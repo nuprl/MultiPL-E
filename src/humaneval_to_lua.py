@@ -21,12 +21,13 @@ class LuaTranslator:
         '''
         if type(c) == bool:
             return str(c).lower()
-        return str(c)
+        return c.__repr__()
     
     def gen_unaryop(self, op, v):
         '''Translate a unary operation (op, v)
         '''
-        return op + self.convert_expr(v)
+        
+        return self.convert_expr(op) + self.convert_expr(v)
     
     def gen_var(self, v):
         '''Translate a variable with name v.
@@ -83,6 +84,8 @@ def expr_to_lua(py_expr: ast.AST):
             return translator.gen_call(func, args)
         case ast.BinOp(left=l, op=o, right=r):
             return translator.gen_binop(l,o,r)
+        case ast.USub():
+            return "-"
         case _other:
             print("OMFG" + py_expr.value)
             raise Exception(f"Unhandled expression: {py_expr}")
@@ -170,8 +173,8 @@ def tests_to_lua(py_tests: str, entry_point: str, filename: str) -> str:
                 #try:
                     test_cases.append("    lu.assertEquals({}, {})".format(expr_to_lua(left), expr_to_lua(right)))
                 #except Exception as e:
-                #    print(f"Exception translating expressions for {filename}: {e}")
-                #    return None
+                    #print(f"Exception translating expressions for {filename}: {e}")
+                    #return None
             case _other:
                 print(f"In tests for {filename}: {item_ast}")
                 return None
