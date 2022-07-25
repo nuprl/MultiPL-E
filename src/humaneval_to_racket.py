@@ -139,8 +139,9 @@ def is_file_complete(path):
 
 
 def process_json(json):
-    cleaned_task_id =  json["task_id"].replace("/", "_")
-    entry_point = json["entry_point"]
+    cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
+    entry_point = re.search("(HumanEval_\d+)_(.+).py", file.name).group(2)
+
     filename = (
         "racket_humaneval/test_" + cleaned_task_id + f"_{entry_point}.rkt"
     )
@@ -148,8 +149,31 @@ def process_json(json):
     if os.path.exists(filename) and is_file_complete(filename):
         return
 
-    racket_prompt = prompt_to_racket(json["prompt"], f"{cleaned_task_id}.py")
-    racket_tests = tests_to_racket(json["test"], entry_point, f"{cleaned_task_id}.py")
+    reading_prompt = True
+    reading_tests = False
+    prompt_buffer = []
+    tests_buffer = []
+
+    with open(file) as f:
+        for line in f:
+            if "### Canonical solution below ###" in line:
+                reading_prompt = False
+            if "### Unit tests below ###" in line:
+                reading_tests = True
+                continue
+            if "def test_check():" in line:
+                break
+
+            if reading_prompt:
+                prompt_buffer.append(line)
+            if reading_tests:
+                tests_buffer.append(line)
+
+    prompt = "".join(prompt_buffer)
+    racket_prompt = prompt_to_racket(prompt, f"{cleaned_task_id}.py")
+
+    tests = "".join(tests_buffer)
+    racket_tests = tests_to_racket(tests, entry_point, f"{cleaned_task_id}.py")
 
     if racket_prompt is None:
         print(f"Failed to translate prompt for {filename}")
@@ -171,15 +195,14 @@ def process_json(json):
             n=1,
         )
         f.write(response[0])
-        f.write("\n-- Unit tests below\n\n")
+        f.write("\n;; Unit tests below\n\n")
         f.write(racket_tests)
 
 
 def main():
-    with open("HumanEval.jsonl") as f:
-        for line in f:
-           process_json(json.loads(line))
-    print("""Now run 'python3 humaneval_to_racket'.""")
+    directory = Path("datasets").resolve()
+    for file in sorted(directory.glob("*.py")):
+        process_file(file)
 
 if __name__ == "__main__":
     main()
