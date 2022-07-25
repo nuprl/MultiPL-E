@@ -1,7 +1,6 @@
 # Authored by Molly Feldman, based on code originally written by Arjun Guha
 #
 # This script runs the Ruby-fied HumanEval programs in ruby
-import os
 import subprocess
 from pathlib import Path
 
