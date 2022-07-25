@@ -1,0 +1,25 @@
+#lang racket
+#| You will be given a string of words separated by commas or spaces. Your task is
+ to split the string into words and return an array of the words.
+ For example:
+ words_string("Hi, my name is John") == ["Hi", "my", "name", "is", "John"]
+ words_string("One, two, three, four, five, six") == ["One", "two", "three", "four", "five", "six"]|#
+(define (words_string s)
+  (split-string s "[ ,]" t))
+(words_string "Hi, my name is John")
+(words_string "One, two, three, four, five, six")
+
+;; Unit tests below
+
+(require rackunit)
+
+(define (test-humaneval) (
+    (check-equal? (candidate 'Hi, my name is John') '('Hi' 'my' 'name' 'is' 'John'))
+    (check-equal? (candidate 'One, two, three, four, five, six') '('One' 'two' 'three' 'four' 'five' 'six'))
+    (check-equal? (candidate 'Hi, my name') '('Hi' 'my' 'name'))
+    (check-equal? (candidate 'One,, two, three, four, five, six,') '('One' 'two' 'three' 'four' 'five' 'six'))
+    (check-equal? (candidate '') '())
+    (check-equal? (candidate 'ahmed     , gamal') '('ahmed' 'gamal'))
+))
+
+(test-humaneval)
