@@ -28,9 +28,7 @@ def check(candidate):
     # Check some edge cases that are easy to work out by hand.
     assert candidate([-1, -2, 8]) == 0, "This prints if this assert fails 5 (also good for debugging!)"
     assert candidate([0.2, 3, 5]) == 34, "This prints if this assert fails 6 (also good for debugging!)"
-    lst = list(range(-99, 100, 2))
-    odd_sum = sum([i**2 for i in lst if i%2!=0 and i > 0])
-    assert candidate(lst) == odd_sum , "This prints if this assert fails 7 (good for debugging!)"
+    assert candidate([-9, -7, -5, -3, -1, 1, 3, 5, 7, 9]) == 165, "This prints if this assert fails 7 (good for debugging!)"
 
 def test_check():
     check(double_the_difference)

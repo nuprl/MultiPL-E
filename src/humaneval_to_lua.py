@@ -21,6 +21,7 @@ class LuaTranslator:
     Lt = "<"
     Mult = "*"
     Sub = "-"
+    Pow = "^"
     stop = [ '\nlocal', '\nfunction', '\n--', '\n\n' ]
     
     def __init__(self, convert_expr):
@@ -113,6 +114,8 @@ def translate_expr(py_expr: ast.AST):
             return translator.Mult
         case ast.Sub():
             return translator.Sub
+        case ast.Pow():
+            return translator.Pow
         case ast.Compare(left=l, ops=o,comparators=r):
             return translate_expr(l) + translate_expr(o[0]) + translate_expr(r[0])
         case _other:
