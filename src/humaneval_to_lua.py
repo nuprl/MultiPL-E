@@ -14,7 +14,7 @@ class LuaTranslator:
     '''
     USub = "-"
     Eq = "=="
-    Not = "!"
+    Not = "not"
     Is = "=="
     Lt = "<"
     Mult = "*"

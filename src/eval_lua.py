@@ -22,10 +22,12 @@ def main():
             output = subprocess.check_output(" ".join(["lua", os.path.join(directory, filename)]),
                                         stderr=subprocess.STDOUT, shell=True)
         except subprocess.CalledProcessError as exc:
-            if 'expected near' in (str(exc.output)):
+            if 'expected near' in (str(exc.output)) or\
+                'Failed tests:' not in str(exc.output):
+                #Either it has parse error or no tests were failed
                 print(str(exc.output))
                 return
-            print("FAIL", exc.returncode)
+            print("FAIL", exc.returncode, exc.output)
         else:
             #Success
             ok = True
