@@ -192,7 +192,7 @@ def process_file(file):
             temperature=0.2,
             top_p=0.95,
             # NOTE(arjun): Seems like reasonable stop sequences for Lua
-            stop=[ '\nlocal', '\nfunction', '\n--', '\n\n' ],
+            stop=[ '\n(define ', '\n#|', '\n;', '\n\n' ],
             n=1,
         )
         f.write(response[0])
