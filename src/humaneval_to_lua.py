@@ -181,11 +181,11 @@ def tests_to_lua(py_tests: str, entry_point: str, filename: str) -> str:
                 # Skips assert True
                 pass
             case ast.Assert(test=exp):
-                #try:
+                try:
                     test_cases.append("    lu.assertTrue({})".format(expr_to_lua(exp)))
-                #except Exception as e:
-                    #print(f"Exception translating expressions for {filename}: {e}")
-                    #return None
+                except Exception as e:
+                    print(f"Exception translating expressions for {filename}: {e}")
+                    return None
             case ast.Expr(value=ast.Name(id='print')):
                 pass
             case _other:
