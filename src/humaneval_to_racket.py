@@ -20,8 +20,10 @@ def expr_to_racket(py_expr: ast.AST):
     - A function call f(x, y, z) translates to (f x y z)
     """
     match py_expr:
-        case ast.Constant(value=s) if type(s) in [str, int, float]:
+        case ast.Constant(value=s) if type(s) in [int, float]:
             return s.__repr__()
+        case ast.Constant(value=s) if type(s)==str:
+            return f'"{s}"'
         case ast.Constant(value=s) if type(s) == bool:
             return "#t" if s else "#f"
         case ast.UnaryOp(op=ast.USub(), operand=ast.Constant(value=n)) if type(n) in [int, float]:
