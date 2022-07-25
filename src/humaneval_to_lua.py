@@ -175,6 +175,8 @@ def tests_to_lua(py_tests: str, entry_point: str, filename: str) -> str:
                 #except Exception as e:
                     #print(f"Exception translating expressions for {filename}: {e}")
                     #return None
+            case ast.Expr(value=ast.Name(id='print')):
+                pass
             case _other:
                 print(f"In tests for {filename}: {item_ast}")
                 return None
@@ -233,6 +235,7 @@ def process_file(file):
         print(f"Failed to translate tests for {filename}")
         return
     with open(filename, "w") as f:
+        print("Success", filename)
         f.write(lua_prompt)
         response = completion(
             engine="code-davinci-001",
