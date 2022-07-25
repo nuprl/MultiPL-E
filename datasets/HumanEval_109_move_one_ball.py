@@ -1,5 +1,6 @@
+from typing import List
 
-def move_one_ball(arr):
+def move_one_ball(arr: List[int]) -> bool:
     """We have an array 'arr' of N integers arr[1], arr[2], ..., arr[N].The
     numbers in the array will be randomly ordered. Your task is to determine if
     it is possible to get an array sorted in non-decreasing order by performing 

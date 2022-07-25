@@ -1,5 +1,6 @@
+from typing import Union
 
-def compare_one(a, b):
+def compare_one(a: Union[int, float, str], b: Union[int, float, str]) -> Union[int, float, str, None]:
     """
     Create a function that takes integers, floats, or strings representing
     real numbers, and returns the larger variable in its given variable type.

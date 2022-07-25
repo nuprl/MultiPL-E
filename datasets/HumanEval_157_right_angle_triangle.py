@@ -1,5 +1,5 @@
 
-def right_angle_triangle(a, b, c):
+def right_angle_triangle(a: int, b: int, c: int) -> bool:
     '''
     Given the lengths of the three sides of a triangle. Return True if the three
     sides form a right-angled triangle, False otherwise.

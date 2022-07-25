@@ -1,5 +1,6 @@
+from typing import List
 
-def smallest_change(arr):
+def smallest_change(arr: List[int]) -> int:
     """
     Given an array arr of integers, find the minimum number of elements that
     need to be changed to make the array palindromic. A palindromic array is an array that

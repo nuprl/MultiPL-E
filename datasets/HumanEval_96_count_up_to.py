@@ -1,5 +1,6 @@
+from typing import List
 
-def count_up_to(n):
+def count_up_to(n: int) -> List[int]:
     """Implement a function that takes an non-negative integer and returns an array of the first n
     integers that are prime numbers and less than n.
     for example:

@@ -1,5 +1,5 @@
 
-def x_or_y(n, x, y):
+def x_or_y(n: int, x: int, y: int) -> int:
     """A simple program which should return the value of x if n is 
     a prime number and should return the value of y otherwise.
 

@@ -1,5 +1,6 @@
+from typing import List
 
-def eat(number, need, remaining):
+def eat(number: int, need: int, remaining: int) -> List[int]:
     """
     You're a hungry rabbit, and you already have eaten a certain number of carrots,
     but now you need to eat more carrots to complete the day's meals.

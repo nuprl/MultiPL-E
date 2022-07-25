@@ -1,5 +1,6 @@
+from typing import List
 
-def strange_sort_list(lst):
+def strange_sort_list(lst: List[int]) -> List[int]:
     '''
     Given list of integers, return list in strange order.
     Strange sorting, is when you start with the minimum value,
@@ -31,9 +32,6 @@ def check(candidate):
     assert candidate([1,2,3,4,5,6,7,8]) == [1, 8, 2, 7, 3, 6, 4, 5]
     assert candidate([0,2,2,2,5,5,-5,-5]) == [-5, 5, -5, 5, 0, 2, 2, 2]
     assert candidate([111111]) == [111111]
-
-    # Check some edge cases that are easy to work out by hand.
-    assert True
 
 def test_check():
     check(strange_sort_list)

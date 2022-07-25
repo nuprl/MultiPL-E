@@ -1,5 +1,6 @@
+from typing import List
 
-def sort_array(array):
+def sort_array(array: List[int]) -> List[int]:
     """
     Given an array of non-negative integers, return a copy of the given array after sorting,
     you will sort the given array in ascending order if the sum( first index value, last index value) is odd,

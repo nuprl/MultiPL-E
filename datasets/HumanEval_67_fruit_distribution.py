@@ -1,5 +1,5 @@
 
-def fruit_distribution(s,n):
+def fruit_distribution(s: str, n: int) -> int:
     """
     In this task, you will be given a string that represents a number of apples and oranges 
     that are distributed in a basket of fruit this basket contains 

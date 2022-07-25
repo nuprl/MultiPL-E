@@ -1,5 +1,5 @@
 
-def is_bored(S):
+def is_bored(S: str) -> int:
     """
     You'll be given a string of words, and your task is to count the number
     of boredoms. A boredom is a sentence that starts with the word "I".

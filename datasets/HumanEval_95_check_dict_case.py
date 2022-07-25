@@ -1,5 +1,6 @@
+from typing import Dict
 
-def check_dict_case(dict):
+def check_dict_case(dict: Dict[str, str]) -> bool:
     """
     Given a dictionary, return True if all keys are strings in lower 
     case or all keys are strings in upper case, else return False.

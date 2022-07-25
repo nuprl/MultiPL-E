@@ -1,5 +1,6 @@
+from typing import Tuple 
 
-def even_odd_count(num):
+def even_odd_count(num: int) -> Tuple[int, int]:
     """Given an integer. return a tuple that has the number of even and odd digits respectively.
 
      Example:

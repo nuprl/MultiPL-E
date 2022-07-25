@@ -1,5 +1,5 @@
 
-def hex_key(num):
+def hex_key(num: str) -> int:
     """You have been tasked to write a function that receives 
     a hexadecimal number as a string and counts the number of hexadecimal 
     digits that are primes (prime number, or a prime, is a natural number 

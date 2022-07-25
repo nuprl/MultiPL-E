@@ -1,5 +1,6 @@
+from typing import List
 
-def match_parens(lst):
+def match_parens(lst: List[str]) -> str:
     '''
     You are given a list of two strings, both strings consist of open
     parentheses '(' or close parentheses ')' only.

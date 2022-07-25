@@ -1,5 +1,5 @@
 
-def is_nested(string):
+def is_nested(string: str) -> bool:
     '''
     Create a function that takes a string as input which contains only square brackets.
     The function should return True if and only if there is a valid subsequence of brackets 

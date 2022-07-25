@@ -1,5 +1,5 @@
 
-def words_in_sentence(sentence):
+def words_in_sentence(sentence: str) -> str:
     """
     You are given a string representing a sentence,
     the sentence contains some words separated by a space,

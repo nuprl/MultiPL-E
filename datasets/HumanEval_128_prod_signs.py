@@ -1,5 +1,7 @@
+from typing import List
+from typing import Union
 
-def prod_signs(arr):
+def prod_signs(arr: List[int]) -> Union[int, None]:
     """
     You are given an array arr of integers and you need to return
     sum of magnitudes of integers multiplied by product of all signs

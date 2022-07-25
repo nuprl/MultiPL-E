@@ -1,5 +1,7 @@
-
-def largest_smallest_integers(lst):
+from typing import List
+from typing import Tuple
+from typing import Union
+def largest_smallest_integers(lst: List[int]) -> Tuple[Union[int, None], Union[int, None]]:
     '''
     Create a function that returns a tuple (a, b), where 'a' is
     the largest of negative integers, and 'b' is the smallest

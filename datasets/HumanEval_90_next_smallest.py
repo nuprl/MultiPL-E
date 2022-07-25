@@ -1,5 +1,7 @@
+from typing import List
+from typing import Union
 
-def next_smallest(lst):
+def next_smallest(lst: List[int]) -> Union(int, None):
     """
     You are given a list of integers.
     Write a function next_smallest() that returns the 2nd smallest element of the list.

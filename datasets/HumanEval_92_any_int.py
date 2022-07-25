@@ -1,5 +1,5 @@
 
-def any_int(x, y, z):
+def any_int(x: int, y: int, z: int) -> bool:
     '''
     Create a function that takes 3 numbers.
     Returns true if one of the numbers is equal to the sum of the other two, and all numbers are integers.

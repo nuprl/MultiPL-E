@@ -1,6 +1,6 @@
 
 
-def correct_bracketing(brackets: str):
+def correct_bracketing(brackets: str) -> bool:
     """ brackets is a string of "(" and ")".
     return True if every opening bracket has a corresponding closing bracket.
 
@@ -31,18 +31,18 @@ METADATA = {}
 
 
 def check(candidate):
-    assert candidate("()")
-    assert candidate("(()())")
-    assert candidate("()()(()())()")
-    assert candidate("()()((()()())())(()()(()))")
-    assert not candidate("((()())))")
-    assert not candidate(")(()")
-    assert not candidate("(")
-    assert not candidate("((((")
-    assert not candidate(")")
-    assert not candidate("(()")
-    assert not candidate("()()(()())())(()")
-    assert not candidate("()()(()())()))()")
-
+    assert candidate("()") == True
+    assert candidate("(()())") == True
+    assert candidate("()()(()())()") == True
+    assert candidate("()()((()()())())(()()(()))") == True
+    assert candidate("((()())))") == False
+    assert candidate(")(()") == False
+    assert candidate("(") == False
+    assert candidate("((((") == False
+    assert candidate(")") == False
+    assert candidate("(()") == False
+    assert candidate("()()(()())())(()") == False
+    assert candidate("()()(()())()))()") == False
+ 
 def test_check():
     check(correct_bracketing)

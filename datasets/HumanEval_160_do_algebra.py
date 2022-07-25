@@ -1,5 +1,7 @@
 
-def do_algebra(operator, operand):
+from typing import List
+
+def do_algebra(operator: List[str], operand: List[int]) -> int:
     """
     Given two lists operator, and operand. The first list has basic algebra operations, and 
     the second list is a list of integers. Use the two given lists to build the algebric 

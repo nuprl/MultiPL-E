@@ -1,5 +1,5 @@
 
-def count_upper(s):
+def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
     
@@ -27,8 +27,6 @@ def check(candidate):
     assert candidate('') == 0
     assert candidate('EEEE') == 2
 
-    # Check some edge cases that are easy to work out by hand.
-    assert True
 
 def test_check():
     check(count_upper)
