@@ -17,8 +17,6 @@ METADATA = {}
 
 
 def check(candidate):
-    import random
-
     assert candidate(0, 1) == 1
     assert candidate(1, 0) == 1
     assert candidate(2, 3) == 5
