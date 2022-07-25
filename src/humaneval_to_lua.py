@@ -12,6 +12,13 @@ from pathlib import Path
 class LuaTranslator:
     '''Lua Translator
     '''
+    USub = "-"
+    Eq = "=="
+    Not = "!"
+    Is = "=="
+    Lt = "<"
+    Mult = "*"
+    Sub = "-"
     def __init__(self, convert_expr):
         self.convert_expr = convert_expr
     
@@ -59,7 +66,7 @@ class LuaTranslator:
         return self.convert_expr(func) + "(" + ", ".join(self.convert_expr(a) for a in args) + ")"
 
     def gen_binop(self, l, o, r):
-        return self.convert_expr(l) + str(o) + self.convert_expr(r)
+        return self.convert_expr(l) + self.convert_expr(o) + self.convert_expr(r)
 
 def expr_to_lua(py_expr: ast.AST):
     """
@@ -85,18 +92,21 @@ def expr_to_lua(py_expr: ast.AST):
         case ast.BinOp(left=l, op=o, right=r):
             return translator.gen_binop(l,o,r)
         case ast.USub():
-            return "-"
+            return translator.USub
         case ast.Eq():
-            return "=="
+            return translator.Eq
         case ast.Not():
-            return "-"
+            return translator.Not
         case ast.Is():
-            return "=="
+            return translator.Is
         case ast.Lt():
-            return "<"
+            return translator.Lt
+        case ast.Mult():
+            return translator.Mult
+        case ast.Sub():
+            return translator.Sub
         case ast.Compare(left=l, ops=o,comparators=r):
             return expr_to_lua(l) + expr_to_lua(o[0]) + expr_to_lua(r[0])
-        
         case _other:
             print("OMFG" + py_expr.value)
             raise Exception(f"Unhandled expression: {py_expr}")

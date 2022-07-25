@@ -17,11 +17,18 @@ def main():
             continue
         total += 1
         # Run it with lua, suppressing all output
-        p = subprocess.run(["lua", filename], cwd=directory,
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
-        # Check exit code
-        ok = p.returncode == 0
-        if ok:
+        ok = False
+        try:
+            output = subprocess.check_output(" ".join(["lua", os.path.join(directory, filename)]),
+                                        stderr=subprocess.STDOUT, shell=True)
+        except subprocess.CalledProcessError as exc:
+            if 'expected near' in (str(exc.output)):
+                print(str(exc.output))
+                return
+            print("FAIL", exc.returncode)
+        else:
+            #Success
+            ok = True
             successes += 1
         filename = filename.split(".")[0]
         print(f"Lua,{filename},{ok}")
