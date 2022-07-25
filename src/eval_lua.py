@@ -10,6 +10,7 @@ def main():
     directory = Path(Path(__file__).parent, "..", "datasets", "lua").resolve()
     total = 0
     successes = 0
+    parse_error = 0
     # For every file in lua_humaneval:
     for filename in os.listdir(directory):
         # If it's a .lua file:
@@ -26,7 +27,8 @@ def main():
                 'Failed tests:' not in str(exc.output):
                 #Either it has parse error or no tests were failed
                 print(str(exc.output))
-                return
+                parse_error+=1
+                
             print("FAIL", exc.returncode, exc.output)
         else:
             #Success
@@ -34,6 +36,7 @@ def main():
             successes += 1
         filename = filename.split(".")[0]
         print(f"Lua,{filename},{ok}")
+    print(f"total {total} Parse error {parse_error}")
     # print(f"{successes}/{total}")
 
 if __name__ == "__main__":
