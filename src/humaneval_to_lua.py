@@ -8,6 +8,38 @@ import ast
 import re
 from completion import completion
 
+class LuaTranslator:
+    '''Lua Translator
+    '''
+    def __init__(self, convert_expr):
+        self.convert_expr = convert_expr
+    
+    def gen_literal(self, c):
+        if type(c) == bool:
+            return str(c).lower()
+        return str(c)
+    
+    def gen_unaryop(self, n):
+        pass
+    
+    def gen_var(self, v):
+        return v
+    
+    def gen_list(self, l):
+        return "{" + ", ".join(self.convert_expr(e) for e in l) + "}"
+    
+    def gen_tuple(self, t):
+        return "{" + ", ".join(self.convert_expr(e) for e in t) + "}"
+    
+    def gen_dict(self, keys, values):
+        return "{" + ", ".join(f"['{k}'] = {self.convert_expr(v)}" for k, v in zip(keys, values)) + "}"
+    
+    def gen_call(self, func, args):
+        return self.convert_expr(func) + "(" + ", ".join(self.convert_expr(a) for a in args) + ")"
+
+    def gen_binop(self, l, o, r):
+        return self.convert_expr(l) + str(o) + self.convert_expr(r)
+
 def expr_to_lua(py_expr: ast.AST):
     """
     Translates a Python expression to Lua.
@@ -19,23 +51,24 @@ def expr_to_lua(py_expr: ast.AST):
     - A dictionary { "key1": val1, "key2": val2 } translates to { ["key1"] = val1, ["key2"] = val2 }
     - A function call f(x, y, z) translates to f(x, y, z)
     """
+    lua_translator = LuaTranslator(expr_to_lua)
     match py_expr:
-        case ast.Constant(value=s) if type(s) in [str, int, float]:
-            return s.__repr__()
-        case ast.Constant(value=s) if type(s) == bool:
-            return "true" if s else "false"
+        case ast.Constant(value=s):
+            return lua_translator.gen_literal(s)
         case ast.UnaryOp(op=ast.USub(), operand=ast.Constant(value=n)) if type(n) in [int, float]:
             return (-n).__repr__()
         case ast.Name(id):
-            return id
+            return lua_translator.gen_var(id)
         case ast.List(elts=elts):
-            return "{" + ", ".join(expr_to_lua(e) for e in elts) + "}"
+            return lua_translator.gen_list(elts)
         case ast.Tuple(elts=elts):
-            return "{" + ", ".join(expr_to_lua(e) for e in elts) + "}"
+            return lua_translator.gen_tuple(elts)
         case ast.Dict(keys=keys, values=values):
-            return "{" + ", ".join(f"['{k}'] = {expr_to_lua(v)}" for k, v in zip(keys, values)) + "}"
+            return lua_translator.gen_dict(keys, values)
         case ast.Call(func, args):
-            return expr_to_lua(func) + "(" + ", ".join(expr_to_lua(a) for a in args) + ")"
+            return lua_translator.gen_call(func, args)
+        case ast.BinOp(left=l, op=o, right=r):
+            return lua_translator.gen_binop(l,o,r)
         case _other:
             print("OMFG" + py_expr.value)
             raise Exception(f"Unhandled expression: {py_expr}")
@@ -120,11 +153,11 @@ def tests_to_lua(py_tests: str, entry_point: str, filename: str) -> str:
                 # Skips assert True
                 pass
             case ast.Assert(test=ast.Compare(left=left, ops=[ast.Eq()], comparators=[right])):
-                try:
+                #try:
                     test_cases.append("    lu.assertEquals({}, {})".format(expr_to_lua(left), expr_to_lua(right)))
-                except Exception as e:
-                    print(f"Exception translating expressions for {filename}: {e}")
-                    return None
+                #except Exception as e:
+                #    print(f"Exception translating expressions for {filename}: {e}")
+                #    return None
             case _other:
                 print(f"In tests for {filename}: {item_ast}")
                 return None
