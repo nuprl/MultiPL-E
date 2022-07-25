@@ -28,7 +28,7 @@ class LuaTranslator:
         '''
         if type(c) == bool:
             return str(c).lower()
-        return c.__repr__()
+        return repr(c)
     
     def gen_unaryop(self, op, v):
         '''Translate a unary operation (op, v)
@@ -247,6 +247,7 @@ def process_file(file):
     prompt = "".join(prompt_buffer)
     lua_prompt = prompt_to_lua(prompt, f"{cleaned_task_id}.py")
 
+    # print(repr(lua_prompt))
     tests = "".join(tests_buffer)
     lua_tests = tests_to_lua(tests, entry_point, f"{cleaned_task_id}.py")
 
