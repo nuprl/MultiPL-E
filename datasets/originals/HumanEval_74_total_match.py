@@ -32,7 +32,7 @@ def total_match(lst1: List[str], lst2: List[str]) -> List[str]:
 def check(candidate):
 
     # Check some simple cases
-    assert True, "This prints if this assert fails 1 (good for debugging!)"
+    
     assert candidate([], []) == []
     assert candidate(['hi', 'admin'], ['hi', 'hi']) == ['hi', 'hi']
     assert candidate(['hi', 'admin'], ['hi', 'hi', 'admin', 'project']) == ['hi', 'admin']
@@ -43,7 +43,7 @@ def check(candidate):
 
 
     # Check some edge cases that are easy to work out by hand.
-    assert True, "This prints if this assert fails 2 (also good for debugging!)"
+    
     assert candidate([], ['this']) == []
     assert candidate(['this'], []) == []
 

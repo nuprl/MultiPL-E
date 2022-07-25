@@ -46,7 +46,7 @@ def check(candidate):
     assert candidate(1000) == 'm'
 
     # Check some edge cases that are easy to work out by hand.
-    assert True
+    
 
 def test_check():
     check(int_to_mini_roman)

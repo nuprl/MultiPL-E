@@ -44,7 +44,7 @@ def check(candidate):
     assert candidate("Above") == "o"
 
     # Check some edge cases that are easy to work out by hand.
-    assert True
+    
 
 def test_check():
     check(get_closest_vowel)

@@ -32,7 +32,7 @@ def check(candidate):
 
 
     # Check some edge cases that are easy to work out by hand.
-    assert True
+    
 
 def test_check():
     check(even_odd_count)
