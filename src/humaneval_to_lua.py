@@ -7,6 +7,7 @@ import os
 import ast
 import re
 from completion import completion
+from pathlib import Path
 
 def expr_to_lua(py_expr: ast.AST):
     """
@@ -141,18 +142,41 @@ def is_file_complete(path):
     return False
 
 
-def process_json(json):
-    cleaned_task_id =  json["task_id"].replace("/", "_")
-    entry_point = json["entry_point"]
+def process_file(file):
+    cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
+    entry_point = re.search("(HumanEval_\d+)_(.+).py", file.name).group(2)
+
     filename = (
-        "lua_humaneval/test_" + cleaned_task_id + f"_{entry_point}.lua"
+        "lua_humaneval/" + cleaned_task_id + f"_{entry_point}.lua"
     )
 
     if os.path.exists(filename) and is_file_complete(filename):
         return
 
-    lua_prompt = prompt_to_lua(json["prompt"], f"{cleaned_task_id}.py")
-    lua_tests = tests_to_lua(json["test"], entry_point, f"{cleaned_task_id}.py")
+    reading_prompt = True
+    reading_tests = False
+    prompt_buffer = []
+    tests_buffer = []
+    with open(file) as f:
+        for line in f:
+            if "### Canonical solution below ###" in line:
+                reading_prompt = False
+            if "### Unit tests below ###" in line:
+                reading_tests = True
+                continue
+            if "def test_check():" in line:
+                break
+
+            if reading_prompt:
+                prompt_buffer.append(line)
+            if reading_tests:
+                tests_buffer.append(line)
+
+    prompt = "".join(prompt_buffer)
+    lua_prompt = prompt_to_lua(prompt, f"{cleaned_task_id}.py")
+
+    tests = "".join(tests_buffer)
+    lua_tests = tests_to_lua(tests, entry_point, f"{cleaned_task_id}.py")
 
     if lua_prompt is None:
         print(f"Failed to translate prompt for {filename}")
@@ -179,10 +203,9 @@ def process_json(json):
 
 
 def main():
-    with open("HumanEval.jsonl") as f:
-        for line in f:
-           process_json(json.loads(line))
-    print("""Now run 'python3 humaneval_to_lua'.""")
+    directory = Path("datasets").resolve()
+    for file in sorted(directory.glob("*.py")):
+        process_file(file)
 
 if __name__ == "__main__":
     main()
