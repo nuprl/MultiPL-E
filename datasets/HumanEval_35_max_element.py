@@ -1,6 +1,6 @@
+from typing import List
 
-
-def max_element(l: list):
+def max_element(l: List[int]) -> int:
     """Return maximum element in the list.
     >>> max_element([1, 2, 3])
     3

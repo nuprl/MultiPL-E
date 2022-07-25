@@ -1,6 +1,6 @@
+from typing import List
 
-
-def incr_list(l: list):
+def incr_list(l: List[int]) -> List[int]:
     """Return list with elements incremented by 1.
     >>> incr_list([1, 2, 3])
     [2, 3, 4]
