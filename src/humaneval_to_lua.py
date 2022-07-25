@@ -146,9 +146,8 @@ def process_file(file):
     cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
     entry_point = re.search("(HumanEval_\d+)_(.+).py", file.name).group(2)
 
-    filename = (
-        "lua_humaneval/" + cleaned_task_id + f"_{entry_point}.lua"
-    )
+    filename = Path(file.parent, "..", "lua", f"{cleaned_task_id}_{entry_point}.lua").resolve()
+    filename.parent.mkdir(parents=True, exist_ok=True)
 
     if os.path.exists(filename) and is_file_complete(filename):
         return
@@ -203,8 +202,8 @@ def process_file(file):
 
 
 def main():
-    directory = Path("datasets").resolve()
-    for file in sorted(directory.glob("*.py")):
+    directory = Path(Path(__file__).parent, "..", Path("datasets")).resolve()
+    for file in sorted(directory.glob("originals/*.py")):
         process_file(file)
 
 if __name__ == "__main__":
