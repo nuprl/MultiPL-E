@@ -20,7 +20,7 @@ def check(candidate):
     assert candidate('password') == '5f4dcc3b5aa765d61d8327deb882cf99'
 
     # Check some edge cases that are easy to work out by hand.
-    assert True
+    
 
 def test_check():
     check(string_to_md5)

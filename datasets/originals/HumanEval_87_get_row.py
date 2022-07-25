@@ -56,7 +56,7 @@ def check(candidate):
     assert candidate([[], [1], [1, 2, 3]], 3) == [(2, 2)]
 
     # Check some edge cases that are easy to work out by hand.
-    assert True
+    
 
 def test_check():
     check(get_row)

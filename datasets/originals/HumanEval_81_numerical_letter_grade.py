@@ -70,7 +70,7 @@ def check(candidate):
     assert candidate([0, 0.7]) == ['E', 'D-']
 
     # Check some edge cases that are easy to work out by hand.
-    assert True
+    
 
 def test_check():
     check(numerical_letter_grade)

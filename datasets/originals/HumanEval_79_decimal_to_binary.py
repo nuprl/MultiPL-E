@@ -24,7 +24,7 @@ def check(candidate):
     assert candidate(15) == "db1111db", "This prints if this assert fails 1 (good for debugging!)"
 
     # Check some edge cases that are easy to work out by hand.
-    assert True, "This prints if this assert fails 2 (also good for debugging!)"
+    
 
 def test_check():
     check(decimal_to_binary)

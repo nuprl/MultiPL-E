@@ -33,7 +33,7 @@ def check(candidate):
     assert candidate("apple pi e ") == False
 
     # Check some edge cases that are easy to work out by hand.
-    assert True
+    
 
 def test_check():
     check(check_if_last_char_is_a_letter)
