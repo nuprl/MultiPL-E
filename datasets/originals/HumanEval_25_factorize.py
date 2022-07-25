@@ -1,5 +1,4 @@
 from typing import List
-import math
 
 def factorize(n: int) -> List[int]:
     """ Return list of prime factors of given integer in the order from smallest to largest.
@@ -13,6 +12,7 @@ def factorize(n: int) -> List[int]:
     [2, 5, 7]
     """
     ### Canonical solution below ###
+    import math
     fact = []
     i = 2
     while i <= int(math.sqrt(n) + 1):
