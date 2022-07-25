@@ -1,5 +1,4 @@
 from typing import List
-import collections
 
 def remove_duplicates(numbers: List[int]) -> List[int]:
     """ From a list of integers, remove all elements that occur more than once.
@@ -8,6 +7,7 @@ def remove_duplicates(numbers: List[int]) -> List[int]:
     [1, 3, 4]
     """
     ### Canonical solution below ###
+    import collections
     c = collections.Counter(numbers)
     return [n for n in numbers if c[n] <= 1]
 

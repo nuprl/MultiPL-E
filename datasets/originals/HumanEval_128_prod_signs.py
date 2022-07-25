@@ -22,7 +22,7 @@ def prod_signs(arr: List[int]) -> Union[int, None]:
 def check(candidate):
 
     # Check some simple cases
-    assert True, "This prints if this assert fails 1 (good for debugging!)"
+    
     assert candidate([1, 2, 2, -4]) == -9
     assert candidate([0, 1]) == 0
     assert candidate([1, 1, 1, 2, 3, -1, 1]) == -10
@@ -33,7 +33,7 @@ def check(candidate):
     assert candidate([-1, 1, 1, 0]) == 0
 
     # Check some edge cases that are easy to work out by hand.
-    assert True, "This prints if this assert fails 2 (also good for debugging!)"
+    
 
 def test_check():
     check(prod_signs)

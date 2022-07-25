@@ -27,7 +27,7 @@ def check(candidate):
     assert candidate('') == ''
     assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
     # Check some edge cases that are easy to work out by hand.
-    assert True
+    
 
 def test_check():
     check(anti_shuffle)
