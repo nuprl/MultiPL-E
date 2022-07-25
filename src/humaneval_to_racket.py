@@ -35,7 +35,7 @@ def expr_to_racket(py_expr: ast.AST):
         case ast.Dict(keys=keys, values=values):
             return "'#hash(" + " ".join(f"({k} .  {expr_to_racket(v)})" for k, v in zip(keys, values)) + ")"
         case ast.Call(func, args):
-            return '(' + expr_to_racket(func) + " ".join(expr_to_racket(a) for a in args) + ")"
+            return '(' + expr_to_racket(func) + " " + " ".join(expr_to_racket(a) for a in args) + ")"
         case _other:
             print("OMFG" + py_expr.value)
             raise Exception(f"Unhandled expression: {py_expr}")
