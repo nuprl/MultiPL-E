@@ -86,6 +86,17 @@ def expr_to_lua(py_expr: ast.AST):
             return translator.gen_binop(l,o,r)
         case ast.USub():
             return "-"
+        case ast.Eq():
+            return "=="
+        case ast.Not():
+            return "-"
+        case ast.Is():
+            return "=="
+        case ast.Lt():
+            return "<"
+        case ast.Compare(left=l, ops=o,comparators=r):
+            return expr_to_lua(l) + expr_to_lua(o[0]) + expr_to_lua(r[0])
+        
         case _other:
             print("OMFG" + py_expr.value)
             raise Exception(f"Unhandled expression: {py_expr}")
@@ -169,9 +180,9 @@ def tests_to_lua(py_tests: str, entry_point: str, filename: str) -> str:
             case ast.Assert(test=ast.Constant()):
                 # Skips assert True
                 pass
-            case ast.Assert(test=ast.Compare(left=left, ops=op, comparators=[right])):
+            case ast.Assert(test=exp):
                 #try:
-                    test_cases.append("    lu.assertTrue({} {} {})".format(expr_to_lua(left), op, expr_to_lua(right)))
+                    test_cases.append("    lu.assertTrue({})".format(expr_to_lua(exp)))
                 #except Exception as e:
                     #print(f"Exception translating expressions for {filename}: {e}")
                     #return None
@@ -238,18 +249,18 @@ def process_file(file):
     with open(filename, "w") as f:
         print("Success", filename)
         f.write(lua_prompt)
-        response = completion(
-            engine="code-davinci-001",
-            # Settings from the Codex paper
-            prompt=lua_prompt,
-            max_tokens=500,
-            temperature=0.2,
-            top_p=0.95,
-            # NOTE(arjun): Seems like reasonable stop sequences for Lua
-            stop=[ '\nlocal', '\nfunction', '\n--', '\n\n' ],
-            n=1,
-        )
-        f.write(response[0])
+        # response = completion(
+        #     engine="code-davinci-001",
+        #     # Settings from the Codex paper
+        #     prompt=lua_prompt,
+        #     max_tokens=500,
+        #     temperature=0.2,
+        #     top_p=0.95,
+        #     # NOTE(arjun): Seems like reasonable stop sequences for Lua
+        #     stop=[ '\nlocal', '\nfunction', '\n--', '\n\n' ],
+        #     n=1,
+        # )
+        # f.write(response[0])
         f.write("\n-- Unit tests below\n\n")
         f.write(lua_tests)
 
