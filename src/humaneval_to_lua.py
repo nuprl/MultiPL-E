@@ -169,9 +169,9 @@ def tests_to_lua(py_tests: str, entry_point: str, filename: str) -> str:
             case ast.Assert(test=ast.Constant()):
                 # Skips assert True
                 pass
-            case ast.Assert(test=ast.Compare(left=left, ops=[ast.Eq()], comparators=[right])):
+            case ast.Assert(test=ast.Compare(left=left, ops=op, comparators=[right])):
                 #try:
-                    test_cases.append("    lu.assertEquals({}, {})".format(expr_to_lua(left), expr_to_lua(right)))
+                    test_cases.append("    lu.assertTrue({} {} {})".format(expr_to_lua(left), op, expr_to_lua(right)))
                 #except Exception as e:
                     #print(f"Exception translating expressions for {filename}: {e}")
                     #return None
