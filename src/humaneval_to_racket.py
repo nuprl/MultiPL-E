@@ -6,6 +6,7 @@ import os
 import ast
 import re
 from completion import completion
+from pathlib import Path
 
 def expr_to_racket(py_expr: ast.AST):
     """
@@ -22,7 +23,7 @@ def expr_to_racket(py_expr: ast.AST):
         case ast.Constant(value=s) if type(s) in [str, int, float]:
             return s.__repr__()
         case ast.Constant(value=s) if type(s) == bool:
-            return "true" if s else "false"
+            return "#t" if s else "#f"
         case ast.UnaryOp(op=ast.USub(), operand=ast.Constant(value=n)) if type(n) in [int, float]:
             return (-n).__repr__()
         case ast.Name(id):
@@ -66,8 +67,8 @@ class PromptVisitor(ast.NodeVisitor):
     def racket_function_decl(self) -> str|None:
         if self.state != "complete":
             return None
-        args = ", ".join(self.arg_names)
-        racket_description = "#| " + re.sub(DOCSTRING_LINESTART_RE, "\n ", self.description.strip()) + "|#\n"
+        args = " ".join(self.arg_names)
+        racket_description = "#lang racket\n#| " + re.sub(DOCSTRING_LINESTART_RE, "\n ", self.description.strip()) + "|#\n"
 
         return f"{racket_description}(define ({self.name} {args})\n"
 
@@ -94,16 +95,15 @@ def tests_to_racket(py_tests: str, entry_point: str, filename: str) -> str:
 
     produces
 
-    #lang racket
     (require rackunit)
 
     (define (test-humaneval)
         (check-equal? LHS RHS))
 
-    os.exit(lu.LuaUnit.run())  ##how do I change this??
+    (test-humaneval)
     """
     tests_ast = ast.parse(py_tests, filename)
-    test_cases = [ "#lang racket\n(require rackunit)", "", "(define (test-humaneval) (" ]
+    test_cases = [ "(require rackunit)", "", "(define (test-humaneval) (" ]
     match tests_ast:
         case ast.Module(body=[ast.FunctionDef(body=body)]):
             body_ast = body
@@ -125,9 +125,9 @@ def tests_to_racket(py_tests: str, entry_point: str, filename: str) -> str:
             case _other:
                 print(f"In tests for {filename}: {item_ast}")
                 return None
-    test_cases.append(")")
+    test_cases.append("))")
     test_cases.append("")
-    test_cases.append("os.exit(lu.LuaUnit.run())") #how do I change this?
+    test_cases.append("(test-humaneval)") 
     return "\n".join(test_cases)
 
 def is_file_complete(path):
@@ -138,7 +138,7 @@ def is_file_complete(path):
     return False
 
 
-def process_json(json):
+def process_file(file):
     cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
     entry_point = re.search("(HumanEval_\d+)_(.+).py", file.name).group(2)
 
