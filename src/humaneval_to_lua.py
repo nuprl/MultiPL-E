@@ -15,26 +15,45 @@ class LuaTranslator:
         self.convert_expr = convert_expr
     
     def gen_literal(self, c):
+        ''' Translate a literal expression
+            c: is the literal value
+        '''
         if type(c) == bool:
             return str(c).lower()
         return str(c)
     
-    def gen_unaryop(self, n):
-        pass
+    def gen_unaryop(self, op, v):
+        '''Translate a unary operation (op, v)
+        '''
+        return op + self.convert_expr(v)
     
     def gen_var(self, v):
+        '''Translate a variable with name v.
+        '''
         return v
     
     def gen_list(self, l):
+        '''Translate a list with elements l
+           A list [ x, y, z] translates to { x, y, z }
+        '''
         return "{" + ", ".join(self.convert_expr(e) for e in l) + "}"
     
     def gen_tuple(self, t):
+        '''Translate a tuple with elements t
+           A tuple (x, y, z) translates to { x, y, z }
+        '''
         return "{" + ", ".join(self.convert_expr(e) for e in t) + "}"
     
     def gen_dict(self, keys, values):
+        '''Translate a dictionary with keys and values
+           A dictionary { "key1": val1, "key2": val2 } translates to { ["key1"] = val1, ["key2"] = val2 }  
+        '''
         return "{" + ", ".join(f"['{k}'] = {self.convert_expr(v)}" for k, v in zip(keys, values)) + "}"
     
     def gen_call(self, func, args):
+        '''Translate a function call `func(args)`
+           A function call f(x, y, z) translates to f(x, y, z)
+        '''
         return self.convert_expr(func) + "(" + ", ".join(self.convert_expr(a) for a in args) + ")"
 
     def gen_binop(self, l, o, r):
@@ -43,32 +62,26 @@ class LuaTranslator:
 def expr_to_lua(py_expr: ast.AST):
     """
     Translates a Python expression to Lua.
-    - Strings and numbers are quoted.
-    - Booleans are lowercased.
-    - Variables translate trivially (we print them as themselves)
-    - An array [ x, y, z] translates to { x, y, z }
-    - A tuple (x, y, z) translates to { x, y, z }
-    - A dictionary { "key1": val1, "key2": val2 } translates to { ["key1"] = val1, ["key2"] = val2 }
-    - A function call f(x, y, z) translates to f(x, y, z)
     """
-    lua_translator = LuaTranslator(expr_to_lua)
+
+    translator = LuaTranslator(expr_to_lua)
     match py_expr:
         case ast.Constant(value=s):
-            return lua_translator.gen_literal(s)
-        case ast.UnaryOp(op=ast.USub(), operand=ast.Constant(value=n)) if type(n) in [int, float]:
-            return (-n).__repr__()
+            return translator.gen_literal(s)
+        case ast.UnaryOp(op=o, operand=v):
+            return translator.gen_unaryop(o, v)
         case ast.Name(id):
-            return lua_translator.gen_var(id)
+            return translator.gen_var(id)
         case ast.List(elts=elts):
-            return lua_translator.gen_list(elts)
+            return translator.gen_list(elts)
         case ast.Tuple(elts=elts):
-            return lua_translator.gen_tuple(elts)
+            return translator.gen_tuple(elts)
         case ast.Dict(keys=keys, values=values):
-            return lua_translator.gen_dict(keys, values)
+            return translator.gen_dict(keys, values)
         case ast.Call(func, args):
-            return lua_translator.gen_call(func, args)
+            return translator.gen_call(func, args)
         case ast.BinOp(left=l, op=o, right=r):
-            return lua_translator.gen_binop(l,o,r)
+            return translator.gen_binop(l,o,r)
         case _other:
             print("OMFG" + py_expr.value)
             raise Exception(f"Unhandled expression: {py_expr}")
