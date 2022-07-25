@@ -194,6 +194,7 @@ def is_file_complete(path):
 
 
 def process_file(file):
+    file = Path(file).resolve()
     cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
     entry_point = re.search("(HumanEval_\d+)_(.+).py", file.name).group(2)
 
