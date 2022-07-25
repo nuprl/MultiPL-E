@@ -1,5 +1,5 @@
 
-def closest_integer(value):
+def closest_integer(value: str) -> int:
     '''
     Create a function that takes a value (string) representing a number
     and returns the closest integer to it. If the number is equidistant

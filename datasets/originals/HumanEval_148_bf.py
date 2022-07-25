@@ -1,5 +1,6 @@
+from typing import Tuple
 
-def bf(planet1, planet2):
+def bf(planet1: str, planet2: str) -> Tuple[str, ...]:
     '''
     There are eight planets in our solar system: the closerst to the Sun 
     is Mercury, the next one is Venus, then Earth, Mars, Jupiter, Saturn, 

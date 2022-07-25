@@ -1,6 +1,6 @@
 
 
-def is_palindrome(text: str):
+def is_palindrome(text: str) -> bool:
     """
     Checks if given string is a palindrome
     >>> is_palindrome('')

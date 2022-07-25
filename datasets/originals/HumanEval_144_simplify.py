@@ -1,5 +1,5 @@
 
-def simplify(x, n):
+def simplify(x: str, n: str) -> bool:
     """Your task is to implement a function that will simplify the expression
     x * n. The function returns True if x * n evaluates to a whole number and False
     otherwise. Both x and n, are string representation of a fraction, and have the following format,

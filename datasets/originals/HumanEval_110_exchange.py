@@ -1,5 +1,6 @@
+from typing import List
 
-def exchange(lst1, lst2):
+def exchange(lst1: List[int], lst2: List[int]) -> str:
     """In this problem, you will implement a function that takes two lists of numbers,
     and determines whether it is possible to perform an exchange of elements
     between them to make lst1 a list of only even numbers.

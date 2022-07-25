@@ -1,5 +1,5 @@
 
-def prime_length(string):
+def prime_length(string: str) -> bool:
     """Write a function that takes a string and returns True if the string
     length is a prime number or False otherwise
     Examples

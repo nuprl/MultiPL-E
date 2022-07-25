@@ -1,5 +1,5 @@
 
-def decimal_to_binary(decimal):
+def decimal_to_binary(decimal: int) -> str:
     """You will be given a number in decimal form and your task is to convert it to
     binary format. The function should return a string, with each character representing a binary
     number. Each character in the string will be '0' or '1'.

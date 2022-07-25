@@ -1,9 +1,6 @@
 
-FIX = """
-Add more test cases.
-"""
 
-def vowels_count(s):
+def vowels_count(s: str) -> int:
     """Write a function vowels_count which takes a string representing
     a word as input and returns the number of vowels in the string.
     Vowels in this case are 'a', 'e', 'i', 'o', 'u'. Here, 'y' is also a
@@ -35,7 +32,6 @@ def check(candidate):
     assert candidate("ACEDY") == 3, "Test 7"
 
     # Check some edge cases that are easy to work out by hand.
-    assert True, "This prints if this assert fails 2 (also good for debugging!)"
 
 def test_check():
     check(vowels_count)

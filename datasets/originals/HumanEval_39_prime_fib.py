@@ -1,4 +1,4 @@
-
+import math
 
 def prime_fib(n: int):
     """
@@ -15,8 +15,6 @@ def prime_fib(n: int):
     89
     """
     ### Canonical solution below ###
-    import math
-
     def is_prime(p):
         if p < 2:
             return False

@@ -1,5 +1,6 @@
+from typing import Tuple
 
-def reverse_delete(s,c):
+def reverse_delete(s: str,c: str) -> Tuple[str, bool]:
     """Task
     We are given two strings s and c, you have to deleted all the characters in s that are equal to any character in c
     then check if the result string is palindrome.

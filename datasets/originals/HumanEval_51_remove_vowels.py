@@ -1,6 +1,6 @@
 
 
-def remove_vowels(text):
+def remove_vowels(text: str) -> str:
     """
     remove_vowels is a function that takes string and returns string without vowels.
     >>> remove_vowels('')

@@ -1,6 +1,6 @@
+from typing import List
 
-
-def skjkasdkd(lst):
+def skjkasdkd(lst: List[int]) -> int:
     """You are given a list of integers.
     You need to find the largest prime value and return the sum of its digits.
 

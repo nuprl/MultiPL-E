@@ -1,6 +1,6 @@
 
 
-def is_prime(n):
+def is_prime(n:int) -> bool:
     """Return true if a given number is prime, and false otherwise.
     >>> is_prime(6)
     False
@@ -42,9 +42,9 @@ def check(candidate):
     assert candidate(5) == True
     assert candidate(11) == True
     assert candidate(17) == True
-    assert candidate(5 * 17) == False
-    assert candidate(11 * 7) == False
-    assert candidate(13441 * 19) == False
+    assert candidate(85) == False
+    assert candidate(77) == False
+    assert candidate(255379) == False
 
 def test_check():
     check(is_prime)

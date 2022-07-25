@@ -20,7 +20,7 @@ def make_palindrome(string: str) -> str:
 
     beginning_of_suffix = 0
 
-    while not is_palindrome(string[beginning_of_suffix:]):
+    while string[beginning_of_suffix:] != string[beginning_of_suffix:][::-1]:
         beginning_of_suffix += 1
 
     return string + string[:beginning_of_suffix][::-1]

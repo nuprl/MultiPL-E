@@ -1,5 +1,6 @@
+from typing import List
 
-def numerical_letter_grade(grades):
+def numerical_letter_grade(grades: List[float]) -> List[str]:
     """It is the last week of the semester and the teacher has to give the grades
     to students. The teacher has been making her own algorithm for grading.
     The only problem is, she has lost the code she used for grading.

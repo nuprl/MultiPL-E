@@ -1,5 +1,6 @@
+from typing import List
 
-def solution(lst):
+def solution(lst: List[int]) -> int:
     """Given a non-empty list of integers, return the sum of all of the odd elements that are in even positions.
     
 

@@ -1,5 +1,6 @@
+from typing import List
 
-def maximum(arr, k):
+def maximum(arr: List[int], k: int) -> List[int]:
     """
     Given an array arr of integers and a positive integer k, return a sorted list 
     of length k with the maximum k numbers in arr.

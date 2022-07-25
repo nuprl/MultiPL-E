@@ -1,5 +1,6 @@
+from typing import List
 
-def pluck(arr):
+def pluck(arr: List[int]) -> List[int]:
     """
     "Given an array representing a branch of a tree that has non-negative integer nodes
     your task is to pluck one of the nodes and return it.
@@ -43,7 +44,6 @@ def pluck(arr):
 def check(candidate):
 
     # Check some simple cases
-    assert True, "This prints if this assert fails 1 (good for debugging!)"
     assert candidate([4,2,3]) == [2, 1], "Error"
     assert candidate([1,2,3]) == [2, 1], "Error"
     assert candidate([]) == [], "Error"

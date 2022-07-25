@@ -1,5 +1,6 @@
+from typing import List
 
-def is_sorted(lst):
+def is_sorted(lst: List[int]) -> bool:
     '''
     Given a list of numbers, return whether or not they are sorted
     in ascending order. If list has more than 1 duplicate of the same
