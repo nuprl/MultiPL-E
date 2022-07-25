@@ -23,7 +23,7 @@ METADATA = {
 
 def check(candidate):
     assert candidate(3.5) == 0.5
-    assert abs(candidate(1.33) - 0.33) < 1e-6
-    assert abs(candidate(123.456) - 0.456) < 1e-6
+    assert candidate(1.25) == 0.25
+    assert candidate(123.0) == 0.0
 def test_check():
     check(truncate_number)
