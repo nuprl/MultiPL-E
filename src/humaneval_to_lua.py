@@ -12,6 +12,8 @@ from pathlib import Path
 class LuaTranslator:
     '''Lua Translator
     '''
+
+    '''Operators'''
     USub = "-"
     Eq = "=="
     Not = "not"
@@ -19,6 +21,8 @@ class LuaTranslator:
     Lt = "<"
     Mult = "*"
     Sub = "-"
+    stop = [ '\nlocal', '\nfunction', '\n--', '\n\n' ]
+    
     def __init__(self, convert_expr):
         self.convert_expr = convert_expr
     
@@ -68,12 +72,16 @@ class LuaTranslator:
     def gen_binop(self, l, o, r):
         return self.convert_expr(l) + self.convert_expr(o) + self.convert_expr(r)
 
-def expr_to_lua(py_expr: ast.AST):
+    def gen_func_decl(self, name, args, description):
+        lua_description = "-- " + re.sub(DOCSTRING_LINESTART_RE, "\n-- ", description.strip()) + "\n"
+
+        return f"{lua_description}local function {name}({args})\n"
+
+def translate_expr(py_expr: ast.AST):
     """
     Translates a Python expression to Lua.
     """
 
-    translator = LuaTranslator(expr_to_lua)
     match py_expr:
         case ast.Constant(value=s):
             return translator.gen_literal(s)
@@ -106,16 +114,19 @@ def expr_to_lua(py_expr: ast.AST):
         case ast.Sub():
             return translator.Sub
         case ast.Compare(left=l, ops=o,comparators=r):
-            return expr_to_lua(l) + expr_to_lua(o[0]) + expr_to_lua(r[0])
+            return translate_expr(l) + translate_expr(o[0]) + translate_expr(r[0])
         case _other:
             print("OMFG" + py_expr.value)
             raise Exception(f"Unhandled expression: {py_expr}")
+
+#TODO: This is annoying
+translator = LuaTranslator(translate_expr)
 
 
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
 class PromptVisitor(ast.NodeVisitor):
-    """Helper for prompt_to_lua"""
+    """Helper for translate_prompt"""
     def __init__(self):
         super().__init__()
         self.state = "start"
@@ -135,16 +146,14 @@ class PromptVisitor(ast.NodeVisitor):
             case _other:
                 self.state = "error"
 
-    def lua_function_decl(self) -> str|None:
+    def translate_func_decl(self) -> str|None:
         if self.state != "complete":
             return None
         args = ", ".join(self.arg_names)
-        lua_description = "-- " + re.sub(DOCSTRING_LINESTART_RE, "\n-- ", self.description.strip()) + "\n"
-
-        return f"{lua_description}local function {self.name}({args})\n"
+        return translator.gen_func_decl(self.name, args, self.description)
 
 
-def prompt_to_lua(py_prompt: str, filename: str) -> str:
+def translate_prompt(py_prompt: str, filename: str) -> str:
     """
     Reads in a prompt from the HumanEval dataset with "    pass" appended. Translates the prompt to
     Lua. Ignores type annotations and imports. Fails if the prompt has auxiliary functions.
@@ -152,9 +161,9 @@ def prompt_to_lua(py_prompt: str, filename: str) -> str:
     prompt_ast = ast.parse(py_prompt + "    pass", filename)
     prompt_visitor = PromptVisitor()
     prompt_visitor.visit(prompt_ast)
-    return prompt_visitor.lua_function_decl()
+    return prompt_visitor.translate_func_decl()
 
-def tests_to_lua(py_tests: str, entry_point: str, filename: str) -> str:
+def translate_tests(py_tests: str, entry_point: str, filename: str) -> str:
     """
     Translates a suite of tests from the HumanEval dataset to Lua. Expects the code to look like:
 
@@ -192,7 +201,8 @@ def tests_to_lua(py_tests: str, entry_point: str, filename: str) -> str:
                 pass
             case ast.Assert(test=exp):
                 try:
-                    test_cases.append("    lu.assertTrue({})".format(expr_to_lua(exp)))
+                    translated_expr = translate_expr(exp)
+                    test_cases.append("    lu.assertTrue({})".format(translated_expr))
                 except Exception as e:
                     print(f"Exception translating expressions for {filename}: {e}")
                     return None
@@ -245,36 +255,35 @@ def process_file(file):
                 tests_buffer.append(line)
 
     prompt = "".join(prompt_buffer)
-    lua_prompt = prompt_to_lua(prompt, f"{cleaned_task_id}.py")
+    translated_prompt = translate_prompt(prompt, f"{cleaned_task_id}.py")
 
     # print(repr(lua_prompt))
     tests = "".join(tests_buffer)
-    lua_tests = tests_to_lua(tests, entry_point, f"{cleaned_task_id}.py")
+    translated_tests = translate_tests(tests, entry_point, f"{cleaned_task_id}.py")
 
-    if lua_prompt is None:
+    if translated_prompt is None:
         print(f"Failed to translate prompt for {filename}")
         return
-    if lua_tests is None:
+    if translated_tests is None:
         print(f"Failed to translate tests for {filename}")
         return
     with open(filename, "w") as f:
         print("Success", filename)
-        f.write(lua_prompt)
-        # response = completion(
-        #     engine="code-davinci-001",
-        #     # Settings from the Codex paper
-        #     prompt=lua_prompt,
-        #     max_tokens=500,
-        #     temperature=0.2,
-        #     top_p=0.95,
-        #     # NOTE(arjun): Seems like reasonable stop sequences for Lua
-        #     stop=[ '\nlocal', '\nfunction', '\n--', '\n\n' ],
-        #     n=1,
-        # )
-        # f.write(response[0])
-        f.write("end")
+        f.write(translated_prompt)
+        response = completion(
+            engine="code-davinci-001",
+            # Settings from the Codex paper
+            prompt=translated_prompt,
+            max_tokens=500,
+            temperature=0.2,
+            top_p=0.95,
+            # NOTE(arjun): Seems like reasonable stop sequences for Lua
+            stop=translator.stop,
+            n=1,
+        )
+        f.write(response[0])
         f.write("\n-- Unit tests below\n\n")
-        f.write(lua_tests)
+        f.write(translated_tests)
 
 
 def main():
