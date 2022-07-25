@@ -261,12 +261,13 @@ def process_file(file):
         #     n=1,
         # )
         # f.write(response[0])
+        f.write("end")
         f.write("\n-- Unit tests below\n\n")
         f.write(lua_tests)
 
 
 def main():
-    directory = Path(Path(__file__).parent, "..", Path("datasets")).resolve()
+    directory = Path(Path(__file__).parent, "..", "datasets").resolve()
     for file in sorted(directory.glob("originals/*.py")):
         process_file(file)
 
