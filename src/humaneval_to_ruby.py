@@ -41,7 +41,7 @@ class RubyTranslator:
         NOTE for Ruby: we use the Test::Unit library rather than RSpec (https://rspec.info/) because it 
         is simpler and still supported in 3.0.2. It returns 1 as a failure code. 
         """
-        return ["require 'test/unit'", "class TestHumanEval < Test::Unit::TestCase", f"  def test_{entry_point}"]
+        return ["require 'test/unit'", "class TestHumanEval < Test::Unit::TestCase", f"  def test_{entry_point}", f"    candidate = method(:{entry_point})"]
 
     def test_suite_suffix_lines(self) -> List[str]:
         return ["  end", "end", ""]
