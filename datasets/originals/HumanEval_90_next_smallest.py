@@ -25,7 +25,7 @@ def check(candidate):
     assert candidate([]) == None
     assert candidate([1, 1]) == None
     assert candidate([1,1,1,1,0]) == 1
-    assert candidate([1, 0**0]) == None
+    assert candidate([1, 1]) == None
     assert candidate([-35, 34, 12, -45]) == -35
 
     # Check some edge cases that are easy to work out by hand.
