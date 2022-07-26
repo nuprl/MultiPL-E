@@ -4,7 +4,7 @@
 # This script translates problems from the OpenAI HumanEval dataset into Lua.
 import re
 from typing import List
-from generic_translator import main, translate_expr
+from generic_translator import main
 
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.
@@ -35,11 +35,11 @@ class LuaTranslator:
 
     USub = "-"
 
-    def __init__(self, convert_expr, file_ext):
-        self.convert_expr = convert_expr
+    def __init__(self, file_ext):
         self.file_ext = file_ext
 
-    def gen_literal(self, c):
+    # NOTE(arjun): Really, no Nones?
+    def gen_literal(self, c: bool|str|int|float):
         """Translate a literal expression
         c: is the literal value
         """
@@ -47,52 +47,39 @@ class LuaTranslator:
             return str(c).lower()
         return repr(c)
 
-    def gen_unaryop(self, op, v):
+    def gen_unaryop(self, op: str, v: str) -> str:
         """Translate a unary operation (op, v)"""
+        return op + v
 
-        return self.convert_expr(self, op) + self.convert_expr(self, v)
-
-    def gen_var(self, v):
+    def gen_var(self, v: str) -> str:
         """Translate a variable with name v."""
         return v
 
-    def gen_list(self, l):
+    def gen_list(self, l: List[str]) -> str:
         """Translate a list with elements l
         A list [ x, y, z] translates to { x, y, z }
         """
-        return "{" + ", ".join(self.convert_expr(self, e) for e in l) + "}"
+        return "{" + ", ".join(l) + "}"
 
-    def gen_tuple(self, t):
+    def gen_tuple(self, t: List[str]) -> str:
         """Translate a tuple with elements t
         A tuple (x, y, z) translates to { x, y, z }
         """
-        return "{" + ", ".join(self.convert_expr(self, e) for e in t) + "}"
+        return "{" + ", ".join(t) + "}"
 
-    def gen_dict(self, keys, values):
+    def gen_dict(self, keys: List[str], values: List[str]) -> str:
         """Translate a dictionary with keys and values
         A dictionary { "key1": val1, "key2": val2 } translates to { ["key1"] = val1, ["key2"] = val2 }
         """
-        return (
-            "{"
-            + ", ".join(
-                f"[{self.convert_expr(self, k)}] = {self.convert_expr(self, v)}"
-                for k, v in zip(keys, values)
-            )
-            + "}"
-        )
+        return "{" + ", ".join(f"[{k}] = {v}" for k, v in zip(keys, values)) + "}"
 
-    def gen_call(self, func, args):
+    def gen_call(self, func: str, args: List[str]) -> str:
         """Translate a function call `func(args)`
         A function call f(x, y, z) translates to f(x, y, z)
         """
-        return (
-            self.convert_expr(self, func)
-            + "("
-            + ", ".join(self.convert_expr(self, a) for a in args)
-            + ")"
-        )
+        return func + "(" + ", ".join(args) + ")"
 
-    def gen_func_decl(self, name, args, description):
+    def translate_prompt(self, name: str, args: List[str], description: str) -> str:
         lua_description = (
             "-- " + re.sub(DOCSTRING_LINESTART_RE, "\n-- ", description.strip()) + "\n"
         )
@@ -100,5 +87,5 @@ class LuaTranslator:
 
 
 if __name__ == "__main__":
-    translator = LuaTranslator(translate_expr, "lua")
+    translator = LuaTranslator("lua")
     main(translator)

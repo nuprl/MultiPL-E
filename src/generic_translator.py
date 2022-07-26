@@ -9,6 +9,7 @@ from completion import completion
 from pathlib import Path
 from typing import List
 
+
 def translate_expr(translator, py_expr: ast.AST):
     """
     Translates a Python expression to Lua.
@@ -18,17 +19,25 @@ def translate_expr(translator, py_expr: ast.AST):
         case ast.Constant(value=s):
             return translator.gen_literal(s)
         case ast.UnaryOp(op=o, operand=v):
-            return translator.gen_unaryop(o, v)
+            return translator.gen_unaryop(
+                translate_expr(translator, o), translate_expr(translator, v)
+            )
         case ast.Name(id):
             return translator.gen_var(id)
         case ast.List(elts=elts):
-            return translator.gen_list(elts)
+            return translator.gen_list([translate_expr(translator, e) for e in elts])
         case ast.Tuple(elts=elts):
-            return translator.gen_tuple(elts)
+            return translator.gen_tuple([translate_expr(translator, e) for e in elts])
         case ast.Dict(keys=keys, values=values):
-            return translator.gen_dict(keys, values)
+            return translator.gen_dict(
+                [translate_expr(translator, e) for e in keys],
+                [translate_expr(translator, e) for e in values],
+            )
         case ast.Call(func, args):
-            return translator.gen_call(func, args)
+            return translator.gen_call(
+                translate_expr(translator, func),
+                [translate_expr(translator, a) for a in args],
+            )
         case ast.USub():
             return translator.USub
         case _other:
@@ -38,6 +47,7 @@ def translate_expr(translator, py_expr: ast.AST):
 
 class PromptVisitor(ast.NodeVisitor):
     """Helper for translate_prompt"""
+
     def __init__(self, translator):
         super().__init__()
         self.state = "start"
@@ -49,20 +59,20 @@ class PromptVisitor(ast.NodeVisitor):
             return
 
         self.name = node.name
-        self.arg_names = [ arg.arg for arg in node.args.args ]
+        self.arg_names = [arg.arg for arg in node.args.args]
 
         match node.body:
-            case [ ast.Expr(value=ast.Constant(s)), ast.Pass() ] if type(s) == str:
+            case [ast.Expr(value=ast.Constant(s)), ast.Pass()] if type(s) == str:
                 self.description = s
                 self.state = "complete"
             case _other:
                 self.state = "error"
 
-    def translate_func_decl(self) -> str|None:
+    def translate_func_decl(self) -> str | None:
         if self.state != "complete":
             return None
         args = ", ".join(self.arg_names)
-        return self.translator.gen_func_decl(self.name, args, self.description)
+        return self.translator.translate_prompt(self.name, args, self.description)
 
 
 def translate_prompt(translator, py_prompt: str, filename: str) -> str:
@@ -74,6 +84,7 @@ def translate_prompt(translator, py_prompt: str, filename: str) -> str:
     prompt_visitor = PromptVisitor(translator)
     prompt_visitor.visit(prompt_ast)
     return prompt_visitor.translate_func_decl()
+
 
 def translate_tests(translator, py_tests: str, entry_point: str, filename: str) -> str:
     """
@@ -105,18 +116,20 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
         case ast.Module(body=[ast.Assign(), ast.FunctionDef(body=body)]):
             body_ast = body
         case _other:
-            return None # TODO(arjun): Should this blow up?
+            return None  # TODO(arjun): Should this blow up?
     for item_ast in body_ast:
         match item_ast:
-            case ast.Assert(test=ast.Compare(left=left, ops=[ast.Eq()], comparators=[right])):
+            case ast.Assert(
+                test=ast.Compare(left=left, ops=[ast.Eq()], comparators=[right])
+            ):
                 try:
                     left = translate_expr(translator, left)
                     right = translate_expr(translator, right)
                     test_cases.append(translator.deep_equality(left, right))
                 except Exception as e:
-                    print (f"Exception translating expressions for {filename}: {e}")
+                    print(f"Exception translating expressions for {filename}: {e}")
                     return None
-            case ast.Expr(value=ast.Name(id='print')):
+            case ast.Expr(value=ast.Name(id="print")):
                 pass
             case _other:
                 print("Failed to translate tests for " + filename)
@@ -125,14 +138,20 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
         test_cases.append(line)
     return "\n".join(test_cases)
 
+
 def translate_file(translator, file):
     file = Path(file).resolve()
     cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
     entry_point = re.search("(HumanEval_\d+)_(.+).py", file.name).group(2)
 
-    filename = Path(file.parent, "..", f"{translator.file_ext}", f"{cleaned_task_id}_{entry_point}.{translator.file_ext}").resolve()
+    filename = Path(
+        file.parent,
+        "..",
+        f"{translator.file_ext}",
+        f"{cleaned_task_id}_{entry_point}.{translator.file_ext}",
+    ).resolve()
     filename.parent.mkdir(parents=True, exist_ok=True)
-    
+
     reading_prompt = True
     reading_tests = False
     prompt_buffer = []
@@ -157,7 +176,9 @@ def translate_file(translator, file):
 
     # print(repr(lua_prompt))
     tests = "".join(tests_buffer)
-    translated_tests = translate_tests(translator, tests, entry_point, f"{cleaned_task_id}.py")
+    translated_tests = translate_tests(
+        translator, tests, entry_point, f"{cleaned_task_id}.py"
+    )
 
     if translated_prompt is None:
         print(f"Failed to translate prompt for {filename}")
