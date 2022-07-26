@@ -20,7 +20,7 @@ class LuaTranslator:
     def __init__(self, file_ext):
         self.file_ext = file_ext
 
-    def translate_prompt(self, name: str, args: List[ast.arg], description: str) -> str:
+    def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         lua_description = (
             "-- " + re.sub(DOCSTRING_LINESTART_RE, "\n-- ", description.strip()) + "\n"
         )

@@ -56,6 +56,7 @@ class PromptVisitor(ast.NodeVisitor):
 
         self.name = node.name
         self.args = node.args.args
+        self.returns = node.returns
 
         match node.body:
             case [ast.Expr(value=ast.Constant(s)), ast.Pass()] if type(s) == str:
@@ -67,7 +68,7 @@ class PromptVisitor(ast.NodeVisitor):
     def translate_func_decl(self) -> str | None:
         if self.state != "complete":
             return None
-        return self.translator.translate_prompt(self.name, self.args, self.description)
+        return self.translator.translate_prompt(self.name, self.args, self.returns, self.description)
 
 
 def translate_prompt(translator, py_prompt: str, filename: str) -> str:
