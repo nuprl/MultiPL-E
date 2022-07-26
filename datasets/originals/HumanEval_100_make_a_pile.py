@@ -28,7 +28,7 @@ def check(candidate):
     assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
 
     # Check some edge cases that are easy to work out by hand.
-    assert True, "This prints if this assert fails 2 (also good for debugging!)"
+    # 
 
 def test_check():
     check(make_a_pile)

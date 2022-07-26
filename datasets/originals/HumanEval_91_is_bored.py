@@ -28,7 +28,7 @@ def check(candidate):
     assert candidate("You and I are going for a walk") == 0, "Test 6"
 
     # Check some edge cases that are easy to work out by hand.
-    assert True, "This prints if this assert fails 2 (also good for debugging!)"
+    
 
 def test_check():
     check(is_bored)

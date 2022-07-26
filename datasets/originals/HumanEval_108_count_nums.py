@@ -29,11 +29,11 @@ def check(candidate):
     assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
     assert candidate([1, 100, 98, -7, 1, -1]) == 4
     assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([-0, 1**0]) == 1
+    assert candidate([-0, 1]) == 1
     assert candidate([1]) == 1
 
     # Check some edge cases that are easy to work out by hand.
-    assert True, "This prints if this assert fails 2 (also good for debugging!)"
+    
 
 def test_check():
     check(count_nums)

@@ -120,7 +120,8 @@ def tests_to_racket(py_tests: str, entry_point: str, filename: str) -> str:
                 pass
             case ast.Assert(test=ast.Compare(left=left, ops=[ast.Eq()], comparators=[right])):
                 try:
-                    test_cases.append("    (check-equal? {} {})".format(expr_to_racket(left), expr_to_racket(right)))
+                    finalLeft = expr_to_ruby(left).replace('candidate', entry_point)
+                    test_cases.append("    (check-equal? {} {})".format(expr_to_racket(finalLeft), expr_to_racket(right)))
                 except Exception as e:
                     print(f"Exception translating expressions for {filename}: {e}")
                     return None
@@ -192,7 +193,7 @@ def process_file(file):
             temperature=0.2,
             top_p=0.95,
             # NOTE(arjun): Seems like reasonable stop sequences for Lua
-            stop=[ '\nlocal', '\nfunction', '\n--', '\n\n' ],
+            stop=[ '\n(define ', '\n#|', '\n;', '\n\n' ],
             n=1,
         )
         f.write(response[0])

@@ -29,7 +29,7 @@ def check(candidate):
     assert candidate([-35, 34, 12, -45]) == -35
 
     # Check some edge cases that are easy to work out by hand.
-    assert True
+    
 
 def test_check():
     check(next_smallest)

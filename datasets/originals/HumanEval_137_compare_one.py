@@ -33,7 +33,7 @@ def check(candidate):
     assert candidate("1", 1) == None
 
     # Check some edge cases that are easy to work out by hand.
-    assert True
+    
 
 def test_check():
     check(compare_one)

@@ -35,6 +35,6 @@ def check(candidate):
     assert candidate([-6, -4, -4, -3, -100, 1]) == (-3, 1)
 
     # Check some edge cases that are easy to work out by hand.
-    assert True
+    
 def test_check():
     check(largest_smallest_integers)
