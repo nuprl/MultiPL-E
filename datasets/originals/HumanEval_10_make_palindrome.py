@@ -11,10 +11,6 @@ def make_palindrome(string: str) -> str:
     'catac'
     """
     ### Canonical solution below ###
-    def is_palindrome(string: str) -> bool:
-        """ Test if given string is a palindrome """
-        return string == string[::-1]
-
     if not string:
         return ''
 
