@@ -2,6 +2,7 @@
 #
 # This script translates problems from the OpenAI HumanEval dataset into Racket.
 import re
+import ast
 from typing import List
 from generic_translator import main
 
@@ -17,9 +18,11 @@ class RacketTranslator:
     def __init__(self, file_ext):
         self.file_ext = file_ext
 
-    def translate_prompt(self, name: str, args: List[str], description: str) -> str:
-        racket_description = "#lang racket\n#| " + re.sub(DOCSTRING_LINESTART_RE, "\n ", self.description.strip()) + "|#\n"
-        return f"{racket_description}(define ({self.name} {args})\n"
+    def translate_prompt(self, name: str, args: List[ast.arg], description: str) -> str:
+        racket_description = "#lang racket\n#| " + re.sub(DOCSTRING_LINESTART_RE, "\n ", description.strip()) + "|#\n"
+        arg_names = [arg.arg for arg in args]
+        arg_list = ", ".join(arg_names)
+        return f"{racket_description}(define ({name} {arg_list})\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
