@@ -9,76 +9,7 @@ import re
 from completion import completion
 from pathlib import Path
 
-class LuaTranslator:
-    '''Lua Translator
-    '''
-
-    '''Operators'''
-    USub = "-"
-    Eq = "=="
-    Not = "not"
-    Is = "=="
-    Lt = "<"
-    Mult = "*"
-    Sub = "-"
-    Pow = "^"
-    stop = [ '\nlocal', '\nfunction', '\n--', '\n\n' ]
-    
-    def __init__(self, convert_expr):
-        self.convert_expr = convert_expr
-    
-    def gen_literal(self, c):
-        ''' Translate a literal expression
-            c: is the literal value
-        '''
-        if type(c) == bool:
-            return str(c).lower()
-        return repr(c)
-    
-    def gen_unaryop(self, op, v):
-        '''Translate a unary operation (op, v)
-        '''
-        
-        return self.convert_expr(op) + self.convert_expr(v)
-    
-    def gen_var(self, v):
-        '''Translate a variable with name v.
-        '''
-        return v
-    
-    def gen_list(self, l):
-        '''Translate a list with elements l
-           A list [ x, y, z] translates to { x, y, z }
-        '''
-        return "{" + ", ".join(self.convert_expr(e) for e in l) + "}"
-    
-    def gen_tuple(self, t):
-        '''Translate a tuple with elements t
-           A tuple (x, y, z) translates to { x, y, z }
-        '''
-        return "{" + ", ".join(self.convert_expr(e) for e in t) + "}"
-    
-    def gen_dict(self, keys, values):
-        '''Translate a dictionary with keys and values
-           A dictionary { "key1": val1, "key2": val2 } translates to { ["key1"] = val1, ["key2"] = val2 }  
-        '''
-        return "{" + ", ".join(f"['{k}'] = {self.convert_expr(v)}" for k, v in zip(keys, values)) + "}"
-    
-    def gen_call(self, func, args):
-        '''Translate a function call `func(args)`
-           A function call f(x, y, z) translates to f(x, y, z)
-        '''
-        return self.convert_expr(func) + "(" + ", ".join(self.convert_expr(a) for a in args) + ")"
-
-    def gen_binop(self, l, o, r):
-        return self.convert_expr(l) + self.convert_expr(o) + self.convert_expr(r)
-
-    def gen_func_decl(self, name, args, description):
-        lua_description = "-- " + re.sub(DOCSTRING_LINESTART_RE, "\n-- ", description.strip()) + "\n"
-
-        return f"{lua_description}local function {name}({args})\n"
-
-def translate_expr(py_expr: ast.AST):
+def translate_expr(translator, py_expr: ast.AST):
     """
     Translates a Python expression to Lua.
     """
@@ -116,23 +47,24 @@ def translate_expr(py_expr: ast.AST):
             return translator.Sub
         case ast.Pow():
             return translator.Pow
+        case ast.Add():
+            return translator.Add
+        case ast.Div():
+            return translator.Div
         case ast.Compare(left=l, ops=o,comparators=r):
-            return translate_expr(l) + translate_expr(o[0]) + translate_expr(r[0])
+            return translate_expr(translator, l) + translate_expr(translator, o[0]) + translate_expr(translator, r[0])
         case _other:
-            print("OMFG" + py_expr.value)
+            print("OMFG" + py_expr)
             raise Exception(f"Unhandled expression: {py_expr}")
-
-#TODO: This is annoying
-translator = LuaTranslator(translate_expr)
-
 
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
 class PromptVisitor(ast.NodeVisitor):
     """Helper for translate_prompt"""
-    def __init__(self):
+    def __init__(self, translator):
         super().__init__()
         self.state = "start"
+        self.translator = translator
 
     def visit_FunctionDef(self, node: ast.FunctionDef):
         if self.state != "start":
@@ -153,20 +85,20 @@ class PromptVisitor(ast.NodeVisitor):
         if self.state != "complete":
             return None
         args = ", ".join(self.arg_names)
-        return translator.gen_func_decl(self.name, args, self.description)
+        return self.translator.gen_func_decl(self.name, args, self.description)
 
 
-def translate_prompt(py_prompt: str, filename: str) -> str:
+def translate_prompt(translator, py_prompt: str, filename: str) -> str:
     """
     Reads in a prompt from the HumanEval dataset with "    pass" appended. Translates the prompt to
     Lua. Ignores type annotations and imports. Fails if the prompt has auxiliary functions.
     """
     prompt_ast = ast.parse(py_prompt + "    pass", filename)
-    prompt_visitor = PromptVisitor()
+    prompt_visitor = PromptVisitor(translator)
     prompt_visitor.visit(prompt_ast)
     return prompt_visitor.translate_func_decl()
 
-def translate_tests(py_tests: str, entry_point: str, filename: str) -> str:
+def translate_tests(translator, py_tests: str, entry_point: str, filename: str) -> str:
     """
     Translates a suite of tests from the HumanEval dataset to Lua. Expects the code to look like:
 
@@ -204,7 +136,7 @@ def translate_tests(py_tests: str, entry_point: str, filename: str) -> str:
                 pass
             case ast.Assert(test=exp):
                 try:
-                    translated_expr = translate_expr(exp)
+                    translated_expr = translate_expr(translator, exp)
                     test_cases.append("    lu.assertTrue({})".format(translated_expr))
                 except Exception as e:
                     print(f"Exception translating expressions for {filename}: {e}")
@@ -227,14 +159,14 @@ def is_file_complete(path):
     return False
 
 
-def process_file(file):
+def translate_file(translator, file):
     file = Path(file).resolve()
     cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
     entry_point = re.search("(HumanEval_\d+)_(.+).py", file.name).group(2)
 
-    filename = Path(file.parent, "..", "lua", f"{cleaned_task_id}_{entry_point}.lua").resolve()
+    filename = Path(file.parent, "..", f"{translator.file_ext}", f"{cleaned_task_id}_{entry_point}.{translator.file_ext}").resolve()
     filename.parent.mkdir(parents=True, exist_ok=True)
-
+    
     if os.path.exists(filename) and is_file_complete(filename):
         return
 
@@ -258,11 +190,11 @@ def process_file(file):
                 tests_buffer.append(line)
 
     prompt = "".join(prompt_buffer)
-    translated_prompt = translate_prompt(prompt, f"{cleaned_task_id}.py")
+    translated_prompt = translate_prompt(translator, prompt, f"{cleaned_task_id}.py")
 
     # print(repr(lua_prompt))
     tests = "".join(tests_buffer)
-    translated_tests = translate_tests(tests, entry_point, f"{cleaned_task_id}.py")
+    translated_tests = translate_tests(translator, tests, entry_point, f"{cleaned_task_id}.py")
 
     if translated_prompt is None:
         print(f"Failed to translate prompt for {filename}")
@@ -280,7 +212,6 @@ def process_file(file):
             max_tokens=500,
             temperature=0.2,
             top_p=0.95,
-            # NOTE(arjun): Seems like reasonable stop sequences for Lua
             stop=translator.stop,
             n=1,
         )
@@ -289,10 +220,85 @@ def process_file(file):
         f.write(translated_tests)
 
 
-def main():
+class LuaTranslator:
+    '''Lua Translator
+    '''
+
+    '''Operators'''
+    USub = "-"
+    Eq = "=="
+    Not = "not"
+    Is = "=="
+    Lt = "<"
+    Mult = "*"
+    Sub = "-"
+    Pow = "^"
+    Add = "+"
+    Div = "/"
+    # NOTE(arjun): Seems like reasonable stop sequences for Lua
+    stop = [ '\nlocal', '\nfunction', '\n--', '\n\n' ]
+    
+    def __init__(self, convert_expr, file_ext):
+        self.convert_expr = convert_expr
+        self.file_ext = file_ext
+    
+    def gen_literal(self, c):
+        ''' Translate a literal expression
+            c: is the literal value
+        '''
+        if type(c) == bool:
+            return str(c).lower()
+        return repr(c)
+    
+    def gen_unaryop(self, op, v):
+        '''Translate a unary operation (op, v)
+        '''
+        
+        return self.convert_expr(self, op) + self.convert_expr(self, v)
+    
+    def gen_var(self, v):
+        '''Translate a variable with name v.
+        '''
+        return v
+    
+    def gen_list(self, l):
+        '''Translate a list with elements l
+           A list [ x, y, z] translates to { x, y, z }
+        '''
+        return "{" + ", ".join(self.convert_expr(self, e) for e in l) + "}"
+    
+    def gen_tuple(self, t):
+        '''Translate a tuple with elements t
+           A tuple (x, y, z) translates to { x, y, z }
+        '''
+        return "{" + ", ".join(self.convert_expr(self, e) for e in t) + "}"
+    
+    def gen_dict(self, keys, values):
+        '''Translate a dictionary with keys and values
+           A dictionary { "key1": val1, "key2": val2 } translates to { ["key1"] = val1, ["key2"] = val2 }  
+        '''
+        return "{" + ", ".join(f"['{k}'] = {self.convert_expr(self, v)}" for k, v in zip(keys, values)) + "}"
+    
+    def gen_call(self, func, args):
+        '''Translate a function call `func(args)`
+           A function call f(x, y, z) translates to f(x, y, z)
+        '''
+        return self.convert_expr(self, func) + "(" + ", ".join(self.convert_expr(self, a) for a in args) + ")"
+
+    def gen_binop(self, l, o, r):
+        return self.convert_expr(self, l) + self.convert_expr(self, o) + self.convert_expr(self, r)
+
+    def gen_func_decl(self, name, args, description):
+        lua_description = "-- " + re.sub(DOCSTRING_LINESTART_RE, "\n-- ", description.strip()) + "\n"
+
+        return f"{lua_description}local function {name}({args})\n"
+
+def main(translator):
     directory = Path(Path(__file__).parent, "..", "datasets").resolve()
-    for file in sorted(directory.glob("originals/*.py")):
-        process_file(file)
+    for filepath in sorted(directory.glob("originals/*.py")):
+        translate_file(translator, filepath)
 
 if __name__ == "__main__":
-    main()
+    #TODO: This is bad
+    translator = LuaTranslator(translate_expr, "lua")
+    main(translator)
