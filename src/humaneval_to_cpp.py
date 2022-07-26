@@ -11,15 +11,14 @@ from generic_translator import main
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
-
 class CPPTranslator:
     '''Translate Python to C++.
-       Each method returns a tuple of code and type for an expression
+       Each method returns a tuple of code and type of the expression
     '''
 
 
     # NOTE(arjun): Seems like reasonable stop sequences for CPP
-    stop = ["}\n\n", "}\nvoid", "}\nint", "}\nstd::string", "}\nfloat"]
+    stop = ["}\n\n"] #, "}\nvoid", "}\nint", "}\nstd::string", "}\nfloat"
 
     def __init__(self, file_ext):
         self.file_ext = file_ext
@@ -38,14 +37,52 @@ class CPPTranslator:
         print ("UNKNOWN", pytype)
         return "UNKNOWN"
 
-    def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
+    def return_type(self, ann: ast.expr | None) -> str:
+        if ann == None:
+            print(
+                f"Didn't find annotation for a fundecl arg")
+            return ""
+            raise Exception(f"No annotation")
+
+        type_name = ""
+        match ann:
+            case ast.Name(id="str"):
+                type_name = "std::string"
+            case ast.Name(id="int"):
+                type_name = "int"
+            case ast.Name(id="float"):
+                type_name = "float"
+            case ast.Name(id="bool"):
+                type_name = "bool"
+            case ast.Tuple(elts=elts):
+                type_name = "std::vector<%s>"%self.return_type(elts[0]).strip()
+            case ast.Subscript(value=ast.Name(id="Dict"), slice=ast.Tuple(elts=key_val_type)):
+                type_name = "std::map<%s, %s>"%(self.return_type(key_val_type[0]), self.return_type(key_val_type[1]))
+            case ast.Subscript(value=ast.Name(id="List"), slice=elem_type):
+                type_name = "std::vector<%s>"%self.return_type(elem_type).strip()
+            case ast.Subscript(value=ast.Name(id="Tuple"), slice=elem_type):
+                type_name = "std::vector<%s>"%self.return_type(elem_type).strip()
+            case ast.Name(id="Any"):
+                #Cannot do this in C++
+                print("Cannot use Any in C++")
+                
+            # case ast.Subscript(value=ast.Name(id="Union"), slice=ast.Union(elts)):
+            #     type_name += "union"
+            case _other:
+                print(f"Unhandled annotation: {ast.dump(ann)}")
+                # raise Exception(f"Unhandled annotation: {ann}")
+        return type_name
+
+    def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:       
         comment_start = "//"
         CPP_description = (
             comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" +comment_start + " ", description.strip()) + "\n"
         )
-        arg_names = [arg.arg for arg in args]
-        arg_list = ", ".join(arg_names)
-        return f"{CPP_description}void {name}({arg_list})\n"
+        args = [f"{self.return_type(arg.annotation)} {arg.arg}" for arg in args]
+        arg_list = ", ".join(args)
+
+        ret_type = self.return_type(_returns)
+        return f"{CPP_description}{ret_type} {name}({arg_list})" + " {\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
