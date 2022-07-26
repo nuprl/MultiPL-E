@@ -18,10 +18,8 @@ def translate_expr(translator, py_expr: ast.AST):
     match py_expr:
         case ast.Constant(value=s):
             return translator.gen_literal(s)
-        case ast.UnaryOp(op=o, operand=v):
-            return translator.gen_unaryop(
-                translate_expr(translator, o), translate_expr(translator, v)
-            )
+        case ast.UnaryOp(op=ast.USub(), operand=ast.Constant(value=n)) if type(3) in [int, float]:
+            return translator.gen_literal(-n)
         case ast.Name(id):
             return translator.gen_var(id)
         case ast.List(elts=elts):
@@ -38,8 +36,6 @@ def translate_expr(translator, py_expr: ast.AST):
                 translate_expr(translator, func),
                 [translate_expr(translator, a) for a in args],
             )
-        case ast.USub():
-            return translator.USub
         case _other:
             print("OMFG" + py_expr)
             raise Exception(f"Unhandled expression: {py_expr}")

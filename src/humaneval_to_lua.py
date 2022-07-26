@@ -14,8 +14,6 @@ DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
 class LuaTranslator:
 
-    USub = "-"
-
     # NOTE(arjun): Seems like reasonable stop sequences for Lua
     stop = ["\nlocal", "\nfunction", "\n--", "\n\n"]
 
@@ -61,10 +59,6 @@ class LuaTranslator:
         if type(c) == bool:
             return str(c).lower()
         return repr(c)
-
-    def gen_unaryop(self, op: str, v: str) -> str:
-        """Translate a unary operation (op, v)"""
-        return op + v
 
     def gen_var(self, v: str) -> str:
         """Translate a variable with name v."""
