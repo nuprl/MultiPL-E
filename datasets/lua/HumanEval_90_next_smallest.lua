@@ -32,7 +32,7 @@ local candidate = next_smallest
     lu.assertEquals(candidate({}), None)
     lu.assertEquals(candidate({1, 1}), None)
     lu.assertEquals(candidate({1, 1, 1, 1, 0}), 1)
-    lu.assertEquals(candidate({1, 0^0}), None)
+    lu.assertEquals(candidate({1, 1}), None)
     lu.assertEquals(candidate({-35, 34, 12, -45}), -35)
 end
 

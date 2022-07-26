@@ -30,12 +30,12 @@ lu = require('luaunit')
 
 function test_humaneval()
 local candidate = check_dict_case
-    lu.assertEquals(candidate({['<ast.Constant object at 0x7f078fc91f30>'] = 'pineapple', ['<ast.Constant object at 0x7f078fc93940>'] = 'banana'}), true)
-    lu.assertEquals(candidate({['<ast.Constant object at 0x7f078fc90580>'] = 'pineapple', ['<ast.Constant object at 0x7f078fc922f0>'] = 'banana', ['<ast.Constant object at 0x7f078fc92620>'] = 'banana'}), false)
-    lu.assertEquals(candidate({['<ast.Constant object at 0x7f078fc93cd0>'] = 'pineapple', ['<ast.Constant object at 0x7f078fc90a00>'] = 'banana', ['<ast.Constant object at 0x7f078fc93760>'] = 'apple'}), false)
-    lu.assertEquals(candidate({['<ast.Constant object at 0x7f078fc91090>'] = 'John', ['<ast.Constant object at 0x7f078fc92b90>'] = '36', ['<ast.Constant object at 0x7f078fc91870>'] = 'Houston'}), false)
-    lu.assertEquals(candidate({['<ast.Constant object at 0x7f078fc93d60>'] = 'NC', ['<ast.Constant object at 0x7f078fc937c0>'] = '12345'}), true)
-    lu.assertEquals(candidate({['<ast.Constant object at 0x7f078fc910c0>'] = 'Orange', ['<ast.Constant object at 0x7f078fc93880>'] = 'Sweet'}), true)
+    lu.assertEquals(candidate({['p'] = 'pineapple', ['b'] = 'banana'}), true)
+    lu.assertEquals(candidate({['p'] = 'pineapple', ['A'] = 'banana', ['B'] = 'banana'}), false)
+    lu.assertEquals(candidate({['p'] = 'pineapple', [5] = 'banana', ['a'] = 'apple'}), false)
+    lu.assertEquals(candidate({['Name'] = 'John', ['Age'] = '36', ['City'] = 'Houston'}), false)
+    lu.assertEquals(candidate({['STATE'] = 'NC', ['ZIP'] = '12345'}), true)
+    lu.assertEquals(candidate({['fruit'] = 'Orange', ['taste'] = 'Sweet'}), true)
     lu.assertEquals(candidate({}), false)
 end
 
