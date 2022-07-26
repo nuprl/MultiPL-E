@@ -33,26 +33,6 @@ def translate_expr(translator, py_expr: ast.AST):
             return translator.gen_binop(l,o,r)
         case ast.USub():
             return translator.USub
-        case ast.Eq():
-            return translator.Eq
-        case ast.Not():
-            return translator.Not
-        case ast.Is():
-            return translator.Is
-        case ast.Lt():
-            return translator.Lt
-        case ast.Mult():
-            return translator.Mult
-        case ast.Sub():
-            return translator.Sub
-        case ast.Pow():
-            return translator.Pow
-        case ast.Add():
-            return translator.Add
-        case ast.Div():
-            return translator.Div
-        case ast.Compare(left=l, ops=o,comparators=r):
-            return translate_expr(translator, l) + translate_expr(translator, o[0]) + translate_expr(translator, r[0])
         case _other:
             print("OMFG" + py_expr)
             raise Exception(f"Unhandled expression: {py_expr}")
@@ -215,15 +195,6 @@ class LuaTranslator:
 
     '''Operators'''
     USub = "-"
-    Eq = "=="
-    Not = "not"
-    Is = "=="
-    Lt = "<"
-    Mult = "*"
-    Sub = "-"
-    Pow = "^"
-    Add = "+"
-    Div = "/"
     # NOTE(arjun): Seems like reasonable stop sequences for Lua
     stop = [ '\nlocal', '\nfunction', '\n--', '\n\n' ]
     
@@ -266,7 +237,7 @@ class LuaTranslator:
         '''Translate a dictionary with keys and values
            A dictionary { "key1": val1, "key2": val2 } translates to { ["key1"] = val1, ["key2"] = val2 }  
         '''
-        return "{" + ", ".join(f"['{k}'] = {self.convert_expr(self, v)}" for k, v in zip(keys, values)) + "}"
+        return "{" + ", ".join(f"[{self.convert_expr(self, k)}] = {self.convert_expr(self, v)}" for k, v in zip(keys, values)) + "}"
     
     def gen_call(self, func, args):
         '''Translate a function call `func(args)`
