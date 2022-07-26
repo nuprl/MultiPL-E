@@ -19,7 +19,7 @@ class CPPTranslator:
 
 
     # NOTE(arjun): Seems like reasonable stop sequences for CPP
-    stop = ["}\n\n", "}\nvoid", "}\nint", "}\nstd::string"]
+    stop = ["}\n\n", "}\nvoid", "}\nint", "}\nstd::string", "}\nfloat"]
 
     def __init__(self, file_ext):
         self.file_ext = file_ext
@@ -39,8 +39,9 @@ class CPPTranslator:
         return "UNKNOWN"
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
+        comment_start = "//"
         CPP_description = (
-            "-- " + re.sub(DOCSTRING_LINESTART_RE, "\n-- ", description.strip()) + "\n"
+            comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" +comment_start + " ", description.strip()) + "\n"
         )
         arg_names = [arg.arg for arg in args]
         arg_list = ", ".join(arg_names)
@@ -51,14 +52,17 @@ class CPPTranslator:
         This code goes at the start of the test suite.
         """
         return [
-            "lu = require('CPPunit')",
+            "#include<iostream>",
+            "#include<vector>",
+            "#include<string>",
+            "#include<assert.h>",
             "",
-            "function test_humaneval()",
-            f"local candidate = {entry_point}",
+            "int main() {",
+            f"    auto candidate = {entry_point};"
         ]
 
     def test_suite_suffix_lines(self) -> List[str]:
-        return ["end", "", "os.exit(lu.CPPUnit.run())"]
+        return ["}"] #["end", "", "os.exit(lu.CPPUnit.run())"]
 
     def deep_equality(self, left: str, right: str) -> str:
         """
