@@ -1,5 +1,3 @@
-
-
 def make_palindrome(string: str) -> str:
     """ Find the shortest palindrome that begins with a supplied string.
     Algorithm idea is simple:
@@ -13,6 +11,10 @@ def make_palindrome(string: str) -> str:
     'catac'
     """
     ### Canonical solution below ###
+    def is_palindrome(string: str) -> bool:
+        """ Test if given string is a palindrome """
+        return string == string[::-1]
+
     if not string:
         return ''
 
