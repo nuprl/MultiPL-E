@@ -165,10 +165,10 @@ def translate_file(port: int, translator, file):
     )
 
     if translated_prompt is None:
-        print(f"Failed to translate prompt for {filename}")
+        print(f"Failed to translate prompt for {file}")
         return
     if translated_tests is None:
-        print(f"Failed to translate tests for {filename}")
+        print(f"Failed to translate tests for {file}")
         return
     with open(filename, "w") as f:
         f.write(translated_prompt)
@@ -190,6 +190,9 @@ def translate_file(port: int, translator, file):
 
 
 def main(translator):
+    if len(translator.stop) <= 0 or len(translator.stop) > 4:
+        raise Exception("Translator must have 0 < n <= 4 stop words!")
+
     # Commandline arguments: --port 
     args = argparse.ArgumentParser()
     args.add_argument("--port", type=int, default=9000, help="Port to use for OpenAI Caching Proxy")
