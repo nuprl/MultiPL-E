@@ -32,6 +32,7 @@ import requests
 from typing import List
 
 def completion(
+    port: int,
     engine: str,
     prompt: str,
     temperature: float = 1.0,
@@ -52,7 +53,7 @@ def completion(
         "frequency_penalty": frequency_penalty,
         "n": n,
     }
-    resp = requests.post(f"http://localhost:9000/completion/{engine}",
+    resp = requests.post(f"http://localhost:{port}/completion/{engine}",
       headers={"Content-Type": "application/json"},
       json=body)
     return resp.json()

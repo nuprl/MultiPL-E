@@ -8,6 +8,7 @@ import re
 from completion import completion
 from pathlib import Path
 from typing import List
+import argparse
 
 
 def translate_expr(translator, py_expr: ast.AST):
@@ -123,7 +124,7 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
     return "\n".join(test_cases)
 
 
-def translate_file(translator, file):
+def translate_file(port: int, translator, file):
     file = Path(file).resolve()
     cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
     entry_point = re.search("(HumanEval_\d+)_(.+).py", file.name).group(2)
@@ -172,6 +173,7 @@ def translate_file(translator, file):
     with open(filename, "w") as f:
         f.write(translated_prompt)
         response = completion(
+            port=port,
             engine="code-davinci-001",
             # Settings from the Codex paper
             prompt=translated_prompt,
@@ -184,9 +186,15 @@ def translate_file(translator, file):
         f.write(response[0])
         f.write("\n\n")
         f.write(translated_tests)
+        print(f'Wrote {filename}')
 
 
 def main(translator):
+    # Commandline arguments: --port 
+    args = argparse.ArgumentParser()
+    args.add_argument("--port", type=int, default=9000, help="Port to use for OpenAI Caching Proxy")
+    args = args.parse_args()
+
     directory = Path(Path(__file__).parent, "..", "datasets").resolve()
     for filepath in sorted(directory.glob("originals/*.py")):
-        translate_file(translator, filepath)
+        translate_file(args.port, translator, filepath)
