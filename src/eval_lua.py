@@ -8,36 +8,26 @@ from pathlib import Path
 
 def main():
     directory = Path(Path(__file__).parent, "..", "datasets", "lua").resolve()
-    total = 0
-    successes = 0
-    parse_error = 0
-    # For every file in lua_humaneval:
+
     for filename in os.listdir(directory):
         # If it's a .lua file:
         if filename == "luaunit.lua":
             continue
-        total += 1
-        # Run it with lua, suppressing all output
-        ok = False
+
         try:
-            output = subprocess.check_output(" ".join(["lua", os.path.join(directory, filename)]),
-                                        stderr=subprocess.STDOUT, shell=True)
+            # Assumes exit-code 0 is all okay
+            subprocess.check_output(" ".join(["lua", os.path.join(directory, filename)]),
+                                        stderr=subprocess.DEVNULL, shell=True, timeout=5)
+            status = "OK"
+        except subprocess.TimeoutExpired as exc:
+            status = "Timeout"
         except subprocess.CalledProcessError as exc:
-            if 'expected near' in (str(exc.output)) or\
-                'Failed tests:' not in str(exc.output):
-                #Either it has parse error or no tests were failed
-                print(str(exc.output))
-                parse_error+=1
-                
-            print("FAIL", exc.returncode, exc.output)
-        else:
-            #Success
-            ok = True
-            successes += 1
+            if 'expected near' in (str(exc.output)) or 'Failed tests:' not in str(exc.output):
+                status = "SyntaxError"
+            else:
+                status = "Exception"
         filename = filename.split(".")[0]
-        print(f"Lua,{filename},{ok}")
-    print(f"total {total} Parse error {parse_error}")
-    # print(f"{successes}/{total}")
+        print(f"Lua,{filename},{status}")
 
 if __name__ == "__main__":
     main()
