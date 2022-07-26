@@ -15,7 +15,7 @@ class RacketTranslator:
 
     USub = "-"
 
-    stop = [ '\n(define ', '\n#|', '\n;', '\n)' ]
+    stop = [ '\n(define ', '\n#|', '\n;', '\n(' ]
 
     def __init__(self, file_ext):
         self.file_ext = file_ext
@@ -30,10 +30,10 @@ class RacketTranslator:
         """
         This code goes at the start of the test suite.
         """
-        return [ "(require rackunit)", "", "(define (test-humaneval) (",f"(let (( candidate {entry_point}))" ]
+        return [ "(require rackunit)", "", "(define (test-humaneval) \n",f"  (let (( candidate {entry_point}))" ]
 
     def test_suite_suffix_lines(self) -> List[str]:
-        return [")))", "", "(test-humaneval)"]
+        return ["))", "", "(test-humaneval)"]
 
     def deep_equality(self, left: str, right: str) -> str:
         """
