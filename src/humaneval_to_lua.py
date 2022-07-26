@@ -2,12 +2,11 @@
 # Copyright (c) 2022, Roblox Inc.
 #
 # This script translates problems from the OpenAI HumanEval dataset into Lua.
-import json
-import os
 import ast
 import re
 from completion import completion
 from pathlib import Path
+from typing import List
 
 def translate_expr(translator, py_expr: ast.AST):
     """
@@ -29,8 +28,6 @@ def translate_expr(translator, py_expr: ast.AST):
             return translator.gen_dict(keys, values)
         case ast.Call(func, args):
             return translator.gen_call(func, args)
-        case ast.BinOp(left=l, op=o, right=r):
-            return translator.gen_binop(l,o,r)
         case ast.USub():
             return translator.USub
         case _other:
@@ -71,7 +68,7 @@ class PromptVisitor(ast.NodeVisitor):
 def translate_prompt(translator, py_prompt: str, filename: str) -> str:
     """
     Reads in a prompt from the HumanEval dataset with "    pass" appended. Translates the prompt to
-    Lua. Ignores type annotations and imports. Fails if the prompt has auxiliary functions.
+    Language L. Ignores type annotations and imports. Fails if the prompt has auxiliary functions.
     """
     prompt_ast = ast.parse(py_prompt + "    pass", filename)
     prompt_visitor = PromptVisitor(translator)
@@ -101,35 +98,31 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
     os.exit(lu.LuaUnit.run())
     """
     tests_ast = ast.parse(py_tests, filename)
-    test_cases = [ "lu = require('luaunit')", "", "function test_humaneval()", f"local candidate = {entry_point}" ]
+    test_cases = translator.test_suite_prefix_lines(entry_point)
     match tests_ast:
         case ast.Module(body=[ast.FunctionDef(body=body)]):
             body_ast = body
         case ast.Module(body=[ast.Assign(), ast.FunctionDef(body=body)]):
             body_ast = body
         case _other:
-            return None
+            return None # TODO(arjun): Should this blow up?
     for item_ast in body_ast:
         match item_ast:
-            case ast.Assert(test=ast.Constant()):
-                # Skips assert True
-                pass
             case ast.Assert(test=ast.Compare(left=left, ops=[ast.Eq()], comparators=[right])):
                 try:
                     left = translate_expr(translator, left)
                     right = translate_expr(translator, right)
-                    test_cases.append("    lu.assertEquals({}, {})".format(left, right))
+                    test_cases.append(translator.deep_equality(left, right))
                 except Exception as e:
-                    print(f"Exception translating expressions for {filename}: {e}")
+                    print (f"Exception translating expressions for {filename}: {e}")
                     return None
             case ast.Expr(value=ast.Name(id='print')):
                 pass
             case _other:
-                print(f"In tests for {filename}: {item_ast}")
+                print("Failed to translate tests for " + filename)
                 return None
-    test_cases.append("end")
-    test_cases.append("")
-    test_cases.append("os.exit(lu.LuaUnit.run())")
+    for line in translator.test_suite_suffix_lines():
+        test_cases.append(line)
     return "\n".join(test_cases)
 
 def translate_file(translator, file):
@@ -193,6 +186,21 @@ class LuaTranslator:
     '''Lua Translator
     '''
 
+
+    def test_suite_prefix_lines(self, entry_point) -> List[str]:
+        return [
+            "lu = require('luaunit')", "",
+            "function test_humaneval()",
+            f"local candidate = {entry_point}"
+        ]
+
+    def test_suite_suffix_lines(self) -> List[str]:
+        return ["end", "", "os.exit(lu.LuaUnit.run())"]
+
+    def deep_equality(self, left: str, right: str) -> str:
+        return "    lu.assertEquals({}, {})".format(left, right)
+
+
     '''Operators'''
     USub = "-"
     # NOTE(arjun): Seems like reasonable stop sequences for Lua
@@ -244,9 +252,6 @@ class LuaTranslator:
            A function call f(x, y, z) translates to f(x, y, z)
         '''
         return self.convert_expr(self, func) + "(" + ", ".join(self.convert_expr(self, a) for a in args) + ")"
-
-    def gen_binop(self, l, o, r):
-        return self.convert_expr(self, l) + self.convert_expr(self, o) + self.convert_expr(self, r)
 
     def gen_func_decl(self, name, args, description):
         lua_description = "-- " + re.sub(DOCSTRING_LINESTART_RE, "\n-- ", description.strip()) + "\n"
