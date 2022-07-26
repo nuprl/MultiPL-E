@@ -13,8 +13,19 @@ DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
 class LuaTranslator:
 
+    USub = "-"
+
     # NOTE(arjun): Seems like reasonable stop sequences for Lua
     stop = ["\nlocal", "\nfunction", "\n--", "\n\n"]
+
+    def __init__(self, file_ext):
+        self.file_ext = file_ext
+
+    def translate_prompt(self, name: str, args: List[str], description: str) -> str:
+        lua_description = (
+            "-- " + re.sub(DOCSTRING_LINESTART_RE, "\n-- ", description.strip()) + "\n"
+        )
+        return f"{lua_description}local function {name}({args})\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
@@ -31,15 +42,16 @@ class LuaTranslator:
         return ["end", "", "os.exit(lu.LuaUnit.run())"]
 
     def deep_equality(self, left: str, right: str) -> str:
+        """
+        All tests are assertions that compare deep equality between left and right.
+
+        Make sure you use the right equality operator for your language. For example,
+        == is the wrong operator for Java and OCaml.
+        """
         return "    lu.assertEquals({}, {})".format(left, right)
 
-    USub = "-"
-
-    def __init__(self, file_ext):
-        self.file_ext = file_ext
-
     # NOTE(arjun): Really, no Nones?
-    def gen_literal(self, c: bool|str|int|float):
+    def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
         c: is the literal value
         """
@@ -78,12 +90,6 @@ class LuaTranslator:
         A function call f(x, y, z) translates to f(x, y, z)
         """
         return func + "(" + ", ".join(args) + ")"
-
-    def translate_prompt(self, name: str, args: List[str], description: str) -> str:
-        lua_description = (
-            "-- " + re.sub(DOCSTRING_LINESTART_RE, "\n-- ", description.strip()) + "\n"
-        )
-        return f"{lua_description}local function {name}({args})\n"
 
 
 if __name__ == "__main__":
