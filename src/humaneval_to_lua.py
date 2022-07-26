@@ -3,6 +3,7 @@
 #
 # This script translates problems from the OpenAI HumanEval dataset into Lua.
 import re
+import ast
 from typing import List
 from generic_translator import main
 
@@ -21,11 +22,13 @@ class LuaTranslator:
     def __init__(self, file_ext):
         self.file_ext = file_ext
 
-    def translate_prompt(self, name: str, args: List[str], description: str) -> str:
+    def translate_prompt(self, name: str, args: List[ast.arg], description: str) -> str:
         lua_description = (
             "-- " + re.sub(DOCSTRING_LINESTART_RE, "\n-- ", description.strip()) + "\n"
         )
-        return f"{lua_description}local function {name}({args})\n"
+        arg_names = [arg.arg for arg in args]
+        arg_list = ", ".join(arg_names)
+        return f"{lua_description}local function {name}({arg_list})\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
