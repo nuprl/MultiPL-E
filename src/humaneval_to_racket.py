@@ -15,13 +15,13 @@ class RacketTranslator:
 
     USub = "-"
 
-    stop = [ '\n(define ', '\n#|', '\n;', '\n\n' ]
+    stop = [ '\n(define ', '\n#|', '\n;', '\n)' ]
 
     def __init__(self, file_ext):
         self.file_ext = file_ext
 
-    def translate_prompt(self, name: str, args: List[ast.arg], description: str) -> str:
-        racket_description = "#lang racket\n#| " + re.sub(DOCSTRING_LINESTART_RE, "\n ", description.strip()) + "|#\n"
+    def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
+        racket_description = "#lang racket\n\n;; " + re.sub(DOCSTRING_LINESTART_RE, "\n;; ", description.strip()) + "\n"
         arg_names = [arg.arg for arg in args]
         arg_list = ", ".join(arg_names)
         return f"{racket_description}(define ({name} {arg_list})\n"
@@ -44,7 +44,6 @@ class RacketTranslator:
         """
         return "    (check-equal? {} {})".format(left, right)
 
-    # NOTE(arjun): Really, no Nones?
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
         c: is the literal value
@@ -53,6 +52,8 @@ class RacketTranslator:
             return "#t" if c else "#f"
         elif type(c) == str:
             return f'"{c}"'
+        elif c is None:
+            return "#f" # NOTE(arjun): My guess
         return repr(c)
 
     def gen_unaryop(self, op: str, v: str) -> str:
