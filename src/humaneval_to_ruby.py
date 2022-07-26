@@ -1,5 +1,5 @@
 '''
-Authored by Molly Q Feldman - based on scripts by Arjun Guha & Carolyn Anderson.
+Authored by Molly Q Feldman - based on scripts by Arjun Guha & Abhinav Jangda
 
 This script translates problems from the OpenAI HumanEval dataset into Ruby.
 
