@@ -12,7 +12,7 @@ from typing import List
 
 def translate_expr(translator, py_expr: ast.AST):
     """
-    Translates a Python expression to Lua.
+    Translates a Python expression to Language L.
     """
 
     match py_expr:
@@ -87,25 +87,13 @@ def translate_prompt(translator, py_prompt: str, filename: str) -> str:
 
 def translate_tests(translator, py_tests: str, entry_point: str, filename: str) -> str:
     """
-    Translates a suite of tests from the HumanEval dataset to Lua. Expects the code to look like:
+    Translates a suite of tests from the HumanEval dataset to Language L. Expects the code to look like:
 
     METADATA = ... <-- optional
 
     def check():
         assert(LHS == RHS)
         ...
-
-    produces
-
-    lu = require('luaunit')
-
-    function test_humaneval()
-        local candidate = entry_point
-        lu.assertEquals(LHS, RHS)
-        ...
-    end
-
-    os.exit(lu.LuaUnit.run())
     """
     tests_ast = ast.parse(py_tests, filename)
     test_cases = translator.test_suite_prefix_lines(entry_point)
@@ -173,7 +161,6 @@ def translate_file(translator, file):
     prompt = "".join(prompt_buffer)
     translated_prompt = translate_prompt(translator, prompt, f"{cleaned_task_id}.py")
 
-    # print(repr(lua_prompt))
     tests = "".join(tests_buffer)
     translated_tests = translate_tests(
         translator, tests, entry_point, f"{cleaned_task_id}.py"
@@ -198,7 +185,7 @@ def translate_file(translator, file):
             n=1,
         )
         f.write(response[0])
-        f.write("\n-- Unit tests below\n\n")
+        f.write("\n" + translator.comment("Unit tests below") + "\n")
         f.write(translated_tests)
 
 
