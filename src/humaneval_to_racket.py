@@ -13,6 +13,8 @@ DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
 class RacketTranslator:
 
+    USub = "-"
+
     stop = [ '\n(define ', '\n#|', '\n;', '\n\n' ]
 
     def __init__(self, file_ext):
