@@ -134,10 +134,11 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
             case ast.Assert(test=ast.Constant()):
                 # Skips assert True
                 pass
-            case ast.Assert(test=exp):
+            case ast.Assert(test=ast.Compare(left=left, ops=[ast.Eq()], comparators=[right])):
                 try:
-                    translated_expr = translate_expr(translator, exp)
-                    test_cases.append("    lu.assertTrue({})".format(translated_expr))
+                    left = translate_expr(translator, left)
+                    right = translate_expr(translator, right)
+                    test_cases.append("    lu.assertEquals({}, {})".format(left, right))
                 except Exception as e:
                     print(f"Exception translating expressions for {filename}: {e}")
                     return None
@@ -151,14 +152,6 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
     test_cases.append("os.exit(lu.LuaUnit.run())")
     return "\n".join(test_cases)
 
-def is_file_complete(path):
-    with open(path) as f:
-        for line in f:
-            if line.startswith("os.exit(lu.LuaUnit.run())"):
-                return True
-    return False
-
-
 def translate_file(translator, file):
     file = Path(file).resolve()
     cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
@@ -167,9 +160,6 @@ def translate_file(translator, file):
     filename = Path(file.parent, "..", f"{translator.file_ext}", f"{cleaned_task_id}_{entry_point}.{translator.file_ext}").resolve()
     filename.parent.mkdir(parents=True, exist_ok=True)
     
-    if os.path.exists(filename) and is_file_complete(filename):
-        return
-
     reading_prompt = True
     reading_tests = False
     prompt_buffer = []
@@ -203,7 +193,6 @@ def translate_file(translator, file):
         print(f"Failed to translate tests for {filename}")
         return
     with open(filename, "w") as f:
-        print("Success", filename)
         f.write(translated_prompt)
         response = completion(
             engine="code-davinci-001",
