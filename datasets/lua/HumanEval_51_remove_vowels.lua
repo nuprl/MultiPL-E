@@ -24,7 +24,6 @@ local function remove_vowels(text)
     end
     return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

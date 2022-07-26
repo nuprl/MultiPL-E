@@ -19,7 +19,6 @@ local function below_zero(operations)
   end
   return false
 end
--- Unit tests below
 
 lu = require('luaunit')
 

@@ -15,7 +15,6 @@ local function circular_shift(x, shift)
   local s2 = string.sub(s, 1, shift)
   return s1 .. s2
 end
--- Unit tests below
 
 lu = require('luaunit')
 

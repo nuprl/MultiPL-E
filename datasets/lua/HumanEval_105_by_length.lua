@@ -49,7 +49,6 @@ local function by_length(arr)
   end
   return new_arr_2
 end
--- Unit tests below
 
 lu = require('luaunit')
 

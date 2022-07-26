@@ -30,7 +30,6 @@ local function car_race_collision(n)
   end
   return collisions
 end
--- Unit tests below
 
 lu = require('luaunit')
 

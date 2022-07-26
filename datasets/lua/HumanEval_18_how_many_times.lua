@@ -18,7 +18,6 @@ local function how_many_times(string, substring)
   end
   return count
 end
--- Unit tests below
 
 lu = require('luaunit')
 

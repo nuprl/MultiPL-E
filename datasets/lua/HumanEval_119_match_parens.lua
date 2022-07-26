@@ -33,7 +33,6 @@ local function match_parens(lst)
   end
   return 'No'
 end
--- Unit tests below
 
 lu = require('luaunit')
 

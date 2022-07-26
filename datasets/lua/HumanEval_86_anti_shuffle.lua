@@ -18,7 +18,6 @@ local function anti_shuffle(s)
   end
   return table.concat(result, " ")
 end
--- Unit tests below
 
 lu = require('luaunit')
 

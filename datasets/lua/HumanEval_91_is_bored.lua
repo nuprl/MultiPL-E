@@ -15,7 +15,6 @@ local function is_bored(S)
   end
   return count
 end
--- Unit tests below
 
 lu = require('luaunit')
 

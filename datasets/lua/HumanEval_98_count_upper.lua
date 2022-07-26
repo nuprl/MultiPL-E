@@ -13,7 +13,6 @@ local function count_upper(s)
   end
   return count
 end
--- Unit tests below
 
 lu = require('luaunit')
 

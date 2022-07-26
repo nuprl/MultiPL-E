@@ -17,7 +17,6 @@ local function cycpattern_check(a, b)
   end
   return cycpattern_check_aux(a, b, 1)
 end
--- Unit tests below
 
 lu = require('luaunit')
 

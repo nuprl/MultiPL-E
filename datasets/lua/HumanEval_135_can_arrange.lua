@@ -15,7 +15,6 @@ local function can_arrange(arr)
   end
   return -1
 end
--- Unit tests below
 
 lu = require('luaunit')
 

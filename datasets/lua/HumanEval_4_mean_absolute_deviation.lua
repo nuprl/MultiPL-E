@@ -15,7 +15,6 @@ local function mean_absolute_deviation(numbers)
     end
     return sum / count
 end
--- Unit tests below
 
 lu = require('luaunit')
 

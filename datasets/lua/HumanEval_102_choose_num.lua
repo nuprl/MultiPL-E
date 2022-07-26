@@ -13,7 +13,6 @@ local function choose_num(x, y)
   end
   return num
 end
--- Unit tests below
 
 lu = require('luaunit')
 

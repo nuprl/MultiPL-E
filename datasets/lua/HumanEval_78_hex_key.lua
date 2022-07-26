@@ -35,7 +35,6 @@ local function hex_key(num)
     }
     return key[num]
 end
--- Unit tests below
 
 lu = require('luaunit')
 

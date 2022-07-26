@@ -15,7 +15,6 @@ local function compare_one(a, b)
         return nil
     end
 end
--- Unit tests below
 
 lu = require('luaunit')
 

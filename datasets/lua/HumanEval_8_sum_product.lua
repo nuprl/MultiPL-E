@@ -13,7 +13,6 @@ local function sum_product(numbers)
     end
     return sum, product
 end
--- Unit tests below
 
 lu = require('luaunit')
 

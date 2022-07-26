@@ -12,7 +12,6 @@ local function fruit_distribution(s, n)
   local apples, oranges = s:match("(%d+) apples and (%d+) oranges")
   return n - tonumber(apples) - tonumber(oranges)
 end
--- Unit tests below
 
 lu = require('luaunit')
 

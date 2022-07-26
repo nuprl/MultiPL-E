@@ -23,7 +23,6 @@ local function correct_bracketing(brackets)
   end
   return #stack == 0
 end
--- Unit tests below
 
 lu = require('luaunit')
 

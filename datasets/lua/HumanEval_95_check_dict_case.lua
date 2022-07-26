@@ -24,7 +24,6 @@ local function check_dict_case(dict)
   end
   return lower_case or upper_case
 end
--- Unit tests below
 
 lu = require('luaunit')
 

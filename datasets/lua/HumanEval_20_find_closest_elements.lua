@@ -17,7 +17,6 @@ local function find_closest_elements(numbers)
   end
   return smallest_number, largest_number
 end
--- Unit tests below
 
 lu = require('luaunit')
 

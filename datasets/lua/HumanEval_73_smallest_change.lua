@@ -28,7 +28,6 @@ local function smallest_change(arr)
   end
   return min_changes
 end
--- Unit tests below
 
 lu = require('luaunit')
 

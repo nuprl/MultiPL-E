@@ -10,7 +10,6 @@ local function string_sequence(n)
   end
   return s
 end
--- Unit tests below
 
 lu = require('luaunit')
 

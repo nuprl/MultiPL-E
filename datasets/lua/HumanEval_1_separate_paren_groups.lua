@@ -30,7 +30,6 @@ local function separate_paren_groups(paren_string)
   end
   return paren_groups
 end
--- Unit tests below
 
 lu = require('luaunit')
 

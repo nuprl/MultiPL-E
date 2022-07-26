@@ -13,7 +13,6 @@ local function add_elements(arr, k)
   end
   return sum
 end
--- Unit tests below
 
 lu = require('luaunit')
 

@@ -25,7 +25,6 @@ local function reverse_delete(s, c)
   end
   return s_new, is_palindrome
 end
--- Unit tests below
 
 lu = require('luaunit')
 

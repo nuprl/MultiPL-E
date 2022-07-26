@@ -12,7 +12,6 @@ local function filter_by_prefix(strings, prefix)
   end
   return out
 end
--- Unit tests below
 
 lu = require('luaunit')
 

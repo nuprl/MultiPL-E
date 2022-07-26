@@ -17,7 +17,6 @@ local function minSubArraySum(nums)
   end
   return min
 end
--- Unit tests below
 
 lu = require('luaunit')
 

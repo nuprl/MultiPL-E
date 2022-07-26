@@ -13,7 +13,6 @@ local function intersperse(numbers, delimeter)
     end
     return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

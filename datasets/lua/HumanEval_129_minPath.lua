@@ -54,7 +54,6 @@ local function minPath(grid, k)
   end
   return res
 end
--- Unit tests below
 
 lu = require('luaunit')
 

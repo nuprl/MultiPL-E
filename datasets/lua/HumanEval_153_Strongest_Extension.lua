@@ -34,7 +34,6 @@ local function Strongest_Extension(class_name, extensions)
   end
   return class_name .. '.' .. strongest_extension
 end
--- Unit tests below
 
 lu = require('luaunit')
 

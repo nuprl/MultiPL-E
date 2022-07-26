@@ -9,7 +9,6 @@ local function fix_spaces(text)
   local new_text = text:gsub("%s+", "_")
   return new_text:gsub("_+", "-")
 end
--- Unit tests below
 
 lu = require('luaunit')
 

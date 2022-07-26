@@ -18,7 +18,6 @@ local function prod_signs(arr)
   end
   return product * sum
 end
--- Unit tests below
 
 lu = require('luaunit')
 

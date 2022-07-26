@@ -12,7 +12,6 @@ local function is_simple_power(x, n)
   -- your code here
   return false
 end
--- Unit tests below
 
 lu = require('luaunit')
 

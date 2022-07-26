@@ -19,7 +19,6 @@ local function simplify(x, n)
     return false
   end
 end
--- Unit tests below
 
 lu = require('luaunit')
 

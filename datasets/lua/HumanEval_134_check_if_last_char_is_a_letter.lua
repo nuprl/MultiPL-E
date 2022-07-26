@@ -10,7 +10,6 @@
 local function check_if_last_char_is_a_letter(txt)
   return txt:match("[%w]$")
 end
--- Unit tests below
 
 lu = require('luaunit')
 

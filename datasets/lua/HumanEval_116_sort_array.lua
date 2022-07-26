@@ -16,7 +16,6 @@ local function sort_array(arr)
     end
     return count
   end
--- Unit tests below
 
 lu = require('luaunit')
 

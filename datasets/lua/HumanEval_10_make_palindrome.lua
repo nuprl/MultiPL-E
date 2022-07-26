@@ -29,7 +29,6 @@ local function make_palindrome(string)
   end
   return palindrome
 end
--- Unit tests below
 
 lu = require('luaunit')
 

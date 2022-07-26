@@ -20,7 +20,6 @@ local function is_sorted(lst)
   end
   return sorted
 end
--- Unit tests below
 
 lu = require('luaunit')
 

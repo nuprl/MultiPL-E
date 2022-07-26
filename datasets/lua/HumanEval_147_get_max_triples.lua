@@ -25,7 +25,6 @@ local function get_max_triples(n)
     end
     return count
 end
--- Unit tests below
 
 lu = require('luaunit')
 

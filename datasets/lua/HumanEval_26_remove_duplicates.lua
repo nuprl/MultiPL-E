@@ -12,7 +12,6 @@ local function remove_duplicates(numbers)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

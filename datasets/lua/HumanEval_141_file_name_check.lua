@@ -27,7 +27,6 @@ local function file_name_check(file_name)
     local after_dot_ext_name_name_name_name = string.sub(after_dot_ext_name_name_name, 1, after_dot_ext_name_name_name_pos - 1)
     local after_dot_ext_name_name_name_name_pos = string.find(after_dot_ext_name_name_name_name, '.')
     local after_dot_ext_name_name_name_name_name = string.sub(after_dot_ext_name_name_name_name, 1, after_dot_ext_name_name_name_name_pos - 1)
--- Unit tests below
 
 lu = require('luaunit')
 

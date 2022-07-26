@@ -13,7 +13,6 @@ local function median(l)
         return l[math.floor(len / 2) + 1]
     end
 end
--- Unit tests below
 
 lu = require('luaunit')
 

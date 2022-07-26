@@ -63,7 +63,6 @@ local function max_fill(grid, capacity)
   end
   return res
 end
--- Unit tests below
 
 lu = require('luaunit')
 

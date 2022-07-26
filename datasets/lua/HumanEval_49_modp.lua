@@ -20,7 +20,6 @@ local function modp(n, p)
   end
   return r
 end
--- Unit tests below
 
 lu = require('luaunit')
 

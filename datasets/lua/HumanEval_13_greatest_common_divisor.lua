@@ -9,7 +9,6 @@ local function greatest_common_divisor(a, b)
     end
     return a
 end
--- Unit tests below
 
 lu = require('luaunit')
 

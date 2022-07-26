@@ -22,7 +22,6 @@ local function largest_smallest_integers(lst)
     end
     return largest_negative, smallest_positive
 end
--- Unit tests below
 
 lu = require('luaunit')
 

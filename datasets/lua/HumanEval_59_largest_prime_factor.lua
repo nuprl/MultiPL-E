@@ -19,7 +19,6 @@ local function largest_prime_factor(n)
     end
     return largest_factor
 end
--- Unit tests below
 
 lu = require('luaunit')
 

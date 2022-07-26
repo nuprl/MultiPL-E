@@ -19,7 +19,6 @@ local function f(n)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

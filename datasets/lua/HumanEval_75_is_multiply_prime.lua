@@ -80,7 +80,6 @@ local function is_multiply_prime(a)
   local cccc = 2
   local dddd = 2
   local eeee = 2
--- Unit tests below
 
 lu = require('luaunit')
 

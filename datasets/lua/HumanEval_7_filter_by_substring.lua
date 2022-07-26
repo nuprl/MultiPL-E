@@ -12,7 +12,6 @@ local function filter_by_substring(strings, substring)
   end
   return filtered
 end
--- Unit tests below
 
 lu = require('luaunit')
 

@@ -10,7 +10,6 @@ local function incr_list(l)
   end
   return res
 end
--- Unit tests below
 
 lu = require('luaunit')
 

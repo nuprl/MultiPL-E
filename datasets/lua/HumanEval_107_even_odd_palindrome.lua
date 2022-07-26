@@ -28,7 +28,6 @@ local function even_odd_palindrome(n)
     end
     return even, odd
 end
--- Unit tests below
 
 lu = require('luaunit')
 

@@ -21,7 +21,6 @@ local function next_smallest(lst)
   end
   return second_smallest
 end
--- Unit tests below
 
 lu = require('luaunit')
 

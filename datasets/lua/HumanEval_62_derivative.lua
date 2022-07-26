@@ -13,7 +13,6 @@ local function derivative(xs)
     end
     return res
 end
--- Unit tests below
 
 lu = require('luaunit')
 

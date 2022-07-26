@@ -53,10 +53,6 @@ class LuaTranslator:
         """
         return "    lu.assertEquals({}, {})".format(left, right)
 
-    def comment(self, s: str) -> str:
-        """Translate the given string into a comment"""
-        return f"-- {s}\n"
-
     # NOTE(arjun): Really, no Nones?
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression

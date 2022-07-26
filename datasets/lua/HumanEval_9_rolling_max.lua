@@ -14,7 +14,6 @@ local function rolling_max(numbers)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

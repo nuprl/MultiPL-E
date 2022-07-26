@@ -44,7 +44,6 @@ local function parse_music(music_string)
   end
   return music_list
 end
--- Unit tests below
 
 lu = require('luaunit')
 

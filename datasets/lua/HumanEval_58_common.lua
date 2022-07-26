@@ -7,7 +7,6 @@ local function common(l1, l2)
   local common = {}
   local set1 = {}
   local set2 = {}
--- Unit tests below
 
 lu = require('luaunit')
 

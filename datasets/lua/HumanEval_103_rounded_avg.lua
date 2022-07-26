@@ -15,7 +15,6 @@ local function rounded_avg(n, m)
   end
   return string.format("%s", string.format("%x", math.floor(sum / (m - n + 1))))
 end
--- Unit tests below
 
 lu = require('luaunit')
 

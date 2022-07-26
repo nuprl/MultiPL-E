@@ -185,7 +185,7 @@ def translate_file(translator, file):
             n=1,
         )
         f.write(response[0])
-        f.write("\n" + translator.comment("Unit tests below") + "\n")
+        f.write("\n\n")
         f.write(translated_tests)
 
 

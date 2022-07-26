@@ -18,7 +18,6 @@ local function digitSum(s)
   end
   return sum
 end
--- Unit tests below
 
 lu = require('luaunit')
 

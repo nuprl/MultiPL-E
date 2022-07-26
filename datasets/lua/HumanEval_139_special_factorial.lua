@@ -13,7 +13,6 @@ local function special_factorial(n)
   end
   return factorial
 end
--- Unit tests below
 
 lu = require('luaunit')
 

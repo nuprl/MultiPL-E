@@ -18,7 +18,6 @@ local function histogram(test)
     end
     return hist
 end
--- Unit tests below
 
 lu = require('luaunit')
 

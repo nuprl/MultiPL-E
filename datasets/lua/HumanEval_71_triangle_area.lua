@@ -12,7 +12,6 @@ local function triangle_area(a, b, c)
   end
   return math.floor((a + b + c) / 2 * math.sqrt(a * b * c)) / 100
 end
--- Unit tests below
 
 lu = require('luaunit')
 

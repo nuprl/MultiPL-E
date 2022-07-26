@@ -10,7 +10,6 @@ local function starts_one_ends(n)
   end
   return count
 end
--- Unit tests below
 
 lu = require('luaunit')
 

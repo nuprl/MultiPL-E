@@ -19,7 +19,6 @@ local function factorize(n)
     end
     return factors
 end
--- Unit tests below
 
 lu = require('luaunit')
 

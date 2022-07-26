@@ -41,7 +41,6 @@ local function get_closest_vowel(word)
     local consonants_count_list_temp_count_temp = 0
     local vowels_index_list_temp_count_temp_temp = 0
     local consonants_index_list_temp_count_temp
--- Unit tests below
 
 lu = require('luaunit')
 

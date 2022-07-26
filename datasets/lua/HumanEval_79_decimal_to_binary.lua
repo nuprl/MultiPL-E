@@ -16,7 +16,6 @@ local function decimal_to_binary(decimal)
   end
   return "db" .. binary .. "db"
 end
--- Unit tests below
 
 lu = require('luaunit')
 

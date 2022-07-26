@@ -21,7 +21,6 @@ local function count_nums(arr)
   end
   return count
 end
--- Unit tests below
 
 lu = require('luaunit')
 

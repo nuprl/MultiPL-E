@@ -4,7 +4,6 @@
 local function triangle_area(a, h)
   return (a * h) / 2
 end
--- Unit tests below
 
 lu = require('luaunit')
 

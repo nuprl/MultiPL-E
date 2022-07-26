@@ -28,7 +28,6 @@ local function tri(n)
   end
   return t
 end
--- Unit tests below
 
 lu = require('luaunit')
 

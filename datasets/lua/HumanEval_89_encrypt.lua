@@ -23,7 +23,6 @@ local function encrypt(s)
   end
   return new_string
 end
--- Unit tests below
 
 lu = require('luaunit')
 

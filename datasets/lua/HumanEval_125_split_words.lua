@@ -24,7 +24,6 @@ local function split_words(txt)
   end
   return words
 end
--- Unit tests below
 
 lu = require('luaunit')
 

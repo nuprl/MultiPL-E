@@ -16,7 +16,6 @@ local function is_palindrome(text)
     end
     return true
 end
--- Unit tests below
 
 lu = require('luaunit')
 
