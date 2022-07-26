@@ -10,6 +10,7 @@ RUBY_VERSION is 3.0.2
 '''
 
 import re
+import ast
 from typing import List
 from generic_translator import main
 
@@ -18,12 +19,13 @@ from generic_translator import main
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
 class RubyTranslator:
+    USub = "-"
     stop=  [ '\nclass', '\ndef', '\n#', '\n\n' ]
 
     def __init__(self, file_ext):
         self.file_ext = file_ext
 
-    def translate_prompt(self, name: str, args: List[str], description: str) -> str:
+    def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         """
         NOTE for Ruby: that the prompt start is based on multiple Ruby style guides to avoid block comment syntax.
         https://ruby-style-guide.shopify.dev/
@@ -32,7 +34,7 @@ class RubyTranslator:
         ruby_description = "# " + re.sub(DOCSTRING_LINESTART_RE, "\n# ", description.strip()) + "\n"
         arg_names = [arg.arg for arg in args]
         arg_list = ", ".join(arg_names)
-        return f"{ruby_description}def {name}({arg_list})\n"
+        return f"{ruby_description}def {name}({arg_list.lower()})\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
@@ -56,11 +58,9 @@ class RubyTranslator:
         NOTE for Ruby: it has (expected, actual) ordering, so right then left. 
         NOTE for Ruby: https://docs.ruby-lang.org/en/2.0.0/Test/Unit/Assertions.html#method-i-assert_equal
         is the document for assert-equal which uses == equality (i.e. structural)
-        NOTE for Ruby: 3.0.2 example does not have parens when calling assert_equal on arguments, so I followed that style
         """
-        return "    assert-equal {}, {}".format(right, left)
+        return "    assert_equal({}, {})".format(right, left)
 
-    # NOTE(arjun): Really, no Nones?
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
         c: is the literal value
@@ -73,6 +73,10 @@ class RubyTranslator:
             return 'nil'
         return repr(c)
 
+    def gen_unaryop(self, op: str, v: str) -> str:
+        """Translate a unary operation (op, v)"""
+        return op + v
+
     def gen_var(self, v: str) -> str:
         """Translate a variable with name v."""
         return v
@@ -81,7 +85,7 @@ class RubyTranslator:
         """Translate a list with elements l
         A list [ x, y, z] translates to [ x, y, z ] (a Ruby Array)
         """
-        return "'[" + ", ".join(l) + "]"
+        return "[" + ", ".join(l) + "]"
 
     def gen_tuple(self, t: List[str]) -> str:
         """Translate a tuple with elements t
@@ -89,7 +93,7 @@ class RubyTranslator:
 
         NOTE for Ruby: there are no tuples in Ruby, so they are mapped to Arrays 
         """
-        return "'[" + ", ".join(t) + "]"
+        return "[" + ", ".join(t) + "]"
 
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
         """Translate a dictionary with keys and values
@@ -103,7 +107,7 @@ class RubyTranslator:
         """Translate a function call `func(args)`
         A function call f(x, y, z) translates to f(x, y, z)
         """
-        return func + "(" + ", ".join(args) + ")"
+        return func + ".call(" + ", ".join(args) + ")"
 
 
 if __name__ == "__main__":
