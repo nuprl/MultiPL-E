@@ -50,7 +50,7 @@ class RacketTranslator:
         c: is the literal value
         """
         if type(c) == bool:
-            return "#t" if s else "#f"
+            return "#t" if c else "#f"
         elif type(c) == str:
             return f'"{c}"'
         return repr(c)
