@@ -232,8 +232,10 @@ def main(translator):
 
 
     directory = Path(Path(__file__).parent, "..", "datasets").resolve()
-    files_unsorted = directory.glob(f"originals/*.py") 
-    files_sorted = sorted(files_unsorted, key=(lambda s: int(str(s).split("_")[1])))
+    files_unsorted = directory.glob("originals/*.py") 
+    # assumption: base filenames are in the format of HumanEval_X_*.py
+    # Where X is a valid number
+    files_sorted = sorted(files_unsorted, key=(lambda s: int(str(s.name).split("_")[1])))
     files_index = []
     if len(args.files) > 0:
         files_index = args.files
