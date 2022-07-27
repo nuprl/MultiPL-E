@@ -19,6 +19,8 @@ class CPPTranslator:
        Each method returns a tuple of code and type of the expression
     '''
 
+    UNKNOWN_TYPE = "?"
+
     #Seems like reasonable stop sequences for CPP
     stop = ["\n\n","\nvoid", "\nint", "}\nbool"]
 
@@ -35,23 +37,32 @@ class CPPTranslator:
         type_name = ""
         match ann:
             case ast.Name(id="str"):
-                type_name = "std::string"
+                return "std::string"
             case ast.Name(id="int"):
-                type_name = "int"
+                return "int"
             case ast.Name(id="float"):
-                type_name = "float"
+                return "float"
             case ast.Name(id="bool"):
-                type_name = "bool"
+                return "bool"
+            case ast.Name(id="None"):
+                #It appears None is always used in optional
+                return "{}"
             case ast.List(elts=elts):
-                type_name = "std::vector<%s>"%self.pytype_to_cpptype(elts[0]).strip()
+                return "std::vector<%s>"%self.pytype_to_cpptype(elts[0])
             case ast.Tuple(elts=elts):
-                type_name = "std::vector<%s>"%self.pytype_to_cpptype(elts[0]).strip()
+                return "std::vector<%s>"%self.pytype_to_cpptype(elts[0])
+            case ast.Dict(keys=k,values=v):
+                return "std::map<%s, %s>"%(self.pytype_to_cpptype(k), self.pytype_to_cpptype(v))
             case ast.Subscript(value=ast.Name(id="Dict"), slice=ast.Tuple(elts=key_val_type)):
-                type_name = "std::map<%s, %s>"%(self.pytype_to_cpptype(key_val_type[0]), self.pytype_to_cpptype(key_val_type[1]))
+                return "std::map<%s, %s>"%(self.pytype_to_cpptype(key_val_type[0]), self.pytype_to_cpptype(key_val_type[1]))
             case ast.Subscript(value=ast.Name(id="List"), slice=elem_type):
-                type_name = "std::vector<%s>"%self.pytype_to_cpptype(elem_type).strip()
-            case ast.Subscript(value=ast.Name(id="Tuple"), slice=elem_type):
-                type_name = "std::vector<%s>"%self.pytype_to_cpptype(elem_type).strip()
+                return "std::vector<%s>"%self.pytype_to_cpptype(elem_type)
+            case ast.Subscript(value=ast.Name(id="Tuple"), slice=elts):
+                if type(elts) is ast.Tuple:
+                    return self.pytype_to_cpptype(elts)
+                return "std::vector<%s>"%self.pytype_to_cpptype(elts)
+            case ast.Subscript(value=ast.Name(id="Optional"), slice=elem_type):
+                return "std::optional<%s>"%self.pytype_to_cpptype(elem_type)
             case ast.Name(id="Any"):
                 #Cannot do this in C++
                 print("Cannot use Any in C++")
@@ -68,11 +79,20 @@ class CPPTranslator:
         CPP_description = (
             comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" +comment_start + " ", description.strip()) + "\n"
         )
-        args = [f"{self.pytype_to_cpptype(arg.annotation)} {arg.arg}" for arg in args]
-        arg_list = ", ".join(args)
+        self.args_type = [self.pytype_to_cpptype(arg.annotation) for arg in args]
+        formal_args = [f"{self.pytype_to_cpptype(arg.annotation)} {arg.arg}" for arg in args]
+        formal_arg_list = ", ".join(formal_args)
 
-        ret_type = self.pytype_to_cpptype(_returns)
-        return f"{CPP_description}{ret_type} {name}({arg_list})" + " {\n"
+        self.ret_type = self.pytype_to_cpptype(_returns)
+        return f"{CPP_description}{self.ret_type} {name}({formal_arg_list})" + " {\n"
+    
+    def update_type(self, right, expected_type):
+        '''Update type of the right expression if it is different from the
+            return type of function
+        '''
+        if self.pytype_to_cpptype(right[1]) == expected_type:
+            return right[0]
+        return re.sub("(.+)\(", expected_type+"(", right[0])
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
@@ -90,6 +110,7 @@ class CPPTranslator:
             "#include<vector>",
             "#include<string>",
             "#include<map>",
+            "#include<optional>",
             "#include<assert.h>",
             ""
         ])
@@ -104,7 +125,9 @@ class CPPTranslator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        return f"    assert({left[0]} == {right[0]});"
+        print(right)
+        right = self.update_type(right, self.ret_type)
+        return f"    assert({left[0]} == {right});"
 
     # NOTE(arjun): Really, no Nones?
     def gen_literal(self, c: bool | str | int | float | None):
@@ -114,12 +137,13 @@ class CPPTranslator:
         if type(c) == bool:
             return str(c).lower(), ast.Name("bool")
         if type(c) == str:
-            return repr(c), ast.Name("str")
+            return f'"{c}"', ast.Name("str")
         if type(c) == int:
             return repr(c), ast.Name("int")
         if type(c) == float:
             return repr(c), ast.Name("float")
-        return repr(c), ast.Name("None")
+        #It appears None occurs for only optional
+        return "{}", ast.Name("None")
 
     def gen_var(self, v: str) -> str:
         """Translate a variable with name v."""
@@ -134,7 +158,7 @@ class CPPTranslator:
           return "std::vector<int>()", ast.List([ast.Name("int")])
 
         elem_type = self.pytype_to_cpptype(l[0][1])
-        return f"std::vector<{elem_type}>" + "{" + ", ".join([e[0] for e in l]) + "}", ast.List([l[0][1]])
+        return f"std::vector<{elem_type}>" + "({" + ", ".join([e[0] for e in l]) + "})", ast.List([l[0][1]])
 
     def gen_tuple(self, t: List[str]) -> str:
         """Translate a tuple with elements t
@@ -148,7 +172,9 @@ class CPPTranslator:
         A dictionary { "key1": val1, "key2": val2 } translates to map<?,?>{ ["key1"] = val1, ["key2"] = val2 }
         """
         if keys == [] and values == []:
-          return "{}", List[None]
+            dict_type = ast.Dict(ast.Name("None"), ast.Name("None"))
+            cpp_type = self.pytype_to_cpptype(dict_type)
+            return cpp_type+"({})", dict_type
         
         #Assuming all keys and values have same type
         keys_type = keys[0][1]
@@ -156,14 +182,15 @@ class CPPTranslator:
         keys = [k[0] for k in keys]
         values = [v[0] for v in values]
         
-        cppdict = f"std::map<{self.pytype_to_cpptype(keys_type)}, {self.pytype_to_cpptype(keys_type)}>"
-        return cppdict + "{" + ", ".join(f"[{k}] = {v}" for k, v in zip(keys, values)) + "}", ast.Dict(keys_type, values_type)
+        dict_type = ast.Dict(keys_type, values_type)
+        cpp_type = self.pytype_to_cpptype(dict_type)
+        return cpp_type + "({" + ", ".join(f"[{k}] = {v}" for k, v in zip(keys, values)) + "})", dict_type
 
     def gen_call(self, func: str, args: List[str]) -> str:
         """Translate a function call `func(args)`
         A function call f(x, y, z) translates to f(x, y, z)
         """
-        return func[0] + "(" + ", ".join([arg[0] for arg in args]) + ")", None
+        return func[0] + "(" + ", ".join([self.update_type(args[i], self.args_type[i]) for i in range(len(args))]) + ")", None
 
 
 if __name__ == "__main__":

@@ -10,10 +10,15 @@ def main():
     directory = Path(Path(__file__).parent, "..", "datasets", "cpp").resolve()
 
     for filename in os.listdir(directory):
-        if "151_double_the_difference" in filename:
+        if "151_double_the_difference" in filename or '103' in filename:
+          continue
+        if '.cpp' not in filename:
+          #Do not compile a binary
           continue
         filepath = os.path.join(directory, filename)
         binary = filepath.replace('.cpp','')
+        if os.path.basename(binary) in os.listdir(directory):
+          continue
         command = " ".join(["g++", filepath, "-o", binary])
         print(command)
         # Assumes exit-code 0 is all okay
@@ -23,12 +28,11 @@ def main():
         else:
           status = "SyntaxError"
           print(output)
-
+          return
         # except subprocess.TimeoutExpired as exc:
         #     status = "Timeout"
         filename = filename.split(".")[0]
         print(f"C++,{filename},{status}")
-        return
 
 if __name__ == "__main__":
     main()
