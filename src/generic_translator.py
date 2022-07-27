@@ -129,14 +129,6 @@ def translate_file(port: int, translator, file):
     cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
     entry_point = re.search("(HumanEval_\d+)_(.+).py", file.name).group(2)
 
-    filename = Path(
-        file.parent,
-        "..",
-        f"{translator.file_ext}",
-        f"{cleaned_task_id}_{entry_point}.{translator.file_ext}",
-    ).resolve()
-    filename.parent.mkdir(parents=True, exist_ok=True)
-
     reading_prompt = True
     reading_tests = False
     prompt_buffer = []
@@ -170,19 +162,28 @@ def translate_file(port: int, translator, file):
     if translated_tests is None:
         print(f"Failed to translate tests for {file}")
         return
+    response = completion(
+        port=port,
+        engine="code-davinci-001",
+        # Settings from the Codex paper
+        prompt=translated_prompt,
+        max_tokens=500,
+        temperature=0.2,
+        top_p=0.95,
+        stop=translator.stop,
+        n=1,
+    )
+
+    filename = Path(
+        file.parent,
+        "..",
+        f"{translator.file_ext}",
+        f"{cleaned_task_id}_{entry_point}.{translator.file_ext}",
+    ).resolve()
+    filename.parent.mkdir(parents=True, exist_ok=True)
+
     with open(filename, "w") as f:
         f.write(translated_prompt)
-        response = completion(
-            port=port,
-            engine="code-davinci-001",
-            # Settings from the Codex paper
-            prompt=translated_prompt,
-            max_tokens=500,
-            temperature=0.2,
-            top_p=0.95,
-            stop=translator.stop,
-            n=1,
-        )
         f.write(response[0])
         f.write("\n\n")
         f.write(translated_tests)
