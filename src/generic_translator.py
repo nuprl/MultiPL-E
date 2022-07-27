@@ -4,6 +4,7 @@
 # This is a helper script for translating problems from the OpenAI HumanEval
 # problems to Language L.
 import ast
+from glob import glob
 import re
 from pathlib import Path
 import argparse
@@ -216,6 +217,14 @@ def main(translator):
         default="code_davinci_001_temp_0.2",
         help="Code generation model to use")
 
+    args.add_argument(
+        "--files",
+        type=int,
+        nargs="*",
+        default=[],
+        help="Specify the files to translate by their number, e.g. --files 0 1 2"
+    )
+
     args = args.parse_args()
 
     if args.doctests not in [ "keep", "remove", "transform" ]:
@@ -223,5 +232,13 @@ def main(translator):
 
 
     directory = Path(Path(__file__).parent, "..", "datasets").resolve()
-    for filepath in sorted(directory.glob("originals/*.py")):
+    files_unsorted = directory.glob(f"originals/*.py") 
+    files_sorted = sorted(files_unsorted, key=(lambda s: int(str(s).split("_")[1])))
+    files_index = []
+    if len(args.files) > 0:
+        files_index = args.files
+    else:
+        files_index = range(len(files_sorted)) 
+    for i in files_index:
+        filepath = files_sorted[i]
         translate_file(args, translator, filepath)
