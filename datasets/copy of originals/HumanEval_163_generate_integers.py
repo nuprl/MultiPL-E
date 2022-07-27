@@ -6,9 +6,12 @@ def generate_integers(a: int, b: int) -> List[int]:
     and b, in ascending order.
 
     For example:
-    generate_integers(2, 8) => [2, 4, 6, 8]
-    generate_integers(8, 2) => [2, 4, 6, 8]
-    generate_integers(10, 14) => []
+    >>> generate_integers(2, 8) 
+    [2, 4, 6, 8]
+    >>> generate_integers(8, 2) 
+    [2, 4, 6, 8]
+    >>> generate_integers(10, 14) 
+    []
     """
     ### Canonical solution below ###
     lower = max(2, min(a, b))
@@ -26,7 +29,7 @@ def check(candidate):
     assert candidate(17,89) == [], "Test 4"
 
     # Check some edge cases that are easy to work out by hand.
-    assert True, "This prints if this assert fails 2 (also good for debugging!)"
+    
 
 def test_check():
     check(generate_integers)
