@@ -27,6 +27,9 @@ def main():
             except subprocess.CalledProcessError as exc:
                 # Well, it's a panic
                 status = "Exception"
+            # Ensures the last /tmp/a.out file is deleted at the end. Otherwise, I retain
+            # ownership and other users cannot overwrite it.
+            os.remove("/tmp/a.out")
         filename = filename.split(".")[0]
         print(f"Rust,{filename},{status}")
 
