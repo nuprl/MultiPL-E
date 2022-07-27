@@ -11,33 +11,21 @@ from generic_translator import main
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
+
+#TODO: Set annotations 
+
 class CPPTranslator:
     '''Translate Python to C++.
        Each method returns a tuple of code and type of the expression
     '''
 
-
-    # NOTE(arjun): Seems like reasonable stop sequences for CPP
-    stop = ["}\n\n"] #, "}\nvoid", "}\nint", "}\nstd::string", "}\nfloat"
+    #Seems like reasonable stop sequences for CPP
+    stop = ["\n\n","\nvoid", "\nint", "}\nbool"]
 
     def __init__(self, file_ext):
         self.file_ext = file_ext
 
-    def pytype_to_cpptype(self, pytype):
-        #Ugh: match does not work with types
-        #Only matching types that appear in the dataset
-        if pytype == int:
-            return "int"
-        elif pytype == str:
-            return "std::string"
-        elif pytype == float:
-            return "float"
-        elif pytype == List[int]:
-            return "std::vector<int>"
-        print ("UNKNOWN", pytype)
-        return "UNKNOWN"
-
-    def return_type(self, ann: ast.expr | None) -> str:
+    def pytype_to_cpptype(self, ann: ast.expr | None) -> str:
         if ann == None:
             print(
                 f"Didn't find annotation for a fundecl arg")
@@ -54,14 +42,16 @@ class CPPTranslator:
                 type_name = "float"
             case ast.Name(id="bool"):
                 type_name = "bool"
+            case ast.List(elts=elts):
+                type_name = "std::vector<%s>"%self.pytype_to_cpptype(elts[0]).strip()
             case ast.Tuple(elts=elts):
-                type_name = "std::vector<%s>"%self.return_type(elts[0]).strip()
+                type_name = "std::vector<%s>"%self.pytype_to_cpptype(elts[0]).strip()
             case ast.Subscript(value=ast.Name(id="Dict"), slice=ast.Tuple(elts=key_val_type)):
-                type_name = "std::map<%s, %s>"%(self.return_type(key_val_type[0]), self.return_type(key_val_type[1]))
+                type_name = "std::map<%s, %s>"%(self.pytype_to_cpptype(key_val_type[0]), self.pytype_to_cpptype(key_val_type[1]))
             case ast.Subscript(value=ast.Name(id="List"), slice=elem_type):
-                type_name = "std::vector<%s>"%self.return_type(elem_type).strip()
+                type_name = "std::vector<%s>"%self.pytype_to_cpptype(elem_type).strip()
             case ast.Subscript(value=ast.Name(id="Tuple"), slice=elem_type):
-                type_name = "std::vector<%s>"%self.return_type(elem_type).strip()
+                type_name = "std::vector<%s>"%self.pytype_to_cpptype(elem_type).strip()
             case ast.Name(id="Any"):
                 #Cannot do this in C++
                 print("Cannot use Any in C++")
@@ -78,10 +68,10 @@ class CPPTranslator:
         CPP_description = (
             comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" +comment_start + " ", description.strip()) + "\n"
         )
-        args = [f"{self.return_type(arg.annotation)} {arg.arg}" for arg in args]
+        args = [f"{self.pytype_to_cpptype(arg.annotation)} {arg.arg}" for arg in args]
         arg_list = ", ".join(args)
 
-        ret_type = self.return_type(_returns)
+        ret_type = self.pytype_to_cpptype(_returns)
         return f"{CPP_description}{ret_type} {name}({arg_list})" + " {\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
@@ -89,17 +79,23 @@ class CPPTranslator:
         This code goes at the start of the test suite.
         """
         return [
-            "#include<iostream>",
-            "#include<vector>",
-            "#include<string>",
-            "#include<assert.h>",
             "",
             "int main() {",
             f"    auto candidate = {entry_point};"
         ]
+    
+    def module_imports(self):
+        return "\n".join([
+            "#include<iostream>",
+            "#include<vector>",
+            "#include<string>",
+            "#include<map>",
+            "#include<assert.h>",
+            ""
+        ])
 
     def test_suite_suffix_lines(self) -> List[str]:
-        return ["}"] #["end", "", "os.exit(lu.CPPUnit.run())"]
+        return ["}"]
 
     def deep_equality(self, left: str, right: str) -> str:
         """
@@ -116,8 +112,14 @@ class CPPTranslator:
         c: is the literal value
         """
         if type(c) == bool:
-            return str(c).lower(), type(c)
-        return repr(c), type(c)
+            return str(c).lower(), ast.Name("bool")
+        if type(c) == str:
+            return repr(c), ast.Name("str")
+        if type(c) == int:
+            return repr(c), ast.Name("int")
+        if type(c) == float:
+            return repr(c), ast.Name("float")
+        return repr(c), ast.Name("None")
 
     def gen_var(self, v: str) -> str:
         """Translate a variable with name v."""
@@ -128,11 +130,11 @@ class CPPTranslator:
         A list [ x, y, z] translates to vector<?>{ x, y, z }
         """
         #Assuming all elements in list have same type
-        if l == []:
-          return "{}", List[None]
+        if l == [] or l == ():
+          return "std::vector<int>()", ast.List([ast.Name("int")])
 
         elem_type = self.pytype_to_cpptype(l[0][1])
-        return f"std::vector<{elem_type}>" + "{" + ", ".join([e[0] for e in l]) + "}", List[l[0][1]]
+        return f"std::vector<{elem_type}>" + "{" + ", ".join([e[0] for e in l]) + "}", ast.List([l[0][1]])
 
     def gen_tuple(self, t: List[str]) -> str:
         """Translate a tuple with elements t
@@ -155,7 +157,7 @@ class CPPTranslator:
         values = [v[0] for v in values]
         
         cppdict = f"std::map<{self.pytype_to_cpptype(keys_type)}, {self.pytype_to_cpptype(keys_type)}>"
-        return cppdict + "{" + ", ".join(f"[{k}] = {v}" for k, v in zip(keys, values)) + "}", Dict[keys_type, values_type]
+        return cppdict + "{" + ", ".join(f"[{k}] = {v}" for k, v in zip(keys, values)) + "}", ast.Dict(keys_type, values_type)
 
     def gen_call(self, func: str, args: List[str]) -> str:
         """Translate a function call `func(args)`
