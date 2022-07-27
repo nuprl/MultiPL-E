@@ -25,8 +25,5 @@ def check(candidate):
     assert candidate(132, 2) == [2, 4, 6, 8], "Test 3"
     assert candidate(17,89) == [], "Test 4"
 
-    # Check some edge cases that are easy to work out by hand.
-    assert True, "This prints if this assert fails 2 (also good for debugging!)"
-
 def test_check():
     check(generate_integers)

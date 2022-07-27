@@ -11,15 +11,7 @@ from generic_translator import main
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
-
-# class AnnotationVisitor(ast.NodeVisitor):
-#     def __init__(self, level,*args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.level = level
-    
-#     def generic_visit(self):
-
-    
+#Needs lots of refactoring :(
 
 #TODO: Set annotations 
 
@@ -29,7 +21,7 @@ class CPPTranslator:
     '''
 
     #Seems like reasonable stop sequences for CPP
-    stop = ["\n\n","\nvoid", "\nint", "}\nbool"]
+    stop = ["\n\n","\nvoid", "\nint", "\nbool"]
     #C++ Keywords found in the dataset
     cpp_keywords = ["operator"]
 
@@ -173,6 +165,7 @@ class CPPTranslator:
             "#include<map>",
             "#include<optional>",
             "#include<assert.h>",
+            "#include<bits/stdc++.h>",
             ""
         ])
 
