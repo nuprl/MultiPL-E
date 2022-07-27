@@ -56,31 +56,18 @@ class RacketTranslator:
             return "#f" # NOTE(arjun): My guess
         return repr(c)
 
-    def gen_unaryop(self, op: str, v: str) -> str:
-        """Translate a unary operation (op, v)"""
-        return op + v
-
     def gen_var(self, v: str) -> str:
         """Translate a variable with name v."""
         return v
 
     def gen_list(self, l: List[str]) -> str:
-        """Translate a list with elements l
-        A list [ x, y, z] translates to { x, y, z }
-        """
-        return "'(" + " ".join(l) + ")"
+        return "(list " + " ".join(l) + ")"
 
     def gen_tuple(self, t: List[str]) -> str:
-        """Translate a tuple with elements t
-        A tuple (x, y, z) translates to { x, y, z }
-        """
-        return "'(" + " ".join(t) + ")"
+        return "(list " + " ".join(t) + ")"
 
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
-        """Translate a dictionary with keys and values
-        A dictionary { "key1": val1, "key2": val2 } translates to { ["key1"] = val1, ["key2"] = val2 }
-        """
-        return "'#hash(" + " ".join(f"({k} .  {v})" for k, v in zip(keys, values)) + ")"
+        return "#hash(" + " ".join(f"({k} .  {v})" for k, v in zip(keys, values)) + ")"
 
     def gen_call(self, func: str, args: List[str]) -> str:
         """Translate a function call `func(args)`
