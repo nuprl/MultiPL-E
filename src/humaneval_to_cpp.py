@@ -29,7 +29,7 @@ class CPPTranslator:
     '''
 
     #Seems like reasonable stop sequences for CPP
-    stop = ["\n\n","\nvoid", "\nint", "}\nbool"]
+    stop = ["\n\n","\nvoid", "\nint", "\nbool"]
     #C++ Keywords found in the dataset
     cpp_keywords = ["operator"]
 
@@ -173,6 +173,7 @@ class CPPTranslator:
             "#include<map>",
             "#include<optional>",
             "#include<assert.h>",
+            "#include<bits/stdc++.h>",
             ""
         ])
 
