@@ -8,16 +8,20 @@ def valid_date(date: str) -> bool:
     3. The months should not be less than 1 or higher than 12.
     4. The date should be in the format: mm-dd-yyyy
 
-    for example: 
-    valid_date('03-11-2000') => True
+    >>> valid_date('03-11-2000')
+    True
 
-    valid_date('15-01-2012') => False
+    >>> valid_date('15-01-2012')
+    False
 
-    valid_date('04-0-2040') => False
+    >>> valid_date('04-0-2040')
+    False
 
-    valid_date('06-04-2020') => True
+    >>> valid_date('06-04-2020')
+    True
 
-    valid_date('06/04/2020') => False
+    >>> valid_date('06/04/2020')
+    False
     """
     ### Canonical solution below ###
     try:

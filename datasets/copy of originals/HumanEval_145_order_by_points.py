@@ -8,8 +8,10 @@ def order_by_points(nums: List[int]) -> List[int]:
     order them based on their index in original list.
 
     For example:
-    >>> order_by_points([1, 11, -1, -11, -12]) == [-1, -11, 1, -12, 11]
-    >>> order_by_points([]) == []
+    >>> order_by_points([1, 11, -1, -11, -12])
+    [-1, -11, 1, -12, 11]
+    >>> order_by_points([])
+    []
     """
     ### Canonical solution below ###
     def digits_sum(n):

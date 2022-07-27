@@ -7,11 +7,8 @@ def get_max_triples(n: int) -> int:
     and a[i] + a[j] + a[k] is a multiple of 3.
 
     Example :
-        Input: n = 5
-        Output: 1
-        Explanation: 
-        a = [1, 3, 7, 13, 21]
-        The only valid triple is (1, 7, 13).
+    >>> get_max_triples(5)
+    1
     """
     ### Canonical solution below ###
     A = [i*i - i + 1 for i in range(1,n+1)]

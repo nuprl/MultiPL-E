@@ -16,9 +16,12 @@ def intersection(interval1: Tuple[int, int], interval2: Tuple[int, int]) -> str:
 
 
     [input/output] samples:
-    intersection((1, 2), (2, 3)) ==> "NO"
-    intersection((-1, 1), (0, 4)) ==> "NO"
-    intersection((-3, -1), (-5, 5)) ==> "YES"
+    >>> intersection((1, 2), (2, 3))
+    "NO"
+    >>> intersection((-1, 1), (0, 4))
+    "NO"
+    >>> intersection((-3, -1), (-5, 5))
+    "YES"
     """
     ### Canonical solution below ###
     def is_prime(num):

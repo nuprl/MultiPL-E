@@ -7,12 +7,8 @@ def add_elements(arr: List[int], k: int) -> int:
 
     Example:
 
-        Input: arr = [111,21,3,4000,5,6,7,8,9], k = 4
-        Output: 24 # sum of 21 + 3
-
-    Constraints:
-        1. 1 <= len(arr) <= 100
-        2. 1 <= k <= len(arr)
+    >>> add_elements([111,21,3,4000,5,6,7,8,9], 4)
+    24
     """
     ### Canonical solution below ###
     return sum(elem for elem in arr[:k] if len(str(elem)) <= 2)

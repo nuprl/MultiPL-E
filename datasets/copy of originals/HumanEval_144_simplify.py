@@ -7,9 +7,12 @@ def simplify(x: str, n: str) -> bool:
 
     You can assume that x, and n are valid fractions, and do not have zero as denominator.
 
-    simplify("1/5", "5/1") = True
-    simplify("1/6", "2/1") = False
-    simplify("7/10", "10/2") = False
+    >>> simplify("1/5", "5/1")
+    True
+    >>> simplify("1/6", "2/1")
+    False
+    >>> simplify("7/10", "10/2")
+    False
     """
     ### Canonical solution below ###
     a, b = x.split("/")

@@ -7,8 +7,10 @@ def can_arrange(arr: List[int]) -> int:
     duplicate values.
 
     Examples:
-    can_arrange([1,2,4,3,5]) = 3
-    can_arrange([1,2,3]) = -1
+    >>> can_arrange([1,2,4,3,5])
+    3
+    >>> can_arrange([1,2,3])
+    -1
     """
     ### Canonical solution below ###
     ind=-1

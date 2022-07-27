@@ -7,9 +7,12 @@ def split_words(txt: str) -> Union[List[str], int]:
     should split on commas ',' if no commas exists you should return the number of lower-case letters with odd order in the
     alphabet, ord('a') = 0, ord('b') = 1, ... ord('z') = 25
     Examples
-    split_words("Hello world!") ➞ ["Hello", "world!"]
-    split_words("Hello,world!") ➞ ["Hello", "world!"]
-    split_words("abcdef") == 3 
+    >>> split_words("Hello world!")
+    ["Hello", "world!"]
+    >>> split_words("Hello,world!")
+    ["Hello", "world!"]
+    >>> split_words("abcdef") 
+    3 
     '''
     ### Canonical solution below ###
     if " " in txt:

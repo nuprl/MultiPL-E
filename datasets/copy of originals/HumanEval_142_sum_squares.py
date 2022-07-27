@@ -7,9 +7,12 @@ def sum_squares(lst: List[int]) -> int:
     change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
     
     Examples:
-    For lst = [1,2,3] the output should be 6
-    For lst = []  the output should be 0
-    For lst = [-1,-5,2,-1,-5]  the output should be -126
+    >>> lst 
+    [1,2,3] 
+    >>> lst 
+    []  
+    >>> lst 
+    [-1,-5,2,-1,-5]
     """
     ### Canonical solution below ###
     result =[]

@@ -21,14 +21,12 @@ def minPath(grid: List[List[int]], k: int) -> List[int]:
     lst_A[j] = lst_B[j].
     It is guaranteed that the answer is unique.
     Return an ordered list of the values on the cells that the minimum path go through.
+    
+    >>> minPath([ [1,2,3], [4,5,6], [7,8,9]], 3)
+    [1, 2, 1]
 
-    Examples:
-
-        Input: grid = [ [1,2,3], [4,5,6], [7,8,9]], k = 3
-        Output: [1, 2, 1]
-
-        Input: grid = [ [5,9,3], [4,1,6], [7,8,2]], k = 1
-        Output: [1]
+    >>> minPath([ [5,9,3], [4,1,6], [7,8,2]], 1)
+    [1]
     """
     ### Canonical solution below ###
     n = len(grid)

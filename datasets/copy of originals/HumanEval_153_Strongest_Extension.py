@@ -15,7 +15,8 @@ def Strongest_Extension(class_name: str, extensions: List[str]) -> str:
     return 'Slices.SErviNGSliCes' since 'SErviNGSliCes' is the strongest extension 
     (its strength is -1).
     Example:
-    for Strongest_Extension('my_class', ['AA', 'Be', 'CC']) == 'my_class.AA'
+    >>> Strongest_Extension('my_class', ['AA', 'Be', 'CC'])
+    'my_class.AA'
     """
     ### Canonical solution below ###
     strong = extensions[0]

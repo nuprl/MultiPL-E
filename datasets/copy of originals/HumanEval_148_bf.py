@@ -12,9 +12,12 @@ def bf(planet1: str, planet2: str) -> Tuple[str, ...]:
     The function should return an empty tuple if planet1 or planet2
     are not correct planet names. 
     Examples
-    bf("Jupiter", "Neptune") ==> ("Saturn", "Uranus")
-    bf("Earth", "Mercury") ==> ("Venus")
-    bf("Mercury", "Uranus") ==> ("Venus", "Earth", "Mars", "Jupiter", "Saturn")
+    >>> bf("Jupiter", "Neptune")
+    ("Saturn", "Uranus")
+    >>> bf("Earth", "Mercury")
+    ("Venus")
+    >>> bf("Mercury", "Uranus")
+    ("Venus", "Earth", "Mars", "Jupiter", "Saturn")
     '''
     ### Canonical solution below ###
     planet_names = ("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune")

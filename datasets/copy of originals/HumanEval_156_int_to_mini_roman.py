@@ -6,9 +6,12 @@ def int_to_mini_roman(number: int) -> str:
     Restrictions: 1 <= num <= 1000
 
     Examples:
-    >>> int_to_mini_roman(19) == 'xix'
-    >>> int_to_mini_roman(152) == 'clii'
-    >>> int_to_mini_roman(426) == 'cdxxvi'
+    >>> int_to_mini_roman(19)
+    'xix'
+    >>> int_to_mini_roman(152)
+    'clii'
+    >>> int_to_mini_roman(426)
+    'cdxxvi'
     """
     ### Canonical solution below ###
     num = [1, 4, 5, 9, 10, 40, 50, 90,  

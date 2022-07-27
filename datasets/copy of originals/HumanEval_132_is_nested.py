@@ -5,12 +5,18 @@ def is_nested(string: str) -> bool:
     The function should return True if and only if there is a valid subsequence of brackets 
     where at least one bracket in the subsequence is nested.
 
-    is_nested('[[]]') ➞ True
-    is_nested('[]]]]]]][[[[[]') ➞ False
-    is_nested('[][]') ➞ False
-    is_nested('[]') ➞ False
-    is_nested('[[][]]') ➞ True
-    is_nested('[[]][[') ➞ True
+    >>> is_nested('[[]]') 
+    True
+    >>> is_nested('[]]]]]]][[[[[]') 
+    False
+    >>> is_nested('[][]') 
+    False
+    >>> is_nested('[]') 
+    False
+    >>> is_nested('[[][]]') 
+    True
+    >>> is_nested('[[]][[') 
+    True
     '''
     ### Canonical solution below ###
     opening_bracket_index = []

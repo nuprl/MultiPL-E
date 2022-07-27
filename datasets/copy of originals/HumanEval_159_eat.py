@@ -9,10 +9,14 @@ def eat(number: int, need: int, remaining: int) -> List[int]:
     if there are not enough remaining carrots, you will eat all remaining carrots, but will still be hungry.
     
     Example:
-    * eat(5, 6, 10) -> [11, 4]
-    * eat(4, 8, 9) -> [12, 1]
-    * eat(1, 10, 10) -> [11, 0]
-    * eat(2, 11, 5) -> [7, 0]
+    >>> eat(5, 6, 10)
+    [11, 4]
+    >>> eat(4, 8, 9)
+    [12, 1]
+    >>> eat(1, 10, 10)
+    [11, 0]
+    >>> eat(2, 11, 5)
+    [7, 0]
     
     Variables:
     @number : integer

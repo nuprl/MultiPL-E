@@ -4,8 +4,10 @@ def even_odd_count(num: int) -> Tuple[int, int]:
     """Given an integer. return a tuple that has the number of even and odd digits respectively.
 
      Example:
-        even_odd_count(-12) ==> (1, 1)
-        even_odd_count(123) ==> (1, 2)
+    >>> even_odd_count(-12) 
+    (1, 1)
+    >>> even_odd_count(123) 
+    (1, 2)
     """
     ### Canonical solution below ###
     even_count = 0

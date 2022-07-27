@@ -6,9 +6,12 @@ def solve(s: str) -> str:
     If the string contains no letters, reverse the string.
     The function should return the resulted string.
     Examples
-    solve("1234") = "4321"
-    solve("ab") = "AB"
-    solve("#a@C") = "#A@c"
+    >>> solve("1234") 
+    "4321"
+    >>> solve("ab") 
+    "AB"
+    >>> solve("#a@C") 
+    "#A@c"
     """
     ### Canonical solution below ###
     flg = 0

@@ -9,9 +9,12 @@ def largest_smallest_integers(lst: List[int]) -> Tuple[Optional[int], Optional[i
     If there is no negative or positive integers, return them as None.
 
     Examples:
-    largest_smallest_integers([2, 4, 1, 3, 5, 7]) == (None, 1)
-    largest_smallest_integers([]) == (None, None)
-    largest_smallest_integers([0]) == (None, None)
+    >>> largest_smallest_integers([2, 4, 1, 3, 5, 7]) 
+    (None, 1)
+    >>> largest_smallest_integers([]) 
+    (None, None)
+    >>> largest_smallest_integers([0]) 
+    (None, None)
     '''
     ### Canonical solution below ###
     smallest = list(filter(lambda x: x < 0, lst))
