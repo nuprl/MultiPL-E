@@ -22,18 +22,18 @@ class PerlTranslator:
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         perl_description = "use strict;\n# " + re.sub(DOCSTRING_LINESTART_RE, "\n# ", description.strip()) + "\n"
-        arg_names = [arg.arg for arg in args]
+        arg_names = ["$"+arg.arg for arg in args]
         arg_list = ", ".join(arg_names)
-        return f"{perl_description}sub {name} ({arg_list})" + " {\n"
+        return f"{perl_description}sub {name} "+"{\n    " + f"my({arg_list});\n    ({arg_list}) = @_;\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
         This code goes at the start of the test suite.
         """
-        return [ "use Test2::V0;\nuse Test2::Plugin::DieOnFail;", "", "sub test-humaneval {\n",f"my $candidate = {entry_point};" ]
+        return [ "use Test2::V0;\nuse Test2::Plugin::DieOnFail;", "", "sub testhumaneval {",f"    my $candidate = \&{entry_point};"]
 
     def test_suite_suffix_lines(self) -> List[str]:
-        return ["}", "", "test-humaneval();"]
+        return ["}", "", "testhumaneval();"]
 
     def deep_equality(self, left: str, right: str) -> str:
         """
@@ -42,7 +42,7 @@ class PerlTranslator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        return f"  is_deeply({left}, {right});"
+        return f"    is_deeply({left}, {right});"
 
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
@@ -58,7 +58,7 @@ class PerlTranslator:
 
     def gen_var(self, v: str) -> str:
         """Translate a variable with name v."""
-        return f"${v}"
+        return f"{v}"
 
     def gen_list(self, l: List[str]) -> str:
         return "(" + ", ".join(l) + ")"
@@ -73,6 +73,8 @@ class PerlTranslator:
         """Translate a function call `func(args)`
         A function call f(x, y, z) translates to f(x, y, z)
         """
+        if func == "candidate":
+            func = f"${func}->"
         return f'{func}(' + ", ".join(args) + ")"
 
 
