@@ -73,10 +73,10 @@ class PromptVisitor(ast.NodeVisitor):
             return None
         match doctest_transformation:
             case "keep":
-                description = self.description
+                desc = self.description
             case "remove":
                 doctestRegex = re.compile(r'>>> .*\n.*\n')
-                description = re.sub(doctestRegex, '', description)
+                desc = re.sub(doctestRegex, '', self.description)
             case "transform":
                 # Steps:
                 # Find the Python expression and result in each doctest
@@ -99,13 +99,14 @@ class PromptVisitor(ast.NodeVisitor):
                         funcCalls[i] = translate_expr(ast.parse(funcCalls[i]), self.translator)
                         outputs[i] = translate_expr(ast.parse(outputs[i]), self.translator)
                     
-                    description = split[0]
+                    desc = split[0]
                     for i in range(len(funcCalls)):
-                        description += funcCalls[i] + '\n' + outputs[i] + '\n\n'
-                description = self.description
+                        desc += funcCalls[i] + '\n' + outputs[i] + '\n\n'
+                else:
+                    desc = self.description
             case _other:
                 raise Exception(f"bad doctest_transformation")
-        return self.translator.translate_prompt(self.name, self.args, self.returns, description)
+        return self.translator.translate_prompt(self.name, self.args, self.returns, desc)
 
 
 def translate_prompt(translator, doctest_transformation: str, py_prompt: str, filename: str) -> str:
