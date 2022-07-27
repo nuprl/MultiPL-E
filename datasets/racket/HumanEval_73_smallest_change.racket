@@ -1,0 +1,45 @@
+#lang racket
+
+;; Given an array arr of integers, find the minimum number of elements that
+;; need to be changed to make the array palindromic. A palindromic array is an array that
+;; is read the same backwards and forwards. In one change, you can change one element to any other element.
+;; For example:
+;; smallest_change([1,2,3,5,4,7,9,6]) == 4
+;; smallest_change([1, 2, 3, 4, 3, 2, 2]) == 1
+;; smallest_change([1, 2, 3, 2, 1]) == 0
+(define (smallest_change arr)
+  (define (is_palindrome? arr)
+    (define (is_palindrome_recur? arr acc)
+      (if (null? arr)
+          acc
+          (is_palindrome_recur? (cdr arr) (if (equal? (car arr) (cadr arr))
+                                             (cons (car arr) acc)
+                                             (cons (car arr) (cons (cadr arr) acc))))))
+    (equal? (reverse (is_palindrome_recur? arr '())) arr))
+  (define (smallest_change_recur arr acc)
+    (if (is_palindrome? arr)
+        acc
+        (smallest_change_recur (map (lambda (x) (if (equal? x (car arr))
+                                                    (cadr arr)
+                                                    (cdr arr)))
+                                    arr)
+                               (+ 1 acc))))
+  (smallest_change_recur arr 0))
+
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate smallest_change))
+    (check-equal? (candidate '(1 2 3 5 4 7 9 6)) 4)
+    (check-equal? (candidate '(1 2 3 4 3 2 2)) 1)
+    (check-equal? (candidate '(1 4 2)) 1)
+    (check-equal? (candidate '(1 4 4 2)) 1)
+    (check-equal? (candidate '(1 2 3 2 1)) 0)
+    (check-equal? (candidate '(3 1 1 3)) 0)
+    (check-equal? (candidate '(1)) 0)
+    (check-equal? (candidate '(0 1)) 1)
+))
+
+(test-humaneval)

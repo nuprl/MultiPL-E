@@ -1,0 +1,63 @@
+#lang racket
+
+;; Given an array of non-negative integers, return a copy of the given array after sorting,
+;; you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
+;; or sort it in descending order if the sum( first index value, last index value) is even.
+;; Note:
+;; * don't change the given array.
+;; Examples:
+;; * sort_array([]) => []
+;; * sort_array([5]) => [5]
+;; * sort_array([2, 4, 3, 0, 1, 5]) => [0, 1, 2, 3, 4, 5]
+;; * sort_array([2, 4, 3, 0, 1, 5, 6]) => [6, 5, 4, 3, 2, 1, 0]
+(define (sort_array array)
+  (define (sort-array-helper array first last)
+    (if (> first last)
+        '()
+        (let ((middle (/ (+ first last) 2)))
+          (let ((left (sort-array-helper array first middle))
+                (right (sort-array-helper array (1+ middle) last)))
+            (let ((result '()))
+              (let ((left-index 0)
+                    (right-index 0))
+                (while (< left-index (length left))
+                  (let ((left-value (nth left-index left)))
+                    (while (< right-index (length right))
+                      (let ((right-value (nth right-index right)))
+                        (cond ((and (odd? (+ first last))
+                                    (< left-value right-value))
+                               (set! result (append result (list left-value)))
+                               (set! left-index (1+ left-index)))
+                              ((and (odd? (+ first last))
+                                    (> left-value right-value))
+                               (set! result (append result (list right-value)))
+                               (set! right-index (1+ right-index)))
+                              ((and (even? (+ first last))
+                                    (< left-value right-value))
+                               (set! result (append result (list right-value)))
+                               (set! right-index (1+ right-index)))
+                              ((and (even? (+ first last))
+                                    (> left-value right-value))
+                               (set! result (append result (list left-value)))
+                               (set! left-index (1+ left-index)))))))
+                    (set! result (append result (list right-value)))
+                    (set! right-index (1+ right-index))))
+                result))))))
+  (sort-array-helper array 0 (- (length array) 1)))
+
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate sort_array))
+    (check-equal? (candidate '()) '())
+    (check-equal? (candidate '(5)) '(5))
+    (check-equal? (candidate '(2 4 3 0 1 5)) '(0 1 2 3 4 5))
+    (check-equal? (candidate '(2 4 3 0 1 5 6)) '(6 5 4 3 2 1 0))
+    (check-equal? (candidate '(2 1)) '(1 2))
+    (check-equal? (candidate '(15 42 87 32 11 0)) '(0 11 15 32 42 87))
+    (check-equal? (candidate '(21 14 23 11)) '(23 21 14 11))
+))
+
+(test-humaneval)
