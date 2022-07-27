@@ -23,6 +23,8 @@ class CPPTranslator:
 
     #Seems like reasonable stop sequences for CPP
     stop = ["\n\n","\nvoid", "\nint", "}\nbool"]
+    #C++ Keywords found in the dataset
+    cpp_keywords = ["operator"]
 
     def __init__(self, file_ext):
         self.file_ext = file_ext
@@ -39,7 +41,7 @@ class CPPTranslator:
             case ast.Name(id="str"):
                 return "std::string"
             case ast.Name(id="int"):
-                return "int"
+                return "long"
             case ast.Name(id="float"):
                 return "float"
             case ast.Name(id="bool"):
@@ -50,7 +52,7 @@ class CPPTranslator:
             case ast.List(elts=elts):
                 return "std::vector<%s>"%self.pytype_to_cpptype(elts[0])
             case ast.Tuple(elts=elts):
-                return "std::vector<%s>"%self.pytype_to_cpptype(elts[0])
+                return "std::tuple<%s>"%", ".join([self.pytype_to_cpptype(e) for e in elts])
             case ast.Dict(keys=k,values=v):
                 return "std::map<%s, %s>"%(self.pytype_to_cpptype(k), self.pytype_to_cpptype(v))
             case ast.Subscript(value=ast.Name(id="Dict"), slice=ast.Tuple(elts=key_val_type)):
@@ -80,19 +82,26 @@ class CPPTranslator:
             comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" +comment_start + " ", description.strip()) + "\n"
         )
         self.args_type = [self.pytype_to_cpptype(arg.annotation) for arg in args]
-        formal_args = [f"{self.pytype_to_cpptype(arg.annotation)} {arg.arg}" for arg in args]
+        formal_args = [f"{self.pytype_to_cpptype(arg.annotation)} {self.gen_var(arg.arg)[0]}" for arg in args]
         formal_arg_list = ", ".join(formal_args)
 
         self.ret_type = self.pytype_to_cpptype(_returns)
         return f"{CPP_description}{self.ret_type} {name}({formal_arg_list})" + " {\n"
     
+    def wrap_in_brackets(self, s):
+        return f"({s})"
+
     def update_type(self, right, expected_type):
         '''Update type of the right expression if it is different from the
             return type of function
         '''
         if self.pytype_to_cpptype(right[1]) == expected_type:
-            return right[0]
-        return re.sub("(.+)\(", expected_type+"(", right[0])
+            return self.wrap_in_brackets(right[0])
+        
+        if re.findall("(.+)\(", right[0]) == []:
+            #No type? add the type of right
+            return self.wrap_in_brackets(expected_type+"("+right[0]+")")
+        return self.wrap_in_brackets(re.sub("(.+?)\(", expected_type+"(", right[0]))
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
@@ -125,7 +134,6 @@ class CPPTranslator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        print(right)
         right = self.update_type(right, self.ret_type)
         return f"    assert({left[0]} == {right});"
 
@@ -147,6 +155,9 @@ class CPPTranslator:
 
     def gen_var(self, v: str) -> str:
         """Translate a variable with name v."""
+        
+        if v in self.cpp_keywords:
+            return "_"+v+"_", None
         return v, None
 
     def gen_list(self, l: List[str]) -> str:
@@ -162,10 +173,13 @@ class CPPTranslator:
 
     def gen_tuple(self, t: List[str]) -> str:
         """Translate a tuple with elements t
-        A tuple (x, y, z) translates to vector<?>{ x, y, z }
+        A tuple (x, y, z) translates to make_tuple<?>{ x, y, z }
         """
-        #Assuming all elements in tuple have same type
-        return self.gen_list(t)
+        if t == [] or t == ():
+          return "std::tuple<int>()", ast.List([ast.Name("int")])
+        
+        return "std::make_tuple(" + ", ".join([e[0] for e in t]) + ")", \
+            ast.Tuple([e[1] for e in t])
 
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
         """Translate a dictionary with keys and values
@@ -184,7 +198,7 @@ class CPPTranslator:
         
         dict_type = ast.Dict(keys_type, values_type)
         cpp_type = self.pytype_to_cpptype(dict_type)
-        return cpp_type + "({" + ", ".join(f"[{k}] = {v}" for k, v in zip(keys, values)) + "})", dict_type
+        return cpp_type + "({ " + ", ".join(f"{{{k}, {v}}}" for k, v in zip(keys, values)) + " })", dict_type
 
     def gen_call(self, func: str, args: List[str]) -> str:
         """Translate a function call `func(args)`
