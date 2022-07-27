@@ -5,10 +5,9 @@
 # problems to Language L.
 import ast
 import re
-from completion import completion
 from pathlib import Path
-from typing import List
 import argparse
+from models import MODELS
 
 
 def translate_expr(translator, py_expr: ast.AST):
@@ -139,7 +138,7 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
     return "\n".join(test_cases)
 
 
-def translate_file(port: int, doctests_transformation: str, translator, file):
+def translate_file(args, translator, file):
     file = Path(file).resolve()
     cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
     entry_point = re.search("(HumanEval_\d+)_(.+).py", file.name).group(2)
@@ -164,7 +163,7 @@ def translate_file(port: int, doctests_transformation: str, translator, file):
                 tests_buffer.append(line)
 
     prompt = "".join(prompt_buffer)
-    translated_prompt = translate_prompt(translator, doctests_transformation, prompt, f"{cleaned_task_id}.py")
+    translated_prompt = translate_prompt(translator, args.doctests, prompt, f"{cleaned_task_id}.py")
 
     tests = "".join(tests_buffer)
     translated_tests = translate_tests(
@@ -177,29 +176,19 @@ def translate_file(port: int, doctests_transformation: str, translator, file):
     if translated_tests is None:
         print(f"Failed to translate tests for {file}")
         return
-    response = completion(
-        port=port,
-        engine="code-davinci-001",
-        # Settings from the Codex paper
-        prompt=translated_prompt,
-        max_tokens=500,
-        temperature=0.2,
-        top_p=0.95,
-        stop=translator.stop,
-        n=1,
-    )
+    response = MODELS[args.model](args, translated_prompt, translator.stop, 1)[0]
 
     filename = Path(
         file.parent,
         "..",
-        f"{translator.file_ext}",
+        f"{translator.file_ext}-{args.doctests}-{args.model}",
         f"{cleaned_task_id}_{entry_point}.{translator.file_ext}",
     ).resolve()
     filename.parent.mkdir(parents=True, exist_ok=True)
 
     with open(filename, "w") as f:
         f.write(translated_prompt)
-        f.write(response[0])
+        f.write(response)
         f.write("\n\n")
         f.write(translated_tests)
         print(f'Wrote {filename}')
@@ -221,6 +210,12 @@ def main(translator):
         help="What to do with doctests: keep, remove, or transform",
     )
 
+    args.add_argument(
+        "--model",
+        type=str,
+        default="code_davinci_001_temp_0.2",
+        help="Code generation model to use")
+
     args = args.parse_args()
 
     if args.doctests not in [ "keep", "remove", "transform" ]:
@@ -229,4 +224,4 @@ def main(translator):
 
     directory = Path(Path(__file__).parent, "..", "datasets").resolve()
     for filepath in sorted(directory.glob("originals/*.py")):
-        translate_file(args.port, args.doctests, translator, filepath)
+        translate_file(args, translator, filepath)
