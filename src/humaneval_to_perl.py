@@ -21,16 +21,16 @@ class PerlTranslator:
         self.file_ext = file_ext
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
-        perl_description = "use strict;\n# " + re.sub(DOCSTRING_LINESTART_RE, "\n# ", description.strip()) + "\n"
+        perl_description = "# " + re.sub(DOCSTRING_LINESTART_RE, "\n# ", description.strip()) + "\n"
         arg_names = ["$"+arg.arg for arg in args]
         arg_list = ", ".join(arg_names)
-        return f"{perl_description}sub {name} "+"{\n    " + f"my({arg_list});\n    ({arg_list}) = @_;\n"
+        return f"{perl_description}sub {name} "+"{\n    " + f"my({arg_list}) = @_;\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
         This code goes at the start of the test suite.
         """
-        return [ "use Test2::V0;\nuse Test2::Plugin::DieOnFail;", "", "sub testhumaneval {",f"    my $candidate = \&{entry_point};"]
+        return [ "use Data::Compare;\n", "", "sub testhumaneval {",f"    my $candidate = \&{entry_point};"]
 
     def test_suite_suffix_lines(self) -> List[str]:
         return ["}", "", "testhumaneval();"]
@@ -42,7 +42,7 @@ class PerlTranslator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        return f"    is_deeply({left}, {right});"
+        return f"    if(Compare({left},{right})) "+"{\n        print \"ok!\" }else{\n        exit 1;\n        }"
 
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
