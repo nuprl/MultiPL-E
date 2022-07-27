@@ -48,8 +48,10 @@ class PerlTranslator:
         """Translate a literal expression
         c: is the literal value
         """
-        if type(c) == bool:
-            return 1 if c else 0
+        if c is True:
+            return 1
+        elif c is False:
+            return "\"\""
         elif type(c) == str:
             return f'"{c}"'
         elif c is None:
