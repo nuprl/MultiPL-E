@@ -23,10 +23,14 @@ import re
 import ast
 from typing import List, Optional
 from generic_translator import main
+from pydoc import locate
+
 
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
+
+GO_LIST_RE = re.compile(r"^\[\].*{.*\}$")
 
 
 def translate_type(t):
@@ -83,7 +87,23 @@ class GoTranslator:
         # this is book-keeping for making the literals have types when a list/dict is empty
         self.prev_comp_types = []
 
+    def convert_identifier(self, ident):
+        match ident:
+            case "string":
+                return "myString"
+            case "int":
+                return "myInt"
+            case "float":
+                return "myFloat"
+            case "bool":
+                return "myBool"
+            case _other:
+                return ident
+
     def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str) -> Optional[str]:
+        # reset the type list from previous problems
+        self.prev_comp_types = []
+
         description = (
             "// " + re.sub(DOCSTRING_LINESTART_RE, "\n// ",
                            description.strip()) + "\n"
@@ -93,7 +113,7 @@ class GoTranslator:
 
         def translate_arg(arg):
             arg_type = translate_type(arg.annotation)
-            return arg.arg + " " + arg_type
+            return self.convert_identifier(arg.arg) + " " + arg_type
         arg_strings = []
         retType = ""
         try:
@@ -152,18 +172,40 @@ import (
         """
         return "     { actual: %s, expected: %s }," % (left, right)
 
-    def pytype_to_gotype(self, pytype):
+    def pytype_to_gotype(self, pytype: str):
+        # These are type checkers for the types that are in the dataset
+        def get_type(v: str):
+            try:
+                return type(eval(v))
+            except:
+                return None
+
+        def type_check_int(v: str) -> bool:
+            return get_type(v) == int
+
+        def type_check_str(v: str) -> bool:
+            return get_type(v) == str
+
+        def type_check_float(v: str) -> bool:
+            return get_type(v) == float
+
+        def type_check_bool(v: str) -> bool:
+            return get_type(v) == bool
+
+        def type_check_list(v: str) -> bool:
+            return GO_LIST_RE.match(v) is not None
+
         # Ugh: match does not work with types
         # Only matching types that appear in the dataset
-        if pytype == int:
+        if type_check_int(pytype):
             return "int"
-        elif pytype == bool:
+        elif type_check_bool(pytype):
             return "bool"
-        elif pytype == str:
+        elif type_check_str(pytype):
             return "string"
-        elif pytype == float:
+        elif type_check_float(pytype):
             return "float64"
-        elif pytype == List[int]:
+        elif type_check_list(pytype):  # there are only lists of ints in the dataset
             return "[]int"
         print("UNKNOWN", pytype)
         return "UNKNOWN"
@@ -186,7 +228,7 @@ import (
 
     def gen_var(self, v: str) -> str:
         """Translate a variable with name v."""
-        return v
+        return self.convert_identifier(v)
 
     def gen_list(self, l: List[str]) -> str:
         """Translate a list with elements l
@@ -199,10 +241,9 @@ import (
             print("bad list, empty")
             elem_type = "int"  # a guess, but this does not happen
         else:
-            elem_type = self.pytype_to_gotype(type(l[0]))
+            elem_type = self.pytype_to_gotype(l[0])
 
-        if len(self.prev_comp_types) < 1:
-            self.prev_comp_types = [elem_type]
+        self.prev_comp_types = [elem_type]
 
         return f"[]{elem_type}" + "{" + ", ".join(l) + "}"
 
@@ -230,11 +271,10 @@ import (
             keys_type = "string"
             values_type = "int"
         else:
-            keys_type = self.pytype_to_gotype(type(keys[0]))
-            values_type = self.pytype_to_gotype(type(values[0]))
+            keys_type = self.pytype_to_gotype(keys[0])
+            values_type = self.pytype_to_gotype(values[0])
 
-        if len(self.prev_comp_types) < 2:
-            self.prev_comp_types = [keys_type, values_type]
+        self.prev_comp_types = [keys_type, values_type]
 
         return f"map[{keys_type}]{values_type}" + "{" + ", ".join(f"{k}: {v}" for k, v in zip(keys, values)) + "}"
 
