@@ -17,11 +17,11 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_is_bored
     candidate = method(:is_bored)
-    assert_equal(0, candidate.call('Hello world'))
-    assert_equal(0, candidate.call('Is the sky blue?'))
-    assert_equal(1, candidate.call('I love It !'))
-    assert_equal(0, candidate.call('bIt'))
-    assert_equal(2, candidate.call('I feel good today. I will be productive. will kill It'))
-    assert_equal(0, candidate.call('You and I are going for a walk'))
+    assert_equal(0, candidate.call("Hello world"))
+    assert_equal(0, candidate.call("Is the sky blue?"))
+    assert_equal(1, candidate.call("I love It !"))
+    assert_equal(0, candidate.call("bIt"))
+    assert_equal(2, candidate.call("I feel good today. I will be productive. will kill It"))
+    assert_equal(0, candidate.call("You and I are going for a walk"))
   end
 end

@@ -25,10 +25,10 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_encode
     candidate = method(:encode)
-    assert_equal('tgst', candidate.call('TEST'))
-    assert_equal('mWDCSKR', candidate.call('Mudasir'))
-    assert_equal('ygs', candidate.call('YES'))
-    assert_equal('tHKS KS C MGSSCGG', candidate.call('This is a message'))
-    assert_equal('k dQnT kNqW wHcT Tq wRkTg', candidate.call('I DoNt KnOw WhAt tO WrItE'))
+    assert_equal("tgst", candidate.call("TEST"))
+    assert_equal("mWDCSKR", candidate.call("Mudasir"))
+    assert_equal("ygs", candidate.call("YES"))
+    assert_equal("tHKS KS C MGSSCGG", candidate.call("This is a message"))
+    assert_equal("k dQnT kNqW wHcT Tq wRkTg", candidate.call("I DoNt KnOw WhAt tO WrItE"))
   end
 end

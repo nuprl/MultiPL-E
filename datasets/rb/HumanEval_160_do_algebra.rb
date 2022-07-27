@@ -40,8 +40,8 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_do_algebra
     candidate = method(:do_algebra)
-    assert_equal(37, candidate.call(['**', '*', '+'], [2, 3, 4, 5]))
-    assert_equal(9, candidate.call(['+', '*', '-'], [2, 3, 4, 5]))
-    assert_equal(8, candidate.call(['//', '*'], [7, 3, 4]))
+    assert_equal(37, candidate.call(["**", "*", "+"], [2, 3, 4, 5]))
+    assert_equal(9, candidate.call(["+", "*", "-"], [2, 3, 4, 5]))
+    assert_equal(8, candidate.call(["//", "*"], [7, 3, 4]))
   end
 end

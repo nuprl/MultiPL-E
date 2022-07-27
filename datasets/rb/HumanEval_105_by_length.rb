@@ -22,10 +22,10 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_by_length
     candidate = method(:by_length)
-    assert_equal(['Eight', 'Five', 'Four', 'Three', 'Two', 'Two', 'One', 'One'], candidate.call([2, 1, 1, 4, 5, 8, 2, 3]))
+    assert_equal(["Eight", "Five", "Four", "Three", "Two", "Two", "One", "One"], candidate.call([2, 1, 1, 4, 5, 8, 2, 3]))
     assert_equal([], candidate.call([]))
-    assert_equal(['One'], candidate.call([1, -1, 55]))
-    assert_equal(['Three', 'Two', 'One'], candidate.call([1, -1, 3, 2]))
-    assert_equal(['Nine', 'Eight', 'Four'], candidate.call([9, 4, 8]))
+    assert_equal(["One"], candidate.call([1, -1, 55]))
+    assert_equal(["Three", "Two", "One"], candidate.call([1, -1, 3, 2]))
+    assert_equal(["Nine", "Eight", "Four"], candidate.call([9, 4, 8]))
   end
 end

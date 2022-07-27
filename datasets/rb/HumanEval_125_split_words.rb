@@ -19,13 +19,13 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_split_words
     candidate = method(:split_words)
-    assert_equal(['Hello', 'world!'], candidate.call('Hello world!'))
-    assert_equal(['Hello', 'world!'], candidate.call('Hello,world!'))
-    assert_equal(['Hello', 'world,!'], candidate.call('Hello world,!'))
-    assert_equal(['Hello,Hello,world', '!'], candidate.call('Hello,Hello,world !'))
-    assert_equal(3, candidate.call('abcdef'))
-    assert_equal(2, candidate.call('aaabb'))
-    assert_equal(1, candidate.call('aaaBb'))
-    assert_equal(0, candidate.call(''))
+    assert_equal(["Hello", "world!"], candidate.call("Hello world!"))
+    assert_equal(["Hello", "world!"], candidate.call("Hello,world!"))
+    assert_equal(["Hello", "world,!"], candidate.call("Hello world,!"))
+    assert_equal(["Hello,Hello,world", "!"], candidate.call("Hello,Hello,world !"))
+    assert_equal(3, candidate.call("abcdef"))
+    assert_equal(2, candidate.call("aaabb"))
+    assert_equal(1, candidate.call("aaaBb"))
+    assert_equal(0, candidate.call(""))
   end
 end

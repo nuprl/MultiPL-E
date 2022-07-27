@@ -10,8 +10,8 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_string_xor
     candidate = method(:string_xor)
-    assert_equal('010010', candidate.call('111000', '101010'))
-    assert_equal('0', candidate.call('1', '1'))
-    assert_equal('0101', candidate.call('0101', '0000'))
+    assert_equal("010010", candidate.call("111000", "101010"))
+    assert_equal("0", candidate.call("1", "1"))
+    assert_equal("0101", candidate.call("0101", "0000"))
   end
 end

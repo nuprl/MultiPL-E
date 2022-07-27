@@ -17,12 +17,12 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_select_words
     candidate = method(:select_words)
-    assert_equal(['little'], candidate.call('Mary had a little lamb', 4))
-    assert_equal(['Mary', 'lamb'], candidate.call('Mary had a little lamb', 3))
-    assert_equal([], candidate.call('simple white space', 2))
-    assert_equal(['world'], candidate.call('Hello world', 4))
-    assert_equal(['Uncle'], candidate.call('Uncle sam', 3))
-    assert_equal([], candidate.call('', 4))
-    assert_equal(['b', 'c', 'd', 'f'], candidate.call('a b c d e f', 1))
+    assert_equal(["little"], candidate.call("Mary had a little lamb", 4))
+    assert_equal(["Mary", "lamb"], candidate.call("Mary had a little lamb", 3))
+    assert_equal([], candidate.call("simple white space", 2))
+    assert_equal(["world"], candidate.call("Hello world", 4))
+    assert_equal(["Uncle"], candidate.call("Uncle sam", 3))
+    assert_equal([], candidate.call("", 4))
+    assert_equal(["b", "c", "d", "f"], candidate.call("a b c d e f", 1))
   end
 end

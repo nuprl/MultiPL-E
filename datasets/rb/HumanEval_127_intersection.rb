@@ -55,13 +55,13 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_intersection
     candidate = method(:intersection)
-    assert_equal('NO', candidate.call([1, 2], [2, 3]))
-    assert_equal('NO', candidate.call([-1, 1], [0, 4]))
-    assert_equal('YES', candidate.call([-3, -1], [-5, 5]))
-    assert_equal('YES', candidate.call([-2, 2], [-4, 0]))
-    assert_equal('NO', candidate.call([-11, 2], [-1, -1]))
-    assert_equal('NO', candidate.call([1, 2], [3, 5]))
-    assert_equal('NO', candidate.call([1, 2], [1, 2]))
-    assert_equal('NO', candidate.call([-2, -2], [-3, -2]))
+    assert_equal("NO", candidate.call([1, 2], [2, 3]))
+    assert_equal("NO", candidate.call([-1, 1], [0, 4]))
+    assert_equal("YES", candidate.call([-3, -1], [-5, 5]))
+    assert_equal("YES", candidate.call([-2, 2], [-4, 0]))
+    assert_equal("NO", candidate.call([-11, 2], [-1, -1]))
+    assert_equal("NO", candidate.call([1, 2], [3, 5]))
+    assert_equal("NO", candidate.call([1, 2], [1, 2]))
+    assert_equal("NO", candidate.call([-2, -2], [-3, -2]))
   end
 end

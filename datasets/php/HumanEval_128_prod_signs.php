@@ -32,7 +32,7 @@ function test(): void {
     if (candidate(array(1, 2, 2, -4)) !== -9) { throw new Exception("Test failed!"); }
     if (candidate(array(0, 1)) !== 0) { throw new Exception("Test failed!"); }
     if (candidate(array(1, 1, 1, 2, 3, -1, 1)) !== -10) { throw new Exception("Test failed!"); }
-    if (candidate(array()) !== None) { throw new Exception("Test failed!"); }
+    if (candidate(array()) !== null) { throw new Exception("Test failed!"); }
     if (candidate(array(2, 4, 1, 2, -1, -1, 9)) !== 20) { throw new Exception("Test failed!"); }
     if (candidate(array(-1, 1, -1, 1)) !== 4) { throw new Exception("Test failed!"); }
     if (candidate(array(-1, 1, 1, 1)) !== -4) { throw new Exception("Test failed!"); }

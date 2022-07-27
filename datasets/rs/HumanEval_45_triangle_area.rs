@@ -1,9 +1,8 @@
-/// Given length of a side and height return area for a triangle.
+/// Given length of a side and high return area for a triangle.
 /// >>> triangle_area(5, 3)
 /// 7.5
 fn triangle_area(a: isize, h: isize) -> f64 {
-    let area = (a * h) as f64 / 2.0;
-    area
+    (a * h) as f64 / 2.0
 
 }
 

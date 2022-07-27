@@ -22,12 +22,12 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_check_dict_case
     candidate = method(:check_dict_case)
-    assert_equal(true, candidate.call({'p' => 'pineapple', 'b' => 'banana'}))
-    assert_equal(false, candidate.call({'p' => 'pineapple', 'A' => 'banana', 'B' => 'banana'}))
-    assert_equal(false, candidate.call({'p' => 'pineapple', '5' => 'banana', 'a' => 'apple'}))
-    assert_equal(false, candidate.call({'Name' => 'John', 'Age' => '36', 'City' => 'Houston'}))
-    assert_equal(true, candidate.call({'STATE' => 'NC', 'ZIP' => '12345'}))
-    assert_equal(true, candidate.call({'fruit' => 'Orange', 'taste' => 'Sweet'}))
+    assert_equal(true, candidate.call({"p" => "pineapple", "b" => "banana"}))
+    assert_equal(false, candidate.call({"p" => "pineapple", "A" => "banana", "B" => "banana"}))
+    assert_equal(false, candidate.call({"p" => "pineapple", "5" => "banana", "a" => "apple"}))
+    assert_equal(false, candidate.call({"Name" => "John", "Age" => "36", "City" => "Houston"}))
+    assert_equal(true, candidate.call({"STATE" => "NC", "ZIP" => "12345"}))
+    assert_equal(true, candidate.call({"fruit" => "Orange", "taste" => "Sweet"}))
     assert_equal(false, candidate.call({}))
   end
 end

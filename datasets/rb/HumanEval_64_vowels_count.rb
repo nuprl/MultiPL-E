@@ -15,12 +15,12 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_vowels_count
     candidate = method(:vowels_count)
-    assert_equal(2, candidate.call('abcde'))
-    assert_equal(3, candidate.call('Alone'))
-    assert_equal(2, candidate.call('key'))
-    assert_equal(1, candidate.call('bye'))
-    assert_equal(2, candidate.call('keY'))
-    assert_equal(1, candidate.call('bYe'))
-    assert_equal(3, candidate.call('ACEDY'))
+    assert_equal(2, candidate.call("abcde"))
+    assert_equal(3, candidate.call("Alone"))
+    assert_equal(2, candidate.call("key"))
+    assert_equal(1, candidate.call("bye"))
+    assert_equal(2, candidate.call("keY"))
+    assert_equal(1, candidate.call("bYe"))
+    assert_equal(3, candidate.call("ACEDY"))
   end
 end

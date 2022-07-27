@@ -15,10 +15,10 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_parse_music
     candidate = method(:parse_music)
-    assert_equal([], candidate.call(''))
-    assert_equal([4, 4, 4, 4], candidate.call('o o o o'))
-    assert_equal([1, 1, 1, 1], candidate.call('.| .| .| .|'))
-    assert_equal([2, 2, 1, 1, 4, 4, 4, 4], candidate.call('o| o| .| .| o o o o'))
-    assert_equal([2, 1, 2, 1, 4, 2, 4, 2], candidate.call('o| .| o| .| o o| o o|'))
+    assert_equal([], candidate.call(""))
+    assert_equal([4, 4, 4, 4], candidate.call("o o o o"))
+    assert_equal([1, 1, 1, 1], candidate.call(".| .| .| .|"))
+    assert_equal([2, 2, 1, 1, 4, 4, 4, 4], candidate.call("o| o| .| .| o o o o"))
+    assert_equal([2, 1, 2, 1, 4, 2, 4, 2], candidate.call("o| .| o| .| o o| o o|"))
   end
 end

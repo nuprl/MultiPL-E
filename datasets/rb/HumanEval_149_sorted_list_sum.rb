@@ -19,12 +19,12 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_sorted_list_sum
     candidate = method(:sorted_list_sum)
-    assert_equal(['aa'], candidate.call(['aa', 'a', 'aaa']))
-    assert_equal(['AI', 'asdf', 'school'], candidate.call(['school', 'AI', 'asdf', 'b']))
-    assert_equal([], candidate.call(['d', 'b', 'c', 'a']))
-    assert_equal(['abcd', 'dcba'], candidate.call(['d', 'dcba', 'abcd', 'a']))
-    assert_equal(['AI', 'ai', 'au'], candidate.call(['AI', 'ai', 'au']))
-    assert_equal([], candidate.call(['a', 'b', 'b', 'c', 'c', 'a']))
-    assert_equal(['cc', 'dd', 'aaaa', 'bbbb'], candidate.call(['aaaa', 'bbbb', 'dd', 'cc']))
+    assert_equal(["aa"], candidate.call(["aa", "a", "aaa"]))
+    assert_equal(["AI", "asdf", "school"], candidate.call(["school", "AI", "asdf", "b"]))
+    assert_equal([], candidate.call(["d", "b", "c", "a"]))
+    assert_equal(["abcd", "dcba"], candidate.call(["d", "dcba", "abcd", "a"]))
+    assert_equal(["AI", "ai", "au"], candidate.call(["AI", "ai", "au"]))
+    assert_equal([], candidate.call(["a", "b", "b", "c", "c", "a"]))
+    assert_equal(["cc", "dd", "aaaa", "bbbb"], candidate.call(["aaaa", "bbbb", "dd", "cc"]))
   end
 end

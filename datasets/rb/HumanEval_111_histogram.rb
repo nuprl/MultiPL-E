@@ -17,13 +17,13 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_histogram
     candidate = method(:histogram)
-    assert_equal({'a' => 2, 'b' => 2}, candidate.call('a b b a'))
-    assert_equal({'a' => 2, 'b' => 2}, candidate.call('a b c a b'))
-    assert_equal({'a' => 1, 'b' => 1, 'c' => 1, 'd' => 1, 'g' => 1}, candidate.call('a b c d g'))
-    assert_equal({'r' => 1, 't' => 1, 'g' => 1}, candidate.call('r t g'))
-    assert_equal({'b' => 4}, candidate.call('b b b b a'))
-    assert_equal({'r' => 1, 't' => 1, 'g' => 1}, candidate.call('r t g'))
-    assert_equal({}, candidate.call(''))
-    assert_equal({'a' => 1}, candidate.call('a'))
+    assert_equal({"a" => 2, "b" => 2}, candidate.call("a b b a"))
+    assert_equal({"a" => 2, "b" => 2}, candidate.call("a b c a b"))
+    assert_equal({"a" => 1, "b" => 1, "c" => 1, "d" => 1, "g" => 1}, candidate.call("a b c d g"))
+    assert_equal({"r" => 1, "t" => 1, "g" => 1}, candidate.call("r t g"))
+    assert_equal({"b" => 4}, candidate.call("b b b b a"))
+    assert_equal({"r" => 1, "t" => 1, "g" => 1}, candidate.call("r t g"))
+    assert_equal({}, candidate.call(""))
+    assert_equal({"a" => 1}, candidate.call("a"))
   end
 end

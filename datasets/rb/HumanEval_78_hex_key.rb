@@ -22,12 +22,12 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_hex_key
     candidate = method(:hex_key)
-    assert_equal(1, candidate.call('AB'))
-    assert_equal(2, candidate.call('1077E'))
-    assert_equal(4, candidate.call('ABED1A33'))
-    assert_equal(2, candidate.call('2020'))
-    assert_equal(6, candidate.call('123456789ABCDEF0'))
-    assert_equal(12, candidate.call('112233445566778899AABBCCDDEEFF00'))
+    assert_equal(1, candidate.call("AB"))
+    assert_equal(2, candidate.call("1077E"))
+    assert_equal(4, candidate.call("ABED1A33"))
+    assert_equal(2, candidate.call("2020"))
+    assert_equal(6, candidate.call("123456789ABCDEF0"))
+    assert_equal(12, candidate.call("112233445566778899AABBCCDDEEFF00"))
     assert_equal(0, candidate.call([]))
   end
 end

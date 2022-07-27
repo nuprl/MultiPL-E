@@ -32,9 +32,9 @@ class TestHumanEval < Test::Unit::TestCase
     assert_equal(2.5, candidate.call(1, 2.5))
     assert_equal(3, candidate.call(2, 3))
     assert_equal(6, candidate.call(5, 6))
-    assert_equal('2,3', candidate.call(1, '2,3'))
-    assert_equal('6', candidate.call('5,1', '6'))
-    assert_equal('2', candidate.call('1', '2'))
-    assert_equal(nil, candidate.call('1', 1))
+    assert_equal("2,3", candidate.call(1, "2,3"))
+    assert_equal("6", candidate.call("5,1", "6"))
+    assert_equal("2", candidate.call("1", "2"))
+    assert_equal(nil, candidate.call("1", 1))
   end
 end

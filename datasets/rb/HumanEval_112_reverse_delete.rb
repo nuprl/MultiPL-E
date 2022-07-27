@@ -15,14 +15,14 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_reverse_delete
     candidate = method(:reverse_delete)
-    assert_equal(['bcd', false], candidate.call('abcde', 'ae'))
-    assert_equal(['acdef', false], candidate.call('abcdef', 'b'))
-    assert_equal(['cdedc', true], candidate.call('abcdedcba', 'ab'))
-    assert_equal(['dik', false], candidate.call('dwik', 'w'))
-    assert_equal(['', true], candidate.call('a', 'a'))
-    assert_equal(['abcdedcba', true], candidate.call('abcdedcba', ''))
-    assert_equal(['abcdedcba', true], candidate.call('abcdedcba', 'v'))
-    assert_equal(['abba', true], candidate.call('vabba', 'v'))
-    assert_equal(['', true], candidate.call('mamma', 'mia'))
+    assert_equal(["bcd", false], candidate.call("abcde", "ae"))
+    assert_equal(["acdef", false], candidate.call("abcdef", "b"))
+    assert_equal(["cdedc", true], candidate.call("abcdedcba", "ab"))
+    assert_equal(["dik", false], candidate.call("dwik", "w"))
+    assert_equal(["", true], candidate.call("a", "a"))
+    assert_equal(["abcdedcba", true], candidate.call("abcdedcba", ""))
+    assert_equal(["abcdedcba", true], candidate.call("abcdedcba", "v"))
+    assert_equal(["abba", true], candidate.call("vabba", "v"))
+    assert_equal(["", true], candidate.call("mamma", "mia"))
   end
 end

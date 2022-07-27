@@ -19,10 +19,10 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_closest_integer
     candidate = method(:closest_integer)
-    assert_equal(10, candidate.call('10'))
-    assert_equal(15, candidate.call('14.5'))
-    assert_equal(-16, candidate.call('-15.5'))
-    assert_equal(15, candidate.call('15.3'))
-    assert_equal(0, candidate.call('0'))
+    assert_equal(10, candidate.call("10"))
+    assert_equal(15, candidate.call("14.5"))
+    assert_equal(-16, candidate.call("-15.5"))
+    assert_equal(15, candidate.call("15.3"))
+    assert_equal(0, candidate.call("0"))
   end
 end

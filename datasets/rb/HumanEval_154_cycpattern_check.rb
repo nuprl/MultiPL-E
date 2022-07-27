@@ -13,11 +13,11 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_cycpattern_check
     candidate = method(:cycpattern_check)
-    assert_equal(false, candidate.call('xyzw', 'xyw'))
-    assert_equal(true, candidate.call('yello', 'ell'))
-    assert_equal(false, candidate.call('whattup', 'ptut'))
-    assert_equal(true, candidate.call('efef', 'fee'))
-    assert_equal(false, candidate.call('abab', 'aabb'))
-    assert_equal(true, candidate.call('winemtt', 'tinem'))
+    assert_equal(false, candidate.call("xyzw", "xyw"))
+    assert_equal(true, candidate.call("yello", "ell"))
+    assert_equal(false, candidate.call("whattup", "ptut"))
+    assert_equal(true, candidate.call("efef", "fee"))
+    assert_equal(false, candidate.call("abab", "aabb"))
+    assert_equal(true, candidate.call("winemtt", "tinem"))
   end
 end

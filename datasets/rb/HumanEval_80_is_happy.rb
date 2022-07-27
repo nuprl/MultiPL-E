@@ -17,13 +17,13 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_is_happy
     candidate = method(:is_happy)
-    assert_equal(false, candidate.call('a'))
-    assert_equal(false, candidate.call('aa'))
-    assert_equal(true, candidate.call('abcd'))
-    assert_equal(false, candidate.call('aabb'))
-    assert_equal(true, candidate.call('adb'))
-    assert_equal(false, candidate.call('xyy'))
-    assert_equal(true, candidate.call('iopaxpoi'))
-    assert_equal(false, candidate.call('iopaxioi'))
+    assert_equal(false, candidate.call("a"))
+    assert_equal(false, candidate.call("aa"))
+    assert_equal(true, candidate.call("abcd"))
+    assert_equal(false, candidate.call("aabb"))
+    assert_equal(true, candidate.call("adb"))
+    assert_equal(false, candidate.call("xyy"))
+    assert_equal(true, candidate.call("iopaxpoi"))
+    assert_equal(false, candidate.call("iopaxioi"))
   end
 end

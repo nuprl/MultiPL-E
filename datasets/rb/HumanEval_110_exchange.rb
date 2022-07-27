@@ -17,12 +17,12 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_exchange
     candidate = method(:exchange)
-    assert_equal('YES', candidate.call([1, 2, 3, 4], [1, 2, 3, 4]))
-    assert_equal('NO', candidate.call([1, 2, 3, 4], [1, 5, 3, 4]))
-    assert_equal('YES', candidate.call([1, 2, 3, 4], [2, 1, 4, 3]))
-    assert_equal('YES', candidate.call([5, 7, 3], [2, 6, 4]))
-    assert_equal('NO', candidate.call([5, 7, 3], [2, 6, 3]))
-    assert_equal('NO', candidate.call([3, 2, 6, 1, 8, 9], [3, 5, 5, 1, 1, 1]))
-    assert_equal('YES', candidate.call([100, 200], [200, 200]))
+    assert_equal("YES", candidate.call([1, 2, 3, 4], [1, 2, 3, 4]))
+    assert_equal("NO", candidate.call([1, 2, 3, 4], [1, 5, 3, 4]))
+    assert_equal("YES", candidate.call([1, 2, 3, 4], [2, 1, 4, 3]))
+    assert_equal("YES", candidate.call([5, 7, 3], [2, 6, 4]))
+    assert_equal("NO", candidate.call([5, 7, 3], [2, 6, 3]))
+    assert_equal("NO", candidate.call([3, 2, 6, 1, 8, 9], [3, 5, 5, 1, 1, 1]))
+    assert_equal("YES", candidate.call([100, 200], [200, 200]))
   end
 end

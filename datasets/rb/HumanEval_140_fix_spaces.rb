@@ -13,10 +13,10 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_fix_spaces
     candidate = method(:fix_spaces)
-    assert_equal('Example', candidate.call('Example'))
-    assert_equal('Mudasir_Hanif_', candidate.call('Mudasir Hanif '))
-    assert_equal('Yellow_Yellow__Dirty__Fellow', candidate.call('Yellow Yellow  Dirty  Fellow'))
-    assert_equal('Exa-mple', candidate.call('Exa   mple'))
-    assert_equal('-Exa_1_2_2_mple', candidate.call('   Exa 1 2 2 mple'))
+    assert_equal("Example", candidate.call("Example"))
+    assert_equal("Mudasir_Hanif_", candidate.call("Mudasir Hanif "))
+    assert_equal("Yellow_Yellow__Dirty__Fellow", candidate.call("Yellow Yellow  Dirty  Fellow"))
+    assert_equal("Exa-mple", candidate.call("Exa   mple"))
+    assert_equal("-Exa_1_2_2_mple", candidate.call("   Exa 1 2 2 mple"))
   end
 end
