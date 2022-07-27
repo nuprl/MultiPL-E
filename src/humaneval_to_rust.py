@@ -138,7 +138,7 @@ def coerce(expr: str, type) -> str:
 
 class RustTranslator:
 
-    stop = ["\nfn", "pub", "\n/// ", "#[test]"]
+    stop = ["\n}"]
 
     def __init__(self, file_ext):
         global needs_hashmap
@@ -173,10 +173,13 @@ class RustTranslator:
         This code goes at the start of the test suite.
         """
         return [
-            # Uncomment the next two lines to produce valid rust that can be
+            # Uncomment the next line to produce valid rust that can be
             # typechecked!
             #"    panic!();",
-            #"}",
+            # Note that we include the closing brace because we choose it
+            # as a stopword. Otherwise there are too many reasonable stopwords
+            "}",
+            "",
             "fn main() {",
             f"    let candidate = {entry_point};",
         ]
