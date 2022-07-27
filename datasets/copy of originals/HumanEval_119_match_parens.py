@@ -12,8 +12,10 @@ def match_parens(lst: List[str]) -> str:
     Return 'Yes' if there's a way to make a good string, and return 'No' otherwise.
 
     Examples:
-    match_parens(['()(', ')']) == 'Yes'
-    match_parens([')', ')']) == 'No'
+    >>> match_parens(['()(', ')'])
+    'Yes'
+    >>> match_parens([')', ')'])
+    'No'
     '''
     ### Canonical solution below ###
     def check(s):

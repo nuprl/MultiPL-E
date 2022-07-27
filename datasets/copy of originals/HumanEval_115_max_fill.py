@@ -11,22 +11,16 @@ def max_fill(grid: List[List[int]], capacity: int) -> int:
     Output the number of times you need to lower the buckets.
 
     Example 1:
-        Input: 
-            grid : [[0,0,1,0], [0,1,0,0], [1,1,1,1]]
-            bucket_capacity : 1
-        Output: 6
+    >>> max_fill([[0,0,1,0], [0,1,0,0], [1,1,1,1]], 1)
+    6
 
     Example 2:
-        Input: 
-            grid : [[0,0,1,1], [0,0,0,0], [1,1,1,1], [0,1,1,1]]
-            bucket_capacity : 2
-        Output: 5
+    >>> max_fill([[0,0,1,1], [0,0,0,0], [1,1,1,1], [0,1,1,1]], 2)
+    5
     
     Example 3:
-        Input: 
-            grid : [[0,0,0], [0,0,0]]
-            bucket_capacity : 5
-        Output: 0
+    >>> max_fill([[0,0,0], [0,0,0]], 5)
+    0
 
     Constraints:
         * all wells have the same length

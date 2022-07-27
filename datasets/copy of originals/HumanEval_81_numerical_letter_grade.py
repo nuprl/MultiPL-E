@@ -23,7 +23,8 @@ def numerical_letter_grade(grades: List[float]) -> List[str]:
     
 
     Example:
-    grade_equation([4.0, 3, 1.7, 2, 3.5]) ==> ['A+', 'B', 'C-', 'C', 'A-']
+    >>> grade_equation([4.0, 3, 1.7, 2, 3.5])
+    ['A+', 'B', 'C-', 'C', 'A-']
     """
     ### Canonical solution below ###
 

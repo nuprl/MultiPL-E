@@ -7,7 +7,8 @@ def f(n: int) -> List[int]:
     i starts from 1.
     the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
     Example:
-    f(5) == [1, 2, 6, 24, 15]
+    >>> f(5)
+    [1, 2, 6, 24, 15]
     """
     ### Canonical solution below ###
     ret = []

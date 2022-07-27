@@ -11,11 +11,16 @@ def hex_key(num: str) -> int:
     Note: you may assume the input is always correct or empty string, 
     and symbols A,B,C,D,E,F are always uppercase.
     Examples:
-    For num = "AB" the output should be 1.
-    For num = "1077E" the output should be 2.
-    For num = "ABED1A33" the output should be 4.
-    For num = "123456789ABCDEF0" the output should be 6.
-    For num = "2020" the output should be 2.
+    >>> hex_key("AB")
+    1
+    >>> hex_key("1077E")
+    2
+    >>> hex_key("ABED1A33")
+    4
+    >>> hex_key("123456789ABCDEF0")
+    6
+    >>> hex_key("2020")
+    2
     """
     ### Canonical solution below ###
     primes = ('2', '3', '5', '7', 'B', 'D')

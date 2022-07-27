@@ -7,8 +7,10 @@ def triangle_area(a: int, b: int, c: int) -> float:
     Three sides make a valid triangle when the sum of any two sides is greater 
     than the third side.
     Example:
-    triangle_area(3, 4, 5) == 6.00
-    triangle_area(1, 2, 10) == -1
+    >>> triangle_area(3, 4, 5)
+    6.00
+    >>> triangle_area(1, 2, 10)
+    -1
     '''
     ### Canonical solution below ###
     if a + b <= c or a + c <= b or b + c <= a:

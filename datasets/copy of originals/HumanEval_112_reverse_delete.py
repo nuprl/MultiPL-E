@@ -7,9 +7,12 @@ def reverse_delete(s: str,c: str) -> Tuple[str, bool]:
     A string is called palindrome if it reads the same backward as forward.
     You should return a tuple containing the result string and True/False for the check.
     Example
-    For s = "abcde", c = "ae", the result should be ('bcd',False)
-    For s = "abcdef", c = "b"  the result should be ('acdef',False)
-    For s = "abcdedcba", c = "ab", the result should be ('cdedc',True)
+    >>> reverse_delete("abcde", "ae")
+    ('bcd',False)
+    >>> reverse_delete("abcdef", "b")
+    ('acdef',False)
+    >>> reverse_delete("abcdedcba", "ab")
+    ('cdedc',True)
     """
     ### Canonical solution below ###
     s = ''.join([char for char in s if char not in c])

@@ -6,13 +6,17 @@ def any_int(x: int, y: int, z: int) -> bool:
     Returns false in any other cases.
     
     Examples
-    any_int(5, 2, 7) ➞ True
+    >>> any_int(5, 2, 7)
+    True
     
-    any_int(3, 2, 2) ➞ False
+    >>> any_int(3, 2, 2)
+    False
 
-    any_int(3, -2, 1) ➞ True
+    >>> any_int(3, -2, 1)
+    True
     
-    any_int(3.6, -2.2, 2) ➞ False
+    >>> any_int(3.6, -2.2, 2)
+    False
   
 
     

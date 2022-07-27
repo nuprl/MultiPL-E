@@ -8,9 +8,12 @@ def anti_shuffle(s: str) -> str:
     Note: You should keep the order of words and blank spaces in the sentence.
 
     For example:
-    anti_shuffle('Hi') returns 'Hi'
-    anti_shuffle('hello') returns 'ehllo'
-    anti_shuffle('Hello World!!!') returns 'Hello !!!Wdlor'
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
     """
     ### Canonical solution below ###
     return ' '.join([''.join(sorted(list(i))) for i in s.split(' ')])

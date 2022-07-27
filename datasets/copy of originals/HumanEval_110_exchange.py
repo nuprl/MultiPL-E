@@ -9,8 +9,10 @@ def exchange(lst1: List[int], lst2: List[int]) -> str:
     all the elements of lst1 to be even, return "YES".
     Otherwise, return "NO".
     For example:
-    exchange([1, 2, 3, 4], [1, 2, 3, 4]) => "YES"
-    exchange([1, 2, 3, 4], [1, 5, 3, 4]) => "NO"
+    >>> exchange([1, 2, 3, 4], [1, 2, 3, 4])
+    "YES"
+    >>> exchange([1, 2, 3, 4], [1, 5, 3, 4])
+    "NO"
     It is assumed that the input lists will be non-empty.
     """
     ### Canonical solution below ###

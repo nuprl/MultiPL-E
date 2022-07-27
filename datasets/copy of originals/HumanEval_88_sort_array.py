@@ -10,10 +10,14 @@ def sort_array(array: List[int]) -> List[int]:
     * don't change the given array.
 
     Examples:
-    * sort_array([]) => []
-    * sort_array([5]) => [5]
-    * sort_array([2, 4, 3, 0, 1, 5]) => [0, 1, 2, 3, 4, 5]
-    * sort_array([2, 4, 3, 0, 1, 5, 6]) => [6, 5, 4, 3, 2, 1, 0]
+    >>> sort_array([])
+    []
+    >>> sort_array([5])
+    [5]
+    >>> sort_array([2, 4, 3, 0, 1, 5])
+    [0, 1, 2, 3, 4, 5]
+    >>> sort_array([2, 4, 3, 0, 1, 5, 6])
+    [6, 5, 4, 3, 2, 1, 0]
     """
     ### Canonical solution below ###
     return [] if len(array) == 0 else sorted(array, reverse= (array[0]+array[-1]) % 2 == 0) 

@@ -7,18 +7,18 @@ def maximum(arr: List[int], k: int) -> List[int]:
 
     Example 1:
 
-        Input: arr = [-3, -4, 5], k = 3
-        Output: [-4, -3, 5]
+    >>> maximum([-3, -4, 5], 3)
+    [-4, -3, 5]
 
     Example 2:
 
-        Input: arr = [4, -4, 4], k = 2
-        Output: [4, 4]
+    >>> maximum([4, -4, 4], 2)
+    [4, 4]
 
     Example 3:
 
-        Input: arr = [-3, 2, 1, 2, -1, -2, 1], k = 1
-        Output: [2]
+    >>> maximum([-3, 2, 1, 2, -1, -2, 1], 1)
+    [2]
 
     Note:
         1. The length of the array will be in the range of [1, 1000].

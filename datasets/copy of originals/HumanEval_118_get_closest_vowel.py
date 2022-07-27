@@ -9,10 +9,14 @@ def get_closest_vowel(word: str) -> str:
     You may assume that the given string contains English letter only.
 
     Example:
-    get_closest_vowel("yogurt") ==> "u"
-    get_closest_vowel("FULL") ==> "U"
-    get_closest_vowel("quick") ==> ""
-    get_closest_vowel("ab") ==> ""
+    >>> get_closest_vowel("yogurt")
+    "u"
+    >>> get_closest_vowel("FULL")
+    "U"
+    >>> get_closest_vowel("quick")
+    ""
+    >>> get_closest_vowel("ab")
+    ""
     """
     ### Canonical solution below ###
     if len(word) < 3:

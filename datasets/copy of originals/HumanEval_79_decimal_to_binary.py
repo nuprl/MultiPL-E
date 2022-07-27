@@ -8,8 +8,10 @@ def decimal_to_binary(decimal: int) -> str:
     The extra characters are there to help with the format.
 
     Examples:
-    decimal_to_binary(15)   # returns "db1111db"
-    decimal_to_binary(32)   # returns "db100000db"
+    >>> decimal_to_binary(15)
+    "db1111db"
+    >>> decimal_to_binary(32)
+    "db100000db"
     """
     ### Canonical solution below ###
     return "db" + bin(decimal)[2:] + "db"

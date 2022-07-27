@@ -5,12 +5,18 @@ def digitSum(s: str) -> int:
     ASCII codes.
 
     Examples:
-        digitSum("") => 0
-        digitSum("abAB") => 131
-        digitSum("abcCd") => 67
-        digitSum("helloE") => 69
-        digitSum("woArBld") => 131
-        digitSum("aAaaaXa") => 153
+    >>> digitSum("")
+    0
+    >>> digitSum("abAB")
+    131
+    >>> digitSum("abcCd")
+    67
+    >>> digitSum("helloE")
+    69
+    >>> digitSum("woArBld")
+    131
+    >>> digitSum("aAaaaXa")
+    153
     """
     ### Canonical solution below ###
     if s == "": return 0

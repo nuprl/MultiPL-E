@@ -19,10 +19,12 @@ def move_one_ball(arr: List[int]) -> bool:
 
     For Example:
     
-    move_one_ball([3, 4, 5, 1, 2])==>True
+    >>> move_one_ball([3, 4, 5, 1, 2])
+    True
     Explanation: By performin 2 right shift operations, non-decreasing order can
                  be achieved for the given array.
-    move_one_ball([3, 5, 4, 1, 2])==>False
+    >>> move_one_ball([3, 5, 4, 1, 2])
+    False
     Explanation:It is not possible to get non-decreasing order for the given
                 array by performing any number of right shift operations.
                 

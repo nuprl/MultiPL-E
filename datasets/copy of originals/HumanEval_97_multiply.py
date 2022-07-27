@@ -4,10 +4,14 @@ def multiply(a: int, b: int) -> int:
     the product of their unit digits.
     Assume the input is always valid.
     Examples:
-    multiply(148, 412) should return 16.
-    multiply(19, 28) should return 72.
-    multiply(2020, 1851) should return 0.
-    multiply(14,-15) should return 20.
+    >>> multiply(148, 412)
+    16
+    >>> multiply(19, 28)
+    72
+    >>> multiply(2020, 1851)
+    0
+    >>> multiply(14,-15)
+    20
     """
     ### Canonical solution below ###
     return abs(a % 10) * abs(b % 10)

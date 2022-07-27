@@ -13,13 +13,15 @@ def get_row(lst: List[List[int]], x: int) -> List[Tuple[int]]:
     Also, sort coordinates of the row by columns in descending order.
     
     Examples:
-    get_row([
+    >>> get_row([
       [1,2,3,4,5,6],
       [1,2,3,4,1,6],
-      [1,2,3,4,5,1]
-    ], 1) == [(0, 0), (1, 4), (1, 0), (2, 5), (2, 0)]
-    get_row([], 1) == []
-    get_row([[], [1], [1, 2, 3]], 3) == [(2, 2)]
+      [1,2,3,4,5,1]], 1)
+    [(0, 0), (1, 4), (1, 0), (2, 5), (2, 0)]
+    >>> get_row([], 1)
+    []
+    >>> get_row([[], [1], [1, 2, 3]], 3)
+    [(2, 2)]
     """
     ### Canonical solution below ###
     coords = [(i, j) for i in range(len(lst)) for j in range(len(lst[i])) if lst[i][j] == x]
