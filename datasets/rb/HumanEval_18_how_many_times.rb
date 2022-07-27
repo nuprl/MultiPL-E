@@ -13,9 +13,9 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_how_many_times
     candidate = method(:how_many_times)
-    assert_equal(0, candidate.call('', 'x'))
-    assert_equal(4, candidate.call('xyxyxyx', 'x'))
-    assert_equal(4, candidate.call('cacacacac', 'cac'))
-    assert_equal(1, candidate.call('john doe', 'john'))
+    assert_equal(0, candidate.call("", "x"))
+    assert_equal(4, candidate.call("xyxyxyx", "x"))
+    assert_equal(4, candidate.call("cacacacac", "cac"))
+    assert_equal(1, candidate.call("john doe", "john"))
   end
 end

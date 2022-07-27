@@ -13,15 +13,15 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_find_max
     candidate = method(:find_max)
-    assert_equal('string', candidate.call(['name', 'of', 'string']))
-    assert_equal('enam', candidate.call(['name', 'enam', 'game']))
-    assert_equal('aaaaaaa', candidate.call(['aaaaaaa', 'bb', 'cc']))
-    assert_equal('abc', candidate.call(['abc', 'cba']))
-    assert_equal('footbott', candidate.call(['play', 'this', 'game', 'of', 'footbott']))
-    assert_equal('gonna', candidate.call(['we', 'are', 'gonna', 'rock']))
-    assert_equal('nation', candidate.call(['we', 'are', 'a', 'mad', 'nation']))
-    assert_equal('this', candidate.call(['this', 'is', 'a', 'prrk']))
-    assert_equal('b', candidate.call(['b']))
-    assert_equal('play', candidate.call(['play', 'play', 'play']))
+    assert_equal("string", candidate.call(["name", "of", "string"]))
+    assert_equal("enam", candidate.call(["name", "enam", "game"]))
+    assert_equal("aaaaaaa", candidate.call(["aaaaaaa", "bb", "cc"]))
+    assert_equal("abc", candidate.call(["abc", "cba"]))
+    assert_equal("footbott", candidate.call(["play", "this", "game", "of", "footbott"]))
+    assert_equal("gonna", candidate.call(["we", "are", "gonna", "rock"]))
+    assert_equal("nation", candidate.call(["we", "are", "a", "mad", "nation"]))
+    assert_equal("this", candidate.call(["this", "is", "a", "prrk"]))
+    assert_equal("b", candidate.call(["b"]))
+    assert_equal("play", candidate.call(["play", "play", "play"]))
   end
 end

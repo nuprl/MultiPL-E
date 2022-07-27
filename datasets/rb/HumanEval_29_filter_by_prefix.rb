@@ -11,7 +11,7 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_filter_by_prefix
     candidate = method(:filter_by_prefix)
-    assert_equal([], candidate.call([], 'john'))
-    assert_equal(['xxx', 'xxxAAA', 'xxx'], candidate.call(['xxx', 'asd', 'xxy', 'john doe', 'xxxAAA', 'xxx'], 'xxx'))
+    assert_equal([], candidate.call([], "john"))
+    assert_equal(["xxx", "xxxAAA", "xxx"], candidate.call(["xxx", "asd", "xxy", "john doe", "xxxAAA", "xxx"], "xxx"))
   end
 end

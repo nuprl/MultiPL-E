@@ -15,12 +15,12 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_count_upper
     candidate = method(:count_upper)
-    assert_equal(1, candidate.call('aBCdEf'))
-    assert_equal(0, candidate.call('abcdefg'))
-    assert_equal(0, candidate.call('dBBE'))
-    assert_equal(0, candidate.call('B'))
-    assert_equal(1, candidate.call('U'))
-    assert_equal(0, candidate.call(''))
-    assert_equal(2, candidate.call('EEEE'))
+    assert_equal(1, candidate.call("aBCdEf"))
+    assert_equal(0, candidate.call("abcdefg"))
+    assert_equal(0, candidate.call("dBBE"))
+    assert_equal(0, candidate.call("B"))
+    assert_equal(1, candidate.call("U"))
+    assert_equal(0, candidate.call(""))
+    assert_equal(2, candidate.call("EEEE"))
   end
 end

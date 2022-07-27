@@ -24,17 +24,17 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_rounded_avg
     candidate = method(:rounded_avg)
-    assert_equal('0b11', candidate.call(1, 5))
-    assert_equal('0b1010', candidate.call(7, 13))
-    assert_equal('0b1111001010', candidate.call(964, 977))
-    assert_equal('0b1111100100', candidate.call(996, 997))
-    assert_equal('0b1011000010', candidate.call(560, 851))
-    assert_equal('0b101101110', candidate.call(185, 546))
-    assert_equal('0b110101101', candidate.call(362, 496))
-    assert_equal('0b1001110010', candidate.call(350, 902))
-    assert_equal('0b11010111', candidate.call(197, 233))
+    assert_equal("0b11", candidate.call(1, 5))
+    assert_equal("0b1010", candidate.call(7, 13))
+    assert_equal("0b1111001010", candidate.call(964, 977))
+    assert_equal("0b1111100100", candidate.call(996, 997))
+    assert_equal("0b1011000010", candidate.call(560, 851))
+    assert_equal("0b101101110", candidate.call(185, 546))
+    assert_equal("0b110101101", candidate.call(362, 496))
+    assert_equal("0b1001110010", candidate.call(350, 902))
+    assert_equal("0b11010111", candidate.call(197, 233))
     assert_equal(-1, candidate.call(7, 5))
     assert_equal(-1, candidate.call(5, 1))
-    assert_equal('0b101', candidate.call(5, 5))
+    assert_equal("0b101", candidate.call(5, 5))
   end
 end

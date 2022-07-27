@@ -69,6 +69,8 @@ class RubyTranslator:
         """
         if type(c) == bool:
             return str(c).lower()
+        elif type(c) == str:
+            return f'"{c}"'
         elif c is None:
             return 'nil'
         return repr(c)

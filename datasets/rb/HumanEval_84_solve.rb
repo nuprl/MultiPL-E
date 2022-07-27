@@ -16,10 +16,10 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_solve
     candidate = method(:solve)
-    assert_equal('1', candidate.call(1000))
-    assert_equal('110', candidate.call(150))
-    assert_equal('1100', candidate.call(147))
-    assert_equal('1001', candidate.call(333))
-    assert_equal('10010', candidate.call(963))
+    assert_equal("1", candidate.call(1000))
+    assert_equal("110", candidate.call(150))
+    assert_equal("1100", candidate.call(147))
+    assert_equal("1001", candidate.call(333))
+    assert_equal("10010", candidate.call(963))
   end
 end

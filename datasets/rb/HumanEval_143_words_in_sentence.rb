@@ -20,12 +20,12 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_words_in_sentence
     candidate = method(:words_in_sentence)
-    assert_equal('is', candidate.call('This is a test'))
-    assert_equal('go for', candidate.call('lets go for swimming'))
-    assert_equal('there is no place', candidate.call('there is no place available here'))
-    assert_equal('Hi am Hussein', candidate.call('Hi I am Hussein'))
-    assert_equal('go for it', candidate.call('go for it'))
-    assert_equal('', candidate.call('here'))
-    assert_equal('is', candidate.call('here is'))
+    assert_equal("is", candidate.call("This is a test"))
+    assert_equal("go for", candidate.call("lets go for swimming"))
+    assert_equal("there is no place", candidate.call("there is no place available here"))
+    assert_equal("Hi am Hussein", candidate.call("Hi I am Hussein"))
+    assert_equal("go for it", candidate.call("go for it"))
+    assert_equal("", candidate.call("here"))
+    assert_equal("is", candidate.call("here is"))
   end
 end

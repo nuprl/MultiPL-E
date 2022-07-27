@@ -24,12 +24,12 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_bf
     candidate = method(:bf)
-    assert_equal(['Saturn', 'Uranus'], candidate.call('Jupiter', 'Neptune'))
-    assert_equal(['Venus'], candidate.call('Earth', 'Mercury'))
-    assert_equal(['Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn'], candidate.call('Mercury', 'Uranus'))
-    assert_equal(['Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus'], candidate.call('Neptune', 'Venus'))
-    assert_equal([], candidate.call('Earth', 'Earth'))
-    assert_equal([], candidate.call('Mars', 'Earth'))
-    assert_equal([], candidate.call('Jupiter', 'Makemake'))
+    assert_equal(["Saturn", "Uranus"], candidate.call("Jupiter", "Neptune"))
+    assert_equal(["Venus"], candidate.call("Earth", "Mercury"))
+    assert_equal(["Venus", "Earth", "Mars", "Jupiter", "Saturn"], candidate.call("Mercury", "Uranus"))
+    assert_equal(["Earth", "Mars", "Jupiter", "Saturn", "Uranus"], candidate.call("Neptune", "Venus"))
+    assert_equal([], candidate.call("Earth", "Earth"))
+    assert_equal([], candidate.call("Mars", "Earth"))
+    assert_equal([], candidate.call("Jupiter", "Makemake"))
   end
 end

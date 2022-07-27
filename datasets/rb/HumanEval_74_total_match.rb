@@ -16,13 +16,13 @@ class TestHumanEval < Test::Unit::TestCase
   def test_total_match
     candidate = method(:total_match)
     assert_equal([], candidate.call([], []))
-    assert_equal(['hi', 'hi'], candidate.call(['hi', 'admin'], ['hi', 'hi']))
-    assert_equal(['hi', 'admin'], candidate.call(['hi', 'admin'], ['hi', 'hi', 'admin', 'project']))
-    assert_equal(['4'], candidate.call(['4'], ['1', '2', '3', '4', '5']))
-    assert_equal(['hI', 'Hi'], candidate.call(['hi', 'admin'], ['hI', 'Hi']))
-    assert_equal(['hI', 'hi', 'hi'], candidate.call(['hi', 'admin'], ['hI', 'hi', 'hi']))
-    assert_equal(['hi', 'admin'], candidate.call(['hi', 'admin'], ['hI', 'hi', 'hii']))
-    assert_equal([], candidate.call([], ['this']))
-    assert_equal([], candidate.call(['this'], []))
+    assert_equal(["hi", "hi"], candidate.call(["hi", "admin"], ["hi", "hi"]))
+    assert_equal(["hi", "admin"], candidate.call(["hi", "admin"], ["hi", "hi", "admin", "project"]))
+    assert_equal(["4"], candidate.call(["4"], ["1", "2", "3", "4", "5"]))
+    assert_equal(["hI", "Hi"], candidate.call(["hi", "admin"], ["hI", "Hi"]))
+    assert_equal(["hI", "hi", "hi"], candidate.call(["hi", "admin"], ["hI", "hi", "hi"]))
+    assert_equal(["hi", "admin"], candidate.call(["hi", "admin"], ["hI", "hi", "hii"]))
+    assert_equal([], candidate.call([], ["this"]))
+    assert_equal([], candidate.call(["this"], []))
   end
 end

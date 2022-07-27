@@ -14,7 +14,7 @@ class TestHumanEval < Test::Unit::TestCase
   def test_longest
     candidate = method(:longest)
     assert_equal(nil, candidate.call([]))
-    assert_equal('x', candidate.call(['x', 'y', 'z']))
-    assert_equal('zzzz', candidate.call(['x', 'yyy', 'zzzz', 'www', 'kkkk', 'abc']))
+    assert_equal("x", candidate.call(["x", "y", "z"]))
+    assert_equal("zzzz", candidate.call(["x", "yyy", "zzzz", "www", "kkkk", "abc"]))
   end
 end

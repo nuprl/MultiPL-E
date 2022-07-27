@@ -19,9 +19,9 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_decimal_to_binary
     candidate = method(:decimal_to_binary)
-    assert_equal('db0db', candidate.call(0))
-    assert_equal('db100000db', candidate.call(32))
-    assert_equal('db1100111db', candidate.call(103))
-    assert_equal('db1111db', candidate.call(15))
+    assert_equal("db0db", candidate.call(0))
+    assert_equal("db100000db", candidate.call(32))
+    assert_equal("db1100111db", candidate.call(103))
+    assert_equal("db1111db", candidate.call(15))
   end
 end

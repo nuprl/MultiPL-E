@@ -15,13 +15,13 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_encrypt
     candidate = method(:encrypt)
-    assert_equal('lm', candidate.call('hi'))
-    assert_equal('ewhjklnop', candidate.call('asdfghjkl'))
-    assert_equal('kj', candidate.call('gf'))
-    assert_equal('ix', candidate.call('et'))
-    assert_equal('jeiajeaijeiak', candidate.call('faewfawefaewg'))
-    assert_equal('lippsqcjvmirh', candidate.call('hellomyfriend'))
-    assert_equal('hbdhpqrmpjylqmpyjlpmlyjrqpmqryjlpmqryjljygyjl', candidate.call('dxzdlmnilfuhmilufhlihufnmlimnufhlimnufhfucufh'))
-    assert_equal('e', candidate.call('a'))
+    assert_equal("lm", candidate.call("hi"))
+    assert_equal("ewhjklnop", candidate.call("asdfghjkl"))
+    assert_equal("kj", candidate.call("gf"))
+    assert_equal("ix", candidate.call("et"))
+    assert_equal("jeiajeaijeiak", candidate.call("faewfawefaewg"))
+    assert_equal("lippsqcjvmirh", candidate.call("hellomyfriend"))
+    assert_equal("hbdhpqrmpjylqmpyjlpmlyjrqpmqryjlpmqryjljygyjl", candidate.call("dxzdlmnilfuhmilufhlihufnmlimnufhlimnufhfucufh"))
+    assert_equal("e", candidate.call("a"))
   end
 end

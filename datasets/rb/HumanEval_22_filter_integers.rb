@@ -13,7 +13,7 @@ class TestHumanEval < Test::Unit::TestCase
   def test_filter_integers
     candidate = method(:filter_integers)
     assert_equal([], candidate.call([]))
-    assert_equal([4, 9], candidate.call([4, {}, [], 23.2, 9, 'adasd']))
-    assert_equal([3, 3, 3], candidate.call([3, 'c', 3, 3, 'a', 'b']))
+    assert_equal([4, 9], candidate.call([4, {}, [], 23.2, 9, "adasd"]))
+    assert_equal([3, 3, 3], candidate.call([3, "c", 3, 3, "a", "b"]))
   end
 end

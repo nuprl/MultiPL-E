@@ -16,12 +16,12 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_fruit_distribution
     candidate = method(:fruit_distribution)
-    assert_equal(8, candidate.call('5 apples and 6 oranges', 19))
-    assert_equal(10, candidate.call('5 apples and 6 oranges', 21))
-    assert_equal(2, candidate.call('0 apples and 1 oranges', 3))
-    assert_equal(2, candidate.call('1 apples and 0 oranges', 3))
-    assert_equal(95, candidate.call('2 apples and 3 oranges', 100))
-    assert_equal(0, candidate.call('2 apples and 3 oranges', 5))
-    assert_equal(19, candidate.call('1 apples and 100 oranges', 120))
+    assert_equal(8, candidate.call("5 apples and 6 oranges", 19))
+    assert_equal(10, candidate.call("5 apples and 6 oranges", 21))
+    assert_equal(2, candidate.call("0 apples and 1 oranges", 3))
+    assert_equal(2, candidate.call("1 apples and 0 oranges", 3))
+    assert_equal(95, candidate.call("2 apples and 3 oranges", 100))
+    assert_equal(0, candidate.call("2 apples and 3 oranges", 5))
+    assert_equal(19, candidate.call("1 apples and 100 oranges", 120))
   end
 end

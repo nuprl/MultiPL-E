@@ -12,9 +12,9 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_separate_paren_groups
     candidate = method(:separate_paren_groups)
-    assert_equal(['(()())', '((()))', '()', '((())()())'], candidate.call('(()()) ((())) () ((())()())'))
-    assert_equal(['()', '(())', '((()))', '(((())))'], candidate.call('() (()) ((())) (((())))'))
-    assert_equal(['(()(())((())))'], candidate.call('(()(())((())))'))
-    assert_equal(['()', '(())', '(()())'], candidate.call('( ) (( )) (( )( ))'))
+    assert_equal(["(()())", "((()))", "()", "((())()())"], candidate.call("(()()) ((())) () ((())()())"))
+    assert_equal(["()", "(())", "((()))", "(((())))"], candidate.call("() (()) ((())) (((())))"))
+    assert_equal(["(()(())((())))"], candidate.call("(()(())((())))"))
+    assert_equal(["()", "(())", "(()())"], candidate.call("( ) (( )) (( )( ))"))
   end
 end

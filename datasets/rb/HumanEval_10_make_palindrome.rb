@@ -25,10 +25,10 @@ require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_make_palindrome
     candidate = method(:make_palindrome)
-    assert_equal('', candidate.call(''))
-    assert_equal('x', candidate.call('x'))
-    assert_equal('xyzyx', candidate.call('xyz'))
-    assert_equal('xyx', candidate.call('xyx'))
-    assert_equal('jerryrrej', candidate.call('jerry'))
+    assert_equal("", candidate.call(""))
+    assert_equal("x", candidate.call("x"))
+    assert_equal("xyzyx", candidate.call("xyz"))
+    assert_equal("xyx", candidate.call("xyx"))
+    assert_equal("jerryrrej", candidate.call("jerry"))
   end
 end
