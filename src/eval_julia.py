@@ -1,7 +1,7 @@
-# Authored by Arjun Guha, edited by Molly Q Feldman
+# Authored by Arjun Guha, edited by John Gouwar
 # Copyright (c) 2022, Roblox Inc.
 #
-# This script runs the Luafied HumanEval programs in datasets/lua
+# This script runs the Luafied HumanEval programs in datasets/julia
 import os
 import subprocess
 from pathlib import Path
@@ -12,7 +12,7 @@ def main():
     for filename in os.listdir(directory):
         try:
             # Assumes exit-code 0 is all okay
-            subprocess.check_output(" ".join(["ruby", os.path.join(directory, filename)]),
+            subprocess.check_output(" ".join(["julia", os.path.join(directory, filename)]),
                                         stderr=subprocess.DEVNULL, shell=True, timeout=5)
             
             
@@ -22,10 +22,7 @@ def main():
             status = "Timeout"
         except subprocess.CalledProcessError as exc:
             #print(str(exc.output))
-            if "b''" == str(exc.output):
-                status = 'SyntaxError'
-            else: 
-                status = "Exception"
+            status = "Exception"
         filename = filename.split(".")[0]
         print(f"Ruby,{filename},{status}")
 
