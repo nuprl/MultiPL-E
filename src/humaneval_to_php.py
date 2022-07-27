@@ -67,9 +67,14 @@ class PHPTranslator:
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
         c: is the literal value
+
+        PHP booleans are case insensitive, but lowercase is the convention.
+        PHP uses "null" instead of "None". 
         """
         if type(c) == bool:
             return str(c).lower()
+        elif c is None:
+            return "null"
         return repr(c)
 
     def gen_var(self, v: str) -> str:

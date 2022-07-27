@@ -66,13 +66,28 @@ class PromptVisitor(ast.NodeVisitor):
             case _other:
                 self.state = "error"
 
-    def translate_func_decl(self) -> str | None:
+    def translate_func_decl(self, doctest_transformation: str) -> str | None:
         if self.state != "complete":
             return None
-        return self.translator.translate_prompt(self.name, self.args, self.returns, self.description)
+        # TODO(arjun): Use doctest_transformation
+        match doctest_transformation:
+            case "keep":
+                description = self.description
+            case "remove":
+                # TODO(arjun): Remove all doctests
+                description = self.description 
+            case "transform":
+                # Steps:
+                # Find the Python expression and result in each doctest
+                # py_ast = ast.parse("PYTHON EXPRESSION", "bogus filename")
+                # translate_expr(py_ast, self.translator) to get the string for that expression in the target language
+                description = self.description # TODO(arjun): Transform doctests
+            case _other:
+                raise Exception(f"bad doctest_transformation")
+        return self.translator.translate_prompt(self.name, self.args, self.returns, description)
 
 
-def translate_prompt(translator, py_prompt: str, filename: str) -> str:
+def translate_prompt(translator, doctest_transformation: str, py_prompt: str, filename: str) -> str:
     """
     Reads in a prompt from the HumanEval dataset with "    pass" appended. Translates the prompt to
     Language L. Ignores type annotations and imports. Fails if the prompt has auxiliary functions.
@@ -80,7 +95,7 @@ def translate_prompt(translator, py_prompt: str, filename: str) -> str:
     prompt_ast = ast.parse(py_prompt + "    pass", filename)
     prompt_visitor = PromptVisitor(translator)
     prompt_visitor.visit(prompt_ast)
-    return prompt_visitor.translate_func_decl()
+    return prompt_visitor.translate_func_decl(doctest_transformation)
 
 
 def translate_tests(translator, py_tests: str, entry_point: str, filename: str) -> str:
@@ -124,7 +139,7 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
     return "\n".join(test_cases)
 
 
-def translate_file(port: int, translator, file):
+def translate_file(port: int, doctests_transformation: str, translator, file):
     file = Path(file).resolve()
     cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
     entry_point = re.search("(HumanEval_\d+)_(.+).py", file.name).group(2)
@@ -149,7 +164,7 @@ def translate_file(port: int, translator, file):
                 tests_buffer.append(line)
 
     prompt = "".join(prompt_buffer)
-    translated_prompt = translate_prompt(translator, prompt, f"{cleaned_task_id}.py")
+    translated_prompt = translate_prompt(translator, doctests_transformation, prompt, f"{cleaned_task_id}.py")
 
     tests = "".join(tests_buffer)
     translated_tests = translate_tests(
@@ -197,8 +212,21 @@ def main(translator):
     # Commandline arguments: --port 
     args = argparse.ArgumentParser()
     args.add_argument("--port", type=int, default=9000, help="Port to use for OpenAI Caching Proxy")
+
+    # argument --doctests with options "keep", "remove", and "transform"
+    args.add_argument(
+        "--doctests",
+        type=str,
+        default="keep",
+        help="What to do with doctests: keep, remove, or transform",
+    )
+
     args = args.parse_args()
+
+    if args.doctests not in [ "keep", "remove", "transform" ]:
+        raise Exception("Invalid value for --doctests")
+
 
     directory = Path(Path(__file__).parent, "..", "datasets").resolve()
     for filepath in sorted(directory.glob("originals/*.py")):
-        translate_file(args.port, translator, filepath)
+        translate_file(args.port, args.doctests, translator, filepath)
