@@ -28,8 +28,6 @@ class CPPTranslator:
        Each method returns a tuple of code and type of the expression
     '''
 
-    UNKNOWN_TYPE = "?"
-
     #Seems like reasonable stop sequences for CPP
     stop = ["\n\n","\nvoid", "\nint", "}\nbool"]
     #C++ Keywords found in the dataset
@@ -37,6 +35,7 @@ class CPPTranslator:
 
     def __init__(self, file_ext):
         self.file_ext = file_ext
+        self.union_decls = {} #Dictionary of _union_name to a dictionary of type to field
 
     def pytype_to_cpptype(self, ann: ast.expr | None) -> str:
         if ann == None:
@@ -74,6 +73,20 @@ class CPPTranslator:
                 return "std::vector<%s>"%self.pytype_to_cpptype(elts)
             case ast.Subscript(value=ast.Name(id="Optional"), slice=elem_type):
                 return "std::optional<%s>"%self.pytype_to_cpptype(elem_type)
+            case ast.Subscript(value=ast.Name(id="Union"), slice=ast.Tuple(elts=elems)):
+                print(ast.dump(ann))
+                union_elems_types = []
+                union_decl = {}
+                for i,e in enumerate(elems):
+                    elem_type = self.pytype_to_cpptype(e)
+                    union_elems_types += [elem_type]
+                    union_decl[elem_type] = f"f{i}" 
+
+                union_name = ("Union_%s"%("_".join(union_elems_types))).replace("::", "_").replace("<", "_").replace(">", "_")
+                if union_name not in self.union_decls:
+                    self.union_decls[union_name] = union_decl
+
+                return union_name
             case ast.Name(id="Any"):
                 #Cannot do this in C++
                 print("Cannot use Any in C++")
@@ -87,8 +100,9 @@ class CPPTranslator:
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:       
         comment_start = "//"
+        # print (unions)
         CPP_description = (
-            self.module_imports() + comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" +comment_start + " ", description.strip()) + "\n"
+            comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" +comment_start + " ", description.strip()) + "\n"
         )
         self.args_type = [self.pytype_to_cpptype(arg.annotation) for arg in args]
         formal_args = [f"{self.pytype_to_cpptype(arg.annotation)} {self.gen_var(arg.arg)[0]}" for arg in args]
@@ -96,7 +110,30 @@ class CPPTranslator:
 
         self.ret_ann = _returns
         self.ret_cpp_type = self.pytype_to_cpptype(_returns)
-        return f"{CPP_description}{self.ret_cpp_type} {name}({formal_arg_list})" + " {\n"
+        unions = ""
+        if self.union_decls != {}:
+            union = ""
+            for decl, fields in self.union_decls.items():
+                union += "union " + decl + "{\n"
+                
+                #Fields of union
+                union += "\n".join([f"    {type} {field};" for type,field in fields.items()])
+
+                #Constructor of union
+                for type, field in fields.items():
+                    union += f"    {decl}({type} _{field}) : {field}(_{field})" + " {}\n"
+
+                #Destructor of union
+                union += f"    ~{decl}()"+" {}\n"
+                
+                #Comparison operator
+                union += f"    bool operator==({decl} u2) {{\n"
+                comparisons = [f"{field} == u2.{field} " for type, field in fields.items()]
+                union += "        return " + "|| ".join(comparisons) + ";\n"
+                union += "    }"
+                union += "\n};\n"
+            unions += union
+        return f"{self.module_imports()}{unions}{CPP_description}{self.ret_cpp_type} {name}({formal_arg_list})" + " {\n"
     
     def wrap_in_brackets(self, s):
         return f"({s})"
@@ -105,8 +142,10 @@ class CPPTranslator:
         '''Update type of the right expression if it is different from the
             return type of function
         '''
+        
         if self.pytype_to_cpptype(right[1]) == expected_type:
             return self.wrap_in_brackets(right[0])
+        
         #No need to replace std::make_tuple
         if right[0].find('std::make_tuple') == 0:
             return right[0] 
@@ -148,6 +187,8 @@ class CPPTranslator:
         == is the wrong operator for Java and OCaml.
         """
         right = self.update_type(right, self.ret_cpp_type)
+        #Empty the union declarations
+        self.union_decls = {}
         return f"    assert({left[0]} == {right});"
 
     # NOTE(arjun): Really, no Nones?
@@ -263,9 +304,9 @@ class CPPTranslator:
             tuple_node = set(type_nodes_found)
             assert len(tuple_node) == 1, "There should only be one tuple node"
             tuple_node = list(tuple_node)[0]
-            print(found_tuple, t[0][0], ast.dump(t[0][1]), t[1][0], ast.dump(t[1][1]), elem_level)
-            print(self.pytype_to_cpptype(tuple_node))
-            print(ast.dump(tuple_node))
+            # print(found_tuple, t[0][0], ast.dump(t[0][1]), t[1][0], ast.dump(t[1][1]), elem_level)
+            # print(self.pytype_to_cpptype(tuple_node))
+            # print(ast.dump(tuple_node))
 
             cpp_elements = []
             assert len(tuple_node.slice.elts) == len(t), "Tuple elements are different"
