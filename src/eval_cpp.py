@@ -11,40 +11,46 @@ def main():
     binary_dir = os.path.join(directory, 'binary')
     if not os.path.exists(binary_dir):
       os.mkdir(binary_dir)
+    
+    total = 0
+    passed = 0
+    syntax_error = 0
     for filename in sorted(os.listdir(directory)):
         if "_137_" in filename or "_22_" in filename: 
           continue
         if "_39_" in filename: #Missing annotation
           continue
         if "_51_" in filename: #\n in string
-          continue
-        # if "151_double_the_difference" in filename or in filename or \
-        # "_39_" in filename or "_125_" in filename or  or \
-        # '_95_' in filename or '_22_' in filename or '_130_' in filename or '_133_' in filename or '_51_' in filename:
-        #   continue
-        
+          continue        
         if '.cpp' not in filename:
-          #Do not compile a binary
+          #Only cpp files
           continue
-        #TODO: All binaries should go in separate directory
         filepath = os.path.join(directory, filename)
         binary = os.path.join(binary_dir, filename.replace('.cpp',''))
-        if os.path.basename(binary) in os.listdir(binary_dir):
-          continue
         command = " ".join(["g++", filepath, "-o", binary])
-        print(command)
         # Assumes exit-code 0 is all okay
         (code, output) = subprocess.getstatusoutput(command)
         if code == 0:
           status = "OK"
         else:
           status = "SyntaxError"
-          print(output)
-          return
-        # except subprocess.TimeoutExpired as exc:
-        #     status = "Timeout"
+          # print(output)
+          syntax_error += 1
+        
+        if status == "OK":
+          #Execute the compiled binary
+          command = binary
+          (code, output) = subprocess.getstatusoutput(command)
+          if code == 0:
+            status = "OK"
+            passed += 1
+          else:
+            status = "FAIL"
+        total += 1
         filename = filename.split(".")[0]
         print(f"C++,{filename},{status}")
+      
+    print (f"Total {total}, Syntax Error {syntax_error}, Passed {passed}")
 
 if __name__ == "__main__":
     main()
