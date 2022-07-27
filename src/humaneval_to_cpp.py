@@ -97,7 +97,10 @@ class CPPTranslator:
         '''
         if self.pytype_to_cpptype(right[1]) == expected_type:
             return self.wrap_in_brackets(right[0])
-        
+        #No need to replace std::make_tuple
+        if right[0].find('std::make_tuple') == 0:
+            return right[0] 
+
         if re.findall("(.+)\(", right[0]) == []:
             #No type? add the type of right
             return self.wrap_in_brackets(expected_type+"("+right[0]+")")
@@ -166,7 +169,7 @@ class CPPTranslator:
         """
         #Assuming all elements in list have same type
         if l == [] or l == ():
-          return "std::vector<int>()", ast.List([ast.Name("int")])
+          return "std::vector<long>()", ast.List([ast.Name("int")])
 
         elem_type = self.pytype_to_cpptype(l[0][1])
         return f"std::vector<{elem_type}>" + "({" + ", ".join([e[0] for e in l]) + "})", ast.List([l[0][1]])
