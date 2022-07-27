@@ -61,8 +61,8 @@ local candidate = numerical_letter_grade
     lu.assertEquals(candidate({1.2}), {'D+'})
     lu.assertEquals(candidate({0.5}), {'D-'})
     lu.assertEquals(candidate({0.0}), {'E'})
-    lu.assertEquals(candidate({1, 0.3, 1.5, 2.8, 3.3}), {'D', 'D-', 'C-', 'B', 'B+'})
-    lu.assertEquals(candidate({0, 0.7}), {'E', 'D-'})
+    lu.assertEquals(candidate({1.0, 0.3, 1.5, 2.8, 3.3}), {'D', 'D-', 'C-', 'B', 'B+'})
+    lu.assertEquals(candidate({0.0, 0.7}), {'E', 'D-'})
 end
 
 os.exit(lu.LuaUnit.run())

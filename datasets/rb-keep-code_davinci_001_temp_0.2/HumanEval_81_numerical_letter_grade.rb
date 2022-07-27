@@ -59,7 +59,7 @@ class TestHumanEval < Test::Unit::TestCase
     assert_equal(["D+"], candidate.call([1.2]))
     assert_equal(["D-"], candidate.call([0.5]))
     assert_equal(["E"], candidate.call([0.0]))
-    assert_equal(["D", "D-", "C-", "B", "B+"], candidate.call([1, 0.3, 1.5, 2.8, 3.3]))
-    assert_equal(["E", "D-"], candidate.call([0, 0.7]))
+    assert_equal(["D", "D-", "C-", "B", "B+"], candidate.call([1.0, 0.3, 1.5, 2.8, 3.3]))
+    assert_equal(["E", "D-"], candidate.call([0.0, 0.7]))
   end
 end

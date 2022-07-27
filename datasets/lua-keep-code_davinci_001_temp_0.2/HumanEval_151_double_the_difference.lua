@@ -20,12 +20,12 @@ lu = require('luaunit')
 function test_humaneval()
 local candidate = double_the_difference
     lu.assertEquals(candidate({}), 0)
-    lu.assertEquals(candidate({5, 4}), 25)
+    lu.assertEquals(candidate({5.0, 4.0}), 25)
     lu.assertEquals(candidate({0.1, 0.2, 0.3}), 0)
-    lu.assertEquals(candidate({-10, -20, -30}), 0)
-    lu.assertEquals(candidate({-1, -2, 8}), 0)
-    lu.assertEquals(candidate({0.2, 3, 5}), 34)
-    lu.assertEquals(candidate({-9, -7, -5, -3, -1, 1, 3, 5, 7, 9}), 165)
+    lu.assertEquals(candidate({-10.0, -20.0, -30.0}), 0)
+    lu.assertEquals(candidate({-1.0, -2.0, 8.0}), 0)
+    lu.assertEquals(candidate({0.2, 3.0, 5.0}), 34)
+    lu.assertEquals(candidate({-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0}), 165)
 end
 
 os.exit(lu.LuaUnit.run())

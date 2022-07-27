@@ -14,11 +14,11 @@ class TestHumanEval < Test::Unit::TestCase
   def test_double_the_difference
     candidate = method(:double_the_difference)
     assert_equal(0, candidate.call([]))
-    assert_equal(25, candidate.call([5, 4]))
+    assert_equal(25, candidate.call([5.0, 4.0]))
     assert_equal(0, candidate.call([0.1, 0.2, 0.3]))
-    assert_equal(0, candidate.call([-10, -20, -30]))
-    assert_equal(0, candidate.call([-1, -2, 8]))
-    assert_equal(34, candidate.call([0.2, 3, 5]))
-    assert_equal(165, candidate.call([-9, -7, -5, -3, -1, 1, 3, 5, 7, 9]))
+    assert_equal(0, candidate.call([-10.0, -20.0, -30.0]))
+    assert_equal(0, candidate.call([-1.0, -2.0, 8.0]))
+    assert_equal(34, candidate.call([0.2, 3.0, 5.0]))
+    assert_equal(165, candidate.call([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]))
   end
 end

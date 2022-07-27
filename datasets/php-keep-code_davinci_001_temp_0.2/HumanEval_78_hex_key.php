@@ -32,7 +32,6 @@ function test(): void {
     if (candidate('2020') !== 2) { throw new Exception("Test failed!"); }
     if (candidate('123456789ABCDEF0') !== 6) { throw new Exception("Test failed!"); }
     if (candidate('112233445566778899AABBCCDDEEFF00') !== 12) { throw new Exception("Test failed!"); }
-    if (candidate(array()) !== 0) { throw new Exception("Test failed!"); }
 }
 
 test();

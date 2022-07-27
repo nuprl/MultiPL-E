@@ -23,12 +23,12 @@ function candidate(...$args) {
 
 function test(): void {
     if (candidate(array()) !== 0) { throw new Exception("Test failed!"); }
-    if (candidate(array(5, 4)) !== 25) { throw new Exception("Test failed!"); }
+    if (candidate(array(5.0, 4.0)) !== 25) { throw new Exception("Test failed!"); }
     if (candidate(array(0.1, 0.2, 0.3)) !== 0) { throw new Exception("Test failed!"); }
-    if (candidate(array(-10, -20, -30)) !== 0) { throw new Exception("Test failed!"); }
-    if (candidate(array(-1, -2, 8)) !== 0) { throw new Exception("Test failed!"); }
-    if (candidate(array(0.2, 3, 5)) !== 34) { throw new Exception("Test failed!"); }
-    if (candidate(array(-9, -7, -5, -3, -1, 1, 3, 5, 7, 9)) !== 165) { throw new Exception("Test failed!"); }
+    if (candidate(array(-10.0, -20.0, -30.0)) !== 0) { throw new Exception("Test failed!"); }
+    if (candidate(array(-1.0, -2.0, 8.0)) !== 0) { throw new Exception("Test failed!"); }
+    if (candidate(array(0.2, 3.0, 5.0)) !== 34) { throw new Exception("Test failed!"); }
+    if (candidate(array(-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0)) !== 165) { throw new Exception("Test failed!"); }
 }
 
 test();

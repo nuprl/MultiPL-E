@@ -12,7 +12,7 @@ def generate_integers(a, b)
   result
 end
 
-require "test/unit"
+require 'test/unit'
 class TestHumanEval < Test::Unit::TestCase
   def test_generate_integers
     candidate = method(:generate_integers)

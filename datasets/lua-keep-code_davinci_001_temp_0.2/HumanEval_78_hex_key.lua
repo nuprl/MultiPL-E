@@ -46,7 +46,6 @@ local candidate = hex_key
     lu.assertEquals(candidate('2020'), 2)
     lu.assertEquals(candidate('123456789ABCDEF0'), 6)
     lu.assertEquals(candidate('112233445566778899AABBCCDDEEFF00'), 12)
-    lu.assertEquals(candidate({}), 0)
 end
 
 os.exit(lu.LuaUnit.run())

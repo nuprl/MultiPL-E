@@ -22,18 +22,18 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate(array(1, 2, 3)) !== 14) { throw new Exception("Test failed!"); }
-    if (candidate(array(1.0, 2, 3)) !== 14) { throw new Exception("Test failed!"); }
-    if (candidate(array(1, 3, 5, 7)) !== 84) { throw new Exception("Test failed!"); }
-    if (candidate(array(1.4, 4.2, 0)) !== 29) { throw new Exception("Test failed!"); }
-    if (candidate(array(-2.4, 1, 1)) !== 6) { throw new Exception("Test failed!"); }
-    if (candidate(array(100, 1, 15, 2)) !== 10230) { throw new Exception("Test failed!"); }
-    if (candidate(array(10000, 10000)) !== 200000000) { throw new Exception("Test failed!"); }
+    if (candidate(array(1.0, 2.0, 3.0)) !== 14) { throw new Exception("Test failed!"); }
+    if (candidate(array(1.0, 2.0, 3.0)) !== 14) { throw new Exception("Test failed!"); }
+    if (candidate(array(1.0, 3.0, 5.0, 7.0)) !== 84) { throw new Exception("Test failed!"); }
+    if (candidate(array(1.4, 4.2, 0.0)) !== 29) { throw new Exception("Test failed!"); }
+    if (candidate(array(-2.4, 1.0, 1.0)) !== 6) { throw new Exception("Test failed!"); }
+    if (candidate(array(100.0, 1.0, 15.0, 2.0)) !== 10230) { throw new Exception("Test failed!"); }
+    if (candidate(array(10000.0, 10000.0)) !== 200000000) { throw new Exception("Test failed!"); }
     if (candidate(array(-1.4, 4.6, 6.3)) !== 75) { throw new Exception("Test failed!"); }
     if (candidate(array(-1.4, 17.9, 18.9, 19.9)) !== 1086) { throw new Exception("Test failed!"); }
-    if (candidate(array(0)) !== 0) { throw new Exception("Test failed!"); }
-    if (candidate(array(-1)) !== 1) { throw new Exception("Test failed!"); }
-    if (candidate(array(-1, 1, 0)) !== 2) { throw new Exception("Test failed!"); }
+    if (candidate(array(0.0)) !== 0) { throw new Exception("Test failed!"); }
+    if (candidate(array(-1.0)) !== 1) { throw new Exception("Test failed!"); }
+    if (candidate(array(-1.0, 1.0, 0.0)) !== 2) { throw new Exception("Test failed!"); }
 }
 
 test();

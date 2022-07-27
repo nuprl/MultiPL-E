@@ -59,5 +59,4 @@ fn main() {
     assert_eq!(candidate(String::from("2020")), 2);
     assert_eq!(candidate(String::from("123456789ABCDEF0")), 6);
     assert_eq!(candidate(String::from("112233445566778899AABBCCDDEEFF00")), 12);
-    assert_eq!(candidate(String::new()), 0);
 }
