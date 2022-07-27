@@ -13,6 +13,13 @@ def code_davinci_001_temperature_002(args, prompt, stop_tokens, n):
         n=n,
     )
 
+# TODO(arjun): Don't ignore n
+def incoder_6b_temperature_002(_args, prompt, stop_tokens, n):
+    from model_incoder import incoder_completion
+    # NOTE(arjun): Singleton array needd while ignoring n
+    return [incoder_completion(prompt=prompt, stop_tokens=stop_tokens)]
+
 MODELS = {
-    "code_davinci_001_temp_0.2": code_davinci_001_temperature_002
+    "code_davinci_001_temp_0.2": code_davinci_001_temperature_002,
+    "incoder_6b_temp_0.2": incoder_6b_temperature_002
 }
