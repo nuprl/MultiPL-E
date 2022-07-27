@@ -11,15 +11,7 @@ from generic_translator import main
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
-
-# class AnnotationVisitor(ast.NodeVisitor):
-#     def __init__(self, level,*args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.level = level
-    
-#     def generic_visit(self):
-
-    
+#Needs lots of refactoring :(
 
 #TODO: Set annotations 
 
