@@ -25,7 +25,6 @@ local function fibfib(n)
   end
   return fibfib(n-1) + fibfib(n-2) + fibfib(n-3)
 end
--- Unit tests below
 
 lu = require('luaunit')
 

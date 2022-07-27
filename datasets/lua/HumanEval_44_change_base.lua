@@ -16,7 +16,6 @@ local function change_base(x, base)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

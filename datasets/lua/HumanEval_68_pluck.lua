@@ -40,7 +40,6 @@ local function pluck(arr)
   result[2] = minIndex
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

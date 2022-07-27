@@ -14,7 +14,6 @@ local function longest(strings)
   end
   return longest
 end
--- Unit tests below
 
 lu = require('luaunit')
 

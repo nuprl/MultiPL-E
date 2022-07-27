@@ -13,7 +13,6 @@ local function count_distinct_characters(string)
     end
     return #distinct_characters
 end
--- Unit tests below
 
 lu = require('luaunit')
 

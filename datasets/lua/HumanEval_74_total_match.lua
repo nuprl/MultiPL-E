@@ -24,7 +24,6 @@ local function total_match(lst1, lst2)
     return lst1
   end
 end
--- Unit tests below
 
 lu = require('luaunit')
 

@@ -28,7 +28,6 @@ local function maximum(arr, k)
   end
   return heap
 end
--- Unit tests below
 
 lu = require('luaunit')
 

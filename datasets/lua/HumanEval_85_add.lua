@@ -10,7 +10,6 @@ local function add(lst)
     end
     return sum
 end
--- Unit tests below
 
 lu = require('luaunit')
 

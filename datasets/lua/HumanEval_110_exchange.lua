@@ -31,7 +31,6 @@ local function exchange(lst1, lst2)
     return "NO"
   end
 end
--- Unit tests below
 
 lu = require('luaunit')
 

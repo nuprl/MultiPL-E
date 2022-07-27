@@ -8,7 +8,6 @@ local function truncate_number(number)
   local integer_part = math.floor(number)
   return number - integer_part
 end
--- Unit tests below
 
 lu = require('luaunit')
 

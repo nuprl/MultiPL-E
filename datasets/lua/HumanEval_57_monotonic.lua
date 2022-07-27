@@ -13,7 +13,6 @@ local function monotonic(l)
   end
   return true
 end
--- Unit tests below
 
 lu = require('luaunit')
 

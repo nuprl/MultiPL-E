@@ -15,7 +15,6 @@ local function compare(game, guess)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

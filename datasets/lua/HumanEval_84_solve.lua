@@ -16,7 +16,6 @@ local function solve(N)
   end
   return tostring(sum)
 end
--- Unit tests below
 
 lu = require('luaunit')
 

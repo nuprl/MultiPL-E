@@ -35,7 +35,6 @@ local function move_one_ball(arr)
   end
   return n == 1
 end
--- Unit tests below
 
 lu = require('luaunit')
 

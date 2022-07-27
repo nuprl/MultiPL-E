@@ -26,7 +26,6 @@ local function int_to_mini_roman(number)
   end
   return result:lower()
 end
--- Unit tests below
 
 lu = require('luaunit')
 

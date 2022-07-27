@@ -15,7 +15,6 @@ local function digits(n)
   end
   return product
 end
--- Unit tests below
 
 lu = require('luaunit')
 

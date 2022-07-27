@@ -13,7 +13,6 @@ local function unique(l)
   table.sort(n)
   return n
 end
--- Unit tests below
 
 lu = require('luaunit')
 

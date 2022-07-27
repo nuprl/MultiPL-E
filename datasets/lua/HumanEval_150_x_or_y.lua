@@ -10,7 +10,6 @@ local function x_or_y(n, x, y)
     return y
   end
 end
--- Unit tests below
 
 lu = require('luaunit')
 

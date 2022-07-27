@@ -14,7 +14,6 @@
 local function valid_date(date)
   -- your code here
 end
--- Unit tests below
 
 lu = require('luaunit')
 

@@ -20,7 +20,6 @@ local function odd_count(lst)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

@@ -14,7 +14,6 @@ local function sum_squares(lst)
     end
     return sum
 end
--- Unit tests below
 
 lu = require('luaunit')
 

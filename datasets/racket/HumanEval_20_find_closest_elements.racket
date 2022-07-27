@@ -1,0 +1,43 @@
+#lang racket
+
+;; From a supplied list of numbers (of length at least two) select and return two that are the closest to each
+;; other and return them in order (smaller number, larger number).
+;; >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.2])
+;; (2.0, 2.2)
+;; >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0])
+;; (2.0, 2.0)
+(define (find_closest_elements numbers)
+  (define (closest_pair x y)
+    (cond [(> (abs (- (car x) (car y))) (abs (- (car x) (cadr y))))
+           (list (car y) (cadr y))]
+          [(> (abs (- (car x) (cadr y))) (abs (- (car x) (car y))))
+           (list (car y) (cadr y))]
+          [else
+           (list (car x) (car y))]))
+  (define (merge l1 l2)
+    (cond [(null? l1) l2]
+          [(null? l2) l1]
+          [else (closest_pair (car l1) (car l2))]))
+  (define (merge-sort l)
+    (if (> (length l) 1)
+        (let ((l1 (subseq l 0 (quotient (length l) 2)))
+              (l2 (subseq l (quotient (length l) 2))))
+          (merge (merge-sort l1) (merge-sort l2)))
+        l))
+  (merge-sort numbers))
+
+# Examples
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate find_closest_elements))
+    (check-equal? (candidate (list 1.0 2.0 3.9 4.0 5.0 2.2)) (list 3.9 4.0))
+    (check-equal? (candidate (list 1.0 2.0 5.9 4.0 5.0)) (list 5.0 5.9))
+    (check-equal? (candidate (list 1.0 2.0 3.0 4.0 5.0 2.2)) (list 2.0 2.2))
+    (check-equal? (candidate (list 1.0 2.0 3.0 4.0 5.0 2.0)) (list 2.0 2.0))
+    (check-equal? (candidate (list 1.1 2.2 3.1 4.1 5.1)) (list 2.2 3.1))
+))
+
+(test-humaneval)

@@ -17,7 +17,6 @@
 local function get_row(lst, x)
   -- your code here
 end
--- Unit tests below
 
 lu = require('luaunit')
 

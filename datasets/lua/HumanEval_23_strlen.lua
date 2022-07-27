@@ -6,7 +6,6 @@
 local function strlen(string)
   return string.len(string)
 end
--- Unit tests below
 
 lu = require('luaunit')
 

@@ -15,7 +15,6 @@ local function flip_case(string)
   end
   return new_string
 end
--- Unit tests below
 
 lu = require('luaunit')
 

@@ -24,7 +24,6 @@ local function is_prime(n)
     end
     return true
 end
--- Unit tests below
 
 lu = require('luaunit')
 

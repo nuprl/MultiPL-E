@@ -20,7 +20,6 @@ local function sort_array(array)
   end
   return array
 end
--- Unit tests below
 
 lu = require('luaunit')
 

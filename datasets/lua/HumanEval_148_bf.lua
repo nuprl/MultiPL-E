@@ -40,7 +40,6 @@ local function bf(planet1, planet2)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

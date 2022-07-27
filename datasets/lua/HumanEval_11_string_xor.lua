@@ -15,7 +15,6 @@ local function string_xor(a, b)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

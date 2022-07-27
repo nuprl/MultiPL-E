@@ -6,7 +6,6 @@
 local function add(x, y)
     return x + y
 end
--- Unit tests below
 
 lu = require('luaunit')
 

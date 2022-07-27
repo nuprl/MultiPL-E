@@ -23,7 +23,6 @@ local function is_happy(s)
   end
   return is_happy_helper(s, 1)
 end
--- Unit tests below
 
 lu = require('luaunit')
 

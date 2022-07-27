@@ -16,7 +16,6 @@ local function count_up_to(n)
     end
     return true
   end
--- Unit tests below
 
 lu = require('luaunit')
 

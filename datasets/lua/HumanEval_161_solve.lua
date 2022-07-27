@@ -20,7 +20,6 @@ local function solve(s)
   end
   return table.concat(t)
 end
--- Unit tests below
 
 lu = require('luaunit')
 

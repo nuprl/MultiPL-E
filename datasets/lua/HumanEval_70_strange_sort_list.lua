@@ -24,7 +24,6 @@ local function strange_sort_list(lst)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

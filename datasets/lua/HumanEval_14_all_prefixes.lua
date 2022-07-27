@@ -8,7 +8,6 @@ local function all_prefixes(string)
     end
     return prefixes
 end
--- Unit tests below
 
 lu = require('luaunit')
 

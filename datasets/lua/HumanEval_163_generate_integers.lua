@@ -13,7 +13,6 @@ local function generate_integers(a, b)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

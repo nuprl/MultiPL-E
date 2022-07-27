@@ -36,7 +36,6 @@ local function intersection(interval1, interval2)
         return "NO"
     end
 end
--- Unit tests below
 
 lu = require('luaunit')
 

@@ -28,20 +28,19 @@ local function tri(n)
   end
   return t
 end
--- Unit tests below
 
 lu = require('luaunit')
 
 function test_humaneval()
 local candidate = tri
-    lu.assertEquals(candidate(3), {1, 3, 2.0, 8.0})
-    lu.assertEquals(candidate(4), {1, 3, 2.0, 8.0, 3.0})
-    lu.assertEquals(candidate(5), {1, 3, 2.0, 8.0, 3.0, 15.0})
-    lu.assertEquals(candidate(6), {1, 3, 2.0, 8.0, 3.0, 15.0, 4.0})
-    lu.assertEquals(candidate(7), {1, 3, 2.0, 8.0, 3.0, 15.0, 4.0, 24.0})
-    lu.assertEquals(candidate(8), {1, 3, 2.0, 8.0, 3.0, 15.0, 4.0, 24.0, 5.0})
-    lu.assertEquals(candidate(9), {1, 3, 2.0, 8.0, 3.0, 15.0, 4.0, 24.0, 5.0, 35.0})
-    lu.assertEquals(candidate(20), {1, 3, 2.0, 8.0, 3.0, 15.0, 4.0, 24.0, 5.0, 35.0, 6.0, 48.0, 7.0, 63.0, 8.0, 80.0, 9.0, 99.0, 10.0, 120.0, 11.0})
+    lu.assertEquals(candidate(3), {1, 3, 2, 8})
+    lu.assertEquals(candidate(4), {1, 3, 2, 8, 3})
+    lu.assertEquals(candidate(5), {1, 3, 2, 8, 3, 15})
+    lu.assertEquals(candidate(6), {1, 3, 2, 8, 3, 15, 4})
+    lu.assertEquals(candidate(7), {1, 3, 2, 8, 3, 15, 4, 24})
+    lu.assertEquals(candidate(8), {1, 3, 2, 8, 3, 15, 4, 24, 5})
+    lu.assertEquals(candidate(9), {1, 3, 2, 8, 3, 15, 4, 24, 5, 35})
+    lu.assertEquals(candidate(20), {1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11})
     lu.assertEquals(candidate(0), {1})
     lu.assertEquals(candidate(1), {1, 3})
 end

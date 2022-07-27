@@ -12,7 +12,6 @@ local function get_positive(l)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

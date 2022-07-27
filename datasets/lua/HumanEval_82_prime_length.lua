@@ -16,7 +16,6 @@ local function prime_length(string)
   end
   return is_prime(string.len(string))
 end
--- Unit tests below
 
 lu = require('luaunit')
 

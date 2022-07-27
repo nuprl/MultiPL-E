@@ -16,7 +16,6 @@ local function sum_to_n(n)
     return n + sum_to_n(n - 1)
   end
 end
--- Unit tests below
 
 lu = require('luaunit')
 

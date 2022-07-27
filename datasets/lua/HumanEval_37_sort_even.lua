@@ -16,7 +16,6 @@ local function sort_even(l)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

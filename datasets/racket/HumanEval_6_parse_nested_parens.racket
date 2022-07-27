@@ -1,0 +1,39 @@
+#lang racket
+
+;; Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+;; For each of the group, output the deepest level of nesting of parentheses.
+;; E.g. (()()) has maximum two levels of nesting while ((())) has three.
+;; >>> parse_nested_parens('(()()) ((())) () ((())()())')
+;; [2, 3, 1, 3]
+(define (parse_nested_parens paren_string)
+  (let ([parens (map (lambda (x) (if (string=? x "(") 1 -1)) paren_string)])
+    (let ([max_depth 0])
+      (for ([i 0 (< i (length parens))])
+        (let ([depth (+ (nth i parens) (nth (add1 i) parens))])
+          (if (> depth max_depth) (set! max_depth depth))))
+      (let ([result (make-vector (sub1 max_depth) 0)])
+        (for ([i 0 (< i (length parens))])
+          (let ([depth (+ (nth i parens) (nth (add1 i) parens))])
+            (if (= depth max_depth) (set! (vector-ref result depth) (add1 (vector-ref result depth))))))
+        result))))
+
+# The above function is a bit too complicated for this problem.
+# The following function is more straightforward.
+# It counts the number of opening parentheses and subtracts the number of closing parentheses.
+# If the result is non-negative, it means the current group has no nesting.
+# If the result is zero, it means the current group has one level of nesting.
+# If the result is negative, it means the current group has more than one level of nesting.
+# >>> parse_nested_parens_simple('(()()) ((())) () ((())()())')
+# [2, 3, 1, 3]
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate parse_nested_parens))
+    (check-equal? (candidate "(()()) ((())) () ((())()())") (list 2 3 1 3))
+    (check-equal? (candidate "() (()) ((())) (((())))") (list 1 2 3 4))
+    (check-equal? (candidate "(()(())((())))") (list 4))
+))
+
+(test-humaneval)

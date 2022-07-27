@@ -8,7 +8,6 @@ local function string_to_md5(text)
     local md5 = ngx.md5(text)
     return md5
 end
--- Unit tests below
 
 lu = require('luaunit')
 

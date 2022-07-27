@@ -23,7 +23,6 @@ local function multiply(a, b)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

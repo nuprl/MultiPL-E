@@ -23,7 +23,6 @@ local function do_algebra(operator, operand)
     end
     return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

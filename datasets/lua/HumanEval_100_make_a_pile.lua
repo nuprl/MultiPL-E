@@ -23,7 +23,6 @@ local function make_a_pile(n)
   end
   return pile
 end
--- Unit tests below
 
 lu = require('luaunit')
 

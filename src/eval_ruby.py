@@ -1,26 +1,33 @@
-# Authored by Molly Feldman, based on code originally written by Arjun Guha
+# Authored by Arjun Guha, edited by Molly Q Feldman
+# Copyright (c) 2022, Roblox Inc.
 #
-# This script runs the Ruby-fied HumanEval programs in ruby
+# This script runs the Luafied HumanEval programs in datasets/lua
+import os
 import subprocess
 from pathlib import Path
 
 def main():
-    total = 0
-    successes = 0
-    # For every file in ruby:
-    directory = Path(Path(__file__).parent, "..", Path("datasets")).resolve()
-    for filename in sorted(directory.glob("ruby/*.rb")):
-        total += 1
-        # Run it with ruby, suppressing all output
-        p = subprocess.run(["ruby", filename],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
-        # Check exit code
-        ok = p.returncode == 0
-        if ok:
-            successes += 1
-        filename = str(filename).split("/ruby/")[1]
-        print(f"Ruby,{filename},{ok}")
-    print(f"{successes}/{total}")
+    directory = Path(Path(__file__).parent, "..", "datasets", "rb").resolve()
+
+    for filename in os.listdir(directory):
+        try:
+            # Assumes exit-code 0 is all okay
+            subprocess.check_output(" ".join(["ruby", os.path.join(directory, filename)]),
+                                        stderr=subprocess.DEVNULL, shell=True, timeout=5)
+            
+            
+            
+            status = "OK"
+        except subprocess.TimeoutExpired as exc:
+            status = "Timeout"
+        except subprocess.CalledProcessError as exc:
+            #print(str(exc.output))
+            if "b''" == str(exc.output):
+                status = 'SyntaxError'
+            else: 
+                status = "Exception"
+        filename = filename.split(".")[0]
+        print(f"Ruby,{filename},{status}")
 
 if __name__ == "__main__":
     main()

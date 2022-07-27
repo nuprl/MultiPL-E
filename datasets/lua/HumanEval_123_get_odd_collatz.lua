@@ -27,7 +27,6 @@ local function get_odd_collatz(n)
     collatz(n)
     return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

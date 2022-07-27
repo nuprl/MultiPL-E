@@ -12,7 +12,6 @@ local function rescale_to_unit(numbers)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

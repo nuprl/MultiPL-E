@@ -27,7 +27,6 @@ local function is_nested(string)
   end
   return count == 0
 end
--- Unit tests below
 
 lu = require('luaunit')
 

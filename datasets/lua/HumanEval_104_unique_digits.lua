@@ -16,7 +16,6 @@ local function unique_digits(x)
   table.sort(result)
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

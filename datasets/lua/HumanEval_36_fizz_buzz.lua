@@ -14,7 +14,6 @@ local function fizz_buzz(n)
   end
   return count
 end
--- Unit tests below
 
 lu = require('luaunit')
 

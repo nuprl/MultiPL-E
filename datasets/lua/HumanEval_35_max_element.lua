@@ -12,7 +12,6 @@ local function max_element(l)
     end
     return max
 end
--- Unit tests below
 
 lu = require('luaunit')
 

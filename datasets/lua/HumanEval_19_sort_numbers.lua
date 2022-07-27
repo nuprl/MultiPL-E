@@ -11,7 +11,6 @@ local function sort_numbers(numbers)
   table.sort(numbers_table)
   return table.concat(numbers_table, " ")
 end
--- Unit tests below
 
 lu = require('luaunit')
 

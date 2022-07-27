@@ -20,7 +20,6 @@ local function parse_nested_parens(paren_string)
   end
   return nesting_levels, max_nesting
 end
--- Unit tests below
 
 lu = require('luaunit')
 

@@ -33,7 +33,6 @@ local function words_in_sentence(sentence)
     end
     return table.concat(prime_words, " ")
 end
--- Unit tests below
 
 lu = require('luaunit')
 

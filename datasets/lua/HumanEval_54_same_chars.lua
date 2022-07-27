@@ -27,7 +27,6 @@ local function same_chars(s0, s1)
     end
     return true
 end
--- Unit tests below
 
 lu = require('luaunit')
 

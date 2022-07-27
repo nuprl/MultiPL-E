@@ -33,7 +33,6 @@ local function eat(number, need, remaining)
   end
   return {eaten, remaining}
 end
--- Unit tests below
 
 lu = require('luaunit')
 

@@ -21,7 +21,6 @@ local function fib4(n)
   end
   return d
 end
--- Unit tests below
 
 lu = require('luaunit')
 

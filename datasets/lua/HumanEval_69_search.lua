@@ -27,7 +27,6 @@ local function search(lst)
     return -1
   end
 end
--- Unit tests below
 
 lu = require('luaunit')
 

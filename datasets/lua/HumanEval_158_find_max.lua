@@ -20,7 +20,6 @@ local function find_max(words)
   end
   return max_word
 end
--- Unit tests below
 
 lu = require('luaunit')
 

@@ -10,7 +10,6 @@ local function largest_divisor(n)
   end
   return divisor
 end
--- Unit tests below
 
 lu = require('luaunit')
 

@@ -16,7 +16,6 @@ local function even_odd_count(num)
   end
   return even, odd
 end
--- Unit tests below
 
 lu = require('luaunit')
 

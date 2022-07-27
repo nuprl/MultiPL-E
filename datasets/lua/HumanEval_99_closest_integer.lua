@@ -20,7 +20,6 @@ local function closest_integer(value)
   local decimal_value_rounded_to_integer_rounded = decimal_value_rounded_to_integer >= 0 and math.ceil(decimal_value_rounded_to_integer) or math.floor(decimal_value_rounded_to_integer)
   return decimal_value_rounded_to_integer_rounded
 end
--- Unit tests below
 
 lu = require('luaunit')
 

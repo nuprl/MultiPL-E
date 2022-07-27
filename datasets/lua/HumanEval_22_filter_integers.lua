@@ -12,7 +12,6 @@ local function filter_integers(values)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

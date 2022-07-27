@@ -17,7 +17,6 @@ local function sort_third(l)
   table.sort(new_list)
   return new_list
 end
--- Unit tests below
 
 lu = require('luaunit')
 

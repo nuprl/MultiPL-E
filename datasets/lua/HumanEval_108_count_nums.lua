@@ -21,7 +21,6 @@ local function count_nums(arr)
   end
   return count
 end
--- Unit tests below
 
 lu = require('luaunit')
 
@@ -33,7 +32,7 @@ local candidate = count_nums
     lu.assertEquals(candidate({1, 6, 9, -6, 0, 1, 5}), 5)
     lu.assertEquals(candidate({1, 100, 98, -7, 1, -1}), 4)
     lu.assertEquals(candidate({12, 23, 34, -45, -56, 0}), 5)
-    lu.assertEquals(candidate({-0, 1}), 1)
+    lu.assertEquals(candidate({0, 1}), 1)
     lu.assertEquals(candidate({1}), 1)
 end
 

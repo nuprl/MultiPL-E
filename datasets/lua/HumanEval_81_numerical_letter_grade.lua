@@ -52,7 +52,6 @@ local function numerical_letter_grade(grades)
     end
     return letter_grades
 end
--- Unit tests below
 
 lu = require('luaunit')
 

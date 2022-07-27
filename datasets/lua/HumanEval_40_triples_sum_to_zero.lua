@@ -26,7 +26,6 @@ local function triples_sum_to_zero(l)
   end
   return false
 end
--- Unit tests below
 
 lu = require('luaunit')
 

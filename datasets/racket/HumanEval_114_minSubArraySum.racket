@@ -1,0 +1,43 @@
+#lang racket
+
+;; Given an array of integers nums, find the minimum sum of any non-empty sub-array
+;; of nums.
+;; Example
+;; minSubArraySum([2, 3, 4, 1, 2, 4]) == 1
+;; minSubArraySum([-1, -2, -3]) == -6
+(define (minSubArraySum nums)
+  (define (min-sub-array-sum-helper start end)
+    (cond [(>= start end) (error "start should be less than end"))
+          [(= start end) (nums start end)]
+          [else (let ([mid (+ start (/ (- end start) 2))])
+                  (let ([left (min-sub-array-sum-helper start mid)])
+                    (let ([right (min-sub-array-sum-helper (+ mid 1) end)])
+                      (let ([left-sum (apply + left)])
+                        (let ([right-sum (apply + right)])
+                          (cond [(< left-sum right-sum) right]
+                                [(> left-sum right-sum) left]
+                                [(= left-sum right-sum) (list left right)]))))))]))
+  (let ([min-sum (apply + (min-sub-array-sum-helper 0 (- (length nums) 1)))))
+    (cond [(> min-sum 0) min-sum]
+          [else 0])))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate minSubArraySum))
+    (check-equal? (candidate (list 2 3 4 1 2 4)) 1)
+    (check-equal? (candidate (list -1 -2 -3)) -6)
+    (check-equal? (candidate (list -1 -2 -3 2 -10)) -14)
+    (check-equal? (candidate (list -9999999999999999)) -9999999999999999)
+    (check-equal? (candidate (list 0 10 20 1000000)) 0)
+    (check-equal? (candidate (list -1 -2 -3 10 -5)) -6)
+    (check-equal? (candidate (list 100 -1 -2 -3 10 -5)) -6)
+    (check-equal? (candidate (list 10 11 13 8 3 4)) 3)
+    (check-equal? (candidate (list 100 -33 32 -1 0 -2)) -33)
+    (check-equal? (candidate (list -10)) -10)
+    (check-equal? (candidate (list 7)) 7)
+    (check-equal? (candidate (list 1 -1)) -1)
+))
+
+(test-humaneval)

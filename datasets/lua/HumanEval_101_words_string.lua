@@ -17,7 +17,6 @@ local function words_string(s)
   table.insert(words, word)
   return words
 end
--- Unit tests below
 
 lu = require('luaunit')
 

@@ -16,7 +16,6 @@ local function has_close_elements(numbers, threshold)
   end
   return false
 end
--- Unit tests below
 
 lu = require('luaunit')
 

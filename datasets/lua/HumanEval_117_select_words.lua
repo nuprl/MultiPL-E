@@ -31,7 +31,6 @@ local function select_words(s, n)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

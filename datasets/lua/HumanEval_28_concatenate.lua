@@ -10,7 +10,6 @@ local function concatenate(strings)
   end
   return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 

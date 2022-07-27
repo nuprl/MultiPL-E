@@ -6,7 +6,6 @@
 local function is_equal_to_sum_even(n)
   -- TODO: complete
 end
--- Unit tests below
 
 lu = require('luaunit')
 

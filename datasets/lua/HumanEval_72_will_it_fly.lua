@@ -20,7 +20,6 @@ local function will_it_fly(q, w)
     return false
   end
 end
--- Unit tests below
 
 lu = require('luaunit')
 

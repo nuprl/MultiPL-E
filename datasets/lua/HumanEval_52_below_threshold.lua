@@ -11,7 +11,6 @@ local function below_threshold(l, t)
     end
     return true
 end
--- Unit tests below
 
 lu = require('luaunit')
 

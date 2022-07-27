@@ -26,7 +26,6 @@ local function order_by_points(nums)
   end)
   return nums
 end
--- Unit tests below
 
 lu = require('luaunit')
 

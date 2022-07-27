@@ -1,10 +1,6 @@
 -- remove_vowels is a function that takes string and returns string without vowels.
 -- >>> remove_vowels('')
 -- ''
--- >>> remove_vowels("abcdef
-ghijklm")
--- 'bcdf
-ghjklm'
 -- >>> remove_vowels('abcdef')
 -- 'bcdf'
 -- >>> remove_vowels('aaaaa')
@@ -17,14 +13,13 @@ local function remove_vowels(text)
     local vowels = {'a', 'e', 'i', 'o', 'u'}
     local result = ''
     for i = 1, #text do
-        local char = text:sub(i, i)
-        if not table.contains(vowels, char) then
-            result = result .. char
+        local letter = text:sub(i, i)
+        if not table.contains(vowels, letter) then
+            result = result .. letter
         end
     end
     return result
 end
--- Unit tests below
 
 lu = require('luaunit')
 
