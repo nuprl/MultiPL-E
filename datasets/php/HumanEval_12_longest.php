@@ -22,7 +22,7 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate(array()) !== None) { throw new Exception("Test failed!"); }
+    if (candidate(array()) !== null) { throw new Exception("Test failed!"); }
     if (candidate(array('x', 'y', 'z')) !== 'x') { throw new Exception("Test failed!"); }
     if (candidate(array('x', 'yyy', 'zzzz', 'www', 'kkkk', 'abc')) !== 'zzzz') { throw new Exception("Test failed!"); }
 }
