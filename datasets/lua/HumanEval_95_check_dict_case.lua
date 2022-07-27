@@ -4,25 +4,12 @@
 -- Examples:
 -- check_dict_case({"a":"apple", "b":"banana"}) should return True.
 -- check_dict_case({"a":"apple", "A":"banana", "B":"banana"}) should return False.
--- check_dict_case({"a":"apple", 8:"banana", "a":"apple"}) should return False.
+-- check_dict_case({"a":"apple", "8":"banana", "a":"apple"}) should return False.
 -- check_dict_case({"Name":"John", "Age":"36", "City":"Houston"}) should return False.
 -- check_dict_case({"STATE":"NC", "ZIP":"12345" }) should return True.
 local function check_dict_case(dict)
-  -- YOUR CODE HERE
-  local lower_case = true
-  local upper_case = true
-  for k,v in pairs(dict) do
-    if type(k) ~= "string" then
-      return false
-    end
-    if string.lower(k) ~= k then
-      lower_case = false
-    end
-    if string.upper(k) ~= k then
-      upper_case = false
-    end
-  end
-  return lower_case or upper_case
+  -- your code here
+  return true
 end
 
 lu = require('luaunit')
@@ -31,7 +18,7 @@ function test_humaneval()
 local candidate = check_dict_case
     lu.assertEquals(candidate({['p'] = 'pineapple', ['b'] = 'banana'}), true)
     lu.assertEquals(candidate({['p'] = 'pineapple', ['A'] = 'banana', ['B'] = 'banana'}), false)
-    lu.assertEquals(candidate({['p'] = 'pineapple', [5] = 'banana', ['a'] = 'apple'}), false)
+    lu.assertEquals(candidate({['p'] = 'pineapple', ['5'] = 'banana', ['a'] = 'apple'}), false)
     lu.assertEquals(candidate({['Name'] = 'John', ['Age'] = '36', ['City'] = 'Houston'}), false)
     lu.assertEquals(candidate({['STATE'] = 'NC', ['ZIP'] = '12345'}), true)
     lu.assertEquals(candidate({['fruit'] = 'Orange', ['taste'] = 'Sweet'}), true)
