@@ -2,10 +2,6 @@
 // remove_vowels is a function that takes string and returns string without vowels.
 // >>> remove_vowels('')
 // ''
-// >>> remove_vowels("abcdef
-ghijklm")
-// 'bcdf
-ghjklm'
 // >>> remove_vowels('abcdef')
 // 'bcdf'
 // >>> remove_vowels('aaaaa')
@@ -15,18 +11,10 @@ ghjklm'
 // >>> remove_vowels('zbcd')
 // 'zbcd'
 function remove_vowels($text) {
-    $vowels = ['a', 'e', 'i', 'o', 'u'];
-    $result = '';
-    for ($i = 0; $i < strlen($text); $i++) {
-        if (!in_array($text[$i], $vowels)) {
-            $result .= $text[$i];
-        }
-    }
-    return $result;
+    $vowels = array('a', 'e', 'i', 'o', 'u');
+    $text = str_replace($vowels, '', $text);
+    return $text;
 }
-
-$text = 'abcdefghijklm';
-echo remove_vowels($text);
 
 function candidate(...$args) {
     return remove_vowels(...$args);
