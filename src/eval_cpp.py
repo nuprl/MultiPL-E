@@ -9,8 +9,9 @@ from pathlib import Path
 def main():
     directory = Path(Path(__file__).parent, "..", "datasets", "cpp").resolve()
     binary_dir = os.path.join(directory, 'binary')
-
-    for filename in os.listdir(directory):
+    if not os.path.exists(binary_dir):
+      os.mkdir(binary_dir)
+    for filename in sorted(os.listdir(directory)):
         if "151_double_the_difference" in filename or '103' in filename or \
         "_39_" in filename or "_125_" in filename or "_137_" in filename or \
         '_95_' in filename or '_22_' in filename or '_130_' in filename or '_133_' in filename or '_51_' in filename:
@@ -21,7 +22,7 @@ def main():
           continue
         #TODO: All binaries should go in separate directory
         filepath = os.path.join(directory, filename)
-        binary = filepath.replace('.cpp','')
+        binary = os.path.join(binary_dir, filename.replace('.cpp',''))
         if os.path.basename(binary) in os.listdir(directory):
           continue
         command = " ".join(["g++", filepath, "-o", binary])
