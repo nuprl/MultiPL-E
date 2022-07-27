@@ -88,7 +88,7 @@ class CPPTranslator:
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:       
         comment_start = "//"
         CPP_description = (
-            comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" +comment_start + " ", description.strip()) + "\n"
+            self.module_imports() + comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" +comment_start + " ", description.strip()) + "\n"
         )
         self.args_type = [self.pytype_to_cpptype(arg.annotation) for arg in args]
         formal_args = [f"{self.pytype_to_cpptype(arg.annotation)} {self.gen_var(arg.arg)[0]}" for arg in args]
