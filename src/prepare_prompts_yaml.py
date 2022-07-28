@@ -1,7 +1,20 @@
 """
 This script prepares all prompts for a particular language as YAML files (one
-per benchmark). The script evaluate_prompts_yamlinplace.py will then update the
-YAML with completions from an LLM.
+per benchmark). The scripts completions_*.py will then update each file with
+completions from an LLM.
+
+To run this script:
+
+1. mkdir ../datasets/LANGUAGE-keep-MODEL
+
+  where MODEL is either davinci or incoder.
+
+2. python3 prepare_prompts_yaml.py --lang LANGUAGE --target-dir ../datasets/LANGUAGE-keep-MODEL --doctests keep
+
+  This will create lots of YAML files in TARGET-DIR. You should commit these files to the repository.
+
+3. Now run either completions_codex.py or completions_incoder.py.
+
 
 Estimate of how big each YAML file gets:
 

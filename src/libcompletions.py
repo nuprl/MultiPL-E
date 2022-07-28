@@ -22,7 +22,7 @@ def parameterized_main(completion_function, max_to_generate):
         print("Directory does not exist: {}".format(dir))
         sys.exit(1)
 
-    for problem_yaml_path in dir.glob("*.yaml"):
+    for problem_yaml_path in sorted(dir.glob("*.yaml")):
         with problem_yaml_path.open() as f:
             problem = Problem.load(f)
         num_completions_required = 200 - len(problem.completions)
