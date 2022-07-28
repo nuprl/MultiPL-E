@@ -9,6 +9,8 @@ import re
 from pathlib import Path
 import argparse
 from models import MODELS
+from base_language_translator import LanguageTranslator
+from typing import List
 
 
 def translate_expr(translator, py_expr: ast.AST):
@@ -223,7 +225,7 @@ def translate_file(args, translator, file):
     if translated_tests is None:
         print(f"Failed to translate tests for {file}")
         return
-    response = MODELS[args.model](args, translated_prompt, translator.stop, 1)[0]
+    response = MODELS[args.model](args, translated_prompt, get_stop_from_translator(translator), 1)[0]
 
     filename = target_path(args, translator, file)
 
@@ -236,6 +238,19 @@ def translate_file(args, translator, file):
         f.write(translated_tests)
         print(f'Wrote {filename}')
 
+
+def get_stop_from_translator(translator) -> List[str]:
+    if isinstance(translator, LanguageTranslator):
+        return translator.stop()
+    else:
+        return translator.stop
+
+def get_file_ext_from_translator(translator):
+    if isinstance(translator, LanguageTranslator):
+        return translator.file_ext()
+    else:
+        return translator.file_ext
+
 def list_originals():
     directory = Path(Path(__file__).parent, "..", "datasets").resolve()
     files_unsorted = directory.glob("originals/*.py") 
@@ -245,7 +260,8 @@ def list_originals():
     return files_sorted
 
 def main(translator):
-    if len(translator.stop) <= 0 or len(translator.stop) > 4:
+    stop = get_stop_from_translator(translator)
+    if len(stop) <= 0 or len(stop) > 4:
         raise Exception("Translator must have 0 < n <= 4 stop words!")
 
     # Commandline arguments: --port 
