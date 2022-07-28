@@ -204,11 +204,29 @@ import (
         print("UNKNOWN", pytype)
         return "UNKNOWN"
 
+    def get_type_pylist(self, list) -> str:
+        if len(list) == 0:
+            raise Exception("Given empty list to get_type_pylist")
+
+        elem_type = self.pytype_to_gotype(list[0])
+        for el in list[1::]:
+            if self.pytype_to_gotype(el) != elem_type:
+                elem_type = "any"
+                break
+
+        return elem_type
+
     def patch_empty(self, s, t) -> str:
         match s:
             case "PATCH list":
+                if t is None:
+                    return "any" + "{}"
+
                 return translate_type(t) + "{}"
             case "PATCH dict":
+                if t is None:
+                    return "any" + "{}"
+
                 return translate_type(t) + "{}"
             case _other:
                 return s
@@ -237,14 +255,11 @@ import (
         """Translate a list with elements l
         A list [ x, y, z] translates to []'type'{ x, y, z }
         """
-        elem_type = ""
         if len(l) == 0:
             print("empty list. needs patching")
             return "PATCH list"
-        else:
-            elem_type = self.pytype_to_gotype(l[0])
 
-        return f"[]{elem_type}" + "{" + ", ".join(l) + "}"
+        return f"[]{self.get_type_pylist(l)}" + "{" + ", ".join([self.patch_empty(e, None) for e in l]) + "}"
 
     def gen_tuple(self, t: List[str]) -> str:
         """Translate a tuple with elements t
@@ -258,17 +273,15 @@ import (
         A dictionary { "key1": val1, "key2": val2 } translates to 
             map['keyType']'valueType'{ ["key1"] = val1, ["key2"] = val2 }
         """
-        keys_type = ""
-        values_type = ""
-
         if len(keys) == 0 or len(values) == 0:
             print("empty dict. needs patching")
             return "PATCH dict"
-        else:
-            keys_type = self.pytype_to_gotype(keys[0])
-            values_type = self.pytype_to_gotype(values[0])
 
-        return f"map[{keys_type}]{values_type}" + "{" + ", ".join(f"{k}: {v}" for k, v in zip(keys, values)) + "}"
+        keys_type = self.get_type_pylist(keys)
+        values_type = self.get_type_pylist(values)
+
+        return f"map[{keys_type}]{values_type}" + "{" + ", ".join(f"{self.patch_empty(k, None)}: {self.patch_empty(v, None)}" for k,
+                                                                  v in zip(keys, values)) + "}"
 
     def gen_call(self, func: str, args: List[str]) -> str:
         """Translate a function call `func(args)`
