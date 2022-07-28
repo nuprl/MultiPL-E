@@ -80,11 +80,7 @@ class GoTranslator:
 
     def __init__(self, file_ext):
         self.file_ext = file_ext
-        self.type = None
-        self.is_candidate_result = False
-
-        # this is book-keeping for making the literals have types when a list/dict is empty
-        self.prev_comp_types = []
+        self.type = []
 
     def convert_identifier(self, ident):
         match ident:
@@ -100,8 +96,7 @@ class GoTranslator:
                 return ident
 
     def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str) -> Optional[str]:
-        # reset the type list from previous problems
-        self.prev_comp_types = []
+        self.type = [[arg.annotation for arg in args], returns]
 
         description = (
             "// " + re.sub(DOCSTRING_LINESTART_RE, "\n// ",
@@ -169,7 +164,7 @@ import (
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        return "     { actual: %s, expected: %s }," % (left, right)
+        return "     { actual: %s, expected: %s }," % (left, self.patch_empty(right, self.type[1]))
 
     def pytype_to_gotype(self, pytype: str):
         # These are type checkers for the types that are in the dataset
@@ -209,6 +204,15 @@ import (
         print("UNKNOWN", pytype)
         return "UNKNOWN"
 
+    def patch_empty(self, s, t) -> str:
+        match s, t:
+            case "PATCH list":
+                return translate_type(t) + "{}"
+            case "PATCH dict":
+                return translate_type(t) + "{}"
+            case _other:
+                return s
+
     def gen_literal(self, c: bool | str | int | float | None):
         """Translate a literal expression
         c: is the literal value
@@ -234,15 +238,11 @@ import (
         A list [ x, y, z] translates to []'type'{ x, y, z }
         """
         elem_type = ""
-        if len(l) == 0 and len(self.prev_comp_types) >= 1:
-            elem_type = self.prev_comp_types[0]
-        elif len(l) == 0:
-            print("bad list, empty")
-            elem_type = "int"  # a guess, but this does not happen
+        if len(l) == 0:
+            print("empty list. needs patching")
+            return "PATCH list"
         else:
             elem_type = self.pytype_to_gotype(l[0])
-
-        self.prev_comp_types = [elem_type]
 
         return f"[]{elem_type}" + "{" + ", ".join(l) + "}"
 
@@ -261,19 +261,12 @@ import (
         keys_type = ""
         values_type = ""
 
-        if (len(keys) == 0 or len(values) == 0) and len(self.prev_comp_types) >= 2:
-            keys_type = self.prev_comp_types[0]
-            values_type = self.prev_comp_types[1]
-        elif len(keys) == 0 or len(values) == 0:
-            print("bad dict, empty")
-            # a guess, but this does not happen
-            keys_type = "string"
-            values_type = "int"
+        if len(keys) == 0 or len(values) == 0:
+            print("empty dict. needs patching")
+            return "PATCH dict"
         else:
             keys_type = self.pytype_to_gotype(keys[0])
             values_type = self.pytype_to_gotype(values[0])
-
-        self.prev_comp_types = [keys_type, values_type]
 
         return f"map[{keys_type}]{values_type}" + "{" + ", ".join(f"{k}: {v}" for k, v in zip(keys, values)) + "}"
 
@@ -281,8 +274,8 @@ import (
         """Translate a function call `func(args)`
         A function call f(x, y, z) translates to f(x, y, z)
         """
-        if func == "candidate":
-            self.is_candidate_result = True
+        args = [self.patch_empty(arg, self.type[0][i])
+                for i, arg in enumerate(args)]
         return func + "(" + ", ".join(args) + ")"
 
 
