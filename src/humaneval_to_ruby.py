@@ -65,10 +65,13 @@ class RubyTranslator:
         """Translate a literal expression
         c: is the literal value
 
-        NOTE for Ruby: lower case booleans, both single and double quotes work for strings, None equiv is nil 
+        NOTE for Ruby: lower case booleans, None equiv is nil 
+        NOTE for Ruby: using double quoted strings because more general - style guides can't decide
         """
         if type(c) == bool:
             return str(c).lower()
+        elif type(c) == str:
+            return f'"{c}"'
         elif c is None:
             return 'nil'
         return repr(c)
