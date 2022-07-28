@@ -1,3 +1,18 @@
+# Authored by John Gouwar - based on scripts by Arjun Guha, Abhinav Jangda, and Luna Phipps-Costin
+# Copyright (c) 2022, Roblox Inc, Northeastern University, and University of Massachusetts Amherst
+# 
+# This script translates problems from the OpenAI HumanEval dataset into Rust.
+# 
+# Julia is a very similar language to python, therefore, most of the translation 
+# is just between various keywords. Julia includes support for arbitrary Union 
+# types (with Optional being represented as Union{T, Nothing}). Since Julia is 
+# (by and large) dynamically typed, no coercions or type inference are necessary 
+# to generate benchmarks. 
+#
+# Julia can be installed by running the script from jill.sh: 
+# wget https://raw.githubusercontent.com/abelsiqueira/jill/main/jill.sh
+# 
+# The script can both be run as root or user.
 import re
 import ast
 from typing import List, Optional
@@ -45,9 +60,9 @@ def translate_type(t):
                 case other:
                     raise Exception(f"Bad generic {other}")
         case ast.Name("int") | "int":
-            return "Integer"
+            return "Int64"
         case ast.Name("float"):
-            return "Real"
+            return "Float64"
         case ast.Name("bool"):
             return "Bool"
         case ast.Name("str") | "str":
@@ -63,10 +78,17 @@ def translate_type(t):
         case _other:
             raise Exception(f"unknown annotation: {t}")
 
+def coerce(expr: str, type) -> str: 
+    match expr, type:
+        case "[]", ast.Subscript(ast.Name("List"), to): 
+            return f"Vector{{{translate_type(to)}}}([])"
+        case _: 
+            return expr
+
 
 class JuliaTranslator:
 
-    stop = ["\nfunction", "\nmacro", "\n#", "\n\n"]
+    stop = ["\nfunction", "\nmacro", "\n\n"]
 
     def __init__(self, file_ext):
         global needs_hashmap
@@ -75,8 +97,6 @@ class JuliaTranslator:
         self.is_candidate_result = False
 
     def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str) -> Optional[str]:
-        global needs_hashmap
-        needs_hashmap = False
         self.type = [[arg.annotation for arg in args], returns]
         def translate_arg(arg):
             return arg.arg + "::" + translate_type(arg.annotation)
@@ -90,8 +110,7 @@ class JuliaTranslator:
             print(e)
             return None
         arg_list = ", ".join(arg_strings)
-        imports = "use std::collections::HashMap;\n\n" if needs_hashmap else ""
-        return f"{imports}{description}function {name}({arg_list})::{return_type} \n"
+        return f"{description}function {name}({arg_list})::{return_type} \n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
@@ -115,6 +134,9 @@ class JuliaTranslator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
+        if self.is_candidate_result:
+            right = coerce(right, self.type[1])
+            self.is_candidate_result = False
         return f"\t@test({left} == {right})"
 
     def gen_literal(self, c: bool | str | int | float):
@@ -126,8 +148,8 @@ class JuliaTranslator:
         if type(c) == str:
             if '"' in c:
                 raise Exception("smarter quote handling")
-            return 'String::from("' + c + '")'
-        if type(c) == None: 
+            return '"' + c + '"'
+        if c is None: 
             return "nothing"
         return repr(c)
 
@@ -161,6 +183,9 @@ class JuliaTranslator:
         """Translate a function call `func(args)`
         A function call f(x, y, z) translates to f(x, y, z)
         """
+        if func == "candidate": 
+            self.is_candidate_result = True
+            args = [coerce(arg, self.type[0][i]) for i, arg in enumerate(args)]
         return func + "(" + ", ".join(args) + ")"
 
 
