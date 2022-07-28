@@ -73,6 +73,8 @@ class PHPTranslator:
         """
         if type(c) == bool:
             return str(c).lower()
+        elif type(c) == str and '\n' in c:
+            return "\"" + c + "\""
         elif c is None:
             return "null"
         return repr(c)
