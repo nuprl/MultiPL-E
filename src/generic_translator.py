@@ -145,11 +145,12 @@ def target_path(args, translator, file):
     file = Path(file).resolve()
     cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
     entry_point = re.search("(HumanEval_\d+)_(.+).py", file.name).group(2)
+    file_ext = get_file_ext_from_translator(translator)
     filename = Path(
         file.parent,
         "..",
-        f"{translator.file_ext}-{args.doctests}-{args.model}-{args.n}",
-        f"{cleaned_task_id}_{entry_point}.{translator.file_ext}",
+        f"{file_ext}-{args.doctests}-{args.model}-{args.n}",
+        f"{cleaned_task_id}_{entry_point}.{file_ext}",
     ).resolve()
     return filename
 
