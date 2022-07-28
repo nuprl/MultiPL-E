@@ -21,8 +21,6 @@ def main():
           continue
         if "_22_" in filename: #Any
           continue
-        if "_39_" in filename: #Missing annotation
-          continue
         if "_51_" in filename: #\n in string
           continue        
         if "_148_" in filename: #Elipsis

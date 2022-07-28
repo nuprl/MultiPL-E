@@ -46,6 +46,7 @@ class CPPTranslator:
         self.none_type = "{}"
         self.list_type = "std::vector<%s>"
         self.tuple_type = "std::tuple<%s>"
+        self.make_tuple = "std::make_tuple"
         self.dict_type = "std::map<%s, %s>"
         self.optional_type = "std::optional<%s>"
         self.any_type = "std::any"
@@ -164,7 +165,7 @@ class CPPTranslator:
             return self.wrap_in_brackets(right[0])
         
         #No need to replace std::make_tuple
-        if right[0].find('std::make_tuple') == 0:
+        if right[0].find(self.make_tuple) == 0:
             return right[0] 
 
         if re.findall("(.+)\(", right[0]) == []:
@@ -247,7 +248,7 @@ class CPPTranslator:
         """
         if t == [] or t == ():
             #Empty Tuple is at the bottom of expr tree
-            return "std::tuple<long>()", ast.Tuple([ast.Name("int")])
+            return self.tuple_type%"long", ast.Tuple([ast.Name("int")])
 
         #If there is none then add std::optional<?>
         contains_none = "{}" in ", ".join([e[0] for e in t])
@@ -261,13 +262,13 @@ class CPPTranslator:
                 other_types = list(set(other_types))[0]
             else:
                 #Asuming long if no other type
-                other_types = "long"
-            new_elem_type = f"std::optional<{other_types}>"
+                other_types = self.long_type
+            new_elem_type = self.optional_type % other_types
 
-            return "std::make_tuple(" + ", ".join([f"{new_elem_type}({e[0]})" for e in t]) + ")", \
+            return self.make_tuple + "(" + ", ".join([f"{new_elem_type}({e[0]})" for e in t]) + ")", \
                 ast.Tuple([e[1] for e in t])
 
-        return "std::make_tuple(" + ", ".join([e[0] for e in t]) + ")", \
+        return self.make_tuple + "(" + ", ".join([e[0] for e in t]) + ")", \
             ast.Tuple([e[1] for e in t])
 
     def gen_dict(self, keys: List[Tuple[str, ast.Expr]], values: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.Dict]:
