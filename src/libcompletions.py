@@ -23,6 +23,8 @@ def parameterized_main(completion_function, max_to_generate):
         sys.exit(1)
 
     for problem_yaml_path in sorted(dir.glob("*.yaml")):
+        if problem_yaml_path.name.endswith(".results.yaml"):
+            continue
         with problem_yaml_path.open() as f:
             problem = Problem.load(f)
         num_completions_required = 200 - len(problem.completions)

@@ -27,8 +27,20 @@ def list_files(directory, ext):
     files_unsorted = directory.glob(f"HumanEval_*{ext}")
     # assumption: base filenames are in the format of HumanEval_X_*
     # Where X is a valid number
-    files_sorted = sorted(files_unsorted, key=(lambda s: int(str(s.name).split("_")[1])))
-    return files_sorted
+    def key(s):
+        return int(str(s.name).split("_")[1])
+    files_sorted = sorted(files_unsorted, key=(lambda s: key(s)))
+
+    # assumption: there may be missing files, but no extra files
+    # so we build files_array where the index corresponds to the file's number,
+    # and a missing file is represented by None
+    size = key(files_sorted[-1]) + 1
+    files_array = [None] * size
+    for f in files_sorted:
+        k = key(f)
+        files_array[k] = f
+
+    return files_array
 
 def main(eval_script, language, extension):
     args = argparse.ArgumentParser()
@@ -48,19 +60,19 @@ def main(eval_script, language, extension):
     directory = Path(args.directory).resolve()
 
     files_sorted = list_files(directory, extension)
-    
+
     # the directory you specified does not contain the right language
-    if len(files_sorted) == 0: 
+    if len(files_sorted) == 0:
         print(f'The specified directory does not contain files of type {extension}')
         sysexit(1)
- 
+
     files_index = []
     if len(args.files) > 0:
         files_index = args.files
     else:
         files_index = range(len(files_sorted))
 
-    total = len(files_index)
+    total = 0
     passed = 0
     syntax_error = 0
 
@@ -69,10 +81,14 @@ def main(eval_script, language, extension):
     with open(results_file, "w") as f:
         for i in files_index:
             filepath = files_sorted[i]
+            if filepath is None:
+                print("File {} does not exist!".format(i))
+                continue
             res = eval_script(filepath)
             output = f"{language},{filepath.stem},{res['status']}\n"
             f.write(output)
             print(output, end="")
+            total += 1
             if res['status'] == "OK":
                 passed += 1
             elif res['status'] == "SyntaxError":
