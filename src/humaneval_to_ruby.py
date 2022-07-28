@@ -13,19 +13,23 @@ import re
 import ast
 from typing import List
 from generic_translator import main
+from base_language_translator import LanguageTranslator
 
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
-class RubyTranslator:
+class RubyTranslator(LanguageTranslator[str]):
     USub = "-"
-    stop=  [ '\nclass', '\ndef', '\n#', '\n\n' ]
 
-    def __init__(self, file_ext):
-        self.file_ext = file_ext
+    def file_ext(self) -> str:
+        return "rb"
 
-    def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
+    def stop(self) -> List[str]:
+        return [ '\nclass', '\ndef', '\n#', '\n\n' ]
+
+
+    def translate_prompt(self, name: str, args: List[ast.arg], _returns: ast.expr, description: str) -> str:
         """
         NOTE for Ruby: that the prompt start is based on multiple Ruby style guides to avoid block comment syntax.
         https://ruby-style-guide.shopify.dev/
@@ -36,7 +40,7 @@ class RubyTranslator:
         arg_list = ", ".join(arg_names)
         return f"{ruby_description}def {name}({arg_list.lower()})\n"
 
-    def test_suite_prefix_lines(self, entry_point) -> List[str]:
+    def test_suite_prefix_lines(self, entry_point: str) -> List[str]:
         """
         This code goes at the start of the test suite.
 
@@ -61,7 +65,7 @@ class RubyTranslator:
         """
         return "    assert_equal({}, {})".format(right, left)
 
-    def gen_literal(self, c: bool | str | int | float):
+    def gen_literal(self, c: bool | str | int | float | None) -> str:
         """Translate a literal expression
         c: is the literal value
 
@@ -75,10 +79,6 @@ class RubyTranslator:
         elif c is None:
             return 'nil'
         return repr(c)
-
-    def gen_unaryop(self, op: str, v: str) -> str:
-        """Translate a unary operation (op, v)"""
-        return op + v
 
     def gen_var(self, v: str) -> str:
         """Translate a variable with name v."""
@@ -114,5 +114,5 @@ class RubyTranslator:
 
 
 if __name__ == "__main__":
-    translator = RubyTranslator("rb")
+    translator = RubyTranslator()
     main(translator)
