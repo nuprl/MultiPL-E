@@ -205,11 +205,11 @@ import (
         return "UNKNOWN"
 
     def patch_empty(self, s, t) -> str:
-        match s:
+        match s, t:
             case "PATCH list":
-                return t + "{}"
+                return translate_type(t) + "{}"
             case "PATCH dict":
-                return t + "{}"
+                return translate_type(t) + "{}"
             case _other:
                 return s
 
