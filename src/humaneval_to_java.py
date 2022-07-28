@@ -1,41 +1,40 @@
 import re
 import ast
 from typing import List, Optional
-from generic_translator import main
+from humaneval_to_cpp import CPPTranslator
 
 
-
-# Translate a python function to a java function
-# Python: def addTwo(a: int) -> int
-# Java: int addTwo(int a) 
-
-
-class JavaTranslator:
+class JavaTranslator(CPPTranslator):
     stop = ["}\n\n"]
 
     def __init__(self, file_ext):
-        self.file_ext = file_ext
-
-    #Use for ArrayLists, Maps
-    def translate_type(self, t):
-        if pytype == int:
-            return "int"
-        elif pytype == float:
-            return "float"
-        elif pytype == bool:
-            return "boolean"
-        elif pytype == str:
-            return "String"
-        elif pytype == List[int] #Taking into account List[List[int]]
-            return "ArrayList<Integer>"
-
-    def gen_list(self, l: List[])
-        '''Translate a list '''
-
-        return f"ArrayList<"
-    def gen_unop()
-
-
-
+        super().__init__(file_ext)
+        self.string_type = "String"
+        self.float_type = "float"
+        self.int_type = "long"
+        self.bool_type = "bool"
+        self.none_type = "{}"
+        self.list_type = "ArrayList<%s>"
+        self.tuple_type = "std::tuple<%s>"
+        self.make_tuple = "std::make_tuple"
+        self.dict_type = "HashMap<%s, %s>"
+        self.optional_type = "Optional<%s>"
+        self.any_type = "std::any"
     
+    def box_type(self, primitive_type):
+        assert primitive_type in [self.float_type, self.bool_type, self.int_type], "Invalid primitive type"
+        
+        return primitive_type.capitalize()
 
+    def module_imports(self) -> str:
+        return "\n".join([
+            "import java.util.*;"
+        ])
+
+    def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
+        
+
+
+if __name__ == "__main__":
+    translator = JavaTranslator("java")
+    main(translator)
