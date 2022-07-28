@@ -14,7 +14,14 @@ def eval_script(path: Path):
         output = subprocess.run(
             " ".join(["ruby", path]), shell=True, capture_output=True, timeout=5
         )
-        status = "OK"
+        # TODO(arjun): molly do the syntaxerror stuff
+        if output.returncode == 0:
+            status = "OK"
+        else:
+            if "b''" == str(output.stdout):
+                status = "SyntaxError"
+            else:
+                status = "Exception"
         returncode = output.returncode
     except subprocess.TimeoutExpired as exc:
         status = "Timeout"
