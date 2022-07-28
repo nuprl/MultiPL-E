@@ -8,43 +8,51 @@ T = TypeVar('T')
 class LanguageTranslator(ABC, Generic[T]):
     @abstractmethod
     def gen_literal(self, c: bool | str | int | float | None) -> T:
-        """Translate a literal expression
+        """
+        Translate a literal expression
         c: is the literal value
         """
         pass
 
     @abstractmethod
     def gen_var(self, v: str) -> T:
-        """Translate a variable with name v."""
+        """
+        Translate a variable with name v.
+        """
         pass
 
     @abstractmethod
     def gen_list(self, l: List[Tuple[str, ast.Expr]]) -> T:
-        """Translate a list with elements l
+        """
+        Translate a list with elements l
         """
         pass
 
     @abstractmethod
     def gen_tuple(self, t: List[T]) -> T:
-        """Translate a tuple with elements t
+        """
+        Translate a tuple with elements t
         """
         pass
 
     @abstractmethod
     def gen_dict(self, keys: List[T], values: List[T]) -> T:
-        """Translate a dictionary with keys and values
+        """
+        Translate a dictionary with keys and values
         """
         pass
 
     @abstractmethod
     def gen_call(self, func: str, args: List[T]) -> T:
-        """Translate a function call `func(args)`
+        """
+        Translate a function call `func(args)`
         """
         pass
 
     @abstractmethod
     def translate_prompt(self, name: str, args: List[ast.arg], returns: ast.expr, description: str) -> str:
-        """Translate Python prompt.
+        """
+        Translate Python prompt.
         """
         pass
 
@@ -52,6 +60,7 @@ class LanguageTranslator(ABC, Generic[T]):
     def test_suite_prefix_lines(self, entry_point: str) -> List[str]:
         """
         This code goes at the start of the test suite.
+        The entry_point is ???
         """
         pass
 
