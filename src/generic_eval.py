@@ -3,6 +3,21 @@
 #
 # This is a helper script for evaluating benchmarks that have been translated to
 # different languages.
+#
+# To use this script, call eval_lang.py.
+# The --directory argument is required, and tells the script where the benchmarks are located.
+# The --files argument is optional, and takes a list of numbers corresponding to the files to be evaluated.
+#
+# The script will print the results on each benchmark, and also write to results/lang.csv.
+# When the script completes, it will print a summary.
+#
+# Examples
+#
+# To run the entire benchmark suite:
+#   python3 src/eval_php.py --directory datasets/php-keep-code_davinci_001_temp_0.2-0/
+#
+# To run benchmarks 1, 2, and 3:
+#   python3 src/eval_php.py --directory datasets/php-keep-code_davinci_001_temp_0.2-0/ --files 1 2 3
 
 import argparse
 from sys import exit as sysexit
@@ -19,14 +34,14 @@ def main(eval_script, language, extension):
     args = argparse.ArgumentParser()
 
     args.add_argument(
-        "--directory", type=str, required=True, help="Directory to read test files from"
+        "--directory", type=str, required=True, help="Directory to read benchmarks from"
     )
     args.add_argument(
         "--files",
         type=int,
         nargs="*",
         default=[],
-        help="Specify the files to translate by their number, e.g. --files 0 1 2"
+        help="Specify the benchmarks to evaluate by their number, e.g. --files 0 1 2"
     )
     args = args.parse_args()
 
@@ -55,7 +70,9 @@ def main(eval_script, language, extension):
         for i in files_index:
             filepath = files_sorted[i]
             res = eval_script(filepath)
-            f.write(f"{language},{filepath.stem},{res['status']}\n")
+            output = f"{language},{filepath.stem},{res['status']}\n"
+            f.write(output)
+            print(output, end="")
             if res['status'] == "OK":
                 passed += 1
             elif res['status'] == "SyntaxError":

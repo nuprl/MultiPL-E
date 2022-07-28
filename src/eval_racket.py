@@ -11,10 +11,10 @@ def main():
         try:
             # Assumes exit-code 0 is all okay
             # Run racket on the file, capturing stderr
-            output = subprocess.check_output(" ".join(["racket", os.path.join(directory, filename)]),
+            output = subprocess.check_output(["racket", os.path.join(directory, filename)],
                                         stderr=subprocess.STDOUT,
-                                        shell=True, timeout=5)
-            if output.decode("utf-8").find('ERROR') != -1 or output.decode("utf-8").find('FAILURE') != -1:
+                                        encoding="utf-8", timeout=5)
+            if output.find('ERROR') != -1 or output.find('FAILURE') != -1:
                 status = "Exception"
             else:
                 status = "OK"
