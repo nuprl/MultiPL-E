@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Find the shortest palindrome that begins with a supplied string.
@@ -19,18 +14,21 @@ std::string make_palindrome(std::string string) {
     std::string result = string;
     std::string reversed = string;
     std::reverse(reversed.begin(), reversed.end());
-    int i = 0;
-    while (i < string.size()) {
-        if (string.substr(i) == reversed.substr(0, string.size() - i)) {
-            result = string.substr(0, i) + reversed;
-            break;
+    std::string::size_type longest_palindrome_suffix = string.size();
+    while (longest_palindrome_suffix > 0) {
+        std::string::size_type longest_palindrome_prefix = longest_palindrome_suffix;
+        while (longest_palindrome_prefix > 0) {
+            if (reversed.substr(0, longest_palindrome_prefix) == string.substr(longest_palindrome_suffix, longest_palindrome_prefix)) {
+                result = string.substr(0, longest_palindrome_suffix) + reversed.substr(longest_palindrome_suffix, longest_palindrome_prefix) + string;
+                return result;
+            }
+            longest_palindrome_prefix--;
         }
-        ++i;
+        longest_palindrome_suffix--;
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = make_palindrome;
     assert(candidate(("")) == (""));

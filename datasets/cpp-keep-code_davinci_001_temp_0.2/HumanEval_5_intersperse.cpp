@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
@@ -12,16 +7,15 @@
 // [1, 4, 2, 4, 3]
 std::vector<long> intersperse(std::vector<long> numbers, long delimeter) {
     std::vector<long> result;
-    for (int i = 0; i < numbers.size(); i++) {
-        result.push_back(numbers[i]);
-        if (i != numbers.size() - 1) {
+    for (auto it = numbers.begin(); it != numbers.end(); ++it) {
+        result.push_back(*it);
+        if (it + 1 != numbers.end()) {
             result.push_back(delimeter);
         }
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = intersperse;
     assert(candidate((std::vector<long>()), (7)) == (std::vector<long>()));

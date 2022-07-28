@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Return list of prime factors of given integer in the order from smallest to largest.
@@ -15,20 +10,16 @@
 // >>> factorize(70)
 // [2, 5, 7]
 std::vector<long> factorize(long n) {
-    std::vector<long> result;
-    long i = 2;
-    while (n > 1) {
-        if (n % i == 0) {
-            result.push_back(i);
+    std::vector<long> factors;
+    for (long i = 2; i <= n; ++i) {
+        while (n % i == 0) {
+            factors.push_back(i);
             n /= i;
-        } else {
-            i++;
         }
     }
-    return result;
+    return factors;
+
 }
-
-
 int main() {
     auto candidate = factorize;
     assert(candidate((2)) == (std::vector<long>({2})));

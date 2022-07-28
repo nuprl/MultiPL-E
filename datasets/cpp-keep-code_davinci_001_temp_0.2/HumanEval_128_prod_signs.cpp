@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You are given an array arr of integers and you need to return
@@ -14,24 +9,18 @@
 // >>> prod_signs([0, 1]) == 0
 // >>> prod_signs([]) == None
 std::optional<long> prod_signs(std::vector<long> arr) {
-    if(arr.size() == 0) return std::nullopt;
-    std::map<long, long> m;
-    for(auto i : arr) {
-        if(m.find(i) == m.end()) m[i] = 1;
-        else m[i]++;
-    }
-    long prod = 1;
-    for(auto i : m) {
-        prod *= (i.first > 0 ? 1 : (i.first < 0 ? -1 : 0));
-    }
+    if(arr.empty())
+        return std::nullopt;
     long sum = 0;
-    for(auto i : arr) {
-        sum += i > 0 ? 1 : (i < 0 ? -1 : 0);
+    long prod = 1;
+    for(long i : arr)
+    {
+        sum += abs(i);
+        prod *= (i>0)?1:-1;
     }
-    return prod * sum;
+    return sum*prod;
+
 }
-
-
 int main() {
     auto candidate = prod_signs;
     assert(candidate((std::vector<long>({1, 2, 2, -4}))) == (std::optional<long>(-9)));

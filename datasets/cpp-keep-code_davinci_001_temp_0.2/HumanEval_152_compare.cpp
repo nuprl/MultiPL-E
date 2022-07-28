@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // I think we all remember that feeling when the result of some long-awaited
@@ -17,13 +12,12 @@
 // compare([0,5,0,0,0,4],[4,1,1,0,0,-2]) -> [4,4,1,0,0,6]
 std::vector<long> compare(std::vector<long> game, std::vector<long> guess) {
     std::vector<long> result;
-    for (int i = 0; i < game.size(); i++) {
-        result.push_back(std::abs(game[i] - guess[i]));
+    for(int i = 0; i < game.size(); i++) {
+        result.push_back(abs(game[i] - guess[i]));
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = compare;
     assert(candidate((std::vector<long>({1, 2, 3, 4, 5, 1})), (std::vector<long>({1, 2, 3, 4, 2, -2}))) == (std::vector<long>({0, 0, 0, 0, 3, 3})));

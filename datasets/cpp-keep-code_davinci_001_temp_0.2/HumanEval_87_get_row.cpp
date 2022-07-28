@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You are given a 2 dimensional data, as a nested lists,
@@ -22,34 +17,34 @@
 // get_row([], 1) == []
 // get_row([[], [1], [1, 2, 3]], 3) == [(2, 2)]
 std::vector<std::tuple<long, long>> get_row(std::vector<std::vector<long>> lst, long x) {
-    std::vector<std::tuple<long, long>> result;
-    std::map<long, std::vector<std::tuple<long, long>>> map;
-    for (long i = 0; i < lst.size(); i++) {
-        for (long j = 0; j < lst[i].size(); j++) {
-            if (lst[i][j] == x) {
-                map[i].push_back(std::make_tuple(i, j));
+    std::vector<std::tuple<long, long>> res;
+    if (lst.empty()) {
+        return res;
+    }
+    std::vector<std::vector<long>> rows;
+    for (auto &row : lst) {
+        rows.push_back(row);
+    }
+    std::sort(rows.begin(), rows.end());
+    for (auto &row : rows) {
+        std::sort(row.begin(), row.end(), std::greater<long>());
+    }
+    for (long i = 0; i < rows.size(); i++) {
+        for (long j = 0; j < rows[i].size(); j++) {
+            if (rows[i][j] == x) {
+                res.push_back(std::make_tuple(i, j));
             }
         }
     }
-    for (auto& i : map) {
-        std::sort(i.second.begin(), i.second.end(), [](std::tuple<long, long> a, std::tuple<long, long> b) {
-            return std::get<0>(a) < std::get<0>(b);
-        });
-        std::sort(i.second.begin(), i.second.end(), [](std::tuple<long, long> a, std::tuple<long, long> b) {
-            return std::get<1>(a) > std::get<1>(b);
-        });
-        result.insert(result.end(), i.second.begin(), i.second.end());
-    }
-    return result;
+    return res;
+
 }
-
-
 int main() {
     auto candidate = get_row;
-    assert(candidate((std::vector<std::vector<long>>({std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 2, 3, 4, 1, 6}), std::vector<long>({1, 2, 3, 4, 5, 1})})), (1)) == (std::vector<std::tuple<long, long>>({std::make_tuple(long(0), long(0)), std::make_tuple(long(1), long(4)), std::make_tuple(long(1), long(0)), std::make_tuple(long(2), long(5)), std::make_tuple(long(2), long(0))})));
-    assert(candidate((std::vector<std::vector<long>>({std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 2, 3, 4, 5, 6})})), (2)) == (std::vector<std::tuple<long, long>>({std::make_tuple(long(0), long(1)), std::make_tuple(long(1), long(1)), std::make_tuple(long(2), long(1)), std::make_tuple(long(3), long(1)), std::make_tuple(long(4), long(1)), std::make_tuple(long(5), long(1))})));
-    assert(candidate((std::vector<std::vector<long>>({std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 1, 3, 4, 5, 6}), std::vector<long>({1, 2, 1, 4, 5, 6}), std::vector<long>({1, 2, 3, 1, 5, 6}), std::vector<long>({1, 2, 3, 4, 1, 6}), std::vector<long>({1, 2, 3, 4, 5, 1})})), (1)) == (std::vector<std::tuple<long, long>>({std::make_tuple(long(0), long(0)), std::make_tuple(long(1), long(0)), std::make_tuple(long(2), long(1)), std::make_tuple(long(2), long(0)), std::make_tuple(long(3), long(2)), std::make_tuple(long(3), long(0)), std::make_tuple(long(4), long(3)), std::make_tuple(long(4), long(0)), std::make_tuple(long(5), long(4)), std::make_tuple(long(5), long(0)), std::make_tuple(long(6), long(5)), std::make_tuple(long(6), long(0))})));
+    assert(candidate((std::vector<std::vector<long>>({std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 2, 3, 4, 1, 6}), std::vector<long>({1, 2, 3, 4, 5, 1})})), (1)) == (std::vector<std::tuple<long, long>>({std::make_tuple(0, 0), std::make_tuple(1, 4), std::make_tuple(1, 0), std::make_tuple(2, 5), std::make_tuple(2, 0)})));
+    assert(candidate((std::vector<std::vector<long>>({std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 2, 3, 4, 5, 6})})), (2)) == (std::vector<std::tuple<long, long>>({std::make_tuple(0, 1), std::make_tuple(1, 1), std::make_tuple(2, 1), std::make_tuple(3, 1), std::make_tuple(4, 1), std::make_tuple(5, 1)})));
+    assert(candidate((std::vector<std::vector<long>>({std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 2, 3, 4, 5, 6}), std::vector<long>({1, 1, 3, 4, 5, 6}), std::vector<long>({1, 2, 1, 4, 5, 6}), std::vector<long>({1, 2, 3, 1, 5, 6}), std::vector<long>({1, 2, 3, 4, 1, 6}), std::vector<long>({1, 2, 3, 4, 5, 1})})), (1)) == (std::vector<std::tuple<long, long>>({std::make_tuple(0, 0), std::make_tuple(1, 0), std::make_tuple(2, 1), std::make_tuple(2, 0), std::make_tuple(3, 2), std::make_tuple(3, 0), std::make_tuple(4, 3), std::make_tuple(4, 0), std::make_tuple(5, 4), std::make_tuple(5, 0), std::make_tuple(6, 5), std::make_tuple(6, 0)})));
     assert(candidate((std::vector<std::vector<long>>()), (1)) == (std::vector<std::tuple<long, long>>()));
     assert(candidate((std::vector<std::vector<long>>({std::vector<long>({1})})), (2)) == (std::vector<std::tuple<long, long>>()));
-    assert(candidate((std::vector<std::vector<long>>({std::vector<long>(), std::vector<long>({1}), std::vector<long>({1, 2, 3})})), (3)) == (std::vector<std::tuple<long, long>>({std::make_tuple(long(2), long(2))})));
+    assert(candidate((std::vector<std::vector<long>>({std::vector<long>(), std::vector<long>({1}), std::vector<long>({1, 2, 3})})), (3)) == (std::vector<std::tuple<long, long>>({std::make_tuple(2, 2)})));
 }

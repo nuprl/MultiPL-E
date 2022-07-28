@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // In this problem, you will implement a function that takes two lists of numbers,
@@ -17,22 +12,30 @@
 // exchange([1, 2, 3, 4], [1, 5, 3, 4]) => "NO"
 // It is assumed that the input lists will be non-empty.
 std::string exchange(std::vector<long> lst1, std::vector<long> lst2) {
-    std::map<long, long> m;
-    for (auto i : lst1) {
-        m[i]++;
+  // Write your code here
+  std::vector<long>::iterator it1 = lst1.begin();
+  std::vector<long>::iterator it2 = lst2.begin();
+  while (it1 != lst1.end()) {
+    if (*it1 % 2 != 0) {
+      it1 = lst1.erase(it1);
+    } else {
+      it1++;
     }
-    for (auto i : lst2) {
-        m[i]--;
+  }
+  while (it2 != lst2.end()) {
+    if (*it2 % 2 == 0) {
+      it2 = lst2.erase(it2);
+    } else {
+      it2++;
     }
-    for (auto i : m) {
-        if (i.second % 2 != 0) {
-            return "NO";
-        }
-    }
+  }
+  if (lst1.size() == lst2.size()) {
     return "YES";
+  } else {
+    return "NO";
+  }
+
 }
-
-
 int main() {
     auto candidate = exchange;
     assert(candidate((std::vector<long>({1, 2, 3, 4})), (std::vector<long>({1, 2, 3, 4}))) == ("YES"));

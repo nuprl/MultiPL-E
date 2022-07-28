@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given an array arr of integers, find the minimum number of elements that
@@ -13,20 +8,27 @@
 // smallest_change([1, 2, 3, 4, 3, 2, 2]) == 1
 // smallest_change([1, 2, 3, 2, 1]) == 0
 long smallest_change(std::vector<long> arr) {
-    long min_changes = 0;
-    std::vector<long>::iterator it = arr.begin();
-    std::vector<long>::iterator it_end = arr.end();
-    while (it != it_end) {
-        if (*it != *(it_end - 1)) {
-            min_changes++;
-        }
-        it++;
-        it_end--;
-    }
-    return min_changes;
+    // Write your code here
+    long n = arr.size();
+    std::vector<long> dp(n, n);
+    std::vector<long> dp_back(n, n);
+    std::vector<long> dp_back_back(n, n);
+    std::vector<long> dp_back_back_back(n, n);
+    std::vector<long> dp_back_back_back_back(n, n);
+    std::vector<long> dp_back_back_back_back_back(n, n);
+    std::vector<long> dp_back_back_back_back_back_back(n, n);
+    std::vector<long> dp_back_back_back_back_back_back_back(n, n);
+    std::vector<long> dp_back_back_back_back_back_back_back_back(n, n);
+    std::vector<long> dp_back_back_back_back_back_back_back_back_back(n, n);
+    std::vector<long> dp_back_back_back_back_back_back_back_back_back_back(n, n);
+    std::vector<long> dp_back_back_back_back_back_back_back_back_back_back_back(n, n);
+    std::vector<long> dp_back_back_back_back_back_back_back_back_back_back_back_back(n, n);
+    std::vector<long> dp_back_back_back_back_back_back_back_back_back_back_back_back_back(n, n);
+    std::vector<long> dp_back_back_back_back_back_back_back_back_back_back_back_back_back_back(n, n);
+    std::vector<long> dp_back_back_back_back_back_back_back_back_back_back_back_back_back_back_back(n, n);
+    std::
+
 }
-
-
 int main() {
     auto candidate = smallest_change;
     assert(candidate((std::vector<long>({1, 2, 3, 5, 4, 7, 9, 6}))) == (4));

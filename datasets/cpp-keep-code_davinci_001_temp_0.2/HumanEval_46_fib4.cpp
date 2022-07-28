@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
@@ -42,9 +37,8 @@ long fib4(long n) {
         c = d;
     }
     return d;
+
 }
-
-
 int main() {
     auto candidate = fib4;
     assert(candidate((5)) == (4));

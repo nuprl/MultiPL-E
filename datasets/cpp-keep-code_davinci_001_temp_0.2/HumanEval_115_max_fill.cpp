@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You are given a rectangular grid of wells. Each row represents a single well,
@@ -37,14 +32,30 @@ long max_fill(std::vector<std::vector<long>> grid, long capacity) {
     for (int i = 0; i < grid.size(); i++) {
         for (int j = 0; j < grid[i].size(); j++) {
             if (grid[i][j] == 1) {
-                max_fill = std::max(max_fill, std::min(capacity, grid[i].size() - j));
+                long fill = 0;
+                for (int k = i; k >= 0; k--) {
+                    if (grid[k][j] == 0) {
+                        fill++;
+                    } else {
+                        break;
+                    }
+                }
+                for (int k = i; k < grid.size(); k++) {
+                    if (grid[k][j] == 0) {
+                        fill++;
+                    } else {
+                        break;
+                    }
+                }
+                if (fill > max_fill) {
+                    max_fill = fill;
+                }
             }
         }
     }
     return max_fill;
+
 }
-
-
 int main() {
     auto candidate = max_fill;
     assert(candidate((std::vector<std::vector<long>>({std::vector<long>({0, 0, 1, 0}), std::vector<long>({0, 1, 0, 0}), std::vector<long>({1, 1, 1, 1})})), (1)) == (6));

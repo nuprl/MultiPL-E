@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Return a string containing space-delimited numbers starting from 0 upto n inclusive.
@@ -11,17 +6,13 @@
 // >>> string_sequence(5)
 // '0 1 2 3 4 5'
 std::string string_sequence(long n) {
-    std::string s;
+    std::stringstream ss;
     for (long i = 0; i <= n; i++) {
-        s += std::to_string(i);
-        if (i != n) {
-            s += " ";
-        }
+        ss << i << " ";
     }
-    return s;
+    return ss.str();
+
 }
-
-
 int main() {
     auto candidate = string_sequence;
     assert(candidate((0)) == ("0"));

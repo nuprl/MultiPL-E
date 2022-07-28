@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // pairs_sum_to_zero takes a list of integers as an input.
@@ -19,17 +14,16 @@
 // >>> pairs_sum_to_zero([1])
 // False
 bool pairs_sum_to_zero(std::vector<long> l) {
-    std::map<long, long> m;
-    for (long i : l) {
-        if (m.find(i) != m.end()) {
-            return true;
-        }
-        m[-i] = i;
+  std::unordered_map<long, long> m;
+  for (long i : l) {
+    if (m.find(i) != m.end()) {
+      return true;
     }
-    return false;
+    m[-i] = i;
+  }
+  return false;
+
 }
-
-
 int main() {
     auto candidate = pairs_sum_to_zero;
     assert(candidate((std::vector<long>({1, 3, 5, 0}))) == (false));

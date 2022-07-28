@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You're a hungry rabbit, and you already have eaten a certain number of carrots,
@@ -29,12 +24,16 @@
 // Have fun :)
 std::vector<long> eat(long number, long need, long remaining) {
     std::vector<long> result;
-    result.push_back(number + remaining);
-    result.push_back(remaining - need);
+    if (number >= need) {
+        result.push_back(number - need + remaining);
+        result.push_back(0);
+    } else {
+        result.push_back(0);
+        result.push_back(remaining - need + number);
+    }
     return result;
+
 }
-
-
 int main() {
     auto candidate = eat;
     assert(candidate((5), (6), (10)) == (std::vector<long>({11, 4})));

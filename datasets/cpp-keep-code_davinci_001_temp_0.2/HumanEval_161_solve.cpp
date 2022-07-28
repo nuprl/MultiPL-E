@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You are given a string s.
@@ -15,18 +10,21 @@
 // solve("ab") = "AB"
 // solve("#a@C") = "#A@c"
 std::string solve(std::string s) {
-    std::string result;
-    for (auto c : s) {
-        if (std::isalpha(c)) {
-            result += std::toupper(c) == c ? std::tolower(c) : std::toupper(c);
+    std::string res;
+    for(int i = 0; i < s.size(); i++) {
+        if(isalpha(s[i])) {
+            if(isupper(s[i])) {
+                res += tolower(s[i]);
+            } else {
+                res += toupper(s[i]);
+            }
         } else {
-            result += c;
+            res += s[i];
         }
     }
-    return result;
+    return res;
+
 }
-
-
 int main() {
     auto candidate = solve;
     assert(candidate(("AsDf")) == ("aSdF"));

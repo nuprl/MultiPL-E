@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Write a function that accepts a list of strings.
@@ -14,23 +9,22 @@
 // find_max(["aaaaaaa", "bb" ,"cc"]) == ""aaaaaaa"
 std::string find_max(std::vector<std::string> words) {
     std::string max_word;
-    int max_unique_chars = 0;
-    for (auto& word : words) {
-        int unique_chars = 0;
-        for (auto& c : word) {
-            if (std::count(word.begin(), word.end(), c) == 1) {
-                unique_chars++;
+    int max_unique_char = 0;
+    for (auto word : words) {
+        int unique_char = 0;
+        for (auto c : word) {
+            if (std::find(word.begin(), word.end(), c) == word.end()) {
+                unique_char++;
             }
         }
-        if (unique_chars > max_unique_chars) {
-            max_unique_chars = unique_chars;
+        if (unique_char > max_unique_char) {
+            max_unique_char = unique_char;
             max_word = word;
         }
     }
     return max_word;
+
 }
-
-
 int main() {
     auto candidate = find_max;
     assert(candidate((std::vector<std::string>({"name", "of", "string"}))) == ("string"));

@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // From a given list of integers, generate a list of rolling maximum element found until given moment
@@ -13,16 +8,11 @@ std::vector<long> rolling_max(std::vector<long> numbers) {
     std::vector<long> result;
     result.push_back(numbers[0]);
     for (int i = 1; i < numbers.size(); i++) {
-        if (numbers[i] > result[i - 1]) {
-            result.push_back(numbers[i]);
-        } else {
-            result.push_back(result[i - 1]);
-        }
+        result.push_back(std::max(result[i - 1], numbers[i]));
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = rolling_max;
     assert(candidate((std::vector<long>())) == (std::vector<long>()));

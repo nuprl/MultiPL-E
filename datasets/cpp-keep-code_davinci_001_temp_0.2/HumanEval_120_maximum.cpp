@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given an array arr of integers and a positive integer k, return a sorted list 
@@ -22,66 +17,24 @@
 // 3. 0 <= k <= len(arr)
 std::vector<long> maximum(std::vector<long> arr, long k) {
     std::vector<long> res;
-    std::priority_queue<long, std::vector<long>, std::greater<long>> q;
-    for (auto i : arr) {
-        if (q.size() < k) {
-            q.push(i);
+    std::priority_queue<long, std::vector<long>, std::greater<long>> pq;
+    for (long i = 0; i < arr.size(); i++) {
+        if (pq.size() < k) {
+            pq.push(arr[i]);
         } else {
-            if (i > q.top()) {
-                q.pop();
-                q.push(i);
+            if (arr[i] > pq.top()) {
+                pq.pop();
+                pq.push(arr[i]);
             }
         }
     }
-    while (!q.empty()) {
-        res.push_back(q.top());
-        q.pop();
+    while (!pq.empty()) {
+        res.push_back(pq.top());
+        pq.pop();
     }
     return res;
-}
-std::vector<long> maximum(std::vector<long> arr, long k) {
-    std::vector<long> res;
-    std::priority_queue<long, std::vector<long>, std::greater<long>> q;
-    for (auto i : arr) {
-        if (q.size() < k) {
-            q.push(i);
-        } else {
-            if (i > q.top()) {
-                q.pop();
-                q.push(i);
-            }
-        }
-    }
-    while (!q.empty()) {
-        res.push_back(q.top());
-        q.pop();
-    }
-    return res;
-}
-std::vector<long> maximum(std::vector<long> arr, long k) {
-    std::vector<long> res;
-    std::priority_queue<long, std::vector<long>, std::greater<long>> q;
-    for (auto i : arr) {
-        if (q.size() < k) {
-            q.push(i);
-        } else {
-            if (i > q.top()) {
-                q.pop();
-                q.push(i);
-            }
-        }
-    }
-    while (!q.empty()) {
-        res.push_back(q.top());
-        q.pop();
-    }
-    return res;
-}
-std::vector<long> maximum(std::vector<long> arr, long k) {
-    std::vector<long> res;
-    std::
 
-
+}
 int main() {
     auto candidate = maximum;
     assert(candidate((std::vector<long>({-3, -4, 5})), (3)) == (std::vector<long>({-4, -3, 5})));

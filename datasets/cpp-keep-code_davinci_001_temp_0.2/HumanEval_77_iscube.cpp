@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Write a function that takes an integer a and returns True 
@@ -16,29 +11,13 @@
 // iscube(0) ==> True
 // iscube(180) ==> False
 bool iscube(long a) {
-    if (a < 0) {
-        a = -a;
-    }
-    if (a == 0) {
-        return true;
-    }
-    long b = 1;
-    while (b * b * b < a) {
-        b++;
-    }
-    return b * b * b == a;
+    if (a == 0) return true;
+    if (a < 0) return false;
+    long x = a;
+    while (x % 3 == 0) x /= 3;
+    return x == 1;
+
 }
-// Write a function that takes an integer a and returns True 
-// if this ingeger is a power of two.
-// Note: you may assume the input is always valid.
-// Examples:
-// ispowerof2(1) ==> True
-// ispowerof2(2) ==> True
-// ispowerof2(3) ==> False
-// ispowerof2(0) ==> False
-// ispowerof2(-1) ==> False
-
-
 int main() {
     auto candidate = iscube;
     assert(candidate((1)) == (true));

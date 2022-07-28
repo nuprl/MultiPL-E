@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a positive integer N, return the total sum of its digits in binary.
@@ -18,14 +13,12 @@
 std::string solve(long N) {
     std::string result;
     while (N > 0) {
-        result.push_back('0' + (N & 1));
-        N >>= 1;
+        result = std::to_string(N % 2) + result;
+        N /= 2;
     }
-    std::reverse(result.begin(), result.end());
     return result;
+
 }
-
-
 int main() {
     auto candidate = solve;
     assert(candidate((1000)) == ("1"));

@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // From a list of integers, remove all elements that occur more than once.
@@ -11,17 +6,16 @@
 // [1, 3, 4]
 std::vector<long> remove_duplicates(std::vector<long> numbers) {
     std::vector<long> result;
-    std::map<long, long> map;
-    for (auto i : numbers) {
-        if (map.find(i) == map.end()) {
-            map[i] = 1;
-            result.push_back(i);
+    std::unordered_set<long> set;
+    for (long number : numbers) {
+        if (set.find(number) == set.end()) {
+            set.insert(number);
+            result.push_back(number);
         }
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = remove_duplicates;
     assert(candidate((std::vector<long>())) == (std::vector<long>()));

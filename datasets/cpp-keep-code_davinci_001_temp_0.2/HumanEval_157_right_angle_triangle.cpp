@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given the lengths of the three sides of a triangle. Return True if the three
@@ -13,14 +8,9 @@
 // right_angle_triangle(3, 4, 5) == True
 // right_angle_triangle(1, 2, 3) == False
 bool right_angle_triangle(long a, long b, long c) {
-  // your code here
-  if((a*a + b*b == c*c) || (a*a + c*c == b*b) || (b*b + c*c == a*a))
-    return true;
-  else
-    return false;
+    return (a*a + b*b == c*c);
+
 }
-
-
 int main() {
     auto candidate = right_angle_triangle;
     assert(candidate((3), (4), (5)) == (true));

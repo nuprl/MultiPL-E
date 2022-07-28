@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Write a function that accepts two lists of strings and returns the list that has 
@@ -15,24 +10,24 @@
 // total_match(['hi', 'admin'], ['hI', 'hi', 'hi']) ➞ ['hI', 'hi', 'hi']
 // total_match(['4'], ['1', '2', '3', '4', '5']) ➞ ['4']
 std::vector<std::string> total_match(std::vector<std::string> lst1, std::vector<std::string> lst2) {
-    int sum1 = 0;
-    int sum2 = 0;
+    // Write your code here
+    int lst1_len = 0;
+    int lst2_len = 0;
     for(auto s : lst1) {
-        sum1 += s.size();
+        lst1_len += s.length();
     }
     for(auto s : lst2) {
-        sum2 += s.size();
+        lst2_len += s.length();
     }
-    if(sum1 < sum2) {
+    if(lst1_len < lst2_len) {
         return lst1;
-    } else if(sum1 > sum2) {
+    } else if(lst1_len > lst2_len) {
         return lst2;
     } else {
         return lst1;
     }
+
 }
-
-
 int main() {
     auto candidate = total_match;
     assert(candidate((std::vector<std::string>()), (std::vector<std::string>())) == (std::vector<std::string>()));

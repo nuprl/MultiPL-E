@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Concatenate list of strings into a single string
@@ -16,9 +11,8 @@ std::string concatenate(std::vector<std::string> strings) {
         result += s;
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = concatenate;
     assert(candidate((std::vector<std::string>())) == (""));

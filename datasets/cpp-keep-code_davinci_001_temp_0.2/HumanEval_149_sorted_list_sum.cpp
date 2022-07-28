@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Write a function that accepts a list of strings as a parameter,
@@ -19,19 +14,15 @@
 // assert list_sort(["aa", "a", "aaa"]) => ["aa"]
 // assert list_sort(["ab", "a", "aaa", "cd"]) => ["ab", "cd"]
 std::vector<std::string> sorted_list_sum(std::vector<std::string> lst) {
-    std::map<int, std::vector<std::string>> map;
-    for (auto &s : lst) {
-        map[s.size()].push_back(s);
-    }
-    std::vector<std::string> res;
-    for (auto &[k, v] : map) {
-        std::sort(v.begin(), v.end());
-        res.insert(res.end(), v.begin(), v.end());
-    }
-    return res;
+    std::sort(lst.begin(), lst.end(), [](std::string a, std::string b) {
+        if (a.size() == b.size()) {
+            return a < b;
+        }
+        return a.size() < b.size();
+    });
+    return lst;
+
 }
-
-
 int main() {
     auto candidate = sorted_list_sum;
     assert(candidate((std::vector<std::string>({"aa", "a", "aaa"}))) == (std::vector<std::string>({"aa"})));

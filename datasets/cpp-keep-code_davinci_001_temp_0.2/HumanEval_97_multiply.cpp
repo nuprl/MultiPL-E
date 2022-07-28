@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Complete the function that takes two integers and returns 
@@ -15,19 +10,17 @@
 // multiply(14,-15) should return 20.
 long multiply(long a, long b) {
     long result = 0;
-    long a_digits = a;
-    long b_digits = b;
-    while(a_digits > 0) {
-        long a_digit = a_digits % 10;
-        long b_digit = b_digits % 10;
-        result += a_digit * b_digit;
-        a_digits /= 10;
-        b_digits /= 10;
+    long carry = 0;
+    for(int i = 0; i < 32; i++) {
+        long a_bit = (a >> i) & 1;
+        long b_bit = (b >> i) & 1;
+        long sum = a_bit * b_bit + carry;
+        result |= (sum % 10) << i;
+        carry = sum / 10;
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = multiply;
     assert(candidate((148), (412)) == (16));

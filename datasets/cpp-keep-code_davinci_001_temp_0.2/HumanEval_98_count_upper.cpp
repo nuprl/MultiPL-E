@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a string s, count the number of uppercase vowels in even indices.
@@ -12,15 +7,14 @@
 // count_upper('dBBE') returns 0
 long count_upper(std::string s) {
     long count = 0;
-    for (int i = 0; i < s.size(); i += 2) {
+    for (int i = 0; i < s.length(); i += 2) {
         if (s[i] == 'A' || s[i] == 'E' || s[i] == 'I' || s[i] == 'O' || s[i] == 'U') {
             count++;
         }
     }
     return count;
+
 }
-
-
 int main() {
     auto candidate = count_upper;
     assert(candidate(("aBCdEf")) == (1));

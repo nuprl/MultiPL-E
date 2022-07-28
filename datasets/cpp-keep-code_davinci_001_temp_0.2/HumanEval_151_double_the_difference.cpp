@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a list of numbers, return the sum of squares of the numbers
@@ -20,9 +15,8 @@ long double_the_difference(std::vector<float> lst) {
         }
     }
     return sum;
+
 }
-
-
 int main() {
     auto candidate = double_the_difference;
     assert(candidate((std::vector<float>())) == (0));

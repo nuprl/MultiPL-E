@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You will be given a number in decimal form and your task is to convert it to
@@ -14,15 +9,14 @@
 // decimal_to_binary(15)   # returns "db1111db"
 // decimal_to_binary(32)   # returns "db100000db"
 std::string decimal_to_binary(long decimal) {
-    std::string binary = "db";
-    while (decimal > 0) {
-        binary += std::to_string(decimal % 2);
-        decimal /= 2;
-    }
-    return binary;
+  std::string result = "db";
+  while (decimal > 0) {
+    result += (decimal % 2 == 0 ? "0" : "1");
+    decimal /= 2;
+  }
+  return result;
+
 }
-
-
 int main() {
     auto candidate = decimal_to_binary;
     assert(candidate((0)) == ("db0db"));

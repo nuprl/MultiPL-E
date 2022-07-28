@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Imagine a road that's a perfectly straight infinitely long line.
@@ -14,30 +9,26 @@
 // in their trajectory as if they did not collide.
 // This function outputs the number of such collisions.
 long car_race_collision(long n) {
-    std::vector<long> cars_left_to_right(n);
-    std::vector<long> cars_right_to_left(n);
-    std::vector<long> cars_left_to_right_pos(n);
-    std::vector<long> cars_right_to_left_pos(n);
-    std::vector<long> cars_left_to_right_vel(n);
-    std::vector<long> cars_right_to_left_vel(n);
-    std::vector<long> cars_left_to_right_collision(n);
-    std::vector<long> cars_right_to_left_collision(n);
-    std::vector<long> cars_left_to_right_collision_pos(n);
-    std::vector<long> cars_right_to_left_collision_pos(n);
-    std::vector<long> cars_left_to_right_collision_vel(n);
-    std::vector<long> cars_right_to_left_collision_vel(n);
-    std::vector<long> cars_left_to_right_collision_time(n);
-    std::vector<long> cars_right_to_left_collision_time(n);
-    std::vector<long> cars_left_to_right_collision_time_pos(n);
-    std::vector<long> cars_right_to_left_collision_time_pos(n);
-    std::vector<long> cars_left_to_right_collision_time_vel(n);
-    std::vector<long> cars_right_to_left_collision_time_vel(n);
-    std::vector<long> cars_left_to_right_collision_time_time(n);
-    std::vector<long> cars_right_to_left_collision_time_time(n);
-    std::vector<long> cars_left_to_right_collision_time_time_pos(n);
-    std::vector<long> cars_right_to_left_collision_time_time_pos(n);
+  long collisions = 0;
+  long left_to_right = 0;
+  long right_to_left = n - 1;
+  while (left_to_right < right_to_left) {
+    if (left_to_right == right_to_left - 1) {
+      collisions += 1;
+      break;
+    }
+    left_to_right += 1;
+    right_to_left -= 1;
+    if (left_to_right == right_to_left) {
+      collisions += 1;
+      break;
+    }
+    left_to_right += 1;
+    right_to_left -= 1;
+  }
+  return collisions;
 
-
+}
 int main() {
     auto candidate = car_race_collision;
     assert(candidate((2)) == (4));
