@@ -229,104 +229,19 @@ class CPPTranslator:
         elem_type = self.pytype_to_cpptype(l[0][1])
         return f"std::vector<{elem_type}>" + "({" + ", ".join([e[0] for e in l]) + "})", ast.List([l[0][1]])
 
-    def max_type_ann_level(self, type_ann, curr_level):
-        max_level = curr_level
-
-        match type_ann:
-            case ast.Subscript(value=v, slice=s):
-                #Visit only slice in Subscript because value defines the parent type
-                max_level = max(max_level, self.max_type_ann_level(s, curr_level+1))
-            case ast.Tuple(elts=elts):
-                #Do not increase level in Tuple because Subscript already increased the level
-                for elt in elts:
-                    max_level = max(max_level, self.max_type_ann_level(elt, curr_level))
-            case _other:
-                for child in ast.iter_child_nodes(type_ann):
-                    if type(child) is ast.Load:
-                        continue
-                    max_level = max(max_level, self.max_type_ann_level(child, curr_level+1))
-
-        return max_level
-
-    def type_at_level(self, nodes_found, type_ann, curr_level, level):        
-
-        match type_ann:
-            case ast.Subscript(value=v, slice=s):
-                #Visit only slice in Subscript because value defines the parent type
-                if curr_level == level:
-                    nodes_found += [type_ann]
-                self.type_at_level(nodes_found, s, curr_level+1, level)
-            case ast.Tuple(elts=elts):
-                #Do not increase level in Tuple because Subscript already increased the level
-                for elt in elts:
-                    self.type_at_level(nodes_found, elt, curr_level, level)
-            case _other:
-                if curr_level == level:
-                    nodes_found += [type_ann]
-                for child in ast.iter_child_nodes(type_ann):
-                    if type(child) is ast.Load:
-                        continue
-                    self.type_at_level(nodes_found, child, curr_level+1, level)
-
-        return nodes_found
-
     def gen_tuple(self, t: List[str]) -> str:
         """Translate a tuple with elements t
         A tuple (x, y, z) translates to make_tuple<?>{ x, y, z }
         """
         if t == [] or t == ():
             #Empty Tuple is at the bottom of expr tree
-            return "std::tuple<int>()", ast.Tuple([ast.Name("int")]), 0
-        
-        # assert len(set([e[2] for e in t])) == 1, "All elements of tuple should be on same level"
-        # #For each element find the return type at that level in self.return_ann
-        # elem_level = t[0][2]
-        
-        # max_level = self.max_type_ann_level(self.ret_ann, 0)
-        # print(max_level, ast.dump(self.ret_ann))
-        # tuple_level = max_level - elem_level
-        # #Find the type ann node in the return Type Ann Tree which represents this tuple
-        # #Go above the level of tuple elements and find the first Subscript node with Tuple
-        # while tuple_level >= 0:
-        #     type_nodes_found = []
-        #     self.type_at_level(type_nodes_found, self.ret_ann, 0, tuple_level)
-        #     found_tuple = False
-        #     for n in type_nodes_found:
-        #         match n:
-        #             case ast.Subscript(value=ast.Name("Tuple")):
-        #                 found_tuple = True
-        #             case _other:
-        #                 continue
-        #     if found_tuple: 
-        #         break
-        #     tuple_level -= 1
-        # # print(tuple_level, self.type_at_level(type_nodes_found, self.ret_ann, 0, tuple_level))
-        # # print([ast.dump(tt) for tt in e_type], level)
-        # if found_tuple:
-        #     tuple_node = set(type_nodes_found)
-        #     assert len(tuple_node) == 1, "There should only be one tuple node"
-        #     tuple_node = list(tuple_node)[0]
-        #     # print(found_tuple, t[0][0], ast.dump(t[0][1]), t[1][0], ast.dump(t[1][1]), elem_level)
-        #     # print(self.pytype_to_cpptype(tuple_node))
-        #     # print(ast.dump(tuple_node))
-
-        #     cpp_elements = []
-        #     assert len(tuple_node.slice.elts) == len(t), "Tuple elements are different"
-        #     for i in range(len(t)):
-        #         cpp_elem_type = self.pytype_to_cpptype(tuple_node.slice.elts[i])
-        #         cpp_elements += [cpp_elem_type + "(" + t[i][0] + ")"]
-            
-        #     return "std::make_tuple(" + ", ".join(cpp_elements) + ")", \
-        #         ast.Tuple([e[1] for e in t])
-        # else:
+            return "std::tuple<long>()", ast.Tuple([ast.Name("long")])
 
         contains_none = "{}" in ", ".join([e[0] for e in t])
-        new_elem_type = ""
         if contains_none:
             #Find type of other element and make all std::optional
             other_types = []
             for e in t:
-                print(e)
                 if self.pytype_to_cpptype(e[1]) != "{}":
                     other_types += [self.pytype_to_cpptype(e[1])]
             if len(other_types) > 1:
