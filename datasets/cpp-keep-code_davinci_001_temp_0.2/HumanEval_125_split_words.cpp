@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 union Union_std_vector_std_string__long{
@@ -22,22 +17,15 @@ union Union_std_vector_std_string__long{
 // split_words("Hello,world!") ➞ ["Hello", "world!"]
 // split_words("abcdef") == 3
 Union_std_vector_std_string__long split_words(std::string txt) {
-    std::vector<std::string> ret;
-    if(txt.find(',') != std::string::npos) {
-        std::vector<std::string> tmp = split(txt, ',');
-        for(auto & s : tmp) {
-            ret.push_back(s);
-        }
-    } else {
-        std::vector<std::string> tmp = split(txt, ' ');
-        for(auto & s : tmp) {
-            ret.push_back(s);
-        }
+    std::vector<std::string> res;
+    std::stringstream ss(txt);
+    std::string word;
+    while (ss >> word) {
+        res.push_back(word);
     }
-    return Union_std_vector_std_string__long(ret);
+    return Union_std_vector_std_string__long(res);
+
 }
-
-
 int main() {
     auto candidate = split_words;
     assert(candidate(("Hello world!")) == (Union_std_vector_std_string__long({"Hello", "world!"})));

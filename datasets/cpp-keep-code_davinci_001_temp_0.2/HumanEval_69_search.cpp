@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You are given a non-empty list of positive integers. Return the greatest integer that is greater than 
@@ -14,19 +9,18 @@
 // search([1, 2, 2, 3, 3, 3, 4, 4, 4]) == 3
 // search([5, 5, 4, 4, 4]) == -1
 long search(std::vector<long> lst) {
-    std::map<long, int> m;
-    for (auto i : lst) {
+    std::map<long, long> m;
+    for (long i : lst) {
         m[i]++;
     }
-    for (auto i : lst) {
+    for (long i : lst) {
         if (m[i] >= i) {
             return i;
         }
     }
     return -1;
+
 }
-
-
 int main() {
     auto candidate = search;
     assert(candidate((std::vector<long>({5, 5, 5, 5, 1}))) == (1));

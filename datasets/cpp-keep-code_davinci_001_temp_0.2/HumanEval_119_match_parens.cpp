@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You are given a list of two strings, both strings consist of open
@@ -17,44 +12,36 @@
 // match_parens(['()(', ')']) == 'Yes'
 // match_parens([')', ')']) == 'No'
 std::string match_parens(std::vector<std::string> lst) {
-    std::string s1 = lst[0];
-    std::string s2 = lst[1];
-    std::string s3 = "";
-    int i = 0;
-    int j = 0;
-    while (i < s1.size() && j < s2.size()) {
-        if (s1[i] == '(' && s2[j] == ')') {
-            s3 += s1[i];
-            s3 += s2[j];
-            i++;
-            j++;
-        } else if (s1[i] == '(') {
-            s3 += s1[i];
-            i++;
-        } else if (s2[j] == ')') {
-            s3 += s2[j];
-            j++;
-        } else {
-            return "No";
-        }
+  std::string s1 = lst[0];
+  std::string s2 = lst[1];
+  int i = 0;
+  int j = 0;
+  int count = 0;
+  while (i < s1.size() && j < s2.size()) {
+    if (s1[i] == '(') {
+      count++;
     }
-    if (i < s1.size()) {
-        for (; i < s1.size(); i++) {
-            s3 += s1[i];
-        }
-    } else if (j < s2.size()) {
-        for (; j < s2.size(); j++) {
-            s3 += s2[j];
-        }
+    if (s2[j] == '(') {
+      count--;
     }
-    if (s3.size() == s1.size() + s2.size()) {
-        return "Yes";
-    } else {
-        return "No";
+    if (s1[i] == ')') {
+      count--;
     }
+    if (s2[j] == ')') {
+      count++;
+    }
+    if (count < 0) {
+      return "No";
+    }
+    i++;
+    j++;
+  }
+  if (count == 0) {
+    return "Yes";
+  }
+  return "No";
+
 }
-
-
 int main() {
     auto candidate = match_parens;
     assert(candidate((std::vector<std::string>({"()(", ")"}))) == ("Yes"));

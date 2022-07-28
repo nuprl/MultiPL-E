@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 union Union_std_string_long{
@@ -24,13 +19,15 @@ union Union_std_string_long{
 // rounded_avg(10, 20) => "0b1111"
 // rounded_avg(20, 33) => "0b11010"
 Union_std_string_long rounded_avg(long n, long m) {
-    if(n > m) return Union_std_string_long("-1");
+    if(n > m) return -1;
     long sum = 0;
     for(long i = n; i <= m; i++) sum += i;
-    return Union_std_string_long(std::to_string(sum / (m - n + 1)));
+    long avg = sum / (m - n + 1);
+    std::stringstream ss;
+    ss << std::setfill('0') << std::setw(std::ceil(std::log2(avg))) << avg;
+    return Union_std_string_long(ss.str());
+
 }
-
-
 int main() {
     auto candidate = rounded_avg;
     assert(candidate((1), (5)) == (Union_std_string_long("0b11")));

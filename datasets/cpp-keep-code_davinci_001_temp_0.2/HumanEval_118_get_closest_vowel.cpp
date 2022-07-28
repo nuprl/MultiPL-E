@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You are given a word. Your task is to find the closest vowel that stands between 
@@ -19,28 +14,39 @@ std::string get_closest_vowel(std::string word) {
     std::string vowels = "aeiou";
     std::string consonants = "qwrtypsdfghjklzxcvbnm";
     std::string result;
-    int vowel_index = 0;
-    int consonant_index = 0;
-    int vowel_count = 0;
-    int consonant_count = 0;
-    for (int i = word.length() - 1; i >= 0; i--) {
+    int i = word.length() - 1;
+    while (i >= 0) {
         if (vowels.find(word[i]) != std::string::npos) {
-            vowel_count++;
-            vowel_index = i;
+            break;
         }
-        if (consonants.find(word[i]) != std::string::npos) {
-            consonant_count++;
-            consonant_index = i;
+        i--;
+    }
+    if (i < 0) {
+        return result;
+    }
+    int j = i - 1;
+    while (j >= 0) {
+        if (consonants.find(word[j]) != std::string::npos) {
+            break;
         }
-        if (vowel_count == 2 && consonant_count == 1) {
-            result = word[i];
+        j--;
+    }
+    if (j < 0) {
+        return result;
+    }
+    for (int k = 0; k < vowels.length(); k++) {
+        if (vowels[k] == word[i]) {
+            result = vowels[k];
+            break;
+        }
+        if (vowels[k] == word[j]) {
+            result = vowels[k];
             break;
         }
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = get_closest_vowel;
     assert(candidate(("yogurt")) == ("u"));

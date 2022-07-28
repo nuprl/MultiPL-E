@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Return 2^n modulo p (be aware of numerics).
@@ -17,18 +12,15 @@
 // >>> modp(100, 101)
 // 1
 long modp(long n, long p) {
-    long res = 1;
+    long r = 1;
     while (n > 0) {
-        if (n & 1) {
-            res = res * 2 % p;
-        }
-        n = n >> 1;
-        res = res * 2 % p;
+        if (n & 1) r = (r * 1ll * p) % p;
+        p = (p * 1ll * p) % p;
+        n >>= 1;
     }
-    return res;
+    return r;
+
 }
-
-
 int main() {
     auto candidate = modp;
     assert(candidate((3), (5)) == (3));

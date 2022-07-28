@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Implement the function f that takes n as a parameter,
@@ -16,15 +11,14 @@ std::vector<long> f(long n) {
     std::vector<long> result;
     for (long i = 1; i <= n; i++) {
         if (i % 2 == 0) {
-            result.push_back(std::accumulate(std::begin(result), std::end(result), 1, std::multiplies<long>()));
+            result.push_back(factorial(i));
         } else {
-            result.push_back(std::accumulate(std::begin(result), std::end(result), 0, std::plus<long>()));
+            result.push_back(sum(i));
         }
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = f;
     assert(candidate((5)) == (std::vector<long>({1, 2, 6, 24, 15})));

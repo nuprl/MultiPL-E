@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You are given a list of numbers.
@@ -15,14 +10,18 @@
 // For lst = [1.4,4.2,0] the output should be 29
 // For lst = [-2.4,1,1] the output should be 6
 long sum_squares(std::vector<float> lst) {
-    long sum = 0;
-    for (auto i : lst) {
-        sum += std::ceil(i) * std::ceil(i);
+    // Write your code here
+    std::vector<int> v;
+    for(int i=0;i<lst.size();i++){
+        v.push_back(static_cast<int>(std::ceil(lst[i])));
+    }
+    long sum=0;
+    for(int i=0;i<v.size();i++){
+        sum+=v[i]*v[i];
     }
     return sum;
+
 }
-
-
 int main() {
     auto candidate = sum_squares;
     assert(candidate((std::vector<float>({1.0, 2.0, 3.0}))) == (14));

@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You will be given a string of words separated by commas or spaces. Your task is
@@ -11,49 +6,24 @@
 // words_string("Hi, my name is John") == ["Hi", "my", "name", "is", "John"]
 // words_string("One, two, three, four, five, six") == ["One", "two", "three", "four", "five", "six"]
 std::vector<std::string> words_string(std::string s) {
-    std::vector<std::string> result;
-    std::string temp;
-    for (int i = 0; i < s.size(); i++) {
-        if (s[i] == ' ' || s[i] == ',') {
-            result.push_back(temp);
-            temp = "";
+    std::vector<std::string> words;
+    std::string word;
+    for (auto c : s) {
+        if (c == ' ' || c == ',') {
+            if (!word.empty()) {
+                words.push_back(word);
+                word.clear();
+            }
         } else {
-            temp += s[i];
+            word += c;
         }
     }
-    result.push_back(temp);
-    return result;
-}
-// You will be given a string of words separated by commas or spaces. Your task is
-// to split the string into words and return an array of the words.
-// For example:
-// words_string("Hi, my name is John") == ["Hi", "my", "name", "is", "John"]
-// words_string("One, two, three, four, five, six") == ["One", "two", "three", "four", "five", "six"]
-std::vector<std::string> words_string(std::string s) {
-    std::vector<std::string> result;
-    std::string temp;
-    for (int i = 0; i < s.size(); i++) {
-        if (s[i] == ' ' || s[i] == ',') {
-            result.push_back(temp);
-            temp = "";
-        } else {
-            temp += s[i];
-        }
+    if (!word.empty()) {
+        words.push_back(word);
     }
-    result.push_back(temp);
-    return result;
+    return words;
+
 }
-// You will be given a string of words separated by commas or spaces. Your task is
-// to split the string into words and return an array of the words.
-// For example:
-// words_string("Hi, my name is John") == ["Hi", "my", "name", "is", "John"]
-// words_string("One, two, three, four, five, six") == ["One", "two", "three", "four", "five", "six"]
-std::vector<std::string> words_string(std::string s) {
-    std::vector<std::string> result;
-    std::string temp;
-    for (int i = 0;
-
-
 int main() {
     auto candidate = words_string;
     assert(candidate(("Hi, my name is John")) == (std::vector<std::string>({"Hi", "my", "name", "is", "John"})));

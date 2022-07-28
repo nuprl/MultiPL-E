@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Write a function that takes a string and returns an ordered version of it.
@@ -28,9 +23,8 @@ std::string anti_shuffle(std::string s) {
         }
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = anti_shuffle;
     assert(candidate(("Hi")) == ("Hi"));

@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You have been tasked to write a function that receives 
@@ -22,33 +17,15 @@
 // For num = "123456789ABCDEF0" the output should be 6.
 // For num = "2020" the output should be 2.
 long hex_key(std::string num) {
-    std::map<char, long> hex_map;
-    hex_map['0'] = 0;
-    hex_map['1'] = 1;
-    hex_map['2'] = 2;
-    hex_map['3'] = 3;
-    hex_map['4'] = 4;
-    hex_map['5'] = 5;
-    hex_map['6'] = 6;
-    hex_map['7'] = 7;
-    hex_map['8'] = 8;
-    hex_map['9'] = 9;
-    hex_map['A'] = 10;
-    hex_map['B'] = 11;
-    hex_map['C'] = 12;
-    hex_map['D'] = 13;
-    hex_map['E'] = 14;
-    hex_map['F'] = 15;
     long count = 0;
-    for (auto c : num) {
-        if (hex_map[c] == 2 || hex_map[c] == 3 || hex_map[c] == 5 || hex_map[c] == 7 || hex_map[c] == 11 || hex_map[c] == 13) {
+    for (auto i : num) {
+        if (i == '2' || i == '3' || i == '5' || i == '7' || i == 'B' || i == 'D') {
             count++;
         }
     }
     return count;
+
 }
-
-
 int main() {
     auto candidate = hex_key;
     assert(candidate(("AB")) == (1));
@@ -57,5 +34,4 @@ int main() {
     assert(candidate(("2020")) == (2));
     assert(candidate(("123456789ABCDEF0")) == (6));
     assert(candidate(("112233445566778899AABBCCDDEEFF00")) == (12));
-    assert(candidate((std::string())) == (0));
 }

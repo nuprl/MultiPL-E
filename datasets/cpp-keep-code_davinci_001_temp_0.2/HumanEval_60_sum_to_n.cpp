@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // sum_to_n is a function that sums numbers from 1 to n.
@@ -17,10 +12,10 @@
 // >>> sum_to_n(1)
 // 1
 long sum_to_n(long n) {
-    return n * (n + 1) / 2;
+    // TODO: implement me
+    return 0;
+
 }
-
-
 int main() {
     auto candidate = sum_to_n;
     assert(candidate((1)) == (1));

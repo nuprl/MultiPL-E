@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given an array of integers, sort the integers that are between 1 and 9 inclusive,
@@ -22,19 +17,39 @@
 // -> reverse arr -> [55, 1, -1]
 // return = ['One']
 std::vector<std::string> by_length(std::vector<long> arr) {
-    std::vector<long> sorted = arr;
-    std::sort(sorted.begin(), sorted.end());
-    std::reverse(sorted.begin(), sorted.end());
+    std::vector<long> sorted_arr;
     std::vector<std::string> result;
-    for (long i : sorted) {
-        if (i > 0 && i < 10) {
-            result.push_back(std::to_string(i));
+    for (long i = 0; i < arr.size(); i++) {
+        if (arr[i] >= 1 && arr[i] <= 9) {
+            sorted_arr.push_back(arr[i]);
+        }
+    }
+    std::sort(sorted_arr.begin(), sorted_arr.end());
+    std::reverse(sorted_arr.begin(), sorted_arr.end());
+    for (long i = 0; i < sorted_arr.size(); i++) {
+        if (sorted_arr[i] == 1) {
+            result.push_back("One");
+        } else if (sorted_arr[i] == 2) {
+            result.push_back("Two");
+        } else if (sorted_arr[i] == 3) {
+            result.push_back("Three");
+        } else if (sorted_arr[i] == 4) {
+            result.push_back("Four");
+        } else if (sorted_arr[i] == 5) {
+            result.push_back("Five");
+        } else if (sorted_arr[i] == 6) {
+            result.push_back("Six");
+        } else if (sorted_arr[i] == 7) {
+            result.push_back("Seven");
+        } else if (sorted_arr[i] == 8) {
+            result.push_back("Eight");
+        } else if (sorted_arr[i] == 9) {
+            result.push_back("Nine");
         }
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = by_length;
     assert(candidate((std::vector<long>({2, 1, 1, 4, 5, 8, 2, 3}))) == (std::vector<std::string>({"Eight", "Five", "Four", "Three", "Two", "Two", "One", "One"})));

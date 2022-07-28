@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // "Given an array representing a branch of a tree that has non-negative integer nodes
@@ -32,32 +27,18 @@
 // * 0 <= node.value
 std::vector<long> pluck(std::vector<long> arr) {
     std::vector<long> result;
-    if (arr.size() == 0) {
-        return result;
-    }
-    std::map<long, long> map;
-    for (long i = 0; i < arr.size(); i++) {
+    if (arr.size() == 0) return result;
+    std::sort(arr.begin(), arr.end());
+    for (int i = 0; i < arr.size(); i++) {
         if (arr[i] % 2 == 0) {
-            map[arr[i]] = i;
+            result.push_back(arr[i]);
+            result.push_back(i);
+            return result;
         }
     }
-    if (map.size() == 0) {
-        return result;
-    }
-    long min = LONG_MAX;
-    long min_index = LONG_MAX;
-    for (auto it = map.begin(); it != map.end(); it++) {
-        if (it->first < min) {
-            min = it->first;
-            min_index = it->second;
-        }
-    }
-    result.push_back(min);
-    result.push_back(min_index);
     return result;
+
 }
-
-
 int main() {
     auto candidate = pluck;
     assert(candidate((std::vector<long>({4, 2, 3}))) == (std::vector<long>({2, 1})));

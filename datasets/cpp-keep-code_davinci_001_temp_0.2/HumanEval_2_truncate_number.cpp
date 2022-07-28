@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a positive floating point number, it can be decomposed into
@@ -12,11 +7,10 @@
 // >>> truncate_number(3.5)
 // 0.5
 float truncate_number(float number) {
-    float decimal = number - floor(number);
-    return decimal;
+    assert(number >= 0);
+    return number - floor(number);
+
 }
-
-
 int main() {
     auto candidate = truncate_number;
     assert(candidate((3.5)) == (0.5));

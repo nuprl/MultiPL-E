@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // In this task, you will be given a string that represents a number of apples and oranges 
@@ -16,23 +11,21 @@
 // fruit_distribution("2 apples and 3 oranges", 100) -> 100 - 2 - 3 = 95
 // fruit_distribution("100 apples and 1 oranges",120) -> 120 - 100 - 1 = 19
 long fruit_distribution(std::string s, long n) {
-    std::vector<std::string> v;
-    std::string temp;
-    for (int i = 0; i < s.size(); i++) {
-        if (s[i] == ' ') {
-            v.push_back(temp);
-            temp = "";
-        } else {
-            temp += s[i];
+    std::stringstream ss(s);
+    std::string fruit;
+    long apples = 0, oranges = 0, mangoes = 0;
+    while (ss >> fruit) {
+        if (fruit == "apples") {
+            apples = std::stol(ss.str());
+        } else if (fruit == "oranges") {
+            oranges = std::stol(ss.str());
+        } else if (fruit == "mangoes") {
+            mangoes = std::stol(ss.str());
         }
     }
-    v.push_back(temp);
-    long apples = std::stol(v[0]);
-    long oranges = std::stol(v[1]);
-    return n - apples - oranges;
+    return n - apples - oranges - mangoes;
+
 }
-
-
 int main() {
     auto candidate = fruit_distribution;
     assert(candidate(("5 apples and 6 oranges"), (19)) == (8));

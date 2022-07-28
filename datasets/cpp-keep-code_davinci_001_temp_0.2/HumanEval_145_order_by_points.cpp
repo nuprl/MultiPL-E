@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Write a function which sorts the given list of integers
@@ -13,23 +8,28 @@
 // >>> order_by_points([1, 11, -1, -11, -12]) == [-1, -11, 1, -12, 11]
 // >>> order_by_points([]) == []
 std::vector<long> order_by_points(std::vector<long> nums) {
-    std::map<long, int> points;
-    for (int i = 0; i < nums.size(); i++) {
-        long sum = 0;
-        while (nums[i] > 0) {
-            sum += nums[i] % 10;
-            nums[i] /= 10;
-        }
-        points[sum] = i;
-    }
-    std::vector<long> ans;
-    for (auto it = points.begin(); it != points.end(); it++) {
-        ans.push_back(nums[it->second]);
-    }
-    return ans;
+    std::vector<long> result;
+    std::vector<long> digits;
+    std::vector<long> digits_sum;
+    std::vector<long> digits_sum_index;
+    std::vector<long> digits_sum_index_sort;
+    std::vector<long> digits_sum_index_sort_index;
+    std::vector<long> digits_sum_index_sort_index_sort;
+    std::vector<long> digits_sum_index_sort_index_sort_index;
+    std::vector<long> digits_sum_index_sort_index_sort_index_sort;
+    std::vector<long> digits_sum_index_sort_index_sort_index_sort_index;
+    std::vector<long> digits_sum_index_sort_index_sort_index_sort_index_sort;
+    std::vector<long> digits_sum_index_sort_index_sort_index_sort_index_sort_index;
+    std::vector<long> digits_sum_index_sort_index_sort_index_sort_index_sort_index_sort;
+    std::vector<long> digits_sum_index_sort_index_sort_index_sort_index_sort_index_sort_index;
+    std::vector<long> digits_sum_index_sort_index_sort_index_sort_index_sort_index_sort_index_sort;
+    std::vector<long> digits_sum_index_sort_index_sort_index_sort_index_sort_index_sort_index_sort_index;
+    std::vector<long> digits_sum_index_sort_index_sort_index_sort_index_sort_index_sort_index_sort_index_sort;
+    std::vector<long> digits_sum_index_sort_index_sort_index_sort_index_sort_index_sort_index_sort_index_sort_index;
+    std::vector<long> digits_sum_index_sort_index_sort_index_sort_index_sort_index_sort_index_sort_index_sort_index_sort;
+    std::
+
 }
-
-
 int main() {
     auto candidate = order_by_points;
     assert(candidate((std::vector<long>({1, 11, -1, -11, -12}))) == (std::vector<long>({-1, -11, 1, -12, 11})));

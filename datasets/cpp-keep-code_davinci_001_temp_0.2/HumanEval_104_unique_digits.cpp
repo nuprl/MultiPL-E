@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a list of positive integers x. return a sorted list of all 
@@ -15,21 +10,31 @@
 // []
 std::vector<long> unique_digits(std::vector<long> x) {
     std::vector<long> result;
-    for(auto i : x){
-        bool flag = true;
-        for(auto j : std::to_string(i)){
-            if(j == '0' || j == '2' || j == '4' || j == '6' || j == '8'){
-                flag = false;
-                break;
+    for(auto i:x){
+        if(i<10){
+            if(i%2!=0){
+                result.push_back(i);
             }
         }
-        if(flag)
-            result.push_back(i);
+        else{
+            if(i%2!=0){
+                long temp=i;
+                while(temp>0){
+                    if(temp%10%2==0){
+                        break;
+                    }
+                    temp=temp/10;
+                }
+                if(temp==0){
+                    result.push_back(i);
+                }
+            }
+        }
     }
+    std::sort(result.begin(),result.end());
     return result;
+
 }
-
-
 int main() {
     auto candidate = unique_digits;
     assert(candidate((std::vector<long>({15, 33, 1422, 1}))) == (std::vector<long>({1, 15, 33})));

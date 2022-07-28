@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Implement a function that takes an non-negative integer and returns an array of the first n
@@ -15,34 +10,30 @@
 // count_up_to(1) => []
 // count_up_to(18) => [2,3,5,7,11,13,17]
 std::vector<long> count_up_to(long n) {
-    std::vector<long> result;
-    if (n <= 1) {
-        return result;
-    }
-    if (n == 2) {
-        result.push_back(2);
-        return result;
-    }
-    long i = 2;
-    while (i < n) {
-        long j = 2;
-        bool is_prime = true;
-        while (j * j <= i) {
-            if (i % j == 0) {
-                is_prime = false;
-                break;
-            }
-            j++;
-        }
-        if (is_prime) {
-            result.push_back(i);
-        }
-        i++;
-    }
+  std::vector<long> result;
+  if (n == 0) {
     return result;
+  }
+  if (n == 1) {
+    result.push_back(2);
+    return result;
+  }
+  result.push_back(2);
+  for (long i = 3; i < n; i += 2) {
+    bool is_prime = true;
+    for (long j = 2; j < i; j++) {
+      if (i % j == 0) {
+        is_prime = false;
+        break;
+      }
+    }
+    if (is_prime) {
+      result.push_back(i);
+    }
+  }
+  return result;
+
 }
-
-
 int main() {
     auto candidate = count_up_to;
     assert(candidate((5)) == (std::vector<long>({2, 3})));

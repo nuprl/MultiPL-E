@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You are given a string s.
@@ -16,16 +11,19 @@
 // is_happy(adb) => True
 // is_happy(xyy) => False
 bool is_happy(std::string s) {
-    int count = 0;
-    for (int i = 0; i < s.length(); i++) {
-        if (s[i] == s[i + 1]) {
-            count++;
-        }
+    int n = s.length();
+    if(n<3)
+        return false;
+    int i=0;
+    while(i<n-2)
+    {
+        if(s[i]==s[i+1] && s[i+1]==s[i+2])
+            return false;
+        i++;
     }
-    return count == 0;
+    return true;
+
 }
-
-
 int main() {
     auto candidate = is_happy;
     assert(candidate(("a")) == (false));

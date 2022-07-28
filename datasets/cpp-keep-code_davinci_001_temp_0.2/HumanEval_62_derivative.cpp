@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // xs represent coefficients of a polynomial.
@@ -13,14 +8,13 @@
 // >>> derivative([1, 2, 3])
 // [2, 6]
 std::vector<long> derivative(std::vector<long> xs) {
-    std::vector<long> result;
+    std::vector<long> res;
     for (int i = 1; i < xs.size(); i++) {
-        result.push_back(i * xs[i]);
+        res.push_back(i * xs[i]);
     }
-    return result;
+    return res;
+
 }
-
-
 int main() {
     auto candidate = derivative;
     assert(candidate((std::vector<long>({3, 1, 2, 4, 5}))) == (std::vector<long>({1, 4, 12, 20})));

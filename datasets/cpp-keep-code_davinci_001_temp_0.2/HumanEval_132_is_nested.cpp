@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Create a function that takes a string as input which contains only square brackets.
@@ -15,30 +10,20 @@
 // is_nested('[[][]]') ➞ True
 // is_nested('[[]][[') ➞ True
 bool is_nested(std::string string) {
-    std::map<char, char> bracket_map = {
-        {'(', ')'},
-        {'[', ']'},
-        {'{', '}'},
-    };
     std::stack<char> stack;
-    for (char c : string) {
-        if (bracket_map.find(c) != bracket_map.end()) {
-            stack.push(c);
-        } else {
+    for (int i = 0; i < string.length(); i++) {
+        if (string[i] == '[') {
+            stack.push(string[i]);
+        } else if (string[i] == ']') {
             if (stack.empty()) {
-                return false;
-            }
-            char top = stack.top();
-            if (bracket_map[top] != c) {
                 return false;
             }
             stack.pop();
         }
     }
     return stack.empty();
+
 }
-
-
 int main() {
     auto candidate = is_nested;
     assert(candidate(("[[]]")) == (true));

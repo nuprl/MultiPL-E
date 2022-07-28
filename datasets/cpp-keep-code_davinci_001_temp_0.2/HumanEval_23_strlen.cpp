@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Return length of given string
@@ -11,19 +6,13 @@
 // >>> strlen('abc')
 // 3
 long strlen(std::string string) {
-    long length = 0;
-    for (int i = 0; i < string.length(); i++) {
-        length++;
+    long len = 0;
+    for (char c : string) {
+        len++;
     }
-    return length;
+    return len;
+
 }
-// Return true if given string is palindrome
-// >>> is_palindrome('')
-// True
-// >>> is_palindrome('abc')
-// False
-
-
 int main() {
     auto candidate = strlen;
     assert(candidate(("")) == (0));

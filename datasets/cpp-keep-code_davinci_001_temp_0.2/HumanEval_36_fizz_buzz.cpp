@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Return the number of times the digit 7 appears in integers less than n which are divisible by 11 or 13.
@@ -15,14 +10,13 @@
 long fizz_buzz(long n) {
     long count = 0;
     for (long i = 1; i < n; i++) {
-        if (i % 11 == 0 || i % 13 == 0) {
-            count += std::to_string(i).find("7") != std::string::npos ? 1 : 0;
+        if ((i % 11 == 0) || (i % 13 == 0)) {
+            count += 1;
         }
     }
     return count;
+
 }
-
-
 int main() {
     auto candidate = fizz_buzz;
     assert(candidate((50)) == (0));

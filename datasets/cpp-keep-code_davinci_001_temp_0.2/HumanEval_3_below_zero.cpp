@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You're given a list of deposit and withdrawal operations on a bank account that starts with
@@ -21,9 +16,8 @@ bool below_zero(std::vector<long> operations) {
         }
     }
     return false;
+
 }
-
-
 int main() {
     auto candidate = below_zero;
     assert(candidate((std::vector<long>())) == (false));

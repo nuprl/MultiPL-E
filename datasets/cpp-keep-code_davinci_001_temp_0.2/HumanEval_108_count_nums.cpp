@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Write a function count_nums which takes an array of integers and returns
@@ -13,18 +8,20 @@
 // >>> count_nums([-1, 11, -11]) == 1
 // >>> count_nums([1, 1, 2]) == 3
 long count_nums(std::vector<long> arr) {
-    std::map<long, int> m;
-    long sum = 0;
-    for (long i : arr) {
-        sum += i;
+    long count = 0;
+    for (long i = 0; i < arr.size(); i++) {
+        long sum = 0;
+        while (arr[i] > 0) {
+            sum += arr[i] % 10;
+            arr[i] /= 10;
+        }
         if (sum > 0) {
-            m[sum]++;
+            count++;
         }
     }
-    return m.size();
+    return count;
+
 }
-
-
 int main() {
     auto candidate = count_nums;
     assert(candidate((std::vector<long>())) == (0));

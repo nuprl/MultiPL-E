@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given an array of non-negative integers, return a copy of the given array after sorting,
@@ -17,32 +12,34 @@
 // * sort_array([2, 4, 3, 0, 1, 5, 6]) => [6, 5, 4, 3, 2, 1, 0]
 std::vector<long> sort_array(std::vector<long> array) {
     std::vector<long> result;
-    std::map<long, long> map;
-    for (auto i : array) {
-        map[i]++;
+    if (array.size() == 0) {
+        return result;
     }
-    long sum = 0;
-    for (auto i : map) {
-        sum += i.first;
-    }
-    if (sum % 2 == 0) {
-        for (auto i : map) {
-            for (long j = 0; j < i.second; j++) {
-                result.push_back(i.first);
-            }
+    std::vector<long> odd;
+    std::vector<long> even;
+    for (long i = 0; i < array.size(); i++) {
+        if (array[i] % 2 == 0) {
+            even.push_back(array[i]);
+        } else {
+            odd.push_back(array[i]);
         }
+    }
+    if (odd.size() > even.size()) {
+        std::sort(odd.begin(), odd.end());
+        std::sort(even.begin(), even.end(), std::greater<long>());
     } else {
-        for (auto i : map) {
-            for (long j = 0; j < i.second; j++) {
-                result.push_back(i.first);
-            }
-        }
-        std::sort(result.begin(), result.end(), std::greater<long>());
+        std::sort(odd.begin(), odd.end(), std::greater<long>());
+        std::sort(even.begin(), even.end());
+    }
+    for (long i = 0; i < odd.size(); i++) {
+        result.push_back(odd[i]);
+    }
+    for (long i = 0; i < even.size(); i++) {
+        result.push_back(even[i]);
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = sort_array;
     assert(candidate((std::vector<long>())) == (std::vector<long>()));
