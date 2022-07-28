@@ -6,21 +6,23 @@ import re
 import ast
 from typing import List
 from generic_translator import main
+from base_language_translator import LanguageTranslator
 
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
 
-class LuaTranslator:
+class LuaTranslator(LanguageTranslator[str]):
 
-    # NOTE(arjun): Seems like reasonable stop sequences for Lua
-    stop = ["\nlocal", "\nfunction", "\n--", "\n\n"]
+    def stop(self):
+        # NOTE(arjun): Seems like reasonable stop sequences for Lua
+        return ["\nlocal", "\nfunction", "\n--", "\n\n"]
 
-    def __init__(self, file_ext):
-        self.file_ext = file_ext
+    def file_ext(self) -> str:
+        return "lua"
 
-    def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
+    def translate_prompt(self, name: str, args: List[ast.arg], _returns: ast.expr, description: str) -> str:
         lua_description = (
             "-- " + re.sub(DOCSTRING_LINESTART_RE, "\n-- ", description.strip()) + "\n"
         )
@@ -28,7 +30,7 @@ class LuaTranslator:
         arg_list = ", ".join(arg_names)
         return f"{lua_description}local function {name}({arg_list})\n"
 
-    def test_suite_prefix_lines(self, entry_point) -> List[str]:
+    def test_suite_prefix_lines(self, entry_point: str) -> List[str]:
         """
         This code goes at the start of the test suite.
         """
@@ -52,7 +54,7 @@ class LuaTranslator:
         return "    lu.assertEquals({}, {})".format(left, right)
 
     # NOTE(arjun): Really, no Nones?
-    def gen_literal(self, c: bool | str | int | float):
+    def gen_literal(self, c: bool | str | int | float | None) -> str:
         """Translate a literal expression
         c: is the literal value
         """
@@ -90,5 +92,5 @@ class LuaTranslator:
 
 
 if __name__ == "__main__":
-    translator = LuaTranslator("lua")
+    translator = LuaTranslator()
     main(translator)
