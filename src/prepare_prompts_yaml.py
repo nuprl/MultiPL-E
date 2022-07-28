@@ -34,12 +34,14 @@ from pathlib import Path
 from humaneval_to_ruby import RubyTranslator
 from humaneval_to_lua import LuaTranslator
 from humaneval_to_rust import RustTranslator
+from humaneval_to_racket import RacketTranslator
 from problem_yaml import Problem
 
 TRANSLATORS = {
     "ruby": RubyTranslator("rb"),
     "lua": LuaTranslator("lua"),
-    "rust": RustTranslator("rs")
+    "rust": RustTranslator("rs"),
+    "racket": RacketTranslator("racket")
 }
 
 
