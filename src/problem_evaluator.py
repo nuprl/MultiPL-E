@@ -26,7 +26,7 @@ def load_or_create_test_results_yaml(problem: Problem, problem_yaml_path: Path):
     return y
 
 def eval_in_thread(problem, test_results, i):
-    program = problem.prompt + problem.completions[i]
+    program = problem.prompt + problem.completions[i] + '\n' + problem.tests
 
     if i < len(test_results.results) and test_results.results[i].program == program:
         # Assume that the results for this program are already correct.
