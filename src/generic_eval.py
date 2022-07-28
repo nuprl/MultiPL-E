@@ -22,6 +22,7 @@
 import argparse
 from sys import exit as sysexit
 from pathlib import Path
+import sys
 
 def list_files(directory, ext):
     files_unsorted = directory.glob(f"HumanEval_*{ext}")
@@ -94,3 +95,58 @@ def main(eval_script, language, extension):
             elif res['status'] == "SyntaxError":
                 syntax_error += 1
     print (f"Total {total}, Syntax Error {syntax_error}, Passed {passed}")
+
+
+
+def main_check_stubs(check_script, language, extension):
+    args = argparse.ArgumentParser()
+
+    args.add_argument(
+        "--directory", type=str, required=True, help="Directory to read benchmarks from"
+    )
+    args.add_argument(
+        "--files",
+        type=int,
+        nargs="*",
+        default=[],
+        help="Specify the benchmarks to evaluate by their number, e.g. --files 0 1 2"
+    )
+    args = args.parse_args()
+
+    directory = Path(args.directory).resolve()
+
+    files_sorted = list_files(directory, extension)
+
+    # the directory you specified does not contain the right language
+    if len(files_sorted) == 0:
+        print(f'The specified directory does not contain files of type {extension}')
+        sysexit(1)
+
+    files_index = []
+    if len(args.files) > 0:
+        files_index = args.files
+    else:
+        files_index = range(len(files_sorted))
+
+    total = 0
+    passed = 0
+
+    results_file = Path(Path(__file__).parent, "..", "check_results", language.lower() + ".csv").resolve()
+
+    with open(results_file, "w") as f:
+        for i in files_index:
+            filepath = files_sorted[i]
+            if filepath is None:
+                print("File {} does not exist!".format(i))
+                continue
+            res = check_script(filepath)
+            output = f"{language},{filepath.stem},{res['status']}\n"
+            f.write(output)
+            print(output, end="")
+            total += 1
+            if res['status'] == "OK":
+                passed += 1
+    print (f"Total {total}, Passed {passed}")
+
+    if total != passed:
+        sys.exit(1)
