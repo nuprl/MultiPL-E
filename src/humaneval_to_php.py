@@ -83,7 +83,7 @@ class PHPTranslator:
 
     def gen_list(self, l: List[str]) -> str:
         """Translate a list with elements l
-        A list [ x, y, z] translates to array( x, y, z )
+        A list [x, y, z] translates to array(x, y, z)
         """
         return "array(" + ", ".join(l) + ")"
 
