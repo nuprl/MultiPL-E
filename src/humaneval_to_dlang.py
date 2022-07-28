@@ -15,8 +15,19 @@ class DlangTranslator:
     # TODO: what is the stop sequence for it?
     stop = ["\n\n"]
 
+    default_libs = [
+        # "std.math",
+        # "std.typecons"
+    ]
+    
+    features_to_libs = {
+        "tuple": "std.typecons",
+        "nullable": "std.typecons"
+    }
+
     def __init__(self, file_ext):
         self.file_ext = file_ext
+        self.features = {};
 
     def translate_type(self,t):
         match t:
@@ -29,15 +40,19 @@ class DlangTranslator:
                         # TODO
                         return "auto"
                     case "Tuple":
-                        # Even the official documentation uses `auto` for tuples
-                        return "auto"
+                        match slice:
+                            case ast.Tuple(elts,_ctx):
+                                tys = [self.translate_type(elem) for elem in elts]
+                                self.features.add("tuple")
+                                return "Tuple!({})".format(", ".join(tys))
+                            case _other:
+                                raise Exception(f"Bad tuple: {slice}")
                     case "Dict":
                         match slice:
                             case ast.Tuple([ast.Name(k), ast.Name(v)], _ctx):
                                 key, value = self.translate_type(k), self.translate_type(v)
                                 return f"{value}[{key}]"
                     case "Optional":
-                        # TODO: perhaps use Nullable type?
                         return "auto"
                     case other:
                         return "auto"
@@ -54,12 +69,13 @@ class DlangTranslator:
 
     
     def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str) -> str:
+        libraries = "\n".join([f"import {lib};" for lib in self.default_libs])
         dlang_desc = ("/*\n" + description + "\n*/\n")
         
         arg_names_and_types = [self.translate_type(arg.annotation) + ' ' + arg.arg for arg in args]
         arg_list = ", ".join(arg_names_and_types)
         return_type = self.translate_type(returns)
-        return f"{dlang_desc}{return_type} {name}({arg_list}) \n"
+        return f"{libraries}\n{dlang_desc}{return_type} {name}({arg_list}) \n"
 
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
