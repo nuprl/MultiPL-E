@@ -27,16 +27,29 @@ class CPPTranslator:
 
     def __init__(self, file_ext):
         self.file_ext = file_ext
-        self.union_decls = {} #Dictionary of _union_name to a dictionary of type to field
+        #Dictionary of union name to a dictionary of type to field
+        self.union_decls = {}
 
     def pytype_to_cpptype(self, ann: ast.expr | None) -> str:
+        '''Traverses an AST annotation and generates C++ Types
+            Types are converted in following manner:
+            str -> std::string
+            int -> long
+            float -> float
+            bool -> bool
+            None -> {} (None only appears in optional)
+            
+            List -> std::vector
+            Tuple -> std::tuple
+            Dict -> std::map
+            Optional -> std::optional
+            Union -> Create a new Union type
+            Any -> std::any
+        '''
+
         if ann == None:
-            print(
-                f"Didn't find annotation for a fundecl arg")
-            return ""
             raise Exception(f"No annotation")
 
-        type_name = ""
         match ann:
             case ast.Name(id="str"):
                 return "std::string"
@@ -66,7 +79,6 @@ class CPPTranslator:
             case ast.Subscript(value=ast.Name(id="Optional"), slice=elem_type):
                 return "std::optional<%s>"%self.pytype_to_cpptype(elem_type)
             case ast.Subscript(value=ast.Name(id="Union"), slice=ast.Tuple(elts=elems)):
-                print(ast.dump(ann))
                 union_elems_types = []
                 union_decl = {}
                 for i,e in enumerate(elems):
@@ -80,19 +92,18 @@ class CPPTranslator:
 
                 return union_name
             case ast.Name(id="Any"):
-                #Cannot do this in C++
-                print("Cannot use Any in C++")
-                
-            # case ast.Subscript(value=ast.Name(id="Union"), slice=ast.Union(elts)):
-            #     type_name += "union"
+                return "std::any";
             case _other:
                 print(f"Unhandled annotation: {ast.dump(ann)}")
-                # raise Exception(f"Unhandled annotation: {ann}")
-        return type_name
+                raise Exception(f"Unhandled annotation: {ann}")
+        
 
-    def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:       
+    def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
+        '''Translate Python prompt to C++.
+           In addition to comments and example, the prompt contain union declarations (if there are any) 
+           and include files
+        '''
         comment_start = "//"
-        # print (unions)
         CPP_description = (
             comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" +comment_start + " ", description.strip()) + "\n"
         )
@@ -125,6 +136,7 @@ class CPPTranslator:
                 union += "    }"
                 union += "\n};\n"
             unions += union
+            
         return f"{self.module_imports()}{unions}{CPP_description}{self.ret_cpp_type} {name}({formal_arg_list})" + " {\n"
     
     def wrap_in_brackets(self, s):
@@ -159,13 +171,8 @@ class CPPTranslator:
     
     def module_imports(self):
         return "\n".join([
-            "#include<iostream>",
-            "#include<vector>",
-            "#include<string>",
-            "#include<map>",
-            "#include<optional>",
             "#include<assert.h>",
-            "#include<bits/stdc++.h>",
+            "#include<bits/stdc++.h>", #Include every C++ header, works with g++
             ""
         ])
 
@@ -175,9 +182,7 @@ class CPPTranslator:
     def deep_equality(self, left: str, right: str) -> str:
         """
         All tests are assertions that compare deep equality between left and right.
-
-        Make sure you use the right equality operator for your language. For example,
-        == is the wrong operator for Java and OCaml.
+        In C++ using == checks for structural equality
         """
         right = self.update_type(right, self.ret_cpp_type)
         #Empty the union declarations
