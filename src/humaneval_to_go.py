@@ -205,7 +205,7 @@ import (
         return "UNKNOWN"
 
     def patch_empty(self, s, t) -> str:
-        match s, t:
+        match s:
             case "PATCH list":
                 return translate_type(t) + "{}"
             case "PATCH dict":
