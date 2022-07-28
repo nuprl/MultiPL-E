@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Check if in given list of numbers, are any two numbers closer to each other than
@@ -12,26 +7,18 @@
 // >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
 // True
 bool has_close_elements(std::vector<float> numbers, float threshold) {
-    std::map<float, int> m;
-    for (auto n : numbers) {
-        m[n]++;
-    }
-    for (auto n : numbers) {
-        if (m[n] > 1) {
-            return true;
-        }
-        for (auto n2 : numbers) {
-            if (n != n2) {
-                if (std::abs(n - n2) < threshold) {
-                    return true;
-                }
+    std::vector<float>::iterator it;
+    for(it = numbers.begin(); it != numbers.end(); it++) {
+        std::vector<float>::iterator it2;
+        for(it2 = it+1; it2 != numbers.end(); it2++) {
+            if(std::abs(*it - *it2) < threshold) {
+                return true;
             }
         }
     }
     return false;
+
 }
-
-
 int main() {
     auto candidate = has_close_elements;
     assert(candidate((std::vector<float>({1.0, 2.0, 3.9, 4.0, 5.0, 2.2})), (0.3)) == (true));

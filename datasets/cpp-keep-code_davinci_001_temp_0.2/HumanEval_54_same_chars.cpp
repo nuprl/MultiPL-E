@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Check if two words have the same characters.
@@ -19,23 +14,19 @@
 // >>> same_chars('eabcdzzzz', 'dddzzzzzzzddddabc')
 // False
 bool same_chars(std::string s0, std::string s1) {
-    std::map<char, int> m0;
-    std::map<char, int> m1;
-    for (char c : s0) {
-        m0[c]++;
-    }
-    for (char c : s1) {
-        m1[c]++;
-    }
-    for (auto p : m0) {
-        if (m1[p.first] != p.second) {
-            return false;
-        }
-    }
-    return true;
+  if (s0.size() != s1.size()) return false;
+  std::unordered_map<char, int> m0;
+  std::unordered_map<char, int> m1;
+  for (int i = 0; i < s0.size(); i++) {
+    m0[s0[i]]++;
+    m1[s1[i]]++;
+  }
+  for (auto p : m0) {
+    if (m1[p.first] != p.second) return false;
+  }
+  return true;
+
 }
-
-
 int main() {
     auto candidate = same_chars;
     assert(candidate(("eabcdzzzz"), ("dddzzzzzzzddeddabc")) == (true));

@@ -38,14 +38,14 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('AsDf') !== 'aSdF') { throw new Exception("Test failed!"); }
-    if (candidate('1234') !== '4321') { throw new Exception("Test failed!"); }
-    if (candidate('ab') !== 'AB') { throw new Exception("Test failed!"); }
-    if (candidate('#a@C') !== '#A@c') { throw new Exception("Test failed!"); }
-    if (candidate('#AsdfW^45') !== '#aSDFw^45') { throw new Exception("Test failed!"); }
-    if (candidate('#6@2') !== '2@6#') { throw new Exception("Test failed!"); }
-    if (candidate('#$a^D') !== '#$A^d') { throw new Exception("Test failed!"); }
-    if (candidate('#ccc') !== '#CCC') { throw new Exception("Test failed!"); }
+    if (candidate("AsDf") !== "aSdF") { throw new Exception("Test failed!"); }
+    if (candidate("1234") !== "4321") { throw new Exception("Test failed!"); }
+    if (candidate("ab") !== "AB") { throw new Exception("Test failed!"); }
+    if (candidate("#a@C") !== "#A@c") { throw new Exception("Test failed!"); }
+    if (candidate("#AsdfW^45") !== "#aSDFw^45") { throw new Exception("Test failed!"); }
+    if (candidate("#6@2") !== "2@6#") { throw new Exception("Test failed!"); }
+    if (candidate("#$a^D") !== "#$A^d") { throw new Exception("Test failed!"); }
+    if (candidate("#ccc") !== "#CCC") { throw new Exception("Test failed!"); }
 }
 
 test();

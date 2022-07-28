@@ -16,9 +16,9 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('') !== array()) { throw new Exception("Test failed!"); }
-    if (candidate('asdfgh') !== array('a', 'as', 'asd', 'asdf', 'asdfg', 'asdfgh')) { throw new Exception("Test failed!"); }
-    if (candidate('WWW') !== array('W', 'WW', 'WWW')) { throw new Exception("Test failed!"); }
+    if (candidate("") !== array()) { throw new Exception("Test failed!"); }
+    if (candidate("asdfgh") !== array("a", "as", "asd", "asdf", "asdfg", "asdfgh")) { throw new Exception("Test failed!"); }
+    if (candidate("WWW") !== array("W", "WW", "WWW")) { throw new Exception("Test failed!"); }
 }
 
 test();

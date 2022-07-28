@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a positive integer, obtain its roman numeral equivalent as a string,
@@ -14,31 +9,51 @@
 // >>> int_to_mini_roman(426) == 'cdxxvi'
 std::string int_to_mini_roman(long number) {
     std::string roman = "";
-    std::map<int, std::string> roman_map = {
-        {1000, "m"},
-        {900, "cm"},
-        {500, "d"},
-        {400, "cd"},
-        {100, "c"},
-        {90, "xc"},
-        {50, "l"},
-        {40, "xl"},
-        {10, "x"},
-        {9, "ix"},
-        {5, "v"},
-        {4, "iv"},
-        {1, "i"}
-    };
-    for (auto it = roman_map.begin(); it != roman_map.end(); it++) {
-        while (number >= it->first) {
-            roman += it->second;
-            number -= it->first;
+    while (number > 0) {
+        if (number >= 1000) {
+            roman += "m";
+            number -= 1000;
+        } else if (number >= 900) {
+            roman += "cm";
+            number -= 900;
+        } else if (number >= 500) {
+            roman += "d";
+            number -= 500;
+        } else if (number >= 400) {
+            roman += "cd";
+            number -= 400;
+        } else if (number >= 100) {
+            roman += "c";
+            number -= 100;
+        } else if (number >= 90) {
+            roman += "xc";
+            number -= 90;
+        } else if (number >= 50) {
+            roman += "l";
+            number -= 50;
+        } else if (number >= 40) {
+            roman += "xl";
+            number -= 40;
+        } else if (number >= 10) {
+            roman += "x";
+            number -= 10;
+        } else if (number >= 9) {
+            roman += "ix";
+            number -= 9;
+        } else if (number >= 5) {
+            roman += "v";
+            number -= 5;
+        } else if (number >= 4) {
+            roman += "iv";
+            number -= 4;
+        } else if (number >= 1) {
+            roman += "i";
+            number -= 1;
         }
     }
     return roman;
+
 }
-
-
 int main() {
     auto candidate = int_to_mini_roman;
     assert(candidate((19)) == ("xix"));

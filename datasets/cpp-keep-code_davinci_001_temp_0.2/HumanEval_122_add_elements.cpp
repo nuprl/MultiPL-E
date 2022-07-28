@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a non-empty array of integers arr and an integer k, return
@@ -19,9 +14,8 @@ long add_elements(std::vector<long> arr, long k) {
         sum += arr[i];
     }
     return sum;
+
 }
-
-
 int main() {
     auto candidate = add_elements;
     assert(candidate((std::vector<long>({1, -2, -3, 41, 57, 76, 87, 88, 99})), (3)) == (-4));

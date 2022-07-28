@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You are given a string representing a sentence,
@@ -20,27 +15,27 @@
 // * 1 <= len(sentence) <= 100
 // * sentence contains only letters
 std::string words_in_sentence(std::string sentence) {
+    std::string res;
     std::vector<std::string> words;
     std::stringstream ss(sentence);
     std::string word;
     while (ss >> word) {
         words.push_back(word);
     }
-    std::map<int, std::string> prime_words;
-    for (auto word : words) {
-        int len = word.length();
-        if (len > 1 && is_prime(len)) {
-            prime_words[len] = word;
+    std::vector<int> lens;
+    for (auto &word : words) {
+        lens.push_back(word.size());
+    }
+    std::sort(lens.begin(), lens.end());
+    for (auto &l : lens) {
+        if (is_prime(l)) {
+            res += words[lens.index(l)];
+            res += " ";
         }
     }
-    std::string result;
-    for (auto [len, word] : prime_words) {
-        result += word + " ";
-    }
-    return result.substr(0, result.length() - 1);
+    return res.substr(0, res.size() - 1);
+
 }
-
-
 int main() {
     auto candidate = words_in_sentence;
     assert(candidate(("This is a test")) == ("is"));

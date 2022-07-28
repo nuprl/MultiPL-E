@@ -51,16 +51,16 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('apple') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('apple pi e') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('eeeee') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('A') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('Pumpkin pie ') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('Pumpkin pie 1') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('eeeee e ') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('apple pie') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('apple pi e ') !== false) { throw new Exception("Test failed!"); }
+    if (candidate("apple") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("apple pi e") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("eeeee") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("A") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("Pumpkin pie ") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("Pumpkin pie 1") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("eeeee e ") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("apple pie") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("apple pi e ") !== false) { throw new Exception("Test failed!"); }
 }
 
 test();

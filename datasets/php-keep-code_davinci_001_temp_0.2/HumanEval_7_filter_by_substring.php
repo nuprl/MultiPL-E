@@ -24,10 +24,10 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate(array(), 'john') !== array()) { throw new Exception("Test failed!"); }
-    if (candidate(array('xxx', 'asd', 'xxy', 'john doe', 'xxxAAA', 'xxx'), 'xxx') !== array('xxx', 'xxxAAA', 'xxx')) { throw new Exception("Test failed!"); }
-    if (candidate(array('xxx', 'asd', 'aaaxxy', 'john doe', 'xxxAAA', 'xxx'), 'xx') !== array('xxx', 'aaaxxy', 'xxxAAA', 'xxx')) { throw new Exception("Test failed!"); }
-    if (candidate(array('grunt', 'trumpet', 'prune', 'gruesome'), 'run') !== array('grunt', 'prune')) { throw new Exception("Test failed!"); }
+    if (candidate(array(), "john") !== array()) { throw new Exception("Test failed!"); }
+    if (candidate(array("xxx", "asd", "xxy", "john doe", "xxxAAA", "xxx"), "xxx") !== array("xxx", "xxxAAA", "xxx")) { throw new Exception("Test failed!"); }
+    if (candidate(array("xxx", "asd", "aaaxxy", "john doe", "xxxAAA", "xxx"), "xx") !== array("xxx", "aaaxxy", "xxxAAA", "xxx")) { throw new Exception("Test failed!"); }
+    if (candidate(array("grunt", "trumpet", "prune", "gruesome"), "run") !== array("grunt", "prune")) { throw new Exception("Test failed!"); }
 }
 
 test();

@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You'll be given a string of words, and your task is to count the number
@@ -14,18 +9,15 @@
 // >>> is_bored("The sky is blue. The sun is shining. I love this weather")
 // 1
 long is_bored(std::string S) {
-    long count = 0;
-    std::string::size_type pos = 0;
-    while ((pos = S.find(".", pos)) != std::string::npos) {
-        if (S.substr(0, pos).find("I") != std::string::npos) {
-            count++;
-        }
-        pos++;
-    }
-    return count;
+  long count = 0;
+  std::string::size_type pos = 0;
+  while ((pos = S.find("I ", pos)) != std::string::npos) {
+    count++;
+    pos += 2;
+  }
+  return count;
+
 }
-
-
 int main() {
     auto candidate = is_bored;
     assert(candidate(("Hello world")) == (0));

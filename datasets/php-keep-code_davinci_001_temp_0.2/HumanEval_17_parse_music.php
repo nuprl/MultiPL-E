@@ -40,11 +40,11 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('') !== array()) { throw new Exception("Test failed!"); }
-    if (candidate('o o o o') !== array(4, 4, 4, 4)) { throw new Exception("Test failed!"); }
-    if (candidate('.| .| .| .|') !== array(1, 1, 1, 1)) { throw new Exception("Test failed!"); }
-    if (candidate('o| o| .| .| o o o o') !== array(2, 2, 1, 1, 4, 4, 4, 4)) { throw new Exception("Test failed!"); }
-    if (candidate('o| .| o| .| o o| o o|') !== array(2, 1, 2, 1, 4, 2, 4, 2)) { throw new Exception("Test failed!"); }
+    if (candidate("") !== array()) { throw new Exception("Test failed!"); }
+    if (candidate("o o o o") !== array(4, 4, 4, 4)) { throw new Exception("Test failed!"); }
+    if (candidate(".| .| .| .|") !== array(1, 1, 1, 1)) { throw new Exception("Test failed!"); }
+    if (candidate("o| o| .| .| o o o o") !== array(2, 2, 1, 1, 4, 4, 4, 4)) { throw new Exception("Test failed!"); }
+    if (candidate("o| .| o| .| o o| o o|") !== array(2, 1, 2, 1, 4, 2, 4, 2)) { throw new Exception("Test failed!"); }
 }
 
 test();

@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // "
@@ -14,18 +9,17 @@
 // For lst = []  the output should be 0
 // For lst = [-1,-5,2,-1,-5]  the output should be -126
 long sum_squares(std::vector<long> lst) {
-  long sum = 0;
-  for (int i = 0; i < lst.size(); i++) {
-    if (i % 3 == 0) {
-      sum += lst[i] * lst[i];
-    } else if (i % 4 == 0 && i % 3 != 0) {
-      sum += lst[i] * lst[i] * lst[i];
+    long sum = 0;
+    for (int i = 0; i < lst.size(); i++) {
+        if (i % 3 == 0) {
+            sum += lst[i] * lst[i];
+        } else if (i % 4 == 0 && i % 3 != 0) {
+            sum += lst[i] * lst[i] * lst[i];
+        }
     }
-  }
-  return sum;
+    return sum;
+
 }
-
-
 int main() {
     auto candidate = sum_squares;
     assert(candidate((std::vector<long>({1, 2, 3}))) == (6));

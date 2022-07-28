@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Your task is to write a function that returns true if a number x is a simple
@@ -19,9 +14,8 @@ bool is_simple_power(long x, long n) {
     if (x == 1) return true;
     if (x % n != 0) return false;
     return is_simple_power(x / n, n);
+
 }
-
-
 int main() {
     auto candidate = is_simple_power;
     assert(candidate((16), (2)) == (true));

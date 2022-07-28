@@ -23,15 +23,15 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('abcde', 'ae') !== array('bcd', false)) { throw new Exception("Test failed!"); }
-    if (candidate('abcdef', 'b') !== array('acdef', false)) { throw new Exception("Test failed!"); }
-    if (candidate('abcdedcba', 'ab') !== array('cdedc', true)) { throw new Exception("Test failed!"); }
-    if (candidate('dwik', 'w') !== array('dik', false)) { throw new Exception("Test failed!"); }
-    if (candidate('a', 'a') !== array('', true)) { throw new Exception("Test failed!"); }
-    if (candidate('abcdedcba', '') !== array('abcdedcba', true)) { throw new Exception("Test failed!"); }
-    if (candidate('abcdedcba', 'v') !== array('abcdedcba', true)) { throw new Exception("Test failed!"); }
-    if (candidate('vabba', 'v') !== array('abba', true)) { throw new Exception("Test failed!"); }
-    if (candidate('mamma', 'mia') !== array('', true)) { throw new Exception("Test failed!"); }
+    if (candidate("abcde", "ae") !== array("bcd", false)) { throw new Exception("Test failed!"); }
+    if (candidate("abcdef", "b") !== array("acdef", false)) { throw new Exception("Test failed!"); }
+    if (candidate("abcdedcba", "ab") !== array("cdedc", true)) { throw new Exception("Test failed!"); }
+    if (candidate("dwik", "w") !== array("dik", false)) { throw new Exception("Test failed!"); }
+    if (candidate("a", "a") !== array("", true)) { throw new Exception("Test failed!"); }
+    if (candidate("abcdedcba", "") !== array("abcdedcba", true)) { throw new Exception("Test failed!"); }
+    if (candidate("abcdedcba", "v") !== array("abcdedcba", true)) { throw new Exception("Test failed!"); }
+    if (candidate("vabba", "v") !== array("abba", true)) { throw new Exception("Test failed!"); }
+    if (candidate("mamma", "mia") !== array("", true)) { throw new Exception("Test failed!"); }
 }
 
 test();

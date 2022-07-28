@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Create a function encrypt that takes a string as an argument and
@@ -15,20 +10,53 @@
 // encrypt('gf') returns 'kj'
 // encrypt('et') returns 'ix'
 std::string encrypt(std::string s) {
-    std::string alphabet = "abcdefghijklmnopqrstuvwxyz";
-    std::string encrypted = "";
-    for (char c : s) {
-        int index = alphabet.find(c);
-        if (index == std::string::npos) {
-            encrypted += c;
-        } else {
-            encrypted += alphabet[(index + 2) % 26];
-        }
-    }
-    return encrypted;
+  std::string encrypted = "";
+  for (int i = 0; i < s.length(); i++) {
+    if (s[i] == 'z') {
+      encrypted += 'a';
+    } else if (s[i] == 'y') {
+      encrypted += 'b';
+    } else if (s[i] == 'x') {
+      encrypted += 'c';
+    } else if (s[i] == 'w') {
+      encrypted += 'd';
+    } else if (s[i] == 'v') {
+      encrypted += 'e';
+    } else if (s[i] == 'u') {
+      encrypted += 'f';
+    } else if (s[i] == 't') {
+      encrypted += 'g';
+    } else if (s[i] == 's') {
+      encrypted += 'h';
+    } else if (s[i] == 'r') {
+      encrypted += 'i';
+    } else if (s[i] == 'q') {
+      encrypted += 'j';
+    } else if (s[i] == 'p') {
+      encrypted += 'k';
+    } else if (s[i] == 'o') {
+      encrypted += 'l';
+    } else if (s[i] == 'n') {
+      encrypted += 'm';
+    } else if (s[i] == 'm') {
+      encrypted += 'n';
+    } else if (s[i] == 'l') {
+      encrypted += 'o';
+    } else if (s[i] == 'k') {
+      encrypted += 'p';
+    } else if (s[i] == 'j') {
+      encrypted += 'q';
+    } else if (s[i] == 'i') {
+      encrypted += 'r';
+    } else if (s[i] == 'h') {
+      encrypted += 's';
+    } else if (s[i] == 'g') {
+      encrypted += 't';
+    } else if (s[i] == 'f') {
+      encrypted += 'u';
+    } else if (s[i] == 'e
+
 }
-
-
 int main() {
     auto candidate = encrypt;
     assert(candidate(("hi")) == ("lm"));

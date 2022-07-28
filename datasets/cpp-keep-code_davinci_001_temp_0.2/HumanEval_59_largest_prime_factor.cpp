@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Return the largest prime factor of n. Assume n > 1 and is not a prime.
@@ -20,9 +15,8 @@ long largest_prime_factor(long n) {
         }
     }
     return n;
+
 }
-
-
 int main() {
     auto candidate = largest_prime_factor;
     assert(candidate((15)) == (5));

@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // This function takes a list l and returns a list l' such that
@@ -13,21 +8,18 @@
 // >>> sort_third([5, 6, 3, 4, 8, 9, 2])
 // [2, 6, 3, 4, 8, 9, 5]
 std::vector<long> sort_third(std::vector<long> l) {
-    std::vector<long> l_prime;
-    for (long i = 0; i < l.size(); i++) {
-        if (i % 3 == 0) {
-            l_prime.push_back(l[i]);
-        }
+  std::vector<long> l_prime;
+  for (int i = 0; i < l.size(); i++) {
+    if (i % 3 == 0) {
+      l_prime.push_back(l[i]);
+    } else {
+      l_prime.push_back(l[i]);
+      std::sort(l_prime.begin(), l_prime.end());
     }
-    for (long i = 0; i < l.size(); i++) {
-        if (i % 3 != 0) {
-            l_prime.push_back(l[i]);
-        }
-    }
-    return l_prime;
+  }
+  return l_prime;
+
 }
-
-
 int main() {
     auto candidate = sort_third;
     assert(candidate((std::vector<long>({5, 6, 3, 4, 8, 9, 2}))) == (std::vector<long>({2, 6, 3, 4, 8, 9, 5})));

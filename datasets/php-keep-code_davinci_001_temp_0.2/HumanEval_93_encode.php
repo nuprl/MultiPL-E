@@ -45,11 +45,11 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('TEST') !== 'tgst') { throw new Exception("Test failed!"); }
-    if (candidate('Mudasir') !== 'mWDCSKR') { throw new Exception("Test failed!"); }
-    if (candidate('YES') !== 'ygs') { throw new Exception("Test failed!"); }
-    if (candidate('This is a message') !== 'tHKS KS C MGSSCGG') { throw new Exception("Test failed!"); }
-    if (candidate('I DoNt KnOw WhAt tO WrItE') !== 'k dQnT kNqW wHcT Tq wRkTg') { throw new Exception("Test failed!"); }
+    if (candidate("TEST") !== "tgst") { throw new Exception("Test failed!"); }
+    if (candidate("Mudasir") !== "mWDCSKR") { throw new Exception("Test failed!"); }
+    if (candidate("YES") !== "ygs") { throw new Exception("Test failed!"); }
+    if (candidate("This is a message") !== "tHKS KS C MGSSCGG") { throw new Exception("Test failed!"); }
+    if (candidate("I DoNt KnOw WhAt tO WrItE") !== "k dQnT kNqW wHcT Tq wRkTg") { throw new Exception("Test failed!"); }
 }
 
 test();

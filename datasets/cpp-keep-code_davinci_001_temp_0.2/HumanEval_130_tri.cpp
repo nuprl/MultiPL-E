@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
@@ -22,18 +17,28 @@
 // tri(3) = [1, 3, 2, 8]
 std::vector<long> tri(long n) {
     std::vector<long> result;
+    if (n == 0) {
+        return result;
+    }
+    result.push_back(1);
+    if (n == 1) {
+        return result;
+    }
     result.push_back(3);
-    for (long i = 1; i <= n; i++) {
-        if (i % 2 == 0) {
-            result.push_back(1);
-        } else {
-            result.push_back(result[i - 1] + result[i - 2] + result[i - 3]);
-        }
+    if (n == 2) {
+        return result;
+    }
+    long a = 1, b = 3, c = 2;
+    for (int i = 3; i < n; i++) {
+        long tmp = a + b + c;
+        result.push_back(tmp);
+        a = b;
+        b = c;
+        c = tmp;
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = tri;
     assert(candidate((3)) == (std::vector<long>({1, 3, 2, 8})));

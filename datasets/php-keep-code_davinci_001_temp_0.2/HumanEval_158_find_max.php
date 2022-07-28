@@ -28,16 +28,16 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate(array('name', 'of', 'string')) !== 'string') { throw new Exception("Test failed!"); }
-    if (candidate(array('name', 'enam', 'game')) !== 'enam') { throw new Exception("Test failed!"); }
-    if (candidate(array('aaaaaaa', 'bb', 'cc')) !== 'aaaaaaa') { throw new Exception("Test failed!"); }
-    if (candidate(array('abc', 'cba')) !== 'abc') { throw new Exception("Test failed!"); }
-    if (candidate(array('play', 'this', 'game', 'of', 'footbott')) !== 'footbott') { throw new Exception("Test failed!"); }
-    if (candidate(array('we', 'are', 'gonna', 'rock')) !== 'gonna') { throw new Exception("Test failed!"); }
-    if (candidate(array('we', 'are', 'a', 'mad', 'nation')) !== 'nation') { throw new Exception("Test failed!"); }
-    if (candidate(array('this', 'is', 'a', 'prrk')) !== 'this') { throw new Exception("Test failed!"); }
-    if (candidate(array('b')) !== 'b') { throw new Exception("Test failed!"); }
-    if (candidate(array('play', 'play', 'play')) !== 'play') { throw new Exception("Test failed!"); }
+    if (candidate(array("name", "of", "string")) !== "string") { throw new Exception("Test failed!"); }
+    if (candidate(array("name", "enam", "game")) !== "enam") { throw new Exception("Test failed!"); }
+    if (candidate(array("aaaaaaa", "bb", "cc")) !== "aaaaaaa") { throw new Exception("Test failed!"); }
+    if (candidate(array("abc", "cba")) !== "abc") { throw new Exception("Test failed!"); }
+    if (candidate(array("play", "this", "game", "of", "footbott")) !== "footbott") { throw new Exception("Test failed!"); }
+    if (candidate(array("we", "are", "gonna", "rock")) !== "gonna") { throw new Exception("Test failed!"); }
+    if (candidate(array("we", "are", "a", "mad", "nation")) !== "nation") { throw new Exception("Test failed!"); }
+    if (candidate(array("this", "is", "a", "prrk")) !== "this") { throw new Exception("Test failed!"); }
+    if (candidate(array("b")) !== "b") { throw new Exception("Test failed!"); }
+    if (candidate(array("play", "play", "play")) !== "play") { throw new Exception("Test failed!"); }
 }
 
 test();

@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // triples_sum_to_zero takes a list of integers as an input.
@@ -19,25 +14,23 @@
 // >>> triples_sum_to_zero([1])
 // False
 bool triples_sum_to_zero(std::vector<long> l) {
-    std::map<long, int> m;
-    for (auto i : l) {
-        if (m.find(i) != m.end()) {
-            m[i]++;
-        } else {
-            m[i] = 1;
-        }
-    }
-    for (auto i : l) {
-        if (m.find(-i) != m.end()) {
-            if (m[i] > 0 && m[-i] > 0) {
+    std::sort(l.begin(), l.end());
+    for (int i = 0; i < l.size() - 2; i++) {
+        int j = i + 1;
+        int k = l.size() - 1;
+        while (j < k) {
+            if (l[i] + l[j] + l[k] == 0) {
                 return true;
+            } else if (l[i] + l[j] + l[k] < 0) {
+                j++;
+            } else {
+                k--;
             }
         }
     }
     return false;
+
 }
-
-
 int main() {
     auto candidate = triples_sum_to_zero;
     assert(candidate((std::vector<long>({1, 3, 5, 0}))) == (false));

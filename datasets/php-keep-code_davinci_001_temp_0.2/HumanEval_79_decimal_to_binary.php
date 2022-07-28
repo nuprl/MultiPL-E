@@ -21,10 +21,10 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate(0) !== 'db0db') { throw new Exception("Test failed!"); }
-    if (candidate(32) !== 'db100000db') { throw new Exception("Test failed!"); }
-    if (candidate(103) !== 'db1100111db') { throw new Exception("Test failed!"); }
-    if (candidate(15) !== 'db1111db') { throw new Exception("Test failed!"); }
+    if (candidate(0) !== "db0db") { throw new Exception("Test failed!"); }
+    if (candidate(32) !== "db100000db") { throw new Exception("Test failed!"); }
+    if (candidate(103) !== "db1100111db") { throw new Exception("Test failed!"); }
+    if (candidate(15) !== "db1111db") { throw new Exception("Test failed!"); }
 }
 
 test();

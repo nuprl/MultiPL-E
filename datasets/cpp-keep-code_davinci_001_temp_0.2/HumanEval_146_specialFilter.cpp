@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Write a function that takes an array of numbers as input and returns 
@@ -13,15 +8,14 @@
 // specialFilter([33, -2, -3, 45, 21, 109]) => 2
 long specialFilter(std::vector<long> nums) {
     long count = 0;
-    for (long i = 0; i < nums.size(); i++) {
-        if (nums[i] > 10 && (nums[i] % 10) % 2 == 1 && (nums[i] / 10) % 2 == 1) {
+    for (int i = 0; i < nums.size(); i++) {
+        if (nums[i] > 10 && (nums[i] % 10) % 2 != 0 && (nums[i] / 10) % 2 != 0) {
             count++;
         }
     }
     return count;
+
 }
-
-
 int main() {
     auto candidate = specialFilter;
     assert(candidate((std::vector<long>({5, -2, 1, -5}))) == (0));

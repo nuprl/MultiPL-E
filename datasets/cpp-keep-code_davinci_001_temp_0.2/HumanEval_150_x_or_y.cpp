@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // A simple program which should return the value of x if n is 
@@ -11,20 +6,23 @@
 // for x_or_y(7, 34, 12) == 34
 // for x_or_y(15, 8, 5) == 5
 long x_or_y(long n, long x, long y) {
-    if(n == 2) return x;
-    if(n == 3) return y;
-    if(n % 2 == 0) return x;
-    if(n % 3 == 0) return y;
-    long i = 5;
-    while(i * i <= n) {
-        if(n % i == 0) return x;
-        if(n % (i + 2) == 0) return y;
-        i += 6;
-    }
-    return n;
+	assert(n > 0);
+	assert(x > 0);
+	assert(y > 0);
+	if (n == 2) {
+		return x;
+	}
+	if (n % 2 == 0) {
+		return y;
+	}
+	for (long i = 3; i <= sqrt(n); i += 2) {
+		if (n % i == 0) {
+			return y;
+		}
+	}
+	return x;
+
 }
-
-
 int main() {
     auto candidate = x_or_y;
     assert(candidate((7), (34), (12)) == (34));

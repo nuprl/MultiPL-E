@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You are given a positive integer n. You have to create an integer array a of length n.
@@ -16,24 +11,19 @@
 // a = [1, 3, 7, 13, 21]
 // The only valid triple is (1, 7, 13).
 long get_max_triples(long n) {
-    std::vector<long> a(n);
-    for (long i = 0; i < n; i++) {
-        a[i] = i * i - i + 1;
-    }
     long count = 0;
-    for (long i = 0; i < n; i++) {
-        for (long j = i + 1; j < n; j++) {
-            for (long k = j + 1; k < n; k++) {
-                if (a[i] + a[j] + a[k] % 3 == 0) {
+    for(long i = 1; i < n; i++) {
+        for(long j = i + 1; j < n; j++) {
+            for(long k = j + 1; k < n; k++) {
+                if((i * i + j * j + k * k) % 3 == 0) {
                     count++;
                 }
             }
         }
     }
     return count;
+
 }
-
-
 int main() {
     auto candidate = get_max_triples;
     assert(candidate((5)) == (1));

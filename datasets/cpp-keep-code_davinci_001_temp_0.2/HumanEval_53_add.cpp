@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Add two numbers x and y
@@ -12,9 +7,8 @@
 // 12
 long add(long x, long y) {
     return x + y;
+
 }
-
-
 int main() {
     auto candidate = add;
     assert(candidate((0), (1)) == (1));

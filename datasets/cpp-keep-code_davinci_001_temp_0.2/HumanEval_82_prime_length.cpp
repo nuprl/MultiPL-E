@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Write a function that takes a string and returns True if the string
@@ -13,8 +8,11 @@
 // prime_length('kittens') == True
 // prime_length('orange') == False
 bool prime_length(std::string string) {
-    if (string.length() == 1) {
+    if (string.length() == 0) {
         return false;
+    }
+    if (string.length() == 1) {
+        return true;
     }
     for (int i = 2; i < string.length(); i++) {
         if (string.length() % i == 0) {
@@ -22,9 +20,8 @@ bool prime_length(std::string string) {
         }
     }
     return true;
+
 }
-
-
 int main() {
     auto candidate = prime_length;
     assert(candidate(("Hello")) == (true));

@@ -21,13 +21,13 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('') !== '') { throw new Exception("Test failed!"); }
-    if (candidate('abcdef\nghijklm') !== 'bcdf\nghjklm') { throw new Exception("Test failed!"); }
-    if (candidate('fedcba') !== 'fdcb') { throw new Exception("Test failed!"); }
-    if (candidate('eeeee') !== '') { throw new Exception("Test failed!"); }
-    if (candidate('acBAA') !== 'cB') { throw new Exception("Test failed!"); }
-    if (candidate('EcBOO') !== 'cB') { throw new Exception("Test failed!"); }
-    if (candidate('ybcd') !== 'ybcd') { throw new Exception("Test failed!"); }
+    if (candidate("") !== "") { throw new Exception("Test failed!"); }
+    if (candidate("abcdef\nghijklm") !== "bcdf\nghjklm") { throw new Exception("Test failed!"); }
+    if (candidate("fedcba") !== "fdcb") { throw new Exception("Test failed!"); }
+    if (candidate("eeeee") !== "") { throw new Exception("Test failed!"); }
+    if (candidate("acBAA") !== "cB") { throw new Exception("Test failed!"); }
+    if (candidate("EcBOO") !== "cB") { throw new Exception("Test failed!"); }
+    if (candidate("ybcd") !== "ybcd") { throw new Exception("Test failed!"); }
 }
 
 test();

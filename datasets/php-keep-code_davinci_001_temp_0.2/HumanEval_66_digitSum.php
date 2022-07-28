@@ -31,14 +31,14 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('') !== 0) { throw new Exception("Test failed!"); }
-    if (candidate('abAB') !== 131) { throw new Exception("Test failed!"); }
-    if (candidate('abcCd') !== 67) { throw new Exception("Test failed!"); }
-    if (candidate('helloE') !== 69) { throw new Exception("Test failed!"); }
-    if (candidate('woArBld') !== 131) { throw new Exception("Test failed!"); }
-    if (candidate('aAaaaXa') !== 153) { throw new Exception("Test failed!"); }
-    if (candidate(' How are yOu?') !== 151) { throw new Exception("Test failed!"); }
-    if (candidate('You arE Very Smart') !== 327) { throw new Exception("Test failed!"); }
+    if (candidate("") !== 0) { throw new Exception("Test failed!"); }
+    if (candidate("abAB") !== 131) { throw new Exception("Test failed!"); }
+    if (candidate("abcCd") !== 67) { throw new Exception("Test failed!"); }
+    if (candidate("helloE") !== 69) { throw new Exception("Test failed!"); }
+    if (candidate("woArBld") !== 131) { throw new Exception("Test failed!"); }
+    if (candidate("aAaaaXa") !== 153) { throw new Exception("Test failed!"); }
+    if (candidate(" How are yOu?") !== 151) { throw new Exception("Test failed!"); }
+    if (candidate("You arE Very Smart") !== 327) { throw new Exception("Test failed!"); }
 }
 
 test();

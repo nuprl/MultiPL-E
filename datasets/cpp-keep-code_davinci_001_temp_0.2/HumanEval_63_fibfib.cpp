@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // The FibFib number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
@@ -18,12 +13,21 @@
 // >>> fibfib(8)
 // 24
 long fibfib(long n) {
-    if (n <= 1) return 0;
+    if (n == 0) return 0;
+    if (n == 1) return 0;
     if (n == 2) return 1;
-    return fibfib(n-1) + fibfib(n-2) + fibfib(n-3);
+    long a = 0;
+    long b = 0;
+    long c = 1;
+    for (long i = 3; i <= n; i++) {
+        long temp = a + b + c;
+        a = b;
+        b = c;
+        c = temp;
+    }
+    return c;
+
 }
-
-
 int main() {
     auto candidate = fibfib;
     assert(candidate((2)) == (1));

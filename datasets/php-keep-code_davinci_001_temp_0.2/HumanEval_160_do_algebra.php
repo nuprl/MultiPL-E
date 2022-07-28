@@ -47,9 +47,9 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate(array('**', '*', '+'), array(2, 3, 4, 5)) !== 37) { throw new Exception("Test failed!"); }
-    if (candidate(array('+', '*', '-'), array(2, 3, 4, 5)) !== 9) { throw new Exception("Test failed!"); }
-    if (candidate(array('//', '*'), array(7, 3, 4)) !== 8) { throw new Exception("Test failed!"); }
+    if (candidate(array("**", "*", "+"), array(2, 3, 4, 5)) !== 37) { throw new Exception("Test failed!"); }
+    if (candidate(array("+", "*", "-"), array(2, 3, 4, 5)) !== 9) { throw new Exception("Test failed!"); }
+    if (candidate(array("//", "*"), array(7, 3, 4)) !== 8) { throw new Exception("Test failed!"); }
 }
 
 test();

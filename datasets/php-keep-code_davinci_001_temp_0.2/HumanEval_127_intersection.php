@@ -97,14 +97,14 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate(array(1, 2), array(2, 3)) !== 'NO') { throw new Exception("Test failed!"); }
-    if (candidate(array(-1, 1), array(0, 4)) !== 'NO') { throw new Exception("Test failed!"); }
-    if (candidate(array(-3, -1), array(-5, 5)) !== 'YES') { throw new Exception("Test failed!"); }
-    if (candidate(array(-2, 2), array(-4, 0)) !== 'YES') { throw new Exception("Test failed!"); }
-    if (candidate(array(-11, 2), array(-1, -1)) !== 'NO') { throw new Exception("Test failed!"); }
-    if (candidate(array(1, 2), array(3, 5)) !== 'NO') { throw new Exception("Test failed!"); }
-    if (candidate(array(1, 2), array(1, 2)) !== 'NO') { throw new Exception("Test failed!"); }
-    if (candidate(array(-2, -2), array(-3, -2)) !== 'NO') { throw new Exception("Test failed!"); }
+    if (candidate(array(1, 2), array(2, 3)) !== "NO") { throw new Exception("Test failed!"); }
+    if (candidate(array(-1, 1), array(0, 4)) !== "NO") { throw new Exception("Test failed!"); }
+    if (candidate(array(-3, -1), array(-5, 5)) !== "YES") { throw new Exception("Test failed!"); }
+    if (candidate(array(-2, 2), array(-4, 0)) !== "YES") { throw new Exception("Test failed!"); }
+    if (candidate(array(-11, 2), array(-1, -1)) !== "NO") { throw new Exception("Test failed!"); }
+    if (candidate(array(1, 2), array(3, 5)) !== "NO") { throw new Exception("Test failed!"); }
+    if (candidate(array(1, 2), array(1, 2)) !== "NO") { throw new Exception("Test failed!"); }
+    if (candidate(array(-2, -2), array(-3, -2)) !== "NO") { throw new Exception("Test failed!"); }
 }
 
 test();

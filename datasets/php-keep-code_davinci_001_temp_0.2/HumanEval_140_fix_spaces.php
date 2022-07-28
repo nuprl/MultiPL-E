@@ -18,11 +18,11 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('Example') !== 'Example') { throw new Exception("Test failed!"); }
-    if (candidate('Mudasir Hanif ') !== 'Mudasir_Hanif_') { throw new Exception("Test failed!"); }
-    if (candidate('Yellow Yellow  Dirty  Fellow') !== 'Yellow_Yellow__Dirty__Fellow') { throw new Exception("Test failed!"); }
-    if (candidate('Exa   mple') !== 'Exa-mple') { throw new Exception("Test failed!"); }
-    if (candidate('   Exa 1 2 2 mple') !== '-Exa_1_2_2_mple') { throw new Exception("Test failed!"); }
+    if (candidate("Example") !== "Example") { throw new Exception("Test failed!"); }
+    if (candidate("Mudasir Hanif ") !== "Mudasir_Hanif_") { throw new Exception("Test failed!"); }
+    if (candidate("Yellow Yellow  Dirty  Fellow") !== "Yellow_Yellow__Dirty__Fellow") { throw new Exception("Test failed!"); }
+    if (candidate("Exa   mple") !== "Exa-mple") { throw new Exception("Test failed!"); }
+    if (candidate("   Exa 1 2 2 mple") !== "-Exa_1_2_2_mple") { throw new Exception("Test failed!"); }
 }
 
 test();

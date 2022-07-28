@@ -27,11 +27,11 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('') !== '') { throw new Exception("Test failed!"); }
-    if (candidate('x') !== 'x') { throw new Exception("Test failed!"); }
-    if (candidate('xyz') !== 'xyzyx') { throw new Exception("Test failed!"); }
-    if (candidate('xyx') !== 'xyx') { throw new Exception("Test failed!"); }
-    if (candidate('jerry') !== 'jerryrrej') { throw new Exception("Test failed!"); }
+    if (candidate("") !== "") { throw new Exception("Test failed!"); }
+    if (candidate("x") !== "x") { throw new Exception("Test failed!"); }
+    if (candidate("xyz") !== "xyzyx") { throw new Exception("Test failed!"); }
+    if (candidate("xyx") !== "xyx") { throw new Exception("Test failed!"); }
+    if (candidate("jerry") !== "jerryrrej") { throw new Exception("Test failed!"); }
 }
 
 test();

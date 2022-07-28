@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Your task is to implement a function that will simplify the expression
@@ -14,19 +9,17 @@
 // simplify("1/6", "2/1") = False
 // simplify("7/10", "10/2") = False
 bool simplify(std::string x, std::string n) {
-    std::string num = x.substr(0, x.find('/'));
-    std::string den = x.substr(x.find('/') + 1);
-    std::string num2 = n.substr(0, n.find('/'));
-    std::string den2 = n.substr(n.find('/') + 1);
-    int num3 = std::stoi(num) * std::stoi(den2);
-    int den3 = std::stoi(den) * std::stoi(num2);
-    if (num3 == den3) {
+    int x_n = std::stoi(x.substr(0, x.find('/')));
+    int x_d = std::stoi(x.substr(x.find('/') + 1));
+    int n_n = std::stoi(n.substr(0, n.find('/')));
+    int n_d = std::stoi(n.substr(n.find('/') + 1));
+    int gcd = std::__gcd(x_d, n_d);
+    if (x_n * n_d == n_n * x_d) {
         return true;
     }
     return false;
+
 }
-
-
 int main() {
     auto candidate = simplify;
     assert(candidate(("1/5"), ("5/1")) == (true));

@@ -27,13 +27,13 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('abcde') !== 2) { throw new Exception("Test failed!"); }
-    if (candidate('Alone') !== 3) { throw new Exception("Test failed!"); }
-    if (candidate('key') !== 2) { throw new Exception("Test failed!"); }
-    if (candidate('bye') !== 1) { throw new Exception("Test failed!"); }
-    if (candidate('keY') !== 2) { throw new Exception("Test failed!"); }
-    if (candidate('bYe') !== 1) { throw new Exception("Test failed!"); }
-    if (candidate('ACEDY') !== 3) { throw new Exception("Test failed!"); }
+    if (candidate("abcde") !== 2) { throw new Exception("Test failed!"); }
+    if (candidate("Alone") !== 3) { throw new Exception("Test failed!"); }
+    if (candidate("key") !== 2) { throw new Exception("Test failed!"); }
+    if (candidate("bye") !== 1) { throw new Exception("Test failed!"); }
+    if (candidate("keY") !== 2) { throw new Exception("Test failed!"); }
+    if (candidate("bYe") !== 1) { throw new Exception("Test failed!"); }
+    if (candidate("ACEDY") !== 3) { throw new Exception("Test failed!"); }
 }
 
 test();

@@ -43,14 +43,14 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('hi') !== 'lm') { throw new Exception("Test failed!"); }
-    if (candidate('asdfghjkl') !== 'ewhjklnop') { throw new Exception("Test failed!"); }
-    if (candidate('gf') !== 'kj') { throw new Exception("Test failed!"); }
-    if (candidate('et') !== 'ix') { throw new Exception("Test failed!"); }
-    if (candidate('faewfawefaewg') !== 'jeiajeaijeiak') { throw new Exception("Test failed!"); }
-    if (candidate('hellomyfriend') !== 'lippsqcjvmirh') { throw new Exception("Test failed!"); }
-    if (candidate('dxzdlmnilfuhmilufhlihufnmlimnufhlimnufhfucufh') !== 'hbdhpqrmpjylqmpyjlpmlyjrqpmqryjlpmqryjljygyjl') { throw new Exception("Test failed!"); }
-    if (candidate('a') !== 'e') { throw new Exception("Test failed!"); }
+    if (candidate("hi") !== "lm") { throw new Exception("Test failed!"); }
+    if (candidate("asdfghjkl") !== "ewhjklnop") { throw new Exception("Test failed!"); }
+    if (candidate("gf") !== "kj") { throw new Exception("Test failed!"); }
+    if (candidate("et") !== "ix") { throw new Exception("Test failed!"); }
+    if (candidate("faewfawefaewg") !== "jeiajeaijeiak") { throw new Exception("Test failed!"); }
+    if (candidate("hellomyfriend") !== "lippsqcjvmirh") { throw new Exception("Test failed!"); }
+    if (candidate("dxzdlmnilfuhmilufhlihufnmlimnufhlimnufhfucufh") !== "hbdhpqrmpjylqmpyjlpmlyjrqpmqryjlpmqryjljygyjl") { throw new Exception("Test failed!"); }
+    if (candidate("a") !== "e") { throw new Exception("Test failed!"); }
 }
 
 test();

@@ -37,18 +37,18 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate(array('()(', ')')) !== 'Yes') { throw new Exception("Test failed!"); }
-    if (candidate(array(')', ')')) !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate(array('(()(())', '())())')) !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate(array(')())', '(()()(')) !== 'Yes') { throw new Exception("Test failed!"); }
-    if (candidate(array('(())))', '(()())((')) !== 'Yes') { throw new Exception("Test failed!"); }
-    if (candidate(array('()', '())')) !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate(array('(()(', '()))()')) !== 'Yes') { throw new Exception("Test failed!"); }
-    if (candidate(array('((((', '((())')) !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate(array(')(()', '(()(')) !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate(array(')(', ')(')) !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate(array('(', ')')) !== 'Yes') { throw new Exception("Test failed!"); }
-    if (candidate(array(')', '(')) !== 'Yes') { throw new Exception("Test failed!"); }
+    if (candidate(array("()(", ")")) !== "Yes") { throw new Exception("Test failed!"); }
+    if (candidate(array(")", ")")) !== "No") { throw new Exception("Test failed!"); }
+    if (candidate(array("(()(())", "())())")) !== "No") { throw new Exception("Test failed!"); }
+    if (candidate(array(")())", "(()()(")) !== "Yes") { throw new Exception("Test failed!"); }
+    if (candidate(array("(())))", "(()())((")) !== "Yes") { throw new Exception("Test failed!"); }
+    if (candidate(array("()", "())")) !== "No") { throw new Exception("Test failed!"); }
+    if (candidate(array("(()(", "()))()")) !== "Yes") { throw new Exception("Test failed!"); }
+    if (candidate(array("((((", "((())")) !== "No") { throw new Exception("Test failed!"); }
+    if (candidate(array(")(()", "(()(")) !== "No") { throw new Exception("Test failed!"); }
+    if (candidate(array(")(", ")(")) !== "No") { throw new Exception("Test failed!"); }
+    if (candidate(array("(", ")")) !== "Yes") { throw new Exception("Test failed!"); }
+    if (candidate(array(")", "(")) !== "Yes") { throw new Exception("Test failed!"); }
 }
 
 test();

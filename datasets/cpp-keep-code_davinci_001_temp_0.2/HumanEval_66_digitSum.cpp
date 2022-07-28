@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Task
@@ -17,15 +12,14 @@
 // digitSum("aAaaaXa") => 153
 long digitSum(std::string s) {
     long sum = 0;
-    for (char c : s) {
-        if (c >= 'A' && c <= 'Z') {
-            sum += c;
+    for (int i = 0; i < s.length(); i++) {
+        if (s[i] >= 'A' && s[i] <= 'Z') {
+            sum += s[i];
         }
     }
     return sum;
+
 }
-
-
 int main() {
     auto candidate = digitSum;
     assert(candidate(("")) == (0));

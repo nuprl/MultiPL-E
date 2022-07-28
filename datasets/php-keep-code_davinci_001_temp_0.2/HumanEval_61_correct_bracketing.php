@@ -32,18 +32,18 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('()') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('(()())') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('()()(()())()') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('()()((()()())())(()()(()))') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('((()())))') !== false) { throw new Exception("Test failed!"); }
-    if (candidate(')(()') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('(') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('((((') !== false) { throw new Exception("Test failed!"); }
-    if (candidate(')') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('(()') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('()()(()())())(()') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('()()(()())()))()') !== false) { throw new Exception("Test failed!"); }
+    if (candidate("()") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("(()())") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("()()(()())()") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("()()((()()())())(()()(()))") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("((()())))") !== false) { throw new Exception("Test failed!"); }
+    if (candidate(")(()") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("(") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("((((") !== false) { throw new Exception("Test failed!"); }
+    if (candidate(")") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("(()") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("()()(()())())(()") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("()()(()())()))()") !== false) { throw new Exception("Test failed!"); }
 }
 
 test();

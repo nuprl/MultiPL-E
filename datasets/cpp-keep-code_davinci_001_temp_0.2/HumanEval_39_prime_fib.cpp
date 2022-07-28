@@ -12,18 +12,17 @@
 // >>> prime_fib(5)
 // 89
 long prime_fib(long n) {
-    assert(n > 0);
-    long a = 0, b = 1, c = 1;
-    while (n > 0) {
+    assert(n >= 1);
+    long a = 1, b = 1, c = 1;
+    while (n > 2) {
         c = a + b;
         a = b;
         b = c;
-        --n;
+        n--;
     }
     return c;
+
 }
-
-
 int main() {
     auto candidate = prime_fib;
     assert(candidate((1)) == (2));

@@ -16,8 +16,9 @@ def main():
 
         try:
             # Assumes exit-code 0 is all okay
-            subprocess.check_output(" ".join(["lua", os.path.join(directory, filename)]),
-                                        stderr=subprocess.DEVNULL, shell=True, timeout=5)
+            subprocess.check_output(["lua", os.path.join(directory, filename)],
+                                        encoding="utf-8",
+                                        stderr=subprocess.DEVNULL, timeout=5)
             status = "OK"
         except subprocess.TimeoutExpired as exc:
             status = "Timeout"

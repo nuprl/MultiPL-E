@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You have to write a function which validates a given date string and
@@ -19,38 +14,38 @@
 // valid_date('06-04-2020') => True
 // valid_date('06/04/2020') => False
 bool valid_date(std::string date) {
-    std::vector<std::string> date_split = split(date, '-');
+    // Write your code here
+    std::string delimiter = "-";
+    std::vector<std::string> date_split;
+    std::stringstream ss(date);
+    std::string token;
+    while (std::getline(ss, token, '-')) {
+        date_split.push_back(token);
+    }
     if (date_split.size() != 3) {
         return false;
     }
-    std::string month = date_split[0];
-    std::string day = date_split[1];
-    std::string year = date_split[2];
-    if (month.size() != 2 || day.size() != 2 || year.size() != 4) {
+    int month = std::stoi(date_split[0]);
+    int day = std::stoi(date_split[1]);
+    int year = std::stoi(date_split[2]);
+    if (month < 1 || month > 12) {
         return false;
     }
-    int month_num = std::stoi(month);
-    int day_num = std::stoi(day);
-    int year_num = std::stoi(year);
-    if (month_num < 1 || month_num > 12) {
+    if (day < 1 || day > 31) {
         return false;
     }
-    if (day_num < 1 || day_num > 31) {
-        return false;
-    }
-    if (month_num == 2) {
-        if (day_num > 29) {
+    if (month == 2) {
+        if (day > 29) {
             return false;
         }
-    } else if (month_num == 4 || month_num == 6 || month_num == 9 || month_num == 11) {
-        if (day_num > 30) {
+    } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+        if (day > 30) {
             return false;
         }
     }
     return true;
+
 }
-
-
 int main() {
     auto candidate = valid_date;
     assert(candidate(("03-11-2000")) == (true));

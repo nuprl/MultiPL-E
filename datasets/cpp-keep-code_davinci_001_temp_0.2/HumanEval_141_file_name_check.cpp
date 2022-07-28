@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Create a function which takes a string representing a file's name, and returns
@@ -18,42 +13,58 @@
 // file_name_check("example.txt") # => 'Yes'
 // file_name_check("1example.dll") # => 'No' (the name should start with a latin alphapet letter)
 std::string file_name_check(std::string file_name) {
-    std::vector<char> v;
-    std::string s = file_name;
-    std::string s1 = s.substr(0, s.find('.'));
-    std::string s2 = s.substr(s.find('.') + 1);
-    if (s1.length() > 3) {
-        return "No";
-    }
-    for (int i = 0; i < s1.length(); i++) {
-        if (s1[i] < '0' || s1[i] > '9') {
-            v.push_back(s1[i]);
+    std::string result = "No";
+    int count = 0;
+    int dot = 0;
+    int i = 0;
+    while(file_name[i] != '\0') {
+        if(file_name[i] == '.') {
+            dot = i;
+            break;
         }
+        i++;
     }
-    if (v.size() > 1) {
-        return "No";
+    if(dot == 0) {
+        return result;
     }
-    if (s2 != "txt" && s2 != "exe" && s2 != "dll") {
-        return "No";
+    if(file_name[dot+1] == '\0') {
+        return result;
     }
-    return "Yes";
+    if(file_name[dot+1] == 't' && file_name[dot+2] == 'x' && file_name[dot+3] == 't') {
+        result = "Yes";
+    }
+    else if(file_name[dot+1] == 'e' && file_name[dot+2] == 'x' && file_name[dot+3] == 'e') {
+        result = "Yes";
+    }
+    else if(file_name[dot+1] == 'd' && file_name[dot+2] == 'l' && file_name[dot+3] == 'l') {
+        result = "Yes";
+    }
+    else {
+        return result;
+    }
+    i = 0;
+    while(file_name[i] != '.') {
+        if(file_name[i] < 'a' || file_name[i] > 'z') {
+            if(file_name[i] < 'A' || file_name[i] > 'Z') {
+                return result;
+            }
+        }
+        i++;
+    }
+    i = dot - 1;
+    while(file_name[i] != '\0') {
+        if(file_name[i] < '0' || file_name[i] > '9') {
+            return result;
+        }
+        count++;
+        i--;
+    }
+    if(count > 3) {
+        return result;
+    }
+    return result;
+
 }
-std::cout << file_name_check("example.txt") << std::endl;
-std::cout << file_name_check("1example.dll") << std::endl;
-std::cout << file_name_check("example.exe") << std::endl;
-std::cout << file_name_check("example.dll") << std::endl;
-std::cout << file_name_check("example.txt") << std::endl;
-std::cout << file_name_check("example.exe") << std::endl;
-std::cout << file_name_check("example.dll") << std::endl;
-std::cout << file_name_check("example.txt") << std::endl;
-std::cout << file_name_check("example.exe") << std::endl;
-std::cout << file_name_check("example.dll") << std::endl;
-std::cout << file_name_check("example.txt") << std::endl;
-std::cout << file_name_check("example.exe") << std::endl;
-std::cout << file_name_check("example.dll") << std::endl;
-std
-
-
 int main() {
     auto candidate = file_name_check;
     assert(candidate(("example.txt")) == ("Yes"));

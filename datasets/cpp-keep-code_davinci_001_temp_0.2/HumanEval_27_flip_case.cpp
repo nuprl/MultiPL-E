@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // For a given string, flip lowercase characters to uppercase and uppercase to lowercase.
@@ -10,19 +5,18 @@
 // 'hELLO'
 std::string flip_case(std::string string) {
     std::string result;
-    for (auto c : string) {
-        if (c >= 'a' && c <= 'z') {
-            result += c - ('a' - 'A');
-        } else if (c >= 'A' && c <= 'Z') {
-            result += c + ('a' - 'A');
+    for (int i = 0; i < string.length(); i++) {
+        if (string[i] >= 'A' && string[i] <= 'Z') {
+            result += string[i] + 32;
+        } else if (string[i] >= 'a' && string[i] <= 'z') {
+            result += string[i] - 32;
         } else {
-            result += c;
+            result += string[i];
         }
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = flip_case;
     assert(candidate(("")) == (""));
