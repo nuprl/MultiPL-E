@@ -12,7 +12,7 @@ def eval_script(path: Path):
         # Assumes exit-code 0 is all okay
         # Capture
         output = subprocess.run(
-            " ".join(["ruby", path]), shell=True, capture_output=True, timeout=5
+            ["ruby", path], encoding="utf-8", capture_output=True, timeout=5
         )
         # TODO(arjun): molly do the syntaxerror stuff
         if output.returncode == 0:
