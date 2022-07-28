@@ -35,13 +35,15 @@ from humaneval_to_ruby import RubyTranslator
 from humaneval_to_lua import LuaTranslator
 from humaneval_to_rust import RustTranslator
 from humaneval_to_racket import RacketTranslator
+from humaneval_to_php import PHPTranslator
 from problem_yaml import Problem
 
 TRANSLATORS = {
-    "ruby": RubyTranslator("rb"),
-    "lua": LuaTranslator("lua"),
+    "ruby": RubyTranslator(),
+    "lua": LuaTranslator(),
     "rust": RustTranslator("rs"),
-    "racket": RacketTranslator("racket")
+    "racket": RacketTranslator("racket"),
+    "php": PHPTranslator("php")
 }
 
 
