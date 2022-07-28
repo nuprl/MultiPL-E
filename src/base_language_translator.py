@@ -3,11 +3,11 @@ from typing import Tuple, List, TypeVar, Generic
 import ast
 
 
-T = TypeVar('T') 
+TargetExp = TypeVar('TargetExp') 
 
-class LanguageTranslator(ABC, Generic[T]):
+class LanguageTranslator(ABC, Generic[TargetExp]):
     @abstractmethod
-    def gen_literal(self, c: bool | str | int | float | None) -> T:
+    def gen_literal(self, c: bool | str | int | float | None) -> TargetExp:
         """
         Translate a literal expression
         c: is the literal value
@@ -15,35 +15,35 @@ class LanguageTranslator(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    def gen_var(self, v: str) -> T:
+    def gen_var(self, v: str) -> TargetExp:
         """
         Translate a variable with name v.
         """
         pass
 
     @abstractmethod
-    def gen_list(self, l: List[Tuple[str, ast.Expr]]) -> T:
+    def gen_list(self, l: List[Tuple[str, ast.Expr]]) -> TargetExp:
         """
         Translate a list with elements l
         """
         pass
 
     @abstractmethod
-    def gen_tuple(self, t: List[T]) -> T:
+    def gen_tuple(self, t: List[TargetExp]) -> TargetExp:
         """
         Translate a tuple with elements t
         """
         pass
 
     @abstractmethod
-    def gen_dict(self, keys: List[T], values: List[T]) -> T:
+    def gen_dict(self, keys: List[TargetExp], values: List[TargetExp]) -> TargetExp:
         """
         Translate a dictionary with keys and values
         """
         pass
 
     @abstractmethod
-    def gen_call(self, func: str, args: List[T]) -> T:
+    def gen_call(self, func: TargetExp, args: List[TargetExp]) -> TargetExp:
         """
         Translate a function call `func(args)`
         """
@@ -72,7 +72,7 @@ class LanguageTranslator(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    def deep_equality(self, left: T, right: T) -> str:
+    def deep_equality(self, left: TargetExp, right: TargetExp) -> str:
         """
         All tests are assertions that compare deep equality between left and right.
         """
