@@ -146,7 +146,7 @@ def target_path(args, translator, file):
     filename = Path(
         file.parent,
         "..",
-        f"{translator.file_ext}-{args.doctests}-{args.model}-{args.n}",
+        f"{translator.file_ext}-{args.doctests}-{args.model}",
         f"{cleaned_task_id}_{entry_point}.{translator.file_ext}",
     ).resolve()
     return filename
@@ -251,13 +251,6 @@ def main(translator):
     # Commandline arguments: --port 
     args = argparse.ArgumentParser()
     args.add_argument("--port", type=int, default=9000, help="Port to use for OpenAI Caching Proxy")
-
-    args.add_argument(
-        "--n",
-        type=int,
-        default=0,
-        help="Adds a suffix -n to the directory name"
-    )
 
     # argument --doctests with options "keep", "remove", and "transform"
     args.add_argument(
