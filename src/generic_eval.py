@@ -5,6 +5,7 @@
 # different languages.
 
 import argparse
+from sys import exit as sysexit
 from pathlib import Path
 
 def list_files(directory, ext):
@@ -32,6 +33,12 @@ def main(eval_script, language, extension):
     directory = Path(args.directory).resolve()
 
     files_sorted = list_files(directory, extension)
+    
+    # the directory you specified does not contain the right language
+    if len(files_sorted) == 0: 
+        print(f'The specified directory does not contain files of type {extension}')
+        sysexit(1)
+ 
     files_index = []
     if len(args.files) > 0:
         files_index = args.files
