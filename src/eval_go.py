@@ -10,30 +10,36 @@ from generic_eval import main as gmain
 
 
 def eval_script(path: Path):
-    build = subprocess.run(["go", "test", path],
-                           encoding="utf-8",
-                           timeout=15,
-                           stdout=subprocess.PIPE,
-                           stderr=subprocess.PIPE)
-
     status = None
-    stdout = build.stdout
-    # write to stderr just so that we can redirect stdout to a csv
+    stdout = None
+    stderr = None
+    exit_code = None
+    try:
+        build = subprocess.run(["go", "test", path],
+                               encoding="utf-8",
+                               timeout=15,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
 
-    if "[setup failed]" in stdout or "[build failed]" in stdout:
-        status = "SyntaxError"
-    elif "FAIL" in stdout:
-        status = "Exception"
-    elif "ok" in stdout:
-        status = "OK"
-    else:
+        stdout = build.stdout
+        stderr = build.stderr
+        exit_code = build.returncode
+        # write to stderr just so that we can redirect stdout to a csv
+
+        if "[setup failed]" in stdout or "[build failed]" in stdout:
+            status = "SyntaxError"
+        elif "FAIL" in stdout:
+            status = "Exception"
+        else:
+            status = "OK"
+    except subprocess.TimeoutExpired:
         status = "Timeout"
 
     return {
         "status": status,
-        "exit_code": build.returncode,
+        "exit_code": exit_code,
         "stdout": str(stdout),
-        "stderr": str(build.stderr),
+        "stderr": str(stderr),
     }
 
 
