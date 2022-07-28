@@ -5,6 +5,9 @@
 #
 # Installed version is:
 # GNU bash, version 5.1.16(1)-release (x86_64-pc-linux-gnu)
+#
+# The testing framework is bash_unit: https://github.com/pgrange/bash_unit
+# It is a single bash script and needs to be in the same directory as the generated programs.
 import re
 import ast
 from typing import List
@@ -117,6 +120,10 @@ class BashTranslator:
         A list [x, y, z] translates to declare -a x1=(x y z)
         x1 is a fresh variable name, to be used later
         """
+        # If "declare -a" or "declare -A" is in the variables, it's a nested array, which bash doesn't support
+        # So throw an exception
+        if any("declare -" in ll for ll in l):
+            raise Exception("Nested arrays not supported")
         return "declare -a " + self.gensym() + "=(" + " ".join(l) + ")"
 
     def gen_tuple(self, t: List[str]) -> str:
@@ -124,6 +131,10 @@ class BashTranslator:
         A tuple (x, y, z) translates to declare -a x1=(x y z)
         x1 is a fresh variable name, to be used later
         """
+        # If "declare -a" or "declare -A" is in the variables, it's a nested array, which bash doesn't support
+        # So throw an exception
+        if any("declare -" in tt for tt in t):
+            raise Exception("Nested arrays not supported")
         return "declare -a " + self.gensym() + "=(" + " ".join(t) + ")"
 
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
@@ -131,6 +142,10 @@ class BashTranslator:
         A dictionary { "key1": val1, "key2": val2 } translates to declare -A x1=([key1]=val1, [key2]=val2)
         x1 is a fresh variable name, to be used later
         """
+        # If "declare -a" or "declare -A" is in the variables, it's a nested array, which bash doesn't support
+        # So throw an exception
+        if any("declare -" in v for v in values):
+            raise Exception("Nested arrays not supported")
         return "declare -A " + self.gensym() + "=(" + " ".join(f"[{k}]={v}" for k, v in zip(keys, values)) + ")"
 
     def gen_call(self, func: str, args: List[str]) -> str:
