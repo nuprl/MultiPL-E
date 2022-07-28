@@ -65,7 +65,7 @@ def translate_type(t):
         case None:
             raise Exception("implicitly untyped argument")
         case ast.Name("Any"):
-            return "any"
+            return "interface{}"
         case ast.Name(x):
             raise Exception(f"unknown name {x}")
         case ast.Constant(Ellipsis):
@@ -211,7 +211,7 @@ import (
         elem_type = self.pytype_to_gotype(list[0])
         for el in list[1::]:
             if self.pytype_to_gotype(el) != elem_type:
-                elem_type = "any"
+                elem_type = "interface{}"
                 break
 
         return elem_type
@@ -220,12 +220,12 @@ import (
         match s:
             case "PATCH list":
                 if t is None:
-                    return "any" + "{}"
+                    return "[]interface{}" + "{}"
 
                 return translate_type(t) + "{}"
             case "PATCH dict":
                 if t is None:
-                    return "any" + "{}"
+                    return "map[interface{}]interface{}" + "{}"
 
                 return translate_type(t) + "{}"
             case _other:
