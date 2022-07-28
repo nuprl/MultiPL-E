@@ -12,8 +12,8 @@ def main():
     for filename in os.listdir(directory):
         try:
             # Assumes exit-code 0 is all okay
-            subprocess.check_output(" ".join(["rdmd", "-unittest", os.path.join(directory, filename)]),
-                                        stderr=subprocess.STDOUT, shell=True, timeout=5)
+            subprocess.check_output(["rdmd", "-unittest", os.path.join(directory, filename)],
+                                        stderr=subprocess.STDOUT, timeout=5, encoding="utf-8")
             status = "OK"
         except subprocess.TimeoutExpired as exc:
             status = "Timeout"
