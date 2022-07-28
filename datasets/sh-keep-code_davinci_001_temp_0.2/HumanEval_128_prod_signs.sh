@@ -45,7 +45,7 @@ test() {
 
     declare -a x6=()
     x7=$(candidate "${x6[*]}")
-    assert_equals  "${x7[*]}"
+    assert_equals None "${x7[*]}"
 
     declare -a x8=(2 4 1 2 -1 -1 9)
     x9=$(candidate "${x8[*]}")

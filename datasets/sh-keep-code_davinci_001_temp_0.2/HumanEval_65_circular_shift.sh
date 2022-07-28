@@ -29,18 +29,18 @@ candidate() {
 
 test() {
         x0=$(candidate 100 2)
-    assert_equals '001' "${x0[*]}"
+    assert_equals "001" "${x0[*]}"
 
         x1=$(candidate 12 2)
-    assert_equals '12' "${x1[*]}"
+    assert_equals "12" "${x1[*]}"
 
         x2=$(candidate 97 8)
-    assert_equals '79' "${x2[*]}"
+    assert_equals "79" "${x2[*]}"
 
         x3=$(candidate 12 1)
-    assert_equals '21' "${x3[*]}"
+    assert_equals "21" "${x3[*]}"
 
         x4=$(candidate 11 101)
-    assert_equals '11' "${x4[*]}"
+    assert_equals "11" "${x4[*]}"
 
 }

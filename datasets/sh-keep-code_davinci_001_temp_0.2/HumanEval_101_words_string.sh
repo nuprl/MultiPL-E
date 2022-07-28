@@ -20,28 +20,28 @@ candidate() {
 }
 
 test() {
-    declare -a x1=('Hi' 'my' 'name' 'is' 'John')
-        x0=$(candidate 'Hi, my name is John')
+    declare -a x1=("Hi" "my" "name" "is" "John")
+        x0=$(candidate "Hi, my name is John")
     assert_equals "${x1[*]}" "${x0[*]}"
 
-    declare -a x3=('One' 'two' 'three' 'four' 'five' 'six')
-        x2=$(candidate 'One, two, three, four, five, six')
+    declare -a x3=("One" "two" "three" "four" "five" "six")
+        x2=$(candidate "One, two, three, four, five, six")
     assert_equals "${x3[*]}" "${x2[*]}"
 
-    declare -a x5=('Hi' 'my' 'name')
-        x4=$(candidate 'Hi, my name')
+    declare -a x5=("Hi" "my" "name")
+        x4=$(candidate "Hi, my name")
     assert_equals "${x5[*]}" "${x4[*]}"
 
-    declare -a x7=('One' 'two' 'three' 'four' 'five' 'six')
-        x6=$(candidate 'One,, two, three, four, five, six,')
+    declare -a x7=("One" "two" "three" "four" "five" "six")
+        x6=$(candidate "One,, two, three, four, five, six,")
     assert_equals "${x7[*]}" "${x6[*]}"
 
     declare -a x9=()
-        x8=$(candidate '')
+        x8=$(candidate "")
     assert_equals "${x9[*]}" "${x8[*]}"
 
-    declare -a x11=('ahmed' 'gamal')
-        x10=$(candidate 'ahmed     , gamal')
+    declare -a x11=("ahmed" "gamal")
+        x10=$(candidate "ahmed     , gamal")
     assert_equals "${x11[*]}" "${x10[*]}"
 
 }

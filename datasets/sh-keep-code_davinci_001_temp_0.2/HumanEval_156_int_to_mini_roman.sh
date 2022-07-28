@@ -57,45 +57,45 @@ candidate() {
 
 test() {
         x0=$(candidate 19)
-    assert_equals 'xix' "${x0[*]}"
+    assert_equals "xix" "${x0[*]}"
 
         x1=$(candidate 152)
-    assert_equals 'clii' "${x1[*]}"
+    assert_equals "clii" "${x1[*]}"
 
         x2=$(candidate 251)
-    assert_equals 'ccli' "${x2[*]}"
+    assert_equals "ccli" "${x2[*]}"
 
         x3=$(candidate 426)
-    assert_equals 'cdxxvi' "${x3[*]}"
+    assert_equals "cdxxvi" "${x3[*]}"
 
         x4=$(candidate 500)
-    assert_equals 'd' "${x4[*]}"
+    assert_equals "d" "${x4[*]}"
 
         x5=$(candidate 1)
-    assert_equals 'i' "${x5[*]}"
+    assert_equals "i" "${x5[*]}"
 
         x6=$(candidate 4)
-    assert_equals 'iv' "${x6[*]}"
+    assert_equals "iv" "${x6[*]}"
 
         x7=$(candidate 43)
-    assert_equals 'xliii' "${x7[*]}"
+    assert_equals "xliii" "${x7[*]}"
 
         x8=$(candidate 90)
-    assert_equals 'xc' "${x8[*]}"
+    assert_equals "xc" "${x8[*]}"
 
         x9=$(candidate 94)
-    assert_equals 'xciv' "${x9[*]}"
+    assert_equals "xciv" "${x9[*]}"
 
         x10=$(candidate 532)
-    assert_equals 'dxxxii' "${x10[*]}"
+    assert_equals "dxxxii" "${x10[*]}"
 
         x11=$(candidate 900)
-    assert_equals 'cm' "${x11[*]}"
+    assert_equals "cm" "${x11[*]}"
 
         x12=$(candidate 994)
-    assert_equals 'cmxciv' "${x12[*]}"
+    assert_equals "cmxciv" "${x12[*]}"
 
         x13=$(candidate 1000)
-    assert_equals 'm' "${x13[*]}"
+    assert_equals "m" "${x13[*]}"
 
 }

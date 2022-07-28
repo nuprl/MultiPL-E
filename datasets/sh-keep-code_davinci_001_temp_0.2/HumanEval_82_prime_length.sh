@@ -32,52 +32,52 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate 'Hello')
+        x0=$(candidate "Hello")
     assert_equals true "${x0[*]}"
 
-        x1=$(candidate 'abcdcba')
+        x1=$(candidate "abcdcba")
     assert_equals true "${x1[*]}"
 
-        x2=$(candidate 'kittens')
+        x2=$(candidate "kittens")
     assert_equals true "${x2[*]}"
 
-        x3=$(candidate 'orange')
+        x3=$(candidate "orange")
     assert_equals false "${x3[*]}"
 
-        x4=$(candidate 'wow')
+        x4=$(candidate "wow")
     assert_equals true "${x4[*]}"
 
-        x5=$(candidate 'world')
+        x5=$(candidate "world")
     assert_equals true "${x5[*]}"
 
-        x6=$(candidate 'MadaM')
+        x6=$(candidate "MadaM")
     assert_equals true "${x6[*]}"
 
-        x7=$(candidate 'Wow')
+        x7=$(candidate "Wow")
     assert_equals true "${x7[*]}"
 
-        x8=$(candidate '')
+        x8=$(candidate "")
     assert_equals false "${x8[*]}"
 
-        x9=$(candidate 'HI')
+        x9=$(candidate "HI")
     assert_equals true "${x9[*]}"
 
-        x10=$(candidate 'go')
+        x10=$(candidate "go")
     assert_equals true "${x10[*]}"
 
-        x11=$(candidate 'gogo')
+        x11=$(candidate "gogo")
     assert_equals false "${x11[*]}"
 
-        x12=$(candidate 'aaaaaaaaaaaaaaa')
+        x12=$(candidate "aaaaaaaaaaaaaaa")
     assert_equals false "${x12[*]}"
 
-        x13=$(candidate 'Madam')
+        x13=$(candidate "Madam")
     assert_equals true "${x13[*]}"
 
-        x14=$(candidate 'M')
+        x14=$(candidate "M")
     assert_equals false "${x14[*]}"
 
-        x15=$(candidate '0')
+        x15=$(candidate "0")
     assert_equals false "${x15[*]}"
 
 }

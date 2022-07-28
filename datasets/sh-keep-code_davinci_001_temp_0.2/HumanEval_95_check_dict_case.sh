@@ -53,27 +53,27 @@ candidate() {
 }
 
 test() {
-    declare -A x0=(['p']='pineapple' ['b']='banana')
+    declare -A x0=(["p"]="pineapple" ["b"]="banana")
     x1=$(candidate "${x0[*]}")
     assert_equals true "${x1[*]}"
 
-    declare -A x2=(['p']='pineapple' ['A']='banana' ['B']='banana')
+    declare -A x2=(["p"]="pineapple" ["A"]="banana" ["B"]="banana")
     x3=$(candidate "${x2[*]}")
     assert_equals false "${x3[*]}"
 
-    declare -A x4=(['p']='pineapple' ['5']='banana' ['a']='apple')
+    declare -A x4=(["p"]="pineapple" ["5"]="banana" ["a"]="apple")
     x5=$(candidate "${x4[*]}")
     assert_equals false "${x5[*]}"
 
-    declare -A x6=(['Name']='John' ['Age']='36' ['City']='Houston')
+    declare -A x6=(["Name"]="John" ["Age"]="36" ["City"]="Houston")
     x7=$(candidate "${x6[*]}")
     assert_equals false "${x7[*]}"
 
-    declare -A x8=(['STATE']='NC' ['ZIP']='12345')
+    declare -A x8=(["STATE"]="NC" ["ZIP"]="12345")
     x9=$(candidate "${x8[*]}")
     assert_equals true "${x9[*]}"
 
-    declare -A x10=(['fruit']='Orange' ['taste']='Sweet')
+    declare -A x10=(["fruit"]="Orange" ["taste"]="Sweet")
     x11=$(candidate "${x10[*]}")
     assert_equals true "${x11[*]}"
 

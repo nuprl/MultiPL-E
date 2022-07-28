@@ -25,13 +25,13 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate '')
-    assert_equals '' "${x0[*]}"
+        x0=$(candidate "")
+    assert_equals "" "${x0[*]}"
 
-        x1=$(candidate 'Hello!')
-    assert_equals 'hELLO!' "${x1[*]}"
+        x1=$(candidate "Hello!")
+    assert_equals "hELLO!" "${x1[*]}"
 
-        x2=$(candidate 'These violent delights have violent ends')
-    assert_equals 'tHESE VIOLENT DELIGHTS HAVE VIOLENT ENDS' "${x2[*]}"
+        x2=$(candidate "These violent delights have violent ends")
+    assert_equals "tHESE VIOLENT DELIGHTS HAVE VIOLENT ENDS" "${x2[*]}"
 
 }

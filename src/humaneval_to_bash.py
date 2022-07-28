@@ -64,8 +64,17 @@ class BashTranslator:
         """
         All tests are assertions that compare deep equality between left and right.
 
-        Make sure you use the right equality operator for your language. For example,
-        == is the wrong operator for Java and OCaml.
+        Bash is tricky, because there is no deep equality,
+        so arrays are expanded to strings and the strings are compared.
+        If $a is an array, then "${a[*]}" is its expansion.
+
+        Another tricky problem is that arrays have to be initialized in their definitions,
+        and cannot be written as literals. This code lifts the definition to before the
+        comparison, and extracts the variable names, e.g.:
+
+        declare -a x1=(1 2 3)
+        declare -a x2=(1 2 3)
+        assert_equals "${x1[*]}" "${x2[*]}"
         """
         buffer = []
         call_args = []
@@ -92,8 +101,11 @@ class BashTranslator:
         res = repr(c)
         if type(c) == bool:
             res = str(c).lower()
+        elif type(c) == str:
+            c = c.replace('"', '\\"').replace('\n', '\\n')
+            return f'"{c}"'
         elif c is None:
-            res = ""
+            res = "None"
         return res
 
     def gen_var(self, v: str) -> str:
@@ -102,25 +114,35 @@ class BashTranslator:
 
     def gen_list(self, l: List[str]) -> str:
         """Translate a list with elements l
-        A list [x, y, z] translates to (x y z)
+        A list [x, y, z] translates to declare -a x1=(x y z)
+        x1 is a fresh variable name, to be used later
         """
         return "declare -a " + self.gensym() + "=(" + " ".join(l) + ")"
 
     def gen_tuple(self, t: List[str]) -> str:
         """Translate a tuple with elements t
-        A tuple (x, y, z) translates to (x y z)
+        A tuple (x, y, z) translates to declare -a x1=(x y z)
+        x1 is a fresh variable name, to be used later
         """
         return "declare -a " + self.gensym() + "=(" + " ".join(t) + ")"
 
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
         """Translate a dictionary with keys and values
-        A dictionary { "key1": val1, "key2": val2 } translates to ([key1]=val1, [key2]=val2)
+        A dictionary { "key1": val1, "key2": val2 } translates to declare -A x1=([key1]=val1, [key2]=val2)
+        x1 is a fresh variable name, to be used later
         """
         return "declare -A " + self.gensym() + "=(" + " ".join(f"[{k}]={v}" for k, v in zip(keys, values)) + ")"
 
     def gen_call(self, func: str, args: List[str]) -> str:
         """Translate a function call `func(args)`
-        A function call f(x, y, z) translates to f(x, y, z)
+        A function call f(x, y, z) translates to x1=$(f x y z)
+        x1 is a fresh variable name, to be used later, and captures the output of the function call
+
+        If the arguments are literals, they can be left alone.
+        If they are arrays or associative arrays, they need to be lifted, e.g.:
+
+        declare -a x1=$(f 1 2 3)
+        assert_equals "${x1[*]}" true
         """
         buffer = []
         call_args = []

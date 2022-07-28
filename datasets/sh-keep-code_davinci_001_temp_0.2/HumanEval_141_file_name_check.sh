@@ -33,82 +33,82 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate 'example.txt')
-    assert_equals 'Yes' "${x0[*]}"
+        x0=$(candidate "example.txt")
+    assert_equals "Yes" "${x0[*]}"
 
-        x1=$(candidate '1example.dll')
-    assert_equals 'No' "${x1[*]}"
+        x1=$(candidate "1example.dll")
+    assert_equals "No" "${x1[*]}"
 
-        x2=$(candidate 's1sdf3.asd')
-    assert_equals 'No' "${x2[*]}"
+        x2=$(candidate "s1sdf3.asd")
+    assert_equals "No" "${x2[*]}"
 
-        x3=$(candidate 'K.dll')
-    assert_equals 'Yes' "${x3[*]}"
+        x3=$(candidate "K.dll")
+    assert_equals "Yes" "${x3[*]}"
 
-        x4=$(candidate 'MY16FILE3.exe')
-    assert_equals 'Yes' "${x4[*]}"
+        x4=$(candidate "MY16FILE3.exe")
+    assert_equals "Yes" "${x4[*]}"
 
-        x5=$(candidate 'His12FILE94.exe')
-    assert_equals 'No' "${x5[*]}"
+        x5=$(candidate "His12FILE94.exe")
+    assert_equals "No" "${x5[*]}"
 
-        x6=$(candidate '_Y.txt')
-    assert_equals 'No' "${x6[*]}"
+        x6=$(candidate "_Y.txt")
+    assert_equals "No" "${x6[*]}"
 
-        x7=$(candidate '?aREYA.exe')
-    assert_equals 'No' "${x7[*]}"
+        x7=$(candidate "?aREYA.exe")
+    assert_equals "No" "${x7[*]}"
 
-        x8=$(candidate '/this_is_valid.dll')
-    assert_equals 'No' "${x8[*]}"
+        x8=$(candidate "/this_is_valid.dll")
+    assert_equals "No" "${x8[*]}"
 
-        x9=$(candidate 'this_is_valid.wow')
-    assert_equals 'No' "${x9[*]}"
+        x9=$(candidate "this_is_valid.wow")
+    assert_equals "No" "${x9[*]}"
 
-        x10=$(candidate 'this_is_valid.txt')
-    assert_equals 'Yes' "${x10[*]}"
+        x10=$(candidate "this_is_valid.txt")
+    assert_equals "Yes" "${x10[*]}"
 
-        x11=$(candidate 'this_is_valid.txtexe')
-    assert_equals 'No' "${x11[*]}"
+        x11=$(candidate "this_is_valid.txtexe")
+    assert_equals "No" "${x11[*]}"
 
-        x12=$(candidate '#this2_i4s_5valid.ten')
-    assert_equals 'No' "${x12[*]}"
+        x12=$(candidate "#this2_i4s_5valid.ten")
+    assert_equals "No" "${x12[*]}"
 
-        x13=$(candidate '@this1_is6_valid.exe')
-    assert_equals 'No' "${x13[*]}"
+        x13=$(candidate "@this1_is6_valid.exe")
+    assert_equals "No" "${x13[*]}"
 
-        x14=$(candidate 'this_is_12valid.6exe4.txt')
-    assert_equals 'No' "${x14[*]}"
+        x14=$(candidate "this_is_12valid.6exe4.txt")
+    assert_equals "No" "${x14[*]}"
 
-        x15=$(candidate 'all.exe.txt')
-    assert_equals 'No' "${x15[*]}"
+        x15=$(candidate "all.exe.txt")
+    assert_equals "No" "${x15[*]}"
 
-        x16=$(candidate 'I563_No.exe')
-    assert_equals 'Yes' "${x16[*]}"
+        x16=$(candidate "I563_No.exe")
+    assert_equals "Yes" "${x16[*]}"
 
-        x17=$(candidate 'Is3youfault.txt')
-    assert_equals 'Yes' "${x17[*]}"
+        x17=$(candidate "Is3youfault.txt")
+    assert_equals "Yes" "${x17[*]}"
 
-        x18=$(candidate 'no_one#knows.dll')
-    assert_equals 'Yes' "${x18[*]}"
+        x18=$(candidate "no_one#knows.dll")
+    assert_equals "Yes" "${x18[*]}"
 
-        x19=$(candidate '1I563_Yes3.exe')
-    assert_equals 'No' "${x19[*]}"
+        x19=$(candidate "1I563_Yes3.exe")
+    assert_equals "No" "${x19[*]}"
 
-        x20=$(candidate 'I563_Yes3.txtt')
-    assert_equals 'No' "${x20[*]}"
+        x20=$(candidate "I563_Yes3.txtt")
+    assert_equals "No" "${x20[*]}"
 
-        x21=$(candidate 'final..txt')
-    assert_equals 'No' "${x21[*]}"
+        x21=$(candidate "final..txt")
+    assert_equals "No" "${x21[*]}"
 
-        x22=$(candidate 'final132')
-    assert_equals 'No' "${x22[*]}"
+        x22=$(candidate "final132")
+    assert_equals "No" "${x22[*]}"
 
-        x23=$(candidate '_f4indsartal132.')
-    assert_equals 'No' "${x23[*]}"
+        x23=$(candidate "_f4indsartal132.")
+    assert_equals "No" "${x23[*]}"
 
-        x24=$(candidate '.txt')
-    assert_equals 'No' "${x24[*]}"
+        x24=$(candidate ".txt")
+    assert_equals "No" "${x24[*]}"
 
-        x25=$(candidate 's.')
-    assert_equals 'No' "${x25[*]}"
+        x25=$(candidate "s.")
+    assert_equals "No" "${x25[*]}"
 
 }

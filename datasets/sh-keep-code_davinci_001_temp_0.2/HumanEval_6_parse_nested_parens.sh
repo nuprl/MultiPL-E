@@ -39,15 +39,15 @@ candidate() {
 
 test() {
     declare -a x1=(2 3 1 3)
-        x0=$(candidate '(()()) ((())) () ((())()())')
+        x0=$(candidate "(()()) ((())) () ((())()())")
     assert_equals "${x1[*]}" "${x0[*]}"
 
     declare -a x3=(1 2 3 4)
-        x2=$(candidate '() (()) ((())) (((())))')
+        x2=$(candidate "() (()) ((())) (((())))")
     assert_equals "${x3[*]}" "${x2[*]}"
 
     declare -a x5=(4)
-        x4=$(candidate '(()(())((())))')
+        x4=$(candidate "(()(())((())))")
     assert_equals "${x5[*]}" "${x4[*]}"
 
 }

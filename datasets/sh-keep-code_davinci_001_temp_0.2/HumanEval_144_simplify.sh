@@ -32,43 +32,43 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate '1/5' '5/1')
+        x0=$(candidate "1/5" "5/1")
     assert_equals true "${x0[*]}"
 
-        x1=$(candidate '1/6' '2/1')
+        x1=$(candidate "1/6" "2/1")
     assert_equals false "${x1[*]}"
 
-        x2=$(candidate '5/1' '3/1')
+        x2=$(candidate "5/1" "3/1")
     assert_equals true "${x2[*]}"
 
-        x3=$(candidate '7/10' '10/2')
+        x3=$(candidate "7/10" "10/2")
     assert_equals false "${x3[*]}"
 
-        x4=$(candidate '2/10' '50/10')
+        x4=$(candidate "2/10" "50/10")
     assert_equals true "${x4[*]}"
 
-        x5=$(candidate '7/2' '4/2')
+        x5=$(candidate "7/2" "4/2")
     assert_equals true "${x5[*]}"
 
-        x6=$(candidate '11/6' '6/1')
+        x6=$(candidate "11/6" "6/1")
     assert_equals true "${x6[*]}"
 
-        x7=$(candidate '2/3' '5/2')
+        x7=$(candidate "2/3" "5/2")
     assert_equals false "${x7[*]}"
 
-        x8=$(candidate '5/2' '3/5')
+        x8=$(candidate "5/2" "3/5")
     assert_equals false "${x8[*]}"
 
-        x9=$(candidate '2/4' '8/4')
+        x9=$(candidate "2/4" "8/4")
     assert_equals true "${x9[*]}"
 
-        x10=$(candidate '2/4' '4/2')
+        x10=$(candidate "2/4" "4/2")
     assert_equals true "${x10[*]}"
 
-        x11=$(candidate '1/5' '5/1')
+        x11=$(candidate "1/5" "5/1")
     assert_equals true "${x11[*]}"
 
-        x12=$(candidate '1/5' '1/5')
+        x12=$(candidate "1/5" "1/5")
     assert_equals false "${x12[*]}"
 
 }
