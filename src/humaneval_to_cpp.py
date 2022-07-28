@@ -22,13 +22,7 @@ class CPPTranslator:
     cpp_keywords = ["operator"]
 
     def __init__(self, file_ext):
-        self.file_ext = file_ext
-        #Dictionary of union name to a dictionary of type to field
-        self.union_decls = {}
-
-    def pytype_to_cpptype(self, ann: ast.expr | None) -> str:
-        '''Traverses an AST annotation and generates C++ Types
-            Types are converted in following manner:
+        '''Initializes C++ corresponding types.
             str -> std::string
             int -> long
             float -> float
@@ -42,38 +36,55 @@ class CPPTranslator:
             Union -> Create a new Union type
             Any -> std::any
         '''
+        self.file_ext = file_ext
+        #Dictionary of union name to a dictionary of type to field
+        self.union_decls = {}
+        self.string_type = "std::string"
+        self.float_type = "float"
+        self.int_type = "long"
+        self.bool_type = "bool"
+        self.none_type = "{}"
+        self.list_type = "std::vector<%s>"
+        self.tuple_type = "std::tuple<%s>"
+        self.dict_type = "std::map<%s, %s>"
+        self.optional_type = "std::optional<%s>"
+        self.any_type = "std::any"
+
+    def pytype_to_cpptype(self, ann: ast.expr | None) -> str:
+        '''Traverses an AST annotation and generates C++ Types
+        '''
 
         if ann == None:
             raise Exception(f"No annotation")
 
         match ann:
             case ast.Name(id="str"):
-                return "std::string"
+                return self.string_type
             case ast.Name(id="int"):
-                return "long"
+                return self.int_type
             case ast.Name(id="float"):
-                return "float"
+                return self.float_type
             case ast.Name(id="bool"):
-                return "bool"
+                return self.bool_type
             case ast.Name(id="None"):
                 #It appears None is always used in optional
-                return "{}"
+                return self.none_type
             case ast.List(elts=elts):
-                return "std::vector<%s>"%self.pytype_to_cpptype(elts[0])
+                return self.list_type % self.pytype_to_cpptype(elts[0])
             case ast.Tuple(elts=elts):
-                return "std::tuple<%s>"%", ".join([self.pytype_to_cpptype(e) for e in elts])
+                return self.tuple_type % ", ".join([self.pytype_to_cpptype(e) for e in elts])
             case ast.Dict(keys=k,values=v):
-                return "std::map<%s, %s>"%(self.pytype_to_cpptype(k), self.pytype_to_cpptype(v))
+                return self.dict_type % (self.pytype_to_cpptype(k), self.pytype_to_cpptype(v))
             case ast.Subscript(value=ast.Name(id="Dict"), slice=ast.Tuple(elts=key_val_type)):
-                return "std::map<%s, %s>"%(self.pytype_to_cpptype(key_val_type[0]), self.pytype_to_cpptype(key_val_type[1]))
+                return self.dict_type % (self.pytype_to_cpptype(key_val_type[0]), self.pytype_to_cpptype(key_val_type[1]))
             case ast.Subscript(value=ast.Name(id="List"), slice=elem_type):
-                return "std::vector<%s>"%self.pytype_to_cpptype(elem_type)
+                return self.list_type % self.pytype_to_cpptype(elem_type)
             case ast.Subscript(value=ast.Name(id="Tuple"), slice=elts):
                 if type(elts) is ast.Tuple:
                     return self.pytype_to_cpptype(elts)
-                return "std::vector<%s>"%self.pytype_to_cpptype(elts)
+                return self.list_type % self.pytype_to_cpptype(elts)
             case ast.Subscript(value=ast.Name(id="Optional"), slice=elem_type):
-                return "std::optional<%s>"%self.pytype_to_cpptype(elem_type)
+                return self.optional_type % self.pytype_to_cpptype(elem_type)
             case ast.Subscript(value=ast.Name(id="Union"), slice=ast.Tuple(elts=elems)):
                 union_elems_types = []
                 union_decl = {}
@@ -88,9 +99,9 @@ class CPPTranslator:
 
                 return union_name
             case ast.Name(id="Any"):
-                return "std::any";
+                return self.any_type;
             case ast.Constant(value=None):
-                return "{}"
+                return self.none_type
             case ast.Constant(value=Ellipsis):
                 return ""
             case _other:
@@ -228,7 +239,7 @@ class CPPTranslator:
           return "std::vector<long>()", ast.List([ast.Name("int")])
 
         elem_type = self.pytype_to_cpptype(l[0][1])
-        return f"std::vector<{elem_type}>" + "({" + ", ".join([e[0] for e in l]) + "})", ast.List([l[0][1]])
+        return self.list_type%elem_type + "({" + ", ".join([e[0] for e in l]) + "})", ast.List([l[0][1]])
 
     def gen_tuple(self, t: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.Tuple]:
         """Translate a tuple with elements t
