@@ -278,6 +278,9 @@ import (
                 for i, arg in enumerate(args)]
         return func + "(" + ", ".join(args) + ")"
 
+    def no_completion_prompt_stub(self) -> str:
+        return "\tpanic(42)\n}"
+
 
 if __name__ == "__main__":
     # NOTE: go test need to end with _test.go
