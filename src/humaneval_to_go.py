@@ -76,8 +76,7 @@ def translate_type(t):
 
 class GoTranslator:
 
-    # TODO: think about this carefully
-    stop = ["\nfunc", "pub", "\n// ", "#[test]"]
+    stop = ["\nfunc", "struct", "\n// "]
 
     def __init__(self, file_ext):
         self.file_ext = file_ext

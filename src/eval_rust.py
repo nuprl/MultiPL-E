@@ -4,35 +4,46 @@
 # This script runs the Rustified HumanEval programs in datasets/rs
 import os
 import subprocess
+import tempfile
 from pathlib import Path
+from generic_eval import main
 
-def main():
-    directory = Path(Path(__file__).parent, "..", "datasets", "rs").resolve()
+LANG_NAME = "Rust"
+LANG_EXT = ".rs"
 
-    for filename in os.listdir(directory):
-        build = subprocess.run(["rustc", os.path.join(directory, filename), "-o", "/tmp/a.out"],
-                                stderr=subprocess.DEVNULL)
-        status = None
-        if build.returncode != 0:
-            # Well, it's a compile error. May be a type error or
-            # something. But, why break the set convention
-            status = "SyntaxError"
-        else:
-            try:
-                # Assumes exit-code 0 is all okay
-                subprocess.check_output(["/tmp/a.out"], stderr=subprocess.DEVNULL)
+def eval_script(path: Path):
+    basename = ".".join(str(path).split(".")[:-1])
+    build = subprocess.run(["rustc", path, "-o", basename], capture_output=True)
+    status = None
+    returncode = -1
+    output = None
+    if build.returncode != 0:
+        # Well, it's a compile error. May be a type error or
+        # something. But, why break the set convention
+        status = "SyntaxError"
+        returncode = build.returncode
+        output = build
+    else:
+        try:
+            # Assumes exit-code 0 is all okay
+            output = subprocess.run([basename], capture_output=True, timeout=5)
+            returncode = output.returncode
+            if output.returncode == 0:
                 status = "OK"
-            except subprocess.TimeoutExpired as exc:
-                status = "Timeout"
-            except subprocess.CalledProcessError as exc:
+            else:
                 # Well, it's a panic
                 status = "Exception"
-            # Ensures the last /tmp/a.out file is deleted at the end. Otherwise, I retain
-            # ownership and other users cannot overwrite it.
-            os.remove("/tmp/a.out")
-        filename = filename.split(".")[0]
-        print(f"Rust,{filename},{status}")
+        except subprocess.TimeoutExpired as exc:
+            status = "Timeout"
+            output = exc
+        os.remove(basename)
+    return {
+        "status": status,
+        "exit_code": returncode,
+        "stdout": output.stdout,
+        "stderr": output.stderr,
+    }
 
 if __name__ == "__main__":
-    main()
+    main(eval_script, LANG_NAME, LANG_EXT)
 
