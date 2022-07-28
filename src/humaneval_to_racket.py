@@ -23,7 +23,7 @@ class RacketTranslator:
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         racket_description = "#lang racket\n\n;; " + re.sub(DOCSTRING_LINESTART_RE, "\n;; ", description.strip()) + "\n"
         arg_names = [arg.arg for arg in args]
-        arg_list = ", ".join(arg_names)
+        arg_list = " ".join(arg_names)
         return f"{racket_description}(define ({name} {arg_list})\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:

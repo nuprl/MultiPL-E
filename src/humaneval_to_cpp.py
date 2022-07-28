@@ -17,7 +17,7 @@ class CPPTranslator:
     '''
 
     #Seems like reasonable stop sequences for CPP
-    stop = ["\n\n","\nvoid", "\nint", "\nbool"]
+    stop = ["\n}"]
     #C++ Keywords found in the dataset
     cpp_keywords = ["operator"]
 
@@ -179,7 +179,7 @@ class CPPTranslator:
         This code goes at the start of the test suite.
         """
         return [
-            "",
+            "}",
             "int main() {",
             f"    auto candidate = {entry_point};"
         ]
@@ -195,7 +195,7 @@ class CPPTranslator:
     def test_suite_suffix_lines(self) -> List[str]:
         '''Add an empty curly brace
         '''
-        return ["}"]
+        return ["}\n"]
 
     def deep_equality(self, left: Tuple[str, ast.Expr], right: Tuple[str, ast.Expr]) -> str:
         """
@@ -262,7 +262,7 @@ class CPPTranslator:
                 other_types = list(set(other_types))[0]
             else:
                 #Asuming long if no other type
-                other_types = self.long_type
+                other_types = self.int_type
             new_elem_type = self.optional_type % other_types
 
             return self.make_tuple + "(" + ", ".join([f"{new_elem_type}({e[0]})" for e in t]) + ")", \
