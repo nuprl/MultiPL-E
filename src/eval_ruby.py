@@ -1,31 +1,39 @@
 # Authored by Arjun Guha, edited by Molly Q Feldman
 # Copyright (c) 2022, Roblox Inc.
 #
-# Main goal: provide an eval_script implementation 
-# This gets called by problem_evaluator.py for all generated code 
-
+# This script runs the Luafied HumanEval programs in datasets/lua
+import os
 import subprocess
 from pathlib import Path
-from sys import argv
+
 
 def eval_script(path: Path):
     try:
-        # Capture output - will be generated regardless of success, fail, or syntax error
+        # Assumes exit-code 0 is all okay
+        # Capture
         output = subprocess.run(
             " ".join(["ruby", path]), shell=True, capture_output=True, timeout=5
         )
-
-        if output.returncode == 0: # Assumes exit-code 0 is all okay
+        # TODO(arjun): molly do the syntaxerror stuff
+        if output.returncode == 0:
             status = "OK"
-        else: #we have entered into a failure or a SyntaxError
-            if len(output.stdout) > 2: #i.e. code ran, we have a Failure mode (Failure should be very very long) 
-                status = "Exception"
-            else: #we do not have a stdout, so we ran into a syntax error or file does not exist
+        else:
+            if "b''" == str(output.stdout):
                 status = "SyntaxError"
+            else:
+                status = "Exception"
         returncode = output.returncode
-    except:
-        print('Something very weird has happened in subprocess.run for Ruby, INVESTIGATE!')
-
+    except subprocess.TimeoutExpired as exc:
+        status = "Timeout"
+        output = exc
+        returncode = -1
+    except subprocess.CalledProcessError as exc:
+        returncode = exc.returncode
+        if "b''" == str(exc.output):
+            status = "SyntaxError"
+        else:
+            status = "Exception"
+        output = exc
     return {
         "status": status,
         "exit_code": returncode,
@@ -33,14 +41,15 @@ def eval_script(path: Path):
         "stderr": str(output.stderr),
     }
 
+
 def main():
-    # this is for local evaluation purposes only 
-    if len(argv) > 1: # a path has been provided
-        localPath = argv[1]
-        res = eval_script(localPath)
-        print(res)
-    else:
-        print('Provide the full path to the file you would like to evaluate - must be .rb')
+    directory = Path(Path(__file__).parent, "..", "datasets", "rb").resolve()
+
+    for filename in os.listdir(directory):
+        r = eval_script(Path.joinpath(directory, filename))
+        filename = filename.split(".")[0]
+        print(f"Ruby,{filename},{r['status']}")
+
 
 if __name__ == "__main__":
     main()
