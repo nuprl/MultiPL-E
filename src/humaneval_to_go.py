@@ -238,7 +238,7 @@ import (
         if type(c) == bool:
             return str(c).lower()
         if type(c) == str:
-            return f'"{c.replace("\n", "\\n")}"'
+            return "\"%s\"" % c.replace("\n", "\\n")
         if type(c) == None:  # this is possible, maybe we should make a box for Optional
             return "nil"
         return repr(c)
