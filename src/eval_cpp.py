@@ -1,7 +1,7 @@
-# Authored by Arjun Guha
-# Copyright (c) 2022, Roblox Inc.
+# Authored by Abhinav Jangda
+# Copyright (c) 2022, Roblox Inc and University of Massachusetts Amherst
 #
-# This script runs the Luafied HumanEval programs in datasets/lua
+# This script runs the C++ Translated HumanEval programs in datasets/cpp-*
 import os
 import subprocess
 from pathlib import Path
