@@ -33,9 +33,14 @@ from generic_translator import list_originals, translate_prompt_and_tests
 from pathlib import Path
 from humaneval_to_ruby import RubyTranslator
 from humaneval_to_lua import LuaTranslator
+from humaneval_to_rust import RustTranslator
 from problem_yaml import Problem
 
-TRANSLATORS = {"ruby": RubyTranslator("rb"), "lua": LuaTranslator("lua")}
+TRANSLATORS = {
+    "ruby": RubyTranslator("rb"),
+    "lua": LuaTranslator("lua"),
+    "rust": RustTranslator("rs")
+}
 
 
 def main():
