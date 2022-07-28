@@ -14,11 +14,12 @@ def main():
 
     for filename in os.listdir(directory):
         build = subprocess.run(["go", "test", os.path.join(directory, filename)],
+                               encoding="utf-8",
                                stdout=subprocess.PIPE,
                                stderr=subprocess.DEVNULL)
 
         status = None
-        stdout = build.stdout.decode("utf-8")
+        stdout = build.stdout
         # write to stderr just so that we can redirect stdout to a csv
         print(stdout, file=sys.stderr)
 

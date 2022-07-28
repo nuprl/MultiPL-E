@@ -3,6 +3,8 @@
 #
 # Main goal: provide an eval_script implementation 
 # This gets called by problem_evaluator.py for all generated code 
+#
+# See generic_eval.py for instructions on how to run.
 
 import subprocess
 from pathlib import Path
