@@ -96,8 +96,8 @@ class PromptVisitor(ast.NodeVisitor):
                         funcCalls.append(doclist[0])
                         outputs.append(doclist[1].strip())
                     for i in range(len(funcCalls)):
-                        funcCalls[i] = translate_expr(ast.parse(funcCalls[i]), self.translator)
-                        outputs[i] = translate_expr(ast.parse(outputs[i]), self.translator)
+                        funcCalls[i] = translate_expr(self.translator, ast.parse(funcCalls[i]))
+                        outputs[i] = translate_expr(self.translator, ast.parse(outputs[i]))
                     
                     desc = split[0]
                     for i in range(len(funcCalls)):
