@@ -4,11 +4,11 @@
 # This is a helper script for translating problems from the OpenAI HumanEval
 # problems to Language L.
 import ast
+from glob import glob
 import re
-from completion import completion
 from pathlib import Path
-from typing import List
 import argparse
+from models import MODELS
 
 
 def translate_expr(translator, py_expr: ast.AST):
@@ -66,13 +66,28 @@ class PromptVisitor(ast.NodeVisitor):
             case _other:
                 self.state = "error"
 
-    def translate_func_decl(self) -> str | None:
+    def translate_func_decl(self, doctest_transformation: str) -> str | None:
         if self.state != "complete":
             return None
-        return self.translator.translate_prompt(self.name, self.args, self.returns, self.description)
+        # TODO(arjun): Use doctest_transformation
+        match doctest_transformation:
+            case "keep":
+                description = self.description
+            case "remove":
+                # TODO(arjun): Remove all doctests
+                description = self.description 
+            case "transform":
+                # Steps:
+                # Find the Python expression and result in each doctest
+                # py_ast = ast.parse("PYTHON EXPRESSION", "bogus filename")
+                # translate_expr(py_ast, self.translator) to get the string for that expression in the target language
+                description = self.description # TODO(arjun): Transform doctests
+            case _other:
+                raise Exception(f"bad doctest_transformation")
+        return self.translator.translate_prompt(self.name, self.args, self.returns, description)
 
 
-def translate_prompt(translator, py_prompt: str, filename: str) -> str:
+def translate_prompt(translator, doctest_transformation: str, py_prompt: str, filename: str) -> str:
     """
     Reads in a prompt from the HumanEval dataset with "    pass" appended. Translates the prompt to
     Language L. Ignores type annotations and imports. Fails if the prompt has auxiliary functions.
@@ -80,7 +95,7 @@ def translate_prompt(translator, py_prompt: str, filename: str) -> str:
     prompt_ast = ast.parse(py_prompt + "    pass", filename)
     prompt_visitor = PromptVisitor(translator)
     prompt_visitor.visit(prompt_ast)
-    return prompt_visitor.translate_func_decl()
+    return prompt_visitor.translate_func_decl(doctest_transformation)
 
 
 def translate_tests(translator, py_tests: str, entry_point: str, filename: str) -> str:
@@ -124,7 +139,19 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
     return "\n".join(test_cases)
 
 
-def translate_file(port: int, translator, file):
+def target_path(args, translator, file):
+    file = Path(file).resolve()
+    cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
+    entry_point = re.search("(HumanEval_\d+)_(.+).py", file.name).group(2)
+    filename = Path(
+        file.parent,
+        "..",
+        f"{translator.file_ext}-{args.doctests}-{args.model}-{args.n}",
+        f"{cleaned_task_id}_{entry_point}.{translator.file_ext}",
+    ).resolve()
+    return filename
+
+def translate_file(args, translator, file):
     file = Path(file).resolve()
     cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
     entry_point = re.search("(HumanEval_\d+)_(.+).py", file.name).group(2)
@@ -149,7 +176,7 @@ def translate_file(port: int, translator, file):
                 tests_buffer.append(line)
 
     prompt = "".join(prompt_buffer)
-    translated_prompt = translate_prompt(translator, prompt, f"{cleaned_task_id}.py")
+    translated_prompt = translate_prompt(translator, args.doctests, prompt, f"{cleaned_task_id}.py")
 
     tests = "".join(tests_buffer)
     translated_tests = translate_tests(
@@ -162,29 +189,15 @@ def translate_file(port: int, translator, file):
     if translated_tests is None:
         print(f"Failed to translate tests for {file}")
         return
-    response = completion(
-        port=port,
-        engine="code-davinci-001",
-        # Settings from the Codex paper
-        prompt=translated_prompt,
-        max_tokens=500,
-        temperature=0.2,
-        top_p=0.95,
-        stop=translator.stop,
-        n=1,
-    )
+    response = MODELS[args.model](args, translated_prompt, translator.stop, 1)[0]
 
-    filename = Path(
-        file.parent,
-        "..",
-        f"{translator.file_ext}",
-        f"{cleaned_task_id}_{entry_point}.{translator.file_ext}",
-    ).resolve()
+    filename = target_path(args, translator, file)
+
     filename.parent.mkdir(parents=True, exist_ok=True)
 
     with open(filename, "w") as f:
         f.write(translated_prompt)
-        f.write(response[0])
+        f.write(response)
         f.write("\n\n")
         f.write(translated_tests)
         print(f'Wrote {filename}')
@@ -197,8 +210,52 @@ def main(translator):
     # Commandline arguments: --port 
     args = argparse.ArgumentParser()
     args.add_argument("--port", type=int, default=9000, help="Port to use for OpenAI Caching Proxy")
+
+    args.add_argument(
+        "--n",
+        type=int,
+        default=0,
+        help="Adds a suffix -n to the directory name"
+    )
+
+    # argument --doctests with options "keep", "remove", and "transform"
+    args.add_argument(
+        "--doctests",
+        type=str,
+        default="keep",
+        help="What to do with doctests: keep, remove, or transform",
+    )
+
+    args.add_argument(
+        "--model",
+        type=str,
+        default="code_davinci_001_temp_0.2",
+        help="Code generation model to use")
+
+    args.add_argument(
+        "--files",
+        type=int,
+        nargs="*",
+        default=[],
+        help="Specify the files to translate by their number, e.g. --files 0 1 2"
+    )
+
     args = args.parse_args()
 
+    if args.doctests not in [ "keep", "remove", "transform" ]:
+        raise Exception("Invalid value for --doctests")
+
+
     directory = Path(Path(__file__).parent, "..", "datasets").resolve()
-    for filepath in sorted(directory.glob("originals/*.py")):
-        translate_file(args.port, translator, filepath)
+    files_unsorted = directory.glob("originals/*.py") 
+    # assumption: base filenames are in the format of HumanEval_X_*.py
+    # Where X is a valid number
+    files_sorted = sorted(files_unsorted, key=(lambda s: int(str(s.name).split("_")[1])))
+    files_index = []
+    if len(args.files) > 0:
+        files_index = args.files
+    else:
+        files_index = range(len(files_sorted)) 
+    for i in files_index:
+        filepath = files_sorted[i]
+        translate_file(args, translator, filepath)
