@@ -4,16 +4,12 @@
 # This script translates problems from the OpenAI HumanEval dataset into CPP.
 import re
 import ast
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from generic_translator import main
 
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
-
-#Needs lots of refactoring :(
-
-#TODO: Set annotations 
 
 class CPPTranslator:
     '''Translate Python to C++.
@@ -143,12 +139,14 @@ class CPPTranslator:
             
         return f"{self.module_imports()}{unions}{CPP_description}{self.ret_cpp_type} {name}({formal_arg_list})" + " {\n"
     
-    def wrap_in_brackets(self, s):
+    def wrap_in_brackets(self, s: str) -> str:
+        '''Helper function to add brackets '()' around a string
+        '''
         return f"({s})"
 
-    def update_type(self, right, expected_type):
+    def update_type(self, right: Tuple[ast.Expr, str], expected_type: Tuple[str]) -> str:
         '''Update type of the right expression if it is different from the
-            return type of function
+            expected type function
         '''
         
         if self.pytype_to_cpptype(right[1]) == expected_type:
@@ -161,6 +159,7 @@ class CPPTranslator:
         if re.findall("(.+)\(", right[0]) == []:
             #No type? add the type of right
             return self.wrap_in_brackets(expected_type+"("+right[0]+")")
+
         return self.wrap_in_brackets(re.sub("(.+?)\(", expected_type+"(", right[0]))
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
@@ -173,17 +172,20 @@ class CPPTranslator:
             f"    auto candidate = {entry_point};"
         ]
     
-    def module_imports(self):
+    def module_imports(self) -> str:
         return "\n".join([
             "#include<assert.h>",
-            "#include<bits/stdc++.h>", #Include every C++ header, works with g++
+            #Include every C++ header, works with g++
+            "#include<bits/stdc++.h>",
             ""
         ])
 
     def test_suite_suffix_lines(self) -> List[str]:
+        '''Add an empty curly brace
+        '''
         return ["}"]
 
-    def deep_equality(self, left: str, right: str) -> str:
+    def deep_equality(self, left: Tuple[str, ast.Expr], right: Tuple[str, ast.Expr]) -> str:
         """
         All tests are assertions that compare deep equality between left and right.
         In C++ using == checks for structural equality
@@ -193,32 +195,31 @@ class CPPTranslator:
         self.union_decls = {}
         return f"    assert({left[0]} == {right});"
 
-    # NOTE(arjun): Really, no Nones?
-    def gen_literal(self, c: bool | str | int | float | None):
+    def gen_literal(self, c: bool | str | int | float | None) -> Tuple[str, ast.Name]:
         """Translate a literal expression
         c: is the literal value
         """
         #Literal are the bottom of expr tree
         if type(c) == bool:
-            return str(c).lower(), ast.Name("bool"), 0
+            return str(c).lower(), ast.Name("bool")
         if type(c) == str:
-            return f'"{c}"', ast.Name("str"), 0
+            return f'"{c}"', ast.Name("str")
         if type(c) == int:
-            return repr(c), ast.Name("int"), 0
+            return repr(c), ast.Name("int")
         if type(c) == float:
-            return repr(c), ast.Name("float"), 0
+            return repr(c), ast.Name("float")
         #It appears None occurs for only optional
-        return "{}", ast.Name("None"), 0
+        return "{}", ast.Name("None")
 
-    def gen_var(self, v: str) -> str:
+    def gen_var(self, v: str) -> Tuple[str, None]:
         """Translate a variable with name v."""
         
-        #Variables do not occur in expr tree
         if v in self.cpp_keywords:
-            return "_"+v+"_", None, -1
-        return v, None, -1
+            #Add _ around keyword
+            return "_"+v+"_", None
+        return v, None
 
-    def gen_list(self, l: List[str]) -> str:
+    def gen_list(self, l: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.List]:
         """Translate a list with elements l
         A list [ x, y, z] translates to vector<?>{ x, y, z }
         """
@@ -229,14 +230,15 @@ class CPPTranslator:
         elem_type = self.pytype_to_cpptype(l[0][1])
         return f"std::vector<{elem_type}>" + "({" + ", ".join([e[0] for e in l]) + "})", ast.List([l[0][1]])
 
-    def gen_tuple(self, t: List[str]) -> str:
+    def gen_tuple(self, t: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.Tuple]:
         """Translate a tuple with elements t
         A tuple (x, y, z) translates to make_tuple<?>{ x, y, z }
         """
         if t == [] or t == ():
             #Empty Tuple is at the bottom of expr tree
-            return "std::tuple<long>()", ast.Tuple([ast.Name("long")])
+            return "std::tuple<long>()", ast.Tuple([ast.Name("int")])
 
+        #If there is none then add std::optional<?>
         contains_none = "{}" in ", ".join([e[0] for e in t])
         if contains_none:
             #Find type of other element and make all std::optional
@@ -247,6 +249,7 @@ class CPPTranslator:
             if len(other_types) > 1:
                 other_types = list(set(other_types))[0]
             else:
+                #Asuming long if no other type
                 other_types = "long"
             new_elem_type = f"std::optional<{other_types}>"
 
@@ -256,7 +259,7 @@ class CPPTranslator:
         return "std::make_tuple(" + ", ".join([e[0] for e in t]) + ")", \
             ast.Tuple([e[1] for e in t])
 
-    def gen_dict(self, keys: List[str], values: List[str]) -> str:
+    def gen_dict(self, keys: List[Tuple[str, ast.Expr]], values: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.Dict]:
         """Translate a dictionary with keys and values
         A dictionary { "key1": val1, "key2": val2 } translates to map<?,?>{ ["key1"] = val1, ["key2"] = val2 }
         """
@@ -275,7 +278,7 @@ class CPPTranslator:
         cpp_type = self.pytype_to_cpptype(dict_type)
         return cpp_type + "({ " + ", ".join(f"{{{k}, {v}}}" for k, v in zip(keys, values)) + " })", dict_type
 
-    def gen_call(self, func: str, args: List[str]) -> str:
+    def gen_call(self, func: str, args: List[Tuple[str, ast.Expr]]) -> Tuple[str, None]:
         """Translate a function call `func(args)`
         A function call f(x, y, z) translates to f(x, y, z)
         """
