@@ -46,25 +46,25 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate 'Hi')
-    assert_equals 'Hi' "${x0[*]}"
+        x0=$(candidate "Hi")
+    assert_equals "Hi" "${x0[*]}"
 
-        x1=$(candidate 'hello')
-    assert_equals 'ehllo' "${x1[*]}"
+        x1=$(candidate "hello")
+    assert_equals "ehllo" "${x1[*]}"
 
-        x2=$(candidate 'number')
-    assert_equals 'bemnru' "${x2[*]}"
+        x2=$(candidate "number")
+    assert_equals "bemnru" "${x2[*]}"
 
-        x3=$(candidate 'abcd')
-    assert_equals 'abcd' "${x3[*]}"
+        x3=$(candidate "abcd")
+    assert_equals "abcd" "${x3[*]}"
 
-        x4=$(candidate 'Hello World!!!')
-    assert_equals 'Hello !!!Wdlor' "${x4[*]}"
+        x4=$(candidate "Hello World!!!")
+    assert_equals "Hello !!!Wdlor" "${x4[*]}"
 
-        x5=$(candidate '')
-    assert_equals '' "${x5[*]}"
+        x5=$(candidate "")
+    assert_equals "" "${x5[*]}"
 
-        x6=$(candidate 'Hi. My name is Mister Robot. How are you?')
-    assert_equals '.Hi My aemn is Meirst .Rboot How aer ?ouy' "${x6[*]}"
+        x6=$(candidate "Hi. My name is Mister Robot. How are you?")
+    assert_equals ".Hi My aemn is Meirst .Rboot How aer ?ouy" "${x6[*]}"
 
 }

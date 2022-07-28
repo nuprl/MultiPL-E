@@ -20,19 +20,19 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate 'TEST')
-    assert_equals 'tgst' "${x0[*]}"
+        x0=$(candidate "TEST")
+    assert_equals "tgst" "${x0[*]}"
 
-        x1=$(candidate 'Mudasir')
-    assert_equals 'mWDCSKR' "${x1[*]}"
+        x1=$(candidate "Mudasir")
+    assert_equals "mWDCSKR" "${x1[*]}"
 
-        x2=$(candidate 'YES')
-    assert_equals 'ygs' "${x2[*]}"
+        x2=$(candidate "YES")
+    assert_equals "ygs" "${x2[*]}"
 
-        x3=$(candidate 'This is a message')
-    assert_equals 'tHKS KS C MGSSCGG' "${x3[*]}"
+        x3=$(candidate "This is a message")
+    assert_equals "tHKS KS C MGSSCGG" "${x3[*]}"
 
-        x4=$(candidate 'I DoNt KnOw WhAt tO WrItE')
-    assert_equals 'k dQnT kNqW wHcT Tq wRkTg' "${x4[*]}"
+        x4=$(candidate "I DoNt KnOw WhAt tO WrItE")
+    assert_equals "k dQnT kNqW wHcT Tq wRkTg" "${x4[*]}"
 
 }

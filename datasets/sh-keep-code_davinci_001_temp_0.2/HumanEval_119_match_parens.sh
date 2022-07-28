@@ -83,52 +83,52 @@ candidate() {
 }
 
 test() {
-    declare -a x0=('()(' ')')
+    declare -a x0=("()(" ")")
     x1=$(candidate "${x0[*]}")
-    assert_equals 'Yes' "${x1[*]}"
+    assert_equals "Yes" "${x1[*]}"
 
-    declare -a x2=(')' ')')
+    declare -a x2=(")" ")")
     x3=$(candidate "${x2[*]}")
-    assert_equals 'No' "${x3[*]}"
+    assert_equals "No" "${x3[*]}"
 
-    declare -a x4=('(()(())' '())())')
+    declare -a x4=("(()(())" "())())")
     x5=$(candidate "${x4[*]}")
-    assert_equals 'No' "${x5[*]}"
+    assert_equals "No" "${x5[*]}"
 
-    declare -a x6=(')())' '(()()(')
+    declare -a x6=(")())" "(()()(")
     x7=$(candidate "${x6[*]}")
-    assert_equals 'Yes' "${x7[*]}"
+    assert_equals "Yes" "${x7[*]}"
 
-    declare -a x8=('(())))' '(()())((')
+    declare -a x8=("(())))" "(()())((")
     x9=$(candidate "${x8[*]}")
-    assert_equals 'Yes' "${x9[*]}"
+    assert_equals "Yes" "${x9[*]}"
 
-    declare -a x10=('()' '())')
+    declare -a x10=("()" "())")
     x11=$(candidate "${x10[*]}")
-    assert_equals 'No' "${x11[*]}"
+    assert_equals "No" "${x11[*]}"
 
-    declare -a x12=('(()(' '()))()')
+    declare -a x12=("(()(" "()))()")
     x13=$(candidate "${x12[*]}")
-    assert_equals 'Yes' "${x13[*]}"
+    assert_equals "Yes" "${x13[*]}"
 
-    declare -a x14=('((((' '((())')
+    declare -a x14=("((((" "((())")
     x15=$(candidate "${x14[*]}")
-    assert_equals 'No' "${x15[*]}"
+    assert_equals "No" "${x15[*]}"
 
-    declare -a x16=(')(()' '(()(')
+    declare -a x16=(")(()" "(()(")
     x17=$(candidate "${x16[*]}")
-    assert_equals 'No' "${x17[*]}"
+    assert_equals "No" "${x17[*]}"
 
-    declare -a x18=(')(' ')(')
+    declare -a x18=(")(" ")(")
     x19=$(candidate "${x18[*]}")
-    assert_equals 'No' "${x19[*]}"
+    assert_equals "No" "${x19[*]}"
 
-    declare -a x20=('(' ')')
+    declare -a x20=("(" ")")
     x21=$(candidate "${x20[*]}")
-    assert_equals 'Yes' "${x21[*]}"
+    assert_equals "Yes" "${x21[*]}"
 
-    declare -a x22=(')' '(')
+    declare -a x22=(")" "(")
     x23=$(candidate "${x22[*]}")
-    assert_equals 'Yes' "${x23[*]}"
+    assert_equals "Yes" "${x23[*]}"
 
 }

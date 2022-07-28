@@ -48,32 +48,32 @@ candidate() {
 }
 
 test() {
-    declare -a x1=('Saturn' 'Uranus')
-        x0=$(candidate 'Jupiter' 'Neptune')
+    declare -a x1=("Saturn" "Uranus")
+        x0=$(candidate "Jupiter" "Neptune")
     assert_equals "${x1[*]}" "${x0[*]}"
 
-    declare -a x3=('Venus')
-        x2=$(candidate 'Earth' 'Mercury')
+    declare -a x3=("Venus")
+        x2=$(candidate "Earth" "Mercury")
     assert_equals "${x3[*]}" "${x2[*]}"
 
-    declare -a x5=('Venus' 'Earth' 'Mars' 'Jupiter' 'Saturn')
-        x4=$(candidate 'Mercury' 'Uranus')
+    declare -a x5=("Venus" "Earth" "Mars" "Jupiter" "Saturn")
+        x4=$(candidate "Mercury" "Uranus")
     assert_equals "${x5[*]}" "${x4[*]}"
 
-    declare -a x7=('Earth' 'Mars' 'Jupiter' 'Saturn' 'Uranus')
-        x6=$(candidate 'Neptune' 'Venus')
+    declare -a x7=("Earth" "Mars" "Jupiter" "Saturn" "Uranus")
+        x6=$(candidate "Neptune" "Venus")
     assert_equals "${x7[*]}" "${x6[*]}"
 
     declare -a x9=()
-        x8=$(candidate 'Earth' 'Earth')
+        x8=$(candidate "Earth" "Earth")
     assert_equals "${x9[*]}" "${x8[*]}"
 
     declare -a x11=()
-        x10=$(candidate 'Mars' 'Earth')
+        x10=$(candidate "Mars" "Earth")
     assert_equals "${x11[*]}" "${x10[*]}"
 
     declare -a x13=()
-        x12=$(candidate 'Jupiter' 'Makemake')
+        x12=$(candidate "Jupiter" "Makemake")
     assert_equals "${x13[*]}" "${x12[*]}"
 
 }

@@ -24,34 +24,34 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate 'apple')
+        x0=$(candidate "apple")
     assert_equals false "${x0[*]}"
 
-        x1=$(candidate 'apple pi e')
+        x1=$(candidate "apple pi e")
     assert_equals true "${x1[*]}"
 
-        x2=$(candidate 'eeeee')
+        x2=$(candidate "eeeee")
     assert_equals false "${x2[*]}"
 
-        x3=$(candidate 'A')
+        x3=$(candidate "A")
     assert_equals true "${x3[*]}"
 
-        x4=$(candidate 'Pumpkin pie ')
+        x4=$(candidate "Pumpkin pie ")
     assert_equals false "${x4[*]}"
 
-        x5=$(candidate 'Pumpkin pie 1')
+        x5=$(candidate "Pumpkin pie 1")
     assert_equals false "${x5[*]}"
 
-        x6=$(candidate '')
+        x6=$(candidate "")
     assert_equals false "${x6[*]}"
 
-        x7=$(candidate 'eeeee e ')
+        x7=$(candidate "eeeee e ")
     assert_equals false "${x7[*]}"
 
-        x8=$(candidate 'apple pie')
+        x8=$(candidate "apple pie")
     assert_equals false "${x8[*]}"
 
-        x9=$(candidate 'apple pi e ')
+        x9=$(candidate "apple pi e ")
     assert_equals false "${x9[*]}"
 
 }

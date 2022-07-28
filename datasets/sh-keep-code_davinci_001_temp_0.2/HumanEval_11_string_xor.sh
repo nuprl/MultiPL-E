@@ -27,13 +27,13 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate '111000' '101010')
-    assert_equals '010010' "${x0[*]}"
+        x0=$(candidate "111000" "101010")
+    assert_equals "010010" "${x0[*]}"
 
-        x1=$(candidate '1' '1')
-    assert_equals '0' "${x1[*]}"
+        x1=$(candidate "1" "1")
+    assert_equals "0" "${x1[*]}"
 
-        x2=$(candidate '0101' '0000')
-    assert_equals '0101' "${x2[*]}"
+        x2=$(candidate "0101" "0000")
+    assert_equals "0101" "${x2[*]}"
 
 }

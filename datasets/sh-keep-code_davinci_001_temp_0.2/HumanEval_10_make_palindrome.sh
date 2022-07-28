@@ -97,19 +97,19 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate '')
-    assert_equals '' "${x0[*]}"
+        x0=$(candidate "")
+    assert_equals "" "${x0[*]}"
 
-        x1=$(candidate 'x')
-    assert_equals 'x' "${x1[*]}"
+        x1=$(candidate "x")
+    assert_equals "x" "${x1[*]}"
 
-        x2=$(candidate 'xyz')
-    assert_equals 'xyzyx' "${x2[*]}"
+        x2=$(candidate "xyz")
+    assert_equals "xyzyx" "${x2[*]}"
 
-        x3=$(candidate 'xyx')
-    assert_equals 'xyx' "${x3[*]}"
+        x3=$(candidate "xyx")
+    assert_equals "xyx" "${x3[*]}"
 
-        x4=$(candidate 'jerry')
-    assert_equals 'jerryrrej' "${x4[*]}"
+        x4=$(candidate "jerry")
+    assert_equals "jerryrrej" "${x4[*]}"
 
 }

@@ -42,12 +42,12 @@ candidate() {
 }
 
 test() {
-    declare -a x2=( 1)
+    declare -a x2=(None 1)
     declare -a x0=(2 4 1 3 5 7)
     x1=$(candidate "${x0[*]}")
     assert_equals "${x2[*]}" "${x1[*]}"
 
-    declare -a x5=( 1)
+    declare -a x5=(None 1)
     declare -a x3=(2 4 1 3 5 7 0)
     x4=$(candidate "${x3[*]}")
     assert_equals "${x5[*]}" "${x4[*]}"
@@ -67,22 +67,22 @@ test() {
     x13=$(candidate "${x12[*]}")
     assert_equals "${x14[*]}" "${x13[*]}"
 
-    declare -a x17=( )
+    declare -a x17=(None None)
     declare -a x15=()
     x16=$(candidate "${x15[*]}")
     assert_equals "${x17[*]}" "${x16[*]}"
 
-    declare -a x20=( )
+    declare -a x20=(None None)
     declare -a x18=(0)
     x19=$(candidate "${x18[*]}")
     assert_equals "${x20[*]}" "${x19[*]}"
 
-    declare -a x23=(-1 )
+    declare -a x23=(-1 None)
     declare -a x21=(-1 -3 -5 -6)
     x22=$(candidate "${x21[*]}")
     assert_equals "${x23[*]}" "${x22[*]}"
 
-    declare -a x26=(-1 )
+    declare -a x26=(-1 None)
     declare -a x24=(-1 -3 -5 -6 0)
     x25=$(candidate "${x24[*]}")
     assert_equals "${x26[*]}" "${x25[*]}"

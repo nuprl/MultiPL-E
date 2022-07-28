@@ -31,36 +31,36 @@ candidate() {
 }
 
 test() {
-    declare -A x1=(['a']=2 ['b']=2)
-        x0=$(candidate 'a b b a')
+    declare -A x1=(["a"]=2 ["b"]=2)
+        x0=$(candidate "a b b a")
     assert_equals "${x1[*]}" "${x0[*]}"
 
-    declare -A x3=(['a']=2 ['b']=2)
-        x2=$(candidate 'a b c a b')
+    declare -A x3=(["a"]=2 ["b"]=2)
+        x2=$(candidate "a b c a b")
     assert_equals "${x3[*]}" "${x2[*]}"
 
-    declare -A x5=(['a']=1 ['b']=1 ['c']=1 ['d']=1 ['g']=1)
-        x4=$(candidate 'a b c d g')
+    declare -A x5=(["a"]=1 ["b"]=1 ["c"]=1 ["d"]=1 ["g"]=1)
+        x4=$(candidate "a b c d g")
     assert_equals "${x5[*]}" "${x4[*]}"
 
-    declare -A x7=(['r']=1 ['t']=1 ['g']=1)
-        x6=$(candidate 'r t g')
+    declare -A x7=(["r"]=1 ["t"]=1 ["g"]=1)
+        x6=$(candidate "r t g")
     assert_equals "${x7[*]}" "${x6[*]}"
 
-    declare -A x9=(['b']=4)
-        x8=$(candidate 'b b b b a')
+    declare -A x9=(["b"]=4)
+        x8=$(candidate "b b b b a")
     assert_equals "${x9[*]}" "${x8[*]}"
 
-    declare -A x11=(['r']=1 ['t']=1 ['g']=1)
-        x10=$(candidate 'r t g')
+    declare -A x11=(["r"]=1 ["t"]=1 ["g"]=1)
+        x10=$(candidate "r t g")
     assert_equals "${x11[*]}" "${x10[*]}"
 
     declare -A x13=()
-        x12=$(candidate '')
+        x12=$(candidate "")
     assert_equals "${x13[*]}" "${x12[*]}"
 
-    declare -A x15=(['a']=1)
-        x14=$(candidate 'a')
+    declare -A x15=(["a"]=1)
+        x14=$(candidate "a")
     assert_equals "${x15[*]}" "${x14[*]}"
 
 }
