@@ -19,9 +19,10 @@ import sys
 from generic_translator import list_originals, translate_prompt_and_tests
 from pathlib import Path
 from humaneval_to_ruby import RubyTranslator
+from humaneval_to_lua import LuaTranslator
 from problem_yaml import Problem
 
-TRANSLATORS = {"ruby": RubyTranslator("rb")}
+TRANSLATORS = {"ruby": RubyTranslator("rb"), "lua": LuaTranslator("lua")}
 
 
 def main():
