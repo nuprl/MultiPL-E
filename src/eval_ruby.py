@@ -21,7 +21,7 @@ def eval_script(path: Path):
             error = output.stdout
             returncode = 0
         else:
-            raise Exception("there's an issue with check = Tru for Ruby, INVESTIGATE!")
+            raise Exception("there's an issue with check = True for Ruby, INVESTIGATE!")
     except subprocess.TimeoutExpired as exc:
         status = "Timeout"
         out = exc.stdout
