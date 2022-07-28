@@ -40,7 +40,7 @@ def translate_expr(translator, py_expr: ast.AST):
                 [translate_expr(translator, a) for a in args],
             )
         case _other:
-            print("OMFG" + py_expr)
+            # print("OMFG" + py_expr)
             raise Exception(f"Unhandled expression: {py_expr}")
 
 
@@ -67,7 +67,7 @@ class PromptVisitor(ast.NodeVisitor):
                 self.state = "complete"
             case _other:
                 self.state = "error"
-
+        
     def translate_func_decl(self, doctest_transformation: str) -> str | None:
         if self.state != "complete":
             return None
@@ -82,27 +82,29 @@ class PromptVisitor(ast.NodeVisitor):
                 # Find the Python expression and result in each doctest
                 # py_ast = ast.parse("PYTHON EXPRESSION", "bogus filename")
                 # translate_expr(py_ast, self.translator) to get the string for that expression in the target language
-                split = self.description.split('>>> ')
-                if len(split) > 1: 
+                
+                #Split up the prompt from the doctests
+                promptAndDoctests = self.description.split('>>> ')
+                if len(promptAndDoctests) > 1: #checking if there are doctests
                     doctestRegex = re.compile(r'.*\n.*\n')
                     onlyDocTests = []
-                    for test in (split[1:]):
+                    for test in (promptAndDoctests[1:]):
                         onlyDocTests.append(doctestRegex.match(test).group())
                     
                     funcCalls = []
                     outputs = []
                     for doctest in onlyDocTests:
                         doclist = doctest.split('\n')
-                        funcCalls.append(doclist[0])
-                        outputs.append(doclist[1].strip())
+                        funcCalls.append(ast.parse(doclist[0]).body[0].value)
+                        outputs.append(ast.parse(doclist[1].strip()).body[0].value)
                     for i in range(len(funcCalls)):
-                        funcCalls[i] = translate_expr(self.translator, ast.parse(funcCalls[i]))
-                        outputs[i] = translate_expr(self.translator, ast.parse(outputs[i]))
+                        funcCalls[i] = translate_expr(self.translator, funcCalls[i])
+                        outputs[i] = translate_expr(self.translator, outputs[i])
                     
-                    desc = split[0]
+                    desc = promptAndDoctests[0]
                     for i in range(len(funcCalls)):
                         desc += funcCalls[i] + '\n' + outputs[i] + '\n\n'
-                else:
+                else: #else when there are no doctests
                     desc = self.description
             case _other:
                 raise Exception(f"bad doctest_transformation")
