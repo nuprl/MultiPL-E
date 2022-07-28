@@ -1,27 +1,30 @@
-# Authored by Arjun Guha
+# Authored by Arjun Guha, edited by Federico Cassano
 # Copyright (c) 2022, Roblox Inc.
 #
-# This script runs the Go HumanEval programs in datasets/go_test.go
-import os
+# This script runs Gopherfied code - the key functionality is eval_script
+import argparse
+from sys import exit
 import subprocess
-import sys
 from pathlib import Path
+from generic_eval import main as gmain
 
 
-def main():
-    directory = Path(Path(__file__).parent, "..",
-                     "datasets", "go_test.go").resolve()
-
-    for filename in os.listdir(directory):
-        build = subprocess.run(["go", "test", os.path.join(directory, filename)],
+def eval_script(path: Path):
+    status = None
+    stdout = None
+    stderr = None
+    exit_code = None
+    try:
+        build = subprocess.run(["go", "test", path],
                                encoding="utf-8",
+                               timeout=15,
                                stdout=subprocess.PIPE,
-                               stderr=subprocess.DEVNULL)
+                               stderr=subprocess.PIPE)
 
-        status = None
         stdout = build.stdout
+        stderr = build.stderr
+        exit_code = build.returncode
         # write to stderr just so that we can redirect stdout to a csv
-        print(stdout, file=sys.stderr)
 
         if "[setup failed]" in stdout or "[build failed]" in stdout:
             status = "SyntaxError"
@@ -29,12 +32,16 @@ def main():
             status = "Exception"
         else:
             status = "OK"
+    except subprocess.TimeoutExpired:
+        status = "Timeout"
 
-        filename = filename.split(".")[0]
-        print(f"Go,{filename},{status}")
-        # write to stderr just so that we can redirect stdout to a csv, and we can see the output
-        print(f"Go,{filename},{status}", file=sys.stderr)
+    return {
+        "status": status,
+        "exit_code": exit_code,
+        "stdout": str(stdout),
+        "stderr": str(stderr),
+    }
 
 
 if __name__ == "__main__":
-    main()
+    gmain(eval_script, 'Go', '.go')

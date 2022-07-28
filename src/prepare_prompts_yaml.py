@@ -29,17 +29,19 @@ This ignores the tests cases, but it should be compact enough.
 
 import argparse
 import sys
-from generic_translator import list_originals, translate_prompt_and_tests
+from generic_translator import list_originals, translate_prompt_and_tests, get_stop_from_translator
 from pathlib import Path
 from humaneval_to_ruby import RubyTranslator
 from humaneval_to_lua import LuaTranslator
 from humaneval_to_rust import RustTranslator
+from humaneval_to_racket import RacketTranslator
 from problem_yaml import Problem
 
 TRANSLATORS = {
     "ruby": RubyTranslator("rb"),
     "lua": LuaTranslator("lua"),
-    "rust": RustTranslator("rs")
+    "rust": RustTranslator("rs"),
+    "racket": RacketTranslator("racket")
 }
 
 
@@ -95,7 +97,7 @@ def main():
         problem_file.language = args.lang
         problem_file.prompt = prompt
         problem_file.tests = tests
-        problem_file.stop_tokens = translator.stop
+        problem_file.stop_tokens = get_stop_from_translator(translator)
         problem_file.completions = []
         output_text = Problem.dump(problem_file)
         with target_yaml_path.open("w") as f:
