@@ -38,4 +38,4 @@ def eval_script(path: Path):
 
 
 if __name__ == "__main__":
-    gmain(eval_script, 'Ruby', '.rb')
+    gmain(eval_script, 'Go', '.go')
