@@ -54,11 +54,11 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate(array(2, 1, 1, 4, 5, 8, 2, 3)) !== array('Eight', 'Five', 'Four', 'Three', 'Two', 'Two', 'One', 'One')) { throw new Exception("Test failed!"); }
+    if (candidate(array(2, 1, 1, 4, 5, 8, 2, 3)) !== array("Eight", "Five", "Four", "Three", "Two", "Two", "One", "One")) { throw new Exception("Test failed!"); }
     if (candidate(array()) !== array()) { throw new Exception("Test failed!"); }
-    if (candidate(array(1, -1, 55)) !== array('One')) { throw new Exception("Test failed!"); }
-    if (candidate(array(1, -1, 3, 2)) !== array('Three', 'Two', 'One')) { throw new Exception("Test failed!"); }
-    if (candidate(array(9, 4, 8)) !== array('Nine', 'Eight', 'Four')) { throw new Exception("Test failed!"); }
+    if (candidate(array(1, -1, 55)) !== array("One")) { throw new Exception("Test failed!"); }
+    if (candidate(array(1, -1, 3, 2)) !== array("Three", "Two", "One")) { throw new Exception("Test failed!"); }
+    if (candidate(array(9, 4, 8)) !== array("Nine", "Eight", "Four")) { throw new Exception("Test failed!"); }
 }
 
 test();

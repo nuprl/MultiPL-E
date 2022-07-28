@@ -59,10 +59,10 @@ function test(): void {
     if (candidate(1, 2.5) !== 2.5) { throw new Exception("Test failed!"); }
     if (candidate(2, 3) !== 3) { throw new Exception("Test failed!"); }
     if (candidate(5, 6) !== 6) { throw new Exception("Test failed!"); }
-    if (candidate(1, '2,3') !== '2,3') { throw new Exception("Test failed!"); }
-    if (candidate('5,1', '6') !== '6') { throw new Exception("Test failed!"); }
-    if (candidate('1', '2') !== '2') { throw new Exception("Test failed!"); }
-    if (candidate('1', 1) !== null) { throw new Exception("Test failed!"); }
+    if (candidate(1, "2,3") !== "2,3") { throw new Exception("Test failed!"); }
+    if (candidate("5,1", "6") !== "6") { throw new Exception("Test failed!"); }
+    if (candidate("1", "2") !== "2") { throw new Exception("Test failed!"); }
+    if (candidate("1", 1) !== null) { throw new Exception("Test failed!"); }
 }
 
 test();

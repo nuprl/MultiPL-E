@@ -35,10 +35,10 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('(()()) ((())) () ((())()())') !== array('(()())', '((()))', '()', '((())()())')) { throw new Exception("Test failed!"); }
-    if (candidate('() (()) ((())) (((())))') !== array('()', '(())', '((()))', '(((())))')) { throw new Exception("Test failed!"); }
-    if (candidate('(()(())((())))') !== array('(()(())((())))')) { throw new Exception("Test failed!"); }
-    if (candidate('( ) (( )) (( )( ))') !== array('()', '(())', '(()())')) { throw new Exception("Test failed!"); }
+    if (candidate("(()()) ((())) () ((())()())") !== array("(()())", "((()))", "()", "((())()())")) { throw new Exception("Test failed!"); }
+    if (candidate("() (()) ((())) (((())))") !== array("()", "(())", "((()))", "(((())))")) { throw new Exception("Test failed!"); }
+    if (candidate("(()(())((())))") !== array("(()(())((())))")) { throw new Exception("Test failed!"); }
+    if (candidate("( ) (( )) (( )( ))") !== array("()", "(())", "(()())")) { throw new Exception("Test failed!"); }
 }
 
 test();

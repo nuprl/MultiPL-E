@@ -37,9 +37,9 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('(()()) ((())) () ((())()())') !== array(2, 3, 1, 3)) { throw new Exception("Test failed!"); }
-    if (candidate('() (()) ((())) (((())))') !== array(1, 2, 3, 4)) { throw new Exception("Test failed!"); }
-    if (candidate('(()(())((())))') !== array(4)) { throw new Exception("Test failed!"); }
+    if (candidate("(()()) ((())) () ((())()())") !== array(2, 3, 1, 3)) { throw new Exception("Test failed!"); }
+    if (candidate("() (()) ((())) (((())))") !== array(1, 2, 3, 4)) { throw new Exception("Test failed!"); }
+    if (candidate("(()(())((())))") !== array(4)) { throw new Exception("Test failed!"); }
 }
 
 test();

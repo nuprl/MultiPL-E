@@ -21,8 +21,8 @@ function candidate(...$args) {
 
 function test(): void {
     if (candidate(array()) !== array()) { throw new Exception("Test failed!"); }
-    if (candidate(array(4, array(), array(), 23.2, 9, 'adasd')) !== array(4, 9)) { throw new Exception("Test failed!"); }
-    if (candidate(array(3, 'c', 3, 3, 'a', 'b')) !== array(3, 3, 3)) { throw new Exception("Test failed!"); }
+    if (candidate(array(4, array(), array(), 23.2, 9, "adasd")) !== array(4, 9)) { throw new Exception("Test failed!"); }
+    if (candidate(array(3, "c", 3, 3, "a", "b")) !== array(3, 3, 3)) { throw new Exception("Test failed!"); }
 }
 
 test();

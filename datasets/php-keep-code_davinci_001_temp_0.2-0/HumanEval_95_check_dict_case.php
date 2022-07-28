@@ -24,12 +24,12 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate(array('p' => 'pineapple', 'b' => 'banana')) !== true) { throw new Exception("Test failed!"); }
-    if (candidate(array('p' => 'pineapple', 'A' => 'banana', 'B' => 'banana')) !== false) { throw new Exception("Test failed!"); }
-    if (candidate(array('p' => 'pineapple', '5' => 'banana', 'a' => 'apple')) !== false) { throw new Exception("Test failed!"); }
-    if (candidate(array('Name' => 'John', 'Age' => '36', 'City' => 'Houston')) !== false) { throw new Exception("Test failed!"); }
-    if (candidate(array('STATE' => 'NC', 'ZIP' => '12345')) !== true) { throw new Exception("Test failed!"); }
-    if (candidate(array('fruit' => 'Orange', 'taste' => 'Sweet')) !== true) { throw new Exception("Test failed!"); }
+    if (candidate(array("p" => "pineapple", "b" => "banana")) !== true) { throw new Exception("Test failed!"); }
+    if (candidate(array("p" => "pineapple", "A" => "banana", "B" => "banana")) !== false) { throw new Exception("Test failed!"); }
+    if (candidate(array("p" => "pineapple", "5" => "banana", "a" => "apple")) !== false) { throw new Exception("Test failed!"); }
+    if (candidate(array("Name" => "John", "Age" => "36", "City" => "Houston")) !== false) { throw new Exception("Test failed!"); }
+    if (candidate(array("STATE" => "NC", "ZIP" => "12345")) !== true) { throw new Exception("Test failed!"); }
+    if (candidate(array("fruit" => "Orange", "taste" => "Sweet")) !== true) { throw new Exception("Test failed!"); }
     if (candidate(array()) !== false) { throw new Exception("Test failed!"); }
 }
 

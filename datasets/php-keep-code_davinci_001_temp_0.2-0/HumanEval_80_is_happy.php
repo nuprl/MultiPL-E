@@ -79,14 +79,14 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('a') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('aa') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('abcd') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('aabb') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('adb') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('xyy') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('iopaxpoi') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('iopaxioi') !== false) { throw new Exception("Test failed!"); }
+    if (candidate("a") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("aa") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("abcd") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("aabb") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("adb") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("xyy") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("iopaxpoi") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("iopaxioi") !== false) { throw new Exception("Test failed!"); }
 }
 
 test();

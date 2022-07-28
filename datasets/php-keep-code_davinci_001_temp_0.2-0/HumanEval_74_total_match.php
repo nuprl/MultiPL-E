@@ -49,14 +49,14 @@ function candidate(...$args) {
 
 function test(): void {
     if (candidate(array(), array()) !== array()) { throw new Exception("Test failed!"); }
-    if (candidate(array('hi', 'admin'), array('hi', 'hi')) !== array('hi', 'hi')) { throw new Exception("Test failed!"); }
-    if (candidate(array('hi', 'admin'), array('hi', 'hi', 'admin', 'project')) !== array('hi', 'admin')) { throw new Exception("Test failed!"); }
-    if (candidate(array('4'), array('1', '2', '3', '4', '5')) !== array('4')) { throw new Exception("Test failed!"); }
-    if (candidate(array('hi', 'admin'), array('hI', 'Hi')) !== array('hI', 'Hi')) { throw new Exception("Test failed!"); }
-    if (candidate(array('hi', 'admin'), array('hI', 'hi', 'hi')) !== array('hI', 'hi', 'hi')) { throw new Exception("Test failed!"); }
-    if (candidate(array('hi', 'admin'), array('hI', 'hi', 'hii')) !== array('hi', 'admin')) { throw new Exception("Test failed!"); }
-    if (candidate(array(), array('this')) !== array()) { throw new Exception("Test failed!"); }
-    if (candidate(array('this'), array()) !== array()) { throw new Exception("Test failed!"); }
+    if (candidate(array("hi", "admin"), array("hi", "hi")) !== array("hi", "hi")) { throw new Exception("Test failed!"); }
+    if (candidate(array("hi", "admin"), array("hi", "hi", "admin", "project")) !== array("hi", "admin")) { throw new Exception("Test failed!"); }
+    if (candidate(array("4"), array("1", "2", "3", "4", "5")) !== array("4")) { throw new Exception("Test failed!"); }
+    if (candidate(array("hi", "admin"), array("hI", "Hi")) !== array("hI", "Hi")) { throw new Exception("Test failed!"); }
+    if (candidate(array("hi", "admin"), array("hI", "hi", "hi")) !== array("hI", "hi", "hi")) { throw new Exception("Test failed!"); }
+    if (candidate(array("hi", "admin"), array("hI", "hi", "hii")) !== array("hi", "admin")) { throw new Exception("Test failed!"); }
+    if (candidate(array(), array("this")) !== array()) { throw new Exception("Test failed!"); }
+    if (candidate(array("this"), array()) !== array()) { throw new Exception("Test failed!"); }
 }
 
 test();

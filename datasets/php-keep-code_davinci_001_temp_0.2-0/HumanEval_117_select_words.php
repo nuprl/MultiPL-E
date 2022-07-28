@@ -60,13 +60,13 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('Mary had a little lamb', 4) !== array('little')) { throw new Exception("Test failed!"); }
-    if (candidate('Mary had a little lamb', 3) !== array('Mary', 'lamb')) { throw new Exception("Test failed!"); }
-    if (candidate('simple white space', 2) !== array()) { throw new Exception("Test failed!"); }
-    if (candidate('Hello world', 4) !== array('world')) { throw new Exception("Test failed!"); }
-    if (candidate('Uncle sam', 3) !== array('Uncle')) { throw new Exception("Test failed!"); }
-    if (candidate('', 4) !== array()) { throw new Exception("Test failed!"); }
-    if (candidate('a b c d e f', 1) !== array('b', 'c', 'd', 'f')) { throw new Exception("Test failed!"); }
+    if (candidate("Mary had a little lamb", 4) !== array("little")) { throw new Exception("Test failed!"); }
+    if (candidate("Mary had a little lamb", 3) !== array("Mary", "lamb")) { throw new Exception("Test failed!"); }
+    if (candidate("simple white space", 2) !== array()) { throw new Exception("Test failed!"); }
+    if (candidate("Hello world", 4) !== array("world")) { throw new Exception("Test failed!"); }
+    if (candidate("Uncle sam", 3) !== array("Uncle")) { throw new Exception("Test failed!"); }
+    if (candidate("", 4) !== array()) { throw new Exception("Test failed!"); }
+    if (candidate("a b c d e f", 1) !== array("b", "c", "d", "f")) { throw new Exception("Test failed!"); }
 }
 
 test();

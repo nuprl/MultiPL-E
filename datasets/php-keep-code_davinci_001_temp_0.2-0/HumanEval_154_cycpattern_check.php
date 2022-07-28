@@ -34,12 +34,12 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('xyzw', 'xyw') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('yello', 'ell') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('whattup', 'ptut') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('efef', 'fee') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('abab', 'aabb') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('winemtt', 'tinem') !== true) { throw new Exception("Test failed!"); }
+    if (candidate("xyzw", "xyw") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("yello", "ell") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("whattup", "ptut") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("efef", "fee") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("abab", "aabb") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("winemtt", "tinem") !== true) { throw new Exception("Test failed!"); }
 }
 
 test();

@@ -31,13 +31,13 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('eabcdzzzz', 'dddzzzzzzzddeddabc') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('abcd', 'dddddddabc') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('dddddddabc', 'abcd') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('eabcd', 'dddddddabc') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('abcd', 'dddddddabcf') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('eabcdzzzz', 'dddzzzzzzzddddabc') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('aabb', 'aaccc') !== false) { throw new Exception("Test failed!"); }
+    if (candidate("eabcdzzzz", "dddzzzzzzzddeddabc") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("abcd", "dddddddabc") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("dddddddabc", "abcd") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("eabcd", "dddddddabc") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("abcd", "dddddddabcf") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("eabcdzzzz", "dddzzzzzzzddddabc") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("aabb", "aaccc") !== false) { throw new Exception("Test failed!"); }
 }
 
 test();
