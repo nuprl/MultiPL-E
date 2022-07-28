@@ -92,4 +92,15 @@ class LanguageTranslator(ABC, Generic[TargetExp]):
         """
         pass
 
+    def no_completion_prompt_stub(self) -> str:
+        """
+        A default stub to create a syntactically valid translation in case of not performing completion.
+        For example, for Rust this could be:
+
+            todo!()
+        }
+        
+        """
+        return ""
+
 

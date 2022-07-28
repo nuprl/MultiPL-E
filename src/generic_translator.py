@@ -226,7 +226,11 @@ def translate_file(args, translator, file):
     if translated_tests is None:
         print(f"Failed to translate tests for {file}")
         return
-    response = MODELS[args.model](args, translated_prompt, get_stop_from_translator(translator), 1)[0]
+
+    if not args.no_completion:
+        response = MODELS[args.model](args, translated_prompt, get_stop_from_translator(translator), 1)[0]
+    else:
+        response = get_stub_from_translator(translator)
 
     filename = target_path(args, translator, file)
 
@@ -239,6 +243,12 @@ def translate_file(args, translator, file):
         f.write(translated_tests)
         print(f'Wrote {filename}')
 
+
+def get_stub_from_translator(translator) -> str:
+    if hasattr(translator, 'no_completion_prompt_stub'):
+        return translator.no_completion_prompt_stub()
+    else:
+        return ""
 
 def get_stop_from_translator(translator) -> List[str]:
     if isinstance(translator, LanguageTranslator):
@@ -290,6 +300,8 @@ def main(translator):
         default=[],
         help="Specify the files to translate by their number, e.g. --files 0 1 2"
     )
+
+    args.add_argument('--no-completion', action='store_true')
 
     args = args.parse_args()
 
