@@ -151,6 +151,40 @@ def target_path(args, translator, file):
     ).resolve()
     return filename
 
+def translate_prompt_and_tests(original_file, translator, doctests):
+    entry_point = re.search("(HumanEval_\d+)_(.+).py", original_file.name).group(2)
+    reading_prompt = True
+    reading_tests = False
+    prompt_buffer = []
+    tests_buffer = []
+    with open(original_file) as f:
+        for line in f:
+            if "### Canonical solution below ###" in line:
+                reading_prompt = False
+            if "### Unit tests below ###" in line:
+                reading_tests = True
+                continue
+            if "def test_check():" in line:
+                break
+
+            if reading_prompt:
+                prompt_buffer.append(line)
+            if reading_tests:
+                tests_buffer.append(line)
+
+    prompt = "".join(prompt_buffer)
+    translated_prompt = translate_prompt(translator, doctests, prompt, original_file.name)
+
+    tests = "".join(tests_buffer)
+    translated_tests = translate_tests(
+        translator, tests, entry_point, original_file.name
+    )
+
+    if translated_prompt is None or translated_tests is None:
+        return None
+
+    return translated_prompt, translated_tests
+
 def translate_file(args, translator, file):
     file = Path(file).resolve()
     cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
@@ -202,6 +236,13 @@ def translate_file(args, translator, file):
         f.write(translated_tests)
         print(f'Wrote {filename}')
 
+def list_originals():
+    directory = Path(Path(__file__).parent, "..", "datasets").resolve()
+    files_unsorted = directory.glob("originals/*.py") 
+    # assumption: base filenames are in the format of HumanEval_X_*.py
+    # Where X is a valid number
+    files_sorted = sorted(files_unsorted, key=(lambda s: int(str(s.name).split("_")[1])))
+    return files_sorted
 
 def main(translator):
     if len(translator.stop) <= 0 or len(translator.stop) > 4:
@@ -246,11 +287,7 @@ def main(translator):
         raise Exception("Invalid value for --doctests")
 
 
-    directory = Path(Path(__file__).parent, "..", "datasets").resolve()
-    files_unsorted = directory.glob("originals/*.py") 
-    # assumption: base filenames are in the format of HumanEval_X_*.py
-    # Where X is a valid number
-    files_sorted = sorted(files_unsorted, key=(lambda s: int(str(s.name).split("_")[1])))
+    files_sorted = list_originals()
     files_index = []
     if len(args.files) > 0:
         files_index = args.files
