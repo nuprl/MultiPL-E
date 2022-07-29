@@ -35,7 +35,7 @@ def eval_script(path: Path):
 
 
 def main():
-    directory = Path(Path(__file__).parent, "..", "datasets", "racket-keep-code_davinci_001_temp_0.2-0").resolve()
+    directory = Path(Path(__file__).parent, "..", "datasets", "racket-keep-code_davinci_001_temp_0.2").resolve()
 
     for filename in os.listdir(directory):
         r = eval_script(Path.joinpath(directory,filename))

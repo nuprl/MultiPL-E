@@ -28,7 +28,7 @@ class JavaScriptTranslator:
         """
         This code goes at the start of the test suite.
         """
-        return [ "const assert = require('node:assert');\n", "", "function test() {\n",f"  let candidate = {entry_point};" ]
+        return [ "const assert = require('node:assert');\n", "", "function test() {",f"  let candidate = {entry_point};" ]
 
     def test_suite_suffix_lines(self) -> List[str]:
         return ["}", "", "test();"]
@@ -40,7 +40,7 @@ class JavaScriptTranslator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        return f"  if (assert.deepEqual({left},{right})" + " {\n    pass \n} else {\n throw new Error('Failed test!') }\n"
+        return f"  if (assert.deepEqual({left},{right})" + " {\n    true \n  } else {\n  throw new Error('Failed test!') };"
 
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
@@ -75,5 +75,5 @@ class JavaScriptTranslator:
 
 
 if __name__ == "__main__":
-    translator = JavaScriptTranslator("javascript")
+    translator = JavaScriptTranslator("js")
     main(translator)
