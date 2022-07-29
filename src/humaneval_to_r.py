@@ -55,7 +55,7 @@ class RTranslator:
         if type(c) == bool:
             return 'TRUE' if c else 'FALSE'
         elif c is None:
-            return 'NA'
+            return 'NULL'
         return repr(c)
     
     def gen_var(self, v):
@@ -66,16 +66,16 @@ class RTranslator:
     
     def gen_list(self, l):
         '''Translate a list with elements l
-           A list [ x, y, z ] translates to c(x, y, z)
+           A list [ x, y, z ] translates to list(x, y, z)
         '''
-        return "c(" + ", ".join(l) + ")"
+        return "list(" + ", ".join(l) + ")"
     
     #there are no r tuples, but r lists are mostly immutable?
     def gen_tuple(self, t):
         '''Translate a tuple with elements t
-           A tuple (x, y, z) translates to c(x, y, z) }
+           A tuple (x, y, z) translates to list(x, y, z) }
         '''
-        return "c(" + ", ".join(t) + ")"
+        return "list(" + ", ".join(t) + ")"
     
     def gen_dict(self, keys, values):
         '''Translate a dictionary with keys and values (uses R list with keys)
