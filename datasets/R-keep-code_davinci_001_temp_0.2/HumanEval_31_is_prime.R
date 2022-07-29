@@ -13,27 +13,25 @@
 # False
 # >>> is_prime(1)
 # False
-is_prime <- function(n)
-{
-    if (n == 1)
-    {
+is_prime <- function(n) {
+    if (n == 1) {
         return(FALSE)
     }
-    else if (n == 2)
-    {
-        return(TRUE)
-    }
-    else
-    {
-        for (i in 2:(n-1))
-        {
-            if (n %% i == 0)
-            {
-                return(FALSE)
-            }
+    for (i in 2:(n-1)) {
+        if (n %% i == 0) {
+            return(FALSE)
         }
-        return(TRUE)
     }
+    return(TRUE)
+}
+is_prime(6)
+is_prime(101)
+is_prime(11)
+is_prime(13441)
+is_prime(61)
+is_prime(4)
+is_prime(1)
+
 
 test_humaneval <- function() {
 candidate <- is_prime
@@ -51,3 +49,4 @@ candidate <- is_prime
     if(!identical(candidate(77), FALSE)){quit('no', 1)}
     if(!identical(candidate(255379), FALSE)){quit('no', 1)}
 }
+test_humaneval()

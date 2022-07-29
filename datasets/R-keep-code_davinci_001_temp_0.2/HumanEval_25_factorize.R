@@ -15,11 +15,8 @@ factorize <- function(n) {
             n <- n / i
         }
     }
-    return(factors)
+    factors
 }
-factorize(8)
-factorize(25)
-factorize(70)
 
 
 test_humaneval <- function() {
@@ -33,3 +30,4 @@ candidate <- factorize
     if(!identical(candidate(20577), c(3, 19, 19, 19))){quit('no', 1)}
     if(!identical(candidate(18), c(2, 3, 3))){quit('no', 1)}
 }
+test_humaneval()

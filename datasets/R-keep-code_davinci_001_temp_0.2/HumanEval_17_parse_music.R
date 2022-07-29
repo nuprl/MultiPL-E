@@ -8,8 +8,14 @@
 # >>> parse_music('o o| .| o| o| .| .| .| .| o o')
 # [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
 parse_music <- function(music_string) {
-    # your code here
-    return(ans)
+    music_string <- strsplit(music_string, split = ' ')
+    music_string <- unlist(music_string)
+    music_string <- strsplit(music_string, split = '|')
+    music_string <- unlist(music_string)
+    music_string <- as.numeric(music_string)
+    return(music_string)
+}
+
 
 test_humaneval <- function() {
 candidate <- parse_music
@@ -19,3 +25,4 @@ candidate <- parse_music
     if(!identical(candidate('o| o| .| .| o o o o'), c(2, 2, 1, 1, 4, 4, 4, 4))){quit('no', 1)}
     if(!identical(candidate('o| .| o| .| o o| o o|'), c(2, 1, 2, 1, 4, 2, 4, 2))){quit('no', 1)}
 }
+test_humaneval()

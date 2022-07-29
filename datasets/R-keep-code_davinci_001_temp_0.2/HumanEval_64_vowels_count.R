@@ -1,16 +1,25 @@
 # Write a function vowels_count which takes a string representing
--- a word as input and returns the number of vowels in the string.
--- Vowels in this case are 'a', 'e', 'i', 'o', 'u'. Here, 'y' is also a
--- vowel, but only when it is at the end of the given word.
--- Example:
--- >>> vowels_count("abcde")
--- 2
--- >>> vowels_count("ACEDY")
--- 3
-vowels_count <- function(s)
-{
-    # YOUR CODE HERE
-    return(sum(s %in% c("a","e","i","o","u")))
+# a word as input and returns the number of vowels in the string.
+# Vowels in this case are 'a', 'e', 'i', 'o', 'u'. Here, 'y' is also a
+# vowel, but only when it is at the end of the given word.
+# Example:
+# >>> vowels_count("abcde")
+# 2
+# >>> vowels_count("ACEDY")
+# 3
+vowels_count <- function(s) {
+    s <- tolower(s)
+    c <- 0
+    for (i in 1:length(s)) {
+        if (s[i] == 'a' | s[i] == 'e' | s[i] == 'i' | s[i] == 'o' | s[i] == 'u') {
+            c <- c + 1
+        }
+    }
+    return(c)
+}
+vowels_count("abcde")
+vowels_count("ACEDY")
+
 
 test_humaneval <- function() {
 candidate <- vowels_count
@@ -22,3 +31,4 @@ candidate <- vowels_count
     if(!identical(candidate('bYe'), 1)){quit('no', 1)}
     if(!identical(candidate('ACEDY'), 3)){quit('no', 1)}
 }
+test_humaneval()

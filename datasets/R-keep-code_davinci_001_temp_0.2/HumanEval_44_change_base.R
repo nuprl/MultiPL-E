@@ -1,15 +1,16 @@
 # Change numerical base of input number x to base.
--- return string representation after the conversion.
--- base numbers are less than 10.
--- >>> change_base(8, 3)
--- '22'
--- >>> change_base(8, 2)
--- '1000'
--- >>> change_base(7, 2)
--- '111'
-change_base <- function(x, base)
-{
-    # TODO
+# return string representation after the conversion.
+# base numbers are less than 10.
+# >>> change_base(8, 3)
+# '22'
+# >>> change_base(8, 2)
+# '1000'
+# >>> change_base(7, 2)
+# '111'
+change_base <- function(x, base) {
+    # your code here
+}
+
 
 test_humaneval <- function() {
 candidate <- change_base
@@ -26,3 +27,4 @@ candidate <- change_base
     if(!identical(candidate(6, 7), '6')){quit('no', 1)}
     if(!identical(candidate(7, 8), '7')){quit('no', 1)}
 }
+test_humaneval()

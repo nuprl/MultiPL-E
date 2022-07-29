@@ -6,6 +6,8 @@
 count_distinct_characters <- function(string) {
     # your code here
     return(length(unique(string)))
+}
+
 
 test_humaneval <- function() {
 candidate <- count_distinct_characters
@@ -15,3 +17,4 @@ candidate <- count_distinct_characters
     if(!identical(candidate('aaaaAAAAaaaa'), 1)){quit('no', 1)}
     if(!identical(candidate('Jerry jERRY JeRRRY'), 5)){quit('no', 1)}
 }
+test_humaneval()

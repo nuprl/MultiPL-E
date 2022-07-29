@@ -7,17 +7,17 @@
 # 'ccc'
 longest <- function(strings) {
     if (length(strings) == 0) {
-        return(NULL)
+        return(None)
     }
-    longest_string <- NULL
-    longest_length <- 0
-    for (string in strings) {
-        if (length(string) > longest_length) {
-            longest_length <- length(string)
-            longest_string <- string
+    longest_string <- strings[1]
+    for (i in 2:length(strings)) {
+        if (length(strings[i]) > length(longest_string)) {
+            longest_string <- strings[i]
         }
     }
     return(longest_string)
+}
+
 
 test_humaneval <- function() {
 candidate <- longest
@@ -25,3 +25,4 @@ candidate <- longest
     if(!identical(candidate(c('x', 'y', 'z')), 'x')){quit('no', 1)}
     if(!identical(candidate(c('x', 'yyy', 'zzzz', 'www', 'kkkk', 'abc')), 'zzzz')){quit('no', 1)}
 }
+test_humaneval()
