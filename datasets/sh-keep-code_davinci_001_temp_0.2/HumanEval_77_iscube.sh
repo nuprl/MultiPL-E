@@ -10,51 +10,23 @@
 # iscube(0) ==> True
 # iscube(180) ==> False
 iscube() {
-    # your code here
-    if [ $1 -eq 0 ]; then
-        echo True
-    elif [ $1 -lt 0 ]; then
-        echo True
-    else
-        cube=$(echo "($1)^(1/3)" | bc -l)
-        cube=${cube%.*}
-        if [ $cube -eq 1 ]; then
-            echo True
-        else
-            echo False
-        fi
-    fi
+echo 0
 
 }
 
 candidate() {
-    local res=$(iscube "$@")
-    echo $res
+    iscube "$@"
 }
 
-test() {
-        x0=$(candidate 1)
-    assert_equals true "${x0[*]}"
-
-        x1=$(candidate 2)
-    assert_equals false "${x1[*]}"
-
-        x2=$(candidate -1)
-    assert_equals true "${x2[*]}"
-
-        x3=$(candidate 64)
-    assert_equals true "${x3[*]}"
-
-        x4=$(candidate 180)
-    assert_equals false "${x4[*]}"
-
-        x5=$(candidate 1000)
-    assert_equals true "${x5[*]}"
-
-        x6=$(candidate 0)
-    assert_equals true "${x6[*]}"
-
-        x7=$(candidate 1729)
-    assert_equals false "${x7[*]}"
-
+run_test() {
+    [[ $(candidate 1) = true ]]
+    [[ $(candidate 2) = false ]]
+    [[ $(candidate -1) = true ]]
+    [[ $(candidate 64) = true ]]
+    [[ $(candidate 180) = false ]]
+    [[ $(candidate 1000) = true ]]
+    [[ $(candidate 0) = true ]]
+    [[ $(candidate 1729) = false ]]
 }
+
+run_test

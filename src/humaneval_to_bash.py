@@ -17,6 +17,41 @@ from generic_translator import main
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
+BASH_METACHARACTERS = [" ", "\t", "\n", "\r", "|", "&", ";", "(", ")", "<", ">"]
+
+def contains_metachar(s):
+    return any(metachar in s for metachar in BASH_METACHARACTERS)
+
+def contains_whitespace(s):
+    return any(ws in s for ws in [' ', '\t', '\n', '\r'])
+
+def is_quoted(s):
+    return len(s) > 0 and s[0] == '"' and s[-1] == '"'
+
+def quote(s):
+    return s if is_quoted(s) else '"' + s + '"'
+
+def unquote(s):
+    return s[1:-1] if is_quoted(s) else s
+
+def type_to_comment(t, i):
+    match t:
+        case ast.Subscript(ast.Name(id), slice, ctx):
+            match id:
+                case "List":
+                    match slice:
+                        case ast.Subscript(ast.Name(id2), slice2, ctx2):
+                            return f"# ${i} is a newline-separated, space-separated list\n"
+                    return f"# ${i} is a space-separated list\n"
+                case "Tuple":
+                    return f"# ${i} is a space-separated list\n"
+                case "Dict":
+                    return f"# ${i} is a two column CSV in key,value order\n"
+                case other:
+                    return ""
+        case other:
+            return ""
+
 
 class BashTranslator:
 
@@ -27,75 +62,55 @@ class BashTranslator:
         self.num = 0
         self.entry_point = ""
 
-    def gensym(self):
-        num = self.num
-        self.num = self.num + 1
-        return f"x{num}"
-
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         bash_description = (
             "#!/bin/bash\n# " + re.sub(DOCSTRING_LINESTART_RE, "\n# ", description.strip()) + "\n"
         )
-        return f"{bash_description}{name}() {{\n"
+        annotations = [type_to_comment(arg.annotation, i + 1) for i, arg in enumerate(args)]
+        annotations = [a for a in annotations if len(a) > 0]
+        if len(annotations) > 0:
+            annotations = "#\n" + "".join(annotations)
+        else:
+            annotations = ""
+        return f"{bash_description}{annotations}{name}() {{\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
         This code goes at the start of the test suite.
+
+        We define candidate as a wrapper function, that forwards its arguments to entry_point.
+        Tests are written in the run_test function, and we use "set -e" to halt execution and
+        return a non-zero status if anything fails.
         """
-        # Reset the counter if we have a new entry point
-        if self.entry_point is not entry_point:
-            self.num = 0
-            self.entry_point = entry_point
         return [
             # Need a closing brace, because we used it as a stop token
             "}",
             "",
             "candidate() {",
-            f"    local res=$({entry_point} \"$@\")",
-            "    echo $res",
+            f"    {entry_point} \"$@\"",
             "}",
             "",
-            "test() {"
+            # "set -e",
+            "run_test() {",
         ]
 
     def test_suite_suffix_lines(self) -> List[str]:
         return [
             "}",
+            "",
+            "run_test"
         ]
 
     def deep_equality(self, left: str, right: str) -> str:
         """
         All tests are assertions that compare deep equality between left and right.
 
-        Bash is tricky, because there is no deep equality,
-        so arrays are expanded to strings and the strings are compared.
-        If $a is an array, then "${a[*]}" is its expansion.
+        Bash is tricky, because there is no deep equality, so we just compare strings.
 
-        Another tricky problem is that arrays have to be initialized in their definitions,
-        and cannot be written as literals. This code lifts the definition to before the
-        comparison, and extracts the variable names, e.g.:
-
-        declare -a x1=(1 2 3)
-        declare -a x2=(1 2 3)
-        assert_equals "${x1[*]}" "${x2[*]}"
+        Tests are of the form:
+            [[ left = right ]]
         """
-        buffer = []
-        call_args = []
-        right_var = re.search("(x\d+)=", right.split("\n")[-1])
-        if right_var:
-            buffer.append("    " + right)
-            call_args.append("\"${" + right_var.group(1) + "[*]}\"")
-        else:
-            call_args.append(right)
-        left_var = re.search("(x\d+)=", left.split("\n")[-1])
-        if left_var:
-            buffer.append("    " + left)
-            call_args.append("\"${" + left_var.group(1) + "[*]}\"")
-        else:
-            call_args.append(left)
-        buffer.append("    assert_equals " + " ".join(call_args))
-        buffer.append("")
-        return "\n".join(buffer)
+        return "    [[ " + left + " = " + right + " ]]"
 
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
@@ -105,8 +120,12 @@ class BashTranslator:
         if type(c) == bool:
             res = str(c).lower()
         elif type(c) == str:
-            c = c.replace('"', '\\"').replace('\n', '\\n')
-            return f'"{c}"'
+            if not c:
+                return '""'
+            elif contains_metachar(c):
+                c = c.replace('"', '\\"').replace('\n', '\\n').replace('!', '\!')
+                return quote(c)
+            return c.replace('!', '\!')
         elif c is None:
             res = "None"
         return res
@@ -115,62 +134,45 @@ class BashTranslator:
         """Translate a variable with name v."""
         return v
 
+    # TODO: maybe need to maintain some context to determine if we're translated a nested list...
     def gen_list(self, l: List[str]) -> str:
         """Translate a list with elements l
-        A list [x, y, z] translates to declare -a x1=(x y z)
-        x1 is a fresh variable name, to be used later
+        A list [x, y, z] translates to a space-separated list "x y z"
+        If all elements are quoted and contain whitespace, assume this is a nested list.
+        If an element contains whitespace, then we can't translate it.
         """
-        # If "declare -a" or "declare -A" is in the variables, it's a nested array, which bash doesn't support
-        # So throw an exception
-        if any("declare -" in ll for ll in l):
-            raise Exception("Nested arrays not supported")
-        return "declare -a " + self.gensym() + "=(" + " ".join(l) + ")"
+        if all(is_quoted(ll) for ll in l):
+            return quote("\\n".join([unquote(ll) for ll in l]))
+        elif any(contains_whitespace(ll) for ll in l):
+            raise Exception("Cannot translate list element that contains whitespace")
+        return quote(" ".join(unquote(ll) for ll in l))
 
     def gen_tuple(self, t: List[str]) -> str:
         """Translate a tuple with elements t
-        A tuple (x, y, z) translates to declare -a x1=(x y z)
-        x1 is a fresh variable name, to be used later
+        A tuple (x, y, z) translates to a space-separated list "x y z"
+        If an element contains whitespace, then we can't translate it.
         """
-        # If "declare -a" or "declare -A" is in the variables, it's a nested array, which bash doesn't support
-        # So throw an exception
-        if any("declare -" in tt for tt in t):
-            raise Exception("Nested arrays not supported")
-        return "declare -a " + self.gensym() + "=(" + " ".join(t) + ")"
+        if any(contains_whitespace(tt) for tt in t):
+            raise Exception("Cannot translate list element that contains whitespace")
+        return quote(" ".join([unquote(tt) for tt in t]))
 
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
         """Translate a dictionary with keys and values
-        A dictionary { "key1": val1, "key2": val2 } translates to declare -A x1=([key1]=val1, [key2]=val2)
-        x1 is a fresh variable name, to be used later
+        A dictionary { "key1": val1, "key2": val2 } translates to a CSV: key1,val1\nkey2,val2
+        If an element contains whitespace, then we can't translate it.
         """
-        # If "declare -a" or "declare -A" is in the variables, it's a nested array, which bash doesn't support
-        # So throw an exception
-        if any("declare -" in v for v in values):
-            raise Exception("Nested arrays not supported")
-        return "declare -A " + self.gensym() + "=(" + " ".join(f"[{k}]={v}" for k, v in zip(keys, values)) + ")"
+        if any(contains_whitespace(k) or contains_whitespace(v) for k, v in zip(keys, values)):
+            raise Exception("Cannot translate list element that contains whitespace")
+        return quote("\\n".join(unquote(k) + "," + unquote(v) for k, v in zip(keys, values)))
 
     def gen_call(self, func: str, args: List[str]) -> str:
         """Translate a function call `func(args)`
-        A function call f(x, y, z) translates to x1=$(f x y z)
-        x1 is a fresh variable name, to be used later, and captures the output of the function call
-
-        If the arguments are literals, they can be left alone.
-        If they are arrays or associative arrays, they need to be lifted, e.g.:
-
-        declare -a x1=$(f 1 2 3)
-        assert_equals "${x1[*]}" true
+        A function call f(x, y, z) translates to $(f x y z)
         """
-        buffer = []
-        call_args = []
-        for a in args:
-            result = re.search("^(declare -[aA] )?(x\d+)=", a)
-            if result:
-                buffer.append(a)
-                call_args.append("\"${" + result.group(2) + "[*]}\"")
-            else:
-                call_args.append(a)
-        buffer.append("    " + self.gensym() + "=$(" +  func + " " + " ".join(call_args) + ")")
-        return "\n".join(buffer)
+        return "$(" + func + " " + " ".join(args) + ")"
 
+    def no_completion_prompt_stub(self):
+        return "echo 0"
 
 if __name__ == "__main__":
     translator = BashTranslator("sh")

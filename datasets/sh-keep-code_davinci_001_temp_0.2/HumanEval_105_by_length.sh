@@ -15,48 +15,23 @@
 # -> sort arr -> [-1, 1, 55]
 # -> reverse arr -> [55, 1, -1]
 # return = ['One']
+#
+# $1 is a space-separated list
 by_length() {
-    local -r str1=$1
-    local -r str2=$2
-    local -r len1=${#str1}
-    local -r len2=${#str2}
-    [[ $len1 -lt $len2 ]] && return 0
-    [[ $len1 -gt $len2 ]] && return 1
-    [[ $str1 < $str2 ]] && return 0
-    [[ $str1 > $str2 ]] && return 1
-    return 0
+echo 0
 
 }
 
 candidate() {
-    local res=$(by_length "$@")
-    echo $res
+    by_length "$@"
 }
 
-test() {
-    declare -a x2=("Eight" "Five" "Four" "Three" "Two" "Two" "One" "One")
-    declare -a x0=(2 1 1 4 5 8 2 3)
-    x1=$(candidate "${x0[*]}")
-    assert_equals "${x2[*]}" "${x1[*]}"
-
-    declare -a x5=()
-    declare -a x3=()
-    x4=$(candidate "${x3[*]}")
-    assert_equals "${x5[*]}" "${x4[*]}"
-
-    declare -a x8=("One")
-    declare -a x6=(1 -1 55)
-    x7=$(candidate "${x6[*]}")
-    assert_equals "${x8[*]}" "${x7[*]}"
-
-    declare -a x11=("Three" "Two" "One")
-    declare -a x9=(1 -1 3 2)
-    x10=$(candidate "${x9[*]}")
-    assert_equals "${x11[*]}" "${x10[*]}"
-
-    declare -a x14=("Nine" "Eight" "Four")
-    declare -a x12=(9 4 8)
-    x13=$(candidate "${x12[*]}")
-    assert_equals "${x14[*]}" "${x13[*]}"
-
+run_test() {
+    [[ $(candidate "2 1 1 4 5 8 2 3") = "Eight Five Four Three Two Two One One" ]]
+    [[ $(candidate "") = "" ]]
+    [[ $(candidate "1 -1 55") = "One" ]]
+    [[ $(candidate "1 -1 3 2") = "Three Two One" ]]
+    [[ $(candidate "9 4 8") = "Nine Eight Four" ]]
 }
+
+run_test

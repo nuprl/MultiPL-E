@@ -15,65 +15,25 @@
 # Examples:
 # tri(3) = [1, 3, 2, 8]
 tri() {
-    local n=$1
-    local a=0
-    local b=1
-    local c=1
-    local result=()
-    for ((i=0; i<=n; i++)); do
-        result[$i]=$c
-        ((c=a+b+c))
-        ((a=b))
-        ((b=c))
-    done
-    echo ${result[@]}
+echo 0
 
 }
 
 candidate() {
-    local res=$(tri "$@")
-    echo $res
+    tri "$@"
 }
 
-test() {
-    declare -a x1=(1 3 2 8)
-        x0=$(candidate 3)
-    assert_equals "${x1[*]}" "${x0[*]}"
-
-    declare -a x3=(1 3 2 8 3)
-        x2=$(candidate 4)
-    assert_equals "${x3[*]}" "${x2[*]}"
-
-    declare -a x5=(1 3 2 8 3 15)
-        x4=$(candidate 5)
-    assert_equals "${x5[*]}" "${x4[*]}"
-
-    declare -a x7=(1 3 2 8 3 15 4)
-        x6=$(candidate 6)
-    assert_equals "${x7[*]}" "${x6[*]}"
-
-    declare -a x9=(1 3 2 8 3 15 4 24)
-        x8=$(candidate 7)
-    assert_equals "${x9[*]}" "${x8[*]}"
-
-    declare -a x11=(1 3 2 8 3 15 4 24 5)
-        x10=$(candidate 8)
-    assert_equals "${x11[*]}" "${x10[*]}"
-
-    declare -a x13=(1 3 2 8 3 15 4 24 5 35)
-        x12=$(candidate 9)
-    assert_equals "${x13[*]}" "${x12[*]}"
-
-    declare -a x15=(1 3 2 8 3 15 4 24 5 35 6 48 7 63 8 80 9 99 10 120 11)
-        x14=$(candidate 20)
-    assert_equals "${x15[*]}" "${x14[*]}"
-
-    declare -a x17=(1)
-        x16=$(candidate 0)
-    assert_equals "${x17[*]}" "${x16[*]}"
-
-    declare -a x19=(1 3)
-        x18=$(candidate 1)
-    assert_equals "${x19[*]}" "${x18[*]}"
-
+run_test() {
+    [[ $(candidate 3) = "1 3 2 8" ]]
+    [[ $(candidate 4) = "1 3 2 8 3" ]]
+    [[ $(candidate 5) = "1 3 2 8 3 15" ]]
+    [[ $(candidate 6) = "1 3 2 8 3 15 4" ]]
+    [[ $(candidate 7) = "1 3 2 8 3 15 4 24" ]]
+    [[ $(candidate 8) = "1 3 2 8 3 15 4 24 5" ]]
+    [[ $(candidate 9) = "1 3 2 8 3 15 4 24 5 35" ]]
+    [[ $(candidate 20) = "1 3 2 8 3 15 4 24 5 35 6 48 7 63 8 80 9 99 10 120 11" ]]
+    [[ $(candidate 0) = "1" ]]
+    [[ $(candidate 1) = "1 3" ]]
 }
+
+run_test

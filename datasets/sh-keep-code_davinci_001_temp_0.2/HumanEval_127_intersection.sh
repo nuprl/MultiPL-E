@@ -15,68 +15,27 @@
 # intersection((1, 2), (2, 3)) ==> "NO"
 # intersection((-1, 1), (0, 4)) ==> "NO"
 # intersection((-3, -1), (-5, 5)) ==> "YES"
+#
+# $1 is a space-separated list
+# $2 is a space-separated list
 intersection() {
-    local start1=$1
-    local end1=$2
-    local start2=$3
-    local end2=$4
-    local length=$(($end1-$start1))
-    local length2=$(($end2-$start2))
-    local result=$(($end1+$end2-$start1-$start2))
-    if [[ $result -gt $length && $result -gt $length2 ]]; then
-        echo "NO"
-    elif [[ $result -eq $length || $result -eq $length2 ]]; then
-        echo "YES"
-    else
-        echo "NO"
-    fi
+echo 0
 
 }
 
 candidate() {
-    local res=$(intersection "$@")
-    echo $res
+    intersection "$@"
 }
 
-test() {
-    declare -a x0=(1 2)
-declare -a x1=(2 3)
-    x2=$(candidate "${x0[*]}" "${x1[*]}")
-    assert_equals "NO" "${x2[*]}"
-
-    declare -a x3=(-1 1)
-declare -a x4=(0 4)
-    x5=$(candidate "${x3[*]}" "${x4[*]}")
-    assert_equals "NO" "${x5[*]}"
-
-    declare -a x6=(-3 -1)
-declare -a x7=(-5 5)
-    x8=$(candidate "${x6[*]}" "${x7[*]}")
-    assert_equals "YES" "${x8[*]}"
-
-    declare -a x9=(-2 2)
-declare -a x10=(-4 0)
-    x11=$(candidate "${x9[*]}" "${x10[*]}")
-    assert_equals "YES" "${x11[*]}"
-
-    declare -a x12=(-11 2)
-declare -a x13=(-1 -1)
-    x14=$(candidate "${x12[*]}" "${x13[*]}")
-    assert_equals "NO" "${x14[*]}"
-
-    declare -a x15=(1 2)
-declare -a x16=(3 5)
-    x17=$(candidate "${x15[*]}" "${x16[*]}")
-    assert_equals "NO" "${x17[*]}"
-
-    declare -a x18=(1 2)
-declare -a x19=(1 2)
-    x20=$(candidate "${x18[*]}" "${x19[*]}")
-    assert_equals "NO" "${x20[*]}"
-
-    declare -a x21=(-2 -2)
-declare -a x22=(-3 -2)
-    x23=$(candidate "${x21[*]}" "${x22[*]}")
-    assert_equals "NO" "${x23[*]}"
-
+run_test() {
+    [[ $(candidate "1 2" "2 3") = NO ]]
+    [[ $(candidate "-1 1" "0 4") = NO ]]
+    [[ $(candidate "-3 -1" "-5 5") = YES ]]
+    [[ $(candidate "-2 2" "-4 0") = YES ]]
+    [[ $(candidate "-11 2" "-1 -1") = NO ]]
+    [[ $(candidate "1 2" "3 5") = NO ]]
+    [[ $(candidate "1 2" "1 2") = NO ]]
+    [[ $(candidate "-2 -2" "-3 -2") = NO ]]
 }
+
+run_test

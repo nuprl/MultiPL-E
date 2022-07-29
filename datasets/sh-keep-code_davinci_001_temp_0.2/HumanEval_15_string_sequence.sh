@@ -5,28 +5,18 @@
 # >>> string_sequence(5)
 # '0 1 2 3 4 5'
 string_sequence() {
-  local n=$1
-  local i
-  for ((i=0; i<=n; i++)); do
-    printf "%d " $i
-  done
-  printf "\n"
+echo 0
 
 }
 
 candidate() {
-    local res=$(string_sequence "$@")
-    echo $res
+    string_sequence "$@"
 }
 
-test() {
-        x0=$(candidate 0)
-    assert_equals "0" "${x0[*]}"
-
-        x1=$(candidate 3)
-    assert_equals "0 1 2 3" "${x1[*]}"
-
-        x2=$(candidate 10)
-    assert_equals "0 1 2 3 4 5 6 7 8 9 10" "${x2[*]}"
-
+run_test() {
+    [[ $(candidate 0) = 0 ]]
+    [[ $(candidate 3) = "0 1 2 3" ]]
+    [[ $(candidate 10) = "0 1 2 3 4 5 6 7 8 9 10" ]]
 }
+
+run_test

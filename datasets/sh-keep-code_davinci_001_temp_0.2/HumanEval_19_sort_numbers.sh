@@ -5,30 +5,20 @@
 # >>> sort_numbers('three one five')
 # 'one three five'
 sort_numbers() {
-  local numbers=($(echo "$1" | tr ' ' '\n' | sort -n))
-  echo "${numbers[*]}" | tr ' ' ' '
+echo 0
 
 }
 
 candidate() {
-    local res=$(sort_numbers "$@")
-    echo $res
+    sort_numbers "$@"
 }
 
-test() {
-        x0=$(candidate "")
-    assert_equals "" "${x0[*]}"
-
-        x1=$(candidate "three")
-    assert_equals "three" "${x1[*]}"
-
-        x2=$(candidate "three five nine")
-    assert_equals "three five nine" "${x2[*]}"
-
-        x3=$(candidate "five zero four seven nine eight")
-    assert_equals "zero four five seven eight nine" "${x3[*]}"
-
-        x4=$(candidate "six five four three two one zero")
-    assert_equals "zero one two three four five six" "${x4[*]}"
-
+run_test() {
+    [[ $(candidate "") = "" ]]
+    [[ $(candidate three) = three ]]
+    [[ $(candidate "three five nine") = "three five nine" ]]
+    [[ $(candidate "five zero four seven nine eight") = "zero four five seven eight nine" ]]
+    [[ $(candidate "six five four three two one zero") = "zero one two three four five six" ]]
 }
+
+run_test

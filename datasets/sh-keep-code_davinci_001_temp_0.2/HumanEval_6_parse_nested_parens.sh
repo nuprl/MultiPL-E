@@ -5,49 +5,18 @@
 # >>> parse_nested_parens('(()()) ((())) () ((())()())')
 # [2, 3, 1, 3]
 parse_nested_parens() {
-    local max_depth=0
-    local depth=0
-    local result=()
-    for (( i=0; i<${#1}; i++ )); do
-        if [[ ${1:$i:1} == '(' ]]; then
-            (( depth++ ))
-            if (( depth > max_depth )); then
-                max_depth=$depth
-            fi
-        elif [[ ${1:$i:1} == ')' ]]; then
-            (( depth-- ))
-        fi
-    done
-    for (( i=0; i<${#1}; i++ )); do
-        if [[ ${1:$i:1} == '(' ]]; then
-            (( depth++ ))
-            if (( depth == max_depth )); then
-                result+=($i)
-            fi
-        elif [[ ${1:$i:1} == ')' ]]; then
-            (( depth-- ))
-        fi
-    done
-    echo "${result[@]}"
+echo 0
 
 }
 
 candidate() {
-    local res=$(parse_nested_parens "$@")
-    echo $res
+    parse_nested_parens "$@"
 }
 
-test() {
-    declare -a x1=(2 3 1 3)
-        x0=$(candidate "(()()) ((())) () ((())()())")
-    assert_equals "${x1[*]}" "${x0[*]}"
-
-    declare -a x3=(1 2 3 4)
-        x2=$(candidate "() (()) ((())) (((())))")
-    assert_equals "${x3[*]}" "${x2[*]}"
-
-    declare -a x5=(4)
-        x4=$(candidate "(()(())((())))")
-    assert_equals "${x5[*]}" "${x4[*]}"
-
+run_test() {
+    [[ $(candidate "(()()) ((())) () ((())()())") = "2 3 1 3" ]]
+    [[ $(candidate "() (()) ((())) (((())))") = "1 2 3 4" ]]
+    [[ $(candidate "(()(())((())))") = "4" ]]
 }
+
+run_test

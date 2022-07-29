@@ -10,55 +10,24 @@
 # # 3+2+3 is less than the maximum possible weight, and it's balanced.
 # will_it_fly([3], 5) ➞ True
 # # 3 is less than the maximum possible weight, and it's balanced.
+#
+# $1 is a space-separated list
 will_it_fly() {
-    local -i sum=0
-    local -i max=$2
-    local -i i=0
-    local -i j=${#1[@]}-1
-    local -i k=0
-    local -a arr=("${!1}")
-    while ((i<j)); do
-        ((sum+=arr[i]))
-        ((sum+=arr[j]))
-        ((i++))
-        ((j--))
-    done
-    if ((sum<=max)) && [[ "${arr[@]}" == "${arr[@]}" ]]; then
-        echo "True"
-    else
-        echo "False"
-    fi
+echo 0
 
 }
 
 candidate() {
-    local res=$(will_it_fly "$@")
-    echo $res
+    will_it_fly "$@"
 }
 
-test() {
-    declare -a x0=(3 2 3)
-    x1=$(candidate "${x0[*]}" 9)
-    assert_equals true "${x1[*]}"
-
-    declare -a x2=(1 2)
-    x3=$(candidate "${x2[*]}" 5)
-    assert_equals false "${x3[*]}"
-
-    declare -a x4=(3)
-    x5=$(candidate "${x4[*]}" 5)
-    assert_equals true "${x5[*]}"
-
-    declare -a x6=(3 2 3)
-    x7=$(candidate "${x6[*]}" 1)
-    assert_equals false "${x7[*]}"
-
-    declare -a x8=(1 2 3)
-    x9=$(candidate "${x8[*]}" 6)
-    assert_equals false "${x9[*]}"
-
-    declare -a x10=(5)
-    x11=$(candidate "${x10[*]}" 5)
-    assert_equals true "${x11[*]}"
-
+run_test() {
+    [[ $(candidate "3 2 3" 9) = true ]]
+    [[ $(candidate "1 2" 5) = false ]]
+    [[ $(candidate "3" 5) = true ]]
+    [[ $(candidate "3 2 3" 1) = false ]]
+    [[ $(candidate "1 2 3" 6) = false ]]
+    [[ $(candidate "5" 5) = true ]]
 }
+
+run_test

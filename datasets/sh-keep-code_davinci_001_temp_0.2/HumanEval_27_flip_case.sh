@@ -3,35 +3,18 @@
 # >>> flip_case('Hello')
 # 'hELLO'
 flip_case() {
-  local str="$1"
-  local result=""
-  for (( i=0; i<${#str}; i++ )); do
-    local char="${str:$i:1}"
-    if [[ "$char" =~ [a-z] ]]; then
-      result+="${char^^}"
-    elif [[ "$char" =~ [A-Z] ]]; then
-      result+="${char,,}"
-    else
-      result+="$char"
-    fi
-  done
-  echo "$result"
+echo 0
 
 }
 
 candidate() {
-    local res=$(flip_case "$@")
-    echo $res
+    flip_case "$@"
 }
 
-test() {
-        x0=$(candidate "")
-    assert_equals "" "${x0[*]}"
-
-        x1=$(candidate "Hello!")
-    assert_equals "hELLO!" "${x1[*]}"
-
-        x2=$(candidate "These violent delights have violent ends")
-    assert_equals "tHESE VIOLENT DELIGHTS HAVE VIOLENT ENDS" "${x2[*]}"
-
+run_test() {
+    [[ $(candidate "") = "" ]]
+    [[ $(candidate Hello\!) = hELLO\! ]]
+    [[ $(candidate "These violent delights have violent ends") = "tHESE VIOLENT DELIGHTS HAVE VIOLENT ENDS" ]]
 }
+
+run_test

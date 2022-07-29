@@ -8,34 +8,19 @@
 # decimal_to_binary(15)   # returns "db1111db"
 # decimal_to_binary(32)   # returns "db100000db"
 decimal_to_binary() {
-    local number=$1
-    local binary=""
-    local remainder
-    while [ $number -gt 0 ]; do
-        remainder=$((number % 2))
-        binary="${remainder}${binary}"
-        number=$((number / 2))
-    done
-    echo "db${binary}db"
+echo 0
 
 }
 
 candidate() {
-    local res=$(decimal_to_binary "$@")
-    echo $res
+    decimal_to_binary "$@"
 }
 
-test() {
-        x0=$(candidate 0)
-    assert_equals "db0db" "${x0[*]}"
-
-        x1=$(candidate 32)
-    assert_equals "db100000db" "${x1[*]}"
-
-        x2=$(candidate 103)
-    assert_equals "db1100111db" "${x2[*]}"
-
-        x3=$(candidate 15)
-    assert_equals "db1111db" "${x3[*]}"
-
+run_test() {
+    [[ $(candidate 0) = db0db ]]
+    [[ $(candidate 32) = db100000db ]]
+    [[ $(candidate 103) = db1100111db ]]
+    [[ $(candidate 15) = db1111db ]]
 }
+
+run_test

@@ -10,49 +10,19 @@
 # a = [1, 3, 7, 13, 21]
 # The only valid triple is (1, 7, 13).
 get_max_triples() {
-    local n=$1
-    local max_triples=0
-    local i=1
-    local j=1
-    local k=1
-    while [ $i -le $((n - 2)) ]; do
-        j=$((i + 1))
-        while [ $j -le $((n - 1)) ]; do
-            k=$((j + 1))
-            while [ $k -le $n ]; do
-                local sum=$((a[i] + a[j] + a[k]))
-                if [ $((sum % 3)) -eq 0 ]; then
-                    local triples=$((1 + max_triples))
-                    if [ $triples -gt $max_triples ]; then
-                        max_triples=$triples
-                    fi
-                fi
-                k=$((k + 1))
-            done
-            j=$((j + 1))
-        done
-        i=$((i + 1))
-    done
-    echo $max_triples
+echo 0
 
 }
 
 candidate() {
-    local res=$(get_max_triples "$@")
-    echo $res
+    get_max_triples "$@"
 }
 
-test() {
-        x0=$(candidate 5)
-    assert_equals 1 "${x0[*]}"
-
-        x1=$(candidate 6)
-    assert_equals 4 "${x1[*]}"
-
-        x2=$(candidate 10)
-    assert_equals 36 "${x2[*]}"
-
-        x3=$(candidate 100)
-    assert_equals 53361 "${x3[*]}"
-
+run_test() {
+    [[ $(candidate 5) = 1 ]]
+    [[ $(candidate 6) = 4 ]]
+    [[ $(candidate 10) = 36 ]]
+    [[ $(candidate 100) = 53361 ]]
 }
+
+run_test

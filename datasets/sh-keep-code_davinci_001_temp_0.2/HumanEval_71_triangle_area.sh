@@ -8,49 +8,24 @@
 # triangle_area(3, 4, 5) == 6.00
 # triangle_area(1, 2, 10) == -1
 triangle_area() {
-    local a=$1
-    local b=$2
-    local c=$3
-    if (( $a + $b > $c && $a + $c > $b && $b + $c > $a ))
-    then
-        echo "scale=2; ($a + $b + $c) / 2" | bc
-    else
-        echo "-1"
-    fi
+echo 0
 
 }
 
 candidate() {
-    local res=$(triangle_area "$@")
-    echo $res
+    triangle_area "$@"
 }
 
-test() {
-        x0=$(candidate 3 4 5)
-    assert_equals 6.0 "${x0[*]}"
-
-        x1=$(candidate 1 2 10)
-    assert_equals -1 "${x1[*]}"
-
-        x2=$(candidate 4 8 5)
-    assert_equals 8.18 "${x2[*]}"
-
-        x3=$(candidate 2 2 2)
-    assert_equals 1.73 "${x3[*]}"
-
-        x4=$(candidate 1 2 3)
-    assert_equals -1 "${x4[*]}"
-
-        x5=$(candidate 10 5 7)
-    assert_equals 16.25 "${x5[*]}"
-
-        x6=$(candidate 2 6 3)
-    assert_equals -1 "${x6[*]}"
-
-        x7=$(candidate 1 1 1)
-    assert_equals 0.43 "${x7[*]}"
-
-        x8=$(candidate 2 2 10)
-    assert_equals -1 "${x8[*]}"
-
+run_test() {
+    [[ $(candidate 3 4 5) = 6.0 ]]
+    [[ $(candidate 1 2 10) = -1 ]]
+    [[ $(candidate 4 8 5) = 8.18 ]]
+    [[ $(candidate 2 2 2) = 1.73 ]]
+    [[ $(candidate 1 2 3) = -1 ]]
+    [[ $(candidate 10 5 7) = 16.25 ]]
+    [[ $(candidate 2 6 3) = -1 ]]
+    [[ $(candidate 1 1 1) = 0.43 ]]
+    [[ $(candidate 2 2 10) = -1 ]]
 }
+
+run_test

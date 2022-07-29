@@ -9,56 +9,29 @@
 # is_nested('[[][]]') ➞ True
 # is_nested('[[]][[') ➞ True
 is_nested() {
-    [[ $1 =~ \[\] ]] && echo "True" || echo "False"
+echo 0
 
 }
 
 candidate() {
-    local res=$(is_nested "$@")
-    echo $res
+    is_nested "$@"
 }
 
-test() {
-        x0=$(candidate "[[]]")
-    assert_equals true "${x0[*]}"
-
-        x1=$(candidate "[]]]]]]][[[[[]")
-    assert_equals false "${x1[*]}"
-
-        x2=$(candidate "[][]")
-    assert_equals false "${x2[*]}"
-
-        x3=$(candidate "[]")
-    assert_equals false "${x3[*]}"
-
-        x4=$(candidate "[[[[]]]]")
-    assert_equals true "${x4[*]}"
-
-        x5=$(candidate "[]]]]]]]]]]")
-    assert_equals false "${x5[*]}"
-
-        x6=$(candidate "[][][[]]")
-    assert_equals true "${x6[*]}"
-
-        x7=$(candidate "[[]")
-    assert_equals false "${x7[*]}"
-
-        x8=$(candidate "[]]")
-    assert_equals false "${x8[*]}"
-
-        x9=$(candidate "[[]][[")
-    assert_equals true "${x9[*]}"
-
-        x10=$(candidate "[[][]]")
-    assert_equals true "${x10[*]}"
-
-        x11=$(candidate "")
-    assert_equals false "${x11[*]}"
-
-        x12=$(candidate "[[[[[[[[")
-    assert_equals false "${x12[*]}"
-
-        x13=$(candidate "]]]]]]]]")
-    assert_equals false "${x13[*]}"
-
+run_test() {
+    [[ $(candidate [[]]) = true ]]
+    [[ $(candidate []]]]]]][[[[[]) = false ]]
+    [[ $(candidate [][]) = false ]]
+    [[ $(candidate []) = false ]]
+    [[ $(candidate [[[[]]]]) = true ]]
+    [[ $(candidate []]]]]]]]]]) = false ]]
+    [[ $(candidate [][][[]]) = true ]]
+    [[ $(candidate [[]) = false ]]
+    [[ $(candidate []]) = false ]]
+    [[ $(candidate [[]][[) = true ]]
+    [[ $(candidate [[][]]) = true ]]
+    [[ $(candidate "") = false ]]
+    [[ $(candidate [[[[[[[[) = false ]]
+    [[ $(candidate ]]]]]]]]) = false ]]
 }
+
+run_test

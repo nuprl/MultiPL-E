@@ -9,42 +9,22 @@
 # >>> vowels_count("ACEDY")
 # 3
 vowels_count() {
-    local word=$1
-    local count=0
-    for (( i=0; i<${#word}; i++ )); do
-        if [[ ${word:$i:1} == [aeiou] ]]; then
-            count=$((count+1))
-        fi
-    done
-    echo $count
+echo 0
 
 }
 
 candidate() {
-    local res=$(vowels_count "$@")
-    echo $res
+    vowels_count "$@"
 }
 
-test() {
-        x0=$(candidate "abcde")
-    assert_equals 2 "${x0[*]}"
-
-        x1=$(candidate "Alone")
-    assert_equals 3 "${x1[*]}"
-
-        x2=$(candidate "key")
-    assert_equals 2 "${x2[*]}"
-
-        x3=$(candidate "bye")
-    assert_equals 1 "${x3[*]}"
-
-        x4=$(candidate "keY")
-    assert_equals 2 "${x4[*]}"
-
-        x5=$(candidate "bYe")
-    assert_equals 1 "${x5[*]}"
-
-        x6=$(candidate "ACEDY")
-    assert_equals 3 "${x6[*]}"
-
+run_test() {
+    [[ $(candidate abcde) = 2 ]]
+    [[ $(candidate Alone) = 3 ]]
+    [[ $(candidate key) = 2 ]]
+    [[ $(candidate bye) = 1 ]]
+    [[ $(candidate keY) = 2 ]]
+    [[ $(candidate bYe) = 1 ]]
+    [[ $(candidate ACEDY) = 3 ]]
 }
+
+run_test

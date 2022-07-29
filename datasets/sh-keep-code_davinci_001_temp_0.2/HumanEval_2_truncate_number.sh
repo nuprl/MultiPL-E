@@ -6,26 +6,18 @@
 # >>> truncate_number(3.5)
 # 0.5
 truncate_number() {
-  local number=$1
-  local integer_part=$(echo $number | cut -d. -f1)
-  local decimal_part=$(echo $number | cut -d. -f2)
-  echo $decimal_part
+echo 0
 
 }
 
 candidate() {
-    local res=$(truncate_number "$@")
-    echo $res
+    truncate_number "$@"
 }
 
-test() {
-        x0=$(candidate 3.5)
-    assert_equals 0.5 "${x0[*]}"
-
-        x1=$(candidate 1.25)
-    assert_equals 0.25 "${x1[*]}"
-
-        x2=$(candidate 123.0)
-    assert_equals 0.0 "${x2[*]}"
-
+run_test() {
+    [[ $(candidate 3.5) = 0.5 ]]
+    [[ $(candidate 1.25) = 0.25 ]]
+    [[ $(candidate 123.0) = 0.0 ]]
 }
+
+run_test

@@ -11,40 +11,19 @@
 # For example:
 # get_odd_collatz(5) returns [1, 5] # The collatz sequence for 5 is [5, 16, 8, 4, 2, 1], so the odd numbers are only 1, and 5.
 get_odd_collatz() {
-    local n=$1
-    local res=()
-    while [ $n -ne 1 ]; do
-        if [ $((n%2)) -eq 0 ]; then
-            n=$((n/2))
-        else
-            n=$((3*n+1))
-        fi
-        res+=($n)
-    done
-    echo ${res[@]}
+echo 0
 
 }
 
 candidate() {
-    local res=$(get_odd_collatz "$@")
-    echo $res
+    get_odd_collatz "$@"
 }
 
-test() {
-    declare -a x1=(1 5 7 11 13 17)
-        x0=$(candidate 14)
-    assert_equals "${x1[*]}" "${x0[*]}"
-
-    declare -a x3=(1 5)
-        x2=$(candidate 5)
-    assert_equals "${x3[*]}" "${x2[*]}"
-
-    declare -a x5=(1 3 5)
-        x4=$(candidate 12)
-    assert_equals "${x5[*]}" "${x4[*]}"
-
-    declare -a x7=(1)
-        x6=$(candidate 1)
-    assert_equals "${x7[*]}" "${x6[*]}"
-
+run_test() {
+    [[ $(candidate 14) = "1 5 7 11 13 17" ]]
+    [[ $(candidate 5) = "1 5" ]]
+    [[ $(candidate 12) = "1 3 5" ]]
+    [[ $(candidate 1) = "1" ]]
 }
+
+run_test
