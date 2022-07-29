@@ -75,7 +75,7 @@ class PromptVisitor(ast.NodeVisitor):
             case "keep":
                 desc = self.description
             case "remove":
-                doctestRegex = re.compile(r'.*\)\n.*\n')
+                doctestRegex = re.compile(r'>>>.*\)\n.*\n')
                 desc = re.sub(doctestRegex, '', self.description)
             case "transform":
                 # Steps:
