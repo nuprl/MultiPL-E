@@ -16,7 +16,7 @@ def parameterized_main(completion_function, model_name: str, max_to_generate: in
         "--dir", type=str, required=True, help="Directory with problem YAMLs"
     )
     args.add_argument(
-        "--temperature", type=int, required=True)
+        "--temperature", type=float, required=True)
     args.add_argument("--max-samples", type=int, required=True, default=100)
     args = args.parse_args()
 
