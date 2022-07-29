@@ -14,12 +14,12 @@ check_dict_case <- function(dict) {
 
 test_humaneval <- function() {
 candidate <- check_dict_case
-    if(!identical(candidate(list("'p'" = 'pineapple', "'b'" = 'banana')), TRUE)){quit('no', 1)}
-    if(!identical(candidate(list("'p'" = 'pineapple', "'A'" = 'banana', "'B'" = 'banana')), FALSE)){quit('no', 1)}
-    if(!identical(candidate(list("'p'" = 'pineapple', "'5'" = 'banana', "'a'" = 'apple')), FALSE)){quit('no', 1)}
-    if(!identical(candidate(list("'Name'" = 'John', "'Age'" = '36', "'City'" = 'Houston')), FALSE)){quit('no', 1)}
-    if(!identical(candidate(list("'STATE'" = 'NC', "'ZIP'" = '12345')), TRUE)){quit('no', 1)}
-    if(!identical(candidate(list("'fruit'" = 'Orange', "'taste'" = 'Sweet')), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list('p' = 'pineapple', 'b' = 'banana')), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list('p' = 'pineapple', 'A' = 'banana', 'B' = 'banana')), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list('p' = 'pineapple', '5' = 'banana', 'a' = 'apple')), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list('Name' = 'John', 'Age' = '36', 'City' = 'Houston')), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list('STATE' = 'NC', 'ZIP' = '12345')), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list('fruit' = 'Orange', 'taste' = 'Sweet')), TRUE)){quit('no', 1)}
     if(!identical(candidate(list()), FALSE)){quit('no', 1)}
 }
 test_humaneval()
