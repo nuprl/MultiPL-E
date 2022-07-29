@@ -14,7 +14,7 @@ class RTranslator:
     '''R Translator
     '''
 
-    stop = [ '\n}\n\n', '\n#', '\n```']
+    stop = [ '\n#', '\n```']
     
     def __init__(self, file_ext):
         self.file_ext = file_ext
