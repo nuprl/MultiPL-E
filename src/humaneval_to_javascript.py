@@ -13,25 +13,25 @@ DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
 class JavaScriptTranslator:
 
-    stop = [ '\n(define ', '\n#|', '\n;', '\n(' ]
+    stop = [ '\nfunction ', '\n/*', '\n//', '\nclass' ] # NOTE(carolyn): My guess
 
     def __init__(self, file_ext):
         self.file_ext = file_ext
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
-        racket_description = "#lang racket\n\n;; " + re.sub(DOCSTRING_LINESTART_RE, "\n;; ", description.strip()) + "\n"
+        js_description = "//" + re.sub(DOCSTRING_LINESTART_RE, "\n// ", description.strip()) + "\n"
         arg_names = [arg.arg for arg in args]
-        arg_list = " ".join(arg_names)
-        return f"{racket_description}(define ({name} {arg_list})\n"
+        arg_list = ", ".join(arg_names)
+        return f"{js_description}function {name}({arg_list})"+"{\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
         This code goes at the start of the test suite.
         """
-        return [ "(require rackunit)", "", "(define (test-humaneval) \n",f"  (let (( candidate {entry_point}))" ]
+        return [ "const assert = require('node:assert');\n", "", "function test() {\n",f"  let candidate = {entry_point};" ]
 
     def test_suite_suffix_lines(self) -> List[str]:
-        return ["))", "", "(test-humaneval)"]
+        return ["}", "", "test();"]
 
     def deep_equality(self, left: str, right: str) -> str:
         """
@@ -40,18 +40,18 @@ class JavaScriptTranslator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        return "    (check-equal? {} {})".format(left, right)
+        return f"  if (assert.deepEqual({left},{right})" + " {\n    pass \n} else {\n throw new Error('Failed test!') }\n"
 
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
         c: is the literal value
         """
         if type(c) == bool:
-            return "#t" if c else "#f"
+            return "true" if c else "false"
         elif type(c) == str:
             return f'"{c}"'
         elif c is None:
-            return "#f" # NOTE(arjun): My guess
+            return "null" # NOTE(carolyn): My guess
         return repr(c)
 
     def gen_var(self, v: str) -> str:
@@ -59,21 +59,21 @@ class JavaScriptTranslator:
         return v
 
     def gen_list(self, l: List[str]) -> str:
-        return "(list " + " ".join(l) + ")"
+        return "[" + ", ".join(l) + "]"
 
     def gen_tuple(self, t: List[str]) -> str:
-        return "(list " + " ".join(t) + ")"
+        return "[" + ", ".join(l) + "]"
 
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
-        return "#hash(" + " ".join(f"({k} .  {v})" for k, v in zip(keys, values)) + ")"
+        return "{" + ", ".join(f"{k}: {v}" for k, v in zip(keys, values)) + "}"
 
     def gen_call(self, func: str, args: List[str]) -> str:
         """Translate a function call `func(args)`
         A function call f(x, y, z) translates to f(x, y, z)
         """
-        return "(" + func + " " + " ".join(args) + ")"
+        return f"{func}(" + ", ".join(args) + ")"
 
 
 if __name__ == "__main__":
-    translator = RacketTranslator("racket")
+    translator = JavaScriptTranslator("javascript")
     main(translator)
