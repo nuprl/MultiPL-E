@@ -6,10 +6,10 @@ import argparse
 from sys import exit
 import subprocess
 from pathlib import Path
-from generic_eval import main as gmain
+from generic_eval import main_check_stubs
 
 
-def eval_script(path: Path):
+def check_script(path: Path):
     status = None
     stdout = None
     stderr = None
@@ -28,8 +28,6 @@ def eval_script(path: Path):
 
         if "[setup failed]" in stdout or "[build failed]" in stdout:
             status = "SyntaxError"
-        elif "FAIL" in stdout:
-            status = "Exception"
         else:
             status = "OK"
     except subprocess.TimeoutExpired:
@@ -44,4 +42,4 @@ def eval_script(path: Path):
 
 
 if __name__ == "__main__":
-    gmain(eval_script, 'Go', '.go')
+    main_check_stubs(check_script, 'Go', '.go')
