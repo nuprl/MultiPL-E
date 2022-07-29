@@ -174,7 +174,7 @@ class CPPTranslator:
         '''Coerce type of the right expression if it is different from the
             expected type function
         '''
-        
+
         if self.pytype_to_cpptype(right[1]) == expected_type:
             return self.wrap_in_brackets(right[0])
         
@@ -182,7 +182,16 @@ class CPPTranslator:
         if right[0].find(self.make_tuple([])) == 0:
             return right[0] 
         
+        #No need to replace empty optional
+        if right[0].find("Optional.empty()") == 0:
+            return right[0]
+
+        if expected_type.find("Optional") != -1:
+            #Have to do this because Java does Optional.of and C++ have std::optional
+            return f"{self.make_optional('')}({right[0]})"
+        
         type_to_coerce = self.find_type_to_coerce(right[0])
+        print(type_to_coerce, right[0], expected_type)
         if type_to_coerce == []:
             #No type? add the type of right
             return self.wrap_in_brackets(expected_type+"("+right[0]+")")
@@ -235,13 +244,13 @@ class CPPTranslator:
         if type(c) == bool:
             return str(c).lower(), ast.Name("bool")
         if type(c) == str:
-            return f'"{c}"', ast.Name("str")
+            return f'"{repr(c)}"', ast.Name("str")
         if type(c) == int:
             return repr(c), ast.Name("int")
         if type(c) == float:
             return repr(c), ast.Name("float")
         #It appears None occurs for only optional
-        return "{}", ast.Name("None")
+        return self.none_type, ast.Name("None")
 
     def gen_var(self, v: str) -> Tuple[str, None]:
         """Translate a variable with name v."""
@@ -263,6 +272,12 @@ class CPPTranslator:
         elem_type = self.pytype_to_cpptype(l[0][1])
         list_literal = self.make_array_literal(", ".join([e[0] for e in l]))
         return self.make_list(elem_type, list_literal), ast.List([l[0][1]])
+    
+    def make_optional_type(self, types):
+        return self.optional_type % other_types
+
+    def make_optional(self, types):
+        return self.optional_type % other_types
 
     def gen_tuple(self, t: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.Tuple]:
         """Translate a tuple with elements t
@@ -285,7 +300,7 @@ class CPPTranslator:
             else:
                 #Asuming long if no other type
                 other_types = self.int_type
-            new_elem_type = self.optional_type % other_types
+            new_elem_type = self.make_optional(other_types)
 
             return self.make_tuple([]) + "(" + ", ".join([f"{new_elem_type}({e[0]})" for e in t]) + ")", \
                 ast.Tuple([e[1] for e in t])
