@@ -37,6 +37,7 @@ from humaneval_to_rust import RustTranslator
 from humaneval_to_racket import RacketTranslator
 from humaneval_to_php import PHPTranslator
 from humaneval_to_cpp import CPPTranslator
+from humaneval_to_python import PythonTranslator
 from problem_yaml import Problem
 
 TRANSLATORS = {
@@ -45,7 +46,8 @@ TRANSLATORS = {
     "rust": RustTranslator("rs"),
     "racket": RacketTranslator("racket"),
     "php": PHPTranslator("php"),
-    "cpp": CPPTranslator("cpp")
+    "cpp": CPPTranslator("cpp"),
+    "python": PythonTranslator(),
 }
 
 
@@ -81,7 +83,7 @@ def main():
 
     translator = TRANSLATORS[args.lang]
 
-    for original in list_originals():
+    for original in list_originals().values():
         # original.name with .yaml extension
         original_name = original.name.split(".")[0]
         target_yaml_path = target_dir / (original_name + ".yaml")
