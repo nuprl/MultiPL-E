@@ -18,7 +18,6 @@ def eval_script(path: Path):
                 status = "AssertionError"
             else:
                 status = "Exception"
-                print(outmessage)
         returncode = output.returncode
     except subprocess.TimeoutExpired as exc:
         status = "Timeout"
