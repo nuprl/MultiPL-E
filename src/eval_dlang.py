@@ -6,7 +6,7 @@ import os
 import subprocess
 from pathlib import Path
 
-DIR = "d-keep-code_davinci_001_temp_0.2-0"
+DIR = "d-keep-code_davinci_001_temp_0.2"
 
 def eval_script(path: Path):
     try:
