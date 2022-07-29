@@ -37,7 +37,7 @@ class RTranslator:
         ]
 
     def test_suite_suffix_lines(self) -> List[str]:
-        return ["}"]
+        return ["}", "test_humaneval()"]
 
     def deep_equality(self, left: str, right: str) -> str:
         """
