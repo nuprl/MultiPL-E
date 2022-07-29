@@ -49,7 +49,7 @@ class DlangTranslator:
                     case other:
                         raise Exception("Unsupported type")
             case ast.Name("int") | "int":
-                return "int"
+                return "long"
             case ast.Name("float"):
                 return "float"
             case ast.Name("bool"):
@@ -92,6 +92,12 @@ class DlangTranslator:
             "void main(){}"
         ]
 
+    def is_null_stub(self, var, value):
+        if value == "None":
+            return f"assert({var}.isNull);"
+        else:
+            return f"assert(!{var}.isNull && {var}.get == {value});"
+
     def deep_equality(self, left: str, right: str) -> str:
         """
         All tests are assertions that compare deep equality between left and right.
@@ -99,10 +105,13 @@ class DlangTranslator:
         ret_type = self.func_type[RET_TYPE_LOC][0] 
         # A check of the test cases tell me that all of the Optional (-> Nullables) are in return position.
         if ret_type.startswith("Null"):
-            if right == "None":
-                return "{{\n        auto result = {};\n        assert(result.isNull);\n}}\n".format(left)
-            else:
-                return "{{\n        auto result = {};\n        assert(!result.isNull && result.get == {});\n}}\n".format(left,right)
+            return "{{\n        auto result = {};\n        {}\n}}\n".format(left, self.is_null_stub("result", right))
+        # Special case for 136. Not general, but works as a hot fix.
+        elif ret_type == "Tuple!(Nullable!(long), Nullable!(long))":
+            matched_parts = re.match(r"tuple\((.*),(.*)\)", right)
+            tl, tr = self.is_null_stub("result[0]", matched_parts[1].strip()), self.is_null_stub("result[1]", matched_parts[2].strip())
+            return "{{\n        auto result = {};\n        {}\n        {}\n}}\n".format( \
+                        left, tl, tr)        
 
         return "    assert({} == {});".format(left, right)
 
