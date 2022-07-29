@@ -18,7 +18,7 @@ from libcompletions import parameterized_main
 import openai
 import os
 import time
-
+from torch.utils.tensorboard import SummaryWriter
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
@@ -40,7 +40,8 @@ def sleep_duration_seconds(max_to_generate, n):
     return sleep_duration_seconds
 
 def codex_completion(
-    prompt: str, stop_tokens, max_to_generate: int, temperature: float, n
+    prompt: str, stop_tokens, max_to_generate: int, temperature: float, n: int,
+    writer: SummaryWriter
 ):
     rate_limited = False
     while True:
@@ -58,16 +59,16 @@ def codex_completion(
             return  [choice.text for choice in response.choices]
         except openai.error.RateLimitError as e:
             if rate_limited:
-                print(f"Rate-limited twice in a row. Exiting. Decrease n{n} by 2")
+                writer.add_text('Log', f"Rate-limited twice in a row. Exiting. Decrease n{n} by 2")
                 n = min(1, n/2)
-                print(f"New n {n}")
-            print("*** Rate limit error. Sleeping for 1 minute. ***")
-            print(e)
+                writer.add_text('Log', f"New n {n}")
+            writer.add_text('Log', "*** Rate limit error. Sleeping for 1 minute. ***")
+            writer.add_text('Log', str(e))
             rate_limited = True
             time.sleep(60)
 
 def main():
-    parameterized_main(codex_completion, max_to_generate=512)
+    parameterized_main(codex_completion, 'davinci', max_to_generate=512)
 
 
 if __name__ == "__main__":
