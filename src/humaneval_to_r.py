@@ -54,6 +54,8 @@ class RTranslator:
         '''
         if type(c) == bool:
             return 'TRUE' if c else 'FALSE'
+        elif c is None:
+            return 'NA'
         return repr(c)
     
     def gen_var(self, v):
