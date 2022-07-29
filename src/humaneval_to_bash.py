@@ -17,7 +17,7 @@ from generic_translator import main
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
-BASH_METACHARACTERS = [" ", "\t", "\n", "\r", "|", "&", ";", "(", ")", "<", ">"]
+BASH_METACHARACTERS = [" ", "\t", "\n", "\r", "|", "&", ";", "(", ")", "<", ">", "#"]
 
 def contains_metachar(s):
     return any(metachar in s for metachar in BASH_METACHARACTERS)
