@@ -31,6 +31,7 @@ import argparse
 import sys
 from generic_translator import list_originals, translate_prompt_and_tests, get_stop_from_translator
 from pathlib import Path
+from humaneval_to_javascript import JavaScriptTranslator
 from humaneval_to_ruby import RubyTranslator
 from humaneval_to_lua import LuaTranslator
 from humaneval_to_rust import RustTranslator
@@ -50,6 +51,7 @@ TRANSLATORS = {
     "cpp": CPPTranslator("cpp"),
     "python": PythonTranslator(),
     "julia": JuliaTranslator("jl"),
+    "javascript": JavaScriptTranslator()
 }
 
 
