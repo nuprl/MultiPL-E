@@ -5,6 +5,7 @@
 import os
 import subprocess
 from pathlib import Path
+from generic_eval import main
 
 def eval_script(path: Path):
     output = None
@@ -34,15 +35,6 @@ def eval_script(path: Path):
         "stderr": str(output.stderr),
     }
 
-
-def main():
-    directory = Path(Path(__file__).parent, "..", "datasets", "py-keep-code_davinci_001_temp_0.2").resolve()
-
-    for filename in os.listdir(directory):
-        r = eval_script(Path.joinpath(directory, filename))
-        filename = filename.split(".")[0]
-        print(f"Python,{filename},{r['status']}")
-
 if __name__ == "__main__":
-    main()
+    main(eval_script, "Python", "py")
 
