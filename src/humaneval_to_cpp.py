@@ -46,10 +46,18 @@ class CPPTranslator:
         self.none_type = "{}"
         self.list_type = "std::vector<%s>"
         self.tuple_type = "std::tuple<%s>"
-        self.make_tuple = "std::make_tuple"
         self.dict_type = "std::map<%s, %s>"
         self.optional_type = "std::optional<%s>"
         self.any_type = "std::any"
+
+    def make_list(self, elem_type, list_literal):
+        return "new " + self.list_type%self.box_type(elem_type) + "(" + list_literal + ")"
+    
+    def make_tuple(self, elem_types):
+        return "std::make_tuple"
+
+    def make_array_literal(self, list_contents):
+        return "{" + list_contents + "}"
 
     def pytype_to_cpptype(self, ann: ast.expr | None) -> str:
         '''Traverses an AST annotation and generates C++ Types
@@ -122,7 +130,7 @@ class CPPTranslator:
         self.args_type = [self.pytype_to_cpptype(arg.annotation) for arg in args]
         formal_args = [f"{self.pytype_to_cpptype(arg.annotation)} {self.gen_var(arg.arg)[0]}" for arg in args]
         formal_arg_list = ", ".join(formal_args)
-
+        
         self.ret_ann = _returns
         self.ret_cpp_type = self.pytype_to_cpptype(_returns)
         unions = ""
@@ -165,7 +173,7 @@ class CPPTranslator:
             return self.wrap_in_brackets(right[0])
         
         #No need to replace std::make_tuple
-        if right[0].find(self.make_tuple) == 0:
+        if right[0].find(self.make_tuple([])) == 0:
             return right[0] 
 
         if re.findall("(.+)\(", right[0]) == []:
@@ -237,10 +245,11 @@ class CPPTranslator:
         """
         #Assuming all elements in list have same type
         if l == [] or l == ():
-          return "std::vector<long>()", ast.List([ast.Name("int")])
+          return self.make_list(self.int_type, "()"), ast.List([ast.Name("int")])
 
         elem_type = self.pytype_to_cpptype(l[0][1])
-        return self.list_type%elem_type + "({" + ", ".join([e[0] for e in l]) + "})", ast.List([l[0][1]])
+        list_literal = self.make_array_literal(", ".join([e[0] for e in l]))
+        return self.make_list(elem_type, list_literal), ast.List([l[0][1]])
 
     def gen_tuple(self, t: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.Tuple]:
         """Translate a tuple with elements t
@@ -265,10 +274,10 @@ class CPPTranslator:
                 other_types = self.int_type
             new_elem_type = self.optional_type % other_types
 
-            return self.make_tuple + "(" + ", ".join([f"{new_elem_type}({e[0]})" for e in t]) + ")", \
+            return self.make_tuple([]) + "(" + ", ".join([f"{new_elem_type}({e[0]})" for e in t]) + ")", \
                 ast.Tuple([e[1] for e in t])
 
-        return self.make_tuple + "(" + ", ".join([e[0] for e in t]) + ")", \
+        return self.make_tuple([]) + "(" + ", ".join([e[0] for e in t]) + ")", \
             ast.Tuple([e[1] for e in t])
 
     def gen_dict(self, keys: List[Tuple[str, ast.Expr]], values: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.Dict]:

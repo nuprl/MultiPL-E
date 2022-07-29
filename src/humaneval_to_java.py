@@ -5,7 +5,7 @@
 
 import re
 import ast
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from generic_translator import main
 from humaneval_to_cpp import CPPTranslator, DOCSTRING_LINESTART_RE
 
@@ -18,24 +18,35 @@ class JavaTranslator(CPPTranslator):
         self.string_type = "String"
         self.float_type = "float"
         self.int_type = "long"
-        self.bool_type = "bool"
+        self.bool_type = "boolean"
         self.none_type = "{}"
         self.list_type = "ArrayList<%s>"
         self.tuple_type = "std::tuple<%s>"
-        self.make_tuple = "std::make_tuple"
         self.dict_type = "HashMap<%s, %s>"
         self.optional_type = "Optional<%s>"
         self.any_type = "std::any"
+        self.indent = "    "
+        self.problem_class_counter = 0
+        self.get_default_val_def = """private static <T> T getDefaultValue(Class<T> clazz) {
+return (T) Array.get(Array.newInstance(clazz, 1), 0);
+}"""
+
+    def make_list(self, elem_type, list_contents):
+        return "new " + self.list_type%self.box_type(elem_type) + "(Arrays.asList" + list_contents + ")"
     
+    def make_array_literal(self, list_contents):
+        return "(" + list_contents + ")"
+
     def box_type(self, primitive_type):
-        if primitive_type in [self.float_type, self.bool_type, self.int_type]:
+        if self.is_primitive_type(primitive_type):
             return primitive_type.capitalize()
         
         return primitive_type
 
     def module_imports(self) -> str:
         return "\n".join([
-            "import java.util.*;\n"
+            "import java.util.*;",
+            "import java.lang.reflect.*;"
         ]) + "\n"
 
     def pytype_to_cpptype(self, ann: ast.expr | None) -> str:
@@ -102,22 +113,68 @@ class JavaTranslator(CPPTranslator):
            In addition to comments and example, the prompt contain union declarations (if there are any) 
            and include files (TODO)
         '''
-        class_decl = "public class Problem {\n"
+        class_decl = f"class Problem{self.problem_class_counter} {{\n"
+        class_decl += self.get_default_val_def
+        self.problem_class_counter += 1
         indent = "    "
-        comment_start = indent + "//"
+        comment_start = self.indent + "//"
         java_description = (
             comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" + comment_start + " ", description.strip()) + "\n"
         )
         self.args_type = [self.pytype_to_cpptype(arg.annotation) for arg in args]
         formal_args = [f"{self.pytype_to_cpptype(arg.annotation)} {self.gen_var(arg.arg)[0]}" for arg in args]
         formal_arg_list = ", ".join(formal_args)
-
+        self.entry_point = name
         self.ret_ann = _returns
         self.ret_cpp_type = self.pytype_to_cpptype(_returns)
-        java_prompt = f"{self.module_imports()}{class_decl}{java_description}{indent}{self.ret_cpp_type} {name}({formal_arg_list})" + " {\n"
+        java_prompt = f"{self.module_imports()}{class_decl}{java_description}{self.indent}public static {self.ret_cpp_type} {name}({formal_arg_list})" + " {\n"
 
         return java_prompt
-     
+    
+    def is_primitive_type(self, java_type):
+        return java_type in [self.float_type, self.bool_type, self.int_type]
+
+    def return_default_value(self, java_type):
+        if self.is_primitive_type(java_type):
+            return f"return getDefaultValue({java_type}.class);"
+        else:
+            return f"new {java_type}();"
+
+    def test_suite_prefix_lines(self, entry_point) -> List[str]:
+        """
+        This code goes at the start of the test suite.
+        """
+
+        return [
+            self.return_default_value(self.ret_cpp_type),
+            self.indent + "}",
+            self.indent + "public static void main(String[] args) {",
+        ]
+    
+    def test_suite_suffix_lines(self) -> List[str]:
+        '''End class definition and main definition
+        '''
+        return [self.indent + "}\n",
+        "}\n"
+        ]
+    
+    def gen_literal(self, c: bool | str | int | float | None) -> Tuple[str, ast.Name]:
+        """Translate a literal expression
+            Append "f" to floats
+        """
+        if type(c) == float:
+            return repr(c) + "f", ast.Name(id="float")
+        
+        return CPPTranslator.gen_literal(self, c)
+
+    def gen_call(self, func: str, args: List[Tuple[str, ast.Expr]]) -> Tuple[str, None]:
+        """Translate a function call `func(args)`
+        A function call f(x, y, z) translates to f(x, y, z)
+        """
+        func_name = func[0]
+        if func_name == "candidate":
+            func_name = self.entry_point
+        return func_name + "(" + ", ".join([self.update_type(args[i], self.args_type[i]) for i in range(len(args))]) + ")", None
 
 if __name__ == "__main__":
     translator = JavaTranslator("java")
