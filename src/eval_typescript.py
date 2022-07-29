@@ -7,7 +7,17 @@ def eval_script(path: Path):
     try: 
         # Assumes exit-code 0 is all okay
         # Run racket on the file, capturing stderr
-        output = subprocess.run(" ".join(["node", str(path)]), shell=True, capture_output=True, timeout=5)
+        compiled = subprocess.run(" ".join(["tsc", str(path)]), shell=True, capture_output=True, timeout=15)
+        if compiled.returncode == 0:
+            pass
+        else:
+            return {
+            "status": "CompileError",
+            "exit_code": compiled.returncode,
+            "stdout": str(compiled.stdout),
+            "stderr": str(compiled.stderr),
+                }
+        output = subprocess.run(" ".join(["node", str(path).replace('.ts','.js')]), shell=True, capture_output=True, timeout=5)
         
         if output.returncode == 0:
             status = "OK"
@@ -40,12 +50,13 @@ def eval_script(path: Path):
 
 
 def main():
-    directory = Path(Path(__file__).parent, "..", "datasets", "js-keep-code_davinci_001_temp_0.2").resolve()
+    directory = Path(Path(__file__).parent, "..", "datasets", "ts-keep-code_davinci_001_temp_0.2").resolve()
 
     for filename in os.listdir(directory):
-        r = eval_script(Path.joinpath(directory,filename))
-        filename = filename.split(".")[0]
-        print(f"JavaScript,{filename},{r['status']}")
+        if ".ts" in filename:
+            r = eval_script(Path.joinpath(directory,filename))
+            filename = filename.split(".")[0]
+            print(f"TypeScript,{filename},{r['status']}")
 
 if __name__ == "__main__":
     main()
