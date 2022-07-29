@@ -44,12 +44,12 @@ def translate_type(t):
                     return translate_type(slice) + "?"
                 case other:
                     raise Exception(f"Bad generic {other}")
-        case ast.Name("int") | "int" | :
+        case ast.Name("int") | "int":
             return "number"
         case ast.Name("float"):
             return "number"
-        case ast.Name("boolean"):
-            return "bool"
+        case ast.Name("bool"):
+            return "boolean"
         case ast.Name("str") | "str":
             return "string"
         case None:
@@ -80,7 +80,7 @@ class TypeScriptTranslator:
         self.type = None
         self.is_candidate_result = False
 
-    def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
+    def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str) -> str:
         global needs_hashmap
         js_description = "//" + re.sub(DOCSTRING_LINESTART_RE, "\n// ", description.strip()) + "\n"
         # Store this for later coercions on tests
@@ -103,7 +103,7 @@ class TypeScriptTranslator:
         """
         This code goes at the start of the test suite.
         """
-        return [ "const assert = require('node:assert');\n", "", "function test() {",f"  let candidate = {entry_point};" ]
+        return [ "declare var require: any;\nconst assert = require('node:assert');\n", "", "function test() {",f"  let candidate = {entry_point};" ]
 
     def test_suite_suffix_lines(self) -> List[str]:
         return ["}", "", "test();"]
@@ -118,7 +118,7 @@ class TypeScriptTranslator:
         if self.is_candidate_result:
             right = coerce(right, self.type[1])
             self.is_candidate_result = False
-        return f"  if (assert.deepEqual({left},{right})" + " {\n    true \n  } else {\n  throw new Error('Failed test!') };"
+        return f"  assert.deepEqual({left},{right});"
 
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
@@ -140,7 +140,7 @@ class TypeScriptTranslator:
         return "[" + ", ".join(l) + "]"
 
     def gen_tuple(self, t: List[str]) -> str:
-        return "[" + ", ".join(l) + "]"
+        return "[" + ", ".join(t) + "]"
 
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
         return "{" + ", ".join(f"{k}: {v}" for k, v in zip(keys, values)) + "}"

@@ -7,13 +7,18 @@ def eval_script(path: Path):
     try: 
         # Assumes exit-code 0 is all okay
         # Run racket on the file, capturing stderr
-        output = subprocess.run(" ".join(["js", str(path)]), shell=True, capture_output=True, timeout=5)
+        output = subprocess.run(" ".join(["node", str(path)]), shell=True, capture_output=True, timeout=5)
+        
         if output.returncode == 0:
             status = "OK"
         else:
             outmessage = str(output)
-            if 'read-syntax' in outmessage:
+            if 'ERR_ASSERTION' in outmessage:
+                status = "AssertionError"
+            elif 'SyntaxError' in outmessage:
                 status = "SyntaxError"
+            elif 'ReferenceError' in outmessage:
+                status = "ReferenceError"
             else:
                 status = "Exception"
         returncode = output.returncode

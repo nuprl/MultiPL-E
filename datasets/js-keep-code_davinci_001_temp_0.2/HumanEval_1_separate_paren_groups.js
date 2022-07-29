@@ -6,19 +6,26 @@
 // ['()', '(())', '(()())']
 function separate_paren_groups(paren_string){
     var result = [];
-    var current = '';
-    var open_count = 0;
-    for(var i = 0; i < paren_string.length; i++){
-        if(paren_string[i] == '('){
-            open_count++;
+    var open_paren_count = 0;
+    var current_group = '';
+    for (var i = 0; i < paren_string.length; i++){
+        if (paren_string[i] === '('){
+            open_paren_count++;
+            current_group += paren_string[i];
         }
-        else if(paren_string[i] == ')'){
-            open_count--;
+        else if (paren_string[i] === ')'){
+            open_paren_count--;
+            current_group += paren_string[i];
         }
-        current += paren_string[i];
-        if(open_count == 0){
-            result.push(current);
-            current = '';
+        else if (paren_string[i] === ' '){
+            continue;
+        }
+        else{
+            current_group += paren_string[i];
+        }
+        if (open_paren_count === 0){
+            result.push(current_group);
+            current_group = '';
         }
     }
     return result;
@@ -30,22 +37,10 @@ const assert = require('node:assert');
 
 function test() {
   let candidate = separate_paren_groups;
-  if (assert.deepEqual(candidate("(()()) ((())) () ((())()())"),["(()())", "((()))", "()", "((())()())"]) {
-    true 
-  } else {
-  throw new Error('Failed test!') };
-  if (assert.deepEqual(candidate("() (()) ((())) (((())))"),["()", "(())", "((()))", "(((())))"]) {
-    true 
-  } else {
-  throw new Error('Failed test!') };
-  if (assert.deepEqual(candidate("(()(())((())))"),["(()(())((())))"]) {
-    true 
-  } else {
-  throw new Error('Failed test!') };
-  if (assert.deepEqual(candidate("( ) (( )) (( )( ))"),["()", "(())", "(()())"]) {
-    true 
-  } else {
-  throw new Error('Failed test!') };
+  assert.deepEqual(candidate("(()()) ((())) () ((())()())"),["(()())", "((()))", "()", "((())()())"]);
+  assert.deepEqual(candidate("() (()) ((())) (((())))"),["()", "(())", "((()))", "(((())))"]);
+  assert.deepEqual(candidate("(()(())((())))"),["(()(())((())))"]);
+  assert.deepEqual(candidate("( ) (( )) (( )( ))"),["()", "(())", "(()())"]);
 }
 
 test();

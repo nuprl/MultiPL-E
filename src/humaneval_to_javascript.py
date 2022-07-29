@@ -13,7 +13,7 @@ DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
 class JavaScriptTranslator:
 
-    stop = [ '\nfunction ', '\n/*', '\n//', '\nclass' ] # NOTE(carolyn): My guess
+    stop = [ '\nfunction ', '\n/*', '\n//', '\nconsole.log' ] # NOTE(carolyn): My guess
 
     def __init__(self, file_ext):
         self.file_ext = file_ext
@@ -40,7 +40,7 @@ class JavaScriptTranslator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        return f"  if (assert.deepEqual({left},{right})" + " {\n    true \n  } else {\n  throw new Error('Failed test!') };"
+        return f"  assert.deepEqual({left},{right});"
 
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
@@ -62,7 +62,7 @@ class JavaScriptTranslator:
         return "[" + ", ".join(l) + "]"
 
     def gen_tuple(self, t: List[str]) -> str:
-        return "[" + ", ".join(l) + "]"
+        return "[" + ", ".join(t) + "]"
 
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
         return "{" + ", ".join(f"{k}: {v}" for k, v in zip(keys, values)) + "}"
