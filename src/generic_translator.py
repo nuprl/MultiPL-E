@@ -71,19 +71,38 @@ class PromptVisitor(ast.NodeVisitor):
     def translate_func_decl(self, doctest_transformation: str) -> str | None:
         if self.state != "complete":
             return None
-        # TODO(arjun): Use doctest_transformation
         match doctest_transformation:
             case "keep":
                 description = self.description
             case "remove":
-                # TODO(arjun): Remove all doctests
-                description = self.description 
+                doctestRegex = re.compile(r'>>> .*\n.*\n')
+                description = re.sub(doctestRegex, '', description)
             case "transform":
                 # Steps:
                 # Find the Python expression and result in each doctest
                 # py_ast = ast.parse("PYTHON EXPRESSION", "bogus filename")
                 # translate_expr(py_ast, self.translator) to get the string for that expression in the target language
-                description = self.description # TODO(arjun): Transform doctests
+                split = self.description.split('>>> ')
+                if len(split) > 1: 
+                    doctestRegex = re.compile(r'.*\n.*\n')
+                    onlyDocTests = []
+                    for test in (split[1:]):
+                        onlyDocTests.append(doctestRegex.match(test).group())
+                    
+                    funcCalls = []
+                    outputs = []
+                    for doctest in onlyDocTests:
+                        doclist = doctest.split('\n')
+                        funcCalls.append(doclist[0])
+                        outputs.append(doclist[1].strip())
+                    for i in range(len(funcCalls)):
+                        funcCalls[i] = translate_expr(ast.parse(funcCalls[i]), self.translator)
+                        outputs[i] = translate_expr(ast.parse(outputs[i]), self.translator)
+                    
+                    description = split[0]
+                    for i in range(len(funcCalls)):
+                        description += funcCalls[i] + '\n' + outputs[i] + '\n\n'
+                description = self.description
             case _other:
                 raise Exception(f"bad doctest_transformation")
         return self.translator.translate_prompt(self.name, self.args, self.returns, description)
