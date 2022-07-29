@@ -19,7 +19,7 @@ model = model.half().cuda()
 BOS = "<|endoftext|>"
 
 
-def completion_tensors(prompt: str, max_length: int, temperature: float, n: int, writer: SummaryWriter):
+def completion_tensors(prompt: str, max_length: int, temperature: float, n: int):
     """
     Produces n samples.
     """
@@ -64,7 +64,7 @@ def decode_single_output(output_tensor, prompt):
 
 
 def incoder_completion(
-    prompt: str, stop_tokens, max_to_generate: int, temperature: float, n
+    prompt: str, stop_tokens, max_to_generate: int, temperature: float, n, , writer: SummaryWriter
 ):
     """
     Do standard left-to-right completion of the prefix `input` by sampling from the model
