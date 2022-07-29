@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Change numerical base of input number x to base.
     return string representation after the conversion.
@@ -13,17 +14,9 @@ Change numerical base of input number x to base.
 */
 const(char)[] change_base(int x, int base) 
 {
-    const char[] digits = "0123456789abcdefghijklmnopqrstuvwxyz";
-    const int max_base = 36;
-    const int max_x = max_base - 1;
-    const int max_y = max_x / base;
-    const int max_len = max_y + 2;
-    char[] result = new char[max_len];
-    int result_index = max_len - 1;
+    const(char)[] result = new(char[], 0);
     while (x > 0) {
-        int remainder = x % base;
-        result[result_index] = digits[remainder];
-        result_index--;
+        result.push(x % base);
         x /= base;
     }
     return result;

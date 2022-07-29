@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Given two lists operator, and operand. The first list has basic algebra operations, and 
@@ -27,8 +28,29 @@
 */
 int do_algebra(const(char)[][] operator, int[] operand) 
 {
-    // your code here
-    return 0;
+    int result = operand[0];
+    for (int i = 0; i < operator.length; i++)
+    {
+        switch (operator[i])
+        {
+            case '+':
+                result += operand[i + 1];
+                break;
+            case '-':
+                result -= operand[i + 1];
+                break;
+            case '*':
+                result *= operand[i + 1];
+                break;
+            case '//':
+                result /= operand[i + 1];
+                break;
+            case '**':
+                result = std.math.pow(result, operand[i + 1]);
+                break;
+        }
+    }
+    return result;
 }
 
 unittest

@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Given a list of positive integers x. return a sorted list of all 
     elements that hasn't any even digit.
@@ -16,45 +17,36 @@ int[] unique_digits(int[] x)
 {
     int[] result = new int[x.Length];
     int i = 0;
-    foreach (int n in x)
+    for (int j = 0; j < x.Length; j++)
     {
-        if (n < 10)
+        if (x[j] < 10)
         {
-            result[i] = n;
-            i++;
-        }
-        else
-        {
-            int[] digits = new int[10];
-            int j = 0;
-            while (n > 0)
+            if (x[j] % 2 != 0)
             {
-                digits[j] = n % 10;
-                n = n / 10;
-                j++;
-            }
-            bool flag = true;
-            for (int k = 0; k < j; k++)
-            {
-                if (digits[k] % 2 == 0)
-                {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag)
-            {
-                result[i] = n;
+                result[i] = x[j];
                 i++;
             }
         }
+        else
+        {
+            int temp = x[j];
+            while (temp > 0)
+            {
+                if (temp % 10 % 2 == 0)
+                {
+                    break;
+                }
+                else
+                {
+                    result[i] = x[j];
+                    i++;
+                    break;
+                }
+                temp = temp / 10;
+            }
+        }
     }
-    int[] result2 = new int[i];
-    for (int m = 0; m < i; m++)
-    {
-        result2[m] = result[m];
-    }
-    return result2;
+    return result;
 }
 
 unittest

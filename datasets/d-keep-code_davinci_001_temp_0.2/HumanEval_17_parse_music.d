@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
  Input to this function is a string representing musical notes in a special ASCII format.
     Your task is to parse this string and return list of integers corresponding to how many beats does each
@@ -15,29 +16,27 @@
 */
 int[] parse_music(const(char)[] music_string) 
 {
-    int[] beats = new int[music_string.length];
-    int i = 0;
-    int note_length = 0;
-    while (i < music_string.length)
+    int[] beats = new int[0];
+    int beat = 0;
+    for (int i = 0; i < music_string.length; i++)
     {
         if (music_string[i] == 'o')
         {
-            note_length = 4;
+            beat += 4;
         }
         else if (music_string[i] == 'o|')
         {
-            note_length = 2;
+            beat += 2;
         }
-        else if (music_string[i] == '.')
+        else if (music_string[i] == '.|')
         {
-            note_length = 1;
+            beat += 1;
         }
         else
         {
-            note_length = 0;
+            continue;
         }
-        beats[i] = note_length;
-        i++;
+        beats = append(beats, beat);
     }
     return beats;
 }

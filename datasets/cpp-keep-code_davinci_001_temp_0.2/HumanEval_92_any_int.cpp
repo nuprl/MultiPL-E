@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Create a function that takes 3 numbers.
@@ -14,13 +9,12 @@
 // any_int(3, -2, 1) ➞ True
 // any_int(3.6, -2.2, 2) ➞ False
 bool any_int(float x, float y, float z) {
-    if (x == y + z || y == x + z || z == x + y) {
+    if(x == y + z || y == x + z || z == x + y)
         return true;
-    }
-    return false;
+    else
+        return false;
+
 }
-
-
 int main() {
     auto candidate = any_int;
     assert(candidate((float(2)), (float(3)), (float(1))) == (true));

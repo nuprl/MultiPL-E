@@ -30,19 +30,19 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate '10')
+        x0=$(candidate "10")
     assert_equals 10 "${x0[*]}"
 
-        x1=$(candidate '14.5')
+        x1=$(candidate "14.5")
     assert_equals 15 "${x1[*]}"
 
-        x2=$(candidate '-15.5')
+        x2=$(candidate "-15.5")
     assert_equals -16 "${x2[*]}"
 
-        x3=$(candidate '15.3')
+        x3=$(candidate "15.3")
     assert_equals 15 "${x3[*]}"
 
-        x4=$(candidate '0')
+        x4=$(candidate "0")
     assert_equals 0 "${x4[*]}"
 
 }

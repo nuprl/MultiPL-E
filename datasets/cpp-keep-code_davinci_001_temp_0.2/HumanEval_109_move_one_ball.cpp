@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // We have an array 'arr' of N integers arr[1], arr[2], ..., arr[N].The
@@ -27,21 +22,16 @@
 bool move_one_ball(std::vector<long> arr) {
     if(arr.size()==0)
         return true;
-    std::vector<long> temp;
-    temp.push_back(arr[arr.size()-1]);
-    for(int i=arr.size()-2;i>=0;i--)
-    {
-        temp.push_back(arr[i]);
-    }
+    std::vector<long> temp(arr.size());
     for(int i=0;i<arr.size();i++)
-    {
-        if(arr[i]>temp[i])
+        temp[i]=arr[i];
+    std::sort(temp.begin(),temp.end());
+    for(int i=0;i<arr.size();i++)
+        if(arr[i]!=temp[i])
             return false;
-    }
     return true;
+
 }
-
-
 int main() {
     auto candidate = move_one_ball;
     assert(candidate((std::vector<long>({3, 4, 5, 1, 2}))) == (true));

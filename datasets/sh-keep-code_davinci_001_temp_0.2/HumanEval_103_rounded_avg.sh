@@ -25,31 +25,31 @@ candidate() {
 
 test() {
         x0=$(candidate 1 5)
-    assert_equals '0b11' "${x0[*]}"
+    assert_equals "0b11" "${x0[*]}"
 
         x1=$(candidate 7 13)
-    assert_equals '0b1010' "${x1[*]}"
+    assert_equals "0b1010" "${x1[*]}"
 
         x2=$(candidate 964 977)
-    assert_equals '0b1111001010' "${x2[*]}"
+    assert_equals "0b1111001010" "${x2[*]}"
 
         x3=$(candidate 996 997)
-    assert_equals '0b1111100100' "${x3[*]}"
+    assert_equals "0b1111100100" "${x3[*]}"
 
         x4=$(candidate 560 851)
-    assert_equals '0b1011000010' "${x4[*]}"
+    assert_equals "0b1011000010" "${x4[*]}"
 
         x5=$(candidate 185 546)
-    assert_equals '0b101101110' "${x5[*]}"
+    assert_equals "0b101101110" "${x5[*]}"
 
         x6=$(candidate 362 496)
-    assert_equals '0b110101101' "${x6[*]}"
+    assert_equals "0b110101101" "${x6[*]}"
 
         x7=$(candidate 350 902)
-    assert_equals '0b1001110010' "${x7[*]}"
+    assert_equals "0b1001110010" "${x7[*]}"
 
         x8=$(candidate 197 233)
-    assert_equals '0b11010111' "${x8[*]}"
+    assert_equals "0b11010111" "${x8[*]}"
 
         x9=$(candidate 7 5)
     assert_equals -1 "${x9[*]}"
@@ -58,6 +58,6 @@ test() {
     assert_equals -1 "${x10[*]}"
 
         x11=$(candidate 5 5)
-    assert_equals '0b101' "${x11[*]}"
+    assert_equals "0b101" "${x11[*]}"
 
 }

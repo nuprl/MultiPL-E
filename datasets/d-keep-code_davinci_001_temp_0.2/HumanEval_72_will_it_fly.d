@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Write a function that returns True if the object q will fly, and False otherwise.
@@ -20,27 +21,7 @@
 */
 bool will_it_fly(int[] q, int w) 
 {
-    int sum = 0;
-    bool isBalanced = true;
-    for (int i = 0; i < q.Length; i++)
-    {
-        sum += q[i];
-        if (i < q.Length / 2)
-        {
-            if (q[i] != q[q.Length - i - 1])
-            {
-                isBalanced = false;
-            }
-        }
-        else
-        {
-            if (q[i] != q[q.Length - i - 1])
-            {
-                isBalanced = false;
-            }
-        }
-    }
-    return (sum <= w && isBalanced);
+    return q.is_palindrome() && q.sum() <= w;
 }
 
 unittest

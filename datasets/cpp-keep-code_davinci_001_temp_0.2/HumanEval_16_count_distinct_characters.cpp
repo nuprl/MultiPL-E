@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a string, find out how many distinct characters (regardless of case) does it consist of
@@ -11,14 +6,13 @@
 // >>> count_distinct_characters('Jerry')
 // 4
 long count_distinct_characters(std::string string) {
-    std::map<char, int> map;
-    for (auto c : string) {
-        map[c]++;
+    std::unordered_set<char> distinct_characters;
+    for (auto character : string) {
+        distinct_characters.insert(tolower(character));
     }
-    return map.size();
+    return distinct_characters.size();
+
 }
-
-
 int main() {
     auto candidate = count_distinct_characters;
     assert(candidate(("")) == (0));

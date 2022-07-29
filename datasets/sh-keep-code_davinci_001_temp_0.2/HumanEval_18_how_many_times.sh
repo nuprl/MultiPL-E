@@ -32,16 +32,16 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate '' 'x')
+        x0=$(candidate "" "x")
     assert_equals 0 "${x0[*]}"
 
-        x1=$(candidate 'xyxyxyx' 'x')
+        x1=$(candidate "xyxyxyx" "x")
     assert_equals 4 "${x1[*]}"
 
-        x2=$(candidate 'cacacacac' 'cac')
+        x2=$(candidate "cacacacac" "cac")
     assert_equals 4 "${x2[*]}"
 
-        x3=$(candidate 'john doe' 'john')
+        x3=$(candidate "john doe" "john")
     assert_equals 1 "${x3[*]}"
 
 }

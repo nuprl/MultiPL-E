@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Return True is list elements are monotonically increasing or decreasing.
@@ -13,20 +8,16 @@
 // >>> monotonic([4, 1, 0, -10])
 // True
 bool monotonic(std::vector<long> l) {
-    bool inc = true;
-    bool dec = true;
+    bool flag = true;
     for (int i = 0; i < l.size() - 1; i++) {
-        if (l[i] < l[i + 1]) {
-            dec = false;
-        }
         if (l[i] > l[i + 1]) {
-            inc = false;
+            flag = false;
+            break;
         }
     }
-    return inc || dec;
+    return flag;
+
 }
-
-
 int main() {
     auto candidate = monotonic;
     assert(candidate((std::vector<long>({1, 2, 4, 10}))) == (true));

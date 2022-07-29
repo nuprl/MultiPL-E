@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Return list with elements incremented by 1.
@@ -12,13 +7,12 @@
 // [6, 4, 6, 3, 4, 4, 10, 1, 124]
 std::vector<long> incr_list(std::vector<long> l) {
     std::vector<long> res;
-    for (long i : l) {
-        res.push_back(i + 1);
+    for (auto x : l) {
+        res.push_back(x + 1);
     }
     return res;
+
 }
-
-
 int main() {
     auto candidate = incr_list;
     assert(candidate((std::vector<long>())) == (std::vector<long>()));

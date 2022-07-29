@@ -36,44 +36,44 @@ candidate() {
 }
 
 test() {
-    declare -a x0=('name' 'of' 'string')
+    declare -a x0=("name" "of" "string")
     x1=$(candidate "${x0[*]}")
-    assert_equals 'string' "${x1[*]}"
+    assert_equals "string" "${x1[*]}"
 
-    declare -a x2=('name' 'enam' 'game')
+    declare -a x2=("name" "enam" "game")
     x3=$(candidate "${x2[*]}")
-    assert_equals 'enam' "${x3[*]}"
+    assert_equals "enam" "${x3[*]}"
 
-    declare -a x4=('aaaaaaa' 'bb' 'cc')
+    declare -a x4=("aaaaaaa" "bb" "cc")
     x5=$(candidate "${x4[*]}")
-    assert_equals 'aaaaaaa' "${x5[*]}"
+    assert_equals "aaaaaaa" "${x5[*]}"
 
-    declare -a x6=('abc' 'cba')
+    declare -a x6=("abc" "cba")
     x7=$(candidate "${x6[*]}")
-    assert_equals 'abc' "${x7[*]}"
+    assert_equals "abc" "${x7[*]}"
 
-    declare -a x8=('play' 'this' 'game' 'of' 'footbott')
+    declare -a x8=("play" "this" "game" "of" "footbott")
     x9=$(candidate "${x8[*]}")
-    assert_equals 'footbott' "${x9[*]}"
+    assert_equals "footbott" "${x9[*]}"
 
-    declare -a x10=('we' 'are' 'gonna' 'rock')
+    declare -a x10=("we" "are" "gonna" "rock")
     x11=$(candidate "${x10[*]}")
-    assert_equals 'gonna' "${x11[*]}"
+    assert_equals "gonna" "${x11[*]}"
 
-    declare -a x12=('we' 'are' 'a' 'mad' 'nation')
+    declare -a x12=("we" "are" "a" "mad" "nation")
     x13=$(candidate "${x12[*]}")
-    assert_equals 'nation' "${x13[*]}"
+    assert_equals "nation" "${x13[*]}"
 
-    declare -a x14=('this' 'is' 'a' 'prrk')
+    declare -a x14=("this" "is" "a" "prrk")
     x15=$(candidate "${x14[*]}")
-    assert_equals 'this' "${x15[*]}"
+    assert_equals "this" "${x15[*]}"
 
-    declare -a x16=('b')
+    declare -a x16=("b")
     x17=$(candidate "${x16[*]}")
-    assert_equals 'b' "${x17[*]}"
+    assert_equals "b" "${x17[*]}"
 
-    declare -a x18=('play' 'play' 'play')
+    declare -a x18=("play" "play" "play")
     x19=$(candidate "${x18[*]}")
-    assert_equals 'play' "${x19[*]}"
+    assert_equals "play" "${x19[*]}"
 
 }

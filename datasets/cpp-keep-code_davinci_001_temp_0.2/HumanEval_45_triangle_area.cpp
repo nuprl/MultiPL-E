@@ -1,18 +1,14 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given length of a side and high return area for a triangle.
 // >>> triangle_area(5, 3)
 // 7.5
 float triangle_area(long a, long h) {
-    return 0.5 * a * h;
+    assert(a > 0);
+    assert(h > 0);
+    return (a * h) / 2;
+
 }
-
-
 int main() {
     auto candidate = triangle_area;
     assert(candidate((5), (3)) == (7.5));

@@ -100,17 +100,17 @@ candidate() {
 }
 
 test() {
-    declare -a x0=('**' '*' '+')
+    declare -a x0=("**" "*" "+")
 declare -a x1=(2 3 4 5)
     x2=$(candidate "${x0[*]}" "${x1[*]}")
     assert_equals 37 "${x2[*]}"
 
-    declare -a x3=('+' '*' '-')
+    declare -a x3=("+" "*" "-")
 declare -a x4=(2 3 4 5)
     x5=$(candidate "${x3[*]}" "${x4[*]}")
     assert_equals 9 "${x5[*]}"
 
-    declare -a x6=('//' '*')
+    declare -a x6=("//" "*")
 declare -a x7=(7 3 4)
     x8=$(candidate "${x6[*]}" "${x7[*]}")
     assert_equals 8 "${x8[*]}"

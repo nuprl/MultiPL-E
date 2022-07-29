@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Input to this function is a string representing musical notes in a special ASCII format.
@@ -16,26 +11,20 @@
 // [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
 std::vector<long> parse_music(std::string music_string) {
     std::vector<long> result;
-    std::string::iterator it = music_string.begin();
-    while (it != music_string.end()) {
-        if (*it == 'o') {
+    std::stringstream ss(music_string);
+    std::string note;
+    while (ss >> note) {
+        if (note == "o") {
             result.push_back(4);
-            it++;
-        } else if (*it == 'o|') {
+        } else if (note == "o|") {
             result.push_back(2);
-            it += 2;
-        } else if (*it == '.') {
+        } else if (note == ".|") {
             result.push_back(1);
-            it += 2;
-        } else {
-            std::cout << "Invalid character in string" << std::endl;
-            return {};
         }
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = parse_music;
     assert(candidate(("")) == (std::vector<long>()));

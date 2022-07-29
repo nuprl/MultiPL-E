@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
  For a given string, flip lowercase characters to uppercase and uppercase to lowercase.
     >>> flip_case('Hello')
@@ -7,7 +8,7 @@
 */
 const(char)[] flip_case(const(char)[] string) 
 {
-    const(char)[] result = new(char)[string.length];
+    const(char)[] result = new(char, string.length);
     for(int i = 0; i < string.length; i++)
     {
         if(string[i] >= 'A' && string[i] <= 'Z')

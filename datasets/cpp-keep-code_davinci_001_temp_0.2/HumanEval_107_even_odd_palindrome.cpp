@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a positive integer n, return a tuple that has the number of even and odd
@@ -21,28 +16,28 @@
 // 1. 1 <= n <= 10^3
 // 2. returned tuple has the number of even and odd integer palindromes respectively.
 std::tuple<long, long> even_odd_palindrome(long n) {
-    long even = 0, odd = 0;
+    std::vector<long> even_palindrome;
+    std::vector<long> odd_palindrome;
     for (long i = 1; i <= n; i++) {
         if (is_palindrome(i)) {
             if (i % 2 == 0) {
-                even++;
+                even_palindrome.push_back(i);
             } else {
-                odd++;
+                odd_palindrome.push_back(i);
             }
         }
     }
-    return std::make_tuple(even, odd);
+    return std::make_tuple(even_palindrome.size(), odd_palindrome.size());
+
 }
-
-
 int main() {
     auto candidate = even_odd_palindrome;
-    assert(candidate((123)) == (std::make_tuple(long(8), long(13))));
-    assert(candidate((12)) == (std::make_tuple(long(4), long(6))));
-    assert(candidate((3)) == (std::make_tuple(long(1), long(2))));
-    assert(candidate((63)) == (std::make_tuple(long(6), long(8))));
-    assert(candidate((25)) == (std::make_tuple(long(5), long(6))));
-    assert(candidate((19)) == (std::make_tuple(long(4), long(6))));
-    assert(candidate((9)) == (std::make_tuple(long(4), long(5))));
-    assert(candidate((1)) == (std::make_tuple(long(0), long(1))));
+    assert(candidate((123)) == (std::make_tuple(8, 13)));
+    assert(candidate((12)) == (std::make_tuple(4, 6)));
+    assert(candidate((3)) == (std::make_tuple(1, 2)));
+    assert(candidate((63)) == (std::make_tuple(6, 8)));
+    assert(candidate((25)) == (std::make_tuple(5, 6)));
+    assert(candidate((19)) == (std::make_tuple(4, 6)));
+    assert(candidate((9)) == (std::make_tuple(4, 5)));
+    assert(candidate((1)) == (std::make_tuple(0, 1)));
 }

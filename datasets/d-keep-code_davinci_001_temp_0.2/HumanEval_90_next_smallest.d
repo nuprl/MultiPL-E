@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     You are given a list of integers.
@@ -11,33 +12,78 @@
     next_smallest([1, 1]) == None
     
 */
-auto next_smallest(int[] lst) 
+Nullable!(int) next_smallest(int[] lst) 
 {
-    if (lst.size() == 0) return nullptr;
-    int min = lst[0];
-    int min_index = 0;
-    for (int i = 1; i < lst.size(); i++)
+    if (lst.length() == 0)
+        return None();
+    else if (lst.length() == 1)
+        return None();
+    else
     {
-        if (lst[i] < min)
+        var min = lst[0];
+        var min_index = 0;
+        var second_min = lst[0];
+        var second_min_index = 0;
+        for (int i = 1; i < lst.length(); i++)
         {
-            min = lst[i];
-            min_index = i;
+            if (lst[i] < min)
+            {
+                second_min = min;
+                second_min_index = min_index;
+                min = lst[i];
+                min_index = i;
+            }
+            else if (lst[i] < second_min)
+            {
+                second_min = lst[i];
+                second_min_index = i;
+            }
         }
+        if (min_index == 0)
+            return Some(second_min);
+        else
+            return Some(min);
     }
-    if (min_index == 0) return nullptr;
-    return lst[min_index - 1];
 }
 
 unittest
 {
     alias candidate = next_smallest;
 
-    assert(candidate([1, 2, 3, 4, 5]) == 2);
-    assert(candidate([5, 1, 4, 3, 2]) == 2);
-    assert(candidate([]) == None);
-    assert(candidate([1, 1]) == None);
-    assert(candidate([1, 1, 1, 1, 0]) == 1);
-    assert(candidate([1, 1]) == None);
-    assert(candidate([-35, 34, 12, -45]) == -35);
+{
+        auto result = candidate([1, 2, 3, 4, 5]);
+        assert(!result.isNull && result.get == 2);
+}
+
+{
+        auto result = candidate([5, 1, 4, 3, 2]);
+        assert(!result.isNull && result.get == 2);
+}
+
+{
+        auto result = candidate([]);
+        assert(result.isNull);
+}
+
+{
+        auto result = candidate([1, 1]);
+        assert(result.isNull);
+}
+
+{
+        auto result = candidate([1, 1, 1, 1, 0]);
+        assert(!result.isNull && result.get == 1);
+}
+
+{
+        auto result = candidate([1, 1]);
+        assert(result.isNull);
+}
+
+{
+        auto result = candidate([-35, 34, 12, -45]);
+        assert(!result.isNull && result.get == -35);
+}
+
 }
 void main(){}

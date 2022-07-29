@@ -26,12 +26,12 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('AB') !== 1) { throw new Exception("Test failed!"); }
-    if (candidate('1077E') !== 2) { throw new Exception("Test failed!"); }
-    if (candidate('ABED1A33') !== 4) { throw new Exception("Test failed!"); }
-    if (candidate('2020') !== 2) { throw new Exception("Test failed!"); }
-    if (candidate('123456789ABCDEF0') !== 6) { throw new Exception("Test failed!"); }
-    if (candidate('112233445566778899AABBCCDDEEFF00') !== 12) { throw new Exception("Test failed!"); }
+    if (candidate("AB") !== 1) { throw new Exception("Test failed!"); }
+    if (candidate("1077E") !== 2) { throw new Exception("Test failed!"); }
+    if (candidate("ABED1A33") !== 4) { throw new Exception("Test failed!"); }
+    if (candidate("2020") !== 2) { throw new Exception("Test failed!"); }
+    if (candidate("123456789ABCDEF0") !== 6) { throw new Exception("Test failed!"); }
+    if (candidate("112233445566778899AABBCCDDEEFF00") !== 12) { throw new Exception("Test failed!"); }
 }
 
 test();

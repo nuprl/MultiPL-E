@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Return 2^n modulo p (be aware of numerics).
     >>> modp(3, 5)
@@ -15,11 +16,10 @@ Return 2^n modulo p (be aware of numerics).
 */
 int modp(int n, int p) 
 {
-    int r = 1;
-    for (int i = 0; i < n; i++) {
-        r = (r * 2) % p;
-    }
-    return r;
+    if (n == 0)
+        return 1;
+    else
+        return (modp(n - 1, p) * 2) % p;
 }
 
 unittest

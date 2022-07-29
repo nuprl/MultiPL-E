@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Given a positive integer, obtain its roman numeral equivalent as a string,
@@ -13,16 +14,34 @@
 */
 const(char)[] int_to_mini_roman(int number) 
 {
-    string roman = "";
-    int[] roman_numerals = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
-    string[] roman_letters = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
-    for(int i = 0; i < roman_numerals.length; i++) {
-        while(number >= roman_numerals[i]) {
-            roman += roman_letters[i];
-            number -= roman_numerals[i];
-        }
-    }
-    return roman;
+    if(number < 1 || number > 1000)
+        return null;
+    else if(number < 4)
+        return "i" * number;
+    else if(number < 5)
+        return "v" + "i" * (number - 5);
+    else if(number < 9)
+        return "v" + "i" * (number - 5);
+    else if(number < 10)
+        return "x" + "i" * (number - 10);
+    else if(number < 40)
+        return "x" * (number / 10) + "i" * (number % 10);
+    else if(number < 50)
+        return "l" + "x" * ((number - 40) / 10) + "i" * (number % 10);
+    else if(number < 90)
+        return "l" + "x" * ((number - 50) / 10) + "i" * (number % 10);
+    else if(number < 100)
+        return "c" + "x" * ((number - 90) / 10) + "i" * (number % 10);
+    else if(number < 400)
+        return "c" * (number / 100) + "x" * ((number % 100) / 10) + "i" * (number % 10);
+    else if(number < 500)
+        return "d" + "c" * ((number - 400) / 100) + "x" * ((number % 100) / 10) + "i" * (number % 10);
+    else if(number < 900)
+        return "d" + "c" * ((number - 500) / 100) + "x" * ((number % 100) / 10) + "i" * (number % 10);
+    else if(number < 1000)
+        return "m" * (number / 1000) + "c" * ((number % 1000) / 100) + "x" * ((number % 100) / 10) + "i" * (number % 10);
+    else
+        return null;
 }
 
 unittest

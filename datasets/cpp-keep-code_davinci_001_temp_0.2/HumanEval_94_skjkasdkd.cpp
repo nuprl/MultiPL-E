@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You are given a list of integers.
@@ -28,9 +23,8 @@ long skjkasdkd(std::vector<long> lst) {
         max /= 10;
     }
     return sum;
+
 }
-
-
 int main() {
     auto candidate = skjkasdkd;
     assert(candidate((std::vector<long>({0, 3, 2, 1, 3, 5, 7, 4, 5, 5, 5, 2, 181, 32, 4, 32, 3, 2, 32, 324, 4, 3}))) == (10));

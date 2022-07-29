@@ -28,13 +28,13 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate(array('aa', 'a', 'aaa')) !== array('aa')) { throw new Exception("Test failed!"); }
-    if (candidate(array('school', 'AI', 'asdf', 'b')) !== array('AI', 'asdf', 'school')) { throw new Exception("Test failed!"); }
-    if (candidate(array('d', 'b', 'c', 'a')) !== array()) { throw new Exception("Test failed!"); }
-    if (candidate(array('d', 'dcba', 'abcd', 'a')) !== array('abcd', 'dcba')) { throw new Exception("Test failed!"); }
-    if (candidate(array('AI', 'ai', 'au')) !== array('AI', 'ai', 'au')) { throw new Exception("Test failed!"); }
-    if (candidate(array('a', 'b', 'b', 'c', 'c', 'a')) !== array()) { throw new Exception("Test failed!"); }
-    if (candidate(array('aaaa', 'bbbb', 'dd', 'cc')) !== array('cc', 'dd', 'aaaa', 'bbbb')) { throw new Exception("Test failed!"); }
+    if (candidate(array("aa", "a", "aaa")) !== array("aa")) { throw new Exception("Test failed!"); }
+    if (candidate(array("school", "AI", "asdf", "b")) !== array("AI", "asdf", "school")) { throw new Exception("Test failed!"); }
+    if (candidate(array("d", "b", "c", "a")) !== array()) { throw new Exception("Test failed!"); }
+    if (candidate(array("d", "dcba", "abcd", "a")) !== array("abcd", "dcba")) { throw new Exception("Test failed!"); }
+    if (candidate(array("AI", "ai", "au")) !== array("AI", "ai", "au")) { throw new Exception("Test failed!"); }
+    if (candidate(array("a", "b", "b", "c", "c", "a")) !== array()) { throw new Exception("Test failed!"); }
+    if (candidate(array("aaaa", "bbbb", "dd", "cc")) !== array("cc", "dd", "aaaa", "bbbb")) { throw new Exception("Test failed!"); }
 }
 
 test();

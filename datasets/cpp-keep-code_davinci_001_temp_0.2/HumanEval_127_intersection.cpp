@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You are given two intervals,
@@ -22,32 +17,40 @@
 // intersection((-1, 1), (0, 4)) ==> "NO"
 // intersection((-3, -1), (-5, 5)) ==> "YES"
 std::string intersection(std::tuple<long, long> interval1, std::tuple<long, long> interval2) {
-    std::optional<long> intersection_length = std::nullopt;
-    std::optional<long> intersection_start = std::nullopt;
-    std::optional<long> intersection_end = std::nullopt;
-    std::optional<long> start1 = std::nullopt;
-    std::optional<long> end1 = std::nullopt;
-    std::optional<long> start2 = std::nullopt;
-    std::optional<long> end2 = std::nullopt;
-    if (std::get<0>(interval1) <= std::get<1>(interval1) && std::get<0>(interval2) <= std::get<1>(interval2)) {
-        start1 = std::get<0>(interval1);
-        end1 = std::get<1>(interval1);
-        start2 = std::get<0>(interval2);
-        end2 = std::get<1>(interval2);
-    } else if (std::get<0>(interval1) <= std::get<1>(interval1) && std::get<0>(interval2) >= std::get<1>(interval2)) {
-        start1 = std::get<0>(interval1);
-        end1 = std::get<1>(interval1);
-        start2 = std::get<0>(interval2);
-        end2 = std::get<1>(interval2);
-    } else if (std::get<0>(interval1) >= std::get<1>(interval1) && std::get<0>(interval2) <= std::get<1>(interval2)) {
-        start1 = std::get<0>(interval1);
-        end1 = std::get<1>(interval1);
-        start2 = std::get<0>(interval2);
-        end2 = std::get<1>(interval2);
-    } else if (std::get<0>(interval1) >= std::get<1>(interval1) && std::get<0>(interval2) >= std::get<1>(interval2)) {
-        start1 = std::
+    long start1 = std::get<0>(interval1);
+    long end1 = std::get<1>(interval1);
+    long start2 = std::get<0>(interval2);
+    long end2 = std::get<1>(interval2);
+    long start = std::max(start1, start2);
+    long end = std::min(end1, end2);
+    if (start > end) {
+        return "NO";
+    }
+    long length = end - start;
+    if (length < 2) {
+        return "NO";
+    }
+    if (length == 2) {
+        return "YES";
+    }
+    if (length == 3) {
+        return "NO";
+    }
+    if (length % 2 == 0) {
+        return "NO";
+    }
+    if (length % 3 == 0) {
+        return "NO";
+    }
+    if (length % 5 == 0) {
+        return "NO";
+    }
+    if (length % 7 == 0) {
+        return "NO";
+    }
+    return "YES";
 
-
+}
 int main() {
     auto candidate = intersection;
     assert(candidate((std::make_tuple(1, 2)), (std::make_tuple(2, 3))) == ("NO"));

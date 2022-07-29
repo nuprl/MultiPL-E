@@ -38,13 +38,13 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('Jupiter', 'Neptune') !== array('Saturn', 'Uranus')) { throw new Exception("Test failed!"); }
-    if (candidate('Earth', 'Mercury') !== array('Venus')) { throw new Exception("Test failed!"); }
-    if (candidate('Mercury', 'Uranus') !== array('Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn')) { throw new Exception("Test failed!"); }
-    if (candidate('Neptune', 'Venus') !== array('Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus')) { throw new Exception("Test failed!"); }
-    if (candidate('Earth', 'Earth') !== array()) { throw new Exception("Test failed!"); }
-    if (candidate('Mars', 'Earth') !== array()) { throw new Exception("Test failed!"); }
-    if (candidate('Jupiter', 'Makemake') !== array()) { throw new Exception("Test failed!"); }
+    if (candidate("Jupiter", "Neptune") !== array("Saturn", "Uranus")) { throw new Exception("Test failed!"); }
+    if (candidate("Earth", "Mercury") !== array("Venus")) { throw new Exception("Test failed!"); }
+    if (candidate("Mercury", "Uranus") !== array("Venus", "Earth", "Mars", "Jupiter", "Saturn")) { throw new Exception("Test failed!"); }
+    if (candidate("Neptune", "Venus") !== array("Earth", "Mars", "Jupiter", "Saturn", "Uranus")) { throw new Exception("Test failed!"); }
+    if (candidate("Earth", "Earth") !== array()) { throw new Exception("Test failed!"); }
+    if (candidate("Mars", "Earth") !== array()) { throw new Exception("Test failed!"); }
+    if (candidate("Jupiter", "Makemake") !== array()) { throw new Exception("Test failed!"); }
 }
 
 test();

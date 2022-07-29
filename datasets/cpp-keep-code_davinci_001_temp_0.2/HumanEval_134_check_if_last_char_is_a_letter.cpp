@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Create a function that returns True if the last character
@@ -15,16 +10,12 @@
 // check_if_last_char_is_a_letter("apple pi e ") ➞ False
 // check_if_last_char_is_a_letter("") ➞ False
 bool check_if_last_char_is_a_letter(std::string txt) {
-    if(txt.size() == 0)
-        return false;
-    if(txt[txt.size()-1] >= 'a' && txt[txt.size()-1] <= 'z')
-        return true;
-    if(txt[txt.size()-1] >= 'A' && txt[txt.size()-1] <= 'Z')
-        return true;
+    if(txt.length() == 0) return false;
+    if(txt[txt.length()-1] >= 'a' && txt[txt.length()-1] <= 'z') return true;
+    if(txt[txt.length()-1] >= 'A' && txt[txt.length()-1] <= 'Z') return true;
     return false;
+
 }
-
-
 int main() {
     auto candidate = check_if_last_char_is_a_letter;
     assert(candidate(("apple")) == (false));

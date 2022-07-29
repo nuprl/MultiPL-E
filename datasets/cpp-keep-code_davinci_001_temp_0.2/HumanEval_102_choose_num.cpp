@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // This function takes two positive numbers x and y and returns the
@@ -12,20 +7,15 @@
 // choose_num(12, 15) = 14
 // choose_num(13, 12) = -1
 long choose_num(long x, long y) {
-    long result = -1;
+    long max = -1;
     for (long i = x; i <= y; i++) {
         if (i % 2 == 0) {
-            result = i;
-            break;
+            max = i;
         }
     }
-    return result;
+    return max;
+
 }
-// This function takes a string and returns the number of vowels in it.
-// For example:
-// count_vowels("Theistareykjarbunga") = 8
-
-
 int main() {
     auto candidate = choose_num;
     assert(candidate((12), (15)) == (14));

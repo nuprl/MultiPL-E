@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Create a function which takes a string representing a file's name, and returns
     'Yes' if the the file's name is valid, and returns 'No' otherwise.
@@ -16,52 +17,72 @@ Create a function which takes a string representing a file's name, and returns
 */
 const(char)[] file_name_check(const(char)[] file_name) 
 {
-    int i, j, k, l, m, n;
     int count = 0;
     int dot_count = 0;
     int dot_index = 0;
-    int dot_index_1 = 0;
-    int dot_index_2 = 0;
-    int dot_index_3 = 0;
-    int dot_index_4 = 0;
-    int dot_index_5 = 0;
-    int dot_index_6 = 0;
-    int dot_index_7 = 0;
-    int dot_index_8 = 0;
-    int dot_index_9 = 0;
-    int dot_index_10 = 0;
-    int dot_index_11 = 0;
-    int dot_index_12 = 0;
-    int dot_index_13 = 0;
-    int dot_index_14 = 0;
-    int dot_index_15 = 0;
-    int dot_index_16 = 0;
-    int dot_index_17 = 0;
-    int dot_index_18 = 0;
-    int dot_index_19 = 0;
-    int dot_index_20 = 0;
-    int dot_index_21 = 0;
-    int dot_index_22 = 0;
-    int dot_index_23 = 0;
-    int dot_index_24 = 0;
-    int dot_index_25 = 0;
-    int dot_index_26 = 0;
-    int dot_index_27 = 0;
-    int dot_index_28 = 0;
-    int dot_index_29 = 0;
-    int dot_index_30 = 0;
-    int dot_index_31 = 0;
-    int dot_index_32 = 0;
-    int dot_index_33 = 0;
-    int dot_index_34 = 0;
-    int dot_index_35 = 0;
-    int dot_index_36 = 0;
-    int dot_index_37 = 0;
-    int dot_index_38 = 0;
-    int dot_index_39 = 0;
-    int dot_index_40 = 0;
-    int dot_index_41 = 0;
-    int dot_index_
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    int l = 0;
+    int m = 0;
+    int n = 0;
+    int o = 0;
+    int p = 0;
+    int q = 0;
+    int r = 0;
+    int s = 0;
+    int t = 0;
+    int u = 0;
+    int v = 0;
+    int w = 0;
+    int x = 0;
+    int y = 0;
+    int z = 0;
+    int a = 0;
+    int b = 0;
+    int c = 0;
+    int d = 0;
+    int e = 0;
+    int f = 0;
+    int g = 0;
+    int h = 0;
+    int i1 = 0;
+    int j1 = 0;
+    int k1 = 0;
+    int l1 = 0;
+    int m1 = 0;
+    int n1 = 0;
+    int o1 = 0;
+    int p1 = 0;
+    int q1 = 0;
+    int r1 = 0;
+    int s1 = 0;
+    int t1 = 0;
+    int u1 = 0;
+    int v1 = 0;
+    int w1 = 0;
+    int x1 = 0;
+    int y1 = 0;
+    int z1 = 0;
+    int a1 = 0;
+    int b1 = 0;
+    int c1 = 0;
+    int d1 = 0;
+    int e1 = 0;
+    int f1 = 0;
+    int g1 = 0;
+    int h1 = 0;
+    int i2 = 0;
+    int j2 = 0;
+    int k2 = 0;
+    int l2 = 0;
+    int m2 = 0;
+    int n2 = 0;
+    int o2 = 0;
+    int p2 = 0;
+    int q2 = 0;
+    int r2 = 0;
+    int
 
 unittest
 {

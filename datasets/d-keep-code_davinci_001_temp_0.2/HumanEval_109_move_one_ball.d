@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 We have an array 'arr' of N integers arr[1], arr[2], ..., arr[N].The
     numbers in the array will be randomly ordered. Your task is to determine if
@@ -28,44 +29,25 @@ We have an array 'arr' of N integers arr[1], arr[2], ..., arr[N].The
     
 */
 bool move_one_ball(int[] arr) 
-{ 
-    int n = arr.length; 
-    int i = 0; 
-    int j = 0; 
-    while (j < n) 
-    { 
-        if (arr[j] > arr[j + 1]) 
-        { 
-            i = j; 
-            while (i >= 0 && arr[i] > arr[i + 1]) 
-            { 
-                swap(arr, i, i + 1); 
-                i--; 
-            } 
-        } 
-        j++; 
-    } 
-    for (int k = 0; k < n - 1; k++) 
-    { 
-        if (arr[k] > arr[k + 1]) 
-            return false; 
-    } 
-    return true; 
-} 
-// Driver program to test above function 
-public static void main(String[] args) 
-{ 
-    int[] arr = {3, 4, 5, 1, 2}; 
-    if (move_one_ball(arr)) 
-        System.out.println("Yes"); 
-    else
-        System.out.println("No"); 
-} 
-main(args);
-/*
-The above solution is not the most optimal one.
-We can use sorting to solve this problem in O(nLogn) time.
-*/
+{
+    int n = arr.length;
+    if(n==0)
+        return true;
+    int i = 0;
+    while(i<n-1)
+    {
+        if(arr[i]>arr[i+1])
+        {
+            int temp = arr[i];
+            arr[i] = arr[i+1];
+            arr[i+1] = temp;
+            i = 0;
+        }
+        else
+            i++;
+    }
+    return true;
+}
 
 unittest
 {

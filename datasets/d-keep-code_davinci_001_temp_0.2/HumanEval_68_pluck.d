@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     "Given an array representing a branch of a tree that has non-negative integer nodes
@@ -38,40 +39,17 @@ int[] pluck(int[] arr)
 {
     int[] result = new int[2];
     int min = int.MaxValue;
-    int minIndex = int.MaxValue;
-    int minEven = int.MaxValue;
-    int minEvenIndex = int.MaxValue;
-    int minOdd = int.MaxValue;
-    int minOddIndex = int.MaxValue;
+    int index = 0;
     for (int i = 0; i < arr.Length; i++)
     {
-        if (arr[i] % 2 == 0)
+        if (arr[i] % 2 == 0 && arr[i] < min)
         {
-            if (arr[i] < minEven)
-            {
-                minEven = arr[i];
-                minEvenIndex = i;
-            }
-        }
-        else
-        {
-            if (arr[i] < minOdd)
-            {
-                minOdd = arr[i];
-                minOddIndex = i;
-            }
+            min = arr[i];
+            index = i;
         }
     }
-    if (minEven < minOdd)
-    {
-        result[0] = minEven;
-        result[1] = minEvenIndex;
-    }
-    else
-    {
-        result[0] = minOdd;
-        result[1] = minOddIndex;
-    }
+    result[0] = min;
+    result[1] = index;
     return result;
 }
 

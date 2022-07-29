@@ -38,25 +38,25 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate 'This is a test')
-    assert_equals 'is' "${x0[*]}"
+        x0=$(candidate "This is a test")
+    assert_equals "is" "${x0[*]}"
 
-        x1=$(candidate 'lets go for swimming')
-    assert_equals 'go for' "${x1[*]}"
+        x1=$(candidate "lets go for swimming")
+    assert_equals "go for" "${x1[*]}"
 
-        x2=$(candidate 'there is no place available here')
-    assert_equals 'there is no place' "${x2[*]}"
+        x2=$(candidate "there is no place available here")
+    assert_equals "there is no place" "${x2[*]}"
 
-        x3=$(candidate 'Hi I am Hussein')
-    assert_equals 'Hi am Hussein' "${x3[*]}"
+        x3=$(candidate "Hi I am Hussein")
+    assert_equals "Hi am Hussein" "${x3[*]}"
 
-        x4=$(candidate 'go for it')
-    assert_equals 'go for it' "${x4[*]}"
+        x4=$(candidate "go for it")
+    assert_equals "go for it" "${x4[*]}"
 
-        x5=$(candidate 'here')
-    assert_equals '' "${x5[*]}"
+        x5=$(candidate "here")
+    assert_equals "" "${x5[*]}"
 
-        x6=$(candidate 'here is')
-    assert_equals 'is' "${x6[*]}"
+        x6=$(candidate "here is")
+    assert_equals "is" "${x6[*]}"
 
 }

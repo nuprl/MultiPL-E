@@ -27,15 +27,15 @@ candidate() {
 
 test() {
         x0=$(candidate 0)
-    assert_equals 'db0db' "${x0[*]}"
+    assert_equals "db0db" "${x0[*]}"
 
         x1=$(candidate 32)
-    assert_equals 'db100000db' "${x1[*]}"
+    assert_equals "db100000db" "${x1[*]}"
 
         x2=$(candidate 103)
-    assert_equals 'db1100111db' "${x2[*]}"
+    assert_equals "db1100111db" "${x2[*]}"
 
         x3=$(candidate 15)
-    assert_equals 'db1111db' "${x3[*]}"
+    assert_equals "db1111db" "${x3[*]}"
 
 }

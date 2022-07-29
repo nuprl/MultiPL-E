@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Return the number of times the digit 7 appears in integers less than n which are divisible by 11 or 13.
     >>> fizz_buzz(50)
@@ -12,11 +13,11 @@ Return the number of times the digit 7 appears in integers less than n which are
 int fizz_buzz(int n) 
 {
     int count = 0;
-    for (int i = 1; i < n; i++)
+    for (int i = 1; i < n; i++) 
     {
-        if ((i % 11 == 0) || (i % 13 == 0))
+        if ((i % 11 == 0) || (i % 13 == 0)) 
         {
-            count += strchr(to_string(i), '7') != NULL;
+            count++;
         }
     }
     return count;

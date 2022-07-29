@@ -1,23 +1,18 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // For a given number n, find the largest number that divides n evenly, smaller than n
 // >>> largest_divisor(15)
 // 5
 long largest_divisor(long n) {
-    for (long i = n-1; i > 0; i--) {
+    long i;
+    for (i = n - 1; i > 0; i--) {
         if (n % i == 0) {
-            return i;
+            break;
         }
     }
-    return n;
+    return i;
+
 }
-
-
 int main() {
     auto candidate = largest_divisor;
     assert(candidate((3)) == (1));

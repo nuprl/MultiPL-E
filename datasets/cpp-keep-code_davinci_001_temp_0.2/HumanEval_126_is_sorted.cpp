@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a list of numbers, return whether or not they are sorted
@@ -18,18 +13,14 @@
 // is_sorted([1, 2, 2, 3, 3, 4]) ➞ True
 // is_sorted([1, 2, 2, 2, 3, 4]) ➞ False
 bool is_sorted(std::vector<long> lst) {
-    if (lst.size() == 1) {
-        return true;
-    }
     for (int i = 0; i < lst.size() - 1; i++) {
         if (lst[i] > lst[i + 1]) {
             return false;
         }
     }
     return true;
+
 }
-
-
 int main() {
     auto candidate = is_sorted;
     assert(candidate((std::vector<long>({5}))) == (true));

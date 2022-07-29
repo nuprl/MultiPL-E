@@ -56,15 +56,15 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('Watashi', array('tEN', 'niNE', 'eIGHt8OKe')) !== 'Watashi.eIGHt8OKe') { throw new Exception("Test failed!"); }
-    if (candidate('Boku123', array('nani', 'NazeDa', 'YEs.WeCaNe', '32145tggg')) !== 'Boku123.YEs.WeCaNe') { throw new Exception("Test failed!"); }
-    if (candidate('__YESIMHERE', array('t', 'eMptY', 'nothing', 'zeR00', 'NuLl__', '123NoooneB321')) !== '__YESIMHERE.NuLl__') { throw new Exception("Test failed!"); }
-    if (candidate('K', array('Ta', 'TAR', 't234An', 'cosSo')) !== 'K.TAR') { throw new Exception("Test failed!"); }
-    if (candidate('__HAHA', array('Tab', '123', '781345', '-_-')) !== '__HAHA.123') { throw new Exception("Test failed!"); }
-    if (candidate('YameRore', array('HhAas', 'okIWILL123', 'WorkOut', 'Fails', '-_-')) !== 'YameRore.okIWILL123') { throw new Exception("Test failed!"); }
-    if (candidate('finNNalLLly', array('Die', 'NowW', 'Wow', 'WoW')) !== 'finNNalLLly.WoW') { throw new Exception("Test failed!"); }
-    if (candidate('_', array('Bb', '91245')) !== '_.Bb') { throw new Exception("Test failed!"); }
-    if (candidate('Sp', array('671235', 'Bb')) !== 'Sp.671235') { throw new Exception("Test failed!"); }
+    if (candidate("Watashi", array("tEN", "niNE", "eIGHt8OKe")) !== "Watashi.eIGHt8OKe") { throw new Exception("Test failed!"); }
+    if (candidate("Boku123", array("nani", "NazeDa", "YEs.WeCaNe", "32145tggg")) !== "Boku123.YEs.WeCaNe") { throw new Exception("Test failed!"); }
+    if (candidate("__YESIMHERE", array("t", "eMptY", "nothing", "zeR00", "NuLl__", "123NoooneB321")) !== "__YESIMHERE.NuLl__") { throw new Exception("Test failed!"); }
+    if (candidate("K", array("Ta", "TAR", "t234An", "cosSo")) !== "K.TAR") { throw new Exception("Test failed!"); }
+    if (candidate("__HAHA", array("Tab", "123", "781345", "-_-")) !== "__HAHA.123") { throw new Exception("Test failed!"); }
+    if (candidate("YameRore", array("HhAas", "okIWILL123", "WorkOut", "Fails", "-_-")) !== "YameRore.okIWILL123") { throw new Exception("Test failed!"); }
+    if (candidate("finNNalLLly", array("Die", "NowW", "Wow", "WoW")) !== "finNNalLLly.WoW") { throw new Exception("Test failed!"); }
+    if (candidate("_", array("Bb", "91245")) !== "_.Bb") { throw new Exception("Test failed!"); }
+    if (candidate("Sp", array("671235", "Bb")) !== "Sp.671235") { throw new Exception("Test failed!"); }
 }
 
 test();

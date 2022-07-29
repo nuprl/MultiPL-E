@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 You are given a list of numbers.
     You need to return the sum of squared numbers in the given list,
@@ -16,9 +17,9 @@ You are given a list of numbers.
 int sum_squares(float[] lst) 
 {
     int sum = 0;
-    for (int i = 0; i < lst.Length; i++)
+    for (int i = 0; i < lst.length; i++)
     {
-        sum += (int)Math.Ceiling(lst[i]);
+        sum += (int)Math.ceil(lst[i]);
     }
     return sum;
 }

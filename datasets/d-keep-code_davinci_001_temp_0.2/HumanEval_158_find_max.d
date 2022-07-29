@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Write a function that accepts a list of strings.
     The list contains different words. Return the word with maximum number
@@ -12,18 +13,9 @@ Write a function that accepts a list of strings.
 */
 const(char)[] find_max(const(char)[][] words) 
 {
-    int max_len = 0;
-    int max_len_index = 0;
-    for (int i = 0; i < words.length; i++)
-    {
-        if (words[i].length > max_len)
-        {
-            max_len = words[i].length;
-            max_len_index = i;
-        }
-    }
-    return words[max_len_index];
+    // Write your code here
 }
+
 
 unittest
 {

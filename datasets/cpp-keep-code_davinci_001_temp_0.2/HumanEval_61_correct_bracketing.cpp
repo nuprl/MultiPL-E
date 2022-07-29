@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // brackets is a string of "(" and ")".
@@ -16,30 +11,20 @@
 // >>> correct_bracketing(")(()")
 // False
 bool correct_bracketing(std::string brackets) {
-    std::map<char, char> bracket_map = {
-        { '(', ')' },
-        { '{', '}' },
-        { '[', ']' }
-    };
-    std::vector<char> stack;
-    for (char bracket : brackets) {
-        if (bracket_map.find(bracket) != bracket_map.end()) {
-            stack.push_back(bracket);
+    std::stack<char> st;
+    for(char c : brackets) {
+        if(c == '(') {
+            st.push(c);
         } else {
-            if (stack.empty()) {
+            if(st.empty()) {
                 return false;
             }
-            char last_bracket = stack.back();
-            if (bracket_map[last_bracket] != bracket) {
-                return false;
-            }
-            stack.pop_back();
+            st.pop();
         }
     }
-    return stack.empty();
+    return st.empty();
+
 }
-
-
 int main() {
     auto candidate = correct_bracketing;
     assert(candidate(("()")) == (true));

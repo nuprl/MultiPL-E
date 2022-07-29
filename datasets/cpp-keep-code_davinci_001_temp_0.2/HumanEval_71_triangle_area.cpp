@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given the lengths of the three sides of a triangle. Return the area of
@@ -14,14 +9,13 @@
 // triangle_area(3, 4, 5) == 6.00
 // triangle_area(1, 2, 10) == -1
 float triangle_area(long a, long b, long c) {
-    if(a+b>c && a+c>b && b+c>a){
-        float s = (a+b+c)/2;
-        return std::round(std::sqrt(s*(s-a)*(s-b)*(s-c))*100)/100;
-    }
-    return -1;
+    // Write your code here
+    if(a+b>c && a+c>b && b+c>a)
+        return (a+b+c)*0.5;
+    else
+        return -1;
+
 }
-
-
 int main() {
     auto candidate = triangle_area;
     assert(candidate((3), (4), (5)) == (6.0));

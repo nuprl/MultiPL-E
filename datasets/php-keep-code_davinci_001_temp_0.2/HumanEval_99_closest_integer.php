@@ -25,11 +25,11 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('10') !== 10) { throw new Exception("Test failed!"); }
-    if (candidate('14.5') !== 15) { throw new Exception("Test failed!"); }
-    if (candidate('-15.5') !== -16) { throw new Exception("Test failed!"); }
-    if (candidate('15.3') !== 15) { throw new Exception("Test failed!"); }
-    if (candidate('0') !== 0) { throw new Exception("Test failed!"); }
+    if (candidate("10") !== 10) { throw new Exception("Test failed!"); }
+    if (candidate("14.5") !== 15) { throw new Exception("Test failed!"); }
+    if (candidate("-15.5") !== -16) { throw new Exception("Test failed!"); }
+    if (candidate("15.3") !== 15) { throw new Exception("Test failed!"); }
+    if (candidate("0") !== 0) { throw new Exception("Test failed!"); }
 }
 
 test();

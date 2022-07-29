@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Given an array of integers, sort the integers that are between 1 and 9 inclusive,
@@ -24,18 +25,74 @@
 */
 const(char)[][] by_length(int[] arr) 
 {
-    int[] sorted = arr.sort();
-    int[] reversed = arr.reverse();
-    int[] result = new int[sorted.length];
-    for(int i = 0; i < sorted.length; i++)
-    {
-        if(sorted[i] >= 1 && sorted[i] <= 9)
-        {
-            result[i] = sorted[i];
-        }
-    }
-    return result;
-}
+    var result = new const(char)[][];
+    var i = 0;
+    var j = 0;
+    var k = 0;
+    var l = 0;
+    var m = 0;
+    var n = 0;
+    var o = 0;
+    var p = 0;
+    var q = 0;
+    var r = 0;
+    var s = 0;
+    var t = 0;
+    var u = 0;
+    var v = 0;
+    var w = 0;
+    var x = 0;
+    var y = 0;
+    var z = 0;
+    var aa = 0;
+    var ab = 0;
+    var ac = 0;
+    var ad = 0;
+    var ae = 0;
+    var af = 0;
+    var ag = 0;
+    var ah = 0;
+    var ai = 0;
+    var aj = 0;
+    var ak = 0;
+    var al = 0;
+    var am = 0;
+    var an = 0;
+    var ao = 0;
+    var ap = 0;
+    var aq = 0;
+    var ar = 0;
+    var as = 0;
+    var at = 0;
+    var au = 0;
+    var av = 0;
+    var aw = 0;
+    var ax = 0;
+    var ay = 0;
+    var az = 0;
+    var ba = 0;
+    var bb = 0;
+    var bc = 0;
+    var bd = 0;
+    var be = 0;
+    var bf = 0;
+    var bg = 0;
+    var bh = 0;
+    var bi = 0;
+    var bj = 0;
+    var bk = 0;
+    var bl = 0;
+    var bm = 0;
+    var bn = 0;
+    var bo = 0;
+    var bp = 0;
+    var bq = 0;
+    var br = 0;
+    var bs = 0;
+    var bt = 0;
+    var bu = 0;
+    var bv = 0;
+    var b
 
 unittest
 {

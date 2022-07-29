@@ -1,4 +1,4 @@
-
+import std.math;
 /*
  For a given list of input numbers, calculate Mean Absolute Deviation
     around the mean of this dataset.
@@ -11,23 +11,16 @@
 */
 float mean_absolute_deviation(float[] numbers) 
 {
-    float sum = 0;
-    float mean = 0;
-    float mad = 0;
-    
-    // calculate mean
+    float sum = 0.0;
     for (int i = 0; i < numbers.length; i++) {
         sum += numbers[i];
     }
-    mean = sum / numbers.length;
-    
-    // calculate MAD
+    float mean = sum / numbers.length;
+    float sum_deviation = 0.0;
     for (int i = 0; i < numbers.length; i++) {
-        mad += Math.abs(numbers[i] - mean);
+        sum_deviation += abs(numbers[i] - mean);
     }
-    mad = mad / numbers.length;
-    
-    return mad;
+    return sum_deviation / numbers.length;
 }
 
 unittest

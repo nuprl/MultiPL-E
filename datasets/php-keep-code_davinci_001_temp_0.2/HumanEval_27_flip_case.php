@@ -19,9 +19,9 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('') !== '') { throw new Exception("Test failed!"); }
-    if (candidate('Hello!') !== 'hELLO!') { throw new Exception("Test failed!"); }
-    if (candidate('These violent delights have violent ends') !== 'tHESE VIOLENT DELIGHTS HAVE VIOLENT ENDS') { throw new Exception("Test failed!"); }
+    if (candidate("") !== "") { throw new Exception("Test failed!"); }
+    if (candidate("Hello!") !== "hELLO!") { throw new Exception("Test failed!"); }
+    if (candidate("These violent delights have violent ends") !== "tHESE VIOLENT DELIGHTS HAVE VIOLENT ENDS") { throw new Exception("Test failed!"); }
 }
 
 test();

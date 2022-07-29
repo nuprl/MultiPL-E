@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Write a function count_nums which takes an array of integers and returns
@@ -13,14 +14,13 @@
 int count_nums(int[] arr) 
 {
     int count = 0;
-    for (int i = 0; i < arr.Length; i++)
+    for (int i = 0; i < arr.length; i++)
     {
         int sum = 0;
-        int num = arr[i];
-        while (num > 0)
+        while (arr[i] != 0)
         {
-            sum += num % 10;
-            num /= 10;
+            sum += arr[i] % 10;
+            arr[i] /= 10;
         }
         if (sum > 0)
         {

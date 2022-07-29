@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a string representing a space separated lowercase letters, return a dictionary
@@ -16,64 +11,18 @@
 // histogram('') == {}
 std::map<std::string, long> histogram(std::string test) {
     std::map<std::string, long> result;
-    std::vector<std::string> letters;
-    std::stringstream ss(test);
     std::string word;
+    std::stringstream ss(test);
     while (ss >> word) {
-        letters.push_back(word);
-    }
-    for (auto& letter : letters) {
-        if (result.find(letter) == result.end()) {
-            result[letter] = 1;
+        if (result.find(word) == result.end()) {
+            result[word] = 1;
         } else {
-            result[letter] += 1;
+            result[word]++;
         }
     }
     return result;
-}
-std::map<std::string, long> histogram(std::string test) {
-    std::map<std::string, long> result;
-    std::vector<std::string> letters;
-    std::stringstream ss(test);
-    std::string word;
-    while (ss >> word) {
-        letters.push_back(word);
-    }
-    for (auto& letter : letters) {
-        if (result.find(letter) == result.end()) {
-            result[letter] = 1;
-        } else {
-            result[letter] += 1;
-        }
-    }
-    return result;
-}
-std::map<std::string, long> histogram(std::string test) {
-    std::map<std::string, long> result;
-    std::vector<std::string> letters;
-    std::stringstream ss(test);
-    std::string word;
-    while (ss >> word) {
-        letters.push_back(word);
-    }
-    for (auto& letter : letters) {
-        if (result.find(letter) == result.end()) {
-            result[letter] = 1;
-        } else {
-            result[letter] += 1;
-        }
-    }
-    return result;
-}
-std::map<std::string, long> histogram(std::string test) {
-    std::map<std::string, long> result;
-    std::vector<std::string> letters;
-    std::stringstream ss(test);
-    std::string word;
-    while (ss >> word) {
-        letters.
 
-
+}
 int main() {
     auto candidate = histogram;
     assert(candidate(("a b b a")) == (std::map<std::string, long>({ {"a", 2}, {"b", 2} })));

@@ -1,0 +1,1566 @@
+name: HumanEval_6_parse_nested_parens
+language: racket
+prompt: "#lang racket\n\n;; Input to this function is a string represented multiple\
+  \ groups for nested parentheses separated by spaces.\n;; For each of the group,\
+  \ output the deepest level of nesting of parentheses.\n;; E.g. (()()) has maximum\
+  \ two levels of nesting while ((())) has three.\n;; >>> parse_nested_parens('(()())\
+  \ ((())) () ((())()())')\n;; [2, 3, 1, 3]\n(define (parse_nested_parens paren_string)\n"
+tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate parse_nested_parens))\n\
+  \    (check-equal? (candidate \"(()()) ((())) () ((())()())\") (list 2 3 1 3))\n\
+  \    (check-equal? (candidate \"() (()) ((())) (((())))\") (list 1 2 3 4))\n   \
+  \ (check-equal? (candidate \"(()(())((())))\") (list 4))\n))\n\n(test-humaneval)"
+completions: ["  (define (parse_parens paren_string)\n    (cond\n      [(empty? paren_string)\
+    \ 0]\n      [(char=? (first paren_string) #\\() (+ 1 (parse_parens (rest paren_string)))]\n\
+    \      [(char=? (first paren_string) #\\)) (- 1 (parse_parens (rest paren_string)))]\n\
+    \      [else (parse_parens (rest paren_string))]))\n  (map parse_parens (string-split\
+    \ paren_string #\\space)))\n", "  (map (\u03BB (paren_group)\n         (let ([paren_group\
+    \ (string->list paren_group)])\n           (let loop ([paren_group paren_group]\
+    \ [nest_level 0] [max_nest_level 0])\n             (cond [(empty? paren_group)\
+    \ max_nest_level]\n                   [else\n                    (let ([paren\
+    \ (first paren_group)])\n                      (cond [(equal? paren #\\()\n  \
+    \                           (loop (rest paren_group) (+ nest_level 1) (max nest_level\
+    \ max_nest_level))]\n                            [(equal? paren #\\))\n      \
+    \                       (loop (rest paren_group) (- nest_level 1) max_nest_level)]\n\
+    \                            [else (loop (rest paren_group) nest_level max_nest_level)]))]))))\n\
+    \       (string-split paren_string #\\space)))\n", "  (define (parse-parens-helper\
+    \ paren_string paren_stack)\n    (cond\n      [(empty? paren_string) (reverse\
+    \ paren_stack)]\n      [(char=? (first paren_string) #\\()\n       (parse-parens-helper\
+    \ (rest paren_string) (cons 1 paren_stack))]\n      [(char=? (first paren_string)\
+    \ #\\))\n       (parse-parens-helper (rest paren_string) (cons (+ 1 (first paren_stack))\
+    \ (rest paren_stack)))]\n      [(char=? (first paren_string) #\\space)\n     \
+    \  (parse-parens-helper (rest paren_string) (cons 0 (rest paren_stack)))]))\n\
+    \  (parse-parens-helper paren_string (list 0)))\n", "  (map (lambda (paren_group)\n\
+    \         (parse_nested_parens_helper paren_group 0))\n       (string-split paren_string\
+    \ #\\space)))\n", "  (define (parse_parens paren_string)\n    (let loop ([paren_string\
+    \ paren_string] [max_depth 0] [depth 0])\n      (cond [(empty? paren_string) max_depth]\n\
+    \            [(char=? (first paren_string) #\\()\n             (loop (rest paren_string)\n\
+    \                   (if (> depth max_depth) depth max_depth)\n               \
+    \    (+ depth 1))]\n            [(char=? (first paren_string) #\\))\n        \
+    \     (loop (rest paren_string)\n                   (if (> depth max_depth) depth\
+    \ max_depth)\n                   (- depth 1))]\n            [else (loop (rest\
+    \ paren_string) max_depth depth)])))\n  (map parse_parens (string-split paren_string\
+    \ #\\space)))\n", "  (define (parse_parens paren_string)\n    (define (parens-iter\
+    \ paren_string max_level level)\n      (cond [(empty? paren_string) max_level]\n\
+    \            [(char=? (first paren_string) #\\()\n             (parens-iter (rest\
+    \ paren_string) (max max_level (add1 level)) (add1 level))]\n            [(char=?\
+    \ (first paren_string) #\\))\n             (parens-iter (rest paren_string) (max\
+    \ max_level level) (sub1 level))]\n            [else (parens-iter (rest paren_string)\
+    \ max_level level)]))\n    (parens-iter paren_string 0 0))\n  (map parse_parens\
+    \ (string-split paren_string #\\space)))\n", "  (define (parse_parens paren_string)\n\
+    \    (define (parse-parens-iter paren_string level)\n      (cond\n        [(empty?\
+    \ paren_string) level]\n        [(equal? (first paren_string) #\\() (parse-parens-iter\
+    \ (rest paren_string) (+ level 1))]\n        [(equal? (first paren_string) #\\\
+    )) (parse-parens-iter (rest paren_string) (- level 1))]\n        [else (parse-parens-iter\
+    \ (rest paren_string) level)]))\n    (parse-parens-iter paren_string 0))\n  (map\
+    \ parse_parens (string-split paren_string #\\space)))\n", "  (define (parse_nested_parens-iter\
+    \ paren_string max_depth current_depth)\n    (cond\n      [(empty? paren_string)\
+    \ (list max_depth)]\n      [(eq? (first paren_string) #\\()\n       (parse_nested_parens-iter\
+    \ (rest paren_string) (max max_depth (add1 current_depth)) (add1 current_depth))]\n\
+    \      [(eq? (first paren_string) #\\))\n       (parse_nested_parens-iter (rest\
+    \ paren_string) (max max_depth current_depth) (sub1 current_depth))]\n      [(eq?\
+    \ (first paren_string) #\\space)\n       (cons max_depth (parse_nested_parens-iter\
+    \ (rest paren_string) 0 0))]))\n  (parse_nested_parens-iter paren_string 0 0))\n",
+  "  (define (parse-parens-helper paren_string acc)\n    (cond\n      [(empty? paren_string)\
+    \ acc]\n      [(equal? (first paren_string) #\\()\n       (parse-parens-helper\
+    \ (rest paren_string) (add1 acc))]\n      [(equal? (first paren_string) #\\))\n\
+    \       (parse-parens-helper (rest paren_string) (sub1 acc))]\n      [else (parse-parens-helper\
+    \ (rest paren_string) acc)]))\n  (define (parse-parens-helper2 paren_string acc)\n\
+    \    (cond\n      [(empty? paren_string) acc]\n      [(equal? (first paren_string)\
+    \ #\\space)\n       (parse-parens-helper2 (rest paren_string) (cons (parse-parens-helper\
+    \ (rest paren_string) 0) acc))]\n      [else (parse-parens-helper2 (rest paren_string)\
+    \ acc)]))\n  (parse-parens-helper2 paren_string '()))\n", "  (define (parse_parens\
+    \ paren_string)\n    (define (parse_parens_iter paren_string max_depth depth)\n\
+    \      (cond\n        [(empty? paren_string) (list max_depth)]\n        [(char=?\
+    \ (first paren_string) #\\()\n         (parse_parens_iter (rest paren_string)\
+    \ (max max_depth (add1 depth)) (add1 depth))]\n        [(char=? (first paren_string)\
+    \ #\\))\n         (parse_parens_iter (rest paren_string) (max max_depth depth)\
+    \ (sub1 depth))]\n        [else (parse_parens_iter (rest paren_string) max_depth\
+    \ depth)]))\n    (parse_parens_iter paren_string 0 0))\n  (map parse_parens (string-split\
+    \ paren_string #\\space)))\n", "  (define (parse_parens paren_string)\n    (define\
+    \ (parse-parens-helper paren_string level)\n      (cond\n        [(empty? paren_string)\
+    \ level]\n        [(char=? (first paren_string) #\\() (parse-parens-helper (rest\
+    \ paren_string) (+ level 1))]\n        [(char=? (first paren_string) #\\)) (parse-parens-helper\
+    \ (rest paren_string) (- level 1))]\n        [else (parse-parens-helper (rest\
+    \ paren_string) level)]))\n    (parse-parens-helper paren_string 0))\n  (map parse_parens\
+    \ (string-split paren_string #\\space)))\n", "  (define (parse_parens paren_string\
+    \ level)\n    (cond\n      [(empty? paren_string) level]\n      [(equal? (first\
+    \ paren_string) #\\()\n       (parse_parens (rest paren_string) (+ level 1))]\n\
+    \      [(equal? (first paren_string) #\\))\n       (parse_parens (rest paren_string)\
+    \ (- level 1))]\n      [else (parse_parens (rest paren_string) level)]))\n  (define\
+    \ (parse_parens_list paren_string level)\n    (cond\n      [(empty? paren_string)\
+    \ (list level)]\n      [(equal? (first paren_string) #\\ )\n       (cons level\
+    \ (parse_parens_list (rest paren_string) 0))]\n      [(equal? (first paren_string)\
+    \ #\\()\n       (parse_parens_list (rest paren_string) (+ level 1))]\n      [(equal?\
+    \ (first paren_string) #\\))\n       (parse_parens_list (rest paren_string) (-\
+    \ level 1))]\n      [else (parse_parens_list (rest paren_string) level)]))\n \
+    \ (parse_parens_list paren_string 0))\n", "  (map (lambda (paren_group)\n    \
+    \     (let loop ([paren_group paren_group] [max_depth 0] [current_depth 0])\n\
+    \           (cond [(empty? paren_group) max_depth]\n                 [(char=?\
+    \ (first paren_group) #\\()\n                  (loop (rest paren_group) max_depth\
+    \ (+ current_depth 1))]\n                 [(char=? (first paren_group) #\\))\n\
+    \                  (loop (rest paren_group) (max max_depth current_depth) (- current_depth\
+    \ 1))]\n                 [else (loop (rest paren_group) max_depth current_depth)])))\n\
+    \       (regexp-split #rx\" \" paren_string)))\n", "  (define (parse-parens-helper\
+    \ paren_string max-level)\n    (cond\n      [(empty? paren_string) max-level]\n\
+    \      [(string=? (first paren_string) \"(\") (parse-parens-helper (rest paren_string)\
+    \ (+ max-level 1))]\n      [(string=? (first paren_string) \")\") (parse-parens-helper\
+    \ (rest paren_string) (- max-level 1))]\n      [else (parse-parens-helper (rest\
+    \ paren_string) max-level)]))\n  (parse-parens-helper paren_string 0))\n", " \
+    \ (map (lambda (paren_group)\n         (let loop ([paren_group paren_group] [nesting\
+    \ 0] [max_nesting 0])\n           (cond [(empty? paren_group) max_nesting]\n \
+    \                [(equal? (first paren_group) #\\()\n                  (loop (rest\
+    \ paren_group) (+ nesting 1) (max nesting max_nesting))]\n                 [(equal?\
+    \ (first paren_group) #\\))\n                  (loop (rest paren_group) (- nesting\
+    \ 1) (max nesting max_nesting))]\n                 [else (loop (rest paren_group)\
+    \ nesting max_nesting)])))\n       (split-string paren_string)))\n", "  (map (lambda\
+    \ (paren_group)\n         (let loop ([paren_group paren_group] [max_level 0] [cur_level\
+    \ 0])\n           (cond [(empty? paren_group) max_level]\n                 [(char=?\
+    \ (first paren_group) #\\()\n                  (loop (rest paren_group)\n    \
+    \                    (if (> cur_level max_level)\n                           \
+    \ cur_level\n                            max_level)\n                        (+\
+    \ cur_level 1))]\n                 [(char=? (first paren_group) #\\))\n      \
+    \            (loop (rest paren_group)\n                        (if (> cur_level\
+    \ max_level)\n                            cur_level\n                        \
+    \    max_level)\n                        (- cur_level 1))]\n                 [else\
+    \ (loop (rest paren_group) max_level cur_level)])))\n       (string-split paren_string)))\n",
+  "  (define (parse_parens paren_string)\n    (define (parse-parens-iter paren_string\
+    \ max-level level)\n      (cond\n        [(empty? paren_string) max-level]\n \
+    \       [(char=? (first paren_string) #\\()\n         (parse-parens-iter (rest\
+    \ paren_string) (max max-level (add1 level)) (add1 level))]\n        [(char=?\
+    \ (first paren_string) #\\))\n         (parse-parens-iter (rest paren_string)\
+    \ (max max-level level) (sub1 level))]\n        [else (parse-parens-iter (rest\
+    \ paren_string) max-level level)]))\n    (parse-parens-iter paren_string 0 0))\n\
+    \  (map parse_parens (string-split paren_string #\\space)))\n", "  (let loop ([paren_string\
+    \ paren_string] [paren_stack '()] [max_depth 0] [current_depth 0])\n    (cond\
+    \ [(empty? paren_string)\n           (list max_depth)]\n          [(char=? (first\
+    \ paren_string) #\\()\n           (loop (rest paren_string) (cons #\\( paren_stack)\n\
+    \                 (if (> current_depth max_depth)\n                     (add1\
+    \ current_depth)\n                     max_depth)\n                 (add1 current_depth))]\n\
+    \          [(char=? (first paren_string) #\\))\n           (loop (rest paren_string)\
+    \ (rest paren_stack)\n                 (if (> current_depth max_depth)\n     \
+    \                (add1 current_depth)\n                     max_depth)\n     \
+    \            (sub1 current_depth))]\n          [else\n           (loop (rest paren_string)\
+    \ paren_stack max_depth current_depth)])))\n", "  (map (lambda (paren_group)\n\
+    \         (let ([paren_group_list (string->list paren_group)])\n           (let\
+    \ loop ([paren_group_list paren_group_list]\n                      [max_depth\
+    \ 0]\n                      [current_depth 0])\n             (cond [(empty? paren_group_list)\
+    \ max_depth]\n                   [(char=? (first paren_group_list) #\\()\n   \
+    \                 (loop (rest paren_group_list)\n                          (max\
+    \ max_depth (add1 current_depth))\n                          (add1 current_depth))]\n\
+    \                   [(char=? (first paren_group_list) #\\))\n                \
+    \    (loop (rest paren_group_list)\n                          max_depth\n    \
+    \                      (sub1 current_depth))]\n                   [else (loop\
+    \ (rest paren_group_list)\n                               max_depth\n        \
+    \                       current_depth)]))))\n       (string-split paren_string)))\n",
+  "  (define (parse_parens paren_string level)\n    (cond\n      [(empty? paren_string)\
+    \ level]\n      [(equal? (first paren_string) #\\() (parse_parens (rest paren_string)\
+    \ (+ level 1))]\n      [(equal? (first paren_string) #\\)) (parse_parens (rest\
+    \ paren_string) (- level 1))]\n      [else (parse_parens (rest paren_string) level)]))\n\
+    \  (map parse_parens (string-split paren_string #\\space)))\n", "  (define (parse-parens\
+    \ paren-string)\n    (define (parse-parens-iter paren-string max-depth depth)\n\
+    \      (cond\n        [(empty? paren-string) max-depth]\n        [(char=? (first\
+    \ paren-string) #\\()\n         (parse-parens-iter (rest paren-string) (max max-depth\
+    \ (+ depth 1)) (+ depth 1))]\n        [(char=? (first paren-string) #\\))\n  \
+    \       (parse-parens-iter (rest paren-string) (max max-depth depth) (- depth\
+    \ 1))]\n        [else (parse-parens-iter (rest paren-string) max-depth depth)]))\n\
+    \    (parse-parens-iter paren-string 0 0))\n  (map parse-parens (string-split\
+    \ paren-string #\\space)))\n", "  (define (parse_nested_parens_helper paren_string\
+    \ current_level max_level)\n    (cond\n      [(empty? paren_string) max_level]\n\
+    \      [(equal? (first paren_string) #\\()\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (+ current_level 1) (max max_level current_level))]\n  \
+    \    [(equal? (first paren_string) #\\))\n       (parse_nested_parens_helper (rest\
+    \ paren_string) (- current_level 1) max_level)]\n      [else (parse_nested_parens_helper\
+    \ (rest paren_string) current_level max_level)]))\n  (define (parse_nested_parens_helper_2\
+    \ paren_string current_level max_level)\n    (cond\n      [(empty? paren_string)\
+    \ (list max_level)]\n      [(equal? (first paren_string) #\\()\n       (parse_nested_parens_helper_2\
+    \ (rest paren_string) (+ current_level 1) (max max_level current_level))]\n  \
+    \    [(equal? (first paren_string) #\\))\n       (parse_nested_parens_helper_2\
+    \ (rest paren_string) (- current_level 1) max_level)]\n      [(equal? (first paren_string)\
+    \ #\\space)\n       (append (list max_level) (parse_nested_parens_helper_2 (rest\
+    \ paren_string) 0 0))]\n      [else (parse_nested_parens_helper_2 (rest paren_string)\
+    \ current_level max_level)]))\n  (parse_nested_parens_helper_2 paren_string 0\
+    \ 0))\n", "  (define (parse_nested_parens_helper paren_string current_max)\n \
+    \   (cond\n      [(empty? paren_string) current_max]\n      [(char=? (first paren_string)\
+    \ #\\()\n       (parse_nested_parens_helper (rest paren_string) (+ current_max\
+    \ 1))]\n      [(char=? (first paren_string) #\\))\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (- current_max 1))]\n      [else (parse_nested_parens_helper\
+    \ (rest paren_string) current_max)]))\n  (map (lambda (paren_group)\n        \
+    \ (parse_nested_parens_helper paren_group 0))\n       (string-split paren_string\
+    \ #\\space)))\n", "  (map (lambda (paren_group)\n         (let loop ([paren_group\
+    \ paren_group] [max_level 0] [cur_level 0])\n           (cond [(empty? paren_group)\
+    \ max_level]\n                 [(char=? (first paren_group) #\\()\n          \
+    \        (loop (rest paren_group)\n                        (if (> (+ cur_level\
+    \ 1) max_level)\n                            (+ cur_level 1)\n               \
+    \             max_level)\n                        (+ cur_level 1))]\n        \
+    \         [(char=? (first paren_group) #\\))\n                  (loop (rest paren_group)\n\
+    \                        max_level\n                        (- cur_level 1))]\n\
+    \                 [else (loop (rest paren_group) max_level cur_level)])))\n  \
+    \     (string-split paren_string #\\space)))\n", "  (define (parse_nested_parens_helper\
+    \ paren_string current_depth max_depth)\n    (if (empty? paren_string)\n     \
+    \   max_depth\n        (cond\n         [(equal? (first paren_string) #\\()\n \
+    \         (parse_nested_parens_helper (rest paren_string) (+ current_depth 1)\
+    \ (max max_depth current_depth))]\n         [(equal? (first paren_string) #\\\
+    ))\n          (parse_nested_parens_helper (rest paren_string) (- current_depth\
+    \ 1) max_depth)]\n         [else\n          (parse_nested_parens_helper (rest\
+    \ paren_string) current_depth max_depth)])))\n  (define (parse_nested_parens_helper_2\
+    \ paren_string current_depth max_depth)\n    (if (empty? paren_string)\n     \
+    \   (list max_depth)\n        (cond\n         [(equal? (first paren_string) #\\\
+    ()\n          (parse_nested_parens_helper_2 (rest paren_string) (+ current_depth\
+    \ 1) (max max_depth current_depth))]\n         [(equal? (first paren_string) #\\\
+    ))\n          (parse_nested_parens_helper_2 (rest paren_string) (- current_depth\
+    \ 1) max_depth)]\n         [else\n          (if (equal? (first paren_string) #\\\
+    \ )\n              (cons max_depth (parse_nested_parens_helper_2 (rest paren_string)\
+    \ 0 0))\n              (parse_nested_parens_helper_2 (rest paren_string) current_depth\
+    \ max_depth))])))\n  (parse_nested_parens_helper_2 paren_string 0 0))\n", "  (map\
+    \ (lambda (paren_group)\n         (parse_parens paren_group 0))\n       (string-split\
+    \ paren_string)))\n", "  (define (parse_parens paren_string)\n    (let loop ([paren_string\
+    \ paren_string] [paren_count 0] [max_paren_count 0])\n      (cond [(empty? paren_string)\
+    \ max_paren_count]\n            [(char=? (first paren_string) #\\()\n        \
+    \     (loop (rest paren_string) (+ paren_count 1) (max paren_count max_paren_count))]\n\
+    \            [(char=? (first paren_string) #\\))\n             (loop (rest paren_string)\
+    \ (- paren_count 1) max_paren_count)]\n            [else (loop (rest paren_string)\
+    \ paren_count max_paren_count)])))\n  (map parse_parens (string-split paren_string\
+    \ #\\space)))\n", "  (define (parse_parens paren_string)\n    (define (parse-parens-iter\
+    \ paren_string level max-level)\n      (cond [(empty? paren_string) max-level]\n\
+    \            [(char=? (first paren_string) #\\()\n             (parse-parens-iter\
+    \ (rest paren_string) (+ level 1) (max level max-level))]\n            [(char=?\
+    \ (first paren_string) #\\))\n             (parse-parens-iter (rest paren_string)\
+    \ (- level 1) (max level max-level))]\n            [else (parse-parens-iter (rest\
+    \ paren_string) level max-level)]))\n    (parse-parens-iter paren_string 0 0))\n\
+    \  (map parse_parens (string-split paren_string #\\space)))\n", "  (define (parse_parens\
+    \ paren_string)\n    (define (parse-parens-iter paren_string level max-level)\n\
+    \      (cond\n        [(empty? paren_string) max-level]\n        [(char=? (first\
+    \ paren_string) #\\()\n         (parse-parens-iter (rest paren_string) (+ level\
+    \ 1) (max level max-level))]\n        [(char=? (first paren_string) #\\))\n  \
+    \       (parse-parens-iter (rest paren_string) (- level 1) (max level max-level))]\n\
+    \        [else (parse-parens-iter (rest paren_string) level max-level)]))\n  \
+    \  (parse-parens-iter paren_string 0 0))\n  (map parse_parens (string-split paren_string\
+    \ #\\space)))\n", "  (map (lambda (paren_group)\n         (let loop ([paren_group\
+    \ paren_group] [max_depth 0] [current_depth 0])\n           (cond [(empty? paren_group)\n\
+    \                  (max max_depth current_depth)]\n                 [(char=? (first\
+    \ paren_group) #\\()\n                  (loop (rest paren_group)\n           \
+    \             max_depth\n                        (+ current_depth 1))]\n     \
+    \            [(char=? (first paren_group) #\\))\n                  (loop (rest\
+    \ paren_group)\n                        (max max_depth current_depth)\n      \
+    \                  (- current_depth 1))]\n                 [else\n           \
+    \       (loop (rest paren_group)\n                        max_depth\n        \
+    \                current_depth)])))\n       (regexp-split #rx\" \" paren_string)))\n",
+  "  (map (lambda (paren_group)\n         (define (count_parens paren_group)\n   \
+    \        (cond [(empty? paren_group) 0]\n                 [(equal? (first paren_group)\
+    \ #\\() (+ 1 (count_parens (rest paren_group)))]\n                 [(equal? (first\
+    \ paren_group) #\\)) (- 1 (count_parens (rest paren_group)))]))\n         (count_parens\
+    \ paren_group))\n       (string-split paren_string)))\n", "  (map (lambda (paren_group)\n\
+    \         (let loop ([paren_group paren_group] [nesting 0] [max-nesting 0])\n\
+    \           (cond [(empty? paren_group) max-nesting]\n                 [else (let\
+    \ ([c (first paren_group)])\n                         (cond [(char=? c #\\()\n\
+    \                                (loop (rest paren_group) (+ nesting 1) (max max-nesting\
+    \ nesting))]\n                               [(char=? c #\\))\n              \
+    \                  (loop (rest paren_group) (- nesting 1))]\n                \
+    \               [else (loop (rest paren_group) nesting max-nesting)]))])))\n \
+    \      (string-split paren_string)))\n", "  (map (lambda (paren_group)\n     \
+    \    (parse_nested_parens_helper paren_group 0))\n       (string-split paren_string\
+    \ #\\space)))\n", "  (map (lambda (paren_group)\n         (let loop ([paren_group\
+    \ paren_group] [level 0] [max_level 0])\n           (cond [(empty? paren_group)\
+    \ max_level]\n                 [(eq? (first paren_group) #\\()\n             \
+    \     (loop (rest paren_group) (+ level 1) (max level max_level))]\n         \
+    \        [(eq? (first paren_group) #\\))\n                  (loop (rest paren_group)\
+    \ (- level 1) (max level max_level))]\n                 [else (loop (rest paren_group)\
+    \ level max_level)])))\n       (regexp-split #rx\" \" paren_string)))\n", "  (define\
+    \ (parse_parens paren_string acc)\n    (cond\n      [(empty? paren_string) (reverse\
+    \ acc)]\n      [(string=? (first paren_string) \"(\")\n       (parse_parens (rest\
+    \ paren_string) (cons 1 acc))]\n      [(string=? (first paren_string) \")\")\n\
+    \       (parse_parens (rest paren_string) (cons (add1 (first acc)) (rest acc)))]\n\
+    \      [(string=? (first paren_string) \" \")\n       (parse_parens (rest paren_string)\
+    \ (cons 0 acc))]))\n  (parse_parens paren_string '()))\n", "  (define (parse-parens-helper\
+    \ paren_string current_level max_level)\n    (cond\n      [(empty? paren_string)\
+    \ max_level]\n      [(eq? (first paren_string) #\\()\n       (parse-parens-helper\
+    \ (rest paren_string) (+ current_level 1) (max max_level current_level))]\n  \
+    \    [(eq? (first paren_string) #\\))\n       (parse-parens-helper (rest paren_string)\
+    \ (- current_level 1) max_level)]\n      [else (parse-parens-helper (rest paren_string)\
+    \ current_level max_level)]))\n  (define (parse-parens-group-helper paren_string)\n\
+    \    (cond\n      [(empty? paren_string) '()]\n      [(eq? (first paren_string)\
+    \ #\\()\n       (cons (parse-parens-helper paren_string 0 0) (parse-parens-group-helper\
+    \ (rest paren_string)))]\n      [else (parse-parens-group-helper (rest paren_string))]))\n\
+    \  (parse-parens-group-helper paren_string))\n", "  (define (parse_parens paren_string\
+    \ paren_count)\n    (cond\n      [(empty? paren_string) paren_count]\n      [(string=?\
+    \ (first paren_string) \"(\") (parse_parens (rest paren_string) (+ paren_count\
+    \ 1))]\n      [(string=? (first paren_string) \")\") (parse_parens (rest paren_string)\
+    \ (- paren_count 1))]\n      [else (parse_parens (rest paren_string) paren_count)]))\n\
+    \  (map (lambda (paren_group) (parse_parens paren_group 0)) (string-split paren_string)))\n",
+  "  (define (parse_nested_parens_helper paren_string max_depth)\n    (cond\n    \
+    \  [(empty? paren_string) max_depth]\n      [(char=? (first paren_string) #\\\
+    ()\n       (parse_nested_parens_helper (rest paren_string) (+ max_depth 1))]\n\
+    \      [(char=? (first paren_string) #\\))\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (- max_depth 1))]\n      [else (parse_nested_parens_helper\
+    \ (rest paren_string) max_depth)]))\n  (parse_nested_parens_helper paren_string\
+    \ 0))\n", "  (define (parse_parens paren_string)\n    (define (parse-parens-iter\
+    \ paren_string count max-count)\n      (cond\n        [(empty? paren_string) max-count]\n\
+    \        [(char=? (first paren_string) #\\()\n         (parse-parens-iter (rest\
+    \ paren_string) (+ count 1) (max count max-count))]\n        [(char=? (first paren_string)\
+    \ #\\))\n         (parse-parens-iter (rest paren_string) (- count 1) (max count\
+    \ max-count))]\n        [else (parse-parens-iter (rest paren_string) count max-count)]))\n\
+    \    (parse-parens-iter paren_string 0 0))\n  (map parse_parens (string-split\
+    \ paren_string #\\space)))\n", "  (define (parse_parens paren_string)\n    (define\
+    \ (parse-parens-iter paren_string level)\n      (cond\n        [(empty? paren_string)\
+    \ level]\n        [(char=? (first paren_string) #\\() (parse-parens-iter (rest\
+    \ paren_string) (+ level 1))]\n        [(char=? (first paren_string) #\\)) (parse-parens-iter\
+    \ (rest paren_string) (- level 1))]\n        [else (parse-parens-iter (rest paren_string)\
+    \ level)]))\n    (parse-parens-iter paren_string 0))\n  (map parse_parens (string-split\
+    \ paren_string)))\n", "  (define (parse-parens paren-string)\n    (cond\n    \
+    \  [(empty? paren-string) 0]\n      [(string=? (first paren-string) \"(\")\n \
+    \      (add1 (parse-parens (rest paren-string)))]\n      [(string=? (first paren-string)\
+    \ \")\")\n       (sub1 (parse-parens (rest paren-string)))]\n      [else (parse-parens\
+    \ (rest paren-string))]))\n  (map parse-parens (string-split paren_string)))\n",
+  "  (define (parse_parens paren_string)\n    (define (parse-parens-iter paren_string\
+    \ level)\n      (cond ((null? paren_string) level)\n            ((char=? (car\
+    \ paren_string) #\\() (parse-parens-iter (cdr paren_string) (+ level 1)))\n  \
+    \          ((char=? (car paren_string) #\\)) (parse-parens-iter (cdr paren_string)\
+    \ (- level 1)))\n            (else (parse-parens-iter (cdr paren_string) level))))\n\
+    \    (parse-parens-iter paren_string 0))\n  (map parse_parens (string-split paren_string)))\n",
+  "  (define (parse_parens paren_string)\n    (define (parse-parens-iter paren_string\
+    \ depth max-depth)\n      (cond ((null? paren_string) max-depth)\n           \
+    \ ((char=? (car paren_string) #\\()\n             (parse-parens-iter (cdr paren_string)\
+    \ (+ depth 1) (max depth max-depth)))\n            ((char=? (car paren_string)\
+    \ #\\))\n             (parse-parens-iter (cdr paren_string) (- depth 1) (max depth\
+    \ max-depth)))\n            (else (parse-parens-iter (cdr paren_string) depth\
+    \ max-depth))))\n    (parse-parens-iter paren_string 0 0))\n  (map parse_parens\
+    \ (string-split paren_string #\\space)))\n", "  (map (lambda (paren_group)\n \
+    \        (let loop ([paren_group paren_group] [max_depth 0] [current_depth 0])\n\
+    \           (cond [(empty? paren_group) max_depth]\n                 [(char=?\
+    \ (first paren_group) #\\()\n                  (loop (rest paren_group) max_depth\
+    \ (+ current_depth 1))]\n                 [(char=? (first paren_group) #\\))\n\
+    \                  (loop (rest paren_group) (max max_depth current_depth) (- current_depth\
+    \ 1))]\n                 [else (loop (rest paren_group) max_depth current_depth)])))\n\
+    \       (regexp-split #rx\" +\" paren_string)))\n", "  (define (parse-parens paren_string)\n\
+    \    (define (parse-parens-iter paren_string max-level level)\n      (cond\n \
+    \       [(empty? paren_string) (values max-level level)]\n        [(char=? (first\
+    \ paren_string) #\\() (parse-parens-iter (rest paren_string) (max max-level (add1\
+    \ level)) (add1 level))]\n        [(char=? (first paren_string) #\\)) (parse-parens-iter\
+    \ (rest paren_string) max-level (sub1 level))]\n        [else (parse-parens-iter\
+    \ (rest paren_string) max-level level)]))\n    (parse-parens-iter paren_string\
+    \ 0 0))\n  (define (parse-parens-iter paren_string max-level level)\n    (cond\n\
+    \      [(empty? paren_string) (values max-level level)]\n      [(char=? (first\
+    \ paren_string) #\\() (parse-parens-iter (rest paren_string) (max max-level (add1\
+    \ level)) (add1 level))]\n      [(char=? (first paren_string) #\\)) (parse-parens-iter\
+    \ (rest paren_string) max-level (sub1 level))]\n      [else (parse-parens-iter\
+    \ (rest paren_string) max-level level)]))\n  (define (parse-parens-iter paren_string\
+    \ max-level level)\n    (cond\n      [(empty? paren_string) (values max-level\
+    \ level)]\n      [(char=? (first paren_string) #\\() (parse-parens-iter (rest\
+    \ paren_string) (max max-level (add1 level)) (add1 level))]\n      [(char=? (first\
+    \ paren_string) #\\)) (parse-parens-iter (rest paren_string) max-level (sub1 level))]\n\
+    \      [else (parse-parens-iter (rest paren_string) max-level level)]))\n  (define\
+    \ (parse-parens-iter paren_string max-level level)\n    (cond\n      [(empty?\
+    \ paren_", "  (map (\u03BB (paren_group)\n         (let loop ([paren_group paren_group]\
+    \ [max-level 0] [cur-level 0])\n           (cond [(empty? paren_group) max-level]\n\
+    \                 [(char=? (first paren_group) #\\()\n                  (loop\
+    \ (rest paren_group)\n                        (max max-level (add1 cur-level))\n\
+    \                        (add1 cur-level))]\n                 [(char=? (first\
+    \ paren_group) #\\))\n                  (loop (rest paren_group)\n           \
+    \             max-level\n                        (sub1 cur-level))]\n        \
+    \         [else (loop (rest paren_group)\n                             max-level\n\
+    \                             cur-level)])))\n       (string-split paren_string\
+    \ #\\space)))\n", "  (map (lambda (paren_group)\n         (let loop ([paren_group\
+    \ paren_group] [level 0] [max_level 0])\n           (cond [(empty? paren_group)\
+    \ max_level]\n                 [(char=? (first paren_group) #\\()\n          \
+    \        (loop (rest paren_group) (+ level 1) (if (> level max_level) level max_level))]\n\
+    \                 [(char=? (first paren_group) #\\))\n                  (loop\
+    \ (rest paren_group) (- level 1) max_level)]\n                 [else (loop (rest\
+    \ paren_group) level max_level)])))\n       (string-split paren_string)))\n",
+  "  (define (parse-parens-helper paren_string current_level max_level)\n    (cond\n\
+    \      [(null? paren_string) max_level]\n      [(equal? (car paren_string) #\\\
+    ()\n       (parse-parens-helper (cdr paren_string) (+ current_level 1) (max max_level\
+    \ current_level))]\n      [(equal? (car paren_string) #\\))\n       (parse-parens-helper\
+    \ (cdr paren_string) (- current_level 1) max_level)]\n      [else (parse-parens-helper\
+    \ (cdr paren_string) current_level max_level)]))\n  (define (parse-parens-group\
+    \ paren_string)\n    (define (parse-parens-group-helper paren_string current_level\
+    \ max_level)\n      (cond\n        [(null? paren_string) (list max_level)]\n \
+    \       [(equal? (car paren_string) #\\()\n         (parse-parens-group-helper\
+    \ (cdr paren_string) (+ current_level 1) (max max_level current_level))]\n   \
+    \     [(equal? (car paren_string) #\\))\n         (parse-parens-group-helper (cdr\
+    \ paren_string) (- current_level 1) max_level)]\n        [(equal? (car paren_string)\
+    \ #\\space)\n         (append (list max_level) (parse-parens-group (cdr paren_string)))]\n\
+    \        [else (parse-parens-group-helper (cdr paren_string) current_level max_level)]))\n\
+    \    (parse-parens-group-helper paren_string 0 0))\n  (parse-parens-group paren_string))\n",
+  "  (define (parse_parens paren_string)\n    (define (parse-parens-iter paren_string\
+    \ level)\n      (cond\n        [(empty? paren_string) level]\n        [(char=?\
+    \ (first paren_string) #\\() (parse-parens-iter (rest paren_string) (+ level 1))]\n\
+    \        [(char=? (first paren_string) #\\)) (parse-parens-iter (rest paren_string)\
+    \ (- level 1))]\n        [else (parse-parens-iter (rest paren_string) level)]))\n\
+    \    (parse-parens-iter paren_string 0))\n  (map parse_parens (string-split paren_string)))\n",
+  "  (define (parse_nested_parens_helper paren_string acc)\n    (cond\n      [(empty?\
+    \ paren_string) (reverse acc)]\n      [(string=? (first paren_string) \"(\")\n\
+    \       (parse_nested_parens_helper (rest paren_string) (cons 1 acc))]\n     \
+    \ [(string=? (first paren_string) \")\")\n       (parse_nested_parens_helper (rest\
+    \ paren_string) (cons (add1 (first acc)) (rest acc)))]\n      [(string=? (first\
+    \ paren_string) \" \")\n       (parse_nested_parens_helper (rest paren_string)\
+    \ (cons 0 acc))]))\n  (parse_nested_parens_helper paren_string (list)))\n", " \
+    \ (define (parse-parens paren-string)\n    (define (parse-parens-iter paren-string\
+    \ level)\n      (cond ((empty? paren-string) level)\n            ((char=? (first\
+    \ paren-string) #\\()\n             (parse-parens-iter (rest paren-string) (+\
+    \ level 1)))\n            ((char=? (first paren-string) #\\))\n             (parse-parens-iter\
+    \ (rest paren-string) (- level 1)))))\n    (parse-parens-iter paren-string 0))\n\
+    \  (map parse-parens (string-split paren_string #\\space)))\n", "  (define (parse_nested_parens_helper\
+    \ paren_string max_depth)\n    (cond\n      [(empty? paren_string) max_depth]\n\
+    \      [(eq? (first paren_string) #\\()\n       (parse_nested_parens_helper (rest\
+    \ paren_string) (+ max_depth 1))]\n      [(eq? (first paren_string) #\\))\n  \
+    \     (parse_nested_parens_helper (rest paren_string) (- max_depth 1))]\n    \
+    \  [else (parse_nested_parens_helper (rest paren_string) max_depth)]))\n  (define\
+    \ (parse_nested_parens_helper_2 paren_string max_depth)\n    (cond\n      [(empty?\
+    \ paren_string) (list max_depth)]\n      [(eq? (first paren_string) #\\ )\n  \
+    \     (cons max_depth (parse_nested_parens_helper_2 (rest paren_string) 0))]\n\
+    \      [(eq? (first paren_string) #\\()\n       (parse_nested_parens_helper_2\
+    \ (rest paren_string) (+ max_depth 1))]\n      [(eq? (first paren_string) #\\\
+    ))\n       (parse_nested_parens_helper_2 (rest paren_string) (- max_depth 1))]\n\
+    \      [else (parse_nested_parens_helper_2 (rest paren_string) max_depth)]))\n\
+    \  (parse_nested_parens_helper_2 paren_string 0))\n", "  (define (parse_nested_parens_helper\
+    \ paren_string level max_level)\n    (cond\n      [(empty? paren_string) max_level]\n\
+    \      [(char=? (first paren_string) #\\()\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (+ level 1) (max level max_level))]\n      [(char=? (first\
+    \ paren_string) #\\))\n       (parse_nested_parens_helper (rest paren_string)\
+    \ (- level 1) (max level max_level))]\n      [else (parse_nested_parens_helper\
+    \ (rest paren_string) level max_level)]))\n  (map (lambda (paren_group) (parse_nested_parens_helper\
+    \ paren_group 0 0)) (string-split paren_string)))\n", "  (define (parse-parens\
+    \ paren-string)\n    (define (parse-parens-iter paren-string count max-count)\n\
+    \      (cond\n        [(empty? paren-string) max-count]\n        [(char=? (first\
+    \ paren-string) #\\()\n         (parse-parens-iter (rest paren-string) (+ count\
+    \ 1) (max count max-count))]\n        [(char=? (first paren-string) #\\))\n  \
+    \       (parse-parens-iter (rest paren-string) (- count 1) (max count max-count))]\n\
+    \        [else (parse-parens-iter (rest paren-string) count max-count)]))\n  \
+    \  (parse-parens-iter paren-string 0 0))\n  (map parse-parens (string-split paren-string\
+    \ #\\space)))\n", "  (define (parse-parens paren-string paren-count)\n    (cond\n\
+    \      [(empty? paren-string) (list paren-count)]\n      [(char=? (first paren-string)\
+    \ #\\()\n       (parse-parens (rest paren-string) (+ paren-count 1))]\n      [(char=?\
+    \ (first paren-string) #\\))\n       (parse-parens (rest paren-string) (- paren-count\
+    \ 1))]\n      [(char=? (first paren-string) #\\space)\n       (cons paren-count\
+    \ (parse-parens (rest paren-string) paren-count))]))\n  (parse-parens paren_string\
+    \ 0))\n", "  (define (parse-parens paren-string)\n    (let loop ([paren-string\
+    \ paren-string] [level 0] [max-level 0])\n      (cond [(empty? paren-string) max-level]\n\
+    \            [(char=? (first paren-string) #\\()\n             (loop (rest paren-string)\
+    \ (+ level 1) (max level max-level))]\n            [(char=? (first paren-string)\
+    \ #\\))\n             (loop (rest paren-string) (- level 1) (max level max-level))]\n\
+    \            [else (loop (rest paren-string) level max-level)])))\n  (map parse-parens\
+    \ (string-split paren_string #\\space)))\n", "  (define (parse_nested_parens_helper\
+    \ paren_string max_depth)\n    (cond\n      [(empty? paren_string) max_depth]\n\
+    \      [(char=? (first paren_string) #\\()\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (+ max_depth 1))]\n      [(char=? (first paren_string) #\\\
+    ))\n       (parse_nested_parens_helper (rest paren_string) (- max_depth 1))]\n\
+    \      [else (parse_nested_parens_helper (rest paren_string) max_depth)]))\n \
+    \ (map (lambda (paren_group)\n         (parse_nested_parens_helper paren_group\
+    \ 0))\n       (string-split paren_string #\\space)))\n", "  (define (parse_nested_parens_helper\
+    \ paren_string current_level max_level)\n    (cond\n      [(empty? paren_string)\
+    \ max_level]\n      [(equal? (first paren_string) #\\()\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (+ current_level 1) (max max_level current_level))]\n  \
+    \    [(equal? (first paren_string) #\\))\n       (parse_nested_parens_helper (rest\
+    \ paren_string) (- current_level 1) max_level)]\n      [else (parse_nested_parens_helper\
+    \ (rest paren_string) current_level max_level)]))\n  (map (lambda (paren_group)\
+    \ (parse_nested_parens_helper paren_group 0 0)) (string-split paren_string)))\n",
+  "  (map (lambda (paren_group)\n         (let loop ([paren_group paren_group] [max_depth\
+    \ 0] [curr_depth 0])\n           (cond [(empty? paren_group) max_depth]\n    \
+    \             [(char=? (first paren_group) #\\()\n                  (loop (rest\
+    \ paren_group)\n                        (if (> (+ curr_depth 1) max_depth)\n \
+    \                           (+ curr_depth 1)\n                            max_depth)\n\
+    \                        (+ curr_depth 1))]\n                 [(char=? (first\
+    \ paren_group) #\\))\n                  (loop (rest paren_group)\n           \
+    \             max_depth\n                        (- curr_depth 1))]\n        \
+    \         [else (loop (rest paren_group) max_depth curr_depth)])))\n       (regexp-split\
+    \ #rx\" +\" paren_string)))\n", "  (define (parse_parens paren_string)\n    (define\
+    \ (parse_parens_iter paren_string count max_count)\n      (cond\n        [(empty?\
+    \ paren_string) max_count]\n        [(equal? (first paren_string) #\\()\n    \
+    \     (parse_parens_iter (rest paren_string) (+ count 1) (max count max_count))]\n\
+    \        [(equal? (first paren_string) #\\))\n         (parse_parens_iter (rest\
+    \ paren_string) (- count 1) (max count max_count))]\n        [else (parse_parens_iter\
+    \ (rest paren_string) count max_count)]))\n    (parse_parens_iter paren_string\
+    \ 0 0))\n  (map parse_parens (string-split paren_string #\\space)))\n", "  (define\
+    \ (parse_nested_parens_helper paren_string level)\n    (cond\n      [(empty? paren_string)\
+    \ level]\n      [(char=? (first paren_string) #\\()\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (+ level 1))]\n      [(char=? (first paren_string) #\\))\n\
+    \       (parse_nested_parens_helper (rest paren_string) (- level 1))]\n      [else\
+    \ (parse_nested_parens_helper (rest paren_string) level)]))\n  (map (lambda (paren_group)\
+    \ (parse_nested_parens_helper paren_group 0)) (string-split paren_string)))\n",
+  "  (define (parse_parens paren_string current_level)\n    (cond\n      [(empty?\
+    \ paren_string) (list current_level)]\n      [(equal? (first paren_string) #\\\
+    ()\n       (parse_parens (rest paren_string) (+ current_level 1))]\n      [(equal?\
+    \ (first paren_string) #\\))\n       (parse_parens (rest paren_string) (- current_level\
+    \ 1))]\n      [else (parse_parens (rest paren_string) current_level)]))\n  (define\
+    \ (parse_parens_string paren_string)\n    (cond\n      [(empty? paren_string)\
+    \ empty]\n      [(equal? (first paren_string) #\\ )\n       (cons (parse_parens\
+    \ (rest paren_string) 0)\n             (parse_parens_string (rest paren_string)))]\n\
+    \      [else (parse_parens_string (rest paren_string))]))\n  (parse_parens_string\
+    \ paren_string))\n", "  (map (lambda (paren_group)\n         (let loop ([paren_group\
+    \ paren_group] [max_depth 0] [current_depth 0])\n           (cond [(empty? paren_group)\
+    \ max_depth]\n                 [(char=? (first paren_group) #\\()\n          \
+    \        (loop (rest paren_group)\n                        (if (> current_depth\
+    \ max_depth)\n                            current_depth\n                    \
+    \        max_depth)\n                        (+ current_depth 1))]\n         \
+    \        [(char=? (first paren_group) #\\))\n                  (loop (rest paren_group)\n\
+    \                        max_depth\n                        (- current_depth 1))]\n\
+    \                 [else (loop (rest paren_group) max_depth current_depth)])))\n\
+    \       (string-split paren_string)))\n", "  (define (parse_parens paren_string\
+    \ paren_stack)\n    (cond\n      [(empty? paren_string) paren_stack]\n      [(char=?\
+    \ (first paren_string) #\\()\n       (parse_parens (rest paren_string) (cons 1\
+    \ paren_stack))]\n      [(char=? (first paren_string) #\\))\n       (parse_parens\
+    \ (rest paren_string) (cons (+ 1 (first paren_stack)) (rest paren_stack)))]\n\
+    \      [else (parse_parens (rest paren_string) paren_stack)]))\n  (parse_parens\
+    \ paren_string (list 0)))\n", "  (map (lambda (paren_group)\n         (let loop\
+    \ ([paren_group paren_group] [max_depth 0] [current_depth 0])\n           (cond\
+    \ [(empty? paren_group) max_depth]\n                 [(char=? (first paren_group)\
+    \ #\\()\n                  (loop (rest paren_group)\n                        (if\
+    \ (> current_depth max_depth)\n                            current_depth\n   \
+    \                         max_depth)\n                        (+ current_depth\
+    \ 1))]\n                 [(char=? (first paren_group) #\\))\n                \
+    \  (loop (rest paren_group)\n                        max_depth\n             \
+    \           (- current_depth 1))]\n                 [else (loop (rest paren_group)\
+    \ max_depth current_depth)])))\n       (split-string paren_string)))\n", "  (map\
+    \ (lambda (paren_group)\n         (parse_nested_parens_helper paren_group 0))\n\
+    \       (string-split paren_string #\\space)))\n", "  (define (parse_parens paren_string)\n\
+    \    (define (parse-parens-iter paren_string level)\n      (cond\n        [(empty?\
+    \ paren_string) level]\n        [(equal? (first paren_string) #\\() (parse-parens-iter\
+    \ (rest paren_string) (+ level 1))]\n        [(equal? (first paren_string) #\\\
+    )) (parse-parens-iter (rest paren_string) (- level 1))]\n        [else (parse-parens-iter\
+    \ (rest paren_string) level)]))\n    (parse-parens-iter paren_string 0))\n  (map\
+    \ parse_parens (string-split paren_string #\\space)))\n", "  (map (lambda (paren_group)\n\
+    \         (parse_nested_parens_helper paren_group 0))\n       (string-split paren_string)))\n",
+  "  (define (parse_nested_parens_helper paren_string paren_count max_paren_count)\n\
+    \    (cond\n      [(empty? paren_string) (list max_paren_count)]\n      [(equal?\
+    \ (first paren_string) #\\()\n       (parse_nested_parens_helper (rest paren_string)\
+    \ (+ paren_count 1) (max max_paren_count paren_count))]\n      [(equal? (first\
+    \ paren_string) #\\))\n       (parse_nested_parens_helper (rest paren_string)\
+    \ (- paren_count 1) (max max_paren_count paren_count))]\n      [else (parse_nested_parens_helper\
+    \ (rest paren_string) paren_count max_paren_count)]))\n  (parse_nested_parens_helper\
+    \ paren_string 0 0))\n", "  (define (parse-parens paren-string)\n    (define (parse-parens-iter\
+    \ paren-string paren-count)\n      (cond ((null? paren-string) paren-count)\n\
+    \            ((char=? (car paren-string) #\\()\n             (parse-parens-iter\
+    \ (cdr paren-string) (+ paren-count 1)))\n            ((char=? (car paren-string)\
+    \ #\\))\n             (parse-parens-iter (cdr paren-string) (- paren-count 1)))\n\
+    \            (else (parse-parens-iter (cdr paren-string) paren-count))))\n   \
+    \ (parse-parens-iter paren-string 0))\n  (map parse-parens (string-split paren-string)))\n",
+  "  (define (parse_parens paren_string)\n    (cond\n      [(empty? paren_string)\
+    \ 0]\n      [(equal? (first paren_string) #\\() (add1 (parse_parens (rest paren_string)))]\n\
+    \      [(equal? (first paren_string) #\\)) (sub1 (parse_parens (rest paren_string)))]\n\
+    \      [else (parse_parens (rest paren_string))]))\n  (map parse_parens (string-split\
+    \ paren_string #\\space)))\n", "  (map (lambda (paren_group)\n         (let loop\
+    \ ([paren_group paren_group] [max_depth 0] [current_depth 0])\n           (cond\
+    \ [(empty? paren_group) max_depth]\n                 [(char=? (first paren_group)\
+    \ #\\()\n                  (loop (rest paren_group)\n                        (if\
+    \ (> current_depth max_depth)\n                            current_depth\n   \
+    \                         max_depth)\n                        (+ current_depth\
+    \ 1))]\n                 [(char=? (first paren_group) #\\))\n                \
+    \  (loop (rest paren_group)\n                        max_depth\n             \
+    \           (- current_depth 1))]\n                 [else (loop (rest paren_group)\
+    \ max_depth current_depth)])))\n       (string-split paren_string)))\n", "  (map\
+    \ (\u03BB (paren_group)\n         (let ([paren_group (string->list paren_group)])\n\
+    \           (let loop ([paren_group paren_group] [max_depth 0] [current_depth\
+    \ 0])\n             (cond [(null? paren_group) max_depth]\n                  \
+    \ [(equal? (car paren_group) #\\()\n                    (loop (cdr paren_group)\n\
+    \                          (max max_depth (+ current_depth 1))\n             \
+    \             (+ current_depth 1))]\n                   [(equal? (car paren_group)\
+    \ #\\))\n                    (loop (cdr paren_group)\n                       \
+    \   (max max_depth current_depth)\n                          (- current_depth\
+    \ 1))]\n                   [else (loop (cdr paren_group)\n                   \
+    \            max_depth\n                               current_depth)]))))\n \
+    \      (string-split paren_string #\\space)))\n", "  (define (parse_nested_parens_helper\
+    \ paren_string max_depth current_depth)\n    (cond\n      [(empty? paren_string)\
+    \ max_depth]\n      [(equal? (first paren_string) #\\()\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (max max_depth (add1 current_depth)) (add1 current_depth))]\n\
+    \      [(equal? (first paren_string) #\\))\n       (parse_nested_parens_helper\
+    \ (rest paren_string) max_depth (sub1 current_depth))]\n      [else (parse_nested_parens_helper\
+    \ (rest paren_string) max_depth current_depth)]))\n  (define (parse_nested_parens_helper2\
+    \ paren_string max_depth current_depth)\n    (cond\n      [(empty? paren_string)\
+    \ (list max_depth)]\n      [(equal? (first paren_string) #\\ )\n       (append\
+    \ (list max_depth) (parse_nested_parens_helper2 (rest paren_string) 0 0))]\n \
+    \     [(equal? (first paren_string) #\\()\n       (parse_nested_parens_helper2\
+    \ (rest paren_string) (max max_depth (add1 current_depth)) (add1 current_depth))]\n\
+    \      [(equal? (first paren_string) #\\))\n       (parse_nested_parens_helper2\
+    \ (rest paren_string) max_depth (sub1 current_depth))]\n      [else (parse_nested_parens_helper2\
+    \ (rest paren_string) max_depth current_depth)]))\n  (parse_nested_parens_helper2\
+    \ paren_string 0 0))\n", "  (map (lambda (paren_group)\n         (let loop ([paren_group\
+    \ paren_group] [max_depth 0] [current_depth 0])\n           (cond\n          \
+    \   [(empty? paren_group) max_depth]\n             [(char=? (first paren_group)\
+    \ #\\()\n              (loop (rest paren_group)\n                    (if (> current_depth\
+    \ max_depth)\n                        (+ current_depth 1)\n                  \
+    \      max_depth)\n                    (+ current_depth 1))]\n             [(char=?\
+    \ (first paren_group) #\\))\n              (loop (rest paren_group)\n        \
+    \            max_depth\n                    (- current_depth 1))]\n          \
+    \   [else (loop (rest paren_group) max_depth current_depth)])))\n       (regexp-split\
+    \ #rx\" \" paren_string)))\n", "  (define (parse_parens paren_string)\n    (define\
+    \ (parse-parens-iter paren_string count max)\n      (cond ((empty? paren_string)\
+    \ (values count max))\n            ((equal? (first paren_string) #\\()\n     \
+    \        (parse-parens-iter (rest paren_string) (+ count 1) (if (> count max)\
+    \ count max)))\n            ((equal? (first paren_string) #\\))\n            \
+    \ (parse-parens-iter (rest paren_string) (- count 1) (if (> count max) count max)))))\n\
+    \    (parse-parens-iter paren_string 0 0))\n  (define (parse-nested-parens-iter\
+    \ paren_string result)\n    (cond ((empty? paren_string) result)\n          ((equal?\
+    \ (first paren_string) #\\ )\n           (parse-nested-parens-iter (rest paren_string)\
+    \ (append result (list (parse_parens (rest paren_string)))))\n           (parse-nested-parens-iter\
+    \ (rest paren_string) (append result (list (parse_parens (rest paren_string))))))))\n\
+    \  (parse-nested-parens-iter paren_string '()))\n", "  (define (parse-parens-helper\
+    \ paren-string paren-count)\n    (cond\n      [(empty? paren-string) paren-count]\n\
+    \      [(equal? (first paren-string) #\\() (parse-parens-helper (rest paren-string)\
+    \ (+ paren-count 1))]\n      [(equal? (first paren-string) #\\)) (parse-parens-helper\
+    \ (rest paren-string) (- paren-count 1))]\n      [else (parse-parens-helper (rest\
+    \ paren-string) paren-count)]))\n  (parse-parens-helper paren-string 0))\n", " \
+    \ (define (parse_parens paren_string)\n    (define (parse_parens_iter paren_string\
+    \ paren_count max_paren_count)\n      (cond\n        [(empty? paren_string) max_paren_count]\n\
+    \        [(equal? (first paren_string) #\\()\n         (parse_parens_iter (rest\
+    \ paren_string) (+ paren_count 1) (max max_paren_count paren_count))]\n      \
+    \  [(equal? (first paren_string) #\\))\n         (parse_parens_iter (rest paren_string)\
+    \ (- paren_count 1) (max max_paren_count paren_count))]\n        [else (parse_parens_iter\
+    \ (rest paren_string) paren_count max_paren_count)]))\n    (parse_parens_iter\
+    \ paren_string 0 0))\n  (define (parse_parens_iter paren_string paren_count max_paren_count)\n\
+    \    (cond\n      [(empty? paren_string) (list max_paren_count)]\n      [(equal?\
+    \ (first paren_string) #\\ )\n       (append (list max_paren_count) (parse_parens_iter\
+    \ (rest paren_string) 0 0))]\n      [else (parse_parens_iter (rest paren_string)\
+    \ (parse_parens (first paren_string)) max_paren_count)]))\n  (parse_parens_iter\
+    \ paren_string 0 0))\n", "  (define (parse_parens paren_string)\n    (define (parse_parens-iter\
+    \ paren_string count max)\n      (cond\n        [(empty? paren_string) (values\
+    \ count max)]\n        [(equal? (first paren_string) #\\() (parse_parens-iter\
+    \ (rest paren_string) (+ count 1) (max count max))]\n        [(equal? (first paren_string)\
+    \ #\\)) (parse_parens-iter (rest paren_string) (- count 1) (max count max))]\n\
+    \        [else (parse_parens-iter (rest paren_string) count max)]))\n    (parse_parens-iter\
+    \ paren_string 0 0))\n  (define (parse_parens-iter paren_string max_list)\n  \
+    \  (cond\n      [(empty? paren_string) max_list]\n      [(equal? (first paren_string)\
+    \ #\\ ) (parse_parens-iter (rest paren_string) max_list)]\n      [else (parse_parens-iter\
+    \ (rest paren_string) (append max_list (list (parse_parens paren_string))))]))\n\
+    \  (parse_parens-iter paren_string '()))\n", "  (define (parse_parens paren_string)\n\
+    \    (let loop ([paren_string paren_string] [paren_stack '()] [max_depth 0])\n\
+    \      (cond\n        [(empty? paren_string) (list (reverse paren_stack) max_depth)]\n\
+    \        [(char=? (first paren_string) #\\()\n         (loop (rest paren_string)\
+    \ (cons #\\( paren_stack) (add1 max_depth))]\n        [(char=? (first paren_string)\
+    \ #\\))\n         (loop (rest paren_string) (rest paren_stack) max_depth)]\n \
+    \       [else (loop (rest paren_string) paren_stack max_depth)])))\n  (let loop\
+    \ ([paren_string paren_string] [paren_stack '()] [max_depth 0] [result '()])\n\
+    \    (cond\n      [(empty? paren_string) (reverse result)]\n      [(char=? (first\
+    \ paren_string) #\\ )\n       (let ([parsed_parens (parse_parens paren_string)])\n\
+    \         (loop (rest (first parsed_parens)) (second parsed_parens) (third parsed_parens)\
+    \ (cons (third parsed_parens) result)))]\n      [else (loop (rest paren_string)\
+    \ paren_stack max_depth result)])))\n", "  (map (lambda (paren_group)\n      \
+    \   (let loop ([paren_group paren_group] [max_depth 0] [depth 0])\n          \
+    \ (cond [(empty? paren_group) max_depth]\n                 [(char=? (first paren_group)\
+    \ #\\()\n                  (loop (rest paren_group)\n                        (if\
+    \ (> (+ depth 1) max_depth)\n                            (+ depth 1)\n       \
+    \                     max_depth)\n                        (+ depth 1))]\n    \
+    \             [(char=? (first paren_group) #\\))\n                  (loop (rest\
+    \ paren_group)\n                        max_depth\n                        (-\
+    \ depth 1))]\n                 [else (loop (rest paren_group) max_depth depth)])))\n\
+    \       (string-split paren_string)))\n", "  (define (parse_parens paren_string)\n\
+    \    (let loop ([paren_string paren_string] [paren_count 0] [max_paren_count 0])\n\
+    \      (cond [(empty? paren_string) max_paren_count]\n            [(char=? (first\
+    \ paren_string) #\\()\n             (loop (rest paren_string) (+ paren_count 1)\
+    \ (max paren_count max_paren_count))]\n            [(char=? (first paren_string)\
+    \ #\\))\n             (loop (rest paren_string) (- paren_count 1) max_paren_count)]\n\
+    \            [else (loop (rest paren_string) paren_count max_paren_count)])))\n\
+    \  (map parse_parens (string-split paren_string)))\n", "  (map (lambda (paren_group)\n\
+    \         (let loop ([paren_group paren_group] [max_level 0] [current_level 0])\n\
+    \           (cond [(empty? paren_group) max_level]\n                 [(char=?\
+    \ (first paren_group) #\\()\n                  (loop (rest paren_group) max_level\
+    \ (+ current_level 1))]\n                 [(char=? (first paren_group) #\\))\n\
+    \                  (loop (rest paren_group) (max max_level current_level) (- current_level\
+    \ 1))]\n                 [else (loop (rest paren_group) max_level current_level)])))\n\
+    \       (string-split paren_string #\\space)))\n", "  (define (parse_parens paren_string)\n\
+    \    (let loop ([paren_string paren_string] [max_depth 0] [depth 0])\n      (cond\
+    \ [(empty? paren_string) max_depth]\n            [(char=? (first paren_string)\
+    \ #\\()\n             (loop (rest paren_string)\n                   (if (> (+\
+    \ depth 1) max_depth)\n                       (+ depth 1)\n                  \
+    \     max_depth)\n                   (+ depth 1))]\n            [(char=? (first\
+    \ paren_string) #\\))\n             (loop (rest paren_string)\n              \
+    \     max_depth\n                   (- depth 1))]\n            [else (loop (rest\
+    \ paren_string) max_depth depth)])))\n  (map parse_parens (string-split paren_string)))\n",
+  "  (define (parse_nested_parens_helper paren_string acc)\n    (cond\n      [(empty?\
+    \ paren_string) (reverse acc)]\n      [(string=? (first paren_string) \"(\")\n\
+    \       (parse_nested_parens_helper (rest paren_string) (cons 1 acc))]\n     \
+    \ [(string=? (first paren_string) \")\")\n       (parse_nested_parens_helper (rest\
+    \ paren_string) (cons (add1 (first acc)) (rest acc)))]\n      [(string=? (first\
+    \ paren_string) \" \")\n       (parse_nested_parens_helper (rest paren_string)\
+    \ (cons 0 acc))]))\n  (parse_nested_parens_helper paren_string (list)))\n", " \
+    \ (map (lambda (paren_group)\n         (let loop ([paren_group paren_group] [count\
+    \ 0] [max_count 0])\n           (cond [(empty? paren_group) max_count]\n     \
+    \            [(char=? (first paren_group) #\\()\n                  (loop (rest\
+    \ paren_group) (+ count 1) (if (> count max_count) count max_count))]\n      \
+    \           [(char=? (first paren_group) #\\))\n                  (loop (rest\
+    \ paren_group) (- count 1) max_count)]\n                 [else (loop (rest paren_group)\
+    \ count max_count)])))\n       (regexp-split #rx\" \" paren_string)))\n", "  (define\
+    \ (parse_nested_parens_helper paren_string current_level max_level)\n    (cond\n\
+    \      [(empty? paren_string) max_level]\n      [(equal? (first paren_string)\
+    \ #\\()\n       (parse_nested_parens_helper (rest paren_string) (+ current_level\
+    \ 1) (max current_level max_level))]\n      [(equal? (first paren_string) #\\\
+    ))\n       (parse_nested_parens_helper (rest paren_string) (- current_level 1)\
+    \ (max current_level max_level))]\n      [else (parse_nested_parens_helper (rest\
+    \ paren_string) current_level max_level)]))\n  (define (parse_nested_parens_helper_2\
+    \ paren_string current_level max_level)\n    (cond\n      [(empty? paren_string)\
+    \ (cons max_level (parse_nested_parens_helper_2 (rest paren_string) 0 0))]\n \
+    \     [(equal? (first paren_string) #\\()\n       (parse_nested_parens_helper_2\
+    \ (rest paren_string) (+ current_level 1) (max current_level max_level))]\n  \
+    \    [(equal? (first paren_string) #\\))\n       (parse_nested_parens_helper_2\
+    \ (rest paren_string) (- current_level 1) (max current_level max_level))]\n  \
+    \    [(equal? (first paren_string) #\\space)\n       (parse_nested_parens_helper_2\
+    \ (rest paren_string) 0 0)]\n      [else (parse_nested_parens_helper_2 (rest paren_string)\
+    \ current_level max_level)]))\n  (parse_nested_parens_helper_2 paren_string 0\
+    \ 0))\n", "  (define (parse-parens paren-string)\n    (define (parse-parens-iter\
+    \ paren-string level)\n      (cond ((null? paren-string) level)\n            ((equal?\
+    \ (car paren-string) #\\()\n             (parse-parens-iter (cdr paren-string)\
+    \ (+ level 1)))\n            ((equal? (car paren-string) #\\))\n             (parse-parens-iter\
+    \ (cdr paren-string) (- level 1)))))\n    (parse-parens-iter paren-string 0))\n\
+    \  (map parse-parens (string-split paren_string #\\space)))\n", "  (define (parse_parens\
+    \ paren_string)\n    (define (parse_parens_iter paren_string count max_count)\n\
+    \      (cond\n        [(empty? paren_string) max_count]\n        [(equal? (first\
+    \ paren_string) #\\()\n         (parse_parens_iter (rest paren_string) (+ count\
+    \ 1) (max count max_count))]\n        [(equal? (first paren_string) #\\))\n  \
+    \       (parse_parens_iter (rest paren_string) (- count 1) (max count max_count))]\n\
+    \        [else (parse_parens_iter (rest paren_string) count max_count)]))\n  \
+    \  (parse_parens_iter paren_string 0 0))\n  (map parse_parens (string-split paren_string\
+    \ #\\space)))\n", "  (map (lambda (x) (count-parens x)) (string-split paren_string)))\n",
+  "  (map (lambda (paren_group) (parse_nested_parens_helper paren_group 0)) (string-split\
+    \ paren_string)))\n", "  (map (\u03BB (paren_group)\n         (define (count-parens\
+    \ paren_group count)\n           (cond [(empty? paren_group) count]\n        \
+    \         [(char=? (first paren_group) #\\() (count-parens (rest paren_group)\
+    \ (+ count 1))]\n                 [(char=? (first paren_group) #\\)) (count-parens\
+    \ (rest paren_group) (- count 1))]\n                 [else (count-parens (rest\
+    \ paren_group) count)]))\n         (count-parens paren_group 0))\n       (string-split\
+    \ paren_string #\\space)))\n", "  (define (parse_parens paren_string)\n    (define\
+    \ (parse_parens_helper paren_string level)\n      (cond [(empty? paren_string)\
+    \ level]\n            [(char=? (first paren_string) #\\()\n             (parse_parens_helper\
+    \ (rest paren_string) (+ level 1))]\n            [(char=? (first paren_string)\
+    \ #\\))\n             (parse_parens_helper (rest paren_string) (- level 1))]\n\
+    \            [else (parse_parens_helper (rest paren_string) level)]))\n    (parse_parens_helper\
+    \ paren_string 0))\n  (map parse_parens (string-split paren_string #\\space)))\n",
+  "  (define (parse-parens paren-string)\n    (let loop ([paren-string paren-string]\
+    \ [paren-count 0] [max-paren-count 0])\n      (cond\n        [(empty? paren-string)\
+    \ (list paren-count max-paren-count)]\n        [(char=? (first paren-string) #\\\
+    ()\n         (loop (rest paren-string) (+ paren-count 1) (max paren-count max-paren-count))]\n\
+    \        [(char=? (first paren-string) #\\))\n         (loop (rest paren-string)\
+    \ (- paren-count 1) (max paren-count max-paren-count))]\n        [else (loop (rest\
+    \ paren-string) paren-count max-paren-count)])))\n  (map (lambda (paren-string)\
+    \ (first (parse-parens paren-string))) (string-split paren_string #\\space)))\n",
+  "  (define (parse_nested_parens_helper paren_string current_level max_level)\n \
+    \   (cond\n      [(empty? paren_string) (list max_level)]\n      [(equal? (first\
+    \ paren_string) #\\()\n       (parse_nested_parens_helper (rest paren_string)\
+    \ (+ current_level 1) (max max_level current_level))]\n      [(equal? (first paren_string)\
+    \ #\\))\n       (parse_nested_parens_helper (rest paren_string) (- current_level\
+    \ 1) max_level)]\n      [else (parse_nested_parens_helper (rest paren_string)\
+    \ current_level max_level)]))\n  (parse_nested_parens_helper paren_string 0 0))\n",
+  "  (define (parse_parens paren_string)\n    (define (parse_parens_iter paren_string\
+    \ max_depth depth)\n      (cond\n        [(empty? paren_string) max_depth]\n \
+    \       [(char=? (first paren_string) #\\()\n         (parse_parens_iter (rest\
+    \ paren_string)\n                            (if (> depth max_depth) depth max_depth)\n\
+    \                            (+ depth 1))]\n        [(char=? (first paren_string)\
+    \ #\\))\n         (parse_parens_iter (rest paren_string)\n                   \
+    \         (if (> depth max_depth) depth max_depth)\n                         \
+    \   (- depth 1))]\n        [else (parse_parens_iter (rest paren_string) max_depth\
+    \ depth)]))\n    (parse_parens_iter paren_string 0 0))\n  (map parse_parens (string-split\
+    \ paren_string #\\space)))\n", "  (define (paren_level paren_string)\n    (let\
+    \ loop ([paren_string paren_string] [level 0] [max_level 0])\n      (cond [(empty?\
+    \ paren_string) max_level]\n            [(char=? (first paren_string) #\\()\n\
+    \             (loop (rest paren_string) (+ level 1) (max level max_level))]\n\
+    \            [(char=? (first paren_string) #\\))\n             (loop (rest paren_string)\
+    \ (- level 1) (max level max_level))]\n            [else (loop (rest paren_string)\
+    \ level max_level)])))\n  (map paren_level (regexp-split #rx\" \" paren_string)))\n",
+  "  (map (lambda (paren_group)\n         (let loop ([paren_group paren_group] [level\
+    \ 0] [max_level 0])\n           (cond [(empty? paren_group) max_level]\n     \
+    \            [(char=? (first paren_group) #\\()\n                  (loop (rest\
+    \ paren_group) (+ level 1) (if (> level max_level) level max_level))]\n      \
+    \           [(char=? (first paren_group) #\\))\n                  (loop (rest\
+    \ paren_group) (- level 1) max_level)]\n                 [else (loop (rest paren_group)\
+    \ level max_level)])))\n       (regexp-split #rx\" \" paren_string)))\n", "  (define\
+    \ (parse_parens paren_string)\n    (define (parse_parens_iter paren_string paren_count\
+    \ max_paren_count)\n      (cond\n        [(empty? paren_string) max_paren_count]\n\
+    \        [(equal? (first paren_string) #\\()\n         (parse_parens_iter (rest\
+    \ paren_string) (+ paren_count 1) (max paren_count max_paren_count))]\n      \
+    \  [(equal? (first paren_string) #\\))\n         (parse_parens_iter (rest paren_string)\
+    \ (- paren_count 1) (max paren_count max_paren_count))]\n        [else (parse_parens_iter\
+    \ (rest paren_string) paren_count max_paren_count)]))\n    (parse_parens_iter\
+    \ paren_string 0 0))\n  (define (parse_parens_iter paren_string paren_count max_paren_count)\n\
+    \    (cond\n      [(empty? paren_string) (list max_paren_count)]\n      [(equal?\
+    \ (first paren_string) #\\()\n       (parse_parens_iter (rest paren_string) (+\
+    \ paren_count 1) (max paren_count max_paren_count))]\n      [(equal? (first paren_string)\
+    \ #\\))\n       (parse_parens_iter (rest paren_string) (- paren_count 1) (max\
+    \ paren_count max_paren_count))]\n      [(equal? (first paren_string) #\\space)\n\
+    \       (append (list max_paren_count) (parse_parens (rest paren_string)))]\n\
+    \      [else (parse_parens_iter (rest paren_string) paren_count max_paren_count)]))\n\
+    \  (parse_parens_iter paren_string 0 0))\n", "  (define (parse-parens paren-string)\n\
+    \    (define (parse-parens-iter paren-string depth max-depth)\n      (cond\n \
+    \       [(empty? paren-string) max-depth]\n        [(char=? (first paren-string)\
+    \ #\\()\n         (parse-parens-iter (rest paren-string) (+ depth 1) (max max-depth\
+    \ depth))]\n        [(char=? (first paren-string) #\\))\n         (parse-parens-iter\
+    \ (rest paren-string) (- depth 1) max-depth)]\n        [else (parse-parens-iter\
+    \ (rest paren-string) depth max-depth)]))\n    (parse-parens-iter paren-string\
+    \ 0 0))\n  (map parse-parens (string-split paren-string)))\n", "  (map (lambda\
+    \ (paren_group)\n         (let loop ([paren_group paren_group] [count 0] [max_count\
+    \ 0])\n           (cond\n             [(empty? paren_group) max_count]\n     \
+    \        [(char=? (first paren_group) #\\()\n              (loop (rest paren_group)\
+    \ (+ count 1) (max count max_count))]\n             [(char=? (first paren_group)\
+    \ #\\))\n              (loop (rest paren_group) (- count 1) (max count max_count))]\n\
+    \             [else (loop (rest paren_group) count max_count)])))\n       (string-split\
+    \ paren_string)))\n", "  (define (parse-parens-helper paren_string paren_count)\n\
+    \    (cond\n      [(empty? paren_string) paren_count]\n      [(equal? (first paren_string)\
+    \ #\\() (parse-parens-helper (rest paren_string) (+ paren_count 1))]\n      [(equal?\
+    \ (first paren_string) #\\)) (parse-parens-helper (rest paren_string) (- paren_count\
+    \ 1))]\n      [else (parse-parens-helper (rest paren_string) paren_count)]))\n\
+    \  (define (parse-parens-helper-2 paren_string paren_count paren_list)\n    (cond\n\
+    \      [(empty? paren_string) (reverse paren_list)]\n      [(equal? (first paren_string)\
+    \ #\\() (parse-parens-helper-2 (rest paren_string) (+ paren_count 1) paren_list)]\n\
+    \      [(equal? (first paren_string) #\\)) (parse-parens-helper-2 (rest paren_string)\
+    \ (- paren_count 1) (cons paren_count paren_list))]\n      [else (parse-parens-helper-2\
+    \ (rest paren_string) paren_count paren_list)]))\n  (parse-parens-helper-2 paren_string\
+    \ 0 '()))\n", "  (define (parse_nested_parens_helper paren_string current_max)\n\
+    \    (cond\n      [(empty? paren_string) current_max]\n      [(char=? (first paren_string)\
+    \ #\\()\n       (parse_nested_parens_helper (rest paren_string) (+ current_max\
+    \ 1))]\n      [(char=? (first paren_string) #\\))\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (- current_max 1))]\n      [else (parse_nested_parens_helper\
+    \ (rest paren_string) current_max)]))\n  (define (parse_nested_parens_helper2\
+    \ paren_string current_max)\n    (cond\n      [(empty? paren_string) (list current_max)]\n\
+    \      [(char=? (first paren_string) #\\ )\n       (cons current_max (parse_nested_parens_helper2\
+    \ (rest paren_string) 0))]\n      [(char=? (first paren_string) #\\()\n      \
+    \ (parse_nested_parens_helper2 (rest paren_string) (+ current_max 1))]\n     \
+    \ [(char=? (first paren_string) #\\))\n       (parse_nested_parens_helper2 (rest\
+    \ paren_string) (- current_max 1))]\n      [else (parse_nested_parens_helper2\
+    \ (rest paren_string) current_max)]))\n  (parse_nested_parens_helper2 paren_string\
+    \ 0))\n", "  (define (parse_parens paren_string)\n    (define (parse-parens-iter\
+    \ paren_string count max-count)\n      (cond\n        [(empty? paren_string) max-count]\n\
+    \        [(char=? (first paren_string) #\\()\n         (parse-parens-iter (rest\
+    \ paren_string) (+ count 1) (max count max-count))]\n        [(char=? (first paren_string)\
+    \ #\\))\n         (parse-parens-iter (rest paren_string) (- count 1) (max count\
+    \ max-count))]\n        [else (parse-parens-iter (rest paren_string) count max-count)]))\n\
+    \    (parse-parens-iter paren_string 0 0))\n  (map parse_parens (string-split\
+    \ paren_string #\\space)))\n", "  (map (\u03BB (paren_group)\n         (let ([paren_group\
+    \ (string->list paren_group)])\n           (let loop ([paren_group paren_group]\
+    \ [level 0] [max_level 0])\n             (cond [(empty? paren_group) max_level]\n\
+    \                   [(char=? (first paren_group) #\\()\n                    (loop\
+    \ (rest paren_group) (+ level 1) (max level max_level))]\n                   [(char=?\
+    \ (first paren_group) #\\))\n                    (loop (rest paren_group) (- level\
+    \ 1) (max level max_level))]\n                   [else (loop (rest paren_group)\
+    \ level max_level)]))))\n       (string-split paren_string)))\n", "  (map (lambda\
+    \ (paren_group)\n         (let loop ([paren_group paren_group] [level 0] [max_level\
+    \ 0])\n           (cond [(empty? paren_group) max_level]\n                 [(char=?\
+    \ (first paren_group) #\\()\n                  (loop (rest paren_group) (+ level\
+    \ 1) (if (> level max_level) level max_level))]\n                 [(char=? (first\
+    \ paren_group) #\\))\n                  (loop (rest paren_group) (- level 1) max_level)]\n\
+    \                 [else (loop (rest paren_group) level max_level)])))\n      \
+    \ (string-split paren_string)))\n", "  (map (lambda (paren_group)\n         (count-parens\
+    \ paren_group 0))\n       (string-split paren_string)))\n", "  (define (parse_parens\
+    \ paren_string)\n    (define (parse-parens-iter paren_string max-level level)\n\
+    \      (cond\n        [(empty? paren_string) max-level]\n        [(char=? (first\
+    \ paren_string) #\\()\n         (parse-parens-iter (rest paren_string) (if (>\
+    \ level max-level) level max-level) (+ level 1))]\n        [(char=? (first paren_string)\
+    \ #\\))\n         (parse-parens-iter (rest paren_string) (if (> level max-level)\
+    \ level max-level) (- level 1))]\n        [else (parse-parens-iter (rest paren_string)\
+    \ max-level level)]))\n    (parse-parens-iter paren_string 0 0))\n  (map parse_parens\
+    \ (string-split paren_string #\\space)))\n", "  (map (lambda (paren_group)\n \
+    \        (let loop ([paren_group paren_group] [max-depth 0] [current-depth 0])\n\
+    \           (cond [(empty? paren_group) max-depth]\n                 [(char=?\
+    \ (first paren_group) #\\()\n                  (loop (rest paren_group)\n    \
+    \                    (if (> current-depth max-depth)\n                       \
+    \     current-depth\n                            max-depth)\n                \
+    \        (+ current-depth 1))]\n                 [(char=? (first paren_group)\
+    \ #\\))\n                  (loop (rest paren_group)\n                        (if\
+    \ (> current-depth max-depth)\n                            current-depth\n   \
+    \                         max-depth)\n                        (- current-depth\
+    \ 1))]\n                 [else (loop (rest paren_group)\n                    \
+    \         max-depth\n                             current-depth)])))\n       (regexp-split\
+    \ #rx\" \" paren_string)))\n", "  (define (parse-parens paren-string)\n    (let\
+    \ loop ([paren-string paren-string] [level 0] [max-level 0])\n      (cond [(empty?\
+    \ paren-string) max-level]\n            [(char=? (first paren-string) #\\()\n\
+    \             (loop (rest paren-string) (+ level 1) (max level max-level))]\n\
+    \            [(char=? (first paren-string) #\\))\n             (loop (rest paren-string)\
+    \ (- level 1) (max level max-level))]\n            [else (loop (rest paren-string)\
+    \ level max-level)])))\n  (map parse-parens (string-split paren_string)))\n",
+  "  (map (lambda (paren_group)\n         (let loop ([paren_group paren_group] [max_nesting\
+    \ 0] [current_nesting 0])\n           (cond [(empty? paren_group) max_nesting]\n\
+    \                 [(char=? (first paren_group) #\\()\n                  (loop\
+    \ (rest paren_group)\n                        (if (> current_nesting max_nesting)\n\
+    \                            (+ current_nesting 1)\n                         \
+    \   max_nesting)\n                        (+ current_nesting 1))]\n          \
+    \       [(char=? (first paren_group) #\\))\n                  (loop (rest paren_group)\n\
+    \                        max_nesting\n                        (- current_nesting\
+    \ 1))]\n                 [else (loop (rest paren_group) max_nesting current_nesting)])))\n\
+    \       (regexp-split #rx\" \" paren_string)))\n", "  (map (\u03BB (x) (count-parens\
+    \ x)) (string-split paren_string #\\space)))\n", "  (define (parse_nested_parens_helper\
+    \ paren_string max_level)\n    (cond\n      [(empty? paren_string) max_level]\n\
+    \      [(char=? (first paren_string) #\\()\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (+ max_level 1))]\n      [(char=? (first paren_string) #\\\
+    ))\n       (parse_nested_parens_helper (rest paren_string) (- max_level 1))]\n\
+    \      [else (parse_nested_parens_helper (rest paren_string) max_level)]))\n \
+    \ (map (\u03BB (paren_group) (parse_nested_parens_helper paren_group 0)) (string-split\
+    \ paren_string #\\space)))\n", "  (define (parse_nested_parens-iter paren_string\
+    \ acc)\n    (cond [(empty? paren_string) acc]\n          [(equal? (first paren_string)\
+    \ #\\()\n           (parse_nested_parens-iter (rest paren_string) (add1 acc))]\n\
+    \          [(equal? (first paren_string) #\\))\n           (parse_nested_parens-iter\
+    \ (rest paren_string) (sub1 acc))]\n          [else (parse_nested_parens-iter\
+    \ (rest paren_string) acc)]))\n  (parse_nested_parens-iter paren_string 0))\n",
+  "  (map (lambda (paren_group)\n         (paren_nesting_level paren_group))\n   \
+    \    (string-split paren_string #\\space)))\n", "  (define (parse_nested_parens_helper\
+    \ paren_string max_depth)\n    (cond\n      [(empty? paren_string) max_depth]\n\
+    \      [(char=? (first paren_string) #\\()\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (+ max_depth 1))]\n      [(char=? (first paren_string) #\\\
+    ))\n       (parse_nested_parens_helper (rest paren_string) (- max_depth 1))]\n\
+    \      [else (parse_nested_parens_helper (rest paren_string) max_depth)]))\n \
+    \ (parse_nested_parens_helper paren_string 0))\n", "  (map (lambda (paren_group)\n\
+    \         (let loop ([paren_group paren_group] [max_level 0] [level 0])\n    \
+    \       (cond [(empty? paren_group) max_level]\n                 [(char=? (first\
+    \ paren_group) #\\()\n                  (loop (rest paren_group)\n           \
+    \             (if (&gt; level max_level) level max_level)\n                  \
+    \      (+ level 1))]\n                 [(char=? (first paren_group) #\\))\n  \
+    \                (loop (rest paren_group)\n                        (if (&gt; level\
+    \ max_level) level max_level)\n                        (- level 1))]\n       \
+    \          [else (loop (rest paren_group) max_level level)])))\n       (regexp-match*\
+    \ #rx\"([()]*)\" paren_string)))\n</code>\n", "  (define (parse_parens paren_string)\n\
+    \    (define (parse_parens_iter paren_string level)\n      (cond\n        [(empty?\
+    \ paren_string) level]\n        [(equal? (first paren_string) #\\() (parse_parens_iter\
+    \ (rest paren_string) (+ level 1))]\n        [(equal? (first paren_string) #\\\
+    )) (parse_parens_iter (rest paren_string) (- level 1))]\n        [else (parse_parens_iter\
+    \ (rest paren_string) level)]))\n    (parse_parens_iter paren_string 0))\n  (define\
+    \ (parse_parens_iter paren_string level_list)\n    (cond\n      [(empty? paren_string)\
+    \ level_list]\n      [(equal? (first paren_string) #\\ ) (parse_parens_iter (rest\
+    \ paren_string) level_list)]\n      [else (parse_parens_iter (rest paren_string)\
+    \ (append level_list (list (parse_parens paren_string))))]))\n  (parse_parens_iter\
+    \ paren_string '()))\n", "  (define (parse_parens paren_string)\n    (if (empty?\
+    \ paren_string)\n        0\n        (if (equal? (first paren_string) #\\()\n \
+    \           (+ 1 (parse_parens (rest paren_string)))\n            (- (parse_parens\
+    \ (rest paren_string)) 1))))\n  (map parse_parens (string-split paren_string #\\\
+    space)))\n", "  (define (parse_parens paren_string)\n    (define (parse-parens-helper\
+    \ paren_string acc)\n      (cond\n        [(empty? paren_string) acc]\n      \
+    \  [(equal? (first paren_string) #\\() (parse-parens-helper (rest paren_string)\
+    \ (add1 acc))]\n        [(equal? (first paren_string) #\\)) (parse-parens-helper\
+    \ (rest paren_string) (sub1 acc))]\n        [else (parse-parens-helper (rest paren_string)\
+    \ acc)]))\n    (parse-parens-helper paren_string 0))\n  (define (parse-parens-string-helper\
+    \ paren_string acc)\n    (cond\n      [(empty? paren_string) acc]\n      [(equal?\
+    \ (first paren_string) #\\ ) (parse-parens-string-helper (rest paren_string) acc)]\n\
+    \      [else (parse-parens-string-helper (rest paren_string) (cons (parse_parens\
+    \ paren_string) acc))]))\n  (parse-parens-string-helper paren_string '()))\n",
+  "  (map (lambda (paren_group)\n         (let ([paren_group (string->list paren_group)])\n\
+    \           (let loop ([paren_group paren_group] [max_depth 0] [current_depth\
+    \ 0])\n             (cond [(empty? paren_group) max_depth]\n                 \
+    \  [(char=? (first paren_group) #\\()\n                    (loop (rest paren_group)\
+    \ max_depth (+ current_depth 1))]\n                   [(char=? (first paren_group)\
+    \ #\\))\n                    (loop (rest paren_group) (max max_depth current_depth)\
+    \ (- current_depth 1))]\n                   [else (loop (rest paren_group) max_depth\
+    \ current_depth)]))))\n       (string-split paren_string)))\n", "  (define (parse_parens\
+    \ paren_string)\n    (cond\n      [(empty? paren_string) 0]\n      [(char=? (first\
+    \ paren_string) #\\() (add1 (parse_parens (rest paren_string)))]\n      [(char=?\
+    \ (first paren_string) #\\)) (sub1 (parse_parens (rest paren_string)))]\n    \
+    \  [else (parse_parens (rest paren_string))]))\n  (map parse_parens (string-split\
+    \ paren_string #\\space)))\n", "  (map (lambda (paren_group)\n         (define\
+    \ (paren_group_level paren_group)\n           (cond\n             [(empty? paren_group)\
+    \ 0]\n             [(eq? (first paren_group) #\\()\n              (add1 (paren_group_level\
+    \ (rest paren_group)))]\n             [(eq? (first paren_group) #\\))\n      \
+    \        (paren_group_level (rest paren_group))]))\n         (paren_group_level\
+    \ paren_group))\n       (map string->list (string-split paren_string #\\space))))\n",
+  "  (map (lambda (paren_group)\n         (let loop ([paren_group paren_group] [level\
+    \ 0] [max_level 0])\n           (cond [(empty? paren_group) max_level]\n     \
+    \            [(char=? (first paren_group) #\\()\n                  (loop (rest\
+    \ paren_group) (+ level 1) (if (> level max_level) level max_level))]\n      \
+    \           [(char=? (first paren_group) #\\))\n                  (loop (rest\
+    \ paren_group) (- level 1) max_level)]\n                 [else (loop (rest paren_group)\
+    \ level max_level)])))\n       (regexp-split #rx\" \" paren_string)))\n", "  (map\
+    \ (lambda (paren_group)\n         (let loop ([paren_group paren_group] [max_level\
+    \ 0] [level 0])\n           (cond [(empty? paren_group) max_level]\n         \
+    \        [(char=? (first paren_group) #\\()\n                  (loop (rest paren_group)\n\
+    \                        (if (> level max_level) level max_level)\n          \
+    \              (+ level 1))]\n                 [(char=? (first paren_group) #\\\
+    ))\n                  (loop (rest paren_group)\n                        (if (>\
+    \ level max_level) level max_level)\n                        (- level 1))]\n \
+    \                [else (loop (rest paren_group) max_level level)])))\n       (regexp-split\
+    \ #rx\" \" paren_string)))\n", "  (map (lambda (paren_group)\n         (define\
+    \ (paren_level paren_group)\n           (cond\n             [(empty? paren_group)\
+    \ 0]\n             [(eq? (first paren_group) #\\() (add1 (paren_level (rest paren_group)))]\n\
+    \             [(eq? (first paren_group) #\\)) (sub1 (paren_level (rest paren_group)))]\n\
+    \             [else (paren_level (rest paren_group))]))\n         (paren_level\
+    \ paren_group))\n       (map string->list (string-split paren_string #\\space))))\n",
+  "  (define (parse-parens-helper paren_string current_max)\n    (cond\n      [(empty?\
+    \ paren_string) current_max]\n      [(char=? (first paren_string) #\\()\n    \
+    \   (parse-parens-helper (rest paren_string) (add1 current_max))]\n      [(char=?\
+    \ (first paren_string) #\\))\n       (parse-parens-helper (rest paren_string)\
+    \ (sub1 current_max))]\n      [else (parse-parens-helper (rest paren_string) current_max)]))\n\
+    \  (define (parse-parens-helper-2 paren_string current_max)\n    (cond\n     \
+    \ [(empty? paren_string) current_max]\n      [(char=? (first paren_string) #\\\
+    ()\n       (parse-parens-helper-2 (rest paren_string) (add1 current_max))]\n \
+    \     [(char=? (first paren_string) #\\))\n       (parse-parens-helper-2 (rest\
+    \ paren_string) (sub1 current_max))]\n      [else (parse-parens-helper-2 (rest\
+    \ paren_string) current_max)]))\n  (define (parse-parens-helper-3 paren_string\
+    \ current_max)\n    (cond\n      [(empty? paren_string) current_max]\n      [(char=?\
+    \ (first paren_string) #\\()\n       (parse-parens-helper-3 (rest paren_string)\
+    \ (add1 current_max))]\n      [(char=? (first paren_string) #\\))\n       (parse-parens-helper-3\
+    \ (rest paren_string) (sub1 current_max))]\n      [else (parse-parens-helper-3\
+    \ (rest paren_string) current_max)]))\n  (define (parse-parens-helper-4 paren_string\
+    \ current_max)\n    (cond\n      [(empty? paren_string) current_max]\n      [(char=?\
+    \ (first paren_string) #\\()\n       (parse-parens-", "  (define (parse_parens\
+    \ paren_string paren_list)\n    (if (empty? paren_string)\n        paren_list\n\
+    \        (let ([paren (first paren_string)])\n          (if (equal? paren #\\\
+    ()\n              (parse_parens (rest paren_string) (cons 1 paren_list))\n   \
+    \           (if (equal? paren #\\))\n                  (parse_parens (rest paren_string)\
+    \ (cons (add1 (first paren_list)) (rest paren_list)))\n                  (parse_parens\
+    \ (rest paren_string) paren_list))))))\n  (parse_parens paren_string (list)))\n",
+  "  (map (lambda (paren_group)\n         (let loop ([paren_group paren_group] [level\
+    \ 0] [max-level 0])\n           (cond [(empty? paren_group) max-level]\n     \
+    \            [(char=? (first paren_group) #\\()\n                  (loop (rest\
+    \ paren_group) (+ level 1) max-level)]\n                 [(char=? (first paren_group)\
+    \ #\\))\n                  (loop (rest paren_group) (- level 1) (max level max-level))]\n\
+    \                 [else (loop (rest paren_group) level max-level)])))\n      \
+    \ (string-split paren_string)))\n", "  (map (lambda (paren_group)\n         (let\
+    \ loop ([paren_group paren_group] [max_level 0] [level 0])\n           (cond [(empty?\
+    \ paren_group) max_level]\n                 [(char=? (first paren_group) #\\()\n\
+    \                  (loop (rest paren_group) max_level (+ level 1))]\n        \
+    \         [(char=? (first paren_group) #\\))\n                  (loop (rest paren_group)\
+    \ (max max_level level) (- level 1))]\n                 [else (loop (rest paren_group)\
+    \ max_level level)])))\n       (regexp-split #rx\" \" paren_string)))\n", "  (define\
+    \ (parse_nested_parens_helper paren_string acc)\n    (cond\n      [(empty? paren_string)\
+    \ acc]\n      [(string=? (first paren_string) \"(\")\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (add1 acc))]\n      [(string=? (first paren_string) \")\"\
+    )\n       (parse_nested_parens_helper (rest paren_string) (sub1 acc))]\n     \
+    \ [(string=? (first paren_string) \" \")\n       (parse_nested_parens_helper (rest\
+    \ paren_string) acc)]\n      [else (error \"Invalid input\")]))\n  (parse_nested_parens_helper\
+    \ paren_string 0))\n", "  (define (parse-parens paren-string)\n    (define (parse-parens-iter\
+    \ paren-string level max-level)\n      (cond\n        [(empty? paren-string) max-level]\n\
+    \        [(equal? (first paren-string) #\\()\n         (parse-parens-iter (rest\
+    \ paren-string) (+ level 1) max-level)]\n        [(equal? (first paren-string)\
+    \ #\\))\n         (parse-parens-iter (rest paren-string) (- level 1) (max level\
+    \ max-level))]\n        [else (parse-parens-iter (rest paren-string) level max-level)]))\n\
+    \    (parse-parens-iter paren-string 0 0))\n  (map parse-parens (string-split\
+    \ paren-string #\\space)))\n", "  (define (parse_parens paren_string)\n    (define\
+    \ (parse-parens-helper paren_string level)\n      (cond\n        [(empty? paren_string)\
+    \ level]\n        [(equal? (first paren_string) #\\() (parse-parens-helper (rest\
+    \ paren_string) (+ level 1))]\n        [(equal? (first paren_string) #\\)) (parse-parens-helper\
+    \ (rest paren_string) (- level 1))]\n        [else (parse-parens-helper (rest\
+    \ paren_string) level)]))\n    (parse-parens-helper paren_string 0))\n  (map parse_parens\
+    \ (string-split paren_string)))\n", "  (define (parse_parens paren_string)\n \
+    \   (define (parse_parens_iter paren_string depth max-depth)\n      (cond\n  \
+    \      [(empty? paren_string) max-depth]\n        [(char=? (first paren_string)\
+    \ #\\()\n         (parse_parens_iter (rest paren_string) (+ depth 1) (max depth\
+    \ max-depth))]\n        [(char=? (first paren_string) #\\))\n         (parse_parens_iter\
+    \ (rest paren_string) (- depth 1) (max depth max-depth))]\n        [else (parse_parens_iter\
+    \ (rest paren_string) depth max-depth)]))\n    (parse_parens_iter paren_string\
+    \ 0 0))\n  (map parse_parens (string-split paren_string #\\space)))\n", "  (map\
+    \ (lambda (paren_group)\n         (let loop ([paren_group paren_group] [max_level\
+    \ 0] [current_level 0])\n           (cond [(empty? paren_group) max_level]\n \
+    \                [(char=? (first paren_group) #\\()\n                  (loop (rest\
+    \ paren_group)\n                        (if (> current_level max_level)\n    \
+    \                        current_level\n                            max_level)\n\
+    \                        (+ current_level 1))]\n                 [(char=? (first\
+    \ paren_group) #\\))\n                  (loop (rest paren_group)\n           \
+    \             (if (> current_level max_level)\n                            current_level\n\
+    \                            max_level)\n                        (- current_level\
+    \ 1))]\n                 [else (loop (rest paren_group) max_level current_level)])))\n\
+    \       (regexp-split #rx\" \" paren_string)))\n", "  (define (parse_nested_parens_helper\
+    \ paren_string current_level max_level)\n    (cond\n      [(empty? paren_string)\
+    \ max_level]\n      [(char=? (first paren_string) #\\()\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (+ current_level 1) (max current_level max_level))]\n  \
+    \    [(char=? (first paren_string) #\\))\n       (parse_nested_parens_helper (rest\
+    \ paren_string) (- current_level 1) (max current_level max_level))]\n      [else\
+    \ (parse_nested_parens_helper (rest paren_string) current_level max_level)]))\n\
+    \  (map (\u03BB (paren_group) (parse_nested_parens_helper paren_group 0 0)) (string-split\
+    \ paren_string)))\n", "  (define (parse_parens paren_string)\n    (define (parse_parens_helper\
+    \ paren_string level)\n      (cond\n        [(empty? paren_string) level]\n  \
+    \      [(equal? (first paren_string) #\\() (parse_parens_helper (rest paren_string)\
+    \ (+ level 1))]\n        [(equal? (first paren_string) #\\)) (parse_parens_helper\
+    \ (rest paren_string) (- level 1))]\n        [else (parse_parens_helper (rest\
+    \ paren_string) level)]))\n    (parse_parens_helper paren_string 0))\n  (define\
+    \ (parse_parens_list paren_string)\n    (cond\n      [(empty? paren_string) empty]\n\
+    \      [(equal? (first paren_string) #\\ ) (cons (parse_parens (rest paren_string))\
+    \ (parse_parens_list (rest paren_string)))]\n      [else (cons (parse_parens paren_string)\
+    \ (parse_parens_list (rest paren_string)))]))\n  (parse_parens_list paren_string))\n",
+  "  (map (lambda (paren_group)\n         (let loop ([paren_group paren_group] [max_level\
+    \ 0] [current_level 0])\n           (cond [(empty? paren_group) max_level]\n \
+    \                [(char=? (first paren_group) #\\()\n                  (loop (rest\
+    \ paren_group) max_level (+ current_level 1))]\n                 [(char=? (first\
+    \ paren_group) #\\))\n                  (loop (rest paren_group) (max max_level\
+    \ current_level) (- current_level 1))]\n                 [else (loop (rest paren_group)\
+    \ max_level current_level)])))\n       (regexp-split #rx\" \" paren_string)))\n",
+  "  (define (parse-parens paren-string)\n    (define (parse-parens-iter paren-string\
+    \ paren-count)\n      (cond\n        [(empty? paren-string) paren-count]\n   \
+    \     [(char=? (first paren-string) #\\()\n         (parse-parens-iter (rest paren-string)\
+    \ (+ paren-count 1))]\n        [(char=? (first paren-string) #\\))\n         (parse-parens-iter\
+    \ (rest paren-string) (- paren-count 1))]\n        [else (parse-parens-iter (rest\
+    \ paren-string) paren-count)]))\n    (parse-parens-iter paren-string 0))\n  (map\
+    \ parse-parens (string-split paren-string #\\space)))\n", "  (define (parse_parens\
+    \ paren_string)\n    (define (parse_parens_helper paren_string level)\n      (cond\n\
+    \        [(empty? paren_string) level]\n        [(equal? (first paren_string)\
+    \ #\\() (parse_parens_helper (rest paren_string) (+ level 1))]\n        [(equal?\
+    \ (first paren_string) #\\)) (parse_parens_helper (rest paren_string) (- level\
+    \ 1))]\n        [else (parse_parens_helper (rest paren_string) level)]))\n   \
+    \ (parse_parens_helper paren_string 0))\n  (define (parse_parens_groups paren_string)\n\
+    \    (cond\n      [(empty? paren_string) '()]\n      [(equal? (first paren_string)\
+    \ #\\ ) (cons (parse_parens (rest paren_string)) (parse_parens_groups (rest paren_string)))]\n\
+    \      [else (parse_parens_groups (rest paren_string))]))\n  (parse_parens_groups\
+    \ paren_string))\n", "  (define (parse_parens paren_string max_depth)\n    (cond\
+    \ ((null? paren_string) max_depth)\n          ((equal? (car paren_string) #\\\
+    ()\n           (parse_parens (cdr paren_string) (+ max_depth 1)))\n          ((equal?\
+    \ (car paren_string) #\\))\n           (parse_parens (cdr paren_string) (- max_depth\
+    \ 1)))\n          (else (parse_parens (cdr paren_string) max_depth))))\n  (define\
+    \ (parse_paren_groups paren_string max_depths)\n    (cond ((null? paren_string)\
+    \ max_depths)\n          ((equal? (car paren_string) #\\space)\n           (parse_paren_groups\
+    \ (cdr paren_string) (cons (parse_parens (cdr paren_string) 0) max_depths)))\n\
+    \          (else (parse_paren_groups (cdr paren_string) max_depths))))\n  (reverse\
+    \ (parse_paren_groups paren_string '())))\n", "  (define (parse_nested_parens_helper\
+    \ paren_string max_depth)\n    (cond\n      [(empty? paren_string) max_depth]\n\
+    \      [(char=? (first paren_string) #\\()\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (+ max_depth 1))]\n      [(char=? (first paren_string) #\\\
+    ))\n       (parse_nested_parens_helper (rest paren_string) (- max_depth 1))]\n\
+    \      [else (parse_nested_parens_helper (rest paren_string) max_depth)]))\n \
+    \ (for/list ([paren_group (in-list (string-split paren_string \" \"))])\n    (parse_nested_parens_helper\
+    \ paren_group 0)))\n", "  (define (parse_parens paren_string)\n    (let loop ([paren_string\
+    \ paren_string] [max_level 0] [cur_level 0])\n      (cond\n        [(empty? paren_string)\
+    \ (list max_level)]\n        [(char=? (first paren_string) #\\()\n         (loop\
+    \ (rest paren_string) (max max_level (add1 cur_level)) (add1 cur_level))]\n  \
+    \      [(char=? (first paren_string) #\\))\n         (loop (rest paren_string)\
+    \ (max max_level cur_level) (sub1 cur_level))]\n        [else (loop (rest paren_string)\
+    \ max_level cur_level)])))\n  (map parse_parens (string-split paren_string #\\\
+    space)))\n", "  (map (\u03BB (paren_group)\n         (let loop ([paren_group paren_group]\
+    \ [max_depth 0] [curr_depth 0])\n           (cond [(empty? paren_group) max_depth]\n\
+    \                 [(char=? (first paren_group) #\\()\n                  (loop\
+    \ (rest paren_group)\n                        (if (> curr_depth max_depth)\n \
+    \                           (+ curr_depth 1)\n                            max_depth)\n\
+    \                        (+ curr_depth 1))]\n                 [(char=? (first\
+    \ paren_group) #\\))\n                  (loop (rest paren_group)\n           \
+    \             max_depth\n                        (- curr_depth 1))]\n        \
+    \         [else (loop (rest paren_group) max_depth curr_depth)])))\n       (regexp-split\
+    \ #rx\" \" paren_string)))\n", "  (define (parse_nested_parens_helper paren_string\
+    \ max_level)\n    (cond\n      [(empty? paren_string) max_level]\n      [(char=?\
+    \ (first paren_string) #\\()\n       (parse_nested_parens_helper (rest paren_string)\
+    \ (+ max_level 1))]\n      [(char=? (first paren_string) #\\))\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (- max_level 1))]\n      [else (parse_nested_parens_helper\
+    \ (rest paren_string) max_level)]))\n  (define (parse_nested_parens_helper2 paren_string\
+    \ max_level result)\n    (cond\n      [(empty? paren_string) (reverse result)]\n\
+    \      [(char=? (first paren_string) #\\ )\n       (parse_nested_parens_helper2\
+    \ (rest paren_string) 0 (cons max_level result))]\n      [(char=? (first paren_string)\
+    \ #\\()\n       (parse_nested_parens_helper2 (rest paren_string) (+ max_level\
+    \ 1) result)]\n      [(char=? (first paren_string) #\\))\n       (parse_nested_parens_helper2\
+    \ (rest paren_string) (- max_level 1) result)]\n      [else (parse_nested_parens_helper2\
+    \ (rest paren_string) max_level result)]))\n  (parse_nested_parens_helper2 paren_string\
+    \ 0 '()))\n", "  (define (parse-parens-helper paren_string paren_count max_paren_count)\n\
+    \    (cond [(empty? paren_string) max_paren_count]\n          [(char=? (first\
+    \ paren_string) #\\()\n           (parse-parens-helper (rest paren_string) (+\
+    \ paren_count 1)\n                                (if (> paren_count max_paren_count)\n\
+    \                                    paren_count\n                           \
+    \         max_paren_count))]\n          [(char=? (first paren_string) #\\))\n\
+    \           (parse-parens-helper (rest paren_string) (- paren_count 1)\n     \
+    \                           (if (> paren_count max_paren_count)\n            \
+    \                        paren_count\n                                    max_paren_count))]\n\
+    \          [else (parse-parens-helper (rest paren_string) paren_count max_paren_count)]))\n\
+    \  (define (parse-parens-helper-2 paren_string)\n    (parse-parens-helper paren_string\
+    \ 0 0))\n  (map parse-parens-helper-2 (string-split paren_string #\\space)))\n",
+  "  (define (parse_parens paren_string)\n    (define (parse-parens-iter paren_string\
+    \ count max-count)\n      (cond ((empty? paren_string) max-count)\n          \
+    \  ((char=? (first paren_string) #\\()\n             (parse-parens-iter (rest\
+    \ paren_string) (+ count 1) (max count max-count)))\n            ((char=? (first\
+    \ paren_string) #\\))\n             (parse-parens-iter (rest paren_string) (-\
+    \ count 1) (max count max-count)))\n            (else (parse-parens-iter (rest\
+    \ paren_string) count max-count))))\n    (parse-parens-iter paren_string 0 0))\n\
+    \  (define (parse-parens-iter paren_string paren_list)\n    (cond ((empty? paren_string)\
+    \ paren_list)\n          ((char=? (first paren_string) #\\ )\n           (parse-parens-iter\
+    \ (rest paren_string) paren_list))\n          (else (parse-parens-iter (rest paren_string)\
+    \ (cons (parse_parens paren_string) paren_list)))))\n  (parse-parens-iter paren_string\
+    \ '()))\n", "  (map (lambda (paren_group)\n         (let loop ([paren_group paren_group]\
+    \ [level 0] [max_level 0])\n           (cond [(empty? paren_group) max_level]\n\
+    \                 [(char=? (first paren_group) #\\()\n                  (loop\
+    \ (rest paren_group) (+ level 1) (if (> level max_level) level max_level))]\n\
+    \                 [(char=? (first paren_group) #\\))\n                  (loop\
+    \ (rest paren_group) (- level 1) max_level)]\n                 [else (loop (rest\
+    \ paren_group) level max_level)])))\n       (regexp-split #rx\" \" paren_string)))\n",
+  "  (define (parse_nested_parens_helper paren_string max_level)\n    (if (empty?\
+    \ paren_string)\n        max_level\n        (let* ([first-char (first paren_string)]\n\
+    \               [rest-string (rest paren_string)]\n               [new-level (if\
+    \ (equal? first-char #\\()\n                              (+ max_level 1)\n  \
+    \                            (if (equal? first-char #\\))\n                  \
+    \                (- max_level 1)\n                                  max_level))])\n\
+    \          (parse_nested_parens_helper rest-string new-level))))\n  (parse_nested_parens_helper\
+    \ paren_string 0))\n", "  (define (parse-parens paren-string)\n    (define (parse-parens-iter\
+    \ paren-string depth max-depth)\n      (cond\n        [(empty? paren-string) max-depth]\n\
+    \        [(char=? (first paren-string) #\\()\n         (parse-parens-iter (rest\
+    \ paren-string) (+ depth 1) (max depth max-depth))]\n        [(char=? (first paren-string)\
+    \ #\\))\n         (parse-parens-iter (rest paren-string) (- depth 1) (max depth\
+    \ max-depth))]\n        [else (parse-parens-iter (rest paren-string) depth max-depth)]))\n\
+    \    (parse-parens-iter paren-string 0 0))\n  (map parse-parens (string-split\
+    \ paren-string #\\space)))\n", "  (map (\u03BB (paren_group) (paren_group_depth\
+    \ paren_group)) (string-split paren_string)))\n", "  (define (parse_nested_parens_helper\
+    \ paren_string current_level max_level)\n    (cond\n      [(empty? paren_string)\
+    \ max_level]\n      [(char=? (first paren_string) #\\()\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (+ current_level 1) (max current_level max_level))]\n  \
+    \    [(char=? (first paren_string) #\\))\n       (parse_nested_parens_helper (rest\
+    \ paren_string) (- current_level 1) (max current_level max_level))]\n      [else\
+    \ (parse_nested_parens_helper (rest paren_string) current_level max_level)]))\n\
+    \  (define (parse_paren_groups paren_string)\n    (cond\n      [(empty? paren_string)\
+    \ empty]\n      [(char=? (first paren_string) #\\ )\n       (cons (parse_nested_parens_helper\
+    \ (rest paren_string) 0 0) (parse_paren_groups (rest paren_string)))]\n      [else\
+    \ (parse_paren_groups (rest paren_string))]))\n  (parse_paren_groups paren_string))\n",
+  "  (define (parse_parens paren_string)\n    (define (parse-parens-iter paren_string\
+    \ paren_count max_paren_count)\n      (cond\n        [(empty? paren_string) max_paren_count]\n\
+    \        [(char=? (first paren_string) #\\() (parse-parens-iter (rest paren_string)\
+    \ (+ paren_count 1) (max paren_count max_paren_count))]\n        [(char=? (first\
+    \ paren_string) #\\)) (parse-parens-iter (rest paren_string) (- paren_count 1)\
+    \ (max paren_count max_paren_count))]\n        [else (parse-parens-iter (rest\
+    \ paren_string) paren_count max_paren_count)]))\n    (parse-parens-iter paren_string\
+    \ 0 0))\n  (map parse_parens (string-split paren_string #\\space)))\n", "  (define\
+    \ (parse_parens paren_string)\n    (define (parse-parens-helper paren_string level)\n\
+    \      (cond\n        [(empty? paren_string) level]\n        [(equal? (first paren_string)\
+    \ #\\() (parse-parens-helper (rest paren_string) (+ level 1))]\n        [(equal?\
+    \ (first paren_string) #\\)) (parse-parens-helper (rest paren_string) (- level\
+    \ 1))]\n        [else (parse-parens-helper (rest paren_string) level)]))\n   \
+    \ (parse-parens-helper paren_string 0))\n  (map parse_parens (string-split paren_string)))\n",
+  "  (define (parse_parens paren_string)\n    (define (parse_parens_helper paren_string\
+    \ level)\n      (cond\n        [(empty? paren_string) level]\n        [(equal?\
+    \ (first paren_string) #\\() (parse_parens_helper (rest paren_string) (+ level\
+    \ 1))]\n        [(equal? (first paren_string) #\\)) (parse_parens_helper (rest\
+    \ paren_string) (- level 1))]\n        [else (parse_parens_helper (rest paren_string)\
+    \ level)]))\n    (parse_parens_helper paren_string 0))\n  (define (parse_nested_parens_helper\
+    \ paren_string result)\n    (cond\n      [(empty? paren_string) result]\n    \
+    \  [(equal? (first paren_string) #\\ ) (parse_nested_parens_helper (rest paren_string)\
+    \ result)]\n      [else (parse_nested_parens_helper (rest paren_string) (append\
+    \ result (list (parse_parens paren_string))))]))\n  (parse_nested_parens_helper\
+    \ paren_string '()))\n", "  (define (parse_nested_parens_helper paren_string current_level\
+    \ max_level)\n    (cond\n      [(empty? paren_string) (list max_level)]\n    \
+    \  [(char=? (first paren_string) #\\()\n       (parse_nested_parens_helper (rest\
+    \ paren_string) (add1 current_level) (max max_level current_level))]\n      [(char=?\
+    \ (first paren_string) #\\))\n       (parse_nested_parens_helper (rest paren_string)\
+    \ (sub1 current_level) max_level)]\n      [else (parse_nested_parens_helper (rest\
+    \ paren_string) current_level max_level)]))\n  (parse_nested_parens_helper paren_string\
+    \ 0 0))\n", "  (map (lambda (paren_group)\n         (let loop ([paren_group paren_group]\
+    \ [level 0] [max-level 0])\n           (cond [(empty? paren_group) max-level]\n\
+    \                 [(char=? (first paren_group) #\\()\n                  (loop\
+    \ (rest paren_group) (+ level 1) max-level)]\n                 [(char=? (first\
+    \ paren_group) #\\))\n                  (loop (rest paren_group) (- level 1) (max\
+    \ level max-level))]\n                 [else (loop (rest paren_group) level max-level)])))\n\
+    \       (string-split paren_string #\\space)))\n", "  (define (parse_nested_parens_helper\
+    \ paren_string current_depth max_depth)\n    (cond\n      [(empty? paren_string)\
+    \ (list max_depth)]\n      [(equal? (first paren_string) #\\()\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (+ current_depth 1) (max max_depth current_depth))]\n  \
+    \    [(equal? (first paren_string) #\\))\n       (parse_nested_parens_helper (rest\
+    \ paren_string) (- current_depth 1) max_depth)]\n      [else (parse_nested_parens_helper\
+    \ (rest paren_string) current_depth max_depth)]))\n  (parse_nested_parens_helper\
+    \ (string->list paren_string) 0 0))\n", "  (define (parse_parens paren_string)\n\
+    \    (define (parse_parens_helper paren_string depth)\n      (cond\n        [(empty?\
+    \ paren_string) depth]\n        [(char=? (first paren_string) #\\() (parse_parens_helper\
+    \ (rest paren_string) (+ depth 1))]\n        [(char=? (first paren_string) #\\\
+    )) (parse_parens_helper (rest paren_string) (- depth 1))]\n        [else (parse_parens_helper\
+    \ (rest paren_string) depth)]))\n    (parse_parens_helper paren_string 0))\n \
+    \ (define (parse_parens_list paren_list)\n    (cond\n      [(empty? paren_list)\
+    \ empty]\n      [else (cons (parse_parens (first paren_list)) (parse_parens_list\
+    \ (rest paren_list)))]))\n  (parse_parens_list (string-split paren_string)))\n",
+  "  (define (parse_nested_parens_helper paren_string acc)\n    (cond\n      [(empty?\
+    \ paren_string) (reverse acc)]\n      [(string=? (first paren_string) \"(\")\n\
+    \       (parse_nested_parens_helper (rest paren_string) (cons 1 acc))]\n     \
+    \ [(string=? (first paren_string) \")\")\n       (parse_nested_parens_helper (rest\
+    \ paren_string) (cons (add1 (first acc)) (rest acc)))]\n      [(string=? (first\
+    \ paren_string) \" \")\n       (parse_nested_parens_helper (rest paren_string)\
+    \ (cons 0 acc))]))\n  (parse_nested_parens_helper paren_string (list)))\n", " \
+    \ (define (parse_parens paren_string)\n    (define (parse-parens-iter paren_string\
+    \ depth max-depth)\n      (cond ((null? paren_string) max-depth)\n           \
+    \ ((char=? (car paren_string) #\\()\n             (parse-parens-iter (cdr paren_string)\
+    \ (+ depth 1) (max depth max-depth)))\n            ((char=? (car paren_string)\
+    \ #\\))\n             (parse-parens-iter (cdr paren_string) (- depth 1) (max depth\
+    \ max-depth)))\n            (else (parse-parens-iter (cdr paren_string) depth\
+    \ max-depth))))\n    (parse-parens-iter paren_string 0 0))\n  (map parse_parens\
+    \ (string-split paren_string #\\space)))\n", "  (map (lambda (paren_group)\n \
+    \        (let loop ([paren_group paren_group] [max_depth 0] [depth 0])\n     \
+    \      (cond [(empty? paren_group) max_depth]\n                 [(char=? (first\
+    \ paren_group) #\\()\n                  (loop (rest paren_group)\n           \
+    \             (if (> (+ depth 1) max_depth)\n                            (+ depth\
+    \ 1)\n                            max_depth)\n                        (+ depth\
+    \ 1))]\n                 [(char=? (first paren_group) #\\))\n                \
+    \  (loop (rest paren_group)\n                        max_depth\n             \
+    \           (- depth 1))]\n                 [else (loop (rest paren_group) max_depth\
+    \ depth)])))\n       (regexp-split #rx\" \" paren_string)))\n", "  (define (parse_parens\
+    \ paren_string)\n    (let loop ([paren_string paren_string] [nest_level 0] [max_nest_level\
+    \ 0])\n      (cond [(empty? paren_string) max_nest_level]\n            [(char=?\
+    \ (first paren_string) #\\()\n             (loop (rest paren_string) (+ nest_level\
+    \ 1) (max nest_level max_nest_level))]\n            [(char=? (first paren_string)\
+    \ #\\))\n             (loop (rest paren_string) (- nest_level 1) max_nest_level)]\n\
+    \            [else (loop (rest paren_string) nest_level max_nest_level)])))\n\
+    \  (map parse_parens (string-split paren_string)))\n", "  (define (parse-parens-helper\
+    \ paren_string current_level max_level)\n    (cond\n      [(empty? paren_string)\
+    \ max_level]\n      [(char=? (first paren_string) #\\()\n       (parse-parens-helper\
+    \ (rest paren_string) (+ current_level 1) (max max_level current_level))]\n  \
+    \    [(char=? (first paren_string) #\\))\n       (parse-parens-helper (rest paren_string)\
+    \ (- current_level 1) max_level)]\n      [else (parse-parens-helper (rest paren_string)\
+    \ current_level max_level)]))\n  (define (parse-parens-group-helper paren_string\
+    \ current_level max_level)\n    (cond\n      [(empty? paren_string) (list max_level)]\n\
+    \      [(char=? (first paren_string) #\\ )\n       (cons max_level (parse-parens-group-helper\
+    \ (rest paren_string) 0 0))]\n      [else (parse-parens-group-helper (rest paren_string)\
+    \ current_level max_level)]))\n  (parse-parens-group-helper paren_string 0 0))\n",
+  "  (define (parse_parens paren_string)\n    (define (parse-parens-helper paren_string\
+    \ level)\n      (cond\n        [(empty? paren_string) level]\n        [(char=?\
+    \ (first paren_string) #\\() (parse-parens-helper (rest paren_string) (+ level\
+    \ 1))]\n        [(char=? (first paren_string) #\\)) (parse-parens-helper (rest\
+    \ paren_string) (- level 1))]\n        [else (parse-parens-helper (rest paren_string)\
+    \ level)]))\n    (parse-parens-helper paren_string 0))\n  (map parse_parens (string-split\
+    \ paren_string #\\space)))\n", "  (define (parse_nested_parens_helper paren_string\
+    \ max_depth)\n    (cond\n      [(empty? paren_string) max_depth]\n      [(char=?\
+    \ (first paren_string) #\\()\n       (parse_nested_parens_helper (rest paren_string)\
+    \ (+ max_depth 1))]\n      [(char=? (first paren_string) #\\))\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (- max_depth 1))]\n      [else (parse_nested_parens_helper\
+    \ (rest paren_string) max_depth)]))\n  (map (lambda (paren_group)\n         (parse_nested_parens_helper\
+    \ paren_group 0))\n       (string-split paren_string)))\n", "  (define (parse_parens\
+    \ paren_string)\n    (define (parse-parens-helper paren_string level max-level)\n\
+    \      (cond\n        [(empty? paren_string) max-level]\n        [(equal? (first\
+    \ paren_string) #\\()\n         (parse-parens-helper (rest paren_string) (+ level\
+    \ 1) (max level max-level))]\n        [(equal? (first paren_string) #\\))\n  \
+    \       (parse-parens-helper (rest paren_string) (- level 1) (max level max-level))]\n\
+    \        [else (parse-parens-helper (rest paren_string) level max-level)]))\n\
+    \    (parse-parens-helper paren_string 0 0))\n  (map parse_parens (string-split\
+    \ paren_string #\\space)))\n", "  (map (lambda (paren_group)\n         (let loop\
+    \ ([paren_group paren_group] [level 0] [max_level 0])\n           (cond [(empty?\
+    \ paren_group) max_level]\n                 [(equal? (first paren_group) #\\()\n\
+    \                  (loop (rest paren_group) (+ level 1) (max max_level level))]\n\
+    \                 [(equal? (first paren_group) #\\))\n                  (loop\
+    \ (rest paren_group) (- level 1) max_level)]\n                 [else (loop (rest\
+    \ paren_group) level max_level)])))\n       (string-split paren_string)))\n",
+  "  (define (parse-parens paren-string)\n    (define (parse-parens-helper paren-string\
+    \ level max-level)\n      (cond\n        [(empty? paren-string) max-level]\n \
+    \       [(char=? (first paren-string) #\\()\n         (parse-parens-helper (rest\
+    \ paren-string) (+ level 1) (max level max-level))]\n        [(char=? (first paren-string)\
+    \ #\\))\n         (parse-parens-helper (rest paren-string) (- level 1) (max level\
+    \ max-level))]\n        [else (parse-parens-helper (rest paren-string) level max-level)]))\n\
+    \    (parse-parens-helper paren-string 0 0))\n  (map parse-parens (string-split\
+    \ paren-string #\\space)))\n", "  (define (parse_parens paren_string)\n    (define\
+    \ (parse_parens_helper paren_string count)\n      (cond\n        [(empty? paren_string)\
+    \ count]\n        [(equal? (first paren_string) #\\() (parse_parens_helper (rest\
+    \ paren_string) (+ count 1))]\n        [(equal? (first paren_string) #\\)) (parse_parens_helper\
+    \ (rest paren_string) (- count 1))]\n        [else (parse_parens_helper (rest\
+    \ paren_string) count)]))\n    (parse_parens_helper paren_string 0))\n  (define\
+    \ (parse_parens_list paren_string)\n    (cond\n      [(empty? paren_string) empty]\n\
+    \      [(equal? (first paren_string) #\\ ) (cons (parse_parens (rest paren_string))\
+    \ (parse_parens_list (rest paren_string)))]\n      [else (cons (parse_parens paren_string)\
+    \ (parse_parens_list (rest paren_string)))]))\n  (parse_parens_list paren_string))\n",
+  "  (define (parse_parens paren_string)\n    (cond\n      [(empty? paren_string)\
+    \ 0]\n      [(equal? (first paren_string) #\\() (add1 (parse_parens (rest paren_string)))]\n\
+    \      [(equal? (first paren_string) #\\)) (sub1 (parse_parens (rest paren_string)))]\n\
+    \      [else (parse_parens (rest paren_string))]))\n  (map parse_parens (string-split\
+    \ paren_string #\\space)))\n", "  (define (parse_nested_parens_helper paren_string\
+    \ acc)\n    (cond\n      [(empty? paren_string) (reverse acc)]\n      [(string=?\
+    \ paren_string \"\") (reverse acc)]\n      [(string=? (substring paren_string\
+    \ 0 1) \"(\")\n       (parse_nested_parens_helper (substring paren_string 1) (cons\
+    \ 1 acc))]\n      [(string=? (substring paren_string 0 1) \")\")\n       (parse_nested_parens_helper\
+    \ (substring paren_string 1) (cons (- 1 (car acc)) acc))]\n      [(string=? (substring\
+    \ paren_string 0 1) \" \")\n       (parse_nested_parens_helper (substring paren_string\
+    \ 1) (cons 0 acc))]))\n  (parse_nested_parens_helper paren_string (list 0)))\n",
+  "  (map (lambda (paren_group)\n         (let loop ([paren_group paren_group] [max_depth\
+    \ 0] [depth 0])\n           (cond [(empty? paren_group) max_depth]\n         \
+    \        [(char=? (first paren_group) #\\()\n                  (loop (rest paren_group)\
+    \ (max max_depth (add1 depth)) (add1 depth))]\n                 [(char=? (first\
+    \ paren_group) #\\))\n                  (loop (rest paren_group) (max max_depth\
+    \ depth) (sub1 depth))]\n                 [else (loop (rest paren_group) max_depth\
+    \ depth)])))\n       (regexp-split #rx\" \" paren_string)))\n", "  (define (parse_parens\
+    \ paren_string)\n    (define (parse-parens-helper paren_string depth max-depth)\n\
+    \      (cond\n        [(empty? paren_string) max-depth]\n        [(char=? (first\
+    \ paren_string) #\\()\n         (parse-parens-helper (rest paren_string) (+ depth\
+    \ 1) (max depth max-depth))]\n        [(char=? (first paren_string) #\\))\n  \
+    \       (parse-parens-helper (rest paren_string) (- depth 1) (max depth max-depth))]\n\
+    \        [else (parse-parens-helper (rest paren_string) depth max-depth)]))\n\
+    \    (parse-parens-helper paren_string 0 0))\n  (map parse_parens (string-split\
+    \ paren_string)))\n", "  (define (parse_nested_parens_helper paren_string current_level\
+    \ max_level)\n    (cond\n      [(empty? paren_string) max_level]\n      [(equal?\
+    \ (first paren_string) #\\()\n       (parse_nested_parens_helper (rest paren_string)\
+    \ (+ current_level 1) (max current_level max_level))]\n      [(equal? (first paren_string)\
+    \ #\\))\n       (parse_nested_parens_helper (rest paren_string) (- current_level\
+    \ 1) (max current_level max_level))]\n      [else (parse_nested_parens_helper\
+    \ (rest paren_string) current_level max_level)]))\n  (define (parse_nested_parens_helper2\
+    \ paren_string current_level max_level)\n    (cond\n      [(empty? paren_string)\
+    \ (list max_level)]\n      [(equal? (first paren_string) #\\space)\n       (append\
+    \ (list max_level) (parse_nested_parens_helper2 (rest paren_string) 0 0))]\n \
+    \     [(equal? (first paren_string) #\\()\n       (parse_nested_parens_helper2\
+    \ (rest paren_string) (+ current_level 1) (max current_level max_level))]\n  \
+    \    [(equal? (first paren_string) #\\))\n       (parse_nested_parens_helper2\
+    \ (rest paren_string) (- current_level 1) (max current_level max_level))]\n  \
+    \    [else (parse_nested_parens_helper2 (rest paren_string) current_level max_level)]))\n\
+    \  (parse_nested_parens_helper2 paren_string 0 0))\n", "  (define (parse_parens\
+    \ paren_string)\n    (let loop ([paren_string paren_string] [max_nest 0] [curr_nest\
+    \ 0])\n      (cond\n        [(empty? paren_string) max_nest]\n        [(char=?\
+    \ (first paren_string) #\\()\n         (loop (rest paren_string)\n           \
+    \    (if (> (+ curr_nest 1) max_nest)\n                   (+ curr_nest 1)\n  \
+    \                 max_nest)\n               (+ curr_nest 1))]\n        [(char=?\
+    \ (first paren_string) #\\))\n         (loop (rest paren_string)\n           \
+    \    max_nest\n               (- curr_nest 1))]\n        [else (loop (rest paren_string)\
+    \ max_nest curr_nest)])))\n  (map parse_parens (string-split paren_string)))\n",
+  "  (define (parse_parens paren_string)\n    (define (parse-parens-iter paren_string\
+    \ max_nesting current_nesting)\n      (cond\n        [(empty? paren_string) (list\
+    \ max_nesting current_nesting)]\n        [(char=? (first paren_string) #\\()\n\
+    \         (parse-parens-iter (rest paren_string)\n                           \
+    \ (if (> current_nesting max_nesting)\n                                current_nesting\n\
+    \                                max_nesting)\n                            (+\
+    \ current_nesting 1))]\n        [(char=? (first paren_string) #\\))\n        \
+    \ (parse-parens-iter (rest paren_string)\n                            (if (> current_nesting\
+    \ max_nesting)\n                                current_nesting\n            \
+    \                    max_nesting)\n                            (- current_nesting\
+    \ 1))]\n        [else (parse-parens-iter (rest paren_string)\n               \
+    \                  max_nesting\n                                 current_nesting)]))\n\
+    \    (parse-parens-iter paren_string 0 0))\n  (define (parse-nested-parens-iter\
+    \ paren_string result)\n    (cond\n      [(empty? paren_string) result]\n    \
+    \  [(char=? (first paren_string) #\\ )\n       (parse-nested-parens-iter (rest\
+    \ paren_string)\n                                 (append result (list (parse_parens\
+    \ (first (regexp-match #rx\"\\([^\\s]+\\)\" paren_string))))))]\n      [else (parse-nested-parens-iter\
+    \ (rest paren_string)\n                                      result)]))\n  (parse-nested-parens-iter\
+    \ paren_string '()))\n", "  (map (lambda (paren_group)\n         (let ((paren_stack\
+    \ '()))\n           (for ((paren (in-string paren_group)))\n             (cond\n\
+    \               [(char=? paren #\\()\n                (set! paren_stack (cons\
+    \ paren paren_stack))]\n               [(char=? paren #\\))\n                (set!\
+    \ paren_stack (cdr paren_stack))]))\n           (length paren_stack)))\n     \
+    \  (string-split paren_string #\\space)))\n", "  (define (parse_nested_parens_helper\
+    \ paren_string max_depth)\n    (if (empty? paren_string)\n        max_depth\n\
+    \        (cond\n         [(equal? (first paren_string) #\\()\n          (parse_nested_parens_helper\
+    \ (rest paren_string) (+ max_depth 1))]\n         [(equal? (first paren_string)\
+    \ #\\))\n          (parse_nested_parens_helper (rest paren_string) (- max_depth\
+    \ 1))]\n         [else\n          (parse_nested_parens_helper (rest paren_string)\
+    \ max_depth)])))\n  (map (lambda (paren_group)\n         (parse_nested_parens_helper\
+    \ paren_group 0))\n       (string-split paren_string #\\space)))\n", "  (define\
+    \ (parse_parens paren_string)\n    (let loop ([paren_string paren_string] [max_nesting\
+    \ 0] [current_nesting 0])\n      (cond [(empty? paren_string) max_nesting]\n \
+    \           [(char=? (first paren_string) #\\()\n             (loop (rest paren_string)\n\
+    \                   (if (> current_nesting max_nesting)\n                    \
+    \   (+ current_nesting 1)\n                       max_nesting)\n             \
+    \      (+ current_nesting 1))]\n            [(char=? (first paren_string) #\\\
+    ))\n             (loop (rest paren_string)\n                   max_nesting\n \
+    \                  (- current_nesting 1))]\n            [else (loop (rest paren_string)\
+    \ max_nesting current_nesting)])))\n  (map parse_parens (string-split paren_string)))\n",
+  "  (define (parse_parens paren_string)\n    (define (parse-parens-iter paren_string\
+    \ paren-count max-paren-count)\n      (cond ((null? paren_string) max-paren-count)\n\
+    \            ((equal? (car paren_string) #\\()\n             (parse-parens-iter\
+    \ (cdr paren_string) (add1 paren-count) (max paren-count max-paren-count)))\n\
+    \            ((equal? (car paren_string) #\\))\n             (parse-parens-iter\
+    \ (cdr paren_string) (sub1 paren-count) (max paren-count max-paren-count)))\n\
+    \            (else (parse-parens-iter (cdr paren_string) paren-count max-paren-count))))\n\
+    \    (parse-parens-iter paren_string 0 0))\n  (map parse_parens (string-split\
+    \ paren_string #\\space)))\n", "  (define (parse_parens paren_string)\n    (define\
+    \ (parse-parens-helper paren_string level)\n      (cond\n        [(empty? paren_string)\
+    \ level]\n        [(char=? (first paren_string) #\\() (parse-parens-helper (rest\
+    \ paren_string) (+ level 1))]\n        [(char=? (first paren_string) #\\)) (parse-parens-helper\
+    \ (rest paren_string) (- level 1))]\n        [else (parse-parens-helper (rest\
+    \ paren_string) level)]))\n    (parse-parens-helper paren_string 0))\n  (map parse_parens\
+    \ (string-split paren_string)))\n", "  (define (parse_nested_parens_helper paren_string\
+    \ max_depth)\n    (cond\n      [(empty? paren_string) max_depth]\n      [(char=?\
+    \ (first paren_string) #\\()\n       (parse_nested_parens_helper (rest paren_string)\
+    \ (+ max_depth 1))]\n      [(char=? (first paren_string) #\\))\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (- max_depth 1))]\n      [else (parse_nested_parens_helper\
+    \ (rest paren_string) max_depth)]))\n  (for/list ([paren_group (in-list (string-split\
+    \ paren_string \" \"))])\n    (parse_nested_parens_helper paren_group 0)))\n",
+  "  (define (parse_parens paren_string)\n    (cond\n      [(empty? paren_string)\
+    \ 0]\n      [(eq? (first paren_string) #\\() (add1 (parse_parens (rest paren_string)))]\n\
+    \      [(eq? (first paren_string) #\\)) (sub1 (parse_parens (rest paren_string)))]\n\
+    \      [else (parse_parens (rest paren_string))]))\n  (map parse_parens (string-split\
+    \ paren_string #\\space)))\n", "  (define (parse_parens paren_string)\n    (define\
+    \ (parse_parens-iter paren_string max-depth depth)\n      (cond\n        [(empty?\
+    \ paren_string) max-depth]\n        [(char=? (first paren_string) #\\()\n    \
+    \     (parse_parens-iter (rest paren_string) (max max-depth (add1 depth)) (add1\
+    \ depth))]\n        [(char=? (first paren_string) #\\))\n         (parse_parens-iter\
+    \ (rest paren_string) (max max-depth depth) (sub1 depth))]\n        [else (parse_parens-iter\
+    \ (rest paren_string) max-depth depth)]))\n    (parse_parens-iter paren_string\
+    \ 0 0))\n  (map parse_parens (string-split paren_string #\\space)))\n", "  (map\
+    \ (lambda (paren_group)\n         (let loop ([paren_group paren_group] [depth\
+    \ 0] [max_depth 0])\n           (cond [(empty? paren_group) max_depth]\n     \
+    \            [(char=? (first paren_group) #\\()\n                  (loop (rest\
+    \ paren_group) (+ depth 1) (max depth max_depth))]\n                 [(char=?\
+    \ (first paren_group) #\\))\n                  (loop (rest paren_group) (- depth\
+    \ 1) (max depth max_depth))]\n                 [else (loop (rest paren_group)\
+    \ depth max_depth)])))\n       (regexp-split #rx\" \" paren_string)))\n", "  (map\
+    \ (\u03BB (paren_group)\n         (let loop ([paren_group paren_group] [count\
+    \ 0] [max_count 0])\n           (cond [(empty? paren_group) max_count]\n     \
+    \            [(char=? (first paren_group) #\\()\n                  (loop (rest\
+    \ paren_group) (+ count 1) (max count max_count))]\n                 [(char=?\
+    \ (first paren_group) #\\))\n                  (loop (rest paren_group) (- count\
+    \ 1) (max count max_count))]\n                 [else (loop (rest paren_group)\
+    \ count max_count)])))\n       (regexp-split #rx\" \" paren_string)))\n", "  (define\
+    \ (parse-parens-helper paren-string current-level max-level)\n    (cond\n    \
+    \  [(empty? paren-string) max-level]\n      [(char=? (first paren-string) #\\\
+    ()\n       (parse-parens-helper (rest paren-string) (+ current-level 1) (max current-level\
+    \ max-level))]\n      [(char=? (first paren-string) #\\))\n       (parse-parens-helper\
+    \ (rest paren-string) (- current-level 1) max-level)]\n      [else (parse-parens-helper\
+    \ (rest paren-string) current-level max-level)]))\n  (parse-parens-helper paren_string\
+    \ 0 0))\n", "  (map (lambda (paren_group)\n         (let loop ([paren_group paren_group]\
+    \ [nest_level 0] [max_nest_level 0])\n           (cond [(empty? paren_group) max_nest_level]\n\
+    \                 [(char=? (first paren_group) #\\()\n                  (loop\
+    \ (rest paren_group) (+ nest_level 1) max_nest_level)]\n                 [(char=?\
+    \ (first paren_group) #\\))\n                  (loop (rest paren_group) (- nest_level\
+    \ 1)\n                        (if (> nest_level max_nest_level)\n            \
+    \                nest_level\n                            max_nest_level))]\n \
+    \                [else (loop (rest paren_group) nest_level max_nest_level)])))\n\
+    \       (regexp-split #rx\" \" paren_string)))\n", "  (define (parse_nested_parens_helper\
+    \ paren_string max_depth depth)\n    (cond\n      [(empty? paren_string) (list\
+    \ max_depth)]\n      [(char=? (first paren_string) #\\()\n       (parse_nested_parens_helper\
+    \ (rest paren_string) (max max_depth (add1 depth)) (add1 depth))]\n      [(char=?\
+    \ (first paren_string) #\\))\n       (parse_nested_parens_helper (rest paren_string)\
+    \ (max max_depth depth) (sub1 depth))]\n      [(char=? (first paren_string) #\\\
+    space)\n       (append (list max_depth) (parse_nested_parens_helper (rest paren_string)\
+    \ 0 0))]))\n  (parse_nested_parens_helper paren_string 0 0))\n", "  (define (parse_parens\
+    \ paren_string)\n    (define (parse_parens_helper paren_string level)\n      (cond\n\
+    \        [(empty? paren_string) level]\n        [(char=? (first paren_string)\
+    \ #\\() (parse_parens_helper (rest paren_string) (+ level 1))]\n        [(char=?\
+    \ (first paren_string) #\\)) (parse_parens_helper (rest paren_string) (- level\
+    \ 1))]\n        [else (parse_parens_helper (rest paren_string) level)]))\n   \
+    \ (parse_parens_helper paren_string 0))\n  (define (parse_parens_helper paren_string\
+    \ level)\n    (cond\n      [(empty? paren_string) (list level)]\n      [(char=?\
+    \ (first paren_string) #\\ ) (append (list level) (parse_parens_helper (rest paren_string)\
+    \ 0))]\n      [(char=? (first paren_string) #\\() (parse_parens_helper (rest paren_string)\
+    \ (+ level 1))]\n      [(char=? (first paren_string) #\\)) (parse_parens_helper\
+    \ (rest paren_string) (- level 1))]\n      [else (parse_parens_helper (rest paren_string)\
+    \ level)]))\n  (parse_parens_helper paren_string 0))\n", "  (define (parse-parens\
+    \ paren-string)\n    (define (parse-parens-iter paren-string acc)\n      (cond\n\
+    \        [(empty? paren-string) acc]\n        [(char=? (first paren-string) #\\\
+    ()\n         (parse-parens-iter (rest paren-string) (add1 acc))]\n        [(char=?\
+    \ (first paren-string) #\\))\n         (parse-parens-iter (rest paren-string)\
+    \ (sub1 acc))]\n        [else (parse-parens-iter (rest paren-string) acc)]))\n\
+    \    (parse-parens-iter paren-string 0))\n  (map parse-parens (string-split paren-string\
+    \ #\\space)))\n", "  (define (parse_parens paren_string)\n    (define (parse-parens-iter\
+    \ paren_string max_depth curr_depth)\n      (cond\n        [(empty? paren_string)\
+    \ (list max_depth)]\n        [(char=? (first paren_string) #\\() (parse-parens-iter\
+    \ (rest paren_string) (max max_depth (add1 curr_depth)) (add1 curr_depth))]\n\
+    \        [(char=? (first paren_string) #\\)) (parse-parens-iter (rest paren_string)\
+    \ max_depth (sub1 curr_depth))]\n        [else (parse-parens-iter (rest paren_string)\
+    \ max_depth curr_depth)]))\n    (parse-parens-iter paren_string 0 0))\n  (map\
+    \ parse_parens (string-split paren_string #\\space)))\n", "  (define (parse_nested_parens_helper\
+    \ paren_string acc)\n    (cond\n      [(empty? paren_string) (reverse acc)]\n\
+    \      [(string=? (substring paren_string 0 1) \"(\")\n       (parse_nested_parens_helper\
+    \ (substring paren_string 1) (cons 1 acc))]\n      [(string=? (substring paren_string\
+    \ 0 1) \")\")\n       (parse_nested_parens_helper (substring paren_string 1) (cons\
+    \ (- 1 (car acc)) acc))]\n      [(string=? (substring paren_string 0 1) \" \"\
+    )\n       (parse_nested_parens_helper (substring paren_string 1) (cons 0 acc))]))\n\
+    \  (parse_nested_parens_helper paren_string '()))\n", "  (map (lambda (paren_group)\n\
+    \         (let loop ([paren_group paren_group] [max_depth 0] [current_depth 0])\n\
+    \           (cond [(empty? paren_group) max_depth]\n                 [(char=?\
+    \ (first paren_group) #\\()\n                  (loop (rest paren_group) max_depth\
+    \ (+ current_depth 1))]\n                 [(char=? (first paren_group) #\\))\n\
+    \                  (loop (rest paren_group) (max max_depth current_depth) (- current_depth\
+    \ 1))]\n                 [else (loop (rest paren_group) max_depth current_depth)])))\n\
+    \       (regexp-split #rx\" \" paren_string)))\n", "  (map (\u03BB (paren_group)\n\
+    \         (let loop ([paren_group paren_group] [max_level 0] [curr_level 0])\n\
+    \           (cond [(empty? paren_group) max_level]\n                 [(char=?\
+    \ (first paren_group) #\\()\n                  (loop (rest paren_group) max_level\
+    \ (+ curr_level 1))]\n                 [(char=? (first paren_group) #\\))\n  \
+    \                (loop (rest paren_group) (max max_level curr_level) (- curr_level\
+    \ 1))]\n                 [else (loop (rest paren_group) max_level curr_level)])))\n\
+    \       (regexp-split #rx\" +\" paren_string)))\n", "  (map (lambda (paren_group)\n\
+    \         (let loop ([paren_group paren_group] [max_level 0] [current_level 0])\n\
+    \           (cond [(empty? paren_group) max_level]\n                 [(char=?\
+    \ (first paren_group) #\\()\n                  (loop (rest paren_group) max_level\
+    \ (+ current_level 1))]\n                 [(char=? (first paren_group) #\\))\n\
+    \                  (loop (rest paren_group) (max max_level current_level) (- current_level\
+    \ 1))]\n                 [else (loop (rest paren_group) max_level current_level)])))\n\
+    \       (string-split paren_string)))\n", "  (define (parse_parens paren_string)\n\
+    \    (define (parse-parens-helper paren_string count)\n      (cond\n        [(empty?\
+    \ paren_string) count]\n        [(equal? (first paren_string) #\\() (parse-parens-helper\
+    \ (rest paren_string) (+ count 1))]\n        [(equal? (first paren_string) #\\\
+    )) (parse-parens-helper (rest paren_string) (- count 1))]\n        [else (parse-parens-helper\
+    \ (rest paren_string) count)]))\n    (parse-parens-helper paren_string 0))\n \
+    \ (define (parse-parens-helper paren_string count)\n    (cond\n      [(empty?\
+    \ paren_string) count]\n      [(equal? (first paren_string) #\\ ) (parse-parens-helper\
+    \ (rest paren_string) count)]\n      [else (parse-parens-helper (rest paren_string)\
+    \ (cons (parse_parens (first paren_string)) count))]))\n  (parse-parens-helper\
+    \ paren_string '()))\n", "  (map (\u03BB (paren_group)\n         (let loop ([paren_group\
+    \ paren_group] [max_depth 0] [current_depth 0])\n           (cond [(empty? paren_group)\
+    \ max_depth]\n                 [(char=? (first paren_group) #\\()\n          \
+    \        (loop (rest paren_group)\n                        (if (> current_depth\
+    \ max_depth)\n                            (+ current_depth 1)\n              \
+    \              max_depth)\n                        (+ current_depth 1))]\n   \
+    \              [(char=? (first paren_group) #\\))\n                  (loop (rest\
+    \ paren_group)\n                        max_depth\n                        (-\
+    \ current_depth 1))]\n                 [else (loop (rest paren_group) max_depth\
+    \ current_depth)])))\n       (string-split paren_string #\\space)))\n", "  (define\
+    \ (parse_parens paren_string)\n    (define (parse_parens_iter paren_string level\
+    \ max_level)\n      (cond [(empty? paren_string) max_level]\n            [(char=?\
+    \ (first paren_string) #\\()\n             (parse_parens_iter (rest paren_string)\
+    \ (+ level 1) (max level max_level))]\n            [(char=? (first paren_string)\
+    \ #\\))\n             (parse_parens_iter (rest paren_string) (- level 1) (max\
+    \ level max_level))]\n            [else (parse_parens_iter (rest paren_string)\
+    \ level max_level)]))\n    (parse_parens_iter paren_string 0 0))\n  (map parse_parens\
+    \ (string-split paren_string)))\n"]
+stop_tokens:
+- "\n(define "
+- "\n#|"
+- "\n;"
+- "\n("

@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 This function takes a list l and returns a list l' such that
     l' is identical to l in the odd indicies, while its values at the even indicies are equal
@@ -11,19 +12,19 @@ This function takes a list l and returns a list l' such that
 */
 int[] sort_even(int[] l) 
 {
-    int[] l_new = new int[l.length];
-    int i = 0;
-    int j = 0;
-    while (i < l.length) {
-        if (i % 2 == 0) {
-            l_new[i] = l[i];
-        } else {
-            l_new[i] = l[j];
-            j++;
+    int[] l_prime = new int[l.length];
+    for (int i = 0; i < l.length; i++)
+    {
+        if (i % 2 == 0)
+        {
+            l_prime[i] = l[i];
         }
-        i++;
+        else
+        {
+            l_prime[i] = l[i - 1];
+        }
     }
-    return l_new;
+    return l_prime;
 }
 
 unittest

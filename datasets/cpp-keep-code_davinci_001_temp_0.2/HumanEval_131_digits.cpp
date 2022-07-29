@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a positive integer n, return the product of the odd digits.
@@ -12,17 +7,17 @@
 // digits(4)  == 0
 // digits(235) == 15
 long digits(long n) {
-    std::string s = std::to_string(n);
-    long result = 1;
-    for (int i = 0; i < s.length(); i++) {
-        if (s[i] - '0' % 2 == 1) {
-            result *= s[i] - '0';
-        }
+  long result = 1;
+  while (n > 0) {
+    long digit = n % 10;
+    n /= 10;
+    if (digit % 2 == 1) {
+      result *= digit;
     }
-    return result;
+  }
+  return result;
+
 }
-
-
 int main() {
     auto candidate = digits;
     assert(candidate((5)) == (5));

@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Given two positive integers a and b, return the even digits between a
@@ -12,20 +13,18 @@
 */
 int[] generate_integers(int a, int b) 
 {
-    if (a > b)
+    int[] result = new int[0];
+    if(a > b)
     {
-        int temp = a;
+        int tmp = a;
         a = b;
-        b = temp;
+        b = tmp;
     }
-    int[] result = new int[b - a + 1];
-    int i = 0;
-    for (int j = a; j <= b; j++)
+    for(int i = a; i <= b; i++)
     {
-        if (j % 2 == 0)
+        if(i % 2 == 0)
         {
-            result[i] = j;
-            i++;
+            result = append(result, i);
         }
     }
     return result;

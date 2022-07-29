@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
  xs represent coefficients of a polynomial.
     xs[0] + xs[1] * x + xs[2] * x^2 + ....
@@ -11,12 +12,12 @@
 */
 int[] derivative(int[] xs) 
 {
-    int[] result = new int[xs.Length - 1];
+    int[] ys = new int[xs.Length - 1];
     for (int i = 1; i < xs.Length; i++)
     {
-        result[i - 1] = i * xs[i];
+        ys[i - 1] = i * xs[i];
     }
-    return result;
+    return ys;
 }
 
 unittest

@@ -100,32 +100,32 @@ candidate() {
 }
 
 test() {
-    declare -a x1=('Hello' 'world!')
-        x0=$(candidate 'Hello world!')
+    declare -a x1=("Hello" "world!")
+        x0=$(candidate "Hello world!")
     assert_equals "${x1[*]}" "${x0[*]}"
 
-    declare -a x3=('Hello' 'world!')
-        x2=$(candidate 'Hello,world!')
+    declare -a x3=("Hello" "world!")
+        x2=$(candidate "Hello,world!")
     assert_equals "${x3[*]}" "${x2[*]}"
 
-    declare -a x5=('Hello' 'world,!')
-        x4=$(candidate 'Hello world,!')
+    declare -a x5=("Hello" "world,!")
+        x4=$(candidate "Hello world,!")
     assert_equals "${x5[*]}" "${x4[*]}"
 
-    declare -a x7=('Hello,Hello,world' '!')
-        x6=$(candidate 'Hello,Hello,world !')
+    declare -a x7=("Hello,Hello,world" "!")
+        x6=$(candidate "Hello,Hello,world !")
     assert_equals "${x7[*]}" "${x6[*]}"
 
-        x8=$(candidate 'abcdef')
+        x8=$(candidate "abcdef")
     assert_equals 3 "${x8[*]}"
 
-        x9=$(candidate 'aaabb')
+        x9=$(candidate "aaabb")
     assert_equals 2 "${x9[*]}"
 
-        x10=$(candidate 'aaaBb')
+        x10=$(candidate "aaaBb")
     assert_equals 1 "${x10[*]}"
 
-        x11=$(candidate '')
+        x11=$(candidate "")
     assert_equals 0 "${x11[*]}"
 
 }

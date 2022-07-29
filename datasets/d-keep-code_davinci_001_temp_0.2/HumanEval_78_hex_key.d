@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 You have been tasked to write a function that receives 
     a hexadecimal number as a string and counts the number of hexadecimal 
@@ -20,15 +21,20 @@ You have been tasked to write a function that receives
 */
 int hex_key(const(char)[] num) 
 {
-    int count = 0;
-    for (int i = 0; i < strlen(num); i++)
-    {
-        if (num[i] == '2' || num[i] == '3' || num[i] == '5' || num[i] == '7' || num[i] == 'B' || num[i] == 'D')
-        {
-            count++;
-        }
-    }
-    return count;
+    int key = 0;
+    if(num[0] == '2')
+        key++;
+    if(num[0] == '3')
+        key++;
+    if(num[0] == '5')
+        key++;
+    if(num[0] == '7')
+        key++;
+    if(num[0] == 'B')
+        key++;
+    if(num[0] == 'D')
+        key++;
+    return key;
 }
 
 unittest

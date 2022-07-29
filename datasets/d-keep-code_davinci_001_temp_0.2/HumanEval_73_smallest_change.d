@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Given an array arr of integers, find the minimum number of elements that
@@ -13,23 +14,34 @@
 */
 int smallest_change(int[] arr) 
 {
-    int n = arr.Length;
+    int n = arr.length;
     int[] dp = new int[n];
     for (int i = 0; i < n; i++)
     {
         dp[i] = i;
     }
-    for (int i = 1; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < i; j++)
         {
             if (arr[i] > arr[j])
             {
-                dp[i] = Math.Min(dp[i], dp[j] + 1);
+                dp[i] = std.math.min(dp[i], dp[j] + 1);
             }
         }
     }
-    return dp[n - 1];
+    int ans = dp[n - 1];
+    for (int i = n - 2; i >= 0; i--)
+    {
+        for (int j = n - 1; j > i; j--)
+        {
+            if (arr[i] > arr[j])
+            {
+                ans = std.math.min(ans, dp[j] + 1);
+            }
+        }
+    }
+    return ans;
 }
 
 unittest

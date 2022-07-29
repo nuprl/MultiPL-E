@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
  Input are two strings a and b consisting only of 1s and 0s.
     Perform binary XOR on these inputs and return result also as a string.
@@ -7,23 +8,22 @@
     
 */
 const(char)[] string_xor(const(char)[] a, const(char)[] b) 
-{
-    int len = a.length();
-    int i;
-    string c;
-    for(i=0; i<len; i++)
     {
-        if(a[i] == b[i])
+        assert(a.size() == b.size());
+        std.vector.vector[char] result;
+        for(int i = 0; i < a.size(); i++)
         {
-            c.append("0");
+            if(a[i] == b[i])
+            {
+                result.push_back('0');
+            }
+            else
+            {
+                result.push_back('1');
+            }
         }
-        else
-        {
-            c.append("1");
-        }
+        return result;
     }
-    return c;
-}
 
 unittest
 {

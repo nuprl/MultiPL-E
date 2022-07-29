@@ -30,13 +30,13 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('This is a test') !== 'is') { throw new Exception("Test failed!"); }
-    if (candidate('lets go for swimming') !== 'go for') { throw new Exception("Test failed!"); }
-    if (candidate('there is no place available here') !== 'there is no place') { throw new Exception("Test failed!"); }
-    if (candidate('Hi I am Hussein') !== 'Hi am Hussein') { throw new Exception("Test failed!"); }
-    if (candidate('go for it') !== 'go for it') { throw new Exception("Test failed!"); }
-    if (candidate('here') !== '') { throw new Exception("Test failed!"); }
-    if (candidate('here is') !== 'is') { throw new Exception("Test failed!"); }
+    if (candidate("This is a test") !== "is") { throw new Exception("Test failed!"); }
+    if (candidate("lets go for swimming") !== "go for") { throw new Exception("Test failed!"); }
+    if (candidate("there is no place available here") !== "there is no place") { throw new Exception("Test failed!"); }
+    if (candidate("Hi I am Hussein") !== "Hi am Hussein") { throw new Exception("Test failed!"); }
+    if (candidate("go for it") !== "go for it") { throw new Exception("Test failed!"); }
+    if (candidate("here") !== "") { throw new Exception("Test failed!"); }
+    if (candidate("here is") !== "is") { throw new Exception("Test failed!"); }
 }
 
 test();

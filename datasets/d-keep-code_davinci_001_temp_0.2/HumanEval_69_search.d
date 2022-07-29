@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     You are given a non-empty list of positive integers. Return the greatest integer that is greater than 
@@ -13,26 +14,13 @@
 */
 int search(int[] lst) 
 {
-    int max = lst[0];
-    int count = 1;
-    for (int i = 1; i < lst.Length; i++)
+    int max = 0;
+    for (int i = 0; i < lst.length; i++)
     {
-        if (lst[i] == lst[i - 1])
-        {
-            count++;
-        }
-        else
-        {
-            count = 1;
-        }
-        if (lst[i] > max && count >= lst[i])
+        if (lst[i] > max && lst.count(lst[i]) >= lst[i])
         {
             max = lst[i];
         }
-    }
-    if (max == lst[0])
-    {
-        return -1;
     }
     return max;
 }

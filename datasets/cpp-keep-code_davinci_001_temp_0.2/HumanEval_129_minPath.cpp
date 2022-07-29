@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a grid with N rows and N columns (N >= 2) and a positive integer k, 
@@ -30,32 +25,39 @@
 // Output: [1]
 std::vector<long> minPath(std::vector<std::vector<long>> grid, long k) {
     std::vector<std::vector<long>> dp(grid.size(), std::vector<long>(grid[0].size(), 0));
-    dp[0][0] = grid[0][0];
-    for (int i = 1; i < grid.size(); i++) {
-        dp[i][0] = dp[i - 1][0] + grid[i][0];
-    }
-    for (int i = 1; i < grid[0].size(); i++) {
-        dp[0][i] = dp[0][i - 1] + grid[0][i];
-    }
-    for (int i = 1; i < grid.size(); i++) {
-        for (int j = 1; j < grid[0].size(); j++) {
-            dp[i][j] = std::min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
-        }
-    }
-    std::vector<long> res;
+    std::vector<std::vector<long>> dp2(grid.size(), std::vector<long>(grid[0].size(), 0));
     for (int i = 0; i < grid.size(); i++) {
         for (int j = 0; j < grid[0].size(); j++) {
-            if (dp[i][j] >= k) {
-                res.push_back(grid[i][j]);
-                k -= grid[i][j];
-                break;
+            dp[i][j] = grid[i][j];
+            dp2[i][j] = grid[i][j];
+        }
+    }
+    for (int i = 0; i < grid.size(); i++) {
+        for (int j = 0; j < grid[0].size(); j++) {
+            if (i > 0) {
+                dp[i][j] = std::min(dp[i][j], dp[i - 1][j] + grid[i][j]);
+            }
+            if (j > 0) {
+                dp[i][j] = std::min(dp[i][j], dp[i][j - 1] + grid[i][j]);
             }
         }
     }
-    return res;
+    for (int i = grid.size() - 1; i >= 0; i--) {
+        for (int j = grid[0].size() - 1; j >= 0; j--) {
+            if (i < grid.size() - 1) {
+                dp2[i][j] = std::min(dp2[i][j], dp2[i + 1][j] + grid[i][j]);
+            }
+            if (j < grid[0].size() - 1) {
+                dp2[i][j] = std::min(dp2[i][j], dp2[i][j + 1] + grid[i][j]);
+            }
+        }
+    }
+    std::vector<long> ans;
+    for (int i = 0; i < grid.size(); i++) {
+        for (int j = 0; j < grid[0].size(); j++) {
+           
+
 }
-
-
 int main() {
     auto candidate = minPath;
     assert(candidate((std::vector<std::vector<long>>({std::vector<long>({1, 2, 3}), std::vector<long>({4, 5, 6}), std::vector<long>({7, 8, 9})})), (3)) == (std::vector<long>({1, 2, 1})));

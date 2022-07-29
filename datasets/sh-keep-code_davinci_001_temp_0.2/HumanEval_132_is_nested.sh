@@ -19,46 +19,46 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate '[[]]')
+        x0=$(candidate "[[]]")
     assert_equals true "${x0[*]}"
 
-        x1=$(candidate '[]]]]]]][[[[[]')
+        x1=$(candidate "[]]]]]]][[[[[]")
     assert_equals false "${x1[*]}"
 
-        x2=$(candidate '[][]')
+        x2=$(candidate "[][]")
     assert_equals false "${x2[*]}"
 
-        x3=$(candidate '[]')
+        x3=$(candidate "[]")
     assert_equals false "${x3[*]}"
 
-        x4=$(candidate '[[[[]]]]')
+        x4=$(candidate "[[[[]]]]")
     assert_equals true "${x4[*]}"
 
-        x5=$(candidate '[]]]]]]]]]]')
+        x5=$(candidate "[]]]]]]]]]]")
     assert_equals false "${x5[*]}"
 
-        x6=$(candidate '[][][[]]')
+        x6=$(candidate "[][][[]]")
     assert_equals true "${x6[*]}"
 
-        x7=$(candidate '[[]')
+        x7=$(candidate "[[]")
     assert_equals false "${x7[*]}"
 
-        x8=$(candidate '[]]')
+        x8=$(candidate "[]]")
     assert_equals false "${x8[*]}"
 
-        x9=$(candidate '[[]][[')
+        x9=$(candidate "[[]][[")
     assert_equals true "${x9[*]}"
 
-        x10=$(candidate '[[][]]')
+        x10=$(candidate "[[][]]")
     assert_equals true "${x10[*]}"
 
-        x11=$(candidate '')
+        x11=$(candidate "")
     assert_equals false "${x11[*]}"
 
-        x12=$(candidate '[[[[[[[[')
+        x12=$(candidate "[[[[[[[[")
     assert_equals false "${x12[*]}"
 
-        x13=$(candidate ']]]]]]]]')
+        x13=$(candidate "]]]]]]]]")
     assert_equals false "${x13[*]}"
 
 }

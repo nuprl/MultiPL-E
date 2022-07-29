@@ -27,22 +27,22 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('Hello') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('abcdcba') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('kittens') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('orange') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('wow') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('world') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('MadaM') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('Wow') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('HI') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('go') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('gogo') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('aaaaaaaaaaaaaaa') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('Madam') !== true) { throw new Exception("Test failed!"); }
-    if (candidate('M') !== false) { throw new Exception("Test failed!"); }
-    if (candidate('0') !== false) { throw new Exception("Test failed!"); }
+    if (candidate("Hello") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("abcdcba") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("kittens") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("orange") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("wow") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("world") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("MadaM") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("Wow") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("HI") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("go") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("gogo") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("aaaaaaaaaaaaaaa") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("Madam") !== true) { throw new Exception("Test failed!"); }
+    if (candidate("M") !== false) { throw new Exception("Test failed!"); }
+    if (candidate("0") !== false) { throw new Exception("Test failed!"); }
 }
 
 test();

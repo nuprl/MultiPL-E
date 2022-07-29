@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     You are given a string representing a sentence,
@@ -21,10 +22,10 @@
     
 */
 const(char)[] words_in_sentence(const(char)[] sentence) 
-{
-    const(char)[] words = split(sentence, " ");
-    return words;
-}
+    {
+        auto words = split(sentence, ' ');
+        return words;
+    }
 
 unittest
 {

@@ -23,11 +23,11 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate(100, 2) !== '001') { throw new Exception("Test failed!"); }
-    if (candidate(12, 2) !== '12') { throw new Exception("Test failed!"); }
-    if (candidate(97, 8) !== '79') { throw new Exception("Test failed!"); }
-    if (candidate(12, 1) !== '21') { throw new Exception("Test failed!"); }
-    if (candidate(11, 101) !== '11') { throw new Exception("Test failed!"); }
+    if (candidate(100, 2) !== "001") { throw new Exception("Test failed!"); }
+    if (candidate(12, 2) !== "12") { throw new Exception("Test failed!"); }
+    if (candidate(97, 8) !== "79") { throw new Exception("Test failed!"); }
+    if (candidate(12, 1) !== "21") { throw new Exception("Test failed!"); }
+    if (candidate(11, 101) !== "11") { throw new Exception("Test failed!"); }
 }
 
 test();

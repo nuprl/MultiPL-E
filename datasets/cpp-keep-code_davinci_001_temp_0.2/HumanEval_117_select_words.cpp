@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a string s and a natural number n, you have been tasked to implement 
@@ -18,55 +13,26 @@
 // select_words("Uncle sam", 3) ==> ["Uncle"]
 std::vector<std::string> select_words(std::string s, long n) {
     std::vector<std::string> result;
+    if (s.empty()) {
+        return result;
+    }
     std::string word;
-    for (int i = 0; i < s.size(); i++) {
-        if (s[i] == ' ') {
+    for (auto c : s) {
+        if (c == ' ') {
             if (word.size() == n) {
                 result.push_back(word);
             }
-            word = "";
+            word.clear();
         } else {
-            word += s[i];
+            word.push_back(c);
         }
     }
     if (word.size() == n) {
         result.push_back(word);
     }
     return result;
-}
-// Given a string s and a natural number n, you have been tasked to implement 
-// a function that returns a list of all words from string s that contain exactly 
-// n vowels, in order these words appear in the string s.
-// If the string s is empty then the function should return an empty list.
-// Note: you may assume the input string contains only letters and spaces.
-// Examples:
-// select_words("Mary had a little lamb", 4) ==> ["little"]
-// select_words("Mary had a little lamb", 3) ==> ["Mary", "lamb"]
-// select_words("simple white space", 2) ==> []
-// select_words("Hello world", 4) ==> ["world"]
-// select_words("Uncle sam", 3) ==> ["Uncle"]
-std::vector<std::string> select_words(std::string s, long n) {
-    std::vector<std::string> result;
-    std::string word;
-    for (int i = 0; i < s.size(); i++) {
-        if (s[i] == ' ') {
-            if (word.size() == n) {
-                result.push_back(word);
-            }
-            word = "";
-        } else {
-            word += s[i];
-        }
-    }
-    if (word.size() == n) {
-        result.push_back(word);
-    }
-    return result;
-}
-// Given a string s and a natural number n, you have been tasked to implement 
-// a function that returns a list of all words from string s
 
-
+}
 int main() {
     auto candidate = select_words;
     assert(candidate(("Mary had a little lamb"), (4)) == (std::vector<std::string>({"little"})));

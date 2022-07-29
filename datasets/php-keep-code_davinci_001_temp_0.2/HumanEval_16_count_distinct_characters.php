@@ -18,11 +18,11 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('') !== 0) { throw new Exception("Test failed!"); }
-    if (candidate('abcde') !== 5) { throw new Exception("Test failed!"); }
-    if (candidate('abcdecadeCADE') !== 5) { throw new Exception("Test failed!"); }
-    if (candidate('aaaaAAAAaaaa') !== 1) { throw new Exception("Test failed!"); }
-    if (candidate('Jerry jERRY JeRRRY') !== 5) { throw new Exception("Test failed!"); }
+    if (candidate("") !== 0) { throw new Exception("Test failed!"); }
+    if (candidate("abcde") !== 5) { throw new Exception("Test failed!"); }
+    if (candidate("abcdecadeCADE") !== 5) { throw new Exception("Test failed!"); }
+    if (candidate("aaaaAAAAaaaa") !== 1) { throw new Exception("Test failed!"); }
+    if (candidate("Jerry jERRY JeRRRY") !== 5) { throw new Exception("Test failed!"); }
 }
 
 test();

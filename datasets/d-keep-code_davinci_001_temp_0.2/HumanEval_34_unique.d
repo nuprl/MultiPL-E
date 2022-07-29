@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Return sorted unique elements in a list
     >>> unique([5, 3, 5, 2, 3, 3, 9, 0, 123])
@@ -7,19 +8,14 @@ Return sorted unique elements in a list
 */
 int[] unique(int[] l) 
 {
-    // YOUR CODE HERE
-    // HINT: use a set
-    Set<Integer> s = new HashSet<Integer>();
-    for (int i = 0; i < l.length; i++) {
-        s.add(l[i]);
+    int[] r = new int[l.length];
+    int i = 0;
+    for (int x : l)
+    {
+        if (i == 0 || r[i - 1] != x)
+            r[i++] = x;
     }
-    int[] res = new int[s.size()];
-    int j = 0;
-    for (int i : s) {
-        res[j] = i;
-        j++;
-    }
-    return res;
+    return r.slice(0, i);
 }
 
 unittest

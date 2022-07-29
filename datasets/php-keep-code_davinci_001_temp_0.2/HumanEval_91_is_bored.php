@@ -26,12 +26,12 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('Hello world') !== 0) { throw new Exception("Test failed!"); }
-    if (candidate('Is the sky blue?') !== 0) { throw new Exception("Test failed!"); }
-    if (candidate('I love It !') !== 1) { throw new Exception("Test failed!"); }
-    if (candidate('bIt') !== 0) { throw new Exception("Test failed!"); }
-    if (candidate('I feel good today. I will be productive. will kill It') !== 2) { throw new Exception("Test failed!"); }
-    if (candidate('You and I are going for a walk') !== 0) { throw new Exception("Test failed!"); }
+    if (candidate("Hello world") !== 0) { throw new Exception("Test failed!"); }
+    if (candidate("Is the sky blue?") !== 0) { throw new Exception("Test failed!"); }
+    if (candidate("I love It !") !== 1) { throw new Exception("Test failed!"); }
+    if (candidate("bIt") !== 0) { throw new Exception("Test failed!"); }
+    if (candidate("I feel good today. I will be productive. will kill It") !== 2) { throw new Exception("Test failed!"); }
+    if (candidate("You and I are going for a walk") !== 0) { throw new Exception("Test failed!"); }
 }
 
 test();

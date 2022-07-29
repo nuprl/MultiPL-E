@@ -16,11 +16,11 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('') !== '') { throw new Exception("Test failed!"); }
-    if (candidate('three') !== 'three') { throw new Exception("Test failed!"); }
-    if (candidate('three five nine') !== 'three five nine') { throw new Exception("Test failed!"); }
-    if (candidate('five zero four seven nine eight') !== 'zero four five seven eight nine') { throw new Exception("Test failed!"); }
-    if (candidate('six five four three two one zero') !== 'zero one two three four five six') { throw new Exception("Test failed!"); }
+    if (candidate("") !== "") { throw new Exception("Test failed!"); }
+    if (candidate("three") !== "three") { throw new Exception("Test failed!"); }
+    if (candidate("three five nine") !== "three five nine") { throw new Exception("Test failed!"); }
+    if (candidate("five zero four seven nine eight") !== "zero four five seven eight nine") { throw new Exception("Test failed!"); }
+    if (candidate("six five four three two one zero") !== "zero one two three four five six") { throw new Exception("Test failed!"); }
 }
 
 test();

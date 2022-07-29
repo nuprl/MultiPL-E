@@ -23,10 +23,10 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('', 'x') !== 0) { throw new Exception("Test failed!"); }
-    if (candidate('xyxyxyx', 'x') !== 4) { throw new Exception("Test failed!"); }
-    if (candidate('cacacacac', 'cac') !== 4) { throw new Exception("Test failed!"); }
-    if (candidate('john doe', 'john') !== 1) { throw new Exception("Test failed!"); }
+    if (candidate("", "x") !== 0) { throw new Exception("Test failed!"); }
+    if (candidate("xyxyxyx", "x") !== 4) { throw new Exception("Test failed!"); }
+    if (candidate("cacacacac", "cac") !== 4) { throw new Exception("Test failed!"); }
+    if (candidate("john doe", "john") !== 1) { throw new Exception("Test failed!"); }
 }
 
 test();

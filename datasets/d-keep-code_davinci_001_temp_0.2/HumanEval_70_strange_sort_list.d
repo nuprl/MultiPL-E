@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Given list of integers, return list in strange order.
@@ -14,32 +15,36 @@
 int[] strange_sort_list(int[] lst) 
 {
     int[] result = new int[lst.Length];
-    int i = 0;
-    int j = lst.Length - 1;
     int min = lst[0];
-    int max = lst[lst.Length - 1];
-    int minIndex = 0;
-    int maxIndex = lst.Length - 1;
-    while (i <= j)
+    int max = lst[0];
+    int min_index = 0;
+    int max_index = 0;
+    for (int i = 0; i < lst.Length; i++)
     {
-        if (minIndex < maxIndex)
+        if (lst[i] < min)
         {
-            result[i] = min;
-            i++;
-            minIndex++;
+            min = lst[i];
+            min_index = i;
         }
-        if (minIndex < maxIndex)
+        if (lst[i] > max)
         {
-            result[j] = max;
-            j--;
-            maxIndex--;
+            max = lst[i];
+            max_index = i;
         }
-        if (minIndex == maxIndex)
+    }
+    result[0] = min;
+    result[1] = max;
+    for (int i = 2; i < lst.Length; i++)
+    {
+        if (i % 2 == 0)
         {
-            result[i] = min;
-            result[j] = max;
-            i++;
-            j--;
+            result[i] = lst[min_index];
+            min_index++;
+        }
+        else
+        {
+            result[i] = lst[max_index];
+            max_index--;
         }
     }
     return result;

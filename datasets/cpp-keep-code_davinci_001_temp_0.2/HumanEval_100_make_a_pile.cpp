@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a positive integer n, you have to make a pile of n levels of stones.
@@ -17,18 +12,12 @@
 // [3, 5, 7]
 std::vector<long> make_a_pile(long n) {
   std::vector<long> result;
-  while (n > 0) {
-    result.push_back(n);
-    if (n % 2 == 0) {
-      n = n / 2 + 1;
-    } else {
-      n = n / 2 + 2;
-    }
+  for (long i = 0; i < n; i++) {
+    result.push_back(i * 2 + 1);
   }
   return result;
+
 }
-
-
 int main() {
     auto candidate = make_a_pile;
     assert(candidate((3)) == (std::vector<long>({3, 5, 7})));

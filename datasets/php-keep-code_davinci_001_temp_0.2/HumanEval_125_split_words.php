@@ -30,14 +30,14 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('Hello world!') !== array('Hello', 'world!')) { throw new Exception("Test failed!"); }
-    if (candidate('Hello,world!') !== array('Hello', 'world!')) { throw new Exception("Test failed!"); }
-    if (candidate('Hello world,!') !== array('Hello', 'world,!')) { throw new Exception("Test failed!"); }
-    if (candidate('Hello,Hello,world !') !== array('Hello,Hello,world', '!')) { throw new Exception("Test failed!"); }
-    if (candidate('abcdef') !== 3) { throw new Exception("Test failed!"); }
-    if (candidate('aaabb') !== 2) { throw new Exception("Test failed!"); }
-    if (candidate('aaaBb') !== 1) { throw new Exception("Test failed!"); }
-    if (candidate('') !== 0) { throw new Exception("Test failed!"); }
+    if (candidate("Hello world!") !== array("Hello", "world!")) { throw new Exception("Test failed!"); }
+    if (candidate("Hello,world!") !== array("Hello", "world!")) { throw new Exception("Test failed!"); }
+    if (candidate("Hello world,!") !== array("Hello", "world,!")) { throw new Exception("Test failed!"); }
+    if (candidate("Hello,Hello,world !") !== array("Hello,Hello,world", "!")) { throw new Exception("Test failed!"); }
+    if (candidate("abcdef") !== 3) { throw new Exception("Test failed!"); }
+    if (candidate("aaabb") !== 2) { throw new Exception("Test failed!"); }
+    if (candidate("aaaBb") !== 1) { throw new Exception("Test failed!"); }
+    if (candidate("") !== 0) { throw new Exception("Test failed!"); }
 }
 
 test();

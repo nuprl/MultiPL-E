@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Write a function that returns True if the object q will fly, and False otherwise.
@@ -21,13 +16,18 @@ bool will_it_fly(std::vector<long> q, long w) {
     for (int i = 1; i < q.size(); i++) {
         s += std::to_string(q[i]);
     }
-    if (std::stoi(s) <= w && std::stoi(s) >= 0) {
+    if (std::stoi(s) > w) {
+        return false;
+    }
+    if (std::stoi(s) == w) {
+        return true;
+    }
+    if (std::stoi(s) < w) {
         return true;
     }
     return false;
+
 }
-
-
 int main() {
     auto candidate = will_it_fly;
     assert(candidate((std::vector<long>({3, 2, 3})), (9)) == (true));

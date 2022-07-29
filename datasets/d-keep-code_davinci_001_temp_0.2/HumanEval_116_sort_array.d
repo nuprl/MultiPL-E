@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     In this Kata, you have to sort an array of non-negative integers according to
@@ -13,8 +14,9 @@
 */
 int[] sort_array(int[] arr) 
 {
-    return arr.OrderBy(x => x.ToString("X2")).ToArray();
+    return arr.OrderBy(x => x.ToString("X2")).ThenBy(x => x).ToArray();
 }
+
 
 unittest
 {

@@ -25,13 +25,13 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('Hi') !== 'Hi') { throw new Exception("Test failed!"); }
-    if (candidate('hello') !== 'ehllo') { throw new Exception("Test failed!"); }
-    if (candidate('number') !== 'bemnru') { throw new Exception("Test failed!"); }
-    if (candidate('abcd') !== 'abcd') { throw new Exception("Test failed!"); }
-    if (candidate('Hello World!!!') !== 'Hello !!!Wdlor') { throw new Exception("Test failed!"); }
-    if (candidate('') !== '') { throw new Exception("Test failed!"); }
-    if (candidate('Hi. My name is Mister Robot. How are you?') !== '.Hi My aemn is Meirst .Rboot How aer ?ouy') { throw new Exception("Test failed!"); }
+    if (candidate("Hi") !== "Hi") { throw new Exception("Test failed!"); }
+    if (candidate("hello") !== "ehllo") { throw new Exception("Test failed!"); }
+    if (candidate("number") !== "bemnru") { throw new Exception("Test failed!"); }
+    if (candidate("abcd") !== "abcd") { throw new Exception("Test failed!"); }
+    if (candidate("Hello World!!!") !== "Hello !!!Wdlor") { throw new Exception("Test failed!"); }
+    if (candidate("") !== "") { throw new Exception("Test failed!"); }
+    if (candidate("Hi. My name is Mister Robot. How are you?") !== ".Hi My aemn is Meirst .Rboot How aer ?ouy") { throw new Exception("Test failed!"); }
 }
 
 test();

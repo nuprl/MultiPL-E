@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given an array of integers nums, find the minimum sum of any non-empty sub-array
@@ -11,17 +6,16 @@
 // minSubArraySum([2, 3, 4, 1, 2, 4]) == 1
 // minSubArraySum([-1, -2, -3]) == -6
 long minSubArraySum(std::vector<long> nums) {
-    long min_sum = std::numeric_limits<long>::max();
     long sum = 0;
+    long minSum = LONG_MAX;
     for (long i = 0; i < nums.size(); i++) {
         sum += nums[i];
-        min_sum = std::min(min_sum, sum);
+        minSum = std::min(minSum, sum);
         sum = std::min(sum, 0);
     }
-    return min_sum;
+    return minSum;
+
 }
-
-
 int main() {
     auto candidate = minSubArraySum;
     assert(candidate((std::vector<long>({2, 3, 4, 1, 2, 4}))) == (1));

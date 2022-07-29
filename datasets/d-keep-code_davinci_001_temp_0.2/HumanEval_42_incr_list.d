@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Return list with elements incremented by 1.
     >>> incr_list([1, 2, 3])
@@ -9,11 +10,10 @@ Return list with elements incremented by 1.
 */
 int[] incr_list(int[] l) 
 {
-    int[] result = new int[l.length];
-    for (int i = 0; i < l.length; i++) {
-        result[i] = l[i] + 1;
-    }
-    return result;
+    int[] res = new int[l.length];
+    for (int i = 0; i < l.length; i++)
+        res[i] = l[i] + 1;
+    return res;
 }
 
 unittest

@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Given a string s and a natural number n, you have been tasked to implement 
     a function that returns a list of all words from string s that contain exactly 
@@ -15,8 +16,41 @@ Given a string s and a natural number n, you have been tasked to implement
 */
 const(char)[][] select_words(const(char)[] s, int n) 
 {
-    // your code here
-    return null;
+    if(s.length == 0)
+        return [];
+    else
+    {
+        int count = 0;
+        int index = 0;
+        const(char)[][] result = [];
+        for(int i = 0; i < s.length; i++)
+        {
+            if(s[i] == ' ')
+            {
+                if(count == n)
+                {
+                    result.push(s.slice(index, i));
+                    index = i + 1;
+                    count = 0;
+                }
+                else
+                {
+                    index = i + 1;
+                    count = 0;
+                }
+            }
+            else if(s[i] != ' ')
+            {
+                if(s[i] == 'a' || s[i] == 'e' || s[i] == 'i' || s[i] == 'o' || s[i] == 'u')
+                    count = 0;
+                else
+                    count++;
+            }
+        }
+        if(count == n)
+            result.push(s.slice(index, s.length));
+        return result;
+    }
 }
 
 unittest

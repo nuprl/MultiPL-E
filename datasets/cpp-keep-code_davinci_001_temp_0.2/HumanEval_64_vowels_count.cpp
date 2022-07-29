@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Write a function vowels_count which takes a string representing
@@ -16,15 +11,14 @@
 // 3
 long vowels_count(std::string s) {
     long count = 0;
-    for (auto c : s) {
-        if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+    for (int i = 0; i < s.length(); i++) {
+        if (s[i] == 'a' || s[i] == 'e' || s[i] == 'i' || s[i] == 'o' || s[i] == 'u') {
             count++;
         }
     }
     return count;
+
 }
-
-
 int main() {
     auto candidate = vowels_count;
     assert(candidate(("abcde")) == (2));

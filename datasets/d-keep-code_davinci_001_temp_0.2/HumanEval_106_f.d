@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
  Implement the function f that takes n as a parameter,
     and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
@@ -16,11 +17,11 @@ int[] f(int n)
     {
         if (i % 2 == 0)
         {
-            result[i - 1] = factorial(i);
+            result[i - 1] = std.math.factorial(i);
         }
         else
         {
-            result[i - 1] = sum(i);
+            result[i - 1] = std.math.sum(1, i);
         }
     }
     return result;

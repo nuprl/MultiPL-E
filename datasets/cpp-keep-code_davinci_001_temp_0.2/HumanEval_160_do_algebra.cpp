@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given two lists operator, and operand. The first list has basic algebra operations, and 
@@ -24,25 +19,42 @@
 // Operand is a list of of non-negative integers.
 // Operator list has at least one operator, and operand list has at least two operands.
 long do_algebra(std::vector<std::string> _operator_, std::vector<long> operand) {
-    std::map<std::string, std::function<long(long, long)>> op_map = {
-        {"+", [](long a, long b) { return a + b; }},
-        {"-", [](long a, long b) { return a - b; }},
-        {"*", [](long a, long b) { return a * b; }},
-        {"//", [](long a, long b) { return a / b; }},
-        {"**", [](long a, long b) { return a ^ b; }}
-    };
-    std::string op_str = _operator_[0];
-    std::function<long(long, long)> op_func = op_map[op_str];
-    long result = op_func(operand[0], operand[1]);
-    for (int i = 1; i < _operator_.size(); i++) {
-        op_str = _operator_[i];
-        op_func = op_map[op_str];
-        result = op_func(result, operand[i + 1]);
-    }
-    return result;
+    std::vector<std::string> operator = _operator_;
+    std::vector<long> operand = operand;
+    long result = 0;
+    std::stack<long> operand_stack;
+    std::stack<std::string> operator_stack;
+    for (int i = 0; i < operator.size(); i++) {
+        if (operator[i] == "+" || operator[i] == "-" || operator[i] == "*" || operator[i] == "//") {
+            if (operator_stack.empty()) {
+                operator_stack.push(operator[i]);
+            } else {
+                while (!operator_stack.empty() && (operator_stack.top() == "+" || operator_stack.top() == "-" || operator_stack.top() == "*" || operator_stack.top() == "//")) {
+                    if (operator_stack.top() == "+") {
+                        operand_stack.push(operand_stack.top() + operand[i]);
+                    } else if (operator_stack.top() == "-") {
+                        operand_stack.push(operand_stack.top() - operand[i]);
+                    } else if (operator_stack.top() == "*") {
+                        operand_stack.push(operand_stack.top() * operand[i]);
+                    } else if (operator_stack.top() == "//") {
+                        operand_stack.push(operand_stack.top() / operand[i]);
+                    }
+                    operator_stack.pop();
+                }
+                operator_stack.push(operator[i]);
+            }
+        } else if (operator[i] == "**") {
+            if (operator_stack.empty()) {
+                operator_stack.push(operator[i]);
+            } else {
+                while (!operator_stack.empty() && operator_stack.top() == "**") {
+                    operand_stack.push(std::pow(operand_stack.top(), operand[i]));
+                    operator_stack.pop();
+                }
+                operator_stack.push(operator[i]);
+           
+
 }
-
-
 int main() {
     auto candidate = do_algebra;
     assert(candidate((std::vector<std::string>({"**", "*", "+"})), (std::vector<long>({2, 3, 4, 5}))) == (37));

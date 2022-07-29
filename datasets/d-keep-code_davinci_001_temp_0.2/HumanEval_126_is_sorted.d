@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Given a list of numbers, return whether or not they are sorted
@@ -18,16 +19,14 @@
 */
 bool is_sorted(int[] lst) 
 {
-    bool sorted = true;
     for (int i = 0; i < lst.Length - 1; i++)
     {
         if (lst[i] > lst[i + 1])
         {
-            sorted = false;
-            break;
+            return false;
         }
     }
-    return sorted;
+    return true;
 }
 
 unittest

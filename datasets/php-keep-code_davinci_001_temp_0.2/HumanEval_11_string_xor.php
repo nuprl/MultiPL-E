@@ -20,9 +20,9 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('111000', '101010') !== '010010') { throw new Exception("Test failed!"); }
-    if (candidate('1', '1') !== '0') { throw new Exception("Test failed!"); }
-    if (candidate('0101', '0000') !== '0101') { throw new Exception("Test failed!"); }
+    if (candidate("111000", "101010") !== "010010") { throw new Exception("Test failed!"); }
+    if (candidate("1", "1") !== "0") { throw new Exception("Test failed!"); }
+    if (candidate("0101", "0000") !== "0101") { throw new Exception("Test failed!"); }
 }
 
 test();

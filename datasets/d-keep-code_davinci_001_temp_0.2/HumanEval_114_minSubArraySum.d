@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Given an array of integers nums, find the minimum sum of any non-empty sub-array
@@ -12,16 +13,12 @@ int minSubArraySum(int[] nums)
 {
     int min = nums[0];
     int sum = 0;
-    for (int i = 0; i < nums.Length; i++)
+    for(int i = 0; i < nums.Length; i++)
     {
         sum += nums[i];
-        if (sum < min)
+        if(sum < min)
         {
             min = sum;
-        }
-        if (sum > 0)
-        {
-            sum = 0;
         }
     }
     return min;

@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 This function takes a list l and returns a list l' such that
     l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
@@ -12,23 +13,19 @@ This function takes a list l and returns a list l' such that
 int[] sort_third(int[] l) 
 {
     int[] l_prime = new int[l.length];
-    int[] l_prime_sorted = new int[l.length];
-    int[] l_prime_sorted_index = new int[l.length];
-    int[] l_prime_index = new int[l.length];
-    int[] l_prime_sorted_index_sorted = new int[l.length];
-    int[] l_prime_index_sorted = new int[l.length];
-    int[] l_prime_sorted_sorted = new int[l.length];
-    int[] l_prime_sorted_sorted_index = new int[l.length];
-    int[] l_prime_sorted_sorted_index_sorted = new int[l.length];
-    int[] l_prime_sorted_sorted_index_sorted_sorted = new int[l.length];
-    int[] l_prime_sorted_sorted_index_sorted_sorted_index = new int[l.length];
-    int[] l_prime_sorted_sorted_index_sorted_sorted_index_sorted = new int[l.length];
-    int[] l_prime_sorted_sorted_index_sorted_sorted_index_sorted_sorted = new int[l.length];
-    int[] l_prime_sorted_sorted_index_sorted_sorted_index_sorted_sorted_index = new int[l.length];
-    int[] l_prime_sorted_sorted_index_sorted_sorted_index_sorted_sorted_index_sorted = new int[l.length];
-    int[] l_prime_sorted_sorted_index_sorted_sorted_index_sorted_sorted_index_sorted_sorted = new int[l.length];
-    int[] l_prime_sorted_sorted_index_sorted_sorted_index_sorted_sorted_index_sorted_sorted_index = new int[l.length];
-    int[] l_prime_sorted_
+    for (int i = 0; i < l.length; i++)
+    {
+        if (i % 3 == 0)
+        {
+            l_prime[i] = l[i];
+        }
+        else
+        {
+            l_prime[i] = l[i];
+        }
+    }
+    return l_prime;
+}
 
 unittest
 {

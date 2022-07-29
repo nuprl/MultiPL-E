@@ -38,20 +38,20 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate(19) !== 'xix') { throw new Exception("Test failed!"); }
-    if (candidate(152) !== 'clii') { throw new Exception("Test failed!"); }
-    if (candidate(251) !== 'ccli') { throw new Exception("Test failed!"); }
-    if (candidate(426) !== 'cdxxvi') { throw new Exception("Test failed!"); }
-    if (candidate(500) !== 'd') { throw new Exception("Test failed!"); }
-    if (candidate(1) !== 'i') { throw new Exception("Test failed!"); }
-    if (candidate(4) !== 'iv') { throw new Exception("Test failed!"); }
-    if (candidate(43) !== 'xliii') { throw new Exception("Test failed!"); }
-    if (candidate(90) !== 'xc') { throw new Exception("Test failed!"); }
-    if (candidate(94) !== 'xciv') { throw new Exception("Test failed!"); }
-    if (candidate(532) !== 'dxxxii') { throw new Exception("Test failed!"); }
-    if (candidate(900) !== 'cm') { throw new Exception("Test failed!"); }
-    if (candidate(994) !== 'cmxciv') { throw new Exception("Test failed!"); }
-    if (candidate(1000) !== 'm') { throw new Exception("Test failed!"); }
+    if (candidate(19) !== "xix") { throw new Exception("Test failed!"); }
+    if (candidate(152) !== "clii") { throw new Exception("Test failed!"); }
+    if (candidate(251) !== "ccli") { throw new Exception("Test failed!"); }
+    if (candidate(426) !== "cdxxvi") { throw new Exception("Test failed!"); }
+    if (candidate(500) !== "d") { throw new Exception("Test failed!"); }
+    if (candidate(1) !== "i") { throw new Exception("Test failed!"); }
+    if (candidate(4) !== "iv") { throw new Exception("Test failed!"); }
+    if (candidate(43) !== "xliii") { throw new Exception("Test failed!"); }
+    if (candidate(90) !== "xc") { throw new Exception("Test failed!"); }
+    if (candidate(94) !== "xciv") { throw new Exception("Test failed!"); }
+    if (candidate(532) !== "dxxxii") { throw new Exception("Test failed!"); }
+    if (candidate(900) !== "cm") { throw new Exception("Test failed!"); }
+    if (candidate(994) !== "cmxciv") { throw new Exception("Test failed!"); }
+    if (candidate(1000) !== "m") { throw new Exception("Test failed!"); }
 }
 
 test();

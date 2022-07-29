@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Write a function that returns true if the given number is the multiplication of 3 prime numbers
@@ -12,16 +7,15 @@
 // is_multiply_prime(30) == True
 // 30 = 2 * 3 * 5
 bool is_multiply_prime(long a) {
-    if (a < 3) return false;
-    for (int i = 2; i < a; i++) {
-        if (a % i == 0) {
-            return false;
-        }
+    if (a < 2) return false;
+    if (a == 2) return true;
+    if (a % 2 == 0) return false;
+    for (int i = 3; i * i <= a; i += 2) {
+        if (a % i == 0) return false;
     }
     return true;
+
 }
-
-
 int main() {
     auto candidate = is_multiply_prime;
     assert(candidate((5)) == (false));

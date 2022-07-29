@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
  From a given list of integers, generate a list of rolling maximum element found until given moment
     in the sequence.
@@ -8,11 +9,11 @@
 */
 int[] rolling_max(int[] numbers) 
 {
-    int[] result = new int[numbers.Length];
+    int[] result = new int[numbers.length];
     result[0] = numbers[0];
-    for (int i = 1; i < numbers.Length; i++)
+    for (int i = 1; i < numbers.length; i++)
     {
-        result[i] = Math.Max(result[i - 1], numbers[i]);
+        result[i] = std.math.max(numbers[i], result[i - 1]);
     }
     return result;
 }

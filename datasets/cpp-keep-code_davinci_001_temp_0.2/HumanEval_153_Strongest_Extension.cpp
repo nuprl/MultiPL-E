@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // You will be given the name of a class (a string) and a list of extensions.
@@ -21,26 +16,27 @@
 // Example:
 // for Strongest_Extension('my_class', ['AA', 'Be', 'CC']) == 'my_class.AA'
 std::string Strongest_Extension(std::string class_name, std::vector<std::string> extensions) {
-    std::map<std::string, int> strength;
-    for (auto& ext : extensions) {
+    std::string result = class_name;
+    int max_strength = -1;
+    for (auto extension : extensions) {
         int cap = 0;
         int sm = 0;
-        for (auto& c : ext) {
-            if (c >= 'A' && c <= 'Z') {
+        for (auto c : extension) {
+            if (std::isupper(c)) {
                 cap++;
-            } else if (c >= 'a' && c <= 'z') {
+            } else {
                 sm++;
             }
         }
-        strength[ext] = cap - sm;
+        int strength = cap - sm;
+        if (strength > max_strength) {
+            max_strength = strength;
+            result = class_name + "." + extension;
+        }
     }
-    auto max_strength = std::max_element(strength.begin(), strength.end(), [](auto& a, auto& b) {
-        return a.second < b.second;
-    });
-    return class_name + "." + max_strength->first;
+    return result;
+
 }
-
-
 int main() {
     auto candidate = Strongest_Extension;
     assert(candidate(("Watashi"), (std::vector<std::string>({"tEN", "niNE", "eIGHt8OKe"}))) == ("Watashi.eIGHt8OKe"));

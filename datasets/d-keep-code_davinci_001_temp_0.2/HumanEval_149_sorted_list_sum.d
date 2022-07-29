@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Write a function that accepts a list of strings as a parameter,
     deletes the strings that have odd lengths from it,
@@ -17,8 +18,27 @@ Write a function that accepts a list of strings as a parameter,
 */
 const(char)[][] sorted_list_sum(const(char)[][] lst) 
 {
-    // Write your code here
-    return lst;
+    var(int) len = 0;
+    var(char)[][] sorted_list = [];
+    for(var(int) i = 0; i < lst.length; i++)
+    {
+        len = lst[i].length;
+        for(var(int) j = 0; j < lst.length; j++)
+        {
+            if(len > lst[j].length)
+            {
+                len = lst[j].length;
+            }
+        }
+        for(var(int) j = 0; j < lst.length; j++)
+        {
+            if(len == lst[j].length)
+            {
+                sorted_list.push(lst[j]);
+            }
+        }
+    }
+    return sorted_list;
 }
 
 unittest

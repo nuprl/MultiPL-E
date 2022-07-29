@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Given an array of non-negative integers, return a copy of the given array after sorting,
@@ -17,40 +18,20 @@
 */
 int[] sort_array(int[] array) 
 {
-    int[] result = new int[array.Length];
-    int[] temp = new int[array.Length];
     int sum = 0;
-    int index = 0;
-    for (int i = 0; i < array.Length; i++)
+    for (int i = 0; i < array.length; i++)
     {
         sum += array[i];
     }
     if (sum % 2 == 0)
     {
-        for (int i = 0; i < array.Length; i++)
-        {
-            temp[i] = array[i];
-        }
-        Array.Sort(temp);
-        for (int i = 0; i < array.Length; i++)
-        {
-            result[i] = temp[i];
-        }
+        array = array.sort((a, b) => b - a);
     }
     else
     {
-        for (int i = 0; i < array.Length; i++)
-        {
-            temp[i] = array[i];
-        }
-        Array.Sort(temp);
-        Array.Reverse(temp);
-        for (int i = 0; i < array.Length; i++)
-        {
-            result[i] = temp[i];
-        }
+        array = array.sort((a, b) => a - b);
     }
-    return result;
+    return array;
 }
 
 unittest

@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Change numerical base of input number x to base.
@@ -17,14 +12,13 @@
 std::string change_base(long x, long base) {
     std::string result;
     while (x) {
-        result.push_back(x % base + '0');
+        result.push_back('0' + x % base);
         x /= base;
     }
     std::reverse(result.begin(), result.end());
     return result;
+
 }
-
-
 int main() {
     auto candidate = change_base;
     assert(candidate((8), (3)) == ("22"));

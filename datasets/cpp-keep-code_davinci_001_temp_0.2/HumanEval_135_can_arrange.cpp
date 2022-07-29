@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Create a function which returns the largest index of an element which
@@ -13,25 +8,12 @@
 // can_arrange([1,2,4,3,5]) = 3
 // can_arrange([1,2,3]) = -1
 long can_arrange(std::vector<long> arr) {
-    std::map<long, long> m;
-    for (long i = 0; i < arr.size(); i++) {
-        m[arr[i]] = i;
-    }
-    std::map<long, long>::iterator it = m.begin();
-    while (it != m.end()) {
-        std::map<long, long>::iterator it2 = m.find(it->first - 1);
-        if (it2 != m.end()) {
-            std::map<long, long>::iterator it3 = m.find(it->first + 1);
-            if (it3 != m.end()) {
-                return it3->second;
-            }
-        }
-        it++;
-    }
+  std::vector<long>::iterator it = std::adjacent_find(arr.begin(), arr.end());
+  if (it == arr.end())
     return -1;
+  return std::distance(arr.begin(), it);
+
 }
-
-
 int main() {
     auto candidate = can_arrange;
     assert(candidate((std::vector<long>({1, 2, 4, 3, 5}))) == (3));

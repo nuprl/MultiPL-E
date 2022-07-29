@@ -61,32 +61,32 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('example.txt') !== 'Yes') { throw new Exception("Test failed!"); }
-    if (candidate('1example.dll') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('s1sdf3.asd') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('K.dll') !== 'Yes') { throw new Exception("Test failed!"); }
-    if (candidate('MY16FILE3.exe') !== 'Yes') { throw new Exception("Test failed!"); }
-    if (candidate('His12FILE94.exe') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('_Y.txt') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('?aREYA.exe') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('/this_is_valid.dll') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('this_is_valid.wow') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('this_is_valid.txt') !== 'Yes') { throw new Exception("Test failed!"); }
-    if (candidate('this_is_valid.txtexe') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('#this2_i4s_5valid.ten') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('@this1_is6_valid.exe') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('this_is_12valid.6exe4.txt') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('all.exe.txt') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('I563_No.exe') !== 'Yes') { throw new Exception("Test failed!"); }
-    if (candidate('Is3youfault.txt') !== 'Yes') { throw new Exception("Test failed!"); }
-    if (candidate('no_one#knows.dll') !== 'Yes') { throw new Exception("Test failed!"); }
-    if (candidate('1I563_Yes3.exe') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('I563_Yes3.txtt') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('final..txt') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('final132') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('_f4indsartal132.') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('.txt') !== 'No') { throw new Exception("Test failed!"); }
-    if (candidate('s.') !== 'No') { throw new Exception("Test failed!"); }
+    if (candidate("example.txt") !== "Yes") { throw new Exception("Test failed!"); }
+    if (candidate("1example.dll") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("s1sdf3.asd") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("K.dll") !== "Yes") { throw new Exception("Test failed!"); }
+    if (candidate("MY16FILE3.exe") !== "Yes") { throw new Exception("Test failed!"); }
+    if (candidate("His12FILE94.exe") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("_Y.txt") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("?aREYA.exe") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("/this_is_valid.dll") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("this_is_valid.wow") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("this_is_valid.txt") !== "Yes") { throw new Exception("Test failed!"); }
+    if (candidate("this_is_valid.txtexe") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("#this2_i4s_5valid.ten") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("@this1_is6_valid.exe") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("this_is_12valid.6exe4.txt") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("all.exe.txt") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("I563_No.exe") !== "Yes") { throw new Exception("Test failed!"); }
+    if (candidate("Is3youfault.txt") !== "Yes") { throw new Exception("Test failed!"); }
+    if (candidate("no_one#knows.dll") !== "Yes") { throw new Exception("Test failed!"); }
+    if (candidate("1I563_Yes3.exe") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("I563_Yes3.txtt") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("final..txt") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("final132") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("_f4indsartal132.") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate(".txt") !== "No") { throw new Exception("Test failed!"); }
+    if (candidate("s.") !== "No") { throw new Exception("Test failed!"); }
 }
 
 test();

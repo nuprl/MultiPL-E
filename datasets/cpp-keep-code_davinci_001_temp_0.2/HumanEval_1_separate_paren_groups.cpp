@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
@@ -14,28 +9,27 @@
 std::vector<std::string> separate_paren_groups(std::string paren_string) {
     std::vector<std::string> result;
     std::string current;
-    for (auto c : paren_string) {
+    for (char c : paren_string) {
         if (c == '(') {
             if (current.size() > 0) {
                 result.push_back(current);
-                current = "";
+                current.clear();
             }
-            current += c;
+            current.push_back(c);
         } else if (c == ')') {
-            current += c;
+            current.push_back(c);
             result.push_back(current);
-            current = "";
+            current.clear();
         } else {
-            current += c;
+            current.push_back(c);
         }
     }
     if (current.size() > 0) {
         result.push_back(current);
     }
     return result;
+
 }
-
-
 int main() {
     auto candidate = separate_paren_groups;
     assert(candidate(("(()()) ((())) () ((())()())")) == (std::vector<std::string>({"(()())", "((()))", "()", "((())()())"})));

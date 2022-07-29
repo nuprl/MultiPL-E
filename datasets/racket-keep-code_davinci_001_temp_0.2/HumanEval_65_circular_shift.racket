@@ -7,19 +7,22 @@
 ;; "21"
 ;; >>> circular_shift(12, 2)
 ;; "12"
-(define (circular_shift x, shift)
-  (let ((digits (string->list (number->string x)))
-        (result '()))
-    (if (> shift (length digits))
-        (append (reverse digits) result)
-        (let loop ((i 0))
-          (if (= i shift)
-              (append digits result)
-              (begin
-                (set! result (cons (car digits) result))
-                (set! digits (cdr digits))
-                (set! i (+ i 1))
-                (loop i)))))))
+(define (circular_shift x shift)
+  (define (reverse s)
+    (if (null? s)
+        '()
+        (append (reverse (cdr s)) (list (car s)))))
+  (define (shift-digit d s)
+    (if (= s 0)
+        d
+        (shift-digit (modulo (+ d 10) 10) (- s 1))))
+  (define (shift-digits s ds)
+    (if (null? ds)
+        '()
+        (cons (shift-digit (car ds) s) (shift-digits s (cdr ds)))))
+  (if (> shift (length (number->string x)))
+      (reverse (number->string x))
+      (string->number (number->string x) (reverse (shift-digits shift (string->list (number->string x)))))))
 
 
 (require rackunit)

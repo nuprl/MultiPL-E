@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // This function takes a list l and returns a list l' such that
@@ -13,19 +8,24 @@
 // >>> sort_even([5, 6, 3, 4])
 // [3, 6, 5, 4]
 std::vector<long> sort_even(std::vector<long> l) {
-    std::vector<long> l_prime;
-    for (int i = 0; i < l.size(); i++) {
-        if (i % 2 == 0) {
-            l_prime.push_back(l[i]);
-        } else {
-            l_prime.push_back(l[i]);
-            std::sort(l_prime.begin() + i, l_prime.end());
+  std::vector<long> l_prime;
+  for (int i = 0; i < l.size(); i++) {
+    if (i % 2 == 0) {
+      l_prime.push_back(l[i]);
+    } else {
+      std::vector<long> l_prime_even;
+      for (int j = 0; j < l.size(); j++) {
+        if (j % 2 == 0) {
+          l_prime_even.push_back(l[j]);
         }
+      }
+      std::sort(l_prime_even.begin(), l_prime_even.end());
+      l_prime.push_back(l_prime_even[i / 2]);
     }
-    return l_prime;
+  }
+  return l_prime;
+
 }
-
-
 int main() {
     auto candidate = sort_even;
     assert(candidate((std::vector<long>({1, 2, 3}))) == (std::vector<long>({1, 2, 3})));

@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // It is the last week of the semester and the teacher has to give the grades
@@ -28,7 +23,7 @@
 // grade_equation([4.0, 3, 1.7, 2, 3.5]) ==> ['A+', 'B', 'C-', 'C', 'A-']
 std::vector<std::string> numerical_letter_grade(std::vector<float> grades) {
     std::vector<std::string> letter_grades;
-    for (auto grade : grades) {
+    for (float grade : grades) {
         if (grade >= 4.0) {
             letter_grades.push_back("A+");
         } else if (grade >= 3.7) {
@@ -58,9 +53,8 @@ std::vector<std::string> numerical_letter_grade(std::vector<float> grades) {
         }
     }
     return letter_grades;
+
 }
-
-
 int main() {
     auto candidate = numerical_letter_grade;
     assert(candidate((std::vector<float>({4.0, 3, 1.7, 2, 3.5}))) == (std::vector<std::string>({"A+", "B", "C-", "C", "A-"})));

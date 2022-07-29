@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Write a function that takes a string and returns an ordered version of it.
@@ -15,7 +16,7 @@
 */
 const(char)[] anti_shuffle(const(char)[] s) 
 {
-    // your code here
+    // Write your code here
     return s;
 }
 

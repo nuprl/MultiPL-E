@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     You're a hungry rabbit, and you already have eaten a certain number of carrots,

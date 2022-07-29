@@ -1,8 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<map>
-#include<optional>
 #include<assert.h>
 #include<bits/stdc++.h>
 // Given a dictionary, return True if all keys are strings in lower 
@@ -15,20 +10,16 @@
 // check_dict_case({"Name":"John", "Age":"36", "City":"Houston"}) should return False.
 // check_dict_case({"STATE":"NC", "ZIP":"12345" }) should return True.
 bool check_dict_case(std::map<std::string, std::string> dict) {
-    for (auto const& [key, value] : dict) {
-        if (key.size() != value.size()) {
+    if(dict.empty())
+        return false;
+    for(auto it=dict.begin();it!=dict.end();it++)
+    {
+        if(std::isupper(it->first[0]))
             return false;
-        }
-        for (int i = 0; i < key.size(); i++) {
-            if (key[i] != value[i]) {
-                return false;
-            }
-        }
     }
     return true;
+
 }
-
-
 int main() {
     auto candidate = check_dict_case;
     assert(candidate((std::map<std::string, std::string>({ {"p", "pineapple"}, {"b", "banana"} }))) == (true));

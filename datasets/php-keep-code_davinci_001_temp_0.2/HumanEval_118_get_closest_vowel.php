@@ -48,19 +48,19 @@ function candidate(...$args) {
 }
 
 function test(): void {
-    if (candidate('yogurt') !== 'u') { throw new Exception("Test failed!"); }
-    if (candidate('full') !== 'u') { throw new Exception("Test failed!"); }
-    if (candidate('easy') !== '') { throw new Exception("Test failed!"); }
-    if (candidate('eAsy') !== '') { throw new Exception("Test failed!"); }
-    if (candidate('ali') !== '') { throw new Exception("Test failed!"); }
-    if (candidate('bad') !== 'a') { throw new Exception("Test failed!"); }
-    if (candidate('most') !== 'o') { throw new Exception("Test failed!"); }
-    if (candidate('ab') !== '') { throw new Exception("Test failed!"); }
-    if (candidate('ba') !== '') { throw new Exception("Test failed!"); }
-    if (candidate('quick') !== '') { throw new Exception("Test failed!"); }
-    if (candidate('anime') !== 'i') { throw new Exception("Test failed!"); }
-    if (candidate('Asia') !== '') { throw new Exception("Test failed!"); }
-    if (candidate('Above') !== 'o') { throw new Exception("Test failed!"); }
+    if (candidate("yogurt") !== "u") { throw new Exception("Test failed!"); }
+    if (candidate("full") !== "u") { throw new Exception("Test failed!"); }
+    if (candidate("easy") !== "") { throw new Exception("Test failed!"); }
+    if (candidate("eAsy") !== "") { throw new Exception("Test failed!"); }
+    if (candidate("ali") !== "") { throw new Exception("Test failed!"); }
+    if (candidate("bad") !== "a") { throw new Exception("Test failed!"); }
+    if (candidate("most") !== "o") { throw new Exception("Test failed!"); }
+    if (candidate("ab") !== "") { throw new Exception("Test failed!"); }
+    if (candidate("ba") !== "") { throw new Exception("Test failed!"); }
+    if (candidate("quick") !== "") { throw new Exception("Test failed!"); }
+    if (candidate("anime") !== "i") { throw new Exception("Test failed!"); }
+    if (candidate("Asia") !== "") { throw new Exception("Test failed!"); }
+    if (candidate("Above") !== "o") { throw new Exception("Test failed!"); }
 }
 
 test();
