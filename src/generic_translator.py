@@ -75,7 +75,7 @@ class PromptVisitor(ast.NodeVisitor):
             case "keep":
                 desc = self.description
             case "remove":
-                doctestRegex = re.compile(r'>>> .*\n.*\n')
+                doctestRegex = re.compile(r'.*\)\n.*\n')
                 desc = re.sub(doctestRegex, '', self.description)
             case "transform":
                 # Steps:
@@ -88,15 +88,16 @@ class PromptVisitor(ast.NodeVisitor):
                 if len(promptAndDoctests) > 1: #checking if there are doctests
                     doctestRegex = re.compile(r'.*\n.*\n')
                     onlyDocTests = []
-                    for test in (promptAndDoctests[1:]):
+                    for test in (promptAndDoctests[1:]): #Removing each doctest from any junk
                         onlyDocTests.append(doctestRegex.match(test).group())
                     
                     funcCalls = []
                     outputs = []
                     for doctest in onlyDocTests:
-                        doclist = doctest.split('\n')
-                        funcCalls.append(ast.parse(doclist[0]).body[0].value)
+                        doclist = doctest.split('\n') #Splitting up the output from the function call of the doctest
+                        funcCalls.append(ast.parse(doclist[0].strip()).body[0].value)
                         outputs.append(ast.parse(doclist[1].strip()).body[0].value)
+
                     for i in range(len(funcCalls)):
                         funcCalls[i] = translate_expr(self.translator, funcCalls[i])
                         outputs[i] = translate_expr(self.translator, outputs[i])
