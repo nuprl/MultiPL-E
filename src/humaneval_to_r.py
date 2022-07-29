@@ -5,7 +5,6 @@
 
 import ast
 import re
-from pathlib import Path
 from typing import List
 from generic_translator import main
 
@@ -15,8 +14,7 @@ class RTranslator:
     '''R Translator
     '''
 
-    # NOTE(sydney) how do I make a stop sequence for something like x <-, where it should stop before x?
-    stop = [ '\n}\n\n', '\n#' ]
+    stop = [ '\n}\n\n', '\n#', '\n```']
     
     def __init__(self, file_ext):
         self.file_ext = file_ext
@@ -48,7 +46,7 @@ class RTranslator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        return "    stopifnot({} == {})".format(left, right)
+        return "    if(!identical({}, {})) {quit('no', 1)}".format(left, right)
 
     def gen_literal(self, c):
         ''' Translate a literal expression
@@ -66,16 +64,16 @@ class RTranslator:
     
     def gen_list(self, l):
         '''Translate a list with elements l
-           A list [ x, y, z ] translates to list(x, y, z)
+           A list [ x, y, z ] translates to c(x, y, z)
         '''
-        return "list(" + ", ".join(self.convert_expr(self, e) for e in l) + ")"
+        return "c(" + ", ".join(self.convert_expr(self, e) for e in l) + ")"
     
-    #need tuples from the package sets?
+    #there are no r tuples, but r lists are mostly immutable?
     def gen_tuple(self, t):
         '''Translate a tuple with elements t
-           A tuple (x, y, z) translates to tuple(x, y, z) }
+           A tuple (x, y, z) translates to c(x, y, z) }
         '''
-        return "tuple(" + ", ".join(self.convert_expr(self, e) for e in t) + ")"
+        return "c(" + ", ".join(self.convert_expr(self, e) for e in t) + ")"
     
     def gen_dict(self, keys, values):
         '''Translate a dictionary with keys and values (uses R list with keys)
