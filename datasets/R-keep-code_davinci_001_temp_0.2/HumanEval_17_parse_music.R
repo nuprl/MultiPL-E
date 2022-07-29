@@ -7,31 +7,9 @@
 # '.|' - quater note, lasts one beat
 # >>> parse_music('o o| .| o| o| .| .| .| .| o o')
 # [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
-parse_music <- function(music_string)
-{
-    # YOUR CODE HERE
-    # Parse the string into a list of notes
-    notes <- strsplit(music_string, split = " ")[[1]]
-    # Initialize the list of beats
-    beats <- c()
-    # Iterate through the notes and assign the corresponding beats
-    for (i in 1:length(notes))
-    {
-        if (notes[i] == "o")
-        {
-            beats <- c(beats, 4)
-        }
-        else if (notes[i] == "o|")
-        {
-            beats <- c(beats, 2)
-        }
-        else
-        {
-            beats <- c(beats, 1)
-        }
-    }
-    # Return the list of beats
-    return(beats)
+parse_music <- function(music_string) {
+    # your code here
+    return(ans)
 
 test_humaneval <- function() {
 candidate <- parse_music

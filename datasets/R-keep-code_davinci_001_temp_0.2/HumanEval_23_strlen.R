@@ -3,16 +3,8 @@
 # 0
 # >>> strlen('abc')
 # 3
-strlen <- function(string)
-{
-    if (length(string) == 0)
-    {
-        return(0)
-    }
-    else
-    {
-        return(length(string))
-    }
+strlen <- function(string) {
+    return(length(string))
 
 test_humaneval <- function() {
 candidate <- strlen

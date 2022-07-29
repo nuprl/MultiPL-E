@@ -3,18 +3,12 @@
 # 1
 # >>> greatest_common_divisor(25, 15)
 # 5
-greatest_common_divisor <- function(a, b)
-{
-    if (a == 0)
-        return(b)
-    if (b == 0)
-        return(a)
-    if (a == b)
-        return(a)
-    if (a > b)
-        return(greatest_common_divisor(a - b, b))
-    else
-        return(greatest_common_divisor(a, b - a))
+greatest_common_divisor <- function(a, b) {
+    if (a == 0) return(b)
+    if (b == 0) return(a)
+    if (a == b) return(a)
+    if (a > b) return(greatest_common_divisor(a-b, b))
+    return(greatest_common_divisor(a, b-a))
 
 test_humaneval <- function() {
 candidate <- greatest_common_divisor

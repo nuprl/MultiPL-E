@@ -3,9 +3,13 @@
 # [5]
 # >>> filter_integers([1, 2, 3, 'abc', {}, []])
 # [1, 2, 3]
-filter_integers <- function(values)
-{
+filter_integers <- function(values) {
     return(list(filter(is.integer, values)))
+}
+filter_integers(c(1, 2, 3, 'abc', {}, []))
+filter_integers(c('a', 3.14, 5))
+filter_integers(c(1, 2, 3, 'abc', {}, []))
+
 
 test_humaneval <- function() {
 candidate <- filter_integers

@@ -5,8 +5,7 @@
 # 3
 # >>> how_many_times('aaaa', 'aa')
 # 3
-how_many_times <- function(string, substring)
-{
+how_many_times <- function(string, substring) {
     # your code here
 
 test_humaneval <- function() {

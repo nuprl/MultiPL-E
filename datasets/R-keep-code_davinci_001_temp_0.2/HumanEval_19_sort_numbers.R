@@ -3,25 +3,17 @@
 # Return the string with numbers sorted from smallest to largest
 # >>> sort_numbers('three one five')
 # 'one three five'
-sort_numbers <- function(numbers)
-{
-    # Split the input string into a vector of strings
-    numbers_vector <- strsplit(numbers, " ")[[1]]
-    
-    # Convert each string to a number
-    numbers_vector <- sapply(numbers_vector, as.numeric)
-    
-    # Sort the numbers
-    numbers_vector <- sort(numbers_vector)
-    
-    # Convert the numbers back to strings
-    numbers_vector <- sapply(numbers_vector, as.character)
-    
-    # Join the strings into a single string
-    numbers_vector <- paste(numbers_vector, collapse = " ")
-    
-    # Return the result
-    return(numbers_vector)
+sort_numbers <- function(numbers) {
+    # YOUR CODE HERE
+    stop('Not implemented yet')
+}
+test_that('Solution is correct', {
+    expect_equal(sort_numbers('one two three'), 'one two three')
+    expect_equal(sort_numbers('one two three four five six'), 'one two three four five six')
+    expect_equal(sort_numbers('one two three four five six seven eight nine'), 'one two three four five six seven eight nine')
+    expect_equal(sort_numbers('nine eight seven six five four three two one'), 'one two three four five six seven eight nine')
+    expect_equal(sort_numbers('one one two three four five six seven eight nine nine'), 'one one two three four five six seven eight nine nine')
+    expect_equal(sort_numbers('one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one one
 
 test_humaneval <- function() {
 candidate <- sort_numbers

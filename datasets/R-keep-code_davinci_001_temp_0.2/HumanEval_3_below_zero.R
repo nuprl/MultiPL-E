@@ -5,18 +5,15 @@
 # False
 # >>> below_zero([1, 2, -4, 5])
 # True
-below_zero <- function(operations)
-{
+below_zero <- function(operations) {
     balance <- 0
-    for (i in operations)
-    {
-        balance <- balance + i
-        if (balance < 0)
-        {
-            return (TRUE)
+    for (operation in operations) {
+        balance <- balance + operation
+        if (balance < 0) {
+            return(TRUE)
         }
     }
-    return (FALSE)
+    return(FALSE)
 
 test_humaneval <- function() {
 candidate <- below_zero

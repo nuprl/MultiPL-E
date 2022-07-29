@@ -7,9 +7,20 @@
 # [5, 5]
 # >>> factorize(70)
 # [2, 5, 7]
-factorize <- function(n)
-{
-    # your code here
+factorize <- function(n) {
+    factors <- c()
+    for (i in 2:n) {
+        while (n %% i == 0) {
+            factors <- c(factors, i)
+            n <- n / i
+        }
+    }
+    return(factors)
+}
+factorize(8)
+factorize(25)
+factorize(70)
+
 
 test_humaneval <- function() {
 candidate <- factorize

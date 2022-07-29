@@ -3,16 +3,14 @@
 # []
 # >>> intersperse([1, 2, 3], 4)
 # [1, 4, 2, 4, 3]
-intersperse <- function(numbers, delimeter)
-{
-    if (length(numbers) < 2)
-    {
+intersperse <- function(numbers, delimeter) {
+    if (length(numbers) == 0) {
         return(numbers)
     }
-    else
-    {
-        return(c(numbers[1], delimeter, intersperse(numbers[-1], delimeter)))
+    if (length(numbers) == 1) {
+        return(c(numbers, delimeter))
     }
+    return(c(numbers[1], delimeter, intersperse(numbers[-1], delimeter)))
 
 test_humaneval <- function() {
 candidate <- intersperse

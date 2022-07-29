@@ -8,35 +8,27 @@
 # 'catac'
 # >>> make_palindrome('cata')
 # 'catac'
-make_palindrome <- function(string)
-{
-    if (is.null(string) || length(string) == 0)
-    {
+make_palindrome <- function(string) {
+    if (is.null(string) || length(string) == 0) {
         return('')
     }
-    
-    # Find the longest palindromic postfix of the string.
-    palindrome_postfix <- ''
-    for (i in seq_along(string))
-    {
-        if (is_palindrome(string[i:length(string)]))
-        {
-            palindrome_postfix <- string[i:length(string)]
-        }
+    if (length(string) == 1) {
+        return(string)
     }
-    
-    # Find the longest prefix of the string that is a palindrome.
-    palindrome_prefix <- ''
-    for (i in seq_along(string))
-    {
-        if (is_palindrome(string[1:i]))
-        {
-            palindrome_prefix <- string[1:i]
-        }
+    if (string == string[length(string):1]) {
+        return(string)
     }
-    
-    # Return the result.
-    return(paste(palindrome_prefix, palindrome_postfix, sep = ''))
+    # Find the longest palindromic postfix.
+    postfix <- string[length(string):1]
+    while (length(postfix) > 0) {
+        if (postfix == postfix[length(postfix):1]) {
+            break
+        }
+        postfix <- substr(postfix, 2, nchar(postfix))
+    }
+    # Append the reverse of the prefix that comes before the palindromic postfix.
+    prefix <- string[1:(length(string) - length(postfix))]
+    return(paste(prefix, reverse(postfix), sep = ''))
 
 test_humaneval <- function() {
 candidate <- make_palindrome

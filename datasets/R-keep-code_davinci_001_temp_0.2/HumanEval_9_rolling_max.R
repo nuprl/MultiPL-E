@@ -2,22 +2,12 @@
 # in the sequence.
 # >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
 # [1, 2, 3, 3, 3, 4, 4]
-rolling_max <- function(numbers)
-{
+rolling_max <- function(numbers) {
     result <- c()
-    max <- 0
-    for (i in numbers)
-    {
-        if (i > max)
-        {
-            max <- i
-        }
-        result <- c(result, max)
+    for (i in 1:length(numbers)) {
+        result <- c(result, max(numbers[1:i]))
     }
     return(result)
-}
-rolling_max([1, 2, 3, 2, 3, 4, 2])
-
 
 test_humaneval <- function() {
 candidate <- rolling_max

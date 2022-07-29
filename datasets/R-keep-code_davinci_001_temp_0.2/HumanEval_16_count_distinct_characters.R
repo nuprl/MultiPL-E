@@ -3,9 +3,9 @@
 # 3
 # >>> count_distinct_characters('Jerry')
 # 4
-count_distinct_characters <- function(string)
-{
+count_distinct_characters <- function(string) {
     # your code here
+    return(length(unique(string)))
 
 test_humaneval <- function() {
 candidate <- count_distinct_characters

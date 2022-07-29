@@ -2,11 +2,11 @@
 # Perform binary XOR on these inputs and return result also as a string.
 # >>> string_xor('010', '110')
 # '100'
-string_xor <- function(a, b)
-{
+string_xor <- function(a, b) {
     a <- as.integer(a)
     b <- as.integer(b)
-    return(as.character(a ^ b))
+    xor <- a ^ b
+    return(as.character(xor))
 
 test_humaneval <- function() {
 candidate <- string_xor

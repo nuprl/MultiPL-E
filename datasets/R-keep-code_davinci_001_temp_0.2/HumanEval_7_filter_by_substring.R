@@ -3,9 +3,8 @@
 # []
 # >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
 # ['abc', 'bacd', 'array']
-filter_by_substring <- function(strings, substring)
-{
-    return(subset(strings, grepl(substring, strings)))
+filter_by_substring <- function(strings, substring) {
+    # your code here
 
 test_humaneval <- function() {
 candidate <- filter_by_substring

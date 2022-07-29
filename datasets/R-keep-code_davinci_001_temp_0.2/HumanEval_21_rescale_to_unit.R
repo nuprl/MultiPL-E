@@ -2,17 +2,8 @@
 # such that the smallest number will become 0 and the largest will become 1
 # >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])
 # [0.0, 0.25, 0.5, 0.75, 1.0]
-rescale_to_unit <- function(numbers)
-{
-    # Find the minimum and maximum values in the list
-    min_val <- min(numbers)
-    max_val <- max(numbers)
-    
-    # Apply the linear transform
-    numbers <- (numbers - min_val) / (max_val - min_val)
-    
-    # Return the result
-    return(numbers)
+rescale_to_unit <- function(numbers) {
+    # your code here
 
 test_humaneval <- function() {
 candidate <- rescale_to_unit

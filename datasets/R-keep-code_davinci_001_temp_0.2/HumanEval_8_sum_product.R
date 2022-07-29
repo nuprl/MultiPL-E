@@ -4,23 +4,17 @@
 # (0, 1)
 # >>> sum_product([1, 2, 3, 4])
 # (10, 24)
-sum_product <- function(numbers)
-{
-    if (length(numbers) == 0)
-    {
+sum_product <- function(numbers) {
+    if (length(numbers) == 0) {
         return(c(0, 1))
     }
-    else
-    {
-        sum <- 0
-        product <- 1
-        for (i in numbers)
-        {
-            sum <- sum + i
-            product <- product * i
-        }
-        return(c(sum, product))
+    sum <- 0
+    product <- 1
+    for (i in numbers) {
+        sum <- sum + i
+        product <- product * i
     }
+    return(c(sum, product))
 
 test_humaneval <- function() {
 candidate <- sum_product

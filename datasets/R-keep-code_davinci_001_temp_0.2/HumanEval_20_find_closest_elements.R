@@ -4,19 +4,19 @@
 # (2.0, 2.2)
 # >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0])
 # (2.0, 2.0)
-find_closest_elements <- function(numbers)
-{
-    # Sort the list of numbers
-    sorted_numbers <- sort(numbers)
-    
-    # Find the index of the smallest number in the list
-    smallest_index <- which.min(abs(sorted_numbers - sorted_numbers[1]))
-    
-    # Find the index of the largest number in the list
-    largest_index <- which.max(abs(sorted_numbers - sorted_numbers[length(sorted_numbers)]))
-    
-    # Return the two numbers
-    return(c(sorted_numbers[smallest_index], sorted_numbers[largest_index]))
+find_closest_elements <- function(numbers) {
+    if (length(numbers) < 2) {
+        stop("Need at least two numbers")
+    }
+    closest_numbers <- c(numbers[1], numbers[2])
+    for (i in 1:(length(numbers) - 1)) {
+        for (j in (i + 1):length(numbers)) {
+            if (abs(numbers[i] - numbers[j]) < abs(closest_numbers[1] - closest_numbers[2])) {
+                closest_numbers <- c(numbers[i], numbers[j])
+            }
+        }
+    }
+    closest_numbers
 }
 find_closest_elements(c(1.0, 2.0, 3.0, 4.0, 5.0, 2.2))
 find_closest_elements(c(1.0, 2.0, 3.0, 4.0, 5.0, 2.0))

@@ -13,6 +13,8 @@ has_close_elements <- function(numbers, threshold) {
         }
     }
     return(FALSE)
+}
+
 
 test_humaneval <- function() {
 candidate <- has_close_elements
@@ -24,3 +26,4 @@ candidate <- has_close_elements
     if(!identical(candidate(c(1.1, 2.2, 3.1, 4.1, 5.1), 1.0), TRUE)){quit('no', 1)}
     if(!identical(candidate(c(1.1, 2.2, 3.1, 4.1, 5.1), 0.5), FALSE)){quit('no', 1)}
 }
+test_humaneval()

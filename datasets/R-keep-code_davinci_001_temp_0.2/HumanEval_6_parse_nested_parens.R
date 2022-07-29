@@ -3,41 +3,31 @@
 # E.g. (()()) has maximum two levels of nesting while ((())) has three.
 # >>> parse_nested_parens('(()()) ((())) () ((())()())')
 # [2, 3, 1, 3]
-parse_nested_parens <- function(paren_string)
-{
-    # split the string into a list of strings
-    paren_list <- strsplit(paren_string, split = ' ')[[1]]
-    
-    # initialize an empty list to store the number of levels of nesting
-    levels <- list()
-    
-    # loop through each string in the list
-    for (i in 1:length(paren_list))
-    {
-        # initialize the number of levels of nesting to 0
-        num_levels <- 0
-        
-        # loop through each character in the string
-        for (j in 1:length(paren_list[[i]]))
-        {
-            # if the character is an opening parenthesis, increment the number of levels of nesting
-            if (paren_list[[i]][j] == '(')
-            {
-                num_levels <- num_levels + 1
+parse_nested_parens <- function(paren_string) {
+    # Split the string by spaces
+    paren_list <- strsplit(paren_string, " ")[[1]]
+    # Initialize an empty list to store the nesting levels
+    nesting_levels <- list()
+    # Iterate over each group of parentheses
+    for (i in 1:length(paren_list)) {
+        # Initialize a counter to store the nesting level
+        level <- 0
+        # Iterate over each character in the group
+        for (j in 1:length(paren_list[[i]])) {
+            # If the character is an opening parenthesis, increase the level by 1
+            if (paren_list[[i]][j] == '(') {
+                level <- level + 1
             }
-            # if the character is a closing parenthesis, decrement the number of levels of nesting
-            else if (paren_list[[i]][j] == ')')
-            {
-                num_levels <- num_levels - 1
+            # If the character is a closing parenthesis, decrease the level by 1
+            else if (paren_list[[i]][j] == ')') {
+                level <- level - 1
             }
         }
-        
-        # append the number of levels of nesting to the list
-        levels[[i]] <- num_levels
+        # Append the level to the list
+        nesting_levels[[i]] <- level
     }
-    
-    # return the list
-    levels
+    # Return the list
+    nesting_levels
 
 test_humaneval <- function() {
 candidate <- parse_nested_parens

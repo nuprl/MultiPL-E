@@ -5,10 +5,10 @@
 # MAD = average | x - x_mean |
 # >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
 # 1.0
-mean_absolute_deviation <- function(numbers)
-{
-    m <- mean(numbers)
-    sum(abs(numbers - m)) / length(numbers)
+mean_absolute_deviation <- function(numbers) {
+    mean <- mean(numbers)
+    abs_diff <- abs(numbers - mean)
+    mean(abs_diff)
 
 test_humaneval <- function() {
 candidate <- mean_absolute_deviation
