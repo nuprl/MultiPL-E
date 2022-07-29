@@ -36,6 +36,7 @@ from humaneval_to_lua import LuaTranslator
 from humaneval_to_rust import RustTranslator
 from humaneval_to_racket import RacketTranslator
 from humaneval_to_php import PHPTranslator
+from humaneval_to_cpp import CPPTranslator
 from problem_yaml import Problem
 
 TRANSLATORS = {
@@ -43,7 +44,8 @@ TRANSLATORS = {
     "lua": LuaTranslator(),
     "rust": RustTranslator("rs"),
     "racket": RacketTranslator("racket"),
-    "php": PHPTranslator("php")
+    "php": PHPTranslator("php"),
+    "cpp": CPPTranslator("cpp")
 }
 
 
