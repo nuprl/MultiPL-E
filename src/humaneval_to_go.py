@@ -65,7 +65,7 @@ def translate_type(t):
         case None:
             raise Exception("implicitly untyped argument")
         case ast.Name("Any"):
-            return "any"
+            return "interface{}"
         case ast.Name(x):
             raise Exception(f"unknown name {x}")
         case ast.Constant(Ellipsis):
@@ -76,16 +76,11 @@ def translate_type(t):
 
 class GoTranslator:
 
-    # TODO: think about this carefully
-    stop = ["\nfunc", "pub", "\n// ", "#[test]"]
+    stop = ["\nfunc", "struct", "\n// "]
 
     def __init__(self, file_ext):
         self.file_ext = file_ext
-        self.type = None
-        self.is_candidate_result = False
-
-        # this is book-keeping for making the literals have types when a list/dict is empty
-        self.prev_comp_types = []
+        self.type = []
 
     def convert_identifier(self, ident):
         match ident:
@@ -101,8 +96,7 @@ class GoTranslator:
                 return ident
 
     def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str) -> Optional[str]:
-        # reset the type list from previous problems
-        self.prev_comp_types = []
+        self.type = [[arg.annotation for arg in args], returns]
 
         description = (
             "// " + re.sub(DOCSTRING_LINESTART_RE, "\n// ",
@@ -170,7 +164,7 @@ import (
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        return "     { actual: %s, expected: %s }," % (left, right)
+        return "     { actual: %s, expected: %s }," % (left, self.patch_empty(right, self.type[1]))
 
     def pytype_to_gotype(self, pytype: str):
         # These are type checkers for the types that are in the dataset
@@ -210,6 +204,48 @@ import (
         print("UNKNOWN", pytype)
         return "UNKNOWN"
 
+    def get_type_pylist(self, list) -> str:
+        if len(list) == 0:
+            raise Exception("Given empty list to get_type_pylist")
+
+        elem_type = self.pytype_to_gotype(list[0])
+        float_count = 0
+        int_count = 0
+        mismatch = False
+
+        for el in list[1::]:
+            type_el = self.pytype_to_gotype(el)
+            if type_el != elem_type:
+                mismatch = True
+
+            if type_el == "int":
+                int_count += 1
+            elif type_el == "float64":
+                float_count += 1
+
+        if mismatch:
+            if float_count + int_count == len(list) - 1:
+                return "float64"
+            else:
+                return "interface{}"
+
+        return elem_type
+
+    def patch_empty(self, s, t) -> str:
+        match s:
+            case "PATCH list":
+                if t is None:
+                    return "[]interface{}" + "{}"
+
+                return translate_type(t) + "{}"
+            case "PATCH dict":
+                if t is None:
+                    return "map[interface{}]interface{}" + "{}"
+
+                return translate_type(t) + "{}"
+            case _other:
+                return s
+
     def gen_literal(self, c: bool | str | int | float | None):
         """Translate a literal expression
         c: is the literal value
@@ -217,7 +253,7 @@ import (
         if type(c) == bool:
             return str(c).lower()
         if type(c) == str:
-            return f'"{c}"'
+            return "\"%s\"" % c.replace("\n", "\\n")
         if type(c) == None:  # this is possible, maybe we should make a box for Optional
             return "nil"
         return repr(c)
@@ -234,18 +270,11 @@ import (
         """Translate a list with elements l
         A list [ x, y, z] translates to []'type'{ x, y, z }
         """
-        elem_type = ""
-        if len(l) == 0 and len(self.prev_comp_types) >= 1:
-            elem_type = self.prev_comp_types[0]
-        elif len(l) == 0:
-            print("bad list, empty")
-            elem_type = "int"  # a guess, but this does not happen
-        else:
-            elem_type = self.pytype_to_gotype(l[0])
+        if len(l) == 0:
+            print("empty list. needs patching")
+            return "PATCH list"
 
-        self.prev_comp_types = [elem_type]
-
-        return f"[]{elem_type}" + "{" + ", ".join(l) + "}"
+        return f"[]{self.get_type_pylist(l)}" + "{" + ", ".join([self.patch_empty(e, None) for e in l]) + "}"
 
     def gen_tuple(self, t: List[str]) -> str:
         """Translate a tuple with elements t
@@ -259,32 +288,26 @@ import (
         A dictionary { "key1": val1, "key2": val2 } translates to 
             map['keyType']'valueType'{ ["key1"] = val1, ["key2"] = val2 }
         """
-        keys_type = ""
-        values_type = ""
+        if len(keys) == 0 or len(values) == 0:
+            print("empty dict. needs patching")
+            return "PATCH dict"
 
-        if (len(keys) == 0 or len(values) == 0) and len(self.prev_comp_types) >= 2:
-            keys_type = self.prev_comp_types[0]
-            values_type = self.prev_comp_types[1]
-        elif len(keys) == 0 or len(values) == 0:
-            print("bad dict, empty")
-            # a guess, but this does not happen
-            keys_type = "string"
-            values_type = "int"
-        else:
-            keys_type = self.pytype_to_gotype(keys[0])
-            values_type = self.pytype_to_gotype(values[0])
+        keys_type = self.get_type_pylist(keys)
+        values_type = self.get_type_pylist(values)
 
-        self.prev_comp_types = [keys_type, values_type]
-
-        return f"map[{keys_type}]{values_type}" + "{" + ", ".join(f"{k}: {v}" for k, v in zip(keys, values)) + "}"
+        return f"map[{keys_type}]{values_type}" + "{" + ", ".join(f"{self.patch_empty(k, None)}: {self.patch_empty(v, None)}" for k,
+                                                                  v in zip(keys, values)) + "}"
 
     def gen_call(self, func: str, args: List[str]) -> str:
         """Translate a function call `func(args)`
         A function call f(x, y, z) translates to f(x, y, z)
         """
-        if func == "candidate":
-            self.is_candidate_result = True
+        args = [self.patch_empty(arg, self.type[0][i])
+                for i, arg in enumerate(args)]
         return func + "(" + ", ".join(args) + ")"
+
+    def no_completion_prompt_stub(self) -> str:
+        return "\tpanic(42)\n}"
 
 
 if __name__ == "__main__":

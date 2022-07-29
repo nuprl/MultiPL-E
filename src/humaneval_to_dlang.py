@@ -10,24 +10,16 @@ import ast
 from typing import List
 from generic_translator import main
 
+RET_TYPE_LOC = -1
+
 class DlangTranslator:
-
     # TODO: what is the stop sequence for it?
-    stop = ["\n\n"]
-
-    default_libs = [
-        # "std.math",
-        # "std.typecons"
-    ]
-    
-    features_to_libs = {
-        "tuple": "std.typecons",
-        "nullable": "std.typecons"
-    }
+    stop = ["\n\n", "\nvoid", "\nbool", "\nint"]
 
     def __init__(self, file_ext):
         self.file_ext = file_ext
-        self.features = {};
+        self.require_libs = {"std.math"}
+        self.func_type = None
 
     def translate_type(self,t):
         match t:
@@ -37,13 +29,12 @@ class DlangTranslator:
                         slice_type = self.translate_type(slice)
                         return f"{slice_type}[]"
                     case "Union":
-                        # TODO
-                        return "auto"
+                        raise Exception(f"Union is not supported")
                     case "Tuple":
                         match slice:
                             case ast.Tuple(elts,_ctx):
                                 tys = [self.translate_type(elem) for elem in elts]
-                                self.features.add("tuple")
+                                self.require_libs.add("std.typecons")
                                 return "Tuple!({})".format(", ".join(tys))
                             case _other:
                                 raise Exception(f"Bad tuple: {slice}")
@@ -53,9 +44,10 @@ class DlangTranslator:
                                 key, value = self.translate_type(k), self.translate_type(v)
                                 return f"{value}[{key}]"
                     case "Optional":
-                        return "auto"
+                        self.require_libs.add("std.typecons")
+                        return "Nullable!({})".format(self.translate_type(slice))
                     case other:
-                        return "auto"
+                        raise Exception("Unsupported type")
             case ast.Name("int") | "int":
                 return "int"
             case ast.Name("float"):
@@ -65,18 +57,23 @@ class DlangTranslator:
             case ast.Name("str") | "str":
                 return "const(char)[]"
             case _other:
-                return "auto"
-
+                raise Exception("Unsupported type")
     
     def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str) -> str:
-        libraries = "\n".join([f"import {lib};" for lib in self.default_libs])
         dlang_desc = ("/*\n" + description + "\n*/\n")
         
-        arg_names_and_types = [self.translate_type(arg.annotation) + ' ' + arg.arg for arg in args]
-        arg_list = ", ".join(arg_names_and_types)
-        return_type = self.translate_type(returns)
-        return f"{libraries}\n{dlang_desc}{return_type} {name}({arg_list}) \n"
+        try:
+            self.func_type = [(self.translate_type(arg.annotation), arg.arg) for arg in args]
+            arg_names_and_types = [arg[0] + " " +arg[1] for arg in self.func_type]
+            arg_list = ", ".join(arg_names_and_types)
+            return_type = self.translate_type(returns)
+            self.func_type.append((return_type, ""))
+            libraries = "\n".join([f"import {lib};" for lib in self.require_libs])
 
+            return f"{libraries}\n{dlang_desc}{return_type} {name}({arg_list}) \n"
+        except Exception as err:
+            print(err)
+            return None
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
@@ -99,6 +96,14 @@ class DlangTranslator:
         """
         All tests are assertions that compare deep equality between left and right.
         """
+        ret_type = self.func_type[RET_TYPE_LOC][0] 
+        # A check of the test cases tell me that all of the Optional (-> Nullables) are in return position.
+        if ret_type.startswith("Null"):
+            if right == "None":
+                return "{{\n        auto result = {};\n        assert(result.isNull);\n}}\n".format(left)
+            else:
+                return "{{\n        auto result = {};\n        assert(!result.isNull && result.get == {});\n}}\n".format(left,right)
+
         return "    assert({} == {});".format(left, right)
 
 
@@ -133,13 +138,18 @@ class DlangTranslator:
         """Translate a dictionary with keys and values
         { "key1": val1, "key2": val2 } => [ "key1": val1, "key2": val2 ]
         """
-        return "[" + ", ".join(f"[{k}] = {v}" for k, v in zip(keys, values)) + "]"
+        return "[" + ", ".join(f"{k}: {v}" for k, v in zip(keys, values)) + "]"
 
     def gen_call(self, func: str, args: List[str]) -> str:
         """Translate a function call `func(args)`
         f(x, y, z) => f(x, y, z)
         """
-        return func + "(" + ", ".join(args) + ")"
+        translated_args = []
+        for value, type_name in zip(args, self.func_type):
+            ty, _name = type_name
+            translated_args.append(value)
+        
+        return func + "(" + ", ".join(translated_args) + ")"
     
 
 if __name__ == "__main__":

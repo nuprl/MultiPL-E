@@ -10,7 +10,7 @@ def eval_script(path: Path):
     try:
         # Assumes exit-code 0 is all okay
         output  = subprocess.run(
-            " ".join(["julia", str(path)]), shell=True, capture_output=True, timeout=20
+            ["julia", str(path)], encoding="utf-8", capture_output=True, timeout=20
         )
         
         

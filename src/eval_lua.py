@@ -1,33 +1,48 @@
-# Authored by Arjun Guha
+# Authored by Arjun Guha, Abhinav Jangda, and based on eval_ruby by Molly Feldman
 # Copyright (c) 2022, Roblox Inc.
 #
 # This script runs the Luafied HumanEval programs in datasets/lua
-import os
+
+import argparse
+from sys import exit
 import subprocess
 from pathlib import Path
+from generic_eval import main as gmain
 
-def main():
-    directory = Path(Path(__file__).parent, "..", "datasets", "lua").resolve()
-
-    for filename in os.listdir(directory):
-        # If it's a .lua file:
-        if filename == "luaunit.lua":
-            continue
-
-        try:
-            # Assumes exit-code 0 is all okay
-            subprocess.check_output(" ".join(["lua", os.path.join(directory, filename)]),
-                                        stderr=subprocess.DEVNULL, shell=True, timeout=5)
+def eval_script(path: Path):
+    try:
+        # Assumes exit-code 0 is all okay
+        # Need check=True for Lua to pass errors to CalledProcessError
+        output = subprocess.run(
+            ["lua", path], check=True, capture_output=True, timeout=5
+        )
+        if output.returncode == 0:
             status = "OK"
-        except subprocess.TimeoutExpired as exc:
-            status = "Timeout"
-        except subprocess.CalledProcessError as exc:
-            if 'expected near' in (str(exc.output)) or 'Failed tests:' not in str(exc.output):
-                status = "SyntaxError"
-            else:
-                status = "Exception"
-        filename = filename.split(".")[0]
-        print(f"Lua,{filename},{status}")
+            out = output.stderr
+            error = output.stdout
+            returncode = 0
+        else:
+            raise Exception("there's an issue with check = True for Lua, INVESTIGATE!")
+    except subprocess.TimeoutExpired as exc:
+        status = "Timeout"
+        out = exc.stdout
+        error = exc.stderr
+        returncode = -1
+    except subprocess.CalledProcessError as exc:
+        returncode = exc.returncode
+        out = exc.stdout
+        error = exc.stderr
+        #failure with code 1 but no error message is an Exception from Failed tests
+        if len(error) < 1:
+            status = "Exception"
+        else: #everything that prints out an error message is a SyntaxError
+            status = "SyntaxError"
+    return {
+        "status": status,
+        "exit_code": returncode,
+        "stdout": str(out),
+        "stderr": str(error),
+    }
 
 if __name__ == "__main__":
-    main()
+    gmain(eval_script, 'Lua', '.lua')
