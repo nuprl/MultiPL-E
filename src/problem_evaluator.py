@@ -1,14 +1,15 @@
 import argparse
 from pathlib import Path
 from problem_yaml import Problem, Result, ResultList, TestResults
-import eval_ruby, eval_lua
+import eval_ruby, eval_lua, eval_python, eval_rust
 import tempfile
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
 EVALUATORS = {
-#    "ruby": (eval_ruby.eval_script, ".rb"),
-    "lua": (eval_lua.eval_script, ".lua")
+  #  "ruby": (eval_ruby.eval_script, ".rb"),
+ #   "lua": (eval_lua.eval_script, ".lua"),
+    "python": (eval_python.eval_script, ".py")
 }
 
 
@@ -40,7 +41,8 @@ def eval_in_thread(problem, test_results, i):
         result = eval_script(f.name)
         result_yaml = Result()
         result_yaml.program = program
-        result_yaml.stdout = result['stdout']
+        #TODO: make this eyesore not an eyesore 
+        result_yaml.stdout = result['stdout'].replace("!!int", "")
         result_yaml.stderr = result['stderr']
         result_yaml.exit_code = result['exit_code']
         result_yaml.status = result['status']
