@@ -164,8 +164,14 @@ class CPPTranslator:
         '''
         return f"({s})"
 
+    def find_type_to_coerce(self, expr):
+        '''
+        '''
+
+        return re.findall("(.+)\(", expr)
+
     def update_type(self, right: Tuple[ast.Expr, str], expected_type: Tuple[str]) -> str:
-        '''Update type of the right expression if it is different from the
+        '''Coerce type of the right expression if it is different from the
             expected type function
         '''
         
@@ -175,12 +181,18 @@ class CPPTranslator:
         #No need to replace std::make_tuple
         if right[0].find(self.make_tuple([])) == 0:
             return right[0] 
-
-        if re.findall("(.+)\(", right[0]) == []:
+        
+        type_to_coerce = self.find_type_to_coerce(right[0])
+        if type_to_coerce == []:
             #No type? add the type of right
             return self.wrap_in_brackets(expected_type+"("+right[0]+")")
+        type_to_coerce = type_to_coerce[0]
+        coerced_type = right[0].replace(type_to_coerce, expected_type+"(")
 
-        return self.wrap_in_brackets(re.sub("(.+?)\(", expected_type+"(", right[0]))
+        ##Remove extra brackets
+        coerced_type = coerced_type.replace('(())', '()')
+        return self.wrap_in_brackets(coerced_type)
+
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
@@ -244,6 +256,7 @@ class CPPTranslator:
         A list [ x, y, z] translates to vector<?>{ x, y, z }
         """
         #Assuming all elements in list have same type
+        
         if l == [] or l == ():
           return self.make_list(self.int_type, "()"), ast.List([ast.Name("int")])
 
@@ -280,6 +293,13 @@ class CPPTranslator:
         return self.make_tuple([]) + "(" + ", ".join([e[0] for e in t]) + ")", \
             ast.Tuple([e[1] for e in t])
 
+    def make_map_literal(self, keys, values):
+        return "{" + ", ".join(f"{{{k}, {v}}}" for k, v in zip(keys, values)) + "}"
+
+    def make_map(self, dict_type, map_literal):
+        cpp_type = self.pytype_to_cpptype(dict_type)
+        return f"{cpp_type}({map_literal})"
+
     def gen_dict(self, keys: List[Tuple[str, ast.Expr]], values: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.Dict]:
         """Translate a dictionary with keys and values
         A dictionary { "key1": val1, "key2": val2 } translates to map<?,?>{ ["key1"] = val1, ["key2"] = val2 }
@@ -287,7 +307,7 @@ class CPPTranslator:
         if keys == [] and values == []:
             dict_type = ast.Dict(ast.Name("None"), ast.Name("None"))
             cpp_type = self.pytype_to_cpptype(dict_type)
-            return cpp_type+"({})", dict_type
+            return self.make_map(dict_type, ""), dict_type
         
         #Assuming all keys and values have same type
         keys_type = keys[0][1]
@@ -296,8 +316,8 @@ class CPPTranslator:
         values = [v[0] for v in values]
         
         dict_type = ast.Dict(keys_type, values_type)
-        cpp_type = self.pytype_to_cpptype(dict_type)
-        return cpp_type + "({ " + ", ".join(f"{{{k}, {v}}}" for k, v in zip(keys, values)) + " })", dict_type
+        map_literal = self.make_map_literal(keys, values)
+        return self.make_map(dict_type, map_literal), dict_type
 
     def gen_call(self, func: str, args: List[Tuple[str, ast.Expr]]) -> Tuple[str, None]:
         """Translate a function call `func(args)`

@@ -21,7 +21,7 @@ class JavaTranslator(CPPTranslator):
         self.bool_type = "boolean"
         self.none_type = "{}"
         self.list_type = "ArrayList<%s>"
-        self.tuple_type = "std::tuple<%s>"
+        self.tuple_type = "Pair<%s>"
         self.dict_type = "HashMap<%s, %s>"
         self.optional_type = "Optional<%s>"
         self.any_type = "std::any"
@@ -36,6 +36,16 @@ return (T) Array.get(Array.newInstance(clazz, 1), 0);
     
     def make_array_literal(self, list_contents):
         return "(" + list_contents + ")"
+    
+    def make_tuple(self, elem_types):
+        return "Pair.with"
+    
+    def make_map_literal(self, keys, values):
+        return ", ".join(f"{k}, {v}" for k, v in zip(keys, values))
+
+    def make_map(self, dict_type, map_literal):
+        java_type = self.pytype_to_cpptype(dict_type) + "(Map"
+        return f"new {java_type}.of({map_literal}))"
 
     def box_type(self, primitive_type):
         if self.is_primitive_type(primitive_type):
@@ -46,7 +56,8 @@ return (T) Array.get(Array.newInstance(clazz, 1), 0);
     def module_imports(self) -> str:
         return "\n".join([
             "import java.util.*;",
-            "import java.lang.reflect.*;"
+            "import java.lang.reflect.*;",
+            "import org.javatuples.*;"
         ]) + "\n"
 
     def pytype_to_cpptype(self, ann: ast.expr | None) -> str:
@@ -137,8 +148,10 @@ return (T) Array.get(Array.newInstance(clazz, 1), 0);
     def return_default_value(self, java_type):
         if self.is_primitive_type(java_type):
             return f"return getDefaultValue({java_type}.class);"
+        elif "Pair" in java_type:
+            return f"return new {java_type}(0l, 0l);"
         else:
-            return f"new {java_type}();"
+            return f"return new {java_type}();"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
@@ -158,13 +171,21 @@ return (T) Array.get(Array.newInstance(clazz, 1), 0);
         "}\n"
         ]
     
+    def find_type_to_coerce(self, expr):
+        '''
+        '''
+        if "Arrays.asList(" in expr:
+            return expr[expr.index("new ")+len("new "):expr.index("Arrays.asList(")]
+        return re.findall("new (.+)\(", expr)
+
     def gen_literal(self, c: bool | str | int | float | None) -> Tuple[str, ast.Name]:
         """Translate a literal expression
             Append "f" to floats
         """
         if type(c) == float:
             return repr(c) + "f", ast.Name(id="float")
-        
+        if type(c) == int:
+            return repr(c) + "l", ast.Name(id="int")
         return CPPTranslator.gen_literal(self, c)
 
     def gen_call(self, func: str, args: List[Tuple[str, ast.Expr]]) -> Tuple[str, None]:
