@@ -11,7 +11,7 @@ def find_max(words: List[str]) -> str:
     >>> find_max(["name", "enam", "game"])
     "enam"
     >>> find_max(["aaaaaaa", "bb" ,"cc"])
-    ""aaaaaaa"
+    "aaaaaaa"
     """
     ### Canonical solution below ###
     return sorted(words, key = lambda x: (-len(set(x)), x))[0]
