@@ -12,11 +12,11 @@ def eval_script(path: Path):
             status = "OK"
         else:
             outmessage = str(output)
-            print(outmessage)
-            if 'read-syntax' in outmessage:
+            if 'unexpected' in outmessage:
                 status = "SyntaxError"
             else:
                 status = "Exception"
+                print(outmessage)
         returncode = output.returncode
     except subprocess.TimeoutExpired as exc:
         status = "Timeout"
