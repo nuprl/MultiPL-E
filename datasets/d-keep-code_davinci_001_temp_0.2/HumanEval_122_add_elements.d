@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given a non-empty array of integers arr and an integer k, return
@@ -15,14 +15,19 @@ import std.math;
         2. 1 <= k <= len(arr)
     
 */
-int add_elements(int[] arr, int k) 
+long add_elements(long[] arr, long k) 
 {
-    int sum = 0;
+    long sum = 0;
     for (int i = 0; i < k; i++)
     {
-        if (arr[i] < 100)
+        if (arr[i] < 10)
         {
             sum += arr[i];
+        }
+        else
+        {
+            sum += arr[i] % 10;
+            sum += arr[i] / 10;
         }
     }
     return sum;

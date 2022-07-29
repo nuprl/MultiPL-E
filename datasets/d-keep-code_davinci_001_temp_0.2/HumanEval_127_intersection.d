@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 You are given two intervals,
     where each interval is a pair of integers. For example, interval = (start, end) = (1, 2).
@@ -21,23 +21,20 @@ You are given two intervals,
     intersection((-3, -1), (-5, 5)) ==> "YES"
     
 */
-const(char)[] intersection(Tuple!(int, int) interval1, Tuple!(int, int) interval2) 
+const(char)[] intersection(Tuple!(long, long) interval1, Tuple!(long, long) interval2) 
 {
-    int start1 = interval1[0];
-    int end1 = interval1[1];
-    int start2 = interval2[0];
-    int end2 = interval2[1];
-    int length = end1 - start1;
-    int length2 = end2 - start2;
-    int intersection = std.math.gcd(length, length2);
-    if (intersection == 1)
-    {
-        return "YES";
-    }
-    else
+    long start = std.math.max(interval1.start, interval2.start);
+    long end = std.math.min(interval1.end, interval2.end);
+    if (start > end)
     {
         return "NO";
     }
+    long length = end - start;
+    if (std.math.isPrime(length))
+    {
+        return "YES";
+    }
+    return "NO";
 }
 
 unittest

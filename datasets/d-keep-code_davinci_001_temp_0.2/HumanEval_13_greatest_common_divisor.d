@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  Return a greatest common divisor of two integers a and b
     >>> greatest_common_divisor(3, 5)
@@ -8,7 +8,7 @@ import std.math;
     5
     
 */
-int greatest_common_divisor(int a, int b) 
+long greatest_common_divisor(long a, long b) 
 {
     if (b == 0)
         return a;

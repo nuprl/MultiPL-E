@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Imagine a road that's a perfectly straight infinitely long line.
@@ -13,37 +13,18 @@ import std.math;
     This function outputs the number of such collisions.
     
 */
-int car_race_collision(int n) 
+long car_race_collision(long n) 
 {
-    // The number of cars moving left to right
-    int n_left_to_right = n;
-    // The number of cars moving right to left
-    int n_right_to_left = n;
-    // The number of collisions
-    int collisions = 0;
-    // The number of cars that have not collided
-    int n_left_to_right_remaining = n;
-    int n_right_to_left_remaining = n;
-    // The number of cars that have collided
-    int n_left_to_right_collided = 0;
-    int n_right_to_left_collided = 0;
-    // The number of cars that have collided with a car moving left to right
-    int n_left_to_right_collided_with_left_to_right = 0;
-    // The number of cars that have collided with a car moving right to left
-    int n_left_to_right_collided_with_right_to_left = 0;
-    // The number of cars that have collided with a car moving left to right
-    int n_right_to_left_collided_with_left_to_right = 0;
-    // The number of cars that have collided with a car moving right to left
-    int n_right_to_left_collided_with_right_to_left = 0;
-    // The number of cars that have collided with a car moving left to right
-    int n_left_to_right_collided_with_left_to_right_remaining = 0;
-    // The number of cars that have collided with a car moving right to left
-    int n_left_to_right_collided_with_right_to_left_remaining = 0;
-    // The number of cars that have collided with a car moving left to right
-    int n_right_to_left_collided_with_left_to_right_remaining = 0;
-    // The number of cars that have collided with a car moving right to left
-    int n_right_to_left_collided_with_right_to_left_remaining = 0;
-    // The number of cars that have collided with
+    long collisions = 0;
+    for (long i = 0; i < n; i++) {
+        for (long j = i + 1; j < n; j++) {
+            if (i % 2 == 0 && j % 2 == 1) {
+                collisions++;
+            }
+        }
+    }
+    return collisions;
+}
 
 unittest
 {

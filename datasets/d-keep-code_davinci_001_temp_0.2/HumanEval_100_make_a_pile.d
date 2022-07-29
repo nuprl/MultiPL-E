@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given a positive integer n, you have to make a pile of n levels of stones.
@@ -15,23 +15,16 @@ import std.math;
     [3, 5, 7]
     
 */
-int[] make_a_pile(int n) 
+long[] make_a_pile(long n) 
 {
-    int[] result = new int[n];
-    for (int i = 0; i < n; i++)
+    long[] pile = new long[n];
+    pile[0] = n;
+    for (int i = 1; i < n; i++)
     {
-        if (n % 2 == 0)
-        {
-            result[i] = n;
-            n += 2;
-        }
-        else
-        {
-            result[i] = n;
-            n += 1;
-        }
+        pile[i] = (n + 1) % 2 == 0 ? (n + 1) / 2 : (n + 1) / 2 + 1;
+        n = pile[i];
     }
-    return result;
+    return pile;
 }
 
 unittest

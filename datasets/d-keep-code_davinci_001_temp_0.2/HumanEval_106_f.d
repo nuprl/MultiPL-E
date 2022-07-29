@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  Implement the function f that takes n as a parameter,
     and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
@@ -10,21 +10,17 @@ import std.math;
     f(5) == [1, 2, 6, 24, 15]
     
 */
-int[] f(int n) 
+long[] f(long n) 
 {
-    int[] result = new int[n];
+    var res = new long[n];
     for (int i = 1; i <= n; i++)
     {
         if (i % 2 == 0)
-        {
-            result[i - 1] = std.math.factorial(i);
-        }
+            res[i - 1] = i * (i - 1);
         else
-        {
-            result[i - 1] = std.math.sum(1, i);
-        }
+            res[i - 1] = std.math.sum(1, i);
     }
-    return result;
+    return res;
 }
 
 unittest

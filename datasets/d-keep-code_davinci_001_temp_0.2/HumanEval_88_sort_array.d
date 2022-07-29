@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given an array of non-negative integers, return a copy of the given array after sorting,
@@ -16,22 +16,21 @@ import std.math;
     * sort_array([2, 4, 3, 0, 1, 5, 6]) => [6, 5, 4, 3, 2, 1, 0]
     
 */
-int[] sort_array(int[] array) 
+long[] sort_array(long[] array) 
 {
-    int sum = 0;
+    long sum = 0;
     for (int i = 0; i < array.length; i++)
     {
         sum += array[i];
     }
     if (sum % 2 == 0)
     {
-        array = array.sort((a, b) => b - a);
+        return array.sort((a, b) => b - a);
     }
     else
     {
-        array = array.sort((a, b) => a - b);
+        return array.sort((a, b) => a - b);
     }
-    return array;
 }
 
 unittest

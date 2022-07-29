@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Return true if a given number is prime, and false otherwise.
     >>> is_prime(6)
@@ -18,7 +18,7 @@ Return true if a given number is prime, and false otherwise.
     False
     
 */
-bool is_prime(int n) 
+bool is_prime(long n) 
 {
     if (n < 2)
         return false;
@@ -28,7 +28,7 @@ bool is_prime(int n)
         return false;
     else
     {
-        int i = 3;
+        long i = 3;
         while (i * i <= n)
         {
             if (n % i == 0)

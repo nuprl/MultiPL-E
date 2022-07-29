@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Evaluate whether the given number n can be written as the sum of exactly 4 positive even numbers
     Example
@@ -8,18 +8,9 @@ Evaluate whether the given number n can be written as the sum of exactly 4 posit
     is_equal_to_sum_even(8) == True
     
 */
-bool is_equal_to_sum_even(int n) 
+bool is_equal_to_sum_even(long n) 
 {
-    if(n < 4)
-        return false;
-    int sum = 0;
-    for(int i = 2; i <= n; i += 2)
-    {
-        sum += i;
-        if(sum == n)
-            return true;
-    }
-    return false;
+    return n % 2 == 0;
 }
 
 unittest

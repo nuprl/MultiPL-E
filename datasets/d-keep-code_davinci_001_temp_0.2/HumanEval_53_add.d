@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Add two numbers x and y
     >>> add(2, 3)
@@ -8,7 +8,7 @@ Add two numbers x and y
     12
     
 */
-int add(int x, int y) 
+long add(long x, long y) 
 {
     return x + y;
 }

@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 You are given a word. Your task is to find the closest vowel that stands between 
     two consonants from the right side of the word (case sensitive).
@@ -18,28 +18,8 @@ You are given a word. Your task is to find the closest vowel that stands between
 */
 const(char)[] get_closest_vowel(const(char)[] word) 
 {
-    const(char)[] vowels = {'a', 'e', 'i', 'o', 'u'};
-    int[] consonants = {'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'};
-    int[] vowels_positions = {};
-    int[] consonants_positions = {};
-    int[] positions = {};
-    int[] distances = {};
-    int[] closest_vowels = {};
-    int closest_vowel_position = 0;
-    int closest_vowel_distance = 0;
-    int closest_vowel = 0;
-    int closest_vowel_index = 0;
-    int closest_vowel_index_position = 0;
-    int closest_vowel_index_distance = 0;
-    int closest_vowel_index_closest_vowel = 0;
-    int closest_vowel_index_closest_vowel_index = 0;
-    int closest_vowel_index_closest_vowel_index_position = 0;
-    int closest_vowel_index_closest_vowel_index_distance = 0;
-    int closest_vowel_index_closest_vowel_index_closest_vowel = 0;
-    int closest_vowel_index_closest_vowel_index_closest_vowel_index = 0;
-    int closest_vowel_index_closest_vowel_index_closest_vowel_index_position = 0;
-    int closest_vowel_index_closest_vowel_index_closest_vowel_index_distance = 0;
-    int closest_vowel_index_closest_vowel_index_closest_vowel_index_closest_vowel =
+    return [];
+}
 
 unittest
 {

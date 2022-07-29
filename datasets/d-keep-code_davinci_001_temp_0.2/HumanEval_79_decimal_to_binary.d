@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 You will be given a number in decimal form and your task is to convert it to
     binary format. The function should return a string, with each character representing a binary
@@ -13,17 +13,15 @@ You will be given a number in decimal form and your task is to convert it to
     decimal_to_binary(32)   # returns "db100000db"
     
 */
-const(char)[] decimal_to_binary(int decimal) 
+const(char)[] decimal_to_binary(long decimal) 
 {
-    const(char)[] result = new const(char)[];
-    result.append("db");
+    string binary = "db";
     while(decimal > 0)
     {
-        result.append(decimal % 2);
+        binary += decimal % 2;
         decimal /= 2;
     }
-    result.append("db");
-    return result;
+    return binary;
 }
 
 unittest

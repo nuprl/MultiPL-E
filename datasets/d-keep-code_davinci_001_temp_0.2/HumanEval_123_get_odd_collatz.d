@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given a positive integer n, return a sorted list that has the odd numbers in collatz sequence.
@@ -18,26 +18,14 @@ import std.math;
     get_odd_collatz(5) returns [1, 5] # The collatz sequence for 5 is [5, 16, 8, 4, 2, 1], so the odd numbers are only 1, and 5.
     
 */
-int[] get_odd_collatz(int n) 
+long[] get_odd_collatz(long n) 
 {
-    // your code here
-    int[] res = new int[0];
     if (n == 1)
-    {
-        res = new int[] { 1 };
-    }
+        return [1];
+    if (n % 2 == 0)
+        return [1] + get_odd_collatz(n / 2);
     else
-    {
-        int[] collatz = collatz(n);
-        for (int i = 0; i < collatz.Length; i++)
-        {
-            if (collatz[i] % 2 != 0)
-            {
-                res = append(res, collatz[i]);
-            }
-        }
-    }
-    return res;
+        return [1] + get_odd_collatz(n * 3 + 1);
 }
 
 unittest

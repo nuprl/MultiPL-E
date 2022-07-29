@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given a positive integer, obtain its roman numeral equivalent as a string,
@@ -12,36 +12,38 @@ import std.math;
     >>> int_to_mini_roman(426) == 'cdxxvi'
     
 */
-const(char)[] int_to_mini_roman(int number) 
+const(char)[] int_to_mini_roman(long number) 
 {
-    if(number < 1 || number > 1000)
-        return null;
-    else if(number < 4)
-        return "i" * number;
-    else if(number < 5)
-        return "v" + "i" * (number - 5);
-    else if(number < 9)
-        return "v" + "i" * (number - 5);
-    else if(number < 10)
-        return "x" + "i" * (number - 10);
-    else if(number < 40)
-        return "x" * (number / 10) + "i" * (number % 10);
-    else if(number < 50)
-        return "l" + "x" * ((number - 40) / 10) + "i" * (number % 10);
-    else if(number < 90)
-        return "l" + "x" * ((number - 50) / 10) + "i" * (number % 10);
-    else if(number < 100)
-        return "c" + "x" * ((number - 90) / 10) + "i" * (number % 10);
-    else if(number < 400)
-        return "c" * (number / 100) + "x" * ((number % 100) / 10) + "i" * (number % 10);
-    else if(number < 500)
-        return "d" + "c" * ((number - 400) / 100) + "x" * ((number % 100) / 10) + "i" * (number % 10);
-    else if(number < 900)
-        return "d" + "c" * ((number - 500) / 100) + "x" * ((number % 100) / 10) + "i" * (number % 10);
-    else if(number < 1000)
-        return "m" * (number / 1000) + "c" * ((number % 1000) / 100) + "x" * ((number % 100) / 10) + "i" * (number % 10);
-    else
-        return null;
+    if (number < 1 || number > 1000)
+        throw new ValueError("number must be between 1 and 1000");
+    
+    auto roman_numerals = ["i", "v", "x", "l", "c", "d", "m"];
+    auto digits = [0, 0, 0, 0, 0, 0, 0];
+    auto i = 0;
+    while (number > 0) {
+        digits[i] = number % 10;
+        number /= 10;
+        i += 1;
+    }
+    
+    auto result = [];
+    for (i = 0; i < digits.length; i += 1) {
+        if (digits[i] == 0)
+            continue;
+        
+        if (digits[i] <= 3)
+            result.push(roman_numerals[i] * digits[i]);
+        else if (digits[i] == 4)
+            result.push(roman_numerals[i] + roman_numerals[i + 1]);
+        else if (digits[i] == 5)
+            result.push(roman_numerals[i + 1]);
+        else if (digits[i] <= 8)
+            result.push(roman_numerals[i + 1] + roman_numerals[i] * (digits[i] - 5));
+        else
+            result.push(roman_numerals[i] + roman_numerals[i + 2]);
+    }
+    
+    return result;
 }
 
 unittest

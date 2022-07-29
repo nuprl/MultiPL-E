@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 This function takes a list l and returns a list l' such that
     l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
@@ -10,9 +10,9 @@ This function takes a list l and returns a list l' such that
     [2, 6, 3, 4, 8, 9, 5]
     
 */
-int[] sort_third(int[] l) 
+long[] sort_third(long[] l) 
 {
-    int[] l_prime = new int[l.length];
+    long[] l_prime = new long[l.length];
     for (int i = 0; i < l.length; i++)
     {
         if (i % 3 == 0)

@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Return only positive numbers in the list.
     >>> get_positive([-1, 2, -4, 5, 6])
@@ -8,14 +8,12 @@ Return only positive numbers in the list.
     [5, 3, 2, 3, 9, 123, 1]
     
 */
-int[] get_positive(int[] l) 
+long[] get_positive(long[] l) 
 {
-    int[] result = new int[0];
-    foreach (int i in l)
-    {
-        if (i > 0)
-        {
-            result.append(i);
+    long[] result = new long[0];
+    for (long i : l) {
+        if (i > 0) {
+            result = append(result, i);
         }
     }
     return result;

@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Return 2^n modulo p (be aware of numerics).
     >>> modp(3, 5)
@@ -14,7 +14,7 @@ Return 2^n modulo p (be aware of numerics).
     1
     
 */
-int modp(int n, int p) 
+long modp(long n, long p) 
 {
     if (n == 0)
         return 1;

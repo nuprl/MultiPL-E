@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     You are given a 2 dimensional data, as a nested lists,
@@ -21,20 +21,9 @@ import std.math;
     get_row([[], [1], [1, 2, 3]], 3) == [(2, 2)]
     
 */
-Tuple!(int, int)[] get_row(int[][] lst, int x) 
+Tuple!(long, long)[] get_row(long[][] lst, long x) 
 {
-    Tuple!(int, int)[] res;
-    for (int i = 0; i < lst.length; i++)
-    {
-        for (int j = 0; j < lst[i].length; j++)
-        {
-            if (lst[i][j] == x)
-            {
-                res.push(Tuple!(int, int)(i, j));
-            }
-        }
-    }
-    return res;
+    return null;
 }
 
 unittest

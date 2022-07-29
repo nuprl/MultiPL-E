@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     You are given an array arr of integers and you need to return
@@ -13,18 +13,19 @@ import std.math;
     >>> prod_signs([]) == None
     
 */
-Nullable!(int) prod_signs(int[] arr) 
+Nullable!(long) prod_signs(long[] arr) 
 {
-    if (arr.length() == 0) {
+    if (arr.length == 0) {
         return None;
     }
-    int sum = 0;
-    int product = 1;
-    for (int i = 0; i < arr.length(); i++) {
-        sum += std.math.abs(arr[i]);
-        product *= std.math.sign(arr[i]);
+    var sum = 0;
+    var prod = 1;
+    for (var i = 0; i < arr.length; i++) {
+        var num = arr[i];
+        sum += std.math.abs(num);
+        prod *= std.math.sign(num);
     }
-    return sum * product;
+    return sum * prod;
 }
 
 unittest

@@ -7,16 +7,15 @@ import std.math;
     [1, 4, 2, 4, 3]
     
 */
-int[] intersperse(int[] numbers, int delimeter) 
+long[] intersperse(long[] numbers, long delimeter) 
 {
-    int[] result = new int[numbers.Length * 2 - 1];
-    int index = 0;
-    for (int i = 0; i < numbers.Length; i++) 
+    long[] result = new long[numbers.length * 2 - 1];
+    for (int i = 0; i < numbers.length; i++) 
     {
-        result[index++] = numbers[i];
-        if (i < numbers.Length - 1) 
+        result[i * 2] = numbers[i];
+        if (i < numbers.length - 1) 
         {
-            result[index++] = delimeter;
+            result[i * 2 + 1] = delimeter;
         }
     }
     return result;

@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  brackets is a string of "<" and ">".
     return True if every opening bracket has a corresponding closing bracket.
@@ -16,18 +16,73 @@ import std.math;
 */
 bool correct_bracketing(const(char)[] brackets) 
 {
-    int stack = 0;
-    foreach(char c in brackets)
-    {
-        if(c == '<')
-            stack++;
-        else
-            stack--;
-        if(stack < 0)
+    int count = 0;
+    for (int i = 0; i < len(brackets); i++) {
+        if (brackets[i] == '<') {
+            count++;
+        } else if (brackets[i] == '>') {
+            count--;
+        }
+        if (count < 0) {
             return false;
+        }
     }
-    return stack == 0;
+    return count == 0;
 }
+/*
+    >>> correct_bracketing("<>")
+    True
+    >>> correct_bracketing("<")
+    False
+    >>> correct_bracketing("<><")
+    True
+    >>> correct_bracketing("<><><")
+    False
+    >>> correct_bracketing("<><><><")
+    True
+    >>> correct_bracketing("<><>><")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<><<<><")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>> correct_bracketing("<>>>")
+    False
+    >>>
 
 unittest
 {

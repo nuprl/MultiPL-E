@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     You will be given a string of words separated by commas or spaces. Your task is
@@ -12,7 +12,7 @@ import std.math;
 */
 const(char)[][] words_string(const(char)[] s) 
 {
-    return null;
+    return s.split(",").map(x => x.trim()).filter(x => x.length > 0);
 }
 
 unittest

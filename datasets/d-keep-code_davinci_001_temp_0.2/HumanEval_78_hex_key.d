@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 You have been tasked to write a function that receives 
     a hexadecimal number as a string and counts the number of hexadecimal 
@@ -19,21 +19,16 @@ You have been tasked to write a function that receives
     For num = "2020" the output should be 2.
     
 */
-int hex_key(const(char)[] num) 
+long hex_key(const(char)[] num) 
 {
-    int key = 0;
-    if(num[0] == '2')
-        key++;
-    if(num[0] == '3')
-        key++;
-    if(num[0] == '5')
-        key++;
-    if(num[0] == '7')
-        key++;
-    if(num[0] == 'B')
-        key++;
-    if(num[0] == 'D')
-        key++;
+    long key = 0;
+    for(int i = 0; i < num.size(); i++)
+    {
+        if(num[i] == '2' || num[i] == '3' || num[i] == '5' || num[i] == '7' || num[i] == 'B' || num[i] == 'D')
+        {
+            key++;
+        }
+    }
     return key;
 }
 

@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Write a function that returns True if the object q will fly, and False otherwise.
@@ -19,9 +19,9 @@ import std.math;
     # 3 is less than the maximum possible weight, and it's balanced.
     
 */
-bool will_it_fly(int[] q, int w) 
+bool will_it_fly(long[] q, long w) 
 {
-    return q.is_palindrome() && q.sum() <= w;
+    return (sum(q) <= w) && (is_palindrome(q));
 }
 
 unittest

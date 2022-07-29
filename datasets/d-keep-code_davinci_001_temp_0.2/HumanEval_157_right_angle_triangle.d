@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given the lengths of the three sides of a triangle. Return True if the three
@@ -11,9 +11,9 @@ import std.math;
     right_angle_triangle(1, 2, 3) == False
     
 */
-bool right_angle_triangle(int a, int b, int c) 
+bool right_angle_triangle(long a, long b, long c) 
 {
-    return (a*a + b*b == c*c) || (b*b + c*c == a*a) || (a*a + c*c == b*b);
+    return (math.pow(a, 2) + math.pow(b, 2) == math.pow(c, 2));
 }
 
 unittest
