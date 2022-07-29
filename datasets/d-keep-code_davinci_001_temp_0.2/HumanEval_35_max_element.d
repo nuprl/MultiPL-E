@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Return maximum element in the list.
     >>> max_element([1, 2, 3])
@@ -10,10 +11,8 @@ Return maximum element in the list.
 int max_element(int[] l) 
 {
     int max = l[0];
-    for (int i = 1; i < l.Length; i++)
-    {
-        if (l[i] > max)
-        {
+    for (int i = 1; i < l.length; i++) {
+        if (l[i] > max) {
             max = l[i];
         }
     }

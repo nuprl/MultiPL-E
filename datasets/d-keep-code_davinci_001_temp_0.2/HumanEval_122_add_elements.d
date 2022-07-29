@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Given a non-empty array of integers arr and an integer k, return

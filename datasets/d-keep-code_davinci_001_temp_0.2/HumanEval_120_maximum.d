@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Given an array arr of integers and a positive integer k, return a sorted list 
@@ -27,8 +28,16 @@
 */
 int[] maximum(int[] arr, int k) 
 {
-    // Sort the array
-    Arrays.sort(arr);
+    // sort the array first
+    Array.Sort(arr);
+    // get the max k numbers
+    int[] result = new int[k];
+    for (int i = 0; i < k; i++)
+    {
+        result[i] = arr[i];
+    }
+    return result;
+}
 
 unittest
 {

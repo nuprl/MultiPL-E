@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 A simple program which should return the value of x if n is 
     a prime number and should return the value of y otherwise.
@@ -11,7 +12,7 @@ A simple program which should return the value of x if n is
 */
 int x_or_y(int n, int x, int y) 
 {
-    if (n % 2 == 0)
+    if (is_prime(n))
         return x;
     else
         return y;

@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
  Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -9,8 +10,7 @@
 */
 const(char)[] sort_numbers(const(char)[] numbers) 
 {
-    // TODO: implement me
-    return nullptr;
+    return numbers;
 }
 
 unittest

@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Create a function encrypt that takes a string as an argument and
     returns a string encrypted with the alphabet being rotated. 
@@ -13,12 +14,7 @@ Create a function encrypt that takes a string as an argument and
 */
 const(char)[] encrypt(const(char)[] s) 
 {
-    const(char)[] encrypted = new(char)[s.length];
-    for(int i = 0; i < s.length; i++)
-    {
-        encrypted[i] = (char)((s[i] + 2) * 2);
-    }
-    return encrypted;
+    return s;
 }
 
 unittest

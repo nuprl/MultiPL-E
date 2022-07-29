@@ -42,11 +42,11 @@ test() {
 
     declare -a x4=()
     x5=$(candidate "${x4[*]}")
-    assert_equals  "${x5[*]}"
+    assert_equals None "${x5[*]}"
 
     declare -a x6=(1 1)
     x7=$(candidate "${x6[*]}")
-    assert_equals  "${x7[*]}"
+    assert_equals None "${x7[*]}"
 
     declare -a x8=(1 1 1 1 0)
     x9=$(candidate "${x8[*]}")
@@ -54,7 +54,7 @@ test() {
 
     declare -a x10=(1 1)
     x11=$(candidate "${x10[*]}")
-    assert_equals  "${x11[*]}"
+    assert_equals None "${x11[*]}"
 
     declare -a x12=(-35 34 12 -45)
     x13=$(candidate "${x12[*]}")

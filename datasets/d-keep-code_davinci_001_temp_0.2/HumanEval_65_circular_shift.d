@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Circular shift the digits of the integer x, shift the digits right by shift
     and return the result as a string.
@@ -10,31 +11,9 @@ Circular shift the digits of the integer x, shift the digits right by shift
     
 */
 const(char)[] circular_shift(int x, int shift) 
-{
-    int digits = 0;
-    int temp = x;
-    while(temp > 0)
     {
-        temp = temp / 10;
-        digits++;
+        return std.math.digits(x, 10) << shift | std.math.digits(x, 10) >> (std.typecons.digits(x, 10) - shift);
     }
-    if(shift > digits)
-    {
-        return reverse(to_string(x));
-    }
-    else
-    {
-        int temp2 = x;
-        int temp3 = 0;
-        for(int i = 0; i < digits - shift; i++)
-        {
-            temp3 = temp2 % 10;
-            temp2 = temp2 / 10;
-            temp2 = temp2 * 10 + temp3;
-        }
-        return to_string(temp2);
-    }
-}
 
 unittest
 {

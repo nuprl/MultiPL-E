@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Your task is to implement a function that will simplify the expression
     x * n. The function returns True if x * n evaluates to a whole number and False
@@ -14,18 +15,18 @@ Your task is to implement a function that will simplify the expression
 */
 bool simplify(const(char)[] x, const(char)[] n) 
 {
-    int x_num = 0, x_den = 0, n_num = 0, n_den = 0;
-    int x_int = 0, n_int = 0;
-    int x_num_int = 0, x_den_int = 0, n_num_int = 0, n_den_int = 0;
-    int x_num_den = 0, x_den_den = 0, n_num_den = 0, n_den_den = 0;
-    int x_num_n_num = 0, x_num_n_den = 0, x_den_n_num = 0, x_den_n_den = 0;
-    int x_num_n_int = 0, x_den_n_int = 0;
-    int x_num_n_num_int = 0, x_num_n_den_int = 0, x_den_n_num_int = 0, x_den_n_den_int = 0;
-    int x_num_n_num_den = 0, x_num_n_den_den = 0, x_den_n_num_den = 0, x_den_n_den_den = 0;
-    int x_num_n_num_den_int = 0, x_num_n_den_den_int = 0, x_den_n_num_den_int = 0, x_den_n_den_den_int = 0;
-    int x_num_n_num_den_int_int = 0, x_num_n_den_den_int_int = 0, x_den_n_num_den_int_int = 0, x_den_n_den_den_int_int = 0;
-    int x_num_n_num_den_int_int_int = 0, x_num_n_den_den_int_int_int = 0, x_den_n_num_den_int_int_int = 0, x_den_n_den_den_int_int_int = 0;
-    int x_num_n_num_den_int_int_
+    auto x_num = parse_int(x);
+    auto x_den = parse_int(x);
+    auto n_num = parse_int(n);
+    auto n_den = parse_int(n);
+    auto x_num_n_den = x_num * n_den;
+    auto x_den_n_num = x_den * n_num;
+    auto gcd = math.gcd(x_num_n_den, x_den_n_num);
+    if (x_num_n_den % gcd == 0 && x_den_n_num % gcd == 0)
+        return true;
+    else
+        return false;
+}
 
 unittest
 {

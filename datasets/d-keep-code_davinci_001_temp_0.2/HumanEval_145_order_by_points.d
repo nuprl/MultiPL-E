@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Write a function which sorts the given list of integers
@@ -14,39 +15,34 @@
 int[] order_by_points(int[] nums) 
 {
     int[] result = new int[nums.Length];
-    int[] temp = new int[nums.Length];
-    int[] temp2 = new int[nums.Length];
-    int[] temp3 = new int[nums.Length];
-    int[] temp4 = new int[nums.Length];
-    int[] temp5 = new int[nums.Length];
-    int[] temp6 = new int[nums.Length];
-    int[] temp7 = new int[nums.Length];
-    int[] temp8 = new int[nums.Length];
-    int[] temp9 = new int[nums.Length];
-    int[] temp10 = new int[nums.Length];
-    int[] temp11 = new int[nums.Length];
-    int[] temp12 = new int[nums.Length];
-    int[] temp13 = new int[nums.Length];
-    int[] temp14 = new int[nums.Length];
-    int[] temp15 = new int[nums.Length];
-    int[] temp16 = new int[nums.Length];
-    int[] temp17 = new int[nums.Length];
-    int[] temp18 = new int[nums.Length];
-    int[] temp19 = new int[nums.Length];
-    int[] temp20 = new int[nums.Length];
-    int[] temp21 = new int[nums.Length];
-    int[] temp22 = new int[nums.Length];
-    int[] temp23 = new int[nums.Length];
-    int[] temp24 = new int[nums.Length];
-    int[] temp25 = new int[nums.Length];
-    int[] temp26 = new int[nums.Length];
-    int[] temp27 = new int[nums.Length];
-    int[] temp28 = new int[nums.Length];
-    int[] temp29 = new int[nums.Length];
-    int[] temp30 = new int[nums.Length];
-    int[] temp31 = new int[nums.Length];
-    int[] temp32 = new int[nums.Length];
-    int[] temp
+    int[] sum = new int[nums.Length];
+    for (int i = 0; i < nums.Length; i++)
+    {
+        sum[i] = nums[i];
+        int temp = nums[i];
+        while (temp > 0)
+        {
+            sum[i] += temp % 10;
+            temp /= 10;
+        }
+    }
+    for (int i = 0; i < nums.Length; i++)
+    {
+        int min = sum[i];
+        int index = i;
+        for (int j = i + 1; j < nums.Length; j++)
+        {
+            if (sum[j] < min)
+            {
+                min = sum[j];
+                index = j;
+            }
+        }
+        result[i] = nums[index];
+        sum[index] = int.MaxValue;
+    }
+    return result;
+}
 
 unittest
 {

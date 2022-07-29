@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     You will be given a string of words separated by commas or spaces. Your task is
@@ -11,8 +12,7 @@
 */
 const(char)[][] words_string(const(char)[] s) 
 {
-    const(char)[] words = split(s, ' ');
-    return words;
+    return null;
 }
 
 unittest

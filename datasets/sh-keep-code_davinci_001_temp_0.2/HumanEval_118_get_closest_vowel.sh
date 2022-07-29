@@ -56,43 +56,43 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate 'yogurt')
-    assert_equals 'u' "${x0[*]}"
+        x0=$(candidate "yogurt")
+    assert_equals "u" "${x0[*]}"
 
-        x1=$(candidate 'full')
-    assert_equals 'u' "${x1[*]}"
+        x1=$(candidate "full")
+    assert_equals "u" "${x1[*]}"
 
-        x2=$(candidate 'easy')
-    assert_equals '' "${x2[*]}"
+        x2=$(candidate "easy")
+    assert_equals "" "${x2[*]}"
 
-        x3=$(candidate 'eAsy')
-    assert_equals '' "${x3[*]}"
+        x3=$(candidate "eAsy")
+    assert_equals "" "${x3[*]}"
 
-        x4=$(candidate 'ali')
-    assert_equals '' "${x4[*]}"
+        x4=$(candidate "ali")
+    assert_equals "" "${x4[*]}"
 
-        x5=$(candidate 'bad')
-    assert_equals 'a' "${x5[*]}"
+        x5=$(candidate "bad")
+    assert_equals "a" "${x5[*]}"
 
-        x6=$(candidate 'most')
-    assert_equals 'o' "${x6[*]}"
+        x6=$(candidate "most")
+    assert_equals "o" "${x6[*]}"
 
-        x7=$(candidate 'ab')
-    assert_equals '' "${x7[*]}"
+        x7=$(candidate "ab")
+    assert_equals "" "${x7[*]}"
 
-        x8=$(candidate 'ba')
-    assert_equals '' "${x8[*]}"
+        x8=$(candidate "ba")
+    assert_equals "" "${x8[*]}"
 
-        x9=$(candidate 'quick')
-    assert_equals '' "${x9[*]}"
+        x9=$(candidate "quick")
+    assert_equals "" "${x9[*]}"
 
-        x10=$(candidate 'anime')
-    assert_equals 'i' "${x10[*]}"
+        x10=$(candidate "anime")
+    assert_equals "i" "${x10[*]}"
 
-        x11=$(candidate 'Asia')
-    assert_equals '' "${x11[*]}"
+        x11=$(candidate "Asia")
+    assert_equals "" "${x11[*]}"
 
-        x12=$(candidate 'Above')
-    assert_equals 'o' "${x12[*]}"
+        x12=$(candidate "Above")
+    assert_equals "o" "${x12[*]}"
 
 }

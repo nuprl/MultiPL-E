@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Return only positive numbers in the list.
     >>> get_positive([-1, 2, -4, 5, 6])
@@ -9,22 +10,15 @@ Return only positive numbers in the list.
 */
 int[] get_positive(int[] l) 
 {
-    int[] result = new int[l.Length];
-    int count = 0;
-    for (int i = 0; i < l.Length; i++)
+    int[] result = new int[0];
+    foreach (int i in l)
     {
-        if (l[i] > 0)
+        if (i > 0)
         {
-            result[count] = l[i];
-            count++;
+            result.append(i);
         }
     }
-    int[] result2 = new int[count];
-    for (int i = 0; i < count; i++)
-    {
-        result2[i] = result[i];
-    }
-    return result2;
+    return result;
 }
 
 unittest

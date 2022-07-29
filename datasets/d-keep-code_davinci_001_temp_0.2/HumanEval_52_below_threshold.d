@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Return True if all numbers in the list l are below threshold t.
     >>> below_threshold([1, 2, 4, 10], 100)
@@ -9,9 +10,9 @@ Return True if all numbers in the list l are below threshold t.
 */
 bool below_threshold(int[] l, int t) 
 {
-    for (int i = 0; i < l.Length; i++)
+    foreach (int i in l)
     {
-        if (l[i] > t)
+        if (i > t)
         {
             return false;
         }

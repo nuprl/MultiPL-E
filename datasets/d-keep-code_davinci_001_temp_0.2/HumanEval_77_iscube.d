@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Write a function that takes an integer a and returns True 
@@ -15,13 +16,7 @@
 */
 bool iscube(int a) 
 {
-    if (a == 0)
-        return true;
-    if (a < 0)
-        a = -a;
-    double root = std::pow(a, 1.0 / 3.0);
-    int rootint = static_cast<int>(root);
-    return rootint * rootint * rootint == a;
+    return a == std.math.pow(std.math.abs(a), 1/3);
 }
 
 unittest

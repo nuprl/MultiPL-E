@@ -60,36 +60,36 @@ test() {
     declare -a x0=(1 2 3 4)
 declare -a x1=(1 2 3 4)
     x2=$(candidate "${x0[*]}" "${x1[*]}")
-    assert_equals 'YES' "${x2[*]}"
+    assert_equals "YES" "${x2[*]}"
 
     declare -a x3=(1 2 3 4)
 declare -a x4=(1 5 3 4)
     x5=$(candidate "${x3[*]}" "${x4[*]}")
-    assert_equals 'NO' "${x5[*]}"
+    assert_equals "NO" "${x5[*]}"
 
     declare -a x6=(1 2 3 4)
 declare -a x7=(2 1 4 3)
     x8=$(candidate "${x6[*]}" "${x7[*]}")
-    assert_equals 'YES' "${x8[*]}"
+    assert_equals "YES" "${x8[*]}"
 
     declare -a x9=(5 7 3)
 declare -a x10=(2 6 4)
     x11=$(candidate "${x9[*]}" "${x10[*]}")
-    assert_equals 'YES' "${x11[*]}"
+    assert_equals "YES" "${x11[*]}"
 
     declare -a x12=(5 7 3)
 declare -a x13=(2 6 3)
     x14=$(candidate "${x12[*]}" "${x13[*]}")
-    assert_equals 'NO' "${x14[*]}"
+    assert_equals "NO" "${x14[*]}"
 
     declare -a x15=(3 2 6 1 8 9)
 declare -a x16=(3 5 5 1 1 1)
     x17=$(candidate "${x15[*]}" "${x16[*]}")
-    assert_equals 'NO' "${x17[*]}"
+    assert_equals "NO" "${x17[*]}"
 
     declare -a x18=(100 200)
 declare -a x19=(200 200)
     x20=$(candidate "${x18[*]}" "${x19[*]}")
-    assert_equals 'YES' "${x20[*]}"
+    assert_equals "YES" "${x20[*]}"
 
 }

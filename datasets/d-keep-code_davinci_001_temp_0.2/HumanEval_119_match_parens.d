@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     You are given a list of two strings, both strings consist of open
@@ -17,7 +18,7 @@
 */
 const(char)[] match_parens(const(char)[][] lst) 
 {
-    return lst[0] == lst[1] ? "Yes" : "No";
+    return lst.map(x -> x.length).reduce(std.math.add);
 }
 
 unittest

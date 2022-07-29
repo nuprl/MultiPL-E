@@ -1,4 +1,4 @@
-
+import std.math;
 /*
  Filter an input list of strings only for ones that contain given substring
     >>> filter_by_substring([], 'a')
@@ -9,31 +9,17 @@
 */
 const(char)[][] filter_by_substring(const(char)[][] strings, const(char)[] substring) 
 {
-    if(substring.length == 0)
+    if(strings.size() == 0)
         return strings;
-    
-    const(char)[] filtered = [];
+    if(substring.size() == 0)
+        return strings;
+    const(char)[] result = [];
     for(const(char)[] string : strings)
     {
-        for(const(char) c : string)
-        {
-            if(c == substring[0])
-            {
-                bool found = true;
-                for(int i = 1; i < substring.length; i++)
-                {
-                    if(string[i] != substring[i])
-                    {
-                        found = false;
-                        break;
-                    }
-                }
-                if(found)
-                    filtered.push(string);
-            }
-        }
+        if(string.contains(substring))
+            result.push(string);
     }
-    return filtered;
+    return result;
 }
 
 unittest

@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Return true if a given number is prime, and false otherwise.
     >>> is_prime(6)
@@ -19,15 +20,23 @@ Return true if a given number is prime, and false otherwise.
 */
 bool is_prime(int n) 
 {
-    int i;
-    for (i = 2; i < n; i++)
+    if (n < 2)
+        return false;
+    else if (n == 2)
+        return true;
+    else if (n % 2 == 0)
+        return false;
+    else
     {
-        if (n % i == 0)
+        int i = 3;
+        while (i * i <= n)
         {
-            return false;
+            if (n % i == 0)
+                return false;
+            i += 2;
         }
+        return true;
     }
-    return true;
 }
 
 unittest

@@ -82,23 +82,23 @@ candidate() {
 
 test() {
     declare -a x1=()
-        x0=$(candidate '')
+        x0=$(candidate "")
     assert_equals "${x1[*]}" "${x0[*]}"
 
     declare -a x3=(4 4 4 4)
-        x2=$(candidate 'o o o o')
+        x2=$(candidate "o o o o")
     assert_equals "${x3[*]}" "${x2[*]}"
 
     declare -a x5=(1 1 1 1)
-        x4=$(candidate '.| .| .| .|')
+        x4=$(candidate ".| .| .| .|")
     assert_equals "${x5[*]}" "${x4[*]}"
 
     declare -a x7=(2 2 1 1 4 4 4 4)
-        x6=$(candidate 'o| o| .| .| o o o o')
+        x6=$(candidate "o| o| .| .| o o o o")
     assert_equals "${x7[*]}" "${x6[*]}"
 
     declare -a x9=(2 1 2 1 4 2 4 2)
-        x8=$(candidate 'o| .| o| .| o o| o o|')
+        x8=$(candidate "o| .| o| .| o o| o o|")
     assert_equals "${x9[*]}" "${x8[*]}"
 
 }

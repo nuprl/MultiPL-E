@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Given a grid with N rows and N columns (N >= 2) and a positive integer k, 
@@ -34,43 +35,46 @@ int[] minPath(int[][] grid, int k)
 {
     int n = grid.length;
     int m = grid[0].length;
-    int[] dp = new int[n * m];
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            dp[i * m + j] = grid[i][j];
+    int[][] dp = new int[n][m];
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            dp[i][j] = grid[i][j];
         }
     }
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            if (i > 0) {
-                dp[i * m + j] = Math.min(dp[i * m + j], dp[(i - 1) * m + j] + grid[i][j]);
-            }
-            if (j > 0) {
-                dp[i * m + j] = Math.min(dp[i * m + j], dp[i * m + j - 1] + grid[i][j]);
-            }
+    for (int i = 1; i < n; i++)
+    {
+        dp[i][0] += dp[i - 1][0];
+    }
+    for (int j = 1; j < m; j++)
+    {
+        dp[0][j] += dp[0][j - 1];
+    }
+    for (int i = 1; i < n; i++)
+    {
+        for (int j = 1; j < m; j++)
+        {
+            dp[i][j] += Math.min(dp[i - 1][j], dp[i][j - 1]);
         }
     }
     int[] res = new int[k];
-    for (int i = 0; i < k; i++) {
-        res[i] = dp[n * m - 1];
-        if (i < k - 1) {
-            if (n > 1) {
-                res[i] = Math.min(res[i], dp[(n - 1) * m - 1] + grid[n - 1][m - 1]);
-            }
-            if (m > 1) {
-                res[i] = Math.min(res[i], dp[(n - 1) * m - 1] + grid[n - 1][m - 1]);
-            }
+    int i = n - 1;
+    int j = m - 1;
+    for (int kk = k - 1; kk >= 0; kk--)
+    {
+        res[kk] = dp[i][j];
+        if (dp[i - 1][j] < dp[i][j - 1])
+        {
+            i--;
+        }
+        else
+        {
+            j--;
         }
     }
     return res;
 }
-int[][] grid = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-int k = 3;
-int[] res = minPath(grid, k);
-for (int i = 0; i < res.length; i++) {
-    System.out.print(res[i] + " ");
-}
-
 
 unittest
 {

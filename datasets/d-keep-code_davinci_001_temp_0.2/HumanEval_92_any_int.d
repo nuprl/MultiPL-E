@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Create a function that takes 3 numbers.
@@ -20,10 +21,22 @@
 */
 bool any_int(float x, float y, float z) 
 {
-    if (x == y + z || y == x + z || z == x + y)
+    if (x == y + z)
+    {
         return true;
+    }
+    else if (y == x + z)
+    {
+        return true;
+    }
+    else if (z == x + y)
+    {
+        return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 unittest

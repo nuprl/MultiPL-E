@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     In this task, you will be given a string that represents a number of apples and oranges 
@@ -15,15 +16,25 @@
 */
 int fruit_distribution(const(char)[] s, int n) 
 {
-    int apples = 0, oranges = 0, mango = 0;
-    for (int i = 0; i < strlen(s); i++)
+    int apples = 0;
+    int oranges = 0;
+    int mango = 0;
+    int i = 0;
+    while(s[i] != '\0')
     {
-        if (s[i] == 'a')
+        if(s[i] == 'a')
+        {
             apples++;
-        else if (s[i] == 'o')
+        }
+        else if(s[i] == 'o')
+        {
             oranges++;
-        else if (s[i] == 'm')
+        }
+        else if(s[i] == 'm')
+        {
             mango++;
+        }
+        i++;
     }
     return n - apples - oranges - mango;
 }

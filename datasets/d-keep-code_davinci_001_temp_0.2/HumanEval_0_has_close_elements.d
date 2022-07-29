@@ -1,4 +1,4 @@
-
+import std.math;
 /*
  Check if in given list of numbers, are any two numbers closer to each other than
     given threshold.
@@ -10,10 +10,9 @@
 */
 bool has_close_elements(float[] numbers, float threshold) 
 {
-    // YOUR CODE HERE
     for (int i = 0; i < numbers.length; i++) {
         for (int j = i + 1; j < numbers.length; j++) {
-            if (Math.abs(numbers[i] - numbers[j]) < threshold) {
+            if (math.abs(numbers[i] - numbers[j]) < threshold) {
                 return true;
             }
         }

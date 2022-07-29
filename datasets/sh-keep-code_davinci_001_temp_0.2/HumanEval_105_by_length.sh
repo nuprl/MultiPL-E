@@ -34,7 +34,7 @@ candidate() {
 }
 
 test() {
-    declare -a x2=('Eight' 'Five' 'Four' 'Three' 'Two' 'Two' 'One' 'One')
+    declare -a x2=("Eight" "Five" "Four" "Three" "Two" "Two" "One" "One")
     declare -a x0=(2 1 1 4 5 8 2 3)
     x1=$(candidate "${x0[*]}")
     assert_equals "${x2[*]}" "${x1[*]}"
@@ -44,17 +44,17 @@ test() {
     x4=$(candidate "${x3[*]}")
     assert_equals "${x5[*]}" "${x4[*]}"
 
-    declare -a x8=('One')
+    declare -a x8=("One")
     declare -a x6=(1 -1 55)
     x7=$(candidate "${x6[*]}")
     assert_equals "${x8[*]}" "${x7[*]}"
 
-    declare -a x11=('Three' 'Two' 'One')
+    declare -a x11=("Three" "Two" "One")
     declare -a x9=(1 -1 3 2)
     x10=$(candidate "${x9[*]}")
     assert_equals "${x11[*]}" "${x10[*]}"
 
-    declare -a x14=('Nine' 'Eight' 'Four')
+    declare -a x14=("Nine" "Eight" "Four")
     declare -a x12=(9 4 8)
     x13=$(candidate "${x12[*]}")
     assert_equals "${x14[*]}" "${x13[*]}"

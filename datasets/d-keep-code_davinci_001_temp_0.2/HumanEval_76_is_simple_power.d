@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Your task is to write a function that returns true if a number x is a simple
     power of n and false in other cases.
@@ -14,14 +15,80 @@ Your task is to write a function that returns true if a number x is a simple
 */
 bool is_simple_power(int x, int n) 
 {
-    if (x == 1)
+    if(n == 1)
         return true;
-    if (x == n)
-        return true;
-    if (x % n != 0)
+    if(x == 1)
         return false;
-    return is_simple_power(x / n, n);
-}
+    if(n == 0)
+        return false;
+    if(n == -1)
+        return false;
+    if(x == 0)
+        return false;
+    if(x == -1)
+        return false;
+    if(x == 2)
+        return true;
+    if(x == -2)
+        return true;
+    if(x == 3)
+        return true;
+    if(x == -3)
+        return true;
+    if(x == 4)
+        return true;
+    if(x == -4)
+        return true;
+    if(x == 5)
+        return true;
+    if(x == -5)
+        return true;
+    if(x == 6)
+        return true;
+    if(x == -6)
+        return true;
+    if(x == 7)
+        return true;
+    if(x == -7)
+        return true;
+    if(x == 8)
+        return true;
+    if(x == -8)
+        return true;
+    if(x == 9)
+        return true;
+    if(x == -9)
+        return true;
+    if(x == 10)
+        return true;
+    if(x == -10)
+        return true;
+    if(x == 11)
+        return true;
+    if(x == -11)
+        return true;
+    if(x == 12)
+        return true;
+    if(x == -12)
+        return true;
+    if(x == 13)
+        return true;
+    if(x == -13)
+        return true;
+    if(x == 14)
+        return true;
+    if(x == -14)
+        return true;
+    if(x == 15)
+        return true;
+    if(x == -15)
+        return true;
+    if(x == 16)
+        return true;
+    if(x == -16)
+        return true;
+    if(x == 17)
+        return true;
 
 unittest
 {

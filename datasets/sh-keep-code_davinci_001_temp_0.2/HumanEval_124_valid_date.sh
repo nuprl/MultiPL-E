@@ -39,52 +39,52 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate '03-11-2000')
+        x0=$(candidate "03-11-2000")
     assert_equals true "${x0[*]}"
 
-        x1=$(candidate '15-01-2012')
+        x1=$(candidate "15-01-2012")
     assert_equals false "${x1[*]}"
 
-        x2=$(candidate '04-0-2040')
+        x2=$(candidate "04-0-2040")
     assert_equals false "${x2[*]}"
 
-        x3=$(candidate '06-04-2020')
+        x3=$(candidate "06-04-2020")
     assert_equals true "${x3[*]}"
 
-        x4=$(candidate '01-01-2007')
+        x4=$(candidate "01-01-2007")
     assert_equals true "${x4[*]}"
 
-        x5=$(candidate '03-32-2011')
+        x5=$(candidate "03-32-2011")
     assert_equals false "${x5[*]}"
 
-        x6=$(candidate '')
+        x6=$(candidate "")
     assert_equals false "${x6[*]}"
 
-        x7=$(candidate '04-31-3000')
+        x7=$(candidate "04-31-3000")
     assert_equals false "${x7[*]}"
 
-        x8=$(candidate '06-06-2005')
+        x8=$(candidate "06-06-2005")
     assert_equals true "${x8[*]}"
 
-        x9=$(candidate '21-31-2000')
+        x9=$(candidate "21-31-2000")
     assert_equals false "${x9[*]}"
 
-        x10=$(candidate '04-12-2003')
+        x10=$(candidate "04-12-2003")
     assert_equals true "${x10[*]}"
 
-        x11=$(candidate '04122003')
+        x11=$(candidate "04122003")
     assert_equals false "${x11[*]}"
 
-        x12=$(candidate '20030412')
+        x12=$(candidate "20030412")
     assert_equals false "${x12[*]}"
 
-        x13=$(candidate '2003-04')
+        x13=$(candidate "2003-04")
     assert_equals false "${x13[*]}"
 
-        x14=$(candidate '2003-04-12')
+        x14=$(candidate "2003-04-12")
     assert_equals false "${x14[*]}"
 
-        x15=$(candidate '04-2003')
+        x15=$(candidate "04-2003")
     assert_equals false "${x15[*]}"
 
 }

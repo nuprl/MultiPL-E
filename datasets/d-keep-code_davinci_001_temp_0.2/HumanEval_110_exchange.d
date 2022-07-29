@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 In this problem, you will implement a function that takes two lists of numbers,
     and determines whether it is possible to perform an exchange of elements
@@ -15,44 +16,32 @@ In this problem, you will implement a function that takes two lists of numbers,
 */
 const(char)[] exchange(int[] lst1, int[] lst2) 
 {
-    // Your code here
-    int[] even = new int[lst1.Length];
-    int[] odd = new int[lst1.Length];
-    int evenCount = 0;
-    int oddCount = 0;
-    for (int i = 0; i < lst1.Length; i++)
+    if(lst1.length != lst2.length)
     {
-        if (lst1[i] % 2 == 0)
-        {
-            even[evenCount] = lst1[i];
-            evenCount++;
-        }
-        else
-        {
-            odd[oddCount] = lst1[i];
-            oddCount++;
-        }
-    }
-    for (int i = 0; i < lst2.Length; i++)
-    {
-        if (lst2[i] % 2 == 0)
-        {
-            even[evenCount] = lst2[i];
-            evenCount++;
-        }
-        else
-        {
-            odd[oddCount] = lst2[i];
-            oddCount++;
-        }
-    }
-    if (evenCount == lst1.Length && oddCount == 0)
-    {
-        return "YES";
+        return "NO";
     }
     else
     {
-        return "NO";
+        int[] lst3 = new int[lst1.length];
+        for(int i = 0; i < lst1.length; i++)
+        {
+            lst3[i] = lst1[i];
+        }
+        for(int i = 0; i < lst2.length; i++)
+        {
+            if(lst2[i] % 2 == 0)
+            {
+                lst3[i] = lst2[i];
+            }
+        }
+        for(int i = 0; i < lst3.length; i++)
+        {
+            if(lst3[i] % 2 != 0)
+            {
+                return "NO";
+            }
+        }
+        return "YES";
     }
 }
 

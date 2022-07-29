@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Given a string representing a space separated lowercase letters, return a dictionary
     of the letter with the most repetition and containing the corresponding count.
@@ -15,26 +16,10 @@ Given a string representing a space separated lowercase letters, return a dictio
 */
 int[const(char)[]] histogram(const(char)[] test) 
 {
-    int[const(char)][] result = new int[const(char)][];
-    int i = 0;
-    while (i < test.length)
+    int[const(char)[]] result = new int[const(char)[]];
+    foreach(char c in test)
     {
-        int j = 0;
-        while (j < result.length)
-        {
-            if (result[j][0] == test[i])
-            {
-                result[j][1] += 1;
-                break;
-            }
-            j += 1;
-        }
-        if (j == result.length)
-        {
-            result[j][0] = test[i];
-            result[j][1] = 1;
-        }
-        i += 1;
+        result[c]++;
     }
     return result;
 }
@@ -43,13 +28,13 @@ unittest
 {
     alias candidate = histogram;
 
-    assert(candidate("a b b a") == [["a"] = 2, ["b"] = 2]);
-    assert(candidate("a b c a b") == [["a"] = 2, ["b"] = 2]);
-    assert(candidate("a b c d g") == [["a"] = 1, ["b"] = 1, ["c"] = 1, ["d"] = 1, ["g"] = 1]);
-    assert(candidate("r t g") == [["r"] = 1, ["t"] = 1, ["g"] = 1]);
-    assert(candidate("b b b b a") == [["b"] = 4]);
-    assert(candidate("r t g") == [["r"] = 1, ["t"] = 1, ["g"] = 1]);
+    assert(candidate("a b b a") == ["a": 2, "b": 2]);
+    assert(candidate("a b c a b") == ["a": 2, "b": 2]);
+    assert(candidate("a b c d g") == ["a": 1, "b": 1, "c": 1, "d": 1, "g": 1]);
+    assert(candidate("r t g") == ["r": 1, "t": 1, "g": 1]);
+    assert(candidate("b b b b a") == ["b": 4]);
+    assert(candidate("r t g") == ["r": 1, "t": 1, "g": 1]);
     assert(candidate("") == []);
-    assert(candidate("a") == [["a"] = 1]);
+    assert(candidate("a") == ["a": 1]);
 }
 void main(){}

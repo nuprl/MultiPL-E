@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 This function takes two positive numbers x and y and returns the
     biggest even integer number that is in the range [x, y] inclusive. If 
@@ -11,18 +12,26 @@ This function takes two positive numbers x and y and returns the
 */
 int choose_num(int x, int y) 
 {
-    int result = -1;
-    int i = x;
-    while (i <= y)
+    int i;
+    int max = 0;
+    for(i = x; i <= y; i++)
     {
-        if (i % 2 == 0)
+        if((i % 2) == 0)
         {
-            result = i;
-            break;
+            if(i > max)
+            {
+                max = i;
+            }
         }
-        i++;
     }
-    return result;
+    if(max == 0)
+    {
+        return -1;
+    }
+    else
+    {
+        return max;
+    }
 }
 
 unittest

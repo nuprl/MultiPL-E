@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
  From a list of integers, remove all elements that occur more than once.
     Keep order of elements left the same as in the input.
@@ -8,8 +9,15 @@
 */
 int[] remove_duplicates(int[] numbers) 
 {
-    // TODO: Write your code here
-    return null;
+    int[] result = new int[numbers.length];
+    int i = 0;
+    for (int j = 0; j < numbers.length; j++) {
+        if (i == 0 || numbers[j] != result[i - 1]) {
+            result[i] = numbers[j];
+            i++;
+        }
+    }
+    return result;
 }
 
 unittest

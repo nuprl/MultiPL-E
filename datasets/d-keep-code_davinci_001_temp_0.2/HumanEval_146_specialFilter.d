@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Write a function that takes an array of numbers as input and returns 
     the number of elements in the array that are greater than 10 and both 
@@ -11,9 +12,9 @@ Write a function that takes an array of numbers as input and returns
 int specialFilter(int[] nums) 
 {
     int count = 0;
-    for (int i = 0; i < nums.Length; i++)
+    for (int i = 0; i < nums.length; i++)
     {
-        if (nums[i] > 10 && (nums[i] % 10) % 2 == 1)
+        if (nums[i] > 10 && (nums[i] % 10) % 2 != 0 && (nums[i] / 10) % 2 != 0)
         {
             count++;
         }

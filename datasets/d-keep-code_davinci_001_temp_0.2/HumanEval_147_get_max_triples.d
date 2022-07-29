@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     You are given a positive integer n. You have to create an integer array a of length n.
@@ -17,18 +18,13 @@
 int get_max_triples(int n) 
 {
     int max_triples = 0;
-    int a[n];
-    for (int i = 0; i < n; i++)
-    {
-        a[i] = i * i - i + 1;
-    }
-    for (int i = 0; i < n; i++)
+    for (int i = 1; i < n; i++)
     {
         for (int j = i + 1; j < n; j++)
         {
             for (int k = j + 1; k < n; k++)
             {
-                if (a[i] + a[j] + a[k] % 3 == 0)
+                if ((i * i + j * j + k * k) % 3 == 0)
                 {
                     max_triples++;
                 }

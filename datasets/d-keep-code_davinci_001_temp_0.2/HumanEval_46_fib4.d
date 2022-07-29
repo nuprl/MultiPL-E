@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
     fib4(0) -> 0
@@ -17,15 +18,17 @@ The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's
 */
 int fib4(int n) 
 {
-    int a = 0, b = 0, c = 2, d = 0;
-    for (int i = 0; i < n; i++)
-    {
-        a = b;
-        b = c;
-        c = d;
-        d = a + b + c;
-    }
-    return d;
+    if (n < 0)
+        return 0;
+    if (n == 0)
+        return 0;
+    if (n == 1)
+        return 0;
+    if (n == 2)
+        return 2;
+    if (n == 3)
+        return 0;
+    return fib4(n-1) + fib4(n-2) + fib4(n-3) + fib4(n-4);
 }
 
 unittest

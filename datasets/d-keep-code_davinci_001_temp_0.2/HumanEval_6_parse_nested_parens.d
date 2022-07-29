@@ -1,4 +1,4 @@
-
+import std.math;
 /*
  Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
     For each of the group, output the deepest level of nesting of parentheses.
@@ -10,26 +10,26 @@
 */
 int[] parse_nested_parens(const(char)[] paren_string) 
 {
-    int[] paren_count = new int[paren_string.length];
-    int max_nesting = 0;
-    int curr_nesting = 0;
-    for (int i = 0; i < paren_string.length; i++) {
-        char c = paren_string[i];
-        if (c == '(') {
-            curr_nesting++;
-            paren_count[i] = curr_nesting;
-            if (curr_nesting > max_nesting) {
-                max_nesting = curr_nesting;
+    int[] max_nesting = new int[paren_string.length];
+    int max_nesting_level = 0;
+    int current_nesting_level = 0;
+    for (int i = 0; i < paren_string.length; i++)
+    {
+        if (paren_string[i] == '(')
+        {
+            current_nesting_level++;
+            if (current_nesting_level > max_nesting_level)
+            {
+                max_nesting_level = current_nesting_level;
             }
-        } else {
-            curr_nesting--;
         }
+        else if (paren_string[i] == ')')
+        {
+            current_nesting_level--;
+        }
+        max_nesting[i] = max_nesting_level;
     }
-    int[] result = new int[max_nesting + 1];
-    for (int i = 0; i < paren_count.length; i++) {
-        result[paren_count[i]]++;
-    }
-    return result;
+    return max_nesting;
 }
 
 unittest

@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Return sorted unique common elements for two lists.
     >>> common([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121])
@@ -10,18 +11,17 @@ Return sorted unique common elements for two lists.
 */
 int[] common(int[] l1, int[] l2) 
 {
-    int[] result = new int[0];
-    for (int i = 0; i < l1.Length; i++)
-    {
-        for (int j = 0; j < l2.Length; j++)
-        {
-            if (l1[i] == l2[j])
-            {
-                result = result.Concat(new int[] { l1[i] }).ToArray();
+    int[] result = new int[std.math.min(l1.length, l2.length)];
+    int i = 0;
+    for (int x : l1) {
+        for (int y : l2) {
+            if (x == y) {
+                result[i++] = x;
+                break;
             }
         }
     }
-    return result.Distinct().ToArray();
+    return std.typecons.Tuple.make(result);
 }
 
 unittest

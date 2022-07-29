@@ -21,13 +21,13 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate '')
+        x0=$(candidate "")
     assert_equals 0 "${x0[*]}"
 
-        x1=$(candidate 'x')
+        x1=$(candidate "x")
     assert_equals 1 "${x1[*]}"
 
-        x2=$(candidate 'asdasnakj')
+        x2=$(candidate "asdasnakj")
     assert_equals 9 "${x2[*]}"
 
 }

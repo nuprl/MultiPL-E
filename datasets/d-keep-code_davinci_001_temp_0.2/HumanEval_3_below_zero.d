@@ -1,4 +1,4 @@
-
+import std.math;
 /*
  You're given a list of deposit and withdrawal operations on a bank account that starts with
     zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
@@ -14,14 +14,7 @@ bool below_zero(int[] operations)
     int balance = 0;
     for (int i = 0; i < operations.Length; i++)
     {
-        if (operations[i] < 0)
-        {
-            balance += operations[i];
-        }
-        else
-        {
-            balance -= operations[i];
-        }
+        balance += operations[i];
         if (balance < 0)
         {
             return true;

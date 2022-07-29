@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 "
     This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
@@ -14,7 +15,7 @@
 int sum_squares(int[] lst) 
 {
     int sum = 0;
-    for (int i = 0; i < lst.Length; i++)
+    for (int i = 0; i < lst.length; i++)
     {
         if (i % 3 == 0)
         {

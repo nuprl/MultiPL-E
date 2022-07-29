@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     pairs_sum_to_zero takes a list of integers as an input.
@@ -18,16 +19,7 @@
 */
 bool pairs_sum_to_zero(int[] l) 
 {
-    for (int i = 0; i < l.length; i++)
-    {
-        for (int j = 0; j < l.length; j++)
-        {
-            if (i != j && l[i] + l[j] == 0)
-            {
-                return true;
-            }
-        }
-    }
+    // your code here
     return false;
 }
 

@@ -49,22 +49,22 @@ candidate() {
 }
 
 test() {
-        x0=$(candidate 'AB')
+        x0=$(candidate "AB")
     assert_equals 1 "${x0[*]}"
 
-        x1=$(candidate '1077E')
+        x1=$(candidate "1077E")
     assert_equals 2 "${x1[*]}"
 
-        x2=$(candidate 'ABED1A33')
+        x2=$(candidate "ABED1A33")
     assert_equals 4 "${x2[*]}"
 
-        x3=$(candidate '2020')
+        x3=$(candidate "2020")
     assert_equals 2 "${x3[*]}"
 
-        x4=$(candidate '123456789ABCDEF0')
+        x4=$(candidate "123456789ABCDEF0")
     assert_equals 6 "${x4[*]}"
 
-        x5=$(candidate '112233445566778899AABBCCDDEEFF00')
+        x5=$(candidate "112233445566778899AABBCCDDEEFF00")
     assert_equals 12 "${x5[*]}"
 
 }

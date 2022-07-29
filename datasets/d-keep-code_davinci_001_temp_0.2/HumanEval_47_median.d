@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Return median of elements in the list l.
     >>> median([3, 1, 2, 4, 5])
@@ -10,19 +11,13 @@ Return median of elements in the list l.
 float median(int[] l) 
 {
     int n = l.length;
-    int[] l2 = new int[n];
-    for (int i = 0; i < n; i++)
-    {
-        l2[i] = l[i];
+    if (n == 0) {
+        return 0;
     }
-    Arrays.sort(l2);
-    if (n % 2 == 0)
-    {
-        return (l2[n/2] + l2[n/2-1])/2.0;
-    }
-    else
-    {
-        return l2[n/2];
+    if (n % 2 == 0) {
+        return (float) (l[n / 2] + l[n / 2 - 1]) / 2;
+    } else {
+        return (float) l[n / 2];
     }
 }
 

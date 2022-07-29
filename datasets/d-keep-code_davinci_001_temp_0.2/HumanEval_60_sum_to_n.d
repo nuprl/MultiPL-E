@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 sum_to_n is a function that sums numbers from 1 to n.
     >>> sum_to_n(30)
@@ -16,8 +17,9 @@ sum_to_n is a function that sums numbers from 1 to n.
 int sum_to_n(int n) 
 {
     int sum = 0;
-    for (int i = 1; i <= n; i++) {
-        sum += i;
+    for (int i = 1; i <= n; i = i + 1)
+    {
+        sum = sum + i;
     }
     return sum;
 }

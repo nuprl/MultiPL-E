@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Given a non-empty list of integers lst. add the even elements that are at odd indices..
 
@@ -10,7 +11,7 @@ Given a non-empty list of integers lst. add the even elements that are at odd in
 int add(int[] lst) 
 {
     int sum = 0;
-    for (int i = 0; i < lst.Length; i++)
+    for (int i = 0; i < lst.length; i++)
     {
         if (i % 2 != 0 && lst[i] % 2 == 0)
         {

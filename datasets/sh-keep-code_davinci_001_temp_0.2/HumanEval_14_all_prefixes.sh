@@ -23,15 +23,15 @@ candidate() {
 
 test() {
     declare -a x1=()
-        x0=$(candidate '')
+        x0=$(candidate "")
     assert_equals "${x1[*]}" "${x0[*]}"
 
-    declare -a x3=('a' 'as' 'asd' 'asdf' 'asdfg' 'asdfgh')
-        x2=$(candidate 'asdfgh')
+    declare -a x3=("a" "as" "asd" "asdf" "asdfg" "asdfgh")
+        x2=$(candidate "asdfgh")
     assert_equals "${x3[*]}" "${x2[*]}"
 
-    declare -a x5=('W' 'WW' 'WWW')
-        x4=$(candidate 'WWW')
+    declare -a x5=("W" "WW" "WWW")
+        x4=$(candidate "WWW")
     assert_equals "${x5[*]}" "${x4[*]}"
 
 }

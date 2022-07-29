@@ -103,32 +103,32 @@ candidate() {
 }
 
 test() {
-    declare -a x1=('little')
-        x0=$(candidate 'Mary had a little lamb' 4)
+    declare -a x1=("little")
+        x0=$(candidate "Mary had a little lamb" 4)
     assert_equals "${x1[*]}" "${x0[*]}"
 
-    declare -a x3=('Mary' 'lamb')
-        x2=$(candidate 'Mary had a little lamb' 3)
+    declare -a x3=("Mary" "lamb")
+        x2=$(candidate "Mary had a little lamb" 3)
     assert_equals "${x3[*]}" "${x2[*]}"
 
     declare -a x5=()
-        x4=$(candidate 'simple white space' 2)
+        x4=$(candidate "simple white space" 2)
     assert_equals "${x5[*]}" "${x4[*]}"
 
-    declare -a x7=('world')
-        x6=$(candidate 'Hello world' 4)
+    declare -a x7=("world")
+        x6=$(candidate "Hello world" 4)
     assert_equals "${x7[*]}" "${x6[*]}"
 
-    declare -a x9=('Uncle')
-        x8=$(candidate 'Uncle sam' 3)
+    declare -a x9=("Uncle")
+        x8=$(candidate "Uncle sam" 3)
     assert_equals "${x9[*]}" "${x8[*]}"
 
     declare -a x11=()
-        x10=$(candidate '' 4)
+        x10=$(candidate "" 4)
     assert_equals "${x11[*]}" "${x10[*]}"
 
-    declare -a x13=('b' 'c' 'd' 'f')
-        x12=$(candidate 'a b c d e f' 1)
+    declare -a x13=("b" "c" "d" "f")
+        x12=$(candidate "a b c d e f" 1)
     assert_equals "${x13[*]}" "${x12[*]}"
 
 }

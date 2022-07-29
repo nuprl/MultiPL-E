@@ -65,16 +65,16 @@ test() {
         x3=$(candidate 5 6)
     assert_equals 6 "${x3[*]}"
 
-        x4=$(candidate 1 '2,3')
-    assert_equals '2,3' "${x4[*]}"
+        x4=$(candidate 1 "2,3")
+    assert_equals "2,3" "${x4[*]}"
 
-        x5=$(candidate '5,1' '6')
-    assert_equals '6' "${x5[*]}"
+        x5=$(candidate "5,1" "6")
+    assert_equals "6" "${x5[*]}"
 
-        x6=$(candidate '1' '2')
-    assert_equals '2' "${x6[*]}"
+        x6=$(candidate "1" "2")
+    assert_equals "2" "${x6[*]}"
 
-        x7=$(candidate '1' 1)
-    assert_equals  "${x7[*]}"
+        x7=$(candidate "1" 1)
+    assert_equals None "${x7[*]}"
 
 }

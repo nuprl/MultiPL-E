@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
  Given list of numbers (of at least two elements), apply a linear transform to that list,
     such that the smallest number will become 0 and the largest will become 1
@@ -10,21 +11,16 @@ float[] rescale_to_unit(float[] numbers)
 {
     float min = numbers[0];
     float max = numbers[0];
-    for (int i = 0; i < numbers.Length; i++)
+    foreach(float f in numbers)
     {
-        if (numbers[i] < min)
-        {
-            min = numbers[i];
-        }
-        if (numbers[i] > max)
-        {
-            max = numbers[i];
-        }
+        if (f < min) min = f;
+        if (f > max) max = f;
     }
+    float range = max - min;
     float[] result = new float[numbers.Length];
     for (int i = 0; i < numbers.Length; i++)
     {
-        result[i] = (numbers[i] - min) / (max - min);
+        result[i] = (numbers[i] - min) / range;
     }
     return result;
 }

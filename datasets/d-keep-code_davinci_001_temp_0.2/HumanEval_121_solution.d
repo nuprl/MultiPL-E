@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Given a non-empty list of integers, return the sum of all of the odd elements that are in even positions.
     
@@ -21,6 +22,7 @@ int solution(int[] lst)
     }
     return sum;
 }
+
 
 unittest
 {

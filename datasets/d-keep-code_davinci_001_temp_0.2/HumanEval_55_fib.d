@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Return n-th Fibonacci number.
     >>> fib(10)
@@ -11,9 +12,12 @@ Return n-th Fibonacci number.
 */
 int fib(int n) 
 {
-    if (n <= 1)
+    if (n < 2) {
         return n;
-    return fib(n-1) + fib(n-2);
+    }
+    else {
+        return fib(n-1) + fib(n-2);
+    }
 }
 
 unittest

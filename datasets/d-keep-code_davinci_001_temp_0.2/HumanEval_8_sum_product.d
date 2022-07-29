@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
  For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
     Empty sum should be equal to 0 and empty product should be equal to 1.
@@ -10,14 +11,21 @@
 */
 Tuple!(int, int) sum_product(int[] numbers) 
 {
-    int sum = 0;
-    int product = 1;
-    foreach (int number in numbers)
+    if(numbers.length() == 0)
     {
-        sum += number;
-        product *= number;
+        return (0, 1);
     }
-    return (sum, product);
+    else
+    {
+        int sum = 0;
+        int product = 1;
+        foreach(int number in numbers)
+        {
+            sum += number;
+            product *= number;
+        }
+        return (sum, product);
+    }
 }
 
 unittest

@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Create a function that returns a tuple (a, b), where 'a' is
@@ -12,28 +13,33 @@
     largest_smallest_integers([0]) == (None, None)
     
 */
-Tuple!(auto, auto) largest_smallest_integers(int[] lst) 
+Tuple!(Nullable!(int), Nullable!(int)) largest_smallest_integers(int[] lst) 
 {
-    auto max = None;
-    auto min = None;
-    for (auto i : lst)
+    if (lst.length == 0)
     {
-        if (i < 0)
-        {
-            if (max == None || i > max)
-            {
-                max = i;
-            }
-        }
-        else
-        {
-            if (min == None || i < min)
-            {
-                min = i;
-            }
-        }
+        return (None, None);
     }
-    return (max, min);
+    else if (lst.length == 1)
+    {
+        return (None, Some(lst[0]));
+    }
+    else
+    {
+        int min = lst[0];
+        int max = lst[0];
+        for (int i = 1; i < lst.length; i++)
+        {
+            if (lst[i] < min)
+            {
+                min = lst[i];
+            }
+            else if (lst[i] > max)
+            {
+                max = lst[i];
+            }
+        }
+        return (Some(min), Some(max));
+    }
 }
 
 unittest

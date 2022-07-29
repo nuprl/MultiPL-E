@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Write a function that returns true if the given number is the multiplication of 3 prime numbers
     and false otherwise.
@@ -10,16 +11,15 @@ Write a function that returns true if the given number is the multiplication of 
 */
 bool is_multiply_prime(int a) 
 {
-    int count = 0;
-    for (int i = 2; i < a; i++)
+    if (a < 100)
     {
-        if (a % i == 0)
+        for (int i = 2; i < a; i++)
         {
-            count++;
+            if (a % i == 0)
+            {
+                return false;
+            }
         }
-    }
-    if (count == 0)
-    {
         return true;
     }
     else

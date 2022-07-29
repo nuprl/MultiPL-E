@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
  Out of list of strings, return the longest one. Return the first one in case of multiple
     strings of the same length. Return None in case the input list is empty.
@@ -10,15 +11,32 @@
     'ccc'
     
 */
-auto longest(const(char)[][] strings) 
-    => strings.empty() ? none : some(strings[0]);
+Nullable!(const(char)[]) longest(const(char)[][] strings) 
+{
+    if (strings.length() == 0)
+        return null;
+    else
+        return strings[0];
+}
 
 unittest
 {
     alias candidate = longest;
 
-    assert(candidate([]) == None);
-    assert(candidate(["x", "y", "z"]) == "x");
-    assert(candidate(["x", "yyy", "zzzz", "www", "kkkk", "abc"]) == "zzzz");
+{
+        auto result = candidate([]);
+        assert(result.isNull);
+}
+
+{
+        auto result = candidate(["x", "y", "z"]);
+        assert(!result.isNull && result.get == "x");
+}
+
+{
+        auto result = candidate(["x", "yyy", "zzzz", "www", "kkkk", "abc"]);
+        assert(!result.isNull && result.get == "zzzz");
+}
+
 }
 void main(){}

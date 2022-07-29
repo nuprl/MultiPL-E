@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Create a function that takes a string as input which contains only square brackets.
@@ -15,7 +16,25 @@
 */
 bool is_nested(const(char)[] string) 
 {
-    return false;
+    int i = 0;
+    int j = 0;
+    while(i < string.length())
+    {
+        if(string[i] == '[')
+        {
+            j++;
+        }
+        else if(string[i] == ']')
+        {
+            j--;
+        }
+        if(j < 0)
+        {
+            return false;
+        }
+        i++;
+    }
+    return j == 0;
 }
 
 unittest

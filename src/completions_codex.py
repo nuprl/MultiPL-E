@@ -58,8 +58,9 @@ def codex_completion(
             return  [choice.text for choice in response.choices]
         except openai.error.RateLimitError as e:
             if rate_limited:
-                print("Rate-limited twice in a row. Exiting.")
-                raise e
+                print(f"Rate-limited twice in a row. Exiting. Decrease n{n} by 2")
+                n = min(1, n/2)
+                print(f"New n {n}")
             print("*** Rate limit error. Sleeping for 1 minute. ***")
             print(e)
             rate_limited = True

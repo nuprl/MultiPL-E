@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Given the lengths of the three sides of a triangle. Return True if the three
@@ -12,10 +13,7 @@
 */
 bool right_angle_triangle(int a, int b, int c) 
 {
-    if (a*a + b*b == c*c)
-        return true;
-    else
-        return false;
+    return (a*a + b*b == c*c) || (b*b + c*c == a*a) || (a*a + c*c == b*b);
 }
 
 unittest

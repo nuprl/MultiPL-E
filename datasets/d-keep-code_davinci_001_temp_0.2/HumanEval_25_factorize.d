@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
  Return list of prime factors of given integer in the order from smallest to largest.
     Each of the factors should be listed number of times corresponding to how many times it appeares in factorization.
@@ -13,21 +14,21 @@
 */
 int[] factorize(int n) 
 {
-    int[] result = new int[0];
+    int[] factors = new int[0];
     int i = 2;
     while (n > 1)
     {
         if (n % i == 0)
         {
+            factors = append(factors, i);
             n /= i;
-            result = append(result, i);
         }
         else
         {
             i++;
         }
     }
-    return result;
+    return factors;
 }
 
 unittest

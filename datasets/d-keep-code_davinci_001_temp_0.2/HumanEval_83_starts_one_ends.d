@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Given a positive integer n, return the count of the numbers of n-digit
@@ -7,15 +8,10 @@
 */
 int starts_one_ends(int n) 
 {
-    int count = 0;
-    for (int i = 1; i <= n; i++) {
-        if (i == 1 || i == n) {
-            count += (n - 1) * 9;
-        } else {
-            count += (n - 2) * 9;
-        }
-    }
-    return count;
+    if (n == 1)
+        return 10;
+    else
+        return 9 * starts_one_ends(n - 1);
 }
 
 unittest

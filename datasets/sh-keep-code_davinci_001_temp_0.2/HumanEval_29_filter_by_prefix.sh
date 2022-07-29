@@ -26,12 +26,12 @@ candidate() {
 test() {
     declare -a x2=()
     declare -a x0=()
-    x1=$(candidate "${x0[*]}" 'john')
+    x1=$(candidate "${x0[*]}" "john")
     assert_equals "${x2[*]}" "${x1[*]}"
 
-    declare -a x5=('xxx' 'xxxAAA' 'xxx')
-    declare -a x3=('xxx' 'asd' 'xxy' 'john doe' 'xxxAAA' 'xxx')
-    x4=$(candidate "${x3[*]}" 'xxx')
+    declare -a x5=("xxx" "xxxAAA" "xxx")
+    declare -a x3=("xxx" "asd" "xxy" "john doe" "xxxAAA" "xxx")
+    x4=$(candidate "${x3[*]}" "xxx")
     assert_equals "${x5[*]}" "${x4[*]}"
 
 }

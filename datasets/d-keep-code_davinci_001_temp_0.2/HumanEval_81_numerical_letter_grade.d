@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 It is the last week of the semester and the teacher has to give the grades
     to students. The teacher has been making her own algorithm for grading.
@@ -27,64 +28,16 @@ It is the last week of the semester and the teacher has to give the grades
 */
 const(char)[][] numerical_letter_grade(float[] grades) 
 {
-    char[] letter_grades = new char[grades.length];
-    for(int i = 0; i < grades.length; i++)
-    {
-        if(grades[i] >= 4.0)
-        {
-            letter_grades[i] = 'A+';
-        }
-        else if(grades[i] >= 3.7)
-        {
-            letter_grades[i] = 'A';
-        }
-        else if(grades[i] >= 3.3)
-        {
-            letter_grades[i] = 'A-';
-        }
-        else if(grades[i] >= 3.0)
-        {
-            letter_grades[i] = 'B+';
-        }
-        else if(grades[i] >= 2.7)
-        {
-            letter_grades[i] = 'B';
-        }
-        else if(grades[i] >= 2.3)
-        {
-            letter_grades[i] = 'B-';
-        }
-        else if(grades[i] >= 2.0)
-        {
-            letter_grades[i] = 'C+';
-        }
-        else if(grades[i] >= 1.7)
-        {
-            letter_grades[i] = 'C';
-        }
-        else if(grades[i] >= 1.3)
-        {
-            letter_grades[i] = 'C-';
-        }
-        else if(grades[i] >= 1.0)
-        {
-            letter_grades[i] = 'D+';
-        }
-        else if(grades[i] >= 0.7)
-        {
-            letter_grades[i] = 'D';
-        }
-        else if(grades[i] >= 0.0)
-        {
-            letter_grades[i] = 'D-';
-        }
-        else
-        {
-            letter_grades[i] = 'E';
-        }
-    }
-    return letter_grades;
-}
+    const(char)[][] letter_grade = [['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
+                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
+                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
+                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
+                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
+                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
+                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
+                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
+                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
+                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+',
 
 unittest
 {

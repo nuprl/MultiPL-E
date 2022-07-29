@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 
     Write a function that accepts two lists of strings and returns the list that has 
@@ -16,7 +17,8 @@
 */
 const(char)[][] total_match(const(char)[][] lst1, const(char)[][] lst2) 
 {
-    int len1 = 0, len2 = 0;
+    int len1 = 0;
+    int len2 = 0;
     for(int i = 0; i < lst1.length; i++)
     {
         len1 += lst1[i].length;

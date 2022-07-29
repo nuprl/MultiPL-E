@@ -1,4 +1,5 @@
-
+import std.typecons;
+import std.math;
 /*
 Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
     the last couple centuries. However, what people don't know is Tribonacci sequence.
@@ -19,22 +20,21 @@ Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in
 */
 int[] tri(int n) 
 {
-    int[] trib = new int[n + 1];
-    trib[0] = 1;
-    trib[1] = 3;
-    trib[2] = 2;
-    for (int i = 3; i < n + 1; i++)
+    int[] result = new int[n + 1];
+    result[0] = 1;
+    result[1] = 3;
+    for (int i = 2; i < n; i++)
     {
         if (i % 2 == 0)
         {
-            trib[i] = trib[i - 1] + trib[i - 2] / 2;
+            result[i] = 1 + (i / 2);
         }
         else
         {
-            trib[i] = trib[i - 1] + trib[i - 2] + trib[i - 3];
+            result[i] = result[i - 1] + result[i - 2] + result[i + 1];
         }
     }
-    return trib;
+    return result;
 }
 
 unittest
