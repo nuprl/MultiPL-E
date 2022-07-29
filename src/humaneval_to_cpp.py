@@ -101,7 +101,6 @@ class CPPTranslator:
                     elem_type = self.pytype_to_cpptype(e)
                     union_elems_types += [elem_type]
                     union_decl[elem_type] = f"f{i}" 
-                print(union_decl, [ast.dump(e) for e in elems])
                 union_name = ("Union_%s"%("_".join(union_elems_types))).replace("::", "_").replace("<", "_").replace(">", "_")
                 if union_name not in self.union_decls:
                     self.union_decls[union_name] = union_decl
@@ -191,7 +190,6 @@ class CPPTranslator:
             return f"{self.make_optional('')}({right[0]})"
         
         type_to_coerce = self.find_type_to_coerce(right[0])
-        print(type_to_coerce, right, expected_type)
         coerced_type = None
         if type_to_coerce == []:
             #No type? add the type of right
