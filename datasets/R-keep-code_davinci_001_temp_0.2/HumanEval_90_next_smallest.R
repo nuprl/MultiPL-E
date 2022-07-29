@@ -39,10 +39,10 @@ test_humaneval <- function() {
 candidate <- next_smallest
     if(!identical(candidate(c(1, 2, 3, 4, 5)), 2)){quit('no', 1)}
     if(!identical(candidate(c(5, 1, 4, 3, 2)), 2)){quit('no', 1)}
-    if(!identical(candidate(c()), None)){quit('no', 1)}
-    if(!identical(candidate(c(1, 1)), None)){quit('no', 1)}
+    if(!identical(candidate(c()), NA)){quit('no', 1)}
+    if(!identical(candidate(c(1, 1)), NA)){quit('no', 1)}
     if(!identical(candidate(c(1, 1, 1, 1, 0)), 1)){quit('no', 1)}
-    if(!identical(candidate(c(1, 1)), None)){quit('no', 1)}
+    if(!identical(candidate(c(1, 1)), NA)){quit('no', 1)}
     if(!identical(candidate(c(-35, 34, 12, -45)), -35)){quit('no', 1)}
 }
 test_humaneval()

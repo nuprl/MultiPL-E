@@ -31,6 +31,6 @@ candidate <- compare_one
     if(!identical(candidate(1, '2,3'), '2,3')){quit('no', 1)}
     if(!identical(candidate('5,1', '6'), '6')){quit('no', 1)}
     if(!identical(candidate('1', '2'), '2')){quit('no', 1)}
-    if(!identical(candidate('1', 1), None)){quit('no', 1)}
+    if(!identical(candidate('1', 1), NA)){quit('no', 1)}
 }
 test_humaneval()

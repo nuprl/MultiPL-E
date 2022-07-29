@@ -21,7 +21,7 @@ longest <- function(strings) {
 
 test_humaneval <- function() {
 candidate <- longest
-    if(!identical(candidate(c()), None)){quit('no', 1)}
+    if(!identical(candidate(c()), NA)){quit('no', 1)}
     if(!identical(candidate(c('x', 'y', 'z')), 'x')){quit('no', 1)}
     if(!identical(candidate(c('x', 'yyy', 'zzzz', 'www', 'kkkk', 'abc')), 'zzzz')){quit('no', 1)}
 }
