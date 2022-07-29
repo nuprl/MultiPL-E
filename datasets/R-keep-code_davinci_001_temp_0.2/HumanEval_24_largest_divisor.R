@@ -7,6 +7,10 @@ largest_divisor <- function(n) {
             return(i)
         }
     }
+}
+
+largest_divisor(15)
+
 
 test_humaneval <- function() {
 candidate <- largest_divisor
@@ -16,3 +20,4 @@ candidate <- largest_divisor
     if(!identical(candidate(100), 50)){quit('no', 1)}
     if(!identical(candidate(49), 7)){quit('no', 1)}
 }
+test_humaneval()

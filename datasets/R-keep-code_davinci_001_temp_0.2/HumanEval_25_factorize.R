@@ -15,21 +15,19 @@ factorize <- function(n) {
             n <- n / i
         }
     }
-    return(factors)
+    factors
 }
-factorize(8)
-factorize(25)
-factorize(70)
 
 
 test_humaneval <- function() {
 candidate <- factorize
-    if(!identical(candidate(2), c(2))){quit('no', 1)}
-    if(!identical(candidate(4), c(2, 2))){quit('no', 1)}
-    if(!identical(candidate(8), c(2, 2, 2))){quit('no', 1)}
-    if(!identical(candidate(57), c(3, 19))){quit('no', 1)}
-    if(!identical(candidate(3249), c(3, 3, 19, 19))){quit('no', 1)}
-    if(!identical(candidate(185193), c(3, 3, 3, 19, 19, 19))){quit('no', 1)}
-    if(!identical(candidate(20577), c(3, 19, 19, 19))){quit('no', 1)}
-    if(!identical(candidate(18), c(2, 3, 3))){quit('no', 1)}
+    if(!identical(candidate(2), list(2))){quit('no', 1)}
+    if(!identical(candidate(4), list(2, 2))){quit('no', 1)}
+    if(!identical(candidate(8), list(2, 2, 2))){quit('no', 1)}
+    if(!identical(candidate(57), list(3, 19))){quit('no', 1)}
+    if(!identical(candidate(3249), list(3, 3, 19, 19))){quit('no', 1)}
+    if(!identical(candidate(185193), list(3, 3, 3, 19, 19, 19))){quit('no', 1)}
+    if(!identical(candidate(20577), list(3, 19, 19, 19))){quit('no', 1)}
+    if(!identical(candidate(18), list(2, 3, 3))){quit('no', 1)}
 }
+test_humaneval()

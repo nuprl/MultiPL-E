@@ -7,20 +7,27 @@
 # True
 below_zero <- function(operations) {
     balance <- 0
-    for (operation in operations) {
-        balance <- balance + operation
-        if (balance < 0) {
-            return(TRUE)
+    for (op in operations) {
+        if (op < 0) {
+            balance <- balance - op
+            if (balance < 0) {
+                return(TRUE)
+            }
+        } else {
+            balance <- balance + op
         }
     }
     return(FALSE)
+}
+
 
 test_humaneval <- function() {
 candidate <- below_zero
-    if(!identical(candidate(c()), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, -3, 1, 2, -3)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, -4, 5, 6)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1, -1, 2, -2, 5, -5, 4, -4)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c(1, -1, 2, -2, 5, -5, 4, -5)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1, -2, 2, -2, 5, -5, 4, -4)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list()), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, -3, 1, 2, -3)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, -4, 5, 6)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, -1, 2, -2, 5, -5, 4, -4)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(1, -1, 2, -2, 5, -5, 4, -5)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, -2, 2, -2, 5, -5, 4, -4)), TRUE)){quit('no', 1)}
 }
+test_humaneval()

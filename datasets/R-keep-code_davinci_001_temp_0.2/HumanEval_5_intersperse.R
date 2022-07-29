@@ -11,10 +11,13 @@ intersperse <- function(numbers, delimeter) {
         return(c(numbers, delimeter))
     }
     return(c(numbers[1], delimeter, intersperse(numbers[-1], delimeter)))
+}
+
 
 test_humaneval <- function() {
 candidate <- intersperse
-    if(!identical(candidate(c(), 7), c())){quit('no', 1)}
-    if(!identical(candidate(c(5, 6, 3, 2), 8), c(5, 8, 6, 8, 3, 8, 2))){quit('no', 1)}
-    if(!identical(candidate(c(2, 2, 2), 2), c(2, 2, 2, 2, 2))){quit('no', 1)}
+    if(!identical(candidate(list(), 7), list())){quit('no', 1)}
+    if(!identical(candidate(list(5, 6, 3, 2), 8), list(5, 8, 6, 8, 3, 8, 2))){quit('no', 1)}
+    if(!identical(candidate(list(2, 2, 2), 2), list(2, 2, 2, 2, 2))){quit('no', 1)}
 }
+test_humaneval()
