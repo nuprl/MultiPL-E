@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Write a function that takes an array of numbers as input and returns 
     the number of elements in the array that are greater than 10 and both 
@@ -9,9 +9,9 @@ Write a function that takes an array of numbers as input and returns
     specialFilter([33, -2, -3, 45, 21, 109]) => 2
     
 */
-int specialFilter(int[] nums) 
+long specialFilter(long[] nums) 
 {
-    int count = 0;
+    long count = 0;
     for (int i = 0; i < nums.length; i++)
     {
         if (nums[i] > 10 && (nums[i] % 10) % 2 != 0 && (nums[i] / 10) % 2 != 0)

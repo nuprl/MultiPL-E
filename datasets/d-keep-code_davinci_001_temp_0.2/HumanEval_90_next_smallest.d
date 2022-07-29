@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     You are given a list of integers.
@@ -12,38 +12,21 @@ import std.math;
     next_smallest([1, 1]) == None
     
 */
-Nullable!(int) next_smallest(int[] lst) 
+Nullable!(long) next_smallest(long[] lst) 
 {
-    if (lst.length() == 0)
-        return None();
-    else if (lst.length() == 1)
-        return None();
-    else
+    if (lst.length() == 0) return None;
+    var min = lst[0];
+    var min_index = 0;
+    for (var i = 1; i < lst.length(); i++)
     {
-        var min = lst[0];
-        var min_index = 0;
-        var second_min = lst[0];
-        var second_min_index = 0;
-        for (int i = 1; i < lst.length(); i++)
+        if (lst[i] < min)
         {
-            if (lst[i] < min)
-            {
-                second_min = min;
-                second_min_index = min_index;
-                min = lst[i];
-                min_index = i;
-            }
-            else if (lst[i] < second_min)
-            {
-                second_min = lst[i];
-                second_min_index = i;
-            }
+            min = lst[i];
+            min_index = i;
         }
-        if (min_index == 0)
-            return Some(second_min);
-        else
-            return Some(min);
     }
+    if (min_index == 0) return None;
+    return lst[min_index - 1];
 }
 
 unittest

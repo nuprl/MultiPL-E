@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 I think we all remember that feeling when the result of some long-awaited
     event is finally known. The feelings and thoughts you have at that moment are
@@ -16,23 +16,15 @@ I think we all remember that feeling when the result of some long-awaited
     compare([0,5,0,0,0,4],[4,1,1,0,0,-2]) -> [4,4,1,0,0,6]
     
 */
-int[] compare(int[] game, int[] guess) 
+long[] compare(long[] game, long[] guess) 
 {
-    int[] result = new int[game.Length];
-    for (int i = 0; i < game.Length; i++)
+    long[] result = new long[game.length];
+    for (int i = 0; i < game.length; i++)
     {
-        if (game[i] == guess[i])
-        {
-            result[i] = 0;
-        }
-        else
-        {
-            result[i] = Math.Abs(game[i] - guess[i]);
-        }
+        result[i] = Math.abs(game[i] - guess[i]);
     }
     return result;
 }
-
 
 unittest
 {

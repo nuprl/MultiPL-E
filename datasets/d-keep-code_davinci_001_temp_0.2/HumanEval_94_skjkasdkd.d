@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 You are given a list of integers.
     You need to find the largest prime value and return the sum of its digits.
@@ -13,23 +13,17 @@ You are given a list of integers.
     For lst = [0,8,1,2,1,7] the output should be 7
     
 */
-int skjkasdkd(int[] lst) 
+long skjkasdkd(long[] lst) 
 {
-    int max = 0;
-    int sum = 0;
-    for (int i = 0; i < lst.Length; i++)
+    long max = 0;
+    for (int i = 0; i < lst.length; i++)
     {
         if (lst[i] > max)
         {
             max = lst[i];
         }
     }
-    while (max > 0)
-    {
-        sum += max % 10;
-        max /= 10;
-    }
-    return sum;
+    return max;
 }
 
 unittest

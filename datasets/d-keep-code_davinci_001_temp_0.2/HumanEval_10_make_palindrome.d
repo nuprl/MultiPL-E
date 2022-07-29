@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  Find the shortest palindrome that begins with a supplied string.
     Algorithm idea is simple:
@@ -15,50 +15,16 @@ import std.math;
 */
 const(char)[] make_palindrome(const(char)[] string) 
 {
-    const(char)[] result = new(char, string.length() + 1);
-    int i = 0;
-    int j = string.length() - 1;
-    while(i < j)
-    {
-        if(string[i] == string[j])
-        {
-            result[i] = string[i];
-            result[j] = string[j];
-            i++;
-            j--;
+    auto len = str.byte_len(string);
+    auto i = len - 1;
+    while (i > 0) {
+        auto palindrome = str.substr(string, i, len - i);
+        if (std.math.is_palindrome(palindrome)) {
+            return str.concat(str.reverse(str.substr(string, 0, i)), palindrome);
         }
-        else
-        {
-            break;
-        }
+        i -= 1;
     }
-    if(i == j)
-    {
-        result[i] = string[i];
-    }
-    else
-    {
-        int k = 0;
-        while(string[k] == string[j])
-        {
-            k++;
-        }
-        k--;
-        int l = 0;
-        while(string[l] == string[i])
-        {
-            l++;
-        }
-        l--;
-        while(k >= 0)
-        {
-            result[i + l] = string[k];
-            result[j - l] = string[k];
-            k--;
-            l++;
-        }
-    }
-    return result;
+    return str.concat(string, str.reverse(string));
 }
 
 unittest

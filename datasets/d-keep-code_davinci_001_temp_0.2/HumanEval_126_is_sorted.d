@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given a list of numbers, return whether or not they are sorted
@@ -17,11 +17,11 @@ import std.math;
     is_sorted([1, 2, 2, 2, 3, 4]) ➞ False
     
 */
-bool is_sorted(int[] lst) 
+bool is_sorted(long[] lst) 
 {
-    for (int i = 0; i < lst.Length - 1; i++)
+    for (int i = 0; i < lst.length; i++)
     {
-        if (lst[i] > lst[i + 1])
+        if (i < lst.length - 1 && lst[i] > lst[i + 1])
         {
             return false;
         }

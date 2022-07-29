@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given list of integers, return list in strange order.
@@ -12,43 +12,15 @@ import std.math;
     strange_sort_list([]) == []
     
 */
-int[] strange_sort_list(int[] lst) 
+long[] strange_sort_list(long[] lst) 
 {
-    int[] result = new int[lst.Length];
-    int min = lst[0];
-    int max = lst[0];
-    int min_index = 0;
-    int max_index = 0;
-    for (int i = 0; i < lst.Length; i++)
-    {
-        if (lst[i] < min)
-        {
-            min = lst[i];
-            min_index = i;
-        }
-        if (lst[i] > max)
-        {
-            max = lst[i];
-            max_index = i;
-        }
-    }
-    result[0] = min;
-    result[1] = max;
-    for (int i = 2; i < lst.Length; i++)
-    {
-        if (i % 2 == 0)
-        {
-            result[i] = lst[min_index];
-            min_index++;
-        }
-        else
-        {
-            result[i] = lst[max_index];
-            max_index--;
-        }
-    }
-    return result;
+    // your code here
+    return null;
 }
+/*
+    Given list of integers, return list in strange order.
+    Strange sorting, is when you start with the minimum value,
+    then maximum of the remaining integers, then minimum and so on.
 
 unittest
 {

@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Return sorted unique common elements for two lists.
     >>> common([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121])
@@ -9,19 +9,17 @@ Return sorted unique common elements for two lists.
 
     
 */
-int[] common(int[] l1, int[] l2) 
+long[] common(long[] l1, long[] l2) 
 {
-    int[] result = new int[std.math.min(l1.length, l2.length)];
-    int i = 0;
-    for (int x : l1) {
-        for (int y : l2) {
-            if (x == y) {
-                result[i++] = x;
-                break;
+    long[] result = new long[0];
+    for (long i = 0; i < l1.length; i++) {
+        for (long j = 0; j < l2.length; j++) {
+            if (l1[i] == l2[j]) {
+                result = append(result, l1[i]);
             }
         }
     }
-    return std.typecons.Tuple.make(result);
+    return unique(result);
 }
 
 unittest

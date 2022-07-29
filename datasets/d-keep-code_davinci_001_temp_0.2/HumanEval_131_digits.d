@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Given a positive integer n, return the product of the odd digits.
     Return 0 if all digits are even.
@@ -9,20 +9,21 @@ Given a positive integer n, return the product of the odd digits.
     digits(235) == 15
     
 */
-int digits(int n) 
+long digits(long n) 
 {
-    int result = 1;
-    while (n > 0) 
+    long product = 1;
+    while (n > 0)
     {
-        int digit = n % 10;
-        if (digit % 2 == 1) 
+        if (n % 2 == 1)
         {
-            result *= digit;
+            product *= n % 10;
         }
         n /= 10;
     }
-    return result;
+    return product;
 }
+digits(235)
+
 
 unittest
 {

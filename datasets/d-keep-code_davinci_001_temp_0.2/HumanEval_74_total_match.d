@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Write a function that accepts two lists of strings and returns the list that has 
@@ -17,21 +17,21 @@ import std.math;
 */
 const(char)[][] total_match(const(char)[][] lst1, const(char)[][] lst2) 
 {
-    int len1 = 0;
-    int len2 = 0;
+    int sum1 = 0;
+    int sum2 = 0;
     for(int i = 0; i < lst1.length; i++)
     {
-        len1 += lst1[i].length;
+        sum1 += lst1[i].length;
     }
     for(int i = 0; i < lst2.length; i++)
     {
-        len2 += lst2[i].length;
+        sum2 += lst2[i].length;
     }
-    if(len1 < len2)
+    if(sum1 < sum2)
     {
         return lst1;
     }
-    else if(len1 > len2)
+    else if(sum1 > sum2)
     {
         return lst2;
     }

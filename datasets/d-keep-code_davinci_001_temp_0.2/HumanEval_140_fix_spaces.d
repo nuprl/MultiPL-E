@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given a string text, replace all spaces in it with underscores, 

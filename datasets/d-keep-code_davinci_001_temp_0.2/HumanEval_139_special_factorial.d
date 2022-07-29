@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 The Brazilian factorial is defined as:
     brazilian_factorial(n) = n! * (n-1)! * (n-2)! * ... * 1!
@@ -13,14 +13,12 @@ The Brazilian factorial is defined as:
     factorial of this integer.
     
 */
-int special_factorial(int n) 
+long special_factorial(long n) 
 {
-    int result = 1;
-    for (int i = n; i > 0; i--)
-    {
-        result *= i;
-    }
-    return result;
+    if (n <= 1)
+        return 1;
+    else
+        return n * special_factorial(n - 1);
 }
 
 unittest

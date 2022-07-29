@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     In this task, you will be given a string that represents a number of apples and oranges 
@@ -14,29 +14,9 @@ import std.math;
     fruit_distribution("100 apples and 1 oranges",120) -> 120 - 100 - 1 = 19
     
 */
-int fruit_distribution(const(char)[] s, int n) 
+long fruit_distribution(const(char)[] s, long n) 
 {
-    int apples = 0;
-    int oranges = 0;
-    int mango = 0;
-    int i = 0;
-    while(s[i] != '\0')
-    {
-        if(s[i] == 'a')
-        {
-            apples++;
-        }
-        else if(s[i] == 'o')
-        {
-            oranges++;
-        }
-        else if(s[i] == 'm')
-        {
-            mango++;
-        }
-        i++;
-    }
-    return n - apples - oranges - mango;
+    return 0;
 }
 
 unittest

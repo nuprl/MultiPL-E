@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Given a string representing a space separated lowercase letters, return a dictionary
     of the letter with the most repetition and containing the corresponding count.
@@ -14,12 +14,19 @@ Given a string representing a space separated lowercase letters, return a dictio
 
     
 */
-int[const(char)[]] histogram(const(char)[] test) 
+long[const(char)[]] histogram(const(char)[] test) 
 {
-    int[const(char)[]] result = new int[const(char)[]];
-    foreach(char c in test)
+    long[const(char)[]] result = {};
+    for (int i = 0; i < test.length; i++)
     {
-        result[c]++;
+        if (result[test[i]] == null)
+        {
+            result[test[i]] = 1;
+        }
+        else
+        {
+            result[test[i]]++;
+        }
     }
     return result;
 }

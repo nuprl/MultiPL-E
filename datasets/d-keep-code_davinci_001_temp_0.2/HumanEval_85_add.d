@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Given a non-empty list of integers lst. add the even elements that are at odd indices..
 
@@ -8,9 +8,9 @@ Given a non-empty list of integers lst. add the even elements that are at odd in
         add([4, 2, 6, 7]) ==> 2 
     
 */
-int add(int[] lst) 
+long add(long[] lst) 
 {
-    int sum = 0;
+    long sum = 0;
     for (int i = 0; i < lst.length; i++)
     {
         if (i % 2 != 0 && lst[i] % 2 == 0)

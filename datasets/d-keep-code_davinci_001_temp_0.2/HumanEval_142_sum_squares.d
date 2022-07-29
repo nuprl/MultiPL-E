@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 "
     This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
@@ -12,9 +12,9 @@ import std.math;
     For lst = [-1,-5,2,-1,-5]  the output should be -126
     
 */
-int sum_squares(int[] lst) 
+long sum_squares(long[] lst) 
 {
-    int sum = 0;
+    long sum = 0;
     for (int i = 0; i < lst.length; i++)
     {
         if (i % 3 == 0)

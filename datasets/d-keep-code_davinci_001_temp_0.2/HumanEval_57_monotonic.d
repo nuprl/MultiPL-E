@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Return True is list elements are monotonically increasing or decreasing.
     >>> monotonic([1, 2, 4, 20])
@@ -10,19 +10,9 @@ Return True is list elements are monotonically increasing or decreasing.
     True
     
 */
-bool monotonic(int[] l) 
+bool monotonic(long[] l) 
 {
-    if (l.length == 0)
-        return true;
-    int i = 0;
-    int j = 1;
-    while (j < l.length) {
-        if (l[i] > l[j])
-            return false;
-        i = i + 1;
-        j = j + 1;
-    }
-    return true;
+    return (l[0] < l[1]) == (l[1] < l[2]) == (l[2] < l[3]);
 }
 
 unittest

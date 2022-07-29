@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Create a function which takes a string representing a file's name, and returns
     'Yes' if the the file's name is valid, and returns 'No' otherwise.
@@ -17,9 +17,6 @@ Create a function which takes a string representing a file's name, and returns
 */
 const(char)[] file_name_check(const(char)[] file_name) 
 {
-    int count = 0;
-    int dot_count = 0;
-    int dot_index = 0;
     int i = 0;
     int j = 0;
     int k = 0;
@@ -82,7 +79,10 @@ const(char)[] file_name_check(const(char)[] file_name)
     int p2 = 0;
     int q2 = 0;
     int r2 = 0;
-    int
+    int s2 = 0;
+    int t2 = 0;
+    int u2 = 0;
+    int v
 
 unittest
 {

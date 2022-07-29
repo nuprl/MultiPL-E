@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given the lengths of the three sides of a triangle. Return the area of
@@ -12,15 +12,17 @@ import std.math;
     triangle_area(1, 2, 10) == -1
     
 */
-float triangle_area(int a, int b, int c) 
+float triangle_area(long a, long b, long c) 
 {
-    if(a+b>c && a+c>b && b+c>a)
+    if(a + b < c || a + c < b || b + c < a)
     {
-        return std.math.round(std.math.sqrt(std.math.pow(a,2)+std.math.pow(b,2)+std.math.pow(c,2))/2);
+        return -1;
     }
     else
     {
-        return -1;
+        float s = (a + b + c) / 2;
+        float area = sqrt(s * (s - a) * (s - b) * (s - c));
+        return area;
     }
 }
 

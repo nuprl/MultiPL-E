@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Create a function that takes a value (string) representing a number
@@ -19,7 +19,7 @@ import std.math;
     return 15 and closest_integer("-14.5") should return -15.
     
 */
-int closest_integer(const(char)[] value) 
+long closest_integer(const(char)[] value) 
 {
     return 0;
 }

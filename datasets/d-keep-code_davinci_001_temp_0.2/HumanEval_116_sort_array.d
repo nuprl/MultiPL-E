@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     In this Kata, you have to sort an array of non-negative integers according to
@@ -12,9 +12,10 @@ import std.math;
     >>> sort_array([1, 0, 2, 3, 4]) [0, 1, 2, 3, 4]
     
 */
-int[] sort_array(int[] arr) 
+long[] sort_array(long[] arr) 
 {
-    return arr.OrderBy(x => x.ToString("X2")).ThenBy(x => x).ToArray();
+    var arr_sorted = arr.OrderBy(x => x.ToString().Count(y => y == '1')).ToArray();
+    return arr_sorted;
 }
 
 
