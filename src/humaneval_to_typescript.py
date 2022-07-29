@@ -59,7 +59,6 @@ def translate_type(t):
         case ast.Name(x):
             raise Exception(f"unknown name {x}")
         case ast.Constant(Ellipsis):
-            print(t)
             raise Exception("no ellipsis!!")
         case _other:
             raise Exception(f"unknown annotation: {t}")
@@ -131,7 +130,7 @@ class TypeScriptTranslator:
             c = c.replace('\n','\\n')
             return f'"{c}"'
         elif c is None:
-            return "null" # NOTE(carolyn): My guess
+            return "undefined"
         return repr(c)
 
     def gen_var(self, v: str) -> str:
