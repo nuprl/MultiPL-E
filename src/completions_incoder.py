@@ -64,7 +64,7 @@ def decode_single_output(output_tensor, prompt):
 
 
 def incoder_completion(
-    prompt: str, stop_tokens, max_to_generate: int, temperature: float, n, , writer: SummaryWriter
+    prompt: str, stop_tokens, max_to_generate: int, temperature: float, n, writer: SummaryWriter
 ):
     """
     Do standard left-to-right completion of the prefix `input` by sampling from the model
