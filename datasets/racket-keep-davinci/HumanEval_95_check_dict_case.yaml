@@ -1,0 +1,731 @@
+name: HumanEval_95_check_dict_case
+language: racket
+prompt: "#lang racket\n\n;; Given a dictionary, return True if all keys are strings\
+  \ in lower \n;; case or all keys are strings in upper case, else return False.\n\
+  ;; The function should return False is the given dictionary is empty.\n;; Examples:\n\
+  ;; check_dict_case({\"a\":\"apple\", \"b\":\"banana\"}) should return True.\n;;\
+  \ check_dict_case({\"a\":\"apple\", \"A\":\"banana\", \"B\":\"banana\"}) should\
+  \ return False.\n;; check_dict_case({\"a\":\"apple\", \"8\":\"banana\", \"a\":\"\
+  apple\"}) should return False.\n;; check_dict_case({\"Name\":\"John\", \"Age\":\"\
+  36\", \"City\":\"Houston\"}) should return False.\n;; check_dict_case({\"STATE\"\
+  :\"NC\", \"ZIP\":\"12345\" }) should return True.\n(define (check_dict_case dict)\n"
+tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate check_dict_case))\n\
+  \    (check-equal? (candidate #hash((\"p\" .  \"pineapple\") (\"b\" .  \"banana\"\
+  ))) #t)\n    (check-equal? (candidate #hash((\"p\" .  \"pineapple\") (\"A\" .  \"\
+  banana\") (\"B\" .  \"banana\"))) #f)\n    (check-equal? (candidate #hash((\"p\"\
+  \ .  \"pineapple\") (\"5\" .  \"banana\") (\"a\" .  \"apple\"))) #f)\n    (check-equal?\
+  \ (candidate #hash((\"Name\" .  \"John\") (\"Age\" .  \"36\") (\"City\" .  \"Houston\"\
+  ))) #f)\n    (check-equal? (candidate #hash((\"STATE\" .  \"NC\") (\"ZIP\" .  \"\
+  12345\"))) #t)\n    (check-equal? (candidate #hash((\"fruit\" .  \"Orange\") (\"\
+  taste\" .  \"Sweet\"))) #t)\n    (check-equal? (candidate #hash()) #f)\n))\n\n(test-humaneval)"
+completions: ["  (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n  \
+    \      (if (andmap string-lowercase? keys)\n            (andmap string-lowercase?\
+    \ (values dict))\n            (andmap string-uppercase? keys)\n            (andmap\
+    \ string-uppercase? (values dict))))))\n", "  (if (empty? dict)\n      #f\n  \
+    \    (let ([keys (keys dict)])\n        (if (andmap string-lowercase? keys)\n\
+    \            (andmap string-lowercase? (values dict))\n            (andmap string-uppercase?\
+    \ keys)\n            (andmap string-uppercase? (values dict))))))\n</code>\nI'm\
+    \ getting the following error:\n<code>application: not a procedure;\n expected\
+    \ a procedure that can be applied to arguments\n  given: #&lt;procedure:string-lowercase?&gt;\n\
+    \  arguments...:\n   #f\n</code>\nI'm not sure what I'm doing wrong.\n\n\nA:\n\
+    \nThe problem is that <code>andmap</code> expects a procedure as its first argument,\
+    \ but you're passing a boolean value.\nThe <code>andmap</code> procedure is used\
+    \ to apply a function to all the elements of a list and return <code>#t</code>\
+    \ only if all the results are <code>#t</code>. It's similar to <code>map</code>,\
+    \ but it returns a boolean value instead of a list.\nIn your case, you can use\
+    \ <code>andmap</code> to apply <code>string-lowercase?</code> to all the keys\
+    \ and values of the dictionary, and then use <code>and</code> to combine the results:\n\
+    <code>(define (check-dict-case dict)\n  (and (andmap string-lowercase? (keys dict))\n\
+    \       (andmap string-lowercase? (values dict))))\n</code>\n", "  (let ([keys\
+    \ (hash-keys dict)])\n    (if (empty? keys)\n        #f\n        (let ([first-key\
+    \ (first keys)])\n          (if (string? first-key)\n              (if (string-ci=?\
+    \ first-key (string-upcase first-key))\n                  (if (andmap (lambda\
+    \ (key) (string-ci=? key (string-upcase key))) (rest keys))\n                \
+    \      #t\n                      #f)\n                  (if (andmap (lambda (key)\
+    \ (string-ci=? key (string-downcase key))) (rest keys))\n                    \
+    \  #t\n                      #f))\n              #f)))))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(and (string? (car (keys dict)))\n          (string? (car (keys\
+    \ (cdr dict))))\n          (string-ci=? (car (keys dict)) (car (keys (cdr dict)))))\n\
+    \     (check_dict_case (cdr dict))]\n    [else #f]))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(and (string? (car (keys dict)))\n          (string? (car (keys\
+    \ (cdr dict))))\n          (or (string-ci=? (car (keys dict)) (car (keys (cdr\
+    \ dict))))\n              (string-ci=? (car (keys dict)) (car (keys (cdr (cdr\
+    \ dict)))))))\n     (check_dict_case (cdr dict))]\n    [else #f]))\n", "  (cond\
+    \ ((empty? dict) #f)\n        ((and (string? (car (dict-keys dict)))\n       \
+    \       (string? (car (dict-keys (cdr dict)))))\n         (and (string-ci=? (car\
+    \ (dict-keys dict)) (car (dict-keys (cdr dict))))\n              (check_dict_case\
+    \ (cdr dict))))\n        (else #f)))\n", "  (if (empty? dict)\n      #f\n    \
+    \  (let ([keys (keys dict)])\n        (if (andmap string-ci=? keys)\n        \
+    \    #t\n            (andmap string-ci=? (map string-upcase keys))))))\n", " \
+    \ (cond\n    [(empty? dict) false]\n    [(and (string? (first (keys dict)))\n\
+    \          (string? (first (keys (rest dict))))\n          (or (string-ci=? (first\
+    \ (keys dict)) (first (keys (rest dict))))\n              (string-ci=? (first\
+    \ (keys dict)) (first (keys (rest dict))))))\n     (check_dict_case (rest dict))]\n\
+    \    [else false]))\n", "  (cond\n    [(empty? dict) false]\n    [(and (string?\
+    \ (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n          (or\
+    \ (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n              (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n     true]\n    [else false]))\n",
+  "  (cond\n    [(empty? dict) false]\n    [(and (string? (car (keys dict))) (string?\
+    \ (car (keys (cdr dict)))))\n     (and (string-ci=? (car (keys dict)) (car (keys\
+    \ (cdr dict))))\n          (check_dict_case (cdr dict)))]\n    [else false]))\n",
+  "  (cond\n    [(empty? dict) false]\n    [(and (string? (car (keys dict)))\n   \
+    \       (string? (car (keys (cdr dict))))\n          (or (string-ci=? (car (keys\
+    \ dict)) (car (keys (cdr dict))))\n              (string-ci=? (car (keys dict))\
+    \ (car (keys (cdr (cdr dict)))))))\n     (check_dict_case (cdr dict))]\n    [else\
+    \ false]))\n", "  (cond\n    [(empty? dict) #f]\n    [(andmap string-lowercase?\
+    \ (keys dict))\n     (andmap string-lowercase? (keys dict))]\n    [(andmap string-uppercase?\
+    \ (keys dict))\n     (andmap string-uppercase? (keys dict))]\n    [else #f]))\n",
+  "  (cond\n    [(empty? dict) #f]\n    [(and (string? (first (keys dict)))\n    \
+    \      (string? (first (keys (rest dict))))\n          (or (string-ci=? (first\
+    \ (keys dict)) (first (keys (rest dict))))\n              (string-ci=? (first\
+    \ (keys dict)) (first (keys (rest dict))))))\n     (check_dict_case (rest dict))]\n\
+    \    [else #f]))\n</code>\n", "  (cond\n    [(empty? dict) false]\n    [(and (string?\
+    \ (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n          (and\
+    \ (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n               (check_dict_case\
+    \ (cdr dict))))\n     true]\n    [else false]))\n", "  (cond\n    [(empty? dict)\
+    \ #f]\n    [(andmap string-lowercase? (keys dict)) #t]\n    [(andmap string-uppercase?\
+    \ (keys dict)) #t]\n    [else #f]))\n", "  (cond\n    [(empty? dict) false]\n\
+    \    [(and (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n\
+    \          (or (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n     \
+    \         (string-ci=? (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n  \
+    \   (check_dict_case (cdr dict))]\n    [else false]))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(and (string? (first (keys dict)))\n          (string? (first\
+    \ (keys (rest dict))))\n          (string-ci=? (first (keys dict)) (first (keys\
+    \ (rest dict)))))\n     (check_dict_case (rest dict))]\n    [else #f]))\n", " \
+    \ (cond\n    [(empty? dict) #f]\n    [(andmap string-lowercase? (keys dict)) #t]\n\
+    \    [(andmap string-uppercase? (keys dict)) #t]\n    [else #f]))\n", "  (let\
+    \ ([keys (hash-keys dict)])\n    (cond [(empty? keys) #f]\n          [(andmap\
+    \ string-lowercase? keys) #t]\n          [(andmap string-uppercase? keys) #t]\n\
+    \          [else #f])))\n", "  (cond [(empty? dict) #f]\n        [(and (string?\
+    \ (car (keys dict)))\n              (string? (car (keys (cdr dict))))\n      \
+    \        (or (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n       \
+    \           (string-ci=? (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n\
+    \         #t]\n        [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and\
+    \ (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n \
+    \         (or (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n      \
+    \        (string-ci=? (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n   \
+    \  (check_dict_case (cdr dict))]\n    [else #f]))\n", "  (cond\n    [(empty? dict)\
+    \ #f]\n    [(and (string? (car (keys dict)))\n          (string? (car (keys (cdr\
+    \ dict))))\n          (or (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n\
+    \              (string-ci=? (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n\
+    \     (check_dict_case (cdr dict))]\n    [else #f]))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(and (string? (car (keys dict)))\n          (string? (car (keys\
+    \ (cdr dict))))\n          (string-ci=? (car (keys dict)) (car (keys (cdr dict)))))\n\
+    \     (check_dict_case (cdr dict))]\n    [else #f]))\n", "  (if (empty? dict)\n\
+    \      #f\n      (let ([keys (keys dict)])\n        (if (andmap (lambda (x) (string-ci=?\
+    \ x (string-downcase x))) keys)\n            #t\n            (andmap (lambda (x)\
+    \ (string-ci=? x (string-upcase x))) keys)))))\n", "  (cond [(empty? dict) false]\n\
+    \        [(andmap (lambda (k) (string-ci=? (string-upcase k) k)) (keys dict))\
+    \ true]\n        [(andmap (lambda (k) (string-ci=? (string-downcase k) k)) (keys\
+    \ dict)) true]\n        [else false]))\n", "  (if (empty? dict)\n      #f\n  \
+    \    (let ([keys (keys dict)])\n        (if (andmap string-lowercase? keys)\n\
+    \            (andmap string-lowercase? (values dict))\n            (andmap string-uppercase?\
+    \ keys)\n            (andmap string-uppercase? (values dict))))))\n", "  (cond\n\
+    \    [(empty? dict) false]\n    [(and (string? (car (keys dict))) (string? (car\
+    \ (keys (cdr dict)))))\n     (and (string-ci=? (car (keys dict)) (car (keys (cdr\
+    \ dict))))\n          (check_dict_case (cdr dict)))]\n    [else false]))\n", " \
+    \ (cond\n    [(empty? dict) #f]\n    [(and (string? (car (dict-keys dict)))\n\
+    \          (string? (car (dict-keys (cdr dict))))\n          (string-ci=? (car\
+    \ (dict-keys dict)) (car (dict-keys (cdr dict)))))\n     (check_dict_case (cdr\
+    \ dict))]\n    [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(andmap\
+    \ string-lowercase? (keys dict)) #t]\n    [(andmap string-uppercase? (keys dict))\
+    \ #t]\n    [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and (string?\
+    \ (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n          (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n\
+    \    [else #f]))\n", "  (cond [(empty? dict) false]\n        [(andmap string-lowercase?\
+    \ (keys dict)) true]\n        [(andmap string-uppercase? (keys dict)) true]\n\
+    \        [else false]))\n", "  (cond\n    [(empty? dict) false]\n    [(and (string?\
+    \ (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n          (equal?\
+    \ (string-upcase (car (keys dict))) (car (keys dict)))\n          (equal? (string-upcase\
+    \ (car (keys (cdr dict)))) (car (keys (cdr dict)))))\n     (check_dict_case (cdr\
+    \ dict))]\n    [(and (string? (car (keys dict)))\n          (string? (car (keys\
+    \ (cdr dict))))\n          (equal? (string-downcase (car (keys dict))) (car (keys\
+    \ dict)))\n          (equal? (string-downcase (car (keys (cdr dict)))) (car (keys\
+    \ (cdr dict)))))\n     (check_dict_case (cdr dict))]\n    [else false]))\n", " \
+    \ (cond\n    [(empty? dict) false]\n    [(and (string? (car (keys dict)))\n  \
+    \        (string? (car (keys (cdr dict))))\n          (or (string-ci=? (car (keys\
+    \ dict)) (car (keys (cdr dict))))\n              (string-ci=? (car (keys dict))\
+    \ (car (keys (cdr (cdr dict)))))))\n     (check_dict_case (cdr dict))]\n    [else\
+    \ false]))\n", "  (cond [(empty? dict) #f]\n        [(andmap string-lowercase?\
+    \ (keys dict)) #t]\n        [(andmap string-uppercase? (keys dict)) #t]\n    \
+    \    [else #f]))\n", "  (cond\n    [(empty? dict) false]\n    [(and (string? (car\
+    \ (car dict)))\n          (string? (car (cdr (car dict)))))\n     (if (and (char-lower-case?\
+    \ (car (car dict)))\n              (char-lower-case? (car (cdr (car dict)))))\n\
+    \         (check_dict_case (cdr dict))\n         false)]\n    [(and (string? (car\
+    \ (car dict)))\n          (string? (car (cdr (car dict)))))\n     (if (and (char-upper-case?\
+    \ (car (car dict)))\n              (char-upper-case? (car (cdr (car dict)))))\n\
+    \         (check_dict_case (cdr dict))\n         false)]\n    [else false]))\n",
+  "  (cond\n    [(empty? dict) false]\n    [(and (string? (car (keys dict)))\n   \
+    \       (string? (car (keys (cdr dict))))\n          (or (string-ci=? (car (keys\
+    \ dict)) (car (keys (cdr dict))))\n              (string-ci=? (car (keys dict))\
+    \ (car (keys (cdr (cdr dict)))))))\n     true]\n    [else false]))\n", "  (cond\n\
+    \    [(empty? dict) #f]\n    [(and (string? (car (dict-keys dict)))\n        \
+    \  (string? (car (dict-keys (cdr dict))))\n          (string-ci=? (car (dict-keys\
+    \ dict)) (car (dict-keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n\
+    \    [else #f]))\n", "  (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n\
+    \        (if (andmap string-lowercase? keys)\n            (andmap string-lowercase?\
+    \ (values dict))\n            (andmap string-uppercase? keys)\n            (andmap\
+    \ string-uppercase? (values dict))))))\n</code>\n", "  (cond\n    [(empty? dict)\
+    \ false]\n    [(and (string? (car (keys dict)))\n          (string? (car (keys\
+    \ (cdr dict))))\n          (string-ci=? (car (keys dict)) (car (keys (cdr dict)))))\n\
+    \     (check_dict_case (cdr dict))]\n    [else false]))\n", "  (cond\n    [(empty?\
+    \ dict) false]\n    [(string-ci=? (string-downcase (car (keys dict))) (car (keys\
+    \ dict)))\n     (check_dict_case (cdr (keys dict)))]\n    [else false]))\n", " \
+    \ (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n        (cond\
+    \ [(andmap string-lowercase? keys) #t]\n              [(andmap string-uppercase?\
+    \ keys) #t]\n              [else #f]))))\n", "  (if (empty? dict)\n      #f\n\
+    \      (let ([keys (keys dict)])\n        (if (andmap string-lowercase? keys)\n\
+    \            (andmap string-lowercase? (values dict))\n            (andmap string-uppercase?\
+    \ keys)\n            (andmap string-uppercase? (values dict))))))\n", "  (cond\
+    \ ((empty? dict) #f)\n        ((andmap string-lowercase? (keys dict)) #t)\n  \
+    \      ((andmap string-uppercase? (keys dict)) #t)\n        (else #f)))\n", " \
+    \ (cond\n    [(empty? dict) false]\n    [(and (string? (first (first dict)))\n\
+    \          (string? (first (first (rest dict))))\n          (or (string-ci=? (first\
+    \ (first dict)) (first (first (rest dict))))\n              (string-ci=? (first\
+    \ (first dict)) (first (first (rest dict))))))\n     (check_dict_case (rest dict))]\n\
+    \    [else false]))\n", "  (if (empty? dict)\n      #f\n      (let ([keys (keys\
+    \ dict)])\n        (if (andmap string-lowercase? keys)\n            (andmap string-lowercase?\
+    \ (values dict))\n            (andmap string-uppercase? keys)\n            (andmap\
+    \ string-uppercase? (values dict))))))\n", "  (cond\n    [(empty? dict) #f]\n\
+    \    [(andmap string-lowercase? (keys dict)) #t]\n    [(andmap string-uppercase?\
+    \ (keys dict)) #t]\n    [else #f]))\n", "  (cond [(empty? dict) #f]\n        [(andmap\
+    \ string-lowercase? (keys dict)) #t]\n        [(andmap string-uppercase? (keys\
+    \ dict)) #t]\n        [else #f]))\n", "  (if (empty? dict)\n      #f\n      (let\
+    \ ([keys (keys dict)])\n        (if (andmap string-lowercase? keys)\n        \
+    \    (andmap string-lowercase? (values dict))\n            (andmap string-uppercase?\
+    \ keys)\n            (andmap string-uppercase? (values dict))))))\n", "  (cond\n\
+    \    [(empty? dict) #f]\n    [(andmap string-lowercase? (keys dict)) #t]\n   \
+    \ [(andmap string-uppercase? (keys dict)) #t]\n    [else #f]))\n", "  (cond\n\
+    \    [(empty? dict) false]\n    [(and (string? (car (keys dict)))\n          (string?\
+    \ (car (keys (cdr dict))))\n          (and (char-lower-case? (string-ref (car\
+    \ (keys dict)) 0))\n               (char-lower-case? (string-ref (car (keys (cdr\
+    \ dict))) 0))))\n     (check_dict_case (cdr dict))]\n    [(and (string? (car (keys\
+    \ dict)))\n          (string? (car (keys (cdr dict))))\n          (and (char-upper-case?\
+    \ (string-ref (car (keys dict)) 0))\n               (char-upper-case? (string-ref\
+    \ (car (keys (cdr dict))) 0))))\n     (check_dict_case (cdr dict))]\n    [else\
+    \ false]))\n", "  (cond\n    [(empty? dict) false]\n    [(and (string? (car (keys\
+    \ dict)))\n          (string? (car (keys (cdr dict))))\n          (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n\
+    \    [else false]))\n", "  (cond\n    [(empty? dict) false]\n    [(and (string?\
+    \ (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n          (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n\
+    \    [else false]))\n", "  (if (empty? dict)\n      #f\n      (let ([keys (keys\
+    \ dict)])\n        (if (andmap string-lowercase? keys)\n            (andmap string-lowercase?\
+    \ (values dict))\n            (andmap string-uppercase? keys)\n            (andmap\
+    \ string-uppercase? (values dict))))))\n", "  (cond [(empty? dict) #f]\n     \
+    \   [(andmap string-lowercase? (keys dict)) #t]\n        [(andmap string-uppercase?\
+    \ (keys dict)) #t]\n        [else #f]))\n</code>\n", "  (cond\n    [(empty? dict)\
+    \ #f]\n    [(and (string? (car (keys dict)))\n          (string? (car (keys (cdr\
+    \ dict))))\n          (and (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n\
+    \               (check_dict_case (cdr dict))))\n     #t]\n    [else #f]))\n",
+  "  (cond\n    [(empty? dict) false]\n    [(and (string? (car (keys dict)))\n   \
+    \       (string? (car (keys (cdr dict))))\n          (or (string-ci=? (car (keys\
+    \ dict)) (car (keys (cdr dict))))\n              (string-ci=? (car (keys dict))\
+    \ (car (keys (cdr (cdr dict)))))))\n     (check_dict_case (cdr dict))]\n    [else\
+    \ false]))\n", "  (cond\n    [(empty? dict) false]\n    [(and (string? (first\
+    \ (keys dict)))\n          (string? (first (keys (rest dict))))\n          (or\
+    \ (string-ci=? (first (keys dict)) (first (keys (rest dict))))\n             \
+    \ (string-ci=? (first (keys dict)) (first (keys (rest dict)))))\n          (check_dict_case\
+    \ (rest dict)))\n     true]\n    [else false]))\n", "  (cond\n    [(empty? dict)\
+    \ false]\n    [(and (string? (car (keys dict)))\n          (string? (car (keys\
+    \ (cdr dict))))\n          (string-ci=? (car (keys dict)) (car (keys (cdr dict)))))\n\
+    \     (check_dict_case (cdr dict))]\n    [else false]))\n", "  (if (empty? dict)\n\
+    \      #f\n      (let ([keys (keys dict)])\n        (if (andmap string-ci=? keys)\n\
+    \            #t\n            #f))))\n", "  (cond\n    [(empty? dict) false]\n\
+    \    [(and (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n\
+    \          (or (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n     \
+    \         (string-ci=? (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n  \
+    \   (check_dict_case (cdr dict))]\n    [else false]))\n", "  (cond\n    [(empty?\
+    \ dict) false]\n    [(and (string? (car (keys dict)))\n          (string? (car\
+    \ (keys (cdr dict))))\n          (or (and (string-ci=? (car (keys dict)) (car\
+    \ (keys dict)))\n                   (string-ci=? (car (keys (cdr dict))) (car\
+    \ (keys (cdr dict)))))\n              (and (string-ci=? (car (keys dict)) (car\
+    \ (keys dict)))\n                   (string-ci=? (car (keys (cdr dict))) (car\
+    \ (keys (cdr dict)))))))\n     true]\n    [else false]))\n</code>\nI'm not sure\
+    \ if this is the best way to do it, but it works.\n", "  (define (is-lower? str)\n\
+    \    (and (string? str)\n         (string-ci=? str (string-downcase str))))\n\
+    \  (define (is-upper? str)\n    (and (string? str)\n         (string-ci=? str\
+    \ (string-upcase str))))\n  (define (is-all-lower? dict)\n    (cond\n      [(empty?\
+    \ dict) #t]\n      [(is-lower? (car (first dict))) (is-all-lower? (rest dict))]\n\
+    \      [else #f]))\n  (define (is-all-upper? dict)\n    (cond\n      [(empty?\
+    \ dict) #t]\n      [(is-upper? (car (first dict))) (is-all-upper? (rest dict))]\n\
+    \      [else #f]))\n  (cond\n    [(empty? dict) #f]\n    [(is-all-lower? dict)\
+    \ #t]\n    [(is-all-upper? dict) #t]\n    [else #f]))\n</code>\n", "  (if (empty?\
+    \ dict)\n      false\n      (let ([keys (keys dict)])\n        (if (andmap string-lowercase?\
+    \ keys)\n            (andmap string-uppercase? keys)\n            false))))\n",
+  "  (cond\n    [(empty? dict) false]\n    [(and (string? (car (keys dict)))\n   \
+    \       (string? (car (keys (cdr dict))))\n          (or (string-ci=? (car (keys\
+    \ dict)) (car (keys (cdr dict))))\n              (string-ci=? (car (keys dict))\
+    \ (car (keys (cdr (cdr dict)))))))\n     true]\n    [else false]))\n", "  (cond\n\
+    \    [(empty? dict) #f]\n    [(and (string? (car (keys dict)))\n          (string?\
+    \ (car (keys (cdr dict))))\n          (string-ci=? (car (keys dict)) (car (keys\
+    \ (cdr dict)))))\n     (check_dict_case (cdr dict))]\n    [else #f]))\n</code>\n",
+  "  (cond\n    [(empty? dict) false]\n    [(and (string? (car (keys dict)))\n   \
+    \       (string? (car (keys (cdr dict))))\n          (string-ci=? (car (keys dict))\
+    \ (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n    [else false]))\n",
+  "  (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n        (if (andmap\
+    \ string-lowercase? keys)\n            (andmap string-lowercase? (values dict))\n\
+    \            (andmap string-uppercase? keys)\n            (andmap string-uppercase?\
+    \ (values dict))))))\n</code>\n", "  (cond\n    [(empty? dict) false]\n    [(and\
+    \ (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n \
+    \         (or (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n      \
+    \        (string-ci=? (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n   \
+    \  (check_dict_case (cdr dict))]\n    [else false]))\n", "  (cond [(empty? dict)\
+    \ #f]\n        [(andmap string-lowercase? (keys dict)) #t]\n        [(andmap string-uppercase?\
+    \ (keys dict)) #t]\n        [else #f]))\n", "  (cond\n    [(empty? dict) false]\n\
+    \    [(and (string? (first (keys dict)))\n          (string? (first (keys (rest\
+    \ dict))))\n          (or (string-ci=? (first (keys dict)) (first (keys (rest\
+    \ dict))))\n              (string-ci=? (first (keys dict)) (first (keys (rest\
+    \ dict)))))\n          (check_dict_case (rest dict)))\n     true]\n    [else false]))\n",
+  "  (cond\n    [(empty? dict) #f]\n    [(andmap string-lowercase? (keys dict)) #t]\n\
+    \    [(andmap string-uppercase? (keys dict)) #t]\n    [else #f]))\n", "  (cond\n\
+    \    [(empty? dict) false]\n    [(and (string? (car (keys dict)))\n          (string?\
+    \ (car (keys (cdr dict))))\n          (string-ci=? (car (keys dict)) (car (keys\
+    \ (cdr dict)))))\n     (check_dict_case (cdr dict))]\n    [else false]))\n", " \
+    \ (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n        (if (andmap\
+    \ string-lowercase? keys)\n            (andmap string-lowercase? (values dict))\n\
+    \            (andmap string-uppercase? keys)\n            (andmap string-uppercase?\
+    \ (values dict))))))\n</code>\n", "  (if (empty? dict)\n      #f\n      (let ([keys\
+    \ (keys dict)])\n        (if (andmap string-lowercase? keys)\n            (andmap\
+    \ string-lowercase? (values dict))\n            (andmap string-uppercase? keys)\n\
+    \            (andmap string-uppercase? (values dict))))))\n", "  (define (is-lower-case?\
+    \ str)\n    (and (string? str)\n         (string-ci=? str (string-downcase str))))\n\
+    \  (define (is-upper-case? str)\n    (and (string? str)\n         (string-ci=?\
+    \ str (string-upcase str))))\n  (define (is-lower-case-dict? dict)\n    (and (not\
+    \ (empty? dict))\n         (is-lower-case? (car (dict-keys dict)))\n         (is-lower-case-dict?\
+    \ (dict-rest dict))))\n  (define (is-upper-case-dict? dict)\n    (and (not (empty?\
+    \ dict))\n         (is-upper-case? (car (dict-keys dict)))\n         (is-upper-case-dict?\
+    \ (dict-rest dict))))\n  (or (is-lower-case-dict? dict)\n      (is-upper-case-dict?\
+    \ dict)))\n", "  (cond [(empty? dict) #f]\n        [(andmap string-lowercase?\
+    \ (keys dict)) #t]\n        [(andmap string-uppercase? (keys dict)) #t]\n    \
+    \    [else #f]))\n", "  (if (empty? dict)\n      #f\n      (let ([keys (dict-keys\
+    \ dict)])\n        (if (andmap string-lowercase? keys)\n            (andmap string-lowercase?\
+    \ keys)\n            (andmap string-uppercase? keys)))))\n", "  (cond\n    [(empty?\
+    \ dict) false]\n    [(and (string? (car (keys dict)))\n          (string? (car\
+    \ (keys (cdr dict))))\n          (and (char-lower-case? (string-ref (car (keys\
+    \ dict)) 0))\n               (char-lower-case? (string-ref (car (keys (cdr dict)))\
+    \ 0))))\n     (check_dict_case (cdr dict))]\n    [(and (string? (car (keys dict)))\n\
+    \          (string? (car (keys (cdr dict))))\n          (and (char-upper-case?\
+    \ (string-ref (car (keys dict)) 0))\n               (char-upper-case? (string-ref\
+    \ (car (keys (cdr dict))) 0))))\n     (check_dict_case (cdr dict))]\n    [else\
+    \ false]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and (string? (car (keys\
+    \ dict)))\n          (string? (car (keys (cdr dict))))\n          (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n\
+    \    [else #f]))\n", "  (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n\
+    \        (if (andmap string-lowercase? keys)\n            (andmap string-lowercase?\
+    \ (values dict))\n            (andmap string-uppercase? keys)\n            (andmap\
+    \ string-uppercase? (values dict))))))\n", "  (cond\n    [(empty? dict) false]\n\
+    \    [(and (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n\
+    \          (or (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n     \
+    \         (string-ci=? (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n  \
+    \   (check_dict_case (cdr dict))]\n    [else false]))\n", "  (cond [(empty? dict)\
+    \ #f]\n        [(andmap string-lowercase? (keys dict)) #t]\n        [(andmap string-uppercase?\
+    \ (keys dict)) #t]\n        [else #f]))\n", "  (cond\n    [(empty? dict) false]\n\
+    \    [(and (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n\
+    \          (or (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n     \
+    \         (string-ci=? (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n  \
+    \   true]\n    [else false]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and\
+    \ (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n \
+    \         (equal? (string-upper-case (car (keys dict))) (car (keys dict)))\n \
+    \         (equal? (string-upper-case (car (keys (cdr dict)))) (car (keys (cdr\
+    \ dict)))))\n     (check_dict_case (cdr dict))]\n    [(and (string? (car (keys\
+    \ dict)))\n          (string? (car (keys (cdr dict))))\n          (equal? (string-lower-case\
+    \ (car (keys dict))) (car (keys dict)))\n          (equal? (string-lower-case\
+    \ (car (keys (cdr dict)))) (car (keys (cdr dict)))))\n     (check_dict_case (cdr\
+    \ dict))]\n    [else #f]))\n", "  (cond\n    [(empty? dict) false]\n    [(string-ci=?\
+    \ (symbol->string (car (dict-keys dict)))\n                  (symbol->string (car\
+    \ (dict-keys (dict-rest dict)))))\n     (check_dict_case (dict-rest dict))]\n\
+    \    [else false]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and (string? (car\
+    \ (keys dict)))\n          (string? (car (keys (cdr dict))))\n          (or (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr dict))))\n              (string-ci=? (car\
+    \ (keys dict)) (car (keys (cdr (cdr dict)))))))\n     (check_dict_case (cdr dict))]\n\
+    \    [else #f]))\n", "  (cond [(empty? dict) #f]\n        [(andmap string-lowercase?\
+    \ (keys dict)) #t]\n        [(andmap string-uppercase? (keys dict)) #t]\n    \
+    \    [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and (string? (car\
+    \ (keys dict)))\n          (string? (car (keys (cdr dict))))\n          (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n\
+    \    [else #f]))\n", "  (cond [(empty? dict) #f]\n        [(and (string? (car\
+    \ (keys dict)))\n              (string? (car (keys (cdr dict))))\n           \
+    \   (or (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n            \
+    \      (string-ci=? (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n     \
+    \    #t]\n        [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(andmap\
+    \ string-ci=? (dict-keys dict)) #t]\n    [(andmap string-ci=? (dict-keys dict)\
+    \ #:key (compose string-upcase)) #t]\n    [else #f]))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(or (string-lower-case? (car (first dict)))\n         (string-upper-case?\
+    \ (car (first dict))))\n     (check_dict_case (rest dict))]\n    [else #f]))\n",
+  "  (cond\n    [(empty? dict) #f]\n    [(andmap string-lowercase? (keys dict)) #t]\n\
+    \    [(andmap string-uppercase? (keys dict)) #t]\n    [else #f]))\n", "  (cond\n\
+    \    [(empty? dict) #f]\n    [(and (string? (first (keys dict)))\n          (string?\
+    \ (first (keys (rest dict))))\n          (or (string-ci=? (first (keys dict))\
+    \ (first (keys (rest dict))))\n              (string-ci=? (first (keys dict))\
+    \ (first (keys (rest dict)))))\n          (check_dict_case (rest dict)))\n   \
+    \  #t]\n    [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and (string?\
+    \ (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n          (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n\
+    \    [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and (string? (car\
+    \ (keys dict)))\n          (string? (car (keys (cdr dict))))\n          (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n\
+    \    [else #f]))\n", "  (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n\
+    \        (if (andmap string-lowercase? keys)\n            (andmap string-lowercase?\
+    \ (values dict))\n            (andmap string-uppercase? keys)\n            (andmap\
+    \ string-uppercase? (values dict))))))\n", "  (cond\n    [(empty? dict) false]\n\
+    \    [(and (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n\
+    \          (or (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n     \
+    \         (string-ci=? (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n  \
+    \   (check_dict_case (cdr dict))]\n    [else false]))\n", "  (if (empty? dict)\n\
+    \      #f\n      (let ([keys (keys dict)])\n        (if (andmap (lambda (x) (string-ci=?\
+    \ x (string-downcase x))) keys)\n            #t\n            (andmap (lambda (x)\
+    \ (string-ci=? x (string-upcase x))) keys)))))\n", "  (cond\n    [(empty? dict)\
+    \ false]\n    [(and (string? (car (dict-keys dict)))\n          (string? (car\
+    \ (dict-keys (cdr dict))))\n          (or (string-ci=? (car (dict-keys dict))\
+    \ (car (dict-keys (cdr dict))))\n              (string-ci=? (car (dict-keys dict))\
+    \ (car (dict-keys (cdr dict))))))\n     (check_dict_case (cdr dict))]\n    [else\
+    \ false]))\n", "  (cond\n    [(empty? dict) false]\n    [(and (string? (car (dict-keys\
+    \ dict)))\n          (string? (car (dict-keys (cdr dict))))\n          (string-ci=?\
+    \ (car (dict-keys dict)) (car (dict-keys (cdr dict)))))\n     (check_dict_case\
+    \ (cdr dict))]\n    [else false]))\n", "  (cond\n    [(empty? dict) false]\n \
+    \   [(and (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n\
+    \          (or (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n     \
+    \         (string-ci=? (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n  \
+    \   (check_dict_case (cdr dict))]\n    [else false]))\n", "  (cond\n    [(empty?\
+    \ dict) false]\n    [(and (string? (car (dict-keys dict)))\n          (string?\
+    \ (car (dict-keys (cdr dict))))\n          (string-ci=? (car (dict-keys dict))\
+    \ (car (dict-keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n    [else\
+    \ false]))\n", "  (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n\
+    \        (if (andmap string-ci=? keys)\n            #t\n            #f))))\n",
+  "  (cond\n    [(empty? dict) #f]\n    [(and (string? (car (keys dict)))\n      \
+    \    (string? (car (keys (cdr dict))))\n          (or (string-ci=? (car (keys\
+    \ dict)) (car (keys (cdr dict))))\n              (string-ci=? (car (keys dict))\
+    \ (car (keys (cdr (cdr dict)))))))\n     (check_dict_case (cdr dict))]\n    [else\
+    \ #f]))\n", "  (cond [(empty? dict) #f]\n        [(andmap string-lowercase? (keys\
+    \ dict)) #t]\n        [(andmap string-uppercase? (keys dict)) #t]\n        [else\
+    \ #f]))\n", "  (cond\n    [(empty? dict) false]\n    [(and (string? (car (keys\
+    \ dict))) (string? (car (keys (cdr dict)))))\n     (and (string-ci=? (car (keys\
+    \ dict)) (car (keys (cdr dict))))\n          (check_dict_case (cdr dict)))]\n\
+    \    [else false]))\n", "  (cond\n    [(empty? dict) false]\n    [(and (string?\
+    \ (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n          (or\
+    \ (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n              (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n     true]\n    [else false]))\n",
+  "  (cond\n    [(empty? dict) false]\n    [(and (string? (first (keys dict)))\n \
+    \         (string? (first (keys (rest dict))))\n          (or (string-ci=? (first\
+    \ (keys dict)) (first (keys (rest dict))))\n              (string-ci=? (first\
+    \ (keys dict)) (first (keys (rest dict)))))\n          (check_dict_case (rest\
+    \ dict)))\n     true]\n    [else false]))\n", "  (cond\n    [(empty? dict) #f]\n\
+    \    [(and (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n\
+    \          (string-ci=? (car (keys dict)) (car (keys (cdr dict)))))\n     (check_dict_case\
+    \ (cdr dict))]\n    [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(andmap\
+    \ string-lowercase? (keys dict)) #t]\n    [(andmap string-uppercase? (keys dict))\
+    \ #t]\n    [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(andmap string-ci=?\
+    \ (dict-keys dict)) #t]\n    [(andmap string-ci=? (dict-keys dict) #:key (compose\
+    \ string-upcase)) #t]\n    [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n\
+    \    [(andmap string-lowercase? (keys dict)) #t]\n    [(andmap string-uppercase?\
+    \ (keys dict)) #t]\n    [else #f]))\n", "  (cond\n    [(empty? dict) false]\n\
+    \    [(and (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n\
+    \          (string-ci=? (car (keys dict)) (car (keys (cdr dict)))))\n     (check_dict_case\
+    \ (cdr dict))]\n    [else false]))\n", "  (cond\n    [(empty? dict) false]\n \
+    \   [(and (string? (first (keys dict)))\n          (string? (first (keys (rest\
+    \ dict))))\n          (or (string-ci=? (first (keys dict)) (first (keys (rest\
+    \ dict))))\n              (string-ci=? (first (keys dict)) (first (keys (rest\
+    \ dict))))))\n     (check_dict_case (rest dict))]\n    [else false]))\n", "  (if\
+    \ (empty? dict)\n      #f\n      (let ([keys (map (lambda (k) (string-downcase\
+    \ k)) (hash-keys dict))])\n        (if (equal? keys (hash-keys dict))\n      \
+    \      #t\n            #f))))\n", "  (cond\n    [(empty? dict) #f]\n    [(and\
+    \ (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n \
+    \         (or (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n      \
+    \        (string-ci=? (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n   \
+    \  (check_dict_case (cdr dict))]\n    [else #f]))\n", "  (cond\n    [(empty? dict)\
+    \ false]\n    [(and (string? (car (keys dict)))\n          (string? (car (keys\
+    \ (cdr dict))))\n          (or (string-ci=? (car (keys dict)) (car (keys (cdr\
+    \ dict))))\n              (string-ci=? (car (keys dict)) (car (keys (cdr (cdr\
+    \ dict)))))))\n     (check_dict_case (cdr dict))]\n    [else false]))\n", "  (cond\
+    \ [(empty? dict) #f]\n        [(andmap string-lowercase? (keys dict)) #t]\n  \
+    \      [(andmap string-uppercase? (keys dict)) #t]\n        [else #f]))\n", " \
+    \ (cond\n    [(empty? dict) false]\n    [(and (string? (car (keys dict)))\n  \
+    \        (string? (car (keys (cdr dict))))\n          (string-ci=? (car (keys\
+    \ dict)) (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n    [else\
+    \ false]))\n", "  (cond\n    [(empty? dict) #f]\n    [(string-ci=? (string-upcase\
+    \ (car (dict-keys dict)))\n                  (string-upcase (car (dict-keys dict))))\n\
+    \     (check_dict_case (dict-rest dict))]\n    [else #f]))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(andmap string-lowercase? (keys dict)) #t]\n    [(andmap string-uppercase?\
+    \ (keys dict)) #t]\n    [else #f]))\n", "  (cond\n    [(empty? dict) false]\n\
+    \    [(and (string-ci=? (car (dict-ref dict (car (dict-keys dict))))\n       \
+    \                (car (dict-ref dict (car (dict-keys dict)))))\n          (check_dict_case\
+    \ (dict-remove dict (car (dict-keys dict)))))\n     true]\n    [else false]))\n",
+  "  (cond\n    [(empty? dict) false]\n    [(and (string? (car (keys dict)))\n   \
+    \       (string? (car (keys (cdr dict))))\n          (string-ci=? (car (keys dict))\
+    \ (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n    [else false]))\n",
+  "  (cond\n    [(empty? dict) #f]\n    [(andmap string-lowercase? (keys dict)) #t]\n\
+    \    [(andmap string-uppercase? (keys dict)) #t]\n    [else #f]))\n", "  (cond\n\
+    \    [(empty? dict) #f]\n    [(andmap (lambda (k) (string-ci=? k (string-downcase\
+    \ k))) (dict-keys dict)) #t]\n    [(andmap (lambda (k) (string-ci=? k (string-upcase\
+    \ k))) (dict-keys dict)) #t]\n    [else #f]))\n", "  (cond\n    [(empty? dict)\
+    \ #f]\n    [(and (string? (first (keys dict)))\n          (string? (first (keys\
+    \ (rest dict))))\n          (or (string-ci=? (first (keys dict)) (first (keys\
+    \ (rest dict))))\n              (string-ci=? (first (keys dict)) (first (keys\
+    \ (rest dict))))))\n     (check_dict_case (rest dict))]\n    [else #f]))\n", " \
+    \ (cond\n    [(empty? dict) #f]\n    [(andmap string-lowercase? (keys dict)) #t]\n\
+    \    [(andmap string-uppercase? (keys dict)) #t]\n    [else #f]))\n", "  (cond\n\
+    \    [(empty? dict) #f]\n    [(andmap string-lowercase? (keys dict)) #t]\n   \
+    \ [(andmap string-uppercase? (keys dict)) #t]\n    [else #f]))\n", "  (cond [(empty?\
+    \ dict) #f]\n        [(andmap string-ci=? (map key dict)) #t]\n        [(andmap\
+    \ string-ci=? (map key dict)) #t]\n        [else #f]))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(andmap string-lowercase? (keys dict)) #t]\n    [(andmap string-uppercase?\
+    \ (keys dict)) #t]\n    [else #f]))\n", "  (cond [(empty? dict) #f]\n        [(andmap\
+    \ string-lowercase? (keys dict)) #t]\n        [(andmap string-uppercase? (keys\
+    \ dict)) #t]\n        [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and\
+    \ (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n \
+    \         (or (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n      \
+    \        (string-ci=? (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n   \
+    \  (check_dict_case (cdr dict))]\n    [else #f]))\n", "  (cond [(empty? dict)\
+    \ #f]\n        [(and (string? (car (keys dict)))\n              (string? (car\
+    \ (keys (cdr dict))))\n              (or (string-ci=? (car (keys dict)) (car (keys\
+    \ (cdr dict))))\n                  (string-ci=? (car (keys dict)) (string-upcase\
+    \ (car (keys (cdr dict)))))))\n         (check_dict_case (cdr dict))]\n      \
+    \  [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and (string? (car (keys\
+    \ dict)))\n          (string? (car (keys (cdr dict))))\n          (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n\
+    \    [else #f]))\n", "  (cond\n    [(empty? dict) false]\n    [(and (string? (car\
+    \ (keys dict)))\n          (string? (car (keys (cdr dict))))\n          (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n\
+    \    [else false]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and (string? (first\
+    \ (keys dict)))\n          (string? (first (keys (rest dict))))\n          (or\
+    \ (string-ci=? (first (keys dict)) (first (keys (rest dict))))\n             \
+    \ (string-ci=? (first (keys dict)) (first (keys (rest dict)))))\n          (check_dict_case\
+    \ (rest dict)))\n     #t]\n    [else #f]))\n", "  (cond\n    [(empty? dict) false]\n\
+    \    [(and (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n\
+    \          (string-ci=? (car (keys dict)) (car (keys (cdr dict)))))\n     (check_dict_case\
+    \ (cdr dict))]\n    [else false]))\n</code>\n", "  (cond\n    [(empty? dict) #f]\n\
+    \    [(string-ci=? (string-upcase (car (keys dict))) (string-upcase (car (keys\
+    \ dict)))) #t]\n    [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(andmap\
+    \ string-lowercase? (keys dict)) #t]\n    [(andmap string-uppercase? (keys dict))\
+    \ #t]\n    [else #f]))\n", "  (let ([keys (hash-keys dict)])\n    (cond [(empty?\
+    \ keys) #f]\n          [(andmap string-lowercase? keys) #t]\n          [(andmap\
+    \ string-uppercase? keys) #t]\n          [else #f])))\n", "  (if (empty? dict)\n\
+    \      #f\n      (let ([keys (map (lambda (x) (symbol->string (car x))) dict)])\n\
+    \        (if (andmap string-lower-case? keys)\n            (andmap string-upper-case?\
+    \ keys)\n            #f))))\n", "  (if (empty? dict)\n      #f\n      (let ([keys\
+    \ (keys dict)])\n        (if (andmap string-lowercase? keys)\n            (andmap\
+    \ string-lowercase? (values dict))\n            (andmap string-uppercase? keys)\n\
+    \            (andmap string-uppercase? (values dict))))))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(and (string? (car (keys dict)))\n          (string? (car (keys\
+    \ (cdr dict))))\n          (string-ci=? (car (keys dict)) (car (keys (cdr dict)))))\n\
+    \     (check_dict_case (cdr dict))]\n    [else #f]))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(and (string? (car (keys dict)))\n          (string? (car (keys\
+    \ (cdr dict))))\n          (or (string-ci=? (car (keys dict)) (car (keys (cdr\
+    \ dict))))\n              (string-ci=? (car (keys dict)) (car (keys (cdr (cdr\
+    \ dict)))))))\n     (check_dict_case (cdr dict))]\n    [else #f]))\n", "  (cond\n\
+    \    [(empty? dict) #f]\n    [(andmap string-lowercase? (keys dict)) #t]\n   \
+    \ [(andmap string-uppercase? (keys dict)) #t]\n    [else #f]))\n", "  (cond\n\
+    \    [(empty? dict) #f]\n    [(andmap string-ci=? (map key dict)) #t]\n    [(andmap\
+    \ string-ci=? (map key dict) #:key (compose string-upcase)) #t]\n    [else #f]))\n",
+  "  (if (empty? dict)\n      #f\n      (let ((keys (map (lambda (k) (string-downcase\
+    \ k)) (hash-keys dict))))\n        (if (equal? keys (hash-keys dict))\n      \
+    \      #t\n            #f))))\n", "  (if (empty? dict)\n      #f\n      (let ([keys\
+    \ (keys dict)])\n        (if (andmap string-lowercase? keys)\n            (andmap\
+    \ string-lowercase? (values dict))\n            (andmap string-uppercase? keys)\n\
+    \            (andmap string-uppercase? (values dict))))))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(andmap string-lowercase? (keys dict)) #t]\n    [(andmap string-uppercase?\
+    \ (keys dict)) #t]\n    [else #f]))\n", "  (if (empty? dict)\n      #f\n     \
+    \ (let ([keys (keys dict)])\n        (if (andmap string-lowercase? keys)\n   \
+    \         (andmap string-lowercase? (values dict))\n            (andmap string-uppercase?\
+    \ keys)\n            (andmap string-uppercase? (values dict))))))\n", "  (cond\n\
+    \    [(empty? dict) false]\n    [(and (string? (car (keys dict))) (string? (car\
+    \ (keys (cdr dict)))))\n     (and (string-ci=? (car (keys dict)) (car (keys (cdr\
+    \ dict))))\n          (check_dict_case (cdr dict)))]\n    [else false]))\n", " \
+    \ (cond\n    [(empty? dict) #f]\n    [(and (string? (first (keys dict)))\n   \
+    \       (string? (first (keys (rest dict))))\n          (equal? (string-upper-case\
+    \ (first (keys dict))) (first (keys dict)))\n          (equal? (string-upper-case\
+    \ (first (keys (rest dict)))) (first (keys (rest dict)))))\n     (check_dict_case\
+    \ (rest dict))]\n    [(and (string? (first (keys dict)))\n          (string? (first\
+    \ (keys (rest dict))))\n          (equal? (string-lower-case (first (keys dict)))\
+    \ (first (keys dict)))\n          (equal? (string-lower-case (first (keys (rest\
+    \ dict)))) (first (keys (rest dict)))))\n     (check_dict_case (rest dict))]\n\
+    \    [else #f]))\n", "  (cond\n    [(empty? dict) false]\n    [(and (string? (car\
+    \ (keys dict)))\n          (string? (car (keys (cdr dict))))\n          (or (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr dict))))\n              (string-ci=? (car\
+    \ (keys dict)) (string-upcase (car (keys (cdr dict)))))))\n     (check_dict_case\
+    \ (cdr dict))]\n    [else false]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and\
+    \ (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n \
+    \         (or (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n      \
+    \        (string-ci=? (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n   \
+    \  (check_dict_case (cdr dict))]\n    [else #f]))\n", "  (if (empty? dict)\n \
+    \     #f\n      (let ([keys (keys dict)])\n        (if (andmap string-lowercase?\
+    \ keys)\n            (andmap string-lowercase? (values dict))\n            (andmap\
+    \ string-uppercase? keys)\n            (andmap string-uppercase? (values dict))))))\n",
+  "  (cond\n    [(empty? dict) false]\n    [(and (string? (car (keys dict)))\n   \
+    \       (string? (car (keys (cdr dict))))\n          (string-ci=? (car (keys dict))\
+    \ (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n    [else false]))\n",
+  "  (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n        (if (andmap\
+    \ (lambda (key) (string-ci=? key (string-downcase key))) keys)\n            #t\n\
+    \            (andmap (lambda (key) (string-ci=? key (string-upcase key))) keys)))))\n",
+  "  (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n        (if (andmap\
+    \ string-lowercase? keys)\n            (andmap string-lowercase? (values dict))\n\
+    \            (andmap string-uppercase? keys)\n            (andmap string-uppercase?\
+    \ (values dict))))))\n", "  (cond\n    [(empty? dict) #f]\n    [(andmap string-lowercase?\
+    \ (keys dict)) #t]\n    [(andmap string-uppercase? (keys dict)) #t]\n    [else\
+    \ #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and (string? (car (dict-keys\
+    \ dict)))\n          (string? (car (dict-keys (cdr dict))))\n          (string-ci=?\
+    \ (car (dict-keys dict)) (car (dict-keys (cdr dict)))))\n     (check_dict_case\
+    \ (cdr dict))]\n    [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and\
+    \ (string? (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n \
+    \         (or (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n      \
+    \        (string-ci=? (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n   \
+    \  (check_dict_case (cdr dict))]\n    [else #f]))\n", "  (cond\n    [(empty? dict)\
+    \ false]\n    [(and (string? (first (keys dict)))\n          (string? (first (keys\
+    \ (rest dict))))\n          (or (string-ci=? (first (keys dict)) (first (keys\
+    \ (rest dict))))\n              (string-ci=? (first (keys dict)) (first (keys\
+    \ (rest dict))))))\n     (check_dict_case (rest dict))]\n    [else false]))\n",
+  "  (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n        (if (andmap\
+    \ string-lowercase? keys)\n            (andmap string-lowercase? (values dict))\n\
+    \            (andmap string-uppercase? keys)\n            (andmap string-uppercase?\
+    \ (values dict))))))\n", "  (cond\n    [(empty? dict) #f]\n    [(andmap string-lowercase?\
+    \ (keys dict)) #t]\n    [(andmap string-uppercase? (keys dict)) #t]\n    [else\
+    \ #f]))\n", "  (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n\
+    \        (if (andmap string-lowercase? keys)\n            (andmap string-lowercase?\
+    \ (values dict))\n            (andmap string-uppercase? keys)\n            (andmap\
+    \ string-uppercase? (values dict))))))\n", "  (cond\n    [(empty? dict) #f]\n\
+    \    [(andmap string-lowercase? (keys dict)) #t]\n    [(andmap string-uppercase?\
+    \ (keys dict)) #t]\n    [else #f]))\n", "  (if (empty? dict)\n      #f\n     \
+    \ (let ([keys (keys dict)])\n        (if (andmap string-lowercase? keys)\n   \
+    \         (andmap string-lowercase? (values dict))\n            (andmap string-uppercase?\
+    \ keys)\n            (andmap string-uppercase? (values dict))))))\n", "  (cond\n\
+    \    [(empty? dict) false]\n    [(and (string? (car (keys dict))) (string? (car\
+    \ (keys (cdr dict)))))\n     (cond\n       [(and (string-ci=? (car (keys dict))\
+    \ (car (keys (cdr dict))))\n             (string-ci=? (car (keys dict)) (car (keys\
+    \ (cdr (cdr dict))))))\n        true]\n       [else false])]\n    [else false]))\n",
+  "  (cond\n    [(empty? dict) false]\n    [(and (string? (car (keys dict)))\n   \
+    \       (string? (car (keys (cdr dict))))\n          (string-ci=? (car (keys dict))\
+    \ (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n    [else false]))\n",
+  "  (cond\n    [(empty? dict) #f]\n    [(andmap string-lowercase? (keys dict)) #t]\n\
+    \    [(andmap string-uppercase? (keys dict)) #t]\n    [else #f]))\n", "  (cond\n\
+    \    [(empty? dict) false]\n    [(and (string? (first (keys dict)))\n        \
+    \  (string? (first (keys (rest dict))))\n          (or (string-ci=? (first (keys\
+    \ dict)) (first (keys (rest dict))))\n              (string-ci=? (first (keys\
+    \ dict)) (first (keys (rest dict))))))\n     (check_dict_case (rest dict))]\n\
+    \    [else false]))\n", "  (cond\n    [(empty? dict) false]\n    [(and (string?\
+    \ (car (dict-keys dict)))\n          (string? (car (dict-keys (cdr dict))))\n\
+    \          (string-ci=? (car (dict-keys dict)) (car (dict-keys (cdr dict)))))\n\
+    \     (check_dict_case (cdr dict))]\n    [else false]))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(andmap string-lowercase? (keys dict)) #t]\n    [(andmap string-uppercase?\
+    \ (keys dict)) #t]\n    [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n   \
+    \ [(and (string? (car (dict-keys dict)))\n          (string? (car (dict-keys (cdr\
+    \ dict))))\n          (string-ci=? (car (dict-keys dict)) (car (dict-keys (cdr\
+    \ dict)))))\n     (check_dict_case (cdr dict))]\n    [else #f]))\n", "  (cond\n\
+    \    [(empty? dict) #f]\n    [(and (string? (key dict))\n          (string-ci=?\
+    \ (key dict) (key dict))) #t]\n    [else #f]))\n</code>\nI'm not sure how to check\
+    \ if all keys are strings in lower case or all keys are strings in upper case.\n\
+    \n\nA:\n\nYou can use <code>string-ci&lt;=?</code> to check if a string is lowercase:\n\
+    <code>(string-ci&lt;=? \"a\" \"z\")\n=&gt; #t\n</code>\nAnd <code>string-ci&gt;=?</code>\
+    \ to check if a string is uppercase:\n<code>(string-ci&gt;=? \"A\" \"Z\")\n=&gt;\
+    \ #t\n</code>\nYou can use <code>foldl</code> to iterate over the dictionary,\
+    \ and check if all the keys are lowercase or uppercase.\n", "  (let ([keys (hash-keys\
+    \ dict)])\n    (cond [(empty? keys) #f]\n          [(andmap string-lowercase?\
+    \ keys) #t]\n          [(andmap string-uppercase? keys) #t]\n          [else #f])))\n",
+  "  (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n        (if (andmap\
+    \ char-lower-case? (first keys))\n            (andmap char-lower-case? keys)\n\
+    \            (andmap char-upper-case? keys)))))\n", "  (cond\n    [(empty? dict)\
+    \ false]\n    [(and (string? (first (keys dict)))\n          (string? (first (keys\
+    \ (rest dict))))\n          (or (string-ci=? (first (keys dict)) (first (keys\
+    \ (rest dict))))\n              (string-ci=? (first (keys dict)) (first (keys\
+    \ (rest dict)))))\n          (check_dict_case (rest dict)))\n     true]\n    [else\
+    \ false]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and (string? (car (keys\
+    \ dict)))\n          (string? (car (keys (cdr dict))))\n          (or (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr dict))))\n              (string-ci=? (car\
+    \ (keys dict)) (car (keys (cdr (cdr dict)))))))\n     (check_dict_case (cdr dict))]\n\
+    \    [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(andmap string-lowercase?\
+    \ (keys dict)) #t]\n    [(andmap string-uppercase? (keys dict)) #t]\n    [else\
+    \ #f]))\n", "  (cond [(empty? dict) #f]\n        [(and (string? (car (keys dict)))\n\
+    \              (string? (car (keys (cdr dict))))\n              (string-ci=? (car\
+    \ (keys dict)) (car (keys (cdr dict)))))\n         (check_dict_case (cdr dict))]\n\
+    \        [else #f]))\n", "  (cond\n    [(empty? dict) false]\n    [(and (string?\
+    \ (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n          (or\
+    \ (string-ci=? (car (keys dict)) (car (keys (cdr dict))))\n              (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr (cdr dict)))))))\n     (check_dict_case (cdr\
+    \ dict))]\n    [else false]))\n</code>\nI'm not sure how to make it work for dictionaries\
+    \ with more than two keys.\nI'm also not sure if I should use <code>string-ci=?</code>\
+    \ or <code>string=?</code> in the <code>and</code> statement.\n\n\nA:\n\nHere's\
+    \ a solution that uses <code>string-ci=?</code> to compare the keys, and it works\
+    \ for dictionaries with any number of keys:\n<code>(define (check-dict-case dict)\n\
+    \  (if (empty? dict)\n      false\n      (let ([first-key (car (keys dict))])\n\
+    \        (andmap (lambda (key) (string-ci=? first-key key)) (keys dict)))))\n\
+    </code>\n", "  (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n\
+    \        (if (andmap string-lowercase? keys)\n            (andmap string-lowercase?\
+    \ (values dict))\n            (andmap string-uppercase? keys)\n            (andmap\
+    \ string-uppercase? (values dict))))))\n", "  (define (check-keys dict)\n    (cond\
+    \ ((empty? dict) #t)\n          ((and (string? (first (first dict)))\n       \
+    \         (or (char-lower-case? (string-ref (first (first dict)) 0))\n       \
+    \             (char-upper-case? (string-ref (first (first dict)) 0))))\n     \
+    \      (check-keys (rest dict)))\n          (else #f)))\n  (if (empty? dict)\n\
+    \      #f\n      (check-keys dict)))\n", "  (cond\n    [(empty? dict) #f]\n  \
+    \  [(andmap string-ci=? (map key dict)) #t]\n    [(andmap string-ci=? (map key\
+    \ dict) (map (lambda (x) (string-upcase x)) (map key dict))) #t]\n    [else #f]))\n",
+  "  (cond\n    [(empty? dict) false]\n    [(and (string? (car (keys dict)))\n   \
+    \       (string? (car (keys (cdr dict))))\n          (string-ci=? (car (keys dict))\
+    \ (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n    [else false]))\n",
+  "  (cond\n    [(empty? dict) #f]\n    [(andmap string-lowercase? (keys dict)) #t]\n\
+    \    [(andmap string-uppercase? (keys dict)) #t]\n    [else #f]))\n", "  (cond\n\
+    \    [(empty? dict) #f]\n    [(and (string? (car (keys dict)))\n          (string?\
+    \ (car (keys (cdr dict))))\n          (or (char-lower-case? (string-ref (car (keys\
+    \ dict)) 0))\n              (char-upper-case? (string-ref (car (keys dict)) 0)))\n\
+    \          (or (char-lower-case? (string-ref (car (keys (cdr dict))) 0))\n   \
+    \           (char-upper-case? (string-ref (car (keys (cdr dict))) 0)))\n     \
+    \     (char=? (string-ref (car (keys dict)) 0)\n                   (string-ref\
+    \ (car (keys (cdr dict))) 0)))\n     (check_dict_case (cdr dict))]\n    [else\
+    \ #f]))\n</code>\nThe problem is that I get the following error:\n<code>check_dict_case:\
+    \ expects argument of type &lt;dict&gt;; given '((\"a\" . \"apple\") (\"A\" .\
+    \ \"banana\") (\"B\" . \"banana\"))\n</code>\nI have no idea what I'm doing wrong.\n\
+    \n\nA:\n\nThe problem is that you're using <code>keys</code> on a dictionary,\
+    \ which returns a list of keys. But you're using <code>car</code> on that list,\
+    \ which returns the first key, which is a string. So you're comparing strings\
+    \ with strings, which is not what you want.\nYou can use <code>dict-ref</code>\
+    \ to get the value associated with a key in a dictionary.\n<code>(define (check_dict_case\
+    \ dict)\n  (cond\n    [(empty? dict) #f]\n    [(and (string? (dict-ref dict (car\
+    \ (keys dict))))\n          (string? (dict-ref dict (car (keys (cdr dict)))))\n\
+    \          (or (char-lower-case? (string-ref (dict-ref dict (car (keys dict)))\
+    \ 0))\n              (char-upper-case? (string-ref (dict-ref dict (car (keys dict)))\
+    \ 0)))\n          (or (char-lower-case? (string-ref (dict-ref dict (car (keys\
+    \ (cdr dict", "  (cond\n    [(empty? dict) false]\n    [(and (string? (car (keys\
+    \ dict))) (string? (car (keys (cdr dict)))))\n     (and (string-ci=? (car (keys\
+    \ dict)) (car (keys (cdr dict))))\n          (check_dict_case (cdr dict)))]\n\
+    \    [else false]))\n", "  (cond\n    [(empty? dict) #f]\n    [(and (string? (car\
+    \ (dict-keys dict)))\n          (string? (car (dict-keys (cdr dict))))\n     \
+    \     (or (string-ci=? (car (dict-keys dict)) (car (dict-keys (cdr dict))))\n\
+    \              (string-ci=? (car (dict-keys dict)) (car (dict-keys (cdr dict))))))\n\
+    \     (check_dict_case (cdr dict))]\n    [else #f]))\n", "  (if (empty? dict)\n\
+    \      #f\n      (let ([keys (map (lambda (k) (string-upcase k)) (hash-keys dict))])\n\
+    \        (if (equal? keys (hash-keys dict))\n            #t\n            #f))))\n",
+  "  (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n        (if (not\
+    \ (every string? keys))\n            #f\n            (let ([lower (every char-lower-case?\
+    \ (string-&gt;list (car keys)))])\n              (every (lambda (key)\n      \
+    \                 (if lower\n                           (char-lower-case? (car\
+    \ key))\n                           (char-upper-case? (car key))))\n         \
+    \            keys))))))\n</code>\n", "  (cond\n    [(empty? dict) #f]\n    [(andmap\
+    \ string-lowercase? (keys dict)) #t]\n    [(andmap string-uppercase? (keys dict))\
+    \ #t]\n    [else #f]))\n", "  (cond\n    [(empty? dict) false]\n    [(and (string?\
+    \ (car (keys dict)))\n          (string? (car (keys (cdr dict))))\n          (string-ci=?\
+    \ (car (keys dict)) (car (keys (cdr dict)))))\n     (check_dict_case (cdr dict))]\n\
+    \    [else false]))\n</code>\n", "  (if (empty? dict)\n      #f\n      (let ([keys\
+    \ (keys dict)])\n        (if (andmap string-lowercase? keys)\n            (andmap\
+    \ string-lowercase? (values dict))\n            (andmap string-uppercase? keys)\n\
+    \            (andmap string-uppercase? (values dict))))))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(andmap string-lowercase? (dict-keys dict)) #t]\n    [(andmap\
+    \ string-uppercase? (dict-keys dict)) #t]\n    [else #f]))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(and (string? (car (first dict)))\n          (string? (car (last\
+    \ dict)))\n          (or (string-ci=? (car (first dict)) (car (last dict)))\n\
+    \              (string-ci=? (car (first dict)) (car (last dict)))))\n     (check_dict_case\
+    \ (rest dict))]\n    [else #f]))\n", "  (cond\n    [(empty? dict) false]\n   \
+    \ [(andmap string? (map key dict)) true]\n    [(andmap string-upcase? (map key\
+    \ dict)) true]\n    [else false]))\n", "  (cond\n    [(empty? dict) false]\n \
+    \   [(and (string? (first (keys dict)))\n          (string? (first (keys (rest\
+    \ dict))))\n          (or (string-ci=? (first (keys dict)) (first (keys (rest\
+    \ dict))))\n              (string-ci=? (first (keys dict)) (first (keys (rest\
+    \ dict)))))\n          (check_dict_case (rest dict)))\n     true]\n    [else false]))\n",
+  "  (if (empty? dict)\n      #f\n      (let ([keys (keys dict)])\n        (if (andmap\
+    \ string-lowercase? keys)\n            (andmap string-lowercase? (values dict))\n\
+    \            (andmap string-uppercase? keys)\n            (andmap string-uppercase?\
+    \ (values dict))))))\n"]
+stop_tokens:
+- "\n(define "
+- "\n#|"
+- "\n;"
+- "\n("

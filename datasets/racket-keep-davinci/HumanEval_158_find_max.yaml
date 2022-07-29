@@ -1,0 +1,1450 @@
+name: HumanEval_158_find_max
+language: racket
+prompt: "#lang racket\n\n;; Write a function that accepts a list of strings.\n;; The\
+  \ list contains different words. Return the word with maximum number\n;; of unique\
+  \ characters. If multiple strings have maximum number of unique\n;; characters,\
+  \ return the one which comes first in lexicographical order.\n;; find_max([\"name\"\
+  , \"of\", \"string\"]) == \"string\"\n;; find_max([\"name\", \"enam\", \"game\"\
+  ]) == \"enam\"\n;; find_max([\"aaaaaaa\", \"bb\" ,\"cc\"]) == \"\"aaaaaaa\"\n(define\
+  \ (find_max words)\n"
+tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate find_max))\n\
+  \    (check-equal? (candidate (list \"name\" \"of\" \"string\")) \"string\")\n \
+  \   (check-equal? (candidate (list \"name\" \"enam\" \"game\")) \"enam\")\n    (check-equal?\
+  \ (candidate (list \"aaaaaaa\" \"bb\" \"cc\")) \"aaaaaaa\")\n    (check-equal? (candidate\
+  \ (list \"abc\" \"cba\")) \"abc\")\n    (check-equal? (candidate (list \"play\"\
+  \ \"this\" \"game\" \"of\" \"footbott\")) \"footbott\")\n    (check-equal? (candidate\
+  \ (list \"we\" \"are\" \"gonna\" \"rock\")) \"gonna\")\n    (check-equal? (candidate\
+  \ (list \"we\" \"are\" \"a\" \"mad\" \"nation\")) \"nation\")\n    (check-equal?\
+  \ (candidate (list \"this\" \"is\" \"a\" \"prrk\")) \"this\")\n    (check-equal?\
+  \ (candidate (list \"b\")) \"b\")\n    (check-equal? (candidate (list \"play\" \"\
+  play\" \"play\")) \"play\")\n))\n\n(test-humaneval)"
+completions: ["  (define (unique-chars word)\n    (remove-duplicates (string->list\
+    \ word)))\n  (define (max-unique-chars words)\n    (apply max (map unique-chars\
+    \ words)))\n  (define (max-unique-words words)\n    (filter (lambda (word) (=\
+    \ (unique-chars word) (max-unique-chars words))) words))\n  (apply min (max-unique-words\
+    \ words)))\n", "  (define (unique-chars word)\n    (set! word (string->list word))\n\
+    \    (define (unique-chars-iter word acc)\n      (cond ((null? word) acc)\n  \
+    \          ((member (car word) acc) (unique-chars-iter (cdr word) acc))\n    \
+    \        (else (unique-chars-iter (cdr word) (cons (car word) acc)))))\n    (unique-chars-iter\
+    \ word '()))\n  (define (find-max-iter words max-word max-count)\n    (cond ((null?\
+    \ words) max-word)\n          ((> (length (unique-chars (car words))) max-count)\n\
+    \           (find-max-iter (cdr words) (car words) (length (unique-chars (car\
+    \ words)))))\n          ((= (length (unique-chars (car words))) max-count)\n \
+    \          (cond ((string<? (car words) max-word)\n                  (find-max-iter\
+    \ (cdr words) (car words) (length (unique-chars (car words)))))\n            \
+    \     (else (find-max-iter (cdr words) max-word max-count))))\n          (else\
+    \ (find-max-iter (cdr words) max-word max-count))))\n  (find-max-iter words \"\
+    \" 0))\n", "  (let loop ([words words]\n             [max-word \"\"]\n       \
+    \      [max-count 0])\n    (cond [(empty? words) max-word]\n          [(> (length\
+    \ (unique (first words))) max-count)\n           (loop (rest words) (first words)\
+    \ (length (unique (first words))))]\n          [(= (length (unique (first words)))\
+    \ max-count)\n           (if (string<? (first words) max-word)\n             \
+    \  (loop (rest words) (first words) (length (unique (first words))))\n       \
+    \        (loop (rest words) max-word max-count))]\n          [else (loop (rest\
+    \ words) max-word max-count)])))\n", "  (define (unique-chars word)\n    (remove-duplicates\
+    \ (string->list word)))\n  (define (max-unique-chars words)\n    (apply max (map\
+    \ unique-chars words)))\n  (define (max-unique-words words)\n    (filter (lambda\
+    \ (word)\n              (= (unique-chars word) (max-unique-chars words)))\n  \
+    \          words))\n  (define (lexicographical-order words)\n    (sort words string<?))\n\
+    \  (car (lexicographical-order (max-unique-words words))))\n", "  (define (unique-chars\
+    \ word)\n    (set! word (string->list word))\n    (set! word (remove-duplicates\
+    \ word))\n    (list->string word))\n  (define (max-unique-chars words)\n    (apply\
+    \ max (map unique-chars words)))\n  (define (max-unique-chars-words words)\n \
+    \   (filter (lambda (word)\n              (= (unique-chars word) (max-unique-chars\
+    \ words)))\n            words))\n  (define (min-lex words)\n    (apply min words))\n\
+    \  (min-lex (max-unique-chars-words words)))\n", "  (define (unique-chars word)\n\
+    \    (set! word (string->list word))\n    (define (helper word unique-chars)\n\
+    \      (cond\n        [(empty? word) unique-chars]\n        [(member (first word)\
+    \ unique-chars) (helper (rest word) unique-chars)]\n        [else (helper (rest\
+    \ word) (cons (first word) unique-chars))]))\n    (helper word '()))\n  (define\
+    \ (max-unique-chars words)\n    (cond\n      [(empty? words) 0]\n      [else (max\
+    \ (length (unique-chars (first words))) (max-unique-chars (rest words)))]))\n\
+    \  (define (helper words max-unique-chars)\n    (cond\n      [(empty? words) '()]\n\
+    \      [(= (length (unique-chars (first words))) max-unique-chars) (cons (first\
+    \ words) (helper (rest words) max-unique-chars))]\n      [else (helper (rest words)\
+    \ max-unique-chars)]))\n  (define (min-lex words)\n    (cond\n      [(empty? words)\
+    \ '()]\n      [(= (string<? (first words) (second words)) #t) (first words)]\n\
+    \      [else (min-lex (rest words))]))\n  (min-lex (helper words (max-unique-chars\
+    \ words))))\n", "  (define (count-unique-chars word)\n    (length (remove-duplicates\
+    \ (string->list word))))\n  (define (max-unique-chars words)\n    (apply max (map\
+    \ count-unique-chars words)))\n  (define (max-unique-words words)\n    (filter\
+    \ (lambda (word) (= (count-unique-chars word) (max-unique-chars words))) words))\n\
+    \  (define (lexicographically-first words)\n    (apply min words))\n  (lexicographically-first\
+    \ (max-unique-words words)))\n", "  (apply max words))\n", "  (let ([max-word\
+    \ (first words)]\n        [max-count (count-unique-chars (first words))])\n  \
+    \  (for ([word (rest words)])\n      (let ([count (count-unique-chars word)])\n\
+    \        (when (or (> count max-count)\n                  (and (= count max-count)\n\
+    \                       (string<? max-word word)))\n          (set! max-word word)\n\
+    \          (set! max-count count))))\n    max-word))\n", "  (define (unique-chars\
+    \ word)\n    (set! word (string->list word))\n    (define (unique-chars-iter word\
+    \ unique-chars)\n      (cond ((null? word) unique-chars)\n            ((member\
+    \ (car word) unique-chars)\n             (unique-chars-iter (cdr word) unique-chars))\n\
+    \            (else (unique-chars-iter (cdr word) (cons (car word) unique-chars)))))\n\
+    \    (unique-chars-iter word '()))\n  (define (find-max-iter words max-word)\n\
+    \    (cond ((null? words) max-word)\n          ((> (length (unique-chars (car\
+    \ words))) (length (unique-chars max-word)))\n           (find-max-iter (cdr words)\
+    \ (car words)))\n          (else (find-max-iter (cdr words) max-word))))\n  (find-max-iter\
+    \ words (car words)))\n", "  (define (unique-chars word)\n    (set! word (string->list\
+    \ word))\n    (set! word (remove-duplicates word))\n    (list->string word))\n\
+    \  (define (max-unique-chars words)\n    (define (max-unique-chars-iter words\
+    \ max)\n      (cond ((null? words) max)\n            ((> (length (unique-chars\
+    \ (car words))) (length (unique-chars max)))\n             (max-unique-chars-iter\
+    \ (cdr words) (car words)))\n            (else (max-unique-chars-iter (cdr words)\
+    \ max))))\n    (max-unique-chars-iter words (car words)))\n  (max-unique-chars\
+    \ words))\n", "  (let ([max-word (first words)]\n        [max-count (count-unique-chars\
+    \ (first words))])\n    (for ([word (rest words)])\n      (let ([count (count-unique-chars\
+    \ word)])\n        (if (and (> count max-count)\n                 (string<? max-word\
+    \ word))\n            (begin\n              (set! max-word word)\n           \
+    \   (set! max-count count)))))\n    max-word))\n", "  (define (count-unique word)\n\
+    \    (length (remove-duplicates (string->list word))))\n  (define (max-unique-word\
+    \ words)\n    (cond [(empty? words) '()]\n          [(empty? (rest words)) (first\
+    \ words)]\n          [else (if (> (count-unique (first words))\n             \
+    \          (count-unique (max-unique-word (rest words))))\n                  \
+    \  (first words)\n                    (max-unique-word (rest words)))]))\n  (max-unique-word\
+    \ words))\n", "  (let ([max-word (car words)]\n        [max-count (length (remove-duplicates\
+    \ (string->list (car words))))])\n    (for ([word (cdr words)])\n      (let ([count\
+    \ (length (remove-duplicates (string->list word)))])\n        (when (> count max-count)\n\
+    \          (set! max-word word)\n          (set! max-count count))))\n    max-word))\n",
+  "  (define (count-unique word)\n    (length (remove-duplicates (string->list word))))\n\
+    \  (define (max-unique-word words)\n    (if (null? words)\n        \"\"\n    \
+    \    (let ((first-word (car words))\n              (rest-words (cdr words)))\n\
+    \          (if (null? rest-words)\n              first-word\n              (let\
+    \ ((max-word (max-unique-word rest-words)))\n                (if (> (count-unique\
+    \ first-word) (count-unique max-word))\n                    first-word\n     \
+    \               max-word))))))\n  (max-unique-word words))\n", "  (define (unique-chars\
+    \ word)\n    (set! word (string->list word))\n    (set! word (remove-duplicates\
+    \ word))\n    (list->string word))\n  (define (max-unique-chars words)\n    (apply\
+    \ max (map unique-chars words)))\n  (define (max-unique-words words)\n    (filter\
+    \ (lambda (word) (= (unique-chars word) (max-unique-chars words))) words))\n \
+    \ (define (lexicographical-order words)\n    (sort words string<?))\n  (car (lexicographical-order\
+    \ (max-unique-words words))))\n", "  (define (find_max_helper words max-word max-count)\n\
+    \    (if (null? words)\n        max-word\n        (let ([word (car words)])\n\
+    \          (let ([count (length (remove-duplicates (string->list word)))]\n  \
+    \              [new-max-word (if (> count max-count) word max-word)])\n      \
+    \      (find_max_helper (cdr words) new-max-word count)))))\n  (find_max_helper\
+    \ words \"\" 0))\n", "  (let ([max-word (first words)]\n        [max-unique-chars\
+    \ (length (unique-chars (first words)))]\n        [current-unique-chars 0])\n\
+    \    (for ([word words])\n      (set! current-unique-chars (length (unique-chars\
+    \ word)))\n      (when (&gt; current-unique-chars max-unique-chars)\n        (set!\
+    \ max-unique-chars current-unique-chars)\n        (set! max-word word)))\n   \
+    \ max-word))\n", "  (define (find_max_helper words max-word)\n    (cond\n    \
+    \  [(empty? words) max-word]\n      [(string<? (first words) max-word) (find_max_helper\
+    \ (rest words) max-word)]\n      [else (find_max_helper (rest words) (first words))]))\n\
+    \  (define (find_max_unique words max-word)\n    (cond\n      [(empty? words)\
+    \ max-word]\n      [(> (length (unique-chars (first words))) (length (unique-chars\
+    \ max-word)))\n       (find_max_unique (rest words) (first words))]\n      [else\
+    \ (find_max_unique (rest words) max-word)]))\n  (find_max_helper (find_max_unique\
+    \ words (first words)) (first words)))\n", "  (let loop ([words words]\n     \
+    \        [max-word (car words)]\n             [max-count (length (unique-chars\
+    \ (car words)))])\n    (cond [(null? words) max-word]\n          [(> (length (unique-chars\
+    \ (car words))) max-count)\n           (loop (cdr words) (car words) (length (unique-chars\
+    \ (car words))))]\n          [(= (length (unique-chars (car words))) max-count)\n\
+    \           (if (string<? (car words) max-word)\n               (loop (cdr words)\
+    \ (car words) (length (unique-chars (car words))))\n               (loop (cdr\
+    \ words) max-word max-count))]\n          [else (loop (cdr words) max-word max-count)])))\n",
+  "  (let loop ([words words]\n             [max-word \"\"]\n             [max-count\
+    \ 0])\n    (cond [(empty? words) max-word]\n          [(> (length (unique (first\
+    \ words))) max-count)\n           (loop (rest words) (first words) (length (unique\
+    \ (first words))))]\n          [(= (length (unique (first words))) max-count)\n\
+    \           (if (string<? (first words) max-word)\n               (loop (rest\
+    \ words) (first words) (length (unique (first words))))\n               (loop\
+    \ (rest words) max-word max-count))]\n          [else (loop (rest words) max-word\
+    \ max-count)])))\n", "  (define (unique-chars word)\n    (set! word (string->list\
+    \ word))\n    (define (helper word acc)\n      (cond ((null? word) acc)\n    \
+    \        ((member (car word) acc) (helper (cdr word) acc))\n            (else\
+    \ (helper (cdr word) (cons (car word) acc)))))\n    (helper word '()))\n  (define\
+    \ (max-unique-chars words)\n    (cond ((null? words) '())\n          ((null? (cdr\
+    \ words)) (car words))\n          (else (let ((word1 (car words))\n          \
+    \             (word2 (car (cdr words))))\n                  (if (> (length (unique-chars\
+    \ word1))\n                         (length (unique-chars word2)))\n         \
+    \             (max-unique-chars (cons word1 (cdr (cdr words))))\n            \
+    \          (max-unique-chars (cons word2 (cdr (cdr words)))))))))\n  (max-unique-chars\
+    \ words))\n", "  (define (count-unique word)\n    (length (remove-duplicates (string->list\
+    \ word))))\n  (define (max-unique-word words)\n    (cond ((null? words) '())\n\
+    \          ((null? (cdr words)) (car words))\n          (else\n           (let\
+    \ ((first (car words))\n                 (rest (cdr words)))\n             (if\
+    \ (&gt; (count-unique first) (count-unique (max-unique-word rest)))\n        \
+    \         first\n                 (max-unique-word rest))))))\n  (max-unique-word\
+    \ words))\n</code>\n", "  (define (unique-chars word)\n    (set! word (string->list\
+    \ word))\n    (define (unique-chars-iter word unique-chars)\n      (cond\n   \
+    \     [(empty? word) unique-chars]\n        [(member (first word) unique-chars)\
+    \ (unique-chars-iter (rest word) unique-chars)]\n        [else (unique-chars-iter\
+    \ (rest word) (cons (first word) unique-chars))]))\n    (unique-chars-iter word\
+    \ '()))\n  (define (find-max-iter words max-word)\n    (cond\n      [(empty? words)\
+    \ max-word]\n      [(> (length (unique-chars (first words))) (length (unique-chars\
+    \ max-word)))\n       (find-max-iter (rest words) (first words))]\n      [(= (length\
+    \ (unique-chars (first words))) (length (unique-chars max-word)))\n       (cond\n\
+    \         [(string<? (first words) max-word) (find-max-iter (rest words) (first\
+    \ words))]\n         [else (find-max-iter (rest words) max-word)])]\n      [else\
+    \ (find-max-iter (rest words) max-word)]))\n  (find-max-iter words (first words)))\n",
+  "  (let ([max-word (first words)]\n        [max-len (length (remove-duplicates (string->list\
+    \ (first words))))])\n    (for ([word words])\n      (let ([len (length (remove-duplicates\
+    \ (string->list word)))])\n        (when (> len max-len)\n          (set! max-word\
+    \ word)\n          (set! max-len len))))\n    max-word))\n", "  (define (count-unique\
+    \ word)\n    (length (remove-duplicates (string->list word))))\n  (define (max-unique-word\
+    \ words)\n    (cond [(empty? words) '()]\n          [(empty? (rest words)) (first\
+    \ words)]\n          [else (if (> (count-unique (first words))\n             \
+    \         (count-unique (max-unique-word (rest words))))\n                   (first\
+    \ words)\n                   (max-unique-word (rest words)))]))\n  (max-unique-word\
+    \ words))\n", "  (define (find_max_helper words max-word max-unique-chars)\n \
+    \   (cond\n      [(empty? words) max-word]\n      [(string<? (first words) max-word)\
+    \ (find_max_helper (rest words) max-word max-unique-chars)]\n      [(string<?\
+    \ max-word (first words)) (find_max_helper (rest words) (first words) (length\
+    \ (unique-chars (first words))))]\n      [(= (length (unique-chars (first words)))\
+    \ max-unique-chars) (find_max_helper (rest words) max-word max-unique-chars)]\n\
+    \      [else (find_max_helper (rest words) (first words) (length (unique-chars\
+    \ (first words))))]))\n  (find_max_helper (rest words) (first words) (length (unique-chars\
+    \ (first words)))))\n", "  (define (unique-chars word)\n    (set! word (string->list\
+    \ word))\n    (set! word (remove-duplicates word))\n    (list->string word))\n\
+    \  (define (max-unique-chars words)\n    (define (max-unique-chars-helper words\
+    \ max-word)\n      (cond\n        [(empty? words) max-word]\n        [(string=?\
+    \ (unique-chars (first words)) (unique-chars max-word))\n         (max-unique-chars-helper\
+    \ (rest words) max-word)]\n        [(> (string-length (unique-chars (first words)))\n\
+    \            (string-length (unique-chars max-word)))\n         (max-unique-chars-helper\
+    \ (rest words) (first words))]\n        [else (max-unique-chars-helper (rest words)\
+    \ max-word)]))\n    (max-unique-chars-helper (rest words) (first words)))\n  (max-unique-chars\
+    \ words))\n", "  (define (unique-chars word)\n    (set! word (string->list word))\n\
+    \    (define (unique-chars-iter word unique-chars)\n      (cond\n        [(empty?\
+    \ word) unique-chars]\n        [(member (first word) unique-chars) (unique-chars-iter\
+    \ (rest word) unique-chars)]\n        [else (unique-chars-iter (rest word) (cons\
+    \ (first word) unique-chars))]))\n    (unique-chars-iter word '()))\n  (define\
+    \ (max-unique-chars words)\n    (cond\n      [(empty? words) '()]\n      [(empty?\
+    \ (rest words)) (unique-chars (first words))]\n      [else (max-unique-chars (cons\
+    \ (first words) (max-unique-chars (rest words))))]))\n  (define (find-max-iter\
+    \ words max-unique-chars)\n    (cond\n      [(empty? words) '()]\n      [(equal?\
+    \ (unique-chars (first words)) max-unique-chars) (first words)]\n      [else (find-max-iter\
+    \ (rest words) max-unique-chars)]))\n  (find-max-iter words (max-unique-chars\
+    \ words)))\n", "  (define (find_max_helper words max-word)\n    (cond\n      [(empty?\
+    \ words) max-word]\n      [(string<? (first words) max-word) (find_max_helper\
+    \ (rest words) max-word)]\n      [else (find_max_helper (rest words) (first words))]))\n\
+    \  (define (unique-chars word)\n    (define (unique-chars-helper word chars)\n\
+    \      (cond\n        [(empty? word) chars]\n        [(member (first word) chars)\
+    \ (unique-chars-helper (rest word) chars)]\n        [else (unique-chars-helper\
+    \ (rest word) (cons (first word) chars))]))\n    (unique-chars-helper word '()))\n\
+    \  (define (find_max_unique words max-word)\n    (cond\n      [(empty? words)\
+    \ max-word]\n      [(> (length (unique-chars (first words))) (length (unique-chars\
+    \ max-word)))\n       (find_max_unique (rest words) (first words))]\n      [else\
+    \ (find_max_unique (rest words) max-word)]))\n  (find_max_helper (find_max_unique\
+    \ words (first words)) (first words)))\n", "  (define (find_max-helper words max-word\
+    \ max-len)\n    (cond\n      [(empty? words) max-word]\n      [(> (length (unique-chars\
+    \ (first words))) max-len)\n       (find_max-helper (rest words) (first words)\
+    \ (length (unique-chars (first words))))]\n      [(= (length (unique-chars (first\
+    \ words))) max-len)\n       (cond\n         [(string<? (first words) max-word)\n\
+    \          (find_max-helper (rest words) (first words) (length (unique-chars (first\
+    \ words))))]\n         [else (find_max-helper (rest words) max-word max-len)])]\n\
+    \      [else (find_max-helper (rest words) max-word max-len)]))\n  (find_max-helper\
+    \ words \"\" 0))\n", "  (define (find_max-helper words max-word)\n    (cond [(empty?\
+    \ words) max-word]\n          [(string=? (first words) max-word) (find_max-helper\
+    \ (rest words) max-word)]\n          [(> (length (unique-chars (first words)))\
+    \ (length (unique-chars max-word)))\n           (find_max-helper (rest words)\
+    \ (first words))]\n          [else (find_max-helper (rest words) max-word)]))\n\
+    \  (find_max-helper words (first words)))\n", "  (define (find_max_helper words\
+    \ max-word)\n    (cond\n      [(empty? words) max-word]\n      [(or (empty? max-word)\n\
+    \           (< (length (unique-chars (first words)))\n              (length (unique-chars\
+    \ max-word))))\n       (find_max_helper (rest words) (first words))]\n      [else\
+    \ (find_max_helper (rest words) max-word)]))\n  (find_max_helper words \"\"))\n",
+  "  (define (count-unique word)\n    (length (remove-duplicates (string->list word))))\n\
+    \  (define (max-unique-word words)\n    (cond ((null? words) \"\")\n         \
+    \ ((null? (cdr words)) (car words))\n          (else (if (> (count-unique (car\
+    \ words))\n                       (count-unique (cadr words)))\n             \
+    \       (car words)\n                    (max-unique-word (cdr words))))))\n \
+    \ (max-unique-word words))\n", "  (define (unique-chars word)\n    (set! word\
+    \ (string->list word))\n    (set! word (remove-duplicates word))\n    (list->string\
+    \ word))\n  (define (max-unique words)\n    (apply max (map unique-chars words)))\n\
+    \  (define (max-unique-words words)\n    (filter (lambda (word) (= (unique-chars\
+    \ word) (max-unique words))) words))\n  (define (lexicographical-order words)\n\
+    \    (sort words string<?))\n  (car (lexicographical-order (max-unique-words words))))\n",
+  "  (define (unique-chars word)\n    (set! word (string->list word))\n    (set! word\
+    \ (remove-duplicates word))\n    (list->string word))\n  (define (max-unique-chars\
+    \ words)\n    (define (max-unique-chars-iter words max-word max-unique-chars)\n\
+    \      (cond\n        [(empty? words) max-word]\n        [(string<? (unique-chars\
+    \ (first words)) max-unique-chars)\n         (max-unique-chars-iter (rest words)\
+    \ max-word max-unique-chars)]\n        [(string=? (unique-chars (first words))\
+    \ max-unique-chars)\n         (max-unique-chars-iter (rest words) (first words)\
+    \ max-unique-chars)]\n        [else (max-unique-chars-iter (rest words) (first\
+    \ words) (unique-chars (first words)))]))\n    (max-unique-chars-iter words \"\
+    \" \"\"))\n  (max-unique-chars words))\n", "  (define (find_max_helper words max_word)\n\
+    \    (cond\n      [(empty? words) max_word]\n      [(string<? (first words) max_word)\
+    \ (find_max_helper (rest words) max_word)]\n      [else (find_max_helper (rest\
+    \ words) (first words))]))\n  (define (unique_chars word)\n    (define (unique_chars_helper\
+    \ word chars)\n      (cond\n        [(empty? word) chars]\n        [(member (first\
+    \ word) chars) (unique_chars_helper (rest word) chars)]\n        [else (unique_chars_helper\
+    \ (rest word) (cons (first word) chars))]))\n    (unique_chars_helper word '()))\n\
+    \  (define (max_unique_chars words)\n    (define (max_unique_chars_helper words\
+    \ max_word)\n      (cond\n        [(empty? words) max_word]\n        [(string<?\
+    \ (first words) max_word) (max_unique_chars_helper (rest words) max_word)]\n \
+    \       [else (max_unique_chars_helper (rest words) (first words))]))\n    (max_unique_chars_helper\
+    \ words (first words)))\n  (define (max_unique_chars_count words)\n    (length\
+    \ (unique_chars (max_unique_chars words))))\n  (define (max_unique_chars_count_words\
+    \ words)\n    (define (max_unique_chars_count_words_helper words max_count max_words)\n\
+    \      (cond\n        [(empty? words) max_words]\n        [(= (length (unique_chars\
+    \ (first words))) max_count)\n         (max_unique_chars_count_words_helper (rest\
+    \ words) max_count (cons (first words) max_words))]\n        [else (max_unique_chars_count_words_helper\
+    \ (rest words) max_count max_words)]))\n    (max_unique_chars_count_words_helper\
+    \ words (max_unique_chars_count words) '()))\n  (find_", "  (define (find_max_helper\
+    \ words max)\n    (cond\n      [(empty? words) max]\n      [(> (length (set (first\
+    \ words))) (length (set max)))\n       (find_max_helper (rest words) (first words))]\n\
+    \      [else (find_max_helper (rest words) max)]))\n  (find_max_helper words (first\
+    \ words)))\n", "  (define (find_max_helper words max-word max-count)\n    (cond\n\
+    \      [(empty? words) max-word]\n      [(> (length (unique-chars (first words)))\
+    \ max-count)\n       (find_max_helper (rest words) (first words) (length (unique-chars\
+    \ (first words))))]\n      [else (find_max_helper (rest words) max-word max-count)]))\n\
+    \  (find_max_helper words \"\" 0))\n", "  (if (null? words)\n      \"\"\n    \
+    \  (let ((max-word (car words))\n            (max-len (length (remove-duplicates\
+    \ (string->list (car words))))))\n        (for ([word (cdr words)])\n        \
+    \  (let ((word-len (length (remove-duplicates (string->list word)))))\n      \
+    \      (if (> word-len max-len)\n                (begin\n                  (set!\
+    \ max-word word)\n                  (set! max-len word-len)))))\n        max-word)))\n",
+  "  (define (unique-chars word)\n    (set! word (string->list word))\n    (set! word\
+    \ (remove-duplicates word))\n    (list->string word))\n  (define (max-unique-chars\
+    \ words)\n    (define (max-unique-chars-iter words max-word max-unique-chars)\n\
+    \      (cond ((null? words) max-word)\n            ((> (length (unique-chars (car\
+    \ words))) max-unique-chars)\n             (max-unique-chars-iter (cdr words)\
+    \ (car words) (length (unique-chars (car words)))))\n            (else (max-unique-chars-iter\
+    \ (cdr words) max-word max-unique-chars))))\n    (max-unique-chars-iter words\
+    \ \"\" 0))\n  (max-unique-chars words))\n", "  (if (null? words)\n      \"\"\n\
+    \      (let ([max-word (car words)]\n            [max-uniq (length (unique-chars\
+    \ (car words)))]\n            [rest (cdr words)])\n        (while (not (null?\
+    \ rest))\n          (let ([word (car rest)]\n                [uniq (length (unique-chars\
+    \ word))])\n            (if (and (&gt; uniq max-uniq)\n                     (string&lt;?\
+    \ max-word word))\n                (set! max-word word)\n                (set!\
+    \ max-uniq uniq))\n            (set! rest (cdr rest))))\n        max-word)))\n",
+  "  (define (unique-chars word)\n    (set! word (string->list word))\n    (set! word\
+    \ (remove-duplicates word))\n    (list->string word))\n  (define (max-unique-chars\
+    \ words)\n    (apply max (map unique-chars words)))\n  (define (max-unique-words\
+    \ words)\n    (filter (lambda (word)\n              (= (unique-chars word) (max-unique-chars\
+    \ words)))\n            words))\n  (apply min (max-unique-words words)))\n", " \
+    \ (define (unique-chars word)\n    (set! word (string->list word))\n    (set!\
+    \ word (remove-duplicates word))\n    (list->string word))\n  (define (max-unique-chars\
+    \ words)\n    (apply max (map unique-chars words)))\n  (define (max-unique-chars-words\
+    \ words)\n    (filter (lambda (word)\n              (= (unique-chars word) (max-unique-chars\
+    \ words)))\n            words))\n  (define (lexicographical-order words)\n   \
+    \ (apply min words))\n  (lexicographical-order (max-unique-chars-words words)))\n",
+  "  (cond\n    [(empty? words) (error \"empty list\")]\n    [(empty? (rest words))\
+    \ (first words)]\n    [else\n     (let ([max-word (find_max (rest words))])\n\
+    \       (if (> (length (unique-chars (first words)))\n              (length (unique-chars\
+    \ max-word)))\n           (first words)\n           max-word))]))\n", "  (define\
+    \ (unique-chars word)\n    (set! word (string->list word))\n    (define (unique-chars-helper\
+    \ word unique-chars)\n      (cond\n        [(empty? word) unique-chars]\n    \
+    \    [(member (first word) unique-chars) (unique-chars-helper (rest word) unique-chars)]\n\
+    \        [else (unique-chars-helper (rest word) (cons (first word) unique-chars))]))\n\
+    \    (unique-chars-helper word '()))\n  (define (max-unique-chars words)\n   \
+    \ (cond\n      [(empty? words) '()]\n      [(empty? (rest words)) (first words)]\n\
+    \      [else (if (> (length (unique-chars (first words))) (length (unique-chars\
+    \ (second words))))\n                (max-unique-chars (cons (first words) (rest\
+    \ (rest words))))\n                (max-unique-chars (cons (second words) (rest\
+    \ (rest words)))))]))\n  (max-unique-chars words))\n", "  (define (find_max_helper\
+    \ words max-word max-word-len)\n    (cond\n      [(empty? words) max-word]\n \
+    \     [(> (length (unique (first words))) max-word-len)\n       (find_max_helper\
+    \ (rest words) (first words) (length (unique (first words))))]\n      [else (find_max_helper\
+    \ (rest words) max-word max-word-len)]))\n  (find_max_helper words \"\" 0))\n",
+  "  (let ([max-word (first words)]\n        [max-count (length (remove-duplicates\
+    \ (string->list (first words))))])\n    (for ([word (rest words)])\n      (let\
+    \ ([count (length (remove-duplicates (string->list word)))])\n        (when (>\
+    \ count max-count)\n          (set! max-word word)\n          (set! max-count\
+    \ count))))\n    max-word))\n", "  (define (unique-chars word)\n    (set! word\
+    \ (string->list word))\n    (set! word (remove-duplicates word))\n    (list->string\
+    \ word))\n  (define (max-unique-chars words)\n    (define (max-unique-chars-iter\
+    \ words max-word)\n      (cond\n        [(empty? words) max-word]\n        [(string=?\
+    \ (unique-chars (first words)) (unique-chars max-word))\n         (max-unique-chars-iter\
+    \ (rest words) max-word)]\n        [(> (string-length (unique-chars (first words)))\n\
+    \            (string-length (unique-chars max-word)))\n         (max-unique-chars-iter\
+    \ (rest words) (first words))]\n        [else (max-unique-chars-iter (rest words)\
+    \ max-word)]))\n    (max-unique-chars-iter (rest words) (first words)))\n  (max-unique-chars\
+    \ words))\n", "  (define (unique-chars word)\n    (set! word (string->list word))\n\
+    \    (define (unique-chars-helper word unique-chars)\n      (cond\n        [(empty?\
+    \ word) unique-chars]\n        [(member (first word) unique-chars) (unique-chars-helper\
+    \ (rest word) unique-chars)]\n        [else (unique-chars-helper (rest word) (cons\
+    \ (first word) unique-chars))]))\n    (unique-chars-helper word '()))\n  (define\
+    \ (find-max-helper words max-word max-unique-chars)\n    (cond\n      [(empty?\
+    \ words) max-word]\n      [(> (length (unique-chars (first words))) max-unique-chars)\n\
+    \       (find-max-helper (rest words) (first words) (length (unique-chars (first\
+    \ words))))]\n      [(= (length (unique-chars (first words))) max-unique-chars)\n\
+    \       (cond\n         [(string<? (first words) max-word) (find-max-helper (rest\
+    \ words) (first words) max-unique-chars)]\n         [else (find-max-helper (rest\
+    \ words) max-word max-unique-chars)])]\n      [else (find-max-helper (rest words)\
+    \ max-word max-unique-chars)]))\n  (find-max-helper words \"\" 0))\n", "  (define\
+    \ (find_max-helper words max-word)\n    (cond [(empty? words) max-word]\n    \
+    \      [(> (length (unique-chars (first words)))\n              (length (unique-chars\
+    \ max-word)))\n           (find_max-helper (rest words) (first words))]\n    \
+    \      [else (find_max-helper (rest words) max-word)]))\n  (find_max-helper words\
+    \ (first words)))\n", "  (if (null? words)\n      \"\"\n      (let ([max-word\
+    \ (car words)]\n            [max-count (length (remove-duplicates (string->list\
+    \ (car words))))])\n        (for ([word (cdr words)])\n          (let ([count\
+    \ (length (remove-duplicates (string->list word)))])\n            (if (> count\
+    \ max-count)\n                (begin\n                  (set! max-word word)\n\
+    \                  (set! max-count count)))))\n        max-word)))\n", "  (define\
+    \ (find_max-helper words max-word max-count)\n    (cond\n      [(empty? words)\
+    \ max-word]\n      [(> (length (unique-chars (first words))) max-count)\n    \
+    \   (find_max-helper (rest words) (first words) (length (unique-chars (first words))))]\n\
+    \      [else (find_max-helper (rest words) max-word max-count)]))\n  (find_max-helper\
+    \ words \"\" 0))\n", "  (define (unique-chars word)\n    (set! word (string->list\
+    \ word))\n    (set! word (remove-duplicates word))\n    (list->string word))\n\
+    \  (define (max-unique-chars words)\n    (apply max (map unique-chars words)))\n\
+    \  (define (max-unique-words words)\n    (filter (lambda (word) (= (unique-chars\
+    \ word) (max-unique-chars words))) words))\n  (define (lexicographical-order words)\n\
+    \    (sort words string<?))\n  (car (lexicographical-order (max-unique-words words))))\n",
+  "  (define (unique-chars word)\n    (set! word (string->list word))\n    (define\
+    \ (unique-chars-iter word unique-chars)\n      (cond\n        [(empty? word) unique-chars]\n\
+    \        [(member (first word) unique-chars) (unique-chars-iter (rest word) unique-chars)]\n\
+    \        [else (unique-chars-iter (rest word) (cons (first word) unique-chars))]))\n\
+    \    (unique-chars-iter word '()))\n  (define (max-unique-chars words)\n    (cond\n\
+    \      [(empty? words) 0]\n      [else (max (length (unique-chars (first words)))\
+    \ (max-unique-chars (rest words)))]))\n  (define (find-max-iter words max-unique-chars)\n\
+    \    (cond\n      [(empty? words) '()]\n      [(= (length (unique-chars (first\
+    \ words))) max-unique-chars) (first words)]\n      [else (find-max-iter (rest\
+    \ words) max-unique-chars)]))\n  (find-max-iter words (max-unique-chars words)))\n",
+  "  (define (find_max-helper words max-word max-count)\n    (cond\n      [(empty?\
+    \ words) max-word]\n      [(> (length (unique (first words))) max-count)\n   \
+    \    (find_max-helper (rest words) (first words) (length (unique (first words))))]\n\
+    \      [else (find_max-helper (rest words) max-word max-count)]))\n  (find_max-helper\
+    \ words \"\" 0))\n", "  (let loop ([words words]\n             [max-word \"\"\
+    ]\n             [max-count 0])\n    (cond [(empty? words) max-word]\n        \
+    \  [(> (length (unique (first words))) max-count)\n           (loop (rest words)\
+    \ (first words) (length (unique (first words))))]\n          [(= (length (unique\
+    \ (first words))) max-count)\n           (if (string<? (first words) max-word)\n\
+    \               (loop (rest words) (first words) (length (unique (first words))))\n\
+    \               (loop (rest words) max-word max-count))]\n          [else (loop\
+    \ (rest words) max-word max-count)])))\n", "  (define (unique-chars word)\n  \
+    \  (set! word (sort word string<?))\n    (define (unique-chars-iter word unique-chars)\n\
+    \      (cond\n        [(empty? word) unique-chars]\n        [(char=? (first word)\
+    \ (first (rest word))) (unique-chars-iter (rest word) unique-chars)]\n       \
+    \ [else (unique-chars-iter (rest word) (cons (first word) unique-chars))]))\n\
+    \    (unique-chars-iter word '()))\n  (define (max-unique-chars words)\n    (cond\n\
+    \      [(empty? words) '()]\n      [(empty? (rest words)) (unique-chars (first\
+    \ words))]\n      [else (if (> (length (unique-chars (first words))) (length (unique-chars\
+    \ (first (rest words)))))\n                (max-unique-chars (cons (first words)\
+    \ (rest (rest words))))\n                (max-unique-chars (rest words)))]))\n\
+    \  (define (first-word-with-max-unique-chars words)\n    (cond\n      [(empty?\
+    \ words) '()]\n      [(equal? (unique-chars (first words)) (max-unique-chars words))\
+    \ (first words)]\n      [else (first-word-with-max-unique-chars (rest words))]))\n\
+    \  (first-word-with-max-unique-chars words))\n", "  (define (find_max_helper words\
+    \ max-word max-count)\n    (cond\n      [(empty? words) max-word]\n      [(> (length\
+    \ (unique-chars (first words))) max-count)\n       (find_max_helper (rest words)\
+    \ (first words) (length (unique-chars (first words))))]\n      [else (find_max_helper\
+    \ (rest words) max-word max-count)]))\n  (find_max_helper words \"\" 0))\n", " \
+    \ (define (unique-chars word)\n    (for/list ([c (in-string word)])\n      (if\
+    \ (not (member c (rest (in-string word))))\n          c)))\n  (define (max-unique-chars\
+    \ words)\n    (apply max (map unique-chars words)))\n  (define (max-unique-words\
+    \ words)\n    (filter (lambda (word)\n              (= (length (unique-chars word))\n\
+    \                 (max-unique-chars words)))\n            words))\n  (define (first-lexicographically\
+    \ words)\n    (apply min words))\n  (first-lexicographically (max-unique-words\
+    \ words)))\n", "  (let ([max-word (first words)]\n        [max-count (count-unique-chars\
+    \ (first words))])\n    (for ([word (rest words)])\n      (let ([count (count-unique-chars\
+    \ word)])\n        (if (> count max-count)\n            (begin\n             \
+    \ (set! max-word word)\n              (set! max-count count))\n            (if\
+    \ (= count max-count)\n                (if (string<? word max-word)\n        \
+    \            (set! max-word word))))))\n    max-word))\n", "  (define (count-unique\
+    \ word)\n    (length (remove-duplicates (string->list word))))\n  (define (max-unique-word\
+    \ words)\n    (cond ((null? words) '())\n          ((null? (cdr words)) (car words))\n\
+    \          (else\n           (let ((first (car words))\n                 (rest\
+    \ (cdr words)))\n             (if (> (count-unique first) (count-unique (max-unique-word\
+    \ rest)))\n                 first\n                 (max-unique-word rest))))))\n\
+    \  (max-unique-word words))\n", "  (define (find_max_helper words max-word)\n\
+    \    (cond\n      [(empty? words) max-word]\n      [(string<? (first words) max-word)\
+    \ (find_max_helper (rest words) max-word)]\n      [else (find_max_helper (rest\
+    \ words) (first words))]))\n  (define (count-unique-chars word)\n    (define (count-unique-chars-helper\
+    \ word unique-chars)\n      (cond\n        [(empty? word) (length unique-chars)]\n\
+    \        [(member (first word) unique-chars) (count-unique-chars-helper (rest\
+    \ word) unique-chars)]\n        [else (count-unique-chars-helper (rest word) (cons\
+    \ (first word) unique-chars))]))\n    (count-unique-chars-helper word '()))\n\
+    \  (define (find_max_unique words max-word max-unique)\n    (cond\n      [(empty?\
+    \ words) max-word]\n      [(> (count-unique-chars (first words)) max-unique) (find_max_unique\
+    \ (rest words) (first words) (count-unique-chars (first words)))]\n      [(= (count-unique-chars\
+    \ (first words)) max-unique) (find_max_helper (rest words) (first words) max-word)]\n\
+    \      [else (find_max_unique (rest words) max-word max-unique)]))\n  (find_max_unique\
+    \ words (first words) (count-unique-chars (first words))))\n", "  (define (unique-chars\
+    \ word)\n    (remove-duplicates (string->list word)))\n  (define (max-unique-chars\
+    \ words)\n    (apply max (map unique-chars words)))\n  (define (max-unique-words\
+    \ words)\n    (filter (lambda (word)\n              (= (unique-chars word) (max-unique-chars\
+    \ words)))\n            words))\n  (define (first-lex words)\n    (apply min words))\n\
+    \  (first-lex (max-unique-words words)))\n", "  (cond\n    [(empty? words) \"\"\
+    ]\n    [(= (length words) 1) (first words)]\n    [else\n     (let ([max-word (first\
+    \ words)]\n           [max-unique-chars (length (unique-chars (first words)))]\n\
+    \           [rest-words (rest words)])\n       (for ([word rest-words])\n    \
+    \     (let ([unique-chars (length (unique-chars word))])\n           (cond\n \
+    \            [(> unique-chars max-unique-chars)\n              (set! max-word\
+    \ word)\n              (set! max-unique-chars unique-chars)]\n             [(=\
+    \ unique-chars max-unique-chars)\n              (cond\n                [(string<?\
+    \ word max-word)\n                 (set! max-word word)])])))))\n     max-word]))\n",
+  "  (define (unique-chars word)\n    (set! word (string->list word))\n    (define\
+    \ (unique-chars-iter word acc)\n      (cond ((null? word) acc)\n            ((member\
+    \ (car word) acc) (unique-chars-iter (cdr word) acc))\n            (else (unique-chars-iter\
+    \ (cdr word) (cons (car word) acc)))))\n    (unique-chars-iter word '()))\n  (define\
+    \ (find-max-iter words max-word max-count)\n    (cond ((null? words) max-word)\n\
+    \          ((> (length (unique-chars (car words))) max-count)\n           (find-max-iter\
+    \ (cdr words) (car words) (length (unique-chars (car words)))))\n          ((=\
+    \ (length (unique-chars (car words))) max-count)\n           (cond ((string<?\
+    \ (car words) max-word)\n                  (find-max-iter (cdr words) (car words)\
+    \ (length (unique-chars (car words)))))\n                 (else (find-max-iter\
+    \ (cdr words) max-word max-count))))\n          (else (find-max-iter (cdr words)\
+    \ max-word max-count))))\n  (find-max-iter words \"\" 0))\n", "  (define (unique-chars\
+    \ word)\n    (set! word (string->list word))\n    (define (unique-chars-iter word\
+    \ unique-chars)\n      (cond\n        [(empty? word) unique-chars]\n        [(member\
+    \ (first word) unique-chars) (unique-chars-iter (rest word) unique-chars)]\n \
+    \       [else (unique-chars-iter (rest word) (cons (first word) unique-chars))]))\n\
+    \    (unique-chars-iter word '()))\n  (define (find-max-iter words max-word)\n\
+    \    (cond\n      [(empty? words) max-word]\n      [(> (length (unique-chars (first\
+    \ words))) (length (unique-chars max-word)))\n       (find-max-iter (rest words)\
+    \ (first words))]\n      [(= (length (unique-chars (first words))) (length (unique-chars\
+    \ max-word)))\n       (if (string<? (first words) max-word)\n           (find-max-iter\
+    \ (rest words) (first words))\n           (find-max-iter (rest words) max-word))]\n\
+    \      [else (find-max-iter (rest words) max-word)]))\n  (find-max-iter words\
+    \ (first words)))\n", "  (let ([max-word (first words)]\n        [max-count (length\
+    \ (remove-duplicates (string->list (first words))))])\n    (for ([word (rest words)])\n\
+    \      (let ([count (length (remove-duplicates (string->list word)))])\n     \
+    \   (when (> count max-count)\n          (set! max-word word)\n          (set!\
+    \ max-count count))))\n    max-word))\n", "  (define (unique-chars word)\n   \
+    \ (set! word (string->list word))\n    (define (unique-chars-iter word unique-chars)\n\
+    \      (cond ((null? word) unique-chars)\n            ((member (car word) unique-chars)\n\
+    \             (unique-chars-iter (cdr word) unique-chars))\n            (else\
+    \ (unique-chars-iter (cdr word) (cons (car word) unique-chars)))))\n    (unique-chars-iter\
+    \ word '()))\n  (define (max-unique-chars words)\n    (cond ((null? words) 0)\n\
+    \          ((= (length (unique-chars (car words)))\n              (max-unique-chars\
+    \ (cdr words)))\n           (max-unique-chars (cdr words)))\n          (else (length\
+    \ (unique-chars (car words))))))\n  (define (find-max-iter words max-unique-chars)\n\
+    \    (cond ((null? words) '())\n          ((= (length (unique-chars (car words)))\
+    \ max-unique-chars)\n           (list (car words)))\n          (else (find-max-iter\
+    \ (cdr words) max-unique-chars))))\n  (define (min-lex words)\n    (cond ((null?\
+    \ (cdr words)) (car words))\n          ((string<? (car words) (car (cdr words)))\n\
+    \           (min-lex (cdr words)))\n          (else (min-lex (cons (car words)\
+    \ (cdr (cdr words)))))))\n  (min-lex (find-max-iter words (max-unique-chars words))))\n",
+  "  (define (unique-chars word)\n    (set! word (string->list word))\n    (define\
+    \ (unique-chars-helper word acc)\n      (cond ((null? word) acc)\n           \
+    \ ((member (car word) acc) (unique-chars-helper (cdr word) acc))\n           \
+    \ (else (unique-chars-helper (cdr word) (cons (car word) acc)))))\n    (unique-chars-helper\
+    \ word '()))\n  (define (find-max-helper words max-word max-len)\n    (cond ((null?\
+    \ words) max-word)\n          ((> (length (unique-chars (car words))) max-len)\n\
+    \           (find-max-helper (cdr words) (car words) (length (unique-chars (car\
+    \ words)))))\n          ((= (length (unique-chars (car words))) max-len)\n   \
+    \        (cond ((string<? (car words) max-word)\n                  (find-max-helper\
+    \ (cdr words) (car words) (length (unique-chars (car words)))))\n            \
+    \     (else (find-max-helper (cdr words) max-word max-len))))\n          (else\
+    \ (find-max-helper (cdr words) max-word max-len))))\n  (find-max-helper words\
+    \ \"\" 0))\n", "  (define (unique-chars word)\n    (set! word (string->list word))\n\
+    \    (set! word (remove-duplicates word))\n    (list->string word))\n  (define\
+    \ (max-unique-chars words)\n    (define (max-unique-chars-iter words max-word)\n\
+    \      (cond ((null? words) max-word)\n            ((> (length (unique-chars (car\
+    \ words)))\n                (length (unique-chars max-word)))\n             (max-unique-chars-iter\
+    \ (cdr words) (car words)))\n            (else (max-unique-chars-iter (cdr words)\
+    \ max-word))))\n    (max-unique-chars-iter words (car words)))\n  (max-unique-chars\
+    \ words))\n", "  (define (unique-chars word)\n    (set! word (string->list word))\n\
+    \    (set! word (remove-duplicates word))\n    (list->string word))\n  (define\
+    \ (max-unique-chars words)\n    (define (max-unique-chars-iter words max)\n  \
+    \    (cond\n        [(empty? words) max]\n        [(> (string-length (unique-chars\
+    \ (first words)))\n            (string-length (unique-chars max)))\n         (max-unique-chars-iter\
+    \ (rest words) (first words))]\n        [else (max-unique-chars-iter (rest words)\
+    \ max)]))\n    (max-unique-chars-iter words (first words)))\n  (max-unique-chars\
+    \ words))\n", "  (let loop ([words words]\n             [max-word (car words)]\n\
+    \             [max-word-count (length (unique-chars (car words)))])\n    (cond\
+    \ [(empty? words) max-word]\n          [(> (length (unique-chars (car words)))\
+    \ max-word-count)\n           (loop (cdr words) (car words) (length (unique-chars\
+    \ (car words))))]\n          [(= (length (unique-chars (car words))) max-word-count)\n\
+    \           (loop (cdr words) (if (string<? (car words) max-word) (car words)\
+    \ max-word) max-word-count)]\n          [else (loop (cdr words) max-word max-word-count)])))\n",
+  "  (define (count-unique word)\n    (length (remove-duplicates (string->list word))))\n\
+    \  (define (max-unique-word words)\n    (cond ((null? words) '())\n          ((null?\
+    \ (cdr words)) (car words))\n          (else\n           (let ((first (car words))\n\
+    \                 (rest (cdr words)))\n             (if (> (count-unique first)\
+    \ (count-unique (max-unique-word rest)))\n                 first\n           \
+    \      (max-unique-word rest))))))\n  (max-unique-word words))\n", "  (define\
+    \ (unique-chars word)\n    (set! word (string->list word))\n    (set! word (remove-duplicates\
+    \ word))\n    (list->string word))\n  (define (unique-chars-count word)\n    (string-length\
+    \ (unique-chars word)))\n  (define (max-unique-chars-count words)\n    (apply\
+    \ max (map unique-chars-count words)))\n  (define (max-unique-chars-words words)\n\
+    \    (filter (lambda (word) (= (unique-chars-count word) (max-unique-chars-count\
+    \ words))) words))\n  (define (lexicographical-order words)\n    (sort words string<?))\n\
+    \  (first (lexicographical-order (max-unique-chars-words words))))\n", "  (apply\
+    \ max (map string-length words)))\n", "  (define (unique-chars word)\n    (set!\
+    \ word (string->list word))\n    (set! word (remove-duplicates word))\n    (list->string\
+    \ word))\n  (define (max-unique-chars words)\n    (define (max-unique-chars-helper\
+    \ words max)\n      (cond ((null? words) max)\n            ((> (length (unique-chars\
+    \ (car words))) (length (unique-chars max)))\n             (max-unique-chars-helper\
+    \ (cdr words) (car words)))\n            (else (max-unique-chars-helper (cdr words)\
+    \ max))))\n    (max-unique-chars-helper words (car words)))\n  (max-unique-chars\
+    \ words))\n", "  (let loop ([words words]\n             [max-word \"\"]\n    \
+    \         [max-count 0])\n    (cond [(empty? words) max-word]\n          [(> (length\
+    \ (unique (first words))) max-count)\n           (loop (rest words) (first words)\
+    \ (length (unique (first words))))]\n          [(= (length (unique (first words)))\
+    \ max-count)\n           (if (string<? (first words) max-word)\n             \
+    \  (loop (rest words) (first words) (length (unique (first words))))\n       \
+    \        (loop (rest words) max-word max-count))]\n          [else (loop (rest\
+    \ words) max-word max-count)])))\n", "  (define (unique-chars word)\n    (set!\
+    \ word (string->list word))\n    (define (unique-chars-helper word unique-chars)\n\
+    \      (cond\n        [(empty? word) unique-chars]\n        [(member (first word)\
+    \ unique-chars) (unique-chars-helper (rest word) unique-chars)]\n        [else\
+    \ (unique-chars-helper (rest word) (cons (first word) unique-chars))]))\n    (unique-chars-helper\
+    \ word '()))\n  (define (max-unique-chars words)\n    (cond\n      [(empty? words)\
+    \ '()]\n      [(empty? (rest words)) (unique-chars (first words))]\n      [else\
+    \ (if (> (length (unique-chars (first words))) (length (unique-chars (second words))))\n\
+    \                (max-unique-chars (cons (first words) (rest (rest words))))\n\
+    \                (max-unique-chars (cons (second words) (rest (rest words)))))]))\n\
+    \  (define (find-max-helper words max-unique-chars)\n    (cond\n      [(empty?\
+    \ words) '()]\n      [(equal? (unique-chars (first words)) max-unique-chars) (first\
+    \ words)]\n      [else (find-max-helper (rest words) max-unique-chars)]))\n  (find-max-helper\
+    \ words (max-unique-chars words)))\n", "  (define (unique-chars word)\n    (set!\
+    \ word (string->list word))\n    (define (unique-chars-iter word unique-chars)\n\
+    \      (cond\n        [(empty? word) unique-chars]\n        [(member (first word)\
+    \ unique-chars) (unique-chars-iter (rest word) unique-chars)]\n        [else (unique-chars-iter\
+    \ (rest word) (cons (first word) unique-chars))]))\n    (unique-chars-iter word\
+    \ '()))\n  (define (max-unique-chars words)\n    (cond\n      [(empty? words)\
+    \ '()]\n      [(empty? (rest words)) (unique-chars (first words))]\n      [else\
+    \ (if (> (length (unique-chars (first words))) (length (unique-chars (second words))))\n\
+    \                (max-unique-chars (cons (first words) (rest (rest words))))\n\
+    \                (max-unique-chars (cons (second words) (rest (rest words)))))]))\n\
+    \  (first (max-unique-chars words)))\n", "  (define (unique-chars word)\n    (set!\
+    \ word (string->list word))\n    (define (unique-chars-iter word unique-chars)\n\
+    \      (cond\n        [(empty? word) unique-chars]\n        [(member (first word)\
+    \ unique-chars) (unique-chars-iter (rest word) unique-chars)]\n        [else (unique-chars-iter\
+    \ (rest word) (cons (first word) unique-chars))]))\n    (unique-chars-iter word\
+    \ '()))\n  (define (max-unique-chars words)\n    (cond\n      [(empty? words)\
+    \ '()]\n      [(empty? (rest words)) (unique-chars (first words))]\n      [else\
+    \ (if (> (length (unique-chars (first words))) (length (unique-chars (second words))))\n\
+    \                (max-unique-chars (cons (first words) (rest (rest words))))\n\
+    \                (max-unique-chars (cons (second words) (rest (rest words)))))]))\n\
+    \  (first (max-unique-chars words)))\n", "  (define (find_max_helper words max-word\
+    \ max-count)\n    (cond\n      [(empty? words) max-word]\n      [(string=? (first\
+    \ words) max-word) (find_max_helper (rest words) max-word max-count)]\n      [(>\
+    \ (count-unique-chars (first words)) max-count) (find_max_helper (rest words)\
+    \ (first words) (count-unique-chars (first words)))]\n      [else (find_max_helper\
+    \ (rest words) max-word max-count)]))\n  (find_max_helper words \"\" 0))\n", " \
+    \ (let loop ([words words]\n             [max-word (first words)]\n          \
+    \   [max-count (length (unique-chars (first words)))])\n    (cond [(empty? words)\
+    \ max-word]\n          [(> (length (unique-chars (first words))) max-count)\n\
+    \           (loop (rest words) (first words) (length (unique-chars (first words))))]\n\
+    \          [else (loop (rest words) max-word max-count)])))\n", "  (let ([max-word\
+    \ (first words)]\n        [max-count (length (remove-duplicates (string->list\
+    \ (first words))))])\n    (for ([word (rest words)])\n      (let ([count (length\
+    \ (remove-duplicates (string->list word)))])\n        (if (> count max-count)\n\
+    \            (begin\n              (set! max-word word)\n              (set! max-count\
+    \ count)))))\n    max-word))\n", "  (define (unique-chars word)\n    (set! word\
+    \ (string->list word))\n    (set! word (remove-duplicates word))\n    (list->string\
+    \ word))\n  (define (max-unique-chars words)\n    (apply max (map unique-chars\
+    \ words)))\n  (define (max-unique-words words)\n    (filter (lambda (word)\n \
+    \             (= (unique-chars word) (max-unique-chars words)))\n            words))\n\
+    \  (apply min (max-unique-words words)))\n", "  (define (find_max-helper words\
+    \ max-word)\n    (cond\n      [(empty? words) max-word]\n      [(string<? (first\
+    \ words) max-word) (find_max-helper (rest words) max-word)]\n      [else (find_max-helper\
+    \ (rest words) (first words))]))\n  (define (unique-chars word)\n    (define (unique-chars-helper\
+    \ word chars)\n      (cond\n        [(empty? word) chars]\n        [(member (first\
+    \ word) chars) (unique-chars-helper (rest word) chars)]\n        [else (unique-chars-helper\
+    \ (rest word) (cons (first word) chars))]))\n    (unique-chars-helper word '()))\n\
+    \  (define (num-unique-chars word)\n    (length (unique-chars word)))\n  (define\
+    \ (max-unique-chars words)\n    (cond\n      [(empty? words) 0]\n      [else (max\
+    \ (num-unique-chars (first words)) (max-unique-chars (rest words)))]))\n  (find_max-helper\
+    \ words (first words)))\n", "  (apply max (map (lambda (word)\n              \
+    \      (list (length (remove-duplicates (string->list word)))\n              \
+    \            word))\n                  words)))\n", "  (define (find_max_helper\
+    \ words max-word max-count)\n    (cond [(empty? words) max-word]\n          [else\n\
+    \           (define word (first words))\n           (define count (count-unique-chars\
+    \ word))\n           (cond [(> count max-count)\n                  (find_max_helper\
+    \ (rest words) word count)]\n                 [(= count max-count)\n         \
+    \         (cond [(string<? word max-word)\n                         (find_max_helper\
+    \ (rest words) word count)]\n                        [else\n                 \
+    \        (find_max_helper (rest words) max-word count)])]\n                 [else\n\
+    \                  (find_max_helper (rest words) max-word max-count)])]))\n  (find_max_helper\
+    \ words \"\" 0))\n", "  (define (find_max_helper words max-word max-word-len)\n\
+    \    (cond [(empty? words) max-word]\n          [else\n           (define word\
+    \ (first words))\n           (define word-len (length (remove-duplicates (string->list\
+    \ word))))\n           (if (> word-len max-word-len)\n               (find_max_helper\
+    \ (rest words) word word-len)\n               (find_max_helper (rest words) max-word\
+    \ max-word-len))]))\n  (find_max_helper words \"\" 0))\n", "  (define (unique-chars\
+    \ word)\n    (set! word (string->list word))\n    (define (unique-chars-iter word\
+    \ unique-chars)\n      (cond ((null? word) unique-chars)\n            ((member\
+    \ (car word) unique-chars)\n             (unique-chars-iter (cdr word) unique-chars))\n\
+    \            (else (unique-chars-iter (cdr word) (cons (car word) unique-chars)))))\n\
+    \    (unique-chars-iter word '()))\n  (define (max-unique-chars words)\n    (cond\
+    \ ((null? words) '())\n          ((null? (cdr words)) (car words))\n         \
+    \ (else (if (> (length (unique-chars (car words)))\n                      (length\
+    \ (unique-chars (cadr words))))\n                   (max-unique-chars (cons (car\
+    \ words) (cddr words)))\n                   (max-unique-chars (cdr words))))))\n\
+    \  (max-unique-chars words))\n", "  (define (unique-chars word)\n    (set! word\
+    \ (sort word string<?))\n    (define (unique-chars-iter word acc)\n      (cond\
+    \ ((null? word) acc)\n            ((char=? (car word) (car acc)) (unique-chars-iter\
+    \ (cdr word) acc))\n            (else (unique-chars-iter (cdr word) (cons (car\
+    \ word) acc)))))\n    (unique-chars-iter word (list (car word))))\n  (define (max-unique-chars\
+    \ words)\n    (cond ((null? words) '())\n          ((null? (cdr words)) (car words))\n\
+    \          (else (let ((first (car words))\n                       (second (cadr\
+    \ words)))\n                  (if (> (length (unique-chars first))\n         \
+    \                (length (unique-chars second)))\n                      (max-unique-chars\
+    \ (cons first (cddr words)))\n                      (max-unique-chars (cons second\
+    \ (cddr words))))))))\n  (max-unique-chars words))\n", "  (define (unique-chars\
+    \ word)\n    (set! word (string->list word))\n    (set! word (remove-duplicates\
+    \ word))\n    (list->string word))\n  (define (max-unique-chars words)\n    (define\
+    \ (max-unique-chars-iter words max-word max-chars)\n      (cond ((null? words)\
+    \ max-word)\n            ((> (length (unique-chars (car words))) max-chars)\n\
+    \             (max-unique-chars-iter (cdr words) (car words) (length (unique-chars\
+    \ (car words)))))\n            (else (max-unique-chars-iter (cdr words) max-word\
+    \ max-chars))))\n    (max-unique-chars-iter words \"\" 0))\n  (max-unique-chars\
+    \ words))\n", "  (define (find_max_helper words max-word max-count)\n    (cond\n\
+    \      [(empty? words) max-word]\n      [(> (length (unique-chars (first words)))\
+    \ max-count)\n       (find_max_helper (rest words) (first words) (length (unique-chars\
+    \ (first words))))]\n      [else (find_max_helper (rest words) max-word max-count)]))\n\
+    \  (find_max_helper words \"\" 0))\n", "  (define (unique-chars word)\n    (set!\
+    \ word (string->list word))\n    (define (unique-chars-helper word unique-chars)\n\
+    \      (cond ((null? word) unique-chars)\n            ((member (car word) unique-chars)\n\
+    \             (unique-chars-helper (cdr word) unique-chars))\n            (else\
+    \ (unique-chars-helper (cdr word) (cons (car word) unique-chars)))))\n    (unique-chars-helper\
+    \ word '()))\n  (define (find-max-helper words max-word max-word-chars)\n    (cond\
+    \ ((null? words) max-word)\n          ((> (length (unique-chars (car words)))\
+    \ max-word-chars)\n           (find-max-helper (cdr words) (car words) (length\
+    \ (unique-chars (car words)))))\n          ((= (length (unique-chars (car words)))\
+    \ max-word-chars)\n           (cond ((string<? (car words) max-word)\n       \
+    \           (find-max-helper (cdr words) (car words) (length (unique-chars (car\
+    \ words)))))\n                 (else (find-max-helper (cdr words) max-word max-word-chars))))\n\
+    \          (else (find-max-helper (cdr words) max-word max-word-chars))))\n  (find-max-helper\
+    \ words \"\" 0))\n", "  (define (count-unique word)\n    (length (remove-duplicates\
+    \ (string->list word))))\n  (define (max-unique-word words)\n    (if (null? words)\n\
+    \        \"\"\n        (let ((max-word (car words))\n              (max-count\
+    \ (count-unique (car words))))\n          (for ([word (cdr words)])\n        \
+    \    (let ((count (count-unique word)))\n              (if (> count max-count)\n\
+    \                  (begin\n                    (set! max-word word)\n        \
+    \            (set! max-count count)))))\n          max-word)))\n  (max-unique-word\
+    \ words))\n", "  (define (count-uniques word)\n    (length (remove-duplicates\
+    \ (string->list word))))\n  (define (max-uniques words)\n    (apply max (map count-uniques\
+    \ words)))\n  (define (filter-max words)\n    (filter (lambda (word) (= (count-uniques\
+    \ word) (max-uniques words))) words))\n  (define (sort-lex words)\n    (sort words\
+    \ string<?))\n  (car (sort-lex (filter-max words))))\n", "  (cond [(empty? words)\
+    \ \"\"]\n        [(= (length (unique-chars (first words)))\n            (length\
+    \ (unique-chars (last words))))\n         (if (string<? (first words) (last words))\n\
+    \             (first words)\n             (last words))]\n        [(> (length\
+    \ (unique-chars (first words)))\n            (length (unique-chars (last words))))\n\
+    \         (find_max (cons (first words) (rest (rest words))))]\n        [else\
+    \ (find_max (cons (last words) (rest (rest words))))]))\n", "  (define (count-uniques\
+    \ word)\n    (length (remove-duplicates (string->list word))))\n  (define (max-uniques\
+    \ words)\n    (apply max (map count-uniques words)))\n  (define (max-uniques-words\
+    \ words)\n    (filter (lambda (word) (= (count-uniques word) (max-uniques words)))\
+    \ words))\n  (apply min (max-uniques-words words)))\n", "  (let ([max-word (first\
+    \ words)]\n        [max-unique-chars (length (unique-chars (first words)))]\n\
+    \        [max-lex (first words)])\n    (for ([word words])\n      (let ([unique-chars\
+    \ (length (unique-chars word))])\n        (when (> unique-chars max-unique-chars)\n\
+    \          (set! max-unique-chars unique-chars)\n          (set! max-word word))\n\
+    \        (when (and (= unique-chars max-unique-chars)\n                   (string<?\
+    \ word max-lex))\n          (set! max-lex word))))\n    max-lex))\n", "  (define\
+    \ (find_max-helper words max-word max-len)\n    (cond\n      [(empty? words) max-word]\n\
+    \      [(> (length (unique (first words))) max-len)\n       (find_max-helper (rest\
+    \ words) (first words) (length (unique (first words))))]\n      [(= (length (unique\
+    \ (first words))) max-len)\n       (cond\n         [(string<? (first words) max-word)\n\
+    \          (find_max-helper (rest words) (first words) (length (unique (first\
+    \ words))))]\n         [else (find_max-helper (rest words) max-word max-len)])]\n\
+    \      [else (find_max-helper (rest words) max-word max-len)]))\n  (find_max-helper\
+    \ words \"\" 0))\n", "  (apply max (map (lambda (word)\n                    (cons\
+    \ word (length (remove-duplicates (string->list word)))))\n                  words)))\n",
+  "  (define (find_max_helper words max-word max-count)\n    (cond\n      [(empty?\
+    \ words) max-word]\n      [(string<? (first words) max-word)\n       (find_max_helper\
+    \ (rest words) max-word max-count)]\n      [(string<? max-word (first words))\n\
+    \       (find_max_helper (rest words) (first words) (count-unique (first words)))]\n\
+    \      [(= max-count (count-unique (first words)))\n       (find_max_helper (rest\
+    \ words) (first words) max-count)]\n      [else\n       (find_max_helper (rest\
+    \ words) (first words) (count-unique (first words)))]))\n  (find_max_helper words\
+    \ (first words) (count-unique (first words))))\n", "  (define (count-unique-chars\
+    \ word)\n    (length (remove-duplicates (string->list word))))\n  (define (find-max-helper\
+    \ words max-word max-count)\n    (cond [(empty? words) max-word]\n          [else\n\
+    \           (define word (first words))\n           (define count (count-unique-chars\
+    \ word))\n           (if (> count max-count)\n               (find-max-helper\
+    \ (rest words) word count)\n               (if (= count max-count)\n         \
+    \          (if (< word max-word)\n                       (find-max-helper (rest\
+    \ words) word count)\n                       (find-max-helper (rest words) max-word\
+    \ count))\n                   (find-max-helper (rest words) max-word max-count)))]))\n\
+    \  (find-max-helper words \"\" 0))\n", "  (let ([max-word (first words)]\n   \
+    \     [max-count (count-unique-chars (first words))])\n    (for ([word (rest words)])\n\
+    \      (let ([count (count-unique-chars word)])\n        (when (or (&gt; count\
+    \ max-count)\n                  (and (= count max-count)\n                   \
+    \    (string&lt;? word max-word)))\n          (set! max-word word)\n         \
+    \ (set! max-count count))))\n    max-word))\n", "  (define (unique-chars word)\n\
+    \    (set! word (string->list word))\n    (set! word (remove-duplicates word))\n\
+    \    (list->string word))\n  (define (max-unique-chars words)\n    (define (max-unique-chars-iter\
+    \ words max-word)\n      (cond\n        [(empty? words) max-word]\n        [(string=?\
+    \ (unique-chars (first words)) (unique-chars max-word))\n         (max-unique-chars-iter\
+    \ (rest words) max-word)]\n        [(string<? (unique-chars (first words)) (unique-chars\
+    \ max-word))\n         (max-unique-chars-iter (rest words) max-word)]\n      \
+    \  [else (max-unique-chars-iter (rest words) (first words))]))\n    (max-unique-chars-iter\
+    \ (rest words) (first words)))\n  (max-unique-chars words))\n", "  (define (count-unique\
+    \ word)\n    (define (count-unique-helper word unique-chars)\n      (cond\n  \
+    \      [(empty? word) (length unique-chars)]\n        [(member (first word) unique-chars)\
+    \ (count-unique-helper (rest word) unique-chars)]\n        [else (count-unique-helper\
+    \ (rest word) (cons (first word) unique-chars))]))\n    (count-unique-helper word\
+    \ '()))\n  (define (find-max-helper words max-word max-count)\n    (cond\n   \
+    \   [(empty? words) max-word]\n      [(> (count-unique (first words)) max-count)\
+    \ (find-max-helper (rest words) (first words) (count-unique (first words)))]\n\
+    \      [(= (count-unique (first words)) max-count) (if (string<? (first words)\
+    \ max-word) (find-max-helper (rest words) (first words) (count-unique (first words)))\
+    \ (find-max-helper (rest words) max-word max-count))]\n      [else (find-max-helper\
+    \ (rest words) max-word max-count)]))\n  (find-max-helper words \"\" 0))\n", " \
+    \ (define (unique-chars word)\n    (set! word (string->list word))\n    (set!\
+    \ word (remove-duplicates word))\n    (list->string word))\n  (define (max-unique-chars\
+    \ words)\n    (apply max (map unique-chars words)))\n  (define (max-unique-words\
+    \ words)\n    (filter (lambda (word)\n              (= (unique-chars word) (max-unique-chars\
+    \ words)))\n            words))\n  (apply min (max-unique-words words)))\n", " \
+    \ (let ([max-word (first words)]\n        [max-count (length (remove-duplicates\
+    \ (string->list (first words))))])\n    (for ([word (rest words)])\n      (let\
+    \ ([count (length (remove-duplicates (string->list word)))])\n        (when (>\
+    \ count max-count)\n          (set! max-word word)\n          (set! max-count\
+    \ count))))\n    max-word))\n", "  (define (count-unique word)\n    (length (remove-duplicates\
+    \ (string->list word))))\n  (define (max-unique-word words)\n    (if (null? words)\n\
+    \        \"\"\n        (let ((word (car words))\n              (rest (cdr words)))\n\
+    \          (if (null? rest)\n              word\n              (let ((max-word\
+    \ (max-unique-word rest)))\n                (if (> (count-unique word) (count-unique\
+    \ max-word))\n                    word\n                    max-word))))))\n \
+    \ (max-unique-word words))\n", "  (define (unique-chars word)\n    (set! word\
+    \ (string->list word))\n    (define (helper word acc)\n      (cond\n        [(empty?\
+    \ word) acc]\n        [(member (first word) acc) (helper (rest word) acc)]\n \
+    \       [else (helper (rest word) (cons (first word) acc))]))\n    (helper word\
+    \ '()))\n  (define (max-unique-chars words)\n    (cond\n      [(empty? words)\
+    \ '()]\n      [(empty? (rest words)) (unique-chars (first words))]\n      [else\
+    \ (max (unique-chars (first words)) (max-unique-chars (rest words)))]))\n  (define\
+    \ (find-max words max-chars)\n    (cond\n      [(empty? words) '()]\n      [(equal?\
+    \ (unique-chars (first words)) max-chars) (first words)]\n      [else (find-max\
+    \ (rest words) max-chars)]))\n  (find-max words (max-unique-chars words)))\n",
+  "  (let ([max-word (first words)]\n        [max-count (length (unique-chars (first\
+    \ words)))]\n        [current-count 0])\n    (for ([word words])\n      (set!\
+    \ current-count (length (unique-chars word)))\n      (when (> current-count max-count)\n\
+    \        (set! max-count current-count)\n        (set! max-word word)))\n    max-word))\n",
+  "  (define (unique-chars word)\n    (remove-duplicates (string->list word)))\n \
+    \ (define (max-unique-chars words)\n    (apply max (map unique-chars words)))\n\
+    \  (define (max-unique-words words)\n    (filter (lambda (word)\n            \
+    \  (= (unique-chars word) (max-unique-chars words)))\n            words))\n  (apply\
+    \ min (max-unique-words words)))\n", "  (define (unique-chars word)\n    (set!\
+    \ word (string->list word))\n    (set! word (remove-duplicates word))\n    (list->string\
+    \ word))\n  (define (max-unique-chars words)\n    (apply max (map unique-chars\
+    \ words)))\n  (define (max-words words)\n    (filter (lambda (word)\n        \
+    \      (= (unique-chars word) (max-unique-chars words)))\n            words))\n\
+    \  (define (first-word words)\n    (car (sort words string<?)))\n  (first-word\
+    \ (max-words words)))\n", "  (define (count-unique word)\n    (length (remove-duplicates\
+    \ (string->list word))))\n  (define (max-unique-word words)\n    (cond [(empty?\
+    \ words) '()]\n          [(empty? (rest words)) (first words)]\n          [else\
+    \ (let ([first-word (first words)]\n                       [second-word (second\
+    \ words)])\n                  (if (> (count-unique first-word)\n             \
+    \            (count-unique second-word))\n                      first-word\n \
+    \                     (max-unique-word (rest words))))]))\n  (max-unique-word\
+    \ words))\n", "  (define (find_max_helper words max_word max_count)\n    (cond\n\
+    \      [(empty? words) max_word]\n      [(> (count_unique_chars (first words))\
+    \ max_count)\n       (find_max_helper (rest words) (first words) (count_unique_chars\
+    \ (first words)))]\n      [else (find_max_helper (rest words) max_word max_count)]))\n\
+    \  (find_max_helper words \"\" 0))\n", "  (define (find_max-helper words max-word\
+    \ max-count)\n    (cond\n      [(empty? words) max-word]\n      [(string<? (first\
+    \ words) max-word) (find_max-helper (rest words) max-word max-count)]\n      [(string<?\
+    \ max-word (first words)) (find_max-helper (rest words) (first words) (count-unique-chars\
+    \ (first words)))]\n      [(= max-count (count-unique-chars (first words))) (find_max-helper\
+    \ (rest words) max-word max-count)]\n      [(> max-count (count-unique-chars (first\
+    \ words))) (find_max-helper (rest words) (first words) (count-unique-chars (first\
+    \ words)))]))\n  (find_max-helper words \"\" 0))\n", "  (let ([max-word (car words)]\n\
+    \        [max-count (length (remove-duplicates (string->list (car words))))])\n\
+    \    (for ([word (cdr words)])\n      (let ([count (length (remove-duplicates\
+    \ (string->list word)))])\n        (if (> count max-count)\n            (begin\n\
+    \              (set! max-word word)\n              (set! max-count count)))))\n\
+    \    max-word))\n", "  (define (find_max-helper words max-word max-count)\n  \
+    \  (cond\n      [(empty? words) max-word]\n      [(> (length (unique (first words)))\
+    \ max-count)\n       (find_max-helper (rest words) (first words) (length (unique\
+    \ (first words))))]\n      [else (find_max-helper (rest words) max-word max-count)]))\n\
+    \  (find_max-helper words \"\" 0))\n", "  (if (null? words)\n      \"\"\n    \
+    \  (let ([max-word (car words)]\n            [max-count (count-unique-chars (car\
+    \ words))])\n        (for ([word (cdr words)])\n          (let ([count (count-unique-chars\
+    \ word)])\n            (if (or (> count max-count)\n                    (and (=\
+    \ count max-count)\n                         (string<? max-word word)))\n    \
+    \            (begin\n                  (set! max-word word)\n                \
+    \  (set! max-count count)))))\n        max-word)))\n", "  (define (unique-chars\
+    \ word)\n    (set! word (string->list word))\n    (define (unique-chars-iter word\
+    \ unique-chars)\n      (cond\n        [(empty? word) unique-chars]\n        [(member\
+    \ (first word) unique-chars) (unique-chars-iter (rest word) unique-chars)]\n \
+    \       [else (unique-chars-iter (rest word) (cons (first word) unique-chars))]))\n\
+    \    (unique-chars-iter word '()))\n  (define (find-max-iter words max-word max-unique-chars)\n\
+    \    (cond\n      [(empty? words) max-word]\n      [(> (length (unique-chars (first\
+    \ words))) max-unique-chars)\n       (find-max-iter (rest words) (first words)\
+    \ (length (unique-chars (first words))))]\n      [(= (length (unique-chars (first\
+    \ words))) max-unique-chars)\n       (cond\n         [(string<? (first words)\
+    \ max-word) (find-max-iter (rest words) (first words) max-unique-chars)]\n   \
+    \      [else (find-max-iter (rest words) max-word max-unique-chars)])]\n     \
+    \ [else (find-max-iter (rest words) max-word max-unique-chars)]))\n  (find-max-iter\
+    \ words \"\" 0))\n", "  (define (count-unique word)\n    (define (count-unique-helper\
+    \ word unique-chars)\n      (cond\n        [(empty? word) (length unique-chars)]\n\
+    \        [(member (first word) unique-chars) (count-unique-helper (rest word)\
+    \ unique-chars)]\n        [else (count-unique-helper (rest word) (cons (first\
+    \ word) unique-chars))]))\n    (count-unique-helper word '()))\n  (define (find-max-helper\
+    \ words max-word max-count)\n    (cond\n      [(empty? words) max-word]\n    \
+    \  [(> (count-unique (first words)) max-count) (find-max-helper (rest words) (first\
+    \ words) (count-unique (first words)))]\n      [(= (count-unique (first words))\
+    \ max-count) (if (string<? (first words) max-word) (find-max-helper (rest words)\
+    \ (first words) (count-unique (first words))) (find-max-helper (rest words) max-word\
+    \ max-count))]\n      [else (find-max-helper (rest words) max-word max-count)]))\n\
+    \  (find-max-helper words \"\" 0))\n", "  (let ([max-word (first words)]\n   \
+    \     [max-count (length (remove-duplicates (string->list (first words))))])\n\
+    \    (for ([word (rest words)])\n      (let ([count (length (remove-duplicates\
+    \ (string->list word)))])\n        (if (> count max-count)\n            (begin\n\
+    \              (set! max-word word)\n              (set! max-count count)))))\n\
+    \    max-word))\n", "  (let loop ([words words]\n             [max-word \"\"]\n\
+    \             [max-count 0])\n    (cond [(empty? words) max-word]\n          [(>\
+    \ (length (unique (first words))) max-count)\n           (loop (rest words) (first\
+    \ words) (length (unique (first words))))]\n          [(= (length (unique (first\
+    \ words))) max-count)\n           (if (string<? (first words) max-word)\n    \
+    \           (loop (rest words) (first words) (length (unique (first words))))\n\
+    \               (loop (rest words) max-word max-count))]\n          [else (loop\
+    \ (rest words) max-word max-count)])))\n", "  (define (unique-chars word)\n  \
+    \  (set! word (string->list word))\n    (define (unique-chars-iter word acc)\n\
+    \      (cond\n        [(empty? word) acc]\n        [(member (first word) acc)\
+    \ (unique-chars-iter (rest word) acc)]\n        [else (unique-chars-iter (rest\
+    \ word) (cons (first word) acc))]))\n    (unique-chars-iter word '()))\n  (define\
+    \ (max-unique-chars words)\n    (cond\n      [(empty? words) '()]\n      [(empty?\
+    \ (rest words)) (list (first words))]\n      [else\n       (let ([first-word (first\
+    \ words)]\n             [second-word (second words)])\n         (if (> (length\
+    \ (unique-chars first-word))\n                (length (unique-chars second-word)))\n\
+    \             (cons first-word (max-unique-chars (rest words)))\n            \
+    \ (cons second-word (max-unique-chars (rest words)))))]))\n  (define (lexicographical-order\
+    \ words)\n    (cond\n      [(empty? words) '()]\n      [(empty? (rest words))\
+    \ (list (first words))]\n      [else\n       (let ([first-word (first words)]\n\
+    \             [second-word (second words)])\n         (if (string<? first-word\
+    \ second-word)\n             (cons first-word (lexicographical-order (rest words)))\n\
+    \             (cons second-word (lexicographical-order (rest words)))))]))\n \
+    \ (define (find-max-iter words acc)\n    (cond\n      [(empty? words) acc]\n \
+    \     [(empty? (rest words)) (list (first words))]\n      [else\n       (let ([first-word\
+    \ (first words)]\n             [second-word (second words)])\n         (if (>\
+    \ (length (unique-chars first-word))\n                (length (unique-chars second-word)))\n\
+    \             (find-max-iter (rest words) (cons first-word acc))\n           \
+    \  (find-max-iter (rest words) (cons second-word acc))))]))\n  (lexicographical-",
+  "  (define (unique-chars word)\n    (set! word (string->list word))\n    (define\
+    \ (helper word acc)\n      (cond\n        [(empty? word) acc]\n        [(member\
+    \ (first word) acc) (helper (rest word) acc)]\n        [else (helper (rest word)\
+    \ (cons (first word) acc))]))\n    (helper word '()))\n  (define (max-unique-chars\
+    \ words)\n    (define (helper words acc)\n      (cond\n        [(empty? words)\
+    \ acc]\n        [(> (length (unique-chars (first words))) (length acc))\n    \
+    \     (helper (rest words) (unique-chars (first words)))]\n        [else (helper\
+    \ (rest words) acc)]))\n    (helper words '()))\n  (define (max-unique-words words)\n\
+    \    (define (helper words acc)\n      (cond\n        [(empty? words) acc]\n \
+    \       [(equal? (unique-chars (first words)) (max-unique-chars words))\n    \
+    \     (cons (first words) (helper (rest words) acc))]\n        [else (helper (rest\
+    \ words) acc)]))\n    (helper words '()))\n  (define (min-word words)\n    (define\
+    \ (helper words acc)\n      (cond\n        [(empty? words) acc]\n        [(string<?\
+    \ (first words) acc) (helper (rest words) (first words))]\n        [else (helper\
+    \ (rest words) acc)]))\n    (helper words (first words)))\n  (min-word (max-unique-words\
+    \ words)))\n", "  (let loop ([words words]\n             [max-word \"\"]\n   \
+    \          [max-count 0])\n    (cond [(empty? words) max-word]\n          [(>\
+    \ (length (unique (first words))) max-count)\n           (loop (rest words) (first\
+    \ words) (length (unique (first words))))]\n          [(= (length (unique (first\
+    \ words))) max-count)\n           (cond [(string<? (first words) max-word)\n \
+    \                 (loop (rest words) (first words) (length (unique (first words))))]\n\
+    \                 [else (loop (rest words) max-word max-count)])]\n          [else\
+    \ (loop (rest words) max-word max-count)])))\n", "  (define (find_max_aux words\
+    \ max-word max-count)\n    (if (null? words)\n        max-word\n        (let ((word\
+    \ (car words))\n              (count (length (remove-duplicates (string->list\
+    \ word)))))\n          (if (&gt; count max-count)\n              (find_max_aux\
+    \ (cdr words) word count)\n              (find_max_aux (cdr words) max-word max-count)))))\n\
+    \  (find_max_aux words \"\" 0))\n", "  (define (unique-chars word)\n    (set!\
+    \ word (string->list word))\n    (set! word (remove-duplicates word))\n    (list->string\
+    \ word))\n  (define (max-unique-chars words)\n    (define (max-unique-chars-helper\
+    \ words max)\n      (cond\n        [(empty? words) max]\n        [(> (string-length\
+    \ (unique-chars (first words)))\n            (string-length (unique-chars max)))\n\
+    \         (max-unique-chars-helper (rest words) (first words))]\n        [else\
+    \ (max-unique-chars-helper (rest words) max)]))\n    (max-unique-chars-helper\
+    \ words (first words)))\n  (max-unique-chars words))\n", "  (define (unique-chars\
+    \ word)\n    (set! word (string->list word))\n    (set! word (remove-duplicates\
+    \ word))\n    (list->string word))\n  (define (max-unique-chars words)\n    (define\
+    \ (max-unique-chars-iter words max-word max-unique-chars)\n      (cond ((null?\
+    \ words) max-word)\n            ((> (length (unique-chars (car words))) max-unique-chars)\n\
+    \             (max-unique-chars-iter (cdr words) (car words) (length (unique-chars\
+    \ (car words)))))\n            (else (max-unique-chars-iter (cdr words) max-word\
+    \ max-unique-chars))))\n    (max-unique-chars-iter words \"\" 0))\n  (max-unique-chars\
+    \ words))\n", "  (define (find_max-helper words max-word max-count)\n    (cond\n\
+    \      [(empty? words) max-word]\n      [(string=? (first words) max-word) (find_max-helper\
+    \ (rest words) max-word max-count)]\n      [(> (string-length (remove-duplicates\
+    \ (first words))) max-count) (find_max-helper (rest words) (first words) (string-length\
+    \ (remove-duplicates (first words))))]\n      [else (find_max-helper (rest words)\
+    \ max-word max-count)]))\n  (find_max-helper words \"\" 0))\n", "  (let ([max-word\
+    \ (first words)]\n        [max-count (length (remove-duplicates (string->list\
+    \ (first words))))])\n    (for ([word (rest words)])\n      (let ([count (length\
+    \ (remove-duplicates (string->list word)))])\n        (when (> count max-count)\n\
+    \          (set! max-word word)\n          (set! max-count count))))\n    max-word))\n",
+  "  (let ([max-word (first words)]\n        [max-count (length (remove-duplicates\
+    \ (string->list (first words))))])\n    (for ([word (rest words)])\n      (let\
+    \ ([count (length (remove-duplicates (string->list word)))])\n        (when (>\
+    \ count max-count)\n          (set! max-word word)\n          (set! max-count\
+    \ count))))\n    max-word))\n", "  (cond\n    [(empty? words) (error \"empty list\"\
+    )]\n    [(empty? (rest words)) (first words)]\n    [else\n     (let ([max-word\
+    \ (first words)]\n           [max-count (count-unique-chars (first words))])\n\
+    \       (for ([word (rest words)])\n         (let ([count (count-unique-chars\
+    \ word)])\n           (when (> count max-count)\n             (set! max-word word)\n\
+    \             (set! max-count count))))\n       max-word)]))\n", "  (cond\n  \
+    \  [(empty? words) (error \"Empty list\")]\n    [(empty? (rest words)) (first\
+    \ words)]\n    [else\n     (let ([max-word (find_max (rest words))])\n       (if\
+    \ (&gt; (length (unique-chars (first words)))\n              (length (unique-chars\
+    \ max-word)))\n           (first words)\n           max-word))]))\n", "  (define\
+    \ (unique-chars word)\n    (set! word (string->list word))\n    (define (unique-chars-helper\
+    \ word unique-chars)\n      (if (null? word)\n          unique-chars\n       \
+    \   (if (member (car word) unique-chars)\n              (unique-chars-helper (cdr\
+    \ word) unique-chars)\n              (unique-chars-helper (cdr word) (cons (car\
+    \ word) unique-chars)))))\n    (unique-chars-helper word '()))\n  (define (max-unique-chars\
+    \ words)\n    (if (null? words)\n        0\n        (max (length (unique-chars\
+    \ (car words)))\n             (max-unique-chars (cdr words)))))\n  (define (max-unique-chars-words\
+    \ words)\n    (if (null? words)\n        '()\n        (if (= (length (unique-chars\
+    \ (car words))) (max-unique-chars words))\n            (cons (car words) (max-unique-chars-words\
+    \ (cdr words)))\n            (max-unique-chars-words (cdr words)))))\n  (car (sort\
+    \ (max-unique-chars-words words) string<?)))\n", "  (if (null? words)\n      \"\
+    \"\n      (let ([max-word (car words)]\n            [max-count (count-unique-chars\
+    \ (car words))])\n        (for ([word (cdr words)])\n          (let ([count (count-unique-chars\
+    \ word)])\n            (if (> count max-count)\n                (begin\n     \
+    \             (set! max-word word)\n                  (set! max-count count))\n\
+    \                (if (= count max-count)\n                    (if (string<? word\
+    \ max-word)\n                        (set! max-word word))))))\n        max-word)))\n",
+  "  (cond\n    [(empty? words) (error \"Empty list\")]\n    [(empty? (rest words))\
+    \ (first words)]\n    [else\n     (let* ([word1 (first words)]\n            [word2\
+    \ (find_max (rest words))]\n            [unique-chars1 (unique-chars word1)]\n\
+    \            [unique-chars2 (unique-chars word2)])\n       (if (> (length unique-chars1)\
+    \ (length unique-chars2))\n           word1\n           word2))]))\n", "  (cond\n\
+    \    [(empty? words) (error \"empty list\")]\n    [(empty? (rest words)) (first\
+    \ words)]\n    [else\n     (let ([max (find_max (rest words))])\n       (if (&gt;\
+    \ (length (unique-chars (first words)))\n              (length (unique-chars max)))\n\
+    \           (first words)\n           max))]))\n", "  (let ([max-word (first words)]\n\
+    \        [max-len (length (unique-chars (first words)))]\n        [cur-len 0])\n\
+    \    (for ([word words])\n      (set! cur-len (length (unique-chars word)))\n\
+    \      (if (> cur-len max-len)\n          (begin\n            (set! max-len cur-len)\n\
+    \            (set! max-word word))))\n    max-word))\n", "  (define (unique-chars\
+    \ word)\n    (set! word (string->list word))\n    (set! word (remove-duplicates\
+    \ word))\n    (list->string word))\n  (define (max-unique-chars words)\n    (apply\
+    \ max (map unique-chars words)))\n  (define (max-unique-chars-words words)\n \
+    \   (filter (lambda (word)\n              (= (unique-chars word) (max-unique-chars\
+    \ words)))\n            words))\n  (define (lexicographical-order words)\n   \
+    \ (sort words string<?))\n  (first (lexicographical-order (max-unique-chars-words\
+    \ words))))\n", "  (let ([max-word (first words)]\n        [max-word-unique-chars\
+    \ (length (remove-duplicates (string->list max-word)))]\n        [current-word\
+    \ (first words)]\n        [current-word-unique-chars (length (remove-duplicates\
+    \ (string->list current-word)))])\n    (for ([word (rest words)])\n      (set!\
+    \ current-word word)\n      (set! current-word-unique-chars (length (remove-duplicates\
+    \ (string->list current-word))))\n      (if (> current-word-unique-chars max-word-unique-chars)\n\
+    \          (begin\n            (set! max-word current-word)\n            (set!\
+    \ max-word-unique-chars current-word-unique-chars))))\n    max-word))\n", "  (define\
+    \ (unique-chars word)\n    (set! word (string->list word))\n    (define (unique-chars-iter\
+    \ word unique-chars)\n      (cond ((null? word) unique-chars)\n            ((member\
+    \ (car word) unique-chars)\n             (unique-chars-iter (cdr word) unique-chars))\n\
+    \            (else (unique-chars-iter (cdr word) (cons (car word) unique-chars)))))\n\
+    \    (unique-chars-iter word '()))\n  (define (max-unique-chars words)\n    (cond\
+    \ ((null? words) '())\n          ((null? (cdr words)) (car words))\n         \
+    \ (else (if (> (length (unique-chars (car words)))\n                      (length\
+    \ (unique-chars (cadr words))))\n                   (max-unique-chars (cons (car\
+    \ words) (cddr words)))\n                   (max-unique-chars (cdr words))))))\n\
+    \  (max-unique-chars words))\n", "  (let ([max-word (first words)]\n        [max-count\
+    \ (length (unique-chars (first words)))]\n        [current-word (first words)]\n\
+    \        [current-count (length (unique-chars (first words)))])\n    (for ([word\
+    \ (rest words)])\n      (set! current-word word)\n      (set! current-count (length\
+    \ (unique-chars word)))\n      (if (&gt; current-count max-count)\n          (begin\n\
+    \            (set! max-word current-word)\n            (set! max-count current-count))))\n\
+    \    max-word))\n", "  (cond\n    [(empty? words) \"\"]\n    [(empty? (rest words))\
+    \ (first words)]\n    [else\n     (let ([first-word (first words)]\n         \
+    \  [second-word (find_max (rest words))])\n       (if (> (count-unique-chars first-word)\n\
+    \              (count-unique-chars second-word))\n           first-word\n    \
+    \       second-word))]))\n", "  (let ([max-word (first words)]\n        [max-count\
+    \ (length (unique-chars (first words)))]\n        [current-word (first words)]\n\
+    \        [current-count (length (unique-chars (first words)))])\n    (for ([word\
+    \ (rest words)])\n      (set! current-word word)\n      (set! current-count (length\
+    \ (unique-chars word)))\n      (if (> current-count max-count)\n          (begin\n\
+    \            (set! max-word current-word)\n            (set! max-count current-count))))\n\
+    \    max-word))\n", "  (cond\n    [(empty? words) \"\"]\n    [(empty? (rest words))\
+    \ (first words)]\n    [else\n     (let* ([word1 (first words)]\n            [word2\
+    \ (find_max (rest words))]\n            [uniq1 (unique-chars word1)]\n       \
+    \     [uniq2 (unique-chars word2)])\n       (cond\n         [(> (length uniq1)\
+    \ (length uniq2)) word1]\n         [(< (length uniq1) (length uniq2)) word2]\n\
+    \         [else\n          (cond\n            [(string<? word1 word2) word1]\n\
+    \            [else word2])]))]))\n", "  (define (unique-chars word)\n    (set!\
+    \ word (string->list word))\n    (define (unique-chars-helper word seen)\n   \
+    \   (cond\n        [(empty? word) (length seen)]\n        [(member (first word)\
+    \ seen) (unique-chars-helper (rest word) seen)]\n        [else (unique-chars-helper\
+    \ (rest word) (cons (first word) seen))]))\n    (unique-chars-helper word '()))\n\
+    \  (define (find-max-helper words max-word max-unique)\n    (cond\n      [(empty?\
+    \ words) max-word]\n      [(> (unique-chars (first words)) max-unique)\n     \
+    \  (find-max-helper (rest words) (first words) (unique-chars (first words)))]\n\
+    \      [(= (unique-chars (first words)) max-unique)\n       (cond\n         [(string<?\
+    \ (first words) max-word)\n          (find-max-helper (rest words) (first words)\
+    \ max-unique)]\n         [else (find-max-helper (rest words) max-word max-unique)])]\n\
+    \      [else (find-max-helper (rest words) max-word max-unique)]))\n  (find-max-helper\
+    \ words \"\" 0))\n", "  (define (find_max-helper words max-word max-count)\n \
+    \   (cond [(empty? words) max-word]\n          [else\n           (let ([word (first\
+    \ words)])\n             (if (&gt; (length (set (string-&gt;list word))) max-count)\n\
+    \                 (find_max-helper (rest words) word (length (set (string-&gt;list\
+    \ word))))\n                 (find_max-helper (rest words) max-word max-count)))]))\n\
+    \  (find_max-helper words \"\" 0))\n", "  (define (unique-chars word)\n    (set!\
+    \ word (string->list word))\n    (define (unique-chars-helper word unique-chars)\n\
+    \      (cond\n        [(empty? word) unique-chars]\n        [(member (first word)\
+    \ unique-chars) (unique-chars-helper (rest word) unique-chars)]\n        [else\
+    \ (unique-chars-helper (rest word) (cons (first word) unique-chars))]))\n    (unique-chars-helper\
+    \ word '()))\n  (define (max-unique-chars words)\n    (cond\n      [(empty? words)\
+    \ 0]\n      [else (max (length (unique-chars (first words))) (max-unique-chars\
+    \ (rest words)))]))\n  (define (find-max-helper words max-unique-chars)\n    (cond\n\
+    \      [(empty? words) '()]\n      [(= (length (unique-chars (first words))) max-unique-chars)\
+    \ (first words)]\n      [else (find-max-helper (rest words) max-unique-chars)]))\n\
+    \  (find-max-helper words (max-unique-chars words)))\n", "  (define (find_max_helper\
+    \ words max-word max-word-len)\n    (if (null? words)\n        max-word\n    \
+    \    (let ((word (car words))\n              (word-len (length (remove-duplicates\
+    \ (string->list word)))))\n          (if (&gt; word-len max-word-len)\n      \
+    \        (find_max_helper (cdr words) word word-len)\n              (find_max_helper\
+    \ (cdr words) max-word max-word-len)))))\n  (find_max_helper words \"\" 0))\n\
+    </code>\n", "  (let ([max-word (car words)]\n        [max-unique-chars (length\
+    \ (unique-chars (car words)))]\n        [max-lexicographical-order (car words)])\n\
+    \    (for ([word (cdr words)])\n      (let ([unique-chars (length (unique-chars\
+    \ word))])\n        (cond\n          [(> unique-chars max-unique-chars)\n    \
+    \       (set! max-word word)\n           (set! max-unique-chars unique-chars)\n\
+    \           (set! max-lexicographical-order word)]\n          [(= unique-chars\
+    \ max-unique-chars)\n           (cond\n             [(string<? word max-lexicographical-order)\n\
+    \              (set! max-lexicographical-order word)])])))\n    max-lexicographical-order))\n",
+  "  (define (unique-chars word)\n    (set! word (sort word string<?))\n    (for/fold\
+    \ ([chars '()]) ([ch (in-list word)])\n      (if (member ch chars)\n         \
+    \ chars\n          (cons ch chars))))\n  (define (max-unique-chars words)\n  \
+    \  (for/fold ([max-word \"\"\n                max-chars '()])\n              \
+    \ ([word (in-list words)])\n      (let ([chars (unique-chars word)])\n       \
+    \ (if (> (length chars) (length max-chars))\n            (values word chars)\n\
+    \            (values max-word max-chars)))))\n  (max-unique-chars words))\n",
+  "  (define (unique-chars word)\n    (set! word (string->list word))\n    (define\
+    \ (unique-chars-iter word unique-chars)\n      (cond ((null? word) unique-chars)\n\
+    \            ((member (car word) unique-chars)\n             (unique-chars-iter\
+    \ (cdr word) unique-chars))\n            (else (unique-chars-iter (cdr word) (cons\
+    \ (car word) unique-chars)))))\n    (unique-chars-iter word '()))\n  (define (max-unique-chars\
+    \ words)\n    (cond ((null? words) '())\n          ((null? (cdr words)) (car words))\n\
+    \          (else (if (> (length (unique-chars (car words)))\n                \
+    \      (length (unique-chars (cadr words))))\n                   (max-unique-chars\
+    \ (cons (car words) (cddr words)))\n                   (max-unique-chars (cdr\
+    \ words))))))\n  (max-unique-chars words))\n", "  (define (find_max_helper words\
+    \ max_word max_count)\n    (if (null? words)\n        max_word\n        (let ((word\
+    \ (car words))\n              (count (length (remove-duplicates (string->list\
+    \ word)))))\n          (if (&gt; count max_count)\n              (find_max_helper\
+    \ (cdr words) word count)\n              (find_max_helper (cdr words) max_word\
+    \ max_count)))))\n  (find_max_helper words \"\" 0))\n</code>\n", "  (define (find_max_helper\
+    \ words max-word max-count)\n    (if (null? words)\n        max-word\n       \
+    \ (let ([word (car words)])\n          (let ([count (length (remove-duplicates\
+    \ (string->list word)))]\n                [new-max-word (if (> count max-count)\
+    \ word max-word)])\n            (find_max_helper (cdr words) new-max-word count)))))\n\
+    \  (find_max_helper words \"\" 0))\n", "  (define (count-uniques word)\n    (length\
+    \ (remove-duplicates (string->list word))))\n  (define (find-max-helper words\
+    \ max-word max-uniques)\n    (cond\n      [(empty? words) max-word]\n      [(>\
+    \ (count-uniques (first words)) max-uniques)\n       (find-max-helper (rest words)\
+    \ (first words) (count-uniques (first words)))]\n      [(= (count-uniques (first\
+    \ words)) max-uniques)\n       (if (string<? (first words) max-word)\n       \
+    \    (find-max-helper (rest words) (first words) (count-uniques (first words)))\n\
+    \           (find-max-helper (rest words) max-word max-uniques))]\n      [else\
+    \ (find-max-helper (rest words) max-word max-uniques)]))\n  (find-max-helper words\
+    \ \"\" 0))\n", "  (define (max-unique-word words)\n    (define (max-unique-word-helper\
+    \ words max-word max-unique)\n      (if (null? words)\n          max-word\n  \
+    \        (let ([word (car words)]\n                [unique (unique-chars word)])\n\
+    \            (if (&gt; unique max-unique)\n                (max-unique-word-helper\
+    \ (cdr words) word unique)\n                (max-unique-word-helper (cdr words)\
+    \ max-word max-unique)))))\n    (max-unique-word-helper words \"\" 0))\n  (max-unique-word\
+    \ words))\n", "  (let loop ([words words]\n             [max-word \"\"]\n    \
+    \         [max-count 0])\n    (cond [(empty? words) max-word]\n          [(> (length\
+    \ (unique-chars (first words))) max-count)\n           (loop (rest words) (first\
+    \ words) (length (unique-chars (first words))))]\n          [else (loop (rest\
+    \ words) max-word max-count)])))\n", "  (define (count-unique word)\n    (length\
+    \ (remove-duplicates (string->list word))))\n  (define (max-unique-word words)\n\
+    \    (cond ((null? words) '())\n          ((null? (cdr words)) (car words))\n\
+    \          (else\n           (let ((first (car words))\n                 (second\
+    \ (cadr words)))\n             (if (&gt; (count-unique first) (count-unique second))\n\
+    \                 (max-unique-word (cons first (cddr words)))\n              \
+    \   (max-unique-word (cons second (cddr words))))))))\n  (max-unique-word words))\n",
+  "  (define (unique-chars word)\n    (set! word (string->list word))\n    (define\
+    \ (unique-chars-iter word unique-chars)\n      (cond\n        [(empty? word) unique-chars]\n\
+    \        [(member (first word) unique-chars) (unique-chars-iter (rest word) unique-chars)]\n\
+    \        [else (unique-chars-iter (rest word) (cons (first word) unique-chars))]))\n\
+    \    (unique-chars-iter word '()))\n  (define (max-unique-chars words)\n    (cond\n\
+    \      [(empty? words) '()]\n      [(empty? (rest words)) (first words)]\n   \
+    \   [else (if (> (length (unique-chars (first words))) (length (unique-chars (second\
+    \ words))))\n                (max-unique-chars (cons (first words) (rest (rest\
+    \ words))))\n                (max-unique-chars (cons (second words) (rest (rest\
+    \ words)))))]))\n  (max-unique-chars words))\n", "  (apply max (map (lambda (word)\n\
+    \                    (cons (length (remove-duplicates (string->list word)))\n\
+    \                          word))\n                  words)))\n", "  (define (unique-chars\
+    \ word)\n    (remove-duplicates (string->list word)))\n  (define (max-unique-chars\
+    \ words)\n    (apply max (map unique-chars words)))\n  (define (max-unique-chars-words\
+    \ words)\n    (filter (lambda (word)\n              (= (unique-chars word) (max-unique-chars\
+    \ words)))\n            words))\n  (define (lexicographically-first words)\n \
+    \   (apply min words))\n  (lexicographically-first (max-unique-chars-words words)))\n",
+  "  (let ([max-word (first words)]\n        [max-count (count-unique-chars (first\
+    \ words))])\n    (for ([word (rest words)])\n      (let ([count (count-unique-chars\
+    \ word)])\n        (when (or (> count max-count)\n                  (and (= count\
+    \ max-count)\n                       (string<? max-word word)))\n          (set!\
+    \ max-word word)\n          (set! max-count count))))\n    max-word))\n", "  (define\
+    \ (find_max_helper words max-word)\n    (if (null? words)\n        max-word\n\
+    \        (let ((word (car words)))\n          (if (&gt; (length (remove-duplicates\
+    \ (string-&gt;list word)))\n                 (length (remove-duplicates (string-&gt;list\
+    \ max-word))))\n              (find_max_helper (cdr words) word)\n           \
+    \   (find_max_helper (cdr words) max-word)))))\n  (find_max_helper words (car\
+    \ words)))\n</code>\n", "  (define (count-unique word)\n    (length (remove-duplicates\
+    \ (string->list word))))\n  (define (max-unique-word words)\n    (cond ((null?\
+    \ words) '())\n          ((null? (cdr words)) (car words))\n          (else\n\
+    \           (let ((first (car words))\n                 (second (cadr words)))\n\
+    \             (if (> (count-unique first) (count-unique second))\n           \
+    \      (max-unique-word (cons first (cddr words)))\n                 (max-unique-word\
+    \ (cons second (cddr words))))))))\n  (max-unique-word words))\n", "  (define\
+    \ (unique-chars word)\n    (set! word (string->list word))\n    (set! word (remove-duplicates\
+    \ word))\n    (list->string word))\n  (define (max-unique-chars words)\n    (define\
+    \ (max-unique-chars-iter words max-word)\n      (cond ((null? words) max-word)\n\
+    \            ((> (length (unique-chars (car words)))\n                (length\
+    \ (unique-chars max-word)))\n             (max-unique-chars-iter (cdr words) (car\
+    \ words)))\n            (else (max-unique-chars-iter (cdr words) max-word))))\n\
+    \    (max-unique-chars-iter words (car words)))\n  (max-unique-chars words))\n",
+  "  (define (unique-chars word)\n    (set! word (string->list word))\n    (set! word\
+    \ (remove-duplicates word))\n    (list->string word))\n  (define (max-unique-chars\
+    \ words)\n    (define (max-unique-chars-helper words max-word max-unique-chars)\n\
+    \      (cond\n        [(empty? words) max-word]\n        [(> (length (unique-chars\
+    \ (first words))) max-unique-chars)\n         (max-unique-chars-helper (rest words)\
+    \ (first words) (length (unique-chars (first words))))]\n        [else (max-unique-chars-helper\
+    \ (rest words) max-word max-unique-chars)]))\n    (max-unique-chars-helper words\
+    \ \"\" 0))\n  (max-unique-chars words))\n", "  (define (count-unique-chars word)\n\
+    \    (length (remove-duplicates (string->list word))))\n  (define (max-unique-chars\
+    \ words)\n    (apply max (map count-unique-chars words)))\n  (define (max-unique-words\
+    \ words)\n    (filter (lambda (word) (= (count-unique-chars word) (max-unique-chars\
+    \ words))) words))\n  (apply min (max-unique-words words)))\n", "  (define (unique-chars\
+    \ word)\n    (set! word (string->list word))\n    (define (unique-chars-helper\
+    \ word unique-chars)\n      (cond ((null? word) unique-chars)\n            ((member\
+    \ (car word) unique-chars)\n             (unique-chars-helper (cdr word) unique-chars))\n\
+    \            (else (unique-chars-helper (cdr word) (cons (car word) unique-chars)))))\n\
+    \    (unique-chars-helper word '()))\n  (define (find-max-helper words max-word)\n\
+    \    (cond ((null? words) max-word)\n          ((> (length (unique-chars (car\
+    \ words))) (length (unique-chars max-word)))\n           (find-max-helper (cdr\
+    \ words) (car words)))\n          ((= (length (unique-chars (car words))) (length\
+    \ (unique-chars max-word)))\n           (cond ((string<? (car words) max-word)\n\
+    \                  (find-max-helper (cdr words) (car words)))\n              \
+    \   (else (find-max-helper (cdr words) max-word))))\n          (else (find-max-helper\
+    \ (cdr words) max-word))))\n  (find-max-helper words (car words)))\n", "  (cond\n\
+    \    [(empty? words) (error \"Empty list\")]\n    [(empty? (rest words)) (first\
+    \ words)]\n    [else\n     (let ([max-word (find_max (rest words))])\n       (if\
+    \ (&gt; (length (unique-chars (first words)))\n              (length (unique-chars\
+    \ max-word)))\n           (first words)\n           max-word))]))\n", "  (define\
+    \ (find_max_helper words max-word max-len)\n    (cond\n      [(empty? words) max-word]\n\
+    \      [(> (length (unique-chars (first words))) max-len)\n       (find_max_helper\
+    \ (rest words) (first words) (length (unique-chars (first words))))]\n      [else\
+    \ (find_max_helper (rest words) max-word max-len)]))\n  (find_max_helper words\
+    \ \"\" 0))\n", "  (cond\n    [(empty? words) (error \"empty list\")]\n    [(empty?\
+    \ (rest words)) (first words)]\n    [else\n     (let ([max (find_max (rest words))])\n\
+    \       (if (&gt; (length (unique-chars (first words)))\n              (length\
+    \ (unique-chars max)))\n           (first words)\n           max))]))\n", "  (define\
+    \ (unique-chars word)\n    (set! word (string->list word))\n    (define (unique-chars-helper\
+    \ word unique-chars)\n      (if (null? word)\n          unique-chars\n       \
+    \   (if (member (car word) unique-chars)\n              (unique-chars-helper (cdr\
+    \ word) unique-chars)\n              (unique-chars-helper (cdr word) (cons (car\
+    \ word) unique-chars)))))\n    (unique-chars-helper word '()))\n  (define (max-unique-chars\
+    \ words)\n    (if (null? words)\n        0\n        (max (length (unique-chars\
+    \ (car words)))\n             (max-unique-chars (cdr words)))))\n  (define (find-max-helper\
+    \ words max-unique-chars)\n    (if (null? words)\n        '()\n        (if (=\
+    \ (length (unique-chars (car words))) max-unique-chars)\n            (cons (car\
+    \ words) (find-max-helper (cdr words) max-unique-chars))\n            (find-max-helper\
+    \ (cdr words) max-unique-chars))))\n  (car (sort (find-max-helper words (max-unique-chars\
+    \ words)) string<?)))\n```\n\n### Problem 2\n\n```racket\n#lang racket\n", " \
+    \ (define (find_max-helper words max-word max-count)\n    (cond\n      [(empty?\
+    \ words) max-word]\n      [(> (count-unique-chars (first words)) max-count)\n\
+    \       (find_max-helper (rest words) (first words) (count-unique-chars (first\
+    \ words)))]\n      [(= (count-unique-chars (first words)) max-count)\n       (cond\n\
+    \         [(string<? (first words) max-word)\n          (find_max-helper (rest\
+    \ words) (first words) (count-unique-chars (first words)))]\n         [else\n\
+    \          (find_max-helper (rest words) max-word max-count)])]\n      [else\n\
+    \       (find_max-helper (rest words) max-word max-count)]))\n  (find_max-helper\
+    \ words \"\" 0))\n", "  (let loop ([words words]\n             [max-word (car\
+    \ words)]\n             [max-count (length (string-unique-chars (car words)))])\n\
+    \    (cond [(null? words) max-word]\n          [(> (length (string-unique-chars\
+    \ (car words))) max-count)\n           (loop (cdr words) (car words) (length (string-unique-chars\
+    \ (car words))))]\n          [(= (length (string-unique-chars (car words))) max-count)\n\
+    \           (loop (cdr words) (if (string<? (car words) max-word) (car words)\
+    \ max-word) max-count)]\n          [else (loop (cdr words) max-word max-count)])))\n",
+  "  (let ([max-word (first words)]\n        [max-count (length (remove-duplicates\
+    \ (string->list (first words))))])\n    (for ([word (rest words)])\n      (let\
+    \ ([count (length (remove-duplicates (string->list word)))])\n        (when (>\
+    \ count max-count)\n          (set! max-word word)\n          (set! max-count\
+    \ count))))\n    max-word))\n", "  (define (find_max-helper words max-word)\n\
+    \    (cond\n      [(empty? words) max-word]\n      [(string<? (first words) max-word)\
+    \ (find_max-helper (rest words) max-word)]\n      [else (find_max-helper (rest\
+    \ words) (first words))]))\n  (define (unique-chars word)\n    (define (unique-chars-helper\
+    \ word unique-chars)\n      (cond\n        [(empty? word) unique-chars]\n    \
+    \    [(member (first word) unique-chars) (unique-chars-helper (rest word) unique-chars)]\n\
+    \        [else (unique-chars-helper (rest word) (cons (first word) unique-chars))]))\n\
+    \    (unique-chars-helper word '()))\n  (define (max-unique-chars words)\n   \
+    \ (define (max-unique-chars-helper words max-unique-chars)\n      (cond\n    \
+    \    [(empty? words) max-unique-chars]\n        [(> (length (unique-chars (first\
+    \ words))) max-unique-chars) (max-unique-chars-helper (rest words) (length (unique-chars\
+    \ (first words))))]\n        [else (max-unique-chars-helper (rest words) max-unique-chars)]))\n\
+    \    (max-unique-chars-helper words 0))\n  (define (max-unique-chars-words words\
+    \ max-unique-chars)\n    (cond\n      [(empty? words) '()]\n      [(= (length\
+    \ (unique-chars (first words))) max-unique-chars) (cons (first words) (max-unique-chars-words\
+    \ (rest words) max-unique-chars))]\n      [else (max-unique-chars-words (rest\
+    \ words) max-unique-chars)]))\n  (find_max-helper (max-unique-chars-words words\
+    \ (max-unique-chars words)) (first words)))\n", "  (cond\n    [(empty? words)\
+    \ (error \"No words\")]\n    [(empty? (rest words)) (first words)]\n    [else\n\
+    \     (define first-word (first words))\n     (define rest-words (rest words))\n\
+    \     (define first-word-unique-chars (unique-chars first-word))\n     (define\
+    \ rest-words-max (find_max rest-words))\n     (define rest-words-max-unique-chars\
+    \ (unique-chars rest-words-max))\n     (if (> (length first-word-unique-chars)\
+    \ (length rest-words-max-unique-chars))\n         first-word\n         rest-words-max)]))\n",
+  "  (define (unique-chars word)\n    (set! word (string->list word))\n    (set! word\
+    \ (remove-duplicates word))\n    (list->string word))\n  (define (max-unique-chars\
+    \ words)\n    (apply max (map unique-chars words)))\n  (define (max-unique-chars-words\
+    \ words)\n    (filter (lambda (word)\n              (= (unique-chars word) (max-unique-chars\
+    \ words)))\n            words))\n  (define (lexicographical-order words)\n   \
+    \ (sort words string<?))\n  (define (first-word words)\n    (car words))\n  (first-word\
+    \ (lexicographical-order (max-unique-chars-words words))))\n", "  (define (unique-chars\
+    \ word)\n    (set! word (string->list word))\n    (set! word (remove-duplicates\
+    \ word))\n    (list->string word))\n  (define (unique-chars-count word)\n    (length\
+    \ (unique-chars word)))\n  (define (max-unique-chars-count words)\n    (apply\
+    \ max (map unique-chars-count words)))\n  (define (max-unique-chars-words words)\n\
+    \    (filter (lambda (word)\n              (= (unique-chars-count word)\n    \
+    \             (max-unique-chars-count words)))\n            words))\n  (define\
+    \ (lexicographical-order words)\n    (sort words string<?))\n  (first (lexicographical-order\
+    \ (max-unique-chars-words words))))\n", "  (define (unique-chars word)\n    (remove-duplicates\
+    \ (string->list word)))\n  (define (max-unique-chars words)\n    (apply max (map\
+    \ unique-chars words)))\n  (define (filter-max-unique words)\n    (filter (lambda\
+    \ (word) (= (unique-chars word) (max-unique-chars words))) words))\n  (apply min\
+    \ (filter-max-unique words)))\n", "  (let ([max-word (first words)]\n        [max-unique-chars\
+    \ (length (unique-chars (first words)))]\n        [current-word (first words)]\n\
+    \        [current-unique-chars (length (unique-chars (first words)))])\n    (for\
+    \ ([word (rest words)])\n      (set! current-word word)\n      (set! current-unique-chars\
+    \ (length (unique-chars word)))\n      (cond\n        [(> current-unique-chars\
+    \ max-unique-chars)\n         (set! max-word current-word)\n         (set! max-unique-chars\
+    \ current-unique-chars)]\n        [(and (= current-unique-chars max-unique-chars)\n\
+    \              (string<? max-word current-word))\n         (set! max-word current-word)]))\n\
+    \    max-word))\n", "  (define (unique-chars word)\n    (set! word (string->list\
+    \ word))\n    (set! word (remove-duplicates word))\n    (list->string word))\n\
+    \  (define (max-unique-chars words)\n    (define (max-unique-chars-iter words\
+    \ max-word)\n      (cond ((null? words) max-word)\n            ((> (string-length\
+    \ (unique-chars (car words)))\n                (string-length (unique-chars max-word)))\n\
+    \             (max-unique-chars-iter (cdr words) (car words)))\n            (else\
+    \ (max-unique-chars-iter (cdr words) max-word))))\n    (max-unique-chars-iter\
+    \ words (car words)))\n  (max-unique-chars words))\n", "  (define (count-unique\
+    \ word)\n    (length (remove-duplicates (string->list word))))\n  (define (max-unique-word\
+    \ words)\n    (cond ((null? words) \"\")\n          ((null? (cdr words)) (car\
+    \ words))\n          (else (if (> (count-unique (car words))\n               \
+    \       (count-unique (cadr words)))\n                   (car words)\n       \
+    \            (max-unique-word (cdr words))))))\n  (max-unique-word words))\n",
+  "  (define (unique-chars word)\n    (set! word (string->list word))\n    (set! word\
+    \ (remove-duplicates word))\n    (list->string word))\n  (define (max-unique-chars\
+    \ words)\n    (apply max (map unique-chars words)))\n  (define (max-unique-words\
+    \ words)\n    (filter (lambda (word)\n              (= (unique-chars word) (max-unique-chars\
+    \ words)))\n            words))\n  (apply min (max-unique-words words)))\n", " \
+    \ (define (find_max-helper words max-word)\n    (cond\n      [(empty? words) max-word]\n\
+    \      [(string<? (first words) max-word) (find_max-helper (rest words) max-word)]\n\
+    \      [else (find_max-helper (rest words) (first words))]))\n  (define (unique-chars\
+    \ word)\n    (define (unique-chars-helper word chars)\n      (cond\n        [(empty?\
+    \ word) chars]\n        [(member (first word) chars) (unique-chars-helper (rest\
+    \ word) chars)]\n        [else (unique-chars-helper (rest word) (cons (first word)\
+    \ chars))]))\n    (unique-chars-helper word '()))\n  (define (max-unique-chars\
+    \ words)\n    (define (max-unique-chars-helper words max-word)\n      (cond\n\
+    \        [(empty? words) max-word]\n        [(string<? (first words) max-word)\
+    \ (max-unique-chars-helper (rest words) max-word)]\n        [else (max-unique-chars-helper\
+    \ (rest words) (first words))]))\n    (max-unique-chars-helper words (first words)))\n\
+    \  (define (max-unique-chars-count words)\n    (length (unique-chars (max-unique-chars\
+    \ words))))\n  (define (max-unique-chars-words words)\n    (define (max-unique-chars-words-helper\
+    \ words max-words)\n      (cond\n        [(empty? words) max-words]\n        [(=\
+    \ (length (unique-chars (first words))) (max-unique-chars-count words))\n    \
+    \     (max-unique-chars-words-helper (rest words) (cons (first words) max-words))]\n\
+    \        [else (max-unique-chars-words-helper (rest words) max-words)]))\n   \
+    \ (max-unique-chars-words-helper words '()))\n  (find_max-helper (max-unique-chars-words\
+    \ words) (first words)))\n", "  (define (find_max_helper words max-word max-count)\n\
+    \    (cond [(empty? words) max-word]\n          [else\n           (define word\
+    \ (first words))\n           (define count (length (remove-duplicates (string->list\
+    \ word))))\n           (if (> count max-count)\n               (find_max_helper\
+    \ (rest words) word count)\n               (find_max_helper (rest words) max-word\
+    \ max-count))]))\n  (find_max_helper words \"\" 0))\n", "  (let loop ([words words]\n\
+    \             [max-word \"\"]\n             [max-count 0])\n    (cond [(empty?\
+    \ words) max-word]\n          [(> (count-unique-chars (first words)) max-count)\n\
+    \           (loop (rest words) (first words) (count-unique-chars (first words)))]\n\
+    \          [else (loop (rest words) max-word max-count)])))\n", "  (define (unique-chars\
+    \ word)\n    (set! word (string->list word))\n    (define (unique-chars-helper\
+    \ word unique-chars)\n      (cond\n        [(empty? word) unique-chars]\n    \
+    \    [(member (first word) unique-chars) (unique-chars-helper (rest word) unique-chars)]\n\
+    \        [else (unique-chars-helper (rest word) (cons (first word) unique-chars))]))\n\
+    \    (unique-chars-helper word '()))\n  (define (find-max-helper words max-word\
+    \ max-unique-chars)\n    (cond\n      [(empty? words) max-word]\n      [(> (length\
+    \ (unique-chars (first words))) max-unique-chars)\n       (find-max-helper (rest\
+    \ words) (first words) (length (unique-chars (first words))))]\n      [(= (length\
+    \ (unique-chars (first words))) max-unique-chars)\n       (cond\n         [(string<?\
+    \ (first words) max-word) (find-max-helper (rest words) (first words) max-unique-chars)]\n\
+    \         [else (find-max-helper (rest words) max-word max-unique-chars)])]\n\
+    \      [else (find-max-helper (rest words) max-word max-unique-chars)]))\n  (find-max-helper\
+    \ words \"\" 0))\n", "  (define (max-word words)\n    (if (null? words)\n    \
+    \    \"\"\n        (let ([word (car words)])\n          (if (null? (cdr words))\n\
+    \              word\n              (let ([next-word (max-word (cdr words))])\n\
+    \                (if (> (length (unique-chars word))\n                       (length\
+    \ (unique-chars next-word)))\n                    word\n                    next-word))))))\n\
+    \  (max-word (sort words string<?)))\n", "  (let loop ([words words]\n       \
+    \      [max-word \"\"]\n             [max-count 0])\n    (cond [(empty? words)\
+    \ max-word]\n          [(> (length (unique (first words))) max-count)\n      \
+    \     (loop (rest words) (first words) (length (unique (first words))))]\n   \
+    \       [(= (length (unique (first words))) max-count)\n           (if (string<?\
+    \ (first words) max-word)\n               (loop (rest words) (first words) (length\
+    \ (unique (first words))))\n               (loop (rest words) max-word max-count))]\n\
+    \          [else (loop (rest words) max-word max-count)])))\n", "  (define (unique-chars\
+    \ word)\n    (set! word (string->list word))\n    (set! word (remove-duplicates\
+    \ word))\n    (list->string word))\n  (define (max-unique-chars words)\n    (define\
+    \ (max-unique-chars-helper words max-word)\n      (cond\n        [(empty? words)\
+    \ max-word]\n        [(> (length (unique-chars (first words)))\n            (length\
+    \ (unique-chars max-word)))\n         (max-unique-chars-helper (rest words) (first\
+    \ words))]\n        [else (max-unique-chars-helper (rest words) max-word)]))\n\
+    \    (max-unique-chars-helper words (first words)))\n  (max-unique-chars words))\n",
+  "  (define (unique-chars word)\n    (set! word (string->list word))\n    (define\
+    \ (helper word unique-chars)\n      (cond\n        [(empty? word) unique-chars]\n\
+    \        [(member (first word) unique-chars) (helper (rest word) unique-chars)]\n\
+    \        [else (helper (rest word) (cons (first word) unique-chars))]))\n    (helper\
+    \ word '()))\n  (define (helper words max-word)\n    (cond\n      [(empty? words)\
+    \ max-word]\n      [(> (length (unique-chars (first words))) (length (unique-chars\
+    \ max-word)))\n       (helper (rest words) (first words))]\n      [(= (length\
+    \ (unique-chars (first words))) (length (unique-chars max-word)))\n       (if\
+    \ (string<? (first words) max-word)\n           (helper (rest words) (first words))\n\
+    \           (helper (rest words) max-word))]\n      [else (helper (rest words)\
+    \ max-word)]))\n  (helper words (first words)))\n", "  (define (unique-chars word)\n\
+    \    (set! word (string->list word))\n    (define (unique-chars-iter word unique-chars)\n\
+    \      (cond\n        [(empty? word) unique-chars]\n        [(member (first word)\
+    \ unique-chars) (unique-chars-iter (rest word) unique-chars)]\n        [else (unique-chars-iter\
+    \ (rest word) (cons (first word) unique-chars))]))\n    (unique-chars-iter word\
+    \ '()))\n  (define (max-unique-chars words)\n    (cond\n      [(empty? words)\
+    \ 0]\n      [else (max (length (unique-chars (first words))) (max-unique-chars\
+    \ (rest words)))]))\n  (define (find-max-iter words max-unique-chars)\n    (cond\n\
+    \      [(empty? words) '()]\n      [(= (length (unique-chars (first words))) max-unique-chars)\
+    \ (first words)]\n      [else (find-max-iter (rest words) max-unique-chars)]))\n\
+    \  (find-max-iter words (max-unique-chars words)))\n", "  (define (unique-chars\
+    \ word)\n    (set! word (string->list word))\n    (set! word (remove-duplicates\
+    \ word))\n    (list->string word))\n  (define (max-unique-chars words)\n    (apply\
+    \ max (map unique-chars words)))\n  (define (max-unique-words words)\n    (filter\
+    \ (lambda (word) (= (unique-chars word) (max-unique-chars words))) words))\n \
+    \ (define (lexicographical-order words)\n    (sort words string<?))\n  (car (lexicographical-order\
+    \ (max-unique-words words))))\n", "  (let ([max-word (car words)]\n        [max-count\
+    \ (count-unique-chars (car words))])\n    (for ([word (cdr words)])\n      (let\
+    \ ([count (count-unique-chars word)])\n        (when (or (> count max-count)\n\
+    \                  (and (= count max-count)\n                       (string<?\
+    \ max-word word)))\n          (set! max-word word)\n          (set! max-count\
+    \ count))))\n    max-word))\n", "  (define (count-unique word)\n    (define (count-unique-helper\
+    \ word unique-chars)\n      (cond\n        [(empty? word) (length unique-chars)]\n\
+    \        [(member (first word) unique-chars) (count-unique-helper (rest word)\
+    \ unique-chars)]\n        [else (count-unique-helper (rest word) (cons (first\
+    \ word) unique-chars))]))\n    (count-unique-helper word '()))\n  (define (find-max-helper\
+    \ words max-word max-unique-count)\n    (cond\n      [(empty? words) max-word]\n\
+    \      [(> (count-unique (first words)) max-unique-count) (find-max-helper (rest\
+    \ words) (first words) (count-unique (first words)))]\n      [(= (count-unique\
+    \ (first words)) max-unique-count) (find-max-helper (rest words) (first words)\
+    \ (count-unique (first words)))]\n      [else (find-max-helper (rest words) max-word\
+    \ max-unique-count)]))\n  (find-max-helper words \"\" 0))\n", "  (define (unique-chars\
+    \ word)\n    (set! word (string->list word))\n    (define (unique-chars-helper\
+    \ word unique-chars)\n      (cond\n        [(empty? word) unique-chars]\n    \
+    \    [(member (first word) unique-chars) (unique-chars-helper (rest word) unique-chars)]\n\
+    \        [else (unique-chars-helper (rest word) (cons (first word) unique-chars))]))\n\
+    \    (unique-chars-helper word '()))\n  (define (max-unique-chars-word words)\n\
+    \    (cond\n      [(empty? words) '()]\n      [(empty? (rest words)) (first words)]\n\
+    \      [else (if (> (length (unique-chars (first words))) (length (unique-chars\
+    \ (second words))))\n                (max-unique-chars-word (cons (first words)\
+    \ (rest (rest words))))\n                (max-unique-chars-word (cons (second\
+    \ words) (rest (rest words)))))]))\n  (max-unique-chars-word words))\n", "  (define\
+    \ (unique-chars word)\n    (set! word (string->list word))\n    (define (unique-chars-helper\
+    \ word unique-chars)\n      (cond\n        [(empty? word) unique-chars]\n    \
+    \    [(member (first word) unique-chars) (unique-chars-helper (rest word) unique-chars)]\n\
+    \        [else (unique-chars-helper (rest word) (cons (first word) unique-chars))]))\n\
+    \    (unique-chars-helper word '()))\n  (define (find-max-helper words max-word\
+    \ max-unique-chars)\n    (cond\n      [(empty? words) max-word]\n      [(> (length\
+    \ (unique-chars (first words))) max-unique-chars)\n       (find-max-helper (rest\
+    \ words) (first words) (length (unique-chars (first words))))]\n      [(= (length\
+    \ (unique-chars (first words))) max-unique-chars)\n       (cond\n         [(string<?\
+    \ (first words) max-word) (find-max-helper (rest words) (first words) max-unique-chars)]\n\
+    \         [else (find-max-helper (rest words) max-word max-unique-chars)])]\n\
+    \      [else (find-max-helper (rest words) max-word max-unique-chars)]))\n  (find-max-helper\
+    \ words \"\" 0))\n", "  (let loop ([words words]\n             [max-word \"\"\
+    ]\n             [max-count 0])\n    (cond\n      [(null? words) max-word]\n  \
+    \    [(> (length (unique-chars (car words))) max-count)\n       (loop (cdr words)\
+    \ (car words) (length (unique-chars (car words))))]\n      [(= (length (unique-chars\
+    \ (car words))) max-count)\n       (if (string<? (car words) max-word)\n     \
+    \      (loop (cdr words) (car words) (length (unique-chars (car words))))\n  \
+    \         (loop (cdr words) max-word max-count))]\n      [else (loop (cdr words)\
+    \ max-word max-count)])))\n"]
+stop_tokens:
+- "\n(define "
+- "\n#|"
+- "\n;"
+- "\n("
