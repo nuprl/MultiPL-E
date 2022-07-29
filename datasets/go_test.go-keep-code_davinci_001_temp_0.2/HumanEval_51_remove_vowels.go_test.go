@@ -36,9 +36,7 @@ func TestRemove_Vowels(t *testing.T) {
 	}
    tests := []test{
      { actual: candidate(""), expected: "" },
-     { actual: candidate("abcdef
-ghijklm"), expected: "bcdf
-ghjklm" },
+     { actual: candidate("abcdef\nghijklm"), expected: "bcdf\nghjklm" },
      { actual: candidate("fedcba"), expected: "fdcb" },
      { actual: candidate("eeeee"), expected: "" },
      { actual: candidate("acBAA"), expected: "cB" },

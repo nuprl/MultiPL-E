@@ -24,7 +24,7 @@ func TestAll_Prefixes(t *testing.T) {
 		expected interface{}
 	}
    tests := []test{
-     { actual: candidate(""), expected: []int{} },
+     { actual: candidate(""), expected: []string{} },
      { actual: candidate("asdfgh"), expected: []string{"a", "as", "asd", "asdf", "asdfg", "asdfgh"} },
      { actual: candidate("WWW"), expected: []string{"W", "WW", "WWW"} },
    }

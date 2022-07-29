@@ -44,7 +44,7 @@ func TestTotal_Match(t *testing.T) {
 		expected interface{}
 	}
    tests := []test{
-     { actual: candidate([]int{}, []int{}), expected: []int{} },
+     { actual: candidate([]string{}, []string{}), expected: []string{} },
      { actual: candidate([]string{"hi", "admin"}, []string{"hi", "hi"}), expected: []string{"hi", "hi"} },
      { actual: candidate([]string{"hi", "admin"}, []string{"hi", "hi", "admin", "project"}), expected: []string{"hi", "admin"} },
      { actual: candidate([]string{"4"}, []string{"1", "2", "3", "4", "5"}), expected: []string{"4"} },

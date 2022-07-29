@@ -224,7 +224,7 @@ import (
                 float_count += 1
 
         if mismatch:
-            if float_count + int_count == len(list):
+            if float_count + int_count == len(list) - 1:
                 return "float64"
             else:
                 return "interface{}"
