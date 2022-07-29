@@ -25,7 +25,7 @@ class RTranslator:
         )
         arg_names = [arg.arg for arg in args]
         arg_list = ", ".join(arg_names)
-        return f"{r_description}{name} <- function({arg_list})\n"
+        return f"{r_description}{name} <- function({arg_list})" + ' {'
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
