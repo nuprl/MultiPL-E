@@ -79,7 +79,7 @@ class RTranslator:
         '''Translate a dictionary with keys and values (uses R list with keys)
            A dictionary { "key1": val1, "key2": val2 } translates to list("key1" = val1, "key2" = val2)  
         '''
-        return "list(" + ", ".join(f'"{k}" = {v}' for k, v in zip(keys, values)) + ")"
+        return "list(" + ", ".join(f'{k} = {v}' for k, v in zip(keys, values)) + ")"
     
     def gen_call(self, func, args):
         '''Translate a function call `func(args)`
