@@ -209,10 +209,25 @@ import (
             raise Exception("Given empty list to get_type_pylist")
 
         elem_type = self.pytype_to_gotype(list[0])
+        float_count = 0
+        int_count = 0
+        mismatch = False
+
         for el in list[1::]:
-            if self.pytype_to_gotype(el) != elem_type:
-                elem_type = "interface{}"
-                break
+            type_el = self.pytype_to_gotype(el)
+            if type_el != elem_type:
+                mismatch = True
+
+            if type_el == "int":
+                int_count += 1
+            elif type_el == "float64":
+                float_count += 1
+
+        if mismatch:
+            if float_count + int_count == len(list):
+                return "float64"
+            else:
+                return "interface{}"
 
         return elem_type
 
