@@ -41,7 +41,7 @@ def translate_type(t):
                         case other:
                             raise Exception(f"Bad dict: {slice}")
                 case "Optional":
-                    return translate_type(slice) + "?"
+                    return translate_type(slice) + " | undefined"
                 case other:
                     raise Exception(f"Bad generic {other}")
         case ast.Name("int") | "int":
@@ -127,9 +127,10 @@ class TypeScriptTranslator:
         if type(c) == bool:
             return "true" if c else "false"
         elif type(c) == str:
+            c = c.replace('\n','\\n')
             return f'"{c}"'
         elif c is None:
-            return "null" # NOTE(carolyn): My guess
+            return "undefined"
         return repr(c)
 
     def gen_var(self, v: str) -> str:

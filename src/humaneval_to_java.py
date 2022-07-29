@@ -9,6 +9,7 @@ from typing import List, Optional, Tuple
 from generic_translator import main
 from humaneval_to_cpp import CPPTranslator, DOCSTRING_LINESTART_RE
 
+#Refactoring needed
 
 class JavaTranslator(CPPTranslator):
     stop = ["}\n\n"]
@@ -32,9 +33,9 @@ return (T) Array.get(Array.newInstance(clazz, 1), 0);
 }"""
 
     def make_list(self, elem_type, list_contents):
-        p = "new " + self.list_type%self.box_type(elem_type) + "(Arrays.asList" + list_contents + ")"
-        print(36, p)
-        return p
+        if list_contents == "":
+            list_contents = "()"
+        return "new " + self.list_type%self.box_type(elem_type) + "(Arrays.asList" + list_contents + ")"
     
     def make_array_literal(self, list_contents):
         return "(" + list_contents + ")"

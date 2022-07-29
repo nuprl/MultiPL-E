@@ -5,17 +5,17 @@
 // 'a'
 // >>> longest(['a', 'bb', 'ccc'])
 // 'ccc'
-function longest(strings: string[]): string? {
-    if (strings.length === 0) {
-        return null;
+function longest(strings: string[]): string | undefined {
+  if (strings.length === 0) {
+    return undefined;
+  }
+  let longest = strings[0];
+  for (let i = 1; i < strings.length; i++) {
+    if (strings[i].length > longest.length) {
+      longest = strings[i];
     }
-    let longest = strings[0];
-    for (let i = 1; i < strings.length; i++) {
-        if (strings[i].length > longest.length) {
-            longest = strings[i];
-        }
-    }
-    return longest;
+  }
+  return longest;
 }
 
 
@@ -25,7 +25,7 @@ const assert = require('node:assert');
 
 function test() {
   let candidate = longest;
-  assert.deepEqual(candidate([]),null);
+  assert.deepEqual(candidate([]),undefined);
   assert.deepEqual(candidate(["x", "y", "z"]),"x");
   assert.deepEqual(candidate(["x", "yyy", "zzzz", "www", "kkkk", "abc"]),"zzzz");
 }

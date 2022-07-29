@@ -21,9 +21,7 @@ const assert = require('node:assert');
 function test() {
   let candidate = remove_vowels;
   assert.deepEqual(candidate(""),"");
-  assert.deepEqual(candidate("abcdef
-ghijklm"),"bcdf
-ghjklm");
+  assert.deepEqual(candidate("abcdef\nghijklm"),"bcdf\nghjklm");
   assert.deepEqual(candidate("fedcba"),"fdcb");
   assert.deepEqual(candidate("eeeee"),"");
   assert.deepEqual(candidate("acBAA"),"cB");

@@ -5,12 +5,12 @@
 // next_smallest([5, 1, 4, 3, 2]) == 2
 // next_smallest([]) == None
 // next_smallest([1, 1]) == None
-function next_smallest(lst: number[]): number? {
-    if (lst.length < 2) {
-        return null;
-    }
-    const sorted = lst.sort((a, b) => a - b);
-    return sorted[1];
+function next_smallest(lst: number[]): number | undefined {
+  if (lst.length === 0) {
+    return undefined;
+  }
+  const sorted = lst.sort((a, b) => a - b);
+  return sorted[1];
 }
 
 
@@ -22,10 +22,10 @@ function test() {
   let candidate = next_smallest;
   assert.deepEqual(candidate([1, 2, 3, 4, 5]),2);
   assert.deepEqual(candidate([5, 1, 4, 3, 2]),2);
-  assert.deepEqual(candidate([]),null);
-  assert.deepEqual(candidate([1, 1]),null);
+  assert.deepEqual(candidate([]),undefined);
+  assert.deepEqual(candidate([1, 1]),undefined);
   assert.deepEqual(candidate([1, 1, 1, 1, 0]),1);
-  assert.deepEqual(candidate([1, 1]),null);
+  assert.deepEqual(candidate([1, 1]),undefined);
   assert.deepEqual(candidate([-35, 34, 12, -45]),-35);
 }
 
