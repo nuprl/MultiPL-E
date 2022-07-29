@@ -66,26 +66,26 @@ class RTranslator:
         '''Translate a list with elements l
            A list [ x, y, z ] translates to c(x, y, z)
         '''
-        return "c(" + ", ".join(self.convert_expr(self, e) for e in l) + ")"
+        return "c(" + ", ".join(l) + ")"
     
     #there are no r tuples, but r lists are mostly immutable?
     def gen_tuple(self, t):
         '''Translate a tuple with elements t
            A tuple (x, y, z) translates to c(x, y, z) }
         '''
-        return "c(" + ", ".join(self.convert_expr(self, e) for e in t) + ")"
+        return "c(" + ", ".join(t) + ")"
     
     def gen_dict(self, keys, values):
         '''Translate a dictionary with keys and values (uses R list with keys)
            A dictionary { "key1": val1, "key2": val2 } translates to list("key1" = val1, "key2" = val2)  
         '''
-        return "list(" + ", ".join(f'"{k}" = {self.convert_expr(self, v)}' for k, v in zip(keys, values)) + ")"
+        return "list(" + ", ".join(f'"{k}" = {v}' for k, v in zip(keys, values)) + ")"
     
     def gen_call(self, func, args):
         '''Translate a function call `func(args)`
            A function call f(x, y, z) translates to f(x, y, z)
         '''
-        return self.convert_expr(self, func) + "(" + ", ".join(self.convert_expr(self, a) for a in args) + ")"
+        return func + "(" + ", ".join(args) + ")"
 
 if __name__ == "__main__":
     translator = RTranslator("R")
