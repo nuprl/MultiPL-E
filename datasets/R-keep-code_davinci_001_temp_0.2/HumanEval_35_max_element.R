@@ -18,7 +18,7 @@ max_element([5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10])
 
 test_humaneval <- function() {
 candidate <- max_element
-    if(!identical(candidate(c(1, 2, 3)), 3)){quit('no', 1)}
-    if(!identical(candidate(c(5, 3, -5, 2, -3, 3, 9, 0, 124, 1, -10)), 124)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 3)), 3)){quit('no', 1)}
+    if(!identical(candidate(list(5, 3, -5, 2, -3, 3, 9, 0, 124, 1, -10)), 124)){quit('no', 1)}
 }
 test_humaneval()

@@ -21,13 +21,13 @@ monotonic <- function(l) {
 
 test_humaneval <- function() {
 candidate <- monotonic
-    if(!identical(candidate(c(1, 2, 4, 10)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 4, 20)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 20, 4, 10)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c(4, 1, 0, -10)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(4, 1, 1, 0)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 3, 2, 5, 60)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 3, 4, 5, 60)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(9, 9, 9, 9)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 4, 10)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 4, 20)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 20, 4, 10)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(4, 1, 0, -10)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(4, 1, 1, 0)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 3, 2, 5, 60)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 3, 4, 5, 60)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(9, 9, 9, 9)), TRUE)){quit('no', 1)}
 }
 test_humaneval()

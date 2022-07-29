@@ -31,18 +31,18 @@ is_sorted([1, 2, 2, 2, 3, 4])
 
 test_humaneval <- function() {
 candidate <- is_sorted
-    if(!identical(candidate(c(5)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 3, 4, 5)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 3, 2, 4, 5)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 3, 4, 5, 6)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 3, 4, 5, 6, 7)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 3, 2, 4, 5, 6, 7)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c()), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(3, 2, 1)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 2, 2, 3, 4)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 3, 3, 3, 4)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 2, 3, 3, 4)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 3, 4)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(5)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 3, 4, 5)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 3, 2, 4, 5)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 3, 4, 5, 6)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 3, 4, 5, 6, 7)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 3, 2, 4, 5, 6, 7)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list()), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(3, 2, 1)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 2, 2, 3, 4)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 3, 3, 3, 4)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 2, 3, 3, 4)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 3, 4)), TRUE)){quit('no', 1)}
 }
 test_humaneval()

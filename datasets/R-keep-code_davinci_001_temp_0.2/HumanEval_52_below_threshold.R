@@ -15,11 +15,11 @@ below_threshold <- function(l, t) {
 
 test_humaneval <- function() {
 candidate <- below_threshold
-    if(!identical(candidate(c(1, 2, 4, 10), 100), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 20, 4, 10), 5), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 20, 4, 10), 21), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 20, 4, 10), 22), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 8, 4, 10), 11), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 8, 4, 10), 10), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 4, 10), 100), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 20, 4, 10), 5), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 20, 4, 10), 21), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 20, 4, 10), 22), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 8, 4, 10), 11), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 8, 4, 10), 10), FALSE)){quit('no', 1)}
 }
 test_humaneval()

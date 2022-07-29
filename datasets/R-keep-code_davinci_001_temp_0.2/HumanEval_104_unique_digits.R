@@ -15,9 +15,9 @@ unique_digits(c(152, 323, 1422, 10))
 
 test_humaneval <- function() {
 candidate <- unique_digits
-    if(!identical(candidate(c(15, 33, 1422, 1)), c(1, 15, 33))){quit('no', 1)}
-    if(!identical(candidate(c(152, 323, 1422, 10)), c())){quit('no', 1)}
-    if(!identical(candidate(c(12345, 2033, 111, 151)), c(111, 151))){quit('no', 1)}
-    if(!identical(candidate(c(135, 103, 31)), c(31, 135))){quit('no', 1)}
+    if(!identical(candidate(list(15, 33, 1422, 1)), list(1, 15, 33))){quit('no', 1)}
+    if(!identical(candidate(list(152, 323, 1422, 10)), list())){quit('no', 1)}
+    if(!identical(candidate(list(12345, 2033, 111, 151)), list(111, 151))){quit('no', 1)}
+    if(!identical(candidate(list(135, 103, 31)), list(31, 135))){quit('no', 1)}
 }
 test_humaneval()

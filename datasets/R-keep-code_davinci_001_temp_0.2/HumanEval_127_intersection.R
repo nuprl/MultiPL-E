@@ -33,13 +33,13 @@ intersection((-3, -1), (-5, 5))
 
 test_humaneval <- function() {
 candidate <- intersection
-    if(!identical(candidate(c(1, 2), c(2, 3)), 'NO')){quit('no', 1)}
-    if(!identical(candidate(c(-1, 1), c(0, 4)), 'NO')){quit('no', 1)}
-    if(!identical(candidate(c(-3, -1), c(-5, 5)), 'YES')){quit('no', 1)}
-    if(!identical(candidate(c(-2, 2), c(-4, 0)), 'YES')){quit('no', 1)}
-    if(!identical(candidate(c(-11, 2), c(-1, -1)), 'NO')){quit('no', 1)}
-    if(!identical(candidate(c(1, 2), c(3, 5)), 'NO')){quit('no', 1)}
-    if(!identical(candidate(c(1, 2), c(1, 2)), 'NO')){quit('no', 1)}
-    if(!identical(candidate(c(-2, -2), c(-3, -2)), 'NO')){quit('no', 1)}
+    if(!identical(candidate(list(1, 2), list(2, 3)), 'NO')){quit('no', 1)}
+    if(!identical(candidate(list(-1, 1), list(0, 4)), 'NO')){quit('no', 1)}
+    if(!identical(candidate(list(-3, -1), list(-5, 5)), 'YES')){quit('no', 1)}
+    if(!identical(candidate(list(-2, 2), list(-4, 0)), 'YES')){quit('no', 1)}
+    if(!identical(candidate(list(-11, 2), list(-1, -1)), 'NO')){quit('no', 1)}
+    if(!identical(candidate(list(1, 2), list(3, 5)), 'NO')){quit('no', 1)}
+    if(!identical(candidate(list(1, 2), list(1, 2)), 'NO')){quit('no', 1)}
+    if(!identical(candidate(list(-2, -2), list(-3, -2)), 'NO')){quit('no', 1)}
 }
 test_humaneval()

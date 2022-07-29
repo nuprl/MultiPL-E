@@ -24,8 +24,8 @@ do_algebra <- function(operator, operand) {
 
 test_humaneval <- function() {
 candidate <- do_algebra
-    if(!identical(candidate(c('**', '*', '+'), c(2, 3, 4, 5)), 37)){quit('no', 1)}
-    if(!identical(candidate(c('+', '*', '-'), c(2, 3, 4, 5)), 9)){quit('no', 1)}
-    if(!identical(candidate(c('//', '*'), c(7, 3, 4)), 8)){quit('no', 1)}
+    if(!identical(candidate(list('**', '*', '+'), list(2, 3, 4, 5)), 37)){quit('no', 1)}
+    if(!identical(candidate(list('+', '*', '-'), list(2, 3, 4, 5)), 9)){quit('no', 1)}
+    if(!identical(candidate(list('//', '*'), list(7, 3, 4)), 8)){quit('no', 1)}
 }
 test_humaneval()

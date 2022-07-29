@@ -27,12 +27,12 @@ double_the_difference <- function(lst) {
 
 test_humaneval <- function() {
 candidate <- double_the_difference
-    if(!identical(candidate(c()), 0)){quit('no', 1)}
-    if(!identical(candidate(c(5.0, 4.0)), 25)){quit('no', 1)}
-    if(!identical(candidate(c(0.1, 0.2, 0.3)), 0)){quit('no', 1)}
-    if(!identical(candidate(c(-10.0, -20.0, -30.0)), 0)){quit('no', 1)}
-    if(!identical(candidate(c(-1.0, -2.0, 8.0)), 0)){quit('no', 1)}
-    if(!identical(candidate(c(0.2, 3.0, 5.0)), 34)){quit('no', 1)}
-    if(!identical(candidate(c(-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0)), 165)){quit('no', 1)}
+    if(!identical(candidate(list()), 0)){quit('no', 1)}
+    if(!identical(candidate(list(5.0, 4.0)), 25)){quit('no', 1)}
+    if(!identical(candidate(list(0.1, 0.2, 0.3)), 0)){quit('no', 1)}
+    if(!identical(candidate(list(-10.0, -20.0, -30.0)), 0)){quit('no', 1)}
+    if(!identical(candidate(list(-1.0, -2.0, 8.0)), 0)){quit('no', 1)}
+    if(!identical(candidate(list(0.2, 3.0, 5.0)), 34)){quit('no', 1)}
+    if(!identical(candidate(list(-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0)), 165)){quit('no', 1)}
 }
 test_humaneval()

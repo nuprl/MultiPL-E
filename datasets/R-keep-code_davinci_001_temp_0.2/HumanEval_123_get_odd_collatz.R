@@ -23,9 +23,9 @@ get_odd_collatz <- function(n) {
 
 test_humaneval <- function() {
 candidate <- get_odd_collatz
-    if(!identical(candidate(14), c(1, 5, 7, 11, 13, 17))){quit('no', 1)}
-    if(!identical(candidate(5), c(1, 5))){quit('no', 1)}
-    if(!identical(candidate(12), c(1, 3, 5))){quit('no', 1)}
-    if(!identical(candidate(1), c(1))){quit('no', 1)}
+    if(!identical(candidate(14), list(1, 5, 7, 11, 13, 17))){quit('no', 1)}
+    if(!identical(candidate(5), list(1, 5))){quit('no', 1)}
+    if(!identical(candidate(12), list(1, 3, 5))){quit('no', 1)}
+    if(!identical(candidate(1), list(1))){quit('no', 1)}
 }
 test_humaneval()

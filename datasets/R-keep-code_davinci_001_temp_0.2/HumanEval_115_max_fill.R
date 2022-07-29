@@ -72,10 +72,10 @@ max_fill <- function(grid, capacity) {
 
 test_humaneval <- function() {
 candidate <- max_fill
-    if(!identical(candidate(c(c(0, 0, 1, 0), c(0, 1, 0, 0), c(1, 1, 1, 1)), 1), 6)){quit('no', 1)}
-    if(!identical(candidate(c(c(0, 0, 1, 1), c(0, 0, 0, 0), c(1, 1, 1, 1), c(0, 1, 1, 1)), 2), 5)){quit('no', 1)}
-    if(!identical(candidate(c(c(0, 0, 0), c(0, 0, 0)), 5), 0)){quit('no', 1)}
-    if(!identical(candidate(c(c(1, 1, 1, 1), c(1, 1, 1, 1)), 2), 4)){quit('no', 1)}
-    if(!identical(candidate(c(c(1, 1, 1, 1), c(1, 1, 1, 1)), 9), 2)){quit('no', 1)}
+    if(!identical(candidate(list(list(0, 0, 1, 0), list(0, 1, 0, 0), list(1, 1, 1, 1)), 1), 6)){quit('no', 1)}
+    if(!identical(candidate(list(list(0, 0, 1, 1), list(0, 0, 0, 0), list(1, 1, 1, 1), list(0, 1, 1, 1)), 2), 5)){quit('no', 1)}
+    if(!identical(candidate(list(list(0, 0, 0), list(0, 0, 0)), 5), 0)){quit('no', 1)}
+    if(!identical(candidate(list(list(1, 1, 1, 1), list(1, 1, 1, 1)), 2), 4)){quit('no', 1)}
+    if(!identical(candidate(list(list(1, 1, 1, 1), list(1, 1, 1, 1)), 9), 2)){quit('no', 1)}
 }
 test_humaneval()

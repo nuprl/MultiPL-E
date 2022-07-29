@@ -18,12 +18,12 @@ solution <- function(lst) {
 
 test_humaneval <- function() {
 candidate <- solution
-    if(!identical(candidate(c(5, 8, 7, 1)), 12)){quit('no', 1)}
-    if(!identical(candidate(c(3, 3, 3, 3, 3)), 9)){quit('no', 1)}
-    if(!identical(candidate(c(30, 13, 24, 321)), 0)){quit('no', 1)}
-    if(!identical(candidate(c(5, 9)), 5)){quit('no', 1)}
-    if(!identical(candidate(c(2, 4, 8)), 0)){quit('no', 1)}
-    if(!identical(candidate(c(30, 13, 23, 32)), 23)){quit('no', 1)}
-    if(!identical(candidate(c(3, 13, 2, 9)), 3)){quit('no', 1)}
+    if(!identical(candidate(list(5, 8, 7, 1)), 12)){quit('no', 1)}
+    if(!identical(candidate(list(3, 3, 3, 3, 3)), 9)){quit('no', 1)}
+    if(!identical(candidate(list(30, 13, 24, 321)), 0)){quit('no', 1)}
+    if(!identical(candidate(list(5, 9)), 5)){quit('no', 1)}
+    if(!identical(candidate(list(2, 4, 8)), 0)){quit('no', 1)}
+    if(!identical(candidate(list(30, 13, 23, 32)), 23)){quit('no', 1)}
+    if(!identical(candidate(list(3, 13, 2, 9)), 3)){quit('no', 1)}
 }
 test_humaneval()

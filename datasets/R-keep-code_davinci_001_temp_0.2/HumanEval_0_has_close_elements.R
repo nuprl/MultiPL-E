@@ -18,12 +18,12 @@ has_close_elements <- function(numbers, threshold) {
 
 test_humaneval <- function() {
 candidate <- has_close_elements
-    if(!identical(candidate(c(1.0, 2.0, 3.9, 4.0, 5.0, 2.2), 0.3), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1.0, 2.0, 3.9, 4.0, 5.0, 2.2), 0.05), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c(1.0, 2.0, 5.9, 4.0, 5.0), 0.95), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1.0, 2.0, 5.9, 4.0, 5.0), 0.8), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c(1.0, 2.0, 3.0, 4.0, 5.0, 2.0), 0.1), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1.1, 2.2, 3.1, 4.1, 5.1), 1.0), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1.1, 2.2, 3.1, 4.1, 5.1), 0.5), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(1.0, 2.0, 3.9, 4.0, 5.0, 2.2), 0.3), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1.0, 2.0, 3.9, 4.0, 5.0, 2.2), 0.05), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(1.0, 2.0, 5.9, 4.0, 5.0), 0.95), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1.0, 2.0, 5.9, 4.0, 5.0), 0.8), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(1.0, 2.0, 3.0, 4.0, 5.0, 2.0), 0.1), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1.1, 2.2, 3.1, 4.1, 5.1), 1.0), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1.1, 2.2, 3.1, 4.1, 5.1), 0.5), FALSE)){quit('no', 1)}
 }
 test_humaneval()

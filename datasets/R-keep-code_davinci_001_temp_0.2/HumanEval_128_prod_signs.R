@@ -22,13 +22,13 @@ prod_signs <- function(arr) {
 
 test_humaneval <- function() {
 candidate <- prod_signs
-    if(!identical(candidate(c(1, 2, 2, -4)), -9)){quit('no', 1)}
-    if(!identical(candidate(c(0, 1)), 0)){quit('no', 1)}
-    if(!identical(candidate(c(1, 1, 1, 2, 3, -1, 1)), -10)){quit('no', 1)}
-    if(!identical(candidate(c()), NA)){quit('no', 1)}
-    if(!identical(candidate(c(2, 4, 1, 2, -1, -1, 9)), 20)){quit('no', 1)}
-    if(!identical(candidate(c(-1, 1, -1, 1)), 4)){quit('no', 1)}
-    if(!identical(candidate(c(-1, 1, 1, 1)), -4)){quit('no', 1)}
-    if(!identical(candidate(c(-1, 1, 1, 0)), 0)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 2, -4)), -9)){quit('no', 1)}
+    if(!identical(candidate(list(0, 1)), 0)){quit('no', 1)}
+    if(!identical(candidate(list(1, 1, 1, 2, 3, -1, 1)), -10)){quit('no', 1)}
+    if(!identical(candidate(list()), NULL)){quit('no', 1)}
+    if(!identical(candidate(list(2, 4, 1, 2, -1, -1, 9)), 20)){quit('no', 1)}
+    if(!identical(candidate(list(-1, 1, -1, 1)), 4)){quit('no', 1)}
+    if(!identical(candidate(list(-1, 1, 1, 1)), -4)){quit('no', 1)}
+    if(!identical(candidate(list(-1, 1, 1, 0)), 0)){quit('no', 1)}
 }
 test_humaneval()

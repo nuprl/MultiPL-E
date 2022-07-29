@@ -20,12 +20,12 @@ exchange <- function(lst1, lst2) {
 
 test_humaneval <- function() {
 candidate <- exchange
-    if(!identical(candidate(c(1, 2, 3, 4), c(1, 2, 3, 4)), 'YES')){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 3, 4), c(1, 5, 3, 4)), 'NO')){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 3, 4), c(2, 1, 4, 3)), 'YES')){quit('no', 1)}
-    if(!identical(candidate(c(5, 7, 3), c(2, 6, 4)), 'YES')){quit('no', 1)}
-    if(!identical(candidate(c(5, 7, 3), c(2, 6, 3)), 'NO')){quit('no', 1)}
-    if(!identical(candidate(c(3, 2, 6, 1, 8, 9), c(3, 5, 5, 1, 1, 1)), 'NO')){quit('no', 1)}
-    if(!identical(candidate(c(100, 200), c(200, 200)), 'YES')){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 3, 4), list(1, 2, 3, 4)), 'YES')){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 3, 4), list(1, 5, 3, 4)), 'NO')){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 3, 4), list(2, 1, 4, 3)), 'YES')){quit('no', 1)}
+    if(!identical(candidate(list(5, 7, 3), list(2, 6, 4)), 'YES')){quit('no', 1)}
+    if(!identical(candidate(list(5, 7, 3), list(2, 6, 3)), 'NO')){quit('no', 1)}
+    if(!identical(candidate(list(3, 2, 6, 1, 8, 9), list(3, 5, 5, 1, 1, 1)), 'NO')){quit('no', 1)}
+    if(!identical(candidate(list(100, 200), list(200, 200)), 'YES')){quit('no', 1)}
 }
 test_humaneval()

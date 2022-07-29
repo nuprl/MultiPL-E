@@ -15,14 +15,14 @@ reverse_delete <- function(s, c) {
 
 test_humaneval <- function() {
 candidate <- reverse_delete
-    if(!identical(candidate('abcde', 'ae'), c('bcd', FALSE))){quit('no', 1)}
-    if(!identical(candidate('abcdef', 'b'), c('acdef', FALSE))){quit('no', 1)}
-    if(!identical(candidate('abcdedcba', 'ab'), c('cdedc', TRUE))){quit('no', 1)}
-    if(!identical(candidate('dwik', 'w'), c('dik', FALSE))){quit('no', 1)}
-    if(!identical(candidate('a', 'a'), c('', TRUE))){quit('no', 1)}
-    if(!identical(candidate('abcdedcba', ''), c('abcdedcba', TRUE))){quit('no', 1)}
-    if(!identical(candidate('abcdedcba', 'v'), c('abcdedcba', TRUE))){quit('no', 1)}
-    if(!identical(candidate('vabba', 'v'), c('abba', TRUE))){quit('no', 1)}
-    if(!identical(candidate('mamma', 'mia'), c('', TRUE))){quit('no', 1)}
+    if(!identical(candidate('abcde', 'ae'), list('bcd', FALSE))){quit('no', 1)}
+    if(!identical(candidate('abcdef', 'b'), list('acdef', FALSE))){quit('no', 1)}
+    if(!identical(candidate('abcdedcba', 'ab'), list('cdedc', TRUE))){quit('no', 1)}
+    if(!identical(candidate('dwik', 'w'), list('dik', FALSE))){quit('no', 1)}
+    if(!identical(candidate('a', 'a'), list('', TRUE))){quit('no', 1)}
+    if(!identical(candidate('abcdedcba', ''), list('abcdedcba', TRUE))){quit('no', 1)}
+    if(!identical(candidate('abcdedcba', 'v'), list('abcdedcba', TRUE))){quit('no', 1)}
+    if(!identical(candidate('vabba', 'v'), list('abba', TRUE))){quit('no', 1)}
+    if(!identical(candidate('mamma', 'mia'), list('', TRUE))){quit('no', 1)}
 }
 test_humaneval()

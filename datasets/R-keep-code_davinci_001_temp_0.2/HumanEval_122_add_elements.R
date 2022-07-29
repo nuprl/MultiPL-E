@@ -21,10 +21,10 @@ add_elements(arr, k)
 
 test_humaneval <- function() {
 candidate <- add_elements
-    if(!identical(candidate(c(1, -2, -3, 41, 57, 76, 87, 88, 99), 3), -4)){quit('no', 1)}
-    if(!identical(candidate(c(111, 121, 3, 4000, 5, 6), 2), 0)){quit('no', 1)}
-    if(!identical(candidate(c(11, 21, 3, 90, 5, 6, 7, 8, 9), 4), 125)){quit('no', 1)}
-    if(!identical(candidate(c(111, 21, 3, 4000, 5, 6, 7, 8, 9), 4), 24)){quit('no', 1)}
-    if(!identical(candidate(c(1), 1), 1)){quit('no', 1)}
+    if(!identical(candidate(list(1, -2, -3, 41, 57, 76, 87, 88, 99), 3), -4)){quit('no', 1)}
+    if(!identical(candidate(list(111, 121, 3, 4000, 5, 6), 2), 0)){quit('no', 1)}
+    if(!identical(candidate(list(11, 21, 3, 90, 5, 6, 7, 8, 9), 4), 125)){quit('no', 1)}
+    if(!identical(candidate(list(111, 21, 3, 4000, 5, 6, 7, 8, 9), 4), 24)){quit('no', 1)}
+    if(!identical(candidate(list(1), 1), 1)){quit('no', 1)}
 }
 test_humaneval()

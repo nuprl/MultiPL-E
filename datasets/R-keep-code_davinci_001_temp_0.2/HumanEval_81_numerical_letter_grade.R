@@ -34,11 +34,11 @@ numerical_letter_grade <- function(grades) {
 
 test_humaneval <- function() {
 candidate <- numerical_letter_grade
-    if(!identical(candidate(c(4.0, 3, 1.7, 2, 3.5)), c('A+', 'B', 'C-', 'C', 'A-'))){quit('no', 1)}
-    if(!identical(candidate(c(1.2)), c('D+'))){quit('no', 1)}
-    if(!identical(candidate(c(0.5)), c('D-'))){quit('no', 1)}
-    if(!identical(candidate(c(0.0)), c('E'))){quit('no', 1)}
-    if(!identical(candidate(c(1.0, 0.3, 1.5, 2.8, 3.3)), c('D', 'D-', 'C-', 'B', 'B+'))){quit('no', 1)}
-    if(!identical(candidate(c(0.0, 0.7)), c('E', 'D-'))){quit('no', 1)}
+    if(!identical(candidate(list(4.0, 3, 1.7, 2, 3.5)), list('A+', 'B', 'C-', 'C', 'A-'))){quit('no', 1)}
+    if(!identical(candidate(list(1.2)), list('D+'))){quit('no', 1)}
+    if(!identical(candidate(list(0.5)), list('D-'))){quit('no', 1)}
+    if(!identical(candidate(list(0.0)), list('E'))){quit('no', 1)}
+    if(!identical(candidate(list(1.0, 0.3, 1.5, 2.8, 3.3)), list('D', 'D-', 'C-', 'B', 'B+'))){quit('no', 1)}
+    if(!identical(candidate(list(0.0, 0.7)), list('E', 'D-'))){quit('no', 1)}
 }
 test_humaneval()

@@ -46,13 +46,13 @@ is_odd <- function(n) {
 
 test_humaneval <- function() {
 candidate <- even_odd_palindrome
-    if(!identical(candidate(123), c(8, 13))){quit('no', 1)}
-    if(!identical(candidate(12), c(4, 6))){quit('no', 1)}
-    if(!identical(candidate(3), c(1, 2))){quit('no', 1)}
-    if(!identical(candidate(63), c(6, 8))){quit('no', 1)}
-    if(!identical(candidate(25), c(5, 6))){quit('no', 1)}
-    if(!identical(candidate(19), c(4, 6))){quit('no', 1)}
-    if(!identical(candidate(9), c(4, 5))){quit('no', 1)}
-    if(!identical(candidate(1), c(0, 1))){quit('no', 1)}
+    if(!identical(candidate(123), list(8, 13))){quit('no', 1)}
+    if(!identical(candidate(12), list(4, 6))){quit('no', 1)}
+    if(!identical(candidate(3), list(1, 2))){quit('no', 1)}
+    if(!identical(candidate(63), list(6, 8))){quit('no', 1)}
+    if(!identical(candidate(25), list(5, 6))){quit('no', 1)}
+    if(!identical(candidate(19), list(4, 6))){quit('no', 1)}
+    if(!identical(candidate(9), list(4, 5))){quit('no', 1)}
+    if(!identical(candidate(1), list(0, 1))){quit('no', 1)}
 }
 test_humaneval()

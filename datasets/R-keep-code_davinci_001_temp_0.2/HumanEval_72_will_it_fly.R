@@ -21,11 +21,11 @@ will_it_fly <- function(q, w) {
 
 test_humaneval <- function() {
 candidate <- will_it_fly
-    if(!identical(candidate(c(3, 2, 3), 9), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 2), 5), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c(3), 5), TRUE)){quit('no', 1)}
-    if(!identical(candidate(c(3, 2, 3), 1), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 3), 6), FALSE)){quit('no', 1)}
-    if(!identical(candidate(c(5), 5), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(3, 2, 3), 9), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2), 5), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(3), 5), TRUE)){quit('no', 1)}
+    if(!identical(candidate(list(3, 2, 3), 1), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 3), 6), FALSE)){quit('no', 1)}
+    if(!identical(candidate(list(5), 5), TRUE)){quit('no', 1)}
 }
 test_humaneval()

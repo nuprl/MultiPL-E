@@ -12,13 +12,13 @@ count_nums <- function(arr) {
 
 test_humaneval <- function() {
 candidate <- count_nums
-    if(!identical(candidate(c()), 0)){quit('no', 1)}
-    if(!identical(candidate(c(-1, -2, 0)), 0)){quit('no', 1)}
-    if(!identical(candidate(c(1, 1, 2, -2, 3, 4, 5)), 6)){quit('no', 1)}
-    if(!identical(candidate(c(1, 6, 9, -6, 0, 1, 5)), 5)){quit('no', 1)}
-    if(!identical(candidate(c(1, 100, 98, -7, 1, -1)), 4)){quit('no', 1)}
-    if(!identical(candidate(c(12, 23, 34, -45, -56, 0)), 5)){quit('no', 1)}
-    if(!identical(candidate(c(0, 1)), 1)){quit('no', 1)}
-    if(!identical(candidate(c(1)), 1)){quit('no', 1)}
+    if(!identical(candidate(list()), 0)){quit('no', 1)}
+    if(!identical(candidate(list(-1, -2, 0)), 0)){quit('no', 1)}
+    if(!identical(candidate(list(1, 1, 2, -2, 3, 4, 5)), 6)){quit('no', 1)}
+    if(!identical(candidate(list(1, 6, 9, -6, 0, 1, 5)), 5)){quit('no', 1)}
+    if(!identical(candidate(list(1, 100, 98, -7, 1, -1)), 4)){quit('no', 1)}
+    if(!identical(candidate(list(12, 23, 34, -45, -56, 0)), 5)){quit('no', 1)}
+    if(!identical(candidate(list(0, 1)), 1)){quit('no', 1)}
+    if(!identical(candidate(list(1)), 1)){quit('no', 1)}
 }
 test_humaneval()

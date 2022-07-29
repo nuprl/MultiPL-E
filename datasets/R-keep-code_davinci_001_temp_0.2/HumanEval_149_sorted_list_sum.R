@@ -21,12 +21,12 @@ sorted_list_sum <- function(lst) {
 
 test_humaneval <- function() {
 candidate <- sorted_list_sum
-    if(!identical(candidate(c('aa', 'a', 'aaa')), c('aa'))){quit('no', 1)}
-    if(!identical(candidate(c('school', 'AI', 'asdf', 'b')), c('AI', 'asdf', 'school'))){quit('no', 1)}
-    if(!identical(candidate(c('d', 'b', 'c', 'a')), c())){quit('no', 1)}
-    if(!identical(candidate(c('d', 'dcba', 'abcd', 'a')), c('abcd', 'dcba'))){quit('no', 1)}
-    if(!identical(candidate(c('AI', 'ai', 'au')), c('AI', 'ai', 'au'))){quit('no', 1)}
-    if(!identical(candidate(c('a', 'b', 'b', 'c', 'c', 'a')), c())){quit('no', 1)}
-    if(!identical(candidate(c('aaaa', 'bbbb', 'dd', 'cc')), c('cc', 'dd', 'aaaa', 'bbbb'))){quit('no', 1)}
+    if(!identical(candidate(list('aa', 'a', 'aaa')), list('aa'))){quit('no', 1)}
+    if(!identical(candidate(list('school', 'AI', 'asdf', 'b')), list('AI', 'asdf', 'school'))){quit('no', 1)}
+    if(!identical(candidate(list('d', 'b', 'c', 'a')), list())){quit('no', 1)}
+    if(!identical(candidate(list('d', 'dcba', 'abcd', 'a')), list('abcd', 'dcba'))){quit('no', 1)}
+    if(!identical(candidate(list('AI', 'ai', 'au')), list('AI', 'ai', 'au'))){quit('no', 1)}
+    if(!identical(candidate(list('a', 'b', 'b', 'c', 'c', 'a')), list())){quit('no', 1)}
+    if(!identical(candidate(list('aaaa', 'bbbb', 'dd', 'cc')), list('cc', 'dd', 'aaaa', 'bbbb'))){quit('no', 1)}
 }
 test_humaneval()

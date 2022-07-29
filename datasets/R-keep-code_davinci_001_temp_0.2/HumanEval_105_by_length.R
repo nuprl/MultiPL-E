@@ -45,10 +45,10 @@ by_length(c(2, 1, 1, 4, 5, 8, 2, 3))
 
 test_humaneval <- function() {
 candidate <- by_length
-    if(!identical(candidate(c(2, 1, 1, 4, 5, 8, 2, 3)), c('Eight', 'Five', 'Four', 'Three', 'Two', 'Two', 'One', 'One'))){quit('no', 1)}
-    if(!identical(candidate(c()), c())){quit('no', 1)}
-    if(!identical(candidate(c(1, -1, 55)), c('One'))){quit('no', 1)}
-    if(!identical(candidate(c(1, -1, 3, 2)), c('Three', 'Two', 'One'))){quit('no', 1)}
-    if(!identical(candidate(c(9, 4, 8)), c('Nine', 'Eight', 'Four'))){quit('no', 1)}
+    if(!identical(candidate(list(2, 1, 1, 4, 5, 8, 2, 3)), list('Eight', 'Five', 'Four', 'Three', 'Two', 'Two', 'One', 'One'))){quit('no', 1)}
+    if(!identical(candidate(list()), list())){quit('no', 1)}
+    if(!identical(candidate(list(1, -1, 55)), list('One'))){quit('no', 1)}
+    if(!identical(candidate(list(1, -1, 3, 2)), list('Three', 'Two', 'One'))){quit('no', 1)}
+    if(!identical(candidate(list(9, 4, 8)), list('Nine', 'Eight', 'Four'))){quit('no', 1)}
 }
 test_humaneval()

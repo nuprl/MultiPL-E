@@ -27,12 +27,12 @@ sort_array(c(2, 4, 3, 0, 1, 5, 6))
 
 test_humaneval <- function() {
 candidate <- sort_array
-    if(!identical(candidate(c()), c())){quit('no', 1)}
-    if(!identical(candidate(c(5)), c(5))){quit('no', 1)}
-    if(!identical(candidate(c(2, 4, 3, 0, 1, 5)), c(0, 1, 2, 3, 4, 5))){quit('no', 1)}
-    if(!identical(candidate(c(2, 4, 3, 0, 1, 5, 6)), c(6, 5, 4, 3, 2, 1, 0))){quit('no', 1)}
-    if(!identical(candidate(c(2, 1)), c(1, 2))){quit('no', 1)}
-    if(!identical(candidate(c(15, 42, 87, 32, 11, 0)), c(0, 11, 15, 32, 42, 87))){quit('no', 1)}
-    if(!identical(candidate(c(21, 14, 23, 11)), c(23, 21, 14, 11))){quit('no', 1)}
+    if(!identical(candidate(list()), list())){quit('no', 1)}
+    if(!identical(candidate(list(5)), list(5))){quit('no', 1)}
+    if(!identical(candidate(list(2, 4, 3, 0, 1, 5)), list(0, 1, 2, 3, 4, 5))){quit('no', 1)}
+    if(!identical(candidate(list(2, 4, 3, 0, 1, 5, 6)), list(6, 5, 4, 3, 2, 1, 0))){quit('no', 1)}
+    if(!identical(candidate(list(2, 1)), list(1, 2))){quit('no', 1)}
+    if(!identical(candidate(list(15, 42, 87, 32, 11, 0)), list(0, 11, 15, 32, 42, 87))){quit('no', 1)}
+    if(!identical(candidate(list(21, 14, 23, 11)), list(23, 21, 14, 11))){quit('no', 1)}
 }
 test_humaneval()

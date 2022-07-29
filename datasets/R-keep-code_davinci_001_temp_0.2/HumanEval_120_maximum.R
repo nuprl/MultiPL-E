@@ -55,16 +55,16 @@ maximum <- function(arr, k) {
 
 test_humaneval <- function() {
 candidate <- maximum
-    if(!identical(candidate(c(-3, -4, 5), 3), c(-4, -3, 5))){quit('no', 1)}
-    if(!identical(candidate(c(4, -4, 4), 2), c(4, 4))){quit('no', 1)}
-    if(!identical(candidate(c(-3, 2, 1, 2, -1, -2, 1), 1), c(2))){quit('no', 1)}
-    if(!identical(candidate(c(123, -123, 20, 0, 1, 2, -3), 3), c(2, 20, 123))){quit('no', 1)}
-    if(!identical(candidate(c(-123, 20, 0, 1, 2, -3), 4), c(0, 1, 2, 20))){quit('no', 1)}
-    if(!identical(candidate(c(5, 15, 0, 3, -13, -8, 0), 7), c(-13, -8, 0, 0, 3, 5, 15))){quit('no', 1)}
-    if(!identical(candidate(c(-1, 0, 2, 5, 3, -10), 2), c(3, 5))){quit('no', 1)}
-    if(!identical(candidate(c(1, 0, 5, -7), 1), c(5))){quit('no', 1)}
-    if(!identical(candidate(c(4, -4), 2), c(-4, 4))){quit('no', 1)}
-    if(!identical(candidate(c(-10, 10), 2), c(-10, 10))){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 3, -23, 243, -400, 0), 0), c())){quit('no', 1)}
+    if(!identical(candidate(list(-3, -4, 5), 3), list(-4, -3, 5))){quit('no', 1)}
+    if(!identical(candidate(list(4, -4, 4), 2), list(4, 4))){quit('no', 1)}
+    if(!identical(candidate(list(-3, 2, 1, 2, -1, -2, 1), 1), list(2))){quit('no', 1)}
+    if(!identical(candidate(list(123, -123, 20, 0, 1, 2, -3), 3), list(2, 20, 123))){quit('no', 1)}
+    if(!identical(candidate(list(-123, 20, 0, 1, 2, -3), 4), list(0, 1, 2, 20))){quit('no', 1)}
+    if(!identical(candidate(list(5, 15, 0, 3, -13, -8, 0), 7), list(-13, -8, 0, 0, 3, 5, 15))){quit('no', 1)}
+    if(!identical(candidate(list(-1, 0, 2, 5, 3, -10), 2), list(3, 5))){quit('no', 1)}
+    if(!identical(candidate(list(1, 0, 5, -7), 1), list(5))){quit('no', 1)}
+    if(!identical(candidate(list(4, -4), 2), list(-4, 4))){quit('no', 1)}
+    if(!identical(candidate(list(-10, 10), 2), list(-10, 10))){quit('no', 1)}
+    if(!identical(candidate(list(1, 2, 3, -23, 243, -400, 0), 0), list())){quit('no', 1)}
 }
 test_humaneval()

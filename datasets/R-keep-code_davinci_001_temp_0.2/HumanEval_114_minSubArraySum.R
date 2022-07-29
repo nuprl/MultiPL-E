@@ -30,17 +30,17 @@ minSubArraySum([-2, 1, -3, 4, -1, 2, 1, -5, 4])
 
 test_humaneval <- function() {
 candidate <- minSubArraySum
-    if(!identical(candidate(c(2, 3, 4, 1, 2, 4)), 1)){quit('no', 1)}
-    if(!identical(candidate(c(-1, -2, -3)), -6)){quit('no', 1)}
-    if(!identical(candidate(c(-1, -2, -3, 2, -10)), -14)){quit('no', 1)}
-    if(!identical(candidate(c(-9999999999999999)), -9999999999999999)){quit('no', 1)}
-    if(!identical(candidate(c(0, 10, 20, 1000000)), 0)){quit('no', 1)}
-    if(!identical(candidate(c(-1, -2, -3, 10, -5)), -6)){quit('no', 1)}
-    if(!identical(candidate(c(100, -1, -2, -3, 10, -5)), -6)){quit('no', 1)}
-    if(!identical(candidate(c(10, 11, 13, 8, 3, 4)), 3)){quit('no', 1)}
-    if(!identical(candidate(c(100, -33, 32, -1, 0, -2)), -33)){quit('no', 1)}
-    if(!identical(candidate(c(-10)), -10)){quit('no', 1)}
-    if(!identical(candidate(c(7)), 7)){quit('no', 1)}
-    if(!identical(candidate(c(1, -1)), -1)){quit('no', 1)}
+    if(!identical(candidate(list(2, 3, 4, 1, 2, 4)), 1)){quit('no', 1)}
+    if(!identical(candidate(list(-1, -2, -3)), -6)){quit('no', 1)}
+    if(!identical(candidate(list(-1, -2, -3, 2, -10)), -14)){quit('no', 1)}
+    if(!identical(candidate(list(-9999999999999999)), -9999999999999999)){quit('no', 1)}
+    if(!identical(candidate(list(0, 10, 20, 1000000)), 0)){quit('no', 1)}
+    if(!identical(candidate(list(-1, -2, -3, 10, -5)), -6)){quit('no', 1)}
+    if(!identical(candidate(list(100, -1, -2, -3, 10, -5)), -6)){quit('no', 1)}
+    if(!identical(candidate(list(10, 11, 13, 8, 3, 4)), 3)){quit('no', 1)}
+    if(!identical(candidate(list(100, -33, 32, -1, 0, -2)), -33)){quit('no', 1)}
+    if(!identical(candidate(list(-10)), -10)){quit('no', 1)}
+    if(!identical(candidate(list(7)), 7)){quit('no', 1)}
+    if(!identical(candidate(list(1, -1)), -1)){quit('no', 1)}
 }
 test_humaneval()
