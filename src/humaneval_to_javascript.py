@@ -16,8 +16,8 @@ class JavaScriptTranslator:
 
     stop = ["\nfunction ", "\n/*", "\n//", "\nconsole.log"]
 
-    def __init__(self, file_ext):
-        self.file_ext = file_ext
+    def __init__(self):
+        self.file_ext = "js"
 
     def translate_prompt(
         self, name: str, args: List[ast.arg], _returns, description: str
