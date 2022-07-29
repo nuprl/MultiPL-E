@@ -12,6 +12,7 @@ def eval_script(path: Path):
             status = "OK"
         else:
             outmessage = str(output)
+            print(outmessage)
             if 'read-syntax' in outmessage:
                 status = "SyntaxError"
             else:
