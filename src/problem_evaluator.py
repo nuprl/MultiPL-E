@@ -1,13 +1,14 @@
 import argparse
 from pathlib import Path
 from problem_yaml import Problem, Result, ResultList, TestResults
-import eval_ruby
+import eval_ruby, eval_lua
 import tempfile
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
 EVALUATORS = {
-    "ruby": (eval_ruby.eval_script, ".rb"),
+#    "ruby": (eval_ruby.eval_script, ".rb"),
+    "lua": (eval_lua.eval_script, ".lua")
 }
 
 
