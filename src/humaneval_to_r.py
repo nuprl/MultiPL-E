@@ -21,7 +21,7 @@ class RTranslator:
     
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         r_description = (
-            "# " + re.sub(DOCSTRING_LINESTART_RE, "\n-- ", description.strip()) + "\n"
+            "# " + re.sub(DOCSTRING_LINESTART_RE, "\n# ", description.strip()) + "\n"
         )
         arg_names = [arg.arg for arg in args]
         arg_list = ", ".join(arg_names)
@@ -53,7 +53,7 @@ class RTranslator:
             c: is the literal value
         '''
         if type(c) == bool:
-            return str(c).lower()
+            return 'TRUE' if c else 'FALSE'
         return repr(c)
     
     def gen_var(self, v):
