@@ -9,26 +9,19 @@
 # >>> make_palindrome('cata')
 # 'catac'
 make_palindrome <- function(string) {
-    if (is.null(string) || length(string) == 0) {
+    if (string == '') {
         return('')
     }
-    if (length(string) == 1) {
-        return(string)
-    }
-    if (string == string[length(string):1]) {
-        return(string)
-    }
-    # Find the longest palindromic postfix.
-    postfix <- string[length(string):1]
-    while (length(postfix) > 0) {
-        if (postfix == postfix[length(postfix):1]) {
+    # Find the longest postfix of supplied string that is a palindrome.
+    for (i in seq(length(string), 1, -1)) {
+        if (is_palindrome(string[i:length(string)])) {
             break
         }
-        postfix <- substr(postfix, 2, nchar(postfix))
     }
-    # Append the reverse of the prefix that comes before the palindromic postfix.
-    prefix <- string[1:(length(string) - length(postfix))]
-    return(paste(prefix, reverse(postfix), sep = ''))
+    # Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.
+    return(string[1:(i-1)] + reverse(string[i:length(string)]))
+}
+
 
 test_humaneval <- function() {
 candidate <- make_palindrome
@@ -38,3 +31,4 @@ candidate <- make_palindrome
     if(!identical(candidate('xyx'), 'xyx')){quit('no', 1)}
     if(!identical(candidate('jerry'), 'jerryrrej')){quit('no', 1)}
 }
+test_humaneval()

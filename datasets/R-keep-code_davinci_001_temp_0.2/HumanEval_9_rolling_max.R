@@ -8,6 +8,9 @@ rolling_max <- function(numbers) {
         result <- c(result, max(numbers[1:i]))
     }
     return(result)
+}
+rolling_max(c(1, 2, 3, 2, 3, 4, 2))
+
 
 test_humaneval <- function() {
 candidate <- rolling_max
@@ -16,3 +19,4 @@ candidate <- rolling_max
     if(!identical(candidate(c(4, 3, 2, 1)), c(4, 4, 4, 4))){quit('no', 1)}
     if(!identical(candidate(c(3, 2, 3, 100, 3)), c(3, 3, 3, 100, 100))){quit('no', 1)}
 }
+test_humaneval()
