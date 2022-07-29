@@ -43,15 +43,15 @@ from humaneval_to_julia import JuliaTranslator
 from problem_yaml import Problem
 
 TRANSLATORS = {
-    "ruby": RubyTranslator(),
+    "rb": RubyTranslator(),
     "lua": LuaTranslator(),
     "rust": RustTranslator("rs"),
-    "racket": RacketTranslator("racket"),
+    "rkt": RacketTranslator("racket"),
     "php": PHPTranslator("php"),
     "cpp": CPPTranslator("cpp"),
-    "python": PythonTranslator(),
-    "julia": JuliaTranslator("jl"),
-    "javascript": JavaScriptTranslator()
+    "py": PythonTranslator(),
+    "jl": JuliaTranslator("jl"),
+    "js": JavaScriptTranslator()
 }
 
 
@@ -92,7 +92,7 @@ def main():
         original_name = original.name.split(".")[0]
         target_yaml_path = target_dir / (original_name + ".yaml")
         if target_yaml_path.exists():
-            print(f"Skipping {target_yaml_path}")
+            # print(f"Skipping {target_yaml_path}")
             continue
 
         result = translate_prompt_and_tests(
