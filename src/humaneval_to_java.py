@@ -9,6 +9,7 @@ from typing import List, Optional, Tuple
 from generic_translator import main
 from humaneval_to_cpp import CPPTranslator, DOCSTRING_LINESTART_RE
 
+JAVA_CLASS_NAME = "Problem"
 #Refactoring needed
 
 class JavaTranslator(CPPTranslator):
@@ -27,7 +28,6 @@ class JavaTranslator(CPPTranslator):
         self.optional_type = "Optional<%s>"
         self.any_type = "std::any"
         self.indent = "    "
-        self.problem_class_counter = 0
         self.get_default_val_def = """private static <T> T getDefaultValue(Class<T> clazz) {
 return (T) Array.get(Array.newInstance(clazz, 1), 0);
 }"""
@@ -133,9 +133,8 @@ return (T) Array.get(Array.newInstance(clazz, 1), 0);
            In addition to comments and example, the prompt contain union declarations (if there are any) 
            and include files (TODO)
         '''
-        class_decl = f"class Problem{self.problem_class_counter} {{\n"
+        class_decl = f"class {JAVA_CLASS_NAME} {{\n"
         class_decl += self.get_default_val_def
-        self.problem_class_counter += 1
         indent = "    "
         comment_start = self.indent + "//"
         java_description = (
@@ -158,7 +157,22 @@ return (T) Array.get(Array.newInstance(clazz, 1), 0);
         if self.is_primitive_type(java_type):
             return f"return getDefaultValue({java_type}.class);"
         elif "Pair" in java_type: #TODO: use make_optional/make_tuple to createthem and search for self.tuple_type
-            return f"return new {java_type}(0l, 0l);"
+            if "Long, Long" in java_type:
+                return f"return new {java_type}(0l, 0l);"
+            elif "Float, Float" in java_type:
+                return f"return new {java_type}(0f, 0f);"
+            elif "Boolean, Boolean" in java_type:
+                return f"return new {java_type}(true, true);"
+            elif "String, String" in java_type:
+                return f"return new {java_type}(\"\", \"\");"
+            elif "String, Boolean" in java_type:
+                return f"return new {java_type}(\"\", false);"
+            elif "Optional<Long>, Optional<Long>" in java_type:
+                return f"return new {java_type}(Optional.of(1l), Optional.of(1l));"
+            elif "String, " in java_type:
+                return f"return new {java_type}(\"\", \"\");"
+            else:
+                assert False, "Unknown " + java_type
         elif "Optional" in java_type:
             return f"return Optional.empty();"
         else:

@@ -40,7 +40,8 @@ def eval_script(path: Path):
       #Each Java file contains the class with same name `JAVA_CLASS_NAME`
       #Hence, javac will same JAVA_CLASS_NAME.class file for each problem
       #Write class for each problem to a different temp dir
-      build = subprocess.run(["javac", "-d", outdir, path], env={f"CLASSPATH" : f"{javatuples_path}"}, capture_output=True)
+      #Use UTF8 encoding with javac
+      build = subprocess.run(["javac", "-encoding", "UTF8", "-d", outdir, path], env={f"CLASSPATH" : f"{javatuples_path}"}, capture_output=True)
       status = None
       returncode = -1
       output = None

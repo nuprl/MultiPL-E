@@ -264,13 +264,13 @@ class CPPTranslator:
         """Translate a list with elements l
         A list [ x, y, z] translates to vector<?>{ x, y, z }
         """
-        #Assuming all elements in list have same type
-        
+
         if l == [] or l == ():
           return self.make_list(self.int_type, ""), ast.List([ast.Name("int")])
-
+        
+        #Go through all types of list and prefer the bigger type        
         elem_type = self.pytype_to_cpptype(l[0][1])
-        list_literal = self.make_array_literal(", ".join([e[0] for e in l]))
+        list_literal = self.make_array_literal(", ".join([f"({elem_type}){e[0]}" for e in l]))
         return self.make_list(elem_type, list_literal), ast.List([l[0][1]])
     
     def make_optional_type(self, types):
