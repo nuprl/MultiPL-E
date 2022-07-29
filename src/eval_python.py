@@ -25,12 +25,12 @@ def eval_script(path: Path):
             status = "Exception"
     except subprocess.TimeoutExpired as exc:
         status = "Timeout"
-        returncode = output.returncode
+        returncode = -1
         output = exc
 
     return { 
         "status" : status, 
-        "exit_code": output.returncode,
+        "exit_code": returncode,
         "stdout": str(output.stdout),
         "stderr": str(output.stderr),
     }
