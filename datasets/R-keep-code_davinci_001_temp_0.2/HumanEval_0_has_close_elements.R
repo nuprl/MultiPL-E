@@ -4,19 +4,15 @@
 # False
 # >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
 # True
-has_close_elements <- function(numbers, threshold)
-{
-    for (i in 1:(length(numbers) - 1))
-    {
-        for (j in (i + 1):length(numbers))
-        {
-            if (abs(numbers[i] - numbers[j]) < threshold)
-            {
-                return (TRUE)
+has_close_elements <- function(numbers, threshold) {
+    for (i in 1:(length(numbers) - 1)) {
+        for (j in (i + 1):length(numbers)) {
+            if (abs(numbers[i] - numbers[j]) < threshold) {
+                return(TRUE)
             }
         }
     }
-    return (FALSE)
+    return(FALSE)
 
 test_humaneval <- function() {
 candidate <- has_close_elements

@@ -1,13 +1,11 @@
 # Filter given list of any python values only for integers
--- >>> filter_integers(['a', 3.14, 5])
--- [5]
--- >>> filter_integers([1, 2, 3, 'abc', {}, []])
--- [1, 2, 3]
+# >>> filter_integers(['a', 3.14, 5])
+# [5]
+# >>> filter_integers([1, 2, 3, 'abc', {}, []])
+# [1, 2, 3]
 filter_integers <- function(values)
-    # YOUR CODE HERE
-    return(values[sapply(values, is.integer)])
-    # YOUR CODE HERE
-    
+{
+    return(list(filter(is.integer, values)))
 
 test_humaneval <- function() {
 candidate <- filter_integers

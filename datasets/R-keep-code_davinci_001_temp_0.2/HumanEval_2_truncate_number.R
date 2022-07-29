@@ -4,8 +4,7 @@
 # Return the decimal part of the number.
 # >>> truncate_number(3.5)
 # 0.5
-truncate_number <- function(number)
-{
+truncate_number <- function(number) {
     return(number - floor(number))
 
 test_humaneval <- function() {

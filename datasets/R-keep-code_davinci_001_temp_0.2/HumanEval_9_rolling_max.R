@@ -1,14 +1,18 @@
 # From a given list of integers, generate a list of rolling maximum element found until given moment
--- in the sequence.
--- >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
--- [1, 2, 3, 3, 3, 4, 4]
+# in the sequence.
+# >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+# [1, 2, 3, 3, 3, 4, 4]
 rolling_max <- function(numbers)
 {
-    result <- vector(length=length(numbers))
-    result[1] <- numbers[1]
-    for (i in 2:length(numbers))
+    result <- c()
+    max <- 0
+    for (i in numbers)
     {
-        result[i] <- max(numbers[1:i])
+        if (i > max)
+        {
+            max <- i
+        }
+        result <- c(result, max)
     }
     return(result)
 }

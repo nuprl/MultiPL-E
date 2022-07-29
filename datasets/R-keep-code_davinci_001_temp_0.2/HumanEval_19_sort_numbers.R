@@ -1,22 +1,27 @@
 # Input is a space-delimited string of numberals from 'zero' to 'nine'.
--- Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
--- Return the string with numbers sorted from smallest to largest
--- >>> sort_numbers('three one five')
--- 'one three five'
+# Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+# Return the string with numbers sorted from smallest to largest
+# >>> sort_numbers('three one five')
+# 'one three five'
 sort_numbers <- function(numbers)
 {
-    # Convert the string to a vector of numbers
-    numbers <- strsplit(numbers, " ")[[1]]
-    numbers <- as.numeric(numbers)
+    # Split the input string into a vector of strings
+    numbers_vector <- strsplit(numbers, " ")[[1]]
+    
+    # Convert each string to a number
+    numbers_vector <- sapply(numbers_vector, as.numeric)
     
     # Sort the numbers
-    numbers <- sort(numbers)
+    numbers_vector <- sort(numbers_vector)
     
-    # Convert the numbers back to a string
-    numbers <- as.character(numbers)
+    # Convert the numbers back to strings
+    numbers_vector <- sapply(numbers_vector, as.character)
     
-    # Return the sorted string
-    return(paste(numbers, collapse = " "))
+    # Join the strings into a single string
+    numbers_vector <- paste(numbers_vector, collapse = " ")
+    
+    # Return the result
+    return(numbers_vector)
 
 test_humaneval <- function() {
 candidate <- sort_numbers

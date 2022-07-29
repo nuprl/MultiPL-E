@@ -1,28 +1,36 @@
 # Input to this function is a string representing musical notes in a special ASCII format.
--- Your task is to parse this string and return list of integers corresponding to how many beats does each
--- not last.
--- Here is a legend:
--- 'o' - whole note, lasts four beats
--- 'o|' - half note, lasts two beats
--- '.|' - quater note, lasts one beat
--- >>> parse_music('o o| .| o| o| .| .| .| .| o o')
--- [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
+# Your task is to parse this string and return list of integers corresponding to how many beats does each
+# not last.
+# Here is a legend:
+# 'o' - whole note, lasts four beats
+# 'o|' - half note, lasts two beats
+# '.|' - quater note, lasts one beat
+# >>> parse_music('o o| .| o| o| .| .| .| .| o o')
+# [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
 parse_music <- function(music_string)
 {
     # YOUR CODE HERE
     # Parse the string into a list of notes
-    notes <- strsplit(music_string, ' ')[[1]]
-    # Parse each note into a number of beats
+    notes <- strsplit(music_string, split = " ")[[1]]
+    # Initialize the list of beats
     beats <- c()
-    for (i in 1:length(notes)) {
-        if (notes[i] == 'o') {
+    # Iterate through the notes and assign the corresponding beats
+    for (i in 1:length(notes))
+    {
+        if (notes[i] == "o")
+        {
             beats <- c(beats, 4)
-        } else if (notes[i] == 'o|') {
+        }
+        else if (notes[i] == "o|")
+        {
             beats <- c(beats, 2)
-        } else if (notes[i] == '.|') {
+        }
+        else
+        {
             beats <- c(beats, 1)
         }
     }
+    # Return the list of beats
     return(beats)
 
 test_humaneval <- function() {

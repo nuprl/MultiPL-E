@@ -1,6 +1,6 @@
 # Return list of all prefixes from shortest to longest of the input string
--- >>> all_prefixes('abc')
--- ['a', 'ab', 'abc']
+# >>> all_prefixes('abc')
+# ['a', 'ab', 'abc']
 all_prefixes <- function(string)
 {
     prefixes <- c()
@@ -9,6 +9,9 @@ all_prefixes <- function(string)
         prefixes <- c(prefixes, substr(string, 1, i))
     }
     return(prefixes)
+}
+all_prefixes('abc')
+
 
 test_humaneval <- function() {
 candidate <- all_prefixes

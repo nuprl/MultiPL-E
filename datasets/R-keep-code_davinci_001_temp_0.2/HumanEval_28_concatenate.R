@@ -1,8 +1,8 @@
 # Concatenate list of strings into a single string
--- >>> concatenate([])
--- ''
--- >>> concatenate(['a', 'b', 'c'])
--- 'abc'
+# >>> concatenate([])
+# ''
+# >>> concatenate(['a', 'b', 'c'])
+# 'abc'
 concatenate <- function(strings)
 {
     if (length(strings) == 0)

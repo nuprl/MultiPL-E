@@ -1,18 +1,22 @@
 # Return a string containing space-delimited numbers starting from 0 upto n inclusive.
--- >>> string_sequence(0)
--- '0'
--- >>> string_sequence(5)
--- '0 1 2 3 4 5'
+# >>> string_sequence(0)
+# '0'
+# >>> string_sequence(5)
+# '0 1 2 3 4 5'
 string_sequence <- function(n)
 {
-    if (n == 0)
+    if(n == 0)
     {
-        return('')
+        return(0)
     }
     else
     {
-        return(paste(0, string_sequence(n-1), sep=' '))
+        return(paste(0:n, collapse = " "))
     }
+}
+string_sequence(0)
+string_sequence(5)
+
 
 test_humaneval <- function() {
 candidate <- string_sequence

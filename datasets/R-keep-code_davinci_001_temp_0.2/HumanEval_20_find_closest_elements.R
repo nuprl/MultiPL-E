@@ -1,12 +1,26 @@
 # From a supplied list of numbers (of length at least two) select and return two that are the closest to each
--- other and return them in order (smaller number, larger number).
--- >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.2])
--- (2.0, 2.2)
--- >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0])
--- (2.0, 2.0)
+# other and return them in order (smaller number, larger number).
+# >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.2])
+# (2.0, 2.2)
+# >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0])
+# (2.0, 2.0)
 find_closest_elements <- function(numbers)
 {
-    # Write your code here
+    # Sort the list of numbers
+    sorted_numbers <- sort(numbers)
+    
+    # Find the index of the smallest number in the list
+    smallest_index <- which.min(abs(sorted_numbers - sorted_numbers[1]))
+    
+    # Find the index of the largest number in the list
+    largest_index <- which.max(abs(sorted_numbers - sorted_numbers[length(sorted_numbers)]))
+    
+    # Return the two numbers
+    return(c(sorted_numbers[smallest_index], sorted_numbers[largest_index]))
+}
+find_closest_elements(c(1.0, 2.0, 3.0, 4.0, 5.0, 2.2))
+find_closest_elements(c(1.0, 2.0, 3.0, 4.0, 5.0, 2.0))
+
 
 test_humaneval <- function() {
 candidate <- find_closest_elements

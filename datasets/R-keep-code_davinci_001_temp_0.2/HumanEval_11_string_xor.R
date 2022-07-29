@@ -1,14 +1,12 @@
 # Input are two strings a and b consisting only of 1s and 0s.
--- Perform binary XOR on these inputs and return result also as a string.
--- >>> string_xor('010', '110')
--- '100'
+# Perform binary XOR on these inputs and return result also as a string.
+# >>> string_xor('010', '110')
+# '100'
 string_xor <- function(a, b)
 {
-    if (length(a) != length(b))
-    {
-        stop('a and b must be of the same length')
-    }
-    return(paste(as.integer(a) ^ as.integer(b), sep = ''))
+    a <- as.integer(a)
+    b <- as.integer(b)
+    return(as.character(a ^ b))
 
 test_humaneval <- function() {
 candidate <- string_xor

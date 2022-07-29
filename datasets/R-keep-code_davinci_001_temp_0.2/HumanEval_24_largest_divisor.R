@@ -1,6 +1,6 @@
 # For a given number n, find the largest number that divides n evenly, smaller than n
--- >>> largest_divisor(15)
--- 5
+# >>> largest_divisor(15)
+# 5
 largest_divisor <- function(n)
 {
     for (i in 1:n)

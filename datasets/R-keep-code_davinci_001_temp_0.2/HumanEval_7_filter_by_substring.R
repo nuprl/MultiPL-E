@@ -1,11 +1,11 @@
 # Filter an input list of strings only for ones that contain given substring
--- >>> filter_by_substring([], 'a')
--- []
--- >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
--- ['abc', 'bacd', 'array']
+# >>> filter_by_substring([], 'a')
+# []
+# >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+# ['abc', 'bacd', 'array']
 filter_by_substring <- function(strings, substring)
 {
-    return(filter(strings, function(x) {grepl(substring, x)}))
+    return(subset(strings, grepl(substring, strings)))
 
 test_humaneval <- function() {
 candidate <- filter_by_substring
