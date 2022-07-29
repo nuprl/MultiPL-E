@@ -38,6 +38,7 @@ from humaneval_to_racket import RacketTranslator
 from humaneval_to_php import PHPTranslator
 from humaneval_to_cpp import CPPTranslator
 from humaneval_to_python import PythonTranslator
+from humaneval_to_julia import JuliaTranslator
 from problem_yaml import Problem
 
 TRANSLATORS = {
@@ -48,6 +49,7 @@ TRANSLATORS = {
     "php": PHPTranslator("php"),
     "cpp": CPPTranslator("cpp"),
     "python": PythonTranslator(),
+    "julia": JuliaTranslator("jl"),
 }
 
 
