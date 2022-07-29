@@ -25,9 +25,7 @@ std::string remove_vowels(std::string text) {
 int main() {
     auto candidate = remove_vowels;
     assert(candidate(("")) == (""));
-    assert(candidate(("abcdef
-ghijklm")) == ("bcdf
-ghjklm"));
+    assert(candidate(("abcdefghijklm")) == ("bcdfghjklm"));
     assert(candidate(("fedcba")) == ("fdcb"));
     assert(candidate(("eeeee")) == (""));
     assert(candidate(("acBAA")) == ("cB"));
