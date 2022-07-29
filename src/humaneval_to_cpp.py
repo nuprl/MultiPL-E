@@ -51,7 +51,7 @@ class CPPTranslator:
         self.any_type = "std::any"
 
     def make_list(self, elem_type, list_literal):
-        return "new " + self.list_type%self.box_type(elem_type) + "(" + list_literal + ")"
+        return self.list_type%elem_type + "(" + list_literal + ")"
     
     def make_tuple(self, elem_types):
         return "std::make_tuple"
@@ -101,7 +101,7 @@ class CPPTranslator:
                     elem_type = self.pytype_to_cpptype(e)
                     union_elems_types += [elem_type]
                     union_decl[elem_type] = f"f{i}" 
-
+                print(union_decl, [ast.dump(e) for e in elems])
                 union_name = ("Union_%s"%("_".join(union_elems_types))).replace("::", "_").replace("<", "_").replace(">", "_")
                 if union_name not in self.union_decls:
                     self.union_decls[union_name] = union_decl
@@ -168,7 +168,7 @@ class CPPTranslator:
         '''
         '''
 
-        return re.findall("(.+)\(", expr)
+        return re.findall(".+\(", expr)
 
     def update_type(self, right: Tuple[ast.Expr, str], expected_type: Tuple[str]) -> str:
         '''Coerce type of the right expression if it is different from the
@@ -191,13 +191,15 @@ class CPPTranslator:
             return f"{self.make_optional('')}({right[0]})"
         
         type_to_coerce = self.find_type_to_coerce(right[0])
-        print(type_to_coerce, right[0], expected_type)
+        print(type_to_coerce, right, expected_type)
+        coerced_type = None
         if type_to_coerce == []:
             #No type? add the type of right
-            return self.wrap_in_brackets(expected_type+"("+right[0]+")")
-        type_to_coerce = type_to_coerce[0]
-        coerced_type = right[0].replace(type_to_coerce, expected_type+"(")
-
+            coerced_type = expected_type+"("+right[0]+")"
+        else:
+            type_to_coerce = type_to_coerce[0]
+            coerced_type = right[0].replace(type_to_coerce, expected_type+"(")
+        
         ##Remove extra brackets
         coerced_type = coerced_type.replace('(())', '()')
         return self.wrap_in_brackets(coerced_type)
@@ -244,7 +246,7 @@ class CPPTranslator:
         if type(c) == bool:
             return str(c).lower(), ast.Name("bool")
         if type(c) == str:
-            return f'"{repr(c)}"', ast.Name("str")
+            return f'"{c}"'.replace("\n","\\n"), ast.Name("str")
         if type(c) == int:
             return repr(c), ast.Name("int")
         if type(c) == float:
@@ -267,17 +269,17 @@ class CPPTranslator:
         #Assuming all elements in list have same type
         
         if l == [] or l == ():
-          return self.make_list(self.int_type, "()"), ast.List([ast.Name("int")])
+          return self.make_list(self.int_type, ""), ast.List([ast.Name("int")])
 
         elem_type = self.pytype_to_cpptype(l[0][1])
         list_literal = self.make_array_literal(", ".join([e[0] for e in l]))
         return self.make_list(elem_type, list_literal), ast.List([l[0][1]])
     
     def make_optional_type(self, types):
-        return self.optional_type % other_types
+        return self.optional_type % types
 
     def make_optional(self, types):
-        return self.optional_type % other_types
+        return self.optional_type % types
 
     def gen_tuple(self, t: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.Tuple]:
         """Translate a tuple with elements t
