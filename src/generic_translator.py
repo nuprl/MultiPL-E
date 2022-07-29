@@ -267,8 +267,10 @@ def list_originals():
     files_unsorted = directory.glob("originals/*.py") 
     # assumption: base filenames are in the format of HumanEval_X_*.py
     # Where X is a valid number
-    files_sorted = sorted(files_unsorted, key=(lambda s: int(str(s.name).split("_")[1])))
-    return files_sorted
+    key_func = lambda s: int(str(s.name).split("_")[1])
+    files_by_number = {key_func(file): file for file in files_unsorted}
+    
+    return files_by_number
 
 def main(translator):
     stop = get_stop_from_translator(translator)
@@ -309,12 +311,15 @@ def main(translator):
         raise Exception("Invalid value for --doctests")
 
 
-    files_sorted = list_originals()
+    files_by_number = list_originals()
     files_index = []
     if len(args.files) > 0:
         files_index = args.files
     else:
-        files_index = range(len(files_sorted)) 
+        files_index = sorted(files_by_number.keys())
     for i in files_index:
-        filepath = files_sorted[i]
+        if i not in files_by_number:
+            print(f"File {i} does not exist!")
+            continue
+        filepath = files_by_number[i]
         translate_file(args, translator, filepath)
