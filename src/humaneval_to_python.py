@@ -37,7 +37,7 @@ def translate_type(t, needs):
 class PythonTranslator:
 
     # NOTE(arjun): Seems like reasonable stop sequences for Python
-    stop = ["\ndef", "\n#", "\n\n\n", "\nclass"]
+    stop = ["\ndef", "\n#", "\nif", "\nclass"]
 
     def __init__(self, file_ext):
         self.file_ext = file_ext
