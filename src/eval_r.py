@@ -14,6 +14,8 @@ def eval_script(path: Path):
             outmessage = str(output)
             if 'unexpected' in outmessage:
                 status = "SyntaxError"
+            elif "err=b''" in outmessage:
+                status = "AssertionError"
             else:
                 status = "Exception"
                 print(outmessage)
