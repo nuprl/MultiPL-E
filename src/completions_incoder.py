@@ -1,6 +1,8 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from libcompletions import parameterized_main
+from torch.utils.tensorboard import SummaryWriter
+
 
 model_name = "facebook/incoder-6B"
 
@@ -17,7 +19,7 @@ model = model.half().cuda()
 BOS = "<|endoftext|>"
 
 
-def completion_tensors(prompt: str, max_length: int, temperature: float, n: int):
+def completion_tensors(prompt: str, max_length: int, temperature: float, n: int, writer: SummaryWriter):
     """
     Produces n samples.
     """
@@ -75,7 +77,7 @@ def incoder_completion(
 
 
 def main():
-    parameterized_main(incoder_completion, max_to_generate=512)
+    parameterized_main(incoder_completion, 'incoder', max_to_generate=512)
 
 
 if __name__ == "__main__":
