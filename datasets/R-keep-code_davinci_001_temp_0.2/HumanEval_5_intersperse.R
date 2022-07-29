@@ -1,17 +1,17 @@
 # Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
--- >>> intersperse([], 4)
--- []
--- >>> intersperse([1, 2, 3], 4)
--- [1, 4, 2, 4, 3]
+# >>> intersperse([], 4)
+# []
+# >>> intersperse([1, 2, 3], 4)
+# [1, 4, 2, 4, 3]
 intersperse <- function(numbers, delimeter)
 {
-    if (length(numbers) == 0)
+    if (length(numbers) < 2)
     {
         return(numbers)
     }
     else
     {
-        return(c(numbers[1], rep(delimeter, length(numbers) - 1), numbers[2:length(numbers)]))
+        return(c(numbers[1], delimeter, intersperse(numbers[-1], delimeter)))
     }
 
 test_humaneval <- function() {

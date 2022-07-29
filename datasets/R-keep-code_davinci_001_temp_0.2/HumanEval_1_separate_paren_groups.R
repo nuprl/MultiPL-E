@@ -1,50 +1,44 @@
 # Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
--- separate those group into separate strings and return the list of those.
--- Separate groups are balanced (each open brace is properly closed) and not nested within each other
--- Ignore any spaces in the input string.
--- >>> separate_paren_groups('( ) (( )) (( )( ))')
--- ['()', '(())', '(()())']
+# separate those group into separate strings and return the list of those.
+# Separate groups are balanced (each open brace is properly closed) and not nested within each other
+# Ignore any spaces in the input string.
+# >>> separate_paren_groups('( ) (( )) (( )( ))')
+# ['()', '(())', '(()())']
 separate_paren_groups <- function(paren_string)
 {
-    # Initialize empty list to store the groups
-    paren_groups <- list()
+    # Initialize an empty list to store the results
+    result <- list()
     
-    # Initialize the current group to an empty string
-    current_group <- ''
+    # Initialize a counter to keep track of the current level of nesting
+    current_level <- 0
     
-    # Iterate over each character in the string
-    for (char in paren_string)
+    # Iterate over the string
+    for (i in 1:length(paren_string))
     {
-        # If the character is an open brace, append it to the current group
-        if (char == '(')
+        # If the character is an opening parenthesis, increase the nesting level
+        if (paren_string[i] == '(')
         {
-            current_group <- paste(current_group, char)
+            current_level <- current_level + 1
         }
-        # If the character is a closed brace, append it to the current group
-        else if (char == ')')
+        # If the character is a closing parenthesis, decrease the nesting level
+        else if (paren_string[i] == ')')
         {
-            current_group <- paste(current_group, char)
+            current_level <- current_level - 1
         }
-        # If the character is a space, append it to the current group
-        else if (char == ' ')
+        # If the nesting level is 0, then we are not inside a group, so append the character to the result
+        if (current_level == 0)
         {
-            current_group <- paste(current_group, char)
+            result[[length(result) + 1]] <- paren_string[i]
         }
-        # If the character is not a brace, space, or empty, raise an error
+        # If the nesting level is not 0, then we are inside a group, so append the character to the last group
         else
         {
-            stop('Invalid character')
+            result[[length(result)]] <- paste(result[[length(result)]], paren_string[i], sep = "")
         }
     }
     
-    # If the current group is not empty, add it to the list of groups
-    if (current_group != '')
-    {
-        paren_groups <- c(paren_groups, current_group)
-    }
-    
-    # Return the list of groups
-    return(paren_groups)
+    # Return the result
+    return(result)
 
 test_humaneval <- function() {
 candidate <- separate_paren_groups
