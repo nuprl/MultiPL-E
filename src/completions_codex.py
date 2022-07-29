@@ -1,6 +1,5 @@
 """
-This script produces completions from Codex. Specifically, we mean
-code-davinci-002 with temperature 0.2.
+This script produces completions from Codex.
 
 
 To run this script, you have to first prepare a directory with YAML files

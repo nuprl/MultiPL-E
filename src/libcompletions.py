@@ -15,6 +15,8 @@ def parameterized_main(completion_function, model_name: str, max_to_generate: in
     args.add_argument(
         "--dir", type=str, required=True, help="Directory with problem YAMLs"
     )
+    args.add_argument(
+        "--temperature", type=int, required=True)
     args.add_argument("--max-samples", type=int, required=True, default=100)
     args = args.parse_args()
 
@@ -53,7 +55,7 @@ def parameterized_main(completion_function, model_name: str, max_to_generate: in
                 prompt=problem.prompt,
                 stop_tokens=problem.stop_tokens,
                 max_to_generate=max_to_generate,
-                temperature=0.2,
+                temperature=args.temperature,
                 n=num_samples,
                 writer=writer,
             )
