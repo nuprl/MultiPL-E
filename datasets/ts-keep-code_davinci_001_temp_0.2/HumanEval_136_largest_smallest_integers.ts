@@ -6,18 +6,18 @@
 // largest_smallest_integers([2, 4, 1, 3, 5, 7]) == (None, 1)
 // largest_smallest_integers([]) == (None, None)
 // largest_smallest_integers([0]) == (None, None)
-function largest_smallest_integers(lst: number[]): [number?, number?] {
-    if (lst.length === 0) {
-        return [null, null];
-    }
-    let max = lst[0];
-    let min = lst[0];
-    for (let i = 1; i < lst.length; i++) {
-        if (lst[i] > max) {
-            max = lst[i];
-        }
-        if (lst[i] < min) {
-            min = lst[i];
+function largest_smallest_integers(lst: number[]): [number | undefined, number | undefined] {
+    let max = -Infinity;
+    let min = Infinity;
+    for (let i = 0; i < lst.length; i++) {
+        if (lst[i] < 0) {
+            if (lst[i] > max) {
+                max = lst[i];
+            }
+        } else {
+            if (lst[i] < min) {
+                min = lst[i];
+            }
         }
     }
     return [max, min];

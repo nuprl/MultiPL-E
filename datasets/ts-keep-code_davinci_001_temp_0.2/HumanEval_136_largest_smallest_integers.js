@@ -7,17 +7,18 @@
 // largest_smallest_integers([]) == (None, None)
 // largest_smallest_integers([0]) == (None, None)
 function largest_smallest_integers(lst) {
-    if (lst.length === 0) {
-        return [null, null];
-    }
-    var max = lst[0];
-    var min = lst[0];
-    for (var i = 1; i < lst.length; i++) {
-        if (lst[i] > max) {
-            max = lst[i];
+    var max = -Infinity;
+    var min = Infinity;
+    for (var i = 0; i < lst.length; i++) {
+        if (lst[i] < 0) {
+            if (lst[i] > max) {
+                max = lst[i];
+            }
         }
-        if (lst[i] < min) {
-            min = lst[i];
+        else {
+            if (lst[i] < min) {
+                min = lst[i];
+            }
         }
     }
     return [max, min];

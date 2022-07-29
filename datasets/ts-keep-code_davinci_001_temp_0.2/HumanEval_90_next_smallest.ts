@@ -5,12 +5,12 @@
 // next_smallest([5, 1, 4, 3, 2]) == 2
 // next_smallest([]) == None
 // next_smallest([1, 1]) == None
-function next_smallest(lst: number[]): number? {
-    if (lst.length < 2) {
-        return null;
-    }
-    const sorted = lst.sort((a, b) => a - b);
-    return sorted[1];
+function next_smallest(lst: number[]): number | undefined {
+  if (lst.length === 0) {
+    return undefined;
+  }
+  const sorted = lst.sort((a, b) => a - b);
+  return sorted[1];
 }
 
 

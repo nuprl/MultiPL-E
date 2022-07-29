@@ -41,7 +41,7 @@ def translate_type(t):
                         case other:
                             raise Exception(f"Bad dict: {slice}")
                 case "Optional":
-                    return translate_type(slice) + "?"
+                    return translate_type(slice) + " | undefined"
                 case other:
                     raise Exception(f"Bad generic {other}")
         case ast.Name("int") | "int":
