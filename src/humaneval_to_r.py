@@ -46,7 +46,7 @@ class RTranslator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        return "    if(!identical({}, {})) {quit('no', 1)}".format(left, right)
+        return "    if(!identical({}, {}))".format(left, right) + "{quit('no', 1)}"
 
     def gen_literal(self, c):
         ''' Translate a literal expression
