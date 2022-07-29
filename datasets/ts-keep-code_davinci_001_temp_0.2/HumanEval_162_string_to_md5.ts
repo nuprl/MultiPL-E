@@ -18,7 +18,7 @@ const assert = require('node:assert');
 function test() {
   let candidate = string_to_md5;
   assert.deepEqual(candidate("Hello world"),"3e25960a79dbc69b674cd4ec67a72c62");
-  assert.deepEqual(candidate(""),null);
+  assert.deepEqual(candidate(""),undefined);
   assert.deepEqual(candidate("A B C"),"0ef78513b0cb8cef12743f5aeb35f888");
   assert.deepEqual(candidate("password"),"5f4dcc3b5aa765d61d8327deb882cf99");
 }

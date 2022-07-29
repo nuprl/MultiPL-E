@@ -25,7 +25,7 @@ const assert = require('node:assert');
 
 function test() {
   let candidate = longest;
-  assert.deepEqual(candidate([]),null);
+  assert.deepEqual(candidate([]),undefined);
   assert.deepEqual(candidate(["x", "y", "z"]),"x");
   assert.deepEqual(candidate(["x", "yyy", "zzzz", "www", "kkkk", "abc"]),"zzzz");
 }

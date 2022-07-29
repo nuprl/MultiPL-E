@@ -22,10 +22,10 @@ function test() {
   let candidate = next_smallest;
   assert.deepEqual(candidate([1, 2, 3, 4, 5]),2);
   assert.deepEqual(candidate([5, 1, 4, 3, 2]),2);
-  assert.deepEqual(candidate([]),null);
-  assert.deepEqual(candidate([1, 1]),null);
+  assert.deepEqual(candidate([]),undefined);
+  assert.deepEqual(candidate([1, 1]),undefined);
   assert.deepEqual(candidate([1, 1, 1, 1, 0]),1);
-  assert.deepEqual(candidate([1, 1]),null);
+  assert.deepEqual(candidate([1, 1]),undefined);
   assert.deepEqual(candidate([-35, 34, 12, -45]),-35);
 }
 

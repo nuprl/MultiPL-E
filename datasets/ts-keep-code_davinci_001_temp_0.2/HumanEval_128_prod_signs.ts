@@ -29,7 +29,7 @@ function test() {
   assert.deepEqual(candidate([1, 2, 2, -4]),-9);
   assert.deepEqual(candidate([0, 1]),0);
   assert.deepEqual(candidate([1, 1, 1, 2, 3, -1, 1]),-10);
-  assert.deepEqual(candidate([]),null);
+  assert.deepEqual(candidate([]),undefined);
   assert.deepEqual(candidate([2, 4, 1, 2, -1, -1, 9]),20);
   assert.deepEqual(candidate([-1, 1, -1, 1]),4);
   assert.deepEqual(candidate([-1, 1, 1, 1]),-4);
