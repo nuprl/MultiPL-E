@@ -23,12 +23,12 @@ std::optional<long> prod_signs(std::vector<long> arr) {
 }
 int main() {
     auto candidate = prod_signs;
-    assert(candidate((std::vector<long>({1, 2, 2, -4}))) == (std::optional<long>(-9)));
-    assert(candidate((std::vector<long>({0, 1}))) == (std::optional<long>(0)));
-    assert(candidate((std::vector<long>({1, 1, 1, 2, 3, -1, 1}))) == (std::optional<long>(-10)));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)2, (long)-4}))) == (std::optional<long>(-9)));
+    assert(candidate((std::vector<long>({(long)0, (long)1}))) == (std::optional<long>(0)));
+    assert(candidate((std::vector<long>({(long)1, (long)1, (long)1, (long)2, (long)3, (long)-1, (long)1}))) == (std::optional<long>(-10)));
     assert(candidate((std::vector<long>())) == (std::optional<long>({})));
-    assert(candidate((std::vector<long>({2, 4, 1, 2, -1, -1, 9}))) == (std::optional<long>(20)));
-    assert(candidate((std::vector<long>({-1, 1, -1, 1}))) == (std::optional<long>(4)));
-    assert(candidate((std::vector<long>({-1, 1, 1, 1}))) == (std::optional<long>(-4)));
-    assert(candidate((std::vector<long>({-1, 1, 1, 0}))) == (std::optional<long>(0)));
+    assert(candidate((std::vector<long>({(long)2, (long)4, (long)1, (long)2, (long)-1, (long)-1, (long)9}))) == (std::optional<long>(20)));
+    assert(candidate((std::vector<long>({(long)-1, (long)1, (long)-1, (long)1}))) == (std::optional<long>(4)));
+    assert(candidate((std::vector<long>({(long)-1, (long)1, (long)1, (long)1}))) == (std::optional<long>(-4)));
+    assert(candidate((std::vector<long>({(long)-1, (long)1, (long)1, (long)0}))) == (std::optional<long>(0)));
 }

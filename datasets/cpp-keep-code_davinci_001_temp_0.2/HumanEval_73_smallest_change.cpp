@@ -31,12 +31,12 @@ long smallest_change(std::vector<long> arr) {
 }
 int main() {
     auto candidate = smallest_change;
-    assert(candidate((std::vector<long>({1, 2, 3, 5, 4, 7, 9, 6}))) == (4));
-    assert(candidate((std::vector<long>({1, 2, 3, 4, 3, 2, 2}))) == (1));
-    assert(candidate((std::vector<long>({1, 4, 2}))) == (1));
-    assert(candidate((std::vector<long>({1, 4, 4, 2}))) == (1));
-    assert(candidate((std::vector<long>({1, 2, 3, 2, 1}))) == (0));
-    assert(candidate((std::vector<long>({3, 1, 1, 3}))) == (0));
-    assert(candidate((std::vector<long>({1}))) == (0));
-    assert(candidate((std::vector<long>({0, 1}))) == (1));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)5, (long)4, (long)7, (long)9, (long)6}))) == (4));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)4, (long)3, (long)2, (long)2}))) == (1));
+    assert(candidate((std::vector<long>({(long)1, (long)4, (long)2}))) == (1));
+    assert(candidate((std::vector<long>({(long)1, (long)4, (long)4, (long)2}))) == (1));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)2, (long)1}))) == (0));
+    assert(candidate((std::vector<long>({(long)3, (long)1, (long)1, (long)3}))) == (0));
+    assert(candidate((std::vector<long>({(long)1}))) == (0));
+    assert(candidate((std::vector<long>({(long)0, (long)1}))) == (1));
 }

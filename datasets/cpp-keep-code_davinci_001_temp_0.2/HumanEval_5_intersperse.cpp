@@ -19,6 +19,6 @@ std::vector<long> intersperse(std::vector<long> numbers, long delimeter) {
 int main() {
     auto candidate = intersperse;
     assert(candidate((std::vector<long>()), (7)) == (std::vector<long>()));
-    assert(candidate((std::vector<long>({5, 6, 3, 2})), (8)) == (std::vector<long>({5, 8, 6, 8, 3, 8, 2})));
-    assert(candidate((std::vector<long>({2, 2, 2})), (2)) == (std::vector<long>({2, 2, 2, 2, 2})));
+    assert(candidate((std::vector<long>({(long)5, (long)6, (long)3, (long)2})), (8)) == (std::vector<long>({(long)5, (long)8, (long)6, (long)8, (long)3, (long)8, (long)2})));
+    assert(candidate((std::vector<long>({(long)2, (long)2, (long)2})), (2)) == (std::vector<long>({(long)2, (long)2, (long)2, (long)2, (long)2})));
 }

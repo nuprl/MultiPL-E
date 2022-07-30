@@ -27,8 +27,8 @@ std::vector<long> common(std::vector<long> l1, std::vector<long> l2) {
 }
 int main() {
     auto candidate = common;
-    assert(candidate((std::vector<long>({1, 4, 3, 34, 653, 2, 5})), (std::vector<long>({5, 7, 1, 5, 9, 653, 121}))) == (std::vector<long>({1, 5, 653})));
-    assert(candidate((std::vector<long>({5, 3, 2, 8})), (std::vector<long>({3, 2}))) == (std::vector<long>({2, 3})));
-    assert(candidate((std::vector<long>({4, 3, 2, 8})), (std::vector<long>({3, 2, 4}))) == (std::vector<long>({2, 3, 4})));
-    assert(candidate((std::vector<long>({4, 3, 2, 8})), (std::vector<long>())) == (std::vector<long>()));
+    assert(candidate((std::vector<long>({(long)1, (long)4, (long)3, (long)34, (long)653, (long)2, (long)5})), (std::vector<long>({(long)5, (long)7, (long)1, (long)5, (long)9, (long)653, (long)121}))) == (std::vector<long>({(long)1, (long)5, (long)653})));
+    assert(candidate((std::vector<long>({(long)5, (long)3, (long)2, (long)8})), (std::vector<long>({(long)3, (long)2}))) == (std::vector<long>({(long)2, (long)3})));
+    assert(candidate((std::vector<long>({(long)4, (long)3, (long)2, (long)8})), (std::vector<long>({(long)3, (long)2, (long)4}))) == (std::vector<long>({(long)2, (long)3, (long)4})));
+    assert(candidate((std::vector<long>({(long)4, (long)3, (long)2, (long)8})), (std::vector<long>())) == (std::vector<long>()));
 }

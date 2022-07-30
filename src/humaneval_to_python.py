@@ -1,11 +1,14 @@
-# Authored by Arjun Guha and Abhinav Jangda
-# Copyright (c) 2022, Roblox Inc, Northeastern University, and University of Massachusetts Amherst
+# Authored by Luna Phipps-Costin.
+# Reviewed by Arjun Guha.
 #
 # This script translates problems from the OpenAI HumanEval dataset into Python.
-import re
+# It may seem silly, since the HumanEval dataset is already in Python. But,
+# we use this script uniformly across all languages to translate the dataset
+# in various ways.
 import ast
 from typing import List
 from generic_translator import main
+from base_language_translator import LanguageTranslator
 
 
 def translate_type(t, needs):
@@ -34,14 +37,15 @@ def translate_type(t, needs):
             print("other")
             raise Exception(f"unknown annotation: {t}")
 
-class PythonTranslator:
+TargetExp = str
 
-    # NOTE(arjun): Seems like reasonable stop sequences for Python
-    stop = ["\ndef", "\n#", "\n\n\n", "\nclass"]
+class PythonTranslator(LanguageTranslator[TargetExp]):
 
-    def __init__(self, file_ext):
-        self.file_ext = file_ext
-        self.entry_point = None
+    def stop(self):
+        return ["\ndef", "\n#", "\nif", "\nclass"]
+
+    def file_ext(self):
+        return "py"
 
     def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str) -> str:
         py_description = "\"\"\"" + description + "\"\"\""
@@ -77,50 +81,28 @@ class PythonTranslator:
         ]
 
     def deep_equality(self, left: str, right: str) -> str:
-        """
-        All tests are assertions that compare deep equality between left and right.
-
-        Make sure you use the right equality operator for your language. For example,
-        == is the wrong operator for Java and OCaml.
-        """
         return f"    assert {left} == {right}"
 
-    # NOTE(arjun): Really, no Nones?
     def gen_literal(self, c: bool | str | int | float | None):
-        """Translate a literal expression
-        c: is the literal value
-        """
         return repr(c)
 
     def gen_var(self, v: str) -> str:
-        """Translate a variable with name v."""
         return v
 
     def gen_list(self, l: List[str]) -> str:
-        """Translate a list with elements l
-        """
         return "[" + ", ".join(l) + "]"
 
     def gen_tuple(self, t: List[str]) -> str:
-        """Translate a tuple with elements t
-        """
         trailing = "," if len(t) == 1 else ""
         return "(" + ", ".join(t) + trailing + ")"
 
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
-        """Translate a dictionary with keys and values
-        A dictionary { "key1": val1, "key2": val2 } translates to { ["key1"] = val1, ["key2"] = val2 }
-        """
         return "{ " + ", ".join(f'{k}: {v}' for k, v in zip(keys, values)) + " }"
 
     def gen_call(self, func: str, args: List[str]) -> str:
-        """Translate a function call `func(args)`
-        A function call f(x, y, z) translates to f(x, y, z)
-        """
         return func + "(" + ", ".join(args) + ")"
 
 
 if __name__ == "__main__":
-    translator = PythonTranslator("py")
-    main(translator)
+    main(PythonTranslator())
 

@@ -18,16 +18,16 @@ long minSubArraySum(std::vector<long> nums) {
 }
 int main() {
     auto candidate = minSubArraySum;
-    assert(candidate((std::vector<long>({2, 3, 4, 1, 2, 4}))) == (1));
-    assert(candidate((std::vector<long>({-1, -2, -3}))) == (-6));
-    assert(candidate((std::vector<long>({-1, -2, -3, 2, -10}))) == (-14));
-    assert(candidate((std::vector<long>({-9999999999999999}))) == (-9999999999999999));
-    assert(candidate((std::vector<long>({0, 10, 20, 1000000}))) == (0));
-    assert(candidate((std::vector<long>({-1, -2, -3, 10, -5}))) == (-6));
-    assert(candidate((std::vector<long>({100, -1, -2, -3, 10, -5}))) == (-6));
-    assert(candidate((std::vector<long>({10, 11, 13, 8, 3, 4}))) == (3));
-    assert(candidate((std::vector<long>({100, -33, 32, -1, 0, -2}))) == (-33));
-    assert(candidate((std::vector<long>({-10}))) == (-10));
-    assert(candidate((std::vector<long>({7}))) == (7));
-    assert(candidate((std::vector<long>({1, -1}))) == (-1));
+    assert(candidate((std::vector<long>({(long)2, (long)3, (long)4, (long)1, (long)2, (long)4}))) == (1));
+    assert(candidate((std::vector<long>({(long)-1, (long)-2, (long)-3}))) == (-6));
+    assert(candidate((std::vector<long>({(long)-1, (long)-2, (long)-3, (long)2, (long)-10}))) == (-14));
+    assert(candidate((std::vector<long>({(long)-9999999999999999}))) == (-9999999999999999));
+    assert(candidate((std::vector<long>({(long)0, (long)10, (long)20, (long)1000000}))) == (0));
+    assert(candidate((std::vector<long>({(long)-1, (long)-2, (long)-3, (long)10, (long)-5}))) == (-6));
+    assert(candidate((std::vector<long>({(long)100, (long)-1, (long)-2, (long)-3, (long)10, (long)-5}))) == (-6));
+    assert(candidate((std::vector<long>({(long)10, (long)11, (long)13, (long)8, (long)3, (long)4}))) == (3));
+    assert(candidate((std::vector<long>({(long)100, (long)-33, (long)32, (long)-1, (long)0, (long)-2}))) == (-33));
+    assert(candidate((std::vector<long>({(long)-10}))) == (-10));
+    assert(candidate((std::vector<long>({(long)7}))) == (7));
+    assert(candidate((std::vector<long>({(long)1, (long)-1}))) == (-1));
 }

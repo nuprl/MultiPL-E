@@ -21,11 +21,11 @@ bool has_close_elements(std::vector<float> numbers, float threshold) {
 }
 int main() {
     auto candidate = has_close_elements;
-    assert(candidate((std::vector<float>({1.0, 2.0, 3.9, 4.0, 5.0, 2.2})), (0.3)) == (true));
-    assert(candidate((std::vector<float>({1.0, 2.0, 3.9, 4.0, 5.0, 2.2})), (0.05)) == (false));
-    assert(candidate((std::vector<float>({1.0, 2.0, 5.9, 4.0, 5.0})), (0.95)) == (true));
-    assert(candidate((std::vector<float>({1.0, 2.0, 5.9, 4.0, 5.0})), (0.8)) == (false));
-    assert(candidate((std::vector<float>({1.0, 2.0, 3.0, 4.0, 5.0, 2.0})), (0.1)) == (true));
-    assert(candidate((std::vector<float>({1.1, 2.2, 3.1, 4.1, 5.1})), (1.0)) == (true));
-    assert(candidate((std::vector<float>({1.1, 2.2, 3.1, 4.1, 5.1})), (0.5)) == (false));
+    assert(candidate((std::vector<float>({(float)1.0, (float)2.0, (float)3.9, (float)4.0, (float)5.0, (float)2.2})), (0.3)) == (true));
+    assert(candidate((std::vector<float>({(float)1.0, (float)2.0, (float)3.9, (float)4.0, (float)5.0, (float)2.2})), (0.05)) == (false));
+    assert(candidate((std::vector<float>({(float)1.0, (float)2.0, (float)5.9, (float)4.0, (float)5.0})), (0.95)) == (true));
+    assert(candidate((std::vector<float>({(float)1.0, (float)2.0, (float)5.9, (float)4.0, (float)5.0})), (0.8)) == (false));
+    assert(candidate((std::vector<float>({(float)1.0, (float)2.0, (float)3.0, (float)4.0, (float)5.0, (float)2.0})), (0.1)) == (true));
+    assert(candidate((std::vector<float>({(float)1.1, (float)2.2, (float)3.1, (float)4.1, (float)5.1})), (1.0)) == (true));
+    assert(candidate((std::vector<float>({(float)1.1, (float)2.2, (float)3.1, (float)4.1, (float)5.1})), (0.5)) == (false));
 }

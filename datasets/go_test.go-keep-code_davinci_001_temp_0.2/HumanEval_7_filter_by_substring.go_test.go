@@ -28,7 +28,7 @@ func TestFilter_By_Substring(t *testing.T) {
 		expected interface{}
 	}
    tests := []test{
-     { actual: candidate([]int{}, "john"), expected: []int{} },
+     { actual: candidate([]string{}, "john"), expected: []string{} },
      { actual: candidate([]string{"xxx", "asd", "xxy", "john doe", "xxxAAA", "xxx"}, "xxx"), expected: []string{"xxx", "xxxAAA", "xxx"} },
      { actual: candidate([]string{"xxx", "asd", "aaaxxy", "john doe", "xxxAAA", "xxx"}, "xx"), expected: []string{"xxx", "aaaxxy", "xxxAAA", "xxx"} },
      { actual: candidate([]string{"grunt", "trumpet", "prune", "gruesome"}, "run"), expected: []string{"grunt", "prune"} },

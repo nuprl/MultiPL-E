@@ -22,8 +22,8 @@ std::vector<long> sort_third(std::vector<long> l) {
 }
 int main() {
     auto candidate = sort_third;
-    assert(candidate((std::vector<long>({5, 6, 3, 4, 8, 9, 2}))) == (std::vector<long>({2, 6, 3, 4, 8, 9, 5})));
-    assert(candidate((std::vector<long>({5, 8, 3, 4, 6, 9, 2}))) == (std::vector<long>({2, 8, 3, 4, 6, 9, 5})));
-    assert(candidate((std::vector<long>({5, 6, 9, 4, 8, 3, 2}))) == (std::vector<long>({2, 6, 9, 4, 8, 3, 5})));
-    assert(candidate((std::vector<long>({5, 6, 3, 4, 8, 9, 2, 1}))) == (std::vector<long>({2, 6, 3, 4, 8, 9, 5, 1})));
+    assert(candidate((std::vector<long>({(long)5, (long)6, (long)3, (long)4, (long)8, (long)9, (long)2}))) == (std::vector<long>({(long)2, (long)6, (long)3, (long)4, (long)8, (long)9, (long)5})));
+    assert(candidate((std::vector<long>({(long)5, (long)8, (long)3, (long)4, (long)6, (long)9, (long)2}))) == (std::vector<long>({(long)2, (long)8, (long)3, (long)4, (long)6, (long)9, (long)5})));
+    assert(candidate((std::vector<long>({(long)5, (long)6, (long)9, (long)4, (long)8, (long)3, (long)2}))) == (std::vector<long>({(long)2, (long)6, (long)9, (long)4, (long)8, (long)3, (long)5})));
+    assert(candidate((std::vector<long>({(long)5, (long)6, (long)3, (long)4, (long)8, (long)9, (long)2, (long)1}))) == (std::vector<long>({(long)2, (long)6, (long)3, (long)4, (long)8, (long)9, (long)5, (long)1})));
 }

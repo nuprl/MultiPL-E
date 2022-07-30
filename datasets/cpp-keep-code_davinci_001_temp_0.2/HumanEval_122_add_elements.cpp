@@ -18,9 +18,9 @@ long add_elements(std::vector<long> arr, long k) {
 }
 int main() {
     auto candidate = add_elements;
-    assert(candidate((std::vector<long>({1, -2, -3, 41, 57, 76, 87, 88, 99})), (3)) == (-4));
-    assert(candidate((std::vector<long>({111, 121, 3, 4000, 5, 6})), (2)) == (0));
-    assert(candidate((std::vector<long>({11, 21, 3, 90, 5, 6, 7, 8, 9})), (4)) == (125));
-    assert(candidate((std::vector<long>({111, 21, 3, 4000, 5, 6, 7, 8, 9})), (4)) == (24));
-    assert(candidate((std::vector<long>({1})), (1)) == (1));
+    assert(candidate((std::vector<long>({(long)1, (long)-2, (long)-3, (long)41, (long)57, (long)76, (long)87, (long)88, (long)99})), (3)) == (-4));
+    assert(candidate((std::vector<long>({(long)111, (long)121, (long)3, (long)4000, (long)5, (long)6})), (2)) == (0));
+    assert(candidate((std::vector<long>({(long)11, (long)21, (long)3, (long)90, (long)5, (long)6, (long)7, (long)8, (long)9})), (4)) == (125));
+    assert(candidate((std::vector<long>({(long)111, (long)21, (long)3, (long)4000, (long)5, (long)6, (long)7, (long)8, (long)9})), (4)) == (24));
+    assert(candidate((std::vector<long>({(long)1})), (1)) == (1));
 }

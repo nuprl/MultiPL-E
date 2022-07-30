@@ -26,7 +26,7 @@ func TestConcatenate(t *testing.T) {
 		expected interface{}
 	}
    tests := []test{
-     { actual: candidate([]int{}), expected: "" },
+     { actual: candidate([]string{}), expected: "" },
      { actual: candidate([]string{"x", "y", "z"}), expected: "xyz" },
      { actual: candidate([]string{"x", "y", "z", "w", "k"}), expected: "xyzwk" },
    }

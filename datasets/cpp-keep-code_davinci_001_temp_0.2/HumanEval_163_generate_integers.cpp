@@ -19,8 +19,8 @@ std::vector<long> generate_integers(long a, long b) {
 }
 int main() {
     auto candidate = generate_integers;
-    assert(candidate((2), (10)) == (std::vector<long>({2, 4, 6, 8})));
-    assert(candidate((10), (2)) == (std::vector<long>({2, 4, 6, 8})));
-    assert(candidate((132), (2)) == (std::vector<long>({2, 4, 6, 8})));
+    assert(candidate((2), (10)) == (std::vector<long>({(long)2, (long)4, (long)6, (long)8})));
+    assert(candidate((10), (2)) == (std::vector<long>({(long)2, (long)4, (long)6, (long)8})));
+    assert(candidate((132), (2)) == (std::vector<long>({(long)2, (long)4, (long)6, (long)8})));
     assert(candidate((17), (89)) == (std::vector<long>()));
 }

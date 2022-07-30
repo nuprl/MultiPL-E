@@ -40,7 +40,7 @@ def translate_expr(translator, py_expr: ast.AST):
                 [translate_expr(translator, a) for a in args],
             )
         case _other:
-            print("OMFG" + py_expr)
+            # print("OMFG" + py_expr)
             raise Exception(f"Unhandled expression: {py_expr}")
 
 
@@ -67,26 +67,49 @@ class PromptVisitor(ast.NodeVisitor):
                 self.state = "complete"
             case _other:
                 self.state = "error"
-
+        
     def translate_func_decl(self, doctest_transformation: str) -> str | None:
         if self.state != "complete":
             return None
-        # TODO(arjun): Use doctest_transformation
         match doctest_transformation:
             case "keep":
-                description = self.description
+                desc = self.description
             case "remove":
-                # TODO(arjun): Remove all doctests
-                description = self.description 
+                doctestRegex = re.compile(r'>>>.*\)\n.*\n')
+                desc = re.sub(doctestRegex, '', self.description)
             case "transform":
                 # Steps:
                 # Find the Python expression and result in each doctest
                 # py_ast = ast.parse("PYTHON EXPRESSION", "bogus filename")
                 # translate_expr(py_ast, self.translator) to get the string for that expression in the target language
-                description = self.description # TODO(arjun): Transform doctests
+                
+                #Split up the prompt from the doctests
+                promptAndDoctests = self.description.split('>>> ')
+                if len(promptAndDoctests) > 1: #checking if there are doctests
+                    doctestRegex = re.compile(r'.*\n.*\n')
+                    onlyDocTests = []
+                    for test in (promptAndDoctests[1:]): #Removing each doctest from any junk
+                        onlyDocTests.append(doctestRegex.match(test).group())
+                    
+                    funcCalls = []
+                    outputs = []
+                    for doctest in onlyDocTests:
+                        doclist = doctest.split('\n') #Splitting up the output from the function call of the doctest
+                        funcCalls.append(ast.parse(doclist[0].strip()).body[0].value)
+                        outputs.append(ast.parse(doclist[1].strip()).body[0].value)
+
+                    for i in range(len(funcCalls)):
+                        funcCalls[i] = translate_expr(self.translator, funcCalls[i])
+                        outputs[i] = translate_expr(self.translator, outputs[i])
+                    
+                    desc = promptAndDoctests[0]
+                    for i in range(len(funcCalls)):
+                        desc += funcCalls[i] + '\n' + outputs[i] + '\n\n'
+                else: #else when there are no doctests
+                    desc = self.description
             case _other:
                 raise Exception(f"bad doctest_transformation")
-        return self.translator.translate_prompt(self.name, self.args, self.returns, description)
+        return self.translator.translate_prompt(self.name, self.args, self.returns, desc)
 
 
 def translate_prompt(translator, doctest_transformation: str, py_prompt: str, filename: str) -> str:
@@ -267,8 +290,10 @@ def list_originals():
     files_unsorted = directory.glob("originals/*.py") 
     # assumption: base filenames are in the format of HumanEval_X_*.py
     # Where X is a valid number
-    files_sorted = sorted(files_unsorted, key=(lambda s: int(str(s.name).split("_")[1])))
-    return files_sorted
+    key_func = lambda s: int(str(s.name).split("_")[1])
+    files_by_number = {key_func(file): file for file in files_unsorted}
+    
+    return files_by_number
 
 def main(translator):
     stop = get_stop_from_translator(translator)
@@ -309,12 +334,15 @@ def main(translator):
         raise Exception("Invalid value for --doctests")
 
 
-    files_sorted = list_originals()
+    files_by_number = list_originals()
     files_index = []
     if len(args.files) > 0:
         files_index = args.files
     else:
-        files_index = range(len(files_sorted)) 
+        files_index = sorted(files_by_number.keys())
     for i in files_index:
-        filepath = files_sorted[i]
+        if i not in files_by_number:
+            print(f"File {i} does not exist!")
+            continue
+        filepath = files_by_number[i]
         translate_file(args, translator, filepath)

@@ -16,9 +16,9 @@ long can_arrange(std::vector<long> arr) {
 }
 int main() {
     auto candidate = can_arrange;
-    assert(candidate((std::vector<long>({1, 2, 4, 3, 5}))) == (3));
-    assert(candidate((std::vector<long>({1, 2, 4, 5}))) == (-1));
-    assert(candidate((std::vector<long>({1, 4, 2, 5, 6, 7, 8, 9, 10}))) == (2));
-    assert(candidate((std::vector<long>({4, 8, 5, 7, 3}))) == (4));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)4, (long)3, (long)5}))) == (3));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)4, (long)5}))) == (-1));
+    assert(candidate((std::vector<long>({(long)1, (long)4, (long)2, (long)5, (long)6, (long)7, (long)8, (long)9, (long)10}))) == (2));
+    assert(candidate((std::vector<long>({(long)4, (long)8, (long)5, (long)7, (long)3}))) == (4));
     assert(candidate((std::vector<long>())) == (-1));
 }

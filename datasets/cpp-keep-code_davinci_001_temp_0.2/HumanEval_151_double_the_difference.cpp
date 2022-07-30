@@ -20,10 +20,10 @@ long double_the_difference(std::vector<float> lst) {
 int main() {
     auto candidate = double_the_difference;
     assert(candidate((std::vector<float>())) == (0));
-    assert(candidate((std::vector<float>({5.0, 4.0}))) == (25));
-    assert(candidate((std::vector<float>({0.1, 0.2, 0.3}))) == (0));
-    assert(candidate((std::vector<float>({-10.0, -20.0, -30.0}))) == (0));
-    assert(candidate((std::vector<float>({-1.0, -2.0, 8.0}))) == (0));
-    assert(candidate((std::vector<float>({0.2, 3.0, 5.0}))) == (34));
-    assert(candidate((std::vector<float>({-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0}))) == (165));
+    assert(candidate((std::vector<float>({(float)5.0, (float)4.0}))) == (25));
+    assert(candidate((std::vector<float>({(float)0.1, (float)0.2, (float)0.3}))) == (0));
+    assert(candidate((std::vector<float>({(float)-10.0, (float)-20.0, (float)-30.0}))) == (0));
+    assert(candidate((std::vector<float>({(float)-1.0, (float)-2.0, (float)8.0}))) == (0));
+    assert(candidate((std::vector<float>({(float)0.2, (float)3.0, (float)5.0}))) == (34));
+    assert(candidate((std::vector<float>({(float)-9.0, (float)-7.0, (float)-5.0, (float)-3.0, (float)-1.0, (float)1.0, (float)3.0, (float)5.0, (float)7.0, (float)9.0}))) == (165));
 }

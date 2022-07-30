@@ -1,0 +1,1889 @@
+name: HumanEval_10_make_palindrome
+language: racket
+prompt: "#lang racket\n\n;; Find the shortest palindrome that begins with a supplied\
+  \ string.\n;; Algorithm idea is simple:\n;; - Find the longest postfix of supplied\
+  \ string that is a palindrome.\n;; - Append to the end of the string reverse of\
+  \ a string prefix that comes before the palindromic suffix.\n;; >>> make_palindrome('')\n\
+  ;; ''\n;; >>> make_palindrome('cat')\n;; 'catac'\n;; >>> make_palindrome('cata')\n\
+  ;; 'catac'\n(define (make_palindrome string)\n"
+tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate make_palindrome))\n\
+  \    (check-equal? (candidate \"\") \"\")\n    (check-equal? (candidate \"x\") \"\
+  x\")\n    (check-equal? (candidate \"xyz\") \"xyzyx\")\n    (check-equal? (candidate\
+  \ \"xyx\") \"xyx\")\n    (check-equal? (candidate \"jerry\") \"jerryrrej\")\n))\n\
+  \n(test-humaneval)"
+completions: ["  (define (reverse string)\n    (if (string=? string \"\")\n      \
+    \  \"\"\n        (string-append (reverse (substring string 1)) (substring string\
+    \ 0 1))))\n  (define (is_palindrome string)\n    (string=? string (reverse string)))\n\
+    \  (define (find-longest-palindrome-suffix string)\n    (if (is_palindrome string)\n\
+    \        string\n        (find-longest-palindrome-suffix (substring string 1))))\n\
+    \  (define (find-shortest-palindrome-prefix string)\n    (if (string=? string\
+    \ \"\")\n        \"\"\n        (string-append (substring string 0 1) (find-shortest-palindrome-prefix\
+    \ (substring string 1)))))\n  (string-append string (reverse (find-shortest-palindrome-prefix\
+    \ (find-longest-palindrome-suffix string)))))\n", "  (define (reverse-string string)\n\
+    \    (if (string=? string \"\")\n        \"\"\n        (string-append (reverse-string\
+    \ (substring string 1)) (substring string 0 1))))\n  (define (is-palindrome string)\n\
+    \    (string=? string (reverse-string string)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (if (is-palindrome string)\n        string\n        (find-longest-palindrome-suffix\
+    \ (substring string 1))))\n  (string-append string (reverse-string (substring\
+    \ string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (is_palindrome? string)\n    (define (is_palindrome?-iter\
+    \ string left right)\n      (cond ((< left right) (and (char=? (string-ref string\
+    \ left) (string-ref string right))\n                                 (is_palindrome?-iter\
+    \ string (+ left 1) (- right 1))))\n            ((= left right) #t)\n        \
+    \    (else #f)))\n    (is_palindrome?-iter string 0 (- (string-length string)\
+    \ 1)))\n  (define (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-iter\
+    \ string left right)\n      (cond ((< left right) (and (char=? (string-ref string\
+    \ left) (string-ref string right))\n                                 (find-longest-palindrome-suffix-iter\
+    \ string (+ left 1) (- right 1))))\n            ((= left right) (substring string\
+    \ 0 (+ left 1)))\n            (else (substring string 0 right))))\n    (find-longest-palindrome-suffix-iter\
+    \ string 0 (- (string-length string) 1)))\n  (define (reverse-string string)\n\
+    \    (define (reverse-string-iter string left right)\n      (cond ((< left right)\
+    \ (begin (string-set! string left (string-ref string right))\n               \
+    \                    (string-set! string right (string-ref string left))\n   \
+    \                                (reverse-string-iter string (+ left 1) (- right\
+    \ 1))))\n            ((= left right) string)\n            (else string)))\n  \
+    \  (reverse-string-iter (make-string (string-length string)) 0 (- (string-length\
+    \ string) 1)))\n  (string-append string (reverse-string (find-longest-palindrome-suffix\
+    \ string))))\n", "  (define (reverse string)\n    (let loop ((string string)\n\
+    \               (reversed '()))\n      (if (null? string)\n          reversed\n\
+    \          (loop (cdr string)\n                (cons (car string) reversed)))))\n\
+    \  (define (is_palindrome? string)\n    (let loop ((string string)\n         \
+    \      (reversed (reverse string)))\n      (if (null? string)\n          #t\n\
+    \          (and (equal? (car string) (car reversed))\n               (loop (cdr\
+    \ string)\n                     (cdr reversed))))))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (let loop ((string string)\n               (longest-palindrome-suffix\
+    \ '()))\n      (if (is_palindrome? string)\n          string\n          (loop\
+    \ (cdr string)\n                (if (is_palindrome? string)\n                \
+    \    string\n                    longest-palindrome-suffix)))))\n  (define (find-prefix-before-palindrome-suffix\
+    \ string)\n    (let loop ((string string)\n               (prefix '()))\n    \
+    \  (if (is_palindrome? string)\n          prefix\n          (loop (cdr string)\n\
+    \                (cons (car string) prefix)))))\n  (string-append string\n   \
+    \              (reverse (find-prefix-before-palindrome-suffix string))))\n", " \
+    \ (define (find-longest-palindrome-suffix string)\n    (define (is-palindrome?\
+    \ string)\n      (define (is-palindrome-helper? string)\n        (cond\n     \
+    \     [(empty? string) true]\n          [(empty? (rest string)) true]\n      \
+    \    [(char=? (first string) (last string)) (is-palindrome-helper? (rest (butlast\
+    \ string)))]\n          [else false]))\n      (is-palindrome-helper? string))\n\
+    \    (define (find-longest-palindrome-suffix-helper string)\n      (cond\n   \
+    \     [(empty? string) empty]\n        [(is-palindrome? string) string]\n    \
+    \    [else (find-longest-palindrome-suffix-helper (rest string))]))\n    (find-longest-palindrome-suffix-helper\
+    \ string))\n  (append string (reverse (substring string 0 (- (length string) (length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (is_palindrome?\
+    \ string)\n    (define (helper string)\n      (if (empty? string)\n          #t\n\
+    \          (and (equal? (first string) (last string))\n               (helper\
+    \ (rest (butlast string))))))\n    (helper string))\n  (define (find-palindrome-suffix\
+    \ string)\n    (define (helper string)\n      (if (is_palindrome? string)\n  \
+    \        string\n          (helper (rest string))))\n    (helper string))\n  (define\
+    \ (reverse-prefix string)\n    (define (helper string)\n      (if (empty? string)\n\
+    \          string\n          (append (helper (rest string)) (list (first string)))))\n\
+    \    (helper string))\n  (append string (reverse-prefix (find-palindrome-suffix\
+    \ string))))\n", "  (define (reverse string)\n    (if (empty? string)\n      \
+    \  string\n        (string-append (reverse (substring string 1)) (string (string-ref\
+    \ string 0)))))\n  (define (is_palindrome string)\n    (if (empty? string)\n \
+    \       #t\n        (if (equal? (string-ref string 0) (string-ref string (- (string-length\
+    \ string) 1)))\n            (is_palindrome (substring string 1 (- (string-length\
+    \ string) 1)))\n            #f)))\n  (define (find_longest_palindrome string)\n\
+    \    (if (is_palindrome string)\n        string\n        (find_longest_palindrome\
+    \ (substring string 0 (- (string-length string) 1)))))\n  (string-append string\
+    \ (reverse (substring string 0 (- (string-length string) (string-length (find_longest_palindrome\
+    \ string)))))))\n", "  (define (find-longest-palindrome-suffix string)\n    (define\
+    \ (find-longest-palindrome-suffix-iter string suffix)\n      (if (string=? (substring\
+    \ string 0 (string-length suffix)) (reverse suffix))\n          suffix\n     \
+    \     (find-longest-palindrome-suffix-iter string (substring suffix 1))))\n  \
+    \  (find-longest-palindrome-suffix-iter string string))\n  (string-append string\
+    \ (reverse (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (find-longest-palindrome-suffix string)\n    (define\
+    \ (find-longest-palindrome-suffix-iter string suffix)\n      (if (string=? (substring\
+    \ string 0 (string-length suffix)) (reverse suffix))\n          suffix\n     \
+    \     (find-longest-palindrome-suffix-iter string (substring suffix 1))))\n  \
+    \  (find-longest-palindrome-suffix-iter string string))\n  (string-append string\
+    \ (reverse (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (find-longest-palindrome-suffix string)\n    (define\
+    \ (find-longest-palindrome-suffix-iter string suffix-length)\n      (if (= suffix-length\
+    \ 0)\n          string\n          (if (and (char=? (string-ref string 0) (string-ref\
+    \ string (- suffix-length 1)))\n                   (char=? (string-ref string\
+    \ 1) (string-ref string (- suffix-length 2))))\n              (find-longest-palindrome-suffix-iter\
+    \ string (- suffix-length 1))\n              (find-longest-palindrome-suffix-iter\
+    \ (substring string 0 (- suffix-length 1)) (- suffix-length 1)))))\n    (find-longest-palindrome-suffix-iter\
+    \ string (string-length string)))\n  (string-append string (string-reverse (substring\
+    \ string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (reverse string)\n    (if (string=? string \"\"\
+    )\n        \"\"\n        (string-append (reverse (substring string 1)) (substring\
+    \ string 0 1))))\n  (define (find-palindrome-suffix string)\n    (define (find-palindrome-suffix-iter\
+    \ string suffix)\n      (if (string=? string suffix)\n          suffix\n     \
+    \     (find-palindrome-suffix-iter (substring string 0 (- (string-length string)\
+    \ 1))\n                                       (string-append (substring string\
+    \ (- (string-length string) 1)) suffix))))\n    (find-palindrome-suffix-iter string\
+    \ \"\"))\n  (string-append string (reverse (substring string 0 (- (string-length\
+    \ string) (string-length (find-palindrome-suffix string)))))))\n", "  (define\
+    \ (reverse-string string)\n    (define (reverse-string-helper string result)\n\
+    \      (if (empty? string)\n          result\n          (reverse-string-helper\
+    \ (rest string) (append result (list (first string))))))\n    (reverse-string-helper\
+    \ string '()))\n  (define (is-palindrome string)\n    (define (is-palindrome-helper\
+    \ string)\n      (if (empty? string)\n          #t\n          (and (equal? (first\
+    \ string) (last string))\n               (is-palindrome-helper (rest (butlast\
+    \ string))))))\n    (is-palindrome-helper string))\n  (define (find-longest-palindrome\
+    \ string)\n    (define (find-longest-palindrome-helper string result)\n      (if\
+    \ (empty? string)\n          result\n          (if (is-palindrome string)\n  \
+    \            (find-longest-palindrome-helper (butlast string) string)\n      \
+    \        (find-longest-palindrome-helper (butlast string) result))))\n    (find-longest-palindrome-helper\
+    \ string '()))\n  (append string (reverse-string (butlast (find-longest-palindrome\
+    \ string)))))\n", "  (define (reverse string)\n    (if (string=? string \"\")\n\
+    \        \"\"\n        (string-append (substring string 1) (string (string-ref\
+    \ string 0)))))\n  (define (find-palindrome-suffix string)\n    (if (string=?\
+    \ string \"\")\n        \"\"\n        (if (string=? (reverse (substring string\
+    \ 0 (add1 (string-length string)))) string)\n            string\n            (find-palindrome-suffix\
+    \ (substring string 0 (sub1 (string-length string)))))))\n  (string-append string\
+    \ (reverse (substring string 0 (sub1 (string-length (find-palindrome-suffix string)))))))\n",
+  "  (define (is_palindrome? string)\n    (define (is_palindrome?-iter string i j)\n\
+    \      (cond\n        [(>= i j) #t]\n        [(char=? (string-ref string i) (string-ref\
+    \ string j)) (is_palindrome?-iter string (+ i 1) (- j 1))]\n        [else #f]))\n\
+    \    (is_palindrome?-iter string 0 (- (string-length string) 1)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string i)\n      (cond\n\
+    \        [(<= i 0) string]\n        [(is_palindrome? (substring string i (string-length\
+    \ string))) (substring string i (string-length string))]\n        [else (find-longest-palindrome-suffix-iter\
+    \ string (- i 1))]))\n    (find-longest-palindrome-suffix-iter string (- (string-length\
+    \ string) 1)))\n  (define (reverse-string string)\n    (define (reverse-string-iter\
+    \ string i j)\n      (cond\n        [(>= i j) string]\n        [else (string-set!\
+    \ string i (string-ref string j))\n              (string-set! string j (string-ref\
+    \ string i))\n              (reverse-string-iter string (+ i 1) (- j 1))]))\n\
+    \    (reverse-string-iter string 0 (- (string-length string) 1)))\n  (string-append\
+    \ string (reverse-string (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (reverse string)\n\
+    \    (if (empty? string)\n        string\n        (string-append (reverse (substring\
+    \ string 1)) (string (string-ref string 0)))))\n  (define (find-palindrome-suffix\
+    \ string)\n    (if (empty? string)\n        string\n        (if (string=? string\
+    \ (reverse string))\n            string\n            (find-palindrome-suffix (substring\
+    \ string 1)))))\n  (define (find-palindrome-prefix string)\n    (if (empty? string)\n\
+    \        string\n        (if (string=? string (reverse string))\n            string\n\
+    \            (find-palindrome-prefix (substring string 0 (- (string-length string)\
+    \ 1))))))\n  (string-append string (reverse (find-palindrome-prefix (substring\
+    \ string 0 (- (string-length string) (string-length (find-palindrome-suffix string))))))))\n",
+  "  (define (reverse-string string)\n    (define (reverse-string-iter string result)\n\
+    \      (if (string=? string \"\")\n          result\n          (reverse-string-iter\
+    \ (substring string 1) (string-append (substring string 0 1) result))))\n    (reverse-string-iter\
+    \ string \"\"))\n  (define (longest-palindrome-suffix string)\n    (define (longest-palindrome-suffix-iter\
+    \ string result)\n      (if (string=? string \"\")\n          result\n       \
+    \   (if (string=? (substring string 0 1) (substring string (- (string-length string)\
+    \ 1)))\n              (longest-palindrome-suffix-iter (substring string 1 (- (string-length\
+    \ string) 1)) (string-append (substring string 0 1) result))\n              (longest-palindrome-suffix-iter\
+    \ (substring string 1) \"\"))))\n    (longest-palindrome-suffix-iter string \"\
+    \"))\n  (string-append string (reverse-string (substring string 0 (- (string-length\
+    \ string) (string-length (longest-palindrome-suffix string)))))))\n", "  (define\
+    \ (reverse-string string)\n    (define (reverse-string-helper string result)\n\
+    \      (if (empty? string)\n          result\n          (reverse-string-helper\
+    \ (rest string) (cons (first string) result))))\n    (reverse-string-helper string\
+    \ '()))\n  (define (is-palindrome? string)\n    (define (is-palindrome-helper\
+    \ string left right)\n      (if (or (empty? string)\n              (empty? (rest\
+    \ string)))\n          #t\n          (if (equal? (first string) (first right))\n\
+    \              (is-palindrome-helper (rest string) (rest left) (rest right))\n\
+    \              #f)))\n    (is-palindrome-helper string string (reverse-string\
+    \ string)))\n  (define (find-palindrome-suffix string)\n    (define (find-palindrome-suffix-helper\
+    \ string suffix)\n      (if (is-palindrome? suffix)\n          suffix\n      \
+    \    (find-palindrome-suffix-helper (rest string) (cons (first string) suffix))))\n\
+    \    (find-palindrome-suffix-helper string '()))\n  (define (find-palindrome-prefix\
+    \ string)\n    (define (find-palindrome-prefix-helper string prefix)\n      (if\
+    \ (is-palindrome? prefix)\n          prefix\n          (find-palindrome-prefix-helper\
+    \ (rest string) (cons (first string) prefix))))\n    (find-palindrome-prefix-helper\
+    \ string '()))\n  (define (append-reverse-prefix string)\n    (append string (reverse-string\
+    \ (find-palindrome-prefix string))))\n  (append-reverse-prefix string))\n", " \
+    \ (define (reverse string)\n    (define (reverse-iter string result)\n      (if\
+    \ (null? string)\n          result\n          (reverse-iter (cdr string) (cons\
+    \ (car string) result))))\n    (reverse-iter string '()))\n  (define (find-palindrome-suffix\
+    \ string)\n    (define (find-palindrome-suffix-iter string suffix)\n      (if\
+    \ (null? string)\n          suffix\n          (if (equal? (car string) (car suffix))\n\
+    \              (find-palindrome-suffix-iter (cdr string) (cons (car string) suffix))\n\
+    \              suffix)))\n    (find-palindrome-suffix-iter string (reverse string)))\n\
+    \  (define (append-prefix string suffix)\n    (append string (reverse (cdr suffix))))\n\
+    \  (append-prefix string (find-palindrome-suffix string)))\n", "  (define (is_palindrome\
+    \ string)\n    (define (is_palindrome-iter string i j)\n      (cond ((>= i j)\
+    \ #t)\n            ((char=? (string-ref string i) (string-ref string j))\n   \
+    \          (is_palindrome-iter string (+ i 1) (- j 1)))\n            (else #f)))\n\
+    \    (is_palindrome-iter string 0 (- (string-length string) 1)))\n  (define (find-palindrome-suffix\
+    \ string)\n    (define (find-palindrome-suffix-iter string i)\n      (cond ((is_palindrome\
+    \ string) string)\n            (else (find-palindrome-suffix-iter (substring string\
+    \ 0 (- i 1)) (- i 1)))))\n    (find-palindrome-suffix-iter string (- (string-length\
+    \ string) 1)))\n  (define (reverse-prefix string)\n    (define (reverse-prefix-iter\
+    \ string i)\n      (cond ((= i 0) \"\")\n            (else (string-append (string-append\
+    \ (substring string 0 i) (reverse-prefix-iter string (- i 1)))))))\n    (reverse-prefix-iter\
+    \ string (- (string-length string) 1)))\n  (string-append string (reverse-prefix\
+    \ (find-palindrome-suffix string))))\n", "  (define (find-palindrome-suffix string)\n\
+    \    (define (is-palindrome? string)\n      (define (is-palindrome-helper? string\
+    \ left right)\n        (cond\n          [(= left right) true]\n          [(= (string-ref\
+    \ string left) (string-ref string right))\n           (is-palindrome-helper? string\
+    \ (+ left 1) (- right 1))]\n          [else false]))\n    (is-palindrome-helper?\
+    \ string 0 (- (string-length string) 1)))\n  (define (find-palindrome-prefix string)\n\
+    \    (define (is-palindrome? string)\n      (define (is-palindrome-helper? string\
+    \ left right)\n        (cond\n          [(= left right) true]\n          [(= (string-ref\
+    \ string left) (string-ref string right))\n           (is-palindrome-helper? string\
+    \ (+ left 1) (- right 1))]\n          [else false]))\n    (is-palindrome-helper?\
+    \ string 0 (- (string-length string) 1)))\n  (define (find-palindrome-suffix-length\
+    \ string)\n    (define (find-palindrome-suffix-length-helper string length)\n\
+    \      (cond\n        [(is-palindrome? string) length]\n        [else (find-palindrome-suffix-length-helper\
+    \ (substring string 0 (- (string-length string) 1)) (+ length 1))]))\n  (find-palindrome-suffix-length-helper\
+    \ string 0))\n  (define (find-palindrome-prefix-length string)\n    (define (find-palindrome-prefix-length-helper\
+    \ string length)\n      (cond\n        [(is-palindrome? string) length]\n    \
+    \    [else (find-palindrome-prefix-length-helper (substring string 1) (+ length\
+    \ 1))]))\n  (find-palindrome-prefix-length-helper string 0))\n  (define (reverse-string\
+    \ string)\n    (define (reverse-string-helper string result)\n      (cond\n  \
+    \      [(empty? string) result]\n        [else (reverse", "  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string suffix)\n \
+    \     (if (string=? (string-reverse suffix) string)\n          suffix\n      \
+    \    (find-longest-palindrome-suffix-iter string (string-append (substring string\
+    \ 0 1) suffix))))\n    (find-longest-palindrome-suffix-iter string \"\"))\n  (string-append\
+    \ string (string-reverse (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (reverse-string\
+    \ string)\n    (define (reverse-string-helper string result)\n      (if (string=?\
+    \ string \"\")\n          result\n          (reverse-string-helper (substring\
+    \ string 1) (string-append (substring string 0 1) result))))\n    (reverse-string-helper\
+    \ string \"\"))\n  (define (find-longest-palindrome-suffix string)\n    (define\
+    \ (find-longest-palindrome-suffix-helper string suffix)\n      (if (string=? string\
+    \ suffix)\n          suffix\n          (if (string=? (reverse-string suffix) suffix)\n\
+    \              (find-longest-palindrome-suffix-helper string (substring suffix\
+    \ 1))\n              suffix)))\n    (find-longest-palindrome-suffix-helper string\
+    \ string))\n  (string-append string (reverse-string (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))))\n", " \
+    \ (define (reverse string)\n    (if (empty? string)\n        string\n        (string-append\
+    \ (reverse (substring string 1)) (string (string-ref string 0)))))\n  (define\
+    \ (is_palindrome string)\n    (if (empty? string)\n        #t\n        (and (equal?\
+    \ (string-ref string 0) (string-ref string (- (string-length string) 1)))\n  \
+    \           (is_palindrome (substring string 1 (- (string-length string) 1))))))\n\
+    \  (define (find_longest_palindrome_suffix string)\n    (if (is_palindrome string)\n\
+    \        string\n        (find_longest_palindrome_suffix (substring string 1))))\n\
+    \  (string-append string (reverse (substring string 0 (- (string-length string)\
+    \ (string-length (find_longest_palindrome_suffix string)))))))\n", "  (define\
+    \ (is_palindrome? string)\n    (define (is_palindrome?-helper string start end)\n\
+    \      (cond ((< start end)\n             (and (equal? (string-ref string start)\
+    \ (string-ref string end))\n                  (is_palindrome?-helper string (+\
+    \ start 1) (- end 1))))\n            ((= start end) #t)\n            (else #f)))\n\
+    \    (is_palindrome?-helper string 0 (- (string-length string) 1)))\n  (define\
+    \ (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-helper\
+    \ string start end)\n      (cond ((< start end)\n             (if (is_palindrome?\
+    \ (substring string start end))\n                 (substring string start end)\n\
+    \                 (find-longest-palindrome-suffix-helper string start (- end 1))))\n\
+    \            ((= start end) (substring string start end))\n            (else \"\
+    \")))\n    (find-longest-palindrome-suffix-helper string 0 (- (string-length string)\
+    \ 1)))\n  (define (reverse-string string)\n    (define (reverse-string-helper\
+    \ string start end)\n      (cond ((< start end)\n             (string-append (reverse-string-helper\
+    \ string (+ start 1) end)\n                            (string (string-ref string\
+    \ start))))\n            ((= start end) (string (string-ref string start)))\n\
+    \            (else \"\")))\n    (reverse-string-helper string 0 (- (string-length\
+    \ string) 1)))\n  (string-append string (reverse-string (substring string 0 (-\
+    \ (string-length string) (string-length (find-longest-palindrome-suffix string)))))))\n",
+  "  (define (reverse string)\n    (if (string=? string \"\")\n        \"\"\n    \
+    \    (string-append (substring string 1) (string (string-ref string 0)))))\n \
+    \ (define (find-longest-palindrome-suffix string)\n    (if (string=? string \"\
+    \")\n        \"\"\n        (if (string=? (string-append string (reverse string))\
+    \ string)\n            string\n            (find-longest-palindrome-suffix (substring\
+    \ string 1)))))\n  (string-append string (reverse (substring string 0 (string-length\
+    \ (find-longest-palindrome-suffix string))))))\n", "  (define (reverse-string\
+    \ string)\n    (if (string=? string \"\")\n        \"\"\n        (string-append\
+    \ (reverse-string (substring string 1)) (substring string 0 1))))\n  (define (is-palindrome\
+    \ string)\n    (string=? string (reverse-string string)))\n  (define (find-longest-palindrome\
+    \ string)\n    (if (is-palindrome string)\n        string\n        (find-longest-palindrome\
+    \ (substring string 0 (- (string-length string) 1)))))\n  (define (make-palindrome-helper\
+    \ string)\n    (string-append string (reverse-string (substring string 0 (- (string-length\
+    \ (find-longest-palindrome string)) 1)))))\n  (make-palindrome-helper string))\n",
+  "  (define (reverse string)\n    (if (empty? string)\n        string\n        (string-append\
+    \ (reverse (substring string 1)) (string (string-ref string 0)))))\n  (define\
+    \ (is_palindrome string)\n    (if (empty? string)\n        #t\n        (and (char=?\
+    \ (string-ref string 0) (string-ref string (- (string-length string) 1)))\n  \
+    \           (is_palindrome (substring string 1 (- (string-length string) 1))))))\n\
+    \  (define (find_palindrome_suffix string)\n    (if (is_palindrome string)\n \
+    \       string\n        (find_palindrome_suffix (substring string 1))))\n  (define\
+    \ (find_palindrome_prefix string)\n    (if (is_palindrome string)\n        string\n\
+    \        (find_palindrome_prefix (substring string 0 (- (string-length string)\
+    \ 1)))))\n  (string-append string (reverse (find_palindrome_prefix (substring\
+    \ string 0 (- (string-length string) (string-length (find_palindrome_suffix string))))))))\n",
+  "  (define (reverse string)\n    (if (string=? string \"\")\n        \"\"\n    \
+    \    (string-append (reverse (substring string 1)) (substring string 0 1))))\n\
+    \  (define (is_palindrome string)\n    (string=? string (reverse string)))\n \
+    \ (define (find-longest-palindrome-suffix string)\n    (if (is_palindrome string)\n\
+    \        string\n        (find-longest-palindrome-suffix (substring string 1))))\n\
+    \  (define (find-prefix-before-palindrome-suffix string)\n    (substring string\
+    \ 0 (- (string-length string) (string-length (find-longest-palindrome-suffix string)))))\n\
+    \  (string-append string (reverse (find-prefix-before-palindrome-suffix string))))\n",
+  "  (define (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-iter\
+    \ string suffix)\n      (if (string=? (substring string 0 (string-length suffix))\
+    \ (reverse (substring string 0 (string-length suffix))))\n          suffix\n \
+    \         (find-longest-palindrome-suffix-iter string (substring suffix 1))))\n\
+    \    (find-longest-palindrome-suffix-iter string string))\n  (string-append string\
+    \ (reverse (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (reverse string)\n    (if (empty? string)\n   \
+    \     string\n        (string-append (reverse (substring string 1)) (string (string-ref\
+    \ string 0)))))\n  (define (longest-palindrome-suffix string)\n    (let loop ((i\
+    \ 0) (j (sub1 (string-length string))))\n      (if (&lt;= i j)\n          (if\
+    \ (equal? (string-ref string i) (string-ref string j))\n              (loop (add1\
+    \ i) (sub1 j))\n              (loop 0 (sub1 j)))\n          (substring string\
+    \ 0 (add1 i)))))\n  (string-append string (reverse (substring string 0 (sub1 (string-length\
+    \ (longest-palindrome-suffix string)))))))\n", "  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-helper string suffix)\n\
+    \      (if (string=? (substring string 0 (string-length suffix)) suffix)\n   \
+    \       suffix\n          (find-longest-palindrome-suffix-helper string (substring\
+    \ suffix 1))))\n    (find-longest-palindrome-suffix-helper string (substring string\
+    \ 1)))\n  (define (reverse string)\n    (define (reverse-helper string reversed)\n\
+    \      (if (string=? string \"\")\n          reversed\n          (reverse-helper\
+    \ (substring string 1) (string-append (substring string 0 1) reversed))))\n  \
+    \  (reverse-helper string \"\"))\n  (string-append string (reverse (substring\
+    \ string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (reverse-string string)\n    (define (reverse-string-helper\
+    \ string result)\n      (if (null? string)\n          result\n          (reverse-string-helper\
+    \ (cdr string) (cons (car string) result))))\n    (reverse-string-helper string\
+    \ '()))\n  (define (find-palindrome-suffix string)\n    (define (find-palindrome-suffix-helper\
+    \ string result)\n      (if (null? string)\n          result\n          (if (equal?\
+    \ (car string) (car result))\n              (find-palindrome-suffix-helper (cdr\
+    \ string) (cons (car string) result))\n              result)))\n    (find-palindrome-suffix-helper\
+    \ string (reverse-string string)))\n  (define (append-prefix string palindrome-suffix)\n\
+    \    (append string (reverse-string palindrome-suffix)))\n  (append-prefix string\
+    \ (find-palindrome-suffix string)))\n", "  (define (reverse string)\n    (if (string=?\
+    \ string \"\")\n        \"\"\n        (string-append (reverse (substring string\
+    \ 1)) (substring string 0 1))))\n  (define (is_palindrome string)\n    (string=?\
+    \ string (reverse string)))\n  (define (longest_palindrome string)\n    (if (is_palindrome\
+    \ string)\n        string\n        (longest_palindrome (substring string 0 (-\
+    \ (string-length string) 1)))))\n  (string-append string (reverse (substring string\
+    \ 0 (- (string-length string) (string-length (longest_palindrome string)))))))\n",
+  "  (define (reverse string)\n    (if (string=? string \"\")\n        \"\"\n    \
+    \    (string-append (reverse (substring string 1)) (substring string 0 1))))\n\
+    \  (define (is_palindrome string)\n    (string=? string (reverse string)))\n \
+    \ (define (find-palindrome-suffix string)\n    (if (is_palindrome string)\n  \
+    \      string\n        (find-palindrome-suffix (substring string 1))))\n  (define\
+    \ (find-palindrome-prefix string)\n    (substring string 0 (- (string-length string)\
+    \ (string-length (find-palindrome-suffix string)))))\n  (string-append string\
+    \ (reverse (find-palindrome-prefix string))))\n", "  (define (is_palindrome? string)\n\
+    \    (define (is_palindrome?-iter string start end)\n      (if (> start end)\n\
+    \          #t\n          (if (equal? (string-ref string start) (string-ref string\
+    \ end))\n              (is_palindrome?-iter string (+ start 1) (- end 1))\n  \
+    \            #f)))\n    (is_palindrome?-iter string 0 (- (string-length string)\
+    \ 1)))\n  (define (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-iter\
+    \ string start end)\n      (if (is_palindrome? (substring string start end))\n\
+    \          (substring string start end)\n          (find-longest-palindrome-suffix-iter\
+    \ string start (- end 1))))\n    (find-longest-palindrome-suffix-iter string 0\
+    \ (- (string-length string) 1)))\n  (string-append string (string-reverse (substring\
+    \ string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (reverse-string string)\n    (define (reverse-string-helper\
+    \ string result)\n      (if (null? string)\n          result\n          (reverse-string-helper\
+    \ (cdr string) (cons (car string) result))))\n    (reverse-string-helper string\
+    \ '()))\n  (define (longest-palindrome-suffix string)\n    (define (longest-palindrome-suffix-helper\
+    \ string result)\n      (if (null? string)\n          result\n          (if (equal?\
+    \ string (reverse-string string))\n              (longest-palindrome-suffix-helper\
+    \ (cdr string) (cons (car string) result))\n              result)))\n    (longest-palindrome-suffix-helper\
+    \ string '()))\n  (define (string-prefix string)\n    (if (null? string)\n   \
+    \     '()\n        (cons (car string) (string-prefix (cdr string)))))\n  (append\
+    \ string (reverse-string (string-prefix (longest-palindrome-suffix string)))))\n",
+  "  (define (reverse-string string)\n    (apply string (reverse (string->list string))))\n\
+    \  (define (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-iter\
+    \ string suffix)\n      (if (string=? (reverse-string suffix) string)\n      \
+    \    suffix\n          (find-longest-palindrome-suffix-iter string (substring\
+    \ string 0 (add1 (string-length suffix))))))\n    (find-longest-palindrome-suffix-iter\
+    \ string (substring string 0 (add1 (string-length string)))))\n  (define (find-prefix-to-palindrome-suffix\
+    \ string)\n    (substring string 0 (sub1 (string-length (find-longest-palindrome-suffix\
+    \ string)))))\n  (string-append string (reverse-string (find-prefix-to-palindrome-suffix\
+    \ string))))\n", "  (define (reverse string)\n    (if (string=? string \"\")\n\
+    \        \"\"\n        (string-append (reverse (substring string 1)) (substring\
+    \ string 0 1))))\n  (define (is_palindrome string)\n    (string=? string (reverse\
+    \ string)))\n  (define (find-longest-palindrome string)\n    (if (is_palindrome\
+    \ string)\n        string\n        (find-longest-palindrome (substring string\
+    \ 0 (- (string-length string) 1)))))\n  (string-append string (reverse (substring\
+    \ string 0 (- (string-length string) (string-length (find-longest-palindrome string)))))))\n",
+  "  (define (find-longest-palindrome-suffix string)\n    (let loop ((string string)\n\
+    \               (longest-palindrome-suffix \"\"))\n      (if (string=? string\
+    \ \"\")\n          longest-palindrome-suffix\n          (let ((reversed-string\
+    \ (string-reverse string)))\n            (if (string=? string reversed-string)\n\
+    \                (loop (substring string 1) string)\n                (loop (substring\
+    \ string 1) longest-palindrome-suffix))))))\n  (string-append string (string-reverse\
+    \ (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (reverse string)\n    (if (empty? string)\n   \
+    \     string\n        (string-append (reverse (substring string 1)) (string (string-ref\
+    \ string 0)))))\n  (define (longest-palindrome-suffix string)\n    (define (palindrome?\
+    \ string)\n      (if (empty? string)\n          #t\n          (and (char=? (string-ref\
+    \ string 0) (string-ref string (- (string-length string) 1)))\n              \
+    \ (palindrome? (substring string 1 (- (string-length string) 1))))))\n    (if\
+    \ (empty? string)\n        string\n        (if (palindrome? string)\n        \
+    \    string\n            (longest-palindrome-suffix (substring string 1)))))\n\
+    \  (string-append string (reverse (substring string 0 (- (string-length string)\
+    \ (string-length (longest-palindrome-suffix string)))))))\n", "  (define (reverse\
+    \ string)\n    (if (string=? string \"\")\n        \"\"\n        (string-append\
+    \ (reverse (substring string 1)) (substring string 0 1))))\n  (define (longest-palindrome-suffix\
+    \ string)\n    (define (suffixes string)\n      (if (string=? string \"\")\n \
+    \         (list \"\")\n          (append (suffixes (substring string 1)) (list\
+    \ string))))\n    (define (is-palindrome? string)\n      (string=? string (reverse\
+    \ string)))\n    (define (find-palindrome-suffix string suffixes)\n      (if (null?\
+    \ suffixes)\n          \"\"\n          (if (is-palindrome? (car suffixes))\n \
+    \             (car suffixes)\n              (find-palindrome-suffix string (cdr\
+    \ suffixes)))))\n    (find-palindrome-suffix string (suffixes string)))\n  (define\
+    \ (palindrome-prefix string)\n    (substring string 0 (- (string-length string)\
+    \ (string-length (longest-palindrome-suffix string)))))\n  (string-append string\
+    \ (reverse (palindrome-prefix string))))\n", "  (define (reverse string)\n   \
+    \ (if (string=? string \"\")\n        \"\"\n        (string-append (substring\
+    \ string 1) (string (string-ref string 0)))))\n  (define (is_palindrome? string)\n\
+    \    (string=? string (reverse string)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string suffix)\n \
+    \     (if (is_palindrome? suffix)\n          suffix\n          (find-longest-palindrome-suffix-iter\
+    \ string (string-append (string-append suffix (string-ref string 0)) (string-ref\
+    \ string 0)))))\n    (find-longest-palindrome-suffix-iter string \"\"))\n  (string-append\
+    \ string (reverse (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (reverse string)\n\
+    \    (if (string=? string \"\")\n        \"\"\n        (string-append (reverse\
+    \ (substring string 1)) (substring string 0 1))))\n  (define (is_palindrome string)\n\
+    \    (string=? string (reverse string)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (if (is_palindrome string)\n        string\n        (find-longest-palindrome-suffix\
+    \ (substring string 1))))\n  (define (find-longest-palindrome-prefix string)\n\
+    \    (if (is_palindrome string)\n        string\n        (find-longest-palindrome-prefix\
+    \ (substring string 0 (- (string-length string) 1)))))\n  (string-append string\
+    \ (reverse (find-longest-palindrome-prefix (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string))))))))\n", " \
+    \ (define (is_palindrome string)\n    (define (is_palindrome-iter string left\
+    \ right)\n      (cond\n        [(>= left right) #t]\n        [(char=? (string-ref\
+    \ string left) (string-ref string right))\n         (is_palindrome-iter string\
+    \ (+ left 1) (- right 1))]\n        [else #f]))\n    (is_palindrome-iter string\
+    \ 0 (- (string-length string) 1)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string left right)\n\
+    \      (cond\n        [(>= left right) string]\n        [(is_palindrome (substring\
+    \ string left right))\n         (find-longest-palindrome-suffix-iter string left\
+    \ (+ right 1))]\n        [else (find-longest-palindrome-suffix-iter string (+\
+    \ left 1) right)]))\n    (find-longest-palindrome-suffix-iter string 0 (string-length\
+    \ string)))\n  (string-append string (string-reverse (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))))\n", " \
+    \ (define (make-palindrome-helper string)\n    (if (string=? string \"\")\n  \
+    \      \"\"\n        (let* ([first-char (substring string 0 1)]\n            \
+    \   [rest-of-string (substring string 1)])\n          (if (string=? first-char\
+    \ (substring rest-of-string -1))\n              (string-append first-char (make-palindrome-helper\
+    \ rest-of-string))\n              (string-append first-char (reverse rest-of-string))))))\n\
+    \  (make-palindrome-helper string))\n", "  (define (reverse string)\n    (if (null?\
+    \ string)\n        string\n        (append (reverse (cdr string)) (list (car string)))))\n\
+    \  (define (find-palindrome-suffix string)\n    (if (null? string)\n        string\n\
+    \        (if (equal? (car string) (last string))\n            (cons (car string)\
+    \ (find-palindrome-suffix (cdr (reverse (cdr string)))))\n            (find-palindrome-suffix\
+    \ (cdr string)))))\n  (append string (reverse (cdr (reverse (find-palindrome-suffix\
+    \ string))))))\n", "  (define (make-palindrome-helper string)\n    (if (string=?\
+    \ string \"\")\n        \"\"\n        (let* ([suffix (make-palindrome-helper (substring\
+    \ string 1))]\n               [suffix-len (string-length suffix)])\n         \
+    \ (if (string=? (substring string 0 suffix-len) (string-reverse suffix))\n   \
+    \           suffix\n              (string-append string (string-reverse (substring\
+    \ string 0 (sub1 suffix-len))))))))\n  (make-palindrome-helper string))\n", " \
+    \ (define (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-helper\
+    \ string suffix)\n      (if (string=? suffix \"\")\n          \"\"\n         \
+    \ (if (string=? (substring string 0 (string-length suffix)) suffix)\n        \
+    \      suffix\n              (find-longest-palindrome-suffix-helper string (substring\
+    \ suffix 1)))))\n    (find-longest-palindrome-suffix-helper string (substring\
+    \ string 1)))\n  (string-append string (reverse (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))))\n", " \
+    \ (define (find-longest-palindrome-suffix string)\n    (define (iter suffix)\n\
+    \      (if (string=? (substring string 0 (string-length suffix)) (reverse (substring\
+    \ string 0 (string-length suffix))))\n          suffix\n          (iter (substring\
+    \ suffix 1))))\n    (iter (substring string 1)))\n  (string-append string (reverse\
+    \ (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (reverse string)\n    (if (string=? string \"\"\
+    )\n        \"\"\n        (string-append (reverse (substring string 1)) (substring\
+    \ string 0 1))))\n  (define (find-longest-palindrome-suffix string)\n    (define\
+    \ (find-longest-palindrome-suffix-helper string suffix)\n      (if (string=? (reverse\
+    \ suffix) (substring string 0 (string-length suffix)))\n          suffix\n   \
+    \       (find-longest-palindrome-suffix-helper string (substring suffix 1))))\n\
+    \    (find-longest-palindrome-suffix-helper string string))\n  (define (find-longest-palindrome-prefix\
+    \ string)\n    (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))\n  (string-append string (reverse (find-longest-palindrome-prefix\
+    \ string))))\n", "  (define (is_palindrome? string)\n    (define (is_palindrome?-iter\
+    \ string left right)\n      (cond\n        [(empty? string) #t]\n        [(= left\
+    \ right) #t]\n        [(char=? (string-ref string left) (string-ref string right))\n\
+    \         (is_palindrome?-iter string (+ left 1) (- right 1))]\n        [else\
+    \ #f]))\n    (is_palindrome?-iter string 0 (- (string-length string) 1)))\n  (define\
+    \ (find-palindrome-suffix string)\n    (define (find-palindrome-suffix-iter string\
+    \ suffix)\n      (cond\n        [(empty? string) suffix]\n        [(is_palindrome?\
+    \ (string-append string suffix)) suffix]\n        [else (find-palindrome-suffix-iter\
+    \ (substring string 0 (- (string-length string) 1))\n                        \
+    \                   (string-append (substring string (- (string-length string)\
+    \ 1)) suffix))]))\n    (find-palindrome-suffix-iter string \"\"))\n  (define (reverse\
+    \ string)\n    (define (reverse-iter string result)\n      (cond\n        [(empty?\
+    \ string) result]\n        [else (reverse-iter (substring string 1) (string-append\
+    \ (substring string 0 1) result))]))\n    (reverse-iter string \"\"))\n  (string-append\
+    \ string (reverse (substring string 0 (- (string-length string) (string-length\
+    \ (find-palindrome-suffix string)))))))\n", "  (let* ([len (string-length string)]\n\
+    \         [rev (string-reverse string)]\n         [suffix (find-longest-palindrome-suffix\
+    \ string rev)])\n    (string-append string (substring rev 0 (- len (string-length\
+    \ suffix))))))\n", "  (define (reverse-string string)\n    (if (string=? string\
+    \ \"\")\n        \"\"\n        (string-append (reverse-string (substring string\
+    \ 1)) (substring string 0 1))))\n  (define (find-palindrome-suffix string)\n \
+    \   (define (is-palindrome? string)\n      (string=? string (reverse-string string)))\n\
+    \    (define (find-palindrome-suffix-iter string suffix)\n      (if (is-palindrome?\
+    \ suffix)\n          suffix\n          (find-palindrome-suffix-iter string (string-append\
+    \ (substring string 0 1) suffix))))\n    (find-palindrome-suffix-iter string \"\
+    \"))\n  (string-append string (reverse-string (substring string 0 (- (string-length\
+    \ string) (string-length (find-palindrome-suffix string)))))))\n", "  (let* ([len\
+    \ (string-length string)]\n         [suffix (string-suffix string (find-longest-palindromic-suffix\
+    \ string))]\n         [prefix (string-prefix string (- len (string-length suffix)))])\n\
+    \    (string-append prefix (reverse prefix) suffix)))\n", "  (define (reverse\
+    \ string)\n    (if (empty? string)\n        string\n        (string-append (reverse\
+    \ (substring string 1)) (string (string-ref string 0)))))\n  (define (longest-palindrome-suffix\
+    \ string)\n    (define (palindrome-suffix? string)\n      (if (or (empty? string)\
+    \ (= (string-length string) 1))\n          #t\n          (and (char=? (string-ref\
+    \ string 0) (string-ref string (- (string-length string) 1)))\n              \
+    \ (palindrome-suffix? (substring string 1 (- (string-length string) 1))))))\n\
+    \    (if (palindrome-suffix? string)\n        string\n        (longest-palindrome-suffix\
+    \ (substring string 1))))\n  (string-append string (reverse (substring string\
+    \ 0 (- (string-length string) (string-length (longest-palindrome-suffix string)))))))\n",
+  "  (define (reverse str)\n    (if (string=? str \"\")\n        \"\"\n        (string-append\
+    \ (reverse (substring str 1)) (substring str 0 1))))\n  (define (is_palindrome?\
+    \ str)\n    (if (string=? str \"\")\n        #t\n        (if (string=? (substring\
+    \ str 0 1) (substring str (sub1 (string-length str))))\n            (is_palindrome?\
+    \ (substring str 1 (sub1 (string-length str))))\n            #f)))\n  (define\
+    \ (find_longest_palindrome str)\n    (if (is_palindrome? str)\n        str\n \
+    \       (find_longest_palindrome (substring str 0 (sub1 (string-length str))))))\n\
+    \  (define (make_palindrome_helper str)\n    (string-append str (reverse (substring\
+    \ str 0 (sub1 (string-length (find_longest_palindrome str)))))))\n  (make_palindrome_helper\
+    \ string))\n", "  (define (find-longest-palindrome-suffix string)\n    (define\
+    \ (find-longest-palindrome-suffix-helper string suffix)\n      (if (string=? (substring\
+    \ string 0 (string-length suffix)) suffix)\n          suffix\n          (find-longest-palindrome-suffix-helper\
+    \ string (substring suffix 1))))\n    (find-longest-palindrome-suffix-helper string\
+    \ (substring string 1)))\n  (string-append string (string-reverse (substring string\
+    \ 0 (- (string-length string) (string-length (find-longest-palindrome-suffix string)))))))\n",
+  "  (define (reverse-string string)\n    (define (reverse-string-iter string reversed-string)\n\
+    \      (if (string=? string \"\")\n          reversed-string\n          (reverse-string-iter\
+    \ (substring string 1) (string-append (substring string 0 1) reversed-string))))\n\
+    \    (reverse-string-iter string \"\"))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string suffix)\n \
+    \     (if (string=? (reverse-string suffix) suffix)\n          suffix\n      \
+    \    (find-longest-palindrome-suffix-iter string (substring suffix 1))))\n   \
+    \ (find-longest-palindrome-suffix-iter string string))\n  (define (find-prefix\
+    \ string)\n    (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))\n  (string-append string (reverse-string (find-prefix string))))\n",
+  "  (define (reverse string)\n    (if (string=? string \"\")\n        \"\"\n    \
+    \    (string-append (reverse (substring string 1)) (substring string 0 1))))\n\
+    \  (define (find-palindrome-suffix string)\n    (define (find-palindrome-suffix-iter\
+    \ string suffix)\n      (if (string=? string \"\")\n          suffix\n       \
+    \   (if (string=? (reverse string) string)\n              (find-palindrome-suffix-iter\
+    \ (substring string 1) (string-append (substring string 0 1) suffix))\n      \
+    \        suffix)))\n    (find-palindrome-suffix-iter string \"\"))\n  (string-append\
+    \ string (reverse (substring string 0 (- (string-length string) (string-length\
+    \ (find-palindrome-suffix string)))))))\n", "  (define (reverse-string string)\n\
+    \    (define (reverse-string-iter string reversed-string)\n      (if (string=?\
+    \ string \"\")\n          reversed-string\n          (reverse-string-iter (substring\
+    \ string 1) (string-append (substring string 0 1) reversed-string))))\n    (reverse-string-iter\
+    \ string \"\"))\n  (define (find-longest-palindrome-suffix string)\n    (define\
+    \ (find-longest-palindrome-suffix-iter string suffix)\n      (if (string=? string\
+    \ \"\")\n          suffix\n          (if (string=? (reverse-string string) string)\n\
+    \              (find-longest-palindrome-suffix-iter (substring string 1) string)\n\
+    \              (find-longest-palindrome-suffix-iter (substring string 1) suffix))))\n\
+    \    (find-longest-palindrome-suffix-iter string \"\"))\n  (string-append string\
+    \ (reverse-string (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (make-palindrome-helper\
+    \ string)\n    (cond\n      [(empty? string) '()]\n      [(empty? (rest string))\
+    \ string]\n      [else\n       (let ([prefix (make-palindrome-helper (rest string))])\n\
+    \         (if (equal? (reverse prefix) (rest string))\n             (cons (first\
+    \ string) prefix)\n             (make-palindrome-helper (rest string))))]))\n\
+    \  (append string (reverse (make-palindrome-helper string))))\n", "  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-helper string suffix)\n\
+    \      (if (string=? suffix \"\")\n          \"\"\n          (if (string=? (substring\
+    \ string 0 (string-length suffix)) suffix)\n              suffix\n           \
+    \   (find-longest-palindrome-suffix-helper string (substring suffix 1)))))\n \
+    \   (find-longest-palindrome-suffix-helper string (substring string 1)))\n  (string-append\
+    \ string (string-reverse (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string suffix)\n \
+    \     (if (string=? suffix \"\")\n          \"\"\n          (if (string=? (substring\
+    \ string 0 (string-length suffix)) suffix)\n              suffix\n           \
+    \   (find-longest-palindrome-suffix-iter string (substring suffix 1)))))\n   \
+    \ (find-longest-palindrome-suffix-iter string (substring string 1)))\n  (define\
+    \ (reverse-prefix string)\n    (substring (string-reverse string) (string-length\
+    \ (find-longest-palindrome-suffix string))))\n  (string-append string (reverse-prefix\
+    \ string)))\n", "  (define (reverse string)\n    (if (empty? string)\n       \
+    \ string\n        (append (reverse (rest string)) (list (first string)))))\n \
+    \ (define (longest-palindrome-suffix string)\n    (if (empty? string)\n      \
+    \  string\n        (if (equal? (first string) (last string))\n            (append\
+    \ (list (first string)) (longest-palindrome-suffix (rest (reverse (rest string))))))))\n\
+    \  (append string (reverse (substring string 0 (sub1 (length (longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (reverse string)\n    (if (string=? string \"\"\
+    )\n        \"\"\n        (string-append (reverse (substring string 1)) (substring\
+    \ string 0 1))))\n  (define (is_palindrome string)\n    (string=? string (reverse\
+    \ string)))\n  (define (find-longest-palindrome-suffix string)\n    (if (is_palindrome\
+    \ string)\n        string\n        (find-longest-palindrome-suffix (substring\
+    \ string 1))))\n  (define (find-prefix-before-palindrome string palindrome-suffix)\n\
+    \    (if (string=? (substring string 0 1) (substring palindrome-suffix -1))\n\
+    \        (substring string 0 1)\n        (find-prefix-before-palindrome (substring\
+    \ string 1) palindrome-suffix)))\n  (string-append string (reverse (find-prefix-before-palindrome\
+    \ string (find-longest-palindrome-suffix string)))))\n", "  (define (find-palindrome-suffix\
+    \ string)\n    (define (is-palindrome? string)\n      (define (is-palindrome-helper?\
+    \ string start end)\n        (if (= start end)\n            #t\n            (if\
+    \ (= (string-ref string start) (string-ref string (- end 1)))\n              \
+    \  (is-palindrome-helper? string (+ start 1) (- end 1))\n                #f)))\n\
+    \    (is-palindrome-helper? string 0 (string-length string)))\n  (define (find-palindrome-prefix\
+    \ string)\n    (define (is-palindrome? string)\n      (define (is-palindrome-helper?\
+    \ string start end)\n        (if (= start end)\n            #t\n            (if\
+    \ (= (string-ref string start) (string-ref string (- end 1)))\n              \
+    \  (is-palindrome-helper? string (+ start 1) (- end 1))\n                #f)))\n\
+    \    (is-palindrome-helper? string 0 (string-length string)))\n  (define (reverse\
+    \ string)\n    (define (reverse-helper string start end)\n      (if (= start end)\n\
+    \          string\n          (string-set! string start (string-ref string (- end\
+    \ 1)))\n          (string-set! string (- end 1) (string-ref string start))\n \
+    \         (reverse-helper string (+ start 1) (- end 1))))\n    (reverse-helper\
+    \ string 0 (string-length string)))\n  (define (find-palindrome-suffix string)\n\
+    \    (define (is-palindrome? string)\n      (define (is-palindrome-helper? string\
+    \ start end)\n        (if (= start end)\n            #t\n            (if (= (string-ref\
+    \ string start) (string-ref string (- end 1)))\n                (is-palindrome-helper?\
+    \ string (+ start 1) (- end 1))\n                #f)))\n    (is-palindrome-helper?\
+    \ string 0 (string-length string)))\n  (define (find-palindrome-prefix string)\n\
+    \    (define (is-palindrome? string)\n      (define (is-palindrome-", "  (let\
+    \ loop ((string string)\n             (suffix (string-append string (reverse string))))\n\
+    \    (if (string=? string suffix)\n        string\n        (loop (substring string\
+    \ 0 (- (string-length string) 1))\n              (substring suffix 1)))))\n",
+  "  (define (reverse-string string)\n    (if (string=? string \"\")\n        \"\"\
+    \n        (string-append (reverse-string (substring string 1)) (substring string\
+    \ 0 1))))\n  (define (is-palindrome string)\n    (string=? string (reverse-string\
+    \ string)))\n  (define (find-longest-palindrome-suffix string)\n    (if (is-palindrome\
+    \ string)\n        string\n        (find-longest-palindrome-suffix (substring\
+    \ string 1))))\n  (define (find-shortest-palindrome-prefix string)\n    (if (is-palindrome\
+    \ string)\n        \"\"\n        (find-shortest-palindrome-prefix (substring string\
+    \ 0 (- (string-length string) 1)))))\n  (string-append string (reverse-string\
+    \ (find-shortest-palindrome-prefix (find-longest-palindrome-suffix string)))))\n",
+  "  (define (reverse-string string)\n    (define (reverse-string-helper string result)\n\
+    \      (if (string=? string \"\")\n          result\n          (reverse-string-helper\
+    \ (substring string 1) (string-append (substring string 0 1) result))))\n    (reverse-string-helper\
+    \ string \"\"))\n  (define (find-longest-palindrome string)\n    (define (find-longest-palindrome-helper\
+    \ string result)\n      (if (string=? string \"\")\n          result\n       \
+    \   (if (string=? (substring string 0 1) (substring string (string-length string)\
+    \ (- (string-length string) 1)))\n              (find-longest-palindrome-helper\
+    \ (substring string 1) (string-append (substring string 0 1) result))\n      \
+    \        (find-longest-palindrome-helper (substring string 1) result))))\n   \
+    \ (find-longest-palindrome-helper string \"\"))\n  (string-append string (reverse-string\
+    \ (substring string 0 (- (string-length string) (string-length (find-longest-palindrome\
+    \ string)))))))\n", "  (define (is_palindrome? string)\n    (define (iter i j)\n\
+    \      (cond ((> i j) #t)\n            ((char=? (string-ref string i) (string-ref\
+    \ string j)) (iter (+ i 1) (- j 1)))\n            (else #f)))\n    (iter 0 (-\
+    \ (string-length string) 1)))\n  (define (find-longest-palindrome-suffix string)\n\
+    \    (define (iter i)\n      (cond ((is_palindrome? (substring string i)) i)\n\
+    \            (else (iter (- i 1)))))\n    (iter (- (string-length string) 1)))\n\
+    \  (define (reverse-prefix string i)\n    (define (iter j)\n      (cond ((< j\
+    \ i) (string))\n            (else (string-append (string (string-ref string j))\
+    \ (iter (- j 1))))))\n    (iter (- i 1)))\n  (define (append-reverse-prefix string\
+    \ i)\n    (string-append string (reverse-prefix string i)))\n  (append-reverse-prefix\
+    \ string (find-longest-palindrome-suffix string)))\n", "  (define (reverse string)\n\
+    \    (if (empty? string)\n        string\n        (string-append (reverse (substring\
+    \ string 1)) (string (string-ref string 0)))))\n  (define (find-palindrome string)\n\
+    \    (define (find-palindrome-helper string i)\n      (if (or (= i 0) (= i (sub1\
+    \ (string-length string))))\n          string\n          (if (char=? (string-ref\
+    \ string i) (string-ref string (sub1 i)))\n              (find-palindrome-helper\
+    \ string (sub1 i))\n              (find-palindrome-helper string (sub1 i)))))\n\
+    \    (find-palindrome-helper string (sub1 (string-length string))))\n  (string-append\
+    \ string (reverse (substring string 0 (sub1 (string-length (find-palindrome string)))))))\n",
+  "  (define (reverse string)\n    (if (empty? string)\n        string\n        (string-append\
+    \ (reverse (substring string 1)) (string (string-ref string 0)))))\n  (define\
+    \ (is_palindrome string)\n    (if (empty? string)\n        #t\n        (and (char=?\
+    \ (string-ref string 0) (string-ref string (- (string-length string) 1)))\n  \
+    \           (is_palindrome (substring string 1 (- (string-length string) 1))))))\n\
+    \  (define (find_palindrome_suffix string)\n    (if (is_palindrome string)\n \
+    \       string\n        (find_palindrome_suffix (substring string 1))))\n  (string-append\
+    \ string (reverse (substring string 0 (- (string-length string) (string-length\
+    \ (find_palindrome_suffix string)))))))\n", "  (define (reverse string)\n    (if\
+    \ (string=? string \"\")\n        \"\"\n        (string-append (reverse (substring\
+    \ string 1)) (substring string 0 1))))\n  (define (is_palindrome string)\n   \
+    \ (string=? string (reverse string)))\n  (define (find-palindrome-suffix string)\n\
+    \    (if (is_palindrome string)\n        string\n        (find-palindrome-suffix\
+    \ (substring string 1))))\n  (string-append string (reverse (substring string\
+    \ 0 (- (string-length string) (string-length (find-palindrome-suffix string)))))))\n",
+  "  (define (make-palindrome-helper string)\n    (if (string=? string \"\")\n   \
+    \     \"\"\n        (let* ([last-char (substring string -1)]\n               [rest-of-string\
+    \ (substring string 0 -1)])\n          (if (string=? last-char (string-ref rest-of-string\
+    \ 0))\n              (string-append last-char (make-palindrome-helper rest-of-string))\n\
+    \              (string-append last-char (reverse rest-of-string))))))\n  (string-append\
+    \ string (make-palindrome-helper string)))\n", "  (define (reverse-string string)\n\
+    \    (if (string=? string \"\")\n        \"\"\n        (string-append (reverse-string\
+    \ (substring string 1)) (substring string 0 1))))\n  (define (find-palindrome-suffix\
+    \ string)\n    (define (is-palindrome? string)\n      (string=? string (reverse-string\
+    \ string)))\n    (if (is-palindrome? string)\n        string\n        (find-palindrome-suffix\
+    \ (substring string 1))))\n  (define (find-palindrome-prefix string)\n    (if\
+    \ (string=? (substring string 0 1) (substring string -1))\n        (find-palindrome-prefix\
+    \ (substring string 1 -1))\n        (substring string 0)))\n  (string-append string\
+    \ (reverse-string (find-palindrome-prefix (find-palindrome-suffix string)))))\n",
+  "  (define (reverse-string string)\n    (define (reverse-string-iter string result)\n\
+    \      (if (string=? string \"\")\n          result\n          (reverse-string-iter\
+    \ (substring string 1) (string-append (substring string 0 1) result))))\n    (reverse-string-iter\
+    \ string \"\"))\n  (define (is-palindrome? string)\n    (string=? string (reverse-string\
+    \ string)))\n  (define (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-iter\
+    \ string result)\n      (if (is-palindrome? string)\n          string\n      \
+    \    (find-longest-palindrome-suffix-iter (substring string 0 -1) result)))\n\
+    \    (find-longest-palindrome-suffix-iter string \"\"))\n  (string-append string\
+    \ (reverse-string (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-helper string suffix-length)\n\
+    \      (if (= suffix-length 0)\n          string\n          (if (equal? (substring\
+    \ string 0 suffix-length) (reverse (substring string suffix-length)))\n      \
+    \        (find-longest-palindrome-suffix-helper string (- suffix-length 1))\n\
+    \              (find-longest-palindrome-suffix-helper string (- suffix-length\
+    \ 1)))))\n    (find-longest-palindrome-suffix-helper string (string-length string)))\n\
+    \  (string-append string (reverse (substring string 0 (- (string-length string)\
+    \ (string-length (find-longest-palindrome-suffix string)))))))\n", "  (define\
+    \ (reverse string)\n    (if (empty? string)\n        string\n        (string-append\
+    \ (reverse (substring string 1)) (string (string-ref string 0)))))\n  (define\
+    \ (find-longest-palindrome-suffix string)\n    (define (is-palindrome? string)\n\
+    \      (if (empty? string)\n          #t\n          (and (char=? (string-ref string\
+    \ 0) (string-ref string (- (string-length string) 1)))\n               (is-palindrome?\
+    \ (substring string 1 (- (string-length string) 1))))))\n    (if (is-palindrome?\
+    \ string)\n        string\n        (find-longest-palindrome-suffix (substring\
+    \ string 0 (- (string-length string) 1)))))\n  (string-append string (reverse\
+    \ (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (reverse string)\n    (if (empty? string)\n   \
+    \     string\n        (string-append (reverse (substring string 1)) (string (string-ref\
+    \ string 0)))))\n  (define (is_palindrome string)\n    (if (empty? string)\n \
+    \       #t\n        (and (equal? (string-ref string 0) (string-ref string (- (string-length\
+    \ string) 1)))\n             (is_palindrome (substring string 1 (- (string-length\
+    \ string) 1))))))\n  (define (longest_palindrome string)\n    (if (is_palindrome\
+    \ string)\n        string\n        (longest_palindrome (substring string 0 (-\
+    \ (string-length string) 1)))))\n  (define (make_palindrome_helper string)\n \
+    \   (if (is_palindrome string)\n        string\n        (string-append string\
+    \ (reverse (substring string 0 (- (string-length string) (string-length (longest_palindrome\
+    \ string))))))))\n  (make_palindrome_helper string))\n", "  (define (reverse string)\n\
+    \    (if (empty? string)\n        string\n        (string-append (reverse (substring\
+    \ string 1)) (string (string-ref string 0)))))\n  (define (find-palindrome-suffix\
+    \ string)\n    (if (empty? string)\n        string\n        (if (equal? (reverse\
+    \ (substring string 0 (add1 (string-length string)))) string)\n            string\n\
+    \            (find-palindrome-suffix (substring string 0 (sub1 (string-length\
+    \ string)))))))\n  (string-append string (reverse (substring string 0 (sub1 (string-length\
+    \ (find-palindrome-suffix string)))))))\n", "  (define (find-palindrome-suffix\
+    \ string)\n    (cond\n      [(empty? string) empty]\n      [(equal? (first string)\
+    \ (last string))\n       (cons (first string) (find-palindrome-suffix (bf string\
+    \ (rest string))))]\n      [else empty]))\n  (define (reverse-prefix string)\n\
+    \    (cond\n      [(empty? string) empty]\n      [else (cons (last string) (reverse-prefix\
+    \ (bf string)))]))\n  (append string (reverse-prefix (find-palindrome-suffix string))))\n",
+  "  (define (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-helper\
+    \ string suffix)\n      (if (string=? suffix \"\")\n          suffix\n       \
+    \   (if (string=? (substring string 0 (string-length suffix)) suffix)\n      \
+    \        suffix\n              (find-longest-palindrome-suffix-helper string (substring\
+    \ suffix 1)))))\n    (find-longest-palindrome-suffix-helper string (substring\
+    \ string (string-length string))))\n  (string-append string (string-reverse (substring\
+    \ string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (reverse-string string)\n    (define (reverse-string-iter\
+    \ string reversed-string)\n      (if (string=? string \"\")\n          reversed-string\n\
+    \          (reverse-string-iter (substring string 1) (string-append (substring\
+    \ string 0 1) reversed-string))))\n    (reverse-string-iter string \"\"))\n  (define\
+    \ (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-iter\
+    \ string suffix)\n      (if (string=? string \"\")\n          suffix\n       \
+    \   (if (string=? (substring string 0 1) (substring string (string-length string)\
+    \ (- (string-length string) 1)))\n              (find-longest-palindrome-suffix-iter\
+    \ (substring string 1) (substring string 0 1))\n              (find-longest-palindrome-suffix-iter\
+    \ (substring string 1) suffix))))\n    (find-longest-palindrome-suffix-iter string\
+    \ \"\"))\n  (define (append-reverse-prefix string)\n    (string-append string\
+    \ (reverse-string (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n  (append-reverse-prefix string))\n",
+  "  (define (reverse string)\n    (define (reverse-iter string result)\n      (if\
+    \ (null? string)\n          result\n          (reverse-iter (cdr string) (cons\
+    \ (car string) result))))\n    (reverse-iter string '()))\n  (define (is-palindrome\
+    \ string)\n    (define (is-palindrome-iter string left right)\n      (if (null?\
+    \ left)\n          #t\n          (if (equal? (car left) (car right))\n       \
+    \       (is-palindrome-iter string (cdr left) (cdr right))\n              #f)))\n\
+    \    (is-palindrome-iter string string (reverse string)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string suffix)\n \
+    \     (if (is-palindrome suffix)\n          suffix\n          (find-longest-palindrome-suffix-iter\
+    \ string (cdr suffix))))\n    (find-longest-palindrome-suffix-iter string string))\n\
+    \  (define (append-reverse-prefix string suffix)\n    (append string (reverse\
+    \ (take string (sub1 (length suffix))))))\n  (append-reverse-prefix string (find-longest-palindrome-suffix\
+    \ string)))\n", "  (define (reverse-string string)\n    (define (reverse-string-iter\
+    \ string result)\n      (if (string=? string \"\")\n          result\n       \
+    \   (reverse-string-iter (substring string 1) (string-append (substring string\
+    \ 0 1) result))))\n    (reverse-string-iter string \"\"))\n  (define (is-palindrome\
+    \ string)\n    (string=? string (reverse-string string)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string result)\n \
+    \     (if (is-palindrome string)\n          string\n          (find-longest-palindrome-suffix-iter\
+    \ (substring string 0 -1) result)))\n    (find-longest-palindrome-suffix-iter\
+    \ string \"\"))\n  (define (find-prefix-before-palindrome-suffix string)\n   \
+    \ (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))\n  (string-append string (reverse-string (find-prefix-before-palindrome-suffix\
+    \ string))))\n", "  (define (reverse string)\n    (if (empty? string)\n      \
+    \  string\n        (append (reverse (rest string)) (list (first string)))))\n\
+    \  (define (is_palindrome string)\n    (if (empty? string)\n        #t\n     \
+    \   (and (equal? (first string) (last string))\n             (is_palindrome (rest\
+    \ (butlast string))))))\n  (define (find-palindrome-suffix string)\n    (if (is_palindrome\
+    \ string)\n        string\n        (find-palindrome-suffix (rest string))))\n\
+    \  (define (find-palindrome-prefix string)\n    (if (is_palindrome string)\n \
+    \       string\n        (find-palindrome-prefix (butlast string))))\n  (append\
+    \ string (reverse (find-palindrome-prefix (find-palindrome-suffix string)))))\n",
+  "  (define (reverse string)\n    (if (null? string)\n        '()\n        (append\
+    \ (reverse (cdr string)) (list (car string)))))\n  (define (find-longest-palindrome\
+    \ string)\n    (define (find-longest-palindrome-helper string start end)\n   \
+    \   (if (or (= start end) (= start (- end 1)))\n          (list start end)\n \
+    \         (if (equal? (string-ref string start) (string-ref string (- end 1)))\n\
+    \              (find-longest-palindrome-helper string (+ start 1) (- end 1))\n\
+    \              (list start end))))\n    (apply values (find-longest-palindrome-helper\
+    \ string 0 (string-length string))))\n  (define (append-reverse-prefix string\
+    \ start end)\n    (string-append (substring string 0 start) (reverse (substring\
+    \ string 0 start)) (substring string start end)))\n  (define (make-palindrome-helper\
+    \ string)\n    (define (make-palindrome-helper-helper string start end)\n    \
+    \  (if (= start end)\n          (append-reverse-prefix string start end)\n   \
+    \       (if (equal? (string-ref string start) (string-ref string (- end 1)))\n\
+    \              (make-palindrome-helper-helper string (+ start 1) (- end 1))\n\
+    \              (append-reverse-prefix string start end))))\n    (make-palindrome-helper-helper\
+    \ string 0 (string-length string)))\n  (make-palindrome-helper string))\n", " \
+    \ (define (reverse string)\n    (define (reverse-iter string result)\n      (if\
+    \ (empty? string)\n          result\n          (reverse-iter (rest string) (cons\
+    \ (first string) result))))\n    (reverse-iter string '()))\n  (define (is-palindrome\
+    \ string)\n    (if (empty? string)\n        #t\n        (and (equal? (first string)\
+    \ (last string))\n             (is-palindrome (rest (butlast string))))))\n  (define\
+    \ (find-longest-palindrome string)\n    (define (find-longest-palindrome-iter\
+    \ string result)\n      (if (empty? string)\n          result\n          (if (is-palindrome\
+    \ string)\n              (find-longest-palindrome-iter (rest string) string)\n\
+    \              (find-longest-palindrome-iter (rest string) result))))\n    (find-longest-palindrome-iter\
+    \ string '()))\n  (define (append-reverse-prefix string)\n    (append string (reverse\
+    \ (take (length string) string))))\n  (append-reverse-prefix (find-longest-palindrome\
+    \ string)))\n", "  (define (reverse-string string)\n    (define (reverse-string-iter\
+    \ string reversed)\n      (if (string=? string \"\")\n          reversed\n   \
+    \       (reverse-string-iter (substring string 1) (string-append (substring string\
+    \ 0 1) reversed))))\n    (reverse-string-iter string \"\"))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string suffix)\n \
+    \     (if (string=? string suffix)\n          suffix\n          (if (string=?\
+    \ (reverse-string string) string)\n              string\n              (find-longest-palindrome-suffix-iter\
+    \ (substring string 0 -1) (string-append (substring string -1) suffix)))))\n \
+    \   (find-longest-palindrome-suffix-iter string \"\"))\n  (define (find-prefix-to-palindrome-suffix\
+    \ string)\n    (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))\n  (string-append string (reverse-string (find-prefix-to-palindrome-suffix\
+    \ string))))\n", "  (define (reverse-string string)\n    (define (reverse-string-iter\
+    \ string result)\n      (if (string=? string \"\")\n          result\n       \
+    \   (reverse-string-iter (substring string 1) (string-append (substring string\
+    \ 0 1) result))))\n    (reverse-string-iter string \"\"))\n  (define (find-palindrome-suffix\
+    \ string)\n    (define (find-palindrome-suffix-iter string suffix)\n      (if\
+    \ (string=? (reverse-string suffix) suffix)\n          suffix\n          (find-palindrome-suffix-iter\
+    \ string (substring string 0 (- (string-length string) 1)))))\n    (find-palindrome-suffix-iter\
+    \ string string))\n  (string-append string (reverse-string (substring string 0\
+    \ (- (string-length string) (string-length (find-palindrome-suffix string)))))))\n",
+  "  (define (reverse-string string)\n    (if (string=? string \"\")\n        \"\"\
+    \n        (string-append (reverse-string (substring string 1)) (substring string\
+    \ 0 1))))\n  (define (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-helper\
+    \ string suffix)\n      (if (string=? (reverse-string suffix) (substring string\
+    \ 0 (string-length suffix)))\n          suffix\n          (find-longest-palindrome-suffix-helper\
+    \ string (substring suffix 1))))\n    (find-longest-palindrome-suffix-helper string\
+    \ string))\n  (string-append string (reverse-string (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))))\n", " \
+    \ (define (reverse string)\n    (if (empty? string)\n        string\n        (string-append\
+    \ (reverse (substring string 1)) (string (string-ref string 0)))))\n  (define\
+    \ (find-longest-palindrome-suffix string)\n    (define (is-palindrome? string)\n\
+    \      (if (empty? string)\n          #t\n          (and (is-palindrome? (substring\
+    \ string 1 (sub1 (string-length string))))\n               (char=? (string-ref\
+    \ string 0) (string-ref string (sub1 (string-length string)))))))\n    (define\
+    \ (find-longest-palindrome-suffix-iter string suffix)\n      (if (empty? string)\n\
+    \          suffix\n          (if (is-palindrome? string)\n              string\n\
+    \              (find-longest-palindrome-suffix-iter (substring string 1) (string-append\
+    \ (string (string-ref string 0)) suffix)))))\n    (find-longest-palindrome-suffix-iter\
+    \ string \"\"))\n  (string-append string (reverse (substring string 0 (sub1 (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (make-palindrome-helper\
+    \ string)\n    (if (string=? string \"\")\n        \"\"\n        (let* ([len (string-length\
+    \ string)]\n               [half-len (quotient len 2)]\n               [suffix\
+    \ (substring string half-len len)]\n               [prefix (substring string 0\
+    \ half-len)])\n          (if (string=? suffix (string-reverse prefix))\n     \
+    \         (string-append string (string-reverse prefix))\n              (make-palindrome-helper\
+    \ (substring string 0 (- len 1)))))))\n  (make-palindrome-helper string))\n",
+  "  (define (reverse-string string)\n    (if (string=? string \"\")\n        \"\"\
+    \n        (string-append (reverse-string (substring string 1)) (substring string\
+    \ 0 1))))\n  (define (find-longest-palindrome-suffix string)\n    (if (string=?\
+    \ string \"\")\n        \"\"\n        (if (string=? (reverse-string string) string)\n\
+    \            string\n            (find-longest-palindrome-suffix (substring string\
+    \ 0 (- (string-length string) 1))))))\n  (define (find-shortest-palindrome-prefix\
+    \ string)\n    (if (string=? string \"\")\n        \"\"\n        (if (string=?\
+    \ (reverse-string string) string)\n            string\n            (find-shortest-palindrome-prefix\
+    \ (substring string 1)))))\n  (string-append string (reverse-string (find-shortest-palindrome-prefix\
+    \ (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string))))))))\n", "  (define (is_palindrome? string)\n    (define (is_palindrome?-iter\
+    \ string left right)\n      (cond ((= left right) #t)\n            ((= (string-ref\
+    \ string left) (string-ref string right))\n             (is_palindrome?-iter string\
+    \ (+ left 1) (- right 1)))\n            (else #f)))\n    (is_palindrome?-iter\
+    \ string 0 (- (string-length string) 1)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string left right)\n\
+    \      (cond ((= left right) (substring string left right))\n            ((is_palindrome?\
+    \ (substring string left right))\n             (find-longest-palindrome-suffix-iter\
+    \ string left (- right 1)))\n            (else (find-longest-palindrome-suffix-iter\
+    \ string (+ left 1) right))))\n    (find-longest-palindrome-suffix-iter string\
+    \ 0 (- (string-length string) 1)))\n  (string-append string (string-reverse (substring\
+    \ string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (is_palindrome? string)\n    (define (is_palindrome?-iter\
+    \ string left right)\n      (cond\n        [(= left right) #t]\n        [(= (string-ref\
+    \ string left) (string-ref string right))\n         (is_palindrome?-iter string\
+    \ (+ left 1) (- right 1))]\n        [else #f]))\n    (is_palindrome?-iter string\
+    \ 0 (- (string-length string) 1)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string left right)\n\
+    \      (cond\n        [(= left right) (string-length string)]\n        [(is_palindrome?\
+    \ (substring string left right))\n         (find-longest-palindrome-suffix-iter\
+    \ string left (- right 1))]\n        [else (find-longest-palindrome-suffix-iter\
+    \ string (+ left 1) (- (string-length string) 1))]))\n    (find-longest-palindrome-suffix-iter\
+    \ string 0 (- (string-length string) 1)))\n  (define (reverse-prefix string)\n\
+    \    (define (reverse-prefix-iter string left right)\n      (cond\n        [(=\
+    \ left right) (string)]\n        [else (string-append (string-append (string-append\
+    \ (substring string 0 left) (string-reverse (substring string left right))) (reverse-prefix-iter\
+    \ string (+ left 1) right)))]))\n    (reverse-prefix-iter string 0 (- (string-length\
+    \ string) 1)))\n  (string-append string (reverse-prefix string (- (find-longest-palindrome-suffix\
+    \ string) 1))))\n", "  (define (find-longest-palindrome-suffix string)\n    (let\
+    \ loop ((i (sub1 (string-length string))))\n      (if (negative? i)\n        \
+    \  \"\"\n          (if (string=? (substring string 0 i) (substring string i (add1\
+    \ i)))\n              (substring string i (add1 i))\n              (loop (sub1\
+    \ i))))))\n  (string-append string (reverse (substring string 0 (sub1 (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (is_palindrome?\
+    \ string)\n    (define (helper string)\n      (if (empty? string)\n          #t\n\
+    \          (and (equal? (first string) (last string))\n               (helper\
+    \ (rest (butlast string))))))\n    (helper string))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (helper string)\n      (if (is_palindrome? string)\n  \
+    \        string\n          (helper (rest string))))\n    (helper string))\n  (define\
+    \ (reverse string)\n    (define (helper string result)\n      (if (empty? string)\n\
+    \          result\n          (helper (rest string) (append result (list (first\
+    \ string))))))\n    (helper string '()))\n  (append string (reverse (find-longest-palindrome-suffix\
+    \ string))))\n", "  (define (reverse-string string)\n    (if (string=? string\
+    \ \"\")\n        \"\"\n        (string-append (reverse-string (substring string\
+    \ 1)) (substring string 0 1))))\n  (define (find-longest-palindrome-suffix string)\n\
+    \    (define (find-longest-palindrome-suffix-iter string suffix)\n      (if (string=?\
+    \ (reverse-string suffix) (substring string 0 (string-length suffix)))\n     \
+    \     suffix\n          (find-longest-palindrome-suffix-iter string (substring\
+    \ suffix 1))))\n    (find-longest-palindrome-suffix-iter string string))\n  (string-append\
+    \ string (reverse-string (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (reverse-string\
+    \ string)\n    (let loop ((string string)\n               (result '()))\n    \
+    \  (if (null? string)\n          result\n          (loop (cdr string)\n      \
+    \          (cons (car string) result)))))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (let loop ((string string)\n               (result '()))\n    \
+    \  (if (null? string)\n          result\n          (if (equal? (reverse-string\
+    \ string) string)\n              (loop (cdr string)\n                    (cons\
+    \ (car string) result))\n              result))))\n  (let ((palindrome-suffix\
+    \ (find-longest-palindrome-suffix string)))\n    (append string (reverse-string\
+    \ (take string (sub1 (length palindrome-suffix)))))))\n", "  (define (reverse-string\
+    \ string)\n    (if (string=? string \"\")\n        \"\"\n        (string-append\
+    \ (reverse-string (substring string 1)) (substring string 0 1))))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-helper string suffix)\n\
+    \      (if (string=? string suffix)\n          suffix\n          (if (string=?\
+    \ (string-append suffix (reverse-string suffix)) string)\n              suffix\n\
+    \              (find-longest-palindrome-suffix-helper string (substring suffix\
+    \ 1)))))\n    (find-longest-palindrome-suffix-helper string string))\n  (string-append\
+    \ string (reverse-string (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (make-palindrome-helper\
+    \ string)\n    (define (reverse-string string)\n      (define (reverse-string-helper\
+    \ string reversed-string)\n        (if (empty? string)\n            reversed-string\n\
+    \            (reverse-string-helper (rest string) (append reversed-string (list\
+    \ (first string))))))\n      (reverse-string-helper string '()))\n    (define\
+    \ (find-longest-palindrome-suffix string)\n      (define (find-longest-palindrome-suffix-helper\
+    \ string reversed-string)\n        (if (empty? string)\n            reversed-string\n\
+    \            (if (equal? string reversed-string)\n                string\n   \
+    \             (find-longest-palindrome-suffix-helper (rest string) (append reversed-string\
+    \ (list (first string)))))))\n      (find-longest-palindrome-suffix-helper string\
+    \ '()))\n    (append string (reverse-string (find-longest-palindrome-suffix string))))\n\
+    \  (make-palindrome-helper string))\n", "  (define (is_palindrome? string)\n \
+    \   (define (is_palindrome?-iter string i j)\n      (cond\n        [(> i j) #t]\n\
+    \        [(not (equal? (string-ref string i) (string-ref string j))) #f]\n   \
+    \     [else (is_palindrome?-iter string (+ i 1) (- j 1))]))\n    (is_palindrome?-iter\
+    \ string 0 (- (string-length string) 1)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string i)\n      (cond\n\
+    \        [(is_palindrome? (substring string i)) (substring string i)]\n      \
+    \  [else (find-longest-palindrome-suffix-iter string (- i 1))]))\n    (find-longest-palindrome-suffix-iter\
+    \ string (- (string-length string) 1)))\n  (define (reverse-string string)\n \
+    \   (define (reverse-string-iter string i j)\n      (cond\n        [(> i j) string]\n\
+    \        [else (reverse-string-iter (string-set! string i (string-ref string j))\
+    \ (+ i 1) (- j 1))]))\n    (reverse-string-iter string 0 (- (string-length string)\
+    \ 1)))\n  (string-append string (reverse-string (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))))\n", " \
+    \ (define (find-palindrome-suffix string)\n    (define (find-palindrome-suffix-iter\
+    \ string suffix)\n      (if (string=? (substring string 0 (string-length suffix))\
+    \ suffix)\n          suffix\n          (find-palindrome-suffix-iter string (substring\
+    \ suffix 1))))\n    (find-palindrome-suffix-iter string (substring string 1)))\n\
+    \  (string-append string (reverse (substring string 0 (- (string-length string)\
+    \ (string-length (find-palindrome-suffix string)))))))\n", "  (define (reverse\
+    \ string)\n    (if (string=? string \"\")\n        \"\"\n        (string-append\
+    \ (substring string 1) (string (string-ref string 0)))))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string suffix)\n \
+    \     (if (string=? string suffix)\n          suffix\n          (if (string=?\
+    \ (string-append suffix (reverse (substring string 0 (string-length suffix))))\
+    \ string)\n              suffix\n              (find-longest-palindrome-suffix-iter\
+    \ string (substring suffix 1)))))\n    (find-longest-palindrome-suffix-iter string\
+    \ (substring string 1)))\n  (string-append string (reverse (substring string 0\
+    \ (string-length (find-longest-palindrome-suffix string))))))\n", "  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-aux string i j)\n     \
+    \ (if (or (= i 0) (= j (string-length string)))\n          (substring string i\
+    \ j)\n          (if (char=? (string-ref string i) (string-ref string j))\n   \
+    \           (find-longest-palindrome-suffix-aux string (- i 1) (+ j 1))\n    \
+    \          (find-longest-palindrome-suffix-aux string (- i 1) j))))\n    (find-longest-palindrome-suffix-aux\
+    \ string (- (string-length string) 1) (string-length string)))\n  (string-append\
+    \ string (string-reverse (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (reverse string)\n\
+    \    (if (string=? string \"\")\n        \"\"\n        (string-append (reverse\
+    \ (substring string 1)) (substring string 0 1))))\n  (define (is_palindrome string)\n\
+    \    (string=? string (reverse string)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (if (is_palindrome string)\n        string\n        (find-longest-palindrome-suffix\
+    \ (substring string 1))))\n  (define (find-prefix-before-palindrome-suffix string)\n\
+    \    (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))\n  (string-append string (reverse (find-prefix-before-palindrome-suffix\
+    \ string))))\n", "  (define (reverse string)\n    (let loop ((string string)\n\
+    \               (result '()))\n      (if (null? string)\n          result\n  \
+    \        (loop (cdr string)\n                (cons (car string) result)))))\n\
+    \  (define (is_palindrome? string)\n    (let loop ((string string)\n         \
+    \      (reverse (reverse string)))\n      (if (null? string)\n          #t\n \
+    \         (if (equal? (car string) (car reverse))\n              (loop (cdr string)\n\
+    \                    (cdr reverse))\n              #f))))\n  (define (find-longest-palindrome\
+    \ string)\n    (let loop ((string string)\n               (result '()))\n    \
+    \  (if (null? string)\n          result\n          (if (is_palindrome? string)\n\
+    \              string\n              (loop (cdr string)\n                    result)))))\n\
+    \  (define (append-reverse string)\n    (append string (reverse string)))\n  (define\
+    \ (find-prefix string)\n    (let loop ((string string)\n               (result\
+    \ '()))\n      (if (null? string)\n          result\n          (loop (cdr string)\n\
+    \                (cons (car string) result)))))\n  (append-reverse (find-prefix\
+    \ (find-longest-palindrome string))))\n", "  (define (is_palindrome? string)\n\
+    \    (define (is_palindrome?-iter string start end)\n      (cond ((= start end)\
+    \ #t)\n            ((= (string-ref string start) (string-ref string end))\n  \
+    \           (is_palindrome?-iter string (+ start 1) (- end 1)))\n            (else\
+    \ #f)))\n    (is_palindrome?-iter string 0 (- (string-length string) 1)))\n  (define\
+    \ (find-palindrome-suffix string)\n    (define (find-palindrome-suffix-iter string\
+    \ start end)\n      (cond ((= start end) (substring string start end))\n     \
+    \       ((is_palindrome? (substring string start end))\n             (find-palindrome-suffix-iter\
+    \ string start (- end 1)))\n            (else (find-palindrome-suffix-iter string\
+    \ (+ start 1) end))))\n    (find-palindrome-suffix-iter string 0 (- (string-length\
+    \ string) 1)))\n  (define (reverse-prefix string)\n    (define (reverse-prefix-iter\
+    \ string start end)\n      (cond ((= start end) \"\")\n            (else (string-append\
+    \ (substring string start end)\n                                 (reverse-prefix-iter\
+    \ string (+ start 1) end)))))\n    (reverse-prefix-iter string 0 (- (string-length\
+    \ string) 1)))\n  (string-append string (reverse-prefix (find-palindrome-suffix\
+    \ string))))\n", "  (define (reverse-string string)\n    (define (reverse-string-iter\
+    \ string result)\n      (if (string=? string \"\")\n          result\n       \
+    \   (reverse-string-iter (substring string 1) (string-append (substring string\
+    \ 0 1) result))))\n    (reverse-string-iter string \"\"))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string result)\n \
+    \     (if (string=? string \"\")\n          result\n          (if (string=? (reverse-string\
+    \ string) string)\n              (find-longest-palindrome-suffix-iter (substring\
+    \ string 1) string)\n              (find-longest-palindrome-suffix-iter (substring\
+    \ string 1) result))))\n    (find-longest-palindrome-suffix-iter string \"\"))\n\
+    \  (string-append string (reverse-string (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))))\n", " \
+    \ (define (is_palindrome? string)\n    (define (is_palindrome?-iter string left\
+    \ right)\n      (if (= left right)\n          #t\n          (if (char=? (string-ref\
+    \ string left) (string-ref string right))\n              (is_palindrome?-iter\
+    \ string (+ left 1) (- right 1))\n              #f)))\n    (is_palindrome?-iter\
+    \ string 0 (- (string-length string) 1)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string left right)\n\
+    \      (if (is_palindrome? (substring string left right))\n          (find-longest-palindrome-suffix-iter\
+    \ string left (- right 1))\n          (substring string left right)))\n    (find-longest-palindrome-suffix-iter\
+    \ string 0 (string-length string)))\n  (string-append string (string-reverse (substring\
+    \ string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (reverse string)\n    (if (string=? string \"\"\
+    )\n        \"\"\n        (string-append (reverse (substring string 1)) (substring\
+    \ string 0 1))))\n  (define (is_palindrome string)\n    (string=? string (reverse\
+    \ string)))\n  (define (find-longest-palindrome-suffix string)\n    (if (is_palindrome\
+    \ string)\n        string\n        (find-longest-palindrome-suffix (substring\
+    \ string 1))))\n  (define (find-shortest-palindrome-prefix string)\n    (if (is_palindrome\
+    \ string)\n        \"\"\n        (find-shortest-palindrome-prefix (substring string\
+    \ 0 (- (string-length string) 1)))))\n  (string-append string (reverse (find-shortest-palindrome-prefix\
+    \ (find-longest-palindrome-suffix string)))))\n", "  (define (reverse string)\n\
+    \    (if (empty? string)\n        string\n        (string-append (reverse (substring\
+    \ string 1)) (string (string-ref string 0)))))\n  (define (is_palindrome? string)\n\
+    \    (if (empty? string)\n        #t\n        (and (equal? (string-ref string\
+    \ 0) (string-ref string (- (string-length string) 1)))\n             (is_palindrome?\
+    \ (substring string 1 (- (string-length string) 1))))))\n  (define (find_palindrome_suffix\
+    \ string)\n    (if (is_palindrome? string)\n        string\n        (find_palindrome_suffix\
+    \ (substring string 1))))\n  (define (find_palindrome_prefix string)\n    (if\
+    \ (is_palindrome? string)\n        string\n        (find_palindrome_prefix (substring\
+    \ string 0 (- (string-length string) 1)))))\n  (string-append string (reverse\
+    \ (find_palindrome_prefix (find_palindrome_suffix string)))))\n", "  (define (is_palindrome?\
+    \ string)\n    (define (is_palindrome?-iter string i j)\n      (if (> i j)\n \
+    \         #t\n          (if (equal? (string-ref string i) (string-ref string j))\n\
+    \              (is_palindrome?-iter string (+ i 1) (- j 1))\n              #f)))\n\
+    \    (is_palindrome?-iter string 0 (- (string-length string) 1)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string i)\n      (if\
+    \ (is_palindrome? (substring string i (string-length string)))\n          (substring\
+    \ string i (string-length string))\n          (find-longest-palindrome-suffix-iter\
+    \ string (- i 1))))\n    (find-longest-palindrome-suffix-iter string (- (string-length\
+    \ string) 1)))\n  (define (reverse-string string)\n    (define (reverse-string-iter\
+    \ string i j)\n      (if (> i j)\n          string\n          (string-set! string\
+    \ i (string-ref string j))\n          (string-set! string j (string-ref string\
+    \ i))\n          (reverse-string-iter string (+ i 1) (- j 1))))\n    (reverse-string-iter\
+    \ string 0 (- (string-length string) 1)))\n  (string-append string (reverse-string\
+    \ (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (reverse-string string)\n    (if (empty? string)\n\
+    \        string\n        (string-append (reverse-string (substring string 1))\
+    \ (string (string-ref string 0)))))\n  (define (find-palindrome-suffix string)\n\
+    \    (if (empty? string)\n        string\n        (if (equal? (reverse-string\
+    \ string) string)\n            string\n            (find-palindrome-suffix (substring\
+    \ string 1)))))\n  (string-append string (reverse-string (substring string 0 (sub1\
+    \ (string-length (find-palindrome-suffix string)))))))\n", "  (define (find-longest-palindrome-suffix\
+    \ string)\n    (let loop ((i 0) (j (string-length string)))\n      (if (= i j)\n\
+    \          (substring string 0 i)\n          (if (and (char=? (string-ref string\
+    \ i) (string-ref string (- j 1)))\n                   (string=? (substring string\
+    \ i j) (reverse (substring string i j))))\n              (loop (+ i 1) (- j 1))\n\
+    \              (substring string i j)))))\n  (string-append string (reverse (substring\
+    \ string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (find-palindrome-suffix string)\n    (let loop\
+    \ ([string string]\n               [suffix '()])\n      (if (empty? string)\n\
+    \          suffix\n          (loop (rest string)\n                (if (equal?\
+    \ (first string) (first suffix))\n                    (cons (first string) suffix)\n\
+    \                    '())))))\n  (define (reverse-prefix string)\n    (let loop\
+    \ ([string string]\n               [prefix '()])\n      (if (empty? string)\n\
+    \          prefix\n          (loop (rest string)\n                (cons (first\
+    \ string) prefix)))))\n  (append string (reverse-prefix (find-palindrome-suffix\
+    \ string))))\n", "  (define (reverse string)\n    (if (null? string)\n       \
+    \ string\n        (string-append (reverse (substring string 1)) (string (string-ref\
+    \ string 0)))))\n  (define (is_palindrome string)\n    (if (or (null? string)\
+    \ (= (string-length string) 1))\n        #t\n        (and (char=? (string-ref\
+    \ string 0) (string-ref string (- (string-length string) 1)))\n             (is_palindrome\
+    \ (substring string 1 (- (string-length string) 1))))))\n  (define (find_longest_palindrome_suffix\
+    \ string)\n    (if (is_palindrome string)\n        string\n        (find_longest_palindrome_suffix\
+    \ (substring string 1))))\n  (string-append string (reverse (substring string\
+    \ 0 (- (string-length string) (string-length (find_longest_palindrome_suffix string)))))))\n",
+  "  (define (reverse string)\n    (let loop ((string string)\n               (result\
+    \ '()))\n      (if (null? string)\n          result\n          (loop (cdr string)\n\
+    \                (cons (car string) result)))))\n  (define (longest-palindrome-suffix\
+    \ string)\n    (let loop ((string string)\n               (result '()))\n    \
+    \  (if (null? string)\n          result\n          (if (equal? (reverse (cdr string))\
+    \ (cdr result))\n              (loop (cdr string)\n                    (cons (car\
+    \ string) result))\n              result))))\n  (define (append-reverse-prefix\
+    \ string)\n    (append string (reverse (cdr string))))\n  (append-reverse-prefix\
+    \ (append string (longest-palindrome-suffix string))))\n", "  (define (reverse\
+    \ string)\n    (if (empty? string)\n        string\n        (string-append (reverse\
+    \ (substring string 1)) (string (string-ref string 0)))))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (is-palindrome? string)\n      (if (empty? string)\n  \
+    \        #t\n          (and (equal? (string-ref string 0) (string-ref string (-\
+    \ (string-length string) 1)))\n               (is-palindrome? (substring string\
+    \ 1 (- (string-length string) 1))))))\n    (if (is-palindrome? string)\n     \
+    \   string\n        (find-longest-palindrome-suffix (substring string 0 (- (string-length\
+    \ string) 1)))))\n  (string-append string (reverse (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))))\n", " \
+    \ (define (reverse string)\n    (if (string=? string \"\")\n        \"\"\n   \
+    \     (string-append (reverse (substring string 1)) (substring string 0 1))))\n\
+    \  (define (find-longest-palindrome string)\n    (let loop ((i (string-length\
+    \ string))\n               (j 0))\n      (if (= i 0)\n          (substring string\
+    \ j)\n          (if (string=? (substring string j i) (reverse (substring string\
+    \ j i)))\n              (substring string j i)\n              (loop (- i 1) j)))))\n\
+    \  (let ((longest-palindrome (find-longest-palindrome string)))\n    (string-append\
+    \ string (reverse (substring string 0 (- (string-length string) (string-length\
+    \ longest-palindrome)))))))\n", "  (define (is_palindrome string)\n    (define\
+    \ (helper string1 string2)\n      (cond ((and (empty? string1) (empty? string2))\
+    \ #t)\n            ((and (empty? string1) (not (empty? string2))) #f)\n      \
+    \      ((and (not (empty? string1)) (empty? string2)) #f)\n            ((and (not\
+    \ (empty? string1)) (not (empty? string2)))\n             (cond ((equal? (first\
+    \ string1) (first string2)) (helper (rest string1) (rest string2)))\n        \
+    \           (else #f)))))\n    (helper string (reverse string)))\n  (define (helper\
+    \ string)\n    (cond ((empty? string) string)\n          ((is_palindrome string)\
+    \ string)\n          (else (helper (rest string)))))\n  (append string (reverse\
+    \ (helper string))))\n", "  (define (reverse-string string)\n    (if (string=?\
+    \ string \"\")\n        \"\"\n        (string-append (reverse-string (substring\
+    \ string 1)) (substring string 0 1))))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string suffix)\n \
+    \     (if (string=? (reverse-string suffix) (substring string 0 (string-length\
+    \ suffix)))\n          suffix\n          (find-longest-palindrome-suffix-iter\
+    \ string (substring suffix 1))))\n    (find-longest-palindrome-suffix-iter string\
+    \ string))\n  (string-append string (reverse-string (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))))\n", " \
+    \ (define (reverse string)\n    (if (string=? string \"\")\n        \"\"\n   \
+    \     (string-append (reverse (substring string 1)) (substring string 0 1))))\n\
+    \  (define (is_palindrome string)\n    (string=? string (reverse string)))\n \
+    \ (define (find-longest-palindrome string)\n    (if (is_palindrome string)\n \
+    \       string\n        (find-longest-palindrome (substring string 0 (- (string-length\
+    \ string) 1)))))\n  (define (find-prefix string)\n    (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome string)))))\n  (string-append\
+    \ string (reverse (find-prefix string))))\n", "  (define (reverse string)\n  \
+    \  (if (empty? string)\n        string\n        (append (reverse (rest string))\
+    \ (list (first string)))))\n  (define (find-longest-palindrome-suffix string)\n\
+    \    (let loop ((string string)\n               (longest-palindrome-suffix '()))\n\
+    \      (if (empty? string)\n          longest-palindrome-suffix\n          (let\
+    \ ((suffix (append longest-palindrome-suffix (list (first string)))))\n      \
+    \      (if (equal? suffix (reverse suffix))\n                (loop (rest string)\
+    \ suffix)\n                longest-palindrome-suffix)))))\n  (append string (reverse\
+    \ (substring string 0 (sub1 (length (find-longest-palindrome-suffix string)))))))\n",
+  "  (define (reverse string)\n    (if (string=? string \"\")\n        \"\"\n    \
+    \    (string-append (reverse (substring string 1)) (substring string 0 1))))\n\
+    \  (define (is_palindrome string)\n    (string=? string (reverse string)))\n \
+    \ (define (find-longest-palindrome-suffix string)\n    (if (is_palindrome string)\n\
+    \        string\n        (find-longest-palindrome-suffix (substring string 1))))\n\
+    \  (define (find-prefix-to-append string)\n    (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))\n  (string-append\
+    \ string (reverse (find-prefix-to-append string))))\n", "  (define (is_palindrome?\
+    \ string)\n    (define (is_palindrome?-iter string left right)\n      (cond\n\
+    \        [(empty? string) true]\n        [(= left right) true]\n        [(= (first\
+    \ string) (last string)) (is_palindrome?-iter (rest (butlast string)) (+ left\
+    \ 1) (- right 1))]\n        [else false]))\n    (is_palindrome?-iter string 0\
+    \ (- (length string) 1)))\n  (define (find-longest-palindrome-suffix string)\n\
+    \    (define (find-longest-palindrome-suffix-iter string suffix-length)\n    \
+    \  (cond\n        [(= suffix-length (length string)) suffix-length]\n        [(is_palindrome?\
+    \ (substring string (- (length string) suffix-length))) (find-longest-palindrome-suffix-iter\
+    \ string (+ suffix-length 1))]\n        [else (- suffix-length 1)]))\n    (find-longest-palindrome-suffix-iter\
+    \ string 1))\n  (define (reverse-string string)\n    (define (reverse-string-iter\
+    \ string reversed-string)\n      (cond\n        [(empty? string) reversed-string]\n\
+    \        [else (reverse-string-iter (rest string) (string-append reversed-string\
+    \ (string (first string))))]))\n    (reverse-string-iter string \"\"))\n  (string-append\
+    \ string (reverse-string (substring string 0 (- (length string) (find-longest-palindrome-suffix\
+    \ string))))))\n", "  (define (make-palindrome-helper string)\n    (define (reverse-string\
+    \ string)\n      (define (reverse-string-helper string result)\n        (if (string=?\
+    \ string \"\")\n            result\n            (reverse-string-helper (substring\
+    \ string 1) (string-append (substring string 0 1) result))))\n      (reverse-string-helper\
+    \ string \"\"))\n    (define (longest-palindrome-suffix string)\n      (define\
+    \ (longest-palindrome-suffix-helper string result)\n        (if (string=? string\
+    \ \"\")\n            result\n            (longest-palindrome-suffix-helper (substring\
+    \ string 1) (string-append (substring string 0 1) result))))\n      (longest-palindrome-suffix-helper\
+    \ string \"\"))\n    (define (longest-palindrome-prefix string)\n      (define\
+    \ (longest-palindrome-prefix-helper string result)\n        (if (string=? string\
+    \ \"\")\n            result\n            (longest-palindrome-prefix-helper (substring\
+    \ string 0 (- (string-length string) 1)) (string-append result (substring string\
+    \ (- (string-length string) 1) (string-length string))))))\n      (longest-palindrome-prefix-helper\
+    \ string \"\"))\n    (string-append string (reverse-string (longest-palindrome-prefix\
+    \ (longest-palindrome-suffix string)))))\n  (make-palindrome-helper string))\n",
+  "  (define (reverse string)\n    (if (string=? string \"\")\n        \"\"\n    \
+    \    (string-append (reverse (substring string 1)) (substring string 0 1))))\n\
+    \  (define (is_palindrome string)\n    (string=? string (reverse string)))\n \
+    \ (define (find-longest-palindrome-suffix string)\n    (if (is_palindrome string)\n\
+    \        string\n        (find-longest-palindrome-suffix (substring string 1))))\n\
+    \  (define (find-prefix-before-palindrome-suffix string)\n    (substring string\
+    \ 0 (- (string-length string) (string-length (find-longest-palindrome-suffix string)))))\n\
+    \  (string-append string (reverse (find-prefix-before-palindrome-suffix string))))\n",
+  "  (define (reverse-string string)\n    (define (reverse-string-iter string result)\n\
+    \      (if (string=? string \"\")\n          result\n          (reverse-string-iter\
+    \ (substring string 1) (string-append (substring string 0 1) result))))\n    (reverse-string-iter\
+    \ string \"\"))\n  (define (find-longest-palindrome-suffix string)\n    (define\
+    \ (find-longest-palindrome-suffix-iter string result)\n      (if (string=? (reverse-string\
+    \ string) string)\n          string\n          (find-longest-palindrome-suffix-iter\
+    \ (substring string 0 (- (string-length string) 1)) result)))\n    (find-longest-palindrome-suffix-iter\
+    \ string \"\"))\n  (define (find-prefix string)\n    (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))\n  (string-append\
+    \ string (reverse-string (find-prefix string))))\n", "  (define (reverse string)\n\
+    \    (if (string=? string \"\")\n        \"\"\n        (string-append (reverse\
+    \ (substring string 1)) (substring string 0 1))))\n  (define (longest-palindrome-suffix\
+    \ string)\n    (define (is-palindrome? string)\n      (string=? string (reverse\
+    \ string)))\n    (define (longest-palindrome-suffix-iter string suffix)\n    \
+    \  (if (is-palindrome? suffix)\n          suffix\n          (longest-palindrome-suffix-iter\
+    \ string (substring suffix 1))))\n    (longest-palindrome-suffix-iter string string))\n\
+    \  (string-append string (reverse (substring string 0 (- (string-length string)\
+    \ (string-length (longest-palindrome-suffix string)))))))\n", "  (define (is_palindrome?\
+    \ string)\n    (define (is_palindrome?-iter string start end)\n      (cond ((=\
+    \ start end) #t)\n            ((= (string-ref string start) (string-ref string\
+    \ end))\n             (is_palindrome?-iter string (+ start 1) (- end 1)))\n  \
+    \          (else #f)))\n    (is_palindrome?-iter string 0 (- (string-length string)\
+    \ 1)))\n  (define (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-iter\
+    \ string start end)\n      (cond ((= start end) (substring string 0 start))\n\
+    \            ((is_palindrome? (substring string start end))\n             (find-longest-palindrome-suffix-iter\
+    \ string start (- end 1)))\n            (else (find-longest-palindrome-suffix-iter\
+    \ string (+ start 1) end))))\n    (find-longest-palindrome-suffix-iter string\
+    \ 0 (- (string-length string) 1)))\n  (define (reverse-string string)\n    (define\
+    \ (reverse-string-iter string start end)\n      (cond ((= start end) string)\n\
+    \            (else (reverse-string-iter (string-set! string start (string-ref\
+    \ string end))\n                                       (+ start 1) (- end 1)))))\n\
+    \    (reverse-string-iter string 0 (- (string-length string) 1)))\n  (string-append\
+    \ string (reverse-string (substring string 0 (- (string-length (find-longest-palindrome-suffix\
+    \ string)) 1)))))\n", "  (define (reverse string)\n    (let loop ((string string)\n\
+    \               (reversed '()))\n      (if (null? string)\n          reversed\n\
+    \          (loop (cdr string)\n                (cons (car string) reversed)))))\n\
+    \  (define (is_palindrome? string)\n    (let loop ((string string)\n         \
+    \      (reversed (reverse string)))\n      (if (null? string)\n          #t\n\
+    \          (and (equal? (car string) (car reversed))\n               (loop (cdr\
+    \ string)\n                     (cdr reversed))))))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (let loop ((string string)\n               (longest-palindrome-suffix\
+    \ '()))\n      (if (is_palindrome? string)\n          (append longest-palindrome-suffix\
+    \ string)\n          (loop (cdr string)\n                (cons (car string) longest-palindrome-suffix)))))\n\
+    \  (let ((palindrome-suffix (find-longest-palindrome-suffix string)))\n    (append\
+    \ string (reverse (substring string 0 (- (length string) (length palindrome-suffix)))))))\n",
+  "  (define (reverse string)\n    (if (string=? string \"\")\n        \"\"\n    \
+    \    (string-append (reverse (substring string 1)) (substring string 0 1))))\n\
+    \  (define (is_palindrome string)\n    (string=? string (reverse string)))\n \
+    \ (define (find-palindrome-suffix string)\n    (if (is_palindrome string)\n  \
+    \      string\n        (find-palindrome-suffix (substring string 1))))\n  (string-append\
+    \ string (reverse (substring string 0 (- (string-length string) (string-length\
+    \ (find-palindrome-suffix string)))))))\n", "  (define (reverse-string string)\n\
+    \    (define (reverse-string-iter string result)\n      (if (string=? string \"\
+    \")\n          result\n          (reverse-string-iter (substring string 1) (string-append\
+    \ (substring string 0 1) result))))\n    (reverse-string-iter string \"\"))\n\
+    \  (define (find-palindrome-suffix string)\n    (define (find-palindrome-suffix-iter\
+    \ string result)\n      (if (string=? string \"\")\n          result\n       \
+    \   (if (string=? (reverse-string string) string)\n              (find-palindrome-suffix-iter\
+    \ (substring string 1) string)\n              (find-palindrome-suffix-iter (substring\
+    \ string 1) result))))\n    (find-palindrome-suffix-iter string \"\"))\n  (string-append\
+    \ string (reverse-string (substring string 0 (- (string-length string) (string-length\
+    \ (find-palindrome-suffix string)))))))\n", "  (define (is_palindrome? string)\n\
+    \    (define (helper string)\n      (if (empty? string)\n          #t\n      \
+    \    (and (equal? (first string) (last string))\n               (helper (rest\
+    \ (butlast string))))))\n    (helper string))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (helper string)\n      (if (is_palindrome? string)\n  \
+    \        string\n          (helper (rest string))))\n    (helper string))\n  (define\
+    \ (reverse string)\n    (define (helper string result)\n      (if (empty? string)\n\
+    \          result\n          (helper (rest string) (cons (first string) result))))\n\
+    \    (helper string '()))\n  (append string (reverse (find-longest-palindrome-suffix\
+    \ string))))\n", "  (define (reverse-string string)\n    (let loop ((string string)\n\
+    \               (reversed '()))\n      (if (null? string)\n          reversed\n\
+    \          (loop (cdr string)\n                (cons (car string) reversed)))))\n\
+    \  (define (longest-palindrome-suffix string)\n    (let loop ((string string)\n\
+    \               (suffix '()))\n      (if (null? string)\n          suffix\n  \
+    \        (if (equal? (car string) (car (reverse-string string)))\n           \
+    \   (loop (cdr string)\n                    (cons (car string) suffix))\n    \
+    \          suffix))))\n  (define (longest-palindrome-prefix string)\n    (reverse-string\
+    \ (longest-palindrome-suffix (reverse-string string))))\n  (string-append string\
+    \ (reverse-string (substring string (length (longest-palindrome-prefix string))))))\n",
+  "  (define (find-longest-palindrome-postfix string)\n    (define (find-longest-palindrome-postfix-helper\
+    \ string start-index end-index)\n      (if (= start-index end-index)\n       \
+    \   (substring string start-index end-index)\n          (let ([substring (substring\
+    \ string start-index end-index)])\n            (if (is-palindrome? substring)\n\
+    \                substring\n                (find-longest-palindrome-postfix-helper\
+    \ string start-index (- end-index 1))))))\n    (find-longest-palindrome-postfix-helper\
+    \ string 0 (string-length string)))\n  (define (is-palindrome? string)\n    (define\
+    \ (is-palindrome?-helper string start-index end-index)\n      (if (= start-index\
+    \ end-index)\n          #t\n          (if (= (string-ref string start-index) (string-ref\
+    \ string end-index))\n              (is-palindrome?-helper string (+ start-index\
+    \ 1) (- end-index 1))\n              #f)))\n    (is-palindrome?-helper string\
+    \ 0 (- (string-length string) 1)))\n  (define (reverse-string string)\n    (define\
+    \ (reverse-string-helper string start-index end-index)\n      (if (= start-index\
+    \ end-index)\n          (string-append (string-append (substring string start-index\
+    \ end-index) (substring string end-index (+ end-index 1))) (reverse-string-helper\
+    \ string (+ end-index 1) (+ end-index 1)))\n          (substring string start-index\
+    \ end-index)))\n    (reverse-string-helper string 0 0))\n  (string-append string\
+    \ (reverse-string (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome-postfix string)))))))\n", "  (define (reverse string)\n\
+    \    (if (string=? string \"\")\n        \"\"\n        (string-append (reverse\
+    \ (substring string 1)) (substring string 0 1))))\n  (define (is_palindrome string)\n\
+    \    (string=? string (reverse string)))\n  (define (find-palindrome-suffix string)\n\
+    \    (if (is_palindrome string)\n        string\n        (find-palindrome-suffix\
+    \ (substring string 1))))\n  (define (find-prefix string)\n    (substring string\
+    \ 0 (- (string-length string) (string-length (find-palindrome-suffix string)))))\n\
+    \  (string-append string (reverse (find-prefix string))))\n", "  (define (reverse-string\
+    \ string)\n    (if (string=? string \"\")\n        \"\"\n        (string-append\
+    \ (reverse-string (substring string 1)) (substring string 0 1))))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (if (string=? string \"\")\n        \"\"\n        (let* ([suffix\
+    \ (find-longest-palindrome-suffix (substring string 1))]\n               [suffix-length\
+    \ (string-length suffix)])\n          (if (string=? (substring string 0 suffix-length)\
+    \ (reverse-string suffix))\n              suffix\n              (substring string\
+    \ 0 1)))))\n  (let* ([palindrome-suffix (find-longest-palindrome-suffix string)]\n\
+    \         [palindrome-suffix-length (string-length palindrome-suffix)])\n    (string-append\
+    \ string (reverse-string (substring string 0 (- (string-length string) palindrome-suffix-length))))))\n",
+  "  (define (is_palindrome string)\n    (define (helper string1 string2)\n      (if\
+    \ (and (not (empty? string1)) (not (empty? string2)))\n          (and (equal?\
+    \ (first string1) (first string2))\n               (helper (rest string1) (rest\
+    \ string2)))\n          (and (empty? string1) (empty? string2))))\n    (helper\
+    \ string (reverse string)))\n  (define (find-longest-palindrome-suffix string)\n\
+    \    (define (helper string)\n      (if (is_palindrome string)\n          string\n\
+    \          (helper (rest string))))\n    (helper string))\n  (append string (reverse\
+    \ (substring string 0 (- (length string) (length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (reverse-string string)\n    (if (string=? string\
+    \ \"\")\n        \"\"\n        (string-append (reverse-string (substring string\
+    \ 1)) (substring string 0 1))))\n  (define (longest-palindrome-suffix string)\n\
+    \    (define (is-palindrome? string)\n      (string=? string (reverse-string string)))\n\
+    \    (define (longest-palindrome-suffix-iter string suffix)\n      (if (is-palindrome?\
+    \ suffix)\n          suffix\n          (longest-palindrome-suffix-iter string\
+    \ (substring suffix 1))))\n    (longest-palindrome-suffix-iter string string))\n\
+    \  (string-append string (reverse-string (substring string 0 (- (string-length\
+    \ string) (string-length (longest-palindrome-suffix string)))))))\n", "  (define\
+    \ (reverse string)\n    (if (string=? string \"\")\n        \"\"\n        (string-append\
+    \ (reverse (substring string 1)) (substring string 0 1))))\n  (define (is_palindrome\
+    \ string)\n    (string=? string (reverse string)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (if (is_palindrome string)\n        string\n        (find-longest-palindrome-suffix\
+    \ (substring string 1))))\n  (define (find-prefix-before-palindrome-suffix string)\n\
+    \    (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))\n  (string-append string (reverse (find-prefix-before-palindrome-suffix\
+    \ string))))\n", "  (define (reverse-string string)\n    (define (reverse-string-iter\
+    \ string result)\n      (if (string=? string \"\")\n          result\n       \
+    \   (reverse-string-iter (substring string 1) (string-append (substring string\
+    \ 0 1) result))))\n    (reverse-string-iter string \"\"))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string result)\n \
+    \     (if (string=? string \"\")\n          result\n          (if (string=? (substring\
+    \ string 0 1) (substring string (string-length string) (- (string-length string)\
+    \ 1)))\n              (find-longest-palindrome-suffix-iter (substring string 1)\
+    \ (string-append (substring string 0 1) result))\n              result)))\n  \
+    \  (find-longest-palindrome-suffix-iter string \"\"))\n  (string-append string\
+    \ (reverse-string (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (reverse string)\n\
+    \    (if (string=? string \"\")\n        \"\"\n        (string-append (reverse\
+    \ (substring string 1)) (substring string 0 1))))\n  (define (is_palindrome string)\n\
+    \    (string=? string (reverse string)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (if (is_palindrome string)\n        string\n        (find-longest-palindrome-suffix\
+    \ (substring string 1))))\n  (define (find-prefix-before-palindrome-suffix string)\n\
+    \    (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))\n  (string-append string (reverse (find-prefix-before-palindrome-suffix\
+    \ string))))\n", "  (define (reverse string)\n    (define (reverse-iter string\
+    \ reversed)\n      (if (string=? string \"\")\n          reversed\n          (reverse-iter\
+    \ (substring string 1) (string-append (substring string 0 1) reversed))))\n  \
+    \  (reverse-iter string \"\"))\n  (define (find-longest-palindrome string)\n \
+    \   (define (find-longest-palindrome-iter string reversed)\n      (if (string=?\
+    \ string reversed)\n          string\n          (find-longest-palindrome-iter\
+    \ (substring string 0 (- (string-length string) 1)) (string-append (substring\
+    \ string (- (string-length string) 1)) reversed))))\n    (find-longest-palindrome-iter\
+    \ string \"\"))\n  (string-append string (reverse (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome string)))))))\n", "  (define\
+    \ (reverse-string string)\n    (define (reverse-string-helper string result)\n\
+    \      (if (empty? string)\n          result\n          (reverse-string-helper\
+    \ (rest string) (append result (list (first string))))))\n    (reverse-string-helper\
+    \ string '()))\n  (define (is-palindrome string)\n    (define (is-palindrome-helper\
+    \ string)\n      (if (empty? string)\n          #t\n          (and (equal? (first\
+    \ string) (last string))\n               (is-palindrome-helper (rest (butlast\
+    \ string))))))\n    (is-palindrome-helper string))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-helper string result)\n\
+    \      (if (is-palindrome string)\n          string\n          (find-longest-palindrome-suffix-helper\
+    \ (butlast string) (append result (list (last string))))))\n    (find-longest-palindrome-suffix-helper\
+    \ string '()))\n  (append string (reverse-string (find-longest-palindrome-suffix\
+    \ string))))\n", "  (define (reverse string)\n    (if (empty? string)\n      \
+    \  string\n        (string-append (reverse (substring string 1)) (string (string-ref\
+    \ string 0)))))\n  (define (is_palindrome string)\n    (if (empty? string)\n \
+    \       #t\n        (and (is_palindrome (substring string 1 (sub1 (string-length\
+    \ string))))\n             (char=? (string-ref string 0) (string-ref string (sub1\
+    \ (string-length string)))))))\n  (define (find_longest_palindrome_suffix string)\n\
+    \    (if (is_palindrome string)\n        string\n        (find_longest_palindrome_suffix\
+    \ (substring string 1))))\n  (string-append string (reverse (substring string\
+    \ 0 (sub1 (string-length (find_longest_palindrome_suffix string)))))))\n", " \
+    \ (define (reverse string)\n    (if (string=? string \"\")\n        \"\"\n   \
+    \     (string-append (reverse (substring string 1)) (substring string 0 1))))\n\
+    \  (define (is_palindrome string)\n    (string=? string (reverse string)))\n \
+    \ (define (longest_palindrome string)\n    (if (is_palindrome string)\n      \
+    \  string\n        (longest_palindrome (substring string 0 (- (string-length string)\
+    \ 1)))))\n  (define (make_palindrome_helper string)\n    (string-append string\
+    \ (reverse (substring string 0 (- (string-length string) (string-length (longest_palindrome\
+    \ string)))))))\n  (make_palindrome_helper string))\n", "  (define (reverse-string\
+    \ str)\n    (if (string=? str \"\")\n        \"\"\n        (string-append (reverse-string\
+    \ (substring str 1)) (substring str 0 1))))\n  (define (is-palindrome str)\n \
+    \   (string=? str (reverse-string str)))\n  (define (find-longest-palindrome str)\n\
+    \    (if (is-palindrome str)\n        str\n        (find-longest-palindrome (substring\
+    \ str 0 (- (string-length str) 1)))))\n  (define (make-palindrome-helper str)\n\
+    \    (string-append str (reverse-string (substring str 0 (- (string-length (find-longest-palindrome\
+    \ str)) (string-length str))))))\n  (make-palindrome-helper string))\n", "  (define\
+    \ (reverse string)\n    (if (null? string)\n        string\n        (string-append\
+    \ (reverse (substring string 1)) (substring string 0 1))))\n  (define (is_palindrome\
+    \ string)\n    (if (string=? string (reverse string))\n        #t\n        #f))\n\
+    \  (define (find_longest_palindrome_suffix string)\n    (if (is_palindrome string)\n\
+    \        string\n        (find_longest_palindrome_suffix (substring string 0 (-\
+    \ (string-length string) 1)))))\n  (define (find_shortest_palindrome_prefix string)\n\
+    \    (if (is_palindrome string)\n        string\n        (find_shortest_palindrome_prefix\
+    \ (substring string 1))))\n  (string-append string (reverse (find_shortest_palindrome_prefix\
+    \ (find_longest_palindrome_suffix string)))))\n", "  (define (is_palindrome? string)\n\
+    \    (define (is_palindrome?-iter string-len)\n      (cond ((= string-len 1) #t)\n\
+    \            ((= string-len 2) (string=? (string-ref string 0) (string-ref string\
+    \ 1)))\n            ((string=? (string-ref string (- string-len 1)) (string-ref\
+    \ string (- string-len 2)))\n             (is_palindrome?-iter (- string-len 1)))\n\
+    \            (else #f)))\n    (is_palindrome?-iter (string-length string)))\n\
+    \  (define (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-iter\
+    \ string-len)\n      (cond ((= string-len 1) (string-append string (string-reverse\
+    \ string)))\n            ((is_palindrome? (substring string (- string-len 1)))\n\
+    \             (string-append string (string-reverse (substring string 0 (- string-len\
+    \ 1)))))\n            (else (find-longest-palindrome-suffix-iter (- string-len\
+    \ 1)))))\n    (find-longest-palindrome-suffix-iter (string-length string)))\n\
+    \  (find-longest-palindrome-suffix string))\n", "  (define (longest-palindrome-postfix\
+    \ string)\n    (define (is-palindrome? string)\n      (define (is-palindrome-helper?\
+    \ string start end)\n        (cond\n          [(> start end) #t]\n          [(char=?\
+    \ (string-ref string start) (string-ref string end))\n           (is-palindrome-helper?\
+    \ string (+ start 1) (- end 1))]\n          [else #f]))\n      (is-palindrome-helper?\
+    \ string 0 (- (string-length string) 1)))\n    (define (longest-palindrome-postfix-helper\
+    \ string start end)\n      (cond\n        [(> start end) (substring string start\
+    \ end)]\n        [(is-palindrome? (substring string start end))\n         (longest-palindrome-postfix-helper\
+    \ string start (- end 1))]\n        [else (longest-palindrome-postfix-helper string\
+    \ (+ start 1) end)]))\n    (longest-palindrome-postfix-helper string 0 (- (string-length\
+    \ string) 1)))\n  (string-append string (string-reverse (substring string 0 (-\
+    \ (string-length string) (string-length (longest-palindrome-postfix string)))))))\n",
+  "  (define (reverse string)\n    (if (empty? string)\n        string\n        (string-append\
+    \ (reverse (substring string 1)) (string (string-ref string 0)))))\n  (define\
+    \ (longest-palindrome-suffix string)\n    (define (is-palindrome string)\n   \
+    \   (if (empty? string)\n          #t\n          (and (char=? (string-ref string\
+    \ 0) (string-ref string (- (string-length string) 1)))\n               (is-palindrome\
+    \ (substring string 1 (- (string-length string) 1))))))\n    (if (is-palindrome\
+    \ string)\n        string\n        (longest-palindrome-suffix (substring string\
+    \ 1))))\n  (string-append string (reverse (substring string 0 (- (string-length\
+    \ string) (string-length (longest-palindrome-suffix string)))))))\n", "  (define\
+    \ (make-palindrome-helper string)\n    (cond\n      [(empty? string) empty]\n\
+    \      [(empty? (rest string)) string]\n      [else\n       (define (reverse-string\
+    \ string)\n         (cond\n           [(empty? string) empty]\n           [else\
+    \ (append (reverse-string (rest string)) (list (first string)))]))\n       (define\
+    \ (is-palindrome? string)\n         (cond\n           [(empty? string) #t]\n \
+    \          [(empty? (rest string)) #t]\n           [(equal? (first string) (last\
+    \ string)) (is-palindrome? (rest (reverse-string (rest string))))]\n         \
+    \  [else #f]))\n       (cond\n         [(is-palindrome? string) string]\n    \
+    \     [else (make-palindrome-helper (rest string))])]))\n  (append string (reverse-string\
+    \ (make-palindrome-helper string))))\n", "  (define (reverse-string string)\n\
+    \    (if (string=? string \"\")\n        \"\"\n        (string-append (reverse-string\
+    \ (substring string 1)) (substring string 0 1))))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (is-palindrome? string)\n      (string=? string (reverse-string\
+    \ string)))\n    (define (find-longest-palindrome-suffix-iter string suffix)\n\
+    \      (if (string=? suffix \"\")\n          \"\"\n          (if (is-palindrome?\
+    \ suffix)\n              suffix\n              (find-longest-palindrome-suffix-iter\
+    \ string (substring suffix 1)))))\n    (find-longest-palindrome-suffix-iter string\
+    \ string))\n  (define (find-prefix-before-palindrome-suffix string)\n    (substring\
+    \ string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))\n  (string-append string (reverse-string (find-prefix-before-palindrome-suffix\
+    \ string))))\n", "  (define (is_palindrome? string)\n    (define (is_palindrome?-iter\
+    \ string start end)\n      (cond\n        [(> start end) #t]\n        [(char=?\
+    \ (string-ref string start) (string-ref string end))\n         (is_palindrome?-iter\
+    \ string (+ start 1) (- end 1))]\n        [else #f]))\n    (is_palindrome?-iter\
+    \ string 0 (- (string-length string) 1)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string start end)\n\
+    \      (cond\n        [(> start end) (- end 1)]\n        [(is_palindrome? (substring\
+    \ string start (+ start 1)))\n         (find-longest-palindrome-suffix-iter string\
+    \ (+ start 1) end)]\n        [else (find-longest-palindrome-suffix-iter string\
+    \ start (- end 1))]))\n    (find-longest-palindrome-suffix-iter string 0 (- (string-length\
+    \ string) 1)))\n  (define (reverse-prefix string)\n    (define (reverse-prefix-iter\
+    \ string start end)\n      (cond\n        [(> start end) '()]\n        [else (cons\
+    \ (string-ref string start) (reverse-prefix-iter string (+ start 1) end))]))\n\
+    \    (list->string (reverse-prefix-iter string 0 (- (find-longest-palindrome-suffix\
+    \ string) 1))))\n  (string-append string (reverse-prefix string)))\n", "  (let*\
+    \ ([len (string-length string)]\n         [half-len (quotient len 2)]\n      \
+    \   [left-half (substring string 0 half-len)]\n         [right-half (substring\
+    \ string half-len len)])\n    (if (string=? left-half (string-reverse right-half))\n\
+    \        string\n        (string-append string (string-reverse left-half)))))\n",
+  "  (define (reverse-string string)\n    (let loop ((string string)\n           \
+    \    (result '()))\n      (if (null? string)\n          result\n          (loop\
+    \ (cdr string)\n                (cons (car string) result)))))\n  (define (longest-palindrome-suffix\
+    \ string)\n    (let loop ((string string)\n               (result '()))\n    \
+    \  (if (null? string)\n          result\n          (let ((suffix (reverse-string\
+    \ string)))\n            (if (string=? string suffix)\n                (loop (substring\
+    \ string 0 (- (string-length string) 1))\n                      (cons (car string)\
+    \ result))\n                result)))))\n  (let ((suffix (longest-palindrome-suffix\
+    \ string)))\n    (string-append string (reverse-string (substring string 0 (-\
+    \ (string-length string) (string-length suffix)))))))\n", "  (define (reverse-string\
+    \ string)\n    (if (string=? string \"\")\n        \"\"\n        (string-append\
+    \ (reverse-string (substring string 1)) (substring string 0 1))))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (if (string=? string \"\")\n        \"\"\n        (if (string=?\
+    \ (reverse-string string) string)\n            string\n            (find-longest-palindrome-suffix\
+    \ (substring string 0 (- (string-length string) 1))))))\n  (string-append string\
+    \ (reverse-string (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (find-palindrome-suffix\
+    \ string)\n    (define (is-palindrome? string)\n      (define (is-palindrome-helper?\
+    \ string)\n        (cond\n          [(empty? string) #t]\n          [(empty? (rest\
+    \ string)) #t]\n          [(equal? (first string) (last string)) (is-palindrome-helper?\
+    \ (rest (butlast string)))]\n          [else #f]))\n      (is-palindrome-helper?\
+    \ string))\n    (cond\n      [(empty? string) string]\n      [(is-palindrome?\
+    \ string) string]\n      [else (find-palindrome-suffix (rest string))]))\n  (append\
+    \ string (reverse (find-palindrome-suffix (reverse string)))))\n", "  (define\
+    \ (reverse string)\n    (if (empty? string)\n        string\n        (string-append\
+    \ (reverse (substring string 1)) (string (string-ref string 0)))))\n  (define\
+    \ (is_palindrome string)\n    (if (empty? string)\n        #t\n        (and (char=?\
+    \ (string-ref string 0) (string-ref string (- (string-length string) 1)))\n  \
+    \           (is_palindrome (substring string 1 (- (string-length string) 1))))))\n\
+    \  (define (find_longest_palindrome_suffix string)\n    (if (is_palindrome string)\n\
+    \        string\n        (find_longest_palindrome_suffix (substring string 1))))\n\
+    \  (string-append string (reverse (substring string 0 (- (string-length string)\
+    \ (string-length (find_longest_palindrome_suffix string)))))))\n", "  (define\
+    \ (reverse string)\n    (if (string=? string \"\")\n        \"\"\n        (string-append\
+    \ (reverse (substring string 1)) (substring string 0 1))))\n  (define (find-palindrome-suffix\
+    \ string)\n    (define (find-palindrome-suffix-iter string suffix)\n      (if\
+    \ (string=? string \"\")\n          suffix\n          (if (string=? (reverse (substring\
+    \ string 0 (string-length suffix))) suffix)\n              (find-palindrome-suffix-iter\
+    \ (substring string 1) (substring string 0 1))\n              (find-palindrome-suffix-iter\
+    \ (substring string 1) (string-append (substring string 0 1) suffix)))))\n   \
+    \ (find-palindrome-suffix-iter string \"\"))\n  (string-append string (reverse\
+    \ (substring string 0 (- (string-length string) (string-length (find-palindrome-suffix\
+    \ string)))))))\n", "  (define (is_palindrome? string)\n    (define (is_palindrome?-iter\
+    \ string start end)\n      (cond\n        [(> start end) #t]\n        [(char=?\
+    \ (string-ref string start) (string-ref string end))\n         (is_palindrome?-iter\
+    \ string (+ start 1) (- end 1))]\n        [else #f]))\n    (is_palindrome?-iter\
+    \ string 0 (- (string-length string) 1)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string start end)\n\
+    \      (cond\n        [(> start end) (substring string start end)]\n        [(is_palindrome?\
+    \ (substring string start end))\n         (find-longest-palindrome-suffix-iter\
+    \ string start (- end 1))]\n        [else (find-longest-palindrome-suffix-iter\
+    \ string (+ start 1) end)]))\n    (find-longest-palindrome-suffix-iter string\
+    \ 0 (- (string-length string) 1)))\n  (define (reverse-string string)\n    (define\
+    \ (reverse-string-iter string start end)\n      (cond\n        [(> start end)\
+    \ string]\n        [else (reverse-string-iter (string-append (string-append (substring\
+    \ string 0 start)\n                                                          \
+    \        (string-append (string (string-ref string end))\n                   \
+    \                                                              (substring string\
+    \ (+ start 1) end)))\n                                                   (substring\
+    \ string (+ end 1)))\n                                   (+ start 1) (- end 1))]))\n\
+    \    (reverse-string-iter string 0 (- (string-length string) 1)))\n  (string-append\
+    \ string (reverse-string (find-longest-palindrome-suffix string))))\n", "  (define\
+    \ (reverse string)\n    (if (null? string)\n        '()\n        (append (reverse\
+    \ (cdr string)) (list (car string)))))\n  (define (is_palindrome string)\n   \
+    \ (if (null? string)\n        #t\n        (and (equal? (car string) (car (reverse\
+    \ string)))\n             (is_palindrome (cdr (reverse string))))))\n  (define\
+    \ (find-longest-palindrome-suffix string)\n    (if (is_palindrome string)\n  \
+    \      string\n        (find-longest-palindrome-suffix (cdr string))))\n  (define\
+    \ (find-longest-palindrome-prefix string)\n    (reverse (find-longest-palindrome-suffix\
+    \ (reverse string))))\n  (append string (reverse (find-longest-palindrome-prefix\
+    \ string))))\n", "  (define (reverse string)\n    (if (string=? string \"\")\n\
+    \        \"\"\n        (string-append (reverse (substring string 1)) (substring\
+    \ string 0 1))))\n  (define (find-longest-palindrome-suffix string)\n    (if (string=?\
+    \ string \"\")\n        \"\"\n        (if (string=? (reverse string) string)\n\
+    \            string\n            (find-longest-palindrome-suffix (substring string\
+    \ 1)))))\n  (string-append string (reverse (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))))\n", " \
+    \ (define (reverse-string string)\n    (if (empty? string)\n        string\n \
+    \       (string-append (reverse-string (substring string 1)) (substring string\
+    \ 0 1))))\n  (define (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-iter\
+    \ string suffix)\n      (if (string=? (reverse-string suffix) suffix)\n      \
+    \    suffix\n          (find-longest-palindrome-suffix-iter (substring string\
+    \ 0 (- (string-length string) 1)) (substring string (- (string-length string)\
+    \ 1)))))\n    (find-longest-palindrome-suffix-iter string \"\"))\n  (string-append\
+    \ string (reverse-string (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (reverse-string\
+    \ string)\n    (if (string=? string \"\")\n        \"\"\n        (string-append\
+    \ (substring string 1) (string (string-ref string 0)))))\n  (define (longest-palindrome-postfix\
+    \ string)\n    (define (is-palindrome? string)\n      (string=? string (reverse-string\
+    \ string)))\n    (define (longest-palindrome-postfix-iter string postfix)\n  \
+    \    (if (is-palindrome? postfix)\n          postfix\n          (longest-palindrome-postfix-iter\
+    \ string (string-append postfix (string (string-ref string 0))))))\n    (longest-palindrome-postfix-iter\
+    \ string \"\"))\n  (define (string-prefix string)\n    (substring string 0 (-\
+    \ (string-length string) (string-length (longest-palindrome-postfix string)))))\n\
+    \  (string-append string (reverse-string (string-prefix string))))\n", "  (define\
+    \ (reverse string)\n    (if (string=? string \"\")\n        \"\"\n        (string-append\
+    \ (reverse (substring string 1)) (substring string 0 1))))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-helper string suffix)\n\
+    \      (if (string=? string suffix)\n          suffix\n          (find-longest-palindrome-suffix-helper\
+    \ string (string-append (substring string 0 1) suffix))))\n    (find-longest-palindrome-suffix-helper\
+    \ string \"\"))\n  (string-append string (reverse (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))))\n", " \
+    \ (define (find-longest-palindrome-postfix string)\n    (define (find-longest-palindrome-postfix-iter\
+    \ string postfix)\n      (if (string=? postfix \"\")\n          \"\"\n       \
+    \   (if (string=? (substring string 0 (string-length postfix)) postfix)\n    \
+    \          postfix\n              (find-longest-palindrome-postfix-iter string\
+    \ (substring postfix 1)))))\n    (find-longest-palindrome-postfix-iter string\
+    \ (substring string 1)))\n  (define (reverse-string string)\n    (if (string=?\
+    \ string \"\")\n        \"\"\n        (string-append (reverse-string (substring\
+    \ string 1)) (substring string 0 1))))\n  (string-append string (reverse-string\
+    \ (substring string 0 (- (string-length string) (string-length (find-longest-palindrome-postfix\
+    \ string)))))))\n", "  (define (is_palindrome? string)\n    (equal? string (reverse\
+    \ string)))\n  (define (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-iter\
+    \ string suffix)\n      (if (is_palindrome? suffix)\n          suffix\n      \
+    \    (find-longest-palindrome-suffix-iter (substring string 0 (- (string-length\
+    \ string) 1))\n                                               (string-append (substring\
+    \ string (- (string-length string) 1)) suffix))))\n    (find-longest-palindrome-suffix-iter\
+    \ string \"\"))\n  (string-append string (reverse (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))))\n", " \
+    \ (define (reverse string)\n    (define (reverse-iter string reversed)\n     \
+    \ (if (null? string)\n          reversed\n          (reverse-iter (cdr string)\
+    \ (cons (car string) reversed))))\n    (reverse-iter string '()))\n  (define (longest-palindrome-suffix\
+    \ string)\n    (define (longest-palindrome-suffix-iter string suffix)\n      (if\
+    \ (null? string)\n          suffix\n          (if (equal? (car string) (car suffix))\n\
+    \              (longest-palindrome-suffix-iter (cdr string) (cons (car string)\
+    \ suffix))\n              suffix)))\n    (longest-palindrome-suffix-iter string\
+    \ (reverse string)))\n  (define (string-prefix string)\n    (define (string-prefix-iter\
+    \ string prefix)\n      (if (null? string)\n          prefix\n          (string-prefix-iter\
+    \ (cdr string) (cons (car string) prefix))))\n    (string-prefix-iter string '()))\n\
+    \  (append string (reverse (string-prefix (longest-palindrome-suffix string)))))\n",
+  "  (define (reverse-string string)\n    (define (reverse-string-iter string acc)\n\
+    \      (if (string=? string \"\")\n          acc\n          (reverse-string-iter\
+    \ (substring string 1) (string-append (substring string 0 1) acc))))\n    (reverse-string-iter\
+    \ string \"\"))\n  (define (find-longest-palindrome-suffix string)\n    (define\
+    \ (find-longest-palindrome-suffix-iter string acc)\n      (if (string=? string\
+    \ \"\")\n          acc\n          (if (string=? (substring string 0 (string-length\
+    \ acc)) (reverse-string (substring string 0 (string-length acc))))\n         \
+    \     (find-longest-palindrome-suffix-iter (substring string 1) (substring string\
+    \ 0 (string-length acc)))\n              (find-longest-palindrome-suffix-iter\
+    \ (substring string 1) acc))))\n    (find-longest-palindrome-suffix-iter string\
+    \ \"\"))\n  (string-append string (reverse-string (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))))\n", " \
+    \ (let ([string-length (string-length string)])\n    (let loop ([i string-length])\n\
+    \      (if (zero? i)\n          string\n          (if (string=? (substring string\
+    \ 0 i) (substring string (- string-length i) string-length))\n              (string-append\
+    \ string (reverse (substring string 0 (- string-length i))))\n              (loop\
+    \ (- i 1)))))))\n", "  (define (reverse-string string)\n    (define (reverse-string-iter\
+    \ string result)\n      (if (string=? string \"\")\n          result\n       \
+    \   (reverse-string-iter (substring string 1) (string-append (substring string\
+    \ 0 1) result))))\n    (reverse-string-iter string \"\"))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string result)\n \
+    \     (if (string=? string \"\")\n          result\n          (if (string=? (substring\
+    \ string 0 1) (substring string (- (string-length string) 1)))\n             \
+    \ (find-longest-palindrome-suffix-iter (substring string 1) (substring string\
+    \ 0 1))\n              (find-longest-palindrome-suffix-iter (substring string\
+    \ 1) result))))\n    (find-longest-palindrome-suffix-iter string \"\"))\n  (define\
+    \ (find-prefix-to-palindrome-suffix string)\n    (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))\n  (string-append\
+    \ string (reverse-string (find-prefix-to-palindrome-suffix string))))\n", "  (define\
+    \ (reverse-string string)\n    (let loop ((string string)\n               (reversed\
+    \ '()))\n      (if (null? string)\n          reversed\n          (loop (cdr string)\n\
+    \                (cons (car string) reversed)))))\n  (define (longest-palindrome-suffix\
+    \ string)\n    (let loop ((string string)\n               (suffix '()))\n    \
+    \  (if (null? string)\n          suffix\n          (if (equal? string (reverse-string\
+    \ string))\n              string\n              (loop (cdr string)\n         \
+    \           (cons (car string) suffix))))))\n  (define (longest-palindrome-prefix\
+    \ string)\n    (reverse-string (longest-palindrome-suffix (reverse-string string))))\n\
+    \  (string-append string (reverse-string (string-drop (longest-palindrome-prefix\
+    \ string) (string-length string)))))\n", "  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string suffix)\n \
+    \     (if (string=? string suffix)\n          suffix\n          (find-longest-palindrome-suffix-iter\
+    \ (substring string 0 (- (string-length string) 1))\n                        \
+    \                       (string-append (substring string (- (string-length string)\
+    \ 1)) suffix))))\n    (find-longest-palindrome-suffix-iter string \"\"))\n  (string-append\
+    \ string (reverse (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome-suffix string)))))))\n", "  (define (reverse string)\n\
+    \    (if (empty? string)\n        \"\"\n        (string-append (reverse (substring\
+    \ string 1)) (substring string 0 1))))\n  (define (is_palindrome string)\n   \
+    \ (if (empty? string)\n        #t\n        (and (equal? (substring string 0 1)\
+    \ (substring string (- (string-length string) 1) (string-length string)))\n  \
+    \           (is_palindrome (substring string 1 (- (string-length string) 1))))))\n\
+    \  (define (find_longest_palindrome string)\n    (if (is_palindrome string)\n\
+    \        string\n        (find_longest_palindrome (substring string 0 (- (string-length\
+    \ string) 1)))))\n  (string-append string (reverse (substring string 0 (- (string-length\
+    \ string) (string-length (find_longest_palindrome string)))))))\n", "  (define\
+    \ (reverse string)\n    (if (string=? string \"\")\n        \"\"\n        (string-append\
+    \ (reverse (substring string 1)) (substring string 0 1))))\n  (define (is_palindrome\
+    \ string)\n    (string=? string (reverse string)))\n  (define (find-palindrome-suffix\
+    \ string)\n    (if (is_palindrome string)\n        string\n        (find-palindrome-suffix\
+    \ (substring string 1))))\n  (define (find-palindrome-prefix string)\n    (if\
+    \ (is_palindrome string)\n        string\n        (find-palindrome-prefix (substring\
+    \ string 0 (- (string-length string) 1)))))\n  (string-append string (reverse\
+    \ (find-palindrome-prefix (find-palindrome-suffix string)))))\n", "  (define (reverse\
+    \ string)\n    (if (empty? string)\n        string\n        (string-append (reverse\
+    \ (substring string 1)) (string (string-ref string 0)))))\n  (define (longest-palindrome-suffix\
+    \ string)\n    (if (empty? string)\n        \"\"\n        (if (equal? (string-ref\
+    \ string 0) (string-ref string (sub1 (string-length string))))\n            (string-append\
+    \ (string (string-ref string 0)) (longest-palindrome-suffix (substring string\
+    \ 1 (sub1 (string-length string)))))\n            (longest-palindrome-suffix (substring\
+    \ string 1)))))\n  (string-append string (reverse (substring string 0 (sub1 (string-length\
+    \ (longest-palindrome-suffix string)))))))\n", "  (define (reverse-string string)\n\
+    \    (define (reverse-string-iter string reversed-string)\n      (if (string=?\
+    \ string \"\")\n          reversed-string\n          (reverse-string-iter (substring\
+    \ string 1) (string-append (substring string 0 1) reversed-string))))\n    (reverse-string-iter\
+    \ string \"\"))\n  (define (find-longest-palindrome string)\n    (define (find-longest-palindrome-iter\
+    \ string reversed-string)\n      (if (string=? string reversed-string)\n     \
+    \     string\n          (find-longest-palindrome-iter (substring string 0 (- (string-length\
+    \ string) 1)) reversed-string)))\n    (find-longest-palindrome-iter string (reverse-string\
+    \ string)))\n  (string-append string (substring (reverse-string string) (string-length\
+    \ (find-longest-palindrome string)))))\n", "  (define (reverse-string string)\n\
+    \    (if (empty? string)\n        string\n        (string-append (reverse-string\
+    \ (substring string 1)) (substring string 0 1))))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-helper string suffix)\n\
+    \      (if (string=? (reverse-string suffix) suffix)\n          suffix\n     \
+    \     (find-longest-palindrome-suffix-helper (substring string 0 (- (string-length\
+    \ string) 1)) (string-append suffix (substring string (- (string-length string)\
+    \ 1) (string-length string))))))\n  (find-longest-palindrome-suffix-helper string\
+    \ \"\"))\n  (string-append string (reverse-string (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))))\n", " \
+    \ (define (reverse string)\n    (if (string=? string \"\")\n        \"\"\n   \
+    \     (string-append (reverse (substring string 1)) (substring string 0 1))))\n\
+    \  (define (is_palindrome string)\n    (string=? string (reverse string)))\n \
+    \ (define (find-longest-palindrome-suffix string)\n    (if (is_palindrome string)\n\
+    \        string\n        (find-longest-palindrome-suffix (substring string 1))))\n\
+    \  (define (find-prefix-before-palindrome-suffix string)\n    (substring string\
+    \ 0 (- (string-length string) (string-length (find-longest-palindrome-suffix string)))))\n\
+    \  (string-append string (reverse (find-prefix-before-palindrome-suffix string))))\n",
+  "  (define (reverse-string string)\n    (if (string=? string \"\")\n        \"\"\
+    \n        (string-append (reverse-string (substring string 1)) (substring string\
+    \ 0 1))))\n  (define (find-longest-palindrome string)\n    (if (string=? string\
+    \ \"\")\n        \"\"\n        (if (string=? (substring string 0 1) (substring\
+    \ string (- (string-length string) 1)))\n            (string-append (substring\
+    \ string 0 1) (find-longest-palindrome (substring string 1 (- (string-length string)\
+    \ 1))))\n            (find-longest-palindrome (substring string 1)))))\n  (string-append\
+    \ string (reverse-string (substring string 0 (- (string-length string) (string-length\
+    \ (find-longest-palindrome string)))))))\n", "  (define (reverse string)\n   \
+    \ (if (empty? string)\n        string\n        (string-append (reverse (substring\
+    \ string 1)) (string (string-ref string 0)))))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (is-palindrome? string)\n      (if (empty? string)\n  \
+    \        #t\n          (and (char=? (string-ref string 0) (string-ref string (-\
+    \ (string-length string) 1)))\n               (is-palindrome? (substring string\
+    \ 1 (- (string-length string) 1))))))\n    (if (is-palindrome? string)\n     \
+    \   string\n        (find-longest-palindrome-suffix (substring string 0 (- (string-length\
+    \ string) 1)))))\n  (string-append string (reverse (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))))\n", " \
+    \ (define (is_palindrome? string)\n    (define (is_palindrome?-iter string start\
+    \ end)\n      (cond\n        [(= start end) #t]\n        [(= (string-ref string\
+    \ start) (string-ref string end))\n         (is_palindrome?-iter string (+ start\
+    \ 1) (- end 1))]\n        [else #f]))\n    (is_palindrome?-iter string 0 (- (string-length\
+    \ string) 1)))\n  (define (find-longest-palindrome-suffix string)\n    (define\
+    \ (find-longest-palindrome-suffix-iter string start end)\n      (cond\n      \
+    \  [(is_palindrome? (substring string start end))\n         (substring string\
+    \ start end)]\n        [else (find-longest-palindrome-suffix-iter string start\
+    \ (- end 1))]))\n    (find-longest-palindrome-suffix-iter string 0 (string-length\
+    \ string)))\n  (define (reverse-prefix string)\n    (define (reverse-prefix-iter\
+    \ string start end)\n      (cond\n        [(= start end) (string)]\n        [else\
+    \ (string-append (string-append (substring string start end) (string-append (string-ref\
+    \ string start) \"\"))\n                             (reverse-prefix-iter string\
+    \ (+ start 1) end))]))\n    (reverse-prefix-iter string 0 (string-length string)))\n\
+    \  (string-append string (reverse-prefix (find-longest-palindrome-suffix string))))\n",
+  "  (define (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-iter\
+    \ string suffix)\n      (if (string=? string suffix)\n          suffix\n     \
+    \     (find-longest-palindrome-suffix-iter (substring string 0 (- (string-length\
+    \ string) 1))\n                                               (string-append (substring\
+    \ string (- (string-length string) 1)) suffix))))\n    (find-longest-palindrome-suffix-iter\
+    \ string \"\"))\n  (string-append string (substring (reverse string) (string-length\
+    \ (find-longest-palindrome-suffix string)))))\n", "  (define (reverse-string string)\n\
+    \    (define (reverse-string-helper string result)\n      (if (string=? string\
+    \ \"\")\n          result\n          (reverse-string-helper (substring string\
+    \ 1) (string-append (substring string 0 1) result))))\n    (reverse-string-helper\
+    \ string \"\"))\n  (define (find-longest-palindrome-suffix string)\n    (define\
+    \ (find-longest-palindrome-suffix-helper string suffix)\n      (if (string=? (reverse-string\
+    \ suffix) suffix)\n          suffix\n          (find-longest-palindrome-suffix-helper\
+    \ string (substring suffix 1))))\n    (find-longest-palindrome-suffix-helper string\
+    \ string))\n  (define (find-prefix-to-append string)\n    (substring string 0\
+    \ (- (string-length string) (string-length (find-longest-palindrome-suffix string)))))\n\
+    \  (string-append string (reverse-string (find-prefix-to-append string))))\n",
+  "  (define (reverse string)\n    (if (null? string)\n        string\n        (append\
+    \ (reverse (cdr string)) (list (car string)))))\n  (define (is_palindrome string)\n\
+    \    (if (null? string)\n        #t\n        (and (equal? (car string) (car (reverse\
+    \ string)))\n             (is_palindrome (cdr (reverse string))))))\n  (define\
+    \ (find-longest-palindrome-suffix string)\n    (if (is_palindrome string)\n  \
+    \      string\n        (find-longest-palindrome-suffix (cdr string))))\n  (define\
+    \ (find-prefix-before-palindrome-suffix string)\n    (if (is_palindrome string)\n\
+    \        string\n        (find-prefix-before-palindrome-suffix (cdr string))))\n\
+    \  (append string (reverse (find-prefix-before-palindrome-suffix (find-longest-palindrome-suffix\
+    \ string)))))\n", "  (define (reverse string)\n    (if (string=? string \"\")\n\
+    \        \"\"\n        (string-append (reverse (substring string 1)) (substring\
+    \ string 0 1))))\n  (define (longest-palindrome-suffix string)\n    (define (palindrome-suffix?\
+    \ string)\n      (if (string=? string \"\")\n          #t\n          (and (string=?\
+    \ (substring string 0 1) (substring string (sub1 (string-length string))))\n \
+    \              (palindrome-suffix? (substring string 1 (sub1 (string-length string)))))))\n\
+    \    (if (palindrome-suffix? string)\n        string\n        (longest-palindrome-suffix\
+    \ (substring string 0 (sub1 (string-length string))))))\n  (string-append string\
+    \ (reverse (substring string 0 (sub1 (string-length (longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (reverse string)\n    (define (reverse-iter string\
+    \ result)\n      (if (empty? string)\n          result\n          (reverse-iter\
+    \ (rest string) (cons (first string) result))))\n    (reverse-iter string '()))\n\
+    \  (define (is-palindrome? string)\n    (define (is-palindrome-iter string)\n\
+    \      (if (or (empty? string) (empty? (rest string)))\n          #t\n       \
+    \   (and (equal? (first string) (last string))\n               (is-palindrome-iter\
+    \ (rest (butlast string))))))\n    (is-palindrome-iter string))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string result)\n \
+    \     (if (is-palindrome? string)\n          (cons string result)\n          (find-longest-palindrome-suffix-iter\
+    \ (rest string) (cons (first string) result))))\n    (find-longest-palindrome-suffix-iter\
+    \ string '()))\n  (define (append-reverse-prefix string)\n    (append string (reverse\
+    \ (butlast string))))\n  (append-reverse-prefix (find-longest-palindrome-suffix\
+    \ string)))\n", "  (define (reverse string)\n    (if (null? string)\n        string\n\
+    \        (append (reverse (cdr string)) (list (car string)))))\n  (define (is_palindrome\
+    \ string)\n    (if (null? string)\n        #t\n        (if (null? (cdr string))\n\
+    \            #t\n            (and (equal? (car string) (car (reverse string)))\n\
+    \                 (is_palindrome (cdr (reverse string)))))))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (if (is_palindrome string)\n        string\n        (find-longest-palindrome-suffix\
+    \ (cdr string))))\n  (append string (reverse (find-longest-palindrome-suffix string))))\n",
+  "  (define (reverse string)\n    (if (string=? string \"\")\n        \"\"\n    \
+    \    (string-append (reverse (substring string 1)) (substring string 0 1))))\n\
+    \  (define (is_palindrome string)\n    (string=? string (reverse string)))\n \
+    \ (define (find-longest-palindrome-suffix string)\n    (if (is_palindrome string)\n\
+    \        string\n        (find-longest-palindrome-suffix (substring string 1))))\n\
+    \  (define (find-prefix-before-palindrome-suffix string)\n    (substring string\
+    \ 0 (- (string-length string) (string-length (find-longest-palindrome-suffix string)))))\n\
+    \  (string-append string (reverse (find-prefix-before-palindrome-suffix string))))\n",
+  "  (define (reverse-string string)\n    (if (empty? string)\n        \"\"\n    \
+    \    (string-append (reverse-string (substring string 1)) (substring string 0\
+    \ 1))))\n  (define (is-palindrome? string)\n    (if (empty? string)\n        #t\n\
+    \        (and (is-palindrome? (substring string 1 (sub1 (string-length string))))\n\
+    \             (string=? (substring string 0 1) (substring string (sub1 (string-length\
+    \ string)) (string-length string))))))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (if (is-palindrome? string)\n        string\n        (find-longest-palindrome-suffix\
+    \ (substring string 0 (sub1 (string-length string))))))\n  (string-append string\
+    \ (reverse-string (substring string 0 (sub1 (string-length (find-longest-palindrome-suffix\
+    \ string)))))))\n", "  (define (reverse-string string)\n    (if (string=? string\
+    \ \"\")\n        \"\"\n        (string-append (reverse-string (substring string\
+    \ 1)) (substring string 0 1))))\n  (define (find-longest-palindrome-suffix string)\n\
+    \    (define (find-longest-palindrome-suffix-helper string suffix)\n      (if\
+    \ (string=? (reverse-string suffix) suffix)\n          suffix\n          (find-longest-palindrome-suffix-helper\
+    \ string (substring suffix 1))))\n    (find-longest-palindrome-suffix-helper string\
+    \ string))\n  (define (find-prefix-before-palindrome-suffix string)\n    (substring\
+    \ string 0 (- (string-length string) (string-length (find-longest-palindrome-suffix\
+    \ string)))))\n  (string-append string (reverse-string (find-prefix-before-palindrome-suffix\
+    \ string))))\n", "  (define (reverse-string string)\n    (define (reverse-string-iter\
+    \ string result)\n      (if (string=? string \"\")\n          result\n       \
+    \   (reverse-string-iter (substring string 1) (string-append (substring string\
+    \ 0 1) result))))\n    (reverse-string-iter string \"\"))\n  (define (is-palindrome\
+    \ string)\n    (string=? string (reverse-string string)))\n  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-iter string result)\n \
+    \     (if (is-palindrome string)\n          string\n          (find-longest-palindrome-suffix-iter\
+    \ (substring string 0 (- (string-length string) 1)) result)))\n    (find-longest-palindrome-suffix-iter\
+    \ string \"\"))\n  (define (find-prefix string)\n    (substring string 0 (- (string-length\
+    \ string) (string-length (find-longest-palindrome-suffix string)))))\n  (string-append\
+    \ string (reverse-string (find-prefix string))))\n", "  (define (make-palindrome-helper\
+    \ string)\n    (if (string=? string \"\")\n        \"\"\n        (let* ((len (string-length\
+    \ string))\n               (half-len (quotient len 2))\n               (prefix\
+    \ (substring string 0 half-len))\n               (suffix (substring string half-len\
+    \ len)))\n          (if (string=? prefix (reverse suffix))\n              (string-append\
+    \ string (reverse prefix))\n              (make-palindrome-helper (substring string\
+    \ 0 (- len 1)))))))\n  (make-palindrome-helper string))\n", "  (define (reverse\
+    \ str)\n    (if (empty? str)\n        \"\"\n        (string-append (reverse (substring\
+    \ str 1)) (string (string-ref str 0)))))\n  (define (longest-palindrome str)\n\
+    \    (if (empty? str)\n        \"\"\n        (let* ([first-char (string-ref str\
+    \ 0)]\n               [last-char (string-ref str (- (string-length str) 1))]\n\
+    \               [rest (substring str 1 (- (string-length str) 1))])\n        \
+    \  (if (char=? first-char last-char)\n              (string-append (string first-char)\
+    \ (longest-palindrome rest) (string last-char))\n              (longest-palindrome\
+    \ rest)))))\n  (let* ([palindrome (longest-palindrome string)]\n         [prefix\
+    \ (substring string 0 (- (string-length string) (string-length palindrome)))])\n\
+    \    (string-append string (reverse prefix))))\n", "  (define (find-longest-palindrome-suffix\
+    \ string)\n    (define (find-longest-palindrome-suffix-helper string suffix)\n\
+    \      (if (string=? (substring string 0 (string-length suffix)) (reverse suffix))\n\
+    \          suffix\n          (find-longest-palindrome-suffix-helper string (substring\
+    \ suffix 1))))\n    (find-longest-palindrome-suffix-helper string string))\n \
+    \ (string-append string (reverse (substring string 0 (- (string-length string)\
+    \ (string-length (find-longest-palindrome-suffix string)))))))\n", "  (define\
+    \ (find-longest-palindrome-suffix string)\n    (define (find-longest-palindrome-suffix-helper\
+    \ string suffix)\n      (if (string=? suffix \"\")\n          \"\"\n         \
+    \ (if (string=? (substring string 0 (string-length suffix)) suffix)\n        \
+    \      suffix\n              (find-longest-palindrome-suffix-helper string (substring\
+    \ suffix 1)))))\n    (find-longest-palindrome-suffix-helper string (substring\
+    \ string 1)))\n  (string-append string (string-reverse (substring string 0 (-\
+    \ (string-length string) (string-length (find-longest-palindrome-suffix string)))))))\n"]
+stop_tokens:
+- "\n(define "
+- "\n#|"
+- "\n;"
+- "\n("

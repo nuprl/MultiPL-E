@@ -30,7 +30,7 @@ func TestDouble_The_Difference(t *testing.T) {
 		expected interface{}
 	}
    tests := []test{
-     { actual: candidate([]int{}), expected: 0 },
+     { actual: candidate([]float64{}), expected: 0 },
      { actual: candidate([]float64{5.0, 4.0}), expected: 25 },
      { actual: candidate([]float64{0.1, 0.2, 0.3}), expected: 0 },
      { actual: candidate([]float64{-10.0, -20.0, -30.0}), expected: 0 },

@@ -12,5 +12,5 @@ std::vector<long> unique(std::vector<long> l) {
 }
 int main() {
     auto candidate = unique;
-    assert(candidate((std::vector<long>({5, 3, 5, 2, 3, 3, 9, 0, 123}))) == (std::vector<long>({0, 2, 3, 5, 9, 123})));
+    assert(candidate((std::vector<long>({(long)5, (long)3, (long)5, (long)2, (long)3, (long)3, (long)9, (long)0, (long)123}))) == (std::vector<long>({(long)0, (long)2, (long)3, (long)5, (long)9, (long)123})));
 }

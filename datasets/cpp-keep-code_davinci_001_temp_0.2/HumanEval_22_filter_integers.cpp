@@ -18,6 +18,6 @@ std::vector<long> filter_integers(std::vector<std::any> values) {
 int main() {
     auto candidate = filter_integers;
     assert(candidate((std::vector<std::any>())) == (std::vector<long>()));
-    assert(candidate((std::vector<std::any>(std::vector<std::any>(std::vector<std::any>(), 23.2, 9, "adasd"}))) == (std::vector<long>({4, 9})));
-    assert(candidate((std::vector<std::any>({3, "c", 3, 3, "a", "b"}))) == (std::vector<long>({3, 3, 3})));
+    assert(candidate((std::vector<std::any>(long)"adasd"}))) == (std::vector<long>({(long)4, (long)9})));
+    assert(candidate((std::vector<std::any>(long)"b"}))) == (std::vector<long>({(long)3, (long)3, (long)3})));
 }

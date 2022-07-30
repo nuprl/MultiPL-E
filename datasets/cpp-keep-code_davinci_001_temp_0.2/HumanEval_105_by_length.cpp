@@ -52,9 +52,9 @@ std::vector<std::string> by_length(std::vector<long> arr) {
 }
 int main() {
     auto candidate = by_length;
-    assert(candidate((std::vector<long>({2, 1, 1, 4, 5, 8, 2, 3}))) == (std::vector<std::string>({"Eight", "Five", "Four", "Three", "Two", "Two", "One", "One"})));
+    assert(candidate((std::vector<long>({(long)2, (long)1, (long)1, (long)4, (long)5, (long)8, (long)2, (long)3}))) == (std::vector<std::string>({(std::string)"Eight", (std::string)"Five", (std::string)"Four", (std::string)"Three", (std::string)"Two", (std::string)"Two", (std::string)"One", (std::string)"One"})));
     assert(candidate((std::vector<long>())) == (std::vector<std::string>()));
-    assert(candidate((std::vector<long>({1, -1, 55}))) == (std::vector<std::string>({"One"})));
-    assert(candidate((std::vector<long>({1, -1, 3, 2}))) == (std::vector<std::string>({"Three", "Two", "One"})));
-    assert(candidate((std::vector<long>({9, 4, 8}))) == (std::vector<std::string>({"Nine", "Eight", "Four"})));
+    assert(candidate((std::vector<long>({(long)1, (long)-1, (long)55}))) == (std::vector<std::string>({(std::string)"One"})));
+    assert(candidate((std::vector<long>({(long)1, (long)-1, (long)3, (long)2}))) == (std::vector<std::string>({(std::string)"Three", (std::string)"Two", (std::string)"One"})));
+    assert(candidate((std::vector<long>({(long)9, (long)4, (long)8}))) == (std::vector<std::string>({(std::string)"Nine", (std::string)"Eight", (std::string)"Four"})));
 }

@@ -43,10 +43,10 @@ std::vector<long> sort_array(std::vector<long> array) {
 int main() {
     auto candidate = sort_array;
     assert(candidate((std::vector<long>())) == (std::vector<long>()));
-    assert(candidate((std::vector<long>({5}))) == (std::vector<long>({5})));
-    assert(candidate((std::vector<long>({2, 4, 3, 0, 1, 5}))) == (std::vector<long>({0, 1, 2, 3, 4, 5})));
-    assert(candidate((std::vector<long>({2, 4, 3, 0, 1, 5, 6}))) == (std::vector<long>({6, 5, 4, 3, 2, 1, 0})));
-    assert(candidate((std::vector<long>({2, 1}))) == (std::vector<long>({1, 2})));
-    assert(candidate((std::vector<long>({15, 42, 87, 32, 11, 0}))) == (std::vector<long>({0, 11, 15, 32, 42, 87})));
-    assert(candidate((std::vector<long>({21, 14, 23, 11}))) == (std::vector<long>({23, 21, 14, 11})));
+    assert(candidate((std::vector<long>({(long)5}))) == (std::vector<long>({(long)5})));
+    assert(candidate((std::vector<long>({(long)2, (long)4, (long)3, (long)0, (long)1, (long)5}))) == (std::vector<long>({(long)0, (long)1, (long)2, (long)3, (long)4, (long)5})));
+    assert(candidate((std::vector<long>({(long)2, (long)4, (long)3, (long)0, (long)1, (long)5, (long)6}))) == (std::vector<long>({(long)6, (long)5, (long)4, (long)3, (long)2, (long)1, (long)0})));
+    assert(candidate((std::vector<long>({(long)2, (long)1}))) == (std::vector<long>({(long)1, (long)2})));
+    assert(candidate((std::vector<long>({(long)15, (long)42, (long)87, (long)32, (long)11, (long)0}))) == (std::vector<long>({(long)0, (long)11, (long)15, (long)32, (long)42, (long)87})));
+    assert(candidate((std::vector<long>({(long)21, (long)14, (long)23, (long)11}))) == (std::vector<long>({(long)23, (long)21, (long)14, (long)11})));
 }

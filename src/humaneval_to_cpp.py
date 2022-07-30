@@ -46,10 +46,18 @@ class CPPTranslator:
         self.none_type = "{}"
         self.list_type = "std::vector<%s>"
         self.tuple_type = "std::tuple<%s>"
-        self.make_tuple = "std::make_tuple"
         self.dict_type = "std::map<%s, %s>"
         self.optional_type = "std::optional<%s>"
         self.any_type = "std::any"
+
+    def make_list(self, elem_type, list_literal):
+        return self.list_type%elem_type + "(" + list_literal + ")"
+    
+    def make_tuple(self, elem_types):
+        return "std::make_tuple"
+
+    def make_array_literal(self, list_contents):
+        return "{" + list_contents + "}"
 
     def pytype_to_cpptype(self, ann: ast.expr | None) -> str:
         '''Traverses an AST annotation and generates C++ Types
@@ -93,7 +101,6 @@ class CPPTranslator:
                     elem_type = self.pytype_to_cpptype(e)
                     union_elems_types += [elem_type]
                     union_decl[elem_type] = f"f{i}" 
-
                 union_name = ("Union_%s"%("_".join(union_elems_types))).replace("::", "_").replace("<", "_").replace(">", "_")
                 if union_name not in self.union_decls:
                     self.union_decls[union_name] = union_decl
@@ -122,7 +129,7 @@ class CPPTranslator:
         self.args_type = [self.pytype_to_cpptype(arg.annotation) for arg in args]
         formal_args = [f"{self.pytype_to_cpptype(arg.annotation)} {self.gen_var(arg.arg)[0]}" for arg in args]
         formal_arg_list = ", ".join(formal_args)
-
+        
         self.ret_ann = _returns
         self.ret_cpp_type = self.pytype_to_cpptype(_returns)
         unions = ""
@@ -156,23 +163,45 @@ class CPPTranslator:
         '''
         return f"({s})"
 
+    def find_type_to_coerce(self, expr):
+        '''
+        '''
+
+        return re.findall(".+\(", expr)
+
     def update_type(self, right: Tuple[ast.Expr, str], expected_type: Tuple[str]) -> str:
-        '''Update type of the right expression if it is different from the
+        '''Coerce type of the right expression if it is different from the
             expected type function
         '''
-        
+
         if self.pytype_to_cpptype(right[1]) == expected_type:
             return self.wrap_in_brackets(right[0])
         
         #No need to replace std::make_tuple
-        if right[0].find(self.make_tuple) == 0:
+        if right[0].find(self.make_tuple([])) == 0:
             return right[0] 
+        
+        #No need to replace empty optional
+        if right[0].find("Optional.empty()") == 0:
+            return right[0]
 
-        if re.findall("(.+)\(", right[0]) == []:
+        if expected_type.find("Optional") != -1:
+            #Have to do this because Java does Optional.of and C++ have std::optional
+            return f"{self.make_optional('')}({right[0]})"
+        
+        type_to_coerce = self.find_type_to_coerce(right[0])
+        coerced_type = None
+        if type_to_coerce == []:
             #No type? add the type of right
-            return self.wrap_in_brackets(expected_type+"("+right[0]+")")
+            coerced_type = expected_type+"("+right[0]+")"
+        else:
+            type_to_coerce = type_to_coerce[0]
+            coerced_type = right[0].replace(type_to_coerce, expected_type+"(")
+        
+        ##Remove extra brackets
+        coerced_type = coerced_type.replace('(())', '()')
+        return self.wrap_in_brackets(coerced_type)
 
-        return self.wrap_in_brackets(re.sub("(.+?)\(", expected_type+"(", right[0]))
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
@@ -215,13 +244,13 @@ class CPPTranslator:
         if type(c) == bool:
             return str(c).lower(), ast.Name("bool")
         if type(c) == str:
-            return f'"{c}"', ast.Name("str")
+            return f'"{c}"'.replace("\n","\\n"), ast.Name("str")
         if type(c) == int:
             return repr(c), ast.Name("int")
         if type(c) == float:
             return repr(c), ast.Name("float")
         #It appears None occurs for only optional
-        return "{}", ast.Name("None")
+        return self.none_type, ast.Name("None")
 
     def gen_var(self, v: str) -> Tuple[str, None]:
         """Translate a variable with name v."""
@@ -235,12 +264,20 @@ class CPPTranslator:
         """Translate a list with elements l
         A list [ x, y, z] translates to vector<?>{ x, y, z }
         """
-        #Assuming all elements in list have same type
-        if l == [] or l == ():
-          return "std::vector<long>()", ast.List([ast.Name("int")])
 
+        if l == [] or l == ():
+          return self.make_list(self.int_type, ""), ast.List([ast.Name("int")])
+        
+        #Go through all types of list and prefer the bigger type        
         elem_type = self.pytype_to_cpptype(l[0][1])
-        return self.list_type%elem_type + "({" + ", ".join([e[0] for e in l]) + "})", ast.List([l[0][1]])
+        list_literal = self.make_array_literal(", ".join([f"({elem_type}){e[0]}" for e in l]))
+        return self.make_list(elem_type, list_literal), ast.List([l[0][1]])
+    
+    def make_optional_type(self, types):
+        return self.optional_type % types
+
+    def make_optional(self, types):
+        return self.optional_type % types
 
     def gen_tuple(self, t: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.Tuple]:
         """Translate a tuple with elements t
@@ -263,13 +300,20 @@ class CPPTranslator:
             else:
                 #Asuming long if no other type
                 other_types = self.int_type
-            new_elem_type = self.optional_type % other_types
+            new_elem_type = self.make_optional(other_types)
 
-            return self.make_tuple + "(" + ", ".join([f"{new_elem_type}({e[0]})" for e in t]) + ")", \
+            return self.make_tuple([]) + "(" + ", ".join([f"{new_elem_type}({e[0]})" for e in t]) + ")", \
                 ast.Tuple([e[1] for e in t])
 
-        return self.make_tuple + "(" + ", ".join([e[0] for e in t]) + ")", \
+        return self.make_tuple([]) + "(" + ", ".join([e[0] for e in t]) + ")", \
             ast.Tuple([e[1] for e in t])
+
+    def make_map_literal(self, keys, values):
+        return "{" + ", ".join(f"{{{k}, {v}}}" for k, v in zip(keys, values)) + "}"
+
+    def make_map(self, dict_type, map_literal):
+        cpp_type = self.pytype_to_cpptype(dict_type)
+        return f"{cpp_type}({map_literal})"
 
     def gen_dict(self, keys: List[Tuple[str, ast.Expr]], values: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.Dict]:
         """Translate a dictionary with keys and values
@@ -278,7 +322,7 @@ class CPPTranslator:
         if keys == [] and values == []:
             dict_type = ast.Dict(ast.Name("None"), ast.Name("None"))
             cpp_type = self.pytype_to_cpptype(dict_type)
-            return cpp_type+"({})", dict_type
+            return self.make_map(dict_type, ""), dict_type
         
         #Assuming all keys and values have same type
         keys_type = keys[0][1]
@@ -287,8 +331,8 @@ class CPPTranslator:
         values = [v[0] for v in values]
         
         dict_type = ast.Dict(keys_type, values_type)
-        cpp_type = self.pytype_to_cpptype(dict_type)
-        return cpp_type + "({ " + ", ".join(f"{{{k}, {v}}}" for k, v in zip(keys, values)) + " })", dict_type
+        map_literal = self.make_map_literal(keys, values)
+        return self.make_map(dict_type, map_literal), dict_type
 
     def gen_call(self, func: str, args: List[Tuple[str, ast.Expr]]) -> Tuple[str, None]:
         """Translate a function call `func(args)`

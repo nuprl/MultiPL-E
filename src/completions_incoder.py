@@ -1,6 +1,8 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from libcompletions import parameterized_main
+from torch.utils.tensorboard import SummaryWriter
+
 
 model_name = "facebook/incoder-6B"
 
@@ -62,7 +64,7 @@ def decode_single_output(output_tensor, prompt):
 
 
 def incoder_completion(
-    prompt: str, stop_tokens, max_to_generate: int, temperature: float, n
+    prompt: str, stop_tokens, max_to_generate: int, temperature: float, n, writer: SummaryWriter
 ):
     """
     Do standard left-to-right completion of the prefix `input` by sampling from the model
@@ -75,7 +77,7 @@ def incoder_completion(
 
 
 def main():
-    parameterized_main(incoder_completion, max_to_generate=512)
+    parameterized_main(incoder_completion, 'incoder', max_to_generate=512)
 
 
 if __name__ == "__main__":

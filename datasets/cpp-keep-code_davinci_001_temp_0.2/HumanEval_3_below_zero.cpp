@@ -21,9 +21,9 @@ bool below_zero(std::vector<long> operations) {
 int main() {
     auto candidate = below_zero;
     assert(candidate((std::vector<long>())) == (false));
-    assert(candidate((std::vector<long>({1, 2, -3, 1, 2, -3}))) == (false));
-    assert(candidate((std::vector<long>({1, 2, -4, 5, 6}))) == (true));
-    assert(candidate((std::vector<long>({1, -1, 2, -2, 5, -5, 4, -4}))) == (false));
-    assert(candidate((std::vector<long>({1, -1, 2, -2, 5, -5, 4, -5}))) == (true));
-    assert(candidate((std::vector<long>({1, -2, 2, -2, 5, -5, 4, -4}))) == (true));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)-3, (long)1, (long)2, (long)-3}))) == (false));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)-4, (long)5, (long)6}))) == (true));
+    assert(candidate((std::vector<long>({(long)1, (long)-1, (long)2, (long)-2, (long)5, (long)-5, (long)4, (long)-4}))) == (false));
+    assert(candidate((std::vector<long>({(long)1, (long)-1, (long)2, (long)-2, (long)5, (long)-5, (long)4, (long)-5}))) == (true));
+    assert(candidate((std::vector<long>({(long)1, (long)-2, (long)2, (long)-2, (long)5, (long)-5, (long)4, (long)-4}))) == (true));
 }

@@ -41,12 +41,12 @@ std::vector<long> pluck(std::vector<long> arr) {
 }
 int main() {
     auto candidate = pluck;
-    assert(candidate((std::vector<long>({4, 2, 3}))) == (std::vector<long>({2, 1})));
-    assert(candidate((std::vector<long>({1, 2, 3}))) == (std::vector<long>({2, 1})));
+    assert(candidate((std::vector<long>({(long)4, (long)2, (long)3}))) == (std::vector<long>({(long)2, (long)1})));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3}))) == (std::vector<long>({(long)2, (long)1})));
     assert(candidate((std::vector<long>())) == (std::vector<long>()));
-    assert(candidate((std::vector<long>({5, 0, 3, 0, 4, 2}))) == (std::vector<long>({0, 1})));
-    assert(candidate((std::vector<long>({1, 2, 3, 0, 5, 3}))) == (std::vector<long>({0, 3})));
-    assert(candidate((std::vector<long>({5, 4, 8, 4, 8}))) == (std::vector<long>({4, 1})));
-    assert(candidate((std::vector<long>({7, 6, 7, 1}))) == (std::vector<long>({6, 1})));
-    assert(candidate((std::vector<long>({7, 9, 7, 1}))) == (std::vector<long>()));
+    assert(candidate((std::vector<long>({(long)5, (long)0, (long)3, (long)0, (long)4, (long)2}))) == (std::vector<long>({(long)0, (long)1})));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)0, (long)5, (long)3}))) == (std::vector<long>({(long)0, (long)3})));
+    assert(candidate((std::vector<long>({(long)5, (long)4, (long)8, (long)4, (long)8}))) == (std::vector<long>({(long)4, (long)1})));
+    assert(candidate((std::vector<long>({(long)7, (long)6, (long)7, (long)1}))) == (std::vector<long>({(long)6, (long)1})));
+    assert(candidate((std::vector<long>({(long)7, (long)9, (long)7, (long)1}))) == (std::vector<long>()));
 }

@@ -10,11 +10,12 @@ import (
 // [5]
 // >>> filter_integers([1, 2, 3, 'abc', {}, []])
 // [1, 2, 3]
-func filter_integers(values []any) []int {
+func filter_integers(values []interface{}) []int {
     var result []int
-    for _, value := range values {
-        if value, ok := value.(int); ok {
-            result = append(result, value)
+    for _, v := range values {
+        switch v.(type) {
+        case int:
+            result = append(result, v.(int))
         }
     }
     return result
@@ -28,9 +29,9 @@ func TestFilter_Integers(t *testing.T) {
 		expected interface{}
 	}
    tests := []test{
-     { actual: candidate([]int{}), expected: []int{} },
-     { actual: candidate([]int{4, map[string]int{}, []string{}, 23.2, 9, "adasd"}), expected: []int{4, 9} },
-     { actual: candidate([]int{3, "c", 3, 3, "a", "b"}), expected: []int{3, 3, 3} },
+     { actual: candidate([]interface{}{}), expected: []int{} },
+     { actual: candidate([]interface{}{4, map[interface{}]interface{}{}, []interface{}{}, 23.2, 9, "adasd"}), expected: []int{4, 9} },
+     { actual: candidate([]interface{}{3, "c", 3, 3, "a", "b"}), expected: []int{3, 3, 3} },
    }
 
 	for i, tc := range tests {

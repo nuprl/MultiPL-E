@@ -32,8 +32,8 @@ std::vector<std::string> separate_paren_groups(std::string paren_string) {
 }
 int main() {
     auto candidate = separate_paren_groups;
-    assert(candidate(("(()()) ((())) () ((())()())")) == (std::vector<std::string>({"(()())", "((()))", "()", "((())()())"})));
-    assert(candidate(("() (()) ((())) (((())))")) == (std::vector<std::string>({"()", "(())", "((()))", "(((())))"})));
-    assert(candidate(("(()(())((())))")) == (std::vector<std::string>({"(()(())((())))"})));
-    assert(candidate(("( ) (( )) (( )( ))")) == (std::vector<std::string>({"()", "(())", "(()())"})));
+    assert(candidate(("(()()) ((())) () ((())()())")) == (std::vector<std::string>({(std::string)"(()())", (std::string)"((()))", (std::string)"()", (std::string)"((())()())"})));
+    assert(candidate(("() (()) ((())) (((())))")) == (std::vector<std::string>({(std::string)"()", (std::string)"(())", (std::string)"((()))", (std::string)"(((())))"})));
+    assert(candidate(("(()(())((())))")) == (std::vector<std::string>({(std::string)"(()(())((())))"})));
+    assert(candidate(("( ) (( )) (( )( ))")) == (std::vector<std::string>({(std::string)"()", (std::string)"(())", (std::string)"(()())"})));
 }

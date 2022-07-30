@@ -25,11 +25,11 @@ long count_nums(std::vector<long> arr) {
 int main() {
     auto candidate = count_nums;
     assert(candidate((std::vector<long>())) == (0));
-    assert(candidate((std::vector<long>({-1, -2, 0}))) == (0));
-    assert(candidate((std::vector<long>({1, 1, 2, -2, 3, 4, 5}))) == (6));
-    assert(candidate((std::vector<long>({1, 6, 9, -6, 0, 1, 5}))) == (5));
-    assert(candidate((std::vector<long>({1, 100, 98, -7, 1, -1}))) == (4));
-    assert(candidate((std::vector<long>({12, 23, 34, -45, -56, 0}))) == (5));
-    assert(candidate((std::vector<long>({0, 1}))) == (1));
-    assert(candidate((std::vector<long>({1}))) == (1));
+    assert(candidate((std::vector<long>({(long)-1, (long)-2, (long)0}))) == (0));
+    assert(candidate((std::vector<long>({(long)1, (long)1, (long)2, (long)-2, (long)3, (long)4, (long)5}))) == (6));
+    assert(candidate((std::vector<long>({(long)1, (long)6, (long)9, (long)-6, (long)0, (long)1, (long)5}))) == (5));
+    assert(candidate((std::vector<long>({(long)1, (long)100, (long)98, (long)-7, (long)1, (long)-1}))) == (4));
+    assert(candidate((std::vector<long>({(long)12, (long)23, (long)34, (long)-45, (long)-56, (long)0}))) == (5));
+    assert(candidate((std::vector<long>({(long)0, (long)1}))) == (1));
+    assert(candidate((std::vector<long>({(long)1}))) == (1));
 }

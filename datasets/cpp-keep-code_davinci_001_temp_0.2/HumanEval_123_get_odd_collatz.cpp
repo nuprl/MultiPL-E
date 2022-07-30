@@ -28,8 +28,8 @@ std::vector<long> get_odd_collatz(long n) {
 }
 int main() {
     auto candidate = get_odd_collatz;
-    assert(candidate((14)) == (std::vector<long>({1, 5, 7, 11, 13, 17})));
-    assert(candidate((5)) == (std::vector<long>({1, 5})));
-    assert(candidate((12)) == (std::vector<long>({1, 3, 5})));
-    assert(candidate((1)) == (std::vector<long>({1})));
+    assert(candidate((14)) == (std::vector<long>({(long)1, (long)5, (long)7, (long)11, (long)13, (long)17})));
+    assert(candidate((5)) == (std::vector<long>({(long)1, (long)5})));
+    assert(candidate((12)) == (std::vector<long>({(long)1, (long)3, (long)5})));
+    assert(candidate((1)) == (std::vector<long>({(long)1})));
 }

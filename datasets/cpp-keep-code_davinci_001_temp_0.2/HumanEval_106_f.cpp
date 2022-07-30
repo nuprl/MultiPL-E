@@ -21,8 +21,8 @@ std::vector<long> f(long n) {
 }
 int main() {
     auto candidate = f;
-    assert(candidate((5)) == (std::vector<long>({1, 2, 6, 24, 15})));
-    assert(candidate((7)) == (std::vector<long>({1, 2, 6, 24, 15, 720, 28})));
-    assert(candidate((1)) == (std::vector<long>({1})));
-    assert(candidate((3)) == (std::vector<long>({1, 2, 6})));
+    assert(candidate((5)) == (std::vector<long>({(long)1, (long)2, (long)6, (long)24, (long)15})));
+    assert(candidate((7)) == (std::vector<long>({(long)1, (long)2, (long)6, (long)24, (long)15, (long)720, (long)28})));
+    assert(candidate((1)) == (std::vector<long>({(long)1})));
+    assert(candidate((3)) == (std::vector<long>({(long)1, (long)2, (long)6})));
 }

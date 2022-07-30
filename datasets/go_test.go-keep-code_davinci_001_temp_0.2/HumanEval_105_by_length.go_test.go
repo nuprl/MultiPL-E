@@ -41,7 +41,7 @@ func TestBy_Length(t *testing.T) {
 	}
    tests := []test{
      { actual: candidate([]int{2, 1, 1, 4, 5, 8, 2, 3}), expected: []string{"Eight", "Five", "Four", "Three", "Two", "Two", "One", "One"} },
-     { actual: candidate([]string{}), expected: []string{} },
+     { actual: candidate([]int{}), expected: []string{} },
      { actual: candidate([]int{1, -1, 55}), expected: []string{"One"} },
      { actual: candidate([]int{1, -1, 3, 2}), expected: []string{"Three", "Two", "One"} },
      { actual: candidate([]int{9, 4, 8}), expected: []string{"Nine", "Eight", "Four"} },

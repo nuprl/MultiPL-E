@@ -28,7 +28,7 @@ std::vector<long> sort_even(std::vector<long> l) {
 }
 int main() {
     auto candidate = sort_even;
-    assert(candidate((std::vector<long>({1, 2, 3}))) == (std::vector<long>({1, 2, 3})));
-    assert(candidate((std::vector<long>({5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10}))) == (std::vector<long>({-10, 3, -5, 2, -3, 3, 5, 0, 9, 1, 123})));
-    assert(candidate((std::vector<long>({5, 8, -12, 4, 23, 2, 3, 11, 12, -10}))) == (std::vector<long>({-12, 8, 3, 4, 5, 2, 12, 11, 23, -10})));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3}))) == (std::vector<long>({(long)1, (long)2, (long)3})));
+    assert(candidate((std::vector<long>({(long)5, (long)3, (long)-5, (long)2, (long)-3, (long)3, (long)9, (long)0, (long)123, (long)1, (long)-10}))) == (std::vector<long>({(long)-10, (long)3, (long)-5, (long)2, (long)-3, (long)3, (long)5, (long)0, (long)9, (long)1, (long)123})));
+    assert(candidate((std::vector<long>({(long)5, (long)8, (long)-12, (long)4, (long)23, (long)2, (long)3, (long)11, (long)12, (long)-10}))) == (std::vector<long>({(long)-12, (long)8, (long)3, (long)4, (long)5, (long)2, (long)12, (long)11, (long)23, (long)-10})));
 }

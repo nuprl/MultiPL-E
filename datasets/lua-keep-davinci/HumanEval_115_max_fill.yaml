@@ -1,0 +1,1617 @@
+name: HumanEval_115_max_fill
+language: lua
+prompt: "-- You are given a rectangular grid of wells. Each row represents a single\
+  \ well,\n-- and each 1 in a row represents a single unit of water.\n-- Each well\
+  \ has a corresponding bucket that can be used to extract water from it, \n-- and\
+  \ all buckets have the same capacity.\n-- Your task is to use the buckets to empty\
+  \ the wells.\n-- Output the number of times you need to lower the buckets.\n-- Example\
+  \ 1:\n-- Input: \n-- grid : [[0,0,1,0], [0,1,0,0], [1,1,1,1]]\n-- bucket_capacity\
+  \ : 1\n-- Output: 6\n-- Example 2:\n-- Input: \n-- grid : [[0,0,1,1], [0,0,0,0],\
+  \ [1,1,1,1], [0,1,1,1]]\n-- bucket_capacity : 2\n-- Output: 5\n-- Example 3:\n--\
+  \ Input: \n-- grid : [[0,0,0], [0,0,0]]\n-- bucket_capacity : 5\n-- Output: 0\n\
+  -- Constraints:\n-- * all wells have the same length\n-- * 1 <= grid.length <= 10^2\n\
+  -- * 1 <= grid[:,1].length <= 10^2\n-- * grid[i][j] -> 0 | 1\n-- * 1 <= capacity\
+  \ <= 10\nlocal function max_fill(grid, capacity)\n"
+tests: "lu = require('luaunit')\n\nfunction test_humaneval()\nlocal candidate = max_fill\n\
+  \    lu.assertEquals(candidate({{0, 0, 1, 0}, {0, 1, 0, 0}, {1, 1, 1, 1}}, 1), 6)\n\
+  \    lu.assertEquals(candidate({{0, 0, 1, 1}, {0, 0, 0, 0}, {1, 1, 1, 1}, {0, 1,\
+  \ 1, 1}}, 2), 5)\n    lu.assertEquals(candidate({{0, 0, 0}, {0, 0, 0}}, 5), 0)\n\
+  \    lu.assertEquals(candidate({{1, 1, 1, 1}, {1, 1, 1, 1}}, 2), 4)\n    lu.assertEquals(candidate({{1,\
+  \ 1, 1, 1}, {1, 1, 1, 1}}, 9), 2)\nend\n\nos.exit(lu.LuaUnit.run())"
+completions: ["    local n = #grid\n    local m = #grid[1]\n    local max_fill = 0\n\
+    \    for i = 1, n do\n        for j = 1, m do\n            if grid[i][j] == 1\
+    \ then\n                max_fill = max_fill + 1\n            end\n        end\n\
+    \    end\n    return math.ceil(max_fill / capacity)\nend", "    local n, m = #grid,\
+    \ #grid[1]\n    local function get_fill(i, j)\n        local fill = 0\n      \
+    \  for k = 1, i do\n            fill = fill + grid[k][j]\n        end\n      \
+    \  return fill\n    end\n    local function get_max_fill(i, j)\n        local\
+    \ max_fill = 0\n        for k = 1, j do\n            max_fill = math.max(max_fill,\
+    \ get_fill(i, k))\n        end\n        return max_fill\n    end\n    local function\
+    \ get_min_fill(i, j)\n        local min_fill = math.huge\n        for k = 1, j\
+    \ do\n            min_fill = math.min(min_fill, get_fill(i, k))\n        end\n\
+    \        return min_fill\n    end\n    local function get_fill_diff(i, j)\n  \
+    \      return get_max_fill(i, j) - get_min_fill(i, j)\n    end\n    local function\
+    \ get_fill_diff_sum(i, j)\n        local sum = 0\n        for k = 1, i do\n  \
+    \          sum = sum + get_fill_diff(k, j)\n        end\n        return sum\n\
+    \    end\n    local function get_fill_diff_sum_sum(i, j)\n        local sum =\
+    \ 0\n        for k = 1, j do\n            sum = sum + get_fill_diff_sum(i, k)\n\
+    \        end\n        return sum\n    end\n    local function get_fill_diff_sum_sum_sum(i,\
+    \ j)\n        local sum = 0\n        for k = 1, i do\n            sum = sum +\
+    \ get_fill_diff_sum_sum(k, j)\n        end\n        return sum\n    end\n    local\
+    \ function get_fill_diff_sum_sum_sum_sum(i, j)\n        local sum = 0\n      \
+    \  for k = 1, j do\n            sum = sum + get_fill_diff_sum_sum_sum(i, k)\n\
+    \        end\n        return sum\n    end\n    local function get_fill_diff_sum_sum_sum_sum_sum(i,\
+    \ j", "    local m, n = #grid, #grid[1]\n    local function dfs(i, j, visited)\n\
+    \        if i < 1 or i > m or j < 1 or j > n or visited[i][j] == 1 or grid[i][j]\
+    \ == 0 then\n            return 0\n        end\n        visited[i][j] = 1\n  \
+    \      return 1 + dfs(i + 1, j, visited) + dfs(i - 1, j, visited) + dfs(i, j +\
+    \ 1, visited) + dfs(i, j - 1, visited)\n    end\n    local function fill(i, j,\
+    \ visited)\n        if i < 1 or i > m or j < 1 or j > n or visited[i][j] == 1\
+    \ or grid[i][j] == 0 then\n            return 0\n        end\n        visited[i][j]\
+    \ = 1\n        local cnt = 1\n        if grid[i][j] == 1 then\n            grid[i][j]\
+    \ = 0\n        else\n            grid[i][j] = grid[i][j] - 1\n        end\n  \
+    \      cnt = cnt + fill(i + 1, j, visited) + fill(i - 1, j, visited) + fill(i,\
+    \ j + 1, visited) + fill(i, j - 1, visited)\n        return cnt\n    end\n   \
+    \ local res = 0\n    local visited = {}\n    for i = 1, m do\n        visited[i]\
+    \ = {}\n    end\n    for i = 1, m do\n        for j = 1, n do\n            if\
+    \ grid[i][j] == 1 then\n                local cnt = dfs(i, j, visited)\n     \
+    \           if cnt > capacity then\n                    local cnt2 = fill(i, j,\
+    \ visited)\n                    res = res + math.ceil(cnt2 / capacity)\n     \
+    \           end\n            end\n        end\n    end\n    return res\nend\n\
+    return max_fill", "    local n, m = #grid, #grid[1]\n    local function get_max(i,\
+    \ j)\n        local max = 0\n        for k = 1, i - 1 do\n            max = math.max(max,\
+    \ grid[k][j])\n        end\n        return max\n    end\n    local function fill(i,\
+    \ j)\n        local max = get_max(i, j)\n        local diff = max - grid[i][j]\n\
+    \        if diff > 0 then\n            grid[i][j] = max\n            return diff\n\
+    \        end\n        return 0\n    end\n    local function fill_row(i)\n    \
+    \    local sum = 0\n        for j = 1, m do\n            sum = sum + fill(i, j)\n\
+    \        end\n        return sum\n    end\n    local function fill_col(j)\n  \
+    \      local sum = 0\n        for i = 1, n do\n            sum = sum + fill(i,\
+    \ j)\n        end\n        return sum\n    end\n    local function fill_grid()\n\
+    \        local sum = 0\n        for i = 1, n do\n            sum = sum + fill_row(i)\n\
+    \        end\n        for j = 1, m do\n            sum = sum + fill_col(j)\n \
+    \       end\n        return sum\n    end\n    local function fill_bucket(i, j)\n\
+    \        local max = get_max(i, j)\n        local diff = max - grid[i][j]\n  \
+    \      if diff > 0 then\n            grid[i][j] = max\n            return math.ceil(diff\
+    \ / capacity)\n        end\n        return 0\n    end\n    local function fill_row_bucket(i)\n\
+    \        local sum = 0\n        for j = 1, m do\n            sum = sum + fill_bucket(i,\
+    \ j)\n        end\n        return sum\n    end\n    local function fill_col_bucket(j)\n\
+    \        local sum = 0\n        for i = 1, n do\n            sum = sum + fill_bucket(i,\
+    \ j)\n        end\n        return sum\n    end\n    local function fill_grid_bucket()\n\
+    \        local sum = 0\n        for i = 1, n do\n           ", "    local n, m\
+    \ = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        local\
+    \ fill = 0\n        for j = 1, m do\n            if grid[i][j] == 1 then\n   \
+    \             fill = fill + 1\n            end\n        end\n        max_fill\
+    \ = math.max(max_fill, fill)\n    end\n    return math.ceil(max_fill / capacity)\n\
+    end", "    local n, m = #grid, #grid[1]\n    local max_fill = {}\n    for i =\
+    \ 1, n do\n        max_fill[i] = {}\n        for j = 1, m do\n            max_fill[i][j]\
+    \ = grid[i][j]\n        end\n    end\n    for i = 1, n do\n        for j = 1,\
+    \ m do\n            if i > 1 then\n                max_fill[i][j] = math.max(max_fill[i][j],\
+    \ max_fill[i - 1][j])\n            end\n            if j > 1 then\n          \
+    \      max_fill[i][j] = math.max(max_fill[i][j], max_fill[i][j - 1])\n       \
+    \     end\n        end\n    end\n    local count = 0\n    for i = 1, n do\n  \
+    \      for j = 1, m do\n            if max_fill[i][j] > 0 then\n             \
+    \   count = count + 1\n            end\n        end\n    end\n    return count\n\
+    end\nreturn max_fill", "    local max_fill_count = 0\n    for i = 1, #grid do\n\
+    \        local row = grid[i]\n        local fill_count = 0\n        for j = 1,\
+    \ #row do\n            if row[j] == 1 then\n                fill_count = fill_count\
+    \ + 1\n            end\n        end\n        max_fill_count = math.max(max_fill_count,\
+    \ fill_count)\n    end\n    return math.ceil(max_fill_count / capacity)\nend",
+  "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        local fill = 0\n        for j = 1, m do\n            if grid[i][j] ==\
+    \ 1 then\n                fill = fill + 1\n            end\n        end\n    \
+    \    max_fill = math.max(max_fill, fill)\n    end\n    return max_fill\nend",
+  "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        local fill = 0\n        for j = 1, m do\n            if grid[i][j] ==\
+    \ 1 then\n                fill = fill + 1\n            end\n        end\n    \
+    \    max_fill = math.max(max_fill, fill)\n    end\n    return max_fill\nend",
+  "    local n, m = #grid, #grid[1]\n    local max_fill = {}\n    for i = 1, n do\n\
+    \        max_fill[i] = {}\n        for j = 1, m do\n            max_fill[i][j]\
+    \ = 0\n        end\n    end\n    for i = 1, n do\n        for j = 1, m do\n  \
+    \          if grid[i][j] == 1 then\n                max_fill[i][j] = capacity\n\
+    \            else\n                if i > 1 then\n                    max_fill[i][j]\
+    \ = max_fill[i-1][j]\n                end\n            end\n        end\n    end\n\
+    \    return max_fill\nend", "    local max_fill = 0\n    for _, row in ipairs(grid)\
+    \ do\n        local fill = 0\n        for _, well in ipairs(row) do\n        \
+    \    fill = fill + well\n            if fill > capacity then\n               \
+    \ max_fill = max_fill + 1\n                fill = 0\n            end\n       \
+    \ end\n        if fill > 0 then\n            max_fill = max_fill + 1\n       \
+    \ end\n    end\n    return max_fill\nend", "    local rows, cols = #grid, #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, rows do\n        for j = 1, cols do\n\
+    \            if grid[i][j] == 1 then\n                max_fill = max_fill + 1\n\
+    \            end\n        end\n    end\n    return max_fill * capacity\nend",
+  "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        local fill = 0\n        for j = 1, m do\n            if grid[i][j] ==\
+    \ 1 then\n                fill = fill + 1\n            end\n        end\n    \
+    \    max_fill = math.max(max_fill, fill)\n    end\n    return math.ceil(max_fill\
+    \ / capacity)\nend", "    local rows, cols = #grid, #grid[1]\n    local max_fill\
+    \ = 0\n    for i = 1, rows do\n        local fill = 0\n        for j = 1, cols\
+    \ do\n            fill = fill + grid[i][j]\n            if fill == capacity then\n\
+    \                max_fill = max_fill + 1\n                fill = 0\n         \
+    \   elseif fill > capacity then\n                max_fill = max_fill + 1\n   \
+    \             fill = grid[i][j]\n            end\n        end\n        if fill\
+    \ > 0 then\n            max_fill = max_fill + 1\n        end\n    end\n    return\
+    \ max_fill\nend\nreturn max_fill", "    local n, m = #grid, #grid[1]\n    local\
+    \ max_fill = 0\n    for i = 1, n do\n        local fill = 0\n        for j = 1,\
+    \ m do\n            if grid[i][j] == 1 then\n                fill = fill + 1\n\
+    \            end\n        end\n        max_fill = math.max(max_fill, fill)\n \
+    \   end\n    return max_fill\nend", "    local max_fill = 0\n    for _, row in\
+    \ ipairs(grid) do\n        local fill = 0\n        for _, well in ipairs(row)\
+    \ do\n            fill = fill + well\n            if fill > capacity then\n  \
+    \              max_fill = max_fill + 1\n                fill = 0\n           \
+    \ end\n        end\n        if fill > 0 then\n            max_fill = max_fill\
+    \ + 1\n        end\n    end\n    return max_fill\nend\nreturn max_fill", "   \
+    \ local n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        local fill = 0\n        for j = 1, m do\n            if grid[i][j] ==\
+    \ 1 then\n                fill = fill + 1\n            end\n        end\n    \
+    \    max_fill = math.max(max_fill, fill)\n    end\n    return max_fill\nend",
+  "    local n, m = #grid, #grid[1]\n    local dp = {}\n    for i = 1, n do\n    \
+    \    dp[i] = {}\n        for j = 1, m do\n            dp[i][j] = 0\n        end\n\
+    \    end\n    for i = 1, n do\n        for j = 1, m do\n            if grid[i][j]\
+    \ == 1 then\n                dp[i][j] = dp[i][j - 1] + 1\n            else\n \
+    \               dp[i][j] = 0\n            end\n        end\n    end\n    local\
+    \ res = 0\n    for i = 1, n do\n        for j = 1, m do\n            if dp[i][j]\
+    \ > 0 then\n                local k = j\n                while k > 0 and dp[i][k]\
+    \ > 0 and dp[i][k] >= dp[i][j] do\n                    k = k - 1\n           \
+    \     end\n                if k == 0 then\n                    res = res + dp[i][j]\n\
+    \                else\n                    res = res + dp[i][j] - dp[i][k]\n \
+    \               end\n            end\n        end\n    end\n    return res\nend",
+  "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        local fill = 0\n        for j = 1, m do\n            if grid[i][j] ==\
+    \ 1 then\n                fill = fill + 1\n            end\n        end\n    \
+    \    max_fill = math.max(max_fill, fill)\n    end\n    return max_fill\nend",
+  "    local n, m = #grid, #grid[1]\n    local function fill(i, j)\n        local\
+    \ c = 0\n        while i <= n and grid[i][j] == 1 do\n            grid[i][j] =\
+    \ 0\n            c = c + 1\n            i = i + 1\n        end\n        return\
+    \ c\n    end\n    local function empty(i, j)\n        local c = 0\n        while\
+    \ i >= 1 and grid[i][j] == 0 do\n            grid[i][j] = 1\n            c = c\
+    \ + 1\n            i = i - 1\n        end\n        return c\n    end\n    local\
+    \ function fill_all(j)\n        local c = 0\n        for i = 1, n do\n       \
+    \     c = c + fill(i, j)\n        end\n        return c\n    end\n    local function\
+    \ empty_all(j)\n        local c = 0\n        for i = n, 1, -1 do\n           \
+    \ c = c + empty(i, j)\n        end\n        return c\n    end\n    local function\
+    \ fill_one(i, j)\n        local c = 0\n        while i <= n and grid[i][j] ==\
+    \ 1 do\n            grid[i][j] = 0\n            c = c + 1\n            i = i +\
+    \ 1\n            if c == capacity then\n                break\n            end\n\
+    \        end\n        return c\n    end\n    local function empty_one(i, j)\n\
+    \        local c = 0\n        while i >= 1 and grid[i][j] == 0 do\n          \
+    \  grid[i][j] = 1\n            c = c + 1\n            i = i - 1\n            if\
+    \ c == capacity then\n                break\n            end\n        end\n  \
+    \      return c\n    end\n    local function fill_one_all(j)\n        local c\
+    \ = 0\n        for i = 1, n do\n            c = c + fill_one(i, j)\n        end\n\
+    \        return c\n    end\n    local function empty_one_all(j)\n        local\
+    \ c = 0\n        for i = n, 1, -1 do\n            c = c + empty_one(i, j)\n  \
+    \      end\n        return c\n    end\n", "    local n, m = #grid, #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, n do\n        local fill = 0\n       \
+    \ for j = 1, m do\n            if grid[i][j] == 1 then\n                fill =\
+    \ fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return math.min(max_fill, capacity)\nend", "    local n\
+    \ = #grid\n    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        for j = 1, m do\n            max_fill = math.max(max_fill, grid[i][j])\n\
+    \        end\n    end\n    local function fill(grid, capacity, fill_level)\n \
+    \       local n = #grid\n        local m = #grid[1]\n        local count = 0\n\
+    \        for i = 1, n do\n            for j = 1, m do\n                if grid[i][j]\
+    \ > 0 then\n                    count = count + 1\n                    grid[i][j]\
+    \ = math.max(0, grid[i][j] - capacity)\n                end\n            end\n\
+    \        end\n        if count > 0 then\n            return fill(grid, capacity,\
+    \ fill_level + 1)\n        else\n            return fill_level\n        end\n\
+    \    end\n    return fill(grid, capacity, 0)\nend\nreturn max_fill", "    local\
+    \ max_fill = 0\n    for _, row in ipairs(grid) do\n        local fill = 0\n  \
+    \      for _, well in ipairs(row) do\n            fill = fill + well\n       \
+    \     if fill > capacity then\n                max_fill = max_fill + 1\n     \
+    \           fill = 0\n            end\n        end\n        if fill > 0 then\n\
+    \            max_fill = max_fill + 1\n        end\n    end\n    return max_fill\n\
+    end", "    local max_fill = 0\n    for _, row in ipairs(grid) do\n        local\
+    \ fill = 0\n        for _, well in ipairs(row) do\n            fill = fill + well\n\
+    \            if fill > capacity then\n                max_fill = max_fill + 1\n\
+    \                fill = 0\n            end\n        end\n        if fill > 0 then\n\
+    \            max_fill = max_fill + 1\n        end\n    end\n    return max_fill\n\
+    end", "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1,\
+    \ n do\n        local fill = 0\n        for j = 1, m do\n            if grid[i][j]\
+    \ == 1 then\n                fill = fill + 1\n            end\n        end\n \
+    \       max_fill = math.max(max_fill, fill)\n    end\n    return max_fill\nend",
+  "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        local fill = 0\n        for j = 1, m do\n            if grid[i][j] ==\
+    \ 1 then\n                fill = fill + 1\n            end\n        end\n    \
+    \    max_fill = math.max(max_fill, fill)\n    end\n    return max_fill\nend",
+  "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        local fill = 0\n        for j = 1, m do\n            if grid[i][j] ==\
+    \ 1 then\n                fill = fill + 1\n            end\n        end\n    \
+    \    max_fill = math.max(max_fill, fill)\n    end\n    return max_fill\nend",
+  "    local n, m = #grid, #grid[1]\n    local function fill(i, j)\n        local\
+    \ c = 0\n        while i <= n and grid[i][j] == 1 do\n            grid[i][j] =\
+    \ 0\n            c = c + 1\n            i = i + 1\n        end\n        return\
+    \ c\n    end\n    local function empty(i, j)\n        local c = 0\n        while\
+    \ i >= 1 and grid[i][j] == 0 do\n            grid[i][j] = 1\n            c = c\
+    \ + 1\n            i = i - 1\n        end\n        return c\n    end\n    local\
+    \ function fill_all(j)\n        local c = 0\n        for i = 1, n do\n       \
+    \     c = c + fill(i, j)\n        end\n        return c\n    end\n    local function\
+    \ empty_all(j)\n        local c = 0\n        for i = n, 1, -1 do\n           \
+    \ c = c + empty(i, j)\n        end\n        return c\n    end\n    local function\
+    \ fill_one(i, j)\n        local c = 0\n        while j <= m and grid[i][j] ==\
+    \ 1 do\n            c = c + fill(i, j)\n            j = j + 1\n        end\n \
+    \       return c\n    end\n    local function empty_one(i, j)\n        local c\
+    \ = 0\n        while j >= 1 and grid[i][j] == 0 do\n            c = c + empty(i,\
+    \ j)\n            j = j - 1\n        end\n        return c\n    end\n    local\
+    \ function fill_all_one(i)\n        local c = 0\n        for j = 1, m do\n   \
+    \         c = c + fill_one(i, j)\n        end\n        return c\n    end\n   \
+    \ local function empty_all_one(i)\n        local c = 0\n        for j = m, 1,\
+    \ -1 do\n            c = c + empty_one(i, j)\n        end\n        return c\n\
+    \    end\n    local function fill_all_all()\n        local c = 0\n        for\
+    \ i = 1, n do\n            c = c + fill_all_one(", "    local n, m = #grid, #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, n do\n        local fill = 0\n       \
+    \ for j = 1, m do\n            if grid[i][j] == 1 then\n                fill =\
+    \ fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return max_fill\nend", "    local n = #grid\n    local m\
+    \ = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        for j = 1,\
+    \ m do\n            if grid[i][j] == 1 then\n                max_fill = max_fill\
+    \ + 1\n            end\n        end\n    end\n    return max_fill * capacity\n\
+    end", "    local m, n = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1,\
+    \ m do\n        local fill = 0\n        for j = 1, n do\n            if grid[i][j]\
+    \ == 1 then\n                fill = fill + 1\n            end\n        end\n \
+    \       max_fill = math.max(max_fill, fill)\n    end\n    return max_fill\nend",
+  "    local rows, cols = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1,\
+    \ rows do\n        local fill = 0\n        for j = 1, cols do\n            if\
+    \ grid[i][j] == 1 then\n                fill = fill + 1\n            end\n   \
+    \     end\n        max_fill = math.max(max_fill, fill)\n    end\n    return math.ceil(max_fill\
+    \ / capacity)\nend", "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n\
+    \    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n      \
+    \      if grid[i][j] == 1 then\n                fill = fill + 1\n            end\n\
+    \        end\n        max_fill = math.max(max_fill, fill)\n    end\n    return\
+    \ math.ceil(max_fill / capacity)\nend", "    local n, m = #grid, #grid[1]\n  \
+    \  local max_fill = {}\n    for i = 1, n do\n        local row = {}\n        for\
+    \ j = 1, m do\n            if grid[i][j] == 1 then\n                row[j] = capacity\n\
+    \            else\n                row[j] = 0\n            end\n        end\n\
+    \        max_fill[i] = row\n    end\n    return max_fill\nend", "    local n =\
+    \ #grid\n    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        local fill = 0\n        for j = 1, m do\n            fill = fill + grid[i][j]\n\
+    \        end\n        max_fill = math.max(max_fill, fill)\n    end\n    return\
+    \ math.ceil(max_fill / capacity)\nend", "    local n, m = #grid, #grid[1]\n  \
+    \  local max_fill = 0\n    for i = 1, n do\n        local fill = 0\n        for\
+    \ j = 1, m do\n            if grid[i][j] == 1 then\n                fill = fill\
+    \ + 1\n            end\n        end\n        max_fill = math.max(max_fill, fill)\n\
+    \    end\n    return max_fill\nend", "    local n, m = #grid, #grid[1]\n    local\
+    \ max_fill = {}\n    for i = 1, n do\n        max_fill[i] = {}\n        for j\
+    \ = 1, m do\n            max_fill[i][j] = 0\n        end\n    end\n    for i =\
+    \ 1, n do\n        for j = 1, m do\n            if grid[i][j] == 1 then\n    \
+    \            max_fill[i][j] = capacity\n            else\n                if i\
+    \ > 1 then\n                    max_fill[i][j] = max_fill[i - 1][j]\n        \
+    \        end\n            end\n        end\n    end\n    for i = n, 1, -1 do\n\
+    \        for j = m, 1, -1 do\n            if grid[i][j] == 1 then\n          \
+    \      max_fill[i][j] = capacity\n            else\n                if i < n then\n\
+    \                    max_fill[i][j] = math.min(max_fill[i][j], max_fill[i + 1][j])\n\
+    \                end\n            end\n        end\n    end\n    return max_fill\n\
+    end", "    local n, m = #grid, #grid[1]\n    local function fill(i, j)\n     \
+    \   if i < 1 or i > n or j < 1 or j > m then\n            return 0\n        end\n\
+    \        local c = capacity\n        local r = 0\n        while c > 0 and grid[i][j]\
+    \ > 0 do\n            grid[i][j] = grid[i][j] - 1\n            c = c - 1\n   \
+    \         r = r + 1\n        end\n        return r\n    end\n    local function\
+    \ fill_row(i)\n        local r = 0\n        for j = 1, m do\n            r = r\
+    \ + fill(i, j)\n        end\n        return r\n    end\n    local function fill_col(j)\n\
+    \        local r = 0\n        for i = 1, n do\n            r = r + fill(i, j)\n\
+    \        end\n        return r\n    end\n    local r = 0\n    for i = 1, n do\n\
+    \        r = r + fill_row(i)\n    end\n    for j = 1, m do\n        r = r + fill_col(j)\n\
+    \    end\n    return r\nend\nreturn max_fill", "    local n, m = #grid, #grid[1]\n\
+    \    local function dfs(i, j)\n        if i < 1 or i > n or j < 1 or j > m or\
+    \ grid[i][j] == 0 then\n            return 0\n        end\n        grid[i][j]\
+    \ = 0\n        return 1 + dfs(i - 1, j) + dfs(i + 1, j) + dfs(i, j - 1) + dfs(i,\
+    \ j + 1)\n    end\n    local function fill(i, j)\n        local cnt = dfs(i, j)\n\
+    \        if cnt == 0 then\n            return 0\n        end\n        local times\
+    \ = math.ceil(cnt / capacity)\n        return times\n    end\n    local times\
+    \ = 0\n    for i = 1, n do\n        for j = 1, m do\n            times = times\
+    \ + fill(i, j)\n        end\n    end\n    return times\nend", "    local n, m\
+    \ = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        local\
+    \ fill = 0\n        for j = 1, m do\n            if grid[i][j] == 1 then\n   \
+    \             fill = fill + 1\n            end\n        end\n        max_fill\
+    \ = math.max(max_fill, fill)\n    end\n    return max_fill\nend", "    local n\
+    \ = #grid\n    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        for j = 1, m do\n            if grid[i][j] == 1 then\n              \
+    \  max_fill = max_fill + 1\n            end\n        end\n    end\n    return\
+    \ max_fill\nend", "    local n = #grid\n    local m = #grid[1]\n    local max_fill\
+    \ = 0\n    for i = 1, n do\n        for j = 1, m do\n            max_fill = math.max(max_fill,\
+    \ grid[i][j])\n        end\n    end\n    local min_fill = math.max(max_fill -\
+    \ capacity, 0)\n    local min_fill_count = 0\n    for i = 1, n do\n        for\
+    \ j = 1, m do\n            if grid[i][j] > min_fill then\n                min_fill_count\
+    \ = min_fill_count + 1\n            end\n        end\n    end\n    return min_fill_count\n\
+    end", "    local m, n = #grid, #grid[1]\n    local max_fill = {}\n    for i =\
+    \ 1, m do\n        max_fill[i] = {}\n        for j = 1, n do\n            max_fill[i][j]\
+    \ = 0\n        end\n    end\n    local function dfs(i, j)\n        if i < 1 or\
+    \ i > m or j < 1 or j > n then\n            return 0\n        end\n        if\
+    \ max_fill[i][j] > 0 then\n            return max_fill[i][j]\n        end\n  \
+    \      local max_fill_i_j = 0\n        if grid[i][j] == 1 then\n            max_fill_i_j\
+    \ = capacity\n        end\n        local max_fill_i_j_1 = dfs(i, j - 1)\n    \
+    \    local max_fill_i_j_2 = dfs(i, j + 1)\n        local max_fill_i_1_j = dfs(i\
+    \ - 1, j)\n        local max_fill_i_2_j = dfs(i + 1, j)\n        local max_fill_i_j_3\
+    \ = math.min(max_fill_i_j_1, max_fill_i_j_2, max_fill_i_1_j, max_fill_i_2_j)\n\
+    \        max_fill[i][j] = max_fill_i_j + max_fill_i_j_3\n        return max_fill[i][j]\n\
+    \    end\n    local max_fill_1_1 = dfs(1, 1)\n    local max_fill_1_n = dfs(1,\
+    \ n)\n    local max_fill_m_1 = dfs(m, 1)\n    local max_fill_m_n = dfs(m, n)\n\
+    \    return math.min(max_fill_1_1, max_fill_1_n, max_fill_m_1, max_fill_m_n)\n\
+    end\nreturn max_fill", "    local n, m = #grid, #grid[1]\n    local max_fill =\
+    \ 0\n    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n  \
+    \          if grid[i][j] == 1 then\n                fill = fill + 1\n        \
+    \    end\n        end\n        max_fill = math.max(max_fill, fill)\n    end\n\
+    \    return max_fill\nend", "    local n, m = #grid, #grid[1]\n    local max_fill\
+    \ = 0\n    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n\
+    \            if grid[i][j] == 1 then\n                fill = fill + 1\n      \
+    \      end\n        end\n        max_fill = math.max(max_fill, fill)\n    end\n\
+    \    return max_fill\nend", "    local rows, cols = #grid, #grid[1]\n    local\
+    \ max_fill = 0\n    for i = 1, rows do\n        local fill = 0\n        for j\
+    \ = 1, cols do\n            if grid[i][j] == 1 then\n                fill = fill\
+    \ + 1\n            end\n        end\n        max_fill = math.max(max_fill, fill)\n\
+    \    end\n    return math.ceil(max_fill / capacity)\nend", "    local n = #grid\n\
+    \    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n       \
+    \ for j = 1, m do\n            if grid[i][j] == 1 then\n                max_fill\
+    \ = max_fill + 1\n            end\n        end\n    end\n    return max_fill\n\
+    end", "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1,\
+    \ n do\n        local fill = 0\n        for j = 1, m do\n            if grid[i][j]\
+    \ == 1 then\n                fill = fill + 1\n            end\n        end\n \
+    \       max_fill = math.max(max_fill, fill)\n    end\n    return max_fill\nend",
+  "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        for j = 1, m do\n            if grid[i][j] == 1 then\n              \
+    \  max_fill = max_fill + 1\n            end\n        end\n    end\n    return\
+    \ max_fill * capacity\nend", "    local n, m = #grid, #grid[1]\n    local max_fill_row\
+    \ = {}\n    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n\
+    \            if grid[i][j] == 1 then\n                fill = fill + 1\n      \
+    \      else\n                max_fill_row[i] = math.max(max_fill_row[i] or 0,\
+    \ fill)\n                fill = 0\n            end\n        end\n        max_fill_row[i]\
+    \ = math.max(max_fill_row[i] or 0, fill)\n    end\n    local max_fill_col = {}\n\
+    \    for j = 1, m do\n        local fill = 0\n        for i = 1, n do\n      \
+    \      if grid[i][j] == 1 then\n                fill = fill + 1\n            else\n\
+    \                max_fill_col[j] = math.max(max_fill_col[j] or 0, fill)\n    \
+    \            fill = 0\n            end\n        end\n        max_fill_col[j] =\
+    \ math.max(max_fill_col[j] or 0, fill)\n    end\n    local max_fill_grid = {}\n\
+    \    for i = 1, n do\n        max_fill_grid[i] = {}\n        for j = 1, m do\n\
+    \            max_fill_grid[i][j] = math.min(max_fill_row[i], max_fill_col[j])\n\
+    \        end\n    end\n    local result = 0\n    for i = 1, n do\n        for\
+    \ j = 1, m do\n            local fill = max_fill_grid[i][j]\n            if fill\
+    \ > 0 then\n                local times = math.ceil(fill / capacity)\n       \
+    \         result = result + times\n                for k = 1, times do\n     \
+    \               grid[i][j] = grid[i][j] - capacity\n                end\n    \
+    \        end\n        end\n    end\n    return result\nend", "    local n = #grid\n\
+    \    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n       \
+    \ for j = 1, m do\n            if grid[i][j] == 1 then\n                max_fill\
+    \ = max_fill + 1\n            end\n        end\n    end\n    return math.ceil(max_fill\
+    \ / capacity)\nend", "    local n, m = #grid, #grid[1]\n    local max_fill = {}\n\
+    \    for i = 1, n do\n        max_fill[i] = {}\n        for j = 1, m do\n    \
+    \        max_fill[i][j] = grid[i][j]\n        end\n    end\n    for i = 1, n do\n\
+    \        for j = 1, m do\n            if i > 1 then\n                max_fill[i][j]\
+    \ = math.max(max_fill[i][j], max_fill[i - 1][j])\n            end\n          \
+    \  if j > 1 then\n                max_fill[i][j] = math.max(max_fill[i][j], max_fill[i][j\
+    \ - 1])\n            end\n        end\n    end\n    local function fill(i, j)\n\
+    \        if i < 1 or i > n or j < 1 or j > m then\n            return 0\n    \
+    \    end\n        local max_fill_ij = max_fill[i][j]\n        if max_fill_ij ==\
+    \ 0 then\n            return 0\n        end\n        local fill_ij = math.min(max_fill_ij,\
+    \ capacity)\n        max_fill[i][j] = max_fill_ij - fill_ij\n        return fill_ij\n\
+    \    end\n    local function fill_all()\n        local total = 0\n        for\
+    \ i = 1, n do\n            for j = 1, m do\n                total = total + fill(i,\
+    \ j)\n            end\n        end\n        return total\n    end\n    local total\
+    \ = 0\n    while fill_all() > 0 do\n        total = total + 1\n    end\n    return\
+    \ total\nend\nreturn max_fill", "    local n, m = #grid, #grid[1]\n    local max_fill\
+    \ = 0\n    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n\
+    \            if grid[i][j] == 1 then\n                fill = fill + 1\n      \
+    \      end\n        end\n        max_fill = math.max(max_fill, fill)\n    end\n\
+    \    return max_fill\nend", "    local n, m = #grid, #grid[1]\n    local function\
+    \ fill(i, j)\n        local c = 0\n        while i <= n and grid[i][j] == 1 do\n\
+    \            grid[i][j] = 0\n            c = c + 1\n            i = i + 1\n  \
+    \      end\n        return c\n    end\n    local function empty(i, j)\n      \
+    \  local c = 0\n        while i >= 1 and grid[i][j] == 0 do\n            grid[i][j]\
+    \ = 1\n            c = c + 1\n            i = i - 1\n        end\n        return\
+    \ c\n    end\n    local function fill_all(i, j)\n        local c = 0\n       \
+    \ while j <= m do\n            c = c + fill(i, j)\n            j = j + 1\n   \
+    \     end\n        return c\n    end\n    local function empty_all(i, j)\n   \
+    \     local c = 0\n        while j >= 1 do\n            c = c + empty(i, j)\n\
+    \            j = j - 1\n        end\n        return c\n    end\n    local function\
+    \ fill_row(i)\n        local c = 0\n        for j = 1, m do\n            c = c\
+    \ + fill(i, j)\n        end\n        return c\n    end\n    local function empty_row(i)\n\
+    \        local c = 0\n        for j = 1, m do\n            c = c + empty(i, j)\n\
+    \        end\n        return c\n    end\n    local function fill_col(j)\n    \
+    \    local c = 0\n        for i = 1, n do\n            c = c + fill(i, j)\n  \
+    \      end\n        return c\n    end\n    local function empty_col(j)\n     \
+    \   local c = 0\n        for i = 1, n do\n            c = c + empty(i, j)\n  \
+    \      end\n        return c\n    end\n    local function fill_all_rows()\n  \
+    \      local c = 0\n        for i = 1, n do\n            c = c + fill_row(i)\n\
+    \        end\n        return c\n    end\n    local function empty_all_rows()\n\
+    \        local c = 0\n        for i = 1", "    local n, m = #grid, #grid[1]\n\
+    \    local max_fill = {}\n    for i = 1, n do\n        max_fill[i] = {}\n    \
+    \    for j = 1, m do\n            max_fill[i][j] = grid[i][j]\n        end\n \
+    \   end\n    for i = 1, n do\n        for j = 1, m do\n            if i > 1 then\n\
+    \                max_fill[i][j] = math.max(max_fill[i][j], max_fill[i - 1][j])\n\
+    \            end\n            if j > 1 then\n                max_fill[i][j] =\
+    \ math.max(max_fill[i][j], max_fill[i][j - 1])\n            end\n        end\n\
+    \    end\n    local function fill(i, j)\n        if i > n or j > m then\n    \
+    \        return 0\n        end\n        local r = fill(i + 1, j) + fill(i, j +\
+    \ 1)\n        local v = max_fill[i][j]\n        if v > 0 then\n            r =\
+    \ r + math.ceil(v / capacity)\n        end\n        return r\n    end\n    return\
+    \ fill(1, 1)\nend", "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n\
+    \    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n      \
+    \      if grid[i][j] == 1 then\n                fill = fill + 1\n            end\n\
+    \        end\n        max_fill = math.max(max_fill, fill)\n    end\n    return\
+    \ max_fill * capacity\nend", "    local n, m = #grid, #grid[1]\n    local max_fill\
+    \ = 0\n    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n\
+    \            if grid[i][j] == 1 then\n                fill = fill + 1\n      \
+    \      end\n        end\n        max_fill = math.max(max_fill, fill)\n    end\n\
+    \    return max_fill\nend", "    local n, m = #grid, #grid[1]\n    local max_fill\
+    \ = 0\n    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n\
+    \            if grid[i][j] == 1 then\n                fill = fill + 1\n      \
+    \      end\n        end\n        max_fill = math.max(max_fill, fill)\n    end\n\
+    \    return max_fill\nend", "    local n = #grid\n    local m = #grid[1]\n   \
+    \ local max_fill = 0\n    for i = 1, n do\n        for j = 1, m do\n         \
+    \   if grid[i][j] == 1 then\n                max_fill = max_fill + 1\n       \
+    \     end\n        end\n    end\n    return max_fill * capacity\nend", "    local\
+    \ n = #grid\n    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n\
+    \ do\n        for j = 1, m do\n            if grid[i][j] == 1 then\n         \
+    \       max_fill = max_fill + 1\n            end\n        end\n    end\n    return\
+    \ max_fill * capacity\nend", "    local n, m = #grid, #grid[1]\n    local max_fill\
+    \ = 0\n    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n\
+    \            if grid[i][j] == 1 then\n                fill = fill + 1\n      \
+    \      end\n        end\n        max_fill = math.max(max_fill, fill)\n    end\n\
+    \    return max_fill\nend", "    local n = #grid\n    local m = #grid[1]\n   \
+    \ local max_fill = 0\n    for i = 1, n do\n        for j = 1, m do\n         \
+    \   if grid[i][j] == 1 then\n                max_fill = max_fill + 1\n       \
+    \     end\n        end\n    end\n    return max_fill * capacity\nend", "    local\
+    \ n, m = #grid, #grid[1]\n    local max_fill_row = {}\n    for i = 1, n do\n \
+    \       local fill = 0\n        for j = 1, m do\n            if grid[i][j] ==\
+    \ 1 then\n                fill = fill + 1\n            else\n                fill\
+    \ = 0\n            end\n            max_fill_row[i] = math.max(max_fill_row[i]\
+    \ or 0, fill)\n        end\n    end\n    local max_fill_col = {}\n    for j =\
+    \ 1, m do\n        local fill = 0\n        for i = 1, n do\n            if grid[i][j]\
+    \ == 1 then\n                fill = fill + 1\n            else\n             \
+    \   fill = 0\n            end\n            max_fill_col[j] = math.max(max_fill_col[j]\
+    \ or 0, fill)\n        end\n    end\n    local function get_fill(i, j)\n     \
+    \   return math.min(max_fill_row[i], max_fill_col[j])\n    end\n    local function\
+    \ get_fill_sum(i, j)\n        local sum = 0\n        for k = 1, i do\n       \
+    \     for l = 1, j do\n                sum = sum + get_fill(k, l)\n          \
+    \  end\n        end\n        return sum\n    end\n    local function get_fill_sum_fast(i,\
+    \ j)\n        local sum = 0\n        for k = 1, i do\n            sum = sum +\
+    \ max_fill_row[k] * j\n        end\n        for l = 1, j do\n            sum =\
+    \ sum + max_fill_col[l] * i\n        end\n        return sum - get_fill(i, j)\
+    \ * i * j\n    end\n    local function get_fill_sum_fast_fast(i, j)\n        local\
+    \ sum = 0\n        for k = 1, i do\n            sum = sum + max_fill_row[k] *\
+    \ j\n        end\n        for l = 1, j do\n            sum = sum + max_fill_col[l]\
+    \ * i\n        end\n        return sum - max_fill_row[i] * max_fill_col[", " \
+    \   local m, n = #grid, #grid[1]\n    local function get_fill(i, j)\n        if\
+    \ i < 1 or i > m or j < 1 or j > n then\n            return 0\n        end\n \
+    \       return grid[i][j]\n    end\n    local function set_fill(i, j, fill)\n\
+    \        if i < 1 or i > m or j < 1 or j > n then\n            return\n      \
+    \  end\n        grid[i][j] = fill\n    end\n    local function get_max_fill(i,\
+    \ j)\n        local fill = get_fill(i, j)\n        local max_fill = fill\n   \
+    \     for _, d in ipairs({{-1, 0}, {1, 0}, {0, -1}, {0, 1}}) do\n            local\
+    \ x, y = i + d[1], j + d[2]\n            local f = get_fill(x, y)\n          \
+    \  if f > max_fill then\n                max_fill = f\n            end\n     \
+    \   end\n        return max_fill\n    end\n    local function get_max_fill_all()\n\
+    \        local max_fill = 0\n        for i = 1, m do\n            for j = 1, n\
+    \ do\n                local f = get_max_fill(i, j)\n                if f > max_fill\
+    \ then\n                    max_fill = f\n                end\n            end\n\
+    \        end\n        return max_fill\n    end\n    local function fill_all(fill)\n\
+    \        for i = 1, m do\n            for j = 1, n do\n                set_fill(i,\
+    \ j, fill)\n            end\n        end\n    end\n    local function fill_all_max()\n\
+    \        local max_fill = get_max_fill_all()\n        fill_all(max_fill)\n   \
+    \ end\n    local function fill_all_min()\n        local min_fill = math.huge\n\
+    \        for i = 1, m do\n            for j = 1, n do\n                local f\
+    \ = get_fill(i, j)\n                if f < min_fill then\n                   \
+    \ min_fill = f\n                end\n            end\n        end\n        fill_all(min_fill)\n\
+    \    end", "    local n, m = #grid, #grid[1]\n    local function fill(i, j)\n\
+    \        if i < 1 or i > n or j < 1 or j > m then\n            return 0\n    \
+    \    end\n        if grid[i][j] == 0 then\n            return 0\n        end\n\
+    \        grid[i][j] = 0\n        return 1 + fill(i - 1, j) + fill(i + 1, j) +\
+    \ fill(i, j - 1) + fill(i, j + 1)\n    end\n    local function fill_all()\n  \
+    \      local count = 0\n        for i = 1, n do\n            for j = 1, m do\n\
+    \                count = count + fill(i, j)\n            end\n        end\n  \
+    \      return count\n    end\n    local count = 0\n    while fill_all() > 0 do\n\
+    \        count = count + 1\n    end\n    return count\nend", "    local n, m =\
+    \ #grid, #grid[1]\n    local function fill(i, j)\n        local x, y = i, j\n\
+    \        while x > 0 and grid[x][y] == 0 do\n            x = x - 1\n        end\n\
+    \        if x == 0 then\n            return 0\n        end\n        local fill\
+    \ = math.min(capacity, grid[x][y])\n        grid[x][y] = grid[x][y] - fill\n \
+    \       return fill\n    end\n    local function fill_row(i)\n        local fill\
+    \ = 0\n        for j = 1, m do\n            fill = fill + fill(i, j)\n       \
+    \ end\n        return fill\n    end\n    local function fill_col(j)\n        local\
+    \ fill = 0\n        for i = 1, n do\n            fill = fill + fill(i, j)\n  \
+    \      end\n        return fill\n    end\n    local function fill_grid()\n   \
+    \     local fill = 0\n        for i = 1, n do\n            fill = fill + fill_row(i)\n\
+    \        end\n        for j = 1, m do\n            fill = fill + fill_col(j)\n\
+    \        end\n        return fill\n    end\n    local function empty_grid()\n\
+    \        for i = 1, n do\n            for j = 1, m do\n                grid[i][j]\
+    \ = 0\n            end\n        end\n    end\n    local function fill_grid_times(times)\n\
+    \        local fill = 0\n        for _ = 1, times do\n            fill = fill\
+    \ + fill_grid()\n        end\n        return fill\n    end\n    local function\
+    \ fill_grid_until_empty()\n        local fill = 0\n        while fill_grid() >\
+    \ 0 do\n            fill = fill + 1\n        end\n        return fill\n    end\n\
+    \    local function fill_grid_until_full()\n        local fill = 0\n        while\
+    \ fill_grid() < capacity do\n            fill = fill + 1\n        end\n      \
+    \  return fill\n    end\n    local function fill_grid_until_full_or_empty()\n\
+    \        local fill = 0\n        while fill_grid() > 0 and fill_grid() < capacity\
+    \ do\n            fill = fill + 1\n        end\n       ", "    local n, m = #grid,\
+    \ #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        local fill =\
+    \ 0\n        for j = 1, m do\n            if grid[i][j] == 1 then\n          \
+    \      fill = fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return math.ceil(max_fill / capacity)\nend", "    local\
+    \ n = #grid\n    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n\
+    \ do\n        for j = 1, m do\n            if grid[i][j] == 1 then\n         \
+    \       max_fill = max_fill + 1\n            end\n        end\n    end\n    return\
+    \ max_fill * capacity\nend", "    local m, n = #grid, #grid[1]\n    local max_fill\
+    \ = 0\n    for i = 1, m do\n        local fill = 0\n        for j = 1, n do\n\
+    \            if grid[i][j] == 1 then\n                fill = fill + 1\n      \
+    \      end\n        end\n        max_fill = math.max(max_fill, fill)\n    end\n\
+    \    return max_fill\nend", "    local n, m = #grid, #grid[1]\n    local max_fill\
+    \ = {}\n    for i = 1, n do\n        max_fill[i] = {}\n        for j = 1, m do\n\
+    \            max_fill[i][j] = capacity\n        end\n    end\n    for i = 1, n\
+    \ do\n        for j = 1, m do\n            if grid[i][j] == 1 then\n         \
+    \       max_fill[i][j] = 0\n            elseif i > 1 then\n                max_fill[i][j]\
+    \ = max_fill[i - 1][j]\n            end\n        end\n    end\n    for i = n,\
+    \ 1, -1 do\n        for j = m, 1, -1 do\n            if grid[i][j] == 1 then\n\
+    \                max_fill[i][j] = 0\n            elseif i < n then\n         \
+    \       max_fill[i][j] = math.min(max_fill[i][j], max_fill[i + 1][j])\n      \
+    \      end\n        end\n    end\n    for i = 1, n do\n        for j = 1, m do\n\
+    \            if grid[i][j] == 1 then\n                max_fill[i][j] = 0\n   \
+    \         elseif j > 1 then\n                max_fill[i][j] = math.min(max_fill[i][j],\
+    \ max_fill[i][j - 1])\n            end\n        end\n    end\n    for i = 1, n\
+    \ do\n        for j = m, 1, -1 do\n            if grid[i][j] == 1 then\n     \
+    \           max_fill[i][j] = 0\n            elseif j < m then\n              \
+    \  max_fill[i][j] = math.min(max_fill[i][j], max_fill[i][j + 1])\n           \
+    \ end\n        end\n    end\n    return max_fill\nend", "    local max_fill =\
+    \ 0\n    for i = 1, #grid do\n        local row = grid[i]\n        local fill\
+    \ = 0\n        for j = 1, #row do\n            if row[j] == 1 then\n         \
+    \       fill = fill + 1\n            end\n        end\n        if fill > max_fill\
+    \ then\n            max_fill = fill\n        end\n    end\n    return math.ceil(max_fill\
+    \ / capacity)\nend", "    local max_fill = 0\n    for _, row in ipairs(grid) do\n\
+    \        local fill = 0\n        for _, well in ipairs(row) do\n            fill\
+    \ = fill + well\n            if fill > capacity then\n                max_fill\
+    \ = max_fill + 1\n                fill = 0\n            end\n        end\n   \
+    \     if fill > 0 then\n            max_fill = max_fill + 1\n        end\n   \
+    \ end\n    return max_fill\nend", "    local n, m = #grid, #grid[1]\n    local\
+    \ max_fill = {}\n    for i = 1, n do\n        max_fill[i] = {}\n        for j\
+    \ = 1, m do\n            max_fill[i][j] = grid[i][j]\n        end\n    end\n \
+    \   for i = 1, n do\n        for j = 1, m do\n            if max_fill[i][j] ==\
+    \ 1 then\n                for k = 1, capacity do\n                    if i - k\
+    \ >= 1 then\n                        max_fill[i - k][j] = 1\n                \
+    \    end\n                    if i + k <= n then\n                        max_fill[i\
+    \ + k][j] = 1\n                    end\n                    if j - k >= 1 then\n\
+    \                        max_fill[i][j - k] = 1\n                    end\n   \
+    \                 if j + k <= m then\n                        max_fill[i][j +\
+    \ k] = 1\n                    end\n                end\n            end\n    \
+    \    end\n    end\n    return max_fill\nend", "    local n, m = #grid, #grid[1]\n\
+    \    local function fill(i, j)\n        if i < 1 or i > n or j < 1 or j > m then\n\
+    \            return 0\n        end\n        local c = grid[i][j]\n        if c\
+    \ == 0 then\n            return 0\n        end\n        grid[i][j] = 0\n     \
+    \   return c + fill(i + 1, j) + fill(i - 1, j) + fill(i, j + 1) + fill(i, j -\
+    \ 1)\n    end\n    local function count(i, j)\n        if i < 1 or i > n or j\
+    \ < 1 or j > m then\n            return 0\n        end\n        local c = grid[i][j]\n\
+    \        if c == 0 then\n            return 0\n        end\n        grid[i][j]\
+    \ = 0\n        return 1 + count(i + 1, j) + count(i - 1, j) + count(i, j + 1)\
+    \ + count(i, j - 1)\n    end\n    local function fill_all()\n        local cnt\
+    \ = 0\n        for i = 1, n do\n            for j = 1, m do\n                if\
+    \ grid[i][j] == 1 then\n                    cnt = cnt + 1\n                  \
+    \  local f = fill(i, j)\n                    if f > capacity then\n          \
+    \              return cnt\n                    end\n                end\n    \
+    \        end\n        end\n        return cnt\n    end\n    local function fill_all_2()\n\
+    \        local cnt = 0\n        for i = 1, n do\n            for j = 1, m do\n\
+    \                if grid[i][j] == 1 then\n                    cnt = cnt + 1\n\
+    \                    local f = fill(i, j)\n                    local c = count(i,\
+    \ j)\n                    if f > capacity * c then\n                        return\
+    \ cnt\n                    end\n                end\n            end\n       \
+    \ end\n        return cnt\n    end\n    return fill_all_2()\nend", "    local\
+    \ n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n      \
+    \  local fill = 0\n        for j = 1, m do\n            if grid[i][j] == 1 then\n\
+    \                fill = fill + 1\n            end\n        end\n        max_fill\
+    \ = math.max(max_fill, fill)\n    end\n    return max_fill\nend", "    local n,\
+    \ m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        local\
+    \ fill = 0\n        for j = 1, m do\n            if grid[i][j] == 1 then\n   \
+    \             fill = fill + 1\n            end\n        end\n        max_fill\
+    \ = math.max(max_fill, fill)\n    end\n    return max_fill\nend", "    local m,\
+    \ n = #grid, #grid[1]\n    local max_fill_row = {}\n    for i = 1, m do\n    \
+    \    local max_fill_col = {}\n        for j = 1, n do\n            if grid[i][j]\
+    \ == 1 then\n                max_fill_col[j] = capacity\n            else\n  \
+    \              max_fill_col[j] = 0\n            end\n        end\n        max_fill_row[i]\
+    \ = max_fill_col\n    end\n    return max_fill_row\nend", "    local n, m = #grid,\
+    \ #grid[1]\n    local function get_fill(i, j)\n        local fill = 0\n      \
+    \  for i = i, 1, -1 do\n            fill = fill + grid[i][j]\n            if fill\
+    \ > capacity then\n                return capacity\n            end\n        end\n\
+    \        return fill\n    end\n    local function get_fill_col(j)\n        local\
+    \ fill = 0\n        for i = 1, n do\n            fill = fill + grid[i][j]\n  \
+    \          if fill > capacity then\n                return capacity\n        \
+    \    end\n        end\n        return fill\n    end\n    local function get_fill_row(i)\n\
+    \        local fill = 0\n        for j = 1, m do\n            fill = fill + grid[i][j]\n\
+    \            if fill > capacity then\n                return capacity\n      \
+    \      end\n        end\n        return fill\n    end\n    local function get_fill_all()\n\
+    \        local fill = 0\n        for i = 1, n do\n            for j = 1, m do\n\
+    \                fill = fill + grid[i][j]\n                if fill > capacity\
+    \ then\n                    return capacity\n                end\n           \
+    \ end\n        end\n        return fill\n    end\n    local function get_fill_max()\n\
+    \        local fill = 0\n        for i = 1, n do\n            for j = 1, m do\n\
+    \                fill = math.max(fill, get_fill(i, j))\n            end\n    \
+    \    end\n        return fill\n    end\n    local function get_fill_max_col()\n\
+    \        local fill = 0\n        for j = 1, m do\n            fill = math.max(fill,\
+    \ get_fill_col(j))\n        end\n        return fill\n    end\n    local function\
+    \ get_fill_max_row()\n        local fill = 0\n        for i = 1, n do\n      \
+    \      fill = math.max(fill, get_fill_row(i))\n        end\n        return fill\n\
+    \    end\n    local function get_fill_max_all()\n        return math.max(get_fill_max(),\
+    \ get_fill_max_col(), get_fill_max_row(), get_fill_all())\n    end\n    local\
+    \ function get_fill", "    local n, m = #grid, #grid[1]\n    local max_fill =\
+    \ 0\n    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n  \
+    \          if grid[i][j] == 1 then\n                fill = fill + 1\n        \
+    \    end\n        end\n        max_fill = math.max(max_fill, fill)\n    end\n\
+    \    return max_fill\nend", "    local n, m = #grid, #grid[1]\n    local function\
+    \ get_max(i, j)\n        local max = 0\n        for k = 1, i - 1 do\n        \
+    \    max = math.max(max, grid[k][j])\n        end\n        return max\n    end\n\
+    \    local function get_fill(i, j)\n        local max = get_max(i, j)\n      \
+    \  if max > grid[i][j] then\n            return max - grid[i][j]\n        end\n\
+    \        return 0\n    end\n    local function get_fill_row(i)\n        local\
+    \ fill = 0\n        for j = 1, m do\n            fill = fill + get_fill(i, j)\n\
+    \        end\n        return fill\n    end\n    local function get_fill_col(j)\n\
+    \        local fill = 0\n        for i = 1, n do\n            fill = fill + get_fill(i,\
+    \ j)\n        end\n        return fill\n    end\n    local function get_fill_all()\n\
+    \        local fill = 0\n        for i = 1, n do\n            fill = fill + get_fill_row(i)\n\
+    \        end\n        return fill\n    end\n    local function get_fill_row_col()\n\
+    \        local fill = 0\n        for i = 1, n do\n            fill = fill + get_fill_row(i)\n\
+    \        end\n        for j = 1, m do\n            fill = fill + get_fill_col(j)\n\
+    \        end\n        return fill\n    end\n    local function get_fill_row_col_diag()\n\
+    \        local fill = 0\n        for i = 1, n do\n            fill = fill + get_fill_row(i)\n\
+    \        end\n        for j = 1, m do\n            fill = fill + get_fill_col(j)\n\
+    \        end\n        for i = 1, n do\n            for j = 1, m do\n         \
+    \       fill = fill + get_fill(i, j)\n            end\n        end\n        return\
+    \ fill\n    end\n    local function get_fill_row_col_diag_anti()\n        local\
+    \ fill = 0\n        for i = 1, n do\n            fill = fill +", "    local n,\
+    \ m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        local\
+    \ fill = 0\n        for j = 1, m do\n            if grid[i][j] == 1 then\n   \
+    \             fill = fill + 1\n            end\n        end\n        max_fill\
+    \ = math.max(max_fill, fill)\n    end\n    return max_fill\nend", "    local n\
+    \ = #grid\n    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        for j = 1, m do\n            if grid[i][j] == 1 then\n              \
+    \  max_fill = max_fill + 1\n            end\n        end\n    end\n    return\
+    \ math.ceil(max_fill / capacity)\nend", "    local n, m = #grid, #grid[1]\n  \
+    \  local function get_fill(i, j)\n        local sum = 0\n        for k = 1, capacity\
+    \ do\n            if i + k <= n and grid[i + k][j] == 1 then\n               \
+    \ sum = sum + 1\n            end\n        end\n        return sum\n    end\n \
+    \   local function get_max_fill(i, j)\n        local max_fill = 0\n        for\
+    \ k = 1, capacity do\n            if i + k <= n then\n                max_fill\
+    \ = math.max(max_fill, get_fill(i + k, j))\n            end\n        end\n   \
+    \     return max_fill\n    end\n    local function get_max_fill_col(j)\n     \
+    \   local max_fill = 0\n        for i = 1, n do\n            max_fill = math.max(max_fill,\
+    \ get_max_fill(i, j))\n        end\n        return max_fill\n    end\n    local\
+    \ sum = 0\n    for j = 1, m do\n        sum = sum + get_max_fill_col(j)\n    end\n\
+    \    return sum\nend\nreturn max_fill", "    local max_fill_count = 0\n    for\
+    \ i = 1, #grid do\n        local fill_count = 0\n        for j = 1, #grid[i] do\n\
+    \            if grid[i][j] == 1 then\n                fill_count = fill_count\
+    \ + 1\n            end\n        end\n        if fill_count > max_fill_count then\n\
+    \            max_fill_count = fill_count\n        end\n    end\n    return math.ceil(max_fill_count\
+    \ / capacity)\nend", "    local m, n = #grid, #grid[1]\n    local max_fill = 0\n\
+    \    for i = 1, m do\n        local fill = 0\n        for j = 1, n do\n      \
+    \      if grid[i][j] == 1 then\n                fill = fill + 1\n            end\n\
+    \        end\n        max_fill = math.max(max_fill, fill)\n    end\n    return\
+    \ math.ceil(max_fill / capacity)\nend", "    local n, m = #grid, #grid[1]\n  \
+    \  local max_fill = 0\n    for i = 1, n do\n        local fill = 0\n        for\
+    \ j = 1, m do\n            if grid[i][j] == 1 then\n                fill = fill\
+    \ + 1\n            end\n        end\n        max_fill = math.max(max_fill, fill)\n\
+    \    end\n    return math.min(max_fill, capacity)\nend", "    local n = #grid\n\
+    \    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n       \
+    \ for j = 1, m do\n            if grid[i][j] == 1 then\n                max_fill\
+    \ = max_fill + 1\n            end\n        end\n    end\n    return max_fill\n\
+    end", "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1,\
+    \ n do\n        local fill = 0\n        for j = 1, m do\n            if grid[i][j]\
+    \ == 1 then\n                fill = fill + 1\n            end\n        end\n \
+    \       max_fill = math.max(max_fill, fill)\n    end\n    return max_fill\nend",
+  "    local m, n = #grid, #grid[1]\n    local function get_max_fill(i, j)\n     \
+    \   if i < 1 or i > m or j < 1 or j > n then\n            return 0\n        end\n\
+    \        return grid[i][j]\n    end\n    local function fill(i, j)\n        local\
+    \ max_fill = get_max_fill(i, j)\n        if max_fill == 0 then\n            return\
+    \ 0\n        end\n        local fill = math.min(capacity, max_fill)\n        grid[i][j]\
+    \ = grid[i][j] - fill\n        return fill\n    end\n    local function fill_row(i)\n\
+    \        local fill = 0\n        for j = 1, n do\n            fill = fill + fill(i,\
+    \ j)\n        end\n        return fill\n    end\n    local function fill_col(j)\n\
+    \        local fill = 0\n        for i = 1, m do\n            fill = fill + fill(i,\
+    \ j)\n        end\n        return fill\n    end\n    local function fill_diag(i,\
+    \ j)\n        local fill = 0\n        for k = 1, m do\n            fill = fill\
+    \ + fill(i + k - 1, j + k - 1)\n        end\n        return fill\n    end\n  \
+    \  local function fill_anti_diag(i, j)\n        local fill = 0\n        for k\
+    \ = 1, m do\n            fill = fill + fill(i + k - 1, j - k + 1)\n        end\n\
+    \        return fill\n    end\n    local function fill_all()\n        local fill\
+    \ = 0\n        for i = 1, m do\n            fill = fill + fill_row(i)\n      \
+    \  end\n        for j = 1, n do\n            fill = fill + fill_col(j)\n     \
+    \   end\n        for i = 1, m do\n            fill = fill + fill_diag(i, 1)\n\
+    \        end\n        for j = 2, n do\n            fill = fill + fill_diag(1,\
+    \ j)\n        end\n        for i = 1, m do\n            fill = fill + fill_anti_diag(i,\
+    \ n)\n        end\n        for j = 1", "    local n, m = #grid, #grid[1]\n   \
+    \ local function fill(i, j)\n        if i < 1 or i > n or j < 1 or j > m then\n\
+    \            return 0\n        end\n        if grid[i][j] == 0 then\n        \
+    \    return 0\n        end\n        grid[i][j] = 0\n        return 1 + fill(i\
+    \ - 1, j) + fill(i + 1, j) + fill(i, j - 1) + fill(i, j + 1)\n    end\n    local\
+    \ function fill_all()\n        local count = 0\n        for i = 1, n do\n    \
+    \        for j = 1, m do\n                count = count + fill(i, j)\n       \
+    \     end\n        end\n        return count\n    end\n    local count = 0\n \
+    \   while fill_all() > 0 do\n        count = count + 1\n    end\n    return count\n\
+    end\nreturn max_fill", "    local n, m = #grid, #grid[1]\n    local max_fill =\
+    \ {}\n    for i = 1, n do\n        max_fill[i] = {}\n        for j = 1, m do\n\
+    \            max_fill[i][j] = 0\n        end\n    end\n    for i = 1, n do\n \
+    \       for j = 1, m do\n            if grid[i][j] == 1 then\n               \
+    \ max_fill[i][j] = capacity\n            else\n                if i > 1 then\n\
+    \                    max_fill[i][j] = max_fill[i - 1][j]\n                end\n\
+    \            end\n        end\n    end\n    return max_fill\nend", "    local\
+    \ n = #grid\n    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n\
+    \ do\n        for j = 1, m do\n            if grid[i][j] == 1 then\n         \
+    \       max_fill = max_fill + 1\n            end\n        end\n    end\n    return\
+    \ max_fill\nend", "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n\
+    \    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n      \
+    \      if grid[i][j] == 1 then\n                fill = fill + 1\n            end\n\
+    \        end\n        max_fill = math.max(max_fill, fill)\n    end\n    return\
+    \ max_fill\nend", "    local m, n = #grid, #grid[1]\n    local max_fill = 0\n\
+    \    for i = 1, m do\n        for j = 1, n do\n            if grid[i][j] == 1\
+    \ then\n                max_fill = max_fill + 1\n            end\n        end\n\
+    \    end\n    return max_fill\nend", "    local n = #grid\n    local m = #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, n do\n        for j = 1, m do\n      \
+    \      if grid[i][j] == 1 then\n                max_fill = max_fill + 1\n    \
+    \        end\n        end\n    end\n    return max_fill\nend", "    local n, m\
+    \ = #grid, #grid[1]\n    local function fill(i, j)\n        if i < 1 or i > n\
+    \ or j < 1 or j > m then\n            return 0\n        end\n        local v =\
+    \ grid[i][j]\n        if v == 0 then\n            return 0\n        end\n    \
+    \    grid[i][j] = 0\n        return v + fill(i-1, j) + fill(i+1, j) + fill(i,\
+    \ j-1) + fill(i, j+1)\n    end\n    local function fill_all()\n        local count\
+    \ = 0\n        for i = 1, n do\n            for j = 1, m do\n                local\
+    \ v = fill(i, j)\n                if v > 0 then\n                    count = count\
+    \ + math.ceil(v / capacity)\n                end\n            end\n        end\n\
+    \        return count\n    end\n    return fill_all()\nend", "    local n, m =\
+    \ #grid, #grid[1]\n    local function fill(i, j)\n        local c = 0\n      \
+    \  while i <= n and grid[i][j] == 1 do\n            grid[i][j] = 0\n         \
+    \   c = c + 1\n            i = i + 1\n        end\n        return c\n    end\n\
+    \    local function empty(i, j)\n        local c = 0\n        while i >= 1 and\
+    \ grid[i][j] == 0 do\n            grid[i][j] = 1\n            c = c + 1\n    \
+    \        i = i - 1\n        end\n        return c\n    end\n    local function\
+    \ fill_all(j)\n        local c = 0\n        for i = 1, n do\n            c = c\
+    \ + fill(i, j)\n        end\n        return c\n    end\n    local function empty_all(j)\n\
+    \        local c = 0\n        for i = n, 1, -1 do\n            c = c + empty(i,\
+    \ j)\n        end\n        return c\n    end\n    local function fill_to_capacity(j)\n\
+    \        local c = 0\n        for i = 1, n do\n            local f = fill(i, j)\n\
+    \            c = c + f\n            if f == capacity then\n                break\n\
+    \            end\n        end\n        return c\n    end\n    local function empty_to_capacity(j)\n\
+    \        local c = 0\n        for i = n, 1, -1 do\n            local f = empty(i,\
+    \ j)\n            c = c + f\n            if f == capacity then\n             \
+    \   break\n            end\n        end\n        return c\n    end\n    local\
+    \ function fill_to_capacity_all()\n        local c = 0\n        for j = 1, m do\n\
+    \            c = c + fill_to_capacity(j)\n        end\n        return c\n    end\n\
+    \    local function empty_to_capacity_all()\n        local c = 0\n        for\
+    \ j = 1, m do\n            c = c + empty_to_capacity(j)\n        end\n       \
+    \ return c\n    end\n    local function fill_all_to_capacity()\n        local\
+    \ c = 0\n        for j = 1, m do", "    local n, m = #grid, #grid[1]\n    local\
+    \ max_fill = 0\n    for i = 1, n do\n        for j = 1, m do\n            if grid[i][j]\
+    \ == 1 then\n                max_fill = max_fill + 1\n            end\n      \
+    \  end\n    end\n    return max_fill * capacity\nend", "    local n, m = #grid,\
+    \ #grid[1]\n    local max_fill = {}\n    for i = 1, n do\n        max_fill[i]\
+    \ = {}\n        for j = 1, m do\n            max_fill[i][j] = grid[i][j]\n   \
+    \     end\n    end\n    for i = 1, n do\n        for j = 1, m do\n           \
+    \ if i > 1 then\n                max_fill[i][j] = math.max(max_fill[i][j], max_fill[i\
+    \ - 1][j])\n            end\n            if j > 1 then\n                max_fill[i][j]\
+    \ = math.max(max_fill[i][j], max_fill[i][j - 1])\n            end\n        end\n\
+    \    end\n    local function fill(i, j)\n        local fill_count = 0\n      \
+    \  if i > 1 then\n            fill_count = fill_count + math.max(0, max_fill[i\
+    \ - 1][j] - grid[i][j])\n        end\n        if j > 1 then\n            fill_count\
+    \ = fill_count + math.max(0, max_fill[i][j - 1] - grid[i][j])\n        end\n \
+    \       return fill_count\n    end\n    local function lower(i, j)\n        local\
+    \ lower_count = 0\n        if i > 1 then\n            lower_count = lower_count\
+    \ + math.max(0, grid[i][j] - max_fill[i - 1][j])\n        end\n        if j >\
+    \ 1 then\n            lower_count = lower_count + math.max(0, grid[i][j] - max_fill[i][j\
+    \ - 1])\n        end\n        return lower_count\n    end\n    local fill_count,\
+    \ lower_count = 0, 0\n    for i = 1, n do\n        for j = 1, m do\n         \
+    \   local f = fill(i, j)\n            local l = lower(i, j)\n            if f\
+    \ > capacity then\n                fill_count = fill_count + f - capacity\n  \
+    \          elseif l > capacity then\n                lower_count = lower_count\
+    \ + l - capacity\n            end\n        end\n", "    local n, m = #grid, #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, n do\n        local fill = 0\n       \
+    \ for j = 1, m do\n            if grid[i][j] == 1 then\n                fill =\
+    \ fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return math.min(max_fill, capacity)\nend", "    local n,\
+    \ m = #grid, #grid[1]\n    local function fill(i, j)\n        local c = capacity\n\
+    \        for k = i, n do\n            if grid[k][j] == 1 then\n              \
+    \  c = c - 1\n                if c == 0 then\n                    return true\n\
+    \                end\n            end\n        end\n        return false\n   \
+    \ end\n    local function empty(i, j)\n        local c = capacity\n        for\
+    \ k = i, n do\n            if grid[k][j] == 1 then\n                c = c - 1\n\
+    \                grid[k][j] = 0\n                if c == 0 then\n            \
+    \        return true\n                end\n            end\n        end\n    \
+    \    return false\n    end\n    local function fill_all()\n        local count\
+    \ = 0\n        for i = 1, n do\n            for j = 1, m do\n                if\
+    \ grid[i][j] == 1 then\n                    count = count + 1\n              \
+    \  end\n            end\n        end\n        return count\n    end\n    local\
+    \ function empty_all()\n        local count = 0\n        for i = 1, n do\n   \
+    \         for j = 1, m do\n                if grid[i][j] == 1 then\n         \
+    \           count = count + 1\n                end\n            end\n        end\n\
+    \        return count\n    end\n    local function fill_row(i)\n        local\
+    \ count = 0\n        for j = 1, m do\n            if grid[i][j] == 1 then\n  \
+    \              count = count + 1\n            end\n        end\n        return\
+    \ count\n    end\n    local function empty_row(i)\n        local count = 0\n \
+    \       for j = 1, m do\n            if grid[i][j] == 1 then\n               \
+    \ count = count + 1\n            end\n        end\n        return count\n    end\n\
+    \    local function fill_col(j)\n        local count = 0\n        for i = 1, n\
+    \ do\n            if grid[i][j] == 1 then\n                count = count + 1\n\
+    \            end\n        end\n        return count\n    end\n    local function\
+    \ empty_col(j)\n        local count = 0\n        for i = 1, n do\n           \
+    \ if grid[i][j] == 1 then\n                count", "    local max_fill = 0\n \
+    \   for _, row in ipairs(grid) do\n        local fill = 0\n        for _, v in\
+    \ ipairs(row) do\n            fill = fill + v\n            if fill > capacity\
+    \ then\n                max_fill = max_fill + 1\n                fill = 0\n  \
+    \          end\n        end\n        if fill > 0 then\n            max_fill =\
+    \ max_fill + 1\n        end\n    end\n    return max_fill\nend", "    local n,\
+    \ m = #grid, #grid[1]\n    local function fill(i, j)\n        local c = 0\n  \
+    \      while i <= n and grid[i][j] == 1 do\n            grid[i][j] = 0\n     \
+    \       c = c + 1\n            i = i + 1\n        end\n        return c\n    end\n\
+    \    local function empty(i, j)\n        local c = 0\n        while i >= 1 and\
+    \ grid[i][j] == 0 do\n            grid[i][j] = 1\n            c = c + 1\n    \
+    \        i = i - 1\n        end\n        return c\n    end\n    local function\
+    \ fill_all()\n        local c = 0\n        for i = 1, n do\n            for j\
+    \ = 1, m do\n                c = c + fill(i, j)\n            end\n        end\n\
+    \        return c\n    end\n    local function empty_all()\n        local c =\
+    \ 0\n        for i = n, 1, -1 do\n            for j = 1, m do\n              \
+    \  c = c + empty(i, j)\n            end\n        end\n        return c\n    end\n\
+    \    local function fill_one()\n        local c = 0\n        for i = 1, n do\n\
+    \            for j = 1, m do\n                c = c + fill(i, j)\n           \
+    \     if c >= capacity then\n                    return c\n                end\n\
+    \            end\n        end\n        return c\n    end\n    local function empty_one()\n\
+    \        local c = 0\n        for i = n, 1, -1 do\n            for j = 1, m do\n\
+    \                c = c + empty(i, j)\n                if c >= capacity then\n\
+    \                    return c\n                end\n            end\n        end\n\
+    \        return c\n    end\n    local function fill_one_row()\n        local c\
+    \ = 0\n        for i = 1, n do\n            c = c + fill(i, 1)\n            if\
+    \ c >= capacity then\n                return c\n            end\n        end\n\
+    \        return c\n    end\n    local function empty_one_row()\n        local\
+    \ c = 0\n        for i = n, 1, -1 do\n            c = c + empty(i, 1)\n      \
+    \     ", "    local result = 0\n    local n, m = #grid, #grid[1]\n    local function\
+    \ fill(i, j)\n        if i < 1 or i > n or j < 1 or j > m then\n            return\
+    \ 0\n        end\n        if grid[i][j] == 0 then\n            return 0\n    \
+    \    end\n        grid[i][j] = 0\n        return 1 + fill(i - 1, j) + fill(i +\
+    \ 1, j) + fill(i, j - 1) + fill(i, j + 1)\n    end\n    for i = 1, n do\n    \
+    \    for j = 1, m do\n            local fill_count = fill(i, j)\n            if\
+    \ fill_count > 0 then\n                result = result + math.ceil(fill_count\
+    \ / capacity)\n            end\n        end\n    end\n    return result\nend",
+  "    local n, m = #grid, #grid[1]\n    local function fill(i, j)\n        if i <\
+    \ 1 or i > n or j < 1 or j > m then\n            return 0\n        end\n     \
+    \   if grid[i][j] == 0 then\n            return 0\n        end\n        local\
+    \ v = grid[i][j]\n        grid[i][j] = 0\n        return v + fill(i - 1, j) +\
+    \ fill(i + 1, j) + fill(i, j - 1) + fill(i, j + 1)\n    end\n    local function\
+    \ fill_all()\n        local count = 0\n        for i = 1, n do\n            for\
+    \ j = 1, m do\n                local v = fill(i, j)\n                if v > 0\
+    \ then\n                    count = count + 1\n                end\n         \
+    \   end\n        end\n        return count\n    end\n    local function fill_one()\n\
+    \        local count = 0\n        for i = 1, n do\n            for j = 1, m do\n\
+    \                if grid[i][j] > 0 then\n                    grid[i][j] = grid[i][j]\
+    \ - 1\n                    count = count + 1\n                end\n          \
+    \  end\n        end\n        return count\n    end\n    local count = 0\n    while\
+    \ fill_all() > 0 do\n        count = count + fill_one()\n    end\n    return count\n\
+    end\nreturn max_fill", "    local n, m = #grid, #grid[1]\n    local max_fill =\
+    \ 0\n    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n  \
+    \          if grid[i][j] == 1 then\n                fill = fill + 1\n        \
+    \    end\n        end\n        max_fill = math.max(max_fill, fill)\n    end\n\
+    \    return max_fill\nend", "    local n, m = #grid, #grid[1]\n    local max_fill\
+    \ = 0\n    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n\
+    \            if grid[i][j] == 1 then\n                fill = fill + 1\n      \
+    \      end\n        end\n        max_fill = math.max(max_fill, fill)\n    end\n\
+    \    return max_fill\nend", "    local n, m = #grid, #grid[1]\n    local max_fill\
+    \ = {}\n    for i = 1, n do\n        max_fill[i] = {}\n        for j = 1, m do\n\
+    \            max_fill[i][j] = math.min(capacity, grid[i][j])\n        end\n  \
+    \  end\n    return max_fill\nend", "    local n, m = #grid, #grid[1]\n    local\
+    \ function fill(i, j)\n        local c = 0\n        while i <= n and grid[i][j]\
+    \ == 1 do\n            grid[i][j] = 0\n            c = c + 1\n            i =\
+    \ i + 1\n        end\n        return c\n    end\n    local function empty(i, j)\n\
+    \        local c = 0\n        while i >= 1 and grid[i][j] == 0 do\n          \
+    \  grid[i][j] = 1\n            c = c + 1\n            i = i - 1\n        end\n\
+    \        return c\n    end\n    local function fill_all(i, j)\n        local c\
+    \ = 0\n        while j <= m do\n            c = c + fill(i, j)\n            j\
+    \ = j + 1\n        end\n        return c\n    end\n    local function empty_all(i,\
+    \ j)\n        local c = 0\n        while j >= 1 do\n            c = c + empty(i,\
+    \ j)\n            j = j - 1\n        end\n        return c\n    end\n    local\
+    \ function fill_one(i, j)\n        local c = 0\n        while i <= n and j <=\
+    \ m do\n            c = c + fill(i, j)\n            i = i + 1\n            j =\
+    \ j + 1\n        end\n        return c\n    end\n    local function empty_one(i,\
+    \ j)\n        local c = 0\n        while i >= 1 and j >= 1 do\n            c =\
+    \ c + empty(i, j)\n            i = i - 1\n            j = j - 1\n        end\n\
+    \        return c\n    end\n    local function fill_two(i, j)\n        local c\
+    \ = 0\n        while i <= n and j >= 1 do\n            c = c + fill(i, j)\n  \
+    \          i = i + 1\n            j = j - 1\n        end\n        return c\n \
+    \   end\n    local function empty_two(i, j)\n        local c = 0\n        while\
+    \ i >= 1 and j <= m do\n            c = c + empty(i, j)\n            i = i - 1\n\
+    \            j = j + 1\n        end\n        return c", "    local n, m = #grid,\
+    \ #grid[1]\n    local max_fill = {}\n    for i = 1, n do\n        max_fill[i]\
+    \ = {}\n        for j = 1, m do\n            max_fill[i][j] = grid[i][j]\n   \
+    \     end\n    end\n    for i = 1, n do\n        for j = 1, m do\n           \
+    \ if i > 1 then\n                max_fill[i][j] = math.max(max_fill[i][j], max_fill[i\
+    \ - 1][j])\n            end\n            if j > 1 then\n                max_fill[i][j]\
+    \ = math.max(max_fill[i][j], max_fill[i][j - 1])\n            end\n        end\n\
+    \    end\n    local function fill(i, j)\n        if i > n or j > m then\n    \
+    \        return 0\n        end\n        local max_fill_here = max_fill[i][j]\n\
+    \        if max_fill_here == 0 then\n            return 0\n        end\n     \
+    \   local fill_here = math.min(capacity, max_fill_here)\n        max_fill[i][j]\
+    \ = max_fill_here - fill_here\n        return fill_here + fill(i + 1, j) + fill(i,\
+    \ j + 1)\n    end\n    return fill(1, 1)\nend\nreturn max_fill", "    local n\
+    \ = #grid\n    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        for j = 1, m do\n            if grid[i][j] == 1 then\n              \
+    \  max_fill = max_fill + 1\n            end\n        end\n    end\n    return\
+    \ max_fill\nend", "    local n, m = #grid, #grid[1]\n    local function dfs(i,\
+    \ j, visited)\n        if i < 1 or i > n or j < 1 or j > m or visited[i][j] or\
+    \ grid[i][j] == 0 then\n            return 0\n        end\n        visited[i][j]\
+    \ = true\n        local sum = 1\n        sum = sum + dfs(i - 1, j, visited)\n\
+    \        sum = sum + dfs(i + 1, j, visited)\n        sum = sum + dfs(i, j - 1,\
+    \ visited)\n        sum = sum + dfs(i, j + 1, visited)\n        return sum\n \
+    \   end\n    local function fill(i, j, visited)\n        if i < 1 or i > n or\
+    \ j < 1 or j > m or visited[i][j] or grid[i][j] == 0 then\n            return\
+    \ 0\n        end\n        visited[i][j] = true\n        local sum = 1\n      \
+    \  sum = sum + fill(i - 1, j, visited)\n        sum = sum + fill(i + 1, j, visited)\n\
+    \        sum = sum + fill(i, j - 1, visited)\n        sum = sum + fill(i, j +\
+    \ 1, visited)\n        grid[i][j] = 0\n        return sum\n    end\n    local\
+    \ function count_fill(i, j, visited)\n        local sum = 0\n        while true\
+    \ do\n            local s = dfs(i, j, visited)\n            if s == 0 then\n \
+    \               break\n            end\n            sum = sum + 1\n          \
+    \  fill(i, j, visited)\n        end\n        return sum\n    end\n    local sum\
+    \ = 0\n    local visited = {}\n    for i = 1, n do\n        visited[i] = {}\n\
+    \    end\n    for i = 1, n do\n        for j = 1, m do\n            if grid[i][j]\
+    \ == 1 then\n                sum = sum + count_fill(i, j, visited)\n         \
+    \   end\n        end\n    end\n    return sum\nend\nreturn max_fill", "    local\
+    \ n, m = #grid, #grid[1]\n    local function fill(i, j)\n        if i < 1 or i\
+    \ > n or j < 1 or j > m then\n            return 0\n        end\n        if grid[i][j]\
+    \ == 0 then\n            return 0\n        end\n        grid[i][j] = 0\n     \
+    \   return 1 + fill(i - 1, j) + fill(i + 1, j) + fill(i, j - 1) + fill(i, j +\
+    \ 1)\n    end\n    local function fill_all()\n        local count = 0\n      \
+    \  for i = 1, n do\n            for j = 1, m do\n                count = count\
+    \ + fill(i, j)\n            end\n        end\n        return count\n    end\n\
+    \    local count = 0\n    while fill_all() > 0 do\n        count = count + 1\n\
+    \    end\n    return count\nend\nreturn max_fill", "    local n, m = #grid, #grid[1]\n\
+    \    local max_fill = {}\n    for i = 1, n do\n        max_fill[i] = {}\n    \
+    \    for j = 1, m do\n            max_fill[i][j] = grid[i][j]\n        end\n \
+    \   end\n    for i = 1, n do\n        for j = 1, m do\n            if i > 1 then\n\
+    \                max_fill[i][j] = math.max(max_fill[i][j], max_fill[i - 1][j])\n\
+    \            end\n            if j > 1 then\n                max_fill[i][j] =\
+    \ math.max(max_fill[i][j], max_fill[i][j - 1])\n            end\n        end\n\
+    \    end\n    local function fill(i, j)\n        if i > n or j > m then\n    \
+    \        return 0\n        end\n        local max_fill_here = max_fill[i][j]\n\
+    \        if max_fill_here == 0 then\n            return 0\n        end\n     \
+    \   local fill_here = math.min(capacity, max_fill_here)\n        return fill_here\
+    \ + fill(i + 1, j) + fill(i, j + 1)\n    end\n    return fill(1, 1)\nend\nreturn\
+    \ max_fill", "    local n, m = #grid, #grid[1]\n    local function dfs(i, j, visited)\n\
+    \        if i < 1 or i > n or j < 1 or j > m or visited[i][j] == 1 or grid[i][j]\
+    \ == 0 then\n            return 0\n        end\n        visited[i][j] = 1\n  \
+    \      return 1 + dfs(i - 1, j, visited) + dfs(i + 1, j, visited) + dfs(i, j -\
+    \ 1, visited) + dfs(i, j + 1, visited)\n    end\n    local function fill(i, j,\
+    \ visited)\n        if i < 1 or i > n or j < 1 or j > m or visited[i][j] == 1\
+    \ or grid[i][j] == 0 then\n            return 0\n        end\n        visited[i][j]\
+    \ = 1\n        local cnt = 1\n        if grid[i][j] == 1 then\n            grid[i][j]\
+    \ = 0\n        else\n            cnt = 0\n        end\n        return cnt + fill(i\
+    \ - 1, j, visited) + fill(i + 1, j, visited) + fill(i, j - 1, visited) + fill(i,\
+    \ j + 1, visited)\n    end\n    local function fill_all(i, j, visited)\n     \
+    \   if i < 1 or i > n or j < 1 or j > m or visited[i][j] == 1 or grid[i][j] ==\
+    \ 0 then\n            return 0\n        end\n        visited[i][j] = 1\n     \
+    \   local cnt = 0\n        if grid[i][j] == 1 then\n            cnt = 1\n    \
+    \        grid[i][j] = 0\n        end\n        return cnt + fill_all(i - 1, j,\
+    \ visited) + fill_all(i + 1, j, visited) + fill_all(i, j - 1, visited) + fill_all(i,\
+    \ j + 1, visited)\n    end\n    local function fill_all_connected(i, j, visited)\n\
+    \        if i < 1 or i > n or j < 1 or j > m or visited[i][j] == 1 or grid[i][j]",
+  "    local n = #grid\n    local m = #grid[1]\n    local max_fill = 0\n    for i\
+    \ = 1, n do\n        for j = 1, m do\n            if grid[i][j] == 1 then\n  \
+    \              max_fill = max_fill + 1\n            end\n        end\n    end\n\
+    \    return max_fill * capacity\nend", "    local n, m = #grid, #grid[1]\n   \
+    \ local max_fill = 0\n    for i = 1, n do\n        local fill = 0\n        for\
+    \ j = 1, m do\n            if grid[i][j] == 1 then\n                fill = fill\
+    \ + 1\n            end\n        end\n        max_fill = math.max(max_fill, fill)\n\
+    \    end\n    return math.ceil(max_fill / capacity)\nend", "    local n, m = #grid,\
+    \ #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        local fill =\
+    \ 0\n        for j = 1, m do\n            if grid[i][j] == 1 then\n          \
+    \      fill = fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return math.ceil(max_fill / capacity)\nend", "    local\
+    \ n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n      \
+    \  local fill = 0\n        for j = 1, m do\n            if grid[i][j] == 1 then\n\
+    \                fill = fill + 1\n            end\n        end\n        max_fill\
+    \ = math.max(max_fill, fill)\n    end\n    return math.min(max_fill, capacity)\n\
+    end", "    local n, m = #grid, #grid[1]\n    local function fill(i, j)\n     \
+    \   if i < 1 or i > n or j < 1 or j > m then\n            return 0\n        end\n\
+    \        if grid[i][j] == 0 then\n            return 0\n        end\n        grid[i][j]\
+    \ = 0\n        return 1 + fill(i - 1, j) + fill(i + 1, j) + fill(i, j - 1) + fill(i,\
+    \ j + 1)\n    end\n    local function fill_all()\n        local count = 0\n  \
+    \      for i = 1, n do\n            for j = 1, m do\n                count = count\
+    \ + fill(i, j)\n            end\n        end\n        return count\n    end\n\
+    \    local function fill_row(i)\n        local count = 0\n        for j = 1, m\
+    \ do\n            count = count + fill(i, j)\n        end\n        return count\n\
+    \    end\n    local function fill_col(j)\n        local count = 0\n        for\
+    \ i = 1, n do\n            count = count + fill(i, j)\n        end\n        return\
+    \ count\n    end\n    local function fill_all_rows()\n        local count = 0\n\
+    \        for i = 1, n do\n            count = count + fill_row(i)\n        end\n\
+    \        return count\n    end\n    local function fill_all_cols()\n        local\
+    \ count = 0\n        for j = 1, m do\n            count = count + fill_col(j)\n\
+    \        end\n        return count\n    end\n    local function fill_all_rows_cols()\n\
+    \        local count = 0\n        for i = 1, n do\n            count = count +\
+    \ fill_row(i)\n        end\n        for j = 1, m do\n            count = count\
+    \ + fill_col(j)\n        end\n        return count\n    end\n    local function\
+    \ fill_all_cols_rows()\n        local count = 0\n        for j = 1, m do\n   \
+    \         count = count + fill_col(j)\n        end\n        for i = 1, n do\n\
+    \            count = count + fill_row(i)\n        end\n       ", "    local n,\
+    \ m = #grid, #grid[1]\n    local max_fill = {}\n    for i = 1, n do\n        max_fill[i]\
+    \ = {}\n        for j = 1, m do\n            max_fill[i][j] = grid[i][j]\n   \
+    \     end\n    end\n    for i = 1, n do\n        for j = 1, m do\n           \
+    \ if i > 1 then\n                max_fill[i][j] = math.max(max_fill[i][j], max_fill[i\
+    \ - 1][j])\n            end\n            if j > 1 then\n                max_fill[i][j]\
+    \ = math.max(max_fill[i][j], max_fill[i][j - 1])\n            end\n        end\n\
+    \    end\n    local count = 0\n    for i = 1, n do\n        for j = 1, m do\n\
+    \            local diff = max_fill[i][j] - grid[i][j]\n            if diff > 0\
+    \ then\n                count = count + math.ceil(diff / capacity)\n         \
+    \   end\n        end\n    end\n    return count\nend", "    local n = #grid\n\
+    \    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n       \
+    \ for j = 1, m do\n            if grid[i][j] == 1 then\n                max_fill\
+    \ = max_fill + 1\n            end\n        end\n    end\n    return max_fill *\
+    \ capacity\nend", "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n\
+    \    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n      \
+    \      if grid[i][j] == 1 then\n                fill = fill + 1\n            end\n\
+    \        end\n        max_fill = math.max(max_fill, fill)\n    end\n    return\
+    \ max_fill\nend", "    local n, m = #grid, #grid[1]\n    local function fill(i,\
+    \ j)\n        local c = capacity\n        while i <= n and j <= m and c > 0 do\n\
+    \            if grid[i][j] == 1 then\n                grid[i][j] = 0\n       \
+    \         c = c - 1\n            end\n            i, j = i + 1, j + 1\n      \
+    \  end\n        return c\n    end\n    local function fill_row(i)\n        local\
+    \ c = capacity\n        for j = 1, m do\n            if grid[i][j] == 1 then\n\
+    \                c = fill(i, j)\n                if c == 0 then\n            \
+    \        return\n                end\n            end\n        end\n    end\n\
+    \    local function fill_col(j)\n        local c = capacity\n        for i = 1,\
+    \ n do\n            if grid[i][j] == 1 then\n                c = fill(i, j)\n\
+    \                if c == 0 then\n                    return\n                end\n\
+    \            end\n        end\n    end\n    local function fill_diag(i, j)\n \
+    \       local c = capacity\n        while i <= n and j <= m and c > 0 do\n   \
+    \         if grid[i][j] == 1 then\n                c = fill(i, j)\n          \
+    \      if c == 0 then\n                    return\n                end\n     \
+    \       end\n            i, j = i + 1, j + 1\n        end\n    end\n    local\
+    \ function fill_diag_rev(i, j)\n        local c = capacity\n        while i <=\
+    \ n and j >= 1 and c > 0 do\n            if grid[i][j] == 1 then\n           \
+    \     c = fill(i, j)\n                if c == 0 then\n                    return\n\
+    \                end\n            end\n            i, j = i + 1, j - 1\n     \
+    \   end\n    end\n    local function fill_all()\n        for i = 1, n do\n   \
+    \         fill_row(i)\n        end\n        for j = 1, m do\n            fill_col(j)\n\
+    \        end\n        for i = 1, n do\n            fill_diag(i, 1)\n        end\n\
+    \        for j = 2, m do\n            fill_diag(1,", "    local n = #grid\n  \
+    \  local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        for\
+    \ j = 1, m do\n            if grid[i][j] == 1 then\n                max_fill =\
+    \ max_fill + 1\n            end\n        end\n    end\n    return math.ceil(max_fill\
+    \ / capacity)\nend", "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n\
+    \    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n      \
+    \      if grid[i][j] == 1 then\n                fill = fill + 1\n            end\n\
+    \        end\n        max_fill = math.max(max_fill, fill)\n    end\n    return\
+    \ max_fill\nend", "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n\
+    \    for i = 1, n do\n        local fill = 0\n        for j = 1, m do\n      \
+    \      if grid[i][j] == 1 then\n                fill = fill + 1\n            end\n\
+    \        end\n        max_fill = math.max(max_fill, fill)\n    end\n    return\
+    \ math.min(max_fill, capacity)\nend", "    local n, m = #grid, #grid[1]\n    local\
+    \ max_fill = 0\n    for i = 1, n do\n        for j = 1, m do\n            if grid[i][j]\
+    \ == 1 then\n                max_fill = max_fill + 1\n            end\n      \
+    \  end\n    end\n    return max_fill * capacity\nend", "    local n, m = #grid,\
+    \ #grid[1]\n    local max_fill = {}\n    for i = 1, n do\n        max_fill[i]\
+    \ = {}\n        for j = 1, m do\n            max_fill[i][j] = grid[i][j]\n   \
+    \     end\n    end\n    for i = 1, n do\n        for j = 1, m do\n           \
+    \ if i > 1 then\n                max_fill[i][j] = math.max(max_fill[i][j], max_fill[i\
+    \ - 1][j])\n            end\n            if j > 1 then\n                max_fill[i][j]\
+    \ = math.max(max_fill[i][j], max_fill[i][j - 1])\n            end\n        end\n\
+    \    end\n    local function fill(i, j)\n        local max_fill_here = max_fill[i][j]\n\
+    \        if max_fill_here == 0 then\n            return 0\n        end\n     \
+    \   local fill_here = math.min(capacity, max_fill_here)\n        max_fill[i][j]\
+    \ = max_fill_here - fill_here\n        return fill_here\n    end\n    local function\
+    \ fill_row(i)\n        local fill_here = 0\n        for j = 1, m do\n        \
+    \    fill_here = fill_here + fill(i, j)\n        end\n        return fill_here\n\
+    \    end\n    local function fill_col(j)\n        local fill_here = 0\n      \
+    \  for i = 1, n do\n            fill_here = fill_here + fill(i, j)\n        end\n\
+    \        return fill_here\n    end\n    local function fill_grid()\n        local\
+    \ fill_here = 0\n        for i = 1, n do\n            fill_here = fill_here +\
+    \ fill_row(i)\n        end\n        for j = 1, m do\n            fill_here = fill_here\
+    \ + fill_col(j)\n        end\n        return fill_here\n    end\n    local function\
+    \ fill_grid_once()\n        local fill_here = 0\n        for i = 1, n do\n   \
+    \         fill_here = fill_here + fill_row(i)\n", "    local n = #grid\n    local\
+    \ m = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        for j = 1,\
+    \ m do\n            if grid[i][j] == 1 then\n                max_fill = max_fill\
+    \ + 1\n            end\n        end\n    end\n    return max_fill * capacity\n\
+    end", "    local n, m = #grid, #grid[1]\n    local function fill(i, j)\n     \
+    \   local c = capacity\n        while i <= n and c > 0 do\n            if grid[i][j]\
+    \ == 1 then\n                grid[i][j] = 0\n                c = c - 1\n     \
+    \       end\n            i = i + 1\n        end\n        return c\n    end\n \
+    \   local function empty(i, j)\n        local c = capacity\n        while i >=\
+    \ 1 and c > 0 do\n            if grid[i][j] == 0 then\n                grid[i][j]\
+    \ = 1\n                c = c - 1\n            end\n            i = i - 1\n   \
+    \     end\n        return c\n    end\n    local function fill_all(j)\n       \
+    \ local c = capacity\n        for i = 1, n do\n            if grid[i][j] == 1\
+    \ then\n                grid[i][j] = 0\n                c = c - 1\n          \
+    \  end\n        end\n        return c\n    end\n    local function empty_all(j)\n\
+    \        local c = capacity\n        for i = n, 1, -1 do\n            if grid[i][j]\
+    \ == 0 then\n                grid[i][j] = 1\n                c = c - 1\n     \
+    \       end\n        end\n        return c\n    end\n    local function fill_row(i)\n\
+    \        local c = capacity\n        for j = 1, m do\n            if grid[i][j]\
+    \ == 1 then\n                grid[i][j] = 0\n                c = c - 1\n     \
+    \       end\n        end\n        return c\n    end\n    local function empty_row(i)\n\
+    \        local c = capacity\n        for j = m, 1, -1 do\n            if grid[i][j]\
+    \ == 0 then\n                grid[i][j] = 1\n                c = c - 1\n     \
+    \       end\n        end\n        return c\n    end\n    local function fill_col(j)\n\
+    \        local c = capacity\n        for i = 1, n do\n            if grid[i][j]\
+    \ == 1 then\n                grid[i][j] = 0\n                c = c - 1\n     \
+    \       end\n        end\n        return c\n    end\n    local function", "  \
+    \  local n, m = #grid, #grid[1]\n    local max_fill = {}\n    for i = 1, n do\n\
+    \        local max = 0\n        for j = 1, m do\n            if grid[i][j] ==\
+    \ 1 then\n                max = max + 1\n            end\n        end\n      \
+    \  max_fill[i] = max\n    end\n    local function fill(i, j)\n        local max\
+    \ = max_fill[i]\n        if j > max then\n            return 0\n        end\n\
+    \        local count = 0\n        for k = 1, n do\n            if grid[k][j] ==\
+    \ 1 then\n                count = count + 1\n            end\n        end\n  \
+    \      if count <= capacity then\n            return 1\n        end\n        local\
+    \ min = math.huge\n        for k = 1, n do\n            if grid[k][j] == 1 then\n\
+    \                grid[k][j] = 0\n                local c = fill(i, j + 1)\n  \
+    \              if c < min then\n                    min = c\n                end\n\
+    \                grid[k][j] = 1\n            end\n        end\n        return\
+    \ min + 1\n    end\n    return fill(1, 1)\nend", "    local n, m = #grid, #grid[1]\n\
+    \    local function fill(i, j)\n        local r = 0\n        while i <= n and\
+    \ grid[i][j] == 1 do\n            grid[i][j] = 0\n            r = r + 1\n    \
+    \        i = i + 1\n        end\n        return r\n    end\n    local function\
+    \ empty(i, j)\n        local r = 0\n        while i >= 1 and grid[i][j] == 0 do\n\
+    \            grid[i][j] = 1\n            r = r + 1\n            i = i - 1\n  \
+    \      end\n        return r\n    end\n    local function fill_row(i)\n      \
+    \  local r = 0\n        for j = 1, m do\n            r = r + fill(i, j)\n    \
+    \    end\n        return r\n    end\n    local function empty_row(i)\n       \
+    \ local r = 0\n        for j = 1, m do\n            r = r + empty(i, j)\n    \
+    \    end\n        return r\n    end\n    local function fill_col(j)\n        local\
+    \ r = 0\n        for i = 1, n do\n            r = r + fill(i, j)\n        end\n\
+    \        return r\n    end\n    local function empty_col(j)\n        local r =\
+    \ 0\n        for i = 1, n do\n            r = r + empty(i, j)\n        end\n \
+    \       return r\n    end\n    local function fill_all()\n        local r = 0\n\
+    \        for i = 1, n do\n            r = r + fill_row(i)\n        end\n     \
+    \   return r\n    end\n    local function empty_all()\n        local r = 0\n \
+    \       for i = 1, n do\n            r = r + empty_row(i)\n        end\n     \
+    \   return r\n    end\n    local function fill_all_col()\n        local r = 0\n\
+    \        for j = 1, m do\n            r = r + fill_col(j)\n        end\n     \
+    \   return r\n    end\n    local function empty_all_col()\n        local r = 0\n\
+    \        for j = 1, m do\n            r = r + empty_col(j)\n        end", "  \
+    \  local max_fill = 0\n    for i = 1, #grid do\n        local fill = 0\n     \
+    \   for j = 1, #grid[i] do\n            fill = fill + grid[i][j]\n        end\n\
+    \        max_fill = math.max(max_fill, fill)\n    end\n    return math.ceil(max_fill\
+    \ / capacity)\nend", "    local max_fill = 0\n    for _, row in ipairs(grid) do\n\
+    \        local fill = 0\n        for _, cell in ipairs(row) do\n            fill\
+    \ = fill + cell\n            if fill > capacity then\n                fill = capacity\n\
+    \            end\n        end\n        if fill > max_fill then\n            max_fill\
+    \ = fill\n        end\n    end\n    return max_fill\nend", "    local n, m = #grid,\
+    \ #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        local fill =\
+    \ 0\n        for j = 1, m do\n            if grid[i][j] == 1 then\n          \
+    \      fill = fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return max_fill\nend", "    local n, m = #grid, #grid[1]\n\
+    \    local max_fill = {}\n    for i = 1, n do\n        max_fill[i] = {}\n    \
+    \    for j = 1, m do\n            max_fill[i][j] = grid[i][j]\n        end\n \
+    \   end\n    for i = 1, n do\n        for j = 1, m do\n            if i > 1 then\n\
+    \                max_fill[i][j] = math.max(max_fill[i][j], max_fill[i - 1][j])\n\
+    \            end\n            if j > 1 then\n                max_fill[i][j] =\
+    \ math.max(max_fill[i][j], max_fill[i][j - 1])\n            end\n        end\n\
+    \    end\n    local result = 0\n    for i = 1, n do\n        for j = 1, m do\n\
+    \            local diff = max_fill[i][j] - grid[i][j]\n            local times\
+    \ = math.ceil(diff / capacity)\n            result = result + times\n        end\n\
+    \    end\n    return result\nend", "    local m, n = #grid, #grid[1]\n    local\
+    \ max_fill = 0\n    for i = 1, m do\n        local fill = 0\n        for j = 1,\
+    \ n do\n            if grid[i][j] == 1 then\n                fill = fill + 1\n\
+    \            end\n        end\n        max_fill = math.max(max_fill, fill)\n \
+    \   end\n    return max_fill\nend", "    local n, m = #grid, #grid[1]\n    local\
+    \ function get_max_fill(i, j)\n        if i < 1 or i > n or j < 1 or j > m then\n\
+    \            return 0\n        end\n        local max_fill = 0\n        for k\
+    \ = 1, capacity do\n            max_fill = max_fill + grid[i][j]\n           \
+    \ i = i + 1\n        end\n        return max_fill\n    end\n    local function\
+    \ get_max_fill_row(i)\n        local max_fill = 0\n        for j = 1, m do\n \
+    \           max_fill = max(max_fill, get_max_fill(i, j))\n        end\n      \
+    \  return max_fill\n    end\n    local max_fill_row = {}\n    for i = 1, n do\n\
+    \        max_fill_row[i] = get_max_fill_row(i)\n    end\n    local max_fill =\
+    \ 0\n    for i = 1, n do\n        max_fill = max_fill + max_fill_row[i]\n    end\n\
+    \    return max_fill\nend\nreturn max_fill", "    local m, n = #grid, #grid[1]\n\
+    \    local function fill(i, j)\n        if i < 1 or i > m or j < 1 or j > n then\n\
+    \            return 0\n        end\n        if grid[i][j] == 1 then\n        \
+    \    grid[i][j] = 0\n            return 1\n        end\n        return 0\n   \
+    \ end\n    local function dfs(i, j)\n        local sum = 0\n        for k = 1,\
+    \ capacity do\n            sum = sum + fill(i, j + k)\n        end\n        for\
+    \ k = 1, capacity do\n            sum = sum + fill(i + k, j)\n        end\n  \
+    \      return sum\n    end\n    local function bfs(i, j)\n        local sum =\
+    \ 0\n        for k = 1, capacity do\n            sum = sum + fill(i, j - k)\n\
+    \        end\n        for k = 1, capacity do\n            sum = sum + fill(i -\
+    \ k, j)\n        end\n        return sum\n    end\n    local function count()\n\
+    \        local sum = 0\n        for i = 1, m do\n            for j = 1, n do\n\
+    \                if grid[i][j] == 1 then\n                    sum = sum + 1\n\
+    \                end\n            end\n        end\n        return sum\n    end\n\
+    \    local function solve()\n        local sum = 0\n        for i = 1, m do\n\
+    \            for j = 1, n do\n                if grid[i][j] == 1 then\n      \
+    \              sum = sum + dfs(i, j)\n                end\n            end\n \
+    \       end\n        for i = m, 1, -1 do\n            for j = n, 1, -1 do\n  \
+    \              if grid[i][j] == 1 then\n                    sum = sum + bfs(i,\
+    \ j)\n                end\n            end\n        end\n        return sum\n\
+    \    end\n    local function check()\n        for i = 1, m do\n            for\
+    \ j = 1, n do\n                if grid[i][j] == 1 then\n                    return\
+    \ false\n                end\n            end\n        end\n        return true\n\
+    \    end\n    local function main()\n        local sum = count()\n        if sum\
+    \ == 0 then\n            return", "    local n = #grid\n    local m = #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, n do\n        for j = 1, m do\n      \
+    \      if grid[i][j] == 1 then\n                max_fill = max_fill + 1\n    \
+    \        end\n        end\n    end\n    return max_fill\nend", "    local n, m\
+    \ = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        for\
+    \ j = 1, m do\n            if grid[i][j] == 1 then\n                max_fill =\
+    \ max_fill + 1\n            end\n        end\n    end\n    return max_fill * capacity\n\
+    end", "    local n = #grid\n    local m = #grid[1]\n    local max_fill = 0\n \
+    \   for i = 1, n do\n        for j = 1, m do\n            if grid[i][j] == 1 then\n\
+    \                max_fill = max_fill + 1\n            end\n        end\n    end\n\
+    \    return math.ceil(max_fill / capacity)\nend", "    local rows, cols = #grid,\
+    \ #grid[1]\n    local max_fill = 0\n    for i = 1, rows do\n        local fill\
+    \ = 0\n        for j = 1, cols do\n            fill = fill + grid[i][j]\n    \
+    \        if fill > capacity then\n                max_fill = max_fill + 1\n  \
+    \              fill = 0\n            end\n        end\n        max_fill = max_fill\
+    \ + 1\n    end\n    return max_fill\nend", "    local n = #grid\n    local m =\
+    \ #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        for j = 1, m\
+    \ do\n            if grid[i][j] == 1 then\n                max_fill = max_fill\
+    \ + 1\n            end\n        end\n    end\n    local min_fill = math.floor(max_fill\
+    \ / capacity)\n    if max_fill % capacity > 0 then\n        min_fill = min_fill\
+    \ + 1\n    end\n    return min_fill\nend\nreturn max_fill", "    local n, m =\
+    \ #grid, #grid[1]\n    local function fill(i, j)\n        if i < 1 or i > n or\
+    \ j < 1 or j > m then\n            return 0\n        end\n        if grid[i][j]\
+    \ == 0 then\n            return 0\n        end\n        grid[i][j] = 0\n     \
+    \   return 1 + fill(i - 1, j) + fill(i + 1, j) + fill(i, j - 1) + fill(i, j +\
+    \ 1)\n    end\n    local function fill_all()\n        local count = 0\n      \
+    \  for i = 1, n do\n            for j = 1, m do\n                count = count\
+    \ + fill(i, j)\n            end\n        end\n        return count\n    end\n\
+    \    local count = 0\n    while fill_all() > 0 do\n        count = count + 1\n\
+    \    end\n    return count\nend\nreturn max_fill", "    local n, m = #grid, #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, n do\n        for j = 1, m do\n      \
+    \      if grid[i][j] == 1 then\n                max_fill = max_fill + 1\n    \
+    \        end\n        end\n    end\n    return max_fill\nend", "    local n, m\
+    \ = #grid, #grid[1]\n    local function dfs(i, j)\n        if i < 1 or i > n or\
+    \ j < 1 or j > m or grid[i][j] == 0 then\n            return 0\n        end\n\
+    \        local c = grid[i][j]\n        grid[i][j] = 0\n        return c + dfs(i\
+    \ - 1, j) + dfs(i + 1, j) + dfs(i, j - 1) + dfs(i, j + 1)\n    end\n    local\
+    \ function count_fill(i, j)\n        local c = dfs(i, j)\n        return math.ceil(c\
+    \ / capacity)\n    end\n    local function count_fill_all()\n        local c =\
+    \ 0\n        for i = 1, n do\n            for j = 1, m do\n                c =\
+    \ c + count_fill(i, j)\n            end\n        end\n        return c\n    end\n\
+    \    return count_fill_all()\nend\nreturn max_fill", "    local n, m = #grid,\
+    \ #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        local fill =\
+    \ 0\n        for j = 1, m do\n            if grid[i][j] == 1 then\n          \
+    \      fill = fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return max_fill\nend", "    local n, m = #grid, #grid[1]\n\
+    \    local max_fill_grid = {}\n    for i = 1, n do\n        max_fill_grid[i] =\
+    \ {}\n        for j = 1, m do\n            max_fill_grid[i][j] = capacity\n  \
+    \      end\n    end\n    for i = 1, n do\n        for j = 1, m do\n          \
+    \  if grid[i][j] == 1 then\n                max_fill_grid[i][j] = 0\n        \
+    \    elseif i > 1 then\n                max_fill_grid[i][j] = max_fill_grid[i\
+    \ - 1][j]\n            end\n        end\n    end\n    for i = n, 1, -1 do\n  \
+    \      for j = m, 1, -1 do\n            if grid[i][j] == 1 then\n            \
+    \    max_fill_grid[i][j] = 0\n            elseif i < n then\n                max_fill_grid[i][j]\
+    \ = math.min(max_fill_grid[i][j], max_fill_grid[i + 1][j])\n            end\n\
+    \        end\n    end\n    return max_fill_grid\nend", "    local n = #grid\n\
+    \    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n       \
+    \ local fill = 0\n        for j = 1, m do\n            if grid[i][j] == 1 then\n\
+    \                fill = fill + 1\n            end\n        end\n        max_fill\
+    \ = math.max(max_fill, fill)\n    end\n    return max_fill\nend", "    local n,\
+    \ m = #grid, #grid[1]\n    local max_fill = {}\n    for i = 1, n do\n        max_fill[i]\
+    \ = {}\n        for j = 1, m do\n            max_fill[i][j] = 0\n        end\n\
+    \    end\n    for i = 1, n do\n        for j = 1, m do\n            if grid[i][j]\
+    \ == 1 then\n                max_fill[i][j] = capacity\n            else\n   \
+    \             if i > 1 then\n                    max_fill[i][j] = max_fill[i -\
+    \ 1][j]\n                end\n            end\n        end\n    end\n    return\
+    \ max_fill\nend", "    local n = #grid\n    local m = #grid[1]\n    local max_fill\
+    \ = 0\n    for i = 1, n do\n        for j = 1, m do\n            if grid[i][j]\
+    \ == 1 then\n                max_fill = max_fill + 1\n            end\n      \
+    \  end\n    end\n    return max_fill\nend", "    local n, m = #grid, #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, n do\n        local fill = 0\n       \
+    \ for j = 1, m do\n            if grid[i][j] == 1 then\n                fill =\
+    \ fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return max_fill\nend", "    local n, m = #grid, #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, n do\n        local fill = 0\n       \
+    \ for j = 1, m do\n            if grid[i][j] == 1 then\n                fill =\
+    \ fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return max_fill\nend", "    local n, m = #grid, #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, n do\n        local fill = 0\n       \
+    \ for j = 1, m do\n            if grid[i][j] == 1 then\n                fill =\
+    \ fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return max_fill\nend", "    local n = #grid\n    local m\
+    \ = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        for j = 1,\
+    \ m do\n            if grid[i][j] == 1 then\n                max_fill = max_fill\
+    \ + 1\n            end\n        end\n    end\n    return math.ceil(max_fill /\
+    \ capacity)\nend", "    local m, n = #grid, #grid[1]\n    local function fill(i,\
+    \ j)\n        if i < 1 or i > m or j < 1 or j > n then\n            return 0\n\
+    \        end\n        local c = capacity\n        local sum = 0\n        while\
+    \ c > 0 and grid[i][j] > 0 do\n            grid[i][j] = grid[i][j] - 1\n     \
+    \       c = c - 1\n            sum = sum + 1\n        end\n        return sum\n\
+    \    end\n    local function fill_row(i)\n        local sum = 0\n        for j\
+    \ = 1, n do\n            sum = sum + fill(i, j)\n        end\n        return sum\n\
+    \    end\n    local function fill_col(j)\n        local sum = 0\n        for i\
+    \ = 1, m do\n            sum = sum + fill(i, j)\n        end\n        return sum\n\
+    \    end\n    local sum = 0\n    for i = 1, m do\n        sum = sum + fill_row(i)\n\
+    \    end\n    for j = 1, n do\n        sum = sum + fill_col(j)\n    end\n    return\
+    \ sum\nend\nreturn max_fill", "    local n, m = #grid, #grid[1]\n    local max_fill\
+    \ = 0\n    for i = 1, n do\n        for j = 1, m do\n            if grid[i][j]\
+    \ == 1 then\n                max_fill = max_fill + 1\n            end\n      \
+    \  end\n    end\n    return max_fill\nend", "    local max_fill = 0\n    for i\
+    \ = 1, #grid do\n        local fill = 0\n        for j = 1, #grid[i] do\n    \
+    \        fill = fill + grid[i][j]\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return max_fill\nend", "    local m, n = #grid, #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, m do\n        for j = 1, n do\n      \
+    \      if grid[i][j] == 1 then\n                max_fill = max_fill + 1\n    \
+    \        end\n        end\n    end\n    return max_fill * capacity\nend", "  \
+    \  local n = #grid\n    local m = #grid[1]\n    local max_fill = {}\n    for i\
+    \ = 1, n do\n        max_fill[i] = {}\n        for j = 1, m do\n            max_fill[i][j]\
+    \ = grid[i][j]\n        end\n    end\n    for i = 1, n do\n        for j = 1,\
+    \ m do\n            if i > 1 then\n                max_fill[i][j] = math.max(max_fill[i][j],\
+    \ max_fill[i - 1][j])\n            end\n            if j > 1 then\n          \
+    \      max_fill[i][j] = math.max(max_fill[i][j], max_fill[i][j - 1])\n       \
+    \     end\n        end\n    end\n    local function fill(i, j)\n        if i <\
+    \ 1 or i > n or j < 1 or j > m then\n            return 0\n        end\n     \
+    \   return max_fill[i][j]\n    end\n    local function fill_count(i, j)\n    \
+    \    local f = fill(i, j)\n        if f == 0 then\n            return 0\n    \
+    \    end\n        local c = 0\n        while f > 0 do\n            c = c + 1\n\
+    \            f = f - capacity\n        end\n        return c\n    end\n    local\
+    \ count = 0\n    for i = 1, n do\n        for j = 1, m do\n            count =\
+    \ count + fill_count(i, j)\n        end\n    end\n    return count\nend", "  \
+    \  local n = #grid\n    local m = #grid[1]\n    local max_fill = 0\n    for i\
+    \ = 1, n do\n        for j = 1, m do\n            max_fill = math.max(max_fill,\
+    \ grid[i][j])\n        end\n    end\n    local min_fill = math.min(max_fill, capacity)\n\
+    \    local max_fill_count = 0\n    for i = 1, n do\n        for j = 1, m do\n\
+    \            max_fill_count = max_fill_count + (max_fill - grid[i][j])\n     \
+    \   end\n    end\n    local min_fill_count = 0\n    for i = 1, n do\n        for\
+    \ j = 1, m do\n            min_fill_count = min_fill_count + (min_fill - grid[i][j])\n\
+    \        end\n    end\n    return math.max(max_fill_count, min_fill_count)\nend",
+  "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        local fill = 0\n        for j = 1, m do\n            if grid[i][j] ==\
+    \ 1 then\n                fill = fill + 1\n            end\n        end\n    \
+    \    max_fill = math.max(max_fill, fill)\n    end\n    return math.ceil(max_fill\
+    \ / capacity)\nend", "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n\
+    \    for i = 1, n do\n        for j = 1, m do\n            if grid[i][j] == 1\
+    \ then\n                max_fill = max_fill + 1\n            end\n        end\n\
+    \    end\n    return max_fill * capacity\nend", "    local max_fill = 0\n    for\
+    \ i = 1, #grid do\n        local fill = 0\n        for j = 1, #grid[i] do\n  \
+    \          fill = fill + grid[i][j]\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return max_fill\nend", "    local n, m = #grid, #grid[1]\n\
+    \    local function fill(i, j)\n        if i < 1 or i > n or j < 1 or j > m then\n\
+    \            return 0\n        end\n        if grid[i][j] == 0 then\n        \
+    \    return 0\n        end\n        grid[i][j] = 0\n        return 1 + fill(i\
+    \ - 1, j) + fill(i + 1, j) + fill(i, j - 1) + fill(i, j + 1)\n    end\n    local\
+    \ function count_fill(i, j)\n        local c = fill(i, j)\n        return math.ceil(c\
+    \ / capacity)\n    end\n    local res = 0\n    for i = 1, n do\n        for j\
+    \ = 1, m do\n            res = res + count_fill(i, j)\n        end\n    end\n\
+    \    return res\nend", "    local n, m = #grid, #grid[1]\n    local function fill(i,\
+    \ j)\n        local c = capacity\n        while c > 0 and i <= n do\n        \
+    \    if grid[i][j] == 1 then\n                grid[i][j] = 0\n               \
+    \ c = c - 1\n            end\n            i = i + 1\n        end\n        return\
+    \ c\n    end\n    local function fill_all(j)\n        local c = capacity\n   \
+    \     for i = 1, n do\n            if grid[i][j] == 1 then\n                c\
+    \ = fill(i, j)\n                if c == 0 then\n                    return\n \
+    \               end\n            end\n        end\n    end\n    local function\
+    \ fill_all_cols()\n        for j = 1, m do\n            fill_all(j)\n        end\n\
+    \    end\n    local function fill_all_rows()\n        for i = 1, n do\n      \
+    \      fill_all(i)\n        end\n    end\n    local function count_fills()\n \
+    \       local c = 0\n        for i = 1, n do\n            for j = 1, m do\n  \
+    \              if grid[i][j] == 1 then\n                    c = c + 1\n      \
+    \          end\n            end\n        end\n        return c\n    end\n    local\
+    \ function fill_all_cols_and_rows()\n        local c = 0\n        while true do\n\
+    \            fill_all_cols()\n            fill_all_rows()\n            local nc\
+    \ = count_fills()\n            if nc == 0 then\n                return c\n   \
+    \         end\n            c = c + nc\n        end\n    end\n    return fill_all_cols_and_rows()\n\
+    end", "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1,\
+    \ n do\n        local fill = 0\n        for j = 1, m do\n            if grid[i][j]\
+    \ == 1 then\n                fill = fill + 1\n            end\n        end\n \
+    \       max_fill = math.max(max_fill, fill)\n    end\n    return max_fill\nend",
+  "    local n, m = #grid, #grid[1]\n    local max_fill = {}\n    for i = 1, n do\n\
+    \        max_fill[i] = {}\n        for j = 1, m do\n            max_fill[i][j]\
+    \ = 0\n        end\n    end\n    for i = 1, n do\n        for j = 1, m do\n  \
+    \          if grid[i][j] == 1 then\n                max_fill[i][j] = capacity\n\
+    \            else\n                if i > 1 then\n                    max_fill[i][j]\
+    \ = max_fill[i - 1][j]\n                end\n            end\n        end\n  \
+    \  end\n    for i = n, 1, -1 do\n        for j = m, 1, -1 do\n            if grid[i][j]\
+    \ == 1 then\n                max_fill[i][j] = capacity\n            else\n   \
+    \             if i < n then\n                    max_fill[i][j] = math.min(max_fill[i][j],\
+    \ max_fill[i + 1][j])\n                end\n            end\n        end\n   \
+    \ end\n    return max_fill\nend", "    local n, m = #grid, #grid[1]\n    local\
+    \ function get_max_fill(i, j)\n        if i < 1 or i > n or j < 1 or j > m then\n\
+    \            return 0\n        end\n        local max_fill = grid[i][j]\n    \
+    \    if max_fill == 0 then\n            return 0\n        end\n        local left\
+    \ = get_max_fill(i, j - 1)\n        local right = get_max_fill(i, j + 1)\n   \
+    \     local up = get_max_fill(i - 1, j)\n        local down = get_max_fill(i +\
+    \ 1, j)\n        local max_fill = math.max(left, right, up, down)\n        if\
+    \ max_fill > capacity then\n            max_fill = capacity\n        end\n   \
+    \     return max_fill\n    end\n    local function fill(i, j, max_fill)\n    \
+    \    if i < 1 or i > n or j < 1 or j > m then\n            return 0\n        end\n\
+    \        local fill = grid[i][j]\n        if fill == 0 then\n            return\
+    \ 0\n        end\n        if fill > max_fill then\n            fill = max_fill\n\
+    \        end\n        grid[i][j] = grid[i][j] - fill\n        local left = fill(i,\
+    \ j - 1, max_fill)\n        local right = fill(i, j + 1, max_fill)\n        local\
+    \ up = fill(i - 1, j, max_fill)\n        local down = fill(i + 1, j, max_fill)\n\
+    \        return fill + left + right + up + down\n    end\n    local function get_max_fill_in_row(i)\n\
+    \        local max_fill = 0\n        for j = 1, m do\n            local fill =\
+    \ get_max_fill(i, j)\n            if fill > max_fill then\n                max_fill\
+    \ = fill\n            end\n        end\n        return max_fill\n    end\n   \
+    \ local function fill_row(i, max_fill)\n        local fill = 0\n        for j\
+    \ = 1, m do\n            fill = fill + fill(i, j, max_fill)\n        end\n   \
+    \    ", "    local n, m = #grid, #grid[1]\n    local function fill(i, j)\n   \
+    \     if i < 1 or i > n or j < 1 or j > m then\n            return 0\n       \
+    \ end\n        local c = capacity\n        local r = grid[i][j]\n        if r\
+    \ > c then\n            grid[i][j] = r - c\n            return c\n        else\n\
+    \            grid[i][j] = 0\n            return r\n        end\n    end\n    local\
+    \ function fill_row(i)\n        local r = 0\n        for j = 1, m do\n       \
+    \     r = r + fill(i, j)\n        end\n        return r\n    end\n    local function\
+    \ fill_col(j)\n        local r = 0\n        for i = 1, n do\n            r = r\
+    \ + fill(i, j)\n        end\n        return r\n    end\n    local function fill_grid()\n\
+    \        local r = 0\n        for i = 1, n do\n            r = r + fill_row(i)\n\
+    \        end\n        return r\n    end\n    local function fill_grid_reverse()\n\
+    \        local r = 0\n        for i = n, 1, -1 do\n            r = r + fill_row(i)\n\
+    \        end\n        return r\n    end\n    local function fill_grid_diag()\n\
+    \        local r = 0\n        for i = 1, n do\n            r = r + fill_col(i)\n\
+    \        end\n        return r\n    end\n    local function fill_grid_diag_reverse()\n\
+    \        local r = 0\n        for i = m, 1, -1 do\n            r = r + fill_col(i)\n\
+    \        end\n        return r\n    end\n    local r = 0\n    r = r + fill_grid()\n\
+    \    r = r + fill_grid_reverse()\n    r = r + fill_grid_diag()\n    r = r + fill_grid_diag_reverse()\n\
+    \    return r\nend\nreturn max_fill", "    local n, m = #grid, #grid[1]\n    local\
+    \ max_fill = 0\n    for i = 1, n do\n        for j = 1, m do\n            if grid[i][j]\
+    \ == 1 then\n                max_fill = max_fill + 1\n            end\n      \
+    \  end\n    end\n    return max_fill * capacity\nend", "    local n = #grid\n\
+    \    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n       \
+    \ for j = 1, m do\n            if grid[i][j] == 1 then\n                max_fill\
+    \ = max_fill + 1\n            end\n        end\n    end\n    return max_fill *\
+    \ capacity\nend", "    local n, m = #grid, #grid[1]\n    local function get_fill(i,\
+    \ j)\n        local fill = 0\n        for k = 1, capacity do\n            if i\
+    \ + k <= n and grid[i + k][j] == 1 then\n                fill = fill + 1\n   \
+    \         end\n        end\n        return fill\n    end\n    local function get_max_fill(i,\
+    \ j)\n        local max_fill = 0\n        for k = 1, capacity do\n           \
+    \ if j + k <= m then\n                max_fill = math.max(max_fill, get_fill(i,\
+    \ j + k))\n            end\n        end\n        return max_fill\n    end\n  \
+    \  local function get_max_fill_row(i)\n        local max_fill = 0\n        for\
+    \ j = 1, m do\n            max_fill = math.max(max_fill, get_max_fill(i, j))\n\
+    \        end\n        return max_fill\n    end\n    local function get_max_fill_grid()\n\
+    \        local max_fill = 0\n        for i = 1, n do\n            max_fill = math.max(max_fill,\
+    \ get_max_fill_row(i))\n        end\n        return max_fill\n    end\n    local\
+    \ function fill_row(i, fill)\n        for j = 1, m do\n            for k = 1,\
+    \ fill do\n                if i + k <= n and grid[i + k][j] == 1 then\n      \
+    \              grid[i + k][j] = 0\n                end\n            end\n    \
+    \    end\n    end\n    local function fill_grid()\n        local fill = get_max_fill_grid()\n\
+    \        for i = 1, n do\n            fill_row(i, fill)\n        end\n       \
+    \ return fill\n    end\n    local function fill_grid_times(times)\n        local\
+    \ total_fill = 0\n        for i = 1, times do\n            total_fill = total_fill\
+    \ + fill_grid()\n        end\n        return total_fill\n    end\n    local function\
+    \ get_total_fill()\n        local total_fill = 0\n        for i = 1, n do\n  \
+    \          for j = 1, m do\n                if grid", "    local n, m = #grid,\
+    \ #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        local fill =\
+    \ 0\n        for j = 1, m do\n            if grid[i][j] == 1 then\n          \
+    \      fill = fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return max_fill\nend", "    local n, m = #grid, #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, n do\n        local fill = 0\n       \
+    \ for j = 1, m do\n            if grid[i][j] == 1 then\n                fill =\
+    \ fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return max_fill\nend", "    local m, n = #grid, #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, m do\n        local fill = 0\n       \
+    \ for j = 1, n do\n            if grid[i][j] == 1 then\n                fill =\
+    \ fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return math.ceil(max_fill / capacity)\nend", "    local\
+    \ n = #grid\n    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n\
+    \ do\n        for j = 1, m do\n            if grid[i][j] == 1 then\n         \
+    \       max_fill = max_fill + 1\n            end\n        end\n    end\n    return\
+    \ math.ceil(max_fill / capacity)\nend", "    local n, m = #grid, #grid[1]\n  \
+    \  local max_fill = 0\n    for i = 1, n do\n        local fill = 0\n        for\
+    \ j = 1, m do\n            if grid[i][j] == 1 then\n                fill = fill\
+    \ + 1\n            end\n        end\n        max_fill = math.max(max_fill, fill)\n\
+    \    end\n    return math.ceil(max_fill / capacity)\nend", "    local n, m = #grid,\
+    \ #grid[1]\n    local max_fill_row = {}\n    for i = 1, n do\n        local max_fill_col\
+    \ = {}\n        for j = 1, m do\n            if grid[i][j] == 1 then\n       \
+    \         max_fill_col[j] = 0\n            else\n                max_fill_col[j]\
+    \ = (max_fill_row[j] or 0) + 1\n            end\n        end\n        max_fill_row\
+    \ = max_fill_col\n    end\n    local max_fill_col = {}\n    for j = 1, m do\n\
+    \        max_fill_col[j] = 0\n        for i = 1, n do\n            max_fill_col[j]\
+    \ = math.max(max_fill_col[j], max_fill_row[i][j])\n        end\n    end\n    local\
+    \ max_fill_row = {}\n    for i = 1, n do\n        max_fill_row[i] = 0\n      \
+    \  for j = 1, m do\n            max_fill_row[i] = math.max(max_fill_row[i], max_fill_col[j][i])\n\
+    \        end\n    end\n    local max_fill_col = {}\n    for j = 1, m do\n    \
+    \    max_fill_col[j] = 0\n        for i = 1, n do\n            max_fill_col[j]\
+    \ = math.max(max_fill_col[j], max_fill_row[i][j])\n        end\n    end\n    local\
+    \ max_fill_row = {}\n    for i = 1, n do\n        max_fill_row[i] = 0\n      \
+    \  for j = 1, m do\n            max_fill_row[i] = math.max(max_fill_row[i], max_fill_col[j][i])\n\
+    \        end\n    end\n    local max_fill_col = {}\n    for j = 1, m do\n    \
+    \    max_fill_col[j] = 0\n        for i = 1, n do\n            max_fill_col[j]\
+    \ = math.max(max_fill_col[j], max_fill_row[", "    local n, m = #grid, #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, n do\n        local fill = 0\n       \
+    \ for j = 1, m do\n            if grid[i][j] == 1 then\n                fill =\
+    \ fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return max_fill\nend", "    local n, m = #grid, #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, n do\n        local fill = 0\n       \
+    \ for j = 1, m do\n            if grid[i][j] == 1 then\n                fill =\
+    \ fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return max_fill * capacity\nend", "    local n, m = #grid,\
+    \ #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        local fill =\
+    \ 0\n        for j = 1, m do\n            if grid[i][j] == 1 then\n          \
+    \      fill = fill + 1\n            end\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return max_fill\nend", "    local rows, cols = #grid, #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, rows do\n        for j = 1, cols do\n\
+    \            if grid[i][j] == 1 then\n                local fill = 0\n       \
+    \         for k = i, rows do\n                    if grid[k][j] == 1 then\n  \
+    \                      fill = fill + 1\n                    else\n           \
+    \             break\n                    end\n                end\n          \
+    \      max_fill = math.max(max_fill, fill)\n            end\n        end\n   \
+    \ end\n    return max_fill\nend", "    local n, m = #grid, #grid[1]\n    local\
+    \ max_fill = 0\n    for i = 1, n do\n        local fill = 0\n        for j = 1,\
+    \ m do\n            if grid[i][j] == 1 then\n                fill = fill + 1\n\
+    \            end\n        end\n        max_fill = math.max(max_fill, fill)\n \
+    \   end\n    return max_fill\nend", "    local n = #grid\n    local m = #grid[1]\n\
+    \    local max_fill = 0\n    for i = 1, n do\n        for j = 1, m do\n      \
+    \      if grid[i][j] == 1 then\n                max_fill = max_fill + 1\n    \
+    \        end\n        end\n    end\n    return max_fill\nend", "    local n, m\
+    \ = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        for\
+    \ j = 1, m do\n            if grid[i][j] == 1 then\n                max_fill =\
+    \ max_fill + 1\n            end\n        end\n    end\n    return math.min(max_fill,\
+    \ capacity)\nend", "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n\
+    \    for i = 1, n do\n        for j = 1, m do\n            if grid[i][j] == 1\
+    \ then\n                max_fill = max_fill + 1\n            end\n        end\n\
+    \    end\n    return max_fill * capacity\nend", "    local max_fill = 0\n    for\
+    \ i = 1, #grid do\n        local fill = 0\n        for j = 1, #grid[i] do\n  \
+    \          fill = fill + grid[i][j]\n        end\n        max_fill = math.max(max_fill,\
+    \ fill)\n    end\n    return math.ceil(max_fill / capacity)\nend", "    local\
+    \ m, n = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, m do\n      \
+    \  local fill = 0\n        for j = 1, n do\n            if grid[i][j] == 1 then\n\
+    \                fill = fill + 1\n            end\n        end\n        max_fill\
+    \ = math.max(max_fill, fill)\n    end\n    return max_fill\nend", "    local n\
+    \ = #grid\n    local m = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        for j = 1, m do\n            if grid[i][j] == 1 then\n              \
+    \  max_fill = max_fill + 1\n            end\n        end\n    end\n    return\
+    \ max_fill * capacity\nend", "    local max_fill = 0\n    for _, row in ipairs(grid)\
+    \ do\n        local fill = 0\n        for _, v in ipairs(row) do\n           \
+    \ fill = fill + v\n            if fill > capacity then\n                fill =\
+    \ capacity\n            end\n        end\n        if fill > max_fill then\n  \
+    \          max_fill = fill\n        end\n    end\n    return max_fill\nend", " \
+    \   local n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        local fill = 0\n        for j = 1, m do\n            if grid[i][j] ==\
+    \ 1 then\n                fill = fill + 1\n            end\n        end\n    \
+    \    max_fill = math.max(max_fill, fill)\n    end\n    return max_fill\nend",
+  "    local n, m = #grid, #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n\
+    \        local fill = 0\n        for j = 1, m do\n            if grid[i][j] ==\
+    \ 1 then\n                fill = fill + 1\n            end\n        end\n    \
+    \    max_fill = math.max(max_fill, fill)\n    end\n    return max_fill\nend",
+  "    local n, m = #grid, #grid[1]\n    local function fill(i, j)\n        local\
+    \ x = grid[i][j]\n        if x == 0 then\n            return 0\n        end\n\
+    \        local y = math.min(x, capacity)\n        grid[i][j] = x - y\n       \
+    \ return y\n    end\n    local function lower(i, j)\n        local x = grid[i][j]\n\
+    \        if x == 0 then\n            return 0\n        end\n        local y =\
+    \ math.min(x, capacity)\n        grid[i][j] = x - y\n        return y\n    end\n\
+    \    local function empty(i, j)\n        local x = grid[i][j]\n        if x ==\
+    \ 0 then\n            return 0\n        end\n        grid[i][j] = 0\n        return\
+    \ x\n    end\n    local function fill_row(i)\n        local x = 0\n        for\
+    \ j = 1, m do\n            x = x + fill(i, j)\n        end\n        return x\n\
+    \    end\n    local function lower_row(i)\n        local x = 0\n        for j\
+    \ = 1, m do\n            x = x + lower(i, j)\n        end\n        return x\n\
+    \    end\n    local function empty_row(i)\n        local x = 0\n        for j\
+    \ = 1, m do\n            x = x + empty(i, j)\n        end\n        return x\n\
+    \    end\n    local function fill_col(j)\n        local x = 0\n        for i =\
+    \ 1, n do\n            x = x + fill(i, j)\n        end\n        return x\n   \
+    \ end\n    local function lower_col(j)\n        local x = 0\n        for i = 1,\
+    \ n do\n            x = x + lower(i, j)\n        end\n        return x\n    end\n\
+    \    local function empty_col(j)\n        local x = 0\n        for i = 1, n do\n\
+    \            x = x + empty(i, j)\n        end\n        return x\n    end\n   \
+    \ local function fill_all()\n        local x = 0\n        for i = 1, n do\n  \
+    \          x = x +", "    local n = #grid\n    local m = #grid[1]\n    local max_fill\
+    \ = 0\n    for i = 1, n do\n        for j = 1, m do\n            if grid[i][j]\
+    \ == 1 then\n                max_fill = max_fill + 1\n            end\n      \
+    \  end\n    end\n    return max_fill\nend", "    local n = #grid\n    local m\
+    \ = #grid[1]\n    local max_fill = 0\n    for i = 1, n do\n        for j = 1,\
+    \ m do\n            if grid[i][j] == 1 then\n                max_fill = max_fill\
+    \ + 1\n            end\n        end\n    end\n    return math.ceil(max_fill /\
+    \ capacity)\nend", "    local n = #grid\n    local m = #grid[1]\n    local function\
+    \ fill(i, j)\n        if i > n or j > m then\n            return 0\n        end\n\
+    \        local c = grid[i][j]\n        if c == 0 then\n            return fill(i\
+    \ + 1, j)\n        end\n        local c1 = fill(i + 1, j)\n        local c2 =\
+    \ fill(i, j + 1)\n        return math.max(c1, c2) + capacity - c\n    end\n  \
+    \  return fill(1, 1)\nend\nreturn max_fill", "    local n, m = #grid, #grid[1]\n\
+    \    local function fill(i, j)\n        local c = 0\n        while i <= n and\
+    \ grid[i][j] == 1 do\n            grid[i][j] = 0\n            c = c + 1\n    \
+    \        i = i + 1\n        end\n        return c\n    end\n    local function\
+    \ empty(i, j)\n        local c = 0\n        while i >= 1 and grid[i][j] == 0 do\n\
+    \            grid[i][j] = 1\n            c = c + 1\n            i = i - 1\n  \
+    \      end\n        return c\n    end\n    local function fill_all(j)\n      \
+    \  local c = 0\n        for i = 1, n do\n            c = c + fill(i, j)\n    \
+    \    end\n        return c\n    end\n    local function empty_all(j)\n       \
+    \ local c = 0\n        for i = n, 1, -1 do\n            c = c + empty(i, j)\n\
+    \        end\n        return c\n    end\n    local function fill_one(i, j)\n \
+    \       local c = 0\n        while i <= n and grid[i][j] == 1 do\n           \
+    \ grid[i][j] = 0\n            c = c + 1\n            i = i + 1\n            if\
+    \ c == capacity then\n                break\n            end\n        end\n  \
+    \      return c\n    end\n    local function empty_one(i, j)\n        local c\
+    \ = 0\n        while i >= 1 and grid[i][j] == 0 do\n            grid[i][j] = 1\n\
+    \            c = c + 1\n            i = i - 1\n            if c == capacity then\n\
+    \                break\n            end\n        end\n        return c\n    end\n\
+    \    local function fill_one_all(j)\n        local c = 0\n        for i = 1, n\
+    \ do\n            c = c + fill_one(i, j)\n        end\n        return c\n    end\n\
+    \    local function empty_one_all(j)\n        local c = 0\n        for i = n,\
+    \ 1, -1 do\n            c = c + empty_one(i, j)\n        end\n        return c\n\
+    \    end\n"]
+stop_tokens:
+- "\nlocal"
+- "\nfunction"
+- "\n--"
+- "\n\n"

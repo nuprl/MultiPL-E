@@ -57,10 +57,10 @@ std::vector<std::string> numerical_letter_grade(std::vector<float> grades) {
 }
 int main() {
     auto candidate = numerical_letter_grade;
-    assert(candidate((std::vector<float>({4.0, 3, 1.7, 2, 3.5}))) == (std::vector<std::string>({"A+", "B", "C-", "C", "A-"})));
-    assert(candidate((std::vector<float>({1.2}))) == (std::vector<std::string>({"D+"})));
-    assert(candidate((std::vector<float>({0.5}))) == (std::vector<std::string>({"D-"})));
-    assert(candidate((std::vector<float>({0.0}))) == (std::vector<std::string>({"E"})));
-    assert(candidate((std::vector<float>({1.0, 0.3, 1.5, 2.8, 3.3}))) == (std::vector<std::string>({"D", "D-", "C-", "B", "B+"})));
-    assert(candidate((std::vector<float>({0.0, 0.7}))) == (std::vector<std::string>({"E", "D-"})));
+    assert(candidate((std::vector<float>({(float)4.0, (float)3, (float)1.7, (float)2, (float)3.5}))) == (std::vector<std::string>({(std::string)"A+", (std::string)"B", (std::string)"C-", (std::string)"C", (std::string)"A-"})));
+    assert(candidate((std::vector<float>({(float)1.2}))) == (std::vector<std::string>({(std::string)"D+"})));
+    assert(candidate((std::vector<float>({(float)0.5}))) == (std::vector<std::string>({(std::string)"D-"})));
+    assert(candidate((std::vector<float>({(float)0.0}))) == (std::vector<std::string>({(std::string)"E"})));
+    assert(candidate((std::vector<float>({(float)1.0, (float)0.3, (float)1.5, (float)2.8, (float)3.3}))) == (std::vector<std::string>({(std::string)"D", (std::string)"D-", (std::string)"C-", (std::string)"B", (std::string)"B+"})));
+    assert(candidate((std::vector<float>({(float)0.0, (float)0.7}))) == (std::vector<std::string>({(std::string)"E", (std::string)"D-"})));
 }

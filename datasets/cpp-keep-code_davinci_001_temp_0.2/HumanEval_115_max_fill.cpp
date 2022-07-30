@@ -58,9 +58,9 @@ long max_fill(std::vector<std::vector<long>> grid, long capacity) {
 }
 int main() {
     auto candidate = max_fill;
-    assert(candidate((std::vector<std::vector<long>>({std::vector<long>({0, 0, 1, 0}), std::vector<long>({0, 1, 0, 0}), std::vector<long>({1, 1, 1, 1})})), (1)) == (6));
-    assert(candidate((std::vector<std::vector<long>>({std::vector<long>({0, 0, 1, 1}), std::vector<long>({0, 0, 0, 0}), std::vector<long>({1, 1, 1, 1}), std::vector<long>({0, 1, 1, 1})})), (2)) == (5));
-    assert(candidate((std::vector<std::vector<long>>({std::vector<long>({0, 0, 0}), std::vector<long>({0, 0, 0})})), (5)) == (0));
-    assert(candidate((std::vector<std::vector<long>>({std::vector<long>({1, 1, 1, 1}), std::vector<long>({1, 1, 1, 1})})), (2)) == (4));
-    assert(candidate((std::vector<std::vector<long>>({std::vector<long>({1, 1, 1, 1}), std::vector<long>({1, 1, 1, 1})})), (9)) == (2));
+    assert(candidate((std::vector<std::vector<long>>({(std::vector<long>)std::vector<long>({(long)0, (long)0, (long)1, (long)0}), (std::vector<long>)std::vector<long>({(long)0, (long)1, (long)0, (long)0}), (std::vector<long>)std::vector<long>({(long)1, (long)1, (long)1, (long)1})})), (1)) == (6));
+    assert(candidate((std::vector<std::vector<long>>({(std::vector<long>)std::vector<long>({(long)0, (long)0, (long)1, (long)1}), (std::vector<long>)std::vector<long>({(long)0, (long)0, (long)0, (long)0}), (std::vector<long>)std::vector<long>({(long)1, (long)1, (long)1, (long)1}), (std::vector<long>)std::vector<long>({(long)0, (long)1, (long)1, (long)1})})), (2)) == (5));
+    assert(candidate((std::vector<std::vector<long>>({(std::vector<long>)std::vector<long>({(long)0, (long)0, (long)0}), (std::vector<long>)std::vector<long>({(long)0, (long)0, (long)0})})), (5)) == (0));
+    assert(candidate((std::vector<std::vector<long>>({(std::vector<long>)std::vector<long>({(long)1, (long)1, (long)1, (long)1}), (std::vector<long>)std::vector<long>({(long)1, (long)1, (long)1, (long)1})})), (2)) == (4));
+    assert(candidate((std::vector<std::vector<long>>({(std::vector<long>)std::vector<long>({(long)1, (long)1, (long)1, (long)1}), (std::vector<long>)std::vector<long>({(long)1, (long)1, (long)1, (long)1})})), (9)) == (2));
 }

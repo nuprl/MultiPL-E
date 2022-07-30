@@ -26,10 +26,10 @@ std::vector<std::string> words_string(std::string s) {
 }
 int main() {
     auto candidate = words_string;
-    assert(candidate(("Hi, my name is John")) == (std::vector<std::string>({"Hi", "my", "name", "is", "John"})));
-    assert(candidate(("One, two, three, four, five, six")) == (std::vector<std::string>({"One", "two", "three", "four", "five", "six"})));
-    assert(candidate(("Hi, my name")) == (std::vector<std::string>({"Hi", "my", "name"})));
-    assert(candidate(("One,, two, three, four, five, six,")) == (std::vector<std::string>({"One", "two", "three", "four", "five", "six"})));
+    assert(candidate(("Hi, my name is John")) == (std::vector<std::string>({(std::string)"Hi", (std::string)"my", (std::string)"name", (std::string)"is", (std::string)"John"})));
+    assert(candidate(("One, two, three, four, five, six")) == (std::vector<std::string>({(std::string)"One", (std::string)"two", (std::string)"three", (std::string)"four", (std::string)"five", (std::string)"six"})));
+    assert(candidate(("Hi, my name")) == (std::vector<std::string>({(std::string)"Hi", (std::string)"my", (std::string)"name"})));
+    assert(candidate(("One,, two, three, four, five, six,")) == (std::vector<std::string>({(std::string)"One", (std::string)"two", (std::string)"three", (std::string)"four", (std::string)"five", (std::string)"six"})));
     assert(candidate(("")) == (std::vector<std::string>()));
-    assert(candidate(("ahmed     , gamal")) == (std::vector<std::string>({"ahmed", "gamal"})));
+    assert(candidate(("ahmed     , gamal")) == (std::vector<std::string>({(std::string)"ahmed", (std::string)"gamal"})));
 }

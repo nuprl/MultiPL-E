@@ -37,8 +37,8 @@ std::vector<long> unique_digits(std::vector<long> x) {
 }
 int main() {
     auto candidate = unique_digits;
-    assert(candidate((std::vector<long>({15, 33, 1422, 1}))) == (std::vector<long>({1, 15, 33})));
-    assert(candidate((std::vector<long>({152, 323, 1422, 10}))) == (std::vector<long>()));
-    assert(candidate((std::vector<long>({12345, 2033, 111, 151}))) == (std::vector<long>({111, 151})));
-    assert(candidate((std::vector<long>({135, 103, 31}))) == (std::vector<long>({31, 135})));
+    assert(candidate((std::vector<long>({(long)15, (long)33, (long)1422, (long)1}))) == (std::vector<long>({(long)1, (long)15, (long)33})));
+    assert(candidate((std::vector<long>({(long)152, (long)323, (long)1422, (long)10}))) == (std::vector<long>()));
+    assert(candidate((std::vector<long>({(long)12345, (long)2033, (long)111, (long)151}))) == (std::vector<long>({(long)111, (long)151})));
+    assert(candidate((std::vector<long>({(long)135, (long)103, (long)31}))) == (std::vector<long>({(long)31, (long)135})));
 }
