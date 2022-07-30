@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 from problem_yaml import Problem, Result, ResultList, TestResults
-import eval_ruby, eval_lua, eval_python, eval_rust
+import eval_ruby, eval_lua, eval_python, eval_rust, eval_julia
 import tempfile
 import sys
 from concurrent.futures import ThreadPoolExecutor
@@ -9,7 +9,8 @@ from concurrent.futures import ThreadPoolExecutor
 EVALUATORS = {
   #  "ruby": (eval_ruby.eval_script, ".rb"),
  #   "lua": (eval_lua.eval_script, ".lua"),
-    "python": (eval_python.eval_script, ".py")
+#    "python": (eval_python.eval_script, ".py")
+    "julia": (eval_julia.eval_script, ".jl")
 }
 
 
@@ -19,7 +20,7 @@ def get_test_results_yaml_path(problem_yaml_path: Path) -> Path:
 def load_or_create_test_results_yaml(problem: Problem, problem_yaml_path: Path):
     p = get_test_results_yaml_path(problem_yaml_path)
     if p.exists():
-        with p.open() as f:
+        with p.open() as f: 
             return TestResults.load(f)
     y = TestResults()
     y.name = problem.name
