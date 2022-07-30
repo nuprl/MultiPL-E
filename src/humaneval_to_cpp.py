@@ -18,8 +18,6 @@ class CPPTranslator:
 
     #Seems like reasonable stop sequences for CPP
     stop = ["\n}"]
-    #C++ Keywords found in the dataset
-    cpp_keywords = ["operator"]
 
     def __init__(self, file_ext):
         '''Initializes C++ corresponding types.
@@ -49,14 +47,17 @@ class CPPTranslator:
         self.dict_type = "std::map<%s, %s>"
         self.optional_type = "std::optional<%s>"
         self.any_type = "std::any"
+        #C++ Keywords found in the dataset as variable and their idiomatic replacement
+        self.keywords = {"operator": "op"}
+        self.make_tuple = "std::make_tuple"
 
-    def make_list(self, elem_type, list_literal):
+    def gen_make_list(self, elem_type, list_literal):
         return self.list_type%elem_type + "(" + list_literal + ")"
     
-    def make_tuple(self, elem_types):
-        return "std::make_tuple"
+    def gen_make_tuple(self, elems):
+        return "std::make_tuple("+elems+")"
 
-    def make_array_literal(self, list_contents):
+    def gen_array_literal(self, list_contents):
         return "{" + list_contents + "}"
 
     def pytype_to_cpptype(self, ann: ast.expr | None) -> str:
@@ -178,7 +179,7 @@ class CPPTranslator:
             return self.wrap_in_brackets(right[0])
         
         #No need to replace std::make_tuple
-        if right[0].find(self.make_tuple([])) == 0:
+        if right[0].find(self.make_tuple) == 0:
             return right[0] 
         
         #No need to replace empty optional
@@ -199,6 +200,7 @@ class CPPTranslator:
             coerced_type = right[0].replace(type_to_coerce, expected_type+"(")
         
         ##Remove extra brackets
+        print(coerced_type)
         coerced_type = coerced_type.replace('(())', '()')
         return self.wrap_in_brackets(coerced_type)
 
@@ -255,9 +257,9 @@ class CPPTranslator:
     def gen_var(self, v: str) -> Tuple[str, None]:
         """Translate a variable with name v."""
         
-        if v in self.cpp_keywords:
+        if v in self.keywords:
             #Add _ around keyword
-            return "_"+v+"_", None
+            return self.keywords[v], None
         return v, None
 
     def gen_list(self, l: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.List]:
@@ -266,12 +268,12 @@ class CPPTranslator:
         """
 
         if l == [] or l == ():
-          return self.make_list(self.int_type, ""), ast.List([ast.Name("int")])
+          return self.gen_make_list(self.int_type, ""), ast.List([ast.Name("int")])
         
         #Go through all types of list and prefer the bigger type        
         elem_type = self.pytype_to_cpptype(l[0][1])
-        list_literal = self.make_array_literal(", ".join([f"({elem_type}){e[0]}" for e in l]))
-        return self.make_list(elem_type, list_literal), ast.List([l[0][1]])
+        list_literal = self.gen_array_literal(", ".join([f"({elem_type}){e[0]}" for e in l]))
+        return self.gen_make_list(elem_type, list_literal), ast.List([l[0][1]])
     
     def make_optional_type(self, types):
         return self.optional_type % types
@@ -281,7 +283,7 @@ class CPPTranslator:
 
     def gen_tuple(self, t: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.Tuple]:
         """Translate a tuple with elements t
-        A tuple (x, y, z) translates to make_tuple<?>{ x, y, z }
+        A tuple (x, y, z) translates to make_tuple{ x, y, z }
         """
         if t == [] or t == ():
             #Empty Tuple is at the bottom of expr tree
@@ -302,10 +304,10 @@ class CPPTranslator:
                 other_types = self.int_type
             new_elem_type = self.make_optional(other_types)
 
-            return self.make_tuple([]) + "(" + ", ".join([f"{new_elem_type}({e[0]})" for e in t]) + ")", \
+            return self.gen_make_tuple(", ".join([f"{new_elem_type}({e[0]})" for e in t])), \
                 ast.Tuple([e[1] for e in t])
 
-        return self.make_tuple([]) + "(" + ", ".join([e[0] for e in t]) + ")", \
+        return self.make_tuple(", ".join([e[0] for e in t])), \
             ast.Tuple([e[1] for e in t])
 
     def make_map_literal(self, keys, values):
