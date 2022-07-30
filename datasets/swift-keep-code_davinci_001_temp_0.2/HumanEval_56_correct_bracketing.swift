@@ -1,24 +1,24 @@
 
-// brackets is a string of "<" and ">".
-// return True if every opening bracket has a corresponding closing bracket.
-// >>> correct_bracketing("<")
-// False
-// >>> correct_bracketing("<>")
-// True
-// >>> correct_bracketing("<<><>>")
-// True
-// >>> correct_bracketing("><<>")
-// False
+/// brackets is a string of "<" and ">".
+/// return True if every opening bracket has a corresponding closing bracket.
+/// >>> correct_bracketing("<")
+/// False
+/// >>> correct_bracketing("<>")
+/// True
+/// >>> correct_bracketing("<<><>>")
+/// True
+/// >>> correct_bracketing("><<>")
+/// False
 func correct_bracketing(brackets: String) -> Bool {
-    var stack = [Character]()
+    var stack = Stack<Character>()
     for bracket in brackets {
         if bracket == "<" {
-            stack.append(bracket)
-        } else {
+            stack.push(bracket)
+        } else if bracket == ">" {
             if stack.isEmpty {
                 return false
             }
-            stack.removeLast()
+            stack.pop()
         }
     }
     return stack.isEmpty

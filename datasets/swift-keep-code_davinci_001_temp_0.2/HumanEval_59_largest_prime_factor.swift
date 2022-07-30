@@ -1,28 +1,19 @@
 
-// Return the largest prime factor of n. Assume n > 1 and is not a prime.
-// >>> largest_prime_factor(13195)
-// 29
-// >>> largest_prime_factor(2048)
-// 2
+/// Return the largest prime factor of n. Assume n > 1 and is not a prime.
+/// >>> largest_prime_factor(13195)
+/// 29
+/// >>> largest_prime_factor(2048)
+/// 2
 func largest_prime_factor(n: Int) -> Int {
     var n = n
-    var largest = 0
-    while n % 2 == 0 {
-        largest = 2
-        n /= 2
-    }
-    var i = 3
+    var i = 2
     while i * i <= n {
         while n % i == 0 {
-            largest = i
             n /= i
         }
-        i += 2
+        i += 1
     }
-    if n > largest {
-        largest = n
-    }
-    return largest
+    return n
 
 }
 

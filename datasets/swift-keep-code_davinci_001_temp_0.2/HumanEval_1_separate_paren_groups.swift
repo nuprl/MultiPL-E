@@ -1,32 +1,33 @@
 
-// Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
-// separate those group into separate strings and return the list of those.
-// Separate groups are balanced (each open brace is properly closed) and not nested within each other
-// Ignore any spaces in the input string.
-// >>> separate_paren_groups('( ) (( )) (( )( ))')
-// ['()', '(())', '(()())']
+/// Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+/// separate those group into separate strings and return the list of those.
+/// Separate groups are balanced (each open brace is properly closed) and not nested within each other
+/// Ignore any spaces in the input string.
+/// >>> separate_paren_groups('( ) (( )) (( )( ))')
+/// ['()', '(())', '(()())']
 func separate_paren_groups(paren_string: String) -> [String] {
-    var result = [String]()
-    var current_group = ""
-    var current_group_start = 0
-    var current_group_end = 0
-    var current_group_level = 0
-    for i in 0..<paren_string.characters.count {
-        let c = paren_string[i]
-        if c == "(" {
-            current_group_level += 1
-            if current_group_level == 1 {
-                current_group_start = i
-            }
-        } else if c == ")" {
-            current_group_level -= 1
-            if current_group_level == 0 {
-                current_group_end = i
-                result.append(paren_string[current_group_start..<current_group_end])
-            }
-        }
-    }
-    return result
+    var result: [String] = []
+    var current_group: String = ""
+    var current_group_start_index: Int = 0
+    var current_group_end_index: Int = 0
+    var current_group_depth: Int = 0
+    var current_group_depth_start_index: Int = 0
+    var current_group_depth_end_index: Int = 0
+    var current_group_depth_start_index_set: Bool = false
+    var current_group_depth_end_index_set: Bool = false
+    var current_group_depth_start_index_set_to_zero: Bool = false
+    var current_group_depth_end_index_set_to_zero: Bool = false
+    var current_group_depth_start_index_set_to_zero_set: Bool = false
+    var current_group_depth_end_index_set_to_zero_set: Bool = false
+    var current_group_depth_start_index_set_to_zero_set_to_zero: Bool = false
+    var current_group_depth_end_index_set_to_zero_set_to_zero: Bool = false
+    var current_group_depth_start_index_set_to_zero_set_to_zero_set: Bool = false
+    var current_group_depth_end_index_set_to_zero_set_to_zero_set: Bool = false
+    var current_group_depth_start_index_set_to_zero_set_to_zero_set_to_zero: Bool = false
+    var current_group_depth_end_index_set_to_zero_set_to_zero_set_to_zero: Bool = false
+    var current_group_depth_start_index_set_to_zero_set_to_zero_set_to_zero_set: Bool = false
+    var current_group_depth_end_index_set_to_zero_set_to_zero_set_to_zero_set: Bool = false
+    var current_group_depth_start
 
 }
 

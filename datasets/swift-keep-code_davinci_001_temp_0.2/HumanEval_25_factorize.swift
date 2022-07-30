@@ -1,28 +1,25 @@
 
-// Return list of prime factors of given integer in the order from smallest to largest.
-// Each of the factors should be listed number of times corresponding to how many times it appeares in factorization.
-// Input number should be equal to the product of all factors
-// >>> factorize(8)
-// [2, 2, 2]
-// >>> factorize(25)
-// [5, 5]
-// >>> factorize(70)
-// [2, 5, 7]
+/// Return list of prime factors of given integer in the order from smallest to largest.
+/// Each of the factors should be listed number of times corresponding to how many times it appeares in factorization.
+/// Input number should be equal to the product of all factors
+/// >>> factorize(8)
+/// [2, 2, 2]
+/// >>> factorize(25)
+/// [5, 5]
+/// >>> factorize(70)
+/// [2, 5, 7]
 func factorize(n: Int) -> [Int] {
-    var factors: [Int] = []
-    var i = 2
-    while i * i <= n {
-        if n % i == 0 {
-            factors.append(i)
-            n /= i
-        } else {
-            i += 1
+    var result: [Int] = []
+    var divider = 2
+    var number = n
+    while number > 1 {
+        while number % divider == 0 {
+            result.append(divider)
+            number /= divider
         }
+        divider += 1
     }
-    if n > 1 {
-        factors.append(n)
-    }
-    return factors
+    return result
 
 }
 

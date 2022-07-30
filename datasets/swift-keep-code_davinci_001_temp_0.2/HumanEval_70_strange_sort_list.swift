@@ -1,37 +1,21 @@
 
-// Given list of integers, return list in strange order.
-// Strange sorting, is when you start with the minimum value,
-// then maximum of the remaining integers, then minimum and so on.
-// Examples:
-// strange_sort_list([1, 2, 3, 4]) == [1, 4, 2, 3]
-// strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]
-// strange_sort_list([]) == []
+/// Given list of integers, return list in strange order.
+/// Strange sorting, is when you start with the minimum value,
+/// then maximum of the remaining integers, then minimum and so on.
+/// Examples:
+/// strange_sort_list([1, 2, 3, 4]) == [1, 4, 2, 3]
+/// strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]
+/// strange_sort_list([]) == []
 func strange_sort_list(lst: [Int]) -> [Int] {
     var result = [Int]()
-    var min = lst[0]
-    var max = lst[0]
-    var minIndex = 0
-    var maxIndex = 0
-    var i = 0
-    while i < lst.count {
-        if lst[i] < min {
-            min = lst[i]
-            minIndex = i
-        }
-        if lst[i] > max {
-            max = lst[i]
-            maxIndex = i
-        }
-        i += 1
-    }
-    result.append(min)
-    result.append(max)
-    i = 0
-    while i < lst.count {
-        if i != minIndex && i != maxIndex {
-            result.append(lst[i])
-        }
-        i += 1
+    var lst = lst
+    while lst.count > 0 {
+        let min = lst.min()!
+        let max = lst.max()!
+        result.append(min)
+        result.append(max)
+        lst.remove(at: lst.index(of: min)!)
+        lst.remove(at: lst.index(of: max)!)
     }
     return result
 

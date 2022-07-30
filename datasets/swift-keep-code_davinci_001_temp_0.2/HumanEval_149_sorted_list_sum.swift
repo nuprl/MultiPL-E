@@ -1,53 +1,25 @@
 
-// Write a function that accepts a list of strings as a parameter,
-// deletes the strings that have odd lengths from it,
-// and returns the resulted list with a sorted order,
-// The list is always a list of strings and never an array of numbers,
-// and it may contain duplicates.
-// The order of the list should be ascending by length of each word, and you
-// should return the list sorted by that rule.
-// If two words have the same length, sort the list alphabetically.
-// The function should return a list of strings in sorted order.
-// You may assume that all words will have the same length.
-// For example:
-// assert list_sort(["aa", "a", "aaa"]) => ["aa"]
-// assert list_sort(["ab", "a", "aaa", "cd"]) => ["ab", "cd"]
+/// Write a function that accepts a list of strings as a parameter,
+/// deletes the strings that have odd lengths from it,
+/// and returns the resulted list with a sorted order,
+/// The list is always a list of strings and never an array of numbers,
+/// and it may contain duplicates.
+/// The order of the list should be ascending by length of each word, and you
+/// should return the list sorted by that rule.
+/// If two words have the same length, sort the list alphabetically.
+/// The function should return a list of strings in sorted order.
+/// You may assume that all words will have the same length.
+/// For example:
+/// assert list_sort(["aa", "a", "aaa"]) => ["aa"]
+/// assert list_sort(["ab", "a", "aaa", "cd"]) => ["ab", "cd"]
 func sorted_list_sum(lst: [String]) -> [String] {
     var result = [String]()
-    var odd_lst = [String]()
-    var even_lst = [String]()
-    var odd_sum = 0
-    var even_sum = 0
-    var odd_count = 0
-    var even_count = 0
-    var odd_avg = 0
-    var even_avg = 0
-    var odd_avg_count = 0
-    var even_avg_count = 0
-    var odd_avg_sum = 0
-    var even_avg_sum = 0
-    var odd_avg_avg = 0
-    var even_avg_avg = 0
-    var odd_avg_avg_count = 0
-    var even_avg_avg_count = 0
-    var odd_avg_avg_sum = 0
-    var even_avg_avg_sum = 0
-    var odd_avg_avg_avg = 0
-    var even_avg_avg_avg = 0
-    var odd_avg_avg_avg_count = 0
-    var even_avg_avg_avg_count = 0
-    var odd_avg_avg_avg_sum = 0
-    var even_avg_avg_avg_sum = 0
-    var odd_avg_avg_avg_avg = 0
-    var even_avg_avg_avg_avg = 0
-    var odd_avg_avg_avg_avg_count = 0
-    var even_avg_avg_avg_avg_count = 0
-    var odd_avg_avg_avg_avg_sum = 0
-    var even_avg_avg_avg_avg_sum = 0
-    var odd_avg_avg_avg_avg_avg = 0
-    var even_avg_avg_avg_avg_avg = 0
-    var odd_avg_avg_avg_avg_avg_count = 0
-    var even_avg_avg_avg_
+    for str in lst {
+        if str.characters.count % 2 == 0 {
+            result.append(str)
+        }
+    }
+    return result
 
 }
 

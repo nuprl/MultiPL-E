@@ -1,25 +1,25 @@
 
-// Given a string text, replace all spaces in it with underscores, 
-// and if a string has more than 2 consecutive spaces, 
-// then replace all consecutive spaces with - 
-// fix_spaces("Example") == "Example"
-// fix_spaces("Example 1") == "Example_1"
-// fix_spaces(" Example 2") == "_Example_2"
-// fix_spaces(" Example   3") == "_Example-3"
+/// Given a string text, replace all spaces in it with underscores, 
+/// and if a string has more than 2 consecutive spaces, 
+/// then replace all consecutive spaces with - 
+/// fix_spaces("Example") == "Example"
+/// fix_spaces("Example 1") == "Example_1"
+/// fix_spaces(" Example 2") == "_Example_2"
+/// fix_spaces(" Example   3") == "_Example-3"
 func fix_spaces(text: String) -> String {
     var result = ""
-    var i = 0
-    while i < text.characters.count {
-        let ch = text[text.index(text.startIndex, offsetBy: i)]
-        if ch == " " {
-            if result.characters.count > 0 && result.last! != "_" {
-                result.append("_")
+    var lastChar = ""
+    for char in text {
+        if char == " " {
+            if lastChar == " " {
+                result += "-"
+            } else {
+                result += "_"
             }
-            i += 1
         } else {
-            result.append(ch)
-            i += 1
+            result += String(char)
         }
+        lastChar = String(char)
     }
     return result
 

@@ -1,22 +1,16 @@
 
-// Given a string 'text', return its md5 hash equivalent string.
-// If 'text' is an empty string, return None.
-// >>> string_to_md5('Hello world') == '3e25960a79dbc69b674cd4ec67a72c62'
+/// Given a string 'text', return its md5 hash equivalent string.
+/// If 'text' is an empty string, return None.
+/// >>> string_to_md5('Hello world') == '3e25960a79dbc69b674cd4ec67a72c62'
 func string_to_md5(text: String) -> String? {
-    guard text.characters.count > 0 else {
-        return nil
+    guard !text.isEmpty else { return nil }
+    let data = text.data(using: .utf8)!
+    let hash = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> [UInt8] in
+        var hash = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
+        CC_MD5(bytes.baseAddress, CC_LONG(data.count), &hash)
+        return hash
     }
-    let str = text.cString(using: String.Encoding.utf8)
-    let strLen = CUnsignedInt(text.lengthOfBytes(using: String.Encoding.utf8))
-    let digestLen = Int(CC_MD5_DIGEST_LENGTH)
-    let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: digestLen)
-    CC_MD5(str!, strLen, result)
-    let hash = NSMutableString()
-    for i in 0..<digestLen {
-        hash.appendFormat("%02x", result[i])
-    }
-    result.deinitialize()
-    return String(format: hash as String)
+    return hash.map { String(format: "%02x", $0) }.joined()
 
 }
 

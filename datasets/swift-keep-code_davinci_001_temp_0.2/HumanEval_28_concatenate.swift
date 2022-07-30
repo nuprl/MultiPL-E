@@ -1,11 +1,11 @@
 
-// Concatenate list of strings into a single string
-// >>> concatenate([])
-// ''
-// >>> concatenate(['a', 'b', 'c'])
-// 'abc'
+/// Concatenate list of strings into a single string
+/// >>> concatenate([])
+/// ''
+/// >>> concatenate(['a', 'b', 'c'])
+/// 'abc'
 func concatenate(strings: [String]) -> String {
-    return strings.reduce("", combine: +)
+    return strings.reduce("", +)
 
 }
 

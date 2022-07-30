@@ -1,18 +1,23 @@
 
-// Circular shift the digits of the integer x, shift the digits right by shift
-// and return the result as a string.
-// If shift > number of digits, return digits reversed.
-// >>> circular_shift(12, 1)
-// "21"
-// >>> circular_shift(12, 2)
-// "12"
+/// Circular shift the digits of the integer x, shift the digits right by shift
+/// and return the result as a string.
+/// If shift > number of digits, return digits reversed.
+/// >>> circular_shift(12, 1)
+/// "21"
+/// >>> circular_shift(12, 2)
+/// "12"
 func circular_shift(x: Int, shift: Int) -> String {
-    let digits = String(x).characters.map { Int(String($0))! }
-    let shift = shift % digits.count
-    let start = digits.count - shift
-    let end = digits.count
-    let result = digits[start..<end] + digits[0..<start]
-    return result.map { String($0) }.reduce("") { $0 + $1 }
+    var digits = digits_of(x)
+    let n = digits.count
+    if shift > n {
+        return digits.reversed().map { String($0) }.joined()
+    }
+    let start = digits.startIndex
+    let end = digits.endIndex
+    let offset = n - shift
+    let first = digits[start..<start+offset]
+    let last = digits[start+offset..<end]
+    return first.reversed().map { String($0) }.joined() + last.map { String($0) }.joined()
 
 }
 

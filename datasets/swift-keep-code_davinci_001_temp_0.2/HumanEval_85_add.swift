@@ -1,12 +1,12 @@
 
-// Given a non-empty list of integers lst. add the even elements that are at odd indices..
-// Examples:
-// add([4, 2, 6, 7]) ==> 2
+/// Given a non-empty list of integers lst. add the even elements that are at odd indices..
+/// Examples:
+/// add([4, 2, 6, 7]) ==> 2
 func add(lst: [Int]) -> Int {
     var sum = 0
-    for (index, value) in lst.enumerated() {
-        if index % 2 == 0 && value % 2 == 0 {
-            sum += value
+    for (index, num) in lst.enumerated() {
+        if index % 2 == 1 {
+            sum += num
         }
     }
     return sum

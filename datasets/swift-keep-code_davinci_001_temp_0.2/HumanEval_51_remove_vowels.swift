@@ -1,23 +1,24 @@
 
-// remove_vowels is a function that takes string and returns string without vowels.
-// >>> remove_vowels('')
-// ''
-// >>> remove_vowels('abcdef')
-// 'bcdf'
-// >>> remove_vowels('aaaaa')
-// ''
-// >>> remove_vowels('aaBAA')
-// 'B'
-// >>> remove_vowels('zbcd')
-// 'zbcd'
+/// remove_vowels is a function that takes string and returns string without vowels.
+/// >>> remove_vowels('')
+/// ''
+/// >>> remove_vowels('abcdef')
+/// 'bcdf'
+/// >>> remove_vowels('aaaaa')
+/// ''
+/// >>> remove_vowels('aaBAA')
+/// 'B'
+/// >>> remove_vowels('zbcd')
+/// 'zbcd'
 func remove_vowels(text: String) -> String {
-    var result = ""
+    let vowels = ["a", "e", "i", "o", "u"]
+    var newText = ""
     for char in text {
-        if char != "a" && char != "e" && char != "i" && char != "o" && char != "u" {
-            result += String(char)
+        if !vowels.contains(String(char)) {
+            newText += String(char)
         }
     }
-    return result
+    return newText
 
 }
 

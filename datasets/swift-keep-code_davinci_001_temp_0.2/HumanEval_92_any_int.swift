@@ -1,18 +1,14 @@
 
-// Create a function that takes 3 numbers.
-// Returns true if one of the numbers is equal to the sum of the other two, and all numbers are integers.
-// Returns false in any other cases.
-// Examples
-// any_int(5, 2, 7) ➞ True
-// any_int(3, 2, 2) ➞ False
-// any_int(3, -2, 1) ➞ True
-// any_int(3.6, -2.2, 2) ➞ False
+/// Create a function that takes 3 numbers.
+/// Returns true if one of the numbers is equal to the sum of the other two, and all numbers are integers.
+/// Returns false in any other cases.
+/// Examples
+/// any_int(5, 2, 7) ➞ True
+/// any_int(3, 2, 2) ➞ False
+/// any_int(3, -2, 1) ➞ True
+/// any_int(3.6, -2.2, 2) ➞ False
 func any_int(x: Double, y: Double, z: Double) -> Bool {
-    if (x == y + z || y == x + z || z == x + y) && (x.truncatingRemainder(dividingBy: 1) == 0 && y.truncatingRemainder(dividingBy: 1) == 0 && z.truncatingRemainder(dividingBy: 1) == 0) {
-        return true
-    } else {
-        return false
-    }
+    return (x.truncatingRemainder(dividingBy: 1) == 0 && y.truncatingRemainder(dividingBy: 1) == 0 && z.truncatingRemainder(dividingBy: 1) == 0) && (x + y == z || x + z == y || y + z == x)
 
 }
 

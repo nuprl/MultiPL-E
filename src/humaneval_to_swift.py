@@ -1,23 +1,32 @@
 # Authored by Donald Pinckney, based on scripts by Arjun Guha and others
 # Copyright (c) 2022, Roblox Inc, Northeastern University, and University of Massachusetts Amherst
 #
-# This script translates problems from the OpenAI HumanEval dataset into Go.
+# This script translates problems from the OpenAI HumanEval dataset into Swift.
 #
-# ----- Some specific issues about Go -----
+# ----- Some specifics with the Swift translation -----
 #
-# Due to Go's composite literals, we have to type annotate each literal with its type.
-# For example, if we want a slice of ints, we have to write:
-# []int{1, 2, 3}
-# Or a map of string -> int:
-# map[string]int{"a": 1, "b": 2}
-# Therefore, this creates some slight issues with the translation, but it is
-# possible to translate the code by using python's ast annotations, which is what we have done here.
-#
-# Unfortunately, Go does not have Union, Tuple or Optional types, so we reject those.
-# For testing, Go does not have a real testing framework, therefore we ship a small testing program
-# with each problem. For equality, we have exploited Go's value formatting (the "%v" format), which
-# will create the same string if two values are equal. Additionally, all go test filenames have to
-# end in "_test.go", otherwise go will reject them.
+# We use Swift 5.8 to run tests. Every single test case is translated successfully to Swift. 
+# Python docstrings are translated to Swift doc comments (starting with ///). 
+# The Python function signature is translated to Swift, recursively translating Python types to Swift types (more detail below). 
+# The function signature type, and parameter names, are remembered, and then used to translate Python test expressions 
+# into Swift in a type-directed manner. Note that parameter names must be remembered, 
+# as they must be added into the call site in the tests. “\n}” is used for the stop token.
+
+# For translating Python types to Swift types, the following conversions occur:
+# - Tuple is translated to Swift tuples
+# - Tuple[x, …] is translated to an Array<x>
+# - Optional[x] is translated to x?
+# - Union[x, y] is translated to Result<x, y>
+# - Union[..., None] is translated to T? where T is the result of translating Union[...]
+# - Union[x, y, z, etc.] is translated to a generated alg. Datatype.
+# - Any (or missing annotations) are translated to AnyHashable. Note that translating to Any could be possible, but in Swift you can’t do == on Any values, nor can they be keys in dictionaries. So AnyHashable is a closer match to Any in Python.
+
+# When translating test expressions to Swift types, we must do so in a type-directed manner, 
+# especially due to the complicated type translations. 
+# For example, when encountering a Python expression that should be translated into Swift at type Result<Int, Bool>, 
+# we automatically choose the best possible data constructor for Result.
+# In addition, we sometimes need to apply type annotations into Swift expressions explicitly, 
+# for instance this is required in some cases to get empty arrays to typecheck.
 
 from __future__ import annotations
 import re
@@ -632,7 +641,7 @@ class SwiftTranslator(LanguageTranslator[TargetExp]):
         self.return_type = self.translate_type(returns).simplify(self.needs)
 
         swift_needs = self.needs.gen_prompt_needs()
-        swift_description = "// " + re.sub(DOCSTRING_LINESTART_RE, "\n// ", description.strip()) + "\n"
+        swift_description = "/// " + re.sub(DOCSTRING_LINESTART_RE, "\n/// ", description.strip()) + "\n"
         swift_params = ", ".join([f"{name}: {ty.gen_type()}" for name, ty in self.param_names_types])
         swift_return = self.return_type.gen_type()
         return f"{swift_needs}\n{swift_description}func {name}({swift_params}) -> {swift_return} {{\n"

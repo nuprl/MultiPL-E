@@ -1,21 +1,21 @@
 
-// Given a positive integer n, return the product of the odd digits.
-// Return 0 if all digits are even.
-// For example:
-// digits(1)  == 1
-// digits(4)  == 0
-// digits(235) == 15
+/// Given a positive integer n, return the product of the odd digits.
+/// Return 0 if all digits are even.
+/// For example:
+/// digits(1)  == 1
+/// digits(4)  == 0
+/// digits(235) == 15
 func digits(n: Int) -> Int {
-    var product = 1
-    var n = n
-    while n > 0 {
-        let digit = n % 10
+    var result = 1
+    var num = n
+    while num > 0 {
+        let digit = num % 10
         if digit % 2 != 0 {
-            product *= digit
+            result *= digit
         }
-        n /= 10
+        num /= 10
     }
-    return product
+    return result
 
 }
 

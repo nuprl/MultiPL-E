@@ -1,27 +1,27 @@
 
-// brackets is a string of "(" and ")".
-// return True if every opening bracket has a corresponding closing bracket.
-// >>> correct_bracketing("(")
-// False
-// >>> correct_bracketing("()")
-// True
-// >>> correct_bracketing("(()())")
-// True
-// >>> correct_bracketing(")(()")
-// False
+/// brackets is a string of "(" and ")".
+/// return True if every opening bracket has a corresponding closing bracket.
+/// >>> correct_bracketing("(")
+/// False
+/// >>> correct_bracketing("()")
+/// True
+/// >>> correct_bracketing("(()())")
+/// True
+/// >>> correct_bracketing(")(()")
+/// False
 func correct_bracketing(brackets: String) -> Bool {
     var stack = [Character]()
     for bracket in brackets {
         if bracket == "(" {
             stack.append(bracket)
         } else if bracket == ")" {
-            if stack.count == 0 {
+            if stack.isEmpty {
                 return false
             }
             stack.removeLast()
         }
     }
-    return stack.count == 0
+    return stack.isEmpty
 
 }
 

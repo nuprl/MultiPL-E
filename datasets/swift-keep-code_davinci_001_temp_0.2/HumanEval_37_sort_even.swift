@@ -1,19 +1,23 @@
 
-// This function takes a list l and returns a list l' such that
-// l' is identical to l in the odd indicies, while its values at the even indicies are equal
-// to the values of the even indicies of l, but sorted.
-// >>> sort_even([1, 2, 3])
-// [1, 2, 3]
-// >>> sort_even([5, 6, 3, 4])
-// [3, 6, 5, 4]
+/// This function takes a list l and returns a list l' such that
+/// l' is identical to l in the odd indicies, while its values at the even indicies are equal
+/// to the values of the even indicies of l, but sorted.
+/// >>> sort_even([1, 2, 3])
+/// [1, 2, 3]
+/// >>> sort_even([5, 6, 3, 4])
+/// [3, 6, 5, 4]
 func sort_even(l: [Int]) -> [Int] {
-    var new_l = l
-    for i in 0..<new_l.count {
+    var even = [Int]()
+    var odd = [Int]()
+    for i in l {
         if i % 2 == 0 {
-            new_l[i] = l[i + 1]
+            even.append(i)
+        } else {
+            odd.append(i)
         }
     }
-    return new_l
+    even.sort()
+    return even + odd
 
 }
 

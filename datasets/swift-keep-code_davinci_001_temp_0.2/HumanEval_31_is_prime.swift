@@ -1,27 +1,35 @@
 
-// Return true if a given number is prime, and false otherwise.
-// >>> is_prime(6)
-// False
-// >>> is_prime(101)
-// True
-// >>> is_prime(11)
-// True
-// >>> is_prime(13441)
-// True
-// >>> is_prime(61)
-// True
-// >>> is_prime(4)
-// False
-// >>> is_prime(1)
-// False
+/// Return true if a given number is prime, and false otherwise.
+/// >>> is_prime(6)
+/// False
+/// >>> is_prime(101)
+/// True
+/// >>> is_prime(11)
+/// True
+/// >>> is_prime(13441)
+/// True
+/// >>> is_prime(61)
+/// True
+/// >>> is_prime(4)
+/// False
+/// >>> is_prime(1)
+/// False
 func is_prime(n: Int) -> Bool {
     if n <= 1 {
         return false
     }
-    for i in 2..<n {
-        if n % i == 0 {
+    if n <= 3 {
+        return true
+    }
+    if n % 2 == 0 || n % 3 == 0 {
+        return false
+    }
+    var i = 5
+    while i * i <= n {
+        if n % i == 0 || n % (i + 2) == 0 {
             return false
         }
+        i = i + 6
     }
     return true
 

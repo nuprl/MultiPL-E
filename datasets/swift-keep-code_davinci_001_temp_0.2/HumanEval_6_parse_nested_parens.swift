@@ -1,26 +1,15 @@
 
-// Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
-// For each of the group, output the deepest level of nesting of parentheses.
-// E.g. (()()) has maximum two levels of nesting while ((())) has three.
-// >>> parse_nested_parens('(()()) ((())) () ((())()())')
-// [2, 3, 1, 3]
+/// Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+/// For each of the group, output the deepest level of nesting of parentheses.
+/// E.g. (()()) has maximum two levels of nesting while ((())) has three.
+/// >>> parse_nested_parens('(()()) ((())) () ((())()())')
+/// [2, 3, 1, 3]
 func parse_nested_parens(paren_string: String) -> [Int] {
-    var paren_stack = [Int]()
-    var max_depth = 0
-    var depth = 0
-    for char in paren_string {
-        if char == "(" {
-            depth += 1
-            if depth > max_depth {
-                max_depth = depth
-            }
-            paren_stack.append(depth)
-        } else if char == ")" {
-            depth -= 1
-            paren_stack.append(depth)
-        }
+    var result: [Int] = []
+    for paren_group in paren_string.components(separatedBy: " ") {
+        result.append(parse_nested_parens(paren_group))
     }
-    return paren_stack
+    return result
 
 }
 

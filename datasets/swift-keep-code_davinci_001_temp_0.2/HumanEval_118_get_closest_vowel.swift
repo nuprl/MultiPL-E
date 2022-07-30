@@ -1,43 +1,46 @@
 
-// You are given a word. Your task is to find the closest vowel that stands between 
-// two consonants from the right side of the word (case sensitive).
-// Vowels in the beginning and ending doesn't count. Return empty string if you didn't
-// find any vowel met the above condition. 
-// You may assume that the given string contains English letter only.
-// Example:
-// get_closest_vowel("yogurt") ==> "u"
-// get_closest_vowel("FULL") ==> "U"
-// get_closest_vowel("quick") ==> ""
-// get_closest_vowel("ab") ==> ""
+/// You are given a word. Your task is to find the closest vowel that stands between 
+/// two consonants from the right side of the word (case sensitive).
+/// Vowels in the beginning and ending doesn't count. Return empty string if you didn't
+/// find any vowel met the above condition. 
+/// You may assume that the given string contains English letter only.
+/// Example:
+/// get_closest_vowel("yogurt") ==> "u"
+/// get_closest_vowel("FULL") ==> "U"
+/// get_closest_vowel("quick") ==> ""
+/// get_closest_vowel("ab") ==> ""
 func get_closest_vowel(word: String) -> String {
     var vowels: [Character] = ["a", "e", "i", "o", "u"]
     var consonants: [Character] = ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z"]
-    var vowels_count: Int = 0
-    var consonants_count: Int = 0
-    var closest_vowel: Character = "a"
-    var closest_vowel_index: Int = 0
+    var closest_vowel: String = ""
     var closest_vowel_distance: Int = 0
-    var closest_consonant: Character = "a"
-    var closest_consonant_index: Int = 0
-    var closest_consonant_distance: Int = 0
-    var word_array: [Character] = Array(word.characters)
-    var word_array_count: Int = word_array.count
-    var word_array_index: Int = 0
-    var word_array_index_count: Int = 0
-    var word_array_index_count_temp: Int = 0
-    var word_array_index_count_temp_2: Int = 0
-    var word_array_index_count_temp_3: Int = 0
-    var word_array_index_count_temp_4: Int = 0
-    var word_array_index_count_temp_5: Int = 0
-    var word_array_index_count_temp_6: Int = 0
-    var word_array_index_count_temp_7: Int = 0
-    var word_array_index_count_temp_8: Int = 0
-    var word_array_index_count_temp_9: Int = 0
-    var word_array_index_count_temp_10: Int = 0
-    var word_array_index_count_temp_11: Int = 0
-    var word_array_index_count_temp_12: Int = 0
-    var word_array_index_count_temp_13: Int = 0
-    var word
+    var word_array: [Character] = Array(word.lowercased())
+    var word_length: Int = word_array.count
+    var i: Int = 0
+    var j: Int = 0
+    var vowel_found: Bool = false
+    var vowel_distance: Int = 0
+    var consonant_found: Bool = false
+    var consonant_distance: Int = 0
+    var consonant_index: Int = 0
+    var vowel_index: Int = 0
+    var vowel_index_found: Bool = false
+    var consonant_index_found: Bool = false
+    var vowel_found_index: Int = 0
+    var consonant_found_index: Int = 0
+    var consonant_found_index_found: Bool = false
+    var vowel_found_index_found: Bool = false
+    var vowel_found_index_found_2: Bool = false
+    var consonant_found_index_found_2: Bool = false
+    var vowel_found_index_found_3: Bool = false
+    var consonant_found_index_found_3: Bool = false
+    var vowel_found_index_found_4: Bool = false
+    var consonant_found_index_found_4: Bool = false
+    var vowel_found_index_found_5: Bool = false
+    var consonant_found_index_found_5: Bool = false
+    var vowel_found_index_found_6: Bool = false
+    var consonant_found_index_found_6: Bool = false
+    var vowel
 
 }
 

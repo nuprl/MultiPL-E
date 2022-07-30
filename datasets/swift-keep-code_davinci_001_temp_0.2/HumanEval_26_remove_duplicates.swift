@@ -1,14 +1,15 @@
 
-// From a list of integers, remove all elements that occur more than once.
-// Keep order of elements left the same as in the input.
-// >>> remove_duplicates([1, 2, 3, 2, 4])
-// [1, 3, 4]
+/// From a list of integers, remove all elements that occur more than once.
+/// Keep order of elements left the same as in the input.
+/// >>> remove_duplicates([1, 2, 3, 2, 4])
+/// [1, 3, 4]
 func remove_duplicates(numbers: [Int]) -> [Int] {
-    var result: [Int] = []
+    var result = [Int]()
     for number in numbers {
-        if !result.contains(number) {
-            result.append(number)
+        if result.contains(number) {
+            continue
         }
+        result.append(number)
     }
     return result
 

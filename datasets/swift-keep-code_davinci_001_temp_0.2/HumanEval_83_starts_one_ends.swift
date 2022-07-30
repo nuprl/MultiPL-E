@@ -1,10 +1,10 @@
 
-// Given a positive integer n, return the count of the numbers of n-digit
-// positive integers that start or end with 1.
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
 func starts_one_ends(n: Int) -> Int {
     var count = 0
     for i in 1...n {
-        if i.digits.first == 1 || i.digits.last == 1 {
+        if i % 10 == 1 {
             count += 1
         }
     }

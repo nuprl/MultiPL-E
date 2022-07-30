@@ -1,22 +1,20 @@
 
-// Write a function that takes a message, and encodes in such a 
-// way that it swaps case of all letters, replaces all vowels in 
-// the message with the letter that appears 2 places ahead of that 
-// vowel in the english alphabet. 
-// Assume only letters. 
-// Examples:
-// >>> encode('test')
-// 'TGST'
-// >>> encode('This is a message')
-// 'tHKS KS C MGSSCGG'
+/// Write a function that takes a message, and encodes in such a 
+/// way that it swaps case of all letters, replaces all vowels in 
+/// the message with the letter that appears 2 places ahead of that 
+/// vowel in the english alphabet. 
+/// Assume only letters. 
+/// Examples:
+/// >>> encode('test')
+/// 'TGST'
+/// >>> encode('This is a message')
+/// 'tHKS KS C MGSSCGG'
 func encode(message: String) -> String {
     var encodedMessage = ""
     for character in message.characters {
         if character.isLetter {
-            let letter = character.lowercaseString
-            let index = letter.startIndex.advancedBy(2)
-            let newLetter = letter.substringToIndex(index)
-            let newCharacter = newLetter.uppercaseString
+            let index = character.unicodeScalars.first!.value - "a".unicodeScalars.first!.value
+            let newCharacter = String(UnicodeScalar(index + 2))
             encodedMessage += newCharacter
         } else {
             encodedMessage += String(character)

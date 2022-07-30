@@ -1,22 +1,16 @@
 
-// Input are two strings a and b consisting only of 1s and 0s.
-// Perform binary XOR on these inputs and return result also as a string.
-// >>> string_xor('010', '110')
-// '100'
+/// Input are two strings a and b consisting only of 1s and 0s.
+/// Perform binary XOR on these inputs and return result also as a string.
+/// >>> string_xor('010', '110')
+/// '100'
 func string_xor(a: String, b: String) -> String {
-    var result = ""
-    for i in 0..<a.characters.count {
-        let a_char = a[a.index(a.startIndex, offsetBy: i)]
-        let b_char = b[b.index(b.startIndex, offsetBy: i)]
-        if a_char == "1" && b_char == "1" {
-            result += "0"
-        } else if a_char == "0" && b_char == "0" {
-            result += "0"
-        } else {
-            result += "1"
-        }
+    let a_bytes = a.utf8.map { Int($0) }
+    let b_bytes = b.utf8.map { Int($0) }
+    var result = [Int]()
+    for (a_byte, b_byte) in zip(a_bytes, b_bytes) {
+        result.append(a_byte ^ b_byte)
     }
-    return result
+    return String(bytes: result, encoding: .utf8)!
 
 }
 

@@ -1,30 +1,23 @@
 
-// From a supplied list of numbers (of length at least two) select and return two that are the closest to each
-// other and return them in order (smaller number, larger number).
-// >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.2])
-// (2.0, 2.2)
-// >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0])
-// (2.0, 2.0)
+/// From a supplied list of numbers (of length at least two) select and return two that are the closest to each
+/// other and return them in order (smaller number, larger number).
+/// >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.2])
+/// (2.0, 2.2)
+/// >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0])
+/// (2.0, 2.0)
 func find_closest_elements(numbers: [Double]) -> (Double, Double) {
-    var smallest_difference = Double.infinity
-    var smallest_difference_index = 0
-    var second_smallest_difference = Double.infinity
-    var second_smallest_difference_index = 0
-    for i in 0..<numbers.count {
-        for j in i+1..<numbers.count {
-            let difference = numbers[i] - numbers[j]
-            if abs(difference) < smallest_difference {
-                second_smallest_difference = smallest_difference
-                second_smallest_difference_index = smallest_difference_index
-                smallest_difference = abs(difference)
-                smallest_difference_index = j
-            } else if abs(difference) < second_smallest_difference {
-                second_smallest_difference = abs(difference)
-                second_smallest_difference_index = j
+    var min_diff = Double.infinity
+    var min_pair: (Double, Double) = (0, 0)
+    for i in 0..<numbers.count - 1 {
+        for j in i + 1..<numbers.count {
+            let diff = abs(numbers[i] - numbers[j])
+            if diff < min_diff {
+                min_diff = diff
+                min_pair = (numbers[i], numbers[j])
             }
         }
     }
-    return (numbers[smallest_difference_index], numbers[second_smallest_difference_index])
+    return min_pair
 
 }
 

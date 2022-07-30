@@ -1,23 +1,18 @@
 
-// Return a greatest common divisor of two integers a and b
-// >>> greatest_common_divisor(3, 5)
-// 1
-// >>> greatest_common_divisor(25, 15)
-// 5
+/// Return a greatest common divisor of two integers a and b
+/// >>> greatest_common_divisor(3, 5)
+/// 1
+/// >>> greatest_common_divisor(25, 15)
+/// 5
 func greatest_common_divisor(a: Int, b: Int) -> Int {
-    if a == 0 {
-        return b
+    var a = a
+    var b = b
+    while b != 0 {
+        let temp = b
+        b = a % b
+        a = temp
     }
-    if b == 0 {
-        return a
-    }
-    if a < b {
-        return greatest_common_divisor(a: b, b: a)
-    }
-    if a % b == 0 {
-        return b
-    }
-    return greatest_common_divisor(a: b, b: a % b)
+    return a
 
 }
 

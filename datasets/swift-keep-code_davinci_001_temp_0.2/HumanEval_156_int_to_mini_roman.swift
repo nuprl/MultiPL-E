@@ -1,46 +1,17 @@
 
-// Given a positive integer, obtain its roman numeral equivalent as a string,
-// and return it in lowercase.
-// Restrictions: 1 <= num <= 1000
-// Examples:
-// >>> int_to_mini_roman(19) == 'xix'
-// >>> int_to_mini_roman(152) == 'clii'
-// >>> int_to_mini_roman(426) == 'cdxxvi'
+/// Given a positive integer, obtain its roman numeral equivalent as a string,
+/// and return it in lowercase.
+/// Restrictions: 1 <= num <= 1000
+/// Examples:
+/// >>> int_to_mini_roman(19) == 'xix'
+/// >>> int_to_mini_roman(152) == 'clii'
+/// >>> int_to_mini_roman(426) == 'cdxxvi'
 func int_to_mini_roman(number: Int) -> String {
     var roman = ""
-    var num = number
-    while num > 0 {
-        switch num {
-        case 1...3:
-            roman += "i"
-            num -= 1
-        case 4:
-            roman += "iv"
-            num -= 4
-        case 5...8:
-            roman += "v"
-            num -= 5
-        case 9:
-            roman += "ix"
-            num -= 9
-        case 10...30:
-            roman += "x"
-            num -= 10
-        case 31...80:
-            roman += "l"
-            num -= 30
-        case 81...300:
-            roman += "c"
-            num -= 80
-        case 301...800:
-            roman += "d"
-            num -= 300
-        case 801...3000:
-            roman += "m"
-            num -= 800
-        default:
-            break
-        }
+    let digits = number.digits
+    for (index, digit) in digits.enumerated() {
+        let romanDigit = mini_roman_digit(digit: digit, place: index)
+        roman.append(romanDigit)
     }
     return roman
 

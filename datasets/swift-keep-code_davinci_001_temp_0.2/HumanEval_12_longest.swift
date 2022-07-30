@@ -1,18 +1,16 @@
 
-// Out of list of strings, return the longest one. Return the first one in case of multiple
-// strings of the same length. Return None in case the input list is empty.
-// >>> longest([])
-// >>> longest(['a', 'b', 'c'])
-// 'a'
-// >>> longest(['a', 'bb', 'ccc'])
-// 'ccc'
+/// Out of list of strings, return the longest one. Return the first one in case of multiple
+/// strings of the same length. Return None in case the input list is empty.
+/// >>> longest([])
+/// >>> longest(['a', 'b', 'c'])
+/// 'a'
+/// >>> longest(['a', 'bb', 'ccc'])
+/// 'ccc'
 func longest(strings: [String]) -> String? {
-    if strings.isEmpty {
-        return nil
-    }
+    guard !strings.isEmpty else { return nil }
     var longest = strings[0]
     for string in strings {
-        if string.characters.count > longest.characters.count {
+        if string.count > longest.count {
             longest = string
         }
     }

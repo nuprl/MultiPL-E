@@ -1,21 +1,21 @@
 
-// Find how many times a given substring can be found in the original string. Count overlaping cases.
-// >>> how_many_times('', 'a')
-// 0
-// >>> how_many_times('aaa', 'a')
-// 3
-// >>> how_many_times('aaaa', 'aa')
-// 3
+/// Find how many times a given substring can be found in the original string. Count overlaping cases.
+/// >>> how_many_times('', 'a')
+/// 0
+/// >>> how_many_times('aaa', 'a')
+/// 3
+/// >>> how_many_times('aaaa', 'aa')
+/// 3
 func how_many_times(string: String, substring: String) -> Int {
-    if string.isEmpty || substring.isEmpty {
-        return 0
-    }
-    
     var count = 0
-    var start = string.startIndex
-    while let range = string.range(of: substring, options: .caseInsensitive, range: start..<string.endIndex, locale: nil) {
-        count += 1
-        start = range.upperBound
+    var index = string.startIndex
+    while index < string.endIndex {
+        if let range = string.range(of: substring, options: [], range: index..<string.endIndex) {
+            count += 1
+            index = range.upperBound
+        } else {
+            break
+        }
     }
     return count
 

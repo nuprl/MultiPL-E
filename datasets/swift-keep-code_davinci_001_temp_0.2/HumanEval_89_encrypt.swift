@@ -1,25 +1,20 @@
 
-// Create a function encrypt that takes a string as an argument and
-// returns a string encrypted with the alphabet being rotated. 
-// The alphabet should be rotated in a manner such that the letters 
-// shift down by two multiplied to two places.
-// For example:
-// encrypt('hi') returns 'lm'
-// encrypt('asdfghjkl') returns 'ewhjklnop'
-// encrypt('gf') returns 'kj'
-// encrypt('et') returns 'ix'
+/// Create a function encrypt that takes a string as an argument and
+/// returns a string encrypted with the alphabet being rotated. 
+/// The alphabet should be rotated in a manner such that the letters 
+/// shift down by two multiplied to two places.
+/// For example:
+/// encrypt('hi') returns 'lm'
+/// encrypt('asdfghjkl') returns 'ewhjklnop'
+/// encrypt('gf') returns 'kj'
+/// encrypt('et') returns 'ix'
 func encrypt(s: String) -> String {
-    var encryptedString = ""
-    for char in s.characters {
-        let index = alphabet.index(of: String(char))
-        if index == nil {
-            encryptedString.append(char)
-        } else {
-            let newIndex = (index! + 2) * 2
-            encryptedString.append(alphabet[newIndex])
-        }
+    var result = ""
+    for c in s.characters {
+        let index = (alphabet.index(of: c) ?? 0) + 2
+        result.append(alphabet[index % alphabet.count])
     }
-    return encryptedString
+    return result
 
 }
 

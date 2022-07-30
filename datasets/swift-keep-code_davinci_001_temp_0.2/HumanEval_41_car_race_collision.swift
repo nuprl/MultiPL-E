@@ -1,28 +1,28 @@
 
-// Imagine a road that's a perfectly straight infinitely long line.
-// n cars are driving left to right;  simultaneously, a different set of n cars
-// are driving right to left.   The two sets of cars start out being very far from
-// each other.  All cars move in the same speed.  Two cars are said to collide
-// when a car that's moving left to right hits a car that's moving right to left.
-// However, the cars are infinitely sturdy and strong; as a result, they continue moving
-// in their trajectory as if they did not collide.
-// This function outputs the number of such collisions.
+/// Imagine a road that's a perfectly straight infinitely long line.
+/// n cars are driving left to right;  simultaneously, a different set of n cars
+/// are driving right to left.   The two sets of cars start out being very far from
+/// each other.  All cars move in the same speed.  Two cars are said to collide
+/// when a car that's moving left to right hits a car that's moving right to left.
+/// However, the cars are infinitely sturdy and strong; as a result, they continue moving
+/// in their trajectory as if they did not collide.
+/// This function outputs the number of such collisions.
 func car_race_collision(n: Int) -> Int {
     var collisions = 0
-    var cars_left_to_right = Array(repeating: 0, count: n)
-    var cars_right_to_left = Array(repeating: 0, count: n)
+    var cars = Array(repeating: 0, count: n)
     for i in 0..<n {
-        cars_left_to_right[i] = i + 1
-        cars_right_to_left[i] = n - i
+        cars[i] = i
     }
     var i = 0
     while i < n {
-        if cars_left_to_right[i] == cars_right_to_left[i] {
+        if cars[i] == i {
+            i += 1
+        } else {
+            let j = cars[i]
+            cars[i] = cars[j]
+            cars[j] = j
             collisions += 1
-            cars_left_to_right[i] = 0
-            cars_right_to_left[i] = 0
         }
-        i += 1
     }
     return collisions
 

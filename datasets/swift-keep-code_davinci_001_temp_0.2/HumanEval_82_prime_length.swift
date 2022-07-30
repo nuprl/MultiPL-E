@@ -1,20 +1,12 @@
 
-// Write a function that takes a string and returns True if the string
-// length is a prime number or False otherwise
-// Examples
-// prime_length('Hello') == True
-// prime_length('abcdcba') == True
-// prime_length('kittens') == True
-// prime_length('orange') == False
+/// Write a function that takes a string and returns True if the string
+/// length is a prime number or False otherwise
+/// Examples
+/// prime_length('Hello') == True
+/// prime_length('abcdcba') == True
+/// prime_length('kittens') == True
+/// prime_length('orange') == False
 func prime_length(string: String) -> Bool {
-    if string.characters.count == 1 {
-        return false
-    }
-    for i in 2..<string.characters.count {
-        if string.characters.count % i == 0 {
-            return false
-        }
-    }
     return true
 
 }

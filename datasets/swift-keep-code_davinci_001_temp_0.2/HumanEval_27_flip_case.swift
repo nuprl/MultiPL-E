@@ -1,17 +1,9 @@
 
-// For a given string, flip lowercase characters to uppercase and uppercase to lowercase.
-// >>> flip_case('Hello')
-// 'hELLO'
+/// For a given string, flip lowercase characters to uppercase and uppercase to lowercase.
+/// >>> flip_case('Hello')
+/// 'hELLO'
 func flip_case(string: String) -> String {
-    var result = ""
-    for char in string {
-        if char.isUppercase {
-            result.append(char.lowercased())
-        } else {
-            result.append(char.uppercased())
-        }
-    }
-    return result
+    return string.uppercased()
 
 }
 

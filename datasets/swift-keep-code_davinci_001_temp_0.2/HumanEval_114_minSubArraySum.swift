@@ -1,20 +1,22 @@
 
-// Given an array of integers nums, find the minimum sum of any non-empty sub-array
-// of nums.
-// Example
-// minSubArraySum([2, 3, 4, 1, 2, 4]) == 1
-// minSubArraySum([-1, -2, -3]) == -6
+/// Given an array of integers nums, find the minimum sum of any non-empty sub-array
+/// of nums.
+/// Example
+/// minSubArraySum([2, 3, 4, 1, 2, 4]) == 1
+/// minSubArraySum([-1, -2, -3]) == -6
 func minSubArraySum(nums: [Int]) -> Int {
-    var min = nums[0]
-    var sum = 0
+    var minSum = Int.max
+    var currentSum = 0
     for i in 0..<nums.count {
-        sum += nums[i]
-        min = min > sum ? sum : min
-        if sum < 0 {
-            sum = 0
+        currentSum += nums[i]
+        if currentSum < minSum {
+            minSum = currentSum
+        }
+        if currentSum > 0 {
+            currentSum = 0
         }
     }
-    return min
+    return minSum == Int.max ? 0 : minSum
 
 }
 

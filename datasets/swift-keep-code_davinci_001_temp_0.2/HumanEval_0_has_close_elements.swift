@@ -1,21 +1,17 @@
 
-// Check if in given list of numbers, are any two numbers closer to each other than
-// given threshold.
-// >>> has_close_elements([1.0, 2.0, 3.0], 0.5)
-// False
-// >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
-// True
+/// Check if in given list of numbers, are any two numbers closer to each other than
+/// given threshold.
+/// >>> has_close_elements([1.0, 2.0, 3.0], 0.5)
+/// False
+/// >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
+/// True
 func has_close_elements(numbers: [Double], threshold: Double) -> Bool {
-    var i = 0
-    while i < numbers.count {
-        var j = i + 1
-        while j < numbers.count {
-            if abs(numbers[i] - numbers[j]) < threshold {
-                return true
-            }
-            j += 1
+    var last_number: Double = 0.0
+    for number in numbers {
+        if abs(number - last_number) < threshold {
+            return true
         }
-        i += 1
+        last_number = number
     }
     return false
 

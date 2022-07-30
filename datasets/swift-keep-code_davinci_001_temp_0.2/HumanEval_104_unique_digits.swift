@@ -1,37 +1,20 @@
 
-// Given a list of positive integers x. return a sorted list of all 
-// elements that hasn't any even digit.
-// Note: Returned list should be sorted in increasing order.
-// For example:
-// >>> unique_digits([15, 33, 1422, 1])
-// [1, 15, 33]
-// >>> unique_digits([152, 323, 1422, 10])
-// []
+/// Given a list of positive integers x. return a sorted list of all 
+/// elements that hasn't any even digit.
+/// Note: Returned list should be sorted in increasing order.
+/// For example:
+/// >>> unique_digits([15, 33, 1422, 1])
+/// [1, 15, 33]
+/// >>> unique_digits([152, 323, 1422, 10])
+/// []
 func unique_digits(x: [Int]) -> [Int] {
     var result = [Int]()
-    for number in x {
-        if number < 10 {
-            result.append(number)
-        } else {
-            var digits = [Int]()
-            var numberCopy = number
-            while numberCopy > 0 {
-                digits.append(numberCopy % 10)
-                numberCopy /= 10
-            }
-            var hasEvenDigit = false
-            for digit in digits {
-                if digit % 2 == 0 {
-                    hasEvenDigit = true
-                    break
-                }
-            }
-            if !hasEvenDigit {
-                result.append(number)
-            }
+    for i in x {
+        if i.digits.filter({$0 % 2 == 0}).count == 0 {
+            result.append(i)
         }
     }
-    return result.sort()
+    return result.sorted()
 
 }
 

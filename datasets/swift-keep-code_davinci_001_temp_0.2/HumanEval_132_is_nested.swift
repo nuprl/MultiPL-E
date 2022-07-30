@@ -1,26 +1,27 @@
 
-// Create a function that takes a string as input which contains only square brackets.
-// The function should return True if and only if there is a valid subsequence of brackets 
-// where at least one bracket in the subsequence is nested.
-// is_nested('[[]]') ➞ True
-// is_nested('[]]]]]]][[[[[]') ➞ False
-// is_nested('[][]') ➞ False
-// is_nested('[]') ➞ False
-// is_nested('[[][]]') ➞ True
-// is_nested('[[]][[') ➞ True
+/// Create a function that takes a string as input which contains only square brackets.
+/// The function should return True if and only if there is a valid subsequence of brackets 
+/// where at least one bracket in the subsequence is nested.
+/// is_nested('[[]]') ➞ True
+/// is_nested('[]]]]]]][[[[[]') ➞ False
+/// is_nested('[][]') ➞ False
+/// is_nested('[]') ➞ False
+/// is_nested('[[][]]') ➞ True
+/// is_nested('[[]][[') ➞ True
 func is_nested(string: String) -> Bool {
     var stack = [Character]()
     for char in string {
         if char == "[" {
             stack.append(char)
         } else if char == "]" {
-            if stack.count == 0 {
+            if stack.isEmpty {
                 return false
+            } else {
+                stack.removeLast()
             }
-            stack.removeLast()
         }
     }
-    return stack.count == 0
+    return stack.isEmpty
 
 }
 

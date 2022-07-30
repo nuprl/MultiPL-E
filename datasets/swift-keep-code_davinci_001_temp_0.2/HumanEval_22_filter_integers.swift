@@ -1,9 +1,9 @@
 
-// Filter given list of any python values only for integers
-// >>> filter_integers(['a', 3.14, 5])
-// [5]
-// >>> filter_integers([1, 2, 3, 'abc', {}, []])
-// [1, 2, 3]
+/// Filter given list of any python values only for integers
+/// >>> filter_integers(['a', 3.14, 5])
+/// [5]
+/// >>> filter_integers([1, 2, 3, 'abc', {}, []])
+/// [1, 2, 3]
 func filter_integers(values: [AnyHashable]) -> [Int] {
     return values.filter { $0 is Int }.map { $0 as! Int }
 

@@ -1,16 +1,14 @@
 
-// Given a string s, count the number of uppercase vowels in even indices.
-// For example:
-// count_upper('aBCdEf') returns 1
-// count_upper('abcdefg') returns 0
-// count_upper('dBBE') returns 0
+/// Given a string s, count the number of uppercase vowels in even indices.
+/// For example:
+/// count_upper('aBCdEf') returns 1
+/// count_upper('abcdefg') returns 0
+/// count_upper('dBBE') returns 0
 func count_upper(s: String) -> Int {
     var count = 0
-    for (i, c) in s.characters.enumerate() {
-        if c == "A" || c == "E" || c == "I" || c == "O" || c == "U" {
-            if i % 2 == 0 {
-                count += 1
-            }
+    for i in 0..<s.characters.count {
+        if i % 2 == 0 && s[i] == "A" || s[i] == "E" || s[i] == "I" || s[i] == "O" || s[i] == "U" {
+            count += 1
         }
     }
     return count

@@ -1,19 +1,37 @@
 
-// Create a function which takes a string representing a file's name, and returns
-// 'Yes' if the the file's name is valid, and returns 'No' otherwise.
-// A file's name is considered to be valid if and only if all the following conditions 
-// are met:
-// - There should not be more than three digits ('0'-'9') in the file's name.
-// - The file's name contains exactly one dot '.'
-// - The substring before the dot should not be empty, and it starts with a letter from 
-// the latin alphapet ('a'-'z' and 'A'-'Z').
-// - The substring after the dot should be one of these: ['txt', 'exe', 'dll']
-// Examples:
-// file_name_check("example.txt") # => 'Yes'
-// file_name_check("1example.dll") # => 'No' (the name should start with a latin alphapet letter)
+/// Create a function which takes a string representing a file's name, and returns
+/// 'Yes' if the the file's name is valid, and returns 'No' otherwise.
+/// A file's name is considered to be valid if and only if all the following conditions 
+/// are met:
+/// - There should not be more than three digits ('0'-'9') in the file's name.
+/// - The file's name contains exactly one dot '.'
+/// - The substring before the dot should not be empty, and it starts with a letter from 
+/// the latin alphapet ('a'-'z' and 'A'-'Z').
+/// - The substring after the dot should be one of these: ['txt', 'exe', 'dll']
+/// Examples:
+/// file_name_check("example.txt") # => 'Yes'
+/// file_name_check("1example.dll") # => 'No' (the name should start with a latin alphapet letter)
 func file_name_check(file_name: String) -> String {
-    // your code here
-    return ""
+    let file_name_array = file_name.components(separatedBy: ".")
+    if file_name_array.count != 2 {
+        return "No"
+    }
+    let file_name_before_dot = file_name_array[0]
+    let file_name_after_dot = file_name_array[1]
+    if file_name_before_dot.count == 0 {
+        return "No"
+    }
+    let file_name_before_dot_first_char = file_name_before_dot.first!
+    if !(file_name_before_dot_first_char >= "a" && file_name_before_dot_first_char <= "z") && !(file_name_before_dot_first_char >= "A" && file_name_before_dot_first_char <= "Z") {
+        return "No"
+    }
+    if file_name_before_dot.count > 3 {
+        return "No"
+    }
+    if file_name_after_dot != "txt" && file_name_after_dot != "exe" && file_name_after_dot != "dll" {
+        return "No"
+    }
+    return "Yes"
 
 }
 

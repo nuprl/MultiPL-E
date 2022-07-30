@@ -1,9 +1,9 @@
 
-// For a given number n, find the largest number that divides n evenly, smaller than n
-// >>> largest_divisor(15)
-// 5
+/// For a given number n, find the largest number that divides n evenly, smaller than n
+/// >>> largest_divisor(15)
+/// 5
 func largest_divisor(n: Int) -> Int {
-    var divisor = n - 1
+    var divisor = n
     while divisor > 0 {
         if n % divisor == 0 {
             return divisor

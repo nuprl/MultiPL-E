@@ -1,12 +1,11 @@
 
-// Return list of all prefixes from shortest to longest of the input string
-// >>> all_prefixes('abc')
-// ['a', 'ab', 'abc']
+/// Return list of all prefixes from shortest to longest of the input string
+/// >>> all_prefixes('abc')
+/// ['a', 'ab', 'abc']
 func all_prefixes(string: String) -> [String] {
     var prefixes = [String]()
     for i in 0..<string.characters.count {
-        let prefix = string.substring(to: string.index(string.startIndex, offsetBy: i))
-        prefixes.append(prefix)
+        prefixes.append(string.substringToIndex(string.startIndex.advancedBy(i)))
     }
     return prefixes
 

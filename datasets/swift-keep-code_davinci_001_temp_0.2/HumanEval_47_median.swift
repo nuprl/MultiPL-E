@@ -1,16 +1,16 @@
 
-// Return median of elements in the list l.
-// >>> median([3, 1, 2, 4, 5])
-// 3
-// >>> median([-10, 4, 6, 1000, 10, 20])
-// 15.0
+/// Return median of elements in the list l.
+/// >>> median([3, 1, 2, 4, 5])
+/// 3
+/// >>> median([-10, 4, 6, 1000, 10, 20])
+/// 15.0
 func median(l: [Int]) -> Double {
     let sorted = l.sorted()
-    let mid = sorted.count / 2
+    let middle = sorted.count / 2
     if sorted.count % 2 == 0 {
-        return Double(sorted[mid] + sorted[mid - 1]) / 2
+        return Double(sorted[middle] + sorted[middle - 1]) / 2
     } else {
-        return Double(sorted[mid])
+        return Double(sorted[middle])
     }
 
 }

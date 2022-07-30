@@ -1,13 +1,13 @@
 
 extension Int: Error {}
         
-// Given a string of words, return a list of words split on whitespace, if no whitespaces exists in the text you
-// should split on commas ',' if no commas exists you should return the number of lower-case letters with odd order in the
-// alphabet, ord('a') = 0, ord('b') = 1, ... ord('z') = 25
-// Examples
-// split_words("Hello world!") ➞ ["Hello", "world!"]
-// split_words("Hello,world!") ➞ ["Hello", "world!"]
-// split_words("abcdef") == 3
+/// Given a string of words, return a list of words split on whitespace, if no whitespaces exists in the text you
+/// should split on commas ',' if no commas exists you should return the number of lower-case letters with odd order in the
+/// alphabet, ord('a') = 0, ord('b') = 1, ... ord('z') = 25
+/// Examples
+/// split_words("Hello world!") ➞ ["Hello", "world!"]
+/// split_words("Hello,world!") ➞ ["Hello", "world!"]
+/// split_words("abcdef") == 3
 func split_words(txt: String) -> Result<[String], Int> {
     let words = txt.split(separator: " ")
     if words.count > 1 {
@@ -17,12 +17,12 @@ func split_words(txt: String) -> Result<[String], Int> {
     if commas.count > 1 {
         return .success(commas.map { String($0) })
     }
-    let letters = txt.lowercased().filter { $0.isLetter }
-    let count = letters.reduce(0) { $0 + ($1.unicodeScalars.first!.value % 2 == 0 ? 1 : -1) }
-    if count == 0 {
-        return .failure(0)
+    let lower = txt.lowercased()
+    let odd = lower.filter { $0.isLowercase && $0.isLetter && $0.asciiValue! % 2 == 1 }
+    if odd.count > 0 {
+        return .success(odd.map { String($0) })
     }
-    return .success([String(count)])
+    return .failure(txt.count)
 
 }
 

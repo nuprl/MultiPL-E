@@ -1,11 +1,11 @@
 
-// Return n-th Fibonacci number.
-// >>> fib(10)
-// 55
-// >>> fib(1)
-// 1
-// >>> fib(8)
-// 21
+/// Return n-th Fibonacci number.
+/// >>> fib(10)
+/// 55
+/// >>> fib(1)
+/// 1
+/// >>> fib(8)
+/// 21
 func fib(n: Int) -> Int {
     if n < 2 {
         return n
