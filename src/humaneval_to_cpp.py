@@ -44,7 +44,7 @@ class CPPTranslator:
         self.none_type = "{}"
         self.list_type = "std::vector<%s>"
         self.tuple_type = "std::tuple<%s>"
-        self.dict_type = "std::map<%s, %s>"
+        self.dict_type = "std::map"
         self.optional_type = "std::optional<%s>"
         self.any_type = "std::any"
         #C++ Keywords found in the dataset as variable and their idiomatic replacement
@@ -84,9 +84,9 @@ class CPPTranslator:
             case ast.Tuple(elts=elts):
                 return self.tuple_type % ", ".join([self.pytype_to_cpptype(e) for e in elts])
             case ast.Dict(keys=k,values=v):
-                return self.dict_type % (self.pytype_to_cpptype(k), self.pytype_to_cpptype(v))
+                return self.dict_type + "<%s,%s>"  % (self.pytype_to_cpptype(k), self.pytype_to_cpptype(v))
             case ast.Subscript(value=ast.Name(id="Dict"), slice=ast.Tuple(elts=key_val_type)):
-                return self.dict_type % (self.pytype_to_cpptype(key_val_type[0]), self.pytype_to_cpptype(key_val_type[1]))
+                return self.dict_type + "<%s,%s>" % (self.pytype_to_cpptype(key_val_type[0]), self.pytype_to_cpptype(key_val_type[1]))
             case ast.Subscript(value=ast.Name(id="List"), slice=elem_type):
                 return self.list_type % self.pytype_to_cpptype(elem_type)
             case ast.Subscript(value=ast.Name(id="Tuple"), slice=elts):
@@ -183,12 +183,12 @@ class CPPTranslator:
             return right[0] 
         
         #No need to replace empty optional
-        if right[0].find("Optional.empty()") == 0:
+        if right[0].find(self.none_type) == 0: #TODO: In java it is Optional.empty
             return right[0]
 
-        if expected_type.find("Optional") != -1:
+        if expected_type.find(self.optional_type) != -1:
             #Have to do this because Java does Optional.of and C++ have std::optional
-            return f"{self.make_optional('')}({right[0]})"
+            return self.make_optional('', right[0])
         
         type_to_coerce = self.find_type_to_coerce(right[0])
         coerced_type = None
@@ -278,8 +278,8 @@ class CPPTranslator:
     def make_optional_type(self, types):
         return self.optional_type % types
 
-    def make_optional(self, types):
-        return self.optional_type % types
+    def make_optional(self, types, elem):
+        return self.optional_type % types + "(" + elem + ")"
 
     def gen_tuple(self, t: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.Tuple]:
         """Translate a tuple with elements t
@@ -290,24 +290,27 @@ class CPPTranslator:
             return self.tuple_type%"long", ast.Tuple([ast.Name("int")])
 
         #If there is none then add std::optional<?>
-        contains_none = "{}" in ", ".join([e[0] for e in t])
+        contains_none = self.none_type in ", ".join([e[0] for e in t])
         if contains_none:
             #Find type of other element and make all std::optional
             other_types = []
             for e in t:
-                if self.pytype_to_cpptype(e[1]) != "{}":
+                #Use: filter(lambda x: x != self.none_type, other_types)
+                if self.pytype_to_cpptype(e[1]) != self.none_type:
                     other_types += [self.pytype_to_cpptype(e[1])]
-            if len(other_types) > 1:
+            print(302, other_types)
+            if len(other_types) >= 1:
                 other_types = list(set(other_types))[0]
-            else:
+
+            print(304, other_types)
+            if other_types == []:
                 #Asuming long if no other type
                 other_types = self.int_type
-            new_elem_type = self.make_optional(other_types)
-
-            return self.gen_make_tuple(", ".join([f"{new_elem_type}({e[0]})" for e in t])), \
+            print(305, other_types)
+            return self.gen_make_tuple(", ".join([self.make_optional(other_types, e[0]) for e in t])), \
                 ast.Tuple([e[1] for e in t])
 
-        return self.make_tuple(", ".join([e[0] for e in t])), \
+        return self.gen_make_tuple(", ".join([e[0] for e in t])), \
             ast.Tuple([e[1] for e in t])
 
     def make_map_literal(self, keys, values):
