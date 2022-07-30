@@ -40,6 +40,7 @@ from humaneval_to_php import PHPTranslator
 from humaneval_to_cpp import CPPTranslator
 from humaneval_to_python import PythonTranslator
 from humaneval_to_julia import JuliaTranslator
+from humaneval_to_java import JavaTranslator
 from problem_yaml import Problem
 
 TRANSLATORS = {
@@ -51,7 +52,8 @@ TRANSLATORS = {
     "cpp": CPPTranslator("cpp"),
     "py": PythonTranslator(),
     "jl": JuliaTranslator("jl"),
-    "js": JavaScriptTranslator()
+    "js": JavaScriptTranslator(),
+    "java": JavaTranslator("java")
 }
 
 
