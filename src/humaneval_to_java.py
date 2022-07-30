@@ -13,7 +13,7 @@ JAVA_CLASS_NAME = "Problem"
 #Refactoring needed
 
 class JavaTranslator(CPPTranslator):
-    stop = ["}\n\n"]
+    stop = ["    }\n    //","    }\n    p", "    }\n}","    }\n\n"]
 
     def __init__(self, file_ext):
         super().__init__(file_ext)
@@ -66,7 +66,11 @@ return (T) Array.get(Array.newInstance(clazz, 1), 0);
         return "\n".join([
             "import java.util.*;",
             "import java.lang.reflect.*;",
-            "import org.javatuples.*;"
+            "import org.javatuples.*;",
+            "import java.security.*;",
+            "import java.math.*;",
+            "import java.io.*;",
+            "import java.util.stream.*;"
         ]) + "\n"
 
     def pytype_to_cpptype(self, ann: ast.expr | None) -> str:
@@ -127,14 +131,20 @@ return (T) Array.get(Array.newInstance(clazz, 1), 0);
             case _other:
                 print(f"Unhandled annotation: {ast.dump(ann)}")
                 raise Exception(f"Unhandled annotation: {ann}")
-
+    
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         '''Translate Python prompt to Java.
            In addition to comments and example, the prompt contain union declarations (if there are any) 
            and include files (TODO)
         '''
+        def to_camel_case(snake_str):
+            components = snake_str.split('_')
+            # We capitalize the first letter of each component except the first one
+            # with the 'title' method and join them together.
+            return components[0] + ''.join(x.title() for x in components[1:])
+
         class_decl = f"class {JAVA_CLASS_NAME} {{\n"
-        class_decl += self.get_default_val_def
+#        class_decl += self.get_default_val_def
         indent = "    "
         comment_start = self.indent + "//"
         java_description = (
@@ -143,10 +153,11 @@ return (T) Array.get(Array.newInstance(clazz, 1), 0);
         self.args_type = [self.pytype_to_cpptype(arg.annotation) for arg in args]
         formal_args = [f"{self.pytype_to_cpptype(arg.annotation)} {self.gen_var(arg.arg)[0]}" for arg in args]
         formal_arg_list = ", ".join(formal_args)
-        self.entry_point = name
+        #Transform entry point to Java style Camel case
+        self.entry_point = to_camel_case(name)
         self.ret_ann = _returns
         self.ret_cpp_type = self.pytype_to_cpptype(_returns)
-        java_prompt = f"{self.module_imports()}{class_decl}{java_description}{self.indent}public static {self.ret_cpp_type} {name}({formal_arg_list})" + " {\n"
+        java_prompt = f"{self.module_imports()}{class_decl}{java_description}{self.indent}public static {self.ret_cpp_type} {self.entry_point}({formal_arg_list})" + " {\n"
 
         return java_prompt
     
@@ -184,7 +195,7 @@ return (T) Array.get(Array.newInstance(clazz, 1), 0);
         """
 
         return [
-            self.return_default_value(self.ret_cpp_type),
+            # self.return_default_value(self.ret_cpp_type),
             self.indent + "}",
             self.indent + "public static void main(String[] args) {",
         ]
@@ -213,7 +224,7 @@ return (T) Array.get(Array.newInstance(clazz, 1), 0);
         if self.is_primitive_type(self.ret_cpp_type):
             return f"    assert({left[0]} == {right});"
         else:
-            return f"    {left[0]}.equals({right});"
+            return f"    assert({left[0]}.equals({right}));"
 
     def find_type_to_coerce(self, expr):
         '''
