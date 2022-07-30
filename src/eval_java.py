@@ -11,7 +11,6 @@ import subprocess
 import tempfile
 from pathlib import Path
 from generic_eval import main
-from humaneval_to_java import JAVA_CLASS_NAME
 
 LANG_NAME = "Java"
 LANG_EXT = ".java"
@@ -46,7 +45,7 @@ def eval_script(path: Path):
         status = None
         returncode = -1
         output = None
-        exec_name = JAVA_CLASS_NAME
+        exec_name = "Problem" #JAVA_CLASS_NAME
         if build.returncode != 0:
             # Well, it's a compile error. May be a type error or
             # something. But, why break the set convention

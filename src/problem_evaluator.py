@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 from problem_yaml import Problem, Result, ResultList, TestResults
-import eval_ruby, eval_lua, eval_python, eval_rust, eval_julia
+import eval_ruby, eval_lua, eval_python, eval_rust, eval_julia, eval_java
 import tempfile
 import sys
 from concurrent.futures import ThreadPoolExecutor
@@ -10,7 +10,8 @@ EVALUATORS = {
   #  "ruby": (eval_ruby.eval_script, ".rb"),
  #   "lua": (eval_lua.eval_script, ".lua"),
 #    "python": (eval_python.eval_script, ".py")
-    "julia": (eval_julia.eval_script, ".jl")
+#    "julia": (eval_julia.eval_script, ".jl")
+    "java" : (eval_java.eval_script, ".java")
 }
 
 
@@ -39,7 +40,7 @@ def eval_in_thread(problem, test_results, i):
     with tempfile.NamedTemporaryFile(suffix=file_ext, delete=True) as f:
         f.write(program.encode("utf-8"))
         f.flush()
-        result = eval_script(f.name)
+        result = eval_script(f)
         result_yaml = Result()
         result_yaml.program = program
         #TODO: make this eyesore not an eyesore 
