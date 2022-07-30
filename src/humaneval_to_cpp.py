@@ -45,7 +45,7 @@ class CPPTranslator:
         self.list_type = "std::vector<%s>"
         self.tuple_type = "std::tuple<%s>"
         self.dict_type = "std::map"
-        self.optional_type = "std::optional<%s>"
+        self.optional_type = "std::optional"
         self.any_type = "std::any"
         #C++ Keywords found in the dataset as variable and their idiomatic replacement
         self.keywords = {"operator": "op", "strlen" : "string_length"}
@@ -94,7 +94,7 @@ class CPPTranslator:
                     return self.translate_pytype(elts)
                 return self.list_type % self.translate_pytype(elts)
             case ast.Subscript(value=ast.Name(id="Optional"), slice=elem_type):
-                return self.optional_type % self.translate_pytype(elem_type)
+                return self.gen_optional_type(self.translate_pytype(elem_type))
             case ast.Subscript(value=ast.Name(id="Union"), slice=ast.Tuple(elts=elems)):
                 #Not supporting Union
                 union_elems_types = []
@@ -278,7 +278,7 @@ class CPPTranslator:
     
     def gen_optional_type(self, types):
         '''Generate C++ std::optional<T>'''
-        return self.optional_type % types
+        return self.optional_type + "<%s>"% types
 
     def gen_optional(self, types, elem):
         '''Generate C++ std::option<T>()'''
