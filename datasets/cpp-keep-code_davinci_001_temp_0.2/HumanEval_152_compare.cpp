@@ -20,8 +20,8 @@ std::vector<long> compare(std::vector<long> game, std::vector<long> guess) {
 }
 int main() {
     auto candidate = compare;
-    assert(candidate((std::vector<long>({1, 2, 3, 4, 5, 1})), (std::vector<long>({1, 2, 3, 4, 2, -2}))) == (std::vector<long>({0, 0, 0, 0, 3, 3})));
-    assert(candidate((std::vector<long>({0, 0, 0, 0, 0, 0})), (std::vector<long>({0, 0, 0, 0, 0, 0}))) == (std::vector<long>({0, 0, 0, 0, 0, 0})));
-    assert(candidate((std::vector<long>({1, 2, 3})), (std::vector<long>({-1, -2, -3}))) == (std::vector<long>({2, 4, 6})));
-    assert(candidate((std::vector<long>({1, 2, 3, 5})), (std::vector<long>({-1, 2, 3, 4}))) == (std::vector<long>({2, 0, 0, 1})));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)4, (long)5, (long)1})), (std::vector<long>({(long)1, (long)2, (long)3, (long)4, (long)2, (long)-2}))) == (std::vector<long>({(long)0, (long)0, (long)0, (long)0, (long)3, (long)3})));
+    assert(candidate((std::vector<long>({(long)0, (long)0, (long)0, (long)0, (long)0, (long)0})), (std::vector<long>({(long)0, (long)0, (long)0, (long)0, (long)0, (long)0}))) == (std::vector<long>({(long)0, (long)0, (long)0, (long)0, (long)0, (long)0})));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3})), (std::vector<long>({(long)-1, (long)-2, (long)-3}))) == (std::vector<long>({(long)2, (long)4, (long)6})));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)5})), (std::vector<long>({(long)-1, (long)2, (long)3, (long)4}))) == (std::vector<long>({(long)2, (long)0, (long)0, (long)1})));
 }

@@ -22,9 +22,9 @@ std::tuple<float, float> find_closest_elements(std::vector<float> numbers) {
 }
 int main() {
     auto candidate = find_closest_elements;
-    assert(candidate((std::vector<float>({1.0, 2.0, 3.9, 4.0, 5.0, 2.2}))) == (std::make_tuple(3.9, 4.0)));
-    assert(candidate((std::vector<float>({1.0, 2.0, 5.9, 4.0, 5.0}))) == (std::make_tuple(5.0, 5.9)));
-    assert(candidate((std::vector<float>({1.0, 2.0, 3.0, 4.0, 5.0, 2.2}))) == (std::make_tuple(2.0, 2.2)));
-    assert(candidate((std::vector<float>({1.0, 2.0, 3.0, 4.0, 5.0, 2.0}))) == (std::make_tuple(2.0, 2.0)));
-    assert(candidate((std::vector<float>({1.1, 2.2, 3.1, 4.1, 5.1}))) == (std::make_tuple(2.2, 3.1)));
+    assert(candidate((std::vector<float>({(float)1.0, (float)2.0, (float)3.9, (float)4.0, (float)5.0, (float)2.2}))) == (std::make_tuple(3.9, 4.0)));
+    assert(candidate((std::vector<float>({(float)1.0, (float)2.0, (float)5.9, (float)4.0, (float)5.0}))) == (std::make_tuple(5.0, 5.9)));
+    assert(candidate((std::vector<float>({(float)1.0, (float)2.0, (float)3.0, (float)4.0, (float)5.0, (float)2.2}))) == (std::make_tuple(2.0, 2.2)));
+    assert(candidate((std::vector<float>({(float)1.0, (float)2.0, (float)3.0, (float)4.0, (float)5.0, (float)2.0}))) == (std::make_tuple(2.0, 2.0)));
+    assert(candidate((std::vector<float>({(float)1.1, (float)2.2, (float)3.1, (float)4.1, (float)5.1}))) == (std::make_tuple(2.2, 3.1)));
 }

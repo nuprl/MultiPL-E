@@ -38,11 +38,11 @@ std::string exchange(std::vector<long> lst1, std::vector<long> lst2) {
 }
 int main() {
     auto candidate = exchange;
-    assert(candidate((std::vector<long>({1, 2, 3, 4})), (std::vector<long>({1, 2, 3, 4}))) == ("YES"));
-    assert(candidate((std::vector<long>({1, 2, 3, 4})), (std::vector<long>({1, 5, 3, 4}))) == ("NO"));
-    assert(candidate((std::vector<long>({1, 2, 3, 4})), (std::vector<long>({2, 1, 4, 3}))) == ("YES"));
-    assert(candidate((std::vector<long>({5, 7, 3})), (std::vector<long>({2, 6, 4}))) == ("YES"));
-    assert(candidate((std::vector<long>({5, 7, 3})), (std::vector<long>({2, 6, 3}))) == ("NO"));
-    assert(candidate((std::vector<long>({3, 2, 6, 1, 8, 9})), (std::vector<long>({3, 5, 5, 1, 1, 1}))) == ("NO"));
-    assert(candidate((std::vector<long>({100, 200})), (std::vector<long>({200, 200}))) == ("YES"));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)4})), (std::vector<long>({(long)1, (long)2, (long)3, (long)4}))) == ("YES"));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)4})), (std::vector<long>({(long)1, (long)5, (long)3, (long)4}))) == ("NO"));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)4})), (std::vector<long>({(long)2, (long)1, (long)4, (long)3}))) == ("YES"));
+    assert(candidate((std::vector<long>({(long)5, (long)7, (long)3})), (std::vector<long>({(long)2, (long)6, (long)4}))) == ("YES"));
+    assert(candidate((std::vector<long>({(long)5, (long)7, (long)3})), (std::vector<long>({(long)2, (long)6, (long)3}))) == ("NO"));
+    assert(candidate((std::vector<long>({(long)3, (long)2, (long)6, (long)1, (long)8, (long)9})), (std::vector<long>({(long)3, (long)5, (long)5, (long)1, (long)1, (long)1}))) == ("NO"));
+    assert(candidate((std::vector<long>({(long)100, (long)200})), (std::vector<long>({(long)200, (long)200}))) == ("YES"));
 }

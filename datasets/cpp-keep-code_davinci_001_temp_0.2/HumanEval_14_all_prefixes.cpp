@@ -14,6 +14,6 @@ std::vector<std::string> all_prefixes(std::string string) {
 int main() {
     auto candidate = all_prefixes;
     assert(candidate(("")) == (std::vector<std::string>()));
-    assert(candidate(("asdfgh")) == (std::vector<std::string>({"a", "as", "asd", "asdf", "asdfg", "asdfgh"})));
-    assert(candidate(("WWW")) == (std::vector<std::string>({"W", "WW", "WWW"})));
+    assert(candidate(("asdfgh")) == (std::vector<std::string>({(std::string)"a", (std::string)"as", (std::string)"asd", (std::string)"asdf", (std::string)"asdfg", (std::string)"asdfgh"})));
+    assert(candidate(("WWW")) == (std::vector<std::string>({(std::string)"W", (std::string)"WW", (std::string)"WWW"})));
 }

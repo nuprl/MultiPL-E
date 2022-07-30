@@ -17,11 +17,11 @@ std::optional<long> next_smallest(std::vector<long> lst) {
 }
 int main() {
     auto candidate = next_smallest;
-    assert(candidate((std::vector<long>({1, 2, 3, 4, 5}))) == (std::optional<long>(2)));
-    assert(candidate((std::vector<long>({5, 1, 4, 3, 2}))) == (std::optional<long>(2)));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)4, (long)5}))) == (std::optional<long>(2)));
+    assert(candidate((std::vector<long>({(long)5, (long)1, (long)4, (long)3, (long)2}))) == (std::optional<long>(2)));
     assert(candidate((std::vector<long>())) == (std::optional<long>({})));
-    assert(candidate((std::vector<long>({1, 1}))) == (std::optional<long>({})));
-    assert(candidate((std::vector<long>({1, 1, 1, 1, 0}))) == (std::optional<long>(1)));
-    assert(candidate((std::vector<long>({1, 1}))) == (std::optional<long>({})));
-    assert(candidate((std::vector<long>({-35, 34, 12, -45}))) == (std::optional<long>(-35)));
+    assert(candidate((std::vector<long>({(long)1, (long)1}))) == (std::optional<long>({})));
+    assert(candidate((std::vector<long>({(long)1, (long)1, (long)1, (long)1, (long)0}))) == (std::optional<long>(1)));
+    assert(candidate((std::vector<long>({(long)1, (long)1}))) == (std::optional<long>({})));
+    assert(candidate((std::vector<long>({(long)-35, (long)34, (long)12, (long)-45}))) == (std::optional<long>(-35)));
 }

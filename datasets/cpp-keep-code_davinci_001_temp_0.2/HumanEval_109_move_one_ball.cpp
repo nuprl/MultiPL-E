@@ -34,9 +34,9 @@ bool move_one_ball(std::vector<long> arr) {
 }
 int main() {
     auto candidate = move_one_ball;
-    assert(candidate((std::vector<long>({3, 4, 5, 1, 2}))) == (true));
-    assert(candidate((std::vector<long>({3, 5, 10, 1, 2}))) == (true));
-    assert(candidate((std::vector<long>({4, 3, 1, 2}))) == (false));
-    assert(candidate((std::vector<long>({3, 5, 4, 1, 2}))) == (false));
+    assert(candidate((std::vector<long>({(long)3, (long)4, (long)5, (long)1, (long)2}))) == (true));
+    assert(candidate((std::vector<long>({(long)3, (long)5, (long)10, (long)1, (long)2}))) == (true));
+    assert(candidate((std::vector<long>({(long)4, (long)3, (long)1, (long)2}))) == (false));
+    assert(candidate((std::vector<long>({(long)3, (long)5, (long)4, (long)1, (long)2}))) == (false));
     assert(candidate((std::vector<long>())) == (true));
 }

@@ -22,12 +22,12 @@ std::vector<long> factorize(long n) {
 }
 int main() {
     auto candidate = factorize;
-    assert(candidate((2)) == (std::vector<long>({2})));
-    assert(candidate((4)) == (std::vector<long>({2, 2})));
-    assert(candidate((8)) == (std::vector<long>({2, 2, 2})));
-    assert(candidate((57)) == (std::vector<long>({3, 19})));
-    assert(candidate((3249)) == (std::vector<long>({3, 3, 19, 19})));
-    assert(candidate((185193)) == (std::vector<long>({3, 3, 3, 19, 19, 19})));
-    assert(candidate((20577)) == (std::vector<long>({3, 19, 19, 19})));
-    assert(candidate((18)) == (std::vector<long>({2, 3, 3})));
+    assert(candidate((2)) == (std::vector<long>({(long)2})));
+    assert(candidate((4)) == (std::vector<long>({(long)2, (long)2})));
+    assert(candidate((8)) == (std::vector<long>({(long)2, (long)2, (long)2})));
+    assert(candidate((57)) == (std::vector<long>({(long)3, (long)19})));
+    assert(candidate((3249)) == (std::vector<long>({(long)3, (long)3, (long)19, (long)19})));
+    assert(candidate((185193)) == (std::vector<long>({(long)3, (long)3, (long)3, (long)19, (long)19, (long)19})));
+    assert(candidate((20577)) == (std::vector<long>({(long)3, (long)19, (long)19, (long)19})));
+    assert(candidate((18)) == (std::vector<long>({(long)2, (long)3, (long)3})));
 }

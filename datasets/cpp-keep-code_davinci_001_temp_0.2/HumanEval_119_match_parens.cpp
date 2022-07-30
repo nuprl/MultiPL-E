@@ -44,16 +44,16 @@ std::string match_parens(std::vector<std::string> lst) {
 }
 int main() {
     auto candidate = match_parens;
-    assert(candidate((std::vector<std::string>({"()(", ")"}))) == ("Yes"));
-    assert(candidate((std::vector<std::string>({")", ")"}))) == ("No"));
-    assert(candidate((std::vector<std::string>({"(()(())", "())())"}))) == ("No"));
-    assert(candidate((std::vector<std::string>({")())", "(()()("}))) == ("Yes"));
-    assert(candidate((std::vector<std::string>({"(())))", "(()())(("}))) == ("Yes"));
-    assert(candidate((std::vector<std::string>({"()", "())"}))) == ("No"));
-    assert(candidate((std::vector<std::string>({"(()(", "()))()"}))) == ("Yes"));
-    assert(candidate((std::vector<std::string>({"((((", "((())"}))) == ("No"));
-    assert(candidate((std::vector<std::string>({")(()", "(()("}))) == ("No"));
-    assert(candidate((std::vector<std::string>({")(", ")("}))) == ("No"));
-    assert(candidate((std::vector<std::string>({"(", ")"}))) == ("Yes"));
-    assert(candidate((std::vector<std::string>({")", "("}))) == ("Yes"));
+    assert(candidate((std::vector<std::string>({(std::string)"()(", (std::string)")"}))) == ("Yes"));
+    assert(candidate((std::vector<std::string>({(std::string)")", (std::string)")"}))) == ("No"));
+    assert(candidate((std::vector<std::string>({(std::string)"(()(())", (std::string)"())())"}))) == ("No"));
+    assert(candidate((std::vector<std::string>({(std::string)")())", (std::string)"(()()("}))) == ("Yes"));
+    assert(candidate((std::vector<std::string>({(std::string)"(())))", (std::string)"(()())(("}))) == ("Yes"));
+    assert(candidate((std::vector<std::string>({(std::string)"()", (std::string)"())"}))) == ("No"));
+    assert(candidate((std::vector<std::string>({(std::string)"(()(", (std::string)"()))()"}))) == ("Yes"));
+    assert(candidate((std::vector<std::string>({(std::string)"((((", (std::string)"((())"}))) == ("No"));
+    assert(candidate((std::vector<std::string>({(std::string)")(()", (std::string)"(()("}))) == ("No"));
+    assert(candidate((std::vector<std::string>({(std::string)")(", (std::string)")("}))) == ("No"));
+    assert(candidate((std::vector<std::string>({(std::string)"(", (std::string)")"}))) == ("Yes"));
+    assert(candidate((std::vector<std::string>({(std::string)")", (std::string)"("}))) == ("Yes"));
 }

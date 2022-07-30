@@ -26,7 +26,7 @@ std::vector<long> parse_nested_parens(std::string paren_string) {
 }
 int main() {
     auto candidate = parse_nested_parens;
-    assert(candidate(("(()()) ((())) () ((())()())")) == (std::vector<long>({2, 3, 1, 3})));
-    assert(candidate(("() (()) ((())) (((())))")) == (std::vector<long>({1, 2, 3, 4})));
-    assert(candidate(("(()(())((())))")) == (std::vector<long>({4})));
+    assert(candidate(("(()()) ((())) () ((())()())")) == (std::vector<long>({(long)2, (long)3, (long)1, (long)3})));
+    assert(candidate(("() (()) ((())) (((())))")) == (std::vector<long>({(long)1, (long)2, (long)3, (long)4})));
+    assert(candidate(("(()(())((())))")) == (std::vector<long>({(long)4})));
 }

@@ -37,15 +37,15 @@ std::vector<long> maximum(std::vector<long> arr, long k) {
 }
 int main() {
     auto candidate = maximum;
-    assert(candidate((std::vector<long>({-3, -4, 5})), (3)) == (std::vector<long>({-4, -3, 5})));
-    assert(candidate((std::vector<long>({4, -4, 4})), (2)) == (std::vector<long>({4, 4})));
-    assert(candidate((std::vector<long>({-3, 2, 1, 2, -1, -2, 1})), (1)) == (std::vector<long>({2})));
-    assert(candidate((std::vector<long>({123, -123, 20, 0, 1, 2, -3})), (3)) == (std::vector<long>({2, 20, 123})));
-    assert(candidate((std::vector<long>({-123, 20, 0, 1, 2, -3})), (4)) == (std::vector<long>({0, 1, 2, 20})));
-    assert(candidate((std::vector<long>({5, 15, 0, 3, -13, -8, 0})), (7)) == (std::vector<long>({-13, -8, 0, 0, 3, 5, 15})));
-    assert(candidate((std::vector<long>({-1, 0, 2, 5, 3, -10})), (2)) == (std::vector<long>({3, 5})));
-    assert(candidate((std::vector<long>({1, 0, 5, -7})), (1)) == (std::vector<long>({5})));
-    assert(candidate((std::vector<long>({4, -4})), (2)) == (std::vector<long>({-4, 4})));
-    assert(candidate((std::vector<long>({-10, 10})), (2)) == (std::vector<long>({-10, 10})));
-    assert(candidate((std::vector<long>({1, 2, 3, -23, 243, -400, 0})), (0)) == (std::vector<long>()));
+    assert(candidate((std::vector<long>({(long)-3, (long)-4, (long)5})), (3)) == (std::vector<long>({(long)-4, (long)-3, (long)5})));
+    assert(candidate((std::vector<long>({(long)4, (long)-4, (long)4})), (2)) == (std::vector<long>({(long)4, (long)4})));
+    assert(candidate((std::vector<long>({(long)-3, (long)2, (long)1, (long)2, (long)-1, (long)-2, (long)1})), (1)) == (std::vector<long>({(long)2})));
+    assert(candidate((std::vector<long>({(long)123, (long)-123, (long)20, (long)0, (long)1, (long)2, (long)-3})), (3)) == (std::vector<long>({(long)2, (long)20, (long)123})));
+    assert(candidate((std::vector<long>({(long)-123, (long)20, (long)0, (long)1, (long)2, (long)-3})), (4)) == (std::vector<long>({(long)0, (long)1, (long)2, (long)20})));
+    assert(candidate((std::vector<long>({(long)5, (long)15, (long)0, (long)3, (long)-13, (long)-8, (long)0})), (7)) == (std::vector<long>({(long)-13, (long)-8, (long)0, (long)0, (long)3, (long)5, (long)15})));
+    assert(candidate((std::vector<long>({(long)-1, (long)0, (long)2, (long)5, (long)3, (long)-10})), (2)) == (std::vector<long>({(long)3, (long)5})));
+    assert(candidate((std::vector<long>({(long)1, (long)0, (long)5, (long)-7})), (1)) == (std::vector<long>({(long)5})));
+    assert(candidate((std::vector<long>({(long)4, (long)-4})), (2)) == (std::vector<long>({(long)-4, (long)4})));
+    assert(candidate((std::vector<long>({(long)-10, (long)10})), (2)) == (std::vector<long>({(long)-10, (long)10})));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)-23, (long)243, (long)-400, (long)0})), (0)) == (std::vector<long>()));
 }

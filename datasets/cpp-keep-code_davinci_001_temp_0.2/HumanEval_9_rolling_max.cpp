@@ -16,7 +16,7 @@ std::vector<long> rolling_max(std::vector<long> numbers) {
 int main() {
     auto candidate = rolling_max;
     assert(candidate((std::vector<long>())) == (std::vector<long>()));
-    assert(candidate((std::vector<long>({1, 2, 3, 4}))) == (std::vector<long>({1, 2, 3, 4})));
-    assert(candidate((std::vector<long>({4, 3, 2, 1}))) == (std::vector<long>({4, 4, 4, 4})));
-    assert(candidate((std::vector<long>({3, 2, 3, 100, 3}))) == (std::vector<long>({3, 3, 3, 100, 100})));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)4}))) == (std::vector<long>({(long)1, (long)2, (long)3, (long)4})));
+    assert(candidate((std::vector<long>({(long)4, (long)3, (long)2, (long)1}))) == (std::vector<long>({(long)4, (long)4, (long)4, (long)4})));
+    assert(candidate((std::vector<long>({(long)3, (long)2, (long)3, (long)100, (long)3}))) == (std::vector<long>({(long)3, (long)3, (long)3, (long)100, (long)100})));
 }

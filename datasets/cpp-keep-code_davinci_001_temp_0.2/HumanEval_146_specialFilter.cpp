@@ -18,11 +18,11 @@ long specialFilter(std::vector<long> nums) {
 }
 int main() {
     auto candidate = specialFilter;
-    assert(candidate((std::vector<long>({5, -2, 1, -5}))) == (0));
-    assert(candidate((std::vector<long>({15, -73, 14, -15}))) == (1));
-    assert(candidate((std::vector<long>({33, -2, -3, 45, 21, 109}))) == (2));
-    assert(candidate((std::vector<long>({43, -12, 93, 125, 121, 109}))) == (4));
-    assert(candidate((std::vector<long>({71, -2, -33, 75, 21, 19}))) == (3));
-    assert(candidate((std::vector<long>({1}))) == (0));
+    assert(candidate((std::vector<long>({(long)5, (long)-2, (long)1, (long)-5}))) == (0));
+    assert(candidate((std::vector<long>({(long)15, (long)-73, (long)14, (long)-15}))) == (1));
+    assert(candidate((std::vector<long>({(long)33, (long)-2, (long)-3, (long)45, (long)21, (long)109}))) == (2));
+    assert(candidate((std::vector<long>({(long)43, (long)-12, (long)93, (long)125, (long)121, (long)109}))) == (4));
+    assert(candidate((std::vector<long>({(long)71, (long)-2, (long)-33, (long)75, (long)21, (long)19}))) == (3));
+    assert(candidate((std::vector<long>({(long)1}))) == (0));
     assert(candidate((std::vector<long>())) == (0));
 }
