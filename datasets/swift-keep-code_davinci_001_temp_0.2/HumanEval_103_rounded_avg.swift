@@ -1,6 +1,6 @@
 
-extension Int: Error {}       
-                
+extension Int: Error {}
+        
 // You are given two positive integers n and m, and your task is to compute the
 // average of the integers from n through m (including n and m). 
 // Round the answer to the nearest integer and convert that to binary.

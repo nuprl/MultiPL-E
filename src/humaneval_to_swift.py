@@ -1,4 +1,4 @@
-# Authored by Arjun Guha and Abhinav Jangda
+# Authored by Donald Pinckney, based on scripts by Arjun Guha and others
 # Copyright (c) 2022, Roblox Inc, Northeastern University, and University of Massachusetts Amherst
 #
 # This script translates problems from the OpenAI HumanEval dataset into Go.
@@ -22,7 +22,7 @@
 from __future__ import annotations
 import re
 import ast
-from typing import Any, List, Optional, OrderedDict
+from typing import Any, List, Optional, OrderedDict, Set
 from base_language_translator import LanguageTranslator
 from generic_translator import main, translate_expr
 from abc import ABC, abstractmethod
@@ -34,12 +34,19 @@ import ast
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
 
+def type_is_simple(t) -> bool:
+    match t:
+        case SwiftTypeString() | SwiftTypeBool() | SwiftTypeDouble() | SwiftTypeInt():
+            return True
+        case _other:
+            return False
+
 class SwiftType(ABC):
     @abstractmethod
     def gen_type(self) -> str:
         pass
 
-    def simplify(self, needs) -> SwiftType:
+    def simplify(self, needs: NeedTracker) -> SwiftType:
         return self
 
 class SwiftTypeString(SwiftType):
@@ -124,7 +131,7 @@ class SwiftTypeArray(SwiftType):
     def __eq__(self, other: object) -> bool:
         return isinstance(other, type(self)) and self.type_arg == other.type_arg
 
-    def simplify(self, needs) -> SwiftType:
+    def simplify(self, needs: NeedTracker) -> SwiftType:
         return SwiftTypeArray(self.type_arg.simplify(needs))
 
     def gen_type(self) -> str:
@@ -148,7 +155,7 @@ class SwiftTypeDictionary(SwiftType):
     def __eq__(self, other: object) -> bool:
         return isinstance(other, type(self)) and self.key_type_arg == other.key_type_arg and self.value_type_arg == other.value_type_arg
 
-    def simplify(self, needs) -> SwiftType:
+    def simplify(self, needs: NeedTracker) -> SwiftType:
         return SwiftTypeDictionary(self.key_type_arg.simplify(needs), self.value_type_arg.simplify(needs))
     
     def gen_type(self) -> str:
@@ -170,7 +177,7 @@ class SwiftTypeOptional(SwiftType):
     def __eq__(self, other: object) -> bool:
         return isinstance(other, type(self)) and self.type_arg == other.type_arg
 
-    def simplify(self, needs) -> SwiftType:
+    def simplify(self, needs: NeedTracker) -> SwiftType:
         return SwiftTypeOptional(self.type_arg.simplify(needs))
 
     def gen_type(self) -> str:
@@ -192,7 +199,7 @@ class SwiftTypeTuple(SwiftType):
     def __eq__(self, other: object) -> bool:
         return isinstance(other, type(self)) and self.type_args == other.type_args
 
-    def simplify(self, needs) -> SwiftType:
+    def simplify(self, needs: NeedTracker) -> SwiftType:
         simpl = tuple(t.simplify(needs) for t in self.type_args)
         if len(simpl) == 1:
             return simpl[0]
@@ -220,16 +227,14 @@ class SwiftTypeResult(SwiftType):
     def __eq__(self, other: object) -> bool:
         return isinstance(other, type(self)) and self.ok_type_arg == other.ok_type_arg and self.err_type_arg == other.err_type_arg
     
-    def simplify(self, needs) -> SwiftType:
+    def simplify(self, needs: NeedTracker) -> SwiftType:
         ok_s = self.ok_type_arg.simplify(needs)
         err_s = self.err_type_arg.simplify(needs)
         match err_s:
             case SwiftTypeTuple([]):
                 return SwiftTypeOptional(ok_s)
             case _other:
-                needs(f"""
-extension {err_s.gen_type()}: Error {{}}       
-                """)
+                needs.add_protocol_conformance(err_s.gen_type(), 'Error', '{}')
                 return SwiftTypeResult(ok_s, err_s)
 
     def gen_type(self) -> str:
@@ -251,7 +256,7 @@ class SwiftTypeUnion(SwiftType):
     def __eq__(self, other: object) -> bool:
         return isinstance(other, type(self)) and self.case_types == other.case_types
     
-    def simplify(self, needs) -> SwiftType:
+    def simplify(self, needs: NeedTracker) -> SwiftType:
         case_types_simpl = OrderedDict.fromkeys(t.simplify(needs) for t in self.case_types)
         
         make_optional = SwiftTypeTuple(()) in case_types_simpl
@@ -271,18 +276,24 @@ class SwiftTypeUnion(SwiftType):
         if make_optional:
             return SwiftTypeOptional(non_optional_t).simplify(needs)
         else:
+            if isinstance(non_optional_t, SwiftTypeUnion):
+                needs.add_enum_definition(non_optional_t)
             return non_optional_t
 
+
     def gen_type(self) -> str:
-        return "UNIMPLEMENTED UNIONS"
+        all_simple = all([type_is_simple(t) for t in self.case_types])
+        if not all_simple:
+            raise Exception("Can't generate enum with non-simple types")
+            
+        return "Value"
 
     def gen_constructor(self, idx: int, arg: str) -> str:
         t = list(self.case_types)[idx]
-        match t:
-            case SwiftTypeString() | SwiftTypeBool() | SwiftTypeDouble() | SwiftTypeInt():
-                return f"case{t.gen_type()}"
-            case _other:
-                raise Exception(f"Can't generate case for complex type: {t}")
+        if type_is_simple(t):
+            return f"{t.gen_type().lower()}Value({arg})"
+        else:
+            raise Exception(f"Can't generate case for complex type: {t}")
                 
 
 
@@ -472,6 +483,51 @@ def translate_expr_at_type(e: ast.expr, t: SwiftType | None) -> Optional[Tuple[s
 
 
 
+class NeedTracker(object):
+    def __init__(self) -> None:
+        self.protocol_conformances: Set[str] = set()
+        self.enum_definition = None
+
+    def add_protocol_conformance(self, t: str, p: str, body: str):
+        conf_str: str = f"""
+extension {t}: {p} {body}
+        """
+        self.protocol_conformances.add(conf_str)
+
+    def add_enum_definition(self, t: SwiftTypeUnion):
+        if self.enum_definition is None:
+            self.enum_definition = t
+            return
+        if self.enum_definition != t:
+            raise Exception("Can't have more than 1 unique enum definition.")
+
+    def gen_prompt_needs(self) -> str:
+        needs_str = ""
+
+        if self.enum_definition is not None:
+            all_simple = all([type_is_simple(t) for t in self.enum_definition.case_types])
+            if not all_simple:
+                raise Exception("Can't generate enum definition with non-simple cases.")
+            
+            enum_name = self.enum_definition.gen_type()
+
+            def gen_case_line(t, idx):
+                assert self.enum_definition is not None # make type checker happy
+
+                t_str = t.gen_type()
+                return f"    case {self.enum_definition.gen_constructor(idx, t_str)}"
+
+            case_lines = "\n".join([gen_case_line(t, idx) for idx, t in enumerate(self.enum_definition.case_types)])
+            needs_str += f"""
+enum {enum_name}: Equatable, Hashable {{
+{case_lines}
+}}
+
+            """
+        
+        needs_str += "\n".join(self.protocol_conformances)
+        return needs_str
+
 class SwiftTranslator(LanguageTranslator[TargetExp]):
     def gen_literal(self, c: bool | str | int | float | None) -> TargetExp:
         return ast.Constant(value=c)
@@ -569,14 +625,13 @@ class SwiftTranslator(LanguageTranslator[TargetExp]):
         """
         Translate Python prompt.
         """
-        needs = set()
-        add_need = lambda x: needs.add(x)
+        self.needs = NeedTracker()
 
         self.candidate_name = name
-        self.param_names_types = [(arg.arg, self.translate_type(arg.annotation).simplify(add_need)) for arg in args]
-        self.return_type = self.translate_type(returns).simplify(add_need)
+        self.param_names_types = [(arg.arg, self.translate_type(arg.annotation).simplify(self.needs)) for arg in args]
+        self.return_type = self.translate_type(returns).simplify(self.needs)
 
-        swift_needs = '\n'.join(needs)
+        swift_needs = self.needs.gen_prompt_needs()
         swift_description = "// " + re.sub(DOCSTRING_LINESTART_RE, "\n// ", description.strip()) + "\n"
         swift_params = ", ".join([f"{name}: {ty.gen_type()}" for name, ty in self.param_names_types])
         swift_return = self.return_type.gen_type()
@@ -610,7 +665,6 @@ func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
     return true
 }
             """
-
         ]
 
     def test_suite_suffix_lines(self) -> List[str]:
@@ -640,6 +694,5 @@ func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
 
 
 if __name__ == "__main__":
-    # NOTE: go test need to end with _test.go
     translator = SwiftTranslator()
     main(translator)

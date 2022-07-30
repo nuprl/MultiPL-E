@@ -1,4 +1,11 @@
 
+enum Value: Equatable, Hashable {
+    case intValue(Int)
+    case doubleValue(Double)
+    case stringValue(String)
+}
+
+            
 // Create a function that takes integers, floats, or strings representing
 // real numbers, and returns the larger variable in its given variable type.
 // Return None if the values are equal.
@@ -7,7 +14,7 @@
 // compare_one(1, "2,3") ➞ "2,3"
 // compare_one("5,1", "6") ➞ "6"
 // compare_one("1", 1) ➞ None
-func compare_one(a: UNIMPLEMENTED UNIONS, b: UNIMPLEMENTED UNIONS) -> UNIMPLEMENTED UNIONS? {
+func compare_one(a: Value, b: Value) -> Value? {
 	fatalError("unimplemented")
 
 }
@@ -25,11 +32,11 @@ func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
     return true
 }
             
-assert(compare_one(a: .caseInt, b: .caseInt) == .caseInt)
-assert(compare_one(a: .caseInt, b: .caseDouble) == .caseDouble)
-assert(compare_one(a: .caseInt, b: .caseInt) == .caseInt)
-assert(compare_one(a: .caseInt, b: .caseInt) == .caseInt)
-assert(compare_one(a: .caseInt, b: .caseString) == .caseString)
-assert(compare_one(a: .caseString, b: .caseString) == .caseString)
-assert(compare_one(a: .caseString, b: .caseString) == .caseString)
-assert(compare_one(a: .caseString, b: .caseInt) == nil)
+assert(compare_one(a: .intValue(1), b: .intValue(2)) == .intValue(2))
+assert(compare_one(a: .intValue(1), b: .doubleValue(2.5)) == .doubleValue(2.5))
+assert(compare_one(a: .intValue(2), b: .intValue(3)) == .intValue(3))
+assert(compare_one(a: .intValue(5), b: .intValue(6)) == .intValue(6))
+assert(compare_one(a: .intValue(1), b: .stringValue("2,3")) == .stringValue("2,3"))
+assert(compare_one(a: .stringValue("5,1"), b: .stringValue("6")) == .stringValue("6"))
+assert(compare_one(a: .stringValue("1"), b: .stringValue("2")) == .stringValue("2"))
+assert(compare_one(a: .stringValue("1"), b: .intValue(1)) == nil)
