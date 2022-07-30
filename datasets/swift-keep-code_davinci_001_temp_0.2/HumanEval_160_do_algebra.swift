@@ -21,6 +21,6 @@ func do_algebra(operator: [String], operand: [Int]) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
+assert(do_algebra(operator: [**, *, +], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: [+, *, -], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: [//, *], operand: [7, 3, 4]) == 8)

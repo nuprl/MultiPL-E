@@ -14,10 +14,10 @@ func modp(n: Int, p: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(modp(n: 3, p: 5) == 3)
+assert(modp(n: 1101, p: 101) == 2)
+assert(modp(n: 0, p: 101) == 1)
+assert(modp(n: 3, p: 11) == 8)
+assert(modp(n: 100, p: 101) == 1)
+assert(modp(n: 30, p: 5) == 4)
+assert(modp(n: 31, p: 5) == 3)

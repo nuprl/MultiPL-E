@@ -12,11 +12,11 @@ func solve(s: String) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(solve(s: AsDf) == aSdF)
+assert(solve(s: 1234) == 4321)
+assert(solve(s: ab) == AB)
+assert(solve(s: #a@C) == #A@c)
+assert(solve(s: #AsdfW^45) == #aSDFw^45)
+assert(solve(s: #6@2) == 2@6#)
+assert(solve(s: #$a^D) == #$A^d)
+assert(solve(s: #ccc) == #CCC)

@@ -24,9 +24,9 @@ func numerical_letter_grade(grades: [Double]) -> [String] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(numerical_letter_grade(grades: [4.0, 3, 1.7, 2, 3.5]) == [A+, B, C-, C, A-])
+assert(numerical_letter_grade(grades: [1.2]) == [D+])
+assert(numerical_letter_grade(grades: [0.5]) == [D-])
+assert(numerical_letter_grade(grades: [0.0]) == [E])
+assert(numerical_letter_grade(grades: [1.0, 0.3, 1.5, 2.8, 3.3]) == [D, D-, C-, B, B+])
+assert(numerical_letter_grade(grades: [0.0, 0.7]) == [E, D-])

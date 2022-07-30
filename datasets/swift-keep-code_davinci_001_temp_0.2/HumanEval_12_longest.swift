@@ -10,6 +10,6 @@ func longest(strings: [String]) -> String? {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
+assert(longest(strings: []) == nil)
+assert(longest(strings: [x, y, z]) == x)
+assert(longest(strings: [x, yyy, zzzz, www, kkkk, abc]) == zzzz)

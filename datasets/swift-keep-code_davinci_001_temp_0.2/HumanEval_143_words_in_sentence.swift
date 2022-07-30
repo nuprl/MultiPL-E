@@ -17,10 +17,10 @@ func words_in_sentence(sentence: String) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(words_in_sentence(sentence: This is a test) == is)
+assert(words_in_sentence(sentence: lets go for swimming) == go for)
+assert(words_in_sentence(sentence: there is no place available here) == there is no place)
+assert(words_in_sentence(sentence: Hi I am Hussein) == Hi am Hussein)
+assert(words_in_sentence(sentence: go for it) == go for it)
+assert(words_in_sentence(sentence: here) == )
+assert(words_in_sentence(sentence: here is) == is)

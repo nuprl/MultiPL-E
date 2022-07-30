@@ -12,12 +12,12 @@ func total_match(lst1: [String], lst2: [String]) -> [String] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(total_match(lst1: [], lst2: []) == [])
+assert(total_match(lst1: [hi, admin], lst2: [hi, hi]) == [hi, hi])
+assert(total_match(lst1: [hi, admin], lst2: [hi, hi, admin, project]) == [hi, admin])
+assert(total_match(lst1: [4], lst2: [1, 2, 3, 4, 5]) == [4])
+assert(total_match(lst1: [hi, admin], lst2: [hI, Hi]) == [hI, Hi])
+assert(total_match(lst1: [hi, admin], lst2: [hI, hi, hi]) == [hI, hi, hi])
+assert(total_match(lst1: [hi, admin], lst2: [hI, hi, hii]) == [hi, admin])
+assert(total_match(lst1: [], lst2: [this]) == [])
+assert(total_match(lst1: [this], lst2: []) == [])

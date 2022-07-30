@@ -14,7 +14,7 @@ func get_odd_collatz(n: Int) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(get_odd_collatz(n: 14) == [1, 5, 7, 11, 13, 17])
+assert(get_odd_collatz(n: 5) == [1, 5])
+assert(get_odd_collatz(n: 12) == [1, 3, 5])
+assert(get_odd_collatz(n: 1) == [1])

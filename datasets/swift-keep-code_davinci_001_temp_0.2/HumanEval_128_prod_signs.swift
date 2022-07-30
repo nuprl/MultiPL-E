@@ -11,11 +11,11 @@ func prod_signs(arr: [Int]) -> Int? {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(prod_signs(arr: [1, 2, 2, -4]) == -9)
+assert(prod_signs(arr: [0, 1]) == 0)
+assert(prod_signs(arr: [1, 1, 1, 2, 3, -1, 1]) == -10)
+assert(prod_signs(arr: []) == nil)
+assert(prod_signs(arr: [2, 4, 1, 2, -1, -1, 9]) == 20)
+assert(prod_signs(arr: [-1, 1, -1, 1]) == 4)
+assert(prod_signs(arr: [-1, 1, 1, 1]) == -4)
+assert(prod_signs(arr: [-1, 1, 1, 0]) == 0)

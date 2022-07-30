@@ -9,7 +9,7 @@ func generate_integers(a: Int, b: Int) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(generate_integers(a: 2, b: 10) == [2, 4, 6, 8])
+assert(generate_integers(a: 10, b: 2) == [2, 4, 6, 8])
+assert(generate_integers(a: 132, b: 2) == [2, 4, 6, 8])
+assert(generate_integers(a: 17, b: 89) == [])

@@ -16,8 +16,8 @@ func closest_integer(value: String) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(closest_integer(value: 10) == 10)
+assert(closest_integer(value: 14.5) == 15)
+assert(closest_integer(value: -15.5) == -16)
+assert(closest_integer(value: 15.3) == 15)
+assert(closest_integer(value: 0) == 0)

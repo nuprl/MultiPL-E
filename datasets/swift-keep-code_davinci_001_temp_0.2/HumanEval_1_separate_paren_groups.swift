@@ -9,7 +9,7 @@ func separate_paren_groups(paren_string: String) -> [String] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(separate_paren_groups(paren_string: (()()) ((())) () ((())()())) == [(()()), ((())), (), ((())()())])
+assert(separate_paren_groups(paren_string: () (()) ((())) (((())))) == [(), (()), ((())), (((())))])
+assert(separate_paren_groups(paren_string: (()(())((())))) == [(()(())((())))])
+assert(separate_paren_groups(paren_string: ( ) (( )) (( )( ))) == [(), (()), (()())])

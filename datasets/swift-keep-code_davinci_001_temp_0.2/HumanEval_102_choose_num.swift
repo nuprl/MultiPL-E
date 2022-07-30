@@ -9,11 +9,11 @@ func choose_num(x: Int, y: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(choose_num(x: 12, y: 15) == 14)
+assert(choose_num(x: 13, y: 12) == -1)
+assert(choose_num(x: 33, y: 12354) == 12354)
+assert(choose_num(x: 5234, y: 5233) == -1)
+assert(choose_num(x: 6, y: 29) == 28)
+assert(choose_num(x: 27, y: 10) == -1)
+assert(choose_num(x: 7, y: 7) == -1)
+assert(choose_num(x: 546, y: 546) == 546)

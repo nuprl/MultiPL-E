@@ -15,29 +15,29 @@ func file_name_check(file_name: String) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(file_name_check(file_name: example.txt) == Yes)
+assert(file_name_check(file_name: 1example.dll) == No)
+assert(file_name_check(file_name: s1sdf3.asd) == No)
+assert(file_name_check(file_name: K.dll) == Yes)
+assert(file_name_check(file_name: MY16FILE3.exe) == Yes)
+assert(file_name_check(file_name: His12FILE94.exe) == No)
+assert(file_name_check(file_name: _Y.txt) == No)
+assert(file_name_check(file_name: ?aREYA.exe) == No)
+assert(file_name_check(file_name: /this_is_valid.dll) == No)
+assert(file_name_check(file_name: this_is_valid.wow) == No)
+assert(file_name_check(file_name: this_is_valid.txt) == Yes)
+assert(file_name_check(file_name: this_is_valid.txtexe) == No)
+assert(file_name_check(file_name: #this2_i4s_5valid.ten) == No)
+assert(file_name_check(file_name: @this1_is6_valid.exe) == No)
+assert(file_name_check(file_name: this_is_12valid.6exe4.txt) == No)
+assert(file_name_check(file_name: all.exe.txt) == No)
+assert(file_name_check(file_name: I563_No.exe) == Yes)
+assert(file_name_check(file_name: Is3youfault.txt) == Yes)
+assert(file_name_check(file_name: no_one#knows.dll) == Yes)
+assert(file_name_check(file_name: 1I563_Yes3.exe) == No)
+assert(file_name_check(file_name: I563_Yes3.txtt) == No)
+assert(file_name_check(file_name: final..txt) == No)
+assert(file_name_check(file_name: final132) == No)
+assert(file_name_check(file_name: _f4indsartal132.) == No)
+assert(file_name_check(file_name: .txt) == No)
+assert(file_name_check(file_name: s.) == No)

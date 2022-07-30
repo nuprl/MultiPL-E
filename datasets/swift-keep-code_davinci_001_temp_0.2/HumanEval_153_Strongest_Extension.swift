@@ -18,12 +18,12 @@ func Strongest_Extension(class_name: String, extensions: [String]) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(Strongest_Extension(class_name: Watashi, extensions: [tEN, niNE, eIGHt8OKe]) == Watashi.eIGHt8OKe)
+assert(Strongest_Extension(class_name: Boku123, extensions: [nani, NazeDa, YEs.WeCaNe, 32145tggg]) == Boku123.YEs.WeCaNe)
+assert(Strongest_Extension(class_name: __YESIMHERE, extensions: [t, eMptY, nothing, zeR00, NuLl__, 123NoooneB321]) == __YESIMHERE.NuLl__)
+assert(Strongest_Extension(class_name: K, extensions: [Ta, TAR, t234An, cosSo]) == K.TAR)
+assert(Strongest_Extension(class_name: __HAHA, extensions: [Tab, 123, 781345, -_-]) == __HAHA.123)
+assert(Strongest_Extension(class_name: YameRore, extensions: [HhAas, okIWILL123, WorkOut, Fails, -_-]) == YameRore.okIWILL123)
+assert(Strongest_Extension(class_name: finNNalLLly, extensions: [Die, NowW, Wow, WoW]) == finNNalLLly.WoW)
+assert(Strongest_Extension(class_name: _, extensions: [Bb, 91245]) == _.Bb)
+assert(Strongest_Extension(class_name: Sp, extensions: [671235, Bb]) == Sp.671235)

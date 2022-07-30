@@ -11,7 +11,7 @@ func special_factorial(n: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(special_factorial(n: 4) == 288)
+assert(special_factorial(n: 5) == 34560)
+assert(special_factorial(n: 7) == 125411328000)
+assert(special_factorial(n: 1) == 1)

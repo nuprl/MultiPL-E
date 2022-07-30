@@ -13,8 +13,8 @@ func make_palindrome(string: String) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(make_palindrome(string: ) == )
+assert(make_palindrome(string: x) == x)
+assert(make_palindrome(string: xyz) == xyzyx)
+assert(make_palindrome(string: xyx) == xyx)
+assert(make_palindrome(string: jerry) == jerryrrej)

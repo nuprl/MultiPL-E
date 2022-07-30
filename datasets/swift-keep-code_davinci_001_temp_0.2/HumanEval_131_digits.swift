@@ -9,10 +9,10 @@ func digits(n: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(digits(n: 5) == 5)
+assert(digits(n: 54) == 5)
+assert(digits(n: 120) == 1)
+assert(digits(n: 5014) == 5)
+assert(digits(n: 98765) == 315)
+assert(digits(n: 5576543) == 2625)
+assert(digits(n: 2468) == 0)

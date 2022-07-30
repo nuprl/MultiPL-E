@@ -5,8 +5,8 @@ func starts_one_ends(n: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)

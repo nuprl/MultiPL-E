@@ -8,9 +8,9 @@ func words_string(s: String) -> [String] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(words_string(s: Hi, my name is John) == [Hi, my, name, is, John])
+assert(words_string(s: One, two, three, four, five, six) == [One, two, three, four, five, six])
+assert(words_string(s: Hi, my name) == [Hi, my, name])
+assert(words_string(s: One,, two, three, four, five, six,) == [One, two, three, four, five, six])
+assert(words_string(s: ) == [])
+assert(words_string(s: ahmed     , gamal) == [ahmed, gamal])

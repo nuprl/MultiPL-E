@@ -8,7 +8,7 @@ func common(l1: [Int], l2: [Int]) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(common(l1: [1, 4, 3, 34, 653, 2, 5], l2: [5, 7, 1, 5, 9, 653, 121]) == [1, 5, 653])
+assert(common(l1: [5, 3, 2, 8], l2: [3, 2]) == [2, 3])
+assert(common(l1: [4, 3, 2, 8], l2: [3, 2, 4]) == [2, 3, 4])
+assert(common(l1: [4, 3, 2, 8], l2: []) == [])

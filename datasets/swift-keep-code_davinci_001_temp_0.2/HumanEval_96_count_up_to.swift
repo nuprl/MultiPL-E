@@ -12,13 +12,13 @@ func count_up_to(n: Int) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(count_up_to(n: 5) == [2, 3])
+assert(count_up_to(n: 6) == [2, 3, 5])
+assert(count_up_to(n: 7) == [2, 3, 5])
+assert(count_up_to(n: 10) == [2, 3, 5, 7])
+assert(count_up_to(n: 0) == [])
+assert(count_up_to(n: 22) == [2, 3, 5, 7, 11, 13, 17, 19])
+assert(count_up_to(n: 1) == [])
+assert(count_up_to(n: 18) == [2, 3, 5, 7, 11, 13, 17])
+assert(count_up_to(n: 47) == [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43])
+assert(count_up_to(n: 101) == [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97])

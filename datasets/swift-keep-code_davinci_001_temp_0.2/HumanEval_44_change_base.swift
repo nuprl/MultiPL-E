@@ -12,15 +12,15 @@ func change_base(x: Int, base: Int) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(change_base(x: 8, base: 3) == 22)
+assert(change_base(x: 9, base: 3) == 100)
+assert(change_base(x: 234, base: 2) == 11101010)
+assert(change_base(x: 16, base: 2) == 10000)
+assert(change_base(x: 8, base: 2) == 1000)
+assert(change_base(x: 7, base: 2) == 111)
+assert(change_base(x: 2, base: 3) == 2)
+assert(change_base(x: 3, base: 4) == 3)
+assert(change_base(x: 4, base: 5) == 4)
+assert(change_base(x: 5, base: 6) == 5)
+assert(change_base(x: 6, base: 7) == 6)
+assert(change_base(x: 7, base: 8) == 7)

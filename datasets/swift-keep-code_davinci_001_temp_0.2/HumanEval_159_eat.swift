@@ -25,9 +25,9 @@ func eat(number: Int, need: Int, remaining: Int) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(eat(number: 5, need: 6, remaining: 10) == [11, 4])
+assert(eat(number: 4, need: 8, remaining: 9) == [12, 1])
+assert(eat(number: 1, need: 10, remaining: 10) == [11, 0])
+assert(eat(number: 2, need: 11, remaining: 5) == [7, 0])
+assert(eat(number: 4, need: 5, remaining: 7) == [9, 2])
+assert(eat(number: 4, need: 5, remaining: 1) == [5, 0])

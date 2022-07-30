@@ -12,10 +12,10 @@ func vowels_count(s: String) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(vowels_count(s: abcde) == 2)
+assert(vowels_count(s: Alone) == 3)
+assert(vowels_count(s: key) == 2)
+assert(vowels_count(s: bye) == 1)
+assert(vowels_count(s: keY) == 2)
+assert(vowels_count(s: bYe) == 1)
+assert(vowels_count(s: ACEDY) == 3)

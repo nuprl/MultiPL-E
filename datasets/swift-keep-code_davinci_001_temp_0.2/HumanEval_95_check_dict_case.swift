@@ -12,10 +12,10 @@ func check_dict_case(dict: [String : String]) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(check_dict_case(dict: [p : pineapple, b : banana]) == true)
+assert(check_dict_case(dict: [p : pineapple, A : banana, B : banana]) == false)
+assert(check_dict_case(dict: [p : pineapple, 5 : banana, a : apple]) == false)
+assert(check_dict_case(dict: [Name : John, Age : 36, City : Houston]) == false)
+assert(check_dict_case(dict: [STATE : NC, ZIP : 12345]) == true)
+assert(check_dict_case(dict: [fruit : Orange, taste : Sweet]) == true)
+assert(check_dict_case(dict: []) == false)

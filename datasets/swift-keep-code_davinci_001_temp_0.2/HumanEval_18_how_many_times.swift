@@ -10,7 +10,7 @@ func how_many_times(string: String, substring: String) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(how_many_times(string: , substring: x) == 0)
+assert(how_many_times(string: xyxyxyx, substring: x) == 4)
+assert(how_many_times(string: cacacacac, substring: cac) == 4)
+assert(how_many_times(string: john doe, substring: john) == 1)

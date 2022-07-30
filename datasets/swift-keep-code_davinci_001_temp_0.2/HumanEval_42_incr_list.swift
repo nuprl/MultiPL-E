@@ -8,6 +8,6 @@ func incr_list(l: [Int]) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
+assert(incr_list(l: []) == [])
+assert(incr_list(l: [3, 2, 1]) == [4, 3, 2])
+assert(incr_list(l: [5, 2, 5, 2, 3, 3, 9, 0, 123]) == [6, 3, 6, 3, 4, 4, 10, 1, 124])

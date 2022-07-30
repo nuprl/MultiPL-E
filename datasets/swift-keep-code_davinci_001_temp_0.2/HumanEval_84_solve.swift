@@ -13,8 +13,8 @@ func solve(N: Int) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(solve(N: 1000) == 1)
+assert(solve(N: 150) == 110)
+assert(solve(N: 147) == 1100)
+assert(solve(N: 333) == 1001)
+assert(solve(N: 963) == 10010)

@@ -11,9 +11,9 @@ func is_bored(S: String) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(is_bored(S: Hello world) == 0)
+assert(is_bored(S: Is the sky blue?) == 0)
+assert(is_bored(S: I love It !) == 1)
+assert(is_bored(S: bIt) == 0)
+assert(is_bored(S: I feel good today. I will be productive. will kill It) == 2)
+assert(is_bored(S: You and I are going for a walk) == 0)

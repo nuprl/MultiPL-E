@@ -10,11 +10,11 @@ func split_words(txt: String) -> Result<[String], Int> {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(split_words(txt: Hello world!) == .success([Hello, world!]))
+assert(split_words(txt: Hello,world!) == .success([Hello, world!]))
+assert(split_words(txt: Hello world,!) == .success([Hello, world,!]))
+assert(split_words(txt: Hello,Hello,world !) == .success([Hello,Hello,world, !]))
+assert(split_words(txt: abcdef) == .failure(3))
+assert(split_words(txt: aaabb) == .failure(2))
+assert(split_words(txt: aaaBb) == .failure(1))
+assert(split_words(txt: ) == .failure(0))

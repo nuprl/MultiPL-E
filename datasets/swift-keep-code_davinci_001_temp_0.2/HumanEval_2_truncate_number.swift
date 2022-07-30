@@ -9,6 +9,6 @@ func truncate_number(number: Double) -> Double {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
+assert(truncate_number(number: 3.5) == 0.5)
+assert(truncate_number(number: 1.25) == 0.25)
+assert(truncate_number(number: 123.0) == 0.0)

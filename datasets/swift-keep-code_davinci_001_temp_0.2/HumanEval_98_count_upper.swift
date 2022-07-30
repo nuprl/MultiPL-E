@@ -8,10 +8,10 @@ func count_upper(s: String) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(count_upper(s: aBCdEf) == 1)
+assert(count_upper(s: abcdefg) == 0)
+assert(count_upper(s: dBBE) == 0)
+assert(count_upper(s: B) == 0)
+assert(count_upper(s: U) == 1)
+assert(count_upper(s: ) == 0)
+assert(count_upper(s: EEEE) == 2)

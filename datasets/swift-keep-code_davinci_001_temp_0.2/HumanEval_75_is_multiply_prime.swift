@@ -9,13 +9,13 @@ func is_multiply_prime(a: Int) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(is_multiply_prime(a: 5) == false)
+assert(is_multiply_prime(a: 30) == true)
+assert(is_multiply_prime(a: 8) == true)
+assert(is_multiply_prime(a: 10) == false)
+assert(is_multiply_prime(a: 125) == true)
+assert(is_multiply_prime(a: 105) == true)
+assert(is_multiply_prime(a: 126) == false)
+assert(is_multiply_prime(a: 729) == false)
+assert(is_multiply_prime(a: 891) == false)
+assert(is_multiply_prime(a: 1001) == true)

@@ -14,10 +14,10 @@ func select_words(s: String, n: Int) -> [String] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(select_words(s: Mary had a little lamb, n: 4) == [little])
+assert(select_words(s: Mary had a little lamb, n: 3) == [Mary, lamb])
+assert(select_words(s: simple white space, n: 2) == [])
+assert(select_words(s: Hello world, n: 4) == [world])
+assert(select_words(s: Uncle sam, n: 3) == [Uncle])
+assert(select_words(s: , n: 4) == [])
+assert(select_words(s: a b c d e f, n: 1) == [b, c, d, f])

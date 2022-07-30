@@ -15,10 +15,10 @@ func fibfib(n: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(fibfib(n: 2) == 1)
+assert(fibfib(n: 1) == 0)
+assert(fibfib(n: 5) == 4)
+assert(fibfib(n: 8) == 24)
+assert(fibfib(n: 10) == 81)
+assert(fibfib(n: 12) == 274)
+assert(fibfib(n: 14) == 927)

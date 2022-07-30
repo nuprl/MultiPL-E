@@ -11,12 +11,12 @@ func triangle_area(a: Int, b: Int, c: Int) -> Double {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(triangle_area(a: 3, b: 4, c: 5) == 6.0)
+assert(triangle_area(a: 1, b: 2, c: 10) == -1)
+assert(triangle_area(a: 4, b: 8, c: 5) == 8.18)
+assert(triangle_area(a: 2, b: 2, c: 2) == 1.73)
+assert(triangle_area(a: 1, b: 2, c: 3) == -1)
+assert(triangle_area(a: 10, b: 5, c: 7) == 16.25)
+assert(triangle_area(a: 2, b: 6, c: 3) == -1)
+assert(triangle_area(a: 1, b: 1, c: 1) == 0.43)
+assert(triangle_area(a: 2, b: 2, c: 10) == -1)

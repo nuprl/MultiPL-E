@@ -12,12 +12,12 @@ func reverse_delete(s: String, c: String) -> (String, Bool) {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(reverse_delete(s: abcde, c: ae) == (bcd, false))
+assert(reverse_delete(s: abcdef, c: b) == (acdef, false))
+assert(reverse_delete(s: abcdedcba, c: ab) == (cdedc, true))
+assert(reverse_delete(s: dwik, c: w) == (dik, false))
+assert(reverse_delete(s: a, c: a) == (, true))
+assert(reverse_delete(s: abcdedcba, c: ) == (abcdedcba, true))
+assert(reverse_delete(s: abcdedcba, c: v) == (abcdedcba, true))
+assert(reverse_delete(s: vabba, c: v) == (abba, true))
+assert(reverse_delete(s: mamma, c: mia) == (, true))

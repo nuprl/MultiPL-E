@@ -14,13 +14,13 @@ func prime_fib(n: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(prime_fib(n: 1) == 2)
+assert(prime_fib(n: 2) == 3)
+assert(prime_fib(n: 3) == 5)
+assert(prime_fib(n: 4) == 13)
+assert(prime_fib(n: 5) == 89)
+assert(prime_fib(n: 6) == 233)
+assert(prime_fib(n: 7) == 1597)
+assert(prime_fib(n: 8) == 28657)
+assert(prime_fib(n: 9) == 514229)
+assert(prime_fib(n: 10) == 433494437)

@@ -12,11 +12,11 @@ func factorize(n: Int) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(factorize(n: 2) == [2])
+assert(factorize(n: 4) == [2, 2])
+assert(factorize(n: 8) == [2, 2, 2])
+assert(factorize(n: 57) == [3, 19])
+assert(factorize(n: 3249) == [3, 3, 19, 19])
+assert(factorize(n: 185193) == [3, 3, 3, 19, 19, 19])
+assert(factorize(n: 20577) == [3, 19, 19, 19])
+assert(factorize(n: 18) == [2, 3, 3])

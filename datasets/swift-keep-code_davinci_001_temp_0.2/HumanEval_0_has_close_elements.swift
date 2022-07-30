@@ -9,10 +9,10 @@ func has_close_elements(numbers: [Double], threshold: Double) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(has_close_elements(numbers: [1.0, 2.0, 3.9, 4.0, 5.0, 2.2], threshold: 0.3) == true)
+assert(has_close_elements(numbers: [1.0, 2.0, 3.9, 4.0, 5.0, 2.2], threshold: 0.05) == false)
+assert(has_close_elements(numbers: [1.0, 2.0, 5.9, 4.0, 5.0], threshold: 0.95) == true)
+assert(has_close_elements(numbers: [1.0, 2.0, 5.9, 4.0, 5.0], threshold: 0.8) == false)
+assert(has_close_elements(numbers: [1.0, 2.0, 3.0, 4.0, 5.0, 2.0], threshold: 0.1) == true)
+assert(has_close_elements(numbers: [1.1, 2.2, 3.1, 4.1, 5.1], threshold: 1.0) == true)
+assert(has_close_elements(numbers: [1.1, 2.2, 3.1, 4.1, 5.1], threshold: 0.5) == false)

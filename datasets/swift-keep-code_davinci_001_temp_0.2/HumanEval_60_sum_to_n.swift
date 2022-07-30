@@ -14,8 +14,8 @@ func sum_to_n(n: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(sum_to_n(n: 1) == 1)
+assert(sum_to_n(n: 6) == 21)
+assert(sum_to_n(n: 11) == 66)
+assert(sum_to_n(n: 30) == 465)
+assert(sum_to_n(n: 100) == 5050)

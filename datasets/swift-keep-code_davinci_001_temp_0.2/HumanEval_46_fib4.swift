@@ -16,7 +16,7 @@ func fib4(n: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(fib4(n: 5) == 4)
+assert(fib4(n: 8) == 28)
+assert(fib4(n: 10) == 104)
+assert(fib4(n: 12) == 386)

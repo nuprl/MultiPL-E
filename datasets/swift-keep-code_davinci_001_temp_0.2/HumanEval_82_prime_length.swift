@@ -10,19 +10,19 @@ func prime_length(string: String) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(prime_length(string: Hello) == true)
+assert(prime_length(string: abcdcba) == true)
+assert(prime_length(string: kittens) == true)
+assert(prime_length(string: orange) == false)
+assert(prime_length(string: wow) == true)
+assert(prime_length(string: world) == true)
+assert(prime_length(string: MadaM) == true)
+assert(prime_length(string: Wow) == true)
+assert(prime_length(string: ) == false)
+assert(prime_length(string: HI) == true)
+assert(prime_length(string: go) == true)
+assert(prime_length(string: gogo) == false)
+assert(prime_length(string: aaaaaaaaaaaaaaa) == false)
+assert(prime_length(string: Madam) == true)
+assert(prime_length(string: M) == false)
+assert(prime_length(string: 0) == false)

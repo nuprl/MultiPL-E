@@ -11,11 +11,11 @@ func compare_one(a: UNIMPLEMENTED UNIONS, b: UNIMPLEMENTED UNIONS) -> UNIMPLEMEN
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(compare_one(a: .caseInt, b: .caseInt) == .caseInt)
+assert(compare_one(a: .caseInt, b: .caseDouble) == .caseDouble)
+assert(compare_one(a: .caseInt, b: .caseInt) == .caseInt)
+assert(compare_one(a: .caseInt, b: .caseInt) == .caseInt)
+assert(compare_one(a: .caseInt, b: .caseString) == .caseString)
+assert(compare_one(a: .caseString, b: .caseString) == .caseString)
+assert(compare_one(a: .caseString, b: .caseString) == .caseString)
+assert(compare_one(a: .caseString, b: .caseInt) == nil)

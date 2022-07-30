@@ -30,8 +30,8 @@ func max_fill(grid: [[Int]], capacity: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(max_fill(grid: [[0, 0, 1, 0], [0, 1, 0, 0], [1, 1, 1, 1]], capacity: 1) == 6)
+assert(max_fill(grid: [[0, 0, 1, 1], [0, 0, 0, 0], [1, 1, 1, 1], [0, 1, 1, 1]], capacity: 2) == 5)
+assert(max_fill(grid: [[0, 0, 0], [0, 0, 0]], capacity: 5) == 0)
+assert(max_fill(grid: [[1, 1, 1, 1], [1, 1, 1, 1]], capacity: 2) == 4)
+assert(max_fill(grid: [[1, 1, 1, 1], [1, 1, 1, 1]], capacity: 9) == 2)

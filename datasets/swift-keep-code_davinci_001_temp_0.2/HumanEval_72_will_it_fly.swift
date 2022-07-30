@@ -14,9 +14,9 @@ func will_it_fly(q: [Int], w: Int) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(will_it_fly(q: [3, 2, 3], w: 9) == true)
+assert(will_it_fly(q: [1, 2], w: 5) == false)
+assert(will_it_fly(q: [3], w: 5) == true)
+assert(will_it_fly(q: [3, 2, 3], w: 1) == false)
+assert(will_it_fly(q: [1, 2, 3], w: 6) == false)
+assert(will_it_fly(q: [5], w: 5) == true)

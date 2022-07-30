@@ -14,10 +14,12 @@ func remove_vowels(text: String) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(remove_vowels(text: ) == )
+assert(remove_vowels(text: abcdef
+ghijklm) == bcdf
+ghjklm)
+assert(remove_vowels(text: fedcba) == fdcb)
+assert(remove_vowels(text: eeeee) == )
+assert(remove_vowels(text: acBAA) == cB)
+assert(remove_vowels(text: EcBOO) == cB)
+assert(remove_vowels(text: ybcd) == ybcd)

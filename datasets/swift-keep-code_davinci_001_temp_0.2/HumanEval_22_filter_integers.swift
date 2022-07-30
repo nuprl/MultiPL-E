@@ -8,6 +8,6 @@ func filter_integers(values: [any]) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
+assert(filter_integers(values: []) == [])
+assert(filter_integers(values: [4, [], [], 23.2, 9, adasd]) == [4, 9])
+assert(filter_integers(values: [3, c, 3, 3, a, b]) == [3, 3, 3])

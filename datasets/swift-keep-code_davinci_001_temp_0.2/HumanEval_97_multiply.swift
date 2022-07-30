@@ -11,11 +11,11 @@ func multiply(a: Int, b: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(multiply(a: 148, b: 412) == 16)
+assert(multiply(a: 19, b: 28) == 72)
+assert(multiply(a: 2020, b: 1851) == 0)
+assert(multiply(a: 14, b: -15) == 20)
+assert(multiply(a: 76, b: 67) == 42)
+assert(multiply(a: 17, b: 27) == 49)
+assert(multiply(a: 0, b: 1) == 0)
+assert(multiply(a: 0, b: 0) == 0)

@@ -10,9 +10,9 @@ func cycpattern_check(a: String, b: String) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(cycpattern_check(a: xyzw, b: xyw) == false)
+assert(cycpattern_check(a: yello, b: ell) == true)
+assert(cycpattern_check(a: whattup, b: ptut) == false)
+assert(cycpattern_check(a: efef, b: fee) == true)
+assert(cycpattern_check(a: abab, b: aabb) == false)
+assert(cycpattern_check(a: winemtt, b: tinem) == true)

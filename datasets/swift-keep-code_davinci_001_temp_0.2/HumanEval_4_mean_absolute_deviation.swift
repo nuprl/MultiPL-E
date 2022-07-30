@@ -10,6 +10,6 @@ func mean_absolute_deviation(numbers: [Double]) -> Double {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
+assert(mean_absolute_deviation(numbers: [1.0, 2.0]) == 0.5)
+assert(mean_absolute_deviation(numbers: [1.0, 2.0, 3.0, 4.0]) == 1.0)
+assert(mean_absolute_deviation(numbers: [1.0, 2.0, 3.0, 4.0, 5.0]) == 1.2)

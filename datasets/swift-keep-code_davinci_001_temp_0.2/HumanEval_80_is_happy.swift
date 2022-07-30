@@ -13,11 +13,11 @@ func is_happy(s: String) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(is_happy(s: a) == false)
+assert(is_happy(s: aa) == false)
+assert(is_happy(s: abcd) == true)
+assert(is_happy(s: aabb) == false)
+assert(is_happy(s: adb) == true)
+assert(is_happy(s: xyy) == false)
+assert(is_happy(s: iopaxpoi) == true)
+assert(is_happy(s: iopaxioi) == false)

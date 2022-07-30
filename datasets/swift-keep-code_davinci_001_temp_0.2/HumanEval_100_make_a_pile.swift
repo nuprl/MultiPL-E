@@ -13,8 +13,8 @@ func make_a_pile(n: Int) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(make_a_pile(n: 3) == [3, 5, 7])
+assert(make_a_pile(n: 4) == [4, 6, 8, 10])
+assert(make_a_pile(n: 5) == [5, 7, 9, 11, 13])
+assert(make_a_pile(n: 6) == [6, 8, 10, 12, 14, 16])
+assert(make_a_pile(n: 8) == [8, 10, 12, 14, 16, 18, 20, 22])

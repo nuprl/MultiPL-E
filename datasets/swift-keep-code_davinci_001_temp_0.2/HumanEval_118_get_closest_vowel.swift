@@ -13,16 +13,16 @@ func get_closest_vowel(word: String) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(get_closest_vowel(word: yogurt) == u)
+assert(get_closest_vowel(word: full) == u)
+assert(get_closest_vowel(word: easy) == )
+assert(get_closest_vowel(word: eAsy) == )
+assert(get_closest_vowel(word: ali) == )
+assert(get_closest_vowel(word: bad) == a)
+assert(get_closest_vowel(word: most) == o)
+assert(get_closest_vowel(word: ab) == )
+assert(get_closest_vowel(word: ba) == )
+assert(get_closest_vowel(word: quick) == )
+assert(get_closest_vowel(word: anime) == i)
+assert(get_closest_vowel(word: Asia) == )
+assert(get_closest_vowel(word: Above) == o)

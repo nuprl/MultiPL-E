@@ -12,17 +12,17 @@ func is_nested(string: String) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(is_nested(string: [[]]) == true)
+assert(is_nested(string: []]]]]]][[[[[]) == false)
+assert(is_nested(string: [][]) == false)
+assert(is_nested(string: []) == false)
+assert(is_nested(string: [[[[]]]]) == true)
+assert(is_nested(string: []]]]]]]]]]) == false)
+assert(is_nested(string: [][][[]]) == true)
+assert(is_nested(string: [[]) == false)
+assert(is_nested(string: []]) == false)
+assert(is_nested(string: [[]][[) == true)
+assert(is_nested(string: [[][]]) == true)
+assert(is_nested(string: ) == false)
+assert(is_nested(string: [[[[[[[[) == false)
+assert(is_nested(string: ]]]]]]]]) == false)

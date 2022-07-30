@@ -19,11 +19,11 @@ func intersection(interval1: (Int, Int), interval2: (Int, Int)) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(intersection(interval1: (1, 2), interval2: (2, 3)) == NO)
+assert(intersection(interval1: (-1, 1), interval2: (0, 4)) == NO)
+assert(intersection(interval1: (-3, -1), interval2: (-5, 5)) == YES)
+assert(intersection(interval1: (-2, 2), interval2: (-4, 0)) == YES)
+assert(intersection(interval1: (-11, 2), interval2: (-1, -1)) == NO)
+assert(intersection(interval1: (1, 2), interval2: (3, 5)) == NO)
+assert(intersection(interval1: (1, 2), interval2: (1, 2)) == NO)
+assert(intersection(interval1: (-2, -2), interval2: (-3, -2)) == NO)

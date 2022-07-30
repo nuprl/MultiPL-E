@@ -18,14 +18,14 @@ func maximum(arr: [Int], k: Int) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(maximum(arr: [-3, -4, 5], k: 3) == [-4, -3, 5])
+assert(maximum(arr: [4, -4, 4], k: 2) == [4, 4])
+assert(maximum(arr: [-3, 2, 1, 2, -1, -2, 1], k: 1) == [2])
+assert(maximum(arr: [123, -123, 20, 0, 1, 2, -3], k: 3) == [2, 20, 123])
+assert(maximum(arr: [-123, 20, 0, 1, 2, -3], k: 4) == [0, 1, 2, 20])
+assert(maximum(arr: [5, 15, 0, 3, -13, -8, 0], k: 7) == [-13, -8, 0, 0, 3, 5, 15])
+assert(maximum(arr: [-1, 0, 2, 5, 3, -10], k: 2) == [3, 5])
+assert(maximum(arr: [1, 0, 5, -7], k: 1) == [5])
+assert(maximum(arr: [4, -4], k: 2) == [-4, 4])
+assert(maximum(arr: [-10, 10], k: 2) == [-10, 10])
+assert(maximum(arr: [1, 2, 3, -23, 243, -400, 0], k: 0) == [])

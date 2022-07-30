@@ -12,10 +12,10 @@ func is_palindrome(text: String) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(is_palindrome(text: ) == true)
+assert(is_palindrome(text: aba) == true)
+assert(is_palindrome(text: aaaaa) == true)
+assert(is_palindrome(text: zbcd) == false)
+assert(is_palindrome(text: xywyx) == true)
+assert(is_palindrome(text: xywyz) == false)
+assert(is_palindrome(text: xywzx) == false)

@@ -13,10 +13,10 @@ func fruit_distribution(s: String, n: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(fruit_distribution(s: 5 apples and 6 oranges, n: 19) == 8)
+assert(fruit_distribution(s: 5 apples and 6 oranges, n: 21) == 10)
+assert(fruit_distribution(s: 0 apples and 1 oranges, n: 3) == 2)
+assert(fruit_distribution(s: 1 apples and 0 oranges, n: 3) == 2)
+assert(fruit_distribution(s: 2 apples and 3 oranges, n: 100) == 95)
+assert(fruit_distribution(s: 2 apples and 3 oranges, n: 5) == 0)
+assert(fruit_distribution(s: 1 apples and 100 oranges, n: 120) == 19)

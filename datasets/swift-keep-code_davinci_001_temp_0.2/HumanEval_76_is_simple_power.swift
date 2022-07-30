@@ -13,13 +13,13 @@ func is_simple_power(x: Int, n: Int) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(is_simple_power(x: 16, n: 2) == true)
+assert(is_simple_power(x: 143214, n: 16) == false)
+assert(is_simple_power(x: 4, n: 2) == true)
+assert(is_simple_power(x: 9, n: 3) == true)
+assert(is_simple_power(x: 16, n: 4) == true)
+assert(is_simple_power(x: 24, n: 2) == false)
+assert(is_simple_power(x: 128, n: 4) == false)
+assert(is_simple_power(x: 12, n: 6) == false)
+assert(is_simple_power(x: 1, n: 1) == true)
+assert(is_simple_power(x: 1, n: 12) == true)

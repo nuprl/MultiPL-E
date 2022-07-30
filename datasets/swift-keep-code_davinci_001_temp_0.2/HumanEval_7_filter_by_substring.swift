@@ -8,7 +8,7 @@ func filter_by_substring(strings: [String], substring: String) -> [String] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(filter_by_substring(strings: [], substring: john) == [])
+assert(filter_by_substring(strings: [xxx, asd, xxy, john doe, xxxAAA, xxx], substring: xxx) == [xxx, xxxAAA, xxx])
+assert(filter_by_substring(strings: [xxx, asd, aaaxxy, john doe, xxxAAA, xxx], substring: xx) == [xxx, aaaxxy, xxxAAA, xxx])
+assert(filter_by_substring(strings: [grunt, trumpet, prune, gruesome], substring: run) == [grunt, prune])

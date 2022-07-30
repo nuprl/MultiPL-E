@@ -19,9 +19,9 @@ func hex_key(num: String) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(hex_key(num: AB) == 1)
+assert(hex_key(num: 1077E) == 2)
+assert(hex_key(num: ABED1A33) == 4)
+assert(hex_key(num: 2020) == 2)
+assert(hex_key(num: 123456789ABCDEF0) == 6)
+assert(hex_key(num: 112233445566778899AABBCCDDEEFF00) == 12)

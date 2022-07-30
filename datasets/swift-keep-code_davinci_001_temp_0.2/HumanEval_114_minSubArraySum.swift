@@ -8,15 +8,15 @@ func minSubArraySum(nums: [Int]) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(minSubArraySum(nums: [2, 3, 4, 1, 2, 4]) == 1)
+assert(minSubArraySum(nums: [-1, -2, -3]) == -6)
+assert(minSubArraySum(nums: [-1, -2, -3, 2, -10]) == -14)
+assert(minSubArraySum(nums: [-9999999999999999]) == -9999999999999999)
+assert(minSubArraySum(nums: [0, 10, 20, 1000000]) == 0)
+assert(minSubArraySum(nums: [-1, -2, -3, 10, -5]) == -6)
+assert(minSubArraySum(nums: [100, -1, -2, -3, 10, -5]) == -6)
+assert(minSubArraySum(nums: [10, 11, 13, 8, 3, 4]) == 3)
+assert(minSubArraySum(nums: [100, -33, 32, -1, 0, -2]) == -33)
+assert(minSubArraySum(nums: [-10]) == -10)
+assert(minSubArraySum(nums: [7]) == 7)
+assert(minSubArraySum(nums: [1, -1]) == -1)

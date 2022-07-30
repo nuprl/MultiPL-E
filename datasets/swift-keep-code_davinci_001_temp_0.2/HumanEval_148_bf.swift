@@ -16,10 +16,10 @@ func bf(planet1: String, planet2: String) -> [String] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(bf(planet1: Jupiter, planet2: Neptune) == (Saturn, Uranus))
+assert(bf(planet1: Earth, planet2: Mercury) == (Venus))
+assert(bf(planet1: Mercury, planet2: Uranus) == (Venus, Earth, Mars, Jupiter, Saturn))
+assert(bf(planet1: Neptune, planet2: Venus) == (Earth, Mars, Jupiter, Saturn, Uranus))
+assert(bf(planet1: Earth, planet2: Earth) == ())
+assert(bf(planet1: Mars, planet2: Earth) == ())
+assert(bf(planet1: Jupiter, planet2: Makemake) == ())

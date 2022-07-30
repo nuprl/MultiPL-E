@@ -11,7 +11,7 @@ func decimal_to_binary(decimal: Int) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(decimal_to_binary(decimal: 0) == db0db)
+assert(decimal_to_binary(decimal: 32) == db100000db)
+assert(decimal_to_binary(decimal: 103) == db1100111db)
+assert(decimal_to_binary(decimal: 15) == db1111db)

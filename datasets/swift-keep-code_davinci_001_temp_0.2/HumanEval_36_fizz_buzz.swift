@@ -10,11 +10,11 @@ func fizz_buzz(n: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(fizz_buzz(n: 50) == 0)
+assert(fizz_buzz(n: 78) == 2)
+assert(fizz_buzz(n: 79) == 3)
+assert(fizz_buzz(n: 100) == 3)
+assert(fizz_buzz(n: 200) == 6)
+assert(fizz_buzz(n: 4000) == 192)
+assert(fizz_buzz(n: 10000) == 639)
+assert(fizz_buzz(n: 100000) == 8026)

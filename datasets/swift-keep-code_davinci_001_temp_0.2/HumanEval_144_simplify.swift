@@ -11,16 +11,16 @@ func simplify(x: String, n: String) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(simplify(x: 1/5, n: 5/1) == true)
+assert(simplify(x: 1/6, n: 2/1) == false)
+assert(simplify(x: 5/1, n: 3/1) == true)
+assert(simplify(x: 7/10, n: 10/2) == false)
+assert(simplify(x: 2/10, n: 50/10) == true)
+assert(simplify(x: 7/2, n: 4/2) == true)
+assert(simplify(x: 11/6, n: 6/1) == true)
+assert(simplify(x: 2/3, n: 5/2) == false)
+assert(simplify(x: 5/2, n: 3/5) == false)
+assert(simplify(x: 2/4, n: 8/4) == true)
+assert(simplify(x: 2/4, n: 4/2) == true)
+assert(simplify(x: 1/5, n: 5/1) == true)
+assert(simplify(x: 1/5, n: 1/5) == false)

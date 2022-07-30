@@ -12,11 +12,11 @@ func encrypt(s: String) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(encrypt(s: hi) == lm)
+assert(encrypt(s: asdfghjkl) == ewhjklnop)
+assert(encrypt(s: gf) == kj)
+assert(encrypt(s: et) == ix)
+assert(encrypt(s: faewfawefaewg) == jeiajeaijeiak)
+assert(encrypt(s: hellomyfriend) == lippsqcjvmirh)
+assert(encrypt(s: dxzdlmnilfuhmilufhlihufnmlimnufhlimnufhfucufh) == hbdhpqrmpjylqmpyjlpmlyjrqpmqryjlpmqryjljygyjl)
+assert(encrypt(s: a) == e)

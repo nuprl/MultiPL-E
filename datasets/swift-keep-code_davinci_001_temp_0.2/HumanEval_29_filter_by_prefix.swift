@@ -8,5 +8,5 @@ func filter_by_prefix(strings: [String], prefix: String) -> [String] {
 
 }
 
-EQUALITY
-EQUALITY
+assert(filter_by_prefix(strings: [], prefix: john) == [])
+assert(filter_by_prefix(strings: [xxx, asd, xxy, john doe, xxxAAA, xxx], prefix: xxx) == [xxx, xxxAAA, xxx])

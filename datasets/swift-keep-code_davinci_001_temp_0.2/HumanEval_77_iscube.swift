@@ -13,11 +13,11 @@ func iscube(a: Int) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(iscube(a: 1) == true)
+assert(iscube(a: 2) == false)
+assert(iscube(a: -1) == true)
+assert(iscube(a: 64) == true)
+assert(iscube(a: 180) == false)
+assert(iscube(a: 1000) == true)
+assert(iscube(a: 0) == true)
+assert(iscube(a: 1729) == false)

@@ -7,11 +7,11 @@ func even_odd_count(num: Int) -> (Int, Int) {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(even_odd_count(num: 7) == (0, 1))
+assert(even_odd_count(num: -78) == (1, 1))
+assert(even_odd_count(num: 3452) == (2, 2))
+assert(even_odd_count(num: 346211) == (3, 3))
+assert(even_odd_count(num: -345821) == (3, 3))
+assert(even_odd_count(num: -2) == (1, 0))
+assert(even_odd_count(num: -45347) == (2, 3))
+assert(even_odd_count(num: 0) == (1, 0))

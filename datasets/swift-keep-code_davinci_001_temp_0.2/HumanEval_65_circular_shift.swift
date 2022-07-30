@@ -10,8 +10,8 @@ func circular_shift(x: Int, shift: Int) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(circular_shift(x: 100, shift: 2) == 001)
+assert(circular_shift(x: 12, shift: 2) == 12)
+assert(circular_shift(x: 97, shift: 8) == 79)
+assert(circular_shift(x: 12, shift: 1) == 21)
+assert(circular_shift(x: 11, shift: 101) == 11)

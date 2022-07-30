@@ -10,8 +10,8 @@ func fix_spaces(text: String) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(fix_spaces(text: Example) == Example)
+assert(fix_spaces(text: Mudasir Hanif ) == Mudasir_Hanif_)
+assert(fix_spaces(text: Yellow Yellow  Dirty  Fellow) == Yellow_Yellow__Dirty__Fellow)
+assert(fix_spaces(text: Exa   mple) == Exa-mple)
+assert(fix_spaces(text:    Exa 1 2 2 mple) == -Exa_1_2_2_mple)

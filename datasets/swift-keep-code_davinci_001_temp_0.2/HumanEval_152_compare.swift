@@ -13,7 +13,7 @@ func compare(game: [Int], guess: [Int]) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(compare(game: [1, 2, 3, 4, 5, 1], guess: [1, 2, 3, 4, 2, -2]) == [0, 0, 0, 0, 3, 3])
+assert(compare(game: [0, 0, 0, 0, 0, 0], guess: [0, 0, 0, 0, 0, 0]) == [0, 0, 0, 0, 0, 0])
+assert(compare(game: [1, 2, 3], guess: [-1, -2, -3]) == [2, 4, 6])
+assert(compare(game: [1, 2, 3, 5], guess: [-1, 2, 3, 4]) == [2, 0, 0, 1])

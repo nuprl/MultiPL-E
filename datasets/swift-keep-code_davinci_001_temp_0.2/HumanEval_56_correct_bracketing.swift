@@ -13,15 +13,15 @@ func correct_bracketing(brackets: String) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(correct_bracketing(brackets: <>) == true)
+assert(correct_bracketing(brackets: <<><>>) == true)
+assert(correct_bracketing(brackets: <><><<><>><>) == true)
+assert(correct_bracketing(brackets: <><><<<><><>><>><<><><<>>>) == true)
+assert(correct_bracketing(brackets: <<<><>>>>) == false)
+assert(correct_bracketing(brackets: ><<>) == false)
+assert(correct_bracketing(brackets: <) == false)
+assert(correct_bracketing(brackets: <<<<) == false)
+assert(correct_bracketing(brackets: >) == false)
+assert(correct_bracketing(brackets: <<>) == false)
+assert(correct_bracketing(brackets: <><><<><>><>><<>) == false)
+assert(correct_bracketing(brackets: <><><<><>><>>><>) == false)

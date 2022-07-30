@@ -14,15 +14,15 @@ func match_parens(lst: [String]) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(match_parens(lst: [()(, )]) == Yes)
+assert(match_parens(lst: [), )]) == No)
+assert(match_parens(lst: [(()(()), ())())]) == No)
+assert(match_parens(lst: [)()), (()()(]) == Yes)
+assert(match_parens(lst: [(()))), (()())((]) == Yes)
+assert(match_parens(lst: [(), ())]) == No)
+assert(match_parens(lst: [(()(, ()))()]) == Yes)
+assert(match_parens(lst: [((((, ((())]) == No)
+assert(match_parens(lst: [)((), (()(]) == No)
+assert(match_parens(lst: [)(, )(]) == No)
+assert(match_parens(lst: [(, )]) == Yes)
+assert(match_parens(lst: [), (]) == Yes)

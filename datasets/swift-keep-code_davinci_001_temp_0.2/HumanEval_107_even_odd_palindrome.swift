@@ -18,11 +18,11 @@ func even_odd_palindrome(n: Int) -> (Int, Int) {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(even_odd_palindrome(n: 123) == (8, 13))
+assert(even_odd_palindrome(n: 12) == (4, 6))
+assert(even_odd_palindrome(n: 3) == (1, 2))
+assert(even_odd_palindrome(n: 63) == (6, 8))
+assert(even_odd_palindrome(n: 25) == (5, 6))
+assert(even_odd_palindrome(n: 19) == (4, 6))
+assert(even_odd_palindrome(n: 9) == (4, 5))
+assert(even_odd_palindrome(n: 1) == (0, 1))

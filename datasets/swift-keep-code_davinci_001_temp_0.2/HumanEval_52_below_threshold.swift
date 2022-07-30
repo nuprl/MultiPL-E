@@ -8,9 +8,9 @@ func below_threshold(l: [Int], t: Int) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(below_threshold(l: [1, 2, 4, 10], t: 100) == true)
+assert(below_threshold(l: [1, 20, 4, 10], t: 5) == false)
+assert(below_threshold(l: [1, 20, 4, 10], t: 21) == true)
+assert(below_threshold(l: [1, 20, 4, 10], t: 22) == true)
+assert(below_threshold(l: [1, 8, 4, 10], t: 11) == true)
+assert(below_threshold(l: [1, 8, 4, 10], t: 10) == false)

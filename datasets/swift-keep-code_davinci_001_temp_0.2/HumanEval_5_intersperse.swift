@@ -8,6 +8,6 @@ func intersperse(numbers: [Int], delimeter: Int) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
+assert(intersperse(numbers: [], delimeter: 7) == [])
+assert(intersperse(numbers: [5, 6, 3, 2], delimeter: 8) == [5, 8, 6, 8, 3, 8, 2])
+assert(intersperse(numbers: [2, 2, 2], delimeter: 2) == [2, 2, 2, 2, 2])

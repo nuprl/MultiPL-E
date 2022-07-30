@@ -6,6 +6,6 @@ func all_prefixes(string: String) -> [String] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
+assert(all_prefixes(string: ) == [])
+assert(all_prefixes(string: asdfgh) == [a, as, asd, asdf, asdfg, asdfgh])
+assert(all_prefixes(string: WWW) == [W, WW, WWW])

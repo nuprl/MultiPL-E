@@ -14,10 +14,10 @@ func exchange(lst1: [Int], lst2: [Int]) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(exchange(lst1: [1, 2, 3, 4], lst2: [1, 2, 3, 4]) == YES)
+assert(exchange(lst1: [1, 2, 3, 4], lst2: [1, 5, 3, 4]) == NO)
+assert(exchange(lst1: [1, 2, 3, 4], lst2: [2, 1, 4, 3]) == YES)
+assert(exchange(lst1: [5, 7, 3], lst2: [2, 6, 4]) == YES)
+assert(exchange(lst1: [5, 7, 3], lst2: [2, 6, 3]) == NO)
+assert(exchange(lst1: [3, 2, 6, 1, 8, 9], lst2: [3, 5, 5, 1, 1, 1]) == NO)
+assert(exchange(lst1: [100, 200], lst2: [200, 200]) == YES)

@@ -8,11 +8,11 @@ func is_equal_to_sum_even(n: Int) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(is_equal_to_sum_even(n: 4) == false)
+assert(is_equal_to_sum_even(n: 6) == false)
+assert(is_equal_to_sum_even(n: 8) == true)
+assert(is_equal_to_sum_even(n: 10) == true)
+assert(is_equal_to_sum_even(n: 11) == false)
+assert(is_equal_to_sum_even(n: 12) == true)
+assert(is_equal_to_sum_even(n: 13) == false)
+assert(is_equal_to_sum_even(n: 16) == true)

@@ -12,11 +12,11 @@ func histogram(test: String) -> [String : Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(histogram(test: a b b a) == [a : 2, b : 2])
+assert(histogram(test: a b c a b) == [a : 2, b : 2])
+assert(histogram(test: a b c d g) == [a : 1, b : 1, c : 1, d : 1, g : 1])
+assert(histogram(test: r t g) == [r : 1, t : 1, g : 1])
+assert(histogram(test: b b b b a) == [b : 4])
+assert(histogram(test: r t g) == [r : 1, t : 1, g : 1])
+assert(histogram(test: ) == [])
+assert(histogram(test: a) == [a : 1])

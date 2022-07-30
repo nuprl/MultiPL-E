@@ -12,13 +12,13 @@ func check_if_last_char_is_a_letter(txt: String) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(check_if_last_char_is_a_letter(txt: apple) == false)
+assert(check_if_last_char_is_a_letter(txt: apple pi e) == true)
+assert(check_if_last_char_is_a_letter(txt: eeeee) == false)
+assert(check_if_last_char_is_a_letter(txt: A) == true)
+assert(check_if_last_char_is_a_letter(txt: Pumpkin pie ) == false)
+assert(check_if_last_char_is_a_letter(txt: Pumpkin pie 1) == false)
+assert(check_if_last_char_is_a_letter(txt: ) == false)
+assert(check_if_last_char_is_a_letter(txt: eeeee e ) == false)
+assert(check_if_last_char_is_a_letter(txt: apple pie) == false)
+assert(check_if_last_char_is_a_letter(txt: apple pi e ) == false)

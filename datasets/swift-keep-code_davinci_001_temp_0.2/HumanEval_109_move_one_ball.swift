@@ -22,8 +22,8 @@ func move_one_ball(arr: [Int]) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(move_one_ball(arr: [3, 4, 5, 1, 2]) == true)
+assert(move_one_ball(arr: [3, 5, 10, 1, 2]) == true)
+assert(move_one_ball(arr: [4, 3, 1, 2]) == false)
+assert(move_one_ball(arr: [3, 5, 4, 1, 2]) == false)
+assert(move_one_ball(arr: []) == true)

@@ -11,8 +11,8 @@ func car_race_collision(n: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(car_race_collision(n: 2) == 4)
+assert(car_race_collision(n: 3) == 9)
+assert(car_race_collision(n: 4) == 16)
+assert(car_race_collision(n: 8) == 64)
+assert(car_race_collision(n: 10) == 100)

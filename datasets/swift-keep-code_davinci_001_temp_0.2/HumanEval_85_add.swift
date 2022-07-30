@@ -6,7 +6,7 @@ func add(lst: [Int]) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(add(lst: [4, 88]) == 88)
+assert(add(lst: [4, 5, 6, 7, 2, 122]) == 122)
+assert(add(lst: [4, 0, 6, 7]) == 0)
+assert(add(lst: [4, 4, 6, 8]) == 12)

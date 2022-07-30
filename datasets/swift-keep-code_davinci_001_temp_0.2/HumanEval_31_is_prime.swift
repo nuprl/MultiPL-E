@@ -18,16 +18,16 @@ func is_prime(n: Int) -> Bool {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(is_prime(n: 6) == false)
+assert(is_prime(n: 101) == true)
+assert(is_prime(n: 11) == true)
+assert(is_prime(n: 13441) == true)
+assert(is_prime(n: 61) == true)
+assert(is_prime(n: 4) == false)
+assert(is_prime(n: 1) == false)
+assert(is_prime(n: 5) == true)
+assert(is_prime(n: 11) == true)
+assert(is_prime(n: 17) == true)
+assert(is_prime(n: 85) == false)
+assert(is_prime(n: 77) == false)
+assert(is_prime(n: 255379) == false)

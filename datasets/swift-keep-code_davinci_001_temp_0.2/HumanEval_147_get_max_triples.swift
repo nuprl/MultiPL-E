@@ -13,7 +13,7 @@ func get_max_triples(n: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(get_max_triples(n: 5) == 1)
+assert(get_max_triples(n: 6) == 4)
+assert(get_max_triples(n: 10) == 36)
+assert(get_max_triples(n: 100) == 53361)

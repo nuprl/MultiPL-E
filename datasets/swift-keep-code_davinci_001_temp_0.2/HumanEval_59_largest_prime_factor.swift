@@ -8,8 +8,8 @@ func largest_prime_factor(n: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(largest_prime_factor(n: 15) == 5)
+assert(largest_prime_factor(n: 27) == 3)
+assert(largest_prime_factor(n: 63) == 7)
+assert(largest_prime_factor(n: 330) == 11)
+assert(largest_prime_factor(n: 13195) == 29)

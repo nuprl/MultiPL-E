@@ -6,6 +6,6 @@ func triangle_area(a: Int, h: Int) -> Double {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
+assert(triangle_area(a: 5, h: 3) == 7.5)
+assert(triangle_area(a: 2, h: 2) == 2.0)
+assert(triangle_area(a: 10, h: 8) == 40.0)

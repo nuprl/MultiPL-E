@@ -18,13 +18,13 @@ func tri(n: Int) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(tri(n: 3) == [1, 3, 2, 8])
+assert(tri(n: 4) == [1, 3, 2, 8, 3])
+assert(tri(n: 5) == [1, 3, 2, 8, 3, 15])
+assert(tri(n: 6) == [1, 3, 2, 8, 3, 15, 4])
+assert(tri(n: 7) == [1, 3, 2, 8, 3, 15, 4, 24])
+assert(tri(n: 8) == [1, 3, 2, 8, 3, 15, 4, 24, 5])
+assert(tri(n: 9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35])
+assert(tri(n: 20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11])
+assert(tri(n: 0) == [1])
+assert(tri(n: 1) == [1, 3])

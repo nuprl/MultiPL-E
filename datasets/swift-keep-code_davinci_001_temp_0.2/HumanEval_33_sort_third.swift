@@ -10,7 +10,7 @@ func sort_third(l: [Int]) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5])
+assert(sort_third(l: [5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5])
+assert(sort_third(l: [5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5])
+assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])

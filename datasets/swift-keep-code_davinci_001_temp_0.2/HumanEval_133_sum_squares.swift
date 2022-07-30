@@ -12,15 +12,15 @@ func sum_squares(lst: [Double]) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(sum_squares(lst: [1.0, 2.0, 3.0]) == 14)
+assert(sum_squares(lst: [1.0, 2.0, 3.0]) == 14)
+assert(sum_squares(lst: [1.0, 3.0, 5.0, 7.0]) == 84)
+assert(sum_squares(lst: [1.4, 4.2, 0.0]) == 29)
+assert(sum_squares(lst: [-2.4, 1.0, 1.0]) == 6)
+assert(sum_squares(lst: [100.0, 1.0, 15.0, 2.0]) == 10230)
+assert(sum_squares(lst: [10000.0, 10000.0]) == 200000000)
+assert(sum_squares(lst: [-1.4, 4.6, 6.3]) == 75)
+assert(sum_squares(lst: [-1.4, 17.9, 18.9, 19.9]) == 1086)
+assert(sum_squares(lst: [0.0]) == 0)
+assert(sum_squares(lst: [-1.0]) == 1)
+assert(sum_squares(lst: [-1.0, 1.0, 0.0]) == 2)

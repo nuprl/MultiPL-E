@@ -13,11 +13,11 @@ func digitSum(s: String) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(digitSum(s: ) == 0)
+assert(digitSum(s: abAB) == 131)
+assert(digitSum(s: abcCd) == 67)
+assert(digitSum(s: helloE) == 69)
+assert(digitSum(s: woArBld) == 131)
+assert(digitSum(s: aAaaaXa) == 153)
+assert(digitSum(s:  How are yOu?) == 151)
+assert(digitSum(s: You arE Very Smart) == 327)

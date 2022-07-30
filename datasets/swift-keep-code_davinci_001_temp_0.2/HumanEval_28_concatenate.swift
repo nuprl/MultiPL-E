@@ -8,6 +8,6 @@ func concatenate(strings: [String]) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
+assert(concatenate(strings: []) == )
+assert(concatenate(strings: [x, y, z]) == xyz)
+assert(concatenate(strings: [x, y, z, w, k]) == xyzwk)

@@ -8,8 +8,8 @@ func sort_numbers(numbers: String) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(sort_numbers(numbers: ) == )
+assert(sort_numbers(numbers: three) == three)
+assert(sort_numbers(numbers: three five nine) == three five nine)
+assert(sort_numbers(numbers: five zero four seven nine eight) == zero four five seven eight nine)
+assert(sort_numbers(numbers: six five four three two one zero) == zero one two three four five six)

@@ -10,7 +10,7 @@ func f(n: Int) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(f(n: 5) == [1, 2, 6, 24, 15])
+assert(f(n: 7) == [1, 2, 6, 24, 15, 720, 28])
+assert(f(n: 1) == [1])
+assert(f(n: 3) == [1, 2, 6])

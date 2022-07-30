@@ -8,6 +8,6 @@ func parse_nested_parens(paren_string: String) -> [Int] {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
+assert(parse_nested_parens(paren_string: (()()) ((())) () ((())()())) == [2, 3, 1, 3])
+assert(parse_nested_parens(paren_string: () (()) ((())) (((())))) == [1, 2, 3, 4])
+assert(parse_nested_parens(paren_string: (()(())((())))) == [4])

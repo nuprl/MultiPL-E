@@ -8,7 +8,7 @@ func greatest_common_divisor(a: Int, b: Int) -> Int {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(greatest_common_divisor(a: 3, b: 7) == 1)
+assert(greatest_common_divisor(a: 10, b: 15) == 5)
+assert(greatest_common_divisor(a: 49, b: 14) == 7)
+assert(greatest_common_divisor(a: 144, b: 60) == 12)

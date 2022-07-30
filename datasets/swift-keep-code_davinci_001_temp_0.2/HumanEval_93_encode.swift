@@ -13,8 +13,8 @@ func encode(message: String) -> String {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(encode(message: TEST) == tgst)
+assert(encode(message: Mudasir) == mWDCSKR)
+assert(encode(message: YES) == ygs)
+assert(encode(message: This is a message) == tHKS KS C MGSSCGG)
+assert(encode(message: I DoNt KnOw WhAt tO WrItE) == k dQnT kNqW wHcT Tq wRkTg)

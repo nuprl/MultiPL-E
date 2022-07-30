@@ -9,8 +9,8 @@ func sum_product(numbers: [Int]) -> (Int, Int) {
 
 }
 
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
-EQUALITY
+assert(sum_product(numbers: []) == (0, 1))
+assert(sum_product(numbers: [1, 1, 1]) == (3, 1))
+assert(sum_product(numbers: [100, 0]) == (100, 0))
+assert(sum_product(numbers: [3, 5, 7]) == (15, 105))
+assert(sum_product(numbers: [10]) == (10, 10))
