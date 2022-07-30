@@ -40,7 +40,7 @@ def eval_in_thread(problem, test_results, i):
     with tempfile.NamedTemporaryFile(suffix=file_ext, delete=True) as f:
         f.write(program.encode("utf-8"))
         f.flush()
-        result = eval_script(f)
+        result = eval_script(f.name)
         result_yaml = Result()
         result_yaml.program = program
         #TODO: make this eyesore not an eyesore 
