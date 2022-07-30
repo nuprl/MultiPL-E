@@ -1,3 +1,4 @@
+
 // Given a positive integer n, return the product of the odd digits.
 // Return 0 if all digits are even.
 // For example:
@@ -9,6 +10,19 @@ func digits(n: Int) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(digits(n: 5) == 5)
 assert(digits(n: 54) == 5)
 assert(digits(n: 120) == 1)

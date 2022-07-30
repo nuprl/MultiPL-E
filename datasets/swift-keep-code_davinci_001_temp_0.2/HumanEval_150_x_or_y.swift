@@ -1,3 +1,4 @@
+
 // A simple program which should return the value of x if n is 
 // a prime number and should return the value of y otherwise.
 // Examples:
@@ -8,6 +9,19 @@ func x_or_y(n: Int, x: Int, y: Int) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(x_or_y(n: 7, x: 34, y: 12) == 34)
 assert(x_or_y(n: 15, x: 8, y: 5) == 5)
 assert(x_or_y(n: 3, x: 33, y: 5212) == 33)

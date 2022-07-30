@@ -1,3 +1,4 @@
+
 // Write a function that accepts a list of strings as a parameter,
 // deletes the strings that have odd lengths from it,
 // and returns the resulted list with a sorted order,
@@ -16,10 +17,23 @@ func sorted_list_sum(lst: [String]) -> [String] {
 
 }
 
-assert(sorted_list_sum(lst: [aa, a, aaa]) == [aa])
-assert(sorted_list_sum(lst: [school, AI, asdf, b]) == [AI, asdf, school])
-assert(sorted_list_sum(lst: [d, b, c, a]) == [])
-assert(sorted_list_sum(lst: [d, dcba, abcd, a]) == [abcd, dcba])
-assert(sorted_list_sum(lst: [AI, ai, au]) == [AI, ai, au])
-assert(sorted_list_sum(lst: [a, b, b, c, c, a]) == [])
-assert(sorted_list_sum(lst: [aaaa, bbbb, dd, cc]) == [cc, dd, aaaa, bbbb])
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sorted_list_sum(lst: ["aa", "a", "aaa"]) == ["aa"])
+assert(sorted_list_sum(lst: ["school", "AI", "asdf", "b"]) == ["AI", "asdf", "school"])
+assert(sorted_list_sum(lst: ["d", "b", "c", "a"]) == [] as [String])
+assert(sorted_list_sum(lst: ["d", "dcba", "abcd", "a"]) == ["abcd", "dcba"])
+assert(sorted_list_sum(lst: ["AI", "ai", "au"]) == ["AI", "ai", "au"])
+assert(sorted_list_sum(lst: ["a", "b", "b", "c", "c", "a"]) == [] as [String])
+assert(sorted_list_sum(lst: ["aaaa", "bbbb", "dd", "cc"]) == ["cc", "dd", "aaaa", "bbbb"])

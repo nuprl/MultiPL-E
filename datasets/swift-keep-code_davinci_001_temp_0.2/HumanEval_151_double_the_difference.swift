@@ -1,3 +1,4 @@
+
 // Given a list of numbers, return the sum of squares of the numbers
 // in the list that are odd. Ignore numbers that are negative or not integers.
 // double_the_difference([1, 3, 2, 0]) == 1 + 9 + 0 + 0 = 10
@@ -10,7 +11,20 @@ func double_the_difference(lst: [Double]) -> Int {
 
 }
 
-assert(double_the_difference(lst: []) == 0)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(double_the_difference(lst: [] as [Double]) == 0)
 assert(double_the_difference(lst: [5.0, 4.0]) == 25)
 assert(double_the_difference(lst: [0.1, 0.2, 0.3]) == 0)
 assert(double_the_difference(lst: [-10.0, -20.0, -30.0]) == 0)

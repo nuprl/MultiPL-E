@@ -1,3 +1,4 @@
+
 // Given a string text, replace all spaces in it with underscores, 
 // and if a string has more than 2 consecutive spaces, 
 // then replace all consecutive spaces with - 
@@ -10,8 +11,21 @@ func fix_spaces(text: String) -> String {
 
 }
 
-assert(fix_spaces(text: Example) == Example)
-assert(fix_spaces(text: Mudasir Hanif ) == Mudasir_Hanif_)
-assert(fix_spaces(text: Yellow Yellow  Dirty  Fellow) == Yellow_Yellow__Dirty__Fellow)
-assert(fix_spaces(text: Exa   mple) == Exa-mple)
-assert(fix_spaces(text:    Exa 1 2 2 mple) == -Exa_1_2_2_mple)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(fix_spaces(text: "Example") == "Example")
+assert(fix_spaces(text: "Mudasir Hanif ") == "Mudasir_Hanif_")
+assert(fix_spaces(text: "Yellow Yellow  Dirty  Fellow") == "Yellow_Yellow__Dirty__Fellow")
+assert(fix_spaces(text: "Exa   mple") == "Exa-mple")
+assert(fix_spaces(text: "   Exa 1 2 2 mple") == "-Exa_1_2_2_mple")

@@ -1,3 +1,4 @@
+
 // Given a positive integer n, return a tuple that has the number of even and odd
 // integer palindromes that fall within the range(1, n), inclusive.
 // Example 1:
@@ -18,6 +19,19 @@ func even_odd_palindrome(n: Int) -> (Int, Int) {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(even_odd_palindrome(n: 123) == (8, 13))
 assert(even_odd_palindrome(n: 12) == (4, 6))
 assert(even_odd_palindrome(n: 3) == (1, 2))

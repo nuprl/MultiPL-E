@@ -1,3 +1,4 @@
+
 // I think we all remember that feeling when the result of some long-awaited
 // event is finally known. The feelings and thoughts you have at that moment are
 // definitely worth noting down and comparing.
@@ -13,6 +14,19 @@ func compare(game: [Int], guess: [Int]) -> [Int] {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(compare(game: [1, 2, 3, 4, 5, 1], guess: [1, 2, 3, 4, 2, -2]) == [0, 0, 0, 0, 3, 3])
 assert(compare(game: [0, 0, 0, 0, 0, 0], guess: [0, 0, 0, 0, 0, 0]) == [0, 0, 0, 0, 0, 0])
 assert(compare(game: [1, 2, 3], guess: [-1, -2, -3]) == [2, 4, 6])

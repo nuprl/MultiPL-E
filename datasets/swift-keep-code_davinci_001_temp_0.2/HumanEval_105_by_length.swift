@@ -1,3 +1,4 @@
+
 // Given an array of integers, sort the integers that are between 1 and 9 inclusive,
 // reverse the resulting array, and then replace each digit by its corresponding name from
 // "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine".
@@ -19,8 +20,21 @@ func by_length(arr: [Int]) -> [String] {
 
 }
 
-assert(by_length(arr: [2, 1, 1, 4, 5, 8, 2, 3]) == [Eight, Five, Four, Three, Two, Two, One, One])
-assert(by_length(arr: []) == [])
-assert(by_length(arr: [1, -1, 55]) == [One])
-assert(by_length(arr: [1, -1, 3, 2]) == [Three, Two, One])
-assert(by_length(arr: [9, 4, 8]) == [Nine, Eight, Four])
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(by_length(arr: [2, 1, 1, 4, 5, 8, 2, 3]) == ["Eight", "Five", "Four", "Three", "Two", "Two", "One", "One"])
+assert(by_length(arr: [] as [Int]) == [] as [String])
+assert(by_length(arr: [1, -1, 55]) == ["One"])
+assert(by_length(arr: [1, -1, 3, 2]) == ["Three", "Two", "One"])
+assert(by_length(arr: [9, 4, 8]) == ["Nine", "Eight", "Four"])

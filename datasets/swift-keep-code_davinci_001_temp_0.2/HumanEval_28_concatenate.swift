@@ -1,3 +1,4 @@
+
 // Concatenate list of strings into a single string
 // >>> concatenate([])
 // ''
@@ -8,6 +9,19 @@ func concatenate(strings: [String]) -> String {
 
 }
 
-assert(concatenate(strings: []) == )
-assert(concatenate(strings: [x, y, z]) == xyz)
-assert(concatenate(strings: [x, y, z, w, k]) == xyzwk)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(concatenate(strings: [] as [String]) == "")
+assert(concatenate(strings: ["x", "y", "z"]) == "xyz")
+assert(concatenate(strings: ["x", "y", "z", "w", "k"]) == "xyzwk")

@@ -1,3 +1,4 @@
+
 // Return median of elements in the list l.
 // >>> median([3, 1, 2, 4, 5])
 // 3
@@ -8,6 +9,19 @@ func median(l: [Int]) -> Double {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(median(l: [3, 1, 2, 4, 5]) == 3)
 assert(median(l: [-10, 4, 6, 1000, 10, 20]) == 8.0)
 assert(median(l: [5]) == 5)

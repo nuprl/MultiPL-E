@@ -1,3 +1,4 @@
+
 // Create a function that takes a string as input which contains only square brackets.
 // The function should return True if and only if there is a valid subsequence of brackets 
 // where at least one bracket in the subsequence is nested.
@@ -12,17 +13,30 @@ func is_nested(string: String) -> Bool {
 
 }
 
-assert(is_nested(string: [[]]) == true)
-assert(is_nested(string: []]]]]]][[[[[]) == false)
-assert(is_nested(string: [][]) == false)
-assert(is_nested(string: []) == false)
-assert(is_nested(string: [[[[]]]]) == true)
-assert(is_nested(string: []]]]]]]]]]) == false)
-assert(is_nested(string: [][][[]]) == true)
-assert(is_nested(string: [[]) == false)
-assert(is_nested(string: []]) == false)
-assert(is_nested(string: [[]][[) == true)
-assert(is_nested(string: [[][]]) == true)
-assert(is_nested(string: ) == false)
-assert(is_nested(string: [[[[[[[[) == false)
-assert(is_nested(string: ]]]]]]]]) == false)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(is_nested(string: "[[]]") == true)
+assert(is_nested(string: "[]]]]]]][[[[[]") == false)
+assert(is_nested(string: "[][]") == false)
+assert(is_nested(string: "[]") == false)
+assert(is_nested(string: "[[[[]]]]") == true)
+assert(is_nested(string: "[]]]]]]]]]]") == false)
+assert(is_nested(string: "[][][[]]") == true)
+assert(is_nested(string: "[[]") == false)
+assert(is_nested(string: "[]]") == false)
+assert(is_nested(string: "[[]][[") == true)
+assert(is_nested(string: "[[][]]") == true)
+assert(is_nested(string: "") == false)
+assert(is_nested(string: "[[[[[[[[") == false)
+assert(is_nested(string: "]]]]]]]]") == false)

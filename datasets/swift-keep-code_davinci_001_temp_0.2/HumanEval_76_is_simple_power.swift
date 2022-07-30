@@ -1,3 +1,4 @@
+
 // Your task is to write a function that returns true if a number x is a simple
 // power of n and false in other cases.
 // x is a simple power of n if n**int=x
@@ -13,6 +14,19 @@ func is_simple_power(x: Int, n: Int) -> Bool {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(is_simple_power(x: 16, n: 2) == true)
 assert(is_simple_power(x: 143214, n: 16) == false)
 assert(is_simple_power(x: 4, n: 2) == true)

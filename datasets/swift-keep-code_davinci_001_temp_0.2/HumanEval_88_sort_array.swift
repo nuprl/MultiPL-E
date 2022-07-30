@@ -1,3 +1,4 @@
+
 // Given an array of non-negative integers, return a copy of the given array after sorting,
 // you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
 // or sort it in descending order if the sum( first index value, last index value) is even.
@@ -13,7 +14,20 @@ func sort_array(array: [Int]) -> [Int] {
 
 }
 
-assert(sort_array(array: []) == [])
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sort_array(array: [] as [Int]) == [] as [Int])
 assert(sort_array(array: [5]) == [5])
 assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
 assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])

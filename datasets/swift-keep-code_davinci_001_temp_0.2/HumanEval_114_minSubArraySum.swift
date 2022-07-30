@@ -1,3 +1,4 @@
+
 // Given an array of integers nums, find the minimum sum of any non-empty sub-array
 // of nums.
 // Example
@@ -8,6 +9,19 @@ func minSubArraySum(nums: [Int]) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(minSubArraySum(nums: [2, 3, 4, 1, 2, 4]) == 1)
 assert(minSubArraySum(nums: [-1, -2, -3]) == -6)
 assert(minSubArraySum(nums: [-1, -2, -3, 2, -10]) == -14)

@@ -1,3 +1,4 @@
+
 // Create a function that takes 3 numbers.
 // Returns true if one of the numbers is equal to the sum of the other two, and all numbers are integers.
 // Returns false in any other cases.
@@ -11,6 +12,19 @@ func any_int(x: Double, y: Double, z: Double) -> Bool {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(any_int(x: 2, y: 3, z: 1) == true)
 assert(any_int(x: 2.5, y: 2, z: 3) == false)
 assert(any_int(x: 1.5, y: 5, z: 3.5) == false)

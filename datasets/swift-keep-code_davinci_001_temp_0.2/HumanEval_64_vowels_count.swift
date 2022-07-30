@@ -1,3 +1,4 @@
+
 // Write a function vowels_count which takes a string representing
 // a word as input and returns the number of vowels in the string.
 // Vowels in this case are 'a', 'e', 'i', 'o', 'u'. Here, 'y' is also a
@@ -12,10 +13,23 @@ func vowels_count(s: String) -> Int {
 
 }
 
-assert(vowels_count(s: abcde) == 2)
-assert(vowels_count(s: Alone) == 3)
-assert(vowels_count(s: key) == 2)
-assert(vowels_count(s: bye) == 1)
-assert(vowels_count(s: keY) == 2)
-assert(vowels_count(s: bYe) == 1)
-assert(vowels_count(s: ACEDY) == 3)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(vowels_count(s: "abcde") == 2)
+assert(vowels_count(s: "Alone") == 3)
+assert(vowels_count(s: "key") == 2)
+assert(vowels_count(s: "bye") == 1)
+assert(vowels_count(s: "keY") == 2)
+assert(vowels_count(s: "bYe") == 1)
+assert(vowels_count(s: "ACEDY") == 3)

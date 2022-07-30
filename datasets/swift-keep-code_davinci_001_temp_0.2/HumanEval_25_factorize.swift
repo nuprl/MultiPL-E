@@ -1,3 +1,4 @@
+
 // Return list of prime factors of given integer in the order from smallest to largest.
 // Each of the factors should be listed number of times corresponding to how many times it appeares in factorization.
 // Input number should be equal to the product of all factors
@@ -12,6 +13,19 @@ func factorize(n: Int) -> [Int] {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(factorize(n: 2) == [2])
 assert(factorize(n: 4) == [2, 2])
 assert(factorize(n: 8) == [2, 2, 2])

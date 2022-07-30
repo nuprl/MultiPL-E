@@ -1,3 +1,4 @@
+
 // We have an array 'arr' of N integers arr[1], arr[2], ..., arr[N].The
 // numbers in the array will be randomly ordered. Your task is to determine if
 // it is possible to get an array sorted in non-decreasing order by performing 
@@ -22,8 +23,21 @@ func move_one_ball(arr: [Int]) -> Bool {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(move_one_ball(arr: [3, 4, 5, 1, 2]) == true)
 assert(move_one_ball(arr: [3, 5, 10, 1, 2]) == true)
 assert(move_one_ball(arr: [4, 3, 1, 2]) == false)
 assert(move_one_ball(arr: [3, 5, 4, 1, 2]) == false)
-assert(move_one_ball(arr: []) == true)
+assert(move_one_ball(arr: [] as [Int]) == true)

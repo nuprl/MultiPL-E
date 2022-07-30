@@ -1,3 +1,4 @@
+
 // The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
 // fib4(0) -> 0
 // fib4(1) -> 0
@@ -16,6 +17,19 @@ func fib4(n: Int) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(fib4(n: 5) == 4)
 assert(fib4(n: 8) == 28)
 assert(fib4(n: 10) == 104)

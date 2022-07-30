@@ -1,3 +1,4 @@
+
 // You are given a list of two strings, both strings consist of open
 // parentheses '(' or close parentheses ')' only.
 // Your job is to check if it is possible to concatenate the two strings in
@@ -14,15 +15,28 @@ func match_parens(lst: [String]) -> String {
 
 }
 
-assert(match_parens(lst: [()(, )]) == Yes)
-assert(match_parens(lst: [), )]) == No)
-assert(match_parens(lst: [(()(()), ())())]) == No)
-assert(match_parens(lst: [)()), (()()(]) == Yes)
-assert(match_parens(lst: [(()))), (()())((]) == Yes)
-assert(match_parens(lst: [(), ())]) == No)
-assert(match_parens(lst: [(()(, ()))()]) == Yes)
-assert(match_parens(lst: [((((, ((())]) == No)
-assert(match_parens(lst: [)((), (()(]) == No)
-assert(match_parens(lst: [)(, )(]) == No)
-assert(match_parens(lst: [(, )]) == Yes)
-assert(match_parens(lst: [), (]) == Yes)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(match_parens(lst: ["()(", ")"]) == "Yes")
+assert(match_parens(lst: [")", ")"]) == "No")
+assert(match_parens(lst: ["(()(())", "())())"]) == "No")
+assert(match_parens(lst: [")())", "(()()("]) == "Yes")
+assert(match_parens(lst: ["(())))", "(()())(("]) == "Yes")
+assert(match_parens(lst: ["()", "())"]) == "No")
+assert(match_parens(lst: ["(()(", "()))()"]) == "Yes")
+assert(match_parens(lst: ["((((", "((())"]) == "No")
+assert(match_parens(lst: [")(()", "(()("]) == "No")
+assert(match_parens(lst: [")(", ")("]) == "No")
+assert(match_parens(lst: ["(", ")"]) == "Yes")
+assert(match_parens(lst: [")", "("]) == "Yes")

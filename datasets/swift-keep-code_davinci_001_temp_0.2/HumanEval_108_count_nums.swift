@@ -1,3 +1,4 @@
+
 // Write a function count_nums which takes an array of integers and returns
 // the number of elements which has a sum of digits > 0.
 // If a number is negative, then its first signed digit will be negative:
@@ -10,7 +11,20 @@ func count_nums(arr: [Int]) -> Int {
 
 }
 
-assert(count_nums(arr: []) == 0)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(count_nums(arr: [] as [Int]) == 0)
 assert(count_nums(arr: [-1, -2, 0]) == 0)
 assert(count_nums(arr: [1, 1, 2, -2, 3, 4, 5]) == 6)
 assert(count_nums(arr: [1, 6, 9, -6, 0, 1, 5]) == 5)

@@ -1,3 +1,4 @@
+
 // You are given a string representing a sentence,
 // the sentence contains some words separated by a space,
 // and you have to return a string that contains the words from the original sentence,
@@ -17,10 +18,23 @@ func words_in_sentence(sentence: String) -> String {
 
 }
 
-assert(words_in_sentence(sentence: This is a test) == is)
-assert(words_in_sentence(sentence: lets go for swimming) == go for)
-assert(words_in_sentence(sentence: there is no place available here) == there is no place)
-assert(words_in_sentence(sentence: Hi I am Hussein) == Hi am Hussein)
-assert(words_in_sentence(sentence: go for it) == go for it)
-assert(words_in_sentence(sentence: here) == )
-assert(words_in_sentence(sentence: here is) == is)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(words_in_sentence(sentence: "This is a test") == "is")
+assert(words_in_sentence(sentence: "lets go for swimming") == "go for")
+assert(words_in_sentence(sentence: "there is no place available here") == "there is no place")
+assert(words_in_sentence(sentence: "Hi I am Hussein") == "Hi am Hussein")
+assert(words_in_sentence(sentence: "go for it") == "go for it")
+assert(words_in_sentence(sentence: "here") == "")
+assert(words_in_sentence(sentence: "here is") == "is")

@@ -1,3 +1,4 @@
+
 // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
 // the last couple centuries. However, what people don't know is Tribonacci sequence.
 // Tribonacci sequence is defined by the recurrence:
@@ -18,6 +19,19 @@ func tri(n: Int) -> [Int] {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(tri(n: 3) == [1, 3, 2, 8])
 assert(tri(n: 4) == [1, 3, 2, 8, 3])
 assert(tri(n: 5) == [1, 3, 2, 8, 3, 15])

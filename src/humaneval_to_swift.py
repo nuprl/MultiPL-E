@@ -39,7 +39,7 @@ class SwiftType(ABC):
     def gen_type(self) -> str:
         pass
 
-    def simplify(self) -> SwiftType:
+    def simplify(self, needs) -> SwiftType:
         return self
 
 class SwiftTypeString(SwiftType):
@@ -105,7 +105,7 @@ class SwiftTypeAny(SwiftType):
         return isinstance(other, type(self))
 
     def gen_type(self) -> str:
-        return "any" # TODO(donald): I'm not sure if this is right
+        return "AnyHashable"
     
 
 class SwiftTypeArray(SwiftType):
@@ -124,8 +124,8 @@ class SwiftTypeArray(SwiftType):
     def __eq__(self, other: object) -> bool:
         return isinstance(other, type(self)) and self.type_arg == other.type_arg
 
-    def simplify(self) -> SwiftType:
-        return SwiftTypeArray(self.type_arg.simplify())
+    def simplify(self, needs) -> SwiftType:
+        return SwiftTypeArray(self.type_arg.simplify(needs))
 
     def gen_type(self) -> str:
         return f"[{self.type_arg.gen_type()}]"
@@ -148,8 +148,8 @@ class SwiftTypeDictionary(SwiftType):
     def __eq__(self, other: object) -> bool:
         return isinstance(other, type(self)) and self.key_type_arg == other.key_type_arg and self.value_type_arg == other.value_type_arg
 
-    def simplify(self) -> SwiftType:
-        return SwiftTypeDictionary(self.key_type_arg.simplify(), self.value_type_arg.simplify())
+    def simplify(self, needs) -> SwiftType:
+        return SwiftTypeDictionary(self.key_type_arg.simplify(needs), self.value_type_arg.simplify(needs))
     
     def gen_type(self) -> str:
         return f"[{self.key_type_arg.gen_type()} : {self.value_type_arg.gen_type()}]"
@@ -170,8 +170,8 @@ class SwiftTypeOptional(SwiftType):
     def __eq__(self, other: object) -> bool:
         return isinstance(other, type(self)) and self.type_arg == other.type_arg
 
-    def simplify(self) -> SwiftType:
-        return SwiftTypeOptional(self.type_arg.simplify())
+    def simplify(self, needs) -> SwiftType:
+        return SwiftTypeOptional(self.type_arg.simplify(needs))
 
     def gen_type(self) -> str:
         return f"{self.type_arg.gen_type()}?"
@@ -192,8 +192,8 @@ class SwiftTypeTuple(SwiftType):
     def __eq__(self, other: object) -> bool:
         return isinstance(other, type(self)) and self.type_args == other.type_args
 
-    def simplify(self) -> SwiftType:
-        simpl = tuple(t.simplify() for t in self.type_args)
+    def simplify(self, needs) -> SwiftType:
+        simpl = tuple(t.simplify(needs) for t in self.type_args)
         if len(simpl) == 1:
             return simpl[0]
         else:
@@ -220,13 +220,16 @@ class SwiftTypeResult(SwiftType):
     def __eq__(self, other: object) -> bool:
         return isinstance(other, type(self)) and self.ok_type_arg == other.ok_type_arg and self.err_type_arg == other.err_type_arg
     
-    def simplify(self) -> SwiftType:
-        ok_s = self.ok_type_arg.simplify()
-        err_s = self.err_type_arg.simplify()
+    def simplify(self, needs) -> SwiftType:
+        ok_s = self.ok_type_arg.simplify(needs)
+        err_s = self.err_type_arg.simplify(needs)
         match err_s:
             case SwiftTypeTuple([]):
                 return SwiftTypeOptional(ok_s)
             case _other:
+                needs(f"""
+extension {err_s.gen_type()}: Error {{}}       
+                """)
                 return SwiftTypeResult(ok_s, err_s)
 
     def gen_type(self) -> str:
@@ -248,8 +251,8 @@ class SwiftTypeUnion(SwiftType):
     def __eq__(self, other: object) -> bool:
         return isinstance(other, type(self)) and self.case_types == other.case_types
     
-    def simplify(self) -> SwiftType:
-        case_types_simpl = OrderedDict.fromkeys(t.simplify() for t in self.case_types)
+    def simplify(self, needs) -> SwiftType:
+        case_types_simpl = OrderedDict.fromkeys(t.simplify(needs) for t in self.case_types)
         
         make_optional = SwiftTypeTuple(()) in case_types_simpl
         if make_optional:
@@ -261,12 +264,12 @@ class SwiftTypeUnion(SwiftType):
         elif len(case_types_simpl_final) == 1:
             non_optional_t = case_types_simpl_final[0]
         elif len(case_types_simpl_final) == 2:
-            non_optional_t = SwiftTypeResult(case_types_simpl_final[0], case_types_simpl_final[1]).simplify()
+            non_optional_t = SwiftTypeResult(case_types_simpl_final[0], case_types_simpl_final[1]).simplify(needs)
         else:
             non_optional_t = SwiftTypeUnion(OrderedDict.fromkeys(case_types_simpl_final))
 
         if make_optional:
-            return SwiftTypeOptional(non_optional_t).simplify()
+            return SwiftTypeOptional(non_optional_t).simplify(needs)
         else:
             return non_optional_t
 
@@ -293,7 +296,7 @@ def translate_expr_at_type_toplevel(e: ast.expr, t: SwiftType) -> str:
     return translated[0]
 
 def translate_literal_at_type(c: bool | str | int | float | None, t: SwiftType | None) -> Optional[Tuple[str, bool]]:
-    lit_str = f"{c}" # TODO(donald): not sure the format string is right
+    lit_str = f"{c}"
 
     untyped = t is None or type(t) == SwiftTypeAny
 
@@ -302,8 +305,13 @@ def translate_literal_at_type(c: bool | str | int | float | None, t: SwiftType |
             return ("true", False)
         else:
             return ("false", False)
-    elif type(c) == str and (type(t) == SwiftTypeString or untyped):
-        return (lit_str, False)
+    elif isinstance(c, str) and (type(t) == SwiftTypeString or untyped):
+        c = c.replace('\\', '\\\\')
+        c = c.replace('"', '\\"')
+        c = c.replace('\n', '\\n')
+        c = c.replace('\t', '\\t')
+        
+        return (f'"{c}"', False)
     elif type(c) == float and (type(t) == SwiftTypeDouble or untyped):
         return (lit_str, False)
     elif type(c) == int and (type(t) == SwiftTypeInt or untyped):
@@ -387,7 +395,11 @@ def translate_expr_at_type(e: ast.expr, t: SwiftType | None) -> Optional[Tuple[s
                 return None
             val_list = ", ".join(x[0] for x in non_nones)
             any_up = any(x[1] for x in non_nones)
-            return f"[{val_list}]", any_up
+            array_str = f"[{val_list}]"
+            if len(non_nones) == 0:
+                coerced_type_arg = type_arg if type_arg is not None else SwiftTypeAny()
+                array_str = f"{array_str} as [{coerced_type_arg.gen_type()}]"
+            return array_str, any_up
         case ast.Dict(keys=keys, values=values), _:
             if isinstance(t, SwiftTypeDictionary):
                 value_type_arg = t.value_type_arg
@@ -416,7 +428,15 @@ def translate_expr_at_type(e: ast.expr, t: SwiftType | None) -> Optional[Tuple[s
             val_list = ", ".join(vals_keys)
 
             any_up = any(val_up or key_up for ((_, val_up), (_, key_up)) in zip(vals_non_nones, keys_non_nones))
-            return f"[{val_list}]", any_up
+
+            if len(vals_keys) == 0:
+                coerced_key_type_arg = key_type_arg if key_type_arg is not None else SwiftTypeAny()
+                coerced_value_type_arg = value_type_arg if value_type_arg is not None else SwiftTypeAny()
+                dict_str = f"[:] as [{coerced_key_type_arg.gen_type()} : {coerced_value_type_arg.gen_type()}]"
+            else:
+                dict_str = f"[{val_list}]"
+
+            return dict_str, any_up
 
         case ast.Tuple(elts=elts), _:
             if isinstance(t, SwiftTypeTuple):
@@ -437,7 +457,15 @@ def translate_expr_at_type(e: ast.expr, t: SwiftType | None) -> Optional[Tuple[s
             
             val_list = ", ".join(x[0] for x in non_nones)
             any_up = any(x[1] for x in non_nones)
-            return f"({val_list})", any_up or isinstance(t, SwiftTypeArray)
+            
+            if isinstance(t, SwiftTypeArray):
+                final_str = f"[{val_list}]"
+                if len(non_nones) == 0:
+                    coerced_type_arg = t.type_arg if t.type_arg is not None else SwiftTypeAny()
+                    final_str = f"{final_str} as [{coerced_type_arg.gen_type()}]"
+            else:
+                final_str = f"({val_list})"
+            return final_str, any_up or isinstance(t, SwiftTypeArray)
 
         case _:
             raise Exception(f"Unhandled case: {e}, {t}")
@@ -541,15 +569,18 @@ class SwiftTranslator(LanguageTranslator[TargetExp]):
         """
         Translate Python prompt.
         """
+        needs = set()
+        add_need = lambda x: needs.add(x)
+
         self.candidate_name = name
-        self.param_names_types = [(arg.arg, self.translate_type(arg.annotation).simplify()) for arg in args]
-        self.return_type = self.translate_type(returns).simplify()
+        self.param_names_types = [(arg.arg, self.translate_type(arg.annotation).simplify(add_need)) for arg in args]
+        self.return_type = self.translate_type(returns).simplify(add_need)
 
-
+        swift_needs = '\n'.join(needs)
         swift_description = "// " + re.sub(DOCSTRING_LINESTART_RE, "\n// ", description.strip()) + "\n"
         swift_params = ", ".join([f"{name}: {ty.gen_type()}" for name, ty in self.param_names_types])
         swift_return = self.return_type.gen_type()
-        return f"{swift_description}func {name}({swift_params}) -> {swift_return} {{\n"
+        return f"{swift_needs}\n{swift_description}func {name}({swift_params}) -> {swift_return} {{\n"
     
     def file_ext(self) -> str:
         """
@@ -564,7 +595,22 @@ class SwiftTranslator(LanguageTranslator[TargetExp]):
         """
         return [
             "}",
-            ""
+            "",
+            # TODO(donald): autogenerate this for other types
+            """
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            """
+
         ]
 
     def test_suite_suffix_lines(self) -> List[str]:

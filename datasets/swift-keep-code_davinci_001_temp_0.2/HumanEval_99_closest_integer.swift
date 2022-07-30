@@ -1,3 +1,4 @@
+
 // Create a function that takes a value (string) representing a number
 // and returns the closest integer to it. If the number is equidistant
 // from two integers, round it away from zero.
@@ -16,8 +17,21 @@ func closest_integer(value: String) -> Int {
 
 }
 
-assert(closest_integer(value: 10) == 10)
-assert(closest_integer(value: 14.5) == 15)
-assert(closest_integer(value: -15.5) == -16)
-assert(closest_integer(value: 15.3) == 15)
-assert(closest_integer(value: 0) == 0)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(closest_integer(value: "10") == 10)
+assert(closest_integer(value: "14.5") == 15)
+assert(closest_integer(value: "-15.5") == -16)
+assert(closest_integer(value: "15.3") == 15)
+assert(closest_integer(value: "0") == 0)

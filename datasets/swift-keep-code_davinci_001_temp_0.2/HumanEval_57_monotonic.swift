@@ -1,3 +1,4 @@
+
 // Return True is list elements are monotonically increasing or decreasing.
 // >>> monotonic([1, 2, 4, 20])
 // True
@@ -10,6 +11,19 @@ func monotonic(l: [Int]) -> Bool {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(monotonic(l: [1, 2, 4, 10]) == true)
 assert(monotonic(l: [1, 2, 4, 20]) == true)
 assert(monotonic(l: [1, 20, 4, 10]) == false)

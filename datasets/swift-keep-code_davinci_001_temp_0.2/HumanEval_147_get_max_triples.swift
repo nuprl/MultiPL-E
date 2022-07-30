@@ -1,3 +1,4 @@
+
 // You are given a positive integer n. You have to create an integer array a of length n.
 // For each i (1 ≤ i ≤ n), the value of a[i] = i * i - i + 1.
 // Return the number of triples (a[i], a[j], a[k]) of a where i < j < k, 
@@ -13,6 +14,19 @@ func get_max_triples(n: Int) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(get_max_triples(n: 5) == 1)
 assert(get_max_triples(n: 6) == 4)
 assert(get_max_triples(n: 10) == 36)

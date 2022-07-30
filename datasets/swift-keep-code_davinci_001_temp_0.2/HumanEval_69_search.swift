@@ -1,3 +1,4 @@
+
 // You are given a non-empty list of positive integers. Return the greatest integer that is greater than 
 // zero, and has a frequency greater than or equal to the value of the integer itself. 
 // The frequency of an integer is the number of times it appears in the list.
@@ -11,6 +12,19 @@ func search(lst: [Int]) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(search(lst: [5, 5, 5, 5, 1]) == 1)
 assert(search(lst: [4, 1, 4, 1, 4, 4]) == 4)
 assert(search(lst: [3, 3]) == -1)

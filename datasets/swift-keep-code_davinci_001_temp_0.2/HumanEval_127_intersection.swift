@@ -1,3 +1,4 @@
+
 // You are given two intervals,
 // where each interval is a pair of integers. For example, interval = (start, end) = (1, 2).
 // The given intervals are closed which means that the interval (start, end)
@@ -19,11 +20,24 @@ func intersection(interval1: (Int, Int), interval2: (Int, Int)) -> String {
 
 }
 
-assert(intersection(interval1: (1, 2), interval2: (2, 3)) == NO)
-assert(intersection(interval1: (-1, 1), interval2: (0, 4)) == NO)
-assert(intersection(interval1: (-3, -1), interval2: (-5, 5)) == YES)
-assert(intersection(interval1: (-2, 2), interval2: (-4, 0)) == YES)
-assert(intersection(interval1: (-11, 2), interval2: (-1, -1)) == NO)
-assert(intersection(interval1: (1, 2), interval2: (3, 5)) == NO)
-assert(intersection(interval1: (1, 2), interval2: (1, 2)) == NO)
-assert(intersection(interval1: (-2, -2), interval2: (-3, -2)) == NO)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(intersection(interval1: (1, 2), interval2: (2, 3)) == "NO")
+assert(intersection(interval1: (-1, 1), interval2: (0, 4)) == "NO")
+assert(intersection(interval1: (-3, -1), interval2: (-5, 5)) == "YES")
+assert(intersection(interval1: (-2, 2), interval2: (-4, 0)) == "YES")
+assert(intersection(interval1: (-11, 2), interval2: (-1, -1)) == "NO")
+assert(intersection(interval1: (1, 2), interval2: (3, 5)) == "NO")
+assert(intersection(interval1: (1, 2), interval2: (1, 2)) == "NO")
+assert(intersection(interval1: (-2, -2), interval2: (-3, -2)) == "NO")

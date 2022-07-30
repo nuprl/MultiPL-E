@@ -1,3 +1,4 @@
+
 // Given a grid with N rows and N columns (N >= 2) and a positive integer k, 
 // each cell of the grid contains a value. Every integer in the range [1, N * N]
 // inclusive appears exactly once on the cells of the grid.
@@ -26,6 +27,19 @@ func minPath(grid: [[Int]], k: Int) -> [Int] {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(minPath(grid: [[1, 2, 3], [4, 5, 6], [7, 8, 9]], k: 3) == [1, 2, 1])
 assert(minPath(grid: [[5, 9, 3], [4, 1, 6], [7, 8, 2]], k: 1) == [1])
 assert(minPath(grid: [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]], k: 4) == [1, 2, 1, 2])

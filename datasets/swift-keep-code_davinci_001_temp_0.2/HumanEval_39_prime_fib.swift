@@ -1,3 +1,4 @@
+
 // prime_fib returns n-th number that is a Fibonacci number and it's also prime.
 // >>> prime_fib(1)
 // 2
@@ -14,6 +15,19 @@ func prime_fib(n: Int) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(prime_fib(n: 1) == 2)
 assert(prime_fib(n: 2) == 3)
 assert(prime_fib(n: 3) == 5)

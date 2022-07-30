@@ -1,3 +1,4 @@
+
 // You will be given the name of a class (a string) and a list of extensions.
 // The extensions are to be used to load additional classes to the class. The
 // strength of the extension is as follows: Let CAP be the number of the uppercase
@@ -18,12 +19,25 @@ func Strongest_Extension(class_name: String, extensions: [String]) -> String {
 
 }
 
-assert(Strongest_Extension(class_name: Watashi, extensions: [tEN, niNE, eIGHt8OKe]) == Watashi.eIGHt8OKe)
-assert(Strongest_Extension(class_name: Boku123, extensions: [nani, NazeDa, YEs.WeCaNe, 32145tggg]) == Boku123.YEs.WeCaNe)
-assert(Strongest_Extension(class_name: __YESIMHERE, extensions: [t, eMptY, nothing, zeR00, NuLl__, 123NoooneB321]) == __YESIMHERE.NuLl__)
-assert(Strongest_Extension(class_name: K, extensions: [Ta, TAR, t234An, cosSo]) == K.TAR)
-assert(Strongest_Extension(class_name: __HAHA, extensions: [Tab, 123, 781345, -_-]) == __HAHA.123)
-assert(Strongest_Extension(class_name: YameRore, extensions: [HhAas, okIWILL123, WorkOut, Fails, -_-]) == YameRore.okIWILL123)
-assert(Strongest_Extension(class_name: finNNalLLly, extensions: [Die, NowW, Wow, WoW]) == finNNalLLly.WoW)
-assert(Strongest_Extension(class_name: _, extensions: [Bb, 91245]) == _.Bb)
-assert(Strongest_Extension(class_name: Sp, extensions: [671235, Bb]) == Sp.671235)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(Strongest_Extension(class_name: "Watashi", extensions: ["tEN", "niNE", "eIGHt8OKe"]) == "Watashi.eIGHt8OKe")
+assert(Strongest_Extension(class_name: "Boku123", extensions: ["nani", "NazeDa", "YEs.WeCaNe", "32145tggg"]) == "Boku123.YEs.WeCaNe")
+assert(Strongest_Extension(class_name: "__YESIMHERE", extensions: ["t", "eMptY", "nothing", "zeR00", "NuLl__", "123NoooneB321"]) == "__YESIMHERE.NuLl__")
+assert(Strongest_Extension(class_name: "K", extensions: ["Ta", "TAR", "t234An", "cosSo"]) == "K.TAR")
+assert(Strongest_Extension(class_name: "__HAHA", extensions: ["Tab", "123", "781345", "-_-"]) == "__HAHA.123")
+assert(Strongest_Extension(class_name: "YameRore", extensions: ["HhAas", "okIWILL123", "WorkOut", "Fails", "-_-"]) == "YameRore.okIWILL123")
+assert(Strongest_Extension(class_name: "finNNalLLly", extensions: ["Die", "NowW", "Wow", "WoW"]) == "finNNalLLly.WoW")
+assert(Strongest_Extension(class_name: "_", extensions: ["Bb", "91245"]) == "_.Bb")
+assert(Strongest_Extension(class_name: "Sp", extensions: ["671235", "Bb"]) == "Sp.671235")

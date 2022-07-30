@@ -1,3 +1,4 @@
+
 // Task
 // Write a function that takes a string as input and returns the sum of the upper characters only'
 // ASCII codes.
@@ -13,11 +14,24 @@ func digitSum(s: String) -> Int {
 
 }
 
-assert(digitSum(s: ) == 0)
-assert(digitSum(s: abAB) == 131)
-assert(digitSum(s: abcCd) == 67)
-assert(digitSum(s: helloE) == 69)
-assert(digitSum(s: woArBld) == 131)
-assert(digitSum(s: aAaaaXa) == 153)
-assert(digitSum(s:  How are yOu?) == 151)
-assert(digitSum(s: You arE Very Smart) == 327)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(digitSum(s: "") == 0)
+assert(digitSum(s: "abAB") == 131)
+assert(digitSum(s: "abcCd") == 67)
+assert(digitSum(s: "helloE") == 69)
+assert(digitSum(s: "woArBld") == 131)
+assert(digitSum(s: "aAaaaXa") == 153)
+assert(digitSum(s: " How are yOu?") == 151)
+assert(digitSum(s: "You arE Very Smart") == 327)

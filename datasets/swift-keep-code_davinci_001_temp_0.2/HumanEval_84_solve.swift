@@ -1,3 +1,4 @@
+
 // Given a positive integer N, return the total sum of its digits in binary.
 // Example
 // For N = 1000, the sum of digits will be 1 the output should be "1".
@@ -13,8 +14,21 @@ func solve(N: Int) -> String {
 
 }
 
-assert(solve(N: 1000) == 1)
-assert(solve(N: 150) == 110)
-assert(solve(N: 147) == 1100)
-assert(solve(N: 333) == 1001)
-assert(solve(N: 963) == 10010)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(solve(N: 1000) == "1")
+assert(solve(N: 150) == "110")
+assert(solve(N: 147) == "1100")
+assert(solve(N: 333) == "1001")
+assert(solve(N: 963) == "10010")

@@ -1,3 +1,4 @@
+
 // triples_sum_to_zero takes a list of integers as an input.
 // it returns True if there are three distinct elements in the list that
 // sum to zero, and False otherwise.
@@ -16,6 +17,19 @@ func triples_sum_to_zero(l: [Int]) -> Bool {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(triples_sum_to_zero(l: [1, 3, 5, 0]) == false)
 assert(triples_sum_to_zero(l: [1, 3, 5, -1]) == false)
 assert(triples_sum_to_zero(l: [1, 3, -2, 1]) == true)

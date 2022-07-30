@@ -1,3 +1,4 @@
+
 // You are given a list of numbers.
 // You need to return the sum of squared numbers in the given list,
 // round each element in the list to the upper int(Ceiling) first.
@@ -12,6 +13,19 @@ func sum_squares(lst: [Double]) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(sum_squares(lst: [1.0, 2.0, 3.0]) == 14)
 assert(sum_squares(lst: [1.0, 2.0, 3.0]) == 14)
 assert(sum_squares(lst: [1.0, 3.0, 5.0, 7.0]) == 84)

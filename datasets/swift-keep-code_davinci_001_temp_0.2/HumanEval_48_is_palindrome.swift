@@ -1,3 +1,4 @@
+
 // Checks if given string is a palindrome
 // >>> is_palindrome('')
 // True
@@ -12,10 +13,23 @@ func is_palindrome(text: String) -> Bool {
 
 }
 
-assert(is_palindrome(text: ) == true)
-assert(is_palindrome(text: aba) == true)
-assert(is_palindrome(text: aaaaa) == true)
-assert(is_palindrome(text: zbcd) == false)
-assert(is_palindrome(text: xywyx) == true)
-assert(is_palindrome(text: xywyz) == false)
-assert(is_palindrome(text: xywzx) == false)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(is_palindrome(text: "") == true)
+assert(is_palindrome(text: "aba") == true)
+assert(is_palindrome(text: "aaaaa") == true)
+assert(is_palindrome(text: "zbcd") == false)
+assert(is_palindrome(text: "xywyx") == true)
+assert(is_palindrome(text: "xywyz") == false)
+assert(is_palindrome(text: "xywzx") == false)

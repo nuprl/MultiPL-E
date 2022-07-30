@@ -1,3 +1,4 @@
+
 // Add two numbers x and y
 // >>> add(2, 3)
 // 5
@@ -8,6 +9,19 @@ func add(x: Int, y: Int) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(add(x: 0, y: 1) == 1)
 assert(add(x: 1, y: 0) == 1)
 assert(add(x: 2, y: 3) == 5)

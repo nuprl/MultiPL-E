@@ -1,3 +1,4 @@
+
 // "
 // This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
 // multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
@@ -11,9 +12,22 @@ func sum_squares(lst: [Int]) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(sum_squares(lst: [1, 2, 3]) == 6)
 assert(sum_squares(lst: [1, 4, 9]) == 14)
-assert(sum_squares(lst: []) == 0)
+assert(sum_squares(lst: [] as [Int]) == 0)
 assert(sum_squares(lst: [1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9)
 assert(sum_squares(lst: [-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3)
 assert(sum_squares(lst: [0]) == 0)

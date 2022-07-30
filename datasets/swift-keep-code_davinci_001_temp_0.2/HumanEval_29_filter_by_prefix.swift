@@ -1,3 +1,4 @@
+
 // Filter an input list of strings only for ones that start with a given prefix.
 // >>> filter_by_prefix([], 'a')
 // []
@@ -8,5 +9,18 @@ func filter_by_prefix(strings: [String], prefix: String) -> [String] {
 
 }
 
-assert(filter_by_prefix(strings: [], prefix: john) == [])
-assert(filter_by_prefix(strings: [xxx, asd, xxy, john doe, xxxAAA, xxx], prefix: xxx) == [xxx, xxxAAA, xxx])
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(filter_by_prefix(strings: [] as [String], prefix: "john") == [] as [String])
+assert(filter_by_prefix(strings: ["xxx", "asd", "xxy", "john doe", "xxxAAA", "xxx"], prefix: "xxx") == ["xxx", "xxxAAA", "xxx"])

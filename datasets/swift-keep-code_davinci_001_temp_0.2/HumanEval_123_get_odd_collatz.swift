@@ -1,3 +1,4 @@
+
 // Given a positive integer n, return a sorted list that has the odd numbers in collatz sequence.
 // The Collatz conjecture is a conjecture in mathematics that concerns a sequence defined
 // as follows: start with any positive integer n. Then each term is obtained from the 
@@ -14,6 +15,19 @@ func get_odd_collatz(n: Int) -> [Int] {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(get_odd_collatz(n: 14) == [1, 5, 7, 11, 13, 17])
 assert(get_odd_collatz(n: 5) == [1, 5])
 assert(get_odd_collatz(n: 12) == [1, 3, 5])

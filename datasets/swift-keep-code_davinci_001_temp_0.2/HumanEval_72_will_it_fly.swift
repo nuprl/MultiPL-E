@@ -1,3 +1,4 @@
+
 // Write a function that returns True if the object q will fly, and False otherwise.
 // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
 // Example:
@@ -14,6 +15,19 @@ func will_it_fly(q: [Int], w: Int) -> Bool {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(will_it_fly(q: [3, 2, 3], w: 9) == true)
 assert(will_it_fly(q: [1, 2], w: 5) == false)
 assert(will_it_fly(q: [3], w: 5) == true)

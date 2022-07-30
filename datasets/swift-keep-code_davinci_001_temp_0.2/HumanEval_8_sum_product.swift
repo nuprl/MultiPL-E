@@ -1,3 +1,4 @@
+
 // For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
 // Empty sum should be equal to 0 and empty product should be equal to 1.
 // >>> sum_product([])
@@ -9,7 +10,20 @@ func sum_product(numbers: [Int]) -> (Int, Int) {
 
 }
 
-assert(sum_product(numbers: []) == (0, 1))
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sum_product(numbers: [] as [Int]) == (0, 1))
 assert(sum_product(numbers: [1, 1, 1]) == (3, 1))
 assert(sum_product(numbers: [100, 0]) == (100, 0))
 assert(sum_product(numbers: [3, 5, 7]) == (15, 105))

@@ -1,3 +1,4 @@
+
 // Given the lengths of the three sides of a triangle. Return the area of
 // the triangle rounded to 2 decimal points if the three sides form a valid triangle. 
 // Otherwise return -1
@@ -11,6 +12,19 @@ func triangle_area(a: Int, b: Int, c: Int) -> Double {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(triangle_area(a: 3, b: 4, c: 5) == 6.0)
 assert(triangle_area(a: 1, b: 2, c: 10) == -1)
 assert(triangle_area(a: 4, b: 8, c: 5) == 8.18)

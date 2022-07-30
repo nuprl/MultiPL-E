@@ -1,3 +1,4 @@
+
 // You have been tasked to write a function that receives 
 // a hexadecimal number as a string and counts the number of hexadecimal 
 // digits that are primes (prime number, or a prime, is a natural number 
@@ -19,9 +20,22 @@ func hex_key(num: String) -> Int {
 
 }
 
-assert(hex_key(num: AB) == 1)
-assert(hex_key(num: 1077E) == 2)
-assert(hex_key(num: ABED1A33) == 4)
-assert(hex_key(num: 2020) == 2)
-assert(hex_key(num: 123456789ABCDEF0) == 6)
-assert(hex_key(num: 112233445566778899AABBCCDDEEFF00) == 12)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(hex_key(num: "AB") == 1)
+assert(hex_key(num: "1077E") == 2)
+assert(hex_key(num: "ABED1A33") == 4)
+assert(hex_key(num: "2020") == 2)
+assert(hex_key(num: "123456789ABCDEF0") == 6)
+assert(hex_key(num: "112233445566778899AABBCCDDEEFF00") == 12)

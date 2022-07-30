@@ -1,3 +1,4 @@
+
 // Create a function which returns the largest index of an element which
 // is not greater than or equal to the element immediately preceding it. If
 // no such element exists then return -1. The given array will not contain
@@ -10,8 +11,21 @@ func can_arrange(arr: [Int]) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(can_arrange(arr: [1, 2, 4, 3, 5]) == 3)
 assert(can_arrange(arr: [1, 2, 4, 5]) == -1)
 assert(can_arrange(arr: [1, 4, 2, 5, 6, 7, 8, 9, 10]) == 2)
 assert(can_arrange(arr: [4, 8, 5, 7, 3]) == 4)
-assert(can_arrange(arr: []) == -1)
+assert(can_arrange(arr: [] as [Int]) == -1)

@@ -1,3 +1,4 @@
+
 // Find the shortest palindrome that begins with a supplied string.
 // Algorithm idea is simple:
 // - Find the longest postfix of supplied string that is a palindrome.
@@ -13,8 +14,21 @@ func make_palindrome(string: String) -> String {
 
 }
 
-assert(make_palindrome(string: ) == )
-assert(make_palindrome(string: x) == x)
-assert(make_palindrome(string: xyz) == xyzyx)
-assert(make_palindrome(string: xyx) == xyx)
-assert(make_palindrome(string: jerry) == jerryrrej)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(make_palindrome(string: "") == "")
+assert(make_palindrome(string: "x") == "x")
+assert(make_palindrome(string: "xyz") == "xyzyx")
+assert(make_palindrome(string: "xyx") == "xyx")
+assert(make_palindrome(string: "jerry") == "jerryrrej")

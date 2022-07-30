@@ -1,3 +1,4 @@
+
 // You're a hungry rabbit, and you already have eaten a certain number of carrots,
 // but now you need to eat more carrots to complete the day's meals.
 // you should return an array of [ total number of eaten carrots after your meals,
@@ -25,6 +26,19 @@ func eat(number: Int, need: Int, remaining: Int) -> [Int] {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(eat(number: 5, need: 6, remaining: 10) == [11, 4])
 assert(eat(number: 4, need: 8, remaining: 9) == [12, 1])
 assert(eat(number: 1, need: 10, remaining: 10) == [11, 0])

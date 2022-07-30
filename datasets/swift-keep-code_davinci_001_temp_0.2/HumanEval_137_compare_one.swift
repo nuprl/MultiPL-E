@@ -1,3 +1,4 @@
+
 // Create a function that takes integers, floats, or strings representing
 // real numbers, and returns the larger variable in its given variable type.
 // Return None if the values are equal.
@@ -11,6 +12,19 @@ func compare_one(a: UNIMPLEMENTED UNIONS, b: UNIMPLEMENTED UNIONS) -> UNIMPLEMEN
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(compare_one(a: .caseInt, b: .caseInt) == .caseInt)
 assert(compare_one(a: .caseInt, b: .caseDouble) == .caseDouble)
 assert(compare_one(a: .caseInt, b: .caseInt) == .caseInt)

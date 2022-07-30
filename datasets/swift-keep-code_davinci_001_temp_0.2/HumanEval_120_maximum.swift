@@ -1,3 +1,4 @@
+
 // Given an array arr of integers and a positive integer k, return a sorted list 
 // of length k with the maximum k numbers in arr.
 // Example 1:
@@ -18,6 +19,19 @@ func maximum(arr: [Int], k: Int) -> [Int] {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(maximum(arr: [-3, -4, 5], k: 3) == [-4, -3, 5])
 assert(maximum(arr: [4, -4, 4], k: 2) == [4, 4])
 assert(maximum(arr: [-3, 2, 1, 2, -1, -2, 1], k: 1) == [2])
@@ -28,4 +42,4 @@ assert(maximum(arr: [-1, 0, 2, 5, 3, -10], k: 2) == [3, 5])
 assert(maximum(arr: [1, 0, 5, -7], k: 1) == [5])
 assert(maximum(arr: [4, -4], k: 2) == [-4, 4])
 assert(maximum(arr: [-10, 10], k: 2) == [-10, 10])
-assert(maximum(arr: [1, 2, 3, -23, 243, -400, 0], k: 0) == [])
+assert(maximum(arr: [1, 2, 3, -23, 243, -400, 0], k: 0) == [] as [Int])

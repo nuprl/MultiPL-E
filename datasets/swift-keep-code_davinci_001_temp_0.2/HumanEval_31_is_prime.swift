@@ -1,3 +1,4 @@
+
 // Return true if a given number is prime, and false otherwise.
 // >>> is_prime(6)
 // False
@@ -18,6 +19,19 @@ func is_prime(n: Int) -> Bool {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(is_prime(n: 6) == false)
 assert(is_prime(n: 101) == true)
 assert(is_prime(n: 11) == true)

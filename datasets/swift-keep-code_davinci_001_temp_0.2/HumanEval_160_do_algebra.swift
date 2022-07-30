@@ -1,3 +1,4 @@
+
 // Given two lists operator, and operand. The first list has basic algebra operations, and 
 // the second list is a list of integers. Use the two given lists to build the algebric 
 // expression and return the evaluation of this expression.
@@ -21,6 +22,19 @@ func do_algebra(operator: [String], operand: [Int]) -> Int {
 
 }
 
-assert(do_algebra(operator: [**, *, +], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: [+, *, -], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: [//, *], operand: [7, 3, 4]) == 8)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)

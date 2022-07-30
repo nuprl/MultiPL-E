@@ -1,3 +1,4 @@
+
 // You are given a rectangular grid of wells. Each row represents a single well,
 // and each 1 in a row represents a single unit of water.
 // Each well has a corresponding bucket that can be used to extract water from it, 
@@ -30,6 +31,19 @@ func max_fill(grid: [[Int]], capacity: Int) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(max_fill(grid: [[0, 0, 1, 0], [0, 1, 0, 0], [1, 1, 1, 1]], capacity: 1) == 6)
 assert(max_fill(grid: [[0, 0, 1, 1], [0, 0, 0, 0], [1, 1, 1, 1], [0, 1, 1, 1]], capacity: 2) == 5)
 assert(max_fill(grid: [[0, 0, 0], [0, 0, 0]], capacity: 5) == 0)

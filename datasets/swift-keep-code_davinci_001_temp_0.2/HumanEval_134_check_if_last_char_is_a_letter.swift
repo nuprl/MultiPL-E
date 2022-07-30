@@ -1,3 +1,4 @@
+
 // Create a function that returns True if the last character
 // of a given string is an alphabetical character and is not
 // a part of a word, and False otherwise.
@@ -12,13 +13,26 @@ func check_if_last_char_is_a_letter(txt: String) -> Bool {
 
 }
 
-assert(check_if_last_char_is_a_letter(txt: apple) == false)
-assert(check_if_last_char_is_a_letter(txt: apple pi e) == true)
-assert(check_if_last_char_is_a_letter(txt: eeeee) == false)
-assert(check_if_last_char_is_a_letter(txt: A) == true)
-assert(check_if_last_char_is_a_letter(txt: Pumpkin pie ) == false)
-assert(check_if_last_char_is_a_letter(txt: Pumpkin pie 1) == false)
-assert(check_if_last_char_is_a_letter(txt: ) == false)
-assert(check_if_last_char_is_a_letter(txt: eeeee e ) == false)
-assert(check_if_last_char_is_a_letter(txt: apple pie) == false)
-assert(check_if_last_char_is_a_letter(txt: apple pi e ) == false)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(check_if_last_char_is_a_letter(txt: "apple") == false)
+assert(check_if_last_char_is_a_letter(txt: "apple pi e") == true)
+assert(check_if_last_char_is_a_letter(txt: "eeeee") == false)
+assert(check_if_last_char_is_a_letter(txt: "A") == true)
+assert(check_if_last_char_is_a_letter(txt: "Pumpkin pie ") == false)
+assert(check_if_last_char_is_a_letter(txt: "Pumpkin pie 1") == false)
+assert(check_if_last_char_is_a_letter(txt: "") == false)
+assert(check_if_last_char_is_a_letter(txt: "eeeee e ") == false)
+assert(check_if_last_char_is_a_letter(txt: "apple pie") == false)
+assert(check_if_last_char_is_a_letter(txt: "apple pi e ") == false)

@@ -1,3 +1,4 @@
+
 // Return a string containing space-delimited numbers starting from 0 upto n inclusive.
 // >>> string_sequence(0)
 // '0'
@@ -8,6 +9,19 @@ func string_sequence(n: Int) -> String {
 
 }
 
-assert(string_sequence(n: 0) == 0)
-assert(string_sequence(n: 3) == 0 1 2 3)
-assert(string_sequence(n: 10) == 0 1 2 3 4 5 6 7 8 9 10)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(string_sequence(n: 0) == "0")
+assert(string_sequence(n: 3) == "0 1 2 3")
+assert(string_sequence(n: 10) == "0 1 2 3 4 5 6 7 8 9 10")

@@ -1,3 +1,4 @@
+
 // Complete the function that takes two integers and returns 
 // the product of their unit digits.
 // Assume the input is always valid.
@@ -11,6 +12,19 @@ func multiply(a: Int, b: Int) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(multiply(a: 148, b: 412) == 16)
 assert(multiply(a: 19, b: 28) == 72)
 assert(multiply(a: 2020, b: 1851) == 0)

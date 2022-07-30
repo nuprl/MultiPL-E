@@ -1,3 +1,4 @@
+
 // You are given a string s.
 // if s[i] is a letter, reverse its case from lower to upper or vise versa, 
 // otherwise keep it as it is.
@@ -12,11 +13,24 @@ func solve(s: String) -> String {
 
 }
 
-assert(solve(s: AsDf) == aSdF)
-assert(solve(s: 1234) == 4321)
-assert(solve(s: ab) == AB)
-assert(solve(s: #a@C) == #A@c)
-assert(solve(s: #AsdfW^45) == #aSDFw^45)
-assert(solve(s: #6@2) == 2@6#)
-assert(solve(s: #$a^D) == #$A^d)
-assert(solve(s: #ccc) == #CCC)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(solve(s: "AsDf") == "aSdF")
+assert(solve(s: "1234") == "4321")
+assert(solve(s: "ab") == "AB")
+assert(solve(s: "#a@C") == "#A@c")
+assert(solve(s: "#AsdfW^45") == "#aSDFw^45")
+assert(solve(s: "#6@2") == "2@6#")
+assert(solve(s: "#$a^D") == "#$A^d")
+assert(solve(s: "#ccc") == "#CCC")

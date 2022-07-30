@@ -1,3 +1,4 @@
+
 // The FibFib number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
 // fibfib(0) == 0
 // fibfib(1) == 0
@@ -15,6 +16,19 @@ func fibfib(n: Int) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(fibfib(n: 2) == 1)
 assert(fibfib(n: 1) == 0)
 assert(fibfib(n: 5) == 4)

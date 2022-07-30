@@ -1,3 +1,4 @@
+
 // Write a function that returns true if the given number is the multiplication of 3 prime numbers
 // and false otherwise.
 // Knowing that (a) is less then 100. 
@@ -9,6 +10,19 @@ func is_multiply_prime(a: Int) -> Bool {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(is_multiply_prime(a: 5) == false)
 assert(is_multiply_prime(a: 30) == true)
 assert(is_multiply_prime(a: 8) == true)

@@ -1,3 +1,4 @@
+
 // Return the number of times the digit 7 appears in integers less than n which are divisible by 11 or 13.
 // >>> fizz_buzz(50)
 // 0
@@ -10,6 +11,19 @@ func fizz_buzz(n: Int) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(fizz_buzz(n: 50) == 0)
 assert(fizz_buzz(n: 78) == 2)
 assert(fizz_buzz(n: 79) == 3)

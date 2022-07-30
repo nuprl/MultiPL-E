@@ -1,3 +1,4 @@
+
 // Given the lengths of the three sides of a triangle. Return True if the three
 // sides form a right-angled triangle, False otherwise.
 // A right-angled triangle is a triangle in which one angle is right angle or 
@@ -10,6 +11,19 @@ func right_angle_triangle(a: Int, b: Int, c: Int) -> Bool {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(right_angle_triangle(a: 3, b: 4, c: 5) == true)
 assert(right_angle_triangle(a: 1, b: 2, c: 3) == false)
 assert(right_angle_triangle(a: 10, b: 6, c: 8) == true)

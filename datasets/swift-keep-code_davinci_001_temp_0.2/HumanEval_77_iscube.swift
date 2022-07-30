@@ -1,3 +1,4 @@
+
 // Write a function that takes an integer a and returns True 
 // if this ingeger is a cube of some integer number.
 // Note: you may assume the input is always valid.
@@ -13,6 +14,19 @@ func iscube(a: Int) -> Bool {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(iscube(a: 1) == true)
 assert(iscube(a: 2) == false)
 assert(iscube(a: -1) == true)

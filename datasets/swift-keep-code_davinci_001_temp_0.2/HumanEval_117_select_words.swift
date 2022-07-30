@@ -1,3 +1,4 @@
+
 // Given a string s and a natural number n, you have been tasked to implement 
 // a function that returns a list of all words from string s that contain exactly 
 // n consonants, in order these words appear in the string s.
@@ -14,10 +15,23 @@ func select_words(s: String, n: Int) -> [String] {
 
 }
 
-assert(select_words(s: Mary had a little lamb, n: 4) == [little])
-assert(select_words(s: Mary had a little lamb, n: 3) == [Mary, lamb])
-assert(select_words(s: simple white space, n: 2) == [])
-assert(select_words(s: Hello world, n: 4) == [world])
-assert(select_words(s: Uncle sam, n: 3) == [Uncle])
-assert(select_words(s: , n: 4) == [])
-assert(select_words(s: a b c d e f, n: 1) == [b, c, d, f])
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(select_words(s: "Mary had a little lamb", n: 4) == ["little"])
+assert(select_words(s: "Mary had a little lamb", n: 3) == ["Mary", "lamb"])
+assert(select_words(s: "simple white space", n: 2) == [] as [String])
+assert(select_words(s: "Hello world", n: 4) == ["world"])
+assert(select_words(s: "Uncle sam", n: 3) == ["Uncle"])
+assert(select_words(s: "", n: 4) == [] as [String])
+assert(select_words(s: "a b c d e f", n: 1) == ["b", "c", "d", "f"])

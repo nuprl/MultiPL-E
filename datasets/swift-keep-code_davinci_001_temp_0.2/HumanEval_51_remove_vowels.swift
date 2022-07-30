@@ -1,3 +1,4 @@
+
 // remove_vowels is a function that takes string and returns string without vowels.
 // >>> remove_vowels('')
 // ''
@@ -14,12 +15,23 @@ func remove_vowels(text: String) -> String {
 
 }
 
-assert(remove_vowels(text: ) == )
-assert(remove_vowels(text: abcdef
-ghijklm) == bcdf
-ghjklm)
-assert(remove_vowels(text: fedcba) == fdcb)
-assert(remove_vowels(text: eeeee) == )
-assert(remove_vowels(text: acBAA) == cB)
-assert(remove_vowels(text: EcBOO) == cB)
-assert(remove_vowels(text: ybcd) == ybcd)
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(remove_vowels(text: "") == "")
+assert(remove_vowels(text: "abcdef\nghijklm") == "bcdf\nghjklm")
+assert(remove_vowels(text: "fedcba") == "fdcb")
+assert(remove_vowels(text: "eeeee") == "")
+assert(remove_vowels(text: "acBAA") == "cB")
+assert(remove_vowels(text: "EcBOO") == "cB")
+assert(remove_vowels(text: "ybcd") == "ybcd")

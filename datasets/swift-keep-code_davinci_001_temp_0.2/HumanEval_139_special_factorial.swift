@@ -1,3 +1,4 @@
+
 // The Brazilian factorial is defined as:
 // brazilian_factorial(n) = n! * (n-1)! * (n-2)! * ... * 1!
 // where n > 0
@@ -11,6 +12,19 @@ func special_factorial(n: Int) -> Int {
 
 }
 
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
 assert(special_factorial(n: 4) == 288)
 assert(special_factorial(n: 5) == 34560)
 assert(special_factorial(n: 7) == 125411328000)
