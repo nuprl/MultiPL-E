@@ -8,7 +8,30 @@
 // >>> unique_digits([152, 323, 1422, 10])
 // []
 func unique_digits(x: [Int]) -> [Int] {
-	fatalError("unimplemented")
+    var result = [Int]()
+    for number in x {
+        if number < 10 {
+            result.append(number)
+        } else {
+            var digits = [Int]()
+            var numberCopy = number
+            while numberCopy > 0 {
+                digits.append(numberCopy % 10)
+                numberCopy /= 10
+            }
+            var hasEvenDigit = false
+            for digit in digits {
+                if digit % 2 == 0 {
+                    hasEvenDigit = true
+                    break
+                }
+            }
+            if !hasEvenDigit {
+                result.append(number)
+            }
+        }
+    }
+    return result.sort()
 
 }
 

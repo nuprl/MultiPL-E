@@ -22,7 +22,15 @@
 // * 0 <= remaining <= 1000
 // Have fun :)
 func eat(number: Int, need: Int, remaining: Int) -> [Int] {
-	fatalError("unimplemented")
+    var eaten = number
+    var remaining = remaining
+    if eaten >= need {
+        eaten = need
+        remaining = 0
+    } else {
+        remaining = remaining - eaten
+    }
+    return [eaten, remaining]
 
 }
 

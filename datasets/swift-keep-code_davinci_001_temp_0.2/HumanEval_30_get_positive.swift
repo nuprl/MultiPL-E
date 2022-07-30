@@ -5,7 +5,13 @@
 // >>> get_positive([5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10])
 // [5, 3, 2, 3, 9, 123, 1]
 func get_positive(l: [Int]) -> [Int] {
-	fatalError("unimplemented")
+    var result = [Int]()
+    for i in l {
+        if i > 0 {
+            result.append(i)
+        }
+    }
+    return result
 
 }
 

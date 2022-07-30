@@ -27,7 +27,19 @@
 // * grid[i][j] -> 0 | 1
 // * 1 <= capacity <= 10
 func max_fill(grid: [[Int]], capacity: Int) -> Int {
-	fatalError("unimplemented")
+    var max_fill = 0
+    var max_fill_grid = grid
+    var max_fill_capacity = capacity
+    for i in 0..<grid.count {
+        for j in 0..<grid[i].count {
+            if grid[i][j] == 1 {
+                max_fill += 1
+                max_fill_grid[i][j] = 0
+                max_fill_capacity -= 1
+            }
+        }
+    }
+    return max_fill
 
 }
 

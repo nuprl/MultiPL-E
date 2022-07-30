@@ -9,7 +9,7 @@
 // anti_shuffle('hello') returns 'ehllo'
 // anti_shuffle('Hello World!!!') returns 'Hello !!!Wdlor'
 func anti_shuffle(s: String) -> String {
-	fatalError("unimplemented")
+    return ""
 
 }
 

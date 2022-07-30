@@ -13,7 +13,11 @@
 // >>> same_chars('eabcdzzzz', 'dddzzzzzzzddddabc')
 // False
 func same_chars(s0: String, s1: String) -> Bool {
-	fatalError("unimplemented")
+    var s0_chars = [Character](s0.characters)
+    var s1_chars = [Character](s1.characters)
+    s0_chars.sortInPlace()
+    s1_chars.sortInPlace()
+    return s0_chars == s1_chars
 
 }
 

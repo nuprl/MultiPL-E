@@ -13,7 +13,41 @@
 // assert list_sort(["aa", "a", "aaa"]) => ["aa"]
 // assert list_sort(["ab", "a", "aaa", "cd"]) => ["ab", "cd"]
 func sorted_list_sum(lst: [String]) -> [String] {
-	fatalError("unimplemented")
+    var result = [String]()
+    var odd_lst = [String]()
+    var even_lst = [String]()
+    var odd_sum = 0
+    var even_sum = 0
+    var odd_count = 0
+    var even_count = 0
+    var odd_avg = 0
+    var even_avg = 0
+    var odd_avg_count = 0
+    var even_avg_count = 0
+    var odd_avg_sum = 0
+    var even_avg_sum = 0
+    var odd_avg_avg = 0
+    var even_avg_avg = 0
+    var odd_avg_avg_count = 0
+    var even_avg_avg_count = 0
+    var odd_avg_avg_sum = 0
+    var even_avg_avg_sum = 0
+    var odd_avg_avg_avg = 0
+    var even_avg_avg_avg = 0
+    var odd_avg_avg_avg_count = 0
+    var even_avg_avg_avg_count = 0
+    var odd_avg_avg_avg_sum = 0
+    var even_avg_avg_avg_sum = 0
+    var odd_avg_avg_avg_avg = 0
+    var even_avg_avg_avg_avg = 0
+    var odd_avg_avg_avg_avg_count = 0
+    var even_avg_avg_avg_avg_count = 0
+    var odd_avg_avg_avg_avg_sum = 0
+    var even_avg_avg_avg_avg_sum = 0
+    var odd_avg_avg_avg_avg_avg = 0
+    var even_avg_avg_avg_avg_avg = 0
+    var odd_avg_avg_avg_avg_avg_count = 0
+    var even_avg_avg_avg_
 
 }
 

@@ -3,7 +3,13 @@
 // Examples:
 // add([4, 2, 6, 7]) ==> 2
 func add(lst: [Int]) -> Int {
-	fatalError("unimplemented")
+    var sum = 0
+    for (index, value) in lst.enumerated() {
+        if index % 2 == 0 && value % 2 == 0 {
+            sum += value
+        }
+    }
+    return sum
 
 }
 

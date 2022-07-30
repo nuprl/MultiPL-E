@@ -11,7 +11,15 @@
 // select_words("Hello world", 4) ==> ["world"]
 // select_words("Uncle sam", 3) ==> ["Uncle"]
 func select_words(s: String, n: Int) -> [String] {
-	fatalError("unimplemented")
+    var result: [String] = []
+    let words = s.components(separatedBy: " ")
+    for word in words {
+        let count = word.characters.filter { $0 != " " }.count
+        if count == n {
+            result.append(word)
+        }
+    }
+    return result
 
 }
 

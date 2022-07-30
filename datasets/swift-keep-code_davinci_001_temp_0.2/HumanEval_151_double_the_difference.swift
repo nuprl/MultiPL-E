@@ -7,7 +7,7 @@
 // double_the_difference([0]) == 0  
 // If the input list is empty, return 0.
 func double_the_difference(lst: [Double]) -> Int {
-	fatalError("unimplemented")
+    return 0
 
 }
 

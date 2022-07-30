@@ -6,7 +6,7 @@
 // >>> truncate_number(3.5)
 // 0.5
 func truncate_number(number: Double) -> Double {
-	fatalError("unimplemented")
+    return number - floor(number)
 
 }
 

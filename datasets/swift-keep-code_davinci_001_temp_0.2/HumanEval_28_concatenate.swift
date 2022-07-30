@@ -5,7 +5,7 @@
 // >>> concatenate(['a', 'b', 'c'])
 // 'abc'
 func concatenate(strings: [String]) -> String {
-	fatalError("unimplemented")
+    return strings.reduce("", combine: +)
 
 }
 

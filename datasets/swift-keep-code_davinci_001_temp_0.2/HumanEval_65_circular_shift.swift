@@ -7,7 +7,12 @@
 // >>> circular_shift(12, 2)
 // "12"
 func circular_shift(x: Int, shift: Int) -> String {
-	fatalError("unimplemented")
+    let digits = String(x).characters.map { Int(String($0))! }
+    let shift = shift % digits.count
+    let start = digits.count - shift
+    let end = digits.count
+    let result = digits[start..<end] + digits[0..<start]
+    return result.map { String($0) }.reduce("") { $0 + $1 }
 
 }
 

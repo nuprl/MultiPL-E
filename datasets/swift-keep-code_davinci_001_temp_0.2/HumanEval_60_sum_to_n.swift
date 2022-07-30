@@ -11,7 +11,11 @@
 // >>> sum_to_n(1)
 // 1
 func sum_to_n(n: Int) -> Int {
-	fatalError("unimplemented")
+    var sum = 0
+    for i in 1...n {
+        sum += i
+    }
+    return sum
 
 }
 

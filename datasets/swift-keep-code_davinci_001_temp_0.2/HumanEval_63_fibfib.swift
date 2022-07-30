@@ -12,7 +12,16 @@
 // >>> fibfib(8)
 // 24
 func fibfib(n: Int) -> Int {
-	fatalError("unimplemented")
+    if n == 0 {
+        return 0
+    }
+    if n == 1 {
+        return 0
+    }
+    if n == 2 {
+        return 1
+    }
+    return fibfib(n: n-1) + fibfib(n: n-2) + fibfib(n: n-3)
 
 }
 

@@ -15,7 +15,19 @@
 // Examples:
 // tri(3) = [1, 3, 2, 8]
 func tri(n: Int) -> [Int] {
-	fatalError("unimplemented")
+    var result = [Int]()
+    for i in 0..<n {
+        if i == 0 {
+            result.append(3)
+        } else if i == 1 {
+            result.append(1)
+        } else if i % 2 == 0 {
+            result.append(result[i - 1] + result[i - 2] / 2)
+        } else {
+            result.append(result[i - 1] + result[i - 2] + result[i - 3])
+        }
+    }
+    return result
 
 }
 

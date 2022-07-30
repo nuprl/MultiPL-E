@@ -5,7 +5,7 @@
 // >>> strlen('abc')
 // 3
 func strlen(string: String) -> Int {
-	fatalError("unimplemented")
+    return string.characters.count
 
 }
 

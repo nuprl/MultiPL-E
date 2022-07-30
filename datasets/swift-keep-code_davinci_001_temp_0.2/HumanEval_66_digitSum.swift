@@ -10,7 +10,7 @@
 // digitSum("woArBld") => 131
 // digitSum("aAaaaXa") => 153
 func digitSum(s: String) -> Int {
-	fatalError("unimplemented")
+    return s.uppercased().characters.reduce(0) { $0 + Int(String($1))! }
 
 }
 

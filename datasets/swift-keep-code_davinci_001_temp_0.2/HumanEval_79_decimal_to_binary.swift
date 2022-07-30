@@ -8,7 +8,13 @@
 // decimal_to_binary(15)   # returns "db1111db"
 // decimal_to_binary(32)   # returns "db100000db"
 func decimal_to_binary(decimal: Int) -> String {
-	fatalError("unimplemented")
+    var binary = ""
+    var decimal = decimal
+    while decimal > 0 {
+        binary = String(decimal % 2) + binary
+        decimal /= 2
+    }
+    return "db" + binary + "db"
 
 }
 

@@ -9,7 +9,7 @@
 // >>> parse_music('o o| .| o| o| .| .| .| .| o o')
 // [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
 func parse_music(music_string: String) -> [Int] {
-	fatalError("unimplemented")
+    return []
 
 }
 

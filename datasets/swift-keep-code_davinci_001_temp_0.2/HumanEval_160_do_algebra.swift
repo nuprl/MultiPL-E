@@ -18,7 +18,24 @@
 // Operand is a list of of non-negative integers.
 // Operator list has at least one operator, and operand list has at least two operands.
 func do_algebra(operator: [String], operand: [Int]) -> Int {
-	fatalError("unimplemented")
+    var result = operand[0]
+    for i in 1..<operand.count {
+        switch operator[i - 1] {
+        case "+":
+            result += operand[i]
+        case "-":
+            result -= operand[i]
+        case "*":
+            result *= operand[i]
+        case "//":
+            result /= operand[i]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i])))
+        default:
+            break
+        }
+    }
+    return result
 
 }
 

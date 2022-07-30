@@ -7,7 +7,33 @@
 // strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]
 // strange_sort_list([]) == []
 func strange_sort_list(lst: [Int]) -> [Int] {
-	fatalError("unimplemented")
+    var result = [Int]()
+    var min = lst[0]
+    var max = lst[0]
+    var minIndex = 0
+    var maxIndex = 0
+    var i = 0
+    while i < lst.count {
+        if lst[i] < min {
+            min = lst[i]
+            minIndex = i
+        }
+        if lst[i] > max {
+            max = lst[i]
+            maxIndex = i
+        }
+        i += 1
+    }
+    result.append(min)
+    result.append(max)
+    i = 0
+    while i < lst.count {
+        if i != minIndex && i != maxIndex {
+            result.append(lst[i])
+        }
+        i += 1
+    }
+    return result
 
 }
 

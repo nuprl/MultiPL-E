@@ -13,7 +13,14 @@
 // >>> pairs_sum_to_zero([1])
 // False
 func pairs_sum_to_zero(l: [Int]) -> Bool {
-	fatalError("unimplemented")
+    var set = Set<Int>()
+    for i in l {
+        if set.contains(i) {
+            return true
+        }
+        set.insert(-i)
+    }
+    return false
 
 }
 

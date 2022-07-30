@@ -15,7 +15,15 @@
 // >>> is_prime(1)
 // False
 func is_prime(n: Int) -> Bool {
-	fatalError("unimplemented")
+    if n <= 1 {
+        return false
+    }
+    for i in 2..<n {
+        if n % i == 0 {
+            return false
+        }
+    }
+    return true
 
 }
 

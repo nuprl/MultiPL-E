@@ -8,7 +8,11 @@
 // any_int(3, -2, 1) ➞ True
 // any_int(3.6, -2.2, 2) ➞ False
 func any_int(x: Double, y: Double, z: Double) -> Bool {
-	fatalError("unimplemented")
+    if (x == y + z || y == x + z || z == x + y) && (x.truncatingRemainder(dividingBy: 1) == 0 && y.truncatingRemainder(dividingBy: 1) == 0 && z.truncatingRemainder(dividingBy: 1) == 0) {
+        return true
+    } else {
+        return false
+    }
 
 }
 

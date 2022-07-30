@@ -13,7 +13,14 @@
 // bf("Earth", "Mercury") ==> ("Venus")
 // bf("Mercury", "Uranus") ==> ("Venus", "Earth", "Mars", "Jupiter", "Saturn")
 func bf(planet1: String, planet2: String) -> [String] {
-	fatalError("unimplemented")
+    let planets = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"]
+    var result: [String] = []
+    if let index1 = planets.index(of: planet1), let index2 = planets.index(of: planet2) {
+        for i in index1 + 1...index2 {
+            result.append(planets[i])
+        }
+    }
+    return result
 
 }
 

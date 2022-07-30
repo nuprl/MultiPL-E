@@ -11,7 +11,17 @@
 // For example:
 // get_odd_collatz(5) returns [1, 5] # The collatz sequence for 5 is [5, 16, 8, 4, 2, 1], so the odd numbers are only 1, and 5.
 func get_odd_collatz(n: Int) -> [Int] {
-	fatalError("unimplemented")
+    var result = [Int]()
+    var num = n
+    while num > 1 {
+        if num % 2 == 0 {
+            num /= 2
+        } else {
+            num = num * 3 + 1
+        }
+        result.append(num)
+    }
+    return result
 
 }
 

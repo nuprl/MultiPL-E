@@ -13,7 +13,15 @@
 // >>> triples_sum_to_zero([1])
 // False
 func triples_sum_to_zero(l: [Int]) -> Bool {
-	fatalError("unimplemented")
+    var set = Set<Int>()
+    for i in l {
+        if set.contains(i) {
+            set.remove(i)
+        } else {
+            set.insert(i)
+        }
+    }
+    return set.count < 3 ? false : true
 
 }
 

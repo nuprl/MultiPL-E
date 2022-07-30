@@ -9,7 +9,16 @@
 // For s = "abcdef", c = "b"  the result should be ('acdef',False)
 // For s = "abcdedcba", c = "ab", the result should be ('cdedc',True)
 func reverse_delete(s: String, c: String) -> (String, Bool) {
-	fatalError("unimplemented")
+    var result = ""
+    var check = true
+    for i in s {
+        if c.contains(i) {
+            check = false
+        } else {
+            result.append(i)
+        }
+    }
+    return (String(result.reversed()), check)
 
 }
 

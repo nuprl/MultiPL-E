@@ -11,7 +11,21 @@
 // match_parens(['()(', ')']) == 'Yes'
 // match_parens([')', ')']) == 'No'
 func match_parens(lst: [String]) -> String {
-	fatalError("unimplemented")
+    var stack: [Character] = []
+    for c in lst[0] {
+        if c == "(" {
+            stack.append(c)
+        } else {
+            if stack.count == 0 {
+                return "No"
+            }
+            stack.removeLast()
+        }
+    }
+    if stack.count == 0 {
+        return "Yes"
+    }
+    return "No"
 
 }
 

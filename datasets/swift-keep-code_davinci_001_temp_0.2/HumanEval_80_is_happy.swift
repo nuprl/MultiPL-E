@@ -10,7 +10,20 @@
 // is_happy(adb) => True
 // is_happy(xyy) => False
 func is_happy(s: String) -> Bool {
-	fatalError("unimplemented")
+    var set = Set<Character>()
+    var count = 0
+    for c in s {
+        if set.contains(c) {
+            return false
+        }
+        set.insert(c)
+        count += 1
+        if count == 3 {
+            set.removeAll()
+            count = 0
+        }
+    }
+    return true
 
 }
 

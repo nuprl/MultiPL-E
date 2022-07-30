@@ -7,7 +7,15 @@
 // prime_length('kittens') == True
 // prime_length('orange') == False
 func prime_length(string: String) -> Bool {
-	fatalError("unimplemented")
+    if string.characters.count == 1 {
+        return false
+    }
+    for i in 2..<string.characters.count {
+        if string.characters.count % i == 0 {
+            return false
+        }
+    }
+    return true
 
 }
 

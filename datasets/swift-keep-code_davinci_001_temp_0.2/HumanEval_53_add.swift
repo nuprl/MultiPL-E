@@ -5,7 +5,7 @@
 // >>> add(5, 7)
 // 12
 func add(x: Int, y: Int) -> Int {
-	fatalError("unimplemented")
+    return x + y
 
 }
 

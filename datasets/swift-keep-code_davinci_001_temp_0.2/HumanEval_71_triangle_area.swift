@@ -8,7 +8,12 @@
 // triangle_area(3, 4, 5) == 6.00
 // triangle_area(1, 2, 10) == -1
 func triangle_area(a: Int, b: Int, c: Int) -> Double {
-	fatalError("unimplemented")
+    if a + b > c && a + c > b && b + c > a {
+        let s = (a + b + c) / 2
+        return sqrt(s * (s - a) * (s - b) * (s - c))
+    } else {
+        return -1
+    }
 
 }
 

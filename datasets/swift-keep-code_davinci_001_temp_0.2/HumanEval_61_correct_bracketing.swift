@@ -10,7 +10,18 @@
 // >>> correct_bracketing(")(()")
 // False
 func correct_bracketing(brackets: String) -> Bool {
-	fatalError("unimplemented")
+    var stack = [Character]()
+    for bracket in brackets {
+        if bracket == "(" {
+            stack.append(bracket)
+        } else if bracket == ")" {
+            if stack.count == 0 {
+                return false
+            }
+            stack.removeLast()
+        }
+    }
+    return stack.count == 0
 
 }
 

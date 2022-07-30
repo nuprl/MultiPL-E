@@ -5,7 +5,7 @@
 // is_equal_to_sum_even(6) == False
 // is_equal_to_sum_even(8) == True
 func is_equal_to_sum_even(n: Int) -> Bool {
-	fatalError("unimplemented")
+    return false
 
 }
 

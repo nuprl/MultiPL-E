@@ -6,7 +6,25 @@
 // >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0])
 // (2.0, 2.0)
 func find_closest_elements(numbers: [Double]) -> (Double, Double) {
-	fatalError("unimplemented")
+    var smallest_difference = Double.infinity
+    var smallest_difference_index = 0
+    var second_smallest_difference = Double.infinity
+    var second_smallest_difference_index = 0
+    for i in 0..<numbers.count {
+        for j in i+1..<numbers.count {
+            let difference = numbers[i] - numbers[j]
+            if abs(difference) < smallest_difference {
+                second_smallest_difference = smallest_difference
+                second_smallest_difference_index = smallest_difference_index
+                smallest_difference = abs(difference)
+                smallest_difference_index = j
+            } else if abs(difference) < second_smallest_difference {
+                second_smallest_difference = abs(difference)
+                second_smallest_difference_index = j
+            }
+        }
+    }
+    return (numbers[smallest_difference_index], numbers[second_smallest_difference_index])
 
 }
 

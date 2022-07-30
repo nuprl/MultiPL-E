@@ -9,7 +9,25 @@
 // For lst = [0,81,12,3,1,21] the output should be 3
 // For lst = [0,8,1,2,1,7] the output should be 7
 func skjkasdkd(lst: [Int]) -> Int {
-	fatalError("unimplemented")
+    var sum = 0
+    var max = 0
+    for i in lst {
+        if i > max {
+            max = i
+        }
+    }
+    var maxPrime = max
+    while maxPrime > 0 {
+        if isPrime(maxPrime) {
+            break
+        }
+        maxPrime -= 1
+    }
+    var maxPrimeStr = String(maxPrime)
+    for i in maxPrimeStr {
+        sum += Int(String(i))!
+    }
+    return sum
 
 }
 

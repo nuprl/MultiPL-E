@@ -16,7 +16,15 @@
 // get_row([], 1) == []
 // get_row([[], [1], [1, 2, 3]], 3) == [(2, 2)]
 func get_row(lst: [[Int]], x: Int) -> [(Int, Int)] {
-	fatalError("unimplemented")
+    var result: [(Int, Int)] = []
+    for (index, row) in lst.enumerated() {
+        for (index2, column) in row.enumerated() {
+            if column == x {
+                result.append((index, index2))
+            }
+        }
+    }
+    return result.sorted(by: {$0.0 < $1.0})
 
 }
 

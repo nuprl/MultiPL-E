@@ -5,7 +5,11 @@
 // >>> count_distinct_characters('Jerry')
 // 4
 func count_distinct_characters(string: String) -> Int {
-	fatalError("unimplemented")
+    var distinctCharacters = Set<Character>()
+    for character in string.characters {
+        distinctCharacters.insert(character)
+    }
+    return distinctCharacters.count
 
 }
 

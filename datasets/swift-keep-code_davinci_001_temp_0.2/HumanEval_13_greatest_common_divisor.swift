@@ -5,7 +5,19 @@
 // >>> greatest_common_divisor(25, 15)
 // 5
 func greatest_common_divisor(a: Int, b: Int) -> Int {
-	fatalError("unimplemented")
+    if a == 0 {
+        return b
+    }
+    if b == 0 {
+        return a
+    }
+    if a < b {
+        return greatest_common_divisor(a: b, b: a)
+    }
+    if a % b == 0 {
+        return b
+    }
+    return greatest_common_divisor(a: b, b: a % b)
 
 }
 

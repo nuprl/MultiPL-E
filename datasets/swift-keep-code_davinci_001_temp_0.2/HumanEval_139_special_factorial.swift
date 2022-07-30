@@ -8,7 +8,11 @@
 // The function will receive an integer as input and should return the special
 // factorial of this integer.
 func special_factorial(n: Int) -> Int {
-	fatalError("unimplemented")
+    var result = 1
+    for i in 1...n {
+        result *= i
+    }
+    return result
 
 }
 

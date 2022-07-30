@@ -7,7 +7,17 @@
 // >>> how_many_times('aaaa', 'aa')
 // 3
 func how_many_times(string: String, substring: String) -> Int {
-	fatalError("unimplemented")
+    if string.isEmpty || substring.isEmpty {
+        return 0
+    }
+    
+    var count = 0
+    var start = string.startIndex
+    while let range = string.range(of: substring, options: .caseInsensitive, range: start..<string.endIndex, locale: nil) {
+        count += 1
+        start = range.upperBound
+    }
+    return count
 
 }
 

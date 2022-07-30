@@ -9,7 +9,17 @@
 // ["the number of odd elements 1n the str1ng 1 of the 1nput.",
 // "the number of odd elements 8n the str8ng 8 of the 8nput."]
 func odd_count(lst: [String]) -> [String] {
-	fatalError("unimplemented")
+    var result = [String]()
+    for i in lst {
+        var count = 0
+        for j in i {
+            if Int(String(j))! % 2 != 0 {
+                count += 1
+            }
+        }
+        result.append("the number of odd elements \(count)n the str\(count)ng \(count) of the \(count)nput.")
+    }
+    return result
 
 }
 

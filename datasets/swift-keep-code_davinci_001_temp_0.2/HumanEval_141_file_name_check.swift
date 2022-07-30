@@ -12,7 +12,8 @@
 // file_name_check("example.txt") # => 'Yes'
 // file_name_check("1example.dll") # => 'No' (the name should start with a latin alphapet letter)
 func file_name_check(file_name: String) -> String {
-	fatalError("unimplemented")
+    // your code here
+    return ""
 
 }
 

@@ -10,7 +10,34 @@
 // get_closest_vowel("quick") ==> ""
 // get_closest_vowel("ab") ==> ""
 func get_closest_vowel(word: String) -> String {
-	fatalError("unimplemented")
+    var vowels: [Character] = ["a", "e", "i", "o", "u"]
+    var consonants: [Character] = ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z"]
+    var vowels_count: Int = 0
+    var consonants_count: Int = 0
+    var closest_vowel: Character = "a"
+    var closest_vowel_index: Int = 0
+    var closest_vowel_distance: Int = 0
+    var closest_consonant: Character = "a"
+    var closest_consonant_index: Int = 0
+    var closest_consonant_distance: Int = 0
+    var word_array: [Character] = Array(word.characters)
+    var word_array_count: Int = word_array.count
+    var word_array_index: Int = 0
+    var word_array_index_count: Int = 0
+    var word_array_index_count_temp: Int = 0
+    var word_array_index_count_temp_2: Int = 0
+    var word_array_index_count_temp_3: Int = 0
+    var word_array_index_count_temp_4: Int = 0
+    var word_array_index_count_temp_5: Int = 0
+    var word_array_index_count_temp_6: Int = 0
+    var word_array_index_count_temp_7: Int = 0
+    var word_array_index_count_temp_8: Int = 0
+    var word_array_index_count_temp_9: Int = 0
+    var word_array_index_count_temp_10: Int = 0
+    var word_array_index_count_temp_11: Int = 0
+    var word_array_index_count_temp_12: Int = 0
+    var word_array_index_count_temp_13: Int = 0
+    var word
 
 }
 

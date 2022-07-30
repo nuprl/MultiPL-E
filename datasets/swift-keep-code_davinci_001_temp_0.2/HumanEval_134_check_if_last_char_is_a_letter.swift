@@ -9,7 +9,14 @@
 // check_if_last_char_is_a_letter("apple pi e ") ➞ False
 // check_if_last_char_is_a_letter("") ➞ False
 func check_if_last_char_is_a_letter(txt: String) -> Bool {
-	fatalError("unimplemented")
+    let lastChar = txt.last
+    if lastChar == nil {
+        return false
+    }
+    let lastCharString = String(lastChar!)
+    let lastCharIsLetter = lastCharString.isLetter
+    let lastCharIsNotPartOfWord = !txt.contains(" ")
+    return lastCharIsLetter && lastCharIsNotPartOfWord
 
 }
 

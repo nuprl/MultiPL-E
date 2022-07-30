@@ -8,7 +8,24 @@
 // largest_smallest_integers([]) == (None, None)
 // largest_smallest_integers([0]) == (None, None)
 func largest_smallest_integers(lst: [Int]) -> (Int?, Int?) {
-	fatalError("unimplemented")
+    var largest: Int? = nil
+    var smallest: Int? = nil
+    for i in lst {
+        if i < 0 {
+            if largest == nil {
+                largest = i
+            } else if i > largest! {
+                largest = i
+            }
+        } else if i > 0 {
+            if smallest == nil {
+                smallest = i
+            } else if i < smallest! {
+                smallest = i
+            }
+        }
+    }
+    return (largest, smallest)
 
 }
 

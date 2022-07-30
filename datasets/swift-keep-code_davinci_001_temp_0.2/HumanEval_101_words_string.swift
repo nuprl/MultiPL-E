@@ -5,7 +5,7 @@
 // words_string("Hi, my name is John") == ["Hi", "my", "name", "is", "John"]
 // words_string("One, two, three, four, five, six") == ["One", "two", "three", "four", "five", "six"]
 func words_string(s: String) -> [String] {
-	fatalError("unimplemented")
+    return s.components(separatedBy: " ")
 
 }
 

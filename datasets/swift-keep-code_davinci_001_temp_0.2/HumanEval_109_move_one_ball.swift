@@ -19,7 +19,20 @@
 // Explanation:It is not possible to get non-decreasing order for the given
 // array by performing any number of right shift operations.
 func move_one_ball(arr: [Int]) -> Bool {
-	fatalError("unimplemented")
+    var arr = arr
+    if arr.count == 0 {
+        return true
+    }
+    var i = 0
+    while i < arr.count - 1 {
+        if arr[i] > arr[i + 1] {
+            arr.swapAt(i, i + 1)
+            i = 0
+        } else {
+            i += 1
+        }
+    }
+    return arr == Array(arr.sorted())
 
 }
 

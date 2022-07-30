@@ -15,7 +15,30 @@
 // 2. The elements in the array will be in the range of [-1000, 1000].
 // 3. 0 <= k <= len(arr)
 func maximum(arr: [Int], k: Int) -> [Int] {
-	fatalError("unimplemented")
+    var result = [Int]()
+    var max = arr[0]
+    var maxIndex = 0
+    for i in 0..<arr.count {
+        if arr[i] > max {
+            max = arr[i]
+            maxIndex = i
+        }
+    }
+    result.append(max)
+    arr.remove(at: maxIndex)
+    while result.count < k {
+        max = arr[0]
+        maxIndex = 0
+        for i in 0..<arr.count {
+            if arr[i] > max {
+                max = arr[i]
+                maxIndex = i
+            }
+        }
+        result.append(max)
+        arr.remove(at: maxIndex)
+    }
+    return result
 
 }
 

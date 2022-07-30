@@ -5,7 +5,13 @@
 // >>> common([5, 3, 2, 8], [3, 2])
 // [2, 3]
 func common(l1: [Int], l2: [Int]) -> [Int] {
-	fatalError("unimplemented")
+    var common = [Int]()
+    for i in l1 {
+        if l2.contains(i) {
+            common.append(i)
+        }
+    }
+    return common.sorted()
 
 }
 

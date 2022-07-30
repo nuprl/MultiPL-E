@@ -16,7 +16,16 @@
 // For num = "123456789ABCDEF0" the output should be 6.
 // For num = "2020" the output should be 2.
 func hex_key(num: String) -> Int {
-	fatalError("unimplemented")
+    var count = 0
+    for char in num {
+        switch char {
+        case "2", "3", "5", "7", "B", "D":
+            count += 1
+        default:
+            break
+        }
+    }
+    return count
 
 }
 

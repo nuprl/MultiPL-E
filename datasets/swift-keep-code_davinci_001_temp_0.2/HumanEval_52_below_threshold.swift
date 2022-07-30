@@ -5,7 +5,7 @@
 // >>> below_threshold([1, 20, 4, 10], 5)
 // False
 func below_threshold(l: [Int], t: Int) -> Bool {
-	fatalError("unimplemented")
+    return l.filter { $0 < t }.count == l.count
 
 }
 

@@ -11,7 +11,13 @@
 // >>> remove_vowels('zbcd')
 // 'zbcd'
 func remove_vowels(text: String) -> String {
-	fatalError("unimplemented")
+    var result = ""
+    for char in text {
+        if char != "a" && char != "e" && char != "i" && char != "o" && char != "u" {
+            result += String(char)
+        }
+    }
+    return result
 
 }
 

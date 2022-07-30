@@ -5,7 +5,16 @@
 // minSubArraySum([2, 3, 4, 1, 2, 4]) == 1
 // minSubArraySum([-1, -2, -3]) == -6
 func minSubArraySum(nums: [Int]) -> Int {
-	fatalError("unimplemented")
+    var min = nums[0]
+    var sum = 0
+    for i in 0..<nums.count {
+        sum += nums[i]
+        min = min > sum ? sum : min
+        if sum < 0 {
+            sum = 0
+        }
+    }
+    return min
 
 }
 

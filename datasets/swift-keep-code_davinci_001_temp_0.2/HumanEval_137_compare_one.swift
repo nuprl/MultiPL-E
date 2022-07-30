@@ -15,7 +15,16 @@ enum Value: Equatable, Hashable {
 // compare_one("5,1", "6") ➞ "6"
 // compare_one("1", 1) ➞ None
 func compare_one(a: Value, b: Value) -> Value? {
-	fatalError("unimplemented")
+    switch (a, b) {
+    case (.intValue(let a), .intValue(let b)):
+        return a > b ? a : b
+    case (.doubleValue(let a), .doubleValue(let b)):
+        return a > b ? a : b
+    case (.stringValue(let a), .stringValue(let b)):
+        return a > b ? a : b
+    default:
+        return nil
+    }
 
 }
 

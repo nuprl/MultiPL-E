@@ -6,7 +6,15 @@
 // choose_num(12, 15) = 14
 // choose_num(13, 12) = -1
 func choose_num(x: Int, y: Int) -> Int {
-	fatalError("unimplemented")
+    var result = -1
+    if x % 2 == 0 && y % 2 == 0 {
+        if x < y {
+            result = x
+        } else {
+            result = y
+        }
+    }
+    return result
 
 }
 

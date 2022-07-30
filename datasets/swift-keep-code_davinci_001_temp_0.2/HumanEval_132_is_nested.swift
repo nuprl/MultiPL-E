@@ -9,7 +9,18 @@
 // is_nested('[[][]]') ➞ True
 // is_nested('[[]][[') ➞ True
 func is_nested(string: String) -> Bool {
-	fatalError("unimplemented")
+    var stack = [Character]()
+    for char in string {
+        if char == "[" {
+            stack.append(char)
+        } else if char == "]" {
+            if stack.count == 0 {
+                return false
+            }
+            stack.removeLast()
+        }
+    }
+    return stack.count == 0
 
 }
 

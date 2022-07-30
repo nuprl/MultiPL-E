@@ -23,7 +23,40 @@
 // Input: grid = [ [5,9,3], [4,1,6], [7,8,2]], k = 1
 // Output: [1]
 func minPath(grid: [[Int]], k: Int) -> [Int] {
-	fatalError("unimplemented")
+    var result = [Int]()
+    var grid = grid
+    var visited = Array(repeating: Array(repeating: false, count: grid[0].count), count: grid.count)
+    var queue = [(Int, Int, Int)]()
+    var min = Int.max
+    queue.append((0, 0, 0))
+    while !queue.isEmpty {
+        let (x, y, step) = queue.removeFirst()
+        if step > k {
+            continue
+        }
+        if x == grid.count - 1 && y == grid[0].count - 1 {
+            if step < min {
+                min = step
+                result = [Int]()
+                for i in 0..<step {
+                    result.append(grid[i][i])
+                }
+            } else if step == min {
+                for i in 0..<step {
+                    result.append(grid[i][i])
+                }
+            }
+        }
+        if x + 1 < grid.count && !visited[x + 1][y] {
+            visited[x + 1][y] = true
+            queue.append((x + 1, y, step + 1))
+        }
+        if y + 1 < grid[0].count && !visited[x][y + 1] {
+            visited[x][y + 1] = true
+            queue.append((x, y + 1, step + 1))
+        }
+    }
+    return result
 
 }
 

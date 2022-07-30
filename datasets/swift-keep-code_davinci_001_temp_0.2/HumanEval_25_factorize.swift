@@ -9,7 +9,20 @@
 // >>> factorize(70)
 // [2, 5, 7]
 func factorize(n: Int) -> [Int] {
-	fatalError("unimplemented")
+    var factors: [Int] = []
+    var i = 2
+    while i * i <= n {
+        if n % i == 0 {
+            factors.append(i)
+            n /= i
+        } else {
+            i += 1
+        }
+    }
+    if n > 1 {
+        factors.append(n)
+    }
+    return factors
 
 }
 

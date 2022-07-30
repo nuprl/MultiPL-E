@@ -4,7 +4,21 @@
 // >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])
 // [0.0, 0.25, 0.5, 0.75, 1.0]
 func rescale_to_unit(numbers: [Double]) -> [Double] {
-	fatalError("unimplemented")
+    var min = numbers[0]
+    var max = numbers[0]
+    for number in numbers {
+        if number < min {
+            min = number
+        }
+        if number > max {
+            max = number
+        }
+    }
+    var result = [Double]()
+    for number in numbers {
+        result.append((number - min) / (max - min))
+    }
+    return result
 
 }
 

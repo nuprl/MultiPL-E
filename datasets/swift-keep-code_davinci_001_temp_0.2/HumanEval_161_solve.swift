@@ -9,7 +9,15 @@
 // solve("ab") = "AB"
 // solve("#a@C") = "#A@c"
 func solve(s: String) -> String {
-	fatalError("unimplemented")
+    var result = ""
+    for char in s {
+        if char.isLetter {
+            result.append(char.isLowercase ? char.uppercased() : char.lowercased())
+        } else {
+            result.append(char)
+        }
+    }
+    return result
 
 }
 

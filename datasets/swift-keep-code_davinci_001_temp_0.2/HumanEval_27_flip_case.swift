@@ -3,7 +3,15 @@
 // >>> flip_case('Hello')
 // 'hELLO'
 func flip_case(string: String) -> String {
-	fatalError("unimplemented")
+    var result = ""
+    for char in string {
+        if char.isUppercase {
+            result.append(char.lowercased())
+        } else {
+            result.append(char.uppercased())
+        }
+    }
+    return result
 
 }
 

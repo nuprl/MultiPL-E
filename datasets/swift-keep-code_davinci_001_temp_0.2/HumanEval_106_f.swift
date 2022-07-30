@@ -7,7 +7,15 @@
 // Example:
 // f(5) == [1, 2, 6, 24, 15]
 func f(n: Int) -> [Int] {
-	fatalError("unimplemented")
+    var result = [Int]()
+    for i in 1...n {
+        if i % 2 == 0 {
+            result.append(factorial(i))
+        } else {
+            result.append(sum(1...i))
+        }
+    }
+    return result
 
 }
 

@@ -9,7 +9,13 @@
 // >>> change_base(7, 2)
 // '111'
 func change_base(x: Int, base: Int) -> String {
-	fatalError("unimplemented")
+    var result = ""
+    var x = x
+    while x > 0 {
+        result = String(x % base) + result
+        x /= base
+    }
+    return result
 
 }
 

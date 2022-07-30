@@ -4,7 +4,13 @@
 // >>> remove_duplicates([1, 2, 3, 2, 4])
 // [1, 3, 4]
 func remove_duplicates(numbers: [Int]) -> [Int] {
-	fatalError("unimplemented")
+    var result: [Int] = []
+    for number in numbers {
+        if !result.contains(number) {
+            result.append(number)
+        }
+    }
+    return result
 
 }
 

@@ -10,7 +10,13 @@
 // >>> make_a_pile(3)
 // [3, 5, 7]
 func make_a_pile(n: Int) -> [Int] {
-	fatalError("unimplemented")
+    var pile = [Int]()
+    var i = n
+    while i > 0 {
+        pile.append(i)
+        i = i + 2 - i % 2
+    }
+    return pile
 
 }
 

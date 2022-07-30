@@ -6,7 +6,13 @@
 // generate_integers(8, 2) => [2, 4, 6, 8]
 // generate_integers(10, 14) => []
 func generate_integers(a: Int, b: Int) -> [Int] {
-	fatalError("unimplemented")
+    var result = [Int]()
+    for i in a...b {
+        if i % 2 == 0 {
+            result.append(i)
+        }
+    }
+    return result
 
 }
 

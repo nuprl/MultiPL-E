@@ -7,7 +7,18 @@
 // >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]
 // >>> sort_array([1, 0, 2, 3, 4]) [0, 1, 2, 3, 4]
 func sort_array(arr: [Int]) -> [Int] {
-	fatalError("unimplemented")
+    var sortedArr = arr
+    var count = 0
+    for i in 0..<arr.count {
+        for j in i+1..<arr.count {
+            if (arr[i] & 1) > (arr[j] & 1) {
+                let temp = arr[i]
+                arr[i] = arr[j]
+                arr[j] = temp
+            }
+        }
+    }
+    return arr
 
 }
 

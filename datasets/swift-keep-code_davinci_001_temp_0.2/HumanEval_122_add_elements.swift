@@ -8,7 +8,11 @@
 // 1. 1 <= len(arr) <= 100
 // 2. 1 <= k <= len(arr)
 func add_elements(arr: [Int], k: Int) -> Int {
-	fatalError("unimplemented")
+    var sum = 0
+    for i in 0..<k {
+        sum += arr[i]
+    }
+    return sum
 
 }
 

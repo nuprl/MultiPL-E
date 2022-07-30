@@ -7,7 +7,17 @@
 // >>> monotonic([4, 1, 0, -10])
 // True
 func monotonic(l: [Int]) -> Bool {
-	fatalError("unimplemented")
+    var isIncreasing = true
+    var isDecreasing = true
+    for i in 0..<l.count-1 {
+        if l[i] > l[i+1] {
+            isIncreasing = false
+        }
+        if l[i] < l[i+1] {
+            isDecreasing = false
+        }
+    }
+    return isIncreasing || isDecreasing
 
 }
 

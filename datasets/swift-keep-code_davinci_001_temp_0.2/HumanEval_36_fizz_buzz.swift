@@ -7,7 +7,13 @@
 // >>> fizz_buzz(79)
 // 3
 func fizz_buzz(n: Int) -> Int {
-	fatalError("unimplemented")
+    var count = 0
+    for i in 1..<n {
+        if i % 11 == 0 || i % 13 == 0 {
+            count += 1
+        }
+    }
+    return count
 
 }
 

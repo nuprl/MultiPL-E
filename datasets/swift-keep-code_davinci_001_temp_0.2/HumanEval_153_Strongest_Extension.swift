@@ -15,7 +15,13 @@
 // Example:
 // for Strongest_Extension('my_class', ['AA', 'Be', 'CC']) == 'my_class.AA'
 func Strongest_Extension(class_name: String, extensions: [String]) -> String {
-	fatalError("unimplemented")
+    let strength = extensions.map { (extension) -> Double in
+        let cap = extension.countOfCharacters(in: CharacterSet.uppercaseLetters)
+        let sm = extension.countOfCharacters(in: CharacterSet.lowercaseLetters)
+        return Double(cap - sm)
+    }
+    let strongest_extension = extensions[strength.index(of: strength.max()!)!]
+    return "\(class_name).\(strongest_extension)"
 
 }
 

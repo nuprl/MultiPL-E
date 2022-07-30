@@ -11,7 +11,27 @@
 // exchange([1, 2, 3, 4], [1, 5, 3, 4]) => "NO"
 // It is assumed that the input lists will be non-empty.
 func exchange(lst1: [Int], lst2: [Int]) -> String {
-	fatalError("unimplemented")
+    var lst1 = lst1
+    var lst2 = lst2
+    var lst1Even = [Int]()
+    var lst2Even = [Int]()
+    for i in lst1 {
+        if i % 2 == 0 {
+            lst1Even.append(i)
+        }
+    }
+    for i in lst2 {
+        if i % 2 == 0 {
+            lst2Even.append(i)
+        }
+    }
+    if lst1Even.count == 0 || lst2Even.count == 0 {
+        return "NO"
+    }
+    if lst1Even.count == lst2Even.count {
+        return "YES"
+    }
+    return "NO"
 
 }
 

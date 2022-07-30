@@ -8,7 +8,23 @@
 // in their trajectory as if they did not collide.
 // This function outputs the number of such collisions.
 func car_race_collision(n: Int) -> Int {
-	fatalError("unimplemented")
+    var collisions = 0
+    var cars_left_to_right = Array(repeating: 0, count: n)
+    var cars_right_to_left = Array(repeating: 0, count: n)
+    for i in 0..<n {
+        cars_left_to_right[i] = i + 1
+        cars_right_to_left[i] = n - i
+    }
+    var i = 0
+    while i < n {
+        if cars_left_to_right[i] == cars_right_to_left[i] {
+            collisions += 1
+            cars_left_to_right[i] = 0
+            cars_right_to_left[i] = 0
+        }
+        i += 1
+    }
+    return collisions
 
 }
 

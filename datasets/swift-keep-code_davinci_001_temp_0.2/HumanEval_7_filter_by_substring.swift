@@ -5,7 +5,7 @@
 // >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
 // ['abc', 'bacd', 'array']
 func filter_by_substring(strings: [String], substring: String) -> [String] {
-	fatalError("unimplemented")
+    return strings.filter { $0.contains(substring) }
 
 }
 

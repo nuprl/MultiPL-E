@@ -4,7 +4,15 @@
 // >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
 // [1, 2, 3, 3, 3, 4, 4]
 func rolling_max(numbers: [Int]) -> [Int] {
-	fatalError("unimplemented")
+    var result: [Int] = []
+    var max: Int = 0
+    for number in numbers {
+        if number > max {
+            max = number
+        }
+        result.append(max)
+    }
+    return result
 
 }
 

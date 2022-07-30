@@ -6,7 +6,16 @@
 // digits(4)  == 0
 // digits(235) == 15
 func digits(n: Int) -> Int {
-	fatalError("unimplemented")
+    var product = 1
+    var n = n
+    while n > 0 {
+        let digit = n % 10
+        if digit % 2 != 0 {
+            product *= digit
+        }
+        n /= 10
+    }
+    return product
 
 }
 

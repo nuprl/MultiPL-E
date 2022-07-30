@@ -7,7 +7,10 @@
 // next_smallest([]) == None
 // next_smallest([1, 1]) == None
 func next_smallest(lst: [Int]) -> Int? {
-	fatalError("unimplemented")
+    guard lst.count > 1 else { return nil }
+    var lst = lst
+    lst.sort()
+    return lst[1]
 
 }
 

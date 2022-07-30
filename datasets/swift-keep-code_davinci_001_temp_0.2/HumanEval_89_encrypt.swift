@@ -9,7 +9,17 @@
 // encrypt('gf') returns 'kj'
 // encrypt('et') returns 'ix'
 func encrypt(s: String) -> String {
-	fatalError("unimplemented")
+    var encryptedString = ""
+    for char in s.characters {
+        let index = alphabet.index(of: String(char))
+        if index == nil {
+            encryptedString.append(char)
+        } else {
+            let newIndex = (index! + 2) * 2
+            encryptedString.append(alphabet[newIndex])
+        }
+    }
+    return encryptedString
 
 }
 

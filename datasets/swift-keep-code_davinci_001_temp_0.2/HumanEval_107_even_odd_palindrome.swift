@@ -15,7 +15,18 @@
 // 1. 1 <= n <= 10^3
 // 2. returned tuple has the number of even and odd integer palindromes respectively.
 func even_odd_palindrome(n: Int) -> (Int, Int) {
-	fatalError("unimplemented")
+    var even = 0
+    var odd = 0
+    for i in 1...n {
+        if isPalindrome(i) {
+            if i % 2 == 0 {
+                even += 1
+            } else {
+                odd += 1
+            }
+        }
+    }
+    return (even, odd)
 
 }
 

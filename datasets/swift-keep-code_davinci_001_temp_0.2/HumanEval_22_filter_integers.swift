@@ -5,7 +5,7 @@
 // >>> filter_integers([1, 2, 3, 'abc', {}, []])
 // [1, 2, 3]
 func filter_integers(values: [AnyHashable]) -> [Int] {
-	fatalError("unimplemented")
+    return values.filter { $0 is Int }.map { $0 as! Int }
 
 }
 

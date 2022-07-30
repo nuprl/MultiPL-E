@@ -7,7 +7,19 @@
 // find_max(["name", "enam", "game"]) == "enam"
 // find_max(["aaaaaaa", "bb" ,"cc"]) == ""aaaaaaa"
 func find_max(words: [String]) -> String {
-	fatalError("unimplemented")
+    var max = words[0]
+    var max_unique_chars = 0
+    for word in words {
+        var unique_chars = Set<Character>()
+        for char in word.characters {
+            unique_chars.insert(char)
+        }
+        if unique_chars.count > max_unique_chars {
+            max = word
+            max_unique_chars = unique_chars.count
+        }
+    }
+    return max
 
 }
 

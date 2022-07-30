@@ -6,7 +6,27 @@
 // >>> separate_paren_groups('( ) (( )) (( )( ))')
 // ['()', '(())', '(()())']
 func separate_paren_groups(paren_string: String) -> [String] {
-	fatalError("unimplemented")
+    var result = [String]()
+    var current_group = ""
+    var current_group_start = 0
+    var current_group_end = 0
+    var current_group_level = 0
+    for i in 0..<paren_string.characters.count {
+        let c = paren_string[i]
+        if c == "(" {
+            current_group_level += 1
+            if current_group_level == 1 {
+                current_group_start = i
+            }
+        } else if c == ")" {
+            current_group_level -= 1
+            if current_group_level == 0 {
+                current_group_end = i
+                result.append(paren_string[current_group_start..<current_group_end])
+            }
+        }
+    }
+    return result
 
 }
 

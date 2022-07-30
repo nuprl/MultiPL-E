@@ -8,7 +8,21 @@
 // simplify("1/6", "2/1") = False
 // simplify("7/10", "10/2") = False
 func simplify(x: String, n: String) -> Bool {
-	fatalError("unimplemented")
+    let xArr = x.components(separatedBy: "/")
+    let nArr = n.components(separatedBy: "/")
+    let xNum = Int(xArr[0])!
+    let xDen = Int(xArr[1])!
+    let nNum = Int(nArr[0])!
+    let nDen = Int(nArr[1])!
+    let xGcd = gcd(xNum, xDen)
+    let nGcd = gcd(nNum, nDen)
+    let xSimp = xNum / xGcd
+    let nSimp = nNum / nGcd
+    if xSimp == nSimp {
+        return true
+    } else {
+        return false
+    }
 
 }
 

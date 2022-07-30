@@ -3,7 +3,12 @@
 // >>> all_prefixes('abc')
 // ['a', 'ab', 'abc']
 func all_prefixes(string: String) -> [String] {
-	fatalError("unimplemented")
+    var prefixes = [String]()
+    for i in 0..<string.characters.count {
+        let prefix = string.substring(to: string.index(string.startIndex, offsetBy: i))
+        prefixes.append(prefix)
+    }
+    return prefixes
 
 }
 

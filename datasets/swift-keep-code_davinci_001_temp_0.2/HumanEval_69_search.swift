@@ -8,7 +8,20 @@
 // search([1, 2, 2, 3, 3, 3, 4, 4, 4]) == 3
 // search([5, 5, 4, 4, 4]) == -1
 func search(lst: [Int]) -> Int {
-	fatalError("unimplemented")
+    var dict = [Int: Int]()
+    for i in lst {
+        if dict[i] == nil {
+            dict[i] = 1
+        } else {
+            dict[i]! += 1
+        }
+    }
+    for (k, v) in dict {
+        if k > 0 && v > dict[k]! {
+            return k
+        }
+    }
+    return -1
 
 }
 

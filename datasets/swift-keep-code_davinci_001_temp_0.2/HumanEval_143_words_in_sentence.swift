@@ -14,7 +14,14 @@
 // * 1 <= len(sentence) <= 100
 // * sentence contains only letters
 func words_in_sentence(sentence: String) -> String {
-	fatalError("unimplemented")
+    var words = sentence.components(separatedBy: " ")
+    var result = ""
+    for word in words {
+        if isPrime(number: word.count) {
+            result += word + " "
+        }
+    }
+    return result
 
 }
 

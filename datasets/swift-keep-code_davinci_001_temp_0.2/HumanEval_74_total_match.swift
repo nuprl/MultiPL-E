@@ -9,7 +9,21 @@
 // total_match(['hi', 'admin'], ['hI', 'hi', 'hi']) ➞ ['hI', 'hi', 'hi']
 // total_match(['4'], ['1', '2', '3', '4', '5']) ➞ ['4']
 func total_match(lst1: [String], lst2: [String]) -> [String] {
-	fatalError("unimplemented")
+    var lst1_count = 0
+    var lst2_count = 0
+    for str in lst1 {
+        lst1_count += str.count
+    }
+    for str in lst2 {
+        lst2_count += str.count
+    }
+    if lst1_count < lst2_count {
+        return lst1
+    } else if lst1_count > lst2_count {
+        return lst2
+    } else {
+        return lst1
+    }
 
 }
 

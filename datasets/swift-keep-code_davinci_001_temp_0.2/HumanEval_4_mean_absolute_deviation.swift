@@ -7,7 +7,9 @@
 // >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
 // 1.0
 func mean_absolute_deviation(numbers: [Double]) -> Double {
-	fatalError("unimplemented")
+    let mean = mean(numbers)
+    let absolute_deviations = numbers.map { abs($0 - mean) }
+    return mean(absolute_deviations)
 
 }
 

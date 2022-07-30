@@ -11,7 +11,11 @@ extension Int: Error {}
 // rounded_avg(10, 20) => "0b1111"
 // rounded_avg(20, 33) => "0b11010"
 func rounded_avg(n: Int, m: Int) -> Result<String, Int> {
-	fatalError("unimplemented")
+    if n > m {
+        return .failure(-1)
+    }
+    let avg = (n + m) / 2
+    return .success(String(avg, radix: 2))
 
 }
 

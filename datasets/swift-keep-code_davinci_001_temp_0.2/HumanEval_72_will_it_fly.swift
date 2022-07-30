@@ -11,7 +11,14 @@
 // will_it_fly([3], 5) ➞ True
 // # 3 is less than the maximum possible weight, and it's balanced.
 func will_it_fly(q: [Int], w: Int) -> Bool {
-	fatalError("unimplemented")
+    if q.count == 0 {
+        return true
+    }
+    if q.count == 1 {
+        return q[0] <= w
+    }
+    let sum = q.reduce(0, +)
+    return sum <= w && is_palindrome(q)
 
 }
 

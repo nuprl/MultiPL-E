@@ -10,7 +10,7 @@
 // iscube(0) ==> True
 // iscube(180) ==> False
 func iscube(a: Int) -> Bool {
-	fatalError("unimplemented")
+    return false
 
 }
 

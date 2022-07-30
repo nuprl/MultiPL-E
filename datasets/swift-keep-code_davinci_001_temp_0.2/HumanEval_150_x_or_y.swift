@@ -5,7 +5,17 @@
 // for x_or_y(7, 34, 12) == 34
 // for x_or_y(15, 8, 5) == 5
 func x_or_y(n: Int, x: Int, y: Int) -> Int {
-	fatalError("unimplemented")
+    // your code here
+    if n == 1 {
+        return x
+    }
+    if n == 2 {
+        return y
+    }
+    if n % 2 == 0 {
+        return x
+    }
+    return y
 
 }
 

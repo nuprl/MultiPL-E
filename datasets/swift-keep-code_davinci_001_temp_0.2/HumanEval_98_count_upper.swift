@@ -5,7 +5,15 @@
 // count_upper('abcdefg') returns 0
 // count_upper('dBBE') returns 0
 func count_upper(s: String) -> Int {
-	fatalError("unimplemented")
+    var count = 0
+    for (i, c) in s.characters.enumerate() {
+        if c == "A" || c == "E" || c == "I" || c == "O" || c == "U" {
+            if i % 2 == 0 {
+                count += 1
+            }
+        }
+    }
+    return count
 
 }
 

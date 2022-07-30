@@ -6,7 +6,8 @@
 // is_multiply_prime(30) == True
 // 30 = 2 * 3 * 5
 func is_multiply_prime(a: Int) -> Bool {
-	fatalError("unimplemented")
+    // your code here
+    return false
 
 }
 

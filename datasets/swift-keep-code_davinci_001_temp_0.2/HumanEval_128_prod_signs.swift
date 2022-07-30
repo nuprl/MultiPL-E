@@ -8,7 +8,20 @@
 // >>> prod_signs([0, 1]) == 0
 // >>> prod_signs([]) == None
 func prod_signs(arr: [Int]) -> Int? {
-	fatalError("unimplemented")
+    guard arr.count > 0 else { return nil }
+    var result = 1
+    var product = 1
+    for num in arr {
+        if num == 0 {
+            product *= 0
+        } else if num > 0 {
+            product *= 1
+        } else {
+            product *= -1
+        }
+        result += num.magnitude
+    }
+    return result * product
 
 }
 

@@ -13,7 +13,9 @@
 // farthest from zero. For example closest_integer("14.5") should
 // return 15 and closest_integer("-14.5") should return -15.
 func closest_integer(value: String) -> Int {
-	fatalError("unimplemented")
+    let value = Double(value)
+    let rounded = Int(round(value!))
+    return rounded
 
 }
 

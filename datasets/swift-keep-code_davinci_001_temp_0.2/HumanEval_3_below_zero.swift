@@ -7,7 +7,14 @@
 // >>> below_zero([1, 2, -4, 5])
 // True
 func below_zero(operations: [Int]) -> Bool {
-	fatalError("unimplemented")
+    var balance = 0
+    for operation in operations {
+        balance += operation
+        if balance < 0 {
+            return true
+        }
+    }
+    return false
 
 }
 

@@ -9,7 +9,11 @@
 // For lst = [1.4,4.2,0] the output should be 29
 // For lst = [-2.4,1,1] the output should be 6
 func sum_squares(lst: [Double]) -> Int {
-	fatalError("unimplemented")
+    var sum = 0
+    for i in lst {
+        sum += Int(ceil(i)) * Int(ceil(i))
+    }
+    return sum
 
 }
 

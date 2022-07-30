@@ -10,7 +10,19 @@
 // >>> encode('This is a message')
 // 'tHKS KS C MGSSCGG'
 func encode(message: String) -> String {
-	fatalError("unimplemented")
+    var encodedMessage = ""
+    for character in message.characters {
+        if character.isLetter {
+            let letter = character.lowercaseString
+            let index = letter.startIndex.advancedBy(2)
+            let newLetter = letter.substringToIndex(index)
+            let newCharacter = newLetter.uppercaseString
+            encodedMessage += newCharacter
+        } else {
+            encodedMessage += String(character)
+        }
+    }
+    return encodedMessage
 
 }
 

@@ -7,7 +7,22 @@
 // >>> count_nums([-1, 11, -11]) == 1
 // >>> count_nums([1, 1, 2]) == 3
 func count_nums(arr: [Int]) -> Int {
-	fatalError("unimplemented")
+    var count = 0
+    for i in arr {
+        if i < 0 {
+            let num = String(i)
+            let index = num.index(num.startIndex, offsetBy: 1)
+            let num2 = Int(String(num[index...]))
+            if num2! > 0 {
+                count += 1
+            }
+        } else {
+            if i > 0 {
+                count += 1
+            }
+        }
+    }
+    return count
 
 }
 

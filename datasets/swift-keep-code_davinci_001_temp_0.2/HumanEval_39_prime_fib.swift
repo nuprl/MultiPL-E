@@ -11,7 +11,27 @@
 // >>> prime_fib(5)
 // 89
 func prime_fib(n: Int) -> Int {
-	fatalError("unimplemented")
+    var fib = [Int]()
+    fib.append(1)
+    fib.append(1)
+    for i in 2...n {
+        fib.append(fib[i-1] + fib[i-2])
+    }
+    var prime = [Int]()
+    prime.append(2)
+    for i in 3...fib[n] {
+        var isPrime = true
+        for j in 2..<i {
+            if i % j == 0 {
+                isPrime = false
+                break
+            }
+        }
+        if isPrime {
+            prime.append(i)
+        }
+    }
+    return prime[n]
 
 }
 

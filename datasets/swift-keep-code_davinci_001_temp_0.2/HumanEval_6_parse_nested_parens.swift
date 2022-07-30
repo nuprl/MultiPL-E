@@ -5,7 +5,22 @@
 // >>> parse_nested_parens('(()()) ((())) () ((())()())')
 // [2, 3, 1, 3]
 func parse_nested_parens(paren_string: String) -> [Int] {
-	fatalError("unimplemented")
+    var paren_stack = [Int]()
+    var max_depth = 0
+    var depth = 0
+    for char in paren_string {
+        if char == "(" {
+            depth += 1
+            if depth > max_depth {
+                max_depth = depth
+            }
+            paren_stack.append(depth)
+        } else if char == ")" {
+            depth -= 1
+            paren_stack.append(depth)
+        }
+    }
+    return paren_stack
 
 }
 

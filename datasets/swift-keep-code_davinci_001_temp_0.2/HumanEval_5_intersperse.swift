@@ -5,7 +5,16 @@
 // >>> intersperse([1, 2, 3], 4)
 // [1, 4, 2, 4, 3]
 func intersperse(numbers: [Int], delimeter: Int) -> [Int] {
-	fatalError("unimplemented")
+    var result = [Int]()
+    for i in 0..<numbers.count {
+        if i == numbers.count - 1 {
+            result.append(numbers[i])
+        } else {
+            result.append(numbers[i])
+            result.append(delimeter)
+        }
+    }
+    return result
 
 }
 

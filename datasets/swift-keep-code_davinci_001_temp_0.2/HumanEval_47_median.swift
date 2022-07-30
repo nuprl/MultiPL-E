@@ -5,7 +5,13 @@
 // >>> median([-10, 4, 6, 1000, 10, 20])
 // 15.0
 func median(l: [Int]) -> Double {
-	fatalError("unimplemented")
+    let sorted = l.sorted()
+    let mid = sorted.count / 2
+    if sorted.count % 2 == 0 {
+        return Double(sorted[mid] + sorted[mid - 1]) / 2
+    } else {
+        return Double(sorted[mid])
+    }
 
 }
 

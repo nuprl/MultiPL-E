@@ -5,7 +5,9 @@
 // >>> sort_numbers('three one five')
 // 'one three five'
 func sort_numbers(numbers: String) -> String {
-	fatalError("unimplemented")
+    let numbers = numbers.components(separatedBy: " ")
+    let sortedNumbers = numbers.sorted(by: <)
+    return sortedNumbers.joined(separator: " ")
 
 }
 

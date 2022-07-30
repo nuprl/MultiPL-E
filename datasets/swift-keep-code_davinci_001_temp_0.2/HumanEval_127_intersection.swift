@@ -16,7 +16,12 @@
 // intersection((-1, 1), (0, 4)) ==> "NO"
 // intersection((-3, -1), (-5, 5)) ==> "YES"
 func intersection(interval1: (Int, Int), interval2: (Int, Int)) -> String {
-	fatalError("unimplemented")
+    let intersection = (max(interval1.0, interval2.0), min(interval1.1, interval2.1))
+    if intersection.0 <= intersection.1 {
+        return "YES"
+    } else {
+        return "NO"
+    }
 
 }
 

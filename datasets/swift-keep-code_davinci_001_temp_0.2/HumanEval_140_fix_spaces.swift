@@ -7,7 +7,21 @@
 // fix_spaces(" Example 2") == "_Example_2"
 // fix_spaces(" Example   3") == "_Example-3"
 func fix_spaces(text: String) -> String {
-	fatalError("unimplemented")
+    var result = ""
+    var i = 0
+    while i < text.characters.count {
+        let ch = text[text.index(text.startIndex, offsetBy: i)]
+        if ch == " " {
+            if result.characters.count > 0 && result.last! != "_" {
+                result.append("_")
+            }
+            i += 1
+        } else {
+            result.append(ch)
+            i += 1
+        }
+    }
+    return result
 
 }
 

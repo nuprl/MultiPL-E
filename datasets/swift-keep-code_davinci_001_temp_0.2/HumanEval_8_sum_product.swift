@@ -6,7 +6,13 @@
 // >>> sum_product([1, 2, 3, 4])
 // (10, 24)
 func sum_product(numbers: [Int]) -> (Int, Int) {
-	fatalError("unimplemented")
+    var sum = 0
+    var product = 1
+    for number in numbers {
+        sum += number
+        product *= number
+    }
+    return (sum, product)
 
 }
 

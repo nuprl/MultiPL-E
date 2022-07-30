@@ -9,7 +9,20 @@ extension Int: Error {}
 // split_words("Hello,world!") ➞ ["Hello", "world!"]
 // split_words("abcdef") == 3
 func split_words(txt: String) -> Result<[String], Int> {
-	fatalError("unimplemented")
+    let words = txt.split(separator: " ")
+    if words.count > 1 {
+        return .success(words.map { String($0) })
+    }
+    let commas = txt.split(separator: ",")
+    if commas.count > 1 {
+        return .success(commas.map { String($0) })
+    }
+    let letters = txt.lowercased().filter { $0.isLetter }
+    let count = letters.reduce(0) { $0 + ($1.unicodeScalars.first!.value % 2 == 0 ? 1 : -1) }
+    if count == 0 {
+        return .failure(0)
+    }
+    return .success([String(count)])
 
 }
 

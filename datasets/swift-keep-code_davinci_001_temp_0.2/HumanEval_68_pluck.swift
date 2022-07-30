@@ -25,7 +25,22 @@
 // * 1 <= nodes.length <= 10000
 // * 0 <= node.value
 func pluck(arr: [Int]) -> [Int] {
-	fatalError("unimplemented")
+    var result = [Int]()
+    var min = Int.max
+    var minIndex = Int.max
+    for (index, value) in arr.enumerated() {
+        if value % 2 == 0 {
+            if value < min {
+                min = value
+                minIndex = index
+            }
+        }
+    }
+    if minIndex != Int.max {
+        result.append(min)
+        result.append(minIndex)
+    }
+    return result
 
 }
 

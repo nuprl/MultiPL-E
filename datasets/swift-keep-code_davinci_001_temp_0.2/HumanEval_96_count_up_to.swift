@@ -9,7 +9,15 @@
 // count_up_to(1) => []
 // count_up_to(18) => [2,3,5,7,11,13,17]
 func count_up_to(n: Int) -> [Int] {
-	fatalError("unimplemented")
+    var primes = [Int]()
+    var i = 2
+    while i < n {
+        if is_prime(n: i) {
+            primes.append(i)
+        }
+        i += 1
+    }
+    return primes
 
 }
 

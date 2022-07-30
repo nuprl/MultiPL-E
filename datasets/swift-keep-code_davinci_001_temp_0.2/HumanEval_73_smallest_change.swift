@@ -7,7 +7,17 @@
 // smallest_change([1, 2, 3, 4, 3, 2, 2]) == 1
 // smallest_change([1, 2, 3, 2, 1]) == 0
 func smallest_change(arr: [Int]) -> Int {
-	fatalError("unimplemented")
+    var count = 0
+    var i = 0
+    var j = arr.count - 1
+    while i < j {
+        if arr[i] != arr[j] {
+            count += 1
+        }
+        i += 1
+        j -= 1
+    }
+    return count
 
 }
 

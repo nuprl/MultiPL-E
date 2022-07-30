@@ -6,7 +6,13 @@
 // specialFilter([15, -73, 14, -15]) => 1 
 // specialFilter([33, -2, -3, 45, 21, 109]) => 2
 func specialFilter(nums: [Int]) -> Int {
-	fatalError("unimplemented")
+    var count = 0
+    for num in nums {
+        if num > 10 && num % 10 % 2 == 1 && num / 10 % 10 % 2 == 1 {
+            count += 1
+        }
+    }
+    return count
 
 }
 

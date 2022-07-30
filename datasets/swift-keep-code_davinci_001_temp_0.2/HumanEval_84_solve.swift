@@ -10,7 +10,13 @@
 // Output:
 // a string of binary number
 func solve(N: Int) -> String {
-	fatalError("unimplemented")
+    var result = 0
+    var n = N
+    while n > 0 {
+        result += n % 2
+        n /= 2
+    }
+    return String(result, radix: 2)
 
 }
 

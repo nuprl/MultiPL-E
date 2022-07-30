@@ -5,7 +5,11 @@
 // >>> string_sequence(5)
 // '0 1 2 3 4 5'
 func string_sequence(n: Int) -> String {
-	fatalError("unimplemented")
+    var result = ""
+    for i in 0..<n {
+        result += "\(i) "
+    }
+    return result
 
 }
 

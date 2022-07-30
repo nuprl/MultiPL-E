@@ -4,7 +4,19 @@
 // >>> string_xor('010', '110')
 // '100'
 func string_xor(a: String, b: String) -> String {
-	fatalError("unimplemented")
+    var result = ""
+    for i in 0..<a.characters.count {
+        let a_char = a[a.index(a.startIndex, offsetBy: i)]
+        let b_char = b[b.index(b.startIndex, offsetBy: i)]
+        if a_char == "1" && b_char == "1" {
+            result += "0"
+        } else if a_char == "0" && b_char == "0" {
+            result += "0"
+        } else {
+            result += "1"
+        }
+    }
+    return result
 
 }
 

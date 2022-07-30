@@ -8,7 +8,14 @@
 // >>> is_bored("The sky is blue. The sun is shining. I love this weather")
 // 1
 func is_bored(S: String) -> Int {
-	fatalError("unimplemented")
+    let sentences = S.components(separatedBy: ".")
+    var count = 0
+    for sentence in sentences {
+        if sentence.hasPrefix("I") {
+            count += 1
+        }
+    }
+    return count
 
 }
 

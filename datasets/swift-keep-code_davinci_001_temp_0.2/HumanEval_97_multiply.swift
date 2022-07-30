@@ -8,7 +8,14 @@
 // multiply(2020, 1851) should return 0.
 // multiply(14,-15) should return 20.
 func multiply(a: Int, b: Int) -> Int {
-	fatalError("unimplemented")
+    var a = a
+    var b = b
+    var result = 0
+    while a > 0 {
+        result += b
+        a -= 1
+    }
+    return result
 
 }
 

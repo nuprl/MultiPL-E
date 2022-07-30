@@ -21,7 +21,37 @@
 // Example:
 // grade_equation([4.0, 3, 1.7, 2, 3.5]) ==> ['A+', 'B', 'C-', 'C', 'A-']
 func numerical_letter_grade(grades: [Double]) -> [String] {
-	fatalError("unimplemented")
+    var result: [String] = []
+    for grade in grades {
+        if grade >= 4.0 {
+            result.append("A+")
+        } else if grade >= 3.7 {
+            result.append("A")
+        } else if grade >= 3.3 {
+            result.append("A-")
+        } else if grade >= 3.0 {
+            result.append("B+")
+        } else if grade >= 2.7 {
+            result.append("B")
+        } else if grade >= 2.3 {
+            result.append("B-")
+        } else if grade >= 2.0 {
+            result.append("C+")
+        } else if grade >= 1.7 {
+            result.append("C")
+        } else if grade >= 1.3 {
+            result.append("C-")
+        } else if grade >= 1.0 {
+            result.append("D+")
+        } else if grade >= 0.7 {
+            result.append("D")
+        } else if grade >= 0.0 {
+            result.append("D-")
+        } else {
+            result.append("E")
+        }
+    }
+    return result
 
 }
 

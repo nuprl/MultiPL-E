@@ -12,7 +12,12 @@
 // is_sorted([1, 2, 2, 3, 3, 4]) ➞ True
 // is_sorted([1, 2, 2, 2, 3, 4]) ➞ False
 func is_sorted(lst: [Int]) -> Bool {
-	fatalError("unimplemented")
+    var sorted = lst.sorted()
+    if sorted == lst {
+        return true
+    } else {
+        return false
+    }
 
 }
 

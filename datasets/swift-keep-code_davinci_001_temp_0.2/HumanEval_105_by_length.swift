@@ -16,7 +16,14 @@
 // -> reverse arr -> [55, 1, -1]
 // return = ['One']
 func by_length(arr: [Int]) -> [String] {
-	fatalError("unimplemented")
+    var result = [String]()
+    let sorted = arr.sorted()
+    for i in sorted {
+        if i >= 1 && i <= 9 {
+            result.append(String(i))
+        }
+    }
+    return result.reversed()
 
 }
 

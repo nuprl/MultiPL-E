@@ -9,7 +9,13 @@
 // >>> vowels_count("ACEDY")
 // 3
 func vowels_count(s: String) -> Int {
-	fatalError("unimplemented")
+    var count = 0
+    for c in s.characters {
+        if c == "a" || c == "e" || c == "i" || c == "o" || c == "u" {
+            count += 1
+        }
+    }
+    return count
 
 }
 

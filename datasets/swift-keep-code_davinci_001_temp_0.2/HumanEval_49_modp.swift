@@ -11,7 +11,7 @@
 // >>> modp(100, 101)
 // 1
 func modp(n: Int, p: Int) -> Int {
-	fatalError("unimplemented")
+    return n % p
 
 }
 

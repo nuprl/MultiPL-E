@@ -7,7 +7,16 @@
 // >>> longest(['a', 'bb', 'ccc'])
 // 'ccc'
 func longest(strings: [String]) -> String? {
-	fatalError("unimplemented")
+    if strings.isEmpty {
+        return nil
+    }
+    var longest = strings[0]
+    for string in strings {
+        if string.characters.count > longest.characters.count {
+            longest = string
+        }
+    }
+    return longest
 
 }
 

@@ -6,7 +6,18 @@
 // >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
 // True
 func has_close_elements(numbers: [Double], threshold: Double) -> Bool {
-	fatalError("unimplemented")
+    var i = 0
+    while i < numbers.count {
+        var j = i + 1
+        while j < numbers.count {
+            if abs(numbers[i] - numbers[j]) < threshold {
+                return true
+            }
+            j += 1
+        }
+        i += 1
+    }
+    return false
 
 }
 

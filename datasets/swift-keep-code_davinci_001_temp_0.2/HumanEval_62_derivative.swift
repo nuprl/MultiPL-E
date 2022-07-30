@@ -7,7 +7,11 @@
 // >>> derivative([1, 2, 3])
 // [2, 6]
 func derivative(xs: [Int]) -> [Int] {
-	fatalError("unimplemented")
+    var result = [Int]()
+    for i in 1..<xs.count {
+        result.append(i * xs[i])
+    }
+    return result
 
 }
 

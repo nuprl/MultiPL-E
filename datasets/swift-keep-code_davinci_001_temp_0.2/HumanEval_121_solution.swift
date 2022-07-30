@@ -5,7 +5,13 @@
 // solution([3, 3, 3, 3, 3]) ==> 9
 // solution([30, 13, 24, 321]) ==>0
 func solution(lst: [Int]) -> Int {
-	fatalError("unimplemented")
+    var sum = 0
+    for i in 0..<lst.count {
+        if i % 2 == 0 && lst[i] % 2 != 0 {
+            sum += lst[i]
+        }
+    }
+    return sum
 
 }
 

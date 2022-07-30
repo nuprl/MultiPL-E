@@ -9,7 +9,7 @@
 // >>> is_palindrome('zbcd')
 // False
 func is_palindrome(text: String) -> Bool {
-	fatalError("unimplemented")
+    return text == String(text.characters.reverse())
 
 }
 

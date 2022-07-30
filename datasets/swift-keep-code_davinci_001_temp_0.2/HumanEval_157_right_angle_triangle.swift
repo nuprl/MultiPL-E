@@ -7,7 +7,7 @@
 // right_angle_triangle(3, 4, 5) == True
 // right_angle_triangle(1, 2, 3) == False
 func right_angle_triangle(a: Int, b: Int, c: Int) -> Bool {
-	fatalError("unimplemented")
+    return (a * a) + (b * b) == (c * c)
 
 }
 

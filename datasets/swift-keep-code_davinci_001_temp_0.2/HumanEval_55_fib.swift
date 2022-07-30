@@ -7,7 +7,10 @@
 // >>> fib(8)
 // 21
 func fib(n: Int) -> Int {
-	fatalError("unimplemented")
+    if n < 2 {
+        return n
+    }
+    return fib(n: n - 1) + fib(n: n - 2)
 
 }
 

@@ -7,7 +7,18 @@
 // >>> sort_third([5, 6, 3, 4, 8, 9, 2])
 // [2, 6, 3, 4, 8, 9, 5]
 func sort_third(l: [Int]) -> [Int] {
-	fatalError("unimplemented")
+    var new_list = [Int]()
+    for i in 0..<l.count {
+        if i % 3 == 0 {
+            new_list.append(l[i])
+        }
+    }
+    for i in 0..<l.count {
+        if i % 3 != 0 {
+            new_list.append(l[i])
+        }
+    }
+    return new_list
 
 }
 

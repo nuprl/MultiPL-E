@@ -9,7 +9,17 @@
 // check_dict_case({"Name":"John", "Age":"36", "City":"Houston"}) should return False.
 // check_dict_case({"STATE":"NC", "ZIP":"12345" }) should return True.
 func check_dict_case(dict: [String : String]) -> Bool {
-	fatalError("unimplemented")
+    var lower = true
+    var upper = true
+    for (key, value) in dict {
+        if key.lowercased() != key {
+            lower = false
+        }
+        if key.uppercased() != key {
+            upper = false
+        }
+    }
+    return lower || upper
 
 }
 

@@ -5,7 +5,7 @@
 // >>> filter_by_prefix(['abc', 'bcd', 'cde', 'array'], 'a')
 // ['abc', 'array']
 func filter_by_prefix(strings: [String], prefix: String) -> [String] {
-	fatalError("unimplemented")
+    return strings.filter { $0.hasPrefix(prefix) }
 
 }
 

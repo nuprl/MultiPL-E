@@ -7,7 +7,13 @@
 // >>> sort_even([5, 6, 3, 4])
 // [3, 6, 5, 4]
 func sort_even(l: [Int]) -> [Int] {
-	fatalError("unimplemented")
+    var new_l = l
+    for i in 0..<new_l.count {
+        if i % 2 == 0 {
+            new_l[i] = l[i + 1]
+        }
+    }
+    return new_l
 
 }
 

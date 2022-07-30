@@ -10,7 +10,17 @@
 // >>> make_palindrome('cata')
 // 'catac'
 func make_palindrome(string: String) -> String {
-	fatalError("unimplemented")
+    var result = string
+    var reversed = String(string.characters.reverse())
+    var i = 0
+    while i < string.characters.count {
+        if string.substringFromIndex(string.endIndex.advancedBy(-i)) == reversed.substringToIndex(reversed.startIndex.advancedBy(i)) {
+            break
+        }
+        i += 1
+    }
+    result = reversed.substringToIndex(reversed.startIndex.advancedBy(i)) + result
+    return result
 
 }
 

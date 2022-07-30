@@ -9,7 +9,12 @@
 // histogram('b b b b a') == {'b': 4}
 // histogram('') == {}
 func histogram(test: String) -> [String : Int] {
-	fatalError("unimplemented")
+    var dict = [String : Int]()
+    let words = test.components(separatedBy: " ")
+    for word in words {
+        dict[word] = (dict[word] ?? 0) + 1
+    }
+    return dict
 
 }
 

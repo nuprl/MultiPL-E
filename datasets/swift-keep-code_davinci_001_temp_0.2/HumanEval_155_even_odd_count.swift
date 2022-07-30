@@ -4,7 +4,19 @@
 // even_odd_count(-12) ==> (1, 1)
 // even_odd_count(123) ==> (1, 2)
 func even_odd_count(num: Int) -> (Int, Int) {
-	fatalError("unimplemented")
+    var even = 0
+    var odd = 0
+    var num = num
+    while num > 0 {
+        let digit = num % 10
+        if digit % 2 == 0 {
+            even += 1
+        } else {
+            odd += 1
+        }
+        num /= 10
+    }
+    return (even, odd)
 
 }
 

@@ -10,7 +10,21 @@
 // a = [1, 3, 7, 13, 21]
 // The only valid triple is (1, 7, 13).
 func get_max_triples(n: Int) -> Int {
-	fatalError("unimplemented")
+    var a = [Int](repeating: 0, count: n)
+    for i in 1...n {
+        a[i-1] = i * i - i + 1
+    }
+    var count = 0
+    for i in 0..<n {
+        for j in i+1..<n {
+            for k in j+1..<n {
+                if a[i] + a[j] + a[k] % 3 == 0 {
+                    count += 1
+                }
+            }
+        }
+    }
+    return count
 
 }
 
