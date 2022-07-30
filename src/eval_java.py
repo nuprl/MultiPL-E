@@ -1,45 +1,88 @@
-# Authored by Arjun Guha
-# Copyright (c) 2022, Roblox Inc.
+# Authored by Abhinav Jangda based on eval_cpp.py
+# Copyright (c) 2022, Roblox Inc and University of Massachusetts Amherst
 #
-# This script runs the Luafied HumanEval programs in datasets/lua
+# This script runs the C++ Translated HumanEval programs in datasets/cpp-*
 import os
 import subprocess
 from pathlib import Path
 
-def main():
-    directory = Path(Path(__file__).parent, "..", "datasets", "java").resolve()
-    binary_dir = os.path.join(directory, 'binary')
-    if not os.path.exists(binary_dir):
-      os.mkdir(binary_dir)
-    for filename in sorted(os.listdir(directory)):
-        if "151_double_the_difference" in filename or '103' in filename or \
-        "_39_" in filename or "_125_" in filename or "_137_" in filename or \
-        '_95_' in filename or '_22_' in filename or '_130_' in filename or '_133_' in filename or '_51_' in filename:
-          continue
+import os
+import subprocess
+import tempfile
+from pathlib import Path
+from generic_eval import main
+from humaneval_to_java import JAVA_CLASS_NAME
+
+LANG_NAME = "Java"
+LANG_EXT = ".java"
+
+#Following files have problems:
+#137, 
+#22: Any
+#148: Elipsis
+
+def eval_script(path: Path):
+    javatuples_path = os.path.join(os.getcwd(), "javatuples-1.2.jar")
+    if ".java" not in path.name:
+        return
+    if not os.path.exists(javatuples_path):
+        print("Downloading and extracting javatuples")
+        #Download and unzip javatuples jar
+        ret, _ = subprocess.getstatusoutput("wget http://www.java2s.com/Code/JarDownload/javatuples/javatuples-1.2.jar.zip")
+        if ret != 0:
+            printf("***Couldn't download javatuples***")
+            return
         
-        if '.java' not in filename:
-          #Do not compile a binary
-          continue
-        #TODO: All binaries should go in separate directory
-        filepath = os.path.join(directory, filename)
-        binary = os.path.join(binary_dir, filename.replace('.java',''))
-        
-        if os.path.basename(binary) in os.listdir(directory):
-          continue
-        command = " ".join(["javac", binary])
-        print(command)
-        # Assumes exit-code 0 is all okay
-        (code, output) = subprocess.getstatusoutput(command)
-        if code == 0:
-          status = "OK"
+        ret = subprocess.getstatusoutput("unzip javatuples-1.2.jar.zip")
+        assert os.path.exists(javatuples_path), "Javatuples should exists"
+    import time
+
+    with tempfile.TemporaryDirectory() as outdir:
+        #Each Java file contains the class with same name `JAVA_CLASS_NAME`
+        #Hence, javac will same JAVA_CLASS_NAME.class file for each problem
+        #Write class for each problem to a different temp dir
+        #Use UTF8 encoding with javac
+        build = subprocess.run(["javac", "-encoding", "UTF8", "-d", outdir, path], env={f"CLASSPATH" : f"{javatuples_path}"}, capture_output=True)
+        status = None
+        returncode = -1
+        output = None
+        exec_name = JAVA_CLASS_NAME
+        if build.returncode != 0:
+            # Well, it's a compile error. May be a type error or
+            # something. But, why break the set convention
+            status = "SyntaxError"
+            returncode = build.returncode
+            output = build
+            print(output.stderr)
         else:
-          status = "SyntaxError"
-          print(output)
-          return
-        # except subprocess.TimeoutExpired as exc:
-        #     status = "Timeout"
-        filename = filename.split(".")[0]
-        print(f"Java,{filename},{status}")
+            try:
+                # Assumes exit-code 0 is all okay
+                output = subprocess.run(["java", "-ea", "-cp", f"{outdir}", exec_name], env={"CLASSPATH" : f"{javatuples_path}"}, capture_output=True, timeout=5)
+                returncode = output.returncode
+                if output.returncode == 0:
+                    status = "OK"
+                else:
+                    # Well, it's a panic
+                    status = "Exception"
+            except subprocess.TimeoutExpired as exc:
+                status = "Timeout"
+                output = exc
+
+        if output.stdout is not None:
+            output.stdout = output.stdout.decode("utf-8")
+        else:
+            output.stdout = "None"
+
+        if output.stderr is not None:
+            output.stderr = output.stderr.decode("utf-8")
+        else:
+            output.stderr = "None"
+        return {
+            "status": status,
+            "exit_code": returncode,
+            "stdout": output.stdout,
+            "stderr": output.stderr,
+        }
 
 if __name__ == "__main__":
-    main()
+    main(eval_script, LANG_NAME, LANG_EXT)

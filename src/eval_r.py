@@ -7,13 +7,15 @@ def eval_script(path: Path):
     try: 
         # Assumes exit-code 0 is all okay
         # Run racket on the file, capturing stderr
-        output = subprocess.run(" ".join(["racket", str(path)]), shell=True, capture_output=True, timeout=5)
+        output = subprocess.run(" ".join(["Rscript", str(path)]), shell=True, capture_output=True, timeout=5)
         if output.returncode == 0:
             status = "OK"
         else:
             outmessage = str(output)
-            if 'read-syntax' in outmessage:
+            if 'unexpected' in outmessage:
                 status = "SyntaxError"
+            elif "err=b''" in outmessage:
+                status = "AssertionError"
             else:
                 status = "Exception"
         returncode = output.returncode
@@ -35,12 +37,12 @@ def eval_script(path: Path):
 
 
 def main():
-    directory = Path(Path(__file__).parent, "..", "datasets", "racket-keep-code_davinci_001_temp_0.2").resolve()
+    directory = Path(Path(__file__).parent, "..", "datasets", "R-keep-code_davinci_001_temp_0.2").resolve()
 
     for filename in os.listdir(directory):
         r = eval_script(Path.joinpath(directory,filename))
         filename = filename.split(".")[0]
-        print(f"Racket,{filename},{r['status']}")
+        print(f"R,{filename},{r['status']}")
 
 if __name__ == "__main__":
     main()

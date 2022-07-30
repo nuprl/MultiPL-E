@@ -1,4 +1,4 @@
-# Authored by Abhinav Jangda
+# Authored by Abhinav Jangda based on eval_rust.py
 # Copyright (c) 2022, Roblox Inc and University of Massachusetts Amherst
 #
 # This script runs the C++ Translated HumanEval programs in datasets/cpp-*
@@ -6,56 +6,61 @@ import os
 import subprocess
 from pathlib import Path
 
-def main():
-    directory = Path(Path(__file__).parent, "..", "datasets", "cpp-keep-code_davinci_001_temp_0.2").resolve()
-    binary_dir = os.path.join(directory, 'binary')
-    if not os.path.exists(binary_dir):
-      os.mkdir(binary_dir)
-    
-    total = 0
-    passed = 0
-    syntax_error = 0
-    for filename in sorted(os.listdir(directory)):
-        #Skip following tests
-        if "_137_" in filename: 
-          continue
-        if "_22_" in filename: #Any
-          continue
-        if "_51_" in filename: #\n in string
-          continue        
-        if "_148_" in filename: #Elipsis
-          continue
-        if "_23_" in filename: #strlen
-            continue
-        if '.cpp' not in filename:
-          #Only cpp files
-          continue
-        filepath = os.path.join(directory, filename)
-        binary = os.path.join(binary_dir, filename.replace('.cpp',''))
-        command = " ".join(["g++", filepath, "-o", binary])
-        # Assumes exit-code 0 is all okay
-        (code, output) = subprocess.getstatusoutput(command)
-        if code == 0:
-          status = "OK"
-        else:
-          status = "SyntaxError"
-          # print(output)
-          syntax_error += 1
-        
-        if status == "OK":
-          #Execute the compiled binary
-          command = binary
-          (code, output) = subprocess.getstatusoutput(command)
-          if code == 0:
-            status = "OK"
-            passed += 1
-          else:
-            status = "FAIL"
-        total += 1
-        filename = filename.split(".")[0]
-        print(f"C++,{filename},{status}")
-      
-    print (f"Total {total}, Syntax Error {syntax_error}, Passed {passed}")
+import os
+import subprocess
+import tempfile
+from pathlib import Path
+from generic_eval import main
+
+LANG_NAME = "C++"
+LANG_EXT = ".cpp"
+
+#Following files have problems:
+#137, 
+#22: Any
+#148: Elipsis
+
+def eval_script(path: Path):
+    basename = ".".join(str(path).split(".")[:-1])
+    build = subprocess.run(["g++", path, "-o", basename], capture_output=True)
+    status = None
+    returncode = -1
+    output = None
+    if build.returncode != 0:
+        # Well, it's a compile error. May be a type error or
+        # something. But, why break the set convention
+        status = "SyntaxError"
+        returncode = build.returncode
+        output = build
+    else:
+        try:
+            # Assumes exit-code 0 is all okay
+            output = subprocess.run([basename], capture_output=True, timeout=5)
+            returncode = output.returncode
+            if output.returncode == 0:
+                status = "OK"
+            else:
+                # Well, it's a panic
+                status = "Exception"
+        except subprocess.TimeoutExpired as exc:
+            status = "Timeout"
+            output = exc
+        os.remove(basename)
+    if output.stdout is not None:
+        output.stdout = output.stdout.decode("utf-8")
+    else:
+        output.stdout = "None"
+
+    if output.stderr is not None:
+        output.stderr = output.stderr.decode("utf-8")
+    else:
+        output.stderr = "None"
+    return {
+        "status": status,
+        "exit_code": returncode,
+        "stdout": output.stdout,
+        "stderr": output.stderr,
+    }
 
 if __name__ == "__main__":
-    main()
+    main(eval_script, LANG_NAME, LANG_EXT)
