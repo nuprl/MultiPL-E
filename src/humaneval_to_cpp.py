@@ -41,7 +41,7 @@ class CPPTranslator:
         self.float_type = "float"
         self.int_type = "long"
         self.bool_type = "bool"
-        self.none_type = "{}"
+        self.none_type = "std::nullopt"
         self.list_type = "std::vector<%s>"
         self.tuple_type = "std::tuple<%s>"
         self.dict_type = "std::map"
@@ -298,15 +298,13 @@ class CPPTranslator:
                 #Use: filter(lambda x: x != self.none_type, other_types)
                 if self.pytype_to_cpptype(e[1]) != self.none_type:
                     other_types += [self.pytype_to_cpptype(e[1])]
-            print(302, other_types)
             if len(other_types) >= 1:
                 other_types = list(set(other_types))[0]
 
-            print(304, other_types)
             if other_types == []:
                 #Asuming long if no other type
                 other_types = self.int_type
-            print(305, other_types)
+            
             return self.gen_make_tuple(", ".join([self.make_optional(other_types, e[0]) for e in t])), \
                 ast.Tuple([e[1] for e in t])
 
