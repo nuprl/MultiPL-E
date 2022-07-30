@@ -20,9 +20,9 @@ LANG_EXT = ".java"
 #22: Any
 #148: Elipsis
 
-def eval_script(path: Path):
+def eval_script(path: str):
     javatuples_path = os.path.join(os.getcwd(), "javatuples-1.2.jar")
-    if ".java" not in path.name:
+    if ".java" not in path:
         return
     if not os.path.exists(javatuples_path):
         print("Downloading and extracting javatuples")
