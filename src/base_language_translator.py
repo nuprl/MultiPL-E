@@ -22,7 +22,7 @@ class LanguageTranslator(ABC, Generic[TargetExp]):
         pass
 
     @abstractmethod
-    def gen_list(self, l: List[Tuple[str, ast.Expr]]) -> TargetExp:
+    def gen_list(self, l: List[TargetExp]) -> TargetExp:
         """
         Translate a list with elements l
         """

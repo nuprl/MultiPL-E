@@ -15,7 +15,7 @@ def check_script(path: Path):
     stderr = None
     exit_code = None
     try:
-        build = subprocess.run(["swift", path],
+        build = subprocess.run(["swiftc", "-typecheck", path],
                                encoding="utf-8",
                                timeout=15,
                                stdout=subprocess.PIPE,

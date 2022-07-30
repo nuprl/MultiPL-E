@@ -24,7 +24,7 @@ import re
 import ast
 from typing import Any, List, Optional, OrderedDict
 from base_language_translator import LanguageTranslator
-from generic_translator import main
+from generic_translator import main, translate_expr
 from abc import ABC, abstractmethod
 from typing import Tuple, List, TypeVar, Generic
 import ast
@@ -109,6 +109,8 @@ class SwiftTypeAny(SwiftType):
     
 
 class SwiftTypeArray(SwiftType):
+    __match_args__ = ("type_arg",)
+
     def __init__(self, type_arg: SwiftType) -> None:
         super().__init__()
         self.type_arg = type_arg
@@ -130,6 +132,8 @@ class SwiftTypeArray(SwiftType):
 
 
 class SwiftTypeDictionary(SwiftType):
+    __match_args__ = ("key_type_arg", "value_type_arg")
+
     def __init__(self, key_type_arg: SwiftType, value_type_arg: SwiftType) -> None:
         super().__init__()
         self.key_type_arg = key_type_arg
@@ -151,6 +155,8 @@ class SwiftTypeDictionary(SwiftType):
         return f"[{self.key_type_arg.gen_type()} : {self.value_type_arg.gen_type()}]"
 
 class SwiftTypeOptional(SwiftType):
+    __match_args__ = ("type_arg",)
+
     def __init__(self, type_arg: SwiftType) -> None:
         super().__init__()
         self.type_arg = type_arg
@@ -171,6 +177,8 @@ class SwiftTypeOptional(SwiftType):
         return f"{self.type_arg.gen_type()}?"
 
 class SwiftTypeTuple(SwiftType):
+    __match_args__ = ("type_args",)
+
     def __init__(self, type_args: Tuple[SwiftType, ...] | Tuple[()]) -> None:
         super().__init__()
         self.type_args = type_args
@@ -196,6 +204,8 @@ class SwiftTypeTuple(SwiftType):
         return f"({type_strs})"
 
 class SwiftTypeResult(SwiftType):
+    __match_args__ = ("ok_type_arg", "err_type_arg")
+
     def __init__(self, ok_type_arg: SwiftType, err_type_arg: SwiftType) -> None:
         super().__init__()
         self.ok_type_arg = ok_type_arg
@@ -220,10 +230,11 @@ class SwiftTypeResult(SwiftType):
                 return SwiftTypeResult(ok_s, err_s)
 
     def gen_type(self) -> str:
-        # TODO(donald): perhaps I need an import
         return f"Result<{self.ok_type_arg.gen_type()}, {self.err_type_arg.gen_type()}>"
 
 class SwiftTypeUnion(SwiftType):
+    __match_args__ = ("case_types",)
+
     def __init__(self, case_types: OrderedDict[SwiftType, None]) -> None:
         super().__init__
         self.case_types = case_types
@@ -262,47 +273,215 @@ class SwiftTypeUnion(SwiftType):
     def gen_type(self) -> str:
         return "UNIMPLEMENTED UNIONS"
 
+    def gen_constructor(self, idx: int, arg: str) -> str:
+        t = list(self.case_types)[idx]
+        match t:
+            case SwiftTypeString() | SwiftTypeBool() | SwiftTypeDouble() | SwiftTypeInt():
+                return f"case{t.gen_type()}"
+            case _other:
+                raise Exception(f"Can't generate case for complex type: {t}")
+                
 
-TargetExp = str
+
+TargetExp = ast.expr
+
+
+def translate_expr_at_type_toplevel(e: ast.expr, t: SwiftType) -> str:
+    translated = translate_expr_at_type(e, t)
+    if translated is None:
+        raise Exception(f"Failed to translate expr:\n{ast.dump(e, indent=4)}\n\nat type:\n{t}")
+    return translated[0]
+
+def translate_literal_at_type(c: bool | str | int | float | None, t: SwiftType | None) -> Optional[Tuple[str, bool]]:
+    lit_str = f"{c}" # TODO(donald): not sure the format string is right
+
+    untyped = t is None or type(t) == SwiftTypeAny
+
+    if type(c) == bool and (type(t) == SwiftTypeBool or untyped):
+        if c:
+            return ("true", False)
+        else:
+            return ("false", False)
+    elif type(c) == str and (type(t) == SwiftTypeString or untyped):
+        return (lit_str, False)
+    elif type(c) == float and (type(t) == SwiftTypeDouble or untyped):
+        return (lit_str, False)
+    elif type(c) == int and (type(t) == SwiftTypeInt or untyped):
+        return (lit_str, False)
+    elif type(c) == int and type(t) == SwiftTypeDouble:
+        return (lit_str, True)
+    else:
+        # raise Exception(f"Unhandlded: c = {c}, t = {t}")
+        return None
+
+
+def make_translation_choice(e: ast.expr, ts: List[SwiftType]) -> Optional[Tuple[Tuple[str, bool], int]]:
+    assert len(ts) > 0
+
+    results = [(translate_expr_at_type(e, t), idx) for (idx, t) in enumerate(ts)]
+    def sort_key(v: Tuple[Optional[Tuple[str, bool]], int]) -> int:
+        val = v[0]
+        if val is None:
+            return 2
+        elif val[1] == True:
+            return 1
+        else:
+            return 0
+    results.sort(key=sort_key)
+
+    res, idx = results[0]
+    if res is None:
+        return None
+    else:
+        return (res, idx)
+
+
+
+    
+
+def translate_expr_at_type(e: ast.expr, t: SwiftType | None) -> Optional[Tuple[str, bool]]:
+    """
+        Return None if e can't be translated at type t.
+        Else, return (translation, b), where b indicates if any numeric (int -> float) upcasting occurred
+    """
+
+    untyped = type(t) == SwiftTypeAny or t is None
+
+    match e, t:
+        case ast.Constant(value=None), SwiftTypeOptional(_opt_type):
+            return "nil", False
+        case _, SwiftTypeOptional(opt_type):
+            return translate_expr_at_type(e, opt_type)
+        case _, SwiftTypeResult(ok_type, err_type):
+            constructors = [lambda x: f".success({x})", lambda x: f".failure({x})"]
+            res_and_idx = make_translation_choice(e, [ok_type, err_type])
+            if res_and_idx is None:
+                return None
+            (res, upc), idx = res_and_idx
+            return constructors[idx](res), upc
+        case _, SwiftTypeUnion(case_types):
+            case_types_list = list(case_types)
+            res_and_idx = make_translation_choice(e, case_types_list)
+            if res_and_idx is None:
+                return None
+            (res, upc), idx = res_and_idx
+            assert isinstance(t, SwiftTypeUnion) and t is not None # Just to make the type hint happy
+            return f".{t.gen_constructor(idx, res)}", upc            
+        case ast.Constant(value=c), _:
+            return translate_literal_at_type(c, t)
+        case ast.Name(v), _:
+            return f"{v}", False
+        case ast.Call(func, args), _:
+            raise Exception("Can't handle function calls other than candidate(...)")
+        case ast.List(elts=elts), _:
+            if isinstance(t, SwiftTypeArray):
+                type_arg = t.type_arg
+            elif untyped:
+                type_arg = None
+            else:
+                return None
+
+            vals_and_ups = [translate_expr_at_type(v, type_arg) for v in elts]
+            non_nones = [x for x in vals_and_ups if x is not None]
+            if len(non_nones) != len(vals_and_ups):
+                return None
+            val_list = ", ".join(x[0] for x in non_nones)
+            any_up = any(x[1] for x in non_nones)
+            return f"[{val_list}]", any_up
+        case ast.Dict(keys=keys, values=values), _:
+            if isinstance(t, SwiftTypeDictionary):
+                value_type_arg = t.value_type_arg
+                key_type_arg = t.key_type_arg
+            elif untyped:
+                value_type_arg = None
+                key_type_arg = None
+            else:
+                return None
+                
+            vals_and_ups = [translate_expr_at_type(v, value_type_arg) for v in values]
+            vals_non_nones = [x for x in vals_and_ups if x is not None]
+            if len(vals_non_nones) != len(vals_and_ups):
+                return None
+
+            non_null_keys = [k for k in keys if k is not None]
+            if len(non_null_keys) != len(keys):
+                raise Exception("Can't handle null key case")
+            
+            keys_and_ups = [translate_expr_at_type(k, key_type_arg) for k in non_null_keys]
+            keys_non_nones = [x for x in keys_and_ups if x is not None]
+            if len(keys_non_nones) != len(keys_and_ups):
+                return None
+
+            vals_keys = [f"{key_trans} : {val_trans}" for ((val_trans, _), (key_trans, _)) in zip(vals_non_nones, keys_non_nones)]
+            val_list = ", ".join(vals_keys)
+
+            any_up = any(val_up or key_up for ((_, val_up), (_, key_up)) in zip(vals_non_nones, keys_non_nones))
+            return f"[{val_list}]", any_up
+
+        case ast.Tuple(elts=elts), _:
+            if isinstance(t, SwiftTypeTuple):
+                type_args = t.type_args
+            elif untyped:
+                type_args = [None for elt in elts]
+            elif isinstance(t, SwiftTypeArray):
+                type_args = [t.type_arg for elt in elts]
+            else:
+                return None
+
+            if len(elts) != len(type_args):
+                return None
+            comp_trans = [translate_expr_at_type(elt, t_arg) for (elt, t_arg) in zip(elts, type_args)]
+            non_nones = [x for x in comp_trans if x is not None]
+            if len(non_nones) != len(comp_trans):
+                return None
+            
+            val_list = ", ".join(x[0] for x in non_nones)
+            any_up = any(x[1] for x in non_nones)
+            return f"({val_list})", any_up or isinstance(t, SwiftTypeArray)
+
+        case _:
+            raise Exception(f"Unhandled case: {e}, {t}")
+
+
 
 class SwiftTranslator(LanguageTranslator[TargetExp]):
     def gen_literal(self, c: bool | str | int | float | None) -> TargetExp:
-        """
-        Translate a literal expression
-        c: is the literal value
-        """
-        return "LITERAL"
+        return ast.Constant(value=c)
 
     def gen_var(self, v: str) -> TargetExp:
-        """
-        Translate a variable with name v.
-        """
-        return "VAR"
+        return ast.Name(v)
 
-    def gen_list(self, l: List[Tuple[str, ast.Expr]]) -> TargetExp:
-        """
-        Translate a list with elements l
-        """
-        return "LIST"
+    def gen_list(self, l: List[TargetExp]) -> TargetExp:
+        return ast.List(elts=l)
 
     def gen_tuple(self, t: List[TargetExp]) -> TargetExp:
-        """
-        Translate a tuple with elements t
-        """
-        return "TUPLE"
+        return ast.Tuple(elts=t)
 
     def gen_dict(self, keys: List[TargetExp], values: List[TargetExp]) -> TargetExp:
-        """
-        Translate a dictionary with keys and values
-        """
-        return "DICT"
+        return ast.Dict(keys, values)
 
     def gen_call(self, func: TargetExp, args: List[TargetExp]) -> TargetExp:
-        """
-        Translate a function call `func(args)`
-        """
-        return "CALL"
+        return ast.Call(func, args)
 
+    def deep_equality(self, left: TargetExp, right: TargetExp) -> str:
+        """
+        All tests are assertions that compare deep equality between left and right.
+        """
+
+        assert isinstance(left, ast.Call)
+        assert isinstance(left.func, ast.Name)
+        assert left.func.id == 'candidate'
+
+        call_args_py = left.args
+        assert len(call_args_py) == len(self.param_names_types)
+
+        call_args_swift = ", ".join(
+            f"{param_name}: {translate_expr_at_type_toplevel(arg, param_type_swift)}" 
+            for (arg, (param_name, param_type_swift)) in zip(call_args_py, self.param_names_types)
+        )
+        assert_val_swift = translate_expr_at_type_toplevel(right, self.return_type)
+
+        return f"assert({self.candidate_name}({call_args_swift}) == {assert_val_swift})"
 
     def translate_type(self, python_type: ast.expr | None) -> SwiftType:
         assert python_type is not None
@@ -357,12 +536,12 @@ class SwiftTranslator(LanguageTranslator[TargetExp]):
                 raise Exception(f"unknown constant: {x}")
             case _other:
                 raise Exception(f"unknown annotation: {python_type}")
-
-      
+  
     def translate_prompt(self, name: str, args: List[ast.arg], returns: ast.expr, description: str) -> str:
         """
         Translate Python prompt.
         """
+        self.candidate_name = name
         self.param_names_types = [(arg.arg, self.translate_type(arg.annotation).simplify()) for arg in args]
         self.return_type = self.translate_type(returns).simplify()
 
@@ -371,14 +550,6 @@ class SwiftTranslator(LanguageTranslator[TargetExp]):
         swift_params = ", ".join([f"{name}: {ty.gen_type()}" for name, ty in self.param_names_types])
         swift_return = self.return_type.gen_type()
         return f"{swift_description}func {name}({swift_params}) -> {swift_return} {{\n"
-
-
-    def deep_equality(self, left: TargetExp, right: TargetExp) -> str:
-        """
-        All tests are assertions that compare deep equality between left and right.
-        """
-        return "EQUALITY"
-
     
     def file_ext(self) -> str:
         """
@@ -393,7 +564,7 @@ class SwiftTranslator(LanguageTranslator[TargetExp]):
         """
         return [
             "}",
-            "",
+            ""
         ]
 
     def test_suite_suffix_lines(self) -> List[str]:
