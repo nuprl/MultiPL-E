@@ -33,41 +33,63 @@ class CsharpTranslator(CPPTranslator):
         self.keywords["decimal"] = "decimalNum"
         self.make_tuple = "Tuple.Create"
 
+    #Type creation and literal creation of List, Dict, Map, and Optional
+    def gen_list_type(self, elem_type):
+        '''Generate type for List<T>
+        '''
+        return self.list_type + "<%s>"% elem_type
+
     def gen_make_list(self, elem_type, list_contents):
+        '''Generate List literal using and array literal
+            `new List<T>(new int[]{...})
+        '''
         if list_contents == "":
             array = ""
         else:
             array = f"new {elem_type}[]" + list_contents
         return "new " + self.list_type + "<%s>"%elem_type + "(" + array + ")"
-    
-    def gen_list_type(self, elem_type):
-        return self.list_type + "<%s>"% elem_type
-
-    def gen_dict_type(self, ktype, vtype):
-        return self.dict_type + "<%s,%s>"  % (ktype, vtype)
 
     def gen_array_literal(self, list_contents):
+        '''Generate an array literal with contents
+            {e1, e2, e3, e4, ...}
+        '''
         return "{" + list_contents + "}"
 
-    def gen_make_tuple(self, elems):
-        return self.make_tuple+"("+elems+")"
+    def gen_dict_type(self, ktype, vtype):
+        '''Generate Dict<K,V>
+        '''
+        return self.dict_type + "<%s,%s>"  % (ktype, vtype)
 
     def gen_map_literal(self, keys, values):
+        '''Generate dict literal
+            {{k1,v1}, {k2,v2}, {k3,v3}, ...}
+        '''
         return "{" + ", ".join(f"{{{k}, {v}}}" for k, v in zip(keys, values)) + "}"
+    
+    def gen_map(self, dict_type, map_literal):
+        '''Generate Dict object from literal
+            `new Dict<K, V>() {{k,v}, {k,v}, ... }
+        '''
+        csharp_type = self.translate_pytype(dict_type)
+        return f"new {csharp_type}(){map_literal}"
 
     def gen_optional_type(self, elem_type):
+        '''Generate C#'s Optional, i.e. Nullable 
+            Nullable<T> is only generated for primitive types
+        '''
         if self.is_primitive_type(elem_type):
             return self.optional_type + "<%s>" % elem_type
         return elem_type
 
     def gen_optional(self, elem_type, elem):
+        '''Generate value for C#'s Optional.
+            if elem is null generate (Nullable<T>) null
+        '''
         if elem == self.none_type:
             return "(" + self.optional_type + "<%s>" % elem_type + ")" + elem
         return elem
-
-    def gen_map(self, dict_type, map_literal):
-        csharp_type = self.translate_pytype(dict_type)
-        return f"new {csharp_type}(){map_literal}"
+    
+    #gen_tuple_type and gen_make_tuple are same as C++
 
     def module_imports(self) -> str:
         return "\n".join([
@@ -82,8 +104,7 @@ class CsharpTranslator(CPPTranslator):
     
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         '''Translate Python prompt to C#.
-           In addition to comments and example, the prompt contain union declarations (if there are any) 
-           and include files (TODO)
+            The function name is converted to C#'s convention that uses CamelCase
         '''
         def to_camel_case(snake_str):
             components = snake_str.split('_')
@@ -109,9 +130,22 @@ class CsharpTranslator(CPPTranslator):
         return csharp_prompt
     
     def is_primitive_type(self, csharp_type):
+        '''Return if a type is primitive.
+            float, long, and bool are considered primitive type
+        '''
         return csharp_type in [self.float_type, self.bool_type, self.int_type]
 
-    def return_default_value(self, csharp_type): #make this function name default value and add it in C++ Translator 
+    def return_default_value(self, csharp_type):
+        '''Recursively generate default value of a given C# type based on following rules:
+
+            default(int) => 0
+            default(float) => 0.0
+            default(bool) => true
+            default(List<T>) => new List<T> ()
+            default(Tupe<T, U>) => Tuple.Create(default(T), default(U))
+            default(Optional<T>) => (Optional<T>)null
+            default(Any other object of type T) => new T()
+        '''
         if self.is_primitive_type(csharp_type):
             if self.int_type in csharp_type:
                 return "0"
@@ -121,12 +155,12 @@ class CsharpTranslator(CPPTranslator):
                 return "true"
         elif self.string_type == csharp_type:
             return '""'
-        elif csharp_type.find("List<") == 0:
-            elem_type = re.findall(rf'List<(.+)>', csharp_type)[0]
+        elif csharp_type.find(f"{self.list_type}<") == 0:
+            elem_type = re.findall(rf'{self.list_type}<(.+)>', csharp_type)[0]
             #List default is: new List<T>()
             return self.gen_make_list(elem_type, "")
-        elif csharp_type.find("Tuple<") == 0 : #TODO: use gen_optional/make_tuple to createthem and search for self.tuple_type
-            template_types = re.findall(rf'Tuple<(.+),(.+)>', csharp_type)[0]
+        elif csharp_type.find(f"{self.tuple_type}<") == 0:
+            template_types = re.findall(rf'{self.tuple_type}<(.+),(.+)>', csharp_type)[0]
             first_default = self.return_default_value(template_types[0].strip())
             second_default = self.return_default_value(template_types[1].strip())
             return self.gen_make_tuple(first_default + "," + second_default)
@@ -138,6 +172,8 @@ class CsharpTranslator(CPPTranslator):
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
         This code goes at the start of the test suite.
+        This code adds a return statement for default value if required, which makes sure
+        compiler does not complain about no return value.
         """
 
         return [
@@ -155,6 +191,7 @@ class CsharpTranslator(CPPTranslator):
     
     def update_type(self, right: Tuple[ast.Expr, str], expected_type: Tuple[str]) -> str:
         if self.is_primitive_type(expected_type) and self.translate_pytype(right[1]) != expected_type:
+            #Do not update type if it is primitive
             return f"({expected_type}){right[0]}"
 
         return super().update_type(right, expected_type)
@@ -173,7 +210,9 @@ class CsharpTranslator(CPPTranslator):
             return f"    Debug.Assert({left[0]}.Equals({right}));"
 
     def find_type_to_coerce(self, expr):
-        '''
+        '''Return a type to coerce into another type.
+            null is never coerced.
+            And other types can be coerced similar to C++
         '''
         if expr == "null":
             #No need to coerce null
