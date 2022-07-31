@@ -4,6 +4,7 @@
 # This is a helper script for translating problems from the OpenAI HumanEval
 # problems to Language L.
 import ast
+import traceback
 from glob import glob
 import re
 from pathlib import Path
@@ -40,7 +41,7 @@ def translate_expr(translator, py_expr: ast.AST):
                 [translate_expr(translator, a) for a in args],
             )
         case _other:
-            print("OMFG" + py_expr)
+            # print("OMFG" + py_expr)
             raise Exception(f"Unhandled expression: {py_expr}")
 
 
@@ -67,26 +68,49 @@ class PromptVisitor(ast.NodeVisitor):
                 self.state = "complete"
             case _other:
                 self.state = "error"
-
+        
     def translate_func_decl(self, doctest_transformation: str) -> str | None:
         if self.state != "complete":
             return None
-        # TODO(arjun): Use doctest_transformation
         match doctest_transformation:
             case "keep":
-                description = self.description
+                desc = self.description
             case "remove":
-                # TODO(arjun): Remove all doctests
-                description = self.description 
+                doctestRegex = re.compile(r'>>>.*\)\n.*\n')
+                desc = re.sub(doctestRegex, '', self.description)
             case "transform":
                 # Steps:
                 # Find the Python expression and result in each doctest
                 # py_ast = ast.parse("PYTHON EXPRESSION", "bogus filename")
                 # translate_expr(py_ast, self.translator) to get the string for that expression in the target language
-                description = self.description # TODO(arjun): Transform doctests
+                
+                #Split up the prompt from the doctests
+                promptAndDoctests = self.description.split('>>> ')
+                if len(promptAndDoctests) > 1: #checking if there are doctests
+                    doctestRegex = re.compile(r'.*\n.*\n')
+                    onlyDocTests = []
+                    for test in (promptAndDoctests[1:]): #Removing each doctest from any junk
+                        onlyDocTests.append(doctestRegex.match(test).group())
+                    
+                    funcCalls = []
+                    outputs = []
+                    for doctest in onlyDocTests:
+                        doclist = doctest.split('\n') #Splitting up the output from the function call of the doctest
+                        funcCalls.append(ast.parse(doclist[0].strip()).body[0].value)
+                        outputs.append(ast.parse(doclist[1].strip()).body[0].value)
+
+                    for i in range(len(funcCalls)):
+                        funcCalls[i] = translate_expr(self.translator, funcCalls[i])
+                        outputs[i] = translate_expr(self.translator, outputs[i])
+                    
+                    desc = promptAndDoctests[0]
+                    for i in range(len(funcCalls)):
+                        desc += funcCalls[i] + '\n' + outputs[i] + '\n\n'
+                else: #else when there are no doctests
+                    desc = self.description
             case _other:
                 raise Exception(f"bad doctest_transformation")
-        return self.translator.translate_prompt(self.name, self.args, self.returns, description)
+        return self.translator.translate_prompt(self.name, self.args, self.returns, desc)
 
 
 def translate_prompt(translator, doctest_transformation: str, py_prompt: str, filename: str) -> str:
@@ -96,8 +120,13 @@ def translate_prompt(translator, doctest_transformation: str, py_prompt: str, fi
     """
     prompt_ast = ast.parse(py_prompt + "    pass", filename)
     prompt_visitor = PromptVisitor(translator)
-    prompt_visitor.visit(prompt_ast)
-    return prompt_visitor.translate_func_decl(doctest_transformation)
+    try:
+        prompt_visitor.visit(prompt_ast)
+        return prompt_visitor.translate_func_decl(doctest_transformation)
+    except Exception as e:
+        print(f"Exception translating prompt for {filename}: {e}")
+        traceback.print_exception(e)
+        return None
 
 
 def translate_tests(translator, py_tests: str, entry_point: str, filename: str) -> str:
@@ -130,6 +159,7 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
                     test_cases.append(translator.deep_equality(left, right))
                 except Exception as e:
                     print(f"Exception translating expressions for {filename}: {e}")
+                    traceback.print_exception(e)
                     return None
             case ast.Expr(value=ast.Name(id="print")):
                 pass

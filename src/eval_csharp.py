@@ -1,4 +1,4 @@
-# Authored by Abhinav Jangda based on eval_rust.py
+# Authored by Abhinav Jangda based on eval_cpp.py
 # Copyright (c) 2022, Roblox Inc and University of Massachusetts Amherst
 #
 # This script runs the C++ Translated HumanEval programs in datasets/cpp-*
@@ -12,17 +12,20 @@ import tempfile
 from pathlib import Path
 from generic_eval import main
 
-LANG_NAME = "C++"
-LANG_EXT = ".cpp"
+LANG_NAME = "CSharp"
+LANG_EXT = ".cs"
 
 #Following files have problems:
 #137, 
 #22: Any
 #148: Elipsis
 
-def eval_script(path: Path):
+def eval_script(path: str):
+    if ".cs" not in path.name:
+        return
     basename = ".".join(str(path).split(".")[:-1])
-    build = subprocess.run(["g++", path, "-o", basename], capture_output=True)
+    binaryname = basename + ".exe"
+    build = subprocess.run(["csc", "/d:DEBUG", "-r:System.Numerics.dll", path, f"/out:{binaryname}"], capture_output=True)
     status = None
     returncode = -1
     output = None
@@ -32,11 +35,17 @@ def eval_script(path: Path):
         status = "SyntaxError"
         returncode = build.returncode
         output = build
+        print(output.stdout)
+        print(output.stderr)
     else:
         try:
             # Assumes exit-code 0 is all okay
-            output = subprocess.run([basename], capture_output=True, timeout=5)
+            output = subprocess.run(["mono", binaryname], env={"MONO_TRACE_LISTENER":"Console.Error"}, capture_output=True, timeout=5)
             returncode = output.returncode
+            output.stderr = str(output.stderr, "utf-8")
+            #mono return 0 even when failing
+            fail = "System.Diagnostics.DefaultTraceListener.Fail" in output.stderr
+            output.returncode = 1 if fail else 0
             if output.returncode == 0:
                 status = "OK"
             else:
@@ -45,16 +54,16 @@ def eval_script(path: Path):
         except subprocess.TimeoutExpired as exc:
             status = "Timeout"
             output = exc
-        os.remove(basename)
+        os.remove(binaryname)
+
     if output.stdout is not None:
         output.stdout = output.stdout.decode("utf-8")
     else:
         output.stdout = "None"
 
-    if output.stderr is not None:
-        output.stderr = output.stderr.decode("utf-8")
-    else:
+    if output.stderr == "":
         output.stderr = "None"
+
     return {
         "status": status,
         "exit_code": returncode,

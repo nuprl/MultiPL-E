@@ -5,7 +5,6 @@
 
 import ast
 import re
-from pathlib import Path
 from typing import List
 from generic_translator import main
 
@@ -15,19 +14,18 @@ class RTranslator:
     '''R Translator
     '''
 
-    # NOTE(sydney) how do I make a stop sequence for something like x <-, where it should stop before x?
-    stop = [ '\n}\n\n', '\n#' ]
+    stop = [ '\n#', '\n```']
     
     def __init__(self, file_ext):
         self.file_ext = file_ext
     
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         r_description = (
-            "# " + re.sub(DOCSTRING_LINESTART_RE, "\n-- ", description.strip()) + "\n"
+            "# " + re.sub(DOCSTRING_LINESTART_RE, "\n# ", description.strip()) + "\n"
         )
         arg_names = [arg.arg for arg in args]
         arg_list = ", ".join(arg_names)
-        return f"{r_description}{name} <- function({arg_list})\n"
+        return f"{r_description}{name} <- function({arg_list})" + ' {'
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
@@ -39,7 +37,7 @@ class RTranslator:
         ]
 
     def test_suite_suffix_lines(self) -> List[str]:
-        return ["}"]
+        return ["}", "test_humaneval()"]
 
     def deep_equality(self, left: str, right: str) -> str:
         """
@@ -48,14 +46,16 @@ class RTranslator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        return "    stopifnot({} == {})".format(left, right)
+        return "    if(!identical({}, {}))".format(left, right) + "{quit('no', 1)}"
 
     def gen_literal(self, c):
         ''' Translate a literal expression
             c: is the literal value
         '''
         if type(c) == bool:
-            return str(c).lower()
+            return 'TRUE' if c else 'FALSE'
+        elif c is None:
+            return 'NULL'
         return repr(c)
     
     def gen_var(self, v):
@@ -68,26 +68,26 @@ class RTranslator:
         '''Translate a list with elements l
            A list [ x, y, z ] translates to list(x, y, z)
         '''
-        return "list(" + ", ".join(self.convert_expr(self, e) for e in l) + ")"
+        return "list(" + ", ".join(l) + ")"
     
-    #need tuples from the package sets?
+    #there are no r tuples, but r lists are mostly immutable?
     def gen_tuple(self, t):
         '''Translate a tuple with elements t
-           A tuple (x, y, z) translates to tuple(x, y, z) }
+           A tuple (x, y, z) translates to list(x, y, z) }
         '''
-        return "tuple(" + ", ".join(self.convert_expr(self, e) for e in t) + ")"
+        return "list(" + ", ".join(t) + ")"
     
     def gen_dict(self, keys, values):
         '''Translate a dictionary with keys and values (uses R list with keys)
            A dictionary { "key1": val1, "key2": val2 } translates to list("key1" = val1, "key2" = val2)  
         '''
-        return "list(" + ", ".join(f'"{k}" = {self.convert_expr(self, v)}' for k, v in zip(keys, values)) + ")"
+        return "list(" + ", ".join(f'{k} = {v}' for k, v in zip(keys, values)) + ")"
     
     def gen_call(self, func, args):
         '''Translate a function call `func(args)`
            A function call f(x, y, z) translates to f(x, y, z)
         '''
-        return self.convert_expr(self, func) + "(" + ", ".join(self.convert_expr(self, a) for a in args) + ")"
+        return func + "(" + ", ".join(args) + ")"
 
 if __name__ == "__main__":
     translator = RTranslator("R")

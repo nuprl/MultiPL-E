@@ -1,28 +1,17 @@
-# Authored by Abhinav Jangda based on eval_rust.py
-# Copyright (c) 2022, Roblox Inc and University of Massachusetts Amherst
+# Authored by Arjun Guha, edited by Federico Cassano
+# Copyright (c) 2022, Roblox Inc.
 #
-# This script runs the C++ Translated HumanEval programs in datasets/cpp-*
-import os
+# This script runs Gopherfied code - the key functionality is eval_script
+import argparse
+from sys import exit
 import subprocess
-from pathlib import Path
-
-import os
-import subprocess
-import tempfile
 from pathlib import Path
 from generic_eval import main
-
-LANG_NAME = "C++"
-LANG_EXT = ".cpp"
-
-#Following files have problems:
-#137, 
-#22: Any
-#148: Elipsis
+import os
 
 def eval_script(path: Path):
     basename = ".".join(str(path).split(".")[:-1])
-    build = subprocess.run(["g++", path, "-o", basename], capture_output=True)
+    build = subprocess.run(["swiftc", path, "-o", basename], capture_output=True)
     status = None
     returncode = -1
     output = None
@@ -46,15 +35,6 @@ def eval_script(path: Path):
             status = "Timeout"
             output = exc
         os.remove(basename)
-    if output.stdout is not None:
-        output.stdout = output.stdout.decode("utf-8")
-    else:
-        output.stdout = "None"
-
-    if output.stderr is not None:
-        output.stderr = output.stderr.decode("utf-8")
-    else:
-        output.stderr = "None"
     return {
         "status": status,
         "exit_code": returncode,
@@ -62,5 +42,6 @@ def eval_script(path: Path):
         "stderr": output.stderr,
     }
 
+
 if __name__ == "__main__":
-    main(eval_script, LANG_NAME, LANG_EXT)
+    main(eval_script, 'Swift', '.swift')

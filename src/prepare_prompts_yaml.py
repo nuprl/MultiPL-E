@@ -31,6 +31,7 @@ import argparse
 import sys
 from generic_translator import list_originals, translate_prompt_and_tests, get_stop_from_translator
 from pathlib import Path
+from humaneval_to_javascript import JavaScriptTranslator
 from humaneval_to_ruby import RubyTranslator
 from humaneval_to_lua import LuaTranslator
 from humaneval_to_rust import RustTranslator
@@ -39,17 +40,20 @@ from humaneval_to_php import PHPTranslator
 from humaneval_to_cpp import CPPTranslator
 from humaneval_to_python import PythonTranslator
 from humaneval_to_julia import JuliaTranslator
+from humaneval_to_java import JavaTranslator
 from problem_yaml import Problem
 
 TRANSLATORS = {
-    "ruby": RubyTranslator(),
+    "rb": RubyTranslator(),
     "lua": LuaTranslator(),
     "rust": RustTranslator("rs"),
-    "racket": RacketTranslator("racket"),
+    "rkt": RacketTranslator("racket"),
     "php": PHPTranslator("php"),
     "cpp": CPPTranslator("cpp"),
-    "python": PythonTranslator(),
-    "julia": JuliaTranslator("jl"),
+    "py": PythonTranslator(),
+    "jl": JuliaTranslator("jl"),
+    "js": JavaScriptTranslator(),
+    "java": JavaTranslator("java")
 }
 
 
@@ -90,7 +94,7 @@ def main():
         original_name = original.name.split(".")[0]
         target_yaml_path = target_dir / (original_name + ".yaml")
         if target_yaml_path.exists():
-            print(f"Skipping {target_yaml_path}")
+            # print(f"Skipping {target_yaml_path}")
             continue
 
         result = translate_prompt_and_tests(
