@@ -5,9 +5,7 @@
 // >>> truncate_number(3.5)
 // 0.5
 function truncate_number(number){
-    var int_part = Math.floor(number);
-    var dec_part = number - int_part;
-    return dec_part;
+    return number - Math.floor(number);
 }
 
 
@@ -16,18 +14,9 @@ const assert = require('node:assert');
 
 function test() {
   let candidate = truncate_number;
-  if (assert.deepEqual(candidate(3.5),0.5) {
-    true 
-  } else {
-  throw new Error('Failed test!') };
-  if (assert.deepEqual(candidate(1.25),0.25) {
-    true 
-  } else {
-  throw new Error('Failed test!') };
-  if (assert.deepEqual(candidate(123.0),0.0) {
-    true 
-  } else {
-  throw new Error('Failed test!') };
+  assert.deepEqual(candidate(3.5),0.5);
+  assert.deepEqual(candidate(1.25),0.25);
+  assert.deepEqual(candidate(123.0),0.0);
 }
 
 test();

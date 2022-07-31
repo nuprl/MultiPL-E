@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 The FibFib number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
     fibfib(0) == 0
@@ -15,20 +15,11 @@ The FibFib number sequence is a sequence similar to the Fibbonacci sequnece that
     24
     
 */
-int fibfib(int n) 
+long fibfib(long n) 
 {
-    if(n == 0)
-    {
-        return 0;
-    }
-    if(n == 1)
-    {
-        return 0;
-    }
-    if(n == 2)
-    {
-        return 1;
-    }
+    if (n == 0) return 0;
+    if (n == 1) return 0;
+    if (n == 2) return 1;
     return fibfib(n-1) + fibfib(n-2) + fibfib(n-3);
 }
 

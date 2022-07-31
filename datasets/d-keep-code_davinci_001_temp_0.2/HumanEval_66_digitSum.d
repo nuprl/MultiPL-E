@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Task
     Write a function that takes a string as input and returns the sum of the upper characters only'
@@ -14,9 +14,9 @@ Task
         digitSum("aAaaaXa") => 153
     
 */
-int digitSum(const(char)[] s) 
+long digitSum(const(char)[] s) 
 {
-    int sum = 0;
+    long sum = 0;
     for(int i = 0; i < s.length; i++)
     {
         if(s[i] >= 'A' && s[i] <= 'Z')

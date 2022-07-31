@@ -33,13 +33,13 @@ bool triples_sum_to_zero(std::vector<long> l) {
 }
 int main() {
     auto candidate = triples_sum_to_zero;
-    assert(candidate((std::vector<long>({1, 3, 5, 0}))) == (false));
-    assert(candidate((std::vector<long>({1, 3, 5, -1}))) == (false));
-    assert(candidate((std::vector<long>({1, 3, -2, 1}))) == (true));
-    assert(candidate((std::vector<long>({1, 2, 3, 7}))) == (false));
-    assert(candidate((std::vector<long>({1, 2, 5, 7}))) == (false));
-    assert(candidate((std::vector<long>({2, 4, -5, 3, 9, 7}))) == (true));
-    assert(candidate((std::vector<long>({1}))) == (false));
-    assert(candidate((std::vector<long>({1, 3, 5, -100}))) == (false));
-    assert(candidate((std::vector<long>({100, 3, 5, -100}))) == (false));
+    assert(candidate((std::vector<long>({(long)1, (long)3, (long)5, (long)0}))) == (false));
+    assert(candidate((std::vector<long>({(long)1, (long)3, (long)5, (long)-1}))) == (false));
+    assert(candidate((std::vector<long>({(long)1, (long)3, (long)-2, (long)1}))) == (true));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)7}))) == (false));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)5, (long)7}))) == (false));
+    assert(candidate((std::vector<long>({(long)2, (long)4, (long)-5, (long)3, (long)9, (long)7}))) == (true));
+    assert(candidate((std::vector<long>({(long)1}))) == (false));
+    assert(candidate((std::vector<long>({(long)1, (long)3, (long)5, (long)-100}))) == (false));
+    assert(candidate((std::vector<long>({(long)100, (long)3, (long)5, (long)-100}))) == (false));
 }

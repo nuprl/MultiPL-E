@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Write a function which sorts the given list of integers
@@ -12,34 +12,35 @@ import std.math;
     >>> order_by_points([]) == []
     
 */
-int[] order_by_points(int[] nums) 
+long[] order_by_points(long[] nums) 
 {
-    int[] result = new int[nums.Length];
-    int[] sum = new int[nums.Length];
-    for (int i = 0; i < nums.Length; i++)
+    // your code here
+    long[] result = new long[nums.length];
+    long[] sum = new long[nums.length];
+    long[] index = new long[nums.length];
+    for(int i = 0; i < nums.length; i++)
     {
-        sum[i] = nums[i];
-        int temp = nums[i];
-        while (temp > 0)
+        long sum_of_digits = 0;
+        long index_of_digits = 0;
+        long temp = nums[i];
+        while(temp > 0)
         {
-            sum[i] += temp % 10;
+            sum_of_digits += temp % 10;
+            index_of_digits += temp % 10;
             temp /= 10;
         }
+        sum[i] = sum_of_digits;
+        index[i] = index_of_digits;
     }
-    for (int i = 0; i < nums.Length; i++)
+    for(int i = 0; i < nums.length; i++)
     {
-        int min = sum[i];
-        int index = i;
-        for (int j = i + 1; j < nums.Length; j++)
+        for(int j = 0; j < nums.length; j++)
         {
-            if (sum[j] < min)
+            if(sum[i] == sum[j] && index[i] == index[j])
             {
-                min = sum[j];
-                index = j;
+                result[i] = nums[j];
             }
         }
-        result[i] = nums[index];
-        sum[index] = int.MaxValue;
     }
     return result;
 }

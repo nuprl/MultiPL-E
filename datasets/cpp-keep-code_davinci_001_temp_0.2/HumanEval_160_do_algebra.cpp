@@ -57,7 +57,7 @@ long do_algebra(std::vector<std::string> _operator_, std::vector<long> operand) 
 }
 int main() {
     auto candidate = do_algebra;
-    assert(candidate((std::vector<std::string>({"**", "*", "+"})), (std::vector<long>({2, 3, 4, 5}))) == (37));
-    assert(candidate((std::vector<std::string>({"+", "*", "-"})), (std::vector<long>({2, 3, 4, 5}))) == (9));
-    assert(candidate((std::vector<std::string>({"//", "*"})), (std::vector<long>({7, 3, 4}))) == (8));
+    assert(candidate((std::vector<std::string>({(std::string)"**", (std::string)"*", (std::string)"+"})), (std::vector<long>({(long)2, (long)3, (long)4, (long)5}))) == (37));
+    assert(candidate((std::vector<std::string>({(std::string)"+", (std::string)"*", (std::string)"-"})), (std::vector<long>({(long)2, (long)3, (long)4, (long)5}))) == (9));
+    assert(candidate((std::vector<std::string>({(std::string)"//", (std::string)"*"})), (std::vector<long>({(long)7, (long)3, (long)4}))) == (8));
 }

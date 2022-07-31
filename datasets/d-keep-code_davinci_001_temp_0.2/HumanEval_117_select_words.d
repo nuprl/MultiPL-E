@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Given a string s and a natural number n, you have been tasked to implement 
     a function that returns a list of all words from string s that contain exactly 
@@ -14,44 +14,33 @@ Given a string s and a natural number n, you have been tasked to implement
     select_words("Uncle sam", 3) ==> ["Uncle"]
     
 */
-const(char)[][] select_words(const(char)[] s, int n) 
+const(char)[][] select_words(const(char)[] s, long n) 
 {
     if(s.length == 0)
-        return [];
-    else
+        return new const(char)[][]{};
+    const(char)[][] result = new const(char)[][]{};
+    for(long i = 0; i < s.length; i++)
     {
-        int count = 0;
-        int index = 0;
-        const(char)[][] result = [];
-        for(int i = 0; i < s.length; i++)
+        long count = 0;
+        for(long j = i; j < s.length; j++)
         {
-            if(s[i] == ' ')
+            if(s[j] == ' ')
+                break;
+            if(s[j] != 'a' && s[j] != 'e' && s[j] != 'i' && s[j] != 'o' && s[j] != 'u')
+                count++;
+            if(count == n)
             {
-                if(count == n)
-                {
-                    result.push(s.slice(index, i));
-                    index = i + 1;
-                    count = 0;
-                }
-                else
-                {
-                    index = i + 1;
-                    count = 0;
-                }
-            }
-            else if(s[i] != ' ')
-            {
-                if(s[i] == 'a' || s[i] == 'e' || s[i] == 'i' || s[i] == 'o' || s[i] == 'u')
-                    count = 0;
-                else
-                    count++;
+                const(char)[] temp = new const(char)[s.length - j];
+                for(long k = 0; k < temp.length; k++)
+                    temp[k] = s[j + k];
+                result.add(temp);
+                break;
             }
         }
-        if(count == n)
-            result.push(s.slice(index, s.length));
-        return result;
     }
+    return result;
 }
+
 
 unittest
 {

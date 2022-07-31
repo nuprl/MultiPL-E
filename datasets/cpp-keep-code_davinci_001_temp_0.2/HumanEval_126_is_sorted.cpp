@@ -23,17 +23,17 @@ bool is_sorted(std::vector<long> lst) {
 }
 int main() {
     auto candidate = is_sorted;
-    assert(candidate((std::vector<long>({5}))) == (true));
-    assert(candidate((std::vector<long>({1, 2, 3, 4, 5}))) == (true));
-    assert(candidate((std::vector<long>({1, 3, 2, 4, 5}))) == (false));
-    assert(candidate((std::vector<long>({1, 2, 3, 4, 5, 6}))) == (true));
-    assert(candidate((std::vector<long>({1, 2, 3, 4, 5, 6, 7}))) == (true));
-    assert(candidate((std::vector<long>({1, 3, 2, 4, 5, 6, 7}))) == (false));
+    assert(candidate((std::vector<long>({(long)5}))) == (true));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)4, (long)5}))) == (true));
+    assert(candidate((std::vector<long>({(long)1, (long)3, (long)2, (long)4, (long)5}))) == (false));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)4, (long)5, (long)6}))) == (true));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)4, (long)5, (long)6, (long)7}))) == (true));
+    assert(candidate((std::vector<long>({(long)1, (long)3, (long)2, (long)4, (long)5, (long)6, (long)7}))) == (false));
     assert(candidate((std::vector<long>())) == (true));
-    assert(candidate((std::vector<long>({1}))) == (true));
-    assert(candidate((std::vector<long>({3, 2, 1}))) == (false));
-    assert(candidate((std::vector<long>({1, 2, 2, 2, 3, 4}))) == (false));
-    assert(candidate((std::vector<long>({1, 2, 3, 3, 3, 4}))) == (false));
-    assert(candidate((std::vector<long>({1, 2, 2, 3, 3, 4}))) == (true));
-    assert(candidate((std::vector<long>({1, 2, 3, 4}))) == (true));
+    assert(candidate((std::vector<long>({(long)1}))) == (true));
+    assert(candidate((std::vector<long>({(long)3, (long)2, (long)1}))) == (false));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)2, (long)2, (long)3, (long)4}))) == (false));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)3, (long)3, (long)4}))) == (false));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)2, (long)3, (long)3, (long)4}))) == (true));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3, (long)4}))) == (true));
 }

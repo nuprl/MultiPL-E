@@ -8,28 +8,28 @@ import std.math;
     [2, 3, 1, 3]
     
 */
-int[] parse_nested_parens(const(char)[] paren_string) 
+long[] parse_nested_parens(const(char)[] paren_string) 
 {
-    int[] max_nesting = new int[paren_string.length];
-    int max_nesting_level = 0;
-    int current_nesting_level = 0;
-    for (int i = 0; i < paren_string.length; i++)
+    long[] paren_levels = new long[paren_string.length];
+    long curr_level = 0;
+    long max_level = 0;
+    for (long i = 0; i < paren_string.length; i++)
     {
         if (paren_string[i] == '(')
         {
-            current_nesting_level++;
-            if (current_nesting_level > max_nesting_level)
+            curr_level++;
+            paren_levels[i] = curr_level;
+            if (curr_level > max_level)
             {
-                max_nesting_level = current_nesting_level;
+                max_level = curr_level;
             }
         }
         else if (paren_string[i] == ')')
         {
-            current_nesting_level--;
+            curr_level--;
         }
-        max_nesting[i] = max_nesting_level;
     }
-    return max_nesting;
+    return paren_levels;
 }
 
 unittest

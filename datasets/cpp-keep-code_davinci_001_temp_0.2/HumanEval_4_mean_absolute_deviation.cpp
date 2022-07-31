@@ -24,7 +24,7 @@ float mean_absolute_deviation(std::vector<float> numbers) {
 }
 int main() {
     auto candidate = mean_absolute_deviation;
-    assert(candidate((std::vector<float>({1.0, 2.0}))) == (0.5));
-    assert(candidate((std::vector<float>({1.0, 2.0, 3.0, 4.0}))) == (1.0));
-    assert(candidate((std::vector<float>({1.0, 2.0, 3.0, 4.0, 5.0}))) == (1.2));
+    assert(candidate((std::vector<float>({(float)1.0, (float)2.0}))) == (0.5));
+    assert(candidate((std::vector<float>({(float)1.0, (float)2.0, (float)3.0, (float)4.0}))) == (1.0));
+    assert(candidate((std::vector<float>({(float)1.0, (float)2.0, (float)3.0, (float)4.0, (float)5.0}))) == (1.2));
 }

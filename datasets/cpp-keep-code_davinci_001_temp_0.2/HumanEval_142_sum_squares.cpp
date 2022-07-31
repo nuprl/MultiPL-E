@@ -22,15 +22,15 @@ long sum_squares(std::vector<long> lst) {
 }
 int main() {
     auto candidate = sum_squares;
-    assert(candidate((std::vector<long>({1, 2, 3}))) == (6));
-    assert(candidate((std::vector<long>({1, 4, 9}))) == (14));
+    assert(candidate((std::vector<long>({(long)1, (long)2, (long)3}))) == (6));
+    assert(candidate((std::vector<long>({(long)1, (long)4, (long)9}))) == (14));
     assert(candidate((std::vector<long>())) == (0));
-    assert(candidate((std::vector<long>({1, 1, 1, 1, 1, 1, 1, 1, 1}))) == (9));
-    assert(candidate((std::vector<long>({-1, -1, -1, -1, -1, -1, -1, -1, -1}))) == (-3));
-    assert(candidate((std::vector<long>({0}))) == (0));
-    assert(candidate((std::vector<long>({-1, -5, 2, -1, -5}))) == (-126));
-    assert(candidate((std::vector<long>({-56, -99, 1, 0, -2}))) == (3030));
-    assert(candidate((std::vector<long>({-1, 0, 0, 0, 0, 0, 0, 0, -1}))) == (0));
-    assert(candidate((std::vector<long>({-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37}))) == (-14196));
-    assert(candidate((std::vector<long>({-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10}))) == (-1448));
+    assert(candidate((std::vector<long>({(long)1, (long)1, (long)1, (long)1, (long)1, (long)1, (long)1, (long)1, (long)1}))) == (9));
+    assert(candidate((std::vector<long>({(long)-1, (long)-1, (long)-1, (long)-1, (long)-1, (long)-1, (long)-1, (long)-1, (long)-1}))) == (-3));
+    assert(candidate((std::vector<long>({(long)0}))) == (0));
+    assert(candidate((std::vector<long>({(long)-1, (long)-5, (long)2, (long)-1, (long)-5}))) == (-126));
+    assert(candidate((std::vector<long>({(long)-56, (long)-99, (long)1, (long)0, (long)-2}))) == (3030));
+    assert(candidate((std::vector<long>({(long)-1, (long)0, (long)0, (long)0, (long)0, (long)0, (long)0, (long)0, (long)-1}))) == (0));
+    assert(candidate((std::vector<long>({(long)-16, (long)-9, (long)-2, (long)36, (long)36, (long)26, (long)-20, (long)25, (long)-40, (long)20, (long)-4, (long)12, (long)-26, (long)35, (long)37}))) == (-14196));
+    assert(candidate((std::vector<long>({(long)-1, (long)-3, (long)17, (long)-1, (long)-15, (long)13, (long)-1, (long)14, (long)-14, (long)-12, (long)-5, (long)14, (long)-14, (long)6, (long)13, (long)11, (long)16, (long)16, (long)4, (long)10}))) == (-1448));
 }

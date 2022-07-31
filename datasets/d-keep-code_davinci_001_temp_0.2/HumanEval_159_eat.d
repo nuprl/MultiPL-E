@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     You're a hungry rabbit, and you already have eaten a certain number of carrots,
@@ -30,12 +30,10 @@ import std.math;
     Have fun :)
     
 */
-int[] eat(int number, int need, int remaining) 
+long[] eat(long number, long need, long remaining) 
 {
-    int[] result = new int[2];
-    result[0] = number + remaining;
-    result[1] = remaining - need;
-    return result;
+    // your code here
+    return [number, remaining];
 }
 
 unittest

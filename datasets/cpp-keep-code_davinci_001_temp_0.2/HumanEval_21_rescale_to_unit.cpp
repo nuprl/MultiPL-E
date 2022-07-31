@@ -24,9 +24,9 @@ std::vector<float> rescale_to_unit(std::vector<float> numbers) {
 }
 int main() {
     auto candidate = rescale_to_unit;
-    assert(candidate((std::vector<float>({2.0, 49.9}))) == (std::vector<float>({0.0, 1.0})));
-    assert(candidate((std::vector<float>({100.0, 49.9}))) == (std::vector<float>({1.0, 0.0})));
-    assert(candidate((std::vector<float>({1.0, 2.0, 3.0, 4.0, 5.0}))) == (std::vector<float>({0.0, 0.25, 0.5, 0.75, 1.0})));
-    assert(candidate((std::vector<float>({2.0, 1.0, 5.0, 3.0, 4.0}))) == (std::vector<float>({0.25, 0.0, 1.0, 0.5, 0.75})));
-    assert(candidate((std::vector<float>({12.0, 11.0, 15.0, 13.0, 14.0}))) == (std::vector<float>({0.25, 0.0, 1.0, 0.5, 0.75})));
+    assert(candidate((std::vector<float>({(float)2.0, (float)49.9}))) == (std::vector<float>({(float)0.0, (float)1.0})));
+    assert(candidate((std::vector<float>({(float)100.0, (float)49.9}))) == (std::vector<float>({(float)1.0, (float)0.0})));
+    assert(candidate((std::vector<float>({(float)1.0, (float)2.0, (float)3.0, (float)4.0, (float)5.0}))) == (std::vector<float>({(float)0.0, (float)0.25, (float)0.5, (float)0.75, (float)1.0})));
+    assert(candidate((std::vector<float>({(float)2.0, (float)1.0, (float)5.0, (float)3.0, (float)4.0}))) == (std::vector<float>({(float)0.25, (float)0.0, (float)1.0, (float)0.5, (float)0.75})));
+    assert(candidate((std::vector<float>({(float)12.0, (float)11.0, (float)15.0, (float)13.0, (float)14.0}))) == (std::vector<float>({(float)0.25, (float)0.0, (float)1.0, (float)0.5, (float)0.75})));
 }

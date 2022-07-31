@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Write a function count_nums which takes an array of integers and returns
@@ -11,16 +11,15 @@ import std.math;
     >>> count_nums([1, 1, 2]) == 3
     
 */
-int count_nums(int[] arr) 
+long count_nums(long[] arr) 
 {
-    int count = 0;
-    for (int i = 0; i < arr.length; i++)
+    long count = 0;
+    for (long i = 0; i < arr.length; i++)
     {
-        int sum = 0;
-        while (arr[i] != 0)
+        long sum = 0;
+        for (long j = 0; j < arr[i].length(); j++)
         {
-            sum += arr[i] % 10;
-            arr[i] /= 10;
+            sum += arr[i].charAt(j) - '0';
         }
         if (sum > 0)
         {

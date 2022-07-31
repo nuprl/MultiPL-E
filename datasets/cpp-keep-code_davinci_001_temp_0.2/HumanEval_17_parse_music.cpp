@@ -28,8 +28,8 @@ std::vector<long> parse_music(std::string music_string) {
 int main() {
     auto candidate = parse_music;
     assert(candidate(("")) == (std::vector<long>()));
-    assert(candidate(("o o o o")) == (std::vector<long>({4, 4, 4, 4})));
-    assert(candidate((".| .| .| .|")) == (std::vector<long>({1, 1, 1, 1})));
-    assert(candidate(("o| o| .| .| o o o o")) == (std::vector<long>({2, 2, 1, 1, 4, 4, 4, 4})));
-    assert(candidate(("o| .| o| .| o o| o o|")) == (std::vector<long>({2, 1, 2, 1, 4, 2, 4, 2})));
+    assert(candidate(("o o o o")) == (std::vector<long>({(long)4, (long)4, (long)4, (long)4})));
+    assert(candidate((".| .| .| .|")) == (std::vector<long>({(long)1, (long)1, (long)1, (long)1})));
+    assert(candidate(("o| o| .| .| o o o o")) == (std::vector<long>({(long)2, (long)2, (long)1, (long)1, (long)4, (long)4, (long)4, (long)4})));
+    assert(candidate(("o| .| o| .| o o| o o|")) == (std::vector<long>({(long)2, (long)1, (long)2, (long)1, (long)4, (long)2, (long)4, (long)2})));
 }

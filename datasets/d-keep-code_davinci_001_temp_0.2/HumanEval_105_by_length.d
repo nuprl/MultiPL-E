@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given an array of integers, sort the integers that are between 1 and 9 inclusive,
@@ -23,76 +23,38 @@ import std.math;
       return = ['One']
     
 */
-const(char)[][] by_length(int[] arr) 
+const(char)[][] by_length(long[] arr) 
 {
     var result = new const(char)[][];
     var i = 0;
     var j = 0;
-    var k = 0;
-    var l = 0;
-    var m = 0;
-    var n = 0;
-    var o = 0;
-    var p = 0;
-    var q = 0;
-    var r = 0;
-    var s = 0;
-    var t = 0;
-    var u = 0;
-    var v = 0;
-    var w = 0;
-    var x = 0;
-    var y = 0;
-    var z = 0;
-    var aa = 0;
-    var ab = 0;
-    var ac = 0;
-    var ad = 0;
-    var ae = 0;
-    var af = 0;
-    var ag = 0;
-    var ah = 0;
-    var ai = 0;
-    var aj = 0;
-    var ak = 0;
-    var al = 0;
-    var am = 0;
-    var an = 0;
-    var ao = 0;
-    var ap = 0;
-    var aq = 0;
-    var ar = 0;
-    var as = 0;
-    var at = 0;
-    var au = 0;
-    var av = 0;
-    var aw = 0;
-    var ax = 0;
-    var ay = 0;
-    var az = 0;
-    var ba = 0;
-    var bb = 0;
-    var bc = 0;
-    var bd = 0;
-    var be = 0;
-    var bf = 0;
-    var bg = 0;
-    var bh = 0;
-    var bi = 0;
-    var bj = 0;
-    var bk = 0;
-    var bl = 0;
-    var bm = 0;
-    var bn = 0;
-    var bo = 0;
-    var bp = 0;
-    var bq = 0;
-    var br = 0;
-    var bs = 0;
-    var bt = 0;
-    var bu = 0;
-    var bv = 0;
-    var b
+    var temp = new const(char)[arr.length];
+    var temp_arr = new const(char)[arr.length];
+    var temp_arr_2 = new const(char)[arr.length];
+    var temp_arr_3 = new const(char)[arr.length];
+    var temp_arr_4 = new const(char)[arr.length];
+    var temp_arr_5 = new const(char)[arr.length];
+    var temp_arr_6 = new const(char)[arr.length];
+    var temp_arr_7 = new const(char)[arr.length];
+    var temp_arr_8 = new const(char)[arr.length];
+    var temp_arr_9 = new const(char)[arr.length];
+    var temp_arr_10 = new const(char)[arr.length];
+    var temp_arr_11 = new const(char)[arr.length];
+    var temp_arr_12 = new const(char)[arr.length];
+    var temp_arr_13 = new const(char)[arr.length];
+    var temp_arr_14 = new const(char)[arr.length];
+    var temp_arr_15 = new const(char)[arr.length];
+    var temp_arr_16 = new const(char)[arr.length];
+    var temp_arr_17 = new const(char)[arr.length];
+    var temp_arr_18 = new const(char)[arr.length];
+    var temp_arr_19 = new const(char)[arr.length];
+    var temp_arr_20 = new const(char)[arr.length];
+    var temp_arr_21 = new const(char)[arr.length];
+    var temp_arr_22 = new const(char)[arr.length];
+    var temp_arr_23 = new const(char)[arr.length];
+    var temp_arr_24 = new const(char)[arr.length];
+    var temp_arr_25 = new const(char)[arr.length];
+    var temp_arr_26 = new
 
 unittest
 {

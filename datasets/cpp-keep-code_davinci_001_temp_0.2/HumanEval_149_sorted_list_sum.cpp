@@ -25,11 +25,11 @@ std::vector<std::string> sorted_list_sum(std::vector<std::string> lst) {
 }
 int main() {
     auto candidate = sorted_list_sum;
-    assert(candidate((std::vector<std::string>({"aa", "a", "aaa"}))) == (std::vector<std::string>({"aa"})));
-    assert(candidate((std::vector<std::string>({"school", "AI", "asdf", "b"}))) == (std::vector<std::string>({"AI", "asdf", "school"})));
-    assert(candidate((std::vector<std::string>({"d", "b", "c", "a"}))) == (std::vector<std::string>()));
-    assert(candidate((std::vector<std::string>({"d", "dcba", "abcd", "a"}))) == (std::vector<std::string>({"abcd", "dcba"})));
-    assert(candidate((std::vector<std::string>({"AI", "ai", "au"}))) == (std::vector<std::string>({"AI", "ai", "au"})));
-    assert(candidate((std::vector<std::string>({"a", "b", "b", "c", "c", "a"}))) == (std::vector<std::string>()));
-    assert(candidate((std::vector<std::string>({"aaaa", "bbbb", "dd", "cc"}))) == (std::vector<std::string>({"cc", "dd", "aaaa", "bbbb"})));
+    assert(candidate((std::vector<std::string>({(std::string)"aa", (std::string)"a", (std::string)"aaa"}))) == (std::vector<std::string>({(std::string)"aa"})));
+    assert(candidate((std::vector<std::string>({(std::string)"school", (std::string)"AI", (std::string)"asdf", (std::string)"b"}))) == (std::vector<std::string>({(std::string)"AI", (std::string)"asdf", (std::string)"school"})));
+    assert(candidate((std::vector<std::string>({(std::string)"d", (std::string)"b", (std::string)"c", (std::string)"a"}))) == (std::vector<std::string>()));
+    assert(candidate((std::vector<std::string>({(std::string)"d", (std::string)"dcba", (std::string)"abcd", (std::string)"a"}))) == (std::vector<std::string>({(std::string)"abcd", (std::string)"dcba"})));
+    assert(candidate((std::vector<std::string>({(std::string)"AI", (std::string)"ai", (std::string)"au"}))) == (std::vector<std::string>({(std::string)"AI", (std::string)"ai", (std::string)"au"})));
+    assert(candidate((std::vector<std::string>({(std::string)"a", (std::string)"b", (std::string)"b", (std::string)"c", (std::string)"c", (std::string)"a"}))) == (std::vector<std::string>()));
+    assert(candidate((std::vector<std::string>({(std::string)"aaaa", (std::string)"bbbb", (std::string)"dd", (std::string)"cc"}))) == (std::vector<std::string>({(std::string)"cc", (std::string)"dd", (std::string)"aaaa", (std::string)"bbbb"})));
 }

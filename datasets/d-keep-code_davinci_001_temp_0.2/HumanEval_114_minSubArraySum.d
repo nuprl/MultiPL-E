@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given an array of integers nums, find the minimum sum of any non-empty sub-array
@@ -9,16 +9,20 @@ import std.math;
     minSubArraySum([-1, -2, -3]) == -6
     
 */
-int minSubArraySum(int[] nums) 
+long minSubArraySum(long[] nums) 
 {
-    int min = nums[0];
-    int sum = 0;
-    for(int i = 0; i < nums.Length; i++)
+    long min = nums[0];
+    long sum = 0;
+    for(int i = 0; i < nums.length; i++)
     {
         sum += nums[i];
         if(sum < min)
         {
             min = sum;
+        }
+        if(sum > 0)
+        {
+            sum = 0;
         }
     }
     return min;

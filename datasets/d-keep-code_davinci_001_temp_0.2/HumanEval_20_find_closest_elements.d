@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  From a supplied list of numbers (of length at least two) select and return two that are the closest to each
     other and return them in order (smaller number, larger number).
@@ -11,21 +11,25 @@ import std.math;
 */
 Tuple!(float, float) find_closest_elements(float[] numbers) 
 {
-    float min_diff = std.math.abs(numbers[0] - numbers[1]);
-    int min_diff_index = 0;
+    float min_diff = std.math.inf;
+    Tuple!(float, float) result;
     for (int i = 0; i < numbers.length; i++)
     {
         for (int j = i + 1; j < numbers.length; j++)
         {
-            float diff = std.math.abs(numbers[i] - numbers[j]);
+            float diff = numbers[i] - numbers[j];
+            if (diff < 0)
+            {
+                diff = -diff;
+            }
             if (diff < min_diff)
             {
                 min_diff = diff;
-                min_diff_index = i;
+                result = Tuple!(numbers[i], numbers[j]);
             }
         }
     }
-    return (numbers[min_diff_index], numbers[min_diff_index + 1]);
+    return result;
 }
 
 unittest

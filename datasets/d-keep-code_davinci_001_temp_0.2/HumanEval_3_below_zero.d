@@ -9,18 +9,20 @@ import std.math;
     True
     
 */
-bool below_zero(int[] operations) 
+bool below_zero(long[] operations) 
 {
-    int balance = 0;
+    bool is_below_zero = false;
+    long balance = 0;
     for (int i = 0; i < operations.Length; i++)
     {
         balance += operations[i];
         if (balance < 0)
         {
-            return true;
+            is_below_zero = true;
+            break;
         }
     }
-    return false;
+    return is_below_zero;
 }
 
 unittest

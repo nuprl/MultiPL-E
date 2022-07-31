@@ -28,10 +28,10 @@ Union_std_vector_std_string__long split_words(std::string txt) {
 }
 int main() {
     auto candidate = split_words;
-    assert(candidate(("Hello world!")) == (Union_std_vector_std_string__long({"Hello", "world!"})));
-    assert(candidate(("Hello,world!")) == (Union_std_vector_std_string__long({"Hello", "world!"})));
-    assert(candidate(("Hello world,!")) == (Union_std_vector_std_string__long({"Hello", "world,!"})));
-    assert(candidate(("Hello,Hello,world !")) == (Union_std_vector_std_string__long({"Hello,Hello,world", "!"})));
+    assert(candidate(("Hello world!")) == (Union_std_vector_std_string__long(std::string)"world!"})));
+    assert(candidate(("Hello,world!")) == (Union_std_vector_std_string__long(std::string)"world!"})));
+    assert(candidate(("Hello world,!")) == (Union_std_vector_std_string__long(std::string)"world,!"})));
+    assert(candidate(("Hello,Hello,world !")) == (Union_std_vector_std_string__long(std::string)"!"})));
     assert(candidate(("abcdef")) == (Union_std_vector_std_string__long(3)));
     assert(candidate(("aaabb")) == (Union_std_vector_std_string__long(2)));
     assert(candidate(("aaaBb")) == (Union_std_vector_std_string__long(1)));

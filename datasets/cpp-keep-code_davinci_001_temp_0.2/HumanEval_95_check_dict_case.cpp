@@ -22,11 +22,11 @@ bool check_dict_case(std::map<std::string, std::string> dict) {
 }
 int main() {
     auto candidate = check_dict_case;
-    assert(candidate((std::map<std::string, std::string>({ {"p", "pineapple"}, {"b", "banana"} }))) == (true));
-    assert(candidate((std::map<std::string, std::string>({ {"p", "pineapple"}, {"A", "banana"}, {"B", "banana"} }))) == (false));
-    assert(candidate((std::map<std::string, std::string>({ {"p", "pineapple"}, {"5", "banana"}, {"a", "apple"} }))) == (false));
-    assert(candidate((std::map<std::string, std::string>({ {"Name", "John"}, {"Age", "36"}, {"City", "Houston"} }))) == (false));
-    assert(candidate((std::map<std::string, std::string>({ {"STATE", "NC"}, {"ZIP", "12345"} }))) == (true));
-    assert(candidate((std::map<std::string, std::string>({ {"fruit", "Orange"}, {"taste", "Sweet"} }))) == (true));
-    assert(candidate((std::map<std::string, std::string>({}))) == (false));
+    assert(candidate((std::map<std::string, std::string>({{"p", "pineapple"}, {"b", "banana"}}))) == (true));
+    assert(candidate((std::map<std::string, std::string>({{"p", "pineapple"}, {"A", "banana"}, {"B", "banana"}}))) == (false));
+    assert(candidate((std::map<std::string, std::string>({{"p", "pineapple"}, {"5", "banana"}, {"a", "apple"}}))) == (false));
+    assert(candidate((std::map<std::string, std::string>({{"Name", "John"}, {"Age", "36"}, {"City", "Houston"}}))) == (false));
+    assert(candidate((std::map<std::string, std::string>({{"STATE", "NC"}, {"ZIP", "12345"}}))) == (true));
+    assert(candidate((std::map<std::string, std::string>({{"fruit", "Orange"}, {"taste", "Sweet"}}))) == (true));
+    assert(candidate((std::map<std::string, std::string>())) == (false));
 }

@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  Find how many times a given substring can be found in the original string. Count overlaping cases.
     >>> how_many_times('', 'a')
@@ -10,22 +10,20 @@ import std.math;
     3
     
 */
-int how_many_times(const(char)[] string, const(char)[] substring) 
+long how_many_times(const(char)[] string, const(char)[] substring) 
 {
-    int i = 0;
-    int j = 0;
-    int count = 0;
-    while(i < len(string)) {
-        if(string[i] == substring[j]) {
-            j += 1;
-            if(j == len(substring)) {
-                count += 1;
-                j = 0;
+    long count = 0;
+    long len_substring = std.math.length(substring);
+    long len_string = std.math.length(string);
+    for(long i = 0; i < len_string - len_substring + 1; i++)
+    {
+        if(std.math.equals(string[i], substring[0]))
+        {
+            if(std.math.equals(substring, string[i:i+len_substring]))
+            {
+                count++;
             }
-        } else {
-            j = 0;
         }
-        i += 1;
     }
     return count;
 }

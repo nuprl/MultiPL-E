@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  Return list of all prefixes from shortest to longest of the input string
     >>> all_prefixes('abc')
@@ -8,10 +8,10 @@ import std.math;
 */
 const(char)[][] all_prefixes(const(char)[] string) 
 {
-    const(char)[][] prefixes = new const(char)[][];
+    var(char)[][] prefixes = new(char)[][];
     for(int i = 0; i < string.length; i++)
     {
-        prefixes.push(string.slice(0, i + 1));
+        prefixes.push(string[0:i]);
     }
     return prefixes;
 }
@@ -22,10 +22,10 @@ const(char)[][] all_prefixes(const(char)[] string)
 */
 const(char)[][] all_suffixes(const(char)[] string) 
 {
-    const(char)[][] suffixes = new const(char)[][];
+    var(char)[][] suffixes = new(char)[][];
     for(int i = 0; i < string.length; i++)
     {
-        suffixes.push(string.slice(i, string.length));
+        suffixes.push(string[i:string.length]);
     }
     return suffixes;
 }
@@ -36,12 +36,12 @@ const(char)[][] all_suffixes(const(char)[] string)
 */
 const(char)[][] all_substrings(const(char)[] string) 
 {
-    const(char)[][] substrings = new const(char)[][];
+    var(char)[][] substrings = new(char)[][];
     for(int i = 0; i < string.length; i++)
     {
         for(int j = i; j < string.length; j++)
         {
-            substrings.push(string.slice(i, j + 1));
+            substrings.push(string[i:j]);
         }
     }
     return substrings;
@@ -53,12 +53,14 @@ const(char)[][] all_substrings(const(char)[] string)
 */
 const(char)[][] all_substrings(const(char)[] string, int length) 
 {
-    const(char)[][] substrings = new const(char)[][];
+    var(char)[][] substrings = new(char)[][];
     for(int i = 0; i < string.length; i++)
     {
-        for(int j = i; j < i + length; j++)
+        for(int j = i; j < string.length; j++)
         {
-            substrings.push(string.slice
+            if(j - i + 1 == length)
+            {
+                substrings.push(string[
 
 unittest
 {

@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Implement a function that takes an non-negative integer and returns an array of the first n
     integers that are prime numbers and less than n.
@@ -12,16 +12,20 @@ Implement a function that takes an non-negative integer and returns an array of 
     count_up_to(18) => [2,3,5,7,11,13,17]
     
 */
-int[] count_up_to(int n) 
+long[] count_up_to(long n) 
 {
-    int[] primes = new int[n];
-    int count = 0;
-    for(int i = 2; i < n; i++)
+    long[] primes = new long[n];
+    long i = 0;
+    while (i < n)
     {
-        if(is_prime(i))
+        if (is_prime(i))
         {
-            primes[count] = i;
-            count++;
+            primes[i] = i;
+            i++;
+        }
+        else
+        {
+            i++;
         }
     }
     return primes;

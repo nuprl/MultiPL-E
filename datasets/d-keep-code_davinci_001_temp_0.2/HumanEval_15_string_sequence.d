@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  Return a string containing space-delimited numbers starting from 0 upto n inclusive.
     >>> string_sequence(0)
@@ -8,7 +8,7 @@ import std.math;
     '0 1 2 3 4 5'
     
 */
-const(char)[] string_sequence(int n) 
+const(char)[] string_sequence(long n) 
 {
     return str(range(0, n));
 }

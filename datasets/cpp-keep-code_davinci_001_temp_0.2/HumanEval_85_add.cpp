@@ -15,8 +15,8 @@ long add(std::vector<long> lst) {
 }
 int main() {
     auto candidate = add;
-    assert(candidate((std::vector<long>({4, 88}))) == (88));
-    assert(candidate((std::vector<long>({4, 5, 6, 7, 2, 122}))) == (122));
-    assert(candidate((std::vector<long>({4, 0, 6, 7}))) == (0));
-    assert(candidate((std::vector<long>({4, 4, 6, 8}))) == (12));
+    assert(candidate((std::vector<long>({(long)4, (long)88}))) == (88));
+    assert(candidate((std::vector<long>({(long)4, (long)5, (long)6, (long)7, (long)2, (long)122}))) == (122));
+    assert(candidate((std::vector<long>({(long)4, (long)0, (long)6, (long)7}))) == (0));
+    assert(candidate((std::vector<long>({(long)4, (long)4, (long)6, (long)8}))) == (12));
 }

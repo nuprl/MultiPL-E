@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  From a list of integers, remove all elements that occur more than once.
     Keep order of elements left the same as in the input.
@@ -7,17 +7,19 @@ import std.math;
     [1, 3, 4]
     
 */
-int[] remove_duplicates(int[] numbers) 
+long[] remove_duplicates(long[] numbers) 
 {
-    int[] result = new int[numbers.length];
-    int i = 0;
-    for (int j = 0; j < numbers.length; j++) {
-        if (i == 0 || numbers[j] != result[i - 1]) {
-            result[i] = numbers[j];
-            i++;
+    var result = new List<long>();
+    var seen = new List<long>();
+    foreach (var n in numbers)
+    {
+        if (!seen.Contains(n))
+        {
+            seen.Add(n);
+            result.Add(n);
         }
     }
-    return result;
+    return result.ToArray();
 }
 
 unittest

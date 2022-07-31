@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given an array arr of integers and a positive integer k, return a sorted list 
@@ -26,16 +26,13 @@ import std.math;
         3. 0 <= k <= len(arr)
     
 */
-int[] maximum(int[] arr, int k) 
+long[] maximum(long[] arr, long k) 
 {
-    // sort the array first
-    Array.Sort(arr);
-    // get the max k numbers
-    int[] result = new int[k];
+    long[] result = new long[k];
+    long[] copy = arr.copyOf();
+    Arrays.sort(copy);
     for (int i = 0; i < k; i++)
-    {
-        result[i] = arr[i];
-    }
+        result[i] = copy[copy.length - 1 - i];
     return result;
 }
 

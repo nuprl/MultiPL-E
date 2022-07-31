@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     You are given a rectangular grid of wells. Each row represents a single well,
@@ -35,29 +35,39 @@ import std.math;
         * 1 <= capacity <= 10
     
 */
-int max_fill(int[][] grid, int capacity) 
+long max_fill(long[][] grid, long capacity) 
 {
-    int n = grid.length;
-    int m = grid[0].length;
-    int[][] dp = new int[n][m];
-    int[][] dp_prev = new int[n][m];
-    int[][] dp_next = new int[n][m];
-    int[][] dp_next_prev = new int[n][m];
-    int[][] dp_next_next = new int[n][m];
-    int[][] dp_next_next_prev = new int[n][m];
-    int[][] dp_next_next_next = new int[n][m];
-    int[][] dp_next_next_next_prev = new int[n][m];
-    int[][] dp_next_next_next_next = new int[n][m];
-    int[][] dp_next_next_next_next_prev = new int[n][m];
-    int[][] dp_next_next_next_next_next = new int[n][m];
-    int[][] dp_next_next_next_next_next_prev = new int[n][m];
-    int[][] dp_next_next_next_next_next_next = new int[n][m];
-    int[][] dp_next_next_next_next_next_next_prev = new int[n][m];
-    int[][] dp_next_next_next_next_next_next_next = new int[n][m];
-    int[][] dp_next_next_next_next_next_next_next_prev = new int[n][m];
-    int[][] dp_next_next_next_next_next_next_next_next = new int[n][m];
-    int[][] dp_next_next_next_next_next_next_next_next_prev = new int[n][m];
-    int[][] dp_next_next_next_next_next_next_next_next_next = new
+    long[][] dp = new long[grid.length][grid[0].length];
+    long max_fill = 0;
+    for (int i = 0; i < grid.length; i++)
+    {
+        for (int j = 0; j < grid[0].length; j++)
+        {
+            if (grid[i][j] == 0)
+            {
+                dp[i][j] = 0;
+            }
+            else
+            {
+                dp[i][j] = 1;
+                if (i > 0)
+                {
+                    dp[i][j] += dp[i - 1][j];
+                }
+                if (j > 0)
+                {
+                    dp[i][j] += dp[i][j - 1];
+                }
+                if (i > 0 && j > 0)
+                {
+                    dp[i][j] -= dp[i - 1][j - 1];
+                }
+                max_fill = Math.max(max_fill, dp[i][j]);
+            }
+        }
+    }
+    return max_fill;
+}
 
 unittest
 {

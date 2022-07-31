@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 In this problem, you will implement a function that takes two lists of numbers,
     and determines whether it is possible to perform an exchange of elements
@@ -14,36 +14,55 @@ In this problem, you will implement a function that takes two lists of numbers,
     It is assumed that the input lists will be non-empty.
     
 */
-const(char)[] exchange(int[] lst1, int[] lst2) 
+const(char)[] exchange(long[] lst1, long[] lst2) 
 {
-    if(lst1.length != lst2.length)
-    {
-        return "NO";
-    }
-    else
-    {
-        int[] lst3 = new int[lst1.length];
-        for(int i = 0; i < lst1.length; i++)
-        {
-            lst3[i] = lst1[i];
-        }
-        for(int i = 0; i < lst2.length; i++)
-        {
-            if(lst2[i] % 2 == 0)
-            {
-                lst3[i] = lst2[i];
-            }
-        }
-        for(int i = 0; i < lst3.length; i++)
-        {
-            if(lst3[i] % 2 != 0)
-            {
-                return "NO";
-            }
-        }
-        return "YES";
-    }
+    // Write your code here
+    return null;
 }
+/*
+In this problem, you will implement a function that takes a list of numbers,
+    and determines whether it is possible to perform an exchange of elements
+    between the list and a second list to make the first list a list of only
+    even numbers.
+    There is no limit on the number of exchanged elements between the two lists.
+    If it is possible to exchange elements between the two lists to make
+    all the elements of the first list to be even, return "YES".
+    Otherwise, return "NO".
+    For example:
+    exchange([1, 2, 3, 4], [1, 2, 3, 4]) => "YES"
+    exchange([1, 2, 3, 4], [1, 5, 3, 4]) => "NO"
+    It is assumed that the input lists will be non-empty.
+    
+*/
+const(char)[] exchange(long[] lst1, long[] lst2) 
+{
+    // Write your code here
+    return null;
+}
+/*
+In this problem, you will implement a function that takes a list of numbers,
+    and determines whether it is possible to perform an exchange of elements
+    between the list and a second list to make the first list a list of only
+    even numbers.
+    There is no limit on the number of exchanged elements between the two lists.
+    If it is possible to exchange elements between the two lists to make
+    all the elements of the first list to be even, return "YES".
+    Otherwise, return "NO".
+    For example:
+    exchange([1, 2, 3, 4], [1, 2, 3, 4]) => "YES"
+    exchange([1, 2, 3, 4], [1, 5, 3, 4]) => "NO"
+    It is assumed that the input lists will be non-empty.
+    
+*/
+const(char)[] exchange(long[] lst1, long[] lst2) 
+{
+    // Write your code here
+    return null;
+}
+/*
+In this problem, you will implement a function that takes a list of numbers,
+    and determines whether it is possible to perform an exchange of elements
+    between
 
 unittest
 {

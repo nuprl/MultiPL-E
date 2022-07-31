@@ -1,43 +1,47 @@
-# Authored by Arjun Guha, edited by John Gouwar
+# Authored by Arjun Guha, edited by Molly Q Feldman and Abhinav Jangda
 # Copyright (c) 2022, Roblox Inc.
 #
-# This script runs the Juliated HumanEval programs in datasets/julia
-import os
+# This script runs Rubified code - the key functionality is eval_script 
+import argparse
+from sys import exit
 import subprocess
 from pathlib import Path
+from generic_eval import main as gmain
 
-def eval_script(path: Path): 
+def eval_script(path: Path):
     try:
         # Assumes exit-code 0 is all okay
-        output  = subprocess.run(
-            ["julia", str(path)], encoding="utf-8", capture_output=True, timeout=20
+        # Need check=True for Ruby to pass errors to CalledProcessError
+        output = subprocess.run(
+            ["julia", path], encoding='utf-8', check=True, capture_output=True, timeout=5
         )
-        
-        
-        if output.returncode == 0: 
+        if output.returncode == 0:
             status = "OK"
-        else: 
-            status = "Exception"
+            out = output.stderr
+            error = output.stdout
+            returncode = 0
+        else:
+            raise Exception("there's an issue with check = True for Ruby, INVESTIGATE!")
     except subprocess.TimeoutExpired as exc:
         status = "Timeout"
-    except: 
-        print("Not sure how Julia got here")
-
-    return { 
-        "status" : status, 
-        "exit_code": output.returncode,
-        "stdout": str(output.stdout),
-        "stderr": str(output.stderr),
+        out = exc.stdout
+        error = exc.stderr
+        returncode = -1
+    except subprocess.CalledProcessError as exc:
+        returncode = exc.returncode
+        out = exc.stdout
+        error = exc.stderr
+        #failure with code 1 but no error message is an Exception from Failed tests
+        if len(error) < 1:
+            status = "Exception"
+        else: #everything that prints out an error message is a SyntaxError
+            status = "SyntaxError"
+    return {
+        "status": status,
+        "exit_code": returncode,
+        "stdout": str(out),
+        "stderr": str(error),
     }
 
-
-def main():
-    directory = Path(Path(__file__).parent, "..", "datasets", "jl-keep-code_davinci_001_temp_0.2-0").resolve()
-
-    for filename in os.listdir(directory):
-        r = eval_script(Path.joinpath(directory, filename))
-        filename = filename.split(".")[0]
-        print(f"Julia,{filename},{r['status']}")
-
 if __name__ == "__main__":
-    main()
+    gmain(eval_script, 'Julia', '.jl')

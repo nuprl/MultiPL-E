@@ -1,17 +1,19 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given a positive integer n, return the count of the numbers of n-digit
     positive integers that start or end with 1.
     
 */
-int starts_one_ends(int n) 
+long starts_one_ends(long n) 
 {
-    if (n == 1)
-        return 10;
+    if (n == 0)
+        return 0;
+    else if (n == 1)
+        return 9;
     else
-        return 9 * starts_one_ends(n - 1);
+        return 9 * pow(10, n - 1);
 }
 
 unittest

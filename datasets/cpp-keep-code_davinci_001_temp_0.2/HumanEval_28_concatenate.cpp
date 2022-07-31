@@ -16,6 +16,6 @@ std::string concatenate(std::vector<std::string> strings) {
 int main() {
     auto candidate = concatenate;
     assert(candidate((std::vector<std::string>())) == (""));
-    assert(candidate((std::vector<std::string>({"x", "y", "z"}))) == ("xyz"));
-    assert(candidate((std::vector<std::string>({"x", "y", "z", "w", "k"}))) == ("xyzwk"));
+    assert(candidate((std::vector<std::string>({(std::string)"x", (std::string)"y", (std::string)"z"}))) == ("xyz"));
+    assert(candidate((std::vector<std::string>({(std::string)"x", (std::string)"y", (std::string)"z", (std::string)"w", (std::string)"k"}))) == ("xyzwk"));
 }

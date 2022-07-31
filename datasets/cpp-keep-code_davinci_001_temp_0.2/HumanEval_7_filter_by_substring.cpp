@@ -18,7 +18,7 @@ std::vector<std::string> filter_by_substring(std::vector<std::string> strings, s
 int main() {
     auto candidate = filter_by_substring;
     assert(candidate((std::vector<std::string>()), ("john")) == (std::vector<std::string>()));
-    assert(candidate((std::vector<std::string>({"xxx", "asd", "xxy", "john doe", "xxxAAA", "xxx"})), ("xxx")) == (std::vector<std::string>({"xxx", "xxxAAA", "xxx"})));
-    assert(candidate((std::vector<std::string>({"xxx", "asd", "aaaxxy", "john doe", "xxxAAA", "xxx"})), ("xx")) == (std::vector<std::string>({"xxx", "aaaxxy", "xxxAAA", "xxx"})));
-    assert(candidate((std::vector<std::string>({"grunt", "trumpet", "prune", "gruesome"})), ("run")) == (std::vector<std::string>({"grunt", "prune"})));
+    assert(candidate((std::vector<std::string>({(std::string)"xxx", (std::string)"asd", (std::string)"xxy", (std::string)"john doe", (std::string)"xxxAAA", (std::string)"xxx"})), ("xxx")) == (std::vector<std::string>({(std::string)"xxx", (std::string)"xxxAAA", (std::string)"xxx"})));
+    assert(candidate((std::vector<std::string>({(std::string)"xxx", (std::string)"asd", (std::string)"aaaxxy", (std::string)"john doe", (std::string)"xxxAAA", (std::string)"xxx"})), ("xx")) == (std::vector<std::string>({(std::string)"xxx", (std::string)"aaaxxy", (std::string)"xxxAAA", (std::string)"xxx"})));
+    assert(candidate((std::vector<std::string>({(std::string)"grunt", (std::string)"trumpet", (std::string)"prune", (std::string)"gruesome"})), ("run")) == (std::vector<std::string>({(std::string)"grunt", (std::string)"prune"})));
 }

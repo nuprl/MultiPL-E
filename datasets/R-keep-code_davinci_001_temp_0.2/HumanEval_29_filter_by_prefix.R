@@ -1,0 +1,17 @@
+# Filter an input list of strings only for ones that start with a given prefix.
+# >>> filter_by_prefix([], 'a')
+# []
+# >>> filter_by_prefix(['abc', 'bcd', 'cde', 'array'], 'a')
+# ['abc', 'array']
+filter_by_prefix <- function(strings, prefix) {
+    return(strings[grepl(paste0('^', prefix), strings)])
+}
+filter_by_prefix(c('abc', 'bcd', 'cde', 'array'), 'a')
+
+
+test_humaneval <- function() {
+candidate <- filter_by_prefix
+    if(!identical(candidate(list(), 'john'), list())){quit('no', 1)}
+    if(!identical(candidate(list('xxx', 'asd', 'xxy', 'john doe', 'xxxAAA', 'xxx'), 'xxx'), list('xxx', 'xxxAAA', 'xxx'))){quit('no', 1)}
+}
+test_humaneval()

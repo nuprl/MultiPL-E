@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Return True if all numbers in the list l are below threshold t.
     >>> below_threshold([1, 2, 4, 10], 100)
@@ -8,17 +8,23 @@ Return True if all numbers in the list l are below threshold t.
     False
     
 */
-bool below_threshold(int[] l, int t) 
+bool below_threshold(long[] l, long t) 
 {
-    foreach (int i in l)
-    {
-        if (i > t)
-        {
+    foreach (long x in l) {
+        if (x > t) {
             return false;
         }
     }
     return true;
 }
+/*
+Return True if all numbers in the list l are below threshold t.
+    >>> below_threshold([1, 2, 4, 10], 100)
+    True
+    >>> below_threshold([1, 20, 4, 10], 5)
+    False
+    
+*/
 
 unittest
 {

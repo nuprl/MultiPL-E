@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  Return length of given string
     >>> strlen('')
@@ -8,13 +8,11 @@ import std.math;
     3
     
 */
-int strlen(const(char)[] string) 
+long strlen(const(char)[] string) 
 {
-    int i = 0;
-    for(; string[i] != 0; i++)
-    {
-        // empty loop
-    }
+    long i = 0;
+    while(string[i] != '\0')
+        i++;
     return i;
 }
 

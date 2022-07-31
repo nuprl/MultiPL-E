@@ -20,9 +20,9 @@ std::vector<long> make_a_pile(long n) {
 }
 int main() {
     auto candidate = make_a_pile;
-    assert(candidate((3)) == (std::vector<long>({3, 5, 7})));
-    assert(candidate((4)) == (std::vector<long>({4, 6, 8, 10})));
-    assert(candidate((5)) == (std::vector<long>({5, 7, 9, 11, 13})));
-    assert(candidate((6)) == (std::vector<long>({6, 8, 10, 12, 14, 16})));
-    assert(candidate((8)) == (std::vector<long>({8, 10, 12, 14, 16, 18, 20, 22})));
+    assert(candidate((3)) == (std::vector<long>({(long)3, (long)5, (long)7})));
+    assert(candidate((4)) == (std::vector<long>({(long)4, (long)6, (long)8, (long)10})));
+    assert(candidate((5)) == (std::vector<long>({(long)5, (long)7, (long)9, (long)11, (long)13})));
+    assert(candidate((6)) == (std::vector<long>({(long)6, (long)8, (long)10, (long)12, (long)14, (long)16})));
+    assert(candidate((8)) == (std::vector<long>({(long)8, (long)10, (long)12, (long)14, (long)16, (long)18, (long)20, (long)22})));
 }

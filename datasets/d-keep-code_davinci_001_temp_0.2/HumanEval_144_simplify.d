@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Your task is to implement a function that will simplify the expression
     x * n. The function returns True if x * n evaluates to a whole number and False
@@ -19,10 +19,10 @@ bool simplify(const(char)[] x, const(char)[] n)
     auto x_den = parse_int(x);
     auto n_num = parse_int(n);
     auto n_den = parse_int(n);
-    auto x_num_n_den = x_num * n_den;
-    auto x_den_n_num = x_den * n_num;
-    auto gcd = math.gcd(x_num_n_den, x_den_n_num);
-    if (x_num_n_den % gcd == 0 && x_den_n_num % gcd == 0)
+    auto x_numerator = x_num * n_den;
+    auto x_denominator = x_den * n_num;
+    auto gcd = math.gcd(x_numerator, x_denominator);
+    if (x_numerator / gcd == x_num && x_denominator / gcd == x_den)
         return true;
     else
         return false;

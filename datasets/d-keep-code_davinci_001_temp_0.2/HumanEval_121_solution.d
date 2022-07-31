@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Given a non-empty list of integers, return the sum of all of the odd elements that are in even positions.
     
@@ -10,9 +10,9 @@ Given a non-empty list of integers, return the sum of all of the odd elements th
     solution([30, 13, 24, 321]) ==>0
     
 */
-int solution(int[] lst) 
+long solution(long[] lst) 
 {
-    int sum = 0;
+    long sum = 0;
     for (int i = 0; i < lst.Length; i++)
     {
         if (i % 2 == 0 && lst[i] % 2 != 0)

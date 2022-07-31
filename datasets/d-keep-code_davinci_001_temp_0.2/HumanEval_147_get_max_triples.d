@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     You are given a positive integer n. You have to create an integer array a of length n.
@@ -15,17 +15,13 @@ import std.math;
         The only valid triple is (1, 7, 13).
     
 */
-int get_max_triples(int n) 
+long get_max_triples(long n) 
 {
-    int max_triples = 0;
-    for (int i = 1; i < n; i++)
-    {
-        for (int j = i + 1; j < n; j++)
-        {
-            for (int k = j + 1; k < n; k++)
-            {
-                if ((i * i + j * j + k * k) % 3 == 0)
-                {
+    long max_triples = 0;
+    for (long i = 1; i < n; i++) {
+        for (long j = i + 1; j < n; j++) {
+            for (long k = j + 1; k < n; k++) {
+                if ((i * i + i + 1 + j * j + j + 1 + k * k + k + 1) % 3 == 0) {
                     max_triples++;
                 }
             }

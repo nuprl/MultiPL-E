@@ -35,11 +35,11 @@ std::vector<std::string> select_words(std::string s, long n) {
 }
 int main() {
     auto candidate = select_words;
-    assert(candidate(("Mary had a little lamb"), (4)) == (std::vector<std::string>({"little"})));
-    assert(candidate(("Mary had a little lamb"), (3)) == (std::vector<std::string>({"Mary", "lamb"})));
+    assert(candidate(("Mary had a little lamb"), (4)) == (std::vector<std::string>({(std::string)"little"})));
+    assert(candidate(("Mary had a little lamb"), (3)) == (std::vector<std::string>({(std::string)"Mary", (std::string)"lamb"})));
     assert(candidate(("simple white space"), (2)) == (std::vector<std::string>()));
-    assert(candidate(("Hello world"), (4)) == (std::vector<std::string>({"world"})));
-    assert(candidate(("Uncle sam"), (3)) == (std::vector<std::string>({"Uncle"})));
+    assert(candidate(("Hello world"), (4)) == (std::vector<std::string>({(std::string)"world"})));
+    assert(candidate(("Uncle sam"), (3)) == (std::vector<std::string>({(std::string)"Uncle"})));
     assert(candidate((""), (4)) == (std::vector<std::string>()));
-    assert(candidate(("a b c d e f"), (1)) == (std::vector<std::string>({"b", "c", "d", "f"})));
+    assert(candidate(("a b c d e f"), (1)) == (std::vector<std::string>({(std::string)"b", (std::string)"c", (std::string)"d", (std::string)"f"})));
 }

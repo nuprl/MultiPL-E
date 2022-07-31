@@ -46,6 +46,15 @@ def eval_script(path: Path):
             status = "Timeout"
             output = exc
         os.remove(basename)
+    if output.stdout is not None:
+        output.stdout = output.stdout.decode("utf-8")
+    else:
+        output.stdout = "None"
+
+    if output.stderr is not None:
+        output.stderr = output.stderr.decode("utf-8")
+    else:
+        output.stderr = "None"
     return {
         "status": status,
         "exit_code": returncode,

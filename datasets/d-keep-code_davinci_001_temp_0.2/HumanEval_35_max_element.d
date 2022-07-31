@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Return maximum element in the list.
     >>> max_element([1, 2, 3])
@@ -8,9 +8,9 @@ Return maximum element in the list.
     123
     
 */
-int max_element(int[] l) 
+long max_element(long[] l) 
 {
-    int max = l[0];
+    long max = l[0];
     for (int i = 1; i < l.length; i++) {
         if (l[i] > max) {
             max = l[i];
