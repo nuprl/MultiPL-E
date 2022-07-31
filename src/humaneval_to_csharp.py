@@ -13,13 +13,13 @@ CSHARP_CLASS_NAME = "Problem"
 #Refactoring needed
 
 class CsharpTranslator(CPPTranslator):
-    stop = ["    }\n    //","    }\n    p", "    }\n}","    }\n\n"]
+    stop = ["\n    }\n"]
 
     def __init__(self, file_ext):
         super().__init__(file_ext)
         self.string_type = "string"
         self.float_type = "float"
-        self.int_type = "long"
+        self.int_type = "int"
         self.bool_type = "bool"
         self.none_type = "null"
         self.list_type = "List<%s>"
@@ -68,7 +68,10 @@ class CsharpTranslator(CPPTranslator):
             "using System;",
             "using System.Numerics;",
             "using System.Diagnostics;",
-            "using System.Collections.Generic;"
+            "using System.Collections.Generic;",
+            "using System.Linq;",
+            "using System.Text;",
+            "using System.Security.Cryptography;"
         ]) + "\n"
     
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
@@ -105,7 +108,7 @@ class CsharpTranslator(CPPTranslator):
     def return_default_value(self, csharp_type): #make this function name default value and add it in C++ Translator 
         if self.is_primitive_type(csharp_type):
             if self.int_type in csharp_type:
-                return "0L"
+                return "0"
             elif self.float_type in csharp_type:
                 return "0.0f"
             elif self.bool_type in csharp_type:
@@ -132,7 +135,7 @@ class CsharpTranslator(CPPTranslator):
         """
 
         return [
-            "return " + self.return_default_value(self.translated_return_type) + ";",
+            # "return " + self.return_default_value(self.translated_return_type) + ";",
             self.indent + "}",
             self.indent + "public static void Main(string[] args) {", 
         ]
@@ -148,7 +151,7 @@ class CsharpTranslator(CPPTranslator):
         if self.is_primitive_type(expected_type) and self.translate_pytype(right[1]) != expected_type:
             return f"({expected_type}){right[0]}"
 
-        return super().update_type(self, right, expected_type)
+        return super().update_type(right, expected_type)
 
     def deep_equality(self, left: Tuple[str, ast.Expr], right: Tuple[str, ast.Expr]) -> str:
         """
@@ -181,7 +184,7 @@ class CsharpTranslator(CPPTranslator):
         if type(c) == float:
             return repr(c) + "f", ast.Name(id="float")
         if type(c) == int:
-            return repr(c) + "L", ast.Name(id="int")
+            return repr(c), ast.Name(id="int")
         return CPPTranslator.gen_literal(self, c)
 
     def gen_call(self, func: str, args: List[Tuple[str, ast.Expr]]) -> Tuple[str, None]:
