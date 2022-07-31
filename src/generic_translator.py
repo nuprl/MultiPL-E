@@ -4,6 +4,7 @@
 # This is a helper script for translating problems from the OpenAI HumanEval
 # problems to Language L.
 import ast
+import traceback
 from glob import glob
 import re
 from pathlib import Path
@@ -119,8 +120,13 @@ def translate_prompt(translator, doctest_transformation: str, py_prompt: str, fi
     """
     prompt_ast = ast.parse(py_prompt + "    pass", filename)
     prompt_visitor = PromptVisitor(translator)
-    prompt_visitor.visit(prompt_ast)
-    return prompt_visitor.translate_func_decl(doctest_transformation)
+    try:
+        prompt_visitor.visit(prompt_ast)
+        return prompt_visitor.translate_func_decl(doctest_transformation)
+    except Exception as e:
+        print(f"Exception translating prompt for {filename}: {e}")
+        traceback.print_exception(e)
+        return None
 
 
 def translate_tests(translator, py_tests: str, entry_point: str, filename: str) -> str:
@@ -153,6 +159,7 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
                     test_cases.append(translator.deep_equality(left, right))
                 except Exception as e:
                     print(f"Exception translating expressions for {filename}: {e}")
+                    traceback.print_exception(e)
                     return None
             case ast.Expr(value=ast.Name(id="print")):
                 pass
