@@ -10,7 +10,6 @@ from generic_translator import main
 from humaneval_to_cpp import CPPTranslator, DOCSTRING_LINESTART_RE
 
 JAVA_CLASS_NAME = "Problem"
-#Refactoring needed
 
 class JavaTranslator(CPPTranslator):
     stop = ["    }\n    //","    }\n    p", "    }\n}","\n    }\n"]
@@ -22,7 +21,7 @@ class JavaTranslator(CPPTranslator):
         self.int_type = "int"
         self.bool_type = "boolean"
         self.none_type = "Optional.empty()"
-        self.list_type = "ArrayList<%s>"
+        self.list_type = "ArrayList"
         self.tuple_type = "Pair"
         self.dict_type = "HashMap"
         self.optional_type = "Optional"
@@ -31,38 +30,62 @@ class JavaTranslator(CPPTranslator):
         self.make_tuple = "Pair.with"
         self.make_optional = "Optional.of"
 
+    #Type creation and literal creation of List, Dict, Map, and Optional
     def gen_list_type(self, elem_type):
-        print(elem_type, self.box_type(elem_type))
-        return self.list_type % self.box_type(elem_type)
+        '''Generate type for ArrayList<T>
+        '''
+        return self.list_type + "<%s>" % self.box_type(elem_type)
 
     def gen_make_list(self, elem_type, list_contents):
+        '''Generate List literal using and array literal
+            `new ArrayList<BoxType(T)>(Arrays.asList(...))
+        '''
         if list_contents == "":
             list_contents = "()"
-        return "new " + self.list_type%self.box_type(elem_type) + "(Arrays.asList" + list_contents + ")"
+        return "new " + self.list_type + "<%s>"%self.box_type(elem_type) + "(Arrays.asList" + list_contents + ")"
     
-    def gen_dict_type(self, ktype, vtype):
-        return self.dict_type + "<%s,%s>"  % (self.box_type(ktype), self.box_type(vtype))
-
     def gen_array_literal(self, list_contents):
+        '''Generate an array literal with contents
+            (e1, e2, e3, e4, ...)
+        '''
         return "(" + list_contents + ")"
+
+    def gen_dict_type(self, ktype, vtype):
+        '''Generate HashMap<K,V>
+        '''
+        return self.dict_type + "<%s,%s>"  % (self.box_type(ktype), self.box_type(vtype))
     
     def gen_map_literal(self, keys, values):
+        '''Generate dict literal
+            k1,v1, k2,v2, k3,v3, ...
+        '''
         return ", ".join(f"{k}, {v}" for k, v in zip(keys, values))
 
-    def gen_optional_type(self, types):
-        return self.optional_type + "<%s>" % self.box_type(types)
-
-    def gen_optional(self, types, elem):
-        return f"{self.make_optional}(%s)"%elem
-
     def gen_map(self, dict_type, map_literal):
+        '''Generate Dict object from literal
+            `HashMap<K, V>(Map.of({k,v}, {k,v}, ... })
+        '''
         java_type = self.translate_pytype(dict_type) + "(Map"
         return f"new {java_type}.of({map_literal}))"
 
+    def gen_optional_type(self, types):
+        '''Generate Optional<T>
+        '''
+        return self.optional_type + "<%s>" % self.box_type(types)
+
+    def gen_optional(self, types, elem):
+        '''Generate Optional as 
+            `Optional.of`
+        '''
+        return f"{self.make_optional}(%s)"%elem
+
     def gen_tuple_type(self, elem_types):
+        '''Generate Pair<T1, T2>'''
         return self.tuple_type + "<%s>" % ", ".join([self.box_type(et) for et in elem_types])
 
     def box_type(self, primitive_type):
+        '''Box a primitive type otherwise do not
+        '''
         if self.is_primitive_type(primitive_type):
             match primitive_type:
                 case "int":
@@ -93,8 +116,7 @@ class JavaTranslator(CPPTranslator):
     
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         '''Translate Python prompt to Java.
-           In addition to comments and example, the prompt contain union declarations (if there are any) 
-           and include files (TODO)
+           The function name is converted to Java's convention of smallCamelCase
         '''
         def to_camel_case(snake_str):
             components = snake_str.split('_')
@@ -120,12 +142,28 @@ class JavaTranslator(CPPTranslator):
         return java_prompt
     
     def is_primitive_type(self, java_type):
+        '''Return if a type is primitive type 
+        '''
         return java_type in [self.float_type, self.bool_type, self.int_type]
 
     def is_boxed_type(self, boxed_type):
+        '''Return if a type is a boxed version of primitive type
+        '''
         return boxed_type in [self.box_type(t) for t in [self.float_type, self.bool_type, self.int_type]]
 
-    def return_default_value(self, csharp_type): #make this function name default value and add it in C++ Translator 
+    def return_default_value(self, csharp_type):
+        '''Recursively generate default value of a given Java type based on following rules:
+
+            default(int) => 0
+            default(float) => 0.0
+            default(bool) => true
+            default(ArrayList<T>) => new ArrayList<T> ()
+            default(Pair<T, U>) => Pair.with(default(T), default(U))
+            default(Optional<T>) => Optional.empty()
+            default(Any other object of type T) => new T()
+        '''
+        #TODO: This function is same as csharp(You can guess by the type). Combine them
+        #into same functions
         if self.is_primitive_type(csharp_type) or self.is_boxed_type(csharp_type):
             if self.int_type in csharp_type or self.box_type(self.int_type) in csharp_type:
                 return "0"
@@ -135,8 +173,8 @@ class JavaTranslator(CPPTranslator):
                 return "true"
         elif self.string_type == csharp_type:
             return '""'
-        elif csharp_type.find("List<") == 0:
-            elem_type = re.findall(rf'List<(.+)>', csharp_type)[0]
+        elif csharp_type.find(f"{self.list_type}<") == 0:
+            elem_type = re.findall(rf'{self.list_type}<(.+)>', csharp_type)[0]
             #List default is: new List<T>()
             return self.gen_make_list(elem_type, "")
         elif csharp_type.find(f"{self.tuple_type}<") == 0 : #TODO: use gen_optional/gen_make_list to createthem and search for self.tuple_type
@@ -145,13 +183,15 @@ class JavaTranslator(CPPTranslator):
             second_default = self.return_default_value(template_types[1].strip())
             return self.gen_make_tuple(first_default + "," + second_default)
         elif csharp_type.find(self.optional_type) == 0:
-            return f"({csharp_type})null"
+            return "Optional.empty()"
         else:
             return f"new {csharp_type}()"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
         This code goes at the start of the test suite.
+        This code adds a return statement for default value if required, which makes sure
+        compiler does not complain about no return value.
         """
 
         return [
@@ -187,7 +227,10 @@ class JavaTranslator(CPPTranslator):
             return f"    assert({left[0]}.equals({right}));"
 
     def find_type_to_coerce(self, expr):
-        '''
+        '''Return a type to coerce into another type.
+            Optional.of is never coerced.
+            ArrayList needs special handling
+            Otherwise types are coerced similar to C++
         '''
         
         if "Arrays.asList(" in expr:
