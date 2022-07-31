@@ -43,7 +43,7 @@ class CPPTranslator:
         self.bool_type = "bool"
         self.none_type = "std::nullopt"
         self.list_type = "std::vector<%s>"
-        self.tuple_type = "std::tuple<%s>"
+        self.tuple_type = "std::tuple"
         self.dict_type = "std::map"
         self.optional_type = "std::optional"
         self.any_type = "std::any"
@@ -55,7 +55,7 @@ class CPPTranslator:
         return self.list_type%elem_type + "(" + list_literal + ")"
     
     def gen_make_tuple(self, elems):
-        return "std::make_tuple("+elems+")"
+        return self.make_tuple+"("+elems+")"
 
     def gen_array_literal(self, list_contents):
         return "{" + list_contents + "}"
@@ -80,19 +80,19 @@ class CPPTranslator:
                 #It appears None is always used in optional
                 return self.none_type
             case ast.List(elts=elts):
-                return self.list_type % self.translate_pytype(elts[0])
+                return self.gen_list_type(self.translate_pytype(elts[0]))
             case ast.Tuple(elts=elts):
-                return self.tuple_type % ", ".join([self.translate_pytype(e) for e in elts])
+                return self.gen_tuple_type([self.translate_pytype(e) for e in elts])
             case ast.Dict(keys=k,values=v):
-                return self.dict_type + "<%s,%s>"  % (self.translate_pytype(k), self.translate_pytype(v))
+                return self.gen_dict_type(self.translate_pytype(k), self.translate_pytype(v))
             case ast.Subscript(value=ast.Name(id="Dict"), slice=ast.Tuple(elts=key_val_type)):
-                return self.dict_type + "<%s,%s>" % (self.translate_pytype(key_val_type[0]), self.translate_pytype(key_val_type[1]))
+                return self.gen_dict_type(self.translate_pytype(key_val_type[0]), self.translate_pytype(key_val_type[1]))
             case ast.Subscript(value=ast.Name(id="List"), slice=elem_type):
-                return self.list_type % self.translate_pytype(elem_type)
+                return self.gen_list_type(self.translate_pytype(elem_type))
             case ast.Subscript(value=ast.Name(id="Tuple"), slice=elts):
                 if type(elts) is ast.Tuple:
                     return self.translate_pytype(elts)
-                return self.list_type % self.translate_pytype(elts)
+                return self.translate_pytype(elts)
             case ast.Subscript(value=ast.Name(id="Optional"), slice=elem_type):
                 return self.gen_optional_type(self.translate_pytype(elem_type))
             case ast.Subscript(value=ast.Name(id="Union"), slice=ast.Tuple(elts=elems)):
@@ -162,6 +162,15 @@ class CPPTranslator:
             
         return f"{self.module_imports()}{unions}{CPP_description}{self.translated_return_type} {name}({formal_arg_list})" + " {\n"
     
+    def gen_tuple_type(self, elem_types):
+        return self.tuple_type + "<%s>" % ", ".join(elem_types)
+
+    def gen_list_type(self, elem_type):
+        return self.list_type % elem_type
+
+    def gen_dict_type(self, ktype, vtype):
+        return self.dict_type + "<%s,%s>"  % (ktype, vtype)
+
     def wrap_in_brackets(self, s: str) -> str:
         '''Helper function to add brackets '()' around a string
         '''
@@ -190,7 +199,7 @@ class CPPTranslator:
             return right[0]
 
         if expected_type.find(self.optional_type) != -1:
-            return self.gen_optional('', right[0])
+            return right[0] #self.gen_optional('', right[0])
         
         type_to_coerce = self.find_type_to_coerce(right[0])
         coerced_type = None
@@ -278,10 +287,12 @@ class CPPTranslator:
     
     def gen_optional_type(self, types):
         '''Generate C++ std::optional<T>'''
-        return self.optional_type + "<%s>"% types
+        print(types)
+        return self.optional_type + "<%s>"%types
 
     def gen_optional(self, types, elem):
         '''Generate C++ std::option<T>()'''
+        print(295, types)
         return self.gen_optional_type(types) + "(" + elem + ")"
 
     def gen_tuple(self, t: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.Tuple]:
@@ -290,7 +301,7 @@ class CPPTranslator:
         """
         if t == [] or t == ():
             #Empty Tuple is at the bottom of expr tree
-            return self.tuple_type%"long", ast.Tuple([ast.Name("int")])
+            return self.gen_tuple_type(self.int_type), ast.Tuple([ast.Name("int")])
 
         #If there is none then add std::optional<?>
         contains_none = self.none_type in ", ".join([e[0] for e in t])
