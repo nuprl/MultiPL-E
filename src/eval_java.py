@@ -22,7 +22,9 @@ LANG_EXT = ".java"
 
 def eval_script(path: str):
     javatuples_path = os.path.join(os.getcwd(), "javatuples-1.2.jar")
-    if ".java" not in path:
+    if type(path) is str and ".java" not in path:
+        return
+    elif ".java" not in path.name:
         return
     if not os.path.exists(javatuples_path):
         print("Downloading and extracting javatuples")
@@ -52,6 +54,7 @@ def eval_script(path: str):
             status = "SyntaxError"
             returncode = build.returncode
             output = build
+            print(output.stderr)
         else:
             try:
                 # Assumes exit-code 0 is all okay

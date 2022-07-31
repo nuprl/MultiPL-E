@@ -22,8 +22,8 @@ class CsharpTranslator(CPPTranslator):
         self.int_type = "int"
         self.bool_type = "bool"
         self.none_type = "null"
-        self.list_type = "List<%s>"
-        self.tuple_type = "Tuple<%s>"
+        self.list_type = "List"
+        self.tuple_type = "Tuple"
         self.dict_type = "Dictionary"
         self.optional_type = "Nullable"
         self.any_type = "std::any"
@@ -38,8 +38,14 @@ class CsharpTranslator(CPPTranslator):
             array = ""
         else:
             array = f"new {elem_type}[]" + list_contents
-        return "new " + self.list_type%elem_type + "(" + array + ")"
+        return "new " + self.list_type + "<%s>"%elem_type + "(" + array + ")"
     
+    def gen_list_type(self, elem_type):
+        return self.list_type + "<%s>"% elem_type
+
+    def gen_dict_type(self, ktype, vtype):
+        return self.dict_type + "<%s,%s>"  % (ktype, vtype)
+
     def gen_array_literal(self, list_contents):
         return "{" + list_contents + "}"
 
@@ -135,7 +141,7 @@ class CsharpTranslator(CPPTranslator):
         """
 
         return [
-            # "return " + self.return_default_value(self.translated_return_type) + ";",
+            "return " + self.return_default_value(self.translated_return_type) + ";",
             self.indent + "}",
             self.indent + "public static void Main(string[] args) {", 
         ]
