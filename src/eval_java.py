@@ -6,6 +6,31 @@ import os
 import subprocess
 from pathlib import Path
 
+"""
+The purpose of this code is to compile and execute java files in a directory
+
+structure of eval_cpp.py
+1.) compile and build the script
+- subprocess.run(["string to", "run", "in shell"], capture_outpu=bool_value)
+- run() from subprocess is a function for running something in the shell
+
+2.) check the return value from compiling the java file
+- the previous subprocess run will return something other than 0 if error
+
+3.) Execute/run the compiled/built script
+
+
+However in java, you would need to create a class and then the main function
+would be in the class (too much effort just to run the script)
+*This is why you would use jshell instead to just run the script that was 
+translated
+
+"""
+
+def eval_script(path: Path):
+  # need to do ".".join even though the list of elements you are joining
+  # only has 1 element. This is because you want the string result which join will return, not a list
+  
 def main():
     directory = Path(Path(__file__).parent, "..", "datasets", "java").resolve()
     binary_dir = os.path.join(directory, 'binary')
