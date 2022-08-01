@@ -16,7 +16,1440 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate h
   ) #hash((\"b\" .  4)))\n    (check-equal? (candidate \"r t g\") #hash((\"r\" . \
   \ 1) (\"t\" .  1) (\"g\" .  1)))\n    (check-equal? (candidate \"\") #hash())\n\
   \    (check-equal? (candidate \"a\") #hash((\"a\" .  1)))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (let loop ((letters test) (dict '() 0))\n    (cond\n      [(empty?\
+    \ letters) dict]\n      [(not (equal? (first letters) (first dict)))\n       (loop\
+    \ (rest letters) (cons (first letters) dict))]\n      [(equal? (first letters)\
+    \ (first dict))\n       (loop (rest letters) (cons (first letters) dict))]\n \
+    \     [else (loop (rest letters) (cons (first letters) (cons (second letters)\
+    \ dict))))]\n    ))\n</code>\n<|/ a dscore=2 tags=list,functional-programming,scheme\
+    \ |>\n<| c |>\nWhat about `(\"c d f c c\" => \"d f c c\")`?\n<|/ c |>\n<| c |>\n\
+    `'(\"c d f c c\" => \"d f c c\")` -> `'(\"d f c c\" => \"d f c c\")` -> `'(\"\
+    d f c c d f c c\" => \"d f c c d f c c\")` -> `'(\"d f c c d f c c d f c c\" =>\
+    \ \"d f c c d f c c d f c c d f c c\")`\n<|/ c |>\n<| c |>\nAh, yes, I hadn't\
+    \ noticed that (though I suppose it would return an identical structure with the\
+    \ empty string at the end).\n<|/ c |>\n<| c |>\nI've just noticed the comment\
+    \ about empty strings, and updated the solution to return empty strings when given\
+    \ empty strings.\n<|/ c |>\n<| a tags=list,functional-programming,scheme dscore=2\
+    \ |>\nHere is an iterative solution, which will work for any list length, including\
+    \ zero length strings:\n<code>", "  (if (empty? test)\n      {}\n      (let ([letters\
+    \ (string->list test)]\n            [most-frequent (empty-hash)])\n        (loop\
+    \ for letter in letters\n              for [count (hash-ref most-frequency letter)\n\
+    \                    or more? (if (null? count)\n                            \
+    \    #t\n                                (> count (hash-ref most-frequency letter)))]\n\
+    \              collect (cons letter count) into new\n              finally (hash-set\
+    \ most-frequency letter new))))\n", "  (let ([letters-counts #{}])\n    (do ([i\
+    \ (string-length test)])\n        ((= i 0)\n         (return letters-counts))\n\
+    \      (let ([letter (string-to-char test i)])\n        (cond\n          [(not\
+    \ (symbol? letter)) (error \"not a symbol\")] \n          [(not (member? letter\
+    \ letters-counts)) (set! letters-counts (assoc letter letters-counts))]\n    \
+    \      [else (set! letters-counts (assoc (symbol->string letter) (+ (string-to-char\
+    \ test i) 1)))]\n        )))))\n", "  (let ((letters (string-split test #\\Space\
+    \ :divider #\\Newline)))\n    (reduce (fn [h l]\n              (let ((count (assoc\
+    \ l h)))\n                (if (not (pair? count))\n                    (cons (list\
+    \ l 1) h)\n                    (let ([occurence (+ 1 (car count))])\n        \
+    \              (cons (list l (car count)) (cons (car count) occurence)))\n   \
+    \                 (let ([occurence (car count)])\n                      (cons\
+    \ (list l occurence) h))))) '() letters)))\n", "  (define (helper lst count)\n\
+    \    (if (empty? lst)\n        (hash count)\n        (let ((char (car lst)))\n\
+    \          (if (> (hash char) count)\n              (hash char)\n            \
+    \  (helper (cdr lst) (+ count 1))))))\n  (helper (split-string test #\\Space)\
+    \ 0))\n</code>\nAnd for the last one:\n<code>", "  (let ([counts (make-hash (string->list\
+    \ test))])\n    (let loop ((letters ((string->list test) 0))\n              (counts\
+    \ counts))\n      (if (null? letters)\n          counts\n          (loop\n   \
+    \          (rest letters)\n             (update-in counts (hash-ref letters 0)\
+    \ inc)\n             counts)))))\n", "  (if (not (equal? test \"\"))\n      (cons\
+    \ (string->lower (first test)) \n            (count-map (rest test)\n        \
+    \                 (lambda (letter) (if (equal? (first test) letter)\n        \
+    \                                     (+ 1 (count-map letter (lambda (c) (+ 1\
+    \ (count-map c))) 0))\n                                             0)))\n   \
+    \   '()))\n", "  (let ((dict (make-hash-table :test 'equal)))\n    (loop\n   \
+    \    with counts null\n       for c test\n       and count 1\n       for char\
+    \ (string->list c)\n       until (or (not (hash-has-key dict char)) (= count 1))\n\
+    \       do (hash-set dict char count)))\n</code>\n<code>\n#lang racket", "  (let\
+    \ loop ([counts empty-map]\n             [letters (map char->string (string->list\
+    \ test))]\n             [l (length letters)]\n             [i 0])\n    (if (>\
+    \ i l)\n        counts\n        (loop (add1 counts)\n               (take l letters)\n\
+    \               (add1 i)\n               (inc1 i))))))\n", "  (let loop ([letters\
+    \ '() counts '()])\n    (cond\n      [(empty? test) counts]\n      [(cons? test)\
+    \ loop (append letters test counts)]\n      [else (loop (append letters (first\
+    \ test) counts)\n                  (add (count (first test)) counts))]\n    )\n\
+    \  )\n)", "  (let loop ((test test) (acc {}) (letter null) (count 0))\n    (cond\
+    \ ((null? test)\n           (values acc {}))\n          ((equal letter (car test))\n\
+    \           (loop (cdr test)\n                 acc (cons letter count) \n    \
+    \             (cdr letter) (add1 count)))\n          (else\n           (loop (cdr\
+    \ test)\n                 acc\n                 (car test)\n                 (add1\
+    \ count)))))\n", "  (let ([letter-count (hash null)] #t)\n    (do ((i 0 (+ i 1)))\n\
+    \        ((< i test))\n      (let ([letter (substring test i)])\n        (if (string-length\
+    \ letter)\n            (let-values ([(letter-count (hash-ref letter-count letter))\n\
+    \                           (i (+ i 1))])\n              (hash-set! letter-count\
+    \ letter i)\n              (set! i t))\n            (set! letter-count (hash-set\
+    \ letter-count letter i))\n            (set! i t))\n        (hash-set! letter-count\
+    \ letter i)))))\n", "  (count-letters\n   (count-letters-recursive test)))\n",
+  "  (if (empty? test)\n      empty\n      (let ([letters (list-of (first test))])\n\
+    \        (let ([count (number-length (length letters))])\n          (let ([max-count\
+    \ 0])\n            (let ([letter (first letters)])\n              (if (= count\
+    \ 0)\n                  (hash-set max-count (hash letter 1))\n               \
+    \   (hash-set max-count (hash-set max-count (hash letter 1))\n               \
+    \                (hash-set count 1 (hash-set letter count)))\n               \
+    \ (hash-set max-count (hash-set max-count (hash-set max-count (hash letter 1))\n\
+    \                                            (hash-set count 1 (hash-set letter\
+    \ count)))\n                        (hash-set count (+ count 1))\n           \
+    \         (hash-set max-count (hash-set max-count (hash-set max-count (hash letter\
+    \ 1))\n                                                  (hash-set count (+ count\
+    \ 1)))))))\n          (hash-map max-count letters)))))\n", "  (let loop ((lst\
+    \ (reverse (count-elements (string-sort test))))\n             (max-count 0))\n\
+    \    (cond ((null? lst)\n           (hash-map '() max-count))\n          ((> (car\
+    \ lst) max-count)\n           (loop (cdr lst) (max (car lst) max-count)))\n  \
+    \        (else\n           (loop (cdr lst) (max max (car lst))))))\n", "  (dict-map\
+    \ (\u03BB (letter)\n             (let* ((count (count-if string=? letter test))\n\
+    \                    (max (car count) (or (cdr count) 0)))\n               (cons\
+    \ (cons letter max) count))))\n           '()))\n", "  (let loop ([s test]\n \
+    \            [dict #{}])\n    (cond ((or (empty? s) (null? s))\n           dict)\n\
+    \          ((string=? s \" \")\n           (loop (substring s 0 (string-length\
+    \ s))\n                   (cons s dict)))\n          ((not (string=? s \" \"))\n\
+    \           (loop (substring s 0 (string-length s)) (cons s dict)))\n        \
+    \  (else\n           (loop (substring s 0 (string-length s)) (cons (first s) (cons\
+    \ s dict)))))))\n</code>\n<|/ a tags=racket,scheme |>\n<| a dscore=1 tags=racket,scheme\
+    \ |>\nMy answer was similar to Asti's and was given as a separate answer to give\
+    \ the OP a chance to see it. But here it is in a single answer. \n<code>", " \
+    \ (let ((count (make-hash)))\n    (map (lambda (letter)\n           (setf (gethash\
+    \ letter count) (incf (gethash letter count)))) test)\n    count))\n</code>\n\
+    <|/ a |>\n<| a tags=lisp,lisp-2,list,racket,scheme dscore=1 |>\nTry this:\n<code>",
+  "  (let-values ([(letters counts)\n              (apply map (lambda (x)\n      \
+    \                     (hash-ref (apply hash-table (sort (split x #\\Space)) #:hash\
+    \ <))))\n                     (split (string test) #\\Space)])\n    (when (and\
+    \ letters (not (null? counts)))\n      (let-values ([(k v) (max-key counts #:test\
+    \ >)])\n        (set! counts (hash-ref counts k) (+ 1 (hash-ref counts k)))\n\
+    \        (when (> v counts) (set! counts (hash-set counts k 1)))\n        (set!\
+    \ letters (remove k (symbol->string letters))))))\n    (hash-set counts '()))\n\
+    </code>\n<|/ a tags=scheme,racket |>\n<| c |>\nNice code, and nice solution. +1.\
+    \ I just want to point out that `histogram` is incorrect: It doesn't handle the\
+    \ `'` character properly. It will return zero occurrences of single characters\
+    \ like `'a`, which is not the behavior OP is looking for. Also, it doesn't handle\
+    \ Unicode characters (i.e. `'\xC0')`, which might or might not be a problem depending\
+    \ on the OP's context.\n<|/ c |>\n<| c |>\n: Thanks for pointing this out.  It\
+    \ was easy to fix.\n<|/ c |>\n<| a tags=scheme,racket |>\nI'm thinking of a recursive\
+    \ solution:\n<code>", "  (if (empty? test)\n      empty\n      (let ([letters\
+    \ (split-string (first test) \" \")\n             counts (list->map #(hash %)\
+    \ (partition-all #(< %) letters))])\n        (let ([most-common (max-key (lambda\
+    \ (x) (key x counts)) counts)])\n          (list->map #(hash (key % most-common)\
+    \ %) counts)))))\n", "  (if (empty? test)\n      {}\n      (let [s (string->list\
+    \ test)]\n        (let [counts (dict-empty)]\n          (for [c s]\n         \
+    \   (dict-set! counts (string->string c) (add1 (dict-ref counts (string->string\
+    \ c))))))))\n", "  (let ([s (string->list test)])\n    (let loop ()\n      (if\
+    \ (empty? s) (hash-table empty)\n          (let* ([letter (first s)\n        \
+    \         count (+ 1 (gethash (first s) (hash-table empty) '()))]\n          \
+    \       (hash-table-update (first s) (cons letter count) empty)\n            \
+    \     s (rest s))\n            (loop))))))\n</code>\n<code>\n#lang racket\n",
+  "  (let ([letters (string->list test)]\n        [hash (make-hash (map car (sort\
+    \ letters <?)))]\n        [count 0]\n        [letters-occurences (list <???>)])\n\
+    \    (cond [(empty? letters) <?????>]\n          [(empty? (rest letters)) <?????>]\n\
+    \          [else (let [[letter count] (group-by car (sort letters))]\n       \
+    \           (let ([occurences\n                           (append <???>\n    \
+    \                              (list (map car <????>)))]\n                   \
+    \      (cond [(empty? (rest occurences)) <?????>]\n                          \
+    \     [else (hash-set! hash letter\n                                         (cons\
+    \ count occurences))]))]))]))\n", "  (let* ((letters (string-split test #\\Space))\n\
+    \         (counts (group-by\n                   (lambda (x)\n                \
+    \     (apply + (map cadr (filter hash-ref letters x))))\n                   (apply\
+    \ hash-set letters))))\n    (when (null? letters)\n      (return empty-hash))\n\
+    \    (when (empty? (rest letters))\n      (cons (first letters)\n            (append\
+    \ (hash-map (car letters) counts)\n                    (hash-map (first letters)\
+    \ empty-hash)))))\n", "  (define counts (make-hash (cons #f test)))\n  (for ([i\
+    \ (in-range (length test))])\n    (hash-set counts (substring test i (+ i 1))\n\
+    \               (hash-ref counts (substring test i (+ i 1)))))\n  hash-map)\n\
+    </code>\n<|/ a dscore=0 |>\n<| c |>\nThank you, this is a really neat solution.\n\
+    <|/ c |>\n<| a |>\nJust for the heck of it I implemented this in Lisp:\n<code>",
+  "  (count-letters (map car (split-string test #\\Space :trim))\n               \
+    \   (map cadr (split-string test #\\Space :trim))))\n</code>\nThe count-letters\
+    \ function is really simple since it just takes a dictionary and a sequence of\
+    \ letters to count up:\n<code>", "  (let loop ((counts '())\n             (letters\
+    \ '()))\n    (cond ((or (empty? test) (null? counts)) (list (car letters)\n  \
+    \                                              (car counts)\n                \
+    \                                (cdr counts)))\n          ((not (empty? test))\n\
+    \           (let ((letter (car test)))\n             (cond ((null? (cdr test))\n\
+    \                    (loop (cons (car counts) letters) (cons letter letters)))\n\
+    \                   ((member (car test)\n                            (hash-table-ref\
+    \ counts letter))\n                    (loop (cons (car counts) letters)\n   \
+    \                       (cons letter letters)))\n                   (else (loop\
+    \ (cons (car counts) letters)\n                              (cons letter letters)))))\n\
+    \          (else (loop (cons counts '()) '())))))\n</code>\n<|/ a dscore=0 tags=racket,scheme\
+    \ |>\n<| c |>\nThe only issue with this solution is that it is O(n^2). How would\
+    \ you improve the algorithm to get O(n)?\n<|/ c |>\n<| a dscore=0 |>\nA solution\
+    \ in Racket:\n<code>", "  (let ((letters-count (reduce (lambda (key val) (cons\
+    \ (car key) val)) '() (explode test))))\n    (cond\n      [(or (empty? letters-count)\
+    \ (empty? (car letters-count)))\n       (hash->list '())]\n      [(> (cdr (car\
+    \ letters-count)) (cdr (cdr letters-count)))\n       (hash->list (list (car letters-count)\
+    \ (car letters-count)))]\n      [else\n       (hash->list (cons (car letters-count)\n\
+    \                       (+ 1 (cdr (car letters-count))))]\n     ])))\n", "  (define\
+    \ (helper\n           test-list)\n    (cond [(empty? test-list) empty]\n     \
+    \     [else (let ([max-key empty]\n                     ([chars (split (first\
+    \ test-list) \" \"))\n                          (counts (build-list 256 empty)])\n\
+    \                    (for ([char (car chars)])\n                      (cond\n\
+    \                       [(empty? counts) (cons (first char) counts)]\n       \
+    \                [(eq? (first char) max-key) (add1 (last counts))]\n         \
+    \              [else (let ([new-key\n                                     (compare\
+    \ (first char) max-key)])\n                              (cond\n             \
+    \                  [(<= new-key\n                                   (first counts))\
+    \ \n                                  (add (first counts) 1)]\n              \
+    \                 [(> new-key (first counts)) (add1 (first counts))]\n       \
+    \                        [else (add1 (first counts))]))]\n                   \
+    \   )]))]))\n  (helper test-list))\n", "  (let ([letters (map char->string (char->list\
+    \ (string-split test)))])\n    (group-by (lambda (letter) (count-letters letters))\n\
+    \             letters)))\n</code>\nThen you can easily write a function to output\
+    \ the counts of each letter like this:\n<code>", "  (cond\n    [(empty? test)\
+    \ empty]\n    [(null? (cdr test)) (hash-set! empty (first test) 1)]\n    [else\
+    \ (let ([letter (car test)]\n              [letter-count (hash-ref empty letter)])\n\
+    \          (cond [(> (+ letter-count 1) (hash-ref empty letter)) (hash-set! empty\
+    \ letter (+ letter-count 1))]\n                [else (hash-set! empty letter (+\
+    \ letter-count 1))])]\n    [else (histogram (cdr test))]))\n", "  (let\n     \
+    \ ((dict (sort (group-by (lambda (c) (count c test)) test) '<)))\n    (for ([x\
+    \ dict])\n      (if (empty? x)\n          dict\n          (let ([counts (map car\
+    \ x)])\n            (cons (cons (car x) counts) (histogram (cons (cdr x) counts))))))))\
+    \ ;#lang racket\n", "  (let loop ((letters (string->list test))\n            \
+    \ (counts '()))\n    (if (empty? letters)\n        counts\n        (loop (cdr\
+    \ letters)\n              (cons (car letters)\n                    (if (= (length\
+    \ counts) 0)\n                        (caddr counts)\n                       \
+    \ (let ((newcount (+ 1 (caddr counts))))\n                          (set! counts\
+    \ (cons newcount counts))))))))\n", "  (let* (\n        (count (count test))\n\
+    \        (alphabet (sort test < #:key car))\n        (result (group-by (lambda\
+    \ (s) (count s)) alphabet)))\n    (unless (empty? alphabet)\n      (map (lambda\
+    \ (s) (if (> count (count s)) s \"\")) alphabet)))\n  result)\n</code>\n<|/ a\
+    \ tags=racket,functional-programming,scheme |>\n<| a |>\nThis is actually a good\
+    \ question. The answer below isn't very efficient, but it does produce a nice\
+    \ result, and I hope it helps someone. \n<code>", "  (define (aux letter-count\
+    \ count-map)\n    (cond\n      [(empty? letter-count) count-map]\n      [(let*\
+    \ ((letter (car letter-count))\n             (count (cdr letter-count)))\n   \
+    \     (aux (cdr letter-count) (cons (cons letter count) (count-map)))]\n     \
+    \ [(> count 1) (aux (cdr letter-count) (cons letter count-map))]\n      [else\
+    \ (aux letter-count (cons letter count-map))]))\n  (aux test #{}))\n", "  (let\
+    \ loop ((letters (string->list test)) (count 0) (dict))\n    (if (null? letters)\n\
+    \        (reverse dict)\n        (let ((letter (car letters))\n              (count\
+    \ (+ count 1)))\n          (loop (cdr letters) count (cons (cons letter count)\
+    \ dict))))))\n", "  (let ((histogram (make-hash (hash-empty-key (hash-empty-value\
+    \ test)))))\n    (loop for letter in test\n          for count = (hash-ref histogram\
+    \ letter)\n          for i from 0 below (hash-size histogram)\n          when\
+    \ (>= count (hash-ref histogram (hash-ref histogram i)))\n          (hash-set\
+    \ histogram letter (+ count 1))\n          (set! histogram (hash-set histogram\
+    \ (hash-ref histogram i) 1)))\n    histogram))\n", "  (let ((letters (string->list\
+    \ test)))\n    (cond\n      [(empty? letters) #{}]\n      [(list->null? (rest\
+    \ letters)) #{}]\n      [(empty? (rest letters)) #{}]\n      [else (let\n    \
+    \        (key (car letters))\n            (count (count letters))\n          \
+    \  (new-map (hash-table (key-hasher key)))]\n        (hash-table-assoc new-map\
+    \ key count))]))\n", "  (let ((dict (make-hash (string->list (string->string test)))))\n\
+    \    (cond ((string->length test) dict)\n          ((null? test) dict)\n     \
+    \     ((not (hash-table-exists? dict test)) (hash-table-insert dict test 1))\n\
+    \          (else\n           (let ((h (hash-table-find dict test)))\n        \
+    \     (hash-table-insert dict test (h + 1)))))))\n</cell>\n<text>\nWe have created\
+    \ two functions. The first one counts the occurences of an element in a list of\
+    \ strings. It takes a string and converts it into a list of strings, which are\
+    \ each a character of a string, then creates a hash table and adds each element\
+    \ of the list to the hash table. Finally, the function returns the hash table.\n\
+    \n\n</text>\n<cell>", "  (let loop ((test test) (count 0) (histogram #{}))\n \
+    \   (if (empty? test)\n        histogram\n        (let ((c (car test)))\n    \
+    \      (loop (cdr test) (+ count (hash-ref histogram c)) (hash-set histogram c\
+    \ count))\n          ))))\n", "  (let ([letters (string->list (string->string\
+    \ test))])\n    (map make-histogram\n         (group-by identity\n           \
+    \         (map (lambda ([a]) (string-length a))\n                          letters))\n\
+    \         letters)\n    (group-by identity\n              (map (lambda ([letter])\
+    \ (string-length letter))\n                    letters))))\n", "  (let ((dict\
+    \ (hash)))\n    (let loop ((letter (string->list test)))\n      (let ((count 0))\n\
+    \        (for-each (lambda (c) (hash-set dict c count))\n                  (append\
+    \ letter (- count 1)))\n        (hash-set dict letter (- count 1))\n        (loop\
+    \ letter (- count 1)))))\n  (hash-ref dict ''))", "  (let loop ((counts '()) (letters\
+    \ (string-split test #\\Space)))\n    (cond\n      [(empty? letters) counts]\n\
+    \      [(not (or (char-lower? (car letters)) (char-upper? (car letters))))\n \
+    \      (let loop ((letter (car letters)) (count (or (char-char-lower-case letter)\n\
+    \                                          (char-char-upper-case letter)))\n \
+    \            (letters\n              (append (list letter) (loop (cdr letters)\
+    \ (+ count 1)))))]\n      [else (loop (cdr letters) (+ counts (list count)))]))))\n",
+  "  (apply hash\n         (map (lambda (x)\n                (list (car x)\n     \
+    \                (caddr x)\n                     (cadr x)\n                  \
+    \   (hash-ref (hash-ref test x) (car x))))\n              (split (trim test #\\\
+    Space)))))\n", "  (let ([letters (string->list test)]\n        [letters-counts\
+    \ (string->list \"z\" test \"0\")])\n    (make-hash (cond [(empty? letters) '()]\n\
+    \                  [(> count (length letters)) '()]\n                  [else (hash-set\
+    \ letters (car letters-counts) (cdr letters-counts))]))))\n</code>\n<|/ a dscore=2\
+    \ tags=racket,scheme |>\n<| a |>\nHere is a solution that uses the hash-table\
+    \ library, and does not use any external libraries (except for hash-table). It\
+    \ builds up a histogram of letters, and then counts the occurrences of each letter.\
+    \ It has O(n) complexity, where n is the number of letters, and O(n) space complexity,\
+    \ where n is the number of letters. \n<code>", "  (let ([letters-count (hash-table)])\n\
+    \    (let loop ((letters (string->list (string->symbol test)))\n             \
+    \  (i 0))\n      (cond [(empty? letters) letters-count]\n            [(cons? letters)\
+    \ (loop (cdr letters) 0)]\n            [else (loop (hash-table-update! letters-count\
+    \ (hash-table-lookup letters-count letters) inc) (add1 i))])))\n</code>\n<|/ a\
+    \ dscore=2 |>\n<| c |>\nThis is a good answer but if you look at the other answers\
+    \ you can see why this is a bad idea. Cons cell are cheap and hash-tables are\
+    \ expensive.\n<|/ c |>\n<| a |>\nThe code below is based on the other answers,\
+    \ and should work fine for strings of length upto 32 chars.\n<code>", "  (let\
+    \ loop ([letters (string->list test)\n               result (hash #{})]\n    \
+    \         (unless letters\n               result))\n    (cond\n      [(empty?\
+    \ letters)\n       (hash->list result)]\n      [else\n       (let ((letter (first\
+    \ letters)))\n         (loop (rest letters)\n                (hash-update! result\
+    \ letter 1 (fn-add (gethash letter result)\n                                 \
+    \             1)))]\n      (loop (rest letters)\n            result))]))\n", " \
+    \ (cond\n    [(empty? test) empty]\n    [(list? (car test)) (map (lambda (letter)\
+    \ (cons letter (+ 1 (car test))))\n                           (histogram (cdr\
+    \ test)))]\n    [else (cons (car (car test)) (histogram (cdr test)))]))\n", " \
+    \ (reduce (fn [dict current]\n            (if (null? current)\n              \
+    \  (hash-set dict (first current) (hash-ref dict (first current) 0))\n       \
+    \         (hash-set dict (first current)\n                          (+ 1 (hash-ref\
+    \ dict (first current) 0)))))\n          (string-to-long test)))\n", "  (let*\
+    \ ((letters (string->list test))\n         (letters-sorted (sort letters))\n \
+    \        (dict (make-hash-table))\n         (max 0))\n    (loop for letter on\
+    \ letters-sorted\n          for count of (gethash letter dict)\n          for\
+    \ test-count of (gethash letter dict)\n          and min-count (if (<= count test-count)\n\
+    \                            (+ 1 (car count))\n                            (+\
+    \ 1 (car test-count))))\n    (hash->list (hash-ref dict (hash-ref dict (car letters-sorted)))\n\
+    \               )))\n", "  (let ([max-count 0])\n    (cond\n      [(empty? test)\
+    \ empty]\n      [(list? (first test)) (map (lambda (letter)\n                \
+    \                 (cons (first letter) (add1 (length letters))))\n           \
+    \                     (histogram (rest test)))]\n      [else (map (lambda (letter)\n\
+    \                  (let ([count-so-far (length letter)])\n                   \
+    \ (cond\n                      [(> (length letters) (add1 count-so-far)) (set!\
+    \ count-so-far (length letter))]\n                      [else (set! max-count\
+    \ (max max-count count-so-far))]))\n               (histogram (rest test))]))]))\n\
+    </code>\n<|/ a |>\n<| c |>\nVery nice solution. My only comment would be that\
+    \ `(histogram 'b b b b b b a b b c a b b a b a b b b b a b b b b b b b b b b b\
+    \ b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b\
+    \ b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b\
+    \ b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b\
+    \ b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b\
+    \ b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b\
+    \ b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b\
+    \ b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b\
+    \ b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b\
+    \ b b b b b b b b b b ", "  (let ([dict (make-hash (\u03BB (x) (length x))) (counts\
+    \ '())])\n    (for-each (\u03BB (letter) (hash-set! dict letter \n           \
+    \                          (hash-ref dict letter (\u03BB (x) (+ 1 x))))\n    \
+    \           test\n               counts)\n    (hash-copy dict dict)))\n", "  (apply\
+    \ merge-with identity (map count-letters test)))\n", "  (let ([letters (set-letters\
+    \ test)])\n    (define dict (build-histogram letters 0))\n    (filter (lambda\
+    \ (letter count) (< (count dict) (add letter (- count dict))) letters)\n     \
+    \       dict)))\n", "  (let ([histogram '()])\n    (define (loop\n           \
+    \  (test)\n             ([letter-count 1]\n               (if (equal? test '())\n\
+    \                   (set! histogram (append histogram (list letter-count)))\n\
+    \                   (loop (rest test)\n                         (add1 letter-count))))\n\
+    \      (loop (reverse test) 1)\n      histogram)))\n", "  (let ((histo (make-hash)))\n\
+    \    (loop for c in (split-string test #\\Space \"abcdefghijklmnopqrstuvwxyz\"\
+    )\n          for count (hash-ref histo c)\n          while count\n          collect\
+    \ (cons c (- count 1)))))\n", "  (let ((dict\n           (apply (lambda (x)\n\
+    \                     (map (lambda (letter)\n                            (cons\
+    \ letter 0))\n                          (substring test 0 (string-length test)))\n\
+    \                     (substring test 0 (string-length test))))))\n    (if (string-length\
+    \ test)\n        (let ((counts\n              (apply (lambda (x)\n           \
+    \            (map (lambda (letter)\n                               (if (string=\
+    \ letter x)\n                                   (+ 1 0)\n                    \
+    \               0))\n                         (apply reverse dict))))\n      \
+    \        (max (apply (lambda (x)\n                          (cond\n          \
+    \                 ((= (length x) 0)\n                             (error \"empty\
+    \ string\"))\n                           ((> (length x) 1)\n                 \
+    \            (error \"more than one element\"))\n                           (t\n\
+    \                            (if (= (length x) 1)\n                          \
+    \      (first x)\n                                (apply max x)))\n          \
+    \                 0))))\n          (map (lambda (letter)\n                 (cons\
+    \ (first letter)\n                       (if (= (second letter) max)\n       \
+    \                    (second letter)\n                           0)))\n      \
+    \        (substring test 0 (string-length test)))))\n          {})))\n", "  (if\
+    \ (empty? test) \n      empty\n      (let ([char (first test)])\n        (let\
+    \ ([count 1]\n               (rest (rest test))\n               (max (rest test))\n\
+    \               (max-map (\u03BB (char) \n                          (cond (empty?\
+    \ rest)\n                                (hash-set! max-map char (hash-ref max-map\
+    \ char 0) + 1)))\n                             (hashed-set-keys max-map)))\n \
+    \         (cons char (hash-set! max-map char count (if (> count max) (set! max\
+    \ count) max))\n               (histogram rest)))))\n", "  (define (letter-frequency\
+    \ letter)\n    (cond ((null? letter) 0)\n          ((string=? letter \"\") 0)\n\
+    \          ((string=? letter \"a\") 0)\n          ((string=? letter \"b\") 0)\n\
+    \          ((string=? letter \"c\") 0)\n          ((string=? letter \"d\") 0)\n\
+    \          ((string=? letter \"e\") 0)\n          ((string=? letter \"f\") 0)\n\
+    \          ((string=? letter \"g\") 0)\n          ((string=? letter \"h\") 0)\n\
+    \          ((string=? letter \"i\") 0)\n          ((string=? letter \"j\") 0)\n\
+    \          ((string=? letter \"k\") 0)\n          ((string=? letter \"l\") 0)\n\
+    \          ((string=? letter \"m\") 0)\n          ((string=? letter \"n\") 0)\n\
+    \          ((string=? letter \"o\") 0)\n          ((string=? letter \"p\") 0)\n\
+    \          ((string=? letter \"q\") 0)\n          ((string=? letter \"r\") 0)\n\
+    \          ((string=? letter \"s\") 0)\n          ((string=? letter \"t\") 0)\n\
+    \          ((string=? letter \"u\") 0)\n          ((string=? letter \"v\") 0)\n\
+    \          ((string=? letter \"w\") 0)\n          ((string=? letter \"x\") 0)\n\
+    \          ((string=? letter \"y\") 0)\n          ((string=? letter \"z\") 0)\n\
+    \          ((string=? letter \"A\") 0)\n          ((string=? letter \"B\") 0)\n\
+    \          ((string=? letter \"C\") 0)\n          ((string=? letter \"D\") 0)\n\
+    \          ((string=? letter \"E\") 0)\n          ((string=? letter \"F\") 0)\n\
+    \          ((string=? letter \"G\") 0)\n          ((string=? letter \"H\") 0)\n\
+    \          ((string=? letter \"I\") 0)\n          ((string=? letter \"J\") 0)\n\
+    \          ((string=? letter \"K\") 0)\n          ((string=? letter \"L\") 0)\n\
+    \          ((string=? letter \"M\") 0)\n          ((string=? letter \"N\") 0)\n\
+    \          ((string=? letter \"O\") 0)\n          ((string=? letter \"P\") 0)\n\
+    \          ((string=? letter \"Q\") 0)\n          ((string=? letter \"R\") 0)\n",
+  "  (let ((letters (string->list (string->string test)))\n        (most-letter (second\
+    \ (car letters))))\n    (cond [(null? letters) (quote #{})]\n          [(equal?\
+    \ (car letters) most-letter) (cons (car letters) (cons (cdr letters) (length letters)))]\n\
+    \          [(equal? (car letters) (first letters)) (histogram (substring letters\
+    \ 2))]\n          [else (let ((letters (histogram (substring letters 2)))\n  \
+    \                   (count (length letters)))\n                (cond [(equal?\
+    \ (car letters) most-letter) (cons (cons (car letters) count) (cons (cdr letters)\
+    \ (length letters)))]\n                      [else (cons (cons (car letters) count)\
+    \ (cons (cdr letters) (length letters)))]))]))\n</code>\n<|/ a |>\n<| c |>\nThat's\
+    \ pretty cool, but it has some nasty side effects since it requires every letter\
+    \ to be present once. It's possible to make that part simpler by using a hash\
+    \ table instead of an ordered list, but it's still not quite right.\n<|/ c |>\n\
+    <| c |>\nYeah, that's true.  I've reordered the code to avoid that.  Thanks.\n\
+    <|/ c |>\n<| c |>\nThe way your reordered code is structured, you won't even be\
+    \ able to pass in an empty string (as you'd get an error). Also, what does `let\
+    \ ((count (length letters)))` mean? Am I missing something?\n<|/ c |>\n<| c |>\n\
+    The let is for declaring variables.  count is a variable that is being declared\
+    \ to be equal to the length of letters.  It is not defined before the let.\n<|/\
+    \ c |>\n<| c |>\nThis answer doesn't work for me in DrRacket. I get the following\
+    \ error:\n\n    let: bad syntax (not an identifier and no bindings provided) in:\
+    \ let\n    ; (a b c) is a string with spaces in it, as was the OP.\n<|/ c |>\n\
+    <| a |>\nHere's an attempt at a recursive solution using string->list to turn\
+    \ the string into nested lists.\n<code>", "  (let* ([letters (string->list (string->string\
+    \ test))]\n         [most-letter (first letters)])\n    (cond\n      [(null? letters)\
+    \ (hash-table most-letter 0 most-letter (hash-table most-letter 0 most-letter))]\n\
+    \      [(hash-table-contains? most-letter letters) (hash-table most-letter most-letter\
+    \ (hash-table-get! most-letter letters))]\n      [else (hash-table-set! most-letter\
+    \ letters (hash-table-get! most-letter letters 0) + 1)]\n      )))\n</code>\n\
+    <|/ a dscore=3 |>\n<| c |>\nNice solution. I love recursion and I love hash tables,\
+    \ however I still dislike using hash-tables if there are not many elements. To\
+    \ be honest, I think that a solution that is almost identical to mine would have\
+    \ been more efficient, and I'm sure that would be more readable too. :)\n<|/ c\
+    \ |>\n<| c |>\n: I guess that depends on how you define \"almost identical\".\
+    \  If you're looking for a performance improvement, of course you should use my\
+    \ solution.  If you consider it an improvement over yours, then you shouldn't\
+    \ consider it a \"completely identical solution\" :P\n<|/ c |>\n<| c |>\nWell\
+    \ I'm really not sure how to measure the improvement. The efficiency isn't important\
+    \ here, and in any case the code base I'm working with is quite large and so I\
+    \ don't want to make any assumptions on the performance of it. The most important\
+    \ thing for me is that the code is understandable and easy to maintain. My solution\
+    \ has some drawbacks, though - it's not very easy to understand and there's no\
+    \ real reason to use it. It's also slightly slower than the solution suggested\
+    \ by Mr. Richards, I guess because you keep doing the same thing, and it looks\
+    \ like a nice idea.\n<|/ c |>\n<| c |>\n: The first thing I'd do is to try to\
+    \ make my solution readable and understandable (by reducing nested if-then-elses).\
+    \  Second, if performance is really important, then I'd use a hashtable like I\
+    \ did.  However, you said you were looking for a \"completely identical solution\"\
+    \ so I thought I'd stick with my code (although the readability issue is very\
+    \ valid).  My code is easier to maintain than yours.  But again, I don't know\
+    \ how important performance is to you :)\n<|/ c |>\n<| a dscore=1 |>\nHere's another\
+    \ solution using a hash-table:\n<code>", "  (map (lambda (letter)\n         (let\
+    \ ((count 0))\n           (if (string=? letter test)\n               (let ((letter\
+    \ (string=? test letter)))\n                 (set! count (+ count 1))\n      \
+    \           (hash letter count)))\n           (hash letter 0)))\n         '()))\n",
+  "  (let loop ([letters [char-code (first test)]\n             count 1]\n       \
+    \      new-letters [])\n    (if (null? letters)\n        (reverse new-letters)\n\
+    \        (loop (rest letters)\n               (+ count 1)\n               (cons\
+    \ (first letters) new-letters)))))\n</code>\n<|/ a tags=racket,scheme dscore=0\
+    \ |>\n<| c |>\nIt would be more efficient to count the letters first and then\
+    \ build a map of counts. So a map `(->> '(a b b a a) count-letters)` would give\
+    \ `(a 1 b 2 a 1)`\n<|/ c |>\n<| c |>\n`count-letters` is defined differently than\
+    \ your implementation. How would you apply it to `'(a b c d d e)`?\n<|/ c |>\n\
+    <| c |>\nI was just commenting on the `count-letters` implementation not being\
+    \ consistent with the rest of your code. `(count-letters . letters)` should really\
+    \ be `(apply count-letters letters)`. I should mention that you used `racket`\
+    \ as the language, although I assume you meant `racket/scheme`.\n<|/ c |>\n<|\
+    \ c |>\nI see, I didn't notice that. Also yes, `racket/scheme`\n<|/ c |>\n<| c\
+    \ |>\nSorry for being so unclear by my answer, but this was my first attempt.\
+    \ `count-letters` was implemented differently, but yours was the correct implementation.\
+    \ I'll edit my answer, thanks for the clarification.\n<|/ c |>\n<| a dscore=0\
+    \ |>\n<code>\n#lang racket\n", "  (count-occurrences test '()))\n", "  (let ((histogram\
+    \ '()))\n    (set! histogram (append histogram (hash-map test '() '()))))\n  \
+    \  (let ((letter (car test))\n          (count (cdr test)))\n      (map (\u03BB\
+    \ (letter) (if (and (not (hash-empty? histogram)) (> (hash-ref histogram letter)\
+    \ count)) \n                               histogram (hash-map letter (+ 1 count)\
+    \ histogram))\n           (cdr test)))\n    (hash-map '() 0)))\n", "  (let ([letter-count\
+    \ (hash)])\n    (for ([i (split test #\\Space)])\n      (or (hash-set! letter-count\
+    \ i (hash-ref letter-count i))\n          (hash-set! letter-count i 1))))))\n",
+  "  (cond\n    [(empty? test) empty]\n    [(or (char? first) (number? first)) (error\
+    \ \"histogram: String not valid (contains char or number)\")]\n    [else (cons\
+    \ (first test) (histogram (rest test)))]))\n", "  (let loop ((d '())\n       \
+    \      (chars (string-split test #\\Space)))\n    (if (null? chars)\n        d\n\
+    \        (let ((char (car chars))\n              (count 0))\n          (loop (cons\
+    \ (cons char count) (cons count d)) (cdr chars))))))\n", "  (let*\n      ([letters\
+    \ (string-split test #\" \")])\n    (let ([histogram (make-hash (length letters))])\n\
+    \      (do ([i 0 (+ i 1)]\n          [letter (car letters)]\n          [count\
+    \ (+ (gethash (car letters) histogram)\n                   (length letters))])\n\
+    \        ((< i #(length (hash-keys histogram)))\n          (set! histogram (cons\
+    \ (car letters) histogram)))\n        (set! i (+ i 1))\n        ([letter (cdr\
+    \ letters)]\n         [count (+ count (length letters))])\n        (set! histogram\
+    \ (update-hash-value (car letters) (- count 1) histogram))\n        ([letter (cdr\
+    \ letters)]\n         [count (+ count 1)]))\n      (hash-values histogram))))\n",
+  "  (cond\n    [(null? test) '()]\n    [(empty? (rest test)) (list (car test) 1)]\n\
+    \    [else (append (list (car test) (hash-ref (rest (rest test)) (car test)))\n\
+    \                   (histogram (rest (rest test))))]))\n", "  (let loop ((result\
+    \ '())\n             (letters '()))\n    (if (empty? test)\n        result\n \
+    \       (loop (cons (car test)\n                   (if (> (length letters) (car\
+    \ result))\n                       (cons (car result)\n                      \
+    \       result)\n                       result))\n               (append letters\
+    \ (list (car test)))))))\n", "  (let* ((test (string->list test))\n         (len\
+    \ (length test))\n         )\n    (let loop ((test test)\n              (count\
+    \ 0)\n              (histogram '())\n              (i 0))\n      (if (> i len)\n\
+    \          histogram\n          (let ((letter (caar test))\n                (count\
+    \ (cadar test)))\n            (loop (cdr test) (cdr histogram) (+ count 1) i))\n\
+    \        )\n      )\n    )\n  )\n", "  (letrec ([histogram (\u03BB (test result)\n\
+    \                             (cond [(empty? test)\n                         \
+    \           result]\n                                     [else\n            \
+    \                         (let ([letter (first test)\n                       \
+    \                    count (+ 1 (length test))])\n                           \
+    \            (histogram (rest test)\n                                        \
+    \          (cons (first result)\n                                            \
+    \             (cons letter count))))]))])\n    (histogram test {})))\n", "  (let\
+    \ loop ((letters test) (count 0))\n    (cond\n      [(empty? letters) (hash {})]\n\
+    \      [(equal? (first letters) (hash (first letters)))\n       (loop (rest letters)\
+    \ (+ count 1))]\n      [(hash? (first letters))\n       (loop (rest letters) (+\
+    \ (first letters) count))]\n      [else\n       (loop (rest letters) (+ count\
+    \ 1))]\n    ))\n  )\n", "  (let ([s (string->list test)])\n    (cond (empty? s)\
+    \ '()\n          ((atom s) (histogram s))\n          ((> (car s) (first s))\n\
+    \           (let [a (second s)\n                   b (first s)\n             \
+    \      c (- a b)]\n             (cond [(< c 0) (histogram s)]\n              \
+    \     [(< c 1) (cons ((first s)) (histogram s))]\n                   [(< c 2)\
+    \ (cons (first s) (histogram (first s)))]\n                   [(< c 3) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 4) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 5) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 6) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 7) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 8) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 9) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 10) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 11) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 12) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 13) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 14) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 15) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 16) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 17) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 18) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 19) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 20) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 21) (cons ((first\
+    \ s) (first s)) (histogram (first s)))]\n                   [(< c 22) (cons ((first ",
+  "  (let loop ((letters '())\n             (counts '()))\n    (if (empty? test)\n\
+    \        (reverse counts)\n        (loop (append (first test) letters)\n     \
+    \          (cond ((eq? (first test) (car letters)) (+ 1 (first counts))) \n  \
+    \                   ((> (length letters) 1) (loop (rest letters)\n           \
+    \                                     (cons (first letters) counts)))\n      \
+    \               (else (loop (rest letters)\n                                (cons\
+    \ (first letters) counts))))))))\n</code>\n<|/ a |>\n<| c |>\nI see this as a\
+    \ nice solution, however I wonder if the list traversal could be made more efficient.\
+    \ Would it be better to convert the string into a char array and traverse this\
+    \ array as compared to the string itself?\n<|/ c |>\n<| c |>\nThe list traversal\
+    \ should be faster because strings are immutable. One problem is that you need\
+    \ to take care about special characters like spaces. I haven't thought about it\
+    \ but it should make things slower.\n<|/ c |>\n<| a tags=racket,scheme dscore=1\
+    \ |>\nUsing Racket, here's a short solution:\n<code>", "  (let* ((letters (string-split\
+    \ test #\\Space)))\n    (let loop ((letter (first letters)) (count 1) (dict (make-hash-table\
+    \ :test 'equal?)))\n      (cond ((null? letters)\n             (hash-table->list\
+    \ (hash-table-entries dict)))\n            ((not (hash-table-contains? dict letter))\n\
+    \             (loop (rest letters) 1 (hash-table-assoc dict letter (hash-table-count\
+    \ dict))))\n            (else\n             (loop (rest letters) (hash-table-count\
+    \ (hash-table-assoc dict letter))\n                  (hash-table-assoc dict letter\
+    \ (hash-table-count dict)))))\n    ))\n", "  (let loop ((test test) (res ()))\n\
+    \    (if (empty? test)\n        (reverse res)\n        (loop (rest test) (cons\
+    \ (first test) (length res)))))\n</code>\n<|/ a tags=racket,scheme |>\n<| c |>\n\
+    Thank you very much for the solution! I tried this on DrRacket and it didn't work,\
+    \ however, the answer from DavidLL worked perfectly. Thank you very much for your\
+    \ help. I now understand what the error meant and how it can be fixed in the future!\n\
+    <|/ c |>\n<| c |>\nIt would be nice to have a bit of explanation on what this\
+    \ code does. Especially the part with loop and reverse.\n<|/ c |>\n<| c |>\nThe\
+    \ code does something very similar to what David wrote in his answer. But the\
+    \ only difference is that instead of printing the number of occurrences of the\
+    \ letters in the string, it stores them in a dictionary with the letter and it's\
+    \ number of occurrences.\n<|/ c |>\n<| c |>\nThis code also works for strings\
+    \ like 'a c a c a c a c'. `histogram` returns a list with one dictionary for each\
+    \ unique letter in the string, with each dictionary containing a count for the\
+    \ number of letters having the same count.\n<|/ c |>\n<| a dscore=0 |>\n<code>",
+  "  (let ([letters (set-from (split-string (string test) \" \"))\n        letter-counter\
+    \ (dict (length letters) '())])\n    (map #(let ([letter (first %)])\n       \
+    \     (let ([counts (cdr letter-counter)])\n              (cond [(or (eq? letter\
+    \ (first %)) (member? letter counts))\n                       (cons (first %)\
+    \ (update-in letter-counter [letter] incr))]\n                    (else (update-in\
+    \ letter-counter [letter] incr)))))\n          letters)))\n", "  (if (equal? (string-length\
+    \ test) 0)\n      '()\n      (let ([letters (string->list (string-ref test 0))])\n\
+    \        (let loop ([result (hash)])\n          (if (equal? (string-length letters)\
+    \ 0)\n              result\n              (let ([letter (first letters)])\n  \
+    \              (let ([letters (cdr letters)])\n                  (loop (cons (cons\
+    \ letter result) (loop (hash-update result letter 1))))\n                  (loop\
+    \ (hash-update result letter 1)))))))\n        (hash)))\n</code>\nNote that I\
+    \ am not saying that the algorithm is optimal; I am only saying that the language\
+    \ has a simple way to construct such data structures and they can be easily traversed\
+    \ with a simple loop. If I were to write a function that counts the occurrences\
+    \ of a given letter with a given string, I might do something like this:\n<code>",
+  "  (let ([chars (string-split test #\\Space )])\n    (let loop ([result '()])\n\
+    \      (if (empty? chars)\n          result\n          (let ([char (car chars)])\n\
+    \            (loop (cons (concat result '(list char)) result))\n            (loop\
+    \ (cons (car chars) result)))))))\n", "  (let loop ((letters (map char->char test))\
+    \ (result '()) (letter '()))\n    (if (empty? letters)\n        result\n     \
+    \   (loop (rest letters)\n               (cons letter\n                      \
+    \ (cons (hash-ref result (hash-ref letter (first letters))) (rest letters)))\n\
+    \               (rest letters)))))\n", "  (let ([letters (map char->symbol (string-split\
+    \ test #\\)))]\n        (let loop ((letters letters) (dict (hash-table '())))\n\
+    \          (cond\n            ((null? letters) (hash-table-count dict))\n    \
+    \        (else\n             (let ([count (+ 1 (hash-table-count (hash-table-get\
+    \ dict (first letters))))])\n               (hash-table->list (cons (first letters)\
+    \ count)\n                               loop (rest letters) dict)))))\n    ))\n",
+  "  (let ((dict (make-hash)))\n    (define (helper key count)\n      (if (string?\
+    \ key)\n          (hash-update! dict key (+ count 1))\n          (hash-update!\
+    \ dict key count)))\n    (let ((count 0))\n      (for ([letter (split-string (string\
+    \ test) \"\")])\n        (helper (string letter) count))\n    dict))\n", "  (let\
+    \ ((freqs (hash-table)))\n    (let loop ((test test) (counter 0))\n      (if (empty?\
+    \ test)\n          freqs\n          (let ((letter (first test))\n            \
+    \    (count (hash-ref freqs letter)))\n            (hash-set freqs letter (+ count\
+    \ 1))\n            (loop (rest test) (+ counter 1))))))))\n", "  (let loop ((count\
+    \ '()) (letters '()))\n    (match test\n      ((string? test) test)\n      ((list?\
+    \ test)\n       (let loop ((head (car test)) (tail (cdr test)))\n         (cond\
+    \ ((string? head) (loop (car head) (append tail '())))\n              ((char?\
+    \ head) (loop (char->integer head) tail))\n              ((< head 'a) (loop (char->integer\
+    \ 'a) (append tail '())))\n              (else (loop (char->integer head) tail)))\n\
+    \         (cond (empty? tail) (car count))\n              (else (loop (car count)\
+    \ tail)))\n      (else (error \"Can't process test\"))))\n    (if (not empty?\
+    \ letters)\n        (cons (car letters)\n              (if (> (length letters)\
+    \ (car count))\n                  (loop (car letters) (cdr letters))\n       \
+    \           count)))\n    (reverse count)))\n", "  (define (letter counts)\n \
+    \   (cond\n      [(empty? test) counts]\n      [else (let ([letter (first test)])\n\
+    \             (cond [(equal? letter (first counts))\n                    (let\
+    \ ([counts (add1 (second counts))])\n                       (let* ([letter (first\
+    \ test)]\n                              [counts (add1 (second counts))])\n   \
+    \                      (histogram (subseq test 2))\n                         (cons\
+    \ letter counts)))]\n               [else (cons letter counts)])]))\n    0)\n\
+    \  (histogram '()))\n", "  (let-values (((letter-histogram counter) \"\")\n  \
+    \             (counts '())\n               (letters (split test #\\Space)))\n\
+    \    (map #(loop for letter of letters\n                count (if (contains? counter\
+    \ letter)\n                        (+ 1 (cdr counter))\n                     \
+    \   1))\n         letters)\n    (loop for letter of letters\n          for counter\
+    \ in letter-histogram\n          collect (cons letter (car counter)))))\n", " \
+    \ (count-letters\n   (count-letters-helper test '())))\n", "  (let ([histogram\
+    \ (hash)])\n    (set! histogram (hash-set! test 0 (lambda (k) (hash-ref histogram\
+    \ k 0))))\n    (loop for letter in (split test #\\Space)\n          collect (hash-set!\
+    \ histogram letter 1)\n          into histogram\n          until (and (equal?\
+    \ letter (first test)) (not (null? (rest test)))\n                   empty? (rest\
+    \ test))\n          collect (hash-set! histogram letter 2)\n          into histogram)))\n",
+  "  (let ((letters (string->list (string->symbol '(a b c))))\n        (counts (make-hash\
+    \ (string->list (string->symbol '(a b c)))))\n        (most-freq (make-hash (string->list\
+    \ (string->symbol '(a b c)))))\n        (result (make-hash (string->list (string->symbol\
+    \ '(a b c)))))\n        (max-freq (hash-ref most-freq 'a)))\n    (labels ((count-it\
+    \ (letter)\n               (hash-set counts (string->list (string->symbol letter))\
+    \ (hash-ref counts (string->list (string->symbol letter))+ 1)))\n            \
+    \ (find-it (letter)\n               (if (> (hash-ref most-freq (string->list (string->symbol\
+    \ letter))) max-freq)\n                   (hash-set most-freq (string->list (string->symbol\
+    \ letter))\n                               (hash-ref most-freq (string->list (string->symbol\
+    \ letter))+ 1))\n                   (hash-set most-freq (string->list (string->symbol\
+    \ letter))\n                               (hash-ref most-freq (string->list (string->symbol\
+    \ letter))+ 1)))\n               (add-it (letter)\n                   (find-it\
+    \ letter))\n               (add-all-it (letter)\n                   (count-it\
+    \ letter))\n               (add-all-it-recursive (letter)\n                  \
+    \ (if (hash-empty? most-freq)\n                       (add-all-it letter)\n  \
+    \                     (add-all-it-recursive letter)))\n               (add-all-it-recursive-recursive\
+    \ (letter)\n                   (if (hash-empty? most-freq)\n                 \
+    \      (add-all-it-recursive-recursive letter)\n                       (add-all-it-recursive-recursive\
+    \ letter)))\n               (add-all-it-recursive-recursive-recursive (letter)\n\
+    \                   (if (hash-empty? most-freq)\n                       (add-all-it-recursive-recursive-recursive\
+    \ letter)\n                       (add-all-it-recursive-recursive-recursive letter)))\n\
+    \               (add-all-it-recursive-recursive-recursive-recursive (letter)\n\
+    \                   (if (hash-empty? most-freq)\n                       (add-all-it-recursive-recursive-recursive-recursive\
+    \ letter)\n                       (add-all-it-recursive-recursive-recursive-recursive\
+    \ letter)))\n               (add-all-it-recursive-recursive-recursive-recursive-recursive\
+    \ (letter)\n                   (if (hash-empty? most-freq", "  (let* ((letters\
+    \ (char->string test))\n         (counts (map (lambda (c) (hash-ref letters c))\
+    \ (sort letters string<))))\n    (cond\n      ((null? letters) '())\n      ((>\
+    \ (counts (first letters))\n          (counts (rest (first letters))))\n     \
+    \  (cons (first letters) counts))\n      (else (cons (first letters)\n       \
+    \            (+ (counts (first letters))\n                      (counts (rest\
+    \ (first letters)))))))))\n</code>\n<|/ a dscore=2 |>\n<| c |>\nYour answer is\
+    \ clearly better, as mine was only a first draft. I will leave mine as accepted\
+    \ because it does not use `let*`, which is a bit more idiomatic and readable.\n\
+    <|/ c |>\n<| a dscore=1 |>\n<code>", "  (let ([chars (string->list test)])\n \
+    \   (apply (lambda (c n)\n             (cond\n              [(empty? chars) (hash\
+    \ empty)]\n              [(eq? (rest chars) c) (hash (cons c n))]\n          \
+    \    [else (hash (cons (first chars) (add1 (second n)))]))\n             (first\
+    \ chars)\n             (rest chars)))))\n", "  (if (not (equal? (string-length\
+    \ test) 0))\n      (let ((dict (make-hash)))\n        (loop for char (string->list\
+    \ (substring test 0 1))\n              for count (hash-ref dict char)\n      \
+    \        hash-set dict char count + 1)\n        dict)))\n</code>\n<|/ a dscore=1\
+    \ tags=racket,hashmap,hashtable,scheme |>\n<| c |>\nYou might like my implementation\
+    \ of `histogram`\n<|/ c |>\n<| a |>\n<code>", "  (let ([letters '(a b c d e f\
+    \ g a b c d e f g h)])\n    (group-by (\u03BB (letter)\n               (hash-ref\
+    \ (hash-ref letters (car letter)) 0))\n               test)))\n</code>\nI believe\
+    \ this to be a more efficient solution than using (map car) since it uses the\
+    \ internal hash table of the racket standard library (which is guaranteed to be\
+    \ faster). It also uses group-by, which has the advantage of automatically sorting\
+    \ your input (alphabetically).\n<|/ a tags=hashmap,scheme,racket,lambda,functional-programming\
+    \ |>\n<| c |>\nWhat is the difference between `hash-set` and `hash-ref` in your\
+    \ code?\n<|/ c |>\n<| c |>\nSorry, that was a typo. Fixed now.\n<|/ c |>\n<| a\
+    \ tags=hashmap,scheme,racket,lambda,functional-programming dscore=2 |>\nI know\
+    \ this is an old question, but I wanted to add my solution. After searching online\
+    \ for many ways to do this, I settled on this:\n<code>", "  (if (empty? test)\n\
+    \      (hash empty)\n      (let ((c (length test)))\n        (loop for i from\
+    \ 0 to c\n              for j of (subseq test i (+ i 1))\n              when (hash-ref\
+    \ (hash-ref h j) j) collect j\n              collect i)))))\n", "  (let ([letters\
+    \ (string->list (string->string test))])\n    (group-by (lambda (x)\n        \
+    \      (count-by (lambda (y)\n                          (equal? (char->integer\
+    \ x) y)) letters))\n              letters)))\n", "  (reduce (lambda (m letter)\n\
+    \            (let ((count (or (m letter) (hash letter))))\n              (when\
+    \ (eq? letter #\\Space)\n                (set! count (1+ count)))\n          \
+    \    (set! m (cons letter m)))\n            (hash-set '#\\Space 0))\n        \
+    \  (hash-set '#\\Space 0)\n          (split-string (string test #\\Space)))\n",
+  "  (let ((letters ()))\n    (loop for letter in (string test)\n          for count\
+    \ (hash-ref (hash-ref letters letter) (incf (hash-ref letters letter)))\n    \
+    \      collect (list (cons letter count))))\n</code>\n<|/ a dscore=2 |>\n<| c\
+    \ |>\nI like the idea of using the hash to count the occurrences, but how would\
+    \ I get the top n most frequent letters?\n<|/ c |>\n<| c |>\nThat is a good point.\
+    \ I had not thought of that before. I'll update my answer to demonstrate this.\n\
+    <|/ c |>\n<| a |>\nHere's an option if you have a big set of letters to count.\
+    \ \n<code>", "  (if (empty? test)\n      {}\n      (let ([letter-count (count\
+    \ test)])\n        (if (= letter-count 1)\n            (cons (car test) letter-count)\n\
+    \            (let ([most-repeated-letter (car (sort (pair-by compare-by letter-count\
+    \ test))))\n              (cons (list most-repeated-letter letter-count) (cdr\
+    \ letter-count)))))) ; <-- This line.\n</code>\nIn your code, you were calling\
+    \ count on a list instead of on the argument to histogram. count accepts a string\
+    \ and returns a number. On the other hand, histogram expects a single string argument.\
+    \ Hence, you should call count on the argument to histogram and pass it to the\
+    \ let inside histogram where you use it.\n<|/ a |>\n<| c |>\nThanks for your response.\
+    \ I've changed the code as you mentioned and it is giving me error when I try\
+    \ to run the program. Error is `expected a procedure that can be applied to arguments\
+    \ given: 2 argument(s) but got 2 argument(s): 2 arguments.`\n<|/ c |>\n<| c |>\n\
+    It works on my system with the code I gave you. Maybe you have a different version\
+    \ of Racket than the one I have. Does this code work on the system that you are\
+    \ using?\n<|/ c |>\n<| c |>\nI have tried this code on my system but it is throwing\
+    \ me an error `no matching reader for argument #2` at line `let ([letter-count\
+    \ (count test)])` at line `(histograms #(#(a b c a b) #(a a a)))` at line `(histograms\
+    \ #(#(a b c a b) #(a a a)))`. I don't have much knowledge about Scheme. I am using\
+    \ DrRacket IDE. I don't know if it affects.\n<|/ c |>\n<| c |>\nThat's odd. Can\
+    \ you try adding `#lang racket` to your code? Also, make sure you call `histogram`\
+    \ with only one argument and not twice.\n<|/ c |>\n<| c |>\nOh! That was the issue\
+    \ as I added `#lang racket` to my code. Now the error is gone. Thanks. But it\
+    \ is showing me `no matching reader for argument #2` at line `(histograms #(#(a\
+    \ b c a b) #(a a a)))` at line `(histograms #(#(a b c a b) #(a a a)))`. Can you\
+    \ tell me why it is showing such error and how can I fix it?\n<|/ c |>\n<| a tags=racket,scheme ",
+  "  (let ([letters (string-split test #\\Space)])\n    (count-letters letters)\n\
+    \    (max-letter-count letters)\n    (letter-frequency letters))\n  )\n", "  (let*\
+    \ ((letter-frequency (map string->list test)) \n         (most-frequent (apply\
+    \ (lambda (letter)\n                            (max (apply + (filter string=?\
+    \ letter-frequency letter))\n                                  (length letter-frequency)))))\n\
+    \         (letter-counts (apply (lambda (letter)\n                           \
+    \    (apply + \n                                 (filter (string=? letter most-frequency)\n\
+    \                                       letter-frequency))\n                 \
+    \            most-frequency)))\n    (cons (car most-frequency)\n          (map\
+    \ (lambda (letter) (cons letter letter-counts)) most-frequency))\n  )\n)\n", " \
+    \ (if (string-empty? test)\n      (hash-table) ; empty string\n      (let ([letters\
+    \ (string->list test)])\n        (let ([most-repetitive '#{}]\n              [most-repeated\
+    \ #{}])\n          (loop\n            for letter in letters\n            collect\n\
+    \              (hash-update\n                (hash-ref most-repetitive letter\
+    \ 0)\n                (if (hash-ref most-repeated letter)\n                  \
+    \  (hash-ref most-repeated letter)\n                    (+ 1 (hash-ref most-repetitive\
+    \ letter)))\n                (hash-update\n                  most-repetitive\n\
+    \                  (hash-set letter most-repetitive)))))))\n", "  (let ([letters\
+    \ (split-string (string test) \" \")])\n    (if (null? letters)\n        (list\
+    \ '())\n        (let ([most-repeated 0]\n               (dict (new hash-table)))\n\
+    \          (for/fold ([counts ((hash #{}) most-repeated)])\n                 \
+    \   (#:key (lambda (x)\n                            (hash-update! counts x #:+\
+    \ 1))\n                    (reverse letters))\n          (map (lambda (x)\n  \
+    \               (list x (hash-ref counts x 0)))))))\n", "  (letrec\n    ([counts\n\
+    \      (count-elements (lambda (l)\n                        (map (lambda (c)\n\
+    \                              (cons (car l) c))\n                           \
+    \   (split-string (string l) ' '))))]\n     [max-count\n      (max-key-by\n  \
+    \     (lambda (key)\n         (apply max (map values (filter #(eq? (car key) %)\n\
+    \                                      counts))))\n       '())]\n     [most-frequent\n\
+    \      (max-key-by\n       (lambda (key)\n         (apply max (map values (filter\
+    \ #(> (car key) %)\n                                      counts))))\n       '())])\n\
+    \    (if (null? test)\n        (most-frequent most-frequent)\n        (let ([letters\
+    \ (split-string (string test) ' ')]\n              [count-letters (apply + (map\
+    \ values (filter #(eq? (car letters) %)\n                                    \
+    \                counts)))]\n              [max-letter\n               (apply\
+    \ max (map values (filter #(> (car letters) %)\n                             \
+    \               counts)))])\n          (if (> (car counts) max-count)\n      \
+    \        most-frequent\n              (set! most-frequent\n                  \
+    \  (cons (car letters) (cons count-letters max-letter))))))))\n", "  (define (helper\
+    \ str)\n    (if (null? str) '()\n        (append (hash-table (first str) (hash-table)))\n\
+    \        (let ([pair (helper (rest str))])\n          (if (null? pair)\n     \
+    \         (hash-table (first str) (hash-table 1))\n              (cond ((null?\
+    \ (car pair))\n                     (hash-table (first str) (hash-table (car pair)\
+    \ (cdr pair)))\n                     ((< (hash-table (car pair)) (cdr pair))\n\
+    \                      (hash-table (first str) (hash-table (car pair) (cdr pair))))\n\
+    \                      (else (hash-table (first str) (hash-table (car pair) (cdr\
+    \ pair))))))))\n    (helper test)))", "  (let loop ((letters (string->list (string-trim\
+    \ test)))\n             (counts '(0 0 0))\n             (most-freq (first letters))\n\
+    \             (most-freq-count 0))\n    (cond\n      ((null? letters) (counts))\n\
+    \      ((equal? (first letters) most-freq) (counts))\n      (else (loop\n    \
+    \           (rest letters)\n               (cons (first letters)\n           \
+    \          (cons (+ (second counts) 1)\n                           (cons (+ (third\
+    \ counts) 1)\n                                   (third most-freq-count))))\n\
+    \               (first letters)))))))\n</code>\n<|/ a tags=racket,scheme |>\n\
+    <| c |>\nI did not even think of using a loop. Thanks!\n<|/ c |>\n<| c |>\nThe\
+    \ `loop` here is actually a named let binding, not a loop.  In Racket a `let`\
+    \ is defined to behave like a named let binding and can be used as such in place\
+    \ of a loop.  Though in practice I would prefer the `for` loop because it is more\
+    \ idiomatic.\n<|/ c |>\n<| a dscore=1 |>\nI wrote this a while ago:\n<code>",
+  "  (define (count-letter letter)\n    (hash (cons letter 1) (cons letter 1) (cons\
+    \ letter 1) '()))\n  (map (lambda (letter)\n         (hash (cons letter 0) (cons\
+    \ letter 0) (cons letter 0) '()))\n       (string->list test)))\n</code>\n<code>\n\
+    #lang racket\n", "  (let ([letters (string-split test #\" \")])\n    (cond\n \
+    \     [(empty? letters) (hash)]\n      [(equal? (first letters) 'a) (hash (cons\
+    \ 'a (add1 (hash-ref hash letters))))]\n      [(equal? (first letters) 'b) (hash\
+    \ (cons 'b (add1 (hash-ref hash letters))))]\n      [else (hash (cons (first letters)\
+    \ (add1 (hash-ref hash letters))))]))))\n</code>\n<|/ a dscore=0 tags=racket,lisp,scheme\
+    \ |>\n<| a tags=racket,lisp,scheme |>\n<code>", "  (let ((char-map (make-hash))\n\
+    \        (char-counts (make-hash))\n        (max-char (quote #\\space))\n    \
+    \    (current-char test))\n    (loop\n      (when (char= (current-char) max-char)\n\
+    \        (when (char= (current-char) max-char)\n          (let ((char-map (hash-ref\
+    \ char-map max-char))\n                (cnt (hash-ref char-counts max-char)))\n\
+    \            (hash-set! char-map max-char (+ cnt (hash-ref char-map max-char)))\n\
+    \            (hash-set! char-counts max-char cnt)))\n      (set! current-char\
+    \ (char+ current-char (char-char-code current-char)))\n      (when (char= current-char\
+    \ max-char)\n        (set! max-char (char+ max-char (char-char-code current-char))))\n\
+    \      (cdr char-map)\n      char-counts)\n    (hash-set! char-map #\\space 0)\n\
+    \    char-map))\n", "  (let ((letters ()))\n    (loop for letter in test\n   \
+    \       for letters-count (count-letters (substring letter 0 1))\n          collect\
+    \ (cons letter letters-count)\n          into letters\n          when (empty?\
+    \ letters)\n          count (max letters))))\n", "  (let loop ((test test) (letters\
+    \ (make-hash (string->list test))))\n    (cond\n      [(empty? test) (hash)])\n\
+    \    (loop (rest test) (rest letters))\n    (hash\n      (for ([letter (keys (hash-ref\
+    \ letters hash))])\n        (cond [(> (hash-ref letters letter) 0) (hash-set letters\
+    \ (cons letter (hash-ref letters letter))) ]\n              [(< 1 (hash-ref letters\
+    \ letter)) (hash-set letters (cons letter (hash-ref letters letter))) ]\n    \
+    \          [else (hash-set letters (cons letter (hash-ref letters letter)))]\n\
+    \              )\n        )\n      )\n    )\n  )\n</code>\nThe last two lines\
+    \ are the most interesting one. Hash can only have one value per key, so I first\
+    \ put each letter into a list, then count how often each letter has occured in\
+    \ the list. Then I put the letter with the highest frequency into a hash. I put\
+    \ the whole thing into a cond-branch, where I simply return the hash if there\
+    \ are more than one occurences per letter. Otherwise I return the letters. I hope\
+    \ that it is clear enough to understand what's going on.\n<|/ a dscore=3 tags=racket,scheme,functional-programming,lisp\
+    \ |>\n<| c |>\nThe hash->list is a good idea!\n<|/ c |>\n<| a tags=racket,scheme,functional-programming,lisp\
+    \ |>\nIn Racket you can do it using foldl like this:\n<code>\n#lang racket\n",
+  "  (let ([chars (string-split test #\\Space)])\n    (cond [(empty? chars) {}]\n\
+    \          [(cons? chars) (cons (count-occurrences chars) chars)]\n          [else\
+    \ (add1 (histogram (first chars))))])))\n", "  (reduce (\u03BB (k v) (cons k (count\
+    \ v test)))\n          {}))\n", "  (let ([l (string-to-lst test)])\n    (group-by\
+    \ (lambda (x)\n                (count-letters x))\n              l)))\n", "  (let\
+    \ ([lst (split test #\\Space)])\n    (cond ((null? lst)\n           #{})\n   \
+    \       ((null? (rest lst))\n           (hash-map (first lst) (+ 1 (length lst))))\n\
+    \          (else\n           (let ([new-count (+ 1 (hash-ref (first lst) lst)\
+    \ (length (rest lst)))]\n                 (hash-map (first lst) new-count))\n\
+    \             histogram\n             (rest lst)))))\n", "  (let ((letters (string->list\
+    \ test))\n        (letters-count (cons 0 (list-ref letters 0))))\n    (if (null?\
+    \ letters)\n        letters-count\n        (let* ((letter (first letters))\n \
+    \             (remaining-letters (rest letters))\n              (count (+ (first\
+    \ letters-count)\n                         (length remaining-letters))))\n   \
+    \       (if (null? remaining-letters)\n              (cons (cons letter count)\
+    \ letters-count)\n              (histogram remaining-letters))))))\n", "  (reduce\n\
+    \   (\u03BB (a b) (cond (equal? (car a) b) (acons (car a) (add1 (cadr a))))\n\
+    \               (equal? (car b) a) (bcons (car b) (add1 (cadr b))))\n   '() test))\n",
+  "  (let ((dict (make-hash (string-length test))))\n    (do\n      (let ((count 0))\n\
+    \        (for-each \n          (lambda (c) \n            (when (string-match c\
+    \ test)\n              (set! count (add1 count))\n              (hash-set! dict\
+    \ c count))))\n      (hash dict))) ; return\n  dict)  ; return\n", "  (let loop\
+    \ ([letters '()\n                  counts '()])\n    (cond\n      [(empty? test)\n\
+    \       (reverse (append letters counts))]\n      [(char-upper? (car test))\n\
+    \       (loop (append (cons (car test) letters)\n                      counts\n\
+    \                      (rest (cdr test)))]\n      [else\n       (loop (append\
+    \ letters\n                      (cons (car test) letters)\n                 \
+    \     counts\n                      (rest (cdr test))))]\n      [else\n      \
+    \ (loop (cons (car test) letters)\n               (cons (car test) counts)\n \
+    \              (rest (cdr test)))])))\n", "  (cond\n    ((null? test) ())\n  \
+    \  ((string? test) (histogram-string test))\n    ((list? test) (histogram-list\
+    \ test))\n    (else (error \"Cannot histogram '~A'\" test))))\n", "  (let loop\
+    \ ((count (make-hash empty)) (letters (string->list (string->string test)))\n\
+    \             (current-letter (first letters))\n             (current-count (hash-ref\
+    \ count current-letter)))\n    (cond ((null? letters) count)\n          ((eq?\
+    \ (first letters) current-letter)\n           (loop (+ current-count (hash-ref\
+    \ count current-letter))\n                 (rest letters)\n                 (first\
+    \ letters)\n                 (hash-ref count current-letter)))\n          ((null?\
+    \ (rest letters))\n           (loop (+ count 1)\n                 (rest letters)\n\
+    \                 (first letters)\n                 (hash-set! count current-letter\
+    \ 1)))\n          (else\n           (loop (+ count 1)\n                 (rest\
+    \ letters)\n                 (first letters)\n                 (hash-set! count\
+    \ current-letter 1))))))\n", "  (reduce\n   (\u03BB (res str)\n     (let* ([letters\
+    \ (string->list (string->string str))]\n            [count (apply (foldr + (\u03BB\
+    \ (a b) (cond [(null? a) b]\n                                                \
+    \  [(null? b) a]\n                                                  [else (if\
+    \ (< (cdr a) (cdr b)) (cdr b) (cdr a))])) letters count)]\n            [max (car\
+    \ count)]\n            [letter (car max)])\n      (cond\n       [(< count max)\
+    \ (cons count (list letter))]\n       [(equal? (car count) max) (cons count (list\
+    \ letter))]\n       [else (cons max res)])\n       res))\n   [() '()]))\n", " \
+    \ (let loop ((letters (string-map string->list (string->symbol test)))\n     \
+    \        (counts '(()))\n             (max 0)\n             (current '()))\n \
+    \   (cond ((null? letters) counts)\n          ((>= (length letters) 1)\n     \
+    \      (loop (rest letters)\n                 (cons 1 (counts (first letters))\n\
+    \                       max)\n                 (first letters)\n             \
+    \    current))\n          ((counts (first letters)) (loop (rest letters)\n   \
+    \                                       (cons (first letters)\n              \
+    \                                  counts)\n                                 \
+    \         max\n                                          (cons (first letters)\
+    \ current))))\n          ((< max count)\n           (loop (rest letters)\n   \
+    \              (cons count counts)\n                 (+ count (counts (first letters))\n\
+    \                      max)\n                 (first letters)\n              \
+    \   (cons (first letters) current)))\n          (#t (loop (rest letters)\n   \
+    \                (cons count counts)\n                   (max count)\n       \
+    \            (first letters)\n                   current)))\n    counts))\n",
+  "  (let ([letters (string->list test)])\n    (cond [(empty? letters) empty]\n  \
+    \        [(string->list? (first letters)) (hash-map first (make-hash (first letters)))]\n\
+    \          [else (let ([chars (hash-map first letters)])\n                 (cond\
+    \ [(empty? chars) empty]\n                       [(equal? (count chars) (count\
+    \ (first letters))) (hash-map first chars)]\n                       [else (hash-map\
+    \ first chars (+ 1 (count chars))))])])))\n", "  (let loop ([letters (split-string\
+    \ (string test) \" \")])\n    (cond\n      [(empty? letters) (hash (list) (list\
+    \ 0)(list 0))]\n      [(equal? (car letters) (cadr letters)) (hash (list) (cadr\
+    \ letters)(+ (cdr letters) 1))]\n      [(not (equal? (car letters) (cadr letters)))\
+    \ (loop (cdr letters))]\n      [(equal? (cadr letters) (caddr letters)) (loop\
+    \ (cdr letters))]\n      [else (loop (cdr letters))])))\n", "  (let* ((letters\
+    \ (string->list test))\n         (count (map (fn [letter]\n                  \
+    \    (count letter letters))\n                   letters)))\n    (map #(cons #%1\
+    \ %2) letters count)))\n", "  (let-values ([(max-chars counts max-count) \n  \
+    \            (partition-all #(lambda (c) (member c test)) #\\Space)\n        \
+    \      (let [current-char (car max-chars)]\n                (loop for (cat in\
+    \ max-count)\n                      collect (cond [(string=? (car cat) current-char)\
+    \ (+ (car cat) 1)]\n                                [(string=? (car cat) (first\
+    \ max-chars)) (+ (car cat) 1)]\n                                [else (+ (car\
+    \ cat) 1)]))])\n    (values counts max-count)))\n", "  (apply (\u03BB (letter)\n\
+    \            (let* ((reps (count test letter))\n                   (max (cons\
+    \ (car letter) reps)\n                          (cons (cdr letter) reps))))\n\
+    \              (cons (list letter max) reps))))\n", "  (let ([letters '() (count\
+    \ 0) (most-repeated '())])\n    (loop for letter in\n           (string->list\
+    \ test)\n           for count from 0\n           for l from letters\n        \
+    \   until (eq? l letter)\n           collect (cons l count))\n    (cond\n    \
+    \  [(empty? letters) (hash-map '() '())]\n      [(< count most-repeated) (hash-map\
+    \ most-repeated count)]\n      [else (hash-map letters count)]))))\n", "  (if\
+    \ (empty? test)\n      {}\n      ; Split the test string on space and convert\
+    \ to an array\n      (let ([str-arr (split-string test)])\n        (cond\n   \
+    \       ; Convert the string array to an array of words\n          [(empty? str-arr)\
+    \ {}]\n          [else (let ([word (first str-arr)])\n                   (cons\
+    \ (hash-ref word (hash-ref (first str-arr) 0)) \n                         \n \
+    \                          (histogram (rest str-arr))))])))\n  ", "  (let ([letter-count\
+    \ (make-hash (list)))\n        (test-list (list->string\n                    \
+    \ (split-string\n                       (remove-duplicates test #{\\Space}))\n\
+    \                     #\\Lowercase))]\n    (for [test-string test-list]\n    \
+    \  (let ((letter (hash-ref letter-count (first test-string))))\n        (hash-set!\
+    \ letter-count (first test-string) (add1 letter))\n        (set! letter-count\
+    \ (first test-string)))))\n  letter-count)\n", "  (let ((result '()))\n    (define\
+    \ (helper x count)\n      (if (eq? x '()) \n          result\n          (if (eq?\
+    \ (car x) (car count))\n              (helper (cdr x) (+ count (car count)))\n\
+    \              (helper (cons x '()) (+ count 1)))))\n    (helper test 0)\n   \
+    \ result))\n</code>\n<|/ a tags=racket,scheme dscore=0 |>\n<| a |>\nThis solution\
+    \ takes advantage of Racket's support for higher-order functions such as filter\
+    \ and map.\n<code>", "  (let loop ((counts '())\n             (letters '()))\n\
+    \    (if (not (empty? test))\n        (let ((letter (string->list (car test)))\n\
+    \              (count 0))\n          (cond ((member? letter '()) counts)\n   \
+    \             ((eq? (length letters) count) (loop (cons count counts)\n      \
+    \                                      (cons letter '())))\n                ((<\
+    \ count (length letters)) (loop (cons count counts)\n                        \
+    \                          (cons letter '())))\n                (else\n      \
+    \           (loop (append counts (list count) (list letter))\n               \
+    \        (cons letter '())))))\n      counts)))\n", "  (let* ((letters racket/string/split\
+    \ test)\n         (letters-unique (remove-duplicates letters)))\n    (let loop\
+    \ ((letters-unique-counts (dict-new '()))\n               (letters (car letters-unique))\n\
+    \               (new-letters (cdr letters-unique))\n               (count 1))\n\
+    \      (if (null? new-letters)\n          (dict-set! letters-unique-counts (car\
+    \ letters-unique-counts) count)\n          (loop (cdr letters-unique) (cons (car\
+    \ new-letters) new-letters) (+ count 1))))))\n", "  (cond\n    [(empty? test)\
+    \ (empty-dictionary)]\n    [else (let [[letter count]\n                (map (lambda\
+    \ (letter) (cons letter 1))\n                     (split test #\\Space))]\n  \
+    \         (if (> count (length letters))\n               (histogram test)\n  \
+    \             (let [count (+ count 1)]\n                 (cons (first letter)\
+    \ count))))]))\n", "  (let ((count (make-hash (hash-empty-key hash-empty-val))))\n\
+    \    (define (h str)\n      (let ((count (hash-ref count str)))\n        (if (hash-member?\
+    \ count str)\n            (hash-set! count str 1)\n            (hash-set! count\
+    \ str (1+ count)))\n        count))\n    (string-map test #(if (number? (car %))\
+    \ (h (car %)) #t) count))\n</code>\n<|/ a dscore=1 tags=racket,string,scheme |>\n\
+    <| c |>\nThis is an elegant solution, but it seems too slow.  I'm hoping that\
+    \ a solution with `string-map` can help.\n<|/ c |>\n<| c |>\nThis is not an answer.\
+    \ This should have been a comment.\n<|/ c |>\n<| c |>\nI don't have enough reputation\
+    \ to comment under a question. I'm sorry for the confusion.\n<|/ c |>\n<| a |>\n\
+    This is not in scheme, but I like it because it does its job in one function call.\
+    \  It uses string-split, which is the same thing as split-string, which is not\
+    \ part of the standard:\n<code>", "  (let ([letters-counts\n         (dict-empty)\n\
+    \         letter-counts \n         (hash-table-empty)]\n        (loop [curr-char\
+    \ test]\n          (cond\n            ((empty? curr-char) \n             (hash-table->list\
+    \ (hash-table-count letters-counts) letters-counts))\n            ((eq? (car curr-char)\
+    \ (cadr curr-char))\n             (let [letter (car curr-char)\n             \
+    \      count (cadr curr-char)]\n               (hash-table-update letter-counts\
+    \ letter \n                                 count\n                          \
+    \       letters-counts))\n             (recur (cdr curr-char)))\n            (t\n\
+    \             (loop (cdr curr-char)))))\n    (hash-table->list (hash-table-count\
+    \ letters-counts) letters-counts)))\n", "  (let* ((dict (make-hash-table))\n \
+    \        (letters (split-string->list->string test))\n         (max (hash-table-count\
+    \ dict))\n         (result (hash-table)))\n    (do ((i 0 (+ i 1))\n         (j\
+    \ 0 (+ j 1)))\n        ((and (not (hash-table-empty? result)) (< i j))\n     \
+    \     (let ((key (list-ref letters (+ i j))))\n            (hash-table-count (hash-table-ref\
+    \ result key)\n                            (cond ((> (hash-table-count (hash-table-ref\
+    \ result key) max) max)\n                                  (hash-table-insert\
+    \ result key max 1))\n                                  (else (hash-table-insert\
+    \ result key (hash-table-count (hash-table-ref result key) max)))))\n        \
+    \  (hash-table-insert result key (hash-table-count (hash-table-ref result key)\
+    \ 1)))\n      (hash-table-insert result letters max))))\n", "  (let ([histogram\
+    \ (dict ())]\n        [test-length (string-length test)])\n    (if (= test-length\
+    \ 0)\n        histogram\n        (let ([char (char-alphabetic? test)]\n      \
+    \        [test-idx (string-to-number test)])\n          (if (not (char-alphabetic?\
+    \ char))\n              (let ([char (string-to-number char)])\n              \
+    \  (set! histogram (cons (car histogram) (+ (cdr histogram) char)))\n        \
+    \        (set! histogram (cdr histogram))\n                histogram)\n      \
+    \        (set! histogram (cons (car histogram) (+ (cdr histogram) char))\n   \
+    \                   histogram)\n              histogram)))))\n", "  (let ((letter-counter\
+    \ (make-hash (make-array '(256))))\n        (max-letter (car letter-counter))\n\
+    \        (current-letter (car letter-counter)))\n    (loop for letter in test\n\
+    \       for count of (string-length letter)\n       do (incf (gethash (char->integer\
+    \ letter) letter-counter)\n             (- count 1)))\n    (if (empty? letter-counter)\
+    \ ; when all letters are non-repeated\n        (hash-ref letter-counter max-letter)\n\
+    \        (loop for letter in (sort letter-counter '< :key (lambda (a b) (compare\
+    \ (hash-ref letter-counter a) (hash-ref letter-counter b))))\n           with\
+    \ max < (hash-ref letter-counter max-letter)\n           do (hash-set letter-counter\
+    \ max-letter max))))\n", "  (let loop ((count 0) (result '()))\n    (cond ((null?\
+    \ test)\n           (reverse result))\n          ((char-blank? #\\) (loop count\
+    \ result))\n          ((char-blank? #\\Space #\\Tab) #\\Space)\n          ((char-blank?\
+    \ #\\Newline)\n           (loop (+ count 1) result))\n          ((char-blank?\
+    \ #\\Space #\\Tab #\\Newline)\n           (loop (+ count 1) result))\n       \
+    \   (else\n           (loop (+ count 1)\n                (cons (char-lowercase-or-blank\
+    \ test) (cons count result)))\n           (loop (+ count 1)\n                result)))))\n",
+  "  (let ([letters (string->list test)])\n    (if (empty? letters)\n        (error\
+    \ \"Histogram expected at least one letter\")\n        (let ([letter-count (make-hash\
+    \ (string-length letters))])\n          (map-indexed (lambda (letter i)\n    \
+    \                     (let ([letter (gethash letter letter-count)])\n        \
+    \                   (set! letter-count (update-ref letter-count (cons letter i)\
+    \ (incf letter)))\n                           letter-count))\n               \
+    \      letters)))))\n", "  (let ([char-table (hash-table (quote ()) 0)])\n   \
+    \ (string-split test #\\Space)\n    (for ([i (in-range (length char-table))])\n\
+    \      (let ([c (char-ref char-table i)])\n        (hash-set char-table c \n \
+    \                 (hash-ref char-table c)\n                  (+ 1 (hash-ref char-table\
+    \ c))))\n    (hash-copy char-table)))\n", "  (let loop ([letters test] [letters-count\
+    \ 0]\n             [letters-dict (make-hash (hash-empty))])\n    (if (empty? letters)\n\
+    \        letters-dict\n        (loop\n           (rest letters)\n           (+\
+    \ letters-count 1)\n           (hash-set! letters-dict (first letters) (+ letters-count\
+    \ 1))\n           (loop (rest letters) (+ letters-count 1))))))\n", "  (let loop\
+    \ ([letters (split-string-in-space test)]\n             [dict (hash)])\n    (cond\n\
+    \      [(empty? letters) dict]\n      [(cons? letters) (loop (rest letters) (merge\
+    \ dict (count-letters letters)))]\n      [else (loop (rest letters) (count-letters\
+    \ (first letters) dict))]))))\n", "  (let loop ((n 0)\n             (dict (make-hash\
+    \ (string->char-type 'a))))\n    (cond ((null? test)\n           (hash->list (hash-new\
+    \ '())))\n          ((char= (first test) ' ')\n           (loop (+ 1 (car test))\n\
+    \                 (hash-set dict (first test) n))))\n          ((not (char= (first\
+    \ test) ' '))\n           (loop (+ 1 (car test))\n                 (hash-set dict\
+    \ (first test) n))))\n          (else\n           (loop (+ 1 (car test))\n   \
+    \              (hash-set dict (first test) n))))))\n", "  (let ((dict (make-hash))\n\
+    \        (counts nil))\n    (iter ((s test) (i 0) (max 0))\n          (cons (hash-ref\
+    \ dict s) (hash-ref counts s))\n          (set! dict (hash-set dict s (hash-ref\
+    \ dict s))\n                    (hash-set counts s (+ i 1))))\n    (if (empty?\
+    \ dict)\n        counts\n        (let ((k (hash-key dict)))\n          (hash-value\
+    \ counts k)\n          (iter (hash-key dict)\n                (+ i 1)\n      \
+    \          (hash-value counts k))))))\n", "  (let* ((letters (string->list test))\n\
+    \         (counts '())\n         (pairs '())\n         (max (first letters))\n\
+    \         (count 1))\n    (let loop ((letter (first letters))\n              \
+    \ (next-letter (rest letters)))\n      (if (null? next-letter)\n          (cond\n\
+    \            (max (cons letter counts)) (set! counts cons letter counts)\n   \
+    \         (max (cons letter counts))\n            (set! counts cons letter counts)\n\
+    \            (cons letter counts)\n            (max (cons letter counts))\n  \
+    \          (set! counts cons letter counts)\n            (cons letter counts)\n\
+    \            (max (cons letter counts))\n            (set! counts cons letter\
+    \ counts)\n            (cons letter counts)\n            (max (cons letter counts))\n\
+    \            (set! counts cons letter counts)\n            (cons letter counts)\n\
+    \            (max (cons letter counts))\n            (set! counts cons letter\
+    \ counts)\n            (cons letter counts)\n            (max (cons letter counts))\n\
+    \            (set! counts cons letter counts)\n            (cons letter counts)\n\
+    \            (max (cons letter counts))\n            (set! counts cons letter\
+    \ counts)\n            (cons letter counts)\n            (max (cons letter counts))\n\
+    \            (set! counts cons letter counts)\n            (cons letter counts)\n\
+    \            (max (cons letter counts))\n            (set! counts cons letter\
+    \ counts)\n            (cons letter counts)\n            (max (cons letter counts))\n\
+    \            (set! counts cons letter counts)\n            (cons letter counts)\n\
+    \            (max (cons letter counts))\n            (set! counts cons letter\
+    \ counts)\n            (cons letter counts)\n            (max (cons letter counts))\n\
+    \            (set! counts cons letter counts)\n            (cons letter counts)\n\
+    \            (max (cons letter counts))\n            (set! counts cons letter\
+    \ counts)\n            (cons letter counts)\n            (max (cons letter counts))\n\
+    \            (set! counts cons letter counts)\n            (cons letter counts)\n\
+    \            (max (cons letter counts))\n            (set! counts cons letter\
+    \ counts)\n            (cons letter counts)\n            (max (cons letter counts))\n\
+    \            (set! counts cons letter counts)\n            (", "  (let loop ([dict\
+    \ (make-hash (string->list test))\n             letter racket:identity\n     \
+    \        count 0])\n    (if (string? test)\n        (let ((letter (string->char\
+    \ test 0))\n              (count (hash-ref dict letter)))\n          (if (> count\
+    \ 0)\n              (loop (hash-remove dict letter)\n                    (hash-ref\
+    \ dict letter)\n                    count)))\n        dict)))\n", "  (let ((dict\
+    \ (make-hash-table)))\n    (loop for letter in (split test #\\Space)\n       \
+    \   for count = (hash-table-count dict letter)\n          while count\n      \
+    \    do (hash-table-insert dict letter count)\n          finally (return dict))))\n",
+  "  (let ([letters (make-hash (string->list test))])\n    (let ([res (list->hash\
+    \ letters)])\n      (map (\u03BB (k)\n             (set! letters (assoc k letters))\n\
+    \             (incf (ref letters k)))\n           letters)\n      res)))\n</code>\n\
+    <|/ a dscore=1 tags=lisp,scheme |>\n<| a tags=lisp,scheme |>\nAs far as I know,\
+    \ Scheme doesn't have built-in hash tables. So you need some external module to\
+    \ do it. I suggest hashtables written in Scheme.\n<|/ a dscore=0 |>\n<| a |>\n\
+    Here's a Scheme implementation of counting sort:\n<code>", "  (define (helper-hash\
+    \ letter count)\n    (cond\n      [(not (hash? count)) (hash-set! count (hash-new\
+    \ letter count))\n       (hash-set! count (hash-new letter count))]\n      [else\
+    \ (hash-set! count (hash-add (hash-ref count letter) (- count 1))\n        (hash-add!\
+    \ count letter))]\n      [(hash-empty? count) count]\n      [(hash-empty? (hash-ref\
+    \ count letter)) count]\n      [else (helper-hash (cdr letter) (hash-ref count\
+    \ letter))]))\n  (let ((letters (string->list test))\n        (count (hash-new\
+    \ '() 0)))\n    (loop for l in letters until (empty? letters)\n      [(hash-ref\
+    \ count l)\n       (helper-hash l (hash-ref count l))]\n      [(hash-empty? count)\
+    \ count]\n      [(hash-empty? (hash-ref count (car letters)))\n       (hash-empty?\
+    \ count)]\n      [else (helper-hash (car letters) (hash-ref count (car letters))))]))\n\
+    </code>\nA couple of things to note:\n\nThe code uses hash-set! rather than hash-set?\
+    \ because it's much more efficient on large datasets.\nThe code uses hash-new\
+    \ rather than hash-ref because it's more efficient on large datasets.\n\nAs a\
+    \ bonus you can then use the histogram like this:\n<code>", "  (let ((letters\
+    \ (count-letter test #f #t)))\n    (cond\n      [(empty? letters) empty]\n   \
+    \   [(not (member test letters)) (list test 1)]\n      [else (cons (car letters)\
+    \ (+ 1 (cdr letters)))]\n      )))\n", "  (let ([letters (map char test)])\n \
+    \   (cond\n      [(empty? letters) empty]\n      [(cons? letters)\n       (let\
+    \ ([letter (car letters)])\n         (cond\n           [(or (empty? letters) (list?\
+    \ letter)) (dict empty)]\n           [(not (member letter letters)) (dict letter\
+    \ (length letters))]\n           [else (cons (cons letter 1) (histogram (delete\
+    \ letter letters)))]\n         ))]\n      [(not (null? letters)) (histogram(drop\
+    \ letters 1))]\n      [else (error 'histogram \"not list or string\")]))))\n",
+  "  (let ([chars (string-split test #\\Space)])\n    (group-by (car chars) chars\
+    \ (lambda (c chars)\n                       (apply + (map cdr (group-by c chars\
+    \ identity)))))))\n", "  (let* ((letter-count (make-list (hash-map))))\n    (do-all-letters\
+    \ (letter test)\n      (let ((counter (hash-ref letter-count letter)))\n     \
+    \   (when (eq? counter 0)\n          (hash-set letter-count letter 1))\n     \
+    \   (add1 counter)))))\n", "  (let ([letters (string-split test #\\Space)])\n\
+    \    (cond (empty? letters)\n          (empty? letters)\n          (empty? letters)\n\
+    \          (empty? letters)\n          (hash-new empty)\n          ((empty? (hash-ref\
+    \ (hash-ref (hash-new empty) letters) 0) 0) (hash-ref (hash-ref (hash-new empty)\
+    \ letters) 0) (hash-ref (hash-ref (hash-new empty) letters) 0))\n          (else\
+    \ (cond ((char=? (first letters) #\\a) (+ (hash-ref (hash-ref (hash-new empty)\
+    \ letters) #\\a) 1))\n                    ((char=? (first letters) #\\b) (+ (hash-ref\
+    \ (hash-ref (hash-new empty) letters) #\\b) 1))\n                    ((char=?\
+    \ (first letters) #\\c) (+ (hash-ref (hash-ref (hash-new empty) letters) #\\c)\
+    \ 1))\n                    (else (cond ((char=? (first letters) #\\d) (+ (hash-ref\
+    \ (hash-ref (hash-new empty) letters) #\\d) 1))\n                            \
+    \  ((char=? (first letters) #\\e) (+ (hash-ref (hash-ref (hash-new empty) letters)\
+    \ #\\e) 1))\n                              ((char=? (first letters) #\\f) (+ (hash-ref\
+    \ (hash-ref (hash-new empty) letters) #\\f) 1))\n                            \
+    \  ((char=? (first letters) #\\n) (+ (hash-ref (hash-ref (hash-new empty) letters)\
+    \ #\\n) 1))\n                              ((char=? (first letters) #\\o) (+ (hash-ref\
+    \ (hash-ref (hash-new empty) letters) #\\o) 1))\n                            \
+    \  ((char=? (first letters) #\\p) (+ (hash-ref (hash-ref (hash-new empty) letters)\
+    \ #\\p) 1))\n                              ((char=? (first letters) #\\r) (+ (hash-ref\
+    \ (hash-ref (hash-new empty) letters) #\\r) 1))\n                            \
+    \  ((char=? (first letters) #\\s) (+ (hash-ref (hash-ref (hash-new empty) letters)\
+    \ #\\s) 1))\n                              ((char=? (first letters) #\\t) (+ (hash-ref\
+    \ (hash-ref (hash-new empty) letters) #\\t) 1))\n                            \
+    \  ((", "  (map (\u03BB (item) (let ([count (count-of item test)]) (cons (car\
+    \ item) count))) \n       (split-with #(= item \" \") test)))\n", "  (let* ((letters\
+    \ (all-letters test))\n         (frequencies (count-letters letters)))\n    (cond\
+    \ ((= (length frequencies) 0)\n           #{})\n          ((= (length frequencies)\
+    \ (length letters))\n           (cons (first letters)\n                   (second\
+    \ (first frequencies))))\n          ((> (second frequencies) (second letters))\n\
+    \           (cons (first letters)\n                   (second (first frequencies))))\n\
+    \          (else\n           (reduce (fn [acc key values]\n                  \
+    \   (assoc key (first acc) (+ value (second acc))))\n                  frequencies\n\
+    \                  letters)))))\n", "  (let loop ((i 0) (histo (make-hash (make-hash\
+    \ '()))) (res '()))\n    (if (null? test)\n        (cons (hash-ref histo i) (cons\
+    \ i res))\n        (let ((letter (car test)))\n          (loop (+ i 1) (hash-set!\
+    \ histo letter i (+ i (hash-ref histo letter)) histo)\n                (cons letter\
+    \ res))))))\n", "  (define (aux input acc count)\n    (cond\n      [(empty? input)\n\
+    \       (cons count acc)\n       ]\n      [else\n       (aux (cdr input)\n   \
+    \         (cons (car input) count)\n            1)]\n      ))\n  (aux test '()\
+    \ 0))\n", "  (let ([letters (split-string (lower-case test) \" \")])\n    (dict-builder\
+    \ (length letters)\n                   (lambda (k count)\n                   \
+    \  (cond [(= count 0) #{}]\n                           [(or (>= count (caar letters))\
+    \ (> count (caadr letters))) #(cons (car letters) (cdr letters))]\n          \
+    \                 [(= count (caar letters)) (cons (car letters) (cdr letters))])))))\n",
+  "  (let loop ((test test) (dict (make-hash (string->list (string->char test))))\n\
+    \             (counter 0))\n    (if (or (not (list? test)) (not (null? test)))\n\
+    \        (cons counter dict)\n        dict)))\n", "  (if (empty? test)\n     \
+    \ {}\n      (let ((letters (split test \" \"))\n            (most-frequent (hash-table)))\n\
+    \        (for ([letter letters])\n          (let ((count 0))\n            (for\
+    \ ([other-letter letters])\n              (hash-table-ref most-frequent letter\n\
+    \                               (hash-table-ref most-frequent other-letter 0))\n\
+    \              (incf count)\n              (hash-table-ref most-frequent letter\
+    \ count))\n            (hash-table! most-frequent letter count))))))\n", "  (let*\
+    \ (\n        (letters\n          (filter #(equal? (first %) test) \n         \
+    \           (map #(first %) (split-string (first %) \" \"))))\n        (counts\n\
+    \          (map (lambda (letter) (count test letter)) letters)))\n    (if (equal?\
+    \ (car (keys counts)) (car (values (keys counts)))) \n        counts\n       \
+    \ (hash (zip-with car (keys counts) (cdr counts))))))\n", "  (let ([letters \n\
+    \          (split (apply string-trim test) \n                  #\\Space\n    \
+    \              (lambda (s l)\n                    (cond [(equal? s (string-append\
+    \ l s)) (+ 1 (length s))]\n                          [(equal? s (string-append\
+    \ l (first s))) (+ 1 (length s))]\n                          [else 0]))])\n  \
+    \      (freqs (sort (filter number? (map length letters))\n                  \
+    \ #<\n                   lambda (a b)\n                     (> a b)\n        \
+    \             (- (length b) a))])\n    (cond [(empty? freqs) empty]\n        \
+    \  [(> (first freqs) 0) \n           (dict (first freqs) (second freqs))]\n  \
+    \        [else (dict freqs (first freqs))]))\n  (check-expect (histogram \"a b\
+    \ c d e f g h i j k l m n o p q r s t u v w x y z\") \n               {'a': 1,\
+    \ 'b': 1, 'c': 2, 'd': 1, 'e': 1, 'f': 1, 'g': 1, 'h': 1, 'i': 1, 'j': 1, 'k':\
+    \ 1, 'l': 1, 'm': 1, 'n': 1, 'o': 1, 'p': 1, 'q': 1, 'r': 1, 's': 1, 't': 1, 'u':\
+    \ 1, 'v': 1, 'w': 1, 'x': 1, 'y': 1, 'z': 1})\n  (check-expect (histogram \"a\
+    \ b b b a\") {'a': 2, 'b': 2})\n  (check-expect (histogram \"\") {})\n  (check-expect\
+    \ (histogram \"a b c a b\") {'a': 2, 'b': 2})\n  (check-expect (histogram \"b\
+    \ b b b a\") {'b': 4})\n  (check-expect (histogram \"a b c d e f g h i j k l m\
+    \ n o p q r s t u v w x y z\") \n               {'a': 1, 'b': 1, 'c': 2, 'd':\
+    \ 1, 'e': 1, 'f': 1, 'g': 1, 'h': 1, 'i': 1, 'j': 1, 'k': 1, 'l': 1, 'm': 1, 'n':\
+    \ 1, 'o': 1, 'p': 1, 'q': 1, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 1, 'w': 1, 'x':\
+    \ 1, 'y': 1, 'z': 1})\n  (check-expect (histogram \"a b b b a\") {'a': 2, 'b':\
+    \ 2})\n  (check-expect (histogram \"\") {})\n  (check-expect (histogram \"a b\
+    \ c d e f g h i j k l m n o p q r s t u v w x y z\") \n               {'a': 1,\
+    \ 'b': 1, 'c': 2, 'd': 1, 'e': 1, 'f': 1, 'g': 1, 'h': 1, 'i': 1, 'j': 1, 'k':\
+    \ 1, 'l': 1, 'm': 1, 'n': 1, 'o': 1, 'p': 1, 'q': 1, 'r': 1, 's': 1, 't': 1, 'u':\
+    \ 1, 'v': 1, 'w': 1, 'x': 1, 'y': 1, 'z': 1})\n  (check-", "  (cond\n    [(empty?\
+    \ test) empty]\n    [(number? (first test)) (add1 ((second test) (incf (first\
+    \ test))))]\n    [else (cons (first test) \n               (map (lambda (letter)\
+    \ (add1 \n                                    (if (second (assoc letter (second\
+    \ test))\n                                         (second (assoc letter (second\
+    \ test))) 0)))\n                     test)\n               (histogram (rest test)))]))\n",
+  '  (count-char-by-char test #\Space))', "  (cond\n    [(empty? test) empty]\n  \
+    \  [(list? (first test)) (let-values [(letters count) (histogram (rest test))]\
+    \ (cons (cons letter count) letters))]\n    [else (let-values [(letters count)\
+    \ (histogram (rest test))] (cons test count))]))\n</code>\n<|/ a dscore=1 tags=scheme\
+    \ |>\n<| c |>\nThank you! This is very helpful and it got me started on figuring\
+    \ this out.\n<|/ c |>\n<| c |>\nIn a first pass I thought you were supposed to\
+    \ return the letter (as a string) with the largest count and count as a number.\
+    \ In the second pass I thought you were supposed to return a number that contains\
+    \ the count of the letter (as a string) that has the largest count.\n<|/ c |>\n\
+    <| c |>\nYes, this was an assignment and the second pass was supposed to be returning\
+    \ a number that contained the count of the letter. Thanks for you help!\n<|/ c\
+    \ |>\n<| a |>\nYou could use the function count-letters which counts the number\
+    \ of occurrences of the character in a string. Then you could use that to return\
+    \ the letter with the maximum number of occurrences using the procedure max. The\
+    \ implementation could look like this:\n<code>", "  (map (\u03BB (x)\n       \
+    \  (let ((letter (list-ref test 0)))\n           (cond\n             ((empty?\
+    \ x) (list letter 1))\n             (else (cons (first x) (+ (cdr letter) 1)))))))\n\
+    \      (count-letters test)))\n", "  (let* ((count-table (hash-table (cons (car\
+    \ test) 0) (lambda (c) (+ (hash-ref count-table c) 1))))\n         (max (flet\
+    \ ((max-key (key table)\n                        (cond (< key (hash-ref table\
+    \ (hash-ref table key)))\n                              (hash-ref table key)\n\
+    \                              (> (hash-ref table key) (hash-ref table (hash-ref\
+    \ table key))))))\n              (map (lambda (k v)\n                     (cons\
+    \ k (max-key k v)))\n                  (hash-keys count-table))\n         ))\n\
+    \    (when (null? max)\n      (hash-table {}))\n    (hash-set! count-table max\n\
+    \               (fmap (lambda (c) (car c))\n                      (sort (hash-keys\
+    \ count-table) <)))\n    ))\n", "  (reduce (lambda (dict letter) (if (char=? letter\
+    \ dict) dict (hash-update dict letter 1)))\n          (hash-empty)\n         \
+    \ test))\n", "  (if (string-empty? test)\n      '()\n      (let ([letters (string-split\
+    \ test #\\Space 1)]\n            [letter-occurrences (count-occurrences letters)])\n\
+    \        (map (\u03BB ([letter count])\n              (list letter count))\n \
+    \            (max-by-key #'car\n                       letter-occurrences\n  \
+    \                     (\u03BB ([letter count])\n                          count))))))\n",
+  "  (let loop ([letters (split-string (substring test 0 1))]\n             [counts\
+    \ '()]\n             [max '()])\n    (cond\n      [(empty? letters)\n       (reverse\
+    \ counts)]\n      [(member (car letters) counts)\n       (loop (cdr letters)\n\
+    \             (cons (car counts) counts)\n             (if (< (cdr counts) (caar\
+    \ max))\n                 max\n                 counts))]\n      [else\n     \
+    \  (loop (cdr letters)\n             (cons (car letters) counts)\n           \
+    \  (if (< (caar counts) (car max))\n                 max\n                 counts))]))))\n",
+  "  (letrec ([max-count (or (empty-dict) (in-dict empty-dict))\n             in-dict\
+    \ (dict-set!)]\n           [chars (string->list (string->symbol test \" \" \"\"\
+    ))])\n    (loop [i 0]\n      (if (empty-list chars)\n          max-count\n   \
+    \       (begin\n            (set! in-dict (char->list (car chars))\n         \
+    \            (+ (cdr in-dict) 1)\n                     (dict-set! max-count (car\
+    \ chars)\n                                 (max (+ (car max-count) 1) (cdr max-count)))\n\
+    \                     (set! i (+ i 1))\n                     (loop (+ i 1)))))\n\
+    \    in-dict))\n", "  (define (helper test count)\n    (cond\n      [(empty? test)\
+    \ ]\n      [(equal? (first test) test) (cons (first test) count)]\n      [(char?\
+    \ (first test))\n       (helper (rest test) (add1 (second count)))]\n      [(not\
+    \ (char? (first test)))\n       (helper (rest test) (add1 (second count)))]\n\
+    \      [else (helper (rest test) (add1 (second count)))]\n    ))\n  (helper test\
+    \ 0))\n</code>\n<|/ a |>\n<| c |>\nWhat does `count` represent in the `histogram`\
+    \ function?\n<|/ c |>\n<| c |>\n`count` represents the number of times the letter\
+    \ `test` has been seen so far, and is used to keep track of the letter that occurred\
+    \ the most. `helper` calls itself recursively to process the rest of the list.\n\
+    <|/ c |>\n<| c |>\nThe `add1` function is really useful, but in this case it is\
+    \ not needed. The `count` argument is used to keep the counts distinct for each\
+    \ letter.\n<|/ c |>\n<| c |>\nYes, I added it because I wanted to leave the solution\
+    \ out there as much as possible. Feel free to remove it if you want :)\n<|/ c\
+    \ |>\n<| a dscore=2 |>\n<code>", "  (let loop ((test-str (string-map #\\Space\
+    \ test))\n             (max-count 1)\n             (max-letters (list #\\Space)))\n\
+    \    (if (empty? test-str)\n        (hash max-letters max-count)\n        (let\
+    \ ((letter (car test-str))\n              (count (+ 1 (cdr test-str))))\n    \
+    \      (if (> (hash letter count) max-count)\n              (loop (cdr test-str)\n\
+    \                    (if (> count max-count)\n                        (hash letter\
+    \ count)\n                        (loop (cdr test-str))))\n              (loop\
+    \ (cdr test-str)\n                    (if (< count max-count)\n              \
+    \          (hash letter count)\n                        (reverse max-letters)))))))\n\
+    </code>\n<|/ a dscore=4 |>\n<| c |>\nThis is a beautiful solution using only standard\
+    \ libraries, thank you for the answer.\n<|/ c |>\n<| a dscore=4 |>\n<code>", " \
+    \ (apply merge-with (lambda (a b) (if (string=? b a) a b) (list->hash (string->list\
+    \ (string-split test #\\Space #\\Whitespace)))))\n)\n", "  (let ([letters (string-split\
+    \ (string test) \" \")])\n    (let ([max-count (max 0 (map length letters))])\n\
+    \      (cons (filter-map (lambda (x)\n                         (let ([count (length\
+    \ x)])\n                           (when (> count max-count)\n               \
+    \              (set! max-count count)\n                             (list (car\
+    \ x) count)))\n                       letters)\n            (map (lambda (x)\n\
+    \                   (filter (lambda (y)\n                            (equal? x\
+    \ (car y)))\n                        (map (lambda (y)\n                      \
+    \         (cdr y))\n                               letters))\n               \
+    \   max-count))))))\n", "  (let ([counts (make-hash (\u03BB (x) (* (hash-ref counts\
+    \ x) 1))\n                              (\u03BB (x) (hash-set counts x 1))))]\n\
+    \    (string-split-map test\n                     (\u03BB (x)\n              \
+    \           (\u03BB (y) (incf (hash-ref counts y)))\n                        \
+    \ (\u03BB (y) (incf (hash-ref counts y)))\n                         (\u03BB (y)\
+    \ (incf (hash-ref counts y)))\n                         (\u03BB (y) (incf (hash-ref\
+    \ counts y)))\n                         (\u03BB (y) (incf (hash-ref counts y)))\n\
+    \                         (\u03BB (y) (incf (hash-ref counts y)))\n          \
+    \               (\u03BB (y) (incf (hash-ref counts y)))\n                    \
+    \     (\u03BB (y) (incf (hash-ref counts y)))\n                         (\u03BB\
+    \ (y) (incf (hash-ref counts y)))\n                         (\u03BB (y) (incf\
+    \ (hash-ref counts y)))\n                         (\u03BB (y) (incf (hash-ref\
+    \ counts y)))\n                         (\u03BB (y) (incf (hash-ref counts y)))\n\
+    \                         (\u03BB (y) (incf (hash-ref counts y)))\n          \
+    \               (\u03BB (y) (incf (hash-ref counts y)))\n                    \
+    \     (\u03BB (y) (incf (hash-ref counts y)))\n                         (\u03BB\
+    \ (y) (incf (hash-ref counts y)))\n                         (\u03BB (y) (incf\
+    \ (hash-ref counts y)))\n                         (\u03BB (y) (incf (hash-ref\
+    \ counts y)))\n                         (\u03BB (y) (incf (hash-ref counts y)))\n\
+    \                         (\u03BB (y) (incf (hash-ref counts y)))\n          \
+    \               (\u03BB (y) (incf (hash-ref counts y)))\n                    \
+    \     (\u03BB (y) (incf (hash-ref counts y)))\n                         (\u03BB\
+    \ (y) (incf (hash-ref counts y)))\n                         (\u03BB (y) (incf\
+    \ (hash-ref counts y)))\n                         (\u03BB (y) (incf (hash-ref\
+    \ counts y)))\n                         (\u03BB (y) (incf (hash", "  (let* ((letters\
+    \ (string->list test))\n         (counts (map (lambda (x) (count-letter x letters))\
+    \ letters)))\n    (if (null? letters)\n        (hash ())\n        (hash (cons\
+    \ (car letters) counts)))))\n", "  (if (empty? test)\n      {}\n      (let [letters\
+    \ (split-string (substring test 0 1))\n            counts (count-letters letters)]\n\
+    \        (let [most-occurring (max-count counts)]\n          (cond [(< most-occurring\
+    \ most-occurring)\n                 (update-histograms most-occurred letters counts)]\n\
+    \                [else (update-histograms most-occurred letters counts)])))))\n",
+  "  (let loop ((letters test) (count 0))\n    (cond ((null? letters)\n          \
+    \ (hash-set! count (hash-ref count (first letters))))\n          ((string-equal?\
+    \ #\\space (first letters))\n           (loop (rest letters) (+ 1 (hash-ref count\
+    \ (first letters)))))\n          ((string=? (first letters) #\\newline)\n    \
+    \       (loop (rest letters) count))\n          ((string=? (first letters) #\\\
+    space)\n           (loop (rest letters) (+ count 1)))\n          ((string=? (first\
+    \ letters) #\\newline)\n           (loop (rest letters) count)))\n    (cond (<0\
+    \ (hash-ref count (first letters))\n           (loop (rest letters) count))\n\
+    \          ((> (hash-ref count (first letters)) count)\n           (loop (rest\
+    \ letters) count)))))\n", "  (let ([letters (remove-if #(equal? (car %) 'a) (string-split\
+    \ test #\\Space #\\Newline))]\n         counts (count-occurrences letters))\n\
+    \    (if (equal? (car counts) #f)\n        {#{}}\n        (map (lambda ([letter\
+    \ count]) (cons letter count))\n             (sort (apply + counts)\n        \
+    \            (lambda (a b) (< (number->string (length a)) (number->string (length\
+    \ b))))))))\n", "  (let ((counts '()))\n    (define (count-letters letters)\n\
+    \      (if (null? letters)\n          counts\n          (if (> (count (car letters))\
+    \ (car counts))\n              (set! counts counts\n                    (cons\
+    \ (car letters) (cons (car counts) (cdr counts))))\n              (set! counts\
+    \ counts\n                    (cons (car letters) (cons (count (car letters))\
+    \ (cdr counts))))))\n    (map count-letters (split test #\\Space)))\n</code>\n\
+    <|/ a dscore=1 |>\n<| c |>\nThanks for your answer but I'm still looking for a\
+    \ simpler solution. I've also added the solution I found.\n<|/ c |>\n<| a dscore=1\
+    \ |>\nYou could use an association list to keep count of letters. This works for\
+    \ lowercase letters, not tested for upper case letters. \n<code>", "  (define\
+    \ counts '())\n  (define last-char (first test))\n  (let loop ((counts counts)\n\
+    \             (last-char last-char))\n    (if (null? test)\n        (reverse counts)\n\
+    \        (let ((char (first test)))\n          (if (equal? (hash-ref counts char)\
+    \ (hash-ref counts last-char))\n              (loop (hash-set counts char 1)\n\
+    \                    char)\n              (if (null? (rest (cdr test)))\n    \
+    \              (loop (hash-set counts char 1)\n                        last-char)\n\
+    \                  (loop (hash-set counts (car test) (car counts)) (caar test)))))))\n\
+    </code>\n<|/ a tags=string,common-lisp,lisp |>\n<| a dscore=1 |>\n<code>", " \
+    \ (let* ([letters (string->list (string-trim test \" \"))])\n    (cond\n     \
+    \ [(null? letters) (hash-new ())]\n      [(hash-empty? (hash-new ())) (hash-new\
+    \ ())]\n      [else (let* ([letter (first letters)]\n                   [count\
+    \ (hash-ref (hash-ref (hash-new ()) letter) 0)])\n               (cond\n     \
+    \          [(equal? letter #\\a) (hash-update (hash-ref (hash-new ()) letter)\
+    \ 1 count)]\n               [(equal? letter #\\b) (hash-update (hash-ref (hash-new\
+    \ ()) letter) 1 (+ count 1))]\n               [(equal? letter #\\c) (hash-update\
+    \ (hash-ref (hash-new ()) letter) 1 (+ count 1))]\n               [else (hash-update\
+    \ (hash-ref (hash-new ()) letter) 1 (+ count 1))]))]))))\n", "  (let ((count 0))\n\
+    \    (cond\n      [(empty? test)\n       (make-hash (make-array string :initial-element\
+    \ empty))]\n      [else\n       (let ((next (first test))\n             (test\
+    \ (rest test)))\n         (cond\n           [(string-equal? next \"\")\n     \
+    \       (make-hash (make-array string :initial-element empty))]\n           [else\n\
+    \            (let* ((count-next (+ (count-hash (get count next)) 1))\n       \
+    \           (next-next (first next))\n                  (test-next (rest next)))\n\
+    \              (cond\n                [(string-equal? test-next \"\")\n      \
+    \           (make-hash (make-array string :initial-element empty))\n         \
+    \        ]\n                [else\n                 (let* ((count-next-next (+\
+    \ (count-hash (get count next-next)) 1))\n                        (next-next (first\
+    \ next-next))\n                        (test-next (rest next-next)))\n       \
+    \            (cond\n                     [(equal? test-next \"\")\n          \
+    \             (make-hash (make-array string :initial-element empty))]\n      \
+    \               [else\n                      (let ((new-count (+ count-next 1)))\n\
+    \                        (cond\n                          [(equal? next next-next)\n\
+    \                           (set! count (+ count new-count))\n               \
+    \            (make-hash (make-array string :initial-element (cons next-next count-next-next)))]\n\
+    \                          [else\n                           (set! count new-count)\n\
+    \                           (make-hash (make-array string :initial-element empty))\n\
+    \                           ]))]))]))]))))\n", "  (let ([letters (string->list\
+    \ test)])\n    (group-by (lambda (letter)\n              (string-length letter))\n\
+    \              letters)))\n", "  (let ((letters '()))\n    (loop\n       (for\
+    \ letter (string-split (string test) #\\Space )\n         (cond ((empty? letters)\
+    \ (hash letter (list 1)))\n               ((empty? (lookup letter letters)) (replace\
+    \ letter letters (list 1 1)))\n               (else (hash (first letters) (append\
+    \ (replace (rest letters) (list 1) (list letter) (first (rest letters)))))) )\n\
+    \       (set! letters (rest letters))\n       (if (empty? letters) '() (recurse\
+    \ letters)))))\n</code>\nI did not include a solution for case-insensitive strings,\
+    \ because I'm not sure it's possible to do that in Racket; you could consider\
+    \ a solution that uses casefold-string on both the keys and values.\n<|/ a tags=scheme\
+    \ dscore=1 |>\n<| c |>\nThanks alot for you help and effort. I found an example\
+    \ online that shows how this could work from another question: http://www.cs.princeton.edu/~rs/domains/functional/string-histogram/\n\
+    <|/ c |>\n<| a |>\nOk, here I got it :)\n<code>\n#lang racket\n", "  (let ([count\
+    \ (length test)])\n    (hash-map (\u03BB (letter)\n               (when (not (member\
+    \ letter test))\n                 (hash-set letter count)))\n               (sort\
+    \ (\u03BB (a b) (= (length a) (length b)))\n                     (map car (sort\
+    \ (\u03BB (a b) (hash-ref a letter) > (hash-ref b letter)))\n                \
+    \          test)))))\n", "  (let ([letters (racket/string->list (racket/string-split\
+    \ test #\\Space))]\n        [freqs '()\n         counts '()\n         (let ([current\
+    \ (first letters)]\n               [letters-seen (list)])\n           (if (null?\
+    \ current)\n               freqs\n               (let ([letter (first current)])\n\
+    \                 (if (list? (cdr letters-seen))\n                     (append\
+    \ letters-seen (list letter))\n                     (list (list letter 1))))\n\
+    \               (let ([new-letters (cons (first current) letters-seen)])\n   \
+    \              (if (not (list? (cdr new-letters)))\n                     new-letters\n\
+    \                     (let ([new-letter (first new-letters)])\n              \
+    \         (if (not (member new-letter letters-seen))\n                       \
+    \    (cons (list new-letter 1)\n                                 (cons letters-seen\
+    \ new-letters))\n                           (cons (list new-letter (cdr new-letters))\n\
+    \                                 (cons letters-seen (cdr new-letters)))))))\n\
+    \             (cons (first current)\n                  (append freqs (list current)\n\
+    \                          counts (list 1)))]))\n    (if (empty? letters)\n  \
+    \      freqs\n        (let ([freq (apply max (map second letters))\n         \
+    \      max (apply max (map second counts))\n               letter (apply min (map\
+    \ first letters))\n               first (apply min (map first counts))]\n    \
+    \          (cons (list letter freq)\n                    (append letters (list\
+    \ (list letter freq)))\n                    (append freqs (list (list letter freq)))))\n\
+    \        (cons freqs '())))\n</code>\n<|/ a dscore=4 |>\n<| c |>\nThanks for your\
+    \ answer, but it was rejected for being too complicated for me. My apologies for\
+    \ that. I am a beginner when it comes to racket, but I have been able to learn\
+    \ quite a bit from your answer. I will see if I can learn something from it next\
+    \ time.\n<|/ c |>\n<| c |>\nI have added a simpler version of your solution that\
+    \ I just tested and it seems to work as well.\n<|/ c |>\n<| a |>\nMy solution\
+    \ to this problem is very similar to Liz's solution, but it uses the more \"functional\"\
+    \ way of thinking.\n<code>", "  (let ([letters (a-string-to-long test)])\n   \
+    \ (if (or (char-blank? letters)\n            (char= test \"\"))\n        (hash-table?\
+    \ letters)\n      (let ([most-occurred (hash-table-count (hash-table-sort letters\
+    \ count))]\n            (result (hash-table-empty)))\n        (for-each (lambda\
+    \ (letter)\n                    (let ([count (hash-table-count (hash-table-find\
+    \ letters letter))])\n                      (when (> count most-occurred)\n  \
+    \                      (set! most-occurred count)\n                        (set!\
+    \ result (hash-table-cons letter count))))\n                  letters)\n     \
+    \     result))))\n", "  (let loop ((current-key '()) (current-value 0))\n    (if\
+    \ (empty? test)\n      (hash current-key current-value)\n      (let ((key (car\
+    \ test)) (values (cdr test)))\n        (if (> (length key) 0)\n          (loop\
+    \ (cons (car key) current-key) (+ current-value (car values)))\n          (loop\
+    \ (cons (car key) current-key) current-value)))\n    (loop '() 0)))\n", "  (cond\n\
+    \    [(empty? test) empty]\n    [(equal? (car test) (car (cdr test))) (cons (car\
+    \ test) (histo (cdr test)))]\n    [else (histogram (cdr test))]))\n", "  (let\
+    \ loop ([letters test\n               count-table (make-hash-table (list->hash\
+    \ letters))])\n    (cond [(empty? letters) (hash-table count-table)]\n       \
+    \   [(equal? (first letters) (first count-table)) (let ([entry (hash-value count-table\
+    \ (first letters))])\n                                                       \
+    \               (hash-set count-table (first letters) (+ count entry))\n     \
+    \                                                                 (loop (rest\
+    \ letters) (hash-set count-table (first letters) (+ count entry))))]\n       \
+    \   [else (let ([entry (hash-ref count-table (first letters))])\n            \
+    \        (hash-set count-table (first letters) (+ count entry))\n            \
+    \        (loop (rest letters) (hash-set count-table (first letters) (+ count entry))))])))\n\
+    </code>\n<|/ a dscore=1 |>\n<| c |>\nThank you for the suggestions! Unfortunately,\
+    \ I didn't manage to make it work with the `#lang racket` environment yet. Could\
+    \ you be so kind and give a working example? Thanks again!\n<|/ c |>\n<| a dscore=0\
+    \ |>\nI guess you might find it useful to have a recursive solution:\n<code>",
+  "  (let loop ([chars null]\n             [letters {}])\n    (cond\n      [(or (char?\
+    \ test)\n           (null? test))\n       (reverse letters)]\n      [(empty? test)\n\
+    \       (reverse letters)]\n      [(char? (car test))\n       (loop (cdr test)\
+    \ (car letters)\n             (cons (car test) letters))]\n      [else\n     \
+    \  (loop (cdr test)\n             (cons (car test) letters)\n             letters)]))))\n\
+    </code>\n<|/ a tags=scheme,racket,lisp,racket-student-languages dscore=0 |>\n\
+    <| a tags=scheme,racket,lisp,racket-student-languages |>\n<code>", "  (define\
+    \ (count-by-letter l)\n    (count-if count-if l))\n  (count-by-letter test))\n",
+  "  (cond ((null? test)\n         #{}) \n        ((string=? (first test) ' ')\n \
+    \        (histogram-space (drop 1 (first test)))\n         (histogram (rest test)))\n\
+    \        (else\n         (let ((chars (split-string (first test) ' ')))\n    \
+    \       (if (string=? (first chars) '')\n               (histogram-space (drop\
+    \ 1 (first chars)))\n               (histogram-char (first chars)\n          \
+    \                      (rest chars)\n                                #{})))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

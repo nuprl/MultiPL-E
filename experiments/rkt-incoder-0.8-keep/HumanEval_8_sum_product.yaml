@@ -9,7 +9,1146 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate s
   \ (list 1 1 1)) (list 3 1))\n    (check-equal? (candidate (list 100 0)) (list 100\
   \ 0))\n    (check-equal? (candidate (list 3 5 7)) (list 15 105))\n    (check-equal?\
   \ (candidate (list 10)) (list 10 10))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (let ((sum (first numbers))\n        (product (second numbers)))\n\
+    \    (cond\n      [(empty? numbers)\n       (list 0 1)\n       ]\n      [(equal?\
+    \ (first numbers) 0)\n       (list 0 0)\n       ]\n      [else\n       (let ((s\
+    \ (sum_product (subseq numbers (+ 1 s))))\n             (p (product (subseq numbers\
+    \ (+ 1 p))))\n             (new_sum (+ sum s)\n                     new_product\
+    \ (* product p)\n                     )\n             )\n         (cond\n    \
+    \       [(empty? s) (list new_sum new_product)]\n           [else (list new_sum\
+    \ (* new_product (first s)))]\n           )\n         ]\n       )\n      ]\n \
+    \     )\n    )\n  )\n</code>\n<|/ a dscore=3 |>\n<| c |>\nFor those who can't\
+    \ read the language spec: what happens if `numbers` is `[]`?\n<|/ c |>\n<| c |>\n\
+    If numbers is empty then the first part of the conditional expression is true,\
+    \ but the first expression in the consequent is evaluated, so new_sum and new_product\
+    \ are set to 0 and 1.\n<|/ c |>\n<| c |>\nThis is nice and all, but it's still\
+    \ a lot more verbose than a simple recursive function like mine would be.  It\
+    \ also has more \"side effects\" as you mentioned.  It would be interesting to\
+    \ compare the performance of mine and the recursive solutions, possibly using\
+    \ a different algorithm.  Also, your recursive solution appears to be O(log n)\
+    \ whereas mine is O(n) so I'm not sure if that matters here.  I think the recursive\
+    \ solution is more readable though.\n<|/ c |>\n<| c |>\nIf n is large enough,\
+    \ your function will crash.\n<|/ c |>\n<| c |>\nI haven't considered that; it\
+    \ depends on the size of the input list.  If the list is extremely long (say,\
+    \ >100,000 elements), then my solution will crash, while this one would continue\
+    \ to work just fine.  That doesn't seem like a big problem in this case, but it's\
+    \ something to consider if it becomes one.\n<|/ c |>\n<| a dscore=2 tags=racket,scheme\
+    \ |>\nHere's a solution that uses a local accumulator variable.\n<code>", "  (let*\
+    \ ((accum 0)\n         (product 1)\n         (sum 0))\n    (if (null? numbers)\n\
+    \        (list sum product)\n        (let ((num (car numbers))\n             \
+    \ (new-accum accum)\n              (new-product product))\n          (set! accum\
+    \ (+ accum num))\n          (set! product (* product num))\n          (set! sum\
+    \ (+ sum num))\n          (cons (list sum (* product accum)) (sum_product (cdr\
+    \ numbers)))))))\n", "  (if (empty? numbers)\n      (cons (car numbers) (* 1 (car\
+    \ numbers)))\n      (let ((sum (car numbers)) (product (* 1 (car numbers))))\n\
+    \        (sum_product (rest numbers)\n                    (+ sum (* product (car\
+    \ numbers)))\n                    (* product (car numbers))))))\n", "  (let ((sum\
+    \ (car numbers))\n        (product 1))\n    (if (null? numbers)\n        (list\
+    \ sum product)\n        (let ((next-number (cdr numbers)))\n          (set! sum\
+    \ (+ sum next-number))\n          (set! product (* product next-number))\n   \
+    \       (sum_product next-number)))))\n", "  (cond (empty? numbers) (cond ((=\
+    \ 0 (first numbers)) (second numbers))\n                              (else (cons\
+    \ (first numbers) (sum_product (rest numbers)))))))\n", "  (cond\n    ((null?\
+    \ numbers) (error \"The first parameter must be a non-empty list of integers.\"\
+    ))\n    ((= (length numbers) 1) (cons (car numbers) (cons 1 (car numbers)))) ;;\
+    \ (+ 1 1)\n    ((null? (cdr numbers)) (cons (car numbers) (cons 0 (car numbers))))\
+    \ ;; (* 1 0)\n    (else (let ((product-accumulator (car numbers)))\n         \
+    \    (let ((sum-accumulator (+ product-accumulator 1)))\n               (cond\n\
+    \                ((null? (cdr numbers)) ;; (+ 1 0)\n                 (cons (car\
+    \ numbers) (cons sum-accumulator product-accumulator)))) ;; (+ 1 0)\n        \
+    \       (else (let ((next-number (cdr numbers))\n                           (new-sum-accumulator\
+    \ (+ sum-accumulator 1))\n                           (new-product-accumulator\
+    \ (* product-accumulator next-number)))\n                        (cond\n     \
+    \                     ((null? next-number) ;; (* 1 0)\n                      \
+    \     (cons (car numbers) (cons new-sum-accumulator new-product-accumulator))))\
+    \ ;; (* 1 0)\n                        (else (sum_product next-number)))))))) ;;\
+    \ (+ 1 0)", "  (define (accumulator acc x)\n    (if (= x 0)\n        (cons acc\
+    \ 0)\n        (accumulator acc (- x 1))))\n  (accumulator 0 numbers))\n", "  (if\
+    \ (empty? numbers)\n      ;; Return empty sum and empty product.\n      (list\
+    \ 0 1)\n      ;; Add first number to first sum\n      (let ([sum (+ sum (first\
+    \ numbers))])\n        ;; Add next numbers to sum\n        (rest_loop (rest numbers)\n\
+    \                    sum\n                    (lambda ([number sum] [(* number\
+    \ sum)])\n                      ;; If there are no more numbers, return sum and\
+    \ product\n                      (list (* sum product) (+ sum (first numbers)))))))",
+  "  (let* ((sum (+ 0 (apply + numbers))) \n         (prod (if (null? numbers) 1 \n\
+    \                   (apply * (car numbers)))))\n    (list sum prod)))\n", "  (let*\
+    \ ([sum (+ 0 (car numbers))\n         product (* 1 (cdr numbers))]\n         ([result-1\
+    \ sum] (cons sum nil))\n         ([result-2 product] (cons product nil)))\n  \
+    \  (cond\n      [(or (= sum 0) (= product 1)) result-1 ]\n      [else result-2])))\n",
+  "  (define (helper-sum numbers sum)\n    (cond\n      [(empty? numbers) (cons sum\
+    \ (cons 0 (empty? sum)))]\n      [else (helper-sum (rest numbers) (+ sum . . .\
+    \ ))]))\n  (define (helper-product numbers product)\n    (cond\n      [(empty?\
+    \ numbers) (cons product (cons 1 (empty? product)))]\n      [else (helper-product\
+    \ (rest numbers) (* product . . . ))]))\n  (helper-sum numbers (first numbers))\
+    \ ; Sum the numbers\n  (helper-product numbers (first numbers)) ; multiply them\n\
+    \  (helper-sum (rest numbers) (second numbers)) ; sum the rest numbers\n  (helper-product\
+    \ (rest numbers) (second numbers)) ; multiply them again\n)\n", "  (if (null?\
+    \ numbers)\n      (values (make-vector 0 0)\n              1)\n      (let ([sum\
+    \ (first numbers)\n             product (* sum 1)])\n        (vector-set! numbers\
+    \ sum)\n        (vector-set! numbers product)\n        (sum_product (rest numbers)))))\n",
+  "  (let* ((sum (fold + (map identity numbers)) 0)\n         (product (fold * 1 (map\
+    \ identity numbers)))) \n    (list sum product)))\n", "  (if (null? (cdr numbers))\n\
+    \      (list (+ 0 (car numbers)))\n      (let ((sum (+ 0 (car numbers))))\n  \
+    \      (let ((product 1))\n          (map (lambda (x) (* x product)) (cdr numbers)\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))\n            (lambda (y) (+ y product))\n\
+    \            (lambda (y) (+ y sum))", "  (if (null? numbers)\n      (list 0 1)\n\
+    \      ((car (sum numbers)) (mul (car (sum numbers)) (length (cdr numbers)))))))\n",
+  "  (let ((sum 0)\n        (product 1))\n    (for ([i numbers]\n          (if (empty?\
+    \ i)\n              (list sum product)\n              (let ((sum1 (add1 sum))\n\
+    \                    (product1 (mul1 product)))\n                (if (empty? i)\n\
+    \                    (list sum1 product1)\n                    (let ((sum2 (add1\
+    \ sum1))\n                          (product2 (mul1 product1)))\n            \
+    \          (if (empty? i)\n                          (list sum2 product2)\n  \
+    \                        (let ((sum3 (add1 sum2))\n                          \
+    \      (product3 (mul1 product2)))\n                            (if (empty? i)\n\
+    \                                (list sum3 product3)\n                      \
+    \          (let ((sum4 (add1 sum3))\n                                      (product4\
+    \ (mul1 product3)))\n                                  (if (empty? i)\n      \
+    \                                (list sum4 product4)\n                      \
+    \                (let ((sum5 (add1 sum4))\n                                  \
+    \          (product5 (mul1 product4)))\n                                     \
+    \ (if (empty? i)\n                                          (list sum5 product5)\n\
+    \                                          (let ((sum6 (add1 sum5))\n        \
+    \                                        (product6 (mul1 product5)))\n       \
+    \                                 (if (empty? i)\n                           \
+    \                 (list sum6 product6)\n                                     \
+    \       (let ((sum7 (add1 sum6))\n                                           \
+    \       (product7 (mul1 product6)))\n                                        \
+    \  (if (empty? i)\n                                              (list sum7 product7)\n\
+    \                                              (let ((sum8 (add1 sum7))\n    \
+    \                                                (product8 (mul1 product7)))\n\
+    \                                            (if (empty? i)\n                \
+    \                                (list sum8 product8)\n                      \
+    \                          (let ((sum9 (add1 sum8))\n                        \
+    \                              (product9 (mul1 product8)))\n                 \
+    \                             (if (empty? i)\n                               \
+    \                   (list sum9 product9)\n                                   \
+    \               (let ((sum10 (add1 sum9))\n                                  \
+    \                      (product10 (mul1 product9)))\n                        \
+    \                        (if (empty? i)\n                                    \
+    \                (list sum10 product10)\n                                    \
+    \                (let ((sum11 (add1 sum10))\n                                \
+    \                          (product11 (mul1 product10)))\n                   \
+    \                               (if (empty? i)\n                             \
+    \                         (list sum11 product11)\n                           \
+    \                           (let ((sum12 (add1 sum11))\n                     \
+    \                                       (product12 (mul1 product11)))\n      \
+    \                                              (if (empty? i)\n              \
+    \                                          (list sum12 product12)\n          \
+    \                                              (let ((sum13 (add1 sum12))\n  \
+    \                                                            (product13 (mul1\
+    \ product12)))\n                                                      (if (empty?\
+    \ i)\n                                                          (list sum13 product13)",
+  "  (let ((sum 0)\n        (product 1))\n    (for-each add-to-sum numbers (lambda\
+    \ (n)\n                                 (set! sum (add1 sum))\n              \
+    \                   (set! product (mul1 product)))\n                (lambda (result\
+    \ n)\n                  (set! sum (add1 sum))\n                  (set! product\
+    \ (mul1 product))\n                  (cons result (cons n sum)))))\n  (cons 0\
+    \ product)))", "  (cond\n    [(empty? numbers) (list 0 (product numbers))]\n \
+    \   [else (sum (cons (first numbers) (sum_product (rest numbers))))\n        \
+    \  (product (cons (first numbers) (sum_product (rest numbers))))]))\n", "  (cond\n\
+    \    [(empty? numbers) (cons 0 1)]\n    [else (+ (car numbers) (sum_product (rest\
+    \ numbers)))]))\n", "  (let ((sum (first numbers))\n        (product 1))\n   \
+    \ (if (null? numbers)\n        (list sum product)\n        (sum_product (cons\
+    \ (+ sum product) (first numbers))\n                    (* product (rest numbers))))))\n\
+    </cell>\n<cell>\n#lang racket\n", "  (define (helper numbers sum)\n    (cond\n\
+    \      [(null? numbers) (list sum (* sum sum))]\n      [(number? (car numbers))\
+    \ (helper numbers (+ sum (car numbers)))]\n      [else (helper (cdr numbers) (+\
+    \ sum (car numbers)))]))\n  (helper numbers 0))\n", "  (cond [(null? numbers)\
+    \ (list 0 1)]\n        [(number? (car numbers)) (list 1 (* (car numbers) (sum_product\
+    \ (cdr numbers))))]\n        [else (list (* (sum_product (car numbers)) (sum_product\
+    \ (cdr numbers))) (car numbers))]))", "  (cond\n    [(empty? numbers) (cons 0\
+    \ (list 1))]\n    [else\n     (let ((sum (car numbers))\n           (product 1))\n\
+    \       (cond\n         [(empty? (cdr numbers)) '(sum product)]\n         [(equal?\
+    \ sum 0) '(sum product)]\n         [else (cons (+ (car numbers) sum)\n       \
+    \              (product (* product (cdr numbers))))]\n         )])]))\n", "  (if\
+    \ (null? numbers)\n      (list 0 (* 1 1))\n      (cons (+ (car numbers) (sum_product\
+    \ (rest numbers)))\n            (sum_product (cdr numbers)))))\n", "  (cond\n\
+    \    [(empty? numbers) (cons 0 (cons 1 0))]\n    [else (sum (map car numbers))\
+    \ (product (map cdr numbers))]))\n", "  (let* ((sum (+ sum numbers))\n       \
+    \  (prod (* numbers (length numbers))))\n    (cond\n      [(empty? numbers)\n\
+    \       (list sum prod)]\n      [else\n       (list sum prod)])))\n</cell>\n<text>\n\
+    Now let's try the function on our test cases.\n\n\n</text>\n<cell>", "  (let ((sum\
+    \ (+ 0 (length numbers))))\n    (let loop ((index 0) (product 1))\n      (if (null?\
+    \ numbers)\n          (list sum product)\n          (let ((number (first numbers)))\n\
+    \            (set! sum (+ sum index))\n            (set! product (* product number))\n\
+    \            (loop (+ index 1) (* product number)))))))\n", "  (let ((sum (car\
+    \ numbers))\n        (product (cadr numbers)))\n    (if (null? numbers)\n    \
+    \    (list sum product)\n        (let ((n (cdr numbers)))\n          (cond ((null?\
+    \ n)\n                 (list sum product))\n                ((odd? n)\n      \
+    \           (list sum (* sum product)))\n                (else\n             \
+    \    (list sum (* sum product) (* n product))\n                 (sum_product (cdr\
+    \ numbers))))))))\n</code>\n<|/ a dscore=1 |>\n<| c |>\nThank you, your code is\
+    \ working properly but it's too long for me, and I'm struggling to understand\
+    \ it, could you please explain me what exactly does this part do?", "  (let ([sum\
+    \ 0]\n        [product 1])\n    (cond\n      [(empty? numbers) (list sum product)]\n\
+    \      [else (let ([current (car numbers)])\n               (list (+ sum (current))\n\
+    \                       (* product (current)))\n               (sum_product (rest\
+    \ numbers))]))]))\n", "  (let loop ((sum (car numbers)) (product (car numbers)))\n\
+    \    (if (null? (cdr numbers))\n        (list sum product)\n        (loop (+ sum\
+    \ car product) (cdr numbers)))))\n", "  (cond ((empty? numbers)\n         (list\
+    \ 0 1))\n        (else (cons (+ (first numbers) (sum_product (rest numbers)))\
+    \ (* 1 (first numbers))))))\n", "  (let ((sum (car numbers))\n        (product\
+    \ (car (cdr numbers))))\n    (if (null? (cdr numbers))\n        (list sum product)\n\
+    \        (let ((sum (+ sum numbers))\n               (product (* product numbers)))\n\
+    \          (list sum product)))))\n", "  (cond\n    [(empty? numbers) (list 0\
+    \ 1)]\n    [else\n     (sum (map car numbers)\n           (* 1 (map cdr numbers))\n\
+    \           (map cdr numbers))]))\n", "  (define (helper-function a b acc)\n \
+    \   (cond ((null? numbers) acc)\n          ((< a b) (helper-function (cdr a) b\
+    \ (+ (car acc) (cdr b))))\n          (else (helper-function (cdr a) b (car acc))))\n\
+    \  (helper-function numbers 0 (+ (car numbers) 1))\n  )\n", "  (let\n      ((sum\
+    \ (if (empty? numbers) 0 (+ (first numbers) (sum_product (rest numbers))))\n \
+    \            (if (empty? (rest numbers)) 1 (* (first numbers) (sum_product (rest\
+    \ numbers))))))\n    (if (empty? numbers) (list sum 0)\n        (list sum (* (first\
+    \ numbers) (sum_product (rest numbers)))))))\n", "  (let ((sum (if (null? numbers)\
+    \ 0 (car numbers))\n          product (if (null? numbers) 1 (car numbers))))\n\
+    \    (cond\n      [(null? numbers) (list 0 1)]\n      [else (if (> sum 0)\n  \
+    \            (if (> product 1)\n                  (list sum (* product product))\n\
+    \                  (list sum (* product (- product 1))))\n              (list\
+    \ sum (* product 1))))])))\n", "  (define (helper sum-product numbers)\n    (cond\n\
+    \      [(empty? numbers) (list 0 1)] \n      [(not (pair? (first numbers))) (helper\
+    \ (+ sum-product (first numbers)) (rest numbers))]\n      [else (helper (+ sum-product\
+    \ (first numbers)) (rest numbers))]))\n  (helper 0 numbers))\n", "  (let\n   \
+    \ ((product 1)\n     (sum 0))\n    (for ((i numbers) (j i)) ;; The inner loop\
+    \ iterates over the numbers twice\n      (if (zero? j)\n        sum (* product\
+    \ j))\n      (set! product (* product j))\n      (set! sum (+ j sum)))\n    (/\
+    \ sum (* product (length (sort numbers))))))\n", "  (if (empty? numbers) (list\
+    \ 0 1) ; Empty sum and empty product should be the same\n    (let ((sum (car numbers))\n\
+    \          (product 1))\n      (if (empty? numbers)\n          (list sum product)\n\
+    \          (let ((next (cdr numbers)))\n            (if (empty? next)\n      \
+    \          (list sum product)\n                (let ((product (cdr product))\n\
+    \                      (sum (+ sum (car next)))\n                      (next (cdr\
+    \ next)))\n                  (list sum product)\n                  (sum_product\
+    \ next))))))))\n", "  (let ((sum 0) (product 1))\n    (cond ((null? numbers) (cons\
+    \ sum product))\n          ((null? (cdr numbers)) (cons sum product))\n      \
+    \    (else (let ((n1 (car numbers))\n                       (n2 (cdr numbers)))\n\
+    \                    (cons (+ sum (* n1 n2)) (* product n1 n2)))\n           \
+    \         (+ sum product))))))\n", "  (cond [(null? (rest numbers))\n        \
+    \ (first (rest numbers))\n         (first (rest numbers))]\n        [else\n  \
+    \       (+ (first numbers)\n            (sum_product (rest numbers))\n       \
+    \     (* 1 numbers))]))\n", "  (let ((sum 0)\n        (product 1))\n    (if (null?\
+    \ numbers)\n        (list sum product)\n        (let ((num (car numbers))\n  \
+    \            (next (sum_product (cdr numbers))))\n          (set! sum (+ sum num))\n\
+    \          (set! product (* product num))\n          (list sum product))))))\n",
+  "  (cond\n    [(empty? numbers)\n     (cons (car numbers) (car numbers))]\n    [else\n\
+    \     (+ (car numbers)\n       (sum_product (cdr numbers))\n       (* (car numbers)\n\
+    \         (sum_product (cdr numbers))))])))\n", "  (let ((product 1)\n       \
+    \ (sum 0))\n    (loop for n from numbers sum product \n         for product (*\
+    \ product n) \n         sum sum)))\n", "  (let ((sum (car numbers))\n        (product\
+    \ (car numbers)))\n    (if (null? (cdr numbers))\n        (cons sum product)\n\
+    \        (sum (+ sum numbers) (* product (car numbers)))))))\n", "  (let* ((sum\
+    \ (first numbers))\n         (product (second numbers)))\n    (cond\n      [(empty?\
+    \ numbers) (list (cons sum product) 1)]\n      [(= sum 0) (list (cons sum product)\
+    \ 1)]\n      [(= product 1) (list (cons sum product) 1)]\n      [else (list sum\
+    \ (* product numbers))])))\n</code>\n<|/ a tags=scheme,racket |>\n<| c |>\nI don't\
+    \ like the (= sum 0) case here: it seems unlikely, but it's legal - so if someone\
+    \ wrote `(sum_product (cons 1 2 3 4))` it would break.\n<|/ c |>\n<| a tags=scheme,racket\
+    \ |>\nIn Racket, the empty list has an empty tail -- a list whose head is itself\
+    \ an \"empty\" list. Thus, all you need is to test whether a list has a tail,\
+    \ like this:\n<code>", "  (cond\n    [(null? numbers) (cons 0 (cons 1 (cons 1\
+    \ 1)))]\n    [else (cons (+ (car numbers) (sum_product (rest numbers)))\n    \
+    \            (cons (* (car numbers) (sum_product (rest numbers)))\n          \
+    \            (sum_product (rest numbers))))]))\n", "  (let loop ((sum (car numbers))\
+    \ (product (cdr numbers)))\n    (cond ((null? numbers) (cons sum product))\n \
+    \         ((null? (cdr numbers)) (loop (+ sum 1) product))\n          (else (loop\
+    \ (+ sum 1) (* product (car numbers)))))))\n  \n", "  (let loop ((sum #f) (product\
+    \ #f) (numbers numbers))\n    (if (null? numbers)\n        (list sum (* product\
+    \ product))\n        (loop (+ sum (first numbers)) (* product (first numbers))\n\
+    \               (rest numbers)))))\n", "  (let ([sum (make-list length numbers)])\n\
+    \    (for ([i (in-range 0 length)])\n      (set! i (+ i 1))\n      (set! sum (cons\
+    \ i (list sum))))\n    (list sum (length numbers))))\n", "  (let((result (list\
+    \ 0 1)))\n    (for-each\n      (lambda (n) (set! result (list n (* n result))))\
+    \ (numbers))\n    (car result)))\n", "  (let ((sum (first numbers))\n        (product\
+    \ 1))\n    (if (empty? numbers)\n        (list sum product)\n        (let ((n\
+    \ (rest numbers)))\n          (set! sum (+ sum n))\n          (set! product (*\
+    \ product n))))))\n</cell>\n<cell>", "  (let ((sum 0)\n        (product 1))\n\
+    \    (do ((i numbers (cdr i)))\n        ((null? i) (set! sum (+ sum 0)) (set!\
+    \ product (* product 1)))\n      (set! sum (+ sum (first i))) (set! product (*\
+    \ product (cdr i))))\n    (set! sum (+ sum 0))\n    (set! product (* product 1))\n\
+    \    (list sum product)))\n", "  (let loop ([s 0] [p 1])\n    (if (empty? numbers)\n\
+    \        (values s p)\n        (loop (+ s (car numbers)) (* p car numbers))))\n\
+    )\n</cell>\n<cell>\n#lang racket\n", "  (let ((sum (first numbers)) (product (first\
+    \ numbers)))\n    (if (null? numbers)\n        (list sum product)\n        (let*\
+    \ ((number (first numbers))\n               (next-numbers (rest numbers))\n  \
+    \             (sum-of-next-numbers (+ sum (first next-numbers))) (product-of-next-numbers\
+    \ (* product (first next-numbers))))\n          (list sum-of-next-numbers product-of-next-numbers)\n\
+    \          (sum_product next-numbers)\n          )\n        )\n      )\n    )\n\
+    \  )\n", "  (let loop ((sum 0) (product 1))\n    (cond ((null? numbers) (list\
+    \ sum product))\n          ((< first numbers) (loop (+ sum (first numbers))\n\
+    \                                (* product (first numbers))\n               \
+    \                 (next numbers))\n          (else (loop (+ sum (first numbers))\
+    \ (* product (first numbers))\n                                 (rest numbers)))\n\
+    \      (else (loop (+ sum (first numbers)) (* product (first numbers))\n     \
+    \                  (rest numbers))))))\n", "  (let ((sum (apply + (repeat 0 numbers)))\
+    \ (product (apply * (repeat 1 numbers))))\n    (cond (empty? numbers) (list sum\
+    \ product)\n          (else (list sum (* product (first numbers)))))))\n", " \
+    \ (let* ((sum (first numbers))\n         (product (second numbers))\n        \
+    \ (sum-of-squares (* sum sum)))\n    (cond\n      [(empty? numbers)\n       (list\
+    \ sum product)]\n      [else\n       (let* ((next-number (rest numbers))\n   \
+    \            (new-sum (+ sum next-number))\n               (new-product (* product\
+    \ next-number)))\n         (cons (cons new-sum new-product) (sum_product next-number))]))]))\n",
+  "  (let loop ((numbers numbers)\n             (sum 0)\n             (product 1))\n\
+    \    (cond ((null? numbers) (list sum product))\n          ((= (length numbers)\
+    \ 1) (list sum product))\n          ((= (length numbers) 2) (cons (+ (first numbers)\
+    \ (second numbers)) (loop (rest numbers)\n                                   \
+    \                                (+ sum (first numbers))\n                   \
+    \                                                (* product (first numbers)))))\n\
+    \          ((= (length numbers) 3) (cons (+ (first numbers) (second numbers) (third\
+    \ numbers)) (loop (rest numbers)\n                                           \
+    \                                                    (+ sum (first numbers))\n\
+    \                                                                            \
+    \                   (* product (first numbers))\n                            \
+    \                                                                   (* product\
+    \ (second numbers)))))\n          (else (loop (rest numbers)\n               \
+    \      (+ sum (first numbers))\n                     (* product (first numbers))\n\
+    \                     (* product (first numbers))))))))\n", "  (let ((sum (car\
+    \ numbers))\n        (product 1))\n    (if (null? numbers)\n        ;; Empty sum\
+    \ should be equal to 0 and empty product should be equal to 1.\n        (cons\
+    \ sum (cons product (cons '1 '()))\n             sum (cons product '()))\n   \
+    \     (loop for num in numbers collect (+ num (* sum product))\n             \
+    \ (+ sum product)\n              (+ sum 1)))))\n", "  (letrec ((total-sum (\u03BB\
+    \ (total)\n                      (+ (first total) (second total)))\n         \
+    \    (total-product (\u03BB (total)\n                               (* (first\
+    \ total) (second total))))\n             (get-product (\u03BB (num)\n        \
+    \                    (+ (first num) (second num)))))\n           (loop ((numbers\
+    \ numbers)\n                  (new-total (\u03BB (total)\n                   \
+    \           (get-product (first numbers))))\n                  (new-numbers (\u03BB\
+    \ (numbers)\n                                 (append (subseq numbers (first numbers)\
+    \ (length numbers))\n                                        (get-product (subseq\
+    \ numbers (first numbers) (length numbers))))))\n                  (new-total-sum\
+    \ (\u03BB (total)\n                                   (+ (first total) (second\
+    \ total)))\n                  (new-total-product (\u03BB (total)\n           \
+    \                           (* (first total) (second total))))))\n    (cond ((null?\
+    \ (rest numbers)\n               (cons total-sum total-product))\n          (else\n\
+    \           (loop (rest numbers)\n                  new-total\n              \
+    \    new-numbers\n                  (cons (first numbers) new-total-sum)\n   \
+    \               (cons (first numbers) new-total-product))))))\n", "  (let* ((sum\
+    \ 0)\n         (product 1)\n         (current-number (cdr numbers))\n        \
+    \ (current-product))\n    (cond\n      [(null? current-number) (values (list sum\
+    \ product) (list 1 1))]\n      [(< current-number sum) (sum_product (cons current-number\
+    \ numbers))]\n      [(= sum 0) (values (list sum product) (list 1 1))]\n     \
+    \ [(< current-number product) (sum_product (cons current-number (cdr numbers)))]\n\
+    \      [else (sum_product (cons (car numbers) numbers))])))\n</code>\n<|/ a |>\n\
+    <| c |>\nthanks for your effort but i think i haven't understood the question..\
+    \  i think he wants the product of all the numbers in all the lists in the list\
+    \ but i think he wants to return the products as well\n<|/ c |>\n<| c |>\nthanks\
+    \ i think i got the idea now.  i will try it out and post back here if i get stuck\n\
+    <|/ c |>\n<| c |>\nI made an edit to the code.  Now it returns the products as\
+    \ well.  Let me know if it works.\n<|/ c |>\n<| c |>\nI updated my code to return\
+    \ the products as well.  Let me know if it works.\n<|/ c |>\n<| c |>\nthanks a\
+    \ lot guys.  i had been struggling with this for awhile and you all helped a lot.\
+    \  I got the answer i wanted.  Thanks again for your help and I truly appreciate\
+    \ it.\n<|/ c |>\n<| a |>\nHere's an implementation that is tail-recursive, using\
+    \ an accumulator parameter to avoid allocating memory for a new list:\n<code>",
+  "  (let ((sum (car numbers))\n        (product (cdr numbers)))\n    (if (null? product)\n\
+    \        (cons 0 sum)\n        (let ((product (cdr product)))\n          (if (null?\
+    \ product)\n              (cons 0 sum)\n              (let ((sum (+ sum product)))\n\
+    \                (if (null? product)\n                    (cons sum 0)\n     \
+    \               (sum_product product))))))))", "  (let ((product 1))\n    (for\
+    \ ([i (in-range (length numbers))])\n      (let ((sum (+ sum numbers)))\n    \
+    \    (set! product (* product (- i 1))))\n      (set! sum (+ sum 0))))\n  (/ sum\
+    \ product))\n", "  (cond\n    [(empty? numbers) (list 0 (product numbers))]\n\
+    \    [else (cons (+ (car numbers) (sum_product (cdr numbers))) (product numbers))]))\n",
+  "  (let ((sum 0)\n        (prod 1))\n    (for ([n numbers])\n      (set! sum (+\
+    \ sum (* n prod)))\n      (set! prod (* n prod))\n      ))\n  (list sum prod))\n",
+  "  (cond\n    [(empty? numbers)\n     (list 0 1)]\n    [else\n     (+ (first numbers)\n\
+    \        (sum_product (rest numbers)))]))\n", "  (cond\n    [(empty? numbers)\
+    \ (list 0 1)]\n    [(empty? (rest numbers)) (list 0 (first numbers))]\n    [else\
+    \ (let ([sum (+ (first numbers) (sum_product (rest numbers)))]\n             \
+    \ [product (* sum product)]))]))\n", "  (cond\n    [(empty? numbers) (list 0 (product\
+    \ numbers))]\n    [else (+ (first numbers) (sum_product (rest numbers)))]))\n",
+  "  (let ((sum 0)\n        (product 1))\n    (cond ((null? numbers)\n           (list\
+    \ sum product))\n          ((atom numbers)\n           (error \"Can only use numbers\
+    \ as arguments.\"))\n          (else (let ((n1 (first numbers))\n            \
+    \           (n2 (second numbers))\n                       (n3 (third numbers))\n\
+    \                       (n4 (fourth numbers))\n                       (n5 (fifth\
+    \ numbers))\n                       (n6 (sixth numbers))\n                   \
+    \    (n7 (seventh numbers))\n                       (n8 (eight numbers))\n   \
+    \                    (n9 (nineth numbers)))\n                 (if (> n1 n2)\n\
+    \                     (if (> n1 n3)\n                         (if (> n1 n4)\n\
+    \                             (if (> n1 n5)\n                                \
+    \ (if (> n1 n6)\n                                     (if (> n1 n7)\n        \
+    \                                 (if (> n1 n8)\n                            \
+    \                (if (> n1 n9)\n                                            (let\
+    \ ((product 1)\n                                                   (sum (+ sum\
+    \ n1)))\n                                            (let ((product (* product\
+    \ n1))\n                                                   (sum (+ sum n1)))\n\
+    \                                            (nil))\n                        \
+    \                 (let ((product (* product n1))\n                           \
+    \                        (sum (+ sum n1)))\n                                 \
+    \           (nil))\n                                       (let ((product (* product\
+    \ n1))\n                                                   (sum (+ sum n1)))\n\
+    \                                            (nil))\n                        \
+    \             (let ((product (* product n1))\n                               \
+    \                    (sum (+ sum n1)))\n                                     \
+    \       (nil))\n                                 (let ((product (* product n1))\n\
+    \                                                   (sum (+ sum n1)))\n      \
+    \                                      (nil))\n                              \
+    \ (let ((product (* product n1))\n                                           \
+    \        (sum (+ sum n1)))\n                                            (nil))\n\
+    \                            (let ((product (* product n1))\n                \
+    \                                   (sum (+ sum n1)))\n                      \
+    \                      (nil))\n                           (let ((product (* product\
+    \ n1))\n                                                   (sum (+ sum n1)))\n\
+    \                                            (nil))\n                       (let\
+    \ ((product (* product n1))\n                                                \
+    \   (sum (+ sum n1)))\n                                            (nil))\n  \
+    \                   (let ((product (* product n1))\n                         \
+    \                          (sum (+ sum n1)))\n                               \
+    \             (nil))\n                    (let ((product (* product n1))\n   \
+    \                                                (sum (+ sum n1)))\n         \
+    \                                   (nil))\n                   (let ((product\
+    \ (* product n1))\n                                                   (sum (+\
+    \ sum n1)))\n                                            ", "  (let* ((sum (make-integer\
+    \ 0))\n         (product (make-integer 1)))\n    (for ([i (in-range (length numbers))])\n\
+    \      (let ((x (car numbers)))\n        (set! sum (+ sum x))\n        (set! product\
+    \ (* product x))))\n    (list (sum product) numbers)))\n", "  (cond\n    [(empty?\
+    \ numbers)\n     (values 0 1)]\n    [else\n     (let ((sum_ (+ 0 (first numbers))\n\
+    \             prod_ (* 1 0)))\n       (cond\n         [(empty? (rest numbers))\n\
+    \          (values sum_ prod_)]\n         [else\n          (let ((n (first numbers))\n\
+    \                (ns (rest numbers)))\n            (cond\n              [(empty?\
+    \ ns)\n                (values sum_ prod_)]\n              [else\n           \
+    \    (let ((sum_ (+ sum_ (first ns))\n                       prod_ (* prod_ n)))\n\
+    \                 (cond\n                   [(empty? (rest ns))\n            \
+    \        (values sum_ prod_)]\n                   [else\n                    (let\
+    \ ((n (first ns))\n                          (ns (rest ns)))\n               \
+    \       (cond\n                        [(empty? ns)\n                        \
+    \ (values sum_ prod_)]\n                        [else\n                      \
+    \   (let ((sum_ (+ sum_ (first ns))\n                                 prod_ (*\
+    \ prod_ n)))\n                           (cond\n                             [(empty?\
+    \ (rest ns))\n                              (values sum_ prod_)]\n           \
+    \                  [else\n                              (let ((n (first ns))\n\
+    \                                    (ns (rest ns)))\n                       \
+    \         (cond\n                                  [(empty? ns)\n            \
+    \                       (values sum_ prod_)]\n                               \
+    \   [else\n                                   (let ((sum_ (+ sum_ (first ns))\n\
+    \                                           prod_ (* prod_ n)))\n            \
+    \                        (cond\n                                      [(empty?\
+    \ (rest ns))\n                                       (values sum_ prod_)]\n  \
+    \                                    [else\n                                 \
+    \      (let ((n (first ns))\n                                            (ns (rest\
+    \ ns)))\n                                       (cond\n                      \
+    \                  [(empty? ns)\n                                         (values\
+    \ sum_ prod_)]\n                                        [else\n              \
+    \                           (let ((sum_ (+ sum_ (first ns))\n                \
+    \                                 prod_ (* prod_ n)))\n                      \
+    \                     (cond\n                                             [(empty?\
+    \ (rest ns))\n                                              (values sum_ prod_)]\n\
+    \                                             [else\n                        \
+    \                      (let ((n (first ns))\n                                \
+    \                      (ns (rest ns)))\n                                     \
+    \         (cond\n                                                [(empty? ns)\n\
+    \                                                 (values sum_ prod_)]\n     \
+    \                                           [else\n                          \
+    \                       (let ((sum_ (+ sum_ (first ns))\n                    \
+    \                                     prod_ (* prod_ n)))\n                  \
+    \                                (cond\n                                     \
+    \               [(empty? ns)\n                                               \
+    \      (values sum_ prod_)]\n                                                \
+    \    [else\n                                                     (let ((n (first\
+    \ ns))\n                                                           (ns (rest ns)))\n\
+    \                                                     (cond\n                \
+    \                                       [(empty? ns)", "  (cond\n    [(empty?\
+    \ numbers) (cons 0 1)]\n    [else (let ([sum (first numbers)\n               product\
+    \ (* 1 sum)]\n                 [new (cdr numbers)])\n           (cons sum (sum_product\
+    \ new))]))]))\n", "  (let loop ((sum 0) (product 1))\n    (cond\n      ((empty?\
+    \ numbers) (list sum product))\n      (else\n       (let ((n (car numbers))\n\
+    \             (rest (cdr numbers))\n             (sum (+ sum (* n sum)))\n   \
+    \          (product (* product product)))\n         (loop (caddr rest) (caddr\
+    \ sum) (caddr product))))))))\n", "  (if (null? numbers)\n      (list 0 (car (cdr\
+    \ numbers)))\n      (let ((sum (car numbers))\n            (product (* sum (cadr\
+    \ numbers))))\n        (list (+ sum product) (* product sum)))))\n</code>\nThis\
+    \ solution is written in Racket.\n<|/ a dscore=2 |>\n<| a tags=scheme,racket,lisp\
+    \ |>\n<code>", "  (let ((sum 0)\n        (product 1))\n    (cond ((null? numbers)\
+    \ (list sum product))\n          ((number? (car numbers)) (sum_product (cdr numbers)\
+    \ sum product))\n          (else (let ((x (car numbers))\n                   \
+    \    (y (sum_product (cdr numbers) sum product)))\n                    (+ sum\
+    \ (* x y)))))))\n", "  (let ((sum (car numbers))\n        (product (car numbers))\n\
+    \        (next (append numbers (list sum))))\n    (if (null? next)\n        (list\
+    \ sum product)\n        (let ((sum (+ sum next))\n              (product (* product\
+    \ next)))\n          (sum_product next)))))\n</cell>\n<text>\nExercise 9: List\
+    \ Comprehensions\nWrite a function which takes a list, a starting value, and an\
+    \ end value, and returns a list of values starting from the start value up to\
+    \ but not including the end value.\n\nHint: The recursive definition of a list\
+    \ comprehension can be found on Wikipedia at .\n\n\n</text>\n<code language=racket-language>",
+  "  (cond\n    [(empty? numbers) (cons 0 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1\
+    \ (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (con", "  (let loop ((total 0) (product 1))\n    (if (empty? numbers)\n\
+    \      (list total product)\n      (loop (+ total number) (* product number))))))\n",
+  "  (let loop ((sum 0) (prod 1))\n    (if (null? (rest numbers))\n        (reverse\
+    \ (cons sum (cons prod nil))) (loop (+ sum numbers) (* prod numbers)))))", " \
+    \ (let ((product-sum (* 1 numbers))\n        (sum-sum (+ 0 numbers)))\n    (if\
+    \ (null? numbers)\n        (list sum-sum product-sum)\n        (let ((n-sum (+\
+    \ sum-sum numbers))\n              (product-sum (* product-sum numbers)))\n  \
+    \        (list (list n-sum product-sum) (list n-sum product-sum))\n          )\n\
+    \      )\n    )\n  )\n", "  (let ((sum (apply + numbers)))\n    (if (empty? numbers)\n\
+    \        ((list sum '() ))\n        (let ((product (apply * numbers)))\n     \
+    \     (list (sum (cdr numbers)) product)\n        )\n      )\n    )\n  )\n", " \
+    \ (let ((total (make-pair 0 1))\n        (product (make-pair 1)))\n    (for ([i\
+    \ numbers])\n      (set! (first product) (* i (second product)))\n      (set!\
+    \ (first total) (+ i (second total)))\n      (set! (first product) (+ 1 (second\
+    \ product)))))\n  (first total)\n  (second product))\n", "  (if (null? numbers)\n\
+    \      (list 0 1)\n      (cons (+ (car numbers) (sum numbers)) (product numbers))))\n",
+  "  (let loop ((total 0)\n             (product 1)\n             (numbers '(1 2 3\
+    \ 4))) ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "  (let loop ((sum '() (map (lambda (n) (+ n sum)) numbers)) (product 1 (map (lambda\
+    \ (n) (* n product)) numbers)))\n    (cond (empty? numbers) (list sum (* product\
+    \ product))\n          (else (loop (car numbers) (* product product))\n      \
+    \          (loop (car numbers) (+ sum (* product product)))))))\n</code>\n<code>",
+  "  (let ((total (first numbers))\n        (* (second numbers) (if (empty? numbers)\
+    \ 1 1)))\n    (cond ((empty? numbers) (list 0 1))\n          ((= total 0) (list\
+    \ 1 0))\n          (else (list (+ (first numbers) total)\n                   \
+    \   (* (second numbers) (+ (first numbers) (* (second numbers) total)))))\n  \
+    \        )))\n", "  (cond\n    ((null? numbers) (cons 0 1))\n    ((number? (car\
+    \ numbers)) (cons (+ (car numbers) (sum_product (cdr numbers)))\n            \
+    \                           (* (sum_product (cdr numbers)) (length numbers))))\n\
+    \    (else (sum_product (cdr numbers)))))\n", "  (let ((product 1)\n        (sum\
+    \ 0))\n    (cond ((or (null? numbers) (zero? numbers)) (values sum product))\n\
+    \          ((not (number? (car numbers))) (values sum product))\n          ((number?\
+    \ (car numbers)) (let ((n1 (car numbers))\n                                  \
+    \       (n2 (cdr numbers)))\n                             (cond ((or (number?\
+    \ n1) (number? n2)) (values sum product))\n                                  \
+    \   ((zero? n1) (values sum 0))\n                                     ((zero?\
+    \ n2) (values 0 1))\n                                     ((zero? n1) (values\
+    \ 0 1))\n                                     ((zero? n2) (values 0 1))\n    \
+    \                                 ((zero? (+ (car n1) (car n2))) (values sum product))\n\
+    \                                     ((zero? (+ (car n1) (cdr n2))) (values 0\
+    \ 1))\n                                     ((zero? (+ (cdr n1) (cdr n2))) (values\
+    \ 0 1))\n                                     (else (values sum product)))))\n\
+    \          (else (let ((n1 (car numbers))\n                      (n2 (caddr numbers)))\n\
+    \                 (cond ((or (number? n1) (number? n2)) (values sum product))\n\
+    \                      ((zero? n1) (values sum 0))\n                      ((zero?\
+    \ n2) (values 0 1))\n                      ((zero? n1) (values 0 1))\n       \
+    \               ((zero? n2) (values 0 1))\n                      ((zero? (+ (car\
+    \ n1) (car n2))) (values sum product))\n                      ((zero? (+ (car\
+    \ n1) (cdr n2))) (values 0 1))\n                      ((zero? (+ (cdr n1) (cdr\
+    \ n2))) (values 0 1))\n                      ((else (values sum product)))))\n\
+    \          (else (error \"Not Implemented\")))))))\n", "  (let loop ((sum 0) (product\
+    \ 1) (car numbers))\n    (cond\n      [(null? numbers) (list sum product)]\n \
+    \     [else (loop (+ sum car) (* product car) (cdr numbers))]))\n  )\n", "  (let\
+    \ ((sum (+ 0 numbers)))\n    (let ((product 1))\n      (for ((i) (length numbers))\n\
+    \        (set! product (* product (- i 1)))\n        (set! sum (+ sum (- i 1))))\n\
+    \      (list sum product))))", "  (cond\n    [(empty? numbers) (cons (add1 (car\
+    \ numbers)) '())]\n    [else (cons (add1 (car numbers)) (mult (cdr numbers) (sum_product\
+    \ (cdr numbers))))]\n  ))\n", "  (define (sum-product sum (product product))\n\
+    \    (if (null? numbers)\n        (list sum (* product product))\n        (sum-product\
+    \ (+ sum number) (* product product) (first numbers))))\n  (sum-product 0 1))\n",
+  "  (cond ((null? numbers) (cons (car numbers) (cons 0 1)))\n        ((= (car numbers)\
+    \ 0) (cons 0 (cons (car numbers) (cons 1 0))))\n        (else (cons (+ (car numbers)\
+    \ (sum_product (rest numbers))) (sum_product (rest numbers))))))\n", "  (cond\
+    \ [(empty? numbers)\n         (list (cond [(empty? numbers) 0] (else  (* 1 (first\
+    \ (rest numbers)))))]\n        [else\n         (cond [(empty? (rest numbers))\n\
+    \                (list (cond [(empty? numbers) 0] (else  (* 1 (first (rest numbers)))))]\n\
+    \                  [else (* 1 (first (rest numbers)) (sum_product (rest (rest\
+    \ numbers))))])]))))\n", "  (cond\n    [(empty? numbers) (cons 0 (cons 1 1))]\n\
+    \    [else (cons (+ (first numbers)) (sum_product (rest numbers)))]))\n", "  (let\
+    \ loop ([i 0] [sum (car numbers) 1] [product (cdr numbers) 1])\n    (if (empty?\
+    \ numbers) (list sum product)\n      (loop (+ i 1) (+ sum (car numbers)) (* product\
+    \ (cdr numbers)) (cddr numbers)))))\n", "  (let loop ((result 0) (product 1) (numbers\
+    \ numbers))\n    (if (null? numbers)\n        (list result product)\n        (loop\
+    \ (+ result (first numbers)) (* product (first numbers)) (drop numbers (first\
+    \ numbers))))))\n", "  (cond\n    [(empty? numbers) (cons 0 (cons 1 empty))]\n\
+    \    [else\n      (let ([product-accum (foldl (lambda (acc x)\n              \
+    \                   (* x acc))\n                              1 (cdr numbers))])\n\
+    \        (cond\n          [(empty? product-accum) (cons 0 (cons 1 empty))]\n \
+    \         [else\n           (let ([sum-accum (foldl (lambda (acc x)\n        \
+    \                              (+ x acc))\n                                  \
+    \  0\n                                    (cdr product-accum))])\n           \
+    \  (cond\n               [(= sum-accum 0) (cons 0 (cons 1 empty))]\n         \
+    \      [else (cons (car numbers) (sum_product (cdr numbers) product-accum))]))]))]))\n",
+  "  (let ([result (list 0 1)]) (loop for n in numbers do\n        (set! result (append\
+    \ result (list n (* n result)))))\n    (first result)))\n", "  (let loop ((sum\
+    \ '()) (product '()))\n    (if (null? numbers)\n        (cons (list* sum (list*\
+    \ product 1))\n              (list* product 1))\n        (loop (+ sum (car numbers))\
+    \ (* product (cdr numbers)))))))\n", "  (let ((sum (car numbers))\n        (product\
+    \ 1))\n    (if (null? numbers)\n        (list sum product)\n        (let ((x (car\
+    \ numbers))\n              (y))\n          (if (null? (cdr numbers))\n       \
+    \       (list (car sum) (* product (cdr product)))\n              (let ((next\
+    \ (car numbers)))\n                (set! product (cdr product))\n            \
+    \    (set! sum (+ (car sum) x))\n                (set! numbers (cdr numbers))\n\
+    \                (sum_product (cdr numbers)))))))\n", "  (let ((sum 0)\n     \
+    \   (product 1))\n    (for ((i numbers))\n      (set! sum (+ sum i))\n      (set!\
+    \ product (* product i)))\n    (list sum product)))\n", "  (let loop ((sum (make-instance\
+    \ 'int 0) (make-instance 'int 1)))\n    (if (null? numbers)\n      (values sum\
+    \ sum)\n      (loop (+ sum (car numbers))\n             (* (car numbers) (cdr\
+    \ numbers))))))\n", "  (if (empty? numbers)\n      (list 0 (float 1 32))\n   \
+    \   (let ((sum (car numbers))\n            (product (cdr numbers)))\n        (list\
+    \ sum (* sum product))))))\n</cell>\n<code language=dyalog-kernel>\n#lang racket\n",
+  "  (let ((sum (car numbers))\n        (prod (car (cdr numbers))))\n    (if (null?\
+    \ (cdr numbers))\n        (cons sum prod)\n        (let ((next (sum_product (cdr\
+    \ numbers))))\n          (if (> (car next) 0)\n              (cons (+ sum (car\
+    \ next)) prod)\n              (cons sum prod)))))) ; #lang racket\n", "  (cond\
+    \ [(empty? numbers) (list 0 (1))]\n        [else (let ((total (first numbers))\n\
+    \                       (product (second numbers)))\n               (list (+ total\
+    \ product)\n                     (* total product))]))) ;; #lang racket\n</code>\n\
+    <|/ a tags=lisp,racket,scheme,recursion |>\n<| a |>\nThis is probably the best\
+    \ way to do it without loops or cond:\n<code>", "  (let loop ((sum 0) (product\
+    \ 1))\n    (if (empty? numbers)\n        (list sum product)\n        (loop (+\
+    \ sum numbers) (* product numbers)))))\n", "  (let* ((sum (+ 0 (apply + numbers))\n\
+    \          product (* 1 (apply * numbers)))\n         (empty-sum (and (empty?\
+    \ sum) (empty? product))\n         empty-product (and (empty? product) (empty?\
+    \ sum))))\n    (cond ((empty-sum) '()\n          (empty-product) '())\n      \
+    \    ((not (empty-sum)) (list sum))\n          ((not (empty-product)) (list product))\n\
+    \          ((not (empty-sum empty-product)) (list sum product))\n          (else\
+    \ (cons sum product)))))\n", "  (let ((sum_ 0)\n        (prod_ 1))\n    (cond\n\
+    \      [(empty? numbers) (list! sum_ prod_)]\n      [(cons? numbers) (let ((n\
+    \ (first numbers)))\n                          (sum_ (+ sum_ n))\n           \
+    \               (prod_ (* prod_ n)))]\n      [else (let ((n (first numbers))\n\
+    \                  (s (second numbers))\n                  (t (first numbers)))]\n\
+    \      (else (let ((n (first numbers))\n                  (s (second numbers))\n\
+    \                  (t (first numbers)))]\n             (let ((n (first numbers))\n\
+    \                  (s (second numbers))\n                  (t (first numbers)))]\n\
+    \              (let ((n (first numbers))\n                    (s (second numbers))\n\
+    \                    (t (first numbers)))]\n              (let ((n (first numbers))\n\
+    \                    (s (second numbers))\n                    (t (first numbers)))]\n\
+    \              (let ((n (first numbers))\n                    (s (second numbers))\n\
+    \                    (t (first numbers)))]\n              (let ((n (first numbers))\n\
+    \                    (s (second numbers))\n                    (t (first numbers)))]\n\
+    \              (let ((n (first numbers))\n                    (s (second numbers))\n\
+    \                    (t (first numbers)))]\n              (let ((n (first numbers))\n\
+    \                    (s (second numbers))\n                    (t (first numbers)))]\n\
+    \              (let ((n (first numbers))\n                    (s (second numbers))\n\
+    \                    (t (first numbers)))]\n              (let ((n (first numbers))\n\
+    \                    (s (second numbers))\n                    (t (first numbers)))]\n\
+    \              (let ((n (first numbers))\n                    (s (second numbers))\n\
+    \                    (t (first numbers)))]\n              (let ((n (first numbers))\n\
+    \                    (s (second numbers))\n                    (t (first numbers)))]\n\
+    \              (let ((n (first numbers))\n                    (s (second numbers))\n\
+    \                    (t (first numbers)))]\n              (let ((n (first numbers))\n\
+    \                    (s (second numbers))\n                    (t (first numbers)))]\n\
+    \              (let ((n (first numbers))\n                    (s (second numbers))\n\
+    \                    (t (first numbers)))]\n              (let ((n (first numbers))\n\
+    \                    (s (second numbers))\n                    (t (first numbers)))]\n\
+    \              (let ((n (first numbers))\n                    (s (second numbers))\n\
+    \                    (t (first numbers)))]\n              (let ((n (first numbers))\n\
+    \                    (s (second numbers))\n                    (t (first numbers)))]\n\
+    \              (let ((", "  (cond\n    [(empty? numbers) (cons 0 1)]\n    [(cons?\
+    \ numbers) (+ (car numbers) (sum_product (cdr numbers)))]\n    [else (error 'sum-product\
+    \ \"Expected a list as input\")]))\n</cell>\n<text>\nExercises\nExercise 1:\n\
+    Write a function that takes a list of numbers and returns the sum of the elements\
+    \ in the list and a list of the product of the elements in the list.\n\n\n</text>\n\
+    <code language=internal-cellular-programming>", "  (let ((product 1)\n       \
+    \ (sum 0))\n    (cond ((null? numbers) (list sum product))\n          ((number?\
+    \ (car numbers)) (list sum (* sum (car numbers))))\n          (else (append (sum_product\
+    \ (car numbers)) (sum_product (cdr numbers)))))))\n</code>\n<|/ a tags=scheme,recursion\
+    \ |>\n<| c |>\nThank you for this solution, it's pretty neat and clean. As mentioned\
+    \ in my comment to the OP, I'd prefer a solution without lists if possible but\
+    \ I'm glad this implementation solves the problem. Thanks!\n<|/ c |>\n<| c |>\n\
+    I'm glad I could help you! I see that you're new here and I hope you find my answer\
+    \ helpful. Just so you know, if you find any answer useful, upvote it! :)\n<|/\
+    \ c |>\n<| a |>\n<code>", "  (cond\n    [(empty? numbers) (list 0 (product numbers))]\n\
+    \    [else (cons (+ (first numbers) (sum_product (rest numbers))) (product numbers))]\n\
+    \  )\n)\n", "  (if (empty? numbers)\n      ;; For an empty list, sum should equal\
+    \ 0 and product should equal 1.\n      (cons (- (first numbers) (first numbers))\n\
+    \            (cons (first numbers)\n                  (* 1 (second numbers))))\n\
+    \      (;; For a non-empty list, add the first element of the list to the sum\n\
+    \      ;; and the product of all the other elements.\n      (cons (+ (first numbers)\n\
+    \              (sum_product (rest numbers))\n              (* 1 (second numbers)))\n\
+    \            (cons (first numbers)\n                  (* 1 (second numbers)))))))\n",
+  "  (if (empty? numbers) (list 0 (* 1 1))\n      (let ((sum (car numbers))\n    \
+    \        (product (* 1 1)))\n        (cons (cons sum product) (sum_product (cdr\
+    \ numbers))))))\n", "  (if (empty? numbers)\n      (cond ((eq? (first numbers)\
+    \ 0) 0) ((eq? (first numbers) 1) 1)\n            (else (error 'sum-product \"\
+    Empty sum should be equal to 0 and empty product should be equal to 1\"))))\n\
+    \  (let ((product 1)\n        (sum 0))\n    (for-each (lambda (x) (set! sum (+\
+    \ sum x))\n                   (set! product (* product x)))\n              numbers)))\n",
+  "  (cond\n    [(empty? numbers) (list 0 1)]\n    [else (list (+ (first numbers)\
+    \ (sum_product (rest numbers))) (* 1 (first numbers)))]))\n", "  (let ((sum (first\
+    \ numbers))\n        (*product1 (second numbers)))\n    (cond\n      [(empty?\
+    \ numbers) (list (+ sum 0) *product1)]\n      [(= (first numbers) (last(numbers)))\
+    \ (list (+ sum 1) *product1)]\n      [else (+ (+ (first numbers) (first numbers))\
+    \ (sum_product (rest numbers)))])))\n", "  (let loop ((numbers numbers)\n    \
+    \         (sum '())\n             (product 1))\n    (cond\n      [(null? numbers)\
+    \ (list (list sum #f) product)]\n      [(boolean (first numbers)) (loop (rest\
+    \ numbers)\n                                   (first sum)\n                 \
+    \                  product *)]\n      [else (loop (rest numbers)\n           \
+    \       (cons (first numbers) sum)\n                  (* product (first numbers))\n\
+    \                  )])\n    )\n  )\n)", "  (let* ((sum (+ 0 (reduce + numbers)))\n\
+    \         (product (* 1 (reduce * numbers))))\n    (cond ((null? numbers)\n  \
+    \         (list sum product))\n          ((null? (cdr numbers))\n           (list\
+    \ sum product))\n          ((zero? (car numbers))\n           (list 0 (car numbers)))\n\
+    \          (else\n           (list sum (* product (reduction (cdr numbers))))))))\n",
+  "  (let ((total (first numbers))\n        (product (second numbers)))\n    (if (empty?\
+    \ numbers)\n        (list total product)\n        (let ((result (sum_product (rest\
+    \ numbers))))\n          (list (+ total product) (* product (length numbers)))\n\
+    \          result))))\n", "  (cond\n    ((null? numbers)\n     (error 'sum-product\
+    \ \"Cannot divide by zero\"))\n    ((= (length numbers) 1)\n     (list (car (first\
+    \ numbers))\n           (* (car (first numbers))\n              (car (rest numbers)))))\n\
+    \    (else\n     (let ((car (car numbers))\n           (product (car (rest numbers)))\n\
+    \           (sum (+ car product)))\n       (list (sum product)\n            (*\
+    \ sum product)))))\n", "  (cond\n    [(empty? numbers) (cons 0 (cons 1 nil))]\n\
+    \    [else\n     (let ([head (car numbers)]\n           [tail (cdr numbers)])\n\
+    \       (cond\n         [(= head 0) (cons head nil)\n          (= head 1) (cons\
+    \ head (sum_product tail))]\n         [(not (list? tail)) (cons head (sum_product\
+    \ tail))]\n         [else (cons (* (sum_product tail) head) (sum_product tail))]))]))]))\n",
+  "  (let loop ((accumulator 0) (product 1))\n    (if (null? numbers)\n        (list\
+    \ accumulator product)\n        (loop (+ accumulator number) (* product number)))))\n",
+  "  (let ((sum (first (pair? numbers))\n          product 1))\n    (map car (numbers))\n\
+    \    (if (null? numbers)\n        (list sum product)\n        (let ((next-numbers\
+    \ (cdr numbers))\n              (next-sum (first next-numbers))\n            \
+    \  (next-product (second next-numbers)))\n          (if (null? next-numbers)\n\
+    \              (list sum product)\n              (let ((new-sum (+ sum next-sum))\n\
+    \                    (new-product (* product next-product)))\n               \
+    \ (cons (list new-sum new-product)\n                      (sum_product next-numbers))))\n\
+    \            (list sum product))))))\n", "  (let loop ((sum 0) (product 1))\n\
+    \    (if (null? numbers)\n        (list sum product)\n        (loop (+ sum (car\
+    \ numbers)) (* product (car numbers))))))\n</code>\n<|/ a tags=racket,scheme |>\n\
+    <| c |>\nI think you mean to say `let loop ((sum 0) (product 1))`\n<|/ c |>\n\
+    <| c |>\nI meant `(let loop ((sum 0) (product 1))`\n<|/ c |>\n<| c |>", "  (define\
+    \ (helper n sum)\n    (if (< n 0)\n        (list sum (* sum n) (* n n) (helper\
+    \ n (+ sum n)))\n        (helper n (+ sum n) (* n n))))\n  (helper numbers (car\
+    \ numbers) 1))\n", "  (define (loop [numbers numbers sum product]\n          \
+    \  (if (null? numbers)\n                (list sum product)\n                (loop\
+    \ (cdr numbers) (car numbers) (+ sum (car numbers)) (* product (car numbers))))))\n\
+    \  (loop (reverse numbers) numbers 0 1))\n", "  (let ((sum '())\n        (product\
+    \ 1))\n    (define (helper-sum numbers)\n      (set! sum (cons 0 (car (reverse\
+    \ numbers))))\n      (set! product (cdr (reverse numbers))))\n    (helper numbers\
+    \ '() (+ sum (* product product))))\n  (values (car sum) (* product product)))\n",
+  "  (if (empty? numbers)\n      (values 0 1)\n      (values (first numbers) (sum_product\
+    \ (rest numbers)))))\n", "  (if (null? numbers)\n      0\n      (+ (car numbers)\n\
+    \         (* (sum_product (rest numbers)) (car numbers)))))\n", "  (let ((sum\
+    \ (first numbers)))\n    (if (empty? numbers)\n        (list sum 1)\n        (let\
+    \ ((product (* sum numbers)))\n          (list sum (* product product))\n    \
+    \      ))))\n", "  (let ((total (car numbers))\n        (product (cdr numbers)))\n\
+    \    (if (null? (cdr numbers))\n        (cons total product)\n        (let ((product-total\
+    \ (sum_product product))\n              (total-total (sum_product total)))\n \
+    \         (cons (+ total product)\n                (* product product-total)))))\n\
+    </code>\nThis implementation is tail-recursive so it will run just as fast as\
+    \ your other implementation. This is the main benefit of this implementation.\n\
+    \nAn implementation using your original algorithm and list concatenation instead:\n\
+    <code>", "  (let ((sum (add1 0)))\n    (map add1 (map (lambda (n) (* sum n)) numbers))))\n",
+  "  (if (null? numbers) (list 0 1)\n      (cons (+ (first numbers) (sum_product (rest\
+    \ numbers))) (* 1 (sum_product (rest numbers)))))))\n", "  (let ((product 1)\n\
+    \        (sum 0))\n    (for ([i numbers])\n      (begin\n        (set! sum (+\
+    \ sum i))\n        (set! product (* product i)))\n      (list sum product))))\n",
+  "  (cond [(empty? numbers) (list 0 1)]\n        [(number? (car numbers)) (+ (car\
+    \ numbers) (sum_product (rest numbers)))]\n        [else (sum_product (rest numbers))\
+    \ (* 1 car numbers)]))\n", "  (cond\n    [(empty? numbers) #(0 1)]\n    [(empty?\
+    \ (rest numbers)) #(0 1)]\n    [else (+ (first numbers) (sum_product (rest numbers)))]))\n",
+  "  (define (helper x y)\n    (cond ((null? x) y)\n          ((null? y) x)\n    \
+    \      (else\n           (helper (rest x) (* (first x) (first y)))))) \n  (helper\
+    \ numbers 1))\n", "  (cond [(empty? numbers) (list 0 1)]\n        [else (let ((sum\
+    \ (+ (first numbers) (sum_product (rest numbers))))\n                    (product\
+    \ (* sum (first numbers))))\n              (list sum\n                    product))]))\n",
+  "  (let* ((product 1)\n         (sum (first numbers))\n         (i\n           (length\
+    \ (rest numbers))))\n    (when (> i 0)\n      (begin\n        (set! sum (+ sum\
+    \ numbers))\n        (set! product (* product i)))\n      (do ((j i (- i 1)))\n\
+    \          ((> j 0))\n        (begin\n          (set! sum (+ sum numbers))\n \
+    \         (set! product (* product j))))\n      (return-from sum_product (list\
+    \ sum product))))\n", "  (cond\n    [(empty? numbers) (list 0 1)]\n    [(empty?\
+    \ (cdr numbers)) (list 0 1)]\n    [else (list (add1 (car numbers)) (* (car numbers)\
+    \ (sum_product (cdr numbers))))]))\n", "  (cond\n    ((empty? numbers) (list 0\
+    \ 1))\n    ((number? (car numbers)) (+ (car numbers) (sum_product (cdr numbers))))\n\
+    \    ((> (car numbers) 0) (+ (car numbers) (sum_product (cdr numbers))))\n   \
+    \ (else (sum_product (cdr numbers)))))\n", "  (let loop ((sum '()) (product '()))\n\
+    \    (cond ((null? numbers) (list sum product))\n          ((pair? (car numbers))\
+    \ (loop (+ sum sum) product (cdr numbers)))\n          (else (loop (+ sum sum)\
+    \ (* product (car numbers)) (cdr numbers))))))\n", "  (let loop ((i 0 (+ i 1)))\n\
+    \    (cond ((empty? numbers) (cons (+ (car numbers) i) (cons (car numbers) i)))\n\
+    \          ((null? (cdr numbers)) (cons 0 (cons (car numbers) i)))\n         \
+    \ (else (loop (+ i 1) (cdr numbers))))))", "  (let loop ((numbers numbers) \n\
+    \             (sum '()) (product 1))\n    (cond\n      [(null? numbers) (list\
+    \ sum (reverse product))]\n      [(number? (car numbers))\n       (loop (cdr numbers)\
+    \ \n             (cons (+ sum (car numbers)) (* product (car numbers))) \n   \
+    \          (+ product (car numbers)))]\n      [(even? (car numbers))\n       (loop\
+    \ (cdr numbers)\n             (cons (+ sum (car numbers)) (* product (car numbers)))\n\
+    \             (+ product (car numbers)))]\n      [else (loop (cdr numbers)\n \
+    \                (+ sum (car numbers))\n                 (* product (car numbers)))])))\n\
+    </code>\n<|/ a tags=racket,list dscore=0 |>\n<| c |>\nThank you! I was trying\
+    \ to do something similar, but I wasn't familiar with the \"loop\" function. My\
+    \ next question is why does this work? Why does (list sum (reverse product)) return\
+    \ a list of two lists, one of them a reversed list of the sum, and the other a\
+    \ list of all the product of the numbers?\n<|/ c |>\n<| c |>\nThe first argument\
+    \ of `loop` is the list to be processed, the `loop` function processes one element\
+    \ from the list at a time. When you write `(loop (cdr numbers)` it means that\
+    \ the first element of the list `numbers` is to be processed, which we do by doing\
+    \ `(cdr numbers)`. Now that we have processed one element from the list `numbers`,\
+    \ let's say we have `5` as the list `numbers`, we do the following:\n\n`(cdr (cdr\
+    \ numbers))` which means that `(cdr (cdr numbers))` is to `5`, so we now have\
+    \ `[5 2 1]`. Now we do `(+ sum (car numbers)` and `(* product (car numbers))`.\
+    \ We then take the first element from the list `numbers` `5` which is `(+ sum\
+    \ (car numbers))` and multiply it with `(* product (car numbers))` and append\
+    \ it to the list `sum` which is `(+ sum (car numbers))` and append it to `product`\
+    \ which is `(* product (car numbers))` so now we have `sum` of `[5 2 1]` and `product`\
+    \ of `[24 1]`, then we do `(loop (cdr numbers)` which means that the next element\
+    \ in the list is to be processed. Same process happens here as I explained.\n\
+    <|/ c |>\n<| c |>\nI hope that makes things clear to you now :) If not, ", " \
+    \ (if (empty? numbers)\n      ; Sum should be 0.\n      ((list 0 1))\n      ;\
+    \ Sum should be the product of all the numbers in the list.\n      (let ((sum\
+    \ (car numbers))\n            (product 1))\n        (for ((i (cdr numbers))\n\
+    \               (j (cdr (rest numbers)))\n               (sum (+ sum (* i j)))\n\
+    \               (product (* product i)))\n          (cons (list sum (* product\
+    \ product))\n                (sum_product (list i (cdr numbers)))))))) ;; Sum\
+    \ should be the product of all the numbers in the list.", "  (if (null? numbers)\
+    \ \n      (list (add 0 1) 1)\n      (let ([sum (add1 (first numbers))])\n    \
+    \    (cons (+ sum sum) (sum_product (rest numbers))))))\n", "  (let* ((result\
+    \ (list 0 (* 1 (first numbers))))\n         (next-number (rest numbers))\n   \
+    \      (carry-out (if (null? next-number) 0 (first next-number))))\n    (if (null?\
+    \ next-number)\n        result\n        (let ((product-value (* carry-out (first\
+    \ next-number))))\n          (set! result (cons (+ carry-out (first next-number))\
+    \ result))\n          (set! next-number (rest next-number))\n          (set! carry-out\
+    \ (first next-number))\n          (sum_product next-number)))))\n</code>\n<|/\
+    \ a dscore=1 tags=scheme,racket |>\n<| c |>\nYou don't need to do anything if\
+    \ you use `(define (sum-product x) (* 1 (apply + x)))`\n<|/ c |>\n<| c |>\n.N.\
+    \ That's what I was trying to get at with my comment on the question: this was\
+    \ just an exercise to show how `letrec` is useful. My intention was to point out\
+    \ that the `letrec` form can be rewritten as a `letrec*` form, which would be\
+    \ more efficient because we don't need two `if` expressions to decide what to\
+    \ do next and what not to do. However, I forgot that `letrec*` was in Racket as\
+    \ well...\n<|/ c |>\n<| c |>\n`letrec` doesn't work for me. I get this error:\
+    \ `application: not a procedure;\n expected a procedure that can be applied to\
+    \ arguments\n  given: '((lambda (x) (+ x 1)) '(1 2 3 4))\n  arguments...:\n  \
+    \ '((lambda (x) (+ x 1)) '(1 2 3 4))\n  context...:\n   /opt/opt/pkg/racket/collects/racket/private/misc.rkt:1:1:\
+    \ /opt/opt/pkg/racket/collects/racket/private/misc.rkt:1:1: apply\n   context...:\n\
+    \   /opt/opt/pkg/racket/collects/racket/private/misc.rkt:1:1:`\n<|/ c |>\n<| c\
+    \ |>\n.N. Hmm. Yes, `letrec` does not work with lambda expressions. I fixed the\
+    \ answer. Sorry for the confusion.\n<|/ c |>\n<| c |>\nIt's okay :) I edited your\
+    \ answer to show what the code should look like.\n<|/ c |>\n<| a dscore=1 |>\n\
+    A very simple solution ", "  (cond\n    [(empty? numbers)\n     (cond [(= (length\
+    \ numbers) 0)\n            (0, 0)]\n          [else\n            (cond [(= (length\
+    \ numbers) 1)\n                   (+ 1 (* (first numbers) (first numbers)))]\n\
+    \                    [else\n                     (+ 1 (* (first numbers) (sum_product\
+    \ (rest numbers))))\n                     ]))]\n    [else\n     (+ 1 (* (first\
+    \ numbers) (sum_product (rest numbers))))]))", "  (let ((sum (car numbers))\n\
+    \        (product 1))\n    (cond ((null? numbers) (list sum product))\n      \
+    \    ((< sum 0) (list 0 product))\n          ((< product 0) (list sum 0))\n  \
+    \        ((eq? sum 0) (list 0 product))\n          (else (append (list sum product)\
+    \ (sum_product (rest numbers))))))) ;; cons is a function in Racket and so is\
+    \ append", "  (cond\n    [(empty? numbers) (make-pair 0 1)]\n    [else (make-pair\
+    \ (+ (car numbers) (sum_product (rest numbers)))\n                      (* (cdr\
+    \ numbers) (sum_product (rest numbers))))]\n   ))\n", "  (let* ((product 1)\n\
+    \         (sum (first numbers))\n         (i1 (rest numbers)))\n    (cond\n  \
+    \    [(empty? numbers) (list sum product)]\n      [(empty? i1) (list sum product\
+    \ 1)]\n      [(< (first i1) sum) (sum_product (rest numbers))]\n      [(> (first\
+    \ i1) sum) (sum_product (cons (first i1) numbers))]\n      [else (let* ((sum (first\
+    \ i1)) (product product) (next (first i1)))\n               (if (empty? (rest\
+    \ i1))\n                   (list sum product)\n                   (let* ((new-sum\
+    \ (first i1)) (new-product product) (new-next (first i1)))\n                 \
+    \    (if (> sum new-sum)\n                         (let* ((prod (first new-next))\n\
+    \                                (new-product (* product prod))\n            \
+    \                    (new-sum (+ sum new-sum))\n                             \
+    \   (new-next (rest new-next)))\n                           (list new-sum new-product)\n\
+    \                           (recur (rest i1) new-next))\n                    \
+    \     (let* ((prod (first new-next))\n                                (new-product\
+    \ (* product prod))\n                                (new-sum (+ sum new-sum)))\n\
+    \                           (list new-sum new-product)\n                     \
+    \      (recur (rest i1) (rest new-next)))))))]\n   ))\n)\n", "  (cond\n    [(empty?\
+    \ numbers) (list 0 1)]\n    [(cons? numbers) (cons (+ (car numbers) (sum_product\
+    \ (cdr numbers))) (* (car numbers) (sum_product (cdr numbers))))])))\n</code>\n\
+    <|/ a tags=racket,recursion dscore=0 |>\n<| a tags=racket,recursion |>\n<code>",
+  "  (if (empty? numbers)\n      (0 (1+ 0)))\n  (let ((sum 0))\n    (if (not (null?\
+    \ (first numbers))) (add1 (first numbers)) (sum))\n    (let ((product 1))\n  \
+    \    (if (not (null? (rest numbers))) (add1 (rest numbers)) (product)))\n    (list\
+    \ sum product)))\n", "  (let ((product 1) (sum 0))\n    (for-each (lambda (n)\
+    \ (set! sum (+ sum n)) (set! product (* product n))) (numbers)))\n  (list sum\
+    \ product))\n", "  (cond [(empty? numbers) \n         (list 0 1)]\n        [else\n\
+    \         (let ([sum (first numbers)]\n               [product (* sum (first numbers))]\n\
+    \               [new (cdr numbers)])\n           (if (empty? new) \n         \
+    \      (list sum product)\n               (let ([new-sum (+ sum new)]\n      \
+    \               [new-product (* new-sum (first new))]\n                     [new-new\
+    \ (cdr new-new)])\n                 (sum_product new-new)\n                 )))]))\n",
+  '  (cond [(empty? numbers) (cons 0 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons
+    1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 0 (cons 0 (cons
+    0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons
+    0 (cons 1 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 1 (cons 0 (cons 0 (cons
+    0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons
+    0 (cons 1 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons
+    1 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 1 (cons
+    0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 1 (cons 0 (cons 0 (cons
+    0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons
+    0 (cons 0 (cons 0 (cons 1 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons
+    0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 1 (cons 0 (cons 0 (cons 0 (cons 0 (cons
+    0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 1 (cons 0 (cons
+    0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons
+    0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons
+    0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons
+    1 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons
+    0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons
+    0 (cons ', "  (if (null? numbers)\n      0\n      (let ((sum_ (+ 0 (first numbers))\n\
+    \            product_1 (* (first numbers) (first numbers))))\n        (let ((sum\
+    \ (+ (first sum_) sum_)\n              product (* product_1 product_1)))\n   \
+    \       (if (null? (rest numbers))\n              (list sum product)\n       \
+    \       (let ((next (sum_product (rest numbers))))\n                (list sum\
+    \ (* next (first product)))))\n            0)))))", "  (if (empty? numbers) (list\
+    \ 0 1) \n      (let ((total (car numbers))\n            (product 1))\n       \
+    \ (if (empty? (cdr numbers))\n            (list total product)\n            (let\
+    \ ((number (cdr numbers))\n                  (product (car numbers)))\n      \
+    \        (list (+ total number) product))))))\n</code>\n<|/ a |>\n<| a dscore=1\
+    \ tags=racket,sum,list,scheme |>\nMy answer is based on this answer: Racket -\
+    \ summing a list\n<code>", "  (if (null? numbers)\n      (cons 0 1)\n      (let\
+    \ ((sum (car numbers))\n            (product 1))\n        (if (null? (cdr numbers))\n\
+    \            (cons (+ sum product) product)\n            (let ((result (sum_product\
+    \ (cdr numbers))))\n              (cons (+ sum result) (* product result)))))\n\
+    \      ;; Returning a 'null' list is a good way to indicate error.\n      '(null)))\n",
+  "  (cond\n    [(empty? numbers) (cons 0 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1\
+    \ (cons 1 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons\
+    \ 1 (cons 1 (cons 1 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 1 (cons 1 (cons\
+    \ 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons\
+    \ 1 (cons 1 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 1 (cons 1 (cons\
+    \ 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons 0 (cons\
+    \ 0 (cons 0 (con", "  (cond [(null? numbers) ((list) (list 0 1))]\n        [(cons?\
+    \ numbers) ((cons\n                            (add1 (cadr numbers))\n       \
+    \                     (product1 (cddr numbers))))]\n        [else (let ((sum (+\
+    \ 0 (car numbers))))\n                   (cons (cons sum product)\n          \
+    \               (sum_product (cdr numbers))))]\n       ))\n", "  (let loop ((sum\
+    \ (* 1 0))\n             (product 1))\n    (cond\n      [(empty? numbers) (list\
+    \ sum product)]\n      [else\n       (loop (+ (first numbers) sum)\n         \
+    \    (* (first numbers) product))]))\n</code>\n<|/ a |>\n<| c |>\nThanks for the\
+    \ response. I'm really new to Racket so I'm struggling with this. I'm working\
+    \ on it, but could you help me understand how you got the code you posted to work\
+    \ using the language that I mentioned above? Also, are there any sites that would\
+    \ help me understand the language better?\n<|/ c |>\n<| c |>\nYour question was\
+    \ really about using recursion to implement a sum and product function. I will\
+    \ update my answer to include code which uses this language construct. I do not\
+    \ have a site that would help with learning a programming language better than\
+    \ this, but I do have a recommendation for the Racket documentation.\n<|/ c |>\n\
+    <| c |>\nOkay, thank you for the help. I've been trying to learn this language\
+    \ and I'm struggling. I'm finding it very difficult to understand how to implement\
+    \ this. Do you know of any site that could help me learn this language better?\n\
+    <|/ c |>\n<| c |>\nI recommend you [learn the language first](http://learnracket-lang.org/),\
+    \ then move on to learning a particular language that you are comfortable with.\
+    \ Don't try to learn Racket by trial and error. Start with small exercises (like\
+    \ \"return all numbers from a list which are smaller than 10\") and work your\
+    \ way up. Think of yourself as a programmer and try to imagine what you would\
+    \ do in an actual programming language. Then you will be able to adapt the code\
+    \ to your specific needs.\n<|/ c |>\n<| c |>\nOkay, thank you. I really appreciate\
+    \ the help.\n<|/ c |>\n<| a |>\nYou said you're new to Racket, so I'm going to\
+    \ give some clarifications regarding the use of Racket's built-in higher-order\
+    \ functions. Higher-order functions are functions that take functions as arguments.\
+    \ For example, take two functions: square and cube that both take number arguments\
+    \ and return the square-cube of the number they receive. Here's how you'd use\
+    \ these functions:\n<code>", "  (let loop ((total 0) (product 1))\n    (cond\n\
+    \      ((null? numbers) (list total product))\n      ((= 1 (car numbers)) (loop\
+    \ (+ total 1) (* product (car numbers))))\n      (else (loop (+ total 1) (* product\
+    \ (car numbers))))))))\n</code>\nAnd here's a version using a mutable list to\
+    \ keep track of the totals and products.  Notice that the mutated list is returned\
+    \ at the end of the function.\n<code>\n#lang racket\n", "  (if (null? numbers)\
+    \ (cons 0 1) (if (= (first numbers) 0) (cons (+ 0 (first numbers)) (sum_product\
+    \ (rest numbers))) (cons (* 1 (first numbers)) (sum_product (rest numbers))))))\n",
+  "  (if (null? numbers)\n      ;; The sum of an empty list should be zero.\n    \
+    \  (list (cond [(empty? numbers) 0]\n                    [else 1])\n         \
+    \ (map + numbers (rest numbers))))\n", "  (if (null? numbers)\n      (values 0\
+    \ (product 1 numbers))\n      (let ((sum (car numbers))\n            (product\
+    \ (product 1 numbers)))\n        (values sum (+ sum product))\n        (sum_product\
+    \ (rest numbers)))))", "  (cond [(empty? numbers) (list 0 1)]\n        [(number?\
+    \ (car numbers)) (cons (+ (car numbers) (sum_product (cdr numbers))) (cons (*\
+    \ 1 (cdr numbers)) (sum_product (cdr numbers))))]\n        [else (sum_product\
+    \ (cdr numbers))]))\n", "  (cond [(empty? numbers) #(0 1)]\n        [else (+ (car\
+    \ numbers) (sum_product (cdr numbers)))]))\n</cell>\n<code language=dyalog-kernel>",
+  "  (cond\n    [(empty? numbers) '()]\n    [(> (first numbers) 0) '()]\n    [else\
+    \ (+ (first numbers) (product numbers))]))\n", "  (define (helper xs sum)\n  \
+    \  (if (empty? xs)\n        (values (add1 sum) 1)\n        (helper (cdr xs) (add1\
+    \ (car xs)))))))\n  (helper numbers 0))\n", "  (cond\n    [(empty? numbers) ((first\
+    \ numbers) (product numbers))]\n    [else ( (+ (first numbers) (product numbers))\
+    \ (sum_product (rest numbers))) ] ))\n", "  (let ((sum 0)\n        (product 1))\n\
+    \    (cond ((null? numbers) (list sum product))\n          ((list? (car numbers))\
+    \ (sum_product (cdr numbers)))\n          (else (set! sum (+ sum numbers))\n \
+    \               (set! product (* product numbers)))))\n  ;; (sum_product '(1 2\
+    \ 3))\n  ;; (10 24)\n\n  ;; For a given list of integers, return a string consisting\
+    \ of the numbers in reverse order\n  ;; >>> reverse_str([])\n  ;; (\"\")\n  ;;\
+    \ >>> reverse_str([1])\n  ;; (\"1\")\n  (define (reverse_str numbers)\n    (cond\n\
+    \      ((null? numbers) \"\")\n      ((list? (car numbers)) (concat (reverse_str\
+    \ (cdr numbers)) (car numbers))) \n      (else (concat numbers \"\")))))\n  ;;\
+    \ >>> reverse_str(1)\n  ;; (\"1\")\n  (reverse_str numbers)\n\n  ;; For a given\
+    \ list of integers, return a string consisting of the numbers in ascending order\n\
+    \  ;; >>> sort_str([])\n  ;; (\"\")\n  ;; >>> sort_str([1])\n  ;; (\"1\")\n  (define\
+    \ (sort_str numbers)\n    (cond\n      ((null? numbers) \"\")\n      ((list? (car\
+    \ numbers)) (concat (sort_str (cdr numbers)) (car numbers))) \n      (else (concat\
+    \ numbers \"\")))))\n  ;; >>> sort_str(1)\n  ;; (\"1\")\n  (reverse_str numbers)\n\
+    \n  ;; For a given list of integers, return the first number in the list\n  ;;\
+    \ >>> first_num(1)\n  ;; (1)\n  (define (first_num x)\n    (cond\n      ((null?\
+    \ x) nil)\n      (else (list (car x) (cdr x)))))\n  ;; >>> first_num(1)\n  ;;\
+    \ (1)\n\n  ;; For a given list of integers, return the last number in the list\n\
+    \  ;; >>> last_num(1)\n  ;; (1)\n  (define (last_num x)\n    (cond\n      ((null?\
+    \ x) nil)\n      (else (list (cdr x) (car x)))))\n  ;; >>> last_num(1)\n  ;; (1)\n\
+    \n  ;; For a given list of integers, return the sum of the first and last number\
+    \ in the list\n  ;; >>> first_last_sum(1)\n  ;; (1 1)\n  (define (first_last_sum\
+    \ x)\n    (cond\n      ((null? x) nil)\n      (else (list (", "  (let ((sum 0))\n\
+    \    (let loop ((sum 0) (product 1) (numbers numbers))\n      (cond ((null? numbers)\
+    \ (list sum product))\n            ((odd? (car numbers)) (loop (+ sum sum) (*\
+    \ product (/ 1 car numbers)) (cdr numbers)))\n            (else (loop (+ sum sum)\
+    \ (* product car numbers) (cdr numbers)))))))\n", "  (if (null? numbers)\n   \
+    \   ; Return an empty pair\n      (let ((result (list 0 (first numbers))))\n \
+    \       (if (null? (rest numbers))\n            (cons result (+ result 1))\n \
+    \           (let ((product (1* (first numbers))))\n              (if (null? (rest\
+    \ numbers))\n                  (cons result product)\n                  (let ((sum\
+    \ (+ sum (first numbers))))\n                    (if (null? (rest numbers))\n\
+    \                        (cons result (+ result sum))\n                      \
+    \  (let ((product (1* (rest numbers))))\n                          (if (null?\
+    \ (rest numbers))\n                              (cons result (+ result product))\n\
+    \                              (let ((sum (+ sum (rest numbers))))\n         \
+    \                       (cons result (+ result sum) (* result product)))))))))\n\
+    \      ; Return only a pair\n      (let ((result (list 0 (first numbers))))\n\
+    \        (if (null? (rest numbers))\n            (cons result (+ result 1))\n\
+    \            (let ((product (1* (first numbers))))\n              (if (null? (rest\
+    \ numbers))\n                  (cons result product)\n                  (let ((sum\
+    \ (+ sum (first numbers))))\n                    (if (null? (rest numbers))\n\
+    \                        (cons result (+ result sum))\n                      \
+    \  (let ((product (1* (rest numbers))))\n                          (if (null?\
+    \ (rest numbers))\n                              (cons result (+ result product))\n\
+    \                              (let ((sum (+ sum (rest numbers))))\n         \
+    \                       (cons result (+ result sum) (* result product)))))))))))\n\
+    \      ; Return only an integer\n      (let ((result (list 0 (first numbers))))\n\
+    \        (if (null? (rest numbers))\n            (cons result (+ result 1))\n\
+    \            (let ((product (1* (first numbers))))\n              (if (null? (rest\
+    \ numbers))\n                  (cons result product)\n                  (let ((sum\
+    \ (+ sum (first numbers))))\n                    (if (null? (rest numbers))\n\
+    \                        (cons result (+ result sum))\n                      \
+    \  (let ((product (1* (rest numbers))))\n                          (if (null?\
+    \ (rest numbers))\n                              (cons result (+ result product))\n\
+    \                              (let ((sum (+ sum (rest numbers))))\n         \
+    \                       (cons result (+ result sum) (* result product)))))))))))\n\
+    \      ; Return only a pair and a float\n      (let ((result (list 0 (first numbers))))\n\
+    \        (if (null? (rest numbers))\n            (con", "  (let ((sum 0)\n   \
+    \     (product 1))\n    (for ([i numbers])\n      (set! sum (+ sum i))\n     \
+    \ (set! product (* product i)))\n    (list sum (* product 1))))\n", "  (if (null?\
+    \ numbers) \n      (cons (car numbers) (cons 1 (car numbers))) \n      (let ((sum\
+    \ (car numbers))\n            (product (car numbers)))\n        (sum_product (cdr\
+    \ numbers))\n        (cons (+ (* sum product) (* sum product)) \n            \
+    \  (cons (* sum product) (* sum product)))))) \n", "  (define (helper numbers\
+    \ sum product i)\n    (cond ((null? numbers) (list sum product))\n          ((=\
+    \ i 0) (helper numbers (+ sum numbers) product 0))\n          (else (helper (cdr\
+    \ numbers) sum (* product numbers) (+ i 1))))))\n  (helper numbers '() '1 0))\n",
+  "  (let ((sum (car numbers))\n        (prod 1))\n    (cond ((null? numbers) (list\
+    \ sum prod))\n          ((> (car numbers) sum) (list 0 (* (car numbers) prod)))\n\
+    \          ((< (car numbers) sum) (list 1 (+ (car numbers) prod)))\n         \
+    \ (else         (list (+ sum prod)\n                            (* prod (car numbers))\n\
+    \                            (sum_product (cdr numbers)))))))\n</cell>\n<code\
+    \ language=r>", "  (cond\n    [(empty? numbers) \n     (list 0 (product numbers))]\n\
+    \    [else\n     (+ (first numbers)\n      (sum_product (rest numbers))\n    \
+    \  (product numbers))]))\n", "  (let loop ((sum 0) (product 1))\n    (cond ((empty?\
+    \ numbers) (list sum product))\n          ((= 1 (car numbers)) (loop (+ sum 1)\
+    \ (* product (car numbers))))\n          (else (loop (+ sum (car numbers)) (*\
+    \ product (car numbers)))))))\n", "  (cond\n    [(empty? numbers) (pair? numbers)\n\
+    \     (cond [(empty? (rest numbers)) (pair? (rest numbers))\n             (cons\
+    \ (pair? (rest numbers)) (pair? (rest numbers))\n               (cons (pair? (rest\
+    \ numbers)) (pair? (rest numbers))\n                 (cons (pair? (rest numbers))\
+    \ (pair? (rest numbers))\n                   (cons (pair? (rest numbers)) (pair?\
+    \ (rest numbers)))\n                 (cons (pair? (rest numbers)) (pair? (rest\
+    \ numbers)))]\n           [else (pair? (rest numbers))]\n          )]]\n    [else\
+    \ (cons (+ (first numbers)) (product (cons (rest numbers) numbers)))]))\n</code>\n\
+    <|/ a |>\n<| c |>\nThanks for your time and effort! I appreciate it very much!\n\
+    <|/ c |>\n<| c |>\nThe product of empty list is always 1. So you can simplify\
+    \ `(define (sum_product numbers) (if (empty? numbers) (cons 1 (product (rest numbers)))\
+    \ (* (first numbers) (sum_product (rest numbers)))))`\n<|/ c |>\n<| a dscore=1\
+    \ |>\n<code>", "  (let ((sum (+ 0 numbers)))\n    (cond ((null? numbers) (cons\
+    \ sum sum))\n          (else (let ((product 1))\n                    (cons (car\
+    \ numbers) (* product (cdr numbers)))\n                    (cons product sum))\n\
+    \          ))\n  )\n", "  (if (empty? numbers)\n      (cons 0 (cons 1 (cons 1\
+    \ (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons\
+    \ 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 0 (cons\
+    \ 0)))))))) ))))))))\n      ;; (cons 0 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1\
+    \ (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons\
+    \ 1 (cons 1 (cons 0 (cons 0)))))))) ))))))))\n      ;; (cons 0 (cons 1 (cons 1\
+    \ (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons 1 (cons\
+    \ 1 (cons 1 (cons 1 (cons 0 (cons 0)))))))) ))))))))\n      (cons (+ 0 (map (lambda\
+    \ (x) (* x x)) numbers))\n            (map (lambda (x) (* x x)) numbers))))\n",
+  "  (cond\n    ((null? numbers)\n     (error \"Can't compute sum product on empty\
+    \ list\"))\n    ((= 0 (length numbers) )\n     (cons (car numbers) (* 1 (car numbers))))\n\
+    \    (else\n     (+ (car numbers)\n      (sum_product (cdr numbers)))\n     )\n\
+    \   ))\n</code>\n<|/ a |>\n<| a |>\n<code>", "  (cond\n    [(empty? numbers) (list\
+    \ 0 (product numbers))]\n    [else (cons (+ (car numbers) (sum_product (rest numbers)))\
+    \ (product numbers))]))\n", "  (let ((sum 0) (product 1))\n    (cond [(empty?\
+    \ numbers) (list (list sum product))]\n          [else (let ((num (first numbers))\n\
+    \                       (product (* product num)))\n                    (cond\
+    \ [(< num 0) (list sum (/ num product))]\n                          [(= num 0)\
+    \ (list sum (* product 1))]\n                          [else (cons num (sum_product\
+    \ (rest numbers)))]))])))\n", "  (let ((sum (* 0 numbers))\n        (product 1))\n\
+    \    (cond\n      [(empty? numbers) (cons sum (cons product 1))]\n      [else\
+    \ (let ((n (first numbers)))\n               (cond\n                [(= n 0) (cons\
+    \ sum (cons product 0))]\n                [else (cons (+ n sum) \n           \
+    \                (* product (- n 1))\n                           (sum_product\
+    \ (rest numbers)))])))])))\n", "  (cond\n    ((null numbers)\n     (list 0 1))\n\
+    \    ((null? (cdr numbers))\n     (list (car numbers) (car (cdr numbers))))\n\
+    \    (else\n     (let ((sum (+ (car numbers) (sum_product (cdr numbers))))\n \
+    \          (product (* product (car numbers))))\n       (list sum (* product (car\
+    \ numbers)))))))\n", "  (cond ((null? numbers) (list 0 (1)))\n        ((= (remainder\
+    \ 0 (length numbers)) (length numbers))\n         (let ((sum (car numbers))\n\
+    \               (product 1))\n           (cons (+ (* sum product) (remainder 0\
+    \ (length numbers)))\n                 (sum_product (rest numbers)))))\n     \
+    \   (else (let ((sum (car numbers))\n                    (product 1))\n      \
+    \         (cons (+ (* sum product) (* product (remainder 0 (length numbers))))\n\
+    \                     (sum_product (rest numbers))))))))\n", "  (let ((product\
+    \ 1))\n    (for ((number numbers))\n      (let ((sum (+ (* product number) (*\
+    \ number product))))\n        (set! product (* product number))\n        (set!\
+    \ sum (* sum number))\n        (list sum (* product number)))))\n", "  (cond\n\
+    \    ((empty? numbers) (list 0 1))\n    ((= (length numbers) 1) (cons (car numbers)\
+    \ (cons 1 (sum_product (rest numbers)))))\n    (else\n      (let ((sum (car numbers))\n\
+    \            (product (sum_product (rest numbers))))\n        (cond\n        \
+    \  ((= sum 0) (cons 0 product))\n          ((= product 1) (cons sum product))\n\
+    \          (else\n           (cons (+ sum (car numbers))\n                 (*\
+    \ product (car numbers)))))))) \n", "  (define (sum x y)\n    (if (< x y) x (+\
+    \ x y)))\n  (define (prod x y)\n    (if (< x y) 1 (* x y)))\n  (sum (product 1\
+    \ 1) (product 1 1)\n    (map sum numbers numbers numbers))\n)\n", "  (let loop\
+    \ ((sum (car numbers)) (product 1))\n    (if (null? (cdr numbers))\n      (cons\
+    \ sum product)\n      (loop (+ sum car product) (* product (cdr numbers))))))\n",
+  "  (cond\n    [(empty? numbers) (list 0 1)]\n    [else (+ (car numbers)\n      \
+    \        (sum_product (cdr numbers)))]))\n", "  (define (loop lst sum product)\n\
+    \    (cond ((null? lst) \n           (list sum product))\n          ((= 1 (car\
+    \ lst))\n           (loop (cdr lst) (+ sum (car lst)) (* product (car lst))))\n\
+    \          (else\n           (loop (cdr lst) sum (* product (car lst))))))\n \
+    \ (loop (reverse numbers) 0 1))\n", "  (if (null? numbers) \n      (cons 0 1)\n\
+    \      ; Remember that this list has at least 2 elements\n      (append (+ (car\
+    \ numbers) (sum_product (rest numbers)))\n               (* (car numbers) (sum_product\
+    \ (rest numbers))))))\n", "  (define (helper current result)\n    (if (empty?\
+    \ numbers)\n        (list result 0)\n        (helper (cdr numbers) (+ result (*\
+    \ current (car numbers))))))\n  (helper numbers 0))\n", "  (letrec ((helper (lambda\
+    \ (numbers sum product)\n                   (cond\n                    [(empty?\
+    \ numbers) (list 0 product)]\n                    [else (cons (+ (car numbers)\
+    \ sum) \n                                 (helper (cdr numbers)\n            \
+    \                              (+ (car numbers) sum) \n                      \
+    \                    product))])))\n            (sum-product '() '1 '1)\n    \
+    \        (product-product '() '1 '1)))\n    (helper numbers '() '1))\n  \n  "]
 stop_tokens:
 - "\n(define "
 - "\n#|"

@@ -9,7 +9,1937 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate p
   \    (check-equal? (candidate \"(()()) ((())) () ((())()())\") (list 2 3 1 3))\n\
   \    (check-equal? (candidate \"() (()) ((())) (((())))\") (list 1 2 3 4))\n   \
   \ (check-equal? (candidate \"(()(())((())))\") (list 4))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (let loop ([paren_string paren_string]\n             [paren_level\
+    \ 0]\n             [paren_string paren_string]\n             [groups '()])\n \
+    \   (if (empty? paren_string)\n        (reverse groups)\n        (let ((char (char-code\
+    \ (first paren_string))))\n          (if (equal? char #\\())\n              (loop\
+    \ (rest paren_string)\n                    (add1 paren_level)\n              \
+    \      (rest paren_string)\n                    (set! groups cons (- paren_level\
+    \ 1)))\n              (if (equal? char #\\))\n                  (loop (rest paren_string)\n\
+    \                        (add1 paren_level)\n                        (rest paren_string)\n\
+    \                        (set! groups cons paren_level)))\n          (loop (rest\
+    \ paren_string)\n                (add1 paren_level)\n                (rest paren_string)\n\
+    \                (set! groups cons paren_level)))))\n", "  (let ((parens empty))\n\
+    \    (let loop ((i 0) (cur paren_string))\n      (cond ((< i (length paren_string))\n\
+    \             (cond ((equal? cur '())\n                    (if (empty? parens)\n\
+    \                        i\n                        (loop (+ i 1) (pop parens)))\n\
+    \                     (loop (+ i 1) (pop parens)))\n               (else\n   \
+    \             (loop (+ i 1) cur)))\n            (t\n             (push cur parens)))))))\n",
+  "  (let loop ((paren_string paren_string)\n             (levels '(0 0 0 0 0)))\n\
+    \    (if (empty? paren_string)\n        (reverse levels)\n        (let ((char\
+    \ (car paren_string)))\n          (if (char '(\n                  (loop (cdr paren_string)\n\
+    \                        (cond [(char '()\n                              (set!\
+    \ levels (cons (length levels) levels))\n                              (loop (cdr\
+    \ paren_string) (add1 (length levels))))]\n                            [else\n\
+    \                              (set! levels (cons 0 levels))\n               \
+    \               (loop (cdr paren_string) (add1 (length levels))))]))\n       \
+    \     (loop (cdr paren_string)\n                  levels)))\n    (loop '(()) '(()))\n\
+    \  ))\n", "  (define levels ())\n  (define level (0))\n  (define level_i 0)\n\
+    \  (let ([i paren_string])\n    (set! level (- level_i 2))\n    (set! levels (cons\
+    \ level levels))\n    (while (char= i #\\))\n      (if (not (endp (cdr levels)))\n\
+    \        (begin (set! level_i level_i)\n               (set! levels (cons level\
+    \ levels))\n               (set! level (+ level_i 1)))))\n    (if (not (endp (cdr\
+    \ levels)))\n      (set! levels (cons level levels))\n      levels))\n", "  (define\
+    \ (parse paren_string)\n    (cond\n      [(empty? paren_string) '()]\n      [(string=?\
+    \ (car paren_string) '(') (parse-nested (list paren_string) (parse-nested (cdr\
+    \ paren_string)))]\n      [(string=? (car paren_string) '{') (parse-nested (list\
+    \ paren_string) (parse-nested (cdr paren_string)))]\n      [(string=? (car paren_string)\
+    \ '[') (parse-nested (list paren_string) (parse-nested (cdr paren_string)))]\n\
+    \      [else (parse-nested (list paren_string) (parse-nested (cdr paren_string)))]\n\
+    \      ))\n  (parse paren_string))\n", "  (let loop ((nesting 0) (depth 0) (group\
+    \ 0))\n    (cond [(string-length paren_string)\n           (if (= (- nesting depth)\
+    \ 0)\n               (cond [(= (- depth 0) (- nesting depth))\n              \
+    \         (append (list group) (reverse (list nesting))\n                    \
+    \          (loop (+ nesting 1) (- depth 1) (cons group 0)))]\n               \
+    \        ([false]\n                        (append (list group) (reverse (list\
+    \ nesting))\n                              (loop (+ nesting 1) (- depth 1) (cons\
+    \ group 0))))]\n             [false]))\n           [(string-empty? paren_string)\n\
+    \           (append (list group) (reverse (list nesting))\n                  (loop\
+    \ (+ nesting 1) (- depth 1) (cons group 0))]\n           [else (loop (+ nesting\
+    \ 1) (- depth 1) (cons group 0))]])\n  )\n)\n", "  (define (helper\n         \
+    \  paren_count_left\n           paren_count_right\n           current_depth\n\
+    \           max_depth)\n    (cond [(empty? paren_string) max_depth]\n        \
+    \  [(char=? (first paren_string) (first ')')) (helper (rest paren_string) 1 current_depth\
+    \ max_depth)]\n          [(char=? (first paren_string) (first ')')) (helper (rest\
+    \ paren_string) (+ 1 paren_count_left) current_depth max_depth)]\n          [(char=?\
+    \ (first paren_string) '(') (helper (rest paren_string) (+ 1 paren_count_right)\
+    \ (+ 1 current_depth) max_depth)]\n          [else (helper (rest paren_string)\
+    \ (+ 1 paren_count_left) 1 max_depth)])\n    (helper 0 1 0 0))\n  (helper (length\
+    \ (string-split paren_string)) 0 0 0))\n", "  (let loop ((groups '()))\n    (if\
+    \ (= (length paren_string) 0)\n        (list 0)\n        (let ((char (char-code\
+    \ (list-ref paren_string 0)))\n              (level (+ 1 groups)))\n         \
+    \ (if (= char #\\())\n              (loop (cons group groups))\n             \
+    \ (if (char-code (char-code (char-code (char-code char))))\n                 \
+    \ (loop (cons group groups))\n                  (loop (cons (- group 1) groups)))))\n\
+    \    groups))\n", "  (let\n      ((stack '())\n        (i (position 1 paren_string))\n\
+    \        (end (+ i 1)))\n    (unless (char= paren_string[end] '(')\n      (set!\
+    \ stack (cons paren_string[end] stack))\n      (set! i (+ i 1)))\n    (unless\
+    \ (char= paren_string[i] '(')\n      (set! stack (cons paren_string[i] stack))\n\
+    \      (set! i (+ i 1)))\n    (if (or (char= paren_string[end] ')')\n        \
+    \    (char= paren_string[i] '('))\n      (reverse (cons stack ()))\n      (let\
+    \ ((new_stack (parse_nested_parens paren_string)))\n        (set! stack (cons\
+    \ new_stack stack)))))\n", "  (define (parse_nested_parens_helper paren_string\
+    \ level max_level)\n    (cond\n      [(empty? paren_string) max_level]\n     \
+    \ [(char=? (car paren_string) '(') (parse_nested_parens_helper (cdr paren_string)\
+    \ (+ 1 level) max_level)]\n      [(char=? (car paren_string) '(') (parse_nested_parens_helper\
+    \ (cdr paren_string) level max_level)]\n      [(char=? (car paren_string) ')')\
+    \ (parse_nested_parens_helper (cdr paren_string) level (min level max_level))]\n\
+    \      [(char=? (car paren_string) ')') (parse_nested_parens_helper (cdr paren_string)\
+    \ level (min max_level max_level))]\n      [else (parse_nested_parens_helper (cdr\
+    \ paren_string) (+ 1 level) max_level)]))\n  (parse_nested_parens_helper paren_string\
+    \ 0 0))\n</code>\n<|/ a tags=racket,string,nested,scheme |>\n<| c |>\nThank you.\
+    \ This really helped. I'm also very new to Racket and R5RS and it's going quite\
+    \ smoothly. I've been working on this all day but now I see what I was doing wrong\
+    \ and how it works now. Thanks again!\n<|/ c |>\n<| a |>\nA very naive way to\
+    \ solve this would be to traverse the string recursively:\n<code>", "  (cond\n\
+    \    [(empty? paren_string) '()]\n    [(equal? (car paren_string) '(') \n    \
+    \ (let ([level (parse_nested_parens (cdr paren_string))])\n       (if (= level\
+    \ 0) (cdr paren_string) \n         (let ([substring (parse_nested_parens (cdr\
+    \ paren_string))])\n           (if (= level 1) substring (append '() (substring\
+    \ substring 0)))))]\n    [else \n     (let ([level (parse_nested_parens (cdr paren_string))])\n\
+    \       (if (= level 0) (cdr paren_string) \n         (let ([substring (parse_nested_parens\
+    \ (cdr paren_string))])\n           (if (= level 1) substring (append '() (substring\
+    \ substring 0)))))]\n    [else (error 'ParseNestedParens \"Unrecognized input\"\
+    \ (list->string (list->list paren_string))])]))\n", "  (cond [(null? paren_string)\
+    \ 0]\n        [(equal? (car paren_string) '()) 0]\n        [else (max (parse_nested_parens\
+    \ (rest paren_string)) (+ 1 (parse_nested_parens (car paren_string))))]))\n",
+  "  (let loop ((depth 0)\n             (parens (substring paren_string 0 (string-length\
+    \ paren_string)))\n             (result '()))\n    (if (string= paren_string \"\
+    \")\n        result\n        (let ((next (substring paren_string 0 (string-length\
+    \ paren_string)))\n              (found (equal (char next '(') (char parens '(')))\n\
+    \              (found (not (equal (char next ')') (char parens ')'))))\n     \
+    \     (if (equal? found true)\n              (loop (add1 depth) (substring paren_string\
+    \ 0 (string-length paren_string))\n                     (append result (list depth)))\n\
+    \              (loop (add1 depth) (substring paren_string 0 (string-length paren_string))\n\
+    \                     (append result (list depth)))))))\n", "  (let ((levels ()))\n\
+    \    (if (string-empty? paren_string)\n        (list 0)\n        (let ((char (string->char\
+    \ (string->list paren_string))))\n          (if (equal? (string->char char) #\\\
+    ))\n              (if (pair? char) (append levels (nth 0 char) (parse_nested_parens\
+    \ (substring paren_string 2))\n                  (let ((next_char (string->char\
+    \ (string->list (substring paren_string 2))))\n                    (if (equal?\
+    \ (string->char next_char) #\\))\n                        (if (pair? char) (append\
+    \ levels (nth 1 char) (parse_nested_parens (substring paren_string 3))\n     \
+    \                       (let ((next_char (string->char (string->list (substring\
+    \ paren_string 3))))\n                              (if (equal? (string->char\
+    \ next_char) #\\))\n                                  (if (pair? char) (append\
+    \ levels (nth 2 char) (parse_nested_parens (substring paren_string 4))\n     \
+    \                                 (let ((next_char (string->char (string->list\
+    \ (substring paren_string 4))))\n                                        (if (equal?\
+    \ (string->char next_char) #\\))\n                                           \
+    \ (if (pair? char) (append levels (nth 3 char) (parse_nested_parens (substring\
+    \ paren_string 5))\n                                                (let ((next_char\
+    \ (string->char (string->list (substring paren_string 5))))\n                \
+    \                                  (if (equal? (string->char next_char) #\\))\n\
+    \                                                      (if (pair? char) (append\
+    \ levels (nth 4 char) (parse_nested_parens (substring paren_string 6))\n     \
+    \                                                   (let ((next_char (string->char\
+    \ (string->list (substring paren_string 6))))\n                              \
+    \                            (if (equal? (string->char next_char) #\\))\n    \
+    \                                                          (if (pair? char) (append\
+    \ levels (nth 5 char) (parse_nested_parens (substring paren_string 7))\n     \
+    \                                                           (let ((next_char (string->char\
+    \ (string->list (substring paren_string 7))))\n                              \
+    \                                    (if (equal? (string->char next_char) #\\\
+    ))\n                                                                      (if\
+    \ (pair? char) (append levels (nth 6 char) (parse_nested_parens (substring paren_string\
+    \ 8))\n                                                                      \
+    \    (let ((next_char (string->char (string->list (substring paren_string 8))))\n\
+    \                                            (if (equal? (string->char next_char)\
+    \ #\\))\n                                                (if (pair? char) (append\
+    \ levels (nth 7 char) (parse_nested_parens (substring paren_string 9))\n     \
+    \                                             (let ", "  (let loop ((parens 0))\n\
+    \    (cond\n      [(empty? paren_string)\n       (set! parens 0)]\n      [(equal?\
+    \ (car paren_string) '())\n       (add! parens 0)]\n      [(char? (car paren_string))\n\
+    \       (let ((new_parens (loop (+ parens (length paren_string))))\n         \
+    \    (new_string (cdr paren_string)))\n         (cond\n           [(equal? new_string\
+    \ '())\n            (loop (add! parens new_parens))]\n           [(empty? new_string)\n\
+    \            (set! parens new_parens)]\n           [else\n            (set! parens\
+    \ new_parens)\n            (loop (add! parens (length new_string)))]))]\n    \
+    \  [else\n       (loop (add! parens (length paren_string)))]))\n  parens)\n",
+  "  (let loop ((paren_string (subseq paren_string 0 (- (string-length paren_string)\
+    \ 1)))\n             (nested_level (length paren_string))\n             (result\
+    \ '()))\n    (cond\n      [(empty? paren_string)\n       result]\n      [(equal?\
+    \ (first paren_string) '(')\n       (loop (rest paren_string)\n             (add1\
+    \ nested_level)\n             (append result (first (rest paren_string))))]\n\
+    \      [(equal? (first paren_string) '(')\n       (loop (rest paren_string)\n\
+    \             (sub1 nested_level)\n             (append result (first (rest paren_string))))]\n\
+    \      [else\n       (loop (rest paren_string)\n             (sub1 nested_level)\n\
+    \             (append result (first (rest paren_string))))]\n    )\n    result))\n",
+  "  (define num_levels (parse_nested_parens_levels paren_string))\n  (if (zero? num_levels)\n\
+    \      (length paren_string)\n      (max num_levels (parse_nested_parens_levels\
+    \ paren_string))))\n", "  (let ((depths ()))\n    (loop for i from 0 to (length\
+    \ paren_string) do\n          (let* ((current (substring paren_string i 1))\n\
+    \                 (next (substring paren_string i 2))\n                 (count\
+    \ 1))\n            (cond\n              [(string=? current \")\")\n          \
+    \     (add1 (make-list count (cond [(string=? next \")\") 0] [0])))]\n       \
+    \       [(string=? current \"(\")]\n              [(string=? next \")\")\n   \
+    \            (add1 (make-list count (cond [(string=? next \"(\") 0] [0])))]\n\
+    \              [(string=? current \")\")\n               (cond\n             \
+    \    [(string=? next \")\")\n                  (add1 (make-list count (cond [(string=?\
+    \ next \"(\") 0] [0])))]\n                 [else\n                  (cond\n  \
+    \                  [(string=? next \")\")\n                     (add1 (make-list\
+    \ count (cond [(string=? next \"(\") 0] [0])))]\n                    [else\n \
+    \                    (cond\n                      [(string=? next \")\")\n   \
+    \                    (cond\n                         [(string=? next \"(\")\n\
+    \                           (cond\n                             [(string=? next\
+    \ \")\")\n                               (add1 (make-list count (cond [(string=?\
+    \ next \"(\") 0] [0])))]\n                             [else\n               \
+    \                (add1 (make-list count (cond [(string=? next \"(\") 0] [0])))])]\n\
+    \                         [else\n                           (add1 (make-list count\
+    \ (cond [(string=? next \"(\") 0] [0])))])]\n                      [else\n   \
+    \                    (add1 (make-list count (cond [(string=? next \"(\") 0] [0])))])]\n\
+    \                    [else\n                     (add1 (make-list count (cond\
+    \ [(string=? next \"(\") 0] [0])))])]\n                  [else\n             \
+    \     (add1 (make-list count (cond [(string=? next \"(\") 0] [0])))])]\n     \
+    \         [else\n              (add1 (make-list count (cond [(string=? next \"\
+    (\") 0] [0])))])\n            (cond\n              [(string=? next \"(\")\n  \
+    \             (let ((depth (+ 1 (length depths))))\n                 (cond\n \
+    \                  [(string=? next \")\")\n                    (add1 (make-list\
+    \ depth (cond [(string=? next \"(\") 0] [0])))]\n", "  (define (parse-paren paren_string\
+    \ level)\n    (cond [(not (null? paren_string))\n           (if (char= paren_string\
+    \ (first paren_string))\n               (parse-paren (rest paren_string) (incf\
+    \ level))\n               (parse-paren (rest paren_string) level))]\n        \
+    \  [else level]))\n  (parse-paren paren_string 0))\n", "  (define (deep_max level\
+    \ output)\n    (cond [(= level 0) (length output)]\n          [(> level 0) (deep_max\
+    \ (- level 1) (cons level output))]\n          [else (deep_max (- level 1) output)]))\n\
+    \  (deep_max 0 (list 0)))\n", "  (let loop ((parens '())\n             (levels\
+    \ 0))\n    (if (not (equal? (string-length paren_string) 0))\n        (loop (append\
+    \ parens (list (car paren_string)))\n             (+ 1 levels))\n        (list\
+    \ levels))))\n", "  (let ([stack (make-empty-stack)])\n    (loop [paren_string\
+    \ paren_string\n           stack stack]\n      (cond\n        ((empty? paren_string)\n\
+    \         (push (length! stack) stack)\n         stack)\n        ((char= (char\
+    \ paren_string 0) #\\()\n         (push 1 (pop stack))\n         (push paren_string\
+    \ stack))\n        ((char= (char paren_string 0) #\\)\n         (push 1 (pop stack))\n\
+    \         (push stack stack))\n        (else\n         (cond [(char= (char paren_string\
+    \ 0) #\\))\n                (push 1 (pop stack))\n                (push stack\
+    \ stack)]\n              [(char= (char paren_string 0) #\\))\n               \
+    \ (push 1 (pop stack))\n                (push stack stack)\n                (push\
+    \ paren_string stack)\n                (push (length! stack) (pop stack))\n  \
+    \              (push stack stack)\n                (push stack stack)\n      \
+    \          (push stack stack)]\n              [(char= (char paren_string 0) #\\\
+    ))\n                (push 1 (pop stack))\n                (push stack stack)\n\
+    \                (push stack stack)\n                (push stack stack)\n    \
+    \            (push stack stack)\n                (push stack stack)]\n       \
+    \       [(char= (char paren_string 0) #\\)\n                (push 1 (pop stack))\n\
+    \                (push stack stack)\n                (push stack stack)\n    \
+    \            (push stack stack)\n                (push stack stack)\n        \
+    \        (push stack stack)]\n              [(char= (char paren_string 0) #\\\
+    ))\n                (push 1 (pop stack))\n                (push stack stack)\n\
+    \                (push stack stack)\n                (push stack stack)\n    \
+    \            (push stack stack)\n                (push stack stack)\n        \
+    \        (push stack stack)]\n              [(char= (char paren_string 0) #\\\
+    ()\n                (push 1 (pop stack))\n                (push stack stack)\n\
+    \                (push stack stack)\n                (push stack stack)\n    \
+    \            (push stack stack)\n                (push stack stack)\n        \
+    \        (push stack stack)]\n              [(char= (char paren_string 0) #\\\
+    ()\n                (push 1 (pop stack))\n                (push stack stack)\n\
+    \                (push stack stack)\n                (push stack stack)\n    \
+    \            (push stack stack)\n                (push stack stack)\n        \
+    \        (push stack stack)]\n              [(char= (char paren_string 0) #\\\
+    ()\n                (push 1 (pop stack))\n                (push stack stack)\n\
+    \                (push stack stack)\n                (push stack stack", "  (define\
+    \ (count open_parens closed_parens)\n    (cond\n      [(= open_parens closed_parens)\
+    \ (+ open_parens closed_parens)]\n      [(> closed_parens open_parens) (count\
+    \ (+ open_parens closed_parens) (+ closed_parens open_parens))]\n      [(= open_parens\
+    \ 0) (+ closed_parens closed_parens)]\n      [(< closed_parens open_parens) (count\
+    \ (+ open_parens closed_parens) (+ closed_parens open_parens))]\n      [(= closed_parens\
+    \ 0) (+ open_parens open_parens)]\n      [(< open_parens closed_parens) (count\
+    \ (+ open_parens closed_parens) (+ closed_parens open_parens))]\n      [(< open_parens\
+    \ 0) (+ closed_parens closed_parens)]\n      [(> closed_parens 0) (count (+ open_parens\
+    \ closed_parens) (+ closed_parens open_parens))]\n      [(> open_parens 0) (+\
+    \ closed_parens open_parens)]\n      [(< closed_parens 0) (+ open_parens open_parens)]\n\
+    \      [(> open_parens 0) (+ closed_parens closed_parens)]\n      [(< open_parens\
+    \ closed_parens) (count (+ open_parens closed_parens) (+ closed_parens open_parens))]\n\
+    \      [else (+ 1 (count open_parens closed_parens))])))\n  (define (next_group\
+    \ group open_brackets)\n    (cond\n      [(or (string=? (substring group 1) '(')\
+    \ (string=? (substring group 1) '['))\n       (cond\n         [(or (string=? (substring\
+    \ group 2) '(') (string=? (substring group 2) '['))\n          (+ open_brackets\
+    \ (count (+ open_brackets 1) 1))]\n         [(or (string=? (substring group 2)\
+    \ '[') (string=? (substring group 2) '('))\n          (+ open_brackets (count\
+    \ (+ open_brackets 1) -1))]\n         [(or (string=? (substring group 3) '(')\
+    \ (string=? (substring group 3) '['))\n          (+ open_brackets (count (+ open_brackets\
+    \ 1) 2))]\n         [(or (string=? (substring group 3) '[') (string=? (substring\
+    \ group 3) '('))\n          ", "  (let loop ((paren_string paren_string)\n   \
+    \          (current_level 0))\n    (cond [(null? paren_string) 0]\n          [(char=\
+    \ (char paren_string 0) '( () )]\n          [(char= (char paren_string 0) '())\
+    \ 1]\n          [(char= (char paren_string 0) '()) 2]\n          [(char= (char\
+    \ paren_string 0) '())] 3)\n          [(char= (char paren_string 0) '()) 3]\n\
+    \          [(char= (char paren_string 0) '())] 4)\n          [(char= (char paren_string\
+    \ 0) '( () ))] 5)\n          [(char= (char paren_string 0) '( () ))] 6)\n    \
+    \      [(char= (char paren_string 0) '( () ))] 7)\n          [(char= (char paren_string\
+    \ 0) '( () ))] 8)\n          [(char= (char paren_string 0) '( () ))] 9)\n    \
+    \      [(char= (char paren_string 0) '( () ))] 10)\n          [(char= (char paren_string\
+    \ 0) '( () ))] 11)\n          [(char= (char paren_string 0) '( () ))] 12)\n  \
+    \        [(char= (char paren_string 0) '( () ))] 13)\n          [(char= (char\
+    \ paren_string 0) '( () ))] 14)\n          [(char= (char paren_string 0) '( ()\
+    \ ))] 15)\n          [(char= (char paren_string 0) '( () ))] 16)\n          [(char=\
+    \ (char paren_string 0) '( () ))] 17)\n          [(char= (char paren_string 0)\
+    \ '( () ))] 18)\n          [(char= (char paren_string 0) '( () ))] 19)\n     \
+    \     [(char= (char paren_string 0) '( () ))] 20)\n          [(char= (char paren_string\
+    \ 0) '( () ))] 21)\n          [(char= (char paren_string 0) '( () ))] 22)\n  \
+    \        [(char= (char paren_string 0) '( () ))] 23)\n          [(char= (char\
+    \ paren_string 0) '( () ))] 24)\n          [(char= (char paren_string 0) '( ()\
+    \ ))] 25)\n          [(char= (char paren_string 0) '( (", "  (let loop ((depth\
+    \ 0))\n    (cond ((empty? paren_string) '())\n          ((char=? (car paren_string)\
+    \ #\\())\n           (loop (add1 depth)\n                 (cdr paren_string))\n\
+    \           (loop (add1 depth)\n                 (car paren_string)))\n      \
+    \    (else (loop (add1 depth)\n                      (loop (add1 depth) (parse_rest_of_parens\
+    \ (cdr paren_string)))))))\n", "  (let loop ((depth 0))\n    (cond\n      [(string-length\
+    \ = paren_string) depth]\n      [(char-equal? paren_string\n                 \
+    \ '())\n       (loop (add1 depth))\n       depth]\n      [else\n       (loop (add1\
+    \ depth) (parse-parens (string->list paren_string)))\n       depth])))\n", " \
+    \ (cond\n    [(empty? paren_string) 0]\n    [else\n     (let ([opening_paren (first\
+    \ (subseq paren_string 0 1)))\n           (closed_paren (rest (subseq paren_string\
+    \ 1 end)))\n           (levels (parse_nested_parens closed_paren))]\n      (cond\n\
+    \       [(equal? opening_paren '(') (+ 1 (first levels))]\n       [(equal? opening_paren\
+    \ '[) (+ 1 (first levels))]\n       [(equal? opening_paren '{) (+ 1 (first levels))]\n\
+    \       [(equal? opening_paren '#lang) (+ 1 (first levels))]\n       [(equal?\
+    \ (first levels) closed_paren]\n       [(equal? (first levels) opening_paren)\n\
+    \        (max (first levels)\n             (max levels\n                   (parse_nested_parens\
+    \ closed_paren)))]\n       [else\n        (max (first levels)\n             (max\
+    \ levels\n                   (parse_nested_parens closed_paren)))]))]))\n", " \
+    \ (cond [(string-empty? paren_string)\n         (list 0)]\n        [(= (string-length\
+    \ paren_string) 1)\n         (+ (parse (substring paren_string 0 1) (parse_nested_parens\
+    \ \n                                                      (substring paren_string\
+    \ 1 \n                                                               (string-length\
+    \ paren_string)))) 1)]\n        [else\n         (let ([result (parse (substring\
+    \ paren_string 0 1) \n                            (parse_nested_parens (substring\
+    \ paren_string 1 \n                                                      (string-length\
+    \ paren_string)))) \n               temp (parse_nested_parens (substring paren_string\
+    \ 1 \n                                               (string-length paren_string)))])\n\
+    \           (if (null? (car temp))\n               (append result temp)\n    \
+    \           (append result (car temp))))])) ;; # lang racket\n  ", "  (let loop\
+    \ ((levels null) (result null) (paren_string paren_string))\n    (cond ((equal?\
+    \ paren_string '())\n           (reverse levels))\n          ((begins-with? paren_string\
+    \ '(()))\n           (loop (list (length levels) levels)\n                 (cons\
+    \ (- (length levels) 1) result)\n                 paren_string))\n          (else\
+    \ (loop (rest levels) result (substring paren_string 0 1)))\n      )\n    (reverse\
+    \ result)\n  )\n)\n", "  (define (parse-nested-pn paren_string pn max_levels)\n\
+    \    (cond\n      [(string-empty? paren_string) max_levels]\n      [(equal? pn\
+    \ '()) 0]\n      [(equal? (char-after (string-ref paren_string pn) '(') (char-after\
+    \ paren_string pn))\n      (parse-nested-pn (string-append paren_string '()) '()\
+    \ (incf pn))]\n      [(equal? (char-after (string-ref paren_string pn) '()) (char-after\
+    \ paren_string pn))\n      (parse-nested-pn (string-append paren_string '() '())\
+    \ '() (incf pn))]\n      [else (parse-nested-pn (string-append paren_string '()\
+    \ '() '()) '() (incf pn))]\n    )\n  )\n  (parse-nested-pn paren_string '() 0)\n\
+    )\n", "  (let ((paren_group (string-split paren_string #\\Space 2)))\n    (match\
+    \ paren_group\n      [(empty) (empty)]\n      [(list () (empty)) (count (first\
+    \ paren_group))]\n      [(list (item 0) (rest))\n       (if (empty? rest)\n  \
+    \         (count (first paren_group))\n           (max (parse_nested_parens item)\
+    \ (count (rest paren_group)))\n         )]\n      ))\n  )\n", "  (let loop ()\n\
+    \    (define (nested-level-counter par)\n      (if (null? par)\n        0\n  \
+    \      (+ 1 (nested-level-counter (cdr par))))\n      (nested-level-counter (parse-sequence\
+    \ (parse-symbol paren_string))))\n    (loop))\n  (let loop ()\n    (define (current-level-counter\
+    \ par)\n      (if (null? par)\n        0\n        (+ 1 (current-level-counter\
+    \ (cdr par))))\n      (current-level-counter (parse-sequence (parse-symbol paren_string))))\n\
+    \    (loop))\n  (let loop ()\n    (define (current-level-counter-with-length par\
+    \ length)\n      (if (null? par)\n        0\n        (+ length (current-level-counter-with-length\
+    \ (cdr par) length))))\n    (loop))\n  (let loop ()\n    (define (paren-length\
+    \ par)\n      (if (null? par)\n        0\n        (+ 1 (paren-length (cdr par))))\n\
+    \      (current-level-counter-with-length (parse-sequence (parse-symbol paren_string))\
+    \ (paren-length (parse-sequence (parse-symbol paren_string)))))\n    (loop))\n\
+    \  (loop))\n", "  (let ((paren_stack (list 0))\n        (nest_counts () 0)\n \
+    \       (current_nest_level 0))\n    (define (advance-nesting-level stack)\n \
+    \     (if (null? stack)\n          nest_counts\n          (let ((nest_counts (cdr\
+    \ stack)))\n            (set! current_nest_level (max (nest_counts +)))\n    \
+    \        nest_counts))\n      (define (push-paren stack)\n        (set! stack\
+    \ (cons (car stack)\n                           (if (< current_nest_level (car\
+    \ nest_counts))\n                               (advance-nesting-level stack)\n\
+    \                               stack)))\n      (define (pop-paren stack)\n  \
+    \      (set! stack (cdr stack))\n        stack)\n      (define (next-paren stack)\n\
+    \        (set! stack (cons (car stack)\n                           (if (> (car\
+    \ nest_counts) current_nest_level)\n                               (pop-paren\
+    \ stack)\n                               stack))))\n      (begin\n        (while\
+    \ (string= paren_string\n                 (string-append paren_string\n      \
+    \                          '('\n                                (if (>= (length\
+    \ paren_string) 1)\n                                    '()\n                \
+    \                    '())\n                                '))'))\n          (begin\n\
+    \            (push-paren paren_stack)\n            (set! paren_string (substring\
+    \ paren_string\n                                      0 (string-length paren_string)\n\
+    \                                      (+ 0 (string-length paren_string))))\n\
+    \            (set! nest_counts (cddr nest_counts))\n            (if (string= paren_string\n\
+    \                     '())())())()))))\n        (define (pop-nest stack)\n   \
+    \       (set! nest_counts (cdr stack))\n          (set! current_nest_level (cddr\
+    \ nest_counts))\n          nest_counts)\n        nest_counts))\n    (let ((stack\
+    \ (cons () 0)))\n      (begin\n        (while (string= paren_string\n        \
+    \         (string-append paren_string\n                                '('\n \
+    \                               (if (>= (length paren_string) 1)\n           \
+    \                         '()\n                                    '())\n    \
+    \                            '))'))\n          (begin\n            (push-paren\
+    \ stack)\n            (set! paren_string (substring paren_string\n           \
+    \                           0 (string-length paren_string)\n                 \
+    \                     (+ 0 (string-length paren_string))))\n            (set!\
+    \ nest_counts (cddr nest_counts))\n            (if (string= paren_string\n   \
+    \                  '()))()))))\n        (define (pop-nest stack)\n          (set!\
+    \ nest_counts (", "  (match paren_string\n    [(_ . _) 1]\n    [(_) 0]))\n", " \
+    \ (let ([pairs (string->list paren_string)])\n    (cond\n      [(empty? pairs)\
+    \ '()]\n      [(pair? (first pairs)) (parse_deepest_level (rest pairs))]\n   \
+    \   [else (parse_nested_parens (first pairs))])))\n", "  (let ([parens (split\
+    \ paren_string #\\Space)])\n    (cond [(empty? parens)\n           0]\n      \
+    \    [(not (member (first parens) '(()))\n            (+ 3 (parse_nested_parens\
+    \ (first parens)))]\n          [else\n           (parse_nested_parens (rest parens))])))\n",
+  "  (let loop ((opening-parens ()))\n    (cond\n      [(or (empty? paren_string)\
+    \ (char=? (car paren_string) '('))\n       (append opening-parens (parse-nested-parens\
+    \ (cdr paren_string)))]\n      [(or (char=? (car paren_string) ')')\n        \
+    \   (char=? (car opening-parens) ')')]\n      [else\n       (loop (cons (car opening-parens)\
+    \ opening-parens))]\n    )\n  )\n)\n", "  (let ((levels ()))\n    (loop\n    \
+    \   for c across (string->char-array paren_string)\n       when (char=? c #\\\
+    ()\n       collect (1+ levels))\n    (if (empty? levels)\n        (cond ((string=\
+    \ (substring paren_string 0 c) '())\n               (length (substring paren_string\
+    \ (c+1) (string-length paren_string)))\n               (cond ((equal? c 0)\n \
+    \                    (length (substring paren_string (c+2) (string-length paren_string)))\n\
+    \                     (+ 1 (length (substring paren_string (c+3) (string-length\
+    \ paren_string))))\n                     (+ 1 (length (substring paren_string\
+    \ (c+4) (string-length paren_string))))\n                     (+ 1 (length (substring\
+    \ paren_string (c+5) (string- length paren_string))))\n                     (+\
+    \ 1 (length (substring paren_string (c+6) (string- length paren_string))))\n \
+    \                    (+ 1 (length (substring paren_string (c+7) (string- length\
+    \ paren_string))))\n                     (+ 1 (length (substring paren_string\
+    \ (c+8) (string- length paren_string))))\n                     (+ 1 (length (substring\
+    \ paren_string (c+9) (string- length paren_string))))\n                     (+\
+    \ 1 (length (substring paren_string (c+10) (string- length paren_string))))\n\
+    \                     (+ 1 (length (substring paren_string (c+11) (string- length\
+    \ paren_string))))\n                     (+ 1 (length (substring paren_string\
+    \ (c+12) (string- length paren_string))))\n                     (+ 1 (length (substring\
+    \ paren_string (c+13) (string- length paren_string))))\n                     (+\
+    \ 1 (length (substring paren_string (c+14) (string- length paren_string))))\n\
+    \                     (+ 1 (length (substring paren_string (c+15) (string- length\
+    \ paren_string))))\n                     (+ 1 (length (substring paren_string\
+    \ (c+16) (string- length paren_string))))\n                     (+ 1 (length (substring\
+    \ paren_string (c+17) (string- length paren_string))))\n                     (+\
+    \ 1 (length (substring paren_string (c+18) (string- length paren_string))))\n\
+    \                     (+ 1 (length (substring paren_string (c+19) (string- length\
+    \ paren_string))))\n                     (+ 1 (length (substring paren_string\
+    \ (c+20) (string- length paren_string))))\n                     (+ 1 (length (substring\
+    \ paren_string (c+21) (string- length paren_string))))\n", "  (let loop ((paren_count\
+    \ 0)\n             (paren_list '())\n             (paren_string paren_string)\n\
+    \             (i 0))\n    (if (< i 0)\n        (parse-error\n         (list \"\
+    Invalid number of parentheses in parenthesized string.\"))\n        (if (equal?\
+    \ (char-after paren_string i) '())\n            (loop (add1 paren_count)\n   \
+    \               (cons paren_count\n                        (append paren_list\n\
+    \                                 (list (string->chars (string->list paren_string)))\n\
+    \                                 (list (string->chars (string->list paren_string))))\n\
+    \                  (make-string (add1 paren_count)\n                         \
+    \        (string->list (string->chars (string->list paren_string))))\n       \
+    \     (loop (add1 paren_count)\n                  (cons paren_count\n        \
+    \                (append paren_list\n                                 (list (string->chars\
+    \ (string->list paren_string)))\n                                 (list (string->chars\
+    \ (string->list paren_string))))\n                  (make-string (add1 paren_count)\n\
+    \                                 (string->list (string->chars (string->list paren_string))))))))))\n\
+    </code>\nNow to find the maximum level of nesting we need to keep track of each\
+    \ opening parenthesis. Here is an example of a recursive function which does that:\n\
+    <code>", "  (let loop ((paren_string paren_string)\n             (cur_level (substring\
+    \ paren_string 0 (string-length paren_string)))\n             (max_level (substring\
+    \ paren_string (string-length paren_string) 1))\n             (groups ()))\n \
+    \   (if (or (char=? (car paren_string) '(')\n            (char=? (car paren_string)\
+    \ '{'))\n        (let ((group_count 0))\n          (cond ((or (char=? (car paren_string)\
+    \ '(')\n                      (char=? (car paren_string) '{')\n              \
+    \        (eq? cur_level 0))\n                 (if (= (substring paren_string 0\
+    \ 1) '(\n                      (append groups (list cur_level))\n            \
+    \          (loop (substring paren_string\n                                 (+\
+    \ 1 string-length (substring paren_string 1 1))\n                            \
+    \     (substring paren_string 1 1)\n                                 (+ group_count\
+    \ 1)))\n                      cur_level))\n                 (if (= (substring\
+    \ paren_string 0 1) '{')\n                      (append groups (list cur_level))\n\
+    \                      (loop (substring paren_string\n                       \
+    \          (+ 1 string-length (substring paren_string 1 1))\n                \
+    \                 (substring paren_string 1 1)\n                             \
+    \    (+ group_count 1))))\n                 (else\n                  (loop (substring\
+    \ paren_string\n                             (+ 1 string-length (substring paren_string\
+    \ 1 1))\n                             (substring paren_string 1 1)\n         \
+    \                    (+ group_count 1))))))\n        (if (= (substring paren_string\
+    \ 0 1) '(\n             (append groups (list cur_level))\n             (loop (substring\
+    \ paren_string\n                        (+ 1 string-length (substring paren_string\
+    \ 1 1))\n                        (substring paren_string 1 1)\n              \
+    \          (+ group_count 1))))\n        (if (= (substring paren_string 0 1) '{')\n\
+    \            (append groups (list cur_level))\n            (loop (substring paren_string\n\
+    \                     (+ 1 string-length (substring paren_string 1 1))\n     \
+    \                (substring paren_string 1 1)\n                     (+ group_count\
+    \ 1))))\n        (append groups (list cur_level)))))\n    (apply max (reverse\
+    \ groups))))\n", "  (map parse-nested-parens split-string (remove-string-all \"\
+    \ () \" paren_string)))\n", "  (let* ((open_paren_count 0)\n         (close_paren_count\
+    \ 0)\n         (paren_count 0)\n         (max_level_count 0))\n    (loop for char\
+    \ in (string paren_string)\n          while char=? char '()'\n          collect\
+    \ (if (char=? (substring string 1 (+ char '())) '())\n                     (if\
+    \ (char=? (substring string 1 (+ char '())) '()()) (+ 1 (+ open_paren_count 1))\n\
+    \                         (if (char=? (substring string 1 (+ char '())) '()) \n\
+    \                             (+ 1 (+ close_paren_count 1))\n                \
+    \             0))\n                     0))\n    (let ((current_level_count (max\
+    \ (- open_paren_count close_paren_count))))\n      (cond\n        ((= current_level_count\
+    \ max_level_count)\n         (+ 1 (+ paren_count 1))\n         (if (= (- close_paren_count\
+    \ open_paren_count) max_level_count)\n             (+ 1 (+ current_level_count\
+    \ 1))\n             (if (= open_paren_count max_level_count)\n               \
+    \  (+ 1 (+ open_paren_count 1))\n                 0)))))\n", "  (let ((cur_paren_count\
+    \ 0))\n    (loop for group_str in (explode (explode paren_string))\n         \
+    \ for group_count in (parse_parens group_str)\n          while cur_paren_count\
+    \ < group_count do\n            (set! cur_paren_count group_count)\n         \
+    \   (set! cur_paren_count (- cur_paren_count 1)))\n    (- cur_paren_count 1)))\n",
+  "  (let loop ((parens 0))\n    (let ((current_parens '()))\n      (cond\n      \
+    \  [(eq? paren_string  empty) current_parens]\n        [(eq? (first paren_string)\
+    \ empty) current_parens]\n        [else\n         (loop (+ (first paren_string)\
+    \ 1)\n               (cond\n                 [(eq? (first paren_string) (second\
+    \ paren_string)) (+ (first paren_string) 2)]\n                 [else\n       \
+    \            (loop (+ (first paren_string) 1)\n                         (cond\n\
+    \                           [(eq? (first paren_string) (third paren_string)) (+\
+    \ (first paren_string) 3)]\n                           [else\n               \
+    \             (loop (+ (first paren_string) 1)\n                             \
+    \     current_parens)]\n                           )]))])))))\n</code>\n<|/ a\
+    \ tags=recursion,racket,algorithm dscore=3 |>\n<| a |>\nA recursive solution could\
+    \ be to create a stack and pop a value from the stack as you parse the parentheses.\
+    \ To make the solution more understandable, I will use an explicit stack (of lists).\
+    \ \n<code>", "  (let loop ((groups ()))\n    (if (empty? paren_string)\n     \
+    \   (reverse groups)\n        (let ((group (make-paren-group )))\n          (set!\
+    \ groups (cons group groups))\n          (loop (rest groups))))))\n", "  (map\
+    \ (lambda (x) (length (parse (list '(') '()) x))) (split (string paren_string)\
+    \ ' '))\n  ;; ((length (parse (list '(') '()) 0)) (length (parse (list '(') '())\
+    \ 1)) (length (parse (list '(') '()) 2)) (length (parse (list '(') '()) 3))\n\
+    \  ;; (length (parse (list '(') '()) 0)) (length (parse (list '(') '()) 1)) (length\
+    \ (parse (list '(') '()) 2)) (length (parse (list '(') '()) 3))\n  ;; (length\
+    \ (parse (list '(') '()) 0)) (length (parse (list '(') '()) 1)) (length (parse\
+    \ (list '(') '()) 2)) (length (parse (list '(') '()) 3))\n  ;; (length (parse\
+    \ (list '(') '()) 0)) (length (parse (list '(') '()) 1)) (length (parse (list\
+    \ '(') '()) 2)) (length (parse (list '(') '()) 3))\n  ;; (length (parse (list\
+    \ '(') '()) 0)) (length (parse (list '(') '()) 1)) (length (parse (list '(') '())\
+    \ 2)) (length (parse (list '(') '()) 3))\n  ;; (length (parse (list '(') '())\
+    \ 0)) (length (parse (list '(') '()) 1)) (length (parse (list '(') '()) 2)) (length\
+    \ (parse (list '(') '()) 3))\n  ;; (length (parse (list '(') '()) 0)) (length\
+    \ (parse (list '(') '()) 1)) (length (parse (list '(') '()) 2)) (length (parse\
+    \ (list '(') '()) 3))\n  ;; (length (parse (list '(') '()) 0)) (length (parse\
+    \ (list '(') '()) 1)) (length (parse (list '(') '()) 2)) (length (parse (list\
+    \ '(') '()) 3))\n  ;; (length (parse (list '(') '()) 0)) (length (parse (list\
+    \ '(') '()) 1)) (length (parse (list '(') '()) 2)) (length", "  (cond\n    [(empty?\
+    \ paren_string) empty]\n    [(starts-with? '() paren_string) (parse_nested_parens\
+    \ (string->list paren_string))]\n    [(starts-with? '( ( '() paren_string)) (cons\
+    \ (parse_nested_parens (string->list paren_string))\n                        \
+    \                           (parse_nested_parens (string->list (substring paren_string\
+    \ 2 string->length (substring paren_string 0 1)))]))\n     (cons (parse-nested-parens\
+    \ (substring paren_string 0 (length (substring paren_string 0 1))))\n        \
+    \   (parse-nested-parens (substring paren_string 1 string->length (substring paren_string\
+    \ 0 1))))]\n    [else (parse-nested-parens (substring paren_string 0 (string->length\
+    \ (substring paren_string 0 1))))]))\n", "  (let loop ((paren_string paren_string)\n\
+    \             (group_length 0))\n    (if (equal? (char (char-after-current paren_string))\
+    \ #\\Space )\n        (if (= group_length 0)\n            (add1 group_length)\n\
+    \            (loop (char (char-after-current paren_string))\n                \
+    \  (add1 group_length))\n            (loop (char (char-after-current paren_string))\n\
+    \                  (add1 group_length)\n                  (sub1 group_length)))\n\
+    \        (if (= (length paren_string) (add1 group_length))\n            (loop\
+    \ (char (char-after-current paren_string))\n                  (add1 group_length)))\n\
+    \        (loop (char (char-after-current paren_string))\n              (add1 group_length)\n\
+    \              (sub1 group_length))))))\n", "  (let ((paren_stack (make-list 0\
+    \ '())))\n    (let loop ((paren_string paren_string)\n               (paren_stack\
+    \ '()))\n      (cond\n        ((string= paren_string '') paren_stack)\n      \
+    \  ((string=? paren_string '())\n         (cond\n           ((string= paren_stack\
+    \ '()) 1)\n           (else (cons -1 (loop (substring paren_string 0 (length (string-length\
+    \ paren_string))\n                                           (append paren_stack\
+    \ (list '())))\n                            (cons 1 (loop (substring paren_string\
+    \ 1 (length (string-length paren_string))\n                                  \
+    \         (append paren_stack (list '())) paren_stack))))))))\n        (else\n\
+    \         (cond\n           ((string= (substring paren_string 0 (string-length\
+    \ paren_string))\n                     (substring (substring paren_string 0 (length\
+    \ (string-length paren_string)-1))\n                               (substring\
+    \ paren_string 0 (length (string-length paren_string)-1))))\n           ((member\
+    \ (char->integer (substring (substring paren_string 0 (length (string-length paren_string)-1))\n\
+    \                                     (substring paren_string 0 (length (string-length\
+    \ paren_string)-1)))\n                  ('()())) 1)\n           ((member (char->integer\
+    \ (substring (substring paren_string 0 (length (string-length paren_string)-1))\n\
+    \                                     (substring paren_string 0 (length (string-length\
+    \ paren_string)-1)))\n                  ('(()))) 0)\n           (else (loop (substring\
+    \ paren_string 1 (length (string-length paren_string))\n                     \
+    \           (append paren_stack (list '())) paren_stack))))))))))\n", "  (let\
+    \ ((level (parse_nested_parens paren_string)))\n    (if (= 0 level)\n        0\n\
+    \        (+ 1 (max level (parse_nested_parens (substring paren_string 0 level)))))\n\
+    \    )\n  )\n", "  (let loop ((paren_string paren_string)\n             (max_level\
+    \ 0))\n    (cond\n      [(empty? paren_string) 0]\n      [(char=? paren_string)\
+    \ max_level]\n      [(char=? (peek-char paren_string) ')')\n       (loop (parse-string\
+    \ (rest paren_string)\n                         (if (char=? paren_string) max_level\n\
+    \                             (loop (parse-string (rest paren_string) max_level)))))]\n\
+    \      [(char=? (peek-char paren_string) '(') (loop (parse-string (rest paren_string)\
+    \ max_level))]\n      [else (loop (parse-string (rest paren_string) max_level))]))))\n",
+  "  (cond [(empty? paren_string)\n         0]\n        [else\n         (let ((level\
+    \ (parse_nested_parens (rest paren_string))))\n           (if (> level 0)\n  \
+    \             (+ 1 (parse_nested_parens (rest paren_string))))\n           level))]\n\
+    ))\n", "  (cond\n    [(empty? paren_string) 0]\n    [(list? (car paren_string))\
+    \ (1 + \n      ;; If the parenthesized string is of length 1, it is the only item.\
+    \ \n      ;; So we simply return it.\n      (cdr paren_string))]\n    [else (max\
+    \ (parse_nested_parens (car paren_string))\n              (parse_nested_parens\
+    \ (cdr paren_string)))]))\n", "  (let loop ((parens (split paren_string \" \"\
+    ))\n             (out-count 0))\n    (if (null? parens)\n        out-count\n \
+    \       (loop (rest parens)\n              (add1 out-count)))))\n", "  (cond [(empty?\
+    \ paren_string) empty]\n        [else (let ([group (string->list paren_string)])\n\
+    \               (+ (max 1 \n                  (parse (lambda ([char] char) (lambda\
+    \ ([char] char) (lambda ([char] char) (lambda ([char] char) (lambda ([char] char)\
+    \ (lambda ([char] char) empty))))))\n                  (parse_nested_parens (rest\
+    \ group)))]))]))\n", "  (let loop ((parens empty-list)\n             (chars (string->list\
+    \ paren_string))\n             (max 0))\n    (if (null? chars)\n        parens\n\
+    \        (loop (append parens (first chars)) (rest chars) (if (equal? (first chars)\
+    \ '(') max max)))))\n", "  (cond\n    ((empty? paren_string) '())\n    ((equal?\
+    \ (first (first (first paren_string)))) (parse_nested_parens (rest (first paren_string))))\n\
+    \    (else\n     (let ([nested_count (parse_nested_parens (rest paren_string))])\n\
+    \       (cond [(empty? nested_count) nested_count]\n             [(= nested_count\
+    \ (+ nested_count 1)) nested_count]\n             [else\n              (cond [(equal?\
+    \ (first (first paren_string)) (first (first nested_count)))\n               \
+    \      (parse_nested_parens (rest nested_count))\n                     (else (+\
+    \ nested_count 1))]))])))) ; base case\n\n", "  (if (empty? paren_string)\n  \
+    \    '()\n      (let loop ((paren_string paren_string) \n                 (depth\
+    \ (car paren_string))\n                 (result '()))\n        (if (char? (car\
+    \ paren_string))\n            (loop (cdr paren_string) depth (cons depth (loop\
+    \ paren_string (cddr paren_string))))\n            (loop (cdr paren_string) depth\
+    \ (cons depth (loop '() (cddr paren_string)))))\n        result))) ;; #lang racket\n",
+  "  (let loop ([string paren_string] [depth 0])\n    (if (= depth 0)\n      (add-to-stack\
+    \ string)\n      (let ([char (read-char)])\n        (if (equal? (char-type char)\
+    \ '('))\n          (loop (build-string (substring string 0 depth)\n          \
+    \                    (cond [(equal? (char-type (char-after-read-char char)) ')')\
+    \ depth]\n                                    [(equal? (char-type char) '(') (add-to-stack\
+    \ (substring string 0 depth)) (+ depth 1)]\n                                 \
+    \   [else depth]))\n          (loop (build-string (substring string 0 depth)\n\
+    \                              (cond [(equal? (char-type (char-after-read-char\
+    \ char)) ')') (substring string 0 depth)]\n                                  \
+    \  [(equal? (char-type char) '(') (string-append (substring string 0 depth) char)\n\
+    \                                     (add-to-stack (substring string 0 depth))\
+    \ (+ depth 1)]\n                                    [else (substring string 0\
+    \ depth) (cons char depth)])))\n        (loop string (+ depth 1))))))\n", "  (if\
+    \ (empty? paren_string)\n      '()\n      (append (parse_nested_parens (rest paren_string))\n\
+    \              (list (string-length (first paren_string)))\n              (first\
+    \ paren_string)))\n  )\n", "  (cond\n    [(empty? paren_string)\n     (length\
+    \ (map length empty?))]\n    [(equal? (char-type (car paren_string)) open-paren)\n\
+    \     (let [level (+ 1 (parse_nested_parens (cdr paren_string)))]\n       (cons\
+    \ level (parse_nested_parens (cdr paren_string))))]\n    [(equal? (char-type (car\
+    \ paren_string)) close-paren)\n     (let [level (- 1 (parse_nested_parens (cdr\
+    \ paren_string)))]\n       (cons level (parse_nested_parens (cdr paren_string))))]\n\
+    \    [else\n     (let [chars (string-split-non-empty-keeping-delimiters '(\n \
+    \       (lambda (x)\n          (cond\n            [(equal? (char-type x) open-paren)\n\
+    \             (+ 1 (parse_nested_parens (cdr x)))]\n            [(equal? (char-type\
+    \ x) close-paren)\n             (- 1 (parse_nested_parens (cdr x)))]\n       \
+    \     [else\n             x]))\n      max-level (parse-nested-parens (string-concatenate\
+    \ '() (map (lambda (x)\n          (cond [(equal? (char-type x) open-paren)\n \
+    \                (+ 1 (parse_nested_parens (cdr x)))]\n              [(equal?\
+    \ (char-type x) close-paren)\n                 (- 1 (parse_nested_parens (cdr\
+    \ x)))]\n              [else\n                 x]))\n      max-chars (map maximum\
+    \ max-level)]\n       (if (< (car max-chars) 0)\n         (cons (car max-chars)\
+    \ (parse_nested_parens (cdr max-chars)))\n         empty))]))]))\n", "  (define\
+    \ level (length paren_string))\n  (define (level level current_level current_parens)\n\
+    \    (cond ((= level 0) current_level)\n          ((= level (length paren_string))\
+    \ current_parens)\n          (else (level (sub1 level) (add1 level) (append (list\
+    \ (length current_parens)) (list current_parens))))))\n  (define (level level\
+    \ current_level current_parens)\n    (cond ((= level 0) current_level)\n     \
+    \     ((= level (length paren_string)) (length current_parens))\n          (else\
+    \ (level (sub1 level) (add1 level) (append (list (length current_parens)) (list\
+    \ current_parens))))))\n  (level (length paren_string) 0 '()))\n</code>\n<|/ a\
+    \ tags=racket,parsing,string,scheme dscore=1 |>\n<| a tags=racket,parsing,string,scheme\
+    \ |>\nI wanted to do the same thing and came across this, so thought I'd share.\
+    \ I started with a simpler example and got it to work with the following code:\n\
+    <code>\n#lang racket", "  (let ([group (list-of-strings paren_string)])\n    (cond\n\
+    \      [(empty? group) empty]\n      [(string=? (first group) '(())) (inc! count-of-open-parens\
+    \ (length group))]\n      [(string=? (first group) '((())) (inc! count-of-closed-parens\
+    \ (length group))]\n      [else (max (car group) (max count-of-open-parens count-of-closed-parens))]\n\
+    \    )))\n</code>\n<|/ a dscore=0 |>\n<| a tags=scheme,racket,parentheses,parsing\
+    \ |>\nHere's a solution that works for any valid nested parentheses expression\
+    \ (without using recursion):\n<code>", "  (let ((parens (paren_string)))\n   \
+    \ (match parens\n      [(empty-string)\n       parens]\n      [(others chars)\n\
+    \       (parse_nested_parens (cons chars parens))]\n      [(any-char chars)\n\
+    \       (append (chars (list any-char)) (parse_nested_parens (rest parens)))]\n\
+    \      [(open-paren char)\n       (append (list (char (+ 1 any-char)))\n     \
+    \         (parse_nested_parens (cons (char any-char) parens)))]\n      [(close-paren\
+    \ char)\n       (append (list (char (+ 1 any-char)))\n              (parse_nested_parens\
+    \ (rest (rest parens))))]\n      [(open-paren chars)\n       (append (list (char\
+    \ (+ 1 any-char)))\n              (parse_nested_parens (cons (first chars) parens)))]\n\
+    \      [(close-paren chars)\n       (append (list (char (+ 1 any-char)))\n   \
+    \           (parse_nested_parens (rest (rest parens))))]))\n</code>\nAnd here's\
+    \ the corresponding code for the function I wrote in Scheme:\n<code>", "  (let*\
+    \ ((nesting-stack (make-vector (length (str-trim paren_string))))\n         (result\
+    \ (vector-length (vector-ref nesting-stack 0))))\n    (if (= (vector-ref nesting-stack\
+    \ 0) 0)\n        result\n        (let loop ((i 0) (n 0))\n          (if (char=\
+    \ paren_string\n               (vector-ref nesting-stack (vector-ref nesting-stack\
+    \ i))) ; Reached the closing parens.\n               (vector-set! result (vector-ref\
+    \ nesting-stack i)\n                           (vector-ref nesting-stack (vector-ref\
+    \ nesting-stack n))) ; Reached the same level of nesting.\n               (vector-set!\
+    \ nesting-stack i (vector-ref nesting-stack i)\n                             \
+    \   (vector-ref nesting-stack n))\n               (vector-set! nesting-stack (vector-ref\
+    \ nesting-stack i)\n                                (vector-ref nesting-stack\
+    \ n)))\n               (loop (add1 i) (incf n)))))\n    (vector-ref nesting-stack\
+    \ 0)))\n", "  (let ((parsed_list (parse-list paren_string)))\n    (match parsed_list\n\
+    \      ([] 0)\n      ([new-level] new-level))\n))\n", "  (let loop ((i 0) (parens\
+    \ 0))\n    (cond\n      [(null? paren_string) #f]\n      [(substring? paren_string\
+    \ i) i]\n      [else\n       (loop (add1 (parse-integer (substring paren_string\
+    \ i)))\n             (add1 (parse-integer (substring paren_string i (length paren_string))))\n\
+    \             (add1 i))]))))\n</code>\n<|/ a |>\n<| a |>\nThe first solution using\
+    \ regex and eval:\n<code>", "  (parse_infix_string '(,) paren_string))\n", " \
+    \ (match paren_string\n    (([()()] (length paren_string))\n     ([()() ()] 0))\n\
+    \    (([() ()()] 3)\n     ([() ()] 2))\n    (([()() ()()] 4)\n     ([() () ()]\
+    \ 3))\n    (([()()() ()()] 5)\n     ([() () ()()] 4))\n    (([() () ()() ()()]\
+    \ 6)\n     ([() () () ()()] 5))\n    (([() () () () () ()()] 7)\n     ([() ()\
+    \ () () () ()()] 6))\n    (([() () () () () () () () () ()()] 8)\n     ([() ()\
+    \ () () () () () () () () () () ()()] 7))\n    (([() () () () () () () () () ()\
+    \ () () () () () () () () () () () () () () () () () () () () () () () () () ()\
+    \ () () () () () () () () () () () () () () () () () () () () () () () () () ()\
+    \ () () () () () () () () () () () () () () () () () () () () () () () () () ()\
+    \ () () () () () () () () () () () () () () () () () () () () () () () () () ()\
+    \ () () () () () () () () () () () () () () () () () () () () () () () () () ()\
+    \ () () () () () () () () () () () () () () () () () () () () () () () () () ()\
+    \ () () () () () () () () () () () () () () () () () () () () () () () () () ()\
+    \ () () () () () () () () () () () () () () () () () () () () () () () () () ()\
+    \ () () () () () () () () () () () () () () () () () () () () () () () () () ()\
+    \ () () () () () () () () () () () () () () () () () () () () () () () () () ()\
+    \ () () () () () () () () () () () () () () () () () () () () () () () () () ()\
+    \ () () () () () () () () () () () () () () () () () () () () () () () () () ()\
+    \ () () () () () () () () () () () () () () () () () () () () () () () () () ()\
+    \ () () () () () () () () ", "  (let loop ((count (length paren_string))\n   \
+    \          (paren_string paren_string)\n             (parens (make-vector count\
+    \ 0))\n             (level (+ count 1)))\n    (cond [(= count 0)\n           (reverse\
+    \ parens)]\n          [(equal? (car paren_string) '())\n           (reverse (cons\
+    \ level parens))]\n          [(equal? (car paren_string) ')')\n           (reverse\
+    \ (cons (- count 1) (cons level parens)))]\n          [(equal? (car paren_string)\
+    \ '(')\n           (loop (- count 1)\n                  (concatenate 'string '(car\
+    \ paren_string) paren_string)\n                  (append parens (- count 1))\n\
+    \                  level)]\n          [else\n           (loop (- count 1)\n  \
+    \                (concatenate 'string '(car paren_string) paren_string)\n    \
+    \              (append parens (- count 1))\n                  (+ level 1))]))))\n\
+    </code>\n<|/ a |>\n<| c |>\nI think you should point out the missing `reverse`\
+    \ which makes the code work.\n<|/ c |>\n<| c |>\nThanks. I added the missing `reverse`\
+    \ in the answer. Also, I don't get what you mean by `append parens` since `parens`\
+    \ is a vector, not a list. `append` does not work with vectors.\n<|/ c |>\n<|\
+    \ c |>\nThanks again, but this is still O(n^2) complexity. `append` is O(n). You\
+    \ are not using any built-in procedures here which would make it O(n).\n<|/ c\
+    \ |>\n<| c |>\nThanks, I edited my answer so it should be O(n).\n<|/ c |>\n<|\
+    \ c |>\nI added a solution without recursion.\n<|/ c |>\n<| a tags=racket,scheme\
+    \ |>\nIt seems to me that you are trying to learn how to write functions, which\
+    \ is a good thing.  However, you seem to have a misunderstanding of how they work.\
+    \  You don't need to use loop to do this.  A for loop is just another way of writing\
+    \ a while loop:\n<code>", "  (let ((paren_stack (list)))\n    (cond [(empty? paren_string)\
+    \ 0]\n          [(char=? (first paren_string) '(') (push paren_stack 0)]\n   \
+    \       [(char=? (first paren_string) ')') (pop paren_stack)]\n          [(char=?\
+    \ (first paren_string) ')') 0]\n          [(char=? (first paren_string) '(') (push\
+    \ paren_stack 1)]\n          [(char=? (first paren_string) '(') 0]\n         \
+    \ [else (let ((level (if (null? paren_stack)\n                               \
+    \  (+ 1 (length (rest paren_string)))\n                                 (+ 1 (pop\
+    \ paren_stack))))\n                    (set! level (- level 1)))\n           \
+    \ (cons level\n                  (parse_nested_parens (rest paren_string)))]))))\n",
+  "  (let loop ((group (string-split paren_string))\n             (count 0))\n   \
+    \ (cond\n      [(null? group) 0]\n      [(null? (cdr group)) (+ count (length\
+    \ (car group)))]\n      [else (loop (cdr group) (+ 1 (loop group)))]\n    )\n\
+    \  )\n)\n", "  (let loop ((paren_string (subseq paren_string 0 (- (length paren_string)\
+    \ 1)))\n             (current_level (parse_int 0)))\n    (cond\n      [(empty?\
+    \ paren_string)\n       (list current_level)]\n      [(char-match (car paren_string)\
+    \ '(')\n       (loop (subseq paren_string 1 (length paren_string))\n         \
+    \   (+ current_level 1))]\n      [else\n       (loop (subseq paren_string 1 (-\
+    \ (length paren_string) 1))\n             current_level)])))\n", "  (cond [(empty?\
+    \ paren_string) empty]\n        [(empty? (rest paren_string)) (parse (length paren_string)\
+    \ (rest paren_string))]\n        [else (parse 0 (first paren_string))]))\n", " \
+    \ (cond [(empty? paren_string) 0]\n        [(equal? (first (first (first paren_string))))\
+    \ 0]\n        [else (+ (first (first paren_string))\n                (parse_nested_parens\
+    \ (rest paren_string)))]))\n", "  (let loop ((parens (string->list paren_string))\n\
+    \             (max_level (max (length parens)\n                             (length\
+    \ str-to-int (substring parens (- max_level (length parens)) max_level))))\n \
+    \            (level (string->list (string->int (substring parens 0 max_level))))\n\
+    \             (current 0))\n    (if (= level 0)\n      (list->string\n       (append\
+    \ (substring parens 0 max_level) \n              (loop (substring parens (- max_level\
+    \ 1) max_level)\n                    max_level\n                    (+ current\
+    \ (substring parens max_level max_level))))\n      (loop (substring parens (+\
+    \ max_level (- level 1)) max_level)\n            max_level\n            (+ current\
+    \ (substring parens max_level max_level)))) ; advance to next\n      (loop (substring\
+    \ parens (+ max_level (- level 1)) max_level)\n            max_level\n       \
+    \     (+ current (substring parens max_level max_level))))))\n", "  (cond\n  \
+    \  [(null? paren_string) 0]\n    [(not (= (length paren_string) 1))\n     (error\
+    \ \"Invalid number of parentheses in input.\")]\n    [(equal? (car paren_string)\
+    \ '())\n     (+ 1 (parse_nested_parens (cdr paren_string)))]\n    [else (+ 1 (parse_nested_parens\
+    \ (cdr paren_string)))]\n    ))\n", "  (define (nested-parens string depth nested)\n\
+    \    (cond\n      [(null? string) nested]\n      [(char=? (car string) '()) nested]\n\
+    \      [(char=? (car string) '(])\n      (nested-parens (cdr string) (+ depth\
+    \ 1) (+ nested (if (char=? (car string) '()) 1 0)))]\n      [(char=? (car string)\
+    \ '(])\n      (nested-parens (cdr string) (+ depth 1) (+ nested (if (char=? (car\
+    \ string) '()) 0 1)))]\n      [else (nested-parens (cdr string) (+ depth 1) (+\
+    \ nested 1))]))\n  (nested-parens paren_string 0 0))\n", "  (cond [(empty? paren_string)\
+    \ 0]\n        [(char paren_string 0)\n         (add (parse_nested_parens (rest\
+    \ paren_string))\n              (parse_nested_parens (rest paren_string)))]\n\
+    \        [else\n         (if (char? (char (rest paren_string) 0))\n          \
+    \   (+ 1 (parse_nested_parens (rest paren_string)))\n             (+ 1 (parse_nested_parens\
+    \ (rest paren_string))))]))\n", "  (if (empty? paren_string)\n      0\n      (let\
+    \ ([chars (string->list paren_string)])\n        (cond [(char= (chars 0) '(')\n\
+    \               (+ 1 (parse_nested_parens (cdr chars)))]\n              [else\n\
+    \               (+ 1 (max (parse_nested_parens (cdr chars)) (parse_nested_parens\
+    \ (cdr chars))))]))))\n", "  (let ((level_of_paren 0))\n    (map-indexed (lambda\
+    \ (x)\n                  (if (char=? (car x) '(())\n                      (begin\n\
+    \                         (set! level_of_paren (+ 1 level_of_paren))\n       \
+    \                  level_of_paren)\n                      0))\n              \
+    \    (split-string (cons paren_string \" \") #\\Space #\\)))\n               \
+    \   ))\n  (max (map level_of_paren paren_string)))\n", "  (let ((i 0))\n    (cond\
+    \ [(empty? paren_string) 0]\n          [(char= paren_string '()) 1]\n        \
+    \  [(char= paren_string '(()) 0]\n          [(char= paren_string '((())) 0]\n\
+    \          [(char= paren_string '((())()) 0]\n          [else (+ 1 (parse_nested_parens\
+    \ (rest-of-string paren_string))) ])))\n", "  (let* ((paren_list (split paren_string))\n\
+    \         (deepest_level (if (or (null? paren_list) (empty? paren_list))\n   \
+    \                          0\n                             (max 0 (apply max (map\
+    \ (lambda (item)\n                                                       (parse-nested-parens\
+    \ (first item))))\n                                        paren_list)))))\n \
+    \   (list-reverse (cons deepest_level (map parse-nested-parens (rest paren_list)))))\n",
+  "  (define (parse-paren paren_string)\n    (let ([start (string-position paren_string\
+    \ '(')]\n          [end (or (string-position paren_string ')')\n             \
+    \     (string-length paren_string))])\n      (cond [(> start end) 0]\n       \
+    \     [else (+ 1 (parse-paren (substring paren_string 0 end)))])))\n\n  (parse-paren\
+    \ paren_string))\n", "  (let ((levels ()))\n    (for-each (lambda(x) (push (+\
+    \ 1 levels) x))\n              (split-string paren_string #\\Space #\\)))\n  \
+    \  (max levels)))\n", "  (define (parse_inside_paren paren_string depth)\n   \
+    \ (cond [(empty? paren_string) #f]\n          [(equal? (char-value (car paren_string))\
+    \ '(') (add1 depth)]\n          [(equal? (char-value (car paren_string)) ')')\
+    \ (sub1 depth)]\n          [else (parse_inside_paren (cdr paren_string) depth)]))\n\
+    \  (parse_inside_paren paren_string 0))\n", "  (let ((levels ()))\n    (loop [i\
+    \ 0]\n          (cond [(null? paren_string) (list levels)]\n                [else\
+    \ (set! levels (cons (length levels) levels))]\n                [else (cons (substring\
+    \ paren_string i 1)\n                          (parse-nested-parens (substring\
+    \ paren_string 0 (add1 i))))]\n                [else]\n                [then (loop\
+    \ (add1 i) 0)]))))\n", "  (let loop ((paren_str (string->list paren_string)) (result\
+    \ '()))\n    (cond\n      [(empty? paren_str) result]\n      [(member (car (car\
+    \ paren_str)) '()) (loop (cdr paren_str) (cons (- 1 (cadr paren_str)) result))]\n\
+    \      [(not (member (car (car paren_str)) '())) (loop (cdr paren_str) (cdr result))]\n\
+    \      [else\n       (loop (cdr paren_str) (append result (list (car paren_str))))])))\n\
+    </code>\n<|/ a tags=lisp,common-lisp,scheme,racket dscore=3 |>\n<| c |>\nI'm guessing\
+    \ you meant `(car (car paren_str))` instead of `(car (cdr paren_str))`? Also,\
+    \ this isn't tail recursive so it's a pretty bad idea.\n<|/ c |>\n<| c |>\n, yes,\
+    \ thank you for catching that.  I meant `(car (car paren_str))`.  That will make\
+    \ things much simpler.\n<|/ c |>\n<| a dscore=3 |>\nIf you're looking for an approach\
+    \ that just uses lists, this should do the trick:\n<code>", "  (define (count-nested-p-l\
+    \ level-count)\n    (if (null? level-count)\n        0\n        (if (equal? level-count\
+    \ 1)\n            (+ 1 (car level-count))\n            (+ 1 (count-nested-p-l\
+    \ (cdr level-count))))))\n  (define (count-nested-p-g level-count)\n    (if (null?\
+    \ level-count)\n        0\n        (if (equal? level-count 1)\n            (+\
+    \ 1 (car level-count))\n            (+ 1 (count-nested-p-g (cdr level-count))))))\n\
+    \  (define (count-nested-p-a level-count)\n    (if (null? level-count)\n     \
+    \   0\n        (if (equal? level-count 1)\n            (+ 1 (car level-count))\n\
+    \            (+ 1 (count-nested-p-a (cdr level-count))))))\n  (define (count-nested-p-b\
+    \ level-count)\n    (if (null? level-count)\n        0\n        (if (equal? level-count\
+    \ 1)\n            (+ 1 (car level-count))\n            (+ 1 (count-nested-p-b\
+    \ (cdr level-count))))))\n  (define (count-nested-p-n level-count)\n    (if (null?\
+    \ level-count)\n        0\n        (if (equal? level-count 1)\n            (+\
+    \ 1 (car level-count))\n            (+ 1 (count-nested-p-n (cdr level-count))))))\n\
+    \  (define (count-nested-p-l level-count)\n    (if (null? level-count)\n     \
+    \   0\n        (if (equal? level-count 1)\n            (+ 1 (car level-count))\n\
+    \            (+ 1 (count-nested-p-l level-count))))))\n  (define (count-nested-p-g\
+    \ level-count)\n    (if (null? level-count)\n        0\n        (if (equal? level-count\
+    \ 1)\n            (+ 1 (car level-count))\n            (+ 1 (count-nested-p-g\
+    \ level-count))))))\n  (define (count-nested-p-a level-count)\n    (if (null?\
+    \ level-count)\n        0\n        (if (equal? level-count 1)\n            (+\
+    \ 1 (car level-count))\n            (+ 1 (count-nested-p-a level-count))))))\n\
+    \  (define (count-nested-p-b level-count)\n    (if (null? level-count)\n     \
+    \   0\n        (if (equal? level-count 1)\n            (+ 1 (car level-count))\n\
+    \            (+ 1 (", "  (local\n    [(define (parse group depth group)\n    \
+    \  (if (null? group)\n          depth\n          (parse (cdr group) (+ depth 1)\
+    \ (car group))))\n      (define (match char group depth)\n        (cond\n    \
+    \      [(char= char ')'] (parse group depth group))\n          [(char= char ')']\
+    \ (cons depth (match char group (- depth 1)))]\n          [else (parse group (+\
+    \ depth 1) (char))])))\n      (parse '() 0 paren_string)])\n</code>\n<|/ a tags=racket,parsing,recursion\
+    \ |>\n<| c |>\nThis code gives the wrong answer for the input `(())`. Your code\
+    \ gives 4, and my code gives 3\n<|/ c |>\n<| c |>\nThe correct answer is 4 for\
+    \ `(())` - and 3 for `(()())` as well. Please read the question again; I've edited\
+    \ my answer.\n<|/ c |>\n<| c |>\nYour answer is not correct, because it also returns\
+    \ `3` for `(()())`. However, my answer was wrong. I've edited my answer and now\
+    \ it does exactly what was asked for.\n<|/ c |>\n<| c |>\nSorry, I misunderstood\
+    \ the question. The question was about counting the maximum level of nested parentheses.\
+    \ Your answer counts the *minimum* level of nesting. I was confused. Thanks for\
+    \ your efforts.\n<|/ c |>\n<| c |>\nAh yes, now I see what you mean. I've edited\
+    \ my answer again, please take a look.\n<|/ c |>\n<| a dscore=0 |>\nI believe\
+    \ the following code will give you the correct answer:\n<code>", "  (if (string?\
+    \ paren_string)\n      (let ([parens (parse (substring paren_string 0 (string-length\
+    \ paren_string))\n                            (lambda (x) (cons (+ x 1) '()))])\n\
+    \            (max-level (reduce +\n                           0 (map (lambda (level)\
+    \ (if (null? level) 0\n                                                     (if\
+    \ (> (length level) max-level)\n                                             \
+    \            (length level) max-level))\n                                    \
+    \        level))))\n            (levels (map (lambda (level) (list level)) '(#()\
+    \ #() #()))])\n        (map max (cons (- max-level (apply max levels)) levels)))\n\
+    \      #'()))\n", "  (define (count parens cur)\n    (cond ((or (string= cur '())\n\
+    \              (string= cur '()))\n           cur)\n          ((string= cur '('))\n\
+    \          ((string= cur '['))\n          ((string= cur '{))\n          ((string=\
+    \ cur '(') (+ 1 (count (- 1 cur) cur)))\n          ((string= cur '[') (+ 1 (count\
+    \ (- 1 cur) cur)))\n          ((string= cur '{) (+ 1 (count (- 1 cur) cur)))\n\
+    \          (else (count (- 1 cur) cur))))\n  (define (deep_level parens cur)\n\
+    \    (cond ((or (string= cur '())\n              (string= cur '()))\n        \
+    \   0)\n          ((string= cur '('))\n          ((string= cur '[))\n        \
+    \  ((string= cur '{))\n          ((string= cur '[) (+ 1 (deep_level parens (-\
+    \ 1 cur) cur)))\n          ((string= cur '{') (+ 1 (deep_level parens (- 1 cur)\
+    \ cur)))\n          (else (deep_level parens (- 1 cur) cur))))\n  (define (depth\
+    \ cur)\n    (cond ((or (string= cur '())\n              (string= cur '()))\n \
+    \          0)\n          ((string= cur '(') (+ 1 (depth cur)))\n          ((string=\
+    \ cur '[') (+ 1 (depth cur)))\n          ((string= cur '{') (+ 1 (depth cur)))\n\
+    \          (else (depth cur))))\n  (define (deepest_level cur)\n    (cond ((or\
+    \ (string= cur '())\n              (string= cur '()))\n           (list (+ cur\
+    \ 1)))\n          ((string= cur '(') (+ 1 (deepest_level cur)))\n          ((string=\
+    \ cur '[') (+ 1 (deepest_level cur)))\n          ((string= cur '{') (+ 1 (deepest_level\
+    \ cur)))\n          (else (list (- cur 1)))))\n  (define (parse_nested paren_string\
+    \ i cur level)\n    (cond ((or (= i 0)\n              (string= paren_string '())\n\
+    \              (eq cur '()))\n           cur)\n          ((= i 1)\n          \
+    \ (cond ((eq cur '(') (+ (count level (- 1 cur) cur)))\n                  ((eq\
+    \ cur '[') (+ (count level (- 1 cur) cur)))\n                  ", "  (cond\n \
+    \   [(empty? paren_string) empty]\n    [(equal? (first paren_string) '(') (recur\
+    \ (rest paren_string) 0 0))]\n    [else (recur (rest paren_string) (incf (first\
+    \ paren_string)) (incf (first paren_string)))]))\n</code>\n<|/ a |>\n<| a tags=scheme\
+    \ dscore=0 |>\nA slightly different version that uses a stack. It only has two\
+    \ cases and looks similar to yours:\n<code>", "  (parse-nested-parens (string-split\
+    \ paren_string #\\Space 2)\n                      (lambda (level parens_stack)\n\
+    \                        (cond\n                        [(empty? parens_stack)\
+    \ (add1 level)]\n                        [else\n                         (let*\
+    \ ((paren (car parens_stack))\n                                (stack_count (dec\
+    \ (length parens_stack)))\n                                (stack_top (car parens_stack)))\n\
+    \                           (if (not (= stack_count 0))\n                    \
+    \           (begin (if (> (parse-nested-parens (string-slice paren 1 (length paren))\
+    \ parens_stack) 1)\n                                        (begin\n         \
+    \                                (parse-nested-parens (string-slice paren (+ 1\
+    \ (length paren)) (length paren) parens_stack)\n                             \
+    \                             (lambda (level parens_stack)\n                 \
+    \                                           (cond [(empty? parens_stack) (add1\
+    \ level)]\n                                                                 [else\n\
+    \                                                 (let* ((parent_level (parse-nested-parens\
+    \ (string-slice paren 1 (length paren)) parens_stack))\n                     \
+    \                                   (parent_stack_top (car parens_stack)))\n \
+    \                                                  (if (= stack_count 0)\n   \
+    \                                                    (begin (if (> (parse-nested-parens\
+    \ (string-slice paren 1 (length paren)) parens_stack) 1)\n                   \
+    \                                                   (begin (parse-nested-parens\
+    \ (string-slice paren (+ 1 (length paren)) (length paren) parens_stack)\n    \
+    \                                                                            \
+    \   (lambda (level parens_stack)\n                                           \
+    \                                          (cond [(empty? parens_stack) (add1\
+    \ level)]\n                                                                  \
+    \                        [else\n                                             \
+    \                                              (let* ((parent_level parent_stack_top)\n\
+    \                                                                            \
+    \                    (parent_stack_count (dec (length parens_stack)))\n      \
+    \                                                                            \
+    \              (stack_top (car parens_stack)))\n                             \
+    \                                                              (if (> (parse-nested-parens\
+    \ (string-slice paren 1 (length paren)) parens_stack) 1)\n                   \
+    \                                                                          (begin\
+    \ (parse-nested-parens (string-slice paren (+ 1 (length paren)) (length paren)\
+    \ parens_stack)\n                                                            \
+    \                                           (lambda (level parens_stack)\n   \
+    \                                                                            \
+    \                         (cond [(empty? parens_stack) (add1 level)]\n       \
+    \                                                                            \
+    \                         [else\n                                            \
+    \                                                                 (let* ((parent_level\
+    \ (parse-nested-parens (string-slice paren 1 (length paren)) parens_stack))\n\
+    \                                                                            \
+    \                                      (parent_stack_top (car parens_stack)))\n\
+    \                                                                            \
+    \                                     (if (= stack_count 0)\n                \
+    \                                                                            \
+    \                       (begin (if (> (parse-nested-parens (string-slice paren",
+  "  (let loop ((parens paren_string)\n             (result 0))\n    (if (empty? parens)\n\
+    \        result\n        (loop (rest parens)\n              (+ result (parse_deepest_nesting\
+    \ (rest parens))))))))\n", "  (define char (char-alphabetic paren_string))\n \
+    \ (define result '())\n  (define current 0)\n  (define level 0)\n  (let loop ((current_char\
+    \ char)\n               (level 0)\n               (result '()))\n    (cond\n \
+    \     ((char-alphabetic paren_string) (loop))\n      ((char-whitespace char) ())\n\
+    \      ((char-alphabetic? (char-alphabetic char)) (loop (char-alphabetic char)\
+    \ 0 result))\n      ((char-alphabetic? (char-alphabetic char) (char-alphabetic\
+    \ paren_string)) (loop (char-alphabetic char) (+ level 1) (cons level (loop (char-alphabetic\
+    \ char) level result))))\n      (else (loop (char-alphabetic char) (+ level 1)\
+    \ (cons level (loop (char-alphabetic char) (+ level 1) (cons (+ level 1) result)))))\n\
+    \    result))\n", "  (cond\n    [(string? paren_string) (parse_nested_parens (split_string\
+    \ paren_string))]\n    [else (max 0 (parse_nested_parens (split_string paren_string)))]))\n",
+  "  (let loop ((paren_string paren_string)\n             (paren_count 0)\n      \
+    \       (max_count 0))\n    (cond\n      [(empty? paren_string) max_count]\n \
+    \     [(equal? (char-at-pos (+ 0 (string-length paren_string))) ')']\n      [else\
+    \ (loop (rest paren_string)\n                 (+ 1 paren_count)\n            \
+    \     (loop (rest paren_string)\n                      (+ 1 paren_count)\n   \
+    \                   (max max_count paren_count)))]\n      [(equal? (char-at-pos\
+    \ (+ 0 (string-length paren_string)) '(') ')')\n       (loop (rest paren_string)\n\
+    \             (+ 1 paren_count)\n             (max max_count paren_count))]\n\
+    \      [else (loop (rest paren_string)\n                 (+ 1 paren_count)\n \
+    \                (max max_count paren_count))]))))", "  (let ((paren (make-list\
+    \ '() )))\n    (for-each (lambda (char)\n              (when (char=? char #\\\
+    ( ))\n                (append paren (char-syntax (char-code char))))\n       \
+    \       (append paren (char-syntax (char-code char))))\n              paren_string)\n\
+    \    (apply max (reverse (append (length paren) paren)))))\n", "  (let ([groups\
+    \ ()\n         max_level 0])\n    (for-each (lambda (group i) (incf max_level\
+    \ (length (substring paren_string i (length paren_string))))\n               \
+    \ (split-at paren_string (substring paren_string 0 i)))\n              ;; group\
+    \ starts with '('\n              [(cdr group) (+ 1 max_level)])\n    max_level))\n",
+  "  (let loop ((paren_string paren_string)\n             (stack '())\n          \
+    \   (n 0)\n             (max 0))\n    (cond [(empty? paren_string) max]\n    \
+    \      [(equal? paren_string \"()\")\n           (loop (rest paren_string)\n \
+    \                 (cons stack (list n))\n                  (1+ n)\n          \
+    \        (max 0))]\n          [(equal? paren_string \"(()\")\n           (loop\
+    \ (rest paren_string)\n                  (cons (first stack) (list n))\n     \
+    \             (1+ n)\n                  (max 0))]\n          [(equal? paren_string\
+    \ \"(())\")\n           (loop (rest paren_string)\n                  (cons (first\
+    \ stack) (list n))\n                  (1+ n)\n                  (max 0))]\n  \
+    \        [(equal? paren_string \"(()()\")\n           (loop (rest paren_string)\n\
+    \                  (cons (first stack) (list (rest stack) (1+ n)))\n         \
+    \         (1+ n)\n                  (max 1))]\n          [(equal? paren_string\
+    \ \"((())\")\n           (loop (rest paren_string)\n                  (cons (first\
+    \ stack) (list (rest stack) (1+ n)))\n                  (1+ n)\n             \
+    \     (max 1))]\n          [(equal? paren_string \"(()())\")\n           (loop\
+    \ (rest paren_string)\n                  (cons (first stack) (list (rest stack)\
+    \ (1+ n)))\n                  (1+ n)\n                  (max 2))]\n          [(equal?\
+    \ paren_string \"((()())\")\n           (loop (rest paren_string)\n          \
+    \        (cons (first stack) (list (rest stack) (1+ n)))\n                  (1+\
+    \ n)\n                  (max 2))]\n          [(equal? paren_string \"(()())()\"\
+    )\n           (loop (rest paren_string)\n                  (cons (first stack)\
+    \ (list (rest stack) (1+ n)))\n                  (1+ n)\n                  (max\
+    \ 3))]\n          [(equal? paren_string \"((()())())\")\n           (loop (rest\
+    \ paren_string)\n                  (cons (first stack) (list (rest stack) (1+\
+    \ n)))\n                  (1+ n)\n                  (max 3))]\n          [(equal?\
+    \ paren_string \"((())())()\")\n           (loop (rest paren_string)\n       \
+    \           (cons (first stack) (list (rest stack) (1+ n)))\n                \
+    \  (1+ n)\n                  (max 4))]\n          [(equal? paren_string \"(((()))())\"\
+    )\n           (loop (", "  (let ((open (subseq-count paren_string 0 0))\n    \
+    \    (close (subseq-count paren_string 0 open)))\n    (let loop ((i open) (j close)\
+    \ (result 0))\n      (if (<= i j)\n          result\n          (loop (+ i 1) (+\
+    \ j 1) (+ result 1))))))\n", "  (let ((groups (regexp-opt '[()[(]] paren_string)))\n\
+    \    (apply max groups)))\n", "  (define (parse_nested_parens string stack)\n\
+    \    (cond\n      [(empty? string)\n       stack]\n      [(equal? (car string)\
+    \ '())\n       (parse_nested_parens (cdr string) (cons stack stack))]\n      [(equal?\
+    \ (car string) (list) (append stack (list (car string))))]\n      [(equal? (car\
+    \ string) (cons) (parse_nested_parens (cdr string) (cons stack (list (car string))))]\n\
+    \      [else (parse_nested_parens (cdr string) (cons stack (list (car string))))]))\n\
+    \  (parse_nested_parens paren_string '()))\n", "  (cond [(empty? paren_string)\
+    \ 0]\n        [(equal? (peek paren_string) '(')\n         (parse_deepest_level_of_nesting\
+    \ (cons (length (parse_nested_parens (rest paren_string))) '()))]\n        [else\n\
+    \         (parse_deepest_level_of_nesting (parse_nested_parens (rest paren_string)))]\n\
+    \        ))\n", "  (let ((levels nil))\n    (cond\n      [(string=? (car paren_string)\
+    \ '(') (incf levels)]\n      [(string=? (car paren_string) '(<') (incf (list levels)))]\n\
+    \      [(string=? (car paren_string) '(>') (decf (list levels)))]\n      [else\
+    \ (cond\n               [(null? (rest paren_string))\n                (length\
+    \ (sort levels))]\n               [else (incf levels)]\n               [(string=?\
+    \ (car paren_string) '|')\n                (let ((new-level (parse_nested_parens\
+    \ (cdr paren_string))))\n                  (cond\n                    [(null?\
+    \ levels) new-level]\n                    [else (cons (car levels) new-level)]\n\
+    \                    [else (cons new-level (parse_nested_parens (cdr paren_string)))]\n\
+    \                  )])]\n      [else (cond\n               [(null? (rest paren_string))\n\
+    \                (length (sort levels))]\n               [else (incf levels)]\n\
+    \               [(string=? (car paren_string) '|')\n                (let ((new-level\
+    \ (parse_nested_parens (cdr paren_string))))\n                  (cond\n      \
+    \              [(null? levels) new-level]\n                    [else (cons (car\
+    \ levels) new-level)]\n                    [else (cons new-level (parse_nested_parens\
+    \ (cdr paren_string)))]\n                  )])]\n      [else (cond\n         \
+    \      [(null? (rest paren_string))\n                (length (sort levels))]\n\
+    \               [else (incf levels)]\n               [else (cond\n           \
+    \             [else (cond\n                               [(null? (rest paren_string))\n\
+    \                                (length (sort levels))]\n                   \
+    \            [else (incf levels)]\n                               [else (cond\n\
+    \                                        [(null? (rest paren_string))\n      \
+    \                                   (length (sort levels))]\n                \
+    \                        [else (cond\n                                       \
+    \           [(null? (rest paren_string))\n                                   \
+    \                (length (sort levels))]\n                                   \
+    \               [else (cond\n                                                \
+    \            [(null? (rest paren_string))\n                                  \
+    \                           (length (sort levels))]\n                        \
+    \                                    [else (cond\n                           \
+    \                                          [(null? (rest paren_string))\n    \
+    \                                                                 (length (sort\
+    \ levels))]\n                                                                \
+    \     [else (cond\n                                                          \
+    \                    [(null? (rest paren_string))\n                          \
+    \                                                     (length (sort levels))]\n\
+    \                                                                            \
+    \  [else (cond\n                                                             \
+    \            [(null? (rest paren_string))\n                                  \
+    \                                       (", "  (define num_nested_parentheses\
+    \ (length paren_string))\n  (define max_num_nested_parentheses 0)\n  (define max_num_nested_parentheses_len\
+    \ (ref 0 0))\n  (define result (make-array num_nested_parentheses #f 'integer))\n\
+    \  (define nested_parentheses_stack (make-array num_nested_parentheses #f 'vector))\n\
+    \  (define next_char (ref 0 0))\n  (define current_char (ref 0 0))\n  (define\
+    \ is_next_char (ref 0 0))\n  (define is_current_char (ref 0 0))\n\n  (do\n   \
+    \ (when (< current_char #\\space)\n      (set! is_next_char #t)\n      (set! nested_parentheses_stack\
+    \ empty))\n    (when (< next_char #\\space)\n      (set! is_next_char #t)\n  \
+    \    (set! nested_parentheses_stack empty))\n    (when (< next_char #\\NewLine)\n\
+    \      (set! is_next_char #t)\n      (set! nested_parentheses_stack empty))\n\
+    \    (when (< next_char #\\NewLine)\n      (set! is_next_char #t)\n      (set!\
+    \ nested_parentheses_stack empty))\n    (when (< next_char #\\RightParenthesis)\n\
+    \      (set! is_next_char #f)\n      (set! nested_parentheses_stack empty))\n\
+    \    (when (< next_char #\\RightParenthesis)\n      (set! is_next_char #f)\n \
+    \     (set! nested_parentheses_stack empty))\n\n    (when (= current_char #\\\
+    Space)\n      (set! is_current_char #f)\n      (set! nested_parentheses_stack\
+    \ empty))\n    (when (= current_char #\\NewLine)\n      (set! is_current_char\
+    \ #f)\n      (set! nested_parentheses_stack empty))\n    (when (= current_char\
+    \ #\\RightParenthesis)\n      (set! is_current_char #f)\n      (set! nested_parentheses_stack\
+    \ empty))\n\n    (when (= next_char #\\Space)\n      (set! is_current_char #f)\n\
+    \      (set! nested_parentheses_stack empty))\n    (when (= next_char #\\NewLine)\n\
+    \      (set! is_current_char #f)\n      (set! nested_parentheses_stack empty))\n\
+    \    (when (= next_char #\\RightParenthesis)\n      (set! is_current_char #f)\n\
+    \      (set! nested_parentheses_stack empty))\n\n    (when (= next_char #\\LeftParenthesis)\n\
+    \      (set! is_current_char #f)\n      (set! nested_parentheses_stack empty))",
+  "  (parse-parens paren_string\n   (lambda (paren)\n     (parse (lambda ()\n    \
+    \           (cond\n                 [(parse (lambda ()\n                     \
+    \    (parse (lambda ()\n                                   (parse (lambda ()\n\
+    \                                           (parse (lambda ()\n              \
+    \                                     (parse (lambda ()\n                    \
+    \                                      (parse (lambda ()\n                   \
+    \                                                paren)\n                    \
+    \                                     paren)))\n                             \
+    \                   paren)))\n                              paren)\n         \
+    \                   paren)\n                  paren)\n                paren)\n\
+    \              paren))\n   '()))\n", "  (check-type paren_string string)\n  (parse-nested-parens-iter\
+    \ 0 0 paren_string))\n", "  (let ((level 0))\n    (loop\n       (with next_level\n\
+    \        (cond\n          [(equal? next_level 0) (list level)]\n          [(equal?\
+    \ next_level 1)\n           (loop\n              (cond\n                 [(equal?\
+    \ (car paren_string) '(') (add1 (add1 (car next_level))))\n                  \
+    \ (set! level car next_level)]\n                 [(equal? (car paren_string) ')')\
+    \ (add1 (add1 (car next_level)))]\n                 [else (loop\n            \
+    \            (cond\n                         [(equal? (car paren_string) '(')\
+    \ (add1 (car next_level)))]\n                         [(equal? (car paren_string)\
+    \ ')') (add1 (car next_level))])])]\n          [else (loop\n                 \
+    \  (cond\n                     [(equal? (car paren_string) '(') (add1 (car next_level)))]\n\
+    \                     [(equal? (car paren_string) ')') (add1 (car next_level)))])])])\n\
+    \       do (set! paren_string (substring paren_string 0 (car next_level)))))\n\
+    \    (cond\n      [(equal? (car paren_string) '()) (add1 (add1 level))]\n    \
+    \  [else (add1 level)]))\n", "  (let ((nest (parse_innermost (tokenize_string\
+    \ (tokenize_string (tokenize_string paren_string))))))\n    (max (map (lambda\
+    \ (x) (length (flatten_nested_parens nest))) nest))\n  )\n)\n", "  (let ((result\
+    \ '()))\n    (cond\n      [(empty? paren_string) result]\n      [(= (length paren_string)\
+    \ 0) result]\n      [else\n       (begin (set! result (parse_nested_parens (rest\
+    \ paren_string)))\n               (if (empty? result) result (+ result 1)))]))))\n",
+  "  (let loop ((n 0) (max-levels 0))\n    (cond ((null? paren_string)\n         \
+    \  (if (= n max-levels) 0\n               (+ 1 (loop (add1 n) 0))))\n        \
+    \  ((equal? (car paren_string) ')')\n           (loop (add1 n) (add1 max-levels)))\n\
+    \          (else\n           (let ((level 0)\n                 (groups (string-split\n\
+    \                         (string-downcase (car paren_string) #\\)\n         \
+    \                (string-downcase (car (cdr paren_string)) #\\)\n            \
+    \             #\\)))\n             (loop (add1 n) (add1 (max (car groups)\n  \
+    \                                 (loop (add1 n) (add1 level)))\n            \
+    \           (cdr groups))))))))\n", "  (let loop ([parens 0])\n    (if (empty?\
+    \ paren_string)\n        parens\n        (loop (+ 1 (loop (char-count (first paren_string)\
+    \ '())))\n              (loop (+ (char-count (first paren_string) '()) 1))))))\n",
+  "  (let ((parens (string-ref paren_string 0 (string->list (string-ref paren_string\
+    \ 0 '())) '())))\n    (if (null? parens)\n        0\n      (+ 1 (parse-nested_parens\
+    \ (cdr parens))))))\n", "  (match paren_string\n  ['() '()]\n    [(parens) '(]\n\
+    \    [else (+ max (parse_nested_parens (rest parens)) \n         (parse_nested_parens\
+    \ (rest parens))))]))\n", "  (let ([paren_list (string->list paren_string)])\n\
+    \    (let loop ([stack '()] [level 0])\n      (cond [(or (empty? paren_list) (=\
+    \ level 0)) #t]\n            ([(equal? car paren_list) (add1 level)]\n       \
+    \      (loop (rest paren_list) (add1 level))\n             (empty? paren_list)))\n\
+    \      (loop '() level)))))\n", "  (let recur ((parens 0)\n             (group_list\
+    \ '())\n             (levels 0)\n             (last_level 0))\n    (if (equal?\
+    \ paren_string (string paren_string \")\"))\n        (reverse levels)\n      \
+    \  (if (equal? (char-at-pos (car paren_string) paren_string) \")\")\n        \
+    \    (recur (cdr parens)\n                  (cons (+ levels (last_level)) group_list)\n\
+    \                  (+ levels (last-level)))\n            (recur (cdr parens)\n\
+    \                  (cons (+ levels (last_level)) group_list)\n               \
+    \   (+ levels 1)))\n        (recur (cdr parens)\n              (cons (+ levels\
+    \ (last_level)) group_list)\n              (+ levels 1))))\n  (if (< levels 0)\n\
+    \      (error 'parse_nested_parens-too-deeply levels))\n  (reverse group_list))\n",
+  "  (let loop ((parens '()) (paren_count 0))\n    (cond ((eof-object? paren_string)\
+    \ paren_count)\n          ((string=? paren_string '()) paren_count)\n        \
+    \  ((string=? paren_string '(())) (emit-string (list-length paren_count))\n  \
+    \        ((string=? paren_string '((())) (emit-string (list-length paren_count\
+    \ + 1))\n          ((string=? paren_string '(()())) (emit-string (list-length\
+    \ paren_count + 2 ))\n          ((string=? paren_string '((())()) (emit-string\
+    \ (list-length paren_count + 3 ))\n          ((string=? paren_string '(((())))\
+    \ (emit-string (list-length paren_count + 4 ))\n          (else (loop (append-list\
+    \ parens (list (first paren_string))))))))))\n", "  (cond\n    [(empty? paren_string)\
+    \ [0]]\n    [(equal? (car paren_string) '( () ( ( ( () ()) ()) ( ( () ())) ()\
+    \ () ()))) (+ (max 0 (parse-nested-parens (cdr paren_string)))]\n    [else (+\
+    \ (max 0 (parse-nested-parens (cdr paren_string)))\n            (parse-nested-parens\
+    \ (cddr paren_string)))]))\n", "  (define (count-parentheses s count)\n    (cond\n\
+    \      [(equal? s ')') count]\n      [(equal? s ')') (+ count 1)]\n      [else\
+    \ (+ count (count-parentheses (substring s 1) count))]))\n  (count-parentheses\
+    \ paren_string 0))\n", "  (cond [(empty? paren_string)\n         0]\n        [(equal?\
+    \ (first paren_string) '())\n         0]\n        [else\n         (let ([(first-char\
+    \ (substring paren_string 0 1))\n                (num-nested-parens (parse_nested_parens\
+    \ (rest paren_string)))]\n               [(next-char (substring paren_string 1\
+    \ 1))]\n               [(last-char (substring paren_string 0 1))])\n         \
+    \  (cond [(equal? (first paren_string) last-char)\n                  (+ 1 (num-nested-parens))]\n\
+    \                 [(equal? (first-char paren_string) '(')\n                  (+\
+    \ num-nested-parens (parse_nested_parens (rest paren_string)))]\n            \
+    \     [(equal? (first-char paren_string) ')')\n                  (- num-nested-parens\
+    \ (parse_nested_parens (rest paren_string)))]\n                 [(equal? (last-char\
+    \ paren_string) '(')\n                  (- num-nested-parens (parse_nested_parens\
+    \ (rest paren_string)))]\n                 [(equal? (last-char paren_string) ')')\n\
+    \                  (+ 1 (num-nested-parens))]\n                 [(equal? (first-char\
+    \ paren_string) '(')\n                  (+ 1 (num-nested-parens))]\n         \
+    \        [(equal? (first-char paren_string) ')')\n                  (+ 1 (num-nested-parens))]))]))\n",
+  "  (define (find parens current_depth level)\n    (if (null? parens)\n        (list\
+    \ level)\n      (let ((next (first (rest parens)))\n            (next_level (+\
+    \ level 1)))\n        (if (and (null? (first parens))\n                 (equal?\
+    \ (first parens) next))\n            (let ((current_level (- level 1)))\n    \
+    \          (let ((next_level (+ next_level 1)))\n                (let ((next_next_level\
+    \ (+ next_level 2)))\n                  (find (rest parens)\n                \
+    \        current_level\n                        (max next_level next_next_level))))\n\
+    \          (let ((current_level (- level 1)))\n            (let ((next_level (+\
+    \ next_level 1)))\n            (let ((next_next_level (+ next_level 2)))\n   \
+    \           (find (rest parens)\n                    current_level\n         \
+    \           (max next_level next_next_level)))))\n      (let ((next (first (rest\
+    \ parens)))\n            (next_level (+ level 1)))\n      (if (and (null? (first\
+    \ parens))\n              (equal? (first parens) next))\n            (let ((current_level\
+    \ (- level 1)))\n              (find (rest parens)\n                    current_level\n\
+    \                    (max next_level 1))))))\n  (let ((level (0))\n        (parens\
+    \ (string-split-by-white-space paren_string)))\n    (find parens\n          level\n\
+    \          (max 0 (+ 1 (first (rest parens)))))) ; Add 1 to match 0-based count.\n\
+    </code>\n<code>", "  (cond ((string? paren_string)\n         (map parse_nested_parens\
+    \ (string->list paren_string)))\n        (else 0)))\n", "  (let loop ([string\
+    \ paren_string]\n             [count 0])\n    (cond\n      [(string? string) count]\n\
+    \      [(string? (cdr string)) (loop (cdr string) (inc count))]\n      [(char=?\
+    \ (car string) '(') (inc (loop (cdr string) (inc count)))]\n      [else (inc (loop\
+    \ (cdr string) (inc count)))])))\n", "  (if (empty? paren_string)\n      '()\n\
+    \      (let ((pars ()))\n        (cond [(char=? (car paren_string) '(') (add!\
+    \ pars (parse_nested_parens (cdr paren_string)))]\n              [(char=? (car\
+    \ paren_string) ')') (add! pars (parse_nested_parens (cdr paren_string)))]\n \
+    \             [else (add! pars (parse_infix_expr (car paren_string)))])))\n  )\n",
+  "  (let-values (((level paren_string) (* (length paren_string) 1)))\n    (if (and\
+    \ (not (string-empty? paren_string))\n             (eql (parse-string paren_string)\
+    \ '()))\n      (list level)\n      (let ((level_left (- level 1)))\n        (if\
+    \ (> level_left 0)\n            (let ((level_right (- level_left 1)))\n      \
+    \        (list level_left level_right)\n              (let ((level_right_left\
+    \ (- level_right 1)))\n                (list level_left level_right_left)\n  \
+    \              (let ((level_right_right (- level_right_left 1)))\n           \
+    \       (list level_left level_right_left level_right_right)))))))))\n", "  (cond\n\
+    \    [(empty? paren_string) empty]\n    [(equal? (car paren_string) '()) (+ 1\
+    \ (parse_nested_parens (cdr paren_string)))]\n    [(equal? (car paren_string)\
+    \ (string? (car paren_string))) (+ 1 (parse_nested_parens (cdr paren_string)))]\n\
+    \    [else (+ 1 (parse_nested_parens (cdr paren_string)))]))\n", "  (define group\n\
+    \    (string-split paren_string))\n  (define nest\n    (map length (partition\
+    \ 2 (reverse group))))\n  (max nest))\n", "  (define (level group_count)\n   \
+    \ (if (= group_count 0)\n        0\n        (+ ((count levels)) group_count)))\n\
+    \  (define levels (make-vector 3 (list '() '() '())))\n  (let loop ()\n    (when\
+    \ (not (or (equal? (car paren_string) ')')\n              (equal? (car paren_string)\
+    \ '(')))\n      (set! levels (vector-push levels (vector-ref levels (- group_count\
+    \ 1))))\n      (set! group_count (- group_count 1)))\n    (let ((char (car paren_string)))\n\
+    \      (when (= char '( () (set! group_count (- group_count 1)) (loop))\n    \
+    \    (set! levels (vector-push levels (vector-ref levels (- group_count 1))))\n\
+    \        (set! group_count (- group_count 1)))\n      (when (= char ') (set! group_count\
+    \ (- group_count 1)) (loop))\n      (set! levels (vector-push levels (vector-ref\
+    \ levels (- group_count 1))))\n      (set! group_count (- group_count 1))))\n\
+    \  (vector-ref levels (vector-length levels)))\n</code>\n<|/ a |>\n<| c |>\nThat\
+    \ would just be `(parse_nested_parens ')()()(())())')`\n<|/ c |>\n<| c |>\nI missed\
+    \ the point that you want to count how many times the inner parentheses are nested\
+    \ while they are nested. Hence the result `[2, 3, 1, 3]`. Fixed it now.\n<|/ c\
+    \ |>\n<| c |>\nThe OP asked for *max level of nesting*, not total level of nesting;\
+    \ so the correct result would be `[2, 2, 1, 1]` for `')()(()(()))(())'`\n<|/ c\
+    \ |>\n<| a tags=scheme,racket |>\nJust for fun, here's a Scheme implementation\
+    \ that counts the depth of parentheses:\n<code>", "  (let loop ((parens ()) (level_so_far\
+    \ (0))) (acc '())\n    (cond [(empty? paren_string) acc]\n          [else (loop\n\
+    \                   (append (parse_nested_parens (rest paren_string)) parens)\n\
+    \                   (+ level_so_far 1))]\n          )\n  )\n)", "  (let* ((stack\
+    \ (make-list 0))\n         (current_group (make-list 0))\n         (depth (min\
+    \ (length paren_string) 0))\n         (group (make-list depth))\n         (char\
+    \ (substring (string paren_string) 0 depth))\n         (char-count (length char))\n\
+    \         (current-char (char 0 char-count))\n         (count-limit (max 1 (-\
+    \ depth 1)))\n         (count-limit (max 1 (- (length paren_string) depth)))\n\
+    \         (char (char 0 char-count))\n         (char-count (length char))\n  \
+    \       (current-char (char 0 char-count))\n         (count 0))\n    (unless (char-count\
+    \ 0)\n      (set! current-char (char 1 char-count))\n      (cond [(char = ')']\n\
+    \            [(set! count count)\n             (set! count 0)]\n            [(char\
+    \ = '(')]\n            [(set! count (+ count 1))]\n            [else\n       \
+    \      (set! count 0)]\n            [else\n             (set! count (+ count 1))]\n\
+    \            [(= count depth)\n             (set! count 0)]\n            [(set!\
+    \ count (- count 1))\n             (set! count 0)]\n            [(< count depth)\n\
+    \             (set! count 0)]\n            [(set! count (+ count 1))\n       \
+    \      (set! count 0)]\n            [(set! count (- count 1))\n             (set!\
+    \ count 0)]\n            [(= count 0)\n             (set! count (+ count 1))]\n\
+    \            [else\n             (set! count 0)]\n            [(set! count (+\
+    \ count 1))\n             (set! count 0)]\n            [(= count 0)\n        \
+    \     (set! count (- count 1))]\n            [else\n             (set! count 0)]\n\
+    \            [else\n             (set! count 0)]\n            [(set! count (-\
+    \ count 1))\n             (set! count 0)]\n            [(= count 0)\n        \
+    \     (set! count (+ count 1))]\n            [else\n             (set! count 0)]\n\
+    \            [else\n             (set! count 0)]\n            [else\n        \
+    \     (set! count 0)]\n            [(set! count (+ count 1))]\n            [(=\
+    \ count 0)\n             (set! count (- count 1))]\n            [else\n      \
+    \       (set! count 0)]\n            [else\n             (set! count 0)]\n   \
+    \         [else\n             (set! count 0)]\n            [else\n           \
+    \  (set! count 0)]\n            [else\n             (set! count 0)]\n", "  (cond\n\
+    \    ((null? paren_string) #f)\n    ((char=? #\\( paren_string) (parse_nested_parens\
+    \ (rest paren_string)))\n     (cond ((char=? #\\) (rest paren_string)) #f)\n \
+    \          ((char=? #\\) (rest paren_string) (parse_nested_parens (rest paren_string)))\n\
+    \           ((char=? #\\) (parse_nested_parens (rest paren_string)))\n       \
+    \    ((char=? #\\) (rest paren_string) (parse_nested_parens (rest paren_string)))\n\
+    \           ((char=? #\\) (rest paren_string) (parse_nested_parens (rest paren_string)))\n\
+    \           ((char=? #\\) (parse_nested_parens (rest paren_string)))\n       \
+    \    ((char=? #\\) (rest paren_string) (parse_nested_parens (rest paren_string)))))\n\
+    \    ((char=? #\\ ( paren_string) (parse_nested_parens (rest paren_string)))\n\
+    \     (cond ((char=? #\\) (rest paren_string)) #f)\n           ((char=? #\\) (rest\
+    \ paren_string) (parse_nested_parens (rest paren_string)))\n           ((char=?\
+    \ #\\) (parse_nested_parens (rest paren_string)))\n           ((char=? #\\) (rest\
+    \ paren_string) (parse_nested_parens (rest paren_string)))\n           ((char=?\
+    \ #\\) (rest paren_string) (parse_nested_parens (rest paren_string)))\n      \
+    \     ((char=? #\\) (parse_nested_parens (rest paren_string)))\n           ((char=?\
+    \ #\\) (rest paren_string) (parse_nested_parens (rest paren_string)))))\n    ((char=?\
+    \ #\\ ( paren_string) (parse_nested_parens (rest paren_string)))\n     (cond ((char=?\
+    \ #\\) (rest paren_string)) #f)\n           ((char=? #\\) (rest paren_string)\
+    \ (parse_nested_parens (rest paren_string)))\n           ((char=? #\\) (parse_nested_parens\
+    \ (rest paren_string)))\n           ((char=? #\\) (rest paren_string) (parse_nested_parens\
+    \ (rest paren_string)))\n           ((char=? #\\) (rest paren_string) (parse_nested_parens\
+    \ (rest paren_string)))\n           ((char=? #\\) (parse_nested_parens (rest paren_string)))\n\
+    \           ((char=? #\\) (rest paren_string) (parse_nested_parens (rest paren_string)))))\n\
+    \    ((char=? #\\ (paren_string) (parse_nested_parens (rest paren_string)))\n\
+    \     (cond ((char=? #\\) (rest paren_string)) #f)\n           ((char", "  (let\
+    \ loop ()\n    (if (= (length paren_string) 0)\n        (list))\n    (let ((curr_piece\
+    \ (char (string-ref paren_string 0)))\n          (next_piece (string-ref paren_string\
+    \ 1))\n          (level_of_nesting (parse_nested_parens next_piece)))\n      (cond\n\
+    \        ((null? curr_piece)\n         (loop ()))\n        ((char= curr_piece\
+    \ ')')\n         (if (< level_of_nesting 0)\n             (loop))\n         (loop))\n\
+    \        (else\n         (loop))))))\n", "  (let loop ((paren_string paren_string)\n\
+    \             (output 0))\n    (if (empty? paren_string)\n        0\n        (if\
+    \ (char-equal? (first (split-at paren_string '()')) ')')\n            (loop (substring\
+    \ paren_string 2)\n                   (+ output 1))\n            (loop (substring\
+    \ paren_string 1)\n                   (+ output (if (char-equal? (first (split-at\
+    \ paren_string '()')) ')')\n                             0\n                 \
+    \            1)))\n        ))))\n", "  (if (string? paren_string)\n      (parse-nested-parens-helper\
+    \ paren_string)\n      0))\n", "  (let recur ((paren_string paren_string)\n  \
+    \             (acc 0))\n    (cond\n      [(empty? paren_string)\n       (reverse\
+    \ acc)]\n      [(not (pair? (car paren_string)))\n       (recur (cdr paren_string)\
+    \ (+ acc 1))]\n      [else\n       (recur (car paren_string)\n             (recur\
+    \ (cdr paren_string)\n                    (+ acc (parse_nested_parens paren_string)))])))\n",
+  "  (let ([max_levels 0])\n    (cond [(not (empty? paren_string)) \n           (let\
+    \ ([cur-level (string-length (first paren_string))])\n             (cond\n   \
+    \           [(> cur-level (string-length (rest (first paren_string))))\n     \
+    \          (set! max_levels (+ cur-level (+ max_levels 1)))]\n              [else\n\
+    \               (set! max_levels (+ cur-level (+ max_levels 1)))]\n          \
+    \    [else (set! max_levels cur-level)])\n           max_levels]\n          [else\
+    \ (set! max_levels 0)]\n          )))\n", "  (parse \n   (string->list paren_string)\n\
+    \   (lambda (x)\n     (if (or (null? x) (equal? x '()))\n         0\n        \
+    \ (if (and (equal? (caar x) ')')\n               (= (caadr x) '('))\n        \
+    \     (+ 1 (parse_nested_parens (cdr x))))))))\n", "  (define (loop start end)\n\
+    \    (cond [(null? paren_string)\n           start]\n          [(char= (char-code\
+    \ start) '())\n           (loop (add1 start) (add1 end))]\n          [else\n \
+    \          (loop (add1 start) end)]\n          ))\n  (loop (length paren_string)\
+    \ (length paren_string)))\n</code>\n<|/ a |>\n<| a tags=string,scheme,parentheses,racket,recursion\
+    \ |>\nHere are two other solutions in Scheme.  One is using list recursion and\
+    \ the other one uses pattern matching.\n<code>", "  (define (parse-nested-parens\
+    \ input depth parens)\n    (cond [(equal? input #\\Space ) parens]\n         \
+    \ [(equal? input #\\( ) (parse-nested-parens (read-string #\\Space) depth (+ depth\
+    \ 1)))\n           (parse-nested-parens (read-string #\\Space) depth (+ depth\
+    \ 1))]\n          [(equal? input #\\) ) (parse-nested-parens (read-string #\\\
+    Space) depth (+ depth 1))\n           (parse-nested-parens (read-string #\\Space)\
+    \ depth (+ depth 1))]\n          [(equal? input #\\) ) (parse-nested-parens (read-string\
+    \ #\\Space) depth (+ depth 1))\n           (parse-nested-parens (read-string #\\\
+    Space) depth (+ depth 1))]\n          [(equal? input #\\) ) (parse-nested-parens\
+    \ (read-string #\\Space) depth (+ depth 1))\n           (parse-nested-parens (read-string\
+    \ #\\Space) depth (+ depth 1))]\n          [(equal? input #\\) ) (parse-nested-parens\
+    \ (read-string #\\Space) depth (+ depth 1))\n           (parse-nested-parens (read-string\
+    \ #\\Space) depth (+ depth 1))]\n          [(equal? input #\\( ) (parse-nested-parens\
+    \ (read-string #\\Space) depth (+ depth 1)))\n           (parse-nested-parens\
+    \ (read-string #\\Space) depth (+ depth 1))]\n          [(equal? input #\\) )\
+    \ (parse-nested-parens (read-string #\\Space) depth (+ depth 1))\n           (parse-nested-parens\
+    \ (read-string #\\Space) depth (+ depth 1))]\n          [else (parse-nested-parens\
+    \ (read-string #\\Space) depth (+ depth 1))]))\n  (parse-nested-parens paren_string\
+    \ 0 (list 0)))\n", "  (let loop ((groups '()))\n    (if (string-match-p (car paren_string)\
+    \ '()+)\n        (cons (length groups)\n              (loop (cdr groups))))\n\
+    \    (loop '()))\n  )\n", "  (let loop ((parens (string-ref paren_string 0))\n\
+    \             (levels 0))\n    (cond\n      [(string-length paren_string)\n  \
+    \     (list levels)]\n      [(string=? string-ref parens 0)\n       (loop (string->list\n\
+    \               (substring-no-properties paren_string\n                      \
+    \             0 (string-length paren_string)))\n           levels)]\n      [(string=?\
+    \ (car parens)\n                 ')']\n      [else\n       (loop (cdr parens)\n\
+    \             (+ 1 levels))]\n    ))\n  )\n", "  (define (parse-nested-pun nested-paren\
+    \ level stack)\n    (cond\n      [(null? nested-paren)\n       level]\n      [(equal?\
+    \ nested-paren (first (last stack)))\n       level + 1])\n  (cond\n    [(empty?\
+    \ paren_string)\n     0]\n    [else\n     (let ([nested-paren (split-string (last\
+    \ paren_string) '())\n            level (parse-nested-pun (rest paren_string)\
+    \ 1 '())])\n       (if (equal? nested-paren '())\n           level\n         \
+    \  (parse-nested-pun (rest nested-paren) level (append '() nested-paren))))]))\n\
+    \  (parse-nested-pun (last paren_string) 0 '()))", "  (let* ((count (length paren_string))\n\
+    \         (counts ())\n         (level (quote ()))\n         (next_level (quote\
+    \ ()))\n         (nested_parens ()))\n    (cond ((or (= count 1) (eq? count 0))\n\
+    \           (reverse nested_parens))\n          ((or (= count 0)\n           \
+    \     (eq? (car paren_string) '()))\n           (reverse nested_parens))\n   \
+    \       ((or (eq? count 1)\n                (eq? (car paren_string) '()))\n  \
+    \         (set! count (cdr paren_string))\n           (set! counts (cons (+ count\
+    \ 1) counts))\n           (set! count 0)\n           (set! level (cdr paren_string))\n\
+    \           (set! next_level (car paren_string))\n           (set! count (cdr\
+    \ counts))\n           (set! count 0)\n           (set! level (cons (car paren_string)\
+    \ (cons count level)))\n           (set! next_level (car level))\n           (set!\
+    \ count (cdr level))\n           (set! count 0)\n           (set! level (cons\
+    \ (car next_level) (cons count level)))\n           (set! nested_parens (cons\
+    \ (car level) nested_parens))\n          (t\n           (set! count 0)\n     \
+    \      (set! level (quote ()))\n           (set! next_level (quote ()))\n    \
+    \       (set! counts (cons 0 counts))\n           (set! count 0)\n           (set!\
+    \ level (cons (car paren_string) level))\n           (set! nested_parens (cons\
+    \ (car level) nested_parens)))))\n", "  (cond [(empty? paren_string) empty]\n\
+    \        [(equal? (car paren_string) '()) empty]\n        [else (+ (parse_deepest_level_of_nesting\
+    \ (parse_nested_parens (rest paren_string)) empty)])\n        ))\n", "  (let loop\
+    \ ((result '())\n             (group_string paren_string)\n             (group_count\
+    \ 0))\n    (if (not group_count)\n        result\n        (loop (+ result (- group_count\
+    \ 1))\n             (substring group_string 0 (- (string-length group_string)\
+    \ group_count))\n             (+ group_count 1)))))\n", "  (if (empty? paren_string)\n\
+    \      []\n      (parse parse_tree (first paren_string)\n                (parse_nested_parens\
+    \ (rest paren_string))))))\n", "  (cond [(empty? paren_string)\n         [0]]\n\
+    \        [(cons? (car paren_string))\n         (+ 1 (parse_nested_parens (cdr\
+    \ paren_string)))]\n        [else\n         (max (parse_nested_parens (car paren_string))\n\
+    \              (parse_nested_parens (cdr paren_string)))]))\n", "  (let loop ((inst\
+    \ '())\n             (paren_groups '())\n             (opening_parens '())\n \
+    \            (levels '()))\n    (cond\n      [(empty? paren_string) (build-list\
+    \ 0 levels)\n       (build-list 0 levels)\n       (build-list 0 levels)\n    \
+    \   (build-list 0 levels)]\n      [(equal? (char paren_string (first paren_groups)))\
+    \ (inst @(first paren_groups) @(first paren_groups) @(first paren_groups) @(first\
+    \ paren_groups))\n       (loop (rest paren_string)\n             (append paren_groups\n\
+    \                      (list (first paren_groups))\n                      (loop\
+    \ (rest paren_string)\n                            (append paren_groups\n    \
+    \                                (loop (rest paren_string)\n                 \
+    \                         (cons (first paren_groups) inst))))\n              \
+    \        opening_parens\n                      (cons (first paren_groups) levels))]\n\
+    \      [else\n       (loop (rest paren_string)\n             (append paren_groups\n\
+    \                      (loop (rest paren_string)\n                           \
+    \ (append paren_groups\n                                    (loop (rest paren_string)\n\
+    \                                          (cons (first paren_groups) inst))))\n\
+    \                      opening_parens\n                      (cons (first paren_groups)\
+    \ levels))]))))\n", "  (check-type paren_string string)\n  (let loop ((parens\
+    \ ()) (index 0))\n    (cond ((and string= paren_string \"\")\n           (reverse\
+    \ parens))\n          ((string= paren_string \")\") (append (list index) parens))\n\
+    \          ((string= paren_string \"(\") (incf index))\n          ((not (= index\
+    \ 0)) (recur (append parens ()) (dec index))))\n    (loop '() (- index 1))))\n",
+  "  (let ((levels ()))\n    (iter-for-pair paren_string\n                  (lambda\
+    \ (char) (if (char = '(')\n                                    (add-to-list levels\
+    \ 1)\n                                    (add-to-list levels 0)))\n         \
+    \         (lambda (pair) (recur levels pair)))))\n", "  (let ((group_stack (list\
+    \ 0))\n        (group_count 0)\n        (level_of_nesting 0)\n        (level_of_nested_group\
+    \ 0))\n    (cond ((null? paren_string)\n           (quote ())) ; no groups\n \
+    \         ((char= (first paren_string) '( () ( ))) ; one group\n           (cons\
+    \ group_count\n                 (parse_nested_parens (rest paren_string)))\n \
+    \         ((char= (first paren_string) '())) ; no nesting\n          ((char= (first\
+    \ paren_string) ')) ; no nesting\n          ((char= (first paren_string) '())\
+    \ ; single group\n           (cons (first paren_string)\n                 (parse_nested_parens\
+    \ (rest paren_string))))\n          ((char= (first paren_string) '( () ( )) '())\
+    \ ; one level\n           (cons (first paren_string)\n                 (cons (first\
+    \ paren_string)\n                      (parse_nested_parens (rest paren_string)))\n\
+    \                 (cons (first paren_string)\n                      (cons level_of_nesting\n\
+    \                             (parse_nested_parens (rest paren_string))))\n  \
+    \               (cons (first paren_string)\n                      (cons level_of_nesting\n\
+    \                             (cons level_of_nested_group\n                  \
+    \                 (parse_nested_parens (rest paren_string))))))\n          ((char=\
+    \ (first paren_string) '()) ; one level\n           (cons (first paren_string)\n\
+    \                 (cons level_of_nesting\n                       (parse_nested_parens\
+    \ (rest paren_string))))\n          ((char= (first paren_string) '())) ; no nesting\n\
+    \          ((char= (first paren_string) '( () ( )) '())) ; one level\n       \
+    \    (cons (first paren_string)\n                 (cons (first paren_string)\n\
+    \                       (cons level_of_nesting\n                             (cons\
+    \ level_of_nested_group\n                                   (parse_nested_parens\
+    \ (rest paren_string))))\n                       (cons level_of_nesting\n    \
+    \                         (cons level_of_nested_group\n                      \
+    \             (parse_nested_parens (rest paren_string))))))\n          ((char=\
+    \ (first paren_string) '()) ; no nesting\n           (cons (first paren_string)\n\
+    \                 (cons level_of_nesting\n                       (cons level_of_nested_group\n\
+    \                             (parse_nested_parens (rest paren_string))))))\n\
+    \          (else (error \"Unexpected char after parens: ~a\" (char-code (first\
+    \ paren_string))))))) ; unexpected char\n    ; To get the output, we have to reverse\
+    \ the stack", "  (let loop ((n 0) (acc '()))\n    (cond\n      [(empty? paren_string)\
+    \ acc]\n      [(equal? (char-type (char-at (peek-char n)) '(') (char-type (char-at\
+    \ (peek-char n)) '(')) (loop (+ n 1) (cons (char-type (char-at (peek-char n))\
+    \ '(') acc))]\n      [(equal? (char-type (char-at (peek-char n)) '(') (char-type\
+    \ (char-at (peek-char n)) '(')) (loop (+ n 1) (cons (char-type (char-at (peek-char\
+    \ n)) '(') acc))]\n      [(equal? (char-type (char-at (peek-char n)) ')') (loop\
+    \ (+ n 1) acc)]\n      [(equal? (char-type (char-at (peek-char n)) ')') (loop\
+    \ (+ n 1) (cons (char-type (char-at (peek-char n)) '(') acc))]\n      [(equal?\
+    \ (char-type (char-at (peek-char n)) ')') (loop (+ n 1) (cons (char-type (char-at\
+    \ (peek-char n)) '(') acc))]\n      [(equal? (char-type (char-at (peek-char n))\
+    \ '(') (char-type (char-at (peek-char n)) '(')) (loop (+ n 1) (cons (char-type\
+    \ (char-at (peek-char n)) '(') (loop (+ n 1) (cons (char-type (char-at (peek-char\
+    \ n)) '(') acc))))]\n      [(equal? (char-type (char-at (peek-char n)) '(') (char-type\
+    \ (char-at (peek-char n)) '(')) (loop (+ n 1) (cons (char-type (char-at (peek-char\
+    \ n)) '(') (loop (+ n 1) (cons (char-type (char-at (peek-char n)) '(') (loop (+\
+    \ n 1) (cons (char-type (char-at (peek-char n)) '(') acc))))))]\n      [(equal?\
+    \ (char-type (char-at (peek-char n)) '(') (char-type (char-at (peek-char n)) '('))\
+    \ (loop (+ n 1) (cons (char-type (char-at (peek-char n)) ", "  (let loop ((levels\
+    \ 0) ((level-stack '())) ((paren-stack '())) ((paren-stack-size 0))\n        \
+    \    (paren_char null-char) (paren_string paren_string) (paren_stack-ptr 0)\n\
+    \            (paren_char-ptr 0))\n    (cond\n      [(empty? paren_string)\n  \
+    \     (reverse levels)]\n      [(equal? paren_char ')'\n            (set-char!\
+    \ paren_char null-char)\n            (loop (add1 (car paren_stack))\n        \
+    \           (cdr paren_stack)\n                   (add1 (car level-stack))\n \
+    \                  (cadr paren_stack))\n           levels]\n      [(equal? (car\
+    \ paren_stack) '(') (set! levels (add1 (car paren_stack)))\n       ;; Level increases\
+    \ when the open parenthesis is encountered in the stack.\n       (set-char! paren_char\
+    \ null-char)\n       (set-char! (car paren_char) (add1 (car paren_stack)))\n \
+    \      (loop (add1 (car level-stack))\n             (cdr paren_stack)\n      \
+    \       (add1 (car level-stack))\n             (cadr paren_stack)\n          \
+    \   (add1 (car level-stack))\n             (cadr paren_stack))]\n      [(equal?\
+    \ (car paren_stack) ')') (set! levels (add1 (car paren_stack)))\n       ;; Level\
+    \ decreases when the closing parenthesis is encountered in the stack.\n      \
+    \ (set-char! paren_char null-char)\n       (set-char! (car paren_char) (sub1 (car\
+    \ level-stack)))\n       (loop (sub1 (car level-stack))\n             (cdr paren_stack)\n\
+    \             (add1 (car level-stack))\n             (cadr paren_stack)\n    \
+    \         (add1 (car level-stack))\n             (cadr paren_stack))]\n      [else\n\
+    \       ;; New character is encountered.\n       (set-char! (car paren_char) (car\
+    \ paren_string))\n       (set-char! paren_char null-char)\n       (loop (add1\
+    \ (car level-stack))\n             (cdr paren_stack)\n             (add1 (car\
+    \ level-stack))\n             (cadr paren_stack)\n             (add1 (car level-stack))\n\
+    \             (cadr paren_stack))]\n      [(equal? paren_char null-char) (loop\
+    \ (add", "  (if (empty? paren_string)\n      '()\n      (let ((groups (tokenize\
+    \ paren_string)))\n        (cond [(empty? groups) '()]\n              [(not (pair?\
+    \ groups)) (error \"Expected a group\")]\n              [(string? groups) (parse_nested_parens\
+    \ (drop groups 1))]\n              [else (parse_nested_parens (drop groups 0))])))\n",
+  "  (let loop ((i 0)\n             (current_level 0))\n    (cond\n      [(equal?\
+    \ i 0)\n       (list current_level)]\n      [(equal? (string-length paren_string)\
+    \ (- i 1))\n       (loop (+ i 1)\n             (add1 current_level))]\n      [else\n\
+    \       (loop (+ i 1)\n             (max (add1 current_level)\n              \
+    \     (loop (+ i 1) current_level))))]))\n", "  (let ((stack (make-stack)))\n\
+    \    (cond ((null? paren_string) 0)\n          ((equal? (car paren_string) '())\
+    \ (car stack))\n          ((equal? (car paren_string) '((())) (car stack) (push\
+    \ (car paren_string) stack))\n          ((equal? (car paren_string) '((()) (car\
+    \ stack) (push (car paren_string) stack))\n          (parse_nested_parens (cdr\
+    \ paren_string) (+ 1 stack)))\n          (else (push (car paren_string) stack)))\n\
+    \    (reverse stack)))\n", "  (let ((max-level (max (parse_indented_string paren_string)\
+    \ 0)))\n    (build-list max-level (lambda (n) (parse_indented_string paren_string)))))\n",
+  "  (cond [(empty? paren_string)\n         0]\n        [else\n         (let ([start\
+    \ (position (first (rest paren_string)) paren_string)])\n           (cond [(empty?\
+    \ (rest paren_string))\n                  (+ 1 (parse_nested_parens (rest paren_string)))]\n\
+    \                 [else\n                  (let ([paren_string (substring paren_string\
+    \ start (+ start 1))])\n                    (cond [(empty? paren_string)\n   \
+    \                        (+ 1 (parse_nested_parens (rest paren_string)))]\n  \
+    \                       [else\n                           (+ 1 (parse_nested_parens\
+    \ (rest paren_string))))]))]))))\n", "  (let loop ((paren_string paren_string)\n\
+    \             (levels 0))\n    (cond\n      [(not (member paren_string '() '(()))\n\
+    \       (error \"Nested parentheses detected.\"))\n       levels]\n      [(member\
+    \ (string-ref paren_string 0)\n               '()\n               '((()))\n  \
+    \             (loop (string-ref paren_string 1)\n                     levels +\
+    \ 1))]\n      [(member (string-ref paren_string 0)\n               '()\n     \
+    \          '((())\n                (loop (string-ref paren_string 2)\n       \
+    \               levels + 1)))]\n      [else\n       (loop (string-ref paren_string\
+    \ 1)\n             levels + 1)])))\n", "  (parse_infix_parens paren_string\n \
+    \    (lambda (c n)\n       (cond [(char=? c (char #\\Space (- n 1))) n]\n    \
+    \         [(char=? c (char #\\Paren (- n 1))) (parse_infix_parens (substring paren_string\
+    \ 0 n)\n                                                                 (lambda\
+    \ (x) (+ n x)))]\n             [(char=? c (char #\\Brace)) (parse_infix_parens\
+    \ (substring paren_string 0 n)\n                                             \
+    \              (lambda (x) (+ n x)))]\n             [else (parse_infix_parens\
+    \ (substring paren_string 0 n)\n                                     (lambda (x)\
+    \ (+ n x)))]))))\n", "  (let loop ([paren_string paren_string]\n             [levels\
+    \ nil]\n             [result 0])\n    (if (empty? paren_string)\n        result\n\
+    \        (let ((new_paren_string (remove-char paren_string 0))\n             \
+    \ (new_levels (parse-levels new_paren_string)))\n          (loop (remove-char\
+    \ new_paren_string 0)\n                (cons new_levels (reverse new_levels))\n\
+    \                (+ result (max 0 (map max new_levels))))))))\n", "  (let loop\
+    \ ((nesting 0))\n    (if (null? paren_string)\n        nesting\n        (loop\
+    \ (parse-nested-parens-helper (car paren_string) (cdr paren_string) nesting 1)))))\n",
+  "  (define (parse-nested-group group_string i j count)\n    (cond\n      [(= i 0)\
+    \ (+ count j)]\n      [(char=? (char-code group-string) '(') (parse-nested-group\
+    \ group-string (+ i 1) (+ j 1) (+ count 1))]\n      [(char=? (char-code group-string)\
+    \ '(') (parse-nested-group group-string (+ i 1) (+ j 1) count)]\n      [(char=?\
+    \ (char-code group-string) ')') (parse-nested-group group-string (- i 1) (+ j\
+    \ 1) count)]\n      [(char=? (char-code group-string) ')') (parse-nested-group\
+    \ group-string (- i 1) (+ j 1) count)]\n      [(char=? (char-code group-string)\
+    \ ' ') (parse-nested-group group-string (+ i 1) (+ j 1) count)]\n      [else (parse-nested-group\
+    \ group-string (+ i 1) (+ j 1) count)]\n      ))\n  (parse-nested-group paren_string\
+    \ 0 1 0))\n", "  (let loop ((paren_string paren_string)\n             (stack 0)\n\
+    \             (levels 0))\n    (cond ((null? paren_string) (list levels))\n  \
+    \        ((char=? (car paren_string) '())\n           (loop (cdr paren_string)\
+    \ (add1 stack) levels))\n          ((char=? (car paren_string) '()) \n       \
+    \    (loop (cdr paren_string) (add1 stack) (add1 levels)))\n          ((char=?\
+    \ (car paren_string) (cond ((>= stack 1) stack)\n                            \
+    \            ((char=? (cdr paren_string) '()) stack)\n                       \
+    \                 (else (loop (cdr paren_string) (add1 stack) (add1 levels))))))\n\
+    \          (else (loop (cdr paren_string) (add1 stack) (add1 levels)))))))\n</code>\n\
+    <|/ a dscore=1 |>\n<| c |>\nThank you for the great solution! I did not expect\
+    \ such a good solution to exist. Can you explain why you use a loop here? I mean,\
+    \ I don't think it's necessary to re-indent the code like you did in your answer.\
+    \ Also, is there a way to avoid the need for the parenthesis grouping when calling\
+    \ the function?\n<|/ c |>\n<| c |>\n: It's just how I like to do it. I like to\
+    \ indent all the code so that it's clear what's happening at each line. `loop`\
+    \ iterates over `(paren_string paren_string)`, which are the strings in the parentheses.\
+    \  Each iteration is based on the same variables (`paren_string`, `stack`, `levels`).\
+    \  When the code starts, `levels` is 0, and `stack` is 0.  Then each iteration\
+    \ either adds one to `stack` or `add1` to `levels`, depending on which condition\
+    \ it matches.  When it reaches the end of the string, either `stack` and `levels`\
+    \ are returned, or they keep their original values.\n<|/ c |>\n<| c |>\n: Yes,\
+    \ you can call `parse_nested_parens` with only a single argument, `(())`.  See\
+    \ [my answer to your previous question](http://stackoverflow.com/a/33321757/849891).\n\
+    <|/ c |>\n<| a |>\nThis can be solved using the same idea as before: \n<code>",
+  "  (let loop ((groups (string->list paren_string)))\n    (if (null? groups)\n  \
+    \      0\n        (let ((nest_level (loop (rest groups))))\n          (if (< nest_level\
+    \ 3)\n              nest_level\n              (loop (rest groups))))))))\n", " \
+    \ (cond\n    ((null? paren_string)\n     '())\n    ((equal? (car paren_string)\
+    \ '( () )\n     (+ 1 (parse (cdr paren_string))))\n    ((equal? (car paren_string)\
+    \ '( () )\n     (+ 1 (parse (cdr paren_string))))\n    ((equal? (car paren_string)\
+    \ '( () )\n     (+ 1 (parse (cdr paren_string))))\n    (else\n     (parse (parse_nested_parens\
+    \ (cdr paren_string))))))\n", "  (check-type paren_string string)\n  (let ((stack\
+    \ '()))\n    (loop\n       [(index 0) (char null-char)]\n       [(end-index length)\
+    \ (char null-char)]\n       [i 0]\n       [char null-char]\n       [nesting 0]\n\
+    \       [temp null-char]\n       [level (parse-number null-char)\n        char\
+    \ (parse-char null-char)]\n      (cond\n        ((equal? (char) '(') (set! char\
+    \ (parse-char null-char)))\n        ((equal? (char) ')') (set! char (parse-char\
+    \ null-char)))\n        ((equal? (char) '()) (set! char (parse-char null-char)))\n\
+    \        ((equal? (char) '[) (set! char (parse-char null-char)))\n        ((equal?\
+    \ (char) ']') (set! char (parse-char null-char)))\n        ((equal? (char) '{')\
+    \ (set! char (parse-char null-char)))\n        ((equal? (char) '}') (set! char\
+    \ (parse-char null-char)))\n        (else (set! char (parse-char null-char))))\n\
+    \      (cond\n        ((equal? char null-char) (cond\n                       \
+    \             ((equal? char ']') (set! char '['))\n                          \
+    \          ((equal? char '}') (set! char '{')))\n                            \
+    \        ((equal? char '[') (set! char '{')))\n                              \
+    \      ((equal? char '(') (set! char '(')))\n                                \
+    \    ((equal? char ')') (set! char '(')))\n                                  \
+    \  ((equal? char '{) (set! char '{')))\n                                    (else\
+    \ (set! char (parse-char null-char))))\n        ((equal? char ')') (cond\n   \
+    \                               ((equal? char ']') (set! char '{'))\n        \
+    \                          ((equal? char '(') (set! char '{')))\n            \
+    \                      ((equal? char '{') (set! char '{')))\n                \
+    \                  ((equal? char '[') (set! char '{')))\n                    \
+    \              (else (set! char (parse-char null-char))))\n        ((equal? char\
+    \ '(') (cond\n                                  ((equal? char ']') (set! char\
+    \ '['))\n                                  ((equal? char '{') (set! char '{')))\n\
+    \                                  ((equal? char '[') (set! ", "  (let* ((parens\
+    \ (split-string paren_string #\\)) ; split parens to list of strings for parsing\
+    \ to a string\n         (parens (remove-if-not (lambda (s) (empty? s)) parens))\
+    \ ; remove empty strings\n         (parens_count (length parens)) ; compute number\
+    \ of strings\n         (result '()) ; initialize result\n         (i 0))\n   \
+    \ (cond\n      [(empty? parens) result]\n      [(equal? (first parens) '(') (set!\
+    \ i (add1 (+ i 1)))]\n      [(equal? (first parens) ')') (set! i (add1 (+ i 1)))]\n\
+    \      [(>= i parens_count) (set! i (add1 (+ i 1)))]\n      [else (set! result\
+    \ (append result (list (add1 (+ i 1)))) (set! i (add1 (+ i 1)))]))\n    result))\n",
+  "  (cond [(empty? paren_string) '()]\n        [else (parse (first paren_string)\
+    \ (parse_nested_parens (rest paren_string)))]))\n", "  (let ((result (loop\n \
+    \                for (i 0) #:when (char-equal? paren_string\n                \
+    \                         (char-before paren_string i))\n                 #:do\
+    \ (add1 i)\n                 #:until (char-equal? paren_string #\\)))\n      \
+    \   (level (if (null? result) 0 (car result))))\n    (if (null? paren_string)\n\
+    \        result\n        (loop\n           for i level\n           for result\n\
+    \           collect (if (equal? (char-before paren_string i)\n               \
+    \              (char-after paren_string i))\n                       level\n  \
+    \                     (+ 1 (level (loop\n                                  for\
+    \ j level\n                                  for result\n                    \
+    \              collect (if (equal? (char-before paren_string j)\n            \
+    \                                       (char-after paren_string j))\n       \
+    \                                        level\n                             \
+    \                  (+ 1 (level (loop\n                                       \
+    \                  #:do (add1 j)\n                                           \
+    \              #:until (char-equal? paren_string #\\)))\n                    \
+    \                           (loop\n                                          \
+    \      for k level\n                                                for result\n\
+    \                                                collect (if (equal? (char-before\
+    \ paren_string k)\n                                                          \
+    \       (char-after paren_string k))\n                                       \
+    \                        level\n                                             \
+    \                  (+ 1 (level (loop\n                                       \
+    \                               #:do (add1 k)\n                              \
+    \                                        #:until (char-equal? paren_string #\\\
+    )))))))))\n                       level))))))) ;the value of this variable is\
+    \ just for debug purpose and should not be used\n</code>\n<|/ a dscore=1 |>\n\
+    <| c |>\nThanks a lot for the quick answer. I have one question, how do I get\
+    \ the output of the function to be printed out when I execute it?\n<|/ c |>\n\
+    <| c |>\nThis should just print out the result if you type the name of the function\
+    \ on the command line.\n<|/ c |>\n<| c |>\nThanks again. I am a little confused,\
+    \ since I want to print the result when I execute it, I should be able to write\
+    \ \"(parse_nested_parens \"(())\") on the console, am I right?\n<|/ c |>\n<| c\
+    \ |>\nThat will do it. However, you will need to put it into another function\
+    \ to print it. Here is a [link to learn about how to print stuff in the REPL](https://doc.racket-lang.org/reference/print.html)\n\
+    <|/ c |>\n<| c |>\nThanks a lot for the reply. I am just trying to figure it out\
+    \ with my limited knowledge.\n<|/ c |>\n<| a dscore=0 |>\nOne thing you can do\
+    \ is define a procedure that takes a string and returns a list of integers representing\
+    \ how many nested parentheses are in it:\n<code>", "  (define (helper stack-length\
+    \ group stack)\n    (if (string=? group \")\")\n        (if (= (length stack)\
+    \ stack-length)\n            (if (string=? group \"(\")\n                (helper\
+    \ (+ 1 stack-length) group (list group))\n                '()))\n        '()))\n\
+    \  (helper 0 paren_string '()))\n", "  (define (count_levels str num_levels)\n\
+    \    (cond (; The string has only one level.\n          (= str #\\')\n       \
+    \   num_levels)\n          ; The string has two levels.\n          (< num_levels\
+    \ 2)\n          ; The string has three levels.\n          (< (count_levels (substring\
+    \ str 2) num_levels)\n             (count_levels (substring str (+ 1 num_levels))\n\
+    \                       num_levels))\n          ; The string has four levels.\n\
+    \          (< (count_levels (substring str 3) num_levels)\n             (count_levels\
+    \ (substring str (+ 1 num_levels)\n                          num_levels))\n  \
+    \           (count_levels (substring str (+ 2 num_levels))\n                 \
+    \      num_levels))\n          ; The string has five levels.\n          (< (count_levels\
+    \ (substring str 4) num_levels)\n             (count_levels (substring str (+\
+    \ 1 num_levels)\n                          num_levels))\n             (count_levels\
+    \ (substring str (+ 2 num_levels)\n                          num_levels))\n  \
+    \           (count_levels (substring str (+ 3 num_levels))\n                 \
+    \      num_levels))\n          ; The string has six levels.\n          (< (count_levels\
+    \ (substring str 5) num_levels)\n             (count_levels (substring str (+\
+    \ 1 num_levels)\n                          num_levels))\n             (count_levels\
+    \ (substring str (+ 2 num_levels)\n                          num_levels))\n  \
+    \           (count_levels (substring str (+ 3 num_levels)\n                  \
+    \        num_levels))\n             (count_levels (substring str (+ 4 num_levels))\n\
+    \                       num_levels))\n          ; The string has seven levels.\n\
+    \          (< (count_levels (substring str 6) num_levels)\n             (count_levels\
+    \ (substring str (+ 1 num_levels)\n                          num_levels))\n  \
+    \           (count_levels (substring str (+ 2 num_levels)\n                  \
+    \        num_levels))\n             (count_levels (substring str (+ 3 num_levels)\n\
+    \                          num_levels))\n             (count_levels (substring\
+    \ str (+ 4 num_levels)\n                          num_levels))\n             (count_levels\
+    \ (substring str (+ 5 num_levels))\n                       num_levels))\n    \
+    \      ; The string has eight levels.\n          (< (count_levels (substring str\
+    \ 7) num_levels)\n             (count_levels (substring str (+ 1 num_levels)\n\
+    \                          num_levels))\n             (count_levels (substring\
+    \ str (+ 2 num_levels)\n                          num_levels))\n             (count_levels\
+    \ (substring str (", "  (let ((result (list)))\n    (while (not (empty? paren_string))\n\
+    \      (let ((char (car paren_string)))\n        (cond\n          ((or (char=\
+    \ char '()') (char= char '[]'))\n           (push (cdr result) (car result))\n\
+    \           (push (cdr result) char))\n          ((char= char '(()))\n       \
+    \    (push (cdr result) (car result))\n           (push (cdr result) (append (char\
+    \ '() (car result))\n                                       (cdr result))))\n\
+    \          (else (push (cdr result) char)))\n      (set! paren_string (substring\
+    \ paren_string 1 (string-length paren_string))))\n    result))\n</code>\n<|/ a\
+    \ |>\n<| c |>\nThis works but its too slow when dealing with large strings. Is\
+    \ there any way I can speed this up?\n<|/ c |>\n<| c |>\nI have updated my solution.\
+    \ Hopefully, the complexity is still O(n), where n is the number of characters\
+    \ in the given string. For the input `'(()()) ((())) () ((())()())`, it is still\
+    \ O(n). So it seems the complexity of above solution is still O(n).\n<|/ c |>\n\
+    <| c |>\nThis works, though it is too slow for large strings. How would I go about\
+    \ making this more efficient for large strings?\n<|/ c |>\n<| c |>\nI have updated\
+    \ my solution. Hopefully, the complexity is still O(n), where n is the number\
+    \ of characters in the given string. For the input `'(()()) ((())) () ((())()())`,\
+    \ it is still O(n). So it seems the complexity of above solution is still O(n).\n\
+    <|/ c |>\n<| c |>\n: How did you test the complexity of the given solution? I\
+    \ run this with `(time (for ((i 100000)) (nth-deep-level '(()()) ((())) () ((())()())))`\
+    \ and got `cpu time: 18002 real time: 18002 gc time: 0`. I also tried the same\
+    \ with your updated solution and got the same result.\n<|/ c |>\n<| a tags=racket,scheme,lisp\
+    \ dscore=0 |>\nHere is my solution, it's similar to Dan Dykstra's solution but\
+    \ also handles strings with repeated parentheses correctly.\n<code>", "  (let\
+    \ ((stack [-1 0]))\n    (define (deep-level-of-parens depth)\n      (cond\n  \
+    \      ((> stack depth)\n         0)\n        (else\n         (+ 1 (deep-level-of-parens\
+    \ (- stack depth)))))\n    (let ((chars (string->list paren_string)))\n      (let\
+    \ ((depth (car chars)))\n        (let ((new (if (string=? (first chars) '(') (+\
+    \ depth 1) depth)))\n          (if (eqv? new depth)\n            (deep-level-of-parens\
+    \ new) \n            (push! stack (- new depth)))))\n      stack))))\n", "  (let\
+    \ loop ((group-count 0) (parens-left 0))\n    (if (= parens-left 0)\n        0\n\
+    \        (let ((current-depth group-count))\n          (if (and (= (length paren_string)\
+    \ parens-left)\n                   (char=? (first paren_string) '(')\n       \
+    \            (char=? (first paren_string) '{'))\n              (loop (+ group-count\
+    \ 1)\n                    (- parens-left 1))\n              (loop (+ group-count\
+    \ 1)\n                    (- parens-left 1))))))))\n", "  (let ((stack '())\n\
+    \        (count 0))\n    (string-split paren_string\n                \" ()()\"\
+    \n                [#:key (lambda(x) (equal? (car x) #\\Space))]\n            \
+    \    [#:result (lambda () (let ([stack (cons (car stack) stack)] (count) stack))])])\n\
+    \    count))\n", "  (define (level depth)\n    (cond\n      [(zero? depth) 0]\n\
+    \      [else (+ 1 (level (- depth 1)))]))\n  (define (parse-paren paren_string)\n\
+    \    (cond\n      [(string=? (string-ref paren_string 0) '()) 0]\n      [else\
+    \ (+ 1 (parse-paren (substring paren_string 0 1)))]))\n  (parse-paren (substring\
+    \ paren_string 0 (string-length paren_string)))\n  (list\n   (length paren_string)\n\
+    \   (list\n    (length paren_string)\n    (list (level 0)\n          (level 0)\n\
+    \          (level 0)\n          (level 0)\n          (level 0)\n          (level\
+    \ 0)\n          (level 0)))))\n", "  (let loop ((parens ())\n             (result\
+    \ 0))\n    (if (char= paren_string '())\n        (set! result (max result (length\
+    \ parens)))\n        (loop (cons (char-code paren_string)\n                  \
+    \    parens)\n              (+ result 1)))))\n", "  (cond [(empty? paren_string)\
+    \ 0]\n        [(list? (car paren_string)) (let ([result (parse_nested_parens (cdr\
+    \ paren_string))])\n                                 (max (+ result 1))\n    \
+    \                             result)]\n        [else (max (parse_nested_parens\
+    \ (car paren_string)) 1)]))\n", "  (cond [(empty? paren_string)\n         #t]\n\
+    \        [else\n         (let ([group_1 (parse_nested_parens (rest paren_string)))\n\
+    \               group_2 (parse_nested_parens (rest group_1)))\n           (cond\
+    \ [(< group_2 group_1)\n                   (+ (- group_2 group_1) 1)\n       \
+    \            (+ (- group_1 group_2) 1)]\n                 [else\n            \
+    \       (+ (- group_2 group_1) (- group_1 group_2))]\n                 ))]\n \
+    \       ))\n", "  (define (max_depth paren_string)\n    (if (empty? paren_string)\n\
+    \        0\n        (let ((n (number->string (length (string->list (car paren_string)))))\n\
+    \              (result (max (+ 1 (max_depth (cdr paren_string))) (max_depth (cdr\
+    \ paren_string))))\n          (if (= n 1)\n              result\n            \
+    \  (cond ((eq? n 2) (+ 1 (max_depth (cdr (cdr paren_string))))\n             \
+    \        ((eq? n 3) (+ 1 (max_depth (cdr paren_string)))))))))\n  (max_depth paren_string))\n",
+  "  (if (null? paren_string)\n      '()\n      (let ([open (char->int (first paren_string)))\n\
+    \            close (char->int (second paren_string))])\n        (if (not (= open\
+    \ close))\n            (recur (rest paren_string)\n                   (+ 1 (parse_nested_parens\
+    \ (rest paren_string))))\n            (let ([level (parse_nested_parens (rest\
+    \ paren_string))])\n              (cond [(= open close) (- level 1)]\n       \
+    \             [else (cond [(= close open) (+ level 1)]\n                     \
+    \          [else level]\n                               )])\n            ))))\n",
+  "  (map max-depth \n       (flat-map \n        (fold-right (lambda (acc _)\n   \
+    \                   (cond ((eq? acc (string-length paren_string)) (cons acc 0))\n\
+    \                            ((eq? (substring paren_string 0 acc) (substring paren_string\
+    \ acc 1))\n                             (cons acc 1))\n                      \
+    \      ((eq? (substring paren_string 0 acc) (substring paren_string acc 2))\n\
+    \                             (cons acc 2))\n                            ((eq?\
+    \ (substring paren_string 0 acc) (substring paren_string acc 3))\n           \
+    \                  (cons acc 3))\n                            ((eq? (substring\
+    \ paren_string 0 acc) (substring paren_string acc 4))\n                      \
+    \       (cons acc 4))\n                            ((eq? (substring paren_string\
+    \ 0 acc) (substring paren_string acc 5))\n                             (cons acc\
+    \ 5))\n                            ((eq? (substring paren_string 0 acc) (substring\
+    \ paren_string acc 6))\n                             (cons acc 6))\n         \
+    \                   (else\n                             (cons acc acc))))\n  \
+    \             paren_string)))\n", "  (let loop ((paren_string paren_string)\n\
+    \             (levels ()))\n    (cond [(null? paren_string)\n           levels]\n\
+    \          [(char=? (car paren_string) '(')\n           (loop (cdr paren_string)\
+    \ (add1 levels))]\n          [(char=? (car paren_string) '(')\n           (loop\
+    \ (cdr paren_string) (add1 levels))]\n          [(char=? (car paren_string) ')')\n\
+    \           (loop (cdr paren_string) (sub1 levels))]\n          [(char=? (car\
+    \ paren_string) ')')\n           (loop (cdr paren_string) (sub1 levels))]\n  \
+    \        [else\n           (loop (cdr paren_string) (add1 levels))]))))\n", " \
+    \ (let loop ((i 0) (acc 0) (parens 0))\n    (cond\n      [(equal? i 0)\n     \
+    \  (if (equal? parens 0)\n           (append acc 0)\n           (if (equal? parens\
+    \ 1)\n               (reverse acc)\n               (loop (+ i 1) (+ acc 1) (+\
+    \ parens 1)))]\n      [(equal? i 0)\n       (if (equal? parens 0)\n          \
+    \ (reverse acc)\n           (loop (+ i 1) acc parens 1))]\n      [(equal? i 0)\n\
+    \       (if (equal? parens 0)\n           (loop (+ i 1) (+ acc 1) 0 parens))]\n\
+    \      [(equal? i 0)\n       (if (equal? parens 0)\n           (loop (+ i 1) acc\
+    \ 0 (+ parens 1)))]\n      [(equal? i 0)\n       (if (equal? parens 0)\n     \
+    \      (loop (+ i 1) (+ acc 1) 0 parens))]\n      [(equal? i 0)\n       (if (equal?\
+    \ parens 0)\n           (loop (+ i 1) acc 0 (+ parens 1)))]\n      [(equal? i\
+    \ 0)\n       (if (equal? parens 0)\n           (loop (+ i 1) (+ acc 1) 0 parens))]\n\
+    \      [(equal? i 0)\n       (if (equal? parens 0)\n           (loop (+ i 1) (+\
+    \ acc 1) 0 parens))]\n      [(equal? i 0)\n       (if (equal? parens 0)\n    \
+    \       (loop (+ i 1) (+ acc 1) 0 (+ parens 1)))]\n      [(equal? i 0)\n     \
+    \  (if (equal? parens 0)\n           (loop (+ i 1) (+ acc 1) 0 parens))]\n   \
+    \   [(equal? i 0)\n       (if (equal? parens 0)\n           (loop (+ i 1) (+ acc\
+    \ 1) 0 (+ parens 1)))]\n      [(equal? i 0)\n       (if (equal? parens 0)\n  \
+    \         (loop (+ i 1) (+ acc 1) 0 (+ parens 1)))]\n      [(equal? i 0)\n   \
+    \    (if (equal? parens 0)\n           (loop (+ i 1) (+ acc 1) 0 (+ parens 1)))]\n\
+    \      [(equal? i 0)\n       (if (equal? parens 0)\n           (loop (+ i 1) (+\
+    \ acc 1) 0 (+ parens 1)))]\n      [(equal? i 0)\n       (if (equal? parens 0)\n\
+    \           (loop (+ i 1) (+ acc 1) 0 (+ parens 1)))]\n      [(equal? i 0)\n \
+    \      (if (equal", "  (define levels (parse_paren_levels paren_string))\n  (reduce\
+    \ (lambda (level_counter level_of_nesting)\n            (cond [(< level_counter\
+    \ level_of_nesting) (- level_counter level_of_nesting)]\n                  [(=\
+    \ level_counter 0) level_of_nesting]\n                  [else (+ 1 (level_counter\
+    \ level_of_nesting))]\n                  )))\n          (- 0 levels) levels))\n",
+  "  (let ([level (0))\n        (result '())\n        (level_list '())]\n    (for\
+    \ ([i (in-range 1 (string-length paren_string) 1)]\n          [char (char->integer\
+    \ paren_string[i])]\n          [nest (if (char->integer paren_string[(i-1)]) (incf\
+    \ level) 0)]\n          [prev (if (char->integer paren_string[i-1]) (incf level)\
+    \ 0)])\n      (cond [(char->integer paren_string[i-1])\n             (list (length\
+    \ level_list)\n                   (if (eqv? prev 1) (+ 1 (length level_list))\
+    \ level_list))]\n            [(eqv? prev 1)\n             (if (eqv? prev nest)\
+    \ (+ 1 (length level_list)) level_list)]\n            [else\n             (cond\
+    \ [(eqv? prev nest)\n                    (+ 1 (length level_list))\n         \
+    \           (if (eqv? prev 1) level_list)]\n                  [else\n        \
+    \            (cond [(eqv? prev nest) (+ 1 (length level_list))\n             \
+    \             level_list]\n                          [else\n                 \
+    \         (cond [(eqv? prev nest) (+ 1 (length level_list))\n                \
+    \                 level_list]\n                                   [else\n    \
+    \                                 (cond [(eqv? prev nest) (+ 1 (length level_list))\n\
+    \                                             level_list]\n                  \
+    \                         [else\n                                            \
+    \ (cond [(eqv? prev nest) (+ 1 (length level_list))\n                        \
+    \                           level_list]\n                                    \
+    \               [else\n                                                    (cond\
+    \ [(eqv? prev nest) (+ 1 (length level_list))\n                              \
+    \                             level_list]\n                                  \
+    \                             [else\n                                        \
+    \                       (cond [(eqv? prev nest) (+ 1 (length level_list))\n  \
+    \                                                                 level_list]\n\
+    \                                                                   [else\n  \
+    \                                                                   (cond [(eqv?\
+    \ prev nest) (+ 1 (length level_list))\n                                     \
+    \                                        level_list]\n                       \
+    \                                                    [else\n                 \
+    \                                                           (cond [(eqv? prev\
+    \ nest) (+ 1 (length level_list))\n                                          \
+    \                                         level_list]\n                      \
+    \                                                             [else\n        \
+    \                                                                            (cond\
+    \ [(eqv? prev nest) (+ 1 (length level_list))\n                              \
+    \                                                             level_list]\n  \
+    \                                                                            \
+    \             [else\n                                                        \
+    \                                     (cond [(eqv? prev nest) (+ 1 (length level_list))\n\
+    \                                                                            \
+    \                       level_list]\n                                        \
+    \                                                           [else\n          \
+    \                                                                            \
+    \               (cond [(eqv? prev nest) (+ 1 (length level_list))\n          \
+    \                                                                            \
+    \                     level_list]\n                                          \
+    \                                                                 [", "  (let\
+    \ ((out-array (make-array (incf (length (split-string paren_string #\\)))\n  \
+    \                                (lambda (i j)\n                             \
+    \       (cond\n                                      ((empty? (split-string paren_string\
+    \ i))\n                                         (cond\n                      \
+    \                    ((empty? (split-string paren_string j))\n               \
+    \                             (let ((level (length (split-string paren_string\
+    \ #\\))))\n                                              (set! i (substring i\
+    \ 2))\n                                              (set! j (substring j 1))\n\
+    \                                              (cond\n                       \
+    \                         ((= level 0) (set! i (substring i 1))))\n          \
+    \                                    (else (set! j (substring j 1))))))\n    \
+    \                                  ((= i j) (set! i (substring i 1))))\n     \
+    \                                 (else (set! i (substring i 1)))))))\n      \
+    \  (current-level (length paren_string)))\n    (dotimes (i (length paren_string))\n\
+    \      (when (char=? (char-syntax (car paren_string) i) '(())())\n        (cond\n\
+    \          ((= i (current-level)) (set! i (substring i 1))))\n          ((not\
+    \ (char=? (char-syntax (car paren_string) i) '(()))\n            (cond\n     \
+    \         ((= i (current-level)) (set! i (substring i 1))))\n              ((not\
+    \ (char=? (char-syntax (car paren_string) i) '()())\n                (cond\n \
+    \                 ((= i (current-level)) (set! i (substring i 1))))\n        \
+    \          ((not (char=? (char-syntax (car paren_string) i) '(())())\n       \
+    \             (cond\n                      ((= i (current-level)) (set! i (substring\
+    \ i 1))))\n                      ((not (char=? (char-syntax (car paren_string)\
+    \ i) '(()())\n                        (cond\n                          ((= i (current-level))\
+    \ (set! i (substring i 1))))\n                          ((not (char=? (char-syntax\
+    \ (car paren_string) i) '())())\n                            (cond\n         \
+    \                     ((= i (current-level)) (set! i (substring i 1))))\n    \
+    \                          ((not (char=? (char-syntax (car paren_string) i) '(())())\n\
+    \                                (cond\n                                  ((=\
+    \ i (current-level)) (set! i (substring i 1))))\n                            \
+    \      ((not (char=? (char-syntax (car paren_string) i) '(())())\n           \
+    \                         (cond\n                                      ((= i (current-level)) ",
+  "  (let loop ((paren_string (substring paren_string 0 (string.length paren_string)))\n\
+    \             (max_count 0))\n    (cond ((string=? paren_string \"\") max_count)\n\
+    \          ((null? (cddr paren_string)) max_count)\n          ((not (character?\
+    \ paren_string)) max_count)\n          ((equal? (first paren_string) '(') (loop\
+    \ (cdr (rest paren_string)) (+ 1 max_count)))\n          ((equal? (first paren_string)\
+    \ '(') (loop (cddr (rest paren_string)) (+ 1 max_count)))\n          ((equal?\
+    \ (first paren_string) '(') (loop (rest paren_string) max_count))\n          (else\
+    \ (loop (rest paren_string) max_count)))\n    max_count))\n", "  (let ((openings\
+    \ (split-by-whitespace paren_string)))\n    (map (lambda (opening)\n         \
+    \  (let ((nested-paren-count (count-opening-parens opening openings)))\n     \
+    \        (cond ((= (length nested-paren-count) 0)\n                    (append\
+    \ opening (list '1))\n                    (else (append opening (list (max 0 (length\
+    \ openings)))))))\n             #t #f))\n         openings)))\n", "  (define (parse\
+    \ paren_string)\n    (match paren_string\n      [(empty? paren_string) 0]\n  \
+    \    [(char '(' left-paren) parse]\n      [(char '(' right-paren) parse]\n   \
+    \   [(char '[' (+ (count left-paren) 1) (+ (count right-paren) 1))\n       (if\
+    \ (= (count left-paren) 1)\n           (if (= (count right-paren) 1)\n       \
+    \        (+ 1 parse)\n               (+ 1 parse))\n           (if (= (count right-paren)\
+    \ 1)\n               (parse)\n               (parse))]))\n      (else (error \"\
+    Unrecognized characters: ~A\" paren_string)))))\n  (parse paren_string))\n", " \
+    \ (let ((stack '())\n        (count 0))\n    (if (empty? paren_string)\n     \
+    \   stack\n        (let ((char (car paren_string))\n              (group_count\
+    \ 0))\n          (cond ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren_string) '(') (push! stack (- count\
+    \ 1)))\n                ((char=? (car paren", "  (let ((nested_levels ()))\n \
+    \   (cond [(empty? paren_string) 0]\n          [(char? paren_string) 0]\n    \
+    \      [(equal? (car paren_string) '(') (add1 nested_levels)]\n          [else\
+    \ (let ((nest_level (parse_nested_parens (cdr paren_string))\n               \
+    \         (nest_levels (cons (add1 nest_level) (nested_levels)))))]\n        \
+    \  )))\n", "  (cond\n    [(empty? paren_string) 0]\n    [(starts-with? paren_string\
+    \ '(()())) 0])\n  (parse_innermost_parens paren_string 0))\n", "  (let loop ((parens\
+    \ (list-ref paren_string 0))\n             (char '())\n             (max_level\
+    \ '()))\n    (cond\n      [(empty? parens) max_level]\n      [(char=? char (first\
+    \ parens)) (loop (rest parens) char (add max_level 1))]\n      [(char=? char '())\
+    \ (loop (rest parens) char (add max_level 1))]\n      [else (loop (rest parens)\
+    \ (first parens) (add max_level 1))]))))\n", "  (define (parse paren_string curr_level\
+    \ curr_nest)\n    (cond [(empty? paren_string) #f]\n          [else\n        \
+    \   (let ([ch (read-char paren_string)])\n             (if (char=? ch '(')\n \
+    \                 (if (> (+ curr_level 1) curr_nest)\n                      (parse\
+    \ (read-char paren_string)\n                            (+ curr_level 1)\n   \
+    \                         (+ curr_nest 1))\n                      (parse paren_string\n\
+    \                            (+ curr_level 1)\n                            (+\
+    \ curr_nest 1)))\n                  (parse (read-char paren_string)\n        \
+    \                curr_level\n                        curr_nest)))]))\n  (parse\
+    \ paren_string 0 0)\n  (length (filter (lambda (x) (not (= x '())) paren_string))))\
+    \ ; remove the empty string from the list\n</code>\n<|/ a tags=recursion,racket,scheme\
+    \ |>\n<| c |>\nThank you so much for your answer, it is exactly what i want. Your\
+    \ explanation was very helpful to me. I also learn a lot from your answer. Thank\
+    \ you again !!\n<|/ c |>\n<| c |>\nYou're welcome! I'm glad to help.\n<|/ c |>\n\
+    <| a tags=recursion,racket,scheme |>\nThis code will do the trick :\n<code>",
+  "  (if (null? paren_string)\n      0\n      (+ ((parse_nested_parens (substring\
+    \ (paren_string 0) 1) )\n         ((parse_nested_parens (substring (paren_string\
+    \ 1) 1) )\n          0))))\n", "  (let ([cur-level (0)])\n    (cond\n      [(empty?\
+    \ paren_string) (list cur-level)]\n      [(equal? paren_string '()) empty]\n \
+    \     [(equal? paren_string '())\n       (begin\n         (let ([new_level ((+\
+    \ cur-level 1))])\n           (cond\n             [(empty? paren_string) (list\
+    \ new_level)]\n             [else (cons new_level (parse_nested_parens (rest paren_string))))]))]\n\
+    \      [(equal? (car paren_string) ')')\n       (cond\n         [(equal? cur-level\
+    \ 0)\n          (begin\n            (let ([new_level ((+ cur-level 1))])\n   \
+    \           (cond\n                [(empty? paren_string) (list new_level)]\n\
+    \                [else (cons new_level (parse_nested_parens (rest paren_string))))])]\n\
+    \         [else\n          (let ([new-level ((+ cur-level 1))])\n            (cond\n\
+    \              [(empty? paren_string) (list new-level)]\n              [else\n\
+    \               (cons new-level (parse_nested_parens (rest paren_string)))])])]\n\
+    \      [else (begin\n              (let ([new-level ((+ cur-level 1))])\n    \
+    \            (cond\n                  [(empty? paren_string) (list new-level)]\n\
+    \                  [else (cons new-level (parse_nested_parens (rest paren_string))))])])]))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

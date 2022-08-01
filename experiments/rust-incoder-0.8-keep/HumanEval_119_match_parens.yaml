@@ -22,6 +22,1612 @@ tests: "}\n\nfn main() {\n    let candidate = match_parens;\n    assert_eq!(cand
   )(\"), String::from(\")(\")]), String::from(\"No\"));\n    assert_eq!(candidate(vec![String::from(\"\
   (\"), String::from(\")\")]), String::from(\"Yes\"));\n    assert_eq!(candidate(vec![String::from(\"\
   )\"), String::from(\"(\")]), String::from(\"Yes\"));\n}\n"
-completions: []
+completions: ["    // base case\n    if lst.len() == 1 {\n        return \"Yes\";\n\
+    \    }\n    // recursive case\n    if lst.len() == 2 {\n        if lst[0] == \"\
+    (\" && lst[1] == \"(\") {\n            return \"Yes\";\n        }\n        if\
+    \ lst[1] == \")\" && lst[0] == \"(\") {\n            return \"Yes\";\n       \
+    \ }\n    }\n    let mut is_good = false;\n    let mut stack = Vec::new();\n  \
+    \  for i in 0..lst.len() - 1 {\n        if lst[i] == \"(\" && lst[i+1] == \"(\"\
+    ) {\n            // add left parentheses to the stack\n            stack.append(&lst[i]);\n\
+    \        }\n        if lst[i] == \")\" && lst[i+1] == \")\" {\n            //\
+    \ add right parentheses to the stack\n            if stack.is_empty() {\n    \
+    \            is_good = false;\n            } else {\n                let index\
+    \ = stack.last().unwrap();\n                let start = i as usize;\n        \
+    \        let end = i + (stack.len() - 1).unwrap_or(0);\n                // if\
+    \ left parentheses are balanced, then no need to\n                // check for\
+    \ the right ones\n                if index - start == 1 && end - index == 1 {\n\
+    \                    is_good = true;\n                }\n            }\n     \
+    \       stack.pop();\n        }\n    }\n    if is_good {\n        return \"Yes\"\
+    ;\n    } else {\n        return \"No\";\n    }", "    let mut stack: Vec<Vec<String>>\
+    \ = Vec::new();\n    let mut current: Vec<String> = Vec::new();\n    for str in\
+    \ lst {\n        if str == \"(\" || str == \")\" {\n            current.push(str);\n\
+    \            if let Ok(last) = stack.pop() {\n                let mut res = Vec::new();\n\
+    \                for i in 0..(current.len() - last.len()) {\n                \
+    \    res.push(current.clone());\n                }\n                res.push(last);\n\
+    \                stack = res.clone();\n            } else {\n                stack.push(current);\n\
+    \                current = Vec::new();\n            }\n        } else {\n    \
+    \        current.push(str);\n        }\n    }\n\n    if stack.len() != 0 {\n \
+    \       \"No\".to_string()\n    } else {\n        \"Yes\".to_string()\n    }",
+  "    match lst.len() {\n        1 => \"Yes\".to_string(),\n        2 => \"Yes\"\
+    .to_string(),\n        _ => \"\",\n    }", "    let mut ans = String::new();\n\
+    \    let mut count = 1;\n    let mut cur = String::new();\n    let mut open =\
+    \ 0;\n\n    for str in lst {\n        let c = str[0];\n        if c == '(' {\n\
+    \            open++;\n        }\n        if c == ')' {\n            open--;\n\
+    \        }\n        if open == 0 && c == ',' && ans.is_empty() {\n           \
+    \ ans = str;\n        }\n        if open < 0 {\n            ans.push_str(str);\n\
+    \        }\n    }\n    ans", '    iterate(true, lst, 0, "", "", "").to_string()',
+  "    let mut opens = HashSet::new();\n    let mut closes = HashSet::new();\n   \
+    \ for s in lst {\n        if s == '(' {\n            opens.insert(s);\n      \
+    \  } else {\n            closes.insert(s);\n        }\n    }\n    if opens.len()\
+    \ == 0 {\n        return \"No\";\n    }\n    for s in lst {\n        if s == ')'\
+    \ {\n            if closes.contains(&s) {\n                return \"No\";\n  \
+    \          } else {\n                closes.remove(s);\n            }\n      \
+    \  }\n        if s == '(' && !closes.contains(&s) {\n            return \"No\"\
+    ;\n        }\n    }\n    return \"Yes\";", "    // If there is only one element\
+    \ left in the list, then it has to be closed\n    if lst.len() == 1 {\n      \
+    \  return lst.len().to_string() + \")\"\n    }\n\n    // Find all the open and\
+    \ close pairs and create an array to store them\n    let mut closed_pairs: Vec<_>\
+    \ = lst.iter().cloned().collect();\n    closed_pairs.retain(|x| x == \")\");\n\
+    \n    // Iterate through the array, opening any left parenthesis as needed\n \
+    \   for open_index in (0..closed_pairs.len()).rev() {\n        let open_pair =\
+    \ match closed_pairs[open_index] {\n            \"(\", \")\" => open_index,\n\
+    \            _ => unreachable!(),\n        };\n        let closed_pair = match\
+    \ closed_pairs[open_index + 1] {\n            \")\", \")\" => open_index + 1,\n\
+    \            _ => unreachable!(),\n        };\n\n        // If both opening and\
+    \ closing pairs are the same, skip this pair\n        if open_pair == closed_pair\
+    \ {\n            continue;\n        }\n\n        // Open the leftmost open pair\n\
+    \        closed_pairs[open_index] = \"(\" + closed_pair;\n    }\n\n    // Iterate\
+    \ through the array and check if the results are balanced\n    // We start with\
+    \ the last element and work backwards\n    for index in (lst.len()..0).rev() {\n\
+    \        let current_pair = match closed_pairs[index] {\n            \"(\", \"\
+    )\" => index,\n            _ => unreachable!(),\n        };\n        let current_left\
+    \ = match closed_pairs[index + 1] {\n            \"(\", \")\" => index + 1,\n\
+    \            _ => unreachable!(),\n        };\n\n        // If there is a left\
+    \ parenthesis left, we are not done\n        if current_left == 0 {\n        \
+    \    return \"No\".to_string();\n        }\n\n        // Open the left parenthesis\
+    \ as needed\n        let left = match closed_pairs[current_left] {\n         \
+    \   \"(\", \")\" => current_left,\n            _ => unreachable!(),\n        };\n\
+    \        let right = match closed_pairs[current_left + 1] {\n            \"(\"\
+    , \")\" => current_left + 1,\n            _ => unreachable!(),\n        };\n \
+    \       let right = match closed_pairs[right] {\n            \"(\", \")\" => right\
+    \ + 1,\n            _ => unreachable!(),\n        };\n        // Close the right\
+    \ parenthesis as needed\n        closed_pairs[right] = \")\" + closed_pairs[right];\n\
+    \        let left = match closed_pairs[left] {\n            \"(\", \")\" => left\
+    \ + 1,\n            _ => unreachable!(),\n", "    let mut left = String::new();\n\
+    \    let mut right = String::new();\n    for s in lst {\n        if s.starts_with(\"\
+    (\") {\n            left += &s[0];\n        } else {\n            right += &s[0];\n\
+    \        }\n    }\n    if left == right {\n        return \"Yes\";\n    } else\
+    \ {\n        return \"No\";\n    }", "    let mut visited: Vec<bool> = vec![false;\
+    \ lst.len()];\n    visited[lst.len() - 1] = true;\n    for x in lst {\n      \
+    \  if !visited[x] {\n            let y: String = match_parens(vec![x, x]);\n \
+    \           if y.len() > 0 {\n                visited[x] = true;\n           \
+    \     return y;\n            }\n        }\n    }\n    \"Yes\"", "    let mut stack:\
+    \ Vec<bool> = vec![false; lst.len()];\n    let mut res = String::new();\n    for\
+    \ idx in 0..lst.len() {\n        let chars = lst[idx].chars();\n        for c\
+    \ in chars {\n            if stack[idx] == false {\n                if c == '('\
+    \ {\n                    stack[idx] = true;\n                }\n             \
+    \   else {\n                    stack[idx] = false;\n                }\n     \
+    \       } else {\n                if c == '(' {\n                    stack[idx]\
+    \ = true;\n                }\n                else {\n                    stack[idx]\
+    \ = false;\n                }\n            }\n        }\n        res += \"Yes\"\
+    \n    }\n    res + \"No\"", "    let mut stack = Stack::new(None);\n    stack.push(lst);\n\
+    \    let mut res = String::new();\n    while let Some(list) = stack.pop() {\n\
+    \        for ele in list {\n            if let Some(pos) = stack.pop() {\n   \
+    \             if pos == list.len() - 1 {\n                    let mut cur_ele\
+    \ = ele + &list[pos];\n                    let mut stack2 = Stack::new(None);\n\
+    \                    stack2.push((cur_ele, pos));\n                    stack2.push(list);\n\
+    \                    if !stack2.is_empty() {\n                        let res\
+    \ = stack2.pop().unwrap()[0];\n                        if res != ele {\n     \
+    \                       res.push_str(&to_str(&res as &str));\n               \
+    \             return res;\n                        }\n                    }\n\
+    \                } else if let Some(pos_2) = stack.pop() {\n                 \
+    \   let mut cur_ele = ele + &list[pos];\n                    let mut stack2 =\
+    \ Stack::new(None);\n                    stack2.push((cur_ele, pos));\n      \
+    \              stack2.push((cur_ele, pos_2));\n                    stack2.push(list);\n\
+    \                    if !stack2.is_empty() {\n                        let res\
+    \ = stack2.pop().unwrap()[0];\n                        if res != ele {\n     \
+    \                       res.push_str(&to_str(&res as &str));\n               \
+    \             return res;\n                        }\n                    }\n\
+    \                }\n            } else if let Some(pos_2) = stack.pop() {\n  \
+    \              if ele != &list[pos_2] {\n                    res.push_str(&to_str(&ele\
+    \ as &str));\n                    return res;\n                }\n           \
+    \ } else {\n                res.push_str(&to_str(&ele as &str));\n           \
+    \     return res;\n            }\n        }\n    }\n    \"No\".into()", "    let\
+    \ mut str = String::new();\n    let mut i = 0;\n    let mut j = 0;\n    let mut\
+    \ found = 0;\n\n    while i < lst.len() {\n        let mut l = lst[i];\n     \
+    \   while j + 1 < str.len() && str.[j] == l {\n            j += 1;\n        }\n\
+    \        if j + 1 < str.len() {\n            str += &lst[i];\n            i +=\
+    \ 1;\n            found = 1;\n            break;\n        }\n        j = 0;\n\
+    \    }\n    if found == 0 || j == str.len() {\n        \"\".to_string()\n    }\
+    \ else {\n        \"No\".to_string()\n    }", "    let mut cnt = 0;\n    let mut\
+    \ stack: Vec<String> = Vec::new();\n    stack.push(\"\");\n    for str in lst\
+    \ {\n        if str == \"(\" || str == \")\" {\n            if stack[stack.len()\
+    \ - 1] == \"\" {\n                return \"No\";\n            }\n            cnt\
+    \ += 1;\n        }\n        stack.push(str);\n    }\n    if cnt > 1 {\n      \
+    \  return \"Yes\";\n    }\n    return \"No\";", "    let mut stack = vec![];\n\
+    \    let mut str = String::new();\n    for s in lst.iter() {\n        stack.push(s);\n\
+    \        while !stack.is_empty() {\n            match stack.pop() {\n        \
+    \        \"(\" => {\n                    str.push_str(&s);\n                 \
+    \   break;\n                }\n                \")\" => {\n                  \
+    \  str.push_str(&s);\n                    break;\n                }\n        \
+    \        _ => break,\n            }\n        }\n    }\n    str", "    let mut\
+    \ stack: Vec<bool> = vec![true];\n\n    for s in lst {\n        let mut last =\
+    \ 0;\n\n        for c in s.chars() {\n            if c == '(' {\n            \
+    \    if stack.is_empty() {\n                    stack.push(true);\n          \
+    \      } else {\n                    stack.pop();\n                }\n       \
+    \     }\n            if c == '(' && stack.is_empty() {\n                return\
+    \ \"No\".to_string();\n            }\n            if c == '(' && !stack.is_empty()\
+    \ {\n                stack.push(true);\n            }\n            if c == ')'\
+    \ && !stack.is_empty() {\n                stack.pop();\n            }\n      \
+    \      last = c;\n        }\n\n        if stack.is_empty() {\n            return\
+    \ \"No\".to_string();\n        }\n    }\n    \"Yes\".to_string()", '    match_parens(&lst,
+    0)', "    match lst.len() {\n        0 => \"No\",\n        1 => \"Yes\",\n   \
+    \     _ => {\n            let mut lst = lst;\n            let mut left = 0;\n\
+    \            let mut right = 0;\n\n            // We will keep track of the 'left'\
+    \ and 'right' positions to check if it's possible\n            for x in lst {\n\
+    \                match x {\n                    \"(\" => {\n                 \
+    \       if right > left {\n                            return \"No\";\n      \
+    \                  }\n                        left += 1;\n                   \
+    \ },\n                    \")\" => {\n                        if left > right\
+    \ {\n                            return \"No\";\n                        }\n \
+    \                       right += 1;\n                    },\n                \
+    \    _ => {\n                        panic!();\n                    },\n     \
+    \           }\n            }\n\n            // There isn't a way to make the result\
+    \ string, return 'No'\n            \"No\"\n        }\n    }", "    let mut opens\
+    \ = 0;\n    let mut closes = 0;\n    let mut cur = String::new();\n    for x in\
+    \ lst {\n        if cur == x.to_owned() {\n            closes += 1;\n        }\n\
+    \        if opens > closes {\n            cur.push_str(x);\n        }\n      \
+    \  if opens < closes {\n            opens += 1;\n        }\n    }\n    cur.to_owned()",
+  "    if lst.len() < 2 {\n        return \"No\";\n    }\n    let mut stack: Vec<String>\
+    \ = vec![\"\".to_string()];\n    for x in lst {\n        if x.contains('(') {\n\
+    \            stack.push(x);\n        } else if x.contains(')') {\n           \
+    \ stack.pop();\n        } else {\n            return String::new();\n        }\n\
+    \    }\n    if stack.len() == 0 {\n        return \"Yes\";\n    }\n    stack[0]",
+  "    let mut cnt = 0;\n    let mut stack = Vec::new();\n    for ele in lst {\n \
+    \       if ele == \"(\" || ele == \")\" {\n            cnt += 1;\n           \
+    \ stack.resize(stack.len(), ());\n        } else {\n            let mut pop_cnt\
+    \ = 0;\n            let mut pop_cnt2 = 1;\n            for (idx, s) in stack.iter().enumerate()\
+    \ {\n                if *s == ele {\n                    pop_cnt += 1;\n     \
+    \               pop_cnt2 += idx;\n                }\n            }\n         \
+    \   stack[pop_cnt2] = ele;\n            cnt -= pop_cnt2;\n        }\n    }\n \
+    \   if cnt > 0 {\n        return \"No\"\n    } else {\n        return \"Yes\"\n\
+    \    }", "    let mut result = \"No\";\n    for ele in lst {\n        if ele ==\
+    \ \"(\" || ele == \")\" {\n            result += \"Yes\";\n        }\n    }\n\
+    \    result + \"Yes\"", "    let mut result = \"\";\n\n    loop {\n        for\
+    \ elem in lst {\n            if elem.contains('(') {\n                result =\
+    \ elem.replace(\")\", result + \"(\");\n            }\n            if elem.contains(')')\
+    \ {\n                if result.len() != 0 {\n                    result = result\
+    \ + \")\";\n                } else {\n                    return \"No\";\n   \
+    \             }\n            }\n        }\n    }", "    if lst.len() < 2 {\n \
+    \       return \"No\";\n    }\n\n    let mut ret = \"\";\n    let mut cur_count\
+    \ = 0;\n    for s in lst {\n        if s.len() != cur_count {\n            if\
+    \ cur_count != 0 {\n                ret += \"(\";\n                cur_count =\
+    \ 0;\n            }\n            cur_count = s.len();\n        }\n        ret\
+    \ += s;\n    }\n    if cur_count != 0 {\n        ret += \"(\";\n    }\n    ret\
+    \ += \")\";\n    return ret;", "    match lst.iter().cloned() {\n        &[\"\"\
+    , \"\"] => \"No\".to_string(),\n        &[\"\", \"()\", \"()\", \"()\"] | &[\"\
+    ()\", \"()\", \"()\", \"()\"] | &[\"()\", \"()\"] | &[\"()\"]\n            | &[\"\
+    ()\", \"\", \"\", \"\"] | &[\"()\", \"()\", \"\", \"\"] | &[\"()\", \"()\", \"\
+    ()\", \"\"] |\n            &[\"()\", \"()\", \"()\", \"\"] | &[\"()\", \"()\"\
+    , \"()\", \"()\"] | &[\"()\", \"()\", \"()\", \"()\"]\n            | &[\"()\"\
+    , \"()\", \"()\", \"()\", \"()\"] | &[\"()\", \"()\", \"()\", \"()\", \"()\",\
+    \ \"()\"] | &[\"()\", \"()\"]\n            | &[\"()\", \"()\", \"\", \"\"] | &[\"\
+    ()\", \"()\", \"()\", \"\"] | &[\"()\", \"()\", \"()\", \"()\", \"\"] |\n    \
+    \        &[\"()\", \"()\", \"()\", \"()\", \"\"] | &[\"()\", \"()\", \"()\", \"\
+    ()\", \"()\", \"\"] | &[\"()\", \"()\", \"()\"]\n            | &[\"()\", \"()\"\
+    , \"()\", \"()\", \"()\", \"()\"] | &[\"()\", \"()\", \"()\", \"()\", \"()\",\
+    \ \"()\", \"()\"] | &[\"()\"]\n            | &[\"()\", \"()\", \"\", \"\", \"\"\
+    ] | &[\"()\", \"()\", \"()\", \"\", \"\"] | &[\"()\", \"()\", \"()\", \"()\",\
+    \ \"\"] |\n            &[\"()\", \"()\", \"()\", \"()\", \"\"] | &[\"()\", \"\
+    ()\", \"()\", \"()\", \"()\", \"\"] | &[\"()\", \"()\", \"()\", \"()\"]\n    \
+    \        | &[\"()\", \"()\", \"()\", \"()\", \"()\", \"()\"] | &[\"()\", \"()\"\
+    , \"()\", \"()\", \"()\", \"()\", \"()\"] | &[\"()\"]\n            | &[\"()\"\
+    , \"()\", \"\", \"\", \"\", \"\"] | &[\"()\", \"()\", \"()\", \"\", \"\", \"\"\
+    ] | &[\"()\", \"()\", \"()\", \"()\", \"\"] |\n            &[\"()\", \"()\", \"\
+    ()\", \"()\", \"\"] | &[\"()\", \"()\", \"()\", \"()\", \"()\", \"\"] | &[\"()\"\
+    , \"()\", \"()\", \"()\"]\n            | &[\"()\", \"()\", \"()\", \"()\", \"\
+    ()\", \"()\"] | &[\"()\", \"()\", \"()\", \"()\", \"()\", \"()\", \"()\"] | &[\"\
+    ()\"]\n            | &[\"()\", \"()\", \"\", \"\", \"\", ", "    // Write your\
+    \ code here\n    let mut stack: Vec<usize> = Vec::new();\n    for elem in lst\
+    \ {\n        match elem {\n            \"(\" => stack.push(0),\n            \"\
+    )\" => if stack.is_empty() {\n                return \"No\"\n            } else\
+    \ if stack.is_pop() == 0 {\n                stack.pop();\n            } else {\n\
+    \                stack.push(0);\n            }\n            _ => {}\n        }\n\
+    \    }\n    return \"Yes\"", "    if lst.length <= 1 {\n        return \"Yes\"\
+    .to_string();\n    }\n    let mut re = Regex::new(r\"[()]+\").unwrap();\n    let\
+    \ mut stack = Stack::new();\n    for &s in &lst {\n        if let Some(match)\
+    \ = re.captures(s) {\n            stack.push(match);\n        } else {\n     \
+    \       re = Regex::new(r\"[)]\").unwrap();\n        }\n    }\n    let mut res\
+    \ = String::new();\n    while !stack.is_empty() {\n        let s = stack.top().as_str();\n\
+    \        if s == \")\" {\n            stack.pop();\n        } else {\n       \
+    \     res.push_str(s);\n        }\n    }\n    if res == \"\" {\n        return\
+    \ \"No\".to_string();\n    } else {\n        return \"Yes\".to_string();\n   \
+    \ }", "    // base case\n    if lst.len() == 0 {\n        return \"No\";\n   \
+    \ }\n    let mut stack = vec![];\n    let mut curr = vec![];\n    for s in lst\
+    \ {\n        if s == \"(\" {\n            stack.push(s);\n        } else if s\
+    \ == \")\" {\n            if stack.is_empty() {\n                return \"No\"\
+    ;\n            }\n            let res = stack.pop();\n            if res != \"\
+    (\" {\n                return \"No\";\n            }\n            stack.push(s);\n\
+    \        } else {\n            curr.push(s);\n        }\n    }\n    if curr ==\
+    \ stack {\n        return \"Yes\";\n    }\n    return \"No\";", "    let mut stack\
+    \ = Stack::new();\n    let mut cur = 0;\n    for &s in lst {\n        let mut\
+    \ stacked = !stack.has_value();\n        if s == '(' {\n            stack.push(s);\n\
+    \        } else if s == ')' {\n            if !stacked {\n                return\
+    \ \"No\".to_string();\n            }\n            stack.pop();\n        }\n  \
+    \      cur += 1;\n    }\n\n    if !stack.has_value() {\n        return \"Yes\"\
+    .to_string();\n    }\n    return \"No\".to_string();", "    match lst.len() {\n\
+    \        0 => \"No\",\n        1 => match lst[0] {\n            '(' => match_parens(lst.iter().take(1).collect()),\n\
+    \            ')' => match_parens(lst.iter().skip(1).collect()),\n            _\
+    \ => \"Yes\",\n        },\n        _ => match_parens(lst.iter().take(2).collect()),\n\
+    \    }", "    if lst.len() < 2 {\n        return \"No\".to_string();\n    }\n\n\
+    \    let mut res = \"Yes\".to_string();\n    match_parens_helper(lst, \"\", res.as_str());\n\
+    \    res", "    let mut stack: Vec<usize> = vec![0; lst.len()];\n\n    let mut\
+    \ first = true;\n    for s in lst {\n        if s.chars().any(|c| c == '(') {\n\
+    \            stack.push(s.chars().enumerate().find(|(_, i)| i <= stack.len()).unwrap()?.0\
+    \ + 1);\n        } else {\n            while let Some(i) = (stack.iter().last()\
+    \ + 1).min(|a, b| {\n                if *a > b {\n                    b\n    \
+    \            } else {\n                    a\n                }\n            })\
+    \ {\n                if first {\n                    if let Some(j) = stack.iter().find(|&i|\
+    \ i >= j).unwrap() {\n                        stack[j] = i;\n                \
+    \    } else {\n                        return \"No\";\n                    }\n\
+    \                } else {\n                    if let Some(j) = stack.iter().find(|&i|\
+    \ i > j).unwrap() {\n                        stack[j] = i;\n                 \
+    \   } else {\n                        return \"No\";\n                    }\n\
+    \                }\n            }\n            first = false;\n        }\n   \
+    \ }\n    if stack.iter().last() != stack.len() {\n        return \"No\";\n   \
+    \ }\n    \"Yes\"", "    match (lst.len() - 1, lst.len() - 2) {\n        (None,\
+    \ None) => \"No\",\n        (Some(1), Some(1)) => \"Yes\",\n        _ => \"No\"\
+    ,\n    }", "    if lst.len() != 2 {\n        return \"\";\n    }\n    let mut\
+    \ has_right = false;\n    let mut has_left = false;\n    for i in lst {\n    \
+    \    if i.len() != 1 {\n            return \"\";\n        }\n        if i[0] !=\
+    \ '(' {\n            return \"\";\n        }\n        has_left = true;\n    }\n\
+    \    for j in lst {\n        if j.len() != 1 {\n            return \"\";\n   \
+    \     }\n        if j[0] != ')' {\n            return \"\";\n        }\n     \
+    \   has_right = true;\n    }\n    if has_left && has_right {\n        return \"\
+    Yes\";\n    }\n    if !has_left && !has_right {\n        return \"No\";\n    }\n\
+    \    return \"\";", "    match lst.len() {\n        0 => \"No\".to_string(),\n\
+    \        1 => \"Yes\".to_string(),\n        _ => if lst.iter().any(|&x| !x.is_empty())\
+    \ && lst.iter().all(|&x| x.chars().any(|c| c == '(' || c == ')')) then \"Yes\"\
+    .to_string() else \"No\".to_string()\n    }", "    let mut stack: Vec<String>\
+    \ = vec![];\n    stack.extend(lst.iter().cloned());\n    let mut found = false;\n\
+    \    loop {\n        if stack.is_empty() {\n            return found ? \"Yes\"\
+    \ : \"No\";\n        }\n        let item = stack.iter().next().unwrap();\n   \
+    \     let next = match item {\n            \"(\" => {\n                stack.remove(item);\n\
+    \                stack.extend(lst.iter().cloned());\n                found = true;\n\
+    \                item\n            }\n            \")\" => stack.remove(item),\n\
+    \            _ => return \"No\".to_string(),\n        };\n        stack.push(next);\n\
+    \    }", "    use self::match_parens::*;\n    let mut str: String = \"No\".to_string();\n\
+    \    for i in lst {\n        if parens_balanced().contains(&i) {\n           \
+    \ str += i.to_string();\n        } else {\n            return \"No\".to_string();\n\
+    \        }\n    }\n    str", "    if lst.is_empty() || lst.len() % 2 != 0 {\n\
+    \        return \"No\";\n    }\n    use std::collections::HashMap;\n    let mut\
+    \ map = HashMap::new();\n    for s in lst {\n        map.entry(s).or_insert(0);\n\
+    \    }\n    for s in lst {\n        let mut cnt = 0;\n        for ch in s.chars()\
+    \ {\n            cnt = map.entry(ch).or_insert(0) + cnt;\n        }\n        if\
+    \ cnt < 2 {\n            return \"No\";\n        }\n    }\n    let mut res = String::new();\n\
+    \    for (i, s) in lst.iter().enumerate() {\n        if i != 0 {\n           \
+    \ res.push_str(&mut s.to_string());\n        } else {\n            res.push_str(&s);\n\
+    \        }\n        if i == lst.len() - 1 {\n            return res.as_str();\n\
+    \        }\n        res.push_str(\")\");\n    }\n    res.push_str(\"No\");", " \
+    \   match lst.len() {\n        1 => \"No\".to_string(),\n        2 => \"Yes\"\
+    .to_string(),\n        _ => unimplemented!(),\n    }", "    if lst.is_empty()\
+    \ {\n        return \"No\";\n    }\n\n    match first_to_last(lst) {\n       \
+    \ Ok((first_str, last_str)) => {\n            if last_str.len() != first_str.len()\
+    \ {\n                return \"No\";\n            }\n\n            let mut stack\
+    \ = VecDeque::new();\n            let mut stack_size = 0;\n            stack.push_back(first_str);\n\
+    \            stack_size = 1;\n\n            loop {\n                let mut last\
+    \ = stack.back().len();\n                if last < 2 {\n                    break;\n\
+    \                }\n\n                let last_str = &stack.back();\n        \
+    \        stack.pop_front();\n\n                let mut first = 0;\n          \
+    \      while !stack.empty() && stack.peek().len() < 2 {\n                    first\
+    \ += 1;\n                    stack.pop_back();\n                }\n\n        \
+    \        if first != last {\n                    return \"No\";\n            \
+    \    }\n\n                let mut index = 0;\n                while index < last_str.len()\
+    \ {\n                    match last_str.get_mut(index) {\n                   \
+    \     Some('(') => stack.push_back(last_str),\n                        Some(')')\
+    \ => stack.pop_back(),\n                        _ => return \"No\",\n        \
+    \            }\n                    index += 1;\n                }\n\n       \
+    \         stack_size++;\n            }\n\n            match first_to_last(lst)\
+    \ {\n                Ok((first_str, last_str)) => {\n                    if last_str.len()\
+    \ != first_str.len() {\n                        return \"No\";\n             \
+    \       }\n\n                    let mut stack = VecDeque::new();\n          \
+    \          let mut stack_size = 0;\n                    stack.push_back(first_str);\n\
+    \                    stack_size = 1;\n\n                    loop {\n         \
+    \               let mut last = stack.back().len();\n                        if\
+    \ last < 2 {\n                            break;\n                        }\n\n\
+    \                        let last_str = &stack.back();\n                     \
+    \   stack.pop_front();\n\n                        let mut first = 0;\n       \
+    \                 while !stack.empty() && stack.peek().len() < 2 {\n         \
+    \                   first += 1;\n                            stack.pop_back();\n\
+    \                        }\n\n                        if first != last {\n   \
+    \                         return \"No\";\n                        }\n\n      \
+    \                  let mut index = 0;\n                        while index < last_str.len()\
+    \ {\n                            match last_str.get_mut(index) {\n           \
+    \                     Some('(') => stack.push_back(last_str),\n              \
+    \                  Some(')') => stack.pop_back(),\n                          \
+    \      _ => return \"No\",\n                            }\n                  \
+    \          index += 1;\n                        }\n\n                        stack_size++;\n\
+    \                    }\n\n                    match first_to_last(lst) {\n   \
+    \                     Ok((first_str, last_str)) => {\n                       \
+    \     if last_str.len() != first_str.len() {\n                               \
+    \ return \"No\";\n                            }\n\n                          \
+    \  let mut stack = VecDeque::new();", "    let mut stack = Stack::new(vec![]);\n\
+    \n    for str in lst {\n        if !stack.exists(|&i| i == str) {\n          \
+    \  stack.push(str);\n        }\n    }\n\n    let mut result = String::new();\n\
+    \n    while !stack.is_empty() {\n        let mut new_str = String::new();\n\n\
+    \        for s in stack.pop().unwrap().split('(') {\n            if !new_str.exists(|&i|\
+    \ i == s) {\n                new_str.append(s);\n            }\n        }\n\n\
+    \        if new_str.len() == stack.peek().unwrap().len() {\n            result.append(new_str);\n\
+    \        }\n    }\n\n    if result.is_empty() {\n        \"No\".to_string()\n\
+    \    } else {\n        \"Yes\".to_string()\n    }", "    use self::ListNode::*;\n\
+    \    let mut stack = vec![ListNode(lst.len())];\n    let mut res = String::new();\n\
+    \    for i in 0..lst.len() {\n        match stack.remove() {\n            ListNode(_)\
+    \ => {\n                res.push_str(&(lst[i - 1].to_string()));\n           \
+    \     stack.pop_back().unwrap().children.push(ListNode(2 * i + 1));\n        \
+    \    },\n            ListNode(0) => res.push_str(&(lst[i].to_string())),\n   \
+    \         ListNode(len) => {\n                let left = stack.remove().unwrap().children.remove(0);\n\
+    \                let right = stack.remove().unwrap().children.remove(0);\n   \
+    \             let res = left.to_string() + right.to_string();\n              \
+    \  res.push_str(\")\");\n                res.push_str(&(lst[len - 1].to_string()));\n\
+    \                stack.push(*ListNode(2 * len + 1).clone());\n            }\n\
+    \        }\n    }\n    stack.remove().unwrap().children.last().to_string()", " \
+    \   let mut stack: Vec<usize> = vec![];\n    for i in lst.iter() {\n        if\
+    \ let Some(index) = (stack.iter().position(|x| x == i).cloned()) {\n         \
+    \   stack[index] = i.len();\n        } else {\n            stack.push(i.len());\n\
+    \        }\n    }\n\n    let mut stack = stack.clone();\n    while stack.len()\
+    \ > 0 {\n        if stack.pop() == 0 {\n            // empty stack means that\
+    \ there is no way to match the open parens.\n            return \"No\".to_string();\n\
+    \        }\n    }\n\n    // string contains balanced parans.\n    \"Yes\".to_string()",
+  "    let mut stack = VecDeque::new();\n    for s in lst {\n        if !s.is_empty()\
+    \ && s == '(' || !s.is_empty() && s == ')' {\n            stack.push((s));\n \
+    \       }\n    }\n    if stack.is_empty() {\n        return \"Yes\".to_string();\n\
+    \    }\n    let mut i = 0;\n    while !stack.is_empty() {\n        if i == stack.front()\
+    \ {\n            i += 1;\n            stack.pop_front();\n        } else {\n \
+    \           i += 1;\n            stack.pop_front();\n            let mut j = i;\n\
+    \            while !stack.is_empty() && stack.front().unwrap() == j {\n      \
+    \          stack.pop_front();\n            }\n        }\n        if stack.is_empty()\
+    \ {\n            return \"No\".to_string();\n        }\n    }\n    \"Yes\".to_string()",
+  "    let mut stack = Vec::new();\n    for s in lst {\n        if s.chars().count()\
+    \ == 0 {\n            continue;\n        }\n        if !stack.is_empty() && stack.last().unwrap().chars().count()\
+    \ == 0 {\n            return false;\n        }\n        let mut in_stack = false;\n\
+    \        for c in s.chars() {\n            match c {\n                '(' | ')'\
+    \ | ']' | '{' | '}' | '){' | '}]' => in_stack = !in_stack,\n                _\
+    \ => (),\n            }\n        }\n        if !in_stack {\n            stack.push(s);\n\
+    \        }\n    }\n    match stack.len() {\n        0 => \"No\",\n        1 =>\
+    \ \"Yes\",\n        _ => panic!(\"Not possible\"),\n    }", "    let mut stack:\
+    \ Vec<Vec<String>> = vec![vec!['(']]\n    for s in lst {\n        if let Some(open)\
+    \ = stack.last_mut() {\n            if open == s.len() {\n                stack.push(vec!['('])\n\
+    \            } else if open == '(' {\n                stack.push(vec!['('])\n\
+    \            } else {\n                stack.push((open..s).collect())\n     \
+    \       }\n        } else {\n            return String::new();\n        }\n  \
+    \  }\n    stack.last().unwrap().pop().unwrap()", "    let mut cnt = 0;\n    let\
+    \ mut opens = vec![];\n    let mut closes = vec![];\n\n    for s in lst {\n  \
+    \      if s.starts_with('(') {\n            opens.push(s);\n        } else {\n\
+    \            closes.push(s);\n        }\n\n        if opens.len() > closes.len()\
+    \ {\n            cnt += 1;\n        }\n    }\n\n    if cnt < 2 {\n        return\
+    \ \"No\".to_string();\n    }\n\n    if cnt > 4 {\n        return \"Yes\".to_string();\n\
+    \    }\n\n    if opens.len() == closes.len() {\n        for s in opens {\n   \
+    \         if s.starts_with('(') {\n                cnt -= 1;\n            } else\
+    \ {\n                cnt += 1;\n            }\n        }\n\n        if cnt ==\
+    \ 0 {\n            return \"Yes\".to_string();\n        } else {\n           \
+    \ return \"No\".to_string();\n        }\n    }\n\n    return \"No\".to_string();",
+  "    let mut stack: Vec<bool> = vec![false; 2 * lst.len()];\n    for &s in lst {\n\
+    \        for &c in s.chars() {\n            if c == '(' { stack.push(false); }\n\
+    \            else if c == ')' { stack.pop(); stack.pop() }\n        }\n      \
+    \  if stack.len() != 0 {\n            return String::from(\"No\");\n        }\n\
+    \    }\n    return String::from(\"Yes\");", "    if lst.len() <= 1 {\n       \
+    \ return \"No\";\n    }\n    // start from right to left\n    for i in 1..lst.len()\
+    \ {\n        if lst[i - 1].len() != lst[i].len() {\n            return \"No\"\
+    ;\n        }\n        if !can_be_closed(&lst[i - 1], &lst[i]) {\n            return\
+    \ \"No\";\n        }\n    }\n    return \"Yes\";", "    let mut lst = lst.to_owned();\n\
+    \    let len = lst.len();\n    let mut stack = VecDeque::new();\n    let mut pos\
+    \ = 0;\n    let mut good = true;\n    loop {\n        pos = lst.len();\n     \
+    \   match stack.pop_back() {\n            Some(_) => {}\n            None => {\n\
+    \                let rem = lst.len();\n                if rem > 0 {\n        \
+    \            let mut good = match (lst.len() - rem, pos, rem) {\n            \
+    \            (Some(_), Some(x), _) => x == 0,\n                        (Some(x),\
+    \ None, _) => x == 0,\n                        (Some(_), None, _) => x == 0,\n\
+    \                        (None, Some(x), _) => x == 0,\n                     \
+    \   (_, None, _) => x == 0,\n                        (None, None, _) => x == 0,\n\
+    \                        (Some(x), None, _) => x > 0,\n                      \
+    \  _ => {\n                            panic!(\"match_parens: bad string len\"\
+    );\n                        }\n                    };\n                    if\
+    \ !good {\n                        good = false;\n                    }\n    \
+    \            }\n                good = true;\n            }\n        };\n    \
+    \    if !good {\n            break;\n        }\n        match stack.pop_back()\
+    \ {\n            Some(_) => {}\n            None => {\n                let rem\
+    \ = lst.len() - pos;\n                let mut good = match (lst.len() - rem, pos,\
+    \ rem) {\n                    (Some(_), Some(x), _) => x == 0,\n             \
+    \       (Some(x), None, _) => x == 0,\n                    (Some(_), None, _)\
+    \ => x == 0,\n                    (None, Some(x), _) => x == 0,\n            \
+    \        (_, None, _) => x == 0,\n                    (None, None, _) => x ==\
+    \ 0,\n                    (Some(x), None, _) => x > 0,\n                    _\
+    \ => {\n                        panic!(\"match_parens: bad string len\");\n  \
+    \                  }\n                };\n                if !good {\n       \
+    \             good = false;\n                }\n                good = true;\n\
+    \            }\n        };\n        if !good {\n            break;\n        }\n\
+    \        match stack.pop_back() {\n            Some(_) => {}\n            None\
+    \ => {\n                let rem = lst.len() - pos;\n                let mut good\
+    \ = match (lst.len() - rem, pos, rem) {\n                    (Some(_), Some(x),\
+    \ _) => x == 0,\n                    (Some(x), None, _) => x == 0,\n         \
+    \           (Some(_), None, _) => x == 0,\n                    (None, Some(x),\
+    \ _) => x == 0,\n                    (_, None, _) => x == 0,\n               \
+    \     (None, None, _) => x == 0,\n                    (Some(x), None, _) => x\
+    \ > 0,\n                    _ => {\n                        panic!(\"match_parens:\
+    \ bad string len\");\n                    }\n                };\n", "    lst.sort();\n\
+    \    let mut paren_stack: Vec<usize> = vec![0; lst.len()];\n    for i in 0..lst.len()\
+    \ {\n        if paren_stack[paren_stack.len()-1] == i {\n            paren_stack.pop();\n\
+    \        } else {\n            paren_stack.push(i);\n        }\n    }\n    let\
+    \ mut cur: usize = 0;\n    loop {\n        let cur = paren_stack[cur];\n     \
+    \   if cur >= lst.len() {\n            return \"No\";\n        }\n        if paren_stack[cur]\
+    \ == paren_stack[cur+1] {\n            paren_stack[cur]++;\n        } else {\n\
+    \            return \"No\";\n        }\n    }", "    let mut stack = Vec::new();\n\
+    \    let mut lst = lst.into_iter();\n    if !lst.next().is_some() {\n        return\
+    \ \"No\".to_string();\n    }\n    if lst.next() != None {\n        stack.resize(lst.next().unwrap().len()\
+    \ + 1);\n    }\n    let mut result = \"\";\n    let mut first = true;\n    for\
+    \ s in lst {\n        if let Some(s) = stack.pop() {\n            if !first {\n\
+    \                if !s.contains('(') {\n                    result += \"(\";\n\
+    \                    first = false;\n                } else {\n              \
+    \      result += \")\";\n                }\n            }\n            result\
+    \ += s;\n        } else {\n            result += s;\n        }\n    }\n    if\
+    \ !first {\n        result += \"(\";\n    }\n    result += \"()\";\n    result",
+  "    if lst.len() == 2 {\n        return match_parens_1(lst[0], lst[1])\n    } else\
+    \ {\n        return match match lst.len() {\n            0 => return \"No\",\n\
+    \            _ => if match_parens_1(lst[0], lst[1]) == \"Yes\" {\n           \
+    \     if match_parens_1(lst[1], lst[0]) == \"Yes\" {\n                    match_parens_1(lst[0],\
+    \ lst[1])\n                } else {\n                    \"No\"\n            \
+    \    }\n            } else {\n                match_parens_1(lst[1], lst[0])\n\
+    \            }\n        }\n    }", "    if lst.is_empty() || lst.len() == 1 {\n\
+    \        return \"No\";\n    }\n\n    match check_parens(&lst[0]) {\n        Some(\"\
+    Yes\") => \"Yes\",\n        Some(\"No\") => \"No\",\n        None => \"No\",\n\
+    \    }", "    let mut len = 0;\n    let mut is_balanced = true;\n    for el in\
+    \ lst {\n        if len == 0 && el == ')' {\n            is_balanced = false;\n\
+    \        }\n        if len > 0 && el == '(' {\n            is_balanced = true;\n\
+    \        }\n        len += 1;\n    }\n    if is_balanced {\n        String::from(\"\
+    Yes\")\n    } else {\n        String::from(\"No\")\n    }", "    let mut is_good\
+    \ = false;\n    let mut last = 0;\n    for paren in lst {\n        if paren ==\
+    \ \"(\" || paren == \")\" {\n            is_good = true;\n            last = paren;\n\
+    \        }\n    }\n    if is_good {\n        String::from(\"Yes\")\n    } else\
+    \ {\n        String::from(\"No\")\n    }", "    let mut stack = Vec::new();\n\
+    \    let mut i = 0;\n    loop {\n        if lst[i].is_empty() {\n            return\
+    \ if stack.len() == 0 {\n                \"No\".to_string()\n            } else\
+    \ {\n                \"Yes\".to_string()\n            };\n        }\n        if\
+    \ stack.len() >= 2 {\n            if stack[stack.len() - 1] == \"(\"\n       \
+    \         && lst[i] == \")\"\n                && stack[stack.len() - 2] == \"\
+    (\"\n            {\n                stack.pop();\n                stack.push(\"\
+    (\");\n                i += 1;\n            } else {\n                return \"\
+    No\".to_string();\n            }\n        } else {\n            if lst[i] == \"\
+    )\" && stack.is_empty() {\n                i += 1;\n            } else {\n   \
+    \             return \"No\".to_string();\n            }\n        }\n    }", " \
+    \   if lst.len() < 2 {\n        return \"No\".to_string();\n    }\n    let mut\
+    \ s = lst[0];\n    let mut result = String::new();\n    for x in lst.iter().skip(1)\
+    \ {\n        if x.starts_with(&s) {\n            result.push_str(&s);\n      \
+    \      s.push(x);\n        } else {\n            result.push_str(&x);\n      \
+    \  }\n    }\n    if result.len() < 2 {\n        result.push_str(&s);\n    }\n\
+    \    if result.len() > 10 {\n        result.remove(0);\n        result.remove(0);\n\
+    \        result.remove(0);\n    }\n    if result.len() > 0 {\n        result.remove(0);\n\
+    \    }\n    if result.len() > 2 {\n        result.remove(0);\n        result.remove(0);\n\
+    \    }\n    if result.len() == 2 {\n        result.remove(0);\n        result.remove(0);\n\
+    \    }\n    result", "    if lst.len() < 2 {\n        return \"No\";\n    }\n\
+    \    let mut stack = Vec::new();\n    for s in lst {\n        if !s.contains(\"\
+    (\") && !s.contains(\")\") {\n            stack.push(s);\n        } else {\n \
+    \           match stack.pop() {\n                Some(a) => return \"No\",\n \
+    \               None => return \"Yes\",\n            }\n        }\n    }\n   \
+    \ return \"No\";", "    match lst.len() {\n        0 => \"No\",\n        1 =>\
+    \ \"Yes\",\n        _ => match_parens(lst[0..lst.len() - 1]).concat(\"Yes\").concat(\"\
+    No\").concat(match_parens(lst[1..])),\n    }", "    // find all open brackets\n\
+    \    let mut is_open_brackets = vec![];\n    for s in lst {\n        let pos =\
+    \ s.find(\"(\");\n        if pos != None {\n            is_open_brackets.push(pos);\n\
+    \        }\n    }\n    // find all closed brackets\n    let mut is_closed_brackets\
+    \ = vec![];\n    for s in lst {\n        let pos = s.find(\")\");\n        if\
+    \ pos != None {\n            is_closed_brackets.push(pos);\n        }\n    }\n\
+    \    // find all open and closed brackets\n    for s in is_open_brackets.iter().chain(is_closed_brackets.iter())\
+    \ {\n        // find all matching closing brackets\n        let mut cnt = 0;\n\
+    \        for e in is_open_brackets.iter() {\n            if e == s + 1 {\n   \
+    \             cnt += 1;\n            }\n        }\n        if cnt != 0 {\n   \
+    \         return format!(\"Yes\");\n        }\n    }\n    return format!(\"No\"\
+    );", "    loop {\n        let mut cur_str = lst[0];\n        let mut cur_balance\
+    \ = 1;\n        for i in 1..lst.len() {\n            cur_str += cur_str;\n   \
+    \         cur_str = lst[i];\n            if cur_str == \"()\" {\n            \
+    \    cur_balance += 1;\n            } else if cur_str == \")\" {\n           \
+    \     cur_balance -= 1;\n            }\n            if cur_balance <= 0 {\n  \
+    \              return \"Yes\".to_string();\n            }\n        }\n    }",
+  "    let mut res = String::new();\n    for s in lst {\n        if s.contains('(')\
+    \ || s.contains('[') || s.contains('{') {\n            res.push_str(s);\n    \
+    \    }\n    }\n    if res.len() == 0 {\n        return \"No\";\n    }\n    res.push_str(\"\
+    \");\n    for s in lst {\n        if s.contains('(') || s.contains('[') || s.contains('{')\
+    \ {\n            res.push_str(s);\n        }\n    }\n    if res == \"\" {\n  \
+    \      return \"No\";\n    }\n    if res.len() < 2 {\n        return \"No\";\n\
+    \    }\n    if res.len() < 4 {\n        return \"Yes\";\n    }\n    let mut stack\
+    \ = vec![false; 4];\n    for ch in &res[0..3] {\n        if ch == ')' && !stack[0]\
+    \ && stack[1] == stack[2] && stack[3] == stack[0] {\n            res.push_str(\"\
+    Yes\");\n        }\n        res.push_str(&format!(\"{}\", ch));\n        stack[0]\
+    \ = (ch == '(');\n        stack[1] = (ch == '[');\n        stack[2] = (ch == '{');\n\
+    \        stack[3] = (ch == ')');\n    }\n    if res.len() < 2 {\n        res.push_str(\"\
+    \");\n    }\n    res.push_str(&format!(\"{}\", res[res.len()-1]));\n    res.push_str(\"\
+    No\");\n    return res.to_string();", "    // Step 1: We must check each opening\
+    \ parentheses first.\n    // This is done by creating one stack, and pushing all\
+    \ parentheses first\n    // into it. This will make all parentheses be on the\
+    \ top of stack, and then\n    // we can check if there are any parentheses left\
+    \ on top.\n    // If there is any, then the string cannot be a good one.\n   \
+    \ // If there is no parentheses left, then the string can be a good one.\n   \
+    \ let mut stack = Vec::new();\n    for ele in lst {\n        if ele == \"(\"\n\
+    \            || ele == \")\" {\n            continue;\n        }\n        // We\
+    \ push parentheses into the stack first, then we pop the top\n        // parentheses\
+    \ later.\n        stack.push(ele);\n    }\n    // Step 2: We must check each closing\
+    \ parentheses second.\n    // This is done by creating a second stack, and then\
+    \ compare each closing\n    // parentheses in the order they appear in our input\
+    \ string, and remove them\n    // from our second stack.\n    // If there are\
+    \ more closing parentheses than opening, then the string cannot be\n    // a good\
+    \ one.\n    // If there are no more closing parentheses left, then the string\
+    \ can be\n    // a good one.\n    let mut stack_2 = Vec::new();\n    for i in\
+    \ 1..lst.len() {\n        if lst[i - 1] == \"(\"\n            || lst[i - 1] ==\
+    \ \")\" {\n            continue;\n        }\n        stack_2.push(lst[i]);\n \
+    \   }\n    if stack_len(&stack) < stack_len(&stack_2) + 1 {\n        return \"\
+    No\";\n    }\n    for ele in &stack {\n        if stack_len(&stack) < stack_len(&stack_2)\n\
+    \            || stack_len(&stack) == stack_len(&stack_2)\n                && stack_2.last().unwrap()\
+    \ == \"(\"\n        {\n            return \"No\";\n        }\n        stack_2.pop();\n\
+    \    }\n    \"Yes\"", "    let mut s = String::new();\n    for x in lst.iter()\
+    \ {\n        if !x.contains(\"(\") || !x.contains(\")\")\n            || x.contains(\"\
+    (\", !x.contains(\")\"))\n        {\n            s.push_str(x);\n        }\n \
+    \   }\n    return s.contains(\"(\") ? \"Yes\" : \"No\"", "    let mut str = String::new();\n\
+    \    for i in lst {\n        str = str + i;\n    }\n    return str[str.len() -\
+    \ 1];", "    if lst.len() != 2 {\n        return \"\";\n    }\n\n    let mut curr\
+    \ = vec![true];\n    \n    for c in lst {\n        if c == '(' {\n           \
+    \ curr[0] = false;\n        } else if c == ')' {\n            curr[0] = !curr[0];\n\
+    \        } else {\n            curr[0] = !curr[0];\n            break;\n     \
+    \   }\n    }\n    return if curr[0] { \"Yes\" } else { \"No\" }", "    let mut\
+    \ cur = String::new();\n    for i in lst {\n        if i == \")\" {\n        \
+    \    if cur.len() == 0 {\n                return \"No\";\n            }\n    \
+    \        cur.push_str(\")\");\n        } else {\n            cur.push_str(\"(\"\
+    );\n        }\n    }\n    let mut c = 1;\n    while c < cur.len() {\n        if\
+    \ cur[c] == '(' {\n            cur[c + 1] = '(';\n            c += 2;\n      \
+    \  }\n        cur[c] = '.';\n        c++;\n    }\n    return cur.trim().to_lowercase();",
+  "    // sort list to guarantee that each pair of ( and ) is unique\n    lst.sort_unstable();\n\
+    \n    // check whether all parentheses are balanced\n    let mut stack = String::new();\n\
+    \    for i in lst[0..lst.len() - 1] {\n        if !stack.contains(&(i)) {\n  \
+    \          if i == '(' {\n                stack += \"(\";\n            } else\
+    \ if i == ')' {\n                stack += \")\";\n            } else {\n     \
+    \           return \"No\".to_string();\n            }\n        } else {\n    \
+    \        return \"No\".to_string();\n        }\n    }\n    stack", "    let mut\
+    \ stack = String::new();\n    for s in lst.iter() {\n        if s.starts_with('(')\
+    \ {\n            stack.push_str(\"(\");\n        } else {\n            match stack.chars().next().unwrap()\
+    \ {\n                '(' => stack.push_str(\"(\"),\n                _ => stack.push_str(\"\
+    )\"),\n            }\n        }\n    }\n    stack", "    // Return Yes if all\
+    \ the parentheses in lst are balanced.\n    // If there's some parentheses in\
+    \ lst not matched, return No.\n    let mut p = 0\n    let mut n = 0\n    for s\
+    \ in lst {\n        if s.chars().all(|c| *c == '(') {\n            p++\n     \
+    \   } else {\n            n++\n        }\n    }\n    if p == n {\n        return\
+    \ \"Yes\"\n    } else {\n        return \"No\"\n    }", "    let mut res = String::new();\n\
+    \    for s in lst {\n        res.push_str(&s);\n        let open = s.chars().filter(|c|\
+    \ c == '(').count();\n        let close = s.chars().filter(|c| c == ')').count();\n\
+    \        if open + close == 2 {\n            res.push_str(\")\");\n        } else\
+    \ {\n            res.push_str(\")\");\n        }\n    }\n    res.push_str(\")\"\
+    );\n    res.to_string()", "    let mut stack = Vec::new();\n    let mut current\
+    \ = 1;\n    let mut is_good = false;\n    let mut len = lst.len();\n    for i\
+    \ in 0..len {\n        if current == 0 {\n            stack.remove(0);\n     \
+    \   }\n        if lst[i].contains(\"(\") {\n            stack.push(1);\n     \
+    \   }\n        if lst[i].contains(\")\") {\n            if stack.len() == 0 ||\
+    \ stack.last().unwrap() == 1 {\n                is_good = true;\n            }\n\
+    \            stack.pop();\n        }\n        current *= lst[i].len();\n    }\n\
+    \    if stack.len() != 0 && !is_good {\n        is_good = \"No\"\n    } else {\n\
+    \        is_good = \"Yes\"\n    }\n    is_good", "    let mut stack = vec![false;\
+    \ lst.len()];\n    let mut result = String::new();\n    let mut last_open: usize\
+    \ = 0;\n    for s in lst {\n        if s == '(' {\n            if stack[last_open]\
+    \ || stack[last_open + 1] {\n                return \"No\";\n            }\n \
+    \           stack[last_open] = true;\n            last_open += 1;\n        } else\
+    \ if s == ')' {\n            if !stack[last_open] {\n                return \"\
+    No\";\n            }\n            stack[last_open] = false;\n            last_open\
+    \ -= 1;\n        } else {\n            result.append(&s[1..]);\n        }\n  \
+    \  }\n    return \"Yes\";", "    if lst.len() > 2 {\n        let (left_parens,\
+    \ right_parens) = lst.split_at(2);\n        let right_left_parens = right_parens.split_at_mut(1);\n\
+    \        if left_parens.len() == right_left_parens.len() {\n            for (l,\
+    \ r) in left_parens.iter().zip(right_left_parens.iter()) {\n                if\
+    \ l != r {\n                    return \"No\";\n                }\n          \
+    \  }\n        }\n    }\n    \"Yes\"", "    if lst.len() != 2 {\n        return\
+    \ \"No\".to_string();\n    }\n\n    match lst.iter().position(|&x| x == ')') {\n\
+    \        Some(i) => {\n            if lst.iter()[i - 1] != ')' || lst.iter()[i\
+    \ + 1] != ')' {\n                return \"No\".to_string();\n            }\n \
+    \           match_parens(&lst[..i]).to_string()\n        }\n        None => \"\
+    Yes\".to_string(),\n    }", "    use std::collections::HashMap;\n\n    let mut\
+    \ map = HashMap::new();\n\n    for ele in lst {\n        if !map.contains_key(&ele)\
+    \ {\n            map.insert(ele, ele);\n        } else {\n            if map.contains_key(&ele)\
+    \ {\n                map.remove(&ele);\n            }\n        }\n    }\n\n  \
+    \  let mut ret = String::new();\n\n    for (key, val) in map {\n        ret +=\
+    \ key;\n        ret += val;\n    }\n\n    ret", "    let mut state = Okay;\n \
+    \   let mut stack: Vec<String> = Vec::new();\n    let mut stack_length = lst.len()\
+    \ - 1;\n    for p in lst {\n        match state {\n            Okay => if p ==\
+    \ ')' {\n                state = Okay;\n                stack.pop();\n       \
+    \         stack_length = stack_length - 1;\n            } else if p == '(' {\n\
+    \                stack.push(p);\n                stack_length = stack_length +\
+    \ 1;\n            }\n            Okay | Bad => {\n                break;\n   \
+    \         }\n        }\n    }\n    if state == Okay\n        && stack.iter().any(|s|\
+    \ !s.is_empty() && s.chars().all(|c| c == ')'))\n    {\n        return \"Yes\"\
+    ;\n    } else {\n        return \"No\";\n    }", "    if lst.len() != 2 {\n  \
+    \      return \"No\";\n    }\n    let mut curr = lst[0];\n    let mut next = lst[1];\n\
+    \    let mut ans = String::from(\"No\");\n    while curr != \"\" {\n        if\
+    \ next.len() == 0 {\n            ans = \"Yes\";\n            break;\n        }\n\
+    \        if curr == \")\" && next.is_empty() {\n            ans = \"Yes\";\n \
+    \           break;\n        }\n        if curr == \"(\" && next.is_empty() {\n\
+    \            ans = \"Yes\";\n            break;\n        }\n        ans = \"No\"\
+    ;\n        break;\n        curr = next;\n        next = curr.next();\n    }\n\
+    \    ans", "    if lst.len() != 2 {\n        return \"No\";\n    }\n    if match_parens_helper(lst,\
+    \ false, \"\").is_empty() {\n        return \"Yes\";\n    }\n    return \"No\"",
+  "    use paren::{paren_open, paren_close, paren_balance};\n\n    let mut open =\
+    \ Vec::new();\n    let mut close = Vec::new();\n    let mut open_balance = Vec::new();\n\
+    \    let mut close_balance = Vec::new();\n\n    for elem in lst {\n        if\
+    \ elem.len() != 1 {\n            return format!(\"No\");\n        }\n\n      \
+    \  let mut i = elem.chars().next().unwrap();\n\n        close.push(elem[1..i]);\n\
+    \        close_balance.push(paren_balance(elem));\n        close.push(i);\n\n\
+    \        open_balance.push(paren_balance(elem));\n\n        while i < elem.len()\
+    \ {\n            let mut j = i;\n\n            open.push(elem[i..j]);\n      \
+    \      open_balance.push(paren_balance(elem[i..j]));\n            open.push(j);\n\
+    \n            i = j;\n        }\n\n        if paren_open(close_balance, open_balance,\
+    \ open, close) != \"Yes\" {\n            return \"No\";\n        }\n    }\n\n\
+    \    \"Yes\"", "    let mut visited = vec![];\n    let mut stack = vec![(0, 0)];\n\
+    \    for &s in &lst {\n        if s.starts_with('(') {\n            stack += vec![(stack.len(),\
+    \ 0)];\n        }\n        if s.starts_with(')') {\n            let (s, _) = stack.pop();\n\
+    \            visited.push(s);\n        }\n    }\n    visited.is_empty()\n    \
+    \    ? \"Yes\"\n        : \"No\"", "    let mut stk = [String::new(); lst.len()];\n\
+    \    stk.pop();\n    stk.push(\"\");\n\n    for i in 0..lst.len() {\n        stk[i]\
+    \ += lst[i];\n        if stk[i].contains(\"(\") {\n            stk[i] += \")\"\
+    ;\n        }\n\n        if stk[i].contains(\")\") {\n            stk[i] = stk[i.clone()].to_string();\n\
+    \            stk[i] += \")\";\n        }\n    }\n\n    stk.pop();\n    let mut\
+    \ cur = \"\";\n    for i in 0..lst.len() {\n        if stk[i].contains(\"(\")\
+    \ {\n            stk[i] = stk[i].to_string();\n            stk[i] = stk[i].replace(\"\
+    )\", \"\");\n            if stk[i].contains(\"(\") {\n                cur = stk[i].to_string();\n\
+    \                stk[i] = cur;\n            } else {\n                let len\
+    \ = stk[i].len();\n                stk[i] = cur + &stk[i][i..len];\n         \
+    \   }\n        }\n    }\n\n    if stk[lst.len() - 1].contains(\"(\") {\n     \
+    \   stk[lst.len() - 1] = \"\".to_string();\n        stk[lst.len() - 1] += \"(\"\
+    ;\n    }\n\n    if stk[lst.len() - 1].contains(\")\") {\n        stk[lst.len()\
+    \ - 1] = \"\".to_string();\n        stk[lst.len() - 1] += \")\";\n    }\n\n  \
+    \  stk[lst.len() - 1]", "    match lst {\n        [] => return \"No\",\n     \
+    \   x => {\n            match x.chars().zip(x).next() {\n                Some(left_1,\
+    \ right_1) => return \"Yes\",\n                Some(left_2, right_2) => return\
+    \ \"Yes\",\n                None => return \"No\",\n            }\n        }\n\
+    \    }", "    // Convert strings to chars, one by one\n    let mut chars = lst.iter().map(|s|\
+    \ s.chars()).collect::<Vec<char>>();\n    let mut index = 0;\n    // We need to\
+    \ track whether we are inside a pair of brackets\n    let mut bracket_count =\
+    \ 0;\n\n    // While we haven't found an open parenthesis\n    while index < chars.len()\
+    \ {\n        // If we have matched a closing parenthesis\n        if chars[index]\
+    \ == '(' {\n            bracket_count += 1;\n        }\n        // Else if we're\
+    \ already out of brackets\n        else if bracket_count == 0 {\n            return\
+    \ String::from(\"No\");\n        }\n        // Else if we have found a closing\
+    \ parenthesis\n        if chars[index] == ')' {\n            bracket_count -=\
+    \ 1;\n        }\n        // Else if we haven't matched a closing parenthesis\n\
+    \        else if chars[index] == ')' && !bracket_count {\n            return String::from(\"\
+    Yes\");\n        }\n        // Else if we haven't matched an open parenthesis\n\
+    \        else if chars[index] == '(' && !bracket_count {\n            return String::from(\"\
+    No\");\n        }\n        // Else if we have an unexpected character\n      \
+    \  else {\n            return String::from(\"No\");\n        }\n\n        index\
+    \ += 1; // Increment the index\n    }\n\n    return String::from(\"No\");", " \
+    \   let mut stack = VecDeque::new();\n    let mut result = String::new();\n\n\
+    \    for e in lst {\n        if e == \"(\" || e == \"{\" || e == \"}\" || e ==\
+    \ \"[\" {\n            stack.push((e, true));\n        } else {\n            if\
+    \ let (Some(e), Some(b)) = stack.pop() {\n                if !b {\n          \
+    \          result.push_str(&e);\n                }\n            }\n        }\n\
+    \    }\n\n    if stack.len() != 0 {\n        result.push_str(\"No\");\n    } else\
+    \ {\n        result.push_str(\"Yes\");\n    }\n    result", "    let mut stack\
+    \ = VecDeque::new();\n\n    for e in lst {\n        if stack.contains(e) {\n \
+    \           return format!(\"No\");\n        }\n        stack.push_back(e);\n\
+    \    }\n    match lst.len() {\n        0 => format!(\"Yes\"),\n        _ => format!(\"\
+    Yes\"),\n    }", "    let mut stack = vec![];\n    let mut good = vec![];\n  \
+    \  for s in lst {\n        if s == '(' {\n            stack.push(s);\n       \
+    \ } else {\n            stack.pop();\n            if !stack.is_empty() && stack.last().unwrap()\
+    \ != s {\n                good.push(false);\n            } else {\n          \
+    \      good.push(true);\n            }\n        }\n    }\n    if good.iter().reduce(true)\
+    \ { |b, a| b && a }\n        && good.iter().last().unwrap()\n    {\n        \"\
+    Yes\"\n    } else {\n        \"No\"\n    }", "    let mut ans = String::new();\n\
+    \n    for elem in lst {\n        if elem.is_empty() {\n            ans += \"No\"\
+    .to_owned();\n            return ans;\n        }\n        if elem.contains(\"\
+    (\") && !elem.contains(\")\")\n            || elem.contains(\")\") && !elem.contains(\"\
+    (\")\n        {\n            ans += \"No\".to_owned();\n            return ans;\n\
+    \        }\n        if elem.contains(\"(\") && !elem.contains(\")\") {\n     \
+    \       ans += \"Yes\".to_owned();\n            return ans;\n        }\n     \
+    \   if elem.contains(\")\") && !elem.contains(\"(\") {\n            ans += \"\
+    Yes\".to_owned();\n            return ans;\n        }\n        if elem.contains(\"\
+    (\") && elem.contains(\")\")\n            && !elem.contains(\"((\") || !elem.contains(\"\
+    )(\")\n        {\n            ans += \"Yes\".to_owned();\n            return ans;\n\
+    \        }\n    }\n    ans += \"No\".to_owned();\n    return ans;", "    let mut\
+    \ stack: Vec<_> = Vec::new();\n    for s in lst {\n        if s == '(' {\n   \
+    \         stack.push(s);\n        } else if s == '(' {\n            if stack.len()\
+    \ == 0 {\n                return \"No\";\n            }\n            stack.pop();\n\
+    \        } else if s == ')' {\n            if stack.len() == 0 {\n           \
+    \     return \"No\";\n            }\n            stack.push(s);\n        }\n \
+    \   }\n    if stack.len() == 0 {\n        return \"Yes\";\n    }\n    \"No\"",
+  "    let mut stack = Vec::new();\n    let mut cur = String::new();\n\n    for i\
+    \ in lst.iter() {\n        if !i.is_empty() {\n            if i[0] == \"(\" {\n\
+    \                stack.push(i);\n            } else {\n                if stack.len()\
+    \ == 0 {\n                    return \"No\".to_string();\n                } else\
+    \ {\n                    let top = stack.pop().unwrap();\n                   \
+    \ match top.len() {\n                        0 => cur.push_str(top),\n       \
+    \                 _ => cur.push_str(top.clone()),\n                    }\n   \
+    \             }\n            }\n        }\n    }\n\n    if stack.len() == 0 {\n\
+    \        cur\n    } else {\n        \"No\".to_string()\n    }", "    let mut counter\
+    \ = 0;\n    for i in lst[0].iter() {\n        if i == ')' {\n            counter\
+    \ -= 1;\n            if counter == 0 {\n                return \"Yes\";\n    \
+    \        }\n        }\n        counter += 1;\n    }\n    return \"No\";", "  \
+    \  match (lst.len() % 2) {\n        0 => \"Yes\".to_string(),\n        _ => \"\
+    No\".to_string(),\n    }", "    let mut st: Vec<String> = lst.clone();\n    let\
+    \ mut prev: Option<String> = None;\n    let mut good: bool = true;\n    while\
+    \ let Some(next) = st.next_back() {\n        if next.starts_with(\"(\") {\n  \
+    \          if let Some(prev) = prev {\n                if !prev.ends_with(\")\"\
+    )\n                {\n                    good = false;\n                    break;\n\
+    \                }\n                prev.pop();\n            }\n            prev\
+    \ = next;\n        }\n        else if next.starts_with(\")\")\n        {\n   \
+    \         if let Some(prev) = prev {\n                if !prev.starts_with(\"\
+    (\")\n                {\n                    good = false;\n                 \
+    \   break;\n                }\n                prev.pop();\n            }\n  \
+    \          prev = next;\n        }\n    }\n    match good {\n        true => \"\
+    Yes\",\n        false => \"No\",\n    }", "    let mut stack = VecDeque::new();\n\
+    \    stack.push(\"(\");\n    stack.push(\")\");\n    stack.push(\"(\");\n    for\
+    \ s in lst {\n        for c in s {\n            if c == '(' {\n              \
+    \  stack.push(c);\n            } else if c == ')' {\n                if stack.len()\
+    \ == 0 {\n                    return \"No\";\n                }\n            \
+    \    let tmp = stack.pop();\n                if tmp == c {\n                 \
+    \   return \"Yes\";\n                }\n            } else {\n               \
+    \ return \"No\";\n            }\n        }\n    }\n    return \"No\";", "    if\
+    \ lst.len() < 2 {\n        return \"No\";\n    }\n    // a list with only a single\
+    \ element\n    if lst.len() == 1 {\n        return match_parens(Vec::from(lst));\n\
+    \    }\n    let mut stack = Vec::new();\n    let mut done = false;\n    let mut\
+    \ i = 0;\n    let mut j = 1;\n    let mut is_good = true;\n    loop {\n      \
+    \  if j > lst.len() - 1 {\n            done = true;\n        } else {\n      \
+    \      // get from left side\n            if lst[j].as_str().unwrap().is_empty()\
+    \ {\n                continue;\n            }\n            if stack.is_empty()\
+    \ && j > 0 && !lst[j - 1].as_str().unwrap().is_empty() {\n                stack.pop();\n\
+    \                j -= 1;\n                continue;\n            }\n         \
+    \   if stack.is_empty() {\n                stack.resize(1);\n                j\
+    \ += 1;\n                i += 1;\n                stack.resize(1);\n         \
+    \   }\n            stack.pop();\n            stack.append(&mut lst[j]);\n    \
+    \        j += 1;\n        }\n        loop {\n            if j > lst.len() - 1\
+    \ {\n                done = true;\n                break;\n            }\n   \
+    \         // get from right side\n            if lst[j].as_str().unwrap().is_empty()\
+    \ {\n                continue;\n            }\n            if stack.is_empty()\
+    \ && j < lst.len() && !lst[j + 1].as_str().unwrap().is_empty() {\n           \
+    \     stack.pop();\n                j += 1;\n                continue;\n     \
+    \       }\n            if stack.is_empty() {\n                stack.resize(1);\n\
+    \                j += 1;\n                i += 1;\n                stack.resize(1);\n\
+    \            }\n            stack.pop();\n            stack.append(&mut lst[j]);\n\
+    \            j += 1;\n        }\n        // check\n        if stack.is_empty()\
+    \ && i == lst.len() - 1 {\n            is_good = false;\n        }\n        if\
+    \ stack.is_empty() && i == lst.len() - 1 {\n            is_good = false;\n   \
+    \     }\n        if stack.is_empty() && i == lst.len() - 1 {\n            is_good\
+    \ = false;\n        }\n        if stack.len() == 0 {\n            break;\n   \
+    \     }\n    }\n    if is_good {\n        \"Yes\"\n    } else {\n        \"No\"\
+    \n    }", "    // Create a set of parentheses\n    let mut s = HashSet::new();\n\
+    \    for e in lst {\n        if e == \"(\" || e == \")\" {\n            s.insert(e);\n\
+    \        }\n    }\n\n    // Check if there is an order\n    for e in lst {\n \
+    \       if !s.contains(e) {\n            return \"No\";\n        }\n    }\n\n\
+    \    // Check if all parentheses are balanced\n    let mut ok = false;\n    for\
+    \ (pos, e) in lst.iter().enumerate() {\n        if e == \"(\" && s.contains(pos.to_string()\
+    \ + '(') && s.contains(pos.to_string() + ')') {\n            ok = true;\n    \
+    \    }\n        if e == ')' && s.contains(pos.to_string() + '(') && !s.contains(pos.to_string()\
+    \ + ')') {\n            ok = true;\n        }\n    }\n    if !ok {\n        return\
+    \ \"No\";\n    }\n\n    // All is good\n    \"Yes\"", "    let mut lst = lst.clone();\n\
+    \    lst.sort();\n\n    for i in 0..lst.len() {\n        if lst[i] == \"\" {\n\
+    \            continue;\n        }\n\n        let mut cur = i;\n        let mut\
+    \ left = i;\n        let mut right = i;\n\n        while left > 0 && right < lst.len()\
+    \ && lst[left] == \"\" {\n            left--;\n        }\n\n        while right\
+    \ > 0 && left < lst.len() && lst[right] == \"\" {\n            right++;\n    \
+    \    }\n\n        if right > left {\n            let res = cur + right;\n\n  \
+    \          // check if we can add '()'\n            if left < right {\n      \
+    \          let left_str = &lst[left..];\n                let right_str = &lst[right..];\n\
+    \                let mut left_open = false;\n                let mut right_open\
+    \ = false;\n                let mut ins_count = 0;\n\n                for c in\
+    \ left_str {\n                    if c == '(' {\n                        left_open\
+    \ = true;\n                    }\n\n                    if c == ')' {\n      \
+    \                  ins_count++;\n\n                        if ins_count == 2 {\n\
+    \                            left_open = false;\n                        }\n \
+    \                   }\n                }\n\n                for c in right_str\
+    \ {\n                    if c == '(' {\n                        right_open = true;\n\
+    \                    }\n\n                    if c == ')' {\n                \
+    \        ins_count++;\n\n                        if ins_count == 2 {\n       \
+    \                     right_open = false;\n                        }\n       \
+    \             }\n                }\n\n                if left_open && right_open\
+    \ {\n                    return \"Yes\";\n                }\n            }\n\n\
+    \            return \"No\";\n        }\n    }\n\n    \"No\"", "    match lst {\n\
+    \        [] | [_] | [_]\n            => \"\".to_string(),\n        [_] | [\"\"\
+    , _] | [_]\n            => \"Yes\".to_string(),\n        _ => unreachable!(),\n\
+    \    }", "    if lst.len() < 2 {\n        return \"No\";\n    }\n\n    let mut\
+    \ res = String::new();\n    let mut stack = Vec::new();\n    stack.push('(');\n\
+    \    for s in lst {\n        if stack.len() == 0 {\n            res += s;\n  \
+    \      } else {\n            match s[stack.len() - 1] {\n                '(' =>\
+    \ res += s,\n                _ => stack.push(*s),\n            }\n        }\n\
+    \    }\n    if stack.len() == 0 {\n        return \"Yes\";\n    }\n    return\
+    \ \"No\";", "    let mut ans = String::new();\n    let mut stack = Vec::new();\n\
+    \n    stack.push(());\n    for &s in lst {\n        if s == '(' {\n          \
+    \  stack.pop();\n            stack.append(());\n        } else if s == ')' {\n\
+    \            match stack.pop() {\n                Some(ref x) => ans.push_str(&format!(\"\
+    {}\", x)),\n                None => ans.push_str(\"No\"),\n            }\n   \
+    \     } else {\n            stack.append(());\n        }\n    }\n    ans.push_str(\"\
+    Yes\")", "    \n    // Iterate through all the strings in lst\n    for i in 0..lst.len()\
+    \ {\n        \n        // If i has already been visited, no need to visit it again\n\
+    \        if lst[i].contains(\"_\") && !lst[i].contains(\"_\") { // Check for repeated\
+    \ visited strings\n            continue;\n        }\n        // If all parentheses\
+    \ in current string are unbalanced\n        // We can return 'Yes'\n        if\
+    \ lst[i].contains(\"(\") && lst[i].contains(\")\")\n            && !(lst[i].contains(\"\
+    (\") + lst[i].contains(\")\"))\n        {\n            return \"Yes\";\n     \
+    \   }\n        // If any parentheses in current string are balanced, return 'No'\n\
+    \        if lst[i].contains(\"(\")\n            && !(lst[i].contains(\"(\") +\
+    \ lst[i].contains(\")\"))\n        {\n            return \"No\";\n        }\n\
+    \    }\n    // Return 'No' if there are no valid strings in lst\n    return \"\
+    No\";", "    let mut counter = 0;\n    let mut result = String::new();\n    loop\
+    \ {\n        if counter == 0 {\n            let mut s = String::new();\n     \
+    \       for (index, item) in lst.iter().enumerate() {\n                if item\
+    \ == '(' {\n                    s += ')';\n                } else {\n        \
+    \            s += item;\n                }\n                if index == lst.len()\
+    \ - 1 {\n                    break;\n                }\n            }\n      \
+    \      result += s;\n        } else {\n            let mut s = String::new();\n\
+    \            for (index, item) in lst.iter().enumerate() {\n                s\
+    \ += item;\n                if index == lst.len() - 1 {\n                    break;\n\
+    \                }\n            }\n            result += s;\n        }\n     \
+    \   counter += 1;\n        if counter == lst.len() {\n            break;\n   \
+    \     }\n    }\n    if result.is_empty() {\n        return \"No\";\n    } else\
+    \ {\n        return \"Yes\";\n    }", "    let mut res = String::new();\n    let\
+    \ mut stack: Vec<usize> = Vec::new();\n    for s in lst {\n        if s == '('\
+    \ {\n            stack.push(0);\n        } else if s == ')' {\n            stack.pop();\n\
+    \        } else {\n            if stack.len() > 0 {\n                res.push_str(&s.to_string()[stack.pop()\
+    \ - 1]);\n            } else {\n                res.push_str(s);\n           \
+    \ }\n        }\n    }\n    res.chars().filter(|c| *c != '(').count() == 0\n  \
+    \      && res.chars().filter(|c| *c != ')').count() == 0\n        && res.chars().filter(|c|\
+    \ *c == ')').count() == 0\n        && res.chars().filter(|c| *c == '(').count()\
+    \ == stack.len();", "    let mut stack: Vec<String> = vec![];\n    stack.extend(lst.clone());\n\
+    \    stack.shrink_to_fit();\n    let mut found = false;\n    while !stack.contains(\"\
+    \") && stack.len() != 0 {\n        if stack.len() == 1 {\n            found =\
+    \ true;\n            break;\n        }\n        let elem = stack.remove(0);\n\
+    \        if elem.is_empty() {\n            break;\n        }\n        let len\
+    \ = elem.len();\n        if len == 1 {\n            continue;\n        }\n   \
+    \     let (left, right) = elem.split_at(len - 1);\n        if !left.is_empty()\
+    \ {\n            stack.extend(left.chars().collect::<Vec<_>>());\n        }\n\
+    \        if !right.is_empty() {\n            stack.extend(right.chars().collect::<Vec<_>>());\n\
+    \        }\n    }\n    if found {\n        \"Yes\".to_string()\n    } else {\n\
+    \        \"No\".to_string()\n    }", "    if lst.len() > 2 {\n        return match\
+    \ &lst[0][..2] {\n            \"()\" => \"Yes\",\n            _ => \"No\",\n \
+    \       };\n    }\n    return \"No\"", "    let mut s = String::from(\"No\");\n\
+    \    for x in lst {\n        match x {\n            \"(\" => {\n             \
+    \   s.push('(');\n            }\n            \")\" => {\n                s.push(')');\n\
+    \            }\n            _ => unreachable!(\"unexpected character\"),\n   \
+    \     }\n    }\n    s == \"Yes\"", "    let mut stack = VecDeque::new();\n   \
+    \ for i in lst.iter() {\n        let len = i.remove(0);\n        stack.push_back(len);\n\
+    \    }\n    match stack.peek() {\n        None => return \"No\".to_string(),\n\
+    \        _ => return \"Yes\".to_string(),\n    }", "    // We are assuming only\
+    \ parentheses open/close.\n    // A valid concatenation would be '(())'\n    for\
+    \ e in lst {\n        let mut open_braces = 1;\n        let mut close_braces =\
+    \ 1;\n        for ch in e {\n            if ch == ')' {\n                close_braces\
+    \ -= 1;\n            }\n            if ch == '(' {\n                open_braces\
+    \ += 1;\n            }\n        }\n\n        if open_braces == close_braces {\n\
+    \            return e.to_string();\n        }\n    }\n    \"No\".to_string()",
+  "    // If there's one element, there's nothing to do.\n    if lst.len() == 1 {\n\
+    \        return \"No\".to_string();\n    }\n\n    // Check which elements can\
+    \ contain open and close parentheses.\n    let mut open = vec![\"(\"];\n    let\
+    \ mut close = vec![\")\"];\n\n    // Iterate through each string and see which\
+    \ elements can contain open\n    // and close parentheses.\n    for str in lst\
+    \ {\n        // Get all valid open and close parentheses.\n        let mut matches\
+    \ = open;\n\n        for c in str.chars() {\n            if c.is_paren() {\n \
+    \               matches.push(c.to_ascii());\n            }\n        }\n\n    \
+    \    // If there's only one element, there's nothing to do.\n        if matches.len()\
+    \ == 1 {\n            return \"No\".to_string();\n        }\n\n        // If there\
+    \ is more than one element, see which one is closer.\n        for (i, c) in matches.iter().enumerate()\
+    \ {\n            if close.contains(c) {\n                // It seems that the\
+    \ close paren is closer than all open\n                // parens, so remove it\
+    \ from close.\n                close.remove(i);\n            } else {\n      \
+    \          // If an open paren is closer to the current close, add the\n     \
+    \           // current open paren to open.\n                if i < close.len()\
+    \ {\n                    open.push(c);\n                }\n            }\n   \
+    \     }\n    }\n\n    // If there is only one element in open, there is nothing\
+    \ to do.\n    if open.len() == 1 {\n        return \"No\".to_string();\n    }\n\
+    \n    // If there is only one element in close, there's nothing to do.\n    if\
+    \ close.len() == 1 {\n        return \"Yes\".to_string();\n    }\n\n    // If\
+    \ the number of elements in open and close are the same, the string can\n    //\
+    \ be made from them. Otherwise there should be an open paren before a\n    //\
+    \ close paren.\n    let open_count = open.len();\n    let close_count = close.len();\n\
+    \n    if open_count == close_count {\n        return match close.iter().min_by_key(|&c|\
+    \ c as u8) {\n            Some(c) => match open.get(c - 1) {\n               \
+    \ Some(c) => \"Yes\".to_string(),\n                None => \"No\".to_string(),\n\
+    \            },\n            None => \"No\".to_string(),\n        };\n    }\n\n\
+    \    // If there are many elements in open, there should be an open paren\n  \
+    \  // before a close paren.\n    if open_count > close_count {\n        let mut\
+    \ i = open_count - 1;\n        let mut j = close_count;\n\n        while i >=\
+    \ 0 {\n            if close[j] as u8 > open[i] as u8 {\n                break;\n\
+    \            }\n            i -= 1;\n            j -= 1;\n        }\n\n      \
+    \  return match open.get(j).unwrap() {\n            Some(c) => \"Yes\".to_string(),\n\
+    \            None ", "    loop {\n        let mut result = lst[0];\n        let\
+    \ mut stack = vec![false; lst[0].len()];\n        let mut opening_count = stack.len();\n\
+    \n        for &x in lst {\n            stack.push(x.is_open());\n            result\
+    \ += &x;\n        }\n\n        while !stack.is_empty() {\n            let next\
+    \ = stack.pop();\n            if next {\n                result += &lst[stack.len()\
+    \ - 1];\n            }\n        }\n\n        // if result contains any unmatched\
+    \ closing parentheses then it is bad\n        if !result.contains(\")\") {\n \
+    \           return format!(\"No\");\n        }\n\n        // all parentheses in\
+    \ result are balanced, therefore it is good\n        return format!(\"Yes\");\n\
+    \    }", "    let mut has_left = false;\n    let mut has_right = false;\n\n  \
+    \  for s in lst {\n        if let Ok(_) = s.chars().find(|c| *c == ')') {\n  \
+    \          has_right = true;\n        }\n        if let Ok(_) = s.chars().find(|c|\
+    \ *c == '(') {\n            has_left = true;\n        }\n    }\n\n    if !has_left\
+    \ && !has_right {\n        return \"No\";\n    }\n    if has_left && !has_right\
+    \ {\n        return \"Yes\";\n    }\n\n    if has_left && has_right {\n      \
+    \  let mut i = 1;\n        let mut current_char = ')';\n        let mut is_right_opened\
+    \ = true;\n        while i <= lst.len() {\n            let next = i + (match current_char\
+    \ {\n                '(' | ')' => {\n                    current_char = match\
+    \ lst[next] {\n                        c => c,\n                        _ => {\n\
+    \                            panic!(\"Cannot concatenate {} and {}\", s, lst[next]);\n\
+    \                        }\n                    };\n                    next\n\
+    \                }\n                _ => {\n                    panic!(\"Cannot\
+    \ concatenate {} and {}\", s, lst[next]);\n                }\n            });\n\
+    \            if i == next {\n                break;\n            }\n         \
+    \   if lst[i - 1] == '(' && lst[next] == '(' {\n                i += 1;\n    \
+    \        } else {\n                i += 2;\n            }\n            current_char\
+    \ = match lst[next] {\n                c => c,\n                _ => {\n     \
+    \               panic!(\"Cannot concatenate {} and {}\", s, lst[next]);\n    \
+    \            }\n            };\n        }\n        let mut found = false;\n  \
+    \      while i <= lst.len() {\n            let next = i + (match current_char\
+    \ {\n                '(' | ')' => {\n                    current_char = match\
+    \ lst[next] {\n                        c => c,\n                        _ => {\n\
+    \                            panic!(\"Cannot concatenate {} and {}\", s, lst[next]);\n\
+    \                        }\n                    };\n                    next\n\
+    \                }\n                _ => {\n                    panic!(\"Cannot\
+    \ concatenate {} and {}\", s, lst[next]);\n                }\n            });\n\
+    \            if i == next {\n                break;\n            }\n         \
+    \   if lst[i - 1] == '(' && lst[next] == '(' {\n                i += 1;\n    \
+    \        } else {\n                i += 2;\n            }\n            current_char\
+    \ = match lst[next] {\n                c => c,\n                _ => {\n     \
+    \               panic!(\"Cannot concatenate {} and {}\", s, lst[next]);\n    \
+    \            }\n            };\n            if !found {\n                if lst[i\
+    \ - 1] == ')' && lst[next] == ')' {\n                    found = true;\n     \
+    \           } else if lst[i - 1] == '(' && lst[next", "    if lst.len() <= 1 {\n\
+    \        return \"No\";\n    }\n    let mut first = lst[0];\n    let mut last:\
+    \ String;\n    if let Some(mut last) = lst.iter().next_back() {\n        last\
+    \ = &last[1..].to_string();\n    }\n    for parens in lst {\n        if parens.len()\
+    \ == 0 {\n            return \"\";\n        }\n        let mut balanced = false;\n\
+    \        for paren in parens.chars() {\n            if paren == '(' {\n      \
+    \          balanced = true;\n            }\n            if paren == ')' {\n  \
+    \              if balanced {\n                    balanced = false;\n        \
+    \        } else {\n                    return \"\";\n                }\n     \
+    \       }\n        }\n        if balanced {\n            first = &first[1..];\n\
+    \        }\n    }\n    return \"Yes\".to_string();", "    let mut stack = vec![\"\
+    \"];\n\n    for s in lst {\n        let mut start = String::new();\n        let\
+    \ mut end = String::new();\n        let mut len = 0;\n\n        for c in s.chars()\
+    \ {\n            if c == '(' || c == '[' || c == '{' || c == '<' {\n         \
+    \       stack += &*start.clone();\n                start += &*c.to_owned();\n\
+    \                len += 1;\n            } else if c == '}' || c == ']' || c ==\
+    \ ']' || c == ']' {\n                start += &*end.clone();\n               \
+    \ end += &*c.to_owned();\n                len += 1;\n                if len ==\
+    \ 2 {\n                    let s = String::from_utf8(start.bytes()).unwrap();\n\
+    \                    if s.ends_with('(') && s.starts_with(')') {\n           \
+    \             start += &*c.to_owned();\n                    } else if s.ends_with('[')\
+    \ && s.starts_with(']') {\n                        start += &*c.to_owned();\n\
+    \                    } else if s.ends_with('{') && s.starts_with('}') {\n    \
+    \                    start += &*c.to_owned();\n                    } else if s.ends_with('<')\
+    \ && s.starts_with('<') {\n                        start += &*c.to_owned();\n\
+    \                    }\n                    len -= 1;\n                }\n   \
+    \         }\n        }\n\n        if stack.is_empty() {\n            return \"\
+    No\".to_string();\n        }\n    }\n    if stack.is_empty() {\n        return\
+    \ \"Yes\".to_string();\n    }\n    return \"No\".to_string();", "    let mut cur\
+    \ = 0;\n    let mut s = \"\".to_string();\n    for v in lst {\n        cur +=\
+    \ v.len();\n        s += &v[cur..];\n        if s.len() > 0 {\n            if\
+    \ s.contains(\"(\") || s.contains(\")\") {\n                return \"Yes\".to_string();\n\
+    \            } else {\n                return \"No\".to_string();\n          \
+    \  }\n        }\n    }\n    return \"No\".to_string();", "    let mut has_left_par\
+    \ = false;\n    let mut has_right_par = false;\n\n    for s in lst.iter() {\n\
+    \        if s.starts_with('(') {\n            has_left_par = true;\n        }\
+    \ else {\n            has_right_par = true;\n        }\n    }\n\n    if !has_left_par\
+    \ && !has_right_par {\n        return \"No\";\n    }\n\n    if has_left_par &&\
+    \ has_right_par {\n        return \"Yes\";\n    }\n\n    return \"No\"", "   \
+    \ let mut stack = VecDeque::new();\n    for s in lst {\n        if s == '(' {\n\
+    \            stack.pop_back();\n        } else if s == ')' {\n            if !stack.is_empty()\
+    \ {\n                let top = stack.front();\n                if top != '(' ||\
+    \ stack.is_empty() {\n                    return \"No\";\n                }\n\
+    \            }\n        } else {\n            stack.push_back(s); //push stack\
+    \ onto a stack\n        }\n    }\n    return \"Yes\";", "    match lst {\n   \
+    \     vec![\n            \")(\",\n            \"())\",\n            \")()(\",\n\
+    \            \"(()(\",\n        ] => {\n            return \"Yes\"\n        }\n\
+    \        _ => \"No\"\n    }", "    if lst.len() == 0 {\n        return \"No\"\
+    .to_string();\n    }\n    let mut stack = Vec::new();\n    stack.push(\"\");\n\
+    \    for parens in lst {\n        if parens.starts_with(\"(\") {\n           \
+    \ stack.push(parens);\n        } else {\n            if stack.is_empty() || parens\
+    \ != stack.pop().unwrap().unwrap() {\n                return \"No\".to_string();\n\
+    \            }\n        }\n    }\n    return \"Yes\".to_string();", "    let mut\
+    \ stack = vec![true; lst.len()];\n    let mut curr = 1;\n    while curr <= lst.len()\
+    \ {\n        if stack[curr] == false {\n            if lst[curr] == '(' {\n  \
+    \              stack[curr] = true;\n                curr += 1;\n            }\
+    \ else if lst[curr] == ')' {\n                stack[curr] = false;\n         \
+    \       curr += 1;\n            } else {\n                return \"No\";\n   \
+    \         }\n        } else {\n            let mut left = curr;\n            for\
+    \ index in (0..curr).rev() {\n                if stack[index] == false {\n   \
+    \                 left = index;\n                    break;\n                }\n\
+    \            }\n            if stack[left] == true {\n                return \"\
+    Yes\";\n            }\n        }\n    }\n    \"No\"", "    // Your code here\n\
+    \    ", "    // Return Yes if there's a way to make a good string and No otherwise.\n\
+    \    // The order of parentheses is important, and parentheses must be balanced\n\
+    \    // for string S to make a good string.\n    // For example, the string '()(',\
+    \ ')', ')()' is good, while '()()' is not,\n    // because parentheses are balanced.\n\
+    \    // See https://en.wikipedia.org/wiki/Dynamic_programming_problem for more\
+    \ details.\n\n    let mut cnt = 0;\n    let mut len = 0;\n    let mut max_len\
+    \ = vec![];\n\n    for v in lst {\n        if v == \"(\" || v == \")\" {\n   \
+    \         cnt += 1;\n        }\n        len += 1;\n        if len > max_len.len()\
+    \ {\n            max_len = vec![len];\n        }\n    }\n\n    if max_len.len()\
+    \ < 3 {\n        return \"No\";\n    }\n    let mut dp: Vec<i32> = vec![];\n \
+    \   dp.push(1);\n    max_len = max_len.iter().cloned().collect();\n    for v in\
+    \ lst {\n        if v == \"(\" || v == \")\" {\n            cnt -= 1;\n      \
+    \  }\n        dp.push(0);\n    }\n\n    while cnt > 0 {\n        let mut cnt2\
+    \ = 0;\n        for v in lst {\n            if v == \"(\" || v == \")\" {\n  \
+    \              cnt2 += 1;\n            }\n        }\n\n        if dp[cnt + cnt2\
+    \ + 1].len() < max_len[cnt + cnt2 + 1] {\n            dp[cnt + cnt2 + 1] = dp[cnt\
+    \ + cnt2 + 1] + 1;\n        } else {\n            dp.pop();\n        }\n\n   \
+    \     cnt -= cnt2;\n    }\n\n    if dp[0].len() < 3 {\n        return \"No\";\n\
+    \    }\n\n    // If dp[0] is at least 3, then we know that we can make a good\
+    \ string from lst.\n    let mut cnt2 = 0;\n    for v in lst {\n        if v ==\
+    \ \"(\" || v == \")\" {\n            cnt2 += 1;\n        }\n    }\n\n    if dp[0].len()\
+    \ == max_len[0] {\n        return \"Yes\";\n    }\n\n    // Return No if there's\
+    \ not possible way to make a good string.\n    // Otherwise, return Yes.\n   \
+    \ return \"No\";", "    let mut s = String::new();\n    for l in lst {\n     \
+    \   if l == \"(\" || l == \")\" {\n            s += l.to_string();\n        }\n\
+    \    }\n    match s {\n        s => s,\n        _ => \"No\".into(),\n    }", " \
+    \   let mut stack = vec![];\n    for s in lst {\n        if let Some((char, idx))\
+    \ = s.chars().nth(0) {\n            stack.unshift(idx);\n        }\n    }\n  \
+    \  let mut chars = vec![];\n    chars.push('(');\n    while stack.len() > 0 {\n\
+    \        chars.push('(');\n        let left = stack.pop().unwrap();\n        for\
+    \ c in chars.iter_mut() {\n            *c = *c + '(';\n        }\n        if stack.len()\
+    \ > 0 {\n            let right = stack.pop().unwrap();\n            for c in chars.iter_mut()\
+    \ {\n                *c = *c + ')';\n            }\n            chars.push(')');\n\
+    \        }\n    }\n    chars.iter().filter(|c| c.is_ascii_alphanumeric()).collect()\n\
+    \        .join(\"_\") == \"Yes_\"\n        || \"No\"", "    if lst.len() != 2\
+    \ {\n        return \"No\";\n    }\n\n    let mut cur = 0;\n    let mut is_open\
+    \ = true;\n\n    let mut lst2 = lst.iter().cloned();\n    let mut new_list = lst2.clone();\n\
+    \n    loop {\n        if cur == lst2.len() && is_open {\n            break;\n\
+    \        }\n\n        if is_open {\n            if lst2[cur] == \"(\" {\n    \
+    \            is_open = true;\n            } else {\n                is_open =\
+    \ false;\n            }\n        }\n\n        if lst2[cur] == \")\" {\n      \
+    \      if is_open {\n                is_open = false;\n            }\n       \
+    \ }\n\n        cur += 1;\n        new_list.push(lst2[cur]);\n    }\n\n    if !is_open\
+    \ {\n        return \"No\";\n    }\n\n    new_list.rev();\n    let mut lst3 =\
+    \ new_list.into_iter().cloned();\n    let mut cur_val = 0;\n    let mut new_val\
+    \ = 0;\n\n    loop {\n        if cur_val == lst3.len() && new_val == 1 {\n   \
+    \         break;\n        }\n\n        if new_val == 1 {\n            if lst3[cur_val]\
+    \ == \"(\" {\n                new_val = 1;\n                cur_val += 1;\n  \
+    \          } else {\n                new_val = 0;\n                cur_val +=\
+    \ 1;\n            }\n        } else {\n            if lst3[cur_val] == \")\" {\n\
+    \                new_val = 0;\n                cur_val += 1;\n            } else\
+    \ {\n                new_val = 1;\n                cur_val += 1;\n           \
+    \ }\n        }\n    }\n\n    if cur_val == lst3.len() && new_val == 1 {\n    \
+    \    return \"Yes\";\n    } else {\n        return \"No\";\n    }", "    if lst.is_empty()\
+    \ || lst.len() != 2 {\n        return \"No\";\n    }\n\n    let mut left_parens\
+    \ = 0;\n    let mut right_parens = 0;\n\n    for s in lst {\n        if s == '('\
+    \ {\n            left_parens += 1;\n        } else if s == ')' {\n           \
+    \ right_parens += 1;\n        }\n    }\n\n    if left_parens > right_parens {\n\
+    \        return \"Yes\";\n    }\n\n    return \"No\";", "    // We will build\
+    \ our solution string from bottom to top,\n    // this gives us a chance to optimize\
+    \ our algorithm.\n    let mut res = String::new();\n    let mut cur = String::new();\n\
+    \    for s in lst {\n        if s.is_empty() {\n            return \"\";\n   \
+    \     }\n        if s.chars().any(|&x| x == '(' || x == '[' || x == '{') {\n \
+    \           cur.push_str(s);\n        } else {\n            res.push_str(&cur);\n\
+    \            res.push_str(s);\n            cur = String::new();\n        }\n \
+    \   }\n    res.push_str(&cur);\n    return res;", "    // check how many open\
+    \ parentheses we have\n    let opens = lst.iter().filter(|&x| x.starts_with('(')).count();\n\
+    \n    // check how many close parentheses we have\n    let closes = lst.iter().filter(|&x|\
+    \ x.starts_with(')')).count();\n\n    // check how many open parentheses we have\n\
+    \    let closes_left = lst.iter().filter(|&x| x.starts_with(')')).count();\n\n\
+    \    // check how many close parentheses we have\n    let closes_right = lst.iter().filter(|&x|\
+    \ x.starts_with('(')).count();\n\n    if opens != closes {\n        return \"\
+    No\";\n    }\n\n    if closes > closes_left && closes > closes_right {\n     \
+    \   return \"Yes\";\n    }\n\n    return \"No\";", "    let mut closed = HashSet::new();\n\
+    \    let mut open = HashSet::new();\n    for s in lst {\n        if s == '(' {\n\
+    \            open.insert(0);\n        } else if s == ')' {\n            open.swap_remove(1);\n\
+    \        }\n    }\n    if open.len() != closed.len() {\n        return \"No\"\
+    ;\n    }\n    let mut current = 1;\n    while current < open.len() {\n       \
+    \ if !closed.contains(&current) {\n            return \"No\";\n        }\n   \
+    \     current += 1;\n    }\n    return \"Yes\";", "    let mut stack: Vec<(String,\
+    \ usize)> = Vec::new();\n    stack.push((\"\", 0));\n    match (lst.len(), &mut\
+    \ stack) {\n        (len, _stack) => {\n            if len > 0 {\n           \
+    \     stack.push((\"\", 0));\n            }\n            loop {\n            \
+    \    let mut found = false;\n                for s in &lst[..stack.last().1.unwrap()]\
+    \ {\n                    if s == '(' {\n                        stack.push((s,\
+    \ stack.last().1 + 1));\n                    } else if s == ')' {\n          \
+    \              let len = stack.last().1 + 1;\n                        if len ==\
+    \ 0 {\n                            found = true;\n                           \
+    \ break;\n                        }\n                        let (mut s, i) =\
+    \ stack.pop();\n                        if i >= len {\n                      \
+    \      found = true;\n                            break;\n                   \
+    \     }\n                        *s = *s[i];\n                        stack.push((s,\
+    \ stack.last().1 + 1));\n                    }\n                }\n          \
+    \      if !found {\n                    return \"No\";\n                }\n  \
+    \          }\n        }\n        (len, _stack) => return \"No\",\n    }", "  \
+    \  match lst.len() {\n        2 => return \"Yes\",\n        _ => {\n         \
+    \   let mut stack = Vec::new();\n            let mut pos = 0;\n            let\
+    \ mut stack_size = lst.len();\n            while stack_size.is_positive() {\n\
+    \                if stack[stack_size-1] == \"(\"\n                        && lst[pos]\
+    \ == \")\" {\n                    stack.pop();\n                    stack_size\
+    \ -= 1;\n                } else {\n                    stack.push(lst[pos]);\n\
+    \                    stack_size += 1;\n                }\n                pos\
+    \ += 1;\n            }\n            match stack.pop() {\n                \"(\"\
+    \ => \"Yes\",\n                _ => \"No\",\n            }\n        }\n    }",
+  "    if lst.len() != 2 {\n        return \"No\";\n    }\n\n    // find the length\
+    \ of the longest open paren\n    let mut max = 0;\n    for s in lst {\n      \
+    \  if s == '(' {\n            max += 1;\n        } else if s == ')' {\n      \
+    \      max -= 1;\n        }\n    }\n\n    if max == 0 {\n        return \"Yes\"\
+    ;\n    }\n\n    let mut current = &lst[0];\n    let mut next = true;\n    for\
+    \ s in &lst[1] {\n        if s == '(' && !next\n            || s == ')' && !current.starts_with('(')\n\
+    \        {\n            current = \"()\".to_owned();\n            next = false;\n\
+    \        } else if current.starts_with('(') && s == ')' {\n            current\
+    \ += \"()\".to_owned();\n            next = true;\n        }\n    }\n    current",
+  "    // Count number of open parentheses in lst\n    let mut num_open = 0;\n   \
+    \ for s in lst {\n        if s == \"(\" {\n            num_open += 1;\n      \
+    \  }\n        if s == \")\" {\n            if num_open == 0 {\n              \
+    \  return \"No\";\n            }\n            num_open -= 1;\n        }\n    }\n\
+    \    if num_open == 0 {\n        return \"Yes\";\n    }\n    return \"No\"", " \
+    \   let mut stack = vec![];\n    let mut current_open = -1;\n    let mut current_close\
+    \ = -1;\n    let mut current_len = std::mem::size_of::<usize>(0);\n    for (i,\
+    \ elem) in lst.iter().enumerate() {\n        match elem {\n            '(' | ')'\
+    \ | ')(' | ')(') => {\n                current_open = i;\n                stack.unshift(elem);\n\
+    \            }\n            _ => {\n                let mut len = current_len;\n\
+    \                while let Some(elem) = stack.last().clone() {\n             \
+    \       if elem == '(' {\n                        len += 1;\n                \
+    \    } else if elem == ')' {\n                        len -= 1;\n            \
+    \            if len == 0 {\n                            break;\n             \
+    \           }\n                    }\n                    stack.pop();\n     \
+    \           }\n                if len > 0 {\n                    current_close\
+    \ += 1;\n                } else {\n                    current_open += 1;\n  \
+    \              }\n            }\n        }\n        current_len = std::cmp::min(std::cmp::max(current_len,\
+    \ len), current_close);\n    }\n    stack.last().unwrap()", '    match_parens_helper(Vec::new(),
+    &lst[0], &lst[1..])', "    let mut stack = Vec::new();\n    let mut curr = String::new();\n\
+    \    for s in lst {\n        if s == ')' {\n            if !stack.is_empty() {\n\
+    \                stack.pop();\n            } else {\n                curr = \"\
+    \";\n            }\n        } else if s == '(' {\n            stack.push(curr);\n\
+    \        } else {\n            curr += &s;\n        }\n    }\n    if !stack.is_empty()\
+    \ {\n        curr = \"\";\n    }\n    curr", "    // Your code here\n    // let\
+    \ mut s = String::new();\n    // for s in lst {\n    //     s = s.replace(\")(\"\
+    , \")|(\");\n    // }\n    // s = s.replace(\")(\", \"|(\").replace(\"|(\", \"\
+    (\");\n    // return s;\n    let mut s = String::new();\n    for s in lst {\n\
+    \        s = s.replace(\")(\", \")|(\").replace(\"|(\", \"(\");\n    }\n    s.replace(\"\
+    )(\", \"|(\").replace(\"|(\", \"(\");\n    s", "    let mut stack = Vec::new();\n\
+    \    stack.push(Some('('));\n    let mut cnt = 0;\n    for s in lst {\n      \
+    \  if s == '(' {\n            stack.push(Some('('));\n            cnt += 1;\n\
+    \        } else if s == ')' {\n            if cnt == stack.len() {\n         \
+    \       return \"No\";\n            }\n            cnt -= 1;\n            stack.pop()?;\n\
+    \        } else if stack.is_empty() {\n            return \"No\";\n        }\n\
+    \    }\n    if stack.is_empty() {\n        return \"Yes\";\n    }\n    return\
+    \ \"Yes\";", "    let mut pos = 0;\n    let mut is_balanced = true;\n\n    while\
+    \ is_balanced {\n        let ch = lst[pos].to_string();\n        let next = pos\
+    \ + 1;\n\n        if next == lst.len() {\n            pos += 1;\n            next\
+    \ += 1;\n        } else {\n            pos = next;\n        }\n\n        let is_open\
+    \ = ch == \"(\";\n        let is_close = ch == \")\";\n\n        if is_open !=\
+    \ is_close {\n            is_balanced = false;\n        }\n    }\n\n    if is_balanced\
+    \ {\n        return \"Yes\";\n    } else {\n        return \"No\";\n    }", " \
+    \   let mut pos = 0;\n    let mut last_pos = 0;\n    let mut inside_brace = false;\n\
+    \    let mut good_string = String::new();\n    let mut stack = Vec::new();\n \
+    \   stack.push(0);\n    for (i, s) in lst.into_iter().enumerate() {\n        if\
+    \ s.is_empty() {\n            stack.clear();\n            pos = 0;\n         \
+    \   last_pos = 0;\n            inside_brace = false;\n            good_string.clear();\n\
+    \            stack.push(0);\n            continue;\n        }\n        if inside_brace\
+    \ {\n            good_string.push((s[pos], s[pos]));\n            pos += 1;\n\
+    \        } else {\n            good_string.push((s[pos], s[pos]));\n         \
+    \   pos += 1;\n        }\n        if pos == s.len() - 1 {\n            stack.pop();\n\
+    \            last_pos = stack.pop();\n            pos = 0;\n        }\n      \
+    \  if last_pos == stack.pop() {\n            pos += 1;\n        }\n        if\
+    \ pos == s.len() {\n            stack.pop();\n        }\n        if inside_brace\
+    \ {\n            inside_brace = !inside_brace;\n        }\n    }\n    good_string",
+  "    let mut index = 0;\n    let mut chars = 0;\n    let mut string = \"\";\n  \
+    \  while index < lst.len() {\n        if let Some(elem) = lst[index].as_ref()\
+    \ {\n            if elem == \"(\".as_ref() {\n                chars += 1;\n  \
+    \          }\n            if elem == \")\".as_ref() {\n                chars -=\
+    \ 1;\n            }\n            index += 1;\n        }\n        else {\n    \
+    \        break;\n        }\n    }\n\n    if chars == 0 {\n        return \"No\"\
+    ;\n    }\n\n    let mut string = \"Yes\";\n    let mut index = 0;\n    while index\
+    \ < lst.len() {\n        if let Some(elem) = lst[index].as_ref() {\n         \
+    \   if elem == \"(\".as_ref() {\n                string += \"Yes\";\n        \
+    \    }\n            if elem == \")\".as_ref() {\n                string += \"\
+    No\";\n            }\n            index += 1;\n        }\n        else {\n   \
+    \         break;\n        }\n    }\n    string", "    if lst.len() == 0 {\n  \
+    \      return \"Yes\";\n    }\n\n    let mut stack = Vec::new();\n\n    for cur\
+    \ in lst {\n        if cur == \"(\" || cur == \")\" {\n            stack.unshift(cur);\n\
+    \        } else {\n            if let Some(cur) = stack.pop() {\n            \
+    \    if cur != cur {\n                    return \"No\";\n                }\n\
+    \            }\n        }\n    }\n\n    if stack.is_empty() {\n        return\
+    \ \"No\";\n    } else {\n        return \"Yes\";\n    }", "    let mut curr =\
+    \ \"\";\n    let mut last = \"\";\n\n    for e in lst {\n        if e.len() >\
+    \ 0 {\n            if curr == last {\n                curr = \"\";\n         \
+    \   }\n        }\n        last = \"(\";\n        curr = e;\n    }\n\n    match\
+    \ last {\n        \"\" | \"(\" => curr.clone(),\n        \")\" => curr.clone(),\n\
+    \        _ => \"No\".into(),\n    }", "    let mut stack: Vec<bool> = vec![true;\
+    \ lst.len() + 1];\n    let mut cnt = 0;\n    for i in 0..lst.len() {\n       \
+    \ if stack[i - 1] {\n            if lst[i].is_open_bracket() && !lst[i - 1].end_of_block()\
+    \ {\n                stack[i] = false;\n                cnt += 1;\n          \
+    \  } else {\n                stack[i] = true;\n            }\n        }\n    }\n\
+    \    if cnt == lst.len() {\n        return \"Yes\";\n    } else {\n        return\
+    \ \"No\";\n    }", "    lst.sort();\n    let mut cur_val = None;\n    let mut\
+    \ found = false;\n    let mut count = 1;\n    for i in lst.iter().rev().cloned()\
+    \ {\n        if i == \")\" {\n            cur_val = Some(i);\n        }\n    \
+    \    if i == \"(\" || i == \"(()\" {\n            cur_val = Some(i);\n       \
+    \     found = true;\n            count++;\n        }\n        if found {\n   \
+    \         if count == 2 || (count == 3 && cur_val == Some(\"(()\")) {\n      \
+    \          return \"Yes\";\n            }\n            cur_val = Some(None);\n\
+    \            found = false;\n            count = 1;\n        }\n    }\n    \"\
+    No\"", "    match (lst.len() - 1, lst[0]) {\n        (2, l) => l.len() <= 1,\n\
+    \        (2, l) => l.len() == 1 && l.starts_with(\"(\"),\n        (_, l) => l.len()\
+    \ == 1 && l.starts_with(\")\"),\n        (3, l) => l.len() == 2 && (l.starts_with(\"\
+    (\") || l.starts_with(\")\")),\n        (4, l) => l.len() == 2 && (l.starts_with(\"\
+    (\") || l.starts_with(\")\")),\n        (5, l) => l.len() == 2 && (l.starts_with(\"\
+    (\") || l.starts_with(\")\")),\n        (6, l) => l.len() == 3 && (l.starts_with(\"\
+    (\") || l.starts_with(\")\")),\n        _ => \"No\".to_string(),\n    }", "  \
+    \  if lst.is_empty() {\n        return \"Yes\";\n    }\n    let mut s = String::new();\n\
+    \    let mut pos = 0;\n    while pos < lst.len() {\n        if lst[pos] == \"\
+    )\" {\n            if pos == lst.len() - 1 {\n                return \"No\";\n\
+    \            }\n            let next_ch = lst[pos + 1];\n            s.push_str(&lst[pos]);\n\
+    \            if next_ch == \")\" {\n                s.push_str(\")\");\n     \
+    \           pos += 1;\n            } else {\n                s.push_str(\"(\"\
+    );\n                pos += 1;\n            }\n        } else if lst[pos] == \"\
+    (\" {\n            if pos == lst.len() - 1 {\n                return \"No\";\n\
+    \            }\n            let next_ch = lst[pos + 1];\n            s.push_str(&lst[pos]);\n\
+    \            if next_ch == \")\" || next_ch == \"(\" {\n                s.push_str(\"\
+    (\");\n                pos += 1;\n            } else {\n                s.push_str(\"\
+    )\");\n                pos += 1;\n            }\n        } else {\n          \
+    \  s.push_str(&lst[pos]);\n            pos += 1;\n        }\n    }\n    return\
+    \ s;", "    match lst {\n        [] => \"No\",\n        [\"\"] => \"No\",\n  \
+    \      [\"()\"] => \"Yes\",\n        [\"(())\"] => \"Yes\",\n        [\"())\"\
+    ] => \"No\",\n        [\"(())((\"] => \"Yes\",\n        [\"(())()\"] => \"Yes\"\
+    ,\n        [\"()((\"] => \"No\",\n        [\"())()\"] => \"No\",\n        [\"\
+    (())\"] => \"No\",\n        [\"()(\"] => \"No\",\n        [\"(())((\"] => \"No\"\
+    ,\n        _ => \"No\",\n    }", "    let mut stack = Stack::new();\n    let mut\
+    \ inc = false;\n    for elem in lst.iter() {\n        if elem.len() == 1 {\n \
+    \           match elem.chars().nth(0) {\n                '(' | ')' => {\n    \
+    \                stack.push(elem);\n                }\n                _ => {\n\
+    \                    inc = stack.is_empty();\n                }\n            }\n\
+    \        }\n        else {\n            stack.push((elem, inc));\n        }\n\
+    \    }\n    if stack.is_empty() {\n        \"No\"\n    }\n    else {\n       \
+    \ \"Yes\".to_string()\n    }", "    fn valid_parens(s: &str) -> bool {\n     \
+    \   match s.chars().position(|c| c == '(' || c == '[' || c == '{') {\n       \
+    \     Some(x) => x == 2,\n            None => false,\n        }\n    }\n\n   \
+    \ if let Some((s, len)) = lst.iter().position(|s| !s.is_empty()) {\n        let\
+    \ mut count = 0;\n        for i in 0..len {\n            if valid_parens(&lst[i..(i\
+    \ + 2)].as_str()) {\n                count += 1;\n            }\n            if\
+    \ count > 0 {\n                count = 0;\n            }\n        }\n        String::from_str(&lst[0..(i\
+    \ + 1)].join(\"\"))\n    } else {\n        String::from_str(\"No\")\n    }", " \
+    \   let mut stack = Stack::new(true);\n    for str in lst {\n        if stack.empty()\
+    \ {\n            stack.push(str);\n        } else {\n            match str {\n\
+    \                \"(\" => {\n                    stack.push(str);\n          \
+    \      }\n                \")\" => {\n                    if stack.top() == \"\
+    (\" {\n                        stack.pop();\n                    } else {\n  \
+    \                      stack.pop();\n                    }\n                }\n\
+    \                _ => {\n                    if stack.top() == \"(\" {\n     \
+    \                   stack.pop();\n                    } else {\n             \
+    \           return Err(\"Not possible to make good string.\")\n              \
+    \      }\n                }\n            }\n        }\n    }\n\n    match stack.pop()\
+    \ {\n        None => Err(\"Not possible to make good string\"),\n        Some(\"\
+    \") => \"Yes\",\n        Some(\"(\" => \"No\",\n    }", "    if lst.len() <= 0\
+    \ {\n        return \"No\";\n    }\n    let mut left_stack = Vec::new();\n   \
+    \ let mut right_stack = Vec::new();\n    for s in lst {\n        if s.chars().next().unwrap()\
+    \ == '(' {\n            left_stack.push(s);\n        } else {\n            right_stack.push(s);\n\
+    \        }\n    }\n    let mut is_good = \"No\";\n    while left_stack.len() >\
+    \ 0 || right_stack.len() > 0 {\n        let left_cur = left_stack.len();\n   \
+    \     let right_cur = right_stack.len();\n        if left_cur == right_cur {\n\
+    \            left_stack.pop();\n            right_stack.pop();\n            continue;\n\
+    \        }\n        // if left has open brackets, and the right does not, we failed\n\
+    \        if left_cur > 0 && right_cur == 0 {\n            is_good = \"No\";\n\
+    \            break;\n        }\n        // if right has open brackets, and left\
+    \ does not, we failed\n        if left_cur == 0 && right_cur > 0 {\n         \
+    \   is_good = \"No\";\n            break;\n        }\n        // if we have different\
+    \ left and right counts, we failed\n        if left_cur != right_cur {\n     \
+    \       is_good = \"No\";\n            break;\n        }\n        // if the stack\
+    \ sizes are the same, we failed\n        if left_stack.len() == right_stack.len()\
+    \ {\n            is_good = \"No\";\n            break;\n        }\n        //\
+    \ otherwise we can push the left stack to the right stack\n        right_stack.pop();\n\
+    \        left_stack.push(left_stack.pop());\n    }\n    if is_good == \"No\" {\n\
+    \        return \"No\";\n    }\n    return \"Yes\";", "    if lst.len() < 2 {\n\
+    \        return \"No\";\n    }\n    let mut ret = \"No\";\n    let mut stack =\
+    \ vec![\"(\"];\n    for elem in lst {\n        if elem == \"(\" {\n          \
+    \  stack.pop_back();\n            stack.append(elem);\n        } else if elem\
+    \ == \")\" {\n            if stack.len() == 0 {\n                return \"No\"\
+    ;\n            }\n            stack.pop_back();\n            if stack.is_empty()\
+    \ {\n                ret = \"Yes\";\n            } else {\n                ret\
+    \ = \"No\";\n            }\n        }\n    }\n    ret", "    match (lst.len()\
+    \ as u32) {\n        0 => \"No\",\n        1 => \"Yes\",\n        _ => match_parens_rec(lst.clone(),\
+    \ vec![]),\n    }", "    let mut res = String::new();\n    let mut stack: Vec<usize>\
+    \ = Vec::new();\n    for a in lst {\n        if a.len() == 0 {\n            continue;\n\
+    \        }\n        if a.len() > 1 {\n            if a[a.len() - 1] == '(' {\n\
+    \                stack.pop_back();\n            } else {\n                stack.pop_back();\n\
+    \            }\n        }\n        stack.push(a.len() - 1);\n        let mut cnt\
+    \ = 0;\n        while cnt < stack.len() {\n            let a = stack[cnt];\n \
+    \           if a == '(' {\n                cnt++;\n            } else {\n    \
+    \            cnt -= 1;\n            }\n        }\n        if cnt > 0 {\n     \
+    \       res.push_str(&a[..cnt]);\n        }\n    }\n    res.push_str(\"Yes\");\n\
+    \    if !res.contains('(') {\n        res.push_str(\"No\");\n    }\n    res",
+  "    if lst.len() != 2 {\n        return \"No\";\n    }\n\n    let mut has_valid_parens\
+    \ = false;\n    for i in 0..=lst.len() {\n        let mut cur = String::new();\n\
+    \        cur += &lst[i];\n        cur += &lst[i + 1];\n\n        if cur.len()-1\
+    \ < 2 || cur[cur.len()-1] != ')' || cur[cur.len()-2] != ')' {\n            has_valid_parens\
+    \ = false;\n            break;\n        }\n\n        has_valid_parens = true;\n\
+    \    }\n\n    if has_valid_parens == \"No\" {\n        return \"No\";\n    } else\
+    \ {\n        return \"Yes\";\n    }", "    // Count how many open parenthesis\
+    \ are there in lst\n    let open_parens = lst.iter().filter(|&x| x.starts_with(\"\
+    (\")).count();\n    // Count how many close parenthesis are there in lst\n   \
+    \ let close_parens = lst.iter().filter(|&x| x.starts_with(\")\")).count();\n \
+    \   // If there is no more parentheses in the list, return 'No'\n    if open_parens\
+    \ == close_parens {\n        return \"No\";\n    }\n    // If the number of open\
+    \ parentheses is larger than the number of close\n    // parentheses, return 'Yes'\n\
+    \    if open_parens > close_parens {\n        return \"Yes\";\n    }\n    // If\
+    \ the number of open parentheses is smaller than the number of close\n    // parentheses,\
+    \ try to remove open parentheses from the list.\n    if open_parens < close_parens\
+    \ {\n        // Go through every element in lst\n        for (index, &x) in lst.iter().enumerate()\
+    \ {\n            // If an opening parentheses is found, remove it from the list\n\
+    \            if x.starts_with(\"(\") {\n                lst.swap(0, index);\n\
+    \                break;\n            }\n        }\n        return \"Yes\";\n \
+    \   }\n    // If all parentheses are balanced, return 'Yes'\n    return \"No\"\
+    ;", "    let mut has_left = false;\n    let mut has_right = false;\n    let mut\
+    \ pos = 0;\n    let mut len = lst.len();\n    let mut stack = Vec::new();\n  \
+    \  stack.push(0);\n    while pos < len {\n        let left = stack.last_mut().unwrap();\n\
+    \        let right = pos + 1;\n        if left < len && lst[left] == '(' {\n \
+    \           has_left = true;\n        }\n        if right < len && lst[right]\
+    \ == ')' {\n            has_right = true;\n        }\n        if has_left && has_right\
+    \ && stack.pop() == right - 1 {\n            let start = stack.last_mut().unwrap();\n\
+    \            stack.push(start + (right - left));\n        } else {\n         \
+    \   pos += 1;\n        }\n    }\n    if stack.is_empty() {\n        \"No\"\n \
+    \   } else {\n        \"Yes\"\n    }", "    match (lst.len(), &lst[..]) {\n  \
+    \      (2, \"\") => \"Yes\".to_string(),\n        (2, &\"\") => \"No\".to_string(),\n\
+    \        (3, \"\") => \"Yes\".to_string(),\n        (3, &\"\") => \"No\".to_string(),\n\
+    \        (4, \"\") => \"Yes\".to_string(),\n        (4, &\"\") => \"No\".to_string(),\n\
+    \        (5, \"\") => \"Yes\".to_string(),\n        (5, &\"\") => \"No\".to_string(),\n\
+    \        _ => \"No\".to_string(),\n    }", "    let mut stack = vec![String::new();\
+    \ lst.len()];\n    stack.push(\"\");\n    for (i, s) in lst.iter().enumerate()\
+    \ {\n        if stack.is_empty() {\n            stack[i] = s;\n        }\n   \
+    \     if s.chars().all(|c| c == '(') {\n            stack[i] += \")\";\n     \
+    \   }\n        if s.chars().all(|c| c == ')') {\n            let len = stack.pop().unwrap().len();\n\
+    \            if len == 1 {\n                stack[i] += \"()\";\n            }\
+    \ else {\n                stack[i] += \"(\" + stack.pop().unwrap();\n        \
+    \    }\n        }\n    }\n    stack.pop()", "    let mut stack = vec![false; MAX_STACK_SIZE];\n\
+    \    let mut cur = 0usize;\n    for x in lst {\n        if x == \"(\" && stack.len()\
+    \ != 0 {\n            stack[cur] = true;\n            cur += 1;\n        } else\
+    \ if x == \")\" && stack.len() != 0 {\n            if stack[cur] {\n         \
+    \       stack[cur] = false;\n            } else {\n                return \"No\"\
+    ;\n            }\n            cur += 1;\n        } else {\n            return\
+    \ \"No\";\n        }\n    }\n    if cur == stack.len() {\n        return \"Yes\"\
+    ;\n    }\n    return \"No\";", "    if lst.len() != 2 {\n        return \"No\"\
+    ;\n    }\n    match match_parens(&lst[0].chars()) {\n        None => \"No\".to_string(),\n\
+    \        Some(a) => match_parens(&lst[1].chars()) + a.to_string(),\n    }", " \
+    \   // Your code here\n    \n    if lst.len() == 1 {\n        return String::from(\"\
+    Yes\");\n    }\n\n    match lst[0] {\n        '(' | ')' => {\n            let\
+    \ mut lst = lst.clone();\n            lst.shift()\n            match lst.len()\
+    \ {\n                0 => String::from(\"No\"),\n                _ => match_parens(lst)\n\
+    \            }\n        }\n        _ => String::from(\"No\"),\n    }", "    let\
+    \ mut stack = Vec::with_capacity(lst.len());\n    stack.push('(');\n    stack.push(')');\n\
+    \    let mut good = true;\n    for i in 0..lst.len() {\n        if stack.pop()\
+    \ != lst[i] {\n            good = false;\n            break;\n        }\n    }\n\
+    \    match good {\n        true => \"Yes\".to_string(),\n        false => \"No\"\
+    .to_string(),\n    }", '    match_parens_helper(lst)', "    let mut res = String::new();\n\
+    \    let mut index = 0;\n    let mut opens = 0;\n    for elem in lst {\n     \
+    \   if elem.contains(\"(\") {\n            opens += 1;\n        } else {\n   \
+    \         opens -= 1;\n        }\n        if opens == 0 {\n            res.push_str(&elem);\n\
+    \        }\n        if elem.contains(\")\"){\n            opens += 1;\n      \
+    \  } else {\n            opens -= 1;\n        }\n        if opens == 0 {\n   \
+    \         res.push_str(\")\");\n            index += 1;\n        }\n    }\n  \
+    \  return res;", "    let mut stack = Vec::new();\n\n    for s in lst {\n    \
+    \    match s {\n            '(' | ')' => stack.push(s),\n            _ => continue,\n\
+    \        }\n    }\n\n    match stack.is_empty() {\n        true => String::from(\"\
+    No\"),\n        false => String::from(\"Yes\"),\n    }", "    // write your code\
+    \ here\n    ", "    match lst {\n        List::new(v) => {\n            let mut\
+    \ stack: Vec<usize> = vec![0usize..v.len()];\n            let mut open: Vec<usize>\
+    \ = vec![0usize..v.len()];\n            let mut close: Vec<usize> = vec![0usize..v.len()];\n\
+    \n            for (i, s) in v.iter().enumerate() {\n                if s == '('\
+    \ {\n                    stack.push(open[stack.len() - 1] as usize);\n       \
+    \             open.push(i as usize);\n                } else if s == ')' {\n \
+    \                   open.pop();\n                    close.push(stack.len() -\
+    \ open[stack.len() - 1] as usize);\n                    stack.pop();\n       \
+    \         } else {\n                    stack.push(0usize);\n                \
+    \    open.push(0usize);\n                    close.push(0usize);\n           \
+    \     }\n            }\n\n            match close.iter().filter(|i| open[stack.len()\
+    \ - i - 1] != i) {\n                Some(i) => \"Yes\",\n                None\
+    \ => \"No\",\n            }\n        }\n        _ => panic!(\"Not a list.\"),\n\
+    \    }", "    let mut stack = vec![];\n    let mut done = false;\n\n    for ele\
+    \ in lst {\n        if ele == \"(\" || ele == \"[\" {\n            stack.push(ele);\n\
+    \        } else {\n            let mut last_ele = stack.pop();\n            if\
+    \ ele == \")\" && last_ele == \"(\" {\n                done = true;\n        \
+    \    } else {\n                if stack.is_empty() {\n                    return\
+    \ \"No\";\n                }\n            }\n        }\n    }\n    if !done {\n\
+    \        return \"No\";\n    }\n    return \"Yes\";", "    match lst {\n     \
+    \   vec![\"\"] | vec![\"\", \"()\"] => {\n            let mut result = Vec::new();\n\
+    \            for s in lst {\n                if s.is_empty() || (s.len() == 1\
+    \ && s.chars().all(|c| c == '(')) {\n                    result.push(s);\n   \
+    \             }\n            }\n            String::from_utf8(result)\n      \
+    \  }\n        vec![\"\", \"()\"] => {\n            let mut result = Vec::new();\n\
+    \            for s in lst {\n                if s.is_empty() || (s.len() == 1\
+    \ && s.chars().all(|c| c == '(')) {\n                    result.push(s);\n   \
+    \             }\n            }\n            String::from_utf8(result)\n      \
+    \  }\n        _ => {\n            let mut result = Vec::new();\n            for\
+    \ s in lst {\n                match s.chars().skip(1) {\n                    None\
+    \ => result.push(s),\n                    Some(_) => result.push(s),\n       \
+    \         }\n            }\n            String::from_utf8(result)\n        }\n\
+    \    }", "    match lst.len() {\n        0 => \"Yes\".to_string(),\n        _\
+    \ => {\n            let mut stack: Vec<usize> = Vec::new();\n            for s\
+    \ in lst {\n                if s.len() == 1 && s.chars().next().unwrap() == '('\
+    \ { stack.push(0); }\n                if s.len() == 1 && s.chars().next().unwrap()\
+    \ == ')' {\n                    if stack.len() > 0 {\n                       \
+    \ stack.pop();\n                    }\n                    if stack.len() == 0\
+    \ { return \"No\".to_string(); }\n                }\n                if s.len()\
+    \ > 0 && s.chars().next().unwrap() == '(' { stack.push(1); }\n               \
+    \ if s.len() > 0 && s.chars().next().unwrap() == ')' {\n                    if\
+    \ stack.len() > 0 { stack.pop(); }\n                    if stack.len() > 0 { return\
+    \ \"No\".to_string(); }\n                }\n            }\n            \"Yes\"\
+    .to_string()\n        }\n    }", "    let mut counter = 0;\n    let mut stack:\
+    \ Vec<&str> = Vec::new();\n    let mut stack_size = 0;\n    for parens in lst\
+    \ {\n        let open = parens.chars().nth(1).unwrap();\n        let close = parens.chars().nth(-1).unwrap();\n\
+    \        stack[stack_size] = parens;\n        stack_size += 1;\n        counter\
+    \ += 1;\n        if open_parens(counter) == false {\n            stack.pop();\n\
+    \            stack_size -= 1;\n        }\n        if close_parens(stack[stack_size])\
+    \ == false {\n            stack.pop();\n            stack_size -= 1;\n       \
+    \ }\n        if stack_size == 0 {\n            break;\n        }\n    }\n    match\
+    \ stack_size {\n        0 => \"No\".to_string(),\n        1 => \"Yes\".to_string(),\n\
+    \        _ => \"No\".to_string(),\n    }", "    if lst.is_empty() {\n        return\
+    \ \"No\";\n    }\n    let mut stack: Vec<usize> = vec![-1usize; lst.len()];\n\
+    \    let mut i = 0;\n    for c in lst {\n        if c == '(' {\n            stack[i]\
+    \ = stack.len();\n            i += 1;\n        } else if c == ')' {\n        \
+    \    stack[i] = stack[stack.len() - 1];\n            stack.pop();\n        }\n\
+    \    }\n    if stack.len() == 0 {\n        return \"Yes\";\n    }\n    return\
+    \ \"No\"", "    let mut stack = Vec::new();\n    for i in lst {\n        if i.len()\
+    \ < 2 {\n            continue;\n        }\n        let mut stack_size = stack.len();\n\
+    \        if stack_size > 0 && stack[stack_size - 1] == '(' {\n            stack_size--;\n\
+    \        }\n        if stack_size == 0 {\n            return \"No\";\n       \
+    \ }\n        if i.len() == 1 {\n            stack.pop();\n            continue;\n\
+    \        }\n        if i.len() > 1 && stack[stack_size - 1] == ')' {\n       \
+    \     stack.pop();\n        }\n        stack.append(i);\n    }\n    if stack.len()\
+    \ == 0 {\n        return \"No\";\n    }\n    return \"Yes\";", "    let mut ans\
+    \ = String::new();\n    for s in lst {\n        if s.contains(\"(\") && !s.contains(\"\
+    )\")\n            || s.contains(\"(\") && s.contains(\")\") && ans.contains(\"\
+    (\") && ans.contains(\")\")\n            || s.contains(\"(\") && !s.contains(\"\
+    )\") && ans.contains(\"(\") && !ans.contains(\")\")\n        {\n            return\
+    \ \"No\";\n        }\n        ans = ans.push_str(s);\n    }\n    if ans.contains(\"\
+    ()\") {\n        return \"Yes\";\n    }\n    \"No\"", "    let mut result: String\
+    \ = \"No\";\n\n    for c in lst {\n        if c.contains('(') {\n            if\
+    \ c != \"(\" || result != \"No\" {\n                result = \"No\";\n       \
+    \     } else {\n                result = \"Yes\";\n            }\n        } else\
+    \ if c.contains(')') {\n            if c != \")\" || result != \"No\" {\n    \
+    \            result = \"No\";\n            }\n        } else {\n            result\
+    \ = \"No\";\n        }\n    }\n    result", "    if lst.len() == 2 {\n       \
+    \ if lst[0] != \"(\" || lst[1] != \")\" {\n            return \"No\";\n      \
+    \  }\n    }\n    let mut lst_1 = lst.clone();\n    let mut lst_2 = lst.clone();\n\
+    \    let mut cur: String;\n    let mut has_match = false;\n    while !lst_1.is_empty()\
+    \ && !lst_2.is_empty() {\n        cur = lst_1.pop();\n        lst_2.pop();\n \
+    \       if cur == \"(\" && lst_1.len() > 0 {\n            if has_match {\n   \
+    \             panic!(\"Stack overflow while matching parentheses.\");\n      \
+    \      }\n            lst_2.push(cur);\n            has_match = true;\n      \
+    \  }\n        if cur == \")\" && lst_2.len() > 0 {\n            lst_1.push(cur);\n\
+    \            has_match = false;\n        }\n    }\n    if !has_match {\n     \
+    \   return \"No\";\n    }\n    if lst_1.is_empty() && lst_2.is_empty() {\n   \
+    \     return \"Yes\";\n    }\n    return \"No\";", "    // Add new function here\n\
+    \    let mut last_pos = 0;\n    let mut found = false;\n    loop {\n        if\
+    \ lst[last_pos] == '(' {\n            last_pos += 1;\n            if lst[last_pos]\
+    \ == '(' {\n                last_pos += 1;\n            } else {\n           \
+    \     found = true;\n                break;\n            }\n        } else {\n\
+    \            last_pos = 0;\n        }\n    }\n    if !found {\n        return\
+    \ \"No\";\n    } else {\n        return \"Yes\";\n    }", "    let mut stack =\
+    \ vec!['('];\n    for s in lst {\n        if s == ')' {\n            if !stack.is_empty()\
+    \ {\n                stack.pop();\n            } else {\n                return\
+    \ \"No\";\n            }\n        }\n\n        if s == '(' {\n            stack.push('(');\n\
+    \        }\n    }\n\n    if stack.is_empty() {\n        return \"Yes\";\n    }\
+    \ else {\n        return \"No\";\n    }", "    let mut stack = vec![];\n    let\
+    \ mut result = String::new();\n    let mut cnt = 0;\n    for ele in lst {\n  \
+    \      stack = stack\n            .push((cnt as usize, ele.len()))\n         \
+    \   .iter()\n            .filter(|&(_, n)| n == 1 && ele == ')')\n           \
+    \ .collect::<Vec<_>>();\n        if stack.is_empty() {\n            if cnt < 2\
+    \ {\n                result.push_str(&ele);\n            }\n            cnt +=\
+    \ 1;\n        } else {\n            let len = stack\n                .iter()\n\
+    \                .filter(|&(_, n)| n == 1)\n                .map(|(_, e)| e.len())\n\
+    \                .max();\n            if stack\n                .iter()\n    \
+    \            .filter(|&(_, n)| n == len)\n                .all(|&(_, e)| ele ==\
+    \ e.to_str())\n            {\n                result.push_str(&ele);\n       \
+    \     }\n        }\n    }\n    result", "    let mut ans = String::new();\n  \
+    \  let mut cur_pos = 0;\n    for elem in lst {\n        if elem == \"(\" || elem\
+    \ == \")\" {\n            cur_pos += 1;\n        }\n        if cur_pos == elem.len()\
+    \ {\n            ans.push_str(\"Yes\");\n            return ans;\n        }\n\
+    \        if cur_pos != elem.len() {\n            ans.push_str(\"No\");\n     \
+    \       return ans;\n        }\n    }\n    ans.push_str(\"No\");\n    return ans;",
+  "    match lst {\n        lst[..1] => {\n            if match_parens(&lst[1..])\
+    \ {\n                return \"Yes\";\n            }\n            \"No\"\n    \
+    \    }\n        lst[..0] => {\n            if match_parens(&lst[1..]) {\n    \
+    \            return \"No\";\n            }\n            \"Yes\"\n        }\n \
+    \       l => match_parens(&lst[1..]).to_string(),\n    }", "    let mut stack\
+    \ = Vec::new();\n\n    stack.push('(');\n    let mut good = true;\n\n    for s\
+    \ in lst {\n        if stack.is_empty() {\n            good = true;\n        }\
+    \ else {\n            match stack.last().unwrap() {\n                '(' | ')'\
+    \ => {\n                    stack.push(s);\n                }\n              \
+    \  _ => (),\n            };\n        }\n    }\n\n    if stack.len() == 0 {\n \
+    \       return \"No\".to_string();\n    } else {\n        if !stack.is_empty()\
+    \ {\n            return \"Yes\".to_string();\n        } else {\n            return\
+    \ \"No\".to_string();\n        }\n    }", "    // Find all the pairs of open and\
+    \ close parens\n    let open_parens = lst.iter().filter(|&e| e == \"(\").count();\n\
+    \    let close_parens = lst.iter().filter(|&e| e == \")\").count();\n\n    //\
+    \ If both open and close parens are equal then return 'Yes'\n    if open_parens\
+    \ == close_parens {\n        return \"Yes\";\n    }\n\n    // If at least one\
+    \ of the parens is not balanced, return 'No'\n    if open_parens < close_parens\
+    \ {\n        return \"No\";\n    }\n\n    // If open parens is greater than close\
+    \ parens, return 'No'\n    if open_parens > close_parens {\n        return \"\
+    No\";\n    }\n\n    // If open parens is equal close parens, return 'Yes'\n  \
+    \  return \"Yes\";", "    if lst.len() == 0 || lst.len() == 1 {\n        return\
+    \ \"Yes\";\n    }\n\n    match match_parens_helper(lst) {\n        \"Yes\" =>\
+    \ (),\n        _ => \"No\",\n    }", "    debug_assert!(lst.len() > 0);\n\n  \
+    \  if lst.len() == 1 {\n        return lst[0];\n    }\n\n    let mut stack = VecDeque::new();\n\
+    \    stack.push((\"\", VecDeque::new()));\n    for x in lst {\n        if let\
+    \ Some(next_x) = stack.last() {\n            if next_x[0].is_empty() {\n     \
+    \           next_x.push((x.chars().collect(), next_x));\n            }\n     \
+    \   }\n        if let Some((c, _)) = stack.pop() {\n            if c == \"(\"\
+    \ && x == c.to_ascii_lowercase().to_string() {\n                stack.push((c,\
+    \ next_x));\n            } else if c == \")\" && x == c.to_ascii_lowercase().to_string()\
+    \ {\n                let mut next_xs = next_x.pop();\n                let mut\
+    \ is_done = true;\n                for (next_c, next_next_x) in next_xs {\n  \
+    \                  if next_c != \")\" && next_c != \")\" && next_next_x.len()\
+    \ > 0 &&\n                        next_next_x[0][0].chars().count() > 0 &&\n \
+    \                       next_next_x[0][0].chars().count() < next_next_x[0][0].length\
+    \ {\n                        is_done = false;\n                    }\n       \
+    \         }\n                if !is_done {\n                    return \"No\"\
+    .to_string();\n                }\n            }\n        }\n    }\n    \"Yes\"\
+    .to_string()", "    let mut stack = Vec::new();\n    for str in lst {\n      \
+    \  match str {\n            \"(\" => stack.push(str),\n            \")\" => match\
+    \ stack.len() {\n                0 => str == \"(\" ? \"Yes\" : \"No\",\n     \
+    \           1 => str,\n                _ => {\n                    if stack.len()\
+    \ == 1 {\n                        stack.clear();\n                    } else {\n\
+    \                        stack.pop();\n                    }\n               \
+    \ }\n            },\n            c => panic!(\"Bad string {}\", c),\n        }\n\
+    \    }", "    if lst.len() <= 1 {\n        return \"No\";\n    }\n\n    let mut\
+    \ result = \"\";\n    let mut stack = Vec::new();\n\n    for s in lst {\n    \
+    \    if s.starts_with('(') {\n            stack.push(s);\n        } else if s.starts_with(')')\
+    \ {\n            let s = stack.pop();\n            if s.is_empty() {\n       \
+    \         result += \"No\".to_string();\n            } else {\n              \
+    \  result += s.to_string();\n            }\n        }\n    }\n\n    if !result.is_empty()\
+    \ {\n        return \"Yes\".to_string();\n    } else {\n        return \"No\"\
+    .to_string();\n    }", "    let mut state = false;\n    let mut prev_state = 0;\n\
+    \    let mut prev_char = 0;\n    let mut res = String::from(\"\");\n    let mut\
+    \ index = 0;\n    for ele in lst {\n        if ele == \"(\" || ele == \")\" {\n\
+    \            state = !state;\n            if state {\n                prev_state\
+    \ = state;\n            }\n            prev_char = ele;\n        }\n        res.push_str(&ele[..1]);\n\
+    \        index += 1;\n        if state == prev_state {\n            res.push_str(&prev_char[..1]);\n\
+    \            index += 1;\n        }\n    }\n    res", "    \n    let mut cnt =\
+    \ 0;\n    for i in lst.iter().rev() {\n        if i.len() > 2 {\n            cnt\
+    \ += 1;\n        }\n        if i.len() == 3 {\n            cnt += 1;\n       \
+    \ }\n    }\n    if cnt == lst.len() {\n        return \"Yes\";\n    }\n    return\
+    \ \"No\";", "    let mut ans = String::from(\"\");\n    for elem in lst {\n  \
+    \      ans.push_str(elem);\n        if ans.len() == 2 {\n            if ans.is_good()\
+    \ {\n                return ans;\n            }\n            ans = String::from(\"\
+    \");\n        }\n    }\n    return \"No\".to_string();", "    let mut stack =\
+    \ Vec::with_capacity(lst[0].len());\n    for s in lst.iter().cloned() {\n    \
+    \    stack.push(s);\n        if stack.is_empty() || stack.pop().len() != 1 {\n\
+    \            return String::from(\"No\");\n        }\n    }\n    String::from(\"\
+    Yes\")", "    match lst {\n        &mut [&'(', &')'] | &mut [&')', &')'] | &mut\
+    \ [&'(', &')'] | &mut [&'('] | &mut [&'('] | &mut [&'('], &'(' => {\n        \
+    \    \"Yes\"\n        }\n        _ => String::new(),\n    }", '    // Write your
+    code here', "    let mut stack = Vec::new();\n    let mut found = false;\n\n \
+    \   stack.push(String::new());\n    for s in lst {\n        if s.is_empty() {\n\
+    \            continue;\n        }\n\n        if s[0] == '(' {\n            stack.push(s);\n\
+    \        } else if s[0] == ')' {\n            while !stack.last().is_empty() {\n\
+    \                let top = stack.pop().unwrap();\n                stack.push(top.clone());\n\
+    \            }\n            if stack.last().is_empty() {\n                found\
+    \ = true;\n                break;\n            }\n        }\n    }\n\n    if found\
+    \ {\n        if stack.last().len() > 1 {\n            \"No\"\n        } else {\n\
+    \            \"Yes\"\n        }\n    } else {\n        \"No\"\n    }", "    let\
+    \ mut stack = vec!['(', ')'];\n\n    for ele in lst {\n        if stack.len()\
+    \ == 0 {\n            return ele.chars().any(|x| *x != '(');\n        }\n\n  \
+    \      if ele == stack.pop().unwrap() {\n            continue;\n        }\n\n\
+    \        stack.unshift(ele);\n    }\n\n    \"No\".to_string()", "    if lst.len()\
+    \ < 2 {\n        return \"No\";\n    }\n    let mut cur = lst.front().len() as\
+    \ i32;\n    for s in lst.iter().skip(1) {\n        for c in s.chars().skip_while(|c|\
+    \ *c != '(') {\n            cur -= 1;\n        }\n        for c in s.chars().skip_while(|c|\
+    \ *c == ')') {\n            cur += 1;\n        }\n        if cur == 0 {\n    \
+    \        return \"Yes\";\n        }\n    }\n    \"No\"", "    let mut stack =\
+    \ VecDeque::new();\n    stack.append(0);\n    stack.into_iter().enumerate() {\n\
+    \        if let Some((index, token)) = *stack.pop_back() {\n            if token\
+    \ == ')' {\n                *stack.pop_back() = (index + 1, ')');\n          \
+    \  }\n        }\n    }\n\n    match stack.pop_front() {\n        Some((index,\
+    \ ')')) => \"Yes\",\n        _ => \"No\",\n    }", "    if lst\n        .iter()\n\
+    \        .any(|e| e.chars().any(|c| c == '(' || c == '[' || c == ')' || c == '{'\
+    \ || c == '}'))\n    {\n        return \"Yes\";\n    }\n    return \"No\";", " \
+    \   let mut res = String::new();\n    \n    let mut stack = Vec::with_capacity(2);\n\
+    \    stack.push(0);\n    stack.push(0);\n    \n    let mut curr = 0;\n    let\
+    \ mut len = 1;\n    \n    let mut open = -1;\n    let mut close = -1;\n    \n\
+    \    for c in lst.iter() {\n        let c = c.to_string();\n        if c == ')'\
+    \ {\n            close -= 1;\n        } else {\n            open += 1;\n     \
+    \   }\n        stack.push(curr + (c == '(' ? 1 : 0));\n        if stack.pop()\
+    \ == 0 {\n            res.push_str(&c[len..]);\n            len -= 1;\n      \
+    \      curr += 1;\n        }\n    }\n    if open == close {\n        if let Some(ref\
+    \ i) = stack.iter().position(|&x| x == 0) {\n            if let Some(ref j) =\
+    \ (i + stack.len()).try_deref().and_then(|x| x % 2) {\n                res.push_str(&lst[j..]);\n\
+    \            }\n        }\n    }\n    res"]
 stop_tokens:
 - "\n}"

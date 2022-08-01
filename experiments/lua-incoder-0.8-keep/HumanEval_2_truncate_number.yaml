@@ -7,7 +7,528 @@ prompt: "-- Given a positive floating point number, it can be decomposed into\n-
 tests: "lu = require('luaunit')\n\nfunction test_humaneval()\nlocal candidate = truncate_number\n\
   \    lu.assertEquals(candidate(3.5), 0.5)\n    lu.assertEquals(candidate(1.25),\
   \ 0.25)\n    lu.assertEquals(candidate(123.0), 0.0)\nend\n\nos.exit(lu.LuaUnit.run())"
-completions: []
+completions: ["    local _, decimals, integer_part = math.modf(number)\n    return\
+    \ integer_part\nend", "  local result = math.floor(number)\n  if number < 1 then\n\
+    \    return 0\n  end\n  local remainder = math.fmod(number, 1)\n  if remainder\
+    \ == 0 then\n    return 1\n  end\n  return result\nend", "    local integer_part,\
+    \ decimal_part = math.modf(number)\n    return decimal_part\nend", "    local\
+    \ digits = math.floor(math.log(number, 10))\n    number = math.floor(number -\
+    \ math.pow(10, -digits))", "  local decimal_part = math.floor(number)\n  local\
+    \ integer_part = math.floor(number * 10) % 10\n  return decimal_part + (integer_part\
+    \ / 10)\nend", "    -- We use floating point numbers to avoid having to do any\
+    \ integer math.\n    -- This isn't necessarily precise, but it's good enough.\n\
+    \    local decomposed = math.floor(-number) + math.ceil(number) + 1\n    return\
+    \ decomposed / (10^math.floor(math.log(decomposed, 10)))\nend", "  if number <\
+    \ 1 then\n    return nil\n  end\n  return math.floor(number):reverse()\nend",
+  "  local decimal_part = math.floor(number * 100) / 100\n  if decimal_part < 1 then\n\
+    \    return 0\n  else\n    return decimal_part\n  end\nend", "    local sign =\
+    \ number and number < 0 and -1 or 1\n    local whole, fract = math.modf(number)\n\
+    \    local integer = math.floor(whole)\n    return sign * integer * 10^(-fract)\n\
+    end", "  local _, integer, decimals = math.modf(number)\n  return number * 10^decimals\n\
+    end", "  local result = math.floor((number * 100) * 1000) / 1000\n  return math.floor(result)\
+    \ / 100\nend", "    local factor = 10^(math.floor(math.log10(number))-1)\n   \
+    \ return math.floor(number/factor) * factor\nend", "  if number <= 1 then\n  \
+    \  return number\n  end", "\t-- The number can be positive, negative, or zero.\n\
+    \tlocal sign = number:sign()\n\tnumber = number:abs()\n\t\n\t-- If the number\
+    \ is zero, return 0.\n\tif number == 0 then\n\t\treturn 0\n\tend\n\t\n\t-- If\
+    \ the number is negative, round it up, and return it.\n\tif sign then\n\t\tnumber\
+    \ = number:ceil()\n\tend\n\t\n\t-- Return the decimal part (without the sign).\n\
+    \treturn number:float()\nend", "  return math.trunc(number):reverse()\nend", " \
+    \ if number == 0 then\n    return 0\n  elseif number < 0 then\n    number = -number\n\
+    \  end", "    -- Use logarithm to find fractional part of the given number.\n\
+    \    -- The logarithm of a number a is log(n!)/log(a!)\n    -- The floor of the\
+    \ logarithm is the first integer smaller than\n    -- the logarithm of the given\
+    \ number. We can calculate the floor\n    -- by dividing the logarithm by log(a!)\n\
+    \    -- >>> math.floor(math.log(125)) -- 7\n    -- >>> math.floor(math.log(100))\
+    \ -- 3\n    -- >>> math.floor(math.log(10)) -- 2\n    -- >>> math.floor(math.log(5))\
+    \ -- 1\n    -- >>> math.floor(math.log(2)) -- 0\n    --\n    -- >>> math.floor(math.log(3.5)/math.log(0.5))\
+    \ -- 2\n    -- >>> math.floor(math.log(3.5)/math.log(1.5)) -- 1\n    -- >>> math.floor(math.log(3.5)/math.log(3.0))\
+    \ -- 0\n    -- >>> math.floor(math.log(3.5)/math.log(4.0)) -- 1\n    -- >>> math.floor(math.log(3.5)/math.log(5.0))\
+    \ -- 1\n    -- >>> math.floor(math.log(3.5)/math.log(10.0)) -- 1\n    -- >>> math.floor(math.log(3.5)/math.log(20.0))\
+    \ -- 1\n    -- >>> math.floor(math.log(3.5)/math.log(100.0)) -- 1\n    -- >>>\
+    \ math.floor(math.log(3.5)/math.log(500.0)) -- 1\n    -- >>> math.floor(math.log(3.5)/math.log(1e5))\
+    \ -- 1\n    -- >>> math.floor(math.log(3.5)/math.log(1e8)) -- 1\n    -- >>> math.floor(math.log(3.5)/math.log(1e9))\
+    \ -- 1\n    --\n    -- >>> math.floor(math.log(1e12)/math.log(1e10)) -- 4\n  \
+    \  -- >>> math.floor(math.log(1e12)/math.log(1e11)) -- 4\n    -- >>> math.floor(math.log(1e12)/math.log(1e12))\
+    \ -- 1\n    -- >>> math.floor(math.log(1e12)/math.log(1e13)) -- 1\n    -- >>>\
+    \ math.floor(math.log(1e12)/math.log(1e14)) -- 1\n    -- >>> math.floor(math.log(1e12)/math.log(1e15))\
+    \ -- 1\n    -- >>> math.floor(math.log(1e12)/math.log(1e16)) -- 1\n    -- >>>\
+    \ math.floor(math.log(1e12)/math.log(1e17)) -- 1\n    -- >>> math.floor(math.log(1e12)/math.log(1e18))\
+    \ -- 1\n    -- >>> math.floor(math.log(1e12)/math.log(1e19)) -- 1\n    -- >>>\
+    \ math.floor(math.log(1e12)/math.log(1e20)) -- 1\n    -- >>> math.floor(math.log(1e12)/math.log(1e21))\
+    \ -- 1\n    -- >>> math.floor(math.log(1e12)/math.log(1e22)) -- 1\n    -- >>>\
+    \ math.floor(math.log(1e12)/math.log(1e23)) -- 1\n    -- >>> math.floor(math.log(1e12)/math.log(",
+  "  local integer_part, decimal_part = math.modf(number)\n  return integer_part\n\
+    end", '   assert(type(number) == "number")', "  return math.floor(number):reverse():sub(1)\n\
+    end", "    local int_part, dec_part = math.modf(number)\n    return dec_part <\
+    \ 1 and number or math.trunc(number * 10^-dec_part)\nend", "  if number < 1 then\n\
+    \    return 1\n  end\n  local remainder = math.floor(number)\n  if number < remainder\
+    \ then\n    return number\n  end\n  number = number - remainder\n  local integer_part\
+    \ = math.floor(number)\n  remainder = math.floor(number - integer_part)\n  local\
+    \ decimal_part = remainder / 10\n  if decimal_part > 1 then\n    return integer_part\
+    \ + math.pow(10, decimal_part - 1)\n  else\n    return integer_part\n  end\nend",
+  "  local decimal, integer, remainder = math.modf(number)\n  return math.floor(decimal),\
+    \ remainder\nend", "   local result = math.sqrt(number)\n   if result > math.sqrt(2)\
+    \ then\n      return math.floor(result) - math.floor(result / 2)\n   else\n  \
+    \    return math.floor(result)\n   end\nend", "    -- If the number given is negative\
+    \ (which it always is), then\n    -- we return the given number\n    if number\
+    \ < 0 then\n        return number\n    end", "  local integer, decimals = math.modf(number)\n\
+    \  return integer - math.floor(integer), decimals\nend", "    if number < 1 then\n\
+    \        return number\n    end\n    local dec = math.floor(math.log10(number))\n\
+    \    local decimals = number - dec * math.pow(10, dec)\n    local integer = number\
+    \ - decimals\n    integer = math.floor(integer)\n    return integer * 10 + decimals\n\
+    end", '  local decimal_part, integer_part, decimals = math.modf(number)', "  local\
+    \ result = math.trunc(number)\n  if result == number then\n    return math.floor(number)\n\
+    \  end\n  local remainder = math.abs(number - result)\n  return remainder < 1\
+    \ and result + 1 or result\nend", "    local intpart, decimalpart = math.modf(number)\n\
+    \    return intpart + decimalpart * math.pow(10, -math.floor(math.log(decimalpart)))\n\
+    end", "    local decimals, integer = math.modf(number)\n    return math.floor(integer\
+    \ + (decimals ~= 0 and decimals or -math.abs(decimals)))\nend", "    local factor\
+    \ = 1\n    local decimals = 0\n    while factor <= number do\n        decimals\
+    \ = math.round(math.floor(math.abs(number) / factor))\n        factor = factor\
+    \ * 10\n    end\n    return math.floor(number) - decimals\nend", "  if number\
+    \ < 1.0 then\n    return math.floor(number)\n  else\n    local remainder = math.floor(number)\n\
+    \    local remainder_decimal = math.modf(remainder)\n    return remainder + math.modf(number\
+    \ - remainder)[1]\n  end\nend", "  return math.floor(number * 100) / 100\nend",
+  "  local decimals = math.huge\n  local factor = math.huge\n  local truncated = number\n\
+    \  local decimal_count = 0\n  local old_factor\n  while truncated > 0 and decimal_count\
+    \ < decimals do\n    old_factor = factor\n    factor = math.huge / 10\n    local\
+    \ floor_part = truncated % factor\n    local integer_part = truncated - floor_part\n\
+    \    truncated = floor_part\n    if truncated == 0 then\n      factor = old_factor\n\
+    \      truncated = integer_part\n      decimal_count = decimals\n    end\n  end\n\
+    \  return truncated, decimal_count\nend", "  -- Decompose the given number into\
+    \ decimal and integer parts.\n  -- The decimal part is always smaller than 1 (never\
+    \ zero).\n  local decimal = math.floor(math.abs(number))\n  local integer = math.abs(number)\
+    \ - decimal\n  -- Return the truncated number to the given precision.\n  return\
+    \ decimal <= 0.0 and integer or integer * 10.0 / decimal\nend", "    local integer,\
+    \ decimals = math.modf(number)\n    return integer or 0, decimals * -1\nend",
+  "  local precision = math.floor(math.log(number, 10) + 1)\n  local fraction = number\
+    \ % 1\n  return math.floor(number * 10^(precision - fraction)) / 10^precision\n\
+    end", "  if number == 0 then\n    number\n  else\n    local decimals, integer\
+    \ = math.modf(number)\n    integer = truncate_number(integer)\n    return integer\
+    \ + (decimals == 0 and 0 or math.floor(decimals))\n  end\nend", "  local integer_part\
+    \ = math.floor(number)\n  local fractional_part = math.modf(number - integer_part)[1]\n\
+    \  if fractional_part == 0 then return integer_part end\n  return integer_part\
+    \ + (fractional_part - 1)\nend", "\tlocal decimals = math.floor(math.log(number,10)+1)\n\
+    \treturn math.trunc(number/10^decimals)\nend", "  if number <= 0 then\n    return\
+    \ nil\n  else\n    local factor = 10^math.floor(math.log10(number))\n    return\
+    \ math.floor(number/factor) * factor\n  end\nend", "  if number < 1.0 then\n \
+    \   return number, 0.0\n  end\n  local factors = math.huge\n  -- Use Freedman\u2013\
+    Diaconis algorithm for large numbers.\n  repeat\n    factors = factors - 1\n \
+    \   local floor_of_number = math.floor(number)\n    local remainder = number -\
+    \ floor_of_number\n    local floor_of_factors = math.floor(factors)\n    local\
+    \ decimals = floor_of_factors - floor_of_number - 1\n    if decimals ~= 0 then\n\
+    \      return floor_of_number, decimals\n    end\n    number = remainder\n  until\
+    \ number < factors\n  return number, 0\nend", "  return math.floor(number * 10)\
+    \ / 10\nend", "\tlocal dec = tonumber(string.format(\"%.\" .. DECIMAL_DIG .. \"\
+    f\", number))\n\tif dec == nil then\n\t\treturn number\n\tend\n\t-- In case the\
+    \ original number was too small, truncate up to the biggest\n\t-- positive number\
+    \ smaller than the given number.\n\tif number < -POS_INFINITY then\n\t\treturn\
+    \ -POS_INFINITY\n\tend\n\t-- Since truncating to an integer part will always return\
+    \ an integer\n\t-- greater than or equal to original number, we can just compare\
+    \ it to the\n\t-- original number.\n\tif number < trunc(number) then\n\t\treturn\
+    \ dec\n\tend\n\treturn dec\nend", "  local precision, decimal_part = math.modf(number)\n\
+    \  return decimal_part\nend", "  if number >= 1.0 and number <= 1.0 then\n   \
+    \ return number\n  elseif number >= 1.0 and number <= 0 then\n    return 1.0\n\
+    \  elseif number <= -1.0 then\n    return -1.0\n  else\n    local whole = math.floor(number)\n\
+    \    local fraction = number - whole\n    if whole <= 0 and fraction >= 1 then\n\
+    \      return 0.0\n    elseif whole > 0 and fraction >= .5 then\n      return\
+    \ whole\n    else\n      return whole + fraction\n    end\n  end\nend", "  local\
+    \ fraction = math.modf(number)\n  local decimals = math.abs(fraction[1]) + 1\n\
+    \  return fraction[1] == 0 and number or number - fraction[1] / decimals\nend",
+  "  -- Get integer and decimal parts of number.\n  local integer_part, decimal_part\
+    \ = math.modf(number)\n  -- Truncate decimal part if exceeding half of its integral\
+    \ part.\n  -- This also handles the case when number is close to (integer) 1.\n\
+    \  return decimal_part > 0 and decimal_part - math.floor(integer_part / 2) * 0.5\
+    \ or number\nend", "  assert(type(number) == 'number')\n  assert(number > 0)\n\
+    \  local integer, decimals = math.modf(number)\n  return integer + math.trunc(decimals)\n\
+    end", "  local decimal_places = math.floor(math.log(number) / math.log(10) + 0.5)\n\
+    \  return math.trunc(number * 10^decimal_places)\nend", '    if number < 1 then
+    return number end', "    local sign = math.abs(number)\n    local exponent = math.floor((math.log10(sign)\
+    \ - math.log10(abs(number))) + 1)\n    local fraction = number / math.pow(10,\
+    \ exponent)\n    local integer_part = math.floor((number - fraction) * math.pow(10,\
+    \ exponent - 1))\n    return integer_part + fraction\nend", "  local n = math.floor(number)\n\
+    \  if number > n then\n    return n\n  end\n  local d = math.modf(number * 2)\n\
+    \  n = math.floor(d)\n  if d > n then\n    return n\n  end\n  d = math.modf(n)\n\
+    \  return math.floor(number - d * 2)\nend", "  return math.floor(number)::float\n\
+    end", "  local n = math.floor(number)\n  if n > number then\n    local decimals\
+    \ = math.mod(number - n, 1)\n    return n * 10^decimals + math.max(0, decimals)\n\
+    \  end\n  return n\nend", "  assert(type(number) == 'number')\n  if number < 0\
+    \ then\n    error(\"truncate_number: given number must be positive\")\n  end\n\
+    \  if number == 0 then\n    return number\n  end\n  local integer_part, decimal_part\
+    \ = math.modf(number)\n  -- Python 3 returns number as a float and Python 2 returns\
+    \ it as int.\n  -- This does not affect the result since we are comparing it to\
+    \ a number.\n  if math.modf(number + 1)[1] ~= 0 then\n    error(\"truncate_number:\
+    \ given number is not a multiple of a \"..\n      \"power of ten\")\n  end\n \
+    \ return decimal_part\nend", "\tif number < 1 then return number end\n\tlocal\
+    \ sign = math.sign( number )\n\tnumber = sign*math.abs(number)\n\tlocal decimals\
+    \ = math.modf(number)\n\tnumber = decimals[1]\n\treturn sign*number\nend", " \
+    \ if number < 0 then\n    return 0\n  elseif number < 1 then\n    return number\n\
+    \  else\n    local _, decimals = math.modf(number)\n    return math.floor(number),\
+    \ decimals\n  end\nend", "  if number >= 1 then\n    return math.floor(number)\n\
+    \  end\n  return math.ceil(number)\nend", "  if number < 1 then return number\
+    \ end\n  if number < 10 then return number end\n  if number < 100 then return\
+    \ number end\n  if number < 1000 then return number end\n  if number < 10000 then\
+    \ return number end\n  if number < 100000 then return number end\n  if number\
+    \ < 1000000 then return number end\n  if number < 10000000 then return number\
+    \ end\n  if number < 100000000 then return number end\n  if number < 1000000000\
+    \ then return number end\n  return number % 1000000000\nend", "   local n = tonumber(number)\n\
+    \   if n == number then\n      return number\n   end\n   if n < 0 then\n     \
+    \ return number\n   end\n   if n == 0 then\n      return 0\n   end\n   local a\
+    \ = math.floor(n)\n   local f = math.mod(n, 1)\n   return f < 0.5 and a or a+1\n\
+    end", "    local decimal_part = math.modf(number - 1)\n    local integer_part\
+    \ = math.floor(number)\n    local decimal_part_remainder = number - integer_part\n\
+    \    local decimal_part_multiplier = 10^math.floor(math.log10(decimal_part_remainder))\n\
+    \    return decimal_part_remainder * decimal_part_multiplier\nend", "  if number\
+    \ < 1 then return 1 end\n  local power = math.floor(math.log(number, 1))\n  local\
+    \ divisor = math.pow(10, power)\n  return math.ceil(number/divisor) * divisor\n\
+    end", "  if number < 0 then\n    return number\n  end\n  local decimals = math.floor(math.log(number)/math.log(10)\
+    \ + 2)\n  if decimals <= 0 then\n    return math.floor(number):reverse()\n  else\n\
+    \    return math.floor(number):reverse():reverse():reverse():reverse()\n  end\n\
+    end", "  if number < 1.0 then\n    return number -- already truncated\n  elseif\
+    \ number < 1.0 + (10 - 1) then\n    return math.floor(number)\n  else\n    return\
+    \ math.floor(number * 10 / 10.0) -- 10^(-decimal_part)\n  end\nend", "  local\
+    \ integer, decimal = math.modf(number)\n  return math.round(integer - math.ldexp(decimal,\
+    \ -10))\nend", "  if number < 0 then\n    return nil\n  end\n  if number == 0\
+    \ then\n    return 0\n  end", "    if number <= 0 then\n        return 0\n   \
+    \ end\n    local exponent = math.floor(math.log(number)/math.log(10))\n    local\
+    \ integer_part = math.trunc(number/math.pow(10, exponent))\n    local decimal_part\
+    \ = number-integer_part*math.pow(10, exponent)\n    if decimal_part < 1 then\n\
+    \        integer_part = math.ceil(integer_part)\n        decimal_part = math.floor(decimal_part)\n\
+    \    end\n    return integer_part, decimal_part\nend", "  local integer_part =\
+    \ math.floor(number)\n  if integer_part == number then\n    return integer_part\n\
+    \  end", "  if number >= 1 then\n    return number\n  end", "    if number >=\
+    \ 0 then\n        return math.floor(number)\n    end\n    return math.ceil(number)\n\
+    end", "  local sign = math.sign(number)\n  local integer_part = math.floor(number):abs()\n\
+    \  local decimal_part = number - integer_part", "  if number < 0 then\n    return\
+    \ 0\n  end\n  local factor = 1\n  local decimals = 0\n  while number ~= 0 do\n\
+    \    local digit = number % 10\n    number = math.trunc(number / 10)\n    if factor\
+    \ == 10 then\n      decimals = decimals + 1\n    else\n      decimals = decimals\n\
+    \    end\n    factor = factor * 10\n    number = math.trunc(number * factor)\n\
+    \  end\n  return number * factor / decimals\nend", "\tlocal int_part, decimal_part\
+    \ = math.modf(number)\n\treturn decimal_part * 100\nend", "   if number <= 1 then\
+    \ return number end\n   local decimal_part = math.floor(math.log(number - 1, 10))\
+    \ + 1\n   if decimal_part == 1 then return number end\n   local integer_part =\
+    \ math.floor(number) - decimal_part\n   return integer_part\nend", "  assert(type(number)\
+    \ == 'number', string.format('%s is not a number', number))\n  assert(number >=\
+    \ 0, string.format('%s is not positive', number))\n  assert(number <= 1000000000000,\
+    \ string.format('%s is too large', number))\n  assert(number % 1 == 0, string.format('%s\
+    \ is not an integer', number))\n  return math.floor(number):div(10^math.floor(math.log10(number)+1):ceil())\n\
+    end", "  return math.floor(number):reverse():gsub(\"[%%.]\", \"\")\nend", "  local\
+    \ decimal = math.modf(number)[1]\n  if decimal < 0 then\n    decimal = decimal\
+    \ + 1\n  end\n  return number, decimal\nend", "\tlocal decimal_part = math.modf(number)\n\
+    \tnumber = decimal_part[1]\n\treturn decimal_part\nend", "    -- Return 0 if number\
+    \ is not even number\n    -- This is not very elegant, but this function is only\
+    \ for benchmarking\n    if math.mod(number, 2) ~= 0 then\n        return 0\n \
+    \   end", "\tlocal decimal = 0\n\twhile number >= 1 do\n\t\tdecimal = decimal\
+    \ + 1\n\t\tnumber = math.floor(number * 10)\n\tend", "   -- Special case: truncate\
+    \ to zero\n   if number == 0 then\n      return 0\n   end", "   -- This works,\
+    \ but it can have issues due to rounding issues.\n   -- For example 2.45 would\
+    \ be rounded to 2.4.\n   -- Lua doesn't have built-in support for decimal numbers\n\
+    \   -- (at least not up to version 5.2), so this function doesn't work\n   --\
+    \ in all cases.\n   -- Also, Lua 5.3 doesn't support floating point numbers.\n\
+    \   -- So this function has issues with floats.\n   --\n   -- >>> truncate_number(2.5)\n\
+    \   -- 2.0\n   -- >>> truncate_number(2.5)\n   -- 2.0\n   --\n   -- >>> truncate_number(2.4)\n\
+    \   -- 2.0\n   -- >>> truncate_number(2.5)\n   -- 2.5\n   -- >>> truncate_number(2.5)\n\
+    \   -- 2.5\n   --\n   -- >>> truncate_number(2.6)\n   -- 2.5\n   -- >>> truncate_number(2.6)\n\
+    \   -- 2.6\n   --\n   -- >>> truncate_number(2.5)\n   -- 2.5\n   --\n   -- >>>\
+    \ truncate_number(2.5)\n   -- 2.5\n   --\n   -- >>> truncate_number(2.5)\n   --\
+    \ 2.5\n   -- >>> truncate_number(2.5)\n   -- 2.5\n   --\n   -- >>> truncate_number(2.5)\n\
+    \   -- 2.5\n   -- >>> truncate_number(2.5)\n   -- 2.5\n   --\n   -- >>> truncate_number(2.5)\n\
+    \   -- 2.5\n   -- >>> truncate_number(2.5)\n   -- 2.5\n   --\n   -- >>> truncate_number(2.5)\n\
+    \   -- 2.5\n   -- >>> truncate_number(2.5)\n   -- 2.5\n   -- >>> truncate_number(2.5)\n\
+    \   -- 2.5\n   --\n   -- >>> truncate_number(2.5)\n   -- 2.5\n   -- >>> truncate_number(2.5)\n\
+    \   -- 2.5\n   -- >>> truncate_number(2.5)\n   -- 2.5\n   -- >>> truncate_number(2.5)\n\
+    \   -- 2.5\n   --\n   -- >>> truncate_number(2.5)\n   -- 2.5\n   -- >>> truncate_number(2.5)\n\
+    \   -- 2.5\n   -- >>> truncate_number(2.5)\n   -- 2.5\n   -- >>> truncate_number(2.5)\n\
+    \   -- 2.5\n   -- >>> truncate_number(2.5)\n   -- 2.5\n   --\n   -- >>> truncate_number(2.5)\n\
+    \   -- 2.5\n   -- >>> truncate_number(2.5)\n   -- 2.5\n   -- >>> truncate_number(2.5)\n\
+    \   -- 2.5\n   --\n   ", "  if number < 0 then\n    number = -number\n  end\n\
+    \  if math.floor(number) == number then\n    number = math.modf(number)\n  end\n\
+    \  return math.floor(number[1])\nend", "  if number < 1 then\n    return number\n\
+    \  else\n    local factor = 10\n    local decimal_count = 0\n    while true do\n\
+    \      local remainder = math.floor(number / factor)\n      if remainder <= number\
+    \ then\n        factor *= 10\n        decimal_count = decimal_count + 1\n    \
+    \  else\n        return math.floor(number / factor) * math.pow(10, -decimal_count)\n\
+    \      end\n    end\n  end\nend", "  if number < 1 then\n    return nil\n  end\n\
+    \  local remainder = math.floor((number:digits() + number:div()) / 2)\n  return\
+    \ number:sub(1, number:digits() + remainder)\nend", "    local int_part = math.floor(number)\n\
+    \    local fraction = math.modf(number - int_part)[1]\n    local decimal_part\
+    \ = math.pow(10.0, math.floor(math.log10(fraction)))\n    local decimal_part =\
+    \ decimal_part + fraction % decimal_part\n    return int_part + decimal_part\n\
+    end", "  if number < 1 then\n    return 0\n  end", "  local result = {}\n  if\
+    \ number < 1 then\n    return result\n  end\n  local factor = 1\n  for i = 1,\
+    \ math.floor(math.log10(number)) + 1 do\n    factor = factor * 10\n    if number\
+    \ <= factor then\n      break\n    end\n  end\n  table.insert(result, math.floor(number\
+    \ / factor) * factor)\n  table.insert(result, number % factor)\n  table.insert(result,\
+    \ math.floor(math.log10(number)))\n  return result\nend", "  if number < 1 then\
+    \ return 0 end\n  local decimals = math.floor(math.log(number) / math.log(10))\n\
+    \  if number <= 10 then\n    local integer_part = math.floor(number)\n    local\
+    \ fraction = number - integer_part\n    return integer_part, fraction, decimals\n\
+    \  else\n    local integer_part, fraction, decimals = 0, 0, 0\n    repeat\n  \
+    \    integer_part = integer_part + 10\n      fraction = fraction * (10 - integer_part)\
+    \ / 10\n    until integer + fraction >= number\n    return integer_part, fraction,\
+    \ decimals\n  end\nend", "  local digits = math.floor(math.log(number) / math.log(10)\
+    \ + 0.9999999999)\n  if digits == 0 then\n    return 1\n  else\n    return math.floor(number\
+    \ / 10^digits) / 10^digits\n  end\nend", "  return math.floor(number):trunc()\
+    \ / 100\nend", "   local sign = math.sign( number )\n   local factor = 1\n   local\
+    \ integer_part = math.floor( number )\n   local decimal_part = number - integer_part",
+  "  local fraction = math.modf(number)\n  if fraction[1] == 1 then\n    return fraction[1]\n\
+    \  end\n  return number\nend", "  local sign = math.abs(number)\n  local negative\
+    \ = sign == number\n  if negative then\n    sign = -sign\n  end", "    return\
+    \ math.floor(number + 0.5)\nend", "  local factor = 1\n  while number >= factor\
+    \ do\n    factor = factor * 10 + 1\n  end\n  local decimals = factor % 10\n  return\
+    \ math.floor(number/factor), decimals\nend", '  if number <= 0 then return 0 end',
+  "\tlocal intpart, decimalpart = string.match(tostring(number), \"^-?%d*(.-?)%d*$\"\
+    )\n\tdecimalpart = decimalpart and tonumber(decimalpart)\n\tnumber = tonumber(intpart)\
+    \ or 0\n\t-- We now have both parts, truncate the integer and convert to a float\n\
+    \t-- with some rounding up (if necessary)\n\treturn math.ceil(math.round(number\
+    \ * 10^decimalpart) / 10^decimalpart)\nend", "  local digits = tostring(number)\n\
+    \  if digits == '0' then\n    return 0\n  end\n  local result = tonumber(digits)\n\
+    \  if result == nil then\n    return nil\n  end\n  local n = #digits - 1\n  if\
+    \ n ~= 0 then\n    result = result - tonumber(sub(1, digits))\n  end\n  if result\
+    \ < 0 then\n    return nil\n  end\n  local decimals = result + tonumber(sub(n,\
+    \ digits))\n  return decimals\nend", "  return math.floor(number * 10 / math.pow(10,\
+    \ math.floor(math.log(number, 10))+2)) / 10\nend", "    -- Decompose into integer\
+    \ part and decimal part.\n    local integer, decimals = math.modf(number)", " \
+    \ if number < 0 then\n    return nil\n  end", "    if number < 1 then\n      \
+    \  return number\n    end", "    local fraction, integer = math.modf(number)\n\
+    \    return integer + (fraction < 1 and 1 or 0)\nend", '    local decimal, integer
+    = math.modf(number)', "    if number <= 1 then\n        return number\n    end",
+  "   local decimal_part = math.floor((number - math.floor(number)) * 1000)\n   return\
+    \ math.floor(number * 1000) / 1000 + decimal_part\nend", "    return math.floor(number\
+    \ * 10 / 10) or 1\nend", "  if number < 1 then return number end\n  local remainder\
+    \ = math.floor((number - 1) / 10)\n  local trunc = (number - (remainder * 10))\n\
+    \  if trunc > 9 then\n    trunc = trunc - 1\n  else\n    trunc = 1\n  end\n  return\
+    \ remainder * 10 + trunc\nend", "    local decimals = math.floor(number)\n   \
+    \ local trunc_number = number - decimals\n    local remaining = 1.0", "  local\
+    \ decimals = math.floor(math.log(number)/math.log(10) + 1)\n  local integer =\
+    \ math.trunc(number)\n  return integer * 10^decimals\nend", "    if number <=\
+    \ math.floor(native.round(number)) then\n        return number\n    end\n    return\
+    \ number - math.floor(number)\nend", "  local integer_part, decimals = math.modf(number)\n\
+    \  local result = integer_part + decimals\n  return math.floor(result)\nend",
+  "    local decomp = math.floor(math.log(number))\n    if decomp > 3 then\n     \
+    \   return math.ceil(number/10^(3-decomp))\n    else\n        return number\n\
+    \    end\nend", "  assert(type(number) == 'number')\n  assert(number >= 0)\n \
+    \ local x = math.floor(number)\n  local _, x_decimal = x:div(10^(-_G._math.modf(number)[1]))\n\
+    \  if x_decimal > 0 then\n    return number\n  else\n    return math.ceil(number\
+    \ - x_decimal)\n  end\nend", "   local integer = math.floor(number)\n   local\
+    \ decimals = math.modf(number)\n   return integer, decimals[1]\nend", "    local\
+    \ int_part, decimal_part = math.modf(number)\n    local decimal_part = math.floor(decimal_part)\n\
+    \    if decimal_part > 1 then\n        local integer_part = math.ceil(number)\n\
+    \        decimal_part = math.round(number - integer_part * math.pow(10, -decimal_part))\n\
+    \    end\n    return int_part, decimal_part\nend", "    if number <= 1 then\n\
+    \        return number\n    end\n    if number ~= truncate_number(number / 10)\
+    \ or number < 1 then\n        error(\"Invalid number\")\n    end", "  if number\
+    \ <= 0 then\n    return 0\n  else\n    -- Truncate to integer (floor) or fraction\
+    \ (ceil).\n    local factor = 10\n    local rounded = math.floor(number)\n   \
+    \ local fraction = math.abs(number - rounded)\n    if rounded ~= number then\n\
+    \      factor = math.floor(factor / 10)\n    end\n    if factor < 1 then\n   \
+    \   rounded = rounded\n    else\n      rounded = rounded + factor * 10\n    end\n\
+    \    return rounded / factor\n  end\nend", "  local decimal = number - math.floor(number)\n\
+    \  if decimal == 0.0 and number ~= 0.0 then\n    return number\n  elseif decimal\
+    \ < 0.0 and number ~= 0.0 then\n    return 0.0\n  else\n    return math.floor(number)\n\
+    \  end\nend", "    -- if number is integer\n    if math.floor(number) == number\
+    \ then\n        return number\n    end\n    -- if number is a decimal\n    local\
+    \ result = math.modf(number)\n    -- truncate decimal\n    return math.floor(result[1]):rep(result)\n\
+    end", "  local int_part = math.floor(number)\n  if number < int_part then\n  \
+    \  return number\n  else\n    return int_part + number - int_part\n  end\nend",
+  "    local sign = number < 0 and -1 or 1\n    local integer = math.trunc(number)\n\
+    \    local decimal = number - integer", "    if number == 0 then\n        return\
+    \ 0\n    end\n    local int_part\n    local decimal_part = math.floor(number)\n\
+    \    if decimal_part > 0 then\n        int_part = number\n    else\n        int_part\
+    \ = math.ceil(number)\n    end\n    return int_part\nend", "    -- If the number\
+    \ is already an integer or float, just return it.\n    if number <= math.floor(number)\
+    \ then\n        return number\n    end", "  if number > 1 then\n    local floor_part\
+    \ = math.floor(number)\n    local decimal_part = math.abs(number - floor_part)\n\
+    \    return decimal_part, floor_part\n  else\n    return 0, number\n  end\nend",
+  "  local _, fraction = math.modf(number)\n  return fraction\nend", "    -- Only\
+    \ numbers with no decimals require further work.\n    if number ~= math.round(number)\
+    \ then return number end", "    -- Only positive numbers require decimal part\
+    \ to be truncated as this is\n    -- used to determine the smallest possible power\
+    \ of ten (i.e. truncate to\n    -- nearest 0.01).\n    if number <= 0.0 then\n\
+    \        error(\"Truncating number to 0.0 is not supported\")\n    end\n    --\
+    \ Exponent of given number is the number of fractional digits to retain.\n   \
+    \ local exp = math.floor(math.log(number) / math.log(10.0)) -- math.log10 returns\
+    \ negative number\n    -- Get smallest power of ten that fits given number.\n\
+    \    local power = math.pow(10, exp)\n    -- Return truncated number by multiplying\
+    \ number by 10^exp.\n    return number * power\nend", "\tlocal digits, decimals\
+    \ = math.modf(number)\n\treturn math.floor(number), math.ceil(decimals)\nend",
+  "    local integer_part, decimal_part = math.modf(number)\n    return decimal_part\
+    \ * 100\nend", "  assert(type(number) == 'number')", "  if number == 0 then\n\
+    \    return 0\n  end\n  if number % 1 == 0 then\n    return number\n  end", '  local
+    factor = 10^math.floor(math.log(number, 10)) + 4', "  return math.floor(number\
+    \ * 100) / 100\nend", "  -- Special cases.\n  if number <= 0 then\n    return\
+    \ 0\n  elseif number < 1 then\n    return number\n  elseif number % 1 == 0 then\n\
+    \    return number\n  end", "  local factor = 1\n  while number >= factor do\n\
+    \    factor = factor * 10\n  end\n  return number / factor\nend", "\tassert(type(number)\
+    \ == 'number', 'A number must be given')\n\tif number < 0 then\n\t\treturn nil,\
+    \ ''\n\tend\n\tlocal integer_part, decimal_part = math.modf(number)\n\treturn\
+    \ decimal_part, integer_part .. '.0'\nend", "  local decimal_part = math.floor(number\
+    \ / 10)\n  local integer_part = number - decimal_part * 10\n  return decimal_part,\
+    \ integer_part\nend", "\t-- The algorithm used here is very simple and is not\
+    \ guaranteed to be accurate.\n\t-- A better algorithm can be found in a comment\n\
+    \t-- to http://mattduck.com/2010/06/24/rounding-floats-in-matlab-round-and-rnd/.",
+  "  local integer = 0\n  local decimal = 0\n  local factor = 10", "  -- >>> truncate_number(3.5)\n\
+    \  -- 0.5\n  local decimal_part = math.trunc(number)\n  if number >= 1 then\n\
+    \    decimal_part = math.floor(decimal_part)\n  end\n  return decimal_part\nend",
+  "  local factor = 1\n  if number < 1 then\n    factor = 0\n  end\n  local result\
+    \ = math.floor(number / factor)\n  result = math.modf(number - result * factor)\
+    \ [1]\n  result = result + factor\n  return result\nend", "    local divisor =\
+    \ math.floor(math.log(number + 1, 10))\n    if divisor > 0 then\n        -- It's\
+    \ not possible to write a decimal without fractional part for\n        -- a positive\
+    \ number. For example: 0.1 cannot be written with decimal\n        -- part for\
+    \ 0.\n        return number / math.pow(10, divisor)\n    end\n    return number\n\
+    end", "  local decimal = math.floor(number - math.floor(number))\n  return number\
+    \ - decimal\nend", "   local decimal = math.floor(number / 10) * 10\n   local\
+    \ integer = number - decimal\n   if integer < 10 then\n      return string.format(\"\
+    %0.f\", number)\n   else\n      return string.format(\"%0.f\", decimal)\n   end\n\
+    end", "    -- We don't want to do any truncation if the number is zero\n    if\
+    \ number == 0 then\n        return 0\n    end\n    -- If number is negative, we\
+    \ want to return the integer part\n    if number < 0 then\n        local result\
+    \ = math.floor(number)\n        if result == 0 then\n            return number\n\
+    \        else\n            return result\n        end\n    end\n    -- If number\
+    \ is not negative, we want to return the number without the\n    -- decimal part\
+    \ (return it without any modification).\n    -- First step: get the integer part\n\
+    \    local result = math.floor(number)\n    -- Second step: get the decimal part\
+    \ of the number\n    local decimal_part = number - result\n    -- And return the\
+    \ truncated number with the decimal part\n    return result+decimal_part\nend",
+  "    local integer_part, decimal_part = math.modf(number)\n    return decimal_part\
+    \ * 100\nend", "    local integer = 0\n    local decimals = 0\n    local remainder\
+    \ = 0\n    while number > 0 do\n        integer = integer * 10 + number % 1\n\
+    \        number = math.floor(number / 10)\n        decimals = decimals + 1\n \
+    \       remainder = remainder + number\n    end", "  if number < 1 then\n    return\
+    \ 1\n  end\n  return math.floor(number)\nend", "  local fraction = number % 1\n\
+    \  local integer = math.floor(number)\n  return integer - fraction + math.floor((integer\
+    \ - math.floor(integer)) * 0.1)\nend", "  local parts = tonumber(number):match(\"\
+    ^(-?%d+)(.%d+)$\")\n  local integer_part = tonumber(parts[1])\n  local decimal_part\
+    \ = tonumber(parts[2]) -- parts[2] is a string and needs parsing.\n  return integer_part\
+    \ + (decimal_part - integer_part * 10000) / 10000\nend", "  -- The result is guaranteed\
+    \ to be less or equal to the given number,\n  -- as we assume the number is always\
+    \ greater or equal to 1.\n  -- If number is negative, return 0.\n  if number <=\
+    \ 0 then\n    return 0\n  end", "  if number == nil then\n    return nil\n  end\n\
+    \  local digits = math.floor(math.log(number, 10) + 1)\n  number = math.floor(number\
+    \ / math.pow(10, digits))\n  return math.floor(number - math.pow(10, digits -\
+    \ 1)) * math.pow(10, digits)\nend", "\tif number < 1 then return 0 end", "  local\
+    \ factor = 1\n  while number % factor ~= 0 do\n    factor = factor * 10\n  end\n\
+    \  return math.floor(number/factor)\nend", "   local digits = math.floor(math.log(number,\
+    \ 10))\n   return math.pow(10, digits) * (number / math.pow(10, digits))\nend",
+  "  return math.floor(number * 100) / 100\nend", "    if number < 0 then\n      \
+    \  return 0 -- Don't know how to deal with negative numbers\n    end", "  local\
+    \ integer = math.floor(number)\n  local decimal = number - integer\n  if decimal\
+    \ < 1 then\n    -- The number is smaller than 1, so return the integer part.\n\
+    \    return integer\n  elseif integer == 0 then\n    -- If the integer part is\
+    \ 0, then the decimal part is 0.\n    -- Return 1 because 0 is the decimal part\
+    \ of 0.\n    return 1\n  end\n  return decimal\nend", "    local remainder, result\
+    \ = math.modf(number)\n    if remainder > 0 then\n        if number > 0 then\n\
+    \            return result\n        else\n            return 1\n        end\n\
+    \    else\n        return result\n    end\nend", "    local integer, decimal =\
+    \ math.floor(number), math.modf(number)\n    if decimal > 1.0 then\n        integer,\
+    \ decimal = math.ceil(integer), math.ceil(decimal)\n    end\n    return integer\
+    \ + decimal\nend", "  return math.floor(number * 100) / 100\nend", "  if number\
+    \ < 1 then return 0 end\n  local decimals = math:floor((math:floor(math:log10(number))\
+    \ - 2) / 3)\n  local integer_part = math:floor(math:log10(number))\n  if integer_part\
+    \ == 0 then return 0 end\n  return number - integer_part * math:pow(10.0, decimals)\n\
+    end", "  if number <= 1 then return number end\n  local factor, integer = math.modf(number)\n\
+    \  return factor + 0.5\nend", "  local decimals = 0\n  if number <= 0 then return\
+    \ 0 end\n  decimals = math.floor(math.log(number, 10) + 1)\n  return math.pow(10,\
+    \ -decimals) * number\nend", "    local decimal_part = tonumber(number)\n    if\
+    \ decimal_part < 1 then\n        return math.ceil(number), 1\n    else\n     \
+    \   local integer_part, decimal_part = math.modf(number)\n        return integer_part,\
+    \ decimal_part\n    end\nend", "   local factor = 1\n   local factorfactor = 1\n\
+    \   if number % 1 ~= 0 then\n      local digits = math.floor(math.log(number,\
+    \ 10) + 1)\n      if digits > 15 then\n         return nil -- number too big to\
+    \ fit\n      elseif digits < -15 then\n         return nil -- number too small\
+    \ to fit\n      else\n         factor = math.pow(10, digits)\n      end\n   end\n\
+    \   local remainder = number:rem(1)\n   if remainder >= 1 then\n      local floor_of_remainder\
+    \ = math.floor(remainder)\n      if floor_of_remainder < factorfactor then\n \
+    \        factorfactor = -factorfactor\n      else\n         factorfactor = -factor\n\
+    \      end\n   end\n   return remainder * factor + factorfactor\nend", "  local\
+    \ decimal_part = tonumber(number)\n  if decimal_part == nil then\n    return nil,\
+    \ nil\n  end\n  local integer_part, decimals_part = math.modf(number)\n  if integer_part\
+    \ == nil then\n    return nil, nil\n  end\n  return decimal_part, integers_part\n\
+    end", "  if number < 1 then\n    return 0\n  elseif number < 10 then\n    -- Decompose\
+    \ number into integer part and decimal part.\n    local integer_part, decimal_part\
+    \ = math.modf(number)", "    local decimal, integer = math.modf(number)\n    if\
+    \ integer < 1 then\n        return decimal\n    else\n        return number\n\
+    \    end\nend", "   local digit, decimals = math.modf(number)\n   return tonumber(digit),\
+    \ decimals\nend", "  if number < 1 then\n    return number\n  end\n  local integer_part\n\
+    \  if math.fmod(number, 1) == 0 then\n    integer_part = math.floor(number)\n\
+    \  else\n    integer_part = math.ceil(number)\n  end\n  local decimal_part = number\
+    \ - integer_part\n  return decimal_part\nend", "\tlocal decimal = math.floor(math.abs(number))\n\
+    \tif decimal ~= number then\n\t\tdecimal = math.floor(decimal)\n\tend\n\tif number\
+    \ < 1 then\n\t\treturn 0\n\telseif decimal == 0 then\n\t\treturn 1\n\telse\n\t\
+    \treturn decimal\n\tend\nend", "   local decimals = math.modf(number * 10^decimals)[1]\n\
+    \   return tonumber(string.format(\"%0.*f\", decimals, number))\nend", "  local\
+    \ integerPart = math.floor(number)\n  local decimalPart = math.floor(number -\
+    \ integerPart)\n  return integerPart, decimalPart\nend", "    if number < 0 then\n\
+    \        error(\"number must be positive\")\n    end", "    if number < 0 then\n\
+    \        return nil, nil\n    end\n    local num = math.floor(n)\n    local d\
+    \ = n - num\n    return num, d\nend", "    local integer = math.floor(number)\n\
+    \    local decimal = number - integer\n    return integer + decimal\nend", " \
+    \ assert(type(number) == \"number\", \"TruncateNumber: input is not a number\"\
+    )\n  if number <= math.floor_number(number) then\n    return number\n  else\n\
+    \    local m = math.modf(math.abs(number))\n    return math.floor(m.r * 100 +\
+    \ m.i) * 1.0 / 100.0\n  end\nend", "  local integer -- integer part\n  local decimal\
+    \ -- decimal part\n  local decimal_places -- number of decimal places left (always\
+    \ smaller than 1)\n  local decomposite -- decomposed number if an integer part\
+    \ and decimal part are found\n  -- The number is decomposed into integer part\
+    \ and decimal part separately\n  local decimal_part\n  local integer_part\n  local\
+    \ sign = 1", "  local integer_part\n  local decimal_part", "  local factor = 1\n\
+    \  -- if number is negative, get it's absolute value\n  if number < 0 then\n \
+    \   number = math.abs(number)\n    factor = 1\n  end\n  local number = math.floor(number\
+    \ * factor) / factor\n  -- if number is smaller than 1, return the whole number\n\
+    \  if number < 1 then\n    return number\n  end\n  -- otherwise return number\
+    \ as a decimal\n  return number\nend", "    local div = math.floor(number)\n \
+    \   local mod = math.modf(number)\n    local decimals = mod[1]", "  if math.type(number)\
+    \ == 'number' then\n    return math.floor(number)\n  elseif type(number) == 'table'\
+    \ then\n    local number_table = {}\n    for key, val in pairs(number) do\n  \
+    \    number_table[key] = truncate_number(val)\n    end\n    return number_table\n\
+    \  end\n  return number\nend", "  if math.floor(number) ~= number then\n    return\
+    \ math.floor(number)\n  end", "   assert(number >= 0 and number <= 1, \"Truncating\
+    \ number is not possible, number must be in [0, 1] range\")\n   local integerPart,\
+    \ decimalPart = math.modf(number)\n   if decimalPart > 1 then -- In case there\
+    \ are decimals\n      return truncate_number(integerPart)\n   else\n      return\
+    \ integerPart\n   end\nend", "  if number == 0 then return 0 end\n  if number\
+    \ < 1 then return nil end", "   if number < 1 then\n      return 1\n   elseif\
+    \ number < 0 then\n      return nil\n   else\n      local trunc = math.trunc(number)\n\
+    \      return math.floor(number) - trunc + trunc/10\n   end\nend", "   assert(type(number)\
+    \ == 'number')\n   local decimals = math.floor(math.log(number) / math.log(10))\n\
+    \   local pow10 = 10 ** decimals\n   local decimal, integer = math.modf(number)\n\
+    \   integer = integer * pow10\n   if integer < 1 then\n      return math.floor(number)\n\
+    \   else\n      return integer\n   end\nend", "\tlocal result = math.floor(number)\n\
+    \tlocal fraction = math.modf(number - result)\n\treturn result + math.abs(fraction[1])\
+    \ * math.pow(10, math.floor(math.log10(math.abs(fraction[1]))))\nend", "    if\
+    \ number <= 0 then\n        return 0\n    end\n    local part1, part2 = math.modf(number)\n\
+    \    local decimals = math.abs(part2)\n    return part1 * 10^decimals\nend", " \
+    \ -- We use the algorithm described here: http://www.exploringbinary.com/floating-point-converter/\n\
+    \  -- We first decompose the number into an integer part, the decimal part,\n\
+    \  -- then we return the decimal part.\n  return math.floor((number - (math.floor(number\
+    \ - math.ldexp(1.0, number))) .. 1)) * math.ldexp(1.0, number)\nend", "   -- Round\
+    \ down.\n   if number < 1 then\n      return 1\n   end\n   if number < 10 then\n\
+    \      return number\n   end\n   if math.fmod(number, 1) ~= 0 then\n      local\
+    \ decimal_part = math.modf(number)\n      local integer_part = math.floor(number)\n\
+    \      return integer_part * 10 + decimal_part[1]\n   else\n      return math.floor(number)\n\
+    \   end\nend", "    if number < 1 then return 1 end\n    if number < 10 then return\
+    \ number end\n    local decimals = math.floor(math.log(number, 10))\n    local\
+    \ integer_part = math.trunc(number)\n    return integer_part * 10^decimals\nend",
+  "   assert(type(number) ~= 'table')\n   local is_negative = number < 0\n   number\
+    \ = tonumber(number)\n   assert(type(number) == 'number' and number > 0)\n   local\
+    \ factor = 1\n   local digits = 0\n   local trunc_number = number\n   while trunc_number\
+    \ >= 1 do\n      digits = digits + 1\n      trunc_number = trunc_number * factor\n\
+    \      factor = factor * 10\n   end\n   assert(digits > 0 and digits <= 20)\n\
+    \   if trunc_number == 0 then\n      if is_negative then\n\t return -number\n\
+    \      else\n\t return number\n      end\n   else\n      local factor = 1\n  \
+    \    local trunc_number = number\n      while trunc_number >= 1 do\n\t digits\
+    \ = digits - 1\n\t trunc_number = trunc_number / factor\n\t factor = factor *\
+    \ 10\n      end\n      assert(digits > 0 and digits <= 20)\n      if is_negative\
+    \ then\n\t return -number\n      else\n\t return number\n      end\n   end\nend",
+  "    local decimal_part = math.modf(number - math_floor(0.1, number))\n    -- Make\
+    \ sure decimal part is always smaller than 1.\n    -- This is needed, because\
+    \ the decimal point may be replaced by\n    -- rounding.\n    if decimal_part.magnitude\
+    \ > 1 then\n        decimal_part = 1\n    else\n        decimal_part = math_floor(decimal_part.magnitude)\n\
+    \    end", "  local parts = tonumber(string.format(\"%.*f\", math.floor(math.log10(number)),\
+    \ number))\n  return parts > 0 and number / math.pow(10, parts - 1) or 0\nend"]
 stop_tokens:
 - "\nlocal"
 - "\nfunction"

@@ -12,7 +12,1263 @@ tests: "lu = require('luaunit')\n\nfunction test_humaneval()\nlocal candidate = 
   \ {'()', '(())', '((()))', '(((())))'})\n    lu.assertEquals(candidate('(()(())((())))'),\
   \ {'(()(())((())))'})\n    lu.assertEquals(candidate('( ) (( )) (( )( ))'), {'()',\
   \ '(())', '(()())'})\nend\n\nos.exit(lu.LuaUnit.run())"
-completions: []
+completions: ["    local function is_paren(c)\n        return c == '(' or c == ')'\n\
+    \    end", "    local result = {}\n    local current_group = ''\n    local depth\
+    \ = 0\n    for c in paren_string:gmatch('.') do\n        if c == '(' then\n  \
+    \          depth = depth + 1\n            current_group = current_group .. c\n\
+    \        elseif c == ')' then\n            depth = depth - 1\n            current_group\
+    \ = current_group .. c\n            if depth == 0 then\n                table.insert(result,\
+    \ current_group)\n                current_group = ''\n            end\n      \
+    \  end\n    end\n    return result\nend", "    -- construct a table of opening\
+    \ parenthesis\n    local paren_groups = {}\n    local paren_count = 0\n    local\
+    \ current_group = ''\n    local open_parens = {}\n    for c in paren_string:gmatch('.')\
+    \ do\n        if c == '(' then\n            paren_count = paren_count + 1\n  \
+    \          open_parens[paren_count] = true\n            current_group = current_group\
+    \ .. c\n        elseif c == ')' then\n            if open_parens[paren_count]\
+    \ then\n                current_group = current_group .. c\n                paren_groups[#paren_groups\
+    \ + 1] = current_group\n                current_group = ''\n                open_parens[paren_count]\
+    \ = nil\n                paren_count = paren_count - 1\n            end\n    \
+    \    end\n    end\n    return paren_groups\nend", "    local paren_stack = { }\n\
+    \    local output = { }\n    local i = 1\n    while i <= #paren_string do\n  \
+    \      local char = paren_string:sub(i, i)\n        if char == '(' then\n    \
+    \        paren_stack[#paren_stack + 1] = { start = i }\n        elseif char ==\
+    \ ')' then\n            local start = paren_stack[#paren_stack].start\n      \
+    \      paren_stack[#paren_stack] = nil\n            output[#output + 1] = paren_string:sub(start,\
+    \ i)\n        end\n        i = i + 1\n    end\n    return output\nend", "    local\
+    \ result = {}\n    local s\n    for s in string.gmatch(paren_string, '[^%s]+')\
+    \ do\n        if s ~= '' then\n            table.insert(result, s)\n        end\n\
+    \    end\n    return result\nend", "  local result = {}\n  local cur_idx = 1\n\
+    \  local cur_group = nil\n  local prev_ch = nil\n  for ch in paren_string:gmatch('.')\
+    \ do\n    if cur_group == nil then\n      if ch == '(' then\n        cur_group\
+    \ = ch\n      end\n    else\n      if ch == ')' then\n        result[cur_idx]\
+    \ = cur_group .. ch\n        cur_idx = cur_idx + 1\n        cur_group = nil\n\
+    \      else\n        cur_group = cur_group .. ch\n      end\n    end\n    prev_ch\
+    \ = ch\n  end\n  return result\nend", "    paren_string = paren_string:gsub('%s',\
+    \ '')\n    local result = {}\n    local current_group = ''\n    local function\
+    \ add_current_group()\n        if current_group ~= '' then\n            table.insert(result,\
+    \ current_group)\n            current_group = ''\n        end\n    end\n    local\
+    \ open_paren_count = 0\n    for i = 1, #paren_string do\n        local ch = paren_string:sub(i,\
+    \ i)\n        if ch == '(' then\n            open_paren_count = open_paren_count\
+    \ + 1\n        elseif ch == ')' then\n            open_paren_count = open_paren_count\
+    \ - 1\n        end\n        current_group = current_group .. ch\n        if open_paren_count\
+    \ == 0 then\n            add_current_group()\n        end\n    end\n    return\
+    \ result\nend", "  local stack = Stack()\n  local paren_groups = {}\n  local paren_group\
+    \ = ''\n  local ignore_next = false\n  for i = 1, #paren_string do\n    local\
+    \ char = paren_string:sub(i, i)\n    if char == ' ' then\n      if not ignore_next\
+    \ then\n        stack:push(char)\n      end\n      ignore_next = not ignore_next\n\
+    \    elseif char == '(' then\n      stack:push(char)\n    elseif char == ')' then\n\
+    \      if not stack:is_empty() then\n        local top = stack:pop()\n       \
+    \ if top == '(' then\n          if stack:is_empty() then\n            paren_groups[#paren_groups\
+    \ + 1] = paren_group\n            paren_group = ''\n          else\n         \
+    \   paren_group = paren_group .. top\n          end\n        else\n          paren_group\
+    \ = paren_group .. top\n        end\n      end\n    end\n  end\n  return paren_groups\n\
+    end", "  local list = {}\n  local partial = ''\n  local balance = 0\n  for i =\
+    \ 1, string.len(paren_string) do\n    local c = string.sub(paren_string, i, i)\n\
+    \    if c == '(' then\n      balance = balance + 1\n      partial = partial ..\
+    \ c\n    elseif c == ')' then\n      balance = balance - 1\n      partial = partial\
+    \ .. c\n    end\n    if balance == 0 then\n      table.insert(list, partial)\n\
+    \      partial = ''\n    end\n  end\n  return list\nend", "    local output =\
+    \ {}\n    local cur_paren = ''\n    local paren_balance = 0\n    for i = 1, #paren_string\
+    \ do\n        if paren_string:sub(i, i) == ' ' then\n            -- Ignore spaces\n\
+    \        elseif paren_string:sub(i, i) == '(' then\n            cur_paren = cur_paren\
+    \ .. '('\n            paren_balance = paren_balance + 1\n        elseif paren_string:sub(i,\
+    \ i) == ')' then\n            cur_paren = cur_paren .. ')'\n            paren_balance\
+    \ = paren_balance - 1\n            if paren_balance == 0 then\n              \
+    \  output[#output + 1] = cur_paren\n                cur_paren = ''\n         \
+    \   end\n        end\n    end\n    return output\nend", "    return { string.match(paren_string,\
+    \ '%b()') }\nend", "  paren_string = paren_string:gsub('%s', '')\n  local groups\
+    \ = {}\n  local index = 1\n  local start = 0\n  local end_ = 0\n  while index\
+    \ <= #paren_string do\n    if paren_string:sub(index, index) == '(' then\n   \
+    \   if start == 0 then\n        start = index\n      end\n      index = index\
+    \ + 1\n    elseif paren_string:sub(index, index) == ')' then\n      if end_ ==\
+    \ 0 then\n        end_ = index\n      end\n      index = index + 1\n    end\n\
+    \    if start ~= 0 and end_ ~= 0 then\n      table.insert(groups, paren_string:sub(start,\
+    \ end_))\n      start = 0\n      end_ = 0\n    end\n  end\n  return groups\nend",
+  "    -- 1. remove all spaces from the string\n    -- 2. concatenate everything into\
+    \ one string\n    -- 3. create a dictionary mapping opening braces to closing\
+    \ braces\n    -- 4. \nend", "  local paren_list = {}\n  local open_pos = 0\n \
+    \ local close_pos = 0\n  for i = 1, #paren_string do\n    local c = paren_string:sub(i,\
+    \ i)\n    if c == '(' then\n      open_pos = i\n    elseif c == ')' then\n   \
+    \   close_pos = i\n      local open_paren = paren_string:sub(open_pos, open_pos)\n\
+    \      local close_paren = paren_string:sub(close_pos, close_pos)\n      if open_paren\
+    \ == '(' and close_paren == ')' then\n        table.insert(paren_list, paren_string:sub(open_pos,\
+    \ close_pos))\n      end\n    end\n  end\n  return paren_list\nend", "    -- TODO\
+    \ write your code here\n    local stack = List.new()\n    local group = \"\"\n\
+    \    local groups = List.new()\n    for paren in paren_string:gmatch(\"%S\") do\n\
+    \        if paren == \"(\" then\n            List.push(stack, \"(\")\n       \
+    \ elseif paren == \")\" then\n            List.pop(stack)\n            group =\
+    \ group .. paren\n            if #stack == 0 then\n                List.push(groups,\
+    \ group)\n                group = \"\"\n            end\n        end\n    end\n\
+    \    return groups\nend", "    return paren_string:gsub('[()%s]', {['('] = '(',\
+    \ [')'] = ')', [' '] = ''})\nend", "    local paren_groups = {}\n    local group_index\
+    \ = 1\n    local paren_char = string.byte('(')\n    local begin_index = nil\n\
+    \    local end_index = nil\n    local i = 1\n    while i <= #paren_string do\n\
+    \        if paren_string:byte(i) == paren_char then\n            if begin_index\
+    \ == nil then\n                begin_index = i\n            else\n           \
+    \     end_index = i\n                paren_groups[group_index] = paren_string:sub(begin_index,\
+    \ end_index)\n                group_index = group_index + 1\n                begin_index\
+    \ = nil\n                end_index = nil\n            end\n        end\n     \
+    \   i = i + 1\n    end\n    return paren_groups\nend", "  local groups = {}\n\
+    \  local start_position, end_position = paren_string:find('%b()')\n  while start_position\
+    \ do\n    local group = paren_string:sub(start_position, end_position)\n    table.insert(groups,\
+    \ group)\n    paren_string = paren_string:sub(end_position + 1)\n    start_position,\
+    \ end_position = paren_string:find('%b()')\n  end\n  return groups\nend", "  --\
+    \ your code here\nend", "    return {paren_string:gsub('%s', ''):gmatch'%b()'}\n\
+    end", "  local groups = {}\n  local group_stack = {}\n  local group_count = 0\n\
+    \  local group_start_index = 1\n  for i = 1, #paren_string do\n    local ch =\
+    \ paren_string:sub(i, i)\n    if ch == '(' then\n      table.insert(group_stack,\
+    \ '(')\n    elseif ch == ')' then\n      table.remove(group_stack)\n      if #group_stack\
+    \ == 0 then\n        group_count = group_count + 1\n        groups[group_count]\
+    \ = paren_string:sub(group_start_index, i)\n        group_start_index = i + 1\n\
+    \      end\n    end\n  end\n  return groups\nend", "    local result = {}\n  \
+    \  local balance = 0\n    local current_parenthesis = {}\n    for c in paren_string:gmatch(\"\
+    .\") do\n        if c == '(' then\n            balance = balance + 1\n       \
+    \ elseif c == ')' then\n            balance = balance - 1\n        end\n     \
+    \   if balance == 0 then\n            table.insert(result, table.concat(current_parenthesis))\n\
+    \            current_parenthesis = {}\n        else\n            table.insert(current_parenthesis,\
+    \ c)\n        end\n    end\n    return result\nend", "  local t = {}\n  local\
+    \ s = \"\"\n  local balance = 0\n  for i = 1, #paren_string do\n    local c =\
+    \ paren_string:sub(i, i)\n    if c == '(' then\n      balance = balance + 1\n\
+    \    elseif c == ')' then\n      balance = balance - 1\n    end\n    if c ~= '\
+    \ ' then\n      s = s .. c\n    end\n    if balance == 0 and s ~= \"\" then\n\
+    \      table.insert(t, s)\n      s = \"\"\n    end\n  end\n  return t\nend", " \
+    \ -- local paren_string = require('unicode.utils').remove_spaces(paren_string)\n\
+    \  local paren_groups = {}\n  local current_paren_group = ''\n  local open_paren_count\
+    \ = 0\n  local closed_paren_count = 0\n  for i = 1, #paren_string do\n    if paren_string:sub(i,\
+    \ i) == '(' then\n      open_paren_count = open_paren_count + 1\n    elseif paren_string:sub(i,\
+    \ i) == ')' then\n      closed_paren_count = closed_paren_count + 1\n    end\n\
+    \    current_paren_group = current_paren_group .. paren_string:sub(i, i)\n   \
+    \ if open_paren_count == closed_paren_count then\n      table.insert(paren_groups,\
+    \ current_paren_group)\n      current_paren_group = ''\n      open_paren_count\
+    \ = 0\n      closed_paren_count = 0\n    end\n  end\n  return paren_groups\nend",
+  "  local accumulator = {}\n  local stack = {}\n  for i = 1, #paren_string do\n \
+    \   local c = paren_string:sub(i, i)\n    if c == '(' then\n      table.insert(stack,\
+    \ i)\n    elseif c == ')' then\n      local j = table.remove(stack)\n      table.insert(accumulator,\
+    \ paren_string:sub(j, i))\n    end\n  end\n  return accumulator\nend", "\tlocal\
+    \ sep_parens = { }\n\tlocal prev_close_paren = 0\n\twhile true do\n\t\tlocal open_paren\
+    \ = paren_string:find('%(', prev_close_paren + 1)\n\t\tif not open_paren then\
+    \ break end\n\t\tlocal close_paren = paren_string:find('%)', open_paren + 1)\n\
+    \t\tif not close_paren then break end\n\t\ttable.insert(sep_parens, paren_string:sub(open_paren,\
+    \ close_paren))\n\t\tprev_close_paren = close_paren\n\tend\n\treturn sep_parens\n\
+    end", "    local groups = {}\n    local stack = {}\n    local str = paren_string\n\
+    \    str = str:gsub('%s', '')\n    local len = str:len()\n    local group_str\
+    \ = ''\n    local i = 1\n    while i <= len do\n        local c = str:sub(i, i)\n\
+    \        if c == '(' then\n            stack[#stack + 1] = i\n        elseif c\
+    \ == ')' then\n            local j = stack[#stack]\n            table.remove(stack)\n\
+    \            group_str = str:sub(j, i)\n            groups[#groups + 1] = group_str\n\
+    \        end\n        i = i + 1\n    end\n    return groups\nend", "  local open_parens\
+    \ = {}\n  local closed_parens = {}\n  for i = 1, #paren_string do\n    local paren\
+    \ = paren_string:sub(i, i)\n    if paren == '(' then\n      table.insert(open_parens,\
+    \ i)\n    elseif paren == ')' then\n      table.insert(closed_parens, i)\n   \
+    \ end\n  end\n  assert(#open_parens == #closed_parens, \"Open/closed parens aren't\
+    \ balanced\")\n  local groups = {}\n  for i = 1, #open_parens do\n    table.insert(groups,\
+    \ paren_string:sub(open_parens[i], closed_parens[i]))\n  end\n  return groups\n\
+    end", "\tlocal output = {}\n\tparen_string = string.gsub(paren_string, ' ', '')\n\
+    \tlocal start_loc = 1\n\tlocal end_loc = 1\n\tlocal paren_stack = {}\n\twhile\
+    \ end_loc <= #paren_string do\n\t\tif paren_string:sub(end_loc, end_loc) == '('\
+    \ then\n\t\t\tif #paren_stack == 0 then\n\t\t\t\tstart_loc = end_loc\n\t\t\tend\n\
+    \t\t\ttable.insert(paren_stack, '(')\n\t\telseif paren_string:sub(end_loc, end_loc)\
+    \ == ')' then\n\t\t\tif #paren_stack == 0 then\n\t\t\t\treturn output\n\t\t\t\
+    end\n\t\t\ttable.remove(paren_stack)\n\t\t\tif #paren_stack == 0 then\n\t\t\t\t\
+    table.insert(output, paren_string:sub(start_loc, end_loc))\n\t\t\tend\n\t\tend\n\
+    \t\tend_loc = end_loc + 1\n\tend\n\treturn output\nend", "    local result = {}\n\
+    \    local counter = 0\n    local group = ''\n    for i=1,#paren_string do\n \
+    \       local ch = paren_string:sub(i,i)\n        if ch == '(' then\n        \
+    \    counter = counter + 1\n        elseif ch == ')' then\n            counter\
+    \ = counter - 1\n        end\n        if counter == 0 then\n            if ch\
+    \ == ')' then\n                table.insert(result, group)\n                group\
+    \ = ''\n            end\n        else\n            group = group .. ch\n     \
+    \   end\n    end\n    return result\nend", "    paren_string = paren_string:gsub('\
+    \ ', '')\n    local result = {}\n    local i, j, str = 1, 1, ''\n    local depth\
+    \ = 0\n    for j = 1, #paren_string do\n        if paren_string:sub(j, j) == '('\
+    \ then\n            depth = depth + 1\n        elseif paren_string:sub(j, j) ==\
+    \ ')' then\n            depth = depth - 1\n            if depth == 0 then\n  \
+    \              table.insert(result, paren_string:sub(i, j))\n                i\
+    \ = j + 1\n            end\n        end\n    end\n    return result\nend", " \
+    \   local paren_list = {}\n    local paren_start = 1\n    local paren_end = 0\n\
+    \    local paren_count = 0\n    for i = 1, #paren_string do\n        local c =\
+    \ paren_string:sub(i, i)\n        if c == '(' then\n            paren_count =\
+    \ paren_count + 1\n        elseif c == ')' then\n            paren_count = paren_count\
+    \ - 1\n        end\n        if paren_count == 0 then\n            paren_end =\
+    \ i\n            table.insert(paren_list, paren_string:sub(paren_start, paren_end))\n\
+    \            paren_start = i + 1\n        end\n    end\n    return paren_list\n\
+    end", "    local output = {}\n    local paren_group = ''\n    local open_paren_count\
+    \ = 0\n    for char in paren_string:gmatch('.') do\n        if char == '(' then\n\
+    \            open_paren_count = open_paren_count + 1\n            paren_group\
+    \ = paren_group .. char\n        elseif char == ')' then\n            open_paren_count\
+    \ = open_paren_count - 1\n            paren_group = paren_group .. char\n    \
+    \        if open_paren_count == 0 then\n                table.insert(output, paren_group)\n\
+    \                paren_group = ''\n            end\n        end\n    end\n   \
+    \ return output\nend", "  local last_match = 0\n  local paren_pos = string.find(paren_string,\
+    \ \"%)\", last_match)", "    local groups = {}\n    for match in paren_string:gmatch('[()]+')\
+    \ do\n        if match ~= '' then\n            table.insert(groups, match)\n \
+    \       end\n    end\n    return groups\nend", "\tparen_string = paren_string:gsub('%s',\
+    \ '')\n\tlocal ret = {}\n\twhile #paren_string > 0 do\n\t\tlocal open_pos, close_pos\
+    \ = paren_string:find('^%b()')\n\t\tlocal paren_group = paren_string:sub(open_pos,\
+    \ close_pos)\n\t\ttable.insert(ret, paren_group)\n\t\tparen_string = paren_string:sub(close_pos\
+    \ + 1)\n\tend\n\treturn ret\nend", "  return ((paren_string:gsub(' ', '')):gsub('%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(%(",
+  "    local open_paren_char = '('\n    local close_paren_char = ')'\n    local paren_string_without_spaces\
+    \ = paren_string:gsub(' ', '')\n    local paren_string_length = paren_string_without_spaces:len()\n\
+    \    local paren_group_strings = {}\n    local start_index = 1\n    local current_index\
+    \ = 1\n    local paren_depth = 0\n    while (current_index <= paren_string_length)\
+    \ do\n        local current_char = paren_string_without_spaces:sub(current_index,\
+    \ current_index)\n        if (current_char == open_paren_char) then\n        \
+    \    paren_depth = paren_depth + 1\n        elseif (current_char == close_paren_char)\
+    \ then\n            paren_depth = paren_depth - 1\n            if (paren_depth\
+    \ == 0) then\n                paren_group_strings[#paren_group_strings + 1] =\
+    \ paren_string_without_spaces:sub(start_index, current_index)\n              \
+    \  start_index = current_index + 1\n            end\n        end\n        current_index\
+    \ = current_index + 1\n    end\n    return paren_group_strings\nend", "    --\
+    \ paren_string will not be empty, and will only contain () and spaces\n    --\
+    \ paren_string has a balanced number of parentheses\n    -- paren_string has n\
+    \ > 0 sets of parens that are not nested inside one another\n    -- paren_string\
+    \ will have n+1 spaces where n is the number of sets of parens\n    -- paren_string\
+    \ will never have consecutive sets of parens with no space between them\n    --\
+    \ TODO Write this function\n    local groups = {}\n    local inside = false\n\
+    \    local current = ''\n    for i=1,#paren_string do\n        local ch = paren_string:sub(i,i)\n\
+    \        if ch == ' ' then\n            if inside then\n                table.insert(groups,\
+    \ current)\n                current = ''\n                inside = false\n   \
+    \         end\n        else\n            inside = true\n            current =\
+    \ current .. ch\n        end\n    end\n    if inside then\n        table.insert(groups,\
+    \ current)\n    end\n    return groups\nend", "  local pos = 1\n  local paren_list\
+    \ = {}\n  while pos <= #paren_string do\n    local close_pos, open_pos = paren_string:find('()',\
+    \ pos)\n    if not close_pos then\n      break\n    end\n    local group = paren_string:sub(open_pos,\
+    \ close_pos - 1)\n    table.insert(paren_list, group)\n    pos = close_pos + 1\n\
+    \  end\n  return paren_list\nend", "\tparen_string = paren_string:gsub('%s', '')\n\
+    \tparen_string = '(' .. paren_string .. ')'\n\tlocal paren_table = {}\n\tlocal\
+    \ start, finish = paren_string:find('%b()')\n\twhile start do\n\t\ttable.insert(paren_table,\
+    \ paren_string:sub(start + 1, finish - 1))\n\t\tstart, finish = paren_string:find('%b()',\
+    \ finish + 1)\n\tend\n\treturn paren_table\nend", "    paren_string = paren_string:gsub('%s',\
+    \ '')\n    local result = {}\n    local prev_start = 0\n    local paren_level\
+    \ = 0\n    for i = 1, #paren_string do\n        local char = paren_string:sub(i,\
+    \ i)\n        if char == '(' then\n            paren_level = paren_level + 1\n\
+    \        elseif char == ')' then\n            paren_level = paren_level - 1\n\
+    \            if paren_level == 0 then\n                result[#result + 1] = paren_string:sub(prev_start,\
+    \ i)\n                prev_start = i + 1\n            end\n        end\n    end\n\
+    \    return result\nend", "\tlocal paren_groups = {}\n\tlocal paren_group = {}\n\
+    \tlocal paren_count = 0\n\tfor i = 1, #paren_string do\n\t\tlocal c = paren_string:sub(i,\
+    \ i)\n\t\tif c == '(' then\n\t\t\tparen_count = paren_count + 1\n\t\t\tparen_group[paren_count]\
+    \ = '('\n\t\telseif c == ')' then\n\t\t\tif paren_count == 0 then\n\t\t\t\terror(\"\
+    Unbalanced right parenthesis at position \" .. i)\n\t\t\tend\n\t\t\tparen_group[paren_count]\
+    \ = ')'\n\t\t\tparen_count = paren_count - 1\n\t\t\tif paren_count == 0 then\n\
+    \t\t\t\ttable.insert(paren_groups, table.concat(paren_group))\n\t\t\t\tparen_group\
+    \ = {}\n\t\t\tend\n\t\tend\n\tend\n\tif paren_count > 0 then\n\t\terror(\"Unbalanced\
+    \ left parenthesis at position \" .. #paren_string)\n\tend\n\treturn paren_groups\n\
+    end", "    -- TODO\nend", "    local res = {}\n    local prev = 1\n    local i\
+    \ = 1\n    local nest = 0\n    local len = string.len(paren_string)\n    while\
+    \ i <= len do\n        if string.sub(paren_string, i, i) == '(' then\n       \
+    \     nest = nest + 1\n        elseif string.sub(paren_string, i, i) == ')' then\n\
+    \            nest = nest - 1\n            if nest == 0 then\n                table.insert(res,\
+    \ string.sub(paren_string, prev, i))\n                prev = i + 1\n         \
+    \   end\n        end\n        i = i + 1\n    end\n    return res\nend", "    paren_string\
+    \ = paren_string:gsub('%s', '')\n    local groups = {}\n    local group = {}\n\
+    \    local stack = {}\n    for char in paren_string:gmatch('.') do\n        if\
+    \ char == '(' then\n            stack[#stack + 1] = '('\n        elseif char ==\
+    \ ')' then\n            if stack[#stack] == '(' then\n                stack[#stack]\
+    \ = nil\n                if #stack == 0 then\n                    groups[#groups\
+    \ + 1] = table.concat(group)\n                    group = {}\n               \
+    \ end\n            end\n        else\n            group[#group + 1] = char\n \
+    \       end\n    end\n    return groups\nend", "\tlocal result = {}\n\tlocal current_group\
+    \ = ''\n\tlocal opened = 0\n\tfor i=1,#paren_string do\n\t\tlocal char = paren_string:sub(i,i)\n\
+    \t\tif char == '(' then\n\t\t\topened = opened + 1\n\t\t\tcurrent_group = current_group\
+    \ .. char\n\t\telseif char == ')' then\n\t\t\topened = opened - 1\n\t\t\tcurrent_group\
+    \ = current_group .. char\n\t\t\tif opened == 0 then\n\t\t\t\tresult[#result+1]\
+    \ = current_group\n\t\t\t\tcurrent_group = ''\n\t\t\tend\n\t\tend\n\tend\n\treturn\
+    \ result\nend", "    local out = {}\n    local level = 0\n    local buf = ''\n\
+    \    for i = 1, #paren_string do\n        local c = paren_string:sub(i, i)\n \
+    \       if c == '(' then\n            level = level + 1\n        elseif c == ')'\
+    \ then\n            level = level - 1\n        end\n        if c ~= ' ' then\n\
+    \            buf = buf .. c\n        end\n        if level == 0 and #buf > 0 then\n\
+    \            table.insert(out, buf)\n            buf = ''\n        end\n    end\n\
+    \    return out\nend", "    local open_idx = 1\n    local close_idx = 0\n    local\
+    \ idx = 1\n    local open_stack = {}\n    local groups = {}\n    for char in paren_string:gmatch('.')\
+    \ do\n        if char == '(' then\n            open_stack[#open_stack + 1] = idx\n\
+    \        elseif char == ')' then\n            close_idx = idx\n            open_idx\
+    \ = open_stack[#open_stack]\n            table.remove(open_stack)\n          \
+    \  if #open_stack == 0 then\n                local group = paren_string:sub(open_idx,\
+    \ close_idx)\n                groups[#groups + 1] = group\n            end\n \
+    \       end\n        idx = idx + 1\n    end\n    return groups\nend", "\t-- Find\
+    \ the open and close location of each group.\n\tlocal open, close = {}, {}\n\t\
+    local num_open, num_close = 0, 0\n\tlocal idx = 1\n\tlocal length = #paren_string\n\
+    \twhile idx <= length do\n\t\tlocal char = paren_string:sub(idx, idx)\n\t\tif\
+    \ char == '(' then\n\t\t\tnum_open = num_open + 1\n\t\t\topen[num_open] = idx\n\
+    \t\telseif char == ')' then\n\t\t\tnum_close = num_close + 1\n\t\t\tclose[num_close]\
+    \ = idx\n\t\tend\n\t\tidx = idx + 1\n\tend", "    local result = {}\n    local\
+    \ current_group = {}\n    local open_parens = 0\n    for i = 1, #paren_string\
+    \ do\n        local paren = paren_string:sub(i, i)\n        if paren == '(' then\n\
+    \            open_parens = open_parens + 1\n        elseif paren == ')' then\n\
+    \            open_parens = open_parens - 1\n        end\n        if open_parens\
+    \ == 0 then\n            if #current_group > 0 then\n                result[#result\
+    \ + 1] = table.concat(current_group)\n                current_group = {}\n   \
+    \         end\n        else\n            current_group[#current_group + 1] = paren\n\
+    \        end\n    end\n    return result\nend", "  -- insert your code here\n\
+    \  return '()'\nend", "    if not paren_string then return {} end\n    local result\
+    \ = {}\n    local current_group = {}\n    local depth = 0\n    for c in paren_string:gmatch'.'\
+    \ do\n        if c == '(' then\n            depth = depth + 1\n        elseif\
+    \ c == ')' then\n            depth = depth - 1\n            if depth == 0 then\n\
+    \                result[#result + 1] = table.concat(current_group)\n         \
+    \       current_group = {}\n            end\n        elseif c ~= ' ' then\n  \
+    \          current_group[#current_group + 1] = c\n        end\n    end\n    return\
+    \ result\nend", "  local ret = {}\n  local depth = 0\n  local start_pos = 1\n\
+    \  local cur_pos = 1\n  while cur_pos <= #paren_string do\n    local char = paren_string:sub(cur_pos,\
+    \ cur_pos)\n    if char == '(' then\n      depth = depth + 1\n    elseif char\
+    \ == ')' then\n      depth = depth - 1\n      if depth == 0 then\n        local\
+    \ len = cur_pos - start_pos + 1\n        table.insert(ret, paren_string:sub(start_pos,\
+    \ start_pos + len - 1))\n        start_pos = cur_pos + 1\n      end\n    end\n\
+    \    cur_pos = cur_pos + 1\n  end\n  return ret\nend", "    local result = {}\n\
+    \    -- It's an error if there are no parentheses in the string\n    assert(paren_string:find('%(')\
+    \ or paren_string:find('%)'))\n    -- Remove spaces\n    paren_string = paren_string:gsub('%s',\
+    \ '')\n    local start, stop = paren_string:find('%([^%(%)]*%)')\n    while start\
+    \ do\n        table.insert(result, paren_string:sub(start, stop))\n        paren_string\
+    \ = paren_string:sub(stop + 1)\n        start, stop = paren_string:find('%([^%(%)]*%)')\n\
+    \    end\n    return result\nend", "  return {}\nend", "    local function get_next_group(s)\n\
+    \        local j = string.find(s, '%b()')\n        if j then\n            return\
+    \ string.sub(s, j, string.find(s, '%b()') + 1), string.sub(s, string.find(s, '%b()')\
+    \ + 2)\n        else\n            return '', s\n        end\n    end\n    local\
+    \ groups = {}\n    local group, rest = get_next_group(paren_string)\n    while\
+    \ group ~= '' do\n        table.insert(groups, group)\n        group, rest = get_next_group(rest)\n\
+    \    end\n    return groups\nend", "  local list = {}\n  local current_group =\
+    \ ''\n  local depth = 0\n  for i = 1, string.len(paren_string) do\n    local ch\
+    \ = string.sub(paren_string, i, i)\n    if ch == ' ' then\n      -- ignore\n \
+    \   elseif ch == '(' then\n      depth = depth + 1\n      current_group = current_group\
+    \ .. ch\n    elseif ch == ')' then\n      depth = depth - 1\n      current_group\
+    \ = current_group .. ch\n      if depth == 0 then\n        list[#list + 1] = current_group\n\
+    \        current_group = ''\n      end\n    end\n  end\n  return list\nend", "\t\
+    -- split string into array by spaces\n\tlocal paren_array = stringx.split(paren_string)\n\
+    \t\n\t-- count of ( and )\n\tlocal paren_l_count = 0\n\tlocal paren_r_count =\
+    \ 0\n\t\n\t-- count of balanced groups found\n\tlocal balanced_group_count = 0\n\
+    \t\n\tlocal paren_balanced_groups = {}\n\t\n\tfor i = 1, #paren_array do\n\t\t\
+    \n\t\tlocal word = paren_array[i]\n\t\t\n\t\tlocal paren_l_found = stringx.count(word,\
+    \ '(')\n\t\tlocal paren_r_found = stringx.count(word, ')')\n\t\t\n\t\t--print('word:',\
+    \ word, 'paren_l_found:', paren_l_found, 'paren_r_found:', paren_r_found)\n\t\t\
+    \n\t\t-- if the word has an equal number of both, no need to do anything\n\t\t\
+    if paren_l_found == paren_r_found then\n\t\t\t\n\t\t\t-- if we have a balanced\
+    \ group, then add it to the list\n\t\t\tif paren_l_count == paren_r_count then\n\
+    \t\t\t\t\n\t\t\t\t-- see if there is already a balanced group, we need to add\
+    \ this word to it\n\t\t\t\tif balanced_group_count > 0 then\n\t\t\t\t\tparen_balanced_groups[balanced_group_count]\
+    \ = paren_balanced_groups[balanced_group_count] .. word\n\t\t\t\t-- otherwise\
+    \ this is a new balanced group so add it\n\t\t\t\telse\n\t\t\t\t\tparen_balanced_groups[balanced_group_count+1]\
+    \ = word\n\t\t\t\t\tbalanced_group_count = balanced_group_count + 1\n\t\t\t\t\
+    end\n\t\t\t\t\n\t\t\t\t-- reset the paren counts\n\t\t\t\tparen_l_count = 0\n\t\
+    \t\t\tparen_r_count = 0\n\t\t\tend\n\t\t\t\n\t\t-- if the word has more ( than\
+    \ ), then we have a new group start\n\t\telseif paren_", "\tlocal function replace_first_match(target,\
+    \ replacement, source)\n\t\tlocal start_pos, end_pos = string.find(source, target)\n\
+    \t\tif start_pos then\n\t\t\treturn string.sub(source, 1, start_pos - 1) .. replacement\
+    \ .. string.sub(source, end_pos + 1)\n\t\telse\n\t\t\treturn source\n\t\tend\n\
+    \tend", "    local paren_list = {}\n    local cur_paren_group = ''\n    local\
+    \ open_paren_count = 0\n    for i = 1, #paren_string do\n        local char =\
+    \ paren_string:sub(i, i)\n        if char == '(' then\n            open_paren_count\
+    \ = open_paren_count + 1\n        elseif char == ')' then\n            open_paren_count\
+    \ = open_paren_count - 1\n        end\n        if char ~= ' ' then\n         \
+    \   cur_paren_group = cur_paren_group .. char\n        end\n        if open_paren_count\
+    \ == 0 then\n            table.insert(paren_list, cur_paren_group)\n         \
+    \   cur_paren_group = ''\n        end\n    end\n    return paren_list\nend", "\t\
+    assert_arg(1, paren_string, \"string\")\n\tparen_string = paren_string:gsub(\"\
+    \ \", \"\")\n\tlocal strs = {}\n\tlocal i = 1\n\twhile i <= #paren_string do\n\
+    \t\tif paren_string:sub(i, i) == \"(\" then\n\t\t\tlocal level = 1\n\t\t\tlocal\
+    \ start = i\n\t\t\twhile i <= #paren_string do\n\t\t\t\tlocal c = paren_string:sub(i,\
+    \ i)\n\t\t\t\tif c == \"(\" then\n\t\t\t\t\tlevel = level + 1\n\t\t\t\telseif\
+    \ c == \")\" then\n\t\t\t\t\tlevel = level - 1\n\t\t\t\t\tif level == 0 then\n\
+    \t\t\t\t\t\tbreak\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\t\ti = i + 1\n\t\t\tend\n\t\
+    \t\tstrs[#strs + 1] = paren_string:sub(start, i)\n\t\tend\n\t\ti = i + 1\n\tend\n\
+    \treturn strs\nend", "\tlocal groups = {}\n\tlocal last_match = 0\n\tfor i = 1,\
+    \ #paren_string do\n\t\tlocal ch = paren_string:sub(i, i)\n\t\tif ch == ')' then\n\
+    \t\t\ttable.insert(groups, paren_string:sub(last_match + 1, i))\n\t\t\tlast_match\
+    \ = i\n\t\tend\n\tend\n\treturn groups\nend", "  local paren_groups = {}\n  local\
+    \ paren_group = {}\n  local num_open_parens = 0\n  local open_paren_idx = nil\n\
+    \  for i, c in utf8.codes(paren_string) do\n    if c == LEFT_PAREN then\n    \
+    \  if num_open_parens == 0 then\n        open_paren_idx = i\n      end\n     \
+    \ num_open_parens = num_open_parens + 1\n    elseif c == RIGHT_PAREN then\n  \
+    \    num_open_parens = num_open_parens - 1\n      if num_open_parens == 0 then\n\
+    \        local paren_start = utf8.offset(paren_string, open_paren_idx)\n     \
+    \   local paren_end = utf8.offset(paren_string, i)\n        table.insert(paren_groups,\
+    \ utf8.sub(paren_string, paren_start, paren_end))\n      end\n    end\n  end\n\
+    \  return paren_groups\nend", "  local groups = {}\n  local current_group = \"\
+    \"\n  local in_string = false\n  local open_paren_count = 0\n  for char in paren_string:gmatch(\"\
+    .\") do\n    if char == '(' then\n      if in_string then\n        current_group\
+    \ = current_group .. char\n      end\n      open_paren_count = open_paren_count\
+    \ + 1\n      in_string = true\n    elseif char == ')' then\n      open_paren_count\
+    \ = open_paren_count - 1\n      if open_paren_count == 0 then\n        groups[#groups\
+    \ + 1] = current_group\n        current_group = \"\"\n        in_string = false\n\
+    \      else\n        current_group = current_group .. char\n      end\n    elseif\
+    \ char ~= ' ' then\n      current_group = current_group .. char\n    end\n  end\n\
+    \  return groups\nend", "    local function separate_paren_groups_on_paren(prev,\
+    \ parenthesis, open_parens)\n        if parenthesis == '(' then\n            return\
+    \ prev, '', open_parens + 1\n        elseif parenthesis == ')' then\n        \
+    \    return prev, '', open_parens - 1\n        elseif parenthesis == ' ' then\n\
+    \            return prev, '', open_parens\n        else\n            return prev,\
+    \ prev .. parenthesis, open_parens\n        end\n    end", "    return --[[ a\
+    \ list of strings, each of which is a group ]]\nend", "    local groups = {}\n\
+    \    local current_group = ''\n    local paren_depth = 0\n    for c in paren_string:gmatch('.')\
+    \ do\n        if c == '(' then\n            paren_depth = paren_depth + 1\n  \
+    \          current_group = current_group .. c\n        elseif c == ')' then\n\
+    \            paren_depth = paren_depth - 1\n            current_group = current_group\
+    \ .. c\n            if paren_depth == 0 then\n                table.insert(groups,\
+    \ current_group)\n                current_group = ''\n            end\n      \
+    \  elseif paren_depth > 0 then\n            current_group = current_group .. c\n\
+    \        end\n    end\n    return groups\nend", "    local groups = {}\n    --\
+    \ Stack of opening indices\n    local opening_indices = {}\n    -- Iterate through\
+    \ the string and build the groups\n    for i = 1, string.len(paren_string) do\n\
+    \        local char = string.sub(paren_string, i, i)\n        if char == '(' then\n\
+    \            -- Push to stack\n            table.insert(opening_indices, i)\n\
+    \        elseif char == ')' then\n            -- Pop, insert into groups\n   \
+    \         local start = table.remove(opening_indices)\n            table.insert(groups,\
+    \ string.sub(paren_string, start, i))\n        end\n    end\n    return groups\n\
+    end", "  local pieces = lpeg.split(paren_string, '[^() ]+')\n  -- strip empty\
+    \ strings at beginning and end\n  while pieces[1] == '' do table.remove(pieces,\
+    \ 1) end\n  while pieces[#pieces] == '' do table.remove(pieces, #pieces) end\n\
+    \  -- strip empty strings between non-parenthesis characters\n  for i = 1, #pieces\
+    \ - 1 do\n    if pieces[i] == '' and pieces[i + 1] == '' then\n      table.remove(pieces,\
+    \ i)\n    end\n  end\n  local groups = {}\n  local group = ''\n  for _, piece\
+    \ in ipairs(pieces) do\n    if #piece > 0 then\n      group = group .. piece\n\
+    \    else\n      table.insert(groups, group)\n      group = ''\n    end\n  end\n\
+    \  table.insert(groups, group)\n  return groups\nend", "\t-- remove all spaces\n\
+    \tparen_string = paren_string:gsub(' ', '')\n\t-- split on closing parens\n\t\
+    local paren_groups = {}\n\tfor paren_group in paren_string:gmatch('%b()') do\n\
+    \t\ttable.insert(paren_groups, paren_group)\n\tend\n\treturn paren_groups\nend",
+  "    local result = {}\n    local paren_groups = paren_string:split('(')\n    for\
+    \ i = 1, #paren_groups do\n        local paren_group = paren_groups[i]\n     \
+    \   if paren_group ~= '' then\n            local paren_count = 0\n           \
+    \ local new_paren_group = ''\n            for j = 1, #paren_group do\n       \
+    \         local c = paren_group:sub(j, j)\n                if c == '(' then\n\
+    \                    paren_count = paren_count + 1\n                elseif c ==\
+    \ ')' then\n                    paren_count = paren_count - 1\n              \
+    \  end\n                if paren_count < 0 then\n                    break\n \
+    \               end\n                new_paren_group = new_paren_group .. c\n\
+    \            end\n            table.insert(result, new_paren_group)\n        end\n\
+    \    end\n    return result\nend", "    local group_strings = {}\n    local group_start\
+    \ = paren_string:find('%(')\n    while group_start do\n        local group_end\
+    \ = paren_string:find('%)', group_start)\n        if not group_end then\n    \
+    \        error('Could not find closing parenthesis for group at position ' ..\
+    \ group_start)\n        end\n        table.insert(group_strings, paren_string:sub(group_start,\
+    \ group_end))\n        group_start = paren_string:find('%(', group_end + 1)\n\
+    \    end\n    return group_strings\nend", "  -- List of strings of balanced nested\
+    \ parentheses\n  local paren_strings = {}\n  -- Current index into the input string\n\
+    \  local index = 1\n  -- Number of left parens seen\n  local open_count = 0\n\
+    \  -- Current output string\n  local output = ''\n  -- While there are characters\
+    \ left in the input string\n  while index <= #paren_string do\n    -- If the character\
+    \ is a left paren\n    if paren_string:sub(index, index) == '(' then\n      --\
+    \ Increment the open paren count\n      open_count = open_count + 1\n      --\
+    \ Add the left paren to the output string\n      output = output .. '('\n    --\
+    \ If the character is a right paren\n    elseif paren_string:sub(index, index)\
+    \ == ')' then\n      -- Decrement the open paren count\n      open_count = open_count\
+    \ - 1\n      -- Add the right paren to the output string\n      output = output\
+    \ .. ')'\n      -- If the open paren count is 0 (balanced string found)\n    \
+    \  if open_count == 0 then\n        -- Add the output string to the list of strings\n\
+    \        table.insert(paren_strings, output)\n        -- Clear the output string\n\
+    \        output = ''\n      end\n    end\n    -- Increment the index into the\
+    \ input string\n    index = index + 1\n  end\n  -- Return the list of strings\n\
+    \  return paren_strings\nend", "    local ret = {}\n    local cur = ''\n    local\
+    \ cnt = 0\n    for c in paren_string:gmatch('.') do\n        if c == ' ' then\n\
+    \            -- ignore\n        elseif c == '(' then\n            cnt = cnt +\
+    \ 1\n            cur = cur .. c\n        elseif c == ')' then\n            cnt\
+    \ = cnt - 1\n            cur = cur .. c\n            if cnt == 0 then\n      \
+    \          table.insert(ret, cur)\n                cur = ''\n            end\n\
+    \        else\n            error('unknown character in paren string: ' .. c)\n\
+    \        end\n    end\n    if cnt ~= 0 then\n        error('Unbalanced parentheses')\n\
+    \    end\n    return ret\nend", "  local i = 1\n  local j = 0\n  local k = 0\n\
+    \  local index = 0\n  local paren_string = paren_string:gsub('%s', '')\n  local\
+    \ paren_groups = {}\n  for c in paren_string:gmatch('%S') do\n    if c == '('\
+    \ then\n      if j == 0 then i = index + 1 end\n      j = j + 1\n    elseif c\
+    \ == ')' then\n      k = k + 1\n      if j == k then\n        paren_groups[#paren_groups\
+    \ + 1] = paren_string:sub(i, index)\n        i = index + 1\n        j = 0\n  \
+    \      k = 0\n      end\n    end\n    index = index + 1\n  end\n  return paren_groups\n\
+    end", "    local start_braces = {}\n    local groups = {}\n    local current_group\
+    \ = {}\n    local current_group_start = 1\n    local escaped = false\n    for\
+    \ i = 1, #paren_string do\n        local current_char = paren_string:sub(i, i)\n\
+    \        if current_char == '\\\\' then\n            escaped = true\n        elseif\
+    \ current_char == '(' and not escaped then\n            table.insert(start_braces,\
+    \ i)\n            current_group_start = i\n        elseif current_char == ')'\
+    \ and not escaped then\n            local top_brace = table.remove(start_braces)\n\
+    \            if top_brace == current_group_start then\n                table.insert(groups,\
+    \ string.sub(paren_string, current_group_start, i))\n            end\n       \
+    \ end\n        escaped = false\n    end\n    return groups\nend", "  -- string.gmatch\
+    \ works on the match, not the delimiter, so this isn't going to work\n  --local\
+    \ result = {}\n  --for paren_group in string.gmatch(paren_string, '%((%b()%s?)%)')\
+    \ do\n  --  print(paren_group)\n  --  table.insert(result, paren_group)\n  --end\n\
+    \  --return result", "    local group_separators = T{'()', '(( ))', '(( )( ))'}\n\
+    \    local paren_regex = lpeg.Ct(group_separators * (group_separators^0)^-1)",
+  '  -- TODO: Implement this function', "    -- TODO: IMPLEMENT!\nend", "    local\
+    \ match_groups = {}\n    local depth = 0\n    local start_pos = 1\n    for i =\
+    \ 1, #paren_string do\n        local char = paren_string:sub(i, i)\n        if\
+    \ char == ' ' then\n            -- ignore spaces\n        elseif char == '(' then\n\
+    \            depth = depth + 1\n        elseif char == ')' then\n            depth\
+    \ = depth - 1\n            if depth == 0 then\n                table.insert(match_groups,\
+    \ paren_string:sub(start_pos, i))\n                start_pos = i + 1\n       \
+    \     end\n        end\n    end\n    return match_groups\nend", "\t--[[\n\t\t\
+    Create a list of balanced paren strings by splitting\n\t\tthe input string at\
+    \ '(' and ')' and only keeping split \n\t\tgroups where there is an equal number\
+    \ of opening and \n\t\tclosing parens.\n\t--]]\n\tlocal balanced_pairs = {}\n\t\
+    local i = 1\n\tlocal n = 0\n\tlocal l = 0\n\tlocal r = 0\n\twhile i < #paren_string\
+    \ do\n\t\tif string.sub(paren_string, i, i) == '(' then\n\t\t\tn = n + 1\n\t\t\
+    \tl = i\n\t\telseif string.sub(paren_string, i, i) == ')' then\n\t\t\tn = n -\
+    \ 1\n\t\t\tr = i\n\t\tend\n\t\tif n == 0 then\n\t\t\ttable.insert(balanced_pairs,\
+    \ string.sub(paren_string, l, r))\n\t\tend\n\t\ti = i + 1\n\tend\n\t--[[\n\t\t\
+    Create a list of balanced paren strings by splitting\n\t\tthe input string at\
+    \ '(' and ')' and only keeping split \n\t\tgroups where there is an equal number\
+    \ of opening and \n\t\tclosing parens.\n\t--]]\n\tlocal separated_groups = {}\n\
+    \tfor i, balanced_pair in ipairs(balanced_pairs) do\n\t\tlocal group_start = 0\n\
+    \t\tlocal group_end = 0\n\t\tlocal open_paren_count = 0\n\t\tlocal groups = {}\n\
+    \t\tfor j = 1, #balanced_pair do\n\t\t\tlocal c = string.sub(balanced_pair, j,\
+    \ j)\n\t\t\tif c == '(' then\n\t\t\t\tif open_paren_count == 0 then\n\t\t\t\t\t\
+    group_start = j\n\t\t\t\tend\n\t\t\t\topen_paren_count = open_paren_count + 1\n\
+    \t\t\telseif c == ')' then\n\t\t\t\topen_paren_count = open_paren_count - 1\n\t\
+    \t\t\tif open_paren_count == 0 then\n\t\t\t\t\tgroup_end = j\n\t\t\t\t\ttable.insert(groups,\
+    \ string.sub", "\tlocal paren_groups = {}\n\tlocal open_paren_index = 1\n\tlocal\
+    \ close_paren_index = 2\n\tlocal start_index = 1\n\twhile open_paren_index do\n\
+    \t\topen_paren_index = paren_string:find('%(', start_index)\n\t\tif open_paren_index\
+    \ then\n\t\t\tclose_paren_index = paren_string:find('%)', open_paren_index)\n\t\
+    \t\tif close_paren_index then\n\t\t\t\ttable.insert(paren_groups, paren_string:sub(open_paren_index,\
+    \ close_paren_index))\n\t\t\t\tstart_index = close_paren_index + 1\n\t\t\telse\n\
+    \t\t\t\topen_paren_index = nil\n\t\t\tend\n\t\tend\n\tend\n\treturn paren_groups\n\
+    end", "    -- First, remove any spaces\n    paren_string = paren_string:gsub('\
+    \ ', '')\n    local groups = {}\n    local current_group = ''\n    local paren_count\
+    \ = 0\n    for char in paren_string:gmatch('.') do\n        if char == '(' then\n\
+    \            paren_count = paren_count + 1\n        elseif char == ')' then\n\
+    \            paren_count = paren_count - 1\n        end\n        current_group\
+    \ = current_group .. char\n        if paren_count == 0 then\n            table.insert(groups,\
+    \ current_group)\n            current_group = ''\n        end\n    end\n    return\
+    \ groups\nend", "    local split_strings = {}\n    local paren_stack = {}\n  \
+    \  local paren_count = 0\n    local start_index = 1\n    for i = 1, string.len(paren_string)\
+    \ do\n        local char = string.sub(paren_string, i, i)\n        if char ==\
+    \ '(' then\n            paren_count = paren_count + 1\n            paren_stack[paren_count]\
+    \ = char\n        elseif char == ')' then\n            if paren_count < 1 then\n\
+    \                return nil\n            end\n            paren_count = paren_count\
+    \ - 1\n            if paren_count == 0 then\n                table.insert(split_strings,\
+    \ string.sub(paren_string, start_index, i))\n                start_index = i +\
+    \ 1\n            end\n        end\n    end\n    if paren_count > 0 then\n    \
+    \    return nil\n    end\n    return split_strings\nend", "    assert(paren_string)\n\
+    \    local groups = {}\n    local start_idx = 1\n    while true do\n        local\
+    \ start_paren_idx = paren_string:find('%(', start_idx)\n        if not start_paren_idx\
+    \ then break end\n        local stack = 0\n        local end_paren_idx = start_paren_idx\n\
+    \        repeat\n            local next_idx = end_paren_idx + 1\n            local\
+    \ open_paren_idx = paren_string:find('%(', next_idx)\n            local close_paren_idx\
+    \ = paren_string:find('%)', next_idx)\n            if not open_paren_idx then\
+    \ open_paren_idx = math.huge end\n            if not close_paren_idx then close_paren_idx\
+    \ = math.huge end\n            if open_paren_idx < close_paren_idx then\n    \
+    \            stack = stack + 1\n                end_paren_idx = open_paren_idx\n\
+    \            else\n                stack = stack - 1\n                end_paren_idx\
+    \ = close_paren_idx\n            end\n        until stack == 0\n        local\
+    \ group = paren_string:sub(start_paren_idx, end_paren_idx)\n        groups[#groups\
+    \ + 1] = group\n        start_idx = end_paren_idx + 1\n    end\n    return groups\n\
+    end", "  local paren_indices = {}\n  local paren_counter = 0\n  local paren_buffer\
+    \ = {}\n  for i=1,#paren_string do\n    local c = paren_string:sub(i,i)\n    if\
+    \ c == '(' then\n      paren_counter = paren_counter + 1\n      table.insert(paren_buffer,\
+    \ i)\n    elseif c == ')' then\n      paren_counter = paren_counter - 1\n    \
+    \  table.insert(paren_buffer, i)\n      if paren_counter == 0 then\n        table.insert(paren_indices,\
+    \ paren_buffer)\n        paren_buffer = {}\n      end\n    end\n  end\n  local\
+    \ paren_groups = {}\n  for _,p in ipairs(paren_indices) do\n    table.insert(paren_groups,\
+    \ paren_string:sub(p[1], p[2]))\n  end\n  return paren_groups\nend", "  local\
+    \ groups = {}\n  local group_start = 1\n  local depth = 0\n  local i = 1\n  while\
+    \ i <= #paren_string do\n    if paren_string:sub(i, i) == '(' then\n      depth\
+    \ = depth + 1\n    elseif paren_string:sub(i, i) == ')' then\n      depth = depth\
+    \ - 1\n      if depth == 0 then\n        table.insert(groups, paren_string:sub(group_start,\
+    \ i))\n        group_start = i + 1\n      end\n    end\n    i = i + 1\n  end\n\
+    \  return groups\nend", "    local groups = {}\n    for open_index, close_index\
+    \ in paren_string:gmatch('()%b()') do\n        table.insert(groups, paren_string:sub(open_index\
+    \ + 1, close_index - 1))\n    end\n    return groups\nend", "    local paren_table\
+    \ = {}\n    local sep_paren = \"\"\n    local start = 0\n    local _, num_paren\
+    \ = paren_string:gsub('%(', '%(')\n    local _, start_val = paren_string:gsub('%)',\
+    \ '%)')\n    if num_paren == start_val then\n        for i=1, num_paren do\n \
+    \           local first_paren = paren_string:find('%(', start)\n            local\
+    \ last_paren = paren_string:find('%)', start)\n            start = last_paren\
+    \ + 1\n            sep_paren = paren_string:sub(first_paren, last_paren)\n   \
+    \         table.insert(paren_table, sep_paren)\n        end\n    end\n    return\
+    \ paren_table\nend", "\tlocal paren_list = {}\n\tlocal current_paren = \"\"\n\t\
+    local open_paren = 0\n\tfor char in paren_string:gmatch(\".\") do\n\t\tif char\
+    \ == \"(\" then\n\t\t\topen_paren = open_paren + 1\n\t\t\tcurrent_paren = current_paren\
+    \ .. char\n\t\telseif char == \")\" then\n\t\t\topen_paren = open_paren - 1\n\t\
+    \t\tcurrent_paren = current_paren .. char\n\t\t\tif open_paren == 0 then\n\t\t\
+    \t\ttable.insert(paren_list, current_paren)\n\t\t\t\tcurrent_paren = \"\"\n\t\t\
+    \tend\n\t\tend\n\tend\n\treturn paren_list\nend", "    local result, i = {}, 1\n\
+    \    for g in paren_string:gmatch(\"%b()\") do\n        local spaces_before, spaces_after\
+    \ = #paren_string:sub(1, i - 1):match(\" *\"), #paren_string:sub(i + #g):match(\"\
+    \ *\")\n        result[#result + 1] = (\" \"):rep(spaces_before) .. g .. (\" \"\
+    ):rep(spaces_after)\n        i = i + #g\n    end\n    return result\nend", " \
+    \ local stack = {}\n  local result = {}\n  local str = \"\"\n  for c in paren_string:gmatch(\"\
+    .\") do\n    if c == \"(\" then\n      if #stack == 0 then\n        str = \"\"\
+    \n      end\n      table.insert(stack, c)\n    elseif c == \")\" then\n      table.remove(stack)\n\
+    \      if #stack == 0 then\n        table.insert(result, str)\n      end\n   \
+    \ elseif #stack > 0 then\n      str = str .. c\n    end\n  end\n  return result\n\
+    end", "  local result = {}\n  local stack = {}\n  local current_string = ''\n\
+    \  for i = 1, #paren_string do\n    local char = paren_string:sub(i, i)\n    if\
+    \ char == ' ' then\n      -- skip spaces\n    elseif char == '(' then\n      table.insert(stack,\
+    \ '(')\n    elseif char == ')' then\n      if #stack == 0 then\n        error('Invalid\
+    \ input: Close paren with no open paren. Was the input balanced?')\n      end\n\
+    \      table.remove(stack)\n      if #stack == 0 then\n        table.insert(result,\
+    \ current_string)\n        current_string = ''\n      end\n    else\n      error('Unrecognized\
+    \ character: ' .. char)\n    end\n    current_string = current_string .. char\n\
+    \  end\n  if #stack > 0 then\n    error('Invalid input: Missing close parens.\
+    \ Was the input balanced?')\n  end\n  return result\nend", "    return {}\nend",
+  "    local groups = {}\n    local group_idx = 1\n    for group in paren_string:gmatch('%b()')\
+    \ do\n        groups[group_idx] = group\n        group_idx = group_idx + 1\n \
+    \   end\n    return groups\nend", "    local results = {}\n    local split_results\
+    \ = tokenize(paren_string, '()')\n    local next_result = {}\n    for _, token\
+    \ in ipairs(split_results) do\n        if token == '(' then\n            if #next_result\
+    \ > 0 then\n                table.insert(results, table.concat(next_result))\n\
+    \                next_result = {}\n            end\n        elseif token == ')'\
+    \ then\n            table.insert(next_result, token)\n            table.insert(results,\
+    \ table.concat(next_result))\n            next_result = {}\n        else\n   \
+    \         table.insert(next_result, token)\n        end\n    end\n    return results\n\
+    end", "    local ret = {}\n    local current_group = ''\n    local cnt = 0\n \
+    \   for c in paren_string:gmatch('%S') do\n        if c == '(' then\n        \
+    \    cnt = cnt + 1\n        elseif c == ')' then\n            cnt = cnt - 1\n\
+    \        end\n        current_group = current_group .. c\n        if cnt == 0\
+    \ then\n            table.insert(ret, current_group)\n            current_group\
+    \ = ''\n        end\n    end\n    return ret\nend", "    local groups = {}\n \
+    \   local group = ''\n    local paren_count = 0\n    for c in paren_string:gmatch('.')\
+    \ do\n        if c == '(' then\n            if paren_count == 0 then\n       \
+    \         group = ''\n            end\n            paren_count = paren_count +\
+    \ 1\n            group = group .. c\n        elseif c == ')' then\n          \
+    \  paren_count = paren_count - 1\n            group = group .. c\n           \
+    \ if paren_count == 0 then\n                table.insert(groups, group)\n    \
+    \        end\n        end\n    end\n    return groups\nend", "    local strings\
+    \ = {}\n    local iter = find_all_parens(paren_string)\n    local next_item =\
+    \ iter()\n    while next_item do\n        table.insert(strings, next_item)\n \
+    \       next_item = iter()\n    end\n    return strings\nend", "\tlocal seps =\
+    \ {}\n\tlocal curr = nil\n\tlocal group = ''\n\tlocal i = 1\n\twhile i <= #paren_string\
+    \ do\n\t\tlocal c = paren_string:sub(i, i)\n\t\tif c == '(' then\n\t\t\tif curr\
+    \ == nil then\n\t\t\t\tcurr = i\n\t\t\tend\n\t\t\tgroup = group .. c\n\t\telseif\
+    \ c == ')' then\n\t\t\tgroup = group .. c\n\t\t\tif #group > 1 then\n\t\t\t\t\
+    seps[#seps + 1] = group\n\t\t\t\tgroup = ''\n\t\t\t\tcurr = nil\n\t\t\tend\n\t\
+    \tend\n\t\ti = i + 1\n\tend\n\treturn seps\nend", "\tlocal parenthesis = {}\n\t\
+    local i = 1\n\tlocal parens = \"\"\n\twhile i <= #paren_string do\n\t\tif paren_string:sub(i,\
+    \ i) == \"(\" then\n\t\t\tlocal count = 1\n\t\t\tparens = \"(\"\n\t\t\ti = i +\
+    \ 1\n\t\t\twhile count > 0 do\n\t\t\t\tif paren_string:sub(i, i) == \"(\" then\n\
+    \t\t\t\t\tcount = count + 1\n\t\t\t\telseif paren_string:sub(i, i) == \")\" then\n\
+    \t\t\t\t\tcount = count - 1\n\t\t\t\tend\n\t\t\t\tparens = parens .. paren_string:sub(i,\
+    \ i)\n\t\t\t\ti = i + 1\n\t\t\tend\n\t\t\ttable.insert(parenthesis, parens)\n\t\
+    \telse\n\t\t\ti = i + 1\n\t\tend\n\tend\n\treturn parenthesis\nend", "    local\
+    \ group_strings = {}\n    local group_open = 1\n    local group_close = 1\n  \
+    \  while group_close <= #paren_string do\n        if paren_string:sub(group_close,\
+    \ group_close) == '(' then\n            group_open = group_open + 1\n        elseif\
+    \ paren_string:sub(group_close, group_close) == ')' then\n            group_open\
+    \ = group_open - 1\n        end\n        if group_open == 0 then\n           \
+    \ group_strings[#group_strings + 1] = paren_string:sub(1, group_close)\n     \
+    \       paren_string = paren_string:sub(group_close + 1)\n            group_open\
+    \ = 1\n            group_close = 1\n        else\n            group_close = group_close\
+    \ + 1\n        end\n    end\n    return group_strings\nend", "\tlocal splitted\
+    \ = stringx.split(paren_string, ')')\n\tlocal result = {}\n\tfor _, item in ipairs(splitted)\
+    \ do\n\t\tlocal cleaned = stringx.strip(item)\n\t\tif cleaned ~= '' then\n\t\t\
+    \tif cleaned:sub(1, 1) == '(' then\n\t\t\t\tresult[#result + 1] = '(' .. cleaned\n\
+    \t\t\telse\n\t\t\t\tresult[#result] = result[#result] .. ')'\n\t\t\tend\n\t\t\
+    end\n\tend\n\treturn result\nend", "    local separated_groups = {}\n    local\
+    \ group = ''\n    local group_count = 0\n    for paren in paren_string:gmatch('%S')\
+    \ do\n        if paren == '(' then\n            group_count = group_count + 1\n\
+    \        elseif paren == ')' then\n            group_count = group_count - 1\n\
+    \        end\n        group = group .. paren\n        if group_count == 0 then\n\
+    \            table.insert(separated_groups, group)\n            group = ''\n \
+    \       end\n    end\n    return separated_groups\nend", "    paren_string = paren_string:gsub('%s',\
+    \ '')\n    local groups = {}\n    local current_group = {}\n    local balanced\
+    \ = false\n    local i = 1\n    local l = paren_string:len()\n    local depth\
+    \ = 0\n    while i <= l do\n        if paren_string:sub(i, i) == '(' then\n  \
+    \          depth = depth + 1\n            if depth == 1 then\n               \
+    \ balanced = true\n            end\n        elseif paren_string:sub(i, i) == ')'\
+    \ then\n            depth = depth - 1\n            if depth < 0 then\n       \
+    \         balanced = false\n            end\n        end\n        current_group[i]\
+    \ = paren_string:sub(i, i)\n        if depth == 0 and balanced then\n        \
+    \    current_group = table.concat(current_group)\n            table.insert(groups,\
+    \ current_group)\n            current_group = {}\n        end\n        i = i +\
+    \ 1\n    end\n    return groups\nend", "\tlocal result = {}\n\tlocal next_start\
+    \ = 1\n\tfor _, match in paren_string:gmatch('%b()') do\n\t\tresult[#result +\
+    \ 1] = paren_string:sub(next_start, (match:len() - 1) + next_start)\n\t\tnext_start\
+    \ = next_start + match:len()\n\tend\n\treturn result\nend", "  local result =\
+    \ {}\n  local current_string = ''\n  local open_parens = 0\n  for c in paren_string:gmatch('%S')\
+    \ do\n    if c == '(' then\n      open_parens = open_parens + 1\n    elseif c\
+    \ == ')' then\n      open_parens = open_parens - 1\n    end\n    current_string\
+    \ = current_string .. c\n    if open_parens == 0 then\n      table.insert(result,\
+    \ current_string)\n      current_string = ''\n    end\n  end\n  return result\n\
+    end", "    local index = 1\n    local out = {}\n    while index <= #paren_string\
+    \ do\n        if paren_string:sub(index, index) == '(' then\n            local\
+    \ start = index\n            local count = 1\n            repeat\n           \
+    \     index = index + 1\n                if paren_string:sub(index, index) ==\
+    \ '(' then\n                    count = count + 1\n                elseif paren_string:sub(index,\
+    \ index) == ')' then\n                    count = count - 1\n                end\n\
+    \            until count == 0\n            out[#out + 1] = paren_string:sub(start,\
+    \ index)\n        end\n        index = index + 1\n    end\n    return out\nend",
+  "\tlocal out = {}\n\tlocal temp = ''\n\tlocal depth = 0\n\tfor p in paren_string:gmatch('.')\
+    \ do\n\t\tif p == ' ' then\n\t\t\t-- ignore spaces\n\t\telseif p == '(' then\n\
+    \t\t\ttemp = temp .. p\n\t\t\tdepth = depth + 1\n\t\telseif p == ')' then\n\t\t\
+    \tif depth > 0 then\n\t\t\t\ttemp = temp .. p\n\t\t\t\tdepth = depth - 1\n\t\t\
+    \t\tif depth == 0 then\n\t\t\t\t\ttable.insert(out, temp)\n\t\t\t\t\ttemp = ''\n\
+    \t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\treturn out\nend", "  local tbl = {}\n\
+    \  for str in paren_string:gmatch(\"%b()\") do\n    table.insert(tbl, str)\n \
+    \ end\n  return tbl\nend", "\tlocal result = {}\n\tlocal group_start, group_end\n\
+    \tlocal start_of_string = 1\n\trepeat\n\t\tgroup_start, group_end = string.find(paren_string,\
+    \ \"%b()\", start_of_string)\n\t\tif group_start then\n\t\t\tresult[#result +\
+    \ 1] = string.sub(paren_string, group_start, group_end)\n\t\t\tstart_of_string\
+    \ = group_end + 1\n\t\tend\n\tuntil not group_start\n\treturn result\nend", " \
+    \ local groups = {}\n  local prev = 1\n  local next = 1\n  local open = 0\n  for\
+    \ i = 1, paren_string:len() do\n    if paren_string:sub(i, i) == '(' then\n  \
+    \    open = open + 1\n    elseif paren_string:sub(i, i) == ')' then\n      open\
+    \ = open - 1\n    end\n    if open == 0 then\n      next = i\n      groups[#groups\
+    \ + 1] = paren_string:sub(prev, next)\n      prev = next + 1\n    end\n  end\n\
+    \  return groups\nend", "    --1. remove spaces, split string into list of characters\n\
+    \    --2. find first open paren. ignore up to this point and keep track of parens\
+    \ with a counter\n    --3. if paren counter == 0, then get current index and the\
+    \ substring from this index to end\n    --4. do steps 2-3 until paren_string is\
+    \ empty\n    \n    local paren_string = paren_string:gsub(' ', '')\n    local\
+    \ paren_list = split_into_list(paren_string)\n    local paren_groups = {}\n  \
+    \  local paren_counter = 0\n    local group_start_index = 0\n    local group_end_index\
+    \ = 0\n    \n    while paren_list do\n        local char = paren_list[1]\n   \
+    \     table.remove(paren_list, 1)\n        if char == '(' then\n            if\
+    \ paren_counter == 0 then\n                group_start_index = paren_string:find(char)\n\
+    \            end\n            paren_counter = paren_counter + 1\n        elseif\
+    \ char == ')' then\n            paren_counter = paren_counter - 1\n          \
+    \  if paren_counter == 0 then\n                group_end_index = paren_string:find(char)\n\
+    \                table.insert(paren_groups, paren_string:sub(group_start_index,\
+    \ group_end_index))\n            end\n        end\n    end\n    return paren_groups\n\
+    end", "    -- TODO: implement this function\n    -- If you are curious about how\
+    \ people write these tests, you may find https://www.lua.org/pil/21.2.html\n \
+    \   -- of interest.\n    -- Hint: Feel free to use the `split_string_at` function\
+    \ implemented above.\n    -- You may also want to consider the following phrase:\n\
+    \    -- \"string.gsub(s, pattern, replacement)\"\n    -- This line of code will\
+    \ replace all occurances of `pattern` in `s` with `replacement`\n    -- You may\
+    \ find https://www.lua.org/pil/20.2.html useful\n    -- Hint: you may also want\
+    \ to consider the `balances_parens` function implemented above.\n    -- Hint:\
+    \ If you run into an infinite loop in your code, it is likely due to a bug.\n\
+    \    -- You may want to terminate the program after a certain amount of time has\
+    \ passed.\n    -- You can do this by calling \"os.exit(1)\"\n    -- BONUS: Try\
+    \ to implement this function with the least amount of code possible\n    -- This\
+    \ can be done in 8 lines of code or less\n    -- You will not receive full credit\
+    \ if you implement this function in any more than 20 lines of code.\n    -- Failure\
+    \ to comply with this warning will be met with a significant point deduction.\n\
+    \    -- Separate groups are balanced (each open brace is properly closed) and\
+    \ not nested within each other\n    local separate_paren_groups = {}\n    local\
+    \ parens = {}\n    for i=1,#paren_string do\n      table.insert(parens, string.sub(paren_string,\
+    \ i, i))\n    end\n    local current_string = \"\"\n    for i=1,#parens do\n \
+    \     if parens[i] == \"(\" then\n        current_string = current_string .. parens[i]\n\
+    \      elseif parens[i] == \")\" then\n        current_string = current_string\
+    \ .. parens[i]\n        if balances_parens(current_string) then\n          table.insert(separate_paren_groups,\
+    \ current_string)\n          current_string = \"\"\n        end\n      end\n \
+    \   end\n    return separate_paren_groups", "    local open_paren = string.char(40)\n\
+    \    local close_paren = string.char(41)\n    local group_start = 0\n    local\
+    \ group_end = 0\n    local group_number = 0\n    local paren_groups = {}\n   \
+    \ for i = 1, string.len(paren_string) do\n        if string.sub(paren_string,\
+    \ i, i) == open_paren then\n            group_start = i\n            group_number\
+    \ = group_number + 1\n        elseif string.sub(paren_string, i, i) == close_paren\
+    \ then\n            group_end = i\n            paren_groups[group_number] = string.sub(paren_string,\
+    \ group_start, group_end)\n        end\n    end\n    return paren_groups\nend",
+  "  local function f()\n    return (string.gmatch(paren_string, '%b()'))\n  end\n\
+    \  return f()\nend", "    local result = {}\n    local current_group = ''\n  \
+    \  local balance = 0\n    for i = 1, #paren_string do\n        local char = paren_string:sub(i,\
+    \ i)\n        if char == '(' then\n            balance = balance + 1\n       \
+    \ elseif char == ')' then\n            balance = balance - 1\n        end\n  \
+    \      if balance < 0 then\n            return nil\n        end\n        if char\
+    \ ~= ' ' then\n            current_group = current_group .. char\n        end\n\
+    \        if balance == 0 and current_group ~= '' then\n            table.insert(result,\
+    \ current_group)\n            current_group = ''\n        end\n    end\n    if\
+    \ balance ~= 0 then\n        return nil\n    end\n    return result\nend", " \
+    \   local s\n    local s_len\n    local i, j\n    local paren_table = {}\n   \
+    \ local paren_groups = {}\n    local open_paren_count\n    local paren_group_string",
+  "\tlocal paren_groups = {}\n\tlocal current_group = ''\n\tlocal open_count = 0\n\
+    \tlocal c = paren_string:sub(1, 1)\n\tlocal i = 1\n\twhile i <= #paren_string\
+    \ do\n\t\tif c == '(' then\n\t\t\topen_count = open_count + 1\n\t\telseif c ==\
+    \ ')' then\n\t\t\topen_count = open_count - 1\n\t\tend\n\t\tcurrent_group = current_group\
+    \ .. c\n\t\tif open_count == 0 then\n\t\t\ttable.insert(paren_groups, current_group)\n\
+    \t\t\tcurrent_group = ''\n\t\tend\n\t\ti = i + 1\n\t\tc = paren_string:sub(i,\
+    \ i)\n\tend\n\treturn paren_groups\nend", "    local result = {}\n    local curr_group\
+    \ = ''\n    local paren_depth = 0\n    for paren in paren_string:gmatch('()%(%s*%)')\
+    \ do\n        curr_group = curr_group .. paren_string:sub(paren + 1, paren + 1)\n\
+    \        if paren_depth == 0 then\n            table.insert(result, curr_group)\n\
+    \            curr_group = ''\n        end\n        paren_depth = paren_depth +\
+    \ 1\n    end\n    return result\nend", "    -- YOUR CODE HERE\n    -- Use 'match'\
+    \ function from the string library\n    local paren_list = {}\n    local pattern\
+    \ = \"(%b())\"\n    for current_paren in paren_string:gmatch(pattern) do\n   \
+    \     paren_list[#paren_list + 1] = current_paren\n    end\n    return paren_list\n\
+    end", "    local result = {}\n    local i = 1\n    while i <= #paren_string do\n\
+    \        local c = paren_string:sub(i, i)\n        if c == '(' then\n        \
+    \    local result_str = c\n            i = i + 1\n            local paren_open\
+    \ = 1\n            while i <= #paren_string do\n                c = paren_string:sub(i,\
+    \ i)\n                if c == '(' then\n                    paren_open = paren_open\
+    \ + 1\n                elseif c == ')' then\n                    paren_open =\
+    \ paren_open - 1\n                end\n                if paren_open == 0 then\n\
+    \                    break\n                end\n                result_str =\
+    \ result_str .. c\n                i = i + 1\n            end\n            result[#result\
+    \ + 1] = result_str\n        else\n            i = i + 1\n        end\n    end\n\
+    \    return result\nend", "    local paren_groups = {}\n    local paren_group\
+    \ = ''\n    local opened = 0\n    for char in paren_string:gmatch('.') do\n  \
+    \      if char == '(' then\n            opened = opened + 1\n        elseif char\
+    \ == ')' then\n            opened = opened - 1\n        end\n        if opened\
+    \ == 0 then\n            if #paren_group > 0 then\n                table.insert(paren_groups,\
+    \ paren_group)\n            end\n            paren_group = ''\n        else\n\
+    \            paren_group = paren_group .. char\n        end\n    end\n    return\
+    \ paren_groups\nend", "    local res = {}\n    local acc = ''\n    local level\
+    \ = 0\n    for i=1,#paren_string do\n        local char = paren_string:sub(i,i)\n\
+    \        if char == '(' then\n            level = level + 1\n        elseif char\
+    \ == ')' then\n            level = level - 1\n        end\n        if char ~=\
+    \ ' ' then\n            acc = acc .. char\n        end\n        if level == 0\
+    \ and char ~= ' ' then\n            table.insert(res, acc)\n            acc =\
+    \ ''\n        end\n    end\n    return res\nend", "    local paren_group_strings\
+    \ = {}\n    -- The main idea here is to count the number of open parentheses.\
+    \ When we reach a 0 count, that\n    -- means we have reached the end of a paren\
+    \ group. Each time we find the end of a group, we\n    -- save that section of\
+    \ the string (including the parentheses) and move on to the next one.\n    local\
+    \ current_paren_count = 0\n    local current_paren_start = 1\n    for i=1,string.len(paren_string)\
+    \ do\n        local char = string.sub(paren_string, i, i)\n        if char ==\
+    \ '(' then\n            current_paren_count = current_paren_count + 1\n      \
+    \  elseif char == ')' then\n            current_paren_count = current_paren_count\
+    \ - 1\n            if current_paren_count == 0 then\n                table.insert(paren_group_strings,\
+    \ string.sub(paren_string, current_paren_start, i))\n                current_paren_start\
+    \ = i + 1\n            end\n        end\n    end\n    return paren_group_strings\n\
+    end", "\tif not paren_string then return end\n\tlocal separate_groups = {}\n\t\
+    local last_start = 1\n\tlocal paren_level = 0\n\tlocal s_len = string.len(paren_string)\n\
+    \tfor i = 1, s_len do\n\t\tlocal p = string.sub(paren_string, i, i)\n\t\tif p\
+    \ == '(' then\n\t\t\tparen_level = paren_level + 1\n\t\telseif p == ')' then\n\
+    \t\t\tparen_level = paren_level - 1\n\t\t\tif paren_level == 0 then\n\t\t\t\t\
+    table.insert(separate_groups, string.sub(paren_string, last_start, i))\n\t\t\t\
+    \tlast_start = i + 1\n\t\t\tend\n\t\tend\n\tend\n\treturn separate_groups\nend",
+  "  -- Write your code here\n  local paren_list = {}\n  local list_length = 0\n \
+    \ local current_string = ''\n  local paren_match_count = 0\n  for i = 1, #paren_string\
+    \ do\n    local c = paren_string:sub(i, i)\n    if c == '(' then\n      paren_match_count\
+    \ = paren_match_count + 1\n      current_string = current_string .. c\n    elseif\
+    \ c == ')' then\n      paren_match_count = paren_match_count - 1\n      current_string\
+    \ = current_string .. c\n    end\n    if paren_match_count == 0 then\n      list_length\
+    \ = list_length + 1\n      paren_list[list_length] = current_string\n      current_string\
+    \ = ''\n    end\n  end\n  return paren_list\nend", "    local paren_list = {}\n\
+    \    local paren_count = 0\n    local last_start = 1\n    local last_end = -1\n\
+    \    for i=1,#paren_string do\n        local c = paren_string:sub(i,i)\n     \
+    \   if c == '(' then\n            paren_count = paren_count + 1\n        elseif\
+    \ c == ')' then\n            paren_count = paren_count - 1\n            if paren_count\
+    \ == 0 then\n                last_end = i\n                table.insert(paren_list,\
+    \ paren_string:sub(last_start, last_end))\n                last_start = i + 1\n\
+    \            end\n        end\n    end\n    return paren_list\nend", "    -- code\n\
+    end", "  -- First, remove all spaces in the string\n  paren_string = string.gsub(paren_string,\
+    \ ' ', '')\n  local groups = {}", "  return {}\nend", "    local groups = {}\n\
+    \    local last_right_paren = 0\n    while true do\n        local left_paren =\
+    \ paren_string:find('%(', last_right_paren + 1)\n        if not left_paren then\
+    \ break end\n        local right_paren = paren_string:find('%)', left_paren +\
+    \ 1)\n        if not right_paren then break end\n        groups[#groups + 1] =\
+    \ paren_string:sub(left_paren, right_paren)\n        last_right_paren = right_paren\n\
+    \    end\n    return groups\nend", "    local groups = {}\n    local current_group\
+    \ = ''\n    local open_braces = 0\n    for i=1,#paren_string do\n        local\
+    \ c = paren_string:sub(i,i)\n        if c == ' ' then\n            -- skip\n \
+    \       elseif c == '(' then\n            open_braces = open_braces + 1\n    \
+    \        current_group = current_group .. c\n        elseif c == ')' then\n  \
+    \          open_braces = open_braces - 1\n            current_group = current_group\
+    \ .. c\n            if open_braces == 0 then\n                table.insert(groups,\
+    \ current_group)\n                current_group = ''\n            end\n      \
+    \  else\n            error('Invalid character: ' .. c)\n        end\n    end\n\
+    \    if open_braces ~= 0 then\n        error('Uneven number of braces')\n    end\n\
+    \    return groups\nend", "  paren_string = paren_string:gsub(' ', '')\n  local\
+    \ groups = {}\n  for group in paren_string:gmatch('%b()') do\n    table.insert(groups,\
+    \ group)\n  end\n  return groups\nend", "    -- todo:\n    -- use string.match\
+    \ to extract the content within each parenthesis\n    -- add to a table\n    --\
+    \ return the table\n    local result = {}\n    for str in string.gmatch(paren_string,\
+    \ \"%b()\") do\n        table.insert(result, str)\n    end\n    return result\n\
+    end", "  local paren_groups = {}\n  local start_index, end_index = paren_string:find('[()]')\n\
+    \  while start_index do\n    local paren_group = paren_string:sub(start_index,\
+    \ end_index)\n    table.insert(paren_groups, paren_group)\n    paren_string =\
+    \ paren_string:sub(end_index + 1)\n    start_index, end_index = paren_string:find('[()]')\n\
+    \  end\n  return paren_groups\nend", "  -- TODO: implement this function\n  return\
+    \ {}\nend", "\tparen_string = paren_string:gsub(' ', '')\n\tlocal output = {}\n\
+    \tlocal start = 1\n\tlocal i = 1\n\twhile i <= #paren_string do\n\t\tif paren_string:sub(i,\
+    \ i) == '(' then\n\t\t\tlocal len = 1\n\t\t\tlocal j = i + 1\n\t\t\twhile j <=\
+    \ #paren_string do\n\t\t\t\tlocal next_char = paren_string:sub(j, j)\n\t\t\t\t\
+    if next_char == '(' then\n\t\t\t\t\tlen = len + 1\n\t\t\t\telseif next_char ==\
+    \ ')' then\n\t\t\t\t\tlen = len - 1\n\t\t\t\t\tif len == 0 then\n\t\t\t\t\t\t\
+    output[#output + 1] = paren_string:sub(start, j)\n\t\t\t\t\t\tstart = j + 1\n\t\
+    \t\t\t\t\tbreak\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\t\tj = j + 1\n\t\t\tend\n\t\t\
+    \tif j > #paren_string then\n\t\t\t\terror('unbalanced parenthesis in ' .. paren_string)\n\
+    \t\t\tend\n\t\t\ti = j\n\t\telse\n\t\t\ti = i + 1\n\t\tend\n\tend\n\treturn output\n\
+    end", "    local groups = {}\n    local open = paren_string:find('%(')\n    local\
+    \ close = paren_string:find('%)')\n    if open == nil or close == nil then\n \
+    \       return groups\n    end\n    while open ~= nil and close ~= nil do\n  \
+    \      local group = paren_string:sub(open, close)\n        group = group:gsub('\
+    \ ', '')\n        groups[#groups + 1] = group\n        paren_string = paren_string:sub(close\
+    \ + 1)\n        open = paren_string:find('%(')\n        close = paren_string:find('%)')\n\
+    \    end\n    return groups\nend", "  return -- [[ADD CODE HERE]]\nend", "   \
+    \ local groups = {}\n    local level = 0\n    local start = nil\n    for i = 1,#paren_string\
+    \ do\n        local c = paren_string:sub(i,i)\n        if c == '(' then\n    \
+    \        if level == 0 then\n                start = i\n            end\n    \
+    \        level = level + 1\n        elseif c == ')' then\n            level =\
+    \ level - 1\n            if level == 0 then\n                groups[#groups+1]\
+    \ = paren_string:sub(start,i)\n            end\n        end\n    end\n    return\
+    \ groups\nend", "    local res = {}\n    local stack = {}\n    local current_group\
+    \ = {}\n    local function add_group()\n        if #current_group > 0 then\n \
+    \           table.insert(res, table.concat(current_group))\n            current_group\
+    \ = {}\n        end\n    end\n    for i = 1, #paren_string do\n        local char\
+    \ = paren_string:sub(i, i)\n        if char == '(' then\n            table.insert(stack,\
+    \ char)\n            table.insert(current_group, char)\n        elseif char ==\
+    \ ')' then\n            if #stack == 0 then\n                error('Closing parenthesis\
+    \ found without any opening parenthesis')\n            end\n            table.remove(stack)\n\
+    \            table.insert(current_group, char)\n            if #stack == 0 then\n\
+    \                add_group()\n            end\n        elseif char ~= ' ' then\n\
+    \            error(string.format('Unexpected character %s found at position %d',\
+    \ char, i))\n        end\n    end\n    if #stack > 0 then\n        error('Opening\
+    \ parenthesis found without any closing parenthesis')\n    end\n    add_group()\n\
+    \    return res\nend", "    local result = {}\n    local tmp = ''\n    local depth\
+    \ = 0\n    for i=1, #paren_string do\n        local c = paren_string:sub(i,i)\n\
+    \        if c == ' ' then\n            -- skip spaces\n        elseif c == '('\
+    \ then\n            if depth == 0 then\n                tmp = '('\n          \
+    \  else\n                tmp = tmp .. '('\n            end\n            depth\
+    \ = depth + 1\n        elseif c == ')' then\n            depth = depth - 1\n \
+    \           if depth == 0 then\n                tmp = tmp .. ')'\n           \
+    \     table.insert(result, tmp)\n                tmp = ''\n            else\n\
+    \                tmp = tmp .. ')'\n            end\n        else\n           \
+    \ if not (c == ' ' or c == '(' or c == ')') then\n                error('parse\
+    \ error, unknown character: ' .. c)\n            end\n        end\n    end\n \
+    \   return result\nend", "  local r = {}\n  local depth = 0\n  local acc = ''\n\
+    \  for i=1,#paren_string do\n    local c = paren_string:sub(i,i)\n    if c ==\
+    \ ' ' then\n      -- skip over space characters\n    elseif c == '(' then\n  \
+    \    depth = depth + 1\n      acc = acc .. c\n    elseif c == ')' then\n     \
+    \ depth = depth - 1\n      acc = acc .. c\n      if depth == 0 then\n        table.insert(r,\
+    \ acc)\n        acc = ''\n      end\n    else\n      error('non-paren character\
+    \ found: ' .. c)\n    end\n  end\n  if depth ~= 0 then\n    error('error in paren\
+    \ string depth: ' .. depth)\n  end\n  return r\nend", "    local result = {}\n\
+    \    local part = \"\"\n    local level = 0\n    for i = 1, #paren_string do\n\
+    \        local char = paren_string:sub(i, i)\n        if char == '(' then\n  \
+    \          level = level + 1\n        elseif char == ')' then\n            level\
+    \ = level - 1\n        end\n        if char ~= ' ' then\n            part = part\
+    \ .. char\n        end\n        if level == 0 and part ~= '' then\n          \
+    \  result[#result + 1] = part\n            part = ''\n        end\n    end\n \
+    \   return result\nend", "    local result = {}\n    local i = 1\n    local open_braces\
+    \ = 0\n    local buffer = ''\n    while i <= #paren_string do\n        local char\
+    \ = paren_string:sub(i, i)\n        if char == '(' then\n            open_braces\
+    \ = open_braces + 1\n            buffer = buffer .. char\n        elseif char\
+    \ == ')' then\n            open_braces = open_braces - 1\n            buffer =\
+    \ buffer .. char\n            if open_braces == 0 then\n                table.insert(result,\
+    \ buffer)\n                buffer = ''\n            end\n        end\n       \
+    \ i = i + 1\n    end\n    return result\nend", "\tlocal paren_groups = {}\n\t\
+    local paren_count = 0\n\tlocal group_start = 1\n\tfor i = 1, #paren_string do\n\
+    \t\tlocal c = paren_string:sub(i, i)\n\t\tif c == '(' then\n\t\t\tparen_count\
+    \ = paren_count + 1\n\t\telseif c == ')' then\n\t\t\tparen_count = paren_count\
+    \ - 1\n\t\t\tif paren_count == 0 then\n\t\t\t\ttable.insert(paren_groups, paren_string:sub(group_start,\
+    \ i))\n\t\t\t\tgroup_start = i + 1\n\t\t\tend\n\t\tend\n\tend\n\treturn paren_groups\n\
+    end", "  -- Split the string into a list of balanced paren groups.\n  local groups\
+    \ = {}\n  while #paren_string > 0 do\n    local first_open = string.find(paren_string,\
+    \ '%(')\n    if not first_open then break end\n    local last_open = first_open\n\
+    \    local matches = 0\n    for i = first_open, #paren_string do\n      if string.sub(paren_string,\
+    \ i, i) == '(' then\n        matches = matches + 1\n        last_open = i\n  \
+    \    elseif string.sub(paren_string, i, i) == ')' then\n        matches = matches\
+    \ - 1\n        if matches == 0 then\n          table.insert(groups, string.sub(paren_string,\
+    \ first_open, i))\n          paren_string = string.sub(paren_string, 1, first_open\
+    \ - 1) .. string.sub(paren_string, i + 1)\n          break\n        end\n    \
+    \  end\n    end\n    if matches > 0 then\n      error('Unbalanced group at position:\
+    \ ' .. last_open .. ' in string: ' .. paren_string)\n    end\n  end\n  return\
+    \ groups\nend", "    local paren_stripped = paren_string:gsub('%s', '')\n    local\
+    \ groups = {}\n    local balanced = true\n    local group = ''\n    for i = 1,\
+    \ #paren_stripped do\n        group = group .. paren_stripped:sub(i, i)\n    \
+    \    if paren_stripped:sub(i, i) == '(' then\n            balanced = false\n \
+    \       elseif paren_stripped:sub(i, i) == ')' then\n            balanced = true\n\
+    \        end\n        if balanced then\n            table.insert(groups, group)\n\
+    \            group = ''\n        end\n    end\n    return groups\nend", "\tparen_string\
+    \ = paren_string:gsub('%s', '')\n\tlocal groups = {}\n\tlocal i = 1\n\tlocal j\
+    \ = 1\n\twhile i <= #paren_string do\n\t\tif paren_string:sub(i, i) == '(' then\n\
+    \t\t\tlocal depth = 1\n\t\t\twhile depth > 0 do\n\t\t\t\ti = i + 1\n\t\t\t\tif\
+    \ paren_string:sub(i, i) == '(' then\n\t\t\t\t\tdepth = depth + 1\n\t\t\t\telseif\
+    \ paren_string:sub(i, i) == ')' then\n\t\t\t\t\tdepth = depth - 1\n\t\t\t\tend\n\
+    \t\t\tend\n\t\t\tgroups[#groups + 1] = paren_string:sub(j, i)\n\t\t\tj = i + 1\n\
+    \t\tend\n\t\ti = i + 1\n\tend\n\treturn groups\nend", "    local groups = {}\n\
+    \    local last_group = 0\n    local count = 0\n    local open_pos = 0\n    for\
+    \ i=1,#paren_string do\n        local c = paren_string:sub(i,i)\n        if c\
+    \ == '(' then\n            count = count + 1\n            if count == 1 then\n\
+    \                open_pos = i\n            end\n        elseif c == ')' then\n\
+    \            count = count - 1\n            if count == 0 then\n             \
+    \   local group = paren_string:sub(open_pos, i)\n                groups[#groups+1]\
+    \ = group\n            end\n        end\n    end\n    return groups\nend", " \
+    \   local groups = {}\n    local match_depth = 0\n    local group_start_idx =\
+    \ 1\n    for idx, c in utf8.codes(paren_string) do\n        if c == utf8.codepoint('(')\
+    \ then\n            match_depth = match_depth + 1\n        elseif c == utf8.codepoint(')')\
+    \ then\n            match_depth = match_depth - 1\n            if match_depth\
+    \ == 0 then\n                table.insert(groups, utf8.sub(paren_string, group_start_idx,\
+    \ idx))\n                group_start_idx = idx + 1\n            end\n        end\n\
+    \    end\n    return groups\nend", "\treturn {}\nend", "    -- TODO: Implement\
+    \ this!\n    return {}\nend", "    -- code here\nend\n```", "    local paren_groups\
+    \ = {}\n    local curr_group = ''\n    local paren_count = 0\n    for i = 1, #paren_string\
+    \ do\n        local curr_char = paren_string:sub(i, i)\n        if curr_char ==\
+    \ '(' then\n            paren_count = paren_count + 1\n        elseif curr_char\
+    \ == ')' then\n            paren_count = paren_count - 1\n        end\n      \
+    \  if paren_count == 0 and #curr_group > 0 then\n            table.insert(paren_groups,\
+    \ curr_group)\n            curr_group = ''\n        elseif curr_char ~= ' ' then\n\
+    \            curr_group = curr_group .. curr_char\n        end\n    end\n    return\
+    \ paren_groups\nend", "    local paren_lists = {}\n    local paren_string = paren_string:gsub('%s',\
+    \ '')\n    local open_paren_positions = {}\n    local current_position = 1\n \
+    \   while true do\n        local open_paren_position = paren_string:find('%(',\
+    \ current_position)\n        if not open_paren_position then\n            break\n\
+    \        end\n        open_paren_positions[#open_paren_positions + 1] = open_paren_position\n\
+    \        current_position = open_paren_position + 1\n    end\n    local paren_count\
+    \ = #open_paren_positions\n    local current_position = 1\n    for i=1, paren_count\
+    \ do\n        local open_paren_position = open_paren_positions[i]\n        local\
+    \ close_paren_position = paren_string:find('%)', open_paren_position + 1)\n  \
+    \      assert(close_paren_position, 'Unbalanced parentheses found')\n        local\
+    \ paren_list = paren_string:sub(open_paren_position, close_paren_position)\n \
+    \       paren_lists[#paren_lists + 1] = paren_list\n        current_position =\
+    \ close_paren_position + 1\n    end\n    return paren_lists\nend", "    local\
+    \ current_group = ''\n    local groups = {}\n    local open_parens = 0\n    for\
+    \ character in paren_string:gmatch('.') do\n        if character == '(' then\n\
+    \            open_parens = open_parens + 1\n        elseif character == ')' then\n\
+    \            open_parens = open_parens - 1\n        end\n        if open_parens\
+    \ == 0 then\n            groups[#groups + 1] = current_group\n            current_group\
+    \ = ''\n        else\n            current_group = current_group .. character\n\
+    \        end\n    end\n    return groups\nend", "\tlocal l = { }\n\tlocal str\
+    \ = ''\n\tlocal depth = 0\n\tfor c in paren_string:gmatch('.') do\n\t\tif c ==\
+    \ '(' then\n\t\t\tdepth = depth + 1\n\t\t\tstr = str .. c\n\t\telseif c == ')'\
+    \ then\n\t\t\tif depth == 0 then\n\t\t\t\treturn nil, 'invalid parentheses'\n\t\
+    \t\tend\n\t\t\tdepth = depth - 1\n\t\t\tstr = str .. c\n\t\t\tif depth == 0 then\n\
+    \t\t\t\ttable.insert(l, str)\n\t\t\t\tstr = ''\n\t\t\tend\n\t\tend\n\tend\n\t\
+    if depth ~= 0 then\n\t\treturn nil, 'invalid parentheses'\n\tend\n\treturn l\n\
+    end", "    local paren_list = {}\n    -- add code here\n    return paren_list\n\
+    end", "  if paren_string == '' then return {} end\n  local start_index = 1\n \
+    \ local end_index = paren_string:find('[^ %(%]') or #paren_string\n  local start_paren_count\
+    \ = 0\n  local end_paren_count = 0\n  local in_string = false\n  local parsed_string\
+    \ = ''\n  local paren_strings = {}\n  for i = start_index, end_index do\n    local\
+    \ char = paren_string:sub(i, i)\n    if char == '(' then\n      start_paren_count\
+    \ = start_paren_count + 1\n      in_string = true\n    elseif char == ')' then\n\
+    \      end_paren_count = end_paren_count + 1\n      if start_paren_count == end_paren_count\
+    \ then\n        in_string = false\n        parsed_string = parsed_string .. char\n\
+    \        paren_strings[#paren_strings + 1] = parsed_string\n        parsed_string\
+    \ = ''\n        start_paren_count = 0\n        end_paren_count = 0\n      end\n\
+    \    end\n    if in_string then\n      parsed_string = parsed_string .. char\n\
+    \    end\n  end\n  return paren_strings\nend", "    local result = {}\n    local\
+    \ stack = {}\n    local group = {}\n    for i=1, #paren_string do\n        local\
+    \ paren = paren_string:sub(i,i)\n        if paren == '(' then\n            table.insert(stack,\
+    \ paren)\n        elseif paren == ')' then\n            table.remove(stack)\n\
+    \            if #stack == 0 then\n                local group_str = table.concat(group)\n\
+    \                table.insert(result, group_str)\n                group = {}\n\
+    \            end\n        elseif paren ~= ' ' then\n            table.insert(group,\
+    \ paren)\n        end\n    end\n    return result\nend", "    local str = paren_string:gsub('\
+    \ ', '')\n    local paren_groups = {}\n    local open_pos = nil\n    for i = 1,\
+    \ #str do\n        local char = str:sub(i, i)\n        if char == '(' then\n \
+    \           open_pos = i\n        elseif char == ')' then\n            table.insert(paren_groups,\
+    \ str:sub(open_pos, i))\n        end\n    end\n    return paren_groups\nend",
+  "  local res = {}\n  local last = 1\n  local open = 0\n  local i = 1\n  while i\
+    \ <= #paren_string do\n    local c = paren_string:sub(i, i)\n    if c == '(' then\n\
+    \      open = open + 1\n    elseif c == ')' then\n      open = open - 1\n    \
+    \  if open == 0 then\n        table.insert(res, paren_string:sub(last, i))\n \
+    \       last = i + 1\n      end\n    end\n    i = i + 1\n  end\n  return res\n\
+    end", "    local res = {}\n    local cur = ''\n    local i = 1\n    while i <=\
+    \ #paren_string do\n        local char = paren_string:sub(i, i)\n        if char\
+    \ == '(' then\n            cur = cur .. char\n        elseif char == ')' then\n\
+    \            cur = cur .. char\n            table.insert(res, cur)\n         \
+    \   cur = ''\n        end\n        i = i + 1\n    end\n    return res\nend", " \
+    \   local outer_parens = paren_string:gsub(' ', '')\n    if outer_parens:sub(1,\
+    \ 1) ~= '(' or outer_parens:sub(-1) ~= ')' then\n        error('parentheses string\
+    \ does not start and end with parentheses')\n    end\n    local current_group\
+    \ = ''\n    local groups = {}\n    for i = 2, #outer_parens - 1 do\n        local\
+    \ ch = outer_parens:sub(i, i)\n        if ch == '(' then\n            current_group\
+    \ = current_group .. ch\n        elseif ch == ')' then\n            current_group\
+    \ = current_group .. ch\n            if current_group:sub(1, 1) == '(' and current_group:sub(-1)\
+    \ == ')' then\n                table.insert(groups, current_group)\n         \
+    \       current_group = ''\n            end\n        end\n    end\n    return\
+    \ groups\nend", "  local groups = {}\n  local cur_str = ''\n  local open_parens\
+    \ = 0\n  for i=1, #paren_string do\n    local ch = paren_string:sub(i,i)\n   \
+    \ if ch == '(' then\n      open_parens = open_parens + 1\n      cur_str = cur_str\
+    \ .. ch\n    elseif ch == ')' then\n      open_parens = open_parens - 1\n    \
+    \  cur_str = cur_str .. ch\n      if open_parens == 0 then\n        groups[#groups+1]\
+    \ = cur_str\n        cur_str = ''\n      end\n    end\n  end\n  return groups\n\
+    end", "    -- for each char in paren_string\n    --    if char == '('\n    --\
+    \       add a new item to the end of the table\n    --    else if char == ')'\n\
+    \    --       add char to end of last item in table\n    --    else\n    --  \
+    \     add char to end of last item in table", "    local matches = {}\n    local\
+    \ i = 1\n    while i <= #paren_string do\n        if paren_string:sub(i, i) ==\
+    \ '(' then\n            local end_i = i\n            for j = i, #paren_string\
+    \ do\n                if paren_string:sub(j, j) == ')' then\n                \
+    \    end_i = j\n                    break\n                end\n            end\n\
+    \            local match = paren_string:sub(i, end_i)\n            table.insert(matches,\
+    \ match)\n            i = end_i\n        end\n        i = i + 1\n    end\n   \
+    \ return matches\nend", "  local groups = {}\n  local current_group = ''\n  local\
+    \ level = 0", "    local groups = {}\n    local group = ''\n    local depth =\
+    \ 0\n    for c in paren_string:gmatch('.') do\n        if c == '(' then\n    \
+    \        depth = depth + 1\n            group = group .. c\n        elseif c ==\
+    \ ')' then\n            depth = depth - 1\n            group = group .. c\n  \
+    \          if depth == 0 then\n                table.insert(groups, group)\n \
+    \               group = ''\n            end\n        end\n    end\n    return\
+    \ groups\nend", "\tlocal paren_string = string.gsub(paren_string, ' ', '')\n\t\
+    local groups = {}\n\tlocal group = ''\n\tlocal level = 0\n\tfor c in paren_string:gmatch('.')\
+    \ do\n\t\tif c == '(' then\n\t\t\tlevel = level + 1\n\t\telseif c == ')' then\n\
+    \t\t\tlevel = level - 1\n\t\tend\n\t\tgroup = group .. c\n\t\tif level == 0 then\n\
+    \t\t\ttable.insert(groups, group)\n\t\t\tgroup = ''\n\t\tend\n\tend\n\treturn\
+    \ groups\nend", "  local out = {}\n  local level = 0\n  local begin, end_ = 1,\
+    \ 1\n  for i = 1, #paren_string do\n    local char = paren_string:sub(i, i)\n\
+    \    if char == '(' then\n      level = level + 1\n    elseif char == ')' then\n\
+    \      level = level - 1\n      if level == 0 then\n        end_ = i\n       \
+    \ out[#out + 1] = paren_string:sub(begin, end_)\n        begin = i + 1\n     \
+    \ end\n    end\n  end\n  return out\nend", "    local count = 1\n    local paren_table\
+    \ = {}\n    local start = 1\n    for i=1, #paren_string do\n        if paren_string:sub(i,i)\
+    \ == '(' then\n            count = count + 1\n        elseif paren_string:sub(i,i)\
+    \ == ')' then\n            count = count - 1\n        end\n        if count ==\
+    \ 0 then\n            table.insert(paren_table, paren_string:sub(start, i))\n\
+    \            start = i + 1\n            count = 1\n        end\n    end\n    return\
+    \ paren_table\nend", "    local groups = {}\n    local cur_group = \"\"\n    local\
+    \ num_open = 0\n    for i=1,#paren_string do\n        local cur_char = paren_string:sub(i,i)\n\
+    \        if cur_char == '(' then\n            num_open = num_open + 1\n      \
+    \  elseif cur_char == ')' then\n            num_open = num_open - 1\n        end\n\
+    \        if num_open > 0 then\n            cur_group = cur_group .. cur_char\n\
+    \        elseif cur_group ~= \"\" then\n            groups[#groups+1] = cur_group\n\
+    \            cur_group = \"\"\n        end\n    end\n    return groups\nend",
+  "    paren_string = paren_string:gsub('%s', '')\n    local stack, i, len, r = {},\
+    \ 1, #paren_string, {}\n    while i <= len do\n        local c = paren_string:sub(i,\
+    \ i)\n        if c == '(' then\n            table.insert(stack, i)\n        elseif\
+    \ c == ')' then\n            table.insert(r, paren_string:sub(stack[#stack], i))\n\
+    \            table.remove(stack)\n        end\n        i = i + 1\n    end\n  \
+    \  return r\nend", "\tlocal result = {}\n\tlocal paren_stack = Stack:new()\n\t\
+    local group_stack = Stack:new()\n\tlocal group_begin = 1\n\tfor i = 1, paren_string:len()\
+    \ do\n\t\tlocal char = paren_string:sub(i, i)\n\t\tif char == '(' then\n\t\t\t\
+    paren_stack:push(i)\n\t\telseif char == ')' then\n\t\t\tlocal open_i = paren_stack:pop()\n\
+    \t\t\tif not open_i then\n\t\t\t\t-- mismatched parens\n\t\t\t\treturn nil\n\t\
+    \t\tend\n\t\t\tgroup_stack:push({ open_i, i })\n\t\tend\n\tend\n\t-- check for\
+    \ unclosed parens\n\tif not paren_stack:is_empty() then\n\t\treturn nil\n\tend\n\
+    \t-- Use a stack to group parens that are not nested within each other\n\twhile\
+    \ not group_stack:is_empty() do\n\t\tlocal group = group_stack:pop()\n\t\tlocal\
+    \ last_group = group_stack:top()\n\t\tif last_group and last_group[1] < group[1]\
+    \ and last_group[2] > group[2] then\n\t\t\tgroup_stack:push(group)\n\t\telse\n\
+    \t\t\tresult[#result + 1] = paren_string:sub(group[1], group[2])\n\t\tend\n\t\
+    end\n\treturn result\nend", "    local groups = {}\n    local group = ''\n   \
+    \ local depth = 0\n    for char in paren_string:gmatch('.') do\n        if char\
+    \ == '(' then\n            depth = depth + 1\n            group = group .. char\n\
+    \        elseif char == ')' then\n            depth = depth - 1\n            group\
+    \ = group .. char\n            if depth == 0 then\n                table.insert(groups,\
+    \ group)\n                group = ''\n            end\n        end\n    end\n\
+    \    return groups\nend", "  if not paren_string:find(\"%b()\") then\n    return\
+    \ {paren_string}\n  end\n  local out = {}\n  for paren in paren_string:gmatch(\"\
+    %b()\") do\n    if not paren:find(\" \") then\n      table.insert(out, paren)\n\
+    \    end\n  end\n  return out\nend", "    local result = {}\n    local current_word\
+    \ = ''\n    local current_group = {}\n    local open_paren_count = 0\n    local\
+    \ closed_paren_count = 0\n    local open_paren_pos = 0\n    local closed_paren_pos\
+    \ = 0\n    local in_paren = false\n    for i = 1, #paren_string do\n        if\
+    \ not in_paren and paren_string:sub(i, i) == '(' then\n            in_paren =\
+    \ true\n            open_paren_pos = i\n            open_paren_count = open_paren_count\
+    \ + 1\n        elseif in_paren and paren_string:sub(i, i) == ')' then\n      \
+    \      closed_paren_count = closed_paren_count + 1\n            closed_paren_pos\
+    \ = i\n        end\n        if in_paren and open_paren_count == closed_paren_count\
+    \ then\n            table.insert(result, paren_string:sub(open_paren_pos, closed_paren_pos))\n\
+    \            in_paren = false\n            open_paren_count = 0\n            closed_paren_count\
+    \ = 0\n        end\n    end\n    return result\nend", "    return {}\nend", " \
+    \   local groups = {}\n    local group = ''\n    local depth = 0\n    for i =\
+    \ 1, #paren_string do\n        local char = paren_string:sub(i, i)\n        if\
+    \ char == '(' then\n            depth = depth + 1\n        elseif char == ')'\
+    \ then\n            depth = depth - 1\n        end\n        if depth == 0 then\n\
+    \            if char == ' ' then\n                if #group > 0 then\n       \
+    \             table.insert(groups, group)\n                    group = ''\n  \
+    \              end\n            else\n                group = group .. char\n\
+    \            end\n        end\n    end\n    return groups\nend", "    -- TODO:\
+    \ implement\n    return { '()', '(())', '(()())' }\nend", "    paren_string =\
+    \ paren_string:gsub(' ', '')\n    local paren_groups = {}\n    local cur_paren\
+    \ = ''\n    local open_paren = 0\n    for i = 1, #paren_string do\n        local\
+    \ char = paren_string:sub(i, i)\n        if char == '(' then\n            open_paren\
+    \ = open_paren + 1\n        elseif char == ')' then\n            open_paren =\
+    \ open_paren - 1\n        end\n        cur_paren = cur_paren .. char\n       \
+    \ if open_paren == 0 then\n            paren_groups[#paren_groups + 1] = cur_paren\n\
+    \            cur_paren = ''\n        end\n    end\n    return paren_groups\nend",
+  "  local out = {}\n  local current_paren_group = ''\n  local current_depth = 0\n\
+    \  local paren_group_started = false\n  for i=1,#paren_string do\n    local current_char\
+    \ = paren_string:sub(i,i)\n    if current_char == '(' then\n      current_depth\
+    \ = current_depth + 1\n      if not paren_group_started then\n        paren_group_started\
+    \ = true\n      end\n      current_paren_group = current_paren_group .. current_char\n\
+    \    elseif current_char == ')' then\n      current_depth = current_depth - 1\n\
+    \      current_paren_group = current_paren_group .. current_char\n      if current_depth\
+    \ == 0 then\n        table.insert(out, current_paren_group)\n        current_paren_group\
+    \ = ''\n        paren_group_started = false\n      end\n    elseif current_char\
+    \ == ' ' then\n      -- Do nothing\n    else\n      error('Encountered unexpected\
+    \ character \"' .. current_char .. '\"')\n    end\n  end\n  if current_depth ~=\
+    \ 0 then\n    error('Parens not properly balanced')\n  end\n  return out\nend",
+  "    --     paren_string = paren_string:gsub('%s+', '')\n    local paren_tokens\
+    \ = {}\n    local char_stack = {}\n    local cur_paren_token = ''\n    local cur_paren_token_start_pos\
+    \ = 1\n    local cur_paren_token_end_pos = 1\n    local cur_paren_token_cnt =\
+    \ 0\n    local cur_group_paren_cnt = 0\n    local paren_cnt = 0\n    local token_cnt\
+    \ = 0\n    for i = 1, #paren_string do\n        if paren_string:sub(i, i) == '('\
+    \ then\n            if #char_stack == 0 then\n                cur_paren_token_start_pos\
+    \ = i\n            end\n            cur_group_paren_cnt = cur_group_paren_cnt\
+    \ + 1\n            token_cnt = token_cnt + 1\n            table.insert(char_stack,\
+    \ '(')\n        elseif paren_string:sub(i, i) == ')' then\n            if #char_stack\
+    \ > 0 then\n                cur_group_paren_cnt = cur_group_paren_cnt - 1\n  \
+    \              table.remove(char_stack)\n                if #char_stack == 0 then\n\
+    \                    cur_paren_token_end_pos = i\n                    local start_token\
+    \ = paren_string:sub(cur_paren_token_start_pos, cur_paren_token_end_pos)\n   \
+    \                 paren_tokens[token_cnt] = start_token\n                    token_cnt\
+    \ = token_cnt + 1\n                end\n            end\n        end\n    end\n\
+    \    return paren_tokens\nend", "  local in_paren = false\n  local group_start\
+    \ = nil\n  local result = {}\n  for i = 1, #paren_string do\n    local char =\
+    \ paren_string:sub(i, i)\n    if char == '(' then\n      if not in_paren then\n\
+    \        in_paren = true\n        group_start = i\n      end\n    elseif char\
+    \ == ')' then\n      if in_paren then\n        in_paren = false\n        table.insert(result,\
+    \ paren_string:sub(group_start, i))\n      end\n    end\n  end\n  return result\n\
+    end", "    local paren_groups = {}\n    local current_group = {}\n    local current_group_depth\
+    \ = 0\n    for paren in paren_string:gmatch('%S') do\n        if paren == '('\
+    \ then\n            current_group_depth = current_group_depth + 1\n        elseif\
+    \ paren == ')' then\n            current_group_depth = current_group_depth - 1\n\
+    \        end\n        current_group[#current_group + 1] = paren\n        if current_group_depth\
+    \ == 0 then\n            paren_groups[#paren_groups + 1] = table.concat(current_group)\n\
+    \            current_group = {}\n        end\n    end\n    return paren_groups\n\
+    end", "    paren_string = string.gsub(paren_string, ' ', '')\n    local group_list\
+    \ = {}\n    local group_start = 1\n    local group_end = 1\n    local group_count\
+    \ = 0\n    local group_text = ''\n    while group_end <= string.len(paren_string)\
+    \ do\n        if string.sub(paren_string, group_end, group_end) == '(' then\n\
+    \            group_count = group_count + 1\n        elseif string.sub(paren_string,\
+    \ group_end, group_end) == ')' then\n            group_count = group_count - 1\n\
+    \        end\n        if group_count == 0 then\n            group_text = string.sub(paren_string,\
+    \ group_start, group_end)\n            table.insert(group_list, group_text)\n\
+    \            group_start = group_end + 1\n        end\n        group_end = group_end\
+    \ + 1\n    end\n    return group_list\nend", "    -- remove all white space\n\
+    \    local paren_string = paren_string:gsub('%s', '')\n    local paren_group_list\
+    \ = {}\n    local start = 1\n    local stop = 1\n    local count = 0\n    for\
+    \ i = 1, #paren_string do\n        if paren_string:sub(i, i) == '(' then\n   \
+    \         count = count + 1\n        elseif paren_string:sub(i, i) == ')' then\n\
+    \            count = count - 1\n        end\n        if count == 0 then\n    \
+    \        stop = i\n            table.insert(paren_group_list, paren_string:sub(start,\
+    \ stop))\n            start = i + 1\n        end\n    end\n    return paren_group_list\n\
+    end", "    local starts, ends = 0, 0\n    local groups = {}\n    for i=1,#paren_string\
+    \ do\n        local ch = paren_string:sub(i,i)\n        if ch == '(' then\n  \
+    \          starts = starts + 1\n        elseif ch == ')' then\n            ends\
+    \ = ends + 1\n        end\n        if starts == ends then\n            groups[#groups+1]\
+    \ = paren_string:sub(1, i)\n            paren_string = paren_string:sub(i+1)\n\
+    \            i = 0\n            starts, ends = 0, 0\n        end\n    end\n  \
+    \  return groups\nend", "  local result = {}\n  local parentheses_count = 0\n\
+    \  local current_group = ''\n  for char in paren_string:gmatch('%S') do\n    if\
+    \ char == '(' then\n      parentheses_count = parentheses_count + 1\n    elseif\
+    \ char == ')' then\n      parentheses_count = parentheses_count - 1\n    end\n\
+    \    current_group = current_group .. char\n    if parentheses_count == 0 then\n\
+    \      table.insert(result, current_group)\n      current_group = ''\n    end\n\
+    \  end\n  return result\nend", "\tif type(paren_string) ~= 'string' then\n\t\t\
+    error('separate_paren_groups should get a string and this is a ' .. type(paren_string))\n\
+    \tend\n\tlocal groups = {}\n\tlocal index = 1\n\twhile index <= #paren_string\
+    \ do\n\t\t-- find the beginning of the group and skip over any spaces\n\t\tlocal\
+    \ char = paren_string:sub(index, index)\n\t\twhile char == ' ' do\n\t\t\tindex\
+    \ = index + 1\n\t\t\tchar = paren_string:sub(index, index)\n\t\tend\n\t\t-- now\
+    \ find the end of the group\n\t\tif char == '(' then\n\t\t\tlocal j = index +\
+    \ 1\n\t\t\tlocal last_start = index\n\t\t\tlocal num_opened = 1\n\t\t\twhile num_opened\
+    \ > 0 do\n\t\t\t\tif paren_string:sub(j, j) == '(' then\n\t\t\t\t\tnum_opened\
+    \ = num_opened + 1\n\t\t\t\telseif paren_string:sub(j, j) == ')' then\n\t\t\t\t\
+    \tnum_opened = num_opened - 1\n\t\t\t\tend\n\t\t\t\tj = j + 1\n\t\t\tend\n\t\t\
+    \ttable.insert(groups, paren_string:sub(last_start, j - 1))\n\t\t\tindex = j\n\
+    \t\telse\n\t\t\terror('Invalid input string to separate_paren_groups!  Must start\
+    \ with a (')\n\t\tend\n\tend\n\treturn groups\nend", "    local buf = {}\n   \
+    \ local level = 0\n    local start = 0\n    for i = 1, #paren_string do\n    \
+    \    local char = paren_string:sub(i, i)\n        if char == ' ' then\n      \
+    \      goto continue\n        end\n        if char == '(' then\n            level\
+    \ = level + 1\n        elseif char == ')' then\n            level = level - 1\n\
+    \        end\n        if level == 0 then\n            local item = paren_string:sub(start,\
+    \ i)\n            table.insert(buf, item)\n            start = i + 1\n       \
+    \ end\n        ::continue::\n    end\n    return buf\nend", "  local result =\
+    \ {}\n  local paren_stack = {}\n  local paren_start = 0\n  local i\n  for i =\
+    \ 1, #paren_string do\n    local char = paren_string:sub(i, i)\n    if char ==\
+    \ '(' then\n      paren_stack[#paren_stack + 1] = char\n    elseif char == ')'\
+    \ then\n      paren_stack[#paren_stack] = nil\n      if #paren_stack == 0 then\n\
+    \        result[#result + 1] = paren_string:sub(paren_start, i)\n        paren_start\
+    \ = i + 1\n      end\n    end\n  end\n  return result\nend", "    local result\
+    \ = {}\n    local function separate_paren_groups_inner(start_pos, paren_string)\n\
+    \        local end_pos, left_parens = find_balanced_parens(paren_string, start_pos)\n\
+    \        if end_pos ~= -1 then\n            -- we found some parens, add the string\
+    \ and\n            -- recurse from the next character after the parens to find\
+    \ more\n            local str = string.sub(paren_string, start_pos, end_pos)\n\
+    \            table.insert(result, str)\n            separate_paren_groups_inner(end_pos\
+    \ + 1, paren_string)\n        end\n    end\n    separate_paren_groups_inner(1,\
+    \ paren_string)\n    return result\nend", "    local buffer = ''\n    local buffers\
+    \ = {}\n    local level = 0\n    for i = 1, #paren_string do\n        local char\
+    \ = paren_string:sub(i, i)\n        if char == '(' then\n            level = level\
+    \ + 1\n        elseif char == ')' then\n            level = level - 1\n      \
+    \  end\n        if char ~= ' ' then\n            buffer = buffer .. char\n   \
+    \     end\n        if level == 0 and #buffer > 0 then\n            table.insert(buffers,\
+    \ buffer)\n            buffer = ''\n        end\n    end\n    return buffers\n\
+    end", "    local groups = {}\n    local current_group = ''\n    local level =\
+    \ 0\n    for i = 1, #paren_string do\n        local c = paren_string:sub(i, i)\n\
+    \        if c == '(' then\n            level = level + 1\n        elseif c ==\
+    \ ')' then\n            level = level - 1\n        end\n        if level == 0\
+    \ then\n            if #current_group > 0 then\n                groups[#groups\
+    \ + 1] = current_group\n                current_group = ''\n            end\n\
+    \        else\n            current_group = current_group .. c\n        end\n \
+    \   end\n    return groups\nend"]
 stop_tokens:
 - "\nlocal"
 - "\nfunction"
