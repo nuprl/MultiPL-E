@@ -9,4 +9,8 @@ RUN pip3 install yamlize
 RUN wget https://deb.nodesource.com/setup_18.x 
 RUN bash setup_18.x
 RUN apt-get install -y nodejs
+RUN wget https://julialang-s3.julialang.org/bin/linux/x64/1.6/julia-1.6.7-linux-x86_64.tar.gz
+RUN tar xf julia-1.6.7-linux-x86_64.tar.gz
+RUN mv julia-1.6.7 /opt/julia
+RUN ln -s /opt/julia/bin/julia /usr/bin/julia
 WORKDIR /multipleval/src
