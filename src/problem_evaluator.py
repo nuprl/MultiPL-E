@@ -78,7 +78,11 @@ def evaluate_problem(problem_yaml_path: Path, max_workers: int):
         f.write(TestResults.dump(test_results))
 
 def evaluate_problems(target_dir: Path, max_workers: int):
-    problems = [ p for p in target_dir.glob("*.yaml") if not p.name.endswith(".results.yaml") ]
+    # Choose HumanEval_53_add as the first problem to run, as a litmus test
+    simple_problem = [f for f in target_dir.glob("*.yaml") if "_53_" in f.name]
+    assert len(simple_problem) == 1
+    problems = simple_problem + [ p for p in target_dir.glob("*.yaml")
+        if not p.name.endswith(".results.yaml") and not "_53_" in p.name ]
 
     for problem_yaml_path in tqdm(problems, desc=str(target_dir)):
         evaluate_problem(problem_yaml_path, max_workers)
