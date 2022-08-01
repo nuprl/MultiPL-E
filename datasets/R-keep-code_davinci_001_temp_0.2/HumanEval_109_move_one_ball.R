@@ -42,10 +42,10 @@ move_one_ball([1])
 
 test_humaneval <- function() {
 candidate <- move_one_ball
-    if(!identical(candidate(list(3, 4, 5, 1, 2)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(list(3, 5, 10, 1, 2)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(list(4, 3, 1, 2)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(list(3, 5, 4, 1, 2)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(c(3, 4, 5, 1, 2)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(c(3, 5, 10, 1, 2)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(c(4, 3, 1, 2)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(c(3, 5, 4, 1, 2)), FALSE)){quit('no', 1)}
     if(!identical(candidate(list()), TRUE)){quit('no', 1)}
 }
 test_humaneval()

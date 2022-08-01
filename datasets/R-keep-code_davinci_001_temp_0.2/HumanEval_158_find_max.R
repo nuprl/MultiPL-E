@@ -23,15 +23,15 @@ find_max(c("aaaaaaa", "bb" ,"cc"))
 
 test_humaneval <- function() {
 candidate <- find_max
-    if(!identical(candidate(list('name', 'of', 'string')), 'string')){quit('no', 1)}
-    if(!identical(candidate(list('name', 'enam', 'game')), 'enam')){quit('no', 1)}
-    if(!identical(candidate(list('aaaaaaa', 'bb', 'cc')), 'aaaaaaa')){quit('no', 1)}
-    if(!identical(candidate(list('abc', 'cba')), 'abc')){quit('no', 1)}
-    if(!identical(candidate(list('play', 'this', 'game', 'of', 'footbott')), 'footbott')){quit('no', 1)}
-    if(!identical(candidate(list('we', 'are', 'gonna', 'rock')), 'gonna')){quit('no', 1)}
-    if(!identical(candidate(list('we', 'are', 'a', 'mad', 'nation')), 'nation')){quit('no', 1)}
-    if(!identical(candidate(list('this', 'is', 'a', 'prrk')), 'this')){quit('no', 1)}
-    if(!identical(candidate(list('b')), 'b')){quit('no', 1)}
-    if(!identical(candidate(list('play', 'play', 'play')), 'play')){quit('no', 1)}
+    if(!identical(candidate(c('name', 'of', 'string')), 'string')){quit('no', 1)}
+    if(!identical(candidate(c('name', 'enam', 'game')), 'enam')){quit('no', 1)}
+    if(!identical(candidate(c('aaaaaaa', 'bb', 'cc')), 'aaaaaaa')){quit('no', 1)}
+    if(!identical(candidate(c('abc', 'cba')), 'abc')){quit('no', 1)}
+    if(!identical(candidate(c('play', 'this', 'game', 'of', 'footbott')), 'footbott')){quit('no', 1)}
+    if(!identical(candidate(c('we', 'are', 'gonna', 'rock')), 'gonna')){quit('no', 1)}
+    if(!identical(candidate(c('we', 'are', 'a', 'mad', 'nation')), 'nation')){quit('no', 1)}
+    if(!identical(candidate(c('this', 'is', 'a', 'prrk')), 'this')){quit('no', 1)}
+    if(!identical(candidate(c('b')), 'b')){quit('no', 1)}
+    if(!identical(candidate(c('play', 'play', 'play')), 'play')){quit('no', 1)}
 }
 test_humaneval()

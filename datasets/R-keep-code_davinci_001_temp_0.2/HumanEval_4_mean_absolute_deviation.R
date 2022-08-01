@@ -14,8 +14,8 @@ mean_absolute_deviation <- function(numbers) {
 
 test_humaneval <- function() {
 candidate <- mean_absolute_deviation
-    if(!identical(candidate(list(1.0, 2.0)), 0.5)){quit('no', 1)}
-    if(!identical(candidate(list(1.0, 2.0, 3.0, 4.0)), 1.0)){quit('no', 1)}
-    if(!identical(candidate(list(1.0, 2.0, 3.0, 4.0, 5.0)), 1.2)){quit('no', 1)}
+    if(!identical(candidate(c(1.0, 2.0)), 0.5)){quit('no', 1)}
+    if(!identical(candidate(c(1.0, 2.0, 3.0, 4.0)), 1.0)){quit('no', 1)}
+    if(!identical(candidate(c(1.0, 2.0, 3.0, 4.0, 5.0)), 1.2)){quit('no', 1)}
 }
 test_humaneval()

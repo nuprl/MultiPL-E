@@ -34,17 +34,17 @@ match_parens <- function(lst) {
 
 test_humaneval <- function() {
 candidate <- match_parens
-    if(!identical(candidate(list('()(', ')')), 'Yes')){quit('no', 1)}
-    if(!identical(candidate(list(')', ')')), 'No')){quit('no', 1)}
-    if(!identical(candidate(list('(()(())', '())())')), 'No')){quit('no', 1)}
-    if(!identical(candidate(list(')())', '(()()(')), 'Yes')){quit('no', 1)}
-    if(!identical(candidate(list('(())))', '(()())((')), 'Yes')){quit('no', 1)}
-    if(!identical(candidate(list('()', '())')), 'No')){quit('no', 1)}
-    if(!identical(candidate(list('(()(', '()))()')), 'Yes')){quit('no', 1)}
-    if(!identical(candidate(list('((((', '((())')), 'No')){quit('no', 1)}
-    if(!identical(candidate(list(')(()', '(()(')), 'No')){quit('no', 1)}
-    if(!identical(candidate(list(')(', ')(')), 'No')){quit('no', 1)}
-    if(!identical(candidate(list('(', ')')), 'Yes')){quit('no', 1)}
-    if(!identical(candidate(list(')', '(')), 'Yes')){quit('no', 1)}
+    if(!identical(candidate(c('()(', ')')), 'Yes')){quit('no', 1)}
+    if(!identical(candidate(c(')', ')')), 'No')){quit('no', 1)}
+    if(!identical(candidate(c('(()(())', '())())')), 'No')){quit('no', 1)}
+    if(!identical(candidate(c(')())', '(()()(')), 'Yes')){quit('no', 1)}
+    if(!identical(candidate(c('(())))', '(()())((')), 'Yes')){quit('no', 1)}
+    if(!identical(candidate(c('()', '())')), 'No')){quit('no', 1)}
+    if(!identical(candidate(c('(()(', '()))()')), 'Yes')){quit('no', 1)}
+    if(!identical(candidate(c('((((', '((())')), 'No')){quit('no', 1)}
+    if(!identical(candidate(c(')(()', '(()(')), 'No')){quit('no', 1)}
+    if(!identical(candidate(c(')(', ')(')), 'No')){quit('no', 1)}
+    if(!identical(candidate(c('(', ')')), 'Yes')){quit('no', 1)}
+    if(!identical(candidate(c(')', '(')), 'Yes')){quit('no', 1)}
 }
 test_humaneval()

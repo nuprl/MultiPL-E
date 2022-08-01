@@ -18,10 +18,10 @@ split_words <- function(txt) {
 
 test_humaneval <- function() {
 candidate <- split_words
-    if(!identical(candidate('Hello world!'), list('Hello', 'world!'))){quit('no', 1)}
-    if(!identical(candidate('Hello,world!'), list('Hello', 'world!'))){quit('no', 1)}
-    if(!identical(candidate('Hello world,!'), list('Hello', 'world,!'))){quit('no', 1)}
-    if(!identical(candidate('Hello,Hello,world !'), list('Hello,Hello,world', '!'))){quit('no', 1)}
+    if(!identical(candidate('Hello world!'), c('Hello', 'world!'))){quit('no', 1)}
+    if(!identical(candidate('Hello,world!'), c('Hello', 'world!'))){quit('no', 1)}
+    if(!identical(candidate('Hello world,!'), c('Hello', 'world,!'))){quit('no', 1)}
+    if(!identical(candidate('Hello,Hello,world !'), c('Hello,Hello,world', '!'))){quit('no', 1)}
     if(!identical(candidate('abcdef'), 3)){quit('no', 1)}
     if(!identical(candidate('aaabb'), 2)){quit('no', 1)}
     if(!identical(candidate('aaaBb'), 1)){quit('no', 1)}

@@ -31,11 +31,11 @@ eat <- function(number, need, remaining) {
 
 test_humaneval <- function() {
 candidate <- eat
-    if(!identical(candidate(5, 6, 10), list(11, 4))){quit('no', 1)}
-    if(!identical(candidate(4, 8, 9), list(12, 1))){quit('no', 1)}
-    if(!identical(candidate(1, 10, 10), list(11, 0))){quit('no', 1)}
-    if(!identical(candidate(2, 11, 5), list(7, 0))){quit('no', 1)}
-    if(!identical(candidate(4, 5, 7), list(9, 2))){quit('no', 1)}
-    if(!identical(candidate(4, 5, 1), list(5, 0))){quit('no', 1)}
+    if(!identical(candidate(5, 6, 10), c(11, 4))){quit('no', 1)}
+    if(!identical(candidate(4, 8, 9), c(12, 1))){quit('no', 1)}
+    if(!identical(candidate(1, 10, 10), c(11, 0))){quit('no', 1)}
+    if(!identical(candidate(2, 11, 5), c(7, 0))){quit('no', 1)}
+    if(!identical(candidate(4, 5, 7), c(9, 2))){quit('no', 1)}
+    if(!identical(candidate(4, 5, 1), c(5, 0))){quit('no', 1)}
 }
 test_humaneval()

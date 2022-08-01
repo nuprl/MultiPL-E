@@ -37,12 +37,12 @@ next_smallest([1, 1])
 
 test_humaneval <- function() {
 candidate <- next_smallest
-    if(!identical(candidate(list(1, 2, 3, 4, 5)), 2)){quit('no', 1)}
-    if(!identical(candidate(list(5, 1, 4, 3, 2)), 2)){quit('no', 1)}
+    if(!identical(candidate(c(1, 2, 3, 4, 5)), 2)){quit('no', 1)}
+    if(!identical(candidate(c(5, 1, 4, 3, 2)), 2)){quit('no', 1)}
     if(!identical(candidate(list()), NULL)){quit('no', 1)}
-    if(!identical(candidate(list(1, 1)), NULL)){quit('no', 1)}
-    if(!identical(candidate(list(1, 1, 1, 1, 0)), 1)){quit('no', 1)}
-    if(!identical(candidate(list(1, 1)), NULL)){quit('no', 1)}
-    if(!identical(candidate(list(-35, 34, 12, -45)), -35)){quit('no', 1)}
+    if(!identical(candidate(c(1, 1)), NULL)){quit('no', 1)}
+    if(!identical(candidate(c(1, 1, 1, 1, 0)), 1)){quit('no', 1)}
+    if(!identical(candidate(c(1, 1)), NULL)){quit('no', 1)}
+    if(!identical(candidate(c(-35, 34, 12, -45)), -35)){quit('no', 1)}
 }
 test_humaneval()

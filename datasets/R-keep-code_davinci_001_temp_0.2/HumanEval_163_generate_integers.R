@@ -24,9 +24,9 @@ generate_integers(10, 14)
 
 test_humaneval <- function() {
 candidate <- generate_integers
-    if(!identical(candidate(2, 10), list(2, 4, 6, 8))){quit('no', 1)}
-    if(!identical(candidate(10, 2), list(2, 4, 6, 8))){quit('no', 1)}
-    if(!identical(candidate(132, 2), list(2, 4, 6, 8))){quit('no', 1)}
+    if(!identical(candidate(2, 10), c(2, 4, 6, 8))){quit('no', 1)}
+    if(!identical(candidate(10, 2), c(2, 4, 6, 8))){quit('no', 1)}
+    if(!identical(candidate(132, 2), c(2, 4, 6, 8))){quit('no', 1)}
     if(!identical(candidate(17, 89), list())){quit('no', 1)}
 }
 test_humaneval()

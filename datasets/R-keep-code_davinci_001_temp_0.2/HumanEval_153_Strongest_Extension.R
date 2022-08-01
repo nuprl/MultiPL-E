@@ -20,14 +20,14 @@ Strongest_Extension <- function(class_name, extensions) {
 
 test_humaneval <- function() {
 candidate <- Strongest_Extension
-    if(!identical(candidate('Watashi', list('tEN', 'niNE', 'eIGHt8OKe')), 'Watashi.eIGHt8OKe')){quit('no', 1)}
-    if(!identical(candidate('Boku123', list('nani', 'NazeDa', 'YEs.WeCaNe', '32145tggg')), 'Boku123.YEs.WeCaNe')){quit('no', 1)}
-    if(!identical(candidate('__YESIMHERE', list('t', 'eMptY', 'nothing', 'zeR00', 'NuLl__', '123NoooneB321')), '__YESIMHERE.NuLl__')){quit('no', 1)}
-    if(!identical(candidate('K', list('Ta', 'TAR', 't234An', 'cosSo')), 'K.TAR')){quit('no', 1)}
-    if(!identical(candidate('__HAHA', list('Tab', '123', '781345', '-_-')), '__HAHA.123')){quit('no', 1)}
-    if(!identical(candidate('YameRore', list('HhAas', 'okIWILL123', 'WorkOut', 'Fails', '-_-')), 'YameRore.okIWILL123')){quit('no', 1)}
-    if(!identical(candidate('finNNalLLly', list('Die', 'NowW', 'Wow', 'WoW')), 'finNNalLLly.WoW')){quit('no', 1)}
-    if(!identical(candidate('_', list('Bb', '91245')), '_.Bb')){quit('no', 1)}
-    if(!identical(candidate('Sp', list('671235', 'Bb')), 'Sp.671235')){quit('no', 1)}
+    if(!identical(candidate('Watashi', c('tEN', 'niNE', 'eIGHt8OKe')), 'Watashi.eIGHt8OKe')){quit('no', 1)}
+    if(!identical(candidate('Boku123', c('nani', 'NazeDa', 'YEs.WeCaNe', '32145tggg')), 'Boku123.YEs.WeCaNe')){quit('no', 1)}
+    if(!identical(candidate('__YESIMHERE', c('t', 'eMptY', 'nothing', 'zeR00', 'NuLl__', '123NoooneB321')), '__YESIMHERE.NuLl__')){quit('no', 1)}
+    if(!identical(candidate('K', c('Ta', 'TAR', 't234An', 'cosSo')), 'K.TAR')){quit('no', 1)}
+    if(!identical(candidate('__HAHA', c('Tab', '123', '781345', '-_-')), '__HAHA.123')){quit('no', 1)}
+    if(!identical(candidate('YameRore', c('HhAas', 'okIWILL123', 'WorkOut', 'Fails', '-_-')), 'YameRore.okIWILL123')){quit('no', 1)}
+    if(!identical(candidate('finNNalLLly', c('Die', 'NowW', 'Wow', 'WoW')), 'finNNalLLly.WoW')){quit('no', 1)}
+    if(!identical(candidate('_', c('Bb', '91245')), '_.Bb')){quit('no', 1)}
+    if(!identical(candidate('Sp', c('671235', 'Bb')), 'Sp.671235')){quit('no', 1)}
 }
 test_humaneval()
