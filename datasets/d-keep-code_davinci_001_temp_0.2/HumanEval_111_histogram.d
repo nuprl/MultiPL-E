@@ -14,44 +14,23 @@ Given a string representing a space separated lowercase letters, return a dictio
 
     
 */
-Nullable!(long[const(char)[]]) histogram(const(char)[] test) 
+Nullable!(long[string]) histogram(string test) 
 {
-    Nullable!(long[const(char)[]]) result;
-    result = new long[const(char)[]];
-    if(test.length == 0)
+    var dict = new long[string];
+    var str = test.Split(' ');
+    foreach (var item in str)
     {
-        return result;
-    }
-    long max = 0;
-    long counter;
-    long[] counts;
-    counts = new long[const(char)[]];
-    for(int i = 0; i < test.length; i++)
-    {
-        counter = 0;
-        for(int j = 0; j < test.length; j++)
+        if (dict.ContainsKey(item))
         {
-            if(test[i] == test[j])
-            {
-                counter++;
-            }
+            dict[item] = dict[item] + 1;
         }
-        counts[i] = counter;
-        if(counter > max)
+        else
         {
-            max = counter;
+            dict[item] = 1;
         }
     }
-    for(int i = 0; i < test.length; i++)
-    {
-        if(counts[i] == max)
-        {
-            result[i] = test[i];
-        }
-    }
-    return result;
+    return dict;
 }
-
 
 unittest
 {
@@ -59,42 +38,42 @@ unittest
 
 {
         auto result = candidate("a b b a");
-        assert(!result.isNull && result.get == ["a": 2, "b": 2]);
+        assert(!result.isNull && result.get == ["a": 2L, "b": 2L]);
 }
 
 {
         auto result = candidate("a b c a b");
-        assert(!result.isNull && result.get == ["a": 2, "b": 2]);
+        assert(!result.isNull && result.get == ["a": 2L, "b": 2L]);
 }
 
 {
         auto result = candidate("a b c d g");
-        assert(!result.isNull && result.get == ["a": 1, "b": 1, "c": 1, "d": 1, "g": 1]);
+        assert(!result.isNull && result.get == ["a": 1L, "b": 1L, "c": 1L, "d": 1L, "g": 1L]);
 }
 
 {
         auto result = candidate("r t g");
-        assert(!result.isNull && result.get == ["r": 1, "t": 1, "g": 1]);
+        assert(!result.isNull && result.get == ["r": 1L, "t": 1L, "g": 1L]);
 }
 
 {
         auto result = candidate("b b b b a");
-        assert(!result.isNull && result.get == ["b": 4]);
+        assert(!result.isNull && result.get == ["b": 4L]);
 }
 
 {
         auto result = candidate("r t g");
-        assert(!result.isNull && result.get == ["r": 1, "t": 1, "g": 1]);
+        assert(!result.isNull && result.get == ["r": 1L, "t": 1L, "g": 1L]);
 }
 
 {
         auto result = candidate("");
-        assert(!result.isNull && result.get == []);
+        assert(result.isNull);
 }
 
 {
         auto result = candidate("a");
-        assert(!result.isNull && result.get == ["a": 1]);
+        assert(!result.isNull && result.get == ["a": 1L]);
 }
 
 }

@@ -18,7 +18,7 @@ unittest
     alias candidate = remove_duplicates;
 
     assert(candidate([]) == []);
-    assert(candidate([1, 2, 3, 4]) == [1, 2, 3, 4]);
-    assert(candidate([1, 2, 3, 2, 4, 3, 5]) == [1, 4, 5]);
+    assert(candidate([1L, 2L, 3L, 4L]) == [1L, 2L, 3L, 4L]);
+    assert(candidate([1L, 2L, 3L, 2L, 4L, 3L, 5L]) == [1L, 4L, 5L]);
 }
 void main(){}

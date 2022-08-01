@@ -28,14 +28,14 @@ unittest
 {
     alias candidate = triangle_area;
 
-    assert(candidate(3, 4, 5) == 6.0);
-    assert(candidate(1, 2, 10) == -1);
-    assert(candidate(4, 8, 5) == 8.18);
-    assert(candidate(2, 2, 2) == 1.73);
-    assert(candidate(1, 2, 3) == -1);
-    assert(candidate(10, 5, 7) == 16.25);
-    assert(candidate(2, 6, 3) == -1);
-    assert(candidate(1, 1, 1) == 0.43);
-    assert(candidate(2, 2, 10) == -1);
+    assert(candidate(3L, 4L, 5L) == 6.0);
+    assert(candidate(1L, 2L, 10L) == -1L);
+    assert(candidate(4L, 8L, 5L) == 8.18);
+    assert(candidate(2L, 2L, 2L) == 1.73);
+    assert(candidate(1L, 2L, 3L) == -1L);
+    assert(candidate(10L, 5L, 7L) == 16.25);
+    assert(candidate(2L, 6L, 3L) == -1L);
+    assert(candidate(1L, 1L, 1L) == 0.43);
+    assert(candidate(2L, 2L, 10L) == -1L);
 }
 void main(){}

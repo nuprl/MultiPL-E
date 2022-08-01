@@ -21,37 +21,30 @@ You are given two intervals,
     intersection((-3, -1), (-5, 5)) ==> "YES"
     
 */
-const(char)[] intersection(Tuple!(long, long) interval1, Tuple!(long, long) interval2) 
+string intersection(Tuple!(long, long) interval1, Tuple!(long, long) interval2) 
 {
-    if(interval1.first > interval2.second || interval2.first > interval1.second)
+    if (interval1.second < interval2.first || interval2.second < interval1.first) {
         return "NO";
-    else if(interval1.first == interval2.first && interval1.second == interval2.second)
+    }
+    long start = std.math.max(interval1.first, interval2.first);
+    long end = std.math.min(interval1.second, interval2.second);
+    if (std.math.isPrime(end - start + 1)) {
         return "YES";
-    else if(interval1.first == interval2.first || interval1.second == interval2.second)
-        return "NO";
-    else if(interval1.first < interval2.first && interval1.second > interval2.second)
-        return "YES";
-    else if(interval1.first > interval2.first && interval1.second < interval2.second)
-        return "YES";
-    else if(interval1.first < interval2.first && interval1.second < interval2.second)
-        return "YES";
-    else if(interval1.first > interval2.first && interval1.second > interval2.second)
-        return "YES";
-    else
-        return "NO";
+    }
+    return "NO";
 }
 
 unittest
 {
     alias candidate = intersection;
 
-    assert(candidate(tuple(1, 2), tuple(2, 3)) == "NO");
-    assert(candidate(tuple(-1, 1), tuple(0, 4)) == "NO");
-    assert(candidate(tuple(-3, -1), tuple(-5, 5)) == "YES");
-    assert(candidate(tuple(-2, 2), tuple(-4, 0)) == "YES");
-    assert(candidate(tuple(-11, 2), tuple(-1, -1)) == "NO");
-    assert(candidate(tuple(1, 2), tuple(3, 5)) == "NO");
-    assert(candidate(tuple(1, 2), tuple(1, 2)) == "NO");
-    assert(candidate(tuple(-2, -2), tuple(-3, -2)) == "NO");
+    assert(candidate(tuple(1L, 2L), tuple(2L, 3L)) == "NO");
+    assert(candidate(tuple(-1L, 1L), tuple(0L, 4L)) == "NO");
+    assert(candidate(tuple(-3L, -1L), tuple(-5L, 5L)) == "YES");
+    assert(candidate(tuple(-2L, 2L), tuple(-4L, 0L)) == "YES");
+    assert(candidate(tuple(-11L, 2L), tuple(-1L, -1L)) == "NO");
+    assert(candidate(tuple(1L, 2L), tuple(3L, 5L)) == "NO");
+    assert(candidate(tuple(1L, 2L), tuple(1L, 2L)) == "NO");
+    assert(candidate(tuple(-2L, -2L), tuple(-3L, -2L)) == "NO");
 }
 void main(){}

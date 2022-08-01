@@ -13,10 +13,10 @@ Write a function vowels_count which takes a string representing
     3
     
 */
-long vowels_count(const(char)[] s) 
+long vowels_count(string s) 
 {
     long count = 0;
-    for(int i = 0; i < s.length; i++)
+    for(int i = 0; i < s.length(); i++)
     {
         if(s[i] == 'a' || s[i] == 'e' || s[i] == 'i' || s[i] == 'o' || s[i] == 'u')
         {
@@ -30,12 +30,12 @@ unittest
 {
     alias candidate = vowels_count;
 
-    assert(candidate("abcde") == 2);
-    assert(candidate("Alone") == 3);
-    assert(candidate("key") == 2);
-    assert(candidate("bye") == 1);
-    assert(candidate("keY") == 2);
-    assert(candidate("bYe") == 1);
-    assert(candidate("ACEDY") == 3);
+    assert(candidate("abcde") == 2L);
+    assert(candidate("Alone") == 3L);
+    assert(candidate("key") == 2L);
+    assert(candidate("bye") == 1L);
+    assert(candidate("keY") == 2L);
+    assert(candidate("bYe") == 1L);
+    assert(candidate("ACEDY") == 3L);
 }
 void main(){}

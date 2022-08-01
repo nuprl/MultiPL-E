@@ -22,6 +22,6 @@ unittest
 {
     alias candidate = unique;
 
-    assert(candidate([5, 3, 5, 2, 3, 3, 9, 0, 123]) == [0, 2, 3, 5, 9, 123]);
+    assert(candidate([5L, 3L, 5L, 2L, 3L, 3L, 9L, 0L, 123L]) == [0L, 2L, 3L, 5L, 9L, 123L]);
 }
 void main(){}

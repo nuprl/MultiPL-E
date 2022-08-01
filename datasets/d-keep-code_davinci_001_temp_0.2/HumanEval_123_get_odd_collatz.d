@@ -33,9 +33,9 @@ unittest
 {
     alias candidate = get_odd_collatz;
 
-    assert(candidate(14) == [1, 5, 7, 11, 13, 17]);
-    assert(candidate(5) == [1, 5]);
-    assert(candidate(12) == [1, 3, 5]);
-    assert(candidate(1) == [1]);
+    assert(candidate(14L) == [1L, 5L, 7L, 11L, 13L, 17L]);
+    assert(candidate(5L) == [1L, 5L]);
+    assert(candidate(12L) == [1L, 3L, 5L]);
+    assert(candidate(1L) == [1L]);
 }
 void main(){}

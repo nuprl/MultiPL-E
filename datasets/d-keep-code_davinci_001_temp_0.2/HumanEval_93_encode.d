@@ -15,76 +15,79 @@ import std.math;
     'tHKS KS C MGSSCGG'
     
 */
-const(char)[] encode(const(char)[] message) 
+string encode(string message) 
 {
-    const(char)[] encoded_message = [];
-    for(int i = 0; i < message.length; i++)
+    string encoded = "";
+    for (int i = 0; i < message.length(); i++)
     {
-        if(message[i] >= 'a' && message[i] <= 'z')
+        if (message[i] >= 'a' && message[i] <= 'z')
         {
-            if(message[i] == 'a')
+            if (message[i] == 'a')
             {
-                encoded_message.push('b');
+                encoded += 'b';
             }
-            else if(message[i] == 'e')
+            else if (message[i] == 'e')
             {
-                encoded_message.push('f');
+                encoded += 'f';
             }
-            else if(message[i] == 'i')
+            else if (message[i] == 'i')
             {
-                encoded_message.push('j');
+                encoded += 'j';
             }
-            else if(message[i] == 'o')
+            else if (message[i] == 'o')
             {
-                encoded_message.push('p');
+                encoded += 'p';
             }
-            else if(message[i] == 'u')
+            else if (message[i] == 'u')
             {
-                encoded_message.push('v');
+                encoded += 'v';
             }
-            else if(message[i] == 'y')
+            else if (message[i] == 'y')
             {
-                encoded_message.push('z');
-            }
-            else if(message[i] == 'z')
-            {
-                encoded_message.push('a');
-            }
-            else if(message[i] == 'b')
-            {
-                encoded_message.push('a');
-            }
-            else if(message[i] == 'f')
-            {
-                encoded_message.push('e');
-            }
-            else if(message[i] == 'j')
-            {
-                encoded_message.push('i');
-            }
-            else if(message[i] == 'p')
-            {
-                encoded_message.push('o');
-            }
-            else if(message[i] == 'v')
-            {
-                encoded_message.push('u');
-            }
-            else if(message[i] == 'z')
-            {
-                encoded_message.push('y');
+                encoded += 'z';
             }
             else
             {
-                encoded_message.push(message[i]);
+                encoded += message[i];
+            }
+        }
+        else if (message[i] >= 'A' && message[i] <= 'Z')
+        {
+            if (message[i] == 'A')
+            {
+                encoded += 'B';
+            }
+            else if (message[i] == 'E')
+            {
+                encoded += 'F';
+            }
+            else if (message[i] == 'I')
+            {
+                encoded += 'J';
+            }
+            else if (message[i] == 'O')
+            {
+                encoded += 'P';
+            }
+            else if (message[i] == 'U')
+            {
+                encoded += 'V';
+            }
+            else if (message[i] == 'Y')
+            {
+                encoded += 'Z';
+            }
+            else
+            {
+                encoded += message[i];
             }
         }
         else
         {
-            encoded_message.push(message[i]);
+            encoded += message[i];
         }
     }
-    return encoded_message;
+    return encoded;
 }
 
 unittest

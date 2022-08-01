@@ -50,9 +50,9 @@ unittest
 {
     alias candidate = unique_digits;
 
-    assert(candidate([15, 33, 1422, 1]) == [1, 15, 33]);
-    assert(candidate([152, 323, 1422, 10]) == []);
-    assert(candidate([12345, 2033, 111, 151]) == [111, 151]);
-    assert(candidate([135, 103, 31]) == [31, 135]);
+    assert(candidate([15L, 33L, 1422L, 1L]) == [1L, 15L, 33L]);
+    assert(candidate([152L, 323L, 1422L, 10L]) == []);
+    assert(candidate([12345L, 2033L, 111L, 151L]) == [111L, 151L]);
+    assert(candidate([135L, 103L, 31L]) == [31L, 135L]);
 }
 void main(){}

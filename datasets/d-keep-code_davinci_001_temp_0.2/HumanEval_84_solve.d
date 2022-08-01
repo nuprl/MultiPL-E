@@ -15,23 +15,25 @@ Given a positive integer N, return the total sum of its digits in binary.
          a string of binary number
     
 */
-const(char)[] solve(long N) 
+string solve(long N) 
 {
-    string binary = std.math.binary(N);
-    long sum = 0;
-    for(char c : binary)
-        sum += c - '0';
-    return {sum};
+    string result = "";
+    while (N > 0)
+    {
+        result = std.math.toBinary(N % 2) + result;
+        N = N / 2;
+    }
+    return result;
 }
 
 unittest
 {
     alias candidate = solve;
 
-    assert(candidate(1000) == "1");
-    assert(candidate(150) == "110");
-    assert(candidate(147) == "1100");
-    assert(candidate(333) == "1001");
-    assert(candidate(963) == "10010");
+    assert(candidate(1000L) == "1");
+    assert(candidate(150L) == "110");
+    assert(candidate(147L) == "1100");
+    assert(candidate(333L) == "1001");
+    assert(candidate(963L) == "10010");
 }
 void main(){}

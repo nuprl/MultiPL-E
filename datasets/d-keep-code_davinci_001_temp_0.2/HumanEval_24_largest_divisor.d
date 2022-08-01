@@ -22,10 +22,10 @@ unittest
 {
     alias candidate = largest_divisor;
 
-    assert(candidate(3) == 1);
-    assert(candidate(7) == 1);
-    assert(candidate(10) == 5);
-    assert(candidate(100) == 50);
-    assert(candidate(49) == 7);
+    assert(candidate(3L) == 1L);
+    assert(candidate(7L) == 1L);
+    assert(candidate(10L) == 5L);
+    assert(candidate(100L) == 50L);
+    assert(candidate(49L) == 7L);
 }
 void main(){}

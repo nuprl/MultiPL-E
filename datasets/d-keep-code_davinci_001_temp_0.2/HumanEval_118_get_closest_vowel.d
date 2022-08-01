@@ -16,30 +16,33 @@ You are given a word. Your task is to find the closest vowel that stands between
     get_closest_vowel("ab") ==> ""
     
 */
-const(char)[] get_closest_vowel(const(char)[] word) 
+string get_closest_vowel(string word) 
 {
-    const(char)[] vowels = {'a', 'e', 'i', 'o', 'u'};
-    int[] consonants = {'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'};
-    int[] vowels_positions = {};
-    int[] consonants_positions = {};
-    int[] positions = {};
-    int[] distances = {};
-    int[] closest_vowels = {};
-    int closest_vowel_position = 0;
-    int closest_vowel_distance = 0;
-    int closest_vowel = 0;
-    int closest_vowel_index = 0;
-    int closest_vowel_index_position = 0;
-    int closest_vowel_index_distance = 0;
-    int closest_vowel_index_closest_vowel = 0;
-    int closest_vowel_index_closest_vowel_index = 0;
-    int closest_vowel_index_closest_vowel_index_position = 0;
-    int closest_vowel_index_closest_vowel_index_distance = 0;
-    int closest_vowel_index_closest_vowel_index_closest_vowel = 0;
-    int closest_vowel_index_closest_vowel_index_closest_vowel_index = 0;
-    int closest_vowel_index_closest_vowel_index_closest_vowel_index_position = 0;
-    int closest_vowel_index_closest_vowel_index_closest_vowel_index_distance = 0;
-    int closest_vowel_index_closest_vowel_index_closest_vowel_index_closest_vowel =
+    string vowels = "aeiou";
+    int i = 0;
+    int j = word.length() - 1;
+    while (i < word.length() && !std.math.is_vowel(word[i]))
+        i++;
+    while (j >= 0 && !std.math.is_vowel(word[j]))
+        j--;
+    if (i >= word.length() || j < 0)
+        return "";
+    int min_diff = word.length();
+    int min_diff_index = -1;
+    for (int k = i; k < j; k++)
+    {
+        if (std.math.is_vowel(word[k]))
+        {
+            int diff = j - k;
+            if (diff < min_diff)
+            {
+                min_diff = diff;
+                min_diff_index = k;
+            }
+        }
+    }
+    return word[min_diff_index];
+}
 
 unittest
 {

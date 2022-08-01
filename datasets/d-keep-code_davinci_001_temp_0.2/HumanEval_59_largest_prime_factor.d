@@ -29,10 +29,10 @@ unittest
 {
     alias candidate = largest_prime_factor;
 
-    assert(candidate(15) == 5);
-    assert(candidate(27) == 3);
-    assert(candidate(63) == 7);
-    assert(candidate(330) == 11);
-    assert(candidate(13195) == 29);
+    assert(candidate(15L) == 5L);
+    assert(candidate(27L) == 3L);
+    assert(candidate(63L) == 7L);
+    assert(candidate(330L) == 11L);
+    assert(candidate(13195L) == 29L);
 }
 void main(){}

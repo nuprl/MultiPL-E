@@ -25,8 +25,8 @@ unittest
 {
     alias candidate = intersperse;
 
-    assert(candidate([], 7) == []);
-    assert(candidate([5, 6, 3, 2], 8) == [5, 8, 6, 8, 3, 8, 2]);
-    assert(candidate([2, 2, 2], 2) == [2, 2, 2, 2, 2]);
+    assert(candidate([], 7L) == []);
+    assert(candidate([5L, 6L, 3L, 2L], 8L) == [5L, 8L, 6L, 8L, 3L, 8L, 2L]);
+    assert(candidate([2L, 2L, 2L], 2L) == [2L, 2L, 2L, 2L, 2L]);
 }
 void main(){}

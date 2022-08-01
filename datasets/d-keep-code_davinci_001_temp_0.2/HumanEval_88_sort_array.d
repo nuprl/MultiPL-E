@@ -42,11 +42,11 @@ unittest
     alias candidate = sort_array;
 
     assert(candidate([]) == []);
-    assert(candidate([5]) == [5]);
-    assert(candidate([2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5]);
-    assert(candidate([2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0]);
-    assert(candidate([2, 1]) == [1, 2]);
-    assert(candidate([15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87]);
-    assert(candidate([21, 14, 23, 11]) == [23, 21, 14, 11]);
+    assert(candidate([5L]) == [5L]);
+    assert(candidate([2L, 4L, 3L, 0L, 1L, 5L]) == [0L, 1L, 2L, 3L, 4L, 5L]);
+    assert(candidate([2L, 4L, 3L, 0L, 1L, 5L, 6L]) == [6L, 5L, 4L, 3L, 2L, 1L, 0L]);
+    assert(candidate([2L, 1L]) == [1L, 2L]);
+    assert(candidate([15L, 42L, 87L, 32L, 11L, 0L]) == [0L, 11L, 15L, 32L, 42L, 87L]);
+    assert(candidate([21L, 14L, 23L, 11L]) == [23L, 21L, 14L, 11L]);
 }
 void main(){}

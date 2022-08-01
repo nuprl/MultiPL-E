@@ -13,52 +13,21 @@ import std.math;
     'catac'
     
 */
-const(char)[] make_palindrome(const(char)[] string) 
+string make_palindrome(string string) 
 {
-    const(char)[] result = new(char, string.length() + 1);
+    string palindrome = string;
     int i = 0;
-    int j = string.length() - 1;
-    while(i < j)
+    while(i < string.length())
     {
-        if(string[i] == string[j])
+        string postfix = string.substr(i);
+        if(is_palindrome(postfix))
         {
-            result[i] = string[i];
-            result[j] = string[j];
-            i++;
-            j--;
-        }
-        else
-        {
+            palindrome += reverse(string.substr(0, i));
             break;
         }
+        i++;
     }
-    if(i == j)
-    {
-        result[i] = string[i];
-    }
-    else
-    {
-        int k = 0;
-        while(string[k] == string[j])
-        {
-            k++;
-        }
-        k--;
-        int l = 0;
-        while(string[l] == string[i])
-        {
-            l++;
-        }
-        l--;
-        while(k >= 0)
-        {
-            result[i + l] = string[k];
-            result[j - l] = string[k];
-            k--;
-            l++;
-        }
-    }
-    return result;
+    return palindrome;
 }
 
 unittest

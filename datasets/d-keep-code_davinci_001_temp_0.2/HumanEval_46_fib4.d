@@ -48,9 +48,9 @@ unittest
 {
     alias candidate = fib4;
 
-    assert(candidate(5) == 4);
-    assert(candidate(8) == 28);
-    assert(candidate(10) == 104);
-    assert(candidate(12) == 386);
+    assert(candidate(5L) == 4L);
+    assert(candidate(8L) == 28L);
+    assert(candidate(10L) == 104L);
+    assert(candidate(12L) == 386L);
 }
 void main(){}

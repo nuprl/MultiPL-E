@@ -47,33 +47,33 @@ unittest
     alias candidate = largest_smallest_integers;
 
 {
-        auto result = candidate([2, 4, 1, 3, 5, 7]);
+        auto result = candidate([2L, 4L, 1L, 3L, 5L, 7L]);
         assert(result[0].isNull);
-        assert(!result[1].isNull && result[1].get == 1);
+        assert(!result[1].isNull && result[1].get == 1L);
 }
 
 {
-        auto result = candidate([2, 4, 1, 3, 5, 7, 0]);
+        auto result = candidate([2L, 4L, 1L, 3L, 5L, 7L, 0L]);
         assert(result[0].isNull);
-        assert(!result[1].isNull && result[1].get == 1);
+        assert(!result[1].isNull && result[1].get == 1L);
 }
 
 {
-        auto result = candidate([1, 3, 2, 4, 5, 6, -2]);
-        assert(!result[0].isNull && result[0].get == -2);
-        assert(!result[1].isNull && result[1].get == 1);
+        auto result = candidate([1L, 3L, 2L, 4L, 5L, 6L, -2L]);
+        assert(!result[0].isNull && result[0].get == -2L);
+        assert(!result[1].isNull && result[1].get == 1L);
 }
 
 {
-        auto result = candidate([4, 5, 3, 6, 2, 7, -7]);
-        assert(!result[0].isNull && result[0].get == -7);
-        assert(!result[1].isNull && result[1].get == 2);
+        auto result = candidate([4L, 5L, 3L, 6L, 2L, 7L, -7L]);
+        assert(!result[0].isNull && result[0].get == -7L);
+        assert(!result[1].isNull && result[1].get == 2L);
 }
 
 {
-        auto result = candidate([7, 3, 8, 4, 9, 2, 5, -9]);
-        assert(!result[0].isNull && result[0].get == -9);
-        assert(!result[1].isNull && result[1].get == 2);
+        auto result = candidate([7L, 3L, 8L, 4L, 9L, 2L, 5L, -9L]);
+        assert(!result[0].isNull && result[0].get == -9L);
+        assert(!result[1].isNull && result[1].get == 2L);
 }
 
 {
@@ -83,33 +83,33 @@ unittest
 }
 
 {
-        auto result = candidate([0]);
+        auto result = candidate([0L]);
         assert(result[0].isNull);
         assert(result[1].isNull);
 }
 
 {
-        auto result = candidate([-1, -3, -5, -6]);
-        assert(!result[0].isNull && result[0].get == -1);
+        auto result = candidate([-1L, -3L, -5L, -6L]);
+        assert(!result[0].isNull && result[0].get == -1L);
         assert(result[1].isNull);
 }
 
 {
-        auto result = candidate([-1, -3, -5, -6, 0]);
-        assert(!result[0].isNull && result[0].get == -1);
+        auto result = candidate([-1L, -3L, -5L, -6L, 0L]);
+        assert(!result[0].isNull && result[0].get == -1L);
         assert(result[1].isNull);
 }
 
 {
-        auto result = candidate([-6, -4, -4, -3, 1]);
-        assert(!result[0].isNull && result[0].get == -3);
-        assert(!result[1].isNull && result[1].get == 1);
+        auto result = candidate([-6L, -4L, -4L, -3L, 1L]);
+        assert(!result[0].isNull && result[0].get == -3L);
+        assert(!result[1].isNull && result[1].get == 1L);
 }
 
 {
-        auto result = candidate([-6, -4, -4, -3, -100, 1]);
-        assert(!result[0].isNull && result[0].get == -3);
-        assert(!result[1].isNull && result[1].get == 1);
+        auto result = candidate([-6L, -4L, -4L, -3L, -100L, 1L]);
+        assert(!result[0].isNull && result[0].get == -3L);
+        assert(!result[1].isNull && result[1].get == 1L);
 }
 
 }

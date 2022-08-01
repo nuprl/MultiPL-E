@@ -14,9 +14,9 @@ import std.math;
     check_if_last_char_is_a_letter("") ➞ False 
     
 */
-bool check_if_last_char_is_a_letter(const(char)[] txt) 
+bool check_if_last_char_is_a_letter(string txt) 
 {
-    return txt.size() > 0 && std.math.is_alpha(txt[txt.size() - 1]);
+    return std.math.is_alpha(txt[txt.size() - 1]);
 }
 
 unittest

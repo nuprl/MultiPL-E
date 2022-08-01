@@ -43,18 +43,18 @@ unittest
 {
     alias candidate = is_prime;
 
-    assert(candidate(6) == false);
-    assert(candidate(101) == true);
-    assert(candidate(11) == true);
-    assert(candidate(13441) == true);
-    assert(candidate(61) == true);
-    assert(candidate(4) == false);
-    assert(candidate(1) == false);
-    assert(candidate(5) == true);
-    assert(candidate(11) == true);
-    assert(candidate(17) == true);
-    assert(candidate(85) == false);
-    assert(candidate(77) == false);
-    assert(candidate(255379) == false);
+    assert(candidate(6L) == false);
+    assert(candidate(101L) == true);
+    assert(candidate(11L) == true);
+    assert(candidate(13441L) == true);
+    assert(candidate(61L) == true);
+    assert(candidate(4L) == false);
+    assert(candidate(1L) == false);
+    assert(candidate(5L) == true);
+    assert(candidate(11L) == true);
+    assert(candidate(17L) == true);
+    assert(candidate(85L) == false);
+    assert(candidate(77L) == false);
+    assert(candidate(255379L) == false);
 }
 void main(){}

@@ -10,9 +10,9 @@ import std.math;
     words_string("One, two, three, four, five, six") == ["One", "two", "three", "four", "five", "six"]
     
 */
-const(char)[][] words_string(const(char)[] s) 
+string[] words_string(string s) 
 {
-    return null;
+    return s.split(", ");
 }
 
 unittest

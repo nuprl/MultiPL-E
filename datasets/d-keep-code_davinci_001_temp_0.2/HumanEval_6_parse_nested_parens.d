@@ -8,26 +8,21 @@ import std.math;
     [2, 3, 1, 3]
     
 */
-long[] parse_nested_parens(const(char)[] paren_string) 
+long[] parse_nested_parens(string paren_string) 
 {
-    long[] paren_levels = new long[paren_string.length];
-    long curr_level = 0;
-    long max_level = 0;
-    for (long i = 0; i < paren_string.length; i++)
+    long[] paren_levels = new long[paren_string.Length];
+    int level = 0;
+    for (int i = 0; i < paren_string.Length; i++)
     {
         if (paren_string[i] == '(')
         {
-            curr_level++;
-            paren_levels[i] = curr_level;
-            if (curr_level > max_level)
-            {
-                max_level = curr_level;
-            }
+            level++;
         }
         else if (paren_string[i] == ')')
         {
-            curr_level--;
+            level--;
         }
+        paren_levels[i] = level;
     }
     return paren_levels;
 }
@@ -36,8 +31,8 @@ unittest
 {
     alias candidate = parse_nested_parens;
 
-    assert(candidate("(()()) ((())) () ((())()())") == [2, 3, 1, 3]);
-    assert(candidate("() (()) ((())) (((())))") == [1, 2, 3, 4]);
-    assert(candidate("(()(())((())))") == [4]);
+    assert(candidate("(()()) ((())) () ((())()())") == [2L, 3L, 1L, 3L]);
+    assert(candidate("() (()) ((())) (((())))") == [1L, 2L, 3L, 4L]);
+    assert(candidate("(()(())((())))") == [4L]);
 }
 void main(){}

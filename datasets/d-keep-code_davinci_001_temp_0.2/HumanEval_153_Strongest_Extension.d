@@ -18,24 +18,32 @@ You will be given the name of a class (a string) and a list of extensions.
     for Strongest_Extension('my_class', ['AA', 'Be', 'CC']) == 'my_class.AA'
     
 */
-const(char)[] Strongest_Extension(const(char)[] class_name, const(char)[][] extensions) 
+string Strongest_Extension(string class_name, string[] extensions) 
 {
-    int[] strengths = new int[extensions.length];
-    for(int i = 0; i < extensions.length; i++)
+    int max = 0;
+    string max_ext = "";
+    for (int i = 0; i < extensions.length; i++)
     {
-        strengths[i] = std.math.abs(std.math.count_uppercase(extensions[i]) - std.math.count_lowercase(extensions[i]));
-    }
-    int max_strength = 0;
-    int max_strength_index = 0;
-    for(int i = 0; i < strengths.length; i++)
-    {
-        if(strengths[i] > max_strength)
+        int cap = 0;
+        int sm = 0;
+        for (int j = 0; j < extensions[i].length; j++)
         {
-            max_strength = strengths[i];
-            max_strength_index = i;
+            if (extensions[i][j] >= 'A' && extensions[i][j] <= 'Z')
+            {
+                cap++;
+            }
+            else if (extensions[i][j] >= 'a' && extensions[i][j] <= 'z')
+            {
+                sm++;
+            }
+        }
+        if (cap - sm > max)
+        {
+            max = cap - sm;
+            max_ext = extensions[i];
         }
     }
-    return class_name + "." + extensions[max_strength_index];
+    return class_name + "." + max_ext;
 }
 
 unittest

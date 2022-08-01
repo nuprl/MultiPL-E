@@ -66,16 +66,16 @@ unittest
 {
     alias candidate = minPath;
 
-    assert(candidate([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 3) == [1, 2, 1]);
-    assert(candidate([[5, 9, 3], [4, 1, 6], [7, 8, 2]], 1) == [1]);
-    assert(candidate([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]], 4) == [1, 2, 1, 2]);
-    assert(candidate([[6, 4, 13, 10], [5, 7, 12, 1], [3, 16, 11, 15], [8, 14, 9, 2]], 7) == [1, 10, 1, 10, 1, 10, 1]);
-    assert(candidate([[8, 14, 9, 2], [6, 4, 13, 15], [5, 7, 1, 12], [3, 10, 11, 16]], 5) == [1, 7, 1, 7, 1]);
-    assert(candidate([[11, 8, 7, 2], [5, 16, 14, 4], [9, 3, 15, 6], [12, 13, 10, 1]], 9) == [1, 6, 1, 6, 1, 6, 1, 6, 1]);
-    assert(candidate([[12, 13, 10, 1], [9, 3, 15, 6], [5, 16, 14, 4], [11, 8, 7, 2]], 12) == [1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6]);
-    assert(candidate([[2, 7, 4], [3, 1, 5], [6, 8, 9]], 8) == [1, 3, 1, 3, 1, 3, 1, 3]);
-    assert(candidate([[6, 1, 5], [3, 8, 9], [2, 7, 4]], 8) == [1, 5, 1, 5, 1, 5, 1, 5]);
-    assert(candidate([[1, 2], [3, 4]], 10) == [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]);
-    assert(candidate([[1, 3], [3, 2]], 10) == [1, 3, 1, 3, 1, 3, 1, 3, 1, 3]);
+    assert(candidate([[1L, 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);
+    assert(candidate([[5L, 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);
+    assert(candidate([[1L, 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L) == [1L, 2L, 1L, 2L]);
+    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L, 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L, 10L, 1L]);
+    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L, 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);
+    assert(candidate([[11L, 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L) == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);
+    assert(candidate([[12L, 13L, 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);
+    assert(candidate([[2L, 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);
+    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L, 5L, 1L, 5L, 1L, 5L, 1L, 5L]);
+    assert(candidate([[1L, 2L], [3L, 4L]], 10L) == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);
+    assert(candidate([[1L, 3L], [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);
 }
 void main(){}

@@ -13,37 +13,32 @@ import std.math;
     check_dict_case({"STATE":"NC", "ZIP":"12345" }) should return True.
     
 */
-bool check_dict_case(Nullable!(const(char)[][const(char)[]]) dict) 
+bool check_dict_case(Nullable!(string[string]) dict) 
 {
-    if (dict == null)
-        return false;
-    if (dict.count == 0)
-        return false;
-    for (int i = 0; i < dict.count; i++)
+    if (dict.HasValue)
     {
-        if (std.typecons.is_string(dict[i][0]))
+        for (int i = 0; i < dict.Value.Length; i++)
         {
-            if (std.math.is_lower(dict[i][0]))
-                continue;
-            else
+            if (!char.IsLetter(dict.Value[i][0]))
+            {
                 return false;
+            }
         }
-        else
-            return false;
+        return true;
     }
-    return true;
+    return false;
 }
 
 unittest
 {
     alias candidate = check_dict_case;
 
-    assert(candidate(["p": "pineapple", "b": "banana"]) == true);
-    assert(candidate(["p": "pineapple", "A": "banana", "B": "banana"]) == false);
-    assert(candidate(["p": "pineapple", "5": "banana", "a": "apple"]) == false);
-    assert(candidate(["Name": "John", "Age": "36", "City": "Houston"]) == false);
-    assert(candidate(["STATE": "NC", "ZIP": "12345"]) == true);
-    assert(candidate(["fruit": "Orange", "taste": "Sweet"]) == true);
-    assert(candidate([]) == false);
+    assert(candidate(["p": "pineapple", "b": "banana"].nullable) == true);
+    assert(candidate(["p": "pineapple", "A": "banana", "B": "banana"].nullable) == false);
+    assert(candidate(["p": "pineapple", "5": "banana", "a": "apple"].nullable) == false);
+    assert(candidate(["Name": "John", "Age": "36", "City": "Houston"].nullable) == false);
+    assert(candidate(["STATE": "NC", "ZIP": "12345"].nullable) == true);
+    assert(candidate(["fruit": "Orange", "taste": "Sweet"].nullable) == true);
+    assert(candidate(Nullable!(string[string]).init) == false);
 }
 void main(){}

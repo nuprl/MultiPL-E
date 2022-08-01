@@ -11,12 +11,18 @@ import std.math;
     'ccc'
     
 */
-Nullable!(const(char)[]) longest(const(char)[][] strings) 
+Nullable!(string) longest(string[] strings) 
 {
-    if (strings.length() == 0)
+    if (strings.length() == 0) {
         return null;
-    else
-        return strings[0];
+    }
+    string longest = strings[0];
+    for (int i = 1; i < strings.length(); i++) {
+        if (strings[i].length() > longest.length()) {
+            longest = strings[i];
+        }
+    }
+    return longest;
 }
 
 unittest

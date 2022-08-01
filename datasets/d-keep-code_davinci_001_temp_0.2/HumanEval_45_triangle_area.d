@@ -15,8 +15,8 @@ unittest
 {
     alias candidate = triangle_area;
 
-    assert(candidate(5, 3) == 7.5);
-    assert(candidate(2, 2) == 2.0);
-    assert(candidate(10, 8) == 40.0);
+    assert(candidate(5L, 3L) == 7.5);
+    assert(candidate(2L, 2L) == 2.0);
+    assert(candidate(10L, 8L) == 40.0);
 }
 void main(){}

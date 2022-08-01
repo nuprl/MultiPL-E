@@ -39,15 +39,15 @@ unittest
 {
     alias candidate = is_multiply_prime;
 
-    assert(candidate(5) == false);
-    assert(candidate(30) == true);
-    assert(candidate(8) == true);
-    assert(candidate(10) == false);
-    assert(candidate(125) == true);
-    assert(candidate(105) == true);
-    assert(candidate(126) == false);
-    assert(candidate(729) == false);
-    assert(candidate(891) == false);
-    assert(candidate(1001) == true);
+    assert(candidate(5L) == false);
+    assert(candidate(30L) == true);
+    assert(candidate(8L) == true);
+    assert(candidate(10L) == false);
+    assert(candidate(125L) == true);
+    assert(candidate(105L) == true);
+    assert(candidate(126L) == false);
+    assert(candidate(729L) == false);
+    assert(candidate(891L) == false);
+    assert(candidate(1001L) == true);
 }
 void main(){}

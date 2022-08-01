@@ -26,24 +26,72 @@ It is the last week of the semester and the teacher has to give the grades
     grade_equation([4.0, 3, 1.7, 2, 3.5]) ==> ['A+', 'B', 'C-', 'C', 'A-']
     
 */
-const(char)[][] numerical_letter_grade(float[] grades) 
+string[] numerical_letter_grade(float[] grades) 
 {
-    const(char)[][] letter_grade = [['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
-                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
-                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
-                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
-                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
-                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
-                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
-                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
-                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E'],
-                                    ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+',
+    string[] letter_grades = new string[grades.length];
+    for (int i = 0; i < grades.length; i++)
+    {
+        if (grades[i] >= 4.0)
+        {
+            letter_grades[i] = "A+";
+        }
+        else if (grades[i] >= 3.7)
+        {
+            letter_grades[i] = "A";
+        }
+        else if (grades[i] >= 3.3)
+        {
+            letter_grades[i] = "A-";
+        }
+        else if (grades[i] >= 3.0)
+        {
+            letter_grades[i] = "B+";
+        }
+        else if (grades[i] >= 2.7)
+        {
+            letter_grades[i] = "B";
+        }
+        else if (grades[i] >= 2.3)
+        {
+            letter_grades[i] = "B-";
+        }
+        else if (grades[i] >= 2.0)
+        {
+            letter_grades[i] = "C+";
+        }
+        else if (grades[i] >= 1.7)
+        {
+            letter_grades[i] = "C";
+        }
+        else if (grades[i] >= 1.3)
+        {
+            letter_grades[i] = "C-";
+        }
+        else if (grades[i] >= 1.0)
+        {
+            letter_grades[i] = "D+";
+        }
+        else if (grades[i] >= 0.7)
+        {
+            letter_grades[i] = "D";
+        }
+        else if (grades[i] >= 0.0)
+        {
+            letter_grades[i] = "D-";
+        }
+        else
+        {
+            letter_grades[i] = "E";
+        }
+    }
+    return letter_grades;
+}
 
 unittest
 {
     alias candidate = numerical_letter_grade;
 
-    assert(candidate([4.0, 3, 1.7, 2, 3.5]) == ["A+", "B", "C-", "C", "A-"]);
+    assert(candidate([4.0, 3L, 1.7, 2L, 3.5]) == ["A+", "B", "C-", "C", "A-"]);
     assert(candidate([1.2]) == ["D+"]);
     assert(candidate([0.5]) == ["D-"]);
     assert(candidate([0.0]) == ["E"]);

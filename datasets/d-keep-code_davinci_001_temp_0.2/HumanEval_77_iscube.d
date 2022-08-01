@@ -28,13 +28,13 @@ unittest
 {
     alias candidate = iscube;
 
-    assert(candidate(1) == true);
-    assert(candidate(2) == false);
-    assert(candidate(-1) == true);
-    assert(candidate(64) == true);
-    assert(candidate(180) == false);
-    assert(candidate(1000) == true);
-    assert(candidate(0) == true);
-    assert(candidate(1729) == false);
+    assert(candidate(1L) == true);
+    assert(candidate(2L) == false);
+    assert(candidate(-1L) == true);
+    assert(candidate(64L) == true);
+    assert(candidate(180L) == false);
+    assert(candidate(1000L) == true);
+    assert(candidate(0L) == true);
+    assert(candidate(1729L) == false);
 }
 void main(){}

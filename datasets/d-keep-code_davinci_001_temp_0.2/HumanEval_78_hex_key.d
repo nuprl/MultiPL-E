@@ -19,29 +19,14 @@ You have been tasked to write a function that receives
     For num = "2020" the output should be 2.
     
 */
-long hex_key(const(char)[] num) 
+long hex_key(string num) 
 {
     long key = 0;
-    for(int i = 0; i < num.length; i++)
+    for (int i = 0; i < num.length(); i++)
     {
-        switch(num[i])
+        if (num[i] == '2' || num[i] == '3' || num[i] == '5' || num[i] == '7' || num[i] == 'B' || num[i] == 'D')
         {
-            case '0': key += 0; break;
-            case '1': key += 1; break;
-            case '2': key += 2; break;
-            case '3': key += 3; break;
-            case '4': key += 4; break;
-            case '5': key += 5; break;
-            case '6': key += 6; break;
-            case '7': key += 7; break;
-            case '8': key += 8; break;
-            case '9': key += 9; break;
-            case 'A': key += 10; break;
-            case 'B': key += 11; break;
-            case 'C': key += 12; break;
-            case 'D': key += 13; break;
-            case 'E': key += 14; break;
-            case 'F': key += 15; break;
+            key++;
         }
     }
     return key;
@@ -51,11 +36,11 @@ unittest
 {
     alias candidate = hex_key;
 
-    assert(candidate("AB") == 1);
-    assert(candidate("1077E") == 2);
-    assert(candidate("ABED1A33") == 4);
-    assert(candidate("2020") == 2);
-    assert(candidate("123456789ABCDEF0") == 6);
-    assert(candidate("112233445566778899AABBCCDDEEFF00") == 12);
+    assert(candidate("AB") == 1L);
+    assert(candidate("1077E") == 2L);
+    assert(candidate("ABED1A33") == 4L);
+    assert(candidate("2020") == 2L);
+    assert(candidate("123456789ABCDEF0") == 6L);
+    assert(candidate("112233445566778899AABBCCDDEEFF00") == 12L);
 }
 void main(){}

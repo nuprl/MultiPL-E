@@ -10,34 +10,26 @@ import std.math;
     3
     
 */
-long how_many_times(const(char)[] string, const(char)[] substring) 
+long how_many_times(string string, string substring) 
 {
-    long len_substring = len(substring);
-    long len_string = len(string);
-    long result = 0;
-    for(long i = 0; i < len_string - len_substring + 1; i++)
+    if (substring.size() == 0)
+        return 0;
+    long count = 0;
+    for (int i = 0; i < string.size() - substring.size() + 1; i++)
     {
-        if(string[i] == substring[0])
-        {
-            if(string[i + 1] == substring[1])
-            {
-                if(string[i + 2] == substring[2])
-                {
-                    result += 1;
-                }
-            }
-        }
+        if (string.substr(i, substring.size()) == substring)
+            count++;
     }
-    return result;
+    return count;
 }
 
 unittest
 {
     alias candidate = how_many_times;
 
-    assert(candidate("", "x") == 0);
-    assert(candidate("xyxyxyx", "x") == 4);
-    assert(candidate("cacacacac", "cac") == 4);
-    assert(candidate("john doe", "john") == 1);
+    assert(candidate("", "x") == 0L);
+    assert(candidate("xyxyxyx", "x") == 4L);
+    assert(candidate("cacacacac", "cac") == 4L);
+    assert(candidate("john doe", "john") == 1L);
 }
 void main(){}

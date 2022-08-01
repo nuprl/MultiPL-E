@@ -33,18 +33,18 @@ unittest
 {
     alias candidate = is_sorted;
 
-    assert(candidate([5]) == true);
-    assert(candidate([1, 2, 3, 4, 5]) == true);
-    assert(candidate([1, 3, 2, 4, 5]) == false);
-    assert(candidate([1, 2, 3, 4, 5, 6]) == true);
-    assert(candidate([1, 2, 3, 4, 5, 6, 7]) == true);
-    assert(candidate([1, 3, 2, 4, 5, 6, 7]) == false);
+    assert(candidate([5L]) == true);
+    assert(candidate([1L, 2L, 3L, 4L, 5L]) == true);
+    assert(candidate([1L, 3L, 2L, 4L, 5L]) == false);
+    assert(candidate([1L, 2L, 3L, 4L, 5L, 6L]) == true);
+    assert(candidate([1L, 2L, 3L, 4L, 5L, 6L, 7L]) == true);
+    assert(candidate([1L, 3L, 2L, 4L, 5L, 6L, 7L]) == false);
     assert(candidate([]) == true);
-    assert(candidate([1]) == true);
-    assert(candidate([3, 2, 1]) == false);
-    assert(candidate([1, 2, 2, 2, 3, 4]) == false);
-    assert(candidate([1, 2, 3, 3, 3, 4]) == false);
-    assert(candidate([1, 2, 2, 3, 3, 4]) == true);
-    assert(candidate([1, 2, 3, 4]) == true);
+    assert(candidate([1L]) == true);
+    assert(candidate([3L, 2L, 1L]) == false);
+    assert(candidate([1L, 2L, 2L, 2L, 3L, 4L]) == false);
+    assert(candidate([1L, 2L, 3L, 3L, 3L, 4L]) == false);
+    assert(candidate([1L, 2L, 2L, 3L, 3L, 4L]) == true);
+    assert(candidate([1L, 2L, 3L, 4L]) == true);
 }
 void main(){}

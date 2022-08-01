@@ -12,28 +12,28 @@ You are given a string s.
     solve("#a@C") = "#A@c"
     
 */
-const(char)[] solve(const(char)[] s) 
+string solve(string s) 
 {
-    const(char)[] result = new const(char)[s.length];
-    for(int i = 0; i < s.length; i++)
+    string res = "";
+    for (int i = 0; i < s.size(); i++)
     {
-        if(std.typecons.isLetter(s[i]))
+        if (isalpha(s[i]))
         {
-            if(std.math.isLower(s[i]))
+            if (islower(s[i]))
             {
-                result[i] = std.math.toUpper(s[i]);
+                res += toupper(s[i]);
             }
             else
             {
-                result[i] = std.math.toLower(s[i]);
+                res += tolower(s[i]);
             }
         }
         else
         {
-            result[i] = s[i];
+            res += s[i];
         }
     }
-    return result;
+    return res;
 }
 
 unittest

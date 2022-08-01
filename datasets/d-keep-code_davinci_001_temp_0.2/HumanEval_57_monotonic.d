@@ -30,13 +30,13 @@ unittest
 {
     alias candidate = monotonic;
 
-    assert(candidate([1, 2, 4, 10]) == true);
-    assert(candidate([1, 2, 4, 20]) == true);
-    assert(candidate([1, 20, 4, 10]) == false);
-    assert(candidate([4, 1, 0, -10]) == true);
-    assert(candidate([4, 1, 1, 0]) == true);
-    assert(candidate([1, 2, 3, 2, 5, 60]) == false);
-    assert(candidate([1, 2, 3, 4, 5, 60]) == true);
-    assert(candidate([9, 9, 9, 9]) == true);
+    assert(candidate([1L, 2L, 4L, 10L]) == true);
+    assert(candidate([1L, 2L, 4L, 20L]) == true);
+    assert(candidate([1L, 20L, 4L, 10L]) == false);
+    assert(candidate([4L, 1L, 0L, -10L]) == true);
+    assert(candidate([4L, 1L, 1L, 0L]) == true);
+    assert(candidate([1L, 2L, 3L, 2L, 5L, 60L]) == false);
+    assert(candidate([1L, 2L, 3L, 4L, 5L, 60L]) == true);
+    assert(candidate([9L, 9L, 9L, 9L]) == true);
 }
 void main(){}

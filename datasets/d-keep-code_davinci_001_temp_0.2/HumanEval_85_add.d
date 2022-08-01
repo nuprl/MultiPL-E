@@ -25,9 +25,9 @@ unittest
 {
     alias candidate = add;
 
-    assert(candidate([4, 88]) == 88);
-    assert(candidate([4, 5, 6, 7, 2, 122]) == 122);
-    assert(candidate([4, 0, 6, 7]) == 0);
-    assert(candidate([4, 4, 6, 8]) == 12);
+    assert(candidate([4L, 88L]) == 88L);
+    assert(candidate([4L, 5L, 6L, 7L, 2L, 122L]) == 122L);
+    assert(candidate([4L, 0L, 6L, 7L]) == 0L);
+    assert(candidate([4L, 4L, 6L, 8L]) == 12L);
 }
 void main(){}

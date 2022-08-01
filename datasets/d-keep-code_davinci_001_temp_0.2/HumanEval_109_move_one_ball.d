@@ -52,10 +52,10 @@ unittest
 {
     alias candidate = move_one_ball;
 
-    assert(candidate([3, 4, 5, 1, 2]) == true);
-    assert(candidate([3, 5, 10, 1, 2]) == true);
-    assert(candidate([4, 3, 1, 2]) == false);
-    assert(candidate([3, 5, 4, 1, 2]) == false);
+    assert(candidate([3L, 4L, 5L, 1L, 2L]) == true);
+    assert(candidate([3L, 5L, 10L, 1L, 2L]) == true);
+    assert(candidate([4L, 3L, 1L, 2L]) == false);
+    assert(candidate([3L, 5L, 4L, 1L, 2L]) == false);
     assert(candidate([]) == true);
 }
 void main(){}

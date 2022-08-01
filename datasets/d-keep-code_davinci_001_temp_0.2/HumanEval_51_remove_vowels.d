@@ -15,9 +15,18 @@ import std.math;
     'zbcd'
     
 */
-const(char)[] remove_vowels(const(char)[] text) 
+string remove_vowels(string text) 
 {
-    return filter(text, (char c) -> !(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'));
+    string vowels = "aeiou";
+    string result = "";
+    for (int i = 0; i < text.length(); i++)
+    {
+        if (vowels.find(text[i]) == -1)
+        {
+            result += text[i];
+        }
+    }
+    return result;
 }
 
 unittest

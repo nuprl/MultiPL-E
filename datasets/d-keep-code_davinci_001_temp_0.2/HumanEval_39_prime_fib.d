@@ -33,15 +33,15 @@ unittest
 {
     alias candidate = prime_fib;
 
-    assert(candidate(1) == 2);
-    assert(candidate(2) == 3);
-    assert(candidate(3) == 5);
-    assert(candidate(4) == 13);
-    assert(candidate(5) == 89);
-    assert(candidate(6) == 233);
-    assert(candidate(7) == 1597);
-    assert(candidate(8) == 28657);
-    assert(candidate(9) == 514229);
-    assert(candidate(10) == 433494437);
+    assert(candidate(1L) == 2L);
+    assert(candidate(2L) == 3L);
+    assert(candidate(3L) == 5L);
+    assert(candidate(4L) == 13L);
+    assert(candidate(5L) == 89L);
+    assert(candidate(6L) == 233L);
+    assert(candidate(7L) == 1597L);
+    assert(candidate(8L) == 28657L);
+    assert(candidate(9L) == 514229L);
+    assert(candidate(10L) == 433494437L);
 }
 void main(){}

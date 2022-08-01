@@ -13,18 +13,24 @@ You will be given a number in decimal form and your task is to convert it to
     decimal_to_binary(32)   # returns "db100000db"
     
 */
-const(char)[] decimal_to_binary(long decimal) 
+string decimal_to_binary(long decimal) 
 {
-    return "";
+    string binary = "";
+    while (decimal > 0)
+    {
+        binary = std.math.to_string(decimal % 2) + binary;
+        decimal /= 2;
+    }
+    return "db" + binary + "db";
 }
 
 unittest
 {
     alias candidate = decimal_to_binary;
 
-    assert(candidate(0) == "db0db");
-    assert(candidate(32) == "db100000db");
-    assert(candidate(103) == "db1100111db");
-    assert(candidate(15) == "db1111db");
+    assert(candidate(0L) == "db0db");
+    assert(candidate(32L) == "db100000db");
+    assert(candidate(103L) == "db1100111db");
+    assert(candidate(15L) == "db1111db");
 }
 void main(){}

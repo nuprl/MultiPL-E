@@ -28,13 +28,13 @@ unittest
 {
     alias candidate = even_odd_count;
 
-    assert(candidate(7) == tuple(0, 1));
-    assert(candidate(-78) == tuple(1, 1));
-    assert(candidate(3452) == tuple(2, 2));
-    assert(candidate(346211) == tuple(3, 3));
-    assert(candidate(-345821) == tuple(3, 3));
-    assert(candidate(-2) == tuple(1, 0));
-    assert(candidate(-45347) == tuple(2, 3));
-    assert(candidate(0) == tuple(1, 0));
+    assert(candidate(7L) == tuple(0L, 1L));
+    assert(candidate(-78L) == tuple(1L, 1L));
+    assert(candidate(3452L) == tuple(2L, 2L));
+    assert(candidate(346211L) == tuple(3L, 3L));
+    assert(candidate(-345821L) == tuple(3L, 3L));
+    assert(candidate(-2L) == tuple(1L, 0L));
+    assert(candidate(-45347L) == tuple(2L, 3L));
+    assert(candidate(0L) == tuple(1L, 0L));
 }
 void main(){}

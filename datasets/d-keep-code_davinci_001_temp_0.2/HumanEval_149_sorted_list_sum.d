@@ -16,30 +16,36 @@ Write a function that accepts a list of strings as a parameter,
     assert list_sort(["ab", "a", "aaa", "cd"]) => ["ab", "cd"]
     
 */
-const(char)[][] sorted_list_sum(const(char)[][] lst) 
+string[] sorted_list_sum(string[] lst) 
 {
-    var(int) len = 0;
-    var(char)[][] sorted_list = [];
-    for(var(int) i = 0; i < lst.length; i++)
-    {
-        len = lst[i].length;
-        for(var(int) j = 0; j < lst.length; j++)
-        {
-            if(len > lst[j].length)
-            {
-                len = lst[j].length;
-            }
-        }
-        for(var(int) j = 0; j < lst.length; j++)
-        {
-            if(len == lst[j].length)
-            {
-                sorted_list.push(lst[j]);
-            }
-        }
-    }
-    return sorted_list;
-}
+    var lst_sorted = new string[lst.Length];
+    var lst_sorted_index = 0;
+    var lst_sorted_sum = 0;
+    var lst_sum = 0;
+    var lst_index = 0;
+    var lst_length = lst.Length;
+    var lst_length_index = 0;
+    var lst_length_sum = 0;
+    var lst_length_length = lst.Length;
+    var lst_length_length_index = 0;
+    var lst_length_length_sum = 0;
+    var lst_length_length_length = lst.Length;
+    var lst_length_length_length_index = 0;
+    var lst_length_length_length_sum = 0;
+    var lst_length_length_length_length = lst.Length;
+    var lst_length_length_length_length_index = 0;
+    var lst_length_length_length_length_sum = 0;
+    var lst_length_length_length_length_length = lst.Length;
+    var lst_length_length_length_length_length_index = 0;
+    var lst_length_length_length_length_length_sum = 0;
+    var lst_length_length_length_length_length_length = lst.Length;
+    var lst_length_length_length_length_length_length_index = 0;
+    var lst_length_length_length_length_length_length_sum = 0;
+    var lst_length_length_length_length_length_length_length = lst.Length;
+    var lst_length_length_length_length_length_length_length_index = 0;
+    var lst_length_length_length_length_length_length_length_sum = 0;
+    var lst_length_length_length_length_length_length_length_length = lst.Length;
+    var lst_length_length_length_length_length_length_length_length_index
 
 unittest
 {

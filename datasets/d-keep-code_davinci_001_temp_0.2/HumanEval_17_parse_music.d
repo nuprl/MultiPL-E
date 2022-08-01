@@ -14,29 +14,10 @@ import std.math;
     [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
     
 */
-long[] parse_music(const(char)[] music_string) 
+long[] parse_music(string music_string) 
 {
-    long[] result = new long[music_string.length];
-    int i = 0;
-    while (i < music_string.length)
-    {
-        if (music_string[i] == 'o')
-        {
-            result[i] = 4;
-            i++;
-        }
-        else if (music_string[i] == 'o' && music_string[i + 1] == '|')
-        {
-            result[i] = 2;
-            i += 2;
-        }
-        else if (music_string[i] == '.' && music_string[i + 1] == '|')
-        {
-            result[i] = 1;
-            i += 2;
-        }
-    }
-    return result;
+    // your code here
+    return new long[] {};
 }
 
 unittest
@@ -44,9 +25,9 @@ unittest
     alias candidate = parse_music;
 
     assert(candidate("") == []);
-    assert(candidate("o o o o") == [4, 4, 4, 4]);
-    assert(candidate(".| .| .| .|") == [1, 1, 1, 1]);
-    assert(candidate("o| o| .| .| o o o o") == [2, 2, 1, 1, 4, 4, 4, 4]);
-    assert(candidate("o| .| o| .| o o| o o|") == [2, 1, 2, 1, 4, 2, 4, 2]);
+    assert(candidate("o o o o") == [4L, 4L, 4L, 4L]);
+    assert(candidate(".| .| .| .|") == [1L, 1L, 1L, 1L]);
+    assert(candidate("o| o| .| .| o o o o") == [2L, 2L, 1L, 1L, 4L, 4L, 4L, 4L]);
+    assert(candidate("o| .| o| .| o o| o o|") == [2L, 1L, 2L, 1L, 4L, 2L, 4L, 2L]);
 }
 void main(){}

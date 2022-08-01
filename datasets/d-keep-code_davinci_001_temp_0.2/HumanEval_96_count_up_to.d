@@ -35,15 +35,15 @@ unittest
 {
     alias candidate = count_up_to;
 
-    assert(candidate(5) == [2, 3]);
-    assert(candidate(6) == [2, 3, 5]);
-    assert(candidate(7) == [2, 3, 5]);
-    assert(candidate(10) == [2, 3, 5, 7]);
-    assert(candidate(0) == []);
-    assert(candidate(22) == [2, 3, 5, 7, 11, 13, 17, 19]);
-    assert(candidate(1) == []);
-    assert(candidate(18) == [2, 3, 5, 7, 11, 13, 17]);
-    assert(candidate(47) == [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43]);
-    assert(candidate(101) == [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]);
+    assert(candidate(5L) == [2L, 3L]);
+    assert(candidate(6L) == [2L, 3L, 5L]);
+    assert(candidate(7L) == [2L, 3L, 5L]);
+    assert(candidate(10L) == [2L, 3L, 5L, 7L]);
+    assert(candidate(0L) == []);
+    assert(candidate(22L) == [2L, 3L, 5L, 7L, 11L, 13L, 17L, 19L]);
+    assert(candidate(1L) == []);
+    assert(candidate(18L) == [2L, 3L, 5L, 7L, 11L, 13L, 17L]);
+    assert(candidate(47L) == [2L, 3L, 5L, 7L, 11L, 13L, 17L, 19L, 23L, 29L, 31L, 37L, 41L, 43L]);
+    assert(candidate(101L) == [2L, 3L, 5L, 7L, 11L, 13L, 17L, 19L, 23L, 29L, 31L, 37L, 41L, 43L, 47L, 53L, 59L, 61L, 67L, 71L, 73L, 79L, 83L, 89L, 97L]);
 }
 void main(){}

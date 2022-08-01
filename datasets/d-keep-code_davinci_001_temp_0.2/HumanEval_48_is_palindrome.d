@@ -13,19 +13,13 @@ import std.math;
     False
     
 */
-bool is_palindrome(const(char)[] text) 
+bool is_palindrome(string text) 
 {
-    auto len = strlen(text);
-    auto i = 0;
-    auto j = len - 1;
-    while(i < j)
+    int len = text.length();
+    for(int i = 0; i < len / 2; i++)
     {
-        if(text[i] != text[j])
-        {
+        if(text[i] != text[len - i - 1])
             return false;
-        }
-        i += 1;
-        j -= 1;
     }
     return true;
 }

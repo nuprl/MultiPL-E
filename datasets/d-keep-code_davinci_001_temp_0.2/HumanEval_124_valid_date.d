@@ -21,28 +21,47 @@ You have to write a function which validates a given date string and
     valid_date('06/04/2020') => False
     
 */
-bool valid_date(const(char)[] date) 
+bool valid_date(string date) 
 {
-    auto [month, day, year] = split(date, "-");
-    auto [month_, day_, year_] = [month, day, year];
-    auto [month__, day__, year__] = [month_, day_, year_];
-    auto [month___, day___, year___] = [month__, day__, year__];
-    auto [month____, day____, year____] = [month___, day___, year___];
-    auto [month_____, day_____, year_____] = [month____, day____, year____];
-    auto [month______, day______, year______] = [month_____, day_____, year_____];
-    auto [month_______, day_______, year_______] = [month______, day______, year______];
-    auto [month________, day________, year________] = [month_______, day_______, year_______];
-    auto [month_________, day_________, year_________] = [month________, day________, year________];
-    auto [month__________, day__________, year__________] = [month_________, day_________, year_________];
-    auto [month___________, day___________, year___________] = [month__________, day__________, year__________];
-    auto [month____________, day____________, year____________] = [month___________, day___________, year___________];
-    auto [month_____________, day_____________, year_____________] = [month____________, day____________, year____________];
-    auto [month______________, day______________, year______________] = [month_____________, day_____________, year_____________];
-    auto [month_______________, day_______________, year_______________] = [month______________, day______________, year______________];
-    auto [month________________, day________________, year________________] = [month_______________, day_______________, year_______________];
-    auto [month_________________, day_________________, year_________________] = [month________________, day________________, year________________];
-    auto [month__________________, day__________________, year__________________] = [month_________________, day_________________, year_________________];
-
+    // your code here
+    var date_arr = date.split('-');
+    var month = int.parse(date_arr[0]);
+    var day = int.parse(date_arr[1]);
+    var year = int.parse(date_arr[2]);
+    if(date.length == 10 && month > 0 && month < 13 && day > 0 && day < 32 && year > 0 && year < 9999)
+    {
+        if(month == 2)
+        {
+            if(day > 0 && day < 30)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if(month == 4 || month == 6 || month == 9 || month == 11)
+        {
+            if(day > 0 && day < 31)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
 
 unittest
 {

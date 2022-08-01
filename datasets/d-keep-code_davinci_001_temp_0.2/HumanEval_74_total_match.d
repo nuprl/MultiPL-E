@@ -15,23 +15,23 @@ import std.math;
     total_match(['4'], ['1', '2', '3', '4', '5']) ➞ ['4']
     
 */
-const(char)[][] total_match(const(char)[][] lst1, const(char)[][] lst2) 
+string[] total_match(string[] lst1, string[] lst2) 
 {
     int len1 = 0;
     int len2 = 0;
-    for(int i = 0; i < lst1.length; i++)
+    for (int i = 0; i < lst1.Length; i++)
     {
-        len1 += lst1[i].length;
+        len1 += lst1[i].Length;
     }
-    for(int i = 0; i < lst2.length; i++)
+    for (int i = 0; i < lst2.Length; i++)
     {
-        len2 += lst2[i].length;
+        len2 += lst2[i].Length;
     }
-    if(len1 < len2)
+    if (len1 < len2)
     {
         return lst1;
     }
-    else if(len1 > len2)
+    else if (len1 > len2)
     {
         return lst2;
     }

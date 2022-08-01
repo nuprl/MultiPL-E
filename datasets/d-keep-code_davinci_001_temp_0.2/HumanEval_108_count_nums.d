@@ -28,13 +28,13 @@ unittest
 {
     alias candidate = count_nums;
 
-    assert(candidate([]) == 0);
-    assert(candidate([-1, -2, 0]) == 0);
-    assert(candidate([1, 1, 2, -2, 3, 4, 5]) == 6);
-    assert(candidate([1, 6, 9, -6, 0, 1, 5]) == 5);
-    assert(candidate([1, 100, 98, -7, 1, -1]) == 4);
-    assert(candidate([12, 23, 34, -45, -56, 0]) == 5);
-    assert(candidate([0, 1]) == 1);
-    assert(candidate([1]) == 1);
+    assert(candidate([]) == 0L);
+    assert(candidate([-1L, -2L, 0L]) == 0L);
+    assert(candidate([1L, 1L, 2L, -2L, 3L, 4L, 5L]) == 6L);
+    assert(candidate([1L, 6L, 9L, -6L, 0L, 1L, 5L]) == 5L);
+    assert(candidate([1L, 100L, 98L, -7L, 1L, -1L]) == 4L);
+    assert(candidate([12L, 23L, 34L, -45L, -56L, 0L]) == 5L);
+    assert(candidate([0L, 1L]) == 1L);
+    assert(candidate([1L]) == 1L);
 }
 void main(){}

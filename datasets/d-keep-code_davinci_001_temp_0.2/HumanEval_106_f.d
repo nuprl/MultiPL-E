@@ -31,9 +31,9 @@ unittest
 {
     alias candidate = f;
 
-    assert(candidate(5) == [1, 2, 6, 24, 15]);
-    assert(candidate(7) == [1, 2, 6, 24, 15, 720, 28]);
-    assert(candidate(1) == [1]);
-    assert(candidate(3) == [1, 2, 6]);
+    assert(candidate(5L) == [1L, 2L, 6L, 24L, 15L]);
+    assert(candidate(7L) == [1L, 2L, 6L, 24L, 15L, 720L, 28L]);
+    assert(candidate(1L) == [1L]);
+    assert(candidate(3L) == [1L, 2L, 6L]);
 }
 void main(){}

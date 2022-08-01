@@ -11,10 +11,35 @@ Write a function that accepts a list of strings.
     find_max(["aaaaaaa", "bb" ,"cc"]) == ""aaaaaaa"
     
 */
-const(char)[] find_max(const(char)[][] words) 
+string find_max(string[] words) 
 {
-    // Write your code here
+    string max = "";
+    int max_count = 0;
+    for(int i = 0; i < words.length; i++)
+    {
+        string word = words[i];
+        int count = 0;
+        for(int j = 0; j < word.length; j++)
+        {
+            if(word[j] != ' ')
+            {
+                count++;
+            }
+        }
+        if(count > max_count)
+        {
+            max_count = count;
+            max = word;
+        }
+    }
+    return max;
 }
+string[] words = ["name", "of", "string"];
+find_max(words);
+string[] words = ["name", "enam", "game"];
+find_max(words);
+string[] words = ["aaaaaaa", "bb" ,"cc"];
+find_max(words);
 
 
 unittest

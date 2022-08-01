@@ -8,12 +8,10 @@ import std.math;
     >>> string_to_md5('Hello world') == '3e25960a79dbc69b674cd4ec67a72c62'
     
 */
-Nullable!(const(char)[]) string_to_md5(const(char)[] text) 
+Nullable!(string) string_to_md5(string text) 
 {
-    if (text.length() == 0)
-        return null;
-    else
-        return std.md5.md5(text);
+    if (text.length() == 0) return null;
+    return md5(text);
 }
 
 unittest

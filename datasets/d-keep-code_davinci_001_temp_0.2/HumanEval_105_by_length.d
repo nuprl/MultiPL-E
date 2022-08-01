@@ -23,24 +23,25 @@ import std.math;
       return = ['One']
     
 */
-const(char)[][] by_length(long[] arr) 
+string[] by_length(long[] arr) 
 {
-    var result = new const(char)[arr.length];
-    for (var i = 0; i < arr.length; i++)
-    {
-        result[i] = arr[i].ToString();
-    }
-    return result;
+  var len = arr.Length;
+  var res = new string[len];
+  for (var i = 0; i < len; i++)
+  {
+    res[i] = arr[i].ToString();
+  }
+  return res;
 }
 
 unittest
 {
     alias candidate = by_length;
 
-    assert(candidate([2, 1, 1, 4, 5, 8, 2, 3]) == ["Eight", "Five", "Four", "Three", "Two", "Two", "One", "One"]);
+    assert(candidate([2L, 1L, 1L, 4L, 5L, 8L, 2L, 3L]) == ["Eight", "Five", "Four", "Three", "Two", "Two", "One", "One"]);
     assert(candidate([]) == []);
-    assert(candidate([1, -1, 55]) == ["One"]);
-    assert(candidate([1, -1, 3, 2]) == ["Three", "Two", "One"]);
-    assert(candidate([9, 4, 8]) == ["Nine", "Eight", "Four"]);
+    assert(candidate([1L, -1L, 55L]) == ["One"]);
+    assert(candidate([1L, -1L, 3L, 2L]) == ["Three", "Two", "One"]);
+    assert(candidate([9L, 4L, 8L]) == ["Nine", "Eight", "Four"]);
 }
 void main(){}

@@ -27,12 +27,12 @@ unittest
 {
     alias candidate = digits;
 
-    assert(candidate(5) == 5);
-    assert(candidate(54) == 5);
-    assert(candidate(120) == 1);
-    assert(candidate(5014) == 5);
-    assert(candidate(98765) == 315);
-    assert(candidate(5576543) == 2625);
-    assert(candidate(2468) == 0);
+    assert(candidate(5L) == 5L);
+    assert(candidate(54L) == 5L);
+    assert(candidate(120L) == 1L);
+    assert(candidate(5014L) == 5L);
+    assert(candidate(98765L) == 315L);
+    assert(candidate(5576543L) == 2625L);
+    assert(candidate(2468L) == 0L);
 }
 void main(){}

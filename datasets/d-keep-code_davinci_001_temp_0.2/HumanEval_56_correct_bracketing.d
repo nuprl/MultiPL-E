@@ -14,20 +14,27 @@ import std.math;
     False
     
 */
-bool correct_bracketing(const(char)[] brackets) 
+bool correct_bracketing(string brackets) 
 {
-    int stack = 0;
-    foreach(char c in brackets)
+    int i = 0;
+    int j = 0;
+    while (i < brackets.length())
     {
-        if(c == '<')
-            stack++;
-        else
-            stack--;
-        if(stack < 0)
-            return false;
+        if (brackets[i] == '<')
+        {
+            j++;
+        }
+        else if (brackets[i] == '>')
+        {
+            j--;
+        }
+        i++;
     }
-    return stack == 0;
+    return j == 0;
 }
+/*
+    return True if brackets is a correct bracketing.
+    return False otherwise.
 
 unittest
 {

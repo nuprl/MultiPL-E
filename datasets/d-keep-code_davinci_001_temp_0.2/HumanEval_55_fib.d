@@ -20,10 +20,10 @@ unittest
 {
     alias candidate = fib;
 
-    assert(candidate(10) == 55);
-    assert(candidate(1) == 1);
-    assert(candidate(8) == 21);
-    assert(candidate(11) == 89);
-    assert(candidate(12) == 144);
+    assert(candidate(10L) == 55L);
+    assert(candidate(1L) == 1L);
+    assert(candidate(8L) == 21L);
+    assert(candidate(11L) == 89L);
+    assert(candidate(12L) == 144L);
 }
 void main(){}

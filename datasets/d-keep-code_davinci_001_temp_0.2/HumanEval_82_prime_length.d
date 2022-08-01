@@ -10,19 +10,24 @@ Write a function that takes a string and returns True if the string
     prime_length('orange') == False
     
 */
-bool prime_length(const(char)[] string) 
+bool prime_length(string string) 
 {
-    auto len = strlen(string);
-    auto is_prime = true;
-    for(auto i = 2; i < len; i++)
+    int length = string.length();
+    if(length == 0 || length == 1)
     {
-        if(len % i == 0)
-        {
-            is_prime = false;
-            break;
-        }
+        return false;
     }
-    return is_prime;
+    else
+    {
+        for(int i = 2; i < length; i++)
+        {
+            if(length % i == 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 
 unittest

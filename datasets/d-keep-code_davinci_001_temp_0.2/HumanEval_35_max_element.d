@@ -23,7 +23,7 @@ unittest
 {
     alias candidate = max_element;
 
-    assert(candidate([1, 2, 3]) == 3);
-    assert(candidate([5, 3, -5, 2, -3, 3, 9, 0, 124, 1, -10]) == 124);
+    assert(candidate([1L, 2L, 3L]) == 3L);
+    assert(candidate([5L, 3L, -5L, 2L, -3L, 3L, 9L, 0L, 124L, 1L, -10L]) == 124L);
 }
 void main(){}

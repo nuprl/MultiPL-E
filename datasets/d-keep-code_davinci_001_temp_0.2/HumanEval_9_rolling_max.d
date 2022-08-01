@@ -23,8 +23,8 @@ unittest
     alias candidate = rolling_max;
 
     assert(candidate([]) == []);
-    assert(candidate([1, 2, 3, 4]) == [1, 2, 3, 4]);
-    assert(candidate([4, 3, 2, 1]) == [4, 4, 4, 4]);
-    assert(candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]);
+    assert(candidate([1L, 2L, 3L, 4L]) == [1L, 2L, 3L, 4L]);
+    assert(candidate([4L, 3L, 2L, 1L]) == [4L, 4L, 4L, 4L]);
+    assert(candidate([3L, 2L, 3L, 100L, 3L]) == [3L, 3L, 3L, 100L, 100L]);
 }
 void main(){}

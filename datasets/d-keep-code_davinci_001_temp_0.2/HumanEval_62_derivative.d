@@ -25,10 +25,10 @@ unittest
 {
     alias candidate = derivative;
 
-    assert(candidate([3, 1, 2, 4, 5]) == [1, 4, 12, 20]);
-    assert(candidate([1, 2, 3]) == [2, 6]);
-    assert(candidate([3, 2, 1]) == [2, 2]);
-    assert(candidate([3, 2, 1, 0, 4]) == [2, 2, 0, 16]);
-    assert(candidate([1]) == []);
+    assert(candidate([3L, 1L, 2L, 4L, 5L]) == [1L, 4L, 12L, 20L]);
+    assert(candidate([1L, 2L, 3L]) == [2L, 6L]);
+    assert(candidate([3L, 2L, 1L]) == [2L, 2L]);
+    assert(candidate([3L, 2L, 1L, 0L, 4L]) == [2L, 2L, 0L, 16L]);
+    assert(candidate([1L]) == []);
 }
 void main(){}

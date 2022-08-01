@@ -8,22 +8,124 @@ import std.math;
     3
     
 */
-long strlen(const(char)[] string) 
+long strlen(string string) 
 {
-    long len = 0;
-    while(string[len] != '\0')
-    {
-        len++;
-    }
-    return len;
+    return strlen(string);
 }
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return
 
 unittest
 {
     alias candidate = strlen;
 
-    assert(candidate("") == 0);
-    assert(candidate("x") == 1);
-    assert(candidate("asdasnakj") == 9);
+    assert(candidate("") == 0L);
+    assert(candidate("x") == 1L);
+    assert(candidate("asdasnakj") == 9L);
 }
 void main(){}

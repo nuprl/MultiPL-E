@@ -8,12 +8,12 @@ import std.math;
     'abc'
     
 */
-const(char)[] concatenate(const(char)[][] strings) 
+string concatenate(string[] strings) 
 {
-    var(char)[] result = new(char)[];
-    foreach(string, string in strings)
+    string result = "";
+    foreach(string s in strings)
     {
-        result.push_all(string);
+        result += s;
     }
     return result;
 }

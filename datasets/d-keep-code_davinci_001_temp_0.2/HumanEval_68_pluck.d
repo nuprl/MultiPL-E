@@ -65,13 +65,13 @@ unittest
 {
     alias candidate = pluck;
 
-    assert(candidate([4, 2, 3]) == [2, 1]);
-    assert(candidate([1, 2, 3]) == [2, 1]);
+    assert(candidate([4L, 2L, 3L]) == [2L, 1L]);
+    assert(candidate([1L, 2L, 3L]) == [2L, 1L]);
     assert(candidate([]) == []);
-    assert(candidate([5, 0, 3, 0, 4, 2]) == [0, 1]);
-    assert(candidate([1, 2, 3, 0, 5, 3]) == [0, 3]);
-    assert(candidate([5, 4, 8, 4, 8]) == [4, 1]);
-    assert(candidate([7, 6, 7, 1]) == [6, 1]);
-    assert(candidate([7, 9, 7, 1]) == []);
+    assert(candidate([5L, 0L, 3L, 0L, 4L, 2L]) == [0L, 1L]);
+    assert(candidate([1L, 2L, 3L, 0L, 5L, 3L]) == [0L, 3L]);
+    assert(candidate([5L, 4L, 8L, 4L, 8L]) == [4L, 1L]);
+    assert(candidate([7L, 6L, 7L, 1L]) == [6L, 1L]);
+    assert(candidate([7L, 9L, 7L, 1L]) == []);
 }
 void main(){}

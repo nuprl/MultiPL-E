@@ -38,9 +38,9 @@ unittest
 {
     alias candidate = get_max_triples;
 
-    assert(candidate(5) == 1);
-    assert(candidate(6) == 4);
-    assert(candidate(10) == 36);
-    assert(candidate(100) == 53361);
+    assert(candidate(5L) == 1L);
+    assert(candidate(6L) == 4L);
+    assert(candidate(10L) == 36L);
+    assert(candidate(100L) == 53361L);
 }
 void main(){}

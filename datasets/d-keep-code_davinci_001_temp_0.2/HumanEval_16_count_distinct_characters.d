@@ -8,27 +8,27 @@ import std.math;
     4
     
 */
-long count_distinct_characters(const(char)[] string) 
+long count_distinct_characters(string string) 
 {
-    long distinct_characters = 0;
-    for (int i = 0; i < len(string); i++)
+    long count = 0;
+    foreach(char c in string)
     {
-        if (string[i] != string[i + 1])
+        if(c != ' ')
         {
-            distinct_characters++;
+            count++;
         }
     }
-    return distinct_characters;
+    return count;
 }
 
 unittest
 {
     alias candidate = count_distinct_characters;
 
-    assert(candidate("") == 0);
-    assert(candidate("abcde") == 5);
-    assert(candidate("abcdecadeCADE") == 5);
-    assert(candidate("aaaaAAAAaaaa") == 1);
-    assert(candidate("Jerry jERRY JeRRRY") == 5);
+    assert(candidate("") == 0L);
+    assert(candidate("abcde") == 5L);
+    assert(candidate("abcdecadeCADE") == 5L);
+    assert(candidate("aaaaAAAAaaaa") == 1L);
+    assert(candidate("Jerry jERRY JeRRRY") == 5L);
 }
 void main(){}

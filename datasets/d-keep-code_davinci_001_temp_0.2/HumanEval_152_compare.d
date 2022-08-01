@@ -38,9 +38,9 @@ unittest
 {
     alias candidate = compare;
 
-    assert(candidate([1, 2, 3, 4, 5, 1], [1, 2, 3, 4, 2, -2]) == [0, 0, 0, 0, 3, 3]);
-    assert(candidate([0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]) == [0, 0, 0, 0, 0, 0]);
-    assert(candidate([1, 2, 3], [-1, -2, -3]) == [2, 4, 6]);
-    assert(candidate([1, 2, 3, 5], [-1, 2, 3, 4]) == [2, 0, 0, 1]);
+    assert(candidate([1L, 2L, 3L, 4L, 5L, 1L], [1L, 2L, 3L, 4L, 2L, -2L]) == [0L, 0L, 0L, 0L, 3L, 3L]);
+    assert(candidate([0L, 0L, 0L, 0L, 0L, 0L], [0L, 0L, 0L, 0L, 0L, 0L]) == [0L, 0L, 0L, 0L, 0L, 0L]);
+    assert(candidate([1L, 2L, 3L], [-1L, -2L, -3L]) == [2L, 4L, 6L]);
+    assert(candidate([1L, 2L, 3L, 5L], [-1L, 2L, 3L, 4L]) == [2L, 0L, 0L, 1L]);
 }
 void main(){}

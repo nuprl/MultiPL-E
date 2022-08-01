@@ -28,10 +28,10 @@ unittest
 {
     alias candidate = add_elements;
 
-    assert(candidate([1, -2, -3, 41, 57, 76, 87, 88, 99], 3) == -4);
-    assert(candidate([111, 121, 3, 4000, 5, 6], 2) == 0);
-    assert(candidate([11, 21, 3, 90, 5, 6, 7, 8, 9], 4) == 125);
-    assert(candidate([111, 21, 3, 4000, 5, 6, 7, 8, 9], 4) == 24);
-    assert(candidate([1], 1) == 1);
+    assert(candidate([1L, -2L, -3L, 41L, 57L, 76L, 87L, 88L, 99L], 3L) == -4L);
+    assert(candidate([111L, 121L, 3L, 4000L, 5L, 6L], 2L) == 0L);
+    assert(candidate([11L, 21L, 3L, 90L, 5L, 6L, 7L, 8L, 9L], 4L) == 125L);
+    assert(candidate([111L, 21L, 3L, 4000L, 5L, 6L, 7L, 8L, 9L], 4L) == 24L);
+    assert(candidate([1L], 1L) == 1L);
 }
 void main(){}

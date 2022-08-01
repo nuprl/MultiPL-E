@@ -17,10 +17,10 @@ unittest
 {
     alias candidate = add;
 
-    assert(candidate(0, 1) == 1);
-    assert(candidate(1, 0) == 1);
-    assert(candidate(2, 3) == 5);
-    assert(candidate(5, 7) == 12);
-    assert(candidate(7, 5) == 12);
+    assert(candidate(0L, 1L) == 1L);
+    assert(candidate(1L, 0L) == 1L);
+    assert(candidate(2L, 3L) == 5L);
+    assert(candidate(5L, 7L) == 12L);
+    assert(candidate(7L, 5L) == 12L);
 }
 void main(){}

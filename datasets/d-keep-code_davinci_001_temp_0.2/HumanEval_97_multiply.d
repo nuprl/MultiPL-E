@@ -39,13 +39,13 @@ unittest
 {
     alias candidate = multiply;
 
-    assert(candidate(148, 412) == 16);
-    assert(candidate(19, 28) == 72);
-    assert(candidate(2020, 1851) == 0);
-    assert(candidate(14, -15) == 20);
-    assert(candidate(76, 67) == 42);
-    assert(candidate(17, 27) == 49);
-    assert(candidate(0, 1) == 0);
-    assert(candidate(0, 0) == 0);
+    assert(candidate(148L, 412L) == 16L);
+    assert(candidate(19L, 28L) == 72L);
+    assert(candidate(2020L, 1851L) == 0L);
+    assert(candidate(14L, -15L) == 20L);
+    assert(candidate(76L, 67L) == 42L);
+    assert(candidate(17L, 27L) == 49L);
+    assert(candidate(0L, 1L) == 0L);
+    assert(candidate(0L, 0L) == 0L);
 }
 void main(){}

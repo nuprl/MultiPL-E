@@ -6,22 +6,22 @@ import std.math;
     'hELLO'
     
 */
-const(char)[] flip_case(const(char)[] string) 
+string flip_case(string string) 
 {
-    const(char)[] result = new(char, string.length);
-    for(int i = 0; i < string.length; i++)
+    string result = "";
+    for (int i = 0; i < string.length(); i++)
     {
-        if(string[i] >= 'A' && string[i] <= 'Z')
+        if (string[i] >= 'A' && string[i] <= 'Z')
         {
-            result[i] = string[i] + 32;
+            result += string[i] + 32;
         }
-        else if(string[i] >= 'a' && string[i] <= 'z')
+        else if (string[i] >= 'a' && string[i] <= 'z')
         {
-            result[i] = string[i] - 32;
+            result += string[i] - 32;
         }
         else
         {
-            result[i] = string[i];
+            result += string[i];
         }
     }
     return result;

@@ -13,9 +13,22 @@ Given a list of strings, where each string consists of only digits, return a lis
      "the number of odd elements 8n the str8ng 8 of the 8nput."]
     
 */
-const(char)[][] odd_count(const(char)[][] lst) 
+string[] odd_count(string[] lst) 
 {
-    return lst.map(s => "the number of odd elements " + std.math.count_odd(s) + "n the str" + std.math.count_odd(s) + "g " + s + " of the " + s + "put.");
+    string[] ret = new string[lst.Length];
+    for (int i = 0; i < lst.Length; i++)
+    {
+        int count = 0;
+        for (int j = 0; j < lst[i].Length; j++)
+        {
+            if (lst[i][j] - '0' % 2 == 1)
+            {
+                count++;
+            }
+        }
+        ret[i] = "the number of odd elements " + count + "n the str" + count + " of the " + count + "put.";
+    }
+    return ret;
 }
 
 unittest

@@ -23,13 +23,13 @@ unittest
 {
     alias candidate = sort_array;
 
-    assert(candidate([1, 5, 2, 3, 4]) == [1, 2, 4, 3, 5]);
-    assert(candidate([-2, -3, -4, -5, -6]) == [-4, -2, -6, -5, -3]);
-    assert(candidate([1, 0, 2, 3, 4]) == [0, 1, 2, 4, 3]);
+    assert(candidate([1L, 5L, 2L, 3L, 4L]) == [1L, 2L, 4L, 3L, 5L]);
+    assert(candidate([-2L, -3L, -4L, -5L, -6L]) == [-4L, -2L, -6L, -5L, -3L]);
+    assert(candidate([1L, 0L, 2L, 3L, 4L]) == [0L, 1L, 2L, 4L, 3L]);
     assert(candidate([]) == []);
-    assert(candidate([2, 5, 77, 4, 5, 3, 5, 7, 2, 3, 4]) == [2, 2, 4, 4, 3, 3, 5, 5, 5, 7, 77]);
-    assert(candidate([3, 6, 44, 12, 32, 5]) == [32, 3, 5, 6, 12, 44]);
-    assert(candidate([2, 4, 8, 16, 32]) == [2, 4, 8, 16, 32]);
-    assert(candidate([2, 4, 8, 16, 32]) == [2, 4, 8, 16, 32]);
+    assert(candidate([2L, 5L, 77L, 4L, 5L, 3L, 5L, 7L, 2L, 3L, 4L]) == [2L, 2L, 4L, 4L, 3L, 3L, 5L, 5L, 5L, 7L, 77L]);
+    assert(candidate([3L, 6L, 44L, 12L, 32L, 5L]) == [32L, 3L, 5L, 6L, 12L, 44L]);
+    assert(candidate([2L, 4L, 8L, 16L, 32L]) == [2L, 4L, 8L, 16L, 32L]);
+    assert(candidate([2L, 4L, 8L, 16L, 32L]) == [2L, 4L, 8L, 16L, 32L]);
 }
 void main(){}

@@ -8,8 +8,11 @@ import std.math;
     'one three five'
     
 */
-const(char)[] sort_numbers(const(char)[] numbers) 
+string sort_numbers(string numbers) 
 {
+    string *numbers_array = explode(numbers, " ");
+    numbers_array = sort_array(numbers_array, (: $1 < $2 :));
+    numbers = implode(numbers_array, " ");
     return numbers;
 }
 

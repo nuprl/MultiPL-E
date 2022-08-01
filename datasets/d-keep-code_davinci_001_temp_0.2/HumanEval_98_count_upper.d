@@ -10,12 +10,12 @@ import std.math;
     count_upper('dBBE') returns 0
     
 */
-long count_upper(const(char)[] s) 
+long count_upper(string s) 
 {
     long count = 0;
-    for(int i = 0; i < s.length; i += 2)
+    for (int i = 0; i < s.length(); i += 2)
     {
-        if(s[i] == 'A' || s[i] == 'E' || s[i] == 'I' || s[i] == 'O' || s[i] == 'U')
+        if (s[i] == 'A' || s[i] == 'E' || s[i] == 'I' || s[i] == 'O' || s[i] == 'U')
         {
             count++;
         }
@@ -27,12 +27,12 @@ unittest
 {
     alias candidate = count_upper;
 
-    assert(candidate("aBCdEf") == 1);
-    assert(candidate("abcdefg") == 0);
-    assert(candidate("dBBE") == 0);
-    assert(candidate("B") == 0);
-    assert(candidate("U") == 1);
-    assert(candidate("") == 0);
-    assert(candidate("EEEE") == 2);
+    assert(candidate("aBCdEf") == 1L);
+    assert(candidate("abcdefg") == 0L);
+    assert(candidate("dBBE") == 0L);
+    assert(candidate("B") == 0L);
+    assert(candidate("U") == 1L);
+    assert(candidate("") == 0L);
+    assert(candidate("EEEE") == 2L);
 }
 void main(){}

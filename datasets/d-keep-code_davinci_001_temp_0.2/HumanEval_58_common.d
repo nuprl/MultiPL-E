@@ -31,9 +31,9 @@ unittest
 {
     alias candidate = common;
 
-    assert(candidate([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121]) == [1, 5, 653]);
-    assert(candidate([5, 3, 2, 8], [3, 2]) == [2, 3]);
-    assert(candidate([4, 3, 2, 8], [3, 2, 4]) == [2, 3, 4]);
-    assert(candidate([4, 3, 2, 8], []) == []);
+    assert(candidate([1L, 4L, 3L, 34L, 653L, 2L, 5L], [5L, 7L, 1L, 5L, 9L, 653L, 121L]) == [1L, 5L, 653L]);
+    assert(candidate([5L, 3L, 2L, 8L], [3L, 2L]) == [2L, 3L]);
+    assert(candidate([4L, 3L, 2L, 8L], [3L, 2L, 4L]) == [2L, 3L, 4L]);
+    assert(candidate([4L, 3L, 2L, 8L], []) == []);
 }
 void main(){}

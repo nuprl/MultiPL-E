@@ -11,9 +11,16 @@ You are given 2 words. You need to return True if the second word or any of its 
 
     
 */
-bool cycpattern_check(const(char)[] a, const(char)[] b) 
+bool cycpattern_check(string a, string b) 
 {
-    // your code here
+    if(a.length() < b.length())
+        return false;
+    for(int i = 0; i < a.length(); i++)
+    {
+        string s = a.substr(i, b.length());
+        if(s == b)
+            return true;
+    }
     return false;
 }
 

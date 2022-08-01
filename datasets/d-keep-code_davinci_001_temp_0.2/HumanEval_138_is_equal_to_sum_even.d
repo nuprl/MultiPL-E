@@ -21,13 +21,13 @@ unittest
 {
     alias candidate = is_equal_to_sum_even;
 
-    assert(candidate(4) == false);
-    assert(candidate(6) == false);
-    assert(candidate(8) == true);
-    assert(candidate(10) == true);
-    assert(candidate(11) == false);
-    assert(candidate(12) == true);
-    assert(candidate(13) == false);
-    assert(candidate(16) == true);
+    assert(candidate(4L) == false);
+    assert(candidate(6L) == false);
+    assert(candidate(8L) == true);
+    assert(candidate(10L) == true);
+    assert(candidate(11L) == false);
+    assert(candidate(12L) == true);
+    assert(candidate(13L) == false);
+    assert(candidate(16L) == true);
 }
 void main(){}

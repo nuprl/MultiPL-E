@@ -73,10 +73,10 @@ unittest
 {
     alias candidate = max_fill;
 
-    assert(candidate([[0, 0, 1, 0], [0, 1, 0, 0], [1, 1, 1, 1]], 1) == 6);
-    assert(candidate([[0, 0, 1, 1], [0, 0, 0, 0], [1, 1, 1, 1], [0, 1, 1, 1]], 2) == 5);
-    assert(candidate([[0, 0, 0], [0, 0, 0]], 5) == 0);
-    assert(candidate([[1, 1, 1, 1], [1, 1, 1, 1]], 2) == 4);
-    assert(candidate([[1, 1, 1, 1], [1, 1, 1, 1]], 9) == 2);
+    assert(candidate([[0L, 0L, 1L, 0L], [0L, 1L, 0L, 0L], [1L, 1L, 1L, 1L]], 1L) == 6L);
+    assert(candidate([[0L, 0L, 1L, 1L], [0L, 0L, 0L, 0L], [1L, 1L, 1L, 1L], [0L, 1L, 1L, 1L]], 2L) == 5L);
+    assert(candidate([[0L, 0L, 0L], [0L, 0L, 0L]], 5L) == 0L);
+    assert(candidate([[1L, 1L, 1L, 1L], [1L, 1L, 1L, 1L]], 2L) == 4L);
+    assert(candidate([[1L, 1L, 1L, 1L], [1L, 1L, 1L, 1L]], 9L) == 2L);
 }
 void main(){}

@@ -17,12 +17,12 @@ import std.math;
     False
     
 */
-bool same_chars(const(char)[] s0, const(char)[] s1) 
+bool same_chars(string s0, string s1) 
 {
-    if(len(s0) != len(s1))
+    if (s0.length() != s1.length())
         return false;
-    for(uint i = 0; i < len(s0); i++)
-        if(s0[i] != s1[i])
+    for (int i = 0; i < s0.length(); i++)
+        if (s0[i] != s1[i])
             return false;
     return true;
 }

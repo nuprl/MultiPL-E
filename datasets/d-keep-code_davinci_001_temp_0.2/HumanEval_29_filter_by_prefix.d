@@ -8,9 +8,15 @@ import std.math;
     ['abc', 'array']
     
 */
-const(char)[][] filter_by_prefix(const(char)[][] strings, const(char)[] prefix) 
+string[] filter_by_prefix(string[] strings, string prefix) 
 {
-    return filter(strings, (const(char)[] s) -> starts_with(s, prefix));
+    string[] filtered = [];
+    foreach(string s in strings) {
+        if(s.substr(0, prefix.length) == prefix) {
+            filtered.insertLast(s);
+        }
+    }
+    return filtered;
 }
 
 unittest

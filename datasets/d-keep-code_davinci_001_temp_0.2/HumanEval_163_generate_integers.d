@@ -21,9 +21,9 @@ unittest
 {
     alias candidate = generate_integers;
 
-    assert(candidate(2, 10) == [2, 4, 6, 8]);
-    assert(candidate(10, 2) == [2, 4, 6, 8]);
-    assert(candidate(132, 2) == [2, 4, 6, 8]);
-    assert(candidate(17, 89) == []);
+    assert(candidate(2L, 10L) == [2L, 4L, 6L, 8L]);
+    assert(candidate(10L, 2L) == [2L, 4L, 6L, 8L]);
+    assert(candidate(132L, 2L) == [2L, 4L, 6L, 8L]);
+    assert(candidate(17L, 89L) == []);
 }
 void main(){}

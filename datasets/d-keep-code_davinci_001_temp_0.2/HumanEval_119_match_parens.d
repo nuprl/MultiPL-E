@@ -16,9 +16,23 @@ import std.math;
     match_parens([')', ')']) == 'No'
     
 */
-const(char)[] match_parens(const(char)[][] lst) 
+string match_parens(string[] lst) 
 {
-    return lst.map(x -> x.length).reduce(std.math.add);
+    string s = lst[0];
+    string t = lst[1];
+    if (s.length() == 0) {
+        return "Yes";
+    }
+    if (t.length() == 0) {
+        return "No";
+    }
+    if (s[0] == '(' && t[0] == ')') {
+        return match_parens([s.substr(1), t.substr(1)]);
+    }
+    if (s[0] == ')' && t[0] == '(') {
+        return match_parens([s.substr(1), t.substr(1)]);
+    }
+    return "No";
 }
 
 unittest

@@ -13,19 +13,11 @@ Your task is to implement a function that will simplify the expression
     simplify("7/10", "10/2") = False
     
 */
-bool simplify(const(char)[] x, const(char)[] n) 
+bool simplify(string x, string n) 
 {
-    auto x_num = parse_int(x);
-    auto x_den = parse_int(x);
-    auto n_num = parse_int(n);
-    auto n_den = parse_int(n);
-    auto x_num_n_den = x_num * n_den;
-    auto x_den_n_num = x_den * n_num;
-    auto gcd = math.gcd(x_num_n_den, x_den_n_num);
-    if (x_num_n_den % gcd == 0 && x_den_n_num % gcd == 0)
-        return true;
-    else
-        return false;
+    int numerator = std.math.gcd(std.typecons.parseInt(x.substr(0, x.find("/"))), std.typecons.parseInt(n.substr(0, n.find("/"))));
+    int denominator = std.math.gcd(std.typecons.parseInt(x.substr(x.find("/") + 1)), std.typecons.parseInt(n.substr(n.find("/") + 1)));
+    return std.math.gcd(numerator, denominator) == 1;
 }
 
 unittest

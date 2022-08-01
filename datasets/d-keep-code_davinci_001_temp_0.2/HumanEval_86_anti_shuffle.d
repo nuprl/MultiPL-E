@@ -14,10 +14,22 @@ import std.math;
     anti_shuffle('Hello World!!!') returns 'Hello !!!Wdlor'
     
 */
-const(char)[] anti_shuffle(const(char)[] s) 
+string anti_shuffle(string s) 
 {
     // Write your code here
-    return s;
+    string res = "";
+    for (int i = 0; i < s.length(); i++)
+    {
+        if (s[i] == ' ')
+        {
+            res += s[i];
+        }
+        else
+        {
+            res += std.math.min(s[i], std.math.max(s[i], s[i]));
+        }
+    }
+    return res;
 }
 
 unittest

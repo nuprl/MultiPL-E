@@ -38,13 +38,13 @@ unittest
     alias candidate = next_smallest;
 
 {
-        auto result = candidate([1, 2, 3, 4, 5]);
-        assert(!result.isNull && result.get == 2);
+        auto result = candidate([1L, 2L, 3L, 4L, 5L]);
+        assert(!result.isNull && result.get == 2L);
 }
 
 {
-        auto result = candidate([5, 1, 4, 3, 2]);
-        assert(!result.isNull && result.get == 2);
+        auto result = candidate([5L, 1L, 4L, 3L, 2L]);
+        assert(!result.isNull && result.get == 2L);
 }
 
 {
@@ -53,23 +53,23 @@ unittest
 }
 
 {
-        auto result = candidate([1, 1]);
+        auto result = candidate([1L, 1L]);
         assert(result.isNull);
 }
 
 {
-        auto result = candidate([1, 1, 1, 1, 0]);
-        assert(!result.isNull && result.get == 1);
+        auto result = candidate([1L, 1L, 1L, 1L, 0L]);
+        assert(!result.isNull && result.get == 1L);
 }
 
 {
-        auto result = candidate([1, 1]);
+        auto result = candidate([1L, 1L]);
         assert(result.isNull);
 }
 
 {
-        auto result = candidate([-35, 34, 12, -45]);
-        assert(!result.isNull && result.get == -35);
+        auto result = candidate([-35L, 34L, 12L, -45L]);
+        assert(!result.isNull && result.get == -35L);
 }
 
 }

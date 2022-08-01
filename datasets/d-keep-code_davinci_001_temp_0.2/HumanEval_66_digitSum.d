@@ -14,12 +14,12 @@ Task
         digitSum("aAaaaXa") => 153
     
 */
-long digitSum(const(char)[] s) 
+long digitSum(string s) 
 {
     long sum = 0;
-    for(int i = 0; i < s.length; i++)
+    for (int i = 0; i < s.length(); i++)
     {
-        if(s[i] >= 'A' && s[i] <= 'Z')
+        if (s[i] >= 'A' && s[i] <= 'Z')
         {
             sum += s[i];
         }
@@ -31,13 +31,13 @@ unittest
 {
     alias candidate = digitSum;
 
-    assert(candidate("") == 0);
-    assert(candidate("abAB") == 131);
-    assert(candidate("abcCd") == 67);
-    assert(candidate("helloE") == 69);
-    assert(candidate("woArBld") == 131);
-    assert(candidate("aAaaaXa") == 153);
-    assert(candidate(" How are yOu?") == 151);
-    assert(candidate("You arE Very Smart") == 327);
+    assert(candidate("") == 0L);
+    assert(candidate("abAB") == 131L);
+    assert(candidate("abcCd") == 67L);
+    assert(candidate("helloE") == 69L);
+    assert(candidate("woArBld") == 131L);
+    assert(candidate("aAaaaXa") == 153L);
+    assert(candidate(" How are yOu?") == 151L);
+    assert(candidate("You arE Very Smart") == 327L);
 }
 void main(){}

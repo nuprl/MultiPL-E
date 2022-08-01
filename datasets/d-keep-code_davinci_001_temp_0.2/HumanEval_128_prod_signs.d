@@ -34,18 +34,18 @@ unittest
     alias candidate = prod_signs;
 
 {
-        auto result = candidate([1, 2, 2, -4]);
-        assert(!result.isNull && result.get == -9);
+        auto result = candidate([1L, 2L, 2L, -4L]);
+        assert(!result.isNull && result.get == -9L);
 }
 
 {
-        auto result = candidate([0, 1]);
-        assert(!result.isNull && result.get == 0);
+        auto result = candidate([0L, 1L]);
+        assert(!result.isNull && result.get == 0L);
 }
 
 {
-        auto result = candidate([1, 1, 1, 2, 3, -1, 1]);
-        assert(!result.isNull && result.get == -10);
+        auto result = candidate([1L, 1L, 1L, 2L, 3L, -1L, 1L]);
+        assert(!result.isNull && result.get == -10L);
 }
 
 {
@@ -54,23 +54,23 @@ unittest
 }
 
 {
-        auto result = candidate([2, 4, 1, 2, -1, -1, 9]);
-        assert(!result.isNull && result.get == 20);
+        auto result = candidate([2L, 4L, 1L, 2L, -1L, -1L, 9L]);
+        assert(!result.isNull && result.get == 20L);
 }
 
 {
-        auto result = candidate([-1, 1, -1, 1]);
-        assert(!result.isNull && result.get == 4);
+        auto result = candidate([-1L, 1L, -1L, 1L]);
+        assert(!result.isNull && result.get == 4L);
 }
 
 {
-        auto result = candidate([-1, 1, 1, 1]);
-        assert(!result.isNull && result.get == -4);
+        auto result = candidate([-1L, 1L, 1L, 1L]);
+        assert(!result.isNull && result.get == -4L);
 }
 
 {
-        auto result = candidate([-1, 1, 1, 0]);
-        assert(!result.isNull && result.get == 0);
+        auto result = candidate([-1L, 1L, 1L, 0L]);
+        assert(!result.isNull && result.get == 0L);
 }
 
 }

@@ -23,10 +23,10 @@ unittest
 {
     alias candidate = sum_to_n;
 
-    assert(candidate(1) == 1);
-    assert(candidate(6) == 21);
-    assert(candidate(11) == 66);
-    assert(candidate(30) == 465);
-    assert(candidate(100) == 5050);
+    assert(candidate(1L) == 1L);
+    assert(candidate(6L) == 21L);
+    assert(candidate(11L) == 66L);
+    assert(candidate(30L) == 465L);
+    assert(candidate(100L) == 5050L);
 }
 void main(){}

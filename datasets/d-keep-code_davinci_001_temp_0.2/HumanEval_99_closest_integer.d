@@ -19,19 +19,19 @@ import std.math;
     return 15 and closest_integer("-14.5") should return -15.
     
 */
-long closest_integer(const(char)[] value) 
+long closest_integer(string value) 
 {
-    return 0;
+    return std.math.round(std.typecons.parse_double(value));
 }
 
 unittest
 {
     alias candidate = closest_integer;
 
-    assert(candidate("10") == 10);
-    assert(candidate("14.5") == 15);
-    assert(candidate("-15.5") == -16);
-    assert(candidate("15.3") == 15);
-    assert(candidate("0") == 0);
+    assert(candidate("10") == 10L);
+    assert(candidate("14.5") == 15L);
+    assert(candidate("-15.5") == -16L);
+    assert(candidate("15.3") == 15L);
+    assert(candidate("0") == 0L);
 }
 void main(){}

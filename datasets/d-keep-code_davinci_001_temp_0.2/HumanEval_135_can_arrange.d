@@ -84,10 +84,10 @@ unittest
 {
     alias candidate = can_arrange;
 
-    assert(candidate([1, 2, 4, 3, 5]) == 3);
-    assert(candidate([1, 2, 4, 5]) == -1);
-    assert(candidate([1, 4, 2, 5, 6, 7, 8, 9, 10]) == 2);
-    assert(candidate([4, 8, 5, 7, 3]) == 4);
-    assert(candidate([]) == -1);
+    assert(candidate([1L, 2L, 4L, 3L, 5L]) == 3L);
+    assert(candidate([1L, 2L, 4L, 5L]) == -1L);
+    assert(candidate([1L, 4L, 2L, 5L, 6L, 7L, 8L, 9L, 10L]) == 2L);
+    assert(candidate([4L, 8L, 5L, 7L, 3L]) == 4L);
+    assert(candidate([]) == -1L);
 }
 void main(){}

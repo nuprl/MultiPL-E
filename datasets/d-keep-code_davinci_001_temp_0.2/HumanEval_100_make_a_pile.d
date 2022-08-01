@@ -33,10 +33,10 @@ unittest
 {
     alias candidate = make_a_pile;
 
-    assert(candidate(3) == [3, 5, 7]);
-    assert(candidate(4) == [4, 6, 8, 10]);
-    assert(candidate(5) == [5, 7, 9, 11, 13]);
-    assert(candidate(6) == [6, 8, 10, 12, 14, 16]);
-    assert(candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]);
+    assert(candidate(3L) == [3L, 5L, 7L]);
+    assert(candidate(4L) == [4L, 6L, 8L, 10L]);
+    assert(candidate(5L) == [5L, 7L, 9L, 11L, 13L]);
+    assert(candidate(6L) == [6L, 8L, 10L, 12L, 14L, 16L]);
+    assert(candidate(8L) == [8L, 10L, 12L, 14L, 16L, 18L, 20L, 22L]);
 }
 void main(){}

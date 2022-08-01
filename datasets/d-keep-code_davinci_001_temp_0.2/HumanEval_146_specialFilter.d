@@ -26,12 +26,12 @@ unittest
 {
     alias candidate = specialFilter;
 
-    assert(candidate([5, -2, 1, -5]) == 0);
-    assert(candidate([15, -73, 14, -15]) == 1);
-    assert(candidate([33, -2, -3, 45, 21, 109]) == 2);
-    assert(candidate([43, -12, 93, 125, 121, 109]) == 4);
-    assert(candidate([71, -2, -33, 75, 21, 19]) == 3);
-    assert(candidate([1]) == 0);
-    assert(candidate([]) == 0);
+    assert(candidate([5L, -2L, 1L, -5L]) == 0L);
+    assert(candidate([15L, -73L, 14L, -15L]) == 1L);
+    assert(candidate([33L, -2L, -3L, 45L, 21L, 109L]) == 2L);
+    assert(candidate([43L, -12L, 93L, 125L, 121L, 109L]) == 4L);
+    assert(candidate([71L, -2L, -33L, 75L, 21L, 19L]) == 3L);
+    assert(candidate([1L]) == 0L);
+    assert(candidate([]) == 0L);
 }
 void main(){}

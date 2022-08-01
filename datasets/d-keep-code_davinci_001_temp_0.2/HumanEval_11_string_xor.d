@@ -7,23 +7,55 @@ import std.math;
     '100'
     
 */
-const(char)[] string_xor(const(char)[] a, const(char)[] b) 
-    {
-        assert(a.size() == b.size());
-        std.vector.vector[char] result;
-        for(int i = 0; i < a.size(); i++)
-        {
-            if(a[i] == b[i])
-            {
-                result.push_back('0');
-            }
-            else
-            {
-                result.push_back('1');
-            }
+string string_xor(string a, string b) 
+{
+    string result = "";
+    for (int i = 0; i < a.length(); i++) {
+        if (a[i] == b[i]) {
+            result += '0';
+        } else {
+            result += '1';
         }
-        return result;
     }
+    return result;
+}
+string string_xor(string a, string b) 
+{
+    string result = "";
+    for (int i = 0; i < a.length(); i++) {
+        result += std.math.logical_xor(a[i], b[i]);
+    }
+    return result;
+}
+string string_xor(string a, string b) 
+{
+    string result = "";
+    for (int i = 0; i < a.length(); i++) {
+        result += std.math.logical_xor(std.typecons.char_of(a[i]), std.typecons.char_of(b[i]));
+    }
+    return result;
+}
+string string_xor(string a, string b) 
+{
+    string result = "";
+    for (int i = 0; i < a.length(); i++) {
+        result += std.math.logical_xor(std.typecons.char_of(a[i]), std.typecons.char_of(b[i]));
+    }
+    return result;
+}
+string string_xor(string a, string b) 
+{
+    string result = "";
+    for (int i = 0; i < a.length(); i++) {
+        result += std.math.logical_xor(std.typecons.char_of(a[i]), std.typecons.char_of(b[i]));
+    }
+    return result;
+}
+string string_xor(string a, string b) 
+{
+    string result = "";
+    for (int i = 0; i < a.length(); i++) {
+        result += std.math.logical_xor(std.typecons.char_of(a[i]), std.typecons.char_of(b
 
 unittest
 {
