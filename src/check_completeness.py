@@ -12,7 +12,7 @@ that do not end in .results.yaml (i.e., the problem files):
 2. 1. It reports if the number of completions for any file is not 200.
 """
 from pathlib import Path
-from problem_yaml import Problem
+import yaml
 from concurrent.futures import ThreadPoolExecutor
 
 LANG = [ "rb", "lua", "rs", "rkt", "php", "cpp", "py", "jl", "js", "java" ]
@@ -31,8 +31,8 @@ def check(lang, model, temp, docstrings):
     
     for p in problems:
         with p.open() as f:
-            problem = Problem.load(f)
-            if len(problem.completions) != 200:
+            problem = yaml.load(p)
+            if len(problem["completions"]) != 200:
                 print(f"{dir} has missing completions")
                 return
 
