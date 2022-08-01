@@ -160,6 +160,21 @@ class DlangTranslator:
             translated_args.append(value)
         
         return func + "(" + ", ".join(translated_args) + ")"
+
+    def no_completion_prompt_stub(self) -> str:
+        """
+        A default stub to create a syntactically valid translation in case of not performing completion.
+        For example, for Rust this could be:
+
+            todo!()
+        }
+        
+        """
+        return """
+{
+    throw new Exception("unimplemented!");
+}
+        """
     
 
 if __name__ == "__main__":
