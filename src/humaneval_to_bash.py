@@ -17,13 +17,14 @@ from generic_translator import main
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
-BASH_METACHARACTERS = [" ", "\t", "\n", "\r", "|", "&", ";", "(", ")", "<", ">", "#"]
+BASH_METACHARACTERS = [" ", "\t", "\n", "\r", "|", "&", ";", "(", ")", "<", ">", "#", "?"]
+WHITESPACE = [' ', '\t', '\n', '\r']
 
 def contains_metachar(s):
-    return any(metachar in s for metachar in BASH_METACHARACTERS)
+    return any(mc in s for mc in BASH_METACHARACTERS)
 
 def contains_whitespace(s):
-    return any(ws in s for ws in [' ', '\t', '\n', '\r'])
+    return any(ws in s for ws in WHITESPACE)
 
 def is_quoted(s):
     return len(s) > 0 and s[0] == '"' and s[-1] == '"'
@@ -48,9 +49,17 @@ def type_to_comment(t, i):
                 case "Dict":
                     return f"# ${i} is a two column CSV in key,value order\n"
                 case other:
-                    return ""
+                    return f"# ${i} is an argument\n"
+        case ast.Name("int"):
+            return f"# ${i} is an integer\n"
+        case ast.Name("float"):
+            return f"# ${i} is a floating point\n"
+        case ast.Name("str"):
+            return f"# ${i} is a string\n"
+        case ast.Name(x):
+            return f"# ${i} is a ${x}\n"
         case other:
-            return ""
+            return f"# ${i} is an argument\n"
 
 
 class BashTranslator:
@@ -67,11 +76,7 @@ class BashTranslator:
             "#!/bin/bash\n# " + re.sub(DOCSTRING_LINESTART_RE, "\n# ", description.strip()) + "\n"
         )
         annotations = [type_to_comment(arg.annotation, i + 1) for i, arg in enumerate(args)]
-        annotations = [a for a in annotations if len(a) > 0]
-        if len(annotations) > 0:
-            annotations = "#\n" + "".join(annotations)
-        else:
-            annotations = ""
+        annotations = "#\n" + "".join(annotations) if len(annotations) > 0 else ""
         return f"{bash_description}{annotations}{name}() {{\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
@@ -119,13 +124,16 @@ class BashTranslator:
         res = repr(c)
         if type(c) == bool:
             res = str(c).lower()
+        elif type(c) == str and not c:
+            # Empty strings need to be quoted
+            return '""'
         elif type(c) == str:
-            if not c:
-                return '""'
-            elif contains_metachar(c):
+            # Note: have to check for metachar before escaping the metachar
+            if contains_metachar(c):
+                # Need to escape and quote string
                 c = c.replace('"', '\\"').replace('\n', '\\n').replace('!', '\!')
                 return quote(c)
-            return c.replace('!', '\!')
+            return c.replace('"', '\\"').replace('\n', '\\n').replace('!', '\!')
         elif c is None:
             res = "None"
         return res
@@ -134,12 +142,12 @@ class BashTranslator:
         """Translate a variable with name v."""
         return v
 
-    # TODO: maybe need to maintain some context to determine if we're translated a nested list...
     def gen_list(self, l: List[str]) -> str:
         """Translate a list with elements l
         A list [x, y, z] translates to a space-separated list "x y z"
-        If all elements are quoted and contain whitespace, assume this is a nested list.
-        If an element contains whitespace, then we can't translate it.
+        If all elements are quoted, assume this is a nested list.
+        NOTE: This can fail if all elements of a (non-nested) list contain metacharacters.
+        If any element contains whitespace, then we can't translate it.
         """
         if all(is_quoted(ll) for ll in l):
             return quote("\\n".join([unquote(ll) for ll in l]))
@@ -150,7 +158,7 @@ class BashTranslator:
     def gen_tuple(self, t: List[str]) -> str:
         """Translate a tuple with elements t
         A tuple (x, y, z) translates to a space-separated list "x y z"
-        If an element contains whitespace, then we can't translate it.
+        If any element contains whitespace, then we can't translate it.
         """
         if any(contains_whitespace(tt) for tt in t):
             raise Exception("Cannot translate list element that contains whitespace")
@@ -159,7 +167,7 @@ class BashTranslator:
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
         """Translate a dictionary with keys and values
         A dictionary { "key1": val1, "key2": val2 } translates to a CSV: key1,val1\nkey2,val2
-        If an element contains whitespace, then we can't translate it.
+        If any element contains whitespace, then we can't translate it.
         """
         if any(contains_whitespace(k) or contains_whitespace(v) for k, v in zip(keys, values)):
             raise Exception("Cannot translate list element that contains whitespace")
