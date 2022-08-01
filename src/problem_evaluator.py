@@ -1,99 +1,43 @@
 import argparse
 from pathlib import Path
-from problem_yaml import Problem, Result, ResultList, TestResults
-import eval_ruby, eval_lua, eval_python, eval_rust, eval_julia, eval_java
-import tempfile
+import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
-EVALUATORS = {
-  #  "ruby": (eval_ruby.eval_script, ".rb"),
- #   "lua": (eval_lua.eval_script, ".lua"),
-#    "python": (eval_python.eval_script, ".py")
-#    "julia": (eval_julia.eval_script, ".jl")
-    "java" : (eval_java.eval_script, ".java")
-}
-
-
-def get_test_results_yaml_path(problem_yaml_path: Path) -> Path:
-    return problem_yaml_path.parent / (problem_yaml_path.stem + ".results.yaml")
-
-def load_or_create_test_results_yaml(problem: Problem, problem_yaml_path: Path):
-    p = get_test_results_yaml_path(problem_yaml_path)
-    if p.exists():
-        with p.open() as f: 
-            return TestResults.load(f)
-    y = TestResults()
-    y.name = problem.name
-    y.language = problem.language
-    y.results = ResultList()
-    return y
-
-def eval_in_thread(problem, test_results, i):
-    program = problem.prompt + problem.completions[i] + '\n' + problem.tests
-
-    if i < len(test_results.results) and test_results.results[i].program == program:
-        # Assume that the results for this program are already correct.
-        return test_results.results[i]
-
-    (eval_script, file_ext) = EVALUATORS[problem.language]
-    with tempfile.NamedTemporaryFile(suffix=file_ext, delete=True) as f:
-        f.write(program.encode("utf-8"))
-        f.flush()
-        result = eval_script(f.name)
-        result_yaml = Result()
-        result_yaml.program = program
-        # Only save the first 2K of output from the running program. Any futher
-        # output is very likely an exceptionally long stack trace or a long
-        # series of prints.
-        #TODO(molly, arjun): make this eyesore not an eyesore
-        result_yaml.stdout = result['stdout'].replace("!!int", "")[:2048]
-        result_yaml.stderr = result['stderr'][:2048]
-        result_yaml.exit_code = result['exit_code']
-        result_yaml.status = result['status']
-    return result_yaml
-
-def evaluate_problem(problem_yaml_path):
-    with open(problem_yaml_path) as f:
-        problem = Problem.load(f)
-
-    # Do not create a blank .results.yaml file if there are no completions ready.
-    if len(problem.completions) == 0:
-        return
-
-    test_results = load_or_create_test_results_yaml(problem, problem_yaml_path)
-
-    if len(problem.completions) < len(test_results.results):
-        print(f"Fewer completions than results for {problem.name}. Skipping. Fix this manually")
-        return
-
-    results_path = get_test_results_yaml_path(problem_yaml_path)
-    print(f'Producing {results_path}')
+# Get working directory
+WORKING_DIR = Path(__file__).parent.parent
     
-    with ThreadPoolExecutor() as executor:
-        result_yamls = executor.map(lambda i: eval_in_thread(problem, test_results, i), range(len(problem.completions)))
-        test_results.results = list(result_yamls)
-    with results_path.open("w") as f:
-        f.write(TestResults.dump(test_results))
+def evaluate_problem(problem_yaml_path: Path):
+     subprocess.run(["podman", "run", "--rm", "--volume",
+        f"${WORKING_DIR}:/multipleval:rw",
+        "--stop-timeout", str(200 * 30),
+        "multipleval", "python3",
+        "containerized_eval.py", str(problem_yaml_path)],
+        shell=True, stdin=subprocess.DEVNULL)
 
-
-def evaluate_problems(target_dir):
-    for problem_yaml_path in target_dir.glob("*.yaml"):
-        if problem_yaml_path.name.endswith(".results.yaml"):
-            continue
-        evaluate_problem(problem_yaml_path)
+def evaluate_problems(target_dir: Path, max_workers: int):
+    problems = [ p for p in target_dir.glob("*.yaml") if not p.name.endswith(".results.yaml") ]
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        for _ in executor.map(evaluate_problem, problems):
+            pass
 
 def main():
     args = argparse.ArgumentParser()
     args.add_argument(
-        "--target-dir", type=str, required=True, help="Directory to write YAML files to"
+        "--target-dir", type=str, required=True, help="Directory to write YAML files to",
+    )
+    args.add_argument(
+        "--max-workers", type=int, required=True, help="Maximum number of workers to use",
     )
     args = args.parse_args()
     target_dir = Path(args.target_dir)
     if not target_dir.exists():
         print(f"Target directory {target_dir} does not exist")
         sys.exit(1)
-    evaluate_problems(target_dir)
+    if args.max_workers < 1:
+        print(f"Maximum workers must be at least 1")
+        sys.exit(1)
+    evaluate_problems(target_dir, args.max_workers)
 
 if __name__ == "__main__":
     main()
