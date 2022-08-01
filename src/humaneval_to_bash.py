@@ -21,8 +21,8 @@
 #   2. Nested dictionaries are not supported
 #   3. List elements containing whitespace are not supported
 #
-# 1 and 2 do not occur in the dataset, but 3 does. In all three cases, the translator
-# silently continues and generates incorrect code.
+# 1 and 2 do not occur in the dataset, but 3 does. The translator does not check for 1 or 2,
+# but will terminate if 3 is encountered.
 import re
 import ast
 from typing import List
@@ -31,6 +31,11 @@ from generic_translator import main
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
+
+WHITESPACE = [' ', '\t', '\n', '\r']
+
+def contains_whitespace(s):
+    return any(ws in s for ws in WHITESPACE)
 
 def is_quoted(s):
     return len(s) > 0 and s[0] == '"' and s[-1] == '"'
@@ -175,7 +180,11 @@ class BashTranslator:
         Ultimately, a nested list [[a, b], [c, d]] translates to a newline-separated, space-separated list "a b\nc d"
 
         Because we need to know what values we're passing around, pass around Python values.
+
+        If any element contains whitespace, then we can't translate it.
         """
+        if any(contains_whitespace(ll) for ll in l):
+            raise Exception("Cannot translate list element that contains whitespace")
         return l
 
     def gen_tuple(self, t: List):
@@ -183,13 +192,21 @@ class BashTranslator:
         A tuple (x, y, z) translates to a space-separated list "x y z"
 
         Because we need to know what values we're passing around, pass around Python values.
+
+        If any element contains whitespace, then we can't translate it.
         """
+        if any(contains_whitespace(tt) for tt in t):
+            raise Exception("Cannot translate tuple element that contains whitespace")
         return t
 
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
         """Translate a dictionary with keys and values
         A dictionary { "key1": val1, "key2": val2 } translates to a CSV: key1,val1\nkey2,val2
+
+        If any element contains whitespace, then we can't translate it.
         """
+        if any(contains_whitespace(k) or contains_whitespace(v) for k, v in zip(keys, values)):
+            raise Exception("Cannot translate list element that contains whitespace")
         return quote("\\n".join(unquote(k) + "," + unquote(v) for k, v in zip(keys, values)))
 
     def gen_call(self, func: str, args: List) -> str:
