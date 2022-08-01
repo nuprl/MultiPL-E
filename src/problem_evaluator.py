@@ -35,19 +35,8 @@ def evaluate_problem_in_container(problem_yaml_path: Path, index):
 def get_test_results_yaml_path(problem_yaml_path: Path) -> Path:
     return problem_yaml_path.parent / (problem_yaml_path.stem + ".results.yaml")
 
-def load_or_create_test_results_yaml(problem: Problem, problem_yaml_path: Path):
-    p = get_test_results_yaml_path(problem_yaml_path)
-    if p.exists():
-        with p.open() as f: 
-            return TestResults.load(f)
-    y = TestResults()
-    y.name = problem.name
-    y.language = problem.language
-    y.results = ResultList()
-    return y
 
-
-def evaluate_problem(problem_yaml_path: Path, max_workers: int, limited = False):
+def evaluate_problem(problem_yaml_path: Path, max_workers: int):
     with open(problem_yaml_path) as f:
         problem = Problem.load(f)
 
@@ -55,13 +44,16 @@ def evaluate_problem(problem_yaml_path: Path, max_workers: int, limited = False)
     if len(problem.completions) == 0:
         return
 
-    test_results = load_or_create_test_results_yaml(problem, problem_yaml_path)
-
-    if len(problem.completions) < len(test_results.results):
-        print(f"Fewer completions than results for {problem.name}. Skipping. Fix this manually")
+    test_results_path = get_test_results_yaml_path(problem_yaml_path)
+    if test_results_path.exists():
         return
 
-    num_problems = 1 if limited else len(problem.completions)
+    num_problems = len(problem.completions)
+
+    test_results = TestResults()
+    test_results.name = problem.name
+    test_results.language = problem.language
+    test_results.results = ResultList()
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         for json_strings in executor.map(lambda index: evaluate_problem_in_container(problem_yaml_path, index), range(num_problems)):
@@ -80,10 +72,7 @@ def evaluate_problem(problem_yaml_path: Path, max_workers: int, limited = False)
         f.write(TestResults.dump(test_results))
 
 def evaluate_problems(target_dir: Path, max_workers: int):
-    # Choose HumanEval_53_add as the first problem to run, as a litmus test
-    simple_problem = [f for f in target_dir.glob("*.yaml") if "_53_" in f.name]
-    problems = simple_problem + [ p for p in target_dir.glob("*.yaml")
-            if not p.name.endswith(".results.yaml") and not "_53_" in p.name ]
+    problems = [ p for p in target_dir.glob("*.yaml") if not p.name.endswith(".results.yaml") ]
 
     for problem_yaml_path in tqdm(problems, desc=str(target_dir)):
         evaluate_problem(problem_yaml_path, max_workers)
@@ -97,8 +86,6 @@ def main():
     args.add_argument(
         "--max-workers", type=int, required=True, help="Maximum number of workers to use",
     )
-    args.add_argument(
-            "--limited", type=bool, default=False)
 
     args = args.parse_args()
     target = Path(args.target)
@@ -112,7 +99,7 @@ def main():
         evaluate_problems(target, args.max_workers)
     else:
         print(f"Evaluating a single problem")
-        evaluate_problem(target, args.max_workers, args.limited)
+        evaluate_problem(target, args.max_workers)
 
 if __name__ == "__main__":
     main()
