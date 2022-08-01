@@ -22,7 +22,7 @@ sum_product([1, 2, 3, 4])
 
 test_humaneval <- function() {
 candidate <- sum_product
-    if(!identical(candidate(list()), c(0, 1))){quit('no', 1)}
+    if(!identical(candidate(c()), c(0, 1))){quit('no', 1)}
     if(!identical(candidate(c(1, 1, 1)), c(3, 1))){quit('no', 1)}
     if(!identical(candidate(c(100, 0)), c(100, 0))){quit('no', 1)}
     if(!identical(candidate(c(3, 5, 7)), c(15, 105))){quit('no', 1)}

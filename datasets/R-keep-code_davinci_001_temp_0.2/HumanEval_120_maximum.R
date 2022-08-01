@@ -65,6 +65,6 @@ candidate <- maximum
     if(!identical(candidate(c(1, 0, 5, -7), 1), c(5))){quit('no', 1)}
     if(!identical(candidate(c(4, -4), 2), c(-4, 4))){quit('no', 1)}
     if(!identical(candidate(c(-10, 10), 2), c(-10, 10))){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 3, -23, 243, -400, 0), 0), list())){quit('no', 1)}
+    if(!identical(candidate(c(1, 2, 3, -23, 243, -400, 0), 0), c())){quit('no', 1)}
 }
 test_humaneval()

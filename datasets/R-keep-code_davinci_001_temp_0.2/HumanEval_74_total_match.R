@@ -25,14 +25,14 @@ total_match(['4'], ['1', '2', '3', '4', '5'])
 
 test_humaneval <- function() {
 candidate <- total_match
-    if(!identical(candidate(list(), list()), list())){quit('no', 1)}
+    if(!identical(candidate(c(), c()), c())){quit('no', 1)}
     if(!identical(candidate(c('hi', 'admin'), c('hi', 'hi')), c('hi', 'hi'))){quit('no', 1)}
     if(!identical(candidate(c('hi', 'admin'), c('hi', 'hi', 'admin', 'project')), c('hi', 'admin'))){quit('no', 1)}
     if(!identical(candidate(c('4'), c('1', '2', '3', '4', '5')), c('4'))){quit('no', 1)}
     if(!identical(candidate(c('hi', 'admin'), c('hI', 'Hi')), c('hI', 'Hi'))){quit('no', 1)}
     if(!identical(candidate(c('hi', 'admin'), c('hI', 'hi', 'hi')), c('hI', 'hi', 'hi'))){quit('no', 1)}
     if(!identical(candidate(c('hi', 'admin'), c('hI', 'hi', 'hii')), c('hi', 'admin'))){quit('no', 1)}
-    if(!identical(candidate(list(), c('this')), list())){quit('no', 1)}
-    if(!identical(candidate(c('this'), list()), list())){quit('no', 1)}
+    if(!identical(candidate(c(), c('this')), c())){quit('no', 1)}
+    if(!identical(candidate(c('this'), c()), c())){quit('no', 1)}
 }
 test_humaneval()

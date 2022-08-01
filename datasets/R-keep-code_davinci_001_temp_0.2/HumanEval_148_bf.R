@@ -31,8 +31,8 @@ candidate <- bf
     if(!identical(candidate('Earth', 'Mercury'), c('Venus'))){quit('no', 1)}
     if(!identical(candidate('Mercury', 'Uranus'), c('Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn'))){quit('no', 1)}
     if(!identical(candidate('Neptune', 'Venus'), c('Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus'))){quit('no', 1)}
-    if(!identical(candidate('Earth', 'Earth'), list())){quit('no', 1)}
-    if(!identical(candidate('Mars', 'Earth'), list())){quit('no', 1)}
-    if(!identical(candidate('Jupiter', 'Makemake'), list())){quit('no', 1)}
+    if(!identical(candidate('Earth', 'Earth'), c())){quit('no', 1)}
+    if(!identical(candidate('Mars', 'Earth'), c())){quit('no', 1)}
+    if(!identical(candidate('Jupiter', 'Makemake'), c())){quit('no', 1)}
 }
 test_humaneval()

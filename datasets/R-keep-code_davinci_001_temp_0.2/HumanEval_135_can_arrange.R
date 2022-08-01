@@ -23,6 +23,6 @@ candidate <- can_arrange
     if(!identical(candidate(c(1, 2, 4, 5)), -1)){quit('no', 1)}
     if(!identical(candidate(c(1, 4, 2, 5, 6, 7, 8, 9, 10)), 2)){quit('no', 1)}
     if(!identical(candidate(c(4, 8, 5, 7, 3)), 4)){quit('no', 1)}
-    if(!identical(candidate(list()), -1)){quit('no', 1)}
+    if(!identical(candidate(c()), -1)){quit('no', 1)}
 }
 test_humaneval()

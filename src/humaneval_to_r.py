@@ -68,7 +68,7 @@ class RTranslator:
         '''Translate a list with elements l
            A list [ x, y, z ] translates to list(x, y, z)
         '''
-        if len(set([type(i) for i in l])) == 1:
+        if len(set([type(i) for i in l])) <= 1:
             return "c(" + ", ".join(l) + ")"
         return "list(" + ", ".join(l) + ")"
     
@@ -77,7 +77,7 @@ class RTranslator:
         '''Translate a tuple with elements t
            A tuple (x, y, z) translates to list(x, y, z) }
         '''
-        if len(set([type(i) for i in t])) == 1:
+        if len(set([type(i) for i in t])) <= 1:
             return "c(" + ", ".join(t) + ")"
         return "list(" + ", ".join(t) + ")"
     

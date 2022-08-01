@@ -18,10 +18,10 @@ test_humaneval <- function() {
 candidate <- select_words
     if(!identical(candidate('Mary had a little lamb', 4), c('little'))){quit('no', 1)}
     if(!identical(candidate('Mary had a little lamb', 3), c('Mary', 'lamb'))){quit('no', 1)}
-    if(!identical(candidate('simple white space', 2), list())){quit('no', 1)}
+    if(!identical(candidate('simple white space', 2), c())){quit('no', 1)}
     if(!identical(candidate('Hello world', 4), c('world'))){quit('no', 1)}
     if(!identical(candidate('Uncle sam', 3), c('Uncle'))){quit('no', 1)}
-    if(!identical(candidate('', 4), list())){quit('no', 1)}
+    if(!identical(candidate('', 4), c())){quit('no', 1)}
     if(!identical(candidate('a b c d e f', 1), c('b', 'c', 'd', 'f'))){quit('no', 1)}
 }
 test_humaneval()

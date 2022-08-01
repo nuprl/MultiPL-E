@@ -38,11 +38,11 @@ test_humaneval <- function() {
 candidate <- pluck
     if(!identical(candidate(c(4, 2, 3)), c(2, 1))){quit('no', 1)}
     if(!identical(candidate(c(1, 2, 3)), c(2, 1))){quit('no', 1)}
-    if(!identical(candidate(list()), list())){quit('no', 1)}
+    if(!identical(candidate(c()), c())){quit('no', 1)}
     if(!identical(candidate(c(5, 0, 3, 0, 4, 2)), c(0, 1))){quit('no', 1)}
     if(!identical(candidate(c(1, 2, 3, 0, 5, 3)), c(0, 3))){quit('no', 1)}
     if(!identical(candidate(c(5, 4, 8, 4, 8)), c(4, 1))){quit('no', 1)}
     if(!identical(candidate(c(7, 6, 7, 1)), c(6, 1))){quit('no', 1)}
-    if(!identical(candidate(c(7, 9, 7, 1)), list())){quit('no', 1)}
+    if(!identical(candidate(c(7, 9, 7, 1)), c())){quit('no', 1)}
 }
 test_humaneval()

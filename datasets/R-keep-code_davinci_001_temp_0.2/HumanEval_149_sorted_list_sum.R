@@ -23,10 +23,10 @@ test_humaneval <- function() {
 candidate <- sorted_list_sum
     if(!identical(candidate(c('aa', 'a', 'aaa')), c('aa'))){quit('no', 1)}
     if(!identical(candidate(c('school', 'AI', 'asdf', 'b')), c('AI', 'asdf', 'school'))){quit('no', 1)}
-    if(!identical(candidate(c('d', 'b', 'c', 'a')), list())){quit('no', 1)}
+    if(!identical(candidate(c('d', 'b', 'c', 'a')), c())){quit('no', 1)}
     if(!identical(candidate(c('d', 'dcba', 'abcd', 'a')), c('abcd', 'dcba'))){quit('no', 1)}
     if(!identical(candidate(c('AI', 'ai', 'au')), c('AI', 'ai', 'au'))){quit('no', 1)}
-    if(!identical(candidate(c('a', 'b', 'b', 'c', 'c', 'a')), list())){quit('no', 1)}
+    if(!identical(candidate(c('a', 'b', 'b', 'c', 'c', 'a')), c())){quit('no', 1)}
     if(!identical(candidate(c('aaaa', 'bbbb', 'dd', 'cc')), c('cc', 'dd', 'aaaa', 'bbbb'))){quit('no', 1)}
 }
 test_humaneval()

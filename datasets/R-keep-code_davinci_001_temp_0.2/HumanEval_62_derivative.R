@@ -16,6 +16,6 @@ candidate <- derivative
     if(!identical(candidate(c(1, 2, 3)), c(2, 6))){quit('no', 1)}
     if(!identical(candidate(c(3, 2, 1)), c(2, 2))){quit('no', 1)}
     if(!identical(candidate(c(3, 2, 1, 0, 4)), c(2, 2, 0, 16))){quit('no', 1)}
-    if(!identical(candidate(c(1)), list())){quit('no', 1)}
+    if(!identical(candidate(c(1)), c())){quit('no', 1)}
 }
 test_humaneval()
