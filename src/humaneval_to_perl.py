@@ -44,7 +44,8 @@ class PerlTranslator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        return f"    if(Compare({left},{right})) "+"{\n        print \"ok!\" }else{\n        exit 1;\n        }"
+        arr_prefix = f"    " + "    ".join(array_list)
+        return arr_prefix+f"    if(Compare({left},{right})) "+"{\n        print \"ok!\" }else{\n        exit 1;\n        }"
 
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
@@ -66,7 +67,7 @@ class PerlTranslator:
 
     def gen_list(self, l: List[str]) -> str:
         idx = len(array_list)
-        array_list.append(f"my @arg{idx} = " + "(" + ", ".join(l) + ")")
+        array_list.append(f"my @arg{idx} = " + "(" + ", ".join(l) + ");\n")
         return f"\\@arg{idx}"
 
     def gen_tuple(self, t: List[str]) -> str:
