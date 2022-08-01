@@ -16,12 +16,13 @@ candidate() {
     add "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 0 1) = 1 ]]
-    [[ $(candidate 1 0) = 1 ]]
-    [[ $(candidate 2 3) = 5 ]]
-    [[ $(candidate 5 7) = 12 ]]
-    [[ $(candidate 7 5) = 12 ]]
+    [[ $(candidate "0" "1") = "1" ]]
+    [[ $(candidate "1" "0") = "1" ]]
+    [[ $(candidate "2" "3") = "5" ]]
+    [[ $(candidate "5" "7") = "12" ]]
+    [[ $(candidate "7" "5") = "12" ]]
 }
 
 run_test

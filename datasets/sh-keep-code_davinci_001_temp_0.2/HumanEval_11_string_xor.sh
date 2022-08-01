@@ -29,10 +29,11 @@ candidate() {
     string_xor "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 111000 101010) = 010010 ]]
-    [[ $(candidate 1 1) = 0 ]]
-    [[ $(candidate 0101 0000) = 0101 ]]
+    [[ $(candidate "111000" "101010") = "010010" ]]
+    [[ $(candidate "1" "1") = "0" ]]
+    [[ $(candidate "0101" "0000") = "0101" ]]
 }
 
 run_test

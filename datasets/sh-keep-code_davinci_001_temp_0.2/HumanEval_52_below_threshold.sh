@@ -24,13 +24,14 @@ candidate() {
     below_threshold "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "1 2 4 10" 100) = true ]]
-    [[ $(candidate "1 20 4 10" 5) = false ]]
-    [[ $(candidate "1 20 4 10" 21) = true ]]
-    [[ $(candidate "1 20 4 10" 22) = true ]]
-    [[ $(candidate "1 8 4 10" 11) = true ]]
-    [[ $(candidate "1 8 4 10" 10) = false ]]
+    [[ $(candidate "1 2 4 10" "100") = "true" ]]
+    [[ $(candidate "1 20 4 10" "5") = "false" ]]
+    [[ $(candidate "1 20 4 10" "21") = "true" ]]
+    [[ $(candidate "1 20 4 10" "22") = "true" ]]
+    [[ $(candidate "1 8 4 10" "11") = "true" ]]
+    [[ $(candidate "1 8 4 10" "10") = "false" ]]
 }
 
 run_test

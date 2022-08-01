@@ -15,10 +15,11 @@ candidate() {
     concatenate "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "") = "" ]]
-    [[ $(candidate "x y z") = xyz ]]
-    [[ $(candidate "x y z w k") = xyzwk ]]
+    [[ $(candidate "x y z") = "xyz" ]]
+    [[ $(candidate "x y z w k") = "xyzwk" ]]
 }
 
 run_test

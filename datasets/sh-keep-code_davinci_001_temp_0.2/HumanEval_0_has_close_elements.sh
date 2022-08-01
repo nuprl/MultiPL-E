@@ -139,14 +139,15 @@ candidate() {
     has_close_elements "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "1.0 2.0 3.9 4.0 5.0 2.2" 0.3) = true ]]
-    [[ $(candidate "1.0 2.0 3.9 4.0 5.0 2.2" 0.05) = false ]]
-    [[ $(candidate "1.0 2.0 5.9 4.0 5.0" 0.95) = true ]]
-    [[ $(candidate "1.0 2.0 5.9 4.0 5.0" 0.8) = false ]]
-    [[ $(candidate "1.0 2.0 3.0 4.0 5.0 2.0" 0.1) = true ]]
-    [[ $(candidate "1.1 2.2 3.1 4.1 5.1" 1.0) = true ]]
-    [[ $(candidate "1.1 2.2 3.1 4.1 5.1" 0.5) = false ]]
+    [[ $(candidate "1.0 2.0 3.9 4.0 5.0 2.2" "0.3") = "true" ]]
+    [[ $(candidate "1.0 2.0 3.9 4.0 5.0 2.2" "0.05") = "false" ]]
+    [[ $(candidate "1.0 2.0 5.9 4.0 5.0" "0.95") = "true" ]]
+    [[ $(candidate "1.0 2.0 5.9 4.0 5.0" "0.8") = "false" ]]
+    [[ $(candidate "1.0 2.0 3.0 4.0 5.0 2.0" "0.1") = "true" ]]
+    [[ $(candidate "1.1 2.2 3.1 4.1 5.1" "1.0") = "true" ]]
+    [[ $(candidate "1.1 2.2 3.1 4.1 5.1" "0.5") = "false" ]]
 }
 
 run_test

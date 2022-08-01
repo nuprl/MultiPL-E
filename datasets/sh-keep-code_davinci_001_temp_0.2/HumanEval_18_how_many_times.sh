@@ -32,11 +32,12 @@ candidate() {
     how_many_times "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "" x) = 0 ]]
-    [[ $(candidate xyxyxyx x) = 4 ]]
-    [[ $(candidate cacacacac cac) = 4 ]]
-    [[ $(candidate "john doe" john) = 1 ]]
+    [[ $(candidate "" "x") = "0" ]]
+    [[ $(candidate "xyxyxyx" "x") = "4" ]]
+    [[ $(candidate "cacacacac" "cac") = "4" ]]
+    [[ $(candidate "john doe" "john") = "1" ]]
 }
 
 run_test

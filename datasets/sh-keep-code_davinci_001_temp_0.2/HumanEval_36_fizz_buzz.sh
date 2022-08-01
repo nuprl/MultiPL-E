@@ -25,15 +25,16 @@ candidate() {
     fizz_buzz "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 50) = 0 ]]
-    [[ $(candidate 78) = 2 ]]
-    [[ $(candidate 79) = 3 ]]
-    [[ $(candidate 100) = 3 ]]
-    [[ $(candidate 200) = 6 ]]
-    [[ $(candidate 4000) = 192 ]]
-    [[ $(candidate 10000) = 639 ]]
-    [[ $(candidate 100000) = 8026 ]]
+    [[ $(candidate "50") = "0" ]]
+    [[ $(candidate "78") = "2" ]]
+    [[ $(candidate "79") = "3" ]]
+    [[ $(candidate "100") = "3" ]]
+    [[ $(candidate "200") = "6" ]]
+    [[ $(candidate "4000") = "192" ]]
+    [[ $(candidate "10000") = "639" ]]
+    [[ $(candidate "100000") = "8026" ]]
 }
 
 run_test

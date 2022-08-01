@@ -32,6 +32,7 @@ candidate() {
     sort_even "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "1 2 3") = "1 2 3" ]]
     [[ $(candidate "5 3 -5 2 -3 3 9 0 123 1 -10") = "-10 3 -5 2 -3 3 5 0 9 1 123" ]]

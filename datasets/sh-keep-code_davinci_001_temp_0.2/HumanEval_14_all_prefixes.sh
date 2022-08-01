@@ -19,10 +19,11 @@ candidate() {
     all_prefixes "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "") = "" ]]
-    [[ $(candidate asdfgh) = "a as asd asdf asdfg asdfgh" ]]
-    [[ $(candidate WWW) = "W WW WWW" ]]
+    [[ $(candidate "asdfgh") = "a as asd asdf asdfg asdfgh" ]]
+    [[ $(candidate "WWW") = "W WW WWW" ]]
 }
 
 run_test

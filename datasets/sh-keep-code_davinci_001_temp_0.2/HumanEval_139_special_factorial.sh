@@ -26,11 +26,12 @@ candidate() {
     special_factorial "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 4) = 288 ]]
-    [[ $(candidate 5) = 34560 ]]
-    [[ $(candidate 7) = 125411328000 ]]
-    [[ $(candidate 1) = 1 ]]
+    [[ $(candidate "4") = "288" ]]
+    [[ $(candidate "5") = "34560" ]]
+    [[ $(candidate "7") = "125411328000" ]]
+    [[ $(candidate "1") = "1" ]]
 }
 
 run_test

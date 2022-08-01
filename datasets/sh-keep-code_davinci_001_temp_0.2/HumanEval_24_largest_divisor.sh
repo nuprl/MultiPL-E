@@ -22,12 +22,13 @@ candidate() {
     largest_divisor "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 3) = 1 ]]
-    [[ $(candidate 7) = 1 ]]
-    [[ $(candidate 10) = 5 ]]
-    [[ $(candidate 100) = 50 ]]
-    [[ $(candidate 49) = 7 ]]
+    [[ $(candidate "3") = "1" ]]
+    [[ $(candidate "7") = "1" ]]
+    [[ $(candidate "10") = "5" ]]
+    [[ $(candidate "100") = "50" ]]
+    [[ $(candidate "49") = "7" ]]
 }
 
 run_test

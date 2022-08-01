@@ -28,14 +28,15 @@ candidate() {
     is_palindrome "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "") = true ]]
-    [[ $(candidate aba) = true ]]
-    [[ $(candidate aaaaa) = true ]]
-    [[ $(candidate zbcd) = false ]]
-    [[ $(candidate xywyx) = true ]]
-    [[ $(candidate xywyz) = false ]]
-    [[ $(candidate xywzx) = false ]]
+    [[ $(candidate "") = "true" ]]
+    [[ $(candidate "aba") = "true" ]]
+    [[ $(candidate "aaaaa") = "true" ]]
+    [[ $(candidate "zbcd") = "false" ]]
+    [[ $(candidate "xywyx") = "true" ]]
+    [[ $(candidate "xywyz") = "false" ]]
+    [[ $(candidate "xywzx") = "false" ]]
 }
 
 run_test

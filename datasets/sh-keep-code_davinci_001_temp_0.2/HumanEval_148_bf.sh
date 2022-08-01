@@ -53,14 +53,15 @@ candidate() {
     bf "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate Jupiter Neptune) = "Saturn Uranus" ]]
-    [[ $(candidate Earth Mercury) = "Venus" ]]
-    [[ $(candidate Mercury Uranus) = "Venus Earth Mars Jupiter Saturn" ]]
-    [[ $(candidate Neptune Venus) = "Earth Mars Jupiter Saturn Uranus" ]]
-    [[ $(candidate Earth Earth) = "" ]]
-    [[ $(candidate Mars Earth) = "" ]]
-    [[ $(candidate Jupiter Makemake) = "" ]]
+    [[ $(candidate "Jupiter" "Neptune") = "Saturn Uranus" ]]
+    [[ $(candidate "Earth" "Mercury") = "Venus" ]]
+    [[ $(candidate "Mercury" "Uranus") = "Venus Earth Mars Jupiter Saturn" ]]
+    [[ $(candidate "Neptune" "Venus") = "Earth Mars Jupiter Saturn Uranus" ]]
+    [[ $(candidate "Earth" "Earth") = "" ]]
+    [[ $(candidate "Mars" "Earth") = "" ]]
+    [[ $(candidate "Jupiter" "Makemake") = "" ]]
 }
 
 run_test

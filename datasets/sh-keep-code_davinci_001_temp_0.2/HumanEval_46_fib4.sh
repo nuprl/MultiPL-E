@@ -106,11 +106,12 @@ candidate() {
     fib4 "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 5) = 4 ]]
-    [[ $(candidate 8) = 28 ]]
-    [[ $(candidate 10) = 104 ]]
-    [[ $(candidate 12) = 386 ]]
+    [[ $(candidate "5") = "4" ]]
+    [[ $(candidate "8") = "28" ]]
+    [[ $(candidate "10") = "104" ]]
+    [[ $(candidate "12") = "386" ]]
 }
 
 run_test

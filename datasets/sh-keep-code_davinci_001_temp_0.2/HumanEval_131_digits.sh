@@ -25,14 +25,15 @@ candidate() {
     digits "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 5) = 5 ]]
-    [[ $(candidate 54) = 5 ]]
-    [[ $(candidate 120) = 1 ]]
-    [[ $(candidate 5014) = 5 ]]
-    [[ $(candidate 98765) = 315 ]]
-    [[ $(candidate 5576543) = 2625 ]]
-    [[ $(candidate 2468) = 0 ]]
+    [[ $(candidate "5") = "5" ]]
+    [[ $(candidate "54") = "5" ]]
+    [[ $(candidate "120") = "1" ]]
+    [[ $(candidate "5014") = "5" ]]
+    [[ $(candidate "98765") = "315" ]]
+    [[ $(candidate "5576543") = "2625" ]]
+    [[ $(candidate "2468") = "0" ]]
 }
 
 run_test

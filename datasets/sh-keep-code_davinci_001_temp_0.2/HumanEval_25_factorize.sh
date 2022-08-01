@@ -30,15 +30,16 @@ candidate() {
     factorize "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 2) = "2" ]]
-    [[ $(candidate 4) = "2 2" ]]
-    [[ $(candidate 8) = "2 2 2" ]]
-    [[ $(candidate 57) = "3 19" ]]
-    [[ $(candidate 3249) = "3 3 19 19" ]]
-    [[ $(candidate 185193) = "3 3 3 19 19 19" ]]
-    [[ $(candidate 20577) = "3 19 19 19" ]]
-    [[ $(candidate 18) = "2 3 3" ]]
+    [[ $(candidate "2") = "2" ]]
+    [[ $(candidate "4") = "2 2" ]]
+    [[ $(candidate "8") = "2 2 2" ]]
+    [[ $(candidate "57") = "3 19" ]]
+    [[ $(candidate "3249") = "3 3 19 19" ]]
+    [[ $(candidate "185193") = "3 3 3 19 19 19" ]]
+    [[ $(candidate "20577") = "3 19 19 19" ]]
+    [[ $(candidate "18") = "2 3 3" ]]
 }
 
 run_test

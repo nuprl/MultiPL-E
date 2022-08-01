@@ -29,12 +29,13 @@ candidate() {
     circular_shift "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 100 2) = 001 ]]
-    [[ $(candidate 12 2) = 12 ]]
-    [[ $(candidate 97 8) = 79 ]]
-    [[ $(candidate 12 1) = 21 ]]
-    [[ $(candidate 11 101) = 11 ]]
+    [[ $(candidate "100" "2") = "001" ]]
+    [[ $(candidate "12" "2") = "12" ]]
+    [[ $(candidate "97" "8") = "79" ]]
+    [[ $(candidate "12" "1") = "21" ]]
+    [[ $(candidate "11" "101") = "11" ]]
 }
 
 run_test

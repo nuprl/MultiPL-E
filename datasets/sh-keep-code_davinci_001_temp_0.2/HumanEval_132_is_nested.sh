@@ -44,21 +44,22 @@ candidate() {
     is_nested "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate [[]]) = true ]]
-    [[ $(candidate []]]]]]][[[[[]) = false ]]
-    [[ $(candidate [][]) = false ]]
-    [[ $(candidate []) = false ]]
-    [[ $(candidate [[[[]]]]) = true ]]
-    [[ $(candidate []]]]]]]]]]) = false ]]
-    [[ $(candidate [][][[]]) = true ]]
-    [[ $(candidate [[]) = false ]]
-    [[ $(candidate []]) = false ]]
-    [[ $(candidate [[]][[) = true ]]
-    [[ $(candidate [[][]]) = true ]]
-    [[ $(candidate "") = false ]]
-    [[ $(candidate [[[[[[[[) = false ]]
-    [[ $(candidate ]]]]]]]]) = false ]]
+    [[ $(candidate "[[]]") = "true" ]]
+    [[ $(candidate "[]]]]]]][[[[[]") = "false" ]]
+    [[ $(candidate "[][]") = "false" ]]
+    [[ $(candidate "[]") = "false" ]]
+    [[ $(candidate "[[[[]]]]") = "true" ]]
+    [[ $(candidate "[]]]]]]]]]]") = "false" ]]
+    [[ $(candidate "[][][[]]") = "true" ]]
+    [[ $(candidate "[[]") = "false" ]]
+    [[ $(candidate "[]]") = "false" ]]
+    [[ $(candidate "[[]][[") = "true" ]]
+    [[ $(candidate "[[][]]") = "true" ]]
+    [[ $(candidate "") = "false" ]]
+    [[ $(candidate "[[[[[[[[") = "false" ]]
+    [[ $(candidate "]]]]]]]]") = "false" ]]
 }
 
 run_test

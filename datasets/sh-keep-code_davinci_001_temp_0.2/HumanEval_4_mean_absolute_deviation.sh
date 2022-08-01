@@ -29,10 +29,11 @@ candidate() {
     mean_absolute_deviation "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "1.0 2.0") = 0.5 ]]
-    [[ $(candidate "1.0 2.0 3.0 4.0") = 1.0 ]]
-    [[ $(candidate "1.0 2.0 3.0 4.0 5.0") = 1.2 ]]
+    [[ $(candidate "1.0 2.0") = "0.5" ]]
+    [[ $(candidate "1.0 2.0 3.0 4.0") = "1.0" ]]
+    [[ $(candidate "1.0 2.0 3.0 4.0 5.0") = "1.2" ]]
 }
 
 run_test

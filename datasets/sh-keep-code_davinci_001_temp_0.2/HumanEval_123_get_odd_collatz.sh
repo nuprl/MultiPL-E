@@ -33,11 +33,12 @@ candidate() {
     get_odd_collatz "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 14) = "1 5 7 11 13 17" ]]
-    [[ $(candidate 5) = "1 5" ]]
-    [[ $(candidate 12) = "1 3 5" ]]
-    [[ $(candidate 1) = "1" ]]
+    [[ $(candidate "14") = "1 5 7 11 13 17" ]]
+    [[ $(candidate "5") = "1 5" ]]
+    [[ $(candidate "12") = "1 3 5" ]]
+    [[ $(candidate "1") = "1" ]]
 }
 
 run_test

@@ -22,12 +22,13 @@ candidate() {
     count_distinct_characters "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "") = 0 ]]
-    [[ $(candidate abcde) = 5 ]]
-    [[ $(candidate abcdecadeCADE) = 5 ]]
-    [[ $(candidate aaaaAAAAaaaa) = 1 ]]
-    [[ $(candidate "Jerry jERRY JeRRRY") = 5 ]]
+    [[ $(candidate "") = "0" ]]
+    [[ $(candidate "abcde") = "5" ]]
+    [[ $(candidate "abcdecadeCADE") = "5" ]]
+    [[ $(candidate "aaaaAAAAaaaa") = "1" ]]
+    [[ $(candidate "Jerry jERRY JeRRRY") = "5" ]]
 }
 
 run_test

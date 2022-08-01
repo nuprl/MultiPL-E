@@ -22,6 +22,7 @@ candidate() {
     compare "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "1 2 3 4 5 1" "1 2 3 4 2 -2") = "0 0 0 0 3 3" ]]
     [[ $(candidate "0 0 0 0 0 0" "0 0 0 0 0 0") = "0 0 0 0 0 0" ]]

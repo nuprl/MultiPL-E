@@ -23,15 +23,16 @@ candidate() {
     count_nums "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "") = 0 ]]
-    [[ $(candidate "-1 -2 0") = 0 ]]
-    [[ $(candidate "1 1 2 -2 3 4 5") = 6 ]]
-    [[ $(candidate "1 6 9 -6 0 1 5") = 5 ]]
-    [[ $(candidate "1 100 98 -7 1 -1") = 4 ]]
-    [[ $(candidate "12 23 34 -45 -56 0") = 5 ]]
-    [[ $(candidate "0 1") = 1 ]]
-    [[ $(candidate "1") = 1 ]]
+    [[ $(candidate "") = "0" ]]
+    [[ $(candidate "-1 -2 0") = "0" ]]
+    [[ $(candidate "1 1 2 -2 3 4 5") = "6" ]]
+    [[ $(candidate "1 6 9 -6 0 1 5") = "5" ]]
+    [[ $(candidate "1 100 98 -7 1 -1") = "4" ]]
+    [[ $(candidate "12 23 34 -45 -56 0") = "5" ]]
+    [[ $(candidate "0 1") = "1" ]]
+    [[ $(candidate "1") = "1" ]]
 }
 
 run_test

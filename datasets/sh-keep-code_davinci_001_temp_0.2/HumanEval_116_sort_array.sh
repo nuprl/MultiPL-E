@@ -21,6 +21,7 @@ candidate() {
     sort_array "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "1 5 2 3 4") = "1 2 4 3 5" ]]
     [[ $(candidate "-2 -3 -4 -5 -6") = "-4 -2 -6 -5 -3" ]]

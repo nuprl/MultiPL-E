@@ -15,6 +15,7 @@ candidate() {
     filter_integers "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "") = "" ]]
     [[ $(candidate "4   23.2 9 adasd") = "4 9" ]]

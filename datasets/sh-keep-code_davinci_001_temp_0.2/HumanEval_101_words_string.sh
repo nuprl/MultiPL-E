@@ -40,6 +40,7 @@ candidate() {
     words_string "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "Hi, my name is John") = "Hi my name is John" ]]
     [[ $(candidate "One, two, three, four, five, six") = "One two three four five six" ]]

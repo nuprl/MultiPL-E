@@ -36,15 +36,16 @@ candidate() {
     monotonic "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "1 2 4 10") = true ]]
-    [[ $(candidate "1 2 4 20") = true ]]
-    [[ $(candidate "1 20 4 10") = false ]]
-    [[ $(candidate "4 1 0 -10") = true ]]
-    [[ $(candidate "4 1 1 0") = true ]]
-    [[ $(candidate "1 2 3 2 5 60") = false ]]
-    [[ $(candidate "1 2 3 4 5 60") = true ]]
-    [[ $(candidate "9 9 9 9") = true ]]
+    [[ $(candidate "1 2 4 10") = "true" ]]
+    [[ $(candidate "1 2 4 20") = "true" ]]
+    [[ $(candidate "1 20 4 10") = "false" ]]
+    [[ $(candidate "4 1 0 -10") = "true" ]]
+    [[ $(candidate "4 1 1 0") = "true" ]]
+    [[ $(candidate "1 2 3 2 5 60") = "false" ]]
+    [[ $(candidate "1 2 3 4 5 60") = "true" ]]
+    [[ $(candidate "9 9 9 9") = "true" ]]
 }
 
 run_test

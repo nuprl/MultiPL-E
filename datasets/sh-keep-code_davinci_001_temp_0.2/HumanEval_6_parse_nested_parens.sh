@@ -77,6 +77,7 @@ candidate() {
     parse_nested_parens "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "(()()) ((())) () ((())()())") = "2 3 1 3" ]]
     [[ $(candidate "() (()) ((())) (((())))") = "1 2 3 4" ]]

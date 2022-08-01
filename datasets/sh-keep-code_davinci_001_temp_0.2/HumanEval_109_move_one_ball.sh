@@ -62,12 +62,13 @@ candidate() {
     move_one_ball "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "3 4 5 1 2") = true ]]
-    [[ $(candidate "3 5 10 1 2") = true ]]
-    [[ $(candidate "4 3 1 2") = false ]]
-    [[ $(candidate "3 5 4 1 2") = false ]]
-    [[ $(candidate "") = true ]]
+    [[ $(candidate "3 4 5 1 2") = "true" ]]
+    [[ $(candidate "3 5 10 1 2") = "true" ]]
+    [[ $(candidate "4 3 1 2") = "false" ]]
+    [[ $(candidate "3 5 4 1 2") = "false" ]]
+    [[ $(candidate "") = "true" ]]
 }
 
 run_test

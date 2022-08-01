@@ -105,16 +105,17 @@ candidate() {
     pairs_sum_to_zero "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "1 3 5 0") = false ]]
-    [[ $(candidate "1 3 -2 1") = false ]]
-    [[ $(candidate "1 2 3 7") = false ]]
-    [[ $(candidate "2 4 -5 3 5 7") = true ]]
-    [[ $(candidate "1") = false ]]
-    [[ $(candidate "-3 9 -1 3 2 30") = true ]]
-    [[ $(candidate "-3 9 -1 3 2 31") = true ]]
-    [[ $(candidate "-3 9 -1 4 2 30") = false ]]
-    [[ $(candidate "-3 9 -1 4 2 31") = false ]]
+    [[ $(candidate "1 3 5 0") = "false" ]]
+    [[ $(candidate "1 3 -2 1") = "false" ]]
+    [[ $(candidate "1 2 3 7") = "false" ]]
+    [[ $(candidate "2 4 -5 3 5 7") = "true" ]]
+    [[ $(candidate "1") = "false" ]]
+    [[ $(candidate "-3 9 -1 3 2 30") = "true" ]]
+    [[ $(candidate "-3 9 -1 3 2 31") = "true" ]]
+    [[ $(candidate "-3 9 -1 4 2 30") = "false" ]]
+    [[ $(candidate "-3 9 -1 4 2 31") = "false" ]]
 }
 
 run_test

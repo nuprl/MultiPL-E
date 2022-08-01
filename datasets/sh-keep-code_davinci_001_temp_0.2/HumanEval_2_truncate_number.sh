@@ -19,10 +19,11 @@ candidate() {
     truncate_number "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 3.5) = 0.5 ]]
-    [[ $(candidate 1.25) = 0.25 ]]
-    [[ $(candidate 123.0) = 0.0 ]]
+    [[ $(candidate "3.5") = "0.5" ]]
+    [[ $(candidate "1.25") = "0.25" ]]
+    [[ $(candidate "123.0") = "0.0" ]]
 }
 
 run_test

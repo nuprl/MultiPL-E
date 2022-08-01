@@ -63,12 +63,13 @@ candidate() {
     max_fill "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "0 0 1 0\n0 1 0 0\n1 1 1 1" 1) = 6 ]]
-    [[ $(candidate "0 0 1 1\n0 0 0 0\n1 1 1 1\n0 1 1 1" 2) = 5 ]]
-    [[ $(candidate "0 0 0\n0 0 0" 5) = 0 ]]
-    [[ $(candidate "1 1 1 1\n1 1 1 1" 2) = 4 ]]
-    [[ $(candidate "1 1 1 1\n1 1 1 1" 9) = 2 ]]
+    [[ $(candidate "0 0 1 0\n0 1 0 0\n1 1 1 1" "1") = "6" ]]
+    [[ $(candidate "0 0 1 1\n0 0 0 0\n1 1 1 1\n0 1 1 1" "2") = "5" ]]
+    [[ $(candidate "0 0 0\n0 0 0" "5") = "0" ]]
+    [[ $(candidate "1 1 1 1\n1 1 1 1" "2") = "4" ]]
+    [[ $(candidate "1 1 1 1\n1 1 1 1" "9") = "2" ]]
 }
 
 run_test

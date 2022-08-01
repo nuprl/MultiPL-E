@@ -33,20 +33,21 @@ candidate() {
     is_prime "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 6) = false ]]
-    [[ $(candidate 101) = true ]]
-    [[ $(candidate 11) = true ]]
-    [[ $(candidate 13441) = true ]]
-    [[ $(candidate 61) = true ]]
-    [[ $(candidate 4) = false ]]
-    [[ $(candidate 1) = false ]]
-    [[ $(candidate 5) = true ]]
-    [[ $(candidate 11) = true ]]
-    [[ $(candidate 17) = true ]]
-    [[ $(candidate 85) = false ]]
-    [[ $(candidate 77) = false ]]
-    [[ $(candidate 255379) = false ]]
+    [[ $(candidate "6") = "false" ]]
+    [[ $(candidate "101") = "true" ]]
+    [[ $(candidate "11") = "true" ]]
+    [[ $(candidate "13441") = "true" ]]
+    [[ $(candidate "61") = "true" ]]
+    [[ $(candidate "4") = "false" ]]
+    [[ $(candidate "1") = "false" ]]
+    [[ $(candidate "5") = "true" ]]
+    [[ $(candidate "11") = "true" ]]
+    [[ $(candidate "17") = "true" ]]
+    [[ $(candidate "85") = "false" ]]
+    [[ $(candidate "77") = "false" ]]
+    [[ $(candidate "255379") = "false" ]]
 }
 
 run_test

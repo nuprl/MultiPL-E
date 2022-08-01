@@ -24,16 +24,17 @@ candidate() {
     triangle_area "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 3 4 5) = 6.0 ]]
-    [[ $(candidate 1 2 10) = -1 ]]
-    [[ $(candidate 4 8 5) = 8.18 ]]
-    [[ $(candidate 2 2 2) = 1.73 ]]
-    [[ $(candidate 1 2 3) = -1 ]]
-    [[ $(candidate 10 5 7) = 16.25 ]]
-    [[ $(candidate 2 6 3) = -1 ]]
-    [[ $(candidate 1 1 1) = 0.43 ]]
-    [[ $(candidate 2 2 10) = -1 ]]
+    [[ $(candidate "3" "4" "5") = "6.0" ]]
+    [[ $(candidate "1" "2" "10") = "-1" ]]
+    [[ $(candidate "4" "8" "5") = "8.18" ]]
+    [[ $(candidate "2" "2" "2") = "1.73" ]]
+    [[ $(candidate "1" "2" "3") = "-1" ]]
+    [[ $(candidate "10" "5" "7") = "16.25" ]]
+    [[ $(candidate "2" "6" "3") = "-1" ]]
+    [[ $(candidate "1" "1" "1") = "0.43" ]]
+    [[ $(candidate "2" "2" "10") = "-1" ]]
 }
 
 run_test

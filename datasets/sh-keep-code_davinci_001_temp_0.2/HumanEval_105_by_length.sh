@@ -27,6 +27,7 @@ candidate() {
     by_length "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "2 1 1 4 5 8 2 3") = "Eight Five Four Three Two Two One One" ]]
     [[ $(candidate "") = "" ]]

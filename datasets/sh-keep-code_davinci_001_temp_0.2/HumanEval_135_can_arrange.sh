@@ -75,12 +75,13 @@ candidate() {
     can_arrange "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "1 2 4 3 5") = 3 ]]
-    [[ $(candidate "1 2 4 5") = -1 ]]
-    [[ $(candidate "1 4 2 5 6 7 8 9 10") = 2 ]]
-    [[ $(candidate "4 8 5 7 3") = 4 ]]
-    [[ $(candidate "") = -1 ]]
+    [[ $(candidate "1 2 4 3 5") = "3" ]]
+    [[ $(candidate "1 2 4 5") = "-1" ]]
+    [[ $(candidate "1 4 2 5 6 7 8 9 10") = "2" ]]
+    [[ $(candidate "4 8 5 7 3") = "4" ]]
+    [[ $(candidate "") = "-1" ]]
 }
 
 run_test

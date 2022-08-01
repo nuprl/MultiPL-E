@@ -35,11 +35,12 @@ candidate() {
     f "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 5) = "1 2 6 24 15" ]]
-    [[ $(candidate 7) = "1 2 6 24 15 720 28" ]]
-    [[ $(candidate 1) = "1" ]]
-    [[ $(candidate 3) = "1 2 6" ]]
+    [[ $(candidate "5") = "1 2 6 24 15" ]]
+    [[ $(candidate "7") = "1 2 6 24 15 720 28" ]]
+    [[ $(candidate "1") = "1" ]]
+    [[ $(candidate "3") = "1 2 6" ]]
 }
 
 run_test

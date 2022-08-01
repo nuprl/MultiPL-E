@@ -48,19 +48,20 @@ candidate() {
     match_parens "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "()(\n)") = Yes ]]
-    [[ $(candidate ")\n)") = No ]]
-    [[ $(candidate "(()(())\n())())") = No ]]
-    [[ $(candidate ")())\n(()()(") = Yes ]]
-    [[ $(candidate "(())))\n(()())((") = Yes ]]
-    [[ $(candidate "()\n())") = No ]]
-    [[ $(candidate "(()(\n()))()") = Yes ]]
-    [[ $(candidate "((((\n((())") = No ]]
-    [[ $(candidate ")(()\n(()(") = No ]]
-    [[ $(candidate ")(\n)(") = No ]]
-    [[ $(candidate "(\n)") = Yes ]]
-    [[ $(candidate ")\n(") = Yes ]]
+    [[ $(candidate "()( )") = "Yes" ]]
+    [[ $(candidate ") )") = "No" ]]
+    [[ $(candidate "(()(()) ())())") = "No" ]]
+    [[ $(candidate ")()) (()()(") = "Yes" ]]
+    [[ $(candidate "(()))) (()())((") = "Yes" ]]
+    [[ $(candidate "() ())") = "No" ]]
+    [[ $(candidate "(()( ()))()") = "Yes" ]]
+    [[ $(candidate "(((( ((())") = "No" ]]
+    [[ $(candidate ")(() (()(") = "No" ]]
+    [[ $(candidate ")( )(") = "No" ]]
+    [[ $(candidate "( )") = "Yes" ]]
+    [[ $(candidate ") (") = "Yes" ]]
 }
 
 run_test

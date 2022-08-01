@@ -102,15 +102,16 @@ candidate() {
     is_happy "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate a) = false ]]
-    [[ $(candidate aa) = false ]]
-    [[ $(candidate abcd) = true ]]
-    [[ $(candidate aabb) = false ]]
-    [[ $(candidate adb) = true ]]
-    [[ $(candidate xyy) = false ]]
-    [[ $(candidate iopaxpoi) = true ]]
-    [[ $(candidate iopaxioi) = false ]]
+    [[ $(candidate "a") = "false" ]]
+    [[ $(candidate "aa") = "false" ]]
+    [[ $(candidate "abcd") = "true" ]]
+    [[ $(candidate "aabb") = "false" ]]
+    [[ $(candidate "adb") = "true" ]]
+    [[ $(candidate "xyy") = "false" ]]
+    [[ $(candidate "iopaxpoi") = "true" ]]
+    [[ $(candidate "iopaxioi") = "false" ]]
 }
 
 run_test

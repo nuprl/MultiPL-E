@@ -38,17 +38,18 @@ candidate() {
     tri "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 3) = "1 3 2 8" ]]
-    [[ $(candidate 4) = "1 3 2 8 3" ]]
-    [[ $(candidate 5) = "1 3 2 8 3 15" ]]
-    [[ $(candidate 6) = "1 3 2 8 3 15 4" ]]
-    [[ $(candidate 7) = "1 3 2 8 3 15 4 24" ]]
-    [[ $(candidate 8) = "1 3 2 8 3 15 4 24 5" ]]
-    [[ $(candidate 9) = "1 3 2 8 3 15 4 24 5 35" ]]
-    [[ $(candidate 20) = "1 3 2 8 3 15 4 24 5 35 6 48 7 63 8 80 9 99 10 120 11" ]]
-    [[ $(candidate 0) = "1" ]]
-    [[ $(candidate 1) = "1 3" ]]
+    [[ $(candidate "3") = "1 3 2 8" ]]
+    [[ $(candidate "4") = "1 3 2 8 3" ]]
+    [[ $(candidate "5") = "1 3 2 8 3 15" ]]
+    [[ $(candidate "6") = "1 3 2 8 3 15 4" ]]
+    [[ $(candidate "7") = "1 3 2 8 3 15 4 24" ]]
+    [[ $(candidate "8") = "1 3 2 8 3 15 4 24 5" ]]
+    [[ $(candidate "9") = "1 3 2 8 3 15 4 24 5 35" ]]
+    [[ $(candidate "20") = "1 3 2 8 3 15 4 24 5 35 6 48 7 63 8 80 9 99 10 120 11" ]]
+    [[ $(candidate "0") = "1" ]]
+    [[ $(candidate "1") = "1 3" ]]
 }
 
 run_test

@@ -90,15 +90,16 @@ candidate() {
     multiply "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 148 412) = 16 ]]
-    [[ $(candidate 19 28) = 72 ]]
-    [[ $(candidate 2020 1851) = 0 ]]
-    [[ $(candidate 14 -15) = 20 ]]
-    [[ $(candidate 76 67) = 42 ]]
-    [[ $(candidate 17 27) = 49 ]]
-    [[ $(candidate 0 1) = 0 ]]
-    [[ $(candidate 0 0) = 0 ]]
+    [[ $(candidate "148" "412") = "16" ]]
+    [[ $(candidate "19" "28") = "72" ]]
+    [[ $(candidate "2020" "1851") = "0" ]]
+    [[ $(candidate "14" "-15") = "20" ]]
+    [[ $(candidate "76" "67") = "42" ]]
+    [[ $(candidate "17" "27") = "49" ]]
+    [[ $(candidate "0" "1") = "0" ]]
+    [[ $(candidate "0" "0") = "0" ]]
 }
 
 run_test

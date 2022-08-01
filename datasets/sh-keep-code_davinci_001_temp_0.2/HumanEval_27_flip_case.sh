@@ -13,9 +13,10 @@ candidate() {
     flip_case "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "") = "" ]]
-    [[ $(candidate Hello\!) = hELLO\! ]]
+    [[ $(candidate "Hello\!") = "hELLO\!" ]]
     [[ $(candidate "These violent delights have violent ends") = "tHESE VIOLENT DELIGHTS HAVE VIOLENT ENDS" ]]
 }
 

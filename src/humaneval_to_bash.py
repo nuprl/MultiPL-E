@@ -6,8 +6,23 @@
 # Installed version is:
 # GNU bash, version 5.1.16(1)-release (x86_64-pc-linux-gnu)
 #
-# The testing framework is bash_unit: https://github.com/pgrange/bash_unit
-# It is a single bash script and needs to be in the same directory as the generated programs.
+# Bash is not a general-purpose programming language, and has its own quirks to work around.
+# In particular, the main datatype is string. While Bash has arrays and associative arrays,
+# the convention is to use strings with spaces and/or newlines as separators.
+#
+# This makes the translation tricky, as we can't pass strings around and concatenate them.
+# If we have a list, we need to know if its elements are lists or base values, since
+# that determines the list encoding. Therefore, we defer translation and pass Python
+# values around. Only deep_equality() and gen_call() need to return strings, so
+# they call py_to_bash() to perform the translation.
+#
+# Known limitations:
+#   1. More than two layers of nesting is not supported
+#   2. Nested dictionaries are not supported
+#   3. List elements containing whitespace are not supported
+#
+# 1 and 2 do not occur in the dataset, but 3 does. In all three cases, the translator
+# silently continues and generates incorrect code.
 import re
 import ast
 from typing import List
@@ -17,14 +32,14 @@ from generic_translator import main
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
-BASH_METACHARACTERS = [" ", "\t", "\n", "\r", "|", "&", ";", "(", ")", "<", ">", "#", "?"]
+# Make sure \ comes first, so we don't escape the escapes.
+METACHARACTERS = '\\\n$!'
 WHITESPACE = [' ', '\t', '\n', '\r']
 
-def contains_metachar(s):
-    return any(mc in s for mc in BASH_METACHARACTERS)
-
-def contains_whitespace(s):
-    return any(ws in s for ws in WHITESPACE)
+def escape(s):
+    for c in METACHARACTERS:
+        s = s.replace(c, '\\' + c)
+    return s
 
 def is_quoted(s):
     return len(s) > 0 and s[0] == '"' and s[-1] == '"'
@@ -35,6 +50,10 @@ def quote(s):
 def unquote(s):
     return s[1:-1] if is_quoted(s) else s
 
+# Bash does not have type annotations, but we include comments explaining the encoding the tests us.
+# List and Tuple -> space-separated list
+# Nested list -> newline-separated, space-separated list
+# Dictionary -> two column CSV in key,value order
 def type_to_comment(t, i):
     match t:
         case ast.Subscript(ast.Name(id), slice, ctx):
@@ -61,6 +80,26 @@ def type_to_comment(t, i):
         case other:
             return f"# ${i} is an argument\n"
 
+# Translation of Python values into Bash strings is deferred until this point.
+# Non-list values have already been translated to Bash syntax.
+# There are three cases for lists:
+#   1. Empty list: this is translated to an empty string.
+#   2. Nested list: the inner lists are recursively translated (which results in
+#      a quoted, space-separated string), unquoted, and then joined with newlines.
+#   3. List: the elements are recursively translated (which results in quoted strings),
+#      unquoted, and then joined with spaces.
+def py_to_bash(val):
+    if type(val) == list:
+        if len(val) == 0:
+            return '""'
+        elif all(type(v) == list for v in val):
+            # Translate list to a string where the inner list is space separated and the outer list is newline separated
+            return quote("\\n".join([unquote(py_to_bash(v)) for v in val]))
+        else:
+            # Translate list to a string with elements separated by spaces
+            return quote(" ".join([unquote(py_to_bash(v)) for v in val]))
+    else:
+        return val
 
 class BashTranslator:
 
@@ -95,7 +134,7 @@ class BashTranslator:
             f"    {entry_point} \"$@\"",
             "}",
             "",
-            # "set -e",
+            "set -e",
             "run_test() {",
         ]
 
@@ -114,70 +153,62 @@ class BashTranslator:
 
         Tests are of the form:
             [[ left = right ]]
-        """
-        return "    [[ " + left + " = " + right + " ]]"
 
-    def gen_literal(self, c: bool | str | int | float):
+        Up until this point, we've been passing Python values around.
+        Now we need to do the actual translation. This allows us to keep track of the list structure.
+        """
+        return "    [[ " + py_to_bash(left) + " = " + py_to_bash(right) + " ]]"
+
+    def gen_literal(self, c: bool | str | int | float) -> str:
         """Translate a literal expression
         c: is the literal value
         """
         res = repr(c)
         if type(c) == bool:
             res = str(c).lower()
-        elif type(c) == str and not c:
-            # Empty strings need to be quoted
-            return '""'
         elif type(c) == str:
-            # Note: have to check for metachar before escaping the metachar
-            if contains_metachar(c):
-                # Need to escape and quote string
-                c = c.replace('"', '\\"').replace('\n', '\\n').replace('!', '\!')
-                return quote(c)
-            return c.replace('"', '\\"').replace('\n', '\\n').replace('!', '\!')
+            # Escape strings
+            res = escape(c)
         elif c is None:
             res = "None"
-        return res
+        # Quote everything
+        return quote(res)
 
     def gen_var(self, v: str) -> str:
         """Translate a variable with name v."""
         return v
 
-    def gen_list(self, l: List[str]) -> str:
+    def gen_list(self, l: List):
         """Translate a list with elements l
-        A list [x, y, z] translates to a space-separated list "x y z"
-        If all elements are quoted, assume this is a nested list.
-        NOTE: This can fail if all elements of a (non-nested) list contain metacharacters.
-        If any element contains whitespace, then we can't translate it.
-        """
-        if all(is_quoted(ll) for ll in l):
-            return quote("\\n".join([unquote(ll) for ll in l]))
-        elif any(contains_whitespace(ll) for ll in l):
-            raise Exception("Cannot translate list element that contains whitespace")
-        return quote(" ".join(unquote(ll) for ll in l))
+        Ultimately, a list [x, y, z] translates to a space-separated list "x y z"
+        Ultimately, a nested list [[a, b], [c, d]] translates to a newline-separated, space-separated list "a b\nc d"
 
-    def gen_tuple(self, t: List[str]) -> str:
+        Because we need to know what values we're passing around, pass around Python values.
+        """
+        return l
+
+    def gen_tuple(self, t: List):
         """Translate a tuple with elements t
         A tuple (x, y, z) translates to a space-separated list "x y z"
-        If any element contains whitespace, then we can't translate it.
+
+        Because we need to know what values we're passing around, pass around Python values.
         """
-        if any(contains_whitespace(tt) for tt in t):
-            raise Exception("Cannot translate list element that contains whitespace")
-        return quote(" ".join([unquote(tt) for tt in t]))
+        return t
 
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
         """Translate a dictionary with keys and values
         A dictionary { "key1": val1, "key2": val2 } translates to a CSV: key1,val1\nkey2,val2
-        If any element contains whitespace, then we can't translate it.
         """
-        if any(contains_whitespace(k) or contains_whitespace(v) for k, v in zip(keys, values)):
-            raise Exception("Cannot translate list element that contains whitespace")
         return quote("\\n".join(unquote(k) + "," + unquote(v) for k, v in zip(keys, values)))
 
-    def gen_call(self, func: str, args: List[str]) -> str:
+    def gen_call(self, func: str, args: List) -> str:
         """Translate a function call `func(args)`
         A function call f(x, y, z) translates to $(f x y z)
+
+        Up until this point, we've been passing Python values around.
+        Now we need to do the actual translation. This allows us to keep track of the list structure.
         """
-        return "$(" + func + " " + " ".join(args) + ")"
+        return "$(" + func + " " + " ".join([py_to_bash(a) for a in args]) + ")"
 
     def no_completion_prompt_stub(self):
         return "echo 0"

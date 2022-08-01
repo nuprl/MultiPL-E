@@ -54,11 +54,12 @@ candidate() {
     get_max_triples "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 5) = 1 ]]
-    [[ $(candidate 6) = 4 ]]
-    [[ $(candidate 10) = 36 ]]
-    [[ $(candidate 100) = 53361 ]]
+    [[ $(candidate "5") = "1" ]]
+    [[ $(candidate "6") = "4" ]]
+    [[ $(candidate "10") = "36" ]]
+    [[ $(candidate "100") = "53361" ]]
 }
 
 run_test

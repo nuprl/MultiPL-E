@@ -24,14 +24,15 @@ candidate() {
     count_upper "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate aBCdEf) = 1 ]]
-    [[ $(candidate abcdefg) = 0 ]]
-    [[ $(candidate dBBE) = 0 ]]
-    [[ $(candidate B) = 0 ]]
-    [[ $(candidate U) = 1 ]]
-    [[ $(candidate "") = 0 ]]
-    [[ $(candidate EEEE) = 2 ]]
+    [[ $(candidate "aBCdEf") = "1" ]]
+    [[ $(candidate "abcdefg") = "0" ]]
+    [[ $(candidate "dBBE") = "0" ]]
+    [[ $(candidate "B") = "0" ]]
+    [[ $(candidate "U") = "1" ]]
+    [[ $(candidate "") = "0" ]]
+    [[ $(candidate "EEEE") = "2" ]]
 }
 
 run_test

@@ -82,20 +82,21 @@ candidate() {
     get_closest_vowel "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate yogurt) = u ]]
-    [[ $(candidate full) = u ]]
-    [[ $(candidate easy) = "" ]]
-    [[ $(candidate eAsy) = "" ]]
-    [[ $(candidate ali) = "" ]]
-    [[ $(candidate bad) = a ]]
-    [[ $(candidate most) = o ]]
-    [[ $(candidate ab) = "" ]]
-    [[ $(candidate ba) = "" ]]
-    [[ $(candidate quick) = "" ]]
-    [[ $(candidate anime) = i ]]
-    [[ $(candidate Asia) = "" ]]
-    [[ $(candidate Above) = o ]]
+    [[ $(candidate "yogurt") = "u" ]]
+    [[ $(candidate "full") = "u" ]]
+    [[ $(candidate "easy") = "" ]]
+    [[ $(candidate "eAsy") = "" ]]
+    [[ $(candidate "ali") = "" ]]
+    [[ $(candidate "bad") = "a" ]]
+    [[ $(candidate "most") = "o" ]]
+    [[ $(candidate "ab") = "" ]]
+    [[ $(candidate "ba") = "" ]]
+    [[ $(candidate "quick") = "" ]]
+    [[ $(candidate "anime") = "i" ]]
+    [[ $(candidate "Asia") = "" ]]
+    [[ $(candidate "Above") = "o" ]]
 }
 
 run_test

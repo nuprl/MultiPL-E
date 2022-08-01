@@ -61,21 +61,22 @@ candidate() {
     int_to_mini_roman "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 19) = xix ]]
-    [[ $(candidate 152) = clii ]]
-    [[ $(candidate 251) = ccli ]]
-    [[ $(candidate 426) = cdxxvi ]]
-    [[ $(candidate 500) = d ]]
-    [[ $(candidate 1) = i ]]
-    [[ $(candidate 4) = iv ]]
-    [[ $(candidate 43) = xliii ]]
-    [[ $(candidate 90) = xc ]]
-    [[ $(candidate 94) = xciv ]]
-    [[ $(candidate 532) = dxxxii ]]
-    [[ $(candidate 900) = cm ]]
-    [[ $(candidate 994) = cmxciv ]]
-    [[ $(candidate 1000) = m ]]
+    [[ $(candidate "19") = "xix" ]]
+    [[ $(candidate "152") = "clii" ]]
+    [[ $(candidate "251") = "ccli" ]]
+    [[ $(candidate "426") = "cdxxvi" ]]
+    [[ $(candidate "500") = "d" ]]
+    [[ $(candidate "1") = "i" ]]
+    [[ $(candidate "4") = "iv" ]]
+    [[ $(candidate "43") = "xliii" ]]
+    [[ $(candidate "90") = "xc" ]]
+    [[ $(candidate "94") = "xciv" ]]
+    [[ $(candidate "532") = "dxxxii" ]]
+    [[ $(candidate "900") = "cm" ]]
+    [[ $(candidate "994") = "cmxciv" ]]
+    [[ $(candidate "1000") = "m" ]]
 }
 
 run_test

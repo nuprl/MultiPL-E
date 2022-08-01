@@ -105,6 +105,7 @@ candidate() {
     sorted_list_sum "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "aa a aaa") = "aa" ]]
     [[ $(candidate "school AI asdf b") = "AI asdf school" ]]

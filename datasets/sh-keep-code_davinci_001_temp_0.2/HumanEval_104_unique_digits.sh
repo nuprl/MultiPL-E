@@ -25,6 +25,7 @@ candidate() {
     unique_digits "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "15 33 1422 1") = "1 15 33" ]]
     [[ $(candidate "152 323 1422 10") = "" ]]

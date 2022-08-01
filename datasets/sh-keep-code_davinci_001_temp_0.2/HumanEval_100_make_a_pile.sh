@@ -29,12 +29,13 @@ candidate() {
     make_a_pile "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 3) = "3 5 7" ]]
-    [[ $(candidate 4) = "4 6 8 10" ]]
-    [[ $(candidate 5) = "5 7 9 11 13" ]]
-    [[ $(candidate 6) = "6 8 10 12 14 16" ]]
-    [[ $(candidate 8) = "8 10 12 14 16 18 20 22" ]]
+    [[ $(candidate "3") = "3 5 7" ]]
+    [[ $(candidate "4") = "4 6 8 10" ]]
+    [[ $(candidate "5") = "5 7 9 11 13" ]]
+    [[ $(candidate "6") = "6 8 10 12 14 16" ]]
+    [[ $(candidate "8") = "8 10 12 14 16 18 20 22" ]]
 }
 
 run_test

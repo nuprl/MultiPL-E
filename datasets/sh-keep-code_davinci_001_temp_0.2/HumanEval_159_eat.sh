@@ -39,13 +39,14 @@ candidate() {
     eat "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 5 6 10) = "11 4" ]]
-    [[ $(candidate 4 8 9) = "12 1" ]]
-    [[ $(candidate 1 10 10) = "11 0" ]]
-    [[ $(candidate 2 11 5) = "7 0" ]]
-    [[ $(candidate 4 5 7) = "9 2" ]]
-    [[ $(candidate 4 5 1) = "5 0" ]]
+    [[ $(candidate "5" "6" "10") = "11 4" ]]
+    [[ $(candidate "4" "8" "9") = "12 1" ]]
+    [[ $(candidate "1" "10" "10") = "11 0" ]]
+    [[ $(candidate "2" "11" "5") = "7 0" ]]
+    [[ $(candidate "4" "5" "7") = "9 2" ]]
+    [[ $(candidate "4" "5" "1") = "5 0" ]]
 }
 
 run_test

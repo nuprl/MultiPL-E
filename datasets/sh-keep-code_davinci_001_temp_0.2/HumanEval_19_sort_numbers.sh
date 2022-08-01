@@ -17,9 +17,10 @@ candidate() {
     sort_numbers "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "") = "" ]]
-    [[ $(candidate three) = three ]]
+    [[ $(candidate "three") = "three" ]]
     [[ $(candidate "three five nine") = "three five nine" ]]
     [[ $(candidate "five zero four seven nine eight") = "zero four five seven eight nine" ]]
     [[ $(candidate "six five four three two one zero") = "zero one two three four five six" ]]

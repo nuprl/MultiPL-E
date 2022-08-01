@@ -41,16 +41,17 @@ candidate() {
     reverse_delete "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate abcde ae) = "bcd false" ]]
-    [[ $(candidate abcdef b) = "acdef false" ]]
-    [[ $(candidate abcdedcba ab) = "cdedc true" ]]
-    [[ $(candidate dwik w) = "dik false" ]]
-    [[ $(candidate a a) = " true" ]]
-    [[ $(candidate abcdedcba "") = "abcdedcba true" ]]
-    [[ $(candidate abcdedcba v) = "abcdedcba true" ]]
-    [[ $(candidate vabba v) = "abba true" ]]
-    [[ $(candidate mamma mia) = " true" ]]
+    [[ $(candidate "abcde" "ae") = "bcd false" ]]
+    [[ $(candidate "abcdef" "b") = "acdef false" ]]
+    [[ $(candidate "abcdedcba" "ab") = "cdedc true" ]]
+    [[ $(candidate "dwik" "w") = "dik false" ]]
+    [[ $(candidate "a" "a") = " true" ]]
+    [[ $(candidate "abcdedcba" "") = "abcdedcba true" ]]
+    [[ $(candidate "abcdedcba" "v") = "abcdedcba true" ]]
+    [[ $(candidate "vabba" "v") = "abba true" ]]
+    [[ $(candidate "mamma" "mia") = " true" ]]
 }
 
 run_test

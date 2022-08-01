@@ -23,6 +23,7 @@ candidate() {
     rolling_max "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "") = "" ]]
     [[ $(candidate "1 2 3 4") = "1 2 3 4" ]]

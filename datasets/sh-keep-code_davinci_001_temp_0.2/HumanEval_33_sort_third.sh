@@ -26,6 +26,7 @@ candidate() {
     sort_third "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "5 6 3 4 8 9 2") = "2 6 3 4 8 9 5" ]]
     [[ $(candidate "5 8 3 4 6 9 2") = "2 8 3 4 6 9 5" ]]

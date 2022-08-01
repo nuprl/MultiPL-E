@@ -35,6 +35,7 @@ candidate() {
     parse_music "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "") = "" ]]
     [[ $(candidate "o o o o") = "4 4 4 4" ]]

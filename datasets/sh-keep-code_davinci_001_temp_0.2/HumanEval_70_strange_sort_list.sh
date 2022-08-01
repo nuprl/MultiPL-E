@@ -97,6 +97,7 @@ candidate() {
     strange_sort_list "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "1 2 3 4") = "1 4 2 3" ]]
     [[ $(candidate "5 6 7 8 9") = "5 9 6 8 7" ]]

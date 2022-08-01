@@ -37,14 +37,15 @@ candidate() {
     words_in_sentence "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "This is a test") = is ]]
+    [[ $(candidate "This is a test") = "is" ]]
     [[ $(candidate "lets go for swimming") = "go for" ]]
     [[ $(candidate "there is no place available here") = "there is no place" ]]
     [[ $(candidate "Hi I am Hussein") = "Hi am Hussein" ]]
     [[ $(candidate "go for it") = "go for it" ]]
-    [[ $(candidate here) = "" ]]
-    [[ $(candidate "here is") = is ]]
+    [[ $(candidate "here") = "" ]]
+    [[ $(candidate "here is") = "is" ]]
 }
 
 run_test

@@ -40,14 +40,15 @@ candidate() {
     exchange "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "1 2 3 4" "1 2 3 4") = YES ]]
-    [[ $(candidate "1 2 3 4" "1 5 3 4") = NO ]]
-    [[ $(candidate "1 2 3 4" "2 1 4 3") = YES ]]
-    [[ $(candidate "5 7 3" "2 6 4") = YES ]]
-    [[ $(candidate "5 7 3" "2 6 3") = NO ]]
-    [[ $(candidate "3 2 6 1 8 9" "3 5 5 1 1 1") = NO ]]
-    [[ $(candidate "100 200" "200 200") = YES ]]
+    [[ $(candidate "1 2 3 4" "1 2 3 4") = "YES" ]]
+    [[ $(candidate "1 2 3 4" "1 5 3 4") = "NO" ]]
+    [[ $(candidate "1 2 3 4" "2 1 4 3") = "YES" ]]
+    [[ $(candidate "5 7 3" "2 6 4") = "YES" ]]
+    [[ $(candidate "5 7 3" "2 6 3") = "NO" ]]
+    [[ $(candidate "3 2 6 1 8 9" "3 5 5 1 1 1") = "NO" ]]
+    [[ $(candidate "100 200" "200 200") = "YES" ]]
 }
 
 run_test

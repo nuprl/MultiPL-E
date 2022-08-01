@@ -27,18 +27,19 @@ candidate() {
     right_angle_triangle "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 3 4 5) = true ]]
-    [[ $(candidate 1 2 3) = false ]]
-    [[ $(candidate 10 6 8) = true ]]
-    [[ $(candidate 2 2 2) = false ]]
-    [[ $(candidate 7 24 25) = true ]]
-    [[ $(candidate 10 5 7) = false ]]
-    [[ $(candidate 5 12 13) = true ]]
-    [[ $(candidate 15 8 17) = true ]]
-    [[ $(candidate 48 55 73) = true ]]
-    [[ $(candidate 1 1 1) = false ]]
-    [[ $(candidate 2 2 10) = false ]]
+    [[ $(candidate "3" "4" "5") = "true" ]]
+    [[ $(candidate "1" "2" "3") = "false" ]]
+    [[ $(candidate "10" "6" "8") = "true" ]]
+    [[ $(candidate "2" "2" "2") = "false" ]]
+    [[ $(candidate "7" "24" "25") = "true" ]]
+    [[ $(candidate "10" "5" "7") = "false" ]]
+    [[ $(candidate "5" "12" "13") = "true" ]]
+    [[ $(candidate "15" "8" "17") = "true" ]]
+    [[ $(candidate "48" "55" "73") = "true" ]]
+    [[ $(candidate "1" "1" "1") = "false" ]]
+    [[ $(candidate "2" "2" "10") = "false" ]]
 }
 
 run_test

@@ -46,14 +46,15 @@ candidate() {
     check_dict_case "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "p,pineapple\nb,banana") = true ]]
-    [[ $(candidate "p,pineapple\nA,banana\nB,banana") = false ]]
-    [[ $(candidate "p,pineapple\n5,banana\na,apple") = false ]]
-    [[ $(candidate "Name,John\nAge,36\nCity,Houston") = false ]]
-    [[ $(candidate "STATE,NC\nZIP,12345") = true ]]
-    [[ $(candidate "fruit,Orange\ntaste,Sweet") = true ]]
-    [[ $(candidate "") = false ]]
+    [[ $(candidate "p,pineapple\nb,banana") = "true" ]]
+    [[ $(candidate "p,pineapple\nA,banana\nB,banana") = "false" ]]
+    [[ $(candidate "p,pineapple\n5,banana\na,apple") = "false" ]]
+    [[ $(candidate "Name,John\nAge,36\nCity,Houston") = "false" ]]
+    [[ $(candidate "STATE,NC\nZIP,12345") = "true" ]]
+    [[ $(candidate "fruit,Orange\ntaste,Sweet") = "true" ]]
+    [[ $(candidate "") = "false" ]]
 }
 
 run_test

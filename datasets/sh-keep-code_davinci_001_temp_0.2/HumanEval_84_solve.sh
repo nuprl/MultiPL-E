@@ -27,12 +27,13 @@ candidate() {
     solve "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 1000) = 1 ]]
-    [[ $(candidate 150) = 110 ]]
-    [[ $(candidate 147) = 1100 ]]
-    [[ $(candidate 333) = 1001 ]]
-    [[ $(candidate 963) = 10010 ]]
+    [[ $(candidate "1000") = "1" ]]
+    [[ $(candidate "150") = "110" ]]
+    [[ $(candidate "147") = "1100" ]]
+    [[ $(candidate "333") = "1001" ]]
+    [[ $(candidate "963") = "10010" ]]
 }
 
 run_test

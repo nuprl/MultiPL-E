@@ -22,6 +22,7 @@ candidate() {
     sum_product "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "") = "0 1" ]]
     [[ $(candidate "1 1 1") = "3 1" ]]

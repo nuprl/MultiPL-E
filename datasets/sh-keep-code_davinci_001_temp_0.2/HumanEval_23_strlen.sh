@@ -15,10 +15,11 @@ candidate() {
     strlen "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "") = 0 ]]
-    [[ $(candidate x) = 1 ]]
-    [[ $(candidate asdasnakj) = 9 ]]
+    [[ $(candidate "") = "0" ]]
+    [[ $(candidate "x") = "1" ]]
+    [[ $(candidate "asdasnakj") = "9" ]]
 }
 
 run_test

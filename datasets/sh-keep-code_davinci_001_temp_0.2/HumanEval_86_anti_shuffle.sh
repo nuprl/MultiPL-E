@@ -20,11 +20,12 @@ candidate() {
     anti_shuffle "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate Hi) = Hi ]]
-    [[ $(candidate hello) = ehllo ]]
-    [[ $(candidate number) = bemnru ]]
-    [[ $(candidate abcd) = abcd ]]
+    [[ $(candidate "Hi") = "Hi" ]]
+    [[ $(candidate "hello") = "ehllo" ]]
+    [[ $(candidate "number") = "bemnru" ]]
+    [[ $(candidate "abcd") = "abcd" ]]
     [[ $(candidate "Hello World\!\!\!") = "Hello \!\!\!Wdlor" ]]
     [[ $(candidate "") = "" ]]
     [[ $(candidate "Hi. My name is Mister Robot. How are you?") = ".Hi My aemn is Meirst .Rboot How aer ?ouy" ]]

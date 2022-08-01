@@ -40,12 +40,13 @@ candidate() {
     car_race_collision "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 2) = 4 ]]
-    [[ $(candidate 3) = 9 ]]
-    [[ $(candidate 4) = 16 ]]
-    [[ $(candidate 8) = 64 ]]
-    [[ $(candidate 10) = 100 ]]
+    [[ $(candidate "2") = "4" ]]
+    [[ $(candidate "3") = "9" ]]
+    [[ $(candidate "4") = "16" ]]
+    [[ $(candidate "8") = "64" ]]
+    [[ $(candidate "10") = "100" ]]
 }
 
 run_test

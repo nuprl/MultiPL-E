@@ -55,12 +55,13 @@ candidate() {
     make_palindrome "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "") = "" ]]
-    [[ $(candidate x) = x ]]
-    [[ $(candidate xyz) = xyzyx ]]
-    [[ $(candidate xyx) = xyx ]]
-    [[ $(candidate jerry) = jerryrrej ]]
+    [[ $(candidate "x") = "x" ]]
+    [[ $(candidate "xyz") = "xyzyx" ]]
+    [[ $(candidate "xyx") = "xyx" ]]
+    [[ $(candidate "jerry") = "jerryrrej" ]]
 }
 
 run_test

@@ -27,14 +27,15 @@ candidate() {
     next_smallest "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "1 2 3 4 5") = 2 ]]
-    [[ $(candidate "5 1 4 3 2") = 2 ]]
-    [[ $(candidate "") = None ]]
-    [[ $(candidate "1 1") = None ]]
-    [[ $(candidate "1 1 1 1 0") = 1 ]]
-    [[ $(candidate "1 1") = None ]]
-    [[ $(candidate "-35 34 12 -45") = -35 ]]
+    [[ $(candidate "1 2 3 4 5") = "2" ]]
+    [[ $(candidate "5 1 4 3 2") = "2" ]]
+    [[ $(candidate "") = "None" ]]
+    [[ $(candidate "1 1") = "None" ]]
+    [[ $(candidate "1 1 1 1 0") = "1" ]]
+    [[ $(candidate "1 1") = "None" ]]
+    [[ $(candidate "-35 34 12 -45") = "-35" ]]
 }
 
 run_test

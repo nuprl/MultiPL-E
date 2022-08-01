@@ -38,16 +38,17 @@ candidate() {
     Strongest_Extension "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate Watashi "tEN niNE eIGHt8OKe") = Watashi.eIGHt8OKe ]]
-    [[ $(candidate Boku123 "nani NazeDa YEs.WeCaNe 32145tggg") = Boku123.YEs.WeCaNe ]]
-    [[ $(candidate __YESIMHERE "t eMptY nothing zeR00 NuLl__ 123NoooneB321") = __YESIMHERE.NuLl__ ]]
-    [[ $(candidate K "Ta TAR t234An cosSo") = K.TAR ]]
-    [[ $(candidate __HAHA "Tab 123 781345 -_-") = __HAHA.123 ]]
-    [[ $(candidate YameRore "HhAas okIWILL123 WorkOut Fails -_-") = YameRore.okIWILL123 ]]
-    [[ $(candidate finNNalLLly "Die NowW Wow WoW") = finNNalLLly.WoW ]]
-    [[ $(candidate _ "Bb 91245") = _.Bb ]]
-    [[ $(candidate Sp "671235 Bb") = Sp.671235 ]]
+    [[ $(candidate "Watashi" "tEN niNE eIGHt8OKe") = "Watashi.eIGHt8OKe" ]]
+    [[ $(candidate "Boku123" "nani NazeDa YEs.WeCaNe 32145tggg") = "Boku123.YEs.WeCaNe" ]]
+    [[ $(candidate "__YESIMHERE" "t eMptY nothing zeR00 NuLl__ 123NoooneB321") = "__YESIMHERE.NuLl__" ]]
+    [[ $(candidate "K" "Ta TAR t234An cosSo") = "K.TAR" ]]
+    [[ $(candidate "__HAHA" "Tab 123 781345 -_-") = "__HAHA.123" ]]
+    [[ $(candidate "YameRore" "HhAas okIWILL123 WorkOut Fails -_-") = "YameRore.okIWILL123" ]]
+    [[ $(candidate "finNNalLLly" "Die NowW Wow WoW") = "finNNalLLly.WoW" ]]
+    [[ $(candidate "_" "Bb 91245") = "_.Bb" ]]
+    [[ $(candidate "Sp" "671235 Bb") = "Sp.671235" ]]
 }
 
 run_test

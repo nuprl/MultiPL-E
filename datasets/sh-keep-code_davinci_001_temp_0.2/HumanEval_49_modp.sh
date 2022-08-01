@@ -32,14 +32,15 @@ candidate() {
     modp "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 3 5) = 3 ]]
-    [[ $(candidate 1101 101) = 2 ]]
-    [[ $(candidate 0 101) = 1 ]]
-    [[ $(candidate 3 11) = 8 ]]
-    [[ $(candidate 100 101) = 1 ]]
-    [[ $(candidate 30 5) = 4 ]]
-    [[ $(candidate 31 5) = 3 ]]
+    [[ $(candidate "3" "5") = "3" ]]
+    [[ $(candidate "1101" "101") = "2" ]]
+    [[ $(candidate "0" "101") = "1" ]]
+    [[ $(candidate "3" "11") = "8" ]]
+    [[ $(candidate "100" "101") = "1" ]]
+    [[ $(candidate "30" "5") = "4" ]]
+    [[ $(candidate "31" "5") = "3" ]]
 }
 
 run_test

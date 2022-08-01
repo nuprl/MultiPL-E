@@ -49,6 +49,7 @@ candidate() {
     sort_array "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "") = "" ]]
     [[ $(candidate "5") = "5" ]]

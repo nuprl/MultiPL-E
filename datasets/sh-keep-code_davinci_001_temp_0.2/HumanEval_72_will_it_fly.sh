@@ -38,13 +38,14 @@ candidate() {
     will_it_fly "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "3 2 3" 9) = true ]]
-    [[ $(candidate "1 2" 5) = false ]]
-    [[ $(candidate "3" 5) = true ]]
-    [[ $(candidate "3 2 3" 1) = false ]]
-    [[ $(candidate "1 2 3" 6) = false ]]
-    [[ $(candidate "5" 5) = true ]]
+    [[ $(candidate "3 2 3" "9") = "true" ]]
+    [[ $(candidate "1 2" "5") = "false" ]]
+    [[ $(candidate "3" "5") = "true" ]]
+    [[ $(candidate "3 2 3" "1") = "false" ]]
+    [[ $(candidate "1 2 3" "6") = "false" ]]
+    [[ $(candidate "5" "5") = "true" ]]
 }
 
 run_test

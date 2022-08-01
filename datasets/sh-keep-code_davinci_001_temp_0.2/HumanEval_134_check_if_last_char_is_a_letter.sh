@@ -23,17 +23,18 @@ candidate() {
     check_if_last_char_is_a_letter "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate apple) = false ]]
-    [[ $(candidate "apple pi e") = true ]]
-    [[ $(candidate eeeee) = false ]]
-    [[ $(candidate A) = true ]]
-    [[ $(candidate "Pumpkin pie ") = false ]]
-    [[ $(candidate "Pumpkin pie 1") = false ]]
-    [[ $(candidate "") = false ]]
-    [[ $(candidate "eeeee e ") = false ]]
-    [[ $(candidate "apple pie") = false ]]
-    [[ $(candidate "apple pi e ") = false ]]
+    [[ $(candidate "apple") = "false" ]]
+    [[ $(candidate "apple pi e") = "true" ]]
+    [[ $(candidate "eeeee") = "false" ]]
+    [[ $(candidate "A") = "true" ]]
+    [[ $(candidate "Pumpkin pie ") = "false" ]]
+    [[ $(candidate "Pumpkin pie 1") = "false" ]]
+    [[ $(candidate "") = "false" ]]
+    [[ $(candidate "eeeee e ") = "false" ]]
+    [[ $(candidate "apple pie") = "false" ]]
+    [[ $(candidate "apple pi e ") = "false" ]]
 }
 
 run_test

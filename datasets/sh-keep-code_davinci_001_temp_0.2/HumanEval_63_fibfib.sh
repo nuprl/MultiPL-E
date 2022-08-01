@@ -33,14 +33,15 @@ candidate() {
     fibfib "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 2) = 1 ]]
-    [[ $(candidate 1) = 0 ]]
-    [[ $(candidate 5) = 4 ]]
-    [[ $(candidate 8) = 24 ]]
-    [[ $(candidate 10) = 81 ]]
-    [[ $(candidate 12) = 274 ]]
-    [[ $(candidate 14) = 927 ]]
+    [[ $(candidate "2") = "1" ]]
+    [[ $(candidate "1") = "0" ]]
+    [[ $(candidate "5") = "4" ]]
+    [[ $(candidate "8") = "24" ]]
+    [[ $(candidate "10") = "81" ]]
+    [[ $(candidate "12") = "274" ]]
+    [[ $(candidate "14") = "927" ]]
 }
 
 run_test

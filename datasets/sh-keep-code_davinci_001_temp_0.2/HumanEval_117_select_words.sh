@@ -66,14 +66,15 @@ candidate() {
     select_words "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "Mary had a little lamb" 4) = "little" ]]
-    [[ $(candidate "Mary had a little lamb" 3) = "Mary lamb" ]]
-    [[ $(candidate "simple white space" 2) = "" ]]
-    [[ $(candidate "Hello world" 4) = "world" ]]
-    [[ $(candidate "Uncle sam" 3) = "Uncle" ]]
-    [[ $(candidate "" 4) = "" ]]
-    [[ $(candidate "a b c d e f" 1) = "b c d f" ]]
+    [[ $(candidate "Mary had a little lamb" "4") = "little" ]]
+    [[ $(candidate "Mary had a little lamb" "3") = "Mary lamb" ]]
+    [[ $(candidate "simple white space" "2") = "" ]]
+    [[ $(candidate "Hello world" "4") = "world" ]]
+    [[ $(candidate "Uncle sam" "3") = "Uncle" ]]
+    [[ $(candidate "" "4") = "" ]]
+    [[ $(candidate "a b c d e f" "1") = "b c d f" ]]
 }
 
 run_test

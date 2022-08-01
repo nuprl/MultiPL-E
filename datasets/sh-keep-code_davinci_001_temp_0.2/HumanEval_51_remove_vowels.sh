@@ -27,14 +27,17 @@ candidate() {
     remove_vowels "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "") = "" ]]
-    [[ $(candidate "abcdef\nghijklm") = "bcdf\nghjklm" ]]
-    [[ $(candidate fedcba) = fdcb ]]
-    [[ $(candidate eeeee) = "" ]]
-    [[ $(candidate acBAA) = cB ]]
-    [[ $(candidate EcBOO) = cB ]]
-    [[ $(candidate ybcd) = ybcd ]]
+    [[ $(candidate "abcdef\
+ghijklm") = "bcdf\
+ghjklm" ]]
+    [[ $(candidate "fedcba") = "fdcb" ]]
+    [[ $(candidate "eeeee") = "" ]]
+    [[ $(candidate "acBAA") = "cB" ]]
+    [[ $(candidate "EcBOO") = "cB" ]]
+    [[ $(candidate "ybcd") = "ybcd" ]]
 }
 
 run_test

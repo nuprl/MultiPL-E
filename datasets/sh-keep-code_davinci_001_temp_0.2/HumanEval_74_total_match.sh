@@ -56,6 +56,7 @@ candidate() {
     total_match "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "" "") = "" ]]
     [[ $(candidate "hi admin" "hi hi") = "hi hi" ]]

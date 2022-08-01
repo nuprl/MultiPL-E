@@ -21,10 +21,11 @@ candidate() {
     string_sequence "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 0) = 0 ]]
-    [[ $(candidate 3) = "0 1 2 3" ]]
-    [[ $(candidate 10) = "0 1 2 3 4 5 6 7 8 9 10" ]]
+    [[ $(candidate "0") = "0" ]]
+    [[ $(candidate "3") = "0 1 2 3" ]]
+    [[ $(candidate "10") = "0 1 2 3 4 5 6 7 8 9 10" ]]
 }
 
 run_test

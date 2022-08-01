@@ -26,15 +26,16 @@ candidate() {
     iscube "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 1) = true ]]
-    [[ $(candidate 2) = false ]]
-    [[ $(candidate -1) = true ]]
-    [[ $(candidate 64) = true ]]
-    [[ $(candidate 180) = false ]]
-    [[ $(candidate 1000) = true ]]
-    [[ $(candidate 0) = true ]]
-    [[ $(candidate 1729) = false ]]
+    [[ $(candidate "1") = "true" ]]
+    [[ $(candidate "2") = "false" ]]
+    [[ $(candidate "-1") = "true" ]]
+    [[ $(candidate "64") = "true" ]]
+    [[ $(candidate "180") = "false" ]]
+    [[ $(candidate "1000") = "true" ]]
+    [[ $(candidate "0") = "true" ]]
+    [[ $(candidate "1729") = "false" ]]
 }
 
 run_test

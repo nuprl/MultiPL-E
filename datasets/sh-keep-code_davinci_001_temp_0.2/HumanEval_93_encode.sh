@@ -44,10 +44,11 @@ candidate() {
     encode "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate TEST) = tgst ]]
-    [[ $(candidate Mudasir) = mWDCSKR ]]
-    [[ $(candidate YES) = ygs ]]
+    [[ $(candidate "TEST") = "tgst" ]]
+    [[ $(candidate "Mudasir") = "mWDCSKR" ]]
+    [[ $(candidate "YES") = "ygs" ]]
     [[ $(candidate "This is a message") = "tHKS KS C MGSSCGG" ]]
     [[ $(candidate "I DoNt KnOw WhAt tO WrItE") = "k dQnT kNqW wHcT Tq wRkTg" ]]
 }

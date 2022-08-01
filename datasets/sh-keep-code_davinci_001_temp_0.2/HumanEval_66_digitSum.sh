@@ -27,15 +27,16 @@ candidate() {
     digitSum "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "") = 0 ]]
-    [[ $(candidate abAB) = 131 ]]
-    [[ $(candidate abcCd) = 67 ]]
-    [[ $(candidate helloE) = 69 ]]
-    [[ $(candidate woArBld) = 131 ]]
-    [[ $(candidate aAaaaXa) = 153 ]]
-    [[ $(candidate " How are yOu?") = 151 ]]
-    [[ $(candidate "You arE Very Smart") = 327 ]]
+    [[ $(candidate "") = "0" ]]
+    [[ $(candidate "abAB") = "131" ]]
+    [[ $(candidate "abcCd") = "67" ]]
+    [[ $(candidate "helloE") = "69" ]]
+    [[ $(candidate "woArBld") = "131" ]]
+    [[ $(candidate "aAaaaXa") = "153" ]]
+    [[ $(candidate " How are yOu?") = "151" ]]
+    [[ $(candidate "You arE Very Smart") = "327" ]]
 }
 
 run_test

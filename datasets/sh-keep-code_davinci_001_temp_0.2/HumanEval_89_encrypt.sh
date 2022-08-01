@@ -20,15 +20,16 @@ candidate() {
     encrypt "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate hi) = lm ]]
-    [[ $(candidate asdfghjkl) = ewhjklnop ]]
-    [[ $(candidate gf) = kj ]]
-    [[ $(candidate et) = ix ]]
-    [[ $(candidate faewfawefaewg) = jeiajeaijeiak ]]
-    [[ $(candidate hellomyfriend) = lippsqcjvmirh ]]
-    [[ $(candidate dxzdlmnilfuhmilufhlihufnmlimnufhlimnufhfucufh) = hbdhpqrmpjylqmpyjlpmlyjrqpmqryjlpmqryjljygyjl ]]
-    [[ $(candidate a) = e ]]
+    [[ $(candidate "hi") = "lm" ]]
+    [[ $(candidate "asdfghjkl") = "ewhjklnop" ]]
+    [[ $(candidate "gf") = "kj" ]]
+    [[ $(candidate "et") = "ix" ]]
+    [[ $(candidate "faewfawefaewg") = "jeiajeaijeiak" ]]
+    [[ $(candidate "hellomyfriend") = "lippsqcjvmirh" ]]
+    [[ $(candidate "dxzdlmnilfuhmilufhlihufnmlimnufhlimnufhfucufh") = "hbdhpqrmpjylqmpyjlpmlyjrqpmqryjlpmqryjljygyjl" ]]
+    [[ $(candidate "a") = "e" ]]
 }
 
 run_test

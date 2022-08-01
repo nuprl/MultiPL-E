@@ -16,15 +16,16 @@ candidate() {
     is_equal_to_sum_even "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 4) = false ]]
-    [[ $(candidate 6) = false ]]
-    [[ $(candidate 8) = true ]]
-    [[ $(candidate 10) = true ]]
-    [[ $(candidate 11) = false ]]
-    [[ $(candidate 12) = true ]]
-    [[ $(candidate 13) = false ]]
-    [[ $(candidate 16) = true ]]
+    [[ $(candidate "4") = "false" ]]
+    [[ $(candidate "6") = "false" ]]
+    [[ $(candidate "8") = "true" ]]
+    [[ $(candidate "10") = "true" ]]
+    [[ $(candidate "11") = "false" ]]
+    [[ $(candidate "12") = "true" ]]
+    [[ $(candidate "13") = "false" ]]
+    [[ $(candidate "16") = "true" ]]
 }
 
 run_test

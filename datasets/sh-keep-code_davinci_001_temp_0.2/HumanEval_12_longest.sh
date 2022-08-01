@@ -26,10 +26,11 @@ candidate() {
     longest "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "") = None ]]
-    [[ $(candidate "x y z") = x ]]
-    [[ $(candidate "x yyy zzzz www kkkk abc") = zzzz ]]
+    [[ $(candidate "") = "None" ]]
+    [[ $(candidate "x y z") = "x" ]]
+    [[ $(candidate "x yyy zzzz www kkkk abc") = "zzzz" ]]
 }
 
 run_test

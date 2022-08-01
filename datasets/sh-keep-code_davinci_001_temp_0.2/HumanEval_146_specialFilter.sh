@@ -23,14 +23,15 @@ candidate() {
     specialFilter "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "5 -2 1 -5") = 0 ]]
-    [[ $(candidate "15 -73 14 -15") = 1 ]]
-    [[ $(candidate "33 -2 -3 45 21 109") = 2 ]]
-    [[ $(candidate "43 -12 93 125 121 109") = 4 ]]
-    [[ $(candidate "71 -2 -33 75 21 19") = 3 ]]
-    [[ $(candidate "1") = 0 ]]
-    [[ $(candidate "") = 0 ]]
+    [[ $(candidate "5 -2 1 -5") = "0" ]]
+    [[ $(candidate "15 -73 14 -15") = "1" ]]
+    [[ $(candidate "33 -2 -3 45 21 109") = "2" ]]
+    [[ $(candidate "43 -12 93 125 121 109") = "4" ]]
+    [[ $(candidate "71 -2 -33 75 21 19") = "3" ]]
+    [[ $(candidate "1") = "0" ]]
+    [[ $(candidate "") = "0" ]]
 }
 
 run_test

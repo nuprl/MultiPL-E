@@ -35,6 +35,7 @@ candidate() {
     find_closest_elements "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "1.0 2.0 3.9 4.0 5.0 2.2") = "3.9 4.0" ]]
     [[ $(candidate "1.0 2.0 5.9 4.0 5.0") = "5.0 5.9" ]]

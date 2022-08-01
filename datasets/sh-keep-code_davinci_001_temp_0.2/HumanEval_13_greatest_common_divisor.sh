@@ -22,11 +22,12 @@ candidate() {
     greatest_common_divisor "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 3 7) = 1 ]]
-    [[ $(candidate 10 15) = 5 ]]
-    [[ $(candidate 49 14) = 7 ]]
-    [[ $(candidate 144 60) = 12 ]]
+    [[ $(candidate "3" "7") = "1" ]]
+    [[ $(candidate "10" "15") = "5" ]]
+    [[ $(candidate "49" "14") = "7" ]]
+    [[ $(candidate "144" "60") = "12" ]]
 }
 
 run_test

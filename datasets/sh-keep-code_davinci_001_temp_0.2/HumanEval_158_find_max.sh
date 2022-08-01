@@ -28,17 +28,18 @@ candidate() {
     find_max "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "name of string") = string ]]
-    [[ $(candidate "name enam game") = enam ]]
-    [[ $(candidate "aaaaaaa bb cc") = aaaaaaa ]]
-    [[ $(candidate "abc cba") = abc ]]
-    [[ $(candidate "play this game of footbott") = footbott ]]
-    [[ $(candidate "we are gonna rock") = gonna ]]
-    [[ $(candidate "we are a mad nation") = nation ]]
-    [[ $(candidate "this is a prrk") = this ]]
-    [[ $(candidate "b") = b ]]
-    [[ $(candidate "play play play") = play ]]
+    [[ $(candidate "name of string") = "string" ]]
+    [[ $(candidate "name enam game") = "enam" ]]
+    [[ $(candidate "aaaaaaa bb cc") = "aaaaaaa" ]]
+    [[ $(candidate "abc cba") = "abc" ]]
+    [[ $(candidate "play this game of footbott") = "footbott" ]]
+    [[ $(candidate "we are gonna rock") = "gonna" ]]
+    [[ $(candidate "we are a mad nation") = "nation" ]]
+    [[ $(candidate "this is a prrk") = "this" ]]
+    [[ $(candidate "b") = "b" ]]
+    [[ $(candidate "play play play") = "play" ]]
 }
 
 run_test

@@ -28,17 +28,18 @@ candidate() {
     is_multiply_prime "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 5) = false ]]
-    [[ $(candidate 30) = true ]]
-    [[ $(candidate 8) = true ]]
-    [[ $(candidate 10) = false ]]
-    [[ $(candidate 125) = true ]]
-    [[ $(candidate 105) = true ]]
-    [[ $(candidate 126) = false ]]
-    [[ $(candidate 729) = false ]]
-    [[ $(candidate 891) = false ]]
-    [[ $(candidate 1001) = true ]]
+    [[ $(candidate "5") = "false" ]]
+    [[ $(candidate "30") = "true" ]]
+    [[ $(candidate "8") = "true" ]]
+    [[ $(candidate "10") = "false" ]]
+    [[ $(candidate "125") = "true" ]]
+    [[ $(candidate "105") = "true" ]]
+    [[ $(candidate "126") = "false" ]]
+    [[ $(candidate "729") = "false" ]]
+    [[ $(candidate "891") = "false" ]]
+    [[ $(candidate "1001") = "true" ]]
 }
 
 run_test

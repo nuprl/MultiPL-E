@@ -101,6 +101,7 @@ candidate() {
     histogram "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "a b b a") = "a,2\nb,2" ]]
     [[ $(candidate "a b c a b") = "a,2\nb,2" ]]
@@ -109,7 +110,7 @@ run_test() {
     [[ $(candidate "b b b b a") = "b,4" ]]
     [[ $(candidate "r t g") = "r,1\nt,1\ng,1" ]]
     [[ $(candidate "") = "" ]]
-    [[ $(candidate a) = "a,1" ]]
+    [[ $(candidate "a") = "a,1" ]]
 }
 
 run_test

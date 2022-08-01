@@ -39,20 +39,21 @@ candidate() {
     is_sorted "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "5") = true ]]
-    [[ $(candidate "1 2 3 4 5") = true ]]
-    [[ $(candidate "1 3 2 4 5") = false ]]
-    [[ $(candidate "1 2 3 4 5 6") = true ]]
-    [[ $(candidate "1 2 3 4 5 6 7") = true ]]
-    [[ $(candidate "1 3 2 4 5 6 7") = false ]]
-    [[ $(candidate "") = true ]]
-    [[ $(candidate "1") = true ]]
-    [[ $(candidate "3 2 1") = false ]]
-    [[ $(candidate "1 2 2 2 3 4") = false ]]
-    [[ $(candidate "1 2 3 3 3 4") = false ]]
-    [[ $(candidate "1 2 2 3 3 4") = true ]]
-    [[ $(candidate "1 2 3 4") = true ]]
+    [[ $(candidate "5") = "true" ]]
+    [[ $(candidate "1 2 3 4 5") = "true" ]]
+    [[ $(candidate "1 3 2 4 5") = "false" ]]
+    [[ $(candidate "1 2 3 4 5 6") = "true" ]]
+    [[ $(candidate "1 2 3 4 5 6 7") = "true" ]]
+    [[ $(candidate "1 3 2 4 5 6 7") = "false" ]]
+    [[ $(candidate "") = "true" ]]
+    [[ $(candidate "1") = "true" ]]
+    [[ $(candidate "3 2 1") = "false" ]]
+    [[ $(candidate "1 2 2 2 3 4") = "false" ]]
+    [[ $(candidate "1 2 3 3 3 4") = "false" ]]
+    [[ $(candidate "1 2 2 3 3 4") = "true" ]]
+    [[ $(candidate "1 2 3 4") = "true" ]]
 }
 
 run_test

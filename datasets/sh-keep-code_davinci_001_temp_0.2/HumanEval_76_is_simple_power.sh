@@ -32,17 +32,18 @@ candidate() {
     is_simple_power "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 16 2) = true ]]
-    [[ $(candidate 143214 16) = false ]]
-    [[ $(candidate 4 2) = true ]]
-    [[ $(candidate 9 3) = true ]]
-    [[ $(candidate 16 4) = true ]]
-    [[ $(candidate 24 2) = false ]]
-    [[ $(candidate 128 4) = false ]]
-    [[ $(candidate 12 6) = false ]]
-    [[ $(candidate 1 1) = true ]]
-    [[ $(candidate 1 12) = true ]]
+    [[ $(candidate "16" "2") = "true" ]]
+    [[ $(candidate "143214" "16") = "false" ]]
+    [[ $(candidate "4" "2") = "true" ]]
+    [[ $(candidate "9" "3") = "true" ]]
+    [[ $(candidate "16" "4") = "true" ]]
+    [[ $(candidate "24" "2") = "false" ]]
+    [[ $(candidate "128" "4") = "false" ]]
+    [[ $(candidate "12" "6") = "false" ]]
+    [[ $(candidate "1" "1") = "true" ]]
+    [[ $(candidate "1" "12") = "true" ]]
 }
 
 run_test

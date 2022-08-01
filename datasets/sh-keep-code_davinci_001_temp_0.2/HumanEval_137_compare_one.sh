@@ -61,15 +61,16 @@ candidate() {
     compare_one "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 1 2) = 2 ]]
-    [[ $(candidate 1 2.5) = 2.5 ]]
-    [[ $(candidate 2 3) = 3 ]]
-    [[ $(candidate 5 6) = 6 ]]
-    [[ $(candidate 1 2,3) = 2,3 ]]
-    [[ $(candidate 5,1 6) = 6 ]]
-    [[ $(candidate 1 2) = 2 ]]
-    [[ $(candidate 1 1) = None ]]
+    [[ $(candidate "1" "2") = "2" ]]
+    [[ $(candidate "1" "2.5") = "2.5" ]]
+    [[ $(candidate "2" "3") = "3" ]]
+    [[ $(candidate "5" "6") = "6" ]]
+    [[ $(candidate "1" "2,3") = "2,3" ]]
+    [[ $(candidate "5,1" "6") = "6" ]]
+    [[ $(candidate "1" "2") = "2" ]]
+    [[ $(candidate "1" "1") = "None" ]]
 }
 
 run_test

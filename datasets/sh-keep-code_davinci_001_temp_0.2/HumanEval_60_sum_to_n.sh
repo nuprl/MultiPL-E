@@ -25,12 +25,13 @@ candidate() {
     sum_to_n "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 1) = 1 ]]
-    [[ $(candidate 6) = 21 ]]
-    [[ $(candidate 11) = 66 ]]
-    [[ $(candidate 30) = 465 ]]
-    [[ $(candidate 100) = 5050 ]]
+    [[ $(candidate "1") = "1" ]]
+    [[ $(candidate "6") = "21" ]]
+    [[ $(candidate "11") = "66" ]]
+    [[ $(candidate "30") = "465" ]]
+    [[ $(candidate "100") = "5050" ]]
 }
 
 run_test

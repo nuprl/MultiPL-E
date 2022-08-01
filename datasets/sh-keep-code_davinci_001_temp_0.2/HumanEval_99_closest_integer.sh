@@ -28,12 +28,13 @@ candidate() {
     closest_integer "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 10) = 10 ]]
-    [[ $(candidate 14.5) = 15 ]]
-    [[ $(candidate -15.5) = -16 ]]
-    [[ $(candidate 15.3) = 15 ]]
-    [[ $(candidate 0) = 0 ]]
+    [[ $(candidate "10") = "10" ]]
+    [[ $(candidate "14.5") = "15" ]]
+    [[ $(candidate "-15.5") = "-16" ]]
+    [[ $(candidate "15.3") = "15" ]]
+    [[ $(candidate "0") = "0" ]]
 }
 
 run_test

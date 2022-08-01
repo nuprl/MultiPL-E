@@ -30,15 +30,16 @@ candidate() {
     split_words "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "Hello world\!") = "Hello world\!" ]]
-    [[ $(candidate Hello,world\!) = "Hello world\!" ]]
+    [[ $(candidate "Hello,world\!") = "Hello world\!" ]]
     [[ $(candidate "Hello world,\!") = "Hello world,\!" ]]
     [[ $(candidate "Hello,Hello,world \!") = "Hello,Hello,world \!" ]]
-    [[ $(candidate abcdef) = 3 ]]
-    [[ $(candidate aaabb) = 2 ]]
-    [[ $(candidate aaaBb) = 1 ]]
-    [[ $(candidate "") = 0 ]]
+    [[ $(candidate "abcdef") = "3" ]]
+    [[ $(candidate "aaabb") = "2" ]]
+    [[ $(candidate "aaaBb") = "1" ]]
+    [[ $(candidate "") = "0" ]]
 }
 
 run_test

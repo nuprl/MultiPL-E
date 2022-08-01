@@ -36,15 +36,16 @@ candidate() {
     even_odd_palindrome "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 123) = "8 13" ]]
-    [[ $(candidate 12) = "4 6" ]]
-    [[ $(candidate 3) = "1 2" ]]
-    [[ $(candidate 63) = "6 8" ]]
-    [[ $(candidate 25) = "5 6" ]]
-    [[ $(candidate 19) = "4 6" ]]
-    [[ $(candidate 9) = "4 5" ]]
-    [[ $(candidate 1) = "0 1" ]]
+    [[ $(candidate "123") = "8 13" ]]
+    [[ $(candidate "12") = "4 6" ]]
+    [[ $(candidate "3") = "1 2" ]]
+    [[ $(candidate "63") = "6 8" ]]
+    [[ $(candidate "25") = "5 6" ]]
+    [[ $(candidate "19") = "4 6" ]]
+    [[ $(candidate "9") = "4 5" ]]
+    [[ $(candidate "1") = "0 1" ]]
 }
 
 run_test

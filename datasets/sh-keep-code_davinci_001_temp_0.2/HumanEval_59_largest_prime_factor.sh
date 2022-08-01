@@ -25,12 +25,13 @@ candidate() {
     largest_prime_factor "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 15) = 5 ]]
-    [[ $(candidate 27) = 3 ]]
-    [[ $(candidate 63) = 7 ]]
-    [[ $(candidate 330) = 11 ]]
-    [[ $(candidate 13195) = 29 ]]
+    [[ $(candidate "15") = "5" ]]
+    [[ $(candidate "27") = "3" ]]
+    [[ $(candidate "63") = "7" ]]
+    [[ $(candidate "330") = "11" ]]
+    [[ $(candidate "13195") = "29" ]]
 }
 
 run_test

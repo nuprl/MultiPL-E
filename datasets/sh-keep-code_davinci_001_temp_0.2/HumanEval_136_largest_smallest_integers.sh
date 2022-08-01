@@ -40,6 +40,7 @@ candidate() {
     largest_smallest_integers "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "2 4 1 3 5 7") = "None 1" ]]
     [[ $(candidate "2 4 1 3 5 7 0") = "None 1" ]]

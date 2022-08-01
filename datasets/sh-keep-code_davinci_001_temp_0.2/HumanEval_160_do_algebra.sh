@@ -67,10 +67,11 @@ candidate() {
     do_algebra "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "** * +" "2 3 4 5") = 37 ]]
-    [[ $(candidate "+ * -" "2 3 4 5") = 9 ]]
-    [[ $(candidate "// *" "7 3 4") = 8 ]]
+    [[ $(candidate "** * +" "2 3 4 5") = "37" ]]
+    [[ $(candidate "+ * -" "2 3 4 5") = "9" ]]
+    [[ $(candidate "// *" "7 3 4") = "8" ]]
 }
 
 run_test

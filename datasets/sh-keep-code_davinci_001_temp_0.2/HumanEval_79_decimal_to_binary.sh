@@ -57,11 +57,12 @@ candidate() {
     decimal_to_binary "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 0) = db0db ]]
-    [[ $(candidate 32) = db100000db ]]
-    [[ $(candidate 103) = db1100111db ]]
-    [[ $(candidate 15) = db1111db ]]
+    [[ $(candidate "0") = "db0db" ]]
+    [[ $(candidate "32") = "db100000db" ]]
+    [[ $(candidate "103") = "db1100111db" ]]
+    [[ $(candidate "15") = "db1111db" ]]
 }
 
 run_test

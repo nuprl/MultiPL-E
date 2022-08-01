@@ -30,15 +30,16 @@ candidate() {
     prod_signs "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "1 2 2 -4") = -9 ]]
-    [[ $(candidate "0 1") = 0 ]]
-    [[ $(candidate "1 1 1 2 3 -1 1") = -10 ]]
-    [[ $(candidate "") = None ]]
-    [[ $(candidate "2 4 1 2 -1 -1 9") = 20 ]]
-    [[ $(candidate "-1 1 -1 1") = 4 ]]
-    [[ $(candidate "-1 1 1 1") = -4 ]]
-    [[ $(candidate "-1 1 1 0") = 0 ]]
+    [[ $(candidate "1 2 2 -4") = "-9" ]]
+    [[ $(candidate "0 1") = "0" ]]
+    [[ $(candidate "1 1 1 2 3 -1 1") = "-10" ]]
+    [[ $(candidate "") = "None" ]]
+    [[ $(candidate "2 4 1 2 -1 -1 9") = "20" ]]
+    [[ $(candidate "-1 1 -1 1") = "4" ]]
+    [[ $(candidate "-1 1 1 1") = "-4" ]]
+    [[ $(candidate "-1 1 1 0") = "0" ]]
 }
 
 run_test

@@ -17,12 +17,13 @@ candidate() {
     fix_spaces "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate Example) = Example ]]
-    [[ $(candidate "Mudasir Hanif ") = Mudasir_Hanif_ ]]
-    [[ $(candidate "Yellow Yellow  Dirty  Fellow") = Yellow_Yellow__Dirty__Fellow ]]
-    [[ $(candidate "Exa   mple") = Exa-mple ]]
-    [[ $(candidate "   Exa 1 2 2 mple") = -Exa_1_2_2_mple ]]
+    [[ $(candidate "Example") = "Example" ]]
+    [[ $(candidate "Mudasir Hanif ") = "Mudasir_Hanif_" ]]
+    [[ $(candidate "Yellow Yellow  Dirty  Fellow") = "Yellow_Yellow__Dirty__Fellow" ]]
+    [[ $(candidate "Exa   mple") = "Exa-mple" ]]
+    [[ $(candidate "   Exa 1 2 2 mple") = "-Exa_1_2_2_mple" ]]
 }
 
 run_test

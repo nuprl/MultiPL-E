@@ -24,14 +24,15 @@ candidate() {
     solve "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate AsDf) = aSdF ]]
-    [[ $(candidate 1234) = 4321 ]]
-    [[ $(candidate ab) = AB ]]
+    [[ $(candidate "AsDf") = "aSdF" ]]
+    [[ $(candidate "1234") = "4321" ]]
+    [[ $(candidate "ab") = "AB" ]]
     [[ $(candidate "#a@C") = "#A@c" ]]
     [[ $(candidate "#AsdfW^45") = "#aSDFw^45" ]]
     [[ $(candidate "#6@2") = "2@6#" ]]
-    [[ $(candidate "#$a^D") = "#$A^d" ]]
+    [[ $(candidate "#\$a^D") = "#\$A^d" ]]
     [[ $(candidate "#ccc") = "#CCC" ]]
 }
 

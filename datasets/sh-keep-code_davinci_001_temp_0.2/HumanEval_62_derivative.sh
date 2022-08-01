@@ -22,6 +22,7 @@ candidate() {
     derivative "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "3 1 2 4 5") = "1 4 12 20" ]]
     [[ $(candidate "1 2 3") = "2 6" ]]

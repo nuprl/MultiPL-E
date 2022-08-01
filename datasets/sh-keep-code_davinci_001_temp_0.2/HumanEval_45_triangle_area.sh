@@ -15,10 +15,11 @@ candidate() {
     triangle_area "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 5 3) = 7.5 ]]
-    [[ $(candidate 2 2) = 2.0 ]]
-    [[ $(candidate 10 8) = 40.0 ]]
+    [[ $(candidate "5" "3") = "7.5" ]]
+    [[ $(candidate "2" "2") = "2.0" ]]
+    [[ $(candidate "10" "8") = "40.0" ]]
 }
 
 run_test

@@ -22,6 +22,7 @@ candidate() {
     incr_list "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "") = "" ]]
     [[ $(candidate "3 2 1") = "4 3 2" ]]

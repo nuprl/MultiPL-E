@@ -29,23 +29,24 @@ candidate() {
     prime_length "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate Hello) = true ]]
-    [[ $(candidate abcdcba) = true ]]
-    [[ $(candidate kittens) = true ]]
-    [[ $(candidate orange) = false ]]
-    [[ $(candidate wow) = true ]]
-    [[ $(candidate world) = true ]]
-    [[ $(candidate MadaM) = true ]]
-    [[ $(candidate Wow) = true ]]
-    [[ $(candidate "") = false ]]
-    [[ $(candidate HI) = true ]]
-    [[ $(candidate go) = true ]]
-    [[ $(candidate gogo) = false ]]
-    [[ $(candidate aaaaaaaaaaaaaaa) = false ]]
-    [[ $(candidate Madam) = true ]]
-    [[ $(candidate M) = false ]]
-    [[ $(candidate 0) = false ]]
+    [[ $(candidate "Hello") = "true" ]]
+    [[ $(candidate "abcdcba") = "true" ]]
+    [[ $(candidate "kittens") = "true" ]]
+    [[ $(candidate "orange") = "false" ]]
+    [[ $(candidate "wow") = "true" ]]
+    [[ $(candidate "world") = "true" ]]
+    [[ $(candidate "MadaM") = "true" ]]
+    [[ $(candidate "Wow") = "true" ]]
+    [[ $(candidate "") = "false" ]]
+    [[ $(candidate "HI") = "true" ]]
+    [[ $(candidate "go") = "true" ]]
+    [[ $(candidate "gogo") = "false" ]]
+    [[ $(candidate "aaaaaaaaaaaaaaa") = "false" ]]
+    [[ $(candidate "Madam") = "true" ]]
+    [[ $(candidate "M") = "false" ]]
+    [[ $(candidate "0") = "false" ]]
 }
 
 run_test

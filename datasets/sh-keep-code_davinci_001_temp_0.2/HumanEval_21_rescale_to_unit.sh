@@ -31,6 +31,7 @@ candidate() {
     rescale_to_unit "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "2.0 49.9") = "0.0 1.0" ]]
     [[ $(candidate "100.0 49.9") = "1.0 0.0" ]]

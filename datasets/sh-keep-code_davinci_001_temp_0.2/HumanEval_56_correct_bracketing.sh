@@ -39,19 +39,20 @@ candidate() {
     correct_bracketing "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "<>") = true ]]
-    [[ $(candidate "<<><>>") = true ]]
-    [[ $(candidate "<><><<><>><>") = true ]]
-    [[ $(candidate "<><><<<><><>><>><<><><<>>>") = true ]]
-    [[ $(candidate "<<<><>>>>") = false ]]
-    [[ $(candidate "><<>") = false ]]
-    [[ $(candidate "<") = false ]]
-    [[ $(candidate "<<<<") = false ]]
-    [[ $(candidate ">") = false ]]
-    [[ $(candidate "<<>") = false ]]
-    [[ $(candidate "<><><<><>><>><<>") = false ]]
-    [[ $(candidate "<><><<><>><>>><>") = false ]]
+    [[ $(candidate "<>") = "true" ]]
+    [[ $(candidate "<<><>>") = "true" ]]
+    [[ $(candidate "<><><<><>><>") = "true" ]]
+    [[ $(candidate "<><><<<><><>><>><<><><<>>>") = "true" ]]
+    [[ $(candidate "<<<><>>>>") = "false" ]]
+    [[ $(candidate "><<>") = "false" ]]
+    [[ $(candidate "<") = "false" ]]
+    [[ $(candidate "<<<<") = "false" ]]
+    [[ $(candidate ">") = "false" ]]
+    [[ $(candidate "<<>") = "false" ]]
+    [[ $(candidate "<><><<><>><>><<>") = "false" ]]
+    [[ $(candidate "<><><<><>><>>><>") = "false" ]]
 }
 
 run_test

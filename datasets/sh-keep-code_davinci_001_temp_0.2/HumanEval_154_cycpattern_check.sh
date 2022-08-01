@@ -44,13 +44,14 @@ candidate() {
     cycpattern_check "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate xyzw xyw) = false ]]
-    [[ $(candidate yello ell) = true ]]
-    [[ $(candidate whattup ptut) = false ]]
-    [[ $(candidate efef fee) = true ]]
-    [[ $(candidate abab aabb) = false ]]
-    [[ $(candidate winemtt tinem) = true ]]
+    [[ $(candidate "xyzw" "xyw") = "false" ]]
+    [[ $(candidate "yello" "ell") = "true" ]]
+    [[ $(candidate "whattup" "ptut") = "false" ]]
+    [[ $(candidate "efef" "fee") = "true" ]]
+    [[ $(candidate "abab" "aabb") = "false" ]]
+    [[ $(candidate "winemtt" "tinem") = "true" ]]
 }
 
 run_test

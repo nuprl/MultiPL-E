@@ -19,11 +19,12 @@ candidate() {
     add "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "4 88") = 88 ]]
-    [[ $(candidate "4 5 6 7 2 122") = 122 ]]
-    [[ $(candidate "4 0 6 7") = 0 ]]
-    [[ $(candidate "4 4 6 8") = 12 ]]
+    [[ $(candidate "4 88") = "88" ]]
+    [[ $(candidate "4 5 6 7 2 122") = "122" ]]
+    [[ $(candidate "4 0 6 7") = "0" ]]
+    [[ $(candidate "4 4 6 8") = "12" ]]
 }
 
 run_test

@@ -34,13 +34,14 @@ candidate() {
     hex_key "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate AB) = 1 ]]
-    [[ $(candidate 1077E) = 2 ]]
-    [[ $(candidate ABED1A33) = 4 ]]
-    [[ $(candidate 2020) = 2 ]]
-    [[ $(candidate 123456789ABCDEF0) = 6 ]]
-    [[ $(candidate 112233445566778899AABBCCDDEEFF00) = 12 ]]
+    [[ $(candidate "AB") = "1" ]]
+    [[ $(candidate "1077E") = "2" ]]
+    [[ $(candidate "ABED1A33") = "4" ]]
+    [[ $(candidate "2020") = "2" ]]
+    [[ $(candidate "123456789ABCDEF0") = "6" ]]
+    [[ $(candidate "112233445566778899AABBCCDDEEFF00") = "12" ]]
 }
 
 run_test

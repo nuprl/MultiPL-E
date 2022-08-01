@@ -21,12 +21,13 @@ candidate() {
     fib "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 10) = 55 ]]
-    [[ $(candidate 1) = 1 ]]
-    [[ $(candidate 8) = 21 ]]
-    [[ $(candidate 11) = 89 ]]
-    [[ $(candidate 12) = 144 ]]
+    [[ $(candidate "10") = "55" ]]
+    [[ $(candidate "1") = "1" ]]
+    [[ $(candidate "8") = "21" ]]
+    [[ $(candidate "11") = "89" ]]
+    [[ $(candidate "12") = "144" ]]
 }
 
 run_test

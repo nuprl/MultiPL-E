@@ -19,13 +19,14 @@ candidate() {
     is_bored "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate "Hello world") = 0 ]]
-    [[ $(candidate "Is the sky blue?") = 0 ]]
-    [[ $(candidate "I love It \!") = 1 ]]
-    [[ $(candidate bIt) = 0 ]]
-    [[ $(candidate "I feel good today. I will be productive. will kill It") = 2 ]]
-    [[ $(candidate "You and I are going for a walk") = 0 ]]
+    [[ $(candidate "Hello world") = "0" ]]
+    [[ $(candidate "Is the sky blue?") = "0" ]]
+    [[ $(candidate "I love It \!") = "1" ]]
+    [[ $(candidate "bIt") = "0" ]]
+    [[ $(candidate "I feel good today. I will be productive. will kill It") = "2" ]]
+    [[ $(candidate "You and I are going for a walk") = "0" ]]
 }
 
 run_test

@@ -28,17 +28,18 @@ candidate() {
     any_int "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate 2 3 1) = true ]]
-    [[ $(candidate 2.5 2 3) = false ]]
-    [[ $(candidate 1.5 5 3.5) = false ]]
-    [[ $(candidate 2 6 2) = false ]]
-    [[ $(candidate 4 2 2) = true ]]
-    [[ $(candidate 2.2 2.2 2.2) = false ]]
-    [[ $(candidate -4 6 2) = true ]]
-    [[ $(candidate 2 1 1) = true ]]
-    [[ $(candidate 3 4 7) = true ]]
-    [[ $(candidate 3.0 4 7) = false ]]
+    [[ $(candidate "2" "3" "1") = "true" ]]
+    [[ $(candidate "2.5" "2" "3") = "false" ]]
+    [[ $(candidate "1.5" "5" "3.5") = "false" ]]
+    [[ $(candidate "2" "6" "2") = "false" ]]
+    [[ $(candidate "4" "2" "2") = "true" ]]
+    [[ $(candidate "2.2" "2.2" "2.2") = "false" ]]
+    [[ $(candidate "-4" "6" "2") = "true" ]]
+    [[ $(candidate "2" "1" "1") = "true" ]]
+    [[ $(candidate "3" "4" "7") = "true" ]]
+    [[ $(candidate "3.0" "4" "7") = "false" ]]
 }
 
 run_test

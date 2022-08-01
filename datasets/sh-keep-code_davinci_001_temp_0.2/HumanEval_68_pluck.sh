@@ -97,6 +97,7 @@ candidate() {
     pluck "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "4 2 3") = "2 1" ]]
     [[ $(candidate "1 2 3") = "2 1" ]]

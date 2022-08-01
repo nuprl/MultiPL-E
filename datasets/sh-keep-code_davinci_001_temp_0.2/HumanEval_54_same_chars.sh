@@ -107,14 +107,15 @@ candidate() {
     same_chars "$@"
 }
 
+set -e
 run_test() {
-    [[ $(candidate eabcdzzzz dddzzzzzzzddeddabc) = true ]]
-    [[ $(candidate abcd dddddddabc) = true ]]
-    [[ $(candidate dddddddabc abcd) = true ]]
-    [[ $(candidate eabcd dddddddabc) = false ]]
-    [[ $(candidate abcd dddddddabcf) = false ]]
-    [[ $(candidate eabcdzzzz dddzzzzzzzddddabc) = false ]]
-    [[ $(candidate aabb aaccc) = false ]]
+    [[ $(candidate "eabcdzzzz" "dddzzzzzzzddeddabc") = "true" ]]
+    [[ $(candidate "abcd" "dddddddabc") = "true" ]]
+    [[ $(candidate "dddddddabc" "abcd") = "true" ]]
+    [[ $(candidate "eabcd" "dddddddabc") = "false" ]]
+    [[ $(candidate "abcd" "dddddddabcf") = "false" ]]
+    [[ $(candidate "eabcdzzzz" "dddzzzzzzzddddabc") = "false" ]]
+    [[ $(candidate "aabb" "aaccc") = "false" ]]
 }
 
 run_test

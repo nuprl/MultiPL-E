@@ -83,6 +83,7 @@ candidate() {
     numerical_letter_grade "$@"
 }
 
+set -e
 run_test() {
     [[ $(candidate "4.0 3 1.7 2 3.5") = "A+ B C- C A-" ]]
     [[ $(candidate "1.2") = "D+" ]]
