@@ -19,8 +19,9 @@ import eval_lua
 import eval_racket
 import eval_javascript
 import eval_swift
+import eval_cpp
 import tempfile
-import sys
+import json
 
 EVALUATORS = {
     "ruby": (eval_ruby.eval_script, ".rb"),
@@ -34,29 +35,14 @@ EVALUATORS = {
     "python": (eval_python.eval_script, ".py"),
     "racket": (eval_racket.eval_script, ".rkt"),
     "javascript": (eval_javascript.eval_script, ".js"),
+    "cpp": (eval_cpp.eval_script, ".cpp")
 }
 
+def eval_in_thread(problem_yaml_path, index):
+    with open(problem_yaml_path) as f:
+        problem = Problem.load(f)
 
-def get_test_results_yaml_path(problem_yaml_path: Path) -> Path:
-    return problem_yaml_path.parent / (problem_yaml_path.stem + ".results.yaml")
-
-def load_or_create_test_results_yaml(problem: Problem, problem_yaml_path: Path):
-    p = get_test_results_yaml_path(problem_yaml_path)
-    if p.exists():
-        with p.open() as f: 
-            return TestResults.load(f)
-    y = TestResults()
-    y.name = problem.name
-    y.language = problem.language
-    y.results = ResultList()
-    return y
-
-def eval_in_thread(problem, test_results, i):
-    program = problem.prompt + problem.completions[i] + '\n' + problem.tests
-
-    if i < len(test_results.results) and test_results.results[i].program == program:
-        # Assume that the results for this program are already correct.
-        return test_results.results[i]
+    program = problem.prompt + problem.completions[index] + '\n' + problem.tests
 
     (eval_script, file_ext) = EVALUATORS[problem.language]
     with tempfile.NamedTemporaryFile(suffix=file_ext, delete=True) as f:
@@ -69,39 +55,21 @@ def eval_in_thread(problem, test_results, i):
         # output is very likely an exceptionally long stack trace or a long
         # series of prints.
         #TODO(molly, arjun): make this eyesore not an eyesore
-        result_yaml.stdout = result['stdout'].replace("!!int", "")[:2048]
-        result_yaml.stderr = result['stderr'][:2048]
-        result_yaml.exit_code = result['exit_code']
-        result_yaml.status = result['status']
-    return result_yaml
-
-def evaluate_problem(problem_yaml_path):
-    with open(problem_yaml_path) as f:
-        problem = Problem.load(f)
-
-    # Do not create a blank .results.yaml file if there are no completions ready.
-    if len(problem.completions) == 0:
-        return
-
-    test_results = load_or_create_test_results_yaml(problem, problem_yaml_path)
-
-    if len(problem.completions) < len(test_results.results):
-        print(f"Fewer completions than results for {problem.name}. Skipping. Fix this manually")
-        return
-
-    for i in range(len(problem.completions)):
-        result = eval_in_thread(problem, test_results, i)
-        test_results.results.append(result)
-
-    results_path = get_test_results_yaml_path(problem_yaml_path)
-    with results_path.open("w") as f:
-        f.write(TestResults.dump(test_results))
+        return {
+            "program": program,
+            "stdout": result['stdout'].replace("!!int", "")[:2048],
+            "stderr": result['stderr'][:2048],
+            "exit_code": result['exit_code'],
+            "status": result['status']
+        }
 
 def main():
     parser = argparse.ArgumentParser(description="Evaluate a problem")
-    parser.add_argument("problem_yaml_path", help="Path to the problem YAML file")
+    parser.add_argument("--problem_yaml_path", help="Path to the problem YAML file")
+    parser.add_argument("--index", help="Index of the problem to evaluate", type=int)
     args = parser.parse_args()
-    evaluate_problem(Path(args.problem_yaml_path))
+    result_json = eval_in_thread(Path(args.problem_yaml_path), args.index)
+    print(json.dumps(result_json))
 
 if __name__ == "__main__":
     main()
