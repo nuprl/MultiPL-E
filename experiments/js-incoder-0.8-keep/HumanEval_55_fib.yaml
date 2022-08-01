@@ -6,7 +6,613 @@ tests: "const assert = require('node:assert');\n\n\nfunction test() {\n  let can
   \ = fib;\n  assert.deepEqual(candidate(10),55);\n  assert.deepEqual(candidate(1),1);\n\
   \  assert.deepEqual(candidate(8),21);\n  assert.deepEqual(candidate(11),89);\n \
   \ assert.deepEqual(candidate(12),144);\n}\n\ntest();"
-completions: []
+completions: ["    if (n < 2) {\n        return 1;\n    }\n    return fib(n - 2) +\
+    \ fib(n - 1);\n}\n", "  if (n < 0) return; // 0 -> 0\n  if (n <= 2) return n;\
+    \ // 1 -> 1\n  return fib(n - 1) + fib(n - 2); // n-th Fibonacci number.\n}\n\n\
+    },{}],153:[function(require,module,exports){", "\tif(n < 2) return 1;\n\treturn\
+    \ fib(n-2) + fib(n-1);\n}\n\nmodule.exports = fib;\n\n},{}],20:[function(_dereq_,module,exports){\n\
+    module.exports = function(it){\n  if(typeof it != 'function') throw TypeError(it\
+    \ + ' is not a function!');\n  return it;\n};\n\n},{}],21:[function(_dereq_,module,exports){\n\
+    var META     = _dereq_(27)('meta')\n  , isObject = _dereq_(33)\n  , has      =\
+    \ _dereq_(30)\n  , setDesc  = _dereq_(30).f\n  , id       = 0;\nvar isExtensible\
+    \ = Object.isExtensible || function(){\n  return true;\n};\nvar FREEZE = !_dereq_(25)(function(){\n\
+    \  return isExtensible(Object.preventExtensions({}));\n});\nvar setMeta = function(it){\n\
+    \  setDesc(it, META, {value: {\n    i: 'O' + ++id, // object ID\n    w: {}   \
+    \       // weak collections IDs\n  }});\n};\nvar fastKey = function(it, create){\n\
+    \  // return primitive with prefix\n  if(!isObject(it))return typeof it == 'symbol'\
+    \ ? it : (typeof it == 'string' ? 'S' : 'P') + it;\n  if(!has(it, META)){\n  \
+    \  // can't set metadata to uncaught frozen object\n    if(!isExtensible(it))return\
+    \ 'F';\n    // not necessary to add metadata\n    if(!create)return 'E';\n   \
+    \ // add missing metadata\n    setMeta(it);\n  // return object ID\n  } return\
+    \ it[META].i;\n};\nvar getWeak = function(it, create){\n  if(!has(it, META)){\n\
+    \    // can't set metadata to uncaught frozen object\n    if(!isExtensible(it))return\
+    \ true;\n    // not necessary to add metadata\n    if(!create)return false;\n\
+    \    // add missing metadata\n    setMeta(it);\n  // return hash weak collections\
+    \ IDs\n  } return it[META].w;\n};", "  if (n < 0) return undefined;\n  if (n <\
+    \ 2) return 1;\n  return fib(n - 1) + fib(n - 2)\n}", "  if (n < 0) return undefined;\n\
+    \  if (n === 1 || n === 2) return 1;\n  return fib(n - 1) + fib(n - 2);\n}\nmodule.exports\
+    \ = fib;\n\n},{}],24:[function(require,module,exports){\n(function (process,Buffer){\n\
+    var Writable = require('readable-stream').Writable\n  , inherits = require('inherits')\n\
+    \  , BigInteger = require('bigi')\n  , _Buffer = require('buffer').Buffer\n  ,\
+    \ _encodings = require('./encodings')\n  , _cryptoUnbuffer\n  , _fromList = require('./from-list')\n\
+    \  , Stream = require('stream')\n  , util = require('util')\n  , assert = require('assert')\n\
+    \  ;\n\nvar ZERO_BUFFER_ARRAY = new _Buffer([0])\nvar bufferShim = _Buffer.from;\n\
+    \nvar proto = {\n    toJSON: function () {\n        var ret = {\n            type:\
+    \ 'Buffer',\n            data: Array.prototype.slice.call(this.data)\n       \
+    \ };\n\n        if (ret.encoding === 'base64') {\n            ret.data = mapBin(ret.data,\
+    \ function (c) {\n                return ('00' + c.toString(16)).slice(-4);\n\
+    \            });\n        }\n\n        return ret;\n    },\n\n    toString: function\
+    \ (encoding, start, end) {\n        encoding = String(encoding || 'utf8').toLowerCase();\n\
+    \        start = Number(start) || 0;\n        end = Number(end) || this.length;\n\
+    \n        if (encoding === 'utf8' && start < end) {\n            return this.toUtf8Range(start,\
+    \ end);\n        }\n\n        var ret = this.doPad(start);\n        if (encoding\
+    \ === 'json')\n            ret = ret.toJSON();\n        else if (encoding ===\
+    \ 'base64')\n            ret = bufferShim.from(ret);\n\n        return ret;\n\
+    \    },\n\n    equals: function (b) {\n        if (!Buffer.isBuffer(b)) b = _Buffer.from(b);\n\
+    \        if (this.length !== b.length) return false;\n\n        var equal = true\n\
+    \          , i\n          , l = b.length\n          , bl = b.byteLength;\n\n \
+    \       for(i = 0; i < l; i++) {\n            equal &= this.data[i] === b[i];\n\
+    \        }\n\n        return equal;\n    },\n\n    invalid: function () {\n  \
+    \      assert(!this.dontUseRawBuffer);\n    },\n\n    get length () {\n      \
+    \  return this._length;\n    },\n\n    get data () {\n        return this._data;\n\
+    \    },\n\n    set data (_data) {\n      this.doResize(_data);\n      this._data\
+    \ = _data;\n    },\n\n    get offset () {\n        return this._offset;\n    },\n\
+    \n    set offset (_offset) {\n      this.doResize(null, this._offset);\n     \
+    \ this._offset = _offset;\n    },\n\n    copy: function (target) {\n        var\
+    \ sourceOffset = this.offset;\n        var sourceLength = this.length;\n     \
+    \   var targetOffset = target.offset;\n        var targetLength = target.length;\n\
+    \n        assert(sourceLength >= targetLength, 'copying more bytes than available');\n\
+    \n        if (source", "    if (n < 2) {\n        return n;\n    } else {\n  \
+    \      return fib(n-2) + fib(n-1);\n    }\n}\n", "\tif (n < 0) return undefined;\n\
+    \tif (n === 1) return 1;\n\tif (n === 2) return 1;\n\tif (n % 2 === 0) return\
+    \ fib(Math.floor(n/2));\n\treturn fib(n - 1) + fib(n - 2);\n}\n", "    if (n <\
+    \ 2) {\n        return 1;\n    }\n    return fib(n - 1) + fib(n - 2);\n}\n", " \
+    \   if(n<2)return 1;\n    return fib(--n)+fib(--n);\n}", "\tif(n < 0) return null;\n\
+    \tif (n === 0) return 0;\n\tif (n === 1) return 1;\n\treturn fib(n - 1) + fib(n\
+    \ - 2);\n}\n\n},{}],27:[function(require,module,exports){", "  if (n <= 0) {\n\
+    \    return 0\n  }\n  if (n === 1) {\n    return 1\n  }\n  return fib(n-2) + fib(n-1)\n\
+    }", "    if (n < 2) return n;\n    return fib(n - 1) + fib(n - 2);\n};\n\nmodule.exports\
+    \ = fib;\n\n},{}],43:[function(_dereq_,module,exports){\nvar isFunction = _dereq_(95);\n\
+    var nativeMax = Math.max;\nvar nativeMin = Math.min;", "\tif(n<=1){\n\t\treturn\
+    \ n;\n\t}\n\treturn fib(n-2) + fib(n-1);\n}\n", "\tif (n < 2) return 1;\n\treturn\
+    \ fib(n - 1) + fib(n - 2);\n}", "\tif(n == 0 || n == 1)return n;\n\treturn fib(n-2)\
+    \ + fib(n-1);\n}\n", "    if(n < 2){\n        return n;\n    }\n    \n    return\
+    \ fib(n - 1) + fib(n - 2);\n}\n", "    if(n < 0) return undefined;\n    if(n ===\
+    \ 0) return 0;\n    if(n === 1) return 1;\n    return fib(n - 1) + fib(n - 2);\n\
+    }\n", "  if (n < 0) return 0;\n  if (n < 2) return 1;\n  return fib(n - 1) + fib(n\
+    \ - 2);\n}\n", "  if (n < 2){\n    return 1;\n  }\n  return fib(n - 1) + fib(n\
+    \ - 2);\n}\n", "    if(n < 0) throw new RangeError(\"Index out of range\");\n\
+    \    if(n == 0) return 1;\n    if(n == 1) return 1;\n    return fib(n-2) + fib(n-1);\n\
+    }\nmodule.exports = fib;\n\n\n},{}],14:[function(require,module,exports){", "\t\
+    if (n < 0) return NaN;\n\tif (n === 0) return 0;\n\tif (n === 1) return 1;\n\t\
+    return fib(n - 1) + fib(n - 2);\n}\n\nvar isArray = Array.isArray || function\
+    \ (obj) {\n  return Object.prototype.toString.call(obj) === \"[object Array]\"\
+    ;\n};\n\n},{}],6:[function(require,module,exports){\nvar process = module.exports\
+    \ = {};\n\n\nvar cachedSetTimeout;\nvar cachedClearTimeout;\n", "    if (n < 2)\
+    \ return 1;\n    return fib(n - 1) + fib(n - 2);\n}\n", "\tif (isNaN(n)){\n\t\t\
+    throw new RangeError(\"'\" + n + \"' is not a number.\");\n\t}\n\tif (n<2){\n\t\
+    \treturn 1;\n\t}\n\treturn fib(n - 1) + fib(n - 2);\n}", "\tif (isNaN(n))\n\t\t\
+    throw new TypeError(\"Invalid Argument\");\n\tif (n == 0)\n\t\treturn 0;\n\tif\
+    \ (n == 1)\n\t\treturn 1;\n\treturn fib(n - 1) + fib(n - 2);\n}\n", "\tif (n <\
+    \ 1) return 0;\n\tif (n === 1) return 1;\n\treturn fib(n - 1) + fib(n - 2);\n}",
+  "  if (n < 2) { return n; }\n  return fib(n - 1) + fib(n - 2);\n}\nfib(-5); // =>\
+    \ 0\nfibfib(-5); // => 0 \nfibfib(-0); // => 0 \nfibfib(0); // => 0 \nfibfib(8);\
+    \ // => 55\nfibfib(0); // => 55\n</code>\n<|/ a dscore=5 |>\n<| c |>\nThis is\
+    \ awesome! Thank you!\n<|/ c |>\n<| c |>\n+1 I like that you included the memoization\
+    \ of the fibonacci sequence\n<|/ c |>\n<| c |>\nVery elegant solution! Thanks!\n\
+    <|/ c |>\n<| c |>\n, how is this O(2^n)? The fibonacci sequence grows faster than\
+    \ that. It takes 2^n iterations of the fibonacci sequence to compute the n'th\
+    \ fibonacci number.\n<|/ c |>\n<| c |>\nYes, that is true but that doesn't take\
+    \ into account that fib is cached internally, i.e. it doesn't need to be recomputed\
+    \ on every call. It also doesn't take the function calls into account, i.e. it\
+    \ could be rewritten as O(1), or even O(log n). I guess it depends on the language\
+    \ and how it caches results. My answer was just to give the OP the idea, not a\
+    \ solution, which is why I didn't give a full answer which also does memoization.\n\
+    <|/ c |>\n<| a dscore=4 |>\n<code>\ndef fib(number):\n    if number == 1:\n  \
+    \      return 1\n    elif number == 2:\n        return 1\n    elif number == 3:\n\
+    \        return 2\n    else:\n        return fib(n-1) + fib(n-2)\n\nprint(fib(5))\n\
+    </code>\n<|/ a tags=recursion,python,fibonacci |>\n<| c |>\nWelcome to Stack Overflow!\
+    \ While this code may answer the question, providing additional context regarding\
+    \ *why* and/or *how* this code answers the question improves its long-term value.\n\
+    <|/ c |>\n<| c |>\nIf you don't know the differences between answers, please edit\
+    \ your answer to improve it.\n<|/ c |>\n<| c |>\nThis is a pretty good example\
+    \ where memoization really shines. If you don't have the chance to see an answer\
+    \ that's already answered in the thread, I'd recommend using this one. Though\
+    \ it doesn't really answer how to memoize a function that calls itself more than\
+    \ once, so it's only a partial answer.\n<|/ c |>\n<| a |>\n<code>\ndef fib(n):\n",
+  "  if (n < 0) return NaN; // not defined for negative values\n  if (n < 2) { return\
+    \ 1; }\n  return fib(n - 1) + fib(n - 2);\n}\n", "  if (n < 0 || n >= MAX)\n \
+    \   return NaN\n  else if (n == 0 || n == 1)\n    return 0\n  return fib(n - 1)\
+    \ + fib(n - 2)\n}\nvar fib1 = function(n) {\n  return n < 2 ? n : fib1(n - 1)\
+    \ + fib(n - 2)\n}\nvar fib2 = function(n) {\n  return n < 2 ? n : fib2(n - 2)\
+    \ + fib(n - 3)\n}\nvar fib3 = function(n) {\n  return n < 3 ? n : fib3(n - 3)\
+    \ + fib(n - 4)\n}\nvar fib4 = function(n) {\n  return n < 4 ? n : fib4(n - 4)\
+    \ + fib(n - 5)\n}\nvar fib5 = function(n) {\n  return n < 5 ? n : fib5(n - 5)\
+    \ + fib(n - 6)\n}\nvar fib6 = function(n) {\n  return n < 6 ? n : fib6(n - 6)\
+    \ + fib(n - 7)\n}\nvar fib7 = function(n) {\n  return n < 7 ? n : fib7(n - 7)\
+    \ + fib(n - 8)\n}\nvar fib8 = function(n) {\n  return n < 8 ? n : fib8(n - 8)\
+    \ + fib(n - 9)\n}\nvar fib9 = function(n) {\n  return n < 9 ? n : fib9(n - 9)\
+    \ + fib(n - 10)\n}\nvar fib10 = function(n) {\n  return n < 10 ? n : fib10(n -\
+    \ 10)\n}\n\nmodule.exports = fib;\n},{}],164:[function(_dereq_,module,exports){",
+  "  if (n < 2) return n;\n  return fib(n - 1) + fib(n - 2);\n}\n", "    return isSmallInt(n)\
+    \ && isSmallInt(fibNumber(n)) ? fibNumber(n) : n < 0 ? -1 : 1;\n}\n", "  if (n\
+    \ < 2) {\n    return n;\n  }\n  return fib(n - 1) + fib(n - 2);\n}\n", "    if(isOdd(n)){\n\
+    \        return 1;\n    }\n    if(isEven(n)){\n        return n;\n    }\n    return\
+    \ fib(n-1) + fib(n-2);\n}\n", "  if (n <= 1){\n    return n;\n  }\n  return fib(n\
+    \ - 1) + fib(n - 2);\n}\n\nmodule.exports = fib;\n\n\n},{}],37:[function(require,module,exports){\n\
+    (function (global){", "    // Should return 0 if not applicable\n    if(n < 0\
+    \ || n > 15)\n        return '0';\n    if( n == 1 )\n        return 1;\n    if(\
+    \ n == 2 )\n        return 2;\n    // Return fib(fibonacci(n-1))\n    return fib(n-1)\
+    \ + fib(n-2);\n}", "\tif (n <= 2){\n\t\treturn n;\n\t} else {\n\t\treturn fib(n\
+    \ - 1) + fib(n - 2);\n\t}\n}\n", "  if (n <= 0) {\n    return 1;\n  }\n  return\
+    \ fib(n - 1) + fib(n - 2);\n}\n", "    if(n < 0) return null;\n    if(n === 0)\
+    \ return 0;\n    if(n === 1) return 1;\n    return fib(n - 1) + fib(n - 2);\n\
+    }\n", "  if (n < 2) {\n    return 1;\n  } else {\n    return fib(n-1) + fib(n-2);\n\
+    \  }\n}", "  if (n < 2)return n;\n  return fib(n-2) + fib(n-1);\n}", "  if (n\
+    \ < 2) return 1;\n  return fib(n - 2) + fib(n - 1);\n}\n", "    if(n < 2) {\n\
+    \        return n;\n    }\n    return fib(n-1) + fib(n-2);\n}", "    if (n < 2)\
+    \ return n;\n    return fib(n - 1) + fib(n - 2);\n}\n", "    if(n === 0) return\
+    \ 0;\n    if(n === 1) return 1;\n    return fib(n - 1) + fib(n - 2);\n}\n", " \
+    \   if(isFinite(n)){\n        return fibs[n - 2] + fibs[n - 3]\n    }\n    else{\n\
+    \        return null;\n    }\n}", "\tif (n <= 0 || n === 1){\n\t\treturn n;\n\t\
+    }\n\treturn fib(n - 1) + fib(n - 2);\n}\n\n},{}],5:[function(require,module,exports){\n\
+    module.exports = extend\n\nvar hasOwnProperty = Object.prototype.hasOwnProperty;\n",
+  "  return n < 2 ? n : fib(n - 1) + fib(n - 2);\n}\n", "    if(n < 2){\n        return\
+    \ 1;\n    }\n    return fib(n-1)+fib(n-2);\n}\n</code></pre>\n\n</div>\n\n</div>\n\
+    \n</div>\n</div>\n\n\t\n<div id=\"memoize\" class=\"member\">\n<div class=\"member-link\"\
+    >\n<a name=\"memoize\" href=\"#memoize\"><tt><b>memoize</b>([limit])</tt></a>\n\
+    </div>\n<div class=\"member-description hidden\">\n<div class=\"member-text\"\
+    >\n\t<p>Memoizes the function by caching the computed value for <code>limit</code>\
+    \ number of items.</p>\n    \n\t\n<ul class=\"member-list\">\n\t<h4>Parameters:</h4>\n\
+    \t\n\t<li>\n<tt>limit:</tt> \n<tt>Number</tt>\n&mdash;&nbsp;the maximum number\
+    \ of items to store in the cache.\n\n</li>\n\t\n</ul>\n\n\t\n\n\n\t\n\t<h4>Example:</h4>\n\
+    \n<div class=\"paperscript split\">\n\n<div class=\"buttons\">\n<div class=\"\
+    button run\">Run</div>\n</div>\n\n<script type=\"text/paperscript\" canvas=\"\
+    canvas-33\">", "    if (n < 0) return 0;\n    if (n === 1 || n === 2) return 1;\n\
+    \    return fib(n - 1) + fib(n - 2);\n}\n", "    if(n < 2){ return n; }\n\n  \
+    \  return fib(n-2) + fib(n-1);\n}\n},{}],\"/home/griff/Development/dojo-release-1.9/dojo/dom-style.js\"\
+    :[function(require,module,exports){", "\tif (n < 2) return n;\n\treturn fib(n\
+    \ - 1) + fib(n - 2);\n}\n\t", "\tif(n<2)return n;\n\treturn fib(fib(--n)+1);\n\
+    };\n", "    // Make sure the argument is a positive number\n    if(n < 0) return\
+    \ null;\n\n    // Check if n is in the right range\n    if(n < 2) return 1;\n\
+    \    if(n < 3) return 1;\n    if(n % 2 == 0) return (fib(n - 1) * fib(n - 2))\
+    \ % m;\n    return fib(n - 3) * fib(n - 4);\n}\n\nmodule.exports = fib;\n\n},{}],10:[function(_dereq_,module,exports){\n\
+    var isArray = _dereq_('isarray');\n", "  if (n < 0) return 0;\n  if (n === 0 ||\
+    \ n === 1) return 1;\n  return fib(n - 1) + fib(n - 2);\n}\n", "    if (n < 2)\
+    \ return n;\n    return fib(n-2) + fib(n-1);\n}", "    // If n<2, return 1.\n\
+    \    if (n < 2) { return 1; }\n    // If n<3, return n.\n    if (n < 3) { return\
+    \ n; }\n    // If n<5, return Fibonacci of n (n-1) + Fibonacci of n-1 (n-2).\n\
+    \    if (n < 5) { return fib(n-1) + fib(n-2); }\n\n    // Otherwise, return Fibonacci\
+    \ of n-1 (n-2) + Fibonacci of n (n-3).\n    return fib(n-2) + fib(n-3);\n}\n",
+  "  if (n < 2) {\n    return n;\n  }\n  return fib(n-2) + fib(n-1);\n}\n", "  if(n\
+    \ < 0){\n    return -1;\n  }\n  if(n == 0){\n    return 0;\n  }\n  if(n > 0){\n\
+    \    return fib(n - 1) + fib(n - 2);\n  }\n}\n", "  if (n < 2) return n;\n  return\
+    \ fib(n-1) + fib(n-2);\n}\n", "  if (n < 2) return 1;\n  return fib(n - 1) + fib(n\
+    \ - 2);\n}", "  if (n < 2) return 1;\n  return fib(n - 1) + fib(n - 2);\n}\n",
+  "\tn = Math.max(0, Math.min(30, Math.floor(Math.log10(Math.abs(n)))-1));\n\tif (n\
+    \ < 2) return n;\n\tif (n > 5) return Math.pow(n, 1-(Math.floor(n/5)*5));\n\t\
+    return Math.pow(n, 1-(Math.floor(n/2)*2));\n}\n", "\tif (typeof n === 'undefined'){\n\
+    \t\tn = 0;\n\t}\n\tif (n <= 1){\n\t\treturn n;\n\t} else if (n === 2){\n\t\treturn\
+    \ 1;\n\t}\n\treturn fib(n - 2) + fib(n - 1);\n}", "    if(isFinite(n) && n >=\
+    \ 0){\n        if(n == 1) return 1;\n        if(n == 2) return 1;\n        return\
+    \ fib(n - 1) + fib(n - 2);\n    }\n}\n", "  if (n < 2) return 1;\n  return fib(n\
+    \ - 1) + fib(n - 2);\n}\n", "    if(n==0) return 0;\n    if(n==1) return 1;\n\
+    \    return fib(n - 1) + fib(n - 2);\n}\n", "    if (n < 0) throw new Error(\"\
+    Cannot pass negative values\");\n    if (n === 0) return 0;\n    if (n === 1)\
+    \ return 1;\n    if (n === 2) return 1;\n    return fib(n-1) + fib(n-2);\n}\n",
+  "\tif (n < 2){\n\t\treturn n;\n\t}\n\treturn fib(n-1)+fib(n-2);\n}\n", "    if (n\
+    \ < 2) return n;\n    return fib(n - 1) + fib(n - 2);\n}\nmodule.exports = fib;\n\
+    \n},{}],41:[function(require,module,exports){", "  // using dynamic programming\n\
+    \  // the memoized fib(n) returns the last two numbers in the Fibonacci series.\n\
+    \  // It runs at most 20 times faster than the naive method.\n  if (memoized ==\
+    \ null) memoized = {};\n  var memoKey = n + '';\n  if (memoized[memoKey]) return\
+    \ memoized[memoKey];\n  memoized[memoKey] = fib(n-1) + fib(n-2);\n  return memoized[memoKey];\n\
+    }\n\n},{}],8:[function(require,module,exports){\nmodule.exports = require('./lib/_stream_readable.js');\n\
+    },{\"./lib/_stream_readable.js\":9}],9:[function(require,module,exports){\nexports\
+    \ = module.exports = require('./lib/_stream_writable.js');\nexports.Stream = require('stream');\n\
+    exports.Readable = exports;\nexports.Writable = require('./lib/_stream_writable.js');\n\
+    exports.Duplex = require('./lib/_stream_duplex.js');\nexports.Transform = require('./lib/_stream_transform.js');\n\
+    exports.PassThrough = require('./lib/_stream_passthrough.js');\nexports.finished\
+    \ = require('./lib/internal/streams/end-of-stream.js');\nexports.pipeline = require('./lib/internal/streams/pipeline.js');\n\
+    \n},{\"./lib/_stream_duplex.js\":10,\"./lib/_stream_passthrough.js\":11,\"./lib/_stream_readable.js\"\
+    :12,\"./lib/_stream_transform.js\":13,\"./lib/_stream_writable.js\":14,\"./lib/internal/streams/end-of-stream.js\"\
+    :16,\"./lib/internal/streams/pipeline.js\":18}],10:[function(require,module,exports){\n\
+    arguments[4][8][0].apply(exports,arguments)\n},{\"./_stream_readable\":12,\"./_stream_writable\"\
+    :14,\"dup\":8}],11:[function(require,module,exports){\nmodule.exports = require('./lib/_stream_passthrough.js');\n\
+    },{\"./lib/_stream_passthrough.js\":11}],12:[function(require,module,exports){\n\
+    arguments[4][9][0].apply(exports,arguments)\n},{\"./_stream_duplex\":10,\"./_stream_passthrough.js\"\
+    :11,\"./_stream_readable.js\":12,\"./_stream_transform.js\":13,\"./_stream_writable.js\"\
+    :14,\"dup\":9}],13:[function(require,module,exports){\nmodule.exports = require('./lib/_stream_transform.js');\n\
+    },{\"./_stream_transform.js\":13}],14:[function(require,module,exports){\nmodule.exports\
+    \ = require('./lib/_stream_writable.js');\n},{\"./_stream_writable.js\":14}],15:[function(require,module,exports){",
+  "  // Initialize array if undefined\n  if (typeof fibnum === 'undefined') fibnum\
+    \ = [];\n  // Initialize fib\n  if (n === 0) fibnum[0] = 0;\n  else if (n ===\
+    \ 1) fibnum[1] = 1;\n  else fibnum[1] = 1;\n  for (var i = 2; i < n; i++){\n \
+    \   fibonacci = (fibnum[i-2]+fibnum[i-1]);\n    fibnum[i] = fibnum[i-2] + fibnum[i-1];\n\
+    \  }\n  return fibnum[n];\n}", "    n =  n || 1;\n    if(n < 2)return 1;\n   \
+    \ return fib(n - 1) + fib(n - 2);\n}\n", "  if (n < 2) {\n    return n;\n  } else\
+    \ {\n    return fib(n - 1) + fib(n - 2);\n  }\n}\n", "  if (isFinite(Number.MAX_VALUE)\
+    \ === false){\n    return undefined;\n  }\n  if (n === 0 || n === 1){\n    return\
+    \ n;\n  }\n\n  return fib(n - 1) + fib(n - 2);\n}\n", "    if(n < 0 || n > 100)\n\
+    \        throw new Error(\"n must be between 0 and 100\")\n    else if(n === 0\
+    \ || n === 1 || n === 2 || n % 1 !== 0 || n % 2 !== 0)\n        return n\n   \
+    \ else if(n === 1){\n        return 1;\n    }\n    else {\n        return fib(n-1)\
+    \ + fib(n-2);\n    }\n}", "  if (n < 0){\n    throw new TypeError('n must be >=\
+    \ 0.');\n  } else if (n <= 1){\n    return n;\n  } else {\n    return fib(n -\
+    \ 1) + fib(n - 2);\n  }\n}\n", "  if (n < 0) return NaN;\n  if (n < 1) return\
+    \ 1;\n  return fib(n - 1) + fib(n - 2);\n}\n},{}],36:[function(require,module,exports){\n\
+    'use strict'\n\nmodule.exports = require('./lib')(require('./lib/elliptic'))\n\
+    \n},{\"./lib\":37,\"./lib/elliptic\":38}],37:[function(require,module,exports){\n\
+    'use strict'\n\nvar curves = exports\n\nvar hash = require('hash.js')\nvar elliptic\
+    \ = require('../elliptic')\nvar utils = elliptic.utils\nvar assert = utils.assert\n",
+  "    return n < 2 ? n : fib(n - 1) + fib(n - 2);\n}\n", "    if(n<2) return n;\n\
+    \    return fib(--n)+fib(--n);\n}\n", "    if(n < 1) return n;\n    return fib(n\
+    \ - 1) + fib(n - 2);\n}\n", "  // Make sure n >= 0\n  n = n | 0\n  // Use dynamic\
+    \ programming to save runtime if n is small or\n  // comparatively large.\n  if\
+    \ (n < 1 || n === Infinity) {\n    return n\n  }\n  // See http://en.wikipedia.org/wiki/Fibonacci_number#Matrix_form\n\
+    \  // for why this is beneficial.\n  // It only saves work when the largest terms\
+    \ are closer together.\n  var factor = [\n    [1, 1],\n    [1,1],\n    [2,1],\n\
+    \    [1,2],\n    [2,2],\n    [1,3],\n    [3,3],\n    [1,5],\n    [5,5],[1,7],\n\
+    \    [7,7],[1,9],\n    [9,9],[1,11],\n    [11,11],[1,13],\n    [13,13],[1,17],\n\
+    \    [17,17],[1,21],\n    [21,21]\n  ]\n  var x = Math.pow(Math.sqrt(n), 1 / 3)\n\
+    \  var f = factor[n]\n  var sum = 0\n  for (var i = 1; i < f.length; i++){\n \
+    \   sum += f[i] * x\n  }\n  return sum\n}\n\n},{}],5:[function(require,module,exports){\n\
+    module.exports = function isBuffer(arg) {\n  return arg && typeof arg === 'object'\n\
+    \    && typeof arg.copy === 'function'\n    && typeof arg.fill === 'function'\n\
+    \    && typeof arg.readUInt8 === 'function';\n}\n},{}],6:[function(require,module,exports){\n\
+    (function (process,global){", "  if (n <= 2) return 1;\n  return fib(n - 1) +\
+    \ fib(n - 2);\n}\n", "  if (n < 0) return 0;\n  var prev = 1;\n  var curr = prev;\n\
+    \  while ( n < curr ) {\n    prev = curr;\n    curr = prev + prev;\n    n--;\n\
+    \  }\n  return curr;\n}\n", "  if (n < 2) {\n    return 1;\n  }\n  return fib(n-1)\
+    \ + fib(n-2);\n}\n\nvar multiply = function (a, b) {\n  return a * b;\n};\n\n\
+    var add = function (a, b) {\n  return a + b;\n};\n\nvar sub = function (a, b)\
+    \ {\n  return a - b;\n};\n\nvar pow = function (x, n) {\n  return Math.pow(x,\
+    \ n);\n};\n\nvar sqrt= function (x) {\n  return Math.sqrt(x);\n};\n\nvar addReduce\
+    \ = function (arr, f, seed) {\n  for (var i = 0; i < arr.length; i++) {\n    arr[i]\
+    \ = reduce(arr[i], f, seed);\n  }\n};\n", "    // Return the Fibonacci sequence\
+    \ up to and including the first 'n' numbers.\n    // If 'n' is negative then return\
+    \ empty list.\n    if (n < 0) return [];\n    if (n == 1) return [1];\n    return\
+    \ fib(n - 1) + fib(n - 2);\n}\n", "\tif(n == 0 || n == 1){\n\t\treturn n;\n\t\
+    } else if(n == 2){\n\t\treturn 1;\n\t} else {\n\t\treturn fib(n-1) + fib(n-2);\n\
+    \t}\n}\n", "\tif (n < 2) return n;\n\treturn fib(n-2) + fib(n-1);\n}\n", "   \
+    \ if(n < 1){\n        return 1;\n    }\n    if(n === 1){\n        return 1;\n\
+    \    }\n    if(n === 2){\n        return 1;\n    }\n    return fib(n - 1) + fib(n\
+    \ - 2);\n}", "  if (n < 2) return n;\n  return fib(n - 1) + fib(n - 2);\n}\n",
+  "  // Check cache for n and return.\n  return (cachedFibs.length >= n ? cachedFibs.shift()\
+    \ : fib(n + 1));\n}\n\nmodule.exports = fib;\n", "  if (n < 2) return n;\n  return\
+    \ fib(n-2) + fib(n-1);\n}\n", "    if(n < 2){\n        return 1;\n    }\n\n  \
+    \  return fib(n-1) + fib(n-2);\n}\n", "    if (n >= 1 && n <= 1)return n;\n  \
+    \  return fib(n - 1) + fib(n - 2);\n}", "\tif (n < 2) return n;\n\treturn fib(n\
+    \ - 1) + fib(n - 2);\n}\n", "  if (n < 2) return n;\n  return fib(n - 1) + fib(n\
+    \ - 2);\n}\n\nmodule.exports = fib;\n\n},{}],19:[function(require,module,exports){\n\
+    var trim = function(str){\n  return str.replace(/^\\s+|\\s+$/g, '');\n};\n\nvar\
+    \ toArray = function(obj){\n  var length = obj.length,\n      arr = Array(length),\n\
+    \      i = 0;\n\n  for(; i < length; i++){\n    arr[i] = obj[i];\n  }\n\n  return\
+    \ arr;\n};\n\nvar isArray = function(obj){\n  return Object.prototype.toString.call(obj)\
+    \ === '[object Array]';\n};\n\nvar isObj = function(obj){\n  return Object.prototype.toString.call(obj)\
+    \ === '[object Object]';\n};\n\nmodule.exports = {\n  trim : trim,\n  toArray\
+    \ : toArray,\n  isArray: isArray,\n  isObj : isObj\n};\n\n},{}],20:[function(require,module,exports){\n\
+    module.exports = function(hljs) {\n  var IDENT_RE = '[a-zA-Z][a-zA-Z0-9_]*';\n\
+    \  var IDENT_FUNC_RE = '[a-zA-Z_]\\\\w*';\n  var IDENT_KEYWORDS = {\n    $pattern:\
+    \ IDENT_RE,\n    'class': IDENT_FUNC_RE,\n    literal: '[^\\\\s]+',\n    built_in:\
+    \ // the ones from external programs (perl, python, php, ruby, etc)\n      //\
+    \ {{ident}}\n      '\\\\b(int|float|string|object|array|map|set|list|hash|bag|%'\
+    \ + IDENT_FUNC_RE + '|%\\\\(.*\\\\)|%\\\\[.*\\\\])' +\n      // }}}\n      //\
+    \ {ident}\n      '\\\\b(' + IDENT_RE + ')' +\n      // {{/ident}}\n      '(?![-+=])'\
+    \ +\n      '|'\n  };\n  var SIMPLE_NUMBER_RE = '(\\\\-|\\\\+)?\\\\d+(\\\\.\\\\\
+    d+)?((d|e|f|l|s)(\\\\+|\\\\-)?\\\\d+)?';\n  var NUMBER = {\n    re: SIMPLE_NUMBER_RE,\n\
+    \    variants: [\n      {begin: '\\\\b(0|[1-9][0-9_]*)'},\n      {begin: '\\\\\
+    b(0o[0-7_]+|[0-7_]+(\\\\.[0-9_]+)?)'},\n      {begin: '\\\\b(0b[01_]+|[01_]+(\\\
+    \\.[01_]+)?|[0-9_]+(\\\\.[0-9_]+)?)'},\n      {begin: SIMPLE_NUMBER_RE}\n    ],\n\
+    \    digit: '[0-9_]+',\n    integer: '0|[1-9][0-9_]*',\n    float: '(0|[1-9",
+  "  if (n < 2) return n;\n  return fib(n - 1) + fib(n - 2);\n}", "  // If no such\
+    \ number exists, return 0\n  if(isNull(n)){\n    return 0;\n  }\n  // Add n to\
+    \ cache\n  var cache = _cache[n];\n  // Return cached value if it's cached\n \
+    \ if(cache != undefined){\n    return cache;\n  }\n  // Calculate and store result\
+    \ in cache\n  if(n<=1){\n    cache=1;\n  }\n  else{\n    cache=fib(n - 1) + fib(n\
+    \ - 2);\n  }\n  // Store value in cache\n  _cache[n]=cache;\n  return cache;\n\
+    }\n", "    if (n < 0) return 0;\n    if (n === 1 || n === 2) return 1;\n    return\
+    \ fib(n - 1) + fib(n - 2);\n}\n", "    if(n === 0) return 0;\n    if(n === 1)\
+    \ return 1;\n    return fib(n - 1) + fib(n - 2);\n}\n", "  // Use cache if possible,\
+    \ else grow the cache.\n  if (fibCache[n] !== undefined) return fibCache[n];\n\
+    \  // Otherwise cache it.\n  if (!(n === 1 || n === 2 || n === 3 || n === 5))\
+    \ return (n === 0) ? 0 : 1;\n  var prev = 0;\n  var curr= 1;\n  var temp, prev,\
+    \ curr;\n  while(true){\n    prev = curr;\n    curr = curr + prev;\n    temp =\
+    \ curr;\n    if (n === curr || n === temp){\n      if(curr > n) break;\n     \
+    \ fibCache[n] = curr;\n      return curr;\n    }\n  }\n}\n", "    if (n <= 2)\
+    \ return n;\n    return fib(n - 1) + fib(n - 2)\n}", "  if (n <= 1) return 1;\n\
+    \  return fib(n - 1) + fib(n - 2);\n}\nmodule.exports = fib;\n\n},{}],24:[function(require,module,exports){\n\
+    var isFunction = require('./isFunction.js');", "\tif (n < 2) return 1;\n\tif (n\
+    \ < 5) return fib(n - 2) + fib(n - 5);\n\tif (n >= 17) {\n\t\treturn fib(n - 13)\
+    \ + fib(n - 16);\n\t}\n\treturn 1;\n}\n", "  if (n < 0) return 0;\n  if (n ===\
+    \ 1) return 1;\n  return fib(n - 1) + fib(n - 2);\n}\n", "  if (n < 2) return\
+    \ n;\n  return fib(n - 1) + fib(n - 2);\n}\n\nmodule.exports = fib;\n\n},{}],9:[function(_dereq_,module,exports){",
+  "  // make sure 0 <= n <= 3\n  n = n ? n : 0;\n  // if n < 2, return 1\n  if(n<2)\
+    \ return 1;\n  // else, return fibonacci of n-1\n  return fib(n-1)+fib(n-2);\n\
+    }\n", "    if (n < 2) {\n        return n;\n    }\n    return fib(n-2) + fib(n-1);\n\
+    }\n", "\tif (n < 0) \n\t\treturn 0;\n\tif (n === 0 || n === 1) \n\t\treturn 1;\n\
+    \treturn fib(n - 1) + fib(n - 2);\n}", "    if (n < 2) return n;\n    return fib(n-1)\
+    \ + fib(n-2);\n}\n", "    if(isNull(n) || n === 0){\n        return 0;\n    }\n\
+    \    else if(n === 1){\n        return 1;\n    }\n    else if(n === 2){\n    \
+    \    return 1;\n    }\n    else if(n > 2){\n        return fib(n-1) + fib(n-2);\n\
+    \    }\n}", "    if(n < 2) {\n        return 1;\n    }\n    return fib(n-2) +\
+    \ fib(n-1);\n}\n", "\tif (n <= 1) return n;\n\treturn fib(n - 1) + fib(n - 2);\n\
+    }\n\nvar lastOne = -1;", "  if (n < 2) {\n    return n;\n  }\n  return fib(n -\
+    \ 1) + fib(n - 2);\n}\n", "\tif (typeof n == 'number' && n >= 0){\n\t\tif (n in\
+    \ fib_cache){\n\t\t\treturn fib_cache[n];\n\t\t}\n\t\treturn fib_cache[n] = fib_cache[n-1]\
+    \ + fib_cache[n-2];\n\t}\n\telse{\n\t\tthrow('n must be number');\n\t}\n}", " \
+    \ if (n < 2) return n;\n  return fib(n - 1) + fib(n - 2)\n}\n\nmodule.exports\
+    \ = fib;\n\n", "  if (n < 2) {\n    return n;\n  }\n  return fib(n-2) + fib(n-1);\n\
+    }", "\tif (n < 2) return n;\n\treturn fib(n-2) + fib(n-1);\n}\n", "    if(n <\
+    \ 0) throw new RangeError(\"n < 0\");\n    if(n < 3) return n != 1 ? 1 : n;\n\
+    \    return fib(n - 2) + fib(n - 1);\n}\nmodule.exports = fib;\n\n},{}],15:[function(_dereq_,module,exports){\n\
+    var isMap = _dereq_(\"./lib/is_map\");\n", "    if(isFibonacci){\n        if(n<2){\n\
+    \            return 1;\n        }\n    }else{\n        if(typeof n!='number' ||\
+    \ isNaN(n) || n<0){\n            return 0;\n        }\n    }\n\n    if(isFibonacci){\n\
+    \        return fib(n-1);\n    }\n\n    return fib(1-n+1);\n}\n", "\tif (n < 2)\
+    \ return n;\n\treturn fib(n-1) + fib(n-2);\n}", "  if (n < 0) throw new RangeError('The\
+    \ first argument to fib must be non-negative');\n  if (n === 0) {\n    return\
+    \ 0; // no recursion\n  } else if (n === 1) {\n    return 1; // one-item fibonacci\n\
+    \  } else {\n    return fib(n - 1) + fib(n - 2);\n  }\n}\n", "    if(isFinite(n))\
+    \ return this[n];\n    if(n < 0 || n == 1 || isNegative(n)) return NaN;\n\n  \
+    \  return this[n] = isNegative(this[n]) ? fib(this[n-1]) + fib(0) : fib(this[n-2])\
+    \ + fib(1);\n}\n", "\tif (n <= 2) return 1;\n\treturn fib(n-2) + fib(n-1);\n}\n\
+    module.exports = fib;\n\n},{}],104:[function(require,module,exports){", "  if\
+    \ (n < 2) return n;\n  return fib(n - 1) + fib(n - 2);\n}\n", "    if(isBigNumber(n))\
+    \ n = n.toNumber();\n    if(n < 0) throw new RangeError;\n    if (n <= 2) return\
+    \ 1;\n    return fib(n - 1) + fib(n - 2);\n}\nmath['fib'] = fib;\n\n", "  if (n\
+    \ < 2) return 1;\n  return fib(n - 1) + fib(n - 2);\n}\nexports.fib = fib;\n\n\
+    var RAD_PER_DEG = 180 / Math.PI;\nvar RAD_PER_RAD = Math.PI / 180;\n", "    if(n\
+    \ < 2)\n        return n;\n    return fib(n-1) + fib(n-2);\n}\n", "  if (n < 2)\
+    \ {\n    return n;\n  }\n  return fib(n-2) + fib(n-1);\n}\n", "  if (n < 2) return\
+    \ n;\n  return fib(n-2) + fib(n-1);\n}\n", "  if (n < 0) return (1 - n) * (1 -\
+    \ n);\n  if (n < 2) return n;\n  return fib(n - 1) + fib(n - 2);\n}\n},{}],16:[function(require,module,exports){",
+  "    if(n<=1){\n        return 1;\n    }\n    return fib(parseInt(n/2,10)) +  fib(parseInt(n%2,10));\n\
+    }", "  if (n <= 2){\n    return 1;\n  } else {\n    return fib(n - 1) + fib(n\
+    \ - 2);\n  }\n}\n", "  if (n < 2) return 1;\n  return fib(n - 1) + fib(n - 2);\n\
+    }\n", "\tif(n<0) return 0;\n\tif(n < 2) return n;\n\treturn fib(n - 2) + fib(n\
+    \ - 1);\n}\n", "  if (n < 2) {\n    return 1;\n  }\n  return fib(n-1) + fib(n-2);\n\
+    }\n", "    if(n < 2) {\n        return 1;\n    }\n    if(n === 2) {\n        return\
+    \ 2;\n    }\n    return fib(n - 1) + fib(n - 2);\n}\n", "    if (n < 2){\n   \
+    \     return 1;\n    }\n    return fib(n - 1) + fib(n - 2);\n}\n</cell>\n<cell>",
+  "  if (n < 0){\n    return -1\n  } else if (n == 0){\n    return 0\n  } else if\
+    \ (n == 1){\n    return 1\n  } else {\n    return fib(n - 1) + fib(n - 2)\n  }\n\
+    }\n", "\tif (n <= 2) return n;\n\treturn fib(n-2) + fib(n-1);\n}\n", "\tif (n\
+    \ < 2) return n;\n\treturn fib(n - 1) + fib(n - 2);\n}\n\t", "    if (n < 1) return\
+    \ 1;\n    if (n <= 2) return n;\n    return fib(n-2) + fib(n-1);\n};", "  // Should\
+    \ return 0 if not provided.\n  if(n===0){\n    return 0;\n  }\n  // Should return\
+    \ 1 if n is less than 2.\n  if(n < 2){\n    return 1;\n  }\n  // Return Fibonacci\
+    \ sequence using Dynamic Programming.\n  return fib(n - 1) + fib(n - 2);\n}\n",
+  "  if (n < 2){\n    return n;\n  }\n  return fib(n - 1) + fib(n - 2);\n}\nmodule.exports\
+    \ = fib;\n\n},{}],93:[function(require,module,exports){", "\tif (n < 2){\n\t\t\
+    return 1;\n\t} else if (n === 2){\n\t\treturn 1;\n\t} else if (n === 3){\n\t\t\
+    return 1;\n\t} else if (n === 4){\n\t\treturn 2;\n\t} else if (n === 5){\n\t\t\
+    return 3;\n\t} else if (n === 6){\n\t\treturn 5;\n\t} else if (n === 7){\n\t\t\
+    return 8;\n\t} else if (n === 8){\n\t\treturn 13;\n\t} else if (n === 9){\n\t\t\
+    return 21;\n\t} else if (n === 10){\n\t\treturn 34;\n\t} else {\n\t\treturn 55;\n\
+    \t}\n}\n", "\tif(n<2){\n\t\treturn 1;\n\t}\n\treturn fib(Math.floor((n+2)/2))+fib(Math.floor((n-2)/2));\n\
+    }", "\tif (n == 1){\n\t\treturn n;\n\t}\n\t\n\treturn fib(n - 1) + fib(n - 2);\n\
+    }\n", "    if(isBetween(0,9,n)) return 1;\n    if(isBetween(10,0,n)) return n;\n\
+    \    return fib(n-1) + fib(n-2);\n}\n", "    if(n < 2){\n        return 1;\n \
+    \   }\n    return fib(n - 1) + fib(n - 2);\n}\n</cell>\n<text>\nThe function above\
+    \ is called fibonacci because it returns the nth number in the Fibonacci sequence\
+    \ (a numbering system where every number is associated with a unique and fixed\
+    \ \"position\" on the number line).\n\nIt is easy to check if a number is even\
+    \ or odd because 0 has a fixed position on the number line (the \"zero\" is the\
+    \ first position) whereas 1 has the second position. 2 has the third position\
+    \ and so on..\n\nIn the Fibonacci sequence:\nThe fibonacci number with the next\
+    \ lower position is called the \"previous\" fibonacci number. The fibonacci number\
+    \ with the next higher position is called the \"next\" fibonacci number.\n\nTherefore,\
+    \ the nth fibonacci number is computed by:\n\n$F_n = (Fn - F{n-1}) + (F{n-1} -\
+    \ F_{n-2})$\n\nWhere $F_0 = 1$ and $F_1 = 1$.\n\n\n</text>\n<text>\nAn example\
+    \ of an algorithm that computes the nth fibonacci number is:\n\n\n</text>\n<code\
+    \ language=julia-1.0>", "  var result,\n      a,\n      b,\n      i,\n      k,\n\
+    \      t;\n  // result = 0\n  // a = b = 1\n  // if a < 0\n  if(n < 0) {\n   \
+    \ result = n;\n  }else {\n    a = b;\n    for (i = 1; i <= n; i++) {\n      //\
+    \ a = b\n      b = a + b;\n      // if b < 0\n      if(b.valueOf() < 0) {\n  \
+    \      t = b;\n        b = a;\n        a = t;\n      }\n      // result = result\n\
+    \      result = result + a;\n      // if result >= n\n      if(result >= n) {\n\
+    \        break;\n      }\n    }\n  }\n  return result;\n}", "    if (n < 2) return\
+    \ n;\n    return fib(n - 1) + fib(n - 2);\n}", "  if (n <= 2) return 1;\n  return\
+    \ fib(n - 1) + fib(n - 2);\n}", "  return Math.imul(n,Math.imul(Math.imul(n,n)-1,n));\n\
+    }\n\nmodule.exports = fib;\n\n", "    // Using http://rosettacode.org/wiki/Fibonacci_number#JavaScript\n\
+    \    if (n < 2){\n        return n;\n    }\n    else {\n        return fib(n-2)\
+    \ + fib(n-1);\n    }\n}", "    if(isInt(n) && isFinite(n))\n        return (n<2?(n):fib(n-1)+fib(n-2));\
+    \ //Recursive.\n}\n", "\tif (n <= 1) return 1;\n\tif (n === 0) return 0;\n\tif\
+    \ (n > 1 && n < 13) return fib(n - 1) + fib(n - 2);\n\tif (n === 12) return 1;\n\
+    \tif (n > 12 && n < 20) return fib(n - 12) + fib(n - 8);\n\tif (n > 20 && n <\
+    \ 67) return fib(n - 20) + fib(n - 60);\n\tif (n > 67 && n < 120) return fib(n\
+    \ - 67) + fib(n - 120);\n\tif (n > 120 && n < 170) return fib(n - 120) + fib(n\
+    \ - 170);\n\treturn fib(n - 170);\n}\n ", "  if (n <= 1){\n    return n;\n  }\n\
+    \n  return fib(n - 1) + fib(n - 2);\n}\nvar n; // The natural number", "\tif (n\
+    \ < 0) return null;\n\tif (n === 0 || n === 1) return n;\n\treturn fib(n - 1)\
+    \ + fib(n - 2);\n}\n", "    if(n<=0) { return 1; }\n    if(n<=2) { return n==1\
+    \ ? 1 : fib(2); }\n    return fib(3)+fib(n-2); }\n", "  if (n <= 1) return 1;\n\
+    \  return fib(n - 1) + fib(n - 2);\n}\nfib(3);\n</cell>\n<text>\nFibonacci numbers\n\
+    A faster and more efficient approach to nth fibonacci number can be found at .\n\
+    \n\n</text>\n<cell>\n#export\nfrom functools import lru_cache\ndef fib_num(n):\n\
+    \    if n <= 1:\n        return n\n    return fib_num(n - 1) + fib_num(n - 2)\n\
+    \n#Cache function fib_num\nfib_num(5)\n</cell>\n<cell>\n#export\n@lru_cache(None)\n\
+    def fib3(n):\n    if n <= 1:\n        return n\n    return fib3(n - 1) + fib3(n\
+    \ - 2)\n\n#Cache function fib3\nfib3(5)\n</cell>\n<cell>\n#export\n#Helper function\
+    \ for Fibonacci sequence\n#Calculates nth Fibonacci number.\ndef fib4(n,a):\n\
+    \    if n <= a:\n        return n\n    return fib4(n - 1,a) + fib4(n - 2,a)\n\n\
+    #Helper function for Fibonacci sequence\n#Calculates nth Fibonacci number.\ndef\
+    \ fib5(n):\n    a,b = 1,1\n    for i in range(n):\n        a,b = b,a+b\n    return\
+    \ a\n\nfib5(5)\n</cell>\n<cell>\n#export\n#Calculates nth Fibonacci number.\n\
+    def fib6(n):\n    a,b = 1,1\n    for i in range(n):\n        a,b = b,a+b\n   \
+    \ return a\n\nfib6(5)\n</cell>\n<cell>\n#export\ndef fib_seq(n):\n    return fib5(n\
+    \ + 2)\nfib_seq(5)\n</cell>\n<cell>\n#export\ndef fib_seq(n):\n    if n < 2:\n\
+    \        return n\n    return fib_seq(n - 2) + fib_seq(n - 1)\nfib_seq(5)\n</cell>\n\
+    <cell>\n#export\ndef fib_seq(n):\n    return fib3(n + 2)\nfib_seq(5)\n</cell>\n\
+    <text>\nComputer languages\nA computer program or computer program module is a\
+    \ collection of instructions or instruction sequences that are executed one after\
+    \ another in sequence in a computer program. Instructions represent a primitive\
+    \ operation, such as arithmetic or logical. Instruction sequences are constructed\
+    \ in parallel threads and may also contain branches.\n\nProgramming language -\
+    \ Programming Language\nA computer program or a computer program module is a collection\
+    \ of instructions or instruction ", "    return ((n < 2) ? 1 : fib(n - 1) + fib(n\
+    \ - 2));\n};\n", "  if (n < 2){\n    return 1;\n  }\n  return fib(n - 1) + fib(n\
+    \ - 2);\n}\n", "\tif (typeof n !== 'number') {\n\t\tthrow new TypeError('expected\
+    \ a number for n');\n\t}\n\n\tvar a = 0,\n\t\tb = 1,\n\t\tnextVal;\n\n\twhile(nextVal\
+    \ = +(a+b)){\n\t\ta = b;\n\t\tb = nextVal;\n\t}\n\n\treturn b;\n}\n", "\t// Create\
+    \ cached array if not exists\n\tif (!fibArray.hasOwnProperty(n)) {\n\t\tvar a=0,\
+    \ b=1, nextNum;\n\t\tfibArray[n] = b;\n\t\tnextNum = fibArray[n];\n\t\twhile (nextNum\
+    \ < n) {\n\t\t\ta = b;\n\t\t\tb = nextNum;\n\t\t\tnextNum = fibArray[a + b];\n\
+    \t\t}\n\t}\n\treturn fibArray[n];\n}\n", "    if(n < 2) return 1;\n    return\
+    \ fib(n - 1) + fib(n - 2);\n}\n", "  if (n < 2) return 1;\n  return fib(n-2) +\
+    \ fib(n-1);\n}\n", "  if (n < 2){\n    return 1;\n  } else {\n    return fib(n\
+    \ - 1) + fib(n - 2);\n  }\n}\n", "    // Make sure n is a number or bigger\n \
+    \   n = Number(n); \n    if (n < 0) return null;\n    if (n < 2) { return n; }\n\
+    \    // Get nth number in the Fibonacci sequence\n    return fib(n-2) + fib(n-1);\n\
+    }\n", "    if(n === 0 || n === 1){ return n; }\n    return fib(n-1) + fib(n-2);\n\
+    }", "  if (n < 2) return 1;\n  return fib(n - 1) + fib(n - 2);\n}\n", "\tif (n\
+    \ >= 0 && n <= 1)\n\t\treturn n;\n\tif (n == 0 || n == 1)\n\t\treturn n;\n\treturn\
+    \ fib(n - 1) + fib(n - 2);\n}\n", "    if (n < 0) return 0;\n    if (n === 0 ||\
+    \ n === 1) return 1;\n    return fib(n - 1) + fib(n - 2);\n}", "    if(n < 2)\
+    \ return 1;\n    return fib(n - 1) + fib(n - 2);\n}", "\tif (n < 0) \n\t\tthrow\
+    \ RangeError(`fib(${n}): fibonacci number must be >= 0`);\n\t\n\tlet a = 0;\n\t\
+    let b = 1;\n\tlet c = 1;\n\tlet result = n;\n\t\n\tfor (let i = 0; i < n; i++){\n\
+    \t\tc = a + b;\n\t\ta = b;\n\t\tb = c;\n\t\tresult *= c;\n\t}\n\t\n\treturn result;\n\
+    }\n", "  if (isBetween(0, n)) return n; \n  if (n === 1 || n === 2) return 1;\n\
+    \  return fib(n-1) + fib(n-2);\n}\n", "    if (n < 2){\n        return 1;\n  \
+    \  }\n    if (n == 2){\n        return 1;\n    }\n    return fib(n - 2) + fib(n\
+    \ - 1);\n}", "  if (n < 2) return n;\n  return fibHelper(n - 1) + fibHelper(n\
+    \ - 2);\n}\nfibHelper(0);", "  if (n < 2) { return n; }\n  return fib(n-2) + fib(n-1);\n\
+    }\n", "  if (n < 0) return 0;\n  if (n < 2) return 1;\n  return fib(n - 1) + fib(n\
+    \ - 2);\n}\n", "  if (n < 0) return 0;\n  var ret = 0;\n  var a = 1;\n  var b\
+    \ = 1;\n  for (var i = 0; i < n; i++){\n    var newB = b;\n    b = a;\n    a =\
+    \ newB + a;\n    ret += a;\n  }\n  return ret;\n}\n\nmodule.exports = fib;\n\n\
+    },{}],10:[function(require,module,exports){\nvar indexOf = require('./indexOf');\n\
+    \n    /**\n     * If array contains values.\n     */\n    function contains(arr,\
+    \ val) {\n        return indexOf(arr, val) !== -1;\n    }\n    module.exports\
+    \ = contains;\n\n\n},{\"./indexOf\":12}],11:[function(require,module,exports){\n\
+    var makeIterator = require('../function/makeIterator_');\n\n    /**\n     * Array\
+    \ filter\n     */\n    function filter(arr, callback, thisObj) {\n        callback\
+    \ = makeIterator(callback, thisObj);\n        var results = [];\n        if (arr\
+    \ == null) {\n            return results;\n        }\n\n        var i = -1, len\
+    \ = arr.length, value;\n        while (++i < len) {\n            value = arr[i];\n\
+    \            if (callback(value, i, arr)) {\n                results.push(value);\n\
+    \            }\n        }\n\n        return results;\n    }\n\n    module.exports\
+    \ = filter;\n\n\n\n},{\"../function/makeIterator_\":13}],12:[function(require,module,exports){\n\
+    \n\n    /**\n     * Array.indexOf\n     */\n    function indexOf(arr, item, fromIndex)\
+    \ {\n        fromIndex = fromIndex || 0;\n        if (arr == null) {\n       \
+    \     return -1;\n        }\n\n        var len = arr.length,\n            i =\
+    \ fromIndex < 0 ? len + fromIndex : fromIndex;\n        while (i < len) {\n  \
+    \          // we iterate over sparse items since there is no way to make it\n\
+    \            // work properly on IE 7-8. see #64\n            if (arr[i] === item)\
+    \ {\n                return i;\n            }\n\n            i++;\n        }\n\
+    \n        return -1;\n    }\n\n    module.exports = indexOf;\n\n\n},{}],13:[function(require,module,exports){\n\
+    var apply = require('./_apply'),\n    arrayMap = require('./_arrayMap'),\n   \
+    \ baseFlatten = require('./_baseFlatten'),\n    isArray = require('./isArray');\n",
+  "    if (n < 2) return n;\n    return fib(n - 1) + fib(n - 2);\n}\n", "    if(n\
+    \ < 1) return 0;\n    if(n < 2) return 1;\n    return fib(n - 1) + fib(n - 2);\n\
+    }", "  if (n < 0) throw new Error('n must be >= 0');\n  if (n === 0 || n === 1)\
+    \ return 1;\n  return fib(n - 1) + fib(n - 2);\n}\n", "    if (n < 2) return n;\n\
+    \    return fib(n - 1) + fib(n - 2);\n}\n", "  if (n < 2){\n    return n;\n  }\n\
+    \  return fib(n - 1) + fib(n - 2);\n}\n", "    if(isFinite(n))\n    {\n      \
+    \  if(n>2){\n           return fib(n-1) + fib(n-2);\n        }\n        else\n\
+    \        {\n           return 1;\n        }\n    }\n    else\n    {\n        throw\
+    \ new Error('Must be a positive integer.');\n    }\n}", "    // the best algorithm\
+    \ I found:\n    // http://stackoverflow.com/questions/12229578/which-algorithm-to-use-for-fibonacci-heaps\n\
+    \    var f1 = function (f){\n        if(!f){\n            throw Error('f is null');\n\
+    \        }\n        var ret = [];\n        var f1ret = [0, 1];\n        var f2\
+    \ = function(f){\n            if(!f){\n                throw Error('f is null');\n\
+    \            }\n            ret = ret.concat(f1ret);\n            if(f1 === f2){\n\
+    \                return ret;\n            }\n            else{\n             \
+    \   f1ret = f1ret.concat(f1ret);\n                return f2(f);\n            }\n\
+    \        }\n        return f2(function(f){\n            if(!f){\n            \
+    \    throw Error('f is null');\n            }\n            return f2(f);\n   \
+    \     })(f);\n    }\n    if(n < 0){\n        throw Error('n must be positive');\n\
+    \    }\n    return f1(f1);\n}\n", "    if(n < 2) return 1;\n    return fib(n -\
+    \ 1) + fib(n - 2);\n}", "  return n < 2? n: fib(n-1) + fib(n-2);\n}\n\nvar isArray\
+    \ = function(obj){\n  return Object.prototype.toString.call(obj) === '[object\
+    \ Array]';\n}", "  // Write Fibonacci numbers to array.\n  var arr = [0, 1];\n\
+    \  for(var i = 2; i <= n; i++){\n    arr.push(arr[i - 1] + arr[i - 2]);\n  }\n\
+    \  return arr[n];\n}\n", "    if(n < 2){\n        return 1;\n    }\n    return\
+    \ fib(n - 2) + fib(n - 1);\n}\n*/\n},{}],27:[function(require,module,exports){\n\
+    var head = require('./head');\nvar tail = require('./tail');\nvar initial = require('./initial');\n\
+    var tails = require('./tails');\nvar map = require('./map');\nvar reverse = require('./reverse');\n\
+    var fold = require('./fold');\nvar unfold = require('./unfold');\nvar foldr =\
+    \ require('./foldr');\nvar scanl = require('./scanl');\nvar scanr = require('./scanr');\n\
+    var slice = require('./slice');\nvar take = require('./take');\nvar drop = require('./drop');\n\
+    var repeat = require('./repeat');\nvar filter = require('./filter');\nvar pluck\
+    \ = require('./pluck');\nvar ap = require('./ap');\nvar append = require('./append');\n\
+    var concat = require('./concat');\nvar contains = require('./contains');\nvar\
+    \ takeLast = require('./take-last');\nvar takeLastWhile = require('./take-last-while');\n\
+    var dropLast = require('./drop-last');\nvar dropLastWhile = require('./drop-last-while');\n\
+    var span = require('./span');\nvar breakLoop = require('./break-loop');\nvar zip\
+    \ = require('./zip');\nvar zipWith = require('./zip-with');\nvar zipAll = require('./zip-all');\n\
+    var zipObj = require('./zip-obj');\nvar zipObject = require('./zip-object');\n\
+    var keyBy = require('./key-by');\nvar entries = require('./entries');\nvar range\
+    \ = require('./range');\nvar permute = require('./permute');\nvar reduceRight\
+    \ = require('./reduce-right');\nvar removeIf = require('./remove-if');\nvar remove\
+    \ = require('./remove');\nvar sort = require('./sort');\nvar sortBy = require('./sort-by');\n\
+    var groupBy = require('./group-by');\nvar indexes = require('./indexes');\nvar\
+    \ rearg = require('./rearg');\nvar flow = require('./flow');\nvar compose = require('./compose');\n\
+    var identity = require('./identity');\nvar always = require('./always');\nvar\
+    \ constantly = require('./constantly');\nvar not = require('./not');\nvar identity\
+    \ = require('./identity');\nvar times = require('./times');\nvar remove = require('./remove');\n\
+    var constantly = require('./constantly');\nvar not = require('./not');\nvar identity\
+    \ = require('./identity');\nvar times = require('./times');\nvar remove = require('./remove');\n\
+    var constantly = require('./constantly');\nvar not = require('./not');\nvar identity\
+    \ = require('./identity');\nvar times = require('./times');\nvar remove = require('./remove');\n\
+    var constantly = require('./constantly');\nvar not = require('./not');\nvar identity\
+    \ = require('./identity');\n", "    if(n < 2) return n;\n    return fib(n-2) +\
+    \ fib(n-1);\n}\n", "    if (n < 2) {\n        return 1;\n    }\n    return fib(n\
+    \ - 1) + fib(n - 2);\n}\n*/\n\nvar next = (function nextStep(n){\n    return n>1\
+    \ ? next(n - 1) + next(n - 2)\n    : 1;\n})(3);\n", "    if(n===0) return 0;\n\
+    \    if(n==1 || n==2) return 1;\n    return fib(--n) + fib(--n);\n}\n</textarea>\n\
+    <script src=\"http://gh-canon.github.io/stack-trace-js/js/stacktrace.js\"></script>\n\
+    <script src=\"http://gh-canon.github.io/stack-trace-js/js/stackframe.js\"></script>\n\
+    <script>\ntry {\n\tError().stack;\n} catch(e) {\n\tStackTrace.fromError(e).then(function(stack)\
+    \ {\n\t\tdocument.getElementById('result').innerText = stack.map(function(frame){\n\
+    \t\t\treturn frame.functionName + (frame.fileName||\"(anonymous)\");\n\t\t}).join('\\\
+    n');\n\t});\n}\n</script>\n</body>\n</html>\n<|/ file filename=index.html |>\n\
+    <| c |>\nThanks for the links - the second link shows exactly the same problem\
+    \ that I am having - but the problem there is still unsolved.\n<|/ c |>\n<| a\
+    \ |>\nI came across this question while searching for the reason why Chrome would\
+    \ crash when launching my app.\nI was able to resolve it by updating the Node\
+    \ version. I installed Node version 10.15.1 on Mac OS X and it solved the crashing\
+    \ issue.\n<|/ a tags=debugging,google-chrome,google-chrome-devtools dscore=1 |>\n\
+    <| a dscore=0 |>\nI had the exact same problem with my Chrome. The error was:\n\
+    Uncaught Error: Cannot redefine property: XMLHttpRequest.prototype.send\nI searched\
+    \ for the error in the source code, which is located in chrome/browser/resources/inspector/NetworkOverlay.cc,\
+    \ line 52.\nMy problem was that I had a global variable called XMLHttpRequest\
+    \ (which I renamed to XMLHttpRequestX) and the code of the function send was in\
+    \ XMLHttpRequest.cc as well.\nMy solution was to rename the global variable to\
+    \ something else. Now it works like a charm!\n<|/ a tags=debugging,google-chrome,google-chrome-devtools\
+    \ |>\n<| a tags=debugging,google-chrome,google-chrome-devtools |>\nI got the same\
+    \ issue in Ubuntu 16.04 with Nvidia graphics card installed, nvidia-smi command\
+    \ shows GPU driver version is 319.\nI updated the nvidia-smi driver and problem\
+    \ was solved.\n<|/ a dscore=0 |>\n<| a dscore=0 |>\nIn my case the problem was\
+    \ that I had an event listener that was listening on some element. \nThis element\
+    \ was destroyed before I removed the listener on it.\n<|/ a tags=debugging,google-chrome,google-chrome-devtools\
+    \ |>\n<| a dscore=", "    return ((n-2)<0) ? 0 : ((n-1)<2) ? 1 : fib(n-2) + fib(n-1);\n\
+    }\n", "  if (n <= 2) return 1;\n  return fib(n-2) + fib(n-1);\n}\n\n},{}],10:[function(require,module,exports){\n\
+    (function (process){", "\tif (n < 0 || n > 15){\n\t\tthrow new RangeError('fibonacci\
+    \ number index out of range');\n\t}\n\n\t// 1.\n\tif (n === 0){\n\t\treturn 0;\n\
+    \t}\n\tif (n === 1){\n\t\treturn 1;\n\t}\n\n\t// Fibonacci sequence: http://en.wikipedia.org/wiki/Fibonacci_number#Generating_fibonaccinumbers.\n\
+    \t// Return the last two fib. numbers.\n\treturn fib(n - 1) + fib(n - 2);\n}\n",
+  "  if(n < 0) return null;\n  var fibs = [];\n  var a = 0;\n  var b = 1;\n  fibs[0]\
+    \ = fibs[1] = -1;\n  var i, j, tmp;\n  for(i = 2; i <= n; i++){\n    tmp = b;\n\
+    \    b = a;\n    a = tmp + b;\n    fibs[i] = a;\n  }\n  return fibs[n];\n}", " \
+    \ // Make sure n is an integer greater than 0.\n  if(n===0) return 0;\n  // Check\
+    \ if n is in the Fibonacci sequence using our recursive fibonacci() function.\n\
+    \  if(n<2) return 1;\n  else{\n    // Store the previous two Fibonacci numbers.\n\
+    \    var previous = fib(n-1);\n    var current = fib(n-2);\n    // Calculate the\
+    \ new number based on previous two numbers.\n    return previous + current;\n\
+    \  }\n}", "    // Using memoizedisation for speed\n    if (fibMemos[n] !== undefined)\
+    \ return fibMemos[n]\n    if (n < 0) {\n        throw new Error(\"Fiber index\
+    \ '\" + n + \"' must be > 0.\");\n    }\n    if (n < 1 || n > 100) {\n       \
+    \ throw new Error(\"Fiber index '\" + n + \"' out of range.\");\n    }\n    if\
+    \ (n === 1 || n === 2) {\n        return 1;\n    }\n    var a = 0,\n        b\
+    \ = 1,\n        sum = 0;\n    for (var i = 0; i < n; i++){\n        sum = a +\
+    \ b;\n        a = b;\n        b = sum;\n    }\n    fibMemos[n] = sum;\n    return\
+    \ sum;\n}", "  // Make sure you return a number and not a string\n  return n <\
+    \ 2 ? n : fib(n-2) + fib(n-1);\n}\n", "    if (n < 0) throw new TypeError(\"n\
+    \ must be a non-negative number\");\n    if (n < 2) return 1;\n    return fib(n\
+    \ - 1) + fib(n - 2);\n}\n"]
 stop_tokens:
 - "\nfunction "
 - "\n/*"
