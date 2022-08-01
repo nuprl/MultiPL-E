@@ -8,6 +8,9 @@
 # '1000'
 # >>> change_base(7, 2)
 # '111'
+#
+# $1 is an integer
+# $2 is an integer
 change_base() {
 echo 0
 

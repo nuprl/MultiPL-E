@@ -4,6 +4,8 @@
 # For example:
 # words_string("Hi, my name is John") == ["Hi", "my", "name", "is", "John"]
 # words_string("One, two, three, four, five, six") == ["One", "two", "three", "four", "five", "six"]
+#
+# $1 is a string
 words_string() {
 echo 0
 

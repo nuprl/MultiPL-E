@@ -5,6 +5,9 @@
 # generate_integers(2, 8) => [2, 4, 6, 8]
 # generate_integers(8, 2) => [2, 4, 6, 8]
 # generate_integers(10, 14) => []
+#
+# $1 is an integer
+# $2 is an integer
 generate_integers() {
 echo 0
 

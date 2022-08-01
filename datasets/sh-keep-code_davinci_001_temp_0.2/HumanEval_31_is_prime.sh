@@ -14,6 +14,8 @@
 # False
 # >>> is_prime(1)
 # False
+#
+# $1 is an integer
 is_prime() {
 echo 0
 

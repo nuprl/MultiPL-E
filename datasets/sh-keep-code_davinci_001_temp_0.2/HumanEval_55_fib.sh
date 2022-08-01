@@ -6,6 +6,8 @@
 # 1
 # >>> fib(8)
 # 21
+#
+# $1 is an integer
 fib() {
 echo 0
 

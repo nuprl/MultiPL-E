@@ -4,6 +4,8 @@
 # count_upper('aBCdEf') returns 1
 # count_upper('abcdefg') returns 0
 # count_upper('dBBE') returns 0
+#
+# $1 is a string
 count_upper() {
 echo 0
 

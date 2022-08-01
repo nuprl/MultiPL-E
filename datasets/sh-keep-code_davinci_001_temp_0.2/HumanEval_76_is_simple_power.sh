@@ -9,6 +9,9 @@
 # is_simple_power(3, 2) => false
 # is_simple_power(3, 1) => false
 # is_simple_power(5, 3) => false
+#
+# $1 is an integer
+# $2 is an integer
 is_simple_power() {
 echo 0
 

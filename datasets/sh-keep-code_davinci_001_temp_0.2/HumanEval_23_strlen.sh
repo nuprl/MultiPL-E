@@ -4,6 +4,8 @@
 # 0
 # >>> strlen('abc')
 # 3
+#
+# $1 is a string
 strlen() {
 echo 0
 

@@ -5,6 +5,8 @@
 # Ignore any spaces in the input string.
 # >>> separate_paren_groups('( ) (( )) (( )( ))')
 # ['()', '(())', '(()())']
+#
+# $1 is a string
 separate_paren_groups() {
 echo 0
 

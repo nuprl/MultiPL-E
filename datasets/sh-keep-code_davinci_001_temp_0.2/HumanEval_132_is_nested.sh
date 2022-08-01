@@ -8,6 +8,8 @@
 # is_nested('[]') ➞ False
 # is_nested('[[][]]') ➞ True
 # is_nested('[[]][[') ➞ True
+#
+# $1 is a string
 is_nested() {
 echo 0
 

@@ -7,6 +7,8 @@
 # 288
 # The function will receive an integer as input and should return the special
 # factorial of this integer.
+#
+# $1 is an integer
 special_factorial() {
 echo 0
 

@@ -6,6 +6,9 @@
 # 3
 # >>> how_many_times('aaaa', 'aa')
 # 3
+#
+# $1 is a string
+# $2 is a string
 how_many_times() {
 echo 0
 

@@ -6,6 +6,8 @@
 # split_words("Hello world!") ➞ ["Hello", "world!"]
 # split_words("Hello,world!") ➞ ["Hello", "world!"]
 # split_words("abcdef") == 3
+#
+# $1 is a string
 split_words() {
 echo 0
 

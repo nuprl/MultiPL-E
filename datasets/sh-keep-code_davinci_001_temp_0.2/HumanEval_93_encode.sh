@@ -9,6 +9,8 @@
 # 'TGST'
 # >>> encode('This is a message')
 # 'tHKS KS C MGSSCGG'
+#
+# $1 is a string
 encode() {
 echo 0
 

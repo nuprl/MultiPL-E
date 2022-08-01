@@ -6,6 +6,9 @@
 # cycpattern_check("abab","baa") => True
 # cycpattern_check("efef","eeff") => False
 # cycpattern_check("himenss","simen") => True
+#
+# $1 is a string
+# $2 is a string
 cycpattern_check() {
 echo 0
 

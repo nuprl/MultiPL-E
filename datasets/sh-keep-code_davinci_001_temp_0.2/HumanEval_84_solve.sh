@@ -9,6 +9,8 @@
 # Constraints: 0 ≤ N ≤ 10000.
 # Output:
 # a string of binary number
+#
+# $1 is an integer
 solve() {
 echo 0
 

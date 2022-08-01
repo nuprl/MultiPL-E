@@ -7,6 +7,10 @@
 # Example:
 # triangle_area(3, 4, 5) == 6.00
 # triangle_area(1, 2, 10) == -1
+#
+# $1 is an integer
+# $2 is an integer
+# $3 is an integer
 triangle_area() {
 echo 0
 

@@ -6,6 +6,10 @@
 # Example:
 # right_angle_triangle(3, 4, 5) == True
 # right_angle_triangle(1, 2, 3) == False
+#
+# $1 is an integer
+# $2 is an integer
+# $3 is an integer
 right_angle_triangle() {
 echo 0
 

@@ -5,6 +5,9 @@
 # For example:
 # choose_num(12, 15) = 14
 # choose_num(13, 12) = -1
+#
+# $1 is an integer
+# $2 is an integer
 choose_num() {
 echo 0
 

@@ -10,6 +10,9 @@
 # select_words("simple white space", 2) ==> []
 # select_words("Hello world", 4) ==> ["world"]
 # select_words("Uncle sam", 3) ==> ["Uncle"]
+#
+# $1 is a string
+# $2 is an integer
 select_words() {
 echo 0
 

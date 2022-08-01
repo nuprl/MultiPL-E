@@ -6,6 +6,8 @@
 # 2
 # >>> fizz_buzz(79)
 # 3
+#
+# $1 is an integer
 fizz_buzz() {
 echo 0
 

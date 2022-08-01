@@ -8,6 +8,8 @@
 # anti_shuffle('Hi') returns 'Hi'
 # anti_shuffle('hello') returns 'ehllo'
 # anti_shuffle('Hello World!!!') returns 'Hello !!!Wdlor'
+#
+# $1 is a string
 anti_shuffle() {
 echo 0
 

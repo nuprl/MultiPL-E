@@ -4,6 +4,9 @@
 # 5
 # >>> add(5, 7)
 # 12
+#
+# $1 is an integer
+# $2 is an integer
 add() {
 echo 0
 

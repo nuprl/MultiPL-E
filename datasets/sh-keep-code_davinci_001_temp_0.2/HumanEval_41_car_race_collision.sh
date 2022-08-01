@@ -7,6 +7,8 @@
 # However, the cars are infinitely sturdy and strong; as a result, they continue moving
 # in their trajectory as if they did not collide.
 # This function outputs the number of such collisions.
+#
+# $1 is an integer
 car_race_collision() {
 echo 0
 

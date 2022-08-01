@@ -8,6 +8,8 @@
 # count_up_to(20) => [2,3,5,7,11,13,17,19]
 # count_up_to(1) => []
 # count_up_to(18) => [2,3,5,7,11,13,17]
+#
+# $1 is an integer
 count_up_to() {
 echo 0
 

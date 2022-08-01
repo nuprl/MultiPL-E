@@ -9,6 +9,8 @@
 # is_happy(aabb) => False
 # is_happy(adb) => True
 # is_happy(xyy) => False
+#
+# $1 is a string
 is_happy() {
 echo 0
 

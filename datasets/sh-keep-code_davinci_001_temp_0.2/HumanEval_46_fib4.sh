@@ -12,6 +12,8 @@
 # 8
 # >>> fib4(7)
 # 14
+#
+# $1 is an integer
 fib4() {
 echo 0
 

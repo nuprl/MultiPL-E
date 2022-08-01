@@ -5,6 +5,8 @@
 # Example:
 # is_multiply_prime(30) == True
 # 30 = 2 * 3 * 5
+#
+# $1 is an integer
 is_multiply_prime() {
 echo 0
 

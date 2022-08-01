@@ -2,6 +2,9 @@
 # Given length of a side and high return area for a triangle.
 # >>> triangle_area(5, 3)
 # 7.5
+#
+# $1 is an integer
+# $2 is an integer
 triangle_area() {
 echo 0
 

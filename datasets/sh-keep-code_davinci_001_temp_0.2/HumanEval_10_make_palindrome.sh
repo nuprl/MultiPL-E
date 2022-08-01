@@ -9,6 +9,8 @@
 # 'catac'
 # >>> make_palindrome('cata')
 # 'catac'
+#
+# $1 is a string
 make_palindrome() {
 echo 0
 

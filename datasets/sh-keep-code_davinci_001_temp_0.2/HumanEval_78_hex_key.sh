@@ -15,6 +15,8 @@
 # For num = "ABED1A33" the output should be 4.
 # For num = "123456789ABCDEF0" the output should be 6.
 # For num = "2020" the output should be 2.
+#
+# $1 is a string
 hex_key() {
 echo 0
 

@@ -8,6 +8,8 @@
 # check_if_last_char_is_a_letter("apple pi e") ➞ True
 # check_if_last_char_is_a_letter("apple pi e ") ➞ False
 # check_if_last_char_is_a_letter("") ➞ False
+#
+# $1 is a string
 check_if_last_char_is_a_letter() {
 echo 0
 

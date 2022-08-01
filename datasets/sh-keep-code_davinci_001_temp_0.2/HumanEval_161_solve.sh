@@ -8,6 +8,8 @@
 # solve("1234") = "4321"
 # solve("ab") = "AB"
 # solve("#a@C") = "#A@c"
+#
+# $1 is a string
 solve() {
 echo 0
 

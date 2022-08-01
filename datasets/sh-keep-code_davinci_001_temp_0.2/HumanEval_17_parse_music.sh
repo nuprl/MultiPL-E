@@ -8,6 +8,8 @@
 # '.|' - quater note, lasts one beat
 # >>> parse_music('o o| .| o| o| .| .| .| .| o o')
 # [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
+#
+# $1 is a string
 parse_music() {
 echo 0
 

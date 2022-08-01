@@ -8,6 +8,8 @@
 # True
 # >>> is_palindrome('zbcd')
 # False
+#
+# $1 is a string
 is_palindrome() {
 echo 0
 

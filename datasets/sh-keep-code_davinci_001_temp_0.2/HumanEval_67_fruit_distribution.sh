@@ -9,6 +9,9 @@
 # fruit_distribution("0 apples and 1 oranges",3) -> 3 - 0 - 1 = 2
 # fruit_distribution("2 apples and 3 oranges", 100) -> 100 - 2 - 3 = 95
 # fruit_distribution("100 apples and 1 oranges",120) -> 120 - 100 - 1 = 19
+#
+# $1 is a string
+# $2 is an integer
 fruit_distribution() {
 echo 0
 

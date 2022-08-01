@@ -13,6 +13,8 @@
 # Constraints:
 # * 1 <= len(sentence) <= 100
 # * sentence contains only letters
+#
+# $1 is a string
 words_in_sentence() {
 echo 0
 

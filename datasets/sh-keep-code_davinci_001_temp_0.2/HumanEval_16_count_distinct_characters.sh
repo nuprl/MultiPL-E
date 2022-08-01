@@ -4,6 +4,8 @@
 # 3
 # >>> count_distinct_characters('Jerry')
 # 4
+#
+# $1 is a string
 count_distinct_characters() {
 echo 0
 

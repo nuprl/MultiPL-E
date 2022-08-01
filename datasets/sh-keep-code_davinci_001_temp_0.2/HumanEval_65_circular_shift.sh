@@ -6,6 +6,9 @@
 # "21"
 # >>> circular_shift(12, 2)
 # "12"
+#
+# $1 is an integer
+# $2 is an integer
 circular_shift() {
 echo 0
 

@@ -21,6 +21,10 @@
 # * 0 <= need <= 1000
 # * 0 <= remaining <= 1000
 # Have fun :)
+#
+# $1 is an integer
+# $2 is an integer
+# $3 is an integer
 eat() {
 echo 0
 

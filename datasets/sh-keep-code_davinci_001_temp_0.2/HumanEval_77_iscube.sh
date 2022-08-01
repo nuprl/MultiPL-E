@@ -9,6 +9,8 @@
 # iscube(64) ==> True
 # iscube(0) ==> True
 # iscube(180) ==> False
+#
+# $1 is an integer
 iscube() {
 echo 0
 

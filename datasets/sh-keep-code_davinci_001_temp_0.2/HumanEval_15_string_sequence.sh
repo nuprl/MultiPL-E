@@ -4,6 +4,8 @@
 # '0'
 # >>> string_sequence(5)
 # '0 1 2 3 4 5'
+#
+# $1 is an integer
 string_sequence() {
 echo 0
 

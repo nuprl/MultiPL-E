@@ -6,6 +6,7 @@
 # [1, 4, 2, 4, 3]
 #
 # $1 is a space-separated list
+# $2 is an integer
 intersperse() {
 echo 0
 

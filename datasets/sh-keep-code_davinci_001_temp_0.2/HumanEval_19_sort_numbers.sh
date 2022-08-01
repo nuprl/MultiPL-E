@@ -4,6 +4,8 @@
 # Return the string with numbers sorted from smallest to largest
 # >>> sort_numbers('three one five')
 # 'one three five'
+#
+# $1 is a string
 sort_numbers() {
 echo 0
 

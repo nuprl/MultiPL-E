@@ -12,6 +12,7 @@
 # # 3 is less than the maximum possible weight, and it's balanced.
 #
 # $1 is a space-separated list
+# $2 is an integer
 will_it_fly() {
 echo 0
 

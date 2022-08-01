@@ -7,6 +7,9 @@
 # compare_one(1, "2,3") ➞ "2,3"
 # compare_one("5,1", "6") ➞ "6"
 # compare_one("1", 1) ➞ None
+#
+# $1 is an argument
+# $2 is an argument
 compare_one() {
 echo 0
 

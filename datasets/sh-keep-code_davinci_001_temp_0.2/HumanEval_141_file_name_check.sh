@@ -11,6 +11,8 @@
 # Examples:
 # file_name_check("example.txt") # => 'Yes'
 # file_name_check("1example.dll") # => 'No' (the name should start with a latin alphapet letter)
+#
+# $1 is a string
 file_name_check() {
 echo 0
 
@@ -28,7 +30,7 @@ run_test() {
     [[ $(candidate MY16FILE3.exe) = Yes ]]
     [[ $(candidate His12FILE94.exe) = No ]]
     [[ $(candidate _Y.txt) = No ]]
-    [[ $(candidate ?aREYA.exe) = No ]]
+    [[ $(candidate "?aREYA.exe") = No ]]
     [[ $(candidate /this_is_valid.dll) = No ]]
     [[ $(candidate this_is_valid.wow) = No ]]
     [[ $(candidate this_is_valid.txt) = Yes ]]

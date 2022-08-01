@@ -8,6 +8,8 @@
 # encrypt('asdfghjkl') returns 'ewhjklnop'
 # encrypt('gf') returns 'kj'
 # encrypt('et') returns 'ix'
+#
+# $1 is a string
 encrypt() {
 echo 0
 

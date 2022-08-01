@@ -17,6 +17,7 @@
 # get_row([[], [1], [1, 2, 3]], 3) == [(2, 2)]
 #
 # $1 is a newline-separated, space-separated list
+# $2 is an integer
 get_row() {
 echo 0
 

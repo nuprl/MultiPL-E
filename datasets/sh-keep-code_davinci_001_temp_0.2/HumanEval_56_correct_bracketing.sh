@@ -9,6 +9,8 @@
 # True
 # >>> correct_bracketing("><<>")
 # False
+#
+# $1 is a string
 correct_bracketing() {
 echo 0
 

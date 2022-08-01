@@ -5,6 +5,8 @@
 # digits(1)  == 1
 # digits(4)  == 0
 # digits(235) == 15
+#
+# $1 is an integer
 digits() {
 echo 0
 

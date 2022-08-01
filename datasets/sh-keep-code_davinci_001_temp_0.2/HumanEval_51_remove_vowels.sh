@@ -10,6 +10,8 @@
 # 'B'
 # >>> remove_vowels('zbcd')
 # 'zbcd'
+#
+# $1 is a string
 remove_vowels() {
 echo 0
 

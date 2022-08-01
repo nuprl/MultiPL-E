@@ -4,6 +4,8 @@
 # is_equal_to_sum_even(4) == False
 # is_equal_to_sum_even(6) == False
 # is_equal_to_sum_even(8) == True
+#
+# $1 is an integer
 is_equal_to_sum_even() {
 echo 0
 

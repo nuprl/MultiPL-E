@@ -12,6 +12,8 @@
 # valid_date('04-0-2040') => False
 # valid_date('06-04-2020') => True
 # valid_date('06/04/2020') => False
+#
+# $1 is a string
 valid_date() {
 echo 0
 

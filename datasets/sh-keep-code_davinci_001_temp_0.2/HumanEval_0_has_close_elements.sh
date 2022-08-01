@@ -7,6 +7,7 @@
 # True
 #
 # $1 is a space-separated list
+# $2 is a floating point
 has_close_elements() {
 echo 0
 

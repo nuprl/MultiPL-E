@@ -8,6 +8,9 @@
 # rounded_avg(7, 5) => -1
 # rounded_avg(10, 20) => "0b1111"
 # rounded_avg(20, 33) => "0b11010"
+#
+# $1 is an integer
+# $2 is an integer
 rounded_avg() {
 echo 0
 

@@ -15,6 +15,7 @@
 # Example:
 # for Strongest_Extension('my_class', ['AA', 'Be', 'CC']) == 'my_class.AA'
 #
+# $1 is a string
 # $2 is a space-separated list
 Strongest_Extension() {
 echo 0

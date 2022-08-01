@@ -24,6 +24,7 @@
 # Output: [1]
 #
 # $1 is a newline-separated, space-separated list
+# $2 is an integer
 minPath() {
 echo 0
 

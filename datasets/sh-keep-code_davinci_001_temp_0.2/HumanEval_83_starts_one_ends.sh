@@ -1,6 +1,8 @@
 #!/bin/bash
 # Given a positive integer n, return the count of the numbers of n-digit
 # positive integers that start or end with 1.
+#
+# $1 is an integer
 starts_one_ends() {
 echo 0
 

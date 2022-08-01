@@ -6,6 +6,8 @@
 # the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
 # Example:
 # f(5) == [1, 2, 6, 24, 15]
+#
+# $1 is an integer
 f() {
 echo 0
 

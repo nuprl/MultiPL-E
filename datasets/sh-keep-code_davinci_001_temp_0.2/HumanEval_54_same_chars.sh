@@ -12,6 +12,9 @@
 # False
 # >>> same_chars('eabcdzzzz', 'dddzzzzzzzddddabc')
 # False
+#
+# $1 is a string
+# $2 is a string
 same_chars() {
 echo 0
 

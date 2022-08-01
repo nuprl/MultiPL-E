@@ -5,6 +5,8 @@
 # Return the decimal part of the number.
 # >>> truncate_number(3.5)
 # 0.5
+#
+# $1 is a floating point
 truncate_number() {
 echo 0
 

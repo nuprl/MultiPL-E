@@ -12,6 +12,9 @@
 # bf("Jupiter", "Neptune") ==> ("Saturn", "Uranus")
 # bf("Earth", "Mercury") ==> ("Venus")
 # bf("Mercury", "Uranus") ==> ("Venus", "Earth", "Mars", "Jupiter", "Saturn")
+#
+# $1 is a string
+# $2 is a string
 bf() {
 echo 0
 

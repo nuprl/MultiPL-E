@@ -14,6 +14,8 @@
 # first n + 1 numbers of the Tribonacci sequence.
 # Examples:
 # tri(3) = [1, 3, 2, 8]
+#
+# $1 is an integer
 tri() {
 echo 0
 

@@ -9,6 +9,8 @@
 # Examples:
 # >>> make_a_pile(3)
 # [3, 5, 7]
+#
+# $1 is an integer
 make_a_pile() {
 echo 0
 

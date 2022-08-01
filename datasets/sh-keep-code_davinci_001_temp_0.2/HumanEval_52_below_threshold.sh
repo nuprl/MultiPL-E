@@ -6,6 +6,7 @@
 # False
 #
 # $1 is a space-separated list
+# $2 is an integer
 below_threshold() {
 echo 0
 

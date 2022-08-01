@@ -10,6 +10,8 @@
 # 13
 # >>> prime_fib(5)
 # 89
+#
+# $1 is an integer
 prime_fib() {
 echo 0
 

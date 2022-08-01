@@ -6,6 +6,8 @@
 # >>> int_to_mini_roman(19) == 'xix'
 # >>> int_to_mini_roman(152) == 'clii'
 # >>> int_to_mini_roman(426) == 'cdxxvi'
+#
+# $1 is an integer
 int_to_mini_roman() {
 echo 0
 

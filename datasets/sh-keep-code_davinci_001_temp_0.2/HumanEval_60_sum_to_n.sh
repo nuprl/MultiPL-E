@@ -10,6 +10,8 @@
 # 55
 # >>> sum_to_n(1)
 # 1
+#
+# $1 is an integer
 sum_to_n() {
 echo 0
 

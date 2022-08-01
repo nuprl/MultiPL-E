@@ -4,6 +4,8 @@
 # 29
 # >>> largest_prime_factor(2048)
 # 2
+#
+# $1 is an integer
 largest_prime_factor() {
 echo 0
 

@@ -9,6 +9,8 @@
 # digitSum("helloE") => 69
 # digitSum("woArBld") => 131
 # digitSum("aAaaaXa") => 153
+#
+# $1 is a string
 digitSum() {
 echo 0
 

@@ -8,6 +8,8 @@
 # 2
 # >>> vowels_count("ACEDY")
 # 3
+#
+# $1 is a string
 vowels_count() {
 echo 0
 

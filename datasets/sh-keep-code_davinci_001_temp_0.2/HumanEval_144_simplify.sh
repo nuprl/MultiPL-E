@@ -7,6 +7,9 @@
 # simplify("1/5", "5/1") = True
 # simplify("1/6", "2/1") = False
 # simplify("7/10", "10/2") = False
+#
+# $1 is a string
+# $2 is a string
 simplify() {
 echo 0
 

@@ -10,6 +10,9 @@
 # 8
 # >>> modp(100, 101)
 # 1
+#
+# $1 is an integer
+# $2 is an integer
 modp() {
 echo 0
 

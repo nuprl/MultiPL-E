@@ -7,6 +7,10 @@
 # any_int(3, 2, 2) ➞ False
 # any_int(3, -2, 1) ➞ True
 # any_int(3.6, -2.2, 2) ➞ False
+#
+# $1 is a floating point
+# $2 is a floating point
+# $3 is a floating point
 any_int() {
 echo 0
 

@@ -9,6 +9,8 @@
 # get_closest_vowel("FULL") ==> "U"
 # get_closest_vowel("quick") ==> ""
 # get_closest_vowel("ab") ==> ""
+#
+# $1 is a string
 get_closest_vowel() {
 echo 0
 

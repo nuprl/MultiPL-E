@@ -8,6 +8,8 @@
 # [5, 5]
 # >>> factorize(70)
 # [2, 5, 7]
+#
+# $1 is an integer
 factorize() {
 echo 0
 

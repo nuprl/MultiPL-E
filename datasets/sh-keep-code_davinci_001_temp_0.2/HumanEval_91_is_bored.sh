@@ -7,6 +7,8 @@
 # 0
 # >>> is_bored("The sky is blue. The sun is shining. I love this weather")
 # 1
+#
+# $1 is a string
 is_bored() {
 echo 0
 

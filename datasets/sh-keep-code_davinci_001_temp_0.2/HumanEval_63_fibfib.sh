@@ -11,6 +11,8 @@
 # 4
 # >>> fibfib(8)
 # 24
+#
+# $1 is an integer
 fibfib() {
 echo 0
 

@@ -7,6 +7,9 @@
 # multiply(19, 28) should return 72.
 # multiply(2020, 1851) should return 0.
 # multiply(14,-15) should return 20.
+#
+# $1 is an integer
+# $2 is an integer
 multiply() {
 echo 0
 

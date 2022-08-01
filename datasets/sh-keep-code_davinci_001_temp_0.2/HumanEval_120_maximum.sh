@@ -16,6 +16,7 @@
 # 3. 0 <= k <= len(arr)
 #
 # $1 is a space-separated list
+# $2 is an integer
 maximum() {
 echo 0
 

@@ -4,6 +4,9 @@
 # 1
 # >>> greatest_common_divisor(25, 15)
 # 5
+#
+# $1 is an integer
+# $2 is an integer
 greatest_common_divisor() {
 echo 0
 

@@ -14,6 +14,8 @@
 # Note:
 # 1. 1 <= n <= 10^3
 # 2. returned tuple has the number of even and odd integer palindromes respectively.
+#
+# $1 is an integer
 even_odd_palindrome() {
 echo 0
 

@@ -8,6 +8,8 @@
 # histogram('a b c a b') == {'a': 2, 'b': 2}
 # histogram('b b b b a') == {'b': 4}
 # histogram('') == {}
+#
+# $1 is a string
 histogram() {
 echo 0
 

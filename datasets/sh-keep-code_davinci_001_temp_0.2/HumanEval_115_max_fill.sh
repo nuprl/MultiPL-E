@@ -28,6 +28,7 @@
 # * 1 <= capacity <= 10
 #
 # $1 is a newline-separated, space-separated list
+# $2 is an integer
 max_fill() {
 echo 0
 

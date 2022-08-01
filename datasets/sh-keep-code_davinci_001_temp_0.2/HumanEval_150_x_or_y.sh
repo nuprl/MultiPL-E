@@ -4,6 +4,10 @@
 # Examples:
 # for x_or_y(7, 34, 12) == 34
 # for x_or_y(15, 8, 5) == 5
+#
+# $1 is an integer
+# $2 is an integer
+# $3 is an integer
 x_or_y() {
 echo 0
 

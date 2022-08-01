@@ -6,6 +6,8 @@
 # prime_length('abcdcba') == True
 # prime_length('kittens') == True
 # prime_length('orange') == False
+#
+# $1 is a string
 prime_length() {
 echo 0
 
