@@ -13,4 +13,6 @@ RUN wget https://julialang-s3.julialang.org/bin/linux/x64/1.6/julia-1.6.7-linux-
 RUN tar xf julia-1.6.7-linux-x86_64.tar.gz
 RUN mv julia-1.6.7 /opt/julia
 RUN ln -s /opt/julia/bin/julia /usr/bin/julia
+RUN mkdir -p /usr/local/share/lua/5.1
+COPY luaunit.lua /usr/local/share/lua/5.1/luaunit.lua
 WORKDIR /multipleval/src
