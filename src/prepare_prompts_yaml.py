@@ -46,7 +46,7 @@ from problem_yaml import Problem
 TRANSLATORS = {
     "rb": RubyTranslator(),
     "lua": LuaTranslator(),
-    "rust": RustTranslator("rs"),
+    "rs": RustTranslator("rs"),
     "rkt": RacketTranslator("racket"),
     "php": PHPTranslator("php"),
     "cpp": CPPTranslator("cpp"),
@@ -89,7 +89,7 @@ def main():
 
     translator = TRANSLATORS[args.lang]
 
-    for original in list_originals().values():
+    for original in list_originals(args.doctests).values():
         # original.name with .yaml extension
         original_name = original.name.split(".")[0]
         target_yaml_path = target_dir / (original_name + ".yaml")

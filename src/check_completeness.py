@@ -18,16 +18,16 @@ from concurrent.futures import ThreadPoolExecutor
 LANG = [ "rb", "lua", "rs", "rkt", "php", "cpp", "py", "jl", "js", "java" ]
 MODEL = [ "incoder", "davinci" ]
 TEMP = [ "0.2", "0.8" ]
-DOCSTRINGS = [ "keep" ] #TODO(arjun): The remove results may be messed up
+DOCSTRINGS = [ "keep", "remove" ]
 
 def check(lang, model, temp, docstrings):
     dir = Path("../experiments") / (lang + "-" + model + "-" + temp + "-" + docstrings)
     if not dir.exists():
-        print(f"{dir} does not exist")
+        print(f"{lang},{docstrings},{model},{temp}")
         return
     problems = [ p for p in dir.glob("*.yaml") if not p.name.endswith(".results.yaml") ]
-    if len(problems) != 161:
-        print(f"{dir} has {len(problems)} problems")
+    #if len(problems) != 161:
+    #    print(f"{dir} has {len(problems)} problems")
     
     for p in problems:
         with p.open() as f:
@@ -38,8 +38,8 @@ def check(lang, model, temp, docstrings):
 
 def check_all():
     with ThreadPoolExecutor() as executor:
-        for lang in LANG:
-            for model in MODEL:
+        for model in MODEL:
+            for lang in LANG:
                 for temp in TEMP:
                     for docstrings in DOCSTRINGS:
                         executor.submit(check, lang, model, temp, docstrings)
