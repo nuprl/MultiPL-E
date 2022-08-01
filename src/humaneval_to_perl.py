@@ -10,6 +10,8 @@ from generic_translator import main
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
+array_list = []
+
 
 class PerlTranslator:
 
@@ -63,7 +65,9 @@ class PerlTranslator:
         return f"{v}"
 
     def gen_list(self, l: List[str]) -> str:
-        return "(" + ", ".join(l) + ")"
+        idx = len(array_list)
+        array_list.append(f"my @arg{idx} = " + "(" + ", ".join(l) + ")")
+        return f"\\@arg{idx}"
 
     def gen_tuple(self, t: List[str]) -> str:
         return "(" + ", ".join(t) + ")"
