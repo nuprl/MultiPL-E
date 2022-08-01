@@ -16,7 +16,7 @@ intersperse <- function(numbers, delimeter) {
 
 test_humaneval <- function() {
 candidate <- intersperse
-    if(!identical(candidate(list(), 7), list())){quit('no', 1)}
+    if(!identical(candidate(c(), 7), c())){quit('no', 1)}
     if(!identical(candidate(c(5, 6, 3, 2), 8), c(5, 8, 6, 8, 3, 8, 2))){quit('no', 1)}
     if(!identical(candidate(c(2, 2, 2), 2), c(2, 2, 2, 2, 2))){quit('no', 1)}
 }

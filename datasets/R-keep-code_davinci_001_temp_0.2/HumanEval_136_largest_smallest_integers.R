@@ -44,7 +44,7 @@ candidate <- largest_smallest_integers
     if(!identical(candidate(c(1, 3, 2, 4, 5, 6, -2)), c(-2, 1))){quit('no', 1)}
     if(!identical(candidate(c(4, 5, 3, 6, 2, 7, -7)), c(-7, 2))){quit('no', 1)}
     if(!identical(candidate(c(7, 3, 8, 4, 9, 2, 5, -9)), c(-9, 2))){quit('no', 1)}
-    if(!identical(candidate(list()), c(NULL, NULL))){quit('no', 1)}
+    if(!identical(candidate(c()), c(NULL, NULL))){quit('no', 1)}
     if(!identical(candidate(c(0)), c(NULL, NULL))){quit('no', 1)}
     if(!identical(candidate(c(-1, -3, -5, -6)), c(-1, NULL))){quit('no', 1)}
     if(!identical(candidate(c(-1, -3, -5, -6, 0)), c(-1, NULL))){quit('no', 1)}

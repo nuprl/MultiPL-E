@@ -46,6 +46,6 @@ candidate <- move_one_ball
     if(!identical(candidate(c(3, 5, 10, 1, 2)), TRUE)){quit('no', 1)}
     if(!identical(candidate(c(4, 3, 1, 2)), FALSE)){quit('no', 1)}
     if(!identical(candidate(c(3, 5, 4, 1, 2)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(list()), TRUE)){quit('no', 1)}
+    if(!identical(candidate(c()), TRUE)){quit('no', 1)}
 }
 test_humaneval()

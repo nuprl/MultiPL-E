@@ -65,9 +65,9 @@ candidate <- count_up_to
     if(!identical(candidate(6), c(2, 3, 5))){quit('no', 1)}
     if(!identical(candidate(7), c(2, 3, 5))){quit('no', 1)}
     if(!identical(candidate(10), c(2, 3, 5, 7))){quit('no', 1)}
-    if(!identical(candidate(0), list())){quit('no', 1)}
+    if(!identical(candidate(0), c())){quit('no', 1)}
     if(!identical(candidate(22), c(2, 3, 5, 7, 11, 13, 17, 19))){quit('no', 1)}
-    if(!identical(candidate(1), list())){quit('no', 1)}
+    if(!identical(candidate(1), c())){quit('no', 1)}
     if(!identical(candidate(18), c(2, 3, 5, 7, 11, 13, 17))){quit('no', 1)}
     if(!identical(candidate(47), c(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43))){quit('no', 1)}
     if(!identical(candidate(101), c(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97))){quit('no', 1)}
