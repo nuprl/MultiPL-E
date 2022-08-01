@@ -20,6 +20,7 @@ import eval_racket
 import eval_javascript
 import eval_swift
 import eval_cpp
+import eval_php
 import tempfile
 import json
 
@@ -35,7 +36,8 @@ EVALUATORS = {
     "python": (eval_python.eval_script, ".py"),
     "racket": (eval_racket.eval_script, ".rkt"),
     "javascript": (eval_javascript.eval_script, ".js"),
-    "cpp": (eval_cpp.eval_script, ".cpp")
+    "cpp": (eval_cpp.eval_script, ".cpp"),
+    "php": (eval_php.eval_script, ".php"),
 }
 
 def eval_in_thread(problem_yaml_path, index):
