@@ -21,6 +21,7 @@ class PerlTranslator:
         self.file_ext = file_ext
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
+        global array_list
         perl_description = "# " + re.sub(DOCSTRING_LINESTART_RE, "\n# ", description.strip()) + "\n"
         arg_names = ["$"+arg.arg for arg in args]
         arg_list = ", ".join(arg_names)
