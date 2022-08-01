@@ -18,7 +18,8 @@
 #
 # $1 is a space-separated list
 by_length() {
-echo 0
+    local -i len="${#1}"
+    echo "$len $1"
 
 }
 

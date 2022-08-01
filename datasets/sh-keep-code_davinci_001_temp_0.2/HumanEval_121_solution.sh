@@ -7,7 +7,17 @@
 #
 # $1 is a space-separated list
 solution() {
-echo 0
+  local sum=0
+  for ((i=0; i<${#1}; i++)); do
+    if [[ $((i%2)) -eq 0 ]]; then
+      if [[ $((i+1)) -eq ${#1} ]]; then
+        sum=$((sum+${1:i:1}))
+      else
+        sum=$((sum+${1:i:1}))
+      fi
+    fi
+  done
+  echo $sum
 
 }
 

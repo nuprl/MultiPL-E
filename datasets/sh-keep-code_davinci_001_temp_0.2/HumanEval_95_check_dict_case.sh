@@ -11,7 +11,34 @@
 #
 # $1 is a two column CSV in key,value order
 check_dict_case() {
-echo 0
+  local dict=$1
+  local key
+  local value
+  local key_case
+  local value_case
+  local key_is_lower
+  local value_is_lower
+  local key_is_upper
+  local value_is_upper
+  local key_is_mixed
+  local value_is_mixed
+  local key_is_mixed_case
+  local value_is_mixed_case
+  local key_is_mixed_case_value
+  local key_is_mixed_case_value_value
+  local key_is_mixed_case_value_value_value
+  local key_is_mixed_case_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value_value_value_value_value_value_
 
 }
 

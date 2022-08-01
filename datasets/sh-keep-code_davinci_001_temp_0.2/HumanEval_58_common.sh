@@ -8,7 +8,17 @@
 # $1 is a space-separated list
 # $2 is a space-separated list
 common() {
-echo 0
+    local -a a=($1)
+    local -a b=($2)
+    local -a c=()
+    for i in "${a[@]}"; do
+        for j in "${b[@]}"; do
+            if [[ "$i" == "$j" ]]; then
+                c+=("$i")
+            fi
+        done
+    done
+    echo "${c[@]}" | tr ' ' '\n' | sort -u
 
 }
 

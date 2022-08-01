@@ -11,7 +11,20 @@
 #
 # $1 is a space-separated list
 skjkasdkd() {
-echo 0
+    local sum=0
+    for i in $1; do
+        local isPrime=1
+        for (( j=2; j<$i; j++ )); do
+            if [[ $(( $i % $j )) -eq 0 ]]; then
+                isPrime=0
+                break
+            fi
+        done
+        if [[ $isPrime -eq 1 ]]; then
+            sum=$(( $sum + $i ))
+        fi
+    done
+    echo $sum
 
 }
 

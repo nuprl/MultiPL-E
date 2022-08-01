@@ -9,7 +9,19 @@
 #
 # $1 is a space-separated list
 mean_absolute_deviation() {
-echo 0
+    local sum=0
+    local count=0
+    local mean=0
+    for num in $@; do
+        sum=$(echo "$sum + $num" | bc -l)
+        count=$(echo "$count + 1" | bc -l)
+    done
+    mean=$(echo "$sum / $count" | bc -l)
+    local sum_deviation=0
+    for num in $@; do
+        sum_deviation=$(echo "$sum_deviation + abs($num - $mean)" | bc -l)
+    done
+    echo $(echo "$sum_deviation / $count" | bc -l)
 
 }
 

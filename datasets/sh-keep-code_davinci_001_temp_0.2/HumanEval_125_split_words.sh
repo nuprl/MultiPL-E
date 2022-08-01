@@ -9,7 +9,20 @@
 #
 # $1 is a string
 split_words() {
-echo 0
+    local words
+    words=$(echo "$1" | tr -s ' ' '\n')
+    local result
+    result=''
+    for word in $words; do
+        if [[ "$word" =~ ^[a-z]+$ ]]; then
+            if [[ "$word" =~ ^[a-z]{2}$ ]]; then
+                result="$result$word,"
+            else
+                result="$result$word"
+            fi
+        fi
+    done
+    echo "$result"
 
 }
 

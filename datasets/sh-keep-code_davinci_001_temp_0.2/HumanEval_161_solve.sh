@@ -11,7 +11,12 @@
 #
 # $1 is a string
 solve() {
-echo 0
+	# your code here
+	if [[ $1 =~ [a-zA-Z] ]]; then
+		echo "$1" | tr '[:lower:]' '[:upper:]' | tr '[:upper:]' '[:lower:]'
+	else
+		echo "$1" | rev
+	fi
 
 }
 

@@ -10,7 +10,29 @@
 #
 # $1 is an integer
 car_race_collision() {
-echo 0
+    local n=$1
+    local collisions=0
+    local cars_left=()
+    local cars_right=()
+    for (( i=0; i<n; i++ )); do
+        cars_left[$i]=$i
+        cars_right[$i]=$((n-i-1))
+    done
+    while [ ${#cars_left[@]} -gt 0 ]; do
+        local car_left=${cars_left[0]}
+        local car_right=${cars_right[0]}
+        if [ $car_left -eq $car_right ]; then
+            collisions=$((collisions+1))
+            unset cars_left[0]
+            unset cars_right[0]
+        else
+            unset cars_left[0]
+            cars_left[${#cars_left[@]}]=$((car_left+1))
+            unset cars_right[0]
+            cars_right[${#cars_right[@]}]=$((car_right-1))
+        fi
+    done
+    echo $collisions
 
 }
 

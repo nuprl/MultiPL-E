@@ -4,7 +4,19 @@
 #
 # $1 is an integer
 starts_one_ends() {
-echo 0
+    local count=0
+    local i=1
+    while [ $i -le $1 ]; do
+        local j=1
+        while [ $j -le $i ]; do
+            if [ $((i % 10)) -eq 1 ] && [ $((j % 10)) -eq 1 ]; then
+                count=$((count + 1))
+            fi
+            j=$((j + 1))
+        done
+        i=$((i + 1))
+    done
+    echo $count
 
 }
 

@@ -26,7 +26,12 @@
 # $2 is an integer
 # $3 is an integer
 eat() {
-echo 0
+    local total=$(($1 + $2))
+    local remaining=$(($3 - $2))
+    if [ $remaining -lt 0 ]; then
+        remaining=0
+    fi
+    echo "$total $remaining"
 
 }
 

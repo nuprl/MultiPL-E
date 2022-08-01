@@ -30,7 +30,32 @@
 # $1 is a newline-separated, space-separated list
 # $2 is an integer
 max_fill() {
-echo 0
+    local max=0
+    local i=0
+    local j=0
+    local max_i=0
+    local max_j=0
+    local max_fill=0
+    local fill=0
+    local max_fill_i=0
+    local max_fill_j=0
+    while [ $i -lt $1 ]
+    do
+        j=0
+        while [ $j -lt $1 ]
+        do
+            fill=$(($2 - $(($1 - $i)) - $(($1 - $j))))
+            if [ $fill -gt $max_fill ]
+            then
+                max_fill=$fill
+                max_fill_i=$i
+                max_fill_j=$j
+            fi
+            j=$(($j + 1))
+        done
+        i=$(($i + 1))
+    done
+    echo "$max_fill_i $max_fill_j"
 
 }
 

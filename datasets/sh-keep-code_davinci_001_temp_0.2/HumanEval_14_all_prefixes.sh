@@ -5,7 +5,13 @@
 #
 # $1 is a string
 all_prefixes() {
-echo 0
+  local str="$1"
+  local prefixes=()
+  while [[ -n "$str" ]]; do
+    prefixes+=("$str")
+    str="${str#?}"
+  done
+  echo "${prefixes[@]}"
 
 }
 

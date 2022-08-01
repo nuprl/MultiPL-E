@@ -14,7 +14,23 @@
 # $1 is a space-separated list
 # $2 is an integer
 will_it_fly() {
-echo 0
+    local sum=0
+    local is_balanced=true
+    local l=${#1}
+    for (( i=0; i<l; i++ )); do
+        sum=$((sum + ${1:i:1}))
+        if [[ $((i % 2)) -eq 0 ]]; then
+            if [[ $((sum % 2)) -ne 0 ]]; then
+                is_balanced=false
+                break
+            fi
+        fi
+    done
+    if [[ $is_balanced == true ]] && [[ $sum -le $2 ]]; then
+        echo true
+    else
+        echo false
+    fi
 
 }
 

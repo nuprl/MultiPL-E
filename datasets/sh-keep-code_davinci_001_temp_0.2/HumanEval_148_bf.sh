@@ -16,7 +16,36 @@
 # $1 is a string
 # $2 is a string
 bf() {
-echo 0
+    if [[ $1 == "Mercury" ]] && [[ $2 == "Neptune" ]]; then
+        echo "Venus"
+    elif [[ $1 == "Venus" ]] && [[ $2 == "Neptune" ]]; then
+        echo "Earth"
+    elif [[ $1 == "Earth" ]] && [[ $2 == "Neptune" ]]; then
+        echo "Mars"
+    elif [[ $1 == "Mars" ]] && [[ $2 == "Neptune" ]]; then
+        echo "Jupiter"
+    elif [[ $1 == "Jupiter" ]] && [[ $2 == "Neptune" ]]; then
+        echo "Saturn"
+    elif [[ $1 == "Saturn" ]] && [[ $2 == "Neptune" ]]; then
+        echo "Uranus"
+    elif [[ $1 == "Uranus" ]] && [[ $2 == "Neptune" ]]; then
+        echo "Neptune"
+    elif [[ $1 == "Neptune" ]] && [[ $2 == "Uranus" ]]; then
+        echo "Pluto"
+    elif [[ $1 == "Pluto" ]] && [[ $2 == "Uranus" ]]; then
+        echo "Neptune"
+    elif [[ $1 == "Neptune" ]] && [[ $2 == "Pluto" ]]; then
+        echo "Uranus"
+    elif [[ $1 == "Uranus" ]] && [[ $2 == "Pluto" ]]; then
+        echo "Saturn"
+    elif [[ $1 == "Saturn" ]] && [[ $2 == "Pluto" ]]; then
+        echo "Jupiter"
+    elif [[ $1 == "Jupiter" ]] && [[ $2 == "Pluto" ]]; then
+        echo "Mars"
+    elif [[ $1 == "Mars" ]] && [[ $2 == "Pluto" ]]; then
+        echo "Earth"
+    elif [[ $1 == "Earth" ]] && [[ $2 == "Pluto" ]]; then
+        echo "
 
 }
 

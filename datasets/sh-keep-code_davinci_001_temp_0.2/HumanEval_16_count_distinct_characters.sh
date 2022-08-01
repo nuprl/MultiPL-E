@@ -7,7 +7,14 @@
 #
 # $1 is a string
 count_distinct_characters() {
-echo 0
+    local string="$1"
+    local distinct_characters=0
+    for character in $(echo "$string" | tr '[:upper:]' '[:lower:]'); do
+        if [[ "$(echo "$string" | grep -o "$character" | wc -l)" -eq 1 ]]; then
+            ((distinct_characters++))
+        fi
+    done
+    echo "$distinct_characters"
 
 }
 

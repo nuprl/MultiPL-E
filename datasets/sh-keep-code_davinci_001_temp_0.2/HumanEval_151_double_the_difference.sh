@@ -9,7 +9,19 @@
 #
 # $1 is a space-separated list
 double_the_difference() {
-echo 0
+  # your code here
+  sum=0
+  for i in $1
+  do
+    if [ $i -ge 0 ] && [ $i -eq $i 2> /dev/null ]
+    then
+      if [ $(($i % 2)) -eq 1 ]
+      then
+        sum=$(($sum + $i * $i))
+      fi
+    fi
+  done
+  echo $sum
 
 }
 

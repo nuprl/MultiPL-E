@@ -5,7 +5,7 @@
 #
 # $1 is a space-separated list
 unique() {
-echo 0
+    echo "$1" | tr ' ' '\n' | sort -u | tr '\n' ' '
 
 }
 

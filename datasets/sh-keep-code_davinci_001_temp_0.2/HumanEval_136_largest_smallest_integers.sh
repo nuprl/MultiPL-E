@@ -10,7 +10,29 @@
 #
 # $1 is a space-separated list
 largest_smallest_integers() {
-echo 0
+    # your code here
+    if [ -z "$1" ]; then
+        echo "None None"
+    else
+        local a=0
+        local b=0
+        for i in $1; do
+            if [ $i -lt 0 ]; then
+                if [ $a -eq 0 ]; then
+                    a=$i
+                elif [ $a -lt $i ]; then
+                    a=$i
+                fi
+            elif [ $i -gt 0 ]; then
+                if [ $b -eq 0 ]; then
+                    b=$i
+                elif [ $b -gt $i ]; then
+                    b=$i
+                fi
+            fi
+        done
+        echo "$a $b"
+    fi
 
 }
 

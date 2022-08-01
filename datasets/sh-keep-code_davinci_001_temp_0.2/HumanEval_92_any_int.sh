@@ -12,7 +12,15 @@
 # $2 is a floating point
 # $3 is a floating point
 any_int() {
-echo 0
+  if [[ $1 =~ ^[0-9]+$ ]] && [[ $2 =~ ^[0-9]+$ ]] && [[ $3 =~ ^[0-9]+$ ]]; then
+    if [[ $1 -eq $2 ]] || [[ $1 -eq $3 ]] || [[ $2 -eq $3 ]]; then
+      echo "True"
+    else
+      echo "False"
+    fi
+  else
+    echo "False"
+  fi
 
 }
 

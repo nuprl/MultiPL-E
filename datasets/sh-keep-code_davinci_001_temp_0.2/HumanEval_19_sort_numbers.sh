@@ -7,7 +7,9 @@
 #
 # $1 is a string
 sort_numbers() {
-echo 0
+    local numbers=($(echo $1 | tr ' ' '\n'))
+    local sorted_numbers=($(echo ${numbers[@]} | tr ' ' '\n' | sort -n))
+    echo "${sorted_numbers[@]}" | tr ' ' ' '
 
 }
 

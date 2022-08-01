@@ -10,7 +10,18 @@
 # $1 is an integer
 # $2 is an integer
 circular_shift() {
-echo 0
+    local x=$1
+    local shift=$2
+    local digits=$(echo -n "$x" | wc -c)
+    local result=""
+    local i=0
+    while [ $i -lt $digits ]; do
+        local digit=$(echo -n "$x" | cut -c $i)
+        local new_digit=$(echo -n "$x" | cut -c $((i+shift)))
+        result="$result$new_digit"
+        i=$((i+1))
+    done
+    echo -n "$result"
 
 }
 

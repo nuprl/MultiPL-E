@@ -11,7 +11,15 @@
 # $2 is an integer
 # $3 is an integer
 right_angle_triangle() {
-echo 0
+    if [ $1 -gt 0 ] && [ $2 -gt 0 ] && [ $3 -gt 0 ]; then
+        if [ $(($1**2 + $2**2)) -eq $3**2 ]; then
+            echo "True"
+        else
+            echo "False"
+        fi
+    else
+        echo "False"
+    fi
 
 }
 

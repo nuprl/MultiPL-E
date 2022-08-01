@@ -12,7 +12,12 @@
 # $1 is an integer
 # $2 is an integer
 rounded_avg() {
-echo 0
+    if [[ $1 -gt $2 ]]; then
+        echo "-1"
+    else
+        sum=$(( ($2 - $1 + 1) * ($1 + $2) / 2 ))
+        echo "obase=2;$sum" | bc
+    fi
 
 }
 

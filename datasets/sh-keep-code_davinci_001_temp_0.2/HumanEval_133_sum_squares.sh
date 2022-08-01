@@ -11,7 +11,11 @@
 #
 # $1 is a space-separated list
 sum_squares() {
-echo 0
+  local sum=0
+  for i in $1; do
+    sum=$((sum + i * i))
+  done
+  echo $sum
 
 }
 

@@ -12,7 +12,43 @@
 # $1 is a space-separated list
 # $2 is a space-separated list
 total_match() {
-echo 0
+  # your code
+  local total_match_list=()
+  local total_match_list_len=0
+  local total_match_list_len_2=0
+  local total_match_list_len_3=0
+  local total_match_list_len_4=0
+  local total_match_list_len_5=0
+  local total_match_list_len_6=0
+  local total_match_list_len_7=0
+  local total_match_list_len_8=0
+  local total_match_list_len_9=0
+  local total_match_list_len_10=0
+  local total_match_list_len_11=0
+  local total_match_list_len_12=0
+  local total_match_list_len_13=0
+  local total_match_list_len_14=0
+  local total_match_list_len_15=0
+  local total_match_list_len_16=0
+  local total_match_list_len_17=0
+  local total_match_list_len_18=0
+  local total_match_list_len_19=0
+  local total_match_list_len_20=0
+  local total_match_list_len_21=0
+  local total_match_list_len_22=0
+  local total_match_list_len_23=0
+  local total_match_list_len_24=0
+  local total_match_list_len_25=0
+  local total_match_list_len_26=0
+  local total_match_list_len_27=0
+  local total_match_list_len_28=0
+  local total_match_list_len_29=0
+  local total_match_list_len_30=0
+  local total_match_list_len_31=0
+  local total_match_list_len_32=0
+  local total_match_list_len_33=0
+  local total_match_list_len_34=0
+  local total_match_list_len_
 
 }
 

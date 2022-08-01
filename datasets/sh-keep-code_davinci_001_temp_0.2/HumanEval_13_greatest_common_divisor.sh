@@ -8,7 +8,13 @@
 # $1 is an integer
 # $2 is an integer
 greatest_common_divisor() {
-echo 0
+    if [ $1 -eq $2 ]; then
+        echo $1
+    elif [ $1 -gt $2 ]; then
+        greatest_common_divisor $(($1 - $2)) $2
+    else
+        greatest_common_divisor $1 $(($2 - $1))
+    fi
 
 }
 

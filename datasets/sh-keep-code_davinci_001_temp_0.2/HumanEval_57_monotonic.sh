@@ -9,7 +9,26 @@
 #
 # $1 is a space-separated list
 monotonic() {
-echo 0
+    local list=$1
+    local direction=0
+    local last=0
+    for i in $list; do
+        if [ $last -gt $i ]; then
+            if [ $direction -eq 0 ]; then
+                direction=-1
+            elif [ $direction -eq 1 ]; then
+                return 1
+            fi
+        elif [ $last -lt $i ]; then
+            if [ $direction -eq 0 ]; then
+                direction=1
+            elif [ $direction -eq -1 ]; then
+                return 1
+            fi
+        fi
+        last=$i
+    done
+    return 0
 
 }
 

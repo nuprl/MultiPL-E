@@ -17,7 +17,18 @@
 #
 # $1 is an integer
 even_odd_palindrome() {
-echo 0
+    local even=0
+    local odd=0
+    for (( i=1; i<=$1; i++ )); do
+        if [[ $(is_palindrome $i) -eq 1 ]]; then
+            if [[ $(is_even $i) -eq 1 ]]; then
+                (( even++ ))
+            else
+                (( odd++ ))
+            fi
+        fi
+    done
+    echo $even $odd
 
 }
 

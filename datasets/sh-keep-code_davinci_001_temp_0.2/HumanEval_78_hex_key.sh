@@ -18,7 +18,15 @@
 #
 # $1 is a string
 hex_key() {
-echo 0
+    local num=$1
+    local count=0
+    local hex_digits="0 1 2 3 4 5 6 7 8 9 A B C D E F"
+    for digit in $hex_digits; do
+        if [[ $num =~ $digit ]]; then
+            count=$((count+1))
+        fi
+    done
+    echo $count
 
 }
 

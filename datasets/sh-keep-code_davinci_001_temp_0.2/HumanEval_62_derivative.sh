@@ -9,7 +9,12 @@
 #
 # $1 is a space-separated list
 derivative() {
-echo 0
+    local xs=($1)
+    local result=()
+    for ((i=1; i<${#xs[@]}; i++)); do
+        result+=(${xs[i]}*$i)
+    done
+    echo ${result[@]}
 
 }
 

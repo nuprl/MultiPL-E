@@ -7,7 +7,7 @@
 #
 # $1 is a space-separated list
 concatenate() {
-echo 0
+    echo "$*" | sed -e 's/ /\n/g' | tr -d '\n'
 
 }
 

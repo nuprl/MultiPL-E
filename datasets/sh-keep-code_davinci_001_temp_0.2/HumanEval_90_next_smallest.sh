@@ -9,7 +9,17 @@
 #
 # $1 is a space-separated list
 next_smallest() {
-echo 0
+    local -a arr
+    mapfile -t arr < <(echo "$1" | tr ' ' '\n' | sort -n)
+    local -i i
+    for ((i=0; i<${#arr[@]}-1; i++)); do
+        if [[ ${arr[i]} -lt ${arr[i+1]} ]]; then
+            echo "${arr[i+1]}"
+            return 0
+        fi
+    done
+    echo "None"
+    return 1
 
 }
 

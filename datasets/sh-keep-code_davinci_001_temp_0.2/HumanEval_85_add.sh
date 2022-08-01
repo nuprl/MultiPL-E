@@ -5,7 +5,13 @@
 #
 # $1 is a space-separated list
 add() {
-echo 0
+    local sum=0
+    for i in $1; do
+        if [[ $((i % 2)) -eq 0 ]] && [[ $((i % 2)) -eq $((i / 2)) ]]; then
+            sum=$((sum + i))
+        fi
+    done
+    echo $sum
 
 }
 

@@ -11,7 +11,23 @@
 #
 # $1 is a string
 parse_music() {
-echo 0
+    local beats=()
+    local beat=0
+    for (( i=0; i<${#1}; i++ )); do
+        case "${1:$i:1}" in
+            "o")
+                beat=4
+                ;;
+            "o|")
+                beat=2
+                ;;
+            ".|")
+                beat=1
+                ;;
+        esac
+        beats+=($beat)
+    done
+    echo "${beats[@]}"
 
 }
 

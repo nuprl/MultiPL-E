@@ -9,7 +9,17 @@
 #
 # $1 is a space-separated list
 below_zero() {
-echo 0
+  local balance=0
+  for i in $1; do
+    if [[ $i -lt 0 ]]; then
+      balance=$((balance + i))
+      if [[ $balance -lt 0 ]]; then
+        echo true
+        return
+      fi
+    fi
+  done
+  echo false
 
 }
 

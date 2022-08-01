@@ -12,7 +12,16 @@
 #
 # $1 is an integer
 make_a_pile() {
-echo 0
+  local n=$1
+  local result=()
+  local i=0
+  while [ $n -gt 0 ]; do
+    let i+=1
+    local next=$(((n+1)%2))
+    result+=($next)
+    n=$next
+  done
+  echo "${result[@]}"
 
 }
 

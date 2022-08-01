@@ -12,7 +12,13 @@
 #
 # $1 is an integer
 iscube() {
-echo 0
+    local -i a=$1
+    local -i b=$(($a**(1/3)))
+    if [ $b -eq $a ]; then
+        echo true
+    else
+        echo false
+    fi
 
 }
 

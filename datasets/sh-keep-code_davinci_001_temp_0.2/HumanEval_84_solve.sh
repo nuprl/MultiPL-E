@@ -12,7 +12,14 @@
 #
 # $1 is an integer
 solve() {
-echo 0
+    local N=$1
+    local sum=0
+    while [ $N -gt 0 ]; do
+        local digit=$((N % 2))
+        sum=$((sum + digit))
+        N=$((N / 2))
+    done
+    echo $sum
 
 }
 

@@ -10,7 +10,21 @@
 # $1 is a string
 # $2 is a string
 how_many_times() {
-echo 0
+    local str="$1"
+    local substr="$2"
+    local count=0
+    local i=0
+    while [ $i -lt ${#str} ]; do
+        local j=0
+        while [ $j -lt ${#substr} ]; do
+            if [ "${str:$i:${#substr}}" == "$substr" ]; then
+                ((count++))
+            fi
+            ((j++))
+        done
+        ((i++))
+    done
+    echo $count
 
 }
 

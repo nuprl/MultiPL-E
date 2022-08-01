@@ -11,7 +11,8 @@
 #
 # $1 is a string
 encrypt() {
-echo 0
+  # Your code here
+  echo $1 | tr '[a-z]' '[b-za]' | tr '[A-Z]' '[C-ZA-B]'
 
 }
 

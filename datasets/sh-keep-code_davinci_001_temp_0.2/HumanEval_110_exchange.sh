@@ -14,7 +14,25 @@
 # $1 is a space-separated list
 # $2 is a space-separated list
 exchange() {
-echo 0
+    # Write your code here
+    local lst1=$1
+    local lst2=$2
+    local even=0
+    for i in $lst1; do
+        if [ $((i%2)) -eq 0 ]; then
+            even=$((even+1))
+        fi
+    done
+    for i in $lst2; do
+        if [ $((i%2)) -eq 0 ]; then
+            even=$((even-1))
+        fi
+    done
+    if [ $even -eq 0 ]; then
+        echo "YES"
+    else
+        echo "NO"
+    fi
 
 }
 

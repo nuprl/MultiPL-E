@@ -9,7 +9,18 @@
 #
 # $1 is a space-separated list
 find_max() {
-echo 0
+  local max_word=""
+  local max_len=0
+  local len=0
+  local word=""
+  for word in $1; do
+    len=${#word}
+    if [[ $len -gt $max_len ]]; then
+      max_len=$len
+      max_word=$word
+    fi
+  done
+  echo $max_word
 
 }
 

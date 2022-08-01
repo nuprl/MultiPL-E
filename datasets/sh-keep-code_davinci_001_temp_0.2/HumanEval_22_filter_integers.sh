@@ -7,7 +7,7 @@
 #
 # $1 is a space-separated list
 filter_integers() {
-echo 0
+    echo "$1" | tr ' ' '\n' | grep -E '^[0-9]+$'
 
 }
 

@@ -12,7 +12,14 @@
 #
 # $1 is a string
 digitSum() {
-echo 0
+    sum=0
+    for (( i=0; i<${#1}; i++ )); do
+        char=${1:$i:1}
+        if [[ "$char" =~ [A-Z] ]]; then
+            sum=$((sum+$(printf "%d" "'$char")))
+        fi
+    done
+    echo $sum
 
 }
 

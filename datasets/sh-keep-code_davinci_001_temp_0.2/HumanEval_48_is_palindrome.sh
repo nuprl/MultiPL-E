@@ -11,7 +11,16 @@
 #
 # $1 is a string
 is_palindrome() {
-echo 0
+    local str=$1
+    local len=${#str}
+    local i=0
+    while [ $i -lt $((len/2)) ]; do
+        if [ "${str:$i:1}" != "${str:$((len-i-1)):1}" ]; then
+            return 1
+        fi
+        i=$((i+1))
+    done
+    return 0
 
 }
 

@@ -8,7 +8,10 @@
 #
 # $1 is a floating point
 truncate_number() {
-echo 0
+    local number=$1
+    local integer_part=$(echo $number | cut -d. -f1)
+    local decimal_part=$(echo $number | cut -d. -f2)
+    echo $decimal_part
 
 }
 

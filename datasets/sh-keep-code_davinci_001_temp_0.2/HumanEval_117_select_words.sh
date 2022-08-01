@@ -14,7 +14,51 @@
 # $1 is a string
 # $2 is an integer
 select_words() {
-echo 0
+    local words=()
+    local count=0
+    local word=""
+    local word_count=0
+    local word_start=0
+    local word_end=0
+    local word_length=0
+    local word_consonants=0
+    local word_vowels=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=0
+    local word_vowel_count=0
+    local word_consonant_count=
 
 }
 

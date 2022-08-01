@@ -11,7 +11,15 @@
 # $1 is a space-separated list
 # $2 is an integer
 add_elements() {
-echo 0
+  local sum=0
+  for i in $(seq 1 $2); do
+    local element=$(echo $1 | cut -d' ' -f$i)
+    local element_len=${#element}
+    if [ $element_len -le 2 ]; then
+      sum=$((sum + element))
+    fi
+  done
+  echo $sum
 
 }
 

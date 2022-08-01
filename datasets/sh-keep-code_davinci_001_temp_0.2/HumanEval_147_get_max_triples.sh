@@ -12,7 +12,41 @@
 #
 # $1 is an integer
 get_max_triples() {
-echo 0
+    local max_triples=0
+    local max_triple_sum=0
+    local max_triple_sum_index=0
+    local max_triple_sum_index_2=0
+    local max_triple_sum_index_3=0
+    local max_triple_sum_index_4=0
+    local max_triple_sum_index_5=0
+    local max_triple_sum_index_6=0
+    local max_triple_sum_index_7=0
+    local max_triple_sum_index_8=0
+    local max_triple_sum_index_9=0
+    local max_triple_sum_index_10=0
+    local max_triple_sum_index_11=0
+    local max_triple_sum_index_12=0
+    local max_triple_sum_index_13=0
+    local max_triple_sum_index_14=0
+    local max_triple_sum_index_15=0
+    local max_triple_sum_index_16=0
+    local max_triple_sum_index_17=0
+    local max_triple_sum_index_18=0
+    local max_triple_sum_index_19=0
+    local max_triple_sum_index_20=0
+    local max_triple_sum_index_21=0
+    local max_triple_sum_index_22=0
+    local max_triple_sum_index_23=0
+    local max_triple_sum_index_24=0
+    local max_triple_sum_index_25=0
+    local max_triple_sum_index_26=0
+    local max_triple_sum_index_27=0
+    local max_triple_sum_index_28=0
+    local max_triple_sum_index_29=0
+    local max_triple_sum_index_30=0
+    local max_triple_sum_index_31=0
+    local max_triple_sum_index_32=0
+   
 
 }
 

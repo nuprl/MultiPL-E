@@ -8,7 +8,16 @@
 #
 # $1 is an integer
 digits() {
-echo 0
+  local product=1
+  local number=$1
+  while [ $number -gt 0 ]; do
+    local digit=$((number % 10))
+    if [ $((digit % 2)) -eq 1 ]; then
+      product=$((product * digit))
+    fi
+    number=$((number / 10))
+  done
+  echo $product
 
 }
 

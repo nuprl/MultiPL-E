@@ -17,7 +17,20 @@
 #
 # $1 is an integer
 tri() {
-echo 0
+    local n=$1
+    local -a arr=()
+    for ((i=0; i<=n; i++)); do
+        if ((i==0)); then
+            arr[$i]=3
+        elif ((i==1)); then
+            arr[$i]=1
+        elif ((i==2)); then
+            arr[$i]=2
+        else
+            arr[$i]=$((arr[$((i-1))]+arr[$((i-2))]+arr[$((i-3))]))
+        fi
+    done
+    echo ${arr[@]}
 
 }
 

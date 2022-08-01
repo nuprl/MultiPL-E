@@ -5,7 +5,7 @@
 #
 # $1 is a string
 flip_case() {
-echo 0
+    echo "$1" | tr '[:upper:]' '[:lower:]' | tr '[:lower:]' '[:upper:]'
 
 }
 

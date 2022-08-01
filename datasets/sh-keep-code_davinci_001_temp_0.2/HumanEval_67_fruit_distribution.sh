@@ -13,7 +13,8 @@
 # $1 is a string
 # $2 is an integer
 fruit_distribution() {
-echo 0
+    # Write your code here
+    echo $2
 
 }
 

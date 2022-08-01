@@ -9,7 +9,16 @@
 #
 # $1 is a space-separated list
 longest() {
-echo 0
+  local longest_string=""
+  local longest_length=0
+  for string in $1; do
+    local length=${#string}
+    if [[ $length -gt $longest_length ]]; then
+      longest_string=$string
+      longest_length=$length
+    fi
+  done
+  echo $longest_string
 
 }
 

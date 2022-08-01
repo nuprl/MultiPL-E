@@ -7,7 +7,8 @@
 #
 # $1 is an integer
 is_equal_to_sum_even() {
-echo 0
+    # your code here
+    return 0
 
 }
 

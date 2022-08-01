@@ -6,7 +6,16 @@
 #
 # $1 is a space-separated list
 rolling_max() {
-echo 0
+  local -a arr=("$@")
+  local -a res=()
+  local max=0
+  for ((i=0; i<${#arr[@]}; i++)); do
+    if [[ ${arr[i]} -gt $max ]]; then
+      max=${arr[i]}
+    fi
+    res[i]=$max
+  done
+  echo "${res[@]}"
 
 }
 

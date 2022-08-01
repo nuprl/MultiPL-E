@@ -15,7 +15,12 @@
 #
 # $1 is a string
 closest_integer() {
-echo 0
+    # Convert string to number
+    num=$(echo $1 | bc -l)
+    # Round number to nearest integer
+    rounded=$(echo "scale=0; $num+0.5" | bc)
+    # Convert number to string
+    echo $rounded | awk '{printf "%f", $0}'
 
 }
 

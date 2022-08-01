@@ -10,7 +10,14 @@
 #
 # $1 is a space-separated list
 unique_digits() {
-echo 0
+    local -a result
+    local -i i
+    for i in $1; do
+        if [[ $i =~ [13579] ]]; then
+            result+=($i)
+        fi
+    done
+    echo "${result[@]}"
 
 }
 

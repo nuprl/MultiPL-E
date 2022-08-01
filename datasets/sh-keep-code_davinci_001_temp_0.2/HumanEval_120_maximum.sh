@@ -18,7 +18,13 @@
 # $1 is a space-separated list
 # $2 is an integer
 maximum() {
-echo 0
+    local max=$2
+    for i in $1; do
+        if [[ $i -gt $max ]]; then
+            max=$i
+        fi
+    done
+    echo $max
 
 }
 

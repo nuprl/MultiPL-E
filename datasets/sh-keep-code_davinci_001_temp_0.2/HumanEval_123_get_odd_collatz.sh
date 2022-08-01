@@ -13,7 +13,19 @@
 #
 # $1 is an integer
 get_odd_collatz() {
-echo 0
+    # Write your code here
+    local n=$1
+    local collatz=()
+    while [ $n -ne 1 ]; do
+        collatz+=($n)
+        if [ $((n%2)) -eq 0 ]; then
+            n=$((n/2))
+        else
+            n=$((3*n+1))
+        fi
+    done
+    collatz+=(1)
+    echo ${collatz[@]}
 
 }
 

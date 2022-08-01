@@ -7,7 +7,16 @@
 #
 # $1 is a string
 count_upper() {
-echo 0
+    local count=0
+    local i=0
+    local s=$1
+    while [ $i -lt ${#s} ]; do
+        if [[ ${s:$i:1} =~ [AEIOU] ]]; then
+            ((count++))
+        fi
+        ((i+=2))
+    done
+    echo $count
 
 }
 

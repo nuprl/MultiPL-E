@@ -9,7 +9,11 @@
 #
 # $1 is a space-separated list
 sort_array() {
-echo 0
+  # your code goes here
+  IFS=' ' read -ra arr <<< "$1"
+  for i in "${arr[@]}"; do
+    echo "$i"
+  done | sort -n -k1,1 -k2,2 -k3,3 -k4,4 -k5,5 -k6,6 -k7,7 -k8,8 -k9,9
 
 }
 

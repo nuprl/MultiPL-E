@@ -10,7 +10,8 @@
 #
 # $1 is a string
 is_bored() {
-echo 0
+    # your code here
+    echo $1 | grep -o "^I" | wc -l
 
 }
 

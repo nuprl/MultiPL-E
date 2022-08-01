@@ -7,7 +7,32 @@
 #
 # $1 is a string
 words_string() {
-echo 0
+    local words_array=()
+    local words_string=$1
+    local words_string_length=${#words_string}
+    local word_start_index=0
+    local word_end_index=0
+    local word_length=0
+    local word=""
+    for ((i=0; i<$words_string_length; i++)); do
+        if [[ ${words_string:$i:1} == "," || ${words_string:$i:1} == " " ]]; then
+            word_end_index=$i
+            word_length=${#word}
+            if [[ $word_length -gt 0 ]]; then
+                words_array+=("$word")
+            fi
+            word=""
+            word_start_index=$i+1
+        else
+            word+="${words_string:$i:1}"
+        fi
+    done
+    word_end_index=$i
+    word_length=${#word}
+    if [[ $word_length -gt 0 ]]; then
+        words_array+=("$word")
+    fi
+    echo "${words_array[@]}"
 
 }
 

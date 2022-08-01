@@ -13,7 +13,18 @@
 # $1 is an integer
 # $2 is an integer
 is_simple_power() {
-echo 0
+    if [[ $1 -eq 1 ]]; then
+        return 0
+    fi
+    if [[ $1 -eq $2 ]]; then
+        return 0
+    fi
+    if [[ $1 -gt $2 ]]; then
+        return 1
+    fi
+    if [[ $1 -lt $2 ]]; then
+        return 1
+    fi
 
 }
 

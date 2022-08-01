@@ -10,7 +10,46 @@
 #
 # $1 is an integer
 decimal_to_binary() {
-echo 0
+  local -i num=$1
+  local -i i=0
+  local -i binary=0
+  local -i remainder=0
+  local -i power=0
+  local -i result=""
+  local -i length=0
+  local -i max_length=0
+  local -i max_power=0
+  local -i max_num=0
+  local -i max_binary=0
+  local -i max_remainder=0
+  local -i max_result=""
+  local -i max_i=0
+  local -i max_power_i=0
+  local -i max_binary_i=0
+  local -i max_remainder_i=0
+  local -i max_result_i=0
+  local -i max_length_i=0
+  local -i max_max_length_i=0
+  local -i max_max_power_i=0
+  local -i max_max_num_i=0
+  local -i max_max_binary_i=0
+  local -i max_max_remainder_i=0
+  local -i max_max_result_i=0
+  local -i max_max_i=0
+  local -i max_max_power_i=0
+  local -i max_max_binary_i=0
+  local -i max_max_remainder_i=0
+  local -i max_max_result_i=0
+  local -i max_max_length_i=0
+  local -i max_max_max_length_i=0
+  local -i max_max_max_power_i=0
+  local -i max_max_max_num_i=0
+  local -i max_max_max_binary_i=0
+  local -i max_max_max_remainder_i=0
+  local -i max_max_max_result_i=0
+  local -i max_max_max_i=0
+  local -i max_max_max_power_i=0
+  local -i max_max_max_binary_i
 
 }
 

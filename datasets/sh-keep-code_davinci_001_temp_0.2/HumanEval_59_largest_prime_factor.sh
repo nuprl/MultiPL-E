@@ -7,7 +7,17 @@
 #
 # $1 is an integer
 largest_prime_factor() {
-echo 0
+    local n=$1
+    local factor=2
+    while [ $factor -lt $n ]; do
+        if [ $(($n % $factor)) -eq 0 ]; then
+            n=$(($n / $factor))
+            factor=2
+        else
+            factor=$(($factor + 1))
+        fi
+    done
+    echo $n
 
 }
 

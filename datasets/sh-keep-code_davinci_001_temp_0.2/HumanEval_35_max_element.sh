@@ -7,7 +7,13 @@
 #
 # $1 is a space-separated list
 max_element() {
-echo 0
+    local max=0
+    for i in $1; do
+        if [ $i -gt $max ]; then
+            max=$i
+        fi
+    done
+    echo $max
 
 }
 

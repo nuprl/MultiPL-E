@@ -7,7 +7,19 @@
 #
 # $1 is a space-separated list
 median() {
-echo 0
+    local l="$1"
+    local n=$(echo "$l" | wc -w)
+    local m=$((n/2))
+    local l2=$(echo "$l" | sort -n)
+    if [ $n -eq 1 ]; then
+        echo "$l2"
+    elif [ $n -eq 2 ]; then
+        echo "scale=1; ($l2[1] + $l2[2]) / 2" | bc
+    elif [ $n -eq 3 ]; then
+        echo "scale=1; ($l2[1] + $l2[2] + $l2[3]) / 3" | bc
+    else
+        echo "scale=1; ($l2[$m] + $l2[$m+1]) / 2" | bc
+    fi
 
 }
 

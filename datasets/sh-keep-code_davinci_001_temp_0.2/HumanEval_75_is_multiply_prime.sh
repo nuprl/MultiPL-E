@@ -8,7 +8,19 @@
 #
 # $1 is an integer
 is_multiply_prime() {
-echo 0
+    local number=$1
+    local prime_number=2
+    local is_multiply_prime=true
+    while [ $prime_number -lt $number ]
+    do
+        if [ $((number % prime_number)) -eq 0 ]
+        then
+            is_multiply_prime=false
+            break
+        fi
+        prime_number=$((prime_number + 1))
+    done
+    echo $is_multiply_prime
 
 }
 

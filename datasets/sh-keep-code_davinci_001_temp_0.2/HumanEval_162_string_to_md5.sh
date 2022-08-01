@@ -5,7 +5,12 @@
 #
 # $1 is a string
 string_to_md5() {
-echo 0
+    local text=$1
+    if [ -z "$text" ]; then
+        echo "None"
+    else
+        echo "$text" | md5sum | cut -d ' ' -f 1
+    fi
 
 }
 

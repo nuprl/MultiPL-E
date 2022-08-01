@@ -21,7 +21,40 @@
 #
 # $1 is a space-separated list
 move_one_ball() {
-echo 0
+    local arr=($1)
+    local len=${#arr[@]}
+    local i=0
+    local j=0
+    local k=0
+    local flag=0
+    local temp=0
+    while [ $i -lt $len ]
+    do
+        flag=0
+        j=$i
+        while [ $j -lt $len ]
+        do
+            if [ ${arr[$i]} -gt ${arr[$j]} ]
+            then
+                temp=${arr[$i]}
+                arr[$i]=${arr[$j]}
+                arr[$j]=$temp
+                flag=1
+            fi
+            j=$((j+1))
+        done
+        if [ $flag -eq 0 ]
+        then
+            break
+        fi
+        i=$((i+1))
+    done
+    if [ $flag -eq 0 ]
+    then
+        echo "False"
+    else
+        echo "True"
+    fi
 
 }
 

@@ -12,7 +12,31 @@
 #
 # $1 is a string
 encode() {
-echo 0
+    local message=$1
+    local encoded=""
+    for (( i=0; i<${#message}; i++ )); do
+        local char=${message:$i:1}
+        if [[ $char =~ [a-zA-Z] ]]; then
+            local newchar=$(echo $char | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
 
 }
 

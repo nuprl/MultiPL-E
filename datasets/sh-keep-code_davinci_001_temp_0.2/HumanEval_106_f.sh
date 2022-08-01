@@ -9,7 +9,25 @@
 #
 # $1 is an integer
 f() {
-echo 0
+    local n=$1
+    local i=1
+    local result=()
+    while [ $i -le $n ]
+    do
+        if [ $((i%2)) -eq 0 ]
+        then
+            result[$i]=$((i*(i-1)*(i-2)*(i-3)*(i-4)*(i-5)*(i-6)*(i-7)*(i-8)*(i-9)*(i-10)))
+        else
+            local sum=0
+            for j in $(seq 1 $i)
+            do
+                sum=$((sum+j))
+            done
+            result[$i]=$sum
+        fi
+        ((i++))
+    done
+    echo ${result[@]}
 
 }
 

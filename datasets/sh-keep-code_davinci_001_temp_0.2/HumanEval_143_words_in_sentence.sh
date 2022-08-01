@@ -16,7 +16,20 @@
 #
 # $1 is a string
 words_in_sentence() {
-echo 0
+    local sentence="$1"
+    local words=()
+    local word=""
+    local i=0
+    for ((i=0; i<${#sentence}; i++)); do
+        if [[ "${sentence:$i:1}" == " " ]]; then
+            words+=("$word")
+            word=""
+        else
+            word="$word${sentence:$i:1}"
+        fi
+    done
+    words+=("$word")
+    echo "${words[@]}"
 
 }
 

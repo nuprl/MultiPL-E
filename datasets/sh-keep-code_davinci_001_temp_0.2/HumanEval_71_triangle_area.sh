@@ -12,7 +12,11 @@
 # $2 is an integer
 # $3 is an integer
 triangle_area() {
-echo 0
+  if (( $1 + $2 > $3 )) && (( $2 + $3 > $1 )) && (( $1 + $3 > $2 )); then
+    echo "scale=2; ($1 * $2 * 0.5)" | bc
+  else
+    echo "-1"
+  fi
 
 }
 

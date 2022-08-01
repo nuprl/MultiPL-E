@@ -10,7 +10,15 @@
 #
 # $1 is an integer
 special_factorial() {
-echo 0
+    if [ $1 -eq 0 ]; then
+        echo 1
+    else
+        local result=1
+        for ((i=1; i<=$1; i++)); do
+            result=$((result * i))
+        done
+        echo $result
+    fi
 
 }
 

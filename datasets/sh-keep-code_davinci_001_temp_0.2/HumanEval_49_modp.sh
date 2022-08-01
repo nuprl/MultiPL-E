@@ -14,7 +14,17 @@
 # $1 is an integer
 # $2 is an integer
 modp() {
-echo 0
+  local n=$1
+  local p=$2
+  local r=1
+  while [ $n -gt 0 ]; do
+    if [ $((n % 2)) -eq 1 ]; then
+      r=$((r * p))
+    fi
+    n=$((n / 2))
+    p=$((p * p))
+  done
+  echo $r
 
 }
 

@@ -17,7 +17,15 @@
 #
 # $1 is an integer
 is_prime() {
-echo 0
+    if [ $1 -eq 1 ]; then
+        return 1
+    fi
+    for (( i=2; i<$1; i++ )); do
+        if [ $(( $1 % $i )) -eq 0 ]; then
+            return 1
+        fi
+    done
+    return 0
 
 }
 

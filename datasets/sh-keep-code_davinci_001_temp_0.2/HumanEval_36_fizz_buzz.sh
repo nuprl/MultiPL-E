@@ -9,7 +9,15 @@
 #
 # $1 is an integer
 fizz_buzz() {
-echo 0
+    local count=0
+    for ((i=1; i<$1; i++)); do
+        if [[ $((i%11)) -eq 0 ]] || [[ $((i%13)) -eq 0 ]]; then
+            if [[ $((i%7)) -eq 0 ]]; then
+                ((count++))
+            fi
+        fi
+    done
+    echo $count
 
 }
 

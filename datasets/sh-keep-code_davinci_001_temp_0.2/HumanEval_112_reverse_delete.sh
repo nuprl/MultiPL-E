@@ -12,7 +12,28 @@
 # $1 is a string
 # $2 is a string
 reverse_delete() {
-echo 0
+    local s=$1
+    local c=$2
+    local result=""
+    local is_palindrome=false
+    for (( i=0; i<${#s}; i++ )); do
+        local char=${s:$i:1}
+        local is_in_c=false
+        for (( j=0; j<${#c}; j++ )); do
+            local c_char=${c:$j:1}
+            if [[ $char == $c_char ]]; then
+                is_in_c=true
+                break
+            fi
+        done
+        if [[ $is_in_c == false ]]; then
+            result+=$char
+        fi
+    done
+    if [[ $result == $(echo $result | rev) ]]; then
+        is_palindrome=true
+    fi
+    echo "$result $is_palindrome"
 
 }
 

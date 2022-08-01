@@ -8,7 +8,26 @@
 #
 # $1 is a space-separated list
 find_closest_elements() {
-echo 0
+    local -a numbers=($1)
+    local -i smallest_difference=999999999
+    local -i smallest_difference_index=0
+    local -i second_smallest_difference=999999999
+    local -i second_smallest_difference_index=0
+    local -i i=0
+    for number in "${numbers[@]}"; do
+        local -i difference=$((number - numbers[smallest_difference_index]))
+        if ((difference < smallest_difference)); then
+            second_smallest_difference=$smallest_difference
+            second_smallest_difference_index=$smallest_difference_index
+            smallest_difference=$difference
+            smallest_difference_index=$i
+        elif ((difference < second_smallest_difference)); then
+            second_smallest_difference=$difference
+            second_smallest_difference_index=$i
+        fi
+        ((i++))
+    done
+    printf "%s %s\n" "${numbers[smallest_difference_index]}" "${numbers[second_smallest_difference_index]}"
 
 }
 

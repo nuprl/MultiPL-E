@@ -9,7 +9,19 @@
 #
 # $1 is a string
 prime_length() {
-echo 0
+    if [[ $1 =~ [^0-9] ]]; then
+        echo "False"
+    else
+        if [[ $1 =~ ^[0-9]+$ ]]; then
+            if [[ $1 =~ ^[0-9]*[02468]$ ]]; then
+                echo "False"
+            else
+                echo "True"
+            fi
+        else
+            echo "False"
+        fi
+    fi
 
 }
 

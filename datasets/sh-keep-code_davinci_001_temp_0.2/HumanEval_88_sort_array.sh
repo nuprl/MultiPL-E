@@ -12,7 +12,36 @@
 #
 # $1 is a space-separated list
 sort_array() {
-echo 0
+    local -a arr
+    arr=($1)
+    local -i sum=0
+    local -i i=0
+    local -i j=0
+    local -i len=${#arr[@]}
+    local -i is_odd=0
+    local -i is_even=0
+    local -i is_odd_sum=0
+    local -i is_even_sum=0
+    local -i is_odd_index=0
+    local -i is_even_index=0
+    local -i is_odd_index_sum=0
+    local -i is_even_index_sum=0
+    local -i is_odd_index_sum_sum=0
+    local -i is_even_index_sum_sum=0
+    local -i is_odd_index_sum_sum_sum=0
+    local -i is_even_index_sum_sum_sum=0
+    local -i is_odd_index_sum_sum_sum_sum=0
+    local -i is_even_index_sum_sum_sum_sum=0
+    local -i is_odd_index_sum_sum_sum_sum_sum=0
+    local -i is_even_index_sum_sum_sum_sum_sum=0
+    local -i is_odd_index_sum_sum_sum_sum_sum_sum=0
+    local -i is_even_index_sum_sum_sum_sum_sum_sum=0
+    local -i is_odd_index_sum_sum_sum_sum_sum_sum_sum=0
+    local -i is_even_index_sum_sum_sum_sum_sum_sum_sum=0
+    local -i is_odd_index_sum_sum_sum_sum_sum_sum_sum_sum=0
+    local -i is_even_index_sum_sum_sum_sum_sum_sum_sum_sum=0
+    local -i is_odd_index_sum_sum_sum_sum_sum_sum_sum_sum_sum=0
+    local -i is_even_index_sum_sum_sum
 
 }
 

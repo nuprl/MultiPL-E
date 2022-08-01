@@ -12,7 +12,42 @@
 #
 # $1 is a string
 make_palindrome() {
-echo 0
+    local str="$1"
+    local len=${#str}
+    local i=0
+    local j=0
+    local max=0
+    local max_i=0
+    local max_j=0
+    local palindrome=''
+    local palindrome_len=0
+    local palindrome_i=0
+    local palindrome_j=0
+    local palindrome_max=0
+    local palindrome_max_i=0
+    local palindrome_max_j=0
+    local palindrome_max_len=0
+    local palindrome_max_str=''
+    local palindrome_max_str_len=0
+    local palindrome_max_str_i=0
+    local palindrome_max_str_j=0
+    local palindrome_max_str_max=0
+    local palindrome_max_str_max_i=0
+    local palindrome_max_str_max_j=0
+    local palindrome_max_str_max_len=0
+    local palindrome_max_str_max_str=''
+    local palindrome_max_str_max_str_len=0
+    local palindrome_max_str_max_str_i=0
+    local palindrome_max_str_max_str_j=0
+    local palindrome_max_str_max_str_max=0
+    local palindrome_max_str_max_str_max_i=0
+    local palindrome_max_str_max_str_max_j=0
+    local palindrome_max_str_max_str_max_len=0
+    local palindrome_max_str_max_str_max_str=''
+    local palindrome_max_str_max_str_max_str_len=0
+    local palindrome_max_str_max_str_max_str_i=0
+    local palindrome_max_str_max_str_max_str_j=0
+    local palindrome_max_str_max_str_
 
 }
 

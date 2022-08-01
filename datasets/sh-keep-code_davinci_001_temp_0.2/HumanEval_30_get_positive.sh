@@ -7,7 +7,14 @@
 #
 # $1 is a space-separated list
 get_positive() {
-echo 0
+    local list=$1
+    local result=()
+    for item in $list; do
+        if [[ $item -gt 0 ]]; then
+            result+=($item)
+        fi
+    done
+    echo "${result[@]}"
 
 }
 

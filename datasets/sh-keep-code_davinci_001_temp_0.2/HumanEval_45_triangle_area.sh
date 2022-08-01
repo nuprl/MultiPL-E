@@ -6,7 +6,8 @@
 # $1 is an integer
 # $2 is an integer
 triangle_area() {
-echo 0
+    local area=$(echo "scale=2; 0.5 * $1 * $2" | bc)
+    echo $area
 
 }
 

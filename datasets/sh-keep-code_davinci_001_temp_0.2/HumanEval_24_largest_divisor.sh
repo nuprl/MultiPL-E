@@ -5,7 +5,16 @@
 #
 # $1 is an integer
 largest_divisor() {
-echo 0
+  local n=$1
+  local divisor=2
+  while (( $divisor < $n )); do
+    if (( $n % $divisor == 0 )); then
+      n=$(($n / $divisor))
+    else
+      divisor=$((divisor + 1))
+    fi
+  done
+  echo $n
 
 }
 

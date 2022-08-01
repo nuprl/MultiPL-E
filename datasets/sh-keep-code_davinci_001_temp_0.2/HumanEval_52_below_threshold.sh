@@ -8,7 +8,15 @@
 # $1 is a space-separated list
 # $2 is an integer
 below_threshold() {
-echo 0
+  local l="$1"
+  local t="$2"
+  local i
+  for i in $l; do
+    if [ $i -gt $t ]; then
+      return 1
+    fi
+  done
+  return 0
 
 }
 

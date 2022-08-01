@@ -6,7 +6,17 @@
 #
 # $1 is a space-separated list
 remove_duplicates() {
-echo 0
+    local result=()
+    local i=0
+    local j=0
+    local item=''
+    for item in $1; do
+        if [[ ${result[$i]} != $item ]]; then
+            result[$i]=$item
+            ((i++))
+        fi
+    done
+    echo ${result[@]}
 
 }
 

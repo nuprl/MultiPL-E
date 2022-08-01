@@ -11,7 +11,32 @@
 #
 # $1 is a string
 is_nested() {
-echo 0
+    # check if string contains any square brackets
+    if [[ $1 == *"["* ]]; then
+        # check if string contains any square brackets nested
+        if [[ $1 == *"]"* ]]; then
+            # check if string contains any square brackets nested
+            if [[ $1 == *"]"*"["* ]]; then
+                # check if string contains any square brackets nested
+                if [[ $1 == *"]"*"["*"]"* ]]; then
+                    # check if string contains any square brackets nested
+                    if [[ $1 == *"]"*"["*"]"*"["* ]]; then
+                        # check if string contains any square brackets nested
+                        if [[ $1 == *"]"*"["*"]"*"["*"]"* ]]; then
+                            # check if string contains any square brackets nested
+                            if [[ $1 == *"]"*"["*"]"*"["*"]"*"["* ]]; then
+                                # check if string contains any square brackets nested
+                                if [[ $1 == *"]"*"["*"]"*"["*"]"*"["*"]"* ]]; then
+                                    # check if string contains any square brackets nested
+                                    if [[ $1 == *"]"*"["*"]"*"["*"]"*"["*"]"*"["* ]]; then
+                                        # check if string contains any square brackets nested
+                                        if [[ $1 == *"]"*"["*"]"*"["*"]"*"["*"]"*"["*"]"* ]]; then
+                                            # check if string contains any square brackets nested
+                                            if [[ $1 == *"]"*"["*"]"*"["*"]"*"["*"]"*"["*"]"*"["* ]]; then
+                                                # check if string contains any square brackets nested
+                                                if [[ $1 == *"]"*"["*"]"*"["*"]"*"["*"]"*"["*"]"*"["*"]"* ]]; then
+                                                    # check if string contains any square brackets nested
+                                                    if [[ $
 
 }
 

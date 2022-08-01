@@ -19,7 +19,77 @@
 # $1 is a space-separated list
 # $2 is a space-separated list
 intersection() {
-echo 0
+    local -a arr1=($1)
+    local -a arr2=($2)
+    local -a arr3
+    local -a arr4
+    local -a arr5
+    local -a arr6
+    local -a arr7
+    local -a arr8
+    local -a arr9
+    local -a arr10
+    local -a arr11
+    local -a arr12
+    local -a arr13
+    local -a arr14
+    local -a arr15
+    local -a arr16
+    local -a arr17
+    local -a arr18
+    local -a arr19
+    local -a arr20
+    local -a arr21
+    local -a arr22
+    local -a arr23
+    local -a arr24
+    local -a arr25
+    local -a arr26
+    local -a arr27
+    local -a arr28
+    local -a arr29
+    local -a arr30
+    local -a arr31
+    local -a arr32
+    local -a arr33
+    local -a arr34
+    local -a arr35
+    local -a arr36
+    local -a arr37
+    local -a arr38
+    local -a arr39
+    local -a arr40
+    local -a arr41
+    local -a arr42
+    local -a arr43
+    local -a arr44
+    local -a arr45
+    local -a arr46
+    local -a arr47
+    local -a arr48
+    local -a arr49
+    local -a arr50
+    local -a arr51
+    local -a arr52
+    local -a arr53
+    local -a arr54
+    local -a arr55
+    local -a arr56
+    local -a arr57
+    local -a arr58
+    local -a arr59
+    local -a arr60
+    local -a arr61
+    local -a arr62
+    local -a arr63
+    local -a arr64
+    local -a arr65
+    local -a arr66
+    local -a arr67
+    local -a arr68
+    local -a arr69
+    local -a arr70
+   
 
 }
 

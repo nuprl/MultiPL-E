@@ -8,7 +8,13 @@
 #
 # $1 is a space-separated list
 sum_product() {
-echo 0
+    local sum=0
+    local product=1
+    for i in $1; do
+        sum=$((sum + i))
+        product=$((product * i))
+    done
+    echo "$sum $product"
 
 }
 

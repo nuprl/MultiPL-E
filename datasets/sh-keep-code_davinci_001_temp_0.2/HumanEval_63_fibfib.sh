@@ -14,7 +14,18 @@
 #
 # $1 is an integer
 fibfib() {
-echo 0
+    if [ $1 -eq 0 ]; then
+        echo 0
+    elif [ $1 -eq 1 ]; then
+        echo 0
+    elif [ $1 -eq 2 ]; then
+        echo 1
+    else
+        fibfib $(( $1 - 1 ))
+        fibfib $(( $1 - 2 ))
+        fibfib $(( $1 - 3 ))
+        echo $(( $1 - 1 + $1 - 2 + $1 - 3 ))
+    fi
 
 }
 

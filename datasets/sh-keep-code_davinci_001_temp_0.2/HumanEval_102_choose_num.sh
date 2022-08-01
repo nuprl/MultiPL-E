@@ -9,7 +9,16 @@
 # $1 is an integer
 # $2 is an integer
 choose_num() {
-echo 0
+    if [ $1 -gt $2 ]; then
+        echo -1
+    else
+        for ((i=$1;i<=$2;i++)); do
+            if [ $((i%2)) -eq 0 ]; then
+                echo $i
+                return
+            fi
+        done
+    fi
 
 }
 

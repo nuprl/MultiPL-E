@@ -11,7 +11,8 @@
 #
 # $1 is a string
 anti_shuffle() {
-echo 0
+    local result=$(echo "$1" | tr -s ' ' '\n' | sort | tr '\n' ' ')
+    echo "$result"
 
 }
 

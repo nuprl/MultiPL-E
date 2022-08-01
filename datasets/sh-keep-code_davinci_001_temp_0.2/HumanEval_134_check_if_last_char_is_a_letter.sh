@@ -11,7 +11,11 @@
 #
 # $1 is a string
 check_if_last_char_is_a_letter() {
-echo 0
+    if [[ $1 =~ [a-zA-Z] ]]; then
+        echo "True"
+    else
+        echo "False"
+    fi
 
 }
 

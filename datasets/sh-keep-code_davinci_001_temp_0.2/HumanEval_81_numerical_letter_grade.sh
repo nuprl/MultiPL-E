@@ -23,7 +23,59 @@
 #
 # $1 is a space-separated list
 numerical_letter_grade() {
-echo 0
+    # your code here
+    # $1 is a space-separated list
+    # $2 is the letter grade
+    # $3 is the numerical grade
+    # $4 is the output list
+    # $5 is the counter
+    # $6 is the number of elements in the list
+    # $7 is the letter grade
+    # $8 is the numerical grade
+    # $9 is the output list
+    # $10 is the counter
+    # $11 is the number of elements in the list
+    # $12 is the letter grade
+    # $13 is the numerical grade
+    # $14 is the output list
+    # $15 is the counter
+    # $16 is the number of elements in the list
+    # $17 is the letter grade
+    # $18 is the numerical grade
+    # $19 is the output list
+    # $20 is the counter
+    # $21 is the number of elements in the list
+    # $22 is the letter grade
+    # $23 is the numerical grade
+    # $24 is the output list
+    # $25 is the counter
+    # $26 is the number of elements in the list
+    # $27 is the letter grade
+    # $28 is the numerical grade
+    # $29 is the output list
+    # $30 is the counter
+    # $31 is the number of elements in the list
+    # $32 is the letter grade
+    # $33 is the numerical grade
+    # $34 is the output list
+    # $35 is the counter
+    # $36 is the number of elements in the list
+    # $37 is the letter grade
+    # $38 is the numerical grade
+    # $39 is the output list
+    # $40 is the counter
+    # $41 is the number of elements in the list
+    # $42 is the letter grade
+    # $43 is the numerical grade
+    # $44 is the output list
+    # $45 is the counter
+    # $46 is the number of elements in the list
+    # $47 is the letter grade
+    # $48 is the numerical grade
+    # $49 is the output list
+    # $50 is the counter
+    # $51 is the number of elements in the list
+   
 
 }
 

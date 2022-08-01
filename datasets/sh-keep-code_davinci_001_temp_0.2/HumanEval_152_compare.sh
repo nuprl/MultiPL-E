@@ -13,7 +13,8 @@
 # $1 is a space-separated list
 # $2 is a space-separated list
 compare() {
-echo 0
+    # your code here
+    echo "Not implemented"
 
 }
 

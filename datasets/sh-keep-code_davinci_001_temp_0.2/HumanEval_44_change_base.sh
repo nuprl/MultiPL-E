@@ -12,7 +12,15 @@
 # $1 is an integer
 # $2 is an integer
 change_base() {
-echo 0
+  local x=$1
+  local base=$2
+  local result=""
+  while [ $x -gt 0 ]; do
+    local digit=$((x % base))
+    result="$digit$result"
+    x=$((x / base))
+  done
+  echo $result
 
 }
 

@@ -19,7 +19,41 @@
 # $1 is a newline-separated, space-separated list
 # $2 is an integer
 get_row() {
-echo 0
+    local row=0
+    local column=0
+    local result=()
+    local row_count=0
+    local column_count=0
+    local row_index=0
+    local column_index=0
+    local row_index_max=0
+    local column_index_max=0
+    local row_index_min=0
+    local column_index_min=0
+    local row_index_max_temp=0
+    local column_index_max_temp=0
+    local row_index_min_temp=0
+    local column_index_min_temp=0
+    local row_index_temp=0
+    local column_index_temp=0
+    local row_index_temp_temp=0
+    local column_index_temp_temp=0
+    local row_index_temp_temp_temp=0
+    local column_index_temp_temp_temp=0
+    local row_index_temp_temp_temp_temp=0
+    local column_index_temp_temp_temp_temp=0
+    local row_index_temp_temp_temp_temp_temp=0
+    local column_index_temp_temp_temp_temp_temp=0
+    local row_index_temp_temp_temp_temp_temp_temp=0
+    local column_index_temp_temp_temp_temp_temp_temp=0
+    local row_index_temp_temp_temp_temp_temp_temp_temp=0
+    local column_index_temp_temp_temp_temp_temp_temp_temp=0
+    local row_index_temp_temp_temp_temp_temp_temp_temp_temp=0
+    local column_index_temp_temp_temp_temp_temp_temp_temp_temp=0
+    local row_index_temp_temp_temp_temp_temp_temp_temp_temp_temp=0
+    local column_index_temp_temp_temp_temp_temp_temp_temp_temp_temp=0
+    local row_index_temp_temp_temp_temp_temp_temp_temp_temp_temp_temp=0
+    local column_index_temp_temp
 
 }
 

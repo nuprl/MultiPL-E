@@ -9,7 +9,7 @@
 #
 # $1 is a string
 fix_spaces() {
-echo 0
+    echo "$1" | sed 's/\s/_/g' | sed 's/\s\+/-/g'
 
 }
 

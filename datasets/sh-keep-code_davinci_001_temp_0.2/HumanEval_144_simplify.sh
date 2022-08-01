@@ -11,7 +11,17 @@
 # $1 is a string
 # $2 is a string
 simplify() {
-echo 0
+    # your code here
+    #echo "simplify $1 $2"
+    #echo "simplify $1 $2" | bc -l
+    #echo "scale=2; $1/$2" | bc -l
+    #echo "scale=2; $1/$2" | bc -l | grep -o '^[0-9]*\.[0-9]*'
+    #echo "scale=2; $1/$2" | bc -l | grep -o '^[0-9]*\.[0-9]*' | grep -o '^[0-9]*'
+    #echo "scale=2; $1/$2" | bc -l | grep -o '^[0-9]*\.[0-9]*' | grep -o '^[0-9]*' | grep -o '^[0-9]*'
+    #echo "scale=2; $1/$2" | bc -l | grep -o '^[0-9]*\.[0-9]*' | grep -o '^[0-9]*' | grep -o '^[0-9]*' | grep -o '^[0-9]*'
+    #echo "scale=2; $1/$2" | bc -l | grep -o '^[0-9]*\.[0-9]*' | grep -o '^[0-9]*' | grep -o '^[0-9]*' | grep -o '^[0-9]*' | grep -o '^[0-9]*'
+    #echo "scale=2; $1/$2" | bc -l | grep -o '^[0-9]*\.[0-9]*' | grep -o '^[0-9]*' | grep -o '^[0-9]*' | grep -o '^[0-9]*' | grep -o '^[0-9]*' | grep -o '^[0-9]*'
+    #echo "scale=2; $1/$2" | bc -l | grep -o '
 
 }
 

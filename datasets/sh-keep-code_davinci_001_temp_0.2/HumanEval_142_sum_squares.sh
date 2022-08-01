@@ -10,7 +10,15 @@
 #
 # $1 is a space-separated list
 sum_squares() {
-echo 0
+    local sum=0
+    for i in $1; do
+        if [[ $((i%3)) -eq 0 ]] && [[ $((i%4)) -ne 0 ]]; then
+            sum=$((sum+i*i))
+        elif [[ $((i%4)) -eq 0 ]] && [[ $((i%3)) -ne 0 ]]; then
+            sum=$((sum+i*i*i))
+        fi
+    done
+    echo $sum
 
 }
 

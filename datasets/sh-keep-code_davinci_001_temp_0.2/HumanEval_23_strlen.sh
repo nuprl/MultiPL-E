@@ -7,7 +7,7 @@
 #
 # $1 is a string
 strlen() {
-echo 0
+    echo "${#1}"
 
 }
 

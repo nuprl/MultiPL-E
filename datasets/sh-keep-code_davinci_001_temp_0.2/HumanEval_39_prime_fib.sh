@@ -13,7 +13,23 @@
 #
 # $1 is an integer
 prime_fib() {
-echo 0
+    local n=$1
+    local a=1
+    local b=1
+    local c=0
+    while [ $n -gt 0 ]
+    do
+        c=$((a + b))
+        a=$b
+        b=$c
+        n=$((n - 1))
+    done
+    if [ $((a % 2)) -eq 0 ]
+    then
+        echo $((a + 1))
+    else
+        echo $a
+    fi
 
 }
 

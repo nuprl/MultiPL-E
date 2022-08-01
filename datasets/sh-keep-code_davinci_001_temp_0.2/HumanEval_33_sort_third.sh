@@ -9,7 +9,16 @@
 #
 # $1 is a space-separated list
 sort_third() {
-echo 0
+  local l=$1
+  local l_prime=()
+  for i in $l; do
+    if [[ $((i % 3)) -eq 0 ]]; then
+      l_prime+=($i)
+    else
+      l_prime+=($i)
+    fi
+  done
+  echo ${l_prime[@]}
 
 }
 

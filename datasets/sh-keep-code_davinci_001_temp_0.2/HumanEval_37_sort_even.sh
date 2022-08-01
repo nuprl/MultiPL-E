@@ -9,7 +9,22 @@
 #
 # $1 is a space-separated list
 sort_even() {
-echo 0
+    local l=$1
+    local l_even=()
+    local l_odd=()
+    local l_sorted=()
+    for (( i=0; i<${#l}; i++ )); do
+        if [[ $((i%2)) -eq 0 ]]; then
+            l_even+=("${l[$i]}")
+        else
+            l_odd+=("${l[$i]}")
+        fi
+    done
+    l_sorted=($(printf "%s\n" "${l_even[@]}" | sort))
+    for (( i=0; i<${#l_sorted}; i++ )); do
+        l_odd[$i]=${l_sorted[$i]}
+    done
+    echo "${l_odd[@]}"
 
 }
 

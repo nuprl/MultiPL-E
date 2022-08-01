@@ -7,7 +7,21 @@
 # $1 is a string
 # $2 is a string
 string_xor() {
-echo 0
+    local a="$1"
+    local b="$2"
+    local res=""
+    for (( i=0; i<${#a}; i++ )); do
+        local c=${a:$i:1}
+        local d=${b:$i:1}
+        if [[ "$c" == "1" && "$d" == "1" ]]; then
+            res+="0"
+        elif [[ "$c" == "0" && "$d" == "0" ]]; then
+            res+="0"
+        else
+            res+="1"
+        fi
+    done
+    echo "$res"
 
 }
 

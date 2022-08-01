@@ -9,7 +9,13 @@
 #
 # $1 is a space-separated list
 count_nums() {
-echo 0
+  local sum=0
+  for i in $1; do
+    if [[ $i =~ ^-?[0-9]+$ ]]; then
+      local sum=$((sum + i))
+    fi
+  done
+  echo $sum
 
 }
 

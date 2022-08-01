@@ -8,7 +8,7 @@
 # $1 is an integer
 # $2 is an integer
 add() {
-echo 0
+  echo $(( $1 + $2 ))
 
 }
 

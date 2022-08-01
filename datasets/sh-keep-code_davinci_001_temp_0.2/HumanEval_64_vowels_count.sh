@@ -11,7 +11,14 @@
 #
 # $1 is a string
 vowels_count() {
-echo 0
+    local word=$1
+    local count=0
+    for (( i=0; i<${#word}; i++ )); do
+        if [[ ${word:$i:1} == "a" || ${word:$i:1} == "e" || ${word:$i:1} == "i" || ${word:$i:1} == "o" || ${word:$i:1} == "u" ]]; then
+            (( count++ ))
+        fi
+    done
+    echo $count
 
 }
 

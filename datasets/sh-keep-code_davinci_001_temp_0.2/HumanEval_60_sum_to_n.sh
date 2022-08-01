@@ -13,7 +13,11 @@
 #
 # $1 is an integer
 sum_to_n() {
-echo 0
+    if [ $1 -eq 1 ]; then
+        echo 1
+    else
+        echo $(( $1 + $(sum_to_n $(($1 - 1))) ))
+    fi
 
 }
 

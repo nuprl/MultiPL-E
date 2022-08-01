@@ -18,7 +18,19 @@
 # $1 is a string
 # $2 is a space-separated list
 Strongest_Extension() {
-echo 0
+    local class="$1"
+    local extensions="$2"
+    local strength=0
+    local strongest_extension=''
+    for extension in $extensions; do
+        local ext_strength=$(echo $extension | tr -dc '[:upper:]' | wc -c)
+        local ext_strength=$(( $ext_strength - $(echo $extension | tr -dc '[:lower:]' | wc -c) ))
+        if [ $ext_strength -gt $strength ]; then
+            strength=$ext_strength
+            strongest_extension=$extension
+        fi
+    done
+    echo "$class.$strongest_extension"
 
 }
 

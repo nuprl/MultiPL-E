@@ -27,7 +27,69 @@
 #
 # $1 is a space-separated list
 pluck() {
-echo 0
+    local -a nodes=($1)
+    local -i i=0
+    local -i j=0
+    local -i k=0
+    local -i l=0
+    local -i m=0
+    local -i n=0
+    local -i o=0
+    local -i p=0
+    local -i q=0
+    local -i r=0
+    local -i s=0
+    local -i t=0
+    local -i u=0
+    local -i v=0
+    local -i w=0
+    local -i x=0
+    local -i y=0
+    local -i z=0
+    local -i a=0
+    local -i b=0
+    local -i c=0
+    local -i d=0
+    local -i e=0
+    local -i f=0
+    local -i g=0
+    local -i h=0
+    local -i i=0
+    local -i j=0
+    local -i k=0
+    local -i l=0
+    local -i m=0
+    local -i n=0
+    local -i o=0
+    local -i p=0
+    local -i q=0
+    local -i r=0
+    local -i s=0
+    local -i t=0
+    local -i u=0
+    local -i v=0
+    local -i w=0
+    local -i x=0
+    local -i y=0
+    local -i z=0
+    local -i a=0
+    local -i b=0
+    local -i c=0
+    local -i d=0
+    local -i e=0
+    local -i f=0
+    local -i g=0
+    local -i h=0
+    local -i i=0
+    local -i j=0
+    local -i k=0
+    local -i l=0
+    local -i m=0
+    local -i n=0
+    local -i o=0
+    local -i p=0
+    local -i q=0
+   
 
 }
 

@@ -8,7 +8,17 @@
 # $1 is a space-separated list
 # $2 is an integer
 intersperse() {
-echo 0
+  local result="$1"
+  local delim="$2"
+  local i=0
+  for item in $1; do
+    if [ $i -gt 0 ]; then
+      result="$result$delim"
+    fi
+    result="$result$item"
+    i=$((i + 1))
+  done
+  echo "$result"
 
 }
 

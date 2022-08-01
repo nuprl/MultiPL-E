@@ -6,7 +6,24 @@
 #
 # $1 is a space-separated list
 rescale_to_unit() {
-echo 0
+    local -a arr
+    IFS=' ' read -ra arr <<< "$1"
+    local min=${arr[0]}
+    local max=${arr[0]}
+    for i in "${arr[@]}"; do
+        if (( i < min )); then
+            min=$i
+        fi
+        if (( i > max )); then
+            max=$i
+        fi
+    done
+    local range=$(( max - min ))
+    local result=()
+    for i in "${arr[@]}"; do
+        result+=($(( (i - min) / range )))
+    done
+    echo "${result[@]}"
 
 }
 

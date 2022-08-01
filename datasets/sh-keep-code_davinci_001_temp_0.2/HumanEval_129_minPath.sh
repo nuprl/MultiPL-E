@@ -26,7 +26,28 @@
 # $1 is a newline-separated, space-separated list
 # $2 is an integer
 minPath() {
-echo 0
+    local grid="$1"
+    local k="$2"
+    local N=$((${#grid[@]}))
+    local min_path=()
+    local min_path_len=0
+    local min_path_len_found=false
+    local min_path_len_found_at=0
+    local min_path_len_found_at_found=false
+    local min_path_len_found_at_found_at=0
+    local min_path_len_found_at_found_at_found=false
+    local min_path_len_found_at_found_at_found_at=0
+    local min_path_len_found_at_found_at_found_at_found=false
+    local min_path_len_found_at_found_at_found_at_found_at=0
+    local min_path_len_found_at_found_at_found_at_found_at_found=false
+    local min_path_len_found_at_found_at_found_at_found_at_found_at=0
+    local min_path_len_found_at_found_at_found_at_found_at_found_at_found=false
+    local min_path_len_found_at_found_at_found_at_found_at_found_at_found_at=0
+    local min_path_len_found_at_found_at_found_at_found_at_found_at_found_at_found=false
+    local min_path_len_found_at_found_at_found_at_found_at_found_at_found_at_found_at=0
+    local min_path_len_found_at_found_at_found_at_found_at_found_at_found_at_found_at_found=false
+    local min_path_len_found_at_found_at_found_at_found_at_found_at_found_at_found_at_found_at=0
+    local min_path_len_found_at_found_at_found_at
 
 }
 

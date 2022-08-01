@@ -15,7 +15,37 @@
 #
 # $1 is a string
 valid_date() {
-echo 0
+    # Write your code here
+    if [ -z "$1" ]; then
+        return 1
+    fi
+    if [[ $1 =~ ^[0-9]{2}-[0-9]{2}-[0-9]{4}$ ]]; then
+        month=${1:0:2}
+        day=${1:3:2}
+        year=${1:6:4}
+        if [ $month -lt 1 ] || [ $month -gt 12 ]; then
+            return 1
+        fi
+        if [ $day -lt 1 ] || [ $day -gt 31 ]; then
+            return 1
+        fi
+        if [ $month -eq 2 ]; then
+            if [ $day -lt 1 ] || [ $day -gt 29 ]; then
+                return 1
+            fi
+        fi
+        if [ $month -eq 4 ] || [ $month -eq 6 ] || [ $month -eq 9 ] || [ $month -eq 11 ]; then
+            if [ $day -lt 1 ] || [ $day -gt 30 ]; then
+                return 1
+            fi
+        fi
+        if [ $year -lt 1 ] || [ $year -gt 9999 ]; then
+            return 1
+        fi
+        return 0
+    else
+        return 1
+    fi
 
 }
 

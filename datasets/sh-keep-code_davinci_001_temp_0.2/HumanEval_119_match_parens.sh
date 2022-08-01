@@ -13,7 +13,34 @@
 #
 # $1 is a space-separated list
 match_parens() {
-echo 0
+  local result=''
+  local parens=()
+  local parens_count=0
+  local parens_count_max=0
+  local parens_count_min=0
+  local parens_count_diff=0
+  local parens_count_diff_max=0
+  local parens_count_diff_min=0
+  local parens_count_diff_diff=0
+  local parens_count_diff_diff_max=0
+  local parens_count_diff_diff_min=0
+  local parens_count_diff_diff_diff=0
+  local parens_count_diff_diff_diff_max=0
+  local parens_count_diff_diff_diff_min=0
+  local parens_count_diff_diff_diff_diff=0
+  local parens_count_diff_diff_diff_diff_max=0
+  local parens_count_diff_diff_diff_diff_min=0
+  local parens_count_diff_diff_diff_diff_diff=0
+  local parens_count_diff_diff_diff_diff_diff_max=0
+  local parens_count_diff_diff_diff_diff_diff_min=0
+  local parens_count_diff_diff_diff_diff_diff_diff=0
+  local parens_count_diff_diff_diff_diff_diff_diff_max=0
+  local parens_count_diff_diff_diff_diff_diff_diff_min=0
+  local parens_count_diff_diff_diff_diff_diff_diff_diff=0
+  local parens_count_diff_diff_diff_diff_diff_diff_diff_max=0
+  local parens_count_diff_diff_diff_diff_diff_diff_diff_min=0
+  local parens_count_diff_diff_diff_diff_diff_diff_diff_diff=0
+  local parens_count_diff_diff_diff_diff_diff_diff
 
 }
 

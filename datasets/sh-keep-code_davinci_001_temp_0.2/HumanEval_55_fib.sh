@@ -9,7 +9,11 @@
 #
 # $1 is an integer
 fib() {
-echo 0
+    if [ $1 -eq 1 ] || [ $1 -eq 2 ]; then
+        echo 1
+    else
+        echo $(( $(fib $(($1 - 1))) + $(fib $(($1 - 2))) ))
+    fi
 
 }
 

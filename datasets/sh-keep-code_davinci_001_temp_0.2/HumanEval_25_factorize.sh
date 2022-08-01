@@ -11,7 +11,18 @@
 #
 # $1 is an integer
 factorize() {
-echo 0
+    local num=$1
+    local factors=()
+    local factor=2
+    while [[ $num -gt 1 ]]; do
+        if [[ $((num % factor)) -eq 0 ]]; then
+            factors+=($factor)
+            num=$((num / factor))
+        else
+            factor=$((factor + 1))
+        fi
+    done
+    echo "${factors[@]}"
 
 }
 

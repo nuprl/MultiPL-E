@@ -7,7 +7,13 @@
 #
 # $1 is an integer
 string_sequence() {
-echo 0
+  local n=$1
+  local i=0
+  while [ $i -le $n ]; do
+    printf "%d " $i
+    i=$((i+1))
+  done
+  printf "\n"
 
 }
 

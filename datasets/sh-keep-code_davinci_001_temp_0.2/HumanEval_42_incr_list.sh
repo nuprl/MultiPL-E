@@ -7,7 +7,14 @@
 #
 # $1 is a space-separated list
 incr_list() {
-echo 0
+    local list=($1)
+    local list_len=${#list[@]}
+    local i=0
+    while [ $i -lt $list_len ]; do
+        list[$i]=$((list[$i]+1))
+        i=$((i+1))
+    done
+    echo "${list[@]}"
 
 }
 

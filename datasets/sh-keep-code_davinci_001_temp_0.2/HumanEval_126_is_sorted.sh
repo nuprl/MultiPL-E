@@ -14,7 +14,24 @@
 #
 # $1 is a space-separated list
 is_sorted() {
-echo 0
+  local -a nums=($1)
+  local -i i=0
+  local -i j=1
+  local -i len=${#nums[@]}
+  local -i is_sorted=1
+  while [ $i -lt $len ]; do
+    if [ ${nums[$i]} -gt ${nums[$j]} ]; then
+      is_sorted=0
+      break
+    fi
+    i=$((i+1))
+    j=$((j+1))
+  done
+  if [ $is_sorted -eq 1 ]; then
+    echo "True"
+  else
+    echo "False"
+  fi
 
 }
 

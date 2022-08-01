@@ -13,7 +13,13 @@
 #
 # $1 is a string
 remove_vowels() {
-echo 0
+    local result=''
+    for (( i=0; i<${#1}; i++ )); do
+        if [[ ! "${1:$i:1}" =~ [aeiouAEIOU] ]]; then
+            result+="${1:$i:1}"
+        fi
+    done
+    echo "$result"
 
 }
 

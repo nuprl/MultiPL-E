@@ -6,7 +6,19 @@
 #
 # $1 is an integer
 even_odd_count() {
-echo 0
+    local even=0
+    local odd=0
+    local num=$1
+    while [[ $num -gt 0 ]]; do
+        local digit=$((num % 10))
+        if [[ $digit -eq 0 ]]; then
+            even=$((even + 1))
+        elif [[ $digit -eq 1 ]]; then
+            odd=$((odd + 1))
+        fi
+        num=$((num / 10))
+    done
+    echo "$even $odd"
 
 }
 

@@ -14,7 +14,12 @@
 #
 # $1 is a string
 file_name_check() {
-echo 0
+    # your code here
+    if [[ $1 =~ ^[a-zA-Z][a-zA-Z0-9]{0,2}\.{1}[a-zA-Z]{3}$ ]]; then
+        echo "Yes"
+    else
+        echo "No"
+    fi
 
 }
 

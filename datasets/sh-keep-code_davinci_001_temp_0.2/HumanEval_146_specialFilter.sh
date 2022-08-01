@@ -8,7 +8,14 @@
 #
 # $1 is a space-separated list
 specialFilter() {
-echo 0
+    local count=0
+    local numbers=($1)
+    for (( i=0; i<${#numbers[@]}; i++ )); do
+        if [[ ${numbers[$i]} -gt 10 && ${numbers[$i]:0:1} -eq 1 && ${numbers[$i]: -1:1} -eq 1 ]]; then
+            ((count++))
+        fi
+    done
+    echo $count
 
 }
 
