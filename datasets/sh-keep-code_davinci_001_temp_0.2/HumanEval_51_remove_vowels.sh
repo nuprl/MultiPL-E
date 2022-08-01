@@ -30,9 +30,7 @@ candidate() {
 set -e
 run_test() {
     [[ $(candidate "") = "" ]]
-    [[ $(candidate "abcdef\
-ghijklm") = "bcdf\
-ghjklm" ]]
+    [[ $(candidate "abcdef\nghijklm") = "bcdf\nghjklm" ]]
     [[ $(candidate "fedcba") = "fdcb" ]]
     [[ $(candidate "eeeee") = "" ]]
     [[ $(candidate "acBAA") = "cB" ]]

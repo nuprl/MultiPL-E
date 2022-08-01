@@ -32,15 +32,6 @@ from generic_translator import main
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
-# Make sure \ comes first, so we don't escape the escapes.
-METACHARACTERS = '\\\n$!'
-WHITESPACE = [' ', '\t', '\n', '\r']
-
-def escape(s):
-    for c in METACHARACTERS:
-        s = s.replace(c, '\\' + c)
-    return s
-
 def is_quoted(s):
     return len(s) > 0 and s[0] == '"' and s[-1] == '"'
 
@@ -168,7 +159,7 @@ class BashTranslator:
             res = str(c).lower()
         elif type(c) == str:
             # Escape strings
-            res = escape(c)
+            res = c.replace('\\', '\\\\').replace('\n', '\\n').replace('"', '\\"').replace('$', '\\$').replace('!', '\\!')
         elif c is None:
             res = "None"
         # Quote everything
