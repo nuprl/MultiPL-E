@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     You are given a rectangular grid of wells. Each row represents a single well,
@@ -38,35 +38,35 @@ import std.typecons;
 long max_fill(long[][] grid, long capacity) 
 {
     long[][] dp = new long[grid.length][grid[0].length];
-    long max_fill = 0;
-    for (int i = 0; i < grid.length; i++)
-    {
-        for (int j = 0; j < grid[0].length; j++)
-        {
-            if (grid[i][j] == 0)
-            {
+    for (int i = 0; i < grid.length; i++) {
+        for (int j = 0; j < grid[0].length; j++) {
+            if (grid[i][j] == 0) {
                 dp[i][j] = 0;
-            }
-            else
-            {
+            } else {
                 dp[i][j] = 1;
-                if (i > 0)
-                {
-                    dp[i][j] += dp[i - 1][j];
-                }
-                if (j > 0)
-                {
-                    dp[i][j] += dp[i][j - 1];
-                }
-                if (i > 0 && j > 0)
-                {
-                    dp[i][j] -= dp[i - 1][j - 1];
-                }
-                max_fill = Math.max(max_fill, dp[i][j]);
             }
         }
     }
-    return max_fill;
+    for (int i = grid.length - 1; i >= 0; i--) {
+        for (int j = grid[0].length - 1; j >= 0; j--) {
+            if (grid[i][j] == 0) {
+                continue;
+            }
+            if (i + 1 < grid.length && grid[i + 1][j] == 1) {
+                dp[i][j] = Math.max(dp[i][j], dp[i + 1][j] + 1);
+            }
+            if (j + 1 < grid[0].length && grid[i][j + 1] == 1) {
+                dp[i][j] = Math.max(dp[i][j], dp[i][j + 1] + 1);
+            }
+        }
+    }
+    long ans = 0;
+    for (int i = 0; i < grid.length; i++) {
+        for (int j = 0; j < grid[0].length; j++) {
+            ans = Math.max(ans, dp[i][j]);
+        }
+    }
+    return ans;
 }
 
 unittest

@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given an array of integers nums, find the minimum sum of any non-empty sub-array
@@ -11,21 +11,15 @@ import std.typecons;
 */
 long minSubArraySum(long[] nums) 
 {
-    long min = nums[0];
+    long minSum = nums[0];
     long sum = 0;
-    for(int i = 0; i < nums.length; i++)
+    for (int i = 0; i < nums.length; i++)
     {
         sum += nums[i];
-        if(sum < min)
-        {
-            min = sum;
-        }
-        if(sum > 0)
-        {
-            sum = 0;
-        }
+        minSum = std.math.min(minSum, sum);
+        sum = std.math.min(sum, 0);
     }
-    return min;
+    return minSum;
 }
 
 unittest

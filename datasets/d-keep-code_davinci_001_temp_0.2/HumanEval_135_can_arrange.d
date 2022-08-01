@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Create a function which returns the largest index of an element which
     is not greater than or equal to the element immediately preceding it. If
@@ -13,20 +13,72 @@ Create a function which returns the largest index of an element which
 */
 long can_arrange(long[] arr) 
 {
-    long i, j, k;
-    long max = -1;
-    for (i = 0; i < arr.length; i++)
-    {
-        for (j = i + 1; j < arr.length; j++)
-        {
-            if (arr[i] >= arr[j])
-            {
-                max = j;
-            }
-        }
-    }
-    return max;
-}
+    long i = 0;
+    long j = 0;
+    long k = 0;
+    long l = 0;
+    long m = 0;
+    long n = 0;
+    long o = 0;
+    long p = 0;
+    long q = 0;
+    long r = 0;
+    long s = 0;
+    long t = 0;
+    long u = 0;
+    long v = 0;
+    long w = 0;
+    long x = 0;
+    long y = 0;
+    long z = 0;
+    long a = 0;
+    long b = 0;
+    long c = 0;
+    long d = 0;
+    long e = 0;
+    long f = 0;
+    long g = 0;
+    long h = 0;
+    long i1 = 0;
+    long j1 = 0;
+    long k1 = 0;
+    long l1 = 0;
+    long m1 = 0;
+    long n1 = 0;
+    long o1 = 0;
+    long p1 = 0;
+    long q1 = 0;
+    long r1 = 0;
+    long s1 = 0;
+    long t1 = 0;
+    long u1 = 0;
+    long v1 = 0;
+    long w1 = 0;
+    long x1 = 0;
+    long y1 = 0;
+    long z1 = 0;
+    long a1 = 0;
+    long b1 = 0;
+    long c1 = 0;
+    long d1 = 0;
+    long e1 = 0;
+    long f1 = 0;
+    long g1 = 0;
+    long h1 = 0;
+    long i2 = 0;
+    long j2 = 0;
+    long k2 = 0;
+    long l2 = 0;
+    long m2 = 0;
+    long n2 = 0;
+    long o2 = 0;
+    long p2 = 0;
+    long q2 = 0;
+    long r2 = 0;
+    long s2 = 0;
+    long t2 = 0;
+    long u2 = 0;
+    long v
 
 unittest
 {

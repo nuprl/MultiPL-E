@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Write a function vowels_count which takes a string representing
     a word as input and returns the number of vowels in the string.

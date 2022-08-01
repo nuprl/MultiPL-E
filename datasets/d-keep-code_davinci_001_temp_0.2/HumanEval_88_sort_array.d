@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given an array of non-negative integers, return a copy of the given array after sorting,
@@ -18,20 +18,24 @@ import std.typecons;
 */
 long[] sort_array(long[] array) 
 {
+    // Write your code here
     long sum = 0;
-    for (int i = 0; i < array.length; i++)
+    for (int i = 0; i < array.Length; i++)
     {
         sum += array[i];
     }
     if (sum % 2 == 0)
     {
-        return array.sort((a, b) => b - a);
+        Array.Sort(array);
+        Array.Reverse(array);
     }
     else
     {
-        return array.sort((a, b) => a - b);
+        Array.Sort(array);
     }
+    return array;
 }
+
 
 unittest
 {

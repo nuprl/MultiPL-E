@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Checks if given string is a palindrome
@@ -15,15 +15,17 @@ import std.typecons;
 */
 bool is_palindrome(const(char)[] text) 
 {
-    auto len = str.length(text);
-    auto i = 0u;
-    auto j = len - 1u;
-    while (i < j) {
-        if (text[i] != text[j]) {
+    auto len = strlen(text);
+    auto i = 0;
+    auto j = len - 1;
+    while(i < j)
+    {
+        if(text[i] != text[j])
+        {
             return false;
         }
-        i = i + 1u;
-        j = j - 1u;
+        i += 1;
+        j -= 1;
     }
     return true;
 }

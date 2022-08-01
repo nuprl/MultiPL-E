@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Change numerical base of input number x to base.
     return string representation after the conversion.
@@ -15,7 +15,7 @@ Change numerical base of input number x to base.
 const(char)[] change_base(long x, long base) 
 {
     const(char)[] result = new const(char)[];
-    while(x != 0)
+    while(x > 0)
     {
         result.push(x % base);
         x /= base;

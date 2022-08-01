@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 You have been tasked to write a function that receives 
     a hexadecimal number as a string and counts the number of hexadecimal 
@@ -22,11 +22,26 @@ You have been tasked to write a function that receives
 long hex_key(const(char)[] num) 
 {
     long key = 0;
-    for(int i = 0; i < num.size(); i++)
+    for(int i = 0; i < num.length; i++)
     {
-        if(num[i] == '2' || num[i] == '3' || num[i] == '5' || num[i] == '7' || num[i] == 'B' || num[i] == 'D')
+        switch(num[i])
         {
-            key++;
+            case '0': key += 0; break;
+            case '1': key += 1; break;
+            case '2': key += 2; break;
+            case '3': key += 3; break;
+            case '4': key += 4; break;
+            case '5': key += 5; break;
+            case '6': key += 6; break;
+            case '7': key += 7; break;
+            case '8': key += 8; break;
+            case '9': key += 9; break;
+            case 'A': key += 10; break;
+            case 'B': key += 11; break;
+            case 'C': key += 12; break;
+            case 'D': key += 13; break;
+            case 'E': key += 14; break;
+            case 'F': key += 15; break;
         }
     }
     return key;

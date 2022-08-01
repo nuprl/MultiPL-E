@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given an array arr of integers, find the minimum number of elements that
@@ -14,7 +14,7 @@ import std.typecons;
 */
 long smallest_change(long[] arr) 
 {
-    // Write your code here
+    // your code goes here
     return 0;
 }
 

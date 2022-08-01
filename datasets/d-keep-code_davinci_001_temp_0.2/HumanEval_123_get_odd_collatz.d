@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given a positive integer n, return a sorted list that has the odd numbers in collatz sequence.
@@ -20,9 +20,10 @@ import std.typecons;
 */
 long[] get_odd_collatz(long n) 
 {
+    // your code here
     if (n == 1)
         return [1];
-    if (n % 2 == 0)
+    else if (n % 2 == 0)
         return [1] + get_odd_collatz(n / 2);
     else
         return [1] + get_odd_collatz(n * 3 + 1);

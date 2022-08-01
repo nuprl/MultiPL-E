@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Return true if a given number is prime, and false otherwise.
     >>> is_prime(6)

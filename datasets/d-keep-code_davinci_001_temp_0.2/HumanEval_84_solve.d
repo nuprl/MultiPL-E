@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Given a positive integer N, return the total sum of its digits in binary.
     
@@ -17,13 +17,11 @@ Given a positive integer N, return the total sum of its digits in binary.
 */
 const(char)[] solve(long N) 
 {
-    int sum = 0;
-    while(N > 0)
-    {
-        sum += N % 2;
-        N /= 2;
-    }
-    return std.string.to_chars(sum);
+    string binary = std.math.binary(N);
+    long sum = 0;
+    for(char c : binary)
+        sum += c - '0';
+    return {sum};
 }
 
 unittest

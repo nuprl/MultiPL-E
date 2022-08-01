@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     remove_vowels is a function that takes string and returns string without vowels.
@@ -17,7 +17,7 @@ import std.typecons;
 */
 const(char)[] remove_vowels(const(char)[] text) 
 {
-    return filter(text, is_not_vowel);
+    return filter(text, (char c) -> !(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'));
 }
 
 unittest

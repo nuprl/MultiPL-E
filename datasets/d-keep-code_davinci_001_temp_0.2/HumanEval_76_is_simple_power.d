@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Your task is to write a function that returns true if a number x is a simple
     power of n and false in other cases.
@@ -15,14 +15,8 @@ Your task is to write a function that returns true if a number x is a simple
 */
 bool is_simple_power(long x, long n) 
 {
-    if (n == 1)
+    if (x == n)
         return true;
-    if (n == 0)
-        return false;
-    if (x == 1)
-        return true;
-    if (x == 0)
-        return false;
     if (x % n != 0)
         return false;
     return is_simple_power(x / n, n);

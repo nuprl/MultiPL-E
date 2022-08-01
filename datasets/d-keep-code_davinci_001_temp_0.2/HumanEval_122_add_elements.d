@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given a non-empty array of integers arr and an integer k, return
@@ -18,17 +18,8 @@ import std.typecons;
 long add_elements(long[] arr, long k) 
 {
     long sum = 0;
-    for (int i = 0; i < k; i++)
-    {
-        if (arr[i] < 10)
-        {
-            sum += arr[i];
-        }
-        else
-        {
-            sum += arr[i] % 10;
-            sum += arr[i] / 10;
-        }
+    for (long i = 0; i < k; i++) {
+        sum += arr[i];
     }
     return sum;
 }

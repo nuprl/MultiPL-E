@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Given length of a side and high return area for a triangle.
     >>> triangle_area(5, 3)
@@ -8,7 +8,7 @@ Given length of a side and high return area for a triangle.
 */
 float triangle_area(long a, long h) 
 {
-    return (a * h) / 2;
+    return 0.5 * a * h;
 }
 
 unittest

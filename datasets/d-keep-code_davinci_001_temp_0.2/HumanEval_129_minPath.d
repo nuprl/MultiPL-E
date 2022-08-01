@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given a grid with N rows and N columns (N >= 2) and a positive integer k, 
@@ -34,39 +34,33 @@ import std.typecons;
 long[] minPath(long[][] grid, long k) 
 {
     long[][] dp = new long[grid.length][grid[0].length];
-    for (int i = 0; i < grid.length; i++) {
-        for (int j = 0; j < grid[0].length; j++) {
-            dp[i][j] = grid[i][j];
-        }
+    dp[0][0] = grid[0][0];
+    for (int i = 1; i < grid.length; i++)
+        dp[i][0] = dp[i - 1][0] + grid[i][0];
+    for (int j = 1; j < grid[0].length; j++)
+        dp[0][j] = dp[0][j - 1] + grid[0][j];
+    for (int i = 1; i < grid.length; i++)
+        for (int j = 1; j < grid[0].length; j++)
+            dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+    long[] ans = new long[k];
+    ans[0] = dp[grid.length - 1][grid[0].length - 1];
+    for (int i = 1; i < k; i++)
+    {
+        long min = Long.MAX_VALUE;
+        for (int j = 0; j < grid.length; j++)
+            for (int k = 0; k < grid[0].length; k++)
+                if (dp[j][k] < min)
+                {
+                    min = dp[j][k];
+                    ans[i] = min;
+                }
+        for (int j = 0; j < grid.length; j++)
+            for (int k = 0; k < grid[0].length; k++)
+                if (dp[j][k] == min)
+                    dp[j][k] += grid[j][k];
     }
-    for (int i = 0; i < grid.length; i++) {
-        for (int j = 0; j < grid[0].length; j++) {
-            if (i > 0) {
-                dp[i][j] = Math.min(dp[i][j], dp[i - 1][j] + grid[i][j]);
-            }
-            if (j > 0) {
-                dp[i][j] = Math.min(dp[i][j], dp[i][j - 1] + grid[i][j]);
-            }
-        }
-    }
-    long[] res = new long[k];
-    for (int i = 0; i < k; i++) {
-        res[i] = dp[grid.length - 1][grid[0].length - 1];
-        if (i > 0) {
-            res[i] = Math.min(res[i], res[i - 1]);
-        }
-        if (grid.length > 1) {
-            res[i] = Math.min(res[i], dp[grid.length - 2][grid[0].length - 1]);
-        }
-        if (grid[0].length > 1) {
-            res[i] = Math.min(res[i], dp[grid.length - 1][grid[0].length - 2]);
-        }
-        grid[grid.length - 1][grid[0].length - 1] = Long.MAX_VALUE;
-        if (grid.length > 1) {
-            grid[grid.length - 2][grid[0].length - 1] = Long.MAX_VALUE;
-        }
-        if (grid[0].length > 1) {
-            grid[grid.length - 1][grid[0].length - 2] = Long.
+    return ans;
+}
 
 unittest
 {

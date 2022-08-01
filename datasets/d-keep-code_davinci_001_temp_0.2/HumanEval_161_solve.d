@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 You are given a string s.
     if s[i] is a letter, reverse its case from lower to upper or vise versa, 
@@ -17,15 +17,15 @@ const(char)[] solve(const(char)[] s)
     const(char)[] result = new const(char)[s.length];
     for(int i = 0; i < s.length; i++)
     {
-        if(char.isLetter(s[i]))
+        if(std.typecons.isLetter(s[i]))
         {
-            if(char.isLower(s[i]))
+            if(std.math.isLower(s[i]))
             {
-                result[i] = char.toUpper(s[i]);
+                result[i] = std.math.toUpper(s[i]);
             }
             else
             {
-                result[i] = char.toLower(s[i]);
+                result[i] = std.math.toLower(s[i]);
             }
         }
         else

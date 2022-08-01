@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     You'll be given a string of words, and your task is to count the number
@@ -15,8 +15,17 @@ import std.typecons;
 */
 long is_bored(const(char)[] S) 
 {
-    // your code here
-    return 0;
+    long boredoms = 0;
+    long i = 0;
+    while (i < len(S))
+    {
+        if (S[i] == 'I')
+        {
+            boredoms += 1;
+        }
+        i += 1;
+    }
+    return boredoms;
 }
 
 unittest

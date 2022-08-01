@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Given a string s and a natural number n, you have been tasked to implement 
     a function that returns a list of all words from string s that contain exactly 
@@ -16,29 +16,26 @@ Given a string s and a natural number n, you have been tasked to implement
 */
 const(char)[][] select_words(const(char)[] s, long n) 
 {
+    const(char)[][] res;
     if(s.length == 0)
-        return new const(char)[][]{};
-    const(char)[][] result = new const(char)[][]{};
-    for(long i = 0; i < s.length; i++)
+        return res;
+    const(char)[] word;
+    for(int i = 0; i < s.length; i++)
     {
-        long count = 0;
-        for(long j = i; j < s.length; j++)
+        if(s[i] == ' ')
         {
-            if(s[j] == ' ')
-                break;
-            if(s[j] != 'a' && s[j] != 'e' && s[j] != 'i' && s[j] != 'o' && s[j] != 'u')
-                count++;
-            if(count == n)
-            {
-                const(char)[] temp = new const(char)[s.length - j];
-                for(long k = 0; k < temp.length; k++)
-                    temp[k] = s[j + k];
-                result.add(temp);
-                break;
-            }
+            if(word.length == n)
+                res.push(word);
+            word = [];
+        }
+        else
+        {
+            word.push(s[i]);
         }
     }
-    return result;
+    if(word.length == n)
+        res.push(word);
+    return res;
 }
 
 

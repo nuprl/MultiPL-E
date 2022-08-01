@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 You are given 2 words. You need to return True if the second word or any of its rotations is a substring in the first word
     cycpattern_check("abcd","abd") => False
@@ -13,13 +13,7 @@ You are given 2 words. You need to return True if the second word or any of its 
 */
 bool cycpattern_check(const(char)[] a, const(char)[] b) 
 {
-    if(a.length() < b.length())
-        return false;
-    for(uint i = 0; i < a.length(); i++)
-    {
-        if(a.slice(i, i + b.length()) == b)
-            return true;
-    }
+    // your code here
     return false;
 }
 

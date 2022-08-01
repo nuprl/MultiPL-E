@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
  From a list of integers, remove all elements that occur more than once.
     Keep order of elements left the same as in the input.
@@ -9,17 +9,8 @@ import std.typecons;
 */
 long[] remove_duplicates(long[] numbers) 
 {
-    var result = new List<long>();
-    var seen = new List<long>();
-    foreach (var n in numbers)
-    {
-        if (!seen.Contains(n))
-        {
-            seen.Add(n);
-            result.Add(n);
-        }
-    }
-    return result.ToArray();
+    // your code here
+    return numbers;
 }
 
 unittest

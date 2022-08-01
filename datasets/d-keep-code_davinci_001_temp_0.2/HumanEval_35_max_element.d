@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Return maximum element in the list.
     >>> max_element([1, 2, 3])

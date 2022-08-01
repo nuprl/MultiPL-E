@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 You are given a string s.
     Your task is to check if the string is happy or not.
@@ -15,15 +15,6 @@ You are given a string s.
 */
 bool is_happy(const(char)[] s) 
 {
-    int i = 0;
-    while(i < s.size())
-    {
-        if(s[i] == s[i+1] && s[i+1] == s[i+2])
-        {
-            return false;
-        }
-        i++;
-    }
     return true;
 }
 

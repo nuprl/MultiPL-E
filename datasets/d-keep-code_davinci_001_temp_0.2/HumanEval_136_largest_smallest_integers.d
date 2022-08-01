@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Create a function that returns a tuple (a, b), where 'a' is
@@ -15,31 +15,31 @@ import std.typecons;
 */
 Tuple!(Nullable!(long), Nullable!(long)) largest_smallest_integers(long[] lst) 
 {
-    if (lst.length == 0)
+    Tuple!(Nullable!(long), Nullable!(long)) result;
+    if (lst.length() == 0)
     {
-        return (None, None);
-    }
-    else if (lst.length == 1)
-    {
-        return (None, Some(lst[0]));
+        result.a = None;
+        result.b = None;
     }
     else
     {
-        var neg = lst[0];
-        var pos = lst[0];
-        for (var i = 1; i < lst.length; i++)
+        long min = lst[0];
+        long max = lst[0];
+        for (long i = 1; i < lst.length(); i++)
         {
-            if (lst[i] < 0)
+            if (lst[i] < min)
             {
-                neg = std.math.max(neg, lst[i]);
+                min = lst[i];
             }
-            else
+            if (lst[i] > max)
             {
-                pos = std.math.min(pos, lst[i]);
+                max = lst[i];
             }
         }
-        return (Some(neg), Some(pos));
+        result.a = min;
+        result.b = max;
     }
+    return result;
 }
 
 unittest

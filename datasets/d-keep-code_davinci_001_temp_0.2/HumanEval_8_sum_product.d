@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
  For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
     Empty sum should be equal to 0 and empty product should be equal to 1.
@@ -11,18 +11,21 @@ import std.typecons;
 */
 Tuple!(long, long) sum_product(long[] numbers) 
 {
-    Tuple!(long, long) result;
-    if (numbers.length == 0)
+    if(numbers.length == 0)
     {
-        result.first = 0;
-        result.second = 1;
+        return (0, 1);
     }
     else
     {
-        result.first = std.math.sum(numbers);
-        result.second = std.math.product(numbers);
+        var sum = 0;
+        var product = 1;
+        for(var i = 0; i < numbers.length; i++)
+        {
+            sum += numbers[i];
+            product *= numbers[i];
+        }
+        return (sum, product);
     }
-    return result;
 }
 
 unittest

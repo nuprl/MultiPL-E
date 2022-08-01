@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Return median of elements in the list l.
     >>> median([3, 1, 2, 4, 5])
@@ -11,19 +11,14 @@ Return median of elements in the list l.
 float median(long[] l) 
 {
     long n = l.length;
-    if (n == 0) {
-        throw new std.OutOfRangeException("median of empty list");
-    }
     long[] s = new long[n];
-    for (long i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
         s[i] = l[i];
-    }
-    std.sort.quickSort(s);
-    if (n % 2 == 0) {
+    std.sort.sort(s);
+    if (n % 2 == 0)
         return (float)(s[n / 2 - 1] + s[n / 2]) / 2;
-    } else {
+    else
         return (float)s[n / 2];
-    }
 }
 
 unittest

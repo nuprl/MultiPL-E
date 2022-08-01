@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Check if two words have the same characters.
@@ -19,14 +19,11 @@ import std.typecons;
 */
 bool same_chars(const(char)[] s0, const(char)[] s1) 
 {
-    if (s0.size() != s1.size()) return false;
-    auto i = 0;
-    while (i < s0.size()) {
-        auto c0 = s0[i];
-        auto c1 = s1[i];
-        if (c0 != c1) return false;
-        i += 1;
-    }
+    if(len(s0) != len(s1))
+        return false;
+    for(uint i = 0; i < len(s0); i++)
+        if(s0[i] != s1[i])
+            return false;
     return true;
 }
 

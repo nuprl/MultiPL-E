@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Task
     Write a function that takes a string as input and returns the sum of the upper characters only'

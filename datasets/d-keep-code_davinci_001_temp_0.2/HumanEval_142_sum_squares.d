@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 "
     This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
@@ -17,13 +17,13 @@ long sum_squares(long[] lst)
     long sum = 0;
     for (int i = 0; i < lst.length; i++)
     {
-        if (i % 3 == 0)
+        if (i % 4 == 0 && i % 3 != 0)
         {
-            sum += lst[i] * lst[i];
+            sum += std.math.pow(lst[i], 3);
         }
-        else if (i % 4 == 0 && i % 3 != 0)
+        else if (i % 3 == 0)
         {
-            sum += lst[i] * lst[i] * lst[i];
+            sum += std.math.pow(lst[i], 2);
         }
     }
     return sum;

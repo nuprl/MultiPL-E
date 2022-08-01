@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
  Concatenate list of strings into a single string
     >>> concatenate([])
@@ -10,17 +10,13 @@ import std.typecons;
 */
 const(char)[] concatenate(const(char)[][] strings) 
 {
-    var result = "";
-    for (var i = 0; i < strings.length; i++)
+    var(char)[] result = new(char)[];
+    foreach(string, string in strings)
     {
-        result += strings[i];
+        result.push_all(string);
     }
     return result;
 }
-/*
-    >>> concatenate(['a', 'b', 'c'])
-    'abc'
-*/
 
 unittest
 {

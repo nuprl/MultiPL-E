@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given a dictionary, return True if all keys are strings in lower 
@@ -13,9 +13,24 @@ import std.typecons;
     check_dict_case({"STATE":"NC", "ZIP":"12345" }) should return True.
     
 */
-bool check_dict_case(const(char)[][const(char)[]] dict) 
+bool check_dict_case(Nullable!(const(char)[][const(char)[]]) dict) 
 {
-    // your code here
+    if (dict == null)
+        return false;
+    if (dict.count == 0)
+        return false;
+    for (int i = 0; i < dict.count; i++)
+    {
+        if (std.typecons.is_string(dict[i][0]))
+        {
+            if (std.math.is_lower(dict[i][0]))
+                continue;
+            else
+                return false;
+        }
+        else
+            return false;
+    }
     return true;
 }
 

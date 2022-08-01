@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 You are given a list of numbers.
     You need to return the sum of squared numbers in the given list,
@@ -19,7 +19,7 @@ long sum_squares(float[] lst)
     long sum = 0;
     for (int i = 0; i < lst.length; i++)
     {
-        sum += Math.ceil(lst[i]);
+        sum += (int)Math.ceil(lst[i]);
     }
     return sum;
 }

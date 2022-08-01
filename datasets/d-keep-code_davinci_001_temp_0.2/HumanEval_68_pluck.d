@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     "Given an array representing a branch of a tree that has non-negative integer nodes
@@ -39,7 +39,7 @@ long[] pluck(long[] arr)
 {
     long[] result = new long[2];
     long min = 0;
-    long minIndex = 0;
+    long min_index = 0;
     for (int i = 0; i < arr.Length; i++)
     {
         if (arr[i] % 2 == 0)
@@ -47,17 +47,17 @@ long[] pluck(long[] arr)
             if (min == 0)
             {
                 min = arr[i];
-                minIndex = i;
+                min_index = i;
             }
             else if (arr[i] < min)
             {
                 min = arr[i];
-                minIndex = i;
+                min_index = i;
             }
         }
     }
     result[0] = min;
-    result[1] = minIndex;
+    result[1] = min_index;
     return result;
 }
 

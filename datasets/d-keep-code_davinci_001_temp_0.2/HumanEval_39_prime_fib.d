@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     prime_fib returns n-th number that is a Fibonacci number and it's also prime.
@@ -17,17 +17,16 @@ import std.typecons;
 */
 long prime_fib(long n) 
 {
-    long a = 2;
-    long b = 3;
-    long c = 5;
-    long i = 1;
-    while (i < n) {
+    long a = 2, b = 3, c;
+    while (n > 0) {
         c = a + b;
+        if (is_prime(c)) {
+            n--;
+        }
         a = b;
         b = c;
-        i = i + 1;
     }
-    return c;
+    return b;
 }
 
 unittest

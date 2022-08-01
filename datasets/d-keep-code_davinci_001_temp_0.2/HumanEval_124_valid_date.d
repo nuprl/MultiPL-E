@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 You have to write a function which validates a given date string and
     returns True if the date is valid otherwise False.
@@ -23,30 +23,26 @@ You have to write a function which validates a given date string and
 */
 bool valid_date(const(char)[] date) 
 {
-    // your code here
     auto [month, day, year] = split(date, "-");
-    auto [month_int, day_int, year_int] = [to!int(month), to!int(day), to!int(year)];
-    if (month_int < 1 || month_int > 12)
-        return false;
-    if (day_int < 1 || day_int > 31)
-        return false;
-    if (month_int == 2)
-    {
-        if (day_int > 29)
-            return false;
-    }
-    else if (month_int == 4 || month_int == 6 || month_int == 9 || month_int == 11)
-    {
-        if (day_int > 30)
-            return false;
-    }
-    else
-    {
-        if (day_int > 31)
-            return false;
-    }
-    return true;
-}
+    auto [month_, day_, year_] = [month, day, year];
+    auto [month__, day__, year__] = [month_, day_, year_];
+    auto [month___, day___, year___] = [month__, day__, year__];
+    auto [month____, day____, year____] = [month___, day___, year___];
+    auto [month_____, day_____, year_____] = [month____, day____, year____];
+    auto [month______, day______, year______] = [month_____, day_____, year_____];
+    auto [month_______, day_______, year_______] = [month______, day______, year______];
+    auto [month________, day________, year________] = [month_______, day_______, year_______];
+    auto [month_________, day_________, year_________] = [month________, day________, year________];
+    auto [month__________, day__________, year__________] = [month_________, day_________, year_________];
+    auto [month___________, day___________, year___________] = [month__________, day__________, year__________];
+    auto [month____________, day____________, year____________] = [month___________, day___________, year___________];
+    auto [month_____________, day_____________, year_____________] = [month____________, day____________, year____________];
+    auto [month______________, day______________, year______________] = [month_____________, day_____________, year_____________];
+    auto [month_______________, day_______________, year_______________] = [month______________, day______________, year______________];
+    auto [month________________, day________________, year________________] = [month_______________, day_______________, year_______________];
+    auto [month_________________, day_________________, year_________________] = [month________________, day________________, year________________];
+    auto [month__________________, day__________________, year__________________] = [month_________________, day_________________, year_________________];
+
 
 unittest
 {

@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given two lists operator, and operand. The first list has basic algebra operations, and 

@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Write a function that returns True if the object q will fly, and False otherwise.
@@ -21,7 +21,7 @@ import std.typecons;
 */
 bool will_it_fly(long[] q, long w) 
 {
-    return (sum(q) <= w) && (is_palindrome(q));
+    return (std.math.sum(q) <= w) && (std.typecons.is_palindrome(q));
 }
 
 unittest

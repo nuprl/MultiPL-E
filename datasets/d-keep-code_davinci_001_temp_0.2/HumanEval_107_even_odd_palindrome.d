@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given a positive integer n, return a tuple that has the number of even and odd
@@ -30,13 +30,16 @@ Tuple!(long, long) even_odd_palindrome(long n)
     long odd = 0;
     for (long i = 1; i <= n; i++)
     {
-        if (is_palindrome(i) && is_even(i))
+        if (is_palindrome(i))
         {
-            even++;
-        }
-        else if (is_palindrome(i) && is_odd(i))
-        {
-            odd++;
+            if (is_even(i))
+            {
+                even++;
+            }
+            else
+            {
+                odd++;
+            }
         }
     }
     return (even, odd);

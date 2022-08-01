@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Write a function that takes a string and returns an ordered version of it.
@@ -15,18 +15,10 @@ import std.typecons;
     
 */
 const(char)[] anti_shuffle(const(char)[] s) 
-    {
-        var(char)[] result = new(char)[];
-        var(char)[] words = s.split(" ");
-        for(var(char)[] word in words)
-        {
-            for(var(char) c in word)
-            {
-                result.push(c);
-            }
-        }
-        return result;
-    }
+{
+    // Write your code here
+    return s;
+}
 
 unittest
 {

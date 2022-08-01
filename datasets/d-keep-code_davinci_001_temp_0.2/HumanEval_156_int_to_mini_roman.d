@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given a positive integer, obtain its roman numeral equivalent as a string,
@@ -14,37 +14,19 @@ import std.typecons;
 */
 const(char)[] int_to_mini_roman(long number) 
 {
-    if (number < 1 || number > 1000)
-        throw new ValueError("number must be between 1 and 1000");
-    
-    auto roman_numerals = ["i", "v", "x", "l", "c", "d", "m"];
-    auto digits = [0, 0, 0, 0, 0, 0, 0];
-    auto i = 0;
-    while (number > 0) {
-        digits[i] = number % 10;
-        number /= 10;
-        i += 1;
-    }
-    
-    auto result = [];
-    for (i = 0; i < digits.length; i += 1) {
-        if (digits[i] == 0)
-            continue;
-        
-        if (digits[i] <= 3)
-            result.push(roman_numerals[i] * digits[i]);
-        else if (digits[i] == 4)
-            result.push(roman_numerals[i] + roman_numerals[i + 1]);
-        else if (digits[i] == 5)
-            result.push(roman_numerals[i + 1]);
-        else if (digits[i] <= 8)
-            result.push(roman_numerals[i + 1] + roman_numerals[i] * (digits[i] - 5));
-        else
-            result.push(roman_numerals[i] + roman_numerals[i + 2]);
-    }
-    
-    return result;
-}
+    const(char)[] roman_numerals = ["i", "v", "x", "l", "c", "d", "m"];
+    const(char)[] roman_numerals_lower = ["i", "v", "x", "l", "c", "d", "m"];
+    const(char)[] roman_numerals_upper = ["I", "V", "X", "L", "C", "D", "M"];
+    const(char)[] roman_numerals_lower_subtract = ["iv", "ix", "xl", "xc", "cd", "cm"];
+    const(char)[] roman_numerals_upper_subtract = ["IV", "IX", "XL", "XC", "CD", "CM"];
+    const(char)[] roman_numerals_subtract = ["iv", "ix", "xl", "xc", "cd", "cm"];
+    const(char)[] roman_numerals_subtract_upper = ["IV", "IX", "XL", "XC", "CD", "CM"];
+    const(char)[] roman_numerals_subtract_lower = ["iv", "ix", "xl", "xc", "cd", "cm"];
+    const(char)[] roman_numerals_subtract_lower_upper = ["IV", "IX", "XL", "XC", "CD", "CM"];
+    const(char)[] roman_numerals_subtract_upper_lower = ["iv", "ix", "xl", "xc", "cd", "cm"];
+    const(char)[] roman_numerals_subtract_upper_lower_lower = ["iv", "ix", "xl", "xc", "cd", "cm"];
+    const(char)[] roman_numerals_subtract_upper_lower_upper = ["IV", "IX", "XL", "XC", "CD", "CM"];
+    const(char)[] roman_numerals_subt
 
 unittest
 {

@@ -42,7 +42,8 @@ class DlangTranslator:
                         match slice:
                             case ast.Tuple([ast.Name(k), ast.Name(v)], _ctx):
                                 key, value = self.translate_type(k), self.translate_type(v)
-                                return f"{value}[{key}]"
+                                # Dlang associative arrays doesn't allow empty arrays, so we are wrapping it with Nullable.
+                                return f"Nullable!({value}[{key}])"
                     case "Optional":
                         self.require_libs.add("std.typecons")
                         return "Nullable!({})".format(self.translate_type(slice))

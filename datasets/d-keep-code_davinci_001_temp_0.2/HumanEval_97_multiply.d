@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Complete the function that takes two integers and returns 
     the product of their unit digits.
@@ -14,13 +14,25 @@ Complete the function that takes two integers and returns
 long multiply(long a, long b) 
 {
     long result = 0;
-    if (a == 0 || b == 0)
-        return 0;
-    else
+    if (a < 0 && b < 0)
     {
-        result = a * b;
-        return result;
+        a = -a;
+        b = -b;
     }
+    else if (a < 0)
+    {
+        a = -a;
+        result = -1;
+    }
+    else if (b < 0)
+    {
+        b = -b;
+        result = -1;
+    }
+    long a_unit = a % 10;
+    long b_unit = b % 10;
+    result = a_unit * b_unit;
+    return result;
 }
 
 unittest

@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
  Return length of given string
     >>> strlen('')
@@ -10,10 +10,12 @@ import std.typecons;
 */
 long strlen(const(char)[] string) 
 {
-    long i = 0;
-    while(string[i] != '\0')
-        i++;
-    return i;
+    long len = 0;
+    while(string[len] != '\0')
+    {
+        len++;
+    }
+    return len;
 }
 
 unittest

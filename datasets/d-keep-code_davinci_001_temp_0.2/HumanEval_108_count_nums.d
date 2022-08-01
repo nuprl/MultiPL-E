@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Write a function count_nums which takes an array of integers and returns
@@ -16,12 +16,7 @@ long count_nums(long[] arr)
     long count = 0;
     for (long i = 0; i < arr.length; i++)
     {
-        long sum = 0;
-        for (long j = 0; j < arr[i].length(); j++)
-        {
-            sum += arr[i].charAt(j) - '0';
-        }
-        if (sum > 0)
+        if (sum_digits(arr[i]) > 0)
         {
             count++;
         }

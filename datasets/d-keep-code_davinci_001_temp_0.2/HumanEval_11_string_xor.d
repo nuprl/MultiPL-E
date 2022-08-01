@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
  Input are two strings a and b consisting only of 1s and 0s.
     Perform binary XOR on these inputs and return result also as a string.
@@ -8,58 +8,22 @@ import std.typecons;
     
 */
 const(char)[] string_xor(const(char)[] a, const(char)[] b) 
-{
-    assert(a.size() == b.size());
-    auto c = new(char[a.size()]);
-    for(auto i = 0; i < a.size(); i++)
     {
-        c[i] = a[i] ^ b[i];
+        assert(a.size() == b.size());
+        std.vector.vector[char] result;
+        for(int i = 0; i < a.size(); i++)
+        {
+            if(a[i] == b[i])
+            {
+                result.push_back('0');
+            }
+            else
+            {
+                result.push_back('1');
+            }
+        }
+        return result;
     }
-    return c;
-}
-/*
- Input are two strings a and b consisting only of 1s and 0s.
-    Perform binary AND on these inputs and return result also as a string.
-    >>> string_and('010', '110')
-    '010'
-*/
-const(char)[] string_and(const(char)[] a, const(char)[] b) 
-{
-    assert(a.size() == b.size());
-    auto c = new(char[a.size()]);
-    for(auto i = 0; i < a.size(); i++)
-    {
-        c[i] = a[i] & b[i];
-    }
-    return c;
-}
-/*
- Input are two strings a and b consisting only of 1s and 0s.
-    Perform binary OR on these inputs and return result also as a string.
-    >>> string_or('010', '110')
-    '110'
-*/
-const(char)[] string_or(const(char)[] a, const(char)[] b) 
-{
-    assert(a.size() == b.size());
-    auto c = new(char[a.size()]);
-    for(auto i = 0; i < a.size(); i++)
-    {
-        c[i] = a[i] | b[i];
-    }
-    return c;
-}
-/*
- Input are two strings a and b consisting only of 1s and 0s.
-    Perform binary AND-NOT on these inputs and return result also as a string.
-    >>> string_andnot('010', '110')
-    '000'
-*/
-const(char)[] string_andnot(const(char)[] a, const(char)[] b) 
-{
-    assert(a.size() == b.size());
-    auto c = new(char[a.size()]);
-    for(auto
 
 unittest
 {

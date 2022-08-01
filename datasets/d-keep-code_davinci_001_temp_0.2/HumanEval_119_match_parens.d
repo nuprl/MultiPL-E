@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     You are given a list of two strings, both strings consist of open
@@ -18,52 +18,8 @@ import std.typecons;
 */
 const(char)[] match_parens(const(char)[][] lst) 
 {
-    if(lst.length() == 0)
-        return {};
-    if(lst.length() == 1)
-        return {'No'};
-    if(lst.length() == 2)
-    {
-        if(lst[0].length() == 0)
-            return {'No'};
-        if(lst[0].length() == 1)
-            return {'Yes'};
-        if(lst[0].length() == 2)
-        {
-            if(lst[0][0] == '(' && lst[0][1] == ')')
-                return {'Yes'};
-            else
-                return {'No'};
-        }
-    }
-    if(lst[0].length() == 0)
-        return {'No'};
-    if(lst[0].length() == 1)
-        return {'Yes'};
-    if(lst[0].length() == 2)
-    {
-        if(lst[0][0] == '(' && lst[0][1] == ')')
-            return {'Yes'};
-        else
-            return {'No'};
-    }
-    if(lst[0].length() == 3)
-    {
-        if(lst[0][0] == '(' && lst[0][1] == '(' && lst[0][2] == ')')
-            return {'Yes'};
-        else
-            return {'No'};
-    }
-    if(lst[0].length() == 4)
-    {
-        if(lst[0][0] == '(' && lst[0][1] == '(' && lst[0][2] == '(' && lst[0][3] == ')')
-            return {'Yes'};
-        else
-            return {'No'};
-    }
-    if(lst[0].length() == 5)
-    {
-        if(lst[0][0] == '(' && lst[0][1] == '(' && lst[0][2] == '(' && lst[0][3] ==
+    return lst.map(x -> x.length).reduce(std.math.add);
+}
 
 unittest
 {

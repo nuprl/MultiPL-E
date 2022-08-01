@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
  brackets is a string of "(" and ")".
     return True if every opening bracket has a corresponding closing bracket.
@@ -17,13 +17,18 @@ import std.typecons;
 bool correct_bracketing(const(char)[] brackets) 
 {
     int count = 0;
-    for (int i = 0; i < len(brackets); i++) {
-        if (brackets[i] == "(") {
+    for(int i = 0; i < len(brackets); i++)
+    {
+        if(brackets[i] == "(")
+        {
             count++;
-        } else if (brackets[i] == ")") {
+        }
+        else if(brackets[i] == ")")
+        {
             count--;
         }
-        if (count < 0) {
+        if(count < 0)
+        {
             return false;
         }
     }

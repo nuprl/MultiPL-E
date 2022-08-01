@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     You are given a string representing a sentence,
@@ -22,20 +22,10 @@ import std.typecons;
     
 */
 const(char)[] words_in_sentence(const(char)[] sentence) 
-{
-    const(char)[] words = [];
-    int start = 0;
-    for(int i = 0; i < len(sentence); i++)
     {
-        if(sentence[i] == ' ')
-        {
-            words.append(sentence[start:i]);
-            start = i + 1;
-        }
+        auto words = split(sentence, ' ');
+        return words;
     }
-    words.append(sentence[start:len(sentence)]);
-    return words;
-}
 
 unittest
 {

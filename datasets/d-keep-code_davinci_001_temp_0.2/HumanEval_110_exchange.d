@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 In this problem, you will implement a function that takes two lists of numbers,
     and determines whether it is possible to perform an exchange of elements
@@ -16,7 +16,7 @@ In this problem, you will implement a function that takes two lists of numbers,
 */
 const(char)[] exchange(long[] lst1, long[] lst2) 
 {
-    // Write your code here
+    // Your code goes here
     return null;
 }
 /*
@@ -25,8 +25,8 @@ In this problem, you will implement a function that takes a list of numbers,
     between the list and a second list to make the first list a list of only
     even numbers.
     There is no limit on the number of exchanged elements between the two lists.
-    If it is possible to exchange elements between the two lists to make
-    all the elements of the first list to be even, return "YES".
+    If it is possible to exchange elements between the lst1 and lst2 to make
+    all the elements of lst1 to be even, return "YES".
     Otherwise, return "NO".
     For example:
     exchange([1, 2, 3, 4], [1, 2, 3, 4]) => "YES"
@@ -36,7 +36,7 @@ In this problem, you will implement a function that takes a list of numbers,
 */
 const(char)[] exchange(long[] lst1, long[] lst2) 
 {
-    // Write your code here
+    // Your code goes here
     return null;
 }
 /*
@@ -45,8 +45,8 @@ In this problem, you will implement a function that takes a list of numbers,
     between the list and a second list to make the first list a list of only
     even numbers.
     There is no limit on the number of exchanged elements between the two lists.
-    If it is possible to exchange elements between the two lists to make
-    all the elements of the first list to be even, return "YES".
+    If it is possible to exchange elements between the lst1 and lst2 to make
+    all the elements of lst1 to be even, return "YES".
     Otherwise, return "NO".
     For example:
     exchange([1, 2, 3, 4], [1, 2, 3, 4]) => "YES"
@@ -56,13 +56,12 @@ In this problem, you will implement a function that takes a list of numbers,
 */
 const(char)[] exchange(long[] lst1, long[] lst2) 
 {
-    // Write your code here
+    // Your code goes here
     return null;
 }
 /*
 In this problem, you will implement a function that takes a list of numbers,
-    and determines whether it is possible to perform an exchange of elements
-    between
+    and determines whether it is
 
 unittest
 {

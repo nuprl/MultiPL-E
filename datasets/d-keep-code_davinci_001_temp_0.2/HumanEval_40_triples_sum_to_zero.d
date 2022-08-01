@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     triples_sum_to_zero takes a list of integers as an input.
@@ -20,15 +20,7 @@ import std.typecons;
 */
 bool triples_sum_to_zero(long[] l) 
 {
-    int n = len(l);
-    if n < 3:
-        return false;
-    else:
-        for i in range(n):
-            for j in range(i+1, n):
-                for k in range(j+1, n):
-                    if l[i] + l[j] + l[k] == 0:
-                        return true;
+    // The following line is a placeholder.  Replace it with your code.
     return false;
 }
 

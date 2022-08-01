@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Given a list of strings, where each string consists of only digits, return a list.
     Each element i of the output should be "the number of odd elements in the
@@ -15,20 +15,7 @@ Given a list of strings, where each string consists of only digits, return a lis
 */
 const(char)[][] odd_count(const(char)[][] lst) 
 {
-    const(char)[][] res = new const(char)[lst.length][];
-    for(int i = 0; i < lst.length; i++)
-    {
-        int odd = 0;
-        for(int j = 0; j < lst[i].length; j++)
-        {
-            if(lst[i][j] - '0' % 2 != 0)
-            {
-                odd++;
-            }
-        }
-        res[i] = "the number of odd elements " + odd + "n the str" + odd + " of the " + odd + "put.";
-    }
-    return res;
+    return lst.map(s => "the number of odd elements " + std.math.count_odd(s) + "n the str" + std.math.count_odd(s) + "g " + s + " of the " + s + "put.");
 }
 
 unittest
