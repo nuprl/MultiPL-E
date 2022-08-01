@@ -9,11 +9,14 @@
 # digitSum("helloE") => 69
 # digitSum("woArBld") => 131
 # digitSum("aAaaaXa") => 153
+#
+# $1 is a string
 digitSum() {
-    local sum=0
+    sum=0
     for (( i=0; i<${#1}; i++ )); do
-        if [[ "${1:$i:1}" =~ [A-Z] ]]; then
-            sum=$((sum+${1:$i:1}))
+        char=${1:$i:1}
+        if [[ "$char" =~ [A-Z] ]]; then
+            sum=$((sum+$(printf "%d" "'$char")))
         fi
     done
     echo $sum
@@ -21,33 +24,19 @@ digitSum() {
 }
 
 candidate() {
-    local res=$(digitSum "$@")
-    echo $res
+    digitSum "$@"
 }
 
-test() {
-        x0=$(candidate "")
-    assert_equals 0 "${x0[*]}"
-
-        x1=$(candidate "abAB")
-    assert_equals 131 "${x1[*]}"
-
-        x2=$(candidate "abcCd")
-    assert_equals 67 "${x2[*]}"
-
-        x3=$(candidate "helloE")
-    assert_equals 69 "${x3[*]}"
-
-        x4=$(candidate "woArBld")
-    assert_equals 131 "${x4[*]}"
-
-        x5=$(candidate "aAaaaXa")
-    assert_equals 153 "${x5[*]}"
-
-        x6=$(candidate " How are yOu?")
-    assert_equals 151 "${x6[*]}"
-
-        x7=$(candidate "You arE Very Smart")
-    assert_equals 327 "${x7[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "") = "0" ]]
+    [[ $(candidate "abAB") = "131" ]]
+    [[ $(candidate "abcCd") = "67" ]]
+    [[ $(candidate "helloE") = "69" ]]
+    [[ $(candidate "woArBld") = "131" ]]
+    [[ $(candidate "aAaaaXa") = "153" ]]
+    [[ $(candidate " How are yOu?") = "151" ]]
+    [[ $(candidate "You arE Very Smart") = "327" ]]
 }
+
+run_test

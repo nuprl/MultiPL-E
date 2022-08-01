@@ -10,36 +10,32 @@
 # 'B'
 # >>> remove_vowels('zbcd')
 # 'zbcd'
+#
+# $1 is a string
 remove_vowels() {
-    echo "${1//[aeiouAEIOU]/}"
+    local result=''
+    for (( i=0; i<${#1}; i++ )); do
+        if [[ ! "${1:$i:1}" =~ [aeiouAEIOU] ]]; then
+            result+="${1:$i:1}"
+        fi
+    done
+    echo "$result"
 
 }
 
 candidate() {
-    local res=$(remove_vowels "$@")
-    echo $res
+    remove_vowels "$@"
 }
 
-test() {
-        x0=$(candidate "")
-    assert_equals "" "${x0[*]}"
-
-        x1=$(candidate "abcdef\nghijklm")
-    assert_equals "bcdf\nghjklm" "${x1[*]}"
-
-        x2=$(candidate "fedcba")
-    assert_equals "fdcb" "${x2[*]}"
-
-        x3=$(candidate "eeeee")
-    assert_equals "" "${x3[*]}"
-
-        x4=$(candidate "acBAA")
-    assert_equals "cB" "${x4[*]}"
-
-        x5=$(candidate "EcBOO")
-    assert_equals "cB" "${x5[*]}"
-
-        x6=$(candidate "ybcd")
-    assert_equals "ybcd" "${x6[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "") = "" ]]
+    [[ $(candidate "abcdef\nghijklm") = "bcdf\nghjklm" ]]
+    [[ $(candidate "fedcba") = "fdcb" ]]
+    [[ $(candidate "eeeee") = "" ]]
+    [[ $(candidate "acBAA") = "cB" ]]
+    [[ $(candidate "EcBOO") = "cB" ]]
+    [[ $(candidate "ybcd") = "ybcd" ]]
 }
+
+run_test

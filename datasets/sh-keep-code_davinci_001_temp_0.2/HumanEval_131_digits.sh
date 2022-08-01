@@ -5,6 +5,8 @@
 # digits(1)  == 1
 # digits(4)  == 0
 # digits(235) == 15
+#
+# $1 is an integer
 digits() {
   local product=1
   local number=$1
@@ -20,30 +22,18 @@ digits() {
 }
 
 candidate() {
-    local res=$(digits "$@")
-    echo $res
+    digits "$@"
 }
 
-test() {
-        x0=$(candidate 5)
-    assert_equals 5 "${x0[*]}"
-
-        x1=$(candidate 54)
-    assert_equals 5 "${x1[*]}"
-
-        x2=$(candidate 120)
-    assert_equals 1 "${x2[*]}"
-
-        x3=$(candidate 5014)
-    assert_equals 5 "${x3[*]}"
-
-        x4=$(candidate 98765)
-    assert_equals 315 "${x4[*]}"
-
-        x5=$(candidate 5576543)
-    assert_equals 2625 "${x5[*]}"
-
-        x6=$(candidate 2468)
-    assert_equals 0 "${x6[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "5") = "5" ]]
+    [[ $(candidate "54") = "5" ]]
+    [[ $(candidate "120") = "1" ]]
+    [[ $(candidate "5014") = "5" ]]
+    [[ $(candidate "98765") = "315" ]]
+    [[ $(candidate "5576543") = "2625" ]]
+    [[ $(candidate "2468") = "0" ]]
 }
+
+run_test

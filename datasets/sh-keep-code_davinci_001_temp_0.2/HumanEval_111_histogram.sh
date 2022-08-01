@@ -8,59 +8,109 @@
 # histogram('a b c a b') == {'a': 2, 'b': 2}
 # histogram('b b b b a') == {'b': 4}
 # histogram('') == {}
+#
+# $1 is a string
 histogram() {
-  local -A hist
+  local -a letters
+  local -i count
   local -i max=0
-  local -a max_keys=()
-  for word in $@; do
-    hist[$word]=$((++hist[$word]))
-    if [[ ${hist[$word]} -gt $max ]]; then
-      max=${hist[$word]}
-      max_keys=($word)
-    elif [[ ${hist[$word]} -eq $max ]]; then
-      max_keys+=($word)
-    fi
-  done
-  echo "${max_keys[@]}"
+  local -i max_count=0
+  local -i i
+  local -i j
+  local -i k
+  local -i l
+  local -i m
+  local -i n
+  local -i o
+  local -i p
+  local -i q
+  local -i r
+  local -i s
+  local -i t
+  local -i u
+  local -i v
+  local -i w
+  local -i x
+  local -i y
+  local -i z
+  local -i a
+  local -i b
+  local -i c
+  local -i d
+  local -i e
+  local -i f
+  local -i g
+  local -i h
+  local -i i
+  local -i j
+  local -i k
+  local -i l
+  local -i m
+  local -i n
+  local -i o
+  local -i p
+  local -i q
+  local -i r
+  local -i s
+  local -i t
+  local -i u
+  local -i v
+  local -i w
+  local -i x
+  local -i y
+  local -i z
+  local -i a
+  local -i b
+  local -i c
+  local -i d
+  local -i e
+  local -i f
+  local -i g
+  local -i h
+  local -i i
+  local -i j
+  local -i k
+  local -i l
+  local -i m
+  local -i n
+  local -i o
+  local -i p
+  local -i q
+  local -i r
+  local -i s
+  local -i t
+  local -i u
+  local -i v
+  local -i w
+  local -i x
+  local -i y
+  local -i z
+  local -i a
+  local -i b
+  local -i c
+  local -i d
+  local -i e
+  local -i f
+  local -i g
+  local -i h
+ 
 
 }
 
 candidate() {
-    local res=$(histogram "$@")
-    echo $res
+    histogram "$@"
 }
 
-test() {
-    declare -A x1=(["a"]=2 ["b"]=2)
-        x0=$(candidate "a b b a")
-    assert_equals "${x1[*]}" "${x0[*]}"
-
-    declare -A x3=(["a"]=2 ["b"]=2)
-        x2=$(candidate "a b c a b")
-    assert_equals "${x3[*]}" "${x2[*]}"
-
-    declare -A x5=(["a"]=1 ["b"]=1 ["c"]=1 ["d"]=1 ["g"]=1)
-        x4=$(candidate "a b c d g")
-    assert_equals "${x5[*]}" "${x4[*]}"
-
-    declare -A x7=(["r"]=1 ["t"]=1 ["g"]=1)
-        x6=$(candidate "r t g")
-    assert_equals "${x7[*]}" "${x6[*]}"
-
-    declare -A x9=(["b"]=4)
-        x8=$(candidate "b b b b a")
-    assert_equals "${x9[*]}" "${x8[*]}"
-
-    declare -A x11=(["r"]=1 ["t"]=1 ["g"]=1)
-        x10=$(candidate "r t g")
-    assert_equals "${x11[*]}" "${x10[*]}"
-
-    declare -A x13=()
-        x12=$(candidate "")
-    assert_equals "${x13[*]}" "${x12[*]}"
-
-    declare -A x15=(["a"]=1)
-        x14=$(candidate "a")
-    assert_equals "${x15[*]}" "${x14[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "a b b a") = "a,2\nb,2" ]]
+    [[ $(candidate "a b c a b") = "a,2\nb,2" ]]
+    [[ $(candidate "a b c d g") = "a,1\nb,1\nc,1\nd,1\ng,1" ]]
+    [[ $(candidate "r t g") = "r,1\nt,1\ng,1" ]]
+    [[ $(candidate "b b b b a") = "b,4" ]]
+    [[ $(candidate "r t g") = "r,1\nt,1\ng,1" ]]
+    [[ $(candidate "") = "" ]]
+    [[ $(candidate "a") = "a,1" ]]
 }
+
+run_test

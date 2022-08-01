@@ -23,7 +23,7 @@ def evaluate_problem_in_container(problem_yaml_path: Path, index):
     if proc.returncode == 0:
         return proc.stdout.decode("utf-8")
 
-    return json.loads({
+    return json.dumps({
         "exit_code": proc.returncode,
         "stdout": proc.stdout.decode("utf-8"),
         "stderr": proc.stderr.decode("utf-8"),
@@ -47,7 +47,7 @@ def load_or_create_test_results_yaml(problem: Problem, problem_yaml_path: Path):
     return y
 
 
-def evaluate_problem(problem_yaml_path: Path, max_workers: int):
+def evaluate_problem(problem_yaml_path: Path, max_workers: int, limited = False):
     with open(problem_yaml_path) as f:
         problem = Problem.load(f)
 
@@ -61,8 +61,10 @@ def evaluate_problem(problem_yaml_path: Path, max_workers: int):
         print(f"Fewer completions than results for {problem.name}. Skipping. Fix this manually")
         return
 
+    num_problems = 1 if limited else len(problem.completions)
+
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        for json_strings in executor.map(lambda index: evaluate_problem_in_container(problem_yaml_path, index), range(len(problem.completions))):
+        for json_strings in executor.map(lambda index: evaluate_problem_in_container(problem_yaml_path, index), range(num_problems)):
             j = json.loads(json_strings)
             result_yaml = Result()
             result_yaml.program = j["program"]
@@ -80,9 +82,8 @@ def evaluate_problem(problem_yaml_path: Path, max_workers: int):
 def evaluate_problems(target_dir: Path, max_workers: int):
     # Choose HumanEval_53_add as the first problem to run, as a litmus test
     simple_problem = [f for f in target_dir.glob("*.yaml") if "_53_" in f.name]
-    assert len(simple_problem) == 1
     problems = simple_problem + [ p for p in target_dir.glob("*.yaml")
-        if not p.name.endswith(".results.yaml") and not "_53_" in p.name ]
+            if not p.name.endswith(".results.yaml") and not "_53_" in p.name ]
 
     for problem_yaml_path in tqdm(problems, desc=str(target_dir)):
         evaluate_problem(problem_yaml_path, max_workers)
@@ -96,6 +97,9 @@ def main():
     args.add_argument(
         "--max-workers", type=int, required=True, help="Maximum number of workers to use",
     )
+    args.add_argument(
+            "--limited", type=bool, default=False)
+
     args = args.parse_args()
     target = Path(args.target)
     if not target.exists():
@@ -108,7 +112,7 @@ def main():
         evaluate_problems(target, args.max_workers)
     else:
         print(f"Evaluating a single problem")
-        evaluate_problem(target, args.max_workers)
+        evaluate_problem(target, args.max_workers, args.limited)
 
 if __name__ == "__main__":
     main()

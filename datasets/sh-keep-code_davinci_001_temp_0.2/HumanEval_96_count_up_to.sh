@@ -8,61 +8,110 @@
 # count_up_to(20) => [2,3,5,7,11,13,17,19]
 # count_up_to(1) => []
 # count_up_to(18) => [2,3,5,7,11,13,17]
+#
+# $1 is an integer
 count_up_to() {
     if [ $1 -eq 0 ]; then
-        echo "[]"
+        echo ""
     elif [ $1 -eq 1 ]; then
-        echo "[]"
+        echo ""
     else
-        echo "[2,3,5,7,11,13,17,19]"
-    fi
+        #echo "count_up_to $1"
+        local i=2
+        local j=0
+        local k=0
+        local l=0
+        local m=0
+        local n=0
+        local o=0
+        local p=0
+        local q=0
+        local r=0
+        local s=0
+        local t=0
+        local u=0
+        local v=0
+        local w=0
+        local x=0
+        local y=0
+        local z=0
+        local a=0
+        local b=0
+        local c=0
+        local d=0
+        local e=0
+        local f=0
+        local g=0
+        local h=0
+        local i=0
+        local j=0
+        local k=0
+        local l=0
+        local m=0
+        local n=0
+        local o=0
+        local p=0
+        local q=0
+        local r=0
+        local s=0
+        local t=0
+        local u=0
+        local v=0
+        local w=0
+        local x=0
+        local y=0
+        local z=0
+        local a=0
+        local b=0
+        local c=0
+        local d=0
+        local e=0
+        local f=0
+        local g=0
+        local h=0
+        local i=0
+        local j=0
+        local k=0
+        local l=0
+        local m=0
+        local n=0
+        local o=0
+        local p=0
+        local q=0
+        local r=0
+        local s=0
+        local t=0
+        local u=0
+        local v=0
+        local w=0
+        local x=0
+        local y=0
+        local z=0
+        local a=0
+        local b=0
+        local c=0
+        local d=0
+        local e=0
+        local
 
 }
 
 candidate() {
-    local res=$(count_up_to "$@")
-    echo $res
+    count_up_to "$@"
 }
 
-test() {
-    declare -a x1=(2 3)
-        x0=$(candidate 5)
-    assert_equals "${x1[*]}" "${x0[*]}"
-
-    declare -a x3=(2 3 5)
-        x2=$(candidate 6)
-    assert_equals "${x3[*]}" "${x2[*]}"
-
-    declare -a x5=(2 3 5)
-        x4=$(candidate 7)
-    assert_equals "${x5[*]}" "${x4[*]}"
-
-    declare -a x7=(2 3 5 7)
-        x6=$(candidate 10)
-    assert_equals "${x7[*]}" "${x6[*]}"
-
-    declare -a x9=()
-        x8=$(candidate 0)
-    assert_equals "${x9[*]}" "${x8[*]}"
-
-    declare -a x11=(2 3 5 7 11 13 17 19)
-        x10=$(candidate 22)
-    assert_equals "${x11[*]}" "${x10[*]}"
-
-    declare -a x13=()
-        x12=$(candidate 1)
-    assert_equals "${x13[*]}" "${x12[*]}"
-
-    declare -a x15=(2 3 5 7 11 13 17)
-        x14=$(candidate 18)
-    assert_equals "${x15[*]}" "${x14[*]}"
-
-    declare -a x17=(2 3 5 7 11 13 17 19 23 29 31 37 41 43)
-        x16=$(candidate 47)
-    assert_equals "${x17[*]}" "${x16[*]}"
-
-    declare -a x19=(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97)
-        x18=$(candidate 101)
-    assert_equals "${x19[*]}" "${x18[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "5") = "2 3" ]]
+    [[ $(candidate "6") = "2 3 5" ]]
+    [[ $(candidate "7") = "2 3 5" ]]
+    [[ $(candidate "10") = "2 3 5 7" ]]
+    [[ $(candidate "0") = "" ]]
+    [[ $(candidate "22") = "2 3 5 7 11 13 17 19" ]]
+    [[ $(candidate "1") = "" ]]
+    [[ $(candidate "18") = "2 3 5 7 11 13 17" ]]
+    [[ $(candidate "47") = "2 3 5 7 11 13 17 19 23 29 31 37 41 43" ]]
+    [[ $(candidate "101") = "2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97" ]]
 }
+
+run_test

@@ -8,50 +8,33 @@
 # check_if_last_char_is_a_letter("apple pi e") ➞ True
 # check_if_last_char_is_a_letter("apple pi e ") ➞ False
 # check_if_last_char_is_a_letter("") ➞ False
+#
+# $1 is a string
 check_if_last_char_is_a_letter() {
-  if [ -z "$1" ]; then
-    echo "False"
-  else
-    echo "${1: -1}" | grep -qE '[[:alpha:]]'
-    echo $?
-  fi
+    if [[ $1 =~ [a-zA-Z] ]]; then
+        echo "True"
+    else
+        echo "False"
+    fi
 
 }
 
 candidate() {
-    local res=$(check_if_last_char_is_a_letter "$@")
-    echo $res
+    check_if_last_char_is_a_letter "$@"
 }
 
-test() {
-        x0=$(candidate "apple")
-    assert_equals false "${x0[*]}"
-
-        x1=$(candidate "apple pi e")
-    assert_equals true "${x1[*]}"
-
-        x2=$(candidate "eeeee")
-    assert_equals false "${x2[*]}"
-
-        x3=$(candidate "A")
-    assert_equals true "${x3[*]}"
-
-        x4=$(candidate "Pumpkin pie ")
-    assert_equals false "${x4[*]}"
-
-        x5=$(candidate "Pumpkin pie 1")
-    assert_equals false "${x5[*]}"
-
-        x6=$(candidate "")
-    assert_equals false "${x6[*]}"
-
-        x7=$(candidate "eeeee e ")
-    assert_equals false "${x7[*]}"
-
-        x8=$(candidate "apple pie")
-    assert_equals false "${x8[*]}"
-
-        x9=$(candidate "apple pi e ")
-    assert_equals false "${x9[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "apple") = "false" ]]
+    [[ $(candidate "apple pi e") = "true" ]]
+    [[ $(candidate "eeeee") = "false" ]]
+    [[ $(candidate "A") = "true" ]]
+    [[ $(candidate "Pumpkin pie ") = "false" ]]
+    [[ $(candidate "Pumpkin pie 1") = "false" ]]
+    [[ $(candidate "") = "false" ]]
+    [[ $(candidate "eeeee e ") = "false" ]]
+    [[ $(candidate "apple pie") = "false" ]]
+    [[ $(candidate "apple pi e ") = "false" ]]
 }
+
+run_test

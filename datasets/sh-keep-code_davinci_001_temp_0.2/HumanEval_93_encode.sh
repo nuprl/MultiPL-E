@@ -9,30 +9,48 @@
 # 'TGST'
 # >>> encode('This is a message')
 # 'tHKS KS C MGSSCGG'
+#
+# $1 is a string
 encode() {
-	echo $1 | tr '[:lower:]' '[:upper:]' | sed -e 's/[AEIOU]/\0\0/g' | tr '[:upper:]' '[:lower:]' | sed -e 's/[AEIOU]/\0\0/g' | tr '[:lower:]' '[:upper:]' | sed -e 's/[AEIOU]/\0\0/g' | tr '[:upper:]' '[:lower:]' | sed -e 's/[AEIOU]/\0\0/g' | tr '[:lower:]' '[:upper:]' | sed -e 's/[AEIOU]/\0\0/g' | tr '[:upper:]' '[:lower:]' | sed -e 's/[AEIOU]/\0\0/g' | tr '[:lower:]' '[:upper:]' | sed -e 's/[AEIOU]/\0\0/g' | tr '[:upper:]' '[:lower:]' | sed -e 's/[AEIOU]/\0\0/g' | tr '[:lower:]' '[:upper:]' | sed -e 's/[AEIOU]/\0\0/g' | tr '[:upper:]' '[:lower:]' | sed -e 's/[AEIOU]/\0\0/g' | tr '[:lower:]' '[:upper:]' | sed -e 's/[AEIOU]/\0\0/g' | tr '[:upper:]' '[:lower:]' | sed -e 's/[AEIOU]/\0\0/g' | tr '[:lower:]' '[:upper:]' | sed -e 's/[AEIOU]/\0\0/g' | tr '[:upper:]' '[:lower:]' | sed -e 's/[AEIOU]/\0\0/g' | tr '[:lower:]' '[:upper:]' | sed -e 's/[AEIOU]/\0\0/g' | tr '[:upper:]' '[:lower:]' | sed -
+    local message=$1
+    local encoded=""
+    for (( i=0; i<${#message}; i++ )); do
+        local char=${message:$i:1}
+        if [[ $char =~ [a-zA-Z] ]]; then
+            local newchar=$(echo $char | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
+            local newchar=$(echo $newchar | tr [:lower:] [:upper:])
 
 }
 
 candidate() {
-    local res=$(encode "$@")
-    echo $res
+    encode "$@"
 }
 
-test() {
-        x0=$(candidate "TEST")
-    assert_equals "tgst" "${x0[*]}"
-
-        x1=$(candidate "Mudasir")
-    assert_equals "mWDCSKR" "${x1[*]}"
-
-        x2=$(candidate "YES")
-    assert_equals "ygs" "${x2[*]}"
-
-        x3=$(candidate "This is a message")
-    assert_equals "tHKS KS C MGSSCGG" "${x3[*]}"
-
-        x4=$(candidate "I DoNt KnOw WhAt tO WrItE")
-    assert_equals "k dQnT kNqW wHcT Tq wRkTg" "${x4[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "TEST") = "tgst" ]]
+    [[ $(candidate "Mudasir") = "mWDCSKR" ]]
+    [[ $(candidate "YES") = "ygs" ]]
+    [[ $(candidate "This is a message") = "tHKS KS C MGSSCGG" ]]
+    [[ $(candidate "I DoNt KnOw WhAt tO WrItE") = "k dQnT kNqW wHcT Tq wRkTg" ]]
 }
+
+run_test

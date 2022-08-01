@@ -6,170 +6,46 @@
 # False
 # >>> monotonic([4, 1, 0, -10])
 # True
+#
+# $1 is a space-separated list
 monotonic() {
-    local list="$1"
-    local i
-    local j
-    local k
-    local l
-    local m
-    local n
-    local o
-    local p
-    local q
-    local r
-    local s
-    local t
-    local u
-    local v
-    local w
-    local x
-    local y
-    local z
-    local a
-    local b
-    local c
-    local d
-    local e
-    local f
-    local g
-    local h
-    local i
-    local j
-    local k
-    local l
-    local m
-    local n
-    local o
-    local p
-    local q
-    local r
-    local s
-    local t
-    local u
-    local v
-    local w
-    local x
-    local y
-    local z
-    local a
-    local b
-    local c
-    local d
-    local e
-    local f
-    local g
-    local h
-    local i
-    local j
-    local k
-    local l
-    local m
-    local n
-    local o
-    local p
-    local q
-    local r
-    local s
-    local t
-    local u
-    local v
-    local w
-    local x
-    local y
-    local z
-    local a
-    local b
-    local c
-    local d
-    local e
-    local f
-    local g
-    local h
-    local i
-    local j
-    local k
-    local l
-    local m
-    local n
-    local o
-    local p
-    local q
-    local r
-    local s
-    local t
-    local u
-    local v
-    local w
-    local x
-    local y
-    local z
-    local a
-    local b
-    local c
-    local d
-    local e
-    local f
-    local g
-    local h
-    local i
-    local j
-    local k
-    local l
-    local m
-    local n
-    local o
-    local p
-    local q
-    local r
-    local s
-    local t
-    local u
-    local v
-    local w
-    local x
-    local y
-    local z
-    local a
+    local list=$1
+    local direction=0
+    local last=0
+    for i in $list; do
+        if [ $last -gt $i ]; then
+            if [ $direction -eq 0 ]; then
+                direction=-1
+            elif [ $direction -eq 1 ]; then
+                return 1
+            fi
+        elif [ $last -lt $i ]; then
+            if [ $direction -eq 0 ]; then
+                direction=1
+            elif [ $direction -eq -1 ]; then
+                return 1
+            fi
+        fi
+        last=$i
+    done
+    return 0
 
 }
 
 candidate() {
-    local res=$(monotonic "$@")
-    echo $res
+    monotonic "$@"
 }
 
-test() {
-    declare -a x0=(1 2 4 10)
-    x1=$(candidate "${x0[*]}")
-    assert_equals true "${x1[*]}"
-
-    declare -a x2=(1 2 4 20)
-    x3=$(candidate "${x2[*]}")
-    assert_equals true "${x3[*]}"
-
-    declare -a x4=(1 20 4 10)
-    x5=$(candidate "${x4[*]}")
-    assert_equals false "${x5[*]}"
-
-    declare -a x6=(4 1 0 -10)
-    x7=$(candidate "${x6[*]}")
-    assert_equals true "${x7[*]}"
-
-    declare -a x8=(4 1 1 0)
-    x9=$(candidate "${x8[*]}")
-    assert_equals true "${x9[*]}"
-
-    declare -a x10=(1 2 3 2 5 60)
-    x11=$(candidate "${x10[*]}")
-    assert_equals false "${x11[*]}"
-
-    declare -a x12=(1 2 3 4 5 60)
-    x13=$(candidate "${x12[*]}")
-    assert_equals true "${x13[*]}"
-
-    declare -a x14=(9 9 9 9)
-    x15=$(candidate "${x14[*]}")
-    assert_equals true "${x15[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "1 2 4 10") = "true" ]]
+    [[ $(candidate "1 2 4 20") = "true" ]]
+    [[ $(candidate "1 20 4 10") = "false" ]]
+    [[ $(candidate "4 1 0 -10") = "true" ]]
+    [[ $(candidate "4 1 1 0") = "true" ]]
+    [[ $(candidate "1 2 3 2 5 60") = "false" ]]
+    [[ $(candidate "1 2 3 4 5 60") = "true" ]]
+    [[ $(candidate "9 9 9 9") = "true" ]]
 }
+
+run_test

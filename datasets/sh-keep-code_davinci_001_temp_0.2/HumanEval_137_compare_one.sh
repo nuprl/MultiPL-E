@@ -7,74 +7,70 @@
 # compare_one(1, "2,3") ➞ "2,3"
 # compare_one("5,1", "6") ➞ "6"
 # compare_one("1", 1) ➞ None
+#
+# $1 is an argument
+# $2 is an argument
 compare_one() {
   if [[ $1 =~ ^[0-9]+$ ]] && [[ $2 =~ ^[0-9]+$ ]]; then
-    if [[ $1 -gt $2 ]]; then
+    if (( $1 > $2 )); then
       echo $1
-    elif [[ $1 -eq $2 ]]; then
-      echo None
-    else
+    elif (( $1 < $2 )); then
       echo $2
+    else
+      echo None
     fi
   elif [[ $1 =~ ^[0-9]+$ ]] && [[ $2 =~ ^[0-9]+\.[0-9]+$ ]]; then
-    if [[ $1 -gt $2 ]]; then
+    if (( $1 > $2 )); then
       echo $1
-    elif [[ $1 -eq $2 ]]; then
-      echo None
-    else
+    elif (( $1 < $2 )); then
       echo $2
+    else
+      echo None
     fi
   elif [[ $1 =~ ^[0-9]+\.[0-9]+$ ]] && [[ $2 =~ ^[0-9]+$ ]]; then
-    if [[ $1 -gt $2 ]]; then
+    if (( $1 > $2 )); then
       echo $1
-    elif [[ $1 -eq $2 ]]; then
-      echo None
-    else
+    elif (( $1 < $2 )); then
       echo $2
+    else
+      echo None
     fi
   elif [[ $1 =~ ^[0-9]+\.[0-9]+$ ]] && [[ $2 =~ ^[0-9]+\.[0-9]+$ ]]; then
-    if [[ $(echo $1 | sed 's/[.,]//g') -gt $(echo $2 | sed 's/[.,]//g') ]]; then
+    if (( $(echo "$1 > $2" | bc -l) )); then
       echo $1
-    elif [[ $(echo $1 | sed 's/[.,]//g') -eq $(echo $2 | sed 's/[.,]//g') ]]; then
-      echo None
-    else
+    elif (( $(echo "$1 < $2" | bc -l) )); then
       echo $2
+    else
+      echo None
     fi
   elif [[ $1 =~ ^[0-9]+\.[0-9]+$ ]] && [[ $2 =~ ^[0-9]+\.[0-9]+$ ]]; then
-    if [[ $(echo $1 | sed 's/[.,]//g') -gt $(echo $2 | sed 's/[.,]//g') ]]; then
+    if (( $(echo "$1 > $2" | bc -l) )); then
       echo $1
-    elif [[ $(echo $1 | sed
+    elif (( $(echo "$1 < $2" | bc -l) )); then
+      echo $2
+    else
+      echo None
+    fi
+  else
+    echo None
+  fi
 
 }
 
 candidate() {
-    local res=$(compare_one "$@")
-    echo $res
+    compare_one "$@"
 }
 
-test() {
-        x0=$(candidate 1 2)
-    assert_equals 2 "${x0[*]}"
-
-        x1=$(candidate 1 2.5)
-    assert_equals 2.5 "${x1[*]}"
-
-        x2=$(candidate 2 3)
-    assert_equals 3 "${x2[*]}"
-
-        x3=$(candidate 5 6)
-    assert_equals 6 "${x3[*]}"
-
-        x4=$(candidate 1 "2,3")
-    assert_equals "2,3" "${x4[*]}"
-
-        x5=$(candidate "5,1" "6")
-    assert_equals "6" "${x5[*]}"
-
-        x6=$(candidate "1" "2")
-    assert_equals "2" "${x6[*]}"
-
-        x7=$(candidate "1" 1)
-    assert_equals None "${x7[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "1" "2") = "2" ]]
+    [[ $(candidate "1" "2.5") = "2.5" ]]
+    [[ $(candidate "2" "3") = "3" ]]
+    [[ $(candidate "5" "6") = "6" ]]
+    [[ $(candidate "1" "2,3") = "2,3" ]]
+    [[ $(candidate "5,1" "6") = "6" ]]
+    [[ $(candidate "1" "2") = "2" ]]
+    [[ $(candidate "1" "1") = "None" ]]
 }
+
+run_test

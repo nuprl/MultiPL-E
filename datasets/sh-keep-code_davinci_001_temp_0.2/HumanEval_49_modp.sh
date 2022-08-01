@@ -10,43 +10,37 @@
 # 8
 # >>> modp(100, 101)
 # 1
+#
+# $1 is an integer
+# $2 is an integer
 modp() {
-    local n=$1 p=$2
-    local r=1
-    while (( n > 0 )); do
-        (( n & 1 )) && r=$(( r * p ))
-        p=$(( p * p ))
-        n=$(( n >> 1 ))
-    done
-    echo $r
+  local n=$1
+  local p=$2
+  local r=1
+  while [ $n -gt 0 ]; do
+    if [ $((n % 2)) -eq 1 ]; then
+      r=$((r * p))
+    fi
+    n=$((n / 2))
+    p=$((p * p))
+  done
+  echo $r
 
 }
 
 candidate() {
-    local res=$(modp "$@")
-    echo $res
+    modp "$@"
 }
 
-test() {
-        x0=$(candidate 3 5)
-    assert_equals 3 "${x0[*]}"
-
-        x1=$(candidate 1101 101)
-    assert_equals 2 "${x1[*]}"
-
-        x2=$(candidate 0 101)
-    assert_equals 1 "${x2[*]}"
-
-        x3=$(candidate 3 11)
-    assert_equals 8 "${x3[*]}"
-
-        x4=$(candidate 100 101)
-    assert_equals 1 "${x4[*]}"
-
-        x5=$(candidate 30 5)
-    assert_equals 4 "${x5[*]}"
-
-        x6=$(candidate 31 5)
-    assert_equals 3 "${x6[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "3" "5") = "3" ]]
+    [[ $(candidate "1101" "101") = "2" ]]
+    [[ $(candidate "0" "101") = "1" ]]
+    [[ $(candidate "3" "11") = "8" ]]
+    [[ $(candidate "100" "101") = "1" ]]
+    [[ $(candidate "30" "5") = "4" ]]
+    [[ $(candidate "31" "5") = "3" ]]
 }
+
+run_test

@@ -8,6 +8,8 @@
 # True
 # >>> is_palindrome('zbcd')
 # False
+#
+# $1 is a string
 is_palindrome() {
     local str=$1
     local len=${#str}
@@ -23,30 +25,18 @@ is_palindrome() {
 }
 
 candidate() {
-    local res=$(is_palindrome "$@")
-    echo $res
+    is_palindrome "$@"
 }
 
-test() {
-        x0=$(candidate "")
-    assert_equals true "${x0[*]}"
-
-        x1=$(candidate "aba")
-    assert_equals true "${x1[*]}"
-
-        x2=$(candidate "aaaaa")
-    assert_equals true "${x2[*]}"
-
-        x3=$(candidate "zbcd")
-    assert_equals false "${x3[*]}"
-
-        x4=$(candidate "xywyx")
-    assert_equals true "${x4[*]}"
-
-        x5=$(candidate "xywyz")
-    assert_equals false "${x5[*]}"
-
-        x6=$(candidate "xywzx")
-    assert_equals false "${x6[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "") = "true" ]]
+    [[ $(candidate "aba") = "true" ]]
+    [[ $(candidate "aaaaa") = "true" ]]
+    [[ $(candidate "zbcd") = "false" ]]
+    [[ $(candidate "xywyx") = "true" ]]
+    [[ $(candidate "xywyz") = "false" ]]
+    [[ $(candidate "xywzx") = "false" ]]
 }
+
+run_test
