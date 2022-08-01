@@ -12,7 +12,592 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate b
   \ (candidate (list 1 -1 2 -2 5 -5 4 -4)) #f)\n    (check-equal? (candidate (list\
   \ 1 -1 2 -2 5 -5 4 -5)) #t)\n    (check-equal? (candidate (list 1 -2 2 -2 5 -5 4\
   \ -4)) #t)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (let loop ([balance 0] [operations operations])\n    (cond [(null?\
+    \ operations) #f]\n          [(>= balance 0) (loop (+ balance (car operations))\
+    \ (cdr operations))]\n          [else #t])))\n", "  (let loop ([balance 0] [operations\
+    \ operations])\n    (cond [(empty? operations) #f]\n          [(< balance 0) #t]\n\
+    \          [else (loop (+ balance (first operations)) (rest operations))])))\n",
+  "  (local ((define (f acc op)\n            (cond [(negative? (+ acc op)) #t]\n \
+    \                 [else (f (+ acc op) (if (empty? operations) 0 (first operations)))])))\n\
+    \    (f 0 (first operations))))\n", "  (define (below-zero? result)\n    (or (negative?\
+    \ result) (zero? result)))\n  (cond [(empty? operations) false]\n        [(below-zero?\
+    \ (reduce + operations)) true]\n        [else false]))", "  (match operations\n\
+    \    ['() #f]\n    [(cons (cons deposit withdrawal) rest)\n     (or (< (- deposit\
+    \ withdrawal) 0)\n         (below_zero rest))]))\n```\n\n```scheme\n#lang racket\n",
+  "  (if (null? operations)\n      false\n      (let ((balance (apply + (reverse operations))))\n\
+    \        (if (< balance 0)\n            true\n            (below_zero (cdr operations))))))",
+  "  (define (iter remaining balance)\n    (cond [(empty? remaining) #f]\n       \
+    \   [(< balance 0) #t]\n          [else (iter (rest remaining) (+ balance (first\
+    \ remaining)))]))\n  (iter operations 0))\n", "  (cond [(empty? operations) false]\n\
+    \        [(< (accumulate + 0 operations) 0) true]\n        [else false]))\n",
+  "  (define (iter ops balance)\n    (cond [(empty? ops) false]\n          [(< balance\
+    \ 0) true]\n          [else (iter (rest ops) (+ balance (first ops)))]))\n  (iter\
+    \ operations 0))\n", "  (for/or ([op (in-list operations)])\n          (if (>\
+    \ op 0)\n              #f\n              (string-append op \"is below zero.\"\
+    ))))\n", "  (define (bz ops acc)\n    (cond\n      [(empty? ops) false]\n    \
+    \  [(< acc 0) true]\n      [else (bz (rest ops) (+ acc (first ops)))]))\n  (bz\
+    \ operations 0))\n", "    (foldl (lambda (op balance) \n        (if (< balance\
+    \ 0)\n            #t\n            (+ balance op))) 0 operations))", "  (define\
+    \ (below-zero/iter operations account)\n    (if (empty? operations)\n        #f\n\
+    \        (if (< account 0)\n            #t\n            (below-zero/iter (rest\
+    \ operations) (+ account (first operations))))))\n  (below-zero/iter operations\
+    \ 0))\n", "  (cond\n    [(empty? operations) false]\n    [(< (apply + operations)\
+    \ 0) true]\n    [else (below_zero (rest operations))]))\n", "  (accumulate (lambda\
+    \ (x y) \n                (not (or (&lt; x 0) (&lt; y 0))))\n             operations\n\
+    \             0))\n", "  (let loop ([operations operations]\n             [balance\
+    \ 0])\n    (if (null? operations)\n        false\n        (let ([op (car operations)])\n\
+    \          (cond ((< balance 0)\n                 true)\n                (else\n\
+    \                 (loop (cdr operations)\n                       (+ balance op))))))))",
+  "  (define (iter ops bal)\n    (if (null? ops)\n        false\n        (if (< bal\
+    \ 0)\n            true\n            (iter (cdr ops) (+ bal (car ops))))))\n  (iter\
+    \ operations 0))\n", "  (for/or ([op (in-list operations)])\n          (< op 0)))\n",
+  "  (cond [(null? operations) #f]\n        [(< (foldl + 0 operations) 0) #t]\n  \
+    \      [else #f]))", "    (define (iter ops acc)\n      (cond ((null? ops) (if\
+    \ (&lt; acc 0) #t #f))\n            ((cons? ops) (iter (cdr ops) (+ acc (car ops))))))\n\
+    \    (iter operations 0))\n</code>\n", "  (cond\n    [(empty? operations) #f]\n\
+    \    [(< (balance operations) 0) #t]\n    [else (below_zero (rest operations))]))\n",
+  "  (cond ((null? operations) #f)\n        ((< (apply + operations) 0) #t)\n    \
+    \    (else #f)))\n", "  (define (below-zero-iter curr-sum operations)\n    (cond\n\
+    \      [(empty? operations)\n       (if (&lt; curr-sum 0) #t #f)]\n      [else\n\
+    \       (let ([next-oper (first operations)])\n         (below-zero-iter (+ curr-sum\
+    \ next-oper) (rest operations)))]))\n  (below-zero-iter 0 operations))\n</code>\n\
+    Is this code correct for all possible inputs? How can it be improved, if possible?\n\
+    \n\nA:\n\nLike @Sylwester said in the comments, your code looks really good, except\
+    \ for some minor details:\n\nProper code indentation: you should indent your code\
+    \ using 2 spaces, and your outer <code>let</code> binding must be aligned with\
+    \ the <code>define</code> that encloses it.\nPrefer <code>cond</code> over <code>if</code>\
+    \ when the test returns a boolean: when you need to do an <code>if</code> statement,\
+    \ use <code>cond</code> instead, it makes the code easier to read and less error-prone.\n\
+    Use <code>if</code> only when it's necessary: this code is an example of a situation\
+    \ where an <code>if</code> statement is not required, since the <code>below-zero-iter</code>\
+    \ procedure will always return a boolean value, and you're comparing it to another\
+    \ boolean, so you can just return it without the need for an <code>if</code>.\n\
+    Prefer <code>car</code> and <code>cdr</code> over <code>first</code> and <code>rest</code>:\
+    \ in Scheme, functions that access and modify the structure of pairs have short\
+    \ names, like <code>car</code> and <code>cdr</code>, while <code>first</code>\
+    \ and <code>rest</code> are synonyms to <code>car</code> and <code>cdr</code>,\
+    \ respectively, which you should use only when porting code from other languages\
+    \ to Scheme.\n\nWith these details in mind, here's how your code should look like:\n\
+    <code>(define (below-zero operations)\n  (define (below-zero-iter curr-sum operations)\n\
+    \    (cond\n     ", "  (define (iter operations acc)\n    (if (null? operations)\n\
+    \        (eq? acc #f)\n        (if (< acc 0)\n            #t\n            (iter\
+    \ (cdr operations) (+ acc (car operations))))))\n  (iter operations 0))\n", " \
+    \ (define opers (map (lambda (e) (if (string=? (substring e 0 1) \"-\") (substring\
+    \ e 1) e))\n                     operations))\n  (define bal 0)\n  (for ([e opers])\n\
+    \    (set! bal (+ bal (string->number e)))\n    (if (< bal 0)\n        (return\
+    \ #t)))\n  #f)\n", "  (define (loop sum ops)\n    (cond [(empty? ops) false]\n\
+    \          [(zero? (- sum (first ops))) true]\n          [else (loop (- sum (first\
+    \ ops)) (rest ops))]))\n  (loop 0 operations))\n", "  (cond\n    [(null? operations)\
+    \ #f]\n    [(< (apply + operations) 0) #t]\n    [else (below_zero (cdr operations))]))\n",
+  "  (for/or ([operation operations])\n    (< operation 0)))", "  (let loop ([operations\
+    \ operations]\n             [balance 0])\n    (if (empty? operations)\n      \
+    \  false\n        (let* ([next (first operations)]\n               [balance (+\
+    \ balance next)])\n          (if (< balance 0)\n              true\n         \
+    \     (loop (rest operations) balance))))))\n", "  (for/or ([operation operations])\n\
+    \    (and (negative? operation) #t)\n    (negative? (for/sum ([operation operations])\n\
+    \                 operation))))\n", "  (cond [(null? operations) #f]\n       \
+    \ [(< (car operations) 0) #t]\n        [else (below_zero (cdr operations))]))",
+  "  (define (iter ops balance)\n    (cond [(empty? ops) balance]\n          [(< balance\
+    \ 0) #t]\n          [else (iter (rest ops) (+ balance (first ops)))]))\n  (iter\
+    \ operations 0))\n", "  (foldl (lambda (a b)\n           (cond\n             [(<\
+    \ (+ a b) 0) #t]\n             [else #f]))\n         0\n         operations))\n",
+  "  (define (process-ops ops bal)\n    (if (null? ops)\n        false\n        (let\
+    \ ([op (car ops)])\n          (if (< (+ bal op) 0)\n              true\n     \
+    \         (process-ops (cdr ops) (+ bal op))))))\n  (process-ops operations 0))\n",
+  "  (if (empty? operations)\n      #f\n      (let* ([accumulator (foldl (lambda (operation\
+    \ acc) (+ operation acc)) 0 operations)]\n             [final-result (if (< accumulator\
+    \ 0) #t #f)])\n        final-result)))", "  (let loop ([balance 0] [ops operations])\n\
+    \    (cond [(null? ops)\n           #f]\n          [(< balance 0)\n          \
+    \ #t]\n          [else\n           (loop (+ balance (car ops)) (cdr ops))])))",
+  "  (define (accumulator result operation)\n    (cond\n      [(< result 0) #t]\n\
+    \      [else (+ result operation)]))\n  (foldl accumulator 0 operations))\n",
+  "  (if (empty? operations)\n      false\n      (if (< (accumulate + operations)\
+    \ 0)\n          true\n          false)))\n", "  (let loop ([remaining-operations\
+    \ operations]\n             [running-balance 0])\n    (if (null? remaining-operations)\n\
+    \        (if (< running-balance 0) #t #f)\n        (let ([operand (car remaining-operations)])\n\
+    \          (loop (cdr remaining-operations)\n                (+ running-balance\
+    \ operand))))))\n```\n\n```racket\n#lang racket\n", "  (define (iter balance operations)\n\
+    \    (if (null? operations)\n        false\n        (if (< balance 0)\n      \
+    \      true\n            (iter (+ balance (car operations)) (cdr operations)))))\n\
+    \  (iter 0 operations))\n", "  (let loop ([balance 0] [operations operations])\n\
+    \    (if (empty? operations)\n        false\n        (let ([balance (- balance\
+    \ (first operations))])\n          (if (&lt; balance 0)\n              true\n\
+    \              (loop balance (rest operations)))))))\n</code>\nYour solution is\
+    \ a tail-recursive loop over the list, where you keep track of the balance as\
+    \ you go along. When you hit a negative balance, you return true, otherwise you\
+    \ recurse.\nTo make it concise, you define a helper function that does the recursion,\
+    \ and that function gets passed the current balance and the rest of the list.\n",
+  "  (let ([running-total 0])\n    (for ([op operations])\n      (set! running-total\
+    \ (+ running-total op))\n      (when (< running-total 0)\n        (return true)))\n\
+    \    false))", "  (let loop ([operations operations]\n             [balance 0])\n\
+    \    (cond\n      [(null? operations) #f]\n      [(< balance 0) #t]\n      [else\
+    \ (loop (cdr operations) (+ balance (car operations)))])))\n", "    (if (null?\
+    \ operations)\n        #f\n        (define (balance ops)\n            (define\
+    \ (inner ops acc)\n                (if (null? ops)\n                    acc\n\
+    \                    (inner (cdr ops) (+ acc (car ops)))))\n            (inner\
+    \ ops 0))\n        (< (balance operations) 0)))\n", "  (define (below-zero-iter\
+    \ running-total ops)\n    (cond ((empty? ops)\n           (zero? running-total))\n\
+    \          ((< running-total 0)\n           true)\n          (else\n         \
+    \  (below-zero-iter (+ running-total (first ops)) (rest ops)))))\n  (below-zero-iter\
+    \ 0 operations))", "  (define (iter operations balance)\n    (if (null? operations)\n\
+    \        false\n        (if (&lt; balance 0)\n            true\n            (iter\
+    \ (cdr operations)\n                  (+ balance (car operations))))))\n  (iter\
+    \ operations 0))\n", "  (let loop ([operations operations]\n             [balance\
+    \ 0])\n    (if (null? operations)\n        #f\n        (let* ([operation (car\
+    \ operations)]\n               [new-balance (+ balance operation)])\n        \
+    \  (if (< new-balance 0)\n              #t\n              (loop (cdr operations)\n\
+    \                    new-balance))))))", "  (define (acc operations acc)\n   \
+    \ (if (null? operations)\n        (if (< acc 0)\n            true\n          \
+    \  false)\n        (if (positive? (car operations))\n            (acc (cdr operations)\
+    \ (+ acc (car operations)))\n            (acc (cdr operations) (- acc (car operations))))))\n\
+    \  (acc operations 0))\n", "  (cond\n    [(and (null? operations) (zero? (car\
+    \ operations))) #f]\n    [(or (null? operations) (zero? (car operations))) #t]\n\
+    \    [else (below_zero (cdr operations))]))\n", '  (andmap (lambda (x) (if (and
+    (positive? x) (negative? x)) #t #f)) operations))', '    (foldl + 0 operations))',
+  "  (cond [(empty? operations) false]\n        [(< (last operations) 0) true]\n \
+    \       [else (below_zero (butlast operations))]))\n", "  (define (process operations\
+    \ current-balance)\n    (if (empty? operations)\n        #f\n        (let ([balance\
+    \ (+ current-balance (car operations))])\n          (if (&lt; balance 0)\n   \
+    \           #t\n              (process (cdr operations) balance)))))\n  (process\
+    \ operations 0))\n", "  (let loop ([ops operations] [balance 0])\n    (if (empty?\
+    \ ops)\n        (= balance 0)\n        (let ([op (first ops)])\n          (if\
+    \ (number? op)\n              (loop (rest ops) (+ balance op))\n             \
+    \ false)))))\n", "  (define (below-zero? acum operations)\n    (if (null? operations)\n\
+    \        acum\n        (below-zero? (cond [(< acum 0) #t]\n                  \
+    \       [else (apply + acum (car operations))])\n                     (cdr operations))))\n\
+    \  (below-zero? 0 operations))\n", "  (if (null? operations)\n      false\n  \
+    \    (if (< (apply + operations) 0)\n          true\n          (below_zero (cdr\
+    \ operations)))))\n", "  (cond [(empty? operations) #f]\n        [(< 0 (apply\
+    \ - (rest operations))) #t]\n        [else (below_zero (rest operations))]))\n",
+  "  (let loop ([operation operations]\n             [balance 0])\n    (if (null?\
+    \ operation)\n        #f\n        (if (< (+ balance (car operation)) 0)\n    \
+    \        #t\n            (loop (cdr operation)\n                  (+ balance (car\
+    \ operation)))))))\n", "  (let loop ([operations operations]\n             [sum\
+    \ 0])\n    (if (null? operations)\n        (< sum 0)\n        (loop (cdr operations)\n\
+    \              (+ sum (car operations))))))\n", "  (define (iter balance operations)\n\
+    \    (if (null? operations)\n        false\n        (if (>= (add1 balance) 0)\n\
+    \            (iter (+ balance (car operations)) (cdr operations))\n          \
+    \  true)))\n  (iter 0 operations))\n", "  (define (loop result ops)\n    (if (empty?\
+    \ ops)\n        result\n        (loop (if (<= (first ops) result)\n          \
+    \       result\n                 (- result (first ops)))\n              (rest\
+    \ ops))))\n  (loop 0 operations))\n", "  (match operations\n    [(list) #f]\n\
+    \    [(cons op (cons op1 operations)) (if (< (+ op op1) 0)\n                 \
+    \                       #t\n                                        (below_zero\
+    \ operations))]))\n", "  (local [(define (loop index sum)\n            (cond [(equal?\
+    \ index (length operations))\n                   #f]\n                  [(> sum\
+    \ 0)\n                   (loop (+ index 1) (+ sum (list-ref operations index)))]\n\
+    \                  [else\n                   #t]))]\n    (loop 0 0)))\n", "  (define\
+    \ (iter opers balance)\n    (cond [(empty? opers) #f]\n          [(negative? balance)\
+    \ #t]\n          [else (iter (rest opers) (+ balance (first opers)))]))\n  (iter\
+    \ operations 0))\n", "  (let loop ([operations operations]\n             [balance\
+    \ 0])\n    (cond [(null? operations) #f]\n          [(< balance 0) #t]\n     \
+    \     [else (loop (cdr operations) (+ balance (car operations)))])))", "  (define\
+    \ (traverse op index acc)\n    (if (&lt; acc 0)\n        #t\n        (cond\n \
+    \         [(= index (length operations)) #f]\n          [else (traverse (list-ref\
+    \ operations index)\n                          (+ index 1)\n                 \
+    \         (+ acc (list-ref operations index)))])))\n  (traverse (list-ref operations\
+    \ 0) 1 0))\n</code>\nWhich gives me:\n<code>&gt; (below_zero '(1 2 3))\n\n#f\n\
+    &gt; (below_zero '(1 2 -4 5))\n\n#t\n</code>\nBut this seems like a lot of code\
+    \ for such a simple problem. Is there a more succint way to code this?\nI thought\
+    \ of using <code>for/fold</code> which would be:\n<code>(define (below_zero operations)\n\
+    \  (for/fold ([acc 0]) ([operation operations])\n    (&lt; acc 0)\n    (+ acc\
+    \ operation)))\n</code>\nBut the problem is, how can I stop iteration in this\
+    \ case?\n\n\nA:\n\nI would use <code>for/fold</code>, but continue to iterate\
+    \ the whole list:\n<code>(define (below-zero ops)\n  (for/fold ([acc 0]) ([op\
+    \ ops])\n    (if (&lt; acc 0)\n        acc\n        (+ acc op))))\n</code>\n",
+  "  (cond\n    [(null? operations) #f]\n    [(< 0 (apply + operations)) #t]\n   \
+    \ [else #f]))\n", "  (let loop ([operations operations]\n             [balance\
+    \ 0])\n    (cond [(null? operations) false]\n          [(> (car operations) 0)\
+    \ (loop (cdr operations) (+ balance (car operations)))]\n          [(< (car operations)\
+    \ 0) (loop (cdr operations) (- balance (car operations)))]\n          [else\n\
+    \           (if (< balance 0)\n               true\n               (loop (cdr\
+    \ operations) balance))])))", "  (cond\n    [(null? operations) (error \"oops\"\
+    )]\n    [(negative? (apply + operations)) #t]\n    [else (below_zero (cdr operations))]))\n",
+  "  (define (fold-fn running-total operation)\n    (if (< running-total 0)\n    \
+    \    'True\n        (+ running-total operation)))\n  (foldl fold-fn 0 operations))\n",
+  "  (define (iter lst acc)\n    (if (empty? lst)\n        false\n        (let ([first\
+    \ (first lst)])\n          (if (&lt; acc first)\n              true\n        \
+    \      (iter (rest lst) (+ acc first))))))\n  (iter operations 0))\n</code>\n",
+  "  (define balance 0)\n  (for ([operation operations])\n    (set! balance (+ balance\
+    \ operation))\n    (when (< balance 0)\n      (displayln \"True\")\n      (return\
+    \ #t)))\n  (displayln \"False\")\n  #f)\n", "  (define (loop balance ops)\n  \
+    \  (if (null? ops)\n        false\n        (if (< (car ops) 0)\n            (loop\
+    \ (+ balance (car ops)) (cdr ops))\n            (loop balance (cdr ops)))))\n\
+    \  (loop 0 operations))\n", "  (define (iter ops bal)\n    (if (null? ops)\n \
+    \       (if (&lt; bal 0)\n            #t\n            #f)\n        (iter (cdr\
+    \ ops) (+ bal (car ops)))))\n  (iter operations 0))\n</code>\n", "  (foldl (lambda\
+    \ (balance current)\n           (if (&lt; balance 0)\n               true\n  \
+    \             (if (positive? current)\n                   (+ balance current)\n\
+    \                   (- balance current))))\n         0\n         operations))\n\
+    </code>\n", "  (define balance 0)\n  (define (loop operations)\n    (cond\n  \
+    \    [(empty? operations) (display \"below zero? \") false]\n      [(negative?\
+    \ (car operations)) (display \"below zero? \") true]\n      [else\n       (set!\
+    \ balance (+ balance (car operations)))\n       (loop (cdr operations))]))\n \
+    \ (loop operations))\n", "  (if (null? operations)\n      #f\n      (let ((balance\
+    \ (apply + operations)))\n        (if (&lt; balance 0)\n            #t\n     \
+    \       (below_zero (cdr operations))))))\n</code>\nThis is what I came up with\
+    \ after much Googling.\nCan you please tell me if I'm correct? How would you improve\
+    \ this?\nThanks.\n\n\nA:\n\nI'd use <code>foldl</code> instead of recursion, thus:\n\
+    <code>(define (below-zero ops)\n  (let ((init 0)\n        (fn (lambda (acc op)\
+    \ (+ acc op))))\n    (&lt; (foldl fn init ops) 0)))\n</code>\nIf you're not comfortable\
+    \ with writing lambdas you can always define a helper function instead.\n", " \
+    \ (let loop ([balance 0] [operations operations])\n    (cond [(empty? operations)\
+    \ false]\n          [(< balance 0) true]\n          [else (loop (+ balance (first\
+    \ operations)) (rest operations))])))\n", "  (cond\n    [(null? operations) #f]\n\
+    \    [(< (foldl + 0 operations) 0) #t]\n    [else #f]))\n", "  (cond [(empty?\
+    \ operations) false]\n        [(< (sum operations) 0) true]\n        [else (below_zero\
+    \ (rest operations))]))\n", "  (if (null? operations)\n      #f\n      (define\
+    \ first-op (car operations))\n      (if (negative? first-op)\n          #t\n \
+    \         (below_zero (cdr operations)))))\n", "  (define balance 0)\n  (for ([item\
+    \ operations])\n    (set! balance (+ balance item))\n    (when (< balance 0)\n\
+    \      (return true)))\n  false)\n```\n\n```", "  (cond [(null? operations) false]\n\
+    \        [(> (car operations) 0) (below_zero (cdr operations))]\n        [else\
+    \ (or (zero? (car operations))\n                  (below_zero (cdr operations)))]))\n",
+  "  (cond ((empty? operations) false)\n        ((>= (apply + operations) 0) false)\n\
+    \        (else true)))\n", "  (let loop ([n-operations (length operations)]\n\
+    \             [balance 0])\n    (cond\n      [(zero? n-operations) #f]\n     \
+    \ [(< (add1 n-operations) 0)\n       (cond\n         [(> balance 0) #f]\n    \
+    \     [else #t])]\n      [else\n       (loop (- n-operations 1)\n            \
+    \ (+ balance (list-ref operations (- n-operations 1))))])))\n", "  (let loop ([operations\
+    \ operations]\n             [balance 0])\n    (cond\n      [(empty? operations)\
+    \ false]\n      [(< balance 0) true]\n      [else (loop (rest operations) (+ balance\
+    \ (first operations)))])))\n", "  (foldl (lambda (balance operation)\n       \
+    \    (define new-balance (+ balance operation))\n           (if (< new-balance\
+    \ 0)\n               true\n               new-balance))\n         0\n        \
+    \ operations))\n", "  (let loop ([result 0] [balance 0])\n    (if (empty? operations)\n\
+    \        (if (< balance 0) #t #f)\n        (let ((operation (first operations)))\n\
+    \          (loop (result + operation) (- balance operation))))))\n", "  (cond\
+    \ [(null? operations) false]\n        [(>= 0 (apply - operations)) true]\n   \
+    \     [else (below_zero (cdr operations))]))\n", "  (cond ((null? operations)\
+    \ #f)\n        ((< 0 (apply + operations)) #t)\n        (else #f)))\n", "  (if\
+    \ (= 0 (for/fold ([balance 0]) ([operation operations])\n                 (if\
+    \ (positive? operation)\n                     (+ balance operation)\n        \
+    \             (- balance operation))))\n      #f\n      #t))\n```\n\n### 3.2.2.2.\
+    \ Palindrome\n\n```racket\n#lang racket\n", "  (cond\n    ((null? operations)\
+    \ 0)\n    ((< (car operations) 0) #t)\n    (else\n      (below_zero (cdr operations)))))\n",
+  "  (if (empty? operations)\n      #f\n      (let ((head (first operations))\n  \
+    \          (tail (rest operations)))\n        (if (< head 0)\n            #t\n\
+    \            (below_zero tail)))))\n", "  (let recur ((operations operations)\n\
+    \              (balance 0))\n    (cond\n      [(empty? operations) false]\n  \
+    \    [(= balance -1) true]\n      [else (recur (rest operations)\n           \
+    \        (+ balance (first operations)))])))\n", "  (define (f x y)\n    (if (<\
+    \ y 0) true\n        false))\n  (for/or ([o operations])\n    (f (first o) (last\
+    \ o))))\n\n", "  (define (iter (balance operations) (accumulator #f))\n    (cond\
+    \ [(empty? operations) accumulator]\n          [(not (positive? (+ balance (first\
+    \ operations))))\n           (iter (first operations) #t)]\n          [else (iter\
+    \ (+ balance (first operations)) accumulator)]))\n  (iter 0 operations))\n", " \
+    \ (for/or ([op (in-list operations)])\n    (let* ([new-balance (if (negative?\
+    \ op)\n                            (- 0 op)\n                            op)]\n\
+    \           [new-balance (if (positive? new-balance)\n                       \
+    \     (- 0 new-balance)\n                            new-balance)])\n      (<\
+    \ 0 new-balance))))\n", "  (let loop ([ops operations]\n             [i 0])\n\
+    \    (cond [(empty? ops) False]\n          [(< i 0) True]\n          [else (loop\
+    \ (rest ops) (+ i (first ops)))])))\n", "  (let loop ([ops operations] [balance\
+    \ 0])\n    (if (null? ops)\n        #f\n        (let ([op (car ops)])\n      \
+    \    (if (< (+ balance op) 0)\n              #t\n              (loop (cdr ops)\
+    \ (+ balance op)))))))\n", "  (if (= (car operations) '())\n      #f\n      (let\
+    \ ((curr-val (car operations))\n            (next-val (cadr operations)))\n  \
+    \      (let ((result (call/cc (lambda (k)\n                                 (if\
+    \ (&lt; curr-val 0)\n                                     (k #t)\n           \
+    \                          (k #f))))))\n          (if result\n              result\n\
+    \              (below_zero (cdr operations)))))))\n</code>\nHowever, this is not\
+    \ working as expected. So far I have debugged and it seems that the <code>result</code>\
+    \ value is never set to <code>#t</code>. \nThe output is:\n<code>Welcome to DrRacket,\
+    \ version 6.9 [3m].\nLanguage: racket [custom]; memory limit: 512 MB.", "  (foldl\
+    \ (lambda (acc operation)\n           (if (< acc 0)\n               #t\n     \
+    \          (+ acc operation)))\n         0\n         operations))\n", "  (cond\n\
+    \    [(null? operations) false]\n    [(< (apply + operations) 0) true]\n    [else\
+    \ false]))\n", "  (define (iter ops acc)\n    (if (null? ops)\n        #f\n  \
+    \      (if (< acc 0)\n            #t\n            (iter (cdr ops) (+ acc (car\
+    \ ops))))))\n  (iter operations 0))", "  (cond [(empty? operations) #f]\n    \
+    \    [(< (apply + operations) 0) #t]\n        [else (below_zero (rest operations))]))\n",
+  "  (let loop ([balance 0] [operations operations])\n    (cond [(empty? operations)\
+    \ #f]\n          [(negative? (add1 balance (first operations))) #t]\n        \
+    \  [else (loop (add1 balance (first operations)) (rest operations))])))\n</code>\n",
+  "  (let loop ([operations operations]\n             [balance 0])\n    (cond [(null?\
+    \ operations) (not (< balance 0))]\n          [(< balance 0) #t]\n          [else\
+    \ (loop (cdr operations) (+ balance (car operations)))])))\n", "  (define (iter\
+    \ balance rest)\n    (cond\n      [(empty? rest) false]\n      [(< balance 0)\
+    \ true]\n      [else (iter (+ balance (first rest)) (rest rest))]))\n  (iter 0\
+    \ operations))\n", "  (define (iter ops acc)\n    (if (null? ops)\n        (=\
+    \ acc 0)\n        (iter (cdr ops) (+ acc (car ops)))))\n  (iter operations 0))\n",
+  "  (define (fold op1 op2)\n    (if (< op1 0) true\n        (+ op1 op2)))\n  (foldl\
+    \ fold 0 operations))\n", "  (let loop ([ls operations] [balance 0])\n    (if\
+    \ (null? ls)\n        (< balance 0)\n        (let ([op (car ls)])\n          (if\
+    \ (positive? op)\n              (loop (cdr ls) (+ balance op))\n             \
+    \ (loop (cdr ls) (- balance op)))))))\n", "  (let loop ([operations operations]\n\
+    \             [account 0])\n    (cond [(null? operations) false]\n          [(>\
+    \ account 0) false]\n          [(< account 0) true]\n          [else (loop (cdr\
+    \ operations)\n                      (+ account (car operations)))])))\n", " \
+    \ (for/or ([o operations])\n          (and (&lt; o 0) (return #t))))\n</code>\n",
+  "  (define (below-zero? bal ops)\n    (cond [(empty? ops) false]\n          [(<\
+    \ (first ops) 0) true]\n          [else (below-zero? (+ bal (first ops)) (rest\
+    \ ops))]))\n  (below-zero? 0 operations))\n", "  (define (accumulate op bal)\n\
+    \    (if (equal? (first op) \"D\")\n        (+ bal (first (rest op)))\n      \
+    \  (- bal (first (rest op)))))\n  (foldl accumulate 0 operations))\n", "  (if\
+    \ (null? operations)\n      false\n      (if (< (apply + operations) 0)\n    \
+    \      true\n          (below_zero (cdr operations)))))\n", "  (let loop ([ops\
+    \ operations]\n             [bal 0])\n    (cond [(empty? ops) (equal? bal 0)]\n\
+    \          [(< bal 0) true]\n          [else (loop (rest ops)\n              \
+    \        (+ bal (first ops)))])))\n", "  (foldl (lambda (result operation)\n \
+    \          (and (not (= result #t))\n                (let ((new-total (+ (first\
+    \ operation) (second operation))))\n                  (if (< new-total 0)\n  \
+    \                    #t\n                      (cons new-total (rest operation))))))\n\
+    \         (cons 0 operations)\n         operations))\n", "    (for/or ([op (in-list\
+    \ operations)])\n            (< op 0)))\n", "  (let loop ([balance 0] [ops operations])\n\
+    \    (cond [(null? ops) #f]\n          [(<= (car ops) balance) (loop (+ balance\
+    \ (car ops)) (cdr ops))]\n          [else #t])))\n", "  (define (iter balance\
+    \ ops)\n    (cond\n      [(null? ops) false]\n      [(< balance 0) true]\n   \
+    \   [else (iter (+ balance (car ops)) (cdr ops))]))\n  (iter 0 operations))\n",
+  "  (let loop ([accum 0] [operations operations])\n    (if (null? operations)\n \
+    \       (zero? accum)\n        (let ((value (car operations)))\n          (loop\
+    \ (+ accum value) (cdr operations))))))\n", "  (define (check lst balance)\n \
+    \   (cond\n      [(null? lst) false]\n      [(< balance 0) true]\n      [else\
+    \ (check (cdr lst) (+ balance (car lst)))]))\n  (check operations 0))\n", "  (cond\n\
+    \    [(empty? operations)\n     #f]\n    [(< (first operations) 0)\n     #t]\n\
+    \    [else\n     (below_zero (rest operations))]))\n", "  (let loop ([balance\
+    \ 0] [ops operations])\n    (cond [(empty? ops) #f]\n          [(< (car ops) 0)\
+    \ (or (< balance (car ops)) (loop balance (cdr ops)))]\n          [else (loop\
+    \ (+ balance (car ops)) (cdr ops))])))\n", "  (define (iter sum ops)\n    (if\
+    \ (null? ops)\n        #f\n        (let ([sum (+ sum (car ops))])\n          (if\
+    \ (< sum 0)\n              #t\n              (iter sum (cdr ops))))))\n  (iter\
+    \ 0 operations))\n", "  (define (iter result ops)\n    (cond [(empty? ops) result]\n\
+    \          [(< (first ops) 0) (iter (not result) (rest ops))]\n          [else\
+    \ (iter result (rest ops))]))\n  (iter #f operations))\n```\n\n```#lang racket",
+  "  (foldl (lambda (x acc)\n           (if (> x 0)\n               (+ acc x)\n  \
+    \             (- acc x)))\n         0\n         operations))\n", "  (cond\n  \
+    \  [(null? operations) false]\n    [(< 0 (apply + operations)) true]\n    [else\
+    \ (below_zero (cdr operations))]))\n", "  (define (balance operations acc)\n \
+    \   (cond [(empty? operations) false]\n          [(< acc 0) true]\n          [else\
+    \ (balance (rest operations) (+ acc (first operations)))]))\n  (balance operations\
+    \ 0))\n```\n\n```racket\n#lang racket\n", "  (cond [(empty? operations) #f]\n\
+    \        [(negative? (foldr - 0 operations)) #t]\n        [else #f]))\n", "  (cond\
+    \ ((null? operations) #f)\n        ((< (apply + operations) 0) #t)\n        (else\
+    \ (below_zero (cdr operations)))))\n", "  (define (below-zero/helper operations\
+    \ balance)\n    (cond [(empty? operations) false]\n          [(> balance 0) (below-zero/helper\
+    \ (rest operations) (- balance (first operations)))]\n          [else true]))\n\
+    \  (below-zero/helper operations 0))\n", "  (if (null? operations)\n      #f\n\
+    \      (let loop ([balance 0] [operations operations])\n        (if (null? operations)\n\
+    \            (zero? balance)\n            (let ([operation (car operations)])\n\
+    \              (if (and (number? operation)\n                       (zero? (modulo\
+    \ operation 1)))\n                  (loop (+ balance operation) (cdr operations))\n\
+    \                  (error \"operation is not a whole number: \" operation)))))))\n\
+    </code>\nI also noticed a typo in your code, where you wrote <code>not (null?\
+    \ operations)</code> instead of <code>(not (null? operations))</code>. I fixed\
+    \ it in my code above.\nRegarding your question about <code>recur</code>; you\
+    \ can't use it because it works only inside <code>loop</code> block. You can use\
+    \ <code>recur</code> inside <code>loop</code> block to jump back to the beginning\
+    \ of <code>loop</code> block, but you can't just use it without <code>loop</code>\
+    \ block. It might be hard to understand this at first, but it makes sense when\
+    \ you're writing a lot of <code>loop</code>-style loops instead of using recursion.\
+    \ Consider the following example:\n<code>#lang racket\n", "  (if (null? operations)\n\
+    \      #f\n      (let ([op (car operations)])\n        (if (negative? op)\n  \
+    \          #t\n            (below_zero (cdr operations))))))\n", "  (local ((define\
+    \ (loop operations balance)\n            (cond\n              [(empty? operations)\
+    \ (not (negative? balance))]\n              [(negative? balance) #t]\n       \
+    \       [else (loop (rest operations) (+ balance (first operations)))])))\n  \
+    \  (loop operations 0)))\n", "  (define (iter ops accum)\n    (cond [(empty? ops)\n\
+    \           #f]\n          [(< accum 0)\n           #t]\n          [else\n   \
+    \        (iter (rest ops) (+ accum (first ops)))]))\n  (iter operations 0))\n",
+  "  (if (empty? operations)\n      #f\n      (if (negative? (apply - operations))\n\
+    \          #t\n          #f)))", "  (cond [(empty? operations) #f]\n        [(<\
+    \ (sum operations) 0) #t]\n        [else #f]))\n", "  (let loop ([ops operations]\n\
+    \             [balance 0])\n    (cond\n      [(null? ops)\n       #f]\n      [(<\
+    \ balance 0)\n       #t]\n      [else\n       (loop (cdr ops)\n             (+\
+    \ balance (car ops)))])))\n", "  (define (iter balance operations)\n    (cond\n\
+    \      [(empty? operations) #f]\n      [(< balance 0) #t]\n      [else (iter (+\
+    \ balance (first operations)) (rest operations))]))\n  (iter 0 operations))\n",
+  "  (let loop ([op operations] [balance 0])\n    (cond [(empty? op) (if (< balance\
+    \ 0) true false)]\n          [(< (- (first op) balance) 0) true]\n          [else\
+    \ (loop (rest op) (- (first op) balance))])))", "  (foldl\n   (lambda (operation\
+    \ balance)\n     (cond\n       ((< balance 0) #t)\n       ((positive? operation)\n\
+    \        (add1 balance))\n       ((negative? operation)\n        (sub1 balance))\n\
+    \       (else balance)))\n   0\n   operations))\n```\n\n```scheme\n#lang racket\n",
+  "  (if (null? operations)\n      false\n      (if (< (apply + operations) 0)\n \
+    \         true\n          (below_zero (cdr operations)))))\n", "  (define (helper\
+    \ ops balance)\n    (cond\n      [(empty? ops) #f]\n      [(< balance 0) #t]\n\
+    \      [else (helper (rest ops) (+ balance (first ops)))]))\n  (helper operations\
+    \ 0))\n", "  (define (get-sum-upto i)\n    (cond [(equal? i -1) 0]\n         \
+    \ [else (+ (list-ref operations i) (get-sum-upto (- i 1)))]))\n  (define (is-negative\
+    \ i)\n    (and (&lt; (get-sum-upto i) 0) (not (equal? i 0))))\n  (define (iter\
+    \ i)\n    (cond [(is-negative i) #t]\n          [(equal? i (- (length operations)\
+    \ 1)) #f]\n          [else (iter (+ i 1))]))\n  (iter 0))\n</code>\nThis works\
+    \ fine:\n<code>&gt; (below_zero '(1 2 3))\n#f\n&gt; (below_zero '(1 2 -4 5))\n\
+    #t\n</code>\nBut the logic of the <code>is-negative</code> function seems like\
+    \ it could be simpler:\n<code>(define (is-negative i)\n  (and (&lt; (get-sum-upto\
+    \ i) 0) (not (equal? i 0))))\n</code>\nThis is how it's described in the book:\n\
+    <blockquote>\n<p>For example, if <code>&lt;code&gt;i = 1&lt;/code&gt;</code>,\
+    \ then <code>&lt;code&gt;get-sum-upto(1)&lt;/code&gt;</code> is <code>&lt;code&gt;1\
+    \ + get-sum-upto(0)&lt;/code&gt;</code>.\n  We don't want to return <code>&lt;code&gt;True&lt;/code&gt;</code>\
+    \ in this case because the balance is\n  negative (1) but the account was not\
+    \ negative until this point.</p>\n</blockquote>\nSince the function will \"never\"\
+    \ call <code>get-sum-upto</code> for <code>i=0</code>, I thought this could be\
+    \ simplified to:\n<code>(define (is-negative i)\n  (&lt; (get-sum-upto i) 0))\n\
+    </code>\nIf I do that, I get incorrect results:\n<code", "  (define (below-zero?\
+    \ balance ops)\n    (cond [(empty? ops) #f]\n          [(< balance 0) #t]\n  \
+    \        [else (below-zero? (+ balance (first ops)) (rest ops))]))\n  (below-zero?\
+    \ 0 operations))\n", "  (define (below-zero? sums)\n    (cond [(null? sums) #f]\n\
+    \          [(< (car sums) 0) #t]\n          [else (below-zero? (cdr sums))]))\n\
+    \  (define (sum-so-far acc next)\n    (cons (+ acc next) (sum-so-far (+ acc next)\
+    \ next)))\n  (define (sum-of-operations ops)\n    (cons 0 (sum-so-far 0 ops)))\n\
+    \  (below-zero? (sum-of-operations operations)))\n```\n\n##### [4.4](https://github.com/gvanrossum/ftl-exercises/blob/master/4/4.4.md)\n\
+    \n```racket\n#lang racket\n", "  (define (iterator current-balance operations)\n\
+    \    (if (null? operations)\n        false\n        (let ((balance (+ current-balance\
+    \ (car operations))))\n          (if (< balance 0)\n              true\n     \
+    \         (iterator balance (cdr operations))))))\n  (iterator 0 operations))\n",
+  "  (let loop ([ops operations]\n             [bal 0])\n    (cond [(empty? ops) false]\n\
+    \          [(< bal 0) true]\n          [else (loop (rest ops) (+ bal (first ops)))])))\n",
+  "  (cond\n    [(empty? operations) false]\n    [(< (apply + operations) 0) true]\n\
+    \    [else (below_zero (rest operations))]))\n", "    (cond [(null? operations)\
+    \ false]\n          [(< 0 (apply + operations)) true]\n          [else false]))",
+  "  (define (helper aos balance)\n    (if (null? aos)\n        false\n        (if\
+    \ (< balance 0)\n            true\n            (helper (cdr aos) (+ balance (car\
+    \ aos))))))\n  (helper operations 0))\n", "    (define (bf-loop xs ys i)\n   \
+    \   (cond\n        [(and (empty? ys) (= i 0)) #f]\n        [(empty? ys) (bf-loop\
+    \ xs (rest xs) (- i (first xs)))]\n        [(and (empty? xs) (= i 0)) #f]\n  \
+    \      [(empty? xs) (bf-loop (rest ys) ys (- i (first ys)))]\n        [(< i 0)\
+    \ #t]\n        [else (bf-loop (rest xs) (rest ys) (- i (first xs) (first ys)))]))\n\
+    \    (bf-loop operations operations 0))", "  (let loop ([operations operations]\n\
+    \             [balance 0])\n    (cond [(null? operations)\n           false]\n\
+    \          [(zero? balance)\n           (loop (cdr operations)\n             \
+    \    (car operations))]\n          [(negative? balance)\n           true]\n  \
+    \        [else\n           (loop (cdr operations)\n                 (+ balance\
+    \ (car operations)))])))\n", "  (let loop ([operations operations]\n         \
+    \    [balance 0])\n    (if (null? operations)\n        (< balance 0)\n       \
+    \ (loop (cdr operations)\n              (+ balance (car operations))))))", " \
+    \ (if (null? operations)\n      false\n      (if (&lt; (apply + operations) 0)\n\
+    \          true\n          (below_zero (cdr operations)))))\n", "  (define (helper\
+    \ acc ops)\n    (cond\n      [(empty? ops) False]\n      [(> acc 0) (helper (+\
+    \ acc (first ops)) (rest ops))]\n      [else True]))\n  (helper 0 operations))\n",
+  "  (let loop ([ops operations] [balance 0])\n    (cond [(empty? ops) #f]\n     \
+    \     [(< (first ops) 0) #t]\n          [else (loop (rest ops) (+ balance (first\
+    \ ops)))])))\n", "  (define (helper ops balance)\n    (if (null? ops)\n      \
+    \  false\n        (if (< balance 0)\n            true\n            (helper (cdr\
+    \ ops) (+ balance (car ops))))))\n  (helper operations 0))\n", "  (define (iter\
+    \ acc ops)\n    (if (null? ops)\n        (if (&lt; acc 0)\n            #t\n  \
+    \          #f)\n        (iter (+ acc (car ops)) (cdr ops))))\n  (iter 0 operations))\n\
+    </code>\nWhile I am aware of the fact that I could have used reduce in Racket,\
+    \ I did not use it to stay as close to the original Python code as possible. The\
+    \ code works for me, I would just like to know if there is a better way to write\
+    \ this in Racket.\nAny thoughts?\n\n\nA:\n\nIt's the same in most functional languages.\
+    \ The general pattern is to map over the list and either use a fold (often called\
+    \ reduce) or keep an accumulator.\n<code>(define (below-zero lst)\n  (or (negative?\
+    \ (foldl add 0 lst))\n      (negative? (foldr add 0 lst))))\n</code>\nI'm not\
+    \ sure that this is what you're looking for, but if it is then you can use <code>foldl</code>\
+    \ or <code>foldr</code> to accumulate the values, and then <code>negative?</code>\
+    \ to check if it's below zero.\n", "  (cond [(empty? operations) #f]\n       \
+    \ [(>= (accumulate + 0 operations) 0) #f]\n        [else #t]))\n", "  (cond ((null?\
+    \ operations) 0)\n        ((< (car operations) 0)\n         (string-append \"\
+    Balance falls below zero at point:\" (number->string (car operations))))\n   \
+    \     (else (below_zero (cdr operations)))))\n", "  (let loop ([ops operations]\n\
+    \             [balance 0])\n    (if (null? ops)\n        (if (&lt; balance 0)\n\
+    \            #t\n            #f)\n        (loop (cdr ops)\n              (+ balance\
+    \ (car ops))))))\n", "  (for/or ([op operations])\n          (and (negative? op)\n\
+    \               (zero? (apply - op operations)))))\n", "  (if (null? operations)\n\
+    \      false\n      (if (&lt; (apply + operations) 0)\n          true\n      \
+    \    (below_zero (cdr operations)))))\n</code>\nThis is a bit verbose and I have\
+    \ used lot of boolean operations here that seem to be unnecessary.\nIn Python\
+    \ for example I would have done it like this:\n<code>def below_zero(operations):\n\
+    \    if sum(operations) &lt; 0:\n        return True\n    else:\n        return\
+    \ False\n</code>\nIs there a concise way to write this in Racket?\n\n\nA:\n\n\
+    You can use <code>any</code> to make a predicate to filter your list:\n<code>(define\
+    \ (below-zero ops)\n  (any &lt; 0 ops))\n</code>\n", "  (let ((balance 0))\n \
+    \   (for ([operation operations])\n      (set! balance (+ balance operation))\n\
+    \      (when (< balance 0)\n        (return #t)))\n    #f))\n", "  (cond\n   \
+    \ ((empty? operations) false)\n    ((< 0 (foldr - 0 operations)) true)\n    (else\
+    \ false)))\n", "  (cond [(null? operations) false]\n        [(< (accumulate +\
+    \ 0 operations) 0) true]\n        [else (below_zero (cdr operations))]))\n", " \
+    \ (local ((define (recur balance ops)\n            (cond [(empty? ops) false]\n\
+    \                  [(< balance 0) true]\n                  [else (recur (+ balance\
+    \ (first ops)) (rest ops))])))\n    (recur 0 operations)))\n", "  (for/or ([op\
+    \ operations])\n          (< op 0)))", "  (define (iter ops balance)\n    (if\
+    \ (null? ops)\n        (if (&lt; balance 0)\n            #t\n            #f)\n\
+    \        (let ([op (car ops)])\n          (iter (cdr ops) (+ balance op)))))\n\
+    \  (iter operations 0))\n</code>\nAnd that's the output I get in Dr. Racket:\n\
+    <code>&gt; (below_zero '(1 2 3))\n#t\n&gt; (below_zero '(1 2 -4 5))\n#t\n</code>\n\
+    What is the correct answer?\n\n\nA:\n\nYou were very close, the problem is in\
+    \ the part of the <code>iter</code> function where you're doing the recursion:\n\
+    <code>(if (null? ops)\n</code>\nThe call to <code>null?</code> should be in the\
+    \ <code>else</code> clause, because if the list is not empty you want to do the\
+    \ recursion, and only if the list is empty you want to check if the account balance\
+    \ is below zero. So the correct procedure would be:\n<code>(define (below_zero\
+    \ operations)\n  (define (iter ops balance)\n    (if (null? ops)\n        (&lt;\
+    \ balance 0)   ; &lt;-- just return the result\n        (let ([op (car ops)])\n\
+    \          (iter (cdr ops) (+ balance op)))))\n  (iter operations 0))\n</code>\n\
+    Alternatively, you can simplify your code and do it this way:\n<code>(define (below_zero\
+    \ operations)\n  (define (iter ops balance)\n    (cond ((null? ops)   (&lt; balance\
+    \ 0))\n          (else          (iter (cdr ops) (+ balance (car ops))))))\n  (iter\
+    \ operations 0))\n</code>\nOr, using <code>reduce</code>:\n<code>(define (below_zero\
+    \ operations)\n  (&lt; (reduce + operations 0) 0))\n</code>\n", "  (for/or ([op\
+    \ (in-list operations)])\n    (below-zero-helper op 0)))\n", "  (define iter (for/fold\
+    \ ([balance 0])\n                         ([op (in-list operations)])\n      \
+    \                   (+ balance op)))\n  (cond ((< iter 0) #t)\n        (else #f)))\n",
+  "    (cond\n        [(empty? operations) #f]\n        [(< (accumulate operations\
+    \ 0 +) 0) #t]\n        [else (below_zero (rest operations))]))\n", "  (let loop\
+    \ ([ops operations]\n             [sum 0])\n    (cond\n      [(empty? ops) (if\
+    \ (> sum 0) #f #t)]\n      [(> sum 0) (loop (rest ops) (+ sum (first ops)))]\n\
+    \      [else #t])))\n", "  (define (iter operations balance)\n    (if (empty?\
+    \ operations)\n        #f\n        (let ((op (first operations)))\n          (iter\
+    \ (rest operations) (+ balance op)))))\n  (iter operations 0))\n", "  (cond [(null?\
+    \ operations) #f]\n        [(>= (foldl + 0 operations) 0) #f]\n        [else #t]))",
+  "  (cond\n    [(empty? operations) false]\n    [(< 0 (apply - operations)) true]\n\
+    \    [else (below_zero (rest operations))]))\n", "  (cond\n    [(empty? operations)\
+    \ false]\n    [(< (apply + operations) 0) true]\n    [else false]))", "  (define\
+    \ balance 0)\n  (cond\n    [(empty? operations)\n     false]\n    [(< balance\
+    \ 0)\n     true]\n    [else\n     (define (calc-balance next-op)\n       (cond\n\
+    \         [(< next-op 0)\n          (- balance next-op)]\n         [else\n   \
+    \       (+ balance next-op)]))\n     (below_zero (rest operations) (calc-balance\
+    \ (first operations)))]))\n", "  (define (iter ops balance)\n    (if (null? ops)\n\
+    \        false\n        (if (< balance 0)\n            true\n            (iter\
+    \ (cdr ops) (+ balance (car ops))))))\n  (iter operations 0))\n", "  (define (iter\
+    \ current balance)\n    (cond\n      [(null? operations) (if (< balance 0) True\
+    \ False)]\n      [(<= 0 current) (iter (car operations) (+ balance current))]\n\
+    \      [else (iter (car operations) (- balance current))]))\n  (iter (car operations)\
+    \ 0))\n", "  (if (= 1 (length operations))\n      false\n      (let ([op (car\
+    \ operations)]\n            [next-ops (cdr operations)])\n        (if (< op 0)\n\
+    \            (below_zero next-ops)\n            (below_zero (append next-ops (list\
+    \ (- 0 op))))))))\n", "  (let loop ([ops operations] [balance 0])\n    (cond [(empty?\
+    \ ops) #f]\n          [(>= (list-ref ops 0) 0) (loop (rest ops) (+ balance (list-ref\
+    \ ops 0)))]\n          [(< (list-ref ops 0) 0) (or (< (- balance (list-ref ops\
+    \ 0)) 0) (loop (rest ops) (- balance (list-ref ops 0))))])))\n", "  (let loop\
+    \ ([acc 0] [ops operations])\n    (if (or (empty? ops) (&lt; acc 0))\n       \
+    \ (&lt; acc 0)\n        (loop (match ops\n                 [(-1 x)\n         \
+    \         (+ acc x)]\n                 [(-2 x)\n                  (- acc x)]\n\
+    \                 [_\n                  acc])\n              (rest ops)))))\n",
+  "  (if (empty? operations)\n      false\n      (if (< (apply + operations) 0)\n\
+    \          true\n          (below_zero (rest operations)))))\n", "  (define (scanner\
+    \ balance operations)\n    (if (null? operations)\n        false\n        (if\
+    \ (< balance 0)\n            true\n            (scanner (+ balance (car operations))\
+    \ (cdr operations)))))\n  (scanner 0 operations))\n", "  (cond ((null? operations)\
+    \ #f)\n        ((<= (foldl - 0 operations) 0) #t)\n        (else #f)))\n", " \
+    \ (cond [(null? operations) #f]\n        [(< (apply + operations) 0) #t]\n   \
+    \     [else (below_zero (cdr operations))]))\n", "  (let loop ([balance 0] [operations\
+    \ operations])\n    (if (empty? operations)\n        #f\n        (if (&lt; (car\
+    \ operations) 0)\n            #t\n            (loop (+ balance (car operations))\
+    \ (cdr operations))))))\n", "  (cond [(null? operations) #f]\n        [(< 0 (apply\
+    \ + operations)) #t]\n        [else #f]))\n", "  (let loop ([operations operations]\n\
+    \             [balance 0])\n    (if (empty? operations)\n        (= balance 0)\n\
+    \        (let ([op (first operations)])\n          (loop (rest operations)\n \
+    \               (+ balance op))))))\n", "  (define (iter ops balance)\n    (if\
+    \ (null? ops) #f\n        (let ((op (car ops)))\n          (if (< balance 0) #t\n\
+    \              (iter (cdr ops) (+ balance op))))))\n  (iter operations 0))\n",
+  "  (define (iter ops result)\n    (if (null? ops)\n        (if (< result 0)\n  \
+    \          #t\n            #f)\n        (if (< result 0)\n            #t\n   \
+    \         (iter (cdr ops) (+ result (car ops))))))\n  (iter operations 0))", " \
+    \ (cond\n    [(null? operations)\n     #f]\n    [(< (foldl + 0 operations) 0)\n\
+    \     #t]\n    [else\n     #f]))\n", "  (define (iter ops acum balance)\n    (cond\
+    \ ((null? ops) balance)\n          ((> (+ acum (car ops)) 0) (iter (cdr ops) (+\
+    \ acum (car ops)) balance))\n          (else #t)))\n  (iter operations 0 #f))\n",
+  "  (define (iter ops bal)\n    (if (null? ops)\n        false\n        (if (< bal\
+    \ 0)\n            true\n            (iter (cdr ops) (+ bal (car ops))))))\n  (iter\
+    \ operations 0))\n", "  (define (below-zero-iter ops acc)\n    (if (null? ops)\n\
+    \        false\n        (let ((transaction (car ops)))\n          (if (< acc transaction)\n\
+    \              true\n              (below-zero-iter (cdr ops) (- acc transaction))))))\n\
+    \  (below-zero-iter operations 0))\n", "  (define (iter ops acc)\n    (if (null?\
+    \ ops)\n        false\n        (let ((op (car ops)))\n          (if (&lt; (add1\
+    \ acc op) 0)\n              true\n              (iter (cdr ops) (add1 acc op))))))\n\
+    \  (iter operations 0))\n", "  (if (null? operations)\n      #f\n      (if (<\
+    \ (apply + operations) 0)\n          #t\n          (below_zero (cdr operations)))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

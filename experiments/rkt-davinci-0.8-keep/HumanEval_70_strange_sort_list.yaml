@@ -14,7 +14,1120 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate s
   \ (list 1 2 3 4 5 6 7 8)) (list 1 8 2 7 3 6 4 5))\n    (check-equal? (candidate\
   \ (list 0 2 2 2 5 5 -5 -5)) (list -5 5 -5 5 0 2 2 2))\n    (check-equal? (candidate\
   \ (list 111111)) (list 111111))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (define (sorted-p lst)\n    (cond\n      [(empty? lst) #t]\n    \
+    \  [(empty? (rest lst)) #t]\n      [(> (first lst) (second lst)) #f]\n      [else\
+    \ (sorted-p (rest lst))]))\n  (define (strange-sort-step lst result)\n    (if\
+    \ (sorted-p lst)\n        (append result lst)\n        (strange-sort-step (remove-lst-min-max\
+    \ lst) (append result (list (car lst) (cadr (reverse lst)))))))\n  (strange-sort-step\
+    \ lst '()))\n", "  (cond\n    [(empty? lst) empty]\n    [(and\n      (empty? (rest\
+    \ lst))\n      (empty? (rest (rest lst))))\n     lst]\n    [else\n     (define\
+    \ min (apply min lst))\n     (define max (apply max lst))\n     (append\n    \
+    \   (list min)\n       (list max)\n       (strange_sort_list\n         (remove\n\
+    \           (lambda (n)\n             (or (= n min) (= n max)))\n           lst)))]))\n",
+  "  (cond ((null? lst) '())\n        ((null? (cdr lst)) lst)\n        (else (append\
+    \ (list (min lst) (max lst)) (strange_sort_list (remove (min lst) (remove (max\
+    \ lst) lst)))))))\n", "  (cond [(null? lst) lst]\n        [(null? (cdr lst)) lst]\n\
+    \        [else (append (list (apply min lst) (apply max lst))\n              \
+    \        (strange_sort_list (remove (apply min lst) (remove (apply max lst) lst))))]))\n\
+    </code>\nSample session:\n<code>&gt; (strange_sort_list (list 3 4 1 2))\n'(1 4\
+    \ 2 3)\n&gt; (strange_sort_list (list 5 5 5 5))\n'(5 5 5 5)\n&gt; (strange_sort_list\
+    \ (list))\n'()\n</code>\n", "  (define (rem-min lst)\n    (cond [(empty? lst)\
+    \ lst]\n          [(empty? (rest lst)) (list (first lst))]\n          [else (if\
+    \ (&lt; (first lst) (first (rest lst)))\n                   (cons (first lst)\
+    \ (rem-min (rest lst)))\n                   (cons (first (rest lst)) (rem-min\
+    \ (rest (rest lst)))))]))\n  (define (rem-max lst)\n    (cond [(empty? lst) lst]\n\
+    \          [(empty? (rest lst)) (list (first lst))]\n          [else (if (&gt;\
+    \ (first lst) (first (rest lst)))\n                   (cons (first lst) (rem-max\
+    \ (rest lst)))\n                   (cons (first (rest lst)) (rem-max (rest (rest\
+    \ lst)))))]))\n  (define (strange-lst lst)\n    (cond [(empty? lst) '()]\n   \
+    \       [(empty? (rest lst)) lst]\n          [else (append (list (first lst) (first\
+    \ (rest lst)))\n                        (strange-lst (append (rest (rest lst))\
+    \ (list (second lst)))))]))\n  (strange-lst (append (rem-min lst) (rem-max lst))))\n\
+    </code>\nAlso, I tried a version that uses the <code>min-max</code> function from\
+    \ Racket. This function returns a list of two elements, the first element being\
+    \ the minimum, and the second being the maximum.\n<code>#lang racket\n", "  (if\
+    \ (null? lst)\n      '()\n      (let* ((min (apply min lst))\n             (max\
+    \ (apply max lst))\n             (new-lst (list min max)))\n        (if (eq? min\
+    \ max)\n            lst\n            (append new-lst (strange_sort_list (remove\
+    \ min (remove max lst))))))))\n</code>\nWell, I don't think this is very Racket-way\
+    \ and also I am not sure how to handle <code>'()</code> case. Can you please critique\
+    \ on this?\n\n\nA:\n\nI might represent the data more like this, which makes processing\
+    \ easier:\n<code>(define (strange-sort lst)\n  (match lst\n    [(list min max)\n\
+    \     (cond\n       [(= min max)\n        lst]\n       [else\n        (list min\
+    \ max (strange-sort (remove min (remove max lst))))])]\n    [else '()]))\n</code>\n\
+    Which I prefer over a <code>let*</code> version because (1) it's tail-recursive\
+    \ and (2) it makes the intent of the procedure very clear.\nBut the key simplification\
+    \ here is that we can recurse on the list without operating on the minimum and\
+    \ maximum explicitly, which eliminates the need for the <code>if</code> expression.\
+    \ Also, instead of using a <code>list</code> constructor in the else clause, I\
+    \ use the <code>cons</code> operator and a quote, which is a bit shorter, and\
+    \ certainly more common than the <code>list</code> command in Racket.\nOn the\
+    \ other hand, there is something very nice in your use of <code>min</code> and\
+    \ <code>max</code>, and I'd like to get rid of the <code>apply</code> command,\
+    \ since it might not be very efficient. That gives us this alternative:\n<code>(define\
+    \ (strange-sort lst)\n  (match lst\n    [(list min max)\n     (cond\n       [(=\
+    \ min max)\n        lst]\n       [else\n        (cons min (cons max (strange-sort\
+    \ (remove min (remove max lst))))))])]\n    [else '()]))\n</", "  (if (empty?\
+    \ lst)\n      lst\n      (let ([min-value (apply min lst)]\n            [max-value\
+    \ (apply max lst)])\n        (append (list min-value max-value)\n            \
+    \    (strange_sort_list (remove min-value lst)))\n        )))\n</code>\n", " \
+    \ (let loop ([lst lst] [out '()])\n    (if (null? lst)\n        out\n        (let*\
+    \ ([min (apply min lst)]\n               [max (apply max lst)]\n             \
+    \  [rm-min (remove min lst)]\n               [rm-max (remove max rm-min)])\n \
+    \         (loop rm-max (append out (list min max)))))))\n", "  (if (empty? lst)\n\
+    \      '()\n      (append (list (list-min lst))\n              (list (list-max\
+    \ (remove (list-min lst) lst)))\n              (strange_sort_list (remove (list-max\
+    \ (remove (list-min lst) lst))\n                                         (remove\
+    \ (list-min lst) lst))))))\n", "  (cond [(empty? lst) '()]\n        [else (strange_sort_list_inner\
+    \ lst)]))\n", "  (cond [(empty? lst) empty]\n        [(= (length lst) 1) lst]\n\
+    \        [else\n         (append (list (min lst) (max lst))\n                \
+    \ (strange_sort_list (remove* (min lst) (remove* (max lst) lst))))]))\n", "  (if\
+    \ (null? lst)\n      lst\n      (begin\n        (display \"resta: \")\n      \
+    \  (display (rest lst))\n        (display \"\\n\")\n        (append (list (min\
+    \ (first lst) (apply min (rest lst))))\n                (list (max (first lst)\
+    \ (apply max (rest lst))))\n                (strange_sort_list (append (remove\
+    \ (min (first lst) (apply min (rest lst))) lst)\n                            \
+    \               (remove (max (first lst) (apply max (rest lst))) lst)))))))\n",
+  "  (if (null? lst)\n      '()\n      (append (list (apply min lst))\n          \
+    \    (list (apply max lst))\n              (strange_sort_list (filter (lambda\
+    \ (x) (not (or (= x (apply min lst)) (= x (apply max lst))))) lst)))))\n</code>\n\
+    \u041A\u0430\u043A \u0441\u0434\u0435\u043B\u0430\u0442\u044C \u0442\u043E \u0436\
+    \u0435 \u0441\u0430\u043C\u043E\u0435 \u0432 Haskell?\n<code>strange_sort_list\
+    \ :: [Int] -&gt; [Int]\nstrange_sort_list [] = []\nstrange_sort_list lst = \n\
+    </code>\n\n\nA:\n\n\u041D\u0430\u043F\u0440\u0438\u043C\u0435\u0440, \u0442\u0430\
+    \u043A:\n<code>strange_sort_list :: [Int] -&gt; [Int]\nstrange_sort_list [] =\
+    \ []\nstrange_sort_list lst = \n    let minVal = minimum lst \n        maxVal\
+    \ = maximum lst\n        newLst = filter (\\n -&gt; n /= minVal &amp;&amp; n /=\
+    \ maxVal) lst\n    in minVal : maxVal : strange_sort_list newLst\n</code>\n",
+  "  (cond\n    [(empty? lst) empty]\n    [(empty? (rest lst)) lst]\n    [else\n \
+    \    (append (list (apply min lst) (apply max lst))\n             (strange_sort_list\
+    \ (remove (apply min lst) (remove (apply max lst) lst))))]))\n\n", "  (if (null?\
+    \ lst)\n      lst\n      (let ([min (apply min lst)]\n            [max (apply\
+    \ max lst)])\n        (if (zero? (sub1 (length lst)))\n            (list min)\n\
+    \            (append (list min)\n                    (strange_sort_list (remove\
+    \ min (remove max lst))))))))\n", "  (cond [(null? lst) lst]\n        [(null?\
+    \ (cdr lst)) lst]\n        [else (append (list (apply min lst) (apply max lst))\n\
+    \                        (strange_sort_list (remove (apply min lst) (remove (apply\
+    \ max lst) lst))))]))\n", "  (cond ((null? lst) '())\n        ((null? (cdr lst))\
+    \ lst)\n        (else (let* ((min-val (apply min lst))\n                     (max-val\
+    \ (apply max lst))\n                     (min-rest (remove min-val lst))\n   \
+    \                  (max-rest (remove max-val min-rest)))\n                (append\
+    \ (list min-val max-val)\n                        (strange_sort_list min-rest)\n\
+    \                        (strange_sort_list max-rest))))))\n", "  (cond [(empty?\
+    \ lst) empty]\n        [(empty? (rest lst)) lst]\n        [else\n         (append\
+    \ (list (min lst) (max lst))\n                 (strange_sort_list (remove (min\
+    \ lst) (remove (max lst) lst))))]))\n", "  (cond\n    [(empty? lst) '()]\n   \
+    \ [(empty? (rest lst)) lst]\n    [else\n     (cons (min lst)\n           (cons\
+    \ (max (remove (min lst) lst))\n                 (strange_sort_list (remove (max\
+    \ (remove (min lst) lst)) (remove (min lst) lst)))))]))\n", "  (define (helper\
+    \ lst min max)\n    (cond ((null? lst) '())\n          ((= min max) (cons min\
+    \ (helper (cdr lst) min max)))\n          ((&lt; min max) (cons min (helper (cdr\
+    \ lst) max min)))\n          ((&gt; min max) (cons max (helper (cdr lst) min max)))))\n\
+    \  (cond ((null? lst) '())\n        ((= (car lst) (cadr lst)) (cons (car lst)\
+    \ (strange_sort_list (cdr lst))))\n        (else (helper lst (car lst) (cadr lst)))))\n",
+  "  (if (null? lst)\n      lst\n      (append (list (apply min lst))\n          \
+    \    (strange_sort_list (list-remove (apply min lst) lst))\n              (list\
+    \ (apply max lst))\n              (strange_sort_list (list-remove (apply max lst)\
+    \ lst)))))\n", "  (cond\n    [(empty? lst) lst]\n    [(= (length lst) 1) lst]\n\
+    \    [else\n     (append (list (min lst) (max lst))\n             (strange_sort_list\
+    \ (remove (max lst) (remove (min lst) lst))))]))\n", "  (if (null? lst)\n    \
+    \  '()\n      (append (list (apply min lst))\n              (append (list (apply\
+    \ max lst))\n                      (strange_sort_list (filter (lambda (x) (not\
+    \ (or (= x (apply min lst)) (= x (apply max lst))))) lst))))))\n", "  (if (null?\
+    \ lst)\n      '()\n      (if (= (length lst) 1)\n          lst\n          (let\
+    \ loop ((lst1 (sort lst <))\n                     (lst2 (sort lst >))\n      \
+    \               (result '()))\n            (if (and (null? lst1) (null? lst2))\n\
+    \                (reverse result)\n                (loop (cdr lst1)\n        \
+    \              (cdr lst2)\n                      (cons (car lst1)\n          \
+    \                  (cons (car lst2)\n                                  result))))))))\n",
+  "  (cond\n    [(empty? lst) (list)]\n    [(= (length lst) 1) lst]\n    [else (list\
+    \ (min lst) (max lst) (strange_sort_list (remove (min lst) (remove (max lst) lst))))]))\n\
+    </code>\n\n<code>#lang racket\n", "  (cond\n    [(null? lst) null]\n    [(zero?\
+    \ (length lst)) lst]\n    [else\n     (append (list (min lst) (max lst))\n   \
+    \          (strange_sort_list (remove (min lst) (remove (max lst) lst))))]))\n",
+  "  (if (empty? lst)\n      '()\n      (strange_sort_list_helper lst '())))\n", " \
+    \ (cond\n    [(empty? lst) '()]\n    [(even? (length lst))\n     (cons (apply\
+    \ min lst)\n           (strange_sort_list (apply remove lst (min lst)))\n    \
+    \       (apply max lst)\n           (strange_sort_list (apply remove lst (max\
+    \ lst))))]\n    [else (cons (apply min lst)\n                (strange_sort_list\
+    \ (apply remove lst (min lst)))\n                (cons (apply max lst)\n     \
+    \                 (strange_sort_list (apply remove lst (max lst)))))]))\n", " \
+    \ (define (iter res lst)\n    (cond [(empty? lst) res]\n          [(empty? (rest\
+    \ lst)) (append res lst)]\n          [else (define min (apply min lst))\n    \
+    \            (define max (apply max lst))\n                (iter (append res (list\
+    \ min max))\n                      (filter (lambda (e) (and (not (equal? e min))\n\
+    \                                               (not (equal? e max))))\n     \
+    \                         lst))]))\n  (iter empty lst))\n</code>\nTo remove duplicate\
+    \ from the list you can use <code>remove-duplicates</code> function:\n<code>#lang\
+    \ racket\n", "  (cond ((= 0 (length lst)) '())\n        ((= 1 (length lst)) lst)\n\
+    \        (else\n         (let loop ([lst lst] [res '()])\n           (cond ((=\
+    \ 0 (length lst)) res)\n                 ((= 1 (length lst)) (append res lst))\n\
+    \                 (else\n                  (loop (cdr (cdr lst))\n           \
+    \             (append res\n                                (list (car lst)\n \
+    \                                     (car (cdr (reverse lst))))))))))))\n", " \
+    \ (cond\n    [(null? lst) '()]\n    [(null? (cdr lst)) lst]\n    [else\n     (define\
+    \ min (apply min lst))\n     (define min-rest (remove min lst))\n     (define\
+    \ max (apply max min-rest))\n     (define max-rest (remove max min-rest))\n  \
+    \   (append (list min max) (strange_sort_list max-rest))]))\n", "  (cond\n   \
+    \ [(empty? lst) empty]\n    [(singleton? lst) lst]\n    [else\n     (append\n\
+    \      (list (min lst) (max lst))\n      (strange_sort_list (remove* (min lst)\
+    \ (remove* (max lst) lst))))]))\n", "  (if (empty? lst)\n      lst\n      (let*\
+    \ ([min (min lst)]\n             [rest (remove min lst)]\n             [max (max\
+    \ rest)]\n             [rest (remove max rest)])\n        (append (list min max)\
+    \ (strange_sort_list rest)))))\n", "  (cond [(empty? lst) empty]\n        [(even?\
+    \ (length lst))\n         (list (list-ref lst 0)\n               (list-ref lst\
+    \ (sub1 (length lst)))\n               (strange_sort_list (sublist lst 1 (sub1\
+    \ (length lst)))))]\n        [(odd? (length lst))\n         (list (list-ref lst\
+    \ (sub1 (length lst)))\n               (list-ref lst 0)\n               (strange_sort_list\
+    \ (sublist lst 1 (sub1 (length lst)))))]))\n", "  (cond\n    [(null? lst) '()]\n\
+    \    [(null? (cdr lst)) lst]\n    [else\n     (let*\n       ([min (apply min lst)]\n\
+    \        [max (apply max lst)]\n        [pos-min (member min lst)]\n        [pos-max\
+    \ (member max lst)]\n        [lst-without-min (filter (lambda (x) (not (= x min)))\
+    \ lst)]\n        [lst-without-max (filter (lambda (x) (not (= x max))) lst)]\n\
+    \        [lst-with-min-max (cons max (cons min lst-without-max))])\n       (append\n\
+    \         (strange_sort_list (filter (lambda (x) (not (= x min))) lst))\n    \
+    \     (strange_sort_list (filter (lambda (x) (not (= x max))) lst))))]))", " \
+    \ (cond [(empty? lst) empty]\n        [(= (length lst) 1) lst]\n        [else\
+    \ (strange_sort_list (rest lst)) (cons (strange_sort_list (first lst)))]))\n</code>\n\
+    and\n<code>#lang racket\n", "  (if (empty? lst)\n      lst\n      (if (equal?\
+    \ (length lst) 1)\n          lst\n          (let ([min (apply min lst)]\n    \
+    \            [max (apply max lst)])\n            (append (list min max)\n    \
+    \                (strange_sort_list (filter (\u03BB (x) (and (not (equal? x min))\
+    \ (not (equal? x max)))) lst)))))))\n", "  (if (empty? lst)\n      empty\n   \
+    \   (append (list (min lst)) (list (max (remove (min lst) lst)))\n           \
+    \   (strange_sort_list (remove (max (remove (min lst) lst)) lst)))))\n", "  (cond\n\
+    \    [(empty? lst) (list)]\n    [(empty? (rest lst)) lst]\n    [else\n     (append\n\
+    \      (list (min lst))\n      (list (max (rest lst)))\n      (strange_sort_list\
+    \ (remove (min lst) lst)))]))\n", "  (define (strange_sort_helper lst)\n    (define\
+    \ (pick-min-max lst i out)\n      (if (= i 0)\n          (values (car lst) out)\n\
+    \          (if (or (null? lst)\n                  (= i 1))\n              (values\
+    \ (car lst) (cdr lst))\n              (let-values ([(x xs) (pick-min-max (cdr\
+    \ lst) (- i 1) (cons (car lst) out))])\n                (values x xs)))))\n  \
+    \  (define (helper lst out i)\n      (if (null? lst)\n          out\n        \
+    \  (let-values ([(x xs) (pick-min-max lst i null)])\n            (helper xs (cons\
+    \ x out) (- i 1)))))\n    (helper lst null 1))\n  (define (helper lst out i)\n\
+    \    (if (null? lst)\n        out\n        (let-values ([(x xs) (pick-min-max\
+    \ lst i null)])\n          (helper xs (cons x out) (- i 1)))))\n  (if (null? lst)\n\
+    \      lst\n      (let-values ([(x xs) (pick-min-max lst 2 null)])\n        (reverse\
+    \ (helper xs (list x) 2)))))\n</code>\n", "  (if (empty? lst)\n      lst\n   \
+    \   (if (not (odd? (length lst)))\n          (append (list (min lst))\n      \
+    \            (list (max lst))\n                  (strange_sort_list (remove (min\
+    \ lst) (remove (max lst) lst))))\n          (append (list (min lst))\n       \
+    \           (strange_sort_list (remove (min lst) lst))))))\n</code>\nThen I tried\
+    \ using the concept of map and lambda function to do it in a different way,\n\
+    <code>#lang racket\n", "  (if (null? lst) '()\n      (let ((min (apply min lst))\n\
+    \            (max (apply max lst)))\n        (append (list min)\n            \
+    \    (strange_sort_list (filter (lambda (x) (not (= x min))) lst))\n         \
+    \       (list max)\n                (strange_sort_list (filter (lambda (x) (not\
+    \ (= x max))) lst))))))", "  (cond\n    [(empty? lst) empty]\n    [(= (length\
+    \ lst) 1) lst]\n    [else\n     (append\n      (list (min lst) (max lst))\n  \
+    \    (strange_sort_list (remove (min lst) (remove (max lst) lst))))]))\n", " \
+    \ (cond ((empty? lst) empty)\n        ((= (length lst) 1) lst)\n        (else\n\
+    \         (append (list (apply min lst))\n                 (strange_sort_list\
+    \ (remove (apply min lst) lst))\n                 (list (apply max lst))\n   \
+    \              (strange_sort_list (remove (apply max lst) lst))))))", "  (cond\
+    \ [(null? lst) lst]\n        [(= (length lst) 1) lst]\n        [else\n       \
+    \  (let* ([min-value (apply min lst)]\n                [max-value (apply max lst)]\n\
+    \                [lst (filter (lambda (e) (not (= e min-value))) lst)]\n     \
+    \           [lst (filter (lambda (e) (not (= e max-value))) lst)])\n         \
+    \  (cons min-value (cons max-value (strange_sort_list lst))))]))\n", "  (if (empty?\
+    \ lst)\n      '()\n      (append (list (min lst) (max lst)) (strange_sort_list\
+    \ (remove (min lst) (remove (max lst) lst))))))\n", "  (cond [(empty? lst) '()]\n\
+    \        [else (append (list (apply min lst))\n                      (list (apply\
+    \ max (remv (apply min lst) lst)))\n                      (strange_sort_list (remv\
+    \ (apply max (remv (apply min lst) lst)) lst)))]))\n", "  (if (null? lst)\n  \
+    \    lst\n      (let* ([min (apply min lst)]\n             [max (apply max lst)]\n\
+    \             [rest (remove min (remove max lst))])\n        (append (list min\
+    \ max) (strange_sort_list rest)))))\n", "  (cond\n    [(empty? lst) empty]\n \
+    \   [(= (count lst) 1) lst]\n    [else\n     (begin\n       (define (sorted-list\
+    \ lst)\n         (cond\n           [(empty? lst) empty]\n           [(= (count\
+    \ lst) 1) lst]\n           [else\n            (sorted-list (sort lst))]))\n  \
+    \     (define (sort lst)\n         (append (list (min lst)) (sort (remove (min\
+    \ lst) lst))))\n       (define (remove item lst)\n         (filter (lambda (x)\
+    \ (not (= x item))) lst))\n       (define (min lst)\n         (cond\n        \
+    \   [(empty? lst) empty]\n           [(= (count lst) 1) (first lst)]\n       \
+    \    [else\n            (if (< (first lst) (min (rest lst)))\n               \
+    \ (first lst)\n                (min (rest lst)))]))\n       (define (max lst)\n\
+    \         (cond\n           [(empty? lst) empty]\n           [(= (count lst) 1)\
+    \ (first lst)]\n           [else\n            (if (> (first lst) (max (rest lst)))\n\
+    \                (first lst)\n                (max (rest lst)))]))\n       (define\
+    \ (min-max-sort lst)\n         (cond\n           [(empty? lst) empty]\n      \
+    \     [(= (count lst) 1) lst]\n           [else\n            (append (list (min\
+    \ lst))\n                    (list (max lst))\n                    (min-max-sort\
+    \ (filter (lambda (x) (not (or (= x (min lst)) (= x (max lst))))) lst)))]))\n\
+    \       (min-max-sort (sorted-list lst))))))\n", "  (if (null? lst)\n      lst\n\
+    \      (let* ([minval (apply min lst)]\n             [maxval (apply max lst)]\n\
+    \             [curmin minval]\n             [curmax maxval]\n             [curlist\
+    \ (list minval maxval)]\n             [curlist2 (remove minval (remove maxval\
+    \ lst))])\n        (if (null? curlist2)\n            curlist\n            (append\
+    \ curlist (strange_sort_list curlist2))))))", "  (strange-sort lst '()))\n", " \
+    \ (cond\n    [(empty? lst) empty]\n    [(equal? (length lst) 1) lst]\n    [else\n\
+    \     (define (nth-x lst n)\n       (define (nth-x-iter lst count)\n         (cond\n\
+    \           [(empty? lst) empty]\n           [(= count n) (first lst)]\n     \
+    \      [else (nth-x-iter (rest lst) (+ count 1))]))\n       (nth-x-iter lst 0))\n\
+    \     (define (max-lst lst)\n       (define (max-lst-iter lst biggest)\n     \
+    \    (cond\n           [(empty? lst) biggest]\n           [(&gt; (first lst) biggest)\
+    \ (max-lst-iter (rest lst) (first lst))]\n           [else (max-lst-iter (rest\
+    \ lst) biggest)]))\n       (max-lst-iter lst 0))\n     (define (min-lst lst)\n\
+    \       (define (min-lst-iter lst smallest)\n         (cond\n           [(empty?\
+    \ lst) smallest]\n           [(&lt; (first lst) smallest) (min-lst-iter (rest\
+    \ lst) (first lst))]\n           [else (min-lst-iter (rest lst) smallest)]))\n\
+    \       (min-lst-iter lst 999))\n     (define (remove-nth lst n)\n       (define\
+    \ (remove-nth-iter lst count)\n         (cond\n           [(empty? lst) empty]\n\
+    \           [(= count n) (rest lst)]\n           [else (cons (first lst) (remove-nth-iter\
+    \ (rest lst) (+ count 1)))]))\n       (remove-nth-iter lst 0))\n     (define (find-pos-of-x\
+    \ lst x)\n       (define (find-pos-of-x-iter lst count)\n         (cond\n    \
+    \       [(empty? lst) empty]\n           [(= (first lst) x) count]\n         \
+    \  [else (find-pos-of-x-iter (rest lst) (+ count 1))]))", "  (cond\n    [(empty?\
+    \ lst) empty]\n    [(empty? (rest lst)) lst]\n    [else\n     (strange_sorted_concat\n\
+    \      (list (min lst))\n      (reverse (min (reverse lst)))\n      (rest (drop-first\
+    \ (reverse lst)))\n      (drop-first lst))]))\n", "  (cond ((empty? lst) empty)\n\
+    \        ((null? (cdr lst)) lst)\n        (else (let ((min (min lst))\n      \
+    \               (max (max lst)))\n                (append (list min max)\n   \
+    \                     (strange_sort_list (remove lst min max)))))))\n", "  (cond\
+    \ [(empty? lst) empty]\n        [(<= (length lst) 2) lst]\n        [else (append\
+    \ (list (first lst) (last lst))\n                      (strange_sort_list (cdr\
+    \ (init lst))))]))\n", "  (cond [(empty? lst)\n         empty]\n        [(= (length\
+    \ lst) 1)\n         lst]\n        [else\n         (append (list (apply min lst))\n\
+    \                 (list (apply max (without (apply min lst) lst)))\n         \
+    \        (strange_sort_list (without (apply min lst) (without (apply max (without\
+    \ (apply min lst) lst)) lst))))]))", "  (if (null? lst)\n      '()\n      (let*\
+    \ ((min-i (argmin lst))\n             (first (list (list-ref lst min-i)))\n  \
+    \           (rem (remove-i lst min-i)))\n        (append first (strange_sort_list\
+    \ rem)))))\n", "  (define (strange_sort_helper lst sort-lst)\n    (if (empty?\
+    \ lst)\n        sort-lst\n        (if (zero? (modulo (length sort-lst) 2))\n \
+    \           (strange_sort_helper (filter (lambda (x) (not (eq? x (min lst))))\
+    \ lst)\n                                 (append sort-lst (list (min lst))))\n\
+    \            (strange_sort_helper (filter (lambda (x) (not (eq? x (max lst))))\
+    \ lst)\n                                 (append sort-lst (list (max lst)))))))\n\
+    \  (strange_sort_helper lst (list)))", "  (define (min_max lst)\n    (define (min\
+    \ lst min)\n      (cond\n        [(empty? lst) min]\n        [(< (first lst) min)\
+    \ (min (rest lst) (first lst))]\n        [else (min (rest lst) min)]))\n    (define\
+    \ (max lst max)\n      (cond\n        [(empty? lst) max]\n        [(> (first lst)\
+    \ max) (max (rest lst) (first lst))]\n        [else (max (rest lst) max)]))\n\
+    \    (values (min lst (first lst)) (max lst (first lst))))\n  (define (min-max-pair\
+    \ lst)\n    (define (min-max-rec min max lst)\n      (cond\n        [(empty? lst)\
+    \ (values min max)]\n        [(< (first lst) min) (min-max-rec (first lst) max\
+    \ (rest lst))]\n        [(> (first lst) max) (min-max-rec min (first lst) (rest\
+    \ lst))]\n        [else (min-max-rec min max (rest lst))]))\n    (min-max-rec\
+    \ (first lst) (first lst) (rest lst)))\n  (define (min-max-pair-2 lst)\n    (define\
+    \ (min-max-rec min max lst)\n      (cond\n        [(empty? lst) (values min max)]\n\
+    \        [(= (first lst) min) (min-max-rec min max (rest lst))]\n        [(= (first\
+    \ lst) max) (min-max-rec min max (rest lst))]\n        [(< (first lst) min) (min-max-rec\
+    \ (first lst) max (rest lst))]\n        [(> (first lst) max) (min-max-rec min\
+    \ (first lst) (rest lst))]\n        [else (min-max-rec min max (rest lst))]))\n\
+    \    (min-max-rec (first lst) (first lst) (rest lst)))\n  (define (min-max-pair-3\
+    \ l", "  (define (t1 lst min max)\n    (cond\n      [(empty? lst) '()]\n     \
+    \ [(= min max) (cons min (t1 lst min max))]\n      [(null? lst) '()]\n      [else\
+    \ (cons min (cons max (t1 (remove min (remove max lst)) min max)))]))\n  (cond\n\
+    \    [(empty? lst) '()]\n    [(null? lst) '()]\n    [else (t1 lst (minimum lst)\
+    \ (maximum lst))]))\n</code>", "  (if (null? lst) lst\n      (let loop ([lst lst]\
+    \ [r '()])\n        (if (null? lst) (reverse r)\n            (let ([min (apply\
+    \ min lst)]\n                  [max (apply max lst)])\n              (loop (remove\
+    \ min lst) (cons min (cons max r))))))))\n</code>\n", "  (sort lst (lambda (a\
+    \ b)\n              (if (&lt; a b)\n                  (if (eq? (&lt; a b) #t)\n\
+    \                      #t\n                      #f)\n                  (if (eq?\
+    \ (&lt; a b) #f)\n                      #t\n                      #f)))))\n</code>\n\
+    As you see, the condition checks if a is smaller than b, this would be true if\
+    \ the first value is smaller than the second, and false otherwise. If a is smaller,\
+    \ then the next value is a true, if not, it's false. The first condition works,\
+    \ but the else statement doesn't. I'm sure there's a better way to do this, without\
+    \ writing this much code.\nWhat I've tried:\n<code>(define (strange_sort_list\
+    \ lst)\n  (sort lst (lambda (a b)\n              (if (&lt; a b)\n            \
+    \      #t\n                  #f))))\n</code>\nThis works for all values except\
+    \ when there's two same numbers.\n<code>(define (strange_sort_list lst)\n  (sort\
+    \ lst (lambda (a b)\n              (if (&lt; a b)\n                  #t\n    \
+    \              #t))))\n</code>\nThis doesn't work for all values.\n\n\nA:\n\n\
+    The anonymous function that you receive takes two arguments, <code>a</code> and\
+    \ <code>b</code>. You need to return either <code>#t</code> or <code>#f</code>\
+    \ depending on whether <code>a</code> is smaller than <code>b</code> or not. You\
+    \ can't return an expression that's evaluated to a boolean, you need to return\
+    \ <code>#t</code> or <code>#f</code> directly.\n<code>(define (strange_sort_list\
+    \ lst)\n  (sort lst\n        (lambda (a b)\n          (&lt; a b))))\n</code>\n\
+    For values where a and b are equal, it doesn't matter what you return.\n<code>(strange_sort_list\
+    \ '(1 2 3 4))\n=&gt; '(1 4 2 3)\n", "  (define (inner lst mn mx)\n    (cond [(empty?\
+    \ lst) '()]\n          [(equal? (count lst) 1) (append lst '())]\n          [(and\
+    \ (eq? (car lst) mn) (equal? (count lst) 2)) (append lst '())]\n          [(and\
+    \ (eq? (car lst) mn) (equal? (count lst) 3)) (append lst '())]\n          [(and\
+    \ (eq? (car lst) mn) (equal? (count lst) 4)) (append lst '())]\n          [(and\
+    \ (eq? (car lst) mn) (equal? (count lst) 5)) (append lst '())]\n          [(eq?\
+    \ (car lst) mn) (append (list mn) (inner (cdr lst) (min (cdr lst)) (max (cdr lst))))]\n\
+    \          [(eq? (car lst) mx) (append (list mx) (inner (cdr lst) (min (cdr lst))\
+    \ (max (cdr lst))))]\n          [else (inner (cdr lst) mn mx)]))\n  (inner lst\
+    \ (min lst) (max lst)))\n", "  (sort lst < :key (lambda (x) (- (apply max lst)\
+    \ x))))\n", "  (cond\n    [(empty? lst) '()]\n    [(= (length lst) 1) lst]\n \
+    \   [else\n     (let ([all-but-first (rest lst)]\n           [min (min (car lst)\
+    \ (apply min all-but-first))]\n           [max (max (car lst) (apply max all-but-first))])\n\
+    \       (append (list min)\n               (cons max (strange_sort_list (remove*\
+    \ min (remove* max lst))))))]))\n", "  (cond [(empty? lst) '()]\n        [else\
+    \ (append (list (min lst) (max lst))\n                      (strange_sort_list\
+    \ (remove (min lst)\n                                                 (remove\
+    \ (max lst) lst))))]))\n</code>\nI am sure there is a better way to do it, especially\
+    \ without <code>remove</code> and <code>append</code> functions.\n\n\nA:\n\nYou\
+    \ are right, there is a better way to do it. Indeed, your code is so inefficient\
+    \ that it's not even wrong! \nI'm guessing that you're asked to write this for\
+    \ a homework assignment, so I'll do you a favor and not give you a code sample.\
+    \ Instead, I'll give you some hints:\n\nDon't loop over the list\nIf you have\
+    \ to, try to use <code>map</code>\n<code>append</code> and <code>remove</code>\
+    \ are mostly wrong. Use a <code>set!</code>\nIf you're not familiar with sorting\
+    \ algorithms, you'll have to at least read about them before you can complete\
+    \ this assignment.\n\nGood luck!\n", "  (if (null? lst)\n      lst\n      (let*\
+    \ ([_ (sort lst #&lt;)]\n             [min (car _)]\n             [rest (cdr _)]\n\
+    \             [max (car (reverse rest))])\n        (cons min (cons max (strange_sort_list\
+    \ (remove min (remove max rest))))))))\n</code>\n\u042D\u0442\u043E \u043C\u043E\
+    \u0435 \u0440\u0435\u0448\u0435\u043D\u0438\u0435:\n<code>#lang racket\n", " \
+    \ (define (iter lst1 lst2)\n    (if (empty? lst1)\n        lst2\n        (iter\
+    \ (cdr lst1) (cons (car lst1) (cons (car (reverse lst1)) lst2)))))\n  (if (empty?\
+    \ lst)\n      lst\n      (iter (cdr lst) (list (car lst)))))\n", "  (cond\n  \
+    \  [(empty? lst) empty]\n    [(one? lst) lst]\n    [else\n     (append\n     \
+    \ (list (min lst) (max lst))\n      (strange_sort_list (filter\n             \
+    \             (lambda (x) (and (not (equal? x (min lst)))\n                  \
+    \                         (not (equal? x (max lst)))))\n                     \
+    \     lst)))]))\n", "  (cond [(null? lst) '()]\n        [else\n         (append\n\
+    \          (list (apply min lst))\n          (list (apply max (filter (lambda\
+    \ (v) (not (equal? v (apply min lst)))) lst)))\n          (strange_sort_list (filter\
+    \ (lambda (v) (not (equal? v (apply min lst)))) (filter (lambda (v) (not (equal?\
+    \ v (apply max lst)))) lst))))]))\n", "  (define (aux lst_acc lst_rem)\n    (cond\n\
+    \      [(empty? lst_rem) lst_acc]\n      [(null? lst_rem) lst_acc]\n      [else\n\
+    \       (let* ([min_elem (min lst_rem)]\n              [lst_rem_min (filter (lambda\
+    \ (x) (not (= x min_elem))) lst_rem)])\n         (aux (append lst_acc (list min_elem))\
+    \ lst_rem_min))]))\n  (aux (list) lst))\n", "  (sort (\u03BB (x y) (&lt; x y))\
+    \ lst))\n", "  (define (strange-sort lst a b)\n    (cond\n      [(empty? lst)\
+    \ (list a b)]\n      [(= a b) (strange-sort lst a b)]\n      [(< a b) (strange-sort\
+    \ (delete a lst) b a)]\n      [(> a b) (strange-sort (delete b lst) a b))]))\n\
+    \  (strange-sort lst (min lst) (max lst)))\n", "  (cond\n    [(empty? lst) '()]\n\
+    \    [(empty? (rest lst)) lst]\n    [else\n     (if (even? (length lst))\n   \
+    \      (append (list (minimum lst) (maximum lst))\n                 (strange_sort_list\
+    \ (remove* (minimum lst) (remove* (maximum lst) lst))))\n         (append (list\
+    \ (maximum lst) (minimum lst))\n                 (strange_sort_list (remove* (minimum\
+    \ lst) (remove* (maximum lst) lst)))))]))\n", "  (cond\n    [(empty? lst) empty]\n\
+    \    [(= (count lst) 1) lst]\n    [else\n     (append (list (min lst) (max lst))\n\
+    \             (strange_sort_list (remove (min lst) (remove (max lst) lst))))]))\n\
+    </code>\nI wonder if I could make it better? Is it possible to remove the <code>append</code>\
+    \ and make it a one liner. Maybe use <code>list-&gt;set</code> to remove the <code>remove</code>?\n\
+    \n\nA:\n\nTo get rid of <code>append</code> and <code>remove</code>, you can use\
+    \ <code>partition</code> to split the list into the minimum value and the rest,\
+    \ and then recurse on the rest with <code>foldr</code> to combine the result.\n\
+    <code>(define (strange-sort-list lst)\n  (define (strange-sort-list* xs)\n   \
+    \ (if (empty? xs) empty\n        (foldr (lambda (y ys) (list (max y ys) (min y\
+    \ ys))) empty xs)))\n  (if (empty? lst) empty\n      (let ([(min . rest) (partition\
+    \ (lambda (x) (= x (min lst))) lst)])\n        (append min (strange-sort-list*\
+    \ rest)))))\n</code>\n", "  (cond [(empty? lst) empty]\n        [(= (length lst)\
+    \ 1) lst]\n        [else (append (list (apply min lst) (apply max lst))\n    \
+    \                  (strange_sort_list (filter (lambda (i) (and (not (= i (apply\
+    \ min lst))) (not (= i (apply max lst))))) lst)))]))\n", "  (cond ((empty? lst)\n\
+    \         empty)\n        ((even? (length lst))\n         (append (sort lst <)\n\
+    \                 (sort lst >)))\n        (else\n         (append (sort lst <)\n\
+    \                 (sort lst >)\n                 (list (last lst))))))\n", " \
+    \ (cond [(empty? lst) '()]\n        [else\n         (append (list (min lst))\n\
+    \                 (strange_sort_list (remove (min lst) lst))\n               \
+    \  (list (max lst))\n                 (strange_sort_list (remove (max lst) lst)))]))\n",
+  "  (if (empty? lst)\n      empty\n      (let ([nums (sort lst <)])\n        (append\
+    \ (list (first nums))\n                (if (even? (length nums))\n           \
+    \         (strange_sort_list (rest (rest nums)))\n                    (strange_sort_list\
+    \ (rest nums)))))))\n", "  (if (empty? lst)\n      '()\n      (strange_sort_list_impl\
+    \ lst #f (list (car lst)))))\n", "  (cond [(empty? lst) empty]\n        [(empty?\
+    \ (rest lst)) lst]\n        [else\n         (append (list (min lst (rest lst)))\n\
+    \                 (list (max lst (rest lst)))\n                 (strange_sort_list\
+    \ (remove (min lst (rest lst)) (remove (max lst (rest lst)) lst))))]))\n", " \
+    \ (cond [(null? lst) null]\n        [(equal? (length lst) 1) lst]\n        [else\
+    \ (list (min lst) (max lst)\n                    (strange_sort_list (remove (min\
+    \ lst) (remove (max lst) lst))))]))\n", "  (cond [(empty? lst) '()]\n        [else\n\
+    \         (let ([lst (sort lst <)])\n           (cons (first lst)\n          \
+    \       (strange_sort_list (reverse (rest lst)))))]))\n", "  (cond [(null? lst)\
+    \ lst]\n        [(zero? (modulo (length lst) 2))\n         (cons (apply min lst)\n\
+    \               (cons (apply max lst)\n                     (strange_sort_list\
+    \ (remove (apply min lst) (remove (apply max lst) lst)))))\n         ]\n     \
+    \   [else\n         (cons (apply max lst)\n               (cons (apply min lst)\n\
+    \                     (strange_sort_list (remove (apply min lst) (remove (apply\
+    \ max lst) lst)))))\n         ]))\n", "  (cond ((empty? lst) empty)\n        ((eq?\
+    \ (count lst) 1) lst)\n        (else (append (list (minimum lst) (maximum lst))\n\
+    \                      (strange_sort_list (remove (maximum lst) (remove (minimum\
+    \ lst) lst)))))))\n", "  (if (null? lst)\n      '()\n      (if (null? (cdr lst))\n\
+    \          lst\n          (let ([min-integer (apply min lst)]\n              \
+    \  [max-integer (apply max lst)])\n            (append (list min-integer max-integer)\n\
+    \                    (strange_sort_list (remove min-integer (remove max-integer\
+    \ lst))))))))\n", "  (cond [(empty? lst) '()]\n        [else\n         (let* ([sorted-lst\
+    \ (sort lst <)]\n                [min (first sorted-lst)]\n                [max\
+    \ (last sorted-lst)]\n                [rest (rest (butlast sorted-lst))])\n  \
+    \         (append (list min)\n                   (reverse (append (list max)\n\
+    \                                    (strange_sort_list rest)))))]))\n```\n\n\
+    ## day 13, 13.01.2020, Friday\n### Languages: JavaScript, ClojureScript\n\n**[Coding\
+    \ Train Challenge #131.2: Cellular Automata - The Game of Life](https://youtu.be/DKGodqDs9sA)**\n\
+    \nThis is a video example, so there's no code to show.\n\n![Day 13](img/day-13.png?raw=true\
+    \ \"day 13\")\n\n## day 14, 14.01.2020, Saturday\n### Languages: JavaScript, ClojureScript\n\
+    \n**[Coding Train Challenge #131.2: Cellular Automata - The Game of Life](https://youtu.be/DKGodqDs9sA)**\n\
+    \nThis is a video example, so there's no code to show.\n\n![Day 14](img/day-14.png?raw=true\
+    \ \"day 14\")\n\n## day 15, 15.01.2020, Sunday\n### Languages: JavaScript, ClojureScript\n\
+    \n**[Coding Train Challenge #131.2: Cellular Automata - The Game of Life](https://youtu.be/DKGodqDs9sA)**\n\
+    \nThis is a video example, so there's no code to show.\n\n![Day 15](img/day-15.png?raw=true\
+    \ \"day 15\")\n\n## day 16, 16.01.2020, Monday\n### Languages: JavaScript, ClojureScript\n\
+    \n**[Coding Train Challenge #131.2: Cellular Automata - The Game of Life](https://youtu.be/DKGodqDs9sA)**\n\
+    \nThis is a video example, so there's no code to show.\n\n![Day 16](img/day-16.png?raw=true\
+    \ \"day 16\")\n\n## day 17, 17.01.2020, Tuesday\n### Languages: JavaScript, ClojureScript\n",
+  "  (cond\n    [(empty? lst) empty]\n    [(one? lst) lst]\n    [else (append (take\
+    \ lst 1)\n                  (reverse (take (drop lst 1) 1))\n                \
+    \  (strange_sort_list (drop (drop lst 1) 1)))]))\n</code>\n", "  (let loop ([lst\
+    \ lst] [acc '()])\n    (cond [(null? lst) (reverse acc)]\n          [else\n  \
+    \         (let ([min (apply min lst)]\n                 [max (apply max lst)])\n\
+    \             (loop (remove min lst) (cons min (cons max acc))))])))\n", "  (cond\
+    \ [(empty? lst) empty]\n        [(= (length lst) 1) lst]\n        [else (let loop\
+    \ ([src lst] [dst empty])\n                (if (empty? src) dst\n            \
+    \        (let* ([min (apply min src)]\n                           [max (apply\
+    \ max src)]\n                           [src (remv src min)])\n              \
+    \        (if (empty? src) (cons min (cons max dst))\n                        \
+    \  (loop (remv src max) (cons min (cons max dst)))))))]))\n</code>\n", "  (if\
+    \ (null? lst)\n      '()\n      (let ([min (apply min lst)]\n            [max\
+    \ (apply max lst)])\n        (if (null? (remove min lst))\n            (list min)\n\
+    \            (list min\n                  (remove min (apply max (remove max lst)))\n\
+    \                  (remove max (apply min (remove min lst))))))))\n", "  (if (null?\
+    \ lst)\n      lst\n      (let ((min-val (apply min lst))\n            (max-val\
+    \ (apply max lst)))\n        (cons min-val\n              (cons max-val\n    \
+    \                (strange_sort_list (remove min-val (remove max-val lst))))))))\n",
+  "  (cond\n    [(empty? lst) lst]\n    [(eq? 1 (length lst)) lst]\n    [else\n  \
+    \   (let ([minimum (apply min lst)]\n           [minimum-pos (first (remove* minimum\
+    \ lst))]\n           [maximum (apply max lst)]\n           [maximum-pos (first\
+    \ (remove* maximum lst))])\n       (append (list minimum)\n               (list\
+    \ maximum)\n               (strange_sort_list (sublist lst (+ minimum-pos 1) maximum-pos)))]\n\
+    \     )\n    ]\n  )\n)\n", "  (let loop ([lst lst] [ans '()])\n    (if (empty?\
+    \ lst) ans\n        (loop (remove-each (min lst) lst)\n              (append ans\
+    \ (list (min lst) (max lst)))))))\n", "  (if (null? lst)\n      '()\n      (let*\
+    \ ([min (apply min lst)]\n             [max (apply max lst)]\n             [i\
+    \ (index-of lst min)]\n             [j (index-of lst max)]\n             [new-lst\
+    \ (remove lst min)]\n             [new-lst (remove new-lst max)])\n        (append\
+    \ (list min max) (strange_sort_list new-lst)))))\n", "  (letrec ((sorted-lst (list->sorted-list\
+    \ lst))\n           (sorted-lst (reverse sorted-lst)))\n    (letrec ([cmp-lst\
+    \ (get-cmp-lst (length lst))]\n             [res-lst (map index-cmp sorted-lst)])\n\
+    \      res-lst)))\n</code>\nMy first idea was to use <code>list-ref</code> with\
+    \ <code>modulo</code> function.\nBut I found that <code>list-ref</code> is really\
+    \ slow.\nI thought about using <code>hash-table</code> but I need to create\n\
+    hash-table of size n where n is length of given list.\nIs there a better way?\n\
+    \n\nA:\n\nYou don't need to create any additional data structure.\nJust pair the\
+    \ values and indexes, sort by the value and then extract only the indexes.\nSince\
+    \ you want to sort from small to big and from odd to even indexes, you have to\
+    \ first sort by the index, and then by the value.\nIf you don't want to sort the\
+    \ list, you can use the function <code>sort</code> to rearrange the elements in-place,\
+    \ but it returns <code>undefined</code>.\nIf you want to keep the original list,\
+    \ you have to use <code>sort-list</code> or <code>sort</code> with a key-function.\n\
+    The key-function returns a list with the value and the index, so that the function\
+    \ <code>sort</code> or <code>sort-list</code> uses the value to sort and the index\
+    \ to break ties.\nThen, you use <code>map</code> with a function that extracts\
+    \ the index from the key to get the result.\nHere is the code:\n<code>(define\
+    \ (strange-sort lst)\n  (let ([result\n         (map first\n              (sort\
+    \ (lambda (x y) (and (&lt; (second x) (second y))\n                          \
+    \              (&lt; (first x) (first y))))\n                    (zip lst (iota\
+    \ (length lst))))))])\n    result))\n</code>\nIt works as expected:\n<code>(strange-sort\
+    \ '())\n=&gt; '()\n", "  (for/list ([x (in-order (sort lst <))]\n            \
+    \ [y (in-order (sort lst >))])\n    (cond [(empty? x) (first y)]\n          [(empty?\
+    \ y) (first x)]\n          [else (if (odd? (car x)) (first x) (first y))])))\n",
+  "  (define (aux l min max)\n    (cond\n      ((empty? l) '())\n      ((= (length\
+    \ l) 1) l)\n      ((< (car l) min) (aux (cdr l) (car l) max))\n      ((> (car\
+    \ l) max) (aux (cdr l) min (car l)))\n      (else (cons (car l) (aux (cdr l) min\
+    \ max)))))\n  (if (empty? lst)\n      '()\n      (aux lst (first lst) (first lst))))\n",
+  "  (let loop ([lst lst] [result '()])\n    (cond [(null? lst) (reverse result)]\n\
+    \          [else\n           (define min (apply min lst))\n           (define\
+    \ max (apply max (remove min lst)))\n           (loop (remove max (remove min\
+    \ lst)) (cons min (cons max result)))])))\n", "  (define (sorted-p lst)\n    (cond\
+    \ [(empty? lst) #t]\n          [(empty? (rest lst)) #t]\n          [(> (first\
+    \ lst) (second lst)) #f]\n          [else (sorted-p (rest lst))]))\n  (define\
+    \ (strange-sort lst)\n    (cond [(empty? lst) empty]\n          [(sorted-p lst)\
+    \ lst]\n          [(equal? (sort lst) lst) (sort lst)]\n          [else (define\
+    \ min-index (min-index lst))\n                (define max-index (max-index lst))\n\
+    \                (define new-lst (empty))\n                (append-list (list\
+    \ (list-ref lst min-index)\n                                   (list-ref lst max-index))\n\
+    \                             (strange-sort (remove lst min-index max-index)))]))\n\
+    \  (strange-sort lst))\n```\n\n## Author\n\nAnthony Simontacchi - https://github.com/asimontacchi",
+  "  (if (empty? lst)\n      empty\n      (append (list (min lst))\n             \
+    \ (strange_sort_list (remove (min lst) lst))\n              (list (max lst))\n\
+    \              (strange_sort_list (remove (max lst) lst)))))\n</code>\n", "  (let\
+    \ loop ([lst lst] [asc true] [out '()])\n    (cond\n      [(empty? lst) (reverse\
+    \ out)]\n      [else\n       (let ([x (find-min-or-max lst asc)])\n         (loop\
+    \ (remove lst x) (not asc) (cons x out)))])))\n", "  (if (null? lst)\n      lst\n\
+    \      (let ([min-i (apply min lst)]\n            [max-i (apply max lst)])\n \
+    \       (append (list min-i max-i)\n                (strange_sort_list (remove\
+    \ min-i (remove max-i lst)))))))\n</code>\n", "  (cond [(empty? lst) empty]\n\
+    \        [(empty? (rest lst)) lst]\n        [else\n         (append (list (min\
+    \ lst) (max lst))\n                 (strange_sort_list (remove (min lst) (remove\
+    \ (max lst) lst))))]))\n", "  (if (null? lst)\n      lst\n      (append (list\
+    \ (minimum lst))\n              (list (maximum (remove (minimum lst) lst)))\n\
+    \              (strange_sort_list (remove (maximum (remove (minimum lst) lst))\n\
+    \                                         (remove (minimum lst) lst))))))\n",
+  "  (define (search_max lst max-index)\n    (cond\n      [(empty? lst) max-index]\n\
+    \      [(> (first lst) (list-ref lst max-index)) (search_max (rest lst) (first\
+    \ lst))]\n      [else (search_max (rest lst) max-index)]))\n  (define (strange_sort_list-inner\
+    \ lst)\n    (cond\n      [(empty? lst) empty]\n      [(> (first lst) (list-ref\
+    \ lst 1)) (append (list (first lst) (first (rest lst))) (strange_sort_list-inner\
+    \ (rest (rest lst))))]\n      [else (append (list (first lst) (list-ref lst (search_max\
+    \ (rest lst) 0))) (strange_sort_list-inner (list-remove lst (list-ref lst (search_max\
+    \ (rest lst) 0)))))]))\n  (strange_sort_list-inner lst))", "  (define (sorter\
+    \ lst1 lst2)\n    (cond\n      [(empty? lst1) lst2]\n      [(empty? lst2) lst1]\n\
+    \      [(< (first lst1) (first lst2))\n       (cons (first lst1) (sorter (rest\
+    \ lst1) lst2))]\n      [else\n       (cons (first lst2) (sorter lst1 (rest lst2)))]))\n\
+    \  (let loop ([lst (sort lst <)])\n    (if (empty? lst) empty\n        (let* ([m\
+    \ (first lst)]\n               [rest (rest lst)]\n               [mm (last rest)]\n\
+    \               [rest (if (equal? m mm) rest (butlast rest))])\n          (cons\
+    \ m (loop (sorter rest (list mm))))))))\n", "  (if (null? lst)\n      '()\n  \
+    \    (append (list (min lst) (max lst))\n              (strange_sort_list (remove\
+    \ (max lst) (remove (min lst) lst))))))\n", "  (cond ((null? lst) '())\n     \
+    \   ((null? (cdr lst)) lst)\n        (else\n         (let ((len (length lst)))\n\
+    \           (begin\n             (define (even? n) (= (remainder n 2) 0))\n  \
+    \           (define (cmp a b) (if (&lt; a b) -1 1))\n             (define (sorted\
+    \ lst)\n               (cond ((null? lst) #t)\n                     ((null? (cdr\
+    \ lst)) #t)\n                     (else (and (= (cmp (car lst) (cadr lst)) -1)\n\
+    \                                (sorted (cdr lst))))))\n             (define\
+    \ (min-max n lst)\n               (cond ((null? lst) n)\n                    \
+    \ ((even? n) (min-max (car lst) (cdr lst)))\n                     (else (min-max\
+    \ (cadr lst) (cdr lst)))))\n             (define (get-val lst)\n             \
+    \  (let ((min (min-max (car lst) (cdr lst))))\n                 (cons min (filter\
+    \ (lambda (x) (not (= x min))) lst))))\n             (let loop ((k 0) (val (get-val\
+    \ lst)) (res '()))\n               (if (= k len) res\n                   (loop\
+    \ (+ k 1) (get-val (cdr val)) (cons (car val) res))))))))))\n", "  (if (null?\
+    \ lst)\n      '()\n      (append (list (min lst) (max lst))\n              (strange_sort_list\
+    \ (remove (min lst) (remove (max lst) lst))))))\n", "  (define (golst lst acc\
+    \ minmax)\n    (cond [(empty? lst) acc]\n          [(= (length lst) 1) (cons (first\
+    \ lst) acc)]\n          [else\n           (define rst (rest lst))\n          \
+    \ (golst (remove (car (minmax (first lst) rst)) rst)\n                  (cons\
+    \ (car (minmax (first lst) rst)) acc)\n                  (lambda (n1 n2) (if (=\
+    \ minmax #t) (min n1 n2) (max n1 n2))))]))\n  (golst lst empty? #t))\n", "  (cond\
+    \ [(empty? lst) '()]\n        [else (append (list (min lst) (max lst))\n     \
+    \                 (strange_sort_list (for/list ([i lst]\n                    \
+    \                                #:when (not (or (= i (min lst))\n           \
+    \                                                         (= i (max lst))))\n\
+    \                                                    )\n                     \
+    \                     i)))]))\n</code>\nI guess it is possible to make it more\
+    \ concise, but I didn't find a way.\n", "  (cond [(empty? lst) '()]\n        [else\n\
+    \         (let* ([small (min lst)]\n                [big (max lst)]\n        \
+    \        [newlst (remove* small lst)]\n                [rest (remove* big newlst)])\n\
+    \           (cons small (cons big (strange_sort_list rest))))]))\n</code>\n",
+  "  (if (null? lst)\n      '()\n      (apply append (for/list ([i (in-list lst)])\n\
+    \                      (list (min lst) (max lst))))))\n</code>\nand I solved it\
+    \ by using 2 lists, is there a way to solve it without using 2 lists.\nThanks.\n\
+    \n\nA:\n\nOne way is to use a helper procedure that takes the list and a boolean\
+    \ flag, and which recursively traverses the list adding the minimum or maximum\
+    \ of the remainder to the output list. When the input list becomes empty, the\
+    \ procedure simply returns the output list:\n<code>(define (strange-sort lst flag)\n\
+    \  (if (null? lst)\n      '()\n      (let ([min (min (remaining lst))]\n     \
+    \       [max (max (remaining lst))])\n        (cons (if flag min max)\n      \
+    \        (strange-sort (remove lst min max) (not flag))))))\n</code>\nHere's how\
+    \ it works:\n<code>(strange-sort '(1 2 3 4) #t)\n=&gt; '(1 4 2 3)\n</code>\nThe\
+    \ <code>min</code> and <code>max</code> procedures are given <code>(remaining\
+    \ lst)</code> as input, which is a local procedure defined by:\n<code>(define\
+    \ (remaining lst)\n  (if (null? lst)\n      '()\n      (remove (cdr lst) (car\
+    \ lst))))\n</code>\nIt uses another local procedure <code>remove</code> to remove\
+    \ the first element of the list, which is defined like this:\n<code>(define (remove\
+    \ lst min max)\n  (cond ((null? lst) '())\n        ((= (car lst) min) (cdr lst))\n\
+    \        ((= (car lst) max) (cdr lst))\n        (else (cons (car lst) (remove\
+    \ (cdr lst) min max)))))\n</code>\nThe output of the main procedure is the result\
+    \ of applying the helper procedure to <code>lst</code> and a boolean flag that\
+    \ tells it if it must be prepared to return the minimum or the maximum of the\
+    \ list's remaining elements", "  (cond\n    [(empty? lst) empty]\n    [(null?\
+    \ (rest lst)) lst]\n    [else\n     (let ([len (length lst)])\n       (append\
+    \ (list (min lst) (max lst))\n               (strange_sort_list (remove* (min\
+    \ lst) (remove* (max lst) lst)))))]))\n", "  (cond\n    [(empty? lst) '()]\n \
+    \   [(= (length lst) 1) lst]\n    [else\n     (let* ([min (car (min-list lst))]\n\
+    \            [max (car (max-list lst))]\n            [min-rest (strange_sort_list\
+    \ (remove min lst))]\n            [max-rest (strange_sort_list (remove max min-rest))])\n\
+    \       (append (list min max) max-rest))]))\n</code>\nExplanation:\n\nIf the\
+    \ input list is empty, return empty list.\nIf the list has only one element, return\
+    \ it.\nOtherwise, recursively calculate the strange order of the remaining integers.\n\
+    \nNote: I used <code>min-list</code> and <code>max-list</code> from Haskell's\
+    \ <code>Data.List</code>.\nI feel this solution is too complicated, is there a\
+    \ better way to write it?\n\n\nA:\n\nI would just recursively divide the list\
+    \ into two sublists and do the same with each of them.\n<code>(define (strange-sort-list\
+    \ lst)\n  (if (empty? lst) '()\n      (let loop ((lst lst) (min (car lst)) (max\
+    \ (car lst)) (res '()))\n        (if (empty? lst) (append (list min max) res)\n\
+    \            (let ((n (car lst)))\n              (if (&lt; n min) (loop (cdr lst)\
+    \ n max res)\n                  (if (&gt; n max) (loop (cdr lst) min n res)\n\
+    \                      (loop (cdr lst) min max (cons n res)))))))))\n</code>\n\
+    I'm not entirely sure if this is the same as your solution, but it's much simpler.\n",
+  "  (cond [(empty? lst) empty]\n        [(empty? (rest lst)) lst]\n        [else\
+    \ (append (list (min lst) (max lst))\n                      (strange_sort_list\
+    \ (remq (min lst) (remq (max lst) lst))))]))\n</code>\nYou can go through the\
+    \ details of the code, but I'd like to know how to make it more functional - thanks!\n\
+    \n\nA:\n\nThere are a few ways to make this more functional.\n\nFor a start, the\
+    \ recursive function is a pretty good start. To make it even better, you can use\
+    \ <code>cond</code> and <code>cond</code>'s <code>else</code> clause to eliminate\
+    \ the need for an extra condition check.\nTo make the <code>cond</code> clause\
+    \ in question more functional you can use <code>map</code> and <code>append</code>\
+    \ together to make the recursive call.\n\nHere's an example of a more functional\
+    \ solution:\n<code>(define (strange-sort-list lst)\n  (cond [(empty? lst) empty]\n\
+    \        [(empty? (rest lst)) lst]\n        [else (append (list (min lst) (max\
+    \ lst))\n                      (strange-sort-list (remove (min lst) (remove (max\
+    \ lst) lst))))]))\n</code>\nSide note: I prefer <code>remove</code> over <code>remq</code>\
+    \ because it's more explicit and I prefer verbs over abbreviations.\n\nUpdate:\n\
+    You can also use <code>map</code> and <code>append</code> together as shown in\
+    \ the example code to make the recursive call:\n<code>(define (strange-sort-list\
+    \ lst)\n  (cond [(empty? lst) empty]\n        [(empty? (rest lst)) lst]\n    \
+    \    [else (append (list (min lst) (max lst))\n                      (map strange-sort-list\
+    \ (remove (min lst) (remove (max lst) lst))))]))\n</code>\n", "  (define (min\
+    \ lst)\n    (apply min lst))\n  (define (max lst)\n    (apply max lst))\n  (define\
+    \ (min-max lst)\n    (cond\n      [(null? lst) '()]\n      [(null? (cdr lst))\
+    \ (list (min lst) (max lst))]\n      [else (cons (min lst) (cons (max lst) (min-max\
+    \ (remove (min lst) (remove (max lst) lst)))))]))\n  (cond\n    [(null? lst) '()]\n\
+    \    [(null? (cdr lst)) lst]\n    [else (append (min-max lst) (min-max (remove\
+    \ (min lst) (remove (max lst) lst))))]))\n", "  (letrec ([sort (lambda (acc mn\
+    \ mx)\n                  (cond [(null? acc) (reverse (append (list mn) (list mx)))]\n\
+    \                        [(= (car acc) mn) (sort (cdr acc) mn mx)]\n         \
+    \               [(= (car acc) mx) (sort (cdr acc) mn mx)]\n                  \
+    \      [else (sort (append (list mn) (list mx) (cdr acc))\n                  \
+    \                  (minimum (cdr acc))\n                                    (maximum\
+    \ (cdr acc)))]))])\n    (if (null? lst) lst\n        (sort (cdr lst) (minimum\
+    \ lst) (maximum lst)))))\n", "  (cond [(null? lst) empty]\n        [(= (length\
+    \ lst) 1) lst]\n        [else\n         (let* ([min (apply min lst)]\n       \
+    \         [max (apply max lst)]\n                [wo-min (remove min lst)]\n \
+    \               [wo-max (remove max wo-min)])\n           (append (list min max)\
+    \ (strange_sort_list wo-max)))]))\n</code>\nThis one got me a little confused.\n\
+    But what about this one:\n<code>#lang racket\n", "  (if (empty? lst)\n      empty\n\
+    \      (append (list (min lst))\n              (list (max (list-rest lst)))\n\
+    \              (strange_sort_list (list-rest (list-rest lst))))))\n", "  (cond\
+    \ [(empty? lst) empty]\n        [(singleton? lst) lst]\n        [else (let* ([sorted\
+    \ (sort lst <)]\n                     [min (car sorted)]\n                   \
+    \  [max (car (reverse sorted))]\n                     [remaining (remove* min\
+    \ sorted)])\n                (append (list min max) (strange_sort_list remaining)))]))\n\
+    ```\n\n## Tests\n\n```racket", "  (cond [(empty? lst) empty]\n        [(equal?\
+    \ (length lst) 1) lst]\n        [else\n         (let-values ([(min max) (map (\u03BB\
+    \ (x) (if (minmax x) x)) lst)])\n           (append (list min) (list max) (strange_sort_list\
+    \ (remove max (remove min lst)))))]))\n", "  (cond [(null? lst)\n         lst]\n\
+    \        [(null? (cdr lst))\n         lst]\n        [else\n         (strange_sort_list_helper\
+    \ lst '())]))\n", "  (cond\n    [(empty? lst) empty]\n    [(= (length lst) 1)\
+    \ lst]\n    [else\n     (let ([m (min (rest lst))]\n           [M (max (rest lst))])\n\
+    \       (cons m (cons M (strange_sort_list (filter (lambda (x) (and (not (= x\
+    \ m)) (not (= x M)))) (rest lst))))))]))", "  (if (empty? lst)\n      '()\n  \
+    \    (cond [(= 1 (length lst))\n             lst]\n            [else\n       \
+    \      (append\n              (list (car (sort lst)))\n              (list (car\
+    \ (reverse (sort lst))))\n              (strange_sort_list (cdr (cdr (sort lst)))))\n\
+    \             ])))\n</code>\nI have a feeling there is a simpler more elegant\
+    \ way of doing this.\n\n\nA:\n\nHere's a recursive solution that works in linear\
+    \ time:\n<code>(define (strange-sort-list lst)\n  (define (even? n) (= (remainder\
+    \ n 2) 0))\n  (define (strange lst n)\n    (if (empty? lst)\n        '()\n   \
+    \     (cons (list-ref lst n)\n              (strange lst (if (even? n)\n     \
+    \                          (sub1 n)\n                               (add1 n))))))\n\
+    \  (if (empty? lst)\n      '()\n      (strange (sort lst &lt;)\n             \
+    \  (quotient (sub1 (length lst)) 2))))\n</code>\nIt's easiest to illustrate how\
+    \ it works with an example. Let's start with this list:\n<code>(strange-sort-list\
+    \ '(3 6 5 1 9 7 2))\n</code>\nFirst, we sort the list to obtain this:\n<code>(1\
+    \ 2 3 5 6 7 9)\n</code>\nThen we call the <code>strange</code> procedure, which\
+    \ goes through the list from one end to the other, alternating between the smallest\
+    \ and the largest values. It's an odd-length list, so the first element is the\
+    \ largest. Next we move to the smallest, and so on. Notice that the <code>n</code>\
+    \ argument tells the procedure what's the next index we should fetch from the\
+    \ list.\n<code>(define (strange lst n)\n  (if (empty? lst)\n      '()\n      (cons\
+    \ (list-ref lst n)\n            (strange lst (if (even? n)\n                 \
+    \            (sub1 n)\n                             (add1 n))))))\n</code>\nThis\
+    \ is how it looks", "  (if (zero? (length lst))\n      '()\n      (append (list\
+    \ (min lst))\n              (list (max (filter (lambda (x)\n                 \
+    \                  (not (= x (min lst))))\n                                 lst)))\n\
+    \              (strange_sort_list (filter (lambda (x)\n                      \
+    \                     (not (member x (list (min lst) (max lst))))\n          \
+    \                                 )\n                                        \
+    \ lst)))))\n", "  (define (min lst)\n    (cond [(empty? lst) '()]\n          [(=\
+    \ (first lst) (first (rest lst))) (min (rest lst))]\n          [(< (first lst)\
+    \ (first (rest lst))) (first lst)]\n          [else (min (rest lst))]))\n  (define\
+    \ (max lst)\n    (cond [(empty? lst) '()]\n          [(= (first lst) (first (rest\
+    \ lst))) (max (rest lst))]\n          [(> (first lst) (first (rest lst))) (first\
+    \ lst)]\n          [else (max (rest lst))]))\n  (define (remove-it lst a)\n  \
+    \  (cond [(empty? lst) '()]\n          [(equal? (first lst) a) (rest lst)]\n \
+    \         [else (cons (first lst) (remove-it (rest lst) a))]))\n  (define (helper\
+    \ lst ans)\n    (cond [(empty? lst) ans]\n          [(empty? (rest lst)) (cons\
+    \ (first lst) ans)]\n          [else (helper (remove-it (remove-it lst (min lst))\
+    \ (max lst))\n                       (cons (min lst) (cons (max lst) ans)))]))\n\
+    \  (helper lst '()))", "  (cond\n    [(empty? lst) '()]\n    [(= (length lst)\
+    \ 1) lst]\n    [else\n     (if (= (length lst) 2)\n         (list (min lst) (max\
+    \ lst))\n         (list (min lst) (max (filter (lambda (x) (> x (min lst))) lst))\n\
+    \               (min (filter (lambda (x) (< x (max lst))) lst))\n            \
+    \   (max lst)))]))\n", "  (strange-sort lst (length lst)))\n", "  (if (null? lst)\n\
+    \      lst\n      (append (list (min lst) (max lst)) (strange_sort_list (remove\
+    \ (min lst) (remove (max lst) lst))))))\n</code>\nFull code here: https://github.com/ilyakava/codewars/blob/master/strange_sort_list.rkt\n\
+    \nUpdate:\nHere is my solution with some performance improvements:\n<code>#lang\
+    \ racket\n", "  (if (empty? lst)\n      empty\n      (append (list (min lst))\n\
+    \              (strange_sort_list (filter (lambda (x) (= x (min lst))) lst))\n\
+    \              (strange_sort_list (filter (lambda (x) (not (= x (min lst)))) lst))\n\
+    \              (list (max lst))\n              (strange_sort_list (filter (lambda\
+    \ (x) (= x (max lst))) lst))\n              (strange_sort_list (filter (lambda\
+    \ (x) (not (= x (max lst)))) lst)))))\n", "  (if (null? lst)\n      lst\n    \
+    \  (cons (min lst)\n            (cons (max lst)\n                  (strange_sort_list\
+    \ (filter (lambda (x) (not (or (= x (min lst)) (= x (max lst))))) lst))))))\n",
+  "  (if (empty? lst)\n      lst\n      (if (empty? (rest lst))\n          lst\n \
+    \         (if (number? (first lst))\n              (if (number? (rest lst))\n\
+    \                  (if (< (first lst) (first (rest lst)))\n                  \
+    \    (cons (first lst) (cons (first (rest lst)) (strange_sort_list (rest (rest\
+    \ lst)))))\n                      (cons (first (rest lst)) (cons (first lst) (strange_sort_list\
+    \ (rest (rest lst))))))\n                  (cons (first lst) (strange_sort_list\
+    \ (rest lst))))\n              (if (not (empty? (rest lst)))\n               \
+    \   (if (not (empty? (first lst)))\n                      (cons (first lst) (strange_sort_list\
+    \ (rest lst)))\n                      (strange_sort_list (rest lst)))\n      \
+    \            (strange_sort_list (rest lst))))))))\n", "  (cond [(empty? lst) '()]\n\
+    \        [else (append (list (min (first lst) (second lst)))\n               \
+    \       (list (max (first lst) (second lst)))\n                      (strange_sort_list\
+    \ (rest (rest lst))))]))\n", "  (cond [(null? lst) lst]\n        [(empty? (rest\
+    \ lst)) lst]\n        [else (append\n               (list (min (rest lst)) (max\
+    \ (rest lst)))\n               (strange_sort_list (remove (max (rest lst)) (remove\
+    \ (min (rest lst)) (rest lst)))))]))\n\n", "  (if (null? lst)\n      lst\n   \
+    \   (append (list (min-of-lst lst))\n              (list (max-of-lst lst))\n \
+    \             (strange_sort_list (without-min-max lst)))))\n", "  (if (empty?\
+    \ lst)\n      empty\n      (append (list (apply min lst))\n              (list\
+    \ (apply max lst))\n              (strange_sort_list (remove (apply min lst) (remove\
+    \ (apply max lst) lst))))))\n", "  (let\n    ([min (apply min lst)]\n     [max\
+    \ (apply max lst)]\n     [remaining (remove min (remove max lst))])\n    (cond\n\
+    \      [(empty? lst) empty]\n      [(empty? remaining) (cons min (cons max empty))]\n\
+    \      [else (cons min (cons max (strange_sort_list remaining)))])))\n</code>\n\
+    As you see I'm using the <code>remove</code> function. It seems very convinient\
+    \ for this situation, but I'm worried about performance. Is there a way to do\
+    \ this without a list traversal?\n\n\nA:\n\nI hope to not be too off-topic, but\
+    \ I find Racket's <code>sort</code> function (which sorts in ascending order)\
+    \ very useful:\n<code>(define (strange-sort-list lst)\n  (if (empty? lst)\n  \
+    \    empty\n      (let* ([lst (sort &lt; lst)]\n             [len (length lst)]\n\
+    \             [mid (quotient len 2)]\n             [left (take lst mid)]\n   \
+    \          [right (drop lst mid)])\n        (append (append-map cons left right)\n\
+    \                (append-map cons right left)))))\n</code>\n", "  (cond\n    [(empty?\
+    \ lst) lst]\n    [(empty? (rest lst)) lst]\n    [else\n     (append\n      (list\
+    \ (min lst) (max lst))\n      (strange_sort_list (remove (min lst) (remove (max\
+    \ lst) lst))))]))\n", "  (if (null? lst)\n      '()\n      (append (list (min\
+    \ lst) (max lst))\n              (strange_sort_list (remove (min lst) (remove\
+    \ (max lst) lst))))))", "  (cond [(empty? lst) '()]\n        [else (append (list\
+    \ (minmax lst))\n                      (strange_sort_list (remove (minmax lst)\
+    \ lst)))]))\n", "  (cond\n    [(empty? lst) '()]\n    [(= (length lst) 1) lst]\n\
+    \    [else\n     (append (list (min-list lst) (max-list lst))\n             (strange_sort_list\
+    \ (remove (min-list lst)\n                                         (remove (max-list\
+    \ lst) lst))))]))\n", "  (define (strange-sort lst)\n    (if (or (empty? lst)\
+    \ (= (length lst) 1))\n        lst\n        (cons (minimum lst)\n            \
+    \  (cons (maximum lst)\n                    (strange-sort (remove (minimum lst)\n\
+    \                                          (remove (maximum lst) lst)))))))\n\
+    \  (define (maximum lst)\n    (let loop ((lst lst)\n               (max (car lst)))\n\
+    \      (if (empty? (cdr lst))\n          max\n          (loop (cdr lst)\n    \
+    \            (if (> (car lst) max)\n                    (car lst)\n          \
+    \          max)))))\n  (define (minimum lst)\n    (let loop ((lst lst)\n     \
+    \          (min (car lst)))\n      (if (empty? (cdr lst))\n          min\n   \
+    \       (loop (cdr lst)\n                (if (< (car lst) min)\n             \
+    \       (car lst)\n                    min)))))\n  (define (remove element lst)\n\
+    \    (cond ((empty? lst) '())\n          ((equal? element (car lst)) (cdr lst))\n\
+    \          (else (cons (car lst) (remove element (cdr lst))))))\n  (strange-sort\
+    \ lst))\n", "  (define (strange-sort a b)\n    (cond\n      [(= (length a) (length\
+    \ b)) (define cmp a b) (if (= cmp 0) a b)]\n      [(= (length a) 0) b]\n     \
+    \ [(= (length b) 0) a]\n      [else (define aa (min (first a) (first b)))\n  \
+    \          (define bb (max (first a) (first b)))\n            (define a-minus-aa\
+    \ (remove-item (first a) a :test (lambda (x y) (= x aa))))\n            (define\
+    \ b-minus-bb (remove-item (first b) b :test (lambda (x y) (= x bb))))\n      \
+    \      (append aa (strange-sort a-minus-aa b-minus-bb) bb)]))\n  (strange-sort\
+    \ lst (range (length lst))))\n</code>\n\u041F\u0440\u0438\u043C\u0435\u0440 \u0440\
+    \u0430\u0431\u043E\u0442\u044B \u043F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\
+    \u044B:\n<code>&gt; (strange_sort_list '(1 2 3 4))\n'(1 4 2 3)\n&gt; (strange_sort_list\
+    \ '(5 5 5 5))\n'(5 5 5 5)\n&gt; (strange_sort_list '())\n'()\n</code>\n\u0421\u043E\
+    \u0431\u0441\u0442\u0432\u0435\u043D\u043D\u043E, \u0432\u043E\u043F\u0440\u043E\
+    \u0441: \u043F\u043E\u0447\u0435\u043C\u0443 \u044D\u0442\u043E\u0442 \u043A\u043E\
+    \u0434 \u043F\u0440\u0438 \u043F\u043E\u043F\u044B\u0442\u043A\u0435 \u043A\u043E\
+    \u043C\u043F\u0438\u043B\u044F\u0446\u0438\u0438 \u0441\u043E\u043E\u0431\u0449\
+    \u0430\u0435\u0442 <code>define: expected a variable name, but found a symbol</code>?\
+    \ \u041F\u043E\u0447\u0435\u043C\u0443 \u043E\u043D \u043D\u0435 \u043F\u043E\u043D\
+    \u0438\u043C\u0430\u0435\u0442 \u0441\u0438\u043C\u0432\u043E\u043B <code>-</code>\
+    \ \u0432 \u0441\u0438\u043C\u0432\u043E\u043B\u044C\u043D\u043E\u0439 \u0441\u0442\
+    \u0440\u043E\u043A\u0435? \u0427\u0442\u043E \u043D\u0443\u0436\u043D\u043E \u0441\
+    \u0434\u0435\u043B\u0430\u0442\u044C, \u0447\u0442\u043E\u0431\u044B \u043F\u0440\
+    \u043E\u0433\u0440\u0430\u043C\u043C\u0430 \u0437\u0430\u0440\u0430\u0431\u043E\
+    \u0442\u0430\u043B\u0430?\n\n", "  (cond [(empty? lst) lst]\n        [else (append\
+    \ (build-list (length lst) (lambda (x) (first lst)))\n                      (strange_sort_list\
+    \ (remove (first lst) lst)))]))\n", "  (if (null? lst)\n      '()\n      (cons\
+    \ (apply min lst)\n            (cons (apply max lst)\n                  (strange_sort_list\
+    \ (remove (apply min lst) (remove (apply max lst) lst)))))))\n", "  (if (null?\
+    \ lst)\n      lst\n      (cons (min lst)\n            (cons (max lst)\n      \
+    \            (strange_sort_list (remove (min lst) (remove (max lst) lst)))))))\n\
+    </code>\n", "  (match lst\n    [(list) lst]\n    [(list item rest ...)\n     (strange_sort_list\
+    \ (list (list (list-min lst)\n                                     (list-max lst))\n\
+    \                              (remove (list-min lst) (remove (list-max lst) lst))))]))\n",
+  "  (letrec ([sorted? (cond [(empty? lst) #t]\n                          [(= (length\
+    \ lst) 1) #t]\n                          [else (or (or (and (= (first lst) (second\
+    \ lst)) (sorted? (rest lst)))\n                                       (and (<\
+    \ (first lst) (second lst)) (sorted? (rest lst)))\n                          \
+    \             (and (> (first lst) (second lst)) (sorted? (rest lst))))\n     \
+    \                               #f)]\n                          )]\n         \
+    \  [tmp-lst lst]\n           [min (cond [(empty? lst) 0]\n                   \
+    \   [else (reduce min lst)])]\n           [max (cond [(empty? lst) 0]\n      \
+    \                [else (reduce max lst)])]\n           [new-list (list min)]\n\
+    \           [new-list (append new-list (list max))])\n    (if (sorted? lst)\n\
+    \        lst\n        (cond [(empty? lst) '()]\n              [(= (length lst)\
+    \ 1) (list (first lst))]\n              [else (strange_sort_list (append (rest\
+    \ lst) (list (first lst))))]))))\n```\n\n## \u0417\u0430\u0434\u0430\u0447\u0430\
+    \ 3\n\n\u0414\u0430 \u0441\u0435 \u0434\u0435\u0444\u0438\u043D\u0438\u0440\u0430\
+    \ \u043F\u0440\u043E\u0446\u0435\u0434\u0443\u0440\u0430 (`sub-lists lst`), \u043A\
+    \u043E\u044F\u0442\u043E \u043F\u043E\u043B\u0443\u0447\u0430\u0432\u0430 \u043A\
+    \u0430\u0442\u043E \u0430\u0440\u0433\u0443\u043C\u0435\u043D\u0442 \u0441\u043F\
+    \u0438\u0441\u044A\u043A \u0438 \u0432\u0440\u044A\u0449\u0430 \u0441\u043F\u0438\
+    \u0441\u044A\u043A \u043E\u0442 \u0441\u043F\u0438\u0441\u044A\u0446\u0438, \u043A\
+    \u043E\u0438\u0442\u043E \u0441\u0430 \u043F\u043E\u0434\u0441\u043F\u0438\u0441\
+    \u044A\u0446\u0438 \u043D\u0430 \u043D\u0435\u0433\u043E.\n\n\u041F\u0440\u0438\
+    \u043C\u0435\u0440:\n\n```racket", "  (cond [(empty? lst) lst]\n        [else\
+    \ (append (list (minimum lst) (maximum lst))\n                      (strange_sort_list\
+    \ (remove (minimum lst) (remove (maximum lst) lst))))]))\n", "  (cond\n    [(empty?\
+    \ lst) empty]\n    [(empty? (rest lst)) lst]\n    [else\n     (append\n      (list\
+    \ (apply min lst))\n      (list (apply max (remove (apply min lst) lst)))\n  \
+    \    (strange_sort_list (remove (apply max (remove (apply min lst) lst)) lst)))]))\n\
+    \n", "  (let loop ([lst lst] [result '()])\n    (cond\n      [(empty? lst) result]\n\
+    \      [(null? lst) result]\n      [else\n       (let ([remaining (drop 1 lst)])\n\
+    \         (loop (remove (min lst) remaining)\n               (cons (min lst)\n\
+    \                     (cons (max remaining)\n                           result))))])))\n\
+    </code>\nEDIT\nChanged the solution to not use built-in remove function, as suggested.\n\
+    \n\nA:\n\n<code>#lang racket\n", "  (if (empty? lst)\n      empty\n      (append\
+    \ (list (min lst))\n              (strange_sort_list (remove (min lst) lst))\n\
+    \              (list (max lst))\n              (strange_sort_list (remove (max\
+    \ lst) lst)))))\n", "  (cond\n    [(empty? lst) '()]\n    [(empty? (rest lst))\
+    \ lst]\n    [else\n     (append\n      (list (min lst) (max lst))\n      (strange_sort_list\
+    \ (remove (min lst) (remove (max lst) lst))))]))\n", "  (define (iter original-lst)\n\
+    \    (if (null? original-lst)\n        '()\n        (let* ([sorted-lst (sort original-lst\
+    \ (lambda (x y) (< x y)))]\n               [minimum (car sorted-lst)]\n      \
+    \         [max-lst (remove minimum sorted-lst)]\n               [maximum (car\
+    \ (sort max-lst (lambda (x y) (> x y))))])\n          (if (= (length max-lst)\
+    \ 0)\n              '()\n              (append (list minimum maximum) (iter max-lst))))))\n\
+    \  (iter lst))\n", "  (cond\n    [(empty? lst) empty]\n    [(< (length lst) 2)\
+    \ lst]\n    [else\n     (let-values ([(min max others) (extract-max-min (list-&gt;set\
+    \ lst))])\n       (match-define (list min) (remove min others))\n       (match-define\
+    \ (list max) (remove max others))\n       (if (null? others)\n           (list\
+    \ min max)\n           (append (list min max) (strange_sort_list others))))]))\n",
+  "  (cond\n    [(empty? lst) empty]\n    [(= (length lst) 1) lst]\n    [else\n  \
+    \   (let* ([smallest (apply min lst)]\n            [remaining-sorted (strange_sort_list\
+    \ (remove smallest lst))]\n            [max-left (apply max (first remaining-sorted))]\n\
+    \            [remaining-sorted-shifted (rest remaining-sorted)])\n       (append\
+    \ (list smallest max-left) (strange_sort_list remaining-sorted-shifted)))]))\n",
+  "  (if (null? lst)\n      '()\n      (append (list (min lst) (max lst))\n      \
+    \        (strange_sort_list (remove (min lst) (remove (max lst) lst))))))\n",
+  "  (cond\n    [(empty? lst) empty]\n    [(= (length lst) 1) lst]\n    [else\n  \
+    \   (append (list (min lst) (max lst))\n             (strange_sort_list (delete\
+    \ (min lst) (delete (max lst) lst))))]))\n", "  (if (null? lst)\n      lst\n \
+    \     (append (list (min lst) (max lst)) (strange_sort_list (remove (min lst)\
+    \ (remove (max lst) lst))))))\n", "  (if (null? lst) '()\n      (let ([mins (map\
+    \ min lst)]\n            [maxs (map max lst)])\n        (append mins maxs))))\n\
+    </code>\n", "  (define (sorting lst)\n    (cond\n      [(= (length lst) 1) lst]\n\
+    \      [(null? lst) lst]\n      [else\n       (append (list (car lst) (car (last\
+    \ lst)))\n               (sorting (if (or (even? (length lst)) (= (length lst)\
+    \ 3))\n                            (rest (cdr lst))\n                        \
+    \    (rest (butlast lst))\n                            )))]))\n  (sorting (sort\
+    \ lst)))\n\n", "  (cond [(null? lst) '()]\n        [else\n         (append\n \
+    \         (list (car (sort lst)))\n          (strange_sort_list (cdr (reverse\
+    \ (sort lst)))))]))\n", "  (cond\n    [(empty? lst) empty]\n    [(= (length lst)\
+    \ 1) lst]\n    [else\n     (let* ([min (min (car lst) (last lst))]\n         \
+    \   [max (max (car lst) (last lst))]\n            [remaining (strange_sort_list\
+    \ (butlast (cdr lst)))]\n            [h (car remaining)]\n            [t (cdr\
+    \ remaining)])\n       (append (list min)\n               (strange_sort_list (append\
+    \ (list h) t))\n               (list max)))]))\n", "  (if (null? lst) '()\n  \
+    \    (let ((m (apply min lst))\n            (M (apply max lst)))\n        (if\
+    \ (null? (cdr lst)) lst\n            (append (list m)\n                    (strange_sort_list\
+    \ (remove m (remove M lst)))\n                    (list M))))))\n</code>\n", " \
+    \ (cond\n    [(empty? lst) empty]\n    [(empty? (rest lst)) lst]\n    [else\n\
+    \     (cons (min lst)\n           (cons (max (rest lst))\n                 (strange_sort_list\
+    \ (remove (min lst) (remove (max (rest lst)) lst)))))]))\n", "  (let loop ([lst\
+    \ lst] [res '()])\n    (cond [(empty? lst) res]\n          [else\n           (let\
+    \ ([mn (apply min lst)]\n                 [mx (apply max lst)])\n            \
+    \ (loop (for/list ([i lst] #:when (not (= i mn)) #:when (not (= i mx))) i)\n \
+    \                  (cons mn (cons mx res))))])))\n</code>\nFor example,\n<code>&gt;\
+    \ (strange_sort_list '(1 2 3 4))\n'(1 4 2 3)\n&gt; (strange_sort_list '(5 5 5\
+    \ 5))\n'(5 5 5 5)\n&gt; (strange_sort_list '())\n'()\n</code>\n", "  (define (incr\
+    \ lst)\n    (if (null? lst) lst\n      (cons (car lst) (incr (cdr lst)))))\n \
+    \ (define (decr lst)\n    (if (null? lst) lst\n      (cons (car (reverse lst))\
+    \ (decr (reverse (cdr (reverse lst)))))))\n  (define (min-list lst)\n    (foldl\
+    \ min (car lst) lst))\n  (define (max-list lst)\n    (foldl max (car lst) lst))\n\
+    \  (define (strange-sort-helper lst result)\n    (if (null? lst) result\n    \
+    \  (strange-sort-helper (remove (min-list lst) lst)\n                        \
+    \   (cons (min-list lst)\n                                 (strange-sort-helper\
+    \ (remove (max-list lst) lst)\n                                              \
+    \        (cons (max-list lst) result))))))\n  (reverse (strange-sort-helper lst\
+    \ '())))\n", "  (sort lst\n        <\n        #:key (lambda (i) (modulo i 2))))\n\
+    \n", "  (define (helper lst acc)\n    (if (null? lst) acc\n      (helper (remove\
+    \ (min lst) lst) (cons (min lst) acc))\n      (helper (remove (max lst) lst) (cons\
+    \ (max lst) acc))))\n  (helper lst '()))\n", "  (cond\n    [(empty? lst) empty]\n\
+    \    [(empty? (rest lst)) lst]\n    [else\n     (append\n      (list (min lst))\n\
+    \      (list (max (rest lst)))\n      (strange_sort_list (delete (min lst) (delete\
+    \ (max (rest lst)) lst))))]))\n</code>\nIt works well and I like it but it is\
+    \ not as \"lispy\" as I would like. For example, I think it can be done more elegantly\
+    \ with <code>map</code> and <code>lambda</code> but I cannot come up with any\
+    \ idea.\n\n\nA:\n\nThe common lisp way of doing it would be something like\n<code>(let\
+    \ ((lst (list 1 2 3 4)))\n  (loop with len = (length lst)\n        with result\
+    \ = (make-array len :element-type 'integer)\n        for i from 0 below len by\
+    \ 2\n        for min from-end (sort lst #'&lt;)\n        for max from-end (sort\
+    \ lst #'&gt;)\n        do (setf (aref result i) (pop min)\n                 (aref\
+    \ result (1+ i)) (pop max))\n        finally (return result)))\n</code>\nYou can\
+    \ do a lot of that in racket with <code>sort</code> and <code>reverse</code>,\
+    \ but you'll still need something like <code>pop</code> to get elements from the\
+    \ end of the list. Here's a possible implementation of that:\n<code>(define (pop\
+    \ lst)\n  (let ((first (car lst))\n        (rest (cdr lst)))\n    (set! lst rest)\n\
+    \    first))\n</code>\n", "  (cond [(empty? lst) lst]\n        [else (append\n\
+    \               (list (min lst))\n               (list (max (remainder lst (min\
+    \ lst))))\n               (strange_sort_list (remainder (remainder lst (min lst))\
+    \ (max (remainder lst (min lst))))))]))\n", "  (if (empty? lst)\n      empty\n\
+    \      (if (or (null? (cdr lst)) (equal? (length lst) 2))\n          lst\n   \
+    \       (let* ([min (apply min lst)]\n                 [max (apply max lst)]\n\
+    \                 [rest (if (equal? min max)\n                           (list\
+    \ (list-ref lst 1))\n                           (if (equal? min (list-ref lst\
+    \ 1))\n                               (list (list-ref lst 0))\n              \
+    \                 (if (equal? min (list-ref lst 0))\n                        \
+    \           (list (list-ref lst 1))\n                                   (range\
+    \ min max))))])\n            (append (list min max) (strange_sort_list rest))))))\n",
+  "  (if (empty? lst)\n      '()\n      (if (= (count lst) 1)\n          lst\n   \
+    \       (append (append (list (min lst))\n                          (list (max\
+    \ (remove (min lst) lst))))\n                  (strange_sort_list (remove (max\
+    \ (remove (min lst) lst))\n                                             (remove\
+    \ (min lst) lst)))))))\n", "  (cond [(empty? lst) '()]\n        [else (append\
+    \ (list (min lst) (max lst)) (strange_sort_list (remove (max lst) (remove (min\
+    \ lst) lst))))]))\n", "  (define (helper left right)\n    (cond [(null? left)\
+    \ right]\n          [(null? right) left]\n          [else (append (list (list-min\
+    \ left) (list-max right))\n                        (helper (list-remove left (list-min\
+    \ left))\n                                (list-remove right (list-max right))))]))\n\
+    \  (helper lst lst))\n", "  (if (null? lst)\n      '()\n      (let* ([min-val\
+    \ (apply min lst)]\n             [max-val (apply max lst)]\n             [min-pos\
+    \ (position min-val lst)]\n             [max-pos (position max-val lst)]\n   \
+    \          [left-lst (take lst (add1 min-pos))]\n             [right-lst (drop\
+    \ lst (add1 min-pos))])\n        (cons min-val\n              (cons max-val\n\
+    \                    (strange_sort_list (remove min-val (remove max-val lst))))))))\n\
+    </code>\nIs there a more idiomatic way to do this? I'm particularly unhappy with\
+    \ the <code>let*</code> bindings; the <code>if</code> form looks like a special\
+    \ case of <code>if</code>; and there is a lot of function application, which seems\
+    \ unnecessarily complex.\nEDIT: I've edited this to use lists instead of vectors\
+    \ and to include sample test cases.\n\n\nA:\n\nHere's a version using <code>sort</code>:\n\
+    <code>(define (strange-sort xs)\n  (let loop ((xs (sort xs &lt;=))\n         \
+    \    (res (list)))\n    (cond ((empty? xs) res)\n          ((empty? (rest xs))\
+    \ (append res xs))\n          (else\n           (loop (rest (rest xs))\n     \
+    \            (append res (list (first xs) (second xs))))))))\n</code>\nIf you're\
+    \ not familiar with the <code>sort</code> function, it returns a new sorted list\
+    \ with the same elements of the original list. The procedure <code>&lt;=</code>\
+    \ can be used to compare numbers and it's what the <code>sort</code> function\
+    \ uses to compare elements. In this case we're sorting the original list from\
+    \ lower to higher.\n", "  (let loop ([sorted '()] [unsorted lst])\n    (if (null?\
+    \ unsorted)\n        (reverse sorted)\n        (loop (cons (find-min unsorted)\n\
+    \                    (cons (find-max unsorted) sorted))\n              (filter\
+    \ (\u03BB (x) (not (or (equal? x (find-min unsorted))\n                      \
+    \                 (equal? x (find-max unsorted)))))\n                      unsorted)))))\n",
+  "  (if (null? lst)\n      '()\n      (if (equal? (min lst) (max lst))\n        \
+    \  lst\n          (append (list (min lst))\n                  (list (max (remove\
+    \ (min lst) lst)))\n                  (strange_sort_list (remove (max (remove\
+    \ (min lst) lst)) lst))))))\n</code>\nWe can see that this works:\n<code>&gt;\
+    \ (strange_sort_list '(1 2 3 4))\n'(1 4 2 3)\n</code>\nHowever, it doesn't work\
+    \ with empty lists:\n<code>&gt; (strange_sort_list '())\ncar: contract violation\n\
+    \  expected: pair?\n  given: #f\n  argument position: 0\n  other arguments...:\n\
+    </code>\nHow can we fix this code so that it works with empty lists?\n\n\nA:\n\
+    \nYou didn't read the error message carefully.\n<code>other arguments...:\n</code>\n\
+    It told you there was another error.\nLet's look at the expression\n<code>(remove\
+    \ (min lst) lst)\n</code>\nWhat happens when <code>lst</code> is empty? You call\
+    \ <code>min</code> with an empty list, and it can't find a minimum.\nSo then <code>remove</code>\
+    \ is called with <code>#f</code> and an empty list.\nYou can't remove a non-existent\
+    \ value from an empty list.\n\nThe solution is to move the checks for emptyness\
+    \ down to the only places where it can cause problems, and handle the empty case\
+    \ there.\n", "  (cond [(empty? lst) empty]\n        [(= (length lst) 1) lst]\n\
+    \        [else (append (list (apply min lst) (apply max lst))\n              \
+    \        (strange_sort_list (remove (apply min lst) (remove (apply max lst) lst))))]))\n",
+  "  (define (process lst output)\n    (cond [(empty? lst) output]\n          [(=\
+    \ (length lst) 1) (append output lst)]\n          [else (process (remove (max\
+    \ lst) lst)\n                         (append output (list (max lst))))]))\n \
+    \ (process lst (list (min lst))))\n</code>\nNow we have all the tools to answer\
+    \ the question of this excercise:\n<code>#lang racket", "  (if (null? lst)\n \
+    \     '()\n      (cons (min lst)\n            (cons (max lst)\n              \
+    \    (strange_sort_list (remove (min lst)\n                                  \
+    \            (remove (max lst)\n                                             \
+    \         lst)))))))\n", "  (if (empty? lst)\n      '()\n      (append (list (min\
+    \ lst) (max lst))\n              (strange_sort_list (remove (min lst) (remove\
+    \ (max lst) lst))))))\n", "  (cond\n    [(empty? lst) lst]\n    [(one? lst) lst]\n\
+    \    [else\n     (cons (min lst)\n           (cons (max (remove (min lst) lst))\n\
+    \                 (strange_sort_list (remove (max (remove (min lst) lst)) (remove\
+    \ (min lst) lst)))))]))\n", "  (cond [(empty? lst) '()]\n        [else (append\
+    \ (list (min lst) (max lst))\n                      (strange_sort_list (remove\
+    \ (min lst) (remove (max lst) lst))))]))\n</code>\n", "  (cond [(empty? lst) lst]\n\
+    \        [else (append (list (min lst) (max lst))\n                      (strange_sort_list\
+    \ (remove (min lst) (remove (max lst) lst))))]))\n</code>\n", "  (if (null? lst)\n\
+    \      '()\n      (let* ([min (min-list lst)]\n             [max (max-list lst)]\n\
+    \             [rem (remove* min lst)])\n        (append (list min max) (strange_sort_list\
+    \ rem)))))\n", "  (cond [(empty? lst) empty]\n        [(one? lst) lst]\n     \
+    \   [else\n         (let ([min (min lst)]\n               [max (max lst)])\n \
+    \          (append (list min max)\n                   (strange_sort_list (remove\
+    \ min (remove max lst)))))]))\n</code>\nThe exact error I get is:\n<code>abstract_list_set:\
+    \ 'remove' given non-list argument of type: #f\n</code>\nI've traced it down to\
+    \ the <code>remove</code> call inside the <code>append</code> call.  I've tried\
+    \ changing <code>lst</code> to <code>(remove min (remove max lst))</code> in the\
+    \ else clause, but then I get the same error on the first remove call.  Why does\
+    \ this error occur, and what is an appropriate way to fix it?\n\n\nA:\n\nHmm,\
+    \ I agree that this does not seem to be a well-defined problem, or at least this\
+    \ is not the correct solution.\nHowever, if you really want to keep with the problem\
+    \ statement, what happens is that at some point, <code>min</code> and <code>max</code>\
+    \ are the same, so when you <code>remove</code> them from the list, there is nothing\
+    \ left. And <code>remove</code> is not smart enough to know that in this case,\
+    \ the input should just be <code>'()</code>.\nSo, you need to special-case this\
+    \ and return <code>'()</code> as the result of <code>remove</code> when the input\
+    \ is <code>'()</code>.\n<code>(define (my-remove el lst)\n  (cond [(empty? lst)\
+    \ '()]\n        [(equal? el (first lst)) (rest lst)]\n        [else (cons (first\
+    \ lst) (my-remove el (rest lst)))]))\n</code>\nAnd then change your code to use\
+    \ <code>my-remove</code> instead of <code>remove</code>.\n", "  (define (helper\
+    \ lst1 lst2)\n    (define min (apply min lst1))\n    (define max (apply max lst1))\n\
+    \    (cond [(empty? lst1) lst2]\n          [(empty? (rest lst1)) (append lst2\
+    \ (list min))]\n          [else (helper (remove min lst1) (append lst2 (list min\
+    \ max)))]))\n  (helper lst '()))\n", "  (if (empty? lst)\n      '()\n      (let\
+    \ ((x (min-list lst))\n            (y (max-list lst)))\n        (cons x (cons\
+    \ y (strange_sort_list (remove x (remove y lst))))))))\n", "  (cond [(empty? lst)\
+    \ empty]\n        [(= (length lst) 1) lst]\n        [else\n         (cons (min\
+    \ lst)\n               (cons (max (remove (min lst) lst))\n                  \
+    \   (strange_sort_list (remove (max (remove (min lst) lst)) (remove (min lst)\
+    \ lst)))))]))\n</code>\nThe errors I get are this\n<code>remove: contract violation\n\
+    \  expected: (and/c (list? . lst) (cons? . lst))\n  given: '()\n</code>\nThese\
+    \ errors are related to the line\n<code>(cons (max (remove (min lst) lst))\n</code>\n\
+    I use remove and max/min as built in functions.\n\n\nA:\n\nIf you're already asked\
+    \ to write a <code>remove</code> procedure, you should write it so that it supports\
+    \ multiple input values. Here's a possible implementation:\n<code>(define (remove\
+    \ v lst)\n  (cond ((null? lst)\n         '())\n        ((= (car lst) v)\n    \
+    \     (remove v (cdr lst)))\n        (else\n         (cons (car lst)\n       \
+    \        (remove v (cdr lst))))))\n</code>\n", "  (define (strange_sort_list2\
+    \ lst2)\n    (cond ((null? lst2) null)\n          ((= (length lst2) 1) lst2)\n\
+    \          (else\n           (append (list (apply min lst2))\n               \
+    \    (list (apply max lst2))\n                   (strange_sort_list2 (remove (apply\
+    \ min lst2) (remove (apply max lst2) lst2)))))))\n  (strange_sort_list2 lst))\n\
+    </code>\nTest cases:\n<code>(strange_sort_list '(1 2 3 4))\n=&gt; '(1 4 2 3)\n",
+  "  (cond\n    [(empty? lst) empty]\n    [(empty? (rest lst)) lst]\n    [else\n \
+    \    (define lst-min (list (apply min lst)))\n     (define lst-max (list (apply\
+    \ max lst)))\n     (append lst-min (strange_sort_list (filter (\u03BB (item) (and\
+    \ (not (equal? item (car lst-min))) (not (equal? item (car lst-max))))) lst)))\n\
+    \     (append lst-max (strange_sort_list (filter (\u03BB (item) (and (not (equal?\
+    \ item (car lst-min))) (not (equal? item (car lst-max))))) lst)))]))\n", "  (define\
+    \ (range-min-max lst)\n    (define (range-min-max-helper lst (min-so-far 0) (max-so-far\
+    \ 0))\n      (cond\n        [(empty? lst) (list min-so-far max-so-far)]\n    \
+    \    [(< (first lst) min-so-far) (range-min-max-helper (rest lst) (first lst)\
+    \ max-so-far)]\n        [(> (first lst) max-so-far) (range-min-max-helper (rest\
+    \ lst) min-so-far (first lst))]\n        [else (range-min-max-helper (rest lst)\
+    \ min-so-far max-so-far)]))\n    (range-min-max-helper lst 0 0))\n  (define (strange-sort-helper\
+    \ lst (min-val 0) (max-val 0) (should-increase? #t))\n    (cond\n      [(empty?\
+    \ lst) '()]\n      [(and (eq? (first lst) min-val) (eq? (first lst) max-val))\
+    \ (cons (first lst) (strange-sort-helper (rest lst) min-val max-val should-increase?))]\n\
+    \      [(eq? (first lst) min-val) (cons (first lst) (strange-sort-helper (rest\
+    \ lst) min-val max-val #f))]\n      [(eq? (first lst) max-val) (cons (first lst)\
+    \ (strange-sort-helper (rest lst) min-val max-val #t))]\n      [(and (eq? should-increase?\
+    \ #t) (< (first lst) (first (rest lst)))) (cons (first lst) (strange-sort-helper\
+    \ (rest lst) min-val max-val should-increase?))]\n      [(and (eq? should-increase?\
+    \ #f) (> (first lst) (first (rest lst)))) (cons (first lst) (strange-sort-helper\
+    \ (rest lst) min-val max-val should-incre", "  (cond [(empty? lst) '()]\n    \
+    \    [else (let ([sorted-lst (sort lst <)])\n                (append (sublist\
+    \ sorted-lst 0 1)\n                        (sublist sorted-lst -1 1)\n       \
+    \                 (strange_sort_list (sublist sorted-lst 1 -1))))]))\n", "  (cond\
+    \ [(empty? lst) empty]\n        [(= (length lst) 1) lst]\n        [else (append\
+    \ (list (min lst) (max lst))\n                      (strange_sort_list (remove\
+    \ (min lst) (remove (max lst) lst))))]))\n</code>\nThis function works, but I\
+    \ wonder if there is a more elegant way to achieve the same. For example, when\
+    \ removing the minimum and maximum from the list, I had to call <code>remove</code>\
+    \ twice. I could write a procedure to remove a list of items from a list, but\
+    \ this seems not to be very elegant.\nFurthermore, is there a way to achieve the\
+    \ same without the <code>append</code> at the end, but rather by appending the\
+    \ items while recursing. This would be better, since I can reuse <code>append</code>\
+    \ from Racket's standard library.\nFinally, is there a way to write the procedure\
+    \ without using <code>min</code> and <code>max</code> and without sorting the\
+    \ list?\n\n\nA:\n\nI think you're on the right track. Here's my solution:\n<code>(define\
+    \ (strange-sort lst)\n  (if (empty? lst)\n      empty\n      (cons (min lst) (cons\
+    \ (max lst) (strange-sort (remove (min lst) (remove (max lst) lst)))))))\n</code>\n\
+    The main thing I'd change is your use of <code>append</code>. Since there are\
+    \ only two elements at each recursive step, and since you already know the order\
+    \ they should appear in, I think a <code>cons</code> is simpler.\nWith respect\
+    \ to your final question about whether you can write this without sorting, I don't\
+    \ think you can.\n", "  (if (empty? lst)\n      '()\n      (if (equal? (length\
+    \ lst) 1)\n          lst\n          (append (list (min (first lst) (second lst)))\n\
+    \                  (list (max (first lst) (second lst)))\n                  (strange_sort_list\
+    \ (cddr lst))))))\n", "  (cond\n    [(empty? lst) empty]\n    [(empty? (rest lst))\
+    \ lst]\n    [else\n     (let*\n       ([x (min lst)]\n        [y (max (remove\
+    \ x lst))]\n        [r (rest (remove y lst))])\n       (cons x (cons y (strange_sort_list\
+    \ r))))]))\n</code>\nCheck on Repl.it\n", "  (if (null? lst)\n      '()\n    \
+    \  (let ([min (apply min lst)]\n            [remaining (remove min lst)])\n  \
+    \      (list min (apply max remaining) (strange_sort_list (remove (apply max remaining)\
+    \ remaining))))))"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

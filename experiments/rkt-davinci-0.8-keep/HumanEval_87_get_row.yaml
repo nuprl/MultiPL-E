@@ -23,7 +23,1343 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate g
   \ (list ) 1) (list ))\n    (check-equal? (candidate (list (list 1)) 2) (list ))\n\
   \    (check-equal? (candidate (list (list ) (list 1) (list 1 2 3)) 3) (list (list\
   \ 2 2)))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (for/list ([(row col) (in-list\n                       (append-map\n\
+    \                        (lambda (row_idx row)\n                          (for/list\
+    \ ([(col_idx elem) (in-list (enumerate row))])\n                            (if\
+    \ (= elem x)\n                                (cons row_idx col_idx))))\n    \
+    \                      lst))])\n    (cons row col)))\n</code>\nUpdate:\n<code>#lang\
+    \ racket\n", "  (filter (\u03BB (x)\n            (or (member x lst)\n        \
+    \        (member (reverse x) lst)))\n          (flatmap (\u03BB (i)\n        \
+    \             (flatmap (\u03BB (j)\n                                (if (equal?\
+    \ (list-ref j i) x)\n                                    (list (list (list i j)\
+    \ (list j i)))\n                                    '()))\n                  \
+    \            lst))\n                   (build-list (length lst) (\u03BB (x) x)))))\n",
+  "  (if (null? lst)\n      '()\n      (append (get_row (cdr lst) x)\n           \
+    \   (filter\n               (lambda (t)\n                 (equal? x (car t)))\n\
+    \               (append\n                (map (lambda (i) (list x i))\n      \
+    \               (filter\n                      (lambda (y)\n                 \
+    \       (member x (car lst)))\n                      (build-list (length (car\
+    \ lst)) (lambda (i) i))))\n                (map (lambda (i) (list i x))\n    \
+    \                 (filter\n                      (lambda (y)\n               \
+    \         (member x (car lst)))\n                      (build-list (length (car\
+    \ lst)) (lambda (i) i)))))))))\n", "  (cond\n    [(empty? lst) '()]\n    [(empty?\
+    \ (first lst)) (get_row (rest lst) x)]\n    [(equal? x (first (first lst)))\n\
+    \     (append (get_row (rest lst) x)\n             (list (list (if (empty? (first\
+    \ lst))\n                             (length lst)\n                         \
+    \    (- (length lst) (length (first lst))))\n                         (if (empty?\
+    \ (first lst))\n                             0\n                             (-\
+    \ (length (first lst)) (length (remq x (first lst))))))))]\n    [else (get_row\
+    \ (rest lst) x)]))\n</code>\nI've been doing daily (more or less) Racket katas.\
+    \ I've found a way to implement the code, but I'm not sure how to make it better.\
+    \ Specifically, I'm not sure how to make it more lispy.\nI'm not sure how to make\
+    \ it more concise. It has, for example, three conditional expressions, where I\
+    \ just expect one.\nI'm not sure how to make it more readable. It has a lot of\
+    \ \"magic numbers\" that I think can be given better names. (The magic numbers\
+    \ are, for example, the <code>0</code> and <code>-1</code>.)\nI'm not sure how\
+    \ to make it more maintainable. I think the code is still readable, but I have\
+    \ a feeling that I'm missing something.\nIn general, I'm looking for code review.\
+    \ I'd like to know what changes to make to the code to make it better. It is probably\
+    \ not correct to expect good code after just a week of learning a new language,\
+    \ so I'd like to know what I can do to get better.\n\n\nA:\n\nSome good points\
+    \ have already been made in other answers, so I'll just add another one.\nI have\
+    \ a couple of things you might be interested in:\n\nYou should avoid using <code>length</code>\
+    \ for operations that operate on the \"structure\" of a list. The reason for this\
+    \ is that <code>length</code> needs to traverse the entire list to return its\
+    \ length. Use <code>car</code> and <code>cdr</code> instead:\n<code>(length (remq\
+    \ x", "  (append (map (lambda (i row)\n                 (map (lambda (j el)\n\
+    \                        (list i j))\n                      (enumerate row) x))\n\
+    \               (enumerate lst)) '()))", "  (filter (\u03BB (x) (equal? x x))\n\
+    \          (map (\u03BB (xy) (if (equal? x (cadr xy))\n                      \
+    \     (car xy)\n                           #f))\n               (apply append\n\
+    \                      (map (\u03BB (xy) (map (\u03BB (x) (list (car xy) x))\n\
+    \                                        (cdr xy)))\n                        \
+    \   (enumerate lst))))))\n", "  (sort-rows-cols\n   (for/list ([row (in-list lst)]\n\
+    \              [col (in-list row)]\n              #:when (= x col))\n     (cons\
+    \ (vector row col)\n           (get-position row col)))))\n", "  (let loop ([lst\
+    \ lst] [res '()] [row 0])\n    (if (null? lst)\n        (sort (lambda (t1 t2)\n\
+    \                (if (< (car t1) (car t2))\n                    #t\n         \
+    \           (if (= (car t1) (car t2))\n                        (> (cadr t1) (cadr\
+    \ t2))\n                        #f)))\n              res)\n        (loop (cdr\
+    \ lst)\n              (append (map (lambda (col)\n                           \
+    \  (cons row col))\n                           (filter (lambda (n) (= n x)) (car\
+    \ lst)))\n                      res)\n              (+ row 1)))))\n</code>\n",
+  "  (for/list ([(row col) (in-list (get-all-coords lst x))])\n    (list row col)))\n",
+  "  (cond\n    [(empty? lst) empty]\n    [(empty? (first lst)) (get_row (rest lst)\
+    \ x)]\n    [(equal? x (first (first lst)))\n     (cons (cons (length lst) (length\
+    \ (first lst)))\n           (get_row (rest lst) x))]\n    [else (get_row (rest\
+    \ lst) x)]))\n</code>\n", "  (map (lambda (y)\n         (list (car y) (cadr y)))\n\
+    \       (filter (lambda (c)\n                 (= (caddr c) x))\n             \
+    \  (sort (lambda (c1 c2)\n                       (cond\n                     \
+    \    ((> (car c1) (car c2)) #t)\n                         ((< (car c1) (car c2))\
+    \ #f)\n                         ((< (cadr c1) (cadr c2)) #t)\n               \
+    \          ((> (cadr c1) (cadr c2)) #f)\n                         (else #f)))\n\
+    \                     (apply append\n                            (map (lambda\
+    \ (l i)\n                                   (map (lambda (el j)\n            \
+    \                              (list i j el))\n                              \
+    \          l\n                                        (build-list (length l) add1)))\n\
+    \                                 lst\n                                 (build-list\
+    \ (length lst) add1)))))))\n</code>\n", "  (for/list ((row (in-list lst))\n  \
+    \           #:when (not (empty? row))\n             (idx (in-indexed row))\n \
+    \            #:when (= x (second idx)))\n    (list (length (filter (\u03BB (list)\n\
+    \                            (not (empty? list)))\n                          (take\
+    \ row idx)))\n          (length row))))\n", "  (define (loop lst a r)\n    (if\
+    \ (null? lst)\n        r\n        (let ((count (- (apply min (map length lst))\
+    \ 1)))\n          (loop (rest lst) (add1 a) (append (map (\u03BB (i) (list a i))\
+    \ (filter (\u03BB (i) (= x (list-ref (first lst) i))) (range 0 count))) r)))))\n\
+    \  (sort (loop lst 0 '()) (\u03BB (a b) (< (first a) (first b)))))\n```\n\n```racket\n\
+    #lang racket\n", "  (sort (sort (for*/list ([x lst] [y (range (length x))] #:when\
+    \ (equal? x (list-ref x y)))\n               (list x y))\n              (lambda\
+    \ (l1 l2) (> (cadr l1) (cadr l2))))\n        (lambda (l1 l2) (< (car l1) (car\
+    \ l2)))))", "  (sort (map (lambda (r) (sort r >))\n             (map (lambda (r)\
+    \ (append (map (lambda (y) (list (find-in-list r x) y)) (iota (length r))) (list\
+    \ (find-in-list r x)))) lst))\n        <))\n", "  (define (row_count lst)\n  \
+    \  (cond\n      [(empty? lst) 0]\n      [else (+ 1 (row_count (rest lst)))]))\n\
+    \  (define (col_count lst)\n    (cond\n      [(empty? lst) 0]\n      [else (max\
+    \ (col_count (rest lst)) (length (first lst)))]))\n  (define (get_elem lst row\
+    \ col)\n    (cond\n      [(empty? lst) '()]\n      [(and (= row 0)\n         \
+    \   (empty? (first lst))\n            (empty? (rest lst)))\n       '()]\n    \
+    \  [(= row 0) (cons (list row col) (get_elem (rest lst) 0 col))]\n      [else\
+    \ (get_elem (rest lst) (- row 1) col)]))\n  (define (get_x_in_row lst x)\n   \
+    \ (cond\n      [(empty? lst) '()]\n      [(and (= (first lst) x)\n           \
+    \ (empty? (rest lst)))\n       (list (list 0 0))]\n      [(= (first lst) x) (cons\
+    \ (list 0 0) (get_x_in_row (rest lst) x))]\n      [else (get_x_in_row (rest lst)\
+    \ x)]))\n  (cond\n    [(empty? lst) '()]\n    [(empty? (first lst)) (get_row (rest\
+    \ lst) x)]\n    [(empty? (rest lst)) (get_x_in_row (first lst) x)]\n    [else\
+    \ (append (get_x_in_row (first lst) x)\n                  (get_row (rest lst)\
+    \ x))]))", "  (define (index-list row)\n    (define (index-list-iter ls ind)\n\
+    \      (cond ((null? ls) '())\n            ((not (equal? (car ls) x)) (index-list-iter\
+    \ (cdr ls) (+ ind 1)))\n            (else (cons ind (index-list-iter (cdr ls)\
+    \ (+ ind 1))))))\n    (index-list-iter row 0))\n  (let loop ([inner-lst lst] [lst-ind\
+    \ 0])\n    (cond ((null? inner-lst) '())\n          ((not (null? (index-list (car\
+    \ inner-lst))))\n           (append (map (lambda (x) (list lst-ind x)) (index-list\
+    \ (car inner-lst)))\n                   (loop (cdr inner-lst) (+ lst-ind 1))))\n\
+    \          (else (loop (cdr inner-lst) (+ lst-ind 1))))))\n", "  (let loop ((x\
+    \ x)\n             (lst lst)\n             (idx-lst '()))\n    (if (null? lst)\n\
+    \        idx-lst\n        (let* ((idx (index x (car lst)))\n               (nxt_idx-lst\n\
+    \                (if idx\n                    (append (loop x (cdr lst) '())\n\
+    \                            (list (cons (length idx-lst)\n                  \
+    \                      idx)))\n                    (loop x (cdr lst) idx-lst))))\n\
+    \          (sort nxt_idx-lst\n                #:key\n                (lambda (idx)\
+    \ (cdr idx))\n                #:reverse?\n                #t)))))\n</code>\nThere\
+    \ might be a bug in the code, as I don't see a result in the format described\
+    \ by the problem, but I am probably misunderstanding the problem.\n", "  (define\
+    \ (get-row-inner lst x res)\n    (cond\n      [(null? lst) res]\n      [(null?\
+    \ (car lst)) (get-row-inner (cdr lst) x res)]\n      [(memq x (car lst)) (get-row-inner\
+    \ (cdr lst) x (cons (cons (length res) (length (filter (lambda (y) (= x y)) (car\
+    \ lst)))) res))]\n      [else (get-row-inner (cdr lst) x res)]))\n  (sort-columns\
+    \ (sort-rows (get-row-inner lst x '()))))\n", "  (apply append\n         (map\
+    \ (\u03BB (r)\n                (map (\u03BB (c)\n                       (cons\
+    \ (length r) c))\n                     (filter (\u03BB (x) (= x (list-ref r c)))\n\
+    \                             (range 0 (length r)))))\n              lst)))\n\
+    </code>\nAny suggestions for improvements?\n\n\nA:\n\nA couple of points:\n\n\
+    <code>length</code> and <code>list-ref</code> are not efficient to use in general,\
+    \ so don't use them inside loops. If you want to get the length of the list, or\
+    \ the Nth element of a list, do it before the loop, and then use it as many times\
+    \ as you need it inside the loop.\nThe <code>append</code> procedure is not tail-recursive\
+    \ and that can cause stack overflows on sufficiently long inputs. Instead, use\
+    \ <code>foldl</code> to accumulate the final result.\n\nWith those points in mind,\
+    \ here's a version that does not use <code>length</code> or <code>list-ref</code>\
+    \ (but it does use <code>map</code> and <code>filter</code>):\n<code>(define (get-row\
+    \ lst x)\n  (foldl (\u03BB (row acc)\n           (let* ([len (length row)]\n \
+    \                 [indexes (range 0 len)])\n             (acc (apply append\n\
+    \                          (map (\u03BB (i)\n                                \
+    \ (cons len i))\n                               (filter (\u03BB (i)\n        \
+    \                                 (= x (list-ref row i)))\n                  \
+    \                     indexes))))))\n         '()\n         lst))\n</code>\nAnd\
+    \ here's the same idea but using good old <code>for/list</code> instead:\n<code>(define\
+    \ (get-row lst x)\n  (for/list ([row lst]\n             [i (in-range (length row))])\n\
+    \    (when (= x (list-ref row i))\n      (cons (length row) i))))\n</code>\n",
+  "  (apply append (for/list ([row lst])\n                  (define (columns-with-value?\
+    \ row value)\n                    (apply append (for/list ([col (range (length\
+    \ row))])\n                                    (if (= (list-ref row col) value)\n\
+    \                                        (list (list col row))\n             \
+    \                           '()))))\n                  (columns-with-value? row\
+    \ x))))\n", "  (define (coord-row lst x row)\n    (cond\n      [(null? lst) '()]\n\
+    \      [(not (memq x (car lst))) (coord-row (cdr lst) x (+ row 1))]\n      [else\
+    \ (append (coord-row (cdr lst) x (+ row 1))\n                    (coord x (car\
+    \ lst) row))]))\n  (define (coord x lst row)\n    (cond\n      [(null? lst) '()]\n\
+    \      [(= x (car lst)) (cons (list row (car (last-index-of x lst)))\n       \
+    \                      (coord x (cdr lst) row))]\n      [else (coord x (cdr lst)\
+    \ row)]))\n  (define (last-index-of x lst)\n    (cond\n      [(null? lst) '()]\n\
+    \      [(= x (car lst)) (cons 0 '())]\n      [else (cons (+ 1 (car (last-index-of\
+    \ x (cdr lst)))) '())]))\n  (sort (coord-row lst x 0)\n        (lambda (l1 l2)\n\
+    \          (cond\n            [(> (car l1) (car l2)) #t]\n            [(= (car\
+    \ l1) (car l2)) (< (cadr l1) (cadr l2))]\n            [else #f]))))", "  (sort\
+    \ (map (lambda (row pos)\n               (map (lambda (col)\n                \
+    \      (cons pos col))\n                    (get-indices x row)))\n          \
+    \   lst\n             (build-list (length lst) add1))\n          <))\n", "  (sort\
+    \ (sort (foldl (lambda (l x y)\n                       (define pos 0)\n      \
+    \                 (cond ((member x l)\n                              (append l\
+    \ (list (list y pos))))\n                             ((member x (car l))\n  \
+    \                            (append (cdr l) (list (list y pos))))\n         \
+    \                    (else\n                              (set! pos (+ pos 1))\n\
+    \                              l)))\n                     '()\n              \
+    \       lst)\n                <)\n         <))\n", "  (cond\n    [(empty? lst)\
+    \ empty]\n    [else\n     (append (get_row (rest lst) x)\n             (get_row2\
+    \ x (first lst) 0 empty))]))\n", "  (cond\n    [(empty? lst) '()]\n    [(not (list?\
+    \ (car lst))) '()]\n    [else\n     (let ([first (map (lambda (y) (cons 0 y))\
+    \ (filter (lambda (y) (= x y)) (car lst)))])\n       (append first (get_row (cdr\
+    \ lst) x (+ 1 (car (car first))))))]))\n</code>\nAnd this produces <code>#&lt;procedure:get_row&gt;</code>\
+    \ in the output area.\n\n\nA:\n\nThe function <code>map</code> takes two arguments:\
+    \ a function and a list.  You are giving it only one argument.\n<code>(define\
+    \ (get_row lst x)\n  (cond\n    [(empty? lst) '()]\n    [(not (list? (car lst)))\
+    \ '()]\n    [else\n     (let ([first (map (lambda (y) (cons 0 y)) (filter (lambda\
+    \ (y) (= x y)) (car lst)))])\n       (append first (get_row (cdr lst) x (+ 1 (car\
+    \ (car first))))))]))\n</code>\n", "  (sort\n   (apply append\n          (map\
+    \ (lambda (row ri)\n                 (map (lambda (col ci)\n                 \
+    \       (if (= col x)\n                            (list (list ri ci))\n     \
+    \                       (list)))\n                     row\n                 \
+    \    (build-list (length row) add1)))\n              lst\n              (build-list\
+    \ (length lst) add1)))\n   (lambda (lst1 lst2)\n     (let ([lt (string<? (car\
+    \ (car lst1)) (car (car lst2)))])\n       (if lt\n           lt\n           (let\
+    \ ([lte (string<= (cadr (car lst1)) (cadr (car lst2)))])\n             (if lte\n\
+    \                 lte\n                 #t)))))))\n", "  (sort\n   (for/list ([row\
+    \ (in-list lst)]\n              [col (in-naturals)])\n     (cons (length lst)\
+    \ col))\n   #:key car\n   #:key cdr\n   #:key >))\n", "    (cond\n        [(empty?\
+    \ lst) '()]\n        [(empty? (first lst)) (get_row (rest lst) x)]\n        [(member\
+    \ x (first lst))\n         (cons (cons (count-rows lst) (count-columns (first\
+    \ lst) x))\n               (get_row (rest lst) x))]\n        [else (get_row (rest\
+    \ lst) x)]))\n", "  (sort (filter (lambda (x) (= x 1)) lst) &lt;))\n</code>\n\
+    but I get error:\n<code>function: expects a procedure that can be applied to arguments\
+    \ [listof integer] [any]\n  given: #&lt;procedure:sorted-set-eqv?&gt;\n</code>\n\
+    I am not sure how to proceed, any help appreciated\n\n\nA:\n\nI guess your issue\
+    \ is the <code>&lt;</code> argument to <code>sort</code>. If you look at the documentation,\
+    \ <code>sort</code> expects a function that takes 2 arguments, and returns a boolean,\
+    \ so instead of\n<code>(sort (filter (lambda (x) (= x 1)) lst) &lt;)\n</code>\n\
+    you probably want\n<code>(sort (filter (lambda (x) (= x 1)) lst) &lt;?)\n</code>\n\
+    You may also want to change the name of your lambda in the <code>filter</code>\
+    \ call, since <code>x</code> is the element of the list, not the search term,\
+    \ so\n<code>(filter (lambda (elem) (= elem 1)) lst)\n</code>\nis more appropriate.\n",
+  "  (cond [(empty? lst) '()]\n        [else (append (get_row (rest lst) x)\n    \
+    \                  (get_coordinates (first lst) x 0))]))\n", "  (sort (append\
+    \ (map (lambda (row)\n                       (map (lambda (col)\n            \
+    \                  (if (= col x)\n                                  (list row\
+    \ col)\n                                  #f))\n                           row))\n\
+    \                     lst)\n                 (list #f))\n        (lambda (x y)\n\
+    \          (cond [(and (=? x #f)\n                      (=? y #f)) #f]\n     \
+    \           [(=? x #f) #t]\n                [(=? y #f) #f]\n                [(<\
+    \ (car x) (car y)) #t]\n                [(> (car x) (car y)) #f]\n           \
+    \     [(> (cadr x) (cadr y)) #t]\n                [(< (cadr x) (cadr y)) #f]\n\
+    \                [else #f]))))\n", "  (cond\n    [(empty? lst) '()]\n    [(empty?\
+    \ (car lst)) (get_row (cdr lst) x)]\n    [(and (equal? x (car (car lst)))\n  \
+    \        (empty? (cdr (car lst))))\n     (cons (list (list-ref lst 0) (list-ref\
+    \ (car lst) 0))\n           (get_row (cdr lst) x))]\n    [(equal? x (car (car\
+    \ lst)))\n     (cons (list (list-ref lst 0) (list-ref (car lst) 0))\n        \
+    \   (get_row (cons (cdr (car lst)) (cdr lst)) x))]\n    [else (get_row (cdr lst)\
+    \ x)]))\n</code>\n", "    ;; recursively find x in lst\n    (define (rec lst row\
+    \ col x)\n      (cond\n        [(empty? lst)\n         '()]\n        [(empty?\
+    \ (first lst))\n         (rec (rest lst) (+ row 1) 0 x)]\n        [(empty? (rest\
+    \ lst))\n         (cond\n           [(= x (first (first lst)))\n            (cons\
+    \ (list row col) (rec (rest (first lst)) row (+ col 1) x))]\n           [else\n\
+    \            (rec (rest (first lst)) row (+ col 1) x)])]\n        [else\n    \
+    \     (cond\n           [(= x (first (first lst)))\n            (cons (list row\
+    \ col) (rec (rest lst) (+ row 1) 0 x))]\n           [else\n            (rec (rest\
+    \ lst) (+ row 1) 0 x)])]))\n    ;; get sorted list\n    (sort (sort (rec lst 0\
+    \ 0 x) <) >))\n</code>\n", "  (sort (for/list ([lst lst] [y (in-naturals)])\n\
+    \         (for/list ([x (in-list lst)] [i (in-naturals)])\n           (and (=\
+    \ x x) (list y i))))\n        (lambda (lst1 lst2) (cond [(< (car lst1) (car lst2))\
+    \ #t]\n                                  [(= (car lst1) (car lst2))\n        \
+    \                           (> (cadr lst1) (cadr lst2))]\n                   \
+    \               [else #f]))))\n</code>\nHowever, I get an error, when I try to\
+    \ evaluate it:\n<code>;;; get_row.rkt:11:4: for: not allowed in: for/list", " \
+    \ (for/list ([row (in-list lst)]\n             [col (in-range (length row))])\n\
+    \    (when (= x (list-ref row col))\n      (list (length lst) col))))\n</code>\n",
+  "  (define (index x lst)\n    (cond ((null? lst) -1)\n          ((= x (car lst))\
+    \ 0)\n          ((> x (car lst)) -1)\n          (else (let ((index (index x (cdr\
+    \ lst))))\n                  (if (= index -1) -1\n                      (+ index\
+    \ 1))))))\n  (define (get_row_aux lst x)\n    (cond ((null? lst) '())\n      \
+    \    ((= x (car lst))\n           (cons (cons 0 0) (get_row_aux (cdr lst) x)))\n\
+    \          ((list? (car lst))\n           (let ((tup (get_row_aux (car lst) x)))\n\
+    \             (cond ((null? tup) (get_row_aux (cdr lst) x))\n                \
+    \   (else (let ((ind (car tup)))\n                           (set-car! tup (cons\
+    \ 0 ind))\n                           (cons tup (get_row_aux (cdr lst) x)))))))\n\
+    \          (else (get_row_aux (cdr lst) x))))\n  (define (get_row_aux_2 lst x)\n\
+    \    (let loop ((lst lst) (ind 0))\n      (cond ((null? lst) '())\n          \
+    \  ((= x (car lst))\n             (cons (cons ind 0) (loop (cdr lst) (+ ind 1))))\n\
+    \            ((list? (car lst))\n             (let ((tup (get_row_aux_2 (car lst)\
+    \ x)))\n               (cond ((null? tup) (loop (cdr lst) (+ ind 1)))\n      \
+    \               (else (let ((ind2 (car tup)))\n                             (set-car!\
+    \ tup (cons ind ind2))\n                             (cons tup (loop (cdr lst)\
+    \ (+ ind 1))))))))\n            (else (loop (cdr lst) (+ ind 1))))))\n  (let ((lst2\
+    \ (get_row_aux lst x)))\n    (sort lst2\n          #:key (lambda (x) (car x))\n\
+    \          #:compare <)\n    (map (lambda", "  (match lst\n    [() '()]\n    [(cons-of\
+    \ row rest)\n     (define row_coords (get_row row x))\n     (match row_coords\n\
+    \       [() (get_row rest x)]\n       [coords (cons (cons 0 (car coords)) (get_row\
+    \ rest x))])]\n    [(list-of (cons-of (list-of l) rest))\n     (define l_coords\
+    \ (get_row l x))\n     (define rest_coords (get_row rest x))\n     (match l_coords\n\
+    \       [() (cons-of rest_coords rest_coords)]\n       [coords (cons (cons 0 (car\
+    \ coords)) (cons-of rest_coords rest_coords))])]\n    [(list-of (list-of l) rest)\n\
+    \     (define l_coords (get_row l x))\n     (define rest_coords (get_row rest\
+    \ x))\n     (match l_coords\n       [() (cons-of rest_coords rest_coords)]\n \
+    \      [coords (cons (cons 0 (car coords)) (cons-of rest_coords rest_coords))])]\n\
+    \    [(list-of l rest)\n     (match l\n       [x (cons (cons 0 0) (get_row rest\
+    \ x))]\n       [l (get_row rest x)])]))\n</code>\nTest:\n<code>#lang racket\n",
+  "  (sort (for/list ([row (in-list lst)]\n                   [idx (in-naturals)]\n\
+    \                   [col (in-list row)])\n         (if (= col x)\n           \
+    \  (list idx col)))\n        (\u03BB (list1 list2)\n          (and (< (car list1)\
+    \ (car list2))\n               (> (cadr list1) (cadr list2))))))\n", "  (foldl\
+    \ (lambda (row acc)\n           (for*/list ([(j i) (in-naturals)]\n          \
+    \             #:when (equal? x (list-ref row i)))\n             (cons (+ 1 j)\
+    \ (cons i acc))))\n         '()\n         lst))\n\n", "  (apply append\n     \
+    \    (map (lambda (row y)\n                (map (lambda (col)\n              \
+    \         (list (list y x)))\n                     (filter (lambda (e) (= e x))\
+    \ row)))\n              lst\n              (range (length lst)))))\n</code>\n\
+    Example run:\n<code>&gt; (get_row '((1 2 3 4 5 6) (1 2 3 4 1 6) (1 2 3 4 5 1))\
+    \ 1)", "  (define (get_row_helper lst x result)\n    (cond\n      [(empty? lst)\
+    \ result]\n      [(empty? (first lst)) (get_row_helper (rest lst) x result)]\n\
+    \      [(= x (first (first lst)))\n       (get_row_helper (rest lst) x (cons (cons\
+    \ (length result) (find_x (first lst) x)) result))]\n      [else (get_row_helper\
+    \ (rest lst) x (cons (cons (length result) -1) result))]))\n  (define (find_x\
+    \ lst x)\n    (cond\n      [(empty? lst) -1]\n      [(= x (first lst)) 0]\n  \
+    \    [else (add1 (find_x (rest lst) x))]))\n  (define (cut_x lst x)\n    (cond\n\
+    \      [(empty? lst) lst]\n      [(= x (first lst)) (rest lst)]\n      [else (cons\
+    \ (first lst) (cut_x (rest lst) x))]))\n  (define (sort_row row)\n    (sort row\
+    \ (lambda (x y) (< (second x) (second y)))))\n  (map sort_row (sort (get_row_helper\
+    \ lst x '()) (lambda (x y) (< (first x) (first y))))))\n", "  (define (loop lst\
+    \ acc_y)\n    (cond\n      [(empty? lst) (reverse acc_y)]\n      [(empty? (first\
+    \ lst)) (loop (rest lst) acc_y)]\n      [(match (first lst)\n         [([y ...])\n\
+    \          (if (= x y)\n              (loop (rest lst) (cons (cons acc_y 0) acc_y))\n\
+    \              (loop (rest lst) acc_y))]\n         [(y)\n          (if (= x y)\n\
+    \              (loop (rest lst) (cons (cons acc_y 0) acc_y))\n              (loop\
+    \ (rest lst) acc_y))])]))\n  (define (sort_row lst)\n    (define (order_cols lst)\n\
+    \      (cond\n        [(empty? lst) empty]\n        [(> (cdr (first lst)) (cdr\
+    \ (second lst))) (cons (first lst) (order_cols (rest lst)))]\n        [else (cons\
+    \ (second lst) (cons (first lst) (order_cols (rest (rest lst)))))]))\n    (define\
+    \ (order_rows lst)\n      (cond\n        [(empty? lst) empty]\n        [(< (car\
+    \ (first lst)) (car (second lst))) (cons (first lst) (order_rows (rest lst)))]\n\
+    \        [else (cons (second lst) (cons (first lst) (order_rows (rest (rest lst)))))]))\n\
+    \    (order_rows (order_cols lst)))\n  (sort_row (loop lst empty)))\n", "  (define\
+    \ (get_row_iter lst x coordinates rows)\n    (cond\n      [(empty? lst) coordinates]\n\
+    \      [(member x (first lst))\n       (get_row_iter (rest lst) x\n          \
+    \           (append coordinates\n                             (build-list (length\
+    \ (first lst))\n                                         (lambda (index) (list\
+    \ rows index))))\n                     (+ rows 1))]\n      [else (get_row_iter\
+    \ (rest lst) x coordinates (+ rows 1))]))\n  (map (lambda (tuple) (tuple-reverse\
+    \ tuple))\n       (sort (get_row_iter lst x '() 0) (lambda (x y) (< (first x)\
+    \ (first y))))))\n```\n\n### How to teach programming for all?\n\n```\n#lang racket\n",
+  "  (apply append (for/list ([row lst])\n                  (for/list ([(col . row-rest)\
+    \ (in-indexed row)])\n                    (when (= x col)\n                  \
+    \    (cons (cons (index-of row lst) col)\n                            (if (empty?\
+    \ row-rest)\n                                empty\n                         \
+    \       (get_row row-rest x))))))))\n", "  (let loop ([lst lst] [acc '()])\n \
+    \   (if (empty? lst)\n        (reverse acc)\n        (loop (rest lst)\n      \
+    \        (append (sublist (first lst) x) acc)))))", "  (define (get_row-aux lst\
+    \ x acc)\n    (cond [(empty? lst) acc]\n          [(empty? (first lst)) (get_row-aux\
+    \ (rest lst) x acc)]\n          [(equal? x (first (first lst))) (get_row-aux (rest\
+    \ lst) x (cons (cons (length acc) (length (first lst))) acc))]\n          [else\
+    \ (get_row-aux (rest lst) x (cons (cons (length acc) (- (length (first lst)) 1))\
+    \ acc))]))\n  (sort (lambda (x y) (cond [(> (first x) (first y)) #t]\n       \
+    \                     [(< (first x) (first y)) #f]\n                         \
+    \   [(> (second x) (second y)) #f]\n                            [(< (second x)\
+    \ (second y)) #t]))\n        (get_row-aux lst x '())))\n", "  (filter\n   (\u03BB\
+    \ (coord)\n     (equal? x (list-ref (list-ref lst (car coord)) (cdr coord))))\n\
+    \   (get-coords lst)))\n", "  (match lst\n    [(cons hd tl)\n     (get_row tl\
+    \ x)]\n    [(cons '() (cons hd tl))\n     (append (filter (lambda (i) (= x i))\
+    \ hd)\n             (get_row tl x))]))\n", "  (if (null? lst) '()\n      (append\
+    \ (get_row-helper lst x (- 1 (length lst)))\n              (get_row (cdr lst)\
+    \ x))))\n", "  (for/list ([row lst] #:when (member x row))\n    (for/list ([elem\
+    \ row] #:when (= x elem))\n      (list row elem))))", "  (sort (for/list ([row\
+    \ (in-list lst)]\n                   [col (in-range (length row))]\n         \
+    \          #:when (equal? x (list-ref row col)))\n         (list (length lst)\
+    \ col))\n        #:key (lambda (lst) lst)))\n</code>\nThis works perfectly. However,\
+    \ when I try to rewrite it as nested <code>for</code> loop, I am getting issues.\n\
+    Code:\n<code>#lang racket\n", "  (define (is-in-row r)\n    (filter (lambda (n)\
+    \ (= n x)) r))\n  (define (get-coords r i)\n    (map (lambda (n) (cons i n)) (is-in-row\
+    \ r)))\n  (cond [(empty? lst) empty]\n        [else (apply append (map (lambda\
+    \ (r) (get-coords r (car r)))\n                                 (sort (map (lambda\
+    \ (r) (list (cdr r) (car r)))\n                                            (map\
+    \ (lambda (r) (cons (length (is-in-row r)) r))\n                             \
+    \                    lst))\n                                       (lambda (a\
+    \ b) (and (< (car a) (car b))\n                                              \
+    \            (or (not (equal? (car a) (car b)))\n                            \
+    \                                  (> (cadr a) (cadr b)))))))))]))", "  (define\
+    \ (flat-lst lst)\n    (if (empty? lst)\n        empty\n        (append (car lst)\
+    \ (flat-lst (cdr lst)))))\n  (define (get-coord lst row col)\n    (cond\n    \
+    \  [(null? lst) empty]\n      [(= x (car lst)) (cons (list row col) (get-coord\
+    \ (cdr lst) row (+ col 1)))]\n      [else (get-coord (cdr lst) row (+ col 1))]))\n\
+    \  (define (get-row lst row)\n    (cond\n      [(null? lst) empty]\n      [else\
+    \ (cons (get-coord (car lst) row 0) (get-row (cdr lst) (+ row 1)))]))\n  (flat-lst\
+    \ (sort (get-row lst 0) (lambda (x y) (< (car x) (car y))))))\n```\n\n```\n#lang\
+    \ racket\n", "  (cond\n    [(empty? lst) empty]\n    [else\n     (cond\n     \
+    \  [(member x (first lst))\n        (let* ([x-indices (find-all x (first lst))]\n\
+    \               [row-coords (map (lambda (y) (cons 0 y)) x-indices)])\n      \
+    \    (append row-coords (get_row (rest lst) x)))]\n       [else\n        (let*\
+    \ ([row-coords (map (lambda (y) (cons 1 y)) (get_row (rest lst) x))])\n      \
+    \    (append row-coords (get_row (rest lst) x)))])])\n  )\n</code>\nThank you\
+    \ very much for your attention!\n\n\nA:\n\nI think the key to making this (and\
+    \ many other recursive functions) easier to write is to define helper functions\
+    \ that carry around additional state.\n<code>(define (get-row/helper lst x current-row)\n\
+    \  (cond\n    [(empty? lst) empty]\n    [else\n     (let ([x-indices (find-all\
+    \ x (first lst))])\n       (map (lambda (y) (cons current-row y)) x-indices))]\n\
+    \    [else\n     (cons (get-row/helper (rest lst) x (+ current-row 1))\n     \
+    \      (get-row/helper (rest lst) x (+ current-row 1)))]))\n", "  (define (finder\
+    \ x lst rows cols)\n    (cond [(null? lst) (reverse (map (lambda (i) (list i (reverse\
+    \ cols))) rows))]\n          [(member x (car lst)) (finder x (cdr lst) (cons (add1\
+    \ (car rows)) rows) (cons (length (car lst)) cols))]\n          [else (finder\
+    \ x (cdr lst) (cons (car rows) rows) (cons 0 cols))]))\n  (define (sort_list tuples)\n\
+    \    (define (merge-tuples a b)\n      (cond [(null? a) b]\n            [(null?\
+    \ b) a]\n            [(< (car (car a)) (car (car b))) (cons (car a) (merge-tuples\
+    \ (cdr a) b))]\n            [else (cons (car b) (merge-tuples a (cdr b)))]))\n\
+    \    (define (sort-merge lst)\n      (cond [(null? lst) '()]\n            [(null?\
+    \ (cdr lst)) (car lst)]\n            [else (merge-tuples (sort-merge (list (car\
+    \ lst) (cadr lst))) (sort-merge (cddr lst)))]))\n    (define (sort-reverse lst)\n\
+    \      (cond [(null? lst) '()]\n            [(= (length (car lst)) 1) (cons (car\
+    \ lst) (sort-reverse (cdr lst)))]\n            [else (cons (reverse (car lst))\
+    \ (sort-reverse (cdr lst)))]))\n    (sort-reverse (sort-merge tuples)))\n  (sort_list\
+    \ (finder x lst (list 0) (list 0))))\n", "  (if (empty? lst)\n      '()\n    \
+    \  (if (empty? (first lst))\n          (get_row (rest lst) x)\n          (append\
+    \ (flatmap (\u03BB (y) (if (= x (first y)) (list (list (length lst) (length (first\
+    \ lst)))) '())) (rest lst))\n                  (get_row (rest lst) x)))))\n",
+  "  (define (empty? lst)\n    (or (null? lst)\n        (and (pair? lst)\n       \
+    \      (null? (car lst)))))\n  (define (get_row' lst x row)\n    (cond\n     \
+    \ [(empty? lst) '()]\n      [(null? (car lst)) (get_row' (cdr lst) x (+ row 1))]\n\
+    \      [(= x (car lst)) (cons (list row 0) (get_row' (cdr lst) x row))]\n    \
+    \  [else (cons (get_row' (cdr lst) x row) (get_row' (cdr lst) x row))]))\n  (define\
+    \ (add_coordinates lst row)\n    (cond\n      [(empty? lst) '()]\n      [(pair?\
+    \ (car lst)) (cons (cons row (car lst)) (add_coordinates (cdr lst) row))]\n  \
+    \    [else (add_coordinates (cdr lst) (+ row 1))]))\n  (define (sort_by_columns\
+    \ lst)\n    (cond\n      [(empty? lst) '()]\n      [(pair? (car lst)) (cons (sort-by\
+    \ (cdr (car lst)) >) (sort_by_columns (cdr lst)))]\n      [else (sort_by_columns\
+    \ (cdr lst))]))\n  (sort_by_columns (add_coordinates (get_row' lst x 0) 0)))\n\
+    </code>\nSo I have a separate function to check if a list is empty, and another\
+    \ to add the row and coordinate together. But I'm trying to figure out why I can't\
+    \ just do the following:\n<code>(define (get_row lst x)\n  (define (get_row' lst\
+    \ x row)\n    (cond\n      [(empty? lst) '()]\n      [(null? (car lst)) (get_row'\
+    \ (cdr lst) x (+ row 1))]\n      [(= x (car lst)) (cons (list row 0) (get_row'\
+    \ (cdr lst) x row))]\n      [else", "    (append-map (lambda (row_index row)\n\
+    \                 (let ((col_indexes (map (lambda (column_index) (list column_index\
+    \ row_index))\n                                         (position x row))))\n\
+    \                   (sort col_indexes (lambda (col_index1 col_index2)\n      \
+    \                                 (let ((r1 (cadr col_index1))\n             \
+    \                                (r2 (cadr col_index2))\n                    \
+    \                         (c1 (car col_index1))\n                            \
+    \                 (c2 (car col_index2)))\n                                   \
+    \      (cond ((= r1 r2) (> c1 c2))\n                                         \
+    \      ((> r1 r2) #t)\n                                               (#t #f)))))))\n\
+    \                 (enumerate lst)))", "  (map (lambda (row col) (list col row))\n\
+    \       (for/list ([row (in-list lst)]\n                  [col (in-list row)])\n\
+    \         (if (= col x) col #f))\n       (iota (length lst))))\n</code>\nIt seems\
+    \ that this version passes all the tests. The only issue is that it returns empty\
+    \ list <code>()</code> instead of empty list <code>'()</code> and I don't know\
+    \ how to fix that.\n", "  (define (get_row_helper lst y)\n    (cond [(empty? lst)\
+    \ empty]\n          [(member x (first lst))\n           (cons (cons y (index-of\
+    \ (first lst) x))\n                 (get_row_helper (rest lst) (+ y 1)))]\n  \
+    \        [else (get_row_helper (rest lst) (+ y 1))]))\n  (get_row_helper lst 0))\n\
+    </code>\nRacket is an interesting language to use, but I'm still learning the\
+    \ language and some of its idioms.\n\n\nA:\n\nThe first thing that caught my eye\
+    \ was your use of <code>index-of</code>. <code>index-of</code> is a linear operation,\
+    \ and you could have done much better than that here.\nYour <code>get_row_helper</code>\
+    \ procedure has a double loop: it iterates over the list and within that it iterates\
+    \ over a single element to find <code>x</code>. In fact, you don't need to do\
+    \ that inner iteration at all.\nThe easiest way to see this is to imagine the\
+    \ case where <code>x</code> isn't present in the list at all. In that case, the\
+    \ result will just be the empty list.\nThis is what we want to achieve, but we're\
+    \ currently working in the wrong direction. Instead of going from the data structure\
+    \ to the result, we should be going from the result to the data structure. Let's\
+    \ look at how we would achieve that for a single nested list (which is the basic\
+    \ building block of the data structure):\n<code>(define (get-row-helper lst x\
+    \ y)\n  (if (empty? lst)\n      empty\n      (let ((is-found (member x (first\
+    \ lst))))\n        (if is-found\n            (cons (cons y (index-of (first lst)\
+    \ x))\n                  (get-row-helper (rest lst) x (+ y 1)))\n            (get-row-helper\
+    \ (rest lst) x (+ y 1))))))\n</code>\n<code>if</code> expressions use lazy evaluation:\
+    \ if the condition is false, then the result of the <code>else</code> branch will\
+    \ never be evaluated. This means that", "  (sort (for/list ([row (in-list lst)]\n\
+    \                   [i (in-range (length row))]\n                   #:when (eq?\
+    \ x (list-ref row i)))\n         (list (list-index row x) i))\n        (\u03BB\
+    \ (a b) (or (and (eq? (car a) (car b))\n                          (lt? (cadr b)\
+    \ (cadr a)))\n                     (lt? (car a) (car b))))))\n", "  (let loop\
+    \ ([i 0] [x-coords '()])\n    (if (empty? lst)\n        (sort x-coords (\u03BB\
+    \ (a b) (cond [(< (car a) (car b)) #t]\n                                     \
+    \  [(> (car a) (car b)) #f]\n                                       [(< (cdr a)\
+    \ (cdr b)) #f]\n                                       [(> (cdr a) (cdr b)) #t])))\n\
+    \        (loop (add1 i)\n              (append (map (\u03BB (y) (cons i y))\n\
+    \                           (filter (\u03BB (z) (= z x)) (car lst)))\n       \
+    \               x-coords)))))\n", "  (foldl (lambda (lst x) (for/list ([coord\
+    \ (in-list lst)]\n                                    #:when (equal? x (car coord)))\n\
+    \                           coord))\n         empty\n         lst))\n", "  (cond\
+    \ ((null? lst) '())\n        ((equal? x (car (car lst)))\n         (append\n \
+    \         (list (list (length lst) (length (car lst))))\n          (get_row (cdr\
+    \ lst) x)))\n        (else (get_row (cdr lst) x))))\n\n", "  (cond\n    [(null?\
+    \ lst) '()]\n    [(null? (car lst)) (get_row (cdr lst) x)]\n    [(list? (car lst))\n\
+    \     (append (get_row (car lst) x) (get_row (cdr lst) x))]\n    [(equal? (car\
+    \ lst) x)\n     (cons (list 0 (length (reverse (car lst)))) (get_row (cdr lst)\
+    \ x))]\n    [else (get_row (cdr lst) x)]))\n", "  (define (count-occurances row)\n\
+    \    (define (count-helper index)\n      (cond\n        [(equal? (length row)\
+    \ index) 0]\n        [(equal? (list-ref row index) x) (+ 1 (count-helper (+ index\
+    \ 1)))]\n        [else (count-helper (+ index 1))]))\n    (count-helper 0))\n\
+    \  (define (generate-index-list index)\n    (cond\n      [(equal? (length lst)\
+    \ index) '()]\n      [else (append (generate-index-list (+ index 1)) (for/list\
+    \ ([i (in-range (count-occurances (list-ref lst index)))]) (list index i)))]))\n\
+    \  (for/list ([i (in-list (generate-index-list 0))]) (list (list-ref i 0) (list-ref\
+    \ i 1))))\n</code>\nHow can I improve the performance of this code? There is a\
+    \ catch though, I'm not allowed to use the append procedure from the standard\
+    \ library, nor the reverse procedure.\n\n\nA:\n\nLet's start by reordering the\
+    \ elements inside the <code>for/list</code> loop:\n<code>(for/list ([i (in-list\
+    \ (generate-index-list 0))])\n  (list (list-ref i 0) (list-ref i 1)))\n</code>\n\
+    In each iteration of the loop <code>i</code> is a pair of the form <code>(x y)</code>,\
+    \ so we can use the <code>rest</code> and <code>first</code> procedures to extract\
+    \ the individual values (which are <code>x</code> and <code>y</code> respectively).\
+    \ In other words, we want:\n<code>(for/list ([i (in-list (generate-index-list\
+    \ 0))])\n  (list (first i) (rest i)))\n</code>\nThe <code>generate-index-list</code>\
+    \ function has the following structure:\n<code>(define (generate-index-list index)\n\
+    \  (cond\n    [(equal? (length lst) index) '()]\n    [else (append (generate-index-list\
+    \ (+ index 1))\n                  (", "  (sort (map (lambda (row i)\n        \
+    \       (if (member x row)\n                   (map (lambda (x_i) (list i (sub1\
+    \ (list-index x_i row))))\n                        (filter (lambda (el) (= el\
+    \ x)) row))\n                   '()))\n             lst\n             (build-list\
+    \ (length lst) add1))\n        (lambda (a b)\n          (cond ((= (car a) (car\
+    \ b))\n                 (cond ((< (cadr a) (cadr b)) -1)\n                   \
+    \    ((> (cadr a) (cadr b)) 1)\n                       (else 0)))\n          \
+    \      ((< (car a) (car b)) -1)\n                ((> (car a) (car b)) 1)\n   \
+    \             (else 0)))))", "  (sort (for/list ([x lst]\n                   [y\
+    \ (in-naturals)])\n         (for/list ([z (in-naturals)])\n           (cons y\
+    \ z)))\n        (\u03BB (a b) (if (< (car a) (car b)) #t #f))))\n```\n\n### \u0423\
+    \u043F\u0440\u0430\u0436\u043D\u0435\u043D\u0438\u0435 4: \u0421\u0443\u043C\u0438\
+    \u0440\u0430\u043D\u0435 \u043D\u0430 \u0432\u0441\u0438\u0447\u043A\u0438 \u0435\
+    \u043B\u0435\u043C\u0435\u043D\u0442\u0438 \u043D\u0430 \u0434\u0430\u0434\u0435\
+    \u043D \u0441\u043F\u0438\u0441\u044A\u043A\n\n\u041D\u0430\u043F\u0438\u0448\u0435\
+    \u0442\u0435 \u0444\u0443\u043D\u043A\u0446\u0438\u044F sum, \u043A\u043E\u044F\
+    \u0442\u043E \u043F\u0440\u0438\u0435\u043C\u0430 \u0441\u043F\u0438\u0441\u044A\
+    \u043A \u043E\u0442 \u0447\u0438\u0441\u043B\u0430 \u0438 \u0432\u0440\u044A\u0449\
+    \u0430 \u043A\u0430\u0442\u043E \u0440\u0435\u0437\u0443\u043B\u0442\u0430\u0442\
+    \n\u0441\u0443\u043C\u0430\u0442\u0430 \u043D\u0430 \u0432\u0441\u0438\u0447\u043A\
+    \u0438 \u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0438 \u043D\u0430 \u0441\u043F\
+    \u0438\u0441\u044A\u043A\u0430.\n\n```scheme\n#lang racket\n", "  (let loop ([lst\
+    \ lst] [row 0] [col 0] [res '()])\n    (if (null? lst)\n        (sort res (lambda\
+    \ (a b) (if (= (car a) (car b))\n                                    (< (cadr\
+    \ b) (cadr a))\n                                    (< (car a) (car b)))))\n \
+    \       (if (null? (car lst))\n            (loop (cdr lst) (+ row 1) 0 res)\n\
+    \            (if (= x (car (car lst)))\n                (loop (cdr lst) row (+\
+    \ col 1) (cons (list row col) res))\n                (loop (cdr lst) row (+ col\
+    \ 1) res))))))\n", "  (for/list ([row (in-list lst)]\n             [col (in-list\
+    \ (for/list ([e (in-list row)]\n                                      #:when (equal?\
+    \ e x))\n                            (count (in-list row) e)))])\n    (list row\
+    \ col)))\n</code>\n", "  (let ((filtered (filter (lambda (row) (member x row))\
+    \ lst)))\n    (for/list ([row filtered]\n               #:when (positions x row))\n\
+    \      (list (index-of filtered row) (index-of row (positions x row))))))\n",
+  "  (filter\n   (lambda (xy) (= x (list-ref (list-ref lst (car xy)) (cdr xy))))\n\
+    \   (flatmap (lambda (row i) (map (lambda (e j) (cons i j)) row (range (length\
+    \ row)))) lst (range (length lst)))))\n", "  (sort (list->set (list-indexes lst\
+    \ x)) (lambda (a b)\n                                          (< (car a) (car\
+    \ b)))))\n", "  (map (curry list (compose -1 add1))\n       (sort (map first (filter\
+    \ (lambda (v) (and (pair? v) (equal? x (second v))))\n                       \
+    \         (flatten (map (\u03BB (y) (map (curry list y) y)) lst))))\n        \
+    \     <)\n       (map (\u03BB (y) (map (curry list y) y)) lst))))\n", "  (if (not\
+    \ (empty? lst))\n      (if (not (empty? (car lst)))\n          (let ([row (get_row\
+    \ lst x)]\n                [col (get_col (car lst) x)])\n            (if (not\
+    \ (empty? col))\n                (let ([tup (get_tup col (car lst))])\n      \
+    \            (if (not (empty? tup))\n                      (cons (cons 0 tup)\
+    \ row)\n                      row))\n                row))\n          (get_row\
+    \ (cdr lst) x))\n      '()))", "  (sort (filter (\u03BB (row-coord)\n        \
+    \          (filter (\u03BB (x-coord)\n                            (= x (second\
+    \ x-coord)))\n                          (get-x-coordinates row-coord)))\n    \
+    \            (get-row-coordinates lst))\n        (\u03BB (x y)\n          (cond\
+    \ [(= (first x) (first y))\n                 (< (second x) (second y))]\n    \
+    \            [else\n                 (< (first x) (first y))]))))\n", "  (map\
+    \ (lambda (l)\n         (if (member x l)\n             (append (list (list (car\
+    \ l) (rindex x (cdr l)))) '())\n             '()))\n       lst))\n", "  (for/list\
+    \ ([pair (in-nested-list lst)]\n             #:when (equal? x (car pair)))\n \
+    \   (cons (car pair) (cdr pair))))\n", "  (define (get_row_helper lsst x res)\n\
+    \    (if (null? lsst)\n        res\n        (if (memq x (car lsst))\n        \
+    \    (get_row_helper (cdr lsst) x (append res (append (list (list (length res)\
+    \ (- (length (car lsst)) (length (member x (car lsst)))))) (get_row_helper (car\
+    \ lsst) x (list)))))\n            (get_row_helper (cdr lsst) x (append res (get_row_helper\
+    \ (car lsst) x (list)))))))\n  (sort (sort (get_row_helper lst x (list)) #:key\
+    \ cadr #:reverse? #t) #:key car))", "  (apply append (map (compose (list) (filter\
+    \ (lambda (y) (= y x)))\n                              (map (lambda (ys) (map\
+    \ vector (repeat ys)))\n                                   (map list (enumerate\
+    \ (map length lst))))))\n                     (enumerate lst))))\n", "  (define\
+    \ (loop lst row col x)\n    (cond [(empty? lst) '()]\n          [(empty? (first\
+    \ lst)) (loop (rest lst) (+ row 1) 0 x)]\n          [(= x (first (first lst)))\n\
+    \           (append (list (list row col))\n                   (loop (rest lst)\
+    \ row (+ col 1) x))]\n          [else (loop (rest lst) row (+ col 1) x)]))\n \
+    \ (reverse (loop lst 0 0 x)))\n", "  (define (row-num row-lst)\n    (map (lambda\
+    \ (lst) (list (list (car lst) (cadr lst))\n                             (list\
+    \ (cadr lst) (car lst))))\n         (filter (lambda (lst) (= (cadr lst) x)) (map\
+    \ (lambda (x) (list (car row-lst) x)) row-lst))))\n  (define (flatten-all lst)\n\
+    \    (filter (lambda (x) (not (list? x)))\n            (apply append (map (lambda\
+    \ (x) (if (list? x) (flatten-all x) x)) lst))))\n  (define (sort-by-first-then-second\
+    \ lst)\n    (sort lst (lambda (x y) (< (car x) (car y)))))\n  (sort-by-first-then-second\
+    \ (flatten-all (map row-num lst))))\n</code>\nI read some manuals for racket,\
+    \ but couldn't find anything about sorting tuples by two criteria.\nSo, maybe\
+    \ I'm solving this the wrong way.\nIs there a better way for solving this problem?\n\
+    Edit:\nUsing <code>vector-sort</code> does not solve the problem.\nFor example:\n\
+    <code>(get_row '((1 1 2) (1 2 3)) 1) == '((0 0) (0 1) (1 0))\n</code>\nshould\
+    \ be:\n<code>(get_row '((1 1 2) (1 2 3)) 1) == '((0 1) (0 0) (1 0))\n</code>\n\
+    \n\nA:\n\n<code>;; get_row: (Listof (Listof X)) X -&gt; (Listof (List X X))",
+  "  (define (loop lst res)\n    (if (empty? lst)\n        res\n        (loop (rest\
+    \ lst)\n              (let ([item (first lst)])\n                (if (empty? item)\n\
+    \                    res\n                    (let ([num (count item x)])\n  \
+    \                    (if (= num 0)\n                          res\n          \
+    \                (append res (map (lambda (i) (list i (count item i))) (iota (length\
+    \ item)))))))))))\n  (filter (lambda (lst) (zero? (count lst x))) (map (lambda\
+    \ (lst) (map (lambda (i) (if (= i x) 0 i)) lst)) lst)))\n", "  (define (index\
+    \ a x lst)\n    (if (and (not (null? lst)) (not (null? (car lst))))\n        (if\
+    \ (= x (car (car lst)))\n            (cons (cons a 0) (index (+ a 1) x (cdr lst)))\n\
+    \            (index (+ a 1) x (cdr lst)))\n        '()))\n  (define (reverse lst)\n\
+    \    (if (null? lst)\n        '()\n        (append (reverse (cdr lst)) (list (car\
+    \ lst)))))\n  (define (sort_by_columns lst a)\n    (if (null? lst)\n        '()\n\
+    \        (append (sort_by_columns (cdr lst) (+ a 1)) (list (cons (car (car lst))\
+    \ a)))))\n  (define (sort_by_rows lst)\n    (if (null? lst)\n        '()\n   \
+    \     (append (sort_by_rows (cdr lst)) (list (car lst)))))\n  (if (null? lst)\n\
+    \      '()\n      (reverse (sort_by_rows (reverse (index 0 x lst))))))", "  (define\
+    \ (find_in_list lst)\n    (letrec ([find (lambda (idx)\n                     (cond\
+    \ [(eq? idx (length lst)) (values '() '())]\n                           [(eq?\
+    \ (list-ref lst idx) x) (values (list idx) (find (+ idx 1)))]\n              \
+    \             [else (find (+ idx 1))]))])\n      (find 0)))\n  (define (get_idx\
+    \ lst)\n    (letrec ([find (lambda (idx)\n                     (cond [(eq? idx\
+    \ (length lst)) (values '())]\n                           [(eq? (list-ref lst\
+    \ idx) x) (values (list idx) (find (+ idx 1)))]\n                           [else\
+    \ (find (+ idx 1))]))])\n      (find 0)))\n  (letrec ([iterate (lambda (idx)\n\
+    \                      (cond [(eq? idx (length lst)) (values '())]\n         \
+    \                   [else (let ([lst (list-ref lst idx)])\n                  \
+    \                  (define (to_tuple idx lst)\n                              \
+    \        (cond [(eq? idx (length lst)) (values '())]\n                       \
+    \                     [else (let ([lst (list-ref lst idx)])\n                \
+    \                                    (values (list (list idx lst)) (to_tuple (+\
+    \ idx 1) lst)))]))\n                                    (to_tuple 0 lst))]))])\n\
+    \    (iterate 0)))\n", "  (apply append\n         (map (\u03BB (row col x)\n \
+    \               (map (\u03BB (col) (list col row))\n                     (filter\
+    \ (\u03BB (col) (= x col)) col)))\n              (range (length lst))\n      \
+    \        lst\n              (repeat x))))\n", "  (define (cord-from-cell cell\
+    \ y)\n    (cond [(empty? cell) empty]\n          [(equal? (first cell) x) (cons\
+    \ (list y x) (cord-from-cell (rest cell) (+ y 1)))]\n          [else (cord-from-cell\
+    \ (rest cell) (+ y 1))]))\n  (define (cord-from-row row)\n    (cord-from-cell\
+    \ row 0))\n  (sort (sort (map cord-from-row lst) (\u03BB (a b) (< (car a) (car\
+    \ b)))) (\u03BB (a b) (> (cadr a) (cadr b)))))\n", "  (define (get-row-indexed\
+    \ lst x)\n    (for/list ([r (in-list lst)]\n               [c (in-list r)]\n \
+    \              #:when (equal? c x))\n      (list r c)))\n  (sort (get-row-indexed\
+    \ lst x)\n        (lambda (l1 l2)\n          (let* ([r1 (first l1)]\n        \
+    \         [c1 (second l1)]\n                 [r2 (first l2)]\n               \
+    \  [c2 (second l2)])\n            (or (and (not (equal? r1 r2))\n            \
+    \         (< r1 r2))\n                (and (equal? r1 r2)\n                  \
+    \   (> c1 c2)))))))\n", "  (apply append\n         (map (lambda (row)\n      \
+    \          (let loop ((row row)\n                           (col 0)\n        \
+    \                   (res '()))\n                  (cond ((null? row) res)\n  \
+    \                      ((equal? x (car row))\n                         (loop (cdr\
+    \ row) (+ col 1) (cons (list col (- (length row) col)) res)))\n              \
+    \          (else (loop (cdr row) (+ col 1) res)))))\n              lst)))\n",
+  "  (define (get-elem lst x res acc)\n    (if (null? lst)\n        res\n        (if\
+    \ (empty? (car lst))\n            (get-elem (cdr lst) x res (add1 acc))\n    \
+    \        (define new-res (get-elem-row (car lst) x res acc))\n            (get-elem\
+    \ (cdr lst) x new-res (add1 acc)))))\n  (define (get-elem-row lst x res acc)\n\
+    \    (if (null? lst)\n        res\n        (define new-res (if (= (car lst) x)\n\
+    \                            (cons (list acc (- (length lst) 1)) res)\n      \
+    \                      res))\n        (get-elem-row (cdr lst) x new-res acc)))\n\
+    \  (sort (get-elem lst x '()) 0))\n</code>\nI know it's not very elegant, but\
+    \ for beginner it is really hard.\n\n\nA:\n\nDon't use recursion for the first\
+    \ iteration\n<code>(define (get-elem lst x res acc)\n  (for/list ([row lst]\n\
+    \             [i (in-naturals)])\n    (get-elem-row row x res i)))\n</code>\n\
+    Sort the result\n<code>(sort (get-elem lst x '()) #:key car)\n</code>\nSort the\
+    \ secondary result\n<code>(define (get-elem-row lst x res acc)\n  (sort (for/list\
+    \ ([el (in-list lst)]\n                   [j (in-naturals)])\n         (if (=\
+    \ el x)\n             (list acc (- (length lst) j 1))\n             '()))\n  \
+    \      #:key cadr))\n</code>\n", "  (if (null? lst)\n      (list)\n      (append\
+    \ (filter (lambda (lst) (member x lst)) (seq-index lst)) (get_row (cdr lst) x))))\n",
+  "  (define helper\n    (lambda (lst x row col acc)\n      (if (null? lst)\n    \
+    \      acc\n          (cond\n            [(null? (car lst))\n             (helper\
+    \ (cdr lst) x (+ row 1) col acc)]\n            [(= x (car (car lst)))\n      \
+    \       (let ([new-acc (cons (list row col) acc)])\n               (if (null?\
+    \ (cdr (car lst)))\n                   (helper (cdr lst) x (+ row 1) col new-acc)\n\
+    \                   (helper (cdr lst) x row (+ col 1) new-acc)))]\n          \
+    \  [else\n             (helper (cdr lst) x row (+ col 1) acc)]))))\n  (sort (helper\
+    \ lst x 0 0 '())\n        (lambda (a b)\n          (cond\n            [(< (car\
+    \ a) (car b)) #t]\n            [(> (car a) (car b)) #f]\n            [(> (cadr\
+    \ a) (cadr b)) #t]\n            [(< (cadr a) (cadr b)) #f]\n            [else\
+    \ #f]))))\n", "  (if (null? lst)\n      '()\n      (if (eq? (length (car lst))\
+    \ 0)\n          (get_row (cdr lst) x)\n          (if (eq? (car (car lst)) x)\n\
+    \              (append (list (cons (length lst) (length (car lst)))) (get_row\
+    \ (cdr lst) x))\n              (get_row (cdr lst) x)))))\n</code>\nI am getting\
+    \ the following error:\n<code>car: expects argument of type &lt;pair&gt;; given\
+    \ (0 . 0)\n</code>\nThe coordinates are returned in the wrong format, I should\
+    \ be getting a list of pairs, not a list of single numbers.\n<code>(get_row '((1\
+    \ 2 3 4 5 6) (1 2 3 4 1 6) (1 2 3 4 5 1)) 1)\n'(0 0 1 4 1 0 2 5 2 0)\n</code>\n\
+    I have also tried <code>(list (cons (length lst) (length (car lst))))</code> and\
+    \ <code>(list (cons (length lst) (car (car lst))))</code> to no avail.\n\n\nA:\n\
+    \nI have found the solution:\n<code>#lang racket\n", "  (for/list ([row (in-list\
+    \ lst)]\n             [col (in-naturals)])\n    (if (eq? x (list-ref row col))\n\
+    \        (list row col))))\n", "  (define (find x lst)\n    (match lst\n     \
+    \ ((list . _) (void))\n      ((list x . xs) (cons 0 (find x xs)))\n      ((list\
+    \ xs . xss) (map (lambda (x) (+ 1 x)) (find x xs)))))\n  (define (lst_len xs)\n\
+    \    (match xs\n      ((list . _) 0)\n      ((list _ . xs) (+ 1 (lst_len xs)))))\n\
+    \  (define (find_row x lst)\n    (match lst\n      ((list . _) (void))\n     \
+    \ ((list xs . xss) (match (find x xs)\n                              ((list .\
+    \ _) (find_row x xss))\n                              ((list ys . yss) (cons (cons\
+    \ (lst_len lst) ys) (find_row x xss))))))\n  (define (sort_row lst)\n    (sort\
+    \ (lambda (x y)\n            (match (x y)\n              ((list . _) #f)\n   \
+    \           ((list x . _) #t)\n              ((list _ . y) #f)))\n          lst))\n\
+    \  (match lst\n    ((list . _) (void))\n    ((list _ . _) (sort_row (find_row\
+    \ x lst)))))\n</code>\nThis code works well, but it is too slow.\n\n\nA:\n\nThe\
+    \ first thing to change is to stop using recursive process. What you do is basically\
+    \ rewrite loops as recursive processes, which is not a good thing.\n<code>(define\
+    \ (get_row lst x)\n  (define (find x lst)\n    (match lst\n      ((list . _) (void))\n\
+    \      ((list x . xs) (cons 0 (find x xs)))\n      ((list xs . xss) (map (lambda\
+    \ (x) (+ 1 x)) (find x xs)))))\n  (define (lst_len xs)\n    (match xs\n      ((list\
+    \ . _) 0)\n      ((list _ . xs) (+ 1 (lst_len xs)))))\n  (define (find_row x",
+  "  (match lst\n    [(cons (cons (? equal? x) r) rs)\n     (append (map (lambda (c)\
+    \ (list 0 c)) (range (length r) -1 0))\n             (get_row rs x 1))]\n    [(cons\
+    \ r rs) (get_row rs x (+ 1 (length r)))]\n    [_ '()]))\n", "  (apply append\n\
+    \         (map (\u03BB (row)\n                (map (\u03BB (y) (cons y row))\n\
+    \                     (filter (\u03BB (y) (= x y)) row)))\n              lst)))\n",
+  "  (map (\u03BB (row i)\n         (map (\u03BB (e j)\n                (if (= e x)\n\
+    \                    (list i j)\n                    '()))\n              row\n\
+    \              (range (length row))))\n       lst\n       (range (length lst))))\n",
+  "  (define (helper lst-of-lst x i acc)\n    (cond\n      [(null? lst-of-lst) (reverse\
+    \ acc)]\n      [(pos? (position x (car lst-of-lst)))\n       (helper (cdr lst-of-lst)\
+    \ x (+ i 1)\n               (append acc (list (list i (position x (car lst-of-lst))))))]\n\
+    \      [else (helper (cdr lst-of-lst) x (+ i 1) acc)]))\n  (define (sort-by-columns\
+    \ lst)\n    (cond\n      [(null? lst) (list)]\n      [(= (length lst) 1) lst]\n\
+    \      [else (cond\n              [(> (cadr (car lst)) (cadr (cadr lst)))\n  \
+    \             (cons (car lst) (sort-by-columns (cdr lst)))]\n              [else\
+    \ (cons (cadr lst) (cons (car lst) (cddr lst)))])]))\n  (cond\n    [(null? lst)\
+    \ (list)]\n    [(pos? (position x (car lst)))\n     (sort-by-columns (helper lst\
+    \ x 0 (list (list 0 (position x (car lst))))))]\n    [else (sort-by-columns (helper\
+    \ lst x 0 (list)))]))\n", "  (for/list ([row (in-list lst)]\n             [col\
+    \ (in-index (length row))])\n    (cond [(= x (list-ref row col)) (list row col)])))\n\
+    </code>\nBut i think this is not good solution, please advise is there better\
+    \ way to solve this task\n\n\nA:\n\nI suggest using <code>filter</code> with a\
+    \ predicate, it's more efficient. This is what I came up with, it might be improved:\n\
+    <code>(define (get-row lst x)\n  (sort\n   (filter (\u03BB (row-col)\n       \
+    \      (equal? x (cadr row-col)))\n           (for/list ([row (in-list lst)]\n\
+    \                      [col (in-index (length row))])\n             (list row\
+    \ col)))\n   (\u03BB (p1 p2)\n     (cond\n       [(not (equal? (car p1) (car p2)))\n\
+    \        (&lt; (car p1) (car p2))]\n       [else\n        (&gt; (cadr p1) (cadr\
+    \ p2))]))))\n</code>\nLet's test it with the sample input:\n<code>(get-row '((1\
+    \ 2 3 4 5 6)\n           (1 2 3 4 1 6)\n           (1 2 3 4 5 1))\n         1)\n\
+    =&gt; '((0 0) (1 4) (1 0) (2 5) (2 0))\n</code>\nIt's possible to make it shorter\
+    \ and more readable by using the built-in <code>member-index</code> procedure:\n\
+    <code>(define (get-row lst x)\n  (sort\n   (filter (\u03BB (row-col)\n       \
+    \      (member-index x (car row-col)))\n           (for/list ([row (in-list lst)]\n\
+    \                      [col (in-index (length row))])\n             (list row\
+    \ col)))\n   (\u03BB (p1 p2)\n     (cond\n       [(not (equal? (car p1) (car p2)))\n\
+    \        (&lt; (car p1) (car p2))]\n       [else\n        (&gt; (cadr p1) (cadr\
+    \ p2))", "  (sort (map (lambda (x y) (list y x)) (flatten lst) (range))\n    \
+    \    (\u03BB (x y) (< (first x) (first y)))))\n", "    (match lst\n      [(cons\
+    \ first rest)\n       (if (not (empty? (flatten first)))\n           (append (get_row\
+    \ first x) (get_row rest x))\n           (get_row rest x))]\n      [(list) '()]))\n",
+  "  (sort (get-all-coordinates lst x) #:key (lambda (coord) (list (car coord) (-\
+    \ 0 (cdr coord)))))\n  )\n", "  (cond\n    [(empty? lst) '()]\n    [(empty? (car\
+    \ lst)) (get_row (cdr lst) x)]\n    [(get_row_row (car lst) x 0)]\n    [else (append\
+    \ (get_row_row (car lst) x 0) (get_row (cdr lst) x))]))\n", "  (cond [(empty?\
+    \ lst)\n         empty]\n        [(empty? (cdr lst))\n         (get_row_helper\
+    \ (car lst) 0 0 x)]\n        [else\n         (append (get_row_helper (car lst)\
+    \ 0 0 x)\n                 (get_row (cdr lst) x))]))\n", "  (for/list ([row (in-naturals)]\n\
+    \             [cell (in-list (list-ref lst row))])\n    (cond\n      [(equal?\
+    \ cell x) (list row (list-index (list-ref lst row) x))])))\n", "  (sort (for*/list\
+    \ ([xl (in-list lst)])\n          (for*/list ([(y . row) (in-indexed xl)])\n \
+    \           (when (memq x row)\n              (list y (position x row))\n    \
+    \          )))\n        <))\n", "  (cond [(empty? lst) '()]\n        [else (sort\
+    \ (append (map (lambda (y)\n                                   (cons (add1 (list-ref\
+    \ (reverse (get-keys lst)) y))\n                                         (list-ref\
+    \ lst y)))\n                                 (get-vals (filter (lambda (z) (equal?\
+    \ x (list-ref z 0)))\n                                                   (filter\
+    \ (lambda (y) (not (empty? y)))\n                                            \
+    \               (map (lambda (x) (list-ref x 1))\n                           \
+    \                                     (map (lambda (x) (index-where (lambda (y)\
+    \ (equal? x y)) x))\n                                                        \
+    \             lst))))))\n                               (map (lambda (y)\n   \
+    \                                   (cons (add1 (list-ref (reverse (get-keys lst))\
+    \ y))\n                                            (list-ref lst y)))\n      \
+    \                              (get-vals (filter (lambda (z) (equal? x (list-ref\
+    \ z 0)))\n                                                      (filter (lambda\
+    \ (y) (not (empty? y)))\n                                                    \
+    \          (map (lambda (x) (list-ref x 0))\n                                \
+    \                                   (map (lambda (x) (index-where (lambda (y)\
+    \ (equal? x y)) x))\n                                                        \
+    \                lst))))))\n                               (lambda (x y)\n   \
+    \                              (cond [(empty? x) '()]\n                      \
+    \                 [(and (not (empty? x)) (empty? y)) '()]\n                  \
+    \                     [(< (list-ref x 0) (list-ref y 0)) '()]\n              \
+    \                         [(> (list-ref x 0) (list-ref y 0)) '()]\n          \
+    \                             [(= (list-ref x 0) (list-ref y 0))\n           \
+    \                             (if (> (list-ref x 1) (list-ref y 1))\n        \
+    \                                    (append (list x) (list y))\n            \
+    \                                (append (list y) (list x)))])))]))\n", "  (for/list\
+    \ ([(row vals) (in-indexed lst)]\n             [col (in-index (range (length vals)))]\n\
+    \             #:when (eq? x (list-ref vals col)))\n    (list row col)))\n</code>\n\
+    Tests:\n<code>;; You should not rely on tests provided below,", "  (define (dfs\
+    \ lst)\n    (for/list ([curr (in-list lst)]\n               #:when (member x curr))\n\
+    \      (list (add1 (length (take (in-list lst) (index curr))))\n            (add1\
+    \ (length (take (in-list curr) (index x)))))))\n  (sort (dfs lst) (compose < string>)))",
+  "  (for/list ([y (in-naturals)]\n             [v (in-list lst)])\n    (for/list\
+    \ ([i (in-indexed v)])\n      (if (= (cdr i) x)\n          (cons y (car i))))))\n\
+    </code>\nand also tried this way:\n<code>#lang racket\n", "  (sort (filter (\u03BB\
+    \ (coord) (equal? x (cdr coord)))\n                (filter (\u03BB (coord) (not\
+    \ (equal? #f (cdr coord))))\n                        (for/list ([row (in-naturals)])\n\
+    \                          (for/list ([col (in-naturals)])\n                 \
+    \           (if (not (empty? (list-ref lst row)))\n                          \
+    \      (if (equal? x (list-ref (list-ref lst row) col))\n                    \
+    \                (cons row col)))))))\n        (\u03BB (x y) (or (and (equal?\
+    \ (car x) (car y)) (and (not (equal? (cdr x) (cdr y)))\n                     \
+    \                                    (> (cdr x) (cdr y))))\n                 \
+    \    (and (not (equal? (car x) (car y))) (< (car x) (car y)))))))\n</code>\nThe\
+    \ <code>filter</code> calls in the <code>sort</code> aren't working, so I'm not\
+    \ quite sure how to do it. Here is the error:\n<code>application: not a procedure;\n\
+    \ expected a procedure that can be applied to arguments\n  given: #&lt;void&gt;\n\
+    \  arguments...:\n   #&lt;void&gt;\n   (0 1)\n   #&lt;void&gt;\n   (0 2)\n   #&lt;void&gt;\n\
+    \   (0 3)\n   #&lt;void&gt;\n   (0 4)\n   #&lt;void&gt;\n   (0 5)\n   #&lt;void&gt;\n\
+    \   (1 0)\n   #&lt;void&gt;\n   (1 1)\n   #&lt;void&gt;\n   (1 2)\n   #&lt;void&gt;\n\
+    \   (1 3)\n   #&lt;void&gt;\n   (1 4)\n   #&lt;void&gt;\n   (1 5)\n   #&lt;void&gt;\n\
+    \   (2 0)\n   #&lt;void&gt;\n   (2 1)\n   #&lt;void&gt;\n   (2 2)\n  ", "  (cond\
+    \ [(empty? lst) empty]\n        [(find-x (first lst) x)\n         (cons (list\
+    \ (list-ref lst 0) (find-x (first lst) x))\n               (get_row (rest lst)\
+    \ x))]\n        [else (get_row (rest lst) x)]))\n", "  (define (find-max-col-in-row\
+    \ lst)\n    (cond [(null? lst) 0]\n          [else (max (length lst) (find-max-col-in-row\
+    \ (cdr lst)))]))\n  (define (find-x-in-row x lst)\n    (cond [(null? lst) (cons\
+    \ '() '())]\n          [(equal? x (car lst)) (cons (list (list x (add1 (car (cdr\
+    \ (cdr (cdr lst))))))) (find-x-in-row x (cdr lst)))]\n          [else (find-x-in-row\
+    \ x (cdr lst))]))\n  (define (find-x x lst)\n    (cond [(null? lst) (cons '()\
+    \ '())]\n          [else (append (find-x-in-row x (car lst)) (find-x x (cdr lst)))]))\n\
+    \  (define (find-x-in-lst x lst)\n    (cond [(null? lst) (cons '() '())]\n   \
+    \       [else (find-x x (car lst))]))\n  (find-x-in-lst x lst))\n</code>\nThis\
+    \ is what I have so far but I am not too sure if it works correctly as I can't\
+    \ test it. \nI am trying to find a way to make it more efficient. \nFor example,\
+    \ we are given a list of <code>lst</code> and then we are given a number <code>x</code>\
+    \ we want to find. \nHow can I make the code more efficient so that it would not\
+    \ have to loop through all the rows in <code>lst</code> and just access the rows\
+    \ that it needs?\n", "  (for/list ([nested-lst lst] #:when (member x nested-lst))\n\
+    \    (for/list ([n (in-nested nested-lst)] #:when (= n x))\n      (list (list-ref\
+    \ lst (sub1 (for/first ([i (in-nested lst)] #:when (= i n)) i)))\n           \
+    \ (sub1 (for/first ([j (in-nested lst)] #:when (= j n)) j))))))\n</code>\n", " \
+    \ (apply append (map (lambda (x y) (if (list-index (list x) y) (list (list x y))))\n\
+    \                     (range (length lst))\n                     lst)))", "  (if\
+    \ (empty? lst)\n      '()\n      (append (get_row (rest lst) x)\n            \
+    \  (filter (lambda (y) (equal? x y)) (first lst)))))\n", "  (sort (filter (lambda\
+    \ (x) (member x lst))\n                (for*/list ([(i j) (in-nested-list lst)])\n\
+    \                  (list i j)))\n        (lambda (l1 l2)\n          (or (and (equal?\
+    \ (car l1) (car l2))\n                   (not (equal? (cadr l1) (cadr l2))\n \
+    \                       (< (cadr l1) (cadr l2))))\n              (< (car l1) (car\
+    \ l2))))))\n", "  (cond\n    [(empty? lst) empty]\n    [else\n     (let ([coord\
+    \ (get-coordinates lst x 0)])\n       (if (empty? coord)\n           (get_row\
+    \ (rest lst) x)\n           (append coord (get_row (rest lst) x))))]))\n", " \
+    \ (sort (for*/list ([i (in-range (length lst))]\n                    [j (in-range\
+    \ (length (list-ref lst i)))])\n           (list i j))\n        (\u03BB (x y)\n\
+    \          (cond [(> (first (first x)) (first (first y))) #t]\n              \
+    \  [(< (first (first x)) (first (first y))) #f]\n                [(> (second (first\
+    \ x)) (second (first y))) #f]\n                [(< (second (first x)) (second\
+    \ (first y))) #t]))))\n", "  (for/list ([row lst]\n             #:when (member\
+    \ x row))\n    (list (list-ref lst row)\n          (for/list ([col row]\n    \
+    \                 #:when (= x col))\n            col))))\n", "  (if (null? lst)\n\
+    \      (list)\n      (let* ([row (car lst)]\n             [is-in (member x row)]\n\
+    \             [indices (find-all is-in row)]\n             [coords (map (lambda\
+    \ (i) (cons 0 i)) indices)])\n        (append coords (get_row (cdr lst) x)))))\n",
+  "  (for/list ([i (in-naturals)]\n             [row (in-list lst)])\n    (for/list\
+    \ ([j (in-naturals)]\n               [elem (in-list row)])\n      (when (= elem\
+    \ x)\n        (list i j)))))\n</code>\nThis function has a drawback, that it produces\
+    \ a lot of lists, even if there is nothing that matches, is there a way to not\
+    \ produce them?\n\n\nA:\n\nYou can use <code>filter</code> with a list of sublists:\n\
+    <code>(define (get_row list x)\n  (filter (lambda (e) (= x (car e)))\n       \
+    \   (filter not-empty?\n                  (for/list ([i (in-naturals)]\n     \
+    \                        [lst (in-list list)])\n                    (filter (lambda\
+    \ (e) (= x (car e)))\n                            (for/list ([j (in-naturals)]\n\
+    \                                       [elem (in-list lst)])\n              \
+    \                (list elem j)))))))\n</code>\n", "  (sort\n   (for/list ([r (in-naturals)]\n\
+    \              [c (in-list (lengths lst))]\n              [e (in-list (list-ref\
+    \ lst r))])\n     (when (= e x)\n       (list r c)))\n   (cut\n    < <>\n    (compose\
+    \ first first)\n    (compose first second))))\n```\n\n### 8.4 Generate all combinations\
+    \ in Python\n\n```#lang racket\n", "  (cond\n    [(empty? lst) '()]\n    [(empty?\
+    \ (car lst)) (get_row (cdr lst) x)]\n    [(member x (car lst))\n     (append (list\
+    \ (cons (length (car lst)) (list (car lst) x)))\n             (get_row (cdr lst)\
+    \ x))]\n    [else (get_row (cdr lst) x)]))\n", "  (let ([i -1])\n    (filter (lambda\
+    \ (e) (equal? x e))\n            (apply append\n                   (map (lambda\
+    \ (e)\n                          (set! i (+ i 1))\n                          (map\
+    \ (lambda (f) (cons i f)) e))\n                        lst)))))\n</code>\n", " \
+    \ (list-sort\n   (lambda (p1 p2)\n     (cond\n       [(> (cdr p1) (cdr p2)) #t]\n\
+    \       [(< (cdr p1) (cdr p2)) #f]\n       [(> (car p1) (car p2)) #t]\n      \
+    \ [(< (car p1) (car p2)) #f]\n       [else #f]))\n   (for/list\n    ([(l . i)\
+    \ (in-list lst)]\n     [e (in-list l)]\n     #:when (= e x))\n    (cons i l))))",
+  "  (for/list ([row (in-list lst)]\n             [column (in-range (length row))])\n\
+    \    (if (= x (list-ref row column))\n        (cons column row))))\n</code>\n\
+    This is my Racket code. I am wondering if I can improve it and improve my functional\
+    \ programming skills in general.\n\n\nA:\n\n<code>#lang racket\n", "  (define\
+    \ (loop lst coords)\n    (cond\n      [(empty? lst) (sort (sort-by second < coords)\
+    \ <)]\n      [(memq x (first lst)) (loop (rest lst) (append coords (map (lambda\
+    \ (y) (cons (first lst) y)) (find-all x (first lst)))))]\n      [else (loop (rest\
+    \ lst) coords)]))\n  (loop lst '()))", "  (sort (map (lambda (y lst) (map (lambda\
+    \ (z) (list y z)) (find-all x lst)))\n          (enumerate (append-map identity\
+    \ lst)))\n        (lambda (x y) (if (eq? (car x) (car y))\n                  \
+    \        (if (eq? (cadr x) (cadr y))\n                              #f\n     \
+    \                         (&gt; (cadr x) (cadr y)))\n                        \
+    \  (&lt; (car x) (car y))))))\n</code>\n", "  (sort\n   (map vector\n        (filter\
+    \ (lambda (y) (= x (vector-ref (vector-ref lst y) 0)))\n                (range\
+    \ (vector-length lst)))\n        (filter (lambda (y) (= x (vector-ref (vector-ref\
+    \ lst y) 0)))\n                (range (vector-length (vector-ref lst 0)))))\n\
+    \   (lambda (x y)\n     (cond\n       ((< (vector-ref x 0) (vector-ref y 0)) #t)\n\
+    \       ((> (vector-ref x 0) (vector-ref y 0)) #f)\n       ((> (vector-ref x 1)\
+    \ (vector-ref y 1)) #t)\n       ((< (vector-ref x 1) (vector-ref y 1)) #f)\n \
+    \      (#t #f)))))\n", "  (cond [(empty? lst) empty]\n        [(and (member x\
+    \ (first lst)) (get_row (rest lst) x))\n         (cons (cons (first lst) (rest\
+    \ lst)) (get_row (rest lst) x))]\n        [else (get_row (rest lst) x)]))", " \
+    \ (cond\n    [(null? lst) '()]\n    [(and (list? (car lst)) (null? (cdr lst)))\n\
+    \     (get_row (car lst) x)]\n    [(list? (car lst))\n     (append (get_row (car\
+    \ lst) x) (get_row (cdr lst) x))]\n    [(equal? (car lst) x)\n     (cons (list\
+    \ (car (cdr lst)) (car (cddr lst)))\n           (get_row (cdr lst) x))]\n    [else\
+    \ (get_row (cdr lst) x)]))\n</code>\nIn my attempt to make it work, I lost the\
+    \ ability to sort the results.\nI know sort by works, but the code I wrote is\
+    \ much too big and messy to provide here.\nI would appreciate some guidance.\n\
+    Thank you.\n\n\nA:\n\nThe problem is that <code>get_row</code> does not know the\
+    \ (row, column) position of the items. You need to provide that information too,\
+    \ but you can do that by providing an additional parameter.\n<code>(define (get_row\
+    \ lst x row column)\n  (cond\n    [(null? lst) '()]\n    [(and (list? (car lst))\
+    \ (null? (cdr lst)))\n     (get_row (car lst) x row column)]\n    [(list? (car\
+    \ lst))\n     (append (get_row (car lst) x row column)\n             (get_row\
+    \ (cdr lst) x (+ row 1) 0))]\n    [(equal? (car lst) x)\n     (cons (list row\
+    \ column)\n           (get_row (cdr lst) x row (+ column 1)))]\n    [else (get_row\
+    \ (cdr lst) x row (+ column 1))]))\n</code>\nNow you can sort by the first element\
+    \ in the list.\n<code>(sort (get_row lst 1 0 0) &lt;)\n</code>\n", "  (for/list\
+    \ ([row (in-list lst)]\n             [i (in-naturals)]\n             [j (in-naturals)])\n\
+    \    (and (member x row)\n         (cons i j))))\n", "  (define (compute-sub lst\
+    \ x)\n    (define (aux lst y)\n      (for/list ([i (in-list lst)]\n          \
+    \       #:when (eq? i x))\n        (list y i)))\n    (define (compute-sub-tuple\
+    \ lst x)\n      (map (\u03BB (y) (aux lst y)) (range (length lst))))\n    (flatten\
+    \ (compute-sub-tuple lst x)))\n  (sort (compute-sub lst x) (\u03BB (a b)\n   \
+    \                           (and (< (car a) (car b))\n                       \
+    \            (or (not (eq? (car a) (car b)))\n                               \
+    \        (> (cadr a) (cadr b)))))))\n", "  (sort\n   (for/list\n    ([line (in-list\
+    \ lst)]\n     [pos (in-naturals)])\n    (for/list\n     ([num (in-list line)]\n\
+    \      [col (in-naturals)])\n     (when (= num x)\n       (list pos col))))\n\
+    \   (lambda (x y)\n     (and\n      (zero? (car x))\n      (zero? (car y))\n \
+    \     (and (not (zero? (cadr x)))\n           (not (zero? (cadr y))))\n      (and\
+    \ (not (zero? (cadr x)))\n           (not (zero? (cadr y)))\n           (not (<\
+    \ (cadr x) (cadr y)))))))\n  (lambda (x y)\n    (or\n     (zero? (car x))\n  \
+    \   (zero? (car y))\n     (and (not (zero? (car x)))\n          (not (zero? (car\
+    \ y)))\n          (< (car x) (car y))))))", "  (define\n    (compare-lst a b)\n\
+    \      (cond\n        [(> (car a) (car b)) 1]\n        [(< (car a) (car b)) -1]\n\
+    \        [(= (car a) (car b)) 0]))\n  (define\n    (compare-row a b)\n      (cond\n\
+    \        [(< (cadr a) (cadr b)) 1]\n        [(> (cadr a) (cadr b)) -1]\n     \
+    \   [(= (cadr a) (cadr b)) 0]))\n  (define\n    (find-x lst-x x-value)\n     \
+    \ (cond\n        [(null? lst-x) '()]\n        [(= x-value (car lst-x)) (cons (car\
+    \ lst-x) (find-x (cdr lst-x) x-value))]\n        [else (find-x (cdr lst-x) x-value)]))\n\
+    \  (define\n    (mapping lst-x x-value row-count)\n      (if (null? lst-x)\n \
+    \       '()\n        (if (null? (car lst-x))\n          (cons (cons row-count\
+    \ 0) (mapping (cdr lst-x) x-value (+ row-count 1)))\n          (define x-coordinate\
+    \ (find-x (car lst-x) x-value))\n          (if (null? x-coordinate)\n        \
+    \    (mapping (cdr lst-x) x-value (+ row-count 1))\n            (cons (cons row-count\
+    \ (index-of (car lst-x) x-value)) (mapping (cdr lst-x) x-value (+ row-count 1)))))))\n\
+    \  (define\n    (extracting-0 a)\n      (if (null? a)\n        '()\n        (cons\
+    \ (car a) (extracting-0 (cdr a)))))\n  (sort (extracting-0 (mapping lst x 0))\
+    \ compare-lst)\n  (sort (extracting-0 (mapping lst x 0)) compare-row))\n", " \
+    \ (let loop ((lst lst)\n             (result '()))\n    (cond ((null? lst) (sort\
+    \ result <))\n          ((member x (car lst))\n           (loop (cdr lst)\n  \
+    \               (append (map (lambda (x) (list (car lst) x))\n               \
+    \               (list-index x (car lst)))\n                         result)))\n\
+    \          (else (loop (cdr lst) result)))))\n", "  (define (get-row-inner lst\
+    \ x coords)\n    (if (null? lst)\n        coords\n        (let ((row-coordinate\
+    \ (add1 (car coords))))\n          (get-row-inner (cdr lst) x\n              \
+    \           (append (map (lambda (column-coordinate)\n                       \
+    \                 (if (= x column-coordinate)\n                              \
+    \              (list row-coordinate column-coordinate)\n                     \
+    \                       '()))\n                                      (car lst))\n\
+    \                                 coords)))))\n  (sort\n   (get-row-inner lst\
+    \ x '())\n   (lambda (coord1 coord2)\n     (cond ((null? coord1) #t)\n       \
+    \    ((null? coord2) #f)\n           ((= (car coord1) (car coord2))\n        \
+    \    (< (cadr coord1) (cadr coord2)))\n           (else (< (car coord1) (car coord2)))))))\n",
+  "  (define (go lst acc)\n    (if (null? lst) acc\n      (define (sub acc1 lst1 x1\
+    \ y1)\n        (if (null? lst1) acc1\n        (if (= x1 (car lst1))\n        \
+    \  (sub (cons (list y1 x1) acc1) (cdr lst1) x1 (+ y1 1))\n          (sub acc1\
+    \ (cdr lst1) x1 (+ y1 1)))))\n      (go (cdr lst) (sub acc (car lst) x 0))))\n\
+    \  (let ((tuples (go lst '())))\n    (sort tuples < :key (lambda (p) (list (cadr\
+    \ p) (car p))))))\n", "  (define (get-row-aux lst x acc)\n    (cond [(empty? lst)\
+    \ acc]\n          [(empty? (first lst)) (get-row-aux (rest lst) x acc)]\n    \
+    \      [(not (equal? x (first (first lst)))) (get-row-aux (rest lst) x acc)]\n\
+    \          [else (get-row-aux (rest lst) x (cons (cons (length acc) (list (position\
+    \ x (first lst)))) acc))]))\n  (get-row-aux lst x '()))", "  (if (empty? lst)\n\
+    \      '()\n      (get_row_int lst x 0)))\n", "  (sort (map\n         (\u03BB\
+    \ (row)\n           (define ys (fold-left (\u03BB (xs ys y)\n                \
+    \                   (append (list (list y ys)) xs))\n                        \
+    \         '()\n                                 (build-list (length row) (\u03BB\
+    \ (y) y))\n                                 row))\n           (filter (\u03BB\
+    \ (tuple) (= (first tuple) x)) ys))\n         lst)\n        (\u03BB (a b) (< (length\
+    \ a) (length b)))))\n```\n\n### Strings and Trees\n``` #lang racket\n", "  (sort\
+    \ (for*/list ([row (in-list lst)]\n                    [col (in-range (length\
+    \ row))]\n                    #:when (equal? x (list-ref row col)))\n        \
+    \ (list row col))\n        (compose > <)\n        (compose compare <)))", "  (cond\
+    \ [(empty? lst) '()]\n        [else\n         (for/list ([row lst]\n         \
+    \           #:when (member x row))\n           (for/list ([col row]\n        \
+    \              #:when (= x col))\n             (list (length lst) col)))]))\n",
+  "  (for/list ([(row col) (in-nested-list lst)])\n    (if (= x (list-ref row col))\n\
+    \        (cons col row))))\n</code>\nMy solution has some problem when given <code>([],\
+    \ 1)</code> input.\n<code>#lang racket\n", "  (apply append\n         (for/list\
+    \ ([e (in-list lst)]\n                    #:when (member x e))\n           (for/list\
+    \ ([y (in-list (range (length e)))]\n                      #:when (= x (list-ref\
+    \ e y)))\n             (list (cons (length e) (length y)))))))\n</code>\nRunning\
+    \ the tests:\n<code>#lang racket\n", "  (for/list ([(list row) lst]\n        \
+    \     #:when (positions x row))\n    (list row (- (length row) (car row)))))\n",
+  "  (sort\n   (append\n    (map (lambda (row)\n            (map (lambda (col)\n \
+    \                   (if (= col x) (list (list (length lst) (length row)))))\n\
+    \                 row))\n          lst)\n    (map (lambda (row)\n            (map\
+    \ (lambda (col)\n                    (if (= col x) (list (list (length lst) (length\
+    \ row)))))\n                 row))\n          lst))\n   (lambda (a b)\n     (cond\n\
+    \       ((< (car (car a)) (car (car b))) #t)\n       ((= (car (car a)) (car (car\
+    \ b)))\n        (< (cadr (car a)) (cadr (car b))))\n       (#f #f)))))\n```\n\n\
+    ```racket\n#lang racket\n", "  (define (helper x res-lst)\n    (if (empty? lst)\
+    \ res-lst\n        (let* ([row (first lst)]\n               [row-len (length row)]\n\
+    \               [row-len-1 (- row-len 1)]\n               [positions (for/list\
+    \ ([y (in-range row-len)])\n                           (define (helper y)\n  \
+    \                           (let* ([first-elem (first row)]\n                \
+    \                    [curr-elem (list-ref row y)])\n                         \
+    \      (if (= curr-elem x)\n                                   (cons y (helper\
+    \ (add1 y)))\n                                   (if (= first-elem x)\n      \
+    \                                 (cons 0 (helper (add1 y)))\n               \
+    \                        (helper (add1 y))))))\n                           (if\
+    \ (= (first row) x)\n                               (cons 0 (helper 1))\n    \
+    \                           (helper 1)))])\n               [positions (filter\
+    \ (lambda (y) (not (empty? y))) positions)])\n          (if (empty? positions)\n\
+    \              (helper x res-lst)\n              (let* ([new-positions (for/list\
+    \ ([position (in-range (length positions))])\n                               \
+    \       (let* ([positions-row (list-ref positions position)]\n               \
+    \                              [positions-row-len (length positions-row)]\n  \
+    \                                           [positions-row-len-1 (- positions-row-len\
+    \ 1)])\n                                        (for/list ([y (in-range positions-row-len)])\n\
+    \                                          (if (= y 0)\n                     \
+    \                         (cons (list-ref positions-row 0) position)\n       \
+    \                                       (cons (list-ref positions-row y) position)))))]\n\
+    \                     [new-positions (apply append new-positions)])\n        \
+    \        (helper x (append res-lst new-positions)))))))\n  (helper x '()))\n",
+  "  (cond [(empty? lst) empty]\n        [(equal? x (car (car lst)))\n         (append\
+    \ (get_row (cdr lst) x)\n                 (make-coordinate-list 0 (find-coordinates\
+    \ x (car lst))))]\n        [else (append (get_row (cdr lst) x)\n             \
+    \         (make-coordinate-list (add1 (car (first (get_row lst x))))\n       \
+    \                                     (find-coordinates x (car lst))))]))\n",
+  "  (let loop ((lst lst)\n             (acc '()))\n    (cond ((null? lst)\n     \
+    \      (sort acc (lambda (x y) (if (&lt; (car x) (car y))\n                  \
+    \                    #t\n                                      (if (&gt; (car\
+    \ x) (car y))\n                                          #f\n                \
+    \                          (if (&gt; (cadr x) (cadr y))\n                    \
+    \                          #t\n                                              #f)))))\n\
+    \           )\n          ((null? (car lst))\n           (loop (cdr lst) acc))\n\
+    \          ((null? (member x (car lst)))\n           (loop (cdr lst) acc))\n \
+    \         (else (loop (cdr lst) (append (map (lambda (y) (list (car lst) y))\n\
+    \                                             (iota (length (car lst)))\n    \
+    \                                         )\n                                \
+    \        acc))\n                 )\n          )\n    )\n  )\n</code>\nDoes it\
+    \ satisfy the requirements?\n\n\nA:\n\nFirst of all, this line:\n<code>(if (&lt;\
+    \ (car x) (car y))\n</code>\nshould be\n<code>(if (&lt; (car x) (car y))\n</code>\n\
+    Note that I changed the <code>=</code> to a <code>&lt;</code>.\nThen, Racket's\
+    \ <code>sort</code> procedure always sorts in ascending order, so using the <code>&lt;</code>\
+    \ comparison should be enough to sort in descending order (but note that your\
+    \ code currently won't run, because of the typo I mentioned above).\n", "  (cond\
+    \ [(empty? lst) empty]\n        [(null? (filter (lambda (sub) (member x sub))\
+    \ lst)) empty]\n        [else (flatten\n               (map (lambda (sub)\n  \
+    \                    (map (lambda (item)\n                             (if (=\
+    \ item x)\n                                 (list (list (quotient (sub1 (length\
+    \ lst)) 2)\n                                             (sub1 (length sub)))\n\
+    \                                       item)\n                              \
+    \   empty))\n                           sub))\n                   lst))]))\n",
+  "  (apply append (map (lambda (x y) (map (lambda (z) (list x z)) (filter (lambda\
+    \ (a) (= a x)) y))) (range (length lst)) lst)))\n", "  (map (lambda (tuple)\n\
+    \         (cons tuple (get-index lst tuple)))\n       (get-index lst x)))\n",
+  "  (sort (for*/list ([(column . lst2) (in-list lst)]\n                    [row (in-range\
+    \ (length lst2))]\n                    #:when (equal? x (list-ref lst2 row)))\n\
+    \         (list row column))\n        <))\n", "  (list->vector (sort (list-flatten\n\
+    \                       (for/list ([row (in-list lst)])\n                    \
+    \     (for/list ([col (in-list row)])\n                           (if (= col x)\n\
+    \                               (vector (list-ref lst row) col)\n            \
+    \                   '()))))\n                      (lambda (v1 v2)\n         \
+    \               (cond\n                          [(or (= (vector-ref v1 0) (vector-ref\
+    \ v2 0))\n                               (> (vector-ref v1 1) (vector-ref v2 1)))\
+    \ #t]\n                          [else #f])))))\n", "  (apply\n   append\n   (map\n\
+    \    (lambda (row)\n      (map\n       (lambda (column)\n         (if (= x column)\n\
+    \             (values row column)\n             #f))\n       row))\n    lst)))\n",
+  "  (let loop ((input lst)\n             (row 0)\n             (result '()))\n  \
+    \  (if (null? input)\n        result\n        (loop (cdr input)\n            \
+    \  (+ row 1)\n              (append result\n                      (let loop ((inner\
+    \ (car input))\n                                 (col 0)\n                   \
+    \              (x_indices '()))\n                        (if (null? inner)\n \
+    \                           x_indices\n                            (loop (cdr\
+    \ inner)\n                                  (+ col 1)\n                      \
+    \            (if (= x (car inner))\n                                      (cons\
+    \ (list row col) x_indices)\n                                      x_indices)))))))))\n",
+  "  (match lst\n    [(list) '()]\n    [(cons (list) lst) (get_row lst x)]\n    [(cons\
+    \ (cons x rest) lst)\n     (append (list (list (length lst) (get_index x rest)))\n\
+    \             (get_row lst x))]\n    [(cons (cons y rest) lst)\n     (get_row\
+    \ lst x)]))", "  (for/list ([i (in-naturals)])\n    (for/list ([j (in-naturals)])\n\
+    \      (if (equal? x (list-ref (list-ref lst i) j))\n          (list i j)))))\n",
+  "  (cond ((empty? lst) '())\n        ((empty? (car lst)) (get_row (cdr lst) x))\n\
+    \        ((equal? x (car (car lst)))\n         (append (cons (cons 0 (list-index\
+    \ (car lst) x))\n                       (get_row (cdr lst) x))\n             \
+    \    (list-transform (list-transform\n                                  (get_row\
+    \ (cdr lst) x)\n                                  (lambda (x) (cons (+ 1 (car\
+    \ x)) (cdr x))))\n                                 (lambda (x) (cons (car x) (cdr\
+    \ x))))))\n        (else (get_row (cdr lst) x))))\n", "  (let loop ([lst lst]\
+    \ [row-num 0] [ans '()])\n    (if (null? lst)\n        (reverse ans)\n       \
+    \ (if (member x (car lst))\n            (loop (cdr lst) (+ row-num 1)\n      \
+    \            (append ans (map (\u03BB (y) (list row-num y))\n                \
+    \                   (get-indexes x (car lst) '()))))\n            (loop (cdr lst)\
+    \ (+ row-num 1) ans)))))\n", "  (for/list ([row (in-list lst)]\n             [col\
+    \ (in-list (for/list ([n (in-list row)]\n                                    \
+    \   #:when (= n x))\n                             (for/fold ([count -1])\n   \
+    \                                    ([_ (in-list row)])\n                   \
+    \            (set! count (add1 count))\n                               count))))\n\
+    \    (list (for/fold ([count -1])\n                    ([row (in-list lst)])\n\
+    \                  (set! count (add1 count))\n                  count)\n     \
+    \     col)))\n", "  (apply append\n         (for/list ([i (in-naturals)])\n  \
+    \         (for/list ([j (in-naturals)])\n             (when (= x (list-ref (list-ref\
+    \ lst i) j))\n               (list (list i j)))))))\n</code>\n", "  (apply append\n\
+    \         (map (\u03BB (lst)\n                (let ((i 0))\n                 \
+    \ (map (\u03BB (e)\n                         (if (= e x)\n                   \
+    \          (list (cons i e))\n                             '()))\n           \
+    \            lst)))\n              lst)))\n", "  (cond\n    [(null? lst) '()]\n\
+    \    [(< (length (car lst)) x) (get_row (cdr lst) x)]\n    [(and (= (car (car\
+    \ lst)) x) (equal? (length (car lst)) (length (cdr lst))))\n     (cons (list (car\
+    \ lst) (length (car lst))) (get_row (cdr lst) x))]\n    [else (get_row (cdr lst)\
+    \ x)]))\n", "  (sort (for/list ([i (in-naturals)])\n         (for/list ([j (in-naturals)])\n\
+    \           (if (equal? x (list-ref (list-ref lst i) j))\n               (list\
+    \ i j))))\n        #:key (lambda (xs) (list (list-ref xs 0) (list-ref xs 1)))))\n\
+    \n", "  (sort (filter (lambda (row-col)\n                  (equal? x (cadr row-col)))\n\
+    \                (for/list ([row (in-naturals)]\n                           [col\
+    \ (in-list (car lst))])\n                  (list row col)))\n        <))\n", " \
+    \ (let loop ([lst lst] [lst-tmp '()] [x x] [x-tmp '()] [y '()])\n    (cond [(empty?\
+    \ lst) (reverse (map list (reverse x-tmp) (reverse y)))]\n          [(empty? (car\
+    \ lst)) (loop (cdr lst) lst-tmp x x-tmp y)]\n          [(empty? (cdr lst))\n \
+    \          (loop '() lst-tmp x (cons (car (car lst)) x-tmp) (cons 0 y))]\n   \
+    \       [(empty? (cddr lst))\n           (let loop2 ([lst (car lst)] [lst-tmp\
+    \ '()] [x x] [x-tmp x-tmp] [y y])\n             (cond [(empty? lst) (reverse (map\
+    \ list (reverse x-tmp) (reverse y)))]\n                   [(empty? (car lst))\
+    \ (loop2 (cdr lst) lst-tmp x x-tmp y)]\n                   [(equal? (car lst)\
+    \ x)\n                    (loop2 (cdr lst) lst-tmp x (cons (car lst) x-tmp) (cons\
+    \ 0 y))]\n                   [else (loop2 (cdr lst) lst-tmp x x-tmp (cons (car\
+    \ lst) y))]))]\n          [(empty? (cdddr lst))\n           (let loop2 ([lst (car\
+    \ lst)] [lst-tmp '()] [x x] [x-tmp x-tmp] [y y])\n             (cond [(empty?\
+    \ lst) (reverse (map list (reverse x-tmp) (reverse y)))]\n                   [(empty?\
+    \ (car lst)) (loop2 (cdr lst) lst-tmp x x-tmp y)]\n                   [(equal?\
+    \ (car lst) x)\n                    (loop2 (cdr lst) lst-tmp x (cons (car lst)\
+    \ x-tmp) (cons 0 y))]\n                   [else (loop2 (cdr lst) lst-tmp x x-tmp\
+    \ (cons (car lst) y))]))]\n          [else\n           (let loop2 ([lst (car l",
+  "  (get_row_iter lst x x 0))\n", "  (define (next-index i lst)\n    (cond [(empty?\
+    \ lst) (cons '() '())]\n          [(empty? (first lst)) (next-index (+ i 1) (rest\
+    \ lst))]\n          [(member x (first lst)) (cons i lst)]\n          [else (next-index\
+    \ (+ i 1) (rest lst))]))\n  (define (index-to-col j lst)\n    (define (index-to-col-index\
+    \ k j lst)\n      (cond [(= k x) '()]\n            [(empty? lst) '()]\n      \
+    \      [(empty? (first lst)) (index-to-col-index (+ k 1) j (rest lst))]\n    \
+    \        [(= k (first lst)) (cons k (index-to-col-index (+ k 1) j (rest lst)))]\n\
+    \            [else (index-to-col-index (+ k 1) j (rest lst))]))\n    (index-to-col-index\
+    \ 0 j lst))\n  (define (next-index-rec i lst)\n    (define (next-index-rec-index\
+    \ i n lst)\n      (cond [(empty? lst) (cons '() '())]\n            [(empty? (first\
+    \ lst)) (next-index-rec-index (+ i 1) (+ n 1) (rest lst))]\n            [(member\
+    \ x (first lst)) (cons i (cons n lst))]\n            [else (next-index-rec-index\
+    \ (+ i 1) (+ n 1) (rest lst))]))\n    (next-index-rec-index i 0 lst))\n  (define\
+    \ (find-row j lst x)\n    (cond [(empty? lst) '()]\n          [(member x (first\
+    \ lst)) (cons j lst)]\n          [else (find-row (+ j 1) (rest lst) x)]))\n  (define\
+    \ (find-rows j lst x)\n    (cond [(empty? lst) '()]\n          [(member x (first\
+    \ lst)) (cons j lst)]\n          [else (find-rows (+ j 1) (rest lst) x)]))\n \
+    \ (define", "  (cond\n    [(empty? lst) '()]\n    [(empty? (first lst)) (get_row\
+    \ (rest lst) x)]\n    [(equal? x (first (first lst)))\n     (append (list (cons\
+    \ (count-left lst) 0))\n             (get_row (first lst) x)\n             (get_row\
+    \ (rest lst) x))]\n    [else (get_row (rest lst) x)]))\n", "  (let f ([lst lst]\
+    \ [result '()])\n    (if (null? lst)\n        (sort result (lambda (t1 t2)\n \
+    \                      (let ([r1 (car t1)] [c1 (cadr t1)]\n                  \
+    \           [r2 (car t2)] [c2 (cadr t2)])\n                         (cond [(and\
+    \ (= r1 r2) (&gt; c1 c2)) #t]\n                               [(and (= r1 r2)\
+    \ (&lt; c1 c2)) #f]\n                               [(and (&lt; r1 r2) (&gt; c1\
+    \ c2)) #t]\n                               [(and (&lt; r1 r2) (&lt; c1 c2)) #t]\n\
+    \                               [(and (&gt; r1 r2) (&gt; c1 c2)) #f]\n       \
+    \                        [(and (&gt; r1 r2) (&lt; c1 c2)) #f])))\n           \
+    \          (lambda (t1 t2)\n                       (let ([r1 (car t1)] [c1 (cadr\
+    \ t1)]\n                             [r2 (car t2)] [c2 (cadr t2)])\n         \
+    \                (cond [(and (= r1 r2) (&gt; c1 c2)) #t]\n                   \
+    \            [(and (= r1 r2) (&lt; c1 c2)) #f]\n                             \
+    \  [(and (&lt; r1 r2) (&gt; c1 c2)) #t]\n                               [(and\
+    \ (&lt; r1 r2) (&lt; c1 c2)) #t]\n                               [(and (&gt; r1\
+    \ r2) (&gt; c1 c2)) #f]\n                               [(and (&gt; r1 r2) (&lt;\
+    \ c1 c2)) #f])))\n                     (lambda (t1 t2)\n                     \
+    \  (let ([r1 (car t1)] [c1 (cadr t1)]\n                             [r2 (car t2)]\
+    \ [c2 (cadr t2)])\n                         (cond [(and (= r1 r2) (&gt; c1 c2))\
+    \ #t]\n                               [(and (= r1 r2) (&lt; c1 c2)) #", "  (apply\
+    \ append\n         (map (lambda (row)\n                (map (lambda (y) (list\
+    \ (list (list row y))\n                                    (list (list (list row\
+    \ y)))))\n                     (list-index-of row x)))\n              lst)))\n\
+    </code>\nSample output:\n<code>&gt; (get_row '((1 2 3 4 5 6) (1 2 3 4 1 6) (1\
+    \ 2 3 4 5 1)) 1)\n'(((0 0)) ((0 0) (1 4)) ((0 0) (1 4) (1 0)) ((0 0) (1 4) (1\
+    \ 0) (2 5)) ((0 0) (1 4) (1 0) (2 5) (2 0)))\n</code>\nI want to apply <code>sort</code>\
+    \ on the entire list, so that I get something like this:\n<code>'(((0 0)) ((0\
+    \ 0) (1 0)) ((0 0) (1 0) (1 4)) ((0 0) (1 0) (1 4) (2 0)) ((0 0) (1 0) (1 4) (2\
+    \ 0) (2 5)))\n</code>\nHow can I achieve this?\n\n\nA:\n\nI think your problem\
+    \ is that you're trying to apply <code>sort</code> to a list whose structure doesn't\
+    \ match the structure expected by <code>sort</code>'s arguments. You should apply\
+    \ <code>sort</code> to a list of pairs that represents the coordinates, like this:\n\
+    <code>(define (get_row lst x)\n  (apply append\n         (map (lambda (row)\n\
+    \                (map (lambda (y) (list (list (list row y))\n                \
+    \                    (list (list (list row y)))))\n                     (list-index-of\
+    \ row x)))\n              lst)))\n", "  (define res\n    (foldl\n      (lambda\
+    \ (row result)\n        (for/list ([(val i) (in-indexed row)])\n          (when\
+    \ (= val x)\n            (cons (cons (length result) i) result))))\n      '()\n\
+    \      lst))\n  (sort (reverse res) (\u03BB (x y)\n                         (and\n\
+    \                          (< (car x) (car y))\n                          (> (cdr\
+    \ x) (cdr y))))))", "  (cond [(empty? lst) empty]\n        [(and (list? (first\
+    \ lst)) (not (empty? (first lst))))\n         (map (lambda (x) (cons (first lst)\
+    \ x)) (get_row (first lst) x))]\n        [(and (list? (first lst)) (empty? (first\
+    \ lst)))\n         (get_row (rest lst) x)]\n        [(equal? (first lst) x) (cons\
+    \ (cons (rest lst) (first lst)) (get_row (rest lst) x))]\n        [else (get_row\
+    \ (rest lst) x)]))\n", "  (apply append (map (lambda (row)\n                 \
+    \      (map (lambda (cell)\n                              (list (length row) cell))\n\
+    \                            (filter (lambda (y) (= x y)) row)))\n           \
+    \          lst)))\n</code>\nIs there a way to make this code better, more concise\
+    \ or use more idiomatic Racket?\n\n\nA:\n\nYou're using too many built-in functions.\
+    \ Also, you're using parenthesis too much. Racket is a lisp, and lisp use little\
+    \ parenthesis.\nAlso, I don't understand why you would <code>filter</code> for\
+    \ <code>x</code> and then map it, instead of just <code>map</code> for <code>x</code>\
+    \ in the first place.\nYou could do something like this:\n<code>(define (get-row\
+    \ lst x)\n  (apply append (map (lambda (row)\n                       (map (lambda\
+    \ (cell)\n                              (list (length row) cell))\n          \
+    \                  (filter (lambda (y) (= x y)) row)))\n                     lst)))\n\
+    </code>\nOr this, which is the same, but little nicer:\n<code>(define (get-row\
+    \ lst x)\n  (map (lambda (row)\n         (map (lambda (cell)\n               \
+    \ (list (length row) cell))\n              (filter (lambda (y) (= x y)) row)))\n\
+    \       lst))\n</code>\nThe last one is the same, but makes the function more\
+    \ explicit and nicer to read.\n", "  (define (get-item lst x acc)\n    (if (empty?\
+    \ lst)\n        acc\n        (let ([len (length (car lst))])\n          (if (&gt;\
+    \ len 0)\n              (get-item (cdr lst) x\n                        (let ([cnt\
+    \ 0])\n                          (acc (append (map (lambda (v)\n             \
+    \                                 (if (= v x)\n                              \
+    \                    (list x y cnt)\n                                        \
+    \          (void)))\n                                            (car lst))\n\
+    \                                       (begin (set! cnt (+ cnt 1)) (void)))))))\n\
+    \          (begin (set! y (+ y 1)) (void))))))\n  (let ([y 0])\n    (sort (get-item\
+    \ lst x (lambda (lst) lst))\n          (lambda (a b)\n            (if (= (car\
+    \ a) (car b))\n                (&gt; (car (cdr a)) (car (cdr b)))\n          \
+    \      (&lt; (car a) (car b)))))))\n", "  (sort\n   (for/list ([row (in-list lst)]\n\
+    \              [col (in-list row)])\n     (list (list-ref row col) (list-ref (range\
+    \ (length row)) col)))\n   (\u03BB (c1 c2) (cond [(< (car c1) (car c2)) #t]\n\
+    \                    [(> (car c1) (car c2)) #f]\n                    [(< (cadr\
+    \ c1) (cadr c2)) #f]\n                    [(> (cadr c1) (cadr c2)) #t]))))", " \
+    \ (define (get-coords item ls)\n    (filter (lambda (idx) (= (car idx) item))\n\
+    \            (apply append (map (lambda (row idx)\n                          \
+    \       (map (lambda (col) (list idx col))\n                                 \
+    \     (range (length row))))\n                               ls (range (length\
+    \ ls))))))\n  (map (lambda (x) (cons (car x) (sub1 (cadr x))))\n       (sort (append\
+    \ (get-coords x lst)\n                     (get-coords (number->string x) lst))\n\
+    \             (lambda (a b)\n               (cond [(> (car a) (car b)) #t]\n \
+    \                    [(< (car a) (car b)) #f]\n                     [(> (cadr\
+    \ a) (cadr b)) #f]\n                     [(< (cadr a) (cadr b)) #t]\n        \
+    \             [else #f])))))\n", "  (apply append (for/list ([row lst])\n    \
+    \              (for/list ([col (in-list row)])\n                    (when (= col\
+    \ x)\n                      (list (cons (length row) (length col))))))))\n</code>\n\
+    Test:\n<code>#lang racket\n", "  (sort (for/fold ([res '()]) ([row (in-list lst)])\n\
+    \          (for/fold ([res res]) ([col (in-list row)])\n            (if (= col\
+    \ x)\n                (append res (list (cons (length res) (length (take res)))))\n\
+    \                res)))\n        < #:key car))\n", "  (match lst\n    [() '()]\n\
+    \    [(cons row rest)\n     (set! indices (get_row_helper row x))\n     (for*/list\
+    \ ([(cons a b) (in-naturals)]\n                 [index (in-list indices)])\n \
+    \              (list a index))]))\n", "  (cond\n    [(empty? lst) empty]\n   \
+    \ [else\n     (let ([first (car lst)]\n           [rest (cdr lst)])\n       (cond\n\
+    \         [(member x first)\n          (append (list (list (length rest) (get-position\
+    \ x first)))\n                  (get_row rest x))]\n         [else (get_row rest\
+    \ x)]))]))\n", "  (for/list ([row (in-list lst)]\n             [col (in-list (for/list\
+    \ ([y (in-list row)]\n                                      #:when (equal? x y))\n\
+    \                             (for/fold ([i 0]) ([y (in-list row)])\n        \
+    \                       (if (equal? x y) (add1 i) i))))])\n    (if (zero? col)\n\
+    \        (list row 0)\n        (list row col))))\n", "  (let loop ([lst lst] [pos\
+    \ 0] [r `()])\n    (cond [(empty? lst) (sort r (\u03BB (x y) (< (car x) (car y))))]\n\
+    \          [(member x (car lst))\n           (loop (cdr lst) (+ pos 1) (cons (list\
+    \ pos (reverse-position x (car lst))) r))]\n          [else (loop (cdr lst) (+\
+    \ pos 1) r)])))\n```\n\n```racket\n#lang racket\n", "  (for/list ([l lst]\n  \
+    \           #:when (member x l))\n    (let* ([row-num (- (length lst) (length\
+    \ l))]\n           [col-num (- (length l) (length (member x l)) -1)])\n      (list\
+    \ row-num col-num))))\n", "  (define (coords? lst row)\n    (map (lambda (col)\
+    \ (list row col))\n         (append (reverse (filter (lambda (col) (= x (list-ref\
+    \ lst row col)))\n                                  (range (length (list-ref lst\
+    \ row)))))\n                 (list -1))))\n  (apply append (map (lambda (row)\
+    \ (coords? lst row))\n                     (filter (lambda (row) (not (empty?\
+    \ (list-ref lst row))))\n                             (range (length lst))))))\n\
+    </code>\nMy solution worked.\nI'd like to know, how to optimize it, especially\
+    \ in terms of performance, and how to make it more readable.\n\n\nA:\n\nIf you\
+    \ are only interested in positive column indices, then you can avoid using the\
+    \ filter by using this version of the <code>coords?</code> function:\n<code>(define\
+    \ (coords? lst row)\n  (let loop ((ls (list-ref lst row)) (n 0))\n    (if (null?\
+    \ ls)\n        '()\n        (let ((x (car ls)))\n          (if (= x x)\n     \
+    \         (cons (list row n) (loop (cdr ls) (+ n 1)))\n              (loop (cdr\
+    \ ls) (+ n 1)))))))\n</code>\nIt will return a list of positions instead of a\
+    \ list of lists, but that is a minor change. If you want to keep the list-of-lists,\
+    \ use this:\n<code>(define (coords? lst row)\n  (let loop ((ls (list-ref lst row))\
+    \ (n 0))\n    (if (null? ls)\n        '()\n        (let ((x (car ls)))\n     \
+    \     (if (= x x)\n              (cons (list row n) (loop (cdr ls) (+ n 1)))\n\
+    \              (loop (cdr ls) (+ n 1)))))))\n</code>\n", "  (let loop ([lst lst]\
+    \ [x x] [acc '()])\n    (if (null? lst)\n        (sort acc\n              (lambda\
+    \ (a b)\n                (let ([ra (car a)]\n                      [rb (car b)])\n\
+    \                  (if (= ra rb)\n                      (let ([ca (cadr a)]\n\
+    \                            [cb (cadr b)])\n                        (&gt; ca\
+    \ cb))\n                      (&lt; ra rb)))))\n        (loop (cdr lst)\n    \
+    \          x\n              (let ([row (car lst)])\n                (let loop\
+    \ ([row row] [n 0] [acc acc])\n                  (if (null? row)\n           \
+    \           acc\n                      (if (= (car row) x)\n                 \
+    \         (loop (cdr row)\n                                (+ n 1)\n         \
+    \                       (cons (list n (car row)) acc))\n                     \
+    \     (loop (cdr row)\n                                (+ n 1)\n             \
+    \                   acc)))))))))\n</code>\n", "  (sort\n   (for/list ([l lst]\
+    \ [c (in-list l)])\n     (if (= c x) (list (list (list-ref lst l) c))))\n   (\u03BB\
+    \ (l1 l2)\n     (and\n      (or (< (car (car l1)) (car (car l2)))\n          (and\
+    \ (= (car (car l1)) (car (car l2)))\n               (> (cadr (car l1)) (cadr (car\
+    \ l2)))))\n      (or (= (car (car l1)) (car (car l2)))\n          (> (car (car\
+    \ l1)) (car (car l2))))))))\n", "  (sort (for/fold ([result '()]) ([i (in-list\
+    \ lst)])\n          (for/fold ([res result]) ([j (in-list i)])\n            (if\
+    \ (= j x)\n                (cons (list (vector-ref (vector-index-right i) 0) (vector-ref\
+    \ (vector-index-right j) 0)) res)\n                res)))\n        (lambda (a\
+    \ b)\n          (if (= (vector-ref a 0) (vector-ref b 0))\n              (> (vector-ref\
+    \ a 1) (vector-ref b 1))\n              (< (vector-ref a 0) (vector-ref b 0))))))\n\
+    ```\n\n```racket\n#lang racket\n", "  (sort (for/list ([j (in-list lst)]\n\t\t\
+    \   [i (in-list j)]\n\t\t   #:when (= x i))\n\t (list (length j) i))\n\t(\u03BB\
+    \ (a b) (and (or (< (first a) (first b)) (= (first a) (first b)))\n\t\t      (>\
+    \ (second a) (second b))))))", "  (let* ([r (for/list ([r (in-list lst)])\n  \
+    \             (for/list ([c (in-list r)])\n                 (if (= c x) (list\
+    \ r c))))]\n         [f (lambda (x y)\n              (cond\n                [(<\
+    \ (car x) (car y)) #t]\n                [(= (car x) (car y))\n               \
+    \  (if (> (cadr x) (cadr y)) #t #f)]\n                [else #f]))]\n         [s\
+    \ (for/list ([x (in-list r)])\n               (sort x f))])\n    (map (\u03BB\
+    \ (x) (list (list-ref x 0) (list-ref x 1))) (flatten s))))\n</code>\nAnd I got\
+    \ the following 2 tests to fail:\n<code>FAIL: (get_row [[] [1] [1 2 3]] 3) ==\
+    \ [(2 2)]\n      expected: [(2 2)]\n      but got: []\nFAIL: (get_row [[1 2 3\
+    \ 4 5 6] [1 2 3 4 1 6] [1 2 3 4 5 1]] 1) == [(0 0) (1 4) (1 0) (2 5) (2 0)]\n\
+    \      expected: [(0 0) (1 4) (1 0) (2 5) (2 0)]\n      but got: [(0 0) (1 4)\
+    \ (1 0) (2 5)]\n</code>\nI can't figure out why this tests fail.\n\n\nA:\n\nWhat's\
+    \ in the nested list that <code>r</code> is bound to in the let*? It can't be\
+    \ the row-number and column-number, since they come from the <code>for/list</code>.\
+    \ My guess is that it's some kind of column-number and row-number. Then <code>flatten</code>\
+    \ will throw away one of the indices, the row-number, because it sees the first\
+    \ element of each \"row\". Then, when the test results (in the second example)\
+    \ are run through <code>map</code>, the column-number for each result will be\
+    \ incorrect.\nIn other words, I'd guess that <code>r</code> is bound to <code>[[0\
+    \ 0] [", "  (match lst\n    [(cons (cons hd tl) tls)\n     (cons (cons 0 (list-index\
+    \ hd x 0))\n           (append (get_row tls x)\n                   (get_row tl\
+    \ x (add1 0))))]\n    [empty '()]))\n", "  (sort (append (let loop ([i 0] [acc\
+    \ '()])\n                   (cond [(empty? lst) acc]\n                       \
+    \  [(member x (car lst))\n                          (loop (add1 i) (append acc\
+    \ (map (lambda (y) (list i y))\n                                             \
+    \              (filter (lambda (y) (= x y))\n                                \
+    \                                   (car lst)))))\n                          ]\n\
+    \                         [else (loop (add1 i) acc)]))\n               (list))\n\
+    \        (lambda (a b)\n          (and (< (car a) (car b))\n               (or\
+    \ (> (cadr a) (cadr b))\n                   (and (= (cadr a) (cadr b))\n     \
+    \                   (< (car a) (car b))))))))\n", "  (define-values (xysys)\n\
+    \    (for/fold ([result '()]) ([lst1 lst])\n      (define-values (xysys1)\n  \
+    \      (for/fold ([result '()]) ([lst2 lst1])\n          (cond\n            [(equal?\
+    \ lst2 x) (values (cons (list (length lst) (length lst1)) result) (add1 (length\
+    \ lst)))]\n            [else (values result (add1 (length lst)))])\n         \
+    \ (list 0)))\n      (values (append xysys xysys1) (add1 (cadr xysys1)))))\n  (sort\
+    \ xysys <))\n</code>\nI have added <code>define-values</code> and <code>for/fold</code>\
+    \ to the code, but it still doesn't work.\nHow can I have a nested <code>for/fold</code>?\n\
+    \n\nA:\n\nI think the body of <code>get_row</code> is a bit too long, but it looks\
+    \ fine.\nThe reason that the code doesn't work is because of the call to <code>cadr</code>.\
+    \ It's a car of a dar (pun intended) and it fails because the list is empty.\n\
+    The real problem is that you need to <code>for/fold</code> over both <code>lst</code>\
+    \ and the elements of <code>lst</code>. In other words, you need to use <code>for*/fold</code>.\n",
+  "  (let ([rows-columns (for/list ([row (in-list lst)])\n                       \
+    \ (let ([row-no (list-ref (list-index (lambda (a) (member x a)) lst row)\n   \
+    \                                             0)])\n                         \
+    \ (for/list ([column (in-list row)])\n                            (cond [(= column\
+    \ x) (list row-no column)]\n                                  [else #f]))))])\n\
+    \    (sort rows-columns\n          (lambda (x y) (cond [(< (car x) (car y)) #t]\n\
+    \                              [(< (car x) (car y)) #f]\n                    \
+    \          [(> (cadr x) (cadr y)) #t]\n                              [else #f]))))))\n",
+  "  (define (helper1 x lst1 ret)\n    (if (null? lst1)\n        ret\n        (helper1\
+    \ x (cdr lst1) (cons (list x (car lst1)) ret))))\n  (define (helper2 x lst2 ret)\n\
+    \    (if (null? lst2)\n        ret\n        (helper2 x (cdr lst2) (append (helper1\
+    \ x (car lst2) ret) ret))))\n  (define (helper3 x lst3 ret)\n    (if (null? lst3)\n\
+    \        ret\n        (helper3 x (cdr lst3) (helper2 x (car lst3) ret))))\n  (let\
+    \ ((new (helper3 x lst '())))\n    (sort new\n          (lambda (a b)\n      \
+    \      (if (= (car a) (car b))\n                (if (= (cadr a) (cadr b))\n  \
+    \                  #f\n                    (> (cadr a) (cadr b)))\n          \
+    \      (< (car a) (car b)))))))\n</code>\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

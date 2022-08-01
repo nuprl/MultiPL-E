@@ -12,7 +12,647 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate d
   \    (check-equal? (candidate 0) \"db0db\")\n    (check-equal? (candidate 32) \"\
   db100000db\")\n    (check-equal? (candidate 103) \"db1100111db\")\n    (check-equal?\
   \ (candidate 15) \"db1111db\")\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (define (dec2bin rest)\n    (if (= rest 0) \"\"\n      (string-append\
+    \ (dec2bin (quotient rest 2)) (number->string (remainder rest 2)))))\n  (string-append\
+    \ \"db\" (dec2bin decimal) \"db\"))\n", "  (define (div2 remainder)\n    (if (=\
+    \ remainder 0) '()\n        (cons (remainder 2) (div2 (quotient remainder 2)))))\n\
+    \  (define (add-pre-suf result)\n    (string-append \"db\" result \"db\"))\n \
+    \ (define (from-list result)\n    (list->string (reverse result)))\n  (add-pre-suf\
+    \ (from-list (div2 decimal))))\n", "  (define (loop n)\n    (cond ((= n 0) \"\"\
+    )\n          ((< n 0) (loop (- n 1)))\n          (else (list-&gt;string (cons\
+    \ (remainder n 2) (loop (quotient n 2)))))))\n  (string-append \"db\" (loop decimal)\
+    \ \"db\"))\n", "  (define (pad s len)\n    (string-append (make-string (- len\
+    \ (string-length s)) #\\0) s))\n  (define (make-binary s)\n    (string-append\
+    \ \"db\" (pad s 8) \"db\"))\n  (cond\n    [(< decimal 0) (error \"Negative value.\"\
+    )]\n    [(= decimal 0) (make-binary (string #\\0))]\n    [else (make-binary (integer->binary\
+    \ decimal))]))\n", "  (define (decimal-&gt;binary-helper n)\n    (cond\n     \
+    \ [(= n 0) '()]\n      [else (cons (remainder n 2) (decimal-&gt;binary-helper\
+    \ (quotient n 2)))]))\n  (string-&gt;list (string-append \"db\" (list-&gt;string\
+    \ (reverse (decimal-&gt;binary-helper decimal))) \"db\")))\n</code>\nIt uses tail\
+    \ recursion, but in a two-fold manner:\n\nit converts the number to binary;\n\
+    it then reverts the string.\n\nAs you can see, this defeats the purpose of tail\
+    \ recursion: the stack frame is used to store the whole number.\nI tried to improve\
+    \ it by reversing the number first, but this is ugly and inelegant:\n<code>#lang\
+    \ racket\n", '  (printf "db~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a',
+  "  (cond [(zero? decimal) \"db0db\"]\n        [else (string-append \"db\" (substring\
+    \ (number->string (integer->exact-integer (integer->bignum (quotient decimal 2))))\
+    \ 2) (decimal_to_binary (remainder decimal 2)))])\n)", "  (string-append \"db\"\
+    \ (decimal_to_binary_aux (integer->list decimal) \"\") \"db\"))\n", "  ;; TODO\n\
+    \  )\n", "  (bytes->string/utf-8 (list-&gt;bytes (reverse (map (\u03BB (x)\n \
+    \                                               (if (equal? x #\\0)\n        \
+    \                                            #\\0\n                          \
+    \                          #\\1))\n                                          \
+    \    (bytes-&gt;list/utf-8 (string-&gt;bytes (number-&gt;string decimal 2)))))))\n\
+    \  )\n", '  (string-append "db" (number->string (logand (ash (ash 1 decimal) -1)
+    #xffff)) "db"))', "  (define (loop base)\n    (if (= base 0) \"\"\n      (string-append\
+    \ (loop (quotient base 2)) (number->string (remainder base 2)))))\n  (string-append\
+    \ \"db\" (loop decimal) \"db\"))\n", "  (define (decimal-&gt;bin-helper decimal/decimal)\n\
+    \    (cond ((&lt;= decimal/decimal 1) \"\")\n          ((&lt; 0 decimal/decimal)\n\
+    \           (decimal-&gt;bin-helper (quotient decimal/decimal 2))\n          \
+    \ (string-append (number-&gt;string (remainder decimal/decimal 2))))\n       \
+    \   (else \"0\")))\n  (string-append \"db\" (decimal-&gt;bin-helper decimal) \"\
+    db\"))\n</code>\n\n<code>#lang racket\n", "  (string-append \"db\" (number->string\
+    \ decimal 2) \"db\"))\n", "  (string-append \"db\"\n                 (decimal_to_binary-inner\
+    \ decimal \"\" #f)\n                 \"db\"))\n", "  (define (to-binary digits)\n\
+    \    (if (= digits 0)\n        \"0\"\n        (let loop ((remainder (modulo digits\
+    \ 2))\n                   (quotient (/ digits 2))\n                   (binary-digits\
+    \ \"\"))\n          (if (= quotient 0)\n              (string-append binary-digits\
+    \ (number->string remainder))\n              (loop (modulo quotient 2)\n     \
+    \               (/ quotient 2)\n                    (string-append binary-digits\
+    \ (number->string remainder)))))))\n  (let ((length (add1 (string-length (to-binary\
+    \ decimal)))))\n    (string-append \"db\" (to-binary decimal) (make-string (-\
+    \ 8 length) #\\0) \"db\")))\n", "  (string-append \"db\" (number->string (integer->binary\
+    \ decimal)) \"db\"))\n```\n\n## FizzBuzz\n[\nhttps://www.codewars.com/kata/fizz-buzz-cuckoo-clock/\n\
+    ](https://www.codewars.com/kata/fizz-buzz-cuckoo-clock/)\n\n```racket\n#lang racket\n",
+  "  (string-append \"db\" (decimal->binary decimal) \"db\"))\n", "  (string-append\
+    \ \"db\" (number->string (exact->inexact (logand decimal 255))) \"db\"))\n", " \
+    \ (string-append \"db\" (number->string decimal 2) \"db\"))\n", "  (define (reverse-string\
+    \ str)\n    (string-append (reverse-string (substring str 1)) (substring str 0\
+    \ 1)))\n  (string-append \"db\" (reverse-string (show-base 2 decimal)) \"db\"\
+    ))\n", "  (string-append \"db\" (integer->string decimal 2) \"db\"))\n", "  (apply\
+    \ string-append\n         (list \"db\"\n               (if (zero? decimal)\n \
+    \                  (list \"0\")\n                   (foldr (lambda (n ls)\n  \
+    \                          (cons (if (zero? (modulo n 2)) \"0\" \"1\") ls))\n\
+    \                          null\n                          (build-list\n     \
+    \                      (add1 (integer-length decimal))\n                     \
+    \      (lambda (index)\n                             (expt 2 index))))\n     \
+    \          \"db\")))\n", "  (define (get-binary base)\n    (cond\n      [(= base\
+    \ 0) \"\"]\n      [else (cons (string (remainder base 2)) (get-binary (quotient\
+    \ base 2)))]))\n  (string-&gt;list (string-append \"db\" (get-binary decimal)\
+    \ \"db\")))\n", "  (string-append \"db\"\n                 (number->string (integer->exact-integer\
+    \ (log2 decimal)))\n                 \"db\"))\n", "  (define (decimal-&gt;binary-int\
+    \ decimal)\n    (if (zero? decimal)\n        '()\n        (cons (remainder decimal\
+    \ 2)\n              (decimal-&gt;binary-int (quotient decimal 2)))))\n  (define\
+    \ (binary-int-&gt;string binary-int)\n    (for/fold ([str \"\"] ([x binary-int]))\n\
+    \      (string-append str (number-&gt;string x))))\n  (string-append \"db\"\n\
+    \                 (binary-int-&gt;string (reverse (decimal-&gt;binary-int decimal)))\n\
+    \                 \"db\"))\n</code>\n", "  (define (bdecimal bdecimal decimal)\n\
+    \    (if (&lt; decimal 2)\n        (string-append bdecimal (number-&gt;string\
+    \ decimal))\n        (bdecimal (string-append bdecimal (number-&gt;string (remainder\
+    \ decimal 2))) (quotient decimal 2))))\n  (string-append \"db\" (bdecimal \"\"\
+    \ decimal) \"db\"))\n", "  (string-append \"db\" (number->string decimal 2) \"\
+    db\"))\n", "  (string-append \"db\" (number->string (exact->inexact (integer->decimal\
+    \ (exact-integer-in 1 2) decimal))) \"db\"))\n", "  (cond\n    [(= decimal 0)\
+    \ \"db0db\"]\n    [else (regexp-replace* #rx\"db\"\n                         \
+    \  (string-append\n                            \"db\"\n                      \
+    \      (reverse (string-split (string->number (number->string decimal) 2) #\\\
+    )) \"db\"))\n                           \"\")]))\n", "  (string-append \"db\"\n\
+    \                 (number->string (string->number (number->string (expt 2 (quotient\
+    \ decimal 1)))))\n                 \"db\"))\n", "  (string-append \"db\"\n   \
+    \              (number->string (integer->binary decimal))\n                 \"\
+    db\"))", "  (string-append \"db\"\n                 (if (= decimal 0) \"0\" (let\
+    \ loop ((decimal decimal) (binary \"\"))\n                                   \
+    \       (if (= decimal 0) binary\n                                           \
+    \   (loop (quotient decimal 2)\n                                             \
+    \       (string-append binary (string (- decimal (* 2 (quotient decimal 2))))))))))\n\
+    \  \"db\")\n</code>\n", "  (define (helper dec accumulator)\n    (cond [(= dec\
+    \ 0) accumulator]\n          [else (helper (quotient dec 2)\n                \
+    \        (string-append accumulator (number->string (remainder dec 2))))]))\n\
+    \  (string-append \"db\" (helper decimal \"\") \"db\"))\n", "  (let ([quotient\
+    \ (/ decimal 2)]\n        [remainder (modulo decimal 2)])\n    (cond [(= 0 quotient)\
+    \ (string-append \"db\" (number->string remainder) \"db\")]\n          [else (string-append\
+    \ \"db\" (number->string remainder) (decimal_to_binary quotient))])))\n", "  (string-append\
+    \ \"db\" (number->string decimal 2) \"db\"))\n", "  (define (r-decimal-to-binary\
+    \ remaining result)\n    (if (zero? remaining)\n        result\n        (r-decimal-to-binary\
+    \ (/ remaining 2)\n                             (string-append (if (even? remaining)\
+    \ \"0\" \"1\") result))))\n  (string-append \"db\" (r-decimal-to-binary decimal\
+    \ \"\") \"db\"))\n</code>\n", "  (define (decimal_to_binary-iter decimal divisor)\n\
+    \    (cond\n      [(zero? decimal) \"\"]\n      [(< decimal divisor) (string-append\
+    \ \"0\" (decimal_to_binary-iter decimal (/ divisor 2)))]\n      [else (string-append\
+    \ \"1\" (decimal_to_binary-iter (- decimal divisor) (/ divisor 2)))]))\n  (string-append\
+    \ \"db\" (decimal_to_binary-iter decimal 128) \"db\"))\n", "  (define (loop d\
+    \ acc)\n    (cond [(< d 2) (append acc (list d))]\n          [else (loop (quotient\
+    \ d 2) (append acc (list (remainder d 2))))]))\n  (string-append \"db\" (string-intersperse\
+    \ (loop decimal '()) #\\d) \"db\"))\n", "  (decimal-&gt;string/base decimal 2))\n",
+  "  (define (decimal_to_binary_helper decimal answer)\n    (cond [(= decimal 0) (string-append\
+    \ answer \"db\")]\n          [else (decimal_to_binary_helper (/ decimal 2) (string-append\
+    \ answer (number->string (remainder decimal 2))))]))\n  (decimal_to_binary_helper\
+    \ decimal \"db\"))\n", "  (define (decimal-&gt;binary dec)\n    (cond [(zero?\
+    \ dec) '()]\n          [else (append (decimal-&gt;binary (quotient dec 2))\n \
+    \                       (list (number-&gt;string (remainder dec 2))))]))\n  (string-append\
+    \ \"db\"\n                 (apply string-append (decimal-&gt;binary decimal))\n\
+    \                 \"db\"))\n</code>\nIn the comments you can see it gets the correct\
+    \ result.\n\n\nA:\n\nThe problem is that your condition is wrong. <code>append</code>\
+    \ appends two lists and therefore <code>(append (decimal-&gt;binary (quotient\
+    \ dec 2))\n                        (list (number-&gt;string (remainder dec 2))))</code>\
+    \ will produce a list.\nThis is not what you want. You want to append two lists\
+    \ of characters, which would be <code>(append (decimal-&gt;binary (quotient dec\
+    \ 2))\n                        (list (number-&gt;string (remainder dec 2))))</code>.\n\
+    On a related note, you could also just use <code>string-append</code> and remove\
+    \ the call to <code>list</code> and <code>apply</code> as well.\n", "  (define\
+    \ (decimal_to_binary_helper n)\n    (cond\n      [(= n 0) \"\"]\n      [else\n\
+    \       (cons (if (= (remainder n 2) 0) #\\0 #\\1)\n             (decimal_to_binary_helper\
+    \ (quotient n 2)))]))\n  (string-append \"db\" (decimal_to_binary_helper decimal)\
+    \ \"db\"))\n", "  (define (decimal_to_binary2 decimal current-binary)\n    (cond\
+    \ ((= decimal 0) current-binary)\n          ((= decimal 1) (string-append \"1\"\
+    \ current-binary))\n          (else (decimal_to_binary2 (/ decimal 2) (string-append\
+    \ (number->string (remainder decimal 2)) current-binary)))))\n  (string-append\
+    \ \"db\" (decimal_to_binary2 decimal \"\") \"db\"))\n", "  (number->string (string->number\
+    \ (number->string decimal) 2)))\n", '  (number->string (string->number (string-append
+    "0b" (integer->binary decimal)) 2)))', "  (define (inner-decimal-to-binary n)\n\
+    \    (cond\n      [(= n 0) \"\"]\n      [else (append (if (= (remainder n 2) 0)\
+    \ \"0\" \"1\") (inner-decimal-to-binary (quotient n 2)))]))\n  (append \"db\"\
+    \ (inner-decimal-to-binary decimal) \"db\"))\n", "  (string-append \"db\" (number->string\
+    \ decimal 2) \"db\"))\n", "  (define (recur2 decimal accum)\n    (cond [(= decimal\
+    \ 0) accum]\n          [else (recur2 (quotient decimal 2) (string-append (number->string\
+    \ (remainder decimal 2)) accum))]))\n  (string-append \"db\" (recur2 decimal \"\
+    \") \"db\"))\n", "  ;; YOUR CODE HERE\n  )\n```\n\n## How to Run\n\n```\nraco\
+    \ test test/unit.rkt\n```", "  (regexp-replace* #rx\"^\" (number->string (bitwise-arithmetic-shift\
+    \ (string->number (regexp-replace* #rx\"db\" (number->string decimal) \"\"))\n\
+    \                                                                    (bitwise-arithmetic-shift-right\
+    \ (string->number (regexp-replace* #rx\"db\" (number->string decimal) \"\")) 1)\n\
+    \                                                                    (bitwise-arithmetic-shift-right\
+    \ (string->number (regexp-replace* #rx\"db\" (number->string decimal) \"\")) 2)\n\
+    \                                                                    (bitwise-arithmetic-shift-right\
+    \ (string->number (regexp-replace* #rx\"db\" (number->string decimal) \"\")) 3)\n\
+    \                                                                    (bitwise-arithmetic-shift-right\
+    \ (string->number (regexp-replace* #rx\"db\" (number->string decimal) \"\")) 4)\n\
+    \                                                                    (bitwise-arithmetic-shift-right\
+    \ (string->number (regexp-replace* #rx\"db\" (number->string decimal) \"\")) 5)\n\
+    \                                                                    (bitwise-arithmetic-shift-right\
+    \ (string->number (regexp-replace* #rx\"db\" (number->string decimal) \"\")) 6)\n\
+    \                                                                    (bitwise-arithmetic-shift-right\
+    \ (string->number (regexp-replace* #rx\"db\" (number->string decimal) \"\")) 7)\n\
+    \                                                                    (bitwise-arithmetic-shift-right\
+    \ (string->number (regexp-replace* #rx\"db\" (number->string decimal) \"\")) 8)\n\
+    \                                                                    (bitwise-arithmetic-shift-right\
+    \ (string->number (regexp-replace* #rx\"db\" (number->string decimal) \"\")) 9)\n\
+    \                                                                    (bitwise-arithmetic-shift-right\
+    \ (string->number (regexp-replace* #rx\"db\" (number->string decimal) \"\")) 10)\n\
+    \                                                                    (bitwise-arithmetic-shift-right\
+    \ (string->number (regexp-replace* #rx\"db\" (number->string decimal) \"\")) 11)\n\
+    \                                                                    (bitwise-arithmetic",
+  "  (string-append \"db\"\n                 (decimal_to_binary-inner decimal)\n \
+    \                \"db\"))\n", "  (string-append \"db\" (number->string (inexact->exact\
+    \ (floor (log2 decimal)))) \"db\"))\n", "  (define (iter number result)\n    (if\
+    \ (zero? number)\n        (string-append \"db\" result \"db\")\n        (iter\
+    \ (quotient number 2)\n              (string-append (number->string (remainder\
+    \ number 2)) result))))\n  (iter decimal \"\"))", "  (string-append \"db\" (number->string\
+    \ (inexact->exact (round (log2 decimal)))) \"db\"))\n", "  (define (num-to-binary\
+    \ num)\n    (cond\n      [(zero? num) \"\"]\n      [(= num 1) \"1\"]\n      [else\
+    \ (append (num-to-binary (quotient num 2)) (num-to-binary (remainder num 2)))]))\n\
+    \  (append \"db\" (num-to-binary decimal) \"db\"))\n</code>\nI've tried to make\
+    \ the <code>num-to-binary</code> function as fast as possible, but I'm open to\
+    \ suggestions. It seems as if mine is a bit on the slow side. \nThe challenge\
+    \ is to make your answer as fast as possible, while still being readable.\nHere\
+    \ are the results of my tests:\n<code>&gt; (time (for ([i (in-range 100000)])\
+    \ (decimal_to_binary 1)))\ncpu time: 861 real time: 863 gc time: 6\n&gt; (time\
+    \ (for ([i (in-range 100000)]) (decimal_to_binary 2)))\ncpu time: 843 real time:\
+    \ 845 gc time: 9\n&gt; (time (for ([i (in-range 100000)]) (decimal_to_binary 3)))\n\
+    cpu time: 975 real time: 976 gc time: 12\n&gt; (time (for ([i (in-range 100000)])\
+    \ (decimal_to_binary 4)))\ncpu time: 837 real time: 839 gc time: 14\n&gt; (time\
+    \ (for ([i (in-range 100000)]) (decimal_to_binary 5)))\ncpu time: 952 real time:\
+    \ 953 gc time: 9\n&gt; (time (for ([i (in-range 100000)]) (decimal_to_binary 6)))\n\
+    cpu time: 983 real time: 984 gc time: 11\n&gt; (time (for ([i (in-range 100000)])\
+    \ (decimal_to_binary 7)))\ncpu time: 1083 real time: 1085 gc time: 9\n&gt; (time\
+    \ (for ([i (in-range 100000)]) (decimal_to_binary 8)))\ncpu time: 934 real time:\
+    \ 935 gc time: 14\n&", "  (string-append \"db\" (integer->string decimal 2) \"\
+    db\"))\n", "  (define (get-digit-from-decimal)\n    (cond\n      [(= decimal 0)\
+    \ \"\"]\n      [else (string-append (get-digit-from-decimal) (number->string (remainder\
+    \ decimal 2)))]))\n  (string-append \"db\" (get-digit-from-decimal) \"db\"))\n",
+  "  (string-append \"db\" (integer->string decimal 2) \"db\"))\n", "  (string-append\
+    \ \"db\"\n                 (if (= decimal 0)\n                     \"\"\n    \
+    \                 (if (= (remainder decimal 2) 0)\n                         (decimal_to_binary\
+    \ (quotient decimal 2))\n                         (string-append (decimal_to_binary\
+    \ (quotient decimal 2)) \"1\")))\n                 \"db\"))\n", "  (format \"\
+    db~a~a\" (build-string (remainder decimal 2)) (decimal_to_binary (quotient decimal\
+    \ 2))))\n", "  (define (helper n s)\n    (cond\n      ((= n 0) (string-append\
+    \ \"db\" s \"db\"))\n      ((= (remainder n 2) 0) (helper (/ n 2) (string-append\
+    \ \"0\" s)))\n      (else (helper (/ n 2) (string-append \"1\" s)))))\n  (helper\
+    \ decimal \"\"))\n", "  (display (string-append \"db\" (number->string (integer->binary\
+    \ decimal)) \"db\")))\n", "  (string-append \"db\" (decimal->binary decimal) \"\
+    db\"))\n", "  (string-append \"db\" (number->string decimal 2) \"db\"))\n", " \
+    \ (define (find-bit-value n)\n    (cond\n      [(< n 0) 0]\n      [(> n 0) 1]\n\
+    \      [else 0]))\n  (define (loop accum n)\n    (cond\n      [(zero? n) accum]\n\
+    \      [else (loop (append accum (list (find-bit-value (remainder n 2)))) (/ n\
+    \ 2))]))\n  (string-append \"db\" (foldr string-append \"\" (loop '() decimal))\
+    \ \"db\"))", "  (string-append \"db\"\n                 (if (= decimal 0)\n  \
+    \                   (string #\\0)\n                     (let loop ((remainder\
+    \ decimal)\n                                (binary_string (string)))\n      \
+    \                 (if (= remainder 0)\n                           binary_string\n\
+    \                           (loop (/ remainder 2)\n                          \
+    \       (string (if (= (remainder remainder 2) 0)\n                          \
+    \                   #\\0\n                                             #\\1)\n\
+    \                                       binary_string)))))\n                 \"\
+    db\"))\n</code>\n", "  (cond ((= decimal 0) \"\")\n        ((= (remainder decimal\
+    \ 2) 0) (string-append \"0\" (decimal_to_binary (/ decimal 2))))\n        (else\
+    \ (string-append \"1\" (decimal_to_binary (/ decimal 2))))))\n", "  (define (to-binary-helper\
+    \ decimal accum)\n    (cond\n      [(zero? decimal) (string-append \"db\" (reverse\
+    \ accum) \"db\")]\n      [else (to-binary-helper (quotient decimal 2) (string-append\
+    \ (number->string (remainder decimal 2)) accum))]))\n  (to-binary-helper decimal\
+    \ \"\"))\n", "  (string-append \"db\" (number->string (integer->char (string->number\
+    \ (number->string decimal)))) \"db\"))\n", "  (define (decimal-to-binary n)\n\
+    \    (if (zero? n)\n        '()\n        (cons (remainder n 2) (decimal-to-binary\
+    \ (quotient n 2)))))\n  (string-append \"db\" (list->string (reverse (decimal-to-binary\
+    \ decimal))) \"db\"))\n", "  (apply string (cons #\\d (cons #\\b (binary-string\
+    \ decimal \"\")))))\n", "  (define (to-binary-rec decimal acc)\n    (cond [(=\
+    \ decimal 0) acc]\n          [else (to-binary-rec (/ decimal 2) (string (number->char\
+    \ (+ 48 (% decimal 2))) acc))]))\n  (string \"db\" (to-binary-rec decimal \"\"\
+    ) \"db\"))", "  (define (decimal_to_binary.decimal decimal)\n    (define (decimal_to_binary.decimal.string\
+    \ decimal string)\n      (if (= decimal 0)\n          string\n          (decimal_to_binary.decimal.string\
+    \ (/ decimal 2)\n                                            (string-append string\
+    \ (number->string (remainder decimal 2))))))\n    (decimal_to_binary.decimal.string\
+    \ decimal \"\"))\n  (string-append \"db\" (decimal_to_binary.decimal decimal)\
+    \ \"db\"))\n", "  ;; Convert given decimal integer to a binary string\n  (define\
+    \ (to-binary-str decimal)\n    (cond\n      ((= decimal 0) \"\")\n      (else\
+    \ (string (remainder decimal 2)) (to-binary-str (quotient decimal 2)))))\n  ;;\
+    \ Ensure binary string is padded to 8 bits with leading zeros\n  (define (pad-binary-str\
+    \ str)\n    (cond\n      ((&gt; (string-length str) 8) (error \"Unexpected large\
+    \ binary string\"))\n      ((&lt; (string-length str) 8) (string \"0\" (pad-binary-str\
+    \ str)))\n      (else str)))\n  (string \"db\" (pad-binary-str (to-binary-str\
+    \ decimal)) \"db\"))\n", "  (string-append \"db\"\n                 (number->string\
+    \ (number->list\n                                  (integer->char decimal)\n \
+    \                                 2))\n                 \"db\"))\n", "  (define\
+    \ (bin_r decimal)\n    (cond ((zero? decimal) '())\n          (else (cons (remainder\
+    \ decimal 2) (bin_r (quotient decimal 2))))))\n  (list->string (append (list #\\\
+    d #\\b) (reverse (bin_r decimal)) (list #\\d #\\b))))", "  (string-append \"db\"\
+    \ (integer->string decimal 2) \"db\"))\n</code>\n", "  (define (inner decimal\
+    \ result)\n    (if (= 0 decimal)\n        result\n        (inner (/ decimal 2)\n\
+    \               (string-append (number->string (remainder decimal 2)) result))))\n\
+    \  (string-append \"db\" (inner decimal \"\") \"db\"))\n", "  (if (= 0 decimal)\n\
+    \      \"db0db\"\n      (string-append \"db\" (decimal_to_binary_aux decimal)\
+    \ \"db\")))\n", "  (cond\n    [(<= decimal 1) (string-append \"db\" (number->string\
+    \ decimal) \"db\")]\n    [else (decimal_to_binary (/ decimal 2))]))\n", "  (string-append\
+    \ \"db\" (number->string decimal 2) \"db\"))\n", "  (define (decimal_to_binary-helper\
+    \ decimal acc)\n    (cond [(zero? decimal) (string-append acc \"db\")]\n     \
+    \     [else (decimal_to_binary-helper (quotient decimal 2)\n                 \
+    \                         (string-append (string (modulo decimal 2)) acc))]))\n\
+    \  (decimal_to_binary-helper decimal \"\"))\n", "  (format \"db~adb\" (number->string\
+    \ decimal 2)))\n", "  (if (zero? decimal)\n      \"dbdb\"\n      (string-append\n\
+    \       \"db\"\n       (string-append\n        (decimal_to_binary (quotient decimal\
+    \ 2))\n        (number->string (remainder decimal 2)))\n       \"db\")))\n", " \
+    \ (define (power-of-two? x)\n    (cond\n      [(= x 1) true]\n      [(even? x)\
+    \ (power-of-two? (/ x 2))]\n      [else false]))\n  (define (d2b decimal bin)\n\
+    \    (cond\n      [(zero? decimal) (string-append \"db\" (reverse bin) \"db\"\
+    )]\n      [(power-of-two? decimal) (d2b (- decimal 1) (string-append \"1\" bin))]\n\
+    \      [else (d2b (- decimal (expt 2 (floor (log2 decimal)))) (string-append \"\
+    1\" bin))]))\n  (d2b decimal \"\"))\n</code>\n", "  (string-append \"db\" (number->string\
+    \ decimal 2) \"db\"))\n", "  (string-append \"db\"\n                 (number->string\n\
+    \                  (exact->inexact\n                   (integer->exact\n     \
+    \               (string->number\n                     (number->string\n      \
+    \                (exact->inexact\n                       (integer->exact\n   \
+    \                     (string->number\n                         (if (> decimal\
+    \ 0)\n                             (number->string (number->integer (log2 decimal)))\n\
+    \                             0)\n                         10)\n             \
+    \           16)\n                       16)\n                      2)\n      \
+    \               16)\n                    2)\n                   16))\n       \
+    \          \"db\"))\n", "  (string-append \"db\"\n                 (string-join\
+    \ (reverse (map (lambda (x)\n                                              (char->string\
+    \ x))\n                                            (integer->list (number->string\
+    \ (expt 2 decimal)) 2)))\n                              \"\")\n              \
+    \   \"db\"))\n", "  (string-append \"db\"\n                 (number->string\n\
+    \                  (local (define (inner dec)\n                           (cond\
+    \ [(= dec 0) 0]\n                                 [(= dec 1) 1]\n            \
+    \                     [else (modulo (inner (/ dec 2)) 2)]))\n                \
+    \          (inner decimal)))\n                 \"db\"))\n", "  (string-append\
+    \ \"db\"\n                 (integer->string decimal 2)\n                 \"db\"\
+    ))\n", "  (string-append \"db\"\n                 (cond\n                   [(=\
+    \ decimal 0) \"\"]\n                   [else (number->string (quotient decimal\
+    \ 2))]\n                   )\n                 (cond\n                   [(= decimal\
+    \ 0) \"\"]\n                   [else (decimal_to_binary (remainder decimal 2))]\n\
+    \                   )\n                 \"db\"\n                 )\n  )\n```\n\
+    \n```racket\n#lang racket\n", "  (string-append \"db\"\n                 (string-append\
+    \ (number->string (integer->binary decimal)) \"db\")))\n", "  (cond [(= decimal\
+    \ 0) \"db0db\"]\n        [else (append \"db\" (integer->string (remainder (decimal_to_binary\
+    \ (quotient decimal 2)) 2)) \"db\")]))\n", "  (define (get-binary-string decimal)\n\
+    \    (cond\n      [(zero? decimal) \"\"]\n      [else (string-append (get-binary-string\
+    \ (quotient decimal 2)) (number->string (remainder decimal 2)))]))\n  (string-append\
+    \ \"db\" (get-binary-string decimal) \"db\"))\n```\n\n## Hexadecimal-to-decimal\n\
+    \n```\n#lang racket\n", "  (if (= decimal 0)\n      \"db\"\n      (string-append\
+    \ \"db\"\n                     (decimal_to_binary (- decimal 1))))\n)", "  (define\
+    \ (string->list str)\n    (map string->number (string-&gt;list str)))\n  (define\
+    \ (list->string lst)\n    (apply string (map number-&gt;string lst)))\n  (define\
+    \ (int-&gt;bin int)\n    (apply list->string (reverse (accumulate (compose list\
+    \ list) empty int list 0))))\n  (define (accumulate f null init list i)\n    (if\
+    \ (= i init)\n        (f (quotient init 2) (remainder init 2))\n        (if (zero?\
+    \ init)\n            (f (quotient init 2) (remainder init 2))\n            (accumulate\
+    \ f null (quotient init 2) (f (quotient init 2) (remainder init 2)) (- i 1)))))\n\
+    \  (string-append \"db\" (int-&gt;bin decimal) \"db\"))\n</code>\nTest cases are\
+    \ provided by the question-setter.\n<code>#|", "  (string-append \"db\"\n    \
+    \             (number->string (integer->exact-integer decimal 2))\n          \
+    \       \"db\"))\n", "  (define (int->bin int)\n    (cond\n      [(zero? int)\
+    \ \"\"]\n      [else (append (int->bin (quotient int 2)) (number->string (remainder\
+    \ int 2)))]))\n  (append \"db\" (int->bin decimal) \"db\"))\n", "  (string-append\
+    \ \"db\" (number->string (truncate (expt 2 decimal))) \"db\"))\n", "  (define\
+    \ (decimal_to_binary-iter decimal acc)\n    (if (= decimal 0)\n        (string-append\
+    \ \"db\" (number->string (reverse acc)) \"db\")\n        (decimal_to_binary-iter\
+    \ (quotient decimal 2) (cons (remainder decimal 2) acc))))\n  (decimal_to_binary-iter\
+    \ decimal '()))\n", "  (let loop ((remaining-decimal decimal)\n             (result\
+    \ '()))\n    (cond\n      [(< remaining-decimal 2) (cons (number->string remaining-decimal)\
+    \ result)]\n      (else (loop (quotient remaining-decimal 2)\n               \
+    \   (cons (number->string (remainder remaining-decimal 2)) result))))))\n", " \
+    \ (define (to-binary decimal)\n    (cond [(< decimal 2) (number->string decimal)]\n\
+    \          [else (string-append (to-binary (quotient decimal 2))\n           \
+    \                    (number->string (remainder decimal 2)))]))\n  (string-append\
+    \ \"db\" (to-binary decimal) \"db\"))\n", "  (if (zero? decimal) \"db0db\"\n \
+    \     (string-append \"db\" (reverse (get-binary decimal)) \"db\")))\n", "  (string-append\
+    \ \"db\" (number->string decimal 2) \"db\"))\n", "  (string-append \"db\" (number->string\
+    \ (integer->binary decimal)) \"db\"))\n", "  (string-append \"db\" (number->string\
+    \ decimal 2) \"db\"))\n", "  (string-append \"db\"\n                 (if (zero?\
+    \ decimal) \"0\"\n                     (apply string-append (map (\u03BB (x) (number->string\
+    \ (remainder decimal (expt 2 x))))\n                                         \
+    \      (range (quotient decimal 2) 0 -1))))\n                 \"db\"))\n", " \
+    \ (define (d2b_worker decimal)\n    (if (= decimal 0)\n        \"\"\n        (string-append\
+    \ (d2b_worker (quotient decimal 2))\n                       (number->string (remainder\
+    \ decimal 2)))))\n  (string-append \"db\" (d2b_worker decimal) \"db\"))\n", " \
+    \ (define (dec_to_bin n)\n    (cond ((= n 0) '())\n          ((and (&gt; n 0)\
+    \ (= (remainder n 2) 0)) (cons '0 (dec_to_bin (quotient n 2))))\n          ((and\
+    \ (&gt; n 0) (= (remainder n 2) 1)) (cons '1 (dec_to_bin (quotient n 2))))))\n\
+    \  (string-append \"db\" (list-&gt;string (dec_to_bin decimal)) \"db\"))\n</code>\n\
+    My solution works, but I do not like it that much. What do you think? Is there\
+    \ any room for improvements?\n\n\nA:\n\nThe first thing I would do is remove the\
+    \ blank lines. The style guide says to only use blank lines sparingly, to separate\
+    \ large chunks of code. Your code is much easier to read when you remove them:\n\
+    <code>(define (decimal_to_binary decimal)\n  (define (dec_to_bin n)\n    (cond\
+    \ ((= n 0) '())\n          ((and (&gt; n 0) (= (remainder n 2) 0)) (cons '0 (dec_to_bin\
+    \ (quotient n 2))))\n          ((and (&gt; n 0) (= (remainder n 2) 1)) (cons '1\
+    \ (dec_to_bin (quotient n 2))))))\n  (string-append \"db\" (list-&gt;string (dec_to_bin\
+    \ decimal)) \"db\"))\n</code>\nNext I would comment the code. For example, the\
+    \ purpose of the <code>dec_to_bin</code> function is not immediately clear, and\
+    \ neither is the purpose of the <code>decimal_to_binary</code> function. It looks\
+    \ like you're converting a number to its binary representation, but I can't know\
+    \ that without reading the entire body of the function.\nThen I would add type\
+    \ declarations. The <code>decimal_to_binary</code> function converts a number\
+    \ to a string, so that's a good first annotation. I would also add type annotations\
+    \ for <code>dec_to_bin</code>, since that is an important auxiliary function:\n\
+    <code>(: decimal_to_binary (Number -&gt; String))", "  (string-append \"db\" (regexp-replace*\
+    \ #rx\".\" (number->string decimal) (lambda (n) (number->string (modulo n 2))))\
+    \ \"db\"))\n", "  (string-append \"db\" (bytes->string/utf-8 (number->string decimal\
+    \ 2)) \"db\"))\n", "  (define (decimal-to-binary-iter x acc)\n    (if (= x 0)\n\
+    \        acc\n        (decimal-to-binary-iter (quotient x 2)\n               \
+    \                 (string-append (number->string (remainder x 2)) acc))))\n  (string-append\
+    \ \"db\" (decimal-to-binary-iter decimal \"\") \"db\"))\n", "  (string-append\
+    \ \"db\" (integer->binary decimal) \"db\"))\n```\n\n```racket\n#lang racket\n",
+  "  (define (helper acc cntr)\n    (if (= cntr 0)\n        (string-append \"db\"\
+    \ acc \"db\")\n        (if (zero? (modulo decimal 2))\n            (helper (string-append\
+    \ acc \"0\") (- cntr 1))\n            (helper (string-append acc \"1\") (- cntr\
+    \ 1)))))\n  (helper \"\" decimal))\n", "  (define (dec-to-bin d)\n    (let loop\
+    \ ([d d] [b '()])\n      (if (zero? d)\n          b\n          (loop (truncate\
+    \ (/ d 2)) (cons (if (odd? d) '1 '0) b)))))\n  (apply string-append '(\"db\" (reverse\
+    \ (dec-to-bin decimal)) \"db\")))\n</code>\n", "  (let ((remainder (modulo decimal\
+    \ 2))\n        (quotient (quotient decimal 2)))\n    (if (zero? quotient)\n  \
+    \      (string-append \"db\" (number->string remainder) \"db\")\n        (string-append\
+    \ (decimal_to_binary quotient) (number->string remainder)))))\n", "  (define (inner\
+    \ n)\n    (cond\n      ((= n 0)\n       '())\n      (else\n       (cons (if (even?\
+    \ n) #\\0 #\\1) (inner (quotient n 2))))))\n  (string-append \"db\" (list->string\
+    \ (reverse (inner decimal))) \"db\"))\n", "  (string-append \"db\" (integer->binary\
+    \ decimal) \"db\"))\n```\n\n## Example Tests\n\n```clojure", '  (string-append
+    "db" (number->string decimal 2) "db"))', "  (display \"db\")\n  (display (integer->binar",
+  "  (cond [(zero? decimal) \"db0db\"]\n        [else (append \"db\" (integer->string\
+    \ (remainder (exact->inexact (floor (log (inexact->exact decimal) 2))) 1)) (decimal_to_binary\
+    \ (quotient decimal 2)) \"db\")]))\n", "  (define (helper decimal)\n    (if (=\
+    \ decimal 0)\n        '()\n        (cons (remainder decimal 2) (helper (truncate\
+    \ (/ decimal 2))))))\n  (string-append \"db\" (list->string (reverse (helper decimal)))\
+    \ \"db\"))\n", "  (string-append \"db\" (make-string (- (/ decimal 2) 1) #\\1)\
+    \ (if (even? decimal) #\\0 #\\1) \"db\"))\n</code>\n", "  (string-append \"db\"\
+    \ (number->string decimal 2) \"db\"))\n", "  (define (helper decimal-number result)\n\
+    \    (if (= 0 decimal-number)\n        (reverse result)\n        (helper (quotient\
+    \ decimal-number 2) (cons (remainder decimal-number 2) result))))\n  (define (pad-with-zeros\
+    \ xs)\n    (if (= 0 (remainder (length xs) 4))\n        xs\n        (pad-with-zeros\
+    \ (cons 0 xs))))\n  (string-join (pad-with-zeros (cons (char #\\d) (cons (char\
+    \ #\\b) (append (helper decimal '()) (list (char #\\d) (char #\\b)))))) \"\"))\n",
+  "  (define (decimal-&gt;binary-iter decimal result)\n    (cond ((= decimal 0) result)\n\
+    \          ((even? decimal) (decimal-&gt;binary-iter (/ decimal 2) (string-append\
+    \ result \"0\")))\n          (else (decimal-&gt;binary-iter (/ (- decimal 1) 2)\
+    \ (string-append result \"1\")))))\n  (string-append \"db\" (decimal-&gt;binary-iter\
+    \ decimal \"\") \"db\"))\n", '  (printf "db~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a',
+  "  (string-append \"db\"\n                 (number->string (string->number (number->string\
+    \ decimal) 2))\n                 \"db\"))\n", "  (string-append \"db\" (integer->string\
+    \ decimal 2) \"db\"))\n", "  ;; start with a list of 0's\n  (let ([binary (build-list\
+    \ (+ decimal 1) (lambda (i) 0))])\n    ;; reverse the binary list\n    (set! binary\
+    \ (reverse binary))\n    ;; turn the integer into a binary string\n    (decimal-to-binary-helper\
+    \ decimal binary 0)\n    (apply string-append \"db\" binary \"db\")))\n", "  (string-append\
+    \ \"db\" (integer->binary decimal) \"db\"))\n", "  (let loop ((n decimal) (acc\
+    \ \"\"))\n    (cond ((= n 0) (string-append \"db\" (reverse acc) \"db\"))\n  \
+    \        (else (loop (quotient n 2) (string-append (number->string (remainder\
+    \ n 2)) acc))))))\n", "  (string-append \"db\"\n                 (binary-string/recursive\
+    \ decimal)\n                 \"db\"))\n", "  (define (loop n)\n    (if (= n 0)\n\
+    \        (list \"db\")\n        (append (loop (- n (quotient n 2))) (list (if\
+    \ (= (remainder n 2) 0)\n                                                    \
+    \ \"0\"\n                                                     \"1\")))))\n  (apply\
+    \ string-append (loop decimal)))\n", "  (define (get-binary-list n)\n    (if (=\
+    \ n 0)\n        (list 0)\n        (cons (remainder n 2) (get-binary-list (quotient\
+    \ n 2)))))\n  (define (list-to-string lst)\n    (if (null? lst)\n        \"\"\n\
+    \        (string-append (number->string (car lst)) (list-to-string (cdr lst)))))\n\
+    \  (string-append \"db\" (list-to-string (reverse (get-binary-list decimal)))\
+    \ \"db\"))\n", "  (define (helper dec)\n    (cond [(= dec 0) \"\"]\n         \
+    \ [(= (remainder dec 2) 0) (string-append (helper (/ dec 2)) \"0\")]\n       \
+    \   [else (string-append (helper (/ dec 2)) \"1\")]))\n  (string-append \"db\"\
+    \ (helper decimal) \"db\"))\n", "  (define (subroutin n)\n    (if (= n 0) '()\n\
+    \        (append (subroutin (quotient n 2)) (list (- n (* (quotient n 2) 2))))))\n\
+    \  (string-append \"db\" (string-join (reverse (subroutin decimal)) \"\") \"db\"\
+    ))\n</code>\nExamples:\n<code>&gt; (decimal_to_binary 15)\n\"db1111db\"\n&gt;\
+    \ (decimal_to_binary 32)\n\"db100000db\"\n</code>\n", "  (cond\n    [(= decimal\
+    \ 0) \"db0db\"]\n    [else (decimal_to_binary_helper decimal \"db\" \"db\")]))\n",
+  "  (define (rec n)\n    (cond [(> n 1) (rec (/ n 2))]\n          [(= n 1) (list\
+    \ #\\1)]\n          [(= n 0) (list #\\0)]))\n  (apply string-append (append (list\
+    \ #\\d #\\b) (rec decimal) (list #\\d #\\b))))\n", "  (define (make-binary-string\
+    \ d)\n    (cond\n      [(= d 0) \"\"]\n      [else (append (make-binary-string\
+    \ (quotient d 2)) (string (remainder d 2)))]))\n  (string-append \"db\" (make-binary-string\
+    \ decimal) \"db\"))\n", "  (string-append \"db\" (integer->string (string->number\
+    \ (number->string decimal 2))) \"db\"))\n", "  (define (helper n)\n    (cond\n\
+    \      [(= n 0) '()]\n      [else (cons (remainder n 2) (helper (quotient n 2)))]))\n\
+    \  (string-append \"db\" (for/fold ([accumulator '()]) ([num (in-list (helper\
+    \ decimal))])\n                          (string-append accumulator (number->string\
+    \ num))) \"db\"))\n", "  (define binary_string\n    (cond [(= decimal 0) \"\"\
+    ]\n          [(even? decimal) (cons #\\0 (decimal_to_binary (/ decimal 2)))]\n\
+    \          [else (cons #\\1 (decimal_to_binary (/ (- decimal 1) 2)))]))\n  (string-append\
+    \ \"db\" (string-reverse binary_string) \"db\"))\n", "  (format \"db~a~a\" (integer->binary\
+    \ decimal) \"db\"))\n", "  (define (binary-rep num base)\n    (cond ((= num 0)\
+    \ (make-string (add1 base) #\\0))\n          ((= base 0) \"\")\n          (else\
+    \ (string (remainder num 2) (binary-rep (quotient num 2) (sub1 base))))))\n  (if\
+    \ (zero? decimal) \"db0db\"\n      (string-append \"db\" (binary-rep decimal 31)\
+    \ \"db\")))\n", "  (string-append \"db\"\n                 (number->string\n \
+    \                 (exact->inexact\n                   (inexact->exact\n      \
+    \              (string->number\n                     (string-append\n        \
+    \              (number->string (quotient decimal 2))\n                      (number->string\
+    \ (remainder decimal 2)))))))\n                 \"db\"))\n", "  (string-append\
+    \ \"db\"\n                 (integer->string\n                  (let loop ([decimal\
+    \ decimal]\n                             [remainder 0]\n                     \
+    \        [result 0])\n                    (cond [(<= 0 decimal)\n            \
+    \               (loop (quotient decimal 2)\n                                 (modulo\
+    \ decimal 2)\n                                 (string-append (integer->string\
+    \ remainder) result))]\n                          [else result])))\n         \
+    \        \"db\"))\n", "  (format \"db~bdb\" decimal))\n", "  (display \"db\")\n\
+    \  (display (integer->binary decimal))\n  (display \"db\"))\n", "  (define (build-binary\
+    \ bits)\n    (if (empty? bits)\n        \"db\"\n        (string-append \"db\"\
+    \ (string-join (reverse bits) \"\") \"db\")))\n  (build-binary (for/list ([bit\
+    \ (in-range 0 (ceiling (log2 decimal)))])\n                  (if (= (modulo decimal\
+    \ (expt 2 bit)) 0)\n                      \"0\"\n                      \"1\"))))",
+  "  (string-append \"db\" (number->string decimal 2) \"db\"))\n", '  (string-append
+    "db" (number->string (integer->exact-integer (expt 2 decimal))) "db"))', '  (format
+    "db~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a~a',
+  "  (string-append \"db\"\n                 (decimal_to_binary-helper decimal)\n\
+    \                 \"db\"))\n", "  (string-append \"db\" (number->string decimal\
+    \ 2) \"db\"))\n", "  (string-append \"db\" (number->string decimal 2) \"db\"))\n",
+  "  (let loop ((decimal decimal)\n             (acc    \"\")\n             (n   \
+    \   1))\n    (if (< n decimal)\n        (loop (/ decimal 2)\n              (if\
+    \ (= 0 (modulo decimal 2))\n                  (string-append acc \"0\")\n    \
+    \              (string-append acc \"1\"))\n              (* n 2))\n        (string-append\
+    \ \"db\" acc \"db\"))))\n", "  (define (helper num)\n    (if (= num 0) '()\n \
+    \     (cons (remainder num 2) (helper (quotient num 2)))))\n  (string-join (map\
+    \ (lambda (digit) (number->string digit)) (helper decimal)) \"\")\n  )\n```\n\n\
+    #### Elixir\n\n```elixir\n# Decimal to binary.\n# You will be given a number in\
+    \ decimal form and your task is to convert it to binary format.\n# The function\
+    \ should return a string, with each character representing a binary number.\n\
+    # Each character in the string will be '0' or '1'.\n# There will be an extra couple\
+    \ of characters 'db' at the beginning and at the end of the string.\n# The extra\
+    \ characters are there to help with the format.\n# Examples:\n# decimal_to_binary(15)\
+    \   # returns \"db1111db\"\n# decimal_to_binary(32)   # returns \"db100000db\"\
+    \ndefmodule DecimalBinary do\n  def decimal_to_binary(decimal) do\n    decimal\
+    \ |> decimal_to_binary_helper |> List.foldl(~s(), &concat/2)\n  end\n\n  defp\
+    \ decimal_to_binary_helper(0), do: []\n  defp decimal_to_binary_helper(decimal)\
+    \ do\n    quotient = decimal rem 2\n    [quotient | decimal_to_binary_helper(decimal\
+    \ div 2)]\n  end\nend\n```\n\n#### Haskell\n\n```haskell\nimport Data.List (intercalate)\n\
+    \ndecimal_to_binary :: Integer -> String\ndecimal_to_binary 0 = \"\"\ndecimal_to_binary\
+    \ n = (decimal_to_binary (n `div` 2)) ++ show (n `mod` 2)\n\nmain = print (decimal_to_binary\
+    \ 12)\n```\n\n#### Java\n\n```java\npublic class DecimalBinary {\n  public static\
+    \ String decimalToBinary(int decimal) {\n    return Integer.toBinaryString(decimal);\n\
+    \  }\n}\n```\n\n#### JavaScript\n\n```javascript\n// Decimal to binary.\n// You\
+    \ will be", "  (let* ([decimal_as_string (number->string decimal)]\n         [string_length\
+    \ (string-length decimal_as_string)]\n         [dummy_length (add1 (add1 string_length))]\n\
+    \         [zeros_to_pad (- (add1 (add1 (* 4 string_length))) dummy_length)])\n\
+    \    (string-append \"db\"\n                   (make-string zeros_to_pad #\\0)\n\
+    \                   decimal_as_string\n                   \"db\")))\n```\n\n##\
+    \ Credit\nThis problem was taken from the [DailyProgrammer][reddit] challenges.\n\
+    \n[reddit]: https://www.reddit.com/r/dailyprogrammer", '  (string-append "db"
+    (list->string (list->bin (decimal ->integer ))) "db"))', "  (define powers '(1\
+    \ 2 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536 131072 262144\
+    \ 524288 1048576 2097152 4194304 8388608 16777216 33554432 67108864 134217728\
+    \ 268435456 536870912 1073741824 2147483648 4294967296 8589934592 17179869184\
+    \ 34359738368 68719476736 137438953472 274877906944 549755813888 1099511627776\
+    \ 2199023255552 4398046511104 8796093022208 17592186044416 35184372088832 70368744177664\
+    \ 140737488355328 281474976710656 562949953421312 1125899906842624 2251799813685248\
+    \ 4503599627370496 9007199254740992 18014398509481984 36028797018963968 72057594037927936\
+    \ 144115188075855872 288230376151711744 576460752303423488 1152921504606846976\
+    \ 2305843009213693952 4611686018427387904 9223372036854775808 18446744073709551616))\n\
+    \  (define (digit? n)\n    (eq? (modulo n 2) 1))\n  (define (binary-digits number)\n\
+    \    (cond [(= number 0) '()]\n          [(digit? number) (cons 1 (binary-digits\
+    \ (quotient number 2)))]\n          [else (cons 0 (binary-digits (quotient number\
+    \ 2)))]))\n  (define (length-in-bits integer)\n    (define (loop n i)\n      (cond\
+    \ [(= i (length powers)) n]\n            [(> integer (list-ref powers i)) (loop\
+    \ (+ n 1) (+ i 1))]\n            [else (loop n (+ i 1))]))\n    (loop 0 0))\n\
+    \  (define (merge-two-lists a b)\n    (cond [(null? a) b]\n          [(null? b)\
+    \ a]\n          [else (cons (car a) (cons (", "  (regexp-replace* #rx\".\" (string-append\
+    \ \"db\" (number->string decimal 2) \"db\") (lambda (m) (number->string (string->number\
+    \ (regexp-match #rx\".\" m)) 2))))\n", "  (string-append \"db\" (number->string\
+    \ decimal 2) \"db\"))\n", "  (string-append \"db\"\n                 (string-reverse\n\
+    \                  (for/fold ([result \"\"] ([n (in-range (integer-length decimal)\
+    \ -1 -1)]) #:when (> n 0))\n                    (string-append result (number->string\
+    \ (modulo decimal (expt 2 n))))\n                    (quotient decimal (expt 2\
+    \ n))))\n                 \"db\"))\n", "  (string-append \"db\" (number->string\
+    \ decimal 2) \"db\"))\n", "  (display (string-append\n            \"db\"\n   \
+    \         (integer->string\n             (list->integer\n              (reverse\n\
+    \               (binary decimal))))\n            \"db\")))\n", "  (define (decimal-&gt;binary-helper\
+    \ decimal)\n    (cond [(= decimal 0) \"\"]\n          [(= decimal 1) \"1\"]\n\
+    \          [else (string-append (decimal-&gt;binary-helper (quotient decimal 2))\n\
+    \                               (if (= (remainder decimal 2) 0) \"0\" \"1\"))]))\n\
+    \  (string-append \"db\" (decimal-&gt;binary-helper decimal) \"db\"))\n</code>\n\
+    Let me know if the explanation is still not clear or if you have any other questions.\n",
+  "  (string-append \"db\" (build-binary-string decimal) \"db\"))\n", "  (define (to-binary\
+    \ n)\n    (cond [(= n 0) \"\"]\n          [(= n 1) \"1\"]\n          [else\n \
+    \          (append (to-binary (modulo n 2))\n                   (to-binary (quotient\
+    \ n 2)))]))\n  (string-append \"db\" (to-binary decimal) \"db\"))\n", '  (string-append
+    "db" (number->string (logior (string->number (number->string decimal)) 0)) "db"))',
+  "  (string-append \"db\"\n                 (number->string (inexact->exact (log2\
+    \ decimal)))\n                 \"db\"))\n", "  (if (zero? decimal)\n      \"db0db\"\
+    \n      (string-append \"db\" (decimal_to_binary_rec (- decimal 1)) \"db\")))\n",
+  "  (string-append \"db\"\n                 (number->string\n                  (string->number\n\
+    \                   (number->string\n                    (integer->char decimal)\n\
+    \                    2)\n                   10))\n                 \"db\"))\n",
+  "  (string-append \"db\"\n                 (string-join (reverse (integer->list\
+    \ (number->string decimal) 2)) \"\")\n                 \"db\"))", "  (define (iter\
+    \ dividend)\n    (if (= dividend 0)\n        '()\n        (cons (remainder dividend\
+    \ 2) (iter (truncate (/ dividend 2))))))\n  (define (bin-string-reversed digits)\n\
+    \    (if (null? digits)\n        '()\n        (append (bin-string-reversed (cdr\
+    \ digits)) (cons (number->string (car digits)) '()))))\n  (string-append \"db\"\
+    \ (bin-string-reversed (iter decimal)) \"db\"))\n", "  (string-append \"db\"\n\
+    \                 (let loop ((n decimal)\n                            (s \"\"\
+    ))\n                   (cond ((zero? n) s)\n                         (else (loop\
+    \ (quotient n 2)\n                                     (string-append (number->string\
+    \ (remainder n 2)) s)))))\n                 \"db\"))\n```\n\n```\n#lang racket\n",
+  "  (define (inner-decimal-to-binary decimal accumulator)\n    (cond\n      [(= decimal\
+    \ 0) accumulator]\n      [else (inner-decimal-to-binary (quotient decimal 2) (string\
+    \ (modulo decimal 2) accumulator))]))\n  (string \"db\" (reverse (inner-decimal-to-binary\
+    \ decimal \"\")) \"db\"))\n", "  (string-append \"db\" (number->string decimal\
+    \ 2) \"db\"))\n</code>\nQuestion\nThe unit test below is marked as failing:\n\
+    <code>decimal_to_binary(8) = db1000db\n</code>\nCan someone please explain why\
+    \ it is marked as failing?\nThe answer given is:\n<code>db1000db\n</code>\nBut\
+    \ I think it should be:\n<code>db1000db\n</code>\nWhere am I going wrong?\n\n\n\
+    A:\n\nIt is failing because it is using a different solution.\nA better solution\
+    \ would be to use binary-string:\n<code>;; You will be given a number in decimal\
+    \ form and your task is to convert it to", "  (string-append \"db\"\n        \
+    \         (if (zero? decimal)\n                     \"0\"\n                  \
+    \   (reverse (foldl (lambda (acc n)\n                                       (if\
+    \ (zero? n)\n                                           (cons #\\0 acc)\n    \
+    \                                       (cons #\\1 acc)))\n                  \
+    \                   (list)\n                                     (range (inexact->exact\
+    \ (ceiling (log2 decimal))) -1 -1))))\n                 \"db\"))\n", "  (string-append\
+    \ \"db\"\n                 (integer->string\n                  (string->integer\n\
+    \                   (string-join\n                    (reverse\n             \
+    \        (map (lambda (n) (if (= n 0) \"0\" \"1\"))\n                        \
+    \  (build-list (ceiling (log2 decimal))\n                                    \
+    \  (lambda (i) (remainder decimal (expt 2 i))))))\n                    \"\"))\n\
+    \                  2))\n  \"db\")\n", "  (define (div2 d)\n    (quotient d 2))\n\
+    \  (define (remainder d)\n    (modulo d 2))\n  (define (decimal_to_binary-iter\
+    \ d result)\n    (cond\n      [(zero? d)  (string-append \"db\" (string-reverse\
+    \ result) \"db\")]\n      [else       (decimal_to_binary-iter (div2 d) (string-append\
+    \ (number->string (remainder d)) result))]))\n  (decimal_to_binary-iter decimal\
+    \ \"\"))\n", "  (list->string\n   (append\n    (list #\\d #\\b)\n    (number->string\n\
+    \     decimal\n     2)\n    (list #\\d #\\b))))\n", "  (string-append \"db\" (convert\
+    \ decimal) \"db\"))\n", "  (if (= decimal 0)\n      (string-append \"db\" \"0\"\
+    \ \"db\")\n      (string-append \"db\" (build-binary-string 0 0) \"db\")))", " \
+    \ (string-append \"db\" (number->string (exact->inexact (binary decimal))) \"\
+    db\"))\n", "  (apply string (cons #\\d (cons #\\b (append (binary-digits decimal)\
+    \ (list #\\d #\\b))))))\n", "  (define (decimal_to_binary-accumulator decimal\
+    \ accumulator)\n    (cond [(= decimal 0) (string-append \"db\" accumulator \"\
+    db\")]\n          [else\n           (decimal_to_binary-accumulator (quotient decimal\
+    \ 2)\n                                          (string-append (number->string\
+    \ (remainder decimal 2)) accumulator))]))\n  (decimal_to_binary-accumulator decimal\
+    \ \"\"))\n```\n\n## Binary to Decimal\n\n``` #lang racket\n", "  (string-append\
+    \ \"db\" (number->string (integer->binary decimal)) \"db\"))\n", "  (define (split-by-odd-even\
+    \ n)\n    (let* ((index (quotient n 2))\n           (rest (remainder n 2)))\n\
+    \      (if (= index 0)\n          (list (number->string rest))\n          (append\
+    \ (split-by-odd-even index) (list (number->string rest))))))\n  (apply string-append\
+    \ (append '(\"db\") (split-by-odd-even decimal) '(\"db\"))))", "  (string-append\
+    \ \"db\"\n                 (number->string\n                  (integer->binary\
+    \ decimal))\n                 \"db\"))\n", "  (string-append \"db\" (number->string\
+    \ (exact->inexact decimal)) \"db\"))\n", "  (display \"decimal: \")\n  (display\
+    \ decimal)\n  (display \"\\n\")\n  (define (get_binary_digits decimal binary)\n\
+    \    (display \"binary: \")\n    (display binary)\n    (display \"\\n\")\n   \
+    \ (display \"decimal: \")\n    (display decimal)\n    (display \"\\n\")\n    (display\
+    \ \"remainder: \")\n    (display (remainder decimal 2))\n    (display \"\\n\"\
+    )\n    (display \"quotient: \")\n    (display (quotient decimal 2))\n    (display\
+    \ \"\\n\")\n    (display \"-------------------\\n\")\n    (if (= (quotient decimal\
+    \ 2) 0)\n        (cons (remainder decimal 2) (cons 0 binary))\n        (get_binary_digits\
+    \ (quotient decimal 2) (cons (remainder decimal 2) binary))))\n  (string-join\
+    \ (list->string (append (list #\\d #\\b) (reverse (get_binary_digits decimal '()))\
+    \ (list #\\d #\\b)))))\n", "  (define str (string->list (number->string decimal)))\n\
+    \  (define (loop str result)\n    (if (empty? str)\n        (list->string (append\
+    \ result (list #\\d #\\b)))\n        (loop (cdr str) (append result (list (+ #\\\
+    0 (car str)))))))\n  (loop str (list #\\d #\\b)))\n", "  (define (append-db str)\n\
+    \    (string-append \"db\" str \"db\"))\n  (append-db (number->string decimal\
+    \ 2)))\n", "  (define (decimal-to-binary-iter number)\n    (if (zero? number)\n\
+    \        '(d b)\n        (cons (modulo number 2) (decimal-to-binary-iter (quotient\
+    \ number 2)))))\n  (string-join (reverse (decimal-to-binary-iter decimal)) \"\"\
+    ))\n</code>\nSolutions offered elsewhere solve the problem by iterating over the\
+    \ binary string and counting the number of zeros. This is not the approach I am\
+    \ looking for. I would like to iterate over the decimal number and build the binary\
+    \ number.\n\n\nA:\n\nThere's a typo in <code>decimal-to-binary-iter</code>, where\
+    \ you should use the <code>number</code> instead of <code>decimal</code>.\nYou\
+    \ can do better by using the <code>integer-&gt;string</code> procedure, which\
+    \ can convert any integer to a string representation in any base:\n<code>(define\
+    \ (decimal_to_binary decimal)\n  (string-append \"db\"\n                 (integer-&gt;string\
+    \ decimal 2)\n                 \"db\"))\n</code>\n", "  (string-append \"db\"\n\
+    \                 (string-reverse\n                  (list->string\n         \
+    \          (reverse\n                    (binary-digits decimal 2))))\n      \
+    \           \"db\"))\n", "  (define (helper decimal result)\n    (cond [(zero?\
+    \ decimal) result]\n          [else (helper (/ decimal 2) (string-append (number->string\
+    \ (remainder decimal 2)) result))]))\n  (string-append \"db\" (helper decimal\
+    \ \"\") \"db\"))\n", "  (string-append \"db\" (decimal_to_binary_helper decimal)\
+    \ \"db\"))\n", "  (cond\n    [(= decimal 0) '\"db0db\"]\n    [else (string-append\n\
+    \            \"db\"\n            (decimal_to_binary (quotient decimal 2))\n  \
+    \          (if (= (remainder decimal 2) 0) \"0\" \"1\")\n            \"db\")]))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

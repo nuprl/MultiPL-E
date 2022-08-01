@@ -11,7 +11,610 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate m
   \ 14 -15) 20)\n    (check-equal? (candidate 76 67) 42)\n    (check-equal? (candidate\
   \ 17 27) 49)\n    (check-equal? (candidate 0 1) 0)\n    (check-equal? (candidate\
   \ 0 0) 0)\n))\n\n(test-humaneval)"
-completions: []
+completions: ['  (remainder (* a b) 10))', "  (if (and (positive? a) (positive? b))\n\
+    \      (* (% a 10) (% b 10))\n      0))\n", "  (require math)\n  (modulo (* (modulo\
+    \ a 10) (modulo b 10)) 10))\n</code>\nI'm getting a weird error that I can't make\
+    \ sense of. I'm pretty sure I'm doing things right. Could anyone help?\nHere's\
+    \ the error:\n<code>; application: not a procedure;", "  (apply * (map string->number\
+    \ (string-split (string-append (number->string a) (number->string b)) \"\"))))\n",
+  "  (let ((a-unit-digit (modulo a 10))\n        (b-unit-digit (modulo b 10)))\n \
+    \   (* a-unit-digit b-unit-digit)))", "  (define (last a)\n    (modulo a 10))\n\
+    \  (define (last-two a)\n    (last (quotient a 10)))\n  (define (first a)\n  \
+    \  (modulo (quotient a 10) 10))\n  (define (first-two a)\n    (quotient a 100))\n\
+    \  (define (slurp a)\n    (define (s a)\n      (if (= a 0)\n          0\n    \
+    \      (+ (s (quotient a 10)) (last a))))\n    (s a))\n  (define (slurp-last a)\n\
+    \    (define (s a)\n      (if (= a 0)\n          0\n          (+ (s (last-two\
+    \ a)) (first a))))\n    (s a))\n  (define (slurp-first a)\n    (define (s a)\n\
+    \      (if (= a 0)\n          0\n          (+ (s (first-two a)) (last a))))\n\
+    \    (s a))\n  (cond\n    [(and (= (slurp a) 0) (= (slurp b) 0)) 0]\n    [(and\
+    \ (= (slurp a) (last a)) (= (slurp b) (last b))) (* (last a) (last b))]\n    [(and\
+    \ (= (slurp-last a) (last a)) (= (slurp-last b) (last b))) (* (last a) (last b))]\n\
+    \    [(and (= (slurp-first a) (first a)) (= (slurp-first b) (first b))) (* (first\
+    \ a) (first b))]\n    [else 0]))\n</code>\nWhich, if I'm not wrong, returns the\
+    \ same expected answers (including 0 when the multiplication of the units is zero)\
+    \ than the original.\nEven if it is a bit too verbose I would like to have it\
+    \ as simple as possible (I'm not a Racket expert yet). How could I do it better?\n\
+    Thanks\n\n\nA:\n\nIf you have an <code>integer?</code> you can use <code>integer-&gt;digits</code>\
+    \ to turn it into a list of digits (a lot like <code>show</code> but in", "  (*\
+    \ (modulo a 10) (modulo b 10)))\n</code>\nThe testing framework doesn't like this\
+    \ and returns \"Test 1 - unexpected result.\"\nI know the answers are correct,\
+    \ but I don't know what the error means.\nAny help is appreciated.\nEdit: someone\
+    \ commented my post saying I wasn't using Racket.  I was, but I did not add the\
+    \ language tag.  I have added it.\n\n\nA:\n\nThe error is at the end of your function,\
+    \ you've written\n<code>(define (multiply a b)\n  (* (modulo a 10) (modulo b 10)))\n\
+    </code>\nbut it should be\n<code>(define (multiply a b)\n  (* (modulo a 10) (modulo\
+    \ b 10)))\n</code>\njust a missing parenthesis there\n", '  (modulo (* a b) 10))',
+  "  (remainder (* a b) 10))\n</code>\nOn running the above code, I get the following\
+    \ output:\n<code>&gt; (multiply 148 412)\n6\n&gt; (multiply 19 28)\n2\n&gt; (multiply\
+    \ 2020 1851)\n0\n&gt; (multiply 14 -15)\n4\n</code>\nThe output is all wrong.\
+    \ Are the test cases wrong, or is it my code?\n\n\nA:\n\n<code>remainder</code>\
+    \ is modulo, which is different from the common middle school definition of the\
+    \ \"remainder\" from long division. (The middle school definition is sometimes\
+    \ also called the modulus).\nWhen doing long division, the remainder is the absolute\
+    \ value of the difference between the dividend and the quotient times the divisor:\n\
+    <code>|dividend - quotient * divisor|\n</code>\n\nEdit:\nI am not a mathematician,\
+    \ but I think I figured out why the quotient of the product is always <code>0</code>\
+    \ or <code>1</code>.\nSince <code>a</code> and <code>b</code> are positive, <code>a*b</code>\
+    \ is less than <code>100</code> because the biggest number we can make is <code>9*9</code>\
+    \ which is <code>81</code>. <code>81</code> is also the largest possible integer\
+    \ <code>x</code> we can have where <code>x &lt; 100</code> and <code>x % 10 ==\
+    \ 9</code>.\nWhen we divide a number less than <code>100</code> by <code>10</code>,\
+    \ the quotient is always <code>0</code> or <code>1</code>.\n", "  (* (remainder\
+    \ a 10) (remainder b 10)))\n</code>\nWhy does the <code>multiply</code> function\
+    \ produce the error <code>reference to undefined identifier: remainder</code>?\n\
+    Here is the same function in Python:\n<code>def multiply(a, b):\n    return (a\
+    \ % 10) * (b % 10)\n</code>\nand here is the same function in Javascript:\n<code>function\
+    \ multiply(a, b) {\n    return (a % 10) * (b % 10);\n}\n</code>\nBoth Python and\
+    \ Javascript run the function as expected.  What is wrong with the Racket function?\n\
+    \n\nA:\n\n<code>%</code> is Racket's modulo operator.\n<code>remainder</code>\
+    \ is the actual Racket's name for modulo.\nThat's why you're getting that error.\n\
+    I would suggest sticking to <code>%</code> for simplicity, but if you must use\
+    \ <code>remainder</code>, you can use <code>#lang racket/base</code> to have it\
+    \ available.\n", "  (cond ((and (not (integer? a)) (not (integer? b))) 0)\n  \
+    \      ((and (integer? a) (integer? b))\n         (* (modulo a 10) (modulo b 10)))\n\
+    \        ((and (not (integer? a)) (integer? b))\n         (* (modulo b 10) 0))\n\
+    \        ((and (integer? a) (not (integer? b)))\n         (* (modulo a 10) 0))))\n",
+  '  (* (modulo a 10) (modulo b 10)))', "    (* (last-digit a) (last-digit b)))\n",
+  "  (define (mod a)\n    (if (= a 0)\n        0\n        (modulo a 10)))\n  (define\
+    \ (mod-product a b)\n    (* (mod a) (mod b)))\n  (mod-product a b))\n", '  (modulo
+    (* a b) 10))', "  (modulo (* a b) 10))\n", "  (* (modulo a 10) (modulo b 10)))\n",
+  "  (define (extract-unit-digit num)\n    (modulo num 10))\n  (define (abs num)\n\
+    \    (if (&lt; num 0) (- num) num))\n  (* (extract-unit-digit (abs a)) (extract-unit-digit\
+    \ (abs b))))\n</code>\nI suppose I could do it with a case statement, but it seems\
+    \ so much more verbose, like this:\n<code>#lang racket\n", "  (modulo (* a b)\
+    \ 10))\n</code>\nThis works as intended, but I want to know if I can shorten this\
+    \ code somehow.\n\n\nA:\n\nI'd go with:\n<code>(define (multiply a b)\n  (remainder\
+    \ (* a b) 10))\n</code>\nOr if you want to really make it one line:\n<code>(define\
+    \ (multiply a b) (remainder (* a b) 10))\n</code>\n", "  (modulo (modulo a 10)\
+    \ (modulo b 10)))\n", '    (* (modulo a 10) (modulo b 10)))', "  (* (remainder\
+    \ a 10) (remainder b 10)))\n</code>\n", "    (* (% a 10) (% b 10)))\n", "  (remainder\
+    \ (* a b) 10))\n", "  (modulo (* a b) 10))\n", '  (remainder (* a b) 10))', " \
+    \ (* (% a 10) (% b 10)))\n</code>\nThe error I'm getting is \n<code>- Expected:\
+    \ 16\n- But got: #f\n</code>\nI can't figure out why. Thanks for your help.\n\n\
+    \nA:\n\nIn Racket, the <code>%</code> operator is the remainder after division.\n\
+    The <code>modulo</code> operator is the modulus (or \"distance\") between two\
+    \ numbers.\nThe built-in <code>modulo</code> procedure may be accessed via the\
+    \ <code>math</code> or <code>racket</code> languages.\nIt's also possible to define\
+    \ your own, as in the following example:\n<code>(define (modulo a b)\n  (if (&lt;\
+    \ a b)\n      a\n      (modulo (- a b) b)))\n</code>\n", "  (* (% a 10) (% b 10)))\n\
+    </code>\nWhen I run the function multiply in REPL, it works well. However, when\
+    \ I submit my answer to the checker, it returns an error: (test-equal? multiply\
+    \ (multiply 2819 2819) 4). What's the problem?\n\n\nA:\n\nYour function works\
+    \ well:\n<code>(multiply 148 412)\n=&gt; 16", "  (remainder (abs a) 10) * (remainder\
+    \ (abs b) 10))\n</code>\nI'm getting this error message:\n<code>test/test.rkt:13:0:\
+    \ module: identifier multiply must be defined, but supplied variables are ()\n\
+    \  in: multiply\n  context...:\n   test/test.rkt:13:0 &lt;:\n</code>\nI'm not\
+    \ sure how to fix this. I'm fairly new to racket and I'm stumped.\n\n\nA:\n\n\
+    There are two ways to define a function. One is through a <code>define</code>\
+    \ special form, and the other is through a <code>lambda</code> special form. A\
+    \ <code>define</code> special form will wrap a <code>lambda</code> expression\
+    \ for you:\n<code>(define (foo)\n  'foo)\n</code>\nis a shorthand for\n<code>(define\
+    \ foo\n  (lambda ()\n    'foo))\n</code>\nIn your case, you have defined a function\
+    \ called <code>multiply</code> which takes two arguments, but you didn't call\
+    \ it. \n<code>(define (multiply a b)\n  (remainder (abs a) 10) * (remainder (abs\
+    \ b) 10))\n</code>\nIf you want to call it, you should just call it:\n<code>(multiply\
+    \ 10 3)\n</code>\n", "  (* (remainder a 10) (remainder b 10)))\n</code>\n", " \
+    \ ;(display (+ (modulo a 10) (modulo b 10)))\n  (+ (modulo a 10) (modulo b 10)))\n",
+  "  (modulo (modulo a 10) (modulo b 10)))\n</code>\nNow I'm wondering if this is\
+    \ the most elegant solution.\nCan someone please try to improve the solution or\
+    \ check if it's valid?\nThanks!\n\n\nA:\n\nFirst of all, your solution doesn't\
+    \ work. It fails when the inputs are negative.\nTo get the last digit of a positive\
+    \ integer, you can use <code>modulo</code> to take the remainder when dividing\
+    \ by 10:\n<code>(modulo number 10)\n</code>\nIf <code>number</code> is negative,\
+    \ you can negate it, then do the same:\n<code>(modulo (- number) 10)\n</code>\n",
+  "  (display (modulo (abs a) 10))\n  (display (modulo (abs b) 10))\n  (modulo (*\
+    \ (modulo (abs a) 10) (modulo (abs b) 10)) 10))\n</code>", "  (let ((a (modulo\
+    \ a 10))\n        (b (modulo b 10)))\n    (* a b)))\n", "  (define (power a b)\n\
+    \    (cond\n      [(zero? b) 1]\n      [else (* a (power a (- b 1)))]))\n  (define\
+    \ (unit a)\n    (cond\n      [(zero? a) 0]\n      [else (modulo a 10)]))\n  (define\
+    \ (abs a)\n    (cond\n      [(zero? a) 0]\n      [(negative? a) (- a)]\n     \
+    \ [else a]))\n  (define (sign a)\n    (cond\n      [(negative? a) (- 1)]\n   \
+    \   [else 1]))\n  (* (unit a) (unit b) (power 10 (+ (abs (- (sign a) (sign b)))\
+    \ 1))))\n</code>\nThe question is about pattern matching on numbers, and I would\
+    \ think that the way to go was to pattern match on the sign of the numbers and\
+    \ check if they are both equal or different and add 1 to the power of 10 (since\
+    \ 10 can't have a 0 at the beginning), but I'm stuck with the numbers that are\
+    \ negative. I would need to add 1 to the power of 10, but if I do <code>(power\
+    \ 10 (+ (abs (- (sign a) (sign b))) 1))</code> and <code>a</code> and <code>b</code>\
+    \ are negative, I would end up adding 1 to the power of 10 twice since <code>(sign\
+    \ a)</code> and <code>(sign b)</code> would both return -1. Do you have any suggestions\
+    \ on how I can fix this?\n\n\nA:\n\nHere's a way to do this using simple arithmetic\
+    \ and no tests.\n<code>(define (sign a) (- 1 (* a (- a a))))\n", '  (modulo (*
+    a b) 10))', "  (remainder (* a b) 10))\n", "  (modulo (* a b) 10))\n", "  (* (modulo\
+    \ a 10) (modulo b 10)))\n", "  (display a)(display \" \")(display b)(newline)\n\
+    \  (define (digit x)\n    (cond\n      [(> x 10) (digit (modulo x 10))]\n    \
+    \  [else x]))\n  (define (p a b)\n    (define d1 (digit a))\n    (define d2 (digit\
+    \ b))\n    (define d (modulo (* d1 d2) 10))\n    (display d)\n    (newline)\n\
+    \    d)\n  (p a b))\n", "  (cond ((= a 0) 0)\n        ((= b 0) 0)\n        ((&lt;\
+    \ a 0) (* (- a) (- b)))\n        ((&lt; b 0) (* a (- b)))\n        (else (* (%\
+    \ a 10) (% b 10)))))\n", "  (define (unit a)\n    (if (= a 0) 0\n        (modulo\
+    \ a 10)))\n  (define (mult a b)\n    (if (= a 0) 0\n        (* (unit a) (unit\
+    \ b))))\n  (mult a b))", "  (modulo (* a b) 10))\n</code>\nand my solution:\n\
+    <code>#lang racket\n", "  (remainder (* a b) 10))\n", '  (modulo (* a b) 10))',
+  "  (let* ([unit_digits_of_a (modulo a 10)]\n         [unit_digits_of_b (modulo b\
+    \ 10)])\n    (* unit_digits_of_a unit_digits_of_b)))\n", "  (remainder (* a b)\
+    \ 10))\n", "  (* (modulo a 10) (modulo b 10)))\n", "  (* (remainder a 10) (remainder\
+    \ b 10)))\n", "  (define (last-digit x) (modulo x 10))\n  (define (all-digits\
+    \ x) (modulo x 10))\n  (define (first-digit x) (quotient x 10))\n  (define (prod\
+    \ x y)\n    (modulo (* x y) 10))\n  (prod (last-digit a) (last-digit b)))\n",
+  '  (remainder (* a b) 10))', "  (displayln a)\n  (displayln b)\n  (exact->inexact\
+    \ (remainder (modulo (abs a) 10) (modulo (abs b) 10))))\n", "  (modulo (* a b)\
+    \ 10))\n</code>\nAbove is my attempt at a function that returns the product of\
+    \ their unit digits. It fails, however, because the modulo function doesn't work\
+    \ with negative values. How can I solve this?\n\n\nA:\n\nUse <code>abs</code>:\n\
+    <code>(define (multiply a b)\n  (modulo (* a b) 10))\n", '  (* (remainder a 10)
+    (remainder b 10)))', "  (modulo (* a b) 10))\n", "  (modulo (modulo a 10)\n  \
+    \        (modulo b 10)))\n", "  (define (digits n)\n    (if (zero? n) '()\n  \
+    \      (cons (remainder n 10) (digits (quotient n 10)))))\n  (if (or (positive?\
+    \ a) (positive? b))\n      (if (and (positive? a) (positive? b))\n          (apply\
+    \ * (digits a) (digits b))\n          (apply * (digits (abs a)) (digits (abs b))))\n\
+    \      (apply * (digits (abs a)) (digits (abs b)))))\n</code>\n", "  (define (last-digit\
+    \ x)\n    (remainder x 10))\n  (* (last-digit a) (last-digit b)))\n", "  (exact-integer-sqrt\
+    \ (* (modulo a 10) (modulo b 10))))\n</code>\nTest Code\n<code>#lang racket\n",
+  "  (*\n   (modulo\n    (abs a)\n    10)\n   (modulo\n    (abs b)\n    10)))\n",
+  "  (remainder (* a b) 10))\n</code>\nI was wondering if there is a way to improve\
+    \ this code. \n\n\nA:\n\nIf you really want to make it really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really really really really really really really really really really\
+    \ really really", "  (if (and (positive? a) (positive? b))\n      (modulo (multiply\
+    \ (integer->string a) (integer->string b)) 10)\n      (begin\n        (cond\n\
+    \          [(and (positive? a) (negative? b)) (multiply (- a) b)]\n          [(and\
+    \ (negative? a) (positive? b)) (multiply a (- b))]\n          [(and (negative?\
+    \ a) (negative? b)) (multiply (- a) (- b))]))))", "  (if (or (zero? a) (zero?\
+    \ b))\n      0\n      (modulo (* a b) 10)))\n</code>\nI think I have the wrong\
+    \ number of arguments to the function. I copied and pasted a bunch of other solutions,\
+    \ but still get the same error message.\n\n\nA:\n\nI believe you need to add the\
+    \ <code>lang</code> at the top\n<code>#lang racket\n</code>\nor you'll need to\
+    \ add\n<code>#!racket\n</code>\nat the top of your file.\nThe script doesn't recognize\
+    \ the <code>;</code> as a comment and is interpreting it as a part of the function\
+    \ call.\n", "    (modulo (* a b) 10))\n</code>\n<code>#lang racket\n", "  (modulo\
+    \ (* a b) 10))\n</code>\n", '  (modulo (* a b) 10))', "  ; multiples each digit\
+    \ and adds together\n  (apply + (map (lambda (x y) (* x y))\n            (integer->list\
+    \ a)\n            (integer->list b)))\n)\n", "  (remainder (* a b) 10))\n", " \
+    \ (modulo (abs a) 10)\n  (modulo (abs b) 10)\n  (* (modulo (abs a) 10) (modulo\
+    \ (abs b) 10)))", "  (define (reducer x y) (list y))\n  (define (mapper x) (list\
+    \ x))\n  (define (get-unit-digit x) (modulo x 10))\n  (define (times a b) (* a\
+    \ b))\n  (define (sum lst) (apply + lst))\n  (define a-unit-digit (get-unit-digit\
+    \ a))\n  (define b-unit-digit (get-unit-digit b))\n  (define (get-unit-digits\
+    \ a b) (list a-unit-digit b-unit-digit))\n  (define (product-of-unit-digits lst)\
+    \ (sum (map times lst)))\n  (product-of-unit-digits (get-unit-digits a b)))\n\
+    </code>\nAny suggestions will be appreciated.\n\n\nA:\n\nVery good, your code\
+    \ is well written and easily readable, it seems you're familiar with Racket.\n\
+    I see two points that could be improved.\nThe first one, which is not a big deal,\
+    \ is that your code becomes more expressive if you use the function <code>list</code>\
+    \ when you are creating lists. For example, instead of:\n<code>(define (reducer\
+    \ x y) (list y))\n</code>\nyou can write:\n<code>(define (reducer x y) (list y))\n\
+    </code>\nAlso, I think your definition of <code>multiply</code> is a bit too long.\
+    \ I suggest that you define auxiliary functions that do each one of the operations\
+    \ that you are doing in the main definition, and then compose them to obtain your\
+    \ result.\nHere's the function defined again, but with the definition of the auxiliary\
+    \ functions:\n<code>(define (multiply a b)\n  (define (reducer x y) (list y))\n\
+    \  (define (mapper x) (list x))\n  (define (get-unit-digit x) (modulo x 10))\n\
+    \  (define (times a b) (* a b))\n  (define (sum lst) (apply + lst))\n  (define\
+    \ a-unit-digit (get-unit-digit a))\n  (define b-unit-digit (get-unit-digit b))\n\
+    \  (define (get-unit", '  (modulo (modulo a 10) (modulo b 10)))', "  (if (zero?\
+    \ (remainder a 10))\n      0\n      (if (zero? (remainder b 10))\n          0\n\
+    \          (* (remainder a 10) (remainder b 10)))))\n</code>\n<code>#lang racket\n",
+  "  (modulo (* a b) 10))\n", '  (modulo (modulo a 10) (modulo b 10)))', "  (*\n \
+    \   (remainder a 10)\n    (remainder b 10)))\n</code>\nYou will have to make sure\
+    \ that your namespace match the name of the folder you put the code in.\n", " \
+    \ (remainder (remainder a 10) (remainder b 10)))\n", '  (modulo (* a b) 10))',
+  "  (modulo (* a b) 10))\n", "  (cond\n    [(= 0 a) 0]\n    [(= 0 b) 0]\n    [else\
+    \ (remainder (* a b) 10)]))\n", "  (remainder (* a b) 10))\n</code>\n", "  (if\
+    \ (negative? a) (set! a (- a)) (void))\n  (if (negative? b) (set! b (- b)) (void))\n\
+    \  (if (eq? a 0) 0 (* (% a 10) (% b 10))))\n", "  (* (% a 10) (% b 10)))\n</code>\n",
+  '  (modulo (* a b) 10))', "  (* (- a (* a (/ a 10))) (- b (* b (/ b 10)))))\n</code>\n\
+    But I get the error: multiply: expects type  as 1st argument, given: 4; other\
+    \ arguments were: 4\nI'm new to Racket and from what I read, the issue is I'm\
+    \ doing something wrong with the type, but I don't know what it is. Any help would\
+    \ be much appreciated.\nEDIT: I solved the issue. It wasn't an issue with the\
+    \ type, as I thought, but with the negative numbers. I changed the code to the\
+    \ following and it works:\n<code>#lang racket\n", "  (modulo (* a b) 10))\n",
+  "  (if (negative? a) \n      (if (negative? b) \n          (unit-digit (* (- a)\
+    \ (- b)))\n          (unit-digit (* (- a) b)))\n      (if (negative? b) \n   \
+    \       (unit-digit (* a (- b)))\n          (unit-digit (* a b)))))", "  (define\
+    \ (digs a b)\n    (remainder a b))\n  (remainder (* (digs a 10) (digs b 10)) 10))\n",
+  "  (cond\n    [(or (zero? a) (zero? b)) 0]\n    [(and (= a 1) (= b 1)) 1]\n    [(and\
+    \ (= a 2) (= b 2)) 4]\n    [(and (= a 3) (= b 3)) 9]\n    [(and (= a 4) (= b 4))\
+    \ 6]\n    [(and (= a 5) (= b 5)) 0]\n    [(and (= a 6) (= b 6)) 6]\n    [(and\
+    \ (= a 7) (= b 7)) 9]\n    [(and (= a 8) (= b 8)) 4]\n    [(and (= a 9) (= b 9))\
+    \ 1]\n    [(> a 0) (multiply (modulo a 10) b)]\n    [(> b 0) (multiply a (modulo\
+    \ b 10))]\n    [else (multiply (- (modulo a 10)) (- (modulo b 10)))]))\n", " \
+    \ (* (modulo a 10) (modulo b 10)))\n", "  (cond\n    [(= a 0) 0]\n    [(= b 0)\
+    \ 0]\n    [else (* (modulo a 10) (modulo b 10))]))", "  (modulo (* a b) 10))\n",
+  "  (define (get-unit-digit n)\n    (if (<= n 10)\n        n\n        (get-unit-digit\
+    \ (modulo n 10))))\n  (modulo (* (get-unit-digit a) (get-unit-digit b)) 10))\n",
+  '  (modulo (* a b) 10))', "  (modulo (* a b) 10))\n", "  (modulo (* a b) 10))\n",
+  "  (* (modulo a 10) (modulo b 10)))\n</code>\nThe problem is that the function needs\
+    \ to return an integer, and the function I created returns an exact integer, but\
+    \ the site requires an inexact integer.  My question is: how do I tell racket\
+    \ to return an inexact integer?\n\n\nA:\n\nYou can simply call <code>inexact</code>\
+    \ to convert an exact integer to inexact:\n<code>(inexact (multiply 14 -15))\n\
+    </code>\n", "  (modulo (modulo a 10) (modulo b 10)))\n</code>\nThis works fine.\
+    \  However, I've since discovered that Racket has a built-in multiplicative modulo,\
+    \ <code>%</code>, so I could use this instead:\n<code>#lang racket\n", "  (define\
+    \ (sub a)\n    (if (= a 0) 0 (- (* (modulo a 10) (sub (quotient a 10))))))\n \
+    \ (sub (* a b)))", "  (modulo (modulo a 10) (modulo b 10)))\n</code>\nI'm new\
+    \ to Racket and I'm not understanding why this doesn't work. I think this only\
+    \ works when you have values like 3, 7 or 11, 14. \n\n\nA:\n\nYou can't use modulo,\
+    \ use this instead:\n<code>(modulo (modulo (abs a) 10) (modulo (abs b) 10))\n\
+    </code>\n", "  (modulo (* a b) 10))\n", "  (define (unit a) (modulo a 10))\n \
+    \ (* (unit a) (unit b)))\n</code>\nI know this is probably a very beginner question,\
+    \ but I don't quite understand how to create and invoke a function. Any help would\
+    \ be appreciated!\n\n\nA:\n\nYou can use either <code>let</code> or <code>define</code>\
+    \ to create the function and then <code>apply</code> to invoke it.\nAlternatively,\
+    \ you can use <code>define</code> to create the function and then use the form\
+    \ <code>(function-name arguments)</code> to invoke it.\n", "  (string-&gt;number\
+    \ (string-append (string-take (number-&gt;string (* a b)) -1))))\n", "  (let ((A\
+    \ (modulo a 10))\n        (B (modulo b 10)))\n    (* A B)))\n</code>\nI think\
+    \ my solution is functional, but my racket skills are a bit rusty.\n\n\nA:\n\n\
+    I see nothing wrong with your code.\nI'm not sure if there's anything more to\
+    \ say than that.\n", "  (modulo (* a b) 10))\n</code>\nI really have no idea how\
+    \ to solve this, but is there a way to do this without using modulo? So using\
+    \ just the basic arithmetic operations.\n", "  (cond\n    [(= a 0) 0]\n    [(=\
+    \ b 0) 0]\n    [else (modulo (* (modulo a 10) (modulo b 10)) 10)]))\n", "  (*\
+    \ (% a 10) (% b 10)))\n", "  (define (extract-last n)\n    (remainder n 10))\n\
+    \  (cond [(or (negative? a) (negative? b)) (multiply (add1 (abs a)) (add1 (abs\
+    \ b)))]\n        [else (extract-last (* a b))]))\n", "  (modulo (modulo a 10)\
+    \ (modulo b 10)))\n</code>\nI think the first problem is that I have no way to\
+    \ check if the numbers are valid since I have no way to read anything from the\
+    \ user. How do I define the input for this problem?\n\n\nA:\n\nThere are a few\
+    \ ways to check if numbers are valid. I'm going to give a simple example to show\
+    \ one way to do it.\nTo check if both numbers are valid integers, you can use\
+    \ <code>integer?</code>.\n<code>(and (integer? a) (integer? b))\n</code>\nYou\
+    \ can make a simple function to check whether the numbers are within the range\
+    \ of <code>-1,000,000,000</code> to <code>1,000,000,000</code> using <code>and</code>\
+    \ and <code>between?</code>.\n<code>(define (are-numbers-in-range a b)\n  (and\
+    \ (between? a -1000000000 1000000000)\n       (between? b -1000000000 1000000000)))\n\
+    </code>\nSo you can use <code>and</code> to check if the function will be valid\
+    \ for the given numbers.\n<code>(define (multiply a b)\n  (if (and (integer? a)\
+    \ (integer? b) (are-numbers-in-range a b))\n      (modulo (modulo a 10) (modulo\
+    \ b 10))\n      #f))\n</code>\nOr if you want, you can throw an error if the numbers\
+    \ aren't valid.\n<code>(define (multiply a b)\n  (when (not (and (integer? a)\
+    \ (integer? b) (are-numbers-in-range a b)))\n    (error \"numbers are not valid\"\
+    ))\n  (modulo (modulo a 10) (modulo b 10)))\n</code>\nSo if you run\n<code>(multiply\
+    \ 148 412)", "    (cond\n        [(not (number? a)) (error \"a isn't a number\"\
+    )]\n        [(not (number? b)) (error \"b isn't a number\")]\n        [(not (integer?\
+    \ a)) (error \"a isn't an integer\")]\n        [(not (integer? b)) (error \"b\
+    \ isn't an integer\")]\n        [(not (<= a 1)) (error \"a isn't less than or\
+    \ equal to 1\")]\n        [(not (<= b 1)) (error \"b isn't less than or equal\
+    \ to 1\")]\n        [else (* (remainder a 10) (remainder b 10))]))\n", "  (modulo\
+    \ (abs a) 10)\n  (modulo (abs b) 10)\n  (* (modulo (abs a) 10) (modulo (abs b)\
+    \ 10)))\n", "    (modulo (* a b) 10))\n", "  (modulo (* a b) 10))\n</code>\nI\
+    \ am using Racket as the chosen language.\n\n\nA:\n\nAt this point there's no\
+    \ point in trying to change languages (although I don't know Scheme/Racket, so\
+    \ I can't easily comment on your code.\nBut I think you need to pay more attention\
+    \ to the task.\nE.g. \"always valid\" isn't something you should assume.\nWhat\
+    \ happens if <code>a</code> or <code>b</code> is 0? What happens if they're negative?\n\
+    \"Examples\" are not enough to determine what the task is -- you need to read\
+    \ it closely.\n", "  (modulo (* a b) 10))\n</code>\nI'm not a programmer, but\
+    \ I would like to learn something about a bit of this.\nAs you can see, I made\
+    \ the function to multiply a and b, and then I asked for the remainder of the\
+    \ division of the product of a and b for 10.\nI used the <code>modulo</code> because\
+    \ I read that in some cases it can be negative (I think this was on a comment\
+    \ to another question) and I thought that using the <code>modulo</code> could\
+    \ help to not get a negative number.\nIs this logic correct or am I doing something\
+    \ wrong?\n\n\nA:\n\nYour code is fine, though there are ways to make it simpler.\n\
+    The <code>modulo</code> operation is exactly what you need, since you want to\
+    \ extract the last digit of a number, while ensuring the result is always positive.\
+    \ The way you have used it is fine, but you could also write:\n<code>(define (multiply\
+    \ a b)\n  (modulo (* a b) 10))\n</code>\nWhich is equivalent to your code, but\
+    \ it does not require an extra variable.\n", "  (*\n    (remainder a 10)\n   \
+    \ (remainder b 10)))\n</code>\nEDIT: I made a mistake, the tests were wrong. It\
+    \ was also written in clojure.\n\n\nA:\n\nFirst, there's no <code>ceiling</code>\
+    \ function in <code>scheme</code>. Do you really mean <code>ceiling</code>?\n\
+    <code>(define ceil\n  (lambda (n)\n    (if (&lt; (remainder n 1) 0)\n        (-\
+    \ n (remainder n 1))\n        (+ n (remainder n 1)))))\n</code>\nThen, this function\
+    \ is wrong, which then makes the test case wrong:\n<code>(define (ceil a b)\n\
+    \  (quotient (ceil (* a b)) 100))\n</code>\nIt seems to assume that <code>b</code>\
+    \ is always <code>10</code>, which isn't the case:\n<code>(ceil (* 5 5))\n</code>\n\
+    Is <code>28</code>, not <code>27</code>.\n", "  (let ([a (remainder a 10)]\n \
+    \       [b (remainder b 10)])\n    (* a b)))\n</code>\nBut for some reason, this\
+    \ returns an error message. I also tried writing <code>(multiply 10 -1)</code>\
+    \ in the terminal and it returned <code>-10</code> as expected. I understand that\
+    \ it's just looking for a certain format, but I'm not sure how to format it. Any\
+    \ suggestions?\n\n\nA:\n\n<code>#lang racket\n", "  (let loop ([a (modulo a 10)]\
+    \ [b (modulo b 10)])\n    (if (= a 0) 0\n        (if (= b 0) 0\n            (+\
+    \ a (loop a (- b 1)))))))\n", "  (remainder (expt a (remainder b 10)) 10))\n",
+  '  (modulo (* a b) 10))', "  (modulo (* a b) 10))\n", "  (define (product-unit-digits\
+    \ n)\n    (remainder n 10))\n  (let ((product (* a b)))\n    (if (zero? product)\
+    \ 0\n        (product-unit-digits product))))\n", "  (exact-integer-sqrt (modulo\
+    \ (* a b) 10)))\n", "  (* (modulo a 10) (modulo b 10)))\n</code>\nThis works fine.\
+    \ I like the way it reads, even if it is not particularly efficient.\nMy questions:\n\
+    1) Is there another, more efficient, way to write this function?\n2) How would\
+    \ you give this function a name that would make it easy to find when\n   one is\
+    \ looking for a solution to a problem? (I'm assuming that this is something\n\
+    \   that would be used a lot.)\n", "  (define (unit a)\n    (remainder a 10))\n\
+    \  (define (product a b)\n    (* (unit a) (unit b)))\n  (product a b))", "  (if\
+    \ (or (equal? a 0) (equal? b 0))\n      0\n      (modulo (* a b) 10)))\n", '  (modulo
+    (* a b) 10))', "  (* (remainder a 10) (remainder b 10)))\n</code>\n", "  (modulo\
+    \ (modulo a 10) (modulo b 10)))\n", "  (define (unit n)\n    (modulo n 10))\n\
+    \  (unit (* a b)))\n</code>\nCan someone help me make sense of this code?\n\n\n\
+    A:\n\n<code>(define (multiply a b)\n  (define (unit n)\n    (modulo n 10))\n \
+    \ (unit (* a b)))\n</code>\nOkay, so let's break it down. <code>multiply</code>\
+    \ is a function that is passed two arguments, <code>a</code> and <code>b</code>.\
+    \ It first defines <code>unit</code> as a function that returns the unit value\
+    \ of the argument <code>n</code>. Then it returns the unit value of the <code>a\
+    \ * b</code>. \nA recursive step by step walk would help make this clearer:\n\n\
+    <code>(multiply 2 3)</code>\n\n<code>(unit (* 2 3))</code>\n\n<code>(modulo (*\
+    \ 2 3) 10)</code>\n\n<code>(modulo 6 10)</code>\n\n<code>6</code>\n\n<code>6</code>\n\
+    \n\n\nIt's kind of confusing at first, and I suggest you play around with writing\
+    \ more \"normal\" code before jumping into recursion.\n", "  (define (abs a)\n\
+    \    (if (&lt; a 0)\n        (- a)\n        a))\n  (if (zero? a)\n      0\n  \
+    \    (* (modulo (abs a) 10) (modulo (abs b) 10))))\n</code>\nExamples:\n<code>&gt;\
+    \ (multiply 148 412)\n16\n&gt; (multiply 19 28)\n72\n&gt; (multiply 2020 1851)\n\
+    0\n&gt; (multiply 14 -15)\n20\n</code>\n", '  (modulo (* a b) 10))', "  (* (modulo\
+    \ a 10) (modulo b 10)))\n</code>\nThis fails on:\n<code>-(multiply 14 -15)\n \
+    \ Expected: 20\n  Actual: -20\n</code>\nIf I change <code>multiply</code> to:\n\
+    <code>(define (multiply a b)\n  (* (abs (modulo a 10)) (abs (modulo b 10))))\n\
+    </code>\nThe tests pass.\nThe code I've written seems fine to me and I can't see\
+    \ how to improve it. \nThis looks like a bug to me.\n\n\nA:\n\nThe problem is\
+    \ the wording of the test:\n<blockquote>\n<p>Complete the function that takes\
+    \ two integers and returns the product of their unit digits. Assume the input\
+    \ is always valid.</p>\n</blockquote>\nI believe that the goal is to return a\
+    \ non-negative result. For example, <code>-(multiply 14 -15)</code> returns <code>-20</code>,\
+    \ which is not <code>20</code>.\nBy simply adding a call to <code>abs</code>,\
+    \ we solve the problem:\n<code>(define (multiply a b)\n  (abs (* (modulo a 10)\
+    \ (modulo b 10))))\n</code>\n", "  (modulo (* a b) 10))\n</code>\nWhen I try to\
+    \ run this, I get the following error:\n<code>modulo: contract violation\n  expected:\
+    \ number?\n  given: 1\n  in: the 1st argument of\n      (-&gt; number? . . . .\
+    \ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\
+    \ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\
+    \ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\
+    \ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\
+    \ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\
+    \ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\
+    \ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\
+    \ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\
+    \ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\
+    \ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\
+    \ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\
+    \ . . . . . . . . . . . . . . . . . . . . . . . .", "  (*\n   (remainder a 10)\n\
+    \   (remainder b 10)))", "  (let ([(mod a 10) a-units]\n        [(mod b 10) b-units])\n\
+    \    (* a-units b-units)))\n</code>\nHowever, when I submit the solution, I'm\
+    \ getting this error:\n<code>    Expected: \"8\"\n    But got:  \"16\"\n</code>\n\
+    Where am I going wrong?\nEDIT:\nThis was the test case that failed:\n<code>  \
+    \  Test.it(\"Example tests\")\n    Test.assert_equals(multiply(148, 412), 8)\n\
+    \    Test.assert_equals(multiply(19, 28), 72)\n    Test.assert_equals(multiply(2020,\
+    \ 1851), 0)\n    Test.assert_equals(multiply(14,-15), 20)\n</code>\n\n\nA:\n\n\
+    You have the concept correct, but your code is wrong. \nSpecifically, you should\
+    \ use <code>remainder</code> instead of <code>mod</code> and your <code>let</code>\
+    \ is syntactically incorrect.\n<code>(define (multiply a b)\n  (let ([a-units\
+    \ (remainder a 10)]\n        [b-units (remainder b 10)])\n    (* a-units b-units)))\n\
+    </code>\n", "  (modulo (* a b) 10))\n</code>\nThis returns the desired result\
+    \ for all but one test case, and I'm not sure why. I think that this is a problem\
+    \ with the test case rather than my code, but I could be wrong.\nThe test that\
+    \ fails is:\n<code>;; multiply(966305823, 0) should return 0.", "  (displayln\
+    \ a)\n  (displayln b)\n  (let ([a (remainder a 10)]\n        [b (remainder b 10)])\n\
+    \    (displayln a)\n    (displayln b)\n    (* a b)))\n", "  (modulo (expt a b)\
+    \ 10))\n", "  (* (modulo a 10) (modulo b 10)))\n</code>\nHere's a test case:\n\
+    <code>#lang racket\n", "  (if (zero? b) 0\n      (+ (* a (remainder a 10)) (multiply\
+    \ (/ a 10) (- b 1)))))\n", "  (modulo (* a b) 10))\n", "    (define (digit a)\n\
+    \        (modulo a 10))\n    (* (digit a) (digit b)))\n</code>\nI was wondering\
+    \ if it is possible to do the same task in a single line, something similar to\
+    \ this.\n<code>#lang racket", "  ; your code here\n  (define u-digits-mul (* \n\
+    \                        (modulo a 10)\n                        (modulo b 10)))\n\
+    \  (cond\n    [(and (not (zero? (modulo a 10)))\n          (not (zero? (modulo\
+    \ b 10))))\n     u-digits-mul]\n    [else\n     0]))\n</code>\nBut it is not working\
+    \ as expected. I wonder why.\n\n\nA:\n\nThe problem here is with the use of modulo.\
+    \  <code>modulo</code> takes the remainder of dividing the first number by the\
+    \ second, but you're essentially using it to take a particular digit from the\
+    \ number.  The best way to do this is to convert the number to a string, so that\
+    \ you can then index it:\n<code>(define (unit-digit n)\n  (string-ref (number-&gt;string\
+    \ n) (- (string-length (number-&gt;string n)) 1)))\n</code>\nThis works for any\
+    \ value of <code>n</code>, including negative numbers:\n<code>(unit-digit 10)\
+    \   ; =&gt; #\\0", "  (remainder (* a b) 10))\n</code>\nI think this is very simple,\
+    \ but maybe I'm missing something.\n\n\nA:\n\n<code>#lang racket\n", "  (if (zero?\
+    \ a)\n      0\n      (if (negative? a)\n          (- (* (remainder a 10)\n   \
+    \             (remainder b 10)))\n          (* (remainder a 10)\n            \
+    \ (remainder b 10)))))", "  (remainder (* a b) 10))\n", "  (* (modulo a 10) (modulo\
+    \ b 10)))\n", "  (cond [(= a 0) 0]\n        [(= b 0) 0]\n        [else (* (modulo\
+    \ a 10) (modulo b 10))]))\n</code>\nI have the following code in Scheme and I\
+    \ need to translate it to Racket. I tried to use (define (multiply a b)) but it\
+    \ doesn't work because of the second define\n\n\nA:\n\nYour <code>multiply</code>\
+    \ function is valid, but you want to use it by passing it two numbers as arguments:\n\
+    <code>(multiply 12 34)\n=&gt; 12\n</code>\n", "  (* (modulo a 10) (modulo b 10)))\n",
+  "    (* (modulo a 10) (modulo b 10)))\n", "  (let ([a (modulo a 10)]\n        [b\
+    \ (modulo b 10)])\n    (* a b)))", "  (modulo (* a b) 10))\n", "  (modulo (* a\
+    \ b) 10))\n</code>\nThe problem is that is not work. In the Repl it shows \"Language:\
+    \ racket; Memory Limit: 3GB; Time Limit: 10 sec\" and I don't know what is the\
+    \ problem.\nI just want the function to be working. \nI have even tried to write\
+    \ the function directly in the Repl but the same problem is.\nI have read about\
+    \ the racket documentation and I don't find anything.\n\n\nA:\n\nThe problem here\
+    \ is that the test cases are calling <code>multiply</code> with other arguments\
+    \ than <code>a</code> and <code>b</code>, for example:\n<code>(multiply 'a 'b)\n\
+    </code>\nSince this expression evaluates to <code>17280</code>, your solution\
+    \ will fail the test cases and you'll get an \"Incorrect\" verdict.\nOne way to\
+    \ solve this problem is to check that the input arguments are numbers before computing\
+    \ the result:\n<code>(define (multiply a b)\n  (if (and (number? a) (number? b))\n\
+    \      (modulo (* a b) 10)\n      \"Wrong input!\"))\n</code>\n", "  (round (*\
+    \ (remainder a 10) (remainder b 10))))\n", "  (let* ([a-digits (modulo a 10)]\n\
+    \         [b-digits (modulo b 10)])\n    (* a-digits b-digits)))\n", "  (remainder\
+    \ (* a b) 10))\n", "  (modulo (modulo a 10) (modulo b 10)))\n</code>\nI was trying\
+    \ to do a small exercise where I needed to multiply only the last digit of two\
+    \ numbers. For example, multiply(148, 412) would be 4*2 = 8.\nI was surprised\
+    \ that the modulo function is not taking the negative numbers correctly. I did\
+    \ the same exercise in Python and I could get the right answer. \n<code>Python:\n\
+    &gt;&gt;&gt; a = -15\n&gt;&gt;&gt; b = -14\n&gt;&gt;&gt; a%10\n5\n&gt;&gt;&gt;\
+    \ b%10\n6\n</code>\nI have read about the remainder function in Racket, but for\
+    \ now, I couldn't figure out how to use it to solve this problem.\n\n\nA:\n\n\
+    From the docs:\n<blockquote>\n<p>Calculates the remainder of the division of x\
+    \ by y. If x and y are both integers, then the result is exact. If x and y are\
+    \ both inexact numbers, then the result is inexact; <strong>if x and y are both\
+    \ exact numbers, then the result may be inexact</strong>.</p>\n</blockquote>\n\
+    So you need to convert your exact number to an inexact one. For example:\n<code>(define\
+    \ (multiply a b)\n  (modulo (exact-&gt;inexact (modulo a 10))\n          (exact-&gt;inexact\
+    \ (modulo b 10))))\n</code>\n", "  (define (last-digit a)\n    (remainder a 10))\n\
+    \  (* (last-digit a) (last-digit b)))\n", "  (let loop ((a (abs a)) (b (abs b)))\n\
+    \    (if (&lt; a 10)\n        (* a b)\n        (modulo (* (loop (quotient a 10)\
+    \ (quotient b 10)) 10) 10))))\n</code>\n", "  (* (modulo a 10) (modulo b 10)))\n\
+    </code>\n", '  (* (modulo a 10) (modulo b 10)))', "  (remainder (remainder a 10)\
+    \ (remainder b 10)))\n", "  (define (mult x y)\n    (if (or (= 0 x) (= 0 y))\n\
+    \        0\n        (remainder (* x y) 10)))\n  (define (abs x)\n    (if (&lt;\
+    \ x 0)\n        (* -1 x)\n        x))\n  (mult (abs a) (abs b)))\n</code>\nThanks\
+    \ a lot!\n\n\nA:\n\nI'm not sure what you're trying to do with the recursive calls\
+    \ to <code>mult</code> in your code. If you're trying to split the numbers up\
+    \ and multiply them together, then it seems like it would be easier to use <code>remainder</code>\
+    \ and <code>quotient</code> to extract the digits and then recursively call the\
+    \ <code>mult</code> function. Here's a quick example of what I mean:\n<code>(define\
+    \ (mult a b)\n  (cond\n    [(or (= 0 a) (= 0 b)) 0]\n    [(zero? (remainder a\
+    \ 10)) 0]\n    [(zero? (remainder b 10)) 0]\n    [else\n     (+ (remainder a 10)\n\
+    \        (remainder b 10))]))\n</code>\n", "  ; Your code goes here\n  (modulo\
+    \ (* a b) 10))\n", "  (* (% a 10) (% b 10)))\n", "  (let ([a-units (modulo a 10)]\n\
+    \        [b-units (modulo b 10)])\n    (* a-units b-units)))\n", "    (modulo\
+    \ (modulo a 10) (modulo b 10)))\n", "  (modulo (expt a (if (equal? (modulo a 10)\
+    \ 0) 1 0)) 10))\n</code>\n", "  (* (remainder a 10) (remainder b 10)))\n", " \
+    \ (define (unit a)\n    (modulo a 10))\n  (define (product a b)\n    (* (unit\
+    \ a) (unit b)))\n  (product a b))\n</code>\nIs it a good practice to write a function\
+    \ inside of another? I suppose it is, but I don't like it too much.\nIf you have\
+    \ any other comments, please do not hesitate to give them.\nThanks in advance.\n\
+    \n\nA:\n\nIn general it is acceptable to write functions within other functions,\
+    \ but you should use it with care and document it well, so that the user of the\
+    \ function is aware of its existence.\nYour code is pretty well documented, using\
+    \ a doc string that explains the input and output for each function, you're using\
+    \ correct indentation, and the name of each function clearly reflects its purpose.\n\
+    Still, there are a few improvements that can be made:\n\nThe <code>unit</code>\
+    \ function is already defined in Racket, so there's no need to write it again;\
+    \ you can use the <code>unit</code> procedure to simplify your code.\nThe <code>product</code>\
+    \ function is unnecessary, so it can be removed.\nSince the <code>multiply</code>\
+    \ function is a one-liner, it's better to use a lambda instead.\nThe arguments\
+    \ are not being used, so it's better to use <code>_</code> instead.\n\nWith all\
+    \ these changes the code becomes:\n<code>#lang racket\n", "  (displayln a)\n \
+    \ (displayln b)\n  (let ((a (remainder a 10))\n        (b (remainder b 10)))\n\
+    \    (displayln a)\n    (displayln b)\n    (* a b)))", '  (* (- a (* a (quotient
+    a 10))) (- b (* b (quotient b 10)))))', "  (define (digits n)\n    (regexp-match?\
+    \ #rx\"^0$\" (number->string n)))\n  (define (get-unit n)\n    (apply * (string-&gt;list\
+    \ (number-&gt;string (modulo n 10)))))\n  (if (digits a)\n      (if (digits b)\n\
+    \          0\n          (* 0 b))\n      (if (digits b)\n          (* a 0)\n  \
+    \        (get-unit (* a b)))))\n</code>\nI'm checking whether either of the two\
+    \ numbers are 0 - if either of them are, then I return 0. However, my tests seem\
+    \ to indicate that this isn't being evaluated correctly. Are there any suggestions\
+    \ or better ways of doing this in Racket?\n\n\nA:\n\nI think this is what you\
+    \ want:\n<code>(if (or (zero? a) (zero? b))\n    0\n    (modulo (* a b) 10))\n\
+    </code>", "  (remainder (* a b) 10))\n", "    ; Check that the function is a valid\
+    \ number\n    (if (or (not (number? a)) (not (number? b))) -1\n        ; Return\
+    \ the product of the units of both numbers\n        (* (modulo a 10) (modulo b\
+    \ 10))\n    )\n)\n", "  (modulo (modulo a 10) (modulo b 10)))\n</code>\n", " \
+    \ (modulo (* a b) 10))\n", "  (modulo (* a b) 10))\n", "  (remainder (* a b) 10))\n",
+  "  (modulo (modulo a 10) (modulo b 10)))\n", "  (regexp-match #rx\"\\d\" (number->string\
+    \ (* a b))))\n", "  (remainder (* a b) 10))\n", "  (integer-length (remainder\
+    \ a 10) (remainder b 10)))\n</code>\nI get the following error:\n<code>integer-length:\
+    \ expects type &lt;natural or exact integer&gt; as 1st argument, given: 0; other\
+    \ arguments were: 1\n</code>\nI don't understand this error message.  Also, I\
+    \ am not sure how to write the remainder as a string.\nI am new to racket and\
+    \ only know the basics (lambda, map, define, etc...).\nPlease explain in simple\
+    \ terms if possible.\n\n\nA:\n\nThe problem is that <code>remainder</code> can\
+    \ produce negative numbers and <code>integer-length</code> expects only positive\
+    \ numbers.\nSo to fix it you just need to force it to be positive:\n<code>(integer-length\
+    \ (abs (remainder a 10)) (abs (remainder b 10)))\n</code>\n", '  (remainder (*
+    a b) 10))', "  (* (modulo a 10) (modulo b 10)))\n", "  (modulo (* a b) 10))\n",
+  "  (modulo (* a b) 10))\n</code>\nI would like to make this function better by using\
+    \ only the unit digits of <code>a</code> and <code>b</code>.\n", "  (modulo (*\
+    \ a b) 10))\n</code>\nIt seems I'm getting the same number for all the test cases.\
+    \ I'm not sure why that's happening. I think the problem lies in the way I'm calling\
+    \ <code>modulo</code>.\n\n\nA:\n\nThe trick is that <code>modulo</code> is the\
+    \ remainder of dividing by ten, but you want the unit digit of the product.  You\
+    \ could convert both numbers to strings, take the last character of each, convert\
+    \ them to integers, multiply, and take the last character again, but that's a\
+    \ lot of work.  As an alternative, you can use the definition of <code>modulo</code>\
+    \ to do it:\n<code>(modulo (- x (* 10 (quotient x 10))) 10)\n</code>\nIf you remove\
+    \ the unit digit from <code>x</code>, you can find the first digit of the product\
+    \ by multiplying the two numbers and taking the modulus by ten.\n<code>(define\
+    \ (multiply a b)\n  (modulo (- (* a b) (* 10 (quotient (* a b) 10))) 10))\n</code>\n",
+  "  (modulo (* a b) 10))\n", "  (modulo (modulo a 10) (modulo b 10)))\n", "  (define\
+    \ (helper number)\n    (cond [(= number 0) 0]\n          [else (modulo number\
+    \ 10)]))\n  (define (maybe-swap-args)\n    (if (&lt; a b)\n        (values b a)\n\
+    \        (values a b)))\n  (define (recur a b)\n    (cond [(= b 0) 0]\n      \
+    \    [else (+ (* (helper a) (helper b)) (recur a (- b 1)))]))\n  (let* ((a* b*)\
+    \ (values a* b*) (recur a* b*)))\n</code>\nI got this, but it doesn't work.\n\
+    <code>#lang racket", "  (let ([a (modulo a 10)]\n        [b (modulo b 10)])\n\
+    \    (* a b)))\n", "  (modulo (modulo a 10) (modulo b 10)))\n", "  (define (digits\
+    \ n)\n    (modulo n 10))\n  (* (digits a) (digits b)))\n</code>\n", '  (remainder
+    (* a b) 10))', "  (if (= 0 b)\n      0\n      (remainder (* a (remainder b 10))\
+    \ 10)))\n", "  (if (zero? b) \n      1\n      (modulo (* a b) 10)))", "  (modulo\
+    \ (* a b) 10))\n", "  (define (digit n)\n    (modulo n 10))\n  (* (digit a) (digit\
+    \ b)))\n</code>\n\nI would like to know if the name <code>digit</code> is good\
+    \ enough. I was wondering if it was more appropriate to call it <code>unit-digit</code>\
+    \ or <code>last-digit</code> or <code>right-digit</code>. If possible, I would\
+    \ like to keep it simple.\nI am not sure about the name <code>modulo</code>. Is\
+    \ it a common term? Maybe <code>remainder</code> is better?\nIn the style guide,\
+    \ it is said that <code>!</code> is used for names of functions where some kind\
+    \ of significant change to the state of the world is expected. Is it ok to use\
+    \ <code>digit</code> instead of <code>digit!</code> since <code>digit</code> doesn't\
+    \ change anything in the program?\n\nThank you!\n\n\nA:\n\n<blockquote>\n<p>I\
+    \ would like to know if the name digit is good enough. I was wondering if it was\
+    \ more appropriate to call it unit-digit or last-digit or right-digit. If possible,\
+    \ I would like to keep it simple.</p>\n</blockquote>\nUse <code>unit-digit</code>\
+    \ or <code>last-digit</code>. They are more explicit and more commonly used.\n\
+    <blockquote>\n<p>I am not sure about the name modulo. Is it a common term? Maybe\
+    \ remainder is better?</p>\n</blockquote>\nYes, use <code>remainder</code>. It's\
+    \ a standard function in math and programming.\n<blockquote>\n<p>In the style\
+    \ guide, it is said that ! is used for names of functions where some kind of significant\
+    \ change to the state of the world is expected. Is it ok to use digit instead\
+    \ of digit! since digit doesn't change anything in the program?</p>\n</blockquote>\n\
+    No, <code>digit</code> is fine because it's a pure function.\n", "  (cond ((or\
+    \ (< a 10) (< b 10)) (* a b))\n        (else (* (% a 10) (% b 10)))))\n", "  (modulo\
+    \ (* a b) 10))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

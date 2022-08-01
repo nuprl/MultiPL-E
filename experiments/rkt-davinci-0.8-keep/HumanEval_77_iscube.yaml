@@ -10,7 +10,482 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate i
   \ (candidate -1) #t)\n    (check-equal? (candidate 64) #t)\n    (check-equal? (candidate\
   \ 180) #f)\n    (check-equal? (candidate 1000) #t)\n    (check-equal? (candidate\
   \ 0) #t)\n    (check-equal? (candidate 1729) #f)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (cuberoot a)\n  )\n", "  (define (pow x n)\n    (if (= n 0)\n   \
+    \   1\n      (* x (pow x (- n 1)))))\n  (define (isCnt x)\n    (if (= x 1)\n \
+    \     #t\n      (if (= (remainder x 3) 0)\n        (isCnt (/ x 3))\n        #f)))\n\
+    \  (isCnt a))\n", "  (if (zero? a) #t\n      (remainder? a (cube-root a))))\n",
+  "  (expt (floor (expt a (/ 1 3))) 3) = a)\n", "  (cond\n    [(= a (expt (round (cbrt\
+    \ a)) 3)) #t]\n    [else #f]))\n", "  (and (integer? a)\n       (or (= a 0) (=\
+    \ a 1)\n           (integer? (sqrt a)))))\n", "  (and (and (integer? a) (&gt;\
+    \ a 0)) (= (expt (round (pow (abs a) (/ 1 3))) 3) (abs a))))\n</code>\nI'm not\
+    \ sure if the (* 1 3) is really needed, but anyway it doesn't work.\n\n\nA:\n\n\
+    I would start by finding the cube root of the input number and testing if that\
+    \ is an integer:\n<code>(define (iscube a)\n  (let ((a (abs a)))\n    (and (&gt;\
+    \ a 0)\n         (let ((root (expt a (/ 1 3))))\n           (zero? (abs (- root\
+    \ (round root))))))))\n</code>\nThe <code>round</code> function will return a\
+    \ number which is closer to the cube root, unless the number is exactly in the\
+    \ middle between two integers.  If the difference between the number we got and\
+    \ the nearest integer is not zero, then the number cannot be a cube.\nFor example,\
+    \ suppose <code>a</code> is <code>27</code>.  Then <code>root</code> will be <code>3</code>.\
+    \  Then <code>round</code> returns <code>3</code> and <code>(- root (round root))</code>\
+    \ will be <code>0</code>.  However, if <code>a</code> were <code>81</code>, then\
+    \ <code>root</code> would be <code>3.0</code> and <code>round</code> would return\
+    \ <code>3</code> and <code>- root (round root)</code> would be <code>0.0</code>.\
+    \  In that case, <code>abs</code> and <code>zero?</code> will return <code>#t</code>\
+    \ and <code>iscube</code> will return <code>#t</code>.\n", "  (define (iter n)\n\
+    \    (if (&gt; n a)\n        #f\n        (if (= (expt n 3) a)\n            #t\n\
+    \            (iter (+ n 1)))))\n  (iter 0))\n</code>\nI believe this is the correct\
+    \ answer to this problem, but I'm curious whether there are any other ways to\
+    \ approach it. \n", "  (define (aux a)\n    (cond ((= a 1) 0)\n          ((&lt;\
+    \ a 0) (- a 1))\n          (else (+ a 1))))\n  (cond ((zero? a) #t)\n        ((&lt;\
+    \ a 0)\n         (define (negative a)\n           (cond ((= a 1) #t)\n       \
+    \          ((&lt; a 0) (negative (aux a)))\n                 (else #f)))\n   \
+    \      (negative a))\n        (else\n         (define (positive a)\n         \
+    \  (cond ((= a 1) #t)\n                 ((&gt; a 0) (positive (aux a)))\n    \
+    \             (else #f)))\n         (positive a))))\n</code>\nI would like to\
+    \ know if there is a way to implement my solution without using a auxiliar function.\
+    \ \n\n\nA:\n\nRacket's <code>cube-root</code> procedure is a more natural way\
+    \ to write this, but the solution you've already got has the right idea.  I'd\
+    \ factor out the sign checking and use <code>abs</code> to convert to a positive\
+    \ number:\n<code>(define (iscube a)\n  (define (aux a)\n    (cond ((= a 1) 0)\n\
+    \          ((&lt; a 0) (- a 1))\n          (else (+ a 1))))\n  (define (positive\
+    \ a)\n    (cond ((= a 1) #t)\n          ((&gt; a 0) (positive (aux a)))\n    \
+    \      (else #f)))\n  (cond ((zero? a) #t)\n        ((positive (abs a)))))\n</code>\n\
+    If you want to use <code>cube-root</code>, you can do this:\n<code>(define (iscube\
+    \ a)\n  (define b (cube-root a))\n  (and (= a (* b b b)) \n       (and (integer?\
+    \ b) (&gt;= b 0))))\n</code>\n", "  (integer? (cubrt a)))\n</code>\n", "  (cond\
+    \ [(= 0 a) #t]\n        [(not (integer? (cbrt a))) #f]\n        [else (= a (*\
+    \ (cbrt a) (cbrt a) (cbrt a)))]))\n", "  (not (zero? a))\n  (cube-root a))\n</code>\n\
+    The code does not work, it returns <code>#f</code> for almost all results but\
+    \ <code>#t</code> for some integers.\n\n\nA:\n\nIf you're looking for an exact\
+    \ cube, you can use the <code>exact-integer-square-root</code> procedure to find\
+    \ the cube root and check if it's an integer:\n<code>(define (iscube a)\n  (integer?\
+    \ (exact-integer-square-root (expt (abs a) 3))))\n</code>\nIf you're looking for\
+    \ an approximate cube, you can check if the cube root equals the integer:\n<code>(define\
+    \ (iscube a)\n  (= (exact-integer-square-root (expt (abs a) 3))\n     (round (exact-integer-square-root\
+    \ (expt (abs a) 3)))))\n</code>\n", "  ;; first, find the cube root of a\n  (cond\n\
+    \    [(= a 0) #t]\n    [(< a 0)\n     ;; a = (- x)\n     (define root (inexact->exact\
+    \ (sqrt (- a))))\n     (= (* root root root) (- a))]\n    [else\n     ;; a = x\n\
+    \     (define root (inexact->exact (sqrt a)))\n     (= (* root root root) a)]))\n",
+  "  (define (cube n)\n    (* n n n))\n  (define (loop current-cube)\n    (if (= a\
+    \ current-cube)\n        #t\n        (if (&gt; current-cube a)\n            #f\n\
+    \            (loop (cube (+ current-cube 1))))))\n  (loop 0))\n", "  (letrec ([cube\
+    \ (lambda (n) (* n n n))])\n    (cond [(zero? a) #t]\n          [(negative? a)\
+    \ (= a (cube (add1 a)))]\n          [else (= a (cube a))])))\n", "  (cond\n  \
+    \  [(= a 0) true]\n    [(< a 0) (iscube (* -1 a))]\n    [else (define (helper\
+    \ x)\n            (cond\n              [(= a (* x x x)) true]\n              [(<\
+    \ a (* x x x)) false]\n              [else (helper (+ x 1))]))\n          (helper\
+    \ 1)]))", "  (if (= (integer-sqrt a) 0)\n      #t\n      (and (zero? (remainder\
+    \ a (integer-sqrt a)))\n           (zero? (remainder (integer-sqrt a) (integer-sqrt\
+    \ (integer-sqrt a)))))))\n", "  (integer? (exact-floor (cbrt a))))\n", "  (zero?\
+    \ (remainder a (expt (truncate (sqrt a)) 3))))\n</code>\nI'm not sure what the\
+    \ remainder of that is supposed to do.  Is it testing if the given integer is\
+    \ a perfect cube?\n\n\nA:\n", "  (define (is-cube? x)\n    (define (cube a)\n\
+    \      (* a a a))\n    (let loop ([x (abs a)])\n      (cond\n        [(= x 0)\
+    \ #t]\n        [(= (cube (inexact->exact (sqrt (exact->inexact x)))) x) #t]\n\
+    \        [else (loop (- x 1))])))\n  (is-cube? a))\n", "  (equal? (expt (floor\
+    \ (cube-root a)) 3) a))\n</code>\nThe function <code>iscube</code> computes the\
+    \ floor of the cube root of <code>a</code>, and checks if it is the same as raising\
+    \ to the power of three.  If it is, the function returns true, otherwise it returns\
+    \ false.\nOne important note: in Racket, <code>expt</code> only computes powers\
+    \ of two, so it was necessary to take a different approach here. \n", "  (define\
+    \ (sqrt-iter guess x)\n    (if (good-enough? guess x)\n        guess\n       \
+    \ (sqrt-iter (improve guess x)\n                   x)))\n  (define (improve guess\
+    \ x)\n    (average guess (/ x guess)))\n  (define (average x y)\n    (/ (+ x y)\
+    \ 2))\n  (define (good-enough? guess x)\n    (&lt; (abs (- (square guess) x))\
+    \ 0.001))\n  (define (square x) (* x x))\n  (and (not (zero? a))\n       (good-enough?\
+    \ (sqrt-iter 1.0 (abs a)) (abs a))))\n</code>\n", "  (equal? (integer-sqrt (abs\
+    \ a))\n          (integer-sqrt (expt a 2))))\n</code>\nThis solution seems to\
+    \ work fine, but it's very complicated.\nI'm sure there's a simpler solution,\
+    \ but I can't figure it out.\nCould you please help me to simplify this solution?\n\
+    Thank you very much.\n\n\nA:\n\nThere is a simpler solution that doesn't require\
+    \ calculating the square root.\n<code>(define (iscube a)\n  (zero? (modulo a (integer-sqrt\
+    \ (abs a)))))\n</code>\nHere's the explanation.\nFor any cube we have <code>a=b^3</code>.\n\
+    So to solve the problem we can simply check if <code>a</code> is <code>b</code>'s\
+    \ cube.\nIn other words we need to check if <code>b^3</code> is divisible by <code>b</code>.\n\
+    It will be divisible if and only if <code>b</code> divides <code>b^3</code> without\
+    \ a remainder.\nSo the solution is:\n<code>(zero? (modulo b^3 b))\n</code>\nNow,\
+    \ we can rewrite it in terms of <code>a</code> and simplify it a bit:\n<code>(zero?\
+    \ (modulo a (integer-sqrt (abs a))))\n</code>\n", "  (= a (* a a a)))\n", "  (equal?\
+    \ a (* a a a)))\n", '  (not (zero? (modulo a (cube-root a)))))', "  (let ((b (cbrt\
+    \ a)))\n    (and (= (round b) b) (/= b 0))))", "  (and (not (zero? a)) (letrec\
+    \ ((iter (lambda (n)\n                                     (cond\n           \
+    \                            ((= a (* n n n)) #t)\n                          \
+    \             ((< a (* n n n)) #f)\n                                       (else\
+    \ (iter (+ n 1)))))))\n                           (iter 1))))\n", "  (define (cube\
+    \ a)\n    (expt a 3))\n  (define (floor x)\n    (define (helper-floor x y)\n \
+    \     (if (= x y)\n          (- y 1)\n          (helper-floor x (+ y 1))))\n \
+    \   (helper-floor x 0))\n  (define (ceiling x)\n    (define (helper-ceiling x\
+    \ y)\n      (if (= x y)\n          (+ y 1)\n          (helper-ceiling x (+ y 1))))\n\
+    \    (helper-ceiling x 0))\n  (let* ([cube-lo (cube (floor (/ a 3.0))))\n    \
+    \     [cube-hi (cube (ceiling (/ a 3.0)))]\n         [cube-mid (cube (/ (+ (floor\
+    \ (/ a 3.0)) (ceiling (/ a 3.0))) 2.0))])\n    (or (= a cube-lo)\n        (= a\
+    \ cube-hi)\n        (= a cube-mid))))\n", "  (let* ((a (abs a))\n\t (root (exact-square-root\
+    \ a)))\n    (if (zero? root)\n\t#t\n\t(equal? (* root root root) a))))\n", " \
+    \ (exact->inexact\n   (sqrt (/ a) 3)))\n", "  (not (= 0 (remainder (expt (round\
+    \ (sqrt a)) 3) a))))\n</code>\n", "  (define (iscube-helper a n)\n    (cond [(=\
+    \ a (* n n n)) true]\n          [(< a (* n n n)) false]\n          [else (iscube-helper\
+    \ a (+ n 1))]))\n  (iscube-helper a 1))\n", "  (expt? (real-part (cbrt a))))\n",
+  "  (if (zero? a)\n      #t\n      (let ([b (sqrt a)])\n        (if (zero? (exact-integer?\
+    \ b))\n            #t\n            #f))))\n</code>\nNote that there is a function\
+    \ cube in Racket:\n<code>#lang racket\n", "  (number? (exact-floor (expt a (/\
+    \ 1 3.0)))))\n", "  (define (loop counter)\n    (if (> counter (+ a 1)) #f\n \
+    \     (if (= a (* counter counter counter)) #t\n        (loop (+ counter 1)))))\n\
+    \  (loop 1))\n", "  (= (expt (round (expt (round (sqrt a)) (/ 1 3))) 3) a))\n",
+  "  (if (zero? a)\n      #t\n      (let loop ((i 1))\n        (if (= a (* i i i))\n\
+    \            #t\n            (if (< i a)\n                (loop (+ i 1))\n   \
+    \             #f)))))\n", "  (let loop ([i 0])\n    (cond\n      [(= i a) #f]\n\
+    \      [(= i (* i i i)) #t]\n      [else (loop (+ i 1))])))\n", "  (define (scube\
+    \ x)\n    (cond ((= a (* x x x)) True)\n          ((&gt; a (* x x x)) (scube (+\
+    \ x 1)))\n          (else False)))\n  (scube 1))\n</code>\nI wanted to know if\
+    \ there is a better way to implement this function, without using the helper function.\n\
+    \n\nA:\n\nI guess you could do this with the <code>integer-sqrt</code> function:\n\
+    <code>(define (iscube a)\n  (let ([s (integer-sqrt a)])\n    (= a (* s s s))))\n\
+    </code>\nHowever I wouldn't say this is better than your solution, in fact I would\
+    \ say it's probably worse.\n", "  (define (cube x)\n    (* x x x))\n  (equal?\
+    \ a (cube (round (expt a (/ 1 3.0)))))\n  )\n</code>\n", "  (integer? (sqrt a)))\n",
+  "  (let ((sq (sqrt a)))\n    (and (= (floor sq) sq)\n         (= (* sq sq sq) a))))\n",
+  "  (cond\n    [(= a 0) #t]\n    [(not (= 0 (remainder a (expt (round (sqrt a)) 3))))\
+    \ #f]\n    [else #t]))\n", "  (letrec ([fcube (lambda (x)\n                  \
+    \  (cond [(> a (* x x x)) (fcube (+ x 1))]\n                          [(< a (*\
+    \ x x x)) #f]\n                          [else #t]))])\n    (fcube 0)))\n", " \
+    \ (define (cube n)\n    (* n n n))\n  (if (= a (cube (round (expt (abs a) (/ 1\
+    \ 3.0)))))\n      #t\n      #f))\n</code>\nMy first question is, if I want to\
+    \ use <code>expt</code> or <code>round</code>, should I <code>require</code> somewhere?\n\
+    My second question is, how can I make my code better?\n\n\nA:\n\nThe answers to\
+    \ your questions are:\n\nYou don't have to <code>require</code> anything; as long\
+    \ as you're using the <code>#lang racket</code> language, you have access to all\
+    \ of the built-in procedures in the Racket language.\nThere's a much simpler way\
+    \ of solving this problem: just use the built-in <code>integer-cube-root</code>\
+    \ procedure:\n\n\n<code>(define (iscube a)\n  (integer? (integer-cube-root a)))\n\
+    </code>\nAnd now, some more observations:\n\nThe <code>if</code> clause is unnecessary;\
+    \ just write <code>(= a (cube (round (expt (abs a) (/ 1 3.0)))))</code>.\nYou\
+    \ don't need to take the absolute value of <code>a</code> if you're using <code>integer-cube-root</code>;\
+    \ it works for both positive and negative numbers.\nFor this simple task, I think\
+    \ it's better to just write a <code>let</code> expression instead of a named procedure.\n\
+    I don't like the name <code>iscube</code>; I'd use something like <code>integer-cube?</code>\
+    \ instead.\nI'd extract the Racket implementation into a comment at the top of\
+    \ the code, so that it's easier to grasp the algorithm.\n\nAnd now, here's the\
+    \ final improved version:\n<code>#lang racket\n", "  (and (< 0 a)\n       (= (cube\
+    \ (floor (expt a (/ 1 3)))) a)))\n", "  (if (= (integer-sqrt a) 0)\n      #t\n\
+    \      (if (= (expt (integer-sqrt a) 3) a)\n          #t\n          #f)))", " \
+    \ (eq? (expt (integer-sqrt a) 3) a))\n", "  (if (zero? a) #t\n      (positive?\
+    \ (integer-sqrt (abs a)))))\n", "  (cond\n    [(equal? a 0) #t]\n    [(< a 0)\
+    \ (equal? (expt (- a) (/(1 3))) (- 1))]\n    [else (equal? (expt a (/(1 3))) (-\
+    \ 1))]))\n", "  (equal? (expt (integer-sqrt a) 3) a))\n", "  (integer? (exact-sqrt\
+    \ a)))\n</code>\nIs there a way to write this function in a better/more efficient\
+    \ way?\n\n\nA:\n\nI believe you should use <code>expt</code> to compute the root:\n\
+    <code>(define (iscube a)\n  (and (not (negative? a))\n       (exact? (expt a 1/3))))\n\
+    </code>\n\nIn case you don't want to use <code>expt</code> for some reason, you\
+    \ could use Newton's method to compute the real cube root of a positive number\
+    \ (and then use <code>exact?</code> to check if it's an integer):\n<code>(define\
+    \ (iscube a)\n  (and (not (negative? a))\n       (exact? (newton-real-cbrt a))))\n",
+  "  (let* ((cubed (expt (round (sqrt a)) 3))\n         (diff (- a cubed)))\n    (or\
+    \ (= a 0)\n        (= diff 0))))\n", "  (let* ((cube-roots (build-list 1000 (lambda\
+    \ (i) (* i i i))))\n         (i 0))\n    (define (iscube/iter i)\n      (if (eq?\
+    \ a (list-ref cube-roots i))\n          #t\n          (if (&lt; i 999)\n     \
+    \         (iscube/iter (+ i 1))\n              #f)))\n    (iscube/iter i)))\n\
+    </code>\nThe function above works as expected:\n<code>&gt; (iscube 27)\n#t\n&gt;\
+    \ (iscube -27)\n#t\n&gt; (iscube 125)\n#t\n&gt; (iscube -125)\n#t\n&gt; (iscube\
+    \ 2)\n#f\n&gt; (iscube -2)\n#f\n&gt; (iscube 0)\n#t\n&gt; (iscube -0)\n#t\n&gt;\
+    \ (iscube 101)\n#f\n&gt; (iscube -101)\n#f\n</code>\nThanks!\n\n\nA:\n\nI'm guessing\
+    \ that you don't want to use the <code>cube</code> function defined here:\n<code>(define\
+    \ (cube x) (* x x x))\n</code>\nFirst, this is a bad variable name because it\
+    \ shadows the built-in <code>cube</code> function in the <code>math</code> namespace.\
+    \ Second, the exercise asks you to write a solution without using the cube function.\n\
+    I'm also guessing that you don't want to use the built-in <code>integer-sqrt</code>\
+    \ function. \nWith those assumptions, your solution looks good. A couple of things\
+    \ to note:\n\nYou could improve the performance of your <code>iscube</code> function\
+    \ by using <code>list-ref</code> instead of <code>memq</code>. You would just\
+    \ need to compare <code>a</code> to each element of <code>cube-roots</code>. \n\
+    Another performance improvement would be to use a binary search instead of a linear\
+    \ search to find <code>a</code> in <code>cube-roots</code>. \nIt's important to\
+    \ distinguish between equality and equivalence. Two numbers can be equivalent\
+    \ without being equal. For example", "  (and (>= a 0)\n       (= (expt (floor\
+    \ (expt a (/ 1 3))) 3) a)))\n", "  (define n 1)\n  (while (not (and (= (expt n\
+    \ 3) a) (= a 0)))\n    (set! n (+ n 1))\n    (set! a (+ a 1)))\n  #t)", "  (isgreaterorequal\
+    \ (abs a) (cuberoot (abs a))))\n", "  (let ((n 1))\n    (let check ((x (expt n\
+    \ 3)))\n      (if (= x a) #t\n          (if (< x a) (check (+ x (+ n 2)))\n  \
+    \            #f)))))\n", "  (if (&lt; a 0)\n      (= (integer-sqrt (- a)) (integer-sqrt\
+    \ a))\n      (= (integer-sqrt a) (integer-sqrt (* a a)))))\n</code>\nThis was\
+    \ my thinking:\n<code>;; find whether x is a cube of some integer number", " \
+    \ (integer? (exact-floor (cbrt a))))\n", "  (not (= (remainder a (expt (floor\
+    \ (sqrt a)) 3)) 0)))\n", "  (= a (* a a a)))\n\n", "  (define (test i)\n    (if\
+    \ (and (<= i a) (<= a (* i i i))) \n        (if (equal? a (* i i i))\n       \
+    \     #t\n            (test (+ i 1)))\n        #f))\n  (test 1))\n", "  (exact->inexact\
+    \ (expt (exact->inexact (round (expt (exact->inexact (sqrt a)) 3))) 3) == a))\n",
+  "  (is-exact-integer? (expt (round (expt a (/ 1 3))) 3)))\n</code>\nThis works in\
+    \ racket, but it fails in rosetta.\nIn racket, <code>(expt 64 (/ 1 3))</code>\
+    \ returns 4, <code>(round 4)</code> returns 4, <code>(expt 4 3)</code> returns\
+    \ 64, and <code>(is-exact-integer? 64)</code> returns true.\nIn rosetta, however,\
+    \ <code>(expt 64 (/ 1 3))</code> returns 4.0, <code>(round 4.0)</code> returns\
+    \ 4, <code>(expt 4 3)</code> returns 64, and <code>(is-exact-integer? 64)</code>\
+    \ returns false.\nWhy is this? The rosetta example for <code>is-exact-integer?</code>\
+    \ accepts floats as arguments, but <code>is-exact-integer?</code> still returns\
+    \ false for 64, which is a float.\n\n\nA:\n\nThe only reason to not just use <code>is-integer?</code>\
+    \ is because of type-specific optimizations. If a program uses only \"pure integer\"\
+    \ values, it can be a lot faster. For example, a factor of two faster for a program\
+    \ that does nothing but integer math. In this case, the difference is that a <code>is-integer?</code>\
+    \ may accept any number that would be returned by an integer math program and\
+    \ <code>is-exact-integer?</code> only accepts things that are representable as\
+    \ exact integers.\nIn your case, there is no difference between those because\
+    \ <code>expt</code> is documented to always return exact results:\n<blockquote>\n\
+    <p>All values are exact unless otherwise noted.</p>\n</blockquote>\nHowever, that\
+    \ is not generally true. For example, <code>(sqrt 3)</code> is exact in Racket,\
+    \ but inexact in other languages.\n", "  (let loop ([c 0])\n    (if (= a (* c\
+    \ c c))\n        #t\n        (if (&lt; a (* c c c))\n            #f\n        \
+    \    (loop (+ c 1))))))\n", "  (= 0 (modulo a (expt (floor (sqrt a)) 3))))\n",
+  "  (define (cube x)\n    (* x x x))\n  (define (nextcube start)\n    (if (&gt; (cube\
+    \ start) a) start\n      (nextcube (+ start 1))))\n  (= (cube (nextcube 0)) a))\n",
+  "  (if (= (expt (ceiling (expt a (/ 1 3))) 3) a)\n      #t\n      #f))\n```\n###\
+    \ Pythagorean Triplet (Medium)\n\n```racket\n#lang racket\n", "  (equal? a (expt\
+    \ (floor (cbrt a)) 3)))\n", "  (= (expt (expt a (/ 1 3)) 3) a))\n", "  (define\
+    \ (find-cube b acc)\n    (if (= (* acc acc acc) a)\n        (display \"True\"\
+    )\n        (if (< acc a)\n            (find-cube b (+ acc 1))\n            (display\
+    \ \"False\"))))\n  (find-cube a 1))\n", "  (define (pos-cube b)\n    (cond\n \
+    \     [(= b 0) false]\n      [(< a (* b b b)) false]\n      [(= a (* b b b)) true]\n\
+    \      [else (pos-cube (+ b 1))]))\n  (define (neg-cube b)\n    (cond\n      [(=\
+    \ b 0) false]\n      [(> a (* b b b)) false]\n      [(= a (* b b b)) true]\n \
+    \     [else (neg-cube (- b 1))]))\n  (cond\n    [(> a 0) (pos-cube 0)]\n    [(<\
+    \ a 0) (neg-cube 0)]\n    [else true]))\n", "  (integer? (exact-sqrt (exact-sqrt\
+    \ a))))\n", "  (cubic-root a))\n", "  (define (approximate-cube x)\n    (cube\
+    \ (round (cbrt x))))\n  (define (cube x)\n    (* x x x))\n  (define (cbrt x)\n\
+    \    (expt x (/ 1 3)))\n  (eq? a (approximate-cube a)))\n", "  (and (integer?\
+    \ a)\n       (integer? (exact-sqrt (abs a)))))\n", "  (cond\n    [(not (= a (*\
+    \ a a a))) #f]\n    [else #t]))\n", "  (and (eq? (round (cube-root a)) (cube-root\
+    \ a))\n       (&gt; a 0)))\n</code>\n\n<code>#lang racket\n", "  (and (= (expt\
+    \ (round (sqrt a)) 3) a)\n       (not (= a 0))))\n", "  (= (expt (round (cbrt\
+    \ a)) 3) a))\n", "  (isperfectcube a))\n", "  (let ([b (sqrt a)])\n    (integer?\
+    \ b)\n    ))", "  (square (integer-sqrt a)))\n", "  (and (>= a 0) (= a (truncate\
+    \ (expt (round (pow (round a) (/ 1 3.0))) 3)))))\n", "  (and (integer? a)\n  \
+    \     (exact-sqrt (abs a))))", "  (define (isNthRoot n k)\n    (exact-integer-sqrt?\
+    \ n k))\n  (define (isPerfectCube n)\n    (for/or ([k (in-range (add1 n))])\n\
+    \            (if (isNthRoot n k)\n                (isNthRoot (expt k 3) n))))\n\
+    \  (isPerfectCube a))", "  (equal? (expt (round (cube-root a)) 3) a))\n</code>\n\
+    I want to compute cube root of a number.\nAbove code works with any number except\
+    \ 0.\n<code>&gt; (iscube 0)\n#f\n</code>\nHow can I fix the problem?\n\n\nA:\n\
+    \n<code>#lang racket\n", "  (equal? a (expt (round (real-sqrt a)) 3)))\n", " \
+    \ (= a (* a a a)))\n", "  (if (equal? a 0)\n      #t\n      (if (negative? a)\n\
+    \          (iscube (- a))\n          (let loop ((i 0))\n            (if (= i a)\n\
+    \                #f\n                (if (= (cube i) a)\n                    #t\n\
+    \                    (loop (+ i 1))))))))\n", "  (cond\n    [(= a 0) #t]\n   \
+    \ [(integer? (exact-floor (cbrt a))) #t]\n    [else #f]))", "  (cond\n    ((or\
+    \ (= a 0) (= a 1)) true)\n    ((>= a 0) (let loop ((i 2))\n                 (cond\n\
+    \                   ((= (* i i i) a) true)\n                   ((>= (* i i i)\
+    \ a) false)\n                   (else (loop (+ i 1))))))\n    (else (let loop\
+    \ ((i -1))\n             (cond\n               ((= (* i i i) a) true)\n      \
+    \         ((<= (* i i i) a) false)\n               (else (loop (- i 1))))))))\n",
+  "  (= (expt (floor (expt a (/ 1 3))) 3) a))\n", "  (cond ((= a 1) #t)\n        ((=\
+    \ a -1) #t)\n        ((= a 0) #t)\n        ((< a 0)\n         (let ((n (- 0 a)))\n\
+    \           (if (exact-integer? (expt n (1/3)))\n               #t\n         \
+    \      #f)))\n        (else\n         (if (exact-integer? (expt a (1/3)))\n  \
+    \           #t\n             #f))))\n", "  (define (cuberoot a) (expt a (/ 1 3)))\n\
+    \  (define (cubed a) (* a a a))\n  (if (= a (cubed (cuberoot a)))\n      #t\n\
+    \      #f))", "  (define (helper x)\n    (cond\n      [(< x a) (and (not (= (expt\
+    \ x 3) a)) (helper (+ x 1)))]\n      [(= x a) #t]\n      [else #f]))\n  (helper\
+    \ 0))\n", "  (and (not (zero? a))\n       (or (zero? (remainder a 3))\n      \
+    \     (iscube (quotient a 3)))))", "  (define (is-divisible? n d)\n    (= (remainder\
+    \ n d) 0))\n  (define (smallest-divisor n)\n    (define (find-divisor n test-divisor)\n\
+    \      (cond ((> (square test-divisor) n) n)\n            ((is-divisible? n test-divisor)\
+    \ test-divisor)\n            (else (find-divisor n (+ test-divisor 1)))))\n  \
+    \  (find-divisor n 2))\n  (define (prime? n)\n    (= n (smallest-divisor n)))\n\
+    \  (define (divisors n)\n    (cond ((< n 2) empty)\n          ((= n 1) (list 1))\n\
+    \          ((= n 2) (list 1 2))\n          ((= n 3) (list 1 3))\n          ((=\
+    \ n 4) (list 1 2 4))\n          ((= n 5) (list 1 5))\n          ((= n 6) (list\
+    \ 1 2 3 6))\n          ((= n 7) (list 1 7))\n          ((= n 8) (list 1 2 4 8))\n\
+    \          ((= n 9) (list 1 3 9))\n          ((or (even? n) (prime? n))\n    \
+    \       (list 1 n))\n          (else\n           (cons 1\n                 (list\
+    \ (smallest-divisor n)\n                       (/ n (smallest-divisor n)))))))\n\
+    \  (define (power x exp)\n    (if (= exp 0)\n        1\n        (* x (power x\
+    \ (- exp 1)))))\n  (cond ((= a 0) #t)\n        ((positive? a)\n         (let loop\
+    \ ((d (divisors a)))\n           (cond ((null? d) #f)\n                 ((= a\
+    \ (power (car d) 3)) #t)\n                 (else (loop (cdr d))))))\n        (else\n\
+    \         (let loop ((d (divisors (- a))))\n           (cond ((null? d) #f)\n\
+    \                 ((= (- a) (power (car d) 3)) #t)\n                 (else (loop\
+    \ (cdr d))))))))\n", "  (equal? a 0)\n  (equal? a (* a a a)))", "  (zero? (modulo\
+    \ a (cube (integer-sqrt a)))))\n", "  (exact->inexact (expt (round (exact->inexact\
+    \ (sqrt (expt a 3)))) 3)\n  )\n)\n", "  (let ((b (cube-root a)))\n    (= a (*\
+    \ b b b))))\n", "  (cond\n    [(= a 0) #t]\n    [(or (= a 1) (= a -1)) #t]\n \
+    \   [(and (> a 0) (not (= (expt (floor (sqrt a)) 3) a))) #f]\n    [(and (< a 0)\
+    \ (not (= (expt (ceiling (sqrt a)) 3) a))) #f]\n    [else #t]))\n", "  (zero?\
+    \ (modulo a 1)))\n</code>\nThe problem is that the first test (1) passes, but\
+    \ the second (2) doesn't. I didn't write the test cases, but my interpretation\
+    \ is that all other tests are supposed to pass. I've been looking at this for\
+    \ at least an hour now, and I can't seem to see the error. I'm using <code>#lang\
+    \ racket</code> instead of <code>#lang racket/base</code> to get around an error,\
+    \ if that helps.\n\n\nA:\n\nThe function you're looking for is <code>exact-cube-root</code>.\n\
+    If <code>exact-cube-root</code> returns <code>#f</code>, the number is not a cube.\
+    \ Otherwise, the number is a cube.\n", "  (= (expt (round (expt a (/ 1 3))) 3)\
+    \ a))\n", "  (if (zero? a)\n      true\n      (if (negative? a)\n          (iscube\
+    \ (- a))\n          (let loop ((a a) (b 1))\n            (if (= a (* b b b))\n\
+    \                true\n                (if (&lt; a (* b b b))\n              \
+    \      false\n                    (loop a (+ b 1))))))))\n</code>\nExamples:\n\
+    <code>&gt; (iscube 180)\n#f\n&gt; (iscube -1)\n#t\n&gt; (iscube 64)\n#t\n&gt;\
+    \ (iscube 0)\n#t\n&gt; (iscube 2)\n#f\n&gt; (iscube 1)\n#t\n</code>\n", "  (and\
+    \ (not (equal? (modulo a 3) 0))\n       (eq? (expt a (/ 1 3)) (floor (expt a (/\
+    \ 1 3))))))\n", "  (integer? (exact-sqrt a)))\n", "  (not (zero? (remainder a\
+    \ (expt (integer-sqrt a) 3)))))\n", "  (define (inner a)\n    (define (is-div-of?\
+    \ d)\n      (= 0 (modulo a d)))\n    (cond\n      [(= a 0) True]\n      [(negative?\
+    \ a)\n       (is-div-of? (- a))]\n      [else\n       (is-div-of? a)]))\n  (inner\
+    \ a))", "  (or (= a 0)\n      (and (not (negative? a))\n           (exact-integer-sqrt\
+    \ a))))\n", "  (not (= a 0))\n  (define (isCubeRec a)\n    (cond\n      [(= (expt\
+    \ a 1/3) 0) #t]\n      [(= (expt a 1/3) 1) #t]\n      [(> (expt a 1/3) 1) (isCubeRec\
+    \ (- (expt a 1/3) 1))]\n      [else #f]))\n  (isCubeRec a))\n", "  (= a\n    \
+    \ (expt\n      (round (cbrt a)) 3)))\n</code>\n", "  (= a (expt (expt a 1/3) 3)))\n\
+    </code>\nOpcionalmente, puedes mejorar el rendimiento de tu funci\xF3n (sobre\
+    \ todo en el caso en que <code>a</code> sea negativo) usando una aproximaci\xF3\
+    n por arriba y por abajo del cubo exacto, usando la funci\xF3n <code>ceiling</code>\
+    \ y <code>floor</code>, que te sirven para redondear el valor de entrada seg\xFA\
+    n tu conveniencia. Por ejemplo:\n<code>#lang racket\n", '  (integer? (cbrt a)))',
+  "  (define (int-cube-root x)\n    (define (good-enough? guess)\n      (= (expt guess\
+    \ 3) x))\n    (define (improve guess)\n      (sqrt (/ (+ (* x 2) (* guess (* guess\
+    \ (- guess)))) 3)))\n    (define (sqrt-iter guess)\n      (if (good-enough? guess)\n\
+    \          guess\n          (sqrt-iter (improve guess))))\n    (sqrt-iter 1))\n\
+    \  (= (expt (int-cube-root a) 3) a))\n", "  (let loop ([x 1])\n    (cond\n   \
+    \   [(> x a) #f]\n      [(= x a) #t]\n      [else (loop (+ x x x))])))", "  (and\
+    \ (exact? a)\n       (not (negative? a))\n       (exact? (cbrt a))))\n", "  (expt\
+    \ (sqrt a) 3)\n  )\n", "  (cond [(integer? a)\n         (let iter ([i 1])\n  \
+    \         (if (and (<= i a) (< a (* i i i)))\n               (iter (+ i 1))\n\
+    \               (= a (* i i i))))]\n        [else #f]))", "  (define (cube a b)\n\
+    \    (if (= (expt a b) a)\n        a\n        (cube a (+ b 1))))\n  (if (= a 0)\n\
+    \      #t\n      (if (= a 1)\n          #t\n          (if (= a -1)\n         \
+    \     #t\n              (cube a 2)))))\n", "  (local ((define (aux n i)\n    \
+    \        (cond [(= a (* i i i)) True]\n                  [(> a (* i i i)) (aux\
+    \ n (+ i 1))]\n                  [else False])))\n    (aux a 1)))\n", "  (and\
+    \ (integer? a)\n       (= a (expt (round (cbrt a)) 3))))\n", "  (let ((x 1))\n\
+    \    (cond ((and (< a 0) (zero? (modulo (expt x 3) (- a)))) #t)\n          ((and\
+    \ (> a 0) (zero? (modulo (expt x 3) a))) #t)\n          (else #f))))\n", "  (and\
+    \ (and (integer? a) (&gt; a 0)) (= a (expt (round (sqrt a)) 3))))\n", "  (define\
+    \ (iscube_iter a n)\n    (cond ((> a (* n n n)) (iscube_iter a (+ n 1)))\n   \
+    \       ((= a (* n n n)) #t)\n          (else #f)))\n  (iscube_iter a 1))\n",
+  "  (= a (expt (round (pow a (div 1 3))) 3)))\n", "  (let ([xa (sqrt a)])\n    (and\
+    \ (integer? xa)\n         (= a (* xa xa xa)))))\n", "  (= a (expt (round (expt\
+    \ a (/ 1 3))) 3)))\n", "  (cond [(equal? a 0) #t]\n        [(equal? a 1) #t]\n\
+    \        [(equal? a (- 1)) #t]\n        [(> a 0) (if (equal? (remainder a 1) 0)\n\
+    \                    (if (equal? (remainder (expt (round (/ a 1)) 3) a) 0) #t\
+    \ #f) #f)]\n        [(< a 0) (if (equal? (remainder a 1) 0)\n                \
+    \    (if (equal? (remainder (expt (round (/ a 1)) 3) a) 0) #t #f) #f)]))\n", " \
+    \ (and (equal? a (* a a a)) a))\n", "  (and \n   (equal? (integer? (expt a 1/3))\
+    \ #t) \n   (equal? (expt (expt a 1/3) 3) a)))\n", "  (equal? a (expt (round (sqrt\
+    \ a)) 3)))\n", "  (and (integer? a) \n       (let ((b (exact-sqrt (abs a))))\n\
+    \         (and (number? b) (zero? (remainder a (* b b b)))))))\n", "  (equal?\
+    \ (expt (round (pow a (/ 1 3))) 3) a))\n\n", "  (let loop ((x 1))\n    (cond ((=\
+    \ x a) #t)\n          ((> (* x x x) a) #f)\n          (else (loop (+ x 1))))))",
+  "  (define (pow x y)\n    (define (f y)\n      (if (= 0 y)\n          1\n      \
+    \    (* x (f (- y 1)))))\n    (f y))\n  (define (clogarithm x y)\n    (define\
+    \ (f x)\n      (if (= x 0)\n          1\n          (+ 1 (f (- x (* y y))))))\n\
+    \    (f x))\n  (if (= a 0)\n      #t\n      (= a (pow a (clogarithm a a)))))\n",
+  "  (cond ((or (zero? a) (= a 1)) true)\n        ((even? a) false)\n        ((negative?\
+    \ a) (= (- a) (round (expt (cube-root (- a)) 3))))\n        (else (= a (round\
+    \ (expt (cube-root a) 3))))))\n</code>\nAnd here is a test file for the above\
+    \ code:\n<code>#lang racket\n", "  (or (and (integer? a) (= a 0))\n      (cube-root\
+    \ a)))\n", "  (define (iscubehelper a n)\n    (cond ((= n a) #t)\n          ((>\
+    \ n a) #f)\n          (else (iscubehelper a (+ n (* n n))))))\n  (iscubehelper\
+    \ a 1))\n", "  (eq? (integer-sqrt (integer-sqrt a)) (integer-sqrt a)))\n", '  (exact-integer?
+    (sqrt (abs a))))', "  (if (= a 0)\n      true\n      (if (= (sqrt (sqrt a)) (round\
+    \ (sqrt (sqrt a))))\n          true\n          false)))\n", "  (define (rt a n)\n\
+    \    (if (&lt; a 0)\n        (- (/ a n))\n        (/ a n)))\n  (let check ([p\
+    \ 1])\n    (if (&lt; p a)\n        (if (= a (* p p p))\n            #t\n     \
+    \       (check (+ p 1)))\n        #t)))\n</code>\nThis code works. However, it's\
+    \ too slow. Can anyone help me to find a way to reduce the running time of this\
+    \ code? Please also explain your way.\nThank you!\n\n\nA:\n\nUPDATE: To be able\
+    \ to submit I put a <code>#;</code> in front of the lambda function and the <code>check</code>\
+    \ function. Simply remove that to see the code in action.\nThe answer is: don't\
+    \ use recursion!\nHere's a version using iteration. To be honest, I don't see\
+    \ the need to use <code>check</code> at all, but it may be useful later on.\n\
+    <code>#lang racket\n", "  (cond\n    [(= a 1) #t]\n    [(= a -1) #t]\n    [(=\
+    \ a 0) #t]\n    [(< a 0) #f]\n    [else (sqrt a) = (round (sqrt a))]))\n", " \
+    \ (define (twice a)\n    (* a a))\n  (define (isinteger a)\n    (or (= a (inexact->exact\
+    \ a)) (= a (exact->inexact a))))\n  (isinteger (/ a (twice a))))\n", "  (= (*\
+    \ a a a) a))\n", "  (define x 0)\n  (define y 0)\n  (while (< y a)\n    (set!\
+    \ y (* x x x))\n    (set! x (+ x 1)))\n  (= y a))\n", "  (and (integer? a)\n \
+    \      (integer? (sqrt a))\n       (integer? (expt (sqrt a) 3))))\n", "  (exact->inexact\
+    \ (expt (integer->inexact (round (expt (inexact->exact (exact->inexact (sqrt (inexact->exact\
+    \ a)))) 3))) 3))\n  (= a (round (expt (inexact->exact (exact->inexact (sqrt (inexact->exact\
+    \ a)))) 3))))\n", "  (define (iter n)\n    (if (&gt; (expt n 3) a)\n        false\n\
+    \        (if (= (expt n 3) a)\n            true\n            (iter (+ n 1)))))\n\
+    \  (iter 1))\n", "  (equal? (integer-sqrt a)\n          (integer-sqrt (integer-sqrt\
+    \ a))))\n</code>\nHow can I improve this code? \n\n\nA:\n\nUsually, when a function's\
+    \ purpose is to determine whether something is true or false, the convention is\
+    \ to use a predicate function, which is a function that returns a Boolean value.\
+    \ The convention for predicate functions is to name them with a question mark\
+    \ at the end, in your case <code>is-cube?</code> or <code>is-cubic?</code>.\n\
+    Just remember to follow this convention in the future, it will help other programmers\
+    \ understand your code better.\n\nSince your function is only expected to receive\
+    \ an <code>integer?</code> argument, there's no need to check whether the argument\
+    \ is valid.\n<code>(define (is-cube? a)\n  (equal? (integer-sqrt a)\n        \
+    \  (integer-sqrt (integer-sqrt a))))\n</code>\n\nI think this is a better way\
+    \ to write your function. You can run a quick test to see that both functions\
+    \ return the same result:\n<code>(for/list ([a (in-range 1000)])\n  (let ((r1\
+    \ (is-cube? a))\n        (r2 (is-cube2? a)))\n    (cond\n      [(not (equal? r1\
+    \ r2)) (list a r1 r2)]\n      [else #f])))\n</code>\n", "  (define (iscube-iter\
+    \ acc)\n    (cond\n      [(= acc a) #t]\n      [(< acc a) (iscube-iter (+ acc\
+    \ (+ acc acc)))]\n      [else #f]))\n  (iscube-iter 1))\n", "  (define (cube-check\
+    \ n)\n    (= a (* n n n)))\n  (cube-check a))\n", "  (define (helper a i)\n  \
+    \  (cond ((= (* i i i) a) #t)\n          ((> (* i i i) a) #f)\n          (else\
+    \ (helper a (+ i 1)))))\n  (helper a 1))\n", "  (if (= a 0)\n      #t\n      (if\
+    \ (< 0 a)\n          (if (= (* (* a a) a) a)\n              #t\n             \
+    \ #f)\n          (if (= (* (* (- a) (- a)) (- a)) a)\n              #t\n     \
+    \         #f))))", "  ;; your code here\n  )\n ", "  (cond\n    ((= a 1) true)\n\
+    \    ((= a 0) true)\n    ((even? a) false)\n    ((zero? a) true)\n    ((equal?\
+    \ (sqrt (sqrt a)) (round (sqrt (sqrt a)))) true)\n    (else false)))\n", "  (cond\
+    \ [(> a 0) (= (expt (round (sqrt a)) 3) a)]\n        [(= a 0) #t]\n        [else\
+    \ (= (expt (round (sqrt (- a))) 3) (- a))]))", "  (if (zerop a)\n      #t\n  \
+    \    (let ((b (round (sqrt a))))\n        (if (and (integer? b) (= a (* b b b)))\n\
+    \            #t\n            #f))))\n", "  (equal? (expt (abs a) (/ 1 3)) (round\
+    \ (expt (abs a) (/ 1 3)))))\n", "  (and (not (zero? a))\n       (equal? a (cube\
+    \ (isqrt a)))))\n", "  (and (integer? a)\n       (= a (* (floor (expt a (/ 1 3)))\n\
+    \               (floor (expt a (/ 1 3)))\n               (floor (expt a (/ 1 3)))))))\n",
+  "  (define (isp a (b 0))\n    (if (== b a)\n        #t\n        (if (< a b)\n  \
+    \          #f\n            (isp a (+ b b b)))))\n  (isp a))\n", "  (cond\n   \
+    \ [(= a 0) true]\n    [(> a 0) (= (expt (round (sqrt (round (sqrt a)))) 3) a)]\n\
+    \    [(< a 0) (= (expt (round (sqrt (round (sqrt (- a))))) 3) (- a))]))\n", " \
+    \ (integer? (sqrt a)))\n", "  (exact-integer? (expt (isqrt a) 3)))\n", "  (define\
+    \ (cube n) (* n n n))\n  (define (forloop n)\n    (if (< (cube n) 0)\n       \
+    \ #f\n        (if (= (cube n) a)\n            #t\n            (forloop (+ n 1)))))\n\
+    \  (forloop 1))\n", "  (equal? (expt (round (sqrt a)) 3) a))\n", "  (exact-integer?\
+    \ (expt (round (sqrt a)) 3)))\n", "  (integer? (cube-root a)))\n", "  (define\
+    \ (cube n) (* n n n))\n  (define (sum a b) (+ a b))\n  (if (= a 0)\n      #t\n\
+    \      (if (< a 0)\n          (zero? (remainder a (cube (- (cube (sum 1 (round\
+    \ (sqrt (- a)))))))))\n          (zero? (remainder a (cube (sum 1 (round (sqrt\
+    \ a)))))))))\n```\n\n```\n#lang racket\n", "  (and (&gt; a 0)\n       (= a\n \
+    \         (expt (round (expt a (/ 1 3))) 3))))\n", "  (integer? (exact-floor (cubrt\
+    \ a))))\n", "  (define (sqrt a)\n    (define (sqrt-iter a g)\n      (if (&lt;\
+    \ (square g) a)\n          (sqrt-iter a (+ g (/ a g)))\n          g))\n    (sqrt-iter\
+    \ a (/ a 2)))\n  (let ([sqrt-a (sqrt a)])\n    (= (expt sqrt-a 3) a)))\n</code>\n\
+    I tested in DrRacket with the following code:\n<code>#lang racket\n", "  (define\
+    \ (isinteger? x)\n    (and (integer? x)\n         (exact? x)))\n  (define (cube\
+    \ x)\n    (* x x x))\n  (and (isinteger? a)\n       (isinteger? (cube (inexact->exact\
+    \ (sqrt (cube a)))))))\n", "  (define b (round (pow (abs a) (/ 1 3.0))))\n  (=\
+    \ (abs a) (* b b b)))", "  (= a (* a a a)))\n</code>\nHere's a run.\n<code>&gt;\
+    \ (iscube 10)\n#f\n&gt; (iscube 27)\n#t\n&gt; (iscube 64)\n#t\n&gt; (iscube -27)\n\
+    #t\n&gt; (iscube 0)\n#t\n&gt; (iscube 180)\n#f\n</code>\n", "  (define (cbrt a)\n\
+    \    (expt a (/ 1 3)))\n  (and (integer? (cbrt a))\n       (= a (expt (cbrt a)\
+    \ 3))))\n", "  (and (= (sqrt a) (floor (sqrt a)))\n       (= a (* (sqrt a) (sqrt\
+    \ a) (sqrt a)))))", "  (=\n   a\n   (expt (round (expt (sqrt a) 1/3)) 3)))\n",
+  "  (cond\n    [(= a 0) #t]\n    [(= a 1) #t]\n    [(< a 0) (iscube (abs a))]\n \
+    \   [else\n     (eq? (expt (round (sqrt a)) 3) a)]))\n", "  (integer? (exact-sqrt\
+    \ (exact-expt a 3))))\n", "  (and (integer? a) (integer? (expt 1/3 a))))\n", " \
+    \ (let loop ((i 1))\n    (cond ((< i (+ i 1)) false)\n          ((= a (* i i i))\
+    \ true)\n          (else (loop (+ i 1))))))\n", "  (integer? (cbrt a)))\n", " \
+    \ (cube-root? a))\n", "  (define n 1)\n  (define (isCube n)\n    (cond ((= a (*\
+    \ n n n)) #t)\n          ((&gt; a (* n n n)) (isCube (+ n 1)))\n          (else\
+    \ #f)))\n  (isCube n))\n</code>\nBut it fails test cases with large numbers such\
+    \ as <code>iscube(7423) ==&gt; False</code>\nThe problem seems to be with the\
+    \ last parameter which outputs correct results for small numbers but the stack\
+    \ overflows with large numbers. Is there a way to fix this or a better way to\
+    \ solve this problem?\n\n\nA:\n\nIf you don't have to use recursion, you can write\
+    \ a single expression like this:\n<code>(define (iscube n)\n  (or (zero? n) (integer?\
+    \ (sqrt n))))\n</code>\n", "  (integer? (exact-sqrt (abs a))))\n</code>\n", " \
+    \ (if (even? a)\n      (iscube (quotient a 2))\n      (integer? (expt a (quotient\
+    \ 1 3)))))", "  (integer? (sqrt (sqrt a))))\n", "  (define (aux a b)\n    (if\
+    \ (&lt; a 0)\n        (if (= a (* b b b))\n            #t\n            #f)\n \
+    \       (if (= a (* b b b))\n            #t\n            (aux a (+ b 1)))))\n\
+    \  (aux a 0))\n</code>\n", "  (not (zero? a))\n  (sqrt a))\n", "  (integer? (exact-sqrt\
+    \ a)))\n", "  (let* ([sqrt a]\n         [root (exact-square-root sqrt)])\n   \
+    \ (cond ((not (integer? root)) #f)\n          ((zero? root) #t)\n          (else\
+    \ (= (* root root root) a)))))\n", "  (and (integer? a) (integer? (cube-root a))))\n",
+  "  (and (&gt; a 0)\n       (= a (round (expt (round (pow a (/ 1 3))) 3)))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

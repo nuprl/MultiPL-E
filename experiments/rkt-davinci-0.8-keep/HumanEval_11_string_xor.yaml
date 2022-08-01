@@ -7,7 +7,811 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate s
   \    (check-equal? (candidate \"111000\" \"101010\") \"010010\")\n    (check-equal?\
   \ (candidate \"1\" \"1\") \"0\")\n    (check-equal? (candidate \"0101\" \"0000\"\
   ) \"0101\")\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (display a)\n  (display \" XOR \")\n  (display b)\n  (display \"\
+    \ = \")\n  (display (string-xor (string->list a) (string->list b)))\n  (newline))\n",
+  "  (apply string (map xor (string-&gt;list a) (string-&gt;list b))))\n</code>\n",
+  "  (define a-len (string-length a))\n  (define b-len (string-length b))\n  (define\
+    \ longer (if (&gt; a-len b-len) a b))\n  (define longer-len (string-length longer))\n\
+    \  (for/fold ([result \"\"] ([i (in-range longer-len)]) #:break (= i longer-len))\n\
+    \    (string-append result\n                   (cond\n                     [(or\
+    \ (not (= i a-len)) (not (= i b-len))) (string (string-ref longer i))]\n     \
+    \                [(= (string-ref a i) (string-ref b i)) \"0\"]\n             \
+    \        [else \"1\"]))))\n", "  (format \"~a\" (bitwise-xor (string->number a\
+    \ 2) (string->number b 2) 2)))\n", "  (apply string (map (\u03BB (x) (remainder\
+    \ (add1 x) 2)) (map string-&gt;number (string-&gt;list a) (string-&gt;list b)))))\n\
+    </code>\nI am getting this error:\n<code>string_xor: expects 3 arguments, given\
+    \ 2\n</code>\nI don't see why <code>map</code> would need 3 arguments though...\n\
+    \n\nA:\n\nThe problem is that the <code>map</code> procedure takes two arguments,\
+    \ a procedure and a list.\nIn your case, you want to call <code>map</code> with\
+    \ two lists, so you need to use <code>map*</code>, which does exactly that.\n\
+    Also, inside your <code>map</code> you're passing a procedure that takes two arguments\
+    \ <code>(\u03BB (x y) ...)</code>, so you need to supply two <code>map</code>s,\
+    \ like this:\n<code>(define (string_xor a b)\n  (apply string (map* (\u03BB (x\
+    \ y) (remainder (add1 (+ x y)) 2))\n                      (string-&gt;list a)\
+    \ (string-&gt;list b))))\n</code>\n", "  (define (conv str)\n    (map string->number\
+    \ (string-&gt;list str)))\n  (define (xor l1 l2)\n    (cond\n      [(null? l1)\
+    \ '()]\n      [(null? l2) '()]\n      [else (cons (bitwise-xor (car l1) (car l2))\
+    \ (xor (cdr l1) (cdr l2)))]))\n  (list-&gt;string (xor (conv a) (conv b))))\n",
+  "  (apply string\n         (map\n          (lambda (aa bb)\n            (if (eq?\
+    \ aa bb)\n                #\\0\n                #\\1))\n          (string->list\
+    \ a)\n          (string->list b))))\n", "  (string-&gt;number (number-&gt;string\
+    \ (logxor (string-&gt;number a 2) (string-&gt;number b 2)) 2)))\n</code>\n", " \
+    \ (string-join\n   (for/list ([x (in-list (string-&gt;list a))]\n            \
+    \   [y (in-list (string-&gt;list b))])\n     (number-&gt;string (bitwise-xor (string-&gt;number\
+    \ (string x))\n                                   (string-&gt;number (string y)))))\n\
+    \   \"\"))\n", "  (define (loop a b acc)\n    (if (and (not (empty? a)) (not (empty?\
+    \ b)))\n        (let ((a-head (car a))\n              (b-head (car b)))\n    \
+    \      (loop (cdr a) (cdr b) (cons (if (equal? a-head b-head) #\\0 #\\1) acc)))\n\
+    \        (reverse acc)))\n  (string->list (string-append a b))\n  (loop (string->list\
+    \ a) (string->list b) '()))\n", "  (string-join\n   (for/list ([(a b) (in-list\
+    \ (string-&gt;list a) (string-&gt;list b))])\n     (number-&gt;string (bitwise-xor\
+    \ (string-&gt;number (string a))\n                                   (string-&gt;number\
+    \ (string b)))))))\n", "  (string-join\n   (for/list ([digit-pair (in-indexed\
+    \ (in-list (string-&gt;list a)))]\n               #:when (equal? (modulo (add1\
+    \ (cadr digit-pair)) 2)\n                              (string-&gt;number (string\
+    \ (car (string-&gt;list b)) (cadr digit-pair)) 2)))\n     (car digit-pair))\n\
+    \   \"\"))\n", "  (define (str_to_int str)\n    (string->number str 2))\n  (define\
+    \ (int_to_str n)\n    (number->string n 2))\n  (int_to_str (logxor (str_to_int\
+    \ a) (str_to_int b))))\n", "  (foldl (lambda (x y) (number->string (xor (string->number\
+    \ x) (string->number y))))\n         \"\"\n         (map (lambda (x y) (list x\
+    \ y)) (string->list a) (string->list b))))\n", '  (apply string (map and (map
+    list (string->list a) (string->list b)))))', "  (apply string (map (lambda (x\
+    \ y) (if (equal? x y) #\\0 #\\1)) a b)))\n", "  (apply string (map (lambda (x\
+    \ y) (char (bitwise-xor (digit->integer x) (digit->integer y)))) a b)))\n", " \
+    \ (build-string\n   (string-length a)\n   (lambda (i)\n     (if (eq? (string-ref\
+    \ a i) (string-ref b i))\n         #\\0\n         #\\1))))\n", "  (string-append\n\
+    \   (if (equal? (string-ref a 0) #\\0)\n       (string #\\0)\n       (string #\\\
+    1))\n   (if (equal? (string-ref a 1) #\\0)\n       (string #\\0)\n       (string\
+    \ #\\1))\n   (if (equal? (string-ref a 2) #\\0)\n       (string #\\0)\n      \
+    \ (string #\\1))\n   (if (equal? (string-ref b 0) #\\0)\n       (string #\\0)\n\
+    \       (string #\\1))\n   (if (equal? (string-ref b 1) #\\0)\n       (string\
+    \ #\\0)\n       (string #\\1))\n   (if (equal? (string-ref b 2) #\\0)\n      \
+    \ (string #\\0)\n       (string #\\1))))\n```\n\n```racket\n#lang racket\n", " \
+    \ (define (xor-char a b)\n    (define (char-to-bin char)\n      (number->string\
+    \ (char->integer char) 2))\n    (define (bin-to-char num)\n      (integer->char\
+    \ (string->number num 2)))\n    (bin-to-char (string-append (if (char=? (string-ref\
+    \ a 0) (string-ref b 0))\n                                     #\"0\"\n      \
+    \                               #\"1\")\n                                 (if\
+    \ (char=? (string-ref a 1) (string-ref b 1))\n                               \
+    \      #\"0\"\n                                     #\"1\")\n                \
+    \                 (if (char=? (string-ref a 2) (string-ref b 2))\n           \
+    \                          #\"0\"\n                                     #\"1\"\
+    ))))\n  (define (string-xor a b)\n    (string-append (xor-char (string-ref a 0)\
+    \ (string-ref b 0))\n                   (xor-char (string-ref a 1) (string-ref\
+    \ b 1))\n                   (xor-char (string-ref a 2) (string-ref b 2))))\n \
+    \ (string-xor a b))", "  (letrec ((sxor\n\t    (lambda (a b)\n\t      (match (list\
+    \ a b)\n\t\t     [('() '()) '()]\n\t\t     [('() _) '()]\n\t\t     [(_ '()) '()]\n\
+    \t\t     [(cons a as) (cons b bs)]\n\t\t     (let ([xor (not (eq? a b))])\n\t\t\
+    \       (cons (if xor '1 '0) (sxor as bs)))))))\n    (sxor (string->list a) (string->list\
+    \ b))))\n", "  (define (convert str)\n    (map (lambda (char)\n           (string->number\
+    \ (string char)))\n         (string->list str)))\n  (number->string\n   (apply\
+    \ bitwise-xor (apply append (map convert (list a b))))))\n", "  (apply string\
+    \ (map bitwise-xor (string->list a) (string->list b))))\n", "  (apply string (map\
+    \ (\u03BB (char1 char2)\n                      (+ (char->integer char1) (char->integer\
+    \ char2) (- (char->integer #\\0) 48)))\n                    (string->list a)\n\
+    \                    (string->list b))))\n", "  (string (bitwise-xor (string->number\
+    \ a 2) (string->number b 2) 2)))\n", "  (string-join (map (\u03BB (pair)\n   \
+    \                   (if (equal? (car pair) (cadr pair))\n                    \
+    \      #\\0\n                          #\\1))\n                    (partition\
+    \ 2 (string->list (string-append a b))))\n               \"\"))\n", "  (define\
+    \ (parse n)\n    (cond ((= n #\\0) #f)\n          ((= n #\\1) #t)\n          (else\
+    \ (error \"Invalid character: ~a\" n))))\n  (define (to-string n)\n    (cond ((boolean?\
+    \ n) (if n #\\1 #\\0))\n          (else (error \"Invalid boolean value: ~a\" n))))\n\
+    \  (define (xor n1 n2)\n    (cond ((and n1 n2) #f)\n          ((or n1 n2) #t)\n\
+    \          (else #f)))\n  (apply string (map to-string (map xor (map parse (string->list\
+    \ a)) (map parse (string->list b))))))\n", "  (cond ((string=? a \"\") b)\n  \
+    \      ((string=? b \"\") a)\n        (else\n         (begin\n           (string-append\
+    \ (string (logxor (string->number (substring a 0 1))\n                       \
+    \                   (string->number (substring b 0 1))))\n                   \
+    \      (string_xor (substring a 1) (substring b 1)))))))", "  (apply string\n\
+    \         (map (\u03BB (a b) (if (and (eq? a #\\1) (eq? b #\\0))\n           \
+    \     #\\1\n                (if (and (eq? a #\\0) (eq? b #\\1))\n            \
+    \        #\\1\n                    #\\0)))\n              a b)))\n```\n\n### Try\
+    \ it\n```\n> (string_xor \"010\" \"110\")\n\"100\"\n```\n\n### Test\n```\n> (module+\
+    \ test\n    (require rackunit)\n    (check-equal? (string_xor \"010\" \"110\"\
+    ) \"100\"))\n```\n\n## Problem 40\n\n### Description\n```\n#lang racket\n", " \
+    \ (apply string (map (curry xor 1) a b)))\n", "  (string (xor (string->number\
+    \ a) (string->number b))))\n", "  (string-append\n   (if (equal? (substring a\
+    \ 0 1) (substring b 0 1)) \"0\" \"1\")\n   (if (equal? (substring a 1 1) (substring\
+    \ b 1 1)) \"0\" \"1\")\n   (if (equal? (substring a 2 1) (substring b 2 1)) \"\
+    0\" \"1\")))\n", "  (string-join (map (\u03BB (x) (number->string x)) (map (\u03BB\
+    \ (x y) (bitwise-xor x y)) (map string-&gt;number (string-&gt;list a)) (map string-&gt;number\
+    \ (string-&gt;list b)))) \"\"))\n", "  (let ([a (string->list a)]\n        [b\
+    \ (string->list b)])\n    (map (\u03BB (c) (if (equal? c '0) '1 '0))\n       \
+    \  (map string (map (\u03BB (c1 c2) (xor c1 c2)) a b)))))\n```\n\n```racket\n\
+    #lang racket\n", "  (for/list ([ac (in-string a)]\n             [bc (in-string\
+    \ b)])\n    (if (char=? ac bc)\n        #\\0\n        #\\1)))\n", "  (number->string\
+    \ (logxor (string->number a 2) (string->number b 2) 2)))\n", "  (let ([a (string->list\
+    \ a)]\n        [b (string->list b)])\n    (map string-downcase (string (car (map\
+    \ vector-ref (map (lambda (v)\n                                              \
+    \               (string-downcase (vector-ref #*0011 v)))\n                   \
+    \                                        (map (lambda (a b)\n                \
+    \                                                  (apply bitwise-xor a b))\n\
+    \                                                                a b)))))))\n",
+  "  (string (bitwise-xor (string->number a 2) (string->number b 2) 2)))\n</code>\n\
+    I would be interested in a solution, that is still \"idiomatic\" but more concise.\
+    \ I am not sure how this would be possible as I do not see a way to avoid creating\
+    \ a string from the xor result and then converting it back.\nYou can find this\
+    \ problem here\n\n\nA:\n\nI think this should do it:\n<code>(define (string-xor\
+    \ a b)\n  (define (xor-digits a b)\n    (bitwise-xor (string-&gt;number (string\
+    \ a) 2)\n                 (string-&gt;number (string b) 2)))\n  (string (xor-digits\
+    \ (string-ref a 0) (string-ref b 0))\n          (xor-digits (string-ref a 1) (string-ref\
+    \ b 1))\n          (xor-digits (string-ref a 2) (string-ref b 2))))\n</code>\n",
+  "  (let ([len (string-length a)])\n    (for/fold ([acc \"\"]\n               ([i\
+    \ (in-range len)])\n               #:result (string-append acc (number->string\
+    \ (bitwise-xor (string-&gt;number (string-ref a i)) (string-&gt;number (string-ref\
+    \ b i)))))))))\n", "  (foldr (lambda (ai bi)\n           (append (list (if (and\
+    \ (equal? bi \"1\") (equal? ai \"1\"))\n                             \"0\"\n \
+    \                            (if (and (equal? bi \"0\") (equal? ai \"0\"))\n \
+    \                                \"0\"\n                                 \"1\"\
+    )))\n                   (list (if (and (equal? bi \"1\") (equal? ai \"1\"))\n\
+    \                             \"1\"\n                             (if (and (equal?\
+    \ bi \"0\") (equal? ai \"0\"))\n                                 \"0\"\n     \
+    \                            \"0\")))))\n         '()\n         (build-list\n\
+    \          (max (string-length a) (string-length b))\n          (lambda (i)\n\
+    \            (list (if (&lt; (string-length a) (string-length b))\n          \
+    \            (string-ref b i)\n                      (string-ref a i))\n     \
+    \             (if (&lt; (string-length a) (string-length b))\n               \
+    \       (string-ref a i)\n                      (string-ref b i)))))))\n</code>\n\
+    Some notes:\n\nI've used <code>build-list</code> to create the list of tuples\
+    \ (binary digits) of both input strings.\nThis uses <code>foldr</code> with cons\
+    \ to build the result from right to left.\nSince <code>string-ref</code> can return\
+    \ <code>#\\newline</code> if you ask it for a character that doesn't exist, I've\
+    \ used <code>string-length</code> to only ask for a character position if the\
+    \ input string is actually long enough.\n\n", "  (cond ((and (string=? \"0\" a)\
+    \ (string=? \"0\" b)) \"0\")\n        ((and (string=? \"0\" a) (string=? \"1\"\
+    \ b)) \"1\")\n        ((and (string=? \"1\" a) (string=? \"0\" b)) \"1\")\n  \
+    \      ((and (string=? \"1\" a) (string=? \"1\" b)) \"0\")))\n", "  (bytes->string/utf-8\
+    \ (string-xor (string->bytes/utf-8 a) (string->bytes/utf-8 b))))\n", "  (apply\
+    \ string (map bitwise-xor (string->list a) (string->list b))))\n", "  (define\
+    \ (sxor a b c)\n    (cond\n      ((zero? (string-length a)) c)\n      ((= (string-ref\
+    \ a 0) #\\0) (sxor (substring a 1) (substring b 1) (string-append c \"0\")))\n\
+    \      ((= (string-ref a 0) #\\1) (sxor (substring a 1) (substring b 1) (string-append\
+    \ c \"1\")))\n      (else #f)))\n  (sxor a b \"\"))\n", "  (define (xor-char a\
+    \ b)\n    (cond\n      [(= (string-ref a 0) (string-ref b 0)) \"0\"]\n      [else\
+    \ \"1\"]))\n  (if (string=? a \"\") b\n      (if (string=? b \"\") a\n       \
+    \   (string-append (xor-char a b) (string_xor (substring a 1) (substring b 1))))))\n",
+  "  (display \"hello\")\n  (begin\n    (display b)\n    (display \"asd\")\n    (display\
+    \ \"b\")))", "  (cond [(empty? a) (string b)]\n        [(empty? b) (string a)]\n\
+    \        [else\n         (string (xor (string-&gt;number (string-take a 1))\n\
+    \                      (string-&gt;number (string-take b 1))))\n         (string_xor\
+    \ (string-drop a 1) (string-drop b 1))]))\n</code>\n<code>string_xor</code> causes\
+    \ an error if a and b don't have the same length.\n\n\nA:\n\nFor the sake of using\
+    \ a different approach, here's a recursive solution that doesn't use <code>string-take</code>\
+    \ and <code>string-drop</code>, it just iterates through the strings from left\
+    \ to right:\n<code>(define (string-xor a b)\n  (define (string-xor-iter a b xor-result)\n\
+    \    (if (and (string? a) (string? b))\n        (if (or (empty? a) (empty? b))\n\
+    \            xor-result\n            (string-xor-iter (string-tail a)\n      \
+    \                       (string-tail b)\n                             (string\
+    \ (logxor (string-ref a 0) (string-ref b 0))\n                               \
+    \      xor-result)))\n        (error \"Arguments must be two strings of the same\
+    \ length\")))\n  (string-xor-iter a b \"\"))\n</code>\nAnd here's a version that's\
+    \ a little more concise and uses <code>cond</code> instead of <code>if</code>:\n\
+    <code>(define (string-xor a b)\n  (define (string-xor-iter a b xor-result)\n \
+    \   (cond [(and (string? a) (string? b))\n           (cond [(or (empty? a) (empty?\
+    \ b))\n                  xor-result]\n                 [else\n               \
+    \   (string-xor-iter (string-tail a)\n                                   (string-tail\
+    \ b)\n                                   (string (logxor (string-ref a 0) (string-ref\
+    \ b 0))\n                                           xor-result))])]\n        \
+    \  [else\n           (error \"Arguments must be two strings of the same length\"\
+    )", "  (cond\n    [(equal? (string-length a) 0) b]\n    [(equal? (string-length\
+    \ b) 0) a]\n    [else\n     (string-append\n      (string-xor (substring a 1)\
+    \ (substring b 1))\n      (string (bitwise-xor (string-ref a 0) (string-ref b\
+    \ 0))))]))\n", "  (if (null? a)\n      b\n      (if (null? b)\n          a\n \
+    \         (if (string=? (string-take a 1) \"0\")\n              (if (string=?\
+    \ (string-take b 1) \"0\")\n                  (string-append \"0\" (string_xor\
+    \ (string-drop a 1) (string-drop b 1)))\n                  (string-append \"1\"\
+    \ (string_xor (string-drop a 1) (string-drop b 1))))\n              (if (string=?\
+    \ (string-take b 1) \"0\")\n                  (string-append \"1\" (string_xor\
+    \ (string-drop a 1) (string-drop b 1)))\n                  (string-append \"0\"\
+    \ (string_xor (string-drop a 1) (string-drop b 1))))))))\n", "  (define (str-to-bin\
+    \ str)\n    (string->list str))\n  (define (bin-to-str bin)\n    (list->string\
+    \ bin))\n  (define (xor-bin a b)\n    (map (\u03BB (x) (if (zero? (remainder x\
+    \ 2)) '0 '1))\n         (map + (str-to-bin a) (str-to-bin b))))\n  (bin-to-str\
+    \ (xor-bin a b)))\n```\n\n## Interesting\n\n* `string->list` and `list->string`\n\
+    * `map` and `map +`", "  (define xor-strings\n    (lambda (x y)\n      (cond ((null?\
+    \ x) '())\n            ((= (string-ref x 0) (string-ref y 0)) \"0\")\n       \
+    \     (else \"1\"))))\n  (string-join\n   (map (lambda (x y) (apply xor-strings\
+    \ x y))\n        (string-&gt;list a)\n        (string-&gt;list b))\n   \"\"))\n\
+    </code>\n", "  (integer->string\n   (bitwise-xor (string->number a 2) (string->number\
+    \ b 2) 2)))\n", "  (define (op n c)\n    (if (eq? n #\\0) (if (eq? c #\\0) #\\\
+    0 #\\1)\n        (if (eq? c #\\0) #\\1 #\\0)))\n  (string-append (map (\u03BB\
+    \ (x y) (op x y)) a b)))\n</code>\nIs it possible to write this code using only\
+    \ <code>syntax-rules</code>?\n\n\nA:\n\n<code>#lang racket\n", "  (let loop ([a\
+    \ (string->list a)]\n             [b (string->list b)]\n             [xs '()])\n\
+    \    (if (or (null? a) (null? b))\n        (string-append (reverse xs))\n    \
+    \    (let ([x (if (or (char=? (car a) #\\0) (char=? (car b) #\\0))\n         \
+    \            #\\0\n                     #\\1)])\n          (loop (cdr a) (cdr\
+    \ b) (cons x xs))))))\n", "  (define (f x y)\n    (cond\n      [(string=? x y)\
+    \ \"0\"]\n      [else \"1\"]))\n  (map f a b))\n```\n\n### Challenge\n\n```racket\n\
+    #lang racket\n", "  (let loop ([a (string->list a)]\n             [b (string->list\
+    \ b)]\n             [result '()])\n    (cond [(empty? a)\n           (list->string\
+    \ (reverse result))]\n          [(empty? b)\n           (list->string (reverse\
+    \ result))]\n          [else\n           (let ([a-char (string-ref a 0)]\n   \
+    \              [b-char (string-ref b 0)])\n             (cond [(char=? a-char\
+    \ #\\0)\n                    (cond [(char=? b-char #\\0)\n                   \
+    \        (loop (cdr a) (cdr b) (cons #\\0 result))]\n                        \
+    \  [(char=? b-char #\\1)\n                           (loop (cdr a) (cdr b) (cons\
+    \ #\\1 result))])]\n                   [(char=? a-char #\\1)\n               \
+    \     (cond [(char=? b-char #\\0)\n                           (loop (cdr a) (cdr\
+    \ b) (cons #\\1 result))]\n                          [(char=? b-char #\\1)\n \
+    \                          (loop (cdr a) (cdr b) (cons #\\0 result))])]\n    \
+    \               [else\n                    '()]))])))", "  (regexp-replace* #rx\"\
+    \" (regexp-replace* #rx\"\" (string-append a b) #rx\"11\") #rx\"00\"))\n", " \
+    \ (cond ((and (= (string-length a) 1) (= (string-length b) 1))\n         (string\
+    \ (xor (string-&gt;number (substring a 0 1))\n                      (string-&gt;number\
+    \ (substring b 0 1)))))\n        ((and (= (string-length a) 2) (= (string-length\
+    \ b) 2))\n         (string (xor (string-&gt;number (substring a 0 1))\n      \
+    \                (string-&gt;number (substring b 0 1)))\n                  (xor\
+    \ (string-&gt;number (substring a 1 2))\n                      (string-&gt;number\
+    \ (substring b 1 2)))))\n        ((&gt; (string-length a) 2)\n         (string\
+    \ (xor (string-&gt;number (substring a 0 1))\n                      (string-&gt;number\
+    \ (substring b 0 1)))\n                  (xor (string-&gt;number (substring a\
+    \ 1 2))\n                      (string-&gt;number (substring b 1 2)))\n      \
+    \            (string_xor (substring a 2 (string-length a))\n                 \
+    \             (substring b 2 (string-length b)))))\n        ((&gt; (string-length\
+    \ b) 2)\n         (string (xor (string-&gt;number (substring a 0 1))\n       \
+    \               (string-&gt;number (substring b 0 1)))\n                  (xor\
+    \ (string-&gt;number (substring a 1 2))\n                      (string-&gt;number\
+    \ (substring b 1 2)))\n                  (string_xor (substring a 2 (string-length\
+    \ a))\n                              (substring b 2 (string-length b)))))\n  \
+    \      (else\n         (string (xor (string-&gt;number (substring a 0 1))\n  \
+    \                    (string-&gt;number (substring b 0 1)))\n                \
+    \  (xor (string-&gt;number (substring a 1 2))\n                      (string-&gt;number\
+    \ (substring b 1 2)))))))\n</code>\nAs you can see, I have just played around\
+    \ and wrote a bunch of if statements and there is surely a better way to do this.\
+    \ If I increase the number of 1", "  (string-join (map (\u03BB (a b)\n       \
+    \                (string (logxor (string->number (string a))\n               \
+    \                        (string->number (string b)))))\n                    \
+    \ (string-&gt;list a)\n                     (string-&gt;list b))))\n", "  (string-append\
+    \ (string-join (map (\u03BB (x) (if (equal? (car x) (cadr x)) \"0\" \"1\")) (zip\
+    \ (string->list a) (string->list b))))))\n", "  (string-append (map (\u03BB (c1\
+    \ c2) (string (xor (digit->integer c1) (digit->integer c2)))) a b)))", "  (define\
+    \ (aux a b)\n    (match-define (list a b) (match (list a b)\n                \
+    \                    [(list #\"0\" #\"0\") '(a b)]\n                         \
+    \           [(list #\"0\" #\"1\") '(a b)]\n                                  \
+    \  [(list #\"1\" #\"0\") '(a b)]\n                                    [(list #\"\
+    1\" #\"1\") '(#\"0\" #\"0\")]))\n    (if (and (string=? a \"\") (string=? b \"\
+    \"))\n        \"\"\n        (string-append (substring a 0 1) (aux (substring a\
+    \ 1) (substring b 1)))))\n  (if (and (string=? a \"\") (string=? b \"\"))\n  \
+    \    \"\"\n      (string-append (substring a 0 1) (aux (substring a 1) (substring\
+    \ b 1)))))\n", "  (string-append\n   (map (lambda (x) (if (char=? (car x) #\\\
+    0) #\\1 #\\0))\n        (list-zip (string->list a) (string->list b)))\n   \"\"\
+    ))\n", "  (cond\n    ((and (equal? a \"0\") (equal? b \"0\")) \"0\")\n    ((and\
+    \ (equal? a \"0\") (equal? b \"1\")) \"1\")\n    ((and (equal? a \"1\") (equal?\
+    \ b \"0\")) \"1\")\n    ((and (equal? a \"1\") (equal? b \"1\")) \"0\")))\n",
+  "  (string-append \n   (if (and (string=? (substring a 0 1) \"1\") (string=? (substring\
+    \ b 0 1) \"0\"))\n       \"1\"\n       (if (and (string=? (substring a 0 1) \"\
+    0\") (string=? (substring b 0 1) \"1\"))\n           \"1\"\n           \"0\"))\n\
+    \   (if (and (string=? (substring a 1 1) \"1\") (string=? (substring b 1 1) \"\
+    0\"))\n       \"1\"\n       (if (and (string=? (substring a 1 1) \"0\") (string=?\
+    \ (substring b 1 1) \"1\"))\n           \"1\"\n           \"0\"))\n   (if (and\
+    \ (string=? (substring a 2 1) \"1\") (string=? (substring b 2 1) \"0\"))\n   \
+    \    \"1\"\n       (if (and (string=? (substring a 2 1) \"0\") (string=? (substring\
+    \ b 2 1) \"1\"))\n           \"1\"\n           \"0\"))))\n", "  (string-join\n\
+    \   (map\n    (lambda (x)\n      (number->string (bitwise-xor (string->number\
+    \ (substring x 0 1))\n                                   (string->number (substring\
+    \ x 1 2)))))\n    (string-split (string-append a b) (string #\\)))\n   (string\
+    \ #\\)))\n", "  (define (char-xor a b)\n    (string->number (number->string (char->integer\
+    \ a) 2) 10))\n  (string-map char-xor a b))\n", "  (cond\n    [(equal? (length\
+    \ a) 0) b]\n    [(equal? (length b) 0) a]\n    [else (string-append (string_xor\
+    \ (substring a 1) (substring b 1))\n                       (string (xor (string->number\
+    \ (substring a 0 1))\n                                    (string->number (substring\
+    \ b 0 1)))))]))\n</code>\nI come from the Python world and would write it like\
+    \ this:\n<code>#lang racket\n", "  (define (str_xor s1 s2 acc)\n    (if (zero?\
+    \ (length s1))\n        acc\n        (str_xor (substring s1 1) (substring s2 1)\n\
+    \                 (string-append acc\n                                (if (equal?\
+    \ (string-ref s1 0) (string-ref s2 0))\n                                    #\"\
+    0\"\n                                    #\"1\")))))\n  (str_xor a b \"\"))\n",
+  "  (define (to-char c)\n    (cond [(= c 0) #\\0]\n          [(= c 1) #\\1]))\n \
+    \ (let loop ([a a] [b b] [pos 0] [res '()])\n    (if (= pos (string-length a))\n\
+    \        (apply string (reverse res))\n        (let ([c (bitwise-xor (char-&gt;integer\
+    \ (string-ref a pos))\n                              (char-&gt;integer (string-ref\
+    \ b pos)))])\n          (loop a b (+ pos 1) (cons (to-char c) res))))))\n</code>\n",
+  "  (string-join (map (\u03BB (x) (number->string x))\n                    (map (\u03BB\
+    \ (ab) (xor (car ab) (cadr ab)))\n                         (map list\n       \
+    \                       (map string-&gt;number (string-&gt;list a))\n        \
+    \                      (map string-&gt;number (string-&gt;list b)))))\n      \
+    \         \"\"))\n</code>\n", "  (apply string (map xor (string-&gt;list a) (string-&gt;list\
+    \ b))))\n", "  (define len (min (string-length a) (string-length b)))\n  (define\
+    \ result (make-string len))\n  (define (xor-char x y)\n    (if (char=? x y)\n\
+    \        #\\0\n        #\\1))\n  (for ((i (in-range len)))\n    (string-set! result\
+    \ i (xor-char (string-ref a i) (string-ref b i))))\n  result)\n", "  (define (int-of-string\
+    \ str)\n    (string->number str 10))\n  (define (string-of-int num)\n    (number->string\
+    \ num 10))\n  (string-of-int\n   (bitwise-xor\n    (int-of-string a)\n    (int-of-string\
+    \ b))))\n\n```\n\n```racket\n#lang racket\n", "  (cond\n    [(= (string-length\
+    \ a) 0) \"\"]\n    [(= (string-length b) 0) \"\"]\n    [else\n     (string-append\n\
+    \      (string (xor (string-&gt;number (string-ref a 0))\n                   \
+    \ (string-&gt;number (string-ref b 0))))\n      (string_xor (substring a 1) (substring\
+    \ b 1)))]))\n</code>\nI have checked this with simple example and it seems to\
+    \ work:\n<code>&gt; (string_xor \"110\" \"011\")\n\"101\"\n</code>\nBut I don't\
+    \ know how to test if it works for longer strings and also if it works for any\
+    \ combinations of 1s and 0s in input.\n\n\nA:\n\nHere's a way to test it. \nFirst,\
+    \ you can use <code>random-integer</code> to generate a random list of ones and\
+    \ zeros:\n<code>(define (random-bit)\n  (random-integer 1))\n", "  (string-&gt;number\
+    \ (number-&gt;string (string-&gt;number a xor string-&gt;number b)))\n  )\n",
+  "  (define (bit-xor x y)\n    (if (equal? x y)\n        #f\n        #t))\n  (define\
+    \ (seq-xor a b)\n    (if (empty? a)\n        '()\n        (cons (bit-xor (first\
+    \ a) (first b)) (seq-xor (rest a) (rest b)))))\n  (define (convert-to-char b)\n\
+    \    (if b\n        #\\1\n        #\\0))\n  (list->string (map convert-to-char\
+    \ (seq-xor (string->list a) (string->list b)))))\n", "  (string-join\n   (map\
+    \ (lambda (a b)\n          (number->string (bitwise-xor (string->number a) (string->number\
+    \ b))))\n        (string-&gt;list a)\n        (string-&gt;list b))))\n", "  (string-&gt;list\
+    \ (string-append (string-split \"\\\\(...\\\\)\" (string-append a b))))\n)\n",
+  "  (let loop ([a (string->list a)]\n             [b (string->list b)]\n        \
+    \     [res '()])\n    (cond [(and (not (null? a)) (not (null? b)))\n         \
+    \  (loop (cdr a)\n                 (cdr b)\n                 (cons (equal? (car\
+    \ a) (car b)) res))]\n          [else (list->string (reverse res))])))\n", " \
+    \ (define (xor a b)\n    (if (eq? a b) '0 '1))\n  (cond ((= (string-length a)\
+    \ 1) (string (xor (string-ref a 0) (string-ref b 0))))\n        (else (cons (xor\
+    \ (string-ref a 0) (string-ref b 0))\n                    (string_xor (substring\
+    \ a 1) (substring b 1))))))\n", "  (string-join (map ~string (map string-&gt;number\
+    \ (map ~list (map list-&gt;string (map string-&gt;number (map list a) 2) (map\
+    \ string-&gt;number (map list b) 2)))) 2)))\n</code>\nIt works but I'm not happy\
+    \ with how I processed both strings. I tried to process them more directly but\
+    \ I can't find a way that works:\n<code>#lang racket\n", "  (cond\n    [(empty?\
+    \ a) b]\n    [(empty? b) a]\n    [else\n     (cons (string-&gt;number (list-ref\
+    \ (list (list (list-ref a 0) (list-ref b 0))) 1))\n           (string_xor (substring\
+    \ a 1) (substring b 1)))]))\n</code>\nNow I run this code, and it works fine:\n\
+    <code>&gt; (string_xor \"010\" \"110\")\n'(1 1 0)\n</code>\nNow I want to add\
+    \ the missing quotes, when I try:\n<code>&gt; (string_xor \"010\" \"110\")\n'(1\
+    \ 1 0)\n&gt; (string \"010\" \"110\")\n\"010110\"\n</code>\nI get a different\
+    \ output. So, what is happening here? What can I do to get the quotes in the output?\n\
+    Thank you very much in advance.\n\n\nA:\n\nYou didn't specify the output format,\
+    \ but the following program assumes you want a string of the form <code>\"101\"\
+    </code> and not <code>'(1 0 1)</code>. \n<code>(define (string_xor a b)\n  (string-&gt;number\
+    \ (string-append\n                   (map (lambda (x y)\n                    \
+    \      (number-&gt;string (xor x y)))\n                        (string-&gt;list\
+    \ a)\n                        (string-&gt;list b)))))\n</code>\n", "  (string\
+    \ (bitwise-xor (string->number a 2) (string->number b 2) 2)))\n", "  (string-append\n\
+    \   (if (string=? (substring a 0 1) \"0\") \"\" \"1\")\n   (if (string=? (substring\
+    \ a 1 1) \"0\") \"\" \"1\")\n   (if (string=? (substring a 2 1) \"0\") \"\" \"\
+    1\")))\n", "  (cond\n    [(equal? a b) '0]\n    [else '1]))\n", "  (let* ([a (string->list\
+    \ a)]\n         [b (string->list b)]\n         [c (map (lambda (a b)\n       \
+    \            (if (equal? a b)\n                       #\\0\n                 \
+    \      #\\1))\n                 a b)])\n    (list->string c)))\n", "  (cond\n\
+    \    [(or (empty? a) (empty? b)) (error \"a and b must be nonempty\")]\n    [(string=?\
+    \ (string-take a 1) \"0\") (string_xor (string-drop a 1) (string-drop b 1))]\n\
+    \    [(string=? (string-take a 1) \"1\") (cons \"1\" (string_xor (string-drop\
+    \ a 1) (string-drop b 1)))]\n    [else (error \"a and b must be made of 1s and\
+    \ 0s\")]))\n```\n\n[Example2](string-xor2.rkt)\n```#lang racket\n", "  (define\
+    \ length (min (string-length a) (string-length b)))\n  (define result (make-string\
+    \ length))\n  (for ([i (in-range length)])\n    (string-set! result i (integer->char\
+    \ (logxor (char->integer (string-ref a i)) (char->integer (string-ref b i))))))\n\
+    \  result)\n", "  (string-&gt;list a))\n</code>\nRacket says: function call: expected\
+    \ a function after the open parenthesis, but received a:\n    string\nWhat am\
+    \ I doing wrong?\n\n\nA:\n\nIt looks like you want to xor the list of bits in\
+    \ <code>a</code> with the list of bits in <code>b</code>, which can be done with\
+    \ <code>bitwise-xor</code>.\n<code>(define (string_xor a b)\n  (map bitwise-xor\n\
+    \       (string-&gt;list a)\n       (string-&gt;list b)))\n</code>\nFor example,\n\
+    <code>(string_xor \"010\" \"110\")\n=&gt; '(#\\1 #\\0 #\\0)\n</code>\nor\n<code>(list-&gt;string\
+    \ (string_xor \"010\" \"110\"))\n=&gt; \"100\"\n</code>\n", "  (define (xor a\
+    \ b)\n    (if (or (= a 1) (= b 1))\n      (if (and (= a 1) (= b 1))\n        \
+    \  0\n          1)\n      0))\n  (letrec ((build-result (lambda (r)\n        \
+    \                  (if (= (length r) 0)\n                              \"\"\n\
+    \                              (string-append (build-result (rest r)) (number->string\
+    \ (first r)))))))\n    (build-result (for/list ([i (in-range (string-length a))])\n\
+    \                   (xor (string-&gt;number (string-ref a i))\n              \
+    \          (string-&gt;number (string-ref b i)))))))\n</code>\n", "  (let ([la\
+    \ (string-length a)]\n        [lb (string-length b)])\n    (cond\n      [(< la\
+    \ lb) (string-append (string-fill \"\" 0 (- lb la)) a)]\n      [(> la lb) (string-append\
+    \ (string-fill \"\" 0 (- la lb)) b)]\n      [else \"\" ])))", "  (if (empty? a)\n\
+    \      \"\"\n      (if (empty? b)\n          \"\"\n          (if (string=? (first\
+    \ a) (first b))\n              (string-append \"0\" (string_xor (rest a) (rest\
+    \ b)))\n              (string-append \"1\" (string_xor (rest a) (rest b)))))))\n",
+  "  (for/list ([a (string->list a)]\n             [b (string->list b)])\n    (string\
+    \ (xor (char->integer a) (char->integer b)))))", "  (define (helper ai bi)\n \
+    \   (let ([ai (string-&gt;number (string ai))]\n          [bi (string-&gt;number\
+    \ (string bi))])\n      (number-&gt;string (logxor ai bi 2))))\n  (apply string\
+    \ (map helper a b)))\n", "  (string-join (apply map-with-index (lambda (i a-char)\n\
+    \                                       (cond\n                              \
+    \           [(string=? \"0\" a-char) (substring b i (+ i 1))]\n              \
+    \                           [(string=? \"1\" a-char) (if (string=? \"0\" (substring\
+    \ b i (+ i 1))) \"1\" \"0\")]))\n                    a)))\n", "  (apply string\
+    \ (map bitwise-xor (string->list a) (string->list b))))\n", "  (if (eq? a \"\"\
+    ) \"\"\n      (number->string\n       (xor (string-&gt;number a) (string-&gt;number\
+    \ b)))))\n</code>\nThis works very well in the REPL environment, but if I try\
+    \ to run it in the Interactions window, I get the following error:\n<code>string_xor:\
+    \ string -&gt; string -&gt; string\nstring_xor: expects argument of type &lt;string&gt;;\
+    \ given 110\n  argument position: 2nd\n  other arguments...:\n   #&lt;procedure:racket@&gt;\n\
+    \   (xor (string-&gt;number a) (string-&gt;number b))\n   (eq? a \"\")\n   \"\"\
+    \n</code>\nWhy is this error thrown? I have already tried it with and without\
+    \ <code>#lang racket</code> at the top of the file.\nI am also not sure why a\
+    \ procedure is listed as the first argument and not a string.\n\n\nA:\n\nThe problem\
+    \ is that <code>xor</code> from racket expects a number and you're passing a string.\
+    \ You have to convert <code>b</code> to a number before passing it to <code>xor</code>\
+    \ (you already do it for <code>a</code>). Here's the fixed code:\n<code>#lang\
+    \ racket\n", "  (letrec ([f (lambda (x y)\n                (if (= x 0) y (f (-\
+    \ x 1) (string-append (string (xor (string-ref a x) (string-ref b x))) y))))])\n\
+    \    (f (- (string-length a) 1) \"\")))", "  (cond [(empty? a) b]\n        [(empty?\
+    \ b) a]\n        [else\n         (string\n          (char (if (equal? (string-ref\
+    \ a 0) (string-ref b 0))\n                    #\\0\n                    #\\1))\n\
+    \          (string_xor (substring a 1) (substring b 1)))]))\n</code>\n", "  (assert\
+    \ (and (string? a) (string? b)))\n  (assert (and (= (string-length a) (string-length\
+    \ b))\n               (every (\u03BB (x) (or (= x #\\0) (= x #\\1))) a)\n    \
+    \           (every (\u03BB (x) (or (= x #\\0) (= x #\\1))) b)))\n  (apply string\
+    \ (map (\u03BB (x y) (if (or (= x #\\0) (= y #\\0)) #\\0 #\\1)) a b)))\n</code>\n",
+  "  (apply string (map (lambda (x y) (if (or (and (= x 0) (= y 1)) (and (= x 1) (=\
+    \ y 0))) 1 0)) (string->list a) (string->list b))))\n", "  (string-append (map\
+    \ (lambda (ac b)\n                        (string-append (if (eq? (string-ref\
+    \ ac 0) #\\1)\n                                           (if (eq? (string-ref\
+    \ b 0) #\\1)\n                                               \"\"\n          \
+    \                                     \"1\")\n                               \
+    \            (if (eq? (string-ref b 0) #\\1)\n                               \
+    \                \"1\"\n                                               \"\"))))\n\
+    \                      (string-split a)\n                      (string-split b))))\n",
+  "  (if (and (equal? (string-length a) (string-length b))\n           (= 0 (modulo\
+    \ (string-length a) 4)))\n      (string-append\n       (string-xor-helper (substring\
+    \ a 0 4) (substring b 0 4))\n       (string-xor-helper (substring a 4 8) (substring\
+    \ b 4 8))\n       (string-xor-helper (substring a 8 12) (substring b 8 12))\n\
+    \       (string-xor-helper (substring a 12 16) (substring b 12 16)))\n      (string-append\
+    \ (string-xor-helper a b))))\n", "  (cond\n    [(and (string=? a \"\") (string=?\
+    \ b \"\")) \"\"]\n    [(and (string=? a \"\") (not (string=? b \"\"))) b]\n  \
+    \  [(and (not (string=? a \"\")) (string=? b \"\")) a]\n    [else (string-append\
+    \ (string_xor (substring a 1) (substring b 1))\n                        (string\
+    \ (bitwise-xor (string-&gt;number (string-ref a 0))\n                        \
+    \                     (string-&gt;number (string-ref b 0)))))]))\n</code>\n\n\
+    <code>#lang racket\n", "  (define (to-int a b)\n    (if (= a b)\n        0\n \
+    \       1))\n  (define (to-binary a b)\n    (if (= 0 (to-int a b))\n        #\\\
+    0\n        #\\1))\n  (string-map to-binary a b))\n", "  (define (str->bin n)\n\
+    \    (string->number n 2))\n  (define (bin->str n)\n    (number->string n 2))\n\
+    \  (bin->str (logxor (str->bin a) (str->bin b))))\n", "  (string-join (map (curry\
+    \ char-xor) a b)))\n", "  (define (string-to-integer str)\n    (string->number\
+    \ str 10))\n  (define (integer-to-string i)\n    (number->string i 10))\n  (integer-to-string\
+    \ (bitwise-xor (string-to-integer a) (string-to-integer b))))", "  (cond [(empty?\
+    \ a) b]\n        [(empty? b) a]\n        [else (string (bitwise-xor (string-&gt;number\
+    \ (string-&gt;list (first a)))\n                                   (string-&gt;number\
+    \ (string-&gt;list (first b)))))\n              (string_xor (rest a) (rest b))]))\n\
+    </code>\nIt works correctly for some inputs, but not always. For example,\n<code>(string_xor\
+    \ \"01\" \"11\") ;; -&gt; \"10\"", "  (cond [(equal? (string-length a) (string-length\
+    \ b))\n         (build-string (string-length a)\n                       (lambda\
+    \ (i)\n                         (string-ref (xor (string->list a) (string->list\
+    \ b)) i)))]\n        [else (error \"Input strings are of different lengths\")]))\n\
+    </code>\n", "  (define (string-to-list s)\n    (string-&gt;list s))\n  (define\
+    \ (num-to-string n)\n    (number-&gt;string n))\n  (apply string-append (map num-to-string\
+    \ (map bitwise-xor (string-to-list a) (string-to-list b)))))\n", "  (string (logxor\
+    \ (string->number a 2) (string->number b 2) 2)))\n", "  (define (binary-xor x\
+    \ y)\n    (cond ((and (= x 0) (= y 0)) 0)\n          ((and (= x 1) (= y 1)) 0)\n\
+    \          (else 1)))\n  (apply string (map binary-xor (string->list a) (string->list\
+    \ b))))\n</code>\n", '  (string (bitwise-xor (string->number a 2) (string->number
+    b 2) 2)))', "  (if (and (string? a) (string? b))\n      (string (char (bitwise-xor\
+    \ (string-&gt;number a 2) (string-&gt;number b 2))))\n      (void)))\n</code>\n\
+    However I'm not sure if this is the most effective way. I'm looking for a solution\
+    \ in HtDP style.\n\n\nA:\n\nHere's one way to do it. As you'll see, while I've\
+    \ written it in HtDP style, the style is at a lower level than the actual problem.\n\
+    <code>#lang racket\n", "  (if (string=? a \"\")\n      b\n      (if (string=?\
+    \ b \"\")\n          a\n          (apply string\n                 (map (\u03BB\
+    \ (ac bc)\n                        (cond ((char=? ac #\\0) bc)\n             \
+    \                 ((char=? bc #\\0) ac)\n                              (else #\\\
+    0)))\n                      a b)))))\n", "  (define (string_xor-helper a b i acc)\n\
+    \    (if (&lt; i (string-length a))\n        (string_xor-helper (substring a 1)\
+    \ (substring b 1) (add1 i) (string-append acc (string (xor (string-&gt;number\
+    \ (substring a 0 1)) (string-&gt;number (substring b 0 1))))))\n        acc))\n\
+    \  (string_xor-helper a b 0 \"\"))\n", "  (define (xor-char x y)\n    (if (eq?\
+    \ x y)\n        '0'\n        '1'))\n  (string-join (map (lambda (x y) (xor-char\
+    \ x y)) (string->list a) (string->list b))))\n```\n\n```\n#lang racket\n", " \
+    \ (string (xor (string->number a 2) (string->number b 2) 2)))\n", "  (define (sxor_h\
+    \ a b)\n    (cond\n      [(empty? a) b]\n      [(empty? b) a]\n      [else (string\
+    \ (bitwise-xor (string-&gt;number (string-ref a 0))\n                        \
+    \         (string-&gt;number (string-ref b 0))))\n            (sxor_h (substring\
+    \ a 1) (substring b 1))]))\n  (sxor_h a b))\n", "  (for/fold ([output (make-string\
+    \ (string-length a))])\n             ([char-a (in-string a)][char-b (in-string\
+    \ b)])\n             (begin (string-set! output char-a (if (eq? char-a char-b)\
+    \ #\\0 #\\1))\n                    output)))\n", "  (apply string (map (\u03BB\
+    \ (x) (+ x (- x x))) (map (\u03BB (pair) (bitwise-xor (car pair) (cadr pair)))\
+    \ (zip (map string->number (string-&gt;list a)) (map string->number (string-&gt;list\
+    \ b)))))))\n</code>\nI tried to make it as short as possible and I think the result\
+    \ is readable in spite of some complex expressions.\n", "  (apply string\n   \
+    \      (map (lambda (x) (if (zero? (car x)) #\\0 #\\1))\n              (zip (map\
+    \ string->number (string-&gt;list a))\n                   (map string->number\
+    \ (string-&gt;list b))))))\n", "  (cond [(or (zero? (string-length a)) (zero?\
+    \ (string-length b))) \"\"]\n        [(string=? (substring a 0 1) (substring b\
+    \ 0 1)) (string_xor (substring a 1) (substring b 1))]\n        [else (string-append\
+    \ (string_xor (substring a 1) (substring b 1)) \"1\")]))\n\n```\n\n```scheme\n\
+    #lang racket\n", "  (cond ((equal? a \"0\") b)\n        ((equal? b \"0\") a)\n\
+    \        ((equal? a \"1\") (string_xor b \"0\"))\n        ((equal? b \"1\") (string_xor\
+    \ a \"0\"))\n        (else (string_xor a b))))\n", "  (define (m x y)\n    (cond\
+    \ ((or (and (equal? x #\\1) (equal? y #\\0))\n               (and (equal? x #\\\
+    0) (equal? y #\\1))) #\\1)\n          (else #\\0)))\n  (regexp-replace* #rx\"\
+    [\" (map (\u03BB (x) (m (car x) (cadr x))) (zip a b)) \"\"))\n", "  (apply string\
+    \ (map (curryr xor (string->number a) (string->number b))\n                  \
+    \   '(#\\0 #\\1 #\\2 #\\3 #\\4 #\\5 #\\6 #\\7 #\\8 #\\9))))\n", "  (define (string-xor!\
+    \ a b)\n    (define (xor-char a b)\n      (if (and (char=? a #\\1) (char=? b #\\\
+    1))\n          #\\0\n          (string-ref a 0)))\n    (if (or (string=? a \"\"\
+    ) (string=? b \"\"))\n        \"\"\n        (let ([ai (string-ref a 0)]\n    \
+    \          [bi (string-ref b 0)])\n          (string (xor-char ai bi))\n     \
+    \     (string-append (string (xor-char ai bi))\n                         (string-xor!\
+    \ (substring a 1) (substring b 1))))))\n  (string-xor! a b))\n", "  (define (helper\
+    \ result1 result2)\n    (if (or (null? result1) (null? result2))\n        \"\"\
+    \n        (string (if (= (string-&gt;number (string-ref result1 0))\n        \
+    \              (string-&gt;number (string-ref result2 0)))\n                 \
+    \  #\\0\n                   #\\1))\n               (helper (substring result1\
+    \ 1) (substring result2 1)))))\n  (helper a b))\n</code>\n", "  (for/fold ([result\
+    \ \"\"]\n             ([a-char (in-string a)]\n              [b-char (in-string\
+    \ b)])\n    (string-append result (if (string=? a-char b-char) \"0\" \"1\"))))\n",
+  "  (define (xor a b)\n    (cond\n      [(= 0 a) b]\n      [(= 0 b) a]\n      [else\
+    \    0]))\n  (for/fold ([result '()])\n            ([a (in-string a)]\n      \
+    \       [b (in-string b)])\n    (cons (xor a b) result)))\n", "  (define (helper\
+    \ a b result)\n    (if (zero? (string-length a))\n        result\n        (let\
+    \ ([first-a (string-ref a 0)]\n              [first-b (string-ref b 0)])\n   \
+    \       (helper (substring a 1)\n                  (substring b 1)\n         \
+    \         (string-append\n                   result\n                   (number->string\n\
+    \                    (bitwise-xor (string->number (string first-a))\n        \
+    \                         (string->number (string first-b))))))))\n  (helper a\
+    \ b \"\"))\n", "  (if (or (null? a) (null? b))\n      \"\"\n      (string-append\
+    \ (list (logxor (string-&gt;number (string a))\n                             \
+    \      (string-&gt;number (string b))))\n                    (string_xor (rest\
+    \ a) (rest b)))))\n</code>\nbut I get an error.\n<code>car: expected argument\
+    \ of type &lt;pair&gt;; given \"1\"\n</code>\nIs there any way to implement such\
+    \ code in Racket?\n\n\nA:\n\nYou're getting that error because the arguments of\
+    \ <code>string_xor</code> are not strings.  That's because the <code>string</code>\
+    \ function doesn't convert a number to a string but rather the other way around.\
+    \  What you want is <code>number-&gt;string</code>.\n", "  (define s (string->list\
+    \ a))\n  (define t (string->list b))\n  (list->string (map (lambda (x y)\n   \
+    \                    (if (equal? x y) '0 '1))\n                     s t)))\n",
+  "  (cond\n    [(empty? a) b]\n    [(empty? b) a]\n    [else\n     (cond\n      \
+    \ [(equal? (first a) (first b)) (cons #\\0 (string_xor (rest a) (rest b)))]\n\
+    \       [else (cons #\\1 (string_xor (rest a) (rest b)))])]))\n", "  (cond\n \
+    \   [(and (equal? a \"0\") (equal? b \"0\")) \"0\"]\n    [(and (equal? a \"0\"\
+    ) (equal? b \"1\")) \"1\"]\n    [(and (equal? a \"1\") (equal? b \"0\")) \"1\"\
+    ]\n    [(and (equal? a \"1\") (equal? b \"1\")) \"0\"]))\n", "  (string-append\n\
+    \   (if (eq? (substring a 0 1) \"0\") \"1\" \"0\")\n   (if (eq? (substring a 1\
+    \ 1) \"0\") \"1\" \"0\")\n   (if (eq? (substring a 2 1) \"0\") \"1\" \"0\")))\n",
+  "  (let loop ([i 0] [acc '()])\n    (if (&lt; i (string-length a))\n        (loop\
+    \ (+ i 1) (cons (string-&gt;number (string (bitwise-xor (string-ref a i) (string-ref\
+    \ b i)))) acc))\n        (reverse acc))))\n", "  (cond [(empty? a) b]\n      \
+    \  [(empty? b) a]\n        [else\n         (string-append\n          (string\n\
+    \           (logxor (string->number (string-take a 1))\n                   (string->number\
+    \ (string-take b 1))))\n          (string_xor (string-drop a 1) (string-drop b\
+    \ 1)))]))\n", "  (let ((res \"\"))\n    (for ([i (in-range (string-length a))])\n\
+    \      (set! res (string-append res (if (eqv? (string-ref a i) (string-ref b i))\n\
+    \                                       \"0\"\n                              \
+    \         \"1\"))))\n    res))\n", "  (apply string\n         (map (lambda (x)\
+    \ (if (equal? (car x) (cadr x)) #\\0 #\\1))\n              (zip (string->list\
+    \ a) (string->list b)))))\n", "  (define a-lst (string->list a))\n  (define b-lst\
+    \ (string->list b))\n  (list->string (map bitwise-xor a-lst b-lst)))\n", "  (number->string\
+    \ (logxor (string->number a 2) (string->number b 2) 2)))\n", "  (cond [(and (equal?\
+    \ a \"\") (equal? b \"\")) \"\"]\n        [(and (equal? a \"\") (not (equal? b\
+    \ \"\"))) (list-ref b 0)]\n        [(and (not (equal? a \"\")) (equal? b \"\"\
+    )) (list-ref a 0)]\n        [else (string_xor (substring a 1) (substring b 1))\n\
+    \             (cond [(equal? (list-ref a 0) (list-ref b 0)) \"0\"]\n         \
+    \          [else \"1\"])]))\n</code>\nThe first three rules of the inner cond\
+    \ are ok, but when it comes to the last one, I can't get it to work.\nWhat I try\
+    \ to do is to evaluate both a and b first, one character at a time.\nFor example,\
+    \ string_xor \"010\" \"110\" will be\n1. string_xor \"10\" \"10\" \"0\"\n2. string_xor\
+    \ \"1\" \"1\" \"1\"\n3. string_xor \"\" \"\" \"10\"\nHere, string_xor will return\
+    \ \"10\"\nI'm not sure how to write it in code.\nEdit: I'm sure there are better\
+    \ ways to perform binary XOR, but I'm more interested in how to write the code\
+    \ in this way.\n\n\nA:\n\nI think the problem is more with the order of evaluation.\
+    \ Try\n<code>(define (string_xor a b)\n  (cond [(and (equal? a \"\") (equal? b\
+    \ \"\")) \"\"]\n        [(and (equal? a \"\") (not (equal? b \"\"))) (list-ref\
+    \ b 0)]\n        [(and (not (equal? a \"\")) (equal? b \"\")) (list-ref a 0)]\n\
+    \        [else (cond [(equal? (list-ref a 0) (list-ref b 0)) \"0\"]\n        \
+    \            [else \"1\"])\n             (string_xor (substring a 1) (substring\
+    \ b 1))]))\n</code>\nIt does seem to work on my system.\nOn the other hand, I\
+    \ think you should improve your code. You need to use a tail recursive function\
+    \ so the call stack does not overflow and you should use <code>char=?</code> instead\
+    \ of <code>equal", "  (define (str-xor-len l1 l2)\n    (if (zero? l1)\n      \
+    \  \"\"\n        (if (zero? l2)\n            (string-append (string-join (make-list\
+    \ l1 #\\0)) \"\")\n            (if (char=? (string-ref a (sub1 l1)) #\\0)\n  \
+    \              (if (char=? (string-ref b (sub1 l2)) #\\0)\n                  \
+    \  (string-append \"0\" (str-xor-len (sub1 l1) (sub1 l2)))\n                 \
+    \   (string-append \"1\" (str-xor-len (sub1 l1) (sub1 l2))))\n               \
+    \ (if (char=? (string-ref b (sub1 l2)) #\\0)\n                    (string-append\
+    \ \"1\" (str-xor-len (sub1 l1) (sub1 l2)))\n                    (string-append\
+    \ \"0\" (str-xor-len (sub1 l1) (sub1 l2))))))))\n  (str-xor-len (string-length\
+    \ a) (string-length b)))\n", "  (cond ((and (= (string-length a) 1) (= (string-length\
+    \ b) 1))\n         (if (string=? a b) \"0\" \"1\"))\n        (else (string-append\
+    \ (string_xor (substring a 0 1) (substring b 0 1))\n                         \
+    \    (string_xor (substring a 1 (string-length a))\n                         \
+    \                (substring b 1 (string-length b)))))))\n", "  (if (string=? a\
+    \ b)\n      (make-string (string-length a) #\\0)\n      (let loop ([i 0] [out\
+    \ #f])\n        (if (= i (string-length a))\n            (if out (list->string\
+    \ (reverse out))\n                (error \"string_xor: wrong input!\"))\n    \
+    \        (let* ([c1 (string-ref a i)]\n                   [c2 (string-ref b i)]\n\
+    \                   [c (if (and (char=? c1 #\\0) (char=? c2 #\\1))\n         \
+    \                 #\\1\n                          (if (and (char=? c1 #\\1) (char=?\
+    \ c2 #\\0))\n                              #\\1\n                            \
+    \  #\\0))])\n              (loop (+ i 1) (cons c out)))))))\n", "  (apply string\
+    \ (map (curry xor 1) a b)))\n", "  (regexp-replace* #rx\"(1)(1)\" a #\"0\" #:replace-backref)\n\
+    \  (regexp-replace* #rx\"(0)(0)\" a #\"0\" #:replace-backref)\n  (regexp-replace*\
+    \ #rx\"(1)(0)\" a #\"1\" #:replace-backref)\n  (regexp-replace* #rx\"(0)(1)\"\
+    \ a #\"1\" #:replace-backref)\n  (regexp-replace* #rx\"(1)(1)\" b #\"0\" #:replace-backref)\n\
+    \  (regexp-replace* #rx\"(0)(0)\" b #\"0\" #:replace-backref)\n  (regexp-replace*\
+    \ #rx\"(1)(0)\" b #\"1\" #:replace-backref)\n  (regexp-replace* #rx\"(0)(1)\"\
+    \ b #\"1\" #:replace-backref)\n  )\n", "  (if (or (null? a) (null? b))\n     \
+    \ (if (or (empty? a) (empty? b))\n          \"\"\n          (if (null? a) b a))\n\
+    \      (if (string=? (string-ref a 0) (string-ref b 0))\n          (string (string-ref\
+    \ a 0) (string_xor (substring a 1) (substring b 1)))\n          (string #\\1 (string_xor\
+    \ (substring a 1) (substring b 1))))))\n", "  (number->string (bitwise-xor (string->number\
+    \ a 2) (string->number b 2) 2)))\n```\n\n## [22] Number to English](https://www.codewars.com/kata/52724507b149fa120600031d)\n\
+    \n```racket\n#lang racket\n", "  (for/list ([i (in-range (string-length a))])\n\
+    \    (number->string\n     (bitwise-xor (string-&gt;number (string-ref a i))\n\
+    \                  (string-&gt;number (string-ref b i))))))\n", "  (cond\n   \
+    \ [(string=? a b) \"0\"]\n    [else \"1\"]))\n", "  (define (char-&gt;int c)\n\
+    \    (string-&gt;number (string c)))\n  (define (int-&gt;char i)\n    (number-&gt;string\
+    \ i))\n  (define (xor-chars a b)\n    (int-&gt;char (logxor (char-&gt;int a) (char-&gt;int\
+    \ b))))\n  (apply string (map xor-chars (string-&gt;list a) (string-&gt;list b))))\n\
+    </code>\nOutput:\n<code>&gt; (string_xor \"010\" \"110\")\n\"100\"\n</code>\n",
+  "  (apply string (map (lambda (a b)\n                       (+ (- a 48) (- b 48)))\n\
+    \                     (string->list a)\n                     (string->list b))))\n",
+  "  (apply string (map (curryr xor) (string->list a) (string->list b))))\n", "  (cond\
+    \ [(and (string=? a \"0\") (string=? b \"0\")) \"0\"]\n        [(and (string=?\
+    \ a \"0\") (string=? b \"1\")) \"1\"]\n        [(and (string=? a \"1\") (string=?\
+    \ b \"0\")) \"1\"]\n        [(and (string=? a \"1\") (string=? b \"1\")) \"0\"\
+    ]))\n", "  (define (char_xor ac bc)\n    (cond ((and (char=? ac #\\1) (char=?\
+    \ bc #\\0)) #\\1)\n          ((and (char=? ac #\\0) (char=? bc #\\1)) #\\1)\n\
+    \          (else #\\0)))\n  (string-append\n   (list (char_xor (string-ref a 0)\
+    \ (string-ref b 0)))\n   (list (char_xor (string-ref a 1) (string-ref b 1)))\n\
+    \   (list (char_xor (string-ref a 2) (string-ref b 2)))))\n", "  (apply string\
+    \ (map (lambda (x y) (if (eq? x y) #\\0 #\\1)) a b)))\n", "  (cond\n    [(or (equal?\
+    \ (length a) 0) (equal? (length b) 0))\n     \"\"]\n    [(equal? (length a) 1)\n\
+    \     (string-append (number->string (bitwise-xor (string->number (substring a\
+    \ 0 1)) (string->number (substring b 0 1))))\n                   (string_xor (substring\
+    \ a 1 (length a)) (substring b 1 (length b))))]\n    [(equal? (length b) 1)\n\
+    \     (string-append (number->string (bitwise-xor (string->number (substring a\
+    \ 0 1)) (string->number (substring b 0 1))))\n                   (string_xor (substring\
+    \ a 1 (length a)) (substring b 1 (length b))))]\n    [else\n     (string-append\
+    \ (number->string (bitwise-xor (string->number (substring a 0 1)) (string->number\
+    \ (substring b 0 1))))\n                   (string_xor (substring a 1 (length\
+    \ a)) (substring b 1 (length b))))]))\n", "  (apply string (map (\u03BB (x) (if\
+    \ (eq? 0 (modulo x 2)) 1 0))\n                     (map + (map char->integer (string->list\
+    \ a))\n                            (map char->integer (string->list b))))))",
+  "  (cond\n    ((or (equal? a \"\") (equal? b \"\")) \"\")\n    ((equal? (string-ref\
+    \ a 0) (string-ref b 0)) (string-append \"0\" (string_xor (substring a 1) (substring\
+    \ b 1))))\n    (else (string-append \"1\" (string_xor (substring a 1) (substring\
+    \ b 1))))))\n", "  (cond\n    [(or (string=? a \"\") (string=? b \"\")) \"\" ]\n\
+    \    [(= (string-ref a 0) (string-ref b 0)) (string_xor (substring a 1) (substring\
+    \ b 1))]\n    [else (string-append (string (not (string-ref a 0))) (string_xor\
+    \ (substring a 1) (substring b 1)))]))\n```\n\n### Binary Rooted Tree\n``` #lang\
+    \ racket\n", "  (build-string\n   (string-length a)\n   (lambda (i)\n     (cond\n\
+    \       [(char=? (string-ref a i) #\\0)\n        (string-ref b i)]\n       [(char=?\
+    \ (string-ref b i) #\\0)\n        (string-ref a i)]\n       [else\n        #\\\
+    0]))))\n", "  (cond ((or (and (equal? a \"0\") (equal? b \"0\"))\n           \
+    \  (and (equal? a \"1\") (equal? b \"1\")))\n         \"0\")\n        (else \"\
+    1\")))\n", "  (string-join (map (curry xor 2) (string-&gt;list a) (string-&gt;list\
+    \ b))))\n", "  (cond\n    [(and (equal? a \"0\") (equal? b \"0\")) \"0\"]\n  \
+    \  [(and (equal? a \"0\") (equal? b \"1\")) \"1\"]\n    [(and (equal? a \"1\"\
+    ) (equal? b \"0\")) \"1\"]\n    [(and (equal? a \"1\") (equal? b \"1\")) \"0\"\
+    ]))\n```\n\n```racket\n#lang racket\n", "  (cond [(empty? a) b]\n        [(empty?\
+    \ b) a]\n        [else\n         (string-append\n          (string (bitwise-xor\
+    \ (string-&gt;number (string-ref a 0))\n                               (string-&gt;number\
+    \ (string-ref b 0))))\n          (string_xor (substring a 1) (substring b 1)))]))\n\
+    </code>\nI then came up with this solution, which is quite a bit faster (17 times\
+    \ faster on my machine).\n<code>#lang racket\n", "  (cond ((empty? a) b)\n   \
+    \     ((empty? b) a)\n        ((string=? (first a) (first b)) \"0\" (string_xor\
+    \ (rest a) (rest b)))\n        (else \"1\" (string_xor (rest a) (rest b)))))\n\
+    ```\n\n## Python\n\n```python\ndef string_xor(a, b):\n    if not a:\n        return\
+    \ b\n    if not b:\n        return a\n    if a[0] == b[0]:\n        return \"\
+    0\" + string_xor(a[1:], b[1:])\n    else:\n        return \"1\" + string_xor(a[1:],\
+    \ b[1:])\n```\n\n## Haskell\n\n```haskell\nstringXor :: String -> String -> String\n\
+    stringXor x y\n  | null x = y\n  | null y = x\n  | otherwise =\n    if head x\
+    \ == head y\n      then \"0\" ++ stringXor (tail x) (tail y)\n      else \"1\"\
+    \ ++ stringXor (tail x) (tail y)\n```\n\n## Java\n\n```java\npublic class Main\
+    \ {\n  public static String stringXor(String a, String b) {\n    if (a.length()\
+    \ == 0) {\n      return b;\n    }\n    if (b.length() == 0) {\n      return a;\n\
+    \    }\n    if (a.charAt(0) == b.charAt(0)) {\n      return \"0\" + stringXor(a.substring(1),\
+    \ b.substring(1));\n    } else {\n      return \"1\" + stringXor(a.substring(1),\
+    \ b.substring(1));\n    }\n  }\n}\n```\n\n## C++\n\n```cpp\nstd::string stringXor(std::string\
+    \ a, std::string b) {\n  if (a.empty()) {\n    return b;\n  }\n  if (b.empty())\
+    \ {\n    return a;\n  }\n  if (a[0] == b[0]) {\n    return \"0\" + stringXor",
+  "  (apply string (map (lambda (a b) (logxor a b)) (string->list a) (string->list\
+    \ b))))\n", "  (cond ((string=? a \"\") b)\n        ((string=? b \"\") a)\n  \
+    \      (else\n         (string-append\n          (string (bitwise-xor (string-&gt;number\
+    \ (string-ref a 0))\n                               (string-&gt;number (string-ref\
+    \ b 0))))\n          (string_xor (substring a 1) (substring b 1))))))\n", "  (bytes->string\n\
+    \   (map (lambda (x y) (bitwise-xor x y))\n        (string->bytes a)\n       \
+    \ (string->bytes b))))\n", "  (define (xor-digit d1 d2)\n    (cond\n      [(=\
+    \ d1 0) d2]\n      [(= d2 0) d1]\n      [else 0]))\n  (if (or (zero? (string-length\
+    \ a)) (zero? (string-length b)))\n      \"\"\n      (string-append\n       (string\
+    \ (xor-digit (string-ref a 0) (string-ref b 0)))\n       (string_xor (substring\
+    \ a 1) (substring b 1)))))", "  (string\n   (cond\n     ((and (char=? (string-ref\
+    \ a 0) #\\1) (char=? (string-ref b 0) #\\0)) #\\1)\n     ((and (char=? (string-ref\
+    \ a 0) #\\0) (char=? (string-ref b 0) #\\1)) #\\1)\n     (else #\\0))\n   (cond\n\
+    \     ((and (char=? (string-ref a 1) #\\1) (char=? (string-ref b 1) #\\0)) #\\\
+    1)\n     ((and (char=? (string-ref a 1) #\\0) (char=? (string-ref b 1) #\\1))\
+    \ #\\1)\n     (else #\\0))\n   (cond\n     ((and (char=? (string-ref a 2) #\\\
+    1) (char=? (string-ref b 2) #\\0)) #\\1)\n     ((and (char=? (string-ref a 2)\
+    \ #\\0) (char=? (string-ref b 2) #\\1)) #\\1)\n     (else #\\0))))\n```\n</details>\n\
+    \n### String reversal\n```racket\n#lang racket\n", "  (let ((len (min (string-length\
+    \ a) (string-length b))))\n    (build-string len\n      (lambda (i)\n        (let\
+    \ ((a (string-ref a i))\n              (b (string-ref b i)))\n          (if (or\
+    \ (eq? a #\\0) (eq? b #\\0))\n              (if (or (eq? a #\\1) (eq? b #\\1))\n\
+    \                  #\\1\n                  #\\0)\n              #\\0))))))", " \
+    \ (cond\n    [(string=? a b) \"0\"]\n    [else \"1\"]))\n", "  (define digits\n\
+    \    (map (lambda (x)\n           (apply string (map (lambda (x) (string-&gt;number\
+    \ (string x))) x)))\n         (map string-&gt;list (list a b))))\n  (apply string\
+    \ (map (lambda (a b) (modulo (+ a b) 2)) (car digits) (cadr digits))))\n</code>\n",
+  "  (string-append\n   (if (or (= (char-downcase (string-ref a 0)) #\\0)\n      \
+    \     (= (char-downcase (string-ref b 0)) #\\0))\n       \"0\"\n       \"1\")\n\
+    \   (if (or (= (char-downcase (string-ref a 1)) #\\0)\n           (= (char-downcase\
+    \ (string-ref b 1)) #\\0))\n       \"0\"\n       \"1\")\n   (if (or (= (char-downcase\
+    \ (string-ref a 2)) #\\0)\n           (= (char-downcase (string-ref b 2)) #\\\
+    0))\n       \"0\"\n       \"1\")))\n", "  (number->string (logxor (string->number\
+    \ a 2) (string->number b 2) 2)))\n", "  (define (xor-a-char a-char b-char)\n \
+    \   (cond\n      [(char=? a-char #\\0) b-char]\n      [(char=? a-char #\\1)\n\
+    \       (cond\n         [(char=? b-char #\\0) #\\1]\n         [(char=? b-char\
+    \ #\\1) #\\0])]))\n  (let ([a-len (string-length a)]\n        [b-len (string-length\
+    \ b)])\n    (if (&gt; a-len b-len)\n        (string-append (substring a 0 (- a-len\
+    \ b-len))\n                       (map (\u03BB (a-and-b) (xor-a-char (car a-and-b)\
+    \ (cadr a-and-b)))\n                            (map list (string-&gt;list a)\
+    \ (string-&gt;list b))))\n        (string-append (substring b 0 (- b-len a-len))\n\
+    \                       (map (\u03BB (a-and-b) (xor-a-char (car a-and-b) (cadr\
+    \ a-and-b)))\n                            (map list (string-&gt;list a) (string-&gt;list\
+    \ b)))))))\n</code>\n", "  (string-append\n   (if (and (char=? (string-ref a 0)\
+    \ #\\1)\n            (char=? (string-ref b 0) #\\0))\n       \"1\"\n       \"\
+    0\")\n   (if (and (char=? (string-ref a 1) #\\1)\n            (char=? (string-ref\
+    \ b 1) #\\0))\n       \"1\"\n       \"0\")\n   (if (and (char=? (string-ref a\
+    \ 2) #\\1)\n            (char=? (string-ref b 2) #\\0))\n       \"1\"\n      \
+    \ \"0\")))\n", "  (define (xor x y)\n    (cond ((and (eq? x #\\1) (eq? y #\\0))\
+    \ #\\1)\n          ((and (eq? x #\\0) (eq? y #\\1)) #\\1)\n          (else #\\\
+    0)))\n  (define (xor-string str1 str2)\n    (cond ((and (empty? str1) (empty?\
+    \ str2)) \"\")\n          ((and (empty? str1) (not (empty? str2))) str2)\n   \
+    \       ((and (not (empty? str1)) (empty? str2)) str1)\n          (else (xor-string\
+    \ (rest str1) (rest str2)))))\n  (apply string xor-string (string->list a) (string->list\
+    \ b)))\n```\n\n##### Racket:\n```scheme\n#lang racket\n", "  (define (xor-char\
+    \ a b)\n    (integer->char (char->integer a #x0 xor char->integer b #x0)))\n \
+    \ (if (equal? \"\" a) \"\"\n      (string-append (string (xor-char (string-ref\
+    \ a 0) (string-ref b 0)))\n                     (string_xor (substring a 1) (substring\
+    \ b 1)))))\n", "  (string (bitwise-xor (string->number a 2) (string->number b\
+    \ 2) 2)))\n", "  (cond\n    [(or (zero? (string-length a)) (zero? (string-length\
+    \ b))) \"\"]\n    [else\n     (let ([a1 (string-ref a 0)]\n           [b1 (string-ref\
+    \ b 0)])\n       (string\n        (char-upcase\n         (if (and (char=? #\\\
+    0 a1) (char=? #\\1 b1)) #\\1\n             (if (and (char=? #\\1 a1) (char=? #\\\
+    0 b1)) #\\1\n                 #\\0))))\n       (string_xor (substring a 1) (substring\
+    \ b 1))]))\n", "  (apply string (map (lambda (t) (bitwise-xor (car t) (cadr t)))\
+    \ (zip (string->list a) (string->list b)))))\n", "  (cond\n    [(string=? a b)\
+    \ \"0\"]\n    [else \"1\"]))\n", "  (cond\n    ((string=? a \"\") b)\n    ((string=?\
+    \ b \"\") a)\n    ((string=? (substring a 0 1) \"0\")\n     (string-append (substring\
+    \ a 0 1) (string_xor (substring a 1) (substring b 1))))\n    ((string=? (substring\
+    \ a 0 1) \"1\")\n     (string-append (substring b 0 1) (string_xor (substring\
+    \ a 1) (substring b 1))))))\n", "  (string-join\n   (map (lambda (x) (number->string\
+    \ (modulo (+ (string-&gt;number (car x))\n                                   \
+    \           (string-&gt;number (cadr x)))\n                                  \
+    \         2)))\n        (list-&gt;pairs (string-&gt;list a) (string-&gt;list b)))\n\
+    \   \"\"))\n</code>\nI have the following questions:\n\nIs my code too complicated?\n\
+    What can I do better?\n\nI am new to racket, so any advice on coding style or\
+    \ libraries to use is appreciated.\n\n\nA:\n\nOk, first let's unpack your code\
+    \ in order to see what it's actually doing:\n<code>(define (string_xor a b)\n\
+    \  (string-join\n   (map (lambda (x) (number-&gt;string (modulo (+ (string-&gt;number\
+    \ (car x))\n                                              (string-&gt;number (cadr\
+    \ x)))\n                                           2)))\n        (list-&gt;pairs\
+    \ (string-&gt;list a) (string-&gt;list b)))\n   \"\"))\n</code>\n\n<code>(string-&gt;list\
+    \ a)</code> and <code>(string-&gt;list b)</code> convert <code>a</code> and <code>b</code>\
+    \ from strings to lists of characters, so if <code>a</code> is <code>\"1010\"\
+    </code> then <code>(string-&gt;list a)</code> becomes <code>'(#\\1 #\\0 #\\1 #\\\
+    0)</code>\n<code>(list-&gt;pairs (string-&gt;list a) (string-&gt;list b))</code>\
+    \ pairs the two strings together, so the result becomes <code>'((#\\1 . #\\1)\
+    \ (#\\0 . #\\0) (#\\1 . #\\1) (#\\0 . #\\0))</code>\n<code>(map (lambda (x) (number-&gt;string\
+    \ (modulo (+ (string-&gt;number (car x))\n                                   \
+    \        (string-&gt;number (cadr x)))\n                                     \
+    \   2)))\n     (", "  (define (char-xor a b)\n    (if (char=? #\\0 a)\n      \
+    \  b\n        (if (char=? #\\0 b)\n            a\n            #\\0)))\n  (apply\
+    \ string (map char-xor (string->list a) (string->list b))))\n</code>\n", "  (for/fold\
+    \ ([result '()]) ([i (in-range (string-length a))])\n    (cons (char=? (string-ref\
+    \ a i) (string-ref b i)) result)))\n", "  (string\n   (integer->char (logxor (string->number\
+    \ a 2) (string->number b 2)))))\n", "  (cond\n    [(string=? a b) \"0\"]\n   \
+    \ [else \"1\"]))\n", "  (let* ([l (length a)]\n         [a (string->list a)]\n\
+    \         [b (string->list b)])\n    (cond\n      ((< l (length b)) (string_xor\
+    \ b a))\n      ((= l (length b))\n       (apply string (map (lambda (x y)\n  \
+    \                          (if (and (eq? (car x) #\\1) (eq? (car y) #\\1))\n \
+    \                               #\\0\n                                (if (or\
+    \ (eq? (car x) #\\1) (eq? (car y) #\\1))\n                                   \
+    \ #\\1\n                                    #\\0)))\n                        \
+    \  a b)))\n      (else (error \"string_xor: strings not of same length\")))))\n",
+  "  (cond\n    [(string=? a \"0\") b]\n    [(string=? a \"1\") (string_xor_helper\
+    \ b)]\n    [(string=? b \"0\") a]\n    [(string=? b \"1\") (string_xor_helper\
+    \ a)]\n    [else \"\" ]))\n", "  (cond ((string=? a \"\") \"\")\n        ((string=?\
+    \ b \"\") \"\")\n        ((string=? (string-ref a 0) #\\0)\n         (string-append\
+    \ (string_xor (substring a 1) (substring b 1)) (string #\\0)))\n        ((string=?\
+    \ (string-ref b 0) #\\0)\n         (string-append (string_xor (substring a 1)\
+    \ (substring b 1)) (string #\\1)))\n        (else\n         (string-append (string_xor\
+    \ (substring a 1) (substring b 1)) (string #\\0)))))\n", "  (let ([res (make-string\
+    \ (string-length a))])\n    (for ([i (in-range (string-length a))])\n      (string-set!\
+    \ res i (if (not (char=? (string-ref a i) (string-ref b i))) #\\1 #\\0)))\n  \
+    \  res))\n", "  (string (logxor (string->number a 2) (string->number b 2) 2)))\n",
+  "  (apply string (map (\u03BB (x) (logxor (car x) (cadr x))) (zip (string->list\
+    \ a) (string->list b)))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"
