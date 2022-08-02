@@ -1,7 +1,7 @@
 # Authored by  Abhinav Jangda
 # Copyright (c) 2022, Roblox Inc and University of Massachusetts Amherst
 #
-# This script translates problems from the OpenAI HumanEval dataset into Java.
+# This script translates problems from the OpenAI HumanEval dataset into Scala.
 
 import re
 import ast
@@ -9,21 +9,21 @@ from typing import List, Optional, Tuple
 from generic_translator import main
 from humaneval_to_cpp import CPPTranslator, DOCSTRING_LINESTART_RE
 
-JAVA_CLASS_NAME = "Problem"
+SCALA_CLASS_NAME = "Problem"
 
-class JavaTranslator(CPPTranslator):
+class ScalaTranslator(CPPTranslator):
     stop = ["\n    }\n"]
 
     def __init__(self, file_ext):
         super().__init__(file_ext)
         self.string_type = "String"
-        self.float_type = "float"
-        self.int_type = "long"
-        self.bool_type = "boolean"
+        self.float_type = "Float"
+        self.int_type = "Long"
+        self.bool_type = "Boolean"
         self.none_type = "Optional.empty()"
-        self.list_type = "ArrayList"
+        self.list_type = "List"
         self.tuple_type = "Pair"
-        self.dict_type = "HashMap"
+        self.dict_type = "Map"
         self.optional_type = "Optional"
         self.any_type = "std::any"
         self.indent = "    "
@@ -34,7 +34,7 @@ class JavaTranslator(CPPTranslator):
     def gen_list_type(self, elem_type):
         '''Generate type for ArrayList<T>
         '''
-        return self.list_type + "<%s>" % self.box_type(elem_type)
+        return self.list_type + "[%s]" % elem_type
 
     def gen_make_list(self, elem_type, list_contents):
         '''Generate List literal using and array literal
@@ -42,7 +42,7 @@ class JavaTranslator(CPPTranslator):
         '''
         if list_contents == "":
             list_contents = "()"
-        return "new " + self.list_type + "<%s>"%self.box_type(elem_type) + "(Arrays.asList" + list_contents + ")"
+        return self.list_type + "[%s]"%elem_type + list_contents
     
     def gen_array_literal(self, list_contents):
         '''Generate an array literal with contents
@@ -53,25 +53,25 @@ class JavaTranslator(CPPTranslator):
     def gen_dict_type(self, ktype, vtype):
         '''Generate HashMap<K,V>
         '''
-        return self.dict_type + "<%s,%s>"  % (self.box_type(ktype), self.box_type(vtype))
+        return self.dict_type + "[%s,%s]"  % (ktype, vtype)
     
     def gen_map_literal(self, keys, values):
         '''Generate dict literal
             k1,v1, k2,v2, k3,v3, ...
         '''
-        return ", ".join(f"{k}, {v}" for k, v in zip(keys, values))
+        return ", ".join(f"{k} -> {v}" for k, v in zip(keys, values))
 
     def gen_map(self, dict_type, map_literal):
         '''Generate Dict object from literal
             `HashMap<K, V>(Map.of({k,v}, {k,v}, ... })
         '''
         java_type = self.translate_pytype(dict_type) + "(Map"
-        return f"new {java_type}.of({map_literal}))"
+        return f"{java_type}.of({map_literal}))"
 
     def gen_optional_type(self, types):
         '''Generate Optional<T>
         '''
-        return self.optional_type + "<%s>" % self.box_type(types)
+        return self.optional_type + "[%s]" % types
 
     def gen_optional(self, types, elem):
         '''Generate Optional as 
@@ -81,7 +81,7 @@ class JavaTranslator(CPPTranslator):
 
     def gen_tuple_type(self, elem_types):
         '''Generate Pair<T1, T2>'''
-        return self.tuple_type + "<%s>" % ", ".join([self.box_type(et) for et in elem_types])
+        return self.tuple_type + "[%s]" % ", ".join([et for et in elem_types])
 
     def box_type(self, primitive_type):
         '''Box a primitive type otherwise do not
@@ -105,18 +105,19 @@ class JavaTranslator(CPPTranslator):
 
     def module_imports(self) -> str:
         return "\n".join([
-            "import java.util.*;",
-            "import java.lang.reflect.*;",
-            "import org.javatuples.*;",
-            "import java.security.*;",
-            "import java.math.*;",
-            "import java.io.*;",
-            "import java.util.stream.*;"
+            #"import java.util.*;",
+            #"import java.lang.reflect.*;",
+            #"import org.javatuples.*;",
+            #"import java.security.*;",
+            "import scala.math._",
+            "import scala.collection.mutable._",
+            #"import java.io.*;",
+            #"import java.util.stream.*;"
         ]) + "\n"
     
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
-        '''Translate Python prompt to Java.
-           The function name is converted to Java's convention of smallCamelCase
+        '''Translate Python prompt to Scala.
+           The function name is converted to Scala's convention of smallCamelCase
         '''
         def to_camel_case(snake_str):
             components = snake_str.split('_')
@@ -124,20 +125,20 @@ class JavaTranslator(CPPTranslator):
             # with the 'title' method and join them together.
             return components[0] + ''.join(x.title() for x in components[1:])
 
-        class_decl = f"class {JAVA_CLASS_NAME} {{\n"
+        class_decl = f"object {SCALA_CLASS_NAME} {{\n"
         indent = "    "
         comment_start = self.indent + "//"
         java_description = (
             comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" + comment_start + " ", description.strip()) + "\n"
         )
         self.args_type = [self.translate_pytype(arg.annotation) for arg in args]
-        formal_args = [f"{self.translate_pytype(arg.annotation)} {self.gen_var(arg.arg)[0]}" for arg in args]
+        formal_args = [f"{self.gen_var(arg.arg)[0]} : {self.translate_pytype(arg.annotation)}" for arg in args]
         formal_arg_list = ", ".join(formal_args)
-        #Transform entry point to Java style Camel case
+        #Transform entry point to Scala style Camel case
         self.entry_point = to_camel_case(name)
         self.ret_ann = _returns
         self.translated_return_type = self.translate_pytype(_returns)
-        java_prompt = f"{self.module_imports()}{class_decl}{java_description}{self.indent}public static {self.translated_return_type} {self.entry_point}({formal_arg_list})" + " {\n"
+        java_prompt = f"{self.module_imports()}{class_decl}{java_description}{self.indent}def {self.translated_return_type} {self.entry_point}({formal_arg_list})" + " {\n"
 
         return java_prompt
     
@@ -152,7 +153,7 @@ class JavaTranslator(CPPTranslator):
         return boxed_type in [self.box_type(t) for t in [self.float_type, self.bool_type, self.int_type]]
 
     def return_default_value(self, csharp_type):
-        '''Recursively generate default value of a given Java type based on following rules:
+        '''Recursively generate default value of a given Scala type based on following rules:
 
             default(int) => 0
             default(float) => 0.0
@@ -197,7 +198,7 @@ class JavaTranslator(CPPTranslator):
         return [
            # "return " + self.return_default_value(self.translated_return_type) + ";",
             self.indent + "}",
-            self.indent + "public static void main(String[] args) {",
+            self.indent + "def main(args: Array[String]) {",
         ]
     
     def test_suite_suffix_lines(self) -> List[str]:
@@ -259,5 +260,5 @@ class JavaTranslator(CPPTranslator):
         return func_name + "(" + ", ".join([self.update_type(args[i], self.args_type[i]) for i in range(len(args))]) + ")", None
 
 if __name__ == "__main__":
-    translator = JavaTranslator("java")
+    translator = ScalaTranslator("scala")
     main(translator)
