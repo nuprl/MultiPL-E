@@ -44,28 +44,23 @@ def main():
 	print("PROMPT")
 	print(prompt)
 	doctestRegex = re.compile(r'>>>.*\n.*\n')
-	print(re.sub(doctestRegex,'',prompt))
-	bits = re.split(doctestRegex, prompt)
-	bits = [b for b in bits if b.strip() != '']
-	if len(bits) == 2:
-		before,after = bits
-	elif len(bits) == 1:
-		before = bits[0]
-		after = ''
+	doctests = []
+	for m in re.finditer(doctestRegex,prompt):
+		doctests.append((m.start(),m.end()))
+	if len(doctests) == 0:
+		tar_prompt = translate_prompt(lang_dict[lang],fields,prompt)
 	else:
-		print("unexpected length!")
-		print(bits)
-
-	doctest = re.search(doctestRegex, prompt)
-	if doctest:
-		doctest = doctest.group(0)
-	else: 
-		doctest = ''
-
-	for lang in lang_dict.keys():
-		tar_before = translate_prompt(lang_dict[lang],fields,before)
-		tar_after = translate_prompt(lang_dict[lang],fields,after)
-		print(lang,":",tar_before+doctest+tar_after)
+		for lang in lang_dict.keys():
+			tar_prompt = ''
+			last = 0
+			for i in doctests:
+				more_prompt = translate_prompt(lang_dict[lang],fields,prompt[last:i[0]])
+				more_doctest = prompt[i[0]:i[1]]
+				last = i[1]
+				tar_prompt += more_prompt+more_doctest
+			more_prompt = translate_prompt(lang_dict[lang],fields,prompt[last:])
+			tar_prompt += more_prompt
+			print(lang,":",tar_prompt)
 
 main()
 
