@@ -20,23 +20,8 @@ LANG_EXT = ".java"
 #22: Any
 #148: Elipsis
 
-def eval_script(path: str):
-    javatuples_path = os.path.join(os.getcwd(), "javatuples-1.2.jar")
-    if type(path) is str and ".java" not in path:
-        return
-    elif ".java" not in path.name:
-        return
-    if not os.path.exists(javatuples_path):
-        print("Downloading and extracting javatuples")
-        #Download and unzip javatuples jar
-        ret, _ = subprocess.getstatusoutput("wget http://www.java2s.com/Code/JarDownload/javatuples/javatuples-1.2.jar.zip")
-        if ret != 0:
-            printf("***Couldn't download javatuples***")
-            return
-        
-        ret = subprocess.getstatusoutput("unzip javatuples-1.2.jar.zip")
-        assert os.path.exists(javatuples_path), "Javatuples should exists"
-    import time
+def eval_script(path: Path):
+    javatuples_path = Path(__file__).parent.parent/"javatuples-1.2.jar"
 
     with tempfile.TemporaryDirectory() as outdir:
         #Each Java file contains the class with same name `JAVA_CLASS_NAME`
@@ -54,7 +39,6 @@ def eval_script(path: str):
             status = "SyntaxError"
             returncode = build.returncode
             output = build
-            print(output.stderr)
         else:
             try:
                 # Assumes exit-code 0 is all okay
