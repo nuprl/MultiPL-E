@@ -88,5 +88,5 @@ class PerlTranslator:
 
 
 if __name__ == "__main__":
-    translator = PerlTranslator("perl")
+    translator = PerlTranslator("pl")
     main(translator)
