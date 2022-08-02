@@ -1,6 +1,6 @@
 import json
 import sys
-import os
+#import os
 import re
 sys.path.append('..')
 with open ('datasets/mbpp/sanitized-mbpp.json', 'r') as f:
@@ -32,8 +32,8 @@ for b in benchmarks:
             func_list.remove(e)
     indent_re = re.compile('\s*')
     indent = re.match(indent_re, func_body[1]).group(0)
-    with open(f'./datasets/mbpp/mbpp_{task_id}_{main_function}', 'w') as f:
-        filename = f'./datasets/mbpp/mbpp_{task_id}_{main_function}'
+    with open(f'./datasets/mbpp/mbpp_{task_id}_{main_function}.py', 'w') as f:
+        filename = f'./datasets/mbpp/mbpp_{task_id}_{main_function}.py'
         f.write(func_sig)
         f.write(indent + "'''\n")
         f.write(indent + prompt + "\n")
