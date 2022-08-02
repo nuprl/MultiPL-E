@@ -4,7 +4,7 @@ import subprocess
 from pathlib import Path
 
 def main():
-    directory = Path(Path(__file__).parent, "..", "datasets", "perl-keep-code_davinci_001_temp_0.2").resolve()
+    directory = Path(Path(__file__).parent, "..", "datasets", "pl-keep-code_davinci_001_temp_0.2").resolve()
 
     for filename in os.listdir(directory):
 
