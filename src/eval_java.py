@@ -10,7 +10,7 @@ import os
 import subprocess
 import tempfile
 from pathlib import Path
-from generic_translator import main
+from generic_eval import main
 
 LANG_NAME = "Java"
 LANG_EXT = ".java"
