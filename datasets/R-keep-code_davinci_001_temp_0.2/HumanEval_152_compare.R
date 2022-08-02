@@ -21,9 +21,9 @@ compare([0,5,0,0,0,4],[4,1,1,0,0,-2])
 
 test_humaneval <- function() {
 candidate <- compare
-    if(!identical(candidate(list(1, 2, 3, 4, 5, 1), list(1, 2, 3, 4, 2, -2)), list(0, 0, 0, 0, 3, 3))){quit('no', 1)}
-    if(!identical(candidate(list(0, 0, 0, 0, 0, 0), list(0, 0, 0, 0, 0, 0)), list(0, 0, 0, 0, 0, 0))){quit('no', 1)}
-    if(!identical(candidate(list(1, 2, 3), list(-1, -2, -3)), list(2, 4, 6))){quit('no', 1)}
-    if(!identical(candidate(list(1, 2, 3, 5), list(-1, 2, 3, 4)), list(2, 0, 0, 1))){quit('no', 1)}
+    if(!identical(candidate(c(1, 2, 3, 4, 5, 1), c(1, 2, 3, 4, 2, -2)), c(0, 0, 0, 0, 3, 3))){quit('no', 1)}
+    if(!identical(candidate(c(0, 0, 0, 0, 0, 0), c(0, 0, 0, 0, 0, 0)), c(0, 0, 0, 0, 0, 0))){quit('no', 1)}
+    if(!identical(candidate(c(1, 2, 3), c(-1, -2, -3)), c(2, 4, 6))){quit('no', 1)}
+    if(!identical(candidate(c(1, 2, 3, 5), c(-1, 2, 3, 4)), c(2, 0, 0, 1))){quit('no', 1)}
 }
 test_humaneval()

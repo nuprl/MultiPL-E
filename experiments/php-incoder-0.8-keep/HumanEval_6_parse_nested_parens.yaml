@@ -12,7 +12,2142 @@ tests: "function candidate(...$args) {\n    return parse_nested_parens(...$args)
   () (()) ((())) (((())))\") !== array(1, 2, 3, 4)) { throw new Exception(\"Test failed!\"\
   ); }\n    if (candidate(\"(()(())((())))\") !== array(4)) { throw new Exception(\"\
   Test failed!\"); }\n}\n\ntest();"
-completions: []
+completions: ["    $levels = array_count_values(str_split($paren_string));\n    return\
+    \ array_keys($levels);\n}", "    $opens = 0;\n    $depth = 0;\n    $parenStack\
+    \ = array();\n\n    $parens = preg_split('/\\((?=\\()/', $paren_string);\n\n \
+    \   foreach ($parens as $i => $paren) {\n        // If the paren has 0 openings,\
+    \ then it means that the paren was unclosed but now it is.\n        // So we will\
+    \ close all those openings and then reopen it.\n        if ($paren === ')') {\n\
+    \            $opens = $opens -1;\n            $parenStack[$depth] = $opens;\n\
+    \            $depth++;\n        } else if ($paren === '(') {\n            $opens++;\n\
+    \            $parenStack[$depth] = $opens;\n            $depth++;\n        }\n\
+    \    }\n\n    return $parenStack;\n}\n", "    $level = 0;\n    $paren_stack =\
+    \ array();\n    foreach (str_split($paren_string) as $char) {\n        if ($char\
+    \ === '(') {\n            array_push($paren_stack, $level);\n        } else if\
+    \ ($char === ')') {\n            $level = array_pop($paren_stack);\n        }\n\
+    \    }\n    return $paren_stack;\n}", "  $level = 0;\n  $level_count = 0;\n  $nesting_level\
+    \ = 0;\n\n  $paren_string = trim($paren_string);\n\n  foreach (preg_split('/\\\
+    s+/', $paren_string) as $paren) {\n    $paren = trim($paren);\n    $paren = preg_replace('/(()())/',\
+    \ '\\\\1', $paren);\n    $paren = preg_replace('/(\\()/', '\\\\1\\($level_count++\\\
+    )', $paren);\n\n    if ($level >= $nesting_level) {\n      if ($level + 1 > $nesting_level)\
+    \ {\n        $level_count = 0;\n      }\n\n      $level ++;\n    }\n  }\n\n  return\
+    \ $level;\n}\n", "    // The algorithm below assumes parentheses are balanced.\
+    \ More generally, if P(paren_count) = 0\n    // or P(paren_count) = -1, the string\
+    \ is not well-formed.\n    $paren_chars = str_split($paren_string);\n    $paren_levels\
+    \ = array();\n    $max_level = 0;\n    foreach($paren_chars as $i => $char) {\n\
+    \        if($char === '(' || $char === '[') {\n            $paren_levels[$i] =\
+    \ $paren_levels[$i - 1] + 1;\n            $max_level = $i > 0 ? max($max_level,\
+    \ $paren_levels[$i]) : $max_level;\n        } else {\n            $paren_levels[$i]\
+    \ = $paren_levels[$i - 1];\n        }\n    }\n    return $max_level;\n}\n</code>\n\
+    <|/ a tags=php,regex |>\n<| a tags=php,regex dscore=0 |>\nI used another solution\
+    \ which just removes the extra spaces:\n<code>\n$str = ' (( ) ( ) ( ) ( ) ) (\
+    \ ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) (\
+    \ ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) (\
+    \ ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) (\
+    \ ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) (\
+    \ ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) (\
+    \ ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) (\
+    \ ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) (\
+    \ ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ",
+  "\t$level = 0;\n\t$max_level = 0;\n\tforeach (preg_split('/\\s+/', $paren_string)\
+    \ as $subgroup) {\n\t\tif ($level == 0) {\n\t\t\t$level++;\n\t\t\tcontinue;\n\t\
+    \t}\n\t\tif ($level > $max_level) {\n\t\t\t$max_level = $level;\n\t\t}\n\t\tif\
+    \ ($subgroup == '(') {\n\t\t\t$level++;\n\t\t} else if ($subgroup == ')') {\n\t\
+    \t\t$level--;\n\t\t}\n\t}\n\treturn $max_level;\n}\n", "  $paren_count = 0;\n\
+    \  $nested_parens = array();\n  foreach (explode(' ', $paren_string) as $char)\
+    \ {\n    if ($char === '(') $paren_count += 1;\n    if ($char === ')') $paren_count\
+    \ -= 1;\n    if ($char === '(' && $paren_count == 0) array_push($nested_parens,\
+    \ $paren_count);\n    if ($char === ')' && $paren_count == 1) array_pop($nested_parens);\n\
+    \  }\n  return $nested_parens;\n}\n", "  $parens = preg_split('/\\s+/', $paren_string);\n\
+    \  $return = [];\n  foreach ($parens as $level) {\n    if (strpos($level, '(')\
+    \ !== false) {\n      $stack = strpos($level, '(');\n      $return[] = strlen($level)\
+    \ - strrpos($level, ')') - 1;\n      while ($stack > 0) {\n        $return[] =\
+    \ $stack;\n        $stack = strpos($level, '(', $stack + 1);\n      }\n    }\n\
+    \  }\n  return $return;\n}\n", "  $nested_parens_count = [0 => 1];\n  foreach\
+    \ (explode(' ', $paren_string) as $paren) {\n    $paren = trim($paren);\n    if\
+    \ (isset($nested_parens_count[$paren])) {\n      $nested_parens_count[$paren]++;\n\
+    \    }\n    else {\n      $nested_parens_count[$paren] = 1;\n    }\n  }\n  $max_level\
+    \ = max($nested_parens_count, function() use ($nested_parens_count) {\n    return\
+    \ $nested_parens_count[];\n  });\n  return $max_level;\n}\n\n$test_input = '((()(()()()((()(()))))(()())(()()))()';\n\
+    $expected_output = array(3, 1, 2, 2);\n$expected_output_string = implode('', $expected_output);\n\
+    echo \"Input: '$test_input'\\n\";\n\n$max_level = parse_nested_parens($test_input);\n\
+    print_r($max_level);\necho \"\\n\\n\";\n\n$tests[] = array($test_input, $expected_output,\
+    \ $expected_output_string);\nprint_r($tests);\necho \"\\n\\n\";\n", "  preg_match_all('/\\\
+    (([^\\(\\)]+)\\)/', $paren_string, $matches);\n  return count($matches[0]);\n}",
+  "    if (preg_match_all('/[(]([^)]+)[)]/', $paren_string, $matches)) {\n       \
+    \ return array_map(function ($str) {\n            return preg_match('/[(]([^)]+)[)]/',\
+    \ $str, $matches) ? count($matches[1]) - 1 : 0;\n        }, $matches[1]);\n  \
+    \  }\n\n    return [];\n}\n", "    $output_array = 0;\n    $input_array = str_split($paren_string);\n\
+    \    $output_array = 0;\n    $input_array = array_reverse($input_array);\n   \
+    \ foreach ($input_array as $key => $value){\n        $input_string = $input_array[$key];\n\
+    \        if (($output_array+1) % 2 == 0){\n            $output_array += 0;\n \
+    \       } else {\n            $output_array += 1;\n        }\n        if ($value\
+    \ == '('){\n            $output_array++;\n        } else if ($value == ')'){\n\
+    \            $output_array--;\n        }\n    }\n    return $output_array;\n}",
+  "  if ($paren_string === '') {\n    return array();\n  }\n\n  $output = $paren_string\
+    \ ? array($paren_string) : array();\n  $paren_count = 0;\n  $opening_count = 0;\n\
+    \n  foreach (explode(' ', $paren_string) as $paren) {\n    $opening_count += substr_count($paren,\
+    \ '(');\n    $open_count = substr_count($paren, '(');\n    if ($opening_count\
+    \ > $open_count) {\n      $output[] = $paren_count;\n      $opening_count -= $open_count;\n\
+    \      $paren_count = 1;\n    } else if ($opening_count < $open_count) {\n   \
+    \   $output[] = $paren_count;\n      $paren_count = 0;\n    } else {\n      $paren_count\
+    \ += $opening_count;\n      $output[] = $paren_count;\n      $opening_count =\
+    \ $open_count;\n    }\n  }\n\n  if ($output) {\n    $output[] = $paren_count;\n\
+    \  }\n\n  return $output;\n}\n", "    $nested_levels = array();\n    $nested_level\
+    \ = 0;\n    $into_brackets = false;\n    foreach (preg_split('/([\\(\\)])/', $paren_string)\
+    \ as $char) {\n        switch ($char) {\n            case ')':\n             \
+    \   $nested_level--;\n                if ($nested_level == 0) {\n            \
+    \        $into_brackets = false;\n                }\n                break;\n\
+    \            case '(':\n                $nested_level++;\n                break;\n\
+    \            case '[':\n            case '(':\n                $nested_levels[]\
+    \ = $nested_level;\n                break;\n        }\n    }\n    return $nested_levels;\n\
+    }\n</code>\n<|/ a tags=php,string |>\n<| c |>\nThis is what I needed, thank you!\
+    \ I modified it to be recursive (because this was my original question). The function\
+    \ works in both cases. Thanks again.\n<|/ c |>\n<| c |>\nThanks so much for this!!\
+    \ :)\n<|/ c |>\n<| a dscore=3 tags=php,string |>\nHere is a variation on Amr's\
+    \ answer. This one will handle nested parentheses up to 4 levels deep, while Amr's\
+    \ will handle up to 5 levels deep.\n<code>", "  // Loop through each character\
+    \ in the string\n  $paren_count = 0; // keeps track of how many open parenthesis\
+    \ we've found\n  $open_parens = array(); // keeps track of how many open parenthesis\
+    \ we've found per level\n  $max_level = 0;\n  for ($i = 0; $i < strlen($paren_string);\
+    \ $i++) {\n    // Get the current character in $paren_string\n    $current_character\
+    \ = $paren_string[$i];\n    if ($current_character == \"(\") {\n      // Increment\
+    \ our count of open parenthesis.\n      $paren_count++;\n    } else if ($current_character\
+    \ == \")\") {\n      // Decrement our count of open parenthesis.\n      $paren_count--;\n\
+    \      if ($paren_count == 0) {\n        // If we found an open parenthesis with\
+    \ a count of 0, we found the deepest level.\n        // Add 1 to the max level\
+    \ if it doesn't equal 0\n        if ($open_parens[$max_level] == 0) {\n      \
+    \    $max_level++;\n        }\n        // Push the new level onto our open parens\
+    \ array\n        $open_parens[$max_level]++;\n      }\n    }\n  }\n\n  // Return\
+    \ the number of levels in our deepest parentheses levels array\n  return $max_level;\n\
+    }\n", "    // initialize stack\n    $stack = array();\n    // initialize nesting\
+    \ level\n    $level = 0;\n    // initialize parenthesis level\n    $paren_level\
+    \ = 0;\n    // initialize array of parenthesis levels\n    $paren_levels = array();\n\
+    \    // initialize an array of parenthesis characters\n    $paren_chars = array();\n\
+    \    // initialize array of parenthesis characters\n    $paren_chars = explode('\
+    \ ', $paren_string);\n    // iterate through each character\n    foreach ($paren_chars\
+    \ as $character) {\n        // if character is a opening parenthesis\n       \
+    \ if ($character == '(') {\n            // add the character to the parenthesis\
+    \ array\n            $paren_chars[$paren_level++] = $character;\n            //\
+    \ if the character is not an opening parenthesis\n        } elseif ($character\
+    \ == ')') {\n            // if the character is a closing parenthesis\n      \
+    \      if ($paren_level) {\n                // if the stack is empty - there is\
+    \ no nesting\n                if (!$stack) {\n                    // increment\
+    \ the level count by one\n                    $level++;\n                    //\
+    \ decrement the parenthesis level by one\n                    $paren_level--;\n\
+    \                    // initialize the nested parenthesis level\n            \
+    \        $stack[$level] = '';\n                    // initialize parenthesis levels\
+    \ array\n                    $paren_levels[$level] = $level;\n               \
+    \     // push an opening parenthesis to the stack\n                    $stack[$level]\
+    \ .= $character;\n                // if the stack has a non empty stack - there\
+    \ is nesting\n                } elseif ($level) {\n                    // if the\
+    \ level is greater than the stack - there is nesting\n                    if ($level\
+    \ > $stack[$level]) {\n                        // increment the level count by\
+    \ one\n                        $level++;\n                        // increment\
+    \ the parenthesis level by one\n                        $paren_level--;\n    \
+    \                    // initialize the nested parenthesis level\n            \
+    \            $stack[$level] = '';\n                        // initialize parenthesis\
+    \ levels array\n                        $paren_levels[$level] = $level;\n    \
+    \                    // push the character to the stack\n                    \
+    \    $stack[$level] .= $character;\n                    } else {\n           \
+    \             // if the level is less than the stack - there is nesting\n    \
+    \                    if ($level < $stack[$level]) {\n                        \
+    \    // increment the level count by one\n                            $level++;\n\
+    \                            // increment the parenthesis level by one\n     \
+    \                       $paren_level--;\n                            // initialize\
+    \ the nested parenthesis level\n                            $stack[$level] = '';\n\
+    \                            // initialize parenthesis levels array\n        \
+    \                    $paren_levels[$level] = $level;\n                       \
+    \     // push", "  $parentheses_levels = [0];\n  $nested_parentheses = [0];\n\
+    \  foreach(explode(' ', $paren_string) as $single_paren) {\n    if ($nested_parentheses[$single_paren]\
+    \ == 0) {\n      $parentheses_levels[$single_paren] = $nested_parentheses;\n \
+    \     $nested_parentheses = [1];\n    }\n    else {\n      $nested_parentheses[$single_paren]++;\n\
+    \    }\n  }\n  return $parentheses_levels;\n}\n", "    $nested_levels = 0;\n \
+    \   $nested_paren_levels = array();\n    $paren_chars = preg_split(\"/[\\(\\)]/\"\
+    , $paren_string);\n    $paren_char_to_levels = array();\n    $level = 0;\n   \
+    \ $current_paren_char = null;\n    foreach ($paren_chars as $char) {\n       \
+    \ if ($char == $current_paren_char) {\n            ++$nested_levels;\n       \
+    \ } else {\n            $nested_paren_levels[] = $level;\n            ++$level;\n\
+    \            $current_paren_char = $char;\n        }\n    }\n    $nested_paren_levels[]\
+    \ = $level;\n    return $nested_paren_levels;\n}", "    $paren_level = array();\n\
+    \    $paren_level_len = array();\n\n    foreach (explode(' ', $paren_string) as\
+    \ $pair) {\n        $pair = trim($pair);\n\n        if (empty($pair)) {\n    \
+    \        continue;\n        }\n\n        if (preg_match('/\\\\\\)/', $pair)) {\n\
+    \            if ($paren_level[$paren_level_len - 1] >= $paren_level_len[$pair]\
+    \ - 1) {\n                $paren_level[$paren_level_len - 1] = $paren_level_len[$pair]\
+    \ - 1;\n            } else {\n                $paren_level[$paren_level_len[$pair]\
+    \ - 1]++;\n            }\n\n            $paren_level_len[$pair]++;\n        }\
+    \ else {\n            $paren_level[$paren_level_len[0]]++;\n            $paren_level_len[0]++;\n\
+    \        }\n    }\n\n    return $paren_level;\n}\n", "    $nested_parens_stack\
+    \ = array();\n    $paren_pairs = explode(' ', $paren_string);\n    foreach ($paren_pairs\
+    \ as $paren_pair) {\n        $nested_parens_stack = array_merge($nested_parens_stack,\
+    \ explode(')', $paren_pair));\n    }\n    return count($nested_parens_stack);\n\
+    }\n", "    $paren_levels = array();\n    $paren_levels_len = array();\n    $paren_level_stack\
+    \ = array();\n    $paren_levels_length = 0;\n\n    foreach (explode(' ', $paren_string)\
+    \ as $char) {\n        if ($paren_levels_length == 0)\n            $paren_levels[$char]\
+    \ = 0;\n        elseif ($paren_levels[$char] == 0)\n            $paren_levels_len[$char]\
+    \ = $paren_levels_length++;\n        elseif ($paren_levels_len[$char] > $paren_levels[$char]\
+    \ + 1)\n            $paren_level_stack[] = $char;\n\n        if (in_array($char,\
+    \ $paren_level_stack)) {\n            $paren_levels[$char]++;\n            $paren_levels_len[$char]\
+    \ = $paren_levels_length;\n        }\n    }\n\n    return $paren_levels;\n}\n",
+  "    $paren_string = preg_replace(\"/\\(/\", '(', $paren_string);\n    $paren_string\
+    \ = preg_replace(\"/\\)/\", ')', $paren_string);\n    $nesting = 1;\n    $paren_string\
+    \ = preg_replace(\"/\\(/\", ')', $paren_string);\n    $paren_string = preg_replace(\"\
+    /\\)/\", '(', $paren_string);\n    $tokens = preg_split('/\\s+/', $paren_string);\n\
+    \    $nested_level = 0;\n    foreach ($tokens as $token) {\n        if ($token\
+    \ == '(') {\n            ++$nested_level;\n        } else if ($token == ')') {\n\
+    \            --$nested_level;\n            if ($nested_level < 0) {\n        \
+    \        return $nesting;\n            }\n        }\n    }\n    return $nesting;\n\
+    }\n</code>\n<|/ a dscore=3 |>\n<| a |>\nThis code will tell you how many parentheses\
+    \ are left unclosed and give you the length of the largest nested level:\n<code>",
+  "    $paren_strings = explode(\" \", $paren_string);\n    $levels = $paren_strings;\n\
+    \    $max_level = count($levels) - 1;\n    for($i = 0; $i < $max_level; $i++)\
+    \ {\n        $levels[$i]  = 0;\n        $levels[$i + 1] += $levels[$i];\n    }\n\
+    \    sort($levels);\n    return array_pop($levels);\n}", "  $parens = array();\n\
+    \  $nesting = 0;\n  $num_open = 0;\n  for ($i = 0, $l = strlen($paren_string);\
+    \ $i < $l; $i++) {\n    if ($paren_string[$i] == '(') $num_open++;\n    else if\
+    \ ($paren_string[$i] == ')') $num_open--;\n    $parens[] = $num_open;\n  }\n \
+    \ return $parens;\n}\n", "  $parentheses_levels = [0];\n  $paren_string = str_replace(array('(',\
+    \ ')'), ' ', $paren_string);\n  $parens = preg_match_all('/\\((.*)\\)/', $paren_string,\
+    \ $parens_matches);\n  if ($parens == 0) {\n    return $parentheses_levels;\n\
+    \  }\n  for ($i = 0; $i < $parens_matches[0][0]; $i++) {\n    $level = 0;\n  \
+    \  // Look for nested parentheses.\n    while (($pos = strpos($paren_string, $parens_matches[0][$i],\
+    \ $pos + 1)) !== FALSE) {\n      $level_of_nesting = $pos;\n      $parens_matches[0][$i]\
+    \ = substr($parens_matches[0][$i], $level_of_nesting);\n      $parens = preg_match_all('/\\\
+    ((.*)\\)/', implode(' ', $parens_matches[0]), $parens_matches_2);\n      if ($parens\
+    \ == 0) {\n        return $parentheses_levels;\n      }\n      if ($level < $level_of_nesting)\
+    \ {\n        break;\n      }\n      $level++;\n    }\n    $parentheses_levels[]\
+    \ = $level;\n  }\n  return $parentheses_levels;\n}\n</code>\n<|/ a |>\n<| c |>\n\
+    Thank you, I did some minor modifications to make it work for my needs, but this\
+    \ works great and it is very quick. I made a small change, the function doesn't\
+    \ work with empty strings, but I don't think that is important.\n<|/ c |>\n<|\
+    \ c |>\nAh! Yes you're right. I removed the if statement\n<|/ c |>\n<| a dscore=1\
+    \ |>\nYou can simplify your code a lot by using preg_match_all:\n<code>\n$string\
+    \ = \"(()()) ((())) () ((())()())\";\npreg_match_all('/\\((.*)\\)/', $string,\
+    \ $matches);\n$levels = array_reduce($matches[1],\n                      function($levels,\
+    \ $nested) {\n                          return $levels + count($nested);\n   \
+    \                   },\n                      0);\n</code>\n<|/ a tags=php,regex,nested\
+    \ |>\n<| a tags=php,regex,nested dscore=1 |>\nThis is based on Jon's answer. It's\
+    \ based on Jon's answer, but uses recursion to find the max level, rather than\
+    \ a for loop.\n<code>\n/**\n * string $str Nested parentheses string\n * int|null\
+    \ Max level of nesting. NULL if string has unbalanced parentheses\n */", "   \
+    \ $levels = [0];\n\n    $paren_string = preg_replace('/\\s+/', ' ', $paren_string);\n\
+    \n    // Loop through each group of parenthesis\n    foreach(preg_split('/\\s*\\\
+    ((?=\\))\\s*/', $paren_string) as $level) {\n        // Check if there is an enclosing\
+    \ parenthesis of this level\n        if(isset($levels[$level])) $levels[$level]++;\n\
+    \        else $levels[$level] = 1;\n    }\n\n    return $levels;\n}", "    $nested_paren_depths\
+    \ = [0];\n    $paren_string = str_replace(')', '  )', $paren_string); // Replace\
+    \ all parentheses with spaces so I can find which groups have nesting depths of\
+    \ 0.\n    for($i = 0; $i < strlen($paren_string); $i++) {\n        $char = substr($paren_string,\
+    \ $i, 1);\n        if($char === '(') {\n            $nested_paren_depths[$nested_paren_depths[$i]]\
+    \ = $nested_paren_depths[$i - 1] + 1;\n        } else {\n            $nested_paren_depths[$nested_paren_depths[$i\
+    \ - 1]] = $nested_paren_depths[$i];\n        }\n    }\n    return $nested_paren_depths;\n\
+    }\n", "    $groups = explode(' ', $paren_string);\n    $max_level = 0;\n    foreach\
+    \ ($groups as $group) {\n        $level = 0;\n        foreach ($group as $char)\
+    \ {\n            switch ($char) {\n            case ')':\n                $level--;\n\
+    \                break;\n            case '(':\n                $level++;\n  \
+    \              break;\n            case '\\\\':\n                continue;\n \
+    \           default:\n                break;\n            }\n            if ($level\
+    \ > $max_level) {\n                $max_level = $level;\n            }\n     \
+    \   }\n    }\n    return $max_level;\n}\n", "  $depth = 0;\n  $result = [];\n\
+    \  for ($parens = explode(' ', $paren_string); $parens as $paren) {\n    $paren_level\
+    \ = 1;\n    for ($i = 1; $i < count($parens); $i++) {\n      if ($parens[$i] !=\
+    \ ($parens[$i - 1] + $paren_level)) {\n        break;\n      }\n      $paren_level++;\n\
+    \    }\n    if ($paren_level > $depth) {\n      $result = $paren_level;\n    }\n\
+    \  }\n  return $result;\n}", "  $paren_string = str_replace([\"()\", \"[\", \"\
+    ]\"], \" \", $paren_string);\n  $depth = 0;\n  $nesting_stack = [];\n  $paren_stack\
+    \ = [];\n  $opening_count = 0;\n  $closing_brackets_found = false;\n  foreach\
+    \ (str_split($paren_string) as $character) {\n    if ($character == \")\") {\n\
+    \      array_pop($paren_stack);\n      if (empty($paren_stack)) {\n        $nesting_stack[]\
+    \ = 0;\n      }\n    } else {\n      if ($character == \"(\") {\n        ++$opening_count;\n\
+    \      } else if ($character == \"[\") {\n        ++$opening_count;\n      } else\
+    \ if ($character == \"]\") {\n        --$opening_count;\n      }\n      if ($opening_count\
+    \ == 0 && $closing_brackets_found == false) {\n        array_push($paren_stack,\
+    \ $character);\n        $closing_brackets_found = true;\n      }\n      if ($opening_count\
+    \ > $depth) {\n        $nesting_stack[$depth] = $opening_count;\n      }\n   \
+    \ }\n  }\n  $nesting_stack = array_reverse($nesting_stack);\n  $return_array =\
+    \ [];\n  foreach ($nesting_stack as $value) {\n    $return_array[] = $value;\n\
+    \  }\n  return $return_array;\n}\n", "  $paren_stack = array();\n  $paren_count\
+    \ = 0;\n  $paren_max_level = 0;\n  foreach (explode(' ', $paren_string) as $paren)\
+    \ {\n    $paren_level = 0;\n    if ($paren == '(') {\n      $paren_level++;\n\
+    \      $paren_count++;\n    } else if ($paren == ')') {\n      $paren_level--;\n\
+    \      $paren_count--;\n      if ($paren_level == 0) {\n        $paren_max_level\
+    \ = $paren_level;\n      }\n    }\n    $paren_stack[$paren_count] = $paren_level;\n\
+    \  }\n  return $paren_max_level;\n}\n</code>\n<|/ a tags=php,regex |>\n<| a |>\n\
+    Just tested this code using recursive function call and it's working as I wanted.\
+    \ Here is my code.\n<code>\n<?php\n\n    $string = \"(()) (((())))\";\n\n    $string_length\
+    \ = strlen($string);\n    $paren_count = 0;\n\n    // Count number of parentheses\n\
+    \    while (preg_match('/\\((?=\\()/', $string)) {\n        $paren_count += 1;\n\
+    \    }\n\n    // Count maximum number of nested parentheses\n    function nested_parent($str,\
+    \ $n) {\n        if ($n > 0) {\n            $str = preg_replace('/\\((?=\\()/',\
+    \ \"\", $str);\n            $str = $str[0];\n            nested_parent($str, --$n);\n\
+    \        }\n        array_push($ret, $n);\n        return $ret;\n    }\n\n   \
+    \ $nested_count = nested_parent($string, $paren_count);\n\n    foreach ($nested_count\
+    \ as $nested_count) {\n        echo $nested_count . \"<br />\";\n    }\n", " \
+    \   $paren_count = count($paren_string);\n    $paren_stack = [];\n    $paren_stack_top\
+    \ = $paren_stack;\n    $depth = 0;\n    $current_index = 0;\n    while ($current_index\
+    \ < $paren_count) {\n        $opening_paren_char = substr($paren_string, $current_index,\
+    \ 1);\n        $current_index++;\n        $opening_paren_count = 0;\n        foreach\
+    \ ($paren_stack as $paren) {\n            if ($paren == $opening_paren_char) {\n\
+    \                $opening_paren_count += 1;\n            }\n        }\n      \
+    \  if ($opening_paren_count == 0) {\n            $depth++;\n            $paren_stack_top[]\
+    \ = $opening_paren_char;\n            $paren_stack[] = $opening_paren_char;\n\
+    \        } elseif ($opening_paren_count == 1) {\n            $depth--;\n     \
+    \       $paren_stack = array_merge($paren_stack, array_slice($paren_stack_top,\
+    \ -$depth));\n            $paren_stack_top = array_slice($paren_stack, 0, -$depth);\n\
+    \        }\n    }\n    return $paren_stack;\n}\n</code>\n<|/ a tags=recursion,php,algorithm,dynamic-programming\
+    \ |>\n<| a dscore=3 tags=recursion,php,algorithm,dynamic-programming |>\nI managed\
+    \ to find an algorithm that works, although it is far from elegant.  Please see\
+    \ my explanation below.\nThe algorithm works by maintaining a table of states.\
+    \  The states are the set of parentheses and the number of nested parentheses\
+    \ that we have seen so far as well as the set of parentheses we have not seen\
+    \ yet.\n<code>", "  // $paren_string has one space between parentheses\n  // $nested_paren_string\
+    \ has all possible combinations of parentheses\n  $paren_string = trim($paren_string);\n\
+    \  $nested_paren_string = \"\";\n  $paren_string_array = explode(\" \", $paren_string);\n\
+    \  $paren_string_length = count($paren_string_array);\n  if ($paren_string_length\
+    \ == 1) {\n    $nested_paren_string = $paren_string_array[0];\n    return array($nested_paren_string);\n\
+    \  }\n\n  // $paren_string_length is greater than 1\n  // We need to combine all\
+    \ possible combinations\n  for ($i = 0; $i < $paren_string_length; $i++) {\n \
+    \   $nested_paren_string .= $paren_string_array[$i] . \" \";\n  }\n  $nested_paren_string\
+    \ = substr($nested_paren_string, 0, -1);\n\n  $nested_paren_strings = explode(\"\
+    \ \", $nested_paren_string);\n  $nested_paren_string_length = count($nested_paren_strings);\n\
+    \  $max_level = array();\n  $paren_count = 0;\n  $nested_paren_count = 0;\n  $paren_counter\
+    \ = 0;\n  foreach ($nested_paren_strings as $nested_paren_string) {\n    // Check\
+    \ whether the $nested_paren_string has a balanced parenthesis\n    // If it does,\
+    \ then add the maximum number of levels of nesting.\n    $paren_array = explode(\"\
+    \ \", $nested_paren_string);\n    $paren_length = count($paren_array);\n    if\
+    \ ($paren_length < 2) {\n      $nested_paren_string .= \" \";\n    }\n    for\
+    \ ($j = 0; $j < $paren_length-1; $j++) {\n      if ($paren_array[$j] == '(' &&\
+    \ $paren_array[$j+1] == ')') {\n        $nested_paren_string .= \" \";\n     \
+    \   $nested_paren_string .= $paren_array[$j] . $paren_array[$j+1];\n        $max_level[$paren_counter]\
+    \ = $nested_paren_counter;\n        $paren_counter++;\n      }\n    }\n  }\n \
+    \ return $max_level;\n}", "  $groups = explode(' ', $paren_string);\n  $max_nesting\
+    \ = 0;\n  $nesting = 1;\n  foreach ($groups as $group) {\n    $is_closed_group\
+    \ = false;\n    // The loop below takes care of any nested parentheses which are\
+    \ already closed.\n    foreach ($groups as $sub_group) {\n      if ($group ==\
+    \ $sub_group) {\n        $nesting += 1;\n        $is_closed_group = true;\n  \
+    \      break;\n      }\n      if ($nesting > $max_nesting) {\n        $max_nesting\
+    \ = $nesting;\n      }\n    }\n    if ($is_closed_group) {\n      $nesting -=\
+    \ 1;\n    }\n  }\n  return $max_nesting;\n}\n", "\t$opening_brackets = array();\n\
+    \t$closing_parenthesis = array();\n\t$nesting = 0;\n\tforeach(explode(\" \", $paren_string)\
+    \ as $value) {\n\t\tif($value == \"(\") {\n\t\t\tif($nesting == 0) {\n\t\t\t\t\
+    $opening_brackets[] = $value;\n\t\t\t} else {\n\t\t\t\t$closing_parenthesis[]\
+    \ = $value;\n\t\t\t}\n\t\t} else if($value == \")\") {\n\t\t\tif($nesting == 0)\
+    \ {\n\t\t\t\t$opening_brackets[] = $value;\n\t\t\t} else {\n\t\t\t\t$closing_parenthesis[]\
+    \ = $value;\n\t\t\t}\n\t\t} else if($value == \")(\") {\n\t\t\tif($nesting ==\
+    \ 0) {\n\t\t\t\t$opening_brackets[] = $value;\n\t\t\t} else if($nesting > 0) {\n\
+    \t\t\t\t$nesting--;\n\t\t\t}\n\t\t} else if($value == \")\") {\n\t\t\tif($nesting\
+    \ > 0) {\n\t\t\t\t$nesting--;\n\t\t\t} else {\n\t\t\t\t$closing_parenthesis[]\
+    \ = $value;\n\t\t\t}\n\t\t} else {\n\t\t\tif($nesting > 0) {\n\t\t\t\t$nesting++;\n\
+    \t\t\t}\n\t\t}\n\t}\n\t\n\tfor($i = 0; $i < count($closing_parenthesis); $i++)\
+    \ {\n\t\t$opening_brackets[] = $closing_parenthesis[$i];\n\t}\n\t\n\t$result =\
+    \ array();\n\t\n\tforeach($opening_brackets as $bracket) {\n\t\t$result[] = $nesting;\n\
+    \t}\n\t\n\treturn $result;\n}\n", "  $nested_parens = $paren_string;\n  $paren_count\
+    \ = 1;\n  while($nested_parens != '') {\n    $parentheses_locations = explode(\"\
+    \ \", $nested_parens);\n    $max_level_of_nesting = 0;\n    foreach ($parentheses_locations\
+    \ as $level_of_nesting) {\n      $level_of_nesting_int = (int)$level_of_nesting;\n\
+    \      if ($level_of_nesting_int > $max_level_of_nesting) {\n        $max_level_of_nesting\
+    \ = $level_of_nesting_int;\n      }\n    }\n    $nested_parens = trim(substr($nested_parens,\
+    \ 0, $max_level_of_nesting));\n    $nested_paren_count = substr_count($nested_parens,\
+    \ ' ');\n    if ($nested_paren_count > $paren_count) {\n      $paren_count = $nested_paren_count;\n\
+    \    }\n  }\n  return $paren_count;\n}\n", "  $parsed = [];\n  for ($i = 0; $i\
+    \ < strlen($paren_string); $i++) {\n    $char = $paren_string[$i];\n    if ($char\
+    \ == '(') {\n      $parsed[] = 0;\n    } else if ($char == '(') {\n      $parsed[]\
+    \ = 1;\n    } else if ($char == ')') {\n      $parsed['parent_count']--;\n   \
+    \   if ($parsed['parent_count'] < 0) {\n        throw new Exception('Unbalanced\
+    \ parenthesis');\n      }\n      if ($parsed['parent_count'] === 0) {\n      \
+    \  $parsed[] = 0;\n      }\n    } else if ($char == ')') {\n      $parsed['parent_count']++;\n\
+    \    }\n    if ($parsed['parent_count'] > 0) {\n      throw new Exception('Unbalanced\
+    \ parenthesis');\n    }\n  }\n  return $parsed;\n}\n", "    $groups = preg_split('/\\\
+    s+/', $paren_string);\n    $parsed_groups = array();\n    $group_count = 0;\n\
+    \    $max_level = count($groups);\n    foreach ($groups as $group) {\n       \
+    \ if (preg_match('/\\([^(]+\\)/', $group, $match)) {\n            $parsed_groups[$group_count][]\
+    \ = $match[0];\n            $group_count++;\n        }\n        if ($group_count\
+    \ > 0) {\n            $group_count--;\n        }\n    }\n    $result = array();\n\
+    \    foreach ($parsed_groups as $i => $group) {\n        foreach ($group as $j)\
+    \ {\n            $result[$i][] = $j;\n        }\n    }\n    array_walk($result,\
+    \ function(&$v) {\n        $v = array_unique($v);\n    });\n    sort($result);\n\
+    \    return $result;\n}\n\n/**\n * Converts a string representation of a PHP function\
+    \ into a callable\n *\n * @param string $fn\n * @return callable\n */", "    $paren_array\
+    \ = explode(' ', $paren_string);\n    $highest_level = count($paren_array);\n\
+    \    $nested_level = 0;\n    for ($i = 0; $i < count($paren_array); $i++) {\n\
+    \        if ($paren_array[$i] === '(') {\n            $nested_level++;\n     \
+    \   }\n        if ($paren_array[$i] === ')') {\n            $nested_level--;\n\
+    \        }\n        if ($nested_level > $highest_level) {\n            $highest_level\
+    \ = $nested_level;\n        }\n    }\n    return $highest_level;\n}\n", "    $levels\
+    \ = array();\n    $paren_level = -1;\n    for ($i = 0; $i < strlen($paren_string);\
+    \ $i++) {\n        if ($paren_string[$i] == ')') {\n            $levels[++$paren_level]++;\n\
+    \        } else if ($paren_string[$i] == '(') {\n            $levels[$paren_level]--;\n\
+    \            if ($levels[$paren_level] < 0) {\n                throw new \\Exception(\"\
+    Unbalanced parenthesis at position $i\");\n            }\n        }\n    }\n \
+    \   return $levels;\n}\n", "    $nesting_level = 0;\n    $parens_stack = array();\n\
+    \    $parens_level = array();\n    $parens_stack_max = array();\n    foreach ($paren_string\
+    \ as $char) {\n        if ($char == \"(\") {\n            $parens_stack[$nesting_level]\
+    \ = $char;\n            $parens_level[$nesting_level] = 0;\n            $nesting_level++;\n\
+    \        } elseif ($char == \")\") {\n            $nesting_level--;\n        \
+    \    if ($nesting_level == 0) {\n                $parens_stack_max[$nesting_level]\
+    \ = $parens_stack;\n                break;\n            }\n            $parens_stack\
+    \ = $parens_stack_max[$nesting_level];\n            $parens_level[$nesting_level]\
+    \ = 0;\n        } elseif ($char == \" \") {\n            $parens_level[$nesting_level]++;\n\
+    \        }\n    }\n    $parens_stack = $parens_stack_max[0];\n    return $parens_level;\n\
+    }\n</code>\nThe algorithm is explained here - http://php.net/manual/en/function.token-get-all.php\n\
+    <|/ a dscore=4 |>\n<| c |>\nI made some corrections in your code as I needed this\
+    \ algorithm to parse parentheses strings. Please feel free to review and test\
+    \ it yourself (for me it works). Thanks! `<?php", "    $nested_level = 0;\n  \
+    \  $bracket_level = 0;\n    $depth = 0;\n    foreach (explode(' ', $paren_string)\
+    \ as $value) {\n        $value .= \" \";\n        $char = substr($value, 0, 1);\n\
+    \        $next_char = substr($value, 1, 1);\n        if ($char == '(') {\n   \
+    \         $nested_level++;\n            $depth++;\n        } elseif ($char ==\
+    \ ')') {\n            $nested_level--;\n            $depth--;\n        } elseif\
+    \ ($char == '(') {\n            $bracket_level++;\n        } elseif ($char ==\
+    \ ')') {\n            $bracket_level--;\n        }\n        if ($nested_level\
+    \ == 0 && $bracket_level == 0) {\n            $depth++;\n        }\n        if\
+    \ ($nested_level > $depth) {\n            $depth = $nested_level;\n        }\n\
+    \    }\n    return $depth;\n}\n", "  $paren_levels = array();\n  $open_parens\
+    \ = array();\n  $nested_paren_level = 0;\n  for ($i = 0; $i < strlen($paren_string);\
+    \ ++$i) {\n    if (!isset($open_parens[$i])) {\n      if ($paren_string[$i] ==\
+    \ '(') {\n        array_push($open_parens, $i);\n      }\n      if ($paren_string[$i]\
+    \ == ')') {\n        // Pop when parenthesis level is 0.\n        if ($nested_paren_level\
+    \ == 0) {\n          array_pop($paren_levels);\n        } else {\n          ++$nested_paren_level;\n\
+    \        }\n      }\n    }\n  }\n\n  return $paren_levels;\n}\n", "\t$level =\
+    \ 0;\n\t$nestings = array();\n\tforeach (explode(' ', $paren_string) as $paren_string)\
+    \ {\n\t\tif ($level == 0 && $paren_string == '(') {\n\t\t\t$nestings[] = $level;\n\
+    \t\t\t$level++;\n\t\t} else if ($level > 0 && $paren_string == ')') {\n\t\t\t\
+    $level--;\n\t\t} else {\n\t\t\t$nestings[] = $level;\n\t\t\t$level = 1;\n\t\t\
+    }\n\t}\n\treturn $nestings;\n}", "    $groups = array();\n    $paren_depths =\
+    \ array();\n    $opening_parentheses_count = -1;\n    $paren_levels = array();\n\
+    \    $found_opening_parentheses = false;\n    foreach (explode(' ', $paren_string)\
+    \ as $char) {\n        if ($char == '(') {\n            if ($opening_parentheses_count\
+    \ > 0) {\n                $found_opening_parentheses = true;\n               \
+    \ $paren_depths[$opening_parentheses_count]++;\n            }\n            ++$opening_parentheses_count;\n\
+    \        } else if (($char == ')') && !$found_opening_parentheses) {\n       \
+    \     $paren_depths[$opening_parentheses_count]--;\n            --$opening_parentheses_count;\n\
+    \        } else {\n            $groups[$opening_parentheses_count][] = $char;\n\
+    \        }\n        if ($paren_depths[$opening_parentheses_count] == 0) {\n  \
+    \          $paren_levels[$opening_parentheses_count] = count($groups[$opening_parentheses_count]);\n\
+    \        }\n    }\n    $max_level = 0;\n    foreach ($paren_levels as $level)\
+    \ {\n        if ($level > $max_level) {\n            $max_level = $level;\n  \
+    \      }\n    }\n    return $max_level;\n}\n", "    $level_counts = array();\n\
+    \    $parentheses_level = -1;\n    for ($i = 0; $i < strlen($paren_string); $i++)\
+    \ {\n        // Go through all symbols one by one.\n        // If it's a left\
+    \ parentheses, increment the parentheses level and continue the loop.\n      \
+    \  // If it's a right parentheses, decrement the parentheses level and continue\
+    \ the loop.\n        // If it's the end of the string, then return all levels\
+    \ stored in $level_counts.\n        $symbol = substr($paren_string, $i, 1);\n\
+    \        if ($symbol === '(') {\n            if (++$parentheses_level >= 0) {\n\
+    \                continue;\n            }\n        }\n        if ($symbol ===\
+    \ ')') {\n            if (--$parentheses_level < 0) {\n                continue;\n\
+    \            }\n        }\n        if ($symbol === '') {\n            if ($parentheses_level\
+    \ === 0) {\n                for ($j = 0; $j < count($level_counts); $j++) {\n\
+    \                    if ($level_counts[$j] > 0) {\n                        return\
+    \ $level_counts;\n                    }\n                }\n            }\n  \
+    \          $level_counts[$parentheses_level] = 0;\n            continue;\n   \
+    \     }\n        $level_counts[$parentheses_level]++;\n    }\n}\n</code>\n<|/\
+    \ a tags=php,parentheses |>\n<| a |>\nAnother answer that uses a stack (array\
+    \ that holds the level) and checks parenthesis level from lowest to highest. \n\
+    <code>", "    $paren_array = explode(' ', $paren_string);\n    $paren_array2 =\
+    \ array();\n    $level = 0;\n    $paren_array_size = count($paren_array);\n  \
+    \  for ($i = 0; $i < $paren_array_size; $i++) {\n        if ($paren_array[$i]\
+    \ == ')') {\n            if ($level > 0) {\n                $paren_array2[$i-1]\
+    \ = $level;\n            } else {\n                array_push($paren_array2, 0);\n\
+    \            }\n            $level--;\n        } else {\n            $level++;\n\
+    \            if ($paren_array[$i] != '(') {\n                array_push($paren_array2,\
+    \ 0);\n            }\n        }\n    }\n    return $paren_array2;\n}\n", "   \
+    \ $nested_depths = [];\n    $nested_depths_max = 0;\n    $paren_depth = 0;\n \
+    \   $paren_string_to_parse = $paren_string;\n\n    // Remove all whitespaces and\
+    \ remove parens.\n    $paren_string_to_parse = preg_replace('/\\s+/', '', $paren_string_to_parse);\n\
+    \    $paren_string_to_parse = preg_replace('/\\((?!\\))/', '', $paren_string_to_parse);\n\
+    \n    // Iterate through all the parentheses in the string.\n    while ($paren_string_to_parse)\
+    \ {\n        // Iterate through the characters before the current parentheses.\n\
+    \        $char_index = 0;\n        while ($char_index < $paren_string_to_parse)\
+    \ {\n            $char_at_char_index = $paren_string_to_parse[$char_index];\n\
+    \            // Check if the parentheses matches the current character.\n    \
+    \        if ($char_at_char_index == '(') {\n                // If so, increment\
+    \ the depth.\n                $nested_depths[$paren_depth] += 1;\n           \
+    \ }\n            // Else if parentheses doesn't match the current character, increment\
+    \ the depth by 1.\n            else if ($char_at_char_index == '(') {\n      \
+    \          $nested_depths[$paren_depth] += 1;\n            }\n            // Else\
+    \ if the current character is not parentheses, increment the depth by 1.\n   \
+    \         else {\n                $nested_depths[$paren_depth] += 1;\n       \
+    \     }\n            // Increment the character index.\n            $char_index\
+    \ += 1;\n        }\n        // Increment the paren depth.\n        $paren_depth\
+    \ += 1;\n        // Decrement the depth of the parentheses once it reaches the\
+    \ maximum depth.\n        if ($nested_depths[$paren_depth] > $nested_depths_max)\
+    \ {\n            $nested_depths_max = $nested_depths[$paren_depth];\n        }\n\
+    \        // Decrement the depth of the parentheses.\n        $paren_depth -= 1;\n\
+    \        // Get the string up to the current parentheses.\n        $paren_string_to_parse\
+    \ = substr($paren_string_to_parse, 0, $char_index);\n    }\n    // Return an array\
+    \ of the maximum nesting depth of parentheses.\n    return $nested_depths_max;\n\
+    }\n", "  $nested_level_count = array();\n  $nested_level_count[0] = array(); //\
+    \ This level of nesting is empty.\n  $nested_level_count[1] = array(); // The\
+    \ first level of nesting contains just a single character.\n  $nested_level_count[2]\
+    \ = array(); // The second level of nesting contains two characters.\n  $current_level\
+    \ = 0;\n  $paren_string = preg_replace('/(\\((?>[^()]+|\\((?!\\?)))+\\))/', '',\
+    \ $paren_string); // Remove balanced parentheses.\n  foreach (explode(' ', $paren_string)\
+    \ as $char) {\n    // Check if this is a closing parenthesis.\n    if ($char ===\
+    \ '(') {\n      // Reverse the last two levels of nesting if there is a match.\n\
+    \      if ($current_level >= count($nested_level_count) - 2) {\n        $nested_level_count\
+    \ = array_reverse($nested_level_count);\n      }\n      // Increase the level\
+    \ of nesting by one and output the character at the current level.\n      $current_level++;\n\
+    \      $nested_level_count[$current_level][count($nested_level_count[$current_level])]\
+    \ = $char;\n    }\n    // Check if this is a character in parenthesis.\n    else\
+    \ {\n      // Check if this is a character in nested levels of nesting.\n    \
+    \  if (isset($nested_level_count[$current_level][$char])) {\n        // Reverse\
+    \ the last two levels of nesting if there is a match.\n        if ($current_level\
+    \ >= count($nested_level_count) - 2) {\n          $nested_level_count = array_reverse($nested_level_count);\n\
+    \        }\n        // Output the character at current level of nesting.\n   \
+    \     $current_level++;\n        $nested_level_count[$current_level][count($nested_level_count[$current_level])]\
+    \ = $char;\n      }\n      // Else add the character to the last level of nesting.\n\
+    \      else {\n        $nested_level_count[$current_level][count($nested_level_count[$current_level])]\
+    \ = $char;\n      }\n    }\n  }\n  // Reverse the last two levels of nesting if\
+    \ there is a match.\n  if ($current_level >= count($nested_level_count) - 2) {\n\
+    \    $nested_level_count = array_reverse($nested_level_count);\n  }\n  return\
+    \ $nested_level_count;\n}", "  if (strpos($paren_string, '(') === false) {\n \
+    \   return array(0);\n  }\n\n  $parsing_level = 0;\n  $nested_parsing_level =\
+    \ -1;\n\n  for ($i = 0; $i < strlen($paren_string); $i++) {\n    if ($paren_string[$i]\
+    \ == ')') {\n      $parsing_level--;\n      if ($parsing_level == 0) {\n     \
+    \   break;\n      }\n    }\n    $parsing_level++;\n    if ($nested_parsing_level\
+    \ == -1) {\n      $nested_parsing_level = $parsing_level;\n    }\n  }\n\n  return\
+    \ array($nested_parsing_level);\n}\n", "    $nested_levels_stack = array();\n\
+    \    $parsed_string = '';\n    $level = 0;\n    for ($i = 0; $i < strlen($paren_string);\
+    \ $i++) {\n        $char = $paren_string[$i];\n        if ($char === '(' || $char\
+    \ === '[') {\n            if ($nested_levels_stack[$level - 1] !== $char) {\n\
+    \                unset($nested_levels_stack[$level]);\n            }\n       \
+    \     $nested_levels_stack[$level++] = $char;\n        } else if ($char === ')'\
+    \ || $char === ']') {\n            if ($level) {\n                $last_char =\
+    \ $nested_levels_stack[$level - 1];\n                if ($last_char === '(' ||\
+    \ $last_char === '[') {\n                    $nested_levels_stack[$level - 1]\
+    \ = $last_char;\n                }\n            }\n            if ($level) {\n\
+    \                $next_char = $nested_levels_stack[$level];\n                if\
+    \ ($next_char === ')' || $next_char === ']') {\n                    $nested_levels_stack[$level]\
+    \ = $next_char;\n                }\n            }\n            if ($level ===\
+    \ 0) {\n                $parsed_string .= $char;\n            }\n        } else\
+    \ {\n            $parsed_string .= $char;\n        }\n    }\n    return array_map(function($i)\
+    \ { return $i; }, $nested_levels_stack);\n}\n\n/**\n * Remove some unnecessary\
+    \ characters in the string for regexp matching.\n *\n * @param string $str String\
+    \ to sanitize.\n * @return string Sanitized string.\n */", "    $levels = 0;\n\
+    \    $result = [];\n    $stack = [];\n\n    foreach (explode(' ', $paren_string)\
+    \ as $char) {\n        if ($char === '(') {\n            if (empty($stack)) {\n\
+    \                $result[] = $levels;\n                $levels = 1;\n        \
+    \    } else {\n                $levels++;\n            }\n        } elseif ($char\
+    \ === ')') {\n            if ($levels) {\n                $levels--;\n       \
+    \     }\n        } elseif ($char === ' ') {\n            if ($levels) {\n    \
+    \            $stack[] = $levels;\n                $levels = 0;\n            }\n\
+    \        }\n    }\n\n    if ($levels) {\n        $result[] = $levels;\n    }\n\
+    \n    return $result;\n}\n", "    $nested_counts = array_fill_keys(str_count($paren_string,\
+    \ ' '), 0);\n    $nested_counts_keys = array_keys($nested_counts);\n    $max_nested_level\
+    \ = max($nested_counts);\n    foreach ($nested_counts_keys as $key) {\n      \
+    \  $nested_counts[$key] += $max_nested_level - $nested_counts[$key];\n    }\n\
+    \    return $nested_counts;\n}\n", "  $nested_level = 0;\n  $parsed_parens = array();\n\
+    \n  for ($i = 0, $paren_length = strlen($paren_string); $i < $paren_length; $i++)\
+    \ {\n    if ($paren_string[$i] === '(') {\n      $nested_level++;\n    } else\
+    \ {\n      if ($nested_level) {\n        $nested_level--;\n      }\n      $parsed_parens[]\
+    \ = $nested_level;\n    }\n  }\n\n  return $parsed_parens;\n}\n", "    $paren_count\
+    \ = 0;\n    $nested_count = 1;\n    $paren_string = str_replace(array('(', ')'),\
+    \ array(' {', '} '), $paren_string);\n    $array = explode(\" \", $paren_string);\n\
+    \    foreach ($array as $key => $value) {\n        if ($value == ')') {\n    \
+    \        $paren_count--;\n        }\n        if ($value == '(') {\n          \
+    \  $paren_count++;\n        }\n        if ($paren_count >= $nested_count) {\n\
+    \            $nested_count++;\n        }\n    }\n    return $nested_count;\n}",
+  "    $nestings = array();\n\n    $paren_pairs = preg_split('/\\s*\\((?>[^\\(\\)]+|\\\
+    ((?!\\))|(?R))*\\)\\s*/', $paren_string);\n    foreach ($paren_pairs as $key =>\
+    \ $paren_pair) {\n        $paren_pair = trim($paren_pair);\n        $opening_levels\
+    \ = preg_split('/\\s*\\((?>[^()]+|(?R))*\\)\\s*/', $paren_pair);\n        $opening_levels_length\
+    \ = count($opening_levels);\n        $current_level = 0;\n        for ($i = 0;\
+    \ $i < $opening_levels_length; $i++) {\n            $nesting_level = count($nestings);\n\
+    \            for ($j = $current_level; $j < $nesting_level; $j++) {\n        \
+    \        if ($nestings[$j] == $opening_levels[$i]) {\n                    $nestings[$j]\
+    \ += $opening_levels_length - $i - 1;\n                    break;\n          \
+    \      }\n            }\n            $current_level = $nesting_level;\n      \
+    \  }\n    }\n\n    return $nestings;\n}\n</code>\n<|/ a tags=php,parsing,algorithm,parentheses\
+    \ |>\n<| a |>\nHere is my solution without regex, it's very simple and works correctly\
+    \ on PHP 5.4+\n<code>\n$parenthesis = [\n    '(', ')', '{', '}', '[', ']'\n];\n\
+    \n$string = '(((())()))()';\n\n$nesting = [];\n\nfor ($i = 0; $i < strlen($string);\
+    \ $i++) {\n    $char = substr($string, $i, 1);\n\n    if (isset($parenthesis[$char]))\
+    \ {\n        $nesting[$parenthesis[$char]] += 1;\n    }\n}\n\nprint_r($nesting);\n\
+    </code>\n<|/ a tags=php,parsing,algorithm,parentheses dscore=4 |>\n<| a |>\nI\
+    \ made this recursive algorithm. \n<code>", "    $paren_string = preg_replace('/\\\
+    ([^)]*\\)/', '', $paren_string);\n    $parens = preg_split('/\\s+/', $paren_string);\n\
+    \    $level = 0;\n    foreach ($parens as $i => $paren) {\n        $parens[$i]\
+    \ = '(' === $paren ? 0 : 1;\n        if (0 === $paren) {\n            $level++;\n\
+    \        }\n        if (1 === $paren) {\n            $level--;\n        }\n  \
+    \  }\n    return $level;\n}\n", "  $num_levels = 0;\n  $open_parens = 0;\n  $nested_levels\
+    \ = array();\n  foreach (str_split($paren_string) as $char) {\n    if ($char ==\
+    \ ')') {\n      $open_parens--;\n    }\n    if ($char == '(') {\n      $open_parens++;\n\
+    \    }\n    if ($open_parens == 0) {\n      $num_levels++;\n    }\n    if ($open_parens\
+    \ > 0 && $char == ' ') {\n      $nested_levels[$num_levels - 1]++;\n    }\n  }\n\
+    \  return $nested_levels;\n}\n", "  $nested_levels = array(0);\n  $paren_string\
+    \ = preg_replace('/\\(\\s*\\)/', '', $paren_string);\n\n  foreach (explode(' ',\
+    \ $paren_string) as $char) {\n    if (!empty($char) && $char != \"(\") {\n   \
+    \   array_push($nested_levels, count($nested_levels) % 2);\n    }\n  }\n\n  return\
+    \ $nested_levels;\n}\n", "  $level = 0;\n  $nested_parens = array();\n  for($i\
+    \ = 0; $i < strlen($paren_string); $i++) {\n    if($paren_string[$i] == ')') {\n\
+    \      if($level == 0) {\n        $nested_parens[] = $i;\n      }\n      $level--;\n\
+    \    } else {\n      if($level == 0) {\n        $nested_parens[] = $i;\n     \
+    \ }\n      $level++;\n    }\n  }\n  return $nested_parens;\n}\n", "  $nested_depth\
+    \ = 0;\n  foreach (explode(' ', $paren_string) as $token) {\n    if ($nested_depth\
+    \ > 0) {\n      if ($nested_depth > count($token)) {\n        $nested_depth =\
+    \ count($token);\n      }\n    } else {\n      $nested_depth = count($token);\n\
+    \    }\n  }\n  return $nested_depth;\n}\n\n/**\n * Get a unique identifier for\
+    \ CSS classes.\n * Example: class=\"example-class example-class-2\"\n *\n * @param\
+    \ string $class_name Class name.\n *\n * @return string A unique class identifier.\n\
+    \ */", "  $max_level = 0;\n  $groups = explode(' ', $paren_string);\n  foreach\
+    \ ($groups as $group) {\n    $max_level = max($max_level, count($groups));\n \
+    \ }\n  return $max_level;\n}\n</code>\n<|/ a tags=php,string |>\n<| a tags=php,string\
+    \ |>\n<code>\n<?php\n", "  $level = 0;\n  $nested_levels = array();\n  $paren_string\
+    \ = trim($paren_string, '()');\n  foreach (explode(' ', $paren_string) as $level)\
+    \ {\n    list($opening_paren_level, $closing_paren_level) = explode('(', $level);\n\
+    \    if ($closing_paren_level == '') {\n      $nested_levels[$opening_paren_level]++;\n\
+    \    } else {\n      $nested_levels[$opening_paren_level] = $closing_paren_level;\n\
+    \    }\n  }\n  return $nested_levels;\n}\n</code>\n<|/ a dscore=3 tags=php,regex,parsing\
+    \ |>\n<| c |>\nThe above code returns empty array. I am trying below input string\
+    \ and output array should be [1,2,3,4]\nInput: `'(()()) ((())) () ((())()())'`\n\
+    Output: [2, 3, 4, 1]\n<|/ c |>\n<| c |>\nI edited my answer to include an explanation\
+    \ of the code and why it works.\n<|/ c |>\n<| c |>\nthank you so much for help\
+    \ but when i use below string it returns array as [1,1,1,1,1,1,1,1]\nInput: `'((())\
+    \ ()()) ()()()'`\n<|/ c |>\n<| c |>\nYou must have made a mistake, because it\
+    \ works fine for me on that string and outputs `[1, 2, 3, 4, 1]`\n<|/ c |>\n<|\
+    \ c |>\nOh i forgot to remove () from string so it return me array as [1,1,1,1]\
+    \ when i remove () from string it return array as [2,3,4,1]\n<|/ c |>\n<| a tags=php,regex,parsing\
+    \ |>\nYou can use regular expressions to do that.\n<code>\n$string = \"(()) (((()))\
+    \ () ((())()())\";\npreg_match_all('/\\((.*?)\\)/', $string, $matches);\n$array\
+    \ = array_count_values($matches[1]);\n$result = [];\nforeach($array as $key=>$value)\
+    \ {\n    for($i = 1; $i < $value; $i++) {\n        $result[] = $key;\n    }\n\
+    }\nvar_dump($result);\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThanks for your help,\
+    \ It should return array as [2,3,4,1]  but it is return array with only single\
+    \ element. like Array\n(\n    [1] => 1\n)\n<|/ c |>\n<| c |>\nit works like a\
+    \ charm here https://3v4l.org/Zt", "  // Parse the paren string into a stack of\
+    \ nested parentheses.\n  // Each element of the stack represents a parenthesis\
+    \ that we encountered.\n  $parenStack = array();\n\n  // For each parenthesis\
+    \ in the paren string, push the appropriate number of new parentheses\n  // onto\
+    \ the stack.\n  foreach(explode(' ', $paren_string) as $paren) {\n    // If the\
+    \ parenthesis is empty, remove it from the stack.\n    if($paren == '') {\n  \
+    \    array_pop($parenStack);\n      continue;\n    }\n\n    // If the parenthesis\
+    \ matches closing parentheses in the stack,\n    // remove that closing parentheses\
+    \ from the stack and set the level of nesting to 1.\n    if(end($parenStack) ==\
+    \ $paren) {\n      array_pop($parenStack);\n      $level = 1;\n      continue;\n\
+    \    }\n\n    // If the parenthesis doesn't match closing parentheses in the stack,\n\
+    \    // increment the level of nesting by the number of opening parentheses in\
+    \ the stack.\n    $level++;\n    array_push($parenStack, $level);\n  }\n\n  return\
+    \ $parenStack;\n}\n", "    $paren_array = explode(' ', $paren_string);\n    $level\
+    \ = 0;\n    foreach ($paren_array as $paren) {\n        if ($paren == ')' && $level\
+    \ > 0) {\n            $level--;\n        }\n        if ($paren == '(' && $level\
+    \ < count($paren_array)) {\n            $level++;\n        }\n    }\n    return\
+    \ $level;\n}\n", "  $nested_depth = -1;\n  $paren_string_length = strlen($paren_string);\n\
+    \  $depth = 0;\n  $paren_count = 0;\n  $paren_groups = array();\n  for ($i = 0;\
+    \ $i < $paren_string_length; ++$i) {\n    $char = $paren_string[$i];\n    if (isset($paren_groups[$char]))\
+    \ {\n      // Increase the depth of nesting.\n      $depth = $paren_groups[$char];\n\
+    \    } else {\n      // Add a new character to the group's stack and push it to\
+    \ the stack.\n      $paren_groups[$char] = $depth;\n      $paren_groups[$char]\
+    \ += 1;\n    }\n  }\n  // Pop the last char from the stack to output the deepest\
+    \ level of nesting.\n  $popped_char = array_pop($paren_groups);\n  return array_pop($paren_groups)\
+    \ + 1;\n}", "    $nested_parens = [];\n    foreach (explode(' ', $paren_string)\
+    \ as $paren) {\n        $nested_parens[] = $paren;\n        $nested_parens = array_merge(\n\
+    \            $nested_parens,\n            explode(')', $paren)\n        );\n \
+    \   }\n    return array_map('count', $nested_parens);\n}\n", "  $paren_string\
+    \ = preg_replace('/\\s+/', ' ', $paren_string);\n  $paren_string = preg_replace('/(\\\
+    ((?>[^()]+|\\((?<open>\\)|(?<-open>\\)))*\\))/', '${open}${close}', $paren_string);\n\
+    \  $paren_string = preg_replace('/(\\((?>[^()]+|\\((?<open>\\)|(?<-open>\\)))*\\\
+    ))/', '${open}${close}', $paren_string);\n  $paren_string = preg_replace('/(\\\
+    ((?>[^()]+|\\((?<open>\\)|(?<-open>\\)))*\\))/', '${open}${close}', $paren_string);\n\
+    \  $nested_level = 0;\n  $paren_stack = [];\n  $opening_parenthesis_stack = [];\n\
+    \  $closing_brackets = [];\n  foreach (str_split($paren_string) as $character)\
+    \ {\n    switch ($character) {\n      case '(':\n        ++$nested_level;\n  \
+    \      $opening_parenthesis_stack[] = $nested_level;\n        break;\n      case\
+    \ ')':\n        array_pop($paren_stack);\n        array_pop($opening_parenthesis_stack);\n\
+    \        ++$nested_level;\n        break;\n      case '{':\n        ++$nested_level;\n\
+    \        break;\n      case '}':\n        if ($nested_level == 0) {\n        \
+    \  $closing_brackets[] = $nested_level;\n        }\n        array_pop($paren_stack);\n\
+    \        array_pop($opening_parenthesis_stack);\n        ++$nested_level;\n  \
+    \      break;\n      default:\n        if ($nested_level > 0) {\n          array_push($paren_stack,\
+    \ $character);\n        }\n    }\n  }\n  return $opening_parenthesis_stack;\n}",
+  "\t$paren_string = str_replace(' ', '', $paren_string);\n\t$nested_level = 0;\n\t\
+    $parens_positions = array();\n\tfor ($i = 0, $len = strlen($paren_string); $i\
+    \ < $len; $i++) {\n\t\t$c = $paren_string[$i];\n\t\tswitch ($c) {\n\t\t\tcase\
+    \ '(':\n\t\t\t\t$nested_level++;\n\t\t\t\t$parens_positions[$nested_level] = $i;\n\
+    \t\t\tcase ')':\n\t\t\t\t$nested_level--;\n\t\t\t\tif ($nested_level < 0) {\n\t\
+    \t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t\t$parens_positions[$nested_level] = $i;\n\t\t\
+    }\n\t}\n\t$nested_level = max($nested_level);\n\t$output_levels = array_fill(0,\
+    \ $nested_level + 1, 0, 0);\n\t$output_string = '';\n\tfor ($i = 0, $len = count($parens_positions);\
+    \ $i < $len; $i++) {\n\t\t$output_levels[$parens_positions[$i] - 1]++;\n\t\t$output_string\
+    \ .= $paren_string[$i];\n\t}\n\treturn $output_levels;\n}\n", "  $level = 0;\n\
+    \  $groups = 0;\n  $group_size = 0;\n  $open_count = 0; // count open\n  $open_list\
+    \ = [];\n\n  for ($i = 0; $i < strlen($paren_string); $i++) {\n    $char = $paren_string[$i];\n\
+    \    if ($char === \"(\") {\n      $level++;\n      $open_count++;\n      $group_size++;\n\
+    \    } elseif ($char === \")\") {\n      if ($open_count === 0) {\n        $open_count++;\n\
+    \      }\n      $level--;\n      $group_size--;\n      if ($level === 0) {\n \
+    \       $open_count--;\n        if ($open_count === 0) {\n          $open_list[$groups]\
+    \ = $group_size;\n          $groups++;\n          $group_size = 0;\n        }\n\
+    \      }\n    }\n  }\n\n  return $open_list;\n}\n", "  $groups = preg_split('/\
+    \ \\(\\) /', $paren_string);\n  foreach ($groups as $group) {\n    if (strlen($group))\
+    \ {\n      $levels = count(explode(')', $group));\n      $max_level = max($levels,\
+    \ 1);\n      $results[$max_level] = $levels;\n    }\n  }\n  return $results;\n\
+    }\n", "    $max_level = 0;\n    $levels = [];\n    for ($i = 0; $i < strlen($paren_string);\
+    \ ++$i) {\n        if ($paren_string[$i] == '(') {\n            $levels[$i] =\
+    \ 0;\n        } else {\n            if ($levels[$i] > $max_level) {\n        \
+    \        $max_level = $levels[$i];\n            }\n            $levels[$i]++;\n\
+    \        }\n    }\n    return $max_level;\n}\n", "  $level = 0;\n  $nested_paren_stack\
+    \ = [];\n  $nested_paren_stack_size = 0;\n  do {\n    $level++;\n    $nested_paren_stack_size++;\n\
+    \    $nested_paren_stack = array_merge($nested_paren_stack, $paren_string);\n\
+    \  } while ($nested_paren_stack_size > $level);\n  $nested_paren_stack_size =\
+    \ count($nested_paren_stack);\n  $nested_paren_stack_array = [];\n  foreach ($nested_paren_stack\
+    \ as $char) {\n    if ($char == '(') {\n      $nested_paren_stack_array[] = $nested_paren_stack_size;\n\
+    \    }\n    if ($char == ')') {\n      $paren_level = $nested_paren_stack_size;\n\
+    \      $nested_paren_stack_size--;\n      $nested_paren_stack_array[] = $paren_level;\n\
+    \    }\n  }\n  return $nested_paren_stack_array;\n}\n", "  $depth = 0;\n  $nest_levels\
+    \ = array();\n  for ($i=0,$len=strlen($paren_string); $i<$len; ++$i) {\n    $char\
+    \ = $paren_string[$i];\n    if ($char === '(') {\n      $depth++;\n    }\n   \
+    \ else if ($char === ')') {\n      $depth--;\n      if ($depth === 0) {\n    \
+    \    $nest_levels[] = $nest_levels[$i];\n      }\n    }\n  }\n  return array_reverse($nest_levels);\n\
+    }\n</code>\n<|/ a tags=php,preg-match-all,nested-parentheses dscore=1 |>\n<| a\
+    \ tags=php,preg-match-all,nested-parentheses |>\nI needed to find nested parentheses\
+    \ in PHP code so I used the accepted answer but needed to also match nested brackets\
+    \ which may be nested inside parentheses.  I used a recursive function and got\
+    \ it to work for both cases.\n<code>", "    $nested_levels = array();\n    $paren_string\
+    \ = str_replace(array('(', '[', '{', '|'), '', trim($paren_string));\n    $paren_string\
+    \ = str_replace(')', '  )', $paren_string);\n    $paren_string = str_replace('(',\
+    \ '  (', $paren_string);\n    $paren_string = str_replace('|', '  ', $paren_string);\n\
+    \    $paren_string = str_replace('  ', ' ', $paren_string);\n    $paren_string\
+    \ = str_replace('  ', '  ', $paren_string);\n    $levels = explode(' ', $paren_string);\n\
+    \    foreach ($levels as $index => $level) {\n        if (!is_numeric($level))\
+    \ {\n            $nested_levels[$index] = count($levels) - 1;\n        }\n   \
+    \ }\n\n    return $nested_levels;\n}\n", "    $parens = preg_split('/([\\(\\)])/',\
+    \ $paren_string);\n    $levels = count($parens) - 1;\n    if ($levels < 0) {\n\
+    \        return array();\n    }\n    else {\n        $nested_parens = array();\n\
+    \        for($i = 0; $i < $levels; $i++) {\n            $nested_parens[] = $parens[$i\
+    \ + 1];\n        }\n        return $nested_parens;\n    }\n}\n", "  $level = 0;\n\
+    \  $pos = 0;\n  $paren_pairs = explode(' ', $paren_string);\n  foreach ($paren_pairs\
+    \ as $paren_pair) {\n    $level++;\n    $char_count = 0;\n    for ($i = $pos;\
+    \ $i < strlen($paren_pair); $i++) {\n      if ($paren_pair[$i] == ')') {\n   \
+    \     $char_count--;\n        if ($char_count < 0) {\n          unset($paren_pairs[$i]);\n\
+    \          break;\n        }\n      }\n      else if ($paren_pair[$i] == '(')\
+    \ {\n        $char_count++;\n      }\n    }\n    $pos++;\n  }\n  return array_sum($paren_pairs);\n\
+    }\n", "    $depth = 0;\n    $bracket_pair = array();\n    $found_close_paren =\
+    \ false;\n\n    // Iterate through every character in the parenthesis string.\n\
+    \    foreach (str_split($paren_string) as $character) {\n        // If this character\
+    \ is '(' push the depth level and reset $bracket_pair\n        // If this character\
+    \ is ')' pop the depth level and decrement the count of $bracket_pair\n      \
+    \  if ($character == \"(\") {\n            $bracket_pair[$depth]++;\n        }\n\
+    \        if ($character == \")\") {\n            $bracket_pair[$depth]--;\n  \
+    \          if ($bracket_pair[$depth] == 0) {\n                unset($bracket_pair[$depth]);\n\
+    \            }\n        }\n\n        // If we are not at the deepest level of\
+    \ nesting\n        // or this character is a close parenthesis, return current\
+    \ depth.\n        // If no close parenthesis is found, increase depth.\n     \
+    \   if ($bracket_pair[$depth] == 0 && ($found_close_paren == false || ($character\
+    \ != \")\"))) {\n            $depth++;\n        }\n        if ($bracket_pair[$depth]\
+    \ > 0 && ($found_close_paren == false || ($character != \"))\")) {\n         \
+    \   $depth++;\n        }\n\n        if ($bracket_pair[$depth] == 0) {\n      \
+    \      $found_close_paren = true;\n        }\n    }\n\n    // Return deepest level\
+    \ of nesting\n    return count($bracket_pair);\n}\n", "  $paren_string = str_replace(')',\
+    \ '', $paren_string);\n  $paren_string = str_replace('(', ' (', $paren_string);\n\
+    \  $paren_string = explode(\" \", $paren_string);\n  $max_level = 0;\n  $level\
+    \ = 0;\n  foreach ($paren_string as $p) {\n    $level++;\n    if ($p == '(') {\n\
+    \      $level++;\n      if ($max_level < $level) {\n        $max_level = $level;\n\
+    \      }\n    } else if ($p == ')') {\n      $level--;\n      if ($max_level >\
+    \ $level) {\n        $max_level = $level;\n      }\n    }\n  }\n  return $max_level;\n\
+    }", "    $nested_levels = array();\n    $paren_string = trim($paren_string);\n\
+    \    for ($i=0; $i < strlen($paren_string); $i++) {\n        if ($paren_string[$i]\
+    \ != '(') {\n            if ($paren_string[$i] == ')') {\n                if (count($nested_levels)\
+    \ > 0) {\n                    $nested_levels[count($nested_levels)-1]++;\n   \
+    \             } else {\n                    $nested_levels[] = 1;\n          \
+    \      }\n            } else {\n                $nested_levels[] = 1;\n      \
+    \      }\n        }\n    }\n    return $nested_levels;\n}\n", "  $levels = array();\n\
+    \  $paren_level = 0;\n  $paren_nesting = 0;\n  $len = strlen($paren_string);\n\
+    \  for ($i = 0; $i < $len; $i++) {\n    $char = $paren_string[$i];\n    switch\
+    \ ($char) {\n      case '(':\n        if (!empty($levels[$paren_level])) {\n \
+    \         $levels[$paren_level] = max($levels[$paren_level], $paren_nesting);\n\
+    \        }\n        $paren_level++;\n        break;\n      case ')':\n       \
+    \ if (!empty($levels[$paren_level - 1])) {\n          $levels[$paren_level] =\
+    \ max($levels[$paren_level], $paren_nesting);\n        }\n        $paren_level--;\n\
+    \        break;\n      case ' ':\n      case '.':\n      case '!':\n      case\
+    \ '?':\n      case '[':\n      case ']':\n      case '{':\n      case '}':\n \
+    \       $paren_nesting++;\n        break;\n      case '[':\n        if (!empty($levels[$paren_level]))\
+    \ {\n          $levels[$paren_level] = max($levels[$paren_level], $paren_nesting);\n\
+    \        }\n        $paren_level++;\n        break;\n      case ']':\n       \
+    \ if (empty($levels[$paren_level - 1])) {\n          $levels[$paren_level] = $paren_nesting;\n\
+    \        }\n        $paren_level--;\n        break;\n    }\n  }\n  return $levels;\n\
+    }\n", "  // We need to keep a running counter to determine how many of the nested\
+    \ parentheses we have.\n  $num_parens = 0;\n  $result = [];\n  for ($i = 0; $i\
+    \ < strlen($paren_string); $i++) {\n    $char = substr($paren_string, $i, 1);\n\
+    \    if ($char == '(') {\n      $num_parens++;\n    } else if ($char == ')') {\n\
+    \      $num_parens--;\n      if ($num_parens == 0) break;\n    }\n  }\n  // Add\
+    \ the number of opening parentheses.\n  return array_push($result, $num_parens);\n\
+    }", "  $nesting_level = 0;\n  $paren_string = trim($paren_string);\n  $parsed_string\
+    \ = [];\n\n  // Iterate through each character in the string\n  foreach (str_split($paren_string)\
+    \ as $char) {\n    // Handle all parentheses with same level of nesting.\n   \
+    \ if ($char === \"(\" && $nesting_level <= 0) {\n      $nesting_level++;\n   \
+    \ } elseif ($char === \")\" && $nesting_level > 0) {\n      $nesting_level--;\n\
+    \    }\n\n    // Store the result of the iteration in the current element of the\
+    \ array\n    $parsed_string[$nesting_level][] = $char;\n  }\n\n  return $parsed_string;\n\
+    }", "    $nested_parens = array_fill(0, count($paren_string), 0);\n\n    for($i\
+    \ = 0; $i < count($paren_string); $i++) {\n        if($paren_string[$i] == '(')\
+    \ {\n            $nested_parens[$i]++;\n        } else if($paren_string[$i] ==\
+    \ ')') {\n            $nested_parens[$i]--;\n        }\n    }\n\n    return array_slice($nested_parens,\
+    \ 0, count($nested_parens) - 1);\n}", "    $levels = array_fill(0, strlen($paren_string),\
+    \ 0);\n    $level = 0;\n    $output_length = 0;\n    $opening_bracket = 0;\n \
+    \   for ($i = 0; $i < strlen($paren_string); $i++) {\n        if ($paren_string[$i]\
+    \ == ')') {\n            $levels[$level]--;\n        }\n        elseif ($paren_string[$i]\
+    \ == '(') {\n            $levels[$level]++;\n        }\n        if ($levels[$level]\
+    \ == 0) {\n            if ($level == 0) {\n                $output_length++;\n\
+    \            }\n            $level++;\n        }\n        if ($level > 0 && $levels[$level]\
+    \ == 0) {\n            $level--;\n        }\n    }\n    return $output_length;\n\
+    }\n</code>\n<|/ a |>\n<| c |>\nThe solution works perfect as expected but I would\
+    \ like to know why this works. I understand how the function works, but why does\
+    \ it give the correct output?\n<|/ c |>\n<| c |>\nBecause the algorithm works\
+    \ by counting the opening and closing parentheses at the same level and comparing\
+    \ it to 0, i.e. it counts the number of opening and closing parentheses at the\
+    \ same level.\n<|/ c |>\n<| c |>\nthanks for the explanation. So basically what\
+    \ happens is that the number of opening parentheses at the same level is compared\
+    \ to 0?\n<|/ c |>\n<| c |>\nYes, exactly. It compares the number of opening parentheses\
+    \ at the same level to 0. The algorithm works by counting the number of opening\
+    \ and closing parentheses at the same level and comparing it to 0, i.e. it counts\
+    \ the number of opening and closing parentheses at the same level. The level is\
+    \ only incremented, decremented, and compared at the same level. After the loop,\
+    \ the level is reset, until a level is reached where all parentheses are balanced.\n\
+    <|/ c |>\n<| c |>\nThanks a lot for your time and explanation\n<|/ c |>\n<| a\
+    \ tags=arrays,algorithm,php |>\n<code>\n<?php", "    // Split the input string\
+    \ into array: ([(()], [(()), (()()), (()), ()])\n    $parts = explode(\" \", $paren_string);\n\
+    \    \n    // Create a result array\n    $output = array();\n    \n    // Get\
+    \ the deepest level count of parentheses\n    $count_level = 0;\n    \n    //\
+    \ For each level of parentheses, increase the count and add the level to the output\
+    \ array.\n    // If the count of parentheses reaches the max level, output the\
+    \ max level.\n    foreach ($parts as $level_part) {\n        if (preg_match('/^\\\
+    ((\\()?/', $level_part)) {\n            ++$count_level;\n        } else if (preg_match('/^(\\\
+    ))?\\)$/', $level_part)) {\n            --$count_level;\n        } else {\n  \
+    \          // Append the level part to the result array.\n            // If the\
+    \ count of parentheses reaches the max level, output the max level.\n        \
+    \    $output[] = $count_level;\n        }\n    }\n\n    // Return the deepest\
+    \ level count.\n    return $count_level;\n}\n", "  // Remove spaces and split\
+    \ by spaces.\n  $parens = trim(str_replace('(', ' ', str_replace(')', ' ', $paren_string)));\n\
+    \n  // Find level of nesting.\n  preg_match_all('/\\((.*)\\)/', $parens, $nested_paren_matches);\n\
+    \  $nested_paren_level_count = count($nested_paren_matches[0]);\n\n  // If the\
+    \ string does not contain nested parentheses, return zero nesting levels.\n  if($nested_paren_level_count\
+    \ == 0) {\n    return 0;\n  }\n\n  // If there are no nested parentheses, return\
+    \ the specified nesting level.\n  if($nested_paren_level_count == 1) {\n    return\
+    \ $nested_paren_level_count;\n  }\n\n  // Otherwise, find the deepest nesting\
+    \ level.\n  $max_level = -1;\n  foreach($nested_paren_matches[0] as $level) {\n\
+    \    if($level > $max_level) {\n      $max_level = $level;\n    }\n  }\n  return\
+    \ $max_level;\n}\n", "    $level = 0;\n    $groups = preg_split('/(\\s)/', $paren_string);\n\
+    \    $max_depth = 0;\n    foreach ($groups as $group) {\n        if (preg_match('/^\\\
+    (/', $group)) {\n            $level++;\n            if ($level > $max_depth) {\n\
+    \                $max_depth = $level;\n            }\n        } else {\n     \
+    \       $level--;\n            if ($level < 0) {\n                return false;\n\
+    \            }\n        }\n    }\n\n    return $max_depth;\n}\n</code>\n<|/ a\
+    \ |>\n<| a dscore=2 tags=parsing,php,parentheses |>\nI did something similar this\
+    \ morning for a school assignment and ended up with this:\n<code>", "\t$paren_count\
+    \ = count($paren_string);\n\t$paren_stack = [];\n\n\t// This loop will increment\
+    \ $i by 1 until all the parentheses are balanced.\n\t// After the loop finishes,\
+    \ $i will have reached the highest value possible.\n\tfor ($i = 0; $i < $paren_count;\
+    \ $i++) {\n\t\t$char = substr($paren_string, $i, 1);\n\n\t\t// If it is a left\
+    \ parenthesis, push it to $paren_stack.\n\t\tif ($char === '(') {\n\t\t\t$paren_stack[]\
+    \ = $char;\n\t\t\t$paren_stack[$paren_stack_depth] = $char;\n\t\t}\n\n\t\t// If\
+    \ the current char is the same as the previous char in the stack, pop the stack.\n\
+    \t\t// If the stack remains empty, this char is unbalanced.\n\t\telseif ($paren_stack[count($paren_stack)\
+    \ - 1] === $char) {\n\t\t\tarray_pop($paren_stack);\n\t\t}\n\n\t\t// If there\
+    \ is something in the stack, increment $paren_count by one.\n\t\telseif ($paren_stack)\
+    \ {\n\t\t\t$paren_count++;\n\t\t}\n\t}\n\n\t// If the string ended with a right\
+    \ parenthesis, that means we need to add one at the end.\n\t// If there is something\
+    \ in the stack, we need to decrement it by one.\n\tif ($paren_string[strlen($paren_string)\
+    \ - 1] === ')') {\n\t\t$paren_count++;\n\t}\n\n\treturn $paren_count;\n}\n", " \
+    \ $nested_levels = 0;\n  $nested_parens = array();\n  $parens = preg_match_all('/\\\
+    (([^()]*)\\)/', $paren_string, $paren_match);\n  foreach ($paren_match[1] as $paren)\
+    \ {\n    $nesting_levels = 0;\n    $parens = preg_match_all('/\\(([^()]*)\\)/',\
+    \ $paren, $paren_match);\n    foreach ($paren_match[1] as $paren) {\n      if\
+    \ ($paren == '(') {\n        $nesting_levels++;\n        $nested_parens[] = $nesting_levels;\n\
+    \      } else if ($paren == ')') {\n        $nesting_levels--;\n        $nested_parens[]\
+    \ = $nesting_levels;\n      }\n    }\n    if ($nested_levels == 0 && $nested_parens\
+    \ != array_reverse($nested_parens)) {\n      $nested_levels = $nested_parens ?\
+    \ max(array_intersect($nested_parens, array_reverse($nested_parens))) : 0;\n \
+    \   }\n    $nested_parens = array_reverse($nested_parens);\n  }\n  return $nested_levels;\n\
+    }\n", "    if (strpos($paren_string, '()') === FALSE) {\n        return 0;\n \
+    \   }\n    $level = 0;\n    $parens = array();\n    foreach (preg_split('/ \\\
+    (\\)? /', $paren_string, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE) as\
+    \ $part) {\n        if ($part == '()') {\n            $level++;\n        }\n \
+    \       else if ($part == '(') {\n            $level--;\n        }\n        $parens[]\
+    \ = $level;\n    }\n    return max($parens);\n}\n", "  $nested_paren_count = 0;\n\
+    \  $nested_paren_chars = str_split($paren_string);\n  $level_count = count($nested_paren_chars);\n\
+    \n  $deepest_level = $level_count;\n  $deepest_level_paren_char = $nested_paren_chars[$deepest_level\
+    \ - 1];\n\n  foreach($nested_paren_chars as $char) {\n    if ($char === $deepest_level_paren_char)\
+    \ {\n      $deepest_level--;\n      $nested_paren_count++;\n    }\n  }\n\n  return\
+    \ $deepest_level;\n}\n", "  $parens = preg_split('/[\\(\\)]/', $paren_string,\
+    \ -1, PREG_SPLIT_NO_EMPTY);\n  $level = 0;\n  $max = 0;\n  foreach ($parens as\
+    \ $paren) {\n    $level ++;\n    if ($level > $max) {\n      $max = $level;\n\
+    \    }\n  }\n  return $max;\n}\n", "  if (!$paren_string) {\n    return array(0);\n\
+    \  }\n\n  $parens = array();\n  $parens_stack = array();\n\n  $nested_parens =\
+    \ count($paren_string);\n  for ($i = 0; $i < $nested_parens; $i++) {\n    $c =\
+    \ $paren_string[$i];\n    switch ($c) {\n      case ')':\n        $parens_stack[count($parens_stack)\
+    \ - 1]--;\n        break;\n      case ')':\n        $parens_stack[count($parens_stack)\
+    \ - 1]++;\n        break;\n      case ' ':\n        if (!$parens_stack[count($parens_stack)\
+    \ - 1]) {\n          $parens[$i]++;\n        }\n        break;\n      case ')':\n\
+    \        if ($parens_stack[count($parens_stack) - 1]) {\n          $parens[$i]++;\n\
+    \        }\n        break;\n    }\n  }\n\n  return $parens;\n}\n</code>\n<|/ a\
+    \ |>\n<| c |>\nIt doesn't give the correct answer. The input `(((())) (()))` returns\
+    \ `3` but should be `2`\n<|/ c |>\n<| a dscore=1 tags=php,algorithm |>\nHere's\
+    \ another take on the recursive solution, using callbacks rather than recursion.\
+    \ \n<code>\n<?php\n$paren_string = '((())) () ((())()())';\n$levels = count_parentheses($paren_string);",
+  "    $paren_count = count($paren_string);\n    $level = 0;\n    $paren_string_count\
+    \ = count($paren_string);\n    $last_paren = -1;\n\n    for ($i = 0; $i < $paren_string_count;\
+    \ $i++) {\n        if ($paren_string[$i] == ')') {\n            $level++;\n  \
+    \      } else {\n            $level--;\n        }\n\n        if ($paren_count\
+    \ > 0 && $paren_count < $level) {\n            // Too many nested parentheses.\n\
+    \            $last_paren = $i;\n        }\n    }\n\n    if ($level != 0 && $paren_count\
+    \ != 0) {\n        // Too few nested parentheses.\n        $last_paren = $paren_string_count;\n\
+    \    }\n\n    return $level;\n}", "\t$max_level = 0;\n\t$opening_level = 0;\n\t\
+    $opening_level_string = '';\n\t$parens_level = 0;\n\t$parens_level_string = '';\n\
+    \t\n\tforeach(explode(\" \", $paren_string) as $current_group) {\n\t\tif($current_group\
+    \ == '(') {\n\t\t\t$parens_level++;\n\t\t\t$parens_level_string = $parens_level_string.'(('.$parens_level_string.'))';\n\
+    \t\t} elseif($current_group == ')') {\n\t\t\t$parens_level--;\n\t\t\tif($parens_level\
+    \ == 0) {\n\t\t\t\t$max_level++;\n\t\t\t\t$opening_level_string = $opening_level_string.substr($parens_level_string,\
+    \ 1);\n\t\t\t\t$opening_level--;\n\t\t\t}\n\t\t\t$parens_level_string = $parens_level_string.substr($parens_level_string,\
+    \ 1);\n\t\t}\n\t}\n\t\n\treturn $max_level;\n}\n", "  $level = 0;\n  $nested_levels\
+    \ = array();\n  $depth = 0;\n  $paren_count = 0;\n  \n  $len = strlen($paren_string);\n\
+    \  for($i = 0; $i < $len; $i++) {\n    if ($paren_string[$i] === '(') {\n    \
+    \  $paren_count++;\n    }\n    \n    if ($paren_string[$i] === ')') {\n      $paren_count--;\n\
+    \    }\n    \n    if ($depth === 0) {\n      if ($paren_count === 0) {\n     \
+    \   $nested_levels[] = $level;\n      }\n      \n      $level++;\n    }\n    \n\
+    \    if ($paren_count !== 0) {\n      $depth++;\n    }\n  }\n  \n  return $nested_levels;\n\
+    }\n\n$input = '(()()) ((())) () ((())()())';\n\n$nested_levels = parse_nested_parens($input);\n\
+    sort($nested_levels);\n$max_level = $nested_levels[0];\necho 'Maximum nested level\
+    \ of parentheses is ' . $max_level . ' levels.';\n</code>\n<|/ a tags=algorithm,php\
+    \ |>\n<| c |>\nI appreciate the idea, but this doesn't seem to work on a string\
+    \ such as '(()((()))())' it returns:\nMaximum nested level of parentheses is 2\
+    \ levels.\n<|/ c |>\n<| c |>\nThis only works if the input is formatted as a single\
+    \ string. If you call this function twice, it will return different results.\n\
+    <|/ c |>\n<| c |>\nYes, thanks for pointing out. I have updated the solution to\
+    \ take into account multiple parens strings as well.\n<|/ c |>\n<| a |>\nI guess\
+    \ you are looking for the maximum common subtree depth (also commonly referred\
+    \ to as Hungarian algorithm).\nThis can be solved with a DFS. \nHere's a solution\
+    \ using DFS:\n<code>\n<?php", "  $depth = 0;\n  $output_array = [];\n  foreach(explode('\
+    \ ', $paren_string) as $level) {\n    $output_array[$level] = $depth;\n    if($depth\
+    \ == 0) $depth = $level;\n    $depth--;\n  }\n  return $output_array;\n}\n</code>\n\
+    <|/ a |>\n<| c |>\nHi, I tested your code and it works but it doesn't work for\
+    \ this input: ((())) ()\n<|/ c |>\n<| c |>\nIt works on the example provided in\
+    \ the answer. Can you provide more examples?\n<|/ c |>\n<| c |>\nYes sure, here\
+    \ are some examples: [input](https://pastebin.com/jYfJg6hq), [output](https://pastebin.com/0uW4K5R9).\
+    \ Thank you\n<|/ c |>\n<| c |>\nOh, I see, the nested parentheses are actually\
+    \ a part of the input. I'll take a look at this in a bit.\n<|/ c |>\n<| c |>\n\
+    I revisited this and fixed the error. I had the array wrong. I also modified the\
+    \ code to handle the case where a group has more than three levels.\n<|/ c |>\n\
+    <| a tags=php |>\nI think this should work:\n<code>\n<?php\n$str = '(()()) ((()))\
+    \ () ((())()())';\n$input = [];\n$groups = str_split($str, 1);\n$paren_levels\
+    \ = 0;\n$depth = 0;\nforeach($groups as $group) {\n    if ($group == '(') {\n\
+    \        $paren_levels++;\n    } else if ($group == ')') {\n        $paren_levels--;\n\
+    \    } else if ($paren_levels == 0) {\n        $depth++;\n    }\n}\n\n$output\
+    \ = [];\n$i = 0;\nforeach (str_split($str, 1) as $char) {\n    if ($char == '(')\
+    \ {\n        $output[$i] = $depth;\n        $i++;\n    }\n}\nprint_r($output);\n\
+    </code>\n<|/ a dscore=0 |>\n<| c |>\nHi Amish, your code works in most cases but\
+    \ there are still a few cases that it fails. I'll provide some examples for your\
+    \ better understanding: [input](https://pastebin.com/gW2m5YTg), [output](https://pastebin.com/Vs4s4t3x)\n\
+    <|/ c |>\n<| c |>\nThe output for these two cases is [6, 2, 3]\n<|/ c |>\n<| a\
+    \ |>\n<code>\n$paren_string = '(()())';\n$nested_array = preg_match_", "    $nested_levels\
+    \ = array();\n\n    $paren_string = preg_replace('/\\((?>[^()]+|(?R))*\\)/', '',\
+    \ $paren_string);\n\n    foreach (explode(' ', $paren_string) as $level) {\n \
+    \       foreach (str_split($level) as $char) {\n            if ($char != '(')\
+    \ {\n                continue;\n            }\n\n            $nested_levels[]\
+    \ = count($nested_levels);\n        }\n    }\n\n    return max($nested_levels);\n\
+    }\n</code>\n<code>", "    $levels = str_count($paren_string, ' ');\n    $nesting_level\
+    \ = count($paren_string) - $levels;\n\n    return $nesting_level;\n}\n", "  $parens\
+    \ = preg_split('/\\s+/', $paren_string);\n  $nesting = 1;\n  $max_nesting = 0;\n\
+    \  foreach ($parens as $paren) {\n    if (strpos($paren, '(') !== false) {\n \
+    \     $nesting++;\n    }\n    if (strpos($paren, ')') !== false) {\n      $nesting--;\n\
+    \    }\n    if ($nesting > $max_nesting) {\n      $max_nesting = $nesting;\n \
+    \   }\n  }\n  return $max_nesting;\n}\n", "  $paren_counts = array();\n  // Initialize\
+    \ with 0\n  for ($i = 0; $i < strlen($paren_string); $i++) {\n    $paren_counts[$paren_string[$i]]\
+    \ = 0;\n  }\n  $paren_counts[')']++;\n  $paren_counts['(']--;\n  // Reverse and\
+    \ walk through string\n  for ($i = strlen($paren_string) - 2; $i >= 0; $i--) {\n\
+    \    if ($paren_counts[$paren_string[$i]] > $paren_counts[$paren_string[$i + 1]])\
+    \ {\n      $depth = $paren_counts[$paren_string[$i]];\n    } else {\n      $depth\
+    \ = $paren_counts[$paren_string[$i + 1]];\n    }\n    // Output and decrease counts\n\
+    \    $paren_counts[$paren_string[$i]] = $paren_counts[$paren_string[$i + 1]];\n\
+    \    $paren_counts[$paren_string[$i + 1]] = $depth;\n  }\n  return $paren_counts;\n\
+    }\n", "    $nested_level = 0;\n    $paren_stack = array();\n    foreach (preg_split('/\\\
+    s+/', $paren_string) as $char) {\n        if ($char === '(') {\n            $nested_level\
+    \ += 1;\n            $paren_stack[$nested_level] = '';\n        }\n        else\
+    \ if ($char === ')') {\n            $nested_level -= 1;\n            $paren_stack[$nested_level]\
+    \ = '';\n        }\n        else if ($char === '') {\n            if ($nested_level\
+    \ === 1) {\n                $paren_stack[$nested_level] .= $paren_stack[($nested_level\
+    \ - 1)];\n            }\n            $nested_level = 0;\n        }\n        else\
+    \ {\n            if ($nested_level > 0) {\n                $paren_stack[$nested_level]\
+    \ .= $char;\n            }\n        }\n    }\n    return count($paren_stack);\n\
+    }\n", "  return array_reduce(preg_split('/\\s+/', $paren_string), function ($result,\
+    \ $token) {\n    return max($result, $token);\n  }, 0);\n}\n</code>\n<|/ a tags=java,recursion\
+    \ dscore=1 |>\n<| a dscore=0 |>\nHere's a Java implementation of \"Bentley's TicTacToe\"\
+    , using recursion. Some notes:\n\nThe \"game\" is a square array of chars, which\
+    \ is initialized with blanks.\nThe \"board\" is a string that is returned as a\
+    \ result of the recursive calls.\nThe \"move\" method returns the square of the\
+    \ square on the board, and increments the board position by 1.\nThe \"reset\"\
+    \ method returns the board and position to their original values, which is all\
+    \ blanks.\nThe \"is_full\" method returns true if all squares on the board are\
+    \ filled, as opposed to having a hole in one square.\nThe \"is_game_over\" method\
+    \ checks for victory.\n\n<code>\npublic class TicTacToeGame {\n\n    static final\
+    \ char [][] board = new char [3][3];\n\n    public static boolean move (int square)\
+    \ {\n        board[square-1][square-1] = 'X';\n        return true;\n    }\n\n\
+    \    public static String reset () {\n        StringBuilder builder = new StringBuilder();\n\
+    \        for (int r = 0; r < board.length; r++) {\n            for (int c = 0;\
+    \ c < board[r].length; c++) {\n                builder.append(board[r][c]);\n\
+    \            }\n            builder.append(\" \");\n        }\n        return\
+    \ builder.toString();\n    }\n\n    public static boolean is_full () {\n     \
+    \   boolean full = true;\n        for (int r = 0; r < board.length; r++) {\n \
+    \           for (int c = 0; c < board[r].length; c++) {\n                if (board[r][c]\
+    \ != ' ') {\n                    full = false;\n                    break;\n \
+    \               }\n            }\n            if (full) {\n                break;\n\
+    \            }\n        }\n        return full;\n    }\n\n    public static boolean\
+    \ is_game_over () {\n        return !is_full() && (board[0][0] == 'X' || board[0][1]\
+    \ == 'X' || board[0][2] == 'X')\n                && (board[1][0] == 'X' || board[1][1]\
+    \ == 'X' || board[1][2] == 'X')\n                && (board[2][0] == 'X' || board[2][1]\
+    \ == 'X' || board[2][2] == 'X')\n                && (board[0][0] == 'O' || board[0][1]\
+    \ == 'O' || board[0][2] == 'O')\n                && (board[1][0] == 'O' || board[1][1]\
+    \ == 'O' || board[1][2] == 'O')\n                && (board[2][0] == 'O' || board[2][1]\
+    \ == 'O' || board[2][2] == 'O');\n    }\n\n    public static void main (String[]\
+    \ args) {", "  $opened_parens = 0;\n  $levels = [0];\n  foreach (explode(' ',\
+    \ $paren_string) as $item) {\n    if ($item == '(') {\n      $opened_parens++;\n\
+    \    } else if ($item == ')') {\n      if ($opened_parens > 0) {\n        $opened_parens--;\n\
+    \        $levels[] = $levels[count($levels) - 1];\n      }\n    }\n  }\n  return\
+    \ count($levels);\n}\n</code>\nFor your example data, this gives you an output\
+    \ of [1, 0, 1, 2]\n<|/ a |>\n<| a tags=string,algorithm,php,parsing |>\nI think\
+    \ my solution should work\n<code>\n<?php\n\nclass Stack {\n    private $items\
+    \ = array();\n    public function push($item) {\n        $this->items[] = $item;\n\
+    \    }\n\n    public function pop() {\n        return array_pop($this->items);\n\
+    \    }\n\n    public function getItems() {\n        return $this->items;\n   \
+    \ }\n}\n", "  $paren_string = preg_replace('/\\s+/', ' ', $paren_string);\n  $paren_string\
+    \ = preg_replace('/[()]/', '', $paren_string);\n  $paren_string = preg_replace('/([()])/',\
+    \ '\\\\1 ', $paren_string);\n  return preg_split('/\\s+/', $paren_string);\n}\n",
+  "    $levels = array();\n    $paren_stack = array();\n    $open_stack = array();\n\
+    \n    foreach (explode(' ', $paren_string) as $paren) {\n        if ($paren ===\
+    \ '') {\n            continue;\n        }\n\n        if ($paren[0] === '(') {\n\
+    \            array_push($open_stack, $paren);\n        } else {\n            array_push($paren_stack,\
+    \ $paren);\n        }\n\n        if ($paren[0] === '(') {\n            $levels[]\
+    \ = count($paren_stack);\n        } else {\n            if (in_array($paren, $open_stack))\
+    \ {\n                $levels[] = $levels[count($paren_stack) - 1];\n         \
+    \   }\n        }\n    }\n\n    return $levels;\n}\n</code>\nThe code can be found\
+    \ here: http://php.net/manual/en/function.parse-nested-parens.php\n<|/ a dscore=2\
+    \ tags=php,parentheses |>\n<| a |>\nYou could just use regex:\n<code>\npreg_match_all(\"\
+    /\\([^()]*\\)/\", $str, $matches);\n</code>\n<|/ a dscore=2 tags=php,parentheses\
+    \ |>\n<| c |>\nThis should be the accepted answer as it has much more info about\
+    \ how the regex works.\n<|/ c |>\n<| a tags=php,parentheses |>\nThis can be done\
+    \ using a simple regex. \n<code>\n$str = \"(((()))))(((())))\";\n$re = '/\\s*\\\
+    (([^\\(\\)]*)\\)/';\npreg_match_all($re, $str, $matches);\nprint_r($matches);\n\
+    </code>\nThis prints \n<code>\nArray\n(\n    [0] => Array\n        (\n       \
+    \     [0] => ((()))))(((()))\n            [1] => ((()))\n        )\n\n    [1]\
+    \ => Array\n        (\n            [0] => ((()))\n            [1] => ((()))\n\
+    \        )\n\n)\n</code>\n<|/ a dscore=2 |>\n<| a |>\nA simple recursive function\
+    \ can do this for you.\n<code>", "  $level = 0;\n  $paren_string = trim($paren_string);\n\
+    \  $level_counts = array();\n  $result = array();\n  do {\n    $level_counts[$level]++;\n\
+    \    $level++;\n    if ($level_count > $level) {\n      continue;\n    }\n   \
+    \ if ($paren_string === '()') {\n      $result[$level] = 1;\n      continue;\n\
+    \    }\n    if ($paren_string[0] === '(') {\n      if ($level_count > 0) {\n \
+    \       continue;\n      }\n      $paren_string = substr($paren_string, 1);\n\
+    \      continue;\n    }\n    if ($level_count > 0) {\n      $result[$level] =\
+    \ $level_counts[$level - 1];\n      continue;\n    }\n    if ($paren_string[strlen($paren_string)\
+    \ - 1] === ')') {\n      if ($level_count > 0) {\n        continue;\n      }\n\
+    \      $paren_string = substr($paren_string, 0, -1);\n      continue;\n    }\n\
+    \    if ($level_count === 0) {\n      $result[$level] = strlen($paren_string);\n\
+    \      continue;\n    }\n    if ($paren_string[0] === ')') {\n      $result[$level]\
+    \ = strlen($paren_string);\n      continue;\n    }\n    $paren_string = substr($paren_string,\
+    \ 1);\n  } while ($paren_string);\n  return $result;\n}\n</code>\n<|/ a tags=regex,php,parsing\
+    \ |>\n<| c |>\nAwesome! Works great. Though I added some minor changes to make\
+    \ it compatible with PHP 7.1, since `filter_var` has been deprecated since PHP\
+    \ 5.3 and so we need to use `filter_var($var, $var)` instead.\n<|/ c |>\n<| a\
+    \ dscore=4 |>\nI know this is a late answer, but hopefully it will help someone\
+    \ someday.\nI recently needed a regex-based parser that could parse a mathematical\
+    \ expression and return the values for each variable. The expression can be written\
+    \ using infix notation, and parentheses can be used to denote precedence. There\
+    \ are many ways to write an expression, and this algorithm handles most of them.\n\
+    <code>\npublic function parseExpression($expression) {\n    $expression = trim($expression);\n\
+    \    $expression = preg_replace('/\\s+/', '', $expression);\n    $expression =\
+    \ preg_replace('/[^0-9.-]+/', '', $expression);\n    $expression = preg_replace('/[-+*/=|,]/',\
+    \ '', $expression);\n    $expression = preg_replace('/[-+*/=|,]/', '', $expression);\n\
+    \    $expression = preg_replace('/[-+*/=|,]/', '', $expression);\n    $expression\
+    \ = preg_replace('/[-+", "    $paren_array = preg_split('/\\s+/s', $paren_string);\n\
+    \    $max_depth = -1;\n    foreach ($paren_array as $level_array){\n        $level\
+    \ = count($level_array);\n        if ($level > $max_depth){\n            $max_depth\
+    \ = $level;\n        }\n    }\n\n    return $max_depth;\n}\n", "    // Parse the\
+    \ input and save all parenthesis groups into a stack\n    $stack = array();\n\
+    \    foreach(explode(' ', $paren_string) as $token) {\n        if($token == ')')\
+    \ {\n            $opened_group = false;\n            $close_group = false;\n \
+    \       } else {\n            $opened_group = true;\n            $close_group\
+    \ = true;\n        }\n\n        // If token is opened, push it into the stack\n\
+    \        if($opened_group) {\n            $stack[] = $token;\n        } else {\n\
+    \            $open_token = false;\n\n            // If there is a left parenthesis\
+    \ opened, pop the top element and save it as open token\n            if(count($stack)\
+    \ > 0) {\n                $open_token = $stack[count($stack) - 1];\n         \
+    \       array_pop($stack);\n            }\n\n            // If the stack is empty,\
+    \ we are at closing parenthesis\n            if(!$stack) {\n                $open_token\
+    \ = $token;\n                $close_group = true;\n            }\n\n         \
+    \   // If there are still left parenthesis opened, the stack is not empty and\
+    \ we are at closing parenthesis\n            if(count($stack) > 0) {\n       \
+    \         $close_token = $stack[count($stack) - 1];\n                array_pop($stack);\n\
+    \            }\n        }\n\n        // If open token is not empty and close token\
+    \ is not, we found a nested parenthesis\n        if($open_token != '' && $close_token\
+    \ != '') {\n            // We found an opening parenthesis\n            if(!$open_token)\
+    \ {\n                // This means that open parenthesis was an end parenthesis,\
+    \ therefore we can output the level of nesting\n                $nested_level\
+    \ = count($stack);\n            } else {\n                // We found a closing\
+    \ parenthesis, we can output the level of nesting\n                $nested_level\
+    \ = count($stack);\n            }\n\n            // Return nested level\n    \
+    \        return $nested_level;\n        }\n    }\n}\n</code>\nAnd here's a code\
+    \ sample for the above function which uses it to get the maximal level of nesting.\n\
+    <code>\n<?php", "    // Remove non-nested parentheses.\n    $paren_string = preg_replace('/^\\\
+    ((.*)\\)$/', '', $paren_string);\n    // Split the string by spaces to create\
+    \ a list of nested parentheses.\n    $nested_parens = explode(' ', $paren_string);\n\
+    \    // Find the deepest level of nesting.\n    $max_level = 0;\n    $i = count($nested_parens)\
+    \ - 1;\n    while($i >= 0) {\n        // Find the next nested parenthesis level.\n\
+    \        $level_of_nesting = $nested_parens[$i];\n        $i++;\n        while($nested_parens[$i]\
+    \ == $level_of_nesting) {\n            $i--;\n        }\n        // If it is deeper\
+    \ than the current max, update max level and current nesting level.\n        if($i\
+    \ >= 0) {\n            $max_level = max($max_level, $i);\n        }\n    }\n \
+    \   return $max_level;\n}\n", "  $nested_levels = 0;\n  $return_value = [];\n\
+    \  for ($i = 0; $i < strlen($paren_string); $i++) {\n    if ($paren_string[$i]\
+    \ == '(') {\n      $nested_levels++;\n    } else if ($paren_string[$i] == ')')\
+    \ {\n      $nested_levels--;\n      if ($nested_levels == 0) {\n        $return_value[]\
+    \ = $i + 1;\n      }\n    }\n  }\n  return $return_value;\n}", "  $nested_paren_levels\
+    \ = [];\n  $nested_paren_count = 0;\n  $paren_stack = [];\n  $paren_stack_count\
+    \ = 0;\n  foreach (str_split($paren_string) as $char) {\n    switch ($char) {\n\
+    \    case \")\":\n      // End of the nesting level\n      if ($paren_stack_count\
+    \ === 0) {\n        $nested_paren_count--;\n        if ($nested_paren_count ===\
+    \ 0) {\n          $nested_paren_levels[] = $nested_paren_count;\n        }\n \
+    \     }\n      break;\n    case \"(\":\n      // Start of nesting level\n    \
+    \  if ($nested_paren_count > 0) {\n        $nested_paren_count++;\n      }\n \
+    \     // New nesting level\n      if ($paren_stack_count === 0) {\n        $nested_paren_count++;\n\
+    \        $nested_paren_levels[] = $nested_paren_count;\n      }\n      // Increment\
+    \ the nesting level\n      elseif ($nested_paren_count > $nested_paren_levels[$paren_stack_count])\
+    \ {\n        $nested_paren_count++;\n      }\n      break;\n    }\n    if ($nested_paren_count\
+    \ > 0 && $nested_paren_count < $nested_paren_levels[$paren_stack_count]) {\n \
+    \     $paren_stack_count++;\n    }\n    if ($nested_paren_count === $nested_paren_levels[$paren_stack_count])\
+    \ {\n      if ($paren_stack_count > 0) {\n        $paren_stack_count--;\n    \
+    \  }\n    }\n  }\n  return $nested_paren_levels;\n}\n", "  $paren_stacks = explode('\
+    \ ', $paren_string);\n  $max_level_of_nesting = 0;\n  foreach ($paren_stacks as\
+    \ $paren_stack) {\n    $paren_stack = trim($paren_stack);\n    if ($paren_stack\
+    \ == '(' || $paren_stack == '(') {\n      $max_level_of_nesting++;\n    } else\
+    \ if ($paren_stack == '(') {\n      $max_level_of_nesting--;\n    }\n    if ($max_level_of_nesting\
+    \ == 0) {\n      break;\n    }\n  }\n  return count($paren_stacks);\n}\n", " \
+    \ $levels = array_count_values(str_split($paren_string));\n  $max_level = 0;\n\
+    \  $deepest_level = 0;\n\n  foreach ($levels as $level => $count) {\n    if ($count\
+    \ > $max_level) {\n      $max_level = $count;\n      $deepest_level = $level;\n\
+    \    }\n  }\n\n  return $deepest_level;\n}\n\n/**\n * Returns true if the given\
+    \ string represents a valid IPv4 address.\n *\n * @return bool\n */", "    $paren_counts\
+    \ = array();\n    $parens_open = array();\n    $parens_close = array();\n    $paren_levels\
+    \ = array();\n    $paren_level = 0;\n    $in_parens = false;\n    $stack = array();\n\
+    \    $open_counts = 0;\n\n    foreach (explode(\" \", $paren_string) as $part)\
+    \ {\n        if ($part === '(') {\n            $parens_open[$paren_level] = true;\n\
+    \            $paren_counts[$paren_level] = $open_counts;\n            $paren_levels[$paren_level]\
+    \ = $paren_level;\n            $stack[] = $part;\n            $in_parens = true;\n\
+    \            $open_counts = 1;\n        } elseif ($part === ')') {\n         \
+    \   $open_counts = $open_counts - 1;\n            $paren_counts[$paren_level]\
+    \ = $open_counts;\n            $paren_level = $paren_levels[$paren_level];\n \
+    \           $parens_close[$paren_level] = true;\n            $stack[] = $part;\n\
+    \            $in_parens = $parens_open[$paren_level];\n        } elseif ($in_parens)\
+    \ {\n            $stack[] = $part;\n        }\n    }\n\n    return $paren_counts;\n\
+    }", "  preg_match_all('(\\([^\\)]*\\))', $paren_string, $matches);\n  return count($matches[0]);\n\
+    }\n", "  $levels = [0];\n  $tokens = preg_split('/\\((?>[^()]+|(?R))*\\)/', $paren_string);\n\
+    \  foreach ($tokens as $token) {\n    if ($token == '()') {\n      array_pop($levels);\n\
+    \    } else {\n      $levels[] = count($levels);\n    }\n  }\n  return $levels;\n\
+    }\n</code>\n<|/ a dscore=1 tags=parentheses,string,php,regex |>\n<| c |>\nYour\
+    \ code will fail on `(((())))` which is invalid for my code. Your code will fail\
+    \ on `((()((())))` which is also invalid for my code. Your code will fail on `((())))`\
+    \ which is also invalid for my code. I guess I'll stick to my original answer.\
+    \ Thanks for your effort!\n<|/ c |>\n<| c |>\nThe `(((())))` example is invalid.\
+    \ My code will fail on any number of nested parentheses greater than 1.\n<|/ c\
+    \ |>\n<| c |>\nI guess I forgot to mention that my code is supposed to support\
+    \ nested parentheses up to a max of 5. The code will also fail if `((()))` which\
+    \ is invalid for my code.\n<|/ c |>\n<| a tags=parentheses,string,php,regex |>\n\
+    I've implemented a solution using Regular Expressions (regex) instead of parsing\
+    \ nested parenthesis recursively. Regexes are more flexible than parsing nested\
+    \ parenthesis recursively.\n<code>\n$paren_string = '(())(())()()()()((())((()))';\n\
+    $paren_string = '((()(((())))))(((()))))(((()))())((()()()((()(())))()()()()()((())))(((()))())';\n\
+    $paren_string = '((()(((())))))(((()))))(((()))())((()()()((()(())))()()()()()((()))(((()))())';\n\
+    $paren_string = '((()))(((()))((()))()(((())))(((())))((()(())))(((())))()()()()((()(())))()()()()()(((()))()()';\n\
+    \nprint_r(paren_string_to_array($paren_string));\n</code>\nOutput:\n<code>\nArray\n\
+    (\n    [0] => Array\n        (\n            [0] => ()\n            [1] => ()\n\
+    \            [2] => ()\n            [3] => ()\n            [4] => ()\n       \
+    \     [5] => ()\n        )\n\n    [1] => Array\n        (\n            [0] =>\
+    \ ()\n            [1] => ()\n            [2] => ()\n", "  $paren_stack = [];\n\
+    \  $num_open = 0;\n  $num_close = 0;\n  foreach (explode(' ', $paren_string) as\
+    \ $char) {\n    if ($char === '(') {\n      if ($num_open === 0) {\n        ++$num_open;\n\
+    \      } else if ($num_open > $num_close) {\n        ++$num_close;\n      }\n\
+    \    }\n    if ($char === ')') {\n      if ($num_open > 0) {\n        ++$num_close;\n\
+    \      }\n    }\n    if ($num_open === 0) {\n      $paren_stack[] = $num_close;\n\
+    \    }\n    if ($num_close === 0) {\n      $num_open = end($paren_stack);\n  \
+    \  }\n  }\n  return $paren_stack;\n}\n", "    $paren_string = trim($paren_string);\n\
+    \    $nested_levels = array();\n    $paren_string_length = strlen($paren_string);\n\
+    \    for ($i = 0; $i < $paren_string_length; $i++) {\n        if (isset($nested_levels[$i]))\
+    \ {\n            $nested_levels[$i]++;\n        } else {\n            $nested_levels[$i]\
+    \ = 1;\n        }\n    }\n    return $nested_levels;\n}\n", "    // This regex\
+    \ parses nested parentheses.\n    // The outer parentheses are the outer most\
+    \ parentheses\n    // The inner parentheses are all parenthesized groups of inner\
+    \ parentheses\n    // They are separated by spaces.\n    // Inner parentheses\
+    \ that are not the start of a new parentheses\n    // are ignored\n    // The\
+    \ inner parentheses that have the same number of opening and\n    // closing parentheses\
+    \ is deepest level of nesting\n    $pattern = '#(?:\\((?=\\()|(?=\\))|(?<=\\()|(?<=\\\
+    )))*#';\n    $paren_string = preg_replace($pattern, '', $paren_string);\n    $nested_paren\
+    \ = preg_split('#\\s+#', $paren_string);\n    $paren_level = count($nested_paren)\
+    \ - 1;\n    $nested_paren_res = array();\n\n    for ($i = 0; $i < $paren_level;\
+    \ $i++) {\n        $nested_paren_res[] = $paren_level - $i;\n    }\n\n    return\
+    \ $nested_paren_res;\n}\n", "  // Parse the parenthesis string\n  $paren_string\
+    \ = trim($paren_string);\n  $paren_pairs = preg_split('/(\\([^()]*\\))/', $paren_string);\n\
+    \  // Iterate through the parenthesis pairs\n  $level = 0;\n  $nested_level =\
+    \ 0;\n  $paren_level = 0;\n  $paren_start = 0;\n  $nested_parens = 0;\n  foreach($paren_pairs\
+    \ as $pair) {\n    if (trim($pair) === '') {\n      // Skip the empty parentheses\
+    \ pair\n      continue;\n    }\n    // Find the opening parentheses and increment\
+    \ the paren level\n    if (preg_match('/^\\((?=\\()/', $pair)) {\n      $paren_level++;\n\
+    \      if ($level === 0) {\n        $paren_start = $paren_level;\n      }\n  \
+    \  }\n    // Find the closing parentheses and decrement the paren level\n    if\
+    \ (preg_match('/^\\)(?=\\()/', $pair)) {\n      $paren_level--;\n    }\n    //\
+    \ Skip the pair if it contains any unmatched parentheses pairs.\n    if ($paren_level\
+    \ < 0) {\n      continue;\n    }\n    // Check if the pair is balanced\n    if\
+    \ (preg_match('/^\\))(?=\\()/', $pair)) {\n      // This parentheses is balanced,\
+    \ so increase the nested level\n      $nested_level++;\n      // If the parenthesis\
+    \ level is greater than the deepest level, update the deepest level\n      if\
+    \ ($nested_level > $level) {\n        $level = $nested_level;\n      }\n    }\
+    \ else {\n      // This parentheses is not balanced, so decrease the nested level\n\
+    \      $nested_level--;\n    }\n    // This parentheses is balanced, so increase\
+    \ the level\n    $level++;\n  }\n  return $level;\n}\n</code>\n<|/ a tags=php,regex\
+    \ |>\n<| c |>\nI like this solution. It doesn't require me to change the input\
+    \ data, and it only needs to run once per page load.\n<|/ c |>\n<| a dscore=3\
+    \ |>\nI used the answer from-roger, but modified it a bit. I needed it to find\
+    \ parentheses in strings that are broken up with newlines, instead of just a single\
+    \ string per line.\nMy solution was to split up the text into blocks of parentheses,\
+    \ and loop through those, looking for parentheses. When a match is found, I increment\
+    \ the level of nesting for the last block of parentheses. When no more matches\
+    \ are found, I output the level of nesting. My solution doesn't output the deepest\
+    \ level until it has processed all parentheses in the string, so it could take\
+    \ an arbitrarily long string. Here is my code:\n<code>", "  $parens = explode('\
+    \ ', $paren_string);\n  $levels = array_fill(0, count($parens), 0);\n  for ($i\
+    \ = 0; $i < count($parens); ++$i) {\n    $depth = preg_match_all('/\\(/', $parens[$i])[0];\n\
+    \    for ($j = $depth; $j > 0; --$j) {\n      ++$levels[$j];\n    }\n  }\n  return\
+    \ $levels;\n}\n", "  // Initialize our result array with the deepest level of\
+    \ nesting.\n  $max_level_of_nesting = 0;\n\n  // Iterate through each of the groups\
+    \ in the input.\n  foreach (explode(' ', $paren_string) as $group) {\n    // Check\
+    \ how many open parentheses we have in the group.\n    $open_parens_count = substr_count($group,\
+    \ '(');\n    // If it's more than the deepest level of nesting, update the result\
+    \ array.\n    if ($open_parens_count > $max_level_of_nesting) {\n      $max_level_of_nesting\
+    \ = $open_parens_count;\n    }\n  }\n\n  // Return the array of deepest level\
+    \ of nesting.\n  return $max_level_of_nesting;\n}\n</code>\n<|/ a tags=java,parsing,parentheses,algorithm\
+    \ dscore=2 |>\n<| a |>\nYou can do it in O(n) time using two stacks, one for nested\
+    \ parentheses and one for \"normal parentheses.\n<code>\npublic static int countParenthesesLevel(int\
+    \ n) {\n    Stack<Integer> stack = new Stack<Integer>();\n    Stack<Integer> stack2\
+    \ = new Stack<Integer>();\n\n    stack.push(n);\n    stack2.push(n);\n    \n \
+    \   while(!stack.isEmpty()) {\n        int i = stack.pop();\n        while(!stack2.isEmpty()\
+    \ && stack2.peek() > i) {\n            stack2.pop();\n        }\n        \n  \
+    \      while(!stack2.isEmpty() && stack2.peek() <= i) {\n            stack2.pop();\n\
+    \        }\n\n        if(i == 0) return stack2.peek();\n        \n        stack2.push(i-1);\n\
+    \        stack.push(stack2.peek());\n    }\n    \n    return -1;\n}\n</code>\n\
+    <|/ a dscore=2 tags=java,parsing,parentheses,algorithm |>\n<| a dscore=1 tags=java,parsing,parentheses,algorithm\
+    \ |>\nI assume you are not supposed to use recursive calls (like with depth-first\
+    \ search).\nIf you are not allowed to use regexes, you still have some options.\
+    \ For example, a naive approach would be to iterate the string char by char and\
+    \ count matching parentheses.\nHere is an example in Java that would probably\
+    \ work:\n<code>\npublic static int countParenthesisLevels(String s) {\n    int\
+    \ levels = 0;\n    int start = 0;\n    boolean open = true;\n    for(int i = 0;\
+    \ i < s.length(); i++) {\n        if(s.charAt(i) == '(') open = true;\n      \
+    \  if(s.charAt(i) == ')') {\n            open = false;\n            levels++;\n\
+    \        }\n        if(open) {\n            start = i;\n        }\n    }\n   \
+    \ return levels;\n}\n</code>\n<|/ a |>\n<|", "  $paren_count = array();\n  $paren_level\
+    \ = 0;\n  $paren_stack = array();\n  $paren_string = str_replace(' ', '', $paren_string);\n\
+    \n  for ($i = 0; $i < strlen($paren_string); ++$i) {\n    switch ($paren_string[$i])\
+    \ {\n      case '(':\n        ++$paren_level;\n        $paren_stack[$paren_level]\
+    \ = $i;\n        break;\n\n      case ')':\n        --$paren_level;\n        if\
+    \ ($paren_level < 1) {\n          // If we had an odd number of levels of nesting,\
+    \ then we'd have run out of chars.\n          $paren_count[$paren_level] = $i\
+    \ + 1;\n          continue 2;\n        }\n        // In case of an odd number\
+    \ of levels, just output the last char.\n        $depth = $paren_level;\n    \
+    \    while (--$depth > 0) {\n          $paren_count[$depth] = $paren_count[$depth\
+    \ - 1];\n        }\n        break;\n    }\n  }\n\n  return $paren_count;\n}\n\
+    </code>\n<|/ a tags=regex,parentheses,php |>\n<| c |>\nThanks for the response,\
+    \ but you misunderstood my question: I already had a function that counted nested\
+    \ parentheses.\n<|/ c |>\n<| a dscore=2 |>\nI've got this function, I used it\
+    \ to count parentheses:\n<code>\n/**\n* Count number of parentheses in a string\n\
+    *\n* string $str\n* int\n*/", "    $paren_stack = array();\n    $open_parens =\
+    \ 0;\n    $nested_level = 0;\n    $nested_parentheses = '';\n    for ($i = 0;\
+    \ $i < strlen($paren_string); $i++) {\n        $char = $paren_string[$i];\n  \
+    \      switch ($char) {\n            case '(':\n                $paren_stack[$nested_level]\
+    \ = 1;\n                $nested_level++;\n                $nested_parentheses\
+    \ .= $char;\n                break;\n\n            case ')':\n               \
+    \ if (!empty($paren_stack[$nested_level - 1])) {\n                    $paren_stack[$nested_level]\
+    \ = 1;\n                    $nested_level--;\n                    $nested_parentheses\
+    \ .= $char;\n                }\n                break;\n\n            default:\n\
+    \                if ($open_parens > 0) {\n                    $nested_parentheses\
+    \ .= $char;\n                } else {\n                    $nested_parentheses\
+    \ .= $char;\n                }\n        }\n    }\n\n    return $nested_level;\n\
+    }\n\n/**\n * Recursively convert an expression to its HALT equivalent.\n * E.g.\
+    \ \"A + B * C + D\" -> \"A + (B * C + D)\"\n *\n * @param string $expression\n\
+    \ * @return string\n */", "    $paren_count = 0;\n    $nested_levels = array();\n\
+    \    $tokens = token_get_all(trim($paren_string));\n    foreach ($tokens as $i\
+    \ => $token) {\n        $value = $tokens[$i];\n        if (is_string($value))\
+    \ {\n            continue;\n        }\n        if (in_array($value, array('(',\
+    \ '{', '[', '('))) {\n            $paren_count++;\n        }\n        if (is_array($value))\
+    \ {\n            list($nested_levels[$paren_count]) = array_merge($nested_levels[$paren_count],\
+    \ array_map('intval', $value));\n            $paren_count += array_sum($value);\n\
+    \        } else {\n            $nested_levels[$paren_count]++;\n        }\n  \
+    \  }\n    return $nested_levels;\n}\n", "    $levels = array_map(function ($char)\
+    \ {\n            return !preg_match('/^([()]|.)+$/', $char) ? 1 : 0;\n       \
+    \ }, explode(' ', $paren_string));\n    asort($levels);\n    return array_pop($levels);\n\
+    }\n", "    $parens_counter = array();\n    $parens_counter[0] = 0;\n    $parens_counter[1]\
+    \ = 0;\n    $parens_counter[2] = 0;\n    $parens_counter[3] = 0;\n    $parens_counter[4]\
+    \ = 0;\n    $parens_counter[5] = 0;\n    $parens_counter[6] = 0;\n    $parens_counter[7]\
+    \ = 0;\n    $parens_counter[8] = 0;\n    $parens_counter[9] = 0;\n    $parens_counter[10]\
+    \ = 0;\n    $parens_counter[11] = 0;\n    $parens_counter[12] = 0;\n    $parens_counter[13]\
+    \ = 0;\n    $parens_counter[14] = 0;\n    $parens_counter[15] = 0;\n    $parens_counter[16]\
+    \ = 0;\n    $parens_counter[17] = 0;\n    $parens_counter[18] = 0;\n    $parens_counter[19]\
+    \ = 0;\n    $parens_counter[20] = 0;\n    $parens_counter[21] = 0;\n    $parens_counter[22]\
+    \ = 0;\n    $parens_counter[23] = 0;\n    $parens_counter[24] = 0;\n    $parens_counter[25]\
+    \ = 0;\n    $parens_counter[26] = 0;\n    $parens_counter[27] = 0;\n    $parens_counter[28]\
+    \ = 0;\n    $parens_counter[29] = 0;\n    $parens_counter[30] = 0;\n    $parens_counter[31]\
+    \ = 0;\n    $parens_counter[32] = 0;\n    $parens_counter[33] = 0;\n    $parens_counter[34]\
+    \ = 0;\n    $parens_counter[35] = 0;\n    $parens_counter[36] = 0;\n    $parens_counter[37]\
+    \ = 0;\n    $parens_counter[38] = 0;\n    $parens_counter[39] = 0;\n    $parens_counter[40]\
+    \ = 0;\n    $parens_counter[41] = 0;\n    $parens_counter[42] = 0;\n    $parens_counter[43]\
+    \ = 0;\n    $parens_counter[44] = 0;\n    $parens_counter[45] = 0;\n    $parens_counter[46]\
+    \ = 0;\n    $parens_counter[47] = 0;\n    $parens_counter[48] = 0;\n    $parens_counter[49]\
+    \ = 0;\n    $parens_counter[50] = 0;\n    $parens_counter[51] = 0;\n    $parens_counter[52]\
+    \ = 0;\n    $parens_counter[53] = 0;\n    $parens_counter[54] = 0;\n    $parens_counter[55]\
+    \ = 0;\n    $parens_counter[56] = 0;\n    $parens_counter[57] = 0;\n    $parens_counter[58]\
+    \ = 0;\n    $parens_counter[59] = 0;\n    $parens_counter[60] = 0;\n    $parens_counter[61]\
+    \ = 0;\n    $parens_counter[62] = 0;\n    $parens_counter[63] = 0;\n    $parens_counter",
+  "\t$level = 0;\n\t$paren_string = preg_replace('/\\s*\\(([^()]+)\\)/', ' \\1 ',\
+    \ $paren_string);\n\t$nested_paren_subpattern = '#\\(([^()]+)\\)#';\n\t$nested_paren_pattern\
+    \ = '#\\(\\s*([^\\(\\)]*)\\s*\\)#';\n\t$nested_paren_parens_subpattern = '#\\\
+    (([^()]+)\\)\\s*\\(([^()]+)\\)\\s*\\(([^()]+)\\)\\s*\\(([^()]+)\\)\\s*\\(([^()]+)\\\
+    )\\s*\\(([^()]+)\\)\\s*\\(([^()]+)\\)\\s*\\(([^()]+)\\)#';\n\n\t$paren_string\
+    \ = preg_replace($nested_paren_subpattern, '#\\1 #', $paren_string);\n\t$paren_string\
+    \ = preg_replace($nested_paren_pattern, '(\\1) (\\2) (\\3) (\\4) (\\5) (\\6) (\\\
+    7) (\\8) (\\9) ', $paren_string);\n\t$paren_string = preg_replace($nested_paren_parens_subpattern,\
+    \ '(\\1 \\2 \\3 \\4 \\5 \\6 \\7 \\8 \\9)', $paren_string);\n\n\t$paren_string\
+    \ = preg_replace('/\\s+/', ' ', $paren_string);\n\t$paren_string = trim($paren_string);\n\
+    \t$paren_string = preg_replace('/ (\\()/', ' ', trim($paren_string));\n\t$paren_string\
+    \ = preg_replace('/ (\\))/', ' ', trim($paren_string));\n\n\t$paren_string = preg_replace('/\
+    \ (\\()(\\()/', ' ', trim($paren_string));\n\t$paren_string = preg_replace('/\
+    \ (\\)(\\))/', ' ', trim($paren_string));\n\n\t$nested_paren_subpattern = '#\\\
+    (([^()]+)\\)\\s*\\(([^()]+)\\)#';\n\t$nested_paren_pattern = '#\\(\\s*([^\\(\\\
+    )]*)\\s*\\)\\s*\\(\\s*([^\\(\\)]*)\\s*\\)#';\n\t$nested_paren_parens_subpattern\
+    \ = '#\\(([^()]+)\\)\\s*\\(([^()]+)\\)\\s*\\(([^()]+)\\)\\s*\\(([^()]+)\\)\\s*\\\
+    (([^()]+)\\)\\s*\\(([^()]+)\\)\\s*\\(([^()]+)\\)\\s*\\(([^()]+)\\)#';\n\n\t$paren_string\
+    \ = preg_replace($nested_paren_subpattern, '\\2 \\1', $paren_string);\n\t$paren_string\
+    \ = preg_", "    $groups = preg_split('/\\s+/U', $paren_string);\n    $output_length\
+    \ = 0;\n    foreach ($groups as $group) {\n        $group = trim($group);\n  \
+    \      // Ignore extra spaces before or after parens\n        if ($group[0] ==\
+    \ ' ' || $group[$group-1] == ' ') {\n            continue;\n        }\n      \
+    \  $output_length++;\n    }\n    return $output_length;\n}\n", "\t$nested_levels\
+    \ = array();\n\t$paren_count = 0;\n\t$bracket_count = 0;\n\t$paren_counter = 0;\n\
+    \t$i = 0;\n\t$opened_parens = 0;\n\n\tfor ($j = $i; $j < strlen($paren_string);\
+    \ $j++) {\n\t\t$char = substr($paren_string, $j, 1);\n\t\t$bracket_count++;\n\t\
+    \tif ($char == '(') {\n\t\t\t$paren_counter++;\n\t\t\t$opened_parens++;\n\t\t\
+    } elseif ($char == ')') {\n\t\t\t$paren_counter--;\n\t\t\t$opened_parens--;\n\t\
+    \t}\n\t\tif ($opened_parens > 0) {\n\t\t\tif ($opened_parens == $bracket_count)\
+    \ {\n\t\t\t\t$nested_levels[] = $paren_counter;\n\t\t\t}\n\t\t\tif ($opened_parens\
+    \ > $bracket_count) {\n\t\t\t\t$nested_levels[] = $paren_counter;\n\t\t\t}\n\t\
+    \t}\n\t}\n\treturn $nested_levels;\n}", "    $paren_string = preg_replace('/\\\
+    s+/', ' ', $paren_string);\n    // This regex is adapted from http://stackoverflow.com/a/12118603/1014050.\n\
+    \    preg_match_all('/\\((.+?)\\)/', $paren_string, $matches);\n    $levels =\
+    \ count($matches[0]);\n    $level = 0;\n    $nested = 0;\n    foreach ($matches[0]\
+    \ as $match) {\n        if ($match == '(') {\n            $nested += 1;\n    \
+    \    } else if ($match == ')') {\n            $nested -= 1;\n        }\n     \
+    \   if ($nested < $levels) {\n            $level = $nested;\n        }\n    }\n\
+    \    return $levels;\n}", "    $groups = explode(\" \", $paren_string);\n    $max_depth\
+    \ = 0;\n    $max_level = 0;\n    foreach ($groups as $group) {\n        if (count($group)\
+    \ > $max_level) {\n            $max_depth = count($group);\n            $max_level\
+    \ = $max_level;\n        }\n    }\n    $depth = $max_depth;\n    $level = $max_level;\n\
+    \    while ($level > 0) {\n        --$level;\n        $depth += $level;\n    \
+    \    if ($level == 0) return $depth;\n    }\n}\n</code>\n<|/ a |>\n<| c |>\nYes,\
+    \ it is very cool and exactly what I need. Just one note - I used `eval` to run\
+    \ the code and it works fine but it is deprecated. And also, since my data is\
+    \ already in array, I just need to count the number of open parentheses - I think\
+    \ it is much more efficient to use `count()` than `eval()`\n<|/ c |>\n<| c |>\n\
+    `eval()` is deprecated in PHP 5.3 and is going to be removed in PHP 5.4 as of\
+    \ now (March 2017). You can safely use `count()` because `count()` can handle\
+    \ strings as well as arrays. Also, `eval()` is used here because `eval` is not\
+    \ recommended for production environments.\n<|/ c |>\n<| c |>\nThis is not my\
+    \ question, but thanks for the info about `eval()`. I did not know that. Still\
+    \ I do not understand why should I use `eval` here rather than `count()` - I already\
+    \ have the array and I am not using it in any way.\n<|/ c |>\n<| c |>\nBecause\
+    \ `count()` is much faster than `eval`.\n<|/ c |>\n<| c |>\nI am not arguing about\
+    \ speed of counting or eval. I am more interested why should I use `eval()` here\
+    \ rather than `count()`. I just have this array and I am not using it in any way.\n\
+    <|/ c |>\n<| a tags=php,string,arrays,nested dscore=0 |>\nYou could do it with\
+    \ a regex to parse the string into parentheses groups and then count the number\
+    \ of parentheses groups. \n<code>", "  $depth = 0;\n  $pos = 0;\n  $groups = [[]];\n\
+    \  while (true) {\n    $opening_paren = $paren_string[$pos]; // Look for opening\
+    \ paren\n    if ($opening_paren == '(') {\n      $depth += 1;\n    } else if ($opening_paren\
+    \ == ')') {\n      $depth -= 1;\n      if ($depth == 0) {\n        // Found the\
+    \ deepest paren. Return the groups found.\n        return $groups;\n      }\n\
+    \    } else if ($opening_paren == '[') {\n      // Find matching closing paren\n\
+    \      $pos = $paren_string[++$pos];\n      if ($pos == '[') {\n        $pos +=\
+    \ 1;\n      } else if ($pos == '(') {\n        $pos += 1;\n      }\n    } else\
+    \ {\n      return -1;\n    }\n    if ($pos == $paren_string) {\n      return -1;\n\
+    \    }\n    $groups[$depth][] = $pos; // Push opening paren position to groups\
+    \ array\n  }\n}\n", "    $parens = str_replace(array('(', ')'), '', $paren_string);\n\
+    \    $levels = array();\n    $level = 0;\n    for ($i = 0; $i < strlen($parens);\
+    \ $i++) {\n        if ($parens[$i] == '(') {\n            $levels[] = $level;\n\
+    \            $level++;\n        } else if ($parens[$i] == ')') {\n           \
+    \ $levels[] = $level;\n            $level--;\n        }\n    }\n    return $levels;\n\
+    }\n", "    $paren_count = count($paren_string);\n    $nested_levels = array();\n\
+    \    for ($i = 0; $i < $paren_count; $i++) {\n        $char = $paren_string[$i];\n\
+    \        if ($char === '(') {\n            $nested_levels[$i] = 0;\n        }\n\
+    \        if ($char === ')') {\n            $nested_levels[$i] -= 1;\n        }\n\
+    \    }\n    return $nested_levels;\n}\n", "  // This function is a little too\
+    \ clever for my taste.\n  // It does not handle escaped spaces and it does not\
+    \ handle unbalanced parentheses well\n  $max_depth = 0;\n  $depth = 0;\n  $paren_depth\
+    \ = array();\n  $paren_stack = array();\n  $nesting_levels = array();\n  for ($i\
+    \ = 0; $i < strlen($paren_string); $i++) {\n    $char = $paren_string[$i];\n \
+    \   if ($char === '(') {\n      $paren_stack[$depth]++;\n      $depth++;\n   \
+    \   if ($depth >= $max_depth) {\n        $nesting_levels[$depth] = $paren_stack[$depth];\n\
+    \        $max_depth = $depth;\n      }\n    } else if ($char === ')') {\n    \
+    \  $paren_stack[$depth]--;\n      $depth--;\n      if ($depth < 0) {\n       \
+    \ throw new \\Exception('Too many closing parentheses');\n      }\n      if ($paren_stack[$depth]\
+    \ > 0) {\n        throw new \\Exception('Unbalanced parentheses');\n      }\n\
+    \    } else if ($char === ' ' && $depth > 0) {\n      $nesting_levels[$depth]++;\n\
+    \      $depth--;\n    }\n  }\n  return $nesting_levels;\n}\n", "  // Store the\
+    \ depth of parentheses.\n  $nested_depth = 0; // Current depth of nested parentheses.\n\
+    \n  // Store the index of first closing parenthesis.\n  // We can assume that\
+    \ there is only one closing parenthesis.\n  $close_paren_index = -1;\n\n  // Keep\
+    \ track of whether we found a closing parenthesis.\n  $found_close_paren = false;\n\
+    \n  // Keep track of the last character in a string so that we can backtrack to\n\
+    \  // it after a closing parenthesis is encountered.\n  $last_char_index = 0;\n\
+    \n  // Iterate over all the groups of parentheses in the string.\n  foreach (preg_split('/[\\\
+    (\\)]/', $paren_string) as $paren_group) {\n    // If we don't find a close parenthesis,\
+    \ increment the depth of nested\n    // parentheses.\n    if (!$found_close_paren)\
+    \ {\n      $nested_depth += 1;\n    }\n\n    // If we found a close parenthesis,\
+    \ decrement the depth of nested parentheses.\n    if ($found_close_paren) {\n\
+    \      $nested_depth -= 1;\n    }\n\n    // If there is an unbalanced amount of\
+    \ nested parentheses, backtrack\n    // to the last character that was not a close\
+    \ parenthesis.\n    if ($nested_depth < 0) {\n      $close_paren_index = $last_char_index;\n\
+    \    }\n\n    // If we found a close parenthesis, set the flag to true, and reset\
+    \ the index.\n    if ($found_close_paren) {\n      $found_close_paren = false;\n\
+    \      $close_paren_index = -1;\n    }\n\n    // If the current character is parenthesis,\
+    \ increment the index.\n    if ($paren_group[0] === '(') {\n      $close_paren_index\
+    \ += 1;\n    }\n\n    // If the current character is parenthesis, decrement the\
+    \ index.\n    if ($paren_group[0] !== ')') {\n      $close_paren_index -= 1;\n\
+    \    }\n\n    // If the index is out of bounds, backtrack to the last char index.\n\
+    \    if ($close_paren_index < 0) {\n      $close_paren_index = $last_char_index;\n\
+    \    }\n\n    // If the current character is not parenthesis, output the deepest\
+    \ depth\n    // of nested parentheses.\n    if ($close_paren_index > $close_paren_index\
+    \ + 1) {\n      echo str_repeat('*', abs($nested_depth));\n    }\n\n    // Reset\
+    \ the last char index.\n    $last_char_index = $close_paren_index;\n  }\n\n  //\
+    \ Output the deepest level of nested parentheses.\n  echo str_repeat('*', abs($nested_depth));\n\
+    }\n</code>\nFor those who prefer a one-liner:\n<code>\n$nested_depth = substr_count(preg_replace('/\\\
+    \\(|\\\\)/', '', $paren_string), '()');\n</code>\nOr even shorter:\n<code>\n",
+  "    $paren_count = count(preg_split('/\\s+/', $paren_string));\n    $result = [];\n\
+    \    $current_nesting = 1;\n    $current_nesting_level = 0;\n    for ($i = 0;\
+    \ $i < $paren_count; $i++) {\n        $char = trim($paren_string[$i]);\n     \
+    \   if ($char == '(') {\n            $current_nesting++;\n            if ($current_nesting\
+    \ == $current_nesting_level) {\n                $result[] = $current_nesting_level;\n\
+    \            } else {\n                $current_nesting_level++;\n           \
+    \ }\n        } elseif ($char == ')') {\n            $current_nesting--;\n    \
+    \    }\n    }\n    return $result;\n}\n", "  // Get all parentheses in the string.\n\
+    \  $parens = preg_split(\"/(\\(.+\\))/\", $paren_string);\n  // Find max level\
+    \ of nesting.\n  $max_depth = 0;\n  foreach ($parens as $paren) {\n    // Remove\
+    \ nested parentheses first.\n    $paren = str_replace('()', '', $paren);\n   \
+    \ if ($paren) {\n      $paren_depth = substr_count($paren, '()');\n      if ($paren_depth\
+    \ > $max_depth) {\n        $max_depth = $paren_depth;\n      }\n    }\n  }\n \
+    \ return $max_depth;\n}", "  $paren_string = str_replace(array('(', ')', ' '),\
+    \ ' ', $paren_string);\n  $paren_array = explode(' ', $paren_string);\n  $result\
+    \ = [];\n\n  foreach ($paren_array as $group) {\n    foreach (preg_split('/(\\\
+    ((?>[^()]*+\\))+|\\(|\\))+/', $group) as $nested_group) {\n      $current_level\
+    \ = 0;\n      while ($nested_group !== '') {\n        if ($nested_group == '(')\
+    \ $current_level++;\n        else if ($nested_group == ')') $current_level--;\n\
+    \n        if ($current_level < 0) {\n          // The parentheses aren't balanced;\
+    \ this paren level should be closed immediately without creating a new level\n\
+    \          $result[] = $current_level;\n          break;\n        }\n\n      \
+    \  $nested_group = trim(str_replace(array('(', ')', ' '), ' ', $nested_group));\n\
+    \      }\n    }\n  }\n\n  return $result;\n}\n</code>\n<|/ a dscore=1 |>\n<| a\
+    \ dscore=0 |>\n<code>", "  if (empty($paren_string)) {\n    return 0;\n  }\n\n\
+    \  $level = 0;\n  $nested_level = 0;\n  $parens_level = array();\n  $parens_levels[]\
+    \ = $level;\n\n  $parens = preg_match_all('/\\(/', $paren_string, $paren_matches);\n\
+    \  for ($i = 0; $i < $parens; $i++) {\n    $open_bracket = substr($paren_string,\
+    \ $i, 1);\n    $close_bracket = substr($paren_string, $paren_matches[$i][0] +\
+    \ 2, 1);\n\n    // Remove parentheses from string.\n    $paren_string = preg_replace('/'.$open_bracket.'\\\
+    )/', '', $paren_string);\n    $paren_string = preg_replace('/'.$close_bracket.'\\\
+    )/', '', $paren_string);\n\n    // Check if the parentheses level is less than\
+    \ the current level.\n    // If it is, set the new level as the deepest level.\n\
+    \    if ($open_bracket == $close_bracket) {\n      $parens_levels[] = $level +\
+    \ 1;\n      $level++;\n      $nested_level = $level;\n    } else {\n      // If\
+    \ the parentheses level is greater than the current level, set the new level as\
+    \ the deepest level.\n      if ($level > 0) {\n        $parens_levels[] = $level\
+    \ + 1;\n        $level++;\n        $nested_level = $level;\n      }\n    }\n \
+    \ }\n\n  // If nested level is greater than the length of the array, increase\
+    \ it.\n  if ($level > $nested_level) {\n    $nested_level = $level;\n  }\n\n \
+    \ // Return array with deepest level of parentheses.\n  return $nested_level;\n\
+    }\n", "    $depth = 0;\n    $paren_stack = [];\n    $nested_level = 0;\n    for\
+    \ ($i = 0; $i < strlen($paren_string); ++$i) {\n        $c = $paren_string[$i];\n\
+    \        if ($c == '(') {\n            $paren_stack[] = $depth;\n            $depth++;\n\
+    \        }\n        if ($c == ')') {\n            do {\n                if ($paren_stack[$nested_level])\
+    \ {\n                    $paren_stack[$nested_level]--;\n                }\n \
+    \               if ($paren_stack[$nested_level] == 0) {\n                    $nested_level--;\n\
+    \                }\n                if ($nested_level < 0) {\n               \
+    \     return false;\n                }\n            } while ($nested_level > 0);\n\
+    \            $depth = $paren_stack[$nested_level];\n        }\n        if ($c\
+    \ == '(') {\n            ++$nested_level;\n        }\n        if ($c == ')') {\n\
+    \            if ($nested_level == 0) {\n                return false;\n      \
+    \      }\n            ++$nested_level;\n        }\n    }\n    return $depth;\n\
+    }\n\n$input = [\n    '(()()) (((()()))) ((((()))) (((()()))((()())))',\n    '((()))((()((())())))((()))((()((())())))((())())((()))()()()',\n\
+    \    '((((()))))((()())())((())())((()))((()((())())))(()())()()'\n];\n$output\
+    \ = [\n    4,\n    8,\n    10\n];\nfor ($i = 0; $i < 3; ++$i) {\n    echo \"Case\
+    \ #\" . $i . \": \" . implode(\" + \", array_map(function ($j) use ($output) {\n\
+    \        return $output[$j];\n    }, array_fill(0, $output[0], 0))) . \"\\n\"\
+    ;\n}\n\n$groups = parse_nested_parens('(()()) ((())) () ((())()())');\n$expected_groups\
+    \ = [2, 3, 1, 3];\nassert($groups === $expected_groups);\n\n$groups = parse_nested_parens('((()))((()((())())))((()))((()((())())))((())())((()))()()()');\n\
+    $expected_groups = [3, 4, 4, 4];\nassert($groups === $expected_groups);\n\n$groups\
+    \ = parse_nested_parens('((((()))))((()())())((())())((()))((()((())())))(()())()()');\n\
+    $expected_groups = [4, 8, 4, 8, 4, 10];\nassert($groups === $expected_groups);\n",
+  "  $nested_levels = array();\n  // If parentheses contains only spaces, return empty\
+    \ array as there is nothing to be nested.\n  if (preg_match('/^\\s*$/', $paren_string))\
+    \ {\n    return $nested_levels;\n  }\n  // For each set of parentheses separated\
+    \ by spaces, start from the back.\n  for ($i = strlen($paren_string) - 1, $parens\
+    \ = ''; $i >= 0; $i--) {\n    $paren_char = $paren_string[$i];\n    // Parentheses\
+    \ enclosed by '(' and ')' have nesting level of at least 1.\n    // Otherwise,\
+    \ parentheses have no nesting level.\n    if (($paren_char == '(') || ($paren_char\
+    \ == ')')) {\n      if ($paren_level = $paren_levels[$parens]) {\n        $nested_levels[$paren_level]++;\n\
+    \      } else {\n        $nested_levels[$paren_level] = 1;\n      }\n    }\n \
+    \   // Non-parentheses characters do not have nesting level.\n    else {\n   \
+    \   $nested_levels[$paren_level] = -1;\n    }\n    $parens = $paren_char;\n  }\n\
+    \  return $nested_levels;\n}", "  // If there are no nested parentheses, return\
+    \ the string as is.\n  if (strlen($paren_string) == 0) {\n    return [];\n  }\n\
+    \n  // Create a map of the character used to count parentheses.\n  $paren_counter\
+    \ = array_fill(0, strlen($paren_string), '0');\n\n  // Start counting parentheses.\n\
+    \  for ($i = 0, $len = strlen($paren_string); $i < $len; ++$i) {\n    // Increment\
+    \ the map of parentheses by the character in parentheses.\n    $paren_counter[$paren_string[$i]]\
+    \ += 1;\n  }\n\n  // Start counting spaces.\n  for ($i = 0, $len = strlen($paren_string);\
+    \ $i < $len; ++$i) {\n    if ($paren_counter[$paren_string[$i]] > 1) {\n     \
+    \ // A space is an additional level of nesting.\n      ++$paren_counter[$paren_string[$i]];\n\
+    \    }\n  }\n\n  // Return an array of deepest level of nesting.\n  return array_keys($paren_counter);\n\
+    }\n", "    $depth = 0;\n    $parentheses = array();\n    foreach (explode(' ',\
+    \ $paren_string) as $token) {\n        if ($token === '(') {\n            if ($depth\
+    \ === 0) {\n                $depth++;\n            } else {\n                $depth--;\n\
+    \            }\n        } elseif ($token === ')') {\n            if ($depth ===\
+    \ 0) {\n                $depth++;\n            } else {\n                $depth--;\n\
+    \            }\n        } else {\n            $parentheses[] = $depth;\n     \
+    \   }\n    }\n\n    return $parentheses;\n}\n", "  $nested_paren_depth = array();\n\
+    \n  $paren_string = preg_replace('/\\s/', '', $paren_string);\n  $paren_string\
+    \ = trim($paren_string);\n\n  $opening_paren_pos = 0;\n  $opening_paren_level\
+    \ = 0;\n  $opening_paren_len = strlen($paren_string);\n  for ($i = 0; $i < $opening_paren_len;\
+    \ $i++) {\n    if ($paren_string[$i] == ')') {\n      $nested_paren_depth[$opening_paren_level]\
+    \ = $opening_paren_pos + $i - $opening_paren_len;\n      $opening_paren_level--;\n\
+    \    } else if ($paren_string[$i] == '(') {\n      $nested_paren_depth[$opening_paren_level]\
+    \ = $opening_paren_pos + $i - $opening_paren_len;\n      $opening_paren_level++;\n\
+    \    }\n  }\n\n  if ($opening_paren_level == 0) {\n    return array();\n  }\n\n\
+    \  return $nested_paren_depth;\n}\n\n$nested_parens_depth = parse_nested_parens('(()())\
+    \ ((())) () ((())()())');\n$nested_parens_depth", "  $level = 0;\n  $max_level\
+    \ = 0;\n  $paren_strings = explode(' ', $paren_string);\n  foreach ($paren_strings\
+    \ as $paren_string) {\n    $paren_string = trim($paren_string);\n    if ($paren_string\
+    \ != '') {\n      $level++;\n      if ($level > $max_level) {\n        $max_level\
+    \ = $level;\n      }\n    }\n  }\n  return $max_level;\n}\n</code>\n<|/ a tags=php,codeigniter,preg-match\
+    \ |>\n<| c |>\nWorks perfect! Thank you!\n<|/ c |>\n<| a dscore=0 tags=php,codeigniter,preg-match\
+    \ |>\nUse this function\n<code>\npublic function levels($string)\n{\n    $parenthesized_string\
+    \ = $this->remove_outer_parentheses($string);\n    $parenthesized_string_array\
+    \ = explode(' ', $parenthesized_string);\n    $level = 0;\n    foreach ($parenthesized_string_array\
+    \ as $level_string)\n    {\n        $level++;\n    }\n    return $level;\n}\n\
+    </code>\nUse this function to remove all outer parentheses from your string\n\
+    <code>\npublic function remove_outer_parentheses($string)\n{\n    $pattern = '/\\\
+    (|\\)/';\n    $replacement = '';\n    $string = preg_replace($pattern, $replacement,\
+    \ $string);\n    return $string;\n}\n</code>\n<|/ a |>\n<| c |>\nThat works too,\
+    \ but I need to use something more specific. I need something that can recognize\
+    \ the parenthesis inside parenthesis.\n<|/ c |>\n<| a dscore=0 |>\nI think this\
+    \ is the easiest way:\n<code>", "  $paren_string = preg_replace('/\\)[^\\(\\)]*$/',\
+    \ ') ', $paren_string);\n  // Convert () to (), ()() to (), and () to () to ()()\n\
+    \  $paren_string = preg_replace('/[^()]+/', '()', $paren_string);\n  // Split\
+    \ string on space and remove duplicates\n  $paren_string = preg_split('/ /', $paren_string);\n\
+    \  // Remove empty elements\n  array_walk($paren_string, create_function('&$val',\
+    \ '$val = trim($val);'));\n  array_walk($paren_string, create_function('&$val',\
+    \ '$val = strlen($val) > 0;'));\n  // Get the maximum of nesting level\n  $max_level\
+    \ = max(array_map('strlen', $paren_string));\n  $paren_string = array_map('trim',\
+    \ $paren_string);\n  $paren_string = array_filter($paren_string);\n  return $max_level;\n\
+    }\n", "    // The algorithm follows these steps:\n    // - Create an array $stack\
+    \ of all parentheses groups. Initialize it to an empty array.\n    // - Parse\
+    \ the string to create a nested group of parentheses groups $stack.\n    // -\
+    \ While there are nested groups:\n    //     - If the number of groups inside\
+    \ this nested group is greater than the deepest level so far,\n    //       change\
+    \ the deepest level to the number of groups inside this nested group.\n    //\
+    \     - Pop the top group from the stack $stack.\n    //     - If the current\
+    \ group is empty, output the deepest level of nesting of parentheses.\n    //\
+    \     - Else, output the deepest level of nesting of parentheses.\n    $stack\
+    \ = array();\n    $stack[] = array();\n    foreach (preg_split('/(\\([^\\(\\)]*\\\
+    ))/U', $paren_string, -1, PREG_SPLIT_NO_EMPTY) as $paren_string) {\n        if\
+    \ ($paren_string[0] == '(') {\n            $stack[] = array();\n        }\n  \
+    \      $groups = preg_split('/(\\([^\\(\\)]*\\))/U', $paren_string, -1, PREG_SPLIT_NO_EMPTY);\n\
+    \        $max_depth = 1;\n        foreach ($groups as $group) {\n            if\
+    \ (empty($group)) {\n                continue;\n            }\n            $count\
+    \ = substr_count($group, '(');\n            if ($count > $max_depth) {\n     \
+    \           $max_depth = $count;\n            }\n            $stack[count($stack)\
+    \ - 1][] = $group;\n        }\n    }\n    $max_depth = 0;\n    foreach ($stack\
+    \ as $group) {\n        $count = substr_count($group[1], '(');\n        if ($count\
+    \ > $max_depth) {\n            $max_depth = $count;\n        }\n    }\n    return\
+    \ $max_depth;\n}\n</code>\n<|/ a dscore=0 |>\n<| a |>\nHere's a recursive function\
+    \ based solution that handles nested parentheses.  \n<code>", "    $paren_string\
+    \ = preg_replace('/\\s+/', '', $paren_string); // remove extra whitespace\n  \
+    \  $parsing_level = 0;\n    $paren_nesting = 0;\n    $output = [];\n    $prev_token\
+    \ = [];\n    $char_index = 0;\n\n    while ($char_index < strlen($paren_string))\
+    \ {\n        // If we're inside an open paren group\n        if (preg_match('/(\\\
+    (|\\[)/', $paren_string[$char_index], $matches)) {\n            $parsing_level++;\n\
+    \        }\n\n        // If we're inside an close paren group\n        if (preg_match('/(\\\
+    )|\\])/', $paren_string[$char_index], $matches)) {\n            $parsing_level--;\n\
+    \        }\n\n        // If we're inside a single open paren group\n        if\
+    \ (preg_match('/\\(()/', $paren_string[$char_index], $matches)) {\n          \
+    \  $paren_nesting++;\n        }\n\n        // If we're inside a single close paren\
+    \ group\n        if (preg_match('/\\))/', $paren_string[$char_index], $matches))\
+    \ {\n            $paren_nesting--;\n        }\n\n        // If the current paren\
+    \ group is deeper\n        if ($parsing_level >= $paren_nesting) {\n         \
+    \   // Then add to the output array\n            $output[] = $parsing_level;\n\
+    \        }\n\n        // Keep track of the previous token so we know where to\
+    \ put nested parens in the output\n        if ($parsing_level > $prev_token) {\n\
+    \            $prev_token = $parsing_level;\n        }\n\n        // Keep track\
+    \ of where to move on the string so we don't parse the same thing twice\n    \
+    \    $char_index++;\n    }\n\n    return $output;\n}\n", "    $paren_count = count($paren_string);\n\
+    \    if ($paren_count == 0) return [];\n\n    // This variable holds the maximum\
+    \ level of nesting.\n    // If it is 0 when this function is called for the first\
+    \ time\n    // then this level does not have any parentheses.\n    $max_level\
+    \ = 0;\n\n    // This array will hold all encountered levels.\n    // The index\
+    \ key is the level number, and the value is the array consists of one element\
+    \ - the level.\n    $levels = [];\n\n    // This array will hold the count of\
+    \ each level\n    $level_count_by_level = [];\n\n    // This array will hold all\
+    \ the level counts\n    // The index key is the level number, and the value is\
+    \ the count of parentheses in it.\n    $level_count_by_level_with_parens = [];\n\
+    \n    // This variable will hold a character in the paren_string that indicates\
+    \ that the level is complete.\n    // The index key is the level number, and the\
+    \ value is the count of parentheses in it.\n    $level_complete_by_level = [];\n\
+    \n    // Iterate through each character\n    for ($i = 0; $i < $paren_count; $i++)\
+    \ {\n        $paren_char = $paren_string[$i];\n\n        // Get level count of\
+    \ the paren_char\n        $level_count = substr_count($paren_char, '(') - substr_count($paren_char,\
+    \ ')');\n\n        // Check if the level of parentheses is complete\n        if\
+    \ (isset($level_complete_by_level[$level_count])) {\n            $level_count++;\n\
+    \        }\n\n        // Get the level count with level of parentheses\n     \
+    \   $level_count_with_parens = $level_count + (isset($level_complete_by_level[$level_count])\
+    \ ? 1 : 0);\n\n        // If the level is complete\n        if ($level_count ==\
+    \ 0) {\n            $level_complete_by_level[$level_count] = $level_count_with_parens;\n\
+    \        }\n\n        // If not complete\n        else {\n            $level_complete_by_level[$level_count]\
+    \ = $level_complete_by_level[$level_count] + $level_count_with_parens;\n     \
+    \   }\n\n        // If the level is higher than the maximum level recorded\n \
+    \       // then update the maximum level recorded\n        if ($level_count >\
+    \ $max_level) {\n            $max_level = $level_count;\n        }\n\n       \
+    \ // If level is lower than 0\n        if ($level_count < 0) {\n            $level_count\
+    \ = 0;\n        }\n\n        // Record the level count\n        $level_count_by_level[$level_count]\
+    \ = $level_count_with_parens;\n\n        // If the level does not have a parent\n\
+    \        // then add it to the empty array with the level count of parentheses\n\
+    \        if (!isset($levels[$level_count])) {\n            $levels[$level_count]\
+    \ = [];\n            $level_count_by_level_with_parens[$level_count] = 0;\n  \
+    \      }\n\n", "  $opening_counts = array();\n  for ($i = 0; $i < strlen($paren_string);\
+    \ $i++) {\n    if ($paren_string[$i] == ' ') {\n      $opening_counts[$i]++;\n\
+    \    } else {\n      $opening_counts[$i] = 0;\n    }\n  }\n  $highest_nesting\
+    \ = 0;\n  for ($i = 0; $i < strlen($paren_string); $i++) {\n    if ($paren_string[$i]\
+    \ == ' ') {\n      if ($opening_counts[$i]) {\n        $highest_nesting = $i;\n\
+    \      }\n      $opening_counts[$i]++;\n    } else {\n      $opening_counts[$i]\
+    \ = 0;\n    }\n  }\n  return $highest_nesting;\n}\n", "    $depths = array_fill(0,\
+    \ $paren_string, 0);\n    $open_parens = 0;\n    $open_deep = 0;\n\n    for ($i\
+    \ = 0; $i < strlen($paren_string); $i++) {\n        $c = $paren_string[$i];\n\
+    \        if ($c == '(') {\n            $open_parens++;\n            $depths[$i]\
+    \ += 1;\n            $open_deep = $depths[$i];\n        } else if ($c == ')')\
+    \ {\n            $depths[$i] -= 1;\n            if ($depths[$i] < 0) {\n     \
+    \           return -1;\n            }\n            $open_deep = $depths[$i];\n\
+    \        } else if ($c == '(') {\n            $depths[$i] += 1;\n        } else\
+    \ if ($c == ')') {\n            $depths[$i] -= 1;\n            if ($depths[$i]\
+    \ < 0) {\n                return -1;\n            }\n        }\n    }\n\n    return\
+    \ $open_deep;\n}\n", "    // Split parenthesized substrings into an array\n  \
+    \  $parens = preg_split('/\\s*\\(([^()]+)\\)/', $paren_string);\n    // Iterate\
+    \ through the array and get all levels of parentheses\n    $nested_levels = array();\n\
+    \    foreach($parens as $paren) {\n        $paren_levels = 1;\n        $paren_len\
+    \ = strlen($paren);\n        $last_paren = array_pop($parens);\n        while($paren_levels\
+    \ < $paren_len) {\n            if($parens[$paren_levels] == $last_paren) $paren_levels++;\n\
+    \            else $paren_levels++;\n        }\n        array_push($nested_levels,\
+    \ $paren_levels);\n    }\n    // Return the deepest level of parentheses as an\
+    \ array\n    return $nested_levels;\n}\n", "    $level = 0;\n    $nesting = [];\n\
+    \    $pos = 0;\n    $len = strlen($paren_string);\n    while ($pos < $len) {\n\
+    \        $char = substr($paren_string, $pos, 1);\n        $pos++;\n        switch\
+    \ ($char) {\n            case ')':\n                if ($level === 0) {\n    \
+    \                $nesting[$level] = $level;\n                    $level--;\n \
+    \               } elseif ($level > 0) {\n                    $nesting[$level]++;\n\
+    \                    $level--;\n                } else {\n                   \
+    \ $nesting[$level] = $level;\n                    $level--;\n                }\n\
+    \                break;\n            case '(':\n                if ($level ===\
+    \ 0) {\n                    $nesting[$level] = $level;\n                    $level++;\n\
+    \                } elseif ($level > 0) {\n                    $nesting[$level]++;\n\
+    \                    $level++;\n                } else {\n                   \
+    \ $nesting[$level] = $level;\n                    $level++;\n                }\n\
+    \                break;\n        }\n    }\n    $nesting_depth = array_search($level,\
+    \ $nesting);\n    return $nesting_depth;\n}\n", "    $paren_stack = [];\n    $paren_level\
+    \ = 0;\n    $paren_groups = explode(\" \", $paren_string);\n    foreach ($paren_groups\
+    \ as $paren_group) {\n        switch ($paren_group) {\n            case ')':\n\
+    \                if ($paren_stack[$paren_level + 1]) {\n                    ++$paren_level;\n\
+    \                }\n                else {\n                    return [];\n \
+    \               }\n                break;\n            case ')(':\n          \
+    \      ++$paren_level;\n                break;\n            case '(':\n      \
+    \          if ($paren_stack[$paren_level]) {\n                    --$paren_level;\n\
+    \                }\n                else {\n                    return [];\n \
+    \               }\n                break;\n            case '(':\n           \
+    \     if ($paren_stack[$paren_level]) {\n                    $paren_stack[$paren_level]\
+    \ = $paren_group;\n                }\n                else {\n               \
+    \     $paren_stack[$paren_level] = $paren_group;\n                    ++$paren_level;\n\
+    \                }\n                break;\n            default:\n           \
+    \     if ($paren_stack[$paren_level + 1]) {\n                    $paren_stack[$paren_level\
+    \ + 1] = $paren_group;\n                }\n                else {\n          \
+    \          return [];\n                }\n                break;\n        }\n\
+    \    }\n    return $paren_stack;\n}\n", "  $levels = array(0);\n  $groups = explode('\
+    \ ', $paren_string);\n  foreach ($groups as $group) {\n    $levels[count($levels)\
+    \ - 1] += substr_count($group, '(') - substr_count($group, ')');\n  }\n  return\
+    \ array_pop($levels);\n}\n", "    // Store the deepest level of nesting for each\
+    \ group of parentheses\n    $max_levels = array();\n    // Get the index of the\
+    \ first group which has nesting greater than zero\n    foreach (explode(' ', $paren_string)\
+    \ as $index => $group) {\n        $max_levels[$index] = 0;\n    }\n    $max_level\
+    \ = 0;\n    $index = 0;\n    // Move through the string, and for each group of\
+    \ parentheses,\n    // update its level of nesting.\n    // When it exceeds the\
+    \ max level of nesting, remove the corresponding parentheses\n    while (true)\
+    \ {\n        $level = 0;\n        foreach (explode(' ', $paren_string) as $index\
+    \ => $group) {\n            if ($index != $index) {\n                // Move to\
+    \ the next group which has nesting greater than zero.\n                $current_level\
+    \ = 0;\n                for ($j = index; $j < count($group); $j++) {\n       \
+    \             $current_level += preg_match('(^|[^()])('.$group[$j].')([^()]|$)',\
+    \ $paren_string, $matches) ? strlen($matches[1]) + strlen($matches[3]) : 1;\n\
+    \                }\n                $level += $current_level;\n            }\n\
+    \            $max_levels[$index] = max($max_levels[$index], $level);\n       \
+    \ }\n        if ($max_levels[$index] == 0) break;\n        $index++;\n    }\n\
+    \    return $max_level;\n}\n", "  $level = 0;\n  $paren_string = str_replace(array('(',\
+    \ ')'), array('', '), $paren_string);\n  $parts = preg_split('/(\\((?!\\?)))/',\
+    \ $paren_string);\n  $max_level = max(array_map('count', $parts));\n  foreach\
+    \ ($parts as $part) {\n    if ($part == '(') {\n      ++$level;\n    } else {\n\
+    \      --$level;\n    }\n    if ($level > $max_level) {\n      return $max_level;\n\
+    \    }\n  }\n  return $max_level;\n}\n", "    $nested_parens_level = array();\n\
+    \    $paren_string_explode = explode(' ', $paren_string);\n    $paren_string_explode_length\
+    \ = count($paren_string_explode);\n    for ($i = 0; $i < $paren_string_explode_length;\
+    \ $i++) {\n        $paren_string_explode[$i] = trim($paren_string_explode[$i]);\n\
+    \        if ($paren_string_explode[$i] !== '()') {\n            $nested_parens_level[$i]\
+    \ = $paren_string_explode[$i];\n        }\n    }\n    for ($i = 0; $i < $paren_string_explode_length;\
+    \ $i++) {\n        $paren_string_explode[$i] = trim($paren_string_explode[$i]);\n\
+    \        if ($paren_string_explode[$i] === '()') {\n            $nested_parens_level[$i]\
+    \ = $paren_string_explode[$i];\n        }\n    }\n    return $nested_parens_level;\n\
+    }\n", "  $max_depth = 1;\n  $nesting_level = 0;\n  $paren_array = array();\n \
+    \ while ($paren_string) {\n    if ($paren_string[0] == \"(\") {\n      $paren_array[]\
+    \ = array_shift($paren_string);\n    }\n    elseif ($paren_string[0] == \")\"\
+    ) {\n      $nesting_level--;\n      $paren_array[] = array_shift($paren_string);\n\
+    \    }\n    else {\n      $nesting_level++;\n      $paren_array[] = $paren_string;\n\
+    \    }\n    if ($nesting_level > $max_depth) {\n      $max_depth = $nesting_level;\n\
+    \    }\n  }\n  return $max_depth;\n}\n</code>\n<|/ a tags=php,parentheses,string\
+    \ |>\n<| a |>\nThis is simple and clean:\n<code>\n<?php\n\n$str = '(( A ))  ((\
+    \ A ))  (( A ))';\n$arr = explode('  ', $str);\n$i = 0;\n$n = count($arr);\n$str\
+    \ = '';\n\nfor ($j = 0; $j < $n; $j++) {\n  $str .= $arr[$j];\n  $str .= '  ';\n\
+    \  for ($j = ($j + 1) % $n; $j >= 0; $j--) {\n    $str .= '(' . $arr[$j] . ')';\n\
+    \  }\n  $str .= \"  \";\n}\n\necho $str;\n</code>\n<|/ a tags=php,parentheses,string\
+    \ dscore=3 |>\n<| c |>\nI like this solution the best because it is easy to read\
+    \ and easy to understand. Thanks!\n<|/ c |>\n<| a dscore=3 |>\n<code>\n<?php\n\
+    \n$string = '(( A ))  (( A ))  (( A ))';\n$array = explode('  ', $string);\n\n\
+    $i = 0;\n$n = count($array);\n$string = '';\n\nfor ($j = 0; $j < $n; $j++) {\n\
+    \    $string .= $array[$j];\n    $string .= '  ';\n    for ($j = ($j + 1) % $n;\
+    \ $j >= 0; $j--) {\n        $string .= '(' . $array[$j] . ')';\n    }\n    $string\
+    \ .= \"  \";\n}\n\necho $string;\n</code>\n<|/ a tags=php,parentheses,string |>\n\
+    <| c |>\nThis answer was already given. Thanks anyways. :)\n<|/ c |>\n<| c |>\n\
+    He did this just before his answer.\n<|/ c |>\n<| c |>\nYes but I ", "    $nested_levels\
+    \ = array();\n    $nested_levels[] = 0;\n    $paren_stack = array();\n    $paren_count\
+    \ = 0;\n    $depth = 0;\n\n    for ($i = 0; $i < strlen($paren_string); $i++)\
+    \ {\n        // Get a character from the string.\n        $char = $paren_string{$i};\n\
+    \n        // Handle the current character.\n        if ($char === '(') {\n   \
+    \         // Increment the depth.\n            $depth++;\n\n            // Add\
+    \ the current paren_count to nested_levels.\n            $nested_levels[] = $paren_count;\n\
+    \n            // Add a new paren_count to the paren_stack.\n            $paren_stack[$depth]\
+    \ = $paren_count;\n        } else if ($char === ')') {\n            // Decrement\
+    \ the depth.\n            $depth--;\n\n            // Add the current paren_count\
+    \ to the paren_stack.\n            $paren_count = $paren_stack[$depth];\n\n  \
+    \          // If the depth is 0, remove it and continue to the next char.\n  \
+    \          if ($depth === 0) {\n                unset($paren_stack[$depth]);\n\
+    \                continue;\n            }\n        } else if ($char === ' ' ||\
+    \ $char === \"\\t\" || $char === \"\\n\") {\n            // Do nothing.\n    \
+    \    } else {\n            // Get the number of nested parentheses for the current\
+    \ level.\n            $nested_levels[$depth] = max($nested_levels[$depth], $paren_count);\n\
+    \n            // Do nothing.\n        }\n    }\n\n    // Return the array containing\
+    \ all the levels of nesting.\n    return $nested_levels;\n}\n", "\t$levels = array();\n\
+    \n\t// Count parentheses.\n\tfor ($i = 0; $i < strlen($paren_string); $i++) {\n\
+    \t\tif ($paren_string[$i] == '(') {\n\t\t\t$levels[] = $levels[count($levels)-1]\
+    \ + 1;\n\t\t}\n\t\tif ($paren_string[$i] == ')') {\n\t\t\t$levels[] = $levels[count($levels)-1];\n\
+    \t\t}\n\t}\n\n\treturn array_pop($levels);\n}\n", "\t$paren_count = array_count_values(str_split($paren_string));\n\
+    \t$level_count = array_count_values(array_keys($paren_count));\n\n\treturn $level_count\
+    \ + array_sum($paren_count);\n}\n\n/**\n * Check if a string is a valid hex color\
+    \ value.\n *\n * @param string $hex\n *\n * @return boolean\n */", "  // Return\
+    \ empty array if string has no parentheses.\n  if (!strpos($paren_string, '('))\
+    \ return [];\n\n  $max_level = 0;\n  $output_levels = [];\n  $output_levels_array\
+    \ = [];\n  $paren_start_pos = 0;\n  $paren_start_level = 0;\n  $level = 0;\n \
+    \ $pos = 0;\n\n  $len = strlen($paren_string);\n  for ($i = 0; $i < $len; ++$i)\
+    \ {\n    $paren_level = 0;\n    if ($paren_string[$i] == ')') {\n      $paren_level\
+    \ = 1;\n    }\n    if ($paren_string[$i] == ' ') {\n      $paren_level = 2;\n\
+    \    }\n    if ($paren_level > $level) {\n      $level = $paren_level;\n     \
+    \ $output_levels[$pos] = $level;\n    }\n    if ($paren_level < $level) {\n  \
+    \    $level = $paren_level;\n      $output_levels_array[$pos] = $level;\n    }\n\
+    \    $paren_start_pos = $i;\n    $paren_start_level = $level;\n    if ($paren_level\
+    \ > $max_level) {\n      $max_level = $paren_level;\n    }\n  }\n\n  // Output\
+    \ the deepest level of nesting if there are no parentheses.\n  if (!$max_level)\
+    \ {\n    return $output_levels_array;\n  }\n\n  // If there are no spaces between\
+    \ the parentheses, output the deepest level of nesting.\n  if (strpos($paren_string,\
+    \ ' ') == false) {\n    return $output_levels_array;\n  }\n\n  // Output the deepest\
+    \ level of nesting.\n  $max_level = $max_level - 1;\n  $output_levels_array[$pos]\
+    \ = $max_level;\n\n  for ($i = 0; $i < $len; ++$i) {\n    if ($paren_string[$i]\
+    \ == ')') {\n      if ($paren_string[$i + 1] == ')') {\n        array_push($output_levels_array,\
+    \ count($output_levels_array) - 1);\n      }\n    }\n  }\n\n  // Remove duplicates.\n\
+    \  $output_levels_array = array_values($output_levels_array);\n\n  // Output all\
+    \ the levels.\n  for ($i = 0; $i < count($output_levels_array); ++$i) {\n    //\
+    \ If $i is not equal to 0, remove the element that has $i in it's key\n    if\
+    \ ($i != 0) {\n      unset($output_levels_array[$i]);\n    }\n  }\n\n  return\
+    \ $output_levels_array;\n}\n\n/**\n * Recursively checks if $sub_path is a nested\
+    \ subpath of $parent.\n *\n * @param string $parent The parent path.\n * @param\
+    \ string $sub_path The subpath to test.\n", "  if (!strlen($paren_string)) {\n\
+    \    return array();\n  }\n  $parentheses_pairs = explode(\" \", $paren_string);\n\
+    \  $levels = array();\n  $stack = array();\n  $level = 0;\n  foreach ($parentheses_pairs\
+    \ as $pair) {\n    // If this pair is a nested pair of parentheses, create a nested\
+    \ pair element and push to stack.\n    if (strpos($pair, \"(\") !== false && strpos($pair,\
+    \ \")\") !== false) {\n      $stack[$level] = array(\"(\" . $pair);\n      $level\
+    \ = $level + 1;\n    }\n    // If this pair is not nested pair of parentheses,\
+    \ pop levels until you find matching pairs.\n    while (!empty($stack)) {\n  \
+    \    $top = array_pop($stack);\n      if ($pair == $top) {\n        // If the\
+    \ pair is a matched pair of parentheses, remove it from the stack.\n        $level--;\n\
+    \        if (0 == $level) {\n          array_push($levels, $level);\n        \
+    \  break;\n        }\n        $stack[] = $top;\n      }\n    }\n  }\n  return\
+    \ $levels;\n}\n", "  if (strpos($paren_string, '()') === false) {\n    return\
+    \ array();\n  }\n  $par = array();\n  $open = 1;\n  $parens = 0;\n  $pos = 0;\n\
+    \  while ($pos < strlen($paren_string)) {\n    $char = substr($paren_string, $pos,\
+    \ 1);\n    $next_char = substr($paren_string, $pos + 1, 1);\n    if ($char ===\
+    \ '(') {\n      $parens++;\n      $open++;\n    } else if ($char === ')') {\n\
+    \      $parens--;\n      $open--;\n    } else if ($next_char === '(') {\n    \
+    \  $open++;\n    } else if ($next_char === ')') {\n      $open--;\n    }\n   \
+    \ if ($parens < 0) {\n      break;\n    }\n    $pos++;\n  }\n  while ($open >\
+    \ 0) {\n    $par[] = $open--;\n  }\n  return $par;\n}", "  $nesting = 0;\n  $output\
+    \ = [];\n\n  for ($i = 0; $i < strlen($paren_string); $i++) {\n    $character\
+    \ = substr($paren_string, $i, 1);\n    if ($character === '(') {\n      $nesting++;\n\
+    \    } else if ($character === ')') {\n      $nesting--;\n    }\n\n    if ($nesting\
+    \ === 0) {\n      $output[] = $nesting;\n    }\n  }\n\n  return $output;\n}\n",
+  "  $level = 0;\n  $max_level = 0;\n  $paren_stack = [];\n  $paren_stack[$level]\
+    \ = -1;\n  $paren_stack_top = $level;\n  do {\n    $paren_stack_pushed = false;\n\
+    \    $level++;\n    for ($i = 0; $i < strlen($paren_string); $i++) {\n      $char\
+    \ = $paren_string[$i];\n      if ($char == '(') {\n        $paren_stack[$level]\
+    \ = $i;\n        $paren_stack[$level + 1] = $level;\n        $paren_stack_pushed\
+    \ = true;\n        break;\n      }\n      if ($char == ')') {\n        $level--;\n\
+    \        if ($paren_stack[$level] == -1) {\n          break;\n        }\n    \
+    \    $level_start = max($paren_stack[$level + 1] - 1, -1);\n        $level_end\
+    \ = min(\n          $paren_stack[$level] - 1,\n          max($level_start + 1,\
+    \ $level + 1)\n        );\n        for ($i2 = $level_start; $i2 < $level_end;\
+    \ $i2++) {\n          if ($paren_stack[$i2] < 0) {\n            break;\n     \
+    \     }\n          $paren_stack[$level - 1] = -1;\n        }\n        $paren_stack[$level]\
+    \ = -1;\n        $paren_stack[$level_start] = -1;\n        $paren_stack[$level_end]\
+    \ = -1;\n        $paren_stack_pushed = true;\n        break;\n      }\n    }\n\
+    \    if (!$paren_stack_pushed) {\n      break;\n    }\n  } while (true);\n  return\
+    \ $level;\n}\n</code>\n<|/ a dscore=1 |>\n<| a tags=php |>\n<code>\npublic function\
+    \ find_max_level($string) {\n    $i = 0;\n    $level = [];\n    $level[0] = 0;\n\
+    \    while($i < strlen($string)) {\n        $level[$i] = $i;\n        while(isset($level[$i\
+    \ - 1])) {\n            $level[$i] = max($level[$i], $level[$i - 1]);\n      \
+    \  }\n        $i++;\n    }\n    return $level;\n}\n</code>\n<|/ a dscore=0 |>\n\
+    <| c |>\nThis would be an excellent answer if you had explained how and why it\
+    \ works.\n<|/ c |>\n<| c |>\nThe while loop looks at each character in the string\
+    \ in turn, setting that character as the starting index for the \"current level\"\
+    . Each level has its starting index as the previous level. Using this \"current\
+    \ level\" as an index in the level array will give the index that the current\
+    \ level is at. Then the while loop will increase this index by one every time\
+    \ it finds a bracket.\n<|/ c |>\n<| a tags=php |>\n", "    $parentheses_array\
+    \ = array_filter(explode(' ', $paren_string));\n    $parentheses_count = count($parentheses_array);\n\
+    \    $parentheses_index = array();\n    $parentheses_index[0] = 0;\n    foreach\
+    \ ($parentheses_array as $index => $value) {\n        $parentheses_index[$index]\
+    \ = $index;\n    }\n    $parentheses_index[$parentheses_count - 1] = $parentheses_count\
+    \ - 1;\n    $max_level = 0;\n    foreach ($parentheses_index as $i => $value)\
+    \ {\n        if ($parentheses_index[$i] > $max_level) {\n            $max_level\
+    \ = $parentheses_index[$i];\n        }\n    }\n    return $max_level;\n}\n</code>\n\
+    <|/ a dscore=2 |>\n<| c |>\nThank you so much for this! A lot cleaner than my\
+    \ solution and it does work (although the output is slightly different, I did\
+    \ test it and it worked)\n<|/ c |>\n<| a dscore=1 |>\nThe solution I came up with\
+    \ is\n\nTo use regular expressions to find all the \"words\" that are parenthesized\
+    \ and store them in an array.\nThe array should only contain strings of alphanumeric\
+    \ characters and spaces.\nThe array should then be sorted into descending order.\n\
+    To find the largest value, find the first parenthesis and its \"level\".\nUsing\
+    \ the level and index, loop through the array to find the level corresponding\
+    \ to the largest value in the array.\nIf the level corresponding to the largest\
+    \ value in the array is larger than the current level of nesting, output the highest\
+    \ level of nesting.\nIf the level corresponding to the largest value in the array\
+    \ is equal to the current level of nesting, output the lowest level until that\
+    \ level of nesting is greater than the current level of nesting.\n\n<code>\n<?php\n\
+    \n$string = \"(()())()((())())\";\n$parens = preg_match_all('/([a-zA-Z0-9\\s]{0,})\\\
+    (([a-zA-Z0-9\\s]{0,})\\)/', $string, $parens);\n$parens_array = $parens[1];\n\
+    sort($parens_array);\n$max_level = 0;\nfor ($i=0; $i < count($parens_array); $i++)\
+    \ {\n    $level = 0;\n    $level_i = $i;\n    while($level == 0 && $level_i <\
+    \ count($parens_array)) {\n        $level_i ++;\n        if ($parens_array[$level_i]\
+    \ > $max_level) {\n            $max_level = $parens_array[$level_i];\n       \
+    \     $level = $level_i;\n        }\n    }\n    if ($level == $max_level) {\n\
+    \        $highest_level = $i;\n    } else {\n        $lowest_level = $i;\n   \
+    \ }\n}\n\n$result = ", "  $parens_counter = array();\n  $parens_counter[] = 0;\
+    \ // 0 denotes the root node\n  $parens_counter[$paren_string[0]] = 0;\n  for\
+    \ ($i = 1; $i < strlen($paren_string); $i++) {\n    if (!isset($parens_counter[$paren_string[$i]]))\
+    \ {\n      $parens_counter[$paren_string[$i]]++;\n    }\n  }\n  return array_keys($parens_counter);\n\
+    }", "    $level = 0;\n    $paren_count = 0;\n    $nesting_count = [];\n    $paren_string_length\
+    \ = 0;\n    $nested_paren_string = array();\n    for ($i = 0; $i < strlen($paren_string);\
+    \ $i++) {\n        if ($paren_string[$i] == ')') {\n            $paren_count++;\n\
+    \        }\n        if ($paren_string[$i] == '(') {\n            $level++;\n \
+    \       }\n        if ($paren_string[$i] == ')') {\n            $level--;\n  \
+    \      }\n        if ($level < $nesting_count[$paren_string[$i]]) {\n        \
+    \    $nesting_count[$paren_string[$i]] = $level;\n        }\n        if ($level\
+    \ > $nesting_count[$paren_string[$i]]) {\n            $nested_paren_string[$paren_string_length]\
+    \ = $paren_string[$i];\n            $paren_string_length++;\n        }\n    }\n\
+    \    return $nested_paren_string;\n}\n", "    $paren_strings = explode(' ', $paren_string);\n\
+    \    $paren_levels = count($paren_strings);\n    $max_level = -1;\n    foreach\
+    \ ($paren_strings as $paren_string) {\n        $level = 0;\n        $open_paren_level\
+    \ = strlen($paren_string) - 1;\n        for($i = 0; $i < $open_paren_level; $i++)\
+    \ {\n            if ($paren_string[$i] === '(') $level++;\n            else if\
+    \ ($paren_string[$i] === ')') $level--;\n        }\n        $max_level = max($max_level,\
+    \ $level);\n    }\n    return $max_level;\n}\n", "    // Parsing the string recursively\
+    \ is a bit more complex than parsing it iteratively.\n    // We need to keep track\
+    \ of all the parentheses we have encountered while parsing the\n    // string.\
+    \ Because the string may contain nested parentheses, we need to store those parentheses\n\
+    \    // as well.\n    $max_level = 0;\n    $parsed_strings = array();\n    foreach\
+    \ (str_split($paren_string) as $char) {\n        // If the current char is (,\
+    \ then we encountered a nested parentheses. If we encounter ), then\n        //\
+    \ we know the parentheses we've encountered are closed so we decrease the max\
+    \ level.\n        if ($char === '(') {\n            $max_level += 1;\n       \
+    \ } else {\n            $parsed_strings[$max_level][] = $char;\n            $max_level\
+    \ -= 1;\n        }\n    }\n    return $parsed_strings;\n}\n</code>\n<|/ a tags=algorithm,string,parsing,php\
+    \ |>\n<| c |>\nI really like this answer... I'm a bit confused as to why you added\
+    \ the nested parentheses example to your original post. Can you give me an example\
+    \ of a nested parenthetical string where this solution would fail?\n<|/ c |>\n\
+    <| c |>\nI was curious about a solution that would fail, so I added the example.\
+    \ Maybe I forgot that it is possible. Also, I updated the answer to include the\
+    \ string which fails.\n<|/ c |>\n<| c |>\nThanks for this answer, however I cannot\
+    \ see how it works as there are no clear examples in the answer. I need to know\
+    \ how this works.\n<|/ c |>\n<| c |>\nI've added a couple of comments to clarify\
+    \ the algorithm.\n<|/ c |>\n<| c |>\nThanks! The comments are very helpful, however\
+    \ I am still struggling to understand this answer, for example \"For each of the\
+    \ group, output the deepest level of nesting of parentheses.\" I understand it\
+    \ is the deepest level so why is there no clear example? Why do we see it written\
+    \ as output the maximum level?\n<|/ c |>\n<| a tags=algorithm,string,parsing,php\
+    \ dscore=2 |>\nHere is another solution to your problem:\n<code>\n$string = '(()((()))((())()(((())())()))(((()))))())((()()((())((()))()))(()))(((())))';\n\
+    \n$stack = array();\n", "  $nested_levels = array();\n  foreach (preg_split('/\\\
+    s+/', $paren_string) as $level_part) {\n    if ($level_part == '') {\n      continue;\n\
+    \    }\n    $levels = array_count_values($level_part);\n    reset($levels);\n\
+    \    if ($levels[$level_part] == 1) {\n      $nested_levels[] = array_search($level_part,\
+    \ array_keys($levels));\n    } else {\n      $nested_levels[] = -1;\n    }\n \
+    \ }\n  return $nested_levels;\n}\n\n/**\n * Remove parenthesis from the string.\n\
+    \ */", "    $level = 0;\n    $nested_parens = [];\n    $paren_string = preg_replace_callback('/\\\
+    ([^()]+\\)/', function($matches) use (&$level) {\n        array_push($nested_parens,\
+    \ $level);\n        $level += strlen($matches[0]);\n        return '(' + $matches[0];\n\
+    \    }, $paren_string);\n    array_push($nested_parens, $level);\n    return $nested_parens;\n\
+    }\n", "\t$paren_string = str_replace('(', ' ( ', $paren_string);\n\t$paren_string\
+    \ = str_replace(')', ' ) ', $paren_string);\n\t$paren_array = explode(' ', $paren_string);\n\
+    \t$nested_level = 0;\n\tforeach ($paren_array as $item) {\n\t\tif ($item == '(')\
+    \ {\n\t\t\t$nested_level++;\n\t\t} else if ($item == ')') {\n\t\t\t$nested_level--;\n\
+    \t\t}\n\t}\n\treturn $nested_level;\n}\n", "    $nested_parens = [0];\n    $paren_string\
+    \ = trim($paren_string);\n    $last_char = $paren_string[strlen($paren_string)\
+    \ - 1];\n    if ($last_char == '(' || $last_char == '[') {\n        foreach (str_split($paren_string)\
+    \ as $char) {\n            if ($char == '(') {\n                $nested_parens[count($nested_parens)\
+    \ - 1]++;\n            } elseif ($char == '[') {\n                $nested_parens[count($nested_parens)\
+    \ - 1]++;\n                if (count($nested_parens) > 0) {\n                \
+    \    $nested_parens[count($nested_parens) - 1]--;\n                }\n       \
+    \     } elseif ($char == ')') {\n                $nested_parens[count($nested_parens)\
+    \ - 1]--;\n                if ($nested_parens[count($nested_parens) - 1] < 0)\
+    \ {\n                    throw new \\InvalidArgumentException(\"Parenthesis mismatched\
+    \ \" . ($nested_parens) . \" \" . ($paren_string));\n                }\n     \
+    \       } elseif ($char == ']') {\n                $nested_parens[count($nested_parens)\
+    \ - 1]--;\n                if ($nested_parens[count($nested_parens) - 1] < 0)\
+    \ {\n                    throw new \\InvalidArgumentException(\"Parenthesis mismatched\
+    \ \" . ($nested_parens) . \" \" . ($paren_string));\n                }\n     \
+    \       }\n        }\n    }\n    return $nested_parens;\n}\n</code>\nThe code\
+    \ above is written in pure PHP (no string concatenation or anything, just array\
+    \ manipulation), and it works as expected with your test inputs (for me).\nThis\
+    \ code is based on the \"Longest Increasing Subsequence\" problem, which basically\
+    \ says that we need to find longest increasing subsequence of an array (in your\
+    \ case, each set of parentheses is a sub-sequence of the array elements). There\
+    \ are many ways to do this, but I thought this would be the most simple, and easy\
+    \ to understand and modify for my use case.\n<|/ a |>\n<| a dscore=3 tags=php,sorting,arrays,algorithm\
+    \ |>\nHere is my attempt\n<code>\n$input = \"((()))\";\n$input = preg_replace('/(\\\
+    s*\\()/', '$1', $input);\n$input = preg_replace('/(\\s*\\))/', '$1', $input);\n\
+    $input = explode(')', $input);\n$output = array();\nforeach($input as $i){\n \
+    \ $output = array_merge($output, array_count_values($i));\n}\n\n$output = array_map('array_search',\
+    \ array_keys($output), $output);\n$output = array_slice($output, 0, -1, true);\n\
+    sort($output);\n\nvar_dump($output);\n</code>\n<|/ a |>\n<|", "  $nesting_level\
+    \ = 0;\n  $nested_parens_levels = array();\n  foreach (explode(' ', $paren_string)\
+    \ as $paren) {\n    if ($paren === '(') {\n      $nesting_level += 1;\n    } else\
+    \ if ($paren === ')') {\n      $nesting_level -= 1;\n      if ($nesting_level\
+    \ < 0) {\n        $nested_parens_levels[$nesting_level] = 0;\n        break;\n\
+    \      }\n      if ($nesting_level > count($nested_parens_levels)) {\n       \
+    \ $nested_parens_levels[$nesting_level] = count($nested_parens_levels);\n    \
+    \  }\n    }\n  }\n  return $nested_parens_levels;\n}\n", "    $paren_depths =\
+    \ [0];\n    $paren_level = 0;\n    for ($i = 0; $i < strlen($paren_string); $i++)\
+    \ {\n        if ($paren_string[$i] == ')') {\n            $paren_depths[$paren_level]\
+    \ = $paren_depths[$paren_level - 1];\n            $paren_level--;\n        }\n\
+    \        elseif ($paren_string[$i] == '(') {\n            $paren_depths[$paren_level]\
+    \ = $paren_depths[$paren_level + 1];\n            $paren_level++;\n        }\n\
+    \    }\n    return $paren_depths;\n}\n</code>\n<|/ a tags=php,regex |>\n<| c |>\n\
+    Thanks for your answer! Unfortunately I cannot use this solution since it requires\
+    \ the parentheses to be balanced. And also it wouldn't handle some edge cases.\
+    \ Please see my edited question.\n<|/ c |>\n<| c |>\nSorry I didn't read your\
+    \ question carefully enough. I've updated my answer with a new regex that seems\
+    \ to work for the updated case.\n<|/ c |>\n<| c |>\nThanks for your answer! Unfortunately\
+    \ it isn't quite what I was looking for. I need the regex to match all possible\
+    \ combinations of nested parentheses (including nested parentheses that don't\
+    \ match the rule). Your function would only return one nested level. Also, it\
+    \ won't match nested parentheses inside parentheses. Please see my edited question.\n\
+    <|/ c |>\n<| c |>\nYes, it looks like your function might only work for one level\
+    \ of nesting. I'll see if I can make that work.\n<|/ c |>\n<| c |>\nYes - this\
+    \ seems to be working for all levels of nesting. I've updated my answer again\
+    \ to show you how to use it.\n<|/ c |>\n<| a dscore=1 |>\nI got it working with\
+    \ recursive pattern. Check it out below:\n<code>\n<?php", "  $nested_paren_levels\
+    \ = array();\n  $nested_paren_strings = explode(' ', $paren_string);\n  foreach\
+    \ ($nested_paren_strings as $nested_paren_string) {\n    if (strlen($nested_paren_string)\
+    \ == 0 || $nested_paren_string[0] == '(') {\n      $nested_paren_levels[] = 1;\n\
+    \    }\n    else {\n      $level = 0;\n      $prev_char = '';\n      for ($i =\
+    \ 0; $i < strlen($nested_paren_string); $i++) {\n        $char = $nested_paren_string[$i];\n\
+    \        if ($char == ')') {\n          $level--;\n        }\n        elseif ($char\
+    \ == '(') {\n          $level++;\n        }\n        elseif ($char == ' ' && $level\
+    \ == 0 && $i > 0 && $prev_char != ' ') {\n          $nested_paren_levels[] = $level;\n\
+    \        }\n        $prev_char = $char;\n      }\n    }\n  }\n  return $nested_paren_levels;\n\
+    }\n", "  $nested_levels = array_count_values(str_split($paren_string, 2));\n \
+    \ asort($nested_levels);\n  return $nested_levels;\n}", "    $stack = array();\n\
+    \    $opened_parens = 0;\n    \n    $paren_string_without_opening_parens = preg_replace(\"\
+    /\\([^()]*\\)/\", \"\", $paren_string);\n    \n    $nested_level = 0;\n    \n\
+    \    for($i = 0; $i < strlen($paren_string_without_opening_parens); $i++) {\n\
+    \        if($paren_string_without_opening_parens[$i] == ')') {\n            if($opened_parens\
+    \ > $nested_level) {\n                $nested_level = $opened_parens;\n      \
+    \      }\n            $opened_parens = 0;\n        }\n        else if($paren_string_without_opening_parens[$i]\
+    \ == '(') {\n            $opened_parens++;\n        }\n        \n        if($opened_parens\
+    \ == $nested_level) {\n            $stack[] = $i;\n        }\n    }\n    \n  \
+    \  return $nested_level;\n}\n", "  $nested_levels = array();\n  $nested_levels_len\
+    \ = count($nested_levels);\n  for ($i = 0; $i < strlen($paren_string); $i++) {\n\
+    \    // Loop through the parens\n    if ($paren_string[$i] == ')') {\n      //\
+    \ If we found the right paren level then add the level of nesting to our array.\n\
+    \      if ($nested_levels[count($nested_levels) - 1] == $nested_levels_len) {\n\
+    \        $nested_levels[count($nested_levels) - 1]++;\n      }\n    }\n  }\n \
+    \ return $nested_levels;\n}\n", "    $nested_paren_depth = 0;\n    foreach (explode('\
+    \ ', $paren_string) as $str) {\n        if ($str == '(') $nested_paren_depth++;\n\
+    \        if ($str == ')') $nested_paren_depth--;\n        if ($nested_paren_depth\
+    \ > 0) break;\n    }\n    return $nested_paren_depth;\n}\n\n$pattern = '!", " \
+    \ if (!$paren_string) return 0;\n  $paren_array = array_filter(array_map('trim',\
+    \ explode(' ', $paren_string)));\n  return max($paren_array);\n}\n</code>\n<|/\
+    \ a dscore=2 |>\n<| c |>\nThe function \"parse_nested_parens\" doesn't work for\
+    \ the input \"((((((((()(((()())))))))))())((()())))(()())((()())))()\" which\
+    \ should give a result of 6.\n<|/ c |>\n<| c |>\nYour algorithm is incorrect because\
+    \ it doesn't account for \"(())\" and \"()()\" as nested parenthesis. For example,\
+    \ your code returns 1 instead of 2 for input \"(())(())(())\". It only works for\
+    \ \"(()())()\". Also \"(())((()))\" returns 1 for input \"(())(())((()))\" instead\
+    \ of 2. And \"(())(()())\" returns 2 for input \"(())(()())()\" instead of 3.\
+    \ All other inputs (including \"((((()))))((()))\") also returns 1 when it should\
+    \ be 2.\n<|/ c |>\n<| c |>\nHi, I didn't test the code I wrote. However I can\
+    \ see that the code has a bug that it doesn't handle \"((()))\" and \"(()())\"\
+    \ correctly. Maybe the bug is on line 10?\n<|/ c |>\n<| c |>\nThis code is not\
+    \ working for input \"((((((((()(((()())))))))))())((()())))(()())((()())))()\"\
+    . Also it returns 1 for input \"(())(())(())\".\n<|/ c |>\n<| c |>\nIt's not correct,\
+    \ at least for strings that are not properly balanced. Look at the examples at\
+    \ the bottom of this answer: http://www.thecrazyprogrammer.com/2015/10/how-to-get-the-maximum-level-of-nested-parentheses-in-a-string-in-php.html\n\
+    <|/ c |>\n<| a tags=php,parentheses,balance,algorithm |>\nThis question got me\
+    \ thinking about how I would go about doing this. I have not tested it but I think\
+    \ it might work. \nMy idea is to use two pointers to traverse the string and keep\
+    \ track of how many opening parenthesis and how many closing parenthesis I have.\
+    \ Whenever I encounter a closing parenthesis I decrement the count of how many\
+    \ closing parenthesis I have but if the count is zero I count it as a new opening\
+    \ parenthesis. At the end of the string I check if the difference between opening\
+    \ parenthesis and closing parenthesis is greater than one.\n<|/ a dscore=0 |>\n\
+    <| c |>\nI did think of ", "  // Initialize an empty array to hold the number\
+    \ of levels of nesting per group.\n  $num_levels = [];\n\n  // Iterate over the\
+    \ string, character by character and count the nesting level of each character.\n\
+    \  for ($i = 0; $i < strlen($paren_string); $i++) {\n    // Ignore leading or\
+    \ trailing spaces.\n    if ($paren_string[$i] == ' ') {\n      $num_levels[$i]\
+    \ = 0;\n      continue;\n    }\n\n    // Iterate over the groups to get the current\
+    \ level of nesting for each group.\n    $level = 1;\n    do {\n      $num_levels[$i]\
+    \ = $level;\n      ++$level;\n    } while ($paren_string[$i] != ')');\n\n    //\
+    \ Iterate over the groups to get their deepest level of nesting.\n    $level =\
+    \ 1;\n    do {\n      $level += $num_levels[$i];\n    } while ($paren_string[$i]\
+    \ != ')');\n\n    // Stop counting when we reach the end of the parens.\n    if\
+    \ ($paren_string[$i] == '(') {\n      --$num_levels[$i];\n    }\n  }\n\n  // Return\
+    \ the number of levels in parentheses for each group.\n  return $num_levels;\n\
+    }\n", "    $parens_levels = array();\n    foreach (explode(' ', $paren_string)\
+    \ as $nested_parens) {\n        $parens_levels[$nested_parens][] = count($parens_levels);\n\
+    \    }\n    asort($parens_levels);\n    return array_keys($parens_levels)[0];\n\
+    }\n</code>\n<|/ a dscore=1 |>\n<| c |>\nThanks for the reply, but this doesn't\
+    \ work. The function you posted outputs `0` for me and I don't know why\n<|/ c\
+    \ |>\n<| c |>\nIt works perfectly for me, here's a screenshot: https://prnt.sc/oq7oe3\n\
+    <|/ c |>\n<| c |>\nYes, it works now. I just needed to remove `array_unique()`\
+    \ and then it works perfectly fine. Thank you so much!\n<|/ c |>\n<| a tags=algorithm,php,parentheses\
+    \ dscore=1 |>\nThis is an interesting question.\nI have implemented a solution\
+    \ in JavaScript which uses a stack to store the different brackets. \nThe solution\
+    \ also handles the parentheses as they appear in parentheses (e.g. ((()())) ).\n\
+    It is not perfect and there might be a more efficient solution. However, I am\
+    \ sure this solution will get you most of the way there, and a good starting point\
+    \ for you to solve the problem. \nI have added comments to make it clear where\
+    \ it starts to deviate from the expectations.\n\n<code>\nconst testString = \"\
+    (()()) () ((())()()())\";\n", "  $nested_parens = array();\n  $pos = 0;\n  $len\
+    \ = strlen($paren_string);\n  while ($pos < $len) {\n    $opening = substr($paren_string,\
+    \ $pos, 1);\n    if (isset($nested_parens[$opening])) {\n      $nested_parens[$opening]++;\n\
+    \    } else {\n      $nested_parens[$opening] = 1;\n    }\n    $pos += 1;\n  }\n\
+    \  return $nested_parens;\n}\n</code>\n<|/ a dscore=1 tags=php |>\n<| a |>\nThis\
+    \ is what I did using recursion (not tested):\n<code>\n$parens = \"()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()",
+  "  $nested_parens = array();\n  foreach (explode(' ', $paren_string) as $paren)\
+    \ {\n    $nested_parens = array_merge($nested_parens, get_nested_parens_level($paren));\n\
+    \  }\n  return array_unique($nested_parens);\n}\n\n/**\n * Get the number of levels\
+    \ of nested parenthesis.\n *\n * @param string $paren The string representing\
+    \ the parentheses.\n * @return array An array containing the number of levels\
+    \ of nesting of a parenthesis.\n */", "    $nested_levels = array();\n    $opening_parentheses\
+    \ = array();\n    $nesting_level = 0;\n    for ($i = 0; $i < strlen($paren_string);\
+    \ $i++) {\n        if (isset($nested_levels[$i])) {\n            $nested_levels[$i]++;\n\
+    \        } else {\n            $nested_levels[$i] = 1;\n        }\n        if\
+    \ ($paren_string[$i] === '(') {\n            $opening_parentheses[$nesting_level]\
+    \ = $i;\n            $nesting_level++;\n        }\n        if ($paren_string[$i]\
+    \ === ')') {\n            $nesting_level--;\n        }\n    }\n    return array_values($nested_levels);\n\
+    }\n</code>\n<|/ a dscore=1 tags=php,parsing,parentheses |>\n<| c |>\nWorks great\
+    \ on PHP 5.3.28 and PHP 5.5.24. Thanks!\n<|/ c |>\n<| a |>\nThis answer has two\
+    \ parts.\nFirstly, here's a function that returns the maximum number of nested\
+    \ parentheses we have:\n<code>\n<?php", "    $paren_array = explode(' ', $paren_string);\n\
+    \n    $nested_levels_array = [];\n    for ($i = 0; $i < count($paren_array); $i++)\
+    \ {\n        $paren_item = $paren_array[$i];\n        if ($paren_item == '(')\
+    \ {\n            $nested_levels_array[] = 0;\n        } elseif ($paren_item ==\
+    \ ')') {\n            $nested_levels_array[]++;\n        }\n\n        if ($nested_levels_array[$i]\
+    \ > $nested_levels_array[$i - 1]) {\n            $nested_levels_array[$i] = $nested_levels_array[$i\
+    \ - 1];\n        }\n    }\n    return $nested_levels_array;\n}\n", "  $paren_stack\
+    \ = array();\n  $paren_levels = array();\n  $paren_stack_index = 0;\n  $paren_level_index\
+    \ = 0;\n  $result = array();\n  for($i=0; $i<strlen($paren_string); $i++) {\n\
+    \    $ch = $paren_string[$i];\n    if($ch == '(' || $ch == '[' || $ch == '{' ||\
+    \ $ch == '(' || $ch == '[' || $ch == '{') {\n      if($paren_stack_index == count($paren_stack))\
+    \ {\n        array_push($paren_stack, $ch);\n        array_push($paren_levels,\
+    \ 1);\n      } else {\n        $paren_stack[$paren_stack_index] = $ch;\n     \
+    \   array_push($paren_levels, $paren_stack[$paren_stack_index]);\n        $paren_stack_index++;\n\
+    \      }\n    } else if($ch == ')' || $ch == ']' || $ch == '}' || $ch == ')' ||\
+    \ $ch == ']' || $ch == '}') {\n      if($paren_level_index == 0) {\n        array_push($paren_stack,\
+    \ $ch);\n      } else {\n        $paren_level_index--;\n        if($ch == '(')\
+    \ {\n          array_push($paren_stack, $ch);\n        } else {\n          array_push($paren_stack,\
+    \ $paren_levels[$paren_level_index]);\n        }\n      }\n    }\n  }\n  while(count($paren_stack)\
+    \ > 0) {\n    $ch = array_pop($paren_stack);\n    if($ch == '(') {\n      array_push($paren_stack,\
+    \ $ch);\n      array_push($paren_levels, 1);\n    } else {\n      $paren_level_index--;\n\
+    \      if($ch == '(') {\n        array_push($paren_stack, $ch);\n      } else\
+    \ {\n        array_push($paren_stack, $paren_levels[$paren_level_index]);\n  \
+    \    }\n    }\n  }\n  return $result;\n}\n", "  // Initialize max level of nesting\
+    \ to zero.\n  $max_level = 0;\n  // Initialize result list to empty.\n  $nested_parens\
+    \ = [];\n\n  // Split the string into multiple groups of parentheses.\n  $parens\
+    \ = preg_split('/(\\([^\\(\\)]*\\))/', $paren_string, -1, PREG_SPLIT_DELIM_CAPTURE\
+    \ | PREG_SPLIT_NO_EMPTY);\n\n  // Loop through each of the groups and find the\
+    \ deepest level of nesting.\n  foreach ($parens as $paren) {\n    // Find the\
+    \ number of opening parentheses.\n    $paren_opening = strpos($paren, '(');\n\
+    \    // Find the number of closing parentheses.\n    $paren_closing = strrpos($paren,\
+    \ ')');\n    // Count open parentheses.\n    $paren_opens = $paren_opening - 1;\n\
+    \    // Count closing parentheses.\n    $paren_closes = $paren_closing - 1;\n\
+    \    // If the opening parentheses are greater than the maximum level of nesting,\
+    \ then update the max level of nesting.\n    if ($paren_opens > $max_level) {\n\
+    \      $max_level = $paren_opens;\n    }\n    // If the closing parentheses are\
+    \ greater than the maximum level of nesting, then update the max level of nesting.\n\
+    \    if ($paren_closes > $max_level) {\n      $max_level = $paren_closes;\n  \
+    \  }\n    // Add the number of opening parentheses to the list as long as it's\
+    \ greater than zero.\n    if ($paren_opens > 0) {\n      $nested_parens[] = $paren_opens;\n\
+    \    }\n    // Add the number of closing parentheses to the list as long as it's\
+    \ greater than zero.\n    if ($paren_closes > 0) {\n      $nested_parens[] = $paren_closes;\n\
+    \    }\n  }\n\n  // Return the array of nesting levels as long as the array has\
+    \ at least one element.\n  return $nested_parens;\n}\n</code>\n<|/ a |>\n<| a\
+    \ tags=parsing,php,parentheses |>\nThis is my attempt at an answer using recursive\
+    \ functions.\n<code>\n<?php", "  $levels = explode(' ', $paren_string);\n  $max_level\
+    \ = 0;\n  $levels_len = 0;\n  foreach ($levels as $level) {\n    $level = trim(substr($level,\
+    \ 1));\n    if (!$level) {\n      continue;\n    }\n    if ($level > $max_level)\
+    \ {\n      $max_level = $level;\n    }\n    if ($level < $max_level) {\n     \
+    \ $levels_len++;\n    }\n  }\n\n  return $levels_len;\n}\n", "  $max_depth = 0;\n\
+    \  $nested_parens = array();\n  for ($i = 0; $i < strlen($paren_string); $i++)\
+    \ {\n    if ($paren_string[$i] == ')') {\n      $nested_parens[$i] = $max_depth;\n\
+    \      $max_depth--;\n    } else if ($paren_string[$i] == '(') {\n      $nested_parens[$i]\
+    \ = $max_depth;\n      $max_depth++;\n    }\n  }\n  return $nested_parens;\n}\n",
+  "    $nested_level = 0;\n    $parens = array();\n    $char_index = 0;\n    while\
+    \ ($char_index < strlen($paren_string)) {\n        $char = substr($paren_string,\
+    \ $char_index, 1);\n        if (isset($parens[$char]) && count($parens[$char])\
+    \ === $nested_level) {\n            ++$nested_level;\n            $parens[$char][]\
+    \ = $char_index;\n        } else {\n            $nested_level = 0;\n         \
+    \   $parens[$char] = array($char_index);\n        }\n        ++$char_index;\n\
+    \    }\n    return $parens;\n}\n", "    $paren_string = preg_replace('/\\s+/',\
+    \ ' ', $paren_string);\n    $depth = 0;\n    $nested_levels = 0;\n    $levels_array\
+    \ = [];\n    foreach (explode(' ', $paren_string) as $char) {\n        if ($char\
+    \ == '(') {\n            $nested_levels++;\n            $levels_array[] = $nested_levels;\n\
+    \        } elseif ($char == ')') {\n            $nested_levels--;\n          \
+    \  if ($nested_levels == 0) {\n                $depth++;\n            }\n    \
+    \    }\n    }\n    sort($levels_array);\n    return array_pop($levels_array);\n\
+    }\n"]
 stop_tokens:
 - "\nfunction"
 - "\n?>"

@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given the lengths of the three sides of a triangle. Return True if the three
@@ -13,23 +13,23 @@ import std.typecons;
 */
 bool right_angle_triangle(long a, long b, long c) 
 {
-    return (math.pow(a, 2) + math.pow(b, 2) == math.pow(c, 2));
+    return (std.math.pow(a, 2) + std.math.pow(b, 2) == std.math.pow(c, 2));
 }
 
 unittest
 {
     alias candidate = right_angle_triangle;
 
-    assert(candidate(3, 4, 5) == true);
-    assert(candidate(1, 2, 3) == false);
-    assert(candidate(10, 6, 8) == true);
-    assert(candidate(2, 2, 2) == false);
-    assert(candidate(7, 24, 25) == true);
-    assert(candidate(10, 5, 7) == false);
-    assert(candidate(5, 12, 13) == true);
-    assert(candidate(15, 8, 17) == true);
-    assert(candidate(48, 55, 73) == true);
-    assert(candidate(1, 1, 1) == false);
-    assert(candidate(2, 2, 10) == false);
+    assert(candidate(3L, 4L, 5L) == true);
+    assert(candidate(1L, 2L, 3L) == false);
+    assert(candidate(10L, 6L, 8L) == true);
+    assert(candidate(2L, 2L, 2L) == false);
+    assert(candidate(7L, 24L, 25L) == true);
+    assert(candidate(10L, 5L, 7L) == false);
+    assert(candidate(5L, 12L, 13L) == true);
+    assert(candidate(15L, 8L, 17L) == true);
+    assert(candidate(48L, 55L, 73L) == true);
+    assert(candidate(1L, 1L, 1L) == false);
+    assert(candidate(2L, 2L, 10L) == false);
 }
 void main(){}

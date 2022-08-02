@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Write a function that takes a string and returns True if the string
     length is a prime number or False otherwise
@@ -10,25 +10,24 @@ Write a function that takes a string and returns True if the string
     prime_length('orange') == False
     
 */
-bool prime_length(const(char)[] string) 
+bool prime_length(string string) 
 {
-    int len = string.length();
-    if (len == 0)
+    int length = string.length();
+    if(length == 0 || length == 1)
+    {
         return false;
-    if (len == 1)
+    }
+    else
+    {
+        for(int i = 2; i < length; i++)
+        {
+            if(length % i == 0)
+            {
+                return false;
+            }
+        }
         return true;
-    if (len == 2)
-        return false;
-    if (len == 3)
-        return true;
-    if (len % 2 == 0)
-        return false;
-    if (len % 3 == 0)
-        return false;
-    for (int i = 5; i * i <= len; i += 6)
-        if (len % i == 0 || len % (i + 2) == 0)
-            return false;
-    return true;
+    }
 }
 
 unittest

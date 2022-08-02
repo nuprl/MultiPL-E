@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 You have to write a function which validates a given date string and
     returns True if the date is valid otherwise False.
@@ -21,31 +21,46 @@ You have to write a function which validates a given date string and
     valid_date('06/04/2020') => False
     
 */
-bool valid_date(const(char)[] date) 
+bool valid_date(string date) 
 {
     // your code here
-    auto [month, day, year] = split(date, "-");
-    auto [month_int, day_int, year_int] = [to!int(month), to!int(day), to!int(year)];
-    if (month_int < 1 || month_int > 12)
-        return false;
-    if (day_int < 1 || day_int > 31)
-        return false;
-    if (month_int == 2)
+    var date_arr = date.split('-');
+    var month = int.parse(date_arr[0]);
+    var day = int.parse(date_arr[1]);
+    var year = int.parse(date_arr[2]);
+    if(date.length == 10 && month > 0 && month < 13 && day > 0 && day < 32 && year > 0 && year < 9999)
     {
-        if (day_int > 29)
-            return false;
-    }
-    else if (month_int == 4 || month_int == 6 || month_int == 9 || month_int == 11)
-    {
-        if (day_int > 30)
-            return false;
+        if(month == 2)
+        {
+            if(day > 0 && day < 30)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if(month == 4 || month == 6 || month == 9 || month == 11)
+        {
+            if(day > 0 && day < 31)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return true;
+        }
     }
     else
     {
-        if (day_int > 31)
-            return false;
+        return false;
     }
-    return true;
 }
 
 unittest

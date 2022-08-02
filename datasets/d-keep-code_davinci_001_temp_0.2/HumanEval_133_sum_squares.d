@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 You are given a list of numbers.
     You need to return the sum of squared numbers in the given list,
@@ -19,7 +19,7 @@ long sum_squares(float[] lst)
     long sum = 0;
     for (int i = 0; i < lst.length; i++)
     {
-        sum += Math.ceil(lst[i]);
+        sum += (int)Math.ceil(lst[i]);
     }
     return sum;
 }
@@ -28,17 +28,17 @@ unittest
 {
     alias candidate = sum_squares;
 
-    assert(candidate([1.0, 2.0, 3.0]) == 14);
-    assert(candidate([1.0, 2.0, 3.0]) == 14);
-    assert(candidate([1.0, 3.0, 5.0, 7.0]) == 84);
-    assert(candidate([1.4, 4.2, 0.0]) == 29);
-    assert(candidate([-2.4, 1.0, 1.0]) == 6);
-    assert(candidate([100.0, 1.0, 15.0, 2.0]) == 10230);
-    assert(candidate([10000.0, 10000.0]) == 200000000);
-    assert(candidate([-1.4, 4.6, 6.3]) == 75);
-    assert(candidate([-1.4, 17.9, 18.9, 19.9]) == 1086);
-    assert(candidate([0.0]) == 0);
-    assert(candidate([-1.0]) == 1);
-    assert(candidate([-1.0, 1.0, 0.0]) == 2);
+    assert(candidate([1.0, 2.0, 3.0]) == 14L);
+    assert(candidate([1.0, 2.0, 3.0]) == 14L);
+    assert(candidate([1.0, 3.0, 5.0, 7.0]) == 84L);
+    assert(candidate([1.4, 4.2, 0.0]) == 29L);
+    assert(candidate([-2.4, 1.0, 1.0]) == 6L);
+    assert(candidate([100.0, 1.0, 15.0, 2.0]) == 10230L);
+    assert(candidate([10000.0, 10000.0]) == 200000000L);
+    assert(candidate([-1.4, 4.6, 6.3]) == 75L);
+    assert(candidate([-1.4, 17.9, 18.9, 19.9]) == 1086L);
+    assert(candidate([0.0]) == 0L);
+    assert(candidate([-1.0]) == 1L);
+    assert(candidate([-1.0, 1.0, 0.0]) == 2L);
 }
 void main(){}

@@ -29,7 +29,1040 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate s
   \ (list 5 4 10 2 1 1 10 3 6 1 8)) 1)\n    (check-equal? (candidate (list 7 9 9 9\
   \ 3 4 1 5 9 1 2 1 1 10 7 5 6 7 6 7 7 6)) 1)\n    (check-equal? (candidate (list\
   \ 3 10 10 9 2)) -1)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (cond\n    [(empty? lst) -1]\n    [(>= (length (filter (\u03BB (x)\
+    \ (= x (car lst))) lst)) (car lst)) (car lst)]\n    [else (search (cdr lst))]))\n",
+  "  (let loop ([x (apply max lst)]\n             [lst lst])\n    (if (or (= x 0)\
+    \ (&lt;= x (length (filter (curry = x) lst))))\n        x\n        (loop (- x\
+    \ 1) lst))))\n</code>\nAnd here's an ugly one that uses <code>hash-table</code>\
+    \ to count frequencies.\n<code>#lang racket\n", "  (define (freq el lst)\n   \
+    \ (if (null? lst)\n        0\n        (+ (if (= el (car lst)) 1 0) (freq el (cdr\
+    \ lst)))))\n  (define (search1 lst)\n    (define (compare max)\n      (if (null?\
+    \ lst)\n          max\n          (if (and (>= (freq (car lst) lst) (car lst))\
+    \ (> (car lst) max))\n              (compare (car lst))\n              (compare\
+    \ max))))\n    (compare -1))\n  (search1 (sort (lambda (x y) (< x y)) lst)))\n",
+  "  (cond\n    [(empty? lst) -1]\n    [(not (member (car lst) (cdr lst))) (search\
+    \ (cdr lst))]\n    [(<= (count (car lst) lst) (car lst)) (search (cdr lst))]\n\
+    \    [else (car lst)]))\n", "  (let ([counts (make-hash)])\n    (for ([x lst])\n\
+    \      (hash-set! counts x (add1 (hash-ref counts x 0))))\n    (for/first ([x\
+    \ lst])\n      (and (> x 0)\n           (>= (hash-ref counts x 0) x)))))\n```\n\
+    \n### Iterators vs. Generators\n\nRacket doesn't have a built-in concept of an\
+    \ iterator. Instead, a generator is used. \nA generator is a function that generates\
+    \ a sequence of values.\n\nThe example below illustrates the difference between\
+    \ `iterate` (an iterator) and `iterate-generator` (a generator):\n\n```Racket\n\
+    #lang racket\n", "  (define (inner lst acc)\n    (if (empty? lst)\n        acc\n\
+    \        (let* ([x (car lst)]\n               [n (count x lst)]\n            \
+    \   [r (remove* x lst)]\n               [new-acc (if (and (> acc x) (>= n x))\
+    \ x acc)])\n          (inner r new-acc))))\n  (inner lst -1))\n", "  (let ([c\
+    \ (flatten (map (\u03BB (x) (map (\u03BB (y) y) (take x (repeat x)))) lst))])\n\
+    \    (let ([max (foldl max 0 c)])\n      (cond [(= (count max c) max) max]\n \
+    \           [else -1]))))\n", "  (cond [(null? lst)\n         -1]\n        [(>=\
+    \ (frequency (car lst) lst) (car lst))\n         (car lst)]\n        [else\n \
+    \        (search (cdr lst))]))\n", "  (define (aux lst v d)\n    (cond\n     \
+    \ [(empty? lst) (if (equal? v 0) d -1)]\n      [(equal? v 0) (aux (rest lst) (first\
+    \ lst) (first lst))]\n      [(equal? (first lst) d) (aux (rest lst) (- v 1) d)]\n\
+    \      [else (aux (rest lst) v d)]))\n  (aux lst 0 0))\n", "  (if (null? lst)\n\
+    \      -1\n      (let ([val (car lst)]\n            [freq (count val lst)])\n\
+    \        (cond\n         [(< val freq) (search (cdr lst))]\n         [(> val freq)\
+    \ (search (cdr lst))]\n         [else val]))))\n", "  (cond\n    [(empty? lst)\
+    \ -1]\n    [(>= (length (filter (lambda (el) (= el (first lst))) lst)) (first\
+    \ lst))\n     (first lst)]\n    [else (search (rest lst))]))\n", "  (define (frequency\
+    \ i) (length (filter (lambda (x) (= x i)) lst)))\n  (define (greater-frequency\
+    \ xs)\n    (cond\n      [(empty? xs) -1]\n      [(and (<= (frequency (first xs))\
+    \ (first xs)) (> (frequency (first xs)) (frequency (second xs))))\n       (first\
+    \ xs)]\n      [else (greater-frequency (rest xs))]))\n  (greater-frequency (range\
+    \ 1 (add1 (apply max lst)))))\n", "  (cond\n    [(empty? lst) -1]\n    [(>= (length\
+    \ (filter (lambda (x) (= x (first lst))) lst)) (first lst)) (first lst)]\n   \
+    \ [else (search (rest lst))]))\n", "  (for/first ([a lst] #:when (> a 0)\n   \
+    \           [c (in-list lst)])\n    (if (and (= c a) (not (zero? c)))\n      \
+    \  c\n        #f)))\n", "  (define (frequencies lst)\n    (for/fold ([frequencies\
+    \ '()]) ([n lst])\n      (define (add-freq n frequencies)\n        (if (not (empty?\
+    \ frequencies))\n            (if (equal? (first (first frequencies)) n)\n    \
+    \            (cons (cons (first (first frequencies)) (+ 1 (second (first frequencies))))\
+    \ (rest frequencies))\n                (if (&gt; (first (first frequencies)) n)\n\
+    \                    (cons (first frequencies) (add-freq n (rest frequencies)))\n\
+    \                    (cons (cons n 1) frequencies)))\n            (cons (cons\
+    \ n 1) frequencies)))\n      (add-freq n frequencies)))\n  (define (max-freq-greater-than-n\
+    \ frequencies n)\n    (define (max-freq-greater-than-n-aux frequencies n current-max)\n\
+    \      (if (empty? frequencies)\n          current-max\n          (if (&gt; (second\
+    \ (first frequencies)) n)\n              (max-freq-greater-than-n-aux (rest frequencies)\
+    \ n (max current-max (first (first frequencies))))\n              (max-freq-greater-than-n-aux\
+    \ (rest frequencies) n current-max))))\n    (max-freq-greater-than-n-aux frequencies\
+    \ n 0))\n  (define (max-freq frequencies)\n    (if (empty? frequencies)\n    \
+    \    0\n        (max (second (first frequencies)) (max-freq (rest frequencies)))))\n\
+    \  (define lst-frequencies (frequencies lst))\n  (if (empty? lst-frequencies)\n\
+    \      -1\n      (max-freq-greater-than-n lst-frequencies (max-freq lst-frequencies))))\n",
+  "  (let ([h (first lst)]\n        [t (rest lst)])\n    (cond [(empty? t) -1]\n \
+    \         [(<= (count h t) h) (search t)]\n          [else h])))\n", "  (let ([freq\n\
+    \         (for/fold ([res '()]) ([x lst])\n           (let* ([count (count x lst)]\n\
+    \                  [new-count (count x res)])\n             (cond [(>= x new-count)\
+    \ (list x res)]\n                   [else res])))])\n    (for/fold ([result -1])\
+    \ ([x freq])\n      (let ([count (count x lst)])\n        (cond [(>= x count)\
+    \ result]\n              [else x])))))\n", "  (let ([l (sort lst)])\n    (do ([i\
+    \ 1 (+ i 1)])\n        ((= i (length l)) -1)\n      (if (and (equal? i (length\
+    \ (remq i l)))\n               (not (equal? i (first l))))\n          i))))\n",
+  "  (define (helper lst counter-lst)\n    (if (empty? lst)\n        (if (null? counter-lst)\n\
+    \            -1\n            (apply max counter-lst))\n        (if (= (car lst)\
+    \ 0)\n            (helper (cdr lst) counter-lst)\n            (if (>= (car lst)\
+    \ (count (car lst) lst))\n                (helper (cdr lst) (cons (car lst) counter-lst))\n\
+    \                (helper (cdr lst) counter-lst)))))\n  (helper lst null))\n",
+  "  (let ([max-elem (apply max lst)])\n    (for/or ([elem (in-range 1 max-elem)])\n\
+    \      (and (<= elem (count elem lst)) elem))))\n```\n\n```\n#lang racket\n",
+  "  (cond\n    [(empty? lst) -1]\n    [(null? (filter (curry = (first lst)) (rest\
+    \ lst))) (search (rest lst))]\n    [else (first lst)]))", "  (match lst \n   \
+    \ [(cons x xs) (if (zero? (length (filter (lambda (y) (= y x)) xs))) -1 x)]))\n",
+  "    (let ((max-val -1)\n          (max-freq -1))\n        (map (lambda (n)\n  \
+    \             (let ((freq (count n lst)))\n                   (if (> freq n)\n\
+    \                       (begin (set! max-val n)\n                            \
+    \  (set! max-freq freq)))))\n             lst)\n        max-val))\n</code>\nBut\
+    \ it doesn't work. I would like to know what is wrong and how to fix it.\n\n\n\
+    A:\n\nI would use a <code>for/fold</code> to loop through the list, updating the\
+    \ accumulator. If you don't know what the accumulator is for, remember that <code>for/fold</code>\
+    \ will return a value. When you use <code>for/fold</code>, you have to decide\
+    \ what the accumulator is representing, and how it will be updated at each step.\n\
+    Here are some solutions that work, I leave it to you to decide which one you like\
+    \ best:\n<code>(define (search lst)\n  (for/fold ([max-val -1] [max-freq -1])\n\
+    \            ([n lst])\n    (let ([freq (count n lst)])\n      (if (&gt; freq\
+    \ n)\n          (values n freq)\n          (values max-val max-freq)))))\n</code>\n\
+    Or, using <code>for/or</code> to stop searching when a <code>#t</code> value is\
+    \ found:\n<code>(define (search lst)\n  (for/or ([n lst])\n    (let ([freq (count\
+    \ n lst)])\n      (if (&gt; freq n)\n          (values n freq)\n          #f))))\n\
+    </code>\nOr, using <code>for*/or</code>:\n<code>(define (search lst)\n  (for*/or\
+    \ ([n lst] [freq (in-list (map (lambda (n) (count n lst)) lst))])\n    (if (&gt;\
+    \ freq n)\n        (values n freq)\n        #f)))\n</code>\nOr, using <code>for*/first</code>:\n\
+    <code>(define (", "  (let* ([lstl (hash)]\n         [found #f])\n    (for ([i\
+    \ lst])\n      (set! lstl (hash-update i add1 0 lstl)))\n    (for ([i lst])\n\
+    \      (when (and (equal? (hash-ref lstl i 0) i)\n                 (not found))\n\
+    \        (set! found i)))\n    (cond\n      [(equal? found #f) -1]\n      [else\
+    \ found])))", "  (define (get-freq x lst)\n    (cond\n      [(null? lst) 0]\n\
+    \      [(= x (car lst)) (+ 1 (get-freq x (cdr lst)))]\n      [else (get-freq x\
+    \ (cdr lst))]))\n  (define (search-first lst)\n    (cond\n      [(= 1 (get-freq\
+    \ (car lst) lst)) (car lst)]\n      [(< 1 (get-freq (car lst) lst)) (search-first\
+    \ (cdr lst))]\n      [else -1]))\n  (search-first lst))", "    (let ([max (apply\
+    \ max lst)])\n        (if (< max 0)\n            -1\n            (let ([freq (apply\
+    \ max (map (\u03BB (x) (if (zero? (count x lst)) 0 (+ 1 (count x lst)))) lst))])\n\
+    \                (if (>= max freq)\n                    max\n                \
+    \    -1)))))\n", "  (let ([freq (sort (map (lambda (i) i) (count-list lst)) <)])\n\
+    \    (cond [(= (count (car freq) lst) (car freq)) (car freq)]\n          [else\
+    \ -1])))\n", "  (let ([modes (list-mode lst)])\n    (let ([greatest (apply max\
+    \ modes)])\n      (if (&gt;= greatest (count greatest lst))\n          greatest\n\
+    \          -1))))\n", "  (let ([m (for/fold ([m #f]) ([x (in-list lst)])\n   \
+    \            (if (or (not m) (&gt; x m)) x m))])\n    (if (&gt;= (length (filter\
+    \ (curry = m) lst)) m) m -1)))\n", "  (cond\n    [(empty? lst) -1]\n    [(or (zero?\
+    \ (length lst))\n         (= (length lst) 1)) -1]\n    [else (search-helper lst)]))\n",
+  "  (let ([freq (map (lambda (x) \n                     (cond [(map (lambda (y) \n\
+    \                                   (equal? x y))\n                          \
+    \       lst)\n                            (list x (length (filter (lambda (y)\
+    \ \n                                                      (equal? x y))\n    \
+    \                                                lst)))]))\n                 \
+    \  lst)])\n    (let loop ([freq freq])\n      (if (empty? freq)\n          -1\n\
+    \          (if (and (equal? (caar freq) (cadar freq))\n                   (> (caar\
+    \ freq) 0))\n              (caar freq)\n              (loop (cdr freq)))))))",
+  "  (if (not (null? lst))\n      (if (= 1 (length lst))\n          (if (&gt; (car\
+    \ lst) 0)\n              (car lst)\n              -1)\n          (if (&gt;= (count\
+    \ (car lst) lst) (car lst))\n              (car lst)\n              (search (cdr\
+    \ lst))))\n      -1))\n", "  (cond\n    [(empty? lst) -1]\n    [(>= (count (first\
+    \ lst) lst) (first lst)) (first lst)]\n    [else (search (rest lst))]))\n", " \
+    \   (for/first ([i (in-list lst)]\n                #:when (> i 0)\n          \
+    \      #:when (>= i (count i lst)))\n      i))", "  (define (frequencies lst)\n\
+    \    (define (counter n lst)\n      (cond ((eq? (length lst) 0) n)\n         \
+    \   ((eq? (car lst) (cadr lst)) (counter (+ n 1) (cdr lst)))\n            (else\
+    \ (counter (+ n 1) (cdr lst)))))\n    (cond ((eq? (length lst) 0) null)\n    \
+    \      ((eq? (length lst) 1) (list (car lst) 1))\n          ((eq? (car lst) (cadr\
+    \ lst)) (cons (car lst) (list (counter 1 (cdr lst)))))\n          (else (cons\
+    \ (car lst) (list (counter 1 (cdr lst)))))))\n  (define (repeat lst)\n    (cond\
+    \ ((eq? (length lst) 0) null)\n          ((eq? (cadr lst) (car lst)) (cons (car\
+    \ lst) (cons (caddr lst) (repeat (cdddr lst)))))\n          (else (cons (car lst)\
+    \ (cons (cadr lst) (repeat (cddr lst)))))))\n  (define (count x lst)\n    (cond\
+    \ ((eq? (length lst) 0) 0)\n          ((eq? (car lst) x) (+ 1 (count x (cdr lst))))\n\
+    \          (else (count x (cdr lst)))))\n  (cond ((eq? (length lst) 0) -1)\n \
+    \       ((and (eq? (cadr lst) (car lst)) (> (car lst) (caddr lst))) (search (cdr\
+    \ lst)))\n        ((and (eq? (cadr lst) (car lst)) (<= (car lst) (caddr lst)))\
+    \ -1)\n        ((<= (car lst) (count (car lst) lst)) (car lst))\n        (else\
+    \ (search (cdr lst)))))\n", "  (let ([frq (make-hash)])\n    (for ([x lst])\n\
+    \      (hash-set! frq x (+ 1 (hash-ref frq x 0))))\n    (for ([x (in-list (sort\
+    \ (hash-keys frq) <))])\n      (if (>= (hash-ref frq x) x)\n          x\n    \
+    \      -1))))\n```\n\n## The Coding Train\n\n### [Games](https://github.com/hfinucane/coding-train)\n\
+    \nYou can find the code for the following games at: https://github.com/hfinucane/coding-train\n\
+    \n#### The Office\n\nBuilt using [Phaser](https://phaser.io/)\n\n##### Demo\n\n\
+    ![The Office](https://github.com/hfinucane/coding-train/blob/master/the_office/the_office.gif?raw=true)\n\
+    \nYou can play the game at: https://hfinucane.github.io/coding-train/the_office/\n\
+    \n#### Flappy Bird\n\nBuilt using [Phaser](https://phaser.io/)\n\n##### Demo\n\
+    \n![Flappy Bird](https://github.com/hfinucane/coding-train/blob/master/flappy_bird/flappy_bird.gif?raw=true)\n\
+    \nYou can play the game at: https://hfinucane.github.io/coding-train/flappy_bird/\n\
+    \n#### Space Invaders\n\nBuilt using [Phaser](https://phaser.io/)\n\n##### Demo\n\
+    \n![Space Invaders](https://github.com/hfinucane/coding-train/blob/master/space_invaders/space_invaders.gif?raw=true)\n\
+    \nYou can play the game at: https://hfinucane.github.io/coding-train/space_invaders/\n\
+    \n#### Virus Game\n\nBuilt using [Processing](https://processing.org/)\n\n#####\
+    \ Demo\n\n![Virus Game](https://github.com/hfinucane/coding-train/blob/master/virus_game/virus_game.gif?raw=",
+  "  (let loop ([acc 0] [n (length lst)])\n    (if (= acc n)\n        -1\n       \
+    \ (if (>= (count (list-ref lst acc) lst) (list-ref lst acc))\n            (list-ref\
+    \ lst acc)\n            (loop (+ acc 1) n)))))\n", "  (let* ([lstl (length lst)]\n\
+    \         [res (for/first ([i (in-list lst)])\n                 (and (and (< 0\
+    \ i) (<= i lstl))\n                      (list i (count i lst))))])\n    (if res\n\
+    \        (car res)\n        -1)))", "  (define (find-max lst1 mx)\n    (cond [(empty?\
+    \ lst1) mx]\n          [(> (car lst1) mx) (find-max (cdr lst1) (car lst1))]\n\
+    \          [else (find-max (cdr lst1) mx)]))\n  (define (find-max-frequence lst2\
+    \ mx-f)\n    (cond [(empty? lst2) mx-f]\n          [(> (count (car lst2) lst)\
+    \ (car lst2)) (find-max-frequence (cdr lst2) (car lst2))]\n          [else (find-max-frequence\
+    \ (cdr lst2) mx-f)]))\n  (define (filter lst3)\n    (cond [(empty? lst3) '()]\n\
+    \          [(> (car lst3) 0) (cons (car lst3) (filter (cdr lst3)))]\n        \
+    \  [else (filter (cdr lst3))]))\n  (let ((max-in-lst (find-max lst 0))\n     \
+    \   (max-frequence (find-max-frequence (filter lst) 0)))\n    (cond [(= max-frequence\
+    \ 0) -1]\n          [else max-frequence])))\n", "  (cond\n    [(empty? lst) -1]\n\
+    \    [(>= (frequency (first lst) lst) (first lst)) (first lst)]\n    [else (search\
+    \ (rest lst))]))", "  (define (greatest-int-greater-than-freq lst int)\n    (cond\
+    \ [(empty? lst) -1]\n          [(> (length (filter (\u03BB (n) (= n int)) lst))\
+    \ int) int]\n          [else (greatest-int-greater-than-freq (rest lst) (max (first\
+    \ lst) int))]))\n  (greatest-int-greater-than-freq lst 0))\n", "  (if (empty?\
+    \ lst) -1\n      (if (cond [(> (count (car lst) lst) (car lst)) (car lst)]\n \
+    \               [else (search (cdr lst))]))\n  ))\n", "  (cond\n    [(empty? lst)\
+    \ -1]\n    [(equal? (count (first lst) lst) (first lst)) (first lst)]\n    [else\
+    \ (search (rest lst))]))\n", "  (cond [(empty? lst) (printf \"no answer\")]\n\
+    \        [else (frequency-filter (integer-counter lst))]))\n", "  (define (helper\
+    \ l)\n    (if (empty? l)\n        -1\n        (let* ([el (car l)]\n          \
+    \     [rest (cdr l)]\n               [rest (filter (lambda (x) (= x el)) rest)]\n\
+    \               [freq (length rest)])\n          (if (> freq (- el 1))\n     \
+    \         el\n              (helper rest)))))\n  (helper lst))\n", "  (let ([frequencies\
+    \ (flatten (map (lambda (x) (build-list x x)) lst))])\n    (cond\n      [(empty?\
+    \ frequencies) -1]\n      [(>= (count frequencies (first frequencies)) (first\
+    \ frequencies)) (first frequencies)]\n      [else (search (cdr frequencies))])))\n",
+  "  (cond\n    [(zero? (length lst)) -1]\n    [(>= (length (filter (\u03BB (x) (=\
+    \ x (car lst))) lst)) (car lst)) (car lst)]\n    [else (search (cdr lst))]))\n",
+  "  (let loop ([lst lst] [i (length lst)])\n    (cond [(null? lst) -1]\n        \
+    \  [(>= (count (first lst) lst) (first lst)) (first lst)]\n          [else (loop\
+    \ (rest lst) (sub1 i))])))\n</code>\nI should also add that this code assumes\
+    \ that there is only one element in the list that meets the criterion - it's possible\
+    \ there are multiple, and then the question becomes which one to return.\n", '  (if
+    (null? lst) -1 (if (null? (cdr lst)) 1 (max (search (cdr lst)) (length (filter
+    (lambda (x) (= x (car lst))) lst))))))', "  (define (max-freq x y)\n    (cond\n\
+    \      [(> (frequency x lst) (frequency y lst)) x]\n      [(< (frequency x lst)\
+    \ (frequency y lst)) y]\n      [(= (frequency x lst) (frequency y lst)) (max x\
+    \ y)]))\n  (define (integers-in-list lst)\n    (foldl max-freq 0 lst))\n  (define\
+    \ (frequency x lst)\n    (foldl (lambda (e acc) (if (= e x) (+ acc 1) acc)) 0\
+    \ lst))\n  (let ([max-lst (integers-in-list lst)])\n    (if (= (frequency max-lst\
+    \ lst) max-lst)\n        max-lst\n        -1)))\n", "  (define (freq-of-value\
+    \ lst v)\n    (if (null? lst)\n        0\n        (+ (if (= (car lst) v) 1 0)\n\
+    \           (freq-of-value (cdr lst) v))))\n  (define (search-helper lst i best-value)\n\
+    \    (if (= i (length lst))\n        best-value\n        (let ([new-value (- (length\
+    \ lst) i)])\n          (cond\n            [(>= (freq-of-value lst new-value) new-value)\n\
+    \             (search-helper lst (+ i 1) new-value)]\n            [else\n    \
+    \         (search-helper lst (+ i 1) best-value)]))))\n  (let ([max-value (length\
+    \ lst)])\n    (cond\n      [(= max-value (freq-of-value lst max-value))\n    \
+    \   max-value]\n      [else\n       (search-helper lst 1 -1)])))\n", "  (define\
+    \ (a-x lst x)\n    (cond [(null? lst) #f]\n          [(= x (car lst)) #t]\n  \
+    \        [else (a-x (cdr lst) x)]))\n  (define (freq lst x)\n    (cond [(null?\
+    \ lst) 0]\n          [(a-x lst x) (+ 1 (freq (cdr lst) x))]\n          [else (freq\
+    \ (cdr lst) x)]))\n  (define (sort lst)\n    (cond [(null? lst) '()]\n       \
+    \   [else (cons (car lst) (sort (cdr lst)))]))\n  (define (max lst)\n    (cond\
+    \ [(null? lst) -1]\n          [(= (freq lst (car lst)) (car lst)) (car lst)]\n\
+    \          [else (max (cdr lst))]))\n  (max (sort lst)))", "  (let ([lst (sort\
+    \ lst <)])\n    (for*/first ([(x freq) (frequency lst)] #:when (> x freq))\n \
+    \     x)))\n", "  (define (freq val) (count val lst))\n  (define (gt? kv)\n  \
+    \  (let ([val (car kv)] [count (cdr kv)])\n      (and (positive? val) (>= count\
+    \ val))))\n  (let ([frequencies (map (lambda (v) (cons v (freq v))) lst)])\n \
+    \   (if (ormap gt? frequencies)\n        (car (filter gt? frequencies))\n    \
+    \    -1)))\n", "  (define (count-frequencies lst)\n    (if (null? lst) '()\n \
+    \       (let ([v (car lst)])\n          (cons (cons v (count-appearances v lst))\
+    \ (count-frequencies (cdr lst))))))\n  (define (count-appearances v lst)\n   \
+    \ (if (null? lst) 0\n        (+ (if (= v (car lst)) 1 0) (count-appearances v\
+    \ (cdr lst)))))\n  (cond [(null? lst) -1]\n        [(null? (count-frequencies\
+    \ lst)) -1]\n        [else (let ([freqs (count-frequencies lst)])\n          \
+    \      (if (= 1 (length freqs)) (car (cdar freqs))\n                    (if (>\
+    \ (length freqs) 1) (search (filter (lambda (pair) (< (car pair) (cdr pair)))\
+    \ freqs))\n                        (if (= (cdr (car freqs)) (car (car freqs)))\
+    \ (car (car freqs)) -1))))]))", "  (let ([ints (sort < lst)])\n    (for/fold ([freq\
+    \ (in-naturals)])\n              ([n (in-list ints)])\n              (set! freq\
+    \ (if (= n (car freq))\n                             (cons n (cdr freq))\n   \
+    \                          (cons n (cadr freq))))\n              (begin0\n   \
+    \             (let ([f (cadr freq)])\n                  (if (>= f n)\n       \
+    \               n\n                      -1))))))\n", "  (let ((counter (make-hash)))\n\
+    \    (for ([i lst])\n      (hash-update! counter i add1 0))\n    (for ([i lst])\n\
+    \      (if (and (> i 0) (>= (hash-ref counter i 0) i))\n          (return i)))\n\
+    \    -1))\n```\n\n```Haskell\nmodule Codewars.Exercise.GreatestIntFrequency where\n\
+    \nimport qualified Data.Map as M\n\nsearch :: [Int] -> Int\nsearch xs = go (M.fromListWith\
+    \ (+) $ zip xs $ repeat 1) xs\n  where go m (x:xs)\n          | x <= 0    = go\
+    \ m xs\n          | otherwise = case M.lookup x m of\n                       \
+    \   Just val | val >= x -> x\n                          _                  ->\
+    \ go m xs\n        go _ [] = -1\n```\n\n```JavaScript\nconst search = arr =>\n\
+    \  arr.reduce((m, c) => {\n    if (c > 0) m[c] = (m[c] || 0) + 1;\n    return\
+    \ m;\n  }, Object.create(null))\n\nconst search = arr =>\n  arr.reduce((m, c)\
+    \ => {\n    if (c > 0) m[c] = (m[c] || 0) + 1;\n    return m;\n  }, Object.create(null))\n\
+    \nconst search = arr =>\n  arr.reduce((m, c) => {\n    if (c > 0) m[c] = (m[c]\
+    \ || 0) + 1;\n    return m;\n  }, Object.create(null))\n```\n\n```C#\nusing System.Linq;\n\
+    \npublic class Kata\n{\n  public static int Search(int[] arr) => arr.Where(x =>\
+    \ x > 0).GroupBy(x => x).OrderByDescending(g => g.Count()).ThenByDescending(g\
+    \ => g.Key).Select(g => g.Count() >= g.Key ? g.Key : -1).FirstOrDefault();\n}\n\
+    ```\n\n```TypeScript\nexport function search(arr: number[]): number {\n ", " \
+    \ (let ([counter (sort (for/list ([x lst])\n                        (cons x (for/sum\
+    \ ([y lst])\n                                       (if (= x y) 1 0))))\n    \
+    \                  >)]\n        [max 0])\n    (for ([x counter])\n      (if (>=\
+    \ (car x) (cdr x))\n          (set! max (car x))))\n    (if (= max 0) -1 max)))\n",
+  "  (define (find-freq elt)\n    (length (filter (lambda (x) (= x elt)) lst)))\n\
+    \  (define (find-greatest lst-n)\n    (cond [(empty? lst-n) #f]\n          [(>=\
+    \ (find-freq (first lst-n)) (first lst-n)) (first lst-n)]\n          [else (find-greatest\
+    \ (rest lst-n))]))\n  (cond [(empty? lst) -1]\n        [(find-greatest lst) (find-greatest\
+    \ lst)]\n        [else -1]))\n```\n\n```racket\n#lang racket\n", "  (for/fold\
+    \ ([freq (in-list lst)]) ([x (in-list lst)])\n    (cond [(> x (length freq)) (append\
+    \ (make-list x -1) freq)]\n          [else\n           (begin\n             (set!\
+    \ (list-ref freq x) (+ 1 (list-ref freq x)))\n             freq)])))\n</code>\n\
+    I tested the above code on a large number of test cases and it worked, but I feel\
+    \ like the code is too complex and I overused <code>set!</code>.\nAnother solution\
+    \ is:\n<code>#lang racket\n", "  (let ((counts (map count-number lst)))\n    (if\
+    \ (find (lambda (x)\n                (>= (cdr x) (car x)))\n              counts)\n\
+    \        (cdr (find (lambda (x)\n                     (>= (cdr x) (car x)))\n\
+    \                   counts))\n      -1)))\n", "  (cond [(empty? lst) -1]\n   \
+    \     [(>= (length (filter (lambda (x) (= x (car lst))) lst)) (car lst)) (car\
+    \ lst)]\n        [else (search (cdr lst))]))\n", "  (let loop ([lst lst] [s (-\
+    \ (length lst) 1)])\n    (cond [(null? lst) -1]\n          [(= (length (filter\
+    \ (lambda (x) (= x (car lst))) lst)) (car lst)) (car lst)]\n          [else (loop\
+    \ (cdr lst) (- s 1))])))\n</code>\n\n<code>#lang racket\n", "    (for/first ([(x\
+    \ (in-list lst))\n                 (count (in-value (count x lst)))])\n      \
+    \  (and (< x count) x)))\n", "  (let ([freq (flip cons)])\n    (for ([x lst])\n\
+    \      (freq x (add1 (or (freq x) 0))))\n    (max\n     (map (lambda (x) x)\n\
+    \          (filter (lambda (x) (<= (freq x) x)) (keys freq)))\n     -1)))\n",
+  "  (define freq\n    (for/fold ([count '()]) ([item lst])\n      (update-in count\
+    \ [item] add1 0)))\n  (define vals (keys->list freq))\n  (filter (\u03BB (v) (and\
+    \ (&gt; v 0)\n                      (&gt;= (freq v) v)))\n          vals))\n",
+  "  (define (find-min lst)\n    (if (= (length lst) 1)\n        (car lst)\n     \
+    \   (min (car lst) (find-min (cdr lst)))))\n  (define (find-max lst)\n    (if\
+    \ (= (length lst) 1)\n        (car lst)\n        (max (car lst) (find-max (cdr\
+    \ lst)))))\n  (define (find-frequency lst)\n    (cond ((= (length lst) 1) (list\
+    \ (list (car lst) 1)))\n          ((= (car lst) (car (cdr lst))) (cons (list (car\
+    \ lst) (+ 1 (cadr (find-frequency (cdr lst))))) (cddr (find-frequency (cdr lst)))))\n\
+    \          (else (cons (list (car lst) 1) (find-frequency (cdr lst))))))\n  (define\
+    \ (is-answer? lst)\n    (cond ((<= (car (cdr lst)) (car lst)) #t)\n          (else\
+    \ #f)))\n  (define (answer? lst)\n    (cond ((= (length lst) 1) (if (is-answer?\
+    \ (car lst)) (car (car lst)) -1))\n          ((is-answer? (car lst)) (car (car\
+    \ lst)))\n          (else (answer? (cdr lst)))))\n  (answer? (find-frequency lst)))\n",
+  "    (if (empty? lst)\n        -1\n        (let ([new-lst (map (lambda (x) (car\
+    \ x)) (remove-duplicates (sort lst (lambda (a b) (&lt; a b)))))])\n          \
+    \  (if (null? new-lst)\n                -1\n                (let ([freq (car (filter\
+    \ (lambda (x) (&gt;= (length x) (car x))) (partition new-lst)))]\n           \
+    \           [top-freq (car (filter (lambda (x) (&gt; (length x) (car x))) (partition\
+    \ new-lst)))]\n                      [bottom-freq (car (filter (lambda (x) (&lt;\
+    \ (length x) (car x))) (partition new-lst)))])\n                    (if (and (null?\
+    \ freq) (null? top-freq) (null? bottom-freq))\n                        -1\n  \
+    \                      (if (and (not (null? freq)) (not (null? top-freq)) (not\
+    \ (null? bottom-freq)))\n                            (car (remove-duplicates (sort\
+    \ (cons (car freq) (cons (car top-freq) (cons (car bottom-freq) '()))) (lambda\
+    \ (a b) (&lt; a b)))))\n                            (if (not (null? freq))\n \
+    \                               (car freq)\n                                (if\
+    \ (not (null? top-freq))\n                                    (car top-freq)\n\
+    \                                    (car bottom-freq)))))))))))\n</code>\nBut\
+    \ I seem to be overthinking it because the test cases give me a timeout, and I\
+    \ know this is the case because I left a print message in the code and it never\
+    \ seems to reach that point. So how can I improve my code so that it's more efficient?\n\
+    \n\nA:\n\nI was planning to write an answer, but I've noticed that user @sicp\
+    \ is probably on the right track, so I decided to add my ideas in the comments:\n\
+    <code>;; You are given a non-empty list of positive integers. Return the greatest\
+    \ integer that is greater than ", "  (define (search-helper lst)\n    (define\
+    \ (count x lst)\n      (cond\n        [(empty? lst) 0]\n        [(= x (first lst))\
+    \ (add1 (count x (rest lst)))]\n        [else (count x (rest lst))]))\n    (define\
+    \ (has-freq lst)\n      (cond\n        [(empty? lst) 0]\n        [(>= (count (first\
+    \ lst) lst) (first lst)) (first lst)]\n        [else (has-freq (rest lst))]))\n\
+    \    (define (remove-dups lst)\n      (cond\n        [(empty? lst) empty]\n  \
+    \      [(equal? (count (first lst) lst) 1) (cons (first lst) (remove-dups (rest\
+    \ lst)))]\n        [else (remove-dups (rest lst))]))\n    (has-freq (remove-dups\
+    \ lst)))\n  (if (>= (search-helper lst) 1) (search-helper lst) -1))\n", "  (define\
+    \ (search-aux lst output-lst)\n    (cond\n      [(empty? lst) (cons output-lst\
+    \ '())]\n      [(member (first lst) output-lst)\n       (search-aux (rest lst)\
+    \ output-lst)]\n      [else (search-aux (rest lst) (cons (first lst) output-lst))]))\n\
+    \  (define (frequency lst)\n    (define (frequency-aux lst counter)\n      (cond\n\
+    \        [(empty? lst) counter]\n        [(equal? (first lst) (second lst))\n\
+    \         (frequency-aux (rest lst) (+ counter 1))]\n        [else (frequency-aux\
+    \ (rest lst) counter)]))\n    (define (frequency-aux-2 lst output-lst)\n     \
+    \ (cond\n        [(empty? lst) (cons output-lst '())]\n        [(member (list\
+    \ (first lst) (frequency-aux lst 0)) output-lst)\n         (frequency-aux-2 (rest\
+    \ lst) output-lst)]\n        [else (frequency-aux-2 (rest lst) (cons (list (first\
+    \ lst) (frequency-aux lst 0)) output-lst))]))\n    (frequency-aux-2 lst '()))\n\
+    \  (define (find-max lst)\n    (cond\n      [(empty? lst) -1]\n      [(> (first\
+    \ (first lst)) (first (first (rest lst))))\n       (find-max (cons (first lst)\
+    \ (rest (rest lst))))]\n      [else (find-max (rest lst))]))\n  (define (check-condition\
+    \ lst)\n    (cond\n      [(empty? lst) -1]\n      [(>= (first (first lst)) (first\
+    \ (second lst)))\n       (find-max lst)]\n      [else (check-condition (rest lst))]))\n\
+    \  (check-condition (frequency (search-aux lst '()))))\n", "  (define (freq-of-elem\
+    \ lst elem)\n    (cond ((null? lst) 0)\n          ((= (car lst) elem) (+ 1 (freq-of-elem\
+    \ (cdr lst) elem)))\n          (else (freq-of-elem (cdr lst) elem))))\n  (cond\
+    \ ((null? lst) -1)\n        ((and (&gt; (car lst) 0)\n              (&gt;= (freq-of-elem\
+    \ lst (car lst)) (car lst)))\n             (car lst))\n        (else (search (cdr\
+    \ lst)))))\n</code>\nThis worked, but I'm pretty sure it can be improved.\nThis\
+    \ is what I did:\n1) I made a function <code>freq-of-elem</code> that counts the\
+    \ frequency of the elements in the list.\n2) I made the function <code>search</code>\
+    \ which checks if the condition is satisfied by the first element. If not, it\
+    \ recursively calls itself on the tail of the list.\nI'm not satisfied with the\
+    \ code as it looks very clunky to me, can someone point me in the right direction?\
+    \ Thanks!\n\n\nA:\n\nThe main problem with your solution is that you're recompute\
+    \ the frequencies for each element of the list. But you're already computing them!\
+    \ Just store the frequencies in a hash table, that way you'll only have to iterate\
+    \ through the list once, not once for each element. Once you've stored the frequencies\
+    \ in a hash table, you can use it to access the value for each element in constant\
+    \ time (\\$O(1)\\$).\nThat's a much more efficient solution, but we can still\
+    \ improve it, by using <code>for/fold</code> to iterate and accumulate the frequencies,\
+    \ using <code>hash</code> to store them, and by using an <code>if</code> expression\
+    \ with a <code>begin</code> block to avoid recursion.\n<code>(define (search lst)\n\
+    \  (define freqs (hash))\n  (for/fold ([max -1]) ([elem lst])\n    (hash-update!\
+    \ freqs elem add1 0)\n    (begin\n      (let ([f", "  (define (aux lst)\n    (cond\
+    \ [(empty? lst)\n           (values -1 -1)]\n          [(eq? (first lst) 1)\n\
+    \           (values 1 1)]\n          [(> (first lst) 1)\n           (values (first\
+    \ lst) 0)]\n          [else\n           (define (iter lst n)\n             (cond\
+    \ [(empty? lst)\n                    (values -1 n)]\n                   [(eq?\
+    \ (first lst) 1)\n                    (values 1 (+ n 1))]\n                  \
+    \ [(> (first lst) 1)\n                    (values (first lst) n)]\n          \
+    \         [else\n                    (iter (rest lst) (+ n 1))]))\n          \
+    \ (iter (rest lst) 0)]))\n  (define (greater-than-zero? n)\n    (> n 0))\n  (define\
+    \ (greater-than-one? n)\n    (> n 1))\n  (define (greater-or-equal? n1 n2)\n \
+    \   (>= n1 n2))\n  (define (gtz-fq n fq)\n    (and (greater-than-zero? n)\n  \
+    \       (greater-or-equal? fq n)))\n  (let-values ([(n fq) (aux lst)])\n    (cond\
+    \ [(gtz-fq n fq)\n           n]\n          [else\n           -1])))", "  (define\
+    \ htable (hash))\n  (for ([e lst])\n    (hash-set! htable e (add1 (hash-ref htable\
+    \ e 0))))\n  (for ([(e h) (in-hash htable)])\n    (cond\n      ((> e (hash-ref\
+    \ htable e)) (hash-set! htable e -1))\n      ((= e (hash-ref htable e)) (hash-set!\
+    \ htable e h))))\n  (for/fold ([e 0]) ([(i h) (in-hash htable)])\n    (cond\n\
+    \      ((> h e) (set! e h))\n      (else e))))\n</code>\nThis is my full code\
+    \ and it's working, but it seems to not be optimal. I'm curious if I can do better\
+    \ or not.\n\n\nA:\n\nHere's an alternative solution, this uses a hash-table to\
+    \ store each element's frequency, and then takes the max of the elements that\
+    \ appear at least as many times as their own value, otherwise it returns -1. It's\
+    \ not linear in time (it uses <code>hash-set!</code> which is O(n), so it's O(n\xB2\
+    ) if the array has many repetitions), but it's really concise:\n<code>(define\
+    \ (search lst)\n  (define ht (hash))\n  (for ([n lst])\n    (hash-set! ht n (add1\
+    \ (hash-ref ht n 0))))\n  (apply max (map (\u03BB (n)\n                    (if\
+    \ (&gt;= (hash-ref ht n) n) n -1))\n                  (hash-keys ht))))\n</code>\n",
+  "  (for/first ([(value . frequency) (in-list (map (compose length) (hash-group-by\
+    \ identity lst)))])\n    (when (and (> frequency 0) (>= frequency value)) value)))",
+  "  (for/fold ([result -1]) ([x lst])\n    (define (f q) (= x (length (filter equal?\
+    \ q))))\n    (define (g q) (f (filter (lambda (x) (= x q)) lst)))\n    (let ([count\
+    \ (g x)])\n      (if (and (<= count x) (> x result))\n          x\n          result))))\n",
+  "  (define (searchH lst acc)\n    (if (empty? lst)\n        acc\n        (let ([x\
+    \ (first lst)])\n          (if (and (<= x (length lst)) (not (member x acc)))\n\
+    \              (searchH (rest lst) (cons x acc))\n              (searchH (rest\
+    \ lst) acc)))))\n  (let ([xs (searchH lst empty)])\n    (if (empty? xs)\n    \
+    \    -1\n        (apply max xs))))\n", "  (or (freq-greater-than-n lst) -1))\n",
+  "  (cond [(empty? lst) -1]\n        [(= (count (first lst) lst) (first lst)) (first\
+    \ lst)]\n        [else (search (rest lst))]))\n", "  (if (empty? lst)\n      -1\n\
+    \      (let* ((current (first lst))\n             (count (count (first lst) lst)))\n\
+    \        (if (&gt;= current count)\n            current\n            (search (rest\
+    \ lst))))))\n", "  (let ([d (make-hasheq)]\n        [g 0])\n    (for ([e lst])\n\
+    \      (hash-set! d e (add1 (hash-ref d e 0))))\n    (for ([i (in-list lst)])\n\
+    \      (let ([f (hash-ref d i 0)])\n        (when (and (&gt; i 0) (&gt;= f i)\
+    \ (&gt; g i))\n          (set! g i))))\n    (if (&gt; g 0) g -1)))\n", "  (letrec\
+    \ ([frequencies (for/fold ([freqs '()]) ([elt lst])\n                        \
+    \   (hash-update freqs elt add1 0))]\n           [frequencies-keys (map key frequencies)]\n\
+    \           [frequencies-values (map value frequencies)]\n           [frequencies-keys-indexes\
+    \ (for/list ([elt frequencies-keys])\n                                       (index\
+    \ frequencies-keys elt))]\n           [frequencies-values-indexes (for/list ([elt\
+    \ frequencies-values])\n                                         (index frequencies-values\
+    \ elt))]\n           [is-gt-value (for/and ([elt frequencies-keys-indexes])\n\
+    \                                 (<= (nth frequencies-values-indexes elt)\n \
+    \                                    (nth frequencies-keys-indexes elt)))])\n\
+    \    (cond [(not is-gt-value)\n           -1]\n          [else\n           (for/fold\
+    \ ([max-result -1]) ([elt frequencies-keys])\n             (cond [(and (> elt\
+    \ max-result)\n                         (>= (nth frequencies-values-indexes elt)\n\
+    \                             (nth frequencies-keys-indexes elt)))\n         \
+    \           elt]\n                   [else\n                    max-result]))])))\n",
+  "  (for/first ([freq (in-naturals)]\n              [n (in-list lst)]\n         \
+    \     #:when (and (> n 0)\n                          (>= (count n lst) n)))\n\
+    \    n))\n", "  (define (helper lst int)\n    (if (null? lst)\n        (if (=\
+    \ (count int lst) int)\n            int\n            (- 1))\n        (helper (cdr\
+    \ lst) (if (> (car lst) int)\n                               (car lst)\n     \
+    \                          int))))\n  (helper lst 0))\n", "  (for/first ([i (in-list\
+    \ lst)]\n              [x (in-list lst)]\n              #:when (= i (count x lst)))\n\
+    \    (when (>= i x)\n      x)))\n</code>\nPerformance is not an issue. I am mostly\
+    \ interested in clarity and using the most idiomatic solution.\n\n\nA:\n\nJust\
+    \ a few minor things to consider:\n\nSince the output of <code>for/first</code>\
+    \ is a natural number, we don't have to bother with <code>-1</code>, we can just\
+    \ return it directly and it'll work fine.\nInstead of filtering out the elements\
+    \ we don't want to process, and then counting only the ones we're interested in,\
+    \ I think it's more efficient to just count the frequency of each element and\
+    \ then do the filtering afterwards.\nIt's usually more idiomatic to use <code>for*/fold</code>\
+    \ instead of <code>for*/first</code> when collecting results, then just return\
+    \ the last one.\nInstead of <code>for/list</code> I prefer to use <code>for*/list</code>,\
+    \ it's usually clearer and more concise.\n\nThese considerations suggest the following\
+    \ solution:\n<code>(define (search lst)\n  (for*/fold ([result 0]) ([elem (in-list\
+    \ lst)]\n                          [freq (in-list (counts lst))])\n    (let ([v\
+    \ (vector-ref freq elem)])\n      (if (and (&gt; v 0) (&gt;= v elem))\n      \
+    \    (max result elem)\n          result))))\n</code>\n", "  (let ([freq-map (hash)]\n\
+    \        [max -1])\n    (for ([n lst])\n      (hash-set! freq-map n (+ 1 (hash-ref\
+    \ freq-map n 0))))\n    (for ([n lst])\n      (if (>= (hash-ref freq-map n 0)\
+    \ n)\n          (set! max (max max n))))\n    max))\n</code>\n", "  (let ([cnts\
+    \ (count-frequencies lst)])\n    (for ([k (in-range (length lst))])\n      (and\
+    \ (in-list? k cnts)\n           (>= (cdr (find k cnts)) k)\n           (return\
+    \ k)))))\n", "  (define (search-iter lst-iter item-counter)\n    (if (empty? lst-iter)\
+    \ -1\n        (if (= item-counter (length lst-iter)) (search-iter (cdr lst-iter)\
+    \ 1)\n            (if (&gt;= item-counter (list-ref lst-iter 0)) (list-ref lst-iter\
+    \ 0)\n                (search-iter lst-iter (+ item-counter 1))))))\n  (search-iter\
+    \ lst 1))\n</code>\nAny feedback/improvements are appreciated.\n\n\nA:\n\nThere's\
+    \ one major issue with your code: the procedure <code>search-iter</code> iterates\
+    \ over the list twice, which is unnecessary.\nTo obtain the desired results, I'd\
+    \ create a procedure to find the frequency of an element in a list, and another\
+    \ procedure to find the desired element in the list (the one with frequency greater\
+    \ than or equal to its value). If no such element is found, the result should\
+    \ be <code>-1</code>:\n<code>(define (search lst)\n  (let loop ((lst lst) (max\
+    \ -1))\n    (cond ((null? lst) max)\n          ((&gt;= (frequency (car lst) lst)\
+    \ (car lst))\n           (loop (cdr lst) (car lst)))\n          (else (loop (cdr\
+    \ lst) max)))))\n", "  (define (count-elt elt lst)\n    (cond\n      [(empty?\
+    \ lst) 0]\n      [(= elt (first lst)) (+ 1 (count-elt elt (rest lst)))]\n    \
+    \  [else (count-elt elt (rest lst))]))\n  (let ([freq-counts (map (\u03BB (x)\
+    \ (cons x (count-elt x lst))) lst)])\n    (define (freq? elt)\n      (cond\n \
+    \       [(= (first elt) (second elt)) elt]\n        [else #f]))\n    (define (filter\
+    \ elt)\n      (cond\n        [(> (first elt) 0) elt]\n        [else #f]))\n  \
+    \  (define (my-max lst)\n      (if (null? (rest lst))\n          (first lst)\n\
+    \          (let ([a (first lst)]\n                [b (first (rest lst))])\n  \
+    \          (if (> a b)\n                (my-max (cons a (rest (rest lst))))\n\
+    \                (my-max (cons b (rest (rest lst))))))))\n    (if (null? (filter\
+    \ (my-max (filter-map freq? freq-counts))))\n        -1\n        (first (filter\
+    \ (my-max (filter-map freq? freq-counts)))))))", "  (let ([lst2 (sort lst <)])\n\
+    \    (for/or ([i (in-list lst2)] #:when (>= i (count i lst2)))\n      i)))\n",
+  "  (local [(define (freq val lst)\n            (cond [(empty? lst) 0]\n        \
+    \          [(= val (first lst)) (+ 1 (freq val (rest lst)))]\n               \
+    \   [else (freq val (rest lst))]))]\n    (cond [(empty? lst) -1]\n          [(=\
+    \ (freq (first lst) lst) (first lst)) (first lst)]\n          [else (search (rest\
+    \ lst))])))", "  (define (sum n lst)\n    (cond ((null? lst) 0)\n          ((=\
+    \ n (car lst)) (+ 1 (sum n (cdr lst))))\n          (else (sum n (cdr lst)))))\n\
+    \  (define (find-val lst)\n    (cond ((null? lst) -1)\n          ((and (> (car\
+    \ lst) 0)\n                (>= (car lst) (sum (car lst) lst))) (car lst))\n  \
+    \        (else (find-val (cdr lst)))))\n  (find-val lst))\n", "  (define (search-internal\
+    \ lst greatest-num-so-far)\n    (cond [(null? lst) -1]\n          [(and (= (length\
+    \ (filter (\u03BB (x) (= x (car lst))) lst)) (car lst))\n                (> (car\
+    \ lst) greatest-num-so-far)) (car lst)]\n          [else (search-internal (cdr\
+    \ lst) greatest-num-so-far)]))\n  (search-internal lst 0))\n", "  (let ([freq\
+    \ (sort (remove-duplicates lst) <)])\n    (for/first ([n (in-list freq)]\n   \
+    \             #:when (>= (count n lst) n))\n      n)))", "  (define result -1)\n\
+    \  (for ([i (in-list lst)])\n    (let* ([count (count i lst)]\n           [i (if\
+    \ (and (<= i count) (> i result)) i result)])\n      (set! result i)))\n  result)\n",
+  "  (define (getFreq val)\n    (if (null? lst) 0\n        (if (= (car lst) val) (+\
+    \ 1 (getFreq val (cdr lst)))\n            (getFreq val (cdr lst)))))\n  (if (null?\
+    \ lst) -1\n      (if (>= (getFreq (car lst)) (car lst)) (car lst) (search (cdr\
+    \ lst)))))\n", "  (define (find-max-freq lst)\n    (if (null? lst)\n        -1\n\
+    \        (define cur-max (car lst))\n        (define cur-freq 1)\n        (for/fold\
+    \ ([max-freq 0]) ([x (in-list (cdr lst))])\n          (if (equal? x cur-max)\n\
+    \              (set! cur-freq (+ cur-freq 1))\n              (if (> cur-freq max-freq)\n\
+    \                  (set! max-freq cur-freq)\n                  (set! cur-max x)\n\
+    \                  (set! cur-freq 1))\n              max-freq))))\n  (define max-freq\
+    \ (find-max-freq lst))\n  (for/fold ([result -1]) ([x (in-list lst)])\n    (define\
+    \ cur-freq 1)\n    (for ([y (in-list lst)])\n      (if (equal? x y)\n        \
+    \  (set! cur-freq (+ cur-freq 1))))\n    (if (and (>= cur-freq x) (>= cur-freq\
+    \ max-freq))\n        (set! result x)\n        result)))\n", "  (for/first ([x\
+    \ (in-list lst)]\n              [n (count x lst)])\n    (if (> n x)\n        x\n\
+    \        -1)))", "  (define (help lst)\n    (let ([dummy 0])\n      (for/fold\
+    \ ([freq 0]) ([i lst])\n        (if (= i dummy)\n            (+ freq 1)\n    \
+    \        freq))))\n  (if (null? lst)\n      -1\n      (let ([x (help lst)])\n\
+    \        (if (= x -1)\n            -1\n            (if (>= (list-ref lst x) x)\n\
+    \                (list-ref lst x)\n                -1)))))\n", "  (define (count-greater-than-me\
+    \ lst num)\n    (cond\n      [(null? lst) 0]\n      [(< (car lst) num) (count-greater-than-me\
+    \ (cdr lst) num)]\n      [(> (car lst) num) (count-greater-than-me (cdr lst) num)]\n\
+    \      [else (+ 1 (count-greater-than-me (cdr lst) num))]))\n  (define (get-max-values\
+    \ lst)\n    (cond\n      [(null? lst) 0]\n      [(> (car lst) (get-max-values\
+    \ (cdr lst))) (car lst)]\n      [else (get-max-values (cdr lst))]))\n  (define\
+    \ (count-equal-value lst num)\n    (cond\n      [(null? lst) 0]\n      [(< (car\
+    \ lst) num) (count-equal-value (cdr lst) num)]\n      [(> (car lst) num) (count-equal-value\
+    \ (cdr lst) num)]\n      [else (+ 1 (count-equal-value (cdr lst) num))]))\n  (cond\n\
+    \    [(< (count-greater-than-me lst (get-max-values lst)) (get-max-values lst))\
+    \ (search (remove (get-max-values lst) lst))]\n    [(> (count-greater-than-me\
+    \ lst (get-max-values lst)) (get-max-values lst)) (get-max-values lst)]\n    [(=\
+    \ (count-greater-than-me lst (get-max-values lst)) (get-max-values lst)) (get-max-values\
+    \ lst)]\n    [(> (count-equal-value lst (get-max-values lst)) (get-max-values\
+    \ lst)) (get-max-values lst)]\n    [else -1]))", "  (let ([c (count lst)]\n  \
+    \      [l (length lst)])\n    (cond [(= l 0) -1]\n          [(>= (get-value c\
+    \ (car lst)) (car lst)) (car lst)]\n          [else (search (cdr lst))])))\n",
+  "  (define (helper lst dic)\n    (cond [(empty? lst) -1]\n          [(dictionary-ref\
+    \ dic (first lst) 0) (if (&gt;= (first lst) (first lst)) (first lst) -1)]\n  \
+    \        [else (helper (rest lst) (dictionary-set dic (first lst) (+ 1 (dictionary-ref\
+    \ dic (first lst) 0))))]))\n  (helper lst (make-dictionary)))\n</code>\nI'm getting\
+    \ an error at line <code>[(dictionary-ref dic (first lst) 0) (if (&gt;= (first\
+    \ lst) (first lst)) (first lst) -1)]</code> with the text:\n<code>dictionary-ref:\
+    \ expected a dictionary but received #&lt;dictionary-db (hash)&gt;\n</code>\n\
+    I've tried wrapping it with <code>(make-dictionary)</code> to create a dictionary\
+    \ but this didn't help.\n\n\nA:\n\nThe error doesn't mean that you should make\
+    \ a dictionary.  It means that <code>dic</code> is not a dictionary.  It is an\
+    \ object of type <code>dictionary-db</code>, which is a concrete implementation\
+    \ of dictionaries.  It is not a dictionary itself.\nThe problem is that you don't\
+    \ have a base case for <code>helper</code>.  You need a way to keep track of the\
+    \ numbers you have seen so far.  If you are looking for the maximum you have seen,\
+    \ then you need to carry that around.  If you have seen a number and its frequency,\
+    \ then you have all the information you need to decide whether to return that\
+    \ number.\nThat means that your base case should be when you get to the end of\
+    \ the list and you have seen a number that passes the test.  If you have not seen\
+    \ a number that passes the test, then you return <code>-1</code>.\nIf you do that,\
+    \ you should find the second clause of your <code>cond</code> is always reached.\
+    \  You need an extra clause that starts the process.\nYou also need to fix <code>&gt;=</code>\
+    \ in your second clause.  It should read\n<code>(d", "  (letrec ([min-greater-than-freq\
+    \ (lambda (lst freq)\n                                    (if (null? lst)\n  \
+    \                                      -1\n                                  \
+    \      (if (and (>= (car lst) freq)\n                                        \
+    \         (> (car lst) (min-greater-than-freq (cdr lst) freq)))\n            \
+    \                                (car lst)\n                                 \
+    \           (min-greater-than-freq (cdr lst) freq))))])\n    (min-greater-than-freq\
+    \ lst 0)))\n</code>\nBut in the second case it's too slow. For some bigger lists\
+    \ it takes so long that it crashes.\n\n\nA:\n\nI'd use <code>hash</code> for this\
+    \ problem:\n<code>(define (search lst)\n  (let ((freq (hash))\n        (min (fold\
+    \ max 0 lst)))\n    (for-each (lambda (x) (hash-set! freq x (+ 1 (hash-ref freq\
+    \ x 0)))) lst)\n    (for/fold ([result -1]) ([i (in-range min (add1 min))])\n\
+    \      (if (&gt;= (hash-ref freq i 0) i) i result))))\n</code>\nThis is not really\
+    \ that much more code than what you wrote, but it is a bit more idiomatic.\nYou\
+    \ need to use <code>for/fold</code> because <code>for-each</code> is not allowed\
+    \ to change the variable the loop is bound to.  Also, note that the way <code>for-each</code>\
+    \ is used here is to count the frequency of each element, which is more straightforward\
+    \ than counting the frequency of each value up to the max element (and remembering\
+    \ how many times the last one occurs).\nThe most important difference is that\
+    \ it is O(N) in time and space (where N is the length of the list) instead of\
+    \ O(N\xB2) in time and O(N) in space.\n", "  (cond [(empty? lst) -1]\n       \
+    \ [(= 1 (count (first lst) lst)) (search (rest lst))]\n        [else (max (first\
+    \ lst) (search (rest lst)))]))", "  (filter (lambda (x) (> x 0))\n    (filter\
+    \ (lambda (x) (>= x (count x lst))) lst)))\n</code>\nresult:\n<code>&gt; (search\
+    \ (list 4 1 2 2 3 1))", "  (let ([cnts (flatten (map (lambda (x) (make-list x\
+    \ x)) lst))])\n    (for ([c cnts] [f (map (lambda (x) (count c x)) lst)])\n  \
+    \    (when (and (&gt; c 0) (&gt;= c f))\n        (return c)))))\n</code>\nThe\
+    \ basic idea is to flatten the list and count the number of occurrences for each\
+    \ number, and for each unique number x in the flat list, find the frequency of\
+    \ x in the original list. Then we loop over each x and its frequency f, return\
+    \ x when it satisfies the requirements.\nThat produces the correct results, but\
+    \ the time complexity is O(n^2) where n is the length of the input list, which\
+    \ is not good. The solution provided by @pmdj is O(n log n), but I found it's\
+    \ slightly faster to do this in a single pass.\n<code>#lang racket\n", "  (let\
+    \ loop ([freq-lst (make-hash)]\n             [max-val 0])\n    (cond\n      [(empty?\
+    \ lst) max-val]\n      [else\n       (define n (first lst))\n       (define n-freq\
+    \ (get-value n freq-lst 0))\n       (loop (hash-set! freq-lst n (+ n-freq 1))\n\
+    \             (if (&gt;= n-freq n)\n                 (max max-val n)\n       \
+    \          max-val))])))\n</code>\n", "  (define (frequency n lst)\n    (cond\n\
+    \      [(empty? lst) 0]\n      [(= n (first lst)) (+ 1 (frequency n (rest lst)))]\n\
+    \      [else (frequency n (rest lst))]))\n  (cond\n    [(empty? lst) -1]\n   \
+    \ [(and (>= (frequency (first lst) lst) (first lst)) (not (empty? (rest lst))))\n\
+    \     (max (first lst) (search (rest lst)))]\n    [(and (>= (frequency (first\
+    \ lst) lst) (first lst)) (empty? (rest lst))) (first lst)]\n    [else (search\
+    \ (rest lst))]))", "  (cond\n    [(empty? lst) -1]\n    [(>= (length (filter (\u03BB\
+    \ (x) (= x (first lst))) lst)) (first lst)) (first lst)]\n    [else (search (rest\
+    \ lst))]))\n</code>\n", "  (let* ([lst (sort (remove-duplicates lst) <)]\n   \
+    \      [most-common-val (cadr (car (filter (\u03BB (lst) (and (pair? lst) (pair?\
+    \ (cdr lst)))) (run-length-encoding lst))))])\n    (if (and (> most-common-val\
+    \ 0) (>= most-common-val (count (\u03BB (x) (= x most-common-val)) lst)))\n  \
+    \      most-common-val\n        -1)))\n", "  (define counts\n    (map (\u03BB\
+    \ (x) (cons x (count (\u03BB (y) (= x y)) lst))) lst))\n  (define value-counts\n\
+    \    (filter (\u03BB (x) (<= (length (cdr x)) (car x))) counts))\n  (if (empty?\
+    \ value-counts)\n      -1\n      (car (sort value-counts > :key car))))\n", " \
+    \ (match lst\n    ([lst . rest] (search-helper rest lst 0))))\n", "  (let ([g\
+    \ (-max lst)]\n        [f (-count g lst)])\n    (if (>= f g) g -1)))\n", "  (define\
+    \ frequencies (for/hash ([i lst]) (values i (length (filter (lambda (x) (= x i))\
+    \ lst)))))\n  (for/fold ([res -1]) ([(i . f) (in-hash frequencies)])\n    (if\
+    \ (= f i) (max res i) res)))", "  (let ((y (reverse (flatten (map (lambda (x)\
+    \ (make-list x x)) lst)))))\n    (cond\n      ((= (length y) 0) -1)\n      ((>\
+    \ (length y) (car y)) (car y))\n      (else (search (cdr y))))))\n", "  (for/first\
+    \ ([num (in-list lst)] #:when (and (> num 0) (>= num (count (in-list lst) num))))\n\
+    \    num))\n", "  (if (null? lst) \n      -1\n      (let ([freq (count-frequencies\
+    \ lst)])\n        (for ([(k v) freq] #:when (and (> k 0) (>= k v)))\n        \
+    \  k))))\n", "  (define (count-appearances num lst)\n    (cond [(null? lst) 0]\n\
+    \          [(= num (car lst)) (add1 (count-appearances num (cdr lst)))]\n    \
+    \      [else (count-appearances num (cdr lst))]))\n  (define (helper lst)\n  \
+    \  (cond [(null? lst) -1]\n          [(= (count-appearances (car lst) lst) (car\
+    \ lst)) (car lst)]\n          [else (helper (cdr lst))]))\n  (helper (reverse\
+    \ (quicksort lst))))", "  (define (search-aux lst cnt count)\n    (cond\n    \
+    \  [(empty? lst) (if (>= cnt count) cnt -1)]\n      [(= (first lst) count) (search-aux\
+    \ (rest lst) count (+ count 1))]\n      [else (search-aux (rest lst) cnt (+ count\
+    \ 1))]))\n  (search-aux lst 0 1))", "  (let ([table (make-hash)])\n    (map (lambda\
+    \ (x) (hash-update! table x add1 0)) lst)\n    (let ([max 0])\n      (for ([k\
+    \ (in-hash table)])\n        (when (and (positive? k) (>= k (hash-ref table k\
+    \ 0)))\n          (set! max (max max k))))\n      (if (positive? max) max -1))))\n\
+    </code>\n", "  (define (number-frequency num)\n    (let loop ([freq 0] [lst lst])\n\
+    \      (cond [(empty? lst) freq]\n            [(= num (first lst)) (loop (+ freq\
+    \ 1) (rest lst))]\n            [else (loop freq (rest lst))])))\n  (let loop ([lst\
+    \ lst])\n    (cond [(empty? lst) -1]\n          [(>= (number-frequency (first\
+    \ lst)) (first lst)) (first lst)]\n          [else (loop (rest lst))])))\n</code>\n\
+    I also don't know if I should have written <code>loop</code> in its own function,\
+    \ and passing <code>lst</code> as an argument to it. But I think it's alright\
+    \ to simply create it in the let expression, right?\n\n\nA:\n\nI would recommend\
+    \ reversing the list, and then using <code>first</code> and <code>rest</code>\
+    \ on it. Otherwise you're essentially doing a linear search on the list. You might\
+    \ want to also create a helper function to count the number of times an element\
+    \ appears, since you'll be using that two times.\nYou should use <code>empty?</code>\
+    \ instead of <code>null?</code> - see this other question to understand the difference.\n",
+  "  (let ([freq (dict)]\n        [max (max (map (lambda (n) (if (positive? n) n 1))\
+    \ lst))])\n    (for ([n lst])\n      (dict-set! freq n (+ (dict-ref freq n 0)\
+    \ 1)))\n    (for/fold ([result -1]) ([n (in-range 1 (add1 max))])\n      (when\
+    \ (and (or (eq? result -1) (> (dict-ref freq n 0) result))\n                 (>=\
+    \ (dict-ref freq n 0) n))\n        (set! result n))\n      result)))\n", "  (cond\n\
+    \    [(empty? lst) -1]\n    [(>= (count (first lst) lst) (first lst)) (first lst)]\n\
+    \    [else (search (rest lst))]))\n", "  (let loop ([lst lst] [acc '()])\n   \
+    \ (cond\n      [(empty? lst) acc]\n      [(member (first lst) acc) (loop (rest\
+    \ lst) acc)]\n      [else (loop (rest lst) (cons (first lst) acc))])))\n", " \
+    \ (let ([numbers (sort (map (lambda (i) (if (= i 0) -1 i)) (iota (length lst)\
+    \ 1)) >)])\n    (for ([n numbers] [i 0])\n      (let ([count (count n lst)])\n\
+    \        (when (and (> n 0) (>= count n))\n          (return n))))\n    -1))\n",
+  "  (let ((dict (list->alist (frequency-list lst))))\n    (for/first ([i (in-list\
+    \ lst)]\n                #:when (and (> i 0)\n                            (>=\
+    \ (dict-ref dict i) i)))\n      i)))\n", "  (let ([dict (create-dict lst)])\n\
+    \    (for/max ([x (in-list lst)])\n      (let ([y (dict-ref dict x '())])\n  \
+    \      (if (>= x (length y)) x -1)))))", "  (for/fold ([maximum -1]) ([x lst])\n\
+    \    (let* ([count (count x lst)]\n           [value (if (and (> x 0) (>= count\
+    \ x)) x maximum)])\n      value)))\n", "  (define (find-freq lst val)\n    (cond\
+    \ [(empty? lst) 0]\n          [(= (first lst) val) (+ 1 (find-freq (rest lst)\
+    \ val))]\n          [else (find-freq (rest lst) val)]))\n  (define (find-freq-greater\
+    \ lst val)\n    (cond [(empty? lst) -1]\n          [(and (= (find-freq lst val)\
+    \ val) (> val 0)) val]\n          [else (find-freq-greater (rest lst) val)]))\n\
+    \  (find-freq-greater lst (first lst)))\n", "  (for/fold ([res -1]) ([x lst])\n\
+    \    (cond\n      [(>= x (length (filter (lambda (y) (= x y)) lst))) (max res\
+    \ x)]\n      [else res])))\n", "  (define (count x lst)\n    (if (null? lst)\n\
+    \        0\n        (+ (if (= x (car lst)) 1 0)\n           (count x (cdr lst)))))\n\
+    \  (if (null? lst)\n      -1\n      (if (>= (count (car lst) lst) (car lst))\n\
+    \          (car lst)\n          (search (cdr lst)))))\n</code>\nIt's basically\
+    \ a linear scan through the list, so it is not the most efficient solution, but\
+    \ it's working.\nEDIT:\nAs suggested by @Chris, here is a better solution, O(n\
+    \ log n):\n<code>#lang racket\n", "  (if (equal? lst '())\n      -1\n      (let*\
+    \ ([max (apply max lst)]\n             [freq (count (first lst) lst)])\n     \
+    \   (if (and (>= freq max) (> max 0))\n            max\n            (search (rest\
+    \ lst))))))\n", "  (if (equal? lst '()) -1\n      (let ([m (max lst)])\n     \
+    \   (let ([f (frequency m lst)])\n          (if (>= f m) m\n              (search\
+    \ (filter (compose (lambda (x) (< x m)) first) lst)))))))\n", "  (let loop ([lst\
+    \ lst] [max -1])\n    (cond [(empty? lst) max]\n          [(>= (length (filter\
+    \ (lambda (x) (= x (first lst))) lst)) (first lst)) (loop (rest lst) (first lst))]\n\
+    \          [else (loop (rest lst) max)])))\n", "  (define (freq x lst)\n    (if\
+    \ (null? lst)\n        0\n        (+ (if (= x (car lst)) 1 0) (freq x (cdr lst)))))\n\
+    \  (define (has-freq x lst)\n    (if (null? lst)\n        #f\n        (if (= x\
+    \ (freq (car lst) lst))\n            #t\n            (has-freq x (cdr lst)))))\n\
+    \  (define (find-x x lst)\n    (if (null? lst)\n        -1\n        (if (and (&gt;\
+    \ (car lst) x)\n                 (has-freq (car lst) lst))\n            (car lst)\n\
+    \            (find-x x (cdr lst)))))\n  (find-x 0 lst))\n", "  (cond [(empty?\
+    \ lst) -1]\n        [(or (= 1 (list-ref lst 0)) (&gt; (list-ref lst 0) (length\
+    \ (remove (list-ref lst 0) lst)))) (list-ref lst 0)]\n        [else (search (rest\
+    \ lst))]))\n", "  (let* ([xs (remove-duplicates lst)]\n         [ys (map\n   \
+    \            (lambda (x)\n                 (values x (count x lst)))\n       \
+    \        xs)])\n    (for/first ([x (in-list xs)]\n                [y (in-list\
+    \ ys)]\n                #:when (and (integer? x) (integer? y)\n              \
+    \              (> x 0) (>= x (second y))))\n      x)))", "  (let ([lst-max (apply\
+    \ max lst)])\n    (for/first ([x (in-range 1 (add1 lst-max))])\n      (when (>=\
+    \ (count x lst) x)\n        x))))\n</code>\n", "  (letrec ([g (lambda (lst)\n\
+    \                (cond [(empty? lst) 0]\n                      [(> (length (filter\
+    \ (lambda (x) (= x (car lst))) lst)) (car lst))\n                       (car lst)]\n\
+    \                      [else (g (cdr lst))]))])\n    (g lst)))\n", "  (let ([max\
+    \ (apply max lst)])\n    (if (&gt;= max (length lst))\n        -1\n        (let\
+    \ recur ([lst lst] [i max])\n          (cond [(null? lst) i]\n               \
+    \ [(= (length lst) (count i lst)) i]\n                [else (recur lst (- i 1))])))))\n",
+  "  (let ((freq (count-freq lst)))\n    (foldl (lambda (el best)\n             (cond\n\
+    \               [(>= (hash-ref freq el 0) el) (max el best)]\n               [else\
+    \ best]))\n           0\n           (remove (lambda (el) (= el 0))\n         \
+    \          (range (max (apply max lst) 0) -1 -1)))))\n", "  (let* ([max-freq (max-frequency\
+    \ lst)]\n         [freq-of-max-freq (frequency lst max-freq)])\n    (if (>= max-freq\
+    \ freq-of-max-freq)\n        max-freq\n        -1)))\n", "  (let loop ([lst lst]\
+    \ [acc '()])\n    (cond\n      [(empty? lst)\n       (-1)]\n      [(>= (length\
+    \ (filter (lambda (x) (= x (first lst))) lst)) (first lst))\n       (first lst)]\n\
+    \      [else\n       (loop (rest lst) (cons (first lst) acc))])))\n", "  (let*\
+    \ ([counts (count-each lst)]\n         [ranks (map (lambda (x) (count-if (lambda\
+    \ (y) (> (cdr y) (cdr x))) counts)) counts)])\n    (or (foldr (lambda (x y) (if\
+    \ (and (equal? y -1) (>= (cdr x) (car x))) (car x) y)) -1 (reverse ranks)) -1)))\n\
+    </code>\nI am aware that the <code>count-each</code> function exists, but I wanted\
+    \ to see if I could implement it.\n<code>;; Given a list, counts how many times\
+    \ each element appears in the list", "  (let ((lst (remove-duplicates lst)) (count\
+    \ 0))\n    (if (or (null? lst) (= (length lst) 1))\n        -1\n        (let loop\
+    \ ((lst lst) (count count))\n          (if (= (length lst) 1)\n              (if\
+    \ (>= (count-frequency (car lst) (remove-duplicates lst)) (car lst))\n       \
+    \           (car lst)\n                  -1)\n              (if (>= (count-frequency\
+    \ (car lst) (remove-duplicates lst)) (car lst))\n                  (loop (cdr\
+    \ lst) (car lst))\n                  (loop (cdr lst) count)))))))", "  (let ([max\
+    \ (apply max lst)])\n    (for/fold ([ret -1]) ([i (in-range (add1 max))])\n  \
+    \    (let ([count (count i lst)])\n        (cond\n          [(and (<= count i)\
+    \ (> i ret)) (values i)]\n          [else (values ret)])))))\n", "  (define (find-frequency\
+    \ n lst)\n    (cond ((null? lst) 0)\n          ((equal? n (car lst)) (+ 1 (find-frequency\
+    \ n (cdr lst))))\n          (else (find-frequency n (cdr lst)))))\n  (let loop\
+    \ ((lst lst) (last 0))\n    (cond ((null? lst) -1)\n          ((>= (find-frequency\
+    \ (car lst) lst) (car lst)) (car lst))\n          (else (loop (cdr lst) (car lst))))))\n",
+  "  (let loop ([lst lst] [current-max 0] [current-max-count 0])\n    (cond\n    \
+    \  [(null? lst) (if (<= current-max-count current-max) -1 current-max)]\n    \
+    \  [(= (car lst) current-max) (loop (cdr lst) current-max (+ current-max-count\
+    \ 1))]\n      [(> (car lst) current-max) (loop (cdr lst) (car lst) 1)]\n     \
+    \ [else (loop (cdr lst) current-max current-max-count)])))\n", "  (for/first ([(x\
+    \ . freq) (group (sort lst))]\n              #:when (and (> x 0) (>= x freq)))\n\
+    \    x))\n", "  (if (empty? lst)\n      -1\n      (define count 0)\n      (for\
+    \ ([e (in-list lst)])\n        (if (= e (first lst))\n            (set! count\
+    \ (+ count 1))\n            '()))\n      (if (>= (first lst) count)\n        \
+    \  (first lst)\n          (search (rest lst)))))\n</code>\nThe for loop is not\
+    \ working. I think I've read somewhere that it is not allowed in Scheme. So I\
+    \ tried to replace it with recursion.\n<code>#lang racket\n", "  (let ([freq (map\
+    \ (lambda (x) \n                     (cons x (length (filter (lambda (y) (= x\
+    \ y)) lst))))\n                   lst)])\n    (filter (lambda (x) \n         \
+    \     (let ([m (assoc x freq)])\n                (= (cdr m) (car m))))\n     \
+    \       lst)))\n</code>\nAccording to my tests it works and the result is correct,\
+    \ but I'm wondering if there is a way to improve it.\n\n\nA:\n\nI'd suggest getting\
+    \ the frequency of each number in a separate function and then use a more efficient\
+    \ data structure like hash table:\n<code>(define (search lst)\n  (let* ([freq\
+    \ (hash-table-from-alist \n                (map (lambda (x) \n               \
+    \        (cons x (length (filter (lambda (y) (= x y)) lst))))\n              \
+    \       lst))])\n    (hash-table-filter-keys (lambda (key)\n                 \
+    \             (= (hash-table-ref freq key 0) key))\n                         \
+    \   freq)))\n</code>\nI'd also put the <code>length</code> call in a separate\
+    \ function, just for readability:\n<code>(define (count-matches lst n)\n  (length\
+    \ (filter (lambda (y) (= n y)) lst)))\n</code>\nThis way the <code>count-matches</code>\
+    \ function can be used in many other scenarios, and your solution becomes:\n<code>(define\
+    \ (search lst)\n  (let* ([freq (hash-table-from-alist \n                (map (lambda\
+    \ (x) \n                       (cons x (count-matches lst x)))\n             \
+    \        lst))])\n    (hash-table-filter-keys (lambda (key)\n                \
+    \              (= (hash-table-ref freq key 0) key))\n                        \
+    \    freq)))\n</code>\nAnother approach would be to get the frequency of every\
+    \ number in a separate function and then use <code>filter</code> with a lambda\
+    \ function as in your original solution. This would be slower, but the program\
+    \ becomes more readable:\n<code>(define (search lst)\n  (let ([freq (map (lambda\
+    \ (x) \n                    ", "  (define (sorted-elements lst)\n    (sort lst\
+    \ <))\n  (define (count-frequency lst)\n    (foldl (lambda (e acc)\n         \
+    \    (define count (if (assoc e acc)\n                               (cdr (assoc\
+    \ e acc))\n                               0))\n             (cons (cons e (+ count\
+    \ 1)) acc))\n           '()\n           lst))\n  (define (find-elements lst)\n\
+    \    (for/list ([e (sorted-elements lst)]\n               [frequency (in-naturals)])\n\
+    \      (cond [(>= frequency e) e]\n            [else #f])))\n  (max (find-elements\
+    \ (count-frequency lst))))\n", "  (define (count n)\n    (length (filter (lambda\
+    \ (x) (= x n)) lst)))\n  (cond ((null? lst) -1)\n        ((>= (count (car lst))\
+    \ (car lst)) (car lst))\n        (else (search (cdr lst)))))\n</code>\n", "  (let\
+    \ loop ([lst lst] [count 1] [res -1])\n    (cond\n      [(null? lst) res]\n  \
+    \    [(equal? (car lst) (car (cdr lst))) (loop (cdr lst) (+ count 1) res)]\n \
+    \     [(> count (car lst)) (loop (cdr lst) 1 (car lst))]\n      [else (loop (cdr\
+    \ lst) 1 res)])))\n", "  (cond\n    [(empty? lst) -1]\n    [(zero? (count (first\
+    \ lst) lst)) (search (rest lst))]\n    [(>= (count (first lst) lst) (first lst))\
+    \ (first lst)]\n    [else (search (rest lst))]))\n", "  (for/fold ([max 0] [ret\
+    \ #f]) ([idx (in-list lst)])\n    (let ([freq (count idx lst)])\n      (if (and\
+    \ (>= freq idx) (> idx max))\n          (values idx #t)\n          (values max\
+    \ ret)))))\n</code>\n", "  (let loop ([lst lst] [result -1])\n    (cond [(null?\
+    \ lst) result]\n          [(< (count-occurences (car lst) lst) (car lst)) (loop\
+    \ (cdr lst) result)]\n          [(> (car lst) result) (loop (cdr lst) (car lst))]\n\
+    \          [else (loop (cdr lst) result)])))\n", "    (let loop ([lst lst] [max-val\
+    \ 0] [max-freq 0])\n        (cond [(empty? lst) (if (>= max-val max-freq) max-val\
+    \ -1)]\n              [(= (first lst) max-val) (loop (rest lst) max-val (+ max-freq\
+    \ 1))]\n              [(> (first lst) max-val) (loop (rest lst) (first lst) 1)]\n\
+    \              [else (loop (rest lst) max-val max-freq)])))\n</code>\n", "  (define\
+    \ (search-max lst)\n    (cond ((null? lst) 0)\n          ((> (car lst) (search-max\
+    \ (cdr lst))) (car lst))\n          (else (search-max (cdr lst)))))\n  (define\
+    \ (frequency lst target)\n    (cond ((null? lst) 0)\n          ((= (car lst) target)\
+    \ (+ 1 (frequency (cdr lst) target)))\n          (else (frequency (cdr lst) target))))\n\
+    \  (let ((max (search-max lst)))\n    (cond ((= (frequency lst max) max) max)\n\
+    \          (else -1))))", "  (for/first ([(x i) (in-list lst)])\n    (and (> x\
+    \ 0)\n         (= i (for/fold ([sum 0]) ([j (in-list lst)])\n                \
+    \    (if (= x j) (+ sum 1) sum))))))\n", "  (let* ((freq (map (curry list '=)\
+    \ lst)) (freq (map (curry list 'count) freq)))\n    (and (map (curry list '>=)\
+    \ freq) (list -1))))\n", "  (let ([res -1]\n        [freq 0])\n    (for ([x lst])\n\
+    \      (let ([x (abs x)])\n        (when (and (> x 0) (>= (list-ref lst x) x))\n\
+    \          (when (> x freq)\n            (set! res x)\n            (set! freq\
+    \ x)))))\n    res))\n", "  (cond\n    [(empty? lst) -1]\n    [(= (length lst)\
+    \ 1) (car lst)]\n    [else\n     (define (max-freq lst)\n       (cond\n      \
+    \   [(empty? lst) -1]\n         [(< (length lst) (car lst)) -1]\n         [else\
+    \ (max-freq (cdr lst))]))\n     (max-freq lst)]))\n", "  (first (sort (map (\u03BB\
+    \ (x) (cons x (count x lst))) lst)\n                > :key second)))\n", "  (or\
+    \ (max (append (filter (lambda (n) (= n (vector-ref lst n))) (range (length lst)))\
+    \ (list -1))) -1))\n", "  (let ([result (cdr (sort (map (lambda (x) (/ x (car\
+    \ (filter (lambda (y) (= x y)) lst)))) lst)) >))]\n    (if (= 1 (length result))\n\
+    \        (-1)\n        (car result))))", "  (let ((counter (make-hash)))\n   \
+    \ (for ([n lst])\n      (hash-update! counter n add1 0))\n    (let ((result -1))\n\
+    \      (hash-for-each (lambda (k v)\n                       (when (<= k v)\n \
+    \                        (set! result (max k result))))\n                    \
+    \ counter)\n      result)))\n", "  (let ([maxval (apply max lst)])\n    (if (and\
+    \ (positive? maxval)\n             (>= (count maxval lst) maxval))\n        maxval\n\
+    \        -1)))\n</code>\nBut it seems too verbose to use two <code>let</code>s.\
+    \ Is there a way to rewrite this with only one <code>let</code>?\n\n\nA:\n\nI\
+    \ don't think you can get rid of the <code>let</code> completely, but you can\
+    \ eliminate the second one.\n<code>(define (search lst)\n  (let ([maxval (apply\
+    \ max lst)])\n    (if (and (positive? maxval)\n             (&gt;= (count maxval\
+    \ lst) maxval))\n        maxval\n        -1)))\n</code>\nCan be rewritten as:\n\
+    <code>(define (search lst)\n  (let ([maxval (apply max lst)])\n    (and (positive?\
+    \ maxval)\n         (&gt;= (count maxval lst) maxval)\n         maxval\n     \
+    \    -1)))\n</code>\n", "  (cond\n    [(empty? lst) -1]\n    [(= (count (first\
+    \ lst) lst) (first lst)) (first lst)]\n    [else (search (rest lst))]))\n", " \
+    \ (let ([lst-sorted (sort lst (lambda (x y) (> x y)))]\n        [cntr 0]\n   \
+    \     [result -1])\n    (cond [(null? lst-sorted) -1]\n          [(= (car lst-sorted)\
+    \ (cadr lst-sorted)) -1]\n          [else\n           (for ([num lst-sorted])\n\
+    \             (begin\n               (when (= num (car lst-sorted))\n        \
+    \         (set! cntr (+ cntr 1)))\n               (when (= num cntr)\n       \
+    \          (set! result num))\n               (when (= (car lst-sorted) (cadr\
+    \ lst-sorted))\n                 (set! cntr 0))))])\n    result))\n", "  (letrec\
+    \ ([freq-map (for/fold ([acc (hash)]) ([i (in-list lst)])\n                  \
+    \           (hash-update acc i (lambda (x) (+ 1 x)) 0))]\n           [keys (hash-keys\
+    \ freq-map)]\n           [vals (hash-values freq-map)])\n    (for/first ([k (in-list\
+    \ keys)]\n                [v (in-list vals)])\n      (and (> k 0)\n          \
+    \ (equal? k v)))))\n</code>\nThis solution uses <code>for/fold</code> to build\
+    \ a hash map from the list of integers, where the key is the integer and the value\
+    \ is the number of occurrences of that integer in the list. Then, we search the\
+    \ list of keys and values to find the integer we are looking for.\n", "  (define\
+    \ (occurrences x lst)\n    (cond [(empty? lst) 0]\n          [(equal? x (first\
+    \ lst)) (+ 1 (occurrences x (rest lst)))]\n          [else (occurrences x (rest\
+    \ lst))]))\n  (define (max-frequency lst)\n    (cond [(empty? lst) -1]\n     \
+    \     [(or (= (occurrences (first lst) lst) (first lst))\n               (= (max-frequency\
+    \ (rest lst)) (first lst))) (first lst)]\n          [else (max-frequency (rest\
+    \ lst))]))\n  (max-frequency lst))\n</code>\nNow, I'm sure there's a better way\
+    \ to do this, but I'm not sure how to recursively sort the list in the <code>max-frequency</code>\
+    \ function. I've been trying to sort the list in the <code>max-frequency</code>\
+    \ function but I haven't been able to find anything about how to sort a list recursively.\n\
+    Would anyone be able to point me in the right direction?\n\n\nA:\n\nYou don't\
+    \ need to sort the list. You are only interested in the maximum value of the list\
+    \ (the numbers will not be repeated anyway, because they have to have a frequency\
+    \ greater than or equal to the value of the integer itself). Try this:\n<code>(define\
+    \ (search lst)\n  (define (occurrences x lst)\n    (cond [(empty? lst) 0]\n  \
+    \        [(equal? x (first lst)) (+ 1 (occurrences x (rest lst)))]\n         \
+    \ [else (occurrences x (rest lst))]))\n  (define (max-frequency lst)\n    (cond\
+    \ [(empty? lst) -1]\n          [(or (= (occurrences (first lst) lst) (first lst))\n\
+    \               (= (max-frequency (rest lst)) (first lst))) (first lst)]\n   \
+    \       [else (max-frequency (rest lst))]))\n  (max-frequency lst))\n</code>\n",
+  "  (if (null? lst)\n      -1\n      (let* ([c (count (car lst) lst)]\n         \
+    \    [cs (search (filter (compose (lambda (x) (= x c)) count) (cdr lst)))]\n \
+    \            [s (if (= cs -1) -1 c)])\n        (if (or (> s (car lst)) (= (car\
+    \ lst) 0)) s (car lst)))))\n</code>\nAs you can see, there are two functions,\
+    \ one is <code>search</code> and the other is <code>count</code>. I would like\
+    \ to move all this to a module and import it, but I am not sure how to do it.\n\
+    I have tried to create a module <code>vacation.rkt</code> with the following content:\n\
+    <code>#lang racket\n", "  (define (search-helper lst)\n    (cond\n      [(empty?\
+    \ lst) -1]\n      [(>= (length (filter (lambda (x) (= x (first lst))) lst)) (first\
+    \ lst))\n       (first lst)]\n      [else (search-helper (rest lst))]))\n  (search-helper\
+    \ (sort > lst)))\n", "  (let* ([frequencies (get-frequencies lst)]\n         [max-freq\
+    \ (maximum frequencies)]\n         [max-val (maximum lst)])\n    (if (<= max-freq\
+    \ max-val)\n        max-val\n        -1)))\n", "  (let ((length (length lst))\n\
+    \        (output 0))\n    (if (equal? (length lst) (list-ref lst (sub1 length)))\n\
+    \        -1\n        (begin\n          (let loop ([i 0])\n            (if (< i\
+    \ length)\n                (if (>= (length (filter (lambda (n) (= n (list-ref\
+    \ lst i))) lst)) (list-ref lst i))\n                    (loop (add1 i))\n    \
+    \                (if (> (list-ref lst i) output)\n                        (begin\n\
+    \                          (set! output (list-ref lst i))\n                  \
+    \        (loop (add1 i)))\n                        (loop (add1 i))))\n       \
+    \         output))))))", "  (cond\n    [(empty? lst) -1]\n    [(>= (length (filter\
+    \ (lambda (x) (= x (first lst))) lst)) (first lst)) (first lst)]\n    [else (search\
+    \ (rest lst))]))", "  (let loop ([seen-before (make-hash)])\n    (if (empty? lst)\n\
+    \        -1\n        (let* ([curr (car lst)]\n               [seen-before-curr\
+    \ (hash-ref seen-before curr 0)])\n          (if (and (> curr 0) (>= curr seen-before-curr))\n\
+    \              curr\n              (loop (hash-set seen-before curr (+ seen-before-curr\
+    \ 1)) (cdr lst)))))))\n", "  (letrec ((search_helper (lambda (lst)\n         \
+    \                   (cond [(empty? lst) -1]\n                                \
+    \  [(>= (length (filter (lambda (x) (= x (car lst))) lst)) (car lst)) (car lst)]\n\
+    \                                  [else (search_helper (cdr lst))]))))\n    (search_helper\
+    \ (reverse (sort lst <)))))\n", "  (define (greatest-gt-freq count)\n    (if (and\
+    \ (> count 0) (>= count (length (filter (lambda (x) (= x count)) lst))))\n   \
+    \     count\n        (greatest-gt-freq (- count 1))))\n  (if (equal? lst '())\n\
+    \      -1\n      (greatest-gt-freq (apply max lst))))\n</code>\nThis is another\
+    \ version of the code that I came up with that is more concise. I didn't use <code>for/fold</code>\
+    \ since it doesn't have a break.\n<code>#lang racket\n", "  (local\n    [(define\
+    \ (count-occurences n lst)\n       (cond\n         [(empty? lst) 0]\n        \
+    \ [(equal? n (first lst)) (+ 1 (count-occurences n (rest lst)))]\n         [else\
+    \ (count-occurences n (rest lst))]))\n     (define (counts lst)\n       (cond\n\
+    \         [(empty? lst) empty]\n         [(member (first lst) (rest lst)) (counts\
+    \ (rest lst))]\n         [else (cons (count-occurences (first lst) lst) (counts\
+    \ (rest lst)))]))\n     (define (frequency-greater-than-value n lst)\n       (cond\n\
+    \         [(empty? lst) #f]\n         [(>= n (first lst)) #t]\n         [else\
+    \ (frequency-greater-than-value n (rest lst))]))\n     (define (find-greatest\
+    \ lst)\n       (cond\n         [(empty? lst) -1]\n         [(and (> (first lst)\
+    \ 0) (frequency-greater-than-value (first lst) lst)) (first lst)]\n         [else\
+    \ (find-greatest (rest lst))]))]\n    (find-greatest (counts lst))))\n</code>\n\
+    \n<code>#lang racket\n", "  (if (empty? lst) -1\n      (let ([val (last lst)])\n\
+    \        (if (>= (length (filter (lambda (x) (= x val)) lst)) val) val\n     \
+    \       (search (butlast lst))))))\n", "  (if (equal? '() lst)\n      -1\n   \
+    \   (let ([elem (car lst)])\n        (if (equal? elem (frequency elem lst))\n\
+    \            elem\n            (search (cdr lst))))))\n", "  (for/or ([n lst]\
+    \ [f (in-list (map (compose cadr cadr) (group lst)))])\n    (and (> n 0) (>= n\
+    \ f) n)))\n</code>\n", "  (cond\n    [(null? lst) -1]\n    [(= (length (filter\
+    \ (lambda (n) (= n (car lst))) lst)) (car lst)) (car lst)]\n    [else (search\
+    \ (cdr lst))]))\n", "  (define (frequency elem lst)\n    (if (empty? lst)\n  \
+    \      0\n        (+ (if (= elem (first lst)) 1 0) (frequency elem (rest lst)))))\n\
+    \  (define (find-freq lst)\n    (cond\n      [(empty? lst) -1]\n      [(>= (frequency\
+    \ (first lst) lst) (first lst)) (first lst)]\n      [else (find-freq (rest lst))]))\n\
+    \  (if (empty? lst)\n      -1\n      (find-freq (sort lst >))))\n", "    (define\
+    \ (freq i lst)\n        (if (null? lst)\n            0\n            (+ (if (=\
+    \ i (car lst)) 1 0) (freq i (cdr lst)))))\n    (define (search-inner lst current)\n\
+    \        (if (null? lst)\n            (if (freq current lst) current -1)\n   \
+    \         (if (>= (freq current lst) current) current (search-inner (cdr lst)\
+    \ (car lst)))))\n    (search-inner (cdr lst) (car lst)))\n", "  (for/first ([x\
+    \ (in-list lst)]\n              [c (in-list (count x lst))])\n    (and (> x 0)\
+    \ (>= x c) x)))\n</code>\nHowever, my test cases are all failing:\n<code>1. &gt;\
+    \ (check-expect (search (list 4 1 2 2 3 1)) 2)\ncheck-expect: result: 1 is not\
+    \ 2\n\n2. &gt; (check-expect (search (list 1 2 2 3 3 3 4 4 4)) 3)\ncheck-expect:\
+    \ result: -1 is not 3\n\n3. &gt; (check-expect (search (list 5 5 4 4 4)) -1)\n\
+    check-expect: result: -1 is not -1\n</code>\nWhat's wrong with my code?\n\n\n\
+    A:\n\nThe problem is that you are consuming the list with <code>for/first</code>,\
+    \ so by the time you get to the second and third <code>check-expect</code> the\
+    \ list is empty.  A better solution would be to sort the list and work your way\
+    \ through it from greatest to least, quitting when you find a number that is greater\
+    \ than the count of the next number in the list:\n<code>(define (search lst)\n\
+    \  (define sorted (sort &gt; lst))\n  (for/fold ([last-seen 0]\n             [last-seen-count\
+    \ 0])\n            ([n (in-list sorted)])\n    (if (&gt;= n last-seen-count)\n\
+    \        (values n (count n sorted))\n        last-seen)))\n</code>\nThen:\n<code>&gt;\
+    \ (search (list 4 1 2 2 3 1))\n2\n&gt; (search (list 1 2 2 3 3 3 4 4 4))\n3\n\
+    &gt; (search (list 5 5 4 4 4))\n-1\n</code>\n", "  (letrec ([high (apply max lst)]\n\
+    \           [freq (make-hash)])\n    (for ([n lst])\n      (hash-set! freq n (+\
+    \ 1 (hash-ref freq n 0))))\n    (for ([n (in-range (add1 high))]\n          #:when\
+    \ (= (hash-ref freq n 0) n))\n      n)))\n</code>\nComplexity:\n\nTime Complexity:\
+    \ <code>O(n)</code> (given that <code>hash-set!</code> and <code>hash-ref</code>\
+    \ are <code>O(1)</code>)\nSpace Complexity: <code>O(n)</code>\n\n", "  (define\
+    \ (count-elem elem lst)\n    (cond ((null? lst) 0)\n          ((= elem (car lst))\
+    \ (+ 1 (count-elem elem (cdr lst))))\n          (else (count-elem elem (cdr lst)))))\n\
+    \  (cond ((null? lst) -1)\n        ((>= (count-elem (car lst) lst) (car lst))\
+    \ (car lst))\n        (else (search (cdr lst)))))\n</code>\n", "  (define (sort\
+    \ lst)\n    (if (null? lst)\n        '()\n        (append (sort (filter (lambda\
+    \ (x) (&lt; x (car lst))) (cdr lst)))\n                (list (car lst))\n    \
+    \            (sort (filter (lambda (x) (= x (car lst))) (cdr lst))))))\n  (define\
+    \ (frequency lst)\n    (if (null? lst)\n        0\n        (+ 1 (frequency (filter\
+    \ (lambda (x) (= x (car lst))) (cdr lst))))))\n  (define (helper lst)\n    (if\
+    \ (null? lst)\n        -1\n        (if (&gt;= (frequency lst) (car lst))\n   \
+    \         (car lst)\n            (helper (cdr lst)))))\n  (helper (sort lst)))\n\
+    </code>\nThere are a few things I dislike about this solution. The first is the\
+    \ sorting algorithm. I know that the <code>append</code> function is recursive\
+    \ but I'm still not sure about how efficient this is.\nThe second thing is the\
+    \ helper function. The function is not elegant as it is and I'm not sure how I\
+    \ can solve this problem in a better way. \nAny suggestions on improvement would\
+    \ be appreciated.\n\n\nA:\n\nThis is a good solution, but it can still be improved.\n\
+    \nThe <code>sort</code> procedure can be made more efficient by using a divide-and-conquer\
+    \ approach instead of the naive recursive one you're using, along with a compounding\
+    \ effect of replacing <code>append</code> with <code>cons</code>, because you're\
+    \ building the list backwards.\nInstead of re-sorting the list every time, we\
+    \ can compute the frequencies once, and then traverse the list just once.\n\n\
+    Here's a possible implementation:\n<code>(define (frequency-table lst)\n  (foldl\
+    \ (lambda (x freq)\n           (hash-update! freq x add1 0))\n         (make-hash)\n\
+    \         lst))\n", "  (let loop ([lst lst] [res '()])\n    (cond [(empty? lst)\
+    \ (reverse res)]\n          [else (define n (count (first lst) lst))\n       \
+    \         (if (or (empty? res) (and (> n (first res)) (>= n (first lst))))\n \
+    \                   (loop (rest lst) (cons (first lst) res))\n               \
+    \     (loop (rest lst) res))])))\n</code>\n", "  (define (search-helper lst max-val\
+    \ best)\n    (cond ((null? lst) best)\n          ((< (count (car lst) lst) (car\
+    \ lst)) (search-helper (cdr lst) max-val best))\n          ((> (car lst) max-val)\
+    \ (search-helper (cdr lst) (car lst) (car lst)))\n          (else (search-helper\
+    \ (cdr lst) max-val best))))\n  (search-helper lst 0 -1))\n", "  (define nums\n\
+    \    (sort lst <))\n  (define (search-inner i)\n    (cond [(= i -1) -1]\n    \
+    \      [(>= (count i nums) i) i]\n          [else (search-inner (- i 1))]))\n\
+    \  (search-inner (- (length nums) 1)))\n", "  (cond\n    [(empty? lst) -1]\n \
+    \   [(empty? (cdr lst)) (car lst)]\n    [else (define (count lst value) (if (empty?\
+    \ lst) 0 (+ (if (= (car lst) value) 1 0) (count (cdr lst) value))))\n        \
+    \   (define (greater-than-or-equal-to lst value)\n             (if (empty? lst)\
+    \ #f\n               (if (= (count lst value) value) #t\n                 (greater-than-or-equal-to\
+    \ (cdr lst) value))))\n           (define (greatest-num lst)\n             (cond\n\
+    \               [(empty? lst) -1]\n               [(empty? (cdr lst)) (car lst)]\n\
+    \               [else (if (&gt; (car lst) (cadr lst)) (greatest-num (cons (car\
+    \ lst) (cddr lst))) (greatest-num (cdr lst)))]))\n           (define (greatest-int\
+    \ lst)\n             (if (greater-than-or-equal-to lst (greatest-num lst)) (greatest-num\
+    \ lst)\n               (greatest-int (cdr lst))))\n           (greatest-int lst)]))\n\
+    </code>\nIn this code, I wrote the search function, <code>count</code> to count\
+    \ the number of times an element is present in the list and <code>greater-than-or-equal-to</code>\
+    \ to check if the number of times an element is present in the list is greater\
+    \ than or equal to the element itself. Then I wrote <code>greatest-num</code>\
+    \ to find the greatest number in the list. Finally I use <code>greatest-int</code>\
+    \ to find the greatest integer in the list.\nI have been wondering if there's\
+    \ a way to make this simpler and more compact. Can we use list filtering to cut\
+    \ down the line count or is there a better algorithm to solve this?\n\n\nA:\n\n\
+    I would use <code>count-occurrences</code> from <code>srfi/1</code> to count occurrences\
+    \ of elements in a list. I would also iterate over", "  (define (freq n lst)\n\
+    \    (cond\n      [(empty? lst) 0]\n      [(= n (first lst)) (+ 1 (freq n (rest\
+    \ lst)))]\n      [else (freq n (rest lst))]))\n  (cond\n    [(empty? lst) -1]\n\
+    \    [(>= (freq (first lst) lst) (first lst)) (first lst)]\n    [else (search\
+    \ (rest lst))]))\n", "  (define (search-helper lst n)\n    (cond\n      [(null?\
+    \ lst) (if (= n 0) -1 n)]\n      [(= (car lst) n) (search-helper (cdr lst) (+\
+    \ n 1))]\n      [else (search-helper (cdr lst) n)]))\n  (define (find-max lst)\n\
+    \    (cond\n      [(null? lst) (list)]\n      [(= (car lst) (car (cdr lst))) (find-max\
+    \ (cdr lst))]\n      [else (cons (car lst) (find-max (cdr lst)))]))\n  (define\
+    \ (check lst2)\n    (cond\n      [(null? lst2) -1]\n      [(= (search-helper lst\
+    \ (car lst2)) (car lst2)) (car lst2)]\n      [else (check (cdr lst2))]))\n  (check\
+    \ (find-max lst)))\n", "  (cond [(empty? lst) -1]\n        [(>= (length (filter\
+    \ (lambda (x) (= x (car lst))) lst)) (car lst)) (car lst)]\n        [else (search\
+    \ (cdr lst))]))", "  (let ([freq (build-list-of-frequencies lst)])\n    (for/first\
+    \ ([i (in-range (length lst))]\n                #:when (>= (list-ref freq i) (list-ref\
+    \ lst i)))\n      i)))\n", "  (define frequencies (invert-list lst))\n  (for/first\
+    \ ([(k . v) frequencies] #:when (and (positive? k) (>= k v)))\n    k))", "  (let\
+    \ ([greatest-repeat-integer 0]\n        [greatest-frequency 0])\n    (let loop\
+    \ ([lst lst])\n      (cond [(null? lst) greatest-repeat-integer]\n           \
+    \ [(= (length lst) 1) greatest-repeat-integer]\n            [else (let* ([current-element\
+    \ (car lst)]\n                        [frequency (apply + (map (lambda (x) (if\
+    \ (= x current-element) 1 0)) lst))])\n                    (cond [(and (> frequency\
+    \ current-element) (> frequency greatest-frequency))\n                       \
+    \    (loop (cdr lst))\n                           (set! greatest-repeat-integer\
+    \ current-element)\n                           (set! greatest-frequency frequency)]\n\
+    \                          [else (loop (cdr lst))]))]))\n    (if (and (> greatest-repeat-integer\
+    \ 0) (= greatest-frequency greatest-repeat-integer)) greatest-repeat-integer -1)))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

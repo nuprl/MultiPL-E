@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Imagine a road that's a perfectly straight infinitely long line.
@@ -19,7 +19,7 @@ long car_race_collision(long n)
     for (long i = 0; i < n; i++) {
         for (long j = i + 1; j < n; j++) {
             if (i % 2 == 0 && j % 2 == 1) {
-                collisions++;
+                collisions += 1;
             }
         }
     }
@@ -30,10 +30,10 @@ unittest
 {
     alias candidate = car_race_collision;
 
-    assert(candidate(2) == 4);
-    assert(candidate(3) == 9);
-    assert(candidate(4) == 16);
-    assert(candidate(8) == 64);
-    assert(candidate(10) == 100);
+    assert(candidate(2L) == 4L);
+    assert(candidate(3L) == 9L);
+    assert(candidate(4L) == 16L);
+    assert(candidate(8L) == 64L);
+    assert(candidate(10L) == 100L);
 }
 void main(){}

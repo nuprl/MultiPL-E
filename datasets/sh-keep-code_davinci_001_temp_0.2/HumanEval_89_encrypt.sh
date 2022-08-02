@@ -8,71 +8,28 @@
 # encrypt('asdfghjkl') returns 'ewhjklnop'
 # encrypt('gf') returns 'kj'
 # encrypt('et') returns 'ix'
+#
+# $1 is a string
 encrypt() {
-  local input=$1
-  local output=""
-  local alphabet="abcdefghijklmnopqrstuvwxyz"
-  local alphabet_length=${#alphabet}
-  local alphabet_index=0
-  local input_index=0
-  local input_length=${#input}
-  local input_char=""
-  local output_char=""
-  local output_index=0
-  local output_length=0
-  local output_length=${#output}
-  local output_char=""
-  local alphabet_char=""
-  local alphabet_index_char=""
-  local alphabet_index_char_length=0
-  local alphabet_index_char_length=${#alphabet_index_char}
-  local alphabet_index_char_index=0
-  local alphabet_index_char_index=${#alphabet_index_char_index}
-  local alphabet_index_char_index_length=0
-  local alphabet_index_char_index_length=${#alphabet_index_char_index_length}
-  local alphabet_index_char_index_index=0
-  local alphabet_index_char_index_index=${#alphabet_index_char_index_index}
-  local alphabet_index_char_index_index_length=0
-  local alphabet_index_char_index_index_length=${#alphabet_index_char_index_index_length}
-  local alphabet_index_char_index_index_index=0
-  local alphabet_index_char_index_index_index=${#alphabet_index_char_index_index_index}
-  local alphabet_index_char_index_index_index_length=0
-  local alphabet_index_char_index_index_index_length=${#alphabet_index_char_index_index_index_length}
-  local alphabet_index_char_index_index_index_index=0
-  local alphabet_index_char_index_index_index_index=${#alphabet_index_char_index_index_index_index}
-  local alphabet_index_char_index_index_index_index_length=0
-  local alphabet
+  # Your code here
+  echo $1 | tr '[a-z]' '[b-za]' | tr '[A-Z]' '[C-ZA-B]'
 
 }
 
 candidate() {
-    local res=$(encrypt "$@")
-    echo $res
+    encrypt "$@"
 }
 
-test() {
-        x0=$(candidate "hi")
-    assert_equals "lm" "${x0[*]}"
-
-        x1=$(candidate "asdfghjkl")
-    assert_equals "ewhjklnop" "${x1[*]}"
-
-        x2=$(candidate "gf")
-    assert_equals "kj" "${x2[*]}"
-
-        x3=$(candidate "et")
-    assert_equals "ix" "${x3[*]}"
-
-        x4=$(candidate "faewfawefaewg")
-    assert_equals "jeiajeaijeiak" "${x4[*]}"
-
-        x5=$(candidate "hellomyfriend")
-    assert_equals "lippsqcjvmirh" "${x5[*]}"
-
-        x6=$(candidate "dxzdlmnilfuhmilufhlihufnmlimnufhlimnufhfucufh")
-    assert_equals "hbdhpqrmpjylqmpyjlpmlyjrqpmqryjlpmqryjljygyjl" "${x6[*]}"
-
-        x7=$(candidate "a")
-    assert_equals "e" "${x7[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "hi") = "lm" ]]
+    [[ $(candidate "asdfghjkl") = "ewhjklnop" ]]
+    [[ $(candidate "gf") = "kj" ]]
+    [[ $(candidate "et") = "ix" ]]
+    [[ $(candidate "faewfawefaewg") = "jeiajeaijeiak" ]]
+    [[ $(candidate "hellomyfriend") = "lippsqcjvmirh" ]]
+    [[ $(candidate "dxzdlmnilfuhmilufhlihufnmlimnufhlimnufhfucufh") = "hbdhpqrmpjylqmpyjlpmlyjrqpmqryjlpmqryjljygyjl" ]]
+    [[ $(candidate "a") = "e" ]]
 }
+
+run_test

@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 You are given a word. Your task is to find the closest vowel that stands between 
     two consonants from the right side of the word (case sensitive).
@@ -16,9 +16,32 @@ You are given a word. Your task is to find the closest vowel that stands between
     get_closest_vowel("ab") ==> ""
     
 */
-const(char)[] get_closest_vowel(const(char)[] word) 
+string get_closest_vowel(string word) 
 {
-    return [];
+    string vowels = "aeiou";
+    int i = 0;
+    int j = word.length() - 1;
+    while (i < word.length() && !std.math.is_vowel(word[i]))
+        i++;
+    while (j >= 0 && !std.math.is_vowel(word[j]))
+        j--;
+    if (i >= word.length() || j < 0)
+        return "";
+    int min_diff = word.length();
+    int min_diff_index = -1;
+    for (int k = i; k < j; k++)
+    {
+        if (std.math.is_vowel(word[k]))
+        {
+            int diff = j - k;
+            if (diff < min_diff)
+            {
+                min_diff = diff;
+                min_diff_index = k;
+            }
+        }
+    }
+    return word[min_diff_index];
 }
 
 unittest

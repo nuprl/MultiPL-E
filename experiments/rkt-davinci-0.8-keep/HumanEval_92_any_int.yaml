@@ -12,7 +12,495 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate a
   \ 2.2 2.2 2.2) #f)\n    (check-equal? (candidate -4 6 2) #t)\n    (check-equal?\
   \ (candidate 2 1 1) #t)\n    (check-equal? (candidate 3 4 7) #t)\n    (check-equal?\
   \ (candidate 3.0 4 7) #f)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (and (integer? x) (integer? y) (integer? z)\n       (or (= x (+ y\
+    \ z)) (= y (+ x z)) (= z (+ x y)))))\n</code>\nResult:\n<code>&gt; (any_int 5\
+    \ 2 7)\n#t\n&gt; (any_int 3 2 2)\n#f\n&gt; (any_int 3 -2 1)\n#t\n&gt; (any_int\
+    \ 3.6 -2.2 2)\n#f\n</code>\n", "  (and\n   (integer? x)\n   (integer? y)\n   (integer?\
+    \ z)\n   (or\n    (= x (+ y z))\n    (= y (+ x z))\n    (= z (+ x y)))))\n", " \
+    \ (cond\n    [(and (integer? x) (integer? y) (integer? z))\n     (if (or (= (abs\
+    \ (- x y)) z) (= (+ x y) z) (= (- x y) z))\n         (display #t)\n         (display\
+    \ #f))]\n    [else (display #f)]))", "  (if (and (integer? x) (integer? y) (integer?\
+    \ z))\n      (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))\n      false))\n",
+  "  (cond\n    [(and (integer? x) (integer? y) (integer? z)) (or (and (= x (+ y z))\
+    \ (/= x y) (/= x z)) (and (= y (+ x z)) (/= x y) (/= y z)) (and (= z (+ x y))\
+    \ (/= x z) (/= y z)))]\n    [else #f]))\n", "  (let ([res (exact->inexact (+ x\
+    \ y))])\n    (or (and (integer? x) (integer? y) (integer? z) (= res z))\n    \
+    \    (and (integer? x) (integer? y) (integer? z) (= res x))\n        (and (integer?\
+    \ x) (integer? y) (integer? z) (= res y)))))\n</code>\nThis seems like a bit of\
+    \ a hacky solution. Any thoughts on how I can simplify this?\n\n\nA:\n\nYes, your\
+    \ implementation is quite convoluted. I suggest you to simplify it like this:\n\
+    <code>(define (any-int x y z)\n  (and (integer? x)\n       (integer? y)\n    \
+    \   (integer? z)\n       (or (= z (+ x y))\n           (= z (- x y))\n       \
+    \    (= z (- y x)))))\n</code>\nIt should be self-explanatory, we just check if\
+    \ the numbers are integers and, if so, we return whether the sum/difference of\
+    \ any of the pairs is equal to <code>z</code>. We don't have to check if <code>x</code>\
+    \ is equal to the sum/difference of <code>y</code> and <code>z</code>, because\
+    \ if that happens, then <code>z</code> is equal to the sum/difference of <code>x</code>\
+    \ and <code>y</code>, which we already checked for.\n", '  (and (integer? x) (integer?
+    y) (integer? z) (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))', "  (and (=\
+    \ (truncate (+ x y)) z)\n       (= (truncate (+ x z)) y)\n       (= (truncate\
+    \ (+ y z)) x)))\n", "  (and\n   (equal? x (+ y z))\n   (integer? x)\n   (integer?\
+    \ y)\n   (integer? z)))", "  (and\n   (integer? x)\n   (integer? y)\n   (integer?\
+    \ z)\n   (or\n    (= (+ x y) z)\n    (= (+ x z) y)\n    (= (+ y z) x))))\n", " \
+    \ (and\n   (integer? x)\n   (integer? y)\n   (integer? z)\n   (or\n    (= x (+\
+    \ y z))\n    (= y (+ x z))\n    (= z (+ x y)))))\n", "  (and (integer? x) (integer?\
+    \ y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))\n",
+  "  (and (integer? x) (integer? y) (integer? z)\n       (or (= (+ x y) z) (= (+ x\
+    \ z) y) (= (+ y z) x))))", "  (and (integer? x) (integer? y) (integer? z)\n  \
+    \     (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))", "  (not (zero? (modulo\
+    \ x 1)) ; x an integer?\n       (not (zero? (modulo y 1)) ; y an integer?\n  \
+    \          (not (zero? (modulo z 1)) ; z an integer?\n                 (or (=\
+    \ x (+ y z)) ; is x the sum of y and z?\n                     (= y (+ x z)) ;\
+    \ is y the sum of x and z?\n                     (= z (+ x y))))))) ; is z the\
+    \ sum of x and y?\n", "  (and (= (round x) x)\n       (= (round y) y)\n      \
+    \ (= (round z) z)\n       (or (= (round (+ y z)) x)\n           (= (round (+ x\
+    \ z)) y)\n           (= (round (+ x y)) z))))\n", "  (if (and (integer? x) (integer?\
+    \ y) (integer? z))\n      (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))\n   \
+    \   #f))\n", "  (and (integer? x) (integer? y) (integer? z)\n       (or (= x (+\
+    \ y z)) (= y (+ x z)) (= z (+ x y)))))\n", "  (and (integer? x) (integer? y) (integer?\
+    \ z)))\n</code>\nThe <code>integer?</code> check works for all inputs I've tested.\
+    \ I can't figure out how to fix it.\nI have a feeling that I need to use something\
+    \ like <code>(or (any_int x y z) (any_int y z x) (any_int z x y))</code> but this\
+    \ returns true for any inputs.\n\n\nA:\n\nYou're thinking in the right direction\
+    \ with your <code>or</code>. The problem is that your <code>any_int</code> procedure\
+    \ doesn't compare the sum with the input.\nYour procedure should take a list of\
+    \ three numbers and return true if any of the elements of the list is equal to\
+    \ the sum of the other two. For example, <code>(any_int '(5 2 7))</code> should\
+    \ return true. This means you can decompose your problem like this:\n\nGiven a\
+    \ list, return the sum of its elements\nGiven a list and a number, return the\
+    \ other two elements that add up to that number\nGiven a list, return true if\
+    \ any of its elements are equal to the sum of the other two\n\nEach of these procedures\
+    \ can be defined independently and you can use them to define your <code>any_int</code>\
+    \ procedure.\n", "  (and (integer? x) (integer? y) (integer? z)\n       (or (=\
+    \ (+ x y) z) (= (+ x z) y) (= (+ y z) x))))\n", "  (cond ((= (+ y z) x) #t)\n\
+    \        ((= (+ x z) y) #t)\n        ((= (+ x y) z) #t)\n        (else #f)))",
+  "  (and (integer? x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+\
+    \ x z)) (= z (+ x y)))))\n", "  (if (= x (+ y z))\n      #t\n      (if (= y (+\
+    \ x z))\n          #t\n          (if (= z (+ x y))\n              #t\n       \
+    \       #f))))\n", '  (and (integer? x) (integer? y) (integer? z) (or (and (=
+    x (+ y z)) (= x z)) (and (= x (+ y z)) (= x y)) (and (= y (+ x z)) (= y z)))))',
+  "  (and (integer? x) (integer? y) (integer? z)\n       (or (= (+ x y) z) (= (+ x\
+    \ z) y) (= (+ y z) x))))\n", "  (if (and (integer? x) (integer? y) (integer? z))\n\
+    \      (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))\n      #f))\n", "  (and\
+    \ (integer? x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z))\
+    \ (= z (+ x y)))))", "  (and (and (integer? x) (integer? y) (integer? z))\n  \
+    \     (or (and (= x (+ y z)) (= x (+ z y)))\n           (and (= y (+ x z)) (=\
+    \ y (+ z x)))\n           (and (= z (+ x y)) (= z (+ y x))))))\n", "  (and (integer?\
+    \ x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z)) (= z (+\
+    \ x y)))))\n", "  (and (integer? x) (integer? y) (integer? z)\n       (or (= x\
+    \ (+ y z)) (= y (+ x z)) (= z (+ x y)))))\n```\n\n### [126. More than one of the\
+    \ same word in a string](https://www.codewars.com/kata/5a2e2c4b8f27f23bb00000a4)\n\
+    \n#### Task\n- Create a function that takes in a string and returns whether the\
+    \ string has the same number of x's and o's.\n\n#### Rules\n- Return a boolean\
+    \ value (true or false).\n- The string can contain any character.\n- When neither\
+    \ an x nor an o is in the string, return true.\n- Input will not be case sensitive.\n\
+    \n#### Examples\n- XO(\"ooxx\") \u279E true\n- XO(\"xooxx\") \u279E false\n- XO(\"\
+    ooxXm\") \u279E true\n- XO(\"zpzpzpp\") \u279E true // when no 'x' and 'o' is\
+    \ present should return true\n- XO(\"zzoo\") \u279E false\n\n```scheme\n#lang\
+    \ racket\n", '  (and (integer? x) (integer? y) (integer? z) (or (= x (+ y z))
+    (= y (+ x z)) (= z (+ x y)))))', "  (and (integer? x) (integer? y) (integer? z)\n\
+    \       (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))\n", "  (and (integer?\
+    \ x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z)) (= z (+\
+    \ x y)))))\n", "  (and (integer? x) (integer? y) (integer? z) (or (and (= x (+\
+    \ y z)) (= z (- x y)))\n                                                    (and\
+    \ (= y (+ x z)) (= z (- y x)))\n                                             \
+    \       (and (= z (+ x y)) (= y (- z x))))))", "  (and\n   (integer? x)\n   (integer?\
+    \ y)\n   (integer? z)\n   (or\n    (= (abs (+ x y)) z)\n    (= (abs (+ x z)) y)\n\
+    \    (= (abs (+ y z)) x))))\n", "  (if (and (integer? x) (integer? y) (integer?\
+    \ z))\n      (or (and (= x (+ y z)) (eq? x y z)) (and (= y (+ x z)) (eq? x y z))\
+    \ (and (= z (+ x y)) (eq? x y z)))\n      (eq? x y z)))", "  (and (= (round x)\
+    \ x)\n       (= (round y) y)\n       (= (round z) z)\n       (or (= (+ x y) z)\n\
+    \           (= (+ x z) y)\n           (= (+ y z) x) )))\n\n", "  (cond\n    [(and\
+    \ (= (integer? x) #t) (= (integer? y) #t) (= (integer? z) #t))\n     (= x (+ y\
+    \ z))]\n    [else #f]))\n", "  (cond\n    [(integer? x) x]\n    [(integer? y)\
+    \ y]\n    [(integer? z) z]\n    [else false]))\n</code>\nThe problem I'm having\
+    \ is that I can only get this to return a single value. I need to return true\
+    \ or false if any number matches any of the other numbers. \nThis is obviously\
+    \ a pretty simple problem but I'm new to racket and I'm struggling with it.\n\n\
+    \nA:\n\nAssuming that you want a value which is <code>#t</code> if and only if\
+    \ any of the 3 values is equal to the sum of the other two, you need to fix two\
+    \ problems:\n\nYou need to fix your <code>cond</code> expression to decide if\
+    \ you should return <code>#t</code> or <code>#f</code>.\nYou need to fix your\
+    \ <code>cond</code> expression to return at least one <code>#t</code> if you need\
+    \ to return <code>#t</code>.\n\nTo fix the first point, you just need to check\
+    \ if <code>x</code> (or <code>y</code> or <code>z</code>) is an integer and if\
+    \ it is equal to the sum of the other two.\nTo fix the second point, you need\
+    \ to return the result of each check. This can be done by replacing the <code>cond</code>\
+    \ by <code>or</code>, which returns the first <code>#t</code> it finds.\nUsing\
+    \ the <code>equal?</code> procedure, the result is:\n<code>(define (any_int x\
+    \ y z)\n  (or (and (integer? x) (equal? x (+ y z)))\n      (and (integer? y) (equal?\
+    \ y (+ x z)))\n      (and (integer? z) (equal? z (+ x y)))))\n</code>\n", "  (cond\n\
+    \    [(and (= (round x) x) (= (round y) y) (= (round z) z))\n     (cond\n    \
+    \   [(= x (+ y z)) #t]\n       [(= y (+ x z)) #t]\n       [(= z (+ x y)) #t]\n\
+    \       [else #f])]\n    [else #f]))", "  (and (integer? x) (integer? y) (integer?\
+    \ z) (or (= (+ x y) z) (= (+ x z) y) (= (+ y z) x))))\n", "  (and (= (truncate\
+    \ x) x) (= (truncate y) y) (= (truncate z) z)\n       (or (= (+ x y) z) (= (+\
+    \ x z) y) (= (+ y z) x))))\n", "  (if (and (integer? x) (integer? y) (integer?\
+    \ z))\n      (or (= (+ x y) z) (= (+ x z) y) (= (+ y z) x))\n      false))", " \
+    \ (cond\n    [(and (integer? x) (integer? y) (integer? z))\n     (or (and (= x\
+    \ (+ y z)) (= y (+ x z)) (= z (+ x y)))\n         (and (= x (- y z)) (= y (- x\
+    \ z)) (= z (- x y)))\n         (and (= x (+ y (- z))) (= y (+ x (- z))) (= z (+\
+    \ x (- y))))\n         (and (= x (- y (+ z))) (= y (- x (+ z))) (= z (- x (+ y)))))]\n\
+    \    [else #f]))\n", "  (and\n   (integer? x)\n   (integer? y)\n   (integer? z)\n\
+    \   (or\n    (= x (+ y z))\n    (= y (+ x z))\n    (= z (+ x y)))))", "  (and\
+    \ (integer? x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z))\
+    \ (= z (+ x y)))))\n", "  (and (integer? x) (integer? y) (integer? z)\n      \
+    \ (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))\n", "  (if (and (integer? x)\
+    \ (integer? y) (integer? z))\n      (or (and (= x (+ y z)) #t)\n          (and\
+    \ (= y (+ x z)) #t)\n          (and (= z (+ x y)) #t))\n      #f))\n", "  (and\
+    \ (integer? x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z))\
+    \ (= z (+ x y)))))\n", "  (or (and (integer? x) (integer? y) (integer? z) (and\
+    \ (= (+ x y) z) (= (+ y z) x) (= (+ x z) y)))\n      (and (integer? x) (integer?\
+    \ y) (integer? z) (and (= (+ x y) z) (= (+ y z) x)))))\n", "  (let ([a (exact->inexact\
+    \ x)]\n        [b (exact->inexact y)]\n        [c (exact->inexact z)])\n    (or\
+    \ (and (= a (+ b c)) (integer? a) (integer? b) (integer? c))\n        (and (=\
+    \ b (+ a c)) (integer? a) (integer? b) (integer? c))\n        (and (= c (+ a b))\
+    \ (integer? a) (integer? b) (integer? c)))))\n", "  (and (integer? x) (integer?\
+    \ y) (integer? z)\n       (or (and (= (+ x y) z) (= (+ x z) y) (= (+ y z) x))\n\
+    \           (and (= (- x y) z) (= (- x z) y) (= (- y z) x)))))\n", "  (define\
+    \ (eq_sum? x y z)\n    (and (integer? x) (integer? y) (integer? z)\n     (or (=\
+    \ (+ x y) z) (= (+ x z) y) (= (+ y z) x))))\n  (if (eq_sum? x y z)\n      true\n\
+    \      false))", "  (and (and (integer? x) (integer? y) (integer? z))\n      \
+    \ (or (= x (+ y z))\n           (= y (+ x z))\n           (= z (+ x y)))))", " \
+    \ (cond ((or (= x y) (= x z) (= y z)) false)\n        ((= x (+ y z)) true)\n \
+    \       ((= y (+ x z)) true)\n        ((= z (+ x y)) true)\n        (else false)))\n\
+    \n", "  (if (and (integer? x) (integer? y) (integer? z))\n      (or (and (= x\
+    \ (+ y z)) (= x (+ y z)))\n          (and (= y (+ x z)) (= y (+ x z)))\n     \
+    \     (and (= z (+ x y)) (= z (+ x y))))\n      #f))\n", "  (and (integer? x)\
+    \ (integer? y) (integer? z)\n       (or (= (+ x y) z) (= (+ x z) y) (= (+ y z)\
+    \ x))))\n", "  (and (= (floor x) x) (= (floor y) y) (= (floor z) z)\n       (or\
+    \ (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))", "  (and (integer? x) (integer?\
+    \ y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))\n```\n\
+    \n```racket\n#lang racket\n", '  (and (integer? x) (integer? y) (integer? z)))',
+  "  (if (and (integer? x) (integer? y) (integer? z))\n      (or (= x (+ y z)) (=\
+    \ y (+ x z)) (= z (+ x y)))\n      #f))\n", "  (and\n   (integer? x)\n   (integer?\
+    \ y)\n   (integer? z)\n   (or (= (+ x y) z)\n       (= (+ x z) y)\n       (= (+\
+    \ y z) x))))\n", "  (and (integer? x) (integer? y) (integer? z)))\n", "  (and\
+    \ (= (exact->inexact (/ (+ x y) 2)) (floor (/ (+ x y) 2)))\n       (= (exact->inexact\
+    \ (/ (+ x z) 2)) (floor (/ (+ x z) 2)))\n       (= (exact->inexact (/ (+ y z)\
+    \ 2)) (floor (/ (+ y z) 2)))))", "  (not (or (or (and (integer? x) (integer? y)\
+    \ (integer? z))\n              (and (integer? x) (integer? y) (not (integer? z))))\n\
+    \           (or (and (integer? x) (not (integer? y)) (integer? z))\n         \
+    \      (and (not (integer? x)) (integer? y) (integer? z))))))\n</code>\nI think\
+    \ this is more elegant and easier to read:\n<code>#lang racket", "  (and (integer?\
+    \ x) (integer? y) (integer? z)))\n", "  (cond\n    [(and (integer? x) (integer?\
+    \ y) (integer? z))\n      (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))]\n  \
+    \  [else false]))\n", "  (or (= (+ x y) z)\n      (= (+ x z) y)\n      (= (+ y\
+    \ z) x)))\n", "  (and (integer? x) (integer? y) (integer? z)\n       (or (= x\
+    \ (+ y z)) (= y (+ x z)) (= z (+ x y)))))\n", "  (and (integer? x) (integer? y)\
+    \ (integer? z)))\n", "  (and (integer? x) (integer? y) (integer? z)\n       (or\
+    \ (= (+ x y) z) (= (+ x z) y) (= (+ y z) x))))\n", "  (cond\n    [(and (integer?\
+    \ x) (integer? y) (integer? z))\n     (or (and (= x (+ y z))\n              (/=\
+    \ x 0)\n              (/= y 0)\n              (/= z 0))\n         (and (= y (+\
+    \ x z))\n              (/= x 0)\n              (/= y 0)\n              (/= z 0))\n\
+    \         (and (= z (+ x y))\n              (/= x 0)\n              (/= y 0)\n\
+    \              (/= z 0)))]\n    [else false]))\n", "  (and (integer? x) (integer?\
+    \ y) (integer? z)\n       (or (and (= x (+ y z)) (= (+ y z) x))\n           (and\
+    \ (= y (+ x z)) (= (+ x z) y))\n           (and (= z (+ x y)) (= (+ x y) z)))))\n",
+  "  (and (integer? x) (integer? y) (integer? z) (or (= x (+ y z)) (= y (+ x z)) (=\
+    \ z (+ x y)))))\n", "  (and (= (truncate x) x)\n       (= (truncate y) y)\n  \
+    \     (= (truncate z) z)\n       (or (= x (+ y z))\n           (= y (+ x z))\n\
+    \           (= z (+ x y)))))", "  (define (two_equal? x y)\n    (if (= x y)\n\
+    \        #t\n        #f))\n  (if (two_equal? x (+ y z))\n      #t\n      (if (two_equal?\
+    \ y (+ x z))\n          #t\n          (if (two_equal? z (+ x y))\n           \
+    \   #t\n              #f))))", "  (and (integer? x) (integer? y) (integer? z)))\n\
+    </code>\nI have tried to create a function that returns true if all three are\
+    \ integers, but I don't know how to add the rest of the logic. Any help would\
+    \ be appreciated.\n\n\nA:\n\nFor the function you've created, you could use <code>or</code>\
+    \ instead of <code>and</code> to get the desired behavior:\n<code>(define (any_int\
+    \ x y z)\n  (or (integer? x) (integer? y) (integer? z)))\n</code>\nBut you should\
+    \ probably create a different function that checks if two numbers add up to the\
+    \ third:\n<code>(define (any_equal x y z)\n  (or (and (= x (+ y z))\n        \
+    \   (integer? x)\n           (integer? y)\n           (integer? z))\n      (and\
+    \ (= y (+ x z))\n           (integer? x)\n           (integer? y)\n          \
+    \ (integer? z))\n      (and (= z (+ x y))\n           (integer? x)\n         \
+    \  (integer? y)\n           (integer? z))))\n</code>\nAnd use this function in\
+    \ your original function:\n<code>(define (any_int x y z)\n  (any_equal x y z))\n\
+    </code>\n", "  (if (= (integer? x) true)\n    (if (= (integer? y) true)\n    \
+    \  (if (= (integer? z) true)\n        (if (or (and (= (+ x y) z) true)\n     \
+    \           (and (= (+ x z) y) true)\n                (and (= (+ y z) x) true))\n\
+    \          \"True\"\n          \"False\")\n        \"False\")\n      \"False\"\
+    )\n    \"False\"))\n</code>\nThe \"integer?\" function returns true, when x, y,\
+    \ and z are integers, but when it meets x = 3.6, it returns false, and I don't\
+    \ know what to do.\n\n\nA:\n\nThere is a procedure <code>whole?</code> that checks\
+    \ if a real number is an integer, but even that is probably not what you want.\n\
+    Since <code>=</code> can compare reals and numbers you can use it to check if\
+    \ the sum of the first two numbers equals the third.\nFor example,\n<code>(= (apply\
+    \ + (list 1.5 1)) 2.5)\n=&gt; #t\n</code>\n", "  (and (integer? x) (integer? y)\
+    \ (integer? z) (or (= (+ x y) z) (= (+ x z) y) (= (+ y z) x))))\n", '  (and (integer?
+    x) (integer? y) (integer? z)))', "  (and (integer? x) (integer? y) (integer? z)))\n",
+  "  (and (integer? x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+\
+    \ x z)) (= z (+ x y)))))\n", "  (and (integer? x) (integer? y) (integer? z)\n\
+    \       (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))\n", "  (and (integer?\
+    \ x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z)) (= z (+\
+    \ x y)))))\n</code>\n", "  (and\n   (integer? x)\n   (integer? y)\n   (integer?\
+    \ z)\n   (or\n    (= x (+ y z))\n    (= y (+ x z))\n    (= z (+ x y)))))\n", " \
+    \ (if (and (= (truncate x) x) (= (truncate y) y) (= (truncate z) z))\n      (or\
+    \ (and (= x (+ y z)) (not (= x y)))\n          (and (= y (+ x z)) (not (= y x)))\n\
+    \          (and (= z (+ x y)) (not (= z x))))\n      false))", "  (= x (+ y z))\n\
+    \  (= y (+ x z))\n  (= z (+ x y)))\n", "  (and (integer? x) (integer? y) (integer?\
+    \ z)))\n", "  (and (number? x) (number? y) (number? z) (= (round x) x) (= (round\
+    \ y) y) (= (round z) z)\n       (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))\n",
+  "  (let* ([x (integer? x)]\n         [y (integer? y)]\n         [z (integer? z)])\n\
+    \    (and x y z (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y))))))\n", "  (and\
+    \ (integer? x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z))\
+    \ (= z (+ x y)))))", "  (and (integer? x) (integer? y) (integer? z)))\n", "  (and\
+    \ (integer? x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z))\
+    \ (= z (+ x y)))))\n", "  (cond\n    [(and (integer? x) (integer? y) (integer?\
+    \ z)) (or (= (+ x y) z) (= (+ x z) y) (= (+ y z) x))]\n    [else false]))\n",
+  "  (cond\n    [(and (integer? x) (integer? y) (integer? z))\n     (or (and (= x\
+    \ (+ y z)) (not (= x 0)))\n         (and (= y (+ x z)) (not (= y 0)))\n      \
+    \   (and (= z (+ x y)) (not (= z 0))))]\n    [else false]))\n", "  (and (integer?\
+    \ x) (integer? y) (integer? z)))\n", "  (and (integer? x) (integer? y) (integer?\
+    \ z)\n       (or (and (= x (+ y z))\n                (= y (+ x z))\n         \
+    \       (= z (+ x y)))\n           (and (= x (+ y z))\n                (= y (+\
+    \ x z)))\n           (and (= x (+ y z))\n                (= z (+ x y)))\n    \
+    \       (and (= y (+ x z))\n                (= z (+ x y))))))", "  (and\n   (integer?\
+    \ x)\n   (integer? y)\n   (integer? z)\n   (or\n    (= x (+ y z))\n    (= y (+\
+    \ x z))\n    (= z (+ x y)))))\n</code>\nI am having trouble with the specification\
+    \ of the function:\n<code>&gt; (any_int 0.5 -0.5 0)\n. . any_int: contract violation\n\
+    \  expected: integer?\n  given: 0.5\n  in: the 1st argument of\n      (- 1 (any_int\
+    \ x y z))\n</code>\nIsn't the provided <code>x</code> a number? Why is it asking\
+    \ for an integer? \n\n\nA:\n\nYou're not using the right function to check whether\
+    \ a number is an integer or not.\n<code>integer?</code> expects an <code>exact-integer?</code>,\
+    \ which is different than a simple integer. See the docs:\n<blockquote>\n<p>Checks\
+    \ whether a number is an exact integer. This predicate returns #t when given an\
+    \ exact integer, and #f when given an inexact integer (a float). Exact integers\
+    \ are produced by using only exact operations, such as (/ 5 2), or (expt 5.0 0).</p>\n\
+    </blockquote>\nYou can use the <code>integer?</code> function, but you first need\
+    \ to convert the input number to an exact value, for example using the <code>exact</code>\
+    \ function:\n<code>(define (any_int x y z)\n  (and\n   (integer? (exact x))\n\
+    \   (integer? (exact y))\n   (integer? (exact z))\n   (or\n    (= x (+ y z))\n\
+    \    (= y (+ x z))\n    (= z (+ x y)))))\n</code>\nIn which case the value <code>0.5</code>\
+    \ that was failing your test now works:\n<code>(any_int 0.5 -0.5 0)\n=&gt; #t\n\
+    </code>\nFor a more detailed explanation on the differences between <code>number?</code>,\
+    \ <code>integer?</code> and <code>exact-integer?</code> read this answer.\n",
+  '  (and (integer? x) (integer? y) (integer? z)))', "  (and (integer? x) (integer?\
+    \ y) (integer? z) (or (= (+ x y) z) (= (+ x z) y) (= (+ y z) x))))\n", "  (and\
+    \ (integer? x) (integer? y) (integer? z)))\n</code>\nI'm running into an error:\n\
+    <code>test_any_int.rkt:10:3: any_int: contract violation\n  expected: Number\n\
+    \  given: 1.5\n  in: the 1st argument of\n      (- x y)\n  contract from: (- any/c\
+    \ any/c)\n  blaming: top-level (assuming the contract is correct)\n  at: test_any_int.rkt:10:3\n\
+    </code>\nMy question is where is the problem in the code?\n\n\nA:\n\nThe problem\
+    \ is that <code>-</code> is a numeric operator, and won't accept other than numeric\
+    \ arguments.\nYou could test each number against the remaining two, like this:\n\
+    <code>(define (any_int x y z)\n  (and (integer? x)\n       (integer? y)\n    \
+    \   (integer? z)\n       (or (= x (+ y z))\n           (= y (+ x z))\n       \
+    \    (= z (+ x y)))))\n</code>\nNote that in Racket you can return the result\
+    \ of an <code>and</code> expression, and it will evaluate to the last expression.\n",
+  "  (integer? x) (integer? y) (integer? z)\n  (and (or (= x (+ y z))\n          \
+    \ (= y (+ x z))\n           (= z (+ x y)))\n       (and (integer? x)\n       \
+    \     (integer? y)\n            (integer? z))))", "  (and (and (integer? x) (integer?\
+    \ y) (integer? z))\n       (or (= x (+ y z))\n           (= y (+ x z))\n     \
+    \      (= z (+ x y)))))\n", "  (cond\n    [(and (= (round x) x) (= (round y) y)\
+    \ (= (round z) z)) (or (= (+ x y) z) (= (+ x z) y) (= (+ y z) x))]\n    [else\
+    \ #f]))", "  (if\n    (and\n      (integer? x)\n      (integer? y)\n      (integer?\
+    \ z))\n    (or\n      (= x (+ y z))\n      (= y (+ x z))\n      (= z (+ x y)))\n\
+    \    #f))\n", "  (and (integer? x) (integer? y) (integer? z)\n       (or (= x\
+    \ (+ y z)) (= y (+ x z)) (= z (+ x y)))))\n", "  (and (integer? x) (integer? y)\
+    \ (integer? z)))\n", "  (and (integer? x) (integer? y) (integer? z) (or (and (=\
+    \ x (+ y z)) \n  (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))))", '  (and
+    (integer? x) (integer? y) (integer? z)))', "  (define x_plus_y (+ x y))\n  (define\
+    \ y_plus_z (+ y z))\n  (define x_plus_z (+ x z))\n  (and (= x_plus_y z) (integer?\
+    \ x) (integer? y) (integer? z))\n  (or (= x_plus_y z) (= y_plus_z x) (= x_plus_z\
+    \ y))\n  )\n", "  (cond\n    [(integer? x) #t]\n    [(integer? y) #t]\n    [(integer?\
+    \ z) #t]\n    [else #f]))\n", "  (or (and (integer? x) (integer? y) (integer?\
+    \ z) (= z (+ x y)))\n      (and (integer? x) (integer? y) (integer? z) (= y (+\
+    \ x z)))\n      (and (integer? x) (integer? y) (integer? z) (= x (+ y z)))))",
+  "  (and\n   (number? x)\n   (number? y)\n   (number? z)\n   (or\n    (= x (+ y z))\n\
+    \    (= y (+ x z))\n    (= z (+ x y)))))\n", "  (cond\n    [(and (integer? x)\
+    \ (integer? y) (integer? z))\n     (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))]\n\
+    \    [else false]))\n", "  (and (integer? x) (integer? y) (integer? z)\n     \
+    \  (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))\n", "  (and\n   (and (integer?\
+    \ x) (integer? y) (integer? z))\n   (or (= x (+ y z)) (= y (+ x z)) (= z (+ x\
+    \ y)))))\n", "  (cond\n    [(integer? x) (integer? y) (integer? z)\n     (or (=\
+    \ (add1 x y) z) (= (add1 x z) y) (= (add1 y z) x))]\n    [else false]))\n", " \
+    \ (and (integer? x) (integer? y) (integer? z) (or (= (+ x y) z) (= (+ x z) y)\
+    \ (= (+ y z) x))))\n", "  (and (integer? x) (integer? y) (integer? z)\n      \
+    \ (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))", "  (cond\n    [(and (= (floor\
+    \ x) x) (= (floor y) y) (= (floor z) z))\n     (or (= x (+ y z)) (= y (+ x z))\
+    \ (= z (+ x y)))]\n    [else #f]))\n</code>\nMy solution is using a lot of double\
+    \ negation, which is something I know I should avoid. Can you help me to rewrite\
+    \ this in a more functional way?\n\n\nA:\n\nI'd probably do something like this:\n\
+    <code>(define (any-int? x y z)\n  (define (integer? n)\n    (= (floor n) n))\n\
+    \  (and (integer? x)\n       (integer? y)\n       (integer? z)\n       (or (=\
+    \ x (+ y z))\n           (= y (+ x z))\n           (= z (+ x y)))))\n</code>\n\
+    Since the three numbers need to be integers it makes sense to check that condition\
+    \ first and if not present return <code>#f</code> immediately.\n", "  (and (integer?\
+    \ x) (integer? y) (integer? z)))\n", "  (and (integer? x) (integer? y) (integer?\
+    \ z)))\n</code>\nI get error:\napplication: not a procedure;\n expected a procedure\
+    \ that can be applied to arguments\n  given: 1\n  arguments...:\n   #1\n    1\n\
+    \   #2\n    2\n   #3\n    3\nHow to solve this problem?\n\n\nA:\n\nYou're trying\
+    \ to use the result of the <code>any_int</code> procedure as a predicate, but\
+    \ that won't work because the procedure doesn't return a boolean value.\nYou have\
+    \ to check if the predicate is true and then check if the sum of the other two\
+    \ numbers is equal to the 3rd one. Here's how to do it:\n<code>(define (any_int\
+    \ x y z)\n  (and (integer? x) (integer? y) (integer? z)\n       (= (+ x y) z)))\n\
+    </code>\nUse it like this:\n<code>(any_int 3 -2 1)\n=&gt; #t\n</code>\n", "  (and\
+    \ (integer? x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z))\
+    \ (= z (+ x y)))))\n", "  (and (integer? x) (integer? y) (integer? z)\n      \
+    \ (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))\n", "  (and (integer? x) (integer?\
+    \ y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))\n",
+  "  (cond\n    ((and (integer? x) (integer? y) (integer? z))\n     (or (= (+ x y)\
+    \ z) (= (+ x z) y) (= (+ y z) x)))\n    (else #f)))\n", "  (if (= (+ x y) z)\n\
+    \      #t\n      (if (= (+ x z) y)\n          #t\n          (if (= (+ y z) x)\n\
+    \              #t\n              #f))))\n", "  (cond\n    [(and (integer? x) (integer?\
+    \ y) (integer? z))\n     (or (= (+ x y) z) (= (+ x z) y) (= (+ y z) x))]\n   \
+    \ [else #f]))\n</code>\nThis code works fine. But I don't want to write it with\
+    \ <code>cond</code>. I want to rewrite it as a function that returns another function\
+    \ that works like this. So I can test it like this:\n<code>(define (test-any_int)\n\
+    \  (and (not (any_int 3.6 -2.2 2))\n       (any_int 3 -2 1)\n       (any_int 5\
+    \ 2 7)\n       (not (any_int 3 2 2))))\n</code>\nThis is what I wrote:\n<code>#lang\
+    \ racket\n", "  (let ((x (inexact->exact x))\n        (y (inexact->exact y))\n\
+    \        (z (inexact->exact z)))\n    (or (and (= x (+ y z)) (integer? x) (integer?\
+    \ y) (integer? z))\n        (and (= y (+ x z)) (integer? x) (integer? y) (integer?\
+    \ z))\n        (and (= z (+ x y)) (integer? x) (integer? y) (integer? z)))))\n",
+  "  (if (= z (+ x y))\n      #t\n      #f))", '  (and (integer? x) (integer? y) (integer?
+    z)))', "  (define (check-sums x y z)\n    (cond\n      [(eq? (+ x y) z) #t]\n\
+    \      [(eq? (+ x z) y) #t]\n      [(eq? (+ y z) x) #t]\n      [else #f]))\n \
+    \ (check-sums (floor x) (floor y) (floor z)))\n", "  (define (int? x)\n    (if\
+    \ (integer? x)\n        true\n        false))\n  (if (and (int? x) (int? y) (int?\
+    \ z))\n      (if (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))\n          true\n\
+    \          false)\n      false))\n", "  (and (integer? x) (integer? y) (integer?\
+    \ z)\n       (or (= (+ x y) z) (= (+ x z) y) (= (+ y z) x))))", '  (and (= (round
+    x) x) (= (round y) y) (= (round z) z)))', "  (and (integer? x) (integer? y) (integer?\
+    \ z)))\n", "  (let ([adds (+ x y)])\n    (and (integer? x) (integer? y) (integer?\
+    \ z)\n         (or (= z adds) (= y (+ x z)) (= x (+ y z))))))\n", "  (and (integer?\
+    \ x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z)) (= z (+\
+    \ x y)))))\n", "  (and (integer? x) (integer? y) (integer? z) (or (= (+ x y) z)\
+    \ (= (+ x z) y) (= (+ y z) x))))\n", "  (and (integer? x) (integer? y) (integer?\
+    \ z)))\n", "  (and (integer? x) (integer? y) (integer? z)\n       (or (= x (+\
+    \ y z)) (= y (+ x z)) (= z (+ x y)))))", "  (= (+ x y) z)\n  (= (+ x z) y)\n \
+    \ (= (+ y z) x))\n", "  (and (integer? x) (integer? y) (integer? z)\n       (or\
+    \ (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))\n</code>\n", "  (and (integer?\
+    \ x) (integer? y) (integer? z)\n       (or (and (= x (- z y)) (= x (+ y z)))\n\
+    \           (and (= y (- x z)) (= y (+ x z)))\n           (and (= z (- x y)) (=\
+    \ z (+ x y))))))\n", "  (and (integer? x) (integer? y) (integer? z)\n       (or\
+    \ (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))", "  (integer? x)\n  (integer?\
+    \ y)\n  (integer? z)\n  (or (= x (+ y z))\n  (= y (+ x z))\n  (= z (+ x y))))",
+  "  (and (integer? x) (integer? y) (integer? z) (or (= x (+ y z)) (= y (+ x z)) (=\
+    \ z (+ x y)))))\n", "  (= x (+ y z))\n  (and (integer? x) (integer? y) (integer?\
+    \ z)))\n", "  (and (integer? x) (integer? y) (integer? z)))\n", "  (define (is_integer\
+    \ n)\n    (equal? (integer? n) #t))\n  (and (is_integer x) (is_integer y) (is_integer\
+    \ z)\n       (or (and (equal? (+ x y) z) (equal? x y))\n           (and (equal?\
+    \ (+ x z) y) (equal? x z))\n           (and (equal? (+ y z) x) (equal? y z)))))\n",
+  "  (and (exact? x) (exact? y) (exact? z)))\n", "  (and (integer? x) (integer? y)\
+    \ (integer? z)\n       (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))", "  (and\
+    \ (integer? x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z))\
+    \ (= z (+ x y)))))\n", "  (and (integer? x) (integer? y) (integer? z)\n      \
+    \ (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))", "  (and (integer? x) (integer?\
+    \ y) (integer? z)\n       (or (and (= x (+ y z)) #t)\n           (and (= y (+\
+    \ x z)) #t)\n           (and (= z (+ x y)) #t))))\n</code>\nI'm trying to avoid\
+    \ the nested ifs, but this looks less neat.\n<code>#lang racket\n", "  (and (integer?\
+    \ x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z)) (= z (+\
+    \ x y)))))\n", "  (and\n   (integer? x)\n   (integer? y)\n   (integer? z)\n  \
+    \ (or\n    (= x (+ y z))\n    (= y (+ x z))\n    (= z (+ x y)))))\n", "  (and\
+    \ (integer? x) (integer? y) (integer? z)\n       (or (= (+ x y) z) (= (+ x z)\
+    \ y) (= (+ y z) x))))\n", "  (and (integer? x) (integer? y) (integer? z)\n   \
+    \    (or (and (= x (+ y z)) (= x (- y z)))\n           (and (= y (+ x z)) (= y\
+    \ (- x z)))\n           (and (= z (+ x y)) (= z (- x y))))))\n", "  (and (integer?\
+    \ x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z)) (= z (+\
+    \ x y)))))\n", "  (cond\n    [(and (integer? x) (integer? y) (integer? z))\n \
+    \     (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))]\n    [else false]))\n",
+  '  (and (integer? x) (integer? y) (integer? z)))', "  (define (equal x y)\n    (and\
+    \ (integer? x) (integer? y) (= x y)))\n  (or (and (equal (+ x y) z)\n        \
+    \   (and (integer? x) (integer? y) (integer? z)))\n      (and (equal (+ x z) y)\n\
+    \           (and (integer? x) (integer? y) (integer? z)))\n      (and (equal (+\
+    \ y z) x)\n           (and (integer? x) (integer? y) (integer? z)))))\n", "  (define\
+    \ sum (- y z))\n  (if (and (integer? x) (integer? y) (integer? z))\n      (if\
+    \ (or (= x sum) (= y sum) (= z sum))\n          true\n          false\n      \
+    \    )\n      false\n      )\n  )\n", "  (and (integer? x) (integer? y) (integer?\
+    \ z)))\n</code>\nI'm not sure where to go from here. I know that I have to have\
+    \ an OR in there, but I'm not sure how to do it. Or is there a way to do it without\
+    \ OR?\n\n\nA:\n\n<code>(define (any_int x y z)\n  (and (integer? x) (integer?\
+    \ y) (integer? z)\n       (or (= x (+ y z))\n           (= y (+ x z))\n      \
+    \     (= z (+ x y)))))\n</code>\nThen\n<code>(any_int 5 2 7) ; ==&gt; #t", " \
+    \ (and (and (integer? x) (integer? y) (integer? z))\n       (or (= (+ x y) z)\n\
+    \           (= (+ x z) y)\n           (= (+ y z) x))))\n", "  (and (integer? x)\
+    \ (integer? y) (integer? z)\n       (or (and (= (+ x y) z) #t)\n           (and\
+    \ (= (+ x z) y) #t)\n           (and (= (+ y z) x) #t))))\n", "  (and (integer?\
+    \ x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z)) (= z (+\
+    \ x y)))))\n", "  (if (and (integer? x) (integer? y) (integer? z))\n      (or\
+    \ (= (+ x y) z) (= (+ x z) y) (= (+ y z) x))\n      false))\n", "  (and (integer?\
+    \ x) (integer? y) (integer? z)\n       (or (and (= x (+ y z)) (= (- x y) z))\n\
+    \           (and (= x (+ z y)) (= (- x z) y))\n           (and (= y (+ x z)) (=\
+    \ (- y x) z))\n           (and (= y (+ z x)) (= (- y z) x))\n           (and (=\
+    \ z (+ x y)) (= (- z x) y))\n           (and (= z (+ y x)) (= (- z y) x)))))\n",
+  "  (and\n   (integer? x)\n   (integer? y)\n   (integer? z)\n   (or (= x (+ y z))\n\
+    \       (= y (+ x z))\n       (= z (+ x y)))))\n", "  (and\n   (integer? x)\n\
+    \   (integer? y)\n   (integer? z)\n   (or\n    (= x (+ y z))\n    (= y (+ x z))\n\
+    \    (= z (+ x y)))))\n", "  (and (integer? x) (integer? y) (integer? z)\n   \
+    \    (or (and (= x (+ y z)) )\n           (and (= y (+ x z)) )\n           (and\
+    \ (= z (+ x y)) )\n          )\n      )\n  )\n", "  (and (exact? x) (exact? y)\
+    \ (exact? z)\n       (or (= x (+ y z))\n           (= y (+ x z))\n           (=\
+    \ z (+ x y)))))\n", "  (and\n   (integer? x)\n   (integer? y)\n   (integer? z)\n\
+    \   (or\n    (= x (+ y z))\n    (= y (+ x z))\n    (= z (+ x y)))))", "  (and\
+    \ (integer? x) (integer? y) (integer? z)\n       (or (and (= x (+ y z)) (= (+\
+    \ y z) x))\n           (and (= y (+ x z)) (= (+ x z) y))\n           (and (= z\
+    \ (+ x y)) (= (+ x y) z)))))", "  (and (integer? x) (integer? y) (integer? z)))\n",
+  "  (and (integer? x) (integer? y) (integer? z)\n       (or (and (= x (+ y z)) (=\
+    \ x (- y z)))\n           (and (= y (+ x z)) (= y (- x z)))\n           (and (=\
+    \ z (+ x y)) (= z (- x y))))))\n", "  (cond\n    [(not (integer? x)) #f]\n   \
+    \ [(not (integer? y)) #f]\n    [(not (integer? z)) #f]\n    [(or (= x (+ y z))\
+    \ (= y (+ x z)) (= z (+ x y))) #t]\n    [else #f]))\n</code>\nAs is, I'm aware\
+    \ this has some minor flaws.\n<code>any_int(3, -2, 1)</code> returns #t because\
+    \ it is not an integer, but I feel like it should return #t, because <code>-2</code>\
+    \ is the sum of the other two values.\nHow could I write this more concisely,\
+    \ and better?\n\n\nA:\n\nYour <code>cond</code> is unnecessarily complicated.\
+    \ Just do this:\n<code>(define (any_int x y z)\n  (and (integer? x)\n       (integer?\
+    \ y)\n       (integer? z)\n       (or (= x (+ y z))\n           (= y (+ x z))\n\
+    \           (= z (+ x y)))))\n</code>\nNotice that I also flipped the order of\
+    \ conditions: first check if all arguments are integers, then test if one of them\
+    \ is the sum of the other two. The reason for this is that the latter condition\
+    \ is more expensive, and we don't want to run it unnecessarily. As a general rule\
+    \ of thumb, it's best to put the simpler conditions first.\n", "  (and (integer?\
+    \ x) (integer? y) (integer? z)\n       (or (= (+ x y) z) (= (+ x z) y) (= (+ y\
+    \ z) x))))\nany_int 3 -2 1\nany_int 3.6 -2.2 2\n", '  (and (integer? x) (integer?
+    y) (integer? z) (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))', "  (and (integer?\
+    \ x) (integer? y) (integer? z)))\n", "  (if\n      (and\n       (integer? x)\n\
+    \       (integer? y)\n       (integer? z))\n      (or\n       (= x (+ y z))\n\
+    \       (= y (+ x z))\n       (= z (+ x y)))\n      #f))", "  (integer? x)\n \
+    \ (integer? y)\n  (integer? z)\n  (if (= (+ x y) z)\n      true\n      (if (=\
+    \ (+ x z) y)\n          true\n          (if (= (+ y z) x)\n              true\n\
+    \              false))))\n", "  (and (integer? x) (integer? y) (integer? z)\n\
+    \       (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))\n", "  (equal? (ceiling\
+    \ x) x)\n  (equal? (ceiling y) y)\n  (equal? (ceiling z) z)\n  (or\n   (and (=\
+    \ x (+ y z)) (= x y))\n   (and (= x (+ y z)) (= x z))\n   (and (= y (+ x z)) (=\
+    \ y x))\n   (and (= y (+ x z)) (= y z))\n   (and (= z (+ x y)) (= z x))\n   (and\
+    \ (= z (+ x y)) (= z y))))\n", "  (cond\n    [(and (integer? x) (integer? y) (integer?\
+    \ z))\n     (or (= (+ x y) z) (= (+ x z) y) (= (+ y z) x))]\n    [else false]))\n",
+  "  (and (integer? x) (integer? y) (integer? z)\n       (or (and (= (+ x y) z) (integer?\
+    \ z))\n           (and (= (+ x z) y) (integer? y))\n           (and (= (+ y z)\
+    \ x) (integer? x)))))\n", "  (if\n    (and (integer? x) (integer? y) (integer?\
+    \ z))\n    (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))\n    (begin (display\
+    \ \"false\\n\")\n           (begin (display \"false\\n\")\n                  (begin\
+    \ (display \"false\\n\")\n                         false)))))", "  (and (integer?\
+    \ x) (integer? y) (integer? z)\n       (or (= (+ x y) z) (= (+ x z) y) (= (+ y\
+    \ z) x))))\n", "  (and\n   (integer? x)\n   (integer? y)\n   (integer? z)\n  \
+    \ (or\n    (= x (+ y z))\n    (= y (+ x z))\n    (= z (+ x y)))))", "  (and (integer?\
+    \ x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z)) (= z (+\
+    \ x y)))))\n", "  (and (integer? x) (integer? y) (integer? z)))\n</code>\nI wanted\
+    \ to use <code>and</code> to check each numbers individually, but it wouldn't\
+    \ work.\nAnyone know why?\nI also tried using <code>cond</code>, and <code>or</code>\
+    \ with no success.\n\n\nA:\n\nTry this:\n<code>(define (any_int x y z)\n  (and\
+    \ (integer? x) (integer? y) (integer? z)\n       (or (= x (+ y z)) (= y (+ x z))\
+    \ (= z (+ x y)))))\n</code>\n", "  (cond\n    [(and (integer? x) (integer? y)\
+    \ (integer? z))\n     (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))]\n    [else\
+    \ #f]))\n", "  (and (= (exact->inexact (truncate (exact-integer x))) x)\n    \
+    \   (= (exact->inexact (truncate (exact-integer y))) y)\n       (= (exact->inexact\
+    \ (truncate (exact-integer z))) z)\n       (or (= x (+ y z))\n           (= y\
+    \ (+ x z))\n           (= z (+ x y)))))\n", "  (or (= (+ x y) z)\n      (= (+\
+    \ x z) y)\n      (= (+ y z) x)))\n", "  (and (integer? x) (integer? y) (integer?\
+    \ z)\n       (or (= x (+ y z)) (= y (+ x z)) (= z (+ x y)))))", "  (and (integer?\
+    \ x) (integer? y) (integer? z)\n       (or (and (= (+ x y) z)\n              \
+    \  (not (= (+ x z) y))\n                (not (= (+ y z) x)))\n           (and\
+    \ (= (+ x z) y)\n                (not (= (+ x y) z))\n                (not (=\
+    \ (+ y z) x)))\n           (and (= (+ y z) x)\n                (not (= (+ x z)\
+    \ y))\n                (not (= (+ x y) z))))))\n", "  (and\n   (integer? x)\n\
+    \   (integer? y)\n   (integer? z)\n   (or\n    (= (+ x y) z)\n    (= (+ x z) y)\n\
+    \    (= (+ y z) x))))\n", "  (and (integer? x) (integer? y) (integer? z)\n   \
+    \    (or (and (= x (+ y z)) (= x y))\n           (and (= x (+ y z)) (= x z))\n\
+    \           (and (= y (+ x z)) (= y z)))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

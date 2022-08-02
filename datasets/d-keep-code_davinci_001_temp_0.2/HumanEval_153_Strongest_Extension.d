@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 You will be given the name of a class (a string) and a list of extensions.
     The extensions are to be used to load additional classes to the class. The
@@ -18,12 +18,33 @@ You will be given the name of a class (a string) and a list of extensions.
     for Strongest_Extension('my_class', ['AA', 'Be', 'CC']) == 'my_class.AA'
     
 */
-const(char)[] Strongest_Extension(const(char)[] class_name, const(char)[][] extensions) 
+string Strongest_Extension(string class_name, string[] extensions) 
 {
-    // your code here
-    return null;
+    int max = 0;
+    string max_ext = "";
+    for (int i = 0; i < extensions.length; i++)
+    {
+        int cap = 0;
+        int sm = 0;
+        for (int j = 0; j < extensions[i].length; j++)
+        {
+            if (extensions[i][j] >= 'A' && extensions[i][j] <= 'Z')
+            {
+                cap++;
+            }
+            else if (extensions[i][j] >= 'a' && extensions[i][j] <= 'z')
+            {
+                sm++;
+            }
+        }
+        if (cap - sm > max)
+        {
+            max = cap - sm;
+            max_ext = extensions[i];
+        }
+    }
+    return class_name + "." + max_ext;
 }
-
 
 unittest
 {

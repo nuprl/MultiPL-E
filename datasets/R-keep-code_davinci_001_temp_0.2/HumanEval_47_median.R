@@ -15,10 +15,10 @@ median <- function(l) {
 
 test_humaneval <- function() {
 candidate <- median
-    if(!identical(candidate(list(3, 1, 2, 4, 5)), 3)){quit('no', 1)}
-    if(!identical(candidate(list(-10, 4, 6, 1000, 10, 20)), 8.0)){quit('no', 1)}
-    if(!identical(candidate(list(5)), 5)){quit('no', 1)}
-    if(!identical(candidate(list(6, 5)), 5.5)){quit('no', 1)}
-    if(!identical(candidate(list(8, 1, 3, 9, 9, 2, 7)), 7)){quit('no', 1)}
+    if(!identical(candidate(c(3, 1, 2, 4, 5)), 3)){quit('no', 1)}
+    if(!identical(candidate(c(-10, 4, 6, 1000, 10, 20)), 8.0)){quit('no', 1)}
+    if(!identical(candidate(c(5)), 5)){quit('no', 1)}
+    if(!identical(candidate(c(6, 5)), 5.5)){quit('no', 1)}
+    if(!identical(candidate(c(8, 1, 3, 9, 9, 2, 7)), 7)){quit('no', 1)}
 }
 test_humaneval()

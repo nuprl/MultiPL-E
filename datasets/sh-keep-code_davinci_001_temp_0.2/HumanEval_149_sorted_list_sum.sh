@@ -12,79 +12,108 @@
 # For example:
 # assert list_sort(["aa", "a", "aaa"]) => ["aa"]
 # assert list_sort(["ab", "a", "aaa", "cd"]) => ["ab", "cd"]
+#
+# $1 is a space-separated list
 sorted_list_sum() {
-  local -a sorted_list
-  local -a list=("$@")
-  local -i i=0
-  local -i j=0
-  local -i k=0
-  local -i list_size=${#list[@]}
-  local -i list_length=${#list[0]}
-  local -i list_length_max=0
-  local -i list_length_min=0
-  local -i list_length_mid=0
-  local -i list_length_mid_min=0
-  local -i list_length_mid_max=0
-  local -i list_length_mid_mid=0
-  local -i list_length_mid_mid_min=0
-  local -i list_length_mid_mid_max=0
-  local -i list_length_mid_mid_mid=0
-  local -i list_length_mid_mid_mid_min=0
-  local -i list_length_mid_mid_mid_max=0
-  local -i list_length_mid_mid_mid_mid=0
-  local -i list_length_mid_mid_mid_mid_min=0
-  local -i list_length_mid_mid_mid_mid_max=0
-  local -i list_length_mid_mid_mid_mid_mid=0
-  local -i list_length_mid_mid_mid_mid_mid_min=0
-  local -i list_length_mid_mid_mid_mid_mid_max=0
-  local -i list_length_mid_mid_mid_mid_mid_mid=0
-  local -i list_length_mid_mid_mid_mid_mid_mid_min=0
-  local -i list_length_mid_mid_mid_mid_mid_mid_max=0
-  local -i list_length_mid_mid_mid_mid_mid_mid_mid=0
-  local -i list_length_mid_mid_mid_mid_mid_mid_mid_min=0
-  local -i list_length_mid_mid_mid_mid_mid_mid_mid_
+  # Write your code here
+  local list=($1)
+  local sorted_list=()
+  local len=0
+  local i=0
+  local j=0
+  local k=0
+  local l=0
+  local m=0
+  local n=0
+  local o=0
+  local p=0
+  local q=0
+  local r=0
+  local s=0
+  local t=0
+  local u=0
+  local v=0
+  local w=0
+  local x=0
+  local y=0
+  local z=0
+  local a=0
+  local b=0
+  local c=0
+  local d=0
+  local e=0
+  local f=0
+  local g=0
+  local h=0
+  local i=0
+  local j=0
+  local k=0
+  local l=0
+  local m=0
+  local n=0
+  local o=0
+  local p=0
+  local q=0
+  local r=0
+  local s=0
+  local t=0
+  local u=0
+  local v=0
+  local w=0
+  local x=0
+  local y=0
+  local z=0
+  local a=0
+  local b=0
+  local c=0
+  local d=0
+  local e=0
+  local f=0
+  local g=0
+  local h=0
+  local i=0
+  local j=0
+  local k=0
+  local l=0
+  local m=0
+  local n=0
+  local o=0
+  local p=0
+  local q=0
+  local r=0
+  local s=0
+  local t=0
+  local u=0
+  local v=0
+  local w=0
+  local x=0
+  local y=0
+  local z=0
+  local a=0
+  local b=0
+  local c=0
+  local d=0
+  local e=0
+  local f=0
+  local g=0
+  local h=0
+  local
 
 }
 
 candidate() {
-    local res=$(sorted_list_sum "$@")
-    echo $res
+    sorted_list_sum "$@"
 }
 
-test() {
-    declare -a x2=("aa")
-    declare -a x0=("aa" "a" "aaa")
-    x1=$(candidate "${x0[*]}")
-    assert_equals "${x2[*]}" "${x1[*]}"
-
-    declare -a x5=("AI" "asdf" "school")
-    declare -a x3=("school" "AI" "asdf" "b")
-    x4=$(candidate "${x3[*]}")
-    assert_equals "${x5[*]}" "${x4[*]}"
-
-    declare -a x8=()
-    declare -a x6=("d" "b" "c" "a")
-    x7=$(candidate "${x6[*]}")
-    assert_equals "${x8[*]}" "${x7[*]}"
-
-    declare -a x11=("abcd" "dcba")
-    declare -a x9=("d" "dcba" "abcd" "a")
-    x10=$(candidate "${x9[*]}")
-    assert_equals "${x11[*]}" "${x10[*]}"
-
-    declare -a x14=("AI" "ai" "au")
-    declare -a x12=("AI" "ai" "au")
-    x13=$(candidate "${x12[*]}")
-    assert_equals "${x14[*]}" "${x13[*]}"
-
-    declare -a x17=()
-    declare -a x15=("a" "b" "b" "c" "c" "a")
-    x16=$(candidate "${x15[*]}")
-    assert_equals "${x17[*]}" "${x16[*]}"
-
-    declare -a x20=("cc" "dd" "aaaa" "bbbb")
-    declare -a x18=("aaaa" "bbbb" "dd" "cc")
-    x19=$(candidate "${x18[*]}")
-    assert_equals "${x20[*]}" "${x19[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "aa a aaa") = "aa" ]]
+    [[ $(candidate "school AI asdf b") = "AI asdf school" ]]
+    [[ $(candidate "d b c a") = "" ]]
+    [[ $(candidate "d dcba abcd a") = "abcd dcba" ]]
+    [[ $(candidate "AI ai au") = "AI ai au" ]]
+    [[ $(candidate "a b b c c a") = "" ]]
+    [[ $(candidate "aaaa bbbb dd cc") = "cc dd aaaa bbbb" ]]
 }
+
+run_test

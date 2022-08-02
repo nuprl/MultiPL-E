@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given a dictionary, return True if all keys are strings in lower 
@@ -13,22 +13,32 @@ import std.typecons;
     check_dict_case({"STATE":"NC", "ZIP":"12345" }) should return True.
     
 */
-bool check_dict_case(const(char)[][const(char)[]] dict) 
+bool check_dict_case(Nullable!(string[string]) dict) 
 {
-    // your code here
-    return true;
+    if (dict.HasValue)
+    {
+        for (int i = 0; i < dict.Value.Length; i++)
+        {
+            if (!char.IsLetter(dict.Value[i][0]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
 }
 
 unittest
 {
     alias candidate = check_dict_case;
 
-    assert(candidate(["p": "pineapple", "b": "banana"]) == true);
-    assert(candidate(["p": "pineapple", "A": "banana", "B": "banana"]) == false);
-    assert(candidate(["p": "pineapple", "5": "banana", "a": "apple"]) == false);
-    assert(candidate(["Name": "John", "Age": "36", "City": "Houston"]) == false);
-    assert(candidate(["STATE": "NC", "ZIP": "12345"]) == true);
-    assert(candidate(["fruit": "Orange", "taste": "Sweet"]) == true);
-    assert(candidate([]) == false);
+    assert(candidate(["p": "pineapple", "b": "banana"].nullable) == true);
+    assert(candidate(["p": "pineapple", "A": "banana", "B": "banana"].nullable) == false);
+    assert(candidate(["p": "pineapple", "5": "banana", "a": "apple"].nullable) == false);
+    assert(candidate(["Name": "John", "Age": "36", "City": "Houston"].nullable) == false);
+    assert(candidate(["STATE": "NC", "ZIP": "12345"].nullable) == true);
+    assert(candidate(["fruit": "Orange", "taste": "Sweet"].nullable) == true);
+    assert(candidate(Nullable!(string[string]).init) == false);
 }
 void main(){}

@@ -11,7 +11,622 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate s
   \ 2)\n    (check-equal? (candidate (list 43 -12 93 125 121 109)) 4)\n    (check-equal?\
   \ (candidate (list 71 -2 -33 75 21 19)) 3)\n    (check-equal? (candidate (list 1))\
   \ 0)\n    (check-equal? (candidate (list )) 0)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (cond [(empty? nums) 0]\n        [else (let ([num (first nums)])\n\
+    \                (+ (if (or (= (remainder num 10) 0)\n                       \
+    \    (= (remainder (floor (/ num 10)) 10) 0))\n                     0\n      \
+    \               1)\n                   (specialFilter (rest nums))))]))\n</code>\n\
+    However, I am wondering if I could have a more elegant solution using higher-order\
+    \ function.\n\n\nA:\n\nMy solution is:\n<code>(define (specialFilter nums)\n \
+    \ (length (filter (lambda (x)\n                    (and (&gt; x 10)\n        \
+    \                 (odd? (remainder x 10))\n                         (odd? (remainder\
+    \ (floor (/ x 10)) 10))))\n                  nums)))\n</code>\n", "  (length (filter\
+    \ (lambda (x) \n                    (and (odd? (remainder x 10))\n           \
+    \              (odd? (quotient x 10))\n                         (> x 10)))\n \
+    \                 nums)))\n", "  (for/fold ([count 0]) ([n nums])\n    (if (and\
+    \ (or (= (modulo n 10) 1) (= (modulo n 10) 3) (= (modulo n 10) 5) (= (modulo n\
+    \ 10) 7) (= (modulo n 10) 9))\n             (or (= (modulo (abs n) 100) 1) (=\
+    \ (modulo (abs n) 100) 3) (= (modulo (abs n) 100) 5) (= (modulo (abs n) 100) 7)\
+    \ (= (modulo (abs n) 100) 9))\n             (> n 10))\n        (add1 count)\n\
+    \        count)))\n", "  (cond [(empty? nums) 0]\n        [else (add1 (specialFilter\
+    \ (cdr nums)))])\n)\n</code>\nWhen I run this on DrRacket, I get an error of:\n\
+    <code>Type Checker: incompatible types\n\nexpected: Number\ngiven: (listof Number)\n\
+    \nin: (car nums)\n</code>\nI do not know why this is happening. I also tried using\
+    \ <code>(number? (car nums))</code> and I get an error saying:\n<code>Type Checker:\
+    \ contract violation\n\nexpected: Number?\ngiven: (listof Number)\n\nin: (car\
+    \ nums)\ncontract from: number?\n\nblame on: #%app\n\nat: eval-1.rkt\nblame on:\
+    \ add1\n\nat: eval-1.rkt\n</code>\nI have also tried using <code>(list? (car nums))</code>\
+    \ and I get the same error as the first one.\n\n\nA:\n\nYou're missing the <code>cond</code>\
+    \ clause that actually checks whether the condition is met, and <code>add1</code>\
+    \ is working with a number, not a list. <code>car</code> gives us the first element\
+    \ of the list, so let's use it in the <code>cond</code>'s predicate:\n<code>(define\
+    \ (specialFilter nums)\n  (cond [(empty? nums) 0]\n        [(and (&gt; (car nums)\
+    \ 10)\n              (odd? (car nums))\n              (odd? (last-digit (car nums))))\n\
+    \         (add1 (specialFilter (cdr nums)))]\n        [else (specialFilter (cdr\
+    \ nums))]))\n</code>\nNow it should work as expected.\n", "  (length (filter (lambda\
+    \ (num)\n                    (and (odd? (modulo num 10))\n                   \
+    \      (odd? (modulo (quotient num 10) 10))\n                         (> num 10)))\n\
+    \                  nums)))\n", "  (length (filter (\u03BB (x) (and (odd? (remainder\
+    \ x 10)) (odd? (quotient x 10)))) nums)))\n", "  (define (helper nums counter)\n\
+    \    (if (or (empty? nums) (null? nums))\n        counter\n        (let ([first-digit\
+    \ (remainder (first nums) 10)])\n          (let ([last-digit (quotient (first\
+    \ nums) 10)])\n            (cond\n              [(and (> first-digit 10) (odd?\
+    \ first-digit) (odd? last-digit))\n               (helper (rest nums) (+ counter\
+    \ 1))]\n              [else (helper (rest nums) counter)])))))\n  (helper nums\
+    \ 0))\n", "  (for/fold ([result 0]) ([n (in-list nums)])\n    (if (and (> n 10)\n\
+    \             (odd? (remainder n 10))\n             (odd? (quotient n 10)))\n\
+    \        (add1 result)\n        result)))\n", "  (filter (lambda (x)\n       \
+    \     (and (odd? (string-ref (number->string x) 0))\n                 (odd? (string-ref\
+    \ (number->string x) (- (string-length (number->string x)) 1)))\n            \
+    \     (> x 10)))\n          nums))", "  (array-count (lambda (n)\n\t\t (and (>\
+    \ n 10)\n\t\t      (odd? (first-digit n))\n\t\t      (odd? (last-digit n))))\n\
+    \t       nums))\n", "  (for/fold ([count 0])\n            ([n nums])\n       \
+    \     (if (and (> n 10)\n                     (even? (first n))\n            \
+    \         (even? (last n)))\n                (+ count 1)\n                count)))\n",
+  "  (if (empty? nums)\n      0\n      (if (and (> (first nums) 10) (odd? (first (list->string\
+    \ (number->string (first nums)))))(odd? (last (list->string (number->string (first\
+    \ nums))))))\n          (+ 1 (specialFilter (rest nums)))\n          (specialFilter\
+    \ (rest nums)))))\n", "  (local\n    ([define (isOdd n) (or (= 1 (remainder n\
+    \ 2)) (= -1 (remainder n 2)))]\n     [define (isGreater n) (> n 10)]\n     [define\
+    \ (isBothOdd n)\n       (if (< n 0)\n           (isBothOdd (- n))\n          \
+    \ (cond [(= 1 (remainder n 10))\n                  (and (isOdd (quotient n 10))\n\
+    \                       (isOdd n))]\n                 [else\n                \
+    \  (and (isOdd (quotient n 10))\n                       (isOdd (modulo n 10)))]))])\n\
+    \    (filter (\u03BB (n) (and (isGreater n) (isBothOdd n))) nums)))\n", "  (foldl\
+    \ (lambda (sum num)\n           (if (and (> num 10)\n                    (and\
+    \ (odd? (modulo num 10))\n                         (odd? (modulo (quotient num\
+    \ 10) 10))))\n               (+ sum 1)\n               sum))\n         0\n   \
+    \      nums))\n", "  (define (isLarge num)\n    (> num 10))\n  (define (isOdd\
+    \ num)\n    (eq? (remainder num 2) 1))\n  (define (hasOddDigits num)\n    (let\
+    \ ([num (abs num)])\n      (and (isOdd (remainder num 10))\n           (isOdd\
+    \ (quotient num 10)))))\n  (length (filter hasOddDigits (filter isLarge nums))))\n",
+  "  (length (filter (\u03BB (x)\n                   (and (odd? (first-digit x))\n\
+    \                        (odd? (last-digit x))\n                        (> x 10)))\n\
+    \                  nums)))\n</code>\n\n<code>#lang racket\n", "  (if (null? nums)\n\
+    \      0\n      (if (and (> (car nums) 10) (odd? (car nums)) (odd? (last-digit\
+    \ (car nums))))\n          (+ 1 (specialFilter (cdr nums)))\n          (specialFilter\
+    \ (cdr nums)))))\n", "  (filter (\u03BB (num) (and (> num 10) (or (and (= (remainder\
+    \ num 10) 1) (= (remainder (quotient num 10) 10) 1)) (and (= (remainder num 10)\
+    \ 9) (= (remainder (quotient num 10) 10) 9))))) nums))\n", "  (define (helper\
+    \ nums counter)\n    (if (null? nums)\n        counter\n        (if (and (> (car\
+    \ nums) 10)\n                 (odd? (remainder (car nums) 10))\n             \
+    \    (odd? (remainder (car nums) (expt 10 (log10 (car nums))))))\n           \
+    \ (helper (cdr nums) (+ counter 1))\n            (helper (cdr nums) counter))))\n\
+    \  (helper nums 0))", "  (cond\n    [(empty? nums) 0]\n    [(and (> (first nums)\
+    \ 10)\n          (odd? (modulo (first nums) 10))\n          (odd? (quotient (first\
+    \ nums) 10)))\n     (+ 1 (specialFilter (rest nums)))]\n    [else (specialFilter\
+    \ (rest nums))]))\n", "  (length (filter (lambda (n) (and (> n 10)\n         \
+    \                          (odd? (first-digit n))\n                          \
+    \         (odd? (last-digit n))))\n                   nums)))\n", "  (let loop\
+    \ ([nums nums] [len 0])\n    (if (null? nums)\n        len\n        (if (and (and\
+    \ (not (even? (remainder (car nums) 10)))\n                      (not (even? (quotient\
+    \ (car nums) 10))))\n                 (> (car nums) 10))\n            (loop (cdr\
+    \ nums) (+ len 1))\n            (loop (cdr nums) len)))))\n", "  (length (filter\
+    \ (lambda (n)\n                    (and (odd? (modulo n 10))\n               \
+    \          (odd? (modulo (quotient n 10) 10))\n                         (> n 10)))\n\
+    \                  nums)))\n", "  (length (filter (lambda (x) \n             \
+    \       (and (odd? (modulo x 10)) \n                         (odd? (modulo x 100))\
+    \ \n                         (> x 10))) \n                  nums)))", "  (count-if\
+    \ (\u03BB (n) (and (> n 10) (odd? (remainder n 10)) (odd? (quotient n 10)))) nums))\n\
+    ```\n\n```scheme\n#lang racket\n", "  (cond\n    [(empty? nums) empty]\n    [(and\
+    \ (> (first nums) 10)\n          (odd? (first (exact-integer-sqrt (first nums))))\n\
+    \          (odd? (remainder (first nums) 10)))\n     (cons (first nums) (specialFilter\
+    \ (rest nums)))]\n    [else (specialFilter (rest nums))]))\n```\n\n## Solution\
+    \ (4 points)\n\n```racket\n#lang racket\n", "  (length (filter (lambda (x) (and\
+    \ (odd? (remainder x 10))\n                                   (odd? (quotient\
+    \ x 10))))\n                  nums)))\n", "  (define (odd? n)\n    (and (odd?\
+    \ (quotient n 10)) (odd? (remainder n 10))))\n  (foldl (lambda (n a)\n       \
+    \    (if (and (> n 10) (odd? n))\n               (+ a 1)\n               a))\n\
+    \         0\n         nums))", "  (if (null? nums)\n      0\n      (if (and (>\
+    \ (car nums) 10)\n               (odd? (car nums))\n               (odd? (modulo\
+    \ (car nums) 10)))\n          (+ 1 (specialFilter (cdr nums)))\n          (specialFilter\
+    \ (cdr nums)))))\n", "  (length (filter (lambda (i) (and (> i 10) (odd? (remainder\
+    \ i 10)) (odd? (remainder (quotient i 10) 10)))) nums)))\n", "  (filter (lambda\
+    \ (num)\n            (and (> num 10)\n                 (odd? (modulo num 10))\n\
+    \                 (odd? (quotient num 10))))\n          nums))\n", "  (define\
+    \ (isSpecial? num)\n    (and (> num 10) (odd? (remainder num 10)) (odd? (quotient\
+    \ num 10))))\n  (length (filter isSpecial? nums)))\n", "  (length (filter (lambda\
+    \ (x)\n                    (and (odd? (modulo x 10))\n                       \
+    \  (odd? (quotient x 10))\n                         (not (= x 1))\n          \
+    \               (> x 10)))\n                  nums)))\n", "  (array-length\n \
+    \  (filter\n    (lambda (num)\n      (and (odd? (remainder num 10)) (odd? (quotient\
+    \ num 10))))\n    nums)))\n</code>\nI have no idea how to run this program. Please\
+    \ help!\n\n\nA:\n\nI'm not familiar with Racket, but here's a function that will\
+    \ solve your problem. It's a quick and dirty solution, so it can be optimized\
+    \ and cleaned up, but I think it should get you started:\n<code>def specialFilter(list):\n\
+    \    i = 0\n    l = []\n    while i &lt; len(list):\n        if list[i] &gt; 10\
+    \ and list[i] % 2 != 0 and list[i] % 5 != 0:\n            l.append(list[i])\n\
+    \        i += 1\n    return l\n</code>\n", "  (length\n   (filter\n    (lambda\
+    \ (n)\n      (and\n       (odd? (car (digits n)))\n       (odd? (last (digits\
+    \ n)))\n       (> n 10)))\n    nums)))\n", "  (cond [(empty? nums) 0]\n      \
+    \  [else\n         (cond [(and (and (> (first nums) 10)\n                    \
+    \     (odd? (first (number->digits (first nums)))))\n                    (odd?\
+    \ (last (number->digits (first nums)))))\n                (+ 1 (specialFilter\
+    \ (rest nums)))]\n               [else (specialFilter (rest nums))])]))\n", " \
+    \ (length (filter (\u03BB (x) (and (odd? (car x)) (odd? (car (reverse x)))))\n\
+    \                   (map (\u03BB (x) (string->number (string-&gt;list (number-&gt;string\
+    \ x)))) nums))))\n</code>\n", "  (apply + (map (\u03BB (n) (and (and (odd? (quotient\
+    \ n 10))\n                                (odd? (remainder n 10)))\n         \
+    \              (gt? n 10)))\n                nums)))\n", "  (length\n   (filter\n\
+    \    (lambda (num)\n      (and\n       (not (zero? (remainder num 10)))\n    \
+    \   (odd? (quotient num 10))\n       (> num 10)))\n    nums)))\n", "  (cond\n\
+    \    [(empty? nums) 0]\n    [(and\n      (odd? (first nums))\n      (odd? (car\
+    \ (reverse (number->list (first nums)))))\n      (&gt; (first nums) 10))\n   \
+    \   (+ 1 (specialFilter (rest nums)))]\n    [else (specialFilter (rest nums))]))\n",
+  "  (let loop ([count 0] [nums nums])\n    (cond [(empty? nums) count]\n        \
+    \  [(odd? (remainder (car nums) 10))\n           (loop (+ count 1) (cdr nums))]\n\
+    \          [else (loop count (cdr nums))])))\n</code>\n<code>#lang racket\n",
+  "  (length (filter (lambda (x) (and (odd? (modulo x 10))\n                     \
+    \              (odd? (quotient x 10))))\n                  nums)))\n", "  (if\
+    \ (empty? nums)\n      0\n      (if (not (and (> (car nums) 10)\n            \
+    \        (odd? (modulo (car nums) 10))\n                    (odd? (quotient (car\
+    \ nums) 10))))\n          (specialFilter (cdr nums))\n          (+ 1 (specialFilter\
+    \ (cdr nums))))))\n", "  (length\n   (filter\n    (lambda (n)\n      (and (> n\
+    \ 10)\n           (odd? (remainder n 10))\n           (odd? (quotient n 10))))\n\
+    \    nums)))\n", "  (define (is-last-odd? n) (even? (modulo n 10)))\n  (define\
+    \ (is-first-odd? n)\n    (let loop ([n n])\n      (if (zero? n) #f\n         \
+    \ (if (odd? (modulo n 10)) #t\n              (loop (quotient n 10))))))\n  (define\
+    \ (is-odd? n) (and (is-last-odd? n) (is-first-odd? n)))\n  (define (is-gt-10?\
+    \ n) (> n 10))\n  (foldl + 0 (map (lambda (n) (if (and (is-gt-10? n) (is-odd?\
+    \ n)) 1 0)) nums)))\n", "  (define (isSpecial? n)\n    (and (odd? (remainder n\
+    \ 10)) (odd? (quotient n 10))))\n  (length (filter isSpecial? nums)))\n", "  (define\
+    \ (isOdd n)\n    (equal? 1 (remainder n 2)))\n  (define (firstDigit n)\n    (define\
+    \ (loop acc n)\n      (if (< acc 10)\n          acc\n          (loop (/ n 10)\
+    \ acc)))\n    (loop (remainder n 10) n))\n  (define (lastDigit n)\n    (remainder\
+    \ n 10))\n  (define (f n)\n    (and (> n 10) (isOdd (firstDigit n)) (isOdd (lastDigit\
+    \ n))))\n  (for/fold ([acc 0]) ([n nums])\n    (if (f n)\n        (+ acc 1)\n\
+    \        acc)))\n", "  (length (filter \n           (lambda (x) (and (zero? (modulo\
+    \ x 10)) (odd? (quotient x 10))))\n           nums)))", "  (define (isSpecial\
+    \ n)\n    (let* ([str (number->string n)]\n           [first (string-&gt;number\
+    \ (substring str 0 1))]\n           [last (string-&gt;number (substring str -1))])\n\
+    \      (and (odd? first)\n           (odd? last)\n           (&gt; n 10))))\n\
+    \  (count (lambda (n) (isSpecial n)) nums))\n</code>\n", "  (define (check-number\
+    \ n)\n    (define (odd? n) (= (remainder n 2) 1))\n    (and (odd? (quotient n\
+    \ 10)) (odd? (remainder n 10))\n         (> n 10)))\n  (length (filter check-number\
+    \ nums)))\n", "  (count-if \n   (lambda (n)\n     (and (> n 10)\n          (odd?\
+    \ (remainder n 10))\n          (odd? (quotient n 10))))\n   nums))\n", "  (length\
+    \ (filter (\u03BB (n) (and (not (zero? (remainder n 10)))\n                  \
+    \             (not (zero? (remainder (/ n 10) 10)))\n                        \
+    \       (> n 10)))\n                   nums)))\n", "  (count (lambda (x) \n  \
+    \         (let ((first (modulo x 10))\n                 (last (modulo x 10)))\n\
+    \             (and (> x 10) (odd? first) (odd? last))))\n         nums))", " \
+    \ (filter (lambda (x)\n            (cond\n              [(= (remainder x 10) 1)\
+    \ false]\n              [(= (remainder x 10) 3) false]\n              [(= (remainder\
+    \ x 10) 5) false]\n              [(= (remainder x 10) 7) false]\n            \
+    \  [(= (remainder x 10) 9) false]\n              [(= (remainder x 10) 0) false]\n\
+    \              [(= (remainder x 10) 2) false]\n              [(= (remainder x\
+    \ 10) 4) false]\n              [(= (remainder x 10) 6) false]\n              [(=\
+    \ (remainder x 10) 8) false]\n              [else (> x 10)]))\n         nums))\n",
+  "  (for/fold ([total 0]) ([num nums])\n    (cond [(and (> num 10) (odd? (remainder\
+    \ num 10)) (odd? (quotient num 10)))\n           (+ total 1)]\n          [else\n\
+    \           total])))\n", "  (foldl + 0 (map (lambda (x) (specialNumber? x)) nums)))\n",
+  "  (let ([filtered (filter (lambda (n)\n                            (and (odd? (first-digit\
+    \ n))\n                                 (odd? (last-digit n))\n              \
+    \                   (> n 10)))\n                          nums)])\n    (length\
+    \ filtered)))", "  (define (firstDigit n)\n    (if (odd? n)\n        n\n     \
+    \   (firstDigit (quotient n 10))))\n  (define (lastDigit n)\n    (if (odd? n)\n\
+    \        n\n        (lastDigit (remainder n 10))))\n  (filter\n   (lambda (n)\n\
+    \     (and (> n 10)\n          (odd? (firstDigit n))\n          (odd? (lastDigit\
+    \ n))))\n   nums))\n", "  (length (filter (lambda (x) (and (and (&gt; x 10) (odd?\
+    \ (remainder x 10))) (odd? (quotient x 10)))) nums)))\n", "  (define (bothOdd\
+    \ n)\n    (and (odd? (car (digits n))) (odd? (car (reverse (digits n))))))\n \
+    \ (length (filter bothOdd nums)))", "  (for/fold ([count 0])\n            ([n\
+    \ nums])\n            (cond\n              [(odd? (remainder n 10))\n        \
+    \       (cond\n                 [(odd? (quotient n 10))\n                  (add1\
+    \ count)]\n                 [else count])]\n              [else count])))\n",
+  "  (apply + (map (lambda (x)\n                  (and (> x 10)\n                \
+    \       (odd? (first (number->string x)))\n                       (odd? (last\
+    \ (number->string x)))))\n                nums)))\n", "  (count (lambda (n)\n\
+    \           (and (and (odd? (modulo n 10))\n                     (odd? (modulo\
+    \ n (expt 10 (sub1 (length (number->string n)))))))\n                (> n 10)))\n\
+    \         nums))\n", "  (filter \n   (lambda (num)\n     (and \n      (> num 10)\n\
+    \      (not (or (zero? (remainder num 10))\n\t       (zero? (remainder num (quotient\
+    \ num 10)))))))\n   nums))\n", "  (let loop ([nums nums] [n 0])\n    (cond [(empty?\
+    \ nums) n]\n          [(and (> (first nums) 10)\n                (odd? (first\
+    \ (number->string (first nums))))\n                (odd? (last (number->string\
+    \ (first nums)))))\n           (loop (rest nums) (+ n 1))]\n          [else (loop\
+    \ (rest nums) n)])))\n", "  (local [(define (isSpecial? n)\n            (cond\n\
+    \              [(< 0 n)\n               (and (odd? (modulo n 10))\n          \
+    \          (odd? (floor (/ n 10))))]\n              [else #f]))]\n    (filter\
+    \ isSpecial? nums)))\n", "  (count (filter (lambda (n)\n\t\t   (and (> n 10)\n\
+    \t\t\t(odd? (remainder n 10))\n\t\t\t(odd? (quotient n 10))))\n\t\t nums)))",
+  "  (list-length (filter (\u03BB (n)\n                         (and (odd? (nth (integer->digits\
+    \ n) 0))\n                              (odd? (nth (integer->digits n) (- (list-length\
+    \ (integer->digits n)) 1)))\n                              (> n 10)))\n      \
+    \                 nums)))\n", "  (cond\n    [(empty? nums) 0]\n    [(and (positive?\
+    \ (first nums)) (odd? (first nums)) (odd? (last nums)))\n     (+ 1 (specialFilter\
+    \ (rest nums)))]\n    [else (specialFilter (rest nums))]))\n", "  (filter (lambda\
+    \ (n)\n            (and (> n 10)\n                 (odd? (remainder n 10))\n \
+    \                (odd? (quotient n 10))))\n          nums))", "  (length\n   (filter\n\
+    \    (lambda (num)\n      (and\n       (and (odd? (modulo num 10)) (odd? (quotient\
+    \ num 10)))\n       (&gt; num 10)))\n    nums)))\n", "    (cond ((null? nums)\
+    \ 0)\n          ((and (odd? (car nums)) (odd? (modulo (car nums) 10)))\n     \
+    \      (+ 1 (specialFilter (cdr nums))))\n          (else (specialFilter (cdr\
+    \ nums)))))\n", "  (length (filter (lambda (n)\n                    (and (> n\
+    \ 10)\n                         (odd? (remainder n 10))\n                    \
+    \     (odd? (quotient n 10))))\n                  nums)))", "  (filter (lambda\
+    \ (num) (and (not (zero? (modulo num 2)))\n\t\t\t     (not (zero? (modulo (quotient\
+    \ num 10) 2)))\n\t\t\t     (> num 10)))\n\t  nums))\n", "  (for/fold ([count 0])\
+    \ ([curr-num nums])\n    (and (and (and (eq? (remainder (truncate (abs curr-num)\
+    \ 10) 10) 1)\n                (eq? (remainder (truncate (abs curr-num) 1) 10)\
+    \ 1))\n          (odd? curr-num))\n         (add1 count))))\n", "  (for/fold ([count\
+    \ 0]) ([i nums])\n    (if (and (number? i) \n             (> i 10) \n        \
+    \     (odd? (remainder i 10)) \n             (odd? (quotient i 10)))\n       \
+    \ (add1 count)\n        count)))\n", "  (length (filter \n           (lambda (n)\
+    \ \n             (and (> n 10) \n                  (odd? (remainder n 10)) \n\
+    \                  (odd? (quotient n 10))))\n           nums)))\n", "  (length\
+    \ (filter (\u03BB (x) (and (> x 10)\n                              (odd? (remainder\
+    \ x 10))\n                              (odd? (integer-sqrt x))))\n          \
+    \         nums)))\n", "  (define (isLargerThanTen n)\n    (> n 10))\n  (define\
+    \ (hasOddDigits n)\n    (cond\n      ((= n 0) #f)\n      ((= n 1) #t)\n      ((=\
+    \ n 2) #f)\n      ((= n 3) #t)\n      ((= n 4) #f)\n      ((= n 5) #t)\n     \
+    \ ((= n 6) #f)\n      ((= n 7) #t)\n      ((= n 8) #f)\n      ((= n 9) #t)\n \
+    \     (else (hasOddDigits (modulo n 10)))))\n  (define (filter n)\n    (cond\n\
+    \      ((or (isLargerThanTen n) (hasOddDigits n)) 1)\n      (else 0)))\n  (apply\
+    \ + (map filter nums)))\n", "  (foldl\n   (lambda (sum num)\n     (cond\n    \
+    \   [(> num 10) (add1 sum)]\n       [else sum]))\n   0\n   nums))\n", "  (length\
+    \ (filter (lambda (x)\n\t\t    (and (> x 10)\n\t\t\t (odd? (modulo x 10))\n\t\t\
+    \t (odd? (quotient x 10))))\n\t\t  nums)))\n", "  (filter\n   (lambda (x)\n  \
+    \   (let* ([y (string->number (number->string x))]\n            [first (remainder\
+    \ y 10)]\n            [last (quotient y 10)])\n       (and (odd? first) (odd?\
+    \ last) (> y 10))))\n   nums))", "  (length (filter (lambda (x) (and (> x 10)\
+    \ (odd? (remainder x 10)) (odd? (remainder (floor (/ x 10)) 10)))) nums)))\n",
+  "  (filter (lambda (n) \n            (and\n             (filter (lambda (n) (and\
+    \ (even? (car n)) (even? (cdr n))))\n                     (list (first-digit n)\
+    \ (last-digit n)))\n             (> n 10)))\n          nums))\n</code>\n", " \
+    \ (length (filter (lambda (n) (and (odd? (modulo n 10))\n                    \
+    \               (odd? (quotient n 10))))\n                  nums)))\n", "  (length\
+    \ (filter (lambda (n) (and (odd? (remainder n 10)) (odd? (quotient n 10)))) nums)))\n",
+  "  (letrec ([len (length nums)]\n           [odd? (lambda (n) (modulo n 2))]\n \
+    \          [odd-last-first? (lambda (n)\n                              (and (odd?\
+    \ (quotient n 10))\n                                   (odd? (modulo n 10))))])\n\
+    \    (let loop ([i 0] [n 0])\n      (cond [(= i len) n]\n            [(and (odd-last-first?\
+    \ (list-ref nums i))\n                  (> (list-ref nums i) 10))\n          \
+    \   (loop (+ i 1) (+ n 1))]\n            [else (loop (+ i 1) n)]))))\n", "  (length\n\
+    \   (filter (lambda (n)\n             (and (odd? (quotient n 10))\n          \
+    \        (odd? (remainder n 10))\n                  (> n 10)))\n           nums)))\n",
+  "  (define (firstDigit num)\n    (cond\n      [(= num 0) 0]\n      [(< 0 num) (firstDigit\
+    \ (quotient num 10))]\n      [(> 0 num) num]))\n  (define (lastDigit num)\n  \
+    \  (remainder num 10))\n  (filter (lambda (num)\n            (and (odd? (firstDigit\
+    \ num))\n                 (odd? (lastDigit num))\n                 (> num 10)))\n\
+    \          nums))\n", "  (length (filter (lambda (n) (and (odd? (remainder n 10))\
+    \ (odd? (remainder (quotient n 10) 10)))) nums)))\n", "  (let f ([num 0] [rem\
+    \ nums])\n    (if (or (empty? rem) (zero? (car rem)))\n        num\n        (f\
+    \ (+ num (check (car rem))) (cdr rem)))))\n", "  (if (null? nums)\n      0\n \
+    \     (if (and (> (car nums) 10)\n               (odd? (car nums))\n         \
+    \      (odd? (modulo (car nums) 10)))\n          (+ 1 (specialFilter (cdr nums)))\n\
+    \          (specialFilter (cdr nums)))))\n", "  (define (special? n)\n    (and\
+    \ \n     (< 10 n)\n     (and\n      (odd? (first-digit n))\n      (odd? (last-digit\
+    \ n)))))\n  (foldl\n   (lambda (n acc) (if (special? n) (+ acc 1) acc))\n   0\n\
+    \   nums))\n", "  (define (special num)\n    (define firstDigit (integer->string\
+    \ (car num)))\n    (define lastDigit (string-ref (number->string (car num)) (sub1\
+    \ (string-length (number->string (car num))))))\n    (and (odd? (string->number\
+    \ firstDigit)) (odd? (string->number lastDigit)) (< 10 (car num))))\n  (length\
+    \ (filter special nums)))\n", "  (if (empty? nums) 0\n      (if (and (> (first\
+    \ nums) 10)\n               (odd? (first (number->list (first nums))))\n     \
+    \          (odd? (last (number->list (first nums)))))\n          (+ 1 (specialFilter\
+    \ (rest nums)))\n          (specialFilter (rest nums)))))", "  (count-if (lambda\
+    \ (x) (and (odd? (modulo x 10)) \n                             (odd? (quotient\
+    \ x 10))\n                             (> x 10)))\n            nums))\n", "  (let\
+    \ ((count 0))\n    (for ((num nums))\n      (if (and (> num 10) (odd? (first-digit\
+    \ num)) (odd? (last-digit num)))\n        (set! count (+ count 1))))\n    count))\n",
+  "  (length (filter (lambda (n) \n                    (and (> n 10) \n          \
+    \               (odd? (modulo n 10)) \n                         (odd? (quotient\
+    \ n 10))))\n                  nums)))\n", "  (define (aux num)\n    (and (odd?\
+    \ (first-digit num)) (odd? (last-digit num)) (> num 10)))\n  (length (filter aux\
+    \ nums)))\n", "  (apply +\n         (map (lambda (n)\n                (if (and\
+    \ (odd? (remainder n 10))\n                         (odd? (remainder (quotient\
+    \ n 10) 10))\n                         (> n 10))\n                    1\n    \
+    \                0))\n              nums)))\n```\n\n```scheme\n#lang racket\n",
+  "  (length (filter (lambda (num)\n                    (and (even? (modulo num 10))\n\
+    \                         (even? (modulo (quotient num 10) 10))\n            \
+    \             (> num 10)))\n                  nums)))\n", "  (length (filter (\u03BB\
+    \ (n) \n                    (and (odd? (remainder n 10))\n                   \
+    \      (odd? (remainder (quotient n 10) 10))\n                         (&gt; n\
+    \ 10)))\n                  nums)))\n</code>\n", "  (let loop ([nums nums] [count\
+    \ 0])\n    (if (null? nums)\n        count\n        (let* ([num (car nums)]\n\
+    \               [first (quotient num 10)]\n               [last (modulo num 10)])\n\
+    \          (if (and (> num 10) (odd? first) (odd? last))\n              (loop\
+    \ (cdr nums) (+ count 1))\n              (loop (cdr nums) count))))))\n", "  (length\
+    \ (filter (\u03BB (x)\n                   (and (odd? (car x))\n              \
+    \          (odd? (car (reverse x)))\n                        (> (car x) 10)))\n\
+    \                 (map (\u03BB (x) (number->list x)) nums))))\n", "  (cond\n \
+    \   [(empty? nums) 0]\n    [(or (= (remainder (first nums) 10) 0) (= (remainder\
+    \ (first nums) 10) 5))\n     (specialFilter (rest nums))]\n    [(< (first nums)\
+    \ 10) (specialFilter (rest nums))]\n    [else (+ 1 (specialFilter (rest nums)))]))\n\
+    ```", "  (foldl\n   (lambda (x cnt)\n     (if (and (and (odd? (integer->digits\
+    \ (remainder x 10)))\n                   (odd? (integer->digits (quotient x 10))))\n\
+    \              (> x 10))\n         (+ cnt 1)\n         cnt))\n   0\n   nums))\n",
+  "  (for/fold ([res 0]) ([num nums])\n    (if (and\n         (odd? (first-digit num))\n\
+    \         (odd? (last-digit num))\n         (&gt; num 10))\n        (add1 res)\n\
+    \        res)))\n", "  (filter\n   (lambda (x)\n     (and\n      (odd? (remainder\
+    \ x 10))\n      (odd? (quotient x 10))\n      (> x 10)))\n   nums))\n", "  (cond\
+    \ [(null? nums) \n         0]\n        [(and (> (car nums) 10)\n             \
+    \ (odd? (remainder (car nums) 10))\n              (odd? (remainder (car nums)\
+    \ (- (car nums) (remainder (car nums) 10)))))\n         (+ 1 (specialFilter (cdr\
+    \ nums)))]\n        [else\n         (specialFilter (cdr nums))]))\n", "  (length\
+    \ (filter (lambda (n)\n                    (and (odd? (modulo n 10))\n       \
+    \                  (odd? (quotient n 10))\n                         (> n 10)))\n\
+    \                  nums)))\n", "  (local ((define (pred x)\n            (and (odd?\
+    \ (first-digit x))\n                 (odd? (last-digit x))\n                 (>\
+    \ x 10))))\n    (length (filter pred nums))))\n", "  (let loop ([nums nums] [count\
+    \ 0])\n    (cond\n      [(empty? nums) count]\n      [(and (< 10 (first nums))\n\
+    \            (odd? (remainder (first nums) 10))\n            (odd? (remainder\
+    \ (first nums) 100000)))\n       (loop (rest nums) (+ count 1))]\n      [else\
+    \ (loop (rest nums) count)])))\n", "  (filter (lambda (n)\n            (and (>\
+    \ n 10)\n                 (odd? (remainder n 10))\n                 (odd? (quotient\
+    \ n 10))))\n          nums))", "  (length (filter (lambda (x)\n              \
+    \      (and (> x 10)\n                         (odd? (remainder x 10))\n     \
+    \                    (odd? (quotient x 10))))\n                  nums)))", " \
+    \ (filter (lambda (num)\n            (and (> num 10)\n                 (and (odd?\
+    \ (modulo num 10))\n                      (odd? (modulo (quotient num 10) 10)))))\n\
+    \          nums))", "  (cond\n    [(empty? nums) 0]\n    [(and (odd? (first (regexp-match\
+    \ #rx\"\\d\" (number->string (first nums)))))\n          (odd? (first (reverse\
+    \ (regexp-match #rx\"\\d\" (number->string (first nums)))))))\n     (+ 1 (specialFilter\
+    \ (rest nums)))]\n    [else (specialFilter (rest nums))]))\n", "  (let ([odd-nums\
+    \ (filter odd? nums)])\n    (length (filter #(and (> % 10)\n                 \
+    \         (odd? (modulo (quotient % 10) 10))\n                          (odd?\
+    \ (modulo % 10)))\n                    odd-nums))))\n", "  (list-length\n   (filter\
+    \ (lambda (n) (and (and (> n 10)\n                                (odd? (integer->digits\
+    \ (quotient n 10) 10)))\n                           (odd? (modulo n 10))))\n \
+    \          nums)))\n", "  (filter (\u03BB (x)\n            (and (and (> x 10)\n\
+    \                      (odd? (remainder x 10)))\n                 (odd? (remainder\
+    \ (quotient x 10) 10))))\n          nums))\n", "  (count (filter (lambda (x)\n\
+    \                   (and (odd? (first (string->list (number->string x))))\n  \
+    \                      (odd? (last (string->list (number->string x))))\n     \
+    \                   (> x 10)))\n                 nums)))", "  (define (bothOdd?\
+    \ x)\n    (and (odd? (car x)) (odd? (car (reverse x)))))\n  (length (filter bothOdd?\
+    \ (filter (> 10) nums))))\n", "  (foldl (lambda (num total)\n           (if (or\
+    \ (= 0 (remainder num 10)) (= 0 (remainder (quotient num 10) 10)))\n         \
+    \      total\n               (if (> num 10)\n                   (+ total 1)\n\
+    \                   total)))\n         0\n         nums))\n", "  (filter (\u03BB\
+    \ (n)\n            (let ([d (number->string n)])\n              (and (> n 10)\n\
+    \                   (or (equal? (string-ref d 0) #\\1)\n                     \
+    \  (equal? (string-ref d 0) #\\3)\n                       (equal? (string-ref\
+    \ d 0) #\\5)\n                       (equal? (string-ref d 0) #\\7)\n        \
+    \               (equal? (string-ref d 0) #\\9))\n                   (or (equal?\
+    \ (string-ref d (- (string-length d) 1)) #\\1)\n                       (equal?\
+    \ (string-ref d (- (string-length d) 1)) #\\3)\n                       (equal?\
+    \ (string-ref d (- (string-length d) 1)) #\\5)\n                       (equal?\
+    \ (string-ref d (- (string-length d) 1)) #\\7)\n                       (equal?\
+    \ (string-ref d (- (string-length d) 1)) #\\9)))))\n          nums))", "  (filter\
+    \ (\u03BB (n) (and (odd? (digit-nth n 1))\n                       (odd? (digit-nth\
+    \ n (digits n)))))\n          (filter (\u03BB (n) (> n 10)) nums)))\n", "  (foldl\
+    \ + 0 (filter (lambda (x)\n                       (and (odd? (first-digit x))\n\
+    \                            (odd? (last-digit x))\n                         \
+    \   (> x 10)))\n                     nums)))\n", "  (length (filter (lambda (n)\n\
+    \                    (and (odd? (car (integer->digits n)))\n                 \
+    \        (odd? (car (reverse (integer->digits n))))\n                        \
+    \ (> n 10)))\n                  nums)))\n", "  (cond [(empty? nums) 0]\n     \
+    \   [(&gt; (first nums) 10) (+ 1 (specialFilter (rest nums)))]\n        [else\
+    \ (specialFilter (rest nums))]))\n", "  (cond\n    [(null? nums) 0]\n    [(and\
+    \ (> (car nums) 10) (odd? (car nums)) (odd? (cdr nums))) (+ 1 (specialFilter (cdr\
+    \ nums)))]\n    [else (specialFilter (cdr nums))]))\n", "  (define (first-digit\
+    \ num)\n    (modulo num 10))\n  (define (last-digit num)\n    (modulo num 100))\n\
+    \  (define (is-first-odd? num)\n    (odd? (first-digit num)))\n  (define (is-last-odd?\
+    \ num)\n    (odd? (last-digit num)))\n  (define (is-greater-than-10? num)\n  \
+    \  (> num 10))\n  (define (is-special? num)\n    (and (is-greater-than-10? num)\n\
+    \         (is-first-odd? num)\n         (is-last-odd? num)))\n  (length (filter\
+    \ is-special? nums)))\n", "  (filter (\u03BB (x) \n            (and (> x 10) \n\
+    \                 (odd? (remainder x 10)) \n                 (odd? (remainder\
+    \ (divide x 10) 10))))\n          nums))\n", "  (define (filterer n)\n    (cond\
+    \ [(= n 0) #f]\n          [(= (modulo n 10) 0) #f]\n          [(odd? (first (integer->list\
+    \ n))) #f]\n          [(odd? (last (integer->list n))) #f]\n          [else #t]))\n\
+    \  (define (looper n acc)\n    (cond [(empty? n) acc]\n          [(filterer (first\
+    \ n)) (looper (rest n) (+ acc 1))]\n          [else (looper (rest n) acc)]))\n\
+    \  (looper nums 0))\n", "  (length\n   (filter (lambda (n)\n             (and\n\
+    \              (> n 10)\n              (odd? (first-digit n))\n              (odd?\
+    \ (last-digit n))))\n           nums)))\n", "  (local [(define (helper n acc)\n\
+    \             (cond [(empty? n) acc]\n                   [(and (&gt; (first n)\
+    \ 10) (odd? (quotient (first n) 10)) (odd? (remainder (first n) 10)))\n      \
+    \              (helper (rest n) (+ acc 1))]\n                   [else (helper\
+    \ (rest n) acc)]))]\n    (helper nums 0)))\n</code>\nI hope this isn't a duplicate.\n",
+  "  (cond\n    [(empty? nums) 0]\n    [(and\n      (> (first nums) 10)\n      (odd?\
+    \ (first (number->string (first nums))))\n      (odd? (first (number->string (last\
+    \ (number->string (first nums)))))))\n     (+ 1 (specialFilter (rest nums)))]\n\
+    \    [else (specialFilter (rest nums))]))\n", "  (count #t (filter (\u03BB (n)\
+    \ \n                     (and (> n 10) \n                          (odd? (car\
+    \ (digits n))) \n                          (odd? (cadr (reverse (digits n))))))\n\
+    \                   nums)))\n", "  (length\n   (filter (lambda (n)\n         \
+    \    (and (> n 10)\n                  (odd? (remainder n 10))\n              \
+    \    (odd? (quotient n 10))))\n           nums)))\n", "  (length\n   (filter\n\
+    \    (lambda (x)\n      (and\n       (odd? (modulo x 10))\n       (odd? (integer-sqrt\
+    \ x))\n       (> x 10)))\n    nums)))\n", "  (count (filter (lambda (x) (and (&gt;\
+    \ x 10)\n                                  (odd? (remainder x 10))\n         \
+    \                         (odd? (quotient x 10))))\n                  nums)))\n\
+    </code>\n", "  (length (filter \n    (lambda (n)\n      (and \n        (> n 10)\n\
+    \        (odd? (remainder n 10))\n        (odd? (quotient n 10))))\n    nums)))\n",
+  "  (define (divisible-by? n divisor)\n    (= (remainder n divisor) 0))\n  (define\
+    \ (filter-odds nums)\n    (filter (lambda (x) (or (divisible-by? x 2)\n      \
+    \                      (and (divisible-by? (quotient x 10) 2)\n              \
+    \                   (divisible-by? (remainder x 10) 2))))\n            nums))\n\
+    \  (filter (lambda (x)\n            (and (> x 10)\n                 (divisible-by?\
+    \ (quotient x 10) 2)\n                 (divisible-by? (remainder x 10) 2)))\n\
+    \          (filter-odds nums)))\n", "  (filter (lambda (n) (and (odd? (first-digit\
+    \ n)) (odd? (last-digit n)) (> n 10))) nums))\n", "  (length\n   (filter (lambda\
+    \ (x)\n             (and (equal? (modulo (abs x) 10) 1)\n                  (equal?\
+    \ (modulo (abs (truncate (/ x 10))) 10) 1)\n                  (> x 10)))\n   \
+    \        nums)))\n", "  (cond [(empty? nums) 0]\n        [else (+ (if (and (>\
+    \ (car nums) 10) (odd? (car nums)) (odd? (last (car nums)))) 1 0)\n          \
+    \      (specialFilter (cdr nums)))]))\n", "  (filter (lambda (n)\n           \
+    \ (and (> n 10)\n                 (odd? (remainder n 10))\n                 (odd?\
+    \ (quotient n 10))))\n          nums))", "  (cond\n    [(null? nums) 0]\n    [(and\
+    \ (odd? (first nums))\n          (odd? (first (string->list (number->string (last\
+    \ nums)))))\n          (> (first nums) 10))\n     (+ 1 (specialFilter (rest nums)))]\n\
+    \    [else (specialFilter (rest nums))]))", "  (length (filter (lambda (x) (and\
+    \ (odd? (car x)) (odd? (cdr x))))\n                  (map (lambda (x) (cons (floor\
+    \ (modulo (abs x) 10))\n                                          (floor (divide\
+    \ (abs x) 10))))\n                       nums))))", "  (define (help n acc)\n\
+    \    (cond ((null? n) acc)\n          ((and (> (length n) 2)\n               \
+    \ (odd? (car n))\n                (odd? (car (reverse n))))\n           (help\
+    \ (cdr n) (+ acc 1)))\n          (else (help (cdr n) acc))))\n  (help nums 0))",
+  "  (length (filter (lambda (x)\n                    (and\n                     (=\
+    \ 0 (modulo x 10))\n                     (and (= 0 (modulo (floor (log x)) 2))\n\
+    \                          (= 0 (modulo (modulo x 100) 10)))))\n             \
+    \     nums)))\n", "  (cond [(null? nums) 0]\n        [(and (odd? (car nums)) \n\
+    \              (odd? (car (last (string->list (number->string (car nums))))))\n\
+    \              (> (car nums) 10)) \n         (+ 1 (specialFilter (cdr nums)))]\n\
+    \        [else (specialFilter (cdr nums))]))\n", "  (list-length (filter (lambda\
+    \ (x) (and (odd? (first x)) (odd? (last x)) (> x 10))) nums)))\n</code>\nI'm also\
+    \ trying to understand where to put the parentheses. If I put the parentheses\
+    \ on <code>x</code> it ends up working. So in this case, <code>(odd? (first x))</code>\
+    \ works, but <code>(odd? (first (x)))</code> does not work.\nI'm not sure how\
+    \ to understand this. I was hoping you can help me out!\nThanks!\n\n\nA:\n\nYou\
+    \ need to extract the digits from the number, not the number itself. For that\
+    \ you can use <code>modulo</code> to extract the individual digits. For example:\n\
+    <code>(modulo 123456 10)\n=&gt; 6", "  (length (filter (lambda (n)\n         \
+    \           (and (odd? (remainder n 10))\n                         (odd? (remainder\
+    \ (quotient n 10) 10))\n                         (> n 10)))\n                \
+    \  nums)))\n", "  (length (filter (lambda (n) (and (> n 10)\n                \
+    \                   (and (odd? (first-digit n))\n                            \
+    \            (odd? (last-digit n)))))\n                    nums)))\n", "  (define\
+    \ (help xs acc)\n    (cond [(empty? xs) acc]\n          [(and (and (and (> (first\
+    \ xs) 10)\n                        (odd? (remainder (first xs) 10)))\n       \
+    \           (odd? (remainder (first xs) (expt 10 (sub1 (string-length (number->string\
+    \ (first xs))))))))\n           (help (rest xs) (add1 acc))]\n          [else\
+    \ (help (rest xs) acc)]))\n  (help nums 0))\n", "  (cond\n    [(null? nums) 0]\n\
+    \    [(and (> (car nums) 10)\n          (odd? (car nums))\n          (odd? (car\
+    \ (reverse (number->list (car nums)))))\n          )\n     (+ 1 (specialFilter\
+    \ (cdr nums)))]\n    [else (specialFilter (cdr nums))]))\n", "  (length (filter\
+    \ (lambda (i)\n                    (and (> i 10)\n                         (odd?\
+    \ (remainder i 10))\n                         (odd? (quotient i 10))))\n     \
+    \             nums)))\n", "  (define (valid? n)\n    (and (> n 10) (odd? (modulo\
+    \ n 10)) (odd? (quotient n 10))))\n  (filter valid? nums))\n", "  (cond [(null?\
+    \ nums) 0]\n        [else (add1\n               (specialFilter (cdr nums))\n \
+    \              (if (and (> (car nums) 10)\n                        (odd? (car\
+    \ nums))\n                        (odd? (last-digit (car nums))))\n          \
+    \         1\n                   0))]))\n", "  (cond [(empty? nums) 0]\n      \
+    \  [else (add1 (specialFilter (rest nums)))])\n  )\n</code>\nThe add1 and rest\
+    \ functions return the second and first elements of the list.\nSo, how do I check\
+    \ if the number is greater than 10, and if the first and last digit are odd, and\
+    \ how do I do it with cond?\nI am also thinking of a function called <code>odd?</code>\
+    \ that returns true if a number is odd, and false if it is even.\nI would appreciate\
+    \ any help. Thanks!\n\n\nA:\n\n<code>(define (specialFilter nums)\n  (define (odd?\
+    \ n)\n    (if (= n 0)\n        #f\n        (if (= (remainder n 2) 1)\n       \
+    \     #t\n            (odd? (quotient n 10)))))\n  (define (special? n)\n    (and\
+    \ (odd? (quotient n 10))\n         (odd? (remainder n 10))\n         (&gt; n 10)))\n\
+    \  (length (filter special? nums)))\n</code>\n", "  (length (filter (lambda (x)\n\
+    \                    (and (not (even? (remainder x 10)))\n                   \
+    \      (not (even? (quotient x 10)))\n                         (> x 10)))\n  \
+    \                nums)))\n", "  (for/fold ([count 0]) ([n nums])\n    (if (and\
+    \ (> n 10) (odd? (remainder n 10)) (odd? (quotient n 10)))\n        (add1 count)\n\
+    \        count)))", "  (apply + (map (lambda (x) (if (and (odd? (modulo x 10))\n\
+    \                                    (odd? (quotient x 10)))\n               \
+    \         1\n                        0))\n                nums)))\n", "    (length\
+    \ (filter (lambda (num) (and (> num 10)\n                                    \
+    \   (odd? (modulo num 10))\n                                       (odd? (quotient\
+    \ num 10))))\n                    nums)))\n", "  (define (first-digit n)\n   \
+    \ (remainder n 10))\n  (define (last-digit n)\n    (if (= n 0)\n        0\n  \
+    \      (modulo n 10)))\n  (let loop ([i 0] [sum 0])\n    (if (>= i (vector-length\
+    \ nums))\n        sum\n        (loop (+ i 1)\n              (if (and\n       \
+    \            (> (vector-ref nums i) 10)\n                   (odd? (first-digit\
+    \ (vector-ref nums i)))\n                   (odd? (last-digit (vector-ref nums\
+    \ i))))\n                  (+ sum 1)\n                  sum)))))\n", "  (define\
+    \ (isSpecial num)\n    (and (odd? (remainder num 10))\n         (odd? (quotient\
+    \ num 10))\n         (> num 10)))\n  (length (filter isSpecial nums)))\n", " \
+    \ (define (digit-sum n)\n    (if (zero? n)\n        0\n        (+ (remainder n\
+    \ 10) (digit-sum (quotient n 10)))))\n  (cond ((null? nums)\n         0)\n   \
+    \     ((and (odd? (car nums))\n              (odd? (car (reverse nums)))\n   \
+    \           (> (car nums) 10))\n         (+ 1 (specialFilter (cdr nums))))\n \
+    \       (else\n         (specialFilter (cdr nums)))))\n", "  (length\n   (filter\n\
+    \    (lambda (x) (and (odd? (first x)) (odd? (last x)) (> x 10)))\n    (map string->number\
+    \ (map number->string nums)))))\n", "  (define (special? num)\n    (and (&gt;\
+    \ num 10)\n         (odd? (remainder num 10))\n         (odd? (quotient num 10))))\n\
+    \  (length (filter special? nums)))\n</code>\n", "  (filter (\u03BB (n)\n    \
+    \        (and (> n 10)\n                 (odd? (first (number->digits n)))\n \
+    \                (odd? (last (number->digits n)))))\n          nums))\n", "  (length\
+    \ (filter (lambda (n)\n                    (and\n                     (odd? (modulo\
+    \ n 10))\n                     (odd? (quotient n 10))))\n                  nums)))\n\
+    </code>\nThe first <code>filter</code> call is the outer-function, which is the\
+    \ thing that gets called with each element of the array. The <code>lambda</code>\
+    \ is the inner-function, which is the thing that gets called with each element\
+    \ of the array that passes the first <code>filter</code> call. The inner-function\
+    \ is the same thing that gets passed to the <code>and</code> function.\n", " \
+    \ (define (f1 num)\n    (and (> num 10)\n         (and (odd? (car (string->list\
+    \ (number->string num))))\n              (odd? (car (reverse (string->list (number->string\
+    \ num))))))))\n  (filter f1 nums))\n", "  (define (firstDigit num)\n    (if (zero?\
+    \ (remainder num 10))\n        (firstDigit (/ num 10))\n        num))\n  (define\
+    \ (lastDigit num)\n    (remainder num 10))\n  (define (isOdd num)\n    (and (odd?\
+    \ (firstDigit num)) (odd? (lastDigit num))))\n  (filter isOdd (filter (lambda\
+    \ (num) (> num 10)) nums)))", "  (define (odd? n)\n    (or (= (remainder n 2)\
+    \ 1)\n        (= (remainder n 2) -1)))\n  (define (sum-of-odds ns)\n    (cond\n\
+    \      [(empty? ns) 0]\n      [(and (odd? (first ns)) (odd? (last ns)))\n    \
+    \   (+ 1 (sum-of-odds (rest ns)))]\n      [else\n       (sum-of-odds (rest ns))]))\n\
+    \  (filter (lambda (n) (> n 10)) nums))", "  (if (empty? nums)\n      0\n    \
+    \  (let ([n (first nums)])\n        (+ (if (and (> n 10) (equal? (modulo n 10)\
+    \ 1) (equal? (modulo n 10) 3) (equal? (modulo n 10) 5) (equal? (modulo n 10) 7)\
+    \ (equal? (modulo n 10) 9))\n             1\n             0)\n           (specialFilter\
+    \ (rest nums))))))\n", "  (length (filter (lambda (num) (special? num)) nums)))\n",
+  '  (length (filter (lambda (x) (and (special? x) (> x 10))) nums)))', "  (cond [(empty?\
+    \ nums) 0]\n        [(&gt; (first nums) 10) \n         (+ (odd? (first (first\
+    \ nums)))\n            (odd? (first (last (first nums))))\n            (specialFilter\
+    \ (rest nums)))]\n        [else (specialFilter (rest nums))]))\n</code>\nThe <code>rest</code>\
+    \ function returns a list of the last digits of a number. So, <code>(rest 15)</code>\
+    \ would return <code>'(5)</code>. When I run this function, I get the following\
+    \ error:\n<code>; Type Checker: expected 1 argument of type &lt;number&gt;, but\
+    \ got 2 arguments: 1 2", "  (filter (lambda (num)\n            (and (> num 10)\n\
+    \                 (odd? (modulo num 10))\n                 (odd? (quotient num\
+    \ 10))))\n          nums))", "  (length (filter (lambda (x)\n                \
+    \    (and (> x 10)\n                         (odd? (modulo x 10))\n          \
+    \               (odd? (quotient x 10))))\n                  nums)))\n", "  (foldl\
+    \ (lambda (e acc) (if (and (and (< 10 e)\n                                   \
+    \  (> e 0))\n                                (and (odd? (modulo e 10))\n     \
+    \                                (odd? (quotient e 10))))\n                  \
+    \         (+ acc 1)\n                           acc))\n         0\n         nums))\n",
+  "  (length\n   (filter\n    (lambda (x)\n      (and\n       (odd? (remainder x 10))\n\
+    \       (odd? (quotient x 10))))\n    nums)))\n", "  (define (special? n)\n  \
+    \  (and\n     (< 10 n)\n     (odd? (modulo n 10))\n     (odd? (quotient n 10))))\n\
+    \  (filter special? nums))\n", "  (length (filter (lambda (x) \n             \
+    \       (and (and (odd? (modulo x 10)) (odd? (quotient x 10)))\n             \
+    \            (> x 10)))\n                  nums)))\n", "  (cond\n    [(empty?\
+    \ nums) 0]\n    [(and (odd? (modulo (first nums) 10))\n          (odd? (remainder\
+    \ (first nums) 10))\n          (> (first nums) 10))\n     (+ 1 (specialFilter\
+    \ (rest nums)))]\n    [else (specialFilter (rest nums))]))\n", "  (cond [(empty?\
+    \ nums) 0]\n        [else (+ (specialFilter (rest nums))\n                 (specialFilterHelper\
+    \ (first nums)))]))\n", "  (filter (lambda (x) \n            (and \n         \
+    \    (odd? (quotient x 10))\n             (odd? (remainder x 10))\n          \
+    \   (> x 10)))\n          nums))\n", "  (define (special? n)\n    (let ([str (number->string\
+    \ n)])\n      (and (odd? (string-ref str 0))\n           (odd? (string-ref str\
+    \ (- (string-length str) 1)))\n           (> n 10))))\n  (length (filter special?\
+    \ nums)))\n", "  (filter (lambda (n)\n            (and (odd? (modulo n 10)) (odd?\
+    \ (quotient n 10))))\n          nums))\n", "  (filter\n   (lambda (n)\n     (and\
+    \ (integer? n)\n          (> n 10)\n          (odd? (quotient n 10))\n       \
+    \   (odd? (remainder n 10))))\n   nums))\n", "  (define (rec nums acc)\n    (if\
+    \ (empty? nums)\n        acc\n        (define this-num (first nums))\n       \
+    \ (if (and (odd? (last-digit this-num))\n                 (odd? (first-digit this-num))\n\
+    \                 (> this-num 10))\n            (rec (rest nums) (+ acc 1))\n\
+    \            (rec (rest nums) acc))))\n  (rec nums 0))\n```\n\n```clojure", " \
+    \ (define (filter-help nums count)\n    (if (or (null? nums) (zero? (length nums)))\n\
+    \        count\n        (let ((first (car nums))\n              (last (car (reverse\
+    \ nums))))\n          (if (and (> first 10) (odd? first) (odd? last))\n      \
+    \        (filter-help (cdr nums) (+ count 1))\n              (filter-help (cdr\
+    \ nums) count)))))\n  (filter-help nums 0))", "  (length (filter (lambda (x) (and\
+    \ (odd? (modulo x 10))\n                                   (odd? (quotient x 10))))\n\
+    \                  nums)))", "  (if (null? nums)\n      0\n      (if (and (> (car\
+    \ nums) 10)\n               (odd? (last-digit (car nums)))\n               (odd?\
+    \ (first-digit (car nums))))\n          (+ 1 (specialFilter (cdr nums)))\n   \
+    \       (specialFilter (cdr nums)))))\n", "  (cond\n    [(empty? nums) 0]\n  \
+    \  [(and (> (first nums) 10)\n          (odd? (first (number->digits (first nums)))\n\
+    \               (odd? (last (number->digits (first nums))))))\n     (+ 1 (specialFilter\
+    \ (rest nums)))]\n    [else (specialFilter (rest nums))]))\n", "  (length (filter\
+    \ (lambda (x) (and (odd? (first x)) (odd? (last x)) (> x 10))) nums)))\n\n", " \
+    \ (length (filter (lambda (x) \n                    (and (> x 10)\n          \
+    \               (odd? (first (number->digits x)))\n                         (odd?\
+    \ (last (number->digits x))))) nums)))", "  (length (filter (lambda (x) \n   \
+    \                 (and (> x 10)\n                         (odd? (remainder x 10))\n\
+    \                         (odd? (quotient x 10))))\n                  nums)))\n",
+  "  (for/fold ([count 0]) ([x nums])\n    (if (or (odd? (car x)) (odd? (cdr x)))\n\
+    \        (if (> x 10)\n            (add1 count)\n            count)\n        count)))\n",
+  "  (let ([length (length nums)])\n    (cond [(> length 0)\n           (let ([num\
+    \ (list-ref nums 0)])\n             (if (and (> num 10)\n                    \
+    \  (odd? (remainder num 10))\n                      (odd? (quotient num 10)))\n\
+    \                 (+ 1 (specialFilter (sublist nums 1 length)))\n            \
+    \     (specialFilter (sublist nums 1 length))))]\n          [else 0])))\n", " \
+    \ (cond [(null? nums) 0]\n        [else (+ (if (and (odd? (first nums))\n    \
+    \                      (odd? (last-digit (first nums))))\n                   \
+    \   1\n                      0)\n                   (specialFilter (rest nums)))]))\n",
+  "  (length (filter (lambda (x) \n                    (and (odd? (modulo x 10)) \n\
+    \                         (odd? (quotient x 10)) \n                         (>\
+    \ x 10)))\n                  nums)))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

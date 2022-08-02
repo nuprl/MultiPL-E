@@ -32,7 +32,2108 @@ tests: "function candidate(...$args) {\n    return Strongest_Extension(...$args)
   Bb\", \"91245\")) !== \"_.Bb\") { throw new Exception(\"Test failed!\"); }\n   \
   \ if (candidate(\"Sp\", array(\"671235\", \"Bb\")) !== \"Sp.671235\") { throw new\
   \ Exception(\"Test failed!\"); }\n}\n\ntest();"
-completions: []
+completions: ["  $frac = array_count_values($extensions);\n  $max = max($frac);\n\
+    \  $strongest = strtr($class_name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz');\n\
+    \  foreach ($extensions as $ext) {\n    if ($frac[$ext] >= $max) {\n      $strongest\
+    \ .= $ext;\n    }\n  }\n  return $strongest;\n}", "    $map = array_flip($extensions);\n\
+    \    $strengths = [];\n    foreach($map as $ext => $val) {\n        $len = strlen($ext);\n\
+    \        if ($val > 0) {\n            $strengths[$ext] = -$val / $len;\n     \
+    \   }\n    }\n    ksort($strengths, SORT_NUMERIC);\n    if ($strengths[0] > 0)\
+    \ {\n        return $class_name.'.'.array_shift($extensions).'.'.current($strengths);\n\
+    \    }\n    return $class_name;\n}\n</code>\n<|/ a |>\n<| a dscore=0 |>\nAs far\
+    \ as I know, PHP doesn't allow to load classes dynamically. \nYou can use a switch\
+    \ statement to choose the class you want to load, depending of the name of the\
+    \ class file.\n<|/ a tags=php,class,variables |>\n<| c |>\nI thought of that,\
+    \ maybe I can use a switch statement to load all classes in the array if they\
+    \ have names like classX.classY.classZ.\n<|/ c |>\n<| c |>\nThen you should use\
+    \ if/else statements to check the name of the class file. If it's classX.classY.classZ,\
+    \ load classX, else load classY.\n<|/ c |>\n<| a dscore=0 |>\nThe code below will\
+    \ dynamically load any class file. \nYou have to modify the class names and load\
+    \ file names in array. \n<code>\n$class_name = 'className';\n$class_file = array('file1.php','file2.php');\n",
+  "  $classes = explode('.', $class_name);\n  $extensions = array_map('strtolower',\
+    \ $extensions);\n  $extensions_count = count($extensions);\n  $extensions_count\
+    \ = array_count_values($extensions);\n  $class_strength = [];\n  foreach($extensions_count\
+    \ as $i => $e) {\n    if ($e == 1) $class_strength[$i] = 0;\n    else $class_strength[$i]\
+    \ = $i - 1;\n  }\n  $extensions_strength = array_keys($class_strength);\n  $extensions_strength\
+    \ = array_flip($extensions_strength);\n  ksort($class_strength);\n  $class_strength_length\
+    \ = count($class_strength);\n  asort($class_strength);\n  $class_strength_length\
+    \ = count($class_strength);\n  foreach($extensions_strength as $i => $e) {\n \
+    \   foreach($class_strength as $j=>$c) {\n      if ($j < $i) continue;\n     \
+    \ else if ($j < $class_strength_length) break;\n      else if ($c == $i) continue;\n\
+    \      else break;\n    }\n    if ($class_strength[$i] == $i) continue;\n    return\
+    \ $classes[$i].'.'.$e;\n  }\n  return $class_name;\n}", "  $extension_count =\
+    \ count($extensions);\n  $i = 0;\n  $strongest_extension = $class_name . '.';\n\
+    \  $extension_strength = -1;\n  $current_strength = -1;\n\n  foreach($extensions\
+    \ as $extension) {\n    $extension_count--;\n    $extension_strength += strlen($extension);\n\
+    \    $current_strength = preg_match('/^[A-Z]/', $extension) ? count(preg_split('//',\
+    \ $extension, -1, PREG_SPLIT_NO_EMPTY)) : 0;\n    if ($current_strength > $extension_strength)\
+    \ {\n      $strongest_extension = $class_name . '.' . $extension;\n      $extension_strength\
+    \ = $current_strength;\n    }\n  }\n  return $strongest_extension;\n}\n</code>\n\
+    <|/ a tags=php,oop |>\n<| c |>\nPlease add some explanation to your answer, why\
+    \ you think this solves the OP's question. Explanations are generally of value\
+    \ beyond just code\n<|/ c |>\n<| c |>\nSure. I'm going to add a quick explanation\
+    \ to my answer.\n<|/ c |>\n<| a |>\nHere is a simple solution to find the best\
+    \ extension for your class:\n<code>\n$class_name = ucfirst($class_name); // for\
+    \ class names without leading caps\n$extensions = array(); // collect extensions",
+  "    $extensions_count = count($extensions);\n    foreach ($extensions as $key =>\
+    \ $extension) {\n        if (preg_match('/^' . str_replace(' ', '\\\\ ', $extension)\
+    \ . '$/', $class_name)) {\n            return $class_name . '.' . $extension;\n\
+    \        }\n        if ($extensions_count > 1) {\n            if (preg_match('/^'\
+    \ . str_replace(' ', '\\\\ ', $extensions[$key]) . '$/', $class_name)) {\n   \
+    \             return $class_name . '.' . $extensions[$key];\n            }\n \
+    \       }\n    }\n}\n</code>\n<|/ a |>\n<| c |>\nThis doesn't work when you add\
+    \ classes like \"A\" and \"B\" because they end up coming out as 'A'.'B'.'A'.'B'\n\
+    <|/ c |>\n<| a dscore=2 tags=php |>\nHere is my answer:\n<code>", "  $class_name\
+    \ = Strongest_Class($class_name);\n  $extensions = array_reverse($extensions);\n\
+    \  sort($extensions);\n  $strength_sum = array_sum(array_map('strtolower', $extensions));\n\
+    \  $strength = array_search(strtolower($class_name), array_map('strtolower', $extensions));\n\
+    \  if ($strength_sum == 0) return $class_name;\n  if ($strength_sum > $strength)\
+    \ return $class_name;\n  return $class_name . '.' . $extensions[$strength];\n\
+    }\n", "\tsort($extensions);\n\t$n = count($extensions);\n\t$strongest = array_flip($extensions);\n\
+    \tforeach ($extensions as $k => $ext) {\n\t\t$strongest[$k] = $ext - $strongest[$k];\n\
+    \t}\n\t$strength = array_sum($strongest);\n\tforeach ($strongest as $k => $str)\
+    \ {\n\t\tif ($str == 0) return $class_name.$k;\n\t}\n\tforeach ($strongest as\
+    \ $k => $str) {\n\t\tif ($str == 0) return $class_name.$k;\n\t}\n\t$strength -=\
+    \ $n;\n\tfor ($i = $n; $i >= 0; $i--) {\n\t\tif ($strongest[$i] == 0) {\n\t\t\t\
+    $strength -= $i;\n\t\t}\n\t}\n\treturn $class_name.$extensions[$strength];\n}\n",
+  "  $class_name = strtolower($class_name);\n  $extensions_count = count($extensions);\n\
+    \  $extensions_strength_sum = array_sum($extensions);\n  $extensions_strength_max\
+    \ = max($extensions);\n  return str_replace(\"_\", \".\", $class_name) .\n   \
+    \ \".\" . substr($class_name, 0, 1) . \n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($extensions) .\n\
+    \    \".\" . array_pop($extensions) .\n    \".\" . array_shift($", "    $strength\
+    \ = array();\n    foreach ($extensions as $extension) {\n        $class_name =\
+    \ str_ireplace(strtolower($extension), $extension, $class_name);\n        if (isset($strength[$class_name]))\
+    \ {\n            if ($strength[$class_name] < 1)\n                continue;\n\
+    \            $strength[$class_name]--;\n        }\n        $strength[$class_name]\
+    \ = 1;\n    }\n    // Sort the extension strength array from highest to lowest.\n\
+    \    arsort($strength);\n    // Select the extension with the highest strength.\n\
+    \    foreach ($strength as $class_name => $strength_of_extension) {\n        if\
+    \ ($strength_of_extension == 1)\n            return $class_name;\n    }\n}\n",
+  "  \n  foreach ($extensions as $ext) {\n    \n    if (strlen($ext) == 0) {\n   \
+    \   \n      continue;\n      \n    }\n    \n    $class = $class_name;\n    \n\
+    \    foreach ($ext as $c) {\n      \n      if (strlen($c) == 0) {\n        \n\
+    \        continue;\n        \n      }\n      \n      if (ctype_upper($c)) {\n\
+    \        \n        $class .= $c;\n        \n      }\n      \n    }\n    \n   \
+    \ if (strlen($class) > 0) {\n      \n      foreach ($extensions as $ext) {\n \
+    \       \n        foreach ($ext as $c) {\n          \n          if (strlen($c)\
+    \ == 0) {\n            \n            continue;\n            \n          }\n  \
+    \        \n          if (ctype_lower($c)) {\n            \n            $class\
+    \ .= $c;\n            \n          }\n          \n        }\n        \n      }\n\
+    \      \n    }\n    \n  }\n  \n  if (strlen($class) == 0) {\n    \n    return\
+    \ '$class_name';\n    \n  }\n  \n  $length = strlen($class);\n  \n  if ($length\
+    \ < 2) {\n    \n    return '$class_name.'.$class;\n    \n  }\n  \n  $c = strtoupper($class);\n\
+    \  \n  $strength = -1;\n  \n  foreach ($extensions as $ext) {\n    \n    foreach\
+    \ ($ext as $c) {\n      \n      if (strlen($c) == 0) {\n        \n        continue;\n\
+    \        \n      }\n      \n      if (ctype_upper($c)) {\n        \n        $strength\
+    \ += 1;\n        \n      }\n      \n    }\n    \n  }\n  \n  if ($strength == 0)\
+    \ {\n    \n    return '$class_name.'.$class;\n    \n  }\n  \n  $strongest = $extensions[0];\n\
+    \  \n  foreach ($extensions as $ext) {\n    \n    foreach ($ext as $c) {\n   \
+    \   \n      if (strlen($c) == 0) {\n        \n        continue;\n        \n  \
+    \    }\n      \n      if (ctype_lower($c)) {\n        \n        $strength -= 1;\n\
+    \        \n        if ($strength == 0) {\n          \n          $strongest = $ext;\n\
+    \          \n          break;\n          \n        }\n        \n      }\n    \
+    \  \n    }\n    \n  }\n  \n  return '$class_name.'.$strongest[0];\n  \n}\n", " \
+    \ if ($extensions !== array()) {\n    $count = count($extensions);\n    $cap =\
+    \ strlen(preg_replace('/[^A-Z]/', '', $class_name));\n    $sm = strlen(preg_replace('/[^a-z]/',\
+    \ '', $class_name));\n    $strength = $cap - $sm;\n\n    if ($count == 1) {\n\
+    \      return $class_name . $extensions[0];\n    }\n    elseif ($strength == 0)\
+    \ {\n      return $class_name;\n    }\n    else {\n      for ($i = 0; $i < $count;\
+    \ $i++) {\n        if ($extensions[$i] == $extensions[($i + 1)]) {\n         \
+    \ $i++;\n          $strength--;\n        }\n        else {\n          break;\n\
+    \        }\n      }\n\n      return $class_name . substr($extensions[0], 0, $strength);\n\
+    \    }\n  }\n  else {\n    return $class_name;\n  }\n}\n</code>\n<|/ a dscore=3\
+    \ tags=php,algorithm |>\n<| a tags=php,algorithm dscore=3 |>\nIn PHP:\n<code>",
+  "   \n    $str_extension = $class_name;\n    $count_letters = count_chars($class_name);\n\
+    \    foreach ($extensions as $ext) {\n        $count1 = count_chars($ext);\n \
+    \       foreach ($extensions as $ext2) {\n            $count2 = count_chars($ext2);\n\
+    \            $str_extension .= $ext;\n            $count3 = count_chars($str_extension);\n\
+    \            if ($count2 < $count3) {\n                $str_extension = $ext2;\n\
+    \                $count4 = $count3;\n            }\n        }\n        if ($count_letters\
+    \ > $count1) {\n            $str_extension = $ext;\n            $count_letters\
+    \ = $count1;\n        }\n    }\n    return $str_extension;\n}\n", "    $classes\
+    \ = array_count_values($extensions);\n    arsort($classes);\n    $classes_by_strength\
+    \ = [];\n    foreach ($classes as $class => $count) {\n        $classes_by_strength[$class]\
+    \ = $count;\n    }\n    if (array_sum($classes) == 0) {\n        return $class_name\
+    \ . '.NoExtensions';\n    }\n    $classes_by_strength = array_reverse($classes_by_strength);\n\
+    \    foreach ($classes_by_strength as $class => $count) {\n        if ($count\
+    \ == 0) {\n            continue;\n        }\n        foreach ($extensions as $extension)\
+    \ {\n            $class_name_extension_str = strtolower($class_name) . strtolower($extension);\n\
+    \            $class_name_extension_arr = explode('.', $class_name_extension_str);\n\
+    \            if (count($class_name_extension_arr) == 2) {\n                continue;\n\
+    \            }\n            $diff = intval($count) - intval(array_sum(explode(\"\
+    \ \", $class_name_extension_arr)));\n            if ($diff == 0) {\n         \
+    \       return $class_name_extension_str;\n            }\n        }\n    }\n}\n\
+    </code>\n<|/ a tags=string,php,algorithm dscore=2 |>\n<| c |>\nThis is very nice\
+    \ but doesn't work when a class has multiple instances. For example: class Foo\
+    \  has extensions AA, BB, BB, and AA. When you add up all the extensions, the\
+    \ result is AB. So it only takes the first instance of each extension. So AA shows\
+    \ up as A even though it has two instances. Any ideas on how to fix this?\n<|/\
+    \ c |>\n<| c |>\nI fixed it by changing the array_sum part to this:\n`$classes_by_strength\
+    \ = array_reverse($classes_by_strength);\n    foreach ($classes_by_strength as\
+    \ $class => $count) {\n        if ($count == 0) {\n            continue;\n   \
+    \     }\n        foreach ($extensions as $extension) {\n            $class_name_extension_str\
+    \ = strtolower($class_name) . strtolower($extension);\n            $class_name_extension_arr\
+    \ = explode('.', $class_name_extension_str);\n            if (count($class_name_extension_arr)\
+    \ == 2) {\n                continue;\n            }\n            $diff = intval($count)\
+    \ - intval(array_sum(explode(\" \", $class_name_extension_arr)));\n          \
+    \  if ($diff == 0) {\n                return $class_name_extension_str;\n    \
+    \        }\n        }\n    }`\n<|/ c |>\n<| a dscore=1 tags=string,php,algorithm\
+    \ |>\nI like some of the answers that use regexes, but I think this would be easier\
+    \ to understand and follow:\n<code>\n<?php\n$classes = \"Slices\";\n$extensions\
+    \ = [\n    'Er", "  sort($extensions, SORT_STRING);\n  $extensions_count = count($extensions);\n\
+    \  \n  $strength = 0;\n  for ($i = 0; $i < $extensions_count; ++$i) {\n    $extension_length\
+    \ = strlen($extensions[$i]);\n    if ($extension_length >= 2) {\n      $extension_length\
+    \ = intval($extension_length / 2);\n    }\n    $strength += $extension_length;\n\
+    \  }\n\n  usort($extensions, function($a, $b) {\n    return $a > $b;\n  });\n\n\
+    \  if (count($extensions) > 1) {\n    $extension = array_shift($extensions);\n\
+    \    $extension_length = strlen($extension);\n    $extension_length = intval($extension_length\
+    \ / 2);\n    $strength += $extension_length;\n  }\n\n  return $class_name . '.'\
+    \ . substr($extensions[0], 0, $strength);\n}", "    \n    // The extension with\
+    \ the most strength has strength 0.\n    $max = 0;\n    $max_name = $class_name;\n\
+    \    $max_extensions = $extensions;\n    \n    // Go through every extension name\
+    \ and see if it is the best so far.\n    foreach ($extensions as $extension) {\n\
+    \        \n        // Get the number of upper case letters.\n        $upper =\
+    \ str_word_count($extension, 1);\n        \n        // Get the number of lower\
+    \ case letters.\n        $lower = str_word_count(strtolower($extension), 1);\n\
+    \        \n        // Get the number of same letters.\n        $same = str_word_count(strtolower($extension),\
+    \ 1);\n        \n        // Find the extension's strength given the upper and\
+    \ lower case letters.\n        $extension_strength = abs($upper - $lower);\n \
+    \       \n        // If this extension's strength is better than our current best.\n\
+    \        if ($extension_strength > $max) {\n            $max = $extension_strength;\n\
+    \            $max_name = $class_name;\n            $max_extensions = $extensions;\n\
+    \        }\n        \n        // If the number of lower case letters is the same\
+    \ as the number of upper\n        // case letters then we have a tie.\n      \
+    \  if ($lower == $upper) {\n            $extension_strength = -1;\n        }\n\
+    \        \n        // See if we have a tie.\n        if ($extension_strength <\
+    \ 0 && ($extension_strength == $same)) {\n            $extension_strength = -1;\n\
+    \        }\n        \n        // If the extension's strength is the same as the\
+    \ max strength we\n        // have a tie, so we must choose the extension with\
+    \ the shortest name.\n        if ($extension_strength == $max) {\n           \
+    \ $extension_strength = -1;\n        }\n    }\n    \n    // We return this extension's\
+    \ name as our best guess and we keep a record \n    // of it because it's possible\
+    \ that there are multiple extensions with the \n    // same name but different\
+    \ strength.\n    return $max_name . '.' . array_shift($max_extensions);\n}", " \
+    \   // your code here\n    foreach ($extensions as $extension) {\n        if (strtoupper(substr($extension,\
+    \ 0, 1))==$extension)\n            return $class_name.$extension;\n    }\n}\n\
+    </code>\n<|/ a dscore=2 |>\n<| c |>\nThanks so much, this helped a lot, I got\
+    \ it down to half the amount of code needed. Thanks a lot for the help!\n<|/ c\
+    \ |>\n<| a tags=php |>\nThis is my solution:\n<code>\n<?php", "    $strongest_extension\
+    \ = '';\n    foreach ($extensions as $extension) {\n        $split_class_name\
+    \ = explode(\" \", $class_name);\n        $split_class_name_counts = array_count_values($split_class_name);\n\
+    \        $extension_strength = -1;\n        $extension_strength_counts = array_count_values($extension);\n\
+    \        foreach ($split_class_name as $class_name_letter) {\n            if (isset($split_class_name_counts[strtoupper($class_name_letter)]))\
+    \ {\n                $extension_strength += $split_class_name_counts[strtoupper($class_name_letter)];\n\
+    \                $extension_strength_counts[strtoupper($class_name_letter)] =\
+    \ 1;\n            }\n        }\n        $extension_strength_counts = array_keys($extension_strength_counts);\n\
+    \        $extension_strength = array_sum($extension_strength_counts) / count($extension_strength_counts);\n\
+    \        if ($extension_strength > 0) {\n            if (isset($split_class_name_counts[strtolower($extension_strength)]))\
+    \ {\n                $extension_strength_counter = 0;\n                foreach\
+    \ ($extension_strength_counts as $class_name_letter_count) {\n               \
+    \     $extension_strength_counter += $class_name_letter_count;\n             \
+    \   }\n                $extension_strength = $extension_strength * $extension_strength_counter\
+    \ / count($extension_strength_counts);\n            }\n        }\n        if ($extension_strength\
+    \ > 0) {\n            $strongest_extension .= $class_name . '.' . $extension_strength;\n\
+    \            break;\n        }\n    }\n    return $strongest_extension;\n}\n</code>\n\
+    <|/ a dscore=1 |>\n<| c |>\nI appreciate the time you put into this. I really\
+    \ like your code. Unfortunately I'm still getting an \"Invalid argument supplied\
+    \ for foreach()\" error even though I think I'm following it correctly...\n<|/\
+    \ c |>\n<| c |>\nThe error is actually coming from the function you defined above,\
+    \ right?  That's a separate question that I'd need to see your code.  As far as\
+    \ the foreach error, are you sure you didn't have a typo?  I tested it and it\
+    \ worked.\n<|/ c |>\n<| c |>\nI'm pretty sure. The function I defined above is\
+    \ not the one that's giving me the error. It's a function I'm calling to get a\
+    \ class with that name (if it exists). If it exists, it gets the class name. If\
+    \ it doesn't it returns FALSE. It seems like it might be the function itself that\
+    \ might be giving me the error. Perhaps I just don't have the syntax correct in\
+    \ the code I posted above.\n<|/ c |>\n<| c |>\nI did notice that in your ", " \
+    \   // Your code here\n    $class_name_array = explode(\".\", $class_name);\n\
+    \    $class_name = $class_name_array[0];\n    $extensions_array = explode(\".\"\
+    , $class_name);\n    $extensions_array = array_filter($extensions_array);\n\n\
+    \    $strongest_extension = '';\n    foreach ($extensions_array as $key => $ext)\
+    \ {\n        $extension_strength = array_count_values(str_split($ext));\n    \
+    \    foreach ($extension_strength as $key => $value) {\n            if ($value\
+    \ > 1) {\n                $extension_strength = array_search($value, $extension_strength);\n\
+    \                $strongest_extension = trim($class_name) . \"_\" . $ext;\n  \
+    \          }\n        }\n    }\n    return $strongest_extension;\n}\n", "    $extensions_count\
+    \ = count($extensions);\n    $strength = -1;\n    for($i=0; $i < $extensions_count;\
+    \ $i++) {\n        $c = substr($extensions[$i], 0, 1);\n        $s = strlen($extensions[$i]);\n\
+    \        $strongest_extension = $class_name . '.' . $extensions[$i];\n       \
+    \ if ($c == $s) {\n            if ($strength == -1) {\n                $strength\
+    \ = $i;\n            } else if ($strength == $i) {\n                $strength\
+    \ = $i;\n            } else {\n                $strength = -1;\n            }\n\
+    \        }\n    }\n    return $class_name . '.' . $extensions[$strength];\n}\n\
+    </code>\n<|/ a dscore=1 |>\n<| c |>\nThanks for your response, this worked for\
+    \ me. I just had to modify the $extensions array in the Strongest_Extension function.\n\
+    <|/ c |>\n<| a tags=php |>\nI wrote a little function for you. You can pass the\
+    \ name of the class and the list of classes to compare to:\n<code>", "    foreach\
+    \ ($extensions as $i => $extension) {\n        $number = substr_count($class_name,\
+    \ $extension);\n        $length = strlen($extension);\n        $strength = abs($number\
+    \ - $length);\n        if ($strength == 0) {\n            // If there is no extension\
+    \ with a strong enough strength, return null.\n            return null;\n    \
+    \    }\n        if ($strength > 0) {\n            $result = $class_name . $extension;\n\
+    \            break;\n        }\n    }\n\n    // If no extension with the strongest\
+    \ strength was found, return null.\n    return $result ? $result : null;\n}\n",
+  "    if ($extensions == NULL) {\n        die(\"Function expects 2 parameters.\"\
+    );\n    }\n    $extensions_count = count($extensions);\n    $extensions_count\
+    \ = count($extensions);\n    $total_count = 0;\n    $extensions_count = count($extensions);\n\
+    \    foreach ($extensions as $extension) {\n        if (preg_match('/[A-Z]/',\
+    \ $extension)) {\n            $total_count += 1;\n        }\n        if (preg_match('/[a-z]/',\
+    \ $extension)) {\n            $total_count += 1;\n        }\n        if (preg_match('/[0-9]/',\
+    \ $extension)) {\n            $total_count += 1;\n        }\n        if (preg_match('/[\
+    \ ]/', $extension)) {\n            $total_count += 1;\n        }\n        if (preg_match('/[!@#$%&*]/',\
+    \ $extension)) {\n            $total_count += 1;\n        }\n    }\n    $strongest\
+    \ = 0;\n    for ($i = 0; $i < $extensions_count; $i++) {\n        $strongest =\
+    \ ($strongest + ($extensions[$i][0] - $extensions[$i][0] % $total_count));\n \
+    \   }\n    $extensions_count = count($extensions);\n    for ($i = 0; $i < $extensions_count;\
+    \ $i++) {\n        if ($extensions[$i][0] == $strongest) {\n            $extensions[$i]\
+    \ = $class_name.$extensions[$i];\n            break;\n        }\n    }\n    $extensions_count\
+    \ = count($extensions);\n    for ($i = 0; $i < $extensions_count; $i++) {\n  \
+    \      if ($extensions[$i] == NULL) {\n            $extensions[$i] = $class_name.$extensions[$i];\n\
+    \        }\n    }\n    return $extensions[0];\n}\n", "  $class_name = strtolower($class_name);\n\
+    \  $extensions = array_map('strtolower', $extensions);\n  asort($extensions);\n\
+    \  foreach ($extensions as $key => $extension) {\n    if ($extension >= 0) {\n\
+    \      $extensions[$key] = $class_name . $extension;\n    }\n  }\n  return implode('.',\
+    \ $extensions);\n}", "    $class_name = strtolower($class_name);\n    $extensions\
+    \ = array_map('strtolower', $extensions);\n    $class_count = preg_match_all('/([A-Z]{1})/',\
+    \ $class_name, $matches);\n    $class_count = ($class_count == 1) ? $class_count\
+    \ : 0;\n    $total_count  = preg_match_all('/([a-z])/', $class_name, $matches);\n\
+    \    $total_count  = ($total_count == 1) ? $total_count : 0;\n    if ($total_count\
+    \ != $class_count) {\n        return false;\n    }\n    $strongest = '';\n   \
+    \ $total_strength = 0;\n    $length = count($extensions);\n    for ($i = 0; $i\
+    \ < $length; ++$i) {\n        $letter = $extensions[$i];\n        $count = preg_match_all('/([A-Z]{1})/',\
+    \ $letter, $matches);\n        $count = ($count == 1) ? $count : 0;\n        $strength\
+    \ = abs($class_count - $count);\n        if ($strength > $total_strength) {\n\
+    \            $strongest = $letter;\n            $total_strength = $strength;\n\
+    \        }\n    }\n    if ($total_strength != 0) {\n        return $class_name\
+    \ . '.' . $strongest;\n    }\n    return $class_name;\n}\n", "  $classes = get_declared_classes();\n\
+    \n  $extensions_count = count($extensions);\n  $extensions_strength = [];\n\n\
+    \  foreach ($extensions as $index => $extension) {\n    if (array_key_exists($extension,\
+    \ array_flip($classes))) {\n      $extensions_strength[$extension] = -1;\n   \
+    \   continue;\n    }\n\n    // we must convert the extension to uppercase \n \
+    \   $extension_upper = strtoupper($extension);\n\n    $extensions_count = count($extensions);\n\
+    \    $extensions_strength[$extension] = -1 * $extensions_count/$extensions_count;\n\
+    \n  }\n  usort($extensions_strength, function($a, $b) {\n    return $a<=$b;\n\
+    \  });\n  rsort($extensions_strength);\n\n  $strongest_extension = NULL;\n\n \
+    \ // find the first one with higher strength\n  foreach ($extensions_strength\
+    \ as $key => $value) {\n    if ($value > -1 && $value + $extensions_count/$extensions_count\
+    \ <= 1) {\n      $strongest_extension = $key;\n    }\n  }\n\n  return $classes[$class_name]\
+    \ . '.' . $strongest_extension;\n}\n", "  $class_name = explode('.', $class_name);\n\
+    \  $class_name = $class_name[0];\n  $max_strength = -1;\n  $max_extension = null;\n\
+    \  foreach ($extensions as $extension) {\n    $extension = explode('.', $extension);\n\
+    \    if ($extension[1] == $class_name) {\n      $strength = strcasecmp($extension[0],\
+    \ $class_name);\n      if ($strength > $max_strength) {\n        $max_strength\
+    \ = $strength;\n        $max_extension = $extension;\n      }\n    }\n  }\n  if\
+    \ ($max_strength == 0) {\n    return '$class_name';\n  } else {\n    return $max_extension[0]\
+    \ . '.' . $max_extension[1];\n  }\n}\n</code>\n<|/ a dscore=2 |>\n<| c |>\nI like\
+    \ your answer, but please add some explanation to your answer so OP can learn\
+    \ how to solve the problem on their own.\n<|/ c |>\n<| a dscore=1 |>\nFor your\
+    \ specific example, this would be my solution:\n<code>", "    sort($extensions);\n\
+    \    foreach ($extensions as $ext) {\n        $strength = substr_count($ext, strtoupper($class_name));\n\
+    \        if ($strength == 0) {\n            continue 2;\n        }\n        $strength\
+    \ = intval($strength);\n        if ($strength > 0) {\n            return $class_name\
+    \ . '.' . $ext;\n        }\n    }\n}\n</code>\n<|/ a |>\n<| a |>\n<code>\n<?php\n\
+    $class = 'FooBar';\n$classes = [\n    'Foo' => 'Foo',\n    'FooBar' => 'Bar',\n\
+    \    'FooBarFoo' => 'FooBar',\n    'Bar' => 'Bar',\n    'BarFoo' => 'FooBar',\n\
+    ];\n$classes = array_flip($classes);\n$classes[$class] = 3;\nksort($classes);\n\
+    print_r($classes);\n</code>\nOutput:\n<code>\nArray\n(\n    [Foo] => 1\n    [Bar]\
+    \ => 3\n    [FooBar] => 2\n    [FooBarFoo] => 1\n)\n</code>\n<|/ a tags=class,php,methods\
+    \ dscore=3 |>\n<| c |>\nWhile this code may answer the question, providing additional\
+    \ context regarding how and/or why it solves the problem would improve the answer's\
+    \ long-term value.\n<|/ c |>\n<| a dscore=2 tags=class,php,methods |>\nI know\
+    \ this is very late, but I had to do the same thing recently so I thought I'd\
+    \ share my solution. \nThe trick was to iterate over all classes that had a method\
+    \ with the desired name, then to sort the class name alphabetically and then compare\
+    \ to the current class name.\n<code>\n<?php", "    $extns = array();\n    foreach\
+    \ ($extensions as $extn) {\n        $letters = str_split($extn);\n        $cap\
+    \ = array_sum($letters);\n        $sm = array_sum(array_map(function($letter)\
+    \ {\n            return strtoupper($letter);\n        }, $letters));\n       \
+    \ $strength = $cap - $sm;\n        $extns[$strength] = $extn;\n    }\n    asort($extns);\n\
+    \    return $class_name . '.' . $extns[0];\n}\n</code>\n<|/ a |>\n<| a tags=php,language-agnostic,algorithm,string\
+    \ dscore=1 |>\nI implemented the answer of Niko and modified it a little bit:\n\
+    <code>", "    $strongest = array();\n    $class = strtolower($class_name);\n \
+    \   foreach ($extensions as $ext) {\n        $letters = str_split($ext);\n   \
+    \     $c = 0;\n        $total = 0;\n        foreach ($letters as $l) {\n     \
+    \       $total += $c;\n            $c++;\n        }\n        $strongest[$ext]\
+    \ = $total / strlen($letters);\n    }\n    arsort($strongest);\n    $last = $strongest[0];\n\
+    \    $counts = array_count_values($extensions);\n    foreach ($strongest as $ext\
+    \ => $strength) {\n        if ($strength == 0) {\n            foreach ($counts\
+    \ as $count => $count) {\n                if ($counts[$ext] > $count) {\n    \
+    \                $counts[$ext] = $count;\n                }\n            }\n \
+    \       }\n        if ($strength > 0 && $strength == $last) continue;\n      \
+    \  if ($strength > 0 && $strength < $last) {\n            return $class . '.'\
+    \ . $ext;\n        }\n    }\n    return $class . '.' . $last;\n}\n", "  foreach\
+    \ ($extensions as $ext) {\n    $first_char = substr($ext, 0, 1);\n    $count_cap\
+    \ = strlen($first_char);\n    $count_sm = strlen($first_char) - 1;\n    $strongest\
+    \ = -1;\n    if ($count_cap > $count_sm) {\n      $strongest = $ext;\n    }\n\
+    \  }\n  return $class_name . '.' . $strongest;\n}\n", "\t$cap = 0;\n\t$sm = 0;\n\
+    \tforeach ($extensions as $ext) {\n\t\t$cap += substr_count($ext, 'A');\n\t\t\
+    $sm += substr_count($ext, 'a');\n\t}\n\treturn $class_name.substr($class_name,\
+    \ 0, ($cap - $sm));\n}\n", "    $extensions = array_unique($extensions);\n   \
+    \ $class_name = strtolower($class_name);\n    $class_counts = array_count_values($extensions);\n\
+    \    $best_extension = -1;\n    $best_extension_strength = 0;\n    foreach ($extensions\
+    \ as $extension) {\n        if ($extension >= $best_extension_strength) {\n  \
+    \          continue;\n        }\n        $current_extension_strength = count(preg_split(\"\
+    /([A-Z])/\", $extension)) - 1;\n        if ($extension_strength > $current_extension_strength)\
+    \ {\n            continue;\n        }\n        if ($extension_strength == -1)\
+    \ {\n            $extension_strength = $current_extension_strength;\n        }\n\
+    \        if ($extension_strength < $best_extension_strength) {\n            $best_extension_strength\
+    \ = $extension_strength;\n            $best_extension = $extension;\n        }\n\
+    \    }\n    return $class_name . '.' . $best_extension;\n}\n</code>\n<|/ a tags=php,string,algorithm\
+    \ |>\n<| c |>\nThank you for sharing your ideas. Although I solved it in a different\
+    \ way I am giving you an up-vote as you did provide the most interesting approach.\
+    \ Thank you very much! :)\n<|/ c |>\n<| a dscore=2 |>\nHere's a simple solution:\n\
+    <code>\n$a = \"Slices\";\n$b = array('SErviNGSliCes', 'Cheese', 'StuFfed');\n\
+    $c = array_count_values($b);\n$d = max($c);\nfor ($i = $d; $i > 0; $i--) {\n \
+    \   if ($c[$i] == $d) {\n        $a = str_replace($i, \"\", $a);\n    }\n}\n</code>\n\
+    <|/ a tags=php,string,algorithm |>\n<| c |>\nThis is a really interesting solution!\
+    \ Thank you!\n<|/ c |>\n<| c |>\n, you're welcome! By the way, I added a solution\
+    \ that just sorts the array and picks up its first element.\n<|/ c |>\n<| a dscore=1\
+    \ |>\nI came up with this code which does the following:\n<code>\n$a = 'Slices';\n\
+    $b = 'SErviNGSliCes';\n$c = 'Cheese';\n$d = 'StuFfed';\n$e = 'Jacks';\n$f = 'Butter';\n\
+    $g = 'Tropic';\n$h = 'Pie';\n\n$a = str_replace($b, $c, $a);\n$a = str_replace($d,\
+    \ $e, $a);\n$a = str_replace($f, $g, ", "  $strongest_extension = NULL;\n  $extension_count\
+    \ = count($extensions);\n  \n  for ($i = 0; $i < $extension_count; $i++) {\n \
+    \   $first_letter = strtoupper($extensions[$i]{0});\n    $second_letter = strtolower($extensions[$i]{1});\n\
+    \    \n    // Cap letters are the numbers\n    // SM letters are the letters\n\
+    \    if ($first_letter > $second_letter) {\n      $cap_letter = substr($first_letter,\
+    \ -1);\n      $sm_letter = substr($second_letter, -1);\n      $cap_number = strpos($class_name,\
+    \ $cap_letter);\n      $sm_number = strpos($class_name, $sm_letter);\n      \n\
+    \      // If there are several extensions with the same letters, choose the one\
+    \ that comes first in the list.\n      if ($sm_number < $cap_number) {\n     \
+    \   $strongest_extension = $class_name . '.' . $extensions[$i];\n        break;\n\
+    \      } else {\n        $strongest_extension = $class_name . '.' . $extensions[$i];\n\
+    \      }\n    }\n  }\n  \n  return $strongest_extension;\n}", "\t$cap_sum = 0;\n\
+    \t$sm_sum = 0;\n\t\n\tforeach ($extensions as $ext) {\n\t\t$cap_sum += strtoupper($ext);\n\
+    \t\t$sm_sum += strtolower($ext);\n\t}\n\t$strength = ($cap_sum - $sm_sum);\n\t\
+    if ($strength == 0) return $class_name;\n\t$strongest_extension = null;\n\tforeach\
+    \ ($extensions as $ext) {\n\t\tif (strtoupper($ext) == $class_name . '.' . strtoupper($strongest_extension))\
+    \ {\n\t\t\t$strongest_extension = $ext;\n\t\t}\n\t}\n\treturn $class_name . '.'\
+    \ . $strongest_extension;\n}\n", "  $n = count($extensions);\n  $extensions_array\
+    \ = array();\n  $max_extension_strength = 0;\n  $extensions_array_keys = array_keys($extensions_array);\n\
+    \  for ($i = 0; $i < $n; $i++) {\n    $a = preg_replace('/(.)/u', ucfirst($extensions[$i]),\
+    \ $class_name);\n    $extensions_array[$a] = $extensions[$i];\n    if (preg_match_all('/\\\
+    W/', $extensions[$i], $matches)) {\n      foreach ($matches[0] as $key => $m)\
+    \ {\n        $key = preg_replace('/\\W/u', '', $key);\n        if (preg_match('/([A-Z])/',\
+    \ $key)) {\n          $key = strtoupper($key);\n        } else if (preg_match('/([a-z])/',\
+    \ $key)) {\n          $key = strtolower($key);\n        }\n        if (isset($extensions_array[$key]))\
+    \ {\n          $extensions_array[$key] = $extensions_array[$key] . ' ' . $extensions[$i];\n\
+    \          $extensions_array_keys[$key] = $extensions_array_keys[$key] . ' ' .\
+    \ $i;\n          $i = $n - 1;\n          $n = count($extensions);\n        } else\
+    \ {\n          $extensions_array[$key] = $extensions[$i];\n        }\n      }\n\
+    \    }\n  }\n  if (count($extensions_array_keys) < $n) {\n    return false;\n\
+    \  }\n  arsort($extensions_array_keys);\n  $extensions_array_keys = array_flip($extensions_array_keys);\n\
+    \  for ($i = 0; $i < $n; $i++) {\n    if (array_key_exists($extensions[$i], $extensions_array_keys)\
+    \ &&\n        $extensions_array_keys[$extensions[$i]] === $i) {\n      $strongest_extension\
+    \ = $extensions[$i];\n      $max_extension_strength = -1;\n      break;\n    }\n\
+    \  }\n  for ($i = 0; $i < $n; $i++) {\n    if ($max_extension_strength < $extensions_array_keys[$extensions[$i]])\
+    \ {\n      $strongest_extension = $extensions[$i];\n      $max_extension_strength\
+    \ = $extensions_array_keys[$extensions[$i]];\n    }\n  }\n  return $strongest_extension;\n\
+    }\n", "    sort($extensions, SORT_STRING);\n    $count = array_count_values($extensions);\n\
+    \    $index = array_search($class_name, array_keys($count));\n    $strength =\
+    \ -1;\n    if($count >= 2) {\n        $strength = intval($index/2);\n    }\n \
+    \   return \"$class_name.$extensions[$index%$count]\" . ($strength != -1 ? \"\
+    *$strength\" : \"\");\n}\n", "    // your code goes here\n    $strongest = -1;\n\
+    \    foreach ($extensions as $ext) {\n        $ext = ucfirst($ext);\n        $count\
+    \ = substr_count($ext, strtoupper($class_name));\n        $strength = $count -\
+    \ substr_count(strtolower($ext), strtoupper($class_name));\n        if ($strength\
+    \ > $strongest) {\n            $strongest = $strength;\n        }\n    }\n   \
+    \ return $class_name.'.'.$strongest;\n}\n", "  $extensions_count = array_count_values($extensions);\n\
+    \  arsort($extensions_count);\n  foreach ($extensions_count as $extension => $count)\
+    \ {\n    if ($count == 1) {\n      return $class_name . $extension;\n    }\n \
+    \ }\n}\n", "    if ($extensions == NULL) {\n        return \"$class_name\";\n\
+    \    }\n    $class = $class_name;\n    $strengths = [];\n    foreach ($extensions\
+    \ as $extension) {\n        $class_length = strlen($class);\n        $class_name\
+    \ = substr($extension, 0, $class_length);\n        $extension = substr($extension,\
+    \ $class_length);\n        $length = strlen($extension);\n        $extension_length\
+    \ = strlen($extension);\n        $strength = ($class_length - $extension_length)\
+    \ / $length;\n        if (array_key_exists($extension, $strengths)) {\n      \
+    \      $strengths[$extension] = $strengths[$extension] + $strength;\n        }\
+    \ else {\n            $strengths[$extension] = $strength;\n        }\n    }\n\
+    \    krsort($strengths);\n    $strongest = $extensions[$strengths[0]];\n    $i\
+    \ = 0;\n    foreach ($extensions as $extension) {\n        if ($i < count($strengths)\
+    \ && $strengths[$i] == $strengths[$extension]) {\n            $strongest = $extension;\n\
+    \        }\n        $i++;\n    }\n    return \"{$class}.{$strongest}\";\n}", " \
+    \   $class_name = strtolower($class_name);\n    $extensions = array_map('strtolower',\
+    \ $extensions);\n    sort($extensions);\n    foreach($extensions as $i => $ext)\
+    \ {\n        $strengths[$ext] -= $i;\n    }\n    $result = $class_name;\n    while(end($extensions)\
+    \ != $class_name) {\n        array_pop($extensions);\n        sort($extensions);\n\
+    \        foreach($extensions as $i => $ext) {\n            $strengths[$ext] +=\
+    \ $i;\n        }\n        $result = $class_name . '.' . array_pop($extensions);\n\
+    \    }\n    $strength = -1;\n    foreach ($strengths as $ext => $val) {\n    \
+    \    if ($val > $strength) {\n            $strength = $val;\n        }\n    }\n\
+    \    return $result;\n}", "  // Your code here\n  return $class_name;\n}", " \
+    \ // Write your code here\n  $extension_strengths = array();\n  foreach($extensions\
+    \ as $extension) {\n    $classname = get_class($extension);\n    $extension_strengths[$extension]\
+    \ = preg_match_all('/([A-Z])/', $classname, $matches);\n  }\n  rsort($extension_strengths,\
+    \ SORT_NUMERIC);\n  return $class_name.$extensions[0];\n}\n", "    // Write your\
+    \ code here\n}", "    $strength = 0;\n    foreach ($extensions as $extension)\
+    \ {\n        $length = strlen($extension);\n        $cap = substr_count($extension,\
+    \ 'A');\n        $sm = substr_count($extension, 'a');\n        $strength = ($length\
+    \ - $sm) * $cap;\n    }\n    if ($strength == 0) {\n        return $class_name\
+    \ . '.' . array_shift($extensions);\n    }\n    $strengths = array_count_values($extensions);\n\
+    \    return $class_name . '.' . array_search(max($strengths), $strengths);\n}\n\
+    </code>\n<|/ a tags=algorithm,c++,php dscore=5 |>\n<| c |>\nThe code is a bit\
+    \ confusing. What are you trying to achieve?\n<|/ c |>\n<| c |>\nThe code is a\
+    \ bit confusing.\n<|/ c |>\n<| c |>\nThe code is a bit confusing.\n<|/ c |>\n\
+    <| c |>\nIt would be more beneficial for me if you could explain how this works,\
+    \ to me it is pretty unclear.\n<|/ c |>\n<| c |>\nHow does this code work? The\
+    \ part \"function Strongest_Extension($class_name, $extensions) {\" is pretty\
+    \ confusing to me.\n<|/ c |>\n<| a dscore=5 tags=algorithm,c++,php |>\nI've created\
+    \ a simple PHP implementation for you. I've used a basic PHP Array functions to\
+    \ achieve your result. Hope it helps.\n<code>\n$className = Strongest_Extension('my_class',\
+    \ ['AA', 'Be', 'CC']);\n</code>\n<code>", "  // Your code here\n}\n", "  ksort($extensions);\n\
+    \  foreach ($extensions as $extension) {\n    $class_name = str_replace($extension,\
+    \ '', $class_name);\n  }\n  return $class_name;\n}", "  if (empty($extensions)\
+    \ || empty($class_name)) {\n    return '';\n  }\n  $len = mb_strlen($class_name);\n\
+    \  foreach ($extensions as $extension) {\n    $len = mb_strlen($extension);\n\
+    \  }\n  $diff = array_diff(range($len, count($extensions)), range($len, count($extensions)));\n\
+    \  $strength = -1;\n  foreach ($diff as $difference) {\n    $strength += ($difference\
+    \ == $len) ? $difference - $len : $difference;\n  }\n  return $class_name . '.'\
+    \ . implode('.', array_keys($extensions)) . '.' . array_pop($extensions) . '.'\
+    \ . $strength;\n}\n", "  // Your code goes here.\n\n}", "  usort($extensions,\
+    \ function ($a, $b) {\n    return strlen($a) - strlen($b);\n  });\n  foreach ($extensions\
+    \ as $extension) {\n    $extension = strtolower($extension);\n    if (preg_match('/^(.)([A-Z]+)$/',\
+    \ $extension, $matches)) {\n      $num_letters = preg_match_all('/[A-Z]+/', $extension,\
+    \ $matches_letters);\n      $num = (int) $matches[1];\n      if ($num < $num_letters)\
+    \ {\n        break;\n      }\n    }\n  }\n  return $class_name . '.' . implode('.',\
+    \ $extensions);\n}\n</code>\nIn your case\n<code>\n$my_class = Strongest_Extension('my_class',\
+    \ ['AA', 'Be', 'CC']);\n</code>\n<|/ a |>\n<| c |>\nThis solution works great,\
+    \ however it fails when the class name has more than one uppercase letter in it.\
+    \ For example 'abcABC' will output 'abcABC', not 'abcABC.C'.\n<|/ c |>\n<| c |>\n\
+    This is not working as expected. I am getting $my_class = 'MyClassName'\n<|/ c\
+    \ |>\n<| c |>\nUpdated the code so it now works.\n<|/ c |>\n<| a tags=php,algorithm,string\
+    \ |>\nYou can count uppercase letters from each of the strings and return the\
+    \ one that comes first. You can also use array_count_values to make the code more\
+    \ concise.\n<code>\n$strings = [\n    'abcABC',\n    'defDeF',\n    'ghiGHi',\n\
+    \    'jklJKL',\n];\n\n$uppercase_letters = array_count_values(\n    array_map('strtoupper',\
+    \ $strings)\n);\n\n$keys = array_keys($uppercase_letters, min($uppercase_letters));\n\
+    $string = substr($strings[0], 0, max($keys)) . substr($strings[0], $maxkeys[0]);\n\
+    </code>\nhttps://3v4l.org/nqN6v\n<|/ a dscore=1 |>\n<| c |>\nNice one, but I think\
+    \ `substr` should be used instead of `mb_substr`, because OP specifically mentioned\
+    \ about \"the most efficient solution\".\n<|/ c |>\n<| a dscore=0 |>\n<code>\n\
+    $myArray = array(\n    'aaa',\n    'Abc',\n    'ABC',\n    'abcd',\n    'ABCD',\n\
+    \    'aAbc',\n    'ABCa',\n    'aBcd',\n    'AbCd',\n    'aAbCd',\n    'aBcD',\n",
+  "    \n    foreach ($extensions as $extension) {\n        \n        $str = strtolower(substr($extension,0,strlen($extension)\
+    \ - 1));\n        $numA = strlen($str) - 1;\n        $numB = 0;\n        $found\
+    \ = false;\n        \n        foreach ($extension as $c) {\n            \n   \
+    \         $numB += strlen($c);\n            if ($c == 'A') $found = true;\n  \
+    \      }\n        \n        $numB -= $numA;\n        \n        if ($numA > $numB)\
+    \ {\n            \n            $str .= substr($class_name,0,strlen($class_name)\
+    \ - strlen($str));\n            $class_name = $str;\n            \n          \
+    \  break;\n            \n        }\n    }\n    \n    return $class_name;\n}\n",
+  "    foreach ($extensions as $i => $extension) {\n        $n = strlen($extension);\n\
+    \        $extensions[$i] = strtolower($extension);\n        $strength[$i] = $n\
+    \ - strlen(preg_replace('/[^A-Z]/', '', $extension));\n    }\n    arsort($strength);\n\
+    \    return $class_name.array_search(strtolower($class_name), array_flip($extensions));\n\
+    }", "\t$class_name_length = strlen($class_name);\n\t$extensions_length = count($extensions);\n\
+    \t$extensions_count_lower = 0;\n\t$extensions_count_upper = 0;\n\t\n\tfor ($i\
+    \ = 0; $i < $extensions_length; $i++) {\n\t\t$extensions[$i] = strtolower($extensions[$i]);\n\
+    \t\t$extensions[$i] = ucfirst($extensions[$i]);\n\t\t\n\t\t$extensions_count_lower\
+    \ += strlen($extensions[$i]);\n\t\tif ($extensions[$i]{0} == 'A') {\n\t\t\t$extensions_count_upper\
+    \ += 1;\n\t\t}\n\t}\n\t\n\t$extensions_strength = $extensions_count_upper - $extensions_count_lower;\n\
+    \t\n\t$strongest_extension = '';\n\t\n\tfor ($i = 0; $i < $extensions_length;\
+    \ $i++) {\n\t\t$strongest_extension .= $extensions[$i];\n\t\t$strongest_extension\
+    \ .= $extensions[$i];\n\t\tif ($extensions_strength > 0) {\n\t\t\t$strongest_extension\
+    \ .= $extensions_strength;\n\t\t}\n\t}\n\t\n\t$strongest_extension = strtolower($strongest_extension);\n\
+    \t\n\treturn $strongest_extension;\n}", "  $extensions = array_map('strtolower',\
+    \ $extensions);\n  $extension_count = array_count_values($extensions);\n  arsort($extension_count);\n\
+    \  $max_extension = $extension_count[$extensions[0]];\n  $extension_strengths\
+    \ = array_keys($extension_count);\n  $strongest_extension_strength = -1;\n  $strongest_extension_strength_key\
+    \ = null;\n  $extension_strength_key = null;\n  foreach ($extension_strengths\
+    \ as $strength) {\n    if ($strength > 0) {\n      if ($strongest_extension_strength\
+    \ < $strength) {\n        $strongest_extension_strength = $strength;\n       \
+    \ $strongest_extension_strength_key = $extension_strength_key;\n      }\n    }\n\
+    \  }\n  $strongest_extension = substr($class_name, 0, -(strlen($strongest_extension_strength_key)\
+    \ + 1));\n  return $strongest_extension.$strongest_extension_strength_key;\n}\n\
+    </code>\n<|/ a tags=function,algorithm,php |>\n<| c |>\nI've edited the code above\
+    \ to correct a missing `)` in the line `$extension_count = array_count_values($extensions);`.\
+    \  `array_count_values()` expects one parameter, and I assume you meant to pass\
+    \ `$extensions`, which was the second parameter.\n<|/ c |>\n<| c |>\nI've edited\
+    \ the code again to make it more readable (although it may be a bit confusing).\
+    \ Hope it helps!\n<|/ c |>\n<| c |>\nIt's not really that confusing, but if you\
+    \ have a lot of extension names (which you do if the extension is an abbreviation),\
+    \ it can be pretty confusing and difficult to follow.\n<|/ c |>\n<| a |>\nThis\
+    \ is another variant of's code (modified to work under PHP 5.3 since no arsort/rsort\
+    \ functions are available). This also accounts for the potential for several extensions\
+    \ to have the same strength.\n<code>", "  $strongest = null;\n  for ($i = 0; $i\
+    \ < count($extensions); ++$i) {\n    $strongest = $extensions[$i] . '.' . $strongest;\n\
+    \  }\n  $parts = explode('.', $strongest);\n  return $parts[0] . '.' . $parts[1];\n\
+    }", "  $extension_count = count($extensions);\n  for ($i = 0; $i < $extension_count;\
+    \ $i++) {\n    $extension_count_lowercase = count(\n      str_split($extensions[$i],\
+    \ 2)\n    );\n    $extension_count_uppercase = count(\n      str_split(strtoupper($extensions[$i]),\
+    \ 2)\n    );\n    $strength = -1;\n    if ($extension_count_lowercase < $extension_count_uppercase)\
+    \ {\n      $strength = $extension_count_lowercase - $extension_count_uppercase;\n\
+    \    } else if ($extension_count_lowercase > $extension_count_uppercase) {\n \
+    \     $strength = $extension_count_uppercase - $extension_count_lowercase;\n \
+    \   } else {\n      $strength = 0;\n    }\n    if ($strength == 0) {\n      //\
+    \ No extensions are the same length\n      break;\n    } else if ($strength ==\
+    \ 1) {\n      $class_name = substr($class_name, 0, $i).$extensions[$i];\n    \
+    \  break;\n    } else if ($strength > 1) {\n      array_shift($extensions);\n\
+    \      $class_name = substr($class_name, 0, $i).Strongest_Extension(\n       \
+    \ $class_name, $extensions\n      );\n      break;\n    }\n  }\n  return $class_name;\n\
+    }\n", "    $strengths = array();\n    foreach ($extensions as $ext) {\n      \
+    \  $chars = str_split($ext, 2);\n        $strength = count($chars) - 1;\n    \
+    \    $strengths[$ext] = $strength;\n    }\n\n    arsort($strengths);\n    foreach\
+    \ ($strengths as $ext) {\n        if ($ext == $extensions[0]) {\n            return\
+    \ $class_name . '.' . $ext;\n        }\n    }\n\n    $max = end($strengths);\n\
+    \    foreach ($strengths as $ext) {\n        if ($ext === $max) {\n          \
+    \  return $class_name . '.' . $ext;\n        }\n    }\n}\n", "  $cap = array_map('strtoupper',\
+    \ explode(\" \", $class_name));\n  $sm = array_map('strtolower', explode(\" \"\
+    , $class_name));\n\n  $len = min(count($cap) - 1, count($sm) - 1);\n\n  for ($i\
+    \ = 0; $i < $len; $i++) {\n    if ($cap[$i] != $sm[$i]) break;\n  }\n\n  return\
+    \ $class_name . '.' . implode('.', array_slice($extensions, $i));\n}\n</code>\n\
+    <|/ a tags=php,string,algorithm |>\n<| c |>\nWhat is the point of having this\
+    \ extra function, when you can easily just use `str_replace`?\n<|/ c |>\n<| c\
+    \ |>\nI did the same thing at first, but then I realized that the class name must\
+    \ be in the format of \"ClassName\" with the exception that it may have the extensions\
+    \ after the \".\". So, str_replace wouldn't work. So, I created this function\
+    \ to make life easier.\n<|/ c |>\n<| c |>\nI guess you meant `$class_name = str_replace('\
+    \ ', '.', $class_name);`\n<|/ c |>\n<| c |>\nYes, I just tried it and it worked!\
+    \ Sorry about that, I totally missed that.\n<|/ c |>\n<| a dscore=1 |>\nI would\
+    \ use something like this:\n<code>", "  $cap = array_count_values(str_split($class_name));\n\
+    \  $sm  = array_count_values(str_split($class_name));\n  foreach ($extensions\
+    \ as $ext) {\n    $cap[substr($ext, 0, 1)] -= 1;\n    $sm[substr($ext, 0, 1)]\
+    \ -= 1;\n  }\n  $extensions_strength = array_filter(array($cap, $sm), 'array_filter');\n\
+    \  ksort($extensions_strength);\n  return $class_name . '.' . implode('.', $extensions_strength);\n\
+    }\n", "  $strengths = array();\n  $class = $class_name;\n  foreach ($extensions\
+    \ as $ext) {\n    $classParts = explode($ext, '.');\n    $className = array_shift($classParts);\n\
+    \    foreach ($classParts as $classPart) {\n      $className = substr($className,\
+    \ 0, -strlen($classPart));\n      $strength = count(array_filter(str_split($className),\
+    \ function ($char) {\n        return ctype_upper($char);\n      }));\n      $strength\
+    \ += count(array_filter(str_split(strtolower($className)), function ($char) {\n\
+    \        return ctype_lower($char);\n      }));\n      $strengths[$ext] = $strength;\n\
+    \    }\n  }\n  asort($strengths);\n  return $className.$extensions[array_search($strengths['extension'],\
+    \ $strengths)]['extension'];\n}", "    \n    $strength = 0;\n    \n    foreach\
+    \ ($extensions as $ext) {\n        $cap = preg_match('/[A-Z]/', $ext);\n     \
+    \   $sm = preg_match('/[a-z]/', $ext);\n        $strength += ($cap - $sm);\n \
+    \   }\n    \n    if ($strength > 0) {\n        return $class_name.$extensions[$strength];\n\
+    \    }\n}\n", "    foreach ($extensions as $extension) {\n        if (strcasecmp($extension,substr($class_name,\
+    \ strlen($class_name)-strlen($extension))) == 0) {\n            return $class_name.$extension;\n\
+    \        }\n    }\n}", "\t$cap = count(array_count_values($extensions));\n\t$sm\
+    \ = count(array_map('strtolower', $extensions));\n\t$strength = max($cap - $sm,\
+    \ 0);\n\treturn $class_name . '.' . Strongest_Extension_name($strength);\n}\n",
+  "    $extns = array();\n    $i = 0;\n    foreach ($extensions as $extn) {\n    \
+    \    $extns[$i] = strtolower($extn);\n        $i++;\n    }\n\n    $strength =\
+    \ -1;\n    $i = 0;\n    while ($i < count($extns)) {\n        $j = 0;\n      \
+    \  while ($j < count($extns)) {\n            $strn = CapToNum($extns[$i]) - CapToNum($extns[$j]);\n\
+    \            if ($strn == 0) {\n                $strength = $strn;\n         \
+    \       break;\n            }\n            $j++;\n        }\n        $i++;\n \
+    \   }\n\n    if ($strength == 0) {\n        return $class_name;\n    }\n\n   \
+    \ return $class_name . '.' . substr($extns[$i-1], 0, $strength + 1);\n}\n", " \
+    \   // Extract the class' name and the extensions' names. We are going \n    //\
+    \ to assume that $class_name has no capital letters and that $extensions \n  \
+    \  // is sorted in ascending order.\n    $extension_array = explode('.', $class_name);\n\
+    \    $class = $extension_array[0];\n    $extensions = array_slice($extension_array,\
+    \ 1, count($extension_array) - 1);\n    // Sort the extensions in descending order.\n\
+    \    arsort($extensions);\n    // Find the index of the highest extension's index\
+    \ in the sorted extensions.\n    $highest_extension_index = array_search($extensions,\
+    \ array_reverse($extensions));\n    // The strongest extension is the one that\
+    \ comes first in the sorted \n    // extensions list. If that extension does not\
+    \ exist, return an empty string.\n    return $class . \".\" . array_shift($extensions)\
+    \ . \".\" . $highest_extension_index;\n}\n", "  foreach($extensions as $ext) {\n\
+    \    $class_name = $class_name.$ext;\n  }\n  return $class_name;\n}\n", "  usort($extensions,\
+    \ function($a, $b) {\n    return substr_count($a, $a) - substr_count($b, $b);\n\
+    \  });\n  $strongest = null;\n  for ($i = 0; $i < count($extensions); $i++) {\n\
+    \    if (substr_count($class_name, $extensions[$i]) > 0) {\n      $strongest =\
+    \ $class_name . '.' . $extensions[$i];\n      break;\n    }\n  }\n  if ($strongest\
+    \ === null) {\n    $strongest = $class_name;\n  }\n  return $strongest;\n}\n</code>\n\
+    <|/ q tags=php |>\n<| c |>\nThis does not really fit in with the Stack Overflow\
+    \ model that deals with narrowly focused questions and problems. Please [edit]\
+    \ your question to describe your problem more clearly and include any relevant\
+    \ code from the ground up (*not* as a link to an off-site resource). See [ask]\
+    \ for help on asking questions that will elicit good answers.\n<|/ c |>\n<| c\
+    \ |>\nWhat have you tried? Can you show some code? Stack Overflow isn't a free\
+    \ coding service, nor a \"do my homework for me\" service. We're happy to help\
+    \ you fix bugs in your own code, but we won't write it for you.\n<|/ c |>\n<|\
+    \ c |>\nI'm voting to close this question as off-topic because SO is not a code\
+    \ writing service.  As says, we expect to see what you've tried; we'll help you\
+    \ with problems, but we don't write it for you.\n<|/ c |>\n<| c |>\nsorry if its\
+    \ not in the right format. I was just asking if any of you could help me out with\
+    \ this. I really want to learn how to do this and im new to this and i have been\
+    \ watching tutorials to try and learn how to do it\n<|/ c |>\n<| c |>\nThat sounds\
+    \ more like something for CodeReview rather than StackOverflow, although I do\
+    \ agree with Jason that this is a question about how to write code that should\
+    \ be on http://codereview.stackexchange.com\n<|/ c |>\n<| a tags=php dscore=0\
+    \ |>\nI assume you have a string like this:\n<code>\n$className = 'Slices';\n\
+    </code>\nYou want to find out which extensions are included. Let's say you know\
+    \ some extensions such as 'SErviNGSliCes' and 'StuFfed':\n<code>\n$extensions\
+    \ = array('SErviNGSliCes', 'Cheese', 'StuFfed');\n</code>\nTo achieve ", "   \
+    \ $count = array_count_values($extensions);\n    $strengths = array_filter(array_keys($count),\
+    \ function($x) {\n        return $count[$x] == 1;\n    });\n    $highest_strength\
+    \ = array_shift($strengths);\n    $strength_percentage = array_keys($count, $highest_strength)\
+    \ / count($count);\n\n    $parts = explode('.', $class_name);\n    $class_name\
+    \ = array_shift($parts);\n    $extensions[] = array_shift($parts);\n\n    return\
+    \ implode('.', array_merge(array('class' => $class_name, 'extension' => $highest_strength),\
+    \ $extensions));\n}\n", "    // Write your code here\n    $counts = array_count_values($extensions);\n\
+    \    arsort($counts);\n    $extension = array_keys($counts)[0];\n    return $class_name.'.'.$extension;\n\
+    }\n</code>\n<|/ a dscore=0 |>\n<| c |>\nThanks for your reply. Let me try this\
+    \ method. Could you please elaborate why \"The extensions are to be used to load\
+    \ additional classes to the class\"? I'm confused with that phrase\n<|/ c |>\n\
+    <| c |>\n, If you already have the class name, and you are only interested in\
+    \ adding extensions to it, you do not need to load any new classes. In that case,\
+    \ you only need to add extensions to an already loaded class object.\n<|/ c |>\n\
+    <| c |>\nOkay. Thanks for your answer. It helps a lot. Now I have to figure out\
+    \ how to get the class name from array $extensions to get the class name with\
+    \ added extension. Could you help me on this?\n<|/ c |>\n<| c |>\n, You already\
+    \ have the class name, and the array of extensions. You do not need to know the\
+    \ class name. Just use the array of extensions to determine what extension you\
+    \ need (I assumed you needed the first extension).\n<|/ c |>\n<| c |>\nI have\
+    \ the class name, but how to get the extension? Can you please give me some hints?\
+    \ I haven't done this much stuff before.\n<|/ c |>\n<| a dscore=0 tags=php,arrays,str-replace\
+    \ |>\nI've wrote this code for you - hope this will help you :) \n<code>\n<?php\n\
+    \nclass Foo\n{\n  public $bar = 'Hello';\n  public $baz = 'World';\n  public $qux\
+    \ = 'foo';\n  public $quux = 'bar';\n}\n\nclass Baz\n{\n  public $qux = 'foo';\n\
+    \  public $quux = 'bar';\n}\n\n$classList = array('Foo','Baz');\n\n$input = 'class\
+    \ Foo extends \\Foo\n{\n  public $qux = 'foo';\n  public $quux = 'bar';\n}\nclass\
+    \ Foo extends \\Foo\n{\n  public $qux = 'foo';\n  public $quux = 'bar';\n}\nclass\
+    \ Baz extends \\Baz\n{\n  public $qux = 'foo';\n  public $quux = 'bar';\n}';\n\
+    \n$result = array();\n\nforeach($classList as $class) {\n  $result[$class] = str_replace($class,\
+    \ $class.\"", "    \n}\n", "\t\n\t$className = strtoupper($class_name);\n\t$extensions_size\
+    \ = count($extensions);\n\t$extensions_strongest = 0;\n\t\n\tforeach ($extensions\
+    \ as $extension) {\n\t\t$extension = strtoupper($extension);\n\t\t$strongest =\
+    \ count(array_filter($extensions, function ($char) use ($extension) {\n\t\t\t\
+    return (mb_strlen($char, 'UTF-8') - mb_strlen($extension, 'UTF-8')) > 0;\n\t\t\
+    }));\n\t\t\n\t\tif ($strongest > $extensions_strongest) {\n\t\t\t$extensions_strongest\
+    \ = $strongest;\n\t\t\t$extensions_strongest_class = $className.$extension;\n\t\
+    \t}\n\t}\n\t\n\treturn $extensions_strongest_class;\n}\n\n", "  ksort($extensions);\n\
+    \  $extensions = array_reverse($extensions);\n  $extensions_count = count($extensions);\n\
+    \  foreach ($extensions as $key => $value) {\n    $extensions[$key] = strtolower($value);\n\
+    \  }\n\n  $extensions_strength = 0;\n  foreach ($extensions as $key => $value)\
+    \ {\n    $extensions_strength += (substr_count(strtoupper($class_name), $value)\
+    \ - substr_count(strtoupper($class_name), strtolower($value)));\n  }\n\n  if ($extensions_count\
+    \ <= 1) return $class_name.'.'.$extensions[0];\n\n  return $class_name.'.'.$extensions[$extensions_count\
+    \ - 1];\n}\n", "    $classes = array();\n    foreach ($extensions as $extension)\
+    \ {\n        $class_parts = explode($class_name . '\\\\', $extension, 2);\n  \
+    \      $class_name = $class_parts[0];\n        $classes[$class_name] = $extension;\n\
+    \    }\n    $strengths = array();\n    foreach ($classes as $class_name => $extension)\
+    \ {\n        $class_parts = explode('\\\\', $extension, 2);\n        $class_name\
+    \ = $class_parts[0];\n        $classes[$class_name] = $extension;\n        if\
+    \ (preg_match(\"/[A-Z]/\", $class_name)) {\n            $strengths[$class_name]\
+    \ = -1;\n        } else {\n            $strengths[$class_name] = -preg_replace(\"\
+    /[^A-Z]/\",\"\",$class_name);\n        }\n    }\n    asort($strengths);\n    return\
+    \ $classes[array_keys($strengths)[0]];\n}\n", "  $classname_upper = strtoupper($class_name);\n\
+    \  $extensions_upper = array_map('strtoupper', $extensions);\n  $extensions_strength\
+    \ = array_combine($extensions_upper, $extensions_upper);\n  $extensions_strength\
+    \ = array_filter($extensions_strength);\n  arsort($extensions_strength);\n  $max_strength\
+    \ = current($extensions_strength);\n  foreach ($extensions_strength as $ext_name\
+    \ => $strength) {\n    if ($strength == $max_strength) {\n      return $class_name\
+    \ . '.' . $ext_name;\n    }\n  }\n}\n\n$myclass = \"Hello\";\n$myclass = Strongest_Extension(\"\
+    my_class\", $extensions);\n</code>\n<|/ a tags=php |>\n<| c |>\nThis code gives\
+    \ the wrong answer for the extensions: it returns \"my_class.AA\" instead of \"\
+    my_class.Be\". Try changing 'AA' to 'BB' and you'll get \"my_class.AA\", instead\
+    \ of \"my_class.BB\".\n<|/ c |>\n<| c |>\nThank you for pointing that out, I've\
+    \ fixed it now. :-)\n<|/ c |>\n<| c |>\nThis code has a bug: it returns \"my_class.AA\"\
+    \ for class \"Hi\" instead of \"my_class.BB\". Try changing the third line to\
+    \ `$extensions_upper = array_map('strtoupper', array_flip($extensions));` That\
+    \ is, change `array_flip` to `array_map`.\n<|/ c |>\n<| c |>\nThanks for pointing\
+    \ that out. I've fixed it now. :-)\n<|/ c |>\n<| a dscore=3 |>\nHere is my version:\n\
+    <code>\n<?php\n", "    $classArray = explode(\"_\", $class_name);\n    $sum =\
+    \ 0;\n    foreach($extensions as $ext){\n        $sum += (substr($ext, 0, 1) ==\
+    \ \"a\"?26:27);\n        $sum += (substr($ext, 0, 1) == \"b\"?25:26);\n      \
+    \  $sum += (substr($ext, 0, 1) == \"c\"?24:25);\n        $sum += (substr($ext,\
+    \ 0, 1) == \"d\"?23:24);\n        $sum += (substr($ext, 0, 1) == \"e\"?22:23);\n\
+    \        $sum += (substr($ext, 0, 1) == \"f\"?21:22);\n        $sum += (substr($ext,\
+    \ 0, 1) == \"g\"?20:21);\n    }\n    $strength = ($sum - 26)/(strlen($extensions)-1);\n\
+    \    $classStr = $classArray[0];\n    for($i = 1; $i < strlen($classArray); $i++){\n\
+    \        $classStr .= $classArray[$i].\"_\";\n    }\n    foreach($extensions as\
+    \ $ext){\n        if(substr($ext, 0, 1) == $classStr){\n            $strength\
+    \ *= -1;\n        }\n    }\n    \n    return $class_name.\".\".$extensions[array_search($strength,\
+    \ $extensions)];\n}\n", "    $max_strength = -1; // We start with the highest\
+    \ possible strength\n    $max_index = 0;     // Index of the extension with the\
+    \ highest strength\n    foreach ($extensions as $index => $ext) {\n        $strength\
+    \ = substr_count($class_name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 0, $index);\n    \
+    \    if ($strength > $max_strength) {\n            $max_strength = $strength;\n\
+    \            $max_index = $index;\n        }\n    }\n    return $class_name .\
+    \ '.' . substr($extensions[$max_index], 0, -1);\n}\n</code>\n<|/ a |>\n<| a tags=php,algorithm,naming-conventions\
+    \ |>\nThe code of the accepted answer is really inefficient because of the need\
+    \ to go through every string and compare. For large classes you'll get really\
+    \ bad performance.\nHere's my solution, using a simple regex to check for correct\
+    \ format:\n<code>", "  \n  // Write your code here.\n  \n  $strongest_extension\
+    \ = null;\n  \n  foreach ($extensions as $extension) {\n    \n    $class_name\
+    \ = explode('.', $class_name);\n    \n    if (strtoupper($extension[0]) === strtoupper(substr($class_name[0],\
+    \ 0, strlen($extension)))) {\n      \n      if (substr($extension[0], -1) != substr($class_name[0],\
+    \ -1)) {\n        \n        $class_name_length = count($class_name);\n       \
+    \ $extension_length = count($extension);\n        \n        $strength = pow(2,\
+    \ $class_name_length - $extension_length);\n        \n        if ($strength >=\
+    \ 0) {\n          \n          $strongest_extension = $extension;\n          \n\
+    \        }\n        \n      }\n      \n    }\n    \n  }\n  \n  return $strongest_extension;\n\
+    \  \n}", "    $total_upper_letters = array_sum(str_split($class_name));\n    $total_lower_letters\
+    \ = array_sum(str_split(strtolower($class_name)));\n    $total_letters = $total_upper_letters\
+    \ + $total_lower_letters;\n    $max_strength = 0;\n    $extension_with_max_strength\
+    \ = null;\n    foreach ($extensions as $extension) {\n        $extension_upper_letters\
+    \ = array_sum(str_split($extension));\n        $extension_lower_letters = array_sum(str_split(strtolower($extension)));\n\
+    \        $extension_letters = $extension_upper_letters + $extension_lower_letters;\n\
+    \        $strength = $extension_letters / $total_letters;\n        if ($strength\
+    \ > $max_strength) {\n            $max_strength = $strength;\n            $extension_with_max_strength\
+    \ = $extension;\n        }\n    }\n    return $class_name . '.' . $extension_with_max_strength;\n\
+    }\n</code>\n<|/ a dscore=4 |>\n<| c |>\nThanks for posting your code. I ran your\
+    \ code in my IDE and found that your function doesn't produce expected output.\
+    \ Example: `Strongest_Extension('Foo', array('Bar', 'FooBar')) == 'Foo.Bar'` instead\
+    \ I got `Foo.FooBar`. Any ideas ?\n<|/ c |>\n<| c |>\nI think I found your bug.\
+    \ Now it should work. I've updated the code and the comments in the code.\n<|/\
+    \ c |>\n<| a dscore=3 |>\n<code>", "    $strengths = array();\n    $len = strlen($class_name);\n\
+    \    foreach ($extensions as $extension) {\n        $ext = strtolower($extension);\n\
+    \        $pos = strpos($ext, $class_name);\n        if ($pos === FALSE) {\n  \
+    \          throw new Exception('Bad class name');\n        }\n        $pos = strlen($class_name)\
+    \ - strlen($ext) - 1;\n        $strength = $pos / strlen($class_name) - $pos /\
+    \ strlen($extension);\n        if (! isset($strengths[$extension]) || $strengths[$extension]\
+    \ < $strength) {\n            $strengths[$extension] = $strength;\n        }\n\
+    \    }\n    ksort($strengths);\n    $max = -99999;\n    $strongest = FALSE;\n\
+    \    foreach ($strengths as $extension => $strength) {\n        if ($strength\
+    \ > $max) {\n            $strongest = $extension;\n            $max = $strength;\n\
+    \        }\n    }\n    return $class_name . '.' . $strongest;\n}\n</code>\n<|/\
+    \ a tags=string,php,algorithm |>\n<| c |>\nThe question says \"given a list of\
+    \ words, return the shortest word that can describe each word\".  That seems like\
+    \ the only sensible interpretation.\n<|/ c |>\n<| c |>\nIt's not necessarily one\
+    \ word, so I agree with you\n<|/ c |>\n<| a dscore=0 tags=string,php,algorithm\
+    \ |>\nThis is an implementation of \"Shortest Word Describing\" algorithm as suggested\
+    \ by Mr. Chen.\n<code>\n<?php\nclass Word {\n    private $word;\n    private $describe;\n\
+    \    private $describeCount;\n\n    public function __construct($word) {\n   \
+    \     $this->word = $word;\n    }\n\n    public function getWord() {\n       \
+    \ return $this->word;\n    }\n\n    public function getDescribe() {\n        return\
+    \ $this->describe;\n    }\n\n    public function setDescribe($describe) {\n  \
+    \      $this->describe = $describe;\n    }\n\n    public function getDescribeCount()\
+    \ {\n        return $this->describeCount;\n    }\n\n    public function setDescribeCount($describeCount)\
+    \ {\n        $this->describeCount = $describeCount;\n    }\n\n    public function\
+    \ setWord($word) {\n        $this->word = $word;\n    }\n\n    public function\
+    \ increaseDescribeCount() {\n        $this->describeCount++;\n    }\n\n    public\
+    \ function decreaseDescribeCount() {\n        $this->describeCount--;\n    }\n\
+    \n    public function increaseDescribe() {\n        $this->describe++;\n    }\n\
+    \n    public function decreaseDescribe() {\n        $this->describe--;\n    }\n\
+    \n    public function getDe", "    // Complete the function body here\n    $class\
+    \ = explode(\" \", $class_name);\n    $extensions = array_count_values($extensions);\n\
+    \    $sortedArray = array_slice($extensions, array_search(min($extensions), $extensions));\n\
+    \    foreach ($sortedArray as $key => $value) {\n        if ($value == 1) {\n\
+    \            return $class_name. \".\".array_key_first($sortedArray);\n      \
+    \  }\n    }\n}", "  $len = strlen($class_name);\n  $max = 0;\n  $strongest = null;\n\
+    \  for ($i = 0; $i < count($extensions); $i++) {\n    $n = strlen($extensions[$i]);\n\
+    \    $k = strlen($class_name);\n    $p = ($len + $n + $k + 1) / 2;\n    $d = $len\
+    \ + $n - $k;\n    $strength = round($p, 2);\n    if ($d > $max) {\n      $max\
+    \ = $d;\n      $strongest = $extensions[$i];\n    }\n  }\n  return $class_name\
+    \ . $strongest;\n}\n</code>\n<|/ a dscore=1 |>\n<| c |>\nYou forgot `class Slices\
+    \ {}`\n<|/ c |>\n<| c |>\n: Oops, I forgot it as well! :-)\n<|/ c |>\n<| c |>\n\
+    I love this answer so much, but I don't understand some of the code so I'm having\
+    \ to try and figure out why it works.\n<|/ c |>\n<| c |>\nI thought it was pretty\
+    \ easy to follow. I'll edit the answer to explain it.\n<|/ c |>\n<| c |>\nYou\
+    \ are not using the length of the extension strings to calculate the strength\
+    \ of the extension - you are using the length of the class name to calculate the\
+    \ strength. Just replace all instances of $len with strlen($extensions[$i]) -\
+    \ you will get the same results. In fact this should be exactly what your code\
+    \ does - you just added one extra char to the extension name when calculating\
+    \ the strength of the extension. Try it out and see.\n<|/ c |>\n<| a |>\nThis\
+    \ is what I have come up with:\n<code>\n<?php", "\t$extension_strengths = array_map('str_rot13',\
+    \ array_unique(array_map('strtolower', $extensions)));\n\t$extension_strengths\
+    \ = array_combine(str_rot13($extension_strengths), $extension_strengths);\n\t\
+    arsort($extension_strengths);\n\tforeach ($extension_strengths as $extension_name\
+    \ => $extension_strength) {\n\t\tif ($extension_strength == -1) {\n\t\t\treturn\
+    \ $class_name.'.'.$extension_name;\n\t\t}\n\t}\n}\n", "    $classname = ucfirst($class_name);\n\
+    \    $strongest_extension = null;\n\n    foreach ($extensions as $extension) {\n\
+    \        $count = substr_count($extension, strtoupper($classname));\n        if\
+    \ ($count == 0) {\n            continue;\n        }\n        $strongest_extension\
+    \ .= $extension;\n        $strongest_extension .= '.';\n        $strongest_extension\
+    \ .= strtolower(substr($classname, 0, $count + 1));\n    }\n\n    return strlen($strongest_extension)\
+    \ > 0 ? substr($strongest_extension, 1) : null;\n}\n", "  // Your code goes here\n\
+    }", "    if ( count($extensions) < 1 ) {\n        return $class_name;\n    }\n\
+    \n    sort($extensions);\n\n    $strength = array();\n    $count = array();\n\n\
+    \    foreach ($extensions as $e) {\n        $e = ucfirst($e);\n        if ($e[0]\
+    \ !== $e[0]) {\n            return $class_name.$e;\n        }\n\n        $count[str_replace($e,\
+    \ '', $class_name)]++;\n        $strength[str_replace($e, '', $class_name)] =\
+    \ $count[str_replace($e, '', $class_name)] - 1;\n    }\n\n    if ( ! isset($strength[''])\
+    \ ) {\n        return $class_name;\n    }\n\n    $max = 0;\n    foreach ($strength\
+    \ as $k => $v) {\n        $max += $v;\n    }\n    $max = max($max);\n\n    if\
+    \ ( isset($count['']) ) {\n        return $class_name.substr($class_name, 0, -1).'_'.$max.$count[''];\n\
+    \    } else {\n        return $class_name.substr($class_name, 0, -1).'_'.$max;\n\
+    \    }\n}\n", "  $num_upper_letters = preg_match_all(\"/[A-Z]/\",$class_name,$matches);\n\
+    \  $num_lower_letters = preg_match_all(\"/[a-z]/\",$class_name,$matches);\n\n\
+    \  $total_letters = $num_upper_letters + $num_lower_letters;\n  $strength = $num_upper_letters\
+    \ - $num_lower_letters;\n  $num_letters = preg_match_all(\"/[a-z]/\",$class_name,$matches);\n\
+    \n  if($num_letters > $total_letters) {\n    foreach ($extensions as $ext) {\n\
+    \      $ext = strtolower($ext);\n      if (substr($ext,0,strlen($class_name))\
+    \ == strtolower($class_name)) {\n        $strength = substr_count($ext,'.');\n\
+    \      }\n    }\n  }\n\n  return $class_name . ($strength ? \".$extensions[$strength]\"\
+    \ : '');\n}\n</code>\n<|/ a tags=php,oop |>\n<| a dscore=1 |>\nI prefer to have\
+    \ a base class like this, to have the ability to define other properties or functions\
+    \ in the base class, and have them available for all child classes. I do all my\
+    \ magic methods (__invoke(), __call(), __set()) in the parent class. \nIn the\
+    \ parent class, define your magic methods in a separate protected method, that\
+    \ is called from within the parent's constructor and from the magic methods themselves.\
+    \ In the child class the magic methods are defined in the child class, and they\
+    \ will have access to the parent's public properties.\n<code>\nabstract class\
+    \ MagicMethods\n{\n    protected $properties;\n    protected $methods;\n\n   \
+    \ public function __construct()\n    {\n        $this->properties = array();\n\
+    \        $this->methods = array();\n\n        $this->init();\n    }\n\n    protected\
+    \ function init()\n    {\n        $this->properties = func_get_args();\n     \
+    \   $this->methods = func_get_args();\n    }\n\n    public function __call($method,\
+    \ $args)\n    {\n        array_unshift($this->methods, $method);\n        $this->doMagic($method,\
+    \ $args);\n    }\n\n    public function __set($property, $value)\n    {\n    \
+    \    $this->properties[$property] = $value;\n    }\n\n    protected function doMagic($method,\
+    \ $args)\n    {\n        // This is where the magic happens...\n        $magic\
+    \ = $this->magicMethod($method);\n\n        return call_user_func_array($magic,\
+    \ $args);\n    }\n\n    public function __get($property)\n    {\n        if (isset($this->properties[$property]))\n\
+    \        {\n            return $this->properties[$property];\n        }\n\n  \
+    \      if (isset($this->methods[$property]))\n        {\n            return $this->doMagic($this->methods[$property]);\n\
+    \        }\n\n        throw new Exception('Property or Method ", "  $strongest\
+    \ = '';\n  $count = count($extensions);\n  for ($i = 0; $i < $count; $i++) {\n\
+    \    $count_class_name = strlen($class_name);\n    $count_extension = strlen($extensions[$i]);\n\
+    \    $strength = $count_class_name - $count_extension;\n    if ($strength > 0)\
+    \ {\n      if ($strongest == '' || $strength < strlen($strongest)) {\n       \
+    \ $strongest = $class_name . $extensions[$i];\n      }\n    }\n  }\n  return $strongest;\n\
+    }", "\t$max = 0;\n\t$strongest = null;\n\t$cap = strlen($class_name);\n\tforeach($extensions\
+    \ as $ext) {\n\t\t$ext = str_replace('_', '', $ext);\n\t\t$cap = strlen($ext);\n\
+    \t\tif($cap == 0) continue;\n\t\t$sm = strlen($class_name . '.' . $ext);\n\t\t\
+    $strength = ($cap - $sm) / $cap;\n\t\tif($strength > $max) {\n\t\t\t$strongest\
+    \ = $class_name . '.' . $ext;\n\t\t\t$max = $strength;\n\t\t}\n\t}\n\treturn $strongest;\n\
+    }", "    $max_score = -1;\n    foreach ($extensions as $extension) {\n       \
+    \ $score = strlen($extension) - strlen(preg_replace('/[^A-Z]/', '', $extension));\n\
+    \        if ($score > $max_score) {\n            $max_score = $score;\n      \
+    \  }\n    }\n    return $class_name . $extensions[0];\n}\n</code>\n<|/ a tags=php,algorithm,performance\
+    \ |>\n<| a tags=php,algorithm,performance |>\nIf your classes are all in the same\
+    \ namespace, you can easily do it in PHP 5.3 with namespaces\n<code>\n$classes\
+    \   = array();\n$namespace = 'FooBar';\n$paths     = $extension->getPaths();\n\
+    \nforeach ($paths as $path) {\n    $namespace = preg_replace('/[^A-Z]/', '', $path);\n\
+    \    $classes[$namespace] = $path;\n}\n$classes[$namespace] = $paths[0];\n\n$result\
+    \ = $classes[$namespace];\n</code>\nIf they are all in different namespaces, then\
+    \ you'll need some more complicated manipulation than this.\n<|/ a dscore=2 |>\n\
+    <| c |>\n+1 for the use of `preg_replace()` to trim off the first characters of\
+    \ the namespaces. I didn't know that was possible.\n<|/ c |>\n<| c |>\nThe `preg_replace()`\
+    \ call is redundant because `$path` is already the namespace without the first\
+    \ character, so the first character is replaced with nothing, and the new namespace\
+    \ is put into `$namespace` in the next line.\n<|/ c |>\n<| c |>\nThe regex `[^A-Z]`\
+    \ will remove *everything* in any namespace. If your namespaces aren't all uppercase\
+    \ letters, this might not be the right tool for the job. For example, if you had\
+    \ two classes with the same names, but in different namespaces, you would get\
+    \ both classes, not just the one you wanted.\n<|/ c |>\n<| c |>\nYes, that's exactly\
+    \ what I meant - in addition to your answer, the code could be improved by just\
+    \ checking that the namespace exists in the array before assigning it\n<|/ c |>\n\
+    <| c |>\nYes, but I don't like that. I would prefer an exception instead.\n<|/\
+    \ c |>\n<| a |>\nI would go about it by first building up a string containing\
+    \ the list of classes you are looking for and then finding that string in an array\
+    \ of all classes. \nFor example:\n<code>\n$classes = \"MyClass1,MyClass2\";\n\
+    $classes = explode(',',$classes);\n</code>\nwould return an array of strings:\
+    \ \n<code>\n$classes[0] = 'MyClass1';\n$classes[1] = 'MyClass2';\n", "    $strongest_extension\
+    \ = array();\n    foreach ($extensions as $extension) {\n        if (preg_match(\"\
+    /([A-Z])\\1/\", $extension, $match)) {\n            $strongest_extension[] = $class_name\
+    \ . $match[1];\n        } else {\n            $strongest_extension[] = $extension;\n\
+    \        }\n    }\n    usort($strongest_extension, function($a, $b) {\n      \
+    \  return strcasecmp(strtolower($a), strtolower($b));\n    });\n    $strongest_extension\
+    \ = array_shift($strongest_extension);\n    return $strongest_extension;\n}\n\
+    </code>\n<|/ a tags=php,regex,preg-match-all |>\n<| a dscore=0 |>\nHere is a simple\
+    \ function that will return the longest matching substring based on some \"similarity\"\
+    \ measure (similarity is a measure of how much two strings match up). I've used\
+    \ this before, but it's been a few years since I've done any PHP. I'll see if\
+    \ I can dig up some old code.\n<code>", "  foreach($extensions as $extension)\
+    \ {\n    $fraction = str_split($extension, 2);\n    $cap = strlen($fraction[0]);\n\
+    \    $sm = strlen($fraction[1]);\n    $strength = round(($cap - $sm) / ($cap));\n\
+    \    if ($strength > 0) {\n      return $class_name.\".\".$extension;\n    }\n\
+    \  }\n}\n", "  if (count($extensions) <= 1) {\n    return $class_name . '.' .\
+    \ $extensions[0];\n  }\n\n  $extension_strengths = array();\n  foreach ($extensions\
+    \ as $extension) {\n    $extension_strengths[strtolower($extension)] = array();\n\
+    \  }\n\n  foreach ($extensions as $extension) {\n    $extension_strengths[strtolower($extension)][]\
+    \ = strtoupper(substr($extension, 0, 1)) . substr($extension, 1, 1);\n  }\n  $strongest_extension_strength\
+    \ = null;\n  foreach ($extension_strengths as $extension_name => $extension_strength)\
+    \ {\n    $extension_strength = array_count_values($extension_strength);\n    if\
+    \ ($extension_strength['Z'] == 1) {\n      $strongest_extension_strength = $extension_name;\n\
+    \      break;\n    }\n  }\n\n  if ($strongest_extension_strength !== null) {\n\
+    \    return $class_name . '.' . $strongest_extension_strength;\n  }\n\n  usort($extension_strengths,\
+    \ function ($a, $b) {\n    return strcasecmp($a, $b);\n  });\n\n  return $class_name\
+    \ . '.' . $extensions[0];\n}", "    $strengths = array();\n    foreach ($extensions\
+    \ as $ext) {\n        $name = substr($ext, 0, 1);\n        $strength = strlen($name)\
+    \ - strlen(strtoupper($name));\n        $strengths[$strength] = $ext;\n    }\n\
+    \    asort($strengths);\n    $strength = array_keys($strengths);\n    return $class_name.$strengths[0];\n\
+    }\n", "    // Your code here.\n}\n</code>\n<|/ a tags=php |>\n<| c |>\nPlease\
+    \ be careful when writing a solution with no explanation.\n<|/ c |>\n<| c |>\n\
+    Thanks for your response. The problem is how to find the strongest extension and\
+    \ how to return it from this function.\n<|/ c |>\n<| a |>\nIt was a little hard\
+    \ to find a PHP function like that, but I came up with a solution:\n<code>", " \
+    \ sort($extensions);\n  $counts = array();\n  foreach ($extensions as $extension)\
+    \ {\n    $counts[$extension] = strlen($extension);\n  }\n  arsort($counts);\n\
+    \  $strongest = array_pop($extensions);\n  $strongest_count = array_pop($counts);\n\
+    \  $fraction = $strongest_count / strlen($class_name);\n  $fraction = round($fraction\
+    \ * 100);\n  $fraction = round($fraction, 2);\n  if ($fraction == 100) {\n   \
+    \ $fraction = \"100\";\n  }\n  $strongest .= \"\\\"\" . $class_name . \"\\\"\"\
+    ;\n  foreach ($counts as $key => $value) {\n    if ($value == $strongest_count)\
+    \ {\n      $strongest .= \".\" . $key;\n    }\n  }\n  return $strongest;\n}\n",
+  "  $classes = [];\n  for ($i = 0; $i < count($extensions); $i++) {\n    $c = $extensions[$i];\n\
+    \    if (strlen($c) > 0) {\n      $classes[$i] = $class_name . '.' . $c;\n   \
+    \ }\n  }\n  $classes = array_count_values($classes);\n  arsort($classes);\n  $str\
+    \ = '';\n  for ($i = 0; $i < count($classes); $i++) {\n    if ($i == 0) {\n  \
+    \    $str .= $classes[$i];\n    } else {\n      $str .= $classes[$i] . '.';\n\
+    \    }\n  }\n  return $str;\n}\n", "  $extension_strengths = array();\n  foreach\
+    \ ($extensions as $extension) {\n    $extension_strengths[] = strlen($extension);\n\
+    \  }\n  array_multisort($extension_strengths, SORT_ASC, $extensions);\n  $strength\
+    \ = end($extension_strengths);\n  $class_name = str_replace(\".\", \"\", $class_name);\
+    \ // remove '.'\n  $class_name = strtolower($class_name); // make class name lowercase\
+    \ for comparison\n  \n  return $class_name . \".\" . array_pop($extensions);\n\
+    }\n", "  // Write your code here...\n}\n", "    $extensions_count = count($extensions);\n\
+    \    $extensions_count = max(1, $extensions_count);\n    $extensions_count = min($extensions_count,\
+    \ count($class_name) - 1);\n    $strength = array();\n    foreach ($extensions\
+    \ as $i => $extension) {\n        $letter_count = str_word_count(strtolower($extension));\n\
+    \        $letter_count = max(1, $letter_count);\n        $letter_count = min($letter_count,\
+    \ count($class_name) - 1 - $i);\n        $strength[$i] = $letter_count / $extensions_count;\n\
+    \    }\n    uasort($strength, function($a, $b) {\n        if ($a == $b) {\n  \
+    \          return 0;\n        }\n        return ($a < $b) ? -1 : 1;\n    });\n\
+    \    $strength_sum = array_sum($strength);\n    if ($strength_sum == 0) {\n  \
+    \      $strength_sum = 1;\n    }\n    $strength_sum = $strength_sum * -1;\n  \
+    \  arsort($strength);\n    $strength_sum = array_sum($strength);\n    if ($strength_sum\
+    \ == 0) {\n        $strength_sum = 1;\n    }\n    $extension = end($extensions);\n\
+    \    $extension = substr($extension, 0, -strlen($extension));\n    return $class_name\
+    \ . '.' . $extension . '.' . array_shift($strength);\n}\n", "  $extensions = array_map('strtolower',\
+    \ $extensions);\n  $class_name_length = strlen($class_name);\n  $extensions_length\
+    \ = count($extensions);\n  $strongest_extension = '';\n\n  for ($i = 0; $i < $extensions_length;\
+    \ $i++) {\n    $extension = strtolower($extensions[$i]);\n    $extension_length\
+    \ = strlen($extension);\n    $strength = strlen($extension) - $class_name_length;\n\
+    \    $strongest = true;\n\n    for ($j = $i; $j < $extensions_length; $j++) {\n\
+    \      $extension_of_j = $extensions[$j];\n      $extension_of_j_length = strlen($extension_of_j);\n\
+    \      $strength_of_j = strlen($extension_of_j) - $class_name_length;\n      if\
+    \ ($strength_of_j > $strength) {\n        if ($strength_of_j < $strength_of_j)\
+    \ {\n          $strength = $strength_of_j;\n          $extension = $extension_of_j;\n\
+    \        }\n      }\n    }\n\n    if ($strength != 0) {\n      if ($strength >=\
+    \ 0) {\n        $strongest = false;\n      }\n      if ($strongest_extension ==\
+    \ '' || $strength > strlen($strongest_extension)) {\n        $strongest_extension\
+    \ = $extension;\n      }\n    }\n  }\n\n  return $class_name . $strongest_extension;\n\
+    }\n", "    $class_parts = explode('_', $class_name);\n    \n    // Get the number\
+    \ of capital letters in the class\n    $cap_letters = array_sum(preg_split('/(?=[A-Z])/',\
+    \ $class_parts[0]));\n    \n    // Get the number of lowercase letters in the\
+    \ class\n    $sm_letters = array_sum(preg_split('/(?=[a-z])/', $class_parts[0]));\n\
+    \    \n    $strength = 0;\n    $extensions_sorted = [];\n    \n    foreach ($extensions\
+    \ as $ext) {\n        // Get number of capital letters in the extension\n    \
+    \    $ext_cap_letters = array_sum(preg_split('/(?=[A-Z])/', $ext));\n        \n\
+    \        // Get number of lowercase letters in the extension\n        $ext_sm_letters\
+    \ = array_sum(preg_split('/(?=[a-z])/', $ext));\n        \n        $strength +=\
+    \ $cap_letters - $ext_cap_letters;\n        $strength += $sm_letters - $ext_sm_letters;\n\
+    \        \n        $extensions_sorted[] = $ext;\n    }\n    \n    array_multisort($extensions_sorted,\
+    \ $strength, SORT_ASC, SORT_STRING, $extensions);\n    \n    return $class_parts[0].'_'.array_shift($extensions);\n\
+    }\n", "  $extension_count = count($extensions);\n  $extension_strength = -1;\n\
+    \  foreach ($extensions as $extension) {\n    $extension_count -= substr_count($class_name,\
+    \ $extension);\n    if ($extension_strength < $extension_count) {\n      $extension_strength\
+    \ = $extension_count;\n    }\n  }\n  return $class_name . '.' . substr($extensions[0],\
+    \ $extension_strength);\n}\n</code>\n<|/ a dscore=0 |>\n<| c |>\nThis is basically\
+    \ the same as the one in my answer.\n<|/ c |>\n<| a |>\nThe most flexible solution\
+    \ would be to define a priority array in the order of preference, then iterate\
+    \ over the array and use the first match as a starting point. Then, use the extension's\
+    \ name as the class name, and iterate over the extensions and see if any of them\
+    \ are in the priority.\n<code>", "  $class_length = strlen($class_name);\n  $extensions_length\
+    \ = count($extensions);\n  $extension_strengths = array_fill(0, $extensions_length,\
+    \ 0);\n  for ($i = 0; $i < $extensions_length; $i++) {\n    $letter = substr($extensions[$i],\
+    \ 0, 1);\n    $number = substr($extensions[$i], 1);\n    $strength = substr_count($letter,\
+    \ $class_name);\n    for ($j = 0; $j < $class_length; $j++) {\n      if ($letter\
+    \ == substr($class_name, $j)) {\n        $extension_strengths[$i] = $strength;\n\
+    \      }\n    }\n  }\n  return $class_name . '.' . implode('.', array_keys($extension_strengths));\n\
+    }\n\n$class_name = 'my_class';\n$extensions = ['A1', 'B2', 'C3'];\necho Strongest_Extension($class_name,\
+    \ $extensions);", "  $total_length = count($extensions);\n  for ($i = 0; $i <\
+    \ $total_length; $i++) {\n    $extensions[$i] = strtolower($extensions[$i]);\n\
+    \  }\n  $count_upper = array_count_values($extensions);\n  $count_lower = array_count_values(array_map('strtolower',\
+    \ $extensions));\n  $count = $count_upper[$class_name] - $count_lower[$class_name];\n\
+    \  if ($count == 0) {\n    return $class_name;\n  }\n  $strength = pow(($count\
+    \ + 1), 0.5);\n  if ($strength == 0) {\n    return $class_name;\n  }\n  $highest_index\
+    \ = -1;\n  foreach ($extensions as $index => $extension) {\n    $length = strlen($extension);\n\
+    \    $extension_length = strlen($extension);\n    if ($highest_index == -1 ||\
+    \ $strength > $highest_index) {\n      $highest_index = $index;\n    }\n    $strength\
+    \ -= $extension_length;\n  }\n  return $class_name . substr($extensions[$highest_index],\
+    \ 1);\n}", "  $strengths = array_count_values($extensions);\n  arsort($strengths);\n\
+    \  reset($strengths);\n  \n  $extension = array_search($class_name, array_keys($strengths));\n\
+    \  return \"$class_name.$extensions[$extension]\";\n}\n</code>\n<|/ a tags=arrays,php\
+    \ |>\n<| a tags=arrays,php |>\nHere is another version to get the most common\
+    \ extension from a list of extensions: https://gist.github.com/dandavis/f59ea15f50532e00e2a5\n\
+    <code>\n<?php", "  $extensions_count = count($extensions);\n  $extensions_count_lowercase\
+    \ = count(array_filter($extensions, function($item) {return ctype_lower($item);}));\n\
+    \  $extensions_count_uppercase = count(array_filter($extensions, function($item)\
+    \ {return ctype_upper($item);}));\n  $extensions_count_string = count(array_filter($extensions,\
+    \ function($item) {return ctype_upper($item);}));\n  $strength = ceil(($extensions_count_lowercase\
+    \ * $extensions_count_uppercase)/($extensions_count_string));\n  foreach ($extensions\
+    \ as $index => $extension) {\n    if ($extension == $class_name) {\n      return\
+    \ $class_name . ($index < $extensions_count ? $extensions_count : -1);\n    }\n\
+    \  }\n  return $class_name . $extensions[$strength];\n}\n\n/*\n * Stronger Extension\n\
+    \ */", "    if ($extensions == NULL) $extensions = array();\n    if (strlen($class_name)\
+    \ != strlen($extensions[0])) {\n        return \"$class_name.XX\";\n    }\n  \
+    \  $strength = 0;\n    for ($i = 0; $i < strlen($class_name); $i++) {\n      \
+    \  $c = substr($class_name, $i, 1);\n        for ($j = 0; $j < strlen($extensions[0]);\
+    \ $j++) {\n            $e = substr($extensions[0], $j, 1);\n            $strength\
+    \ += (ctype_upper($c) && ctype_lower($e)) ? 1 : -1;\n        }\n    }\n    for\
+    \ ($i = 0; $i < count($extensions)-1; $i++) {\n        $strength += $extensions[$i];\n\
+    \        $strength += $extensions[$i+1];\n    }\n    if ($strength > 0) {\n  \
+    \      return \"$class_name.$extensions[0]\";\n    }\n    else return \"No extensions\"\
+    ;\n}\n", "  // Your code goes here.\n}\n", "  foreach ($extensions as $extension)\
+    \ {\n    $index = strpos($class_name, $extension);\n    if ($index !== FALSE &&\
+    \ $index > 0) {\n      return $class_name . substr($extension, 0, $index);\n \
+    \   }\n  }\n  return $class_name;\n}", "    $str_strength = 0;\n    $strongest_ext\
+    \ = '';\n    foreach ($extensions as $extension) {\n        $ext = strtolower($extension);\n\
+    \        $class_name_length = strlen($class_name);\n        $ext_length = strlen($ext);\n\
+    \        if ($ext_length == 0 || $ext_length >= $class_name_length) {\n      \
+    \      continue;\n        }\n        $str_frac = $class_name_length - $ext_length;\n\
+    \        if ($str_frac < $str_strength) {\n            continue;\n        }\n\
+    \        $str_strength = $str_frac;\n        $strongest_ext = $extension;\n  \
+    \  }\n    return $class_name . '.' . $strongest_ext;\n}\n", "    $extensions_array\
+    \ = array_map('strtolower',$extensions);\n    sort($extensions_array, SORT_STRING);\n\
+    \    foreach ($extensions_array as $key => $value) {\n        if (strpos($class_name,\
+    \ $value) === 0) {\n            return $class_name.$value;\n        }\n    }\n\
+    \    return 'Exception'; //Exception must be returned if no extension is strongest\n\
+    }\n", "  $extensions_count = count($extensions);\n  $extensions_strength = 0;\n\
+    \  for ($i = 0; $i < $extensions_count; $i++) {\n    $extension_class = strtolower($class_name\
+    \ . $extensions[$i]);\n    if (class_exists($extension_class)) {\n      $extensions_strength\
+    \ += substr_count($class_name, '.');\n    }\n  }\n  if ($extensions_strength ==\
+    \ 0) {\n    $extensions_strength = 1;\n  }\n  return $class_name . '.' . implode('.',\
+    \ array_slice(str_split(strtr($class_name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),\
+    \ 1), 0, -1));\n}\n", "    $strongest = $class_name;\n    foreach ($extensions\
+    \ as $extension) {\n        $lowercase_letters = preg_replace('/[^A-Z]/', \"\"\
+    , $extension);\n        $upper_letters = preg_replace('/[^a-z]/', \"\", $extension);\n\
+    \        $ratio = ($lowercase_letters - $upper_letters) / ($lowercase_letters\
+    \ + $upper_letters);\n        if ($ratio > 1) {\n            $strongest = $class_name\
+    \ . '.' . $extension;\n        }\n    }\n    return $strongest;\n}\n", "  $extensions_count\
+    \ = count($extensions);\n  $extensions_array = array();\n  for ($i = 0; $i < $extensions_count;\
+    \ $i++) {\n    $ext = strtolower($extensions[$i]);\n    $extensions_array[$i]\
+    \ = $ext;\n  }\n  $extensions_count = count($extensions_array);\n  $max_extension_strength\
+    \ = -1;\n  for ($i = 0; $i < $extensions_count; $i++) {\n    $ext = $extensions_array[$i];\n\
+    \    $cap = strlen($ext);\n    $sm = strlen($class_name);\n    $strongest_extension_strength\
+    \ = round(($cap - $sm) / $cap);\n    if ($strongest_extension_strength > $max_extension_strength)\
+    \ {\n      $max_extension_strength = $strongest_extension_strength;\n    }\n \
+    \ }\n  return $class_name . '.' . $max_extension_strength;\n}\n", "  $strengths\
+    \ = [];\n  $classes = str_replace([' ', '.'], [''], ['my', $class_name]);\n  $class_extensions\
+    \ = explode('.', $class_name);\n  foreach ($class_extensions as $class_extension)\
+    \ {\n    $class_extension = strtolower($class_extension);\n    $classes = str_replace($class_extension,\
+    \ '', $classes);\n    $class_extension = strtoupper($class_extension);\n    $class_extension\
+    \ = substr($class_extension, 0, -1);\n    $strength = substr_count($class_extension,\
+    \ 'ABCDEFGHIJKLMNOPQRSTUVWXYZ');\n    if (!isset($strengths[$class_extension]))\
+    \ {\n      $strengths[$class_extension] = $strength;\n    } else {\n      if ($strengths[$class_extension]\
+    \ > $strength) {\n        $strengths[$class_extension] = $strength;\n      }\n\
+    \    }\n  }\n  ksort($strengths);\n  reset($strengths);\n  $strength = current($strengths);\n\
+    \  foreach ($extensions as $extension) {\n    $extension = strtolower($extension);\n\
+    \    $extension = strtoupper($extension);\n    $extension = substr($extension,\
+    \ 0, -1);\n    if ($extension == $class_extension) {\n      return $classes;\n\
+    \    }\n    $diff = substr_count($extension, $class_extension) - substr_count($extension,\
+    \ 'ABCDEFGHIJKLMNOPQRSTUVWXYZ');\n    if ($diff > 0) {\n      $strength--;\n \
+    \     if ($strength == 0) {\n        break;\n      }\n    }\n  }\n  return $classes;\n\
+    }", "  $cap_str = strlen($class_name);\n  $sm_str = strlen($class_name);\n  foreach\
+    \ ($extensions as $extension) {\n    $cap_str = strlen($extension);\n    $sm_str\
+    \ = strlen($extension);\n    if ($cap_str - $sm_str > 0) {\n      return $class_name\
+    \ . '.' . $extension;\n    }\n  }\n  return $class_name;\n}", "    $min_extension\
+    \ = $extensions[0];\n    for ($i = 1; $i < count($extensions); $i++) {\n     \
+    \   if ($min_extension == $extensions[$i]) {\n            continue;\n        }\n\
+    \        $strongest_index = 0;\n        $min_extension_length = strlen($min_extension);\n\
+    \        for ($j = 0; $j < $min_extension_length; ++$j) {\n            if (strtoupper($extensions[$i]{$j})\
+    \ <> strtoupper($extensions[$i]{$j + $min_extension_length})) {\n            \
+    \    break;\n            }\n            $strongest_index = $j;\n        }\n  \
+    \      if ($strongest_index == -1) {\n            echo \"No extensions match.\\\
+    n\";\n            exit;\n        }\n        if ($extensions[$i]{$strongest_index}\
+    \ < $min_extension[$strongest_index]) {\n            $min_extension = $extensions[$i];\n\
+    \        }\n    }\n    return $class_name . '.' . $min_extension;\n}\n</code>\n\
+    <|/ a dscore=0 tags=php,algorithm,java |>\n<| c |>\nHi Sam thanks for the reply,\
+    \ but I am a little confused by this implementation. I've used this algorithm\
+    \ to implement a sliding window that returns all combinations of words from my\
+    \ database - which works great, but I need to take it a step further and limit\
+    \ the number of words that are returned - so say if my database has 100 words\
+    \ and I only want to return 10 words, my algorithm would return all combinations\
+    \ of 10 words. Is there a way to alter this code to do this?\n<|/ c |>\n<| c |>\n\
+    I updated my answer, but you might want to rethink your algorithm as you might\
+    \ not be getting the best results.\n<|/ c |>\n<| c |>\nHi Sam, thank you for taking\
+    \ the time to look at this. I didn't realise that this was a hard problem to solve.\
+    \ I'm not a very good coder either but I've managed to make some progress using\
+    \ your help so thank you. I have a question which may seem silly - but would you\
+    \ be able to take a look at the code I've implemented and see if it will work\
+    \ for what I'm trying to achieve? I've included my full code in the question above\
+    \ to give you more information.\n<|/ c |>\n<| c |>\nThe code looks as though it\
+    \ should do what you are asking - but I can't say I have tested it. Your example\
+    \ is very close to what I would do but you would be better off with the first\
+    \ few letters of each extension rather than a full comparison - for example 'Slices.SErviNGSliCes'\
+    \ would be 'SErviNGSliCes', I imagine that is what you meant by ", "    $strongest_extension\
+    \ = null;\n    $extension_count = count($extensions);\n    \n    // Get the number\
+    \ of uppercase letters in the class name.\n    $cap_class = preg_replace('/[A-Z]/',\
+    \ '', $class_name);\n    // Get the number of lowercase letters in the class name.\n\
+    \    $sm_class = preg_replace('/[a-z]/', '', $class_name);\n    \n    // If the\
+    \ class name and the extensions have the same number of uppercase letters\n  \
+    \  // and lowercase letters, then the strongest extension comes first. This \n\
+    \    // is because extensions are usually loaded in alphabetical order.\n    if\
+    \ ($cap_class == $sm_class) {\n        $extension_count = -1;\n    }\n    \n \
+    \   // Loop through each extension and compare the strength of each extension.\n\
+    \    for ($count = 0; $count < $extension_count; $count++) {\n        // Get the\
+    \ extension name from the list that corresponds to the counter.\n        $extension_name\
+    \ = $extensions[$count];\n        \n        // Get the number of uppercase letters\
+    \ in the extension name.\n        $cap_extension = preg_replace('/[A-Z]/', '',\
+    \ $extension_name);\n        // Get the number of lowercase letters in the extension\
+    \ name.\n        $sm_extension = preg_replace('/[a-z]/', '', $extension_name);\n\
+    \        \n        // Get the fraction of uppercase letters in the extension name\
+    \ and the \n        // number of uppercase letters in the class name.\n      \
+    \  $cap_extension_strength = preg_replace('/[A-Z]/', \n                      \
+    \                     '', $extension_name) - $cap_class;\n        $sm_extension_strength\
+    \ = preg_replace('/[a-z]/', \n                                           '', $extension_name)\
+    \ - $sm_class;\n        \n        // Compare each extension strength to the strength\
+    \ of the class name.\n        if ($cap_extension_strength >= $sm_extension_strength)\
+    \ {\n            $strongest_extension = $extension_name;\n            break;\n\
+    \        }\n    }\n    return $strongest_extension;\n}\n ", "\t\n\tforeach ($extensions\
+    \ as $extension) {\n\t\tif (StrongestExtension($extension) == $class_name) {\n\
+    \t\t\treturn $class_name . '.' . $extension;\n\t\t}\n\t}\n\n\treturn $class_name;\n\
+    }\n", "    $strengths = array();\n    $class_name = strtolower($class_name);\n\
+    \    foreach ($extensions as $extension) {\n        $extension = strtolower($extension);\n\
+    \        $cap_extension = substr($extension, strlen($class_name) - 1);\n     \
+    \   $sm = strlen($class_name);\n        $cap = strlen($cap_extension);\n     \
+    \   $score = intval($cap / $sm);\n        if (!isset($strengths[$score])) {\n\
+    \            $strengths[$score] = $extension;\n        }\n    }\n    asort($strengths);\n\
+    \    return $class_name . '.' . array_shift($strengths);\n}\n</code>\n<|/ a tags=php,arrays,regex\
+    \ |>\n<| a dscore=1 |>\nJust to share my idea of solution :)\n<code>\n$array =\
+    \ ['Slices', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced',\
+    \ 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Sliced', 'Slice", "    $strongest_extension\
+    \ = null;\n    $cap_extensions = preg_grep(\"/^[A-Z]/\", array_map(\"strtoupper\"\
+    , $extensions));\n    $sm_extensions = preg_grep(\"/^[a-z]/\", array_map(\"strtolower\"\
+    , $extensions));\n\n    $cap_extension_count = count($cap_extensions);\n    $sm_extension_count\
+    \ = count($sm_extensions);\n\n    foreach ($cap_extensions as $key => $extension)\
+    \ {\n        $cap_extensions[$key]->strength = strlen($cap_extensions[$key]->name);\n\
+    \    }\n    foreach ($sm_extensions as $key => $extension) {\n        $sm_extensions[$key]->strength\
+    \ = strlen($sm_extensions[$key]->name);\n    }\n\n    foreach ($cap_extensions\
+    \ as $key => $extension) {\n        foreach ($sm_extensions as $key => $extension)\
+    \ {\n            if ($extension->strength >= $extensions[$key]->strength) {\n\
+    \                $strongest_extension = $class_name . '.' . $extension->name;\n\
+    \            }\n        }\n    }\n    foreach ($sm_extensions as $key => $extension)\
+    \ {\n        foreach ($cap_extensions as $key => $extension) {\n            if\
+    \ ($extension->strength >= $extensions[$key]->strength) {\n                $strongest_extension\
+    \ = $class_name . '.' . $extension->name;\n            }\n        }\n    }\n\n\
+    \    return $strongest_extension;\n}", "    $max = 0;\n    $strongest_extension\
+    \ = null;\n    foreach ($extensions as $extension) {\n        $strength = strlen($class_name)\
+    \ - strlen($extension);\n        if ($strength > $max) {\n            $strongest_extension\
+    \ = $extension;\n            $max = $strength;\n        }\n    }\n    return $strongest_extension;\n\
+    }", "    $classes = get_declared_classes();\n    $extension_count = count($extensions);\n\
+    \    foreach ($classes as $class) {\n        $class_info = explode('.', $class);\n\
+    \        foreach ($class_info as $i => $value) {\n            $class_info[$i]\
+    \ = ucfirst($value);\n        }\n        $class_name = $class_info[0] . '.' .\
+    \ implode('.', $class_info);\n        $class_extensions = array_filter(\n    \
+    \        $extensions,\n            function ($extension) use ($class_name) {\n\
+    \                return preg_match('/' . preg_quote($class_name, '/') . '/', $extension);\n\
+    \            }\n        );\n        $extension_count = count($class_extensions);\n\
+    \        if ($extension_count > $extension_count) {\n            foreach ($class_extensions\
+    \ as $extension) {\n                if ($extension_count > $i) {\n           \
+    \         return $class_name . '.' . $extension;\n                }\n        \
+    \    }\n        }\n    }\n}\n", "    $map=array();\n    foreach($extensions as\
+    \ $ext){\n        $map[strtolower($ext)][]=$ext;\n    }\n    ksort($map);\n  \
+    \  foreach($map as $ext=>$n){\n        if ($n>0) {\n            return $class_name.$ext;\n\
+    \        }\n    }\n    // return $class_name. ???\n}\n", "  $CAP = substr_count($class_name,\
+    \ 'A');\n  $SM = substr_count($class_name, 'a');\n  $strength = -1;\n  foreach\
+    \ ($extensions as $ext) {\n    $CAPext = substr_count($ext, 'A');\n    $SMext\
+    \ = substr_count($ext, 'a');\n    $strength += ($CAPext - $SMext) / ($CAP - $SM);\n\
+    \  }\n  if ($strength == -1) {\n    return $class_name;\n  }\n  return $class_name\
+    \ . \".\" . strtoupper($extensions[0]) . \".\" . strtolower($extensions[1]);\n\
+    }", "    // Your code here\n    $extensions_count = count($extensions);\n    $strongest\
+    \ = 0;\n    $extensions_strength = array();\n    foreach ($extensions as $extension)\
+    \ {\n        $extensions_strength[$extension] = substr_count($class_name, '$'.$extension);\n\
+    \    }\n    arsort($extensions_strength);\n    foreach ($extensions_strength as\
+    \ $k => $v) {\n        if ($strongest == 0) $strongest = $k;\n        if ($strongest\
+    \ == $k && $v > 0) {\n            $strongest = $k;\n        }\n    }\n    return\
+    \ $class_name.'.'.$strongest;\n}\n", "  foreach ($extensions as $ext) {\n    $ext\
+    \ = strtolower($ext);\n    $cap = strpos($ext, strtoupper($ext));\n    $sm  =\
+    \ strpos($ext, strtolower($ext));\n    $strength = round(($cap - $sm)/2, 1);\n\
+    \    if ($strength > 0) {\n      return $class_name . '.' . $ext;\n    }\n  }\n\
+    \  return $class_name;\n}\n</code>\n<|/ a |>\n<| c |>\nWhy did you call it 'Strongest_Extension'\
+    \ rather than something more intuitive like 'Extensible_Extension'? It makes the\
+    \ code much easier to read...\n<|/ c |>\n<| c |>\nYes, I agree with you.  It should\
+    \ be more intuitive but I think its too early to change it.  I wanted to keep\
+    \ it as close to the original code as possible.\n<|/ c |>\n<| c |>\nYes, but \"\
+    extensible\" is not really an English word. It's \"extensible\" but \"extensibility\"\
+    \ would be more appropriate to put there (as in \"extensibility\").\n<|/ c |>\n\
+    <| c |>\n- Thanks for the suggestion, I have added it to the answer.\n<|/ c |>\n\
+    <| a tags=php |>\nThis is my solution. I made a class which holds all the possible\
+    \ extensions keys and a class which holds all the possible extensions values.\
+    \ It also holds the extensions as arrays and stores them in the appropriate place.\
+    \ \n<code>\n<?php\n\nclass Extensions\n{\n    private $exts = array();\n\n   \
+    \ public function __construct($exts)\n    {\n        foreach($exts as $ext){\n\
+    \            $this->exts[] = $ext;\n        }\n    }\n\n    public function getExtensions(){\n\
+    \        return $this->exts;\n    }\n}\n\nclass ExtensionsValues\n{\n    private\
+    \ $extsValues = array();\n\n    public function __construct($extsValues)\n   \
+    \ {\n        foreach($extsValues as $extsValue){\n            $this->extsValues[]\
+    \ = $extsValue;\n        }\n    }\n\n    public function getExtsValues(){\n  \
+    \      return $this->extsValues;\n    }\n}\n\n$extensions = new Extensions(array('jpg','png','txt'));\n\
+    $extValues = new ExtensionsValues(array('jpg'=>'jpg','png'=>'png','txt'=>'txt'));\n\
+    \n$keys = $extensions.getExtensions();\n$values = $extValues.getExtsValues();\n\
+    \n$extKeys = array();\n$extValues = array();", "  $total_extension_strength =\
+    \ -1;\n  $total_extension_count = count($extensions);\n  foreach ($extensions\
+    \ as $ext) {\n    $class_name_parts = explode('.', $class_name);\n    \n    $extension_parts\
+    \ = explode($ext, $class_name_parts[0]);\n    if ($extension_parts[0] == $class_name_parts[0])\
+    \ {\n      // same class name parts => same extension\n      $extension_strength\
+    \ = strlen($extension_parts[1]);\n      if ($extension_strength >= 0) {\n    \
+    \    $total_extension_strength += $extension_strength;\n      }\n    }\n  }\n\
+    \  \n  foreach ($extensions as $ext) {\n    $class_name_parts = explode('.', $class_name);\n\
+    \    \n    $extension_parts = explode($ext, $class_name_parts[0]);\n    if ($extension_parts[0]\
+    \ == $class_name_parts[0]) {\n      // same class name parts => same extension\n\
+    \      $extension_strength = strlen($extension_parts[1]);\n      if ($extension_strength\
+    \ >= 0) {\n        if ($extension_strength > $total_extension_strength) {\n  \
+    \        // found better extension strength\n          $total_extension_strength\
+    \ = $extension_strength;\n        }\n      }\n    }\n  }\n  if ($total_extension_strength\
+    \ >= 0) {\n    $class_name = $class_name . '.' . $extensions[0];\n  }\n  return\
+    \ $class_name;\n}\n</code>\nThe output would be as follows:\n<code>\nStrongest_Extension('my_class',\
+    \ ['AA', 'Be', 'CC']) == 'my_class.Be'\nStrongest_Extension('my_class', ['AA',\
+    \ 'Be', 'CC']) == 'my_class.AA'\nStrongest_Extension('my_class', ['AA', 'Be',\
+    \ 'CC']) == 'my_class.CC'\n</code>\n<|/ a dscore=1 |>\n<| a |>\nI have created\
+    \ this php function to return most used class extension name :\n<code>\n<?php",
+  "  if (count($extensions) == 0) {\n    return false;\n  }\n  \n  $strongest_extension\
+    \ = false;\n  $strongest_extension_strength = -1;\n  foreach ($extensions as $extension)\
+    \ {\n    $extension_length = strlen($extension);\n    $extension_capitals = $extension_length\
+    \ / 2;\n    $extension_smalls = $extension_length - $extension_capitals;\n   \
+    \ $extension_strength = $extension_capitals - $extension_smalls;\n    if ($extension_strength\
+    \ > $strongest_extension_strength) {\n      $strongest_extension_strength = $extension_strength;\n\
+    \      $strongest_extension = $extension;\n    }\n  }\n  return $class_name .\
+    \ \".\" . $strongest_extension;\n}\n", "    $classname = ucfirst(strtolower($class_name));\n\
+    \    $class = new ReflectionClass($classname);\n    $strongest_extension = null;\n\
+    \    $strength = $class->getShortName();\n    $strength = substr($strength, 1);\n\
+    \    foreach($extensions as $ext) {\n        $ext = strtolower($ext);\n      \
+    \  $letters = str_split($ext);\n        $length = count($letters);\n        $strength\
+    \ -= $length;\n        if ($strength <= 0) {\n            $strongest_extension\
+    \ = $classname . '.' . $ext;\n            break;\n        }\n    }\n    return\
+    \ $strongest_extension;\n}\n</code>\n<|/ a tags=php |>\n<| c |>\nThis is what\
+    \ he would need, I agree.\n<|/ c |>\n<| c |>\nThis is really a great solution.\
+    \ I just wanted to point out that \"SErviNGSliCes\" is not a good extension name\
+    \ for this purpose. PHP has two built-in extensions to do what you need: **array_slice**\
+    \ and **array_column**. [Here's](http://php.net/manual/en/function.array-slice.php)\
+    \ an example of how to use it.\n<|/ c |>\n<| c |>\nI agree, that extension name\
+    \ isn't great. But I wanted to give an answer to the question as he had it initially.\n\
+    <|/ c |>\n<| c |>\nThe question was asked before PHP had this functionality, I\
+    \ wouldn't have thought it necessary to add an answer just for that.\n<|/ c |>\n\
+    <| c |>\nWell the question was asked before PHP had this functionality also. At\
+    \ least in 5.3 it was. Not sure how that has changed since then.\n<|/ c |>\n<|\
+    \ a |>\nHere is a function that does exactly what you want:\n<code>", "  $fractal_size\
+    \ = sizeof($extensions);\n  $fractal = 1;\n  foreach ($extensions as $ext) {\n\
+    \    $fractal += substr_count($ext, strtoupper($ext));\n  }\n  return $class_name\
+    \ . \"\\.\" . substr($class_name, 0, $fractal_size-$fractal) . \"\\.\" . array_shift($extensions);\n\
+    }\n", "\tforeach($extensions as $extension) {\n\t\t$index = strpos($extension,\
+    \ '_');\n\t\t$class_name = substr($class_name, 0, $index);\n\t\t$extension = substr($extension,\
+    \ $index + 1);\n\t\t$class_name = ucfirst(strtolower($class_name));\n\t\t$extension\
+    \ = ucfirst(strtolower($extension));\n\t\tif(strpos($extension, $class_name .\
+    \ '.') === 0) {\n\t\t\treturn $extension;\n\t\t}\n\t}\n\treturn $class_name .\
+    \ '.' . $extensions[0];\n}\n", "    $extensions_str = implode(',', $extensions);\n\
+    \    $pattern = \"/\\b$class_name\\b(?:\\.$extensions_str)\\b/\";\n    preg_match_all($pattern,\
+    \ $class_name, $matches);\n    return $matches[0][0];\n}\n</code>\n<|/ a |>\n\
+    <| c |>\nYes, I realize this isn't an exact answer. I'm also surprised that there\
+    \ isn't a native php function already available. I would really like to use the\
+    \ one you posted, however it didn't work well for me when I tried it on my end.\
+    \ I posted a comment to the original post regarding why I couldn't get it to work\
+    \ though.\n<|/ c |>\n<| a dscore=2 tags=regex,php,preg-replace,preg-match-all\
+    \ |>\nIf you want a pure regex solution this should work:\n<code>\n$input = \"\
+    \n<tag attr='value' attr1='value' attr2='value'>\n  <subtag attr='value' attr1='value'\
+    \ attr2='value'>\n     <subsubtag attr='value' attr1='value' attr2='value'>\n\
+    \      </subsubtag>\n  </subtag>\n</tag>\";\n\necho preg_replace(\"/<\\s*\\w+((\\\
+    s+\\w+=\".*?\"){1})*\\s*/>|<\\s*\\w+((\\s+\\w+=\".*?\"){2})*\\s*/>|<\\s*\\w+((\\\
+    s+\\w+=\".*?\"){3})*\\s*/>/\", \"REPLACED\", $input);\n</code>\nThis looks for\
+    \ a series of optional subtags encased in brackets. So you can have one or more,\
+    \ and you can have as many or few of them as you need. Basically, it looks for\
+    \ <\\w+ followed by 0 or more spaces, then a group of 3 attribute tags with values\
+    \ that appear 1 or more times, followed by >. After this, it looks for <\\w+ followed\
+    \ by 0 or more spaces, then a group of 3 attribute tags with values that appear\
+    \ 2 or more times, followed by >. After this, it looks for <\\w+ followed by 0\
+    \ or more spaces, then a group of 3 attribute tags with values that appear 3 or\
+    \ more times, followed by >. After this, it looks for <\\w+ followed by 0 or more\
+    \ spaces, then a group of 3 attribute tags with values that appear 4 or more times,\
+    \ followed by >. Then it looks for <\\w+ followed by 0 or more spaces, then a\
+    \ group of 3 attribute tags with values that appear 0 or more times, followed\
+    \ by >. If one of these patterns was found, it replaces them with the string REPLACED.\
+    \ \nI put in REPLACED because you said you wanted to replace the patterns with\
+    \ different replacements, but ", "  \n  // your code here\n  \n}", "  global $cache;\n\
+    \  global $allowed_extensions;\n  $cache[$class_name] = $cache[$class_name] ?:\
+    \ 1;\n  foreach ($extensions as $extension) {\n    if (in_array(strtolower($extension),\
+    \ $allowed_extensions)) {\n      $cache[$class_name]++;\n      break;\n    }\n\
+    \  }\n  return $class_name . '.' . array_shift($extensions);\n}\n", "  $best_extension\
+    \ = -1;\n  $best_strength = 0;\n  foreach ($extensions as $extension) {\n    $extension_strength\
+    \ = strrpos($class_name, $extension) - strlen($extension);\n    if ($extension_strength\
+    \ > $best_strength) {\n      $best_extension = $extension;\n      $best_strength\
+    \ = $extension_strength;\n    }\n  }\n  return $class_name . '.' . $best_extension;\n\
+    }", "    foreach ($extensions as $ext) {\n        if (mb_strtolower($class_name)\
+    \ == mb_strtolower($ext)) {\n            if ($class_name == $ext) {\n        \
+    \        return $class_name;\n            }\n\n            $ext = strtolower($ext);\n\
+    \            $c = 0;\n            foreach ($extensions as $e) {\n            \
+    \    if ($e == $ext) {\n                    ++$c;\n                }\n       \
+    \     }\n\n            return $class_name.$ext;\n        }\n    }\n\n    return\
+    \ $class_name;\n}\n", "    if (count($extensions) == 0) {\n        return $class_name;\n\
+    \    }\n    $extensions_array = array_count_values($extensions);\n    $best_extension\
+    \ = 0;\n    $best_extension_strength = -1;\n    foreach ($extensions_array as\
+    \ $extension => $value) {\n        if ($value < $best_extension_strength) {\n\
+    \            continue;\n        }\n        if (strlen($extension) > strlen($best_extension))\
+    \ {\n            $best_extension = $extension;\n            $best_extension_strength\
+    \ = $value;\n        }\n    }\n    return $class_name.$best_extension;\n}\n\n\
+    /**\n * Given a class name (as a string), and a list of the extensions (as strings),\n\
+    \ * this function will output the string containing the final extension name,\
+    \ and \n * will also output the string containing the most used extension.\n *\
+    \ If there are two or more extensions with the same strength then you should \n\
+    \ * choose the one that comes first in the list. For example, if you are given\
+    \ \n * \"Slices\" as the class and a list of all the extensions: ['SErviNGSliCes',\
+    \ '\n * Cheese', 'StuFfed'] then you should return 'Slices.SErviNGSliCes' since\
+    \ 'SErviNGSliCes' \n * is the strongest extension (its strength is -1). \n *\n\
+    \ * Example:\n * input: my_class\n * output: my_class.AA \n * input: Slices\n\
+    \ * output: Slices.StuFfed \n * input: my_class; my_class; Slices\n * output:\
+    \ my_class.AA \n * input: Slices; Slices\n * output: Slices.StuFfed \n * input:\
+    \ my_class; my_class; Slices; Slices\n * output: my_class.AA \n * input: Slices;\
+    \ Slices; Slices; Slices; Slices; Slices\n * output: Slices.StuFfed \n * input:\
+    \ my_class; my_class; Slices; Slices; Slices; Slices; Slices; Slices\n * output:\
+    \ my_class.AA \n * input: Slices; Slices; Slices; Slices; Slices; Slices; Slices;\
+    \ Slices; Slices; Slices; Slices\n * output: Slices.StuFfed \n */", "\tforeach\
+    \ ($extensions as $extension) {\n\t\t$class_name = substr($class_name, 0, -strlen($extension));\n\
+    \t\t$count_upper = array_count_values(preg_split('//u', $class_name));\n\t\t$count_lower\
+    \ = array_count_values(preg_split('//l', $class_name));\n\t\t$ratio = $count_upper\
+    \ + $count_lower;\n\t\tif ($ratio > 0)\n\t\t\t$strongest = $class_name . \".\"\
+    \ . $extension;\n\t\tif ($ratio > 1)\n\t\t\t$strongest = array_search($extension,\
+    \ $extensions);\n\t\tif ($strongest) {\n\t\t\treturn $strongest;\n\t\t}\n\t}\n\
+    \treturn $class_name;\n}", "    if (empty($extensions)) {\n        return $class_name;\n\
+    \    }\n    $len = sizeof($extensions);\n    $max = 0;\n    $strongest_extension\
+    \ = '';\n    foreach ($extensions as $extension) {\n        $ext = explode(\"\
+    _\", $extension, 2);\n        $cap = strlen($ext[0]);\n        $sm = strlen($ext[1]);\n\
+    \        if ($max < $cap - $sm) {\n            $max = $cap - $sm;\n          \
+    \  $strongest_extension = $extension;\n        }\n    }\n    return $class_name\
+    \ . '.' . $strongest_extension;\n}\n", "  $strengths = [];\n  $classes_to_load\
+    \ = [];\n  foreach($extensions as $ext) {\n    $classes = array_count_values(explode(\"\
+    \ \", $ext));\n    if (count($classes) == 1) {\n      $classes_to_load[$classes[0]]\
+    \ = $classes[0];\n    }\n    $strengths[$classes_to_load[$classes[0]] - $classes_to_load[$classes[1]]]\
+    \ = $classes_to_load[$classes[0]] - $classes_to_load[$classes[1]];\n  }\n  if\
+    \ (count($extensions) == 1) {\n    $classes_to_load[array_count_values(explode(\"\
+    \ \", $extensions[0]))[0]] = array_count_values(explode(\" \", $extensions[0]))[0];\n\
+    \  }\n  $strength = array_search($strengths[array_count_values($classes_to_load)[0]],\
+    \ $strengths);\n  $class_name = preg_replace('/[^A-Z]+/', '', $class_name);\n\
+    \  return $class_name . '.' . implode('.', array_keys($classes_to_load));\n}",
+  "    foreach ($extensions as $ext) {\n        $ext_caps = str_split($ext, 2);\n\
+    \        $ext_sm = count($ext_caps) - 1;\n        $str_score = 0;\n        for\
+    \ ($i = 0; $i < count($ext_caps); $i++) {\n            $str_score += ord($ext_caps[$i])\
+    \ - ord($ext_caps[$i]);\n            $str_score -= ord($ext_caps[$i]) - ord($ext_caps[$i]);\n\
+    \        }\n        if ($str_score == 0) {\n            throw new Exception(\"\
+    Cannot compute strongest extension, no capitals.\");\n        }\n        $str_score\
+    \ /= $str_score;\n        if ($str_score > $ext_sm) {\n            continue;\n\
+    \        }\n        if ($str_score > 1) {\n            return $class_name.$ext;\n\
+    \        }\n    }\n    throw new Exception(\"No extensions were found.\");\n}\n\
+    </code>\n<|/ a dscore=0 tags=php,algorithm,string |>\n<| c |>\nHi, Thanks for\
+    \ your answer but this not seems to be an optimized method compared to the accepted\
+    \ answer. I am not sure where it can be optimized. Also, I tried your solution\
+    \ and it works but there is a small bug in the code, it gives error while checking\
+    \ for 'C' in the following case: 'CC'. 'CC' should be 'C' because capital C should\
+    \ come before lower case c.\n<|/ c |>\n<| c |>\nThe error is because `if ($str_score\
+    \ == 0) {` should use `==`. I've corrected this in the code. There is still a\
+    \ bug to correct, though. I haven't solved it yet. I'll do that and get back to\
+    \ you.\n<|/ c |>\n<| c |>\nI've added a corrected version of your code to the\
+    \ answer above. I've also added the tests that you mentioned in the question.\n\
+    <|/ c |>\n<| a dscore=0 tags=php,algorithm,string |>\nThis should do it\n<code>",
+  "    $strengths = array();\n    foreach ($extensions as $extension) {\n        $strength\
+    \ = ucfirst(strlen($extension) - strtolower($extension));\n        $strengths[$extension]\
+    \ = $strength;\n    }\n    usort($strengths, 'strnatcmp');\n    return $class_name\
+    \ . '.' . key($strengths);\n}", "    $total_strength = 0;\n    $total_ext = 0;\n\
+    \    foreach ($extensions as $ext) {\n        $cap = strtoupper($ext);\n     \
+    \   $sm = strtolower($ext);\n        $cap = $cap - $sm;\n        $total_ext +=\
+    \ $cap;\n        $total_strength += $cap * $sm;\n    }\n    $strength = abs($total_strength);\n\
+    \    if ($strength == 0) {\n        return $class_name;\n    }\n    $exts_sorted\
+    \ = array_merge($extensions, [$class_name => 1]);\n    $exts_sorted = array_flip($exts_sorted);\n\
+    \    ksort($exts_sorted);\n    $ext = array_search($total_strength, $exts_sorted);\n\
+    \    return $exts_sorted[$ext];\n}\n</code>\n<|/ a tags=php dscore=0 |>\n<| c\
+    \ |>\nWhat is this supposed to do? Where does it say that he has to pass the class\
+    \ name? What is this supposed to do? Where does it say that he has to pass the\
+    \ extension name? What is this supposed to do? What is this supposed to do? What\
+    \ is this supposed to do? What is this supposed to do?\n<|/ c |>\n<| c |>\n: You're\
+    \ right, I missed the class name. I've added some comments in the code above.\n\
+    <|/ c |>\n<| c |>\nAnd what about that $extensions variable ? You still didn't\
+    \ answer the question of what it is, and what it should contain.\n<|/ c |>\n<|\
+    \ c |>\n: I've added some comments to my answer above.\n<|/ c |>\n<| c |>\nBut\
+    \ that still doesn't explain what to pass to it? And what does it do?\n<|/ c |>\n\
+    <| a tags=php dscore=0 |>\n<code>\n<?php", "    \n    $extension_count = count($extensions);\n\
+    \    $class_name = ucfirst($class_name); // Capitalize the first letter\n    $class_name_count\
+    \ = strlen($class_name); // Get the length of the class name\n    $strength =\
+    \ -1; // Default value if the class's name is not found\n    $found = false; //\
+    \ True if a matching extension was found (otherwise false)\n\n    for ($i = 0;\
+    \ $i < $extension_count; $i++) {\n        $extension = strtolower($extensions[$i]);\n\
+    \        $extension_length = strlen($extension);\n        $extension_count_by_length\
+    \ = strlen($extensions[$i]) / 2;\n        $extension_count_by_class_length = strlen(strtolower($extensions[$i]))\
+    \ / 2;\n        // Find the shortest extension name\n        if ($extension_count_by_length\
+    \ < $extension_count_by_class_length) {\n            $class_name_length = $extension_count_by_class_length;\n\
+    \        } else {\n            $class_name_length = $extension_count_by_length;\n\
+    \        }\n        // Check if extension has a match by comparing extension length\
+    \ and class name\n        if ($class_name_length < $extension_length) {\n    \
+    \        $class_name = strtolower($class_name . $extensions[$i]);\n          \
+    \  $found = true;\n            $strength = abs($class_name_length - $extension_length);\n\
+    \        }\n    }\n    if (!$found) {\n        // If no matching extension was\
+    \ found return default\n        $strength = 0;\n    }\n\n    return $class_name\
+    \ . '.' . $extensions[$strength];\n}\n", "    $class = StrToUpper($class_name);\n\
+    \    $strengths = array();\n    foreach ($extensions as $extension) {\n      \
+    \  $class_name = StrToUpper($class_name . '.' . $extension);\n        $strengths[$extension]\
+    \ = substr_count($class_name, $class);\n    }\n    arsort($strengths);\n    $strongest\
+    \ = null;\n    foreach ($extensions as $key => $extension) {\n        if ($strengths[$key]\
+    \ == 1) {\n            $strongest = $extension;\n            break;\n        }\n\
+    \        if ($strengths[$key] == -1) {\n            $strongest = $extension;\n\
+    \        }\n    }\n    return $class . '.' . $strongest;\n}", "  $caps = preg_grep('/^[A-Z]/',\
+    \ $extensions);\n  $sms = preg_grep('/^[a-z]/', $extensions);\n  $caps_count =\
+    \ array_count_values($caps);\n  $sms_count = array_count_values($sms);\n  arsort($caps_count);\n\
+    \  arsort($sms_count);\n  $max_count = max($caps_count, $sms_count);\n  $min_count\
+    \ = min($caps_count, $sms_count);\n  $strength_extensions = [];\n  foreach ($extensions\
+    \ as $extension) {\n    $cap = preg_match('/^[A-Z]/i', $extension) ? 1 : 0;\n\
+    \    $sm = preg_match('/^[a-z]/i', $extension) ? 1 : 0;\n    $cap_or_sm = $cap\
+    \ || $sm;\n    if ($max_count - $min_count + $cap_or_sm == 0) {\n      return\
+    \ $class_name . $extension;\n    }\n    $strength_extensions[] = $class_name .\
+    \ $extension;\n  }\n  return $strength_extensions[0];\n}\n</code>\nThe output\
+    \ is:\n<code>\narray(4) {\n  [\"SErviNGSliCes\"]=>\n  string(5) \"Slices\"\n \
+    \ [\"Cheese\"]=>\n  string(5) \"Cheese\"\n  [\"StuFfed\"]=>\n  string(9) \"StuFfed\"\
+    \n  [\"AiSayi\"]=>\n  string(8) \"AiSayi\"\n}\n</code>\n<|/ a tags=php,arrays\
+    \ dscore=0 |>\n<| c |>\nThanks for your answer, it's very helpful for me and I\
+    \ can understand it more easier.\n<|/ c |>\n<| c |>\nYou are welcome. Happy coding!\n\
+    <|/ c |>\n<| a dscore=0 |>\n<code>", "    $class_list = array();\n    $strongest\
+    \ = null;\n    foreach ($extensions as $extension) {\n        $class_list[$extension]\
+    \ = strtolower($class_name) . substr($extension, 0, 1);\n        if ($extension\
+    \ != strtolower($class_name) . substr($extension, 0, 1)) {\n            if (isset($class_list[$extension])\
+    \ && $class_list[$extension] > 0) {\n                unset($class_list[$extension]);\n\
+    \            }\n        }\n    }\n    // print_r($class_list);\n    foreach ($class_list\
+    \ as $key => $value) {\n        $strongest = (strlen($value) > strlen($strongest)\
+    \ ? $key : $strongest);\n    }\n    // print_r($strongest);\n    return $strongest;\n\
+    }\n\nclass A {\n    function __construct() {\n        echo __METHOD__ . \"\\n\"\
+    ;\n    }\n\n    public function test() {\n        echo __METHOD__ . \"\\n\";\n\
+    \    }\n}\n\nclass B extends A {\n    public function __construct() {\n      \
+    \  echo __METHOD__ . \"\\n\";\n    }\n    public function test() {\n        echo\
+    \ __METHOD__ . \"\\n\";\n    }\n}\n\nclass C extends B {\n    public function\
+    \ __construct() {\n        echo __METHOD__ . \"\\n\";\n    }\n    public function\
+    \ test() {\n        echo __METHOD__ . \"\\n\";\n    }\n}\n\nclass D extends C\
+    \ {\n    public function __construct() {\n        echo __METHOD__ . \"\\n\";\n\
+    \    }\n    public function test() {\n        echo __METHOD__ . \"\\n\";\n   \
+    \ }\n}\n\nclass E extends D {\n    public function __construct() {\n        echo\
+    \ __METHOD__ . \"\\n\";\n    }\n    public function test() {\n        echo __METHOD__\
+    \ . \"\\n\";\n    }\n}\n\nclass F extends E {\n    public function __construct()\
+    \ {\n        echo __METHOD__ . \"\\n\";\n    }\n    public function test() {\n\
+    \        echo __METHOD__ . \"\\n\";\n    }\n}\n\nclass G extends F {\n    public\
+    \ function __construct() {\n        echo __METHOD__ . \"\\n\";\n    }\n    public\
+    \ function test() {\n        echo __METHOD__ . \"\\n\";\n    }\n}\n\n$obj = new\
+    \ F();\n$obj->test();\n$obj = new G();\n$obj->test();\n</code>\n<|/ a tags=oop,php\
+    \ |>\n<| c |>\nThank you. I'll be using this as an inspiration to solve my problem.\n\
+    <|/ c |>\n<| a dscore=2 |>\nI came up with an alternate answer for you, it's based\
+    \ off ", "  \n  $strengths = array();\n  \n  foreach ($extensions as $extension)\
+    \ {\n    if (preg_match(\"/^$extension\\$/i\", $class_name)) {\n      $strength\
+    \ = strlen($extension) - strlen(strtolower($extension));\n    }\n    $strengths[$extension]\
+    \ = $strength;\n  }\n\n  $strengths = array_flip($strengths);\n  $strength = array_search(-1,\
+    \ $strengths);\n  $strongest_extension = array_keys($strengths, $strength);\n\n\
+    \  if (count($strongest_extension) > 1) {\n    foreach ($strongest_extension as\
+    \ $strongest_extension_key) {\n      $strengths[$strongest_extension_key] = 0;\n\
+    \    }\n    arsort($strengths);\n  }\n  return $class_name . \".\" . $strongest_extension[0];\n\
+    }\n", "  \n  sort($extensions, SORT_NUMERIC);\n  foreach ($extensions as $ext)\
+    \ {\n    if (strlen($ext) == 0) {\n      continue;\n    }\n    $length = strlen($ext)\
+    \ - 1;\n    $lowercase_length = strlen(strtolower($ext));\n    if ($lowercase_length\
+    \ <= $length) {\n      $length = $lowercase_length;\n    }\n    $class_length\
+    \ = strlen($class_name);\n    $extension_length = strlen($ext);\n    $strength\
+    \ = $class_length - $extension_length;\n    $strength = $strength / $length;\n\
+    \    if ($strength == 1) {\n      return $class_name . \".\" . $ext;\n    }\n\
+    \  }\n  \n  return $class_name . \".\" . $extensions[0];\n}\n", "  sort($extensions);\n\
+    \  $best_strength = 0;\n  $best_class = $class_name;\n  foreach ($extensions as\
+    \ $extension) {\n    $class_name = $class_name . '.' . $extension;\n    $extension_strength\
+    \ = strlen(ucfirst($extension));\n    if ($extension_strength > $best_strength)\
+    \ {\n      $best_strength = $extension_strength;\n      $best_class = $class_name;\n\
+    \    }\n  }\n  return $best_class;\n}\n", "    $strength = -1;\n    foreach ($extensions\
+    \ as $extension) {\n        if (StrongestExtensionName($class_name, $extension)\
+    \ == $class_name) {\n            $strength = $extension;\n            break;\n\
+    \        }\n    }\n    return $class_name . '.' . $strength;\n}", "    $strongest_extension\
+    \ = null;\n    $strongest_extension_count = null;\n    $class_count = null;\n\
+    \    \n    foreach ($extensions as $extension) {\n        if (class_exists($class_name.\
+    \ '.' . $extension)) {\n            $class_count = $class_count + 1;\n       \
+    \ }\n    }\n    \n    if ($class_count == 0) {\n        echo \"No extensions could\
+    \ be loaded!\";\n    }\n    else if ($class_count == 1) {\n        $extension_count\
+    \ = count($extensions);\n        $strongest_extension_count = $extension_count;\n\
+    \        $strongest_extension = substr($extensions, 1);\n        $strongest_extension\
+    \ = substr($strongest_extension, 1); \n    }\n    else if ($class_count > 1) {\n\
+    \        $extension_count = count($extensions);\n        $strongest_extension_count\
+    \ = $extension_count;\n        foreach ($extensions as $key => $extension) {\n\
+    \            $extension = substr($extension, 1); \n            if ($strongest_extension_count\
+    \ == $extension_count) {\n                $strongest_extension = $extension;\n\
+    \                $strongest_extension_count = $extension_count;\n            }\n\
+    \        }\n    }\n\n    return $class_name . '.' . $strongest_extension;\n}",
+  "  $strength = -1;\n  $strongest = '';\n\n  foreach ($extensions as $extension)\
+    \ {\n    $extension = ucfirst($extension);\n\n    if (preg_match(\"/^(.{$class_name}$extension)$/\"\
+    , $class_name, $matches)) {\n      $count = substr_count($class_name, $extension);\n\
+    \      $strength = $count * $extension;\n      $strongest = $class_name . $extension;\n\
+    \    }\n  }\n\n  return $strongest;\n}", "    $map = [];\n    $count = 0;\n  \
+    \  foreach($extensions as $extension) {\n        $map[$extension] = $count;\n\
+    \        $count += strlen($extension);\n    }\n    \n    foreach($extensions as\
+    \ $extension) {\n        $length = strlen($extension);\n        \n        $i =\
+    \ $map[$extension];\n        \n        if ($i == 0) {\n            $i = $length;\n\
+    \        }\n        \n        $map[$extension] = $length;\n        $count = $map[$extension]\
+    \ - $i;\n    }\n\n    $result = '';\n    foreach ($map as $name => $length) {\n\
+    \        $result .= $class_name.$name.'.';\n    }\n    $result = substr($result,\
+    \ 0, strlen($class_name));\n    \n    if ($count > 0) {\n        foreach ($map\
+    \ as $name => $length) {\n            $result .= $name.'(';\n            \n  \
+    \          for ($i = 0; $i < $count; $i++) {\n                $result .= '.';\n\
+    \            }\n            $result .= ')';\n        }\n    }\n    \n    return\
+    \ $result;\n}\n", "    sort($extensions);\n    $strongest_extension = null;\n\
+    \    $strength = -999999;\n    foreach ($extensions as $extension) {\n       \
+    \ $cap = count($extension);\n        $sm = strlen($extension);\n        $frac\
+    \ = $cap - $sm;\n        if ($frac > 0) {\n            $strength = abs($frac /\
+    \ $cap);\n        }\n        if ($class_name == $extension) {\n            $strongest_extension\
+    \ = $extension;\n            break;\n        } else if ($strongest_extension ===\
+    \ null && $strength > 0) {\n            $strongest_extension = $extension;\n \
+    \       }\n    }\n    return $strongest_extension;\n}\n", "    $extension_map\
+    \ = array();\n    foreach ($extensions as $extension) {\n        $extension_map[strtolower($extension)]\
+    \ = $extension;\n    }\n    \n    $strength = -1;\n    \n    foreach ($extension_map\
+    \ as $extension => $class) {\n        $strength = round($extension_map[$extension]\
+    \ - strtolower($class), 1);\n        if ($strength > 0) {\n            break;\n\
+    \        }\n    }\n    \n    return $class_name . $extensions[$strength];\n}\n",
+  "  asort($extensions);\n  $count = array_count_values($extensions);\n  $highest\
+    \ = array();\n  foreach ($count as $ext => $num) {\n    $highest[$ext] = $num;\n\
+    \  }\n  $index = 0;\n  $found = false;\n  foreach ($extensions as $ext) {\n  \
+    \  if ($found === true) {\n      break;\n    }\n    $index++;\n    if ($highest[$index]\
+    \ >= $highest[$ext]) {\n      $highest[$ext] = $index;\n      $found = true;\n\
+    \    }\n  }\n  return $class_name.$highest[$index];\n}", "    $sorted_extensions\
+    \ = array();\n    foreach ($extensions as $extension) {\n        if (preg_match('/^([A-Z])/',\
+    \ $extension)) {\n            $sorted_extensions[] = $extension;\n        }\n\
+    \    }\n    sort($sorted_extensions);\n    $sorted_extensions = array_reverse($sorted_extensions);\n\
+    \    $strength = 0;\n    foreach ($sorted_extensions as $extension) {\n      \
+    \  if (preg_match('/^([A-Z])/', $extension)) {\n            $letter = $extension;\n\
+    \            $strongest = false;\n            foreach ($sorted_extensions as $next_extension)\
+    \ {\n                if (preg_match('/^([a-z])/', $next_extension)) {\n      \
+    \              $next_letter = $next_extension;\n                    if (preg_match('/^([A-Z])/',\
+    \ $next_letter)) {\n                        if (preg_match('/^([A-Z])/', $letter))\
+    \ {\n                            $strongest = true;\n                        \
+    \    break;\n                        }\n                    }\n              \
+    \  }\n            }\n            if ($strongest) {\n                $strength++;\n\
+    \            }\n        }\n    }\n    if ($strength > 0) {\n        return $class_name\
+    \ . '.' . $sorted_extensions[0];\n    } else {\n        return $class_name . '.NONE';\n\
+    \    }\n}", "    sort($extensions);\n    $strengths = array();\n    foreach ($extensions\
+    \ as $i => $extension) {\n        $strongest = strtolower(substr($extension, 0,\
+    \ 1));\n        $strongest_num = (int) preg_replace('/[a-z]/', '', $strongest);\n\
+    \        $strengths[$strongest][] = $strongest_num;\n    }\n    asort($strengths);\n\
+    \    $max_num = 0;\n    $max_extension = '';\n    foreach ($strengths as $strongest\
+    \ => $strength) {\n        $num_chars = count($extensions) - $i;\n        $num_chars\
+    \ += $strongest;\n        $ratio = ($num_chars / $class_strlen) * $strength;\n\
+    \        if ($ratio > $max_num) {\n            $max_extension = $strongest;\n\
+    \            $max_num = $ratio;\n        }\n    }\n    return $class_name . '.'\
+    \ . $max_extension;\n}\n", "  $extensions_count = count($extensions);\n  $strongest\
+    \ = -1;\n  for ($i = 0; $i < $extensions_count; $i++) {\n    $strongest += strlen($extensions[$i]);\n\
+    \  }\n  $strongest *= pow(26, 3 - strlen($class_name));\n  for ($i = 0; $i < $extensions_count;\
+    \ $i++) {\n    $strongest += strlen($extensions[$i]);\n  }\n  return $class_name\
+    \ . '.' . substr($class_name, 0, -(strlen($extensions[$extensions_count - 1])\
+    \ + 1));\n}\n</code>\n<|/ a dscore=3 tags=performance,php,algorithm |>\n<| a dscore=3\
+    \ |>\nHow about this:\n<code>\nclass X {\n    function X($str) {\n        $this->str\
+    \ = $str;\n    }\n    function __toString() {\n        return $this->str;\n  \
+    \  }\n}\n", "    // Write your code here\n    $strongest_extension = -1;\n   \
+    \ foreach($extensions as $extension){\n        $cap = substr_count($extension,'A');\n\
+    \        $sm = substr_count($extension,'a');\n        $diff = abs($cap - $sm);\n\
+    \        if($diff > $strongest_extension){\n            $strongest_extension =\
+    \ $extension;\n        }\n    }\n    return $class_name.$strongest_extension;\n\
+    }\n", "  $extensions_count = count($extensions);\n  $strength = 0;\n  for($i =\
+    \ 0; $i < $extensions_count; $i++) {\n    $lowercase_letter = strtolower($extensions[$i]);\n\
+    \    $uppercase_letter = strtoupper($extensions[$i]);\n    $letters_count = strlen($lowercase_letter);\n\
+    \    $strength_part = $letters_count - $uppercase_letter;\n    // Increase the\
+    \ strength by the fractional value of the character count\n    $strength += $strength_part;\n\
+    \  }\n  return $class_name . '.' . strtoupper($extensions[0]);\n}\n</code>\n<|/\
+    \ a dscore=1 |>\n<| c |>\nThe answer was very helpful and it worked for me. Thanks.\
+    \ But the code is not complete. It should be complete. :)\n<|/ c |>\n<| c |>\n\
+    Sir can you please check this question https://stackoverflow.com/questions/63479842/how-to-find-the-strongest-extension-using-php\n\
+    <|/ c |>\n<| c |>\nHi, I've added a code example on how to add your extension\
+    \ into my code. Have a look and tell me if it works for you. :)\n<|/ c |>\n<|\
+    \ a |>\nThe code below will find the longest extension from a class name given\
+    \ and return the class name and the extension.\n<code>", "  // We will add all\
+    \ the possible extensions and then sort them by the strength\n  $possible_extensions\
+    \ = array_combine($extensions, $extensions);\n\n  // Sort by the strength of extension\n\
+    \  uasort($possible_extensions, function ($a, $b) use ($class_name) {\n    $a1\
+    \ = substr_count(strtolower($a), strtolower($class_name));\n    $b1 = substr_count(strtolower($b),\
+    \ strtolower($class_name));\n\n    // If there are no lowercase letters then they\
+    \ are equally strong\n    if ($a1 == 0) {\n      return 1;\n    }\n    if ($b1\
+    \ == 0) {\n      return -1;\n    }\n    // If the number of lowercase letters\
+    \ is greater than the number of uppercase letters \n    // they are equally strong\n\
+    \    if ($a1 > $b1) {\n      return 1;\n    }\n    if ($b1 > $a1) {\n      return\
+    \ -1;\n    }\n    // If the number of lowercase letters is equal to the number\
+    \ of uppercase letters \n    // then we sort by the order of the letters\n   \
+    \ return strcmp($a, $b);\n  });\n\n  return reset($possible_extensions);\n}\n\
+    </code>\nThis uses the PHP uasort function (in descending order) along with the\
+    \ PHP substr_count function (in descending order) to sort the extensions based\
+    \ on the number of lowercase and uppercase letters they contain.\nThe uasort function\
+    \ will sort all the extensions according to their strength.\nThe substr_count\
+    \ function will count the number of times a substring occurs in a string.\nIn\
+    \ descending order this means that the first extension with the highest strength\
+    \ will be the strongest extension.\nAs soon as a comparison is made, the return\
+    \ value of the uasort function is used to sort the extensions again.\nThe array_combine\
+    \ function is used to merge the two arrays back into one.\nThe uasort function\
+    \ is being used here because we want to sort the extension by their strength but\
+    \ we also want to return their name if they are equal strength.\nWe use the return\
+    \ value of the uasort function to return the name of the strongest extension.\n\
+    Here is a demo of the above code working:\n\n<code>\n/* \n * You will be given\
+    \ the name of a class (a string) and a list of extensions.\n * The extensions\
+    \ are to be used to load additional classes to the class. The\n * strength of\
+    \ the extension is as follows: Let CAP be the number of the uppercase\n * letters\
+    \ in the extension's name, and let SM be the number of lowercase letters \n *\
+    \          in the extension's name, the strength is given by the fraction CAP\
+    \ - SM. \n *          You should find the strongest extension and return a string\
+    \ in this \n *          format: ClassName.StrongestExtensionName.\n *        \
+    \  If there are two or more extensions with the same strength, you should\n *\
+    \          choose the one ", "\t\n\t// Initialize a counter for each extension\
+    \ \n\t$extensions_counter = [];\n\t\n\t// Loop through extensions\n\tforeach ($extensions\
+    \ as $extension) {\n\t\t// Initialize counter\n\t\t$extension_counter = 0;\n\t\
+    \t\n\t\t// Loop through the letters of the extension\n\t\tfor ($i = 0; $i < strlen($extension);\
+    \ $i++) {\n\t\t\t$letter = $extension[$i];\n\t\t\t\n\t\t\t// Increment letter\
+    \ counter\n\t\t\t$extension_counter += array_key_exists($letter, $extensions_counter)\
+    \ ? $extensions_counter[$letter] : 0;\n\t\t\t\n\t\t\t// Set letter counter for\
+    \ this extension\n\t\t\t$extensions_counter[$letter] = $extension_counter;\n\t\
+    \t}\n\t}\n\t\n\t// Loop through extensions\n\tforeach ($extensions_counter as\
+    \ $letter => $counter) {\n\t\t// Check letter\n\t\tif ($counter == 0) continue;\n\
+    \t\t\n\t\t// Check which extension has the greatest number of letters\n\t\t$greatest_extension\
+    \ = -1;\n\t\t$greatest_extension_index = 0;\n\t\t\n\t\tforeach ($extensions as\
+    \ $i => $extension) {\n\t\t\t$letter_counter = 0;\n\t\t\t\n\t\t\tforeach ($extension\
+    \ as $letter) {\n\t\t\t\t$letter_counter += array_key_exists($letter, $extensions_counter)\
+    \ ? $extensions_counter[$letter] : 0;\n\t\t\t}\n\t\t\t\n\t\t\tif ($letter_counter\
+    \ > $greatest_extension) {\n\t\t\t\t$greatest_extension = $letter_counter;\n\t\
+    \t\t\t$greatest_extension_index = $i;\n\t\t\t}\n\t\t}\n\t\t\n\t\t// Add extension\
+    \ to class\n\t\t$class_name .= $extensions[$greatest_extension_index][0];\n\t\
+    }\n\t\n\t// Return the class name\n\treturn $class_name;\n}", "    $frac = array();\n\
+    \    $max_frac = -1;\n    foreach ($extensions as $key => $value) {\n        $frac[$key]\
+    \ = substr_count($key, $value) / strlen($key);\n        if ($frac[$key] > $max_frac)\
+    \ {\n            $max_frac = $frac[$key];\n        }\n    }\n    $i = 0;\n   \
+    \ foreach ($frac as $key => $value) {\n        $i++;\n    }\n    $i = 0;\n   \
+    \ $str_extension = substr($class_name, 0, strpos($class_name, '.'));\n    foreach\
+    \ ($frac as $key => $value) {\n        $i++;\n        if ($i == $max_frac) {\n\
+    \            $str_extension .= $key.'.';\n        }\n    }\n    return $str_extension;\n\
+    }\n", "    if (sizeof($extensions) < 2) throw new \\InvalidArgumentException('At\
+    \ least two extensions must be given.');\n    \n    $strongest_extension = '';\n\
+    \    $extensions_sizes = array();\n    foreach($extensions as $extension) {\n\
+    \        $size = strlen($extension);\n        $extensions_sizes[$extension] =\
+    \ $size;\n        $strongest_extension .= $class_name . '_' . strtoupper($extension)\
+    \ . '.';\n    }\n    \n    ksort($extensions_sizes);\n    $strongest_extension\
+    \ = trim($strongest_extension, '.');\n    \n    $extensions_sizes = array_reverse($extensions_sizes);\n\
+    \    $size_of_extensions_sizes = sizeof($extensions_sizes);\n    for ($i = 0;\
+    \ $i < $size_of_extensions_sizes; $i++) {\n        if ($extensions_sizes[$i] ==\
+    \ 0) continue;\n        if ($extensions_sizes[$i] == $size_of_extensions_sizes\
+    \ - 1) continue;\n        $extension = $extensions[$i];\n        if ($extensions_sizes[$i]\
+    \ == 1) continue;\n        $extension_upper = strtoupper($extension);\n      \
+    \  \n        $extension_last_pos = strrpos($strongest_extension, $extension_upper);\n\
+    \        $extension_last_size = strlen($extension_last_pos);\n        $extension_last_pos\
+    \ = $extension_last_pos - $extension_last_size;\n        $extension_last_pos =\
+    \ strlen($extension_last_pos);\n        $extension_last_pos = round($extension_last_pos);\n\
+    \        if ($extension_last_pos == 0) continue;\n        \n        $extension_last_size_pos\
+    \ = $extensions_sizes[$i] - $extensions_sizes[$i - 1];\n        $extension_last_size_pos\
+    \ = round($extension_last_size_pos);\n        if ($extension_last_size_pos ==\
+    \ 0) continue;\n        \n        if ($extension_last_pos > $extension_last_size_pos)\
+    \ {\n            $extension = $extension_last_pos;\n        }\n        \n    \
+    \    break;\n    }\n    \n    return $strongest_extension . strtoupper($extension);\n\
+    }\n", "  $max_strength = -1;\n  foreach ($extensions as $key => $ext) {\n    $extn\
+    \ = substr($ext, 0, 1);\n    if (ctype_upper($extn) == $extn) {\n      $n = strlen($extn);\n\
+    \      $m = 0;\n      foreach ($extensions as $extn_key => $extn) {\n        if\
+    \ (ctype_upper($extn) == $extn) {\n          $n++;\n          if ($m > $max_strength)\
+    \ {\n            $max_strength = $m;\n            $name = $class_name;\n     \
+    \       $i = $key;\n            $n = strlen($extn);\n          }\n        }\n\
+    \      }\n    }\n  }\n  return $name.$max_strength.$i;\n}\n</code>\n<|/ a |>\n\
+    <| c |>\nNice. I think you could also use a recursive function instead of two\
+    \ loops.\n<|/ c |>\n<| c |>\nThank you for the answer. Can you please explain\
+    \ to me how this works? Also I'm having problems understanding the first for loop\
+    \ in line 2 of your code. I don't get why the `strlen($extn)` is used and why\
+    \ it is compared to `$n`\n<|/ c |>\n<| c |>\n- I used that as an example.  `$extn`\
+    \ is the string of the first letter in the extension name.  If the first letter\
+    \ of `$extn` is uppercase, `strlen()` is used to count the number of letters in\
+    \ the name, and `1` is subtracted from that value to determine the strength value.\n\
+    <|/ c |>\n<| a dscore=2 |>\nThis is my version of my own answer. Thanks for all\
+    \ the other answers posted.\n<code>", "    $strongest_extension = null;\n    $strongest_extension_strength\
+    \ = 0;\n    foreach($extensions as $extension) {\n        // get the number of\
+    \ uppercase letters in the extension\n        $count_uppercase = preg_match_all('/[A-Z]/',\
+    \ $extension, $count_upper);\n        $count_lowercase = preg_match_all('/[a-z]/',\
+    \ $extension, $count_lower);\n        // calculate the strength of the extension\n\
+    \        $strongest_extension_strength = $count_uppercase - $count_lowercase;\n\
+    \        // check if the extension is in the list of extensions\n        if(in_array($extension,\
+    \ $extensions)) {\n            if($strongest_extension_strength > $strongest_extension_strength)\
+    \ {\n                $strongest_extension = $extension;\n                $strongest_extension_strength\
+    \ = $strongest_extension_strength;\n            }\n        }\n    }\n    return\
+    \ $class_name.$strongest_extension;\n}", "    $classStrength = 1;\n    foreach\
+    \ ($extensions as $ext) {\n        if (preg_match(\"/^$ext$/\", $class_name))\
+    \ {\n            $classStrength = $classStrength * (strlen($ext) - strlen(strtoupper($ext)));\n\
+    \        }\n    }\n    return $class_name . '.' . StrongestExtension($classStrength);\n\
+    }\n", "    $class_name = ucfirst($class_name);\n    $extensions = array_map('ucfirst',\
+    \ $extensions);\n    $strength = [];\n    foreach ($extensions as $extension)\
+    \ {\n        $extension = ucfirst($extension);\n        $class = $class_name .\
+    \ '.' . $extension;\n        if (isset($strength[$class])) {\n            $strength[$class]++;\n\
+    \        } else {\n            $strength[$class] = 1;\n        }\n    }\n    ksort($strength);\n\
+    \    foreach ($strength as $key => $value) {\n        if ($value == 1) {\n   \
+    \         $extensions[$key] = $key;\n        }\n    }\n    return implode('.',\
+    \ $extensions);\n}\n</code>\n<|/ a tags=php,algorithm dscore=2 |>\n<| a dscore=1\
+    \ tags=php,algorithm |>\nA simple way would be to iterate through all the letters\
+    \ and count how many times each letter occurs, then return the one with the most\
+    \ occurrences.\n<|/ a |>\n<| c |>\nThe issue with this approach is that if you\
+    \ have two words with the same number of letters, then this answer would return\
+    \ the alphabetically first one.\n<|/ c |>\n<| c |>\nTrue. But you can always sort\
+    \ them first. I'll update my answer if I get time.\n<|/ c |>\n<| a |>\nYou can\
+    \ iterate over all 26 letters and use a counter to count the amount of times each\
+    \ letter occurs in a given word.\n<code>\n$a = \"aardvark\";\n$b = \"aardwolf\"\
+    ;\n$c = \"aardwolf\";\n\n$alphabet = range('a', 'z');\n$letter_count = array_count_values($alphabet);\n\
+    \n$results = [];\n\nforeach ($letter_count as $letter) {\n    $results[$letter]\
+    \ = $letter;\n}\n\nforeach ($results as $letter => $count) {\n    if ($count >\
+    \ 1) {\n        $results[$letter] = $letter;\n    }\n}\n\nvar_dump($results);\n\
+    </code>\n<|/ a dscore=1 tags=php,algorithm |>\n<| a dscore=1 |>\nFirst of all,\
+    \ the algorithm is pretty much straightforward:\n\nMake a string of all letters\
+    \ of your word (including 'a' and 'z')\nSort the string in ascending order (for\
+    \ example, 'a' comes before 'z')\nCount the number of occurences of each letter\n\
+    \nThe key point here is step 3. Here's some Python code that does it:\n<code>\n\
+    from collections import defaultdict\ndef most_common(lst):\n    cnt = defaultdict(int)\n\
+    \    for x in lst:\n        cnt[x] += 1\n    return max(cnt.iteritems(), key=lambda\
+    \ x:x[1])[0]\n", "  ksort($extensions);\n  $class_name = preg_replace('/[^A-Z]/',\
+    \ '', $class_name); // removes non letters\n  $class_name = preg_replace('/[^a-zA-Z]/',\
+    \ '', $class_name); // removes non letters\n  $class_name = preg_replace('/[^a-zA-Z0-9]/',\
+    \ '', $class_name); // removes non letters\n  $class_name = preg_replace('/_/',\
+    \ '', $class_name); // removes non letters\n  $class_name = preg_replace('/[^A-Z0-9]/',\
+    \ '', $class_name); // removes non letters\n  $class_name = strtoupper($class_name);\
+    \ // converts to uppercase\n  $class_name = str_replace('.', '', $class_name);\
+    \ // removes dot\n  $class_name = preg_replace('/[^A-Z]/', '', $class_name); //\
+    \ removes non letters\n  $class_name = preg_replace('/[^a-zA-Z]/', '', $class_name);\
+    \ // removes non letters\n  $class_name = preg_replace('/[^a-zA-Z0-9]/', '', $class_name);\
+    \ // removes non letters\n  $class_name = preg_replace('/_/', '', $class_name);\
+    \ // removes non letters\n  $class_name = preg_replace('/[^A-Z0-9]/', '', $class_name);\
+    \ // removes non letters\n  sort($extensions);\n  $strength = 0;\n  foreach ($extensions\
+    \ as $extension) {\n    if (preg_match(\"/^$class_name$extension$/i\", $class_name))\
+    \ {\n      $strength += strlen($extension);\n    }\n  }\n  return($class_name\
+    \ . $extensions[array_search($strength, $extensions)]);\n}\n", "    sort($extensions);\n\
+    \    $max = count($extensions) - 1;\n    for ($i = 0; $i < $max; $i++) {\n   \
+    \     $min = max(0, $max - $i);\n        if ($extensions[$i] === $extensions[$min])\
+    \ {\n            $min++;\n        }\n        $diff = $max - ($min + 1);\n    \
+    \    if ($extensions[$i] === $class_name . '.' . $extensions[$min]) {\n      \
+    \      return $class_name . '.' . $extensions[$min];\n        } elseif ($diff\
+    \ > 1) {\n            return $class_name . '.' . $extensions[$min];\n        }\n\
+    \    }\n    return $class_name;\n}\n</code>\n<|/ a dscore=1 tags=php |>\n<| c\
+    \ |>\nHi Mark, I am very sorry but I have not seen the post that you mentioned\
+    \ above. I am very new to PHP programming. I would like to ask you one more question.\
+    \ Can you help me by telling me what to do in the code given above so that I can\
+    \ get the desired output? If you don't mind, I would be very thankful to you if\
+    \ you help me.\n<|/ c |>\n<| c |>\nI suggest you post this question on Stack Overflow\
+    \ instead of on Stack Overflow's [PHP chat room](http://chat.stackoverflow.com/rooms/18/php).\
+    \  They have a much larger community than here on Stack Overflow.\n<|/ c |>\n\
+    <| c |>\nI have posted it on Stack Overflow also. Can you please help me out in\
+    \ this regard?\n<|/ c |>\n<| c |>\nI posted an answer to your question on Stack\
+    \ Overflow.  Please mark it as accepted if you agree with it.\n<|/ c |>\n<| a\
+    \ tags=php |>\nIf you're looking for a way to shorten the function name, you can\
+    \ use the $class_name variable in the function itself.\nSo if you have a function\
+    \ like:\n<code>", "    $best_extension_strength = -1;\n    $best_extension = '';\n\
+    \    foreach($extensions as $extension) {\n        $class_name_with_extension\
+    \ = strtolower($class_name) . '.' . $extension;\n        if (strpos($class_name_with_extension,\
+    \ $best_extension_strength) !== false) {\n            // We have an equal extension,\
+    \ so use the first one found.\n            $best_extension_strength = strpos($class_name_with_extension,\
+    \ $best_extension_strength);\n            $best_extension = $extension;\n    \
+    \    }\n    }\n    return strtolower($class_name) . '.' . $best_extension;\n}\n",
+  "    $max = 0;\n    $strongest_ext = '';\n    foreach ($extensions as $ext) {\n\
+    \        // Find the fraction of the CAP letters in the extension\n        $fraction\
+    \ = substr_count(strtoupper($ext), 'A') - substr_count(strtoupper($ext), 'a');\n\
+    \        if ($fraction > 0) {\n            $frac = $fraction;\n        }\n   \
+    \     else {\n            $frac = 1;\n        }\n        // Find the fraction\
+    \ of the SM letters in the extension\n        $strongest_ext .= substr($ext, 0,\
+    \ 1) . substr($ext, 1, $frac);\n    }\n    return $class_name . '.' . $strongest_ext;\n\
+    }\n", "    sort($extensions);\n    foreach ($extensions as $extension) {\n   \
+    \     $pos = strpos($class_name, $extension);\n        if ($pos === 0) {\n   \
+    \         return $class_name;\n        }\n        $classname = substr($class_name,\
+    \ 0, $pos);\n        $extension_pos = strpos($extension, $class_name);\n     \
+    \   if ($extension_pos === 0) {\n            return $classname.$extension;\n \
+    \       }\n        $extension_pos++;\n        $extension_pos = strpos($extension,\
+    \ $class_name, $extension_pos);\n        if ($extension_pos === 0) {\n       \
+    \     return $classname.$extension;\n        }\n        $extension_pos++;\n  \
+    \      if ($extension_pos === 0) {\n            return $classname.$extension;\n\
+    \        }\n        $extension_pos++;\n        $extension_pos = strpos($extension,\
+    \ $class_name, $extension_pos);\n        $extension_pos++;\n        if ($extension_pos\
+    \ === 0) {\n            return $classname.$extension;\n        }\n        $extension_pos++;\n\
+    \        $extension_pos = strpos($extension, $class_name, $extension_pos);\n \
+    \       $extension_pos++;\n        $extension_pos = strpos($extension, $class_name,\
+    \ $extension_pos);\n        $extension_pos++;\n        $extension_pos = strpos($extension,\
+    \ $class_name, $extension_pos);\n        $extension_pos++;\n        $extension_pos\
+    \ = strpos($extension, $class_name, $extension_pos);\n        $extension_pos++;\n\
+    \        $extension_pos = strpos($extension, $class_name, $extension_pos);\n \
+    \       $extension_pos++;\n        $extension_pos = strpos($extension, $class_name,\
+    \ $extension_pos);\n        $extension_pos++;\n        $extension_pos = strpos($extension,\
+    \ $class_name, $extension_pos);\n        $extension_pos++;\n        $extension_pos\
+    \ = strpos($extension, $class_name, $extension_pos);\n        $extension_pos++;\n\
+    \        $extension_pos = strpos($extension, $class_name, $extension_pos);\n \
+    \       $extension_pos++;\n        $extension_pos = strpos($extension, $class_name,\
+    \ $extension_pos);\n        $extension_pos++;\n        $extension_pos = strpos($extension,\
+    \ $class_name, $extension_pos);\n        $extension_pos++;\n        $extension_pos\
+    \ = strpos($extension, $class_name, $extension_pos);\n        $extension_pos++;\n\
+    \        $extension_pos = strpos($extension, $class_name, $extension_pos);\n \
+    \       $extension_pos++;\n        $extension_pos = strpos($extension, $class_name,\
+    \ $extension_", "    $extensions_size = count($extensions);\n    $best_extension\
+    \ = NULL;\n    $best_extension_strength = -1;\n    foreach ($extensions as $extension)\
+    \ {\n        $extension_strength = ucfirst(strlen($extension));\n        if ($extension_strength\
+    \ > $best_extension_strength) {\n            $best_extension_strength = $extension_strength;\n\
+    \            $best_extension = $extension;\n        }\n    }\n    return $class_name\
+    \ . '.' . $best_extension;\n}\n", "  // Your code goes here\n  $caps = array_count_values(str_split($class_name));\n\
+    \  arsort($caps);\n  $max_key = $caps[array_keys($caps, max($caps))[0]];\n  arsort($extensions);\
+    \ // sort extensions by strength\n  return $class_name . $max_key . '.' . array_pop($extensions);\n\
+    }\n", "  // Write your code here\n  $new_name = $class_name;\n  foreach ($extensions\
+    \ as $ext) {\n    if (preg_match(\"/$ext/i\", $new_name) != false) {\n      $new_name\
+    \ = preg_replace(\"/$ext/i\", $ext, str_replace($class_name.\".\", \"\", $new_name));\n\
+    \      break;\n    }\n  }\n  return $new_name;\n}\n", "    $strongest = null;\n\
+    \    foreach ($extensions as $extension) {\n        $s = strtoupper($extension)\
+    \ - strtolower($extension);\n        if ($s !== 0) {\n            if (!$strongest)\
+    \ {\n                $strongest = $extension;\n            } else {\n        \
+    \        if ($s < (-1 * $strongest)) {\n                    $strongest = $extension;\n\
+    \                }\n            }\n        }\n    }\n    return $class_name .\
+    \ $strongest;\n}\n", "    $max_strength = 0;\n    $extension_parts = explode('.',\
+    \ $class_name);\n    $class_name = array_shift($extension_parts);\n    foreach\
+    \ ($extension_parts as $extension) {\n        $extension = strtolower($extension);\n\
+    \        $extension_parts = explode('_', $extension);\n        $extension_parts_count\
+    \ = count($extension_parts);\n        if ($extension_parts_count > $max_strength)\
+    \ {\n            $max_strength = $extension_parts_count;\n        }\n    }\n \
+    \   $class_name = implode('.', $extension_parts);\n    $extensions = array_map('strtolower',\
+    \ $extensions);\n    asort($extensions);\n    foreach ($extensions as $extension)\
+    \ {\n        $extension_parts = explode('_', $extension);\n        $extension_parts_count\
+    \ = count($extension_parts);\n        if ($extension_parts_count > $max_strength)\
+    \ {\n            $max_strength = $extension_parts_count;\n        }\n    }\n \
+    \   return $class_name . '.' . implode('.', $extensions);\n}", "  $extensions_count\
+    \ = count($extensions);\n  if($extensions_count < 2) {\n    return $class_name;\n\
+    \  }\n  $max_extension_strength = -PHP_INT_MAX;\n  $max_extension = '';\n  for($i\
+    \ = 0; $i < $extensions_count; $i++) {\n    $extension_strength = strlen($extensions[$i]);\n\
+    \    if($extension_strength > $max_extension_strength) {\n      $max_extension_strength\
+    \ = $extension_strength;\n      $max_extension = $extensions[$i];\n    }\n  }\n\
+    \  return $class_name.$max_extension;\n}\n", "    sort($extensions); //sort the\
+    \ list\n    \n    $ext = explode('.', $class_name); //split the name of the class\n\
+    \    $i = 1;\n    $len = count($ext); //get length of the array\n    $n = 0; //number\
+    \ of upper case letters\n    \n    while ($i < $len) { //count the number of upper\
+    \ case letters in extension\n        $n = $n + (strlen($ext[$i]) - mb_strtoupper($ext[$i],\
+    \ 'UTF-8')); \n        $i++;\n    }\n    \n    $n2 = ($len-1); //count the number\
+    \ of lower case letters\n    while ($n2 < $len) { //count the number of lower\
+    \ case letters in extension\n        $n2 = $n2 + (strlen($ext[$n2]) - mb_strtolower($ext[$n2],\
+    \ 'UTF-8')); \n        $n2++;\n    }\n    \n    $s = $n - $n2; //number of strongest\
+    \ extension\n    \n    if ($s == 0) { //if the number of upper case letters is\
+    \ equal to or less than the number of\n        //lower case letters, this strongest\
+    \ extension cannot be found\n        //(the number of lower case letters is equal\
+    \ to the number of upper case letters)\n        $s = $n; //return the number of\
+    \ upper case letters as the strongest extension\n    }\n    \n    $m = $n2 - $n;\
+    \ //number of extensions with the same number of lower case letters\n    \n  \
+    \  for ($i = 0; $i < $m; $i++) { //loop over all the extensions with the same\
+    \ number of lower case letters\n        $ext = explode('.', $extensions[$i]);\
+    \ //split the name of the class\n        $d = $i - $n; //number of extensions\
+    \ with the same number of upper case letters\n        \n        for ($j = $s;\
+    \ $j >= 0; $j--) { //loop over all the extensions with the same number of upper\
+    \ case letters\n            $d++;\n            if ($d == $j) { //if the number\
+    \ of extensions with the same number of lower case letters \n                \n\
+    \                foreach ($ext as $e) { //loop over all the letters in the extension\n\
+    \                    if ($e != '.') { //if the letter of the extension is not\
+    \ a period\n                        $t = mb_strtoupper($e, 'UTF-8'); //convert\
+    \ the letter to upper case\n                        $t = mb_substr($t, 0, $j);\
+    \ //convert the letter to the first j-th upper case letter\n                 \
+    \       $ext[$j] = $t; //convert the extension letter to the j-th upper case letter\n\
+    \                    }\n                }\n                \n                $class_name\
+    \ = implode('.', $ext); //put the extension letters back together\n          \
+    \      \n                $n = $n - $j; //subtract j from the number of upper case\
+    \ letters\n                \n                $len = count($", "\t$classes = (array)$class_name;\n\
+    \t$sorted_by_strength = array();\n\t\n\tforeach($extensions as $extension) {\n\
+    \t\t$length = strlen($extension);\n\t\t$class_name = substr($extension, 0, $length);\n\
+    \t\t$class_name = $class_name[0];\n\t\t$class_name = strtoupper($class_name);\n\
+    \t\t$strength = -1;\n\t\t$found = false;\n\t\t\n\t\tforeach($classes as $class)\
+    \ {\n\t\t\t$class_length = strlen($class);\n\t\t\t\n\t\t\tif (substr($extension,\
+    \ $length) == substr($class, $class_length)) {\n\t\t\t\t$class_name = $class;\n\
+    \t\t\t\t$strength = $length - $class_length;\n\t\t\t\t$found = true;\n\t\t\t\t\
+    break;\n\t\t\t}\n\t\t}\n\t\t\n\t\tif ($found) {\n\t\t\tif ($strength == -1) {\n\
+    \t\t\t\t$strength = $length + 1;\n\t\t\t}\n\t\t} else {\n\t\t\t$sorted_by_strength[]\
+    \ = $extension;\n\t\t}\n\t}\n\t\n\tif (count($sorted_by_strength) > 0) {\n\t\t\
+    $sorted_by_strength = array_unique($sorted_by_strength);\n\t\t$sorted_by_strength\
+    \ = sort($sorted_by_strength);\n\t\t\n\t\treturn $class_name . $sorted_by_strength[0];\n\
+    \t}\n\t\n\treturn $class_name;\n}\n", "    $max_strength = 0;\n    $i = 0;\n \
+    \   foreach ($extensions as $extension) {\n        $cap = strlen($extension);\n\
+    \        $sm = preg_replace('/\\W/', '', $extension);\n        $s = $cap - $sm;\n\
+    \        if ($s > 0) {\n            if ($s > $max_strength) {\n              \
+    \  $max_strength = $s;\n            }\n        }\n    }\n    return $class_name.$extensions[$i];\n\
+    }\n", "    sort($extensions, SORT_NATURAL);\n    $counter = 0;\n    foreach ($extensions\
+    \ as $extension) {\n        $counter = intval($counter / strlen($extension)) -\
+    \ intval($counter % strlen($extension));\n        if ($counter < 0) {\n      \
+    \      break;\n        }\n    }\n    $strength = abs($counter);\n    $strongest\
+    \ = $class_name . \".\" . $extensions[0];\n    for ($i = 1; $i < count($extensions);\
+    \ $i++) {\n        if ($extensions[$i] == $strongest || $extensions[$i] == $extensions[0])\
+    \ {\n            continue;\n        }\n        $strongest = $extensions[$i];\n\
+    \    }\n    return $strongest;\n}\n", "    $strongest = NULL;\n    foreach ($extensions\
+    \ as $ext) {\n        $fraction = strtoupper(substr($ext, 0, 1)) . strtolower(substr($ext,\
+    \ 1));\n        $strength = array_search($fraction, $class_name) - array_search($fraction,\
+    \ strtolower($class_name));\n        if ($strength > 0) {\n            $strongest\
+    \ = $ext;\n            break;\n        }\n    }\n    return $strongest;\n}\n",
+  "  for ($i = count($extensions) - 1; $i >= 0; $i--) {\n    $letters_cap = substr_count(strtolower($class_name),\
+    \ substr($extensions[$i], 0, strlen($extensions[$i]) - 1));\n    $letters_sm =\
+    \ substr_count(strtolower($class_name), strtolower(substr($extensions[$i], 0,\
+    \ strlen($extensions[$i]) - 1)));\n    if ($letters_cap - $letters_sm > 1)\n \
+    \     return $class_name . \".\" . $extensions[$i];\n  }\n  return $class_name;\n\
+    }", "    // Your code here\n}\n", "    $cap_extensions = array();\n    $sm_extensions\
+    \ = array();\n\n    foreach ($extensions as $extension) {\n        $cap_pos =\
+    \ strpos($extension, '_');\n        $sm_pos = strpos($extension, '-');\n\n   \
+    \     // If there is no underscore in the extension name, the extension's \n \
+    \       // name is alone.\n        if ($cap_pos === false) {\n            $cap_pos\
+    \ = strlen($extension);\n        }\n\n        // If there is no dash in the extension\
+    \ name, the extension's \n        // name is alone.\n        if ($sm_pos === false)\
+    \ {\n            $sm_pos = strlen($extension);\n        }\n\n        $cap_extensions[$cap_pos]\
+    \ = $extension;\n        $sm_extensions[$sm_pos] = $extension;\n    }\n\n    arsort($cap_extensions);\n\
+    \    arsort($sm_extensions);\n\n    $strength = -1;\n    foreach ($extensions\
+    \ as $extension) {\n        if ($cap_extensions[$extension] == $extension) {\n\
+    \            $strength = -1;\n            break;\n        }\n\n        if ($sm_extensions[$extension]\
+    \ == $extension) {\n            $strength = -1;\n            break;\n        }\n\
+    \n        if ($cap_extensions[$extension] > $sm_extensions[$extension]) {\n  \
+    \          $strength = $cap_extensions[$extension] - $sm_extensions[$extension];\n\
+    \            break;\n        }\n\n        if ($cap_extensions[$extension] < $sm_extensions[$extension])\
+    \ {\n            $strength = $sm_extensions[$extension] - $cap_extensions[$extension];\n\
+    \            break;\n        }\n    }\n\n    if ($strength === -1) {\n       \
+    \ // If no extensions were found, just return the name of the class \n       \
+    \ // with no extension in it.\n        return $class_name;\n    } else {\n   \
+    \     // If an extension of the same strength was found, return the class\n  \
+    \      // name with the extension in it.\n        return $class_name . '.' . strtolower($extensions[0]);\n\
+    \    }\n}\n</code>\n<|/ a tags=php |>\n<| c |>\nThank you, I have fixed the bug\
+    \ you mentioned, it works now.\n<|/ c |>\n<| c |>\nNo problem. I really appreciate\
+    \ it that you took the time to make an effort to explain things, it really helps\
+    \ :)\n<|/ c |>\n<| a tags=php |>\n<code>", "  // Write your code here\n}", " \
+    \   sort($extensions);\n    $sum = 0;\n    foreach ($extensions as $ext) {\n \
+    \       $sum += strtoupper($ext) - strtolower($ext);\n    }\n    $strength = -1;\n\
+    \    foreach ($extensions as $ext) {\n        $sum += strtoupper($ext) - strtolower($ext);\n\
+    \        if ($sum >= $strength) {\n            $strength = $sum;\n           \
+    \ $className = explode(\"_\", $class_name);\n            $className = end($className);\n\
+    \            return $className . '.' . implode($extensions, \".\");\n        }\n\
+    \    }\n    return $class_name;\n}\n", "    $strongest_extension_strength = -1;\n\
+    \    foreach ($extensions as $extension) {\n        $class_name_and_extension\
+    \ = strtolower($class_name) . $extension;\n        if (preg_match('/^([A-Z])/',\
+    \ $class_name_and_extension)) {\n            $cap_class_name_and_extension = strtoupper($class_name)\
+    \ . $extension;\n            $strength = substr_count($class_name_and_extension,\
+    \ $cap_class_name_and_extension) / 2;\n            if ($strength > $strongest_extension_strength)\
+    \ {\n                $strongest_extension_strength = $strength;\n            \
+    \    $strongest_extension_class = $class_name;\n                $strongest_extension_extension\
+    \ = $extension;\n            }\n        }\n    }\n    return $class_name . $strongest_extension_extension;\n\
+    }\n", "  if (count($extensions) == 0) {\n    return false;\n  }\n\n  $classes\
+    \ = get_declared_classes();\n  $strongest_extension = array_shift($extensions);\n\
+    \  $classes_with_extensions = array();\n  $number_of_unique_extensions = array();\n\
+    \n  foreach ($classes as $class) {\n    foreach ($extensions as $extension) {\n\
+    \      if (strpos($class, $extension) !== FALSE) {\n        $classes_with_extensions[$class][]\
+    \ = $extension;\n      }\n    }\n  }\n\n  foreach ($classes_with_extensions as\
+    \ $class => $extensions) {\n    $number_of_unique_extensions[$class] = count($extensions);\n\
+    \  }\n\n  arsort($number_of_unique_extensions);\n  $strength = array_search(max($number_of_unique_extensions),\
+    \ $number_of_unique_extensions);\n  if ($strength == 0) {\n    return false;\n\
+    \  }\n  foreach ($extensions as $extension) {\n    if (strpos($class, $extension)\
+    \ !== FALSE) {\n      $strongest_extension = $extension;\n      break;\n    }\n\
+    \  }\n  return $class_name . '.' . $strongest_extension;\n}\n", "    $extension_count\
+    \ = array_count_values($extensions);\n    foreach ($extension_count as $k => $v)\
+    \ {\n        if ($k >= $v) {\n            $strong_extension = $k;\n          \
+    \  break;\n        }\n    }\n\n    if (empty($strong_extension)) {\n        die(\"\
+    No extensions with greatest strength for $class_name\");\n    }\n    $extensions\
+    \ = array_reverse($extensions);\n    $strongest_extension = array_pop($extensions);\n\
+    \    $strongest_extension_class = $class_name . $strongest_extension;\n\n    return\
+    \ $strongest_extension_class;\n}\n", "    sort($extensions);\n    $extension_count\
+    \ = array_count_values($extensions);\n    \n    foreach ($extension_count as $extension\
+    \ => $count) {\n        if ($count == 1) {\n            return $class_name . '.'\
+    \ . $extension;\n        }\n    }\n    \n    $max_extension = end($extensions);\n\
+    \    $max_count = array_search($max_extension, $extension_count);\n    $max_extension_count\
+    \ = end($extension_count);\n    \n    return $class_name . '.' . $max_extension;\n\
+    }\n</code>\n<|/ a |>\n<| c |>\nI'm confused by your explanation about how `$max_extension`\
+    \ is chosen. What do you mean by \"the strongest extension\"? How does it choose\
+    \ the strongest extension if there are two or more extensions with the same strength?\n\
+    <|/ c |>\n<| c |>\nI've added a second example to illustrate how `$max_extension`\
+    \ can be chosen.\n<|/ c |>\n<| a |>\nFor those who are looking for a solution\
+    \ in pure PHP without extensions or similar (no Symfony, no Zend, no Laravel..etc)\n\
+    Here is the code (tested on PHP 7.4.1)\n<code>\n$extensions = ['aa', 'be', 'cc'];\n",
+  "  $class_len = strlen($class_name);\n  $ext_len = count($extensions);\n  \n  $i\
+    \ = 0;\n  $strongest_ext = '';\n  while ($i < $class_len) {\n    $strongest_ext\
+    \ .= $class_name{$i};\n    if ($i < $class_len - 1) {\n      $strongest_ext .=\
+    \ '.';\n    }\n    if ($i < $class_len - 2) {\n      if ($i < $class_len - 3)\
+    \ {\n        $strongest_ext .= $extensions[$i];\n        if ($i < $class_len -\
+    \ 3) {\n          $strongest_ext .= '.';\n        }\n        if ($i < $class_len\
+    \ - 4) {\n          if ($i < $class_len - 5) {\n            $strongest_ext .=\
+    \ $extensions[$i];\n            if ($i < $class_len - 5) {\n              $strongest_ext\
+    \ .= '.';\n            }\n            if ($i < $class_len - 6) {\n           \
+    \   if ($i < $class_len - 7) {\n                $strongest_ext .= $extensions[$i];\n\
+    \                if ($i < $class_len - 7) {\n                  $strongest_ext\
+    \ .= '.';\n                }\n                if ($i < $class_len - 8) {\n   \
+    \               if ($i < $class_len - 9) {\n                    $strongest_ext\
+    \ .= $extensions[$i];\n                    if ($i < $class_len - 9) {\n      \
+    \                $strongest_ext .= '.';\n                    }\n             \
+    \       if ($i < $class_len - 10) {\n                      if ($i < $class_len\
+    \ - 11) {\n                        $strongest_ext .= $extensions[$i];\n      \
+    \                  if ($i < $class_len - 11) {\n                          $strongest_ext\
+    \ .= '.';\n                        }\n                      }\n              \
+    \      }\n                  }\n                }\n              }\n          \
+    \  }\n          }\n        }\n      }\n    }\n    $i++;\n  }\n  return $strongest_ext;\n\
+    }\n\n$class_name = 'Slices';\n$extensions = ['SErviNGSliCes', 'Cheese', 'StuFfed'];\n\
+    \necho Strongest_Extension($class_name, $extensions);\n</code>\n<|/ a dscore=2\
+    \ |>\n<| a tags=algorithm,php dscore=2 |>\nAs noted in another answer, the OP\
+    \ asked for PHP, but in case anyone is interested, here's a solution in Ruby:\n\
+    <code>\ndef strongest_extension(class_name, extensions)\n  extension_len = extensions.size\n\
+    \  extension_len = extension_len if extension_len > 1\n  extension_len = extension_len\
+    \ if extension_len < 2", "  $best_strength = -1;\n  $best_extension = NULL;\n\
+    \  foreach ($extensions as $extension) {\n    if (strlen($extension) == 0) {\n\
+    \      continue;\n    }\n    $counts = str_split($extension);\n    $cap_pos =\
+    \ array_count_values($counts);\n    $cap_pos = array_map(function ($a) { return\
+    \ $a['CAP']; }, $cap_pos);\n    $sm = array_count_values($counts);\n    $sm =\
+    \ array_map(function ($a) { return $a['SM']; }, $sm);\n    $strength = array_sum($cap_pos)\
+    \ - array_sum($sm);\n    if ($strength > $best_strength) {\n      $best_extension\
+    \ = $extension;\n      $best_strength = $strength;\n    }\n  }\n  return $class_name\
+    \ . '.' . $best_extension;\n}\n</code>\n<|/ a |>\n<| c |>\nHi Stefan, I tried\
+    \ the solution suggested by you earlier today but my code doesn't work. Your code\
+    \ is perfect but the problem is that I can't modify my code as I already have\
+    \ this huge existing code. I also can't add any external classes as my code is\
+    \ not complete and my PHP server is not responding to the request that you have\
+    \ sent me. Thanks anyways for the effort.\n<|/ c |>\n<| c |>\nNo problem. Can\
+    \ you post a sample of what your PHP code looks like now? It might help to understand\
+    \ how your code is structured.\n<|/ c |>\n<| c |>\nHi Stefan, I have added the\
+    \ code now. Thanks for the help.\n<|/ c |>\n<| c |>\nThanks for your efforts Stefan,\
+    \ I have updated the code and my code works now. Thanks again for the help.\n\
+    <|/ c |>\n<| a |>\nMy first guess would be that the problem is that you didn't\
+    \ pass the $class_name variable to the function, and thus PHP interprets $class_name\
+    \ as an empty string, which evaluates to FALSE.\n<|/ a dscore=0 tags=php,regex\
+    \ |>\n<| a dscore=0 tags=php,regex |>\nYou never call the function with those\
+    \ parameters. You need something like:\n<code>\n$class_name = \"my_class\";\n\
+    $extensions = [\"aa\", \"bb\", \"cc\"];\n$new_extension = Strongest_Extension($class_name,\
+    \ $extensions);\n</code>\nEdit: Sorry I didn't notice that you already had the\
+    \ function declaration at the top, but I'm guessing the problem is still that\
+    \ you need to call the function.\n<|/ a |>\n<| c |>\nHi Andrew. Sorry I didn't\
+    \ mention that I ", "  $strongest_extension = $class_name;\n\n  foreach ($extensions\
+    \ as $extension) {\n    if (strlen($strongest_extension) > strlen($extension))\
+    \ {\n      $strongest_extension = strtolower($extension);\n    }\n  }\n\n  return\
+    \ $strongest_extension;\n}\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThanks for your\
+    \ answer. I am working on a similar project, and I did try to use your code to\
+    \ see if it works. But I'm unsure where exactly I'm supposed to implement this?\
+    \ Can you please give me more specific details? Much appreciated.\n<|/ c |>\n\
+    <| a tags=php,arrays,algorithm dscore=2 |>\nTry this one to solve your problem:\n\
+    <code>\n<?php\n$arr = array(\"slippery\", \"dog\", \"cat\", \"mouse\", \"fish\"\
+    , \"mouse\", \"dog\", \"fish\", \"mouse\");\n$max = count($arr);\n$arr2 = array();\n\
+    $result = [];\n\nforeach ($arr as $value) {\n    $pos = array_search($value, $arr2);\n\
+    \n    if ($pos !== FALSE) {\n        $arr2[$pos]++;\n    } else {\n        $arr2[$value]\
+    \ = 1;\n    }\n}\n\n$result = array_filter($arr2, function($v) use ($max) {\n\
+    \    return $v <= $max / 2;\n});\n\n$result = array_keys($result); //array_flip\
+    \ if $result needs to be flipped\n\nvar_dump($result);\n</code>\n<|/ a |>\n<|\
+    \ c |>\nThanks for your answer. I am working on a similar project, and I did try\
+    \ to use your code to see if it works. But I'm unsure where exactly I'm supposed\
+    \ to implement this? Can you please give me more specific details? Much appreciated.\n\
+    <|/ c |>\n<| c |>\nIt looks like it might be a good solution, but I'm having some\
+    \ trouble figuring out where exactly to put the code. I'm working on a custom\
+    \ PHP site and I didn't know PHP had a native array_search function. Would you\
+    \ mind explaining how your code works?\n<|/ c |>\n<| a |>\nA simplest way I can\
+    \ think of is to use a recursive function and a variable that holds number of\
+    \ times you have seen the value you are looking for\n<code>\n$array = [\"slippery\"\
+    , \"dog\", \"cat\", \"mouse\", \"fish\", \"mouse\", \"dog\", \"fish\", \"mouse\"\
+    ];", "    $strongest = NULL;\n    foreach ($extensions as $extension) {\n    \
+    \    $char_length = strlen($extension);\n        $num_char_lengths = array_sum(str_split($char_length));\n\
+    \        $frac = $num_char_lengths / $char_length;\n        $strongest = $extension;\n\
+    \        if ($frac > 0) {\n            break;\n        }\n    }\n    return $class_name\
+    \ . $strongest;\n}\n", "  $CAP = array_count_values(preg_split('/[A-Z]/i', $class_name));\n\
+    \  $SM = array_count_values(preg_split('/[a-z]/i', $class_name));\n  return $class_name.$extensions[$CAP\
+    \ - $SM];\n}\n</code>\n<|/ a |>\n<| a |>\nHere is a php code snippet that does\
+    \ the job and it can be run anywhere in the php script (tested in php 5.6).\n\
+    <code>\n<?php\n", "    $str_extensions = array();\n    foreach ($extensions as\
+    \ $extension) {\n        $str = strpos($extension, $class_name) . '_' . strtolower(substr($extension,\
+    \ strlen($class_name)));\n        $strength = substr($str, -strlen($str) - 1,\
+    \ 1);\n        if (array_search($strength, $str_extensions) == -1) {\n       \
+    \     $str_extensions[$strength] = $str;\n        } else {\n            $index\
+    \ = array_search($strength, $str_extensions);\n            $str_extensions[$index]\
+    \ = $str;\n        }\n    }\n    // sort extensions by their strength\n    ksort($str_extensions);\n\
+    \    // get the strongest extension\n    $strongest_extension = array_shift($str_extensions);\n\
+    \    // return the class name with the strongest extension\n    return $class_name\
+    \ . '.' . $strongest_extension;\n}"]
 stop_tokens:
 - "\nfunction"
 - "\n?>"

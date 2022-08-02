@@ -8,7 +8,529 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate f
   \    (check-equal? (candidate (list ) \"john\") (list ))\n    (check-equal? (candidate\
   \ (list \"xxx\" \"asd\" \"xxy\" \"john doe\" \"xxxAAA\" \"xxx\") \"xxx\") (list\
   \ \"xxx\" \"xxxAAA\" \"xxx\"))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (cond ((null? strings) strings)\n        ((string-prefix? prefix\
+    \ (first strings)) (rest strings))\n        (else (filter_by_prefix (rest strings)\
+    \ prefix)\n              (cons (first strings)\n                    (filter_by_prefix\
+    \ (rest strings) prefix)))))\n", "  (cond\n    ((empty? strings) strings)\n  \
+    \  ((string=? prefix \"\") strings)\n    (else (cons (car strings)\n         \
+    \      (filter_by_prefix (cdr strings) prefix)))))\n</code>\nThis code has quadratic\
+    \ worst-case time complexity, since it performs a search for each item in the\
+    \ list against the prefix.  There are a number of ways to improve this, such as:\n\
+    \nUse a hashtable to remember what prefixes you've seen already.  That would give\
+    \ you (O(M) time, where M is the size of the prefix set).  Using a hashtable would\
+    \ be a lot more memory efficient than the list solution, but might not have much\
+    \ faster overall runtime.\nInstead of a list, the prefix could be a tree.  You\
+    \ would then do a single search on the tree.  You could even have a simple \"\
+    prefix tree\" as the only internal data structure.  Such a tree could be easily\
+    \ implemented as a hashtable, though it would require more memory than a simple\
+    \ list.  (If you wanted a tree to be more memory efficient than a simple list,\
+    \ you could keep two hashtables, one to remember the current prefix and one to\
+    \ remember which nodes are \"close\" to the current prefix.)\nYou could sort the\
+    \ input list by prefix first, then run your filtering function on the sorted list.\
+    \  It would give you linear time instead of quadratic time.  This is probably\
+    \ the best solution for your needs.\n<|/ a dscore=1 |>\n<| c |>\nI like your last\
+    \ suggestion. I'm going to try it out for my use case.  I've been considering\
+    \ making a prefix tree out of my data, but for now I'm going to stick with a simple\
+    \ list.\n<|/ c |>\n<| a |>\n<code>", "  (if (null? strings)\n      strings (filter_by_prefix\
+    \ (cdr strings) prefix)))\n", "  (cond\n    [(empty? strings) empty]\n    [(=\
+    \ 0 (string-length prefix)) strings]\n    [else (if (string=? prefix \"\")\n \
+    \             (filter_by_prefix (rest strings) prefix)\n              (filter\
+    \ (fn [x] string=? x prefix))\n              )]))\n", "  (let loop ([strings (reverse\
+    \ strings)\n               prefix prefix])\n    (cond [(empty? strings) strings]\n\
+    \          [(equal? (car strings) prefix) (loop (cdr strings) prefix)]\n     \
+    \     [else (cons (car strings) (loop (cdr strings) prefix))])))\n", "  (cond\
+    \ [(or (null? strings) (null? prefix)) (strings)] \n        [(= (string-ref prefix\
+    \ 0) (string-ref strings 0))\n         (filter_by_prefix (substring strings 0\
+    \ string->length) (string-ref strings 0))]\n        [else (cons (string->string\
+    \ strings) (filter_by_prefix (substring strings string->length) prefix))]))\n",
+  "  (cond\n    ((null? strings) (strings))\n    ((string=? (car strings) prefix)\
+    \ (strings))\n    ((string=? (car strings) prefix) (filter_by_prefix (cdr strings)\
+    \ prefix))\n    (else (filter_by_prefix (cdr strings) prefix))))\n", "  (filter\
+    \ (lambda (x) (mem(substring x 0) prefix)) strings))\n</cell>\n<code language=dyalog-kernel>\n\
+    #lang racket\n", "  (cond [(null? strings) strings]\n        [else (cons (first\
+    \ strings)\n                    (filter_by_prefix (rest strings)\n           \
+    \                         prefix))]))\n", "  (cond\n    [(empty? strings) strings]\n\
+    \    [(eq? (first strings) prefix) (cons (first strings) strings)]\n    [else\
+    \ (filter_by_prefix (rest strings) prefix)]\n    )\n  )\n", "  (filter (fn [string]\n\
+    \            (string-prefix? string prefix)))\n  strings)\n", "  (if (null? strings)\n\
+    \      '()\n      (cons (string->list (substring prefix 0 (string-length prefix))\n\
+    \                   (filter_by_prefix (cdr strings) prefix)))))\n", "  (define\
+    \ (go accum string i)\n    (cond [(empty? string) (string->list accum)]\n    \
+    \      [(string->char? string) (string->list accum)]\n          [else (go (cons\
+    \ (string->char string) accum) (string->sub string i) 1)]))\n  (if (empty? strings)\
+    \ '()\n      (go strings prefix 0)))\n", "  (cond\n    [(empty? strings) strings]\n\
+    \    [(and (substring (strings 0) 0) prefix) (cons (substring (strings 0) 0) strings)]\n\
+    \    [else (filter_by_prefix (rest strings) prefix)]))\n", "  (if (null? strings)\n\
+    \      nil\n      (cons (string-match-p prefix strings)\n            (filter_by_prefix\
+    \ (cdr strings) prefix))\n      )\n  )\n", "  (if (null? strings)\n      strings\n\
+    \      (if (equal? (string-ref strings 0)\n                   prefix)\n      \
+    \    (string-ref strings 0)\n          (cons (string-ref strings 0)\n        \
+    \        (filter_by_prefix (rest strings)\n                                 prefix)))))\n",
+  "  (cond [(null? strings) strings]\n        [(string=? (string-ref strings 0) prefix)\
+    \ (substring (drop 1 strings) 0)]\n        [else (cons (car strings) (filter_by_prefix\
+    \ (cdr strings) prefix))]))\n</cell>\n<code language=racket-transformer>", " \
+    \ (filter (lambda (x) (eq? x (substring prefix 0)))\n          strings))\n", " \
+    \ (cond [(empty? strings) strings]\n        [(equal? (first strings) prefix) (drop\
+    \ (rest strings) 1)]\n        [else (cons (first strings)\n                  \
+    \ (filter_by_prefix (rest strings) prefix))]))\n", "  (filter (lambda (str) (string-match\
+    \ prefix str)) strings))\n", "  (cond (empty? strings) strings\n        (not (equal?\
+    \ (first strings) prefix))\n        (filter_by_prefix (rest strings) prefix)\n\
+    \        (else (cons (first strings) (filter_by_prefix (rest strings) prefix)))))\n",
+  "  (cond [(empty? strings) strings]\n        [(equal? (first strings) prefix) strings]\n\
+    \        [else (cons (first strings) (filter_by_prefix (rest strings) prefix))]))\n",
+  "  (if (null? strings)\n      []\n      (if (= 0 (string-length prefix))\n     \
+    \     (string-join strings \"\")\n          (if (starts-with? (string-first strings)\
+    \ prefix)\n              (append (string-next strings) (filter_by_prefix (strings-tail\
+    \ strings) prefix))\n              (append strings (list prefix))))))\n", "  (filter\
+    \ (lambda (s) (match s prefix)) strings))\n", "  (cond [(empty? strings) strings]\n\
+    \        [(equal? (car strings) prefix) (cons (car strings) strings)]\n      \
+    \  [else (cons (car strings)\n                    (filter_by_prefix (cdr strings)\
+    \ prefix))]))\n", "  (cond\n    ((empty? strings) '())\n    ((equal? (car strings)\
+    \ prefix) (strings))\n    (else (cons (car strings)\n                (filter_by_prefix\
+    \ (cdr strings) prefix))))))\n</code>\n<|/ a tags=racket,scheme dscore=3 |>\n\
+    <| c |>\n`(cdr (filter_by_prefix strings prefix))` looks unnecessary. The list\
+    \ returned by the previous call will do just fine.\n<|/ c |>\n<| c |>\nI agree\
+    \ that it is unnecessary. I have removed the line. Thanks for pointing that out.\n\
+    <|/ c |>\n<| a |>\nJust for fun, here is a more general version using foldl:\n\
+    <code>", "  (cond [(empty? strings) '()]\n        [(equal? (first strings) prefix)\
+    \ (tail strings)]\n        [else (cons (first strings)\n                    (filter_by_prefix\
+    \ (rest strings) prefix))]))", "  (cond [(empty? strings) empty]\n        [(equal?\
+    \ (first strings) prefix)\n         (cons (first strings) (filter_by_prefix (rest\
+    \ strings) prefix))]\n        [else (filter_by_prefix (rest strings)\n       \
+    \                       (cons (first strings) prefix))]))\n", "  (filter (lambda\
+    \ (x) (equal? (string x) (string prefix)))\n          strings))\n", "  (cond\n\
+    \    [(empty? strings) strings]\n    [(= (first strings) prefix)\n     (cons (first\
+    \ strings)\n           (filter_by_prefix (rest strings) prefix))]\n    [else (filter_by_prefix\
+    \ (rest strings) prefix)]))\n", "  (cond\n    [(null? strings) strings]\n    [(=\
+    \ 0 (string-length prefix)) strings]\n    [(= (string-length prefix) (string-length\
+    \ strings)) strings]\n    [(string-equal? (substring prefix 0)\n             \
+    \      (substring (string-ref strings 0))) strings]\n    [else (cons string (filter_by_prefix\
+    \ (rest strings)\n                                     (substring prefix 1))))]))\n",
+  "  (filter string? (map string-prefix (filter (string=? prefix . ) strings))))\n",
+  "  (cond\n    ((empty? strings) '())\n    ((string-prefix? (car strings) prefix)\
+    \ (car strings))\n    (else (filter_by_prefix (cdr strings) prefix))))\n</cell>\n\
+    <code language=dyalog-kernel>\n#lang racket\n", "  (cond\n    [(empty? strings)\
+    \ strings]\n    [(= 0 (string-length prefix)) (strings strings)]\n    [(= 1 (string-length\
+    \ prefix)) (filter_by_prefix strings (substring prefix 0))]\n    [else (let ((head\
+    \ (substring prefix 0 (string-length prefix))))\n            (cond [(empty? strings)\
+    \ strings]\n                  [(= head (first strings)) (filter_by_prefix strings\
+    \ (substring prefix (string-length prefix)))]\n                  [else (cons head\
+    \ (filter_by_prefix strings (substring prefix (string-length prefix))))]))]))\n",
+  "  (cond [(empty? strings) strings]\n        [(equal? (first strings) prefix) (drop\
+    \ 1 strings)]\n        [else (cons (first strings)\n                    (filter_by_prefix\
+    \ (rest strings)\n                                     prefix))]))\n", "  (cond\
+    \ [(empty? strings) strings]\n        [(equal? (first strings) prefix)\n     \
+    \    (rest strings)]\n        [else\n         (cons (first strings)\n        \
+    \       (filter_by_prefix (rest strings) prefix))]))\n", "  (filter (lambda (s)\n\
+    \            (string-prefix? (string-match prefix s))))\n          strings))\n",
+  "  (if (null? strings)\n      strings\n      (cons (substring (string-ref strings\
+    \ 0) (string-length prefix)\n                  (if (string-length prefix) (+ 1\
+    \ (string-length prefix)))\n                  (string-length strings))) (string-filter\
+    \ prefix strings))))\n</cell>\n<cell>\n#lang racket\n", "  (cond\n    [(empty?\
+    \ strings) '()]\n    [(equal? (first strings) prefix) (cons (first strings) strings)]\n\
+    \    [else (cons (first strings)\n                (filter_by_prefix (rest strings)\n\
+    \                                 prefix)]))))\n", "  (cond [(empty? strings)\
+    \ strings]\n        [(equal? prefix (first strings)) (cons (first strings) (filter_by_prefix\
+    \ (rest strings) prefix))]\n        [(equal? prefix (first strings)) (filter_by_prefix\
+    \ (rest strings) prefix)]\n        [else (cons (first strings) (filter_by_prefix\
+    \ (rest strings) prefix))]\n        ))\n", "  (cond [(empty? strings) strings]\n\
+    \        [(equal? (car strings) prefix) (tail strings)]\n        [else (cons (car\
+    \ strings)\n                    (filter_by_prefix (cdr strings) prefix))]))\n",
+  "  (cond ((or (null? strings) (string-empty? prefix))\n         (reverse strings))\n\
+    \        ((string=? prefix string) (string-append prefix string))\n        (else\n\
+    \         (filter_by_prefix (rest strings)\n                           (string-append\
+    \ prefix string)))))\n", "  (cond [(empty? strings) strings]\n        [(equal?\
+    \ prefix (car strings)) (cons prefix (filter_by_prefix (cdr strings) prefix))]\n\
+    \        [else (cons (car strings) (filter_by_prefix (cdr strings) prefix))]))\n",
+  "  (cond ((null? strings) '())\n        (else (let ((result (sub1 (filter (lambda\
+    \ (s) (string=? s prefix)) strings))))\n                   (cond ((string=? result\
+    \ prefix) (filter_by_prefix result prefix))\n                        (else (string-append\
+    \ result (sub1 (filter_by_prefix result prefix))))))))\n", "  (cond\n    [(empty?\
+    \ strings) '()]\n    [(equal? (first strings) prefix) (cons (first strings) strings)]\n\
+    \    [else (filter_by_prefix (rest strings) prefix)]))\n", "  (cond\n    [(empty?\
+    \ strings) empty]\n    [(equal? (first strings) prefix) (drop 1 strings)]\n  \
+    \  [else (cons (first strings) (filter_by_prefix (rest strings) prefix))]\n  \
+    \  )\n  )\n)", "  (cond [(empty? strings) strings]\n        [(equal? prefix (first\
+    \ strings)) (cons prefix (filter_by_prefix (rest strings) prefix))]\n        [else\
+    \ (cons (first strings)\n                    (filter_by_prefix (rest strings)\n\
+    \                                    prefix))]))\n", "  (filter strings (lambda\
+    \ (x) (equal? (string-prefix x) prefix))))\n", "  (cond [(or (empty? strings)\
+    \ (empty? prefix))\n         strings]\n        [(equal? (first strings) prefix)\n\
+    \         (cons strings (filter_by_prefix (rest strings) prefix))]\n        [else\n\
+    \         (filter_by_prefix (rest strings)\n                          prefix)])\n\
+    \  )\n", "  (if (null? strings) nil\n      (if (string-prefix? prefix strings)\n\
+    \          (string-tail strings)\n          (filter_by_prefix (string-tail strings)\n\
+    \                            prefix))))\n", "  (filter (lambda (sub)\n       \
+    \     (string-match? prefix sub))\n          strings))\n", "  (cond\n    ((empty?\
+    \ strings) '())\n    ((equal? (first strings) prefix)\n     (cons (first strings)\
+    \ (filter_by_prefix (rest strings) prefix)))\n    (else (cons (first strings)\n\
+    \               (filter_by_prefix (rest strings)\n                           \
+    \     (substring (first strings) 0 (string-length prefix)))))))\n", "  (if (null?\
+    \ strings) strings)\n  (if (equal? (car strings) prefix)\n      (strings)\n  \
+    \    (cons (car strings)\n            (filter_by_prefix (cdr strings) prefix)))))\n",
+  "  (filter (lambda (s) (memq prefix (string->list (string-prefix-of s prefix))))\n\
+    \         strings))\n", "  (cond [(empty? strings) strings]\n        [(equal?\
+    \ (first strings) prefix) (drop 1 (filter_by_prefix (rest strings) prefix))]\n\
+    \        [else (cons (first strings) (filter_by_prefix (rest strings) prefix))]))\n\
+    </code>\n<|/ a tags=racket,lisp,scheme dscore=1 |>\n<| c |>\nI haven't finished\
+    \ the code, but i will accept the answer as it seems to work, i just have to check\
+    \ it against my other answers before accepting ;-)\n<|/ c |>\n<| a tags=racket,lisp,scheme\
+    \ |>\nI couldn't resist taking a different approach. :-)\nThe idea of recursion\
+    \ is really cool, and you can solve this problem in a few steps:\n1. Define your\
+    \ prefixes\n<code>", "  (cond\n    [(string? prefix) (filter_by_prefix prefix\
+    \ prefix strings)]\n    [(null? prefix) (strings strings)]\n    [(eq? (substring\
+    \ prefix 0) (substring prefix -1)) (cons prefix strings)]\n    [(empty? (substring\
+    \ prefix -1)) (cons prefix strings)]\n    [else (cons (substring prefix 0)\n \
+    \              (filter_by_prefix (substring prefix 1) prefix strings))]))\n",
+  "  (cond [(empty? strings) strings]\n        [(string-starts-with-p prefix strings)\
+    \ (concat strings prefix)]\n        [else (filter_by_prefix (cdr strings) prefix)]))\n",
+  "  (filter (lambda (str) (string-match prefix str))\n          strings))\n", " \
+    \ (filter (lambda (str)\n            (string-match prefix str))\n          strings))\n",
+  "  (cond\n    [(empty? strings) strings]\n    [(not (equal? prefix (first strings)))\n\
+    \     (cons prefix (filter_by_prefix (rest strings) prefix))]\n    [else (filter_by_prefix\
+    \ (rest strings) prefix)]))\n", "  (cond\n    [(string-prefix? prefix string)\
+    \ (string-append prefix string)]\n    [else (filter_by_prefix (string-split string\
+    \ #\\) prefix)]\n  ))\n", "  (cond\n    [(null? strings) strings]\n    [(equal?\
+    \ prefix (string-ref (string-first strings) 0)) strings]\n    [else (cons (string-ref\
+    \ (string-first strings) 0) (filter_by_prefix (rest strings) prefix))]))\n</code>\n\
+    <|/ a tags=racket,scheme |>\n<| a dscore=1 |>\nA simple recursive solution just\
+    \ because I like to solve it with a recursive function rather than a loop:\n<code>",
+  "  (cond [(empty? strings) empty]\n        [(starts-with? (first strings) prefix)\
+    \ strings]\n        [else (cons (first strings) (filter_by_prefix (rest strings)\
+    \ prefix))]))\n", "  (filter (lambda (item)\n            (string-starts? prefix\
+    \ item))\n          strings))\n", "  (map (lambda (str) (if (string-match prefix\
+    \ str) str))\n       strings))\n", "  (let ((result (empty-list))\n        (strings\
+    \ (coerce strings string))\n        (prefix (coerce prefix string))\n        (tail\
+    \ (cdr strings))\n        (head (car strings)))\n    (if (empty? strings)\n  \
+    \      result\n        (if (string-equal? prefix (car strings))\n            (cons\
+    \ head result)\n            (filter_by_prefix (tail strings) prefix)\n       \
+    \     (filter_by_prefix (tail strings) prefix))))\n</code>\n<|/ a dscore=1 tags=scheme,racket,algorithm\
+    \ |>\n<| c |>\nThanks a lot for the help. But I am still not getting how this\
+    \ function is working.\n<|/ c |>\n<| a dscore=1 |>\nThis can be done with just\
+    \ using built-in recursion and a helper function:\n<code>", "  (cond [(empty?\
+    \ strings) empty]\n        [(equal? (car strings) prefix) strings]\n        [else\
+    \ (cons (car strings)\n                    (filter_by_prefix (cdr strings) prefix))]))\n",
+  "  (filter (lambda (substr)\n            (string-equal? substr prefix))\n      \
+    \    strings))\n", "  (remove-if-not (lambda (x) (string=? x prefix)) strings))\n",
+  "  (cond [(empty? strings) strings]\n        [(memq (car strings) prefix) strings]\n\
+    \        [else (filter_by_prefix (cdr strings) prefix)]))\n", "  (filter (lambda\
+    \ (sub)\n           (string-match prefix sub))\n         strings))\n", "  (if\
+    \ (null? strings) strings\n      (if (= (length strings) 1)\n          (if (eq?\
+    \ prefix strings)\n              strings\n              (append '() strings))\n\
+    \          (append (string) (filter_by_prefix (rest strings) prefix)))))\n", " \
+    \ (cond [(empty? strings) '()]\n        [(eq? (first strings) prefix) (cons (first\
+    \ strings) (filter_by_prefix (rest strings) prefix))]\n        [else (filter_by_prefix\
+    \ (rest strings) prefix)]))\n", "  (cond (empty? strings) empty \n        (string?\
+    \ (first strings))\n        (and (equal? (first strings) prefix)\n           \
+    \  (rest (rest strings)))))\n", "  (filter (fn [string]\n            (string=?\
+    \ (string-ref string 0) prefix))\n          strings))\n", "  (remove-if\n   (lambda\
+    \ (str) (equal prefix (substring str 0 length)))\n   strings))\n", "  (let loop\
+    \ ((strings strings)\n             (prefix prefix))\n    (if (null? strings)\n\
+    \        ; Return the original list\n        strings\n        (if (char=? prefix\
+    \ (first strings))\n            ; Return the list with the filtered element\n\
+    \            (cons (first strings) (strings))\n            ; Return an empty list\n\
+    \            '()))))\n</code>\n<|/ a tags=racket,scheme |>\n<| a dscore=1 |>\n\
+    Another way of doing it that uses a predicate:\n<code>", "  (cond [(empty? strings)\
+    \ strings]\n        [(equal? (first strings) prefix) (tail strings)]\n       \
+    \ [else (cons (first strings) (filter_by_prefix (rest strings) prefix))]))\n",
+  "  (cond [(empty? strings) '()]\n        [(eq? (first strings) prefix) (cons (first\
+    \ strings) (filter_by_prefix (rest strings) prefix))]\n        [else (cons (first\
+    \ strings) (filter_by_prefix (rest strings) prefix))]))\n", "  (cond\n    ((null?\
+    \ strings) strings)\n    ((string=? prefix (first strings)) (rest strings))\n\
+    \    (else (cons (first strings) (filter_by_prefix (rest strings) prefix)))))\n",
+  "  (cond [(empty? strings) strings]\n        [(not (empty? prefix)) (if (string=?\
+    \ prefix head) (rest strings) (strings prefix))]\n        [else (strings prefix)]))\n",
+  "  (filter (\u03BB (x) (starts-with x prefix)) strings))\n  ", "  (cond [(empty?\
+    \ strings) strings]\n        [(eq? (first strings) prefix) (cons (first strings)\
+    \ strings)]\n        [else (filter_by_prefix (rest strings) prefix)]))\n", " \
+    \ (cond [(empty? strings) '()]\n        [(string-prefix? prefix string) strings]\n\
+    \        [else (cons prefix (filter_by_prefix strings (cdr prefix))))]))\n", " \
+    \ (if (null? strings) '()\n      (if (equal? (first strings) prefix) (cons (first\
+    \ strings) (filter_by_prefix (rest strings) prefix))\n          (filter_by_prefix\
+    \ (rest strings)\n                          prefix)\n          '()))))\n", " \
+    \ (cond [(empty? strings) '()]\n        [(equal? (first strings) prefix) strings]\n\
+    \        [else (cons (first strings)\n                    (filter_by_prefix (rest\
+    \ strings) prefix))]))\n", "  (cond [(empty? strings) empty]\n        [else (cons\
+    \ (first (filter (lambda (str) (string str prefix))\n                        \
+    \         strings)) (recur (rest strings)\n                                  \
+    \                prefix))]\n        ))\n", "  (filter (lambda (s) (starts? prefix\
+    \ s))\n          strings))\n", "  (filter strings-starts-with prefix))\n", " \
+    \ (define (loop current-prefix strings)\n    (cond ((empty? strings) strings)\n\
+    \          ((string-match (car strings) prefix) (string-append current-prefix\
+    \ (cdr strings)))\n          (else (loop (car strings) (cdr strings)))))\n  (loop\
+    \ prefix strings))\n", "  (cond [(empty? strings) empty]\n        [(string-char?\
+    \ prefix 0) strings]\n        [else (cons (string->string\n                  \
+    \     (string->substring\n                        (first strings)\n          \
+    \              0 (string-length prefix)\n                        (string-length\
+    \ prefix))) \n                       (filter_by_prefix (rest strings)\n      \
+    \                                   (substring prefix 1)))]))\n", "  (cond\n \
+    \   ((null? strings) strings)\n    ((string=? prefix (car strings)) #t)\n    (else\
+    \ (filter_by_prefix (cdr strings) prefix))))\n", "  (if (empty? strings) strings\n\
+    \      (let ([string (first strings)])\n        (if (string-starts-with? string\
+    \ prefix)\n            (cons string strings)\n            (filter_by_prefix (rest\
+    \ strings) prefix))))))\n", "  (filter (lambda (x) (equal? x (substring x 0 (string-length\
+    \ prefix))\n                             prefix))\n          strings))\n", " \
+    \ (if (null? strings) '()\n      (if (= 0 (string-length prefix) (string-length\
+    \ (car strings)))\n          (string-append (car strings)\n                  \
+    \       (filter_by_prefix (cdr strings) prefix))\n          (cons (car strings)\n\
+    \                (filter_by_prefix (cdr strings) prefix))))))\n", "  (cond\n \
+    \   [(empty? strings) '()]\n    [(member? (first strings) prefix) (cons (first\
+    \ strings)\n                                         (filter_by_prefix (rest strings)\
+    \ prefix))]\n    [else (filter_by_prefix (rest strings) prefix)]))\n", "  (filter\
+    \ (lambda (x) (string->string x) starts-with prefix) strings))\n", "  (if (empty?\
+    \ strings)\n      empty\n      (if (equal? (first strings) prefix)\n         \
+    \ (cons (first strings) (filter_by_prefix (rest strings) prefix))\n          (cons\
+    \ (first strings) (filter_by_prefix (rest strings) prefix))))))\n", "  (define\
+    \ (prefix str prefix)\n    (if (string=? str prefix)\n        str\n        (prefix\
+    \ str (substring str 0 (string-length prefix))))) \n  (filter strings (lambda\
+    \ (str) (prefix str prefix))) \n)\n", "  (if (empty? strings) '()\n      (if (starts-with?\
+    \ (car strings) prefix)\n          (cons (car strings) (filter_by_prefix (cdr\
+    \ strings) prefix))\n          (filter_by_prefix (cdr strings) prefix))))\n",
+  "  (if (empty? strings) \n      strings\n      (if (empty? prefix) \n          (strings\
+    \ prefix) \n          (let ((first-string (first strings))) \n            (if\
+    \ (string-starts-with first-string prefix)\n                (cons first-string\
+    \ (filter_by_prefix (rest strings) prefix)))))) ;; tail-call: no need for the\
+    \ result to be a list\n   ", "  (filter (lambda (x) (string-match prefix x))\n\
+    \         strings))\n", "  (cond [(empty? strings) '()]\n        [(equal? (first\
+    \ strings) prefix) (cons prefix strings)]\n        [else (cons (first strings)\n\
+    \                   (filter_by_prefix (rest strings) prefix))]))\n", "  (if (empty?\
+    \ strings) empty\n      (cons (first strings)\n            (filter_by_prefix (rest\
+    \ strings)\n                             prefix)))))\n", "  (filter (lambda (str)\
+    \ (string-equal? prefix str)) strings))\n", "  (filter strings (\u03BB (x) (string-equal?\
+    \ prefix x))))\n", "  (filter strings-starts-with prefix))\n", "  (let loop ((strings\
+    \ strings)\n             (prefix prefix))\n    (cond ((null? strings) (strings))\n\
+    \          ((string-starts-with? (car strings) prefix)\n           (loop (cdr\
+    \ strings) prefix))\n          (else\n           (loop (cdr strings) prefix))))\n",
+  "  (cond\n    [(empty? strings) strings]\n    [(substring (string-ref strings 0)\
+    \ 0) (cons (string-ref strings 0) strings)]\n    [else (filter_by_prefix (cdr\
+    \ strings) prefix)]))\n", "  (filter (fn [x] (string-match prefix x))\n      \
+    \    strings))\n", "  (cond\n    ((empty? strings) '())\n    ((string-prefix?\
+    \ (first strings) prefix) (strings (rest strings)))))\n</cell>\n<cell>\n#lang\
+    \ racket\n", "  (filter (lambda (string)\n           (string=? (substring string\
+    \ 0 length) prefix))\n         strings))\n#lang racket\n", "  (cond\n    [(empty?\
+    \ strings) (list)]\n    [(not (symbol=? prefix prefix)) (list)]\n    [(symbol=?\
+    \ (first strings) prefix) (cons (first strings) (filter_by_prefix (rest strings)\
+    \ prefix))]\n    [else (filter_by_prefix (rest strings) prefix)]\n  )\n)\n", " \
+    \ (cond\n    ((null? strings) '())\n    ((string=? prefix null?) strings)\n  \
+    \  ((string=? (first strings) prefix) (filter_by_prefix (rest strings) prefix))\n\
+    \    (else (cons (first strings) (filter_by_prefix (rest strings) prefix)))))\n",
+  "  (filter (lambda (x)\n           (string-match prefix x))\n          strings))\n",
+  "  (cond [(empty? strings) empty]\n        [(starts-with? (car strings) prefix)\
+    \ (cons (car strings) (filter_by_prefix (cdr strings) prefix))]\n        [else\
+    \ (filter_by_prefix (cdr strings) prefix)]))", "  (cond\n    [(string=? prefix\
+    \ \"\") strings]\n    [else (filter (lambda (s) (string=? s prefix)) strings)]))\n",
+  "  (cond [(empty? strings) empty]\n        [(equal? (car strings) prefix) (list\
+    \ strings)]\n        [else (append (filter_by_prefix (cdr strings) prefix)\n \
+    \                      (filter_by_prefix (cdr strings) prefix))]))\n", "  (cond\
+    \ ((empty? strings) '())\n        ((starts-with? prefix string) (cons (first strings)\
+    \ (filter_by_prefix (rest strings) prefix)))\n        (else (filter_by_prefix\
+    \ (rest strings) prefix))))\n", "  (filter (\u03BB (s) (string-match prefix s))\
+    \ strings))\n", "  (cond [(empty? strings) strings]\n        [(equal? (string-first\
+    \ strings) prefix) strings]\n        [else (filter_by_prefix (rest strings) prefix)]\n\
+    \        )\n  )\n", "  (cond ((null? strings) '())\n        ((= (string-ref strings\
+    \ 0) prefix)\n         (list strings))\n        (else (filter_by_prefix (rest\
+    \ strings) prefix))\n  )\n)\n", "  (cond [(empty? strings) strings]\n        [else\
+    \ (cons (first strings)\n                    (filter_by_prefix (rest strings)\n\
+    \                                   prefix))]))\n", "  (cond\n    [(string-empty?\
+    \ strings) '()]\n    [(string-empty? (list-ref strings 0)) '()]\n    [(= (first\
+    \ strings) prefix)\n     (cons (first strings) (filter_by_prefix (rest strings)\
+    \ prefix))]\n    [else (cons (first strings)\n               (filter_by_prefix\
+    \ (rest strings)\n                                 (substring prefix 0 (string-length\
+    \ prefix))))]))\n", "  (if (null? strings)\n      (strings)\n      (filter_by_prefix\
+    \ (cdr strings) prefix (cons (car strings) '()))))\n", "  (cond\n    ((empty?\
+    \ strings) strings)\n    ((string-equal? (car strings) prefix) (string-append\
+    \ prefix strings))\n    (else\n      (filter_by_prefix (cdr strings) prefix)\n\
+    \      )\n    ))\n", "  (cond [(empty? strings) '()]\n        [(equal? (first\
+    \ strings) prefix) (cons (first strings) (rest strings))]\n        [else (filter_by_prefix\
+    \ (rest strings) prefix)]))\n", "  (cond ((empty? strings) '())\n        ((equal?\
+    \ (first strings) prefix) (filter_by_prefix (rest strings) prefix))\n        (else\
+    \ (cons (first strings)\n                    (filter_by_prefix (rest strings)\
+    \ prefix)))))\n", "  (if (null? strings) '()\n      (if (equal? prefix (car strings))\
+    \ (cons (car strings) (filter_by_prefix (cdr strings) prefix))\n          (filter_by_prefix\
+    \ (cdr strings) prefix)))))\n</code>\n<|/ a dscore=1 |>\n<| a tags=racket,scheme,functional-programming,list\
+    \ |>\n<code>", "  (cond [(null? strings) strings]\n        [(eqv? prefix \"\"\
+    ) strings]\n        [else (append (filter_by_prefix (subseq strings 0 (length\
+    \ prefix)) prefix) (filter_by_prefix (subseq strings length) prefix))]))\n", " \
+    \ (cond [(empty? strings) strings]\n        [(string-equal? prefix (first strings))\
+    \ \n         (filter_by_prefix (rest strings) prefix)]\n        [else (cons (first\
+    \ strings) \n                  (filter_by_prefix (rest strings) prefix))]))\n",
+  "  (cond\n    ((null? strings) strings)\n    ((string-equal? prefix (string-ref\
+    \ (string-first strings) 0))) \n    (else (string-append (string-first strings)\
+    \ (filter_by_prefix (cdr strings) prefix)))))\n", "  (define (iter accum current)\n\
+    \    (cond ((null? current) accum)\n          ((eq? current prefix) (list accum))\n\
+    \          (else (iter (cons current accum) (first current)))))\n  (iter '() (first\
+    \ strings)))\n", "  (filter (lambda (string)\n           (string-starts-with string\
+    \ prefix))\n         strings))\n", "  (cond [(empty? strings) strings]\n     \
+    \   [(eq? (first strings) prefix) (cons (first strings) strings)]\n        [else\
+    \ (cons (first strings)\n                    (filter_by_prefix (rest strings)\
+    \ prefix))]))\n", "  (if (empty? strings)\n      nil\n      (if (strings-starts-with?\
+    \ prefix strings)\n          (strings prefix)\n          (cons (first strings)\n\
+    \                (filter_by_prefix (rest strings)\n                          \
+    \       prefix)))))\n</code>\nI tried to write this as a recursive function, but\
+    \ I find that a recursive function often produces much more readable code.\n<|/\
+    \ a dscore=0 |>\n<| a dscore=0 tags=racket,scheme |>\nHere is another solution\
+    \ that is tail-recursive.\n<code>", "  (cond\n    [(null? strings) '()]\n    [(string-match-p\
+    \ prefix strings) (cons strings (filter_by_prefix (rest strings) prefix))]\n \
+    \   [else (cons (first strings) (filter_by_prefix (rest strings) prefix))]\n \
+    \ )\n)\n", "  (cond [(empty? strings) empty]\n        [(equal? (first strings)\
+    \ prefix) (cons (first strings) strings)]\n        [else (filter_by_prefix (rest\
+    \ strings) prefix)]))\n", "  (cond [(empty? strings) strings]\n        [(empty?\
+    \ (first strings)) (list empty)]\n        [else (cons prefix (filter_by_prefix\
+    \ (rest strings) prefix))]))\n", "  (cond (empty? strings)\n        '()\n    \
+    \    (string? (first strings))\n        (equal? (first strings) prefix)\n    \
+    \    strings\n        (filter_by_prefix (rest strings) prefix)))\n", "  (filter\
+    \ (lambda (s index)\n           (= index (length prefix))\n           (equal?\
+    \ (substring s 0 (- (length prefix) index)) prefix))\n         strings))\n", " \
+    \ (cond [(empty? strings) strings]\n        [(equal? (first strings) prefix) strings]\n\
+    \        [else (filter_by_prefix (rest strings) prefix) ]\n        ))\n", "  (if\
+    \ (null? strings) strings)\n  (if (null? (cdr strings)) \n      (if (string= prefix\
+    \ \"\") \n          strings \n          (list prefix strings))\n      (if (string=\
+    \ (car strings) prefix)\n          (filter_by_prefix (cdr strings) prefix)\n \
+    \         (cons (car strings) (filter_by_prefix (cdr strings) prefix))))))\n",
+  "  (define (helper prefix strings)\n    (cond\n      [(null? strings) (string->list\
+    \ prefix)]\n      [else\n       (let ([current (first strings)])\n         (if\
+    \ (string=? prefix current)\n             (helper (cdr prefix) (cdr strings))\n\
+    \             (helper (cdr prefix) (strings current))))]))\n  (helper prefix strings))\n",
+  "  (cond\n    [(empty? strings) strings]\n    [(not (equal? (first (first strings))\
+    \ prefix))\n     (cons (first strings) (filter_by_prefix (rest strings) prefix))]\n\
+    \    [else (filter_by_prefix (rest strings) prefix)]))\n", "  (filter (fn [string]\n\
+    \           (string-match (string prefix) string)))\n  (strings strings))\n",
+  "  (filter (lambda (s)\n            (string=? (string-ref s 0) prefix))\n      \
+    \    strings))\n", "  (map string->string\n       (filter\n        (lambda (str)\n\
+    \          (string-equal? str (string-append prefix str))))\n       strings))\n",
+  "  (filter (lambda (x) (string=? x prefix)) strings))\n", "  (if (empty? strings)\n\
+    \      strings\n      (if (char=? (first strings) prefix)\n          (cons (first\
+    \ strings)\n                (filter_by_prefix (rest strings) prefix))\n      \
+    \    (filter_by_prefix (rest strings) prefix))))\n</code>\n<|/ a tags=racket,scheme\
+    \ |>\n<| c |>\nHi Mark, Thank you for your response. Yes, I'm very new to Scheme\
+    \ so I'm just trying to understand where and why that is the case. I see that\
+    \ in some cases, Scheme will reuse strings that have already been \"searched\"\
+    \ for the prefix. Is this true? For example, will it do \"a\" then \"b\" then\
+    \ \"c\" then \"ab\", or will it do \"ab\" then \"a\" then \"bc\"?\n<|/ c |>\n\
+    <| c |>\nIt will do \"a\" then \"b\" then \"c\", because (cons \"b\" '(a b c))\
+    \ is equivalent to (cons 'a \"b\" 'c '(a b c)), and (cons 'a \"b\" 'c '(a b c))\
+    \ is equivalent to (cons \"a\" \"b\" \"c\" '(a b c)). Does that make sense?\n\
+    <|/ c |>\n<| a dscore=2 |>\nThis code will do the same as your version, but with\
+    \ a slightly more elegant approach. I've replaced the if with a cond so as to\
+    \ not make any new lists.\n<code>", "  (cond\n    [(string-null? strings) '()]\n\
+    \    [(string-match? prefix string) (cons strings '())]\n    [else (cons (string->string\
+    \ prefix) (filter_by_prefix (rest strings) prefix))]))\n", "  (cond\n    [(string-empty?\
+    \ strings) empty]\n    [(starts-with-prefix? prefix strings) (substring strings\
+    \ 0 string-length prefix)]\n    [else (strings)]))\n", "  (cond [(empty? strings)\
+    \ '()]\n        [(equal? prefix (car strings)) (cons (car strings) '())]\n   \
+    \     [(equal? (car strings) prefix) (cons (car strings) (filter_by_prefix (cdr\
+    \ strings) prefix))]\n        [else (cons (car strings) (filter_by_prefix (cdr\
+    \ strings) prefix))]\n        ))\n", "  (let loop ((i 0) (filtered '()))\n   \
+    \ (if (empty? strings)\n        filtered\n        (let ((s (car strings))\n  \
+    \             (prefix-length (string-length prefix)))\n          (cond ((string-start\
+    \ prefix s) (loop (+ i 1) (string-append filtered s))\n                 (empty?\
+    \ strings))\n                (else (loop (+ i 1)\n                          (string-append\
+    \ filtered (list s))))))))\n", "  (filter (lambda (str)\n           (string-match\
+    \ prefix str))\n         strings))\n", "  (cond [(empty? strings) (list empty)]\n\
+    \        [(not (starts-with? (first strings) prefix)) (cons (first strings) (strings))]\n\
+    \        [else (cons (first strings) (filter_by_prefix (rest strings) prefix))]))\n",
+  "  (filter (lambda (string) (string-prefix? string prefix)) strings))\n", "  (cond\n\
+    \    ((null? strings) '())\n    ((string-match (first strings) prefix) (cons (first\
+    \ strings) (filter_by_prefix (rest strings) prefix)))\n    (else (filter_by_prefix\
+    \ (rest strings) prefix))))\n", "  (cond\n    [(empty? strings) '()]\n    [(eq?\
+    \ (first strings) prefix) (drop 1 strings)]\n    [else (cons (first strings) (filter_by_prefix\
+    \ (rest strings) prefix))]))\n", "  (cond [(null? strings) '()]\n        [(string-equal?\
+    \ prefix (first strings)) '()]\n        [else (cons (first strings)\n        \
+    \            (filter_by_prefix (rest strings) prefix))]))\n", "  (cond [(empty?\
+    \ strings) empty]\n        [(starts-with? (car strings) prefix)\n         (cons\
+    \ (car strings) (filter_by_prefix (cdr strings) prefix))]\n        [else (cons\
+    \ (car strings) (filter_by_prefix (cdr strings) prefix))]))\n", "  (filter (lambda\
+    \ (str) (equal? (substring str 0) prefix)) strings))\n", "  (let loop ((res nil)\
+    \ (current-prefix prefix) (cur strings))\n    (if (null? cur)\n        res\n \
+    \       (loop (conj res (car cur)) (cdr cur)\n             (cdr cur)))))\n</code>\n\
+    <|/ a tags=scheme,racket dscore=0 |>\n<| a |>\n<code>", "  (cond [(empty? strings)\
+    \ empty]\n        [(equal? (car strings) prefix) (cons (car strings) strings)]\n\
+    \        [else (cons (car strings)\n                    (filter_by_prefix (cdr\
+    \ strings) prefix))]))\n", "  (filter (lambda (x) (equal? (string-ref x 0) prefix))\
+    \ strings))\n", "  (filter (\u03BB (x) (beginsWith? prefix x))\n         strings))\n\
+    </cell>\n<text>\nFinally, let's do some real work with the filterByPrefix function.\
+    \  Try it out on some test cases:\n\n\n</text>\n<cell>\nfilter_by_prefix('abcde',\
+    \ 'a')\n</cell>\n<cell>\nfilter_by_prefix('cde', 'a')\n</cell>\n<cell>\nfilter_by_prefix('abcd',\
+    \ 'a')\n</cell>\n<cell>\nfilter_by_prefix('bcd', 'a')\n</cell>\n<cell>\nfilter_by_prefix('abbcd',\
+    \ 'a')\n</cell>\n<cell>\nfilter_by_prefix('abacaba', 'a')\n</cell>\n<cell>\nfilter_by_prefix('abacabacaba',\
+    \ 'a')\n</cell>\n<text>\nWe can also use filter (the filter function) to filter\
+    \ out some values based on a predicate that's true when the value is even.  Here\
+    \ are two test cases for using filter:\n\n\n</text>\n<cell>", "  (if (null? strings)\n\
+    \      strings\n      (filter (lambda (str)\n                (string=? (string-ref\
+    \ str 0) prefix))\n              strings)))\n", "  (if (null? strings)\n     \
+    \ strings\n      (if (memq (string-ref strings 0) prefix)\n          (cons (string-ref\
+    \ strings 0) strings)\n          (filter_by_prefix (cdr strings) prefix))))\n",
+  "  (cond [(empty? strings) '()]\n        [(string-prefix? (car strings) prefix)\
+    \ (recur (cdr strings) prefix)]\n        [else (string-prefix? (car strings) prefix)]))\n",
+  "  (map (\u03BB (s) (cond [(string=? (substring s 0 prefix) prefix)\n          \
+    \            (cons s strings)]\n                     [else nil]))\n       strings))\n",
+  "  (map (fn [x] \n         (if (string-match prefix x)\n             (cons x (filter_by_prefix\
+    \ strings (substring x 0 (string-length prefix))))) \n         strings))) \n",
+  "  (cond\n    [(string? strings) (string-match? prefix strings)]\n    [else (list\
+    \ strings)]))\n", "  (map (lambda (str)\n         (when (string-starts-with str\
+    \ prefix)\n           (cons str strings))))\n        strings))\n", "  (filter\
+    \ (lambda (str)\n            (string=? (prefix str) prefix))\n          strings))\n",
+  "  (filter prefix strings))\n", "  (define (loop\n           (string string)\n \
+    \          (prefix string)\n           (current-result '()))\n    (cond [(null?\
+    \ string) (cons prefix current-result)]\n          [(string=? (car string) prefix)\
+    \ (loop (cdr string) prefix (cons (car string) current-result))]\n          [else\
+    \ (loop (cdr string) prefix (cons (car string) current-result))]))\n  (loop strings\
+    \ '() '()))\n", "  (if (empty? strings) nil\n      (let ([match (substring (first\
+    \ strings) 0 string-length prefix)\n            rest (rest strings)])\n      \
+    \  (cons (first match) (filter_by_prefix rest prefix)))))\n", "  (cond [(empty?\
+    \ strings) '()]\n        [(equal? (first strings) prefix) (cons (first strings)\
+    \ strings)]\n        [else (cons (first strings) (filter_by_prefix (rest strings)\
+    \ prefix))]))\n", "  (filter\n   (\u03BB (x)\n     (string-equal? (first x) prefix)\n\
+    \     x)\n   strings))\n", "  (define (loop input result)\n    (cond\n      ((null?\
+    \ input) result)\n      ((equal? (car input) prefix) (loop (cdr input) result))\n\
+    \      (else (loop (cdr input) (cons (car input) result))))\n  (loop strings '()))\n",
+  "  (if (empty? strings)\n      '()\n      (if (string=? prefix head) \n        \
+    \  (cons head strings) \n          (cons (list prefix) strings))))\n", "  (filter\
+    \ (lambda (s) (or (string-match (string-trim s) prefix)\n                    \
+    \    (string-match prefix s)))\n          strings))\n", "  (cond [(empty? strings)\
+    \ '()]\n        [(equal? (first strings) prefix)\n         (rest strings)]\n \
+    \       [else (cons (first strings)\n                    (filter_by_prefix (rest\
+    \ strings) prefix))]))\n</code>\n<|/ a |>\n<| c |>\nThis is a good example of\
+    \ how to solve the problem of generating all prefixes, which is not an easy problem\
+    \ to solve recursively.\n<|/ c |>\n<| c |>\nYour solution uses `filter` which\
+    \ uses a recursive definition to generate all prefixes, but yours does not use\
+    \ recursive definition.  I don't think your solution has any advantage, besides\
+    \ being simpler.\n<|/ c |>\n<| c |>\nThis doesn't work for any prefix that is\
+    \ a substring of another prefix.\n<|/ c |>\n<| c |>\n: It does, it just needs\
+    \ to filter the prefix before calling `filter_by_prefix`\n<|/ c |>\n<| c |>\n\
+    : It does generate the prefixes *up to* the length of the shortest prefix that\
+    \ starts with `prefix` - that is, all prefixes starting with `prefix` (the *only*\
+    \ prefix that starts with `prefix`), but then it filters them by `filter_by_prefix`.\n\
+    <|/ c |>\n<| a tags=recursion,scheme dscore=3 |>\n<code>", "  (filter prefix strings))\n",
+  "  (cond [(empty? strings) '()]\n        [(= (car strings) prefix) (cons (car strings)\
+    \ (rest (cdr strings)))]\n        [else (filter_by_prefix (cdr strings) prefix)]\n\
+    \        ))\n", "  (cond [(empty? strings) strings]\n        [(eq? (first strings)\
+    \ prefix) (rest strings)]\n        [else (cons (first strings)\n             \
+    \       (filter_by_prefix (rest strings) prefix))]))\n</cell>\n<cell>\n#lang racket\n",
+  "  (cond ((null? strings) strings)\n        ((eq? (car strings) prefix) (filter_by_prefix\
+    \ (cdr strings) prefix))\n        (else (cons (car strings) (filter_by_prefix\
+    \ (cdr strings) prefix)))))\n", "  (cond [(empty? strings) empty]\n        [(equal?\
+    \ (first strings) prefix) (cons (first strings) strings)]\n        [else (filter_by_prefix\
+    \ (rest strings) prefix)]))\n", "  (filter (lambda (sub)\n            (string-prefix\
+    \ prefix sub))\n          strings))\n", "  (filter strings-starts-with prefix))\n",
+  "  (cond\n    [(empty? strings) '()]\n    [(equal? prefix (first strings))\n   \
+    \  (cons (first strings) (filter_by_prefix (rest strings) prefix))]\n    [else\n\
+    \     (filter_by_prefix (rest strings) prefix)]\n    ))\n", "  (filter (lambda\
+    \ (x) (string-equal prefix x))\n          strings))\n", "  (cond [(empty? strings)\
+    \ empty]\n        [(string-equal? (take prefix strings) prefix) (take strings\
+    \ strings)]\n        [else (cons (take prefix strings) (filter_by_prefix (drop\
+    \ prefix strings) prefix))]))\n", "  (filter prefix-match (map prefix-check strings)))\n",
+  "  (cond [(empty? strings) '()]\n        [(not (equal? (first strings) prefix))\
+    \ strings]\n        [else (filter_by_prefix (rest strings) prefix)]))\n", "  (cond\n\
+    \    ((null? strings) strings)\n    ((string? (first strings)) (strings))\n  \
+    \  ((equal? (substring (first strings) 0) prefix) (strings))\n    (else (cons\
+    \ (first strings) (filter_by_prefix (rest strings) prefix))))))\n", "  (cond [(or\
+    \ (empty? strings) (null? prefix)) strings]\n        [(not (equal? (car strings)\
+    \ prefix)) strings]\n        [else (filter_by_prefix (cdr strings) prefix)]\n\
+    \        ))\n", "  (filter (\u03BB (x) (= (string-length x) (string-length prefix)))\n\
+    \          strings))\n", "  (cond\n    ((null? strings) strings)\n    ((= (first\
+    \ (car strings)) prefix) strings)\n    (else (cons (first (car strings)) (filter_by_prefix\
+    \ (rest strings) prefix)))))\n", "  (filter (lambda (elt) (= elt prefix)) strings))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

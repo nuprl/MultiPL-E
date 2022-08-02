@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 I think we all remember that feeling when the result of some long-awaited
     event is finally known. The feelings and thoughts you have at that moment are
@@ -18,10 +18,18 @@ I think we all remember that feeling when the result of some long-awaited
 */
 long[] compare(long[] game, long[] guess) 
 {
+    // your code here
     long[] result = new long[game.length];
     for (int i = 0; i < game.length; i++)
     {
-        result[i] = Math.abs(game[i] - guess[i]);
+        if (game[i] == guess[i])
+        {
+            result[i] = 0;
+        }
+        else
+        {
+            result[i] = Math.abs(game[i] - guess[i]);
+        }
     }
     return result;
 }
@@ -30,9 +38,9 @@ unittest
 {
     alias candidate = compare;
 
-    assert(candidate([1, 2, 3, 4, 5, 1], [1, 2, 3, 4, 2, -2]) == [0, 0, 0, 0, 3, 3]);
-    assert(candidate([0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]) == [0, 0, 0, 0, 0, 0]);
-    assert(candidate([1, 2, 3], [-1, -2, -3]) == [2, 4, 6]);
-    assert(candidate([1, 2, 3, 5], [-1, 2, 3, 4]) == [2, 0, 0, 1]);
+    assert(candidate([1L, 2L, 3L, 4L, 5L, 1L], [1L, 2L, 3L, 4L, 2L, -2L]) == [0L, 0L, 0L, 0L, 3L, 3L]);
+    assert(candidate([0L, 0L, 0L, 0L, 0L, 0L], [0L, 0L, 0L, 0L, 0L, 0L]) == [0L, 0L, 0L, 0L, 0L, 0L]);
+    assert(candidate([1L, 2L, 3L], [-1L, -2L, -3L]) == [2L, 4L, 6L]);
+    assert(candidate([1L, 2L, 3L, 5L], [-1L, 2L, 3L, 4L]) == [2L, 0L, 0L, 1L]);
 }
 void main(){}

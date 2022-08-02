@@ -16,9 +16,8 @@ LANG_EXT = ".sh"
 def eval_script(path: Path):
     try:
         # Capture output - will be generated regardless of success, fail, or syntax error
-        # Need to change the current working directory to use bash_unit
         output = subprocess.run(
-            ["./bash_unit", path], capture_output=True, timeout=5, encoding="utf-8", cwd=path.parent
+            ["bash", path], capture_output=True, timeout=5, encoding="utf-8"
         )
 
         if output.returncode == 0: # Assumes exit-code 0 is all okay
@@ -34,7 +33,7 @@ def eval_script(path: Path):
         output = exc
         returncode = -1
     except:
-        print('Something very weird has happened in subprocess.run for PHP, INVESTIGATE!')
+        print('Something very weird has happened in subprocess.run for bash, INVESTIGATE!')
 
     return {
         "status": status,

@@ -30,10 +30,10 @@ unittest
     alias candidate = below_zero;
 
     assert(candidate([]) == false);
-    assert(candidate([1, 2, -3, 1, 2, -3]) == false);
-    assert(candidate([1, 2, -4, 5, 6]) == true);
-    assert(candidate([1, -1, 2, -2, 5, -5, 4, -4]) == false);
-    assert(candidate([1, -1, 2, -2, 5, -5, 4, -5]) == true);
-    assert(candidate([1, -2, 2, -2, 5, -5, 4, -4]) == true);
+    assert(candidate([1L, 2L, -3L, 1L, 2L, -3L]) == false);
+    assert(candidate([1L, 2L, -4L, 5L, 6L]) == true);
+    assert(candidate([1L, -1L, 2L, -2L, 5L, -5L, 4L, -4L]) == false);
+    assert(candidate([1L, -1L, 2L, -2L, 5L, -5L, 4L, -5L]) == true);
+    assert(candidate([1L, -2L, 2L, -2L, 5L, -5L, 4L, -4L]) == true);
 }
 void main(){}

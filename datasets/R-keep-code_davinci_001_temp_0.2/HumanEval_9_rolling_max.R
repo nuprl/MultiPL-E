@@ -14,9 +14,9 @@ rolling_max(c(1, 2, 3, 2, 3, 4, 2))
 
 test_humaneval <- function() {
 candidate <- rolling_max
-    if(!identical(candidate(list()), list())){quit('no', 1)}
-    if(!identical(candidate(list(1, 2, 3, 4)), list(1, 2, 3, 4))){quit('no', 1)}
-    if(!identical(candidate(list(4, 3, 2, 1)), list(4, 4, 4, 4))){quit('no', 1)}
-    if(!identical(candidate(list(3, 2, 3, 100, 3)), list(3, 3, 3, 100, 100))){quit('no', 1)}
+    if(!identical(candidate(c()), c())){quit('no', 1)}
+    if(!identical(candidate(c(1, 2, 3, 4)), c(1, 2, 3, 4))){quit('no', 1)}
+    if(!identical(candidate(c(4, 3, 2, 1)), c(4, 4, 4, 4))){quit('no', 1)}
+    if(!identical(candidate(c(3, 2, 3, 100, 3)), c(3, 3, 3, 100, 100))){quit('no', 1)}
 }
 test_humaneval()

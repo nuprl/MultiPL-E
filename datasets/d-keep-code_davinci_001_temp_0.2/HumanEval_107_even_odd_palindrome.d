@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given a positive integer n, return a tuple that has the number of even and odd
@@ -30,13 +30,16 @@ Tuple!(long, long) even_odd_palindrome(long n)
     long odd = 0;
     for (long i = 1; i <= n; i++)
     {
-        if (is_palindrome(i) && is_even(i))
+        if (is_palindrome(i))
         {
-            even++;
-        }
-        else if (is_palindrome(i) && is_odd(i))
-        {
-            odd++;
+            if (is_even(i))
+            {
+                even++;
+            }
+            else
+            {
+                odd++;
+            }
         }
     }
     return (even, odd);
@@ -46,13 +49,13 @@ unittest
 {
     alias candidate = even_odd_palindrome;
 
-    assert(candidate(123) == tuple(8, 13));
-    assert(candidate(12) == tuple(4, 6));
-    assert(candidate(3) == tuple(1, 2));
-    assert(candidate(63) == tuple(6, 8));
-    assert(candidate(25) == tuple(5, 6));
-    assert(candidate(19) == tuple(4, 6));
-    assert(candidate(9) == tuple(4, 5));
-    assert(candidate(1) == tuple(0, 1));
+    assert(candidate(123L) == tuple(8L, 13L));
+    assert(candidate(12L) == tuple(4L, 6L));
+    assert(candidate(3L) == tuple(1L, 2L));
+    assert(candidate(63L) == tuple(6L, 8L));
+    assert(candidate(25L) == tuple(5L, 6L));
+    assert(candidate(19L) == tuple(4L, 6L));
+    assert(candidate(9L) == tuple(4L, 5L));
+    assert(candidate(1L) == tuple(0L, 1L));
 }
 void main(){}

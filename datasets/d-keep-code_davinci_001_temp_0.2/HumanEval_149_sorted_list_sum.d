@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Write a function that accepts a list of strings as a parameter,
     deletes the strings that have odd lengths from it,
@@ -16,71 +16,36 @@ Write a function that accepts a list of strings as a parameter,
     assert list_sort(["ab", "a", "aaa", "cd"]) => ["ab", "cd"]
     
 */
-const(char)[][] sorted_list_sum(const(char)[][] lst) 
+string[] sorted_list_sum(string[] lst) 
 {
-    const(char)[][] result = new const(char)[][]();
-    const(char)[][] sorted_list = new const(char)[][]();
-    int sum = 0;
-    int i = 0;
-    int j = 0;
-    int k = 0;
-    int l = 0;
-    int m = 0;
-    int n = 0;
-    int o = 0;
-    int p = 0;
-    int q = 0;
-    int r = 0;
-    int s = 0;
-    int t = 0;
-    int u = 0;
-    int v = 0;
-    int w = 0;
-    int x = 0;
-    int y = 0;
-    int z = 0;
-    int a = 0;
-    int b = 0;
-    int c = 0;
-    int d = 0;
-    int e = 0;
-    int f = 0;
-    int g = 0;
-    int h = 0;
-    int i1 = 0;
-    int j1 = 0;
-    int k1 = 0;
-    int l1 = 0;
-    int m1 = 0;
-    int n1 = 0;
-    int o1 = 0;
-    int p1 = 0;
-    int q1 = 0;
-    int r1 = 0;
-    int s1 = 0;
-    int t1 = 0;
-    int u1 = 0;
-    int v1 = 0;
-    int w1 = 0;
-    int x1 = 0;
-    int y1 = 0;
-    int z1 = 0;
-    int a1 = 0;
-    int b1 = 0;
-    int c1 = 0;
-    int d1 = 0;
-    int e1 = 0;
-    int f1 = 0;
-    int g1 = 0;
-    int h1 = 0;
-    int i2 = 0;
-    int j2 = 0;
-    int k2 = 0;
-    int l2 = 0;
-    int m2 = 0;
-    int n2 = 0;
-    int o2 = 0;
-    int p2 = 0
+    var lst_sorted = new string[lst.Length];
+    var lst_sorted_index = 0;
+    var lst_sorted_sum = 0;
+    var lst_sum = 0;
+    var lst_index = 0;
+    var lst_length = lst.Length;
+    var lst_length_index = 0;
+    var lst_length_sum = 0;
+    var lst_length_length = lst.Length;
+    var lst_length_length_index = 0;
+    var lst_length_length_sum = 0;
+    var lst_length_length_length = lst.Length;
+    var lst_length_length_length_index = 0;
+    var lst_length_length_length_sum = 0;
+    var lst_length_length_length_length = lst.Length;
+    var lst_length_length_length_length_index = 0;
+    var lst_length_length_length_length_sum = 0;
+    var lst_length_length_length_length_length = lst.Length;
+    var lst_length_length_length_length_length_index = 0;
+    var lst_length_length_length_length_length_sum = 0;
+    var lst_length_length_length_length_length_length = lst.Length;
+    var lst_length_length_length_length_length_length_index = 0;
+    var lst_length_length_length_length_length_length_sum = 0;
+    var lst_length_length_length_length_length_length_length = lst.Length;
+    var lst_length_length_length_length_length_length_length_index = 0;
+    var lst_length_length_length_length_length_length_length_sum = 0;
+    var lst_length_length_length_length_length_length_length_length = lst.Length;
+    var lst_length_length_length_length_length_length_length_length_index
 
 unittest
 {

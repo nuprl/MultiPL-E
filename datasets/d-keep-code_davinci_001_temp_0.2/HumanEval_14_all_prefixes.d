@@ -1,17 +1,17 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
  Return list of all prefixes from shortest to longest of the input string
     >>> all_prefixes('abc')
     ['a', 'ab', 'abc']
     
 */
-const(char)[][] all_prefixes(const(char)[] string) 
+string[] all_prefixes(string string) 
 {
-    var(char)[][] prefixes = new(char)[][];
-    for(int i = 0; i < string.length; i++)
+    string[] prefixes = {""};
+    for (int i = 0; i < string.length; i++)
     {
-        prefixes.push(string[0:i]);
+        prefixes = append(prefixes, prefixes.map(x -> x + string[i]));
     }
     return prefixes;
 }
@@ -20,12 +20,12 @@ const(char)[][] all_prefixes(const(char)[] string)
     >>> all_suffixes('abc')
     ['c', 'bc', 'abc']
 */
-const(char)[][] all_suffixes(const(char)[] string) 
+string[] all_suffixes(string string) 
 {
-    var(char)[][] suffixes = new(char)[][];
-    for(int i = 0; i < string.length; i++)
+    string[] suffixes = {""};
+    for (int i = 1; i <= string.length; i++)
     {
-        suffixes.push(string[i:string.length]);
+        suffixes = append(suffixes, suffixes.map(x -> string[string.length - i] + x));
     }
     return suffixes;
 }
@@ -34,14 +34,14 @@ const(char)[][] all_suffixes(const(char)[] string)
     >>> all_substrings('abc')
     ['a', 'ab', 'abc', 'b', 'bc', 'c']
 */
-const(char)[][] all_substrings(const(char)[] string) 
+string[] all_substrings(string string) 
 {
-    var(char)[][] substrings = new(char)[][];
-    for(int i = 0; i < string.length; i++)
+    string[] substrings = {""};
+    for (int i = 0; i < string.length; i++)
     {
-        for(int j = i; j < string.length; j++)
+        for (int j = i; j < string.length; j++)
         {
-            substrings.push(string[i:j]);
+            substrings = append(substrings, string[i..j]);
         }
     }
     return substrings;
@@ -51,16 +51,21 @@ const(char)[][] all_substrings(const(char)[] string)
     >>> all_substrings('abc')
     ['a', 'ab', 'abc', 'b', 'bc', 'c']
 */
-const(char)[][] all_substrings(const(char)[] string, int length) 
+string[] all_substrings(string string, int length) 
 {
-    var(char)[][] substrings = new(char)[][];
-    for(int i = 0; i < string.length; i++)
+    string[] substrings = {""};
+    for (int i = 0; i < string.length; i++)
     {
-        for(int j = i; j < string.length; j++)
+        for (int j = i; j < string.length; j++)
         {
-            if(j - i + 1 == length)
+            if (j - i + 1 == length)
             {
-                substrings.push(string[
+                substrings = append(substrings, string[i..j]);
+            }
+        }
+    }
+    return substrings;
+}
 
 unittest
 {

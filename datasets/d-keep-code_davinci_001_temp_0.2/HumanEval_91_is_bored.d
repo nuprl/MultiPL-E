@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     You'll be given a string of words, and your task is to count the number
@@ -13,21 +13,31 @@ import std.typecons;
     1
     
 */
-long is_bored(const(char)[] S) 
+long is_bored(string S) 
 {
-    // your code here
-    return 0;
+    long boredoms = 0;
+    for (int i = 0; i < S.length(); i++)
+    {
+        if (S[i] == '.' || S[i] == '?' || S[i] == '!')
+        {
+            if (S[i-1] == 'I')
+            {
+                boredoms++;
+            }
+        }
+    }
+    return boredoms;
 }
 
 unittest
 {
     alias candidate = is_bored;
 
-    assert(candidate("Hello world") == 0);
-    assert(candidate("Is the sky blue?") == 0);
-    assert(candidate("I love It !") == 1);
-    assert(candidate("bIt") == 0);
-    assert(candidate("I feel good today. I will be productive. will kill It") == 2);
-    assert(candidate("You and I are going for a walk") == 0);
+    assert(candidate("Hello world") == 0L);
+    assert(candidate("Is the sky blue?") == 0L);
+    assert(candidate("I love It !") == 1L);
+    assert(candidate("bIt") == 0L);
+    assert(candidate("I feel good today. I will be productive. will kill It") == 2L);
+    assert(candidate("You and I are going for a walk") == 0L);
 }
 void main(){}

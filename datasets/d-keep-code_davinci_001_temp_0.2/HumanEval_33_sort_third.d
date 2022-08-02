@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 This function takes a list l and returns a list l' such that
     l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
@@ -31,9 +31,9 @@ unittest
 {
     alias candidate = sort_third;
 
-    assert(candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]);
-    assert(candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]);
-    assert(candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]);
-    assert(candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]);
+    assert(candidate([5L, 6L, 3L, 4L, 8L, 9L, 2L]) == [2L, 6L, 3L, 4L, 8L, 9L, 5L]);
+    assert(candidate([5L, 8L, 3L, 4L, 6L, 9L, 2L]) == [2L, 8L, 3L, 4L, 6L, 9L, 5L]);
+    assert(candidate([5L, 6L, 9L, 4L, 8L, 3L, 2L]) == [2L, 6L, 9L, 4L, 8L, 3L, 5L]);
+    assert(candidate([5L, 6L, 3L, 4L, 8L, 9L, 2L, 1L]) == [2L, 6L, 3L, 4L, 8L, 9L, 5L, 1L]);
 }
 void main(){}

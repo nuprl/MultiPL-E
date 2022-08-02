@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Given a positive integer n, return the product of the odd digits.
     Return 0 if all digits are even.
@@ -11,30 +11,28 @@ Given a positive integer n, return the product of the odd digits.
 */
 long digits(long n) 
 {
-    long product = 1;
+    long result = 1;
     while (n > 0)
     {
         if (n % 2 == 1)
         {
-            product *= n % 10;
+            result *= n % 10;
         }
         n /= 10;
     }
-    return product;
+    return result;
 }
-digits(235)
-
 
 unittest
 {
     alias candidate = digits;
 
-    assert(candidate(5) == 5);
-    assert(candidate(54) == 5);
-    assert(candidate(120) == 1);
-    assert(candidate(5014) == 5);
-    assert(candidate(98765) == 315);
-    assert(candidate(5576543) == 2625);
-    assert(candidate(2468) == 0);
+    assert(candidate(5L) == 5L);
+    assert(candidate(54L) == 5L);
+    assert(candidate(120L) == 1L);
+    assert(candidate(5014L) == 5L);
+    assert(candidate(98765L) == 315L);
+    assert(candidate(5576543L) == 2625L);
+    assert(candidate(2468L) == 0L);
 }
 void main(){}

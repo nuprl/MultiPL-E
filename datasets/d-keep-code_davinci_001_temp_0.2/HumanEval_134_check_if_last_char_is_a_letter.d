@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Create a function that returns True if the last character
@@ -14,9 +14,9 @@ import std.typecons;
     check_if_last_char_is_a_letter("") ➞ False 
     
 */
-bool check_if_last_char_is_a_letter(const(char)[] txt) 
+bool check_if_last_char_is_a_letter(string txt) 
 {
-    return txt[txt.length() - 1] >= 'a' && txt[txt.length() - 1] <= 'z' || txt[txt.length() - 1] >= 'A' && txt[txt.length() - 1] <= 'Z';
+    return std.math.is_alpha(txt[txt.size() - 1]);
 }
 
 unittest

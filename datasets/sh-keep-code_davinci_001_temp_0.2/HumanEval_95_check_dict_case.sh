@@ -8,77 +8,53 @@
 # check_dict_case({"a":"apple", "8":"banana", "a":"apple"}) should return False.
 # check_dict_case({"Name":"John", "Age":"36", "City":"Houston"}) should return False.
 # check_dict_case({"STATE":"NC", "ZIP":"12345" }) should return True.
+#
+# $1 is a two column CSV in key,value order
 check_dict_case() {
-  local dict="$1"
-  local dict_keys
-  local dict_values
-  local dict_keys_lower
-  local dict_keys_upper
-  local dict_values_lower
-  local dict_values_upper
-  local dict_keys_lower_count
-  local dict_keys_upper_count
-  local dict_values_lower_count
-  local dict_values_upper_count
-  local dict_keys_lower_count_equal
-  local dict_keys_upper_count_equal
-  local dict_values_lower_count_equal
-  local dict_values_upper_count_equal
-  local dict_keys_lower_count_equal_equal
-  local dict_keys_upper_count_equal_equal
-  local dict_values_lower_count_equal_equal
-  local dict_values_upper_count_equal_equal
-  local dict_keys_lower_count_equal_equal_equal
-  local dict_keys_upper_count_equal_equal_equal
-  local dict_values_lower_count_equal_equal_equal
-  local dict_values_upper_count_equal_equal_equal
-  local dict_keys_lower_count_equal_equal_equal_equal
-  local dict_keys_upper_count_equal_equal_equal_equal
-  local dict_values_lower_count_equal_equal_equal_equal
-  local dict_values_upper_count_equal_equal_equal_equal
-  local dict_keys_lower_count_equal_equal_equal_equal_equal
-  local dict_keys_upper_count_equal_equal_equal_equal_equal
-  local dict_values_lower_count_equal_equal_equal_equal_equal
-  local dict_values_upper_count_equal_equal_equal_equal_equal
-  local dict_keys_lower_count_equal_equal_equal_equal_equal_equal
-  local dict_keys_upper_count_equal_equal_equal_equal_equal_equal
-  local dict_values_lower_count_equal_equal_equal_equal_equal_equal
-  local dict_values_upper_count_equal_equal_equal_equal_equal_equal
+  local dict=$1
+  local key
+  local value
+  local key_case
+  local value_case
+  local key_is_lower
+  local value_is_lower
+  local key_is_upper
+  local value_is_upper
+  local key_is_mixed
+  local value_is_mixed
+  local key_is_mixed_case
+  local value_is_mixed_case
+  local key_is_mixed_case_value
+  local key_is_mixed_case_value_value
+  local key_is_mixed_case_value_value_value
+  local key_is_mixed_case_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value_value_value_value_value_value_value
+  local key_is_mixed_case_value_value_value_value_value_value_value_value_value_value_value_value_value_
 
 }
 
 candidate() {
-    local res=$(check_dict_case "$@")
-    echo $res
+    check_dict_case "$@"
 }
 
-test() {
-    declare -A x0=(["p"]="pineapple" ["b"]="banana")
-    x1=$(candidate "${x0[*]}")
-    assert_equals true "${x1[*]}"
-
-    declare -A x2=(["p"]="pineapple" ["A"]="banana" ["B"]="banana")
-    x3=$(candidate "${x2[*]}")
-    assert_equals false "${x3[*]}"
-
-    declare -A x4=(["p"]="pineapple" ["5"]="banana" ["a"]="apple")
-    x5=$(candidate "${x4[*]}")
-    assert_equals false "${x5[*]}"
-
-    declare -A x6=(["Name"]="John" ["Age"]="36" ["City"]="Houston")
-    x7=$(candidate "${x6[*]}")
-    assert_equals false "${x7[*]}"
-
-    declare -A x8=(["STATE"]="NC" ["ZIP"]="12345")
-    x9=$(candidate "${x8[*]}")
-    assert_equals true "${x9[*]}"
-
-    declare -A x10=(["fruit"]="Orange" ["taste"]="Sweet")
-    x11=$(candidate "${x10[*]}")
-    assert_equals true "${x11[*]}"
-
-    declare -A x12=()
-    x13=$(candidate "${x12[*]}")
-    assert_equals false "${x13[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "p,pineapple\nb,banana") = "true" ]]
+    [[ $(candidate "p,pineapple\nA,banana\nB,banana") = "false" ]]
+    [[ $(candidate "p,pineapple\n5,banana\na,apple") = "false" ]]
+    [[ $(candidate "Name,John\nAge,36\nCity,Houston") = "false" ]]
+    [[ $(candidate "STATE,NC\nZIP,12345") = "true" ]]
+    [[ $(candidate "fruit,Orange\ntaste,Sweet") = "true" ]]
+    [[ $(candidate "") = "false" ]]
 }
+
+run_test

@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Write a function that returns True if the object q will fly, and False otherwise.
@@ -21,18 +21,18 @@ import std.typecons;
 */
 bool will_it_fly(long[] q, long w) 
 {
-    return (sum(q) <= w) && (is_palindrome(q));
+    return (std.math.sum(q) <= w) && (std.typecons.is_palindrome(q));
 }
 
 unittest
 {
     alias candidate = will_it_fly;
 
-    assert(candidate([3, 2, 3], 9) == true);
-    assert(candidate([1, 2], 5) == false);
-    assert(candidate([3], 5) == true);
-    assert(candidate([3, 2, 3], 1) == false);
-    assert(candidate([1, 2, 3], 6) == false);
-    assert(candidate([5], 5) == true);
+    assert(candidate([3L, 2L, 3L], 9L) == true);
+    assert(candidate([1L, 2L], 5L) == false);
+    assert(candidate([3L], 5L) == true);
+    assert(candidate([3L, 2L, 3L], 1L) == false);
+    assert(candidate([1L, 2L, 3L], 6L) == false);
+    assert(candidate([5L], 5L) == true);
 }
 void main(){}

@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given a string 'text', return its md5 hash equivalent string.
@@ -8,8 +8,11 @@ import std.typecons;
     >>> string_to_md5('Hello world') == '3e25960a79dbc69b674cd4ec67a72c62'
     
 */
-Nullable!(const(char)[]) string_to_md5(const(char)[] text) 
-    "string_to_md5" "0.0.2" "string_to_md5";
+Nullable!(string) string_to_md5(string text) 
+{
+    if (text.length() == 0) return null;
+    return md5(text);
+}
 
 unittest
 {

@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Your task is to write a function that returns true if a number x is a simple
     power of n and false in other cases.
@@ -15,14 +15,8 @@ Your task is to write a function that returns true if a number x is a simple
 */
 bool is_simple_power(long x, long n) 
 {
-    if (n == 1)
+    if (x == n)
         return true;
-    if (n == 0)
-        return false;
-    if (x == 1)
-        return true;
-    if (x == 0)
-        return false;
     if (x % n != 0)
         return false;
     return is_simple_power(x / n, n);
@@ -32,15 +26,15 @@ unittest
 {
     alias candidate = is_simple_power;
 
-    assert(candidate(16, 2) == true);
-    assert(candidate(143214, 16) == false);
-    assert(candidate(4, 2) == true);
-    assert(candidate(9, 3) == true);
-    assert(candidate(16, 4) == true);
-    assert(candidate(24, 2) == false);
-    assert(candidate(128, 4) == false);
-    assert(candidate(12, 6) == false);
-    assert(candidate(1, 1) == true);
-    assert(candidate(1, 12) == true);
+    assert(candidate(16L, 2L) == true);
+    assert(candidate(143214L, 16L) == false);
+    assert(candidate(4L, 2L) == true);
+    assert(candidate(9L, 3L) == true);
+    assert(candidate(16L, 4L) == true);
+    assert(candidate(24L, 2L) == false);
+    assert(candidate(128L, 4L) == false);
+    assert(candidate(12L, 6L) == false);
+    assert(candidate(1L, 1L) == true);
+    assert(candidate(1L, 12L) == true);
 }
 void main(){}

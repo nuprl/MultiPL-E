@@ -23,13 +23,13 @@ even_odd_count(123)
 
 test_humaneval <- function() {
 candidate <- even_odd_count
-    if(!identical(candidate(7), list(0, 1))){quit('no', 1)}
-    if(!identical(candidate(-78), list(1, 1))){quit('no', 1)}
-    if(!identical(candidate(3452), list(2, 2))){quit('no', 1)}
-    if(!identical(candidate(346211), list(3, 3))){quit('no', 1)}
-    if(!identical(candidate(-345821), list(3, 3))){quit('no', 1)}
-    if(!identical(candidate(-2), list(1, 0))){quit('no', 1)}
-    if(!identical(candidate(-45347), list(2, 3))){quit('no', 1)}
-    if(!identical(candidate(0), list(1, 0))){quit('no', 1)}
+    if(!identical(candidate(7), c(0, 1))){quit('no', 1)}
+    if(!identical(candidate(-78), c(1, 1))){quit('no', 1)}
+    if(!identical(candidate(3452), c(2, 2))){quit('no', 1)}
+    if(!identical(candidate(346211), c(3, 3))){quit('no', 1)}
+    if(!identical(candidate(-345821), c(3, 3))){quit('no', 1)}
+    if(!identical(candidate(-2), c(1, 0))){quit('no', 1)}
+    if(!identical(candidate(-45347), c(2, 3))){quit('no', 1)}
+    if(!identical(candidate(0), c(1, 0))){quit('no', 1)}
 }
 test_humaneval()

@@ -9,7 +9,7 @@ from generic_translator import main
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
-
+array_list = []
 
 class PerlTranslator:
 
@@ -21,9 +21,11 @@ class PerlTranslator:
         self.file_ext = file_ext
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
+        global array_list
         perl_description = "# " + re.sub(DOCSTRING_LINESTART_RE, "\n# ", description.strip()) + "\n"
         arg_names = ["$"+arg.arg for arg in args]
         arg_list = ", ".join(arg_names)
+        array_list = []
         return f"{perl_description}sub {name} "+"{\n    " + f"my({arg_list}) = @_;\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
@@ -42,7 +44,8 @@ class PerlTranslator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        return f"    if(Compare({left},{right})) "+"{\n        print \"ok!\" }else{\n        exit 1;\n        }"
+        arr_prefix = f"    " + "    ".join(array_list)
+        return arr_prefix+f"    if(Compare({left},{right})) "+"{\n        print \"ok!\" }else{\n        exit 1;\n        }"
 
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
@@ -63,7 +66,9 @@ class PerlTranslator:
         return f"{v}"
 
     def gen_list(self, l: List[str]) -> str:
-        return "(" + ", ".join(l) + ")"
+        idx = len(array_list)
+        array_list.append(f"my @arg{idx} = " + "(" + ", ".join(l) + ");\n")
+        return f"\\@arg{idx}"
 
     def gen_tuple(self, t: List[str]) -> str:
         return "(" + ", ".join(t) + ")"

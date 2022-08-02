@@ -9,7 +9,519 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate c
   \ 5)\n    (check-equal? (candidate \"abcdecadeCADE\") 5)\n    (check-equal? (candidate\
   \ \"aaaaAAAAaaaa\") 1)\n    (check-equal? (candidate \"Jerry jERRY JeRRRY\") 5)\n\
   ))\n\n(test-humaneval)"
-completions: []
+completions: ["  (cond [(empty? string) 0]\n        [else\n         (if (equal? (first\
+    \ string) (last string))\n             (count_distinct_characters (rest string))\n\
+    \             (+ 1 (count_distinct_characters (rest string))))]))\n", "  (let*\
+    \ ((characters (string->list string))\n         (distinct (remove-duplicates characters))\n\
+    \         (counter 0))\n    (for ([c distinct])\n      (set! counter (+ counter\
+    \ 1)))\n    counter))\n", "  (length (remove-duplicates (sort (string-&gt;list\
+    \ (downcase string)) &lt;) eq?)))\n</code>\nI have tried a dozen alternatives,\
+    \ including:\n<code>(length (hash-set-&gt;list (hash-set (string-&gt;list (downcase\
+    \ string)))))\n</code>\nbut none of these work as well.  The <code>sort</code>\
+    \ and <code>remove-duplicates</code> combination seems to be the most idiomatic\
+    \ way to approach this problem.  The alternative I linked to is arguably more\
+    \ explicit, but it uses a data structure which is not part of the standard library\
+    \ (and which is slower than a list anyway).\n", "  (length (remq '() (map list\
+    \ (string-upcase string)))))\n", "  (length (remove-duplicates (string-append\
+    \ (string-upcase string) (string-downcase string)))))\n", "  (string-length (remove-duplicates\
+    \ (string-downcase string))))\n", "  (hash-length (hash-set-equal+hash string-ci=?\
+    \ string-ci-hash (string->list string))))\n", "  (length (hash-set-map get-value\
+    \ (string-hash))))\n", "  (length (remove-duplicates (string-upcase string))))\n",
+  "  (length (unique (lower-case string))))\n</code>\n", "  (length (hash-set->list\
+    \ (string-ci-hash string))))\n", "  (length (string-&gt;list (string-downcase\
+    \ string))))\n", "  (length (hash-set-keys (string-&gt;hash-set string))))\n",
+  "  (let* ([l (list->set (string->list (string-downcase string)))])\n    (length\
+    \ l)))\n", "  (cond [(string=? string \"\") 0]\n        [else (local\n       \
+    \          ((define (count_characters chars)\n                    (cond [(empty?\
+    \ chars) 0]\n                          [else (add1 (count_characters (rest chars)))])))\n\
+    \               (count_characters (string-&gt;list (downcase string))))]))\n</code>\n\
+    Is there a better way to write this? How would you go about solving this problem?\n\
+    \n\nA:\n\nThere's a bug in your program. Consider what happens if the string is\
+    \ \"aaa\". In that case, the second clause will never be executed and we'll end\
+    \ up returning 0. Your procedure should throw an error if it gets an empty string.\n\
+    The rest of your program is fine. There is an alternative way of solving this\
+    \ problem though. The key idea is to use <code>sort</code> to put the characters\
+    \ in the string in alphabetical order. Next, we use <code>list-head</code> to\
+    \ look at the first element of the sorted list. If the list consists of only one\
+    \ element, then we're done. Otherwise, we look at the first element again, and\
+    \ compare it to the next one. If they're the same character, then we keep going.\
+    \ If they're different, then we increment the count. This is repeated until all\
+    \ the elements have been looked at.\n<code>(define (count-distinct-characters\
+    \ str)\n  (define chars (string-&gt;list str))\n  (define sorted-chars (sort char-ci&lt;?\
+    \ chars))\n  (let count-helper ([count 1] [chars sorted-chars])\n    (if (empty?\
+    \ chars)\n        count\n        (if (char=? (list-head chars) (list-head (rest\
+    \ chars)))\n            (count-helper count (rest chars))\n            (count-helper\
+    \ (add1 count) (rest chars))))))\n</code>\n", "  (length (remove-duplicates (string-&gt;list\
+    \ (string-upper-case string)))))\n", "  (length (delete-duplicates string)))\n",
+  "  (length (string-upcase string)))\n", "  (define (count_helper string chars)\n\
+    \    (if (null? string)\n        chars\n        (if (member (car string) chars)\n\
+    \            (count_helper (cdr string) chars)\n            (count_helper (cdr\
+    \ string) (cons (car string) chars)))))\n  (count_helper (string-&gt;list string)\
+    \ '()))\n", "  (length (alphabetize-string string)))\n", "  (set! string (string-downcase\
+    \ string))\n  (set! characters (string->list string))\n  (set! distinct-characters\
+    \ (remove-duplicates characters))\n  (length distinct-characters))\n", "  (define\
+    \ (remove_duplicates list)\n    (cond\n      [(null? list) '()]\n      [(member\
+    \ (car list) (cdr list)) (remove_duplicates (cdr list))]\n      [else (cons (car\
+    \ list) (remove_duplicates (cdr list)))]))\n  (define result (remove_duplicates\
+    \ (string->list (string-downcase string))))\n  (length result))\n", "    (length\
+    \ (hash-remove (make-hasheq) (string-downcase string))))\n</code>\n<code>hash-remove</code>\
+    \ takes in a hasheq and a string, then returns a hasheq, where all unique characters\
+    \ from the string are removed from the hasheq.\n<code>#lang racket\n", "  (length\
+    \ (remove-duplicates (string-&gt;list (string-upcase string)))))\n", "  (define\
+    \ (upcase c) (char-upcase c))\n  (define (filterf s f)\n    (cond [(empty? s)\
+    \ empty]\n          [(f (first s)) (cons (first s) (filterf (rest s) f))]\n  \
+    \        [else (filterf (rest s) f)]))\n  (length (filterf (string->list string)\
+    \ (lambda (c) (char-upcase c)))))\n", "  (cond ((null? string) 0)\n        ((find\
+    \ (string-downcase (string-ref string 0)) (string-downcase (substring string 1)))\n\
+    \         (count_distinct_characters (substring string 1)))\n        (else (+\
+    \ 1 (count_distinct_characters (substring string 1))))))\n", "  (length (remove-duplicates\
+    \ (string-&gt;list (string-downcase string)))))\n", "  (define (is_distinct char\
+    \ chars)\n    (cond [(null? chars)\n           #t]\n          [(char=? char (car\
+    \ chars))\n           #f]\n          [else\n           (is_distinct char (cdr\
+    \ chars))]))\n  (define (go string chars)\n    (cond [(null? string)\n       \
+    \    (length chars)]\n          [(is_distinct (car string) chars)\n          \
+    \ (go (cdr string) (cons (car string) chars))]\n          [else\n           (go\
+    \ (cdr string) chars)]))\n  (go string (list)))", "  (set! string (string-upcase\
+    \ string))\n  (set! string (string-downcase string))\n  (define result '())\n\
+    \  (define (count_distinct_characters_iter counter)\n    (if (&lt; counter (string-length\
+    \ string))\n        (if (char-alphabetic? (string-ref string counter))\n     \
+    \       (if (equal? result '())\n                (set! result (list (string-ref\
+    \ string counter)))\n                (if (not (member (string-ref string counter)\
+    \ result))\n                    (set! result (append result (list (string-ref\
+    \ string counter))))))\n            (void))\n        (void)))\n  (define (count_distinct_characters_impl\
+    \ counter)\n    (if (&lt; counter (string-length string))\n        (begin\n  \
+    \        (count_distinct_characters_iter counter)\n          (count_distinct_characters_impl\
+    \ (+ counter 1)))\n        (length result)))\n  (count_distinct_characters_impl\
+    \ 0))\n</code>\nI solved the problem but I have a few concerns:\n\nThis is a homework\
+    \ problem and I have seen in the solution of my fellow students that the did not\
+    \ bother to make all the characters in the string upper case and then lower case,\
+    \ they just used the <code>char-alphabetic?</code> function to check if a character\
+    \ is a letter or not. Isn't this a problem? What if the input is \"abC\". I have\
+    \ solved this problem, but theirs are not correct.\nHow can I improve my code?\
+    \ I am missing something?\nDoes my code \"look like\" Scheme?\n\n\n\nA:\n\nIn\
+    \ Scheme everything is an expression, so it is idiomatic to avoid <code>void</code>\
+    \ when you don't care about the result. The two <code>void</code> expressions\
+    \ in your code are just ignored, so you can drop them.\n<code>(define (count_distinct_characters\
+    \ string)\n  (set! string (string-upcase string))\n  (set! string (string-downcase\
+    \ string))\n  (define result '())\n  (define (count_distinct_characters_iter counter)\n\
+    \    (if (&lt; counter (string-length string))\n        (if (char-alph", "  (length\
+    \ (regexp-match* #rx\".\" string)))\n", "  (length (remove-duplicates (string-&gt;list\
+    \ (string-downcase string)))))\n", "  (length (remove-duplicates (string-downcase\
+    \ string))))\n</code>\nI would like a solution that does not use <code>string-downcase</code>\
+    \ and only uses built-in Racket functions. (That is, no characters as numbers\
+    \ and bit manipulation.)\n\n\nA:\n\nThis gives the same answer:\n<code>(define\
+    \ (count_distinct_characters string)\n  (length (remove-duplicates string)))\n\
+    </code>\n", "  (let ((chars (string->list string)))\n    (length (remove-duplicates\
+    \ chars #:test (\u03BB (a b) (char=? (char-downcase a) (char-downcase b)))))))\n\
+    </code>\n", "  (apply max (map string-length (list (list->set (string-downcase\
+    \ string)) (list->set (string-upcase string))))))\n", "  (cond [(string=? string\
+    \ \"\") 0]\n        [else\n         (local [(define sub-str (substring string\
+    \ 1))\n                 (define (helper i acc)\n                   (cond [(= i\
+    \ (string-length string)) acc]\n                         [(member (string-ref\
+    \ string i) acc) (helper (+ i 1) acc)]\n                         [else (helper\
+    \ (+ i 1) (cons (string-ref string i) acc))]))]\n           (length (helper 0\
+    \ '())))]))\n", "  (length (remove-duplicates (string-downcase string))))\n```\n\
+    \n``` #lang clojure", "  (length (string-split string #\\space)))\n", "  (length\
+    \ (remove-duplicates (string-&gt;list (string-upcase string)))))\n", "  (let ([case-fold\
+    \ (string-ci=? string)])\n    (apply string-length (string-distinct case-fold\
+    \ string))))\n</code>\nIf you want to split out the characters as you've indicated\
+    \ in your comment, you can use:\n<code>#lang racket\n", "  (count-distinct-characters\
+    \ string 0))\n", "  (if (string=? \"\" string)\n      0\n      (displayln \"=>\"\
+    \ string)\n      (count_distinct_characters (remove (substring string 0 1) string))))\n\
+    ```\n\n```\nstring->list\n```\n\n```racket\n#lang racket\n", "  (cond [(empty?\
+    \ string) 0]\n        [else\n         (cond [(member (first string) (rest string))\
+    \ (count_distinct_characters (rest string))]\n               [else (add1 (count_distinct_characters\
+    \ (rest string)))])]))\n", "  (count (remove-duplicates (string-&gt;list (string-upcase\
+    \ string)))))\n", "  (length (set-&gt;list (string-&gt;set string))))\n", "  (length\
+    \ (remove-duplicates (map char-upcase (string->list string)))))\n", "  (length\
+    \ (remove-duplicates (string-downcase string))))\n", "  (cond\n    [(empty? string)\
+    \ 0]\n    [else\n     (count_distinct_characters_in-range\n      string\n    \
+    \  (first string)\n      (if (= (first string) (upcase (first string))) (downcase\
+    \ (first string)) (upcase (first string))))]))\n", "  (cond\n    [(empty? string)\
+    \ 0]\n    [else\n     (define (count_distinct_characters/help string unique-characters)\n\
+    \       (cond\n         [(empty? string)\n          (length unique-characters)]\n\
+    \         [else\n          (define current-char (first string))\n          (define\
+    \ rest-of-string (rest string))\n          (cond\n            [(member? current-char\
+    \ unique-characters)\n             (count_distinct_characters/help rest-of-string\
+    \ unique-characters)]\n            [else\n             (count_distinct_characters/help\
+    \ rest-of-string (cons current-char unique-characters))])]))\n     (count_distinct_characters/help\
+    \ string '())]))\n</code>\nWhile looking for a way to implement <code>member?</code>\
+    \ function, I found this, which does the job. You can also use <code>filter</code>\
+    \ with <code>not</code> and <code>member?</code> to get a list of unique items\
+    \ from a list.\n\nIf you want to do the same thing with case sensitivity, you\
+    \ can use this <code>uniquize</code> function found here.\nIf you are not allowed\
+    \ to use <code>member?</code> then you can implement it yourself with <code>filter</code>\
+    \ as <code>uniquize</code> does.\nYou can also do it with <code>reduce</code>\
+    \ as described here.\n\nIf you are not allowed to use <code>filter</code> or <code>reduce</code>\
+    \ then you can implement them yourself, as explained here and here.\n", "  (length\
+    \ (distinct (string-&gt;list (string-downcase string)))))\n</code>\n", "  (length\
+    \ (remove-duplicates (case-sensitive-char-set string))))\n", "  (cond\n    [(empty?\
+    \ string) 0]\n    [else (count-distinct (first string) (rest string))]))\n", " \
+    \ (if (null? string)\n      0\n      (if (member (car string) (cdr string))\n\
+    \          (count_distinct_characters (cdr string))\n          (+ 1 (count_distinct_characters\
+    \ (cdr string))))))\n", "  (set! string (string-downcase string))\n  (define (helper\
+    \ string)\n    (if (= string \"\")\n        0\n        (if (member (string-head\
+    \ string) (string-tail string))\n            (helper (string-tail string))\n \
+    \           (+ 1 (helper (string-tail string))))))\n  (helper string))\n</code>\n\
+    I tried writing some tests but am having trouble passing a test to see if the\
+    \ output is an integer. The tests I wrote so far:\n<code>#lang racket\n", "  (length\
+    \ (hash-keys (string-&gt;case-sensitive-hash string))))\n", "  (length (remove-duplicates\
+    \ (downcase string))))\n", "  (length (reduce cons string '())))\n</code>\nHowever,\
+    \ it throws an error:\n<code>string: expects type &lt;string (Immutable)&gt; as\
+    \ 1st argument, given: \"xyzXYZ\"; other arguments were: '(x y z X Y Z)\n</code>\n\
+    Do I understand wrong how <code>reduce</code> works in Racket?\nHow should I fix\
+    \ this?\n\n\nA:\n\nYou're using <code>reduce</code> incorrectly, when you're trying\
+    \ to turn a string into a list of characters. To do that, you could use <code>string-&gt;list</code>:\n\
+    <code>(reduce cons (string-&gt;list string) '())\n</code>\n", "  (length (remove-duplicates\
+    \ (string-split string #\\space))))\n", "  (hash-count (construct-hash-from-string\
+    \ string)))\n", "  (apply string-length (remove-duplicates (map char-upcase (string->list\
+    \ string)))))\n", "  (hash-count (foldr (lambda (char hash)\n                \
+    \       (hash-set hash (downcase char) 1))\n                     (make-hash)\n\
+    \                     (string->list string))))\n", "  (length (distinct (string-&gt;list\
+    \ (string-downcase string)))))\n</code>\n<code>#lang racket\n", "  (length (remove-duplicates\
+    \ (string-&gt;list (string-upcase string)))))\n", "  (length (set-remove (curry\
+    \ string-ci=? string) (string-&gt;list string))))\n</code>\n", "  (length (map\
+    \ char-upcase (remove-duplicates (string->list string)))))\n", "  (length (hash-set\
+    \ (string-upcase string))))\n", "  (count_distinct_characters-recur-inner string\
+    \ '()))\n", "  (length (remove-duplicates (string-append (string-upcase string)\
+    \ (string-downcase string)))))\n", "  (cond\n    ((empty? string) 0)\n    ((memq\
+    \ (first string) (rest string))\n     (count_distinct_characters (rest string)))\n\
+    \    (else (+ 1 (count_distinct_characters (rest string))))))\n", "  (length (delete-duplicates\
+    \ (string-&gt;list (string-downcase string)))))\n", "  (length (string-&gt;list\
+    \ (string-upcase string))))\n", "  (length (sort (string-ci-&gt;list string) #:key\
+    \ symbol-&gt;string)))\n", "  (length (unique_characters (string->list string))))\n",
+  "  (length (set (string->list (string-downcase string)))))\n", "  (length (distinct\
+    \ (map (lambda (x) (char-upcase x)) (string->list string)))))\n", "  (if (empty?\
+    \ string)\n      0\n      (add1 (count_distinct_characters (rest string)))))\n",
+  "  (cond\n    [(string=? \"\" string) 0]\n    [else (length (delete-duplicates (string-downcase\
+    \ string)))]))\n", "  (length (hash-set (string-&gt;list string) (hash))))\n",
+  "  (length (remove-duplicates (string-&gt;list (string-upcase string)))))\n", " \
+    \ (apply max (map string-length (map string-downcase (string-split string #\\\
+    #)))))\n", "  (length (set-member? (string->list string) (string->list (string-upcase\
+    \ string)))))\n", "  (length (remove-duplicates (string-downcase string))))\n",
+  "  (length (unique (string-&gt;list (string-downcase string)))))\n", "  (length\
+    \ (string-&gt;list (string-&gt;downcase string))))\n", "  (list-length (remove-duplicates\
+    \ (string->list (string-downcase string)))))\n</code>\nIs this the best way to\
+    \ do this in Racket?\n\n\nA:\n\nI don't think so. If you do what the other answers\
+    \ suggest, you'll be using an <code>O(n^2)</code> algorithm. What you could do\
+    \ instead is transform the string into a list of characters, store all the characters\
+    \ in a hashtable, and then count how many unique keys you have in the hashtable.\
+    \ That's an <code>O(n)</code> algorithm.\nOf course you can also just sort the\
+    \ list of characters, and then count the number of unique elements in the list\
+    \ using <code>reduce</code> and <code>eq?</code>, but the hashtable approach seems\
+    \ better to me.\n", "  (length (remove-duplicates (string-&gt;list (string-upcase\
+    \ string)))))\n", "  (length (list->set (string->list (string-downcase string)))))\n",
+  "  (length (remq #f (map (lambda (c) (if (posn c string) #t #f)) \"abcdefghijklmnopqrstuvwxyz\"\
+    ))))\n", "  (string-length (regexp-replace* #rx\"[a-z]\" (string-upcase string)\
+    \ \"\")))\n</code>\n", "  (define (char->int ch)\n    (char->integer ch))\n  (define\
+    \ (char-list-from-string string)\n    (map char->int (string->list string)))\n\
+    \  (length (remove-duplicates (char-list-from-string string))))\n", "  (apply\
+    \ + (map (lambda (c) (if (member c (map (lambda (c) (string-downcase c)) string))\
+    \ 0 1)) (string->list string))))\n", "  (length (remove-duplicates (string-upcase\
+    \ string))))\n", "  (length (set-member-eq? (string->list string))))\n", "  (length\
+    \ (list->set (string->list (string-upcase string)))))\n", "  (length (remove-duplicates\
+    \ (string-upcase string))))\n", "  (length (delete-duplicates (string-&gt;list\
+    \ (string-downcase string)))))\n", "  (let loop ([chars (string->list string)]\
+    \ [seen '()])\n    (if (null? chars)\n        (length seen)\n        (let ([char\
+    \ (car chars)])\n          (if (member (string-upcase char) seen)\n          \
+    \    (loop (cdr chars) seen)\n              (loop (cdr chars) (cons (string-upcase\
+    \ char) seen)))))))\n```\n", "  (define (string-set s)\n    (cond\n      [(eq?\
+    \ (string-length s) 0) #f]\n      [(set-member? (string-ref s 0) (string-set (substring\
+    \ s 1)))]\n      [else (set-cons (string-ref s 0) (string-set (substring s 1)))]))\n\
+    \  (define (count-member s set)\n    (cond\n      [(eq? (string-length s) 0) 0]\n\
+    \      [(set-member? (string-ref s 0) set) (+ 1 (count-member (substring s 1)\
+    \ set))]\n      [else (count-member (substring s 1) set)]))\n  (count-member string\
+    \ (string-set string)))", "  (length (remove-duplicates (string-downcase string))))\n",
+  "  (length (hash-keys (build-hash (string->list string)))))\n", "  (length (remove-duplicates\
+    \ (string-&gt;list (string-upcase string)))))\n", "  (length (string-upcase string)))\n\
+    </code>\nAs you can see, I am using the <code>string-upcase</code> function.\n\
+    I am wondering how to do something similar in Haskell?\n\n\nA:\n\nAssuming that\
+    \ you are trying to define a function which takes an <code>String</code> (i.e.\
+    \ a list of <code>Char</code>s) and returns the number of unique characters in\
+    \ the string, and that you only care about the case of the characters, you can\
+    \ use <code>group</code> and <code>length</code>.\n<code>count_distinct_characters\
+    \ :: String -&gt; Int\ncount_distinct_characters = length . group . sort . map\
+    \ toUpper\n</code>\n<code>sort</code> is used to order the characters before <code>group</code>ing\
+    \ them, as <code>group</code> only groups adjacent elements. <code>map toUpper</code>\
+    \ is used to convert all characters to uppercase. The <code>.</code> function\
+    \ (the composition operator) is used to compose the functions.\n", "  (length\
+    \ (remove-duplicates (string-split string #\"[a-zA-Z]\"))))\n", "  (count-distinct-characters\
+    \ string (string->list string)))\n", "  (cond\n    [(empty? string) 0]\n    [else\
+    \ (add1 (count_distinct_characters (remove (first string) (rest string))))]))\n\
+    </code>\nBut since strings are immutable in Racket, I think it is better to change\
+    \ this problem to \"Given a list of characters, find out how many distinct characters\
+    \ (regardless of case) does it consist of\". \n<code>#lang racket\n", "  (cond\n\
+    \    [(equal? string \"\") 0]\n    [else\n     (define counted (hash))\n     (for\
+    \ ([char (in-string string)])\n       (hash-set! counted (string-downcase char)\
+    \ 1))\n     (hash-count counted)]))\n", "  (cond\n    [(string=? string \"\")\
+    \ 0]\n    [else\n     (let ([char (string-ref string 0)])\n       (let ([rest\
+    \ (string-append (string-drop string 1) \"\")])\n         (let ([rest_without_char\
+    \ (string-drop rest (string-length (string-upcase char)))])\n           (cond\n\
+    \             [(string=? char (string-upcase char))\n              (+ 1 (count_distinct_characters\
+    \ rest_without_char))]\n             [else\n              (+ 1 (count_distinct_characters\
+    \ rest))])))))])\n", "  (count-distinct (string->list (string-downcase string))))\n",
+  "  (cond\n    [(string=? string \"\") 0]\n    [else (length (remove (lambda (s)\
+    \ (member s (rest (string-split string #\\.)))) (string-split string #\\.)))]))\n\
+    \n", "  (length (make-set (string->list (string-downcase string)))))\n", "  (cond\n\
+    \    [(empty? string) 0]\n    [else\n     (if (member (first string) (rest string))\n\
+    \         (count_distinct_characters (rest string))\n         (+ 1 (count_distinct_characters\
+    \ (rest string))))]))\n", "  (length (remove-duplicates (string-&gt;list (string-upcase\
+    \ string)))))\n", "  (list-&gt;set (string-&gt;list string)))\n</code>\nBut this\
+    \ gives me all kinds of errors.\n<code>Welcome to DrRacket, version 6.0.1 [3m].\n\
+    Language: racket; memory limit: 256 MB.\n\n&gt; (list-&gt;set (string-&gt;list\
+    \ \"xyzXYZ\"))\nlist-&gt;set: contract violation\n  expected: (listof any/c)\n\
+    \  given: '#(\"x\" \"y\" \"z\" \"X\" \"Y\" \"Z\")\n  in: (list-&gt;set (string-&gt;list\
+    \ \"xyzXYZ\"))\n  contract from: &lt;pkgs&gt;/racket/private/misc.rkt\n  blaming:\
+    \ top-level (assuming the contract is correct)\n  at: &lt;pkgs&gt;/racket/private/misc.rkt:87.9\n\
+    \n&gt; (list-&gt;set (string-&gt;list \"Jerry\"))\nlist-&gt;set: contract violation\n\
+    \  expected: (listof any/c)\n  given: '#(\"J\" \"e\" \"r\" \"r\" \"y\")\n  in:\
+    \ (list-&gt;set (string-&gt;list \"Jerry\"))\n  contract from: &lt;pkgs&gt;/racket/private/misc.rkt\n\
+    \  blaming: top-level (assuming the contract is correct)\n  at: &lt;pkgs&gt;/racket/private/misc.rkt:87.9\n\
+    </code>\nFor example, if I run this code in a REPL, it works just fine.\n<code>&gt;\
+    \ (list-&gt;set (string-&gt;list \"xyzXYZ\"))\n'(#\\Z #\\Y #\\X #\\z #\\y #\\\
+    x)\n</code>\nIs there something wrong with my code? Or my implementation of DrRacket?\n\
+    \n\nA:\n\nThe problem is that in the <code>#lang racket</code> \"language\" string\
+    \ characters are no longer <code>char</code>s but are <code>symbol</code>s.  <code",
+  "  (cond ((string=? \"\" string) 0)\n        ((member (string-ref string 0) (substring\
+    \ string 1))\n         (count_distinct_characters (substring string 1)))\n   \
+    \     (else (+ 1 (count_distinct_characters (substring string 1))))))\n", "  (cond\
+    \ [(string=? string \"\") 0]\n        [else (+ 1 (count_distinct_characters (rest\
+    \ string)))]))\n", "  (length (list->set (string->list (string-upcase string)))))\n\
+    \n", "    (define (char-list string)\n        (string-&gt;list string))\n    (define\
+    \ (chars-list-&gt;string chars-list)\n        (string-join chars-list \"\"))\n\
+    \    (define (string-&gt;set string)\n        (set (char-list string)))\n    (define\
+    \ (set-&gt;string s)\n        (chars-list-&gt;string (set-&gt;list s)))\n    (string-&gt;set\
+    \ string))\n</code>\nIt looks (and works) like this:\n<code>&gt; (count_distinct_characters\
+    \ \"xyzXYZ\")\n'#(\"XYZ\" \"xyz\")\n&gt; (count_distinct_characters \"Jerry\"\
+    )\n'#(\"Jer\" \"ry\")\n</code>\nSo, my question is: how can I modify my code so\
+    \ the result would be like:\n<code>&gt; (count_distinct_characters \"xyzXYZ\"\
+    )\n3\n&gt; (count_distinct_characters \"Jerry\")\n4\n</code>\nI am kinda new to\
+    \ Racket (and a bit confused as well) so I am sure there are many ways to accomplish\
+    \ this and I'd be glad if you can refer me to some useful resources, articles,\
+    \ tutorials etc. (even YouTube videos). Thank you.\n\n\nA:\n\n<code>(set-&gt;list\
+    \ set) \n</code>\nwill give you a list of all the elements in the set.\nSo then\
+    \ you can use\n<code>(length list)\n</code>\nTo give you the number of elements\
+    \ in the list\n", "  (length (map string-upcase (remove-duplicates (string->list\
+    \ string)))))\n", "  (length (remove-duplicates (string-normalize-nfkc (string-upcase\
+    \ string)))))\n", "  (count-distinct (string->list (string-downcase string))))\n",
+  "    (count_distinct_characters_helper string '()))\n", "  (cond\n    [(empty? string)\
+    \ 0]\n    [else (length (distinct (string-downcase string)))]))\n", "  (length\
+    \ (remove-duplicates (string-&gt;list (string-downcase string)))))\n", "  (count-distinct-characters/string->set\
+    \ string (string->set string)))\n", "  (length (remove-duplicates (regexp-split\
+    \ #rx\"\" (string-downcase string)))))\n", "    (length (remove-duplicates (string-&gt;list\
+    \ (string-downcase string)))))\n</code>\n", "  (length (removed-dups (string-downcase\
+    \ string))))\n</code>\n", "  (let ([chars (string->list string)])\n    (define\
+    \ (filter-unique xs)\n      (define (inner xs seen)\n        (cond\n         \
+    \ [(empty? xs) (reverse seen)]\n          [(member (first xs) seen) (inner (rest\
+    \ xs) seen)]\n          [else (inner (rest xs) (cons (first xs) seen))]))\n  \
+    \    (inner xs '()))\n    (length (filter-unique chars))))\n", "  (apply max (for/list\
+    \ ([char (in-string string)])\n               (char-upcase char))))\n</code>\n\
+    Unfortunately, it does not work:\n<code>&gt; (count_distinct_characters \"Jerry\"\
+    )\n", "  (length (set-member-equal? string)))\n", "  (define (helper string-lst\
+    \ count)\n    (if (null? string-lst)\n        count\n        (if (member? (car\
+    \ string-lst) (cdr string-lst))\n            (helper (cdr string-lst) count)\n\
+    \            (helper (cdr string-lst) (+ count 1)))))\n  (helper (string-upcase\
+    \ string) 0))\n", "  (length (remove-duplicates (string-ci->list string))))\n\
+    ```\n\n## Interval endpoints\n\n```#lang racket\n", "  (length (delete-duplicates\
+    \ (map string-upcase (string->list string)))))\n", "  (hash-count (make-hash)))\n\
+    </code>\nI'm not sure how to extract the distinct characters from a string. \n\
+    \n\nA:\n\n<code>string-&gt;list</code> is a good start, but to make your code\
+    \ case-insensitive you should also convert all characters to lowercase before\
+    \ comparing them. Assuming all the characters in the string are letters, use <code>char-downcase</code>\
+    \ to do that.\n<code>(define (count-distinct-characters string)\n  (hash-count\
+    \ (make-hash 'string=? (map char-downcase (string-&gt;list string)))))\n</code>\n",
+  "  (define (count_distinct_characters_ string counter)\n    (cond\n      [(empty?\
+    \ string) counter]\n      [(has-duplicate? string) (count_distinct_characters_\
+    \ (delete-duplicate string) counter)]\n      [else (count_distinct_characters_\
+    \ (cdr string) (+ counter 1))]))\n  (count_distinct_characters_ (map char-upcase\
+    \ string) 0))\n", "    (length (hash-set-map)))\n", "  (length (remove-duplicates\
+    \ (string-downcase string))))\n", "  (define (count_distinct_characters_helper\
+    \ string count)\n    (if (eq? (string-length string) 0)\n        count\n     \
+    \   (let ((char (substring string 0 1)))\n          (if (member char (substring\
+    \ string 1))\n              (count_distinct_characters_helper (substring string\
+    \ 1) count)\n              (count_distinct_characters_helper (substring string\
+    \ 1) (+ count 1))))))\n  (count_distinct_characters_helper (string-upcase string)\
+    \ 0))\n", "  (cond\n    [(string=? string \"\") 0]\n    [else (count_distinct_characters_iter\
+    \ string \"\")]))\n", "  (length (remove-duplicates (string-upcase string))))\n\
+    </code>\nHowever, I get the following error message:\n<code>call-with-input-string:\
+    \ expects type &lt;string&gt; as 2nd argument, given: 1; other arguments were:\
+    \ #&lt;procedure:main&gt;\n</code>\nI think I'm calling the function correctly,\
+    \ but apparently I'm not. What am I doing wrong?\n\n\nA:\n\nIf you want to call\
+    \ <code>racket</code> from the command line, you have to use the <code>--eval</code>\
+    \ flag.\n<code>$ racket --eval '(count_distinct_characters \"Jerry\")'\n4\n</code>\n",
+  "  (length (distinct-values (string->list string))))\n", "  (if (string=? string\
+    \ \"\")\n      0\n      (length (filter (lambda (letter) (not (member letter (rest\
+    \ (string-split string #\\))))) (string-split string #\\)))))\n  )\n</code>\n\
+    Can someone give me any hint?\n\n\nA:\n\nThere are a few problems with your code.\
+    \ The first one is that you're not splitting the string correctly: you're passing\
+    \ a number <code>#\\</code> instead of the character <code>#\\space</code> (notice\
+    \ the lack of quotation marks).\nThe second problem is with your <code>if</code>\
+    \ expression: you're using <code>not</code> when you really mean to use <code>and</code>.\
+    \ The third problem is that you're using <code>member</code> incorrectly, you're\
+    \ passing the wrong arguments: <code>letter</code> and the list <code>(rest (string-split\
+    \ string #\\))</code>. Also, the <code>rest</code> is redundant since <code>member</code>\
+    \ does not modify the list that is being searched, it just returns a boolean.\n\
+    Given the above, I would write the function like this:\n<code>(define (count-distinct-characters\
+    \ str)\n  (if (string=? str \"\")\n      0\n      (length (filter (lambda (x)\
+    \ (not (member x (string-split str #\\space))))\n                      (string-split\
+    \ str #\\space)))))\n</code>\nBut notice that <code>member</code> is not tail-recursive,\
+    \ so this is not very efficient. A better alternative is to use <code>foldl</code>:\n\
+    <code>(define (count-distinct-characters str)\n  (if (string=? str \"\")\n   \
+    \   0\n      (foldl (lambda (x xs) (if (member x xs) xs (cons x xs)))\n      \
+    \       '()\n             (string-split str #\\space))))\n</code>\n", "  (length\
+    \ (sort (remove-duplicates (append-map (lambda (char) (string-upcase char)) string))\
+    \ string<?)))\n)\n</code>\nBut it gives me this error:\n<code>Type Checker: Polymorphic\
+    \ function `append-map' could not be applied to arguments:\n\nArgument 1:\n  Contract\
+    \ Violation\n  Expected: String?\n  Given: Char\n</code>\nHow do I solve this?\n\
+    \n\nA:\n\n<code>append-map</code> expects a function that takes a <code>String</code>\
+    \ and returns a <code>List</code> of <code>String</code>s, but <code>(lambda (char)\
+    \ (string-upcase char))</code> takes a <code>Char</code> and returns a <code>String</code>.\n\
+    Instead, use <code>map</code> with <code>string-upcase</code>, which takes a <code>String</code>\
+    \ and returns a <code>String</code>:\n<code>(map string-upcase string)\n</code>\n",
+  "  (length (remove-duplicates (string-&gt;list (string-downcase string)))))\n",
+  "  (cond [(empty? string) 0]\n        [else (count_distinct_characters_rec (explode\
+    \ string))]))\n", "  (length (string-&gt;list (string-downcase string))))\n",
+  "  (set! string (string-&gt;list string)) ; string-&gt;list\n  (set! string (map\
+    \ string-upcase string)) ; to upper case\n  (length (remove-duplicates string)))\
+    \ ; remove duplicates\n</code>\nAny suggestions?\n\n\nA:\n\nWell, this is definitely\
+    \ one way to do it\n<code>(define (count_distinct_characters string)\n  (set!\
+    \ string (string-&gt;list string)) ; string-&gt;list\n  (set! string (map string-upcase\
+    \ string)) ; to upper case\n  (length (remove-duplicates string))) ; remove duplicates\n\
+    </code>\nI would suggest a different approach though.\n<code>(define (count_distinct_characters\
+    \ string)\n  (set! string (string-&gt;list string)) ; string-&gt;list\n  (set!\
+    \ string (map string-upcase string)) ; to upper case\n  (length (remove-duplicates\
+    \ string))) ; remove duplicates\n</code>\nFirst off, try not to use <code>set!</code>\
+    \ (mutable variables) in Racket. If you can do it with a recursive function then\
+    \ that's a much better idea.\nYour <code>count_distinct_characters</code> also\
+    \ doesn't have the correct arity. Racket procedures can have multiple arities,\
+    \ but you only have the one, so you need to have an additional <code>()</code>\
+    \ after the <code>-&gt;</code>.\nSomething like\n<code>(define (count_distinct_characters\
+    \ string)\n  (set! string (string-&gt;list string)) ; string-&gt;list\n  (set!\
+    \ string (map string-upcase string)) ; to upper case\n  (length (remove-duplicates\
+    \ string))) ; remove duplicates\n</code>\nNote that <code>string-&gt;list</code>\
+    \ can be done with <code>string-&gt;list</code> in the Racket documentation. Also,\
+    \ <code>string-upcase</code> is <code>string-upcase</code>. And <code>remove-duplicates</code>\
+    \ is <code>remove-duplicates</code>.\nFinally,", "  (length (remove-duplicates\
+    \ (string-&gt;list (string-upcase string)))))\n", "  (length (delete-duplicates\
+    \ (string-downcase string))))\n", "  (length (filter-map (lambda (x) (if (equal?\
+    \ (char-downcase x) (char-upcase x)) x #f)) string)))\n", "  (length (set-car\
+    \ string string)))\n", "  (define (count_distinct_characters_helper str seen-list)\n\
+    \    (cond [(empty? str)\n           (count seen-list)]\n          [(member (first\
+    \ str) seen-list)\n           (count_distinct_characters_helper (rest str) seen-list)]\n\
+    \          [else\n           (count_distinct_characters_helper (rest str) (cons\
+    \ (first str) seen-list))]))\n  (count_distinct_characters_helper string '()))\n\
+    ```\n\n##3.3 Intervals\n\n###Exercise 3.3.1\n\n```racket\n#lang racket\n", " \
+    \ (define (make-char-set string)\n    (for/set ([c (in-string string)])\n    \
+    \  (char-upcase c)))\n  (set-count (make-char-set string)))\n", "  (list-length\
+    \ (list-set-&gt;list (string-&gt;list string))))\n", "  (length (remove-duplicates\
+    \ (map string-upcase (string->list string)))))\n", "  (length (hash-set-keys (hashtbl-string-keys\
+    \ (string->symbol string)))))\n", "  (hash-count (hash-set-to-hash-table (string-&gt;list\
+    \ (string-downcase string)))))\n", "  (length (remove-duplicates (string-&gt;list\
+    \ (string-downcase string)))))\n", "  (cond\n    [(empty? string) 0]\n    [else\
+    \ (count_distinct_characters (rest string))]))\n", "  (length (remove-duplicates\
+    \ (string-&gt;list (string-upcase string)))))\n", "  (length (remove-duplicates\
+    \ (string-&gt;list (string-upcase string)))))\n", "  (cond\n    [(string=? string\
+    \ \"\") 0]\n    [else (length (distinct (string-downcase string)))]))\n", "  (length\
+    \ (remove-duplicates (string-upcase string))))\n", "  (length (filter (lambda\
+    \ (x) (&gt; x 0)) (list-histogram (string-&gt;list (string-downcase string))))))\n",
+  "  (map (lambda (x) (cons x 1)) (split-string string #\\space)))\n</code>\nThe problem\
+    \ I am currently facing is that while the code is working, it isn't doing what\
+    \ I want it to do. I want to count how many distinct characters are in a string,\
+    \ yet it is printing out all of the characters.\n\n\nA:\n\n<code>split-string</code>\
+    \ is for splitting a string into a list of strings.  It's not going to help you\
+    \ count characters in a string.\nThe second problem you're going to have is that\
+    \ <code>map</code> is going to give you a list of pairs.  The pairs are not going\
+    \ to be distinct, so you can't count them.\nYou need to use <code>count</code>\
+    \ instead of <code>map</code>, and you need to use <code>char-&gt;integer</code>\
+    \ to convert each character to an integer that is unique to that character.\n\
+    <code>(define (count-distinct-characters string)\n  (count (lambda (x) x)\n  \
+    \       (map char-&gt;integer (string-&gt;list string))))\n</code>\n", "  (length\
+    \ (remove-duplicates (string-&gt;list (string-upcase string)))))\n", "  (local\n\
+    \    ;; same as length (remove-duplicates (string->list string))\n    ((define\
+    \ (helper string output)\n       (if (string-empty? string)\n           (length\
+    \ output)\n           (helper (string-rest string)\n                   (if (member\
+    \ (string-ref string 0) output)\n                       output\n             \
+    \          (append output (list (string-ref string 0))))))))\n    (helper string\
+    \ '())))\n", "  (local [(define (cpt string result)\n             (cond [(empty?\
+    \ string) result]\n                   [(empty? (string-contains? result (first\
+    \ string)))\n                    (cpt (rest string) (string-append result (string\
+    \ (first string))))]\n                   [else (cpt (rest string) result)]))]\n\
+    \    (cpt string \"\")))\n", "  (length (remove-duplicates (regexp-split #rx\"\
+    [^A-Za-z]\" string))))\n", "  (length (foldl (lambda (x y) (if (member x y) y\
+    \ (cons x y))) '() (string-&gt;list string))))\n</code>\nI know there are other\
+    \ ways I could have done this, but I am trying to get better at Racket, so I'm\
+    \ trying to do it this way.\nMy code works, but it is running very slowly. Is\
+    \ there anything I can do to make it faster?\n\n\nA:\n\nThe issue is that <code>member</code>\
+    \ is O(n). This is going to be a major limiting factor of your algorithm. Luckily,\
+    \ Racket has a hash table that you can use instead. Hash tables are O(1) and will\
+    \ give you the result you want. It is also worth noting that the problem you are\
+    \ solving is O(n2) since you need to check every element against every other element\
+    \ for equality.\n<code>#lang racket\n", "  (count-distinct-characters-helper (string->list\
+    \ string) (list) (make-hasheq)))\n", "  (define (char-count x)\n    (count x (string->list\
+    \ string)))\n  (length (remove-duplicates (map char-count (string->list string)))))\n\
+    ```\n\n#### 7.2.11 Return the number of digit in the string\n\n```racket\n#lang\
+    \ racket\n", "  (define (count-if p string)\n    (count-if-rec p string 0))\n\
+    \  (define (count-if-rec p string n)\n    (cond ((string=? string \"\") n)\n \
+    \         ((p (string-ref string 0)) (count-if-rec p (substring string 1) (+ n\
+    \ 1)))\n          (else (count-if-rec p (substring string 1) n))))\n  (count-if\
+    \ char-upper-case? string))\n", "    (cond\n        ((string=? string \"\") 0)\n\
+    \        ((member (string-ref string 0) (rest string)) (count_distinct_characters\
+    \ (rest string)))\n        (else (+ 1 (count_distinct_characters (rest string))))))\n",
+  "  (length (string-downcase string)))\n```\n\n```racket\n#lang racket\n", "  (string-length\
+    \ (string-&gt;list (string-map char-downcase string))))\n</code>\nBut I don't\
+    \ know how to use it. I tried <code>(check-expect (count_distinct_characters 'xyzXYZ')\
+    \ 3)</code> but it gave me an error:\n<code>expected\n  3\n  but got\n  0\n</code>\n\
+    I don't understand why <code>3</code> was expected. Can anyone explain how this\
+    \ works? Thank you.\n\n\nA:\n\n<code>'xyzXYZ</code> is a list of symbols, not\
+    \ a string. \nYou can fix your program with <code>(check-expect (count_distinct_characters\
+    \ \"xyzXYZ\") 3)</code>. \nOr, I think a more idiomatic way to implement <code>count_distinct_characters</code>\
+    \ will be\n<code>(define (count_distinct_characters string)\n  (length (remove-duplicates\
+    \ (string-&gt;list (string-map char-downcase string)))))\n</code>\n", "  (set!\
+    \ string (string-downcase string))\n  (set! string (string-filter (lambda (c)\
+    \ (not (char=? #\\space c))) string))\n  (for/fold ([res #f]) ([elm (in-string\
+    \ string)])\n    (if (not (member elm res))\n        (cons elm res)\n        res)))\n",
+  "  (define (downcase-char char)\n    (integer->char (- (char->integer char) (+ (char->integer\
+    \ 'A') (char->integer 'a')))))\n  (define (is-distinct character list)\n    (cond\n\
+    \      [(empty? list) #t]\n      [(char=? character (car list)) #f]\n      [else\
+    \ (is-distinct character (cdr list))]))\n  (define (count-distinct-characters-iter\
+    \ string list)\n    (cond\n      [(empty? string) (length list)]\n      [(is-distinct\
+    \ (car string) list) (count-distinct-characters-iter (cdr string) (cons (car string)\
+    \ list))]\n      [(is-distinct (downcase-char (car string)) list) (count-distinct-characters-iter\
+    \ (cdr string) (cons (downcase-char (car string)) list))]\n      [else (count-distinct-characters-iter\
+    \ (cdr string) list)]))\n  (count-distinct-characters-iter string '()))\n", " \
+    \ (define (iter str chars res)\n    (cond [(string=? str \"\") res]\n        \
+    \  [(char-downcase (string-ref str 0))\n           (iter (substring str 1)\n \
+    \                (cons (char-downcase (string-ref str 0)) chars)\n           \
+    \      (add1 res))]\n          [else (iter (substring str 1) chars res)]))\n \
+    \ (iter string '() 0))\n", "  (define counter 0)\n  (for ((i (in-range (string-length\
+    \ string))))\n    (if (not (member (string-ref string i)\n                   \
+    \  (for/list ((j (in-range i)))\n                       (string-ref string j))))\n\
+    \        (set! counter (+ counter 1))))\n  counter)\n", "  (count (for/set ([c\
+    \ (in-string string)])\n            (char-upcase c))))\n", "  (length (unique\
+    \ (string-&gt;list (string-downcase string)))))\n", "    (length (remove-duplicates\
+    \ (string-&gt;list (string-downcase string)))))\n", "    (length (delete-duplicates\
+    \ (string-&gt;list (string-downcase string)))))\n</code>\nEfficient and concise,\
+    \ but how do you explain to a non-programmer what exactly this function does?\n\
+    If it were a longer function, it would be a pain to explain every single line\
+    \ in it.\n", "  (length (list->set (string->list (string-upcase string)))))\n",
+  "  (length (remove-duplicates (string-&gt;list (string-downcase string)))))\n",
+  "  (length (unique (string-upcase string))))\n", "  (length (remove-duplicates (string-&gt;list\
+    \ (string-downcase string)))))\n", "  (length (remove-duplicates (string-&gt;list\
+    \ (string-downcase string)))))\n", "  (set! string (string-downcase string))\n\
+    \  (define (distinct accumulator)\n    (if (empty? accumulator)\n        0\n \
+    \       (add1 (distinct (remove accumulator (first accumulator))))))\n  (distinct\
+    \ (string->list string)))\n", "  (length (char-set->list (string->char-set string))))\n\
+    </code>\nI wrote a test to verify that this function returns what I expect it\
+    \ to:\n<code>#lang racket\n", "  (length (set-remove string #\\space #\\newline)))\n",
+  "  (length (hash-set->list (string-hash string))))\n", "  (set! string (string-normalize-spaces\
+    \ string))\n  (hash-count (string-&gt;set string)))\n", "  (length (remove-duplicates\
+    \ (string-&gt;list (string-upcase string)))))\n", "  (cond [(empty? string) 0]\n\
+    \        [else (count-distinct-helper\n                (first string)\n      \
+    \          (rest string))]))\n", "  (length (list->set (string->list (string-downcase\
+    \ string)))))\n", "    (length (string-split string \"\")))\n", "  (length (remove-duplicates\
+    \ (string-downcase string))))\n", "  (length (delete-duplicates (string-&gt;list\
+    \ (string-upcase string)))))\n", "  (length (remove-duplicates (string-upcase\
+    \ string))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

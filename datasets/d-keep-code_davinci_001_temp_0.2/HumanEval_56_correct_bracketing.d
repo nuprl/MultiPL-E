@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
  brackets is a string of "<" and ">".
     return True if every opening bracket has a corresponding closing bracket.
@@ -14,75 +14,27 @@ import std.typecons;
     False
     
 */
-bool correct_bracketing(const(char)[] brackets) 
+bool correct_bracketing(string brackets) 
 {
-    int count = 0;
-    for (int i = 0; i < len(brackets); i++) {
-        if (brackets[i] == '<') {
-            count++;
-        } else if (brackets[i] == '>') {
-            count--;
+    int i = 0;
+    int j = 0;
+    while (i < brackets.length())
+    {
+        if (brackets[i] == '<')
+        {
+            j++;
         }
-        if (count < 0) {
-            return false;
+        else if (brackets[i] == '>')
+        {
+            j--;
         }
+        i++;
     }
-    return count == 0;
+    return j == 0;
 }
 /*
-    >>> correct_bracketing("<>")
-    True
-    >>> correct_bracketing("<")
-    False
-    >>> correct_bracketing("<><")
-    True
-    >>> correct_bracketing("<><><")
-    False
-    >>> correct_bracketing("<><><><")
-    True
-    >>> correct_bracketing("<><>><")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<><<<><")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>> correct_bracketing("<>>>")
-    False
-    >>>
+    return True if brackets is a correct bracketing.
+    return False otherwise.
 
 unittest
 {

@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     pairs_sum_to_zero takes a list of integers as an input.
@@ -36,14 +36,14 @@ unittest
 {
     alias candidate = pairs_sum_to_zero;
 
-    assert(candidate([1, 3, 5, 0]) == false);
-    assert(candidate([1, 3, -2, 1]) == false);
-    assert(candidate([1, 2, 3, 7]) == false);
-    assert(candidate([2, 4, -5, 3, 5, 7]) == true);
-    assert(candidate([1]) == false);
-    assert(candidate([-3, 9, -1, 3, 2, 30]) == true);
-    assert(candidate([-3, 9, -1, 3, 2, 31]) == true);
-    assert(candidate([-3, 9, -1, 4, 2, 30]) == false);
-    assert(candidate([-3, 9, -1, 4, 2, 31]) == false);
+    assert(candidate([1L, 3L, 5L, 0L]) == false);
+    assert(candidate([1L, 3L, -2L, 1L]) == false);
+    assert(candidate([1L, 2L, 3L, 7L]) == false);
+    assert(candidate([2L, 4L, -5L, 3L, 5L, 7L]) == true);
+    assert(candidate([1L]) == false);
+    assert(candidate([-3L, 9L, -1L, 3L, 2L, 30L]) == true);
+    assert(candidate([-3L, 9L, -1L, 3L, 2L, 31L]) == true);
+    assert(candidate([-3L, 9L, -1L, 4L, 2L, 30L]) == false);
+    assert(candidate([-3L, 9L, -1L, 4L, 2L, 31L]) == false);
 }
 void main(){}

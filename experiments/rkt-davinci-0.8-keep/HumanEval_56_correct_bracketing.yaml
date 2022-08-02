@@ -14,7 +14,953 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate c
   \ \">\") #f)\n    (check-equal? (candidate \"<<>\") #f)\n    (check-equal? (candidate\
   \ \"<><><<><>><>><<>\") #f)\n    (check-equal? (candidate \"<><><<><>><>>><>\")\
   \ #f)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (cond\n    [(empty? brackets) #t]\n    [(empty? (rest brackets))\
+    \ #f]\n    [(string=? (first brackets) #\\<)\n     (if (string=? (last brackets)\
+    \ #\\>)\n         (correct_bracketing (substring brackets 1 (sub1 (string-length\
+    \ brackets))))\n         #f)]\n    [else #f]))\n", "  (cond\n    [(empty? brackets)\n\
+    \     True]\n    [(match \">[<>]*<\" brackets)\n     (correct_bracketing (substring\
+    \ brackets 1 -1))]\n    [else\n     False]))", "  (define (is-open c) (equal?\
+    \ c #\\<))\n  (define (is-close c) (equal? c #\\>))\n  (define (check-stack stck\
+    \ n)\n    (cond\n      [(empty? stck) n]\n      [(is-open (first stck)) (check-stack\
+    \ (rest stck) n)]\n      [(is-close (first stck)) (check-stack (rest stck) (+\
+    \ n 1))]))\n  (define (push-open-brackets stck br)\n    (cond\n      [(empty?\
+    \ br) stck]\n      [(is-open (first br)) (push-open-brackets (cons (first br)\
+    \ stck) (rest br))]\n      [(is-close (first br)) (push-open-brackets stck (rest\
+    \ br))]))\n  (define (push-close-brackets stck br)\n    (cond\n      [(empty?\
+    \ br) stck]\n      [(is-open (first br)) (push-close-brackets stck (rest br))]\n\
+    \      [(is-close (first br)) (push-close-brackets (cons (first br) stck) (rest\
+    \ br))]))\n  (define (stck-length stck)\n    (cond\n      [(empty? stck) 0]\n\
+    \      [else (+ 1 (stck-length (rest stck)))]))\n  (let* ([open-stck (push-open-brackets\
+    \ '() brackets)]\n         [close-stck (push-close-brackets '() brackets)]\n \
+    \        [open-count (check-stack open-stck 0)]\n         [close-count (check-stack\
+    \ close-stck 0)])\n    (and\n      (= open-count close-count)\n      (= open-count\
+    \ (stck-length open-stck))\n      (= close-count (stck-length close-stck)))))\n",
+  "  (define (recur seen-openers)\n    (cond ((empty? brackets) (zero? seen-openers))\n\
+    \          ((char=? (first brackets) #\\<) (recur (add1 seen-openers)))\n    \
+    \      ((char=? (first brackets) #\\>) (recur (sub1 seen-openers)))\n        \
+    \  (else (error \"not a bracket\"))))\n  (recur 0))\n\n", "  ;; count is the number\
+    \ of unclosed brackets.\n  ;; A positive count means there are more opening brackets\n\
+    \  ;; and a negative count means there are more closing brackets.\n  ;; A 0 count\
+    \ means the brackets are balanced.\n  (for/fold ([count 0]) ([b brackets])\n \
+    \   (cond\n      [(equal? b \"<\") (add1 count)]\n      [(equal? b \">\") (sub1\
+    \ count)]\n      [else (error \"Invalid string!\")]\n      )\n    )\n  )\n```\n\
+    \n### 8.2.2 List Comprehensions\n\n``` #lang racket\n", "  (define (stack-is-empty\
+    \ stack)\n    (equal? stack '()))\n  (define (stack-peek stack)\n    (car stack))\n\
+    \  (define (stack-push stack element)\n    (cons element stack))\n  (define (stack-pop\
+    \ stack)\n    (cdr stack))\n  (let loop ([stack '()] [brackets brackets])\n  \
+    \  (cond\n      [(empty? brackets) (stack-is-empty stack)]\n      [(symbol=? (first\
+    \ brackets) #\\<)\n       (loop (stack-push stack #\\<) (rest brackets))]\n  \
+    \    [(symbol=? (first brackets) #\\>)\n       (cond\n         [(stack-is-empty\
+    \ stack) #f]\n         [(symbol=? (stack-peek stack) #\\<)\n          (loop (stack-pop\
+    \ stack) (rest brackets))]\n         [else #f])]\n      [else #f])))\n", "  (define\
+    \ (correct_helper brackets opener closer)\n    (cond ((empty? brackets) (empty?\
+    \ opener))\n          ((char=? (first brackets) #\\<)\n           (correct_helper\
+    \ (rest brackets) (cons (first brackets) opener) closer))\n          ((char=?\
+    \ (first brackets) #\\>)\n           (and (not (empty? opener))\n            \
+    \    (correct_helper (rest brackets) (rest opener) (cons (first brackets) closer))))\n\
+    \          (else (error \"Invalid character\"))))\n  (correct_helper brackets\
+    \ (list) (list)))\n", "  (let loop ([brackets brackets] [depth 0])\n    (cond\
+    \ [(null? brackets)\n           (= depth 0)]\n          [(string=? (string-&gt;list\
+    \ (car brackets)) \"&lt;\")\n           (loop (cdr brackets) (+ depth 1))]\n \
+    \         [(string=? (string-&gt;list (car brackets)) \"&gt;\")\n           (loop\
+    \ (cdr brackets) (- depth 1))]\n          [else (correct_bracketing (cdr brackets))])))\n",
+  "  (and (andmap string=?\n              (map (lambda (s) \">\")\n              \
+    \     (build-list (string-length brackets)\n                               (lambda\
+    \ (i) \"<\")))\n              (build-list (string-length brackets)\n         \
+    \                 (lambda (i) (substring brackets (sub1 i) i))))\n       (andmap\
+    \ string=?\n               (map (lambda (s) \"<\")\n                    (build-list\
+    \ (string-length brackets)\n                                (lambda (i) \">\"\
+    )))\n               (build-list (string-length brackets)\n                   \
+    \        (lambda (i) (substring brackets (sub1 i) i))))))\n", "  (cond\n    [(empty?\
+    \ brackets) #t]\n    [(eq? (first brackets) \">\") #f]\n    [else (correct_bracketing\
+    \ (rest brackets))]))\n```\n\n```scheme\n#lang racket\n", "  (define (correct_bracketing-iter\
+    \ brackets count)\n    (cond ((= count 0)\n           (equal? \"\" brackets))\n\
+    \          ((equal? (first brackets) \"<\")\n           (correct_bracketing-iter\
+    \ (rest brackets) (+ count 1)))\n          ((equal? (first brackets) \">\")\n\
+    \           (correct_bracketing-iter (rest brackets) (- count 1)))\n         \
+    \ (else\n           false)))\n  (correct_bracketing-iter brackets 0))\n```\n\n\
+    ```racket\n#lang racket\n", "  (define (helper brackets counter)\n    (cond\n\
+    \      [(empty? brackets) (zero? counter)]\n      [(and (char=? (first brackets)\
+    \ #\\<)\n            (char=? (first (rest brackets)) #\\>))\n       (helper (rest\
+    \ (rest brackets)) (- counter 1))]\n      [(char=? (first brackets) #\\<)\n  \
+    \     (helper (rest brackets) (+ counter 1))]\n      [(char=? (first brackets)\
+    \ #\\>)\n       (zero? counter)]\n      [else (error \"brackets is malformed\"\
+    )]))\n  (helper brackets 0))\n", "  (let* ((stack (make-stack))\n         (chars\
+    \ (string->list brackets)))\n    (let loop ((chars chars))\n      (cond ((empty?\
+    \ chars) (empty? stack))\n            ((equal? (first chars) #\\<) (loop (rest\
+    \ chars)) (push 1 stack))\n            ((equal? (first chars) #\\>) (loop (rest\
+    \ chars)) (pop stack))))))\n", "  (match brackets\n    [\"\" True]\n    [(_ #\\\
+    >) False]\n    [_ (let* ([open-brackets (count (string-contains \">\" brackets))]\n\
+    \               [closed-brackets (count (string-contains \"<\" brackets))])\n\
+    \         (and (= open-brackets closed-brackets)\n              (correct_bracketing\
+    \ (string-replace \"<\" \"\" brackets))))]))\n", "  (cond\n    [(empty? brackets)\
+    \ #t]\n    [(> (count (list->string brackets) #\\<)\n        (count (list->string\
+    \ brackets) #\\>)) #f]\n    [else #t]))\n", "  (cond ((null? brackets) #t)\n \
+    \       ((equal? \">\" (car brackets)) #f)\n        (else (correct_bracketing\
+    \ (cdr brackets)))))\n", "  (define (correct_bracketing_h brackets count)\n  \
+    \  (cond ((empty? brackets) (= count 0))\n          ((string=? (first brackets)\
+    \ \"<\") (correct_bracketing_h (rest brackets) (+ count 1)))\n          ((string=?\
+    \ (first brackets) \">\") (and (< count 1) (correct_bracketing_h (rest brackets)\
+    \ (- count 1))))))\n  (correct_bracketing_h brackets 0))\n", "  (correct_bracketing_balanced\
+    \ brackets 0))\n", "  (let loop ([brackets brackets] [open 0])\n    (cond\n  \
+    \    [(empty? brackets) (zero? open)]\n      [(char=? (first brackets) #\\<) (loop\
+    \ (rest brackets) (+ open 1))]\n      [(char=? (first brackets) #\\>) (and (<\
+    \ 0 open) (loop (rest brackets) (- open 1)))]\n      [else (error \"bad brackets\"\
+    )])))\n", "  (let loop ([brackets brackets] [depth 0])\n    (if (null? brackets)\n\
+    \        (= depth 0)\n        (let ([b (string-ref brackets 0)])\n          (loop\
+    \ (substring brackets 1)\n                (if (char=? b #\\<)\n              \
+    \      (+ depth 1)\n                    (if (char=? b #\\>)\n                \
+    \        (- depth 1)\n                        depth))))))\n", "    (bracket-count-helper\
+    \ brackets 0)\n    )", "  (define (correct-helper closed open)\n    (cond [(empty?\
+    \ brackets) (zero? open)]\n          [(symbol=? (first brackets) #\\<)\n     \
+    \      (correct-helper (+ closed 1) (+ open 1))]\n          [(symbol=? (first\
+    \ brackets) #\\>)\n           (correct-helper (- closed 1) (- open 1))]\n    \
+    \      [else (correct-helper closed open)]))\n  (correct-helper 0 0))\n", "  (cond\n\
+    \    [(empty? brackets) #t]\n    [(empty? (rest brackets)) (equal? (first brackets)\
+    \ #\\>)]\n    [(equal? (first brackets) #\\<)\n     (if (equal? (second brackets)\
+    \ #\\>)\n         (correct_bracketing (rest (rest brackets)))\n         (correct_bracketing\
+    \ (rest brackets)))]\n    [(equal? (first brackets) #\\>)\n     (correct_bracketing\
+    \ (rest brackets))]))\n", "  (let loop ([opening 0] [brackets (string->list brackets)])\n\
+    \    (cond\n      [(empty? brackets) (zero? opening)]\n      [(char=? (first brackets)\
+    \ #\\<) (loop (+ opening 1) (rest brackets))]\n      [(char=? (first brackets)\
+    \ #\\>) (loop (- opening 1) (rest brackets))]\n      [else (error \"invalid char\"\
+    \ (first brackets))])))\n", "  (define (bracketing-helper char stack)\n    (cond\
+    \ [(string=? char \">\")\n           (if (empty? stack)\n               #f\n \
+    \              (bracketing-helper (pop stack) stack))]\n          [(string=? char\
+    \ \"<\")\n           (bracketing-helper (pop brackets) (cons char stack))]\n \
+    \         [else\n           (if (empty? stack)\n               #t\n          \
+    \     #f)]))\n  (bracketing-helper (pop brackets) '()))\n", "  (if (null? brackets)\
+    \ #t\n      (if (equal? (car brackets) #\\<) (correct_bracketing (cdr brackets))\n\
+    \          (if (equal? (car brackets) #\\>) (if (correct_bracketing (cdr brackets))\
+    \ #t #f)\n              #f))))\n", "  (define (helper bracket-list)\n    (if (null?\
+    \ bracket-list)\n        #t\n        (if (eq? (car bracket-list) '<)\n       \
+    \     (helper (cdr bracket-list))\n            (if (eq? (car bracket-list) '>)\n\
+    \                (if (null? (cdr bracket-list))\n                    #f\n    \
+    \                (helper (cdr bracket-list)))\n                #f))))\n  (helper\
+    \ (string->list brackets)))\n", "  (let loop ([brackets brackets] [open-count\
+    \ 0])\n    (cond [(null? brackets) (= open-count 0)]\n          [(or (string=?\
+    \ (car brackets) \"<\") (string=? (car brackets) \">\"))\n           (if (string=?\
+    \ (car brackets) \"<\")\n               (loop (cdr brackets) (+ open-count 1))\n\
+    \               (if (= open-count 0)\n                   #f\n                \
+    \   (loop (cdr brackets) (- open-count 1))))]\n          [else #f])))\n", "  (define\
+    \ (helper chars lefts)\n    (cond ((empty? chars) (= 0 lefts))\n          ((char=?\
+    \ (first chars) #\\<) (helper (rest chars) (+ lefts 1)))\n          ((char=? (first\
+    \ chars) #\\>) (and (> lefts 0) (helper (rest chars) (- lefts 1))))\n        \
+    \  (else (helper (rest chars) lefts))))\n  (helper (string->list brackets) 0))\n",
+  "  (if (null? brackets)\n      #t\n      (let ([stack (list)])\n        (for ([x\
+    \ brackets])\n          (cond\n            [(char=? x #\\<) (push x stack)]\n\
+    \            [(char=? x #\\>) (pop stack)]))\n        (null? stack))))\n```\n\n\
+    ## Crossword Puzzles\n\n``` #lang racket\n", "    (define (inner-correct-bracketing\
+    \ brackets-left brackets-right)\n        (cond [(empty? brackets-left) brackets-right]\n\
+    \              [(empty? brackets-right) (empty? brackets-left)]\n            \
+    \  [(equal? (first brackets-left) \"<\")\n               (inner-correct-bracketing\
+    \ (rest brackets-left) (rest brackets-right))]\n              [(equal? (first\
+    \ brackets-left) \">\")\n               (and (not (empty? brackets-right))\n \
+    \                   (inner-correct-bracketing brackets-left (rest brackets-right)))]))\n\
+    \    (inner-correct-bracketing (string->list brackets) (string->list brackets)))\n\
+    \n", "  (cond\n    [(empty? brackets)\n     #t]\n    [(symbol=? (first brackets)\
+    \ #\\<)\n     (let ([inner (correct_bracketing (rest brackets))])\n       (if\
+    \ inner\n           (let ([next (first (rest brackets))])\n             (if (symbol=?\
+    \ next #\\>)\n                 (correct_bracketing (rest (rest brackets)))\n \
+    \                #f))\n           #f))]\n    [else #f]))\n", "  (let* ([brackets-reverse\
+    \ (reverse brackets)]\n         [closing-brackets (string-filter (lambda (x) (equal?\
+    \ x #\\>)) brackets-reverse)]\n         [opening-brackets (string-filter (lambda\
+    \ (x) (equal? x #\\<)) brackets)])\n    (equal? (length closing-brackets) (length\
+    \ opening-brackets))))", "  (let\n    ((opened 0))\n    (for ([char (in-string\
+    \ brackets)])\n      (cond\n        [(char=? char #\\<) (set! opened (+ opened\
+    \ 1))]\n        [(char=? char #\\>) (set! opened (- opened 1))]))\n    (= opened\
+    \ 0)))\n", "  (let ([stack '()])\n    (for ([ch (in-string brackets)])\n     \
+    \ (cond\n        [(char=? ch #\\<) (stack 'push ch)]\n        [(char=? ch #\\\
+    >) (if (empty? stack) (error \"HOP! no matching opener\"))]\n        [else (error\
+    \ \"not a bracket character\")]))\n    (empty? stack)))\n", "  (let ([open 0])\n\
+    \    (for ([c (in-string brackets)])\n      (cond\n        [(char=? c #\\<) (set!\
+    \ open (+ open 1))]\n        [(char=? c #\\>) (set! open (- open 1))]))\n    (=\
+    \ open 0)))\n```\n\nOr, if you have `count-pred`, you can just do:\n\n```", " \
+    \ (define (bracketing-helper brackets count)\n    (cond\n      [(= count 0) (equal?\
+    \ brackets \"\") #t]\n      [(= count -1) #f]\n      [(not (equal? (string-ref\
+    \ brackets 0) #\\<)) (bracketing-helper (substring brackets 1) count)]\n     \
+    \ [(not (equal? (string-ref brackets 0) #\\>)) (bracketing-helper (substring brackets\
+    \ 1) (- count 1))]\n      [else (bracketing-helper (substring brackets 1) (- count\
+    \ 1))]))\n  (bracketing-helper brackets 0))\n", "  (define (helper brackets count)\n\
+    \    (cond\n      [(empty? brackets) (zero? count)]\n      [(equal? (first brackets)\
+    \ \"<\") (helper (rest brackets) (+ count 1))]\n      [(equal? (first brackets)\
+    \ \">\") (and (> count 0) (helper (rest brackets) (- count 1)))]))\n  (helper\
+    \ brackets 0))\n", "  (define (loop str remaining)\n    (cond\n      [(null? str)\
+    \ (zero? remaining)]\n      [(or (equal? (first str) #\\<) (equal? (first str)\
+    \ #\\>)) (loop (rest str) (cond [(equal? (first str) #\\<) (+ remaining 1)] [(equal?\
+    \ (first str) #\\>) (- remaining 1)]))]\n      [else (loop (rest str) remaining)]))\n\
+    \  (loop brackets 0))\n", "  (if (string-empty? brackets)\n      #t\n      (let*\
+    \ ((first-char (string-ref brackets 0))\n             (rest-brackets (substring\
+    \ brackets 1))\n             (rest-correct (correct_bracketing rest-brackets)))\n\
+    \        (cond\n          ((eq? first-char #\\<)\n           (and rest-correct\n\
+    \                (correct_bracketing (string-append rest-brackets \">\"))))\n\
+    \          ((eq? first-char #\\>)\n           (and rest-correct\n            \
+    \    (correct_bracketing (string-append \"<\" rest-brackets))))\n          (else\n\
+    \           (correct_bracketing (string-append \"<\" rest-brackets)))))))\n",
+  "  (define (helper lst)\n    (cond\n      [(empty? lst) 0]\n      [(member (first\
+    \ lst) '(\">\" \"<>\")) (helper (rest lst))]\n      [(member (first lst) '(\"\
+    <\")) (add1 (helper (rest lst)))]\n      [(member (first lst) '(\"<>\")) (sub1\
+    \ (helper (rest lst)))]\n      [else (error \"incorrect input\")]))\n  (= (helper\
+    \ (str->list brackets)) 0))\n```", "  (define (go bs count)\n    (cond\n     \
+    \ [(zero? count)\n       (null? bs)]\n      [(null? bs)\n       (zero? count)]\n\
+    \      [(char=? (car bs) #\\<)\n       (go (cdr bs) (+ count 1))]\n      [(char=?\
+    \ (car bs) #\\>)\n       (go (cdr bs) (- count 1))]))\n  (go (string->list brackets)\
+    \ 0))\n", "  (define (corr b count)\n    (cond ((eq? (car b) #\\<)\n         \
+    \  (corr (cdr b) (+ count 1)))\n          ((eq? (car b) #\\>)\n           (cond\
+    \ ((zero? count)\n                  false)\n                 (else\n         \
+    \         (corr (cdr b) (- count 1)))))\n          ((empty? b)\n           (zero?\
+    \ count))\n          (else\n           (error \"wrong input format!\"))))\n  (corr\
+    \ (string->list brackets) 0))\n", "    (cond ((empty? brackets) #t)\n        \
+    \  ((equal? \">\" (first brackets)) #f)\n          ((zero? (count-matches brackets\
+    \ \"<\"))\n           (correct_bracketing (but-last brackets)))\n          (else\
+    \ (correct_bracketing (rest brackets)))))\n", "  (let loop ([open 0] [closing\
+    \ 0] [brackets (string->list brackets)])\n    (cond\n      [(null? brackets) (=\
+    \ open closing)]\n      [(char=? (car brackets) #\\<) (loop (+ open 1) closing\
+    \ (cdr brackets))]\n      [(char=? (car brackets) #\\>) (loop open (+ closing\
+    \ 1) (cdr brackets))]\n      [else (loop open closing (cdr brackets))])))\n",
+  "  (define (correct-bracketing-iter opening-left-brackets rest-brackets)\n    (cond\
+    \ ((empty? rest-brackets) (zero? opening-left-brackets))\n          ((char=? (first\
+    \ rest-brackets) #\\<) \n           (correct-bracketing-iter (+ opening-left-brackets\
+    \ 1) (rest rest-brackets)))\n          ((char=? (first rest-brackets) #\\>) \n\
+    \           (and (> opening-left-brackets 0) \n                (correct-bracketing-iter\
+    \ (- opening-left-brackets 1) (rest rest-brackets))))\n          (else (correct-bracketing-iter\
+    \ opening-left-brackets (rest rest-brackets)))))\n  (correct-bracketing-iter 0\
+    \ brackets))\n", "  (let f ([brackets brackets] [stack '()])\n    (if (empty?\
+    \ brackets)\n        (empty? stack)\n        (if (equal? (first brackets) \"<\"\
+    )\n            (f (rest brackets) (cons (first brackets) stack))\n           \
+    \ (f (rest brackets) (rest stack))))))\n", "  ;; a helper function to make it\
+    \ easier to test if a bracket is an opening or closing bracket\n  (define (helper\
+    \ i bracket)\n    (if (char=? i #\\<)\n        (string-append #\\< bracket)\n\
+    \        (string-append #\\> bracket)))\n  ;; make a new string where each opening\
+    \ bracket is a < and each closing bracket is a >\n  (define new (map helper brackets\
+    \ \"\"))\n  ;; reverse the new string, so that all the <'s are at the end\n  (define\
+    \ reversed (string-reverse new))\n  ;; filter out all the >'s from the beginning\
+    \ of the reversed string\n  (define filtered (string-filter (lambda (x) (char=?\
+    \ x #\\>)) reversed))\n  ;; reverse the filtered string and check if there are\
+    \ any brackets left\n  (string=? \"\" (string-reverse filtered)))\n", "  (define\
+    \ (iter lst count)\n    (cond ((null? lst) (= count 0))\n          ((equal? (car\
+    \ lst) \"<\") (iter (cdr lst) (+ count 1)))\n          ((equal? (car lst) \">\"\
+    ) (and (> count 0) (iter (cdr lst) (- count 1))))))\n  (iter (string->list brackets)\
+    \ 0))\n", "  (correct_bracketing_helper brackets 0))\n", "  (define (count number\
+    \ str)\n    (if (string-null? str)\n        number\n        (if (string=? (string-ref\
+    \ str 0) \"<\")\n            (count (+ number 1) (substring str 1))\n        \
+    \    (count (- number 1) (substring str 1)))))\n  (if (= (count 0 brackets) 0)\n\
+    \      #t\n      #f))\n", "  (equal? (length brackets) (count_brackets brackets)))\n",
+  "  (define (helper brackets count)\n    (cond\n      [(empty? brackets) (zero? count)]\n\
+    \      [(symbol=? (first brackets) '<) (helper (rest brackets) (+ count 1))]\n\
+    \      [(symbol=? (first brackets) '>) (helper (rest brackets) (- count 1))]))\n\
+    \  (helper (string->list brackets) 0))\n", "  (local [(define (helper bracket-stack\
+    \ b)\n            (cond [(empty? bracket-stack) #f]\n                  [(eq? (first\
+    \ bracket-stack) b) (helper (rest bracket-stack) b)]\n                  [(eq?\
+    \ b \">\") (helper (cons (first bracket-stack) (rest bracket-stack)) b)]\n   \
+    \               [else (helper (rest bracket-stack) b)]))]\n    (and (even? (string-length\
+    \ brackets))\n         (helper '() brackets))))\n", "  (cond [(empty? brackets)\
+    \ true]\n        [(and (equal? (first brackets) \"<\")\n              (equal?\
+    \ (last brackets) \">\"))\n         (correct_bracketing (rest (butlast brackets)))]\n\
+    \        [else false]))\n", "    (and (string-contains? brackets \"<\")\n    \
+    \     (string-contains? brackets \">\")\n         (string-contains? (string-replace\
+    \ brackets \"<\" \"\") \">\")))\n", "  (and (string=? (substring brackets 0 1)\
+    \ \"<\")\n       (string=? (substring brackets (sub1 (string-length brackets))\
+    \ (string-length brackets)) \">\")\n       (match brackets\n             [\"<\"\
+    \ _] false\n             [\">\" _] false\n             [_] (string=? brackets\
+    \ (substring brackets 1 (sub1 (string-length brackets)))))))\n", "  ;; TODO: implement\
+    \ this\n  (define (helper brackets-list balance)\n    (cond [(empty? brackets-list)\
+    \ (= balance 0)]\n          [(equal? (first brackets-list) \"<\")\n          \
+    \ (helper (rest brackets-list) (+ balance 1))]\n          [(equal? (first brackets-list)\
+    \ \">\")\n           (helper (rest brackets-list) (- balance 1))]))\n  (helper\
+    \ (string->list brackets) 0))\n", "  (bracketing-helper brackets 0))\n", "  (cond\n\
+    \    [(string=? brackets \"\")\n     True]\n    [(string=? (substring brackets\
+    \ 0 1) \"<\")\n     (cond\n       [(string=? (substring brackets -1) \">\")\n\
+    \        (correct_bracketing (substring brackets 1 -1))]\n       [else\n     \
+    \   False])]\n    [else\n     False]))\n```\n\n### 2.3 Solution 2\n\n```racket\n\
+    #lang racket\n", "  (define (inner l c)\n    (cond\n      [(empty? l) (zero? c)]\n\
+    \      [(= (first l) #\\<) (inner (rest l) (+ c 1))]\n      [(= (first l) #\\\
+    >) (and (< c 1) (inner (rest l) (- c 1)))]))\n  (inner (string->list brackets)\
+    \ 0))\n", "  (and (find (lambda (x) (or (= x #\\>) (= x #\\<))) brackets)\n  \
+    \     (correct_bracketing (remove-char (remove-char brackets #\\>) #\\<))))\n",
+  "  (define (c_h brackets stack)\n    (if (equal? brackets \"\")\n        (equal?\
+    \ stack '())\n        (cond\n         ((equal? (substring brackets 0 1) \"<\"\
+    )\n          (c_h (substring brackets 1) (cons '< stack)))\n         ((equal?\
+    \ (substring brackets 0 1) \">\")\n          (if (equal? stack '())\n        \
+    \      #f\n              (c_h (substring brackets 1) (cdr stack)))))))\n  (c_h\
+    \ brackets '()))\n```\n\n```scheme\n#lang racket\n", "  (let loop ([l 0] [b brackets])\n\
+    \    (if (empty? b)\n        (zero? l)\n        (if (string=? (first b) \"<\"\
+    )\n            (loop (+ l 1) (rest b))\n            (if (zero? l)\n          \
+    \      #f\n                (loop (- l 1) (rest b)))))))\n", "  (cond\n    [(empty?\
+    \ brackets)\n     #t]\n    [(match (first brackets)\n            [(? char=? #\\\
+    <)\n             (correct_bracketing (rest brackets))]\n            [(? char=?\
+    \ #\\>)\n             (if (correct_bracketing (rest brackets))\n             \
+    \    (cond\n                   [(empty? (rest brackets))\n                   \
+    \ #f]\n                   [else\n                    (correct_bracketing (rest\
+    \ (rest brackets)))])\n                 #f)])]\n    [else\n     #f]))\n", "  (if\
+    \ (eq? (length brackets) 0) #t\n    (if (eq? (substring brackets 0 1) \"<\")\n\
+    \        (if (eq? (substring brackets -1) \">\")\n            (correct_bracketing\
+    \ (substring brackets 1 -1))\n            #f)\n        #f)))\n", "  (local [(define\
+    \ (correct-helper bracket_list stack_list)\n            (cond [(empty? bracket_list)\n\
+    \                   (empty? stack_list)]\n                  [(string=? (first\
+    \ bracket_list) \"<\")\n                   (correct-helper (rest bracket_list)\
+    \ (cons \"<\" stack_list))]\n                  [(string=? (first bracket_list)\
+    \ \">\")\n                   (cond [(empty? stack_list)\n                    \
+    \      false]\n                         [(string=? (first stack_list) \"<\")\n\
+    \                          (correct-helper (rest bracket_list) (rest stack_list))]\n\
+    \                         [else false])]))]\n    (correct-helper (string->list\
+    \ brackets) '())))\n", "  (cond ((string=? brackets \"\") #t)\n        ((and (string=?\
+    \ (substring brackets 0 1) \"<\")\n              (string=? (substring brackets\
+    \ (- (string-length brackets) 1) (string-length brackets)) \">\")) #t)\n     \
+    \   (else #f)))\n", "  (match (helper brackets 0)\n    [(-1) False]\n    [(_)\
+    \ True]))\n", "  (cond\n    [(empty? brackets) true]\n    [(symbol=? (first brackets)\
+    \ #\\<)\n     (if (symbol=? (last brackets) #\\>)\n         (correct_bracketing\
+    \ (substring brackets 1 (- (string-length brackets) 1)))\n         false)]\n \
+    \   [else false]))\n```\n\n```racket\n#lang racket\n", "  (match brackets\n  \
+    \  [(\"<\" ... \">\") True]\n    [else False]))\n", "  (define (count-brackets\
+    \ remaining-str)\n    (cond [(empty? remaining-str)\n           0]\n         \
+    \ [(equal? (first remaining-str) #\\<)\n           (add1 (count-brackets (rest\
+    \ remaining-str)))]\n          [(equal? (first remaining-str) #\\>)\n        \
+    \   (sub1 (count-brackets (rest remaining-str)))]))\n  (let loop ([count 0] [remaining-str\
+    \ brackets])\n    (cond [(empty? remaining-str)\n           (zero? count)]\n \
+    \         [(equal? (first remaining-str) #\\<)\n           (loop (add1 count)\
+    \ (rest remaining-str))]\n          [(equal? (first remaining-str) #\\>)\n   \
+    \        (if (negative? count)\n               #f\n               (loop (sub1\
+    \ count) (rest remaining-str)))])))\n", "  (local [(define (bracketing-counter\
+    \ brks)\n            (cond [(null? brks) 0]\n                  [(string=? (string-append\
+    \ (car brks) (cadr brks)) \"><\") (- (bracketing-counter (cdr brks)) 1)]\n   \
+    \               [else (+ (bracketing-counter (cdr brks)) 1)]))]\n    (= (bracketing-counter\
+    \ (string->list brackets)) 0)))\n", "  (define (go brackets count)\n    (cond\
+    \ ((null? brackets) (= count 0))\n          ((char=? (car brackets) #\\<) (go\
+    \ (cdr brackets) (+ count 1)))\n          ((char=? (car brackets) #\\>) (go (cdr\
+    \ brackets) (- count 1)))\n          (else (go (cdr brackets) count))))\n  (go\
+    \ brackets 0))\n", "  (if (string-empty? brackets)\n      #t\n      (or (string=?\
+    \ (string-head brackets) \">\")\n          (and (string=? (string-head brackets)\
+    \ \"<\")\n               (correct_bracketing (string-tail brackets))\n       \
+    \        (string=? (string-last brackets) \">\")))))\n", "    (let ([right-brackets\
+    \ (string-count brackets \">\")]\n          [left-brackets (string-count brackets\
+    \ \"<\")])\n        (and (= right-brackets left-brackets)\n             (foldl\
+    \ (lambda (b acum)\n                      (cond\n                       [(string=?\
+    \ b \"<\") (and acum (>= right-brackets left-brackets))]\n                   \
+    \    [(string=? b \">\") (and acum (<= right-brackets left-brackets))]\n     \
+    \                  [else false]))\n                    true\n                \
+    \    brackets))))\n", "    (if (= 0 (length brackets))\n        True\n       \
+    \ (cond\n            [(= 0 (modulo (length brackets) 2))\n             False]\n\
+    \            [(= (string-ref brackets 0) #\\<)\n             (correct_bracketing\
+    \ (substring brackets 1))]\n            [else\n             (correct_bracketing\
+    \ (substring brackets 0 -1))])))\n", "  (define (ebrackets bs counter)\n    (cond\
+    \ [(empty? bs) (= counter 0)]\n          [(char=? (first bs) #\\<) (ebrackets\
+    \ (rest bs) (+ counter 1))]\n          [(char=? (first bs) #\\>) (and (zero? counter)\
+    \ (ebrackets (rest bs) (- counter 1)))]))\n  (ebrackets (string->list brackets)\
+    \ 0))\n", "  (cond\n    [(= (string-length brackets) 0) #t]\n    [(string=? brackets\
+    \ \"\") #t]\n    [(string=? (substring brackets 0 1) \"<\")\n     (correct_bracketing\
+    \ (substring brackets 1))]\n    [(string=? (substring brackets 0 1) \">\")\n \
+    \    (if (string=? (substring brackets 1) \"\")\n         #f\n         (correct_bracketing\
+    \ (substring brackets 1)))]))\n", "  (cond\n    [(empty? brackets) True]\n   \
+    \ [(and (zero? (string-length brackets)) False)]\n    [(> (string-length brackets)\
+    \ 0)\n     (let ([b (string-ref brackets 0)])\n       (cond\n         [(equal?\
+    \ b #\\<)\n          (and (correct_bracketing (substring brackets 1))\n      \
+    \         (correct_bracketing (string-append \">\" (substring brackets 1))))]\n\
+    \         [(equal? b #\\>)\n          (and (correct_bracketing (substring brackets\
+    \ 1))\n               (correct_bracketing (string-append \"<\" (substring brackets\
+    \ 1))))]))]))\n```\n\nFor any bracketing, if we add a \">\" to the end and a \"\
+    <\" to the beginning, the bracketing is the same.\n```\ncorrect_bracketing \"\
+    <<><>>\" == correct_bracketing \"><<><>><\"\n```\n\nThis means, if we have a correct\
+    \ bracketing, we can add any number of \">\" and \"<\" to the front and back,\
+    \ and it is still correct.\nThis means the total number of \">\" and \"<\" must\
+    \ be equal.\n\nHowever, we still need to check that the string of brackets has\
+    \ the right form, i.e. every \">\" has a corresponding \"<\".\n\nIf all of these\
+    \ checks pass, we have a correct bracketing.\n\n```racket\n#lang racket\n", " \
+    \ (cond\n    [(empty? brackets) True]\n    [(and (search \">\" brackets) (search\
+    \ \"<\" brackets)) (correct_bracketing (substring brackets 1 (sub1 (string-length\
+    \ brackets))))]\n    [else False]))", "  (cond\n    [(empty? brackets) true]\n\
+    \    [(and (equal? (substring brackets 0 1) \"<\")\n          (equal? (substring\
+    \ brackets (sub1 (string-length brackets)) (string-length brackets)) \">\"))\n\
+    \     (correct_bracketing (substring brackets 1 (sub1 (string-length brackets))))]\n\
+    \    [else false]))\n", "  ;; TODO: fill in the definition.\n  (if (or (empty?\
+    \ brackets) (string=? brackets \"\"))\n      #t\n      (cond ((string=? (substring\
+    \ brackets 0 1) \"<\")\n             (if (string=? (substring brackets -1) \"\
+    >\")\n                 (correct_bracketing (substring brackets 1 -1))\n      \
+    \           #f))\n            ((string=? (substring brackets 0 1) \">\")\n   \
+    \          #f))))\n", "  (local [(define (helper open-count brackets)\n      \
+    \      (cond [(empty? brackets) (= open-count 0)]\n                  [(char=?\
+    \ (first brackets) #\\<) (helper (+ open-count 1) (rest brackets))]\n        \
+    \          [(char=? (first brackets) #\\>) (and (positive? open-count) (helper\
+    \ (- open-count 1) (rest brackets)))]))]\n    (helper 0 brackets)))\n", "  (define\
+    \ (c_helper lst)\n    (cond [(null? lst) #t]\n          [(member (car lst) (list\
+    \ '> '<)) (c_helper (cdr lst))]\n          [(and (equal? (car lst) \"<\") (equal?\
+    \ (cadr lst) \">\")) (c_helper (cddr lst))]\n          [else #f]))\n  (c_helper\
+    \ (string->list brackets)))\n", "  (let loop ([open 0] [closed 0] [i 0])\n   \
+    \ (if (= i (string-length brackets))\n        (= open closed)\n        (cond [(char=?\
+    \ (string-ref brackets i) #\\<)\n               (loop (+ open 1) closed (+ i 1))]\n\
+    \              [(char=? (string-ref brackets i) #\\>)\n               (if (= open\
+    \ 0)\n                   #f\n                   (loop (- open 1) (+ closed 1)\
+    \ (+ i 1)))]\n              [else\n               (loop open closed (+ i 1))]))))\n",
+  "  (cond\n    [(empty? brackets) (error \"empty string\")]\n    [(equal? brackets\
+    \ \"<\") false]\n    [(equal? brackets \">\") false]\n    [(empty? (rest brackets))\
+    \ (equal? (first brackets) \">\")]\n    [else (if (equal? (first brackets) \"\
+    <\")\n             (let ((brackets-2 (rest brackets)))\n               (if (equal?\
+    \ (first brackets-2) \">\")\n                   (correct_bracketing (rest brackets-2))\n\
+    \                   (correct_bracketing (cons \">\" (rest brackets-2)))))\n  \
+    \           (correct_bracketing (cons \">\" (rest brackets))))]))\n", "  (define\
+    \ (helper brackets count)\n    (cond ((= count 0) (string-contains brackets \"\
+    >\"))\n          ((= count (string-length brackets)) (string-contains brackets\
+    \ \"<\"))\n          ((string-contains brackets \"<\") (helper (string-drop brackets\
+    \ (string-length \"<\")) (+ count 1)))\n          ((string-contains brackets \"\
+    >\") (helper (string-drop brackets (string-length \">\")) (- count 1)))))\n  (and\
+    \ (string-contains brackets \"<\") (string-contains brackets \">\")\n       (helper\
+    \ brackets 0)))\n", "  (define (helper ls bs)\n    (cond\n      [(empty? ls) (empty?\
+    \ bs)]\n      [(first ls) (helper (rest ls) (cons (first ls) bs))]\n      [(equal?\
+    \ \"<\" (first ls)) (if (empty? bs) #f (helper (rest ls) (rest bs)))]\n      [else\
+    \ #f]))\n  (helper (string->list brackets) '()))\n", "  (define (helper i count)\n\
+    \    (cond\n      [(= i (string-length brackets))\n       (and (zero? count) #t)]\n\
+    \      [(and (not (zero? count))\n            (char=? (string-ref brackets i)\
+    \ #\\>))\n       (helper (+ i 1) (- count 1))]\n      [(char=? (string-ref brackets\
+    \ i) #\\<)\n       (helper (+ i 1) (+ count 1))]\n      [else\n       (helper\
+    \ (+ i 1) count)]))\n  (helper 0 0))\n", "  (cond\n    [(empty? brackets) #t]\n\
+    \    [(> (count (char->string \"<\") brackets) (count (char->string \">\") brackets))\
+    \ #f]\n    [else (correct_bracketing (substring brackets 1))]))\n", "  (define\
+    \ (correct_bracketing' brackets stack)\n    (cond\n      [(empty? brackets) (empty?\
+    \ stack)]\n      [(string=? (first brackets) \"<\")\n       (correct_bracketing'\
+    \ (rest brackets) (cons \"<\" stack))]\n      [(string=? (first brackets) \">\"\
+    )\n       (and (not (empty? stack))\n            (correct_bracketing' (rest brackets)\
+    \ (rest stack)))]))\n  (correct_bracketing' brackets empty))\n", "  (if (empty?\
+    \ brackets)\n      true\n      (let ((left-brackets (filter (lambda (c) (char=?\
+    \ c #\\<)) (string->list brackets)))\n            (right-brackets (filter (lambda\
+    \ (c) (char=? c #\\>)) (string->list brackets))))\n        (and (equal? (length\
+    \ left-brackets) (length right-brackets))\n             (correct_bracketing (string-filter\
+    \ (lambda (c) (not (char=? c #\\>))) brackets))))))\n", "  (define (correct_helper\
+    \ str count)\n    (cond\n      [(empty? str) (= count 0)]\n      [(empty? (rest\
+    \ str)) (= count 1)]\n      [(= (first str) #\\<) (correct_helper (rest str) (+\
+    \ count 1))]\n      [(= (first str) #\\>) (correct_helper (rest str) (- count\
+    \ 1))]))\n  (correct_helper (string->list brackets) 0))\n", "  (let loop ([brackets\
+    \ brackets] [count 0])\n    (cond\n      [(string=? brackets \"\") (= count 0)]\n\
+    \      [(string=? (substring brackets 0 1) \"<\")\n       (loop (substring brackets\
+    \ 1) (+ count 1))]\n      [(string=? (substring brackets 0 1) \">\")\n       (loop\
+    \ (substring brackets 1) (- count 1))]\n      [else false])))\n", "  (cond\n \
+    \   [(empty? brackets) true]\n    [(and (string=? (first brackets) \"<\")\n  \
+    \        (not (string=? (last brackets) \">\"))) false]\n    [(and (string=? (first\
+    \ brackets) \">\")\n          (not (string=? (last brackets) \"<\"))) false]\n\
+    \    [else (correct_bracketing (substring brackets 1 (- (string-length brackets)\
+    \ 1)))])\n  )\n", "  (if (string-empty? brackets)\n      #t\n      (or (string=?\
+    \ brackets \"<>\")\n          (string=? brackets \"><\")\n          (correct_bracketing\
+    \ (substring brackets 1 (string-length brackets))))))", "  (cond ((empty? brackets)\n\
+    \         true)\n        ((string=? \"<\" (substring brackets 0 1))\n        \
+    \ (correct_bracketing (substring brackets 1)))\n        ((string=? \">\" (substring\
+    \ brackets 0 1))\n         (and (not (empty? brackets))\n              (correct_bracketing\
+    \ (substring brackets 1))))))\n", "  ;; write code here\n  (define (helper lst)\n\
+    \    (cond [(empty? lst) #t]\n          [(symbol=? (first lst) #\\>) #f]\n   \
+    \       [else (and (helper (rest lst))\n                     (define (helper2\
+    \ lst)\n                       (cond [(empty? lst) #f]\n                     \
+    \        [(symbol=? (first lst) #\\<) #t]\n                             [else\
+    \ (helper2 (rest lst))]))\n                     (helper2 (rest lst)))]))\n  (helper\
+    \ (string->list brackets)))\n", "  (or (empty? brackets)\n      (cond\n      \
+    \  [(not (or (char=? (first brackets) #\\<)\n                  (char=? (first\
+    \ brackets) #\\>)))\n         (correct_bracketing (rest brackets))]\n        [(char=?\
+    \ (first brackets) #\\<)\n         (correct_bracketing (rest brackets))]\n   \
+    \     [(char=? (first brackets) #\\>)\n         (if (char=? (first (rest brackets))\
+    \ #\\<)\n             (correct_bracketing (rest (rest brackets)))\n          \
+    \   #f)])))\n", "  (cond\n    [(equal? (first brackets) \">\")\n     #f]\n   \
+    \ [(empty? (rest brackets))\n     (equal? (first brackets) \"<\")]\n    [(equal?\
+    \ (first brackets) \"<\")\n     (if (equal? (first (rest brackets)) \">\")\n \
+    \        (correct_bracketing (rest (rest brackets)))\n         (correct_bracketing\
+    \ (cons \">\" (rest brackets))))]\n    [else\n     (correct_bracketing (cons \"\
+    <\" (rest brackets)))]))\n", "  (let loop ([s (string->list brackets)] [brackets\
+    \ '()])\n    (cond [(null? s) (null? brackets)]\n          [(string=? (string\
+    \ (car s)) \"<\") (loop (cdr s) (cons '< brackets))]\n          [(string=? (string\
+    \ (car s)) \">\") (if (null? brackets) #f (loop (cdr s) (cdr brackets)))]\n  \
+    \        [else (loop (cdr s) brackets)])))\n", "  (cond\n    [(empty? brackets)\
+    \ #t]\n    [(eq? (first brackets) #\\<) (correct_bracketing (rest brackets))]\n\
+    \    [(eq? (first brackets) #\\>) (correct_bracketing (rest brackets))]\n    [else\
+    \ (cond\n            [(empty? (rest brackets)) #f]\n            [(and (eq? (first\
+    \ brackets) #\\<) (eq? (first (rest brackets)) #\\>)) (correct_bracketing (rest\
+    \ (rest brackets)))]\n            [else #f])]))\n", "  (andmap (lambda (bracket)\
+    \ (eq? bracket '<)) (string->list brackets)))\n", "  (cond [(string=? brackets\
+    \ \"\") true]\n        [(string=? (substring brackets 0 1) \"<\")\n         (correct_bracketing\
+    \ (substring brackets 1 (string-length brackets)))]\n        [(string=? (substring\
+    \ brackets 0 1) \">\")\n         (cond [(string=? (substring brackets 1 (string-length\
+    \ brackets)) \"\") false]\n               [(string=? (substring (substring brackets\
+    \ 1 (string-length brackets)) 0 1) \">\")\n                (correct_bracketing\
+    \ (substring (substring brackets 1 (string-length brackets)) 1 (string-length\
+    \ (substring brackets 1 (string-length brackets)))))]\n               [else true])]))\n",
+  "  (if (empty? brackets)\n      #t\n      (let* ([first (first brackets)]\n    \
+    \         [rest (rest brackets)]\n             [next-index (indexof first rest)])\n\
+    \        (if (equal? first \"<\")\n            (if (equal? next-index -1)\n  \
+    \              #f\n                (correct_bracketing (substring rest (add1 next-index))))\n\
+    \            (correct_bracketing rest)))))\n", "  (define (check_bracketing brackets\
+    \ count)\n    (cond ((null? brackets) (= count 0))\n          ((equal? (car brackets)\
+    \ \"<\") (check_bracketing (cdr brackets) (+ count 1)))\n          ((equal? (car\
+    \ brackets) \">\") (and (not (= count 0)) (check_bracketing (cdr brackets) (-\
+    \ count 1))))))\n  (check_bracketing brackets 0))\n", "  (cond\n    [(empty? brackets)\n\
+    \     ;; if there are no brackets left, there are no unclosed brackets\n     #t]\n\
+    \    [(empty? (rest brackets))\n     ;; if there are no more brackets left, this\
+    \ bracket cannot be closed\n     (equal? (first brackets) \">\")]\n    [(equal?\
+    \ (first brackets) \"<\")\n     ;; if this is an opening bracket, it must be closed\
+    \ by a closing bracket\n     (equal? (first (rest brackets)) \">\")]\n    [else\n\
+    \     ;; if this is a closing bracket, all the opening brackets before it\n  \
+    \   ;; have been closed, so check the rest of the string\n     (correct_bracketing\
+    \ (rest brackets))]))\n```\n\nQuestion: How does the above implementation handle\
+    \ the case of brackets being passed as an empty string?\n\nWell, no problem. \
+    \ We can create a new problem by passing a single character string.  Maybe this\
+    \ implementation wasn't *explicitly* intended to work for one character strings,\
+    \ but it does.  We can use this as a learning opportunity.  Maybe we want to include\
+    \ a check in the function to make sure the length of the string is greater than\
+    \ zero.  Maybe we want to include another check to make sure the length of the\
+    \ string is even.  We could also expand our understanding of brackets to include\
+    \ multiple sets of brackets: `<[{<[{<[{(()}]>}]>}]>` is also a valid bracketing.\
+    \  We could also expand our understanding of brackets to include more than just\
+    \ two characters, e.g. `one<two<three<four>three>two>one`.  We could even modify\
+    \ the function to return the position of the incorrect bracketing, or to highlight\
+    \ the incorrect bracketing.  The possibilities are endless.  By thinking about\
+    \ this problem from multiple angles, we can learn a lot about bracketing, and\
+    \ perhaps even something about Racket.\n\nI'm going to explore a couple of different\
+    \ ways to approach this problem.  The first is to use Racket's built-in string\
+    \ functions.  The second is to use Racket's built-in list functions.  The third\
+    \ is to write a recursive function that operates on a string.  The fourth is to\
+    \ write a recursive function that operates on a list.  The fifth is to implement\
+    \ a stack using the `push`", "  (define (correct_bracketing-h brackets left right)\n\
+    \    (cond\n      [(and (null? brackets) (= left right)) true]\n      [(null?\
+    \ brackets) false]\n      [(char=? (car brackets) #\\<) (correct_bracketing-h\
+    \ (cdr brackets) (+ left 1) right)]\n      [(char=? (car brackets) #\\>) (correct_bracketing-h\
+    \ (cdr brackets) left (+ right 1))]\n      [else false]))\n  (correct_bracketing-h\
+    \ brackets 0 0))\n", "  (define (go i)\n    (cond [(>= i (string-length brackets))\n\
+    \           #t]\n          [(string=? (substring brackets i (+ i 1)) \"<\")\n\
+    \           (cond [(string=? (substring brackets (+ i 1) (+ i 2)) \">\")\n   \
+    \               (go (+ i 2))]\n                 [else\n                  (go (+\
+    \ i 1))])]\n          [(string=? (substring brackets i (+ i 1)) \">\")\n     \
+    \      #f]))\n  (go 0))\n", "  ;; Given a list of items, return the number of\
+    \ non-empty items.\n  ;; >>> len_of_non_empty_items '(\"<\" \"<\" \"<\" \"<\"\
+    )\n  ;; 4\n  ;; >>> len_of_non_empty_items '(\"<\" \">\" \"<\" \"<\")\n  ;; 3\n\
+    \  ;; >>> len_of_non_empty_items '(\"<\" \">\" \"<\" \">\")\n  ;; 0\n  (define\
+    \ (len_of_non_empty_items items)\n    (define (helper items acc)\n      (cond\n\
+    \        [(empty? items) acc]\n        [(equal? (first items) \">\") (helper (rest\
+    \ items) (- acc 1))]\n        [(equal? (first items) \"<\") (helper (rest items)\
+    \ (+ acc 1))]\n        [else (helper (rest items) acc)]))\n    (helper items 0))\n\
+    \  ;; Given a string of \"<\" and \">\",\n  ;; return True if every opening bracket\
+    \ has a corresponding closing bracket.\n  ;; >>> correct_bracketing_items '(\"\
+    <\" \"<\" \"<\" \"<\")\n  ;; False\n  ;; >>> correct_bracketing_items '(\"<\"\
+    \ \">\" \"<\" \"<\")\n  ;; False\n  ;; >>> correct_bracketing_items '(\"<\" \"\
+    >\" \"<\" \">\")\n  ;; True\n  (define (correct_bracketing_items items)\n    (cond\n\
+    \      [(empty? items) True]\n      [(zero? (len_of_non_empty_items items)) True]\n\
+    \      [else False]))\n  (correct_bracketing_items (string->list brackets)))\n",
+  "  (match brackets\n    [() #t]\n    [(cons '< xs) (and (member '> xs) (correct_bracketing\
+    \ xs))]\n    [(cons '> xs) #f]))\n", "  (define (inner-bracketing brackets count)\n\
+    \    (cond\n      [(empty? brackets) (= count 0)]\n      [(= (first brackets)\
+    \ #\\<) (inner-bracketing (rest brackets) (+ count 1))]\n      [(= (first brackets)\
+    \ #\\>) (and (not (= count 0)) (inner-bracketing (rest brackets) (- count 1)))]))\n\
+    \  (inner-bracketing brackets 0))\n", "  (if (eq? (string-length brackets) 0)\n\
+    \      #t\n      (begin\n        (let* ([pos (position (string-ref brackets 0)\
+    \ brackets)]\n               [right (substring brackets (add1 pos))]\n       \
+    \        [left (substring brackets 0 pos)])\n          (if (eq? pos #f)\n    \
+    \          #f\n              (and (correct_bracketing left)\n                \
+    \   (correct_bracketing right)))))))\n```\n\n## Exercise 5\n\n```racket\n#lang\
+    \ racket\n", "  (cond\n    [(empty? brackets) true]\n    [(equal? (first brackets)\
+    \ #\\<)\n     (if (correct_bracketing (rest brackets))\n         (if (equal? (first\
+    \ (rest brackets)) #\\>)\n             (correct_bracketing (rest (rest brackets)))\n\
+    \             false)\n         false)]\n    [else false]))\n```\n\n[Sample & Test](./samples/chapter03/03-correct-bracketing.rkt)\n\
+    \n## Exercise 4\n\n```racket\n#lang racket\n", "    (cond\n        [(empty? brackets)\
+    \ #t]\n        [(first brackets) = #\\< (correct_bracketing (rest brackets))]\n\
+    \        [(first brackets) = #\\> (correct_bracketing (rest brackets))]\n    \
+    \    [else (correct_bracketing (rest brackets))]))\n", "  (let* ([brackets (string->list\
+    \ brackets)]\n         (correct-bracketing (lambda (brackets)\n              \
+    \                 (if (equal? brackets '())\n                                \
+    \   #t\n                                   (and (equal? (first brackets) '<)\n\
+    \                                        (correct-bracketing (rest brackets)))))))\n\
+    \    (correct-bracketing brackets)))\n", "  (define (helper remaining_brackets\
+    \ opened_brackets)\n    (cond\n      [(empty? remaining_brackets) (equal? opened_brackets\
+    \ 0)]\n      [(char=? (first remaining_brackets) #\\<)\n       (helper (rest remaining_brackets)\
+    \ (add1 opened_brackets))]\n      [(char=? (first remaining_brackets) #\\>)\n\
+    \       (and (> opened_brackets 0)\n            (helper (rest remaining_brackets)\
+    \ (sub1 opened_brackets)))]))\n  (helper (string->list brackets) 0))\n", "  (cond\
+    \ ((zero? (length brackets)) #t)\n        ((and (char=? (string-ref brackets 0)\
+    \ #\\<)\n              (char=? (string-ref brackets (sub1 (length brackets)))\
+    \ #\\>))\n         (correct_bracketing (substring brackets 1 (sub1 (length brackets)))))\n\
+    \        (else #f)))\n", "  (cond\n    [(empty? brackets)\n     #t]\n    [(equal?\
+    \ (first brackets) \"<\")\n     (correct_bracketing (rest brackets))]\n    [(equal?\
+    \ (first brackets) \">\")\n     (and (not (empty? (rest brackets)))\n        \
+    \  (correct_bracketing (rest brackets)))]))\n", "  (cond\n    [(string=? brackets\
+    \ \"\") True]\n    [(string=? (substring brackets 0 1) \"<\")\n     (correct_bracketing\
+    \ (substring brackets 1))]\n    [(string=? (substring brackets 0 1) \">\")\n \
+    \    (string=? brackets \">\")]))\n", "  (let* ([open? (lambda (b) (char=? b #\\\
+    <))]\n         [brackets-list (string->list brackets)]\n         [len (length\
+    \ brackets-list)]\n         [open-brackets (filter open? brackets-list)]\n   \
+    \      [close-brackets (filter (lambda (b) (not (open? b))) brackets-list)])\n\
+    \    (and (zero? (modulo len 2))\n         (= (length open-brackets) (length close-brackets)))))\n",
+  "  (define (helper bs a b)\n    (if (empty? bs)\n        (and a (= a b))\n     \
+    \   (let ((c (first bs)))\n          (cond\n            [(equal? c \"<\") (helper\
+    \ (rest bs) (+ a 1) b)]\n            [(equal? c \">\") (helper (rest bs) a (+\
+    \ b 1))]\n            [else (error \"input should be '<' or '>'.\")]))))\n  (helper\
+    \ (string->list brackets) 0 0))\n", "  (define (reduce-brackets str)\n    (cond\n\
+    \      [(empty? str) empty]\n      [(= (first str) #\\<)\n       (if (empty? (rest\
+    \ str)) empty\n           (if (= (first (rest str)) #\\>) (rest (rest str)) str))]\n\
+    \      [else str]))\n  (empty? (foldl reduce-brackets brackets empty)))\n```\n\
+    \n```haskell\n-- brackets is a string of \"<\" and \">\".\n-- return True if every\
+    \ opening bracket has a corresponding closing bracket.\n-- >>> correct_bracketing\
+    \ \"<\"\n-- False\n-- >>> correct_bracketing \"<>\"\n-- True\n-- >>> correct_bracketing\
+    \ \"<<><>>\"\n-- True\n-- >>> correct_bracketing \"><<>\"\n-- False\ncorrect_bracketing\
+    \ :: String -> Bool\ncorrect_bracketing brackets =\n  foldl (\\acc x ->\n    \
+    \       if x == '<'\n             then\n               if empty acc\n        \
+    \         then empty\n                 else if head acc == '>'\n             \
+    \           then tail acc\n                        else acc\n             else\
+    \ acc)\n        brackets\n        empty\n```\n\n## 1.18. Binary trees\n\n```racket\n\
+    #lang racket\n", "  (or (eq? (number-of-open-brackets brackets) (number-of-closed-brackets\
+    \ brackets))\n      (not (or (or (eq? (number-of-open-brackets brackets) (number-of-closed-brackets\
+    \ brackets))\n                     (or (or (or (eq? (number-of-open-brackets brackets)\
+    \ (number-of-closed-brackets brackets))\n                                 (or\
+    \ (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or\
+    \ (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or\
+    \ (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or\
+    \ (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or\
+    \ (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or\
+    \ (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or\
+    \ (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or\
+    \ (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or\
+    \ (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or\
+    \ (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or\
+    \ (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or (or", "  (define\
+    \ (recur-bracketing accum-list brackets)\n    (cond ((empty? brackets)\n     \
+    \      (empty? accum-list))\n          ((char=? (first brackets) #\\<)\n     \
+    \      (recur-bracketing (cons #\\< accum-list) (rest brackets)))\n          ((char=?\
+    \ (first brackets) #\\>)\n           (if (empty? accum-list)\n               #f\n\
+    \               (recur-bracketing (rest accum-list) (rest brackets))))))\n  (recur-bracketing\
+    \ '() brackets))\n", "  (cond [(empty? brackets) #t]\n        [(char=? (first\
+    \ brackets) #\\<)\n         (cond [(empty? (rest brackets)) #f]\n            \
+    \   [(char=? (first (rest brackets)) #\\>) (correct_bracketing (rest (rest brackets)))]\n\
+    \               [else (correct_bracketing (rest brackets))])]\n        [(char=?\
+    \ (first brackets) #\\>) #f]))\n", "  (cond\n    [(empty? brackets) true]\n  \
+    \  [(equal? \"<\" (first brackets))\n     (and (correct_bracketing (rest brackets))\n\
+    \          (correct_bracketing (matching-bracket-string brackets)))]\n    [else\
+    \ (correct_bracketing (rest brackets))]))\n", "  ;; TODO: write a helper function\
+    \ that takes a string of \"<\" and \">\" and\n  ;; returns the number of open\
+    \ brackets minus the number of closed brackets.\n  ;;\n  ;; Then, you can use\
+    \ that function to write a one-line solution to this\n  ;; problem.\n  ;; Make\
+    \ sure you write tests for the helper function too.\n  (check-expect (correct_bracketing\
+    \ \"><><>\") true)\n  (check-expect (correct_bracketing \">><<><>\") true)\n \
+    \ (check-expect (correct_bracketing \"<<><>\") true)\n  (check-expect (correct_bracketing\
+    \ \"><>>\") true)\n  (check-expect (correct_bracketing \"<<><\") false)\n  (check-expect\
+    \ (correct_bracketing \"<<>><><\") false)\n  (check-expect (correct_bracketing\
+    \ \"><><\") false)\n  (define (count-brackets brackets)\n    (if (empty? brackets)\n\
+    \        0\n        (if (char=? (first brackets) #\\<)\n            (+ 1 (count-brackets\
+    \ (rest brackets)))\n            (- 1 (count-brackets (rest brackets))))))\n \
+    \ (if (zero? (count-brackets brackets))\n      true\n      false))\n", "  (cond\n\
+    \    [(empty? brackets) True]\n    [(not(string=? \"<\" (first brackets))) False]\n\
+    \    [(string=? \"<\" (first brackets))\n     (and (correct_bracketing (rest brackets))\n\
+    \          (string=? \">\" (first (rest brackets))))]))\n", "  (and (andmap char=?\
+    \ (string-&gt;list brackets) '(\"&lt;\" \"&gt;\"))\n       (empty? (cdr (for/fold\
+    \ ([open-brackets 0])\n                             ([ch (in-string brackets)])\n\
+    \                             (cond\n                               [(char=? ch\
+    \ #\\&lt;) (+ open-brackets 1)]\n                               [(char=? ch #\\\
+    &gt;) (- open-brackets 1)]\n                               [else open-brackets]))))))\n\
+    </code>\nThe first part of the <code>and</code> is a check to ensure that the\
+    \ string is only made up of brackets. If so, then it continues to the next part.\n\
+    The next part counts the number of open brackets in the string. If it is 0 at\
+    \ the end, then the string is a valid bracketing.\n", "  (define (sift char-list\
+    \ sifter)\n    (cond\n      [(null? char-list)\n       sifter]\n      [(equal?\
+    \ (car char-list) #\\<)\n       (sift (cdr char-list) (cons (car char-list) sifter))]\n\
+    \      [(equal? (car char-list) #\\>)\n       (if (null? sifter)\n           sifter\n\
+    \           (sift (cdr char-list) (cdr sifter)))]\n      [else\n       (sift (cdr\
+    \ char-list) sifter)]))\n  (null? (sift (string->list brackets) '())))\n```\n\n\
+    ```\n#lang racket\n", "  (and (string? brackets)\n       (foldl (lambda (bracket-char\
+    \ so-far)\n                (and so-far\n                     (if (equal? bracket-char\
+    \ \"<\")\n                         (not (empty? so-far))\n                   \
+    \      (equal? (car so-far) \"<\"))))\n              (build-list (string-length\
+    \ brackets) (lambda (x) \"x\"))\n              (string->list brackets))))\n",
+  "  ;; #t if there are no brackets\n  (define (help)\n    (cond [(empty? brackets)\
+    \ #t]\n          [(empty? (rest brackets)) #f]\n          [else (and (= (first\
+    \ brackets) #\\<)\n                     (= (first (rest brackets)) #\\>)\n   \
+    \                  (help))]))\n  (help))\n```\n\n```racket\n#lang racket\n", " \
+    \ (define (is_open? c) (string=? \"<\" c))\n  (define (is_close? c) (string=?\
+    \ \">\" c))\n  (define (walk bs count)\n    (if (empty? bs)\n        (= count\
+    \ 0)\n        (if (is_open? (first bs))\n            (walk (rest bs) (+ count\
+    \ 1))\n            (if (is_close? (first bs))\n                (if (> count 0)\n\
+    \                    (walk (rest bs) (- count 1))\n                    false)\n\
+    \                (walk (rest bs) count)))))\n  (walk (string->list brackets) 0))\n",
+  "  (let loop ([brackets brackets] [count 0])\n    (if (equal? brackets \"\")\n \
+    \       (equal? count 0)\n        (if (equal? (substring brackets 0 1) \"<\")\n\
+    \            (loop (substring brackets 1) (+ count 1))\n            (if (equal?\
+    \ (substring brackets 0 1) \">\")\n                (loop (substring brackets 1)\
+    \ (- count 1))\n                false)))))\n", "  ;; left is the number of left\
+    \ brackets unclosed.\n  ;; if we ever have fewer than 0, then return False\n \
+    \ (define (correct-helper brackets left)\n    (if (empty? brackets)\n        (zero?\
+    \ left)\n        (let ((char (first brackets)))\n          (if (char=? char #\\\
+    <)\n              (correct-helper (rest brackets) (+ left 1))\n              (if\
+    \ (char=? char #\\>)\n                  (correct-helper (rest brackets) (- left\
+    \ 1))\n                  (error \"wrong bracketing\"))))))\n  (correct-helper\
+    \ brackets 0))\n", "  (define (match-bracket c)\n    (cond\n      [(equal? c \"\
+    <\") (cons c \">\")]\n      [(equal? c \">\") (cons c \"<\")]))\n  (define (close-bracket?\
+    \ b)\n    (equal? (match-bracket b) (car stack)))\n  (define (open-bracket? b)\n\
+    \    (equal? (match-bracket b) (cdr stack)))\n  (define (balance stack bracket)\n\
+    \    (cond\n      [(close-bracket? bracket) (cdr stack)]\n      [(open-bracket?\
+    \ bracket) (cons (match-bracket bracket) (car stack))]\n      [else (cons (match-bracket\
+    \ bracket) stack)]))\n  (if (equal? 0 (length brackets))\n      true\n      (let*\
+    \ ([bracket (string-ref brackets 0)]\n             [stack (balance '() bracket)]\n\
+    \             [str (substring brackets 1)])\n        (cond\n          [(null?\
+    \ stack) (correct_bracketing str)]\n          [else (false)]))))\n", "  (define\
+    \ (loop lst)\n    (cond\n      [(null? lst) #t]\n      [(null? (cdr lst)) (eq?\
+    \ (car lst) \">\")]\n      [(eq? (car lst) \"<\") (loop (cdr lst))]\n      [(eq?\
+    \ (car lst) \">\") (eq? (car (cdr lst)) \"<\")]))\n  (loop (string->list brackets)))\n",
+  "  (define (go brackets count)\n    (cond\n      [(empty? brackets) (= count 0)]\n\
+    \      [(and (= (first brackets) #\\<) (not (empty? (rest brackets))))\n     \
+    \  (go (rest brackets) (+ count 1))]\n      [(and (= (first brackets) #\\>) (not\
+    \ (empty? (rest brackets))))\n       (go (rest brackets) (- count 1))]\n     \
+    \ [else (= count 0)]))\n  (go brackets 0))\n", "  (let loop ([i (string-length\
+    \ brackets)] [level 0])\n    (cond\n      [(zero? i)\n       (zero? level)]\n\
+    \      [(char=? (string-ref brackets (sub1 i)) #\\<)\n       (loop (sub1 i) (add1\
+    \ level))]\n      [(char=? (string-ref brackets (sub1 i)) #\\>)\n       (loop\
+    \ (sub1 i) (sub1 level))]\n      [else #f])))\n", "  (if (empty? brackets)\n \
+    \     true\n      (if (equal? (first brackets) \"<\")\n          (if (member \"\
+    >\" (rest brackets))\n              (correct_bracketing (remove* (first (position\
+    \ \">\" (rest brackets))) (rest brackets)))\n              false)\n          false)))\n",
+  "  (define (helper lst count)\n    (cond [(null? lst)\n           (if (= count 0)\n\
+    \               #t\n               #f)]\n          [(eq? (car lst) '<)\n     \
+    \      (helper (cdr lst) (+ count 1))]\n          [(eq? (car lst) '>)\n      \
+    \     (if (= count 0)\n               #f\n               (helper (cdr lst) (-\
+    \ count 1)))]))\n  (helper (string->list brackets) 0))\n", "  (define (inner brackets\
+    \ count)\n    (cond [(empty? brackets) (= count 0)]\n          [(char=? (first\
+    \ brackets) #\\<) (inner (rest brackets) (+ count 1))]\n          [(char=? (first\
+    \ brackets) #\\>) (inner (rest brackets) (- count 1))]\n          [else (inner\
+    \ (rest brackets) count)]))\n  (inner brackets 0))\n```\n\n```racket\n#lang racket\n",
+  "  (define (count-brackets ch)\n    (if (equal? ch #\\>)\n        1\n        -1))\n\
+    \  (if (string-null? brackets)\n      0\n      (+ (count-brackets (string-ref\
+    \ brackets 0))\n         (correct_bracketing (substring brackets 1)))))\n", " \
+    \ (define (char&counts str)\n    (map list str (map (lambda (x) (count x str))\
+    \ str)))\n  (define (count-c str char)\n    (count char str))\n  (define (correct?\
+    \ str)\n    (eq? (count-c str \"<\") (count-c str \">\")))\n  (define (processed-string\
+    \ str)\n    (foldl (lambda (x y) (string-append y (string x))) \"\" str))\n  (cond\
+    \ [(string=? brackets \"\") true]\n        [(correct? brackets) true]\n      \
+    \  [else false]))\n", "  (define (correct-helper brackets total)\n    (cond ((equal?\
+    \ brackets \"\")\n           (= total 0))\n          ((equal? (substring brackets\
+    \ 0 1) \"<\")\n           (correct-helper (substring brackets 1) (+ total 1)))\n\
+    \          ((equal? (substring brackets 0 1) \">\")\n           (correct-helper\
+    \ (substring brackets 1) (- total 1)))\n          (else (error \"not brackets\"\
+    ))))\n  (correct-helper brackets 0))\n", "    (cond\n        [(empty? brackets)\
+    \ true]\n        [(equal? (first brackets) #\\<) (if (member (second brackets)\
+    \ '(#\\> #\\<)) (correct_bracketing (rest (rest brackets))) false)]\n        [(equal?\
+    \ (first brackets) #\\>) false]))\n", "  (define (helper bracket-count remaining-brackets)\n\
+    \    (cond\n      [(empty? remaining-brackets) (= bracket-count 0)]\n      [(string=?\
+    \ (first remaining-brackets) \"<\")\n       (helper (+ bracket-count 1) (rest\
+    \ remaining-brackets))]\n      [(string=? (first remaining-brackets) \">\")\n\
+    \       (if (< bracket-count 1)\n           #f\n           (helper (- bracket-count\
+    \ 1) (rest remaining-brackets)))]))\n  (helper 0 brackets))\n", "  ;; \n  ;; count\
+    \ is the number of left brackets minus the number of right brackets\n  ;; count\
+    \ is a number\n  ;; >>> count\n  ;; 0\n  ;; >>> (count \">>>\")\n  ;; 3\n  ;;\
+    \ >>> (count \"<<<\")\n  ;; -3\n  ;; >>> (count \"><><<\")\n  ;; 0\n  ;; >>> (count\
+    \ \"><>><>\")\n  ;; 0\n  ;; >>> (count \"><><<>>\")\n  ;; 0\n  ;; >>> (count \"\
+    ><><<>\")\n  ;; -1\n  ;; >>> (count \"><<><><<>\")\n  ;; 1\n  ;; >>> (count \"\
+    >\")\n  ;; 1\n  ;; >>> (count \"<\")\n  ;; -1\n  ;; >>> (count \"><\")\n  ;; 0\n\
+    \  ;; >>> (count \"><><>\")\n  ;; 0\n  ;; >>> (count \"><>><><>\")\n  ;; 0\n \
+    \ ;; >>> (count \"><<><>\")\n  ;; -1\n  ;; >>> (count \"><><<>\")\n  ;; -1\n \
+    \ ;; >>> (count \"><>><><>\")\n  ;; 0\n  ;; >>> (count \">\")\n  ;; 1\n  ;; >>>\
+    \ (count \"<\")\n  ;; -1\n  ;; >>> (count \"><\")\n  ;; 0\n  ;; >>> (count \"\
+    ><><>\")\n  ;; 0\n  ;; >>> (count \"><>><><>\")\n  ;; 0\n  ;; >>> (count \"><<><>\"\
+    )\n  ;; -1\n  ;; >>> (count \"><><<>\")\n  ;; -1\n  ;; >>> (count \"><>><><>\"\
+    )\n  ;; 0\n  ;; >>> (count \"><<><>\")\n  ;; -1\n  ;; >>> (count \"><><<>\")\n\
+    \  ;; -1\n  ;; >>> (count \"><>><><>\")\n  ;; 0\n  ;; >>> (count \"><<><>\")\n\
+    \  ;; -1\n  ;; >>> (count \"><><<>\")\n  ;; -1\n  ;; >>> (count \"><>><><>\")\n\
+    \  ;; 0\n  ;;\n  (define (count brackets)\n    (cond\n      [(empty?", "  (if\
+    \ (empty? brackets)\n      True\n      (if (equal? (first brackets) \"<\")\n \
+    \         (correct_bracketing (rest brackets))\n          (let ((brackets (rest\
+    \ brackets)))\n            (if (empty? brackets)\n                False\n    \
+    \            (if (equal? (first brackets) \">\")\n                    (correct_bracketing\
+    \ (rest brackets))\n                    False))))))\n", "  (cond\n    [(empty?\
+    \ brackets) false]\n    [(char=? (first brackets) #\\<) (correct_bracketing_aux\
+    \ (rest brackets) 1)]\n    [else false]))\n", "  (cond\n    [(empty? brackets)\
+    \ true]\n    [(string=? brackets \"<\") false]\n    [(string=? brackets \">\"\
+    ) false]\n    [(string=? (substring brackets 0 1) \"<\")\n     (cond\n       [(string=?\
+    \ (substring brackets (sub1 (string-length brackets))) \">\")\n        (correct_bracketing\
+    \ (substring brackets 1 (sub1 (string-length brackets))))]\n       [else false])]\n\
+    \    [else false]))\n", "  (define (correct_bracketing_iter brackets left)\n \
+    \   (cond [(null? brackets) (= left 0)]\n          [(eq? (car brackets) \"<\"\
+    ) (correct_bracketing_iter (cdr brackets) (+ left 1))]\n          [(eq? (car brackets)\
+    \ \">\") (correct_bracketing_iter (cdr brackets) (- left 1))]\n          [else\
+    \ (error \"Invalid bracket\")]))\n  (correct_bracketing_iter brackets 0))", " \
+    \ (define (helper open-count)\n    (cond\n      [(empty? brackets) (= open-count\
+    \ 0)]\n      [(first brackets) (helper (add1 open-count))]\n      [else (and (positive?\
+    \ open-count) (helper (sub1 open-count)))]))\n  (helper 0))\n", "  (cond\n   \
+    \ [(empty? brackets) True]\n    [(and (char=? (first brackets) #\\<) (char=? (last\
+    \ brackets) #\\>)) True]\n    [else False]))\n", "  (define (helper xs)\n    (cond\n\
+    \      [(empty? xs) 0]\n      [(first xs) (add1 (helper (rest xs)))]\n      [else\
+    \ (sub1 (helper (rest xs)))]))\n  (and (and (>= (helper brackets) 0)\n       \
+    \     (= (helper brackets) 0))\n       brackets))\n", "  (if (string-null? brackets)\n\
+    \      #t\n      (let ([c (string-ref brackets 0)])\n        (if (or (equal? c\
+    \ #\\<) (equal? c #\\>))\n            (correct_bracketing (substring brackets\
+    \ 1))\n            #f))))\n", "  (define (c_b bs os cs)\n    (cond [(empty? bs)\
+    \ (zero? os)]\n          [(char=? (first bs) #\\<) (c_b (rest bs) (+ os 1) cs)]\n\
+    \          [(char=? (first bs) #\\>) (and (not (zero? os)) (c_b (rest bs) (- os\
+    \ 1) (+ cs 1)))]\n          [else (c_b (rest bs) os cs)]))\n  (c_b (string->list\
+    \ brackets) 0 0))\n", "  ;; your code here\n  )\n```\n\n3. A string is a \"palindrome\"\
+    \ if it is the same forwards and backwards, for example `\"Hannah\"` is a palindrome.\n\
+    \   Write a function `palindrome-rec` that takes a string, and checks whether\
+    \ it is a palindrome using only\n   string comparison and recursion.\n\n   ```racket\n\
+    \   #lang racket\n\n   ;; returns True if input string is a palindrome, False\
+    \ otherwise\n   ;; >>> palindrome_rec(\"Hannah\")\n   ;; True\n   ;; >>> palindrome_rec(\"\
+    \")\n   ;; True\n   ;; >>> palindrome_rec(\"racecar\")\n   ;; True\n   ;; >>>\
+    \ palindrome_rec(\"Yasir\")\n   ;; False\n   (define (palindrome-rec x)\n    \
+    \ ;; your code here\n     )\n   ```\n\n4. Write a function `recode` that takes\
+    \ two strings and returns a string where every character\n   in the first string\
+    \ is replaced by the corresponding character in the second string (ignoring\n\
+    \   extra characters in the second string). For example:\n\n   ```racket\n   #lang\
+    \ racket\n\n   ;; >>> recode \"ABCDEF\" \"123456\"\n   ;; \"123456\"\n   ;; >>>\
+    \ recode \"ABCDEF\" \"123\"\n   ;; \"123DEF\"\n   ;; >>> recode \"this is a test\"\
+    \ \"abcdefghijklmnopqrstuvwxyz\"\n   ;; \"this is a test\"\n   ;; >>> recode \"\
+    this is a test\" \"QWERTYUIOPASDFGHJKLZXCVBNM\"\n   ;; \"THIS IS A TEST\"\n  \
+    \ (define (recode string-one string-two)\n     ;; your code here\n     )\n   ```\n\
+    \n5. Write a function `has-prefix?` that returns `True` if its first argument\
+    \ is a prefix of its second,\n   and `False` otherwise.\n\n   ```racket\n   #lang\
+    \ racket\n\n   ;; >>> has-prefix? \"abc\" \"abcdef\"\n   ;; True\n   ;; >>> has-prefix?\
+    \ \"abc\" \"bcdef\"\n   ;; False\n   ;; >>> has-prefix? \"abc\" \"ab\"\n  ", " \
+    \ (cond\n    [(empty? brackets) #t]\n    [(equal? (first brackets) #\\<)\n   \
+    \  (begin\n       (if (equal? (last brackets) #\\>)\n           (correct_bracketing\
+    \ (rest (butlast brackets)))\n           #f))]\n    [else #f]))\n", "  (cond\n\
+    \    [(empty? brackets)\n     #t]\n    [(empty? (rest brackets))\n     (if (eq?\
+    \ (first brackets) #\\<)\n         #f\n         #t)]\n    [(or (eq? (first brackets)\
+    \ #\\>)\n         (eq? (first (rest brackets)) #\\<))\n     (correct_bracketing\
+    \ (rest brackets))]\n    [else\n     (correct_bracketing (rest (rest brackets)))]))\n",
+  "  (if (empty? brackets)\n      #t\n      (let ([lefts (string-count brackets \"\
+    <\")]\n            [rights (string-count brackets \">\")])\n        (if (= lefts\
+    \ rights)\n            #t\n            #f))))\n", "  (equal? brackets (foldr (lambda\
+    \ (char result)\n                            (cond\n                         \
+    \     ((equal? char #\\<) (string-append \">\" result))\n                    \
+    \          ((equal? char #\\>) (string-append \"<\" result))\n               \
+    \               (else result)))\n                          \"\"\n            \
+    \              brackets)))\n", "  ;; if the length of the string is odd, return\
+    \ False.\n  (if (odd? (string-length brackets)) #f\n      ;; otherwise, check\
+    \ if every \">\" has a corresponding \"<\" before it.\n      (let loop ([substr\
+    \ brackets])\n        (if (string-suffix? \">\" substr)\n            (if (string-prefix?\
+    \ \"<\" substr)\n                (loop (substring substr 1 (- (string-length substr)\
+    \ 1)))\n                #f)\n            #t))))\n", "  (cond\n    [(empty? brackets)\
+    \ true]\n    [(not (member (first brackets) '(\"<\" \">\"))) (correct_bracketing\
+    \ (rest brackets))]\n    [(eq? (first brackets) \"<\") (correct_bracketing (rest\
+    \ brackets))]\n    [(eq? (first brackets) \">\")\n     (cond\n       [(empty?\
+    \ (rest brackets)) false]\n       [(and (equal? (second brackets) \"<\") (correct_bracketing\
+    \ (rest (rest brackets)))) true]\n       [else false])]))\n", "  (define (in open\
+    \ close)\n    (if (eq? open 0)\n        (= close 0)\n        (if (not (empty?\
+    \ (car brackets)))\n            (in (sub1 open) (add1 close))\n            (in\
+    \ (sub1 open) close))))\n  (in (count \">\" brackets) (count \"<\" brackets)))\n",
+  "  (define (correct_bracketing_iter [brackets (string->list brackets)] [openings\
+    \ (make-vector 256 #f)] [index 0])\n    (if (zero? (length brackets))\n      \
+    \  (and (<= 1 index)\n             (not (vector-ref openings (char->integer #\\\
+    <))))\n        (cond [(equal? (car brackets) #\\<)\n               (vector-set!\
+    \ openings (char->integer #\\<) index)\n               (correct_bracketing_iter\
+    \ (cdr brackets) openings (+ index 1))]\n              [(equal? (car brackets)\
+    \ #\\>)\n               (or (not (vector-ref openings (char->integer #\\<)))\n\
+    \                   (<= 1 index)\n                   (< (vector-ref openings (char->integer\
+    \ #\\<)) index))\n               (correct_bracketing_iter (cdr brackets) openings\
+    \ (+ index 1))]\n              [else (correct_bracketing_iter (cdr brackets) openings\
+    \ (+ index 1))])))\n  (correct_bracketing_iter brackets))\n", "  (cond ((equal?\
+    \ (string-length brackets) 0) ; no brackets\n         #t)\n        ((equal? (string-length\
+    \ brackets) 1) ; 1 bracket\n         #f)\n        ((equal? (string-ref brackets\
+    \ 0) #\\<) ; leftmost bracket is an opening bracket\n         (cond ((equal? (string-ref\
+    \ brackets (- (string-length brackets) 1)) #\\>) ; last bracket is a closing bracket\n\
+    \                (correct_bracketing (substring brackets 1 (- (string-length brackets)\
+    \ 1))))\n               (else #f)))\n        (else #f)))\n```\n\n```scheme", " \
+    \ (define (helper lst)\n    (cond [(null? lst) #t]\n          [(char=? (car lst)\
+    \ #\\<)\n           (if (char=? (car (cdr lst)) #\\>)\n               (helper\
+    \ (cdr (cdr lst)))\n               #f)]\n          [(char=? (car lst) #\\>) #f]))\n\
+    \  (helper (string->list brackets)))\n", "  (define (correct-bracketing? brackets\
+    \ n)\n    (cond\n      ((= n 0)\n       (equal? brackets \"\"))\n      ((string-ref\
+    \ brackets 0) '<)\n      ((and (> n 0) (string-ref brackets 0) '>)\n       (correct-bracketing?\
+    \ (substring brackets 1) (- n 1)))\n      (else (correct-bracketing? (substring\
+    \ brackets 1) (+ n 1)))))\n  (correct-bracketing? brackets 0))\n", "  (define\
+    \ (count-brackets brackets)\n    (cond\n      [(null? brackets) 0]\n      [(eq?\
+    \ (car brackets) #\\<) (add1 (count-brackets (cdr brackets)))]\n      [(eq? (car\
+    \ brackets) #\\>) (sub1 (count-brackets (cdr brackets)))]))\n  (eq? (count-brackets\
+    \ brackets) 0))", "  (cond\n    [(empty? brackets) #t]\n    [(= (count brackets\
+    \ #\\>) (count brackets #\\<)) #t]\n    [else #f]))\n", "  (define (correct_bracketing-iter\
+    \ so-far brackets-left)\n    (if (null? brackets-left)\n        (zero? so-far)\n\
+    \        (let ([next (car brackets-left)])\n          (cond\n            [(equal?\
+    \ next #\\<)\n             (correct_bracketing-iter (+ so-far 1) (cdr brackets-left))]\n\
+    \            [(equal? next #\\>)\n             (and (> so-far 0)\n           \
+    \       (correct_bracketing-iter (- so-far 1) (cdr brackets-left)))]\n       \
+    \     [else (error \"Bad input, not '<' or '>'\")]))))\n  (correct_bracketing-iter\
+    \ 0 (string->list brackets)))\n", "  (cond\n    [(empty? brackets) true]\n   \
+    \ [(first brackets) '> (error \"Invalid characters in brackets.\")]\n    [(last\
+    \ brackets) '< (error \"Invalid characters in brackets.\")]\n    [(cons '< (cons\
+    \ '> (rest (rest brackets)))) (correct_bracketing (rest (rest brackets)))]\n \
+    \   [else false]))\n", "  (if (or (equal? brackets \"\") (equal? brackets \"<>\"\
+    ))\n      true\n      (if (empty? (regexp-match #rx\"<>\" brackets))\n       \
+    \   true\n          (correct_bracketing (replace #rx\"<>\" brackets \"\")))))\n",
+  "  (cond\n    [(empty? brackets) #t]\n    [(empty? (first brackets)) #f]\n    [(equal?\
+    \ (first brackets) (last brackets)) (correct_bracketing (rest (butlast brackets)))]\n\
+    \    [else #f]))\n", "  (cond\n    [(equal? brackets \"\") true]\n    [(empty?\
+    \ (regexp-match #rx\"<[^>]*>\" brackets)) false]\n    [else\n     (let* ([match\
+    \ (regexp-match #rx\"<[^>]*>\" brackets)]\n            [first-match (vector-ref\
+    \ match 0)]\n            [rest-match (substring (vector-ref match 0) 1)]\n   \
+    \         [match-length (string-length first-match)])\n       (correct_bracketing\
+    \ (string-append (substring brackets 0 match-length) rest-match)))]))\n", "  (cond\
+    \ ((equal? brackets \"\") true)\n        ((equal? (list-ref brackets 0) \"<\"\
+    )\n         (if (equal? (list-ref brackets (- (string-length brackets) 1)) \"\
+    >\")\n             (correct_bracketing (substring brackets 1 (- (string-length\
+    \ brackets) 1)))\n             false))\n        (else false)))\n", "  (cond [(empty?\
+    \ brackets) False]\n        [(member brackets '(\"<\" \"<<>\")) True]\n      \
+    \  [(empty? (rest brackets)) False]\n        [else (correct_bracketing (cdr brackets))]))\n\
+    \n", "  (and (not (empty? brackets))\n       (correct_bracketing_helper brackets\
+    \ '())))\n", "  (define (check str)\n    (cond [(null? str) true]\n          [(and\
+    \ (equal? (car str) #\\<) (equal? (car (cdr str)) #\\>)) (check (cdr (cdr str)))]\n\
+    \          [else false]))\n  (check (string->list brackets)))\n```", "  (cond\n\
+    \    [(empty? brackets) #t]\n    [(empty? (rest brackets)) #f]\n    [(char=? (first\
+    \ brackets) #\\<)\n     (correct_bracketing (cdr (cdr brackets)))]\n    [(char=?\
+    \ (first brackets) #\\>)\n     (correct_bracketing (cdr (cdr brackets)))]))\n",
+  "  (cond\n    [(empty? brackets) false]\n    [(empty? (rest brackets)) false]\n\
+    \    [(and (string=? (first brackets) \"<\")\n          (string=? (last brackets)\
+    \ \">\"))\n     (correct_bracketing (remove-last (remove-first brackets)))]\n\
+    \    [else false]))\n", "  (let loop ([brackets brackets] [count 0])\n    (cond\
+    \ [(empty? brackets) (= count 0)]\n          [(char=? (first brackets) #\\<)\n\
+    \           (loop (rest brackets) (+ count 1))]\n          [(char=? (first brackets)\
+    \ #\\>)\n           (cond [(= count 0)\n                  #f]\n              \
+    \   [else\n                  (loop (rest brackets) (- count 1))])]\n         \
+    \ [else\n           (loop (rest brackets) count)])))\n```\n\n### 27.2\n\n```racket\n\
+    #lang racket\n", "  (define (is-open? bracket) (equal? bracket \"<\"))\n  (define\
+    \ (is-close? bracket) (equal? bracket \">\"))\n  (define (is-match? bracket2 bracket1)\n\
+    \    (and (is-open? bracket1) (is-close? bracket2)))\n  (define (match c lst)\n\
+    \    (cond ((null? lst) #f)\n          ((is-match? c (car lst)) (cdr lst))\n \
+    \         (else (match c (cdr lst)))))\n  (define (check lst)\n    (cond ((null?\
+    \ lst) #t)\n          ((is-open? (car lst)) (check (match (car lst) (cdr lst))))\n\
+    \          (else (check (cdr lst)))))\n  (check (string->list brackets)))\n",
+  "  (define (helper br)\n    (if (empty? br)\n        0\n        (if (= (first br)\
+    \ #\\<)\n            (+ 1 (helper (rest br)))\n            (- 1 (helper (rest\
+    \ br))))))\n  (= (helper (string->list brackets)) 0))\n", "  (define (brackets-helper\
+    \ char sum)\n    (cond\n      [(empty? brackets) (= sum 0)]\n      [(= char #\\\
+    >) (brackets-helper (first brackets) (- sum 1))]\n      [(= char #\\<) (brackets-helper\
+    \ (first brackets) (+ sum 1))]))\n  (brackets-helper (first brackets) 0))\n",
+  "  (define (correct_bracketing_iter bs count)\n    (cond\n      [(empty? bs) (=\
+    \ count 0)]\n      [(equal? (first bs) #\\<) (correct_bracketing_iter (rest bs)\
+    \ (+ count 1))]\n      [(equal? (first bs) #\\>) (and (< count 1) (correct_bracketing_iter\
+    \ (rest bs) (- count 1)))]))\n  (correct_bracketing_iter (string->list brackets)\
+    \ 0))\n", "  (define (fbrack b)\n    (cond\n      [(empty? b) #t]\n      [(equal?\
+    \ (first b) \"<\") (fbrack (rest b))]\n      [(equal? (first b) \">\") (fbrack\
+    \ (rest b))]\n      [else #f]))\n  (fbrack (string->list brackets)))\n", "  (define\
+    \ (helper chars count)\n    (cond\n      [(empty? chars) (= count 0)]\n      [(char=?\
+    \ (first chars) #\\<) (helper (rest chars) (+ count 1))]\n      [(char=? (first\
+    \ chars) #\\>) (and (= count 1) (helper (rest chars) (- count 1)))]\n      [else\
+    \ (and (not (zero? count)) (helper (rest chars) count))]))\n  (helper (string->list\
+    \ brackets) 0))\n", "  (cond [(empty? brackets) #t]\n        [(equal? (first brackets)\
+    \ \"<\") (correct_bracketing (rest brackets))]\n        [(equal? (first brackets)\
+    \ \">\") (correct_bracketing (rest brackets))]\n        [else #f]))", "  (and\
+    \ (not (empty? brackets))\n       (correct_bracketing' brackets 0)))\n", "  (cond\
+    \ ((empty? brackets) #t)\n        ((empty? (rest brackets)) #f)\n        ((equal?\
+    \ (first brackets) #\\<)\n         (cond ((equal? (first (rest brackets)) #\\\
+    >)\n                (correct_bracketing (rest (rest brackets))))\n           \
+    \    (else #f)))\n        (else #f)))\n", "  (let ([open (filter (lambda (c) (equal?\
+    \ c #\\<)) (string->list brackets))]\n        [close (filter (lambda (c) (equal?\
+    \ c #\\>)) (string->list brackets))])\n    (equal? (length open) (length close))))\n",
+  "  (cond\n    [(empty? brackets) True]\n    [(not (or (char=? (first brackets) #\\\
+    <)\n              (char=? (first brackets) #\\>)))\n     (correct_bracketing (rest\
+    \ brackets))]\n    [(char=? (first brackets) #\\<)\n     (and (correct_bracketing\
+    \ (rest brackets))\n          (last (first brackets) (rest brackets)))]\n    [(char=?\
+    \ (first brackets) #\\>)\n     (and (correct_bracketing (rest brackets))\n   \
+    \       (not (first (first brackets) (rest brackets))))]))\n", "    (define (helper\
+    \ brackets count)\n        (cond [(empty? brackets) (= count 0)]\n           \
+    \   [(char=? (first brackets) #\\<) (helper (rest brackets) (+ count 1))]\n  \
+    \            [(char=? (first brackets) #\\>) (helper (rest brackets) (- count\
+    \ 1))]\n              [else (helper (rest brackets) count)]))\n    (helper brackets\
+    \ 0))\n", "  (define (helper remaining-brackets)\n    (if (empty? remaining-brackets)\n\
+    \        #t\n        (if (equal? (first remaining-brackets) \"<\")\n         \
+    \   (if (member \">\" (rest remaining-brackets))\n                (helper (rest\
+    \ remaining-brackets))\n                #f)\n            (if (member \"<\" (rest\
+    \ remaining-brackets))\n                (helper (rest remaining-brackets))\n \
+    \               #t))))\n  (helper (string->list brackets)))\n", "  (and (correct_bracketing_extra\
+    \ brackets 0)\n       (= 0 (correct_bracketing_extra brackets 0))))\n", "  (cond\
+    \ ((null? brackets) #t)\n        ((string=? (substring brackets 0 1) \"<\")\n\
+    \         (cond ((null? (substring brackets 1)) #f)\n               ((string=?\
+    \ (substring brackets -1) \">\")\n                (correct_bracketing (substring\
+    \ brackets 1 -1)))\n               (else #f)))\n        (else #f)))\n```\n\n```racket\n\
+    #lang racket\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

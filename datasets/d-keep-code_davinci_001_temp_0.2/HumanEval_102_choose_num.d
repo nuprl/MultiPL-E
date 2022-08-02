@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 This function takes two positive numbers x and y and returns the
     biggest even integer number that is in the range [x, y] inclusive. If 
@@ -13,15 +13,13 @@ This function takes two positive numbers x and y and returns the
 long choose_num(long x, long y) 
 {
     long result = -1;
-    long i = 0;
+    long i = x;
     while (i <= y)
     {
         if (i % 2 == 0)
         {
-            if (i >= x)
-            {
-                result = i;
-            }
+            result = i;
+            break;
         }
         i++;
     }
@@ -32,13 +30,13 @@ unittest
 {
     alias candidate = choose_num;
 
-    assert(candidate(12, 15) == 14);
-    assert(candidate(13, 12) == -1);
-    assert(candidate(33, 12354) == 12354);
-    assert(candidate(5234, 5233) == -1);
-    assert(candidate(6, 29) == 28);
-    assert(candidate(27, 10) == -1);
-    assert(candidate(7, 7) == -1);
-    assert(candidate(546, 546) == 546);
+    assert(candidate(12L, 15L) == 14L);
+    assert(candidate(13L, 12L) == -1L);
+    assert(candidate(33L, 12354L) == 12354L);
+    assert(candidate(5234L, 5233L) == -1L);
+    assert(candidate(6L, 29L) == 28L);
+    assert(candidate(27L, 10L) == -1L);
+    assert(candidate(7L, 7L) == -1L);
+    assert(candidate(546L, 546L) == 546L);
 }
 void main(){}

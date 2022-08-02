@@ -6,89 +6,96 @@
 # For example:
 # >>> order_by_points([1, 11, -1, -11, -12]) == [-1, -11, 1, -12, 11]
 # >>> order_by_points([]) == []
+#
+# $1 is a space-separated list
 order_by_points() {
-    local -a arr=("$@")
-    local -a temp=()
-    local -i i=0
-    local -i j=0
-    local -i k=0
-    local -i sum=0
-    local -i sum_temp=0
-    local -i index=0
-    local -i index_temp=0
-    local -i flag=0
-    local -i flag_temp=0
-    local -i flag_temp_2=0
-    local -i flag_temp_3=0
-    local -i flag_temp_4=0
-    local -i flag_temp_5=0
-    local -i flag_temp_6=0
-    local -i flag_temp_7=0
-    local -i flag_temp_8=0
-    local -i flag_temp_9=0
-    local -i flag_temp_10=0
-    local -i flag_temp_11=0
-    local -i flag_temp_12=0
-    local -i flag_temp_13=0
-    local -i flag_temp_14=0
-    local -i flag_temp_15=0
-    local -i flag_temp_16=0
-    local -i flag_temp_17=0
-    local -i flag_temp_18=0
-    local -i flag_temp_19=0
-    local -i flag_temp_20=0
-    local -i flag_temp_21=0
-    local -i flag_temp_22=0
-    local -i flag_temp_23=0
-    local -i flag_temp_24=0
-    local -i flag_temp_25=0
-    local -i flag_temp_26=0
-    local -i flag_temp_27=0
-    local -i flag_temp_28=0
-    local -i flag_temp_29=0
-    local -i flag_temp_30=0
-    local -i flag_temp_31=0
-    local -i flag_temp_32=0
-    local -i flag_temp_33=0
-    local -i flag_temp_34=0
-    local -i flag_
+    local -a arr
+    local -a arr2
+    local -a arr3
+    local -a arr4
+    local -a arr5
+    local -a arr6
+    local -a arr7
+    local -a arr8
+    local -a arr9
+    local -a arr10
+    local -a arr11
+    local -a arr12
+    local -a arr13
+    local -a arr14
+    local -a arr15
+    local -a arr16
+    local -a arr17
+    local -a arr18
+    local -a arr19
+    local -a arr20
+    local -a arr21
+    local -a arr22
+    local -a arr23
+    local -a arr24
+    local -a arr25
+    local -a arr26
+    local -a arr27
+    local -a arr28
+    local -a arr29
+    local -a arr30
+    local -a arr31
+    local -a arr32
+    local -a arr33
+    local -a arr34
+    local -a arr35
+    local -a arr36
+    local -a arr37
+    local -a arr38
+    local -a arr39
+    local -a arr40
+    local -a arr41
+    local -a arr42
+    local -a arr43
+    local -a arr44
+    local -a arr45
+    local -a arr46
+    local -a arr47
+    local -a arr48
+    local -a arr49
+    local -a arr50
+    local -a arr51
+    local -a arr52
+    local -a arr53
+    local -a arr54
+    local -a arr55
+    local -a arr56
+    local -a arr57
+    local -a arr58
+    local -a arr59
+    local -a arr60
+    local -a arr61
+    local -a arr62
+    local -a arr63
+    local -a arr64
+    local -a arr65
+    local -a arr66
+    local -a arr67
+    local -a arr68
+    local -a arr69
+    local -a arr70
+    local -a arr71
+    local -
 
 }
 
 candidate() {
-    local res=$(order_by_points "$@")
-    echo $res
+    order_by_points "$@"
 }
 
-test() {
-    declare -a x2=(-1 -11 1 -12 11)
-    declare -a x0=(1 11 -1 -11 -12)
-    x1=$(candidate "${x0[*]}")
-    assert_equals "${x2[*]}" "${x1[*]}"
-
-    declare -a x5=(0 2 3 6 53 423 423 423 1234 145 37 46 56 463 3457)
-    declare -a x3=(1234 423 463 145 2 423 423 53 6 37 3457 3 56 0 46)
-    x4=$(candidate "${x3[*]}")
-    assert_equals "${x5[*]}" "${x4[*]}"
-
-    declare -a x8=()
-    declare -a x6=()
-    x7=$(candidate "${x6[*]}")
-    assert_equals "${x8[*]}" "${x7[*]}"
-
-    declare -a x11=(-3 -32 -98 -11 1 2 43 54)
-    declare -a x9=(1 -11 -32 43 54 -98 2 -3)
-    x10=$(candidate "${x9[*]}")
-    assert_equals "${x11[*]}" "${x10[*]}"
-
-    declare -a x14=(1 10 2 11 3 4 5 6 7 8 9)
-    declare -a x12=(1 2 3 4 5 6 7 8 9 10 11)
-    x13=$(candidate "${x12[*]}")
-    assert_equals "${x14[*]}" "${x13[*]}"
-
-    declare -a x17=(-76 -21 0 4 23 6 6)
-    declare -a x15=(0 6 6 -76 -21 23 4)
-    x16=$(candidate "${x15[*]}")
-    assert_equals "${x17[*]}" "${x16[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "1 11 -1 -11 -12") = "-1 -11 1 -12 11" ]]
+    [[ $(candidate "1234 423 463 145 2 423 423 53 6 37 3457 3 56 0 46") = "0 2 3 6 53 423 423 423 1234 145 37 46 56 463 3457" ]]
+    [[ $(candidate "") = "" ]]
+    [[ $(candidate "1 -11 -32 43 54 -98 2 -3") = "-3 -32 -98 -11 1 2 43 54" ]]
+    [[ $(candidate "1 2 3 4 5 6 7 8 9 10 11") = "1 10 2 11 3 4 5 6 7 8 9" ]]
+    [[ $(candidate "0 6 6 -76 -21 23 4") = "-76 -21 0 4 23 6 6" ]]
 }
+
+run_test

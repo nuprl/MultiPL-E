@@ -9,7 +9,1011 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate e
   \ (candidate 346211) (list 3 3))\n    (check-equal? (candidate -345821) (list 3\
   \ 3))\n    (check-equal? (candidate -2) (list 1 0))\n    (check-equal? (candidate\
   \ -45347) (list 2 3))\n    (check-equal? (candidate 0) (list 1 0))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (let ([even_digits (filter even? (map (lambda (x) (string->number\
+    \ x)) (string-split (number->string num) \"\")))])\n    (values (length even_digits)\
+    \ (- (length (string-split (number->string num) \"\")) (length even_digits)))))\n",
+  "  (local ((define (split-digits num)\n            (cond\n              [(= num\
+    \ 0) empty]\n              [else (cons (modulo num 10) (split-digits (quotient\
+    \ num 10)))])))\n    (define (even? x)\n      (= (modulo x 2) 0))\n    (define\
+    \ (odd? x)\n      (= (modulo x 2) 1))\n    (define (count lst pred)\n      (cond\n\
+    \        [(empty? lst) 0]\n        [(pred (first lst)) (+ 1 (count (rest lst)\
+    \ pred))]\n        [else (count (rest lst) pred)]))\n    (values (count (split-digits\
+    \ num) even?) (count (split-digits num) odd?))))\n", "  (define (odd? n)\n   \
+    \ (not (even? n)))\n  (define (helper n result)\n    (if (zero? n)\n        result\n\
+    \        (if (even? (remainder n 10))\n            (helper (quotient n 10) (add1\
+    \ (car result)))\n            (helper (quotient n 10) (add1 (cdr result))))))\n\
+    \  (helper num (list 0 0)))\n\n", "  (cond\n    [(zero? num) '(0, 0)]\n    [(odd?\
+    \ num) (let ([prev (even_odd_count (quotient num 10))])\n                  (list\
+    \ (first prev) (add1 (second prev))))]\n    [else (let ([prev (even_odd_count\
+    \ (quotient num 10))])\n            (list (add1 (first prev)) (second prev)))]))\n\
+    </code>\nHowever, I've encountered a problem when I tried to include the below\
+    \ code snippet into <code>even_odd_count</code>:\n<code>(cond\n  [(zero? num)\
+    \ '(0, 0)]\n  [(odd? num) (let ([prev (even_odd_count (quotient num 10))])\n \
+    \               (list (first prev) (add1 (second prev))))]\n  [else (let ([prev\
+    \ (even_odd_count (quotient num 10))])\n          (list (add1 (first prev)) (second\
+    \ prev)))]\n  [else (cons 0 0)])\n</code>\nI've tried to add this code snippet\
+    \ to handle a scenario when the input number has more than 2 digits but the results\
+    \ are not as expected.\nIt is supposed to return <code>(0, 0)</code> when the\
+    \ input number is more than 2 digits.\nExample:\n<code> (even_odd_count(12345))\
+    \ ==&gt; (0, 0)\n</code>\nHowever, when I run this example on racket the result\
+    \ is <code>(2, 3)</code>.\nWhat am I doing wrong?\nAny advice would be greatly\
+    \ appreciated.\n\n\nA:\n\nYou should do that check before recursing, like this:\n\
+    <code>(define (even_odd_count num)\n  (if (&gt; (abs num) 99) ; greater than two\
+    \ digits\n      '(0, 0)\n      (cond\n        [(zero? num) '(0, 0)]\n        [(odd?\
+    \ num) (let ([prev (even_odd_count (quotient num 10))])\n                    \
+    \  (list (first prev) (add1 (second prev))))]\n        [else (let ([prev (even_odd_count\
+    \ (quotient num 10))])\n                (list (add1 (first prev)) (second prev))",
+  "  (let loop ([num num] [ev 0] [od 0])\n    (cond\n      [(zero? num) (values ev\
+    \ od)]\n      [(even? (modulo num 10)) (loop (quotient num 10) (+ ev 1) od)]\n\
+    \      [else (loop (quotient num 10) ev (+ od 1))])))\n", "    (if (zero? num)\n\
+    \        (cons 0 0)\n        (if (even? (remainder num 10))\n            (let\
+    \ ([r (even_odd_count (quotient num 10))])\n                (cons (+ 1 (car r))\
+    \ (cdr r)))\n            (let ([r (even_odd_count (quotient num 10))])\n     \
+    \           (cons (car r) (+ 1 (cdr r)))))))\n", "  (if (zero? num)\n      (values\
+    \ 0 0)\n      (let ([n (modulo num 10)])\n        (match-define (values even odd)\
+    \ (even_odd_count (quotient num 10)))\n        (if (even? n)\n            (values\
+    \ (+ even 1) odd)\n            (values even (+ odd 1))))))\n", "  (let ((even-count\
+    \ 0)\n        (odd-count 0))\n    (for ([digit (in-list (number->string num))])\n\
+    \      (cond [(even? (string->number digit)) (set! even-count (+ even-count 1))]\n\
+    \            [(odd? (string->number digit)) (set! odd-count (+ odd-count 1))]))\n\
+    \    (values even-count odd-count)))\n```", "  (match num\n    [(_ -1) (values\
+    \ -1 -1)]\n    [(any-integer? b) (if (= b 0) (values 0 0)\n                  \
+    \       (let ([next-num (/ b 10)])\n                           (if (odd? (remainder\
+    \ b 10))\n                               (let ([prev-ans (even_odd_count next-num)])\n\
+    \                                 (values (first prev-ans) (+ 1 (second prev-ans))))\n\
+    \                               (let ([prev-ans (even_odd_count next-num)])\n\
+    \                                 (values (+ 1 (first prev-ans)) (second prev-ans))))))]))\n",
+  "  (define num-digits (number->string num))\n  (define (count-even-odd digit str)\n\
+    \    (if (empty? str)\n        digit\n        (if (even? (char->integer (car str)))\n\
+    \            (count-even-odd (cons (car digit) (cons (1+ (cadr digit)) (cddr digit)))\
+    \ (cdr str))\n            (count-even-odd (cons (1+ (car digit)) (cons (cadr digit)\
+    \ (cddr digit))) (cdr str)))))\n  (count-even-odd (list 0 0) num-digits))\n",
+  "  (match num\n    [0 (values 0 0)]\n    [n (let* ([n-abs (abs n)]\n           \
+    \   [evens (if (even? (modulo n-abs 10)) 1 0)]\n              [odds (if (odd?\
+    \ (modulo n-abs 10)) 1 0)])\n          (let-values ([(es os) (even_odd_count (quotient\
+    \ n-abs 10))])\n            (values (+ evens es) (+ odds os))))]))\n</code>\n\
+    Which also accounts for negative numbers. But, I think the matches may be easier\
+    \ for beginners to read.\nIf you want a bit more of the pedagogical work done\
+    \ for you, check out the <code>even-odd-count</code> function from Racket's <code>examples/natural-numbers</code>\
+    \ directory.\n<code>#lang racket\n", "  (cond\n    [(positive? num) (even_odd_count\
+    \ (- num))]\n    [(negative? num) (even_odd_count (+ num))]\n    [(even? num)\
+    \ (even_odd_count (/ num 10))]\n    [(odd? num) (even_odd_count (/ num 10))]\n\
+    \    [else '()]))\n</code>\nI have been trying to find the answer for the past\
+    \ couple hours but I just can't find the answer.\nMy logic is to run a base case\
+    \ if the num is 0. Then if the number is even, divide by 10 and start over again.\
+    \ If the number is odd, then just do the same thing but don't count the odd number.\n\
+    \n\nA:\n\nThere are several problems. First of all, it seems that you're trying\
+    \ to implement a tail-recursive function, which isn't possible in Racket because\
+    \ the language doesn't support tail-call optimization. And second, when you're\
+    \ doing <code>(/ num 10)</code> inside your <code>even_odd_count</code> function,\
+    \ you're doing integer division, which means that for example the <code>even_odd_count</code>\
+    \ of <code>12</code> becomes <code>1</code> and that's the end of the story.\n\
+    A non-tail-recursive solution would be this:\n<code>(define (even_odd_count num)\n\
+    \  (let loop ([n num] [even 0] [odd 0])\n    (cond\n      [(zero? n) (values even\
+    \ odd)]\n      [(even? n) (loop (quotient n 10) (+ even 1) odd)]\n      [else\
+    \ (loop (quotient n 10) even (+ odd 1))])))\n</code>\nAnd since this is tagged\
+    \ as an exercise, I'll leave you to convert it to a tail-recursive implementation.\n",
+  "  (cond\n    [(< num 0) (even_odd_count (* -1 num))]\n    [(< num 10) (cons 0 1)]\n\
+    \    [else (\n      (let ([curr (remainder num 10)])\n        (let ([ret (even_odd_count\
+    \ (quotient num 10))])\n          (if (even? curr)\n            (cons (+ 1 (car\
+    \ ret)) (cdr ret))\n            (cons (car ret) (+ 1 (cdr ret)))))))]))\n", " \
+    \ (define (aux n even odd)\n    (cond\n      [(negative? n) (values even odd)]\n\
+    \      [(even? (modulo n 10)) (aux (quotient n 10) (+ even 1) odd)]\n      [else\
+    \ (aux (quotient n 10) even (+ odd 1))]))\n  (aux num 0 0))\n```\n\n```Racket",
+  "  (let* ([str (number->string num)]\n         [len (string-length str)]\n     \
+    \    [evens (for/fold ([evens 0]) ([i (in-range len)])\n                   (if\
+    \ (even? (string->number (string-ref str i)))\n                       (add1 evens)\n\
+    \                       evens))]\n         [odds (sub1 len evens)])\n    (values\
+    \ evens odds)))\n```\n\n```\n#lang racket\n", "  (if (= num 0)\n      (make-tuple\
+    \ 0 0)\n      (if (even? (modulo num 10))\n          (even_odd_count (quotient\
+    \ num 10))\n          (even_odd_count (quotient num 10)))))\n", "  (cond\n   \
+    \ [(= num 0) (cons 0 0)]\n    [(= (remainder num 2) 0) (even_odd_count (quotient\
+    \ num 10) (cons (+ 1 (car ans)) (cdr ans)))]\n    [else (even_odd_count (quotient\
+    \ num 10) (cons (car ans) (+ 1 (cdr ans))))]))", "  (define (even_odd_count_helper\
+    \ num ev_count od_count)\n    (if (zero? num)\n        (cons ev_count od_count)\n\
+    \        (let* ([digit (remainder num 10)]\n               [new_num (quotient\
+    \ num 10)])\n          (if (even? digit)\n              (even_odd_count_helper\
+    \ new_num (+ ev_count 1) od_count)\n              (even_odd_count_helper new_num\
+    \ ev_count (+ od_count 1))))))\n  (even_odd_count_helper num 0 0))\n", "  (define\
+    \ (helper num evens odds)\n    (cond\n      [(= num 0) (values evens odds)]\n\
+    \      [(even? (remainder num 10)) (helper (quotient num 10) (+ evens 1) odds)]\n\
+    \      [else (helper (quotient num 10) evens (+ odds 1))]))\n  (helper num 0 0))\n",
+  "  (let ([n (abs num)])\n    (cond\n      [(zero? n) '(0, 0)]\n      [(even? (remainder\
+    \ n 10)) (let ([r (even_odd_count (quotient n 10))])\n                       \
+    \           (values (+ (car r) 1) (cadr r)))]\n      [else (let ([r (even_odd_count\
+    \ (quotient n 10))])\n              (values (car r) (+ (cadr r) 1)))])\n    )\n\
+    \  )\n", "  (define (helper num even odd)\n    (cond [(zero? num) (values even\
+    \ odd)]\n          [(= (remainder num 10) 0) (helper (quotient num 10) (+ even\
+    \ 1) odd)]\n          [else (helper (quotient num 10) even (+ odd 1))]))\n  (helper\
+    \ num 0 0))\n", "  (letrec\n    ((even-odd-count-iter\n      (lambda (num acc)\n\
+    \        (cond\n          ((zero? num) acc)\n          (else (even-odd-count-iter\n\
+    \                  (quotient num 10)\n                  (let*\n              \
+    \      ([r (remainder num 10)]\n                     [even? (even? r)]\n     \
+    \                [even-count (first acc)]\n                     [odd-count (second\
+    \ acc)])\n                    (cond\n                      (even? (cons (+ even-count\
+    \ 1) odd-count))\n                      (else (cons even-count (+ odd-count 1)))))))))))\n\
+    \    (even-odd-count-iter num (cons 0 0))))\n", "  (define (positive? n) (> n\
+    \ 0))\n  (define (odd? n) (= 1 (remainder n 2)))\n  (define (even? n) (= 0 (remainder\
+    \ n 2)))\n  (define (iter acc even_count odd_count)\n    (if (positive? num)\n\
+    \        (iter (cons (abs num) acc)\n              (if (even? (abs num)) (+ even_count\
+    \ 1) even_count)\n              (if (odd? (abs num)) (+ odd_count 1) odd_count))\n\
+    \        (values even_count odd_count)))\n  (iter (list num) 0 0))\n", "  (cond\n\
+    \    ((= num 0) '(0, 0))\n    ((odd? num) (let* ((t (even_odd_count (/ (- num\
+    \ 1) 10))))\n                  (cons (+ (car t) 1) (cdr t))))\n    (else (let*\
+    \ ((t (even_odd_count (/ num 10))))\n            (cons (car t) (+ (cdr t) 1))))))\n",
+  "  (cond\n    [(= 0 num) (values 0 0)]\n    [(even? (remainder num 10)) (let ([ev\
+    \ (even_odd_count (quotient num 10))]) (values (+ 1 (car ev)) (cdr ev)))]\n  \
+    \  [else (let ([ev (even_odd_count (quotient num 10))]) (values (car ev) (+ 1\
+    \ (cdr ev))))]))\n", "  (cond [(zero? num) (values 0 0)]\n        [(even? num)\
+    \ (call-with-values (\u03BB () (even_odd_count (quotient num 10)))\n         \
+    \                              (\u03BB (even-count odd-count)\n              \
+    \                           (values (+ even-count 1) odd-count)))]\n        [else\
+    \ (call-with-values (\u03BB () (even_odd_count (quotient num 10)))\n         \
+    \                       (\u03BB (even-count odd-count)\n                     \
+    \             (values even-count (+ odd-count 1))))]))\n", "  (cond [(zero? num)\
+    \ (values 0 0)]\n        [(even? num) (values (+ 1 (even_odd_count (floor (/ num\
+    \ 10))))\n                              (even_odd_count (remainder num 10)))]\n\
+    \        [else (values (even_odd_count (floor (/ num 10)))\n                 \
+    \     (+ 1 (even_odd_count (remainder num 10))))]))\n", "  (define (aux num acc0\
+    \ acc1)\n    (cond [(zero? num) (values acc0 acc1)]\n          [(even? (remainder\
+    \ num 10)) (aux (quotient num 10) (+ acc0 1) acc1)]\n          [else (aux (quotient\
+    \ num 10) acc0 (+ acc1 1))]))\n  (aux num 0 0))\n", "  (local [\n    (define (odd?\
+    \ num)\n      (and (not (zero? num)) (odd? (- num 1))))\n\n    (define (even?\
+    \ num)\n      (or (zero? num) (even? (- num 1))))\n\n    (define (my-abs n)\n\
+    \      (if (< n 0) (- n) n))\n\n    (define (even-odd-count lst)\n      (local\
+    \ [(define (even-odd-count-inner lst [i 0] [j 0])\n                (cond [(null?\
+    \ lst)\n                       (values i j)]\n                      [(even? (car\
+    \ lst))\n                       (even-odd-count-inner (cdr lst) (+ i 1) j)]\n\
+    \                      [else\n                       (even-odd-count-inner (cdr\
+    \ lst) i (+ j 1))]))]\n        (even-odd-count-inner lst)))\n    ]\n    (even-odd-count\
+    \ (number->list (my-abs num)))))\n\n", "  (define (helper n even odd)\n    (cond\n\
+    \      [(zero? n) (values even odd)]\n      [(even? (modulo n 10)) (helper (quotient\
+    \ n 10) (+ even 1) odd)]\n      [else (helper (quotient n 10) even (+ odd 1))]))\n\
+    \  (helper num 0 0))\n", "  (define (iter n acc-even acc-odd)\n    (cond [(= n\
+    \ 0) (values acc-even acc-odd)]\n          [(even? (remainder n 10)) (iter (quotient\
+    \ n 10) (+ acc-even 1) acc-odd)]\n          [else (iter (quotient n 10) acc-even\
+    \ (+ acc-odd 1))]))\n  (iter num 0 0))\n", "  (define (even? num)\n    (zero?\
+    \ (modulo num 2)))\n  (define (calc-rec num even-count odd-count)\n    (cond\n\
+    \      ((zero? num) (values even-count odd-count))\n      ((even? num) (calc-rec\
+    \ (quotient num 10) (+ even-count 1) odd-count))\n      (else (calc-rec (quotient\
+    \ num 10) even-count (+ odd-count 1)))))\n  (calc-rec num 0 0))\n", "  (define\
+    \ (even_odd_count_iter num acc)\n    (if (negative? num) (values (car acc) (cdr\
+    \ acc))\n        (if (zero? (modulo num 2))\n            (even_odd_count_iter\
+    \ (quotient num 10) (cons (+ 1 (car acc)) (cdr acc)))\n            (even_odd_count_iter\
+    \ (quotient num 10) (cons (car acc) (+ 1 (cdr acc)))))))\n  (even_odd_count_iter\
+    \ num (cons 0 0)))\n", "  (let* ([abs-num (abs num)]\n         [quotient-abs-num\
+    \ (quotient abs-num 10)]\n         [remainder-abs-num (remainder abs-num 10)])\n\
+    \    (if (zero? quotient-abs-num)\n        (if (even? remainder-abs-num)\n   \
+    \         (values 1 0)\n            (values 0 1))\n        (let* ([even-odd-count\
+    \ (even_odd_count quotient-abs-num)]\n               [even-count (first even-odd-count)]\n\
+    \               [odd-count (second even-odd-count)])\n          (if (even? remainder-abs-num)\n\
+    \              (values (+ even-count 1) odd-count)\n              (values even-count\
+    \ (+ odd-count 1)))))))\n", "  (cond ((negative? num) (even_odd_count (- num)))\n\
+    \        ((zero? num) (values 0 0))\n        (else (let ((digits (quotient num\
+    \ 10)))\n                (let-values (((even odd) (even_odd_count digits)))\n\
+    \                  (if (even? (remainder num 10))\n                      (values\
+    \ (+ even 1) odd)\n                      (values even (+ odd 1))))))))\n", " \
+    \ (let ((even_count 0)\n        (odd_count 0))\n    (for ([digit (in-list (string->list\
+    \ (number->string num)))])\n      (cond\n        ((= digit #\\0) (set! even_count\
+    \ (+ even_count 1)))\n        ((= digit #\\2) (set! even_count (+ even_count 1)))\n\
+    \        ((= digit #\\4) (set! even_count (+ even_count 1)))\n        ((= digit\
+    \ #\\6) (set! even_count (+ even_count 1)))\n        ((= digit #\\8) (set! even_count\
+    \ (+ even_count 1)))\n        ((= digit #\\1) (set! odd_count (+ odd_count 1)))\n\
+    \        ((= digit #\\3) (set! odd_count (+ odd_count 1)))\n        ((= digit\
+    \ #\\5) (set! odd_count (+ odd_count 1)))\n        ((= digit #\\7) (set! odd_count\
+    \ (+ odd_count 1)))\n        ((= digit #\\9) (set! odd_count (+ odd_count 1)))\n\
+    \        (else false))\n      (values even_count odd_count))))\n", "  (define\
+    \ (is_even? num)\n    (modulo num 2 0))\n  (define (even_odd_count/1 num evens\
+    \ odds)\n    (cond ((= num 0) (cons evens odds))\n          ((is_even? num) (even_odd_count/1\
+    \ (/ num 10) (+ evens 1) odds))\n          (else (even_odd_count/1 (/ num 10)\
+    \ evens (+ odds 1)))))\n  (if (negative? num)\n      (even_odd_count/1 (- num)\
+    \ 0 0)\n      (even_odd_count/1 num 0 0)))\n", "  (letrec ([evens (make-tuple)]\n\
+    \           [odds (make-tuple)])\n    (if (&lt;= num 0)\n        (tuple-append\
+    \ evens odds)\n        (if (even? (remainder num 10))\n            (tuple-append\
+    \ evens (tuple 1))\n            (tuple-append evens (tuple 0))\n            (tuple-append\
+    \ odds (tuple 1))\n            (tuple-append odds (tuple 0)))\n        (even_odd_count\
+    \ (- num 1)))))\n</code>\nWhen run, it gives me a \"expected a number\" error\
+    \ on the tuples and a \"no matching clause\" error on the <code>if</code> statement.\
+    \ I'm sure this is an easy fix, but I'm new to Racket and can't figure it out.\n\
+    \n\nA:\n\nYou're not using <code>tuple-append</code> correctly.\nIn addition,\
+    \ you're misusing <code>if</code> as well.\nThe <code>if</code> form is a special\
+    \ form, so it doesn't evaluate its body as a function call like most forms.\n\
+    Instead, it evaluates both its then-body and its else-body, and then chooses which\
+    \ one to use based on its predicate.\nIn your case, you probably want to use <code>cond</code>\
+    \ instead.\n<code>(define (even_odd_count num)\n  (letrec ([evens (make-tuple)]\n\
+    \           [odds (make-tuple)])\n    (cond [&lt;= num 0\n           (tuple-append\
+    \ evens odds)]\n          [(even? (remainder num 10))\n           (tuple-append\
+    \ evens (tuple 1))]\n          [else\n           (tuple-append odds (tuple 1))])\n\
+    \    (even_odd_count (- num 1))))\n</code>\n", "  (define (helper n even odd)\n\
+    \    (if (zero? n)\n        (values even odd)\n        (if (even? (modulo n 10))\n\
+    \            (helper (quotient n 10) (+ even 1) odd)\n            (helper (quotient\
+    \ n 10) even (+ odd 1)))))\n  (helper num 0 0))\n", "  (cond [(zero? num) '()]\n\
+    \        [else (cons (even_odd_count (quotient num 10))\n                    (if\
+    \ (zero? (remainder num 2))\n                        (list 0 1)\n            \
+    \            (list 1 0)))]))\n", "  (if (zero? num)\n      (values 0 0)\n    \
+    \  (let ([last-digit (modulo num 10)])\n        (let-values ([(even-digits odd-digits)\
+    \ (even_odd_count (quotient num 10))])\n          (if (even? last-digit)\n   \
+    \           (values (+ even-digits 1) odd-digits)\n              (values even-digits\
+    \ (+ odd-digits 1)))))))\n", "  (let* ((num-string (number->string num))\n   \
+    \      (num-list (string->list num-string))\n         (even-count 0)\n       \
+    \  (odd-count 0))\n    (for ([i num-list])\n      (if (even? (string->number (list->string\
+    \ i)))\n          (set! even-count (+ even-count 1))\n          (set! odd-count\
+    \ (+ odd-count 1))))\n    (list even-count odd-count)))\n```\n\n## 63. Given two\
+    \ strings, find the number of common characters between them.\n\n``` #lang racket\n",
+  "  (match num\n    (0 (cons 0 0))\n    [(_ n) (cons\n             (+ 1 (first (even_odd_count\
+    \ (div n 10))))\n             (+ (if (odd? (mod n 10)) 1 0) (second (even_odd_count\
+    \ (div n 10)))))])\n  )\n</code>\nThis one has a problem when I put in a negative\
+    \ number, I want to count the number of even and odd digits in a negative number,\
+    \ the first result should be (1,1) for the example I posted above. \n\n\nA:\n\n\
+    What you need to do is to check whether the number is positive and if it is, you\
+    \ drop the sign by doing <code>(abs num)</code>. Then you can call your function\
+    \ recursively on the absolute value of the number:\n<code>(define (even_odd_count\
+    \ num)\n  (if (negative? num)\n      (even_odd_count (abs num))\n      (match\
+    \ num\n        (0 (cons 0 0))\n        [(_ n) (cons\n                 (+ 1 (first\
+    \ (even_odd_count (div n 10))))\n                 (+ (if (odd? (mod n 10)) 1 0)\
+    \ (second (even_odd_count (div n 10)))))])\n      )\n  )\n</code>\n", "  (define\
+    \ (is-even? num)\n    (cond ((= (remainder num 2) 0) #t)\n          (else #f)))\n\
+    \  (define (get-digit-list num)\n    (cond ((= num 0) '(0))\n          (else (append\
+    \ (get-digit-list (quotient num 10))\n                        (list (remainder\
+    \ num 10))))))\n  (cond ((= num 0) '(0, 0))\n        (else (cond ((is-even? num)\n\
+    \                     (define (even-digit-count num digits)\n                \
+    \       (cond ((null? digits) 0)\n                             ((is-even? (car\
+    \ digits)) (+ 1 (even-digit-count num (cdr digits))))\n                      \
+    \       (else (even-digit-count num (cdr digits)))))\n                     (let\
+    \ ((even-count (even-digit-count num (get-digit-list num))))\n               \
+    \        (define (odd-digit-count num digits)\n                         (cond\
+    \ ((null? digits) 0)\n                               ((is-even? (car digits))\
+    \ (odd-digit-count num (cdr digits)))\n                               (else (+\
+    \ 1 (odd-digit-count num (cdr digits))))))\n                       (let ((odd-count\
+    \ (odd-digit-count num (get-digit-list num))))\n                         (list\
+    \ even-count odd-count))))\n                    (else (cond ((is-even? num)\n\
+    \                                 (define (even-digit-count num digits)\n    \
+    \                               (cond ((null? digits) 0)\n                   \
+    \                      ((is-even? (car digits)) (+ 1 (even-digit-count num (cdr\
+    \ digits))))\n                                         (else (even-digit-count\
+    \ num (cdr digits)))))\n                                 (let ((even-count (even-digit-count\
+    \ num (get-digit-list num))))\n                                   (define (odd-digit-count\
+    \ num digits)\n                                     (cond ((null? digits) 0)\n\
+    \                                           ((is-even? (car digits)) (odd-digit-count\
+    \ num (cdr digits)))\n                                           (else (+ 1 (odd-digit-count\
+    \ num (cdr digits))))))\n                                   (let ((odd-count (odd-digit-count\
+    \ num (get-digit-list", "  (cond\n    [(zero? num) '(0, 0)]\n    [(negative? num)\
+    \ (even_odd_count (abs num))]\n    [else\n     (even_odd_count-iter num (count-zeros\
+    \ num) 0 0)]))\n", "  (define even-count (count-even num))\n  (define odd-count\
+    \ (count-odd num))\n  (list even-count odd-count))\n", "  (cond\n    [(zero? num)\
+    \ (cons 0 0)]\n    [(even? (abs num)) (cons 1 0)]\n    [else (cons 0 1)]))\n</code>\n\
+    But, this is not satisfying and apparently not very functional.\n\n\nA:\n\nRacket\
+    \ lets you define multi-function procedures and also has a built-in (->) function\
+    \ (the thread first macro).\nSo let's say we want to count the number of even\
+    \ and odd digits in an integer num. We need to do the following steps:\n\nconvert\
+    \ num to an infinite list of digits, e.g. <code>num =&gt; 123</code> => <code>(1\
+    \ 2 3)</code>\nextract the digits' tails of the list, e.g. <code>(1 2 3)</code>\
+    \ => <code>(2 3)</code>\nconvert the digits' tails to an infinite list, e.g. <code>(2\
+    \ 3)</code> => <code>(2 3)</code>\ncheck if the digits' tails are even and count\
+    \ them, e.g. <code>(2 3)</code> => <code>1</code>\ncheck if the digits' tails\
+    \ are odd and count them, e.g. <code>(2 3)</code> => <code>1</code>\n\nHere's\
+    \ how it can be done in Racket:\n<code>#lang racket\n", "  (letrec ([even (lambda\
+    \ (n count)\n                   (cond [(zero? n) count]\n                    \
+    \     [(even? (remainder n 10)) (even (quotient n 10) (+ count 1))]\n        \
+    \                 [else (even (quotient n 10) count)]))]\n           [odd (lambda\
+    \ (n count)\n                  (cond [(zero? n) count]\n                     \
+    \   [(odd? (remainder n 10)) (odd (quotient n 10) (+ count 1))]\n            \
+    \            [else (odd (quotient n 10) count)]))])\n    (cons (even num 0) (odd\
+    \ num 0))))\n", "  (let* ([num-str (number->string num)]\n         [len (string-length\
+    \ num-str)]\n         [even-counter 0]\n         [odd-counter 0])\n    (for ([i\
+    \ (in-range len)])\n      (if (odd? (string->number (string-ref num-str i)))\n\
+    \          (set! odd-counter (+ odd-counter 1))\n          (set! even-counter\
+    \ (+ even-counter 1))))\n    (values even-counter odd-counter)))\n", "  (if (=\
+    \ num 0)\n      (values 0 0)\n      (let ([rem (modulo num 10)])\n        (if\
+    \ (even? rem)\n            (values (+ 1 (first (even_odd_count (quotient num 10))))\
+    \ (second (even_odd_count (quotient num 10))))\n            (values (first (even_odd_count\
+    \ (quotient num 10))) (+ 1 (second (even_odd_count (quotient num 10)))))))))\n",
+  "  (letrec ([even_odd_helper (lambda (n acc)\n                              (cond\
+    \ [(< n 0) (even_odd_helper (- n) acc)]\n                                    [(zero?\
+    \ n) acc]\n                                    [(even? (remainder n 10)) (even_odd_helper\
+    \ (quotient n 10) (cons 1 (cdr acc)))]\n                                    [else\
+    \ (even_odd_helper (quotient n 10) (cons 0 (cdr acc)))]))])\n    (even_odd_helper\
+    \ num (cons 0 (cons 0 '())))))\n", "  (define (helper num even odd)\n    (cond\n\
+    \      [(zero? num) (values even odd)]\n      [(even? (remainder num 10)) (helper\
+    \ (quotient num 10) (+ even 1) odd)]\n      [else (helper (quotient num 10) even\
+    \ (+ odd 1))]))\n  (if (zero? num)\n      (values 0 0)\n      (helper num 0 0)))\n",
+  "  (define (is_even? x) (= (remainder x 2) 0))\n  (define (count_helper x even odd)\n\
+    \    (cond\n      [(zero? x) (cons even odd)]\n      [(is_even? x) (count_helper\
+    \ (quotient x 10) (+ even 1) odd)]\n      [else (count_helper (quotient x 10)\
+    \ even (+ odd 1))]))\n  (count_helper num 0 0))\n", "  (define even-count 0)\n\
+    \  (define odd-count 0)\n  (define (even-odd-count* num)\n    (if (zero? num)\n\
+    \        (values even-count odd-count)\n        (if (odd? (remainder num 10))\n\
+    \            (begin\n              (set! odd-count (+ odd-count 1))\n        \
+    \      (even-odd-count* (quotient num 10)))\n            (begin\n            \
+    \  (set! even-count (+ even-count 1))\n              (even-odd-count* (quotient\
+    \ num 10))))))\n  (even-odd-count* num))\n", "  (if (zero? num)\n      (values\
+    \ 0 0)\n      (if (even? (remainder num 10))\n          (values-add1 (even_odd_count\
+    \ (quotient num 10)))\n          (values (even_odd_count (quotient num 10)) 1))))\n\
+    </code>\nThis code can be improved.\n", "  (define (even? x)\n    (cond\n    \
+    \  [(= (remainder x 2) 0) true]\n      [else false]))\n  (define (odd? x)\n  \
+    \  (cond\n      [(not (even? x)) true]\n      [else false]))\n  (define (count-even-odd\
+    \ num acc-even acc-odd)\n    (cond\n      [(zero? num) (cons acc-even acc-odd)]\n\
+    \      [(even? num) (count-even-odd (quotient num 10) (+ acc-even 1) acc-odd)]\n\
+    \      [else (count-even-odd (quotient num 10) acc-even (+ acc-odd 1))]))\n  (count-even-odd\
+    \ num 0 0))\n", "  (define (even? n)\n    (zero? (modulo n 2)))\n  (define (odd?\
+    \ n)\n    (not (even? n)))\n  (define (count pred ns)\n    (cond [(null? ns) 0]\n\
+    \          [(pred (car ns)) (+ 1 (count pred (cdr ns)))]\n          [else (count\
+    \ pred (cdr ns))]))\n  (define (num-str n)\n    (number->string n))\n  (define\
+    \ (str-num s)\n    (string->number s))\n  (define (str-list s)\n    (string-&gt;list\
+    \ s))\n  (define (list-str l)\n    (list-&gt;string l))\n  (define (split-str\
+    \ s)\n    (str-list s))\n  (define (str-ints s)\n    (map str-num (split-str s)))\n\
+    \  (define (ints-str ns)\n    (list-str (map num-str ns)))\n  (define (helper\
+    \ n)\n    (values (count even? (str-ints (num-str n)))\n            (count odd?\
+    \ (str-ints (num-str n)))))\n  (helper num))\n</code>\nAnd here is my answer:\n\
+    <code>#lang racket\n", "  (define n (abs num))\n  (define num-digits (string-length\
+    \ (number->string n)))\n  (define (helper n odd even i)\n    (cond\n      [(zero?\
+    \ i) (cons odd even)]\n      [(even? (remainder n 10)) (helper (quotient n 10)\
+    \ odd (+ even 1) (- i 1))]\n      [else (helper (quotient n 10) (+ odd 1) even\
+    \ (- i 1))]))\n  (helper n 0 0 num-digits))\n", "  (let loop ([num num] [even\
+    \ 0] [odd 0])\n    (cond\n      [(zero? num) (values even odd)]\n      [(even?\
+    \ (remainder num 10)) (loop (quotient num 10) (+ even 1) odd)]\n      [else (loop\
+    \ (quotient num 10) even (+ odd 1))])))\n```\n\n```racket\n#lang racket\n", " \
+    \ (let recur ((num num) (even 0) (odd 0))\n    (cond ((zero? num) (values even\
+    \ odd))\n          ((even? (abs num)) (recur (quotient num 10) (+ even 1) odd))\n\
+    \          (else (recur (quotient num 10) even (+ odd 1))))))\n", "  (if (negative?\
+    \ num)\n      (even_odd_count (abs num))\n      (let ([evens 0]\n            [odds\
+    \ 0])\n        (let loop ([num num])\n          (if (= num 0)\n              (values\
+    \ evens odds)\n              (let ([rem (modulo num 10)])\n                (if\
+    \ (even? rem)\n                    (loop (quotient num 10) (+ evens 1))\n    \
+    \                (loop (quotient num 10) (+ odds 1)))))))))\n</code>\n", "  (cond\n\
+    \    [(= num 0) (cons 0 0)]\n    [(even? (abs num)) (cons (+ 1 (car (even_odd_count\
+    \ (quotient num 10)))) (cdr (even_odd_count (quotient num 10))))]\n    [else (cons\
+    \ (car (even_odd_count (quotient num 10))) (+ 1 (cdr (even_odd_count (quotient\
+    \ num 10)))))]))\n", "  (define (even? x)\n    (zero? (modulo x 2)))\n  (define\
+    \ (odd? x)\n    (not (even? x)))\n  (define (aux acc num)\n    (if (zero? num)\n\
+    \        acc\n        (let* ([d (modulo num 10)]\n               [acc (if (even?\
+    \ d)\n                        (cons (cons 1 (car acc)) (cdr acc))\n          \
+    \              (cons (cons (add1 (car acc)) (cdr acc)) (cdr acc)))])\n       \
+    \   (aux acc (quotient num 10)))))\n  (aux (cons (cons 0 0) (cons 0 0)) num))\n",
+  "  (let ((evens (find-evens num))\n        (odds (find-odds num)))\n    (list (list-length\
+    \ evens) (list-length odds))))\n", "  (values\n   (for/sum ([i (in-naturals)]\n\
+    \             #:when (not (zero? (remainder num i)))\n             #:when (even?\
+    \ i))\n    1)\n   (for/sum ([i (in-naturals)]\n             #:when (not (zero?\
+    \ (remainder num i)))\n             #:when (odd? i))\n    1)))\n", "  (define\
+    \ (even-digits n count)\n    (if (= n 0)\n        count\n        (even-digits\
+    \ (/ n 10) (if (even? (remainder n 10)) (add1 count) count))))\n  (define (odd-digits\
+    \ n count)\n    (if (= n 0)\n        count\n        (odd-digits (/ n 10) (if (odd?\
+    \ (remainder n 10)) (add1 count) count))))\n  (values (even-digits num 0) (odd-digits\
+    \ num 0)))\n", "  (let loop ([num num] [even 0] [odd 0])\n    (cond [(zero? num)\
+    \ (values even odd)]\n          [(even? (remainder num 10)) (loop (quotient num\
+    \ 10) (+ even 1) odd)]\n          [else (loop (quotient num 10) even (+ odd 1))])))\n",
+  "    (for/fold ([even 0][odd 0]) ([digit (in-list (string->list (number->string\
+    \ num)))])\n      (cond\n        [(even? (string->number (string digit))) (values\
+    \ (+ even 1) odd)]\n        [else (values even (+ odd 1))])))\n\n", "    (define\
+    \ abs_num (abs num))\n    (define (count_digit state)\n        (if (zero? abs_num)\n\
+    \            state\n            (count_digit (if (even? (remainder abs_num 10))\n\
+    \                             (cons (add1 (car state)) (cdr state))\n        \
+    \                     (cons (car state) (add1 (cdr state)))))))\n    (count_digit\
+    \ (cons 0 0)))\n", "  (define (loop i num evens odds)\n    (if (zero? num)\n \
+    \       (values evens odds)\n        (let ([di (modulo num 10)])\n          (if\
+    \ (even? di)\n              (loop (add1 i) (quotient num 10) (add1 evens) odds)\n\
+    \              (loop (add1 i) (quotient num 10) evens (add1 odds))))))\n  (if\
+    \ (negative? num)\n      (loop 0 (add1 num) 0 0)\n      (loop 0 num 0 0)))\n",
+  "  (letrec ([num (abs num)]\n           [nums (number->string num)]\n          \
+    \ [even-count (for/sum ([digit (in-string nums)])\n                          \
+    \      (if (even? (string->number (string digit))) 1 0))]\n           [odd-count\
+    \ (- (string-length nums) even-count)])\n    (values even-count odd-count)))",
+  "  (let loop ([cur-num num] [even-digit-counter 0] [odd-digit-counter 0])\n    (if\
+    \ (negative? cur-num)\n        (loop (- cur-num) even-digit-counter odd-digit-counter)\n\
+    \        (if (zero? cur-num)\n            (values even-digit-counter odd-digit-counter)\n\
+    \            (let* ([last-digit (modulo cur-num 10)]\n                   [even?\
+    \ (zero? (modulo last-digit 2))])\n              (if even?\n                 \
+    \ (loop (quotient cur-num 10) (+ even-digit-counter 1) odd-digit-counter)\n  \
+    \                (loop (quotient cur-num 10) even-digit-counter (+ odd-digit-counter\
+    \ 1))))))))\n</code>\nTests:\n<code>;; Racket", "  (match num\n    [(cons n ns)\
+    \ (if (even? n)\n                     (cons n ns)\n                     (cons\
+    \ n (even_odd_count ns)))]\n    [_ '()]))\n", "  (define (evens_and_odds num evens\
+    \ odds)\n    (cond ((< num 0) (evens_and_odds (- num) evens odds))\n         \
+    \ ((= num 0) (values (add1 evens) odds))\n          ((even? (modulo num 10)) (evens_and_odds\
+    \ (quotient num 10) (add1 evens) odds))\n          (else (evens_and_odds (quotient\
+    \ num 10) evens (add1 odds)))))\n  (evens_and_odds num 0 0))\n\n", "  (cond\n\
+    \    [(= num 0) (cons 0 0)]\n    [(even? (abs num)) (cons (add1 (car (even_odd_count\
+    \ (quotient num 10))))\n                             (cdr (even_odd_count (quotient\
+    \ num 10))))]\n    [else (cons (car (even_odd_count (quotient num 10)))\n    \
+    \            (add1 (cdr (even_odd_count (quotient num 10)))))]))\n", "  (define\
+    \ (countEven num res)\n    (if (= num 0)\n        res\n        (if (even? (remainder\
+    \ num 10))\n            (countEven (quotient num 10) (+ res 1))\n            (countEven\
+    \ (quotient num 10) res))))\n  (define (countOdd num res)\n    (if (= num 0)\n\
+    \        res\n        (if (odd? (remainder num 10))\n            (countOdd (quotient\
+    \ num 10) (+ res 1))\n            (countOdd (quotient num 10) res))))\n  (values\
+    \ (countEven num 0) (countOdd num 0)))\n", "  (if (zero? num)\n      (cons 0 0)\n\
+    \      (let ([digit (modulo num 10)])\n        (let ([tuple (even_odd_count (quotient\
+    \ num 10))])\n          (if (even? digit)\n              (cons (+ (car tuple)\
+    \ 1) (cdr tuple))\n              (cons (car tuple) (+ (cdr tuple) 1)))))))\n",
+  "  (local [(define (helper k even-count odd-count)\n            (cond [(zero? k)\
+    \ (values even-count odd-count)]\n                  [(even? (modulo k 10)) (helper\
+    \ (quotient k 10) (+ even-count 1) odd-count)]\n                  [else (helper\
+    \ (quotient k 10) even-count (+ odd-count 1))]))]\n    (helper num 0 0)))\n",
+  "  (let ([num-str (number->string num)])\n    (map (cut string-length <> <>)\n \
+    \        (partition even?\n                    (map string->number\n         \
+    \                (string-split num-str))))))\n", "  (tuple (count-odd num) (count-even\
+    \ num)))\n", "  (define (aux num count-even count-odd)\n    (cond [(< num 10)\
+    \ (values count-even count-odd)]\n          [(even? (modulo num 10)) (aux (quotient\
+    \ num 10) (+ count-even 1) count-odd)]\n          [else (aux (quotient num 10)\
+    \ count-even (+ count-odd 1))]))\n  (let ([ce 0] [co 0])\n    (aux num ce co)))\n\
+    \n", "    (define (is_even n) (= (remainder n 2) 0))\n    (let loop ([n num] [even\
+    \ 0] [odd 0])\n      (cond [(negative? n) (cons even odd)]\n            [(is_even\
+    \ n) (loop (quotient n 10) (+ even 1) odd)]\n            [else (loop (quotient\
+    \ n 10) even (+ odd 1))])))\n", "  (define (count even odd n)\n    (cond ((negative?\
+    \ n)\n           (values even odd))\n          ((zero? (modulo n 2))\n       \
+    \    (count (+ even 1) odd (quotient n 10)))\n          (else\n           (count\
+    \ even (+ odd 1) (quotient n 10)))))\n  (count 0 0 num))\n", "  (cond\n    [(negative?\
+    \ num) (even_odd_count (- num))]\n    [(zero? num) (values 0 0)]\n    [else\n\
+    \     (define rem (modulo num 10))\n     (define res (even_odd_count (quotient\
+    \ num 10)))\n     (define even? (even? rem))\n     (define new-even (if even?\
+    \ (add1 (car res)) (car res)))\n     (define new-odd (if even? (cdr res) (add1\
+    \ (cdr res))))\n     (values new-even new-odd)]))\n", "  (cond\n    [(zero? num)\
+    \ (cons 0 0)]\n    [(even? (remainder num 10)) (cons (add1 (car (even_odd_count\
+    \ (quotient num 10)))) (cdr (even_odd_count (quotient num 10))))]\n    [else (cons\
+    \ (car (even_odd_count (quotient num 10))) (add1 (cdr (even_odd_count (quotient\
+    \ num 10)))))]))\n", "  (local [(define positive-num (abs num))\n          (define\
+    \ pos-even-count (for/sum ([x (in-range (number->string positive-num))])\n   \
+    \                                       (if (even? (string->number (string x)))\
+    \ 1 0)))\n          (define pos-odd-count (- (string-length (number->string positive-num))\
+    \ pos-even-count))]\n    (if (negative? num)\n        (list pos-odd-count pos-even-count)\n\
+    \        (list pos-even-count pos-odd-count))))\n```\n\n### Diophantine reciprocals\
+    \ II\n```racket\n#lang racket\n", "  (define (count-evens num)\n    (if (zero?\
+    \ num)\n        0\n        (if (even? (modulo num 10))\n            (+ 1 (count-evens\
+    \ (quotient num 10)))\n            (count-evens (quotient num 10)))))\n  (define\
+    \ (count-odds num)\n    (if (zero? num)\n        0\n        (if (odd? (modulo\
+    \ num 10))\n            (+ 1 (count-odds (quotient num 10)))\n            (count-odds\
+    \ (quotient num 10)))))\n  (define (count-helper num evens odds)\n    (if (positive?\
+    \ num)\n        (count-helper (quotient num 10) (+ evens (count-evens num)) (+\
+    \ odds (count-odds num)))\n        (cons evens odds)))\n  (count-helper num 0\
+    \ 0))\n", "  (define (even? x)\n    (zero? (modulo x 2)))\n  (define (even-digits\
+    \ lst)\n    (cond [(empty? lst) empty]\n          [(even? (first lst)) (cons (first\
+    \ lst) (even-digits (rest lst)))]\n          [else (even-digits (rest lst))]))\n\
+    \  (define (odd-digits lst)\n    (cond [(empty? lst) empty]\n          [(even?\
+    \ (first lst)) (odd-digits (rest lst))]\n          [else (cons (first lst) (odd-digits\
+    \ (rest lst)))]))\n  (define (to-digits n)\n    (if (zero? n)\n        empty\n\
+    \        (cons (modulo n 10) (to-digits (quotient n 10)))))\n  (if (negative?\
+    \ num)\n      (error \"Number must be non-negative.\")\n      (let ([n-digits\
+    \ (to-digits num)])\n        (values (length (even-digits n-digits)) (length (odd-digits\
+    \ n-digits))))))\n```\n\nSlightly refactored with names for intermediate values:\n\
+    \n```racket\n#lang racket\n", "  (if (zero? num)\n      (values 0 0)\n      (let*\
+    \ ([abs-num (abs num)]\n             [last-digit (modulo abs-num 10)]\n      \
+    \       [previous-digits (/ abs-num 10)])\n        (let-values ([(even-count odd-count)\
+    \ (even_odd_count previous-digits)])\n          (cond [(even? last-digit) (values\
+    \ (+ even-count 1) odd-count)]\n                [else (values even-count (+ odd-count\
+    \ 1))])))))\n", "  (let ([evens 0]\n        [odds 0])\n    (do ([num num (quotient\
+    \ num 10)])\n        ((zero? num) (values evens odds))\n      (if (even? (remainder\
+    \ num 10))\n          (set! evens (+ evens 1))\n          (set! odds (+ odds 1))))))\n",
+  "  (define (count rmds)\n    (cond [(null? rmds) #f]\n          [(even? (car rmds))\
+    \ #t]\n          [else #f]))\n  (list (for/sum ([x (in-list (remainders num))]\n\
+    \                  #:when (count x))\n              1)\n        (for/sum ([x (in-list\
+    \ (remainders num))]\n                  #:unless (count x))\n              1)))\n",
+  "  (define (even_odd_count-itr even odd num-str)\n    (if (empty? num-str)\n   \
+    \     (values even odd)\n        (let ([char (string-ref num-str 0)])\n      \
+    \    (if (char=? char #\\-)\n              (even_odd_count-itr even odd (substring\
+    \ num-str 1))\n              (let ([digit (string->number (string char))])\n \
+    \               (if (even? digit)\n                    (even_odd_count-itr (+\
+    \ even 1) odd (substring num-str 1))\n                    (even_odd_count-itr\
+    \ even (+ odd 1) (substring num-str 1))))))))\n  (even_odd_count-itr 0 0 (number->string\
+    \ num)))\n", "  (define (helper num even odd)\n    (cond ((< num 0) (helper (-\
+    \ num) even odd))\n          ((< num 10) (if (even? num)\n                   \
+    \       (tuple even (+ odd 1))\n                          (tuple (+ even 1) odd)))\n\
+    \          (else (helper (/ num 10) even odd))))\n  (helper num 0 0))\n```", " \
+    \ (local [(define (helper r num count)\n            (if (zero? num) count\n  \
+    \              (if (even? (remainder num 10))\n                    (helper r (quotient\
+    \ num 10) (cons 1 (cdr count)))\n                    (helper r (quotient num 10)\
+    \ (cons 0 (cdr count))))))]\n    (helper 0 num (cons 0 (cons 0 '())))))\n", " \
+    \ (define (even? a)\n    (equal? (remainder a 2) 0))\n  (define (odd? a)\n   \
+    \ (not (even? a)))\n  (define (loop count acc num)\n    (cond ((zero? num) acc)\n\
+    \          ((even? (remainder num 10)) (loop (+ count 1) (cons count (cdr acc))\
+    \ (quotient num 10)))\n          ((odd? (remainder num 10)) (loop (+ count 1)\
+    \ (cons (cdr acc) count) (quotient num 10)))\n          (else (loop (+ count 1)\
+    \ acc (quotient num 10)))))\n  (loop 0 (cons 0 0) num))\n", "  (let loop ([num\
+    \ num] [even 0] [odd 0])\n    (cond\n      [(zero? num) (values even odd)]\n \
+    \     [(even? (remainder num 10)) (loop (quotient num 10) (+ even 1) odd)]\n \
+    \     [else (loop (quotient num 10) even (+ odd 1))])))\n", "  (define (count-evens\
+    \ x)\n    (if (zero? x)\n        0\n        (if (even? (remainder x 10))\n   \
+    \         (+ 1 (count-evens (quotient x 10)))\n            (count-evens (quotient\
+    \ x 10)))))\n  (define (count-odds x)\n    (if (zero? x)\n        0\n        (if\
+    \ (odd? (remainder x 10))\n            (+ 1 (count-odds (quotient x 10)))\n  \
+    \          (count-odds (quotient x 10)))))\n  (list (count-evens num) (count-odds\
+    \ num)))\n", "  (let loop ([num num] [even 0] [odd 0])\n    (cond [(<= num 9)\n\
+    \           (cond [(even? num)\n                  (values even (+ odd 1))]\n \
+    \                [else\n                  (values (+ even 1) odd)])]\n       \
+    \   [else\n           (cond [(even? (remainder num 10))\n                  (loop\
+    \ (quotient num 10) (+ even 1) odd)]\n                 [else\n               \
+    \   (loop (quotient num 10) even (+ odd 1))])])))\n", "    (let ((even-count 0)\n\
+    \          (odd-count 0))\n      (for ([digit (- num)])\n        (if (zero? (remainder\
+    \ digit 2))\n            (set! even-count (+ even-count 1))\n            (set!\
+    \ odd-count (+ odd-count 1))))\n      (cons even-count odd-count)))\n\n", "  (cond\n\
+    \    [(zero? num)\n     '(0 0)]\n    [(= (modulo num 2) 0)\n     (if (negative?\
+    \ num)\n         (even_odd_count (add1 (quotient num 10)))\n         (even_odd_count\
+    \ (quotient num 10)))]\n    [else\n     (if (negative? num)\n         (even_odd_count\
+    \ (sub1 (quotient num 10)))\n         (even_odd_count (quotient num 10)))]))\n",
+  "  (define lst (integer->list num))\n  (cond\n    [(null? lst) (cons 0 0)]\n   \
+    \ [(even? (car lst)) (cons (+ 1 (even_odd_count (rest lst))) 0)]\n    [else (cons\
+    \ 0 (+ 1 (even_odd_count (rest lst))))]))\n", "  (cond\n    [(zero? num) (cons\
+    \ 0 0)]\n    [(= (remainder num 10) 0) (cons (+ 1 (car (even_odd_count (quotient\
+    \ num 10)))) (cdr (even_odd_count (quotient num 10))))]\n    [(not (= (remainder\
+    \ num 10) 0)) (cons (car (even_odd_count (quotient num 10))) (+ 1 (cdr (even_odd_count\
+    \ (quotient num 10)))))]))\n", "  (cond\n    [(zero? num) (list 0 0)]\n    [(even?\
+    \ (abs num)) (list (+ 1 (list-ref (even_odd_count (quotient num 10)) 0)) (list-ref\
+    \ (even_odd_count (quotient num 10)) 1))]\n    [else (list (list-ref (even_odd_count\
+    \ (quotient num 10)) 0) (+ 1 (list-ref (even_odd_count (quotient num 10)) 1)))]))\n",
+  "  (define (iter num even-count odd-count)\n    (cond\n      [(zero? num) (cons\
+    \ even-count odd-count)]\n      [(zero? (modulo num 2)) (iter (quotient num 10)\
+    \ (+ even-count 1) odd-count)]\n      [else (iter (quotient num 10) even-count\
+    \ (+ odd-count 1))]))\n  (if (positive? num)\n      (iter num 0 0)\n      (iter\
+    \ (- num) 0 0)))\n</code>\n", "  (define (even num)\n    (cond [(= num 0) 0]\n\
+    \          [(even? num) 1]\n          [else 0]))\n  (define (odd num)\n    (cond\
+    \ [(= num 0) 0]\n          [(even? num) 0]\n          [else 1]))\n  (cond [(=\
+    \ num 0) '(0 0)]\n        [else\n         (let ([digits (number->string num)])\n\
+    \           (for/fold ([evens 0] [odds 0]) ([digit (in-string digits)])\n    \
+    \         (cond [(even? (string->number (string digit)))\n                   \
+    \ (values (+ evens 1) odds)]\n                   [else\n                    (values\
+    \ evens (+ odds 1))])))]))\n", "    (define (even_odd_count_iter num even odd)\n\
+    \        (cond\n            [(zero? num) (cons even odd)]\n            [(even?\
+    \ (remainder num 10)) (even_odd_count_iter (quotient num 10) (+ even 1) odd)]\n\
+    \            [else (even_odd_count_iter (quotient num 10) even (+ odd 1))]))\n\
+    \    (even_odd_count_iter num 0 0))\n", "  (cond\n    [(negative? num) (even_odd_count\
+    \ (- num))]\n    [(zero? num) (values 0 0)]\n    [else\n     (define n10 (quotient\
+    \ num 10))\n     (define n1 (remainder num 10))\n     (define-values (evens odds)\
+    \ (even_odd_count n10))\n     (cond\n       [(even? n1) (values (+ evens 1) odds)]\n\
+    \       [else (values evens (+ odds 1))])]))\n", "  (let ([even? (lambda (n) (even?\
+    \ (abs n)))]\n        [is-num? (lambda (ch) (and (char? ch) (char-numeric? ch)))])\n\
+    \    (define (count-even-odd num)\n      (let ([chars (string->list (number->string\
+    \ num))])\n        (if (null? chars) '()\n            (if (is-num? (car chars))\n\
+    \                (if (even? (string->number (car chars)))\n                  \
+    \  (cons 1 (count-even-odd (cdr chars)))\n                    (cons 0 (count-even-odd\
+    \ (cdr chars))))\n                (count-even-odd (cdr chars))))))\n    (let ([even-and-odd-counts\
+    \ (count-even-odd num)])\n      (values (apply + (filter even? even-and-odd-counts))\n\
+    \              (apply + (filter odd? even-and-odd-counts))))))\n", "  (define\
+    \ (acc n even odd)\n    (cond [(zero? n) (values even odd)]\n          [(even?\
+    \ (remainder n 10)) (acc (quotient n 10) (+ even 1) odd)]\n          [else (acc\
+    \ (quotient n 10) even (+ odd 1))]))\n  (values (acc num 0 0)))\n", "  (let ([even-count\
+    \ 0]\n        [odd-count 0])\n    (define (append-if-pred pred acc)\n      (cond\n\
+    \        [(pred acc) (append-if-pred pred (add1 acc))]\n        [else acc]))\n\
+    \    (define (iter num)\n      (cond\n        [(negative? num) (values even-count\
+    \ odd-count)]\n        [(= num 0) (values even-count odd-count)]\n        [else\n\
+    \         (let ([digit (modulo num 10)])\n           (cond\n             [(even?\
+    \ digit) (set! even-count (append-if-pred even? even-count))]\n             [else\
+    \ (set! odd-count (append-if-pred odd? odd-count))])\n           (iter (quotient\
+    \ num 10)))]))\n    (iter num)))\n\n", "  (define (even-odd-count-helper num odd-count\
+    \ even-count)\n    (cond\n      [(zero? num) (cons even-count odd-count)]\n  \
+    \    [(zero? (modulo num 10) ) (even-odd-count-helper (quotient num 10) odd-count\
+    \ (+ even-count 1))]\n      [else (even-odd-count-helper (quotient num 10) (+\
+    \ odd-count 1) even-count)]))\n  (even-odd-count-helper num 0 0))\n", "  (match\
+    \ num\n    [(-1) (values 1 0)]\n    [(0) (values 0 0)]\n    [(num) (define rem\
+    \ (remainder num 10))\n            (define int (integer->char rem))\n        \
+    \    (define even? (even? rem))\n            (define (next num)\n            \
+    \  (even_odd_count (quotient num 10)))\n            (match int\n             \
+    \ [#\\0 (next num)]\n              [#\\2 (values (+ 1 (first (next num))) (second\
+    \ (next num)))]\n              [#\\4 (values (+ 1 (first (next num))) (second\
+    \ (next num)))]\n              [#\\6 (values (+ 1 (first (next num))) (second\
+    \ (next num)))]\n              [#\\8 (values (+ 1 (first (next num))) (second\
+    \ (next num)))]\n              [else (values (first (next num)) (+ 1 (second (next\
+    \ num))))])]))\n", "  (let ((even 0)\n        (odd 0))\n    (let loop ((n num))\n\
+    \      (if (zero? n)\n          (values even odd)\n          (let ((abs-digit\
+    \ (abs (remainder n 10))))\n            (cond\n              [(even? abs-digit)\
+    \ (loop (quotient n 10)) (set! even (+ even 1))]\n              [else (loop (quotient\
+    \ n 10)) (set! odd (+ odd 1))]))))))\n", "  (let* ((digits (integer->list num))\n\
+    \         (all_digits (for/list ([d digits]) (abs d)))\n         (even_digits\
+    \ (filter even? all_digits))\n         (odd_digits (filter odd? all_digits)))\n\
+    \    (list (length even_digits) (length odd_digits))))\n```\n\n```racket\n#lang\
+    \ racket\n", "  (define (even_odd_count num even odd)\n    (if (= num 0)\n   \
+    \     (values even odd)\n        (let ([digit (remainder num 10)])\n         \
+    \ (if (even? digit)\n              (even_odd_count (quotient num 10) (+ even 1)\
+    \ odd)\n              (even_odd_count (quotient num 10) even (+ odd 1))))))\n\
+    \  (even_odd_count num 0 0))\n", "  (define (iter iter_num even_count odd_count)\n\
+    \    (cond [(zero? iter_num) (values even_count odd_count)]\n          [(even?\
+    \ (remainder iter_num 10)) (iter (quotient iter_num 10) (+ even_count 1) odd_count)]\n\
+    \          [else (iter (quotient iter_num 10) even_count (+ odd_count 1))]))\n\
+    \  (iter num 0 0))\n", "  (cond ((negative? num) (even_odd_count (- num)))\n \
+    \       ((zero? num) (cons 0 0))\n        (else (even_odd_count_helper num 0 0))))\n",
+  "  (let* ([digits (number->string num)]\n         [evens (for/fold ([evens 0]) ([digit\
+    \ (in-string digits)])\n                  (if (even? (string->number (list-ref\
+    \ digits (- (string-length digits) (string-length digit) -1))))\n            \
+    \          (+ evens 1)\n                      evens))]\n         [odds (for/fold\
+    \ ([odds 0]) ([digit (in-string digits)])\n                 (if (odd? (string->number\
+    \ (list-ref digits (- (string-length digits) (string-length digit) -1))))\n  \
+    \                   (+ odds 1)\n                     odds))])\n    (list evens\
+    \ odds)))\n", "  (display (even_odd_count_1 num 0 0)))\n", "  (define (count-even\
+    \ num)\n    (if (zero? num) 0\n        (if (even? (modulo num 10)) (+ 1 (count-even\
+    \ (quotient num 10)))\n            (count-even (quotient num 10)))))\n  (define\
+    \ (count-odd num)\n    (if (zero? num) 0\n        (if (odd? (modulo num 10)) (+\
+    \ 1 (count-odd (quotient num 10)))\n            (count-odd (quotient num 10)))))\n\
+    \  (list (count-even num) (count-odd num)))\n", "  (let loop ((num num) (even\
+    \ 0) (odd 0))\n    (cond [(< num 0) (loop (- num) even odd)]\n          [(zero?\
+    \ num) (values even odd)]\n          [(even? (remainder num 10)) (loop (quotient\
+    \ num 10) (+ even 1) odd)]\n          [else (loop (quotient num 10) even (+ odd\
+    \ 1))])))\n", "  (if (zero? num)\n      (values 0 0)\n      (let* ([r (remainder\
+    \ num 10)]\n             [n (quotient num 10)]\n             [e (even_odd_count\
+    \ n)]\n             [es (car e)]\n             [os (cdr e)])\n        (if (even?\
+    \ r)\n            (values (+ es 1) os)\n            (values es (+ os 1))))))\n",
+  "  (let ((evens 0)\n        (odds 0))\n    (for ([digit (in-list (string->list (number->string\
+    \ (abs num))))])\n      (if (even? (string->number digit))\n          (set! evens\
+    \ (+ evens 1))\n          (set! odds (+ odds 1))))\n    (values evens odds)))\n",
+  "  (cond ((= num 0) (values 0 0))\n        ((= (remainder num 2) 0) (let ([even_count\
+    \ (even_odd_count (quotient num 10))])\n                                   (values\
+    \ (+ (car even_count) 1) (cdr even_count))))\n        (else (let ([odd_count (even_odd_count\
+    \ (quotient num 10))])\n                (values (car odd_count) (+ (cdr odd_count)\
+    \ 1))))))\n", "  (let ([counts (list 0 0)])\n    (for ([d (in-list (digits num))])\n\
+    \      (if (even? d)\n          (set-car! counts (+ 1 (car counts)))\n       \
+    \   (set-cdr! counts (+ 1 (cdr counts)))))\n    counts))\n", "  (if (negative?\
+    \ num)\n      (even_odd_count (- num))\n      (letrec ([even-odd-inner (lambda\
+    \ (digits even-digits odd-digits)\n                                 (if (zero?\
+    \ digits)\n                                     (values even-digits odd-digits)\n\
+    \                                     (let ([digit (remainder digits 10)])\n \
+    \                                      (even-odd-inner (quotient digits 10)\n\
+    \                                                       (if (even? digit) (+ even-digits\
+    \ 1) even-digits)\n                                                       (if\
+    \ (odd? digit) (+ odd-digits 1) odd-digits)))))])\n        (even-odd-inner num\
+    \ 0 0))))\n", "  (let ([abs-num (abs num)])\n    (list (list (list (list (list)))))))\n",
+  "  (cond [(> num 0)\n         (even_odd_count_helper num 0 0)]\n        [(< num\
+    \ 0)\n         (even_odd_count_helper (- num) 0 0)]\n        [else (values 0 0)]))\n",
+  "  (define (even-or-odd? num)\n    (if (zero? (modulo num 2))\n        'even\n \
+    \       'odd))\n  (define (even-or-odd-count lst)\n    (cond\n      [(null? lst)\
+    \ 0]\n      [(eq? (even-or-odd? (car lst)) 'even) (+ 1 (even-or-odd-count (cdr\
+    \ lst)))]\n      [else (even-or-odd-count (cdr lst))]))\n  (even-or-odd-count\
+    \ (number->list num)))\n", "  (let loop ([n (if (negative? num) (- num) num)]\n\
+    \              [even 0]\n              [odd 0])\n    (if (= n 0)\n        (values\
+    \ even odd)\n        (loop (quotient n 10)\n              (if (even? (remainder\
+    \ n 10))\n                  (+ even 1)\n                  even)\n            \
+    \  (if (odd? (remainder n 10))\n                  (+ odd 1)\n                \
+    \  odd)))))\n", "  (define even 0)\n  (define odd 0)\n  (for ([n (in-list (integer->list\
+    \ num))])\n    (if (even? n)\n        (set! even (+ even 1))\n        (set! odd\
+    \ (+ odd 1))))\n  (list even odd))\n", "  (cond ((negative? num) (even_odd_count\
+    \ (- num)))\n        ((zero? num) (values 0 0))\n        (else (values (if (even?\
+    \ (remainder num 10)) 1 0)\n                      (if (odd? (remainder num 10))\
+    \ 1 0)))))\n", "  (if (positive? num)\n      (count-odd-even num)\n      (count-odd-even\
+    \ (add1 (multiply -1 num)))))\n", "  (define (helper num even odd)\n    (if (zero?\
+    \ num)\n        (values even odd)\n        (let ((div10 (/ num 10))\n        \
+    \      (mod10 (modulo num 10)))\n          (if (even? mod10)\n              (helper\
+    \ div10 (+ even 1) odd)\n              (helper div10 even (+ odd 1))))))\n  (helper\
+    \ num 0 0))\n", "  (define (count num lst)\n    (cond\n      [(zero? num) lst]\n\
+    \      [(zero? (remainder num 2)) (count (quotient num 10) (add1 (cadr lst)))\
+    \ ]\n      [else (count (quotient num 10) (add1 (car lst)))]))\n  (count num (cons\
+    \ 0 (cons 0 (list)))))\n", "  (match num\n    [(-2) (values 1 1)]\n    [(-1) (values\
+    \ 1 1)]\n    [0 (values 1 1)]\n    [1 (values 1 1)]\n    [2 (values 1 1)]\n  \
+    \  [_ (even_odd_count2 num 0 0)]))\n", "  (define (even-odd-helper num acc-even\
+    \ acc-odd)\n    (cond [(zero? num) (values acc-even acc-odd)]\n          [(zero?\
+    \ (remainder num 10))\n           (even-odd-helper (quotient num 10) (add1 acc-even)\
+    \ acc-odd)]\n          [else (even-odd-helper (quotient num 10) acc-even (add1\
+    \ acc-odd))]))\n  (even-odd-helper num 0 0))\n", "  (define even-count 0)\n  (define\
+    \ odd-count 0)\n  (for ([i (range (abs num))])\n    (define digit (modulo (abs\
+    \ num) (expt 10 (+ i 1))))\n    (if (even? digit)\n        (set! even-count (+\
+    \ even-count 1))\n        (set! odd-count (+ odd-count 1))))\n  (list even-count\
+    \ odd-count))\n", "    (if (zero? num)\n        (list 0 0)\n        (let ([even\
+    \ (remainder (abs num) 2)])\n          (let ([digits (even_odd_count (quotient\
+    \ (abs num) 10))])\n            (list (+ even (car digits)) (+ 1 (cadr digits)))))))\n\
+    </code>\nI am not quite familiar with Racket. But what I understand that with\
+    \ <code>define</code> I am defining a function with a name (<code>even_odd_count</code>)\
+    \ and two parameters (<code>num</code>). \nWhat I don't get is the <code>#lang\
+    \ racket</code> line. Is it some kind of syntax?  \n\n\nA:\n\nRacket has lots\
+    \ of \"languages\", and the <code>#lang</code> keyword is used to specify which\
+    \ one to use. You can think of this as a sort of \"pragma\" in C or a \"use\"\
+    \ statement in Perl or Python, a special syntax element that has meaning to the\
+    \ preprocessor/interpreter.\n<code>#lang racket</code> is the most common one,\
+    \ it means to use the language Racket. The language is specified by a string literal,\
+    \ so a file can contain more than one language, but that's not often done.\nIn\
+    \ most cases, if you don't include the <code>#lang</code> line, Racket will assume\
+    \ the <code>#lang racket</code> language.\nIn your example, the <code>define</code>\
+    \ is a special syntax form in the <code>#lang racket</code> language. In other\
+    \ languages, it would be replaced by different constructs, such as a <code>let</code>\
+    \ or <code>defun</code>.\n", "  (let ([even_count 0]\n        [odd_count 0])\n\
+    \    (let ([helper\n           (lambda (abs-num)\n             (if (&lt;= abs-num\
+    \ 0)\n                 (values even_count odd_count)\n                 (let ([last-digit\
+    \ (modulo abs-num 10)])\n                   (cond\n                     [(= 0\
+    \ (modulo last-digit 2))\n                      (set! even_count (+ even_count\
+    \ 1))]\n                     [else\n                      (set! odd_count (+ odd_count\
+    \ 1))])\n                   (helper (quotient abs-num 10))))))])\n      (if (&lt;\
+    \ num 0)\n          (helper (- num))\n          (helper num)))))\n", "  (if (negative?\
+    \ num)\n      (even_odd_count (- num))\n      (if (positive? num)\n          (let\
+    \ ([d (remainder num 10)])\n            (even_odd_count (quotient num 10))\n \
+    \           (if (even? d)\n                (even-count (+ 1 (even-count)))\n \
+    \               (odd-count (+ 1 (odd-count)))))\n          (values 0 0))))\n</code>\n\
+    How can I get this code to return a tuple of the count of even digits and odd\
+    \ digits?\nThere is a bug somewhere that is throwing the following error:\n<code>even_odd_count.rkt:11:9:\
+    \ even_odd_count: contract violation\n  expected: number?\n  given: 'values\n\
+    \  in: (even-count (+ 1 (even-count)))\n  contracts from: (even_odd_count.rkt:11:9)\n\
+    </code>\n\n\nA:\n\nYou are using the <code>values</code> form wrong. Read its\
+    \ documentation\nThat form returns multiple values, but they are not necessarily\
+    \ different.\nYou are using it to return the count of odd and even numbers. The\
+    \ problem is that once you reach the base case, you return the same number (0)\
+    \ twice.\nTo know how many numbers of each kind you found (odd and even), you\
+    \ need to keep two values, since you need to return two values.\nIf you need to\
+    \ keep two values, you can use a <code>let</code> form.\n<code>(define (even_odd_count\
+    \ num)\n  (if (negative? num)\n      (even_odd_count (- num))\n      (if (positive?\
+    \ num)\n          (let ([d (remainder num 10)])\n            (even_odd_count (quotient\
+    \ num 10))\n            (if (even? d)\n                (even-count (+ 1 (even-count)))\n\
+    \                (odd-count (+ 1 (odd-count)))))\n          (values 0 0))))\n\
+    </code>\nIn the base case, you return <code>(values 0 0)</code>, i.e. 2 values,\
+    \ the same value (0) both times. You need to pass 2 variables instead:\n<code>(define\
+    \ (even_odd_count num)", "    (let ([n (abs num)])\n        (cond [(= n 0) (values\
+    \ 0 0)]\n              [(= (remainder n 10) 0) (define (even_odd_count num)\n\
+    \                                          (let ([n (abs num)])\n            \
+    \                                  (cond [(= n 0) (values 0 0)]\n            \
+    \                                        [(= (remainder n 10) 0) (values (add1\
+    \ (call-with-values (lambda () (even_odd_count (quotient n 10))) (lambda (even\
+    \ odd) even))) (call-with-values (lambda () (even_odd_count (quotient n 10)))\
+    \ (lambda (even odd) odd)))]\n                                               \
+    \     [else (values (call-with-values (lambda () (even_odd_count (quotient n 10)))\
+    \ (lambda (even odd) even)) (add1 (call-with-values (lambda () (even_odd_count\
+    \ (quotient n 10))) (lambda (even odd) odd))))]))))]\n              [else (values\
+    \ (call-with-values (lambda () (even_odd_count (quotient n 10))) (lambda (even\
+    \ odd) even)) (add1 (call-with-values (lambda () (even_odd_count (quotient n 10)))\
+    \ (lambda (even odd) odd))))])))\n", "  (cons (count-even-digits num) (count-odd-digits\
+    \ num)))\n", "  (match num\n    [(zero? num) '(0, 0)]\n    [(negative? num) (even_odd_count\
+    \ (add1 (abs num)))]\n    [(cons #\\0) (cons #\\0)]\n    [(cons #\\1) (cons #\\\
+    1)]\n    [(cons #\\2) (cons #\\2)]\n    [(cons #\\3) (cons #\\3)]\n    [(cons\
+    \ #\\4) (cons #\\4)]\n    [(cons #\\5) (cons #\\5)]\n    [(cons #\\6) (cons #\\\
+    6)]\n    [(cons #\\7) (cons #\\7)]\n    [(cons #\\8) (cons #\\8)]\n    [(cons\
+    \ #\\9) (cons #\\9)]\n    [(cons #\\-) (cons #\\-)]\n    [(cons #\\+) (cons #\\\
+    +)]\n    [(cons elem (cons rest))\n      (match elem\n        [(even? (string->number\
+    \ (symbol->string elem)))\n          (even_odd_count rest)]\n        [(odd? (string->number\
+    \ (symbol->string elem)))\n          (even_odd_count rest)])]))\n", "    (letrec\n\
+    \        ([reminder (modulo num 10)]\n         [digits (quotient num 10)]\n  \
+    \       [f (cond\n             [(= digits 0) (values (if (even? reminder) 1 0)\
+    \ (if (odd? reminder) 1 0))]\n             [(= digits -1) (values (if (even? reminder)\
+    \ 1 0) (if (odd? reminder) 1 0))]\n             [else (let* ([l (f digits)]\n\
+    \                         [even (car l)]\n                         [odd (cadr\
+    \ l)])\n                     (values (if (even? reminder) (+ even 1) even)\n \
+    \                            (if (odd? reminder) (+ odd 1) odd)))])])\n      \
+    \  (f num)))\n", "  (define (even? a)\n    (equal? (remainder a 2) 0))\n  (define\
+    \ (rec count-even count-odd input)\n    (cond\n      [(zero? input) (values count-even\
+    \ count-odd)]\n      [(even? (remainder input 10)) (rec (+ count-even 1) count-odd\
+    \ (quotient input 10))]\n      [else (rec count-even (+ count-odd 1) (quotient\
+    \ input 10))]))\n  (rec 0 0 num))\n", "  (let ([absnum (abs num)])\n    (tuple\
+    \ (even-digit-count absnum) (odd-digit-count absnum))))\n", "  (letrec ([inner\
+    \ (lambda (n)\n                    (cond [(zero? n) (values 0 0)]\n          \
+    \                [(even? (remainder n 10)) (let-values ([(evens odds) (inner (quotient\
+    \ n 10))])\n                                                         (values (+\
+    \ evens 1) odds))]\n                          [else (let-values ([(evens odds)\
+    \ (inner (quotient n 10))])\n                                  (values evens (+\
+    \ odds 1)))]))])\n    (if (negative? num)\n        (let-values ([(evens odds)\
+    \ (inner (- num))])\n          (values evens odds))\n        (inner num))))\n",
+  "  (define (even_odd_count_helper num even-count odd-count)\n    (if (negative?\
+    \ num)\n        (values even-count odd-count)\n        (cond\n         ((= num\
+    \ 0) (values even-count odd-count))\n         ((= (remainder num 10) 0) (even_odd_count_helper\
+    \ (quotient num 10) (+ even-count 1) odd-count))\n         (else (even_odd_count_helper\
+    \ (quotient num 10) even-count (+ odd-count 1))))))\n  (even_odd_count_helper\
+    \ num 0 0))\n", "  (let ([even-count 0]\n        [odd-count 0])\n    (define (count-helper\
+    \ n)\n      (cond [(= n 0) (values even-count odd-count)]\n            [(even?\
+    \ n) (count-helper (quotient n 10) (+ even-count 1))]\n            [else (count-helper\
+    \ (quotient n 10) (+ odd-count 1))]))\n    (count-helper num)))\n", "  (define\
+    \ (helper num even odd)\n    (if (= num 0)\n        (values even odd)\n      \
+    \  (if (even? (remainder num 10))\n            (helper (quotient num 10) (+ even\
+    \ 1) odd)\n            (helper (quotient num 10) even (+ odd 1)))))\n  (if (&lt;\
+    \ num 0)\n      (helper (abs num) 0 0)\n      (helper num 0 0)))\n", "  (let loop\
+    \ ([rem (abs num)]\n             [even 0]\n             [odd 0])\n    (cond\n\
+    \      [(zero? rem) (values even odd)]\n      [(zero? (remainder rem 10)) (loop\
+    \ (quotient rem 10) (+ even 1) odd)]\n      [else (loop (quotient rem 10) even\
+    \ (+ odd 1))])))\n", "  (local [(define (even_odd_count_helper acc1 acc2 num)\n\
+    \            (cond [(= num 0) (values acc1 acc2)]\n                  [(even? (remainder\
+    \ num 10)) (even_odd_count_helper (+ acc1 1) acc2 (quotient num 10))]\n      \
+    \            [else (even_odd_count_helper acc1 (+ acc2 1) (quotient num 10))]))]\n\
+    \    (even_odd_count_helper 0 0 num)))\n", "  (define abs-num (abs num))\n  (for/fold\
+    \ ([even 0] [odd 0]) ([n (in-range (exact-floor (log10 abs-num)) -1 -1)])\n  \
+    \  (if (even? (remainder n 10))\n        (values (+ even 1) odd)\n        (values\
+    \ even (+ odd 1)))))\n", "  (define (digit-even? num)\n    (define (even? num)\n\
+    \      (zero? (modulo num 2)))\n    (even? (abs num)))\n  (define (even-odd-count\
+    \ num even_count odd_count)\n    (if (zero? num)\n        (values even_count odd_count)\n\
+    \        (if (digit-even? num)\n            (even-odd-count (quotient num 10)\
+    \ (+ even_count 1) odd_count)\n            (even-odd-count (quotient num 10) even_count\
+    \ (+ odd_count 1)))))\n  (even-odd-count num 0 0))\n", "  (define (count_helper\
+    \ num even odd)\n    (cond\n      [(zero? num) (values even odd)]\n      [(and\
+    \ (zero? (modulo num 10)) (even? num)) (count_helper (quotient num 10) (+ even\
+    \ 1) odd)]\n      [(and (zero? (modulo num 10)) (odd? num)) (count_helper (quotient\
+    \ num 10) even (+ odd 1))]\n      [(even? num) (count_helper (quotient num 10)\
+    \ even (+ odd 1))]\n      [(odd? num) (count_helper (quotient num 10) (+ even\
+    \ 1) odd)]))\n  (if (negative? num)\n      (count_helper (abs num) 0 0)\n    \
+    \  (count_helper num 0 0)))\n", "  (let\n    (\n      (num_list (list->vector\
+    \ (string->list (number->string num))))\n      (even 0)\n      (odd 0)\n    )\n\
+    \    (for ([i (in-range (vector-length num_list))])\n      (if (even? (vector-ref\
+    \ num_list i))\n        (set! even (+ even 1))\n        (set! odd (+ odd 1))\n\
+    \      )\n    )\n    (vector even odd)\n  )\n)\n", "  (let* ([digits (abs num)]\n\
+    \         [evens (for/fold ([acc 0]) ([digit (in-list (number->string digits))])\n\
+    \                  (if (even? (string->number digit))\n                      (+\
+    \ acc 1)\n                      acc))]\n         [odds (for/fold ([acc 0]) ([digit\
+    \ (in-list (number->string digits))])\n                 (if (odd? (string->number\
+    \ digit))\n                     (+ acc 1)\n                     acc))])\n    (cons\
+    \ evens odds)))\n```\n\n```racket\n#lang racket\n", "  (if (zero? num)\n     \
+    \ '(0 0)\n      (let ([abs (abs num)])\n        (if (zero? (modulo abs 10))\n\
+    \            (let ([tup (even_odd_count (quotient abs 10))])\n              (values\
+    \ (add1 (car tup)) (cadr tup)))\n            (let ([tup (even_odd_count (quotient\
+    \ abs 10))])\n              (values (car tup) (add1 (cadr tup))))))))\n", "  \
+    \  (define (even_odd_count-helper num even-count odd-count)\n        (if (= num\
+    \ 0)\n            (values even-count odd-count)\n            (if (even? (remainder\
+    \ num 10))\n                (even_odd_count-helper (quotient num 10) (+ even-count\
+    \ 1) odd-count)\n                (even_odd_count-helper (quotient num 10) even-count\
+    \ (+ odd-count 1)))))\n    (even_odd_count-helper num 0 0))\n", "  (let ([abs-num\
+    \ (abs num)])\n    (if (positive? abs-num)\n        (even_odd_count_rec abs-num\
+    \ 0 0)\n        (error \"negative number\"))))\n", "  (define (count-evens num\
+    \ accum)\n    (cond [(= num 0) accum]\n          [(even? (remainder num 10)) (count-evens\
+    \ (quotient num 10) (+ accum 1))]\n          [else (count-evens (quotient num\
+    \ 10) accum)]))\n  (define (count-odds num accum)\n    (cond [(= num 0) accum]\n\
+    \          [(odd? (remainder num 10)) (count-odds (quotient num 10) (+ accum 1))]\n\
+    \          [else (count-odds (quotient num 10) accum)]))\n  (define (abs num)\n\
+    \    (cond [(< num 0) (- num)]\n          [else num]))\n  (make-tuple (count-evens\
+    \ (abs num) 0) (count-odds (abs num) 0)))", "  (define (odd? n)\n    (zero? (remainder\
+    \ n 2)))\n  (define (loop n evens odds)\n    (if (zero? n)\n        (values evens\
+    \ odds)\n        (let ([digit (remainder n 10)])\n          (if (odd? digit)\n\
+    \              (loop (quotient n 10) evens (+ odds 1))\n              (loop (quotient\
+    \ n 10) (+ evens 1) odds)))))\n  (if (negative? num)\n      (loop (negate num)\
+    \ 0 0)\n      (loop num 0 0)))\n", "  (define (count-helper num even-count odd-count)\n\
+    \    (if (zero? num)\n        (values even-count odd-count)\n        (if (even?\
+    \ (modulo num 10))\n            (count-helper (quotient num 10) (add1 even-count)\
+    \ odd-count)\n            (count-helper (quotient num 10) even-count (add1 odd-count)))))\n\
+    \  (if (negative? num)\n      (count-helper (add1 (abs num)) 0 0)\n      (count-helper\
+    \ num 0 0)))\n", "  (cond\n    [(< num 0) (even_odd_count (- num))]\n    [(= num\
+    \ 0) (values 0 0)]\n    [else (let ([recur (even_odd_count (quotient num 10))])\n\
+    \            (if (even? (remainder num 10))\n                (values (+ 1 (car\
+    \ recur)) (cdr recur))\n                (values (car recur) (+ 1 (cdr recur)))))]))\n",
+  "  (if (negative? num)\n      (even_odd_count (- num))\n      (let ([even 0]\n \
+    \           [odd 0])\n        (for ([i (in-range (count (number->string num)))]\n\
+    \              #:when (even? (remainder num 10)))\n          (set! even (+ even\
+    \ 1)))\n        (for ([i (in-range (count (number->string num)))]\n          \
+    \    #:when (odd? (remainder num 10)))\n          (set! odd (+ odd 1)))\n    \
+    \    (values even odd))))\n", "  (define (op n even odd)\n    (cond [(< n 10)\
+    \ (if (even? n) (values (+ even 1) odd) (values even (+ odd 1)))]\n          [else\
+    \ (let ([d (modulo n 10)])\n                  (if (even? d) (op (quotient n 10)\
+    \ (+ even 1) odd) (op (quotient n 10) even (+ odd 1))))]))\n  (op num 0 0))\n",
+  "  (cond\n    [(zero? num) (cons 0 0)]\n    [(zero? (remainder num 2)) (even_odd_count\
+    \ (quotient num 10))]\n    [else (even_odd_count (quotient num 10))]))\n", " \
+    \ (define (even? n)\n    (even? (remainder n 2)))\n  (define (odd? n)\n    (not\
+    \ (even? n)))\n  (define (count-even-odd num lst)\n    (cond [(empty? lst) '()]\n\
+    \          [(even? (first lst)) (cons (first lst) (count-even-odd num (rest lst)))]\n\
+    \          [(odd? (first lst)) (cons (first lst) (count-even-odd num (rest lst)))]))\n\
+    \  (define (even-odd-count-helper num)\n    (cond [(zero? num) '()]\n        \
+    \  [else (append (even-odd-count-helper (quotient num 10)) (list (remainder num\
+    \ 10)))]))\n  (define (even-odd-count num)\n    (cons (length (filter even? (even-odd-count-helper\
+    \ num)))\n          (length (filter odd? (even-odd-count-helper num)))))\n  (even-odd-count\
+    \ num))\n", "  (define (helper num even odd)\n    (cond\n      [(negative? num)\
+    \ (cons even odd)]\n      [(zero? num) (cons even odd)]\n      [(even? (remainder\
+    \ num 10)) (helper (quotient num 10) (+ even 1) odd)]\n      [else (helper (quotient\
+    \ num 10) even (+ odd 1))]))\n  (helper num 0 0))\n", "  (let loop ([n num] [even\
+    \ 0] [odd 0])\n    (if (positive? n)\n        (loop (quotient n 10)\n        \
+    \      (if (even? (remainder n 10))\n                  (+ even 1)\n          \
+    \        even)\n              (if (odd? (remainder n 10))\n                  (+\
+    \ odd 1)\n                  odd))\n        (values even odd))))\n", "  (define\
+    \ (even_odd_helper num even_count odd_count)\n    (cond [(zero? num) (values even_count\
+    \ odd_count)]\n          [(even? (remainder num 10))\n           (even_odd_helper\
+    \ (quotient num 10) (+ even_count 1) odd_count)]\n          [else (even_odd_helper\
+    \ (quotient num 10) even_count (+ odd_count 1))]))\n  (even_odd_helper num 0 0))\n",
+  "  (match num\n    [(cons a b)\n     (even_odd_count b)]\n    [_\n     (define (even-count\
+    \ num)\n       (cond\n         [(= num 0) 0]\n         [(= num 1) 0]\n       \
+    \  [(= num 2) 1]\n         [(= num 3) 0]\n         [(= num 4) 1]\n         [(=\
+    \ num 5) 0]\n         [(= num 6) 1]\n         [(= num 7) 0]\n         [(= num\
+    \ 8) 1]\n         [(= num 9) 0]))\n     (define (odd-count num)\n       (cond\n\
+    \         [(= num 0) 0]\n         [(= num 1) 1]\n         [(= num 2) 0]\n    \
+    \     [(= num 3) 1]\n         [(= num 4) 0]\n         [(= num 5) 1]\n        \
+    \ [(= num 6) 0]\n         [(= num 7) 1]\n         [(= num 8) 0]\n         [(=\
+    \ num 9) 1]))\n     (cons (even-count num) (odd-count num))]))\n", "  (define\
+    \ (even-odd-count num evens odds)\n    (cond\n      [(zero? num) (values evens\
+    \ odds)]\n      [(= (modulo num 2) 0) (even-odd-count (quotient num 10) (+ evens\
+    \ 1) odds)]\n      [else (even-odd-count (quotient num 10) evens (+ odds 1))]))\n\
+    \  (even-odd-count num 0 0))\n", "  (define (is-even? n)\n    (if (eq? (remainder\
+    \ n 2) 0) 1 0))\n  (define (is-odd? n)\n    (if (not (eq? (remainder n 2) 0))\
+    \ 1 0))\n  (define (is-zero? n)\n    (if (eq? n 0) 1 0))\n  (cond\n    [(< num\
+    \ 0) (even_odd_count (- num))]\n    [(zero? num) (values 0 0)]\n    [else (values\
+    \ (+ (is-even? (remainder num 10)) (even? (quotient num 10)))\n              \
+    \     (+ (is-odd? (remainder num 10)) (odd? (quotient num 10))))]))\n", "  (cond\
+    \ [(< num 0) (even_odd_count (- num))]\n        [(= num 0) (values 0 0)]\n   \
+    \     [else (let* ([digit (modulo num 10)]\n                     [counts (even_odd_count\
+    \ (quotient num 10))])\n                (cond [(even? digit) (cons (add1 (car\
+    \ counts)) (cdr counts))]\n                      [else (cons (car counts) (add1\
+    \ (cdr counts)))]))]))\n", "  (define (inner num result)\n    (cond [(zero? num)\
+    \ result]\n          [(even? (remainder num 10)) (inner (quotient num 10) (cons\
+    \ (car result) (cdr result)))]\n          [else (inner (quotient num 10) (cons\
+    \ (cdr result) (car result)))]))\n  (if (negative? num)\n      (inner (- num)\
+    \ (cons 0 0))\n      (inner num (cons 0 0))))\n", "  (let ([num (- (abs num))])\n\
+    \    (cond\n      [(zero? num) '(0, 0)]\n      [(= (remainder num 10) 0) (let\
+    \ ([even (+ 1 (first (even_odd_count (quotient num 10))))])\n                \
+    \                    (list even (second (even_odd_count (quotient num 10)))))\
+    \ ]\n      [else (let ([odd (+ 1 (second (even_odd_count (quotient num 10))))])\n\
+    \               (list (first (even_odd_count (quotient num 10))) odd))])))\n",
+  "  (define (aux num even odd)\n    (if (= num 0)\n        (values even odd)\n  \
+    \      (let* ([digit (remainder num 10)]\n               [num (quotient num 10)])\n\
+    \          (if (even? digit)\n              (aux num (+ even 1) odd)\n       \
+    \       (aux num even (+ odd 1))))))\n  (aux num 0 0))\n", "  (define (even-odd-helper\
+    \ num even odd)\n    (cond [(= num 0) (values even odd)]\n          [(even? (remainder\
+    \ num 10)) (even-odd-helper (quotient num 10) (+ even 1) odd)]\n          [else\
+    \ (even-odd-helper (quotient num 10) even (+ odd 1))]))\n  (even-odd-helper num\
+    \ 0 0))\n", "  (define (aux num even odd)\n    (if (zero? num)\n        (cons\
+    \ even odd)\n        (if (zero? (modulo num 2))\n            (aux (quotient num\
+    \ 10) (+ even 1) odd)\n            (aux (quotient num 10) even (+ odd 1)))))\n\
+    \  (if (negative? num)\n      (aux (- num) 0 0)\n      (aux num 0 0)))\n", " \
+    \ (if (negative? num)\n      (even_odd_count (- num))\n      (match num\n    \
+    \        [`(,head . ,rest) (tuple (if (even? head) 1 0) (if (odd? head) 1 0))]\n\
+    \            [`() (tuple 0 0)])))\n```\n\n```racket\n#lang racket\n", "  (if (negative?\
+    \ num)\n      (even_odd_count (- num))\n      (let loop ([num num] [even 0] [odd\
+    \ 0])\n        (cond [(zero? num) (values even odd)]\n              [(even? (remainder\
+    \ num 10)) (loop (quotient num 10) (+ even 1) odd)]\n              [else (loop\
+    \ (quotient num 10) even (+ odd 1))]))))\n", "  (define (count-even-odd n)\n \
+    \   (cond\n      [(zero? n) (values 0 0)]\n      [(zero? (remainder n 2)) (let-values\
+    \ ([(even odd) (count-even-odd (quotient n 10))]) (values (+ even 1) odd))]\n\
+    \      [else (let-values ([(even odd) (count-even-odd (quotient n 10))]) (values\
+    \ even (+ odd 1)))]))\n  (if (negative? num)\n      (let-values ([(even odd) (count-even-odd\
+    \ (abs num))]) (values odd even))\n      (count-even-odd num)))\n", "  (let loop\
+    \ ((num num) (even 0) (odd 0))\n    (cond ((< num 0) (loop (- num) even odd))\n\
+    \          ((= num 0) (values even odd))\n          ((zero? (modulo num 2)) (loop\
+    \ (quotient num 10) (+ even 1) odd))\n          (else (loop (quotient num 10)\
+    \ even (+ odd 1))))))\n```\n\n**Testing**\n\n```racket\n> (even_odd_count -12)\n\
+    '(1 1)\n> (even_odd_count 123)\n'(1 2)\n```\n\n## Roman to Decimal\n\n**Problem**\n\
+    \n```\nGiven a roman numeral, return the corresponding decimal number.\n\n\"I\"\
+    \ = 1\n\"II\" = 2\n\"III\" = 3\n\"IV\" = 4\n\"V\" = 5\n\"VI\" = 6\n...\n\n\"XC\"\
+    \ = 90\n\"C\" = 100\n\"CC\" = 200\n\"CCC\" = 300\n\"CD\" = 400\n\"D\" = 500\n\"\
+    DC\" = 600\n\"DCC\" = 700\n\"DCCC\" = 800\n\"CM\" = 900\n\"M\" = 1000\n\"MM\"\
+    \ = 2000\n\"MMM\" = 3000\n\nroman_to_decimal(\"DCCCXC\") ==> 890\nroman_to_decimal(\"\
+    CD\") ==> 400\nroman_to_decimal(\"I\") ==> 1\nroman_to_decimal(\"IV\") ==> 4\n\
+    roman_to_decimal(\"V\") ==> 5\nroman_to_decimal(\"VI\") ==> 6\nroman_to_decimal(\"\
+    VII\") ==> 7\nroman_to_decimal(\"VIII\") ==> 8\nroman_to_decimal(\"IX\") ==> 9\n\
+    roman_to_decimal(\"X\") ==> 10\nroman_to_decimal(\"XI\") ==> 11\nroman_to_decimal(\"\
+    XII\") ==> 12\nroman_to_decimal(\"XIII\") ==> 13\nroman_to_decimal(\"XIV\") ==>\
+    \ 14\nroman_to_decimal(\"XV\") ==> 15\nroman_to_decimal(\"XVI\") ==>", "  (let*\
+    \ ((sign (signum num))\n         (num (abs num))\n         (num-str (number->string\
+    \ num))\n         (evens (count-odd-evens num-str #f))\n         (odds (count-odd-evens\
+    \ num-str #t)))\n    (if (negative? sign)\n        (values (- evens) (- odds))\n\
+    \        (values evens odds))))\n", "  (cond ((zero? num) '())\n        ((even?\
+    \ (remainder num 10)) (cons 'even (even_odd_count (quotient num 10))))\n     \
+    \   (else (cons 'odd (even_odd_count (quotient num 10))))))\n", "  (cond\n   \
+    \ [(zero? num) '(0, 0)]\n    [(even? (abs num)) (cons 1 (even_odd_count (abs (quotient\
+    \ num 10))))]\n    [else (cons 0 (even_odd_count (abs (quotient num 10))))]))\n",
+  "  (define (even-or-odd? n)\n    (define (is-even? n)\n      (and (not (zero? n))\
+    \ (zero? (modulo n 2))))\n    (if (is-even? n)\n        'even\n        'odd))\n\
+    \  (define (len lst)\n    (cond\n      [(null? lst) 0]\n      [else (+ 1 (len\
+    \ (cdr lst)))]))\n  (define (cons-to-len lst)\n    (cond\n      [(null? lst) '()]\n\
+    \      [else (cons (len lst) (cons-to-len (cdr lst)))]))\n  (define (num-to-list\
+    \ n)\n    (if (zero? n)\n        '()\n        (cons (modulo n 10) (num-to-list\
+    \ (quotient n 10)))))\n  (define (chunk-list lst)\n    (define (chunk-list-iter\
+    \ new lst)\n      (cond\n        [(null? lst) (cons-to-len new)]\n        [(equal?\
+    \ (car lst) (caar new)) (chunk-list-iter (cons (cons (car lst) (cons (car lst)\
+    \ (cdar new))) (cdr new)) (cdr lst))]\n        [else (chunk-list-iter (cons (list\
+    \ (car lst)) new) (cdr lst))]))\n    (reverse (chunk-list-iter (list (list (car\
+    \ lst))) (cdr lst))))\n  (define (count-even-odd lst)\n    (let ((even-count 0)\n\
+    \          (odd-count 0))\n      (for ([it lst])\n        (cond\n          [(equal?\
+    \ (car it) 'even) (set! even-count (+ even-count (cadr it)))]\n          [(equal?\
+    \ (car it) 'odd) (set! odd-count (+ odd-count (cadr it)))]))\n      (list even-count\
+    \ odd-count)))\n  (count-even-odd (chunk-list (map even-or-odd? (num-to-list num)))))\n",
+  "  (letrec ([f (lambda (n e o)\n                (cond [(zero? n) (values e o)]\n\
+    \                      [(even? (remainder n 10)) (f (quotient n 10) (+ e 1) o)]\n\
+    \                      [else (f (quotient n 10) e (+ o 1))]))])\n    (f num 0\
+    \ 0)))\n```\n\n```racket\n#lang racket\n", "  (cond ((< num 0) (even_odd_count\
+    \ (- num)))\n        ((zero? num) (values 0 0))\n        (else (match (even_odd_count\
+    \ (quotient num 10))\n                     [#(even odd) (values (if (even? (remainder\
+    \ num 10)) (+ even 1) even)\n                                          (if (odd?\
+    \ (remainder num 10)) (+ odd 1) odd))]))))\n", "  (define (count-odd num)\n  \
+    \  (if (or (zero? num) (negative? num))\n        0\n        (if (odd? num)\n \
+    \           (add1 (count-odd (quotient num 10)))\n            (count-odd (quotient\
+    \ num 10)))))\n  (define (count-even num)\n    (if (or (zero? num) (negative?\
+    \ num))\n        0\n        (if (even? num)\n            (add1 (count-even (quotient\
+    \ num 10)))\n            (count-even (quotient num 10)))))\n  (values (count-even\
+    \ num) (count-odd num)))\n", "  (cond [(< num 0) (even_odd_count (- num))]\n \
+    \       [(= num 0) (cons 0 0)]\n        [else (let* ([rem (modulo num 10)]\n \
+    \                    [base (quotient num 10)]\n                     [tup (even_odd_count\
+    \ base)])\n                (cons (if (even? rem) (+ 1 (car tup)) (car tup))\n\
+    \                      (if (odd? rem) (+ 1 (cdr tup)) (cdr tup))))]))\n", "  (if\
+    \ (eq? num 0) '(0 0)\n      (if (odd? num)\n          (even_odd_count (quotient\
+    \ num 10))\n          (even_odd_count (quotient num 10)))))\n", "  (cond\n   \
+    \ [(= num 0) (values 0 0)]\n    [(= (remainder num 2) 0) (let-values ([(n-even\
+    \ n-odd) (even_odd_count (quotient num 10))]) (values (+ n-even 1) n-odd))]\n\
+    \    [else (let-values ([(n-even n-odd) (even_odd_count (quotient num 10))]) (values\
+    \ n-even (+ n-odd 1)))]))\n", "  (define (is-even? num)\n    (and (not (negative?\
+    \ num)) (not (odd? num))))\n  (let ([even-count 0]\n        [odd-count 0])\n \
+    \   (for ([digit (in-list (string->list (number->string num)))])\n      (if (is-even?\
+    \ (string->number (string digit)))\n          (set! even-count (+ even-count 1))\n\
+    \          (set! odd-count (+ odd-count 1))))\n    (list even-count odd-count)))\n",
+  "  (let ([even? (lambda (x) (= 0 (remainder x 2)))])\n    (map (lambda (lst) (length\
+    \ lst))\n      (partition even? (number->list num)))))\n", "  (tuple/c\n   (count\
+    \ odd? (number->list (abs num)))\n   (count even? (number->list (abs num)))))\n",
+  "  (cond [(= 0 num) (cons 0 0)]\n        [(even? (remainder num 10)) (cons (+ 1\
+    \ (car (even_odd_count (quotient num 10)))) (cdr (even_odd_count (quotient num\
+    \ 10))))]\n        [else (cons (car (even_odd_count (quotient num 10))) (+ 1 (cdr\
+    \ (even_odd_count (quotient num 10)))))]))\n\n", "  (define (even-or-odd? num)\n\
+    \    (cond\n      [(= (remainder num 2) 0) 'even]\n      [else 'odd]))\n  (define\
+    \ (helper num acc-even acc-odd)\n    (cond\n      [(= num 0) (cons acc-even acc-odd)]\n\
+    \      [(even-or-odd? num) (helper (quotient num 10) (+ acc-even 1) acc-odd)]\n\
+    \      [else (helper (quotient num 10) acc-even (+ acc-odd 1))]))\n  (helper num\
+    \ 0 0))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

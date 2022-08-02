@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given a grid with N rows and N columns (N >= 2) and a positive integer k, 
@@ -34,54 +34,48 @@ import std.typecons;
 long[] minPath(long[][] grid, long k) 
 {
     long[][] dp = new long[grid.length][grid[0].length];
-    for (int i = 0; i < grid.length; i++) {
-        for (int j = 0; j < grid[0].length; j++) {
-            dp[i][j] = grid[i][j];
-        }
+    dp[0][0] = grid[0][0];
+    for (int i = 1; i < grid.length; i++)
+        dp[i][0] = dp[i - 1][0] + grid[i][0];
+    for (int j = 1; j < grid[0].length; j++)
+        dp[0][j] = dp[0][j - 1] + grid[0][j];
+    for (int i = 1; i < grid.length; i++)
+        for (int j = 1; j < grid[0].length; j++)
+            dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+    long[] ans = new long[k];
+    ans[0] = dp[grid.length - 1][grid[0].length - 1];
+    for (int i = 1; i < k; i++)
+    {
+        long min = Long.MAX_VALUE;
+        for (int j = 0; j < grid.length; j++)
+            for (int k = 0; k < grid[0].length; k++)
+                if (dp[j][k] < min)
+                {
+                    min = dp[j][k];
+                    ans[i] = min;
+                }
+        for (int j = 0; j < grid.length; j++)
+            for (int k = 0; k < grid[0].length; k++)
+                if (dp[j][k] == min)
+                    dp[j][k] += grid[j][k];
     }
-    for (int i = 0; i < grid.length; i++) {
-        for (int j = 0; j < grid[0].length; j++) {
-            if (i > 0) {
-                dp[i][j] = Math.min(dp[i][j], dp[i - 1][j] + grid[i][j]);
-            }
-            if (j > 0) {
-                dp[i][j] = Math.min(dp[i][j], dp[i][j - 1] + grid[i][j]);
-            }
-        }
-    }
-    long[] res = new long[k];
-    for (int i = 0; i < k; i++) {
-        res[i] = dp[grid.length - 1][grid[0].length - 1];
-        if (i > 0) {
-            res[i] = Math.min(res[i], res[i - 1]);
-        }
-        if (grid.length > 1) {
-            res[i] = Math.min(res[i], dp[grid.length - 2][grid[0].length - 1]);
-        }
-        if (grid[0].length > 1) {
-            res[i] = Math.min(res[i], dp[grid.length - 1][grid[0].length - 2]);
-        }
-        grid[grid.length - 1][grid[0].length - 1] = Long.MAX_VALUE;
-        if (grid.length > 1) {
-            grid[grid.length - 2][grid[0].length - 1] = Long.MAX_VALUE;
-        }
-        if (grid[0].length > 1) {
-            grid[grid.length - 1][grid[0].length - 2] = Long.
+    return ans;
+}
 
 unittest
 {
     alias candidate = minPath;
 
-    assert(candidate([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 3) == [1, 2, 1]);
-    assert(candidate([[5, 9, 3], [4, 1, 6], [7, 8, 2]], 1) == [1]);
-    assert(candidate([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]], 4) == [1, 2, 1, 2]);
-    assert(candidate([[6, 4, 13, 10], [5, 7, 12, 1], [3, 16, 11, 15], [8, 14, 9, 2]], 7) == [1, 10, 1, 10, 1, 10, 1]);
-    assert(candidate([[8, 14, 9, 2], [6, 4, 13, 15], [5, 7, 1, 12], [3, 10, 11, 16]], 5) == [1, 7, 1, 7, 1]);
-    assert(candidate([[11, 8, 7, 2], [5, 16, 14, 4], [9, 3, 15, 6], [12, 13, 10, 1]], 9) == [1, 6, 1, 6, 1, 6, 1, 6, 1]);
-    assert(candidate([[12, 13, 10, 1], [9, 3, 15, 6], [5, 16, 14, 4], [11, 8, 7, 2]], 12) == [1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6]);
-    assert(candidate([[2, 7, 4], [3, 1, 5], [6, 8, 9]], 8) == [1, 3, 1, 3, 1, 3, 1, 3]);
-    assert(candidate([[6, 1, 5], [3, 8, 9], [2, 7, 4]], 8) == [1, 5, 1, 5, 1, 5, 1, 5]);
-    assert(candidate([[1, 2], [3, 4]], 10) == [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]);
-    assert(candidate([[1, 3], [3, 2]], 10) == [1, 3, 1, 3, 1, 3, 1, 3, 1, 3]);
+    assert(candidate([[1L, 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);
+    assert(candidate([[5L, 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);
+    assert(candidate([[1L, 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L) == [1L, 2L, 1L, 2L]);
+    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L, 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L, 10L, 1L]);
+    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L, 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);
+    assert(candidate([[11L, 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L) == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);
+    assert(candidate([[12L, 13L, 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);
+    assert(candidate([[2L, 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);
+    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L, 5L, 1L, 5L, 1L, 5L, 1L, 5L]);
+    assert(candidate([[1L, 2L], [3L, 4L]], 10L) == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);
+    assert(candidate([[1L, 3L], [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);
 }
 void main(){}

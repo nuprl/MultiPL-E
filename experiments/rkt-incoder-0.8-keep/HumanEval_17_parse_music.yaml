@@ -13,7 +13,2222 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate p
   \ 1 1 1))\n    (check-equal? (candidate \"o| o| .| .| o o o o\") (list 2 2 1 1 4\
   \ 4 4 4))\n    (check-equal? (candidate \"o| .| o| .| o o| o o|\") (list 2 1 2 1\
   \ 4 2 4 2))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (local\n    [\n      (define (parse-note note)\n        (cond\n \
+    \         [(string=? (substring note 0 1) 'o) 4]\n          [(string=? (substring\
+    \ note 0 1) 'o|) 2]\n          [(string=? (substring note 0 1) '.|) 1]\n     \
+    \     [else 0]))\n\n      (define (parse-notes notes)\n        (map parse-note\n\
+    \             (filter (lambda (note)\n                        (note-beat? note))\n\
+    \                   notes)))\n\n      ;; parse note string and return list of\
+    \ beats\n      (define (parse-note note)\n        (cond\n          [(string=?\
+    \ (substring note 0 1) 'o) 4]\n          [(string=? (substring note 0 1) 'o|)\
+    \ 2]\n          [(string=? (substring note 0 1) '.|) 1]\n          [else 0]))\n\
+    \n      (define (parse-notes notes)\n        (map parse-note\n             (filter\
+    \ (lambda (note)\n                        (note-beat? note))\n               \
+    \    notes)))\n\n      ;; parse music string and return list of lists of beats\n\
+    \      (define (parse-notes notes)\n        (map parse-notes\n             (filter\
+    \ (lambda (notes)\n                        (note-beat? notes))\n             \
+    \      notes)))\n\n      ;; parse music string and return list of lists of beats\n\
+    \      (define (parse-notes notes)\n        (map parse-notes\n             (filter\
+    \ (lambda (notes)\n                        (note-beat? notes))\n             \
+    \      notes)))\n\n      ]\n    (parse-notes music_string)))\n</code>\n<|/ a tags=racket,scheme\
+    \ dscore=1 |>\n<| a dscore=1 |>\nHere is an implementation that produces your\
+    \ expected result:\n<code>", "  (let loop ((music_string music_string) (res 0))\n\
+    \    (if (empty? music_string) res\n        (loop (rest music_string) (+ (count\
+    \ music_string) res))))))\n", "  (let* ((parts (split-string music_string #\\\
+    Space)))\n    (map (lambda (part)\n           (case part\n               (#\\\
+    o '(4))\n               (#\\o|  '(2))\n               (#\\.|  '(1))\n        \
+    \       (#\\space 0)\n               (#\\newline 0)\n               (#\\tabulate\
+    \ 0)\n               (#\\vertical 0)\n               (#\\horizontal 0)\n     \
+    \          (#\\line 0)\n               (#\\carriage-return 0)\n              \
+    \ (#\\form-feed 0)\n               (#\\vertical '(1))\n               (#\\horizontal\
+    \ '(2))\n               (#\\line '(3))\n               (#\\carriage-return '(3))\n\
+    \               (#\\form-feed '(4))\n               (#\\newline '(4))\n      \
+    \         (#\\tabulate '(2))\n               (#\\vertical '(2))\n            \
+    \   (#\\horizontal '(2))\n               (#\\line '(2))\n               (#\\carriage-return\
+    \ '(2))\n               (#\\form-feed '(2))\n               (#\\vertical '(1))\n\
+    \               (#\\horizontal '(1))\n               (#\\line '(1))\n        \
+    \       (#\\carriage-return '(1))\n               (#\\form-feed '(1))\n      \
+    \         (#\\newline '(1))\n               (#\\tabulate '(0))\n             \
+    \  (#\\vertical '(0))\n               (#\\horizontal '(0))\n               (#\\\
+    line '(0))\n               (#\\carriage-return '(0))\n               (#\\form-feed\
+    \ '(0))\n               (#\\vertical '(0))\n               (#\\horizontal '(0))\n\
+    \               (#\\line '(0))\n               (#\\carriage-return '(0))\n   \
+    \            (#\\form-feed '(0))\n               (#\\newline '(0))\n         \
+    \      (#\\tabulate '(0))\n               (#\\vertical '(0))\n               (#\\\
+    horizontal '(0))\n               (#\\line '(0))\n               (#\\carriage-return\
+    \ '(0))\n               (#\\form-feed '(0))\n               (#\\vertical '(0))\n\
+    \               (#\\horizontal '(0))\n               (#\\line '(0))\n        \
+    \       (#\\carriage-return '(0))\n               (#\\form-feed '(0))))\n    \
+    \       parts)))\n\n", "  (define (count-note music_string index)\n    (if (or\
+    \ (string-match \"o\" music_string)\n            (string-match \"o|\" music_string))\n\
+    \        (cons index 4)\n        (cons index 2)))\n  (define (count-quarter music_string\
+    \ index)\n    (if (or (string-match \"o\" music_string)\n            (string-match\
+    \ \"o|\" music_string)\n            (string-match \".|\" music_string))\n    \
+    \    (cons index 3)\n        (cons index 1)))\n  (define (parse-music music_string)\n\
+    \    (loop for char of music_string\n          for i from 0\n          count (count-note\
+    \ music_string i)\n          count (count-quarter music_string i))\n  )\n  (parse-music\
+    \ music_string)\n)\n</code>\n<|/ a dscore=2 tags=racket,scheme |>\n<| c |>\nI\
+    \ like how you used recursion to solve this.  It looks really elegant.\n<|/ c\
+    \ |>\n<| a dscore=1 |>\nHere's a solution using Racket's regular expressions:\n\
+    <code>\n#lang racket", "  (let\n    [\n      (beat-count '())\n      (beats-for-whole\
+    \ '())\n      (beats-for-half '())\n      (beats-for-quarter '())\n    ]\n   \
+    \ (for/fold ((note note))\n              (music-string music-string)\n    (let\n\
+    \      [\n        (n-char (char (substring music-string 0 note)))\n        (last-beats\
+    \ (parse-music-char n-char))\n        (last-beats-whole (if (equal? n-char 'o)\
+    \ 4 2))\n        (last-beats-half (if (equal? n-char 'o|) 2 1))\n        (last-beats-quarter\
+    \ (if (equal? n-char '.|) 1 0))\n      ]\n      (if (equal? note #\\space)\n \
+    \         (set! beat-count (+ beat-count last-beats))\n          (set! beat-count\
+    \ (+ beat-count last-beats-whole))\n          (set! beat-count (+ beat-count last-beats-half))\n\
+    \          (set! beat-count (+ beat-count last-beats-quarter))\n      )\n    \
+    \  (set! note)\n    )\n    (when (char= n-char '|)\n      (set! beats-for-whole\
+    \ (append beats-for-whole (list beat-count)))\n      (set! beats-for-half (append\
+    \ beats-for-half (list beat-count)))\n      (set! beats-for-quarter (append beats-for-quarter\
+    \ (list beat-count)))\n      (set! beat-count '())\n      (set! note)\n    )\n\
+    \    (when (char= n-char '|)\n      (set! beats-for-whole (append beats-for-whole\
+    \ (list beat-count)))\n      (set! beats-for-half (append beats-for-half (list\
+    \ beat-count)))\n      (set! beats-for-quarter (append beats-for-quarter (list\
+    \ beat-count)))\n      (set! beat-count '())\n      (set! note)\n    )\n    (when\
+    \ (char= n-char '|)\n      (set! beats-for-whole (append beats-for-whole (list\
+    \ beat-count)))\n      (set! beats-for-half (append beats-for-half (list beat-count)))\n\
+    \      (set! beats-for-quarter (append beats-for-quarter (list beat-count)))\n\
+    \      (set! beat-count '())\n      (set! note)\n    )\n    (when (char= n-char\
+    \ '|)", "  (let loop ([music_string (music_string)]\n             [note 0]\n \
+    \            [beat_count 0])\n    (cond [(empty? music_string) 0]\n          [(equal?\
+    \ (first music_string) 'o) (loop (rest music_string) note (+ beat_count 4))]\n\
+    \          [(equal? (first music_string) 'o|) (loop (rest music_string) note (+\
+    \ beat_count 2))]\n          [(equal? (first music_string) '.|) (loop (rest music_string)\
+    \ note (+ beat_count 1))]\n          [else (loop (rest music_string) (+ note 1)\
+    \ beat_count)]))))\n</code>\n<|/ a |>\n<| a tags=scheme,racket,lisp dscore=1 |>\n\
+    Here's a recursive version in Scheme that works in Racket:\n<code>", "  (cond\n\
+    \    ((empty? music_string) '())\n    ((string=? music_string 'o o|) 4)\n    ((string=?\
+    \ music_string '.|) 2)\n    ((string=? music_string 'o|) 1)\n    (else '())))\n\
+    \    ", "  (cond\n    [(empty? music_string) '()]\n    [(equal? (first music_string)\
+    \ 'o) '(4 2 1 2 1 2 1 1 1 4 4 4)]\n    [(equal? (first music_string) 'o|) '(2\
+    \ 2 1 2 1 2 1 1 1 4 2 1)]\n    [(equal? (first music_string) '.|) '(2 1 2 1 2\
+    \ 1 1 1 4 2 1 2)]\n    [else (parse_music (rest music_string))]\n  )\n)\n</code>\n\
+    <|/ a dscore=2 tags=scheme,racket |>\n<| a dscore=1 tags=scheme,racket |>\nTo\
+    \ make this code a little more flexible, you could take advantage of Racket's\
+    \ built-in map function for transforming lists.\n<code>", "  (let ((beats [0 0\
+    \ 0 0]))\n    (loop for c in music_string\n         while (char-equal? c #\\Space)\n\
+    \         collect beats)\n    (append (list beats)\n            (loop for i in\
+    \ '(o o| .| o| o| .| .| .| .| .| o o)\n                  for c across i\n    \
+    \              collect (if (char-equal? c #\\Space) 0 1)))\n</code>\n<|/ a tags=racket,scheme\
+    \ |>\n<| a dscore=0 |>\n<code>", "  (define note_notes (map note (split music_string\
+    \ \" \"))) ; split and remove space\n  (define note_duration (map duration (split\
+    \ music_string \"|\"))) ; split and remove |\n  (define note_notes (map symbol\
+    \ (remove (append (map symbol (remove (append (map symbol (remove note_notes)))\
+    \ note_duration)) (map symbol (remove note_notes))))))\n  (append (map length\
+    \ (remove note_notes (append note_duration))) (map length (remove note_notes (append\
+    \ note_notes)))))\n", "  (let ([chars (string->chars music_string)])\n    (cond\
+    \ [(char-equal? (chars 0) #\\space) empty]\n          [(char-equal? (chars 0)\
+    \ #\\newline) empty]\n          [(char-equal? (chars 0) #\\tab) empty]\n     \
+    \     [(char-equal? (chars 0) #\\return) empty]\n          [(char-equal? (chars\
+    \ 0) #\\new) empty]\n          [(char-equal? (chars 0) #\\a) empty]\n        \
+    \  [(char-equal? (chars 0) #\\b) empty]\n          [(char-equal? (chars 0) #\\\
+    c) empty]\n          [(char-equal? (chars 0) #\\d) empty]\n          [(char-equal?\
+    \ (chars 0) #\\e) empty]\n          [(char-equal? (chars 0) #\\f) empty]\n   \
+    \       [(char-equal? (chars 0) #\\g) empty]\n          [(char-equal? (chars 0)\
+    \ #\\h) empty]\n          [(char-equal? (chars 0) #\\i) empty]\n          [(char-equal?\
+    \ (chars 0) #\\j) empty]\n          [(char-equal? (chars 0) #\\k) empty]\n   \
+    \       [(char-equal? (chars 0) #\\l) empty]\n          [(char-equal? (chars 0)\
+    \ #\\m) empty]\n          [(char-equal? (chars 0) #\\n) empty]\n          [(char-equal?\
+    \ (chars 0) #\\o) empty]\n          [(char-equal? (chars 0) #\\p) empty]\n   \
+    \       [(char-equal? (chars 0) #\\q) empty]\n          [(char-equal? (chars 0)\
+    \ #\\r) empty]\n          [(char-equal? (chars 0) #\\s) empty]\n          [(char-equal?\
+    \ (chars 0) #\\t) empty]\n          [(char-equal? (chars 0) #\\v) empty]\n   \
+    \       [(char-equal? (chars 0) #\\0) empty]\n          [(char-equal? (chars 0)\
+    \ #\\1) empty]\n          [(char-equal? (chars 0) #\\2) empty]\n          [(char-equal?\
+    \ (chars 0) #\\3) empty]\n          [(char-equal? (chars 0) #\\4) empty]\n   \
+    \       [(char-equal? (chars 0) #\\5) ", "  (let loop ((music_string (music_string\
+    \ music_string)))\n    (if (empty? music_string)\n        '()\n        (cons (string-length\
+    \ (substring music_string 0 1))\n              (loop (substring music_string 1\
+    \ string-length (substring music_string 0 1))))))))\n", "  (let* ((music_string\
+    \ (make-string music_string))\n         (music_string_length (string-length music_string))\n\
+    \         (music_string_cursor 0)\n         (music_notes_array (make-array 6 :initial-element\
+    \ nil))\n         (music_notes_array (make-array 6 :initial-element nil))\n  \
+    \       (music_notes_array (make-array 6 :initial-element nil))\n         (music_notes_array\
+    \ (make-array 6 :initial-element nil))\n         (music_notes_array (make-array\
+    \ 6 :initial-element nil))\n         (music_notes_array (make-array 6 :initial-element\
+    \ nil))\n         (music_notes_array (make-array 6 :initial-element nil))\n  \
+    \       (music_notes_array (make-array 6 :initial-element nil))\n         (music_notes_array\
+    \ (make-array 6 :initial-element nil))\n         (music_notes_array (make-array\
+    \ 6 :initial-element nil))\n         (music_notes_array (make-array 6 :initial-element\
+    \ nil))\n         (music_notes_array (make-array 6 :initial-element nil))\n  \
+    \       (music_notes_array (make-array 6 :initial-element nil))\n         (music_notes_array\
+    \ (make-array 6 :initial-element nil))\n         (music_notes_array (make-array\
+    \ 6 :initial-element nil))\n         (music_notes_array (make-array 6 :initial-element\
+    \ nil))\n         (music_notes_array (make-array 6 :initial-element nil))\n  \
+    \       (music_notes_array (make-array 6 :initial-element nil))\n         (music_notes_array\
+    \ (make-array 6 :initial-element nil))\n         (music_notes_array (make-array\
+    \ 6 :initial-element nil))\n         (music_notes_array (make-array 6 :initial-element\
+    \ nil))\n         (music_notes_array (make-array 6 :initial-element nil))\n  \
+    \       (music_notes_array (make-array 6 :initial-element nil))\n         (music_notes_array\
+    \ (make-array 6 :initial-element nil))\n         (music_notes_array (make-array\
+    \ 6 :initial-element nil))\n         (music_notes_array (make-array 6 :initial-element\
+    \ nil))\n         (music_notes_array (make-array 6 :initial-element nil))\n  \
+    \       (music_notes_array (make-array 6 :initial-element nil))\n         (music_notes_array\
+    \ (make-array 6 :initial-element nil))\n         (music_notes_array (make-array\
+    \ 6 :initial-element nil", "  (define notes\n    (match music_string\n      (case-fold-left\
+    \ (x y) x y)\n      [(note) 1]\n      [(note|length) 2]\n      [else (length x\
+    \ y)]))\n  ;; Let's not bother with case folding for now.\n  ;; Just return note\
+    \ length times note number.\n  (let ([note notes\n        beats (/ note 4)])\n\
+    \    (if beats\n      (+ beats notes)\n      notes)))\n", "  (let loop ((notes\
+    \ (string->list music_string)) (count 0))\n    (cond ((null? notes) (list count))\
+    \ \n          ((car notes) \n           (loop (cdr notes)\n                 (+\
+    \ (car notes) count)))\n          (else (loop (cdr notes) count)))))\n</code>\n\
+    Now it's time for testing! I'll do it in a few minutes.\n<code>", "  (define (note\
+    \ notes)\n    (cond [(notes equal? #\\o) (- 4 notes)] \n          [(notes equal?\
+    \ #\\o|) (- 2 notes)] \n          [else note]))\n\n  (define (beats notes)\n \
+    \   (cond [(notes equal? #\\.|) (- 1 notes)] \n          [else notes]))\n\n  (define\
+    \ (beat_count notes)\n    (if (null? notes) 0\n      (+ (beats (note notes)) 1)))\n\
+    \n  (define notes\n    (string->list music_string))\n\n  (define note_count\n\
+    \    (map (lambda (note) (note notes)) notes))\n\n  (define beat_count_list\n\
+    \    (map (lambda (note) (beats (note notes))) notes))\n\n  (define beat_count_list_with_zero\n\
+    \    (map (lambda (note beats) (cons note (cons 0 beats))) notes beat_count_list))\n\
+    \n  (define beat_count_list_with_zero_and_one\n    (map (lambda (note beats) (cons\
+    \ note (cons 1 beats))) notes beat_count_list))\n\n  (define total_beat_count\n\
+    \    (sum (map beat_count beat_count_list_with_zero_and_one)))\n\n  (define total_beat_count_without_zero\n\
+    \    (sum (map beat_count beat_count_list_with_zero_and_one\n               (drop\
+    \ 1 beat_count_list_with_zero_and_one))))\n\n  (define total_beat_count_without_zero_and_one\n\
+    \    (sum (map beat_count beat_count_list_with_zero_and_one\n               (drop\
+    \ 2 beat_count_list_with_zero_and_one))))\n\n  (define total_beat_count_without_zero_and_two\n\
+    \    (sum (map beat_count beat_count_list_with_zero_and_two\n               (drop\
+    \ 3 beat_count_list_with_zero_and_two))))\n\n  (define total_beat_count_without_zero_and_three\n\
+    \    (sum (map beat_count beat_count_list_with_zero_and_three\n              \
+    \ (drop 4 beat_count_list_with_zero_and_three))))\n\n  (define total_beat_count_without_zero_and_four\n\
+    \    (sum (map beat_count beat_count_list_with_zero_and_four\n               (drop\
+    \ 5 beat_count_list_with_zero_and_four))))\n\n  (define total_beat_count_without_zero_and_five\n\
+    \    (sum (map beat_count beat_count_list_with_zero_and_five\n               (drop\
+    \ 6 beat_count_list_with_zero_and_five))))\n\n  (define total_beat_", "  (cond\
+    \ [(string? music_string) #f]\n        [(cons? music_string)\n         (list->string\
+    \ (parse_tone (music_string '|)))]\n        [else music_string]))\n", "  (let\
+    \ loop ((music_string music_string) (beats ()))\n    (if (null? music_string)\
+    \ \n        beats\n        (loop (rest music_string) (cons beats (parse-music-note\
+    \ (car music_string)))))))\n</code>\n<|/ a dscore=2 |>\n<| c |>\nthank you so\
+    \ much, this is great help. But I still dont understand what 'o|' - half note\
+    \ means? could you please explain it more detailed? I really want to understand\
+    \ this so I can implement it in other programs.\n<|/ c |>\n<| c |>\n'o' means\
+    \ whole note, 'o|' means half note (note is split to two halves), '.' means quarter,\
+    \ etc. '.| .' means two half notes (note is split to one quarter and one half).\n\
+    <|/ c |>\n<| c |>\nokay, I get it. thank you very much for your help. I really\
+    \ appreciate it.\n<|/ c |>\n<| a dscore=0 |>\nThe main idea is to first convert\
+    \ each note to its note type (note types are indicated with an 'o' or '|', and\
+    \ are represented as a single letter 'o' or '|'). Then use the fact that every\
+    \ note has 12 notes, that is a note can either be divided into two halves ('o'\
+    \ or '|') and one quarter ('.'), or just one note ('o'). \nThis means that one\
+    \ note is divided into two halves ('o|') and one quarter ('.|') if the note is\
+    \ on the lower half or on one quarter ('.'), but then it is divided into just\
+    \ one note ('o') if the note is on the upper half or on both quarters ('.|').\n\
+    So, the problem is to convert each note to its note type.\n<code>", "  (let ([num_beats\
+    \ 0])\n    (define (parse-note note)\n      (cond [(char=? (substring note 0 1)\
+    \ 'o) 4]\n            [(char=? (substring note 0 1) 'o|) 2]\n            [(char=?\
+    \ (substring note 0 1) '.|) 1]\n            [else (error \"Unexpected note type:\
+    \ ~s\" note)]))\n    (for/list ([note music_string])\n      (parse-note note)\n\
+    \      (set! num_beats (+ num_beats note))\n      note))\n  num_beats)\n", " \
+    \ (let ([music_string (music_string music_string)])\n    (cond [(string=? music_string\
+    \ \"o\") (list 4)\n           (string=? music_string \"o|\") (list 2)\n      \
+    \     (string=? music_string \".|\") (list 1)]\n          [(string=? music_string\
+    \ \"o\") (list 4)]\n          [(string=? music_string \".|\") (list 1)]\n    \
+    \      [(string=? music_string \".\") (list 1)]\n          [else (list)]))))\n",
+  "  (let ((notes (list)))\n    (let loop ((music_string music_string) (note 'o))\n\
+    \      (cond\n        ((string=? (string-ref music_string 0) #\\O) (recur (string-tail\
+    \ music_string) 'o|'))\n        ((string=? (string-ref music_string 0) #\\.) (recur\
+    \ (string-tail music_string) '.|'))\n        (else (cond ((string=? (string-ref\
+    \ music_string 0) #\\o) (let ((beat (+ beat 1)))\n                           \
+    \       (loop (string-tail music_string) (cons note beat)))\n                \
+    \      ((string=? (string-ref music_string 0) #\\O) (let ((beat (- beat 1)))\n\
+    \                                      (loop (string-tail music_string) (cons\
+    \ note beat)))\n                      (t (loop (string-tail music_string) (cons\
+    \ note (* beat 4)))))))\n      (set! notes (append notes (list note))))\n    notes))\n",
+  "  (cond\n    ((null? music_string) '())\n    ((char-equal? (car music_string) 'o)\
+    \ \n     (cond\n       ((char-equal? (car music_string) 'o) 4)\n       ((char-equal?\
+    \ (car music_string) 'o|) 2)\n       ((char-equal? (car music_string) '.|) 1)\n\
+    \       (else 0)))\n    (else (add1 (parse-music (cdr music_string)))))) ;; cdr\
+    \ should be called only once\n", "  (let loop ((music_string (string music_string))\n\
+    \             (notes_lengths null))\n    (cond\n      [(or (empty? music_string)\
+    \ (string-length music_string))\n       notes_lengths]\n      [(equal? (car music_string)\
+    \ 'o) 1]\n      [(equal? (car music_string) 'o|) 1]\n      [(equal? (car music_string)\
+    \ '.|) 1]\n      [else\n       (loop (cdr music_string)\n             (add1 (loop\
+    \ music_string notes_lengths))))])))", "  (cond [(music_string= music_string \"\
+    o\") (list 4)]\n        [(music_string= music_string \"o|\") (list 2)]\n     \
+    \   [(music_string= music_string \".|\") (list 1)]\n        [else (parse_remaining_part\
+    \ music_string)]\n        ))\n", "  (cond\n    [(equal? music_string \"\")   \
+    \       (empty? note-list)      0]\n    [(equal? (first music_string) \".\") \
+    \ (cons (first (first music_string)) note-list)]\n    [(equal? (first music_string)\
+    \ \"o\")  (cons (first (first music_string)) note-list)]\n    [(equal? (first\
+    \ music_string) \"|\")  (cons (first (first music_string)) note-list)]\n    [else\
+    \                            (cons (first (first music_string)) note-list)]\n\
+    \  )\n)\n", "  (let ((notes '()))\n    (string-range-apply\n     (lambda(x)\n\
+    \       (if (string=? x '|)\n           (add-last\n            (string-range-position\
+    \ music_string x)\n            (notes x))\n           x))\n     'o o| .| o| o|\
+    \ .| .| .| .| .| o o\n     'o|))\n  (vector-ref notes 0))\n</code>\n<|/ a tags=racket,scheme\
+    \ |>\n<| a tags=racket,scheme |>\nHere's an OCaml solution:\n<code>\nlet parse\
+    \ (music_string: string): int list =\n  List.fold_left (fun acc x -> \n    (match\
+    \ x with\n      | '.' -> acc + 1\n      | 'o' -> acc + 1\n      | x -> acc + (List.mem\
+    \ x acc)) \n    0) music_string\n</code>\n<|/ a dscore=2 |>\n<| a dscore=1 tags=racket,scheme\
+    \ |>\nA simple function using regex:\n<code>", "  (let loop ((note 'o) (instr\
+    \ 0)) (instrs (list) ())\n    (if (char=? note #\\o) (loop 'o instr)\n      (if\
+    \ (char=? note #\\o) (loop 'o instr)\n        (if (char=? note #\\.) (loop 'o|\
+    \ instr)\n          (if (char=? note #\\|) (loop '|instr)\n            (if (char=?\
+    \ note #\\) (loop '|instr)\n              (if (char=? note #\\o) (loop 'o| instr)\n\
+    \                (loop 'o| instr)))))))", "  (define notes (string->list music_string))\n\
+    \  (define notes_length (length (rest notes)))\n  (define beats_count (apply +\
+    \ notes))\n  (define beats_count (cond [(< notes_length 1) beats_count]\n    \
+    \                        [(notes_length mod 4) (if (> (notes_length / 4) 4) 2\
+    \ 1)]\n                            [else 1]))\n  (define notes_to_beats_count\
+    \ (apply + (map (lambda (n)\n                                             `(,n\
+    \ ,@(if (< n 2) (cons 1 n) (cons 2 n))))\n                                   \
+    \     (range notes_length))))\n  (cond [(< beats_count 4) 0]\n        [else (/\
+    \ beats_count 4)]))\n", "  (cond\n    ((empty? music_string) '())\n    ((char?\
+    \ music_string) #f)\n    ((equal? (car music_string) 'o) #f)\n    ((equal? (car\
+    \ music_string) 'o|') #f)\n    ((equal? (car music_string) '.|') #f)\n    (else\n\
+    \     (cond ((equal? (car music_string) 'o) (cons 4 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) 'o|') (cons 2 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) '.|') (cons 1 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) '|') (cons 1 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) '.') (cons 1 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) '|') (cons 1 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) 'o') (cons 4 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) '|') (cons 4 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) '.') (cons 4 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) '|') (cons 4 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) 'o|') (cons 2 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) '.|') (cons 2 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) '|') (cons 2 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) 'o') (cons 4 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) '|') (cons 4 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) '.') (cons 4 parse_music (cdr music_string)))\n\
+    \           ((equal? (car music_string) ", "  (map (lambda (n)\n         (if (equal?\
+    \ (modulo n 4) 0)\n             (+ n 1)\n             (- n 1))\n         (parse-music-chars\
+    \ music_string)))\n  (parse-music-chars music_string))\n", "  (let loop ([music_str\
+    \ (music_string music_string)]\n             [notes ()])\n    (if (string? music_str)\n\
+    \        (if (string-equal? music_str \"|\")\n            (loop (music-str-tail\
+    \ music_str)\n                  (cons (string->int music-str-head music_str) (notes)))\n\
+    \          (loop (music-str-tail music_str)\n                (cons (string->int\
+    \ music-str-head music_str)\n                      (append (cons music-str-head\
+    \ notes) (notes)))))))\n", "  (if (empty? music_string) '()\n      (cond\n   \
+    \     ;; If the string ends with any of [|.o], we are done.\n        [(or (char=\
+    \ #\\| music_string) (char= #\\. music_string)) (cons music_string (parse_music\
+    \ music_string (+ music_string 1)))]\n        ;; If it ends with |, it's a half\
+    \ note.\n        [(char= #\\| music_string) (cons music_string (parse_music music_string\
+    \ (+ music_string 1)))]\n        ;; If it ends with ., it's a quater note.\n \
+    \       [(char= #\\. music_string) (cons music_string (parse_music music_string\
+    \ (+ music_string 1)))]\n        [else (cons music_string (parse_music music_string\
+    \ (+ music_string 1))) ]\n      )\n    )\n  )\n", "  ;; (cons 'o 'o|') returns\
+    \ `'o 'o|'\n  (define note (first music_string))\n  ;; (cons 'o|') returns `'o|'\n\
+    \  (define octave (second music_string))\n  ;; (cons '.| '') returns `'.|'\n \
+    \ (define note (first music_string))\n  ;; (cons '') returns `''\n  (define octave\
+    \ (second music_string))\n  ;; (cons '.| '') returns `'.|'\n  (define note (first\
+    \ music_string))\n  ;; (cons '') returns `''\n  (define octave (second music_string))\n\
+    \  ;; (cons '.| '') returns `'.|'\n  (define note (first music_string))\n  ;;\
+    \ (cons '') returns `''\n  (define octave (second music_string))\n  ;; (cons '.|\
+    \ '') returns `'.|'\n  (define note (first music_string))\n  ;; (cons '') returns\
+    \ `''\n  (define octave (second music_string))\n  ;; (cons '.| '') returns `'.|'\n\
+    \  (define note (first music_string))\n  ;; (cons '') returns `''\n  (define octave\
+    \ (second music_string))\n  ;; (cons '.| '') returns `'.|'\n  (define note (first\
+    \ music_string))\n  ;; (cons '') returns `''\n  (define octave (second music_string))\n\
+    \  ;; (cons '.| '') returns `'.|'\n  (define note (first music_string))\n  ;;\
+    \ (cons '') returns `''\n  (define octave (second music_string))\n  ;; (cons '.|\
+    \ '') returns `'.|'\n  (define note (first music_string))\n  ;; (cons '') returns\
+    \ `''\n  (define octave (second music_string))\n  ;; (cons '.| '') returns `'.|'\n\
+    \  (define note (first music_string))\n  ;; (cons '') returns `''\n  (define octave\
+    \ (second music_string))\n  ;; (cons '.| '') returns `'.|'\n  (define note (first\
+    \ music_string))\n  ;; (cons '') returns `''\n  (define octave (second music_string))",
+  "  (let loop ((music_string music_string)\n             (note 'o) (next_note 'o)\
+    \ (next_next_note 'o) (beats 0))\n    (cond\n      [(empty? music_string) (list\
+    \ beats)]\n      [(equal? (first music_string) note) (loop (rest music_string)\
+    \ (next_note note) (next_next_note note) (+ beats 1))]\n      [(equal? (first\
+    \ music_string) next_note) (loop (rest music_string) (next_note next_note) (next_next_note\
+    \ next_next_note) (+ beats 2))]\n      [(equal? (first music_string) next_next_note)\
+    \ (loop (rest music_string) (next_note next_next_note) (next_next_note next_next_next_note)\
+    \ (+ beats 3))]\n      [(equal? (first music_string) '.') (loop (rest music_string)\
+    \ (next_note next_next_note) (next_next_note next_next_next_note) (+ beats 4))]\n\
+    \      [else (loop (rest music_string) (next_note next_next_note) (next_next_note\
+    \ next_next_next_note) (+ beats 5))]))) ; <<< THIS WILL FAIL IF THERE ARE MORE\
+    \ THAN 6 MUSICAL NOTES\n", "  (let loop ((n music_string) (music_str '()))\n \
+    \   (cond\n      [(empty? n) music_str]\n      [(char= (first n) '|)\n       (loop\
+    \ (rest n) (cons (cons (length music_str) (first music_str)) music_str))\n   \
+    \    music_str]\n      [(char= (first n) 'o)\n       (loop (rest n) (cons (cons\
+    \ (length music_str) (second music_str)) music_str))\n       music_str]\n    \
+    \  [(char= (first n) '.)\n       (loop (rest n) (cons (cons (length music_str)\
+    \ (third music_str)) music_str))\n       music_str]\n      [(char= (first n) 'o)\n\
+    \       (loop (rest n) (cons (cons (length music_str) (first music_str)) music_str))\n\
+    \       (loop (rest n) (cons (cons (length music_str) (second music_str)) music_str))\n\
+    \       music_str]\n      [(char= (first n) 'o)\n       (loop (rest n) (cons (cons\
+    \ (length music_str) (third music_str)) music_str))\n       (loop (rest n) (cons\
+    \ (cons (length music_str) (first music_str)) music_str))\n       (loop (rest\
+    \ n) (cons (cons (length music_str) (second music_str)) music_str))\n       music_str]\n\
+    \      [(char= (first n) 'o)\n       (loop (rest n) (cons (cons (length music_str)\
+    \ (third music_str)) music_str))\n       (loop (rest n) (cons (cons (length music_str)\
+    \ (second music_str)) music_str))\n       (loop (rest n) (cons (cons (length music_str)\
+    \ (third music_str)) music_str))\n       music_str]\n      [(char= (first n) 'o)\n\
+    \       (loop (rest n) (cons (cons (length music_str) (third music_str)) music_str))\n\
+    \       (loop (rest n) (cons (cons (length music_str) (second music_str)) music_str))\n\
+    \       (loop (rest n) (cons (cons (length music_str) (third music_str)) music_str))\n\
+    \       (loop (rest n) (cons (cons (length music_str) (first music_str)) music_str))\n",
+  "  (cond [(string? music_string) #f]\n        [else (append (parse-music-note (music_string\
+    \ 0))\n                     (parse_music (substring music_string 1)))]))\n", " \
+    \ (let* ([music_string (music_string #\\|)]\n         [notes [(parse-music-note\
+    \ music_string)]]\n         [notes_length 0]\n         [notes_beat_length 0])\n\
+    \    (cond [(empty? music_string)\n           empty]\n          [(char? music_string)\n\
+    \           (cons (parse-music-note music_string) notes)]\n          [else\n \
+    \          (let ([note_string (rest (music_string notes_length notes_beat_length))])\n\
+    \             (cond [(empty? note_string)\n                    (if (< notes_length\
+    \ notes_beat_length)\n                        (begin\n                       \
+    \   (set! notes_length 0)\n                          (set! notes_beat_length 0)\n\
+    \                          (set! notes (append (parse-music-note music_string)\
+    \ notes)))\n                      (cons empty notes))]\n                   [(char?\
+    \ note_string)\n                    (if (< notes_length notes_beat_length)\n \
+    \                       (begin\n                          (set! notes_length 0)\n\
+    \                          (set! notes_beat_length 0)\n                      \
+    \    (set! notes (append (parse-music-note music_string) notes)))\n          \
+    \            (cons (parse-music-note note_string) notes))]\n                 \
+    \  [else\n                     (cons (parse-music-note note_string) notes)]\n\
+    \                   (else\n                    (set! notes (append (parse-music-note\
+    \ note_string) notes)))])))\n  (cond [(< notes_length notes_beat_length) notes]\n\
+    \        [else (set! notes (append (parse-music-note note_string) notes))]))\n",
+  "  (cond [(empty? music_string)\n         '()]\n        [(equal? (first music_string)\
+    \ '|)\n         (cons (* 4 (parse-music \"|\" music_string (+ 1 1))) \n      \
+    \        (parse-music music_string (+ 1 1)))]\n        [(equal? (first music_string)\
+    \ 'o)\n         (cons (* 4 (parse-music \"o\" music_string (+ 1 1))) \n      \
+    \        (parse-music music_string (+ 1 1)))]\n        [else\n         (parse-music\
+    \ music_string (+ 1))]))\n", "  (define (helper music_string)\n    (let ((note_chars\
+    \ (string->list music_string))\n          (current_note 0)\n          (last_note\
+    \ 0))\n      (cond\n        ((string-empty? music_string) #f)\n        (else\n\
+    \          (let loop ((notes (rest note_chars))\n                    (note_char\
+    \ (first note_chars)))\n            (cond ((null? notes) (list 0))\n         \
+    \         ((char=? (first notes) 'o) 'o)\n                  ((char=? (first notes)\
+    \ 'o|) 'o|)\n                  ((char=? (first notes) '.|) '.|)\n            \
+    \      ((char=? (first notes) #\\space) '|)\n                  ((char=? (first\
+    \ notes) #\\tab) '|)\n                  ((char=? (first notes) #\\newline) '|)\n\
+    \                  ((char=? (first notes) #\\return) '|)\n                  ((char=?\
+    \ (first notes) #\\e) '|)\n                  ((char=? (first notes) #\\a) '|)\n\
+    \                  ((char=? (first notes) #\\i) #f)\n                  ((char=?\
+    \ (first notes) #\\O) #f)\n                  ((char=? (first notes) #\\D) #f)\n\
+    \                  ((char=? (first notes) #\\M) #f)\n                  ((char=?\
+    \ (first notes) #\\G) #f)\n                  ((char=? (first notes) #\\P) #f)\n\
+    \                  ((char=? (first notes) #\\S) #f)\n                  ((char=?\
+    \ (first notes) #\\W) #f)\n                  ((char=? (first notes) #\\U) #f)\n\
+    \                  ((char=? (first notes) #\\Z) #f)\n                  ((char=?\
+    \ (first notes) #\\A) #f)\n                  ((char=? (first notes) #\\k) #f)\n\
+    \                  ((char=? (first notes) #\\v) #f)\n                  ((char=?\
+    \ (first notes) #\\l) #f)\n                  ((char=? (first notes) #\\z) #f)\n\
+    \                  ((char=? (first notes) #\\y) #f)\n                  ((char=?\
+    \ (first notes) #\\g) #f)\n                  ((char=? (first notes) #\\j) #f)\n\
+    \                  ((char=? (first notes) #\\r) #f)\n                  ((char=?\
+    \ (first notes) #\\B) #f)\n                  ((char=? (first note", "  (define\
+    \ (note-length music_note)\n    (cond [(music_note = \"o\")\n           4]\n \
+    \         [(music_note = \"o|\")\n           2]\n          [else\n           1]))\n\
+    \  (define (parse-music-char music_char)\n    (cond [(music_char = \"o\")\n  \
+    \         (list 'o)]\n          [(music_char = \"o|\")\n           (list 'o|)]\n\
+    \          [(music_char = \".|\")\n           (list '.|)]\n          [(music_char\
+    \ = \"o|\")\n           (list 'o|)]\n          [(music_char = \".|\")\n      \
+    \     (list '.|)]\n          [(music_char = \".|\")\n           (list '.|)]\n\
+    \          [(music_char = \"o|\")\n           (list 'o|)]\n          [(music_char\
+    \ = \"o|\")\n           (list 'o|)]\n          [else\n           (list music_char)]))\n\
+    \  (define (parse-music-string music_string)\n    (cond [(music_string = \"o\"\
+    )\n           (list 'o)]\n          [(music_string = \"o|\")\n           (list\
+    \ 'o|)]\n          [(music_string = \".|\")\n           (list '.|)]\n        \
+    \  [(music_string = \"o|\")\n           (list 'o|)]\n          [(music_string\
+    \ = \".|\")\n           (list '.|)]\n          [(music_string = \".|\")\n    \
+    \       (list '.|)]\n          [(music_string = \"o|\")\n           (list 'o|)]\n\
+    \          [(music_string = \"o|\")\n           (list 'o|)]\n          [else\n\
+    \           (list music_string)]))\n  (define (parse-music-note music_note)\n\
+    \    (cond [(music_note = \"o\")\n           (list 'o)]\n          [(music_note\
+    \ = \"o|\")\n           (list 'o|)]\n          [(music_note = \".|\")\n      \
+    \     (list '.|)]\n          [(music_note = \"o|\")\n           (list 'o|)]\n\
+    \          [(music_note = \".|\")\n           (list '.|)]\n          [(music_note\
+    \ = \".|\")\n           (list '.|)]\n          [(music_note = \"o|\")\n      \
+    \     (list 'o|)]\n          [(music_note = \"o|\")\n           (list 'o|)]\n\
+    \          [else\n           (list music_note)]))\n  (define (", "  (define notes\
+    \ (map string->int->note music_string))\n  ; \"notes\" is a map which has strings\
+    \ as keys and integers as values\n  (cond [(notes #\\o) #[4 2]\n        [(notes\
+    \ #\\.) #[2 1]\n        [(notes #\\|) #[1] 1]]\n    [else notes]) ;; unknown note,\
+    \ just return map with all notes mapped\n  )\n</code>\nSome test cases to play\
+    \ with:\n<code>", "  (let loop ((music-list (string->list music_string))\n   \
+    \          (music-length 0))\n    (cond [(null? music-list)\n           music-length]\n\
+    \          [(char=? (first music-list)#\\o) (loop (rest music-list) (+ music-length\
+    \ 4))]\n          [(char=? (first music-list)#\\|) (loop (rest music-list) (+\
+    \ music-length 2))]\n          [(char=? (first music-list)#\\.) (loop (rest music-list)\
+    \ (+ music-length 1))]\n          [else music-list])))\n", "  (cond\n    [(empty?\
+    \ music_string) '()]\n    [(equal? (car music_string) 'o) (list-of-integers (car\
+    \ music_string) (length music_string))]\n    [(equal? (car music_string) 'o|)\
+    \ (list-of-integers (car music_string) (length (substring (music_string 1 2) 1\
+    \ 2) (substring (music_string 3 4) 1 2)))]\n    [(equal? (car music_string) '.|)\
+    \ (list-of-integers (car music_string) (length (substring (music_string 1 2) 1\
+    \ 2) (substring (music_string 3 4) 1 2) (substring (music_string 5 6) 1 2)))]\n\
+    \    [else (parse music_string (parse-music music_string)))]))\n", "  (let loop\
+    \ ([beats 0])\n    (cond\n      [(= music_string \"\") (list beats)]\n      [(symbol?\
+    \ music_string) (loop beats)]\n      [else\n       (let* ([note (check-music-symbol?\
+    \ music_string)]\n              [beat-length (check-music-length? note)])\n  \
+    \       (loop (+ beat-length beats))\n         (loop (+ beats beat-length))\n\
+    \         note))]))))\n", "  (let loop ((music_string (substring music_string\
+    \ 0 1))\n             (music_list (list (list music_string)))\n             (current_music_string\
+    \ (substring music_string 1 )))\n    (cond ((or (eq? music_string \"o\") (eq?\
+    \ music_string \"o|\") (eq? music_string \".|\"))\n           (let loop ((music_string\
+    \ (substring music_string 0 1))\n                       (music_list (list (list\
+    \ music_string))\n                       (current_music_string (substring music_string\
+    \ 1 )))\n             (cond ((eq? current_music_string \"o|\")\n             \
+    \       (begin\n                      (if (null? music_list)\n               \
+    \           (list 4)\n                          (loop (substring music_string\
+    \ 2 1) (cons (list 2) music_list) current_music_string)\n                    \
+    \      (loop (substring music_string 2 1) music_list current_music_string))\n\
+    \                      (if (null? music_list)\n                          (list\
+    \ 2)\n                          (loop (substring music_string 2 1) music_list\
+    \ current_music_string)))\n                      ((eq? current_music_string \"\
+    .|\")\n                       (begin\n                        (if (null? music_list)\n\
+    \                            (list 1)\n                            (loop (substring\
+    \ music_string 2 1) (cons (list 1) music_list) current_music_string)\n       \
+    \                     (loop (substring music_string 2 1) music_list current_music_string))))\n\
+    \                      ((eq? current_music_string \"o\")\n                   \
+    \    (begin\n                         (if (null? music_list)\n               \
+    \              (list 1)\n                             (loop (substring music_string\
+    \ 2 1) music_list current_music_string)))\n                      (else\n     \
+    \                  (begin\n                         (if (null? music_list)\n \
+    \                            (list 1)\n                             (loop (substring\
+    \ music_string 2 1) music_list current_music_string))))))))\n          ((or (eq?\
+    \ music_string \"o\") (eq? music_string \"o|\"))\n           (let loop ((music_string\
+    \ (substring music_string 0 1))\n                       (music_list (list (list\
+    \ music_string)))\n                       (current_music_string (substring music_string\
+    \ 1 )))\n             (cond ((eq? current_music_string \"o|\")\n             \
+    \       (begin\n                      (if (null? music_list)\n               \
+    \           (list 1)\n                          (loop (substring music_string\
+    \ 2 1) (cons (list 1) music_list) current_music_", "  (cond [(music-chars? music_string)\
+    \ (music-char-seq-to-lsts music_string)]\n        [(music-notes? music_string)\
+    \ (music-notes-seq-to-lsts music_string)]\n        [else (error \"Music string:\
+    \ \" music_string)]))\n", "  ;; Replace all dots with dashes.\n  (replace music_string\
+    \ \".\" \"-\"))\n</code>\n<|/ a tags=racket,scheme dscore=3 |>\n<| c |>\nThank\
+    \ you, that looks great! I have some questions though, how would I be able to\
+    \ add notes that aren't in the \"musical scale\" to the list? I thought about\
+    \ using a function like you did that would read it from the user but I didn't\
+    \ know how to do that.\n<|/ c |>\n<| c |>\nYou can have a separate function `notes`\
+    \ which accepts a string and returns a list of strings. For example, `(notes \"\
+    C4 D4 E4 F4 G4 A4\")` would return `(\"C\",\"D\",\"E\",\"F\",\"G\",\"A\")`. Then,\
+    \ you could read from the user and add every note by calling `(notes (read-line))`.\n\
+    <|/ c |>\n<| c |>\nThanks, I was thinking about that but was wondering if there\
+    \ was a simpler way. I'll work on it and see what I can do! Thanks again for the\
+    \ help!\n<|/ c |>\n<| c |>\nI thought about it and it actually wouldn't be too\
+    \ hard. Basically just make a function that reads a note, add it to the list,\
+    \ then use recursion to read all notes until end of string. I'll edit the answer\
+    \ with a solution and some comments.\n<|/ c |>\n<| c |>\nThanks again, I've been\
+    \ stuck on this for a while but I think I've finally got it! I thought about using\
+    \ the notes function but wasn't sure how to go about doing that. I'm very new\
+    \ to Scheme and functional programming in general, so the whole thing is a bit\
+    \ of a confusing mess!\n<|/ c |>\n<| a dscore=2 |>\nHere is another approach,\
+    \ using a map to hold your counts:\n<code>", "  (let loop ((music-str (music_string\
+    \ 0))\n             (notes '())\n             (music-len (length music-str)))\n\
+    \    (if (>= music-len 0)\n        (cons music-len\n              (loop\n    \
+    \             (substring music-str 0 music-len)\n                 (append notes\
+    \ (list (string-ref music-str 'o))))\n                 (substring music-str (string-length\
+    \ (substring music-str 0 music-len)) music-len))\n        (append notes (list\
+    \ (string-ref music-str 'o))))))\n", "  (define notes (make-list 12))\n  (define\
+    \ acc (make-list 12))\n  (define beats (make-list 12))\n\n  (define (add-note)\n\
+    \    (set! acc (append acc (rest acc)))\n    (set! beats (append beats (rest beats)))\n\
+    \    (set! notes (append notes (cons (car acc) notes)))\n    (set! acc (cdr acc))\n\
+    \    (set! beats (cdr beats))\n    notes)\n\n  (define (note-count note)\n   \
+    \ (define acc (car (assoc note notes)))\n    (cond\n      [(null? acc) 0]\n  \
+    \    [else (+ 1 (note-count (cdr acc)))]))\n\n  (for-each\n   (lambda (n)\n  \
+    \   (let ([pitch (char->integer n)]\n           [acc (char->integer n)]\n    \
+    \       [beats (char->integer n)]\n           [accs (char->integer n)]\n     \
+    \      [beats (char->integer n)]\n           [accs (char->integer n)]\n      \
+    \     [beats (char->integer n)]\n           [accs (char->integer n)]\n       \
+    \    [beats (char->integer n)])\n       (cond [(= pitch 0) (add-note)]\n     \
+    \        [(= pitch 1) (note-count notes)]\n             [(= pitch 2) (add-note)]))))\n",
+  "  (define music_string (string music_string))\n  (define notes (string-map music_string\
+    \ (lambda (n)\n                                     (match n [\n             \
+    \                           'o (list 4)\n                                    \
+    \    'o| (list 2)\n                                        '.| (list 1)\n    \
+    \                                  ]))))\n  (map (lambda (n)\n         (min (map\
+    \ length (filter last-note notes))\n               (max 0 (map length (filter\
+    \ first-note notes)))))\n       notes))\n", "  (let ([note (make-note (music_string))])\n\
+    \    (let loop ([note-value note]\n               [beats 0]\n               [temp-notes\
+    \ (note temp-notes)])\n      (cond\n        ((null? note-value)\n         (list\
+    \ beats))\n        ((note-value note)\n         (loop (note-value rest)\n    \
+    \           (add1 beats)\n               (temp-notes rest))\n         (loop (note-value\
+    \ rest)\n               (add1 beats)\n               (temp-notes (note temp-notes)))\n\
+    \        (else\n         (loop (rest rest)\n               (add1 beats)\n    \
+    \           (temp-notes (note temp-notes)))\n        )))))\n</code>\n<|/ a tags=scheme,functional-programming,racket\
+    \ |>\n<| c |>\nI understand the logic behind this, but when I try to run your\
+    \ code I get the following error on the 'note' line: 'let: not allowed in this\
+    \ context'. What did I miss?\n<|/ c |>\n<| c |>\nDid you copy and paste my code?\
+    \ Because you were using `let` outside `#lang racket`.\n<|/ c |>\n<| a dscore=0\
+    \ |>\nHere's one solution that's a little bit less convoluted than the other ones:\n\
+    <code>", "  (cond [(empty? music_string) '()]\n        [(equal? (first music_string)\
+    \ 'o) (append (parse_music music_string) (parse_music_note (second music_string)))]\n\
+    \        [(equal? (first music_string) 'o|') (append (parse_music music_string)\
+    \ (parse_music_note (second music_string)))]\n        [(equal? (first music_string)\
+    \ '.|') (append (parse_music music_string) (parse_music_note (second music_string)))]\n\
+    \        [else\n         (append (parse_music music_string) (parse_music_note\
+    \ (first music_string)))]))\n", "  (let ((music-list (list (cond [(string=? (car\
+    \ music_string) 'o) (cons 'o music_string)]\n                              [(string=?\
+    \ (car music_string) 'o|') (cons 'o| music_string)]\n                        \
+    \      [(string=? (car music_string) '.|') (cons '.| music_string)]\n        \
+    \                      [(equal? (car music_string) '|') music_string])\n     \
+    \             (cond [(string=? (car music_string) 'o) (append music-list (list\
+    \ (cons 4 music_string)))]\n                        [(string=? (car music_string)\
+    \ 'o|') (append music-list (list (cons 2 music_string)))]\n                  \
+    \      [(string=? (car music_string) '.|') (append music-list (list (cons 1 music_string)))]\n\
+    \                        [(equal? (car music_string) '|') (append music-list (list\
+    \ (cons 0 music_string)))]\n                        [(equal? (car music_string)\
+    \ '<<>>') music_string])\n                  (if (null? (cdr music_string))\n \
+    \                     music-list\n                      (parse_music (cdr music_string)))))\n\
+    \    (apply append music-list)))\n</code>\n<|/ a dscore=2 |>\n<| c |>\nYour answer\
+    \ does return a list of musical notes (I checked with the OP's `music-list`),\
+    \ but I think it is incorrect for the OPs purposes. For example, your answer has\
+    \ `[(cons 4 music-list)] [(cons 2 music-list)]`, while your music-list has `[(cons\
+    \ 'o music-list)]`.\n<|/ c |>\n<| c |>\nYou're right, now I realize my answer\
+    \ is not right either. I hope OP will correct my answer or I should delete it\
+    \ completely.\n<|/ c |>\n<| c |>\nSorry for my unclear question. I try to rewrite\
+    \ my question based on yours.\n<|/ c |>\n<| c |>\nThanks for your answer. Can\
+    \ you show me how to return the music note with beat? For example, `(parse_music\
+    \ \"o o| .| o| o| .| .| .| .| .| o o\")` should return `(5 4)`. `(parse_music\
+    \ \"o o| .| o| o| .| .| .| .| o o\")` should return `(5 3 ", "  (cond\n    [(empty?\
+    \ music_string)\n     (list)\n     (cons (string->number (first music_string))\
+    \ (parse_music (rest music_string)))]\n    [(starts-with? (first music_string)\
+    \ 'o|)\n     (cons (string->number (second music_string)) (parse_music (rest music_string)))]\n\
+    \    [(starts-with? (first music_string) 'o.|)\n     (cons (string->number (second\
+    \ music_string)) (parse_music (rest music_string)))]\n    [else\n     (cons (string->number\
+    \ (first music_string)) (parse_music (rest music_string)))]\n  ))\n", "  (cond\
+    \ [(empty? music_string)\n         0]\n        [(equal? (first music_string) #\\\
+    o)\n         (add1 0)]\n        [(equal? (first music_string) #\\|)\n        \
+    \ (add1 (parse-music music_string (+ 1 1)))]\n        [else\n         (parse-music\
+    \ music_string (+ 1))]))\n", "  (let loop ([music_string (music_string)]\n   \
+    \          [notes #(0 . 1)]\n             [music_length 0])\n    (if (= music_length\
+    \ 0)\n        notes\n        (let ([note (first music_string)])\n          (if\
+    \ (not (member note '(. | | o | o| o| o|)))\n              (loop (rest music_string)\n\
+    \                     (conj notes note)\n                     (add1 music_length))\n\
+    \              (loop (rest music_string)\n                     (conj notes '|)\n\
+    \                     (add1 music_length)))))))\n</code>\n<|/ a |>\n<| a tags=racket,scheme,functional-programming\
+    \ |>\n<code>", "  (define last_beat_count 0)\n  (let ((note_string (split-at (string-length\
+    \ music_string) music_string #\\Space)))\n    (loop for (note first_note) at note_string\n\
+    \      until (string-equal note 'o)\n      collect (if (string-equal note 'o|)\n\
+    \                  (- last_beat_count)\n                  (if (even? (string-length\
+    \ note))\n                      (+ last_beat_count)\n                      (+\
+    \ 1))))))\n", "  (let* ((beat-count 0)\n         (notes '()))\n    (for-each parse-music-note\
+    \ music-string\n               notes)\n    (list beat-count)))\n", "  (local\n\
+    \    [(define (parse-music-helper)\n      (let ([note-char (car music_string)])\n\
+    \        (cond [(note-char = 'o) (list (length music_string))]\n             \
+    \ [(note-char = 'o|) (list (length music_string) / 2)]\n              [(note-char\
+    \ = '.|) (list (length music_string) / 4)]\n              [(note-char #\\Space)\
+    \ (list 1)]\n              [(note-char #\\Newline) (list 1)]\n              [else\
+    \ (error \"Unknown note: '~s'\" note-char)]))]\n    [(parse-music-helper)]))\n",
+  "  (let* ((note (empty-vector 8))\n         (ns (parse music_string note '() 0)))\n\
+    \    (cond ((null? ns)\n           music-list)\n          ((ends? ns)\n      \
+    \     (reverse music-list))\n          ((not (note-is-full? note ns))\n      \
+    \     (let ((n (note ns))\n                 (ns (parse music_string note n (+\
+    \ n 1))))\n             (set! note n) (cons n (parse_music music_string) ns))))\n\
+    \    music-list))\n", "  (cond\n    [(empty? music_string) '()] \n    [(equal?\
+    \ (char-after (string-ref music_string 0) 'o|') '.|') (parse-music-half (substring\
+    \ (music_string 1) (char-before (string-ref music_string 0) 'o|') (char-after\
+    \ (string-ref music_string 0) 'o|'))]\n    [else (parse-music-whole-note music_string)]\n\
+    \    ))\n", "  (let loop ((i 0))\n    (cond\n      ((empty? music_string) #f)\n\
+    \      ((equal? (car music_string) 'o) #f)\n      ((equal? (car music_string)\
+    \ 'o|) #f)\n      (else (append (loop (+ i 4) (+ (car music_string) 12)))))\n\
+    \    (loop (+ i 4) 0)))\n", "  (if (empty? music_string)\n      '()\n      (append\
+    \ (parse music_string 'o) (parse_music music_string 'o|'))))\n", "  (let loop\
+    \ ((notes ()) (note 'o))\n    (if (null? music_string)\n        notes\n      \
+    \  (let ((note_char (char-at (music_string 0) note)))\n          (loop (cons (+\
+    \ note_char (* 4 note)) notes)\n                (cdr music_string)))))\n", " \
+    \ ;; Define helper procedure\n  (define (parse-music-helper music_string)\n  \
+    \  (cond [(music_string = 'o|) (list 1)]\n          [(music_string = 'o) (list\
+    \ 4)]\n          [(music_string = '.|) (list 2)]\n          [(music_string = '.)\
+    \ (list 1)]\n          [else (error \"unknown music note format: '~a'\" music_string)]))\n\
+    \  ;; Call helper procedure\n  (parse-music-helper music_string))\n", "  (let\
+    \ loop ((note (list 0))\n             (chars (string->list (music_string)))\n\
+    \             (beats (list 0))\n             (step (list 0 (string->int (car chars))))\n\
+    \             (char (car chars))\n             (next-char (cdr chars)))\n    (if\
+    \ (null? next-char)\n        (list beats)\n        (loop (+ (car note) (car step))\n\
+    \               (cdr chars)\n               (if (null? chars)\n              \
+    \     (cons (car note) beats)\n                   (loop (+ (car note) (car step))\
+    \ (cdr chars) (cdr beats)))))))\n", "  (let loop ((music-string music_string)\
+    \   ; local binding for music string\n             (music_count 0))          \
+    \   ; local binding for music count\n    (cond\n      [(not (equal? music-string\
+    \ \"\"))\n       (let* ((music-char (char-at-point\n                         \
+    \  (point-min\n                             (point-max\n                     \
+    \         (point-at (point-at (point-at (point-at music-string 0) 0) 0)\n    \
+    \                                   0)\n                             (point-at\
+    \ music-string 0))))\n               (music-char-code (char-code music-char))\n\
+    \               (music-char-note (music-char-code - 48))\n               (music-char-rest\
+    \ (music-char-code + 48))\n               (music-char-note (music-char-note +\
+    \ 1))\n               (music-char-rest - music-char-note)\n               (music-char-rest\
+    \ (music-char-rest + 1))\n               (music-char-note (music-char-note - 1))\n\
+    \               (music-char-rest (music-char-rest - 1))\n               (music-char-rest\
+    \ (music-char-rest + 1))\n               (music-char-rest (music-char-rest - 1))\n\
+    \               (music-char-rest (music-char-rest + 1))\n               (music-char-rest\
+    \ (music-char-rest - 1))\n               (music-char-rest (music-char-rest + 1))\n\
+    \               (music-char-rest (music-char-rest - 1))\n               (music-char-rest\
+    \ (music-char-rest + 1))\n               (music-char-rest (music-char-rest - 1))\n\
+    \               (music-char-rest (music-char-rest + 1))\n               (music-char-rest\
+    \ (music-char-rest - 1))\n               (music-char-rest (music-char-rest + 1))\n\
+    \               (music-char-rest (music-char-rest - 1))\n               (music-char-rest\
+    \ (music-char-rest + 1))\n               (music-char-rest (music-char-rest - 1))\n\
+    \               (music-char-rest (music-char-rest + 1))\n               (music-char-rest\
+    \ (music-char-rest - 1))\n               (music-char-rest (music-char-rest + 1))\n\
+    \              ", "  (local\n    [(define (note music_char)\n       (case music_char\n\
+    \         [('.)     0]\n         [('.|)    1]\n         [('o|)    1]\n       \
+    \  [('o.)    2]\n         [('o.|)   2]\n         [('o...)   2]\n         [('o...)\
+    \   2]\n         [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n\
+    \         [('o.|)   2]\n         [('o...)   2]\n         [('o...)   2]\n     \
+    \    [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n         [('o...)\
+    \   2]\n         [('o...)   2]\n         [('o.|)   2]\n         [('o...)   2]\n\
+    \         [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n    \
+    \     [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n        \
+    \ [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n         [('o...)\
+    \   2]\n         [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n\
+    \         [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n    \
+    \     [('o.|)   2]\n         [('o...)   2]\n         [('o...)   2]\n         [('o...)\
+    \   2]\n         [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n\
+    \         [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n    \
+    \     [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n        \
+    \ [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n         [('o...)\
+    \   2]\n         [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n\
+    \         [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n    \
+    \     [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n        \
+    \ [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n         [('o...)\
+    \   2]\n         [('o...)   2]\n         [('o...)   2]\n         [('o...)   2]\n\
+    \         [('o...)   ", "  (cond\n    ((empty? music_string) '())\n    ((equal?\
+    \ (first music_string) 'o) (cons (* (first music_string) 4) '()))\n    ((equal?\
+    \ (first music_string) 'o|') (cons (* (first music_string) 2) '()))\n    ((equal?\
+    \ (first music_string) '.|') (cons (* (first music_string) 1) '()))\n    ((equal?\
+    \ (first music_string) '.') (cons (first music_string) '()))\n    ((equal? (first\
+    \ music_string) 'o') (cons (first music_string) '()))\n    ((equal? (first music_string)\
+    \ 'o') (cons (first music_string) '()))\n    ((equal? (first music_string) 'o')\
+    \ (cons (first music_string) '()))\n    ((equal? (first music_string) 'o') (cons\
+    \ (first music_string) '()))\n    ((equal? (first music_string) 'o') (cons (first\
+    \ music_string) '()))\n    ((equal? (first music_string) 'o') (cons (first music_string)\
+    \ '()))\n    ((equal? (first music_string) 'o') (cons (first music_string) '()))\n\
+    \    ((equal? (first music_string) 'o') (cons (first music_string) '()))\n   \
+    \ ((equal? (first music_string) 'o') (cons (first music_string) '()))\n    ((equal?\
+    \ (first music_string) 'o') (cons (first music_string) '()))\n    ((equal? (first\
+    \ music_string) 'o') (cons (first music_string) '()))\n    ((equal? (first music_string)\
+    \ 'o') (cons (first music_string) '()))\n    ((equal? (first music_string) 'o')\
+    \ (cons (first music_string) '()))\n    ((equal? (first music_string) 'o') (cons\
+    \ (first music_string) '()))\n    ((equal? (first music_string) 'o') (cons (first\
+    \ music_string) '()))\n    ((equal? (first music_string) 'o') (cons (first music_string)\
+    \ '()))\n    ((equal? (first music_string) 'o') (cons (first music_string) '()))\n\
+    \    ((equal? (first music_string) 'o') (cons (first music_string) '()))\n   \
+    \ ((equal? (first music_string) 'o", "  (define i 0)\n  (define notes-list '())\n\
+    \  (define char-count 0)\n  (define current-note '())\n  (let loop ()\n    (if\
+    \ (>= music-string-length i) notes-list\n      (let ((c (music-string[i])))\n\
+    \        (if (char-count >= music-string-length i) notes-list\n          (cond\
+    \ [(or (eq c \".\") (eq c \"|\")) (loop)]\n                (else\n           \
+    \       (if (eq c \"o\")\n                    (set! current-note (cons c (cons\
+    \ current-note '())))\n                    (set! char-count (+ char-count 1))\n\
+    \                    (loop)))))\n    (set! notes-list (cons (+ (cdr current-note)\
+    \ (* char-count 4)) notes-list)))\n  notes-list)\n", "  (define (parse-music-helper\
+    \ music_string music_list)\n    (cond [(empty? music_string) music_list]\n   \
+    \       [else (parse-music-helper (rest music_string)\n                      \
+    \              (cond [(equal? (car music_string) 'o) (cons (- 4 (length (rest\
+    \ music_string)) music_list) (parse-music-helper (rest music_string) music_list))]\n\
+    \                                          [(equal? (car music_string) 'o|) (cons\
+    \ (- 2 (length (rest music_string)) music_list) (parse-music-helper (rest music_string)\
+    \ music_list))]\n                                          [(equal? (car music_string)\
+    \ '.|) (cons (- 1 1 (length (rest music_string)) music_list) (parse-music-helper\
+    \ (rest music_string) music_list))]\n                                        \
+    \  [else (cons (- 1 (length (rest music_string)) music_list) (parse-music-helper\
+    \ (rest music_string) music_list))]))]))\n  (parse-music-helper music_string (make-list\
+    \ 0 (- (length music_string) 1)))) ; length of music string is equal to length\
+    \ (music_string) - length 'o'", "  (let loop ([i 0] [notes (list 1)]\n       \
+    \      [notes_count 0]\n             [notes_total 0])\n    (if (string-empty?\
+    \ music_string)\n        (reverse notes)\n        (let ((note (music-note music_string\n\
+    \                             (substring music_string 0 i)\n                 \
+    \            (substring music_string (i+1)))))\n          (set! notes \n     \
+    \           (cons (concat notes (length note)) notes))\n          (set! notes_count\n\
+    \                (+ notes_count note))\n          (set! notes_total\n        \
+    \        (+ notes_total (length note)))\n          (set! i (+ i 2))\n        \
+    \  (loop\n               i\n               (cons note\n                     (cons\
+    \ note\n                             (cons note\n                            \
+    \       (cons note notes)))\n               notes_count\n               notes_total)))\n\
+    \    ))\n", "  (define music_string music_string)\n  (define num_notes (length\
+    \ music_string))\n  (define notes_count (/ (length music_string) (length #{'o\
+    \ #| .|})))\n  (define notes_sum (reduce (lambda (x y) (+ x y)) (range notes_count)))\n\
+    \  (define notes_list (list (range notes_sum)\n                        (range\
+    \ (- notes_sum (+ notes_count 1)))))\n  (define notes_sum_list (range notes_sum))\n\
+    \  (define notes_sum_list (map car (partition (lambda (x) (member (car x) notes_list))\
+    \ notes_sum_list)))\n  (define notes_sum_list (sort notes_sum_list < ))\n  (define\
+    \ notes_sum_list (filter #(<= (car %) notes_sum) notes_sum_list))\n  (define notes_sum_list\
+    \ (sort notes_sum_list < ))\n  (define notes_sum_list (filter #(> (car %) notes_sum)\
+    \ notes_sum_list))\n  (define notes_sum_list (sort notes_sum_list < ))\n  (define\
+    \ notes_sum_list (filter #(<= (car %) notes_sum) notes_sum_list))\n  (define notes_sum_list\
+    \ (sort notes_sum_list < ))\n  (define notes_sum_list (filter #(> (car %) notes_sum)\
+    \ notes_sum_list))\n  (define notes_sum_list (sort notes_sum_list < ))\n  (define\
+    \ notes_sum_list (filter #(<= (car %) notes_sum) notes_sum_list))\n  (define notes_sum_list\
+    \ (sort notes_sum_list < ))\n  (define notes_sum_list (filter #(> (car %) notes_sum)\
+    \ notes_sum_list))\n  (define notes_sum_list (sort notes_sum_list < ))\n  (define\
+    \ notes_sum_list (filter #(<= (car %) notes_sum) notes_sum_list))\n  (define notes_sum_list\
+    \ (sort notes_sum_list < ))\n  (define notes_sum_list (filter #(> (car %) notes_sum)\
+    \ notes_sum_list))\n  (define notes_sum_list (sort notes_sum_list < ))\n  (define\
+    \ notes_sum_list (filter #(<= (car %) notes_sum) notes_sum_list))\n  (define notes_sum_list\
+    \ (sort notes_sum_list < ))\n  (define note", "  (define note (substring music_string\
+    \ 0 1))\n  (define rest (substring music_string 1 2))\n  (define rests (substring\
+    \ music_string 3 6))\n  (define rests_count (length rests))\n  (define notes (cond\
+    \ ((= notes '.) (list 4))\n                  ((= notes '|) (list 2))\n       \
+    \           ((= notes 'o) (list 1))\n                  (else (list 0))))\n  (define\
+    \ notes_count (length notes))\n  (define beats (make-list notes_count 0))\n  (define\
+    \ rest_positions (make-list rests_count 0))\n  (define notes_positions (make-list\
+    \ notes_count 0))\n  (define rests_positions (make-list rests_count 0))\n  (define\
+    \ rests_beats (make-list rests_count 0))\n  (define notes_beats (make-list notes_count\
+    \ 0))\n  (define rest_beats (make-list rests_count 0))\n  (define rests_lengths\
+    \ (make-list rests_count 0))\n  (define notes_lengths (make-list notes_count 0))\n\
+    \  (define rest_lengths (make-list rests_count 0))\n  (define rest rest)\n  (define\
+    \ notes notes)\n\n  (let loop ((i 0))\n    (if (< (+ i 4) notes_count)\n     \
+    \   (set! i (+ i 4))\n        (loop (+ i 4))))\n  (let loop ((i 0))\n    (if (<\
+    \ (+ i 2) notes_count)\n        (set! i (+ i 2))\n        (loop (+ i 2))))\n \
+    \ (let loop ((i 0))\n    (if (< (+ i 1) notes_count)\n        (set! i (+ i 1))\n\
+    \        (loop (+ i 1))))\n  (let loop ((i 0))\n    (if (< (+ i 1) notes_count)\n\
+    \        (set! i (+ i 1))\n        (loop (+ i 1))))\n  (let loop ((i 0))\n   \
+    \ (if (< (+ i 1) notes_count)\n        (set! i (+ i 1))\n        (loop (+ i 1))))\n\
+    \  (let loop ((i 0))\n    (if (< (+ i 1) notes_count)\n        (set! i (+ i 1))\n\
+    \        (loop (+ i 1))))\n  (let loop ((i 0))\n    (if (< (+ i 1) notes_count)\n\
+    \        (set! i (+ i 1))\n        (loop (+ i 1))))\n  (let loop ((i 0))\n   \
+    \ (if (< (+ i 1) notes_count)\n        (set! i (+ i 1))\n        (loop (+ i 1))))\n\
+    \  (let loop", "  (define parsed_music '())\n  (define beats (/ 4 2))\n  (define\
+    \ notes (string->list music_string))\n  (for note notes\n    (when (char= (char\
+    \ note 0) #\\o)\n      (append parsed_music (list beats))\n      (set! beats (+\
+    \ beats 1)))\n    (when (char= (char note 0) #\\.)\n      (append parsed_music\
+    \ (list beats))\n      (set! beats (+ beats 4)))\n    (when (char= (char note\
+    \ 0) #\\|)\n      (append parsed_music (list beats))\n      (set! beats (+ beats\
+    \ 2)))\n    (when (char= (char note 0) #\\^)\n      (append parsed_music (list\
+    \ beats))\n      (set! beats (+ beats 1)))\n    (when (char= (char note 0) #\\\
+    v)\n      (append parsed_music (list beats))\n      (set! beats (+ beats 4)))\n\
+    \    (when (char= (char note 0) #\\~)\n      (append parsed_music (list beats))\n\
+    \      (set! beats (+ beats 4)))\n    (when (char= (char note 0) #\\&)\n     \
+    \ (append parsed_music (list beats))\n      (set! beats (+ beats 2)))\n    (when\
+    \ (char= (char note 0) #\\*)\n      (append parsed_music (list beats))\n     \
+    \ (set! beats (+ beats 2)))\n    (when (char= (char note 0) #\\?)\n      (append\
+    \ parsed_music (list beats))\n      (set! beats (+ beats 3)))\n    (when (char=\
+    \ (char note 0) #\\!)\n      (append parsed_music (list beats))\n      (set! beats\
+    \ (+ beats 1)))\n    (when (char= (char note 0) #\\r)\n      (append parsed_music\
+    \ (list beats))\n      (set! beats (+ beats 1)))\n    (when (char= (char note\
+    \ 0) #\\n)\n      (append parsed_music (list beats))\n      (set! beats (+ beats\
+    \ 1)))\n    (when (char= (char note 0) #\\\")\n      (append parsed_music (list\
+    \ beats))\n      (set! beats (+ beats 1)))\n    (when (char= (char note 0) #\\\
+    \")\n      (append parsed_music (list beats))\n      (set! beats (+ beats 1)))\n\
+    \    (when (char= (char note 0) #\\;)\n      (append parsed_music (list beats))",
+  "  (let ((music_list (make-list 128 128)))\n    (music_list\n     (let loop ((index\
+    \ 0) (music_string music_string)\n                (music_list music_list)\n  \
+    \              (index 0))\n       (if (= index 128)\n           (if (null? music_string)\n\
+    \               music_list\n               (loop (add1 index)\n              \
+    \       music_list\n                     (add1 index))\n             (loop (add1\
+    \ index)\n                   music_list\n                   (add1 index))\n  \
+    \         (loop (add1 index)\n                 music_list\n                 (add1\
+    \ index))\n       (cond (char=? (music-char music_string index)\n            \
+    \       'o)\n            (if (not (char=? (music-char music_string index) '|'))\n\
+    \                (loop (add1 index)\n                      music_list\n      \
+    \                (add1 index))\n                (loop (add1 index)\n         \
+    \             music_list\n                      (add1 index))\n            (cond\
+    \ (char=? (music-char music_string index)\n                       '|)\n      \
+    \            (cond (char=? (music-char music_string index) 'o|')\n           \
+    \              (loop (add1 index)\n                               music_list\n\
+    \                               (add1 index))\n                        (else (loop\
+    \ (add1 index)\n                                  music_list\n               \
+    \                   (add1 index)))))\n           (else (loop (add1 index)\n  \
+    \                     music_list\n                       (add1 index)))))\n  \
+    \   music_list))\n  music_list)\n</code>\n<|/ a |>\n<| c |>\nThank you. I am unfamiliar\
+    \ with cond but this seems to be working. I just have one more question. How would\
+    \ I use the `parse_music` function to calculate what note the fifth beat is played\
+    \ at? For example, for the input `o o| .| o| o| .| .| .| .| o o` the fifth note\
+    \ would be the middle note.\n<|/ c |>\n<| c |>\nThe fifth note is the ninth note\
+    \ (index = 4).\n<|/ c |>\n<| c |>\nI see. What if I wanted the second note of\
+    \ the fifth note? So if i put `o o| .| o| o| .| .| .| .| o o` I would get `4`\
+    \ as opposed to `4` which would mean the ninth note.\n<|/ c |>\n<| c |>\nOh i\
+    \ see now. Thank you for helping me understand this!\n<|/ c |>\n<| a ", "  (let\
+    \ ([note_count '()])\n    (for/fold ([notes '()])\n              ([note '()])\n\
+    \              (for/or ([i music_string])\n                      ([char i])\n\
+    \                      #:when (char=? char #\\space)\n                      #:when\
+    \ (char=? char #\\pipe)\n                      #:when (char=? char #\\space|#\\\
+    pipe))\n              (let ([note (if (char=? char #\\space) note note)\n    \
+    \                 char (char->string char)])\n                (set! note_count\
+    \ (+ note note_count))\n                (set! notes (append notes (list note_count))))))\n",
+  "  (let loop ((n music_string) (count 0) (last_beat 0))\n    (cond\n      [(= n\
+    \ 'o) 'o]\n      [(char= '|' n)\n       (cons count (loop (substring music_string\
+    \ 2)\n                      (+ count 1)\n                      (+ last_beat 4)))]\n\
+    \      [(char= '.' n) (cons count (loop (substring music_string 2)\n         \
+    \                           (+ count 1)\n                                    (+\
+    \ last_beat 2)))]\n      [else (loop (substring music_string 1)\n            \
+    \      (+ count 1)\n                  (+ last_beat 1))]\n     )))\n</code>\nIf\
+    \ you want an explanation of the code, here is a little explanation:\nThe function\
+    \ loop processes a music note. The parameters (music_string, count, and last_beat)\
+    \ are used to keep track of the current state of processing one note. The recursive\
+    \ call to the function loop passes in the next character in the music string,\
+    \ the current count, and the new last beat. \nAt the first call of loop, the music_string\
+    \ is the empty string; that is, the beginning of the string. The count is zero,\
+    \ since this is the first note. The last_beat is zero, since this is the first\
+    \ note.\nIn the first case, all we need to do is keep track of how many beats\
+    \ are in this note. In other words, we increment count by 1. We also increment\
+    \ last_beat by 4, since there are four beats in a note.\nIn the second case, we\
+    \ are processing a note. Let's examine what would happen in this case:\n<code>",
+  "  (let*\n      ((note (substring music_string 0 (string-length music_string)))\n\
+    \       (beats (substring music_string 1 (string-length music_string))))\n   \
+    \ (cond [(empty? note) empty]\n          [(empty? beats) beats]\n          [(equal?\
+    \ (first note) '.')\n           (cons 1 (parse_music (substring music_string 2)))]\n\
+    \          [(equal? (first note) '|')\n           (cons 2 (parse_music (substring\
+    \ music_string 3)))]\n          [(equal? (first note) 'o')\n           (cons 4\
+    \ (parse_music (substring music_string 4)))]\n          [else (error \"unknown\
+    \ music note: '~a'\" note)]))))\n", "  (define music_length (length (music_string)))\n\
+    \  (define music_note_length (length music_string))\n  (define music_note_chars\
+    \ (make-char music_length))\n  (define music_notes (make-vector music_length))\n\
+    \  (let loop ((i music_length) (music_note_char music_note_chars)\n          \
+    \   (music_note music_notes))\n    (if (< i music_note_length)\n        (loop\
+    \ (+ i 1) music_note_char (vector-push! music_note (read music_note_char)))\n\
+    \        music_notes))\n\n  (define note_chars (vector-ref music_note_chars 0))\n\
+    \  (define beats (vector-ref music_notes 0))\n  (define n_beats (vector-ref music_notes\
+    \ 1))\n  (define rest (vector-ref music_notes 2))\n  (define n_rest (vector-ref\
+    \ music_notes 3))\n\n  (if (equal? (string-ref note_chars 'o) 'o)\n      (if (equal?\
+    \ (string-ref note_chars '|) '|)\n          (if (equal? (string-ref note_chars\
+    \ '.) '.)\n              (if (equal? (string-ref note_chars ',) ',')\n       \
+    \           (if (equal? (string-ref note_chars '#) '#)\n                     \
+    \ (if (equal? (string-ref note_chars '&) '&)\n                          (if (equal?\
+    \ (string-ref note_chars '=) '=)\n                              (if (equal? (string-ref\
+    \ note_chars '?) '?)\n                                  (if (equal? (string-ref\
+    \ note_chars '>') '>')\n                                      (if (equal? (string-ref\
+    \ note_chars '<') '<)\n                                          (if (equal? (string-ref\
+    \ note_chars '>') '>')\n                                              (if (equal?\
+    \ (string-ref note_chars '<') '<)\n                                          \
+    \        (if (equal? (string-ref note_chars '(') '(')\n                      \
+    \                                (if (equal? (string-ref note_chars '[') '[')\n\
+    \                                                          (if (equal? (string-ref\
+    \ note_chars ']') ']')\n                                                     \
+    \         (if (equal? (string-ref note_chars '{') '{')\n                     \
+    \                                             (if (equal? (string-ref note_chars\
+    \ '|') '|)\n                                                                 \
+    \     (if (equal? (string-ref note_chars '|') '|)\n                          \
+    \                                                (if (equal? (string-ref note_chars\
+    \ '+') '+)\n                                                                 \
+    \             (if (equal? (string-ref note_chars '+') '+)\n                  \
+    \                                                                (if (equal? (string-ref\
+    \ note_chars '", "  (define (parse-note note)\n    (cond ((equal? (char-index\
+    \ note 0) 96) (add1 beats))\n          ((equal? (char-index note 0) 97) (add1\
+    \ beats))\n          ((equal? (char-index note 0) 98) (add1 beats))\n        \
+    \  ((equal? (char-index note 0) 99) (add1 beats))\n          ((equal? (char-index\
+    \ note 0) 100) (add1 beats))\n          ((equal? (char-index note 0) 101) (add1\
+    \ beats))\n          ((equal? (char-index note 0) 102) (add1 beats))\n       \
+    \   ((equal? (char-index note 0) 103) (add1 beats))\n          ((equal? (char-index\
+    \ note 0) 104) (add1 beats))\n          ((equal? (char-index note 0) 105) (add1\
+    \ beats))\n          ((equal? (char-index note 0) 106) (add1 beats))\n       \
+    \   ((equal? (char-index note 0) 107) (add1 beats))\n          ((equal? (char-index\
+    \ note 0) 108) (add1 beats))\n          ((equal? (char-index note 0) 109) (add1\
+    \ beats))\n          ((equal? (char-index note 0) 110) (add1 beats))\n       \
+    \   ((equal? (char-index note 0) 111) (add1 beats))\n          ((equal? (char-index\
+    \ note 0) 112) (add1 beats))\n          ((equal? (char-index note 0) 113) (add1\
+    \ beats))\n          ((equal? (char-index note 0) 114) (add1 beats))\n       \
+    \   ((equal? (char-index note 0) 115) (add1 beats))\n          ((equal? (char-index\
+    \ note 0) 116) (add1 beats))\n          ((equal? (char-index note 0) 117) (add1\
+    \ beats))\n          ((equal? (char-index note 0) 118) (add1 beats))\n       \
+    \   ((equal? (char-index note 0) 119) (add1 beats))\n          ((equal? (char-index\
+    \ note 0) 120) (add1 beats))\n          ((equal? (char-index note 0) 121) (add1\
+    \ beats))\n          ((equal? (char-index note 0) 122) (add1 beats))\n       \
+    \   ((equal? (char-index note 0) 123) (add1 beats))\n          ((equal? (char-index\
+    \ note 0) 124) (add1 beats))\n          ((equal? (char-index note 0) 125) (add1\
+    \ beats))\n          ((equal? (char-index note 0) 126) (add1 beat", "  (if (empty?\
+    \ music_string)\n      '()\n      (let ((note (car music_string)))\n        (if\
+    \ (equal? note 'o)\n            (list 4)\n            (if (equal? note 'o|)\n\
+    \                (list 2)\n                (if (equal? note '.|)\n           \
+    \         (list 1)\n                    (if (equal? (string-ref music_string 0)\
+    \ '|')\n                        (parse-music music_string) (substring (music_string\
+    \ 1) 3))))))))\n</code>\nThis code uses tail recursion to avoid stacking calls.\n\
+    <|/ a tags=scheme,racket,recursion |>\n<| c |>\nThanks so much for this answer!\
+    \ This was very helpful for my current project. I'm still unsure how to solve\
+    \ this question though. Since you said this is tail recursion, how does this stack\
+    \ overflow occur? I've been looking online but couldn't find any examples of tail\
+    \ recursion that involve a recursive call with no parameters. Could you give an\
+    \ example of when this would occur?\n<|/ c |>\n<| c |>\nTail recursion happens\
+    \ when the last expression in the tail of a function is reached before the function\
+    \ call can be made.  In your case you have no arguments to the recursive call,\
+    \ so it can be done with a loop.\n<|/ c |>\n<| c |>\nA recursive call is where\
+    \ you invoke the recursive function again to compute something else. In the case\
+    \ of your code, you call the recursive function `parse-music` with no arguments\
+    \ and then you try to reach the base case by calling the `empty?` function. I\
+    \ think that is what confused you.\n<|/ c |>\n<| c |>\nIf this answered your question,\
+    \ please mark it as the accepted answer.  It is okay to wait a while before you\
+    \ can accept an answer.\n<|/ c |>\n<| c |>\nSure. Thanks for the help!\n<|/ c\
+    \ |>\n<| a tags=scheme,racket,recursion |>\nThe basic problem is that you use\
+    \ an if in the middle of a recursive call and then you use an else that does the\
+    \ same thing. \nHere is an example of recursion:\n<code>", "  (define result '())\n\
+    \  (define n '())\n  (define i (0))\n  (define j (0))\n\n  (let loop ((notes (string->list\
+    \ music_string)))\n    (cond ((null? notes) '())\n          ((char=? (car notes)\
+    \ #\\o) \n           (let ((temp (make-vector (length notes) 'int)))\n       \
+    \      (do ((i (+ i 1))(j (+ j 1))\n                   ((null? (cdr notes)) temp)\n\
+    \                 ((= (mod i 4) 0)\n                   (set! temp (vector-set!\
+    \ temp (+ (vector-ref temp i) 1) 1) #o|))\n                 ((= (mod i 2) 0)\n\
+    \                   (set! temp (vector-set! temp (+ (vector-ref temp i) 1) 1)\
+    \ '.|))\n                 ((= (mod i 1) 0)\n                   (set! temp (vector-set!\
+    \ temp (+ (vector-ref temp i) 1) 1) '.|)))\n             (vector temp result))\n\
+    \          (else\n           (let ((temp (make-vector (length notes) 'int)))\n\
+    \             (do ((i (+ i 1))(j (+ j 1))\n                   ((null? (cdr notes))\
+    \ temp)\n                 ((= (mod i 4) 0)\n                   (vector-set! temp\
+    \ (+ (vector-ref temp i) 1) 1) #o|))\n                 ((= (mod i 2) 0)\n    \
+    \               (vector-set! temp (+ (vector-ref temp i) 1) 1) '.|))\n       \
+    \          ((= (mod i 1) 0)\n                   (vector-set! temp (+ (vector-ref\
+    \ temp i) 1) 1) '.|)))\n             (vector temp result)))))\n\n  result)\n</code>\n\
+    As you see, this is an endless loop (because of do) and the program takes too\
+    \ much time to respond. Can you suggest me a better solution?\n<|/ q tags=racket,vector,scheme\
+    \ dscore=1 |>\n<| a dscore=1 |>\n<code>", "  ; your code goes here\n)\n", "  (if\
+    \ (empty? music_string)\n      '()\n      (append (parse_note (substring music_string\
+    \ 0 1)) \n              (parse_music (substring music_string 2)))))\n", "  (let\
+    \ ((beats_count (make-hash-table)))\n    (for-each ((note (read-char music_string))\n\
+    \                (count (or (hash-ref beats_count note) 0)))\n              (hash-set\
+    \ beats_count note count))\n    (hash-values beats_count)))\n", "  (let loop ((music_string\
+    \ (music_string music_string))\n             (beats (list))\n             (note\
+    \ (first music_string))\n             (beats_per_note (second music_string)))\n\
+    \    (if (equal? note '.)\n        beats\n        (loop (rest music_string)\n\
+    \               (cons beats_per_note beats)\n               note\n           \
+    \    (+ beats_per_note (second music_string))))))\n", "  (cond [(empty? music_string)\
+    \ 0]\n        [(equal? (first music_string) 'o) 4]\n        [(equal? (first music_string)\
+    \ 'o|) 2]\n        [(equal? (first music_string) '.|) 1]\n        [else\n    \
+    \     (+ (parse (first music_string) (parse_music (rest music_string))) (parse_music\
+    \ (rest music_string)))]))\n", "  (cond\n    [(empty? music_string) '()]\n   \
+    \ [(equal? (first music_string) 'o) '()]\n    [else (cons (first (split-at (length\
+    \ music_string) music_string))\n                (parse_music (rest music_string)))]))\n",
+  "  (let* ((len (string-length (music-string music_string)))\n         (music_str\
+    \ (music-string music_string))\n         (music_char (music-char music_str))\n\
+    \         (music_note (music-note music_str))\n         (music_string music_str))\n\
+    \    (cond ((< len 0)\n           music_string)\n          ((eq? music_char #\\\
+    | )\n           (+ (music-note music_str) (parse music_string music_char (add1\
+    \ len))))\n          ((eq? music_char #\\o )\n           (+ (music-note music_str)\
+    \ (parse music_string music_char (add1 len))))\n          ((eq? music_char #\\\
+    . )\n           (+ (music-note music_str) (parse music_string music_char (add1\
+    \ len))))\n          ((eq? music_char #\\) )\n           (+ (music-note music_str)\
+    \ (parse music_string music_char (add1 len))))\n          ((eq? music_char #\\\
+    ) )\n           (+ (music-note music_str) (parse music_string music_char (add1\
+    \ len))))\n          ((eq? music_char #\\) )\n           (+ (music-note music_str)\
+    \ (parse music_string music_char (add1 len))))\n          ((eq? music_char #\\\
+    ) )\n           (+ (music-note music_str) (parse music_string music_char (add1\
+    \ len))))\n          ((eq? music_char #\\) )\n           (+ (music-note music_str)\
+    \ (parse music_string music_char (add1 len))))\n          ((eq? music_char #\\\
+    ) )\n           (+ (music-note music_str) (parse music_string music_char (add1\
+    \ len))))\n          ((eq? music_char #\\) )\n           (+ (music-note music_str)\
+    \ (parse music_string music_char (add1 len))))\n          ((eq? music_char #\\\
+    ) )\n           (+ (music-note music_str) (parse music_string music_char (add1\
+    \ len))))\n          ((eq? music_char #\\) )\n           (+ (music-note music_str)\
+    \ (parse music_string music_char (add1 len))))\n          ((eq? music_char #\\\
+    ) )\n           (+ (music-note music_str) (parse music_string music_char (add1\
+    \ len))))\n          ((", "  (let loop ((music_string music_string)\n        \
+    \     (music_list '() (length music_string)\n                         (map '()\
+    \ '())))\n    (if (null? music_string)\n        music_list\n        (loop (rest\
+    \ music_string) (cons (car music_string)\n                                   \
+    \    (car music_list)))\n        (loop (rest music_string) (cons (car music_string)\n\
+    \                                       (loop (rest music_string) (append (map\
+    \ '()\n                                                                      \
+    \  music_list)\n                                                             \
+    \    music_list))))))\n", "  (let ((notes '())\n        (beats '()))\n    (loop\
+    \ for note_or_beat_count in (split-string (music_string #\\| #\\|) 2)\n      \
+    \ for count in (reverse (parse-music-count note_or_beat_count))\n       for note\
+    \ in (parse-music-note note_or_beat_count)\n       while (note = note)\n     \
+    \  (push note notes)\n       and beat (parse-music-beat count)\n       while (beat\
+    \ = beat)\n       (push beat beats))\n    notes))\n", "  (local\n    [(define\
+    \ (note-str note) (string-append \"o\" note))\n     (define (note-str note beats)\n\
+    \       (string-append note-str beats))]\n    (for-each\n     (lambda (n) (if\
+    \ (string=? (note-str n) music_string)\n              (cond [(string=? (note-str\
+    \ n 1) music_string) (list 1)]\n                    [else (+ 1 (last (note-str\
+    \ n)))]))\n     'o o| .| o| o| .| .| .| .| o o)))\n", "  (let ((note 'o))\n  \
+    \  (define (parsed-note? n)\n      (equal? (modulo n 12) 0))\n    (define (note-type\
+    \ n)\n      (case-and (parsed-note? n) (equal? 'o note))\n      (case-and (parsed-note?\
+    \ n) (equal? 'o| note))\n      (case-and (parsed-note? n) (equal? '.|note))\n\
+    \      (case-and (parsed-note? n) (equal? '.| note))\n      (case-and (parsed-note?\
+    \ n) (equal? 'o| note))\n      (case-and (parsed-note? n) (equal? '.|note))\n\
+    \      (case-and (parsed-note? n) (equal? '.|note))\n      (case-and (parsed-note?\
+    \ n) (equal? 'o note))\n      (case-and (parsed-note? n) (equal? 'o| note))\n\
+    \      (case-and (parsed-note? n) (equal? '.|note))\n      (case-and (parsed-note?\
+    \ n) (equal? '.|note))\n      (case-and (parsed-note? n) (equal? 'o note))\n \
+    \     (case-and (parsed-note? n) (equal? 'o| note))\n      (case-and (parsed-note?\
+    \ n) (equal? '.|note))\n      (case-and (parsed-note? n) (equal? '.|note))\n \
+    \     (case-and (parsed-note? n) (equal? 'o note))\n      (case-and (parsed-note?\
+    \ n) (equal? 'o| note))\n      (case-and (parsed-note? n) (equal? '.|note))\n\
+    \      (case-and (parsed-note? n) (equal? '.|note))\n      (case-and (parsed-note?\
+    \ n) (equal? 'o note))\n      (case-and (parsed-note? n) (equal? 'o| note))\n\
+    \      (case-and (parsed-note? n) (equal? '.|note))\n      (case-and (parsed-note?\
+    \ n) (equal? '.|note))\n      (case-and (parsed-note? n) (equal? 'o note))\n \
+    \     (case-and (parsed-note? n) (equal? 'o| note))\n      (case-and (parsed-note?\
+    \ n) (equal? '.|note))\n      (case-and (parsed-note? n) (equal? '.|note))\n \
+    \     (case-and (parsed-note? n) (equal? 'o note))\n      (case-and (parsed-note?\
+    \ n) (equal? 'o| note", "  (define note (music-note music_string))\n  (if (music-note\
+    \ music_string)\n      (cons (music-note music_string) (parse_music (music-rests\
+    \ music_string)))\n      (parse-rests music_string)))\n", "  (let ([note (make-music-note\
+    \ 'o)]\n        [note-length 'o])\n    (if (empty? music_string)\n        '()\n\
+    \        (let ([next (get-music-note music_string note)\n              length\
+    \ (music-note-length next)]\n              [next-length (music-note-length next)])\n\
+    \          (if (> length note-length)\n              (set! note-length length)\n\
+    \              (cons next (parse_music music_string (+ music_string next))))))))\n",
+  "  (let loop ((music-string music_string) (remaining-notes (list 0)))\n    (cond\
+    \ ((char= (first music-string) 'o) (remaining-notes (cons 4 remaining-notes)))\
+    \ ; 'o - whole note, lasts four beats\n          ((char= (first music-string)\
+    \ 'o|) (remaining-notes (cons 2 remaining-notes))) ; 'o| - half note, lasts two\
+    \ beats\n          ((char= (first music-string) '.|) (remaining-notes (cons 1\
+    \ remaining-notes))) ; '.| - quater note, lasts one beat\n          (else (remaining-notes\
+    \ (cons 0 (rest remaining-notes))))) ; anything else - note lasts zero beats\n\
+    \    (loop (rest music-string) remaining-notes)))\n", "  (define note_chars (string->list\
+    \ music_string))\n  (define note_counter (make-array (length note_chars) 'int))\n\
+    \  (define (parse_note note)\n    (when (string-match #rx\"^[0-9]+$\" note)\n\
+    \      (set! note_counter \n            (+ (array-ref note_counter \n        \
+    \               (position note note_chars)) 1)))\n    (when (string-match #rx\"\
+    ^[\\.|o|o|o]+$\" note)\n      (set! note_counter \n            (+ (array-ref note_counter\
+    \ \n                       (position note note_chars)) 4)))\n    (when (string-match\
+    \ #rx\"^[\\.|o|o|o]+[\\.|o|o|o]+$\" note)\n      (set! note_counter \n       \
+    \     (+ (array-ref note_counter \n                       (position note note_chars))\
+    \ 6)))\n    (when (string-match #rx\"^[\\.|o|o|o]+[\\.|o|o]+[\\.|o|o]+$\" note)\n\
+    \      (set! note_counter \n            (+ (array-ref note_counter \n        \
+    \               (position note note_chars)) 10)))\n    (when (string-match #rx\"\
+    ^[\\.|o|o]+[\\.|o]+[\\.|o]+$\" note)\n      (set! note_counter \n            (+\
+    \ (array-ref note_counter \n                       (position note note_chars))\
+    \ 14)))\n    (when (string-match #rx\"^[\\.|o|o]+[\\.|o]+[\\.|o]+[\\.|o]+$\" note)\n\
+    \      (set! note_counter \n            (+ (array-ref note_counter \n        \
+    \               (position note note_chars)) 19)))\n    (when (string-match #rx\"\
+    ^[\\.|o|o]+[\\.|o]+[\\.|o]+[\\.|o]+[\\.|o]+$\" note)\n      (set! note_counter\
+    \ \n            (+ (array-ref note_counter \n                       (position\
+    \ note note_chars)) 21)))\n    (when (string-match #rx\"^[\\.|o|o]+[\\.|o]+[\\\
+    .|o]+[\\.|o]+[\\.|o]+[\\.|o]+$\" note)\n      (set! note_counter \n          \
+    \  (+ (array-ref note_counter \n                       (position note note_chars))\
+    \ 25)))\n    (when (string-match #rx\"^[\\.|o|o", "  (map (\u03BB (note) (case\
+    \ note\n          ['.|] 1\n          ['.|] 2\n          ['o|] 4\n          ['o]\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          [' ']\
+    \ 4\n          [' '] 4\n          [' '] 4\n          [' '] 4\n          ", " \
+    \ (let loop ([i 0] [music_string music_string] [music_string \"\"])\n    (if (<\
+    \ i music_string.length)\n        (let ([note_type (substring music_string i (+\
+    \ i 1))])\n          (if (eq? 'o note_type)\n              (loop (+ i 1) music_string\
+    \ (cons note_type music_string))\n              (if (eq? 'o| note_type)\n    \
+    \              (loop (+ i 2) music_string (cons note_type music_string))\n   \
+    \               (if (eq? '.| note_type)\n                      (loop (+ i 4) music_string\
+    \ (cons note_type music_string))\n                      music_string)))))))\n",
+  "  (let loop ((music_string music_string)\n             (music_list '())\n     \
+    \        (i 0))\n    (cond\n      [(empty? music_string) music_list]\n      [(equal?\
+    \ (char (peek-char i)) 'o|)\n       (loop (substring (music_string i) 4)\n   \
+    \          (append music_list\n                       (list (substring (music_string\
+    \ i + 1) 2)\n                             1\n                             1)))\n\
+    \       (incf i 2)]\n      [(equal? (char (peek-char i)) 'o.)\n       (loop (substring\
+    \ (music_string i) 4)\n             (append music_list\n                     \
+    \  (list (substring (music_string i + 1) 1)\n                             1\n\
+    \                             1)))\n       (incf i 2)]\n      [(equal? (char (peek-char\
+    \ i)) '.|)\n       (loop (substring (music_string i) 4)\n             (append\
+    \ music_list\n                       (list (substring (music_string i + 1) 1)\n\
+    \                             1\n                             1)))\n       (incf\
+    \ i 2)]\n      [else\n       (loop (substring (music_string i) 4)\n          \
+    \   (append music_list\n                       (list (substring (music_string\
+    \ i + 1) 1)\n                             1\n                             1)))\n\
+    \       (incf i 2)]))))\n", "  (cond [(empty? music_string) empty]\n        [(equal?\
+    \ (first music_string) 'o) (cons 4 (parse_music (rest music_string)))]\n     \
+    \   [(equal? (first music_string) 'o|') (cons 2 (parse_music (rest music_string)))]\n\
+    \        [(equal? (first music_string) '.|') (cons 1 (parse_music (rest music_string)))]\n\
+    \        [else (parse_music (rest music_string))]))\n</code>\n<|/ a dscore=1 tags=racket,scheme\
+    \ |>\n<| c |>\nI like the simplicity of this solution, but it does not work for\
+    \ a case such as 'o o| .| .| .| .| .| o o' (it should return [4, 2, 1, 1, 1, 1,\
+    \ 1]).\n<|/ c |>\n<| c |>\nI have fixed the bug, thanks for pointing it! :)\n\
+    <|/ c |>\n<| c |>\nI have now realized that this does not work. Try it yourself\
+    \ in the online interpreter. I've tried it with the notes listed in the question,\
+    \ both with `(parse_music music_string)` as well as with `(parse_music \"o o|\
+    \ .| .| .| .| .| o o\")`. And it always gives [4, 2, 1, 1, 1, 1, 1] as the output.\n\
+    <|/ c |>\n<| c |>\nOh! That's why I missed that one (it wasn't clear from your\
+    \ question what should happen with those notes). Now I have fixed my answer. :)\n\
+    <|/ c |>\n<| a tags=racket,scheme |>\nI think you need a function which parses\
+    \ the string and outputs something like this:\n<code>", "  (cond [(empty? music_string)\
+    \ '()]\n        [(equal? (first music_string) '.') '()]\n        [(equal? (first\
+    \ music_string) 'o|') '(4 2)]\n        [(equal? (first music_string) 'o|') '(4\
+    \ 2)]\n        [else (cons (first music_string) (parse_music (rest music_string)))]))\n",
+  "  (cond [(empty? music_string) '()]\n        [(equal? (car music_string) 'o) '(4\
+    \ 2 1 2 1 2 1 2 1 2 1 4 4)]\n        [(equal? (car music_string) 'o|) '(3 2 1\
+    \ 1 2 1 1 2 1 2 1 3 4)]\n        [(equal? (car music_string) '.|) '(4 2 1 1 2\
+    \ 1 1 2 1 2 1 4 4)]\n        [else (parse_music (cdr music_string))]))\n</code>\n\
+    <|/ a dscore=3 |>\n<| a dscore=2 |>\nIn addition to the excellent answer by John\
+    \ Coleman, you could also implement a function that does what you want like this:\n\
+    <code>", "  (let ((notes ()))\n    (loop for c in music_string\n          #:when\
+    \ (not (member c '(#\\| #\\. #\\o)))\n          collect (if (c (char '|') notes\
+    \ (cons (- (length notes) (length c)) notes))\n                    c\n       \
+    \             notes))))\n", "  (let* (\n    ;; Parse musical note string.\n  \
+    \  (str-to-note (\u03BB (s) (if (string? s) (string->list s) 'o|')))\n    (notes\
+    \ (remove-if-not (\u03BB (note) (note-string note)) music_string))\n    (note-to-beat\
+    \ (\u03BB (note) (note-to-beat note str-to-note)))\n    ;; Compute musical duration\
+    \ in beats.\n    (beats (map (\u03BB (note) (note-to-beat note)) notes)))\n  ;;\
+    \ Sum up all durations from each note to one whole note.\n  (reduce (\u03BB (acc\
+    \ beat) (if (null? acc) beat acc)) beats '()))\n", "  (cond [(equal? (string-length\
+    \ music_string) 0)\n         0]\n        [(string-match \"^o\" music_string)\n\
+    \         (add-one (parse-music music_string 'o))]\n        [(string-match \"\
+    ^o\\|\" music_string)\n         (add-two (parse-music music_string 'o|))]\n  \
+    \      [(string-match \"\\.\\|\" music_string)\n         (add-one (parse-music\
+    \ music_string '.|))]\n        [else\n         (add-one (parse-music music_string\
+    \ 'o))]\n        ))\n", "  (let loop ((note (first music_string)) (music_string\
+    \ (rest music_string)))\n    (cond\n      [(empty? music_string) '()]\n      [(equal?\
+    \ (first music_string) 'o) (list 4)]\n      [(equal? (first music_string) 'o|)\
+    \ (list 2)]\n      [else (list 1)]))\n  (loop note music_string))\n", "  (if (and\
+    \ (number? (car music_string)) (<= 0 (string-length music_string)))\n      '()\n\
+    \      (let ([\n            (music-notes (parse-notes music_string))\n       \
+    \     (music-rest (parse-rest music_string))\n            ])\n        (append\n\
+    \         (append (build-rest (car music-rest) (map cadr music-notes))\n     \
+    \           (build-rest (cadr music-rest) (map cdr  music-notes))\n          \
+    \      (build-rest (cdr music-rest) (map cadr music-notes))\n                )\n\
+    \         )\n        )\n      )\n  )\n", "  (if (< music-length 0)\n      '()\n\
+    \      (let loop ((music-length music-length) (music-string music-string) (beats\
+    \ 0))\n        (cond\n          [(substring music-string 0 (+ (* beats 4) (substring\
+    \ (substring music-string 0 3) (* beats 4))))\n           (loop (- music-length\
+    \ (* beats 4)) (substring music-string 0 (+ (* beats 4) (substring (substring\
+    \ music-string 0 3) (* beats 4))))\n                (+ beats 4))]\n          [(substring\
+    \ music-string 0 (+ (* beats 2) (substring (substring music-string 0 3) (* beats\
+    \ 2)))) \n           (loop (- music-length (* beats 2)) (substring music-string\
+    \ 0 (+ (* beats 2) (substring (substring music-string 0 3) (* beats 2))))\n  \
+    \              (+ beats 2))]\n          [(substring music-string 0 (+ (* beats\
+    \ 1) (substring (substring music-string 0 3) (* beats 1)))) \n           (loop\
+    \ (- music-length (* beats 1)) music-string\n                music-length\n  \
+    \              (+ beats 1))]\n          [else (list beats)]))))\n", "  (let-values\
+    \ ([(note beat_count) (music_notes music_string)])\n    (cond [(or (not (music_notes\
+    \ music_string))\n              (music_notes music_string)\n              (music_notes\
+    \ music_string)\n              (music_notes music_string)\n              (music_notes\
+    \ music_string)\n              (music_notes music_string)\n              (music_notes\
+    \ music_string)\n              (music_notes music_string)\n              (music_notes\
+    \ music_string)\n              (music_notes music_string)\n              (music_notes\
+    \ music_string)\n              (music_notes music_string))\n           0]\n  \
+    \        [(music_notes music_string)\n           (set! beat_count\n          \
+    \       (+ (length music_notes music_string)\n                     (parse_music\
+    \ music_string))\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string))\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n           (music_notes music_string)\n           (music_notes\
+    \ music_string)\n", "  (let* ((music_list (string->list music_string))\n     \
+    \    (note (first music_list))\n         (beats (rest music_list))\n         (last_beat\
+    \ (- (first beats) (length music_list)))\n         (notes_to_beat_count (vector-length\
+    \ music_list))\n         (notes_to_beat_count (quotient (vector-length music_list)\
+    \ 8))\n         (notes_to_beat_count (floor notes_to_beat_count))\n         (notes_to_beat_count\
+    \ (+ notes_to_beat_count 0))\n         (beats_to_beat_count (vector-length beats))\n\
+    \         (beats_to_beat_count (quotient (vector-length beats) 4))\n         (beats_to_beat_count\
+    \ (floor beats_to_beat_count))\n         (beats_to_beat_count (+ beats_to_beat_count\
+    \ 0))\n         (note (+ (* last_beat beats_to_beat_count) notes_to_beat_count))\n\
+    \         (notes (make-array (+ notes_to_beat_count beats_to_beat_count) :fill-pointer\
+    \ 0 :initial-element 0))\n         (music_length (vector-length music_list))\n\
+    \         (music_length (quotient music_length 8))\n         (music_length (floor\
+    \ music_length))\n         (music_length (+ music_length 0))\n         (beat_length\
+    \ (vector-length beats))\n         (beat_length (quotient beat_length 4))\n  \
+    \       (beat_length (floor beat_length))\n         (beat_length (+ beat_length\
+    \ 0))\n         (beat (vector-ref beats 0))\n         (last_beat (- (vector-ref\
+    \ beats 1) (vector-length beats)))\n         (music_element (vector-ref music_list\
+    \ 0))\n         (beat_index (vector-length beats))\n         (music_element_index\
+    \ (vector-index music_list 0))\n         (music_element_length (vector-length\
+    \ music_list))\n         (music_element_length (quotient music_element_length\
+    \ 8))\n         (music_element_length (floor music_element_length))\n        \
+    \ (music_element_length (+ music_element_length 0))\n         (beat_count (vector-ref\
+    \ beats 0))\n         (music_count (vector-length music_list))\n         (music_count\
+    \ (quotient music_count 8))\n         (music_count (floor music_count))\n    \
+    \     (music_count (+ music_count 0))\n         (music_element (vector-ref music_list\
+    \ 0))\n         (music_element_index (vector-index music_list 0))\n", "  (let\
+    \ loop ((music_string music_string) \n             (music_list (make-empty-list)\n\
+    \                           (lambda (x) (when (string=? (first music_list) x)\
+    \ \n                                             music_list))))\n    (cond [(empty?\
+    \ music_string) music_list]\n          [(equal? (first music_string) '|) (loop\
+    \ (rest music_string)\n                                                    (lambda\
+    \ (last_note)\n                                                      (if (empty?\
+    \ music_list)\n                                                          music_list\n\
+    \                                                          (cons (* (first music_list)\
+    \ (- last_note)) music_list)))\n                                             \
+    \         (last music_list)))]\n          [(equal? (first music_string) 'o) (loop\
+    \ (rest music_string)\n                                                    (lambda\
+    \ (last_note)\n                                                      (cons last_note\
+    \ music_list))]\n          [(equal? (first music_string) '.) (loop (rest music_string)\n\
+    \                                                    (lambda (last_note)\n   \
+    \                                                   (cons (* (first music_list)\
+    \ (/ 4 last_note)) music_list)))]\n          [else (loop (rest music_string) (lambda\
+    \ (last_note) music_list))]))))\n", "  (let ([note (music_string (+ 2 1) (+ 2\
+    \ 1))])\n    (if (= note 'o)\n        (list 4)\n        (if (and (not (music_string\
+    \ 0 (+ 2 1))) (not (music_string 0 (+ 2 1))))\n            (list 2)\n        \
+    \    (if (and (not (music_string 0 (+ 2 1))) (not (music_string 0 (+ 2 1))))\n\
+    \                (list 1)\n                (list 0))))))\n", "  (let ((notes '())\n\
+    \        (tempos '()))\n    (set! notes\n          (if (string=? \"o|\" music_string)\n\
+    \              (set! notes (cons 4 notes))\n              (set! notes (cons 1\
+    \ notes))))\n    (set! tempos\n          (if (string=? \"o\" music_string)\n \
+    \             (set! tempos (cons 4 tempos))\n              (set! tempos (cons\
+    \ 1 tempos))))\n    (set! tempos (remove-if #(> (string->number (car %)) 0) tempos))\n\
+    \    (set! tempos (remove-if #(< (string->number (car %)) 0) tempos))\n    (set!\
+    \ notes (remove-if #(> (string->number (car %)) 0) notes))\n    (set! notes (remove-if\
+    \ #(< (string->number (car %)) 0) notes))\n    (cons notes (parse-music music_string\
+    \ tempos))\n  ))\n", "  (let* ((beats (parse-music-beats music_string))\n    \
+    \     (notes (parse-music-notes music_string beats)))\n    (append notes (parse-music-rest\
+    \ music_string beats))))\n", "  (letrec\n    ([parse_music_helper\n      (lambda\
+    \ (music_string notes current_note)\n        (if (empty? notes)\n            (cons\
+    \ current_note)\n            (parse_music_helper\n             (music_string (rest\
+    \ notes) (+ 1 current_note))\n             (first notes))))])\n    (parse_music_helper\
+    \ music_string 0 'o))\n</code>\n<|/ a tags=racket,scheme,functional-programming\
+    \ |>\n<| c |>\nI like yours better, though it only does one note per note, whereas\
+    \ `parse-music` would need to run through all the notes at least once to see whether\
+    \ it's in the correct position (i.e. whether notes are consecutive or not).  On\
+    \ the other hand, I don't think that's too bad because you can just `parse-music`\
+    \ to see whether any notes are in the correct position, and if any notes are in\
+    \ the wrong position, then you need to add up all the `'o'` notes and subtract\
+    \ all the `'o|'` notes.  Then you can easily determine how many beats the last\
+    \ note has (that is, how many `'o'` notes you've added).\n<|/ c |>\n<| c |>\n\
+    : You are right; I did not know that the notes were consecutive in the OP's question.\
+    \ Anyway, I will update my answer accordingly.\n<|/ c |>\n<| c |>\nThanks for\
+    \ the reply. Very helpful. I was able to use your parse_music function and modify\
+    \ it to handle arbitrary number of notes per note. The only issue I ran into was\
+    \ that after I added a note, the function started parsing all the notes again.\
+    \ It wasn't until I realized I had already hit an even number of notes that I\
+    \ realized my issue. Thanks again for helping me understand the parsing portion\
+    \ of this problem!\n<|/ c |>\n<| c |>\n: Glad it helped you understand the parsing\
+    \ part of it! :) However, I think the issue you ran into can be fixed by doing\
+    \ `(if (empty? notes)\n            (cons current_note)\n            (parse_music_helper\n\
+    \             (rest notes)\n             (first notes))))`\n<|/ c |>\n<| c |>\n\
+    Thanks again! I appreciate the help.\n<|/ c |>\n<| a dscore=1 |>\nHow about this\
+    \ one:\n<code>", "  (let ([note (music_string 0)]\n        [beats 0])\n    (if\
+    \ (null? (music_string 1))\n        [beats]\n        (cond [(equal? (char (music_string\
+    \ 1) 1) 'o') (cons beats (parse_music (music_string 2)))]\n              [(equal?\
+    \ (char (music_string 1) 1) 'o|') (cons beats (parse_music (music_string 2)))]\n\
+    \              [(equal? (char (music_string 1) 1) '.|') (cons beats (parse_music\
+    \ (music_string 2)))]\n              [(equal? (char (music_string 1) 1) '|.')\
+    \ (cons beats (parse_music (music_string 2)))]\n              [(equal? (char (music_string\
+    \ 1) 1) '|#') (cons beats (parse_music (music_string 2)))]\n              [(equal?\
+    \ (char (music_string 1) 1) '|#|') (cons beats (parse_music (music_string 2)))]\n\
+    \              [(equal? (char (music_string 1) 1) '|b') (cons beats (parse_music\
+    \ (music_string 2)))]\n              [(equal? (char (music_string 1) 1) '|bb')\
+    \ (cons beats (parse_music (music_string 2)))]\n              [(equal? (char (music_string\
+    \ 1) 1) '|bbb') (cons beats (parse_music (music_string 2)))]\n              [(equal?\
+    \ (char (music_string 1) 1) '|bbbb') (cons beats (parse_music (music_string 2)))]\n\
+    \              [(equal? (char (music_string 1) 1) '|bbb') (cons beats (parse_music\
+    \ (music_string 2)))]\n              [(equal? (char (music_string 1) 1) '|bbbb')\
+    \ (cons beats (parse_music (music_string 2)))]\n              [(equal? (char (music_string\
+    \ 1) 1) '|bbb') (cons beats (parse_music (music_string 2)))]\n              [(equal?\
+    \ (char (music_string 1) 1) '|bbbb') (cons beats (parse_music (music_string 2)))]\n\
+    \              [(equal? (char (music_string 1) 1) '|bbb') (cons beats (parse_music\
+    \ (music_string 2)))]\n              [(equal? (char (music_string 1) 1) '|bbb')\
+    \ (cons beats (parse_music (music_string 2)))]\n              [(equal? (char (music_string\
+    \ 1) ", "  (define (count-notes string)\n    (cond\n      [(empty? string) 0]\n\
+    \      [(symbol=? 'o (first string)) 4]\n      [(symbol=? 'o| (rest string)) 2]\n\
+    \      [(symbol=? '.|(first string)) 1]\n      [else (+ (count-notes (rest string))\n\
+    \               (count-notes '(o (first string)))\n               (count-notes\
+    \ '(o| (rest string))))]))\n  (count-notes music_string))\n</textarea></form>\n\
+    \n    <script>\n      var editor = CodeMirror.fromTextArea(document.getElementById(\"\
+    code\"), {lineNumbers: true, tabMode: \"indent\"});\n    </script>\n\n    <p><strong>MIME\
+    \ types defined:</strong> <code>text/x-scheme</code>.</p>\n\n    <p>The Racket\
+    \ implementation is defined by\n    <a href=\"https://github.com/pallets/mit-scheme/blob/master/MIT-LICENSE\"\
+    >MIT-LICENSE</a>\n    (or newer version).</p>\n    <p>Code modeled on Scheme 9.0\
+    \ (Scheme defined in R5RS, Section 9.4).</p>\n\n    <p><strong>Parsing/Highlighting\
+    \ Tests:</strong> <a href=\"../../test/index.html#?racket%20%28music%20input%29\"\
+    >normal</a>,\n    <a href=\"../../test/index.html#?racket%20%28music%20input%29%5B%5BB%5D%20music%20notes%5D\"\
+    >music</a>.</p>\n\n    <p><strong>Scheme Music Input:</strong> <code>'o o| .|\
+    \ o| o| .| .| .| .| o o'</code></p>\n    <p><strong>Output (music notes):</strong>\
+    \ <code>[4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]</code></p>\n\n    <p><strong>Input (music\
+    \ notes):</strong> <code>(2 . 1)</code></p>\n    <p><strong>Output (music notes):</strong>\
+    \ <code>(1 . 2)</code></p>\n\n    <p><strong>Input (music notes):</strong> <code>(3\
+    \ 2 1)</code></p>\n    <p><strong>Output (music notes):</strong> <code>(1 2 3)</code></p>\n\
+    \n    <p><strong>Input (music notes):</strong> <code>(2 1 3)</code></p>\n    <p><strong>Output\
+    \ (music notes):</strong> <code>(1 2 3)</code></p>\n\n    <p><strong>Input (music\
+    \ notes):</strong> <code>(2 . 1)</code></p>\n    <p><strong>Output (music notes):</strong>\
+    \ <code>(1 . 2)</code></p>\n\n    <p><strong>Input (music notes):</strong> <code>(3\
+    \ 2 1)</code></p>\n    <p><strong>Output (music notes):</strong> <code>(1 2 3)</code></p>\n\
+    \n    <p><strong>Input (music notes):</strong> <code>", "  (let loop ()\n    (let\
+    \ loop ()\n      (let loop ()\n        (let loop ()\n          (let loop ()\n\
+    \            (let loop ()\n              (let loop ()\n                (let loop\
+    \ ()\n                  (let loop ()\n                    (let loop ()\n     \
+    \                 (let loop ()\n                        (let loop ()\n       \
+    \                   (let loop ()\n                            (let loop ()\n \
+    \                             (let loop ()\n                                (let\
+    \ loop ()\n                                  (let loop ()\n                  \
+    \                  (let loop ()\n                                      (let loop\
+    \ ()\n                                        (let loop ()\n                 \
+    \                         (let loop ()\n                                     \
+    \       (let loop ()\n                                              (let loop\
+    \ ()\n                                                (let loop ()\n         \
+    \                                         (let loop ()\n                     \
+    \                               (let loop ()\n                               \
+    \                       (let loop ()\n                                       \
+    \                 (let loop ()\n                                             \
+    \             (let loop ()\n                                                 \
+    \           (let loop ()\n                                                   \
+    \           (let loop ()\n                                                   \
+    \             (let loop ()\n                                                 \
+    \                 (let loop ()\n                                             \
+    \                       (let loop ()\n                                       \
+    \                               '())))))))))))))))))))))))))))\n             \
+    \         (if (not (equal? (peek music_string) '|))\n                        (let\
+    \ note (parse-note-symbol (peek music_string)))\n                        (add1\
+    \ (make-note note)))\n                      (let note (parse-note-symbol (peek\
+    \ music_string)))\n                      (add1 (make-note note))\n           \
+    \           (let note (parse-note-symbol (peek music_string)))\n             \
+    \         (add1 (make-note note))\n                      (let note (parse-note-symbol\
+    \ (peek music_string)))\n                      (add1 (make-note note))\n     \
+    \                 (let note (parse-note-symbol (peek music_string)))\n       \
+    \               (add1 (make-note note))\n                      (let note (parse-note-symbol\
+    \ (peek music_string)))\n                      (add1 (make-note note))\n     \
+    \                 (let note (parse-note-symbol (peek music_string)))\n       \
+    \               (add1 (make-note note))\n                      (let note (parse-note-symbol\
+    \ (peek music_string)))\n                      (add1 (make-note note))\n     \
+    \                 (let note (parse-note-symbol (peek music_string)))\n       \
+    \               (add1 (make-note note))\n                      (let note (parse-note-symbol\
+    \ (peek music_string)))\n                      (add1 (make-note note))\n     \
+    \                 (let note (parse-note-symbol (peek music_string)))\n", "  (define\
+    \ notes_chars\n    (string->list music_string \"abcdefghijklmnopqrstuvwxyz\"))\n\
+    \  (define notes_chars-index\n    (\u03BB (note)\n      (\u03BB (index)\n    \
+    \    (let ([char (string->char note \"abcdefghijklmnopqrstuvwxyz\")])\n      \
+    \    (cond [(= char #\\o) (+ index 4)]\n                [(= char #\\o|) (+ index\
+    \ 2)]\n                [(= char #\\.|) (+ index 1)]\n                [else (error\
+    \ \"Bad note\")])))))\n  (define notes-chars\n    (\u03BB (notes_chars-index)\n\
+    \      (\u03BB (index)\n        (let ([note (list-ref notes_chars index)])\n \
+    \         (cond [(= note #\\o) (list-ref notes_chars-index note)]\n          \
+    \      [(= note #\\o|) (list-ref notes_chars-index note)]\n                [(=\
+    \ note #\\.|) (list-ref notes_chars-index note)]\n                [else (error\
+    \ \"Bad note\")])))))\n  (define notes\n    (\u03BB (notes_chars-index)\n    \
+    \  (\u03BB (index)\n        (let ([note (list-ref notes_chars index)])\n     \
+    \     (cond [(= note #\\o) (+ index 4)]\n                [(= note #\\o|) (+ index\
+    \ 2)]\n                [(= note #\\.|) (+ index 1)]\n                [else (error\
+    \ \"Bad note\")])))))\n  (define notes-index\n    (\u03BB (notes_chars-index)\n\
+    \      (\u03BB (index)\n        (let ([note (list-ref notes_chars index)])\n \
+    \         (cond [(= note #\\o) (+ index 4)]\n                [(= note #\\o|) (+\
+    \ index 2)]\n                [(= note #\\.|) (+ index 1)]\n                [else\
+    \ (error \"Bad note\")])))))\n  (define notes-notes\n    (\u03BB (notes_chars-index)\n\
+    \      (\u03BB (index)\n        (let ([note (list-ref notes_chars index)])\n \
+    \         (cond [(= note #\\o) (+ index 4)]\n                [(= note #\\o|) (+\
+    \ index 2)]\n                [(= note #\\.|) (+ index 1)]\n                [else\
+    \ (error \"Bad note\")])))))\n  (define notes-beats\n    (\u03BB (notes_chars-index)\n",
+  "  (if (string-length music_string = 0)\n      '()\n      (append (map make-note\
+    \ (parse-note-string music_string))\n              (parse_music music_string (+\
+    \ 4 (length music_string))))))\n", "  ;; Implement me!\n)\n", "  (define note\
+    \ '())\n  (define acc (ref 0))\n  (let loop ((music_string music_string) (music_note\
+    \ music_string) (acc acc) (note note) (music_len 0))\n    (cond ((< music_len\
+    \ (length music_string))\n           (begin\n             (set! acc (length music_string))\n\
+    \             (set! music_note (resto music_string))\n             (loop (resto\
+    \ music_string) (music_note music_string) (acc acc) (note note) (music_len music_len)))\n\
+    \           (if (eq? (char-ascii-code music_note) ?o) (begin (set! note (cons\
+    \ music_note (cons (ref (+ acc)) note))) (loop (resto music_string) (music_note\
+    \ music_string) (acc acc) (note note) (music_len music_len)))\n           (if\
+    \ (eq? (char-ascii-code music_note) ?o|) (begin (set! note (cons music_note (cons\
+    \ (ref (- acc)) note))) (loop (resto music_string) (music_note music_string) (acc\
+    \ acc) (note note) (music_len music_len)))\n           (if (eq? (char-ascii-code\
+    \ music_note) ?.|) (begin (set! note (cons music_note (cons (ref (+ acc)) note)))\
+    \ (loop (resto music_string) (music_note music_string) (acc acc) (note note) (music_len\
+    \ music_len)))\n           (begin (set! note (cons music_note note)) (loop (resto\
+    \ music_string) (music_note music_string) (acc acc) (note note) (music_len music_len))))\n\
+    \    (append note (cons acc note))))\n", "  (define (parse-music-helper music_string)\n\
+    \    (let loop ((index 0))\n      (cond [(empty? music_string) '()]\n        \
+    \    [(character-equal? music_string 'o|) '()\n             (if (even? index)\n\
+    \                 (parse-music-helper (substring music_string (incf index) (incf\
+    \ (length music_string)))\n                                   (add1 (car music_list)))\n\
+    \                 (parse-music-helper (substring music_string (incf index) (incf\
+    \ (length music_string))) (add1 (car music_list)))]\n            [(character-equal?\
+    \ music_string '.|) '()\n             (parse-music-helper (substring music_string\
+    \ (incf index) (incf (length music_string))) (add1 (car music_list)))]\n     \
+    \       [else (parse-music-helper (substring music_string (incf index) (incf (length\
+    \ music_string))) (add1 (car music_list)))])))\n  (parse-music-helper music_string\
+    \ '()))\n", "  (let ([notes (split-string (music_string \"|\") #\\space)])\n \
+    \   (map parse-note notes)))\n", "  (let loop ((music_string (music_string #\\\
+    Space #\\Tab #\\Return #\\Space #\\Newline)))\n    (cond\n      [(= music_string\
+    \ #\\Newline) '()]\n      [(= music_string #\\Space) '()]\n      [(music_string\
+    \ = \"o\") '(1 2 1)]\n      [(music_string = \"o|\") '(2 1 2)]\n      [(music_string\
+    \ = \".|\") '(1 2 1)]\n      [(music_string = \"o.\") '(1 2)]\n      [(music_string\
+    \ = \".o\") '(1 2)]\n      [(music_string = \"o.o\") '(1 2)]\n      [(music_string\
+    \ = \"o.o|\") '(2 1)]\n      [(music_string = \"o..\") '(1 3)]\n      [(music_string\
+    \ = \"o..o\") '(2 2)]\n      [(music_string = \"o..o|\") '(3 2)]\n      [(music_string\
+    \ = \"o...\") '(2 3)]\n      [(music_string = \"o...o\") '(3 3)]\n      [(music_string\
+    \ = \"o...o|\") '(2 3)]\n      [(music_string = \"o....\") '(3 3)]\n      [(music_string\
+    \ = \"o....o\") '(2 4)]\n      [(music_string = \"o....o|\") '(3 4)]\n      [(music_string\
+    \ = \"o...o.\") '(2 4)]\n      [(music_string = \"o...o.o\") '(3 4)]\n      [(music_string\
+    \ = \"o...o.o|\") '(2 4)]\n      [(music_string = \"o...o..\") '(3 5)]\n     \
+    \ [(music_string = \"o...o..o\") '(2 5)]\n      [(music_string = \"o...o..o|\"\
+    ) '(3 5)]\n      [(music_string = \"o...o...\") '(2 5)]\n      [(music_string\
+    \ = \"o...o...o\") '(3 5)]\n      [(music_string = \"o...o...o|\") '(2 5)]\n \
+    \     [(music_string = \"o...o....\") '(3 5)]\n      [(music_string = \"o...o....o\"\
+    ) '(2 6)]\n      [(music_string = \"o...o....o|\") '(3 6)]\n      [(", "  (let\
+    \ loop ((notes (make-hash (hash-empty))\n               (hash-ref notes (car music_string))\
+    \ (length music_string)\n               notes_found 0)\n             (music_string\
+    \ (make-string music_string 0))\n             (beats 0))\n    (cond ((= notes_found\
+    \ music-length)\n           (loop (hash-rest notes) notes (add beats 4))\n   \
+    \        (loop (hash-rest notes) notes (add beats 2))\n           (loop (hash-rest\
+    \ notes) notes (add beats 1)))\n          ((char-equal music-end notes)\n    \
+    \       (loop (hash-rest notes) notes beats))\n          ((char-equal music-comma\
+    \ music-car music_string)\n           (loop (hash-rest notes) (hash-rest notes)\
+    \ (add beats)))\n          (else\n           (loop (hash-rest (hash-ref notes\
+    \ (car music_string)) music_string\n                     (add beats (hash-count\
+    \ (hash-ref notes (car music_string))))\n                     (add beats 1))))))\n\
+    </code>\n<|/ a tags=scheme,racket |>\n<| c |>\nThis doesn't give the correct answer\
+    \ when notes repeat themselves more that once. Also, I doubt that the \"chords\
+    \ don't have to start with a chord\" is a requirement. `chord_count(\"o o| .|\
+    \ o| o| .| .| .| .| o o\")` returns `[4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]`, but `chord_count(\"\
+    o o| o| o| o| .| .| .| .| o o\")` returns `[5, 1, 1, 1, 1, 4, 1]`.\n<|/ c |>\n\
+    <| c |>\nYou're right, I have fixed the bug in my solution. I missed this requirement\
+    \ from OP, but I assume that the function should return [4, 2, 1, 2, 2, 1, 1,\
+    \ 1, 1, 4, 4] when there are no chords present in the input string. I have also\
+    \ added a sample test case to my solution.\n<|/ c |>\n<| a |>\nThis was a fun\
+    \ little puzzle.\nThe solution is pretty straight forward: \n\nuse string->list\
+    \ to split your string on |\nuse string-map to count the number of occurrences\
+    \ of each letter \nuse cons to make a list with the letter count and string\n\n\
+    Here's a solution in Racket:\n<code>", "  (let loop ([music music_string]\n  \
+    \           [notes nil])\n    (if (empty? music)\n        notes\n        (let\
+    \ ([note (first music)])\n          (if (note-is-half note)\n              (loop\
+    \ (rest music) (cons note notes))\n              (loop (rest music) (cons note\
+    \ notes (list (length music)))\n                    (rest music)))))))\n", " \
+    \ (let ([music_string (music_string #\\Space)])\n    (cond\n      [(empty? music_string)\
+    \ '()]\n      [(equal? (first music_string) #\\Space)\n       (parse_music (rest\
+    \ music_string))]\n      [(equal? (first music_string) #\\Tab)\n       (parse_tab\
+    \ (rest music_string))]\n      [(equal? (first music_string) #\\Newline)\n   \
+    \    (parse_newline (rest music_string))]\n      [(equal? (first music_string)\
+    \ #\\|) (parse_half (rest music_string))\n       (parse_half (rest music_string))]\n\
+    \      [(equal? (first music_string) #\\o) (parse_whole_note (rest music_string))\n\
+    \       (parse_whole_note (rest music_string))]\n      [else (parse_pattern_note\
+    \ (rest music_string))]))))\n", "  (local\n    [(define (note beat_length)\n \
+    \         (list-ref music_string\n                    (ceiling (length (substring\
+    \ music_string 0 beat_length)) 4))\n       ;; 'o' can be either whole note, lasts\
+    \ four beats\n       ;; 'o|' can be either half note, lasts two beats\n      \
+    \ ;; '.|' can be either quater note, lasts one beat\n       ;; >>> music_string\
+    \ = 'o o| .| o| o| .| .| .| .| o o'\n       ;; >>> note(4) == o\n       ;; >>>\
+    \ note(2) == o|\n       ;; >>> note(1) == .|\n       ;; >>> note(1) == .\n   \
+    \    ;; >>> note(2) == o\n       ;; >>> note(1) == o\n       ;; >>> note(1) ==\
+    \ o\n       ;; >>> note(2) == o|\n       ;; >>> note(1) == .|\n       ;; >>> note(1)\
+    \ == .\n       ;; >>> note(1) == .|\n       ;; >>> note(2) == o\n       ;; >>>\
+    \ note(1) == o\n       ;; >>> note(1) == o\n       ;; >>> note(2) == o|\n    \
+    \   ;; >>> note(1) == .\n       ;; >>> note(1) == .\n       ;; >>> note(1) ==\
+    \ .\n       ;; >>> note(2) == o\n       ;; >>> note(1) == o\n       ;; >>> note(1)\
+    \ == o\n       ;; >>> note(2) == o|\n       ;; >>> note(1) == .\n       ;; >>>\
+    \ note(1) == .\n       ;; >>> note(1) == .\n       ;; >>> note(2) == o\n     \
+    \  ;; >>> note(1) == o\n       ;; >>> note(1) == o\n       ;; >>> note(2) == o|\n\
+    \       ;; >>> note(1) == .\n       ;; >>> note(1) == .\n       ;; >>> note(1)\
+    \ == .\n       ;; >>> note(2) == o\n       ;; >>> note(1) == o\n       ;; >>>\
+    \ note(1) == o\n       ;; >>> note(2) == o|\n       ;; >>> note(1) == .\n    \
+    \   ;; >>> note(1) == .\n       ;; >>> note(1) == .\n       ;; >>> note(2) ==\
+    \ o\n       ;; >>> note(1) == o\n       ;; ", "  (cond [(empty? music_string)\
+    \ '()]\n        [(equal? 'o (first music_string)) (list 4)]\n        [(equal?\
+    \ 'o| (second music_string)) (list 2)]\n        [(equal? '.| (third music_string))\
+    \ (list 1)]\n        [else (parse_music (rest music_string))]))\n", "  ;; If music_string\
+    \ is empty, return an empty list.\n  (if (string-empty? music_string)\n      '()\n\
+    \      (let loop ((music_char (car music_string))\n                (rest_of_music\
+    \ (cdr music_string))\n                (beats (make-vector 12 #t)))\n        (cond\
+    \ ((eq? music_char #\\o) (set! beats (vector-push-extend 4 beats)) (loop music_char\
+    \ rest_of_music))\n              ((eq? music_char #\\o|) (set! beats (vector-push-extend\
+    \ 2 beats)) (loop music_char rest_of_music))\n              ((eq? music_char #\\\
+    .|) (set! beats (vector-push-extend 1 beats)) (loop music_char rest_of_music))\n\
+    \              (else (set! beats (vector-push-extend 0 beats)) (loop music_char\
+    \ rest_of_music)))))\n", "  (cond [(empty? music_string) empty]\n        [(equal?\
+    \ (first music_string) 'o) (parse music_string (length music_string))]\n     \
+    \   [(equal? (first music_string) 'o|') (parse music_string (length music_string))]\n\
+    \        [else (parse music_string (length music_string))]))\n", "  (let loop\
+    \ ((music-string music_string)\n             (music-string-index 0))\n    (cond\n\
+    \      [(empty? music-string) (list)]\n      [(equal? music-string 'o) (list 4)\n\
+    \       (loop (rest music-string) (add1 music-string-index))\n       (loop (rest\
+    \ music-string) (add1 music-string-index))]\n      [(equal? music-string 'o|)\
+    \ (list 2)\n       (loop (rest music-string) (add1 music-string-index))\n    \
+    \   (loop (rest music-string) (add1 music-string-index))]\n      [(equal? music-string\
+    \ '.|) (list 1)\n       (loop (rest music-string) (add1 music-string-index))\n\
+    \       (loop (rest music-string) (add1 music-string-index))]\n      [else (loop\
+    \ (rest music-string) (add1 music-string-index))]\n      )))\n", "  (let ((result\
+    \ (list )))\n    (lambda ()\n      (let ((char (string-ref music_string 0)))\n\
+    \        (cond [(char = 'o)  (set! result (append result (list 4)))]\n       \
+    \       [(char = 'o|) (set! result (append result (list 2)))]\n              [(char\
+    \ = '.|) (set! result (append result (list 1)))]\n              [else (set! result\
+    \ (append result (list 0))))]))))\n", "  (let loop ([music_string music_string]\n\
+    \             [notes null])\n    (if (empty? music_string)\n        (list notes)\n\
+    \        (let ((note (first music_string)))\n          (let ([beats (parse-music-note\
+    \ note music_string)])\n            (loop (rest music_string)\n              \
+    \    (conj notes beats))))))))\n", "  (cond\n    [(empty? music_string) '()]\n\
+    \    [(equal music_string 'o) 4]\n    [(equal music_string 'o|) 2]\n    [(equal\
+    \ music_string '.|) 1]\n    [else (error \"parse_music: unsupported note type:\
+    \ ~S\" music_string)]))\n", "  (let ([notes '(o o| .| o| o| .| .| .| .| .| o o)])\n\
+    \    (let loop ([note '()\n                 i 0]\n               [output '()])\n\
+    \      (cond\n        ((equal? note 'o) output)\n        ((equal? note 'o|) (loop\
+    \ note (1+ i) (cons 1 (loop 'o|' (i + 1) output)))\n        ((equal? note '.|)\
+    \ (loop note (1+ i) (cons 1 (loop '.|' (i + 1) output)))\n        (else (append\
+    \ output (list (* i 12))\n                         (loop 'o' i output)))))\n \
+    \   output))\n</code>\n<|/ a dscore=1 |>\n<| a |>\nHere is a tail-recursive solution.\
+    \ It uses the fact that if note is o|, the next note must be .\n<code>", "  (cond\n\
+    \    [(empty? music_string) '()]\n    [else\n     (cond [(equal? (rest music_string)\
+    \ '|) 1]\n           [else (cond [(equal? (rest music_string) 'o) 4]\n       \
+    \              [(equal? (rest music_string) 'o|) 2]\n                     [(equal?\
+    \ (rest music_string) '.|) 1]\n                     [else (+ 1 (parse_music (rest\
+    \ music_string)))]))]))\n</code>\nAnd another way of doing it - using a regular\
+    \ expression:\n<code>\n#lang racket\n", "  (cond\n    [(empty? music_string) '()]\n\
+    \    [(equal? (substring (music_string 0) 0) \"o\") (cons (substring (music_string\
+    \ 1) 1) (parse_music (music_string (+ 1 music_string)))]\n    [else (cons (substring\
+    \ (music_string 0) 0) (parse_music (music_string (+ 1 music_string))))]))\n",
+  "  (define (parse_note note)\n    (cond [(note 'o|) (cons 4 note)]\n          [(note\
+    \ '.|) (cons 2 note)]\n          [(note 'o o) note]\n          [else note]))\n\
+    \  (reduce (lambda (note acc) (parse_note note acc)) music_string\n          #f))\n",
+  "  (let loop ((music_string (music_string #\\Space))\n             (music_list (list))\n\
+    \             (music_beat_count (list 0)))\n    (if (null? music_string)\n   \
+    \     music_list\n        (loop (cdr music_string)\n               (cons (length\
+    \ music_string) (append music_list (length music_string))\n                  \
+    \     music_beat_count)\n               (cons (car music_string) music_beat_count)))))\n",
+  "  ; your code goes here\n)\n", "  (let ((beats 0))\n    (cond [(empty? music_string)\
+    \ #f]\n          [(string-equal? (substring music_string 0 1) '.') (add1 beats)]\n\
+    \          [(string-equal? (substring music_string 0 1) 'o') (add1 beats)]\n \
+    \         [(string-equal? (substring music_string 0 1) '|') (add1 beats)]\n  \
+    \        [else (let ((note (substring music_string 0 1)))\n                  \
+    \  (if (equal? (char-code note) 36) (add1 beats) (add1 beats))])]\n    ))\n",
+  "  ;; 'o' - whole note, lasts four beats\n  ;; 'o|' - half note, lasts two beats\n\
+    \  ;; '.|' - quater note, lasts one beat\n  ;; >>> parse_music('o o| .| o| o|\
+    \ .| .| .| .| o o')\n  (let* ((music-string (music-string->symbols music_string))\n\
+    \         (music-symbols (music-string->list music-string)))\n    (let* ((music-symbol\
+    \ (music-symbols->first music-symbols))\n           (music-symbols (music-symbols->rest\
+    \ music-symbols))\n           (music-symbol-len (music-symbol-length music-symbol))\n\
+    \           (music-symbol-len-total (+ music-symbol-len music-symbol-len-beats))\n\
+    \           (music-symbol-len-beats (music-symbol->beats music-symbol)))\n   \
+    \   (if (music-symbol-len-beats music-symbol)\n          (cons (music-symbol-len-beats\
+    \ music-symbol)\n                (parse-music music-symbols))\n          '()))))\n",
+  "  (let* ((music_string (string music_string))\n         (length (length music_string))\n\
+    \         (notes (make-array (+ length 13) '(unsigned-byte 64))))\n    (loop\n\
+    \       for i from 0 to (length music_string)\n       when (string=? (char-after\
+    \ music_string i)\n                     (string->symbol (char->string (char->integer\
+    \ i))))\n       [index i\n         ;; Add beats to last note in music_string.\n\
+    \         (set! notes (+ notes index))\n         index (+ index 2)])\n    notes))\n",
+  "  (define (parse_into_list music_string)\n    (string->list music_string))\n  (define\
+    \ (parse_into_list music_string beats)\n    (if (string-length music_string) \n\
+    \      (parse_into_list (rest music_string) beats)\n      beats))\n  (parse_into_list\
+    \ music_string '()))\n</code>\n<|/ a tags=functional-programming,racket,scheme\
+    \ |>\n<| a |>\nYou might want to take a look at some \"music theory\" algorithms.\
+    \ You can use a simple algorithm to convert a note to a piano pitch, and a second\
+    \ simple algorithm to calculate beats per minute. \nHere is a simple Scheme implementation\
+    \ of \"music theory\" algorithms I recently stumbled upon:\n<code>", "  (define\
+    \ note_symbols '(o o| .| o| o| .| .| .| .| .| o o))\n  (define symbols_to_beats\n\
+    \    (map (lambda (symbol)\n           (match symbol\n             (note_symbol\
+    \ -> (+ beats_count 4)\n                           (_ -> (error \"Unexpected symbol\"\
+    \ symbol)))\n             (symbol_to_beat -> (+ beats_count 1))))\n         note_symbols))\n\
+    \  (let ((beats_count 0))\n    (map symbols_to_beats music_string))\n</code>\n\
+    <|/ a dscore=2 |>\n<| c |>\nThank you for the answer, the problem is that it doesn't\
+    \ work when I add more symbols to music_string, it just prints out the whole music\
+    \ string and stops there (the output should be something like: \n`(4 2 1 2 1 1\
+    \ 1 4 4 4)`\n<|/ c |>\n<| c |>\nIt works for me. Which implementation/version\
+    \ are you using? The \"return\" statement is not required in Racket and can be\
+    \ omitted.\n<|/ c |>\n<| c |>\nI'm using Racket 5.3.2 on Windows. Is it possible\
+    \ that you implemented it in a wrong way?\n<|/ c |>\n<| c |>\nI added `(define\
+    \ music_string (concat music_string music_symbol))` at the end of the `music_symbol_to_beat`\
+    \ function, because otherwise it prints out the whole music string and stops there\
+    \ (the output should be something like `(4 2 1 2 1 1 1 4 4 4)`).\n<|/ c |>\n<|\
+    \ c |>\nI see. Racket prints out the whole music string because that is the only\
+    \ statement in the `music_symbol_to_beat` function and that is the only statement\
+    \ in the `music` function. So I think your original question was correct, and\
+    \ I misunderstood it. Sorry about that.\n<|/ c |>\n<| a |>\n<code>", "  (let ([chars\
+    \ '(o o| .| o| o| .| .| .| .| .| o o)])\n    (loop ([i 0] [result '()])\n    \
+    \      (if (endp (music_string i))\n              result\n              (begin\n\
+    \                (set! result (conj result (if (chars-ref chars i) 1\n       \
+    \                                        (+ 1 (chars-ref chars (+ i 1))))))\n\
+    \                (set! i (+ i 1))))))))\n", "  (let ((beats_per_note '()))\n \
+    \   (set-syntax '(#%app . #%app2))\n    (loop [music_string (music_string #\\\
+    space)]\n          (cond [(empty? music_string) beats_per_note]\n            \
+    \    [(equal? (car music_string) #\\space) music_string]\n                [(equal?\
+    \ (car music_string) '#\\space) music_string]\n                [(equal? (car music_string)\
+    \ '#\\|) music_string]\n                [(equal? (car music_string) '#\\o.) music_string]\n\
+    \                [(equal? (car music_string) '#\\o.|) music_string]\n        \
+    \        [else (append beats_per_note\n                              (list (number->string\
+    \ (- (car music_string) 'o)))\n                              (loop\n         \
+    \                       (cond [(equal? (cdr music_string) 'o) 4] \n          \
+    \                            [(equal? (cdr music_string) 'o|) 2]\n           \
+    \                           [(equal? (cdr music_string) '.|) 1]\n            \
+    \                          [else (+ 1 (- (cdr music_string) 'o)))])]\n       \
+    \         (set! music_string (cons (cdr music_string) music_string))]))))\n",
+  "  (let loop ((music_string music_string)\n             (music_accum [])\n     \
+    \        (music_rest music_string))\n    (if (null? music_string)\n        (music_accum\
+    \ (reverse music_accum))\n        (loop (rest music_string)\n              (if\
+    \ (eq? '. music_string)\n                  (add1 music_accum)\n              \
+    \    (if (char=? (first music_string) 'o|)\n                      (add1 (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest))\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n                      (loop\
+    \ (rest (rest music_string)) music_accum music_rest)\n", "  (let* ((notes    \
+    \ (string-match-all-pairs '(#\\| #\\.) #'(#\\| #\\.) #'#:nocase)\n           \
+    \            (notes_out (assoc-all notes empty))\n                       (n_beats\
+    \ (length (filter notes_out music_string))\n                       (beats    (map\
+    \ 'first notes_out))\n                       (rest     (map 'second notes_out))\n\
+    \                       (rest2 (map 'third notes_out)))\n         (notes (cons\
+    \ (car rest) (car rest2))))\n    (append notes\n            (map (lambda (note)\
+    \ (* note n_beats))\n                  rest))\n    (cons n_beats beats)\n    (parse_music\
+    \ rest2)))\n", "  (let\n    (\n      (remainder music_string)\n      (beats 1)\n\
+    \      (note 0)\n      (music-string music_string)\n      (music-list '())\n \
+    \     (notes '())\n      (note-list '())\n    )\n    (while (not (empty? remainder))\n\
+    \      (\n        (char (car remainder))\n        (if (char=? char #\\0)\n   \
+    \         (add-to music-list note)\n            (set-note note char)\n       \
+    \     (set-notes notes (append notes note)))\n        (set-note 0 (char-to-int\
+    \ char)))\n      (\n        (if (>= note 12) (add-to music-list note) (set-note\
+    \ note 12) (set-notes notes (append notes note)))\n        (set-note note (+ note\
+    \ 1))\n        (set-notes notes (append notes note))\n        (set-note 0 (char-to-int\
+    \ (char (cdr remainder))))\n        (set-notes notes (append notes note))\n  \
+    \      (set-note 0 (char-to-int (char (car remainder))))\n        (set-notes notes\
+    \ (append notes note))\n        (set-note note (car music-string))\n        (set-notes\
+    \ notes (append notes note))\n        (set-note 0 (char-to-int (char (car remainder))))\n\
+    \        (set-notes notes (append notes note))\n        (set-note note (cdr music-string))\n\
+    \        (set-notes notes (append notes note))\n        (set-note 0 (char-to-int\
+    \ (char (cdr remainder))))\n        (set-notes notes (append notes note))\n  \
+    \      (set-note note (car music-string))\n        (set-notes notes (append notes\
+    \ note))\n        (set-note 0 (char-to-int (char (car remainder))))\n        (set-notes\
+    \ notes (append notes note))\n        (set-note note (cdr music-string))\n   \
+    \     (set-notes notes (append notes note))\n        (set-note note (car music-string))\n\
+    \        (set-notes notes (append notes note))\n        (set-note 0 (char-to-int\
+    \ (char (cdr remainder))))\n        (set-notes notes (append notes note))\n  \
+    \      (set-note note (cdr music-string))\n        (set-notes notes (append notes\
+    \ note))\n        (set-note note (car music-string))\n        (set-notes notes\
+    \ (append notes note))\n        (set-note 0 (char-to-int (char (cdr remainder))))\n",
+  "  (define notes #f)\n  (define counter 0)\n  (define is_last_note #f)\n  (define\
+    \ notes_count 0)\n  (define notes_count_by_beat 0)\n  (define notes_count_by_note_type\
+    \ '())\n  (define notes_count_by_note_type (build-list '() notes_count_by_note_type))\n\
+    \n  (for-each (lambda (c) (when (char=? c #\\Space) (cdr notes))\n           \
+    \ (set! notes (cons (car notes) #t)))\n            (string->list music_string))\n\
+    \n  (for-each (lambda (c) (when (char=? c #\\Space) (cdr notes))\n           \
+    \ (set! notes (cons (car notes) #t)))\n            (string->list music_string))\n\
+    \n  (for-each (lambda (c) (when (char=? c #\\Space) (cdr notes))\n           \
+    \ (set! notes (cons (car notes) #t)))\n            (string->list music_string))\n\
+    \n  (for-each (lambda (c) (when (char=? c #\\Space) (cdr notes))\n           \
+    \ (set! notes (cons (car notes) #t)))\n            (string->list music_string))\n\
+    \n  (for-each (lambda (c) (when (char=? c #\\Space) (cdr notes))\n           \
+    \ (set! notes (cons (car notes) #t)))\n            (string->list music_string))\n\
+    \n  (for-each (lambda (c) (when (char=? c #\\Space) (cdr notes))\n           \
+    \ (set! notes (cons (car notes) #t)))\n            (string->list music_string))\n\
+    \n  (for-each (lambda (c) (when (char=? c #\\Space) (cdr notes))\n           \
+    \ (set! notes (cons (car notes) #t)))\n            (string->list music_string))\n\
+    \n  (for-each (lambda (c) (when (char=? c #\\Space) (cdr notes))\n           \
+    \ (set! notes (cons (car notes) #t)))\n            (string->list music_string))\n\
+    \n  (for-each (lambda (c) (when (char=? c #\\Space) (cdr notes))\n           \
+    \ (set! notes (cons (car notes) #t)))\n            (string->list music_string))\n\
+    \n  (for-each (lambda (c) (when (char=? c #\\Space) (cdr note", "  (let* ((notes\
+    \ (string-split music_string #\\Space #\\Tab \" \"))\n         (beats (map parse-note\
+    \ notes)))\n    (cond [(empty? notes) 0]\n          [(and (not (or (char= (char-after\
+    \ (car notes) #\\Space) #\\Tab) (char= (char-after (car notes) #\\Newline) (char=\
+    \ (char-after (car notes) #\\Newline) 0))))\n           (set! beats (cons (+ (car\
+    \ beats) 4) (cons (cadr beats) (cons (caddr beats) (car beats)))))]\n        \
+    \  [else beats])))\n", "  (let* ((note 'o) (temp 'o) (beats '())\n         (notes\
+    \ '(o o|.| .| o|.| .| .| .| .| o))\n         (note-count (length notes)))\n  \
+    \  (loop for i from 0\n          for note = notes \n          for temp = note\n\
+    \          for temp2 = note\n          for beats = note-count\n          until\
+    \ (or (eq? temp note) (eq? temp2 note))\n          collect (/ (string->int (substring\
+    \ music_string i i+1)) (abs temp2))\n          while (< i (length music_string))\n\
+    \          collect beats\n          finally (return beats))))\n", "  (let ((acc\
+    \ (list))\n        (length (length music_string))\n        (position (0))\n  \
+    \      (music_note (subseq music_string 0 position))\n        (current_note music_note))\n\
+    \    (cond\n      [(empty? music_string) acc]\n      [(char= (char-at! music_string\
+    \ position) 'o) \n       (if (< (position 1) (length music_string))\n        \
+    \   (progn\n             (set! acc (cons 1 acc))\n             (set! music_note\
+    \ (subseq music_string 1 (+ 1 position)))\n             (set! position (+ 1 position))\n\
+    \             (parse_music music_string))\n           (progn\n             (set!\
+    \ acc (cons 1 acc))\n             (set! music_note (subseq music_string 0 (+ 1\
+    \ position)))\n             (set! position (+ 1 position))\n             (parse_music\
+    \ music_string))))]\n      [(char= (char-at! music_string position) 'o|)\n   \
+    \    (if (< (position 1) (length music_string))\n           (progn\n         \
+    \    (set! acc (cons 2 acc))\n             (set! music_note (subseq music_string\
+    \ 1 (+ 1 position)))\n             (set! position (+ 1 position))\n          \
+    \   (parse_music music_string))\n           (progn\n             (set! acc (cons\
+    \ 1 acc))\n             (set! music_note (subseq music_string 0 (+ 1 position)))\n\
+    \             (set! position (+ 1 position))\n             (parse_music music_string))))]\n\
+    \      [(char= (char-at! music_string position) '.|)\n       (if (< (position\
+    \ 1) (length music_string))\n           (progn\n             (set! acc (cons 3\
+    \ acc))\n             (set! music_note (subseq music_string 1 (+ 1 position)))\n\
+    \             (set! position (+ 1 position))\n             (parse_music music_string))\n\
+    \           (progn\n             (set! acc (cons 2 acc))\n             (set! music_note\
+    \ (subseq music_string 0 (+ 1 position)))\n             (set! position (+ 1 position))\n\
+    \             (parse_music music_string))))]\n      (else \n       (progn\n  \
+    \       (set! acc (cons (subseq music_string position length) acc))\n        \
+    \ (parse_music music_string))))))\n</code>\n<|/ a dscore=1 |>\n<| c |>\nIt looks\
+    \ like ", "  (if (string? music_string)\n      (regexp-match '\\s ' music_string\n\
+    \                     '(^ ?(. .)+ ?)\n                     ((list 'o 'o|) '(.\
+    \ .))\n                     ((list '.| .) '(. .))\n                     ((list\
+    \ '.|) '(. .))\n                     ((list '.|) '(. .))\n                   \
+    \  ((list '.|) '(. .))\n                     ((list '.|) '(. .))\n           \
+    \          ((list '.|) '(. .))\n                     ((list '.|) '(. .))\n   \
+    \                  ((list 'o 'o|) '(. .))\n                     ((list '.| .)\
+    \ '(. .))\n                     ((list '.|) '(. .))\n                     ((list\
+    \ '.|) '(. .))\n                     ((list '.|) '(. .))\n                   \
+    \  ((list '.|) '(. .))\n                     ((list '.|) '(. .))\n           \
+    \          ((list 'o 'o|) '(. .))\n                     ((list '.| .) '(. .))\n\
+    \                     ((list '.|) '(. .))\n                     ((list '.|) '(.\
+    \ .))\n                     ((list '.|) '(. .))\n                     ((list '.|)\
+    \ '(. .))\n                     ((list 'o 'o|) '(. .))\n                     ((list\
+    \ '.| .) '(. .))\n                     ((list '.|) '(. .))\n                 \
+    \    ((list '.|) '(. .))\n                     ((list '.|) '(. .))\n         \
+    \            ((list '.|) '(. .))\n                     ((list '.|) '(. .))\n \
+    \                    ((list 'o 'o|) '(. .))\n                     ((list '.| .)\
+    \ '(. .))\n                     ((list '.|) '(. .))\n                     ((list\
+    \ '.|) '(. .))\n                     ((list '.|) '(. .))\n                   \
+    \  ((list '.|) '(. .))\n                     ((list 'o 'o|) '(. .))\n        \
+    \             ((list '.| .) '(. .))\n                     ((list '.|) '(. .))\n\
+    \                     ((list '.|) '(. .))\n                     (", "  (let ((beat-counter\
+    \ 0)) ; <-- this is the counter\n    (loop\n       for note (map char->integer\
+    \ music_string)\n       when (= note (char 0)) ; <-- stop processing notes other\
+    \ than rest\n       if (note (char 0)) ; <-- rest note\n       do ((set! beat-counter\
+    \ (add1 beat-counter))\n          (cond ((= note (char 0)) ; <-- rest note\n \
+    \                (set! beat-counter (add1 beat-counter)))\n                ((=\
+    \ note (char 1)) ; <-- whole note\n                 (set! beat-counter (add1 beat-counter))))\n\
+    \       else\n       do ((set! beat-counter (add1 beat-counter)))))) ; <-- normal\
+    \ note\n</code>\n<|/ a dscore=0 |>\n<| c |>\nThanks for the help! I just wanted\
+    \ to add that if you don't have an idea of how to implement the code, it's probably\
+    \ a lot simpler to do it in Ruby or some other high-level language. I was trying\
+    \ to avoid that because I am still learning Racket.\n<|/ c |>\n<| c |>\nYes, that's\
+    \ absolutely possible in Racket. I am not sure though why you don't want to do\
+    \ it in Ruby. Since it's also a modern language, you will see many people here\
+    \ doing things in Scheme or Common Lisp. Ruby is also a modern language, that\
+    \ is why people are still using it.\n<|/ c |>\n<| c |>\nI guess it's a good thing\
+    \ because I am teaching myself Racket and I kind of want to learn the language\
+    \ before learning Ruby or other similar languages. I guess I'll learn Ruby later\
+    \ on and stick with it until I have enough practice with Racket that I can learn\
+    \ a modern language with good performance.\n<|/ c |>\n<| c |>\nI think it would\
+    \ be better to ask your teacher what would be easier for him to implement than\
+    \ what you propose to implement. You can also try to write it in Racket, but be\
+    \ careful if you have no programming experience at all.\n<|/ c |>\n<| c |>\nBTW,\
+    \ in Racket, instead of `(map char->integer music_string)`, you can use `(map\
+    \ char->integer music_string? #\\space)` or `(map char->integer music_string?\
+    \ #\\newline)`.\n<|/ c |>\n<| a dscore=0 |>\n<code>", "  (cond\n    [(or (empty?\
+    \ music_string)\n          (equal? (first music_string) '#\\Space))\n     (list\
+    \ 0)]\n    [else\n     (cond [(equal? (first music_string) '#\\Space)\n      \
+    \      (list (substring (music_string) (+ 1 5)))]\n           [(equal? (first\
+    \ music_string) '#\\Dot)\n            (list (substring (music_string) (+ 1 3))\n\
+    \                  (substring (music_string) (+ 1 3)))]\n           [(equal? (first\
+    \ music_string) '#\\Plus)\n            (list (substring (music_string) (+ 1 3))\n\
+    \                  (substring (music_string) (+ 1 3))\n                  (substring\
+    \ (music_string) (+ 1 3)))]\n           [(equal? (first music_string) '#\\Plus)\n\
+    \            (list (substring (music_string) (+ 1 3))\n                  (substring\
+    \ (music_string) (+ 1 3))\n                  (substring (music_string) (+ 1 3))\n\
+    \                  (substring (music_string) (+ 1 3)))]\n           [(equal? (first\
+    \ music_string) '#\\Minus)\n            (list (substring (music_string) (+ 1 3))\n\
+    \                  (substring (music_string) (+ 1 3))\n                  (substring\
+    \ (music_string) (+ 1 3))\n                  (substring (music_string) (+ 1 3)))]\n\
+    \           [(equal? (first music_string) '#\\Minus)\n            (list (substring\
+    \ (music_string) (+ 1 3))\n                  (substring (music_string) (+ 1 3))\n\
+    \                  (substring (music_string) (+ 1 3))\n                  (substring\
+    \ (music_string) (+ 1 3)))]\n           [(equal? (first music_string) '#\\Dollar)\n\
+    \            (list (substring (music_string) (+ 1 3))\n                  (substring\
+    \ (music_string) (+ 1 3))\n                  (substring (music_string) (+ 1 3))\n\
+    \                  (substring (music_string) (+ 1 3)))]\n           [else\n  \
+    \          (let ([music_note_length\n                  (cond [(equal? (first music_string)\
+    \ '#\\O)\n                         4]\n                            [(equal? (first\
+    \ music_string) '#\\O|)\n                         2]\n                       \
+    \     [(equal? (first music_string) '#\\.|)\n                         1]\n   \
+    \                         [(equal? (first music_string) '#\\Space)\n         \
+    \                0])\n              (cond [(", "  ; Write your code here\n)\n",
+  "  (parse-music-string music_string '()))\n", "  (let loop ((music-string music-string)\
+    \ (music-notes #f) (music-beats #f))\n    (if (not music-notes)\n        (set!\
+    \ music-notes (map (lambda (x) (if (char=? x #\\|) (+ 1 music-beats) music-beats))\
+    \ (range? (char-code music-string)))) (set! music-beats (map music-notes music-beats))\n\
+    \        (loop (cdr music-string) (cdr music-notes) (cdr music-beats)))))\n",
+  "  (let ((notes '()))\n    (cond\n      [(empty? music_string) notes]\n      [(equal?\
+    \ 'o music_string) (add1 (length notes))]\n      [(equal? 'o| music_string) (add1\
+    \ (length notes))]\n      [else (add1 (parse_music (sub1 music_string)))])))\n",
+  "  (cond\n    [(empty? music_string) '()]\n    [else\n     (let ([letters (string->list\
+    \ music_string)\n             current_note 0])\n       (if (or (char-equal? (first\
+    \ letters) 'o') (char-equal? (first letters) 'o|'))\n           (if (char-equal?\
+    \ (first letters) 'o|')\n               (+ 1 (* (cdr (rest letters)) 4))\n   \
+    \            (+ 1 (* (cdr (rest letters)) 2)))\n           (if (char-equal? (first\
+    \ letters) '|')\n               (+ 1 (* (cdr (rest letters)) 1))\n           \
+    \    (+ 1 (* (cdr (rest letters)) 1))))\n             (parse_music (rest music_string))]))]))\n",
+  "  (define beats (cadr (assoc 'o (rest music_string)))\n  (define note_length (caddr\
+    \ (assoc 'o| (rest music_string)))\n  (define quarter_length (caddr (assoc '.|\
+    \ (rest music_string)))\n  (define rest (cddr music_string))\n  (define notes\
+    \ (append '()\n                       (for ([i (length music_string)])\n     \
+    \                    (cond [(= i (- 4 beats))\n                              \
+    \   (append notes\n                                        (cons (substring music_string\
+    \ 0 i) '()))]\n                               [(= i (- 2 beats))\n           \
+    \                      (append notes\n                                       \
+    \ (cons (substring music_string 0 i) '()))]\n                               [(=\
+    \ i (- 1 beats))\n                                 (append notes\n           \
+    \                             (cons (substring music_string 0 i) '()))]\n    \
+    \                           [(not (= i (- 4 beats))\n                        \
+    \         (cons (substring music_string 0 i) '()))]\n                        \
+    \       [(not (= i (- 2 beats))\n                                 (cons (substring\
+    \ music_string 0 i) '()))]\n                               [(not (= i (- 1 beats))\n\
+    \                                 (cons (substring music_string 0 i) '()))]\n\
+    \                               [(< i rest)\n                                \
+    \ (cons (substring music_string 0 i) '()))])))\n\n  (append notes\n          (for\
+    \ ([i (length rest)])\n            (cond [(= i notes)]\n                  [(=\
+    \ i quarter_length)]\n                  [(= i note_length)]\n                \
+    \  [(= i beats)]\n                  [else (cons (car rest) (substring rest i (+\
+    \ i 1)))])))))\n", "  (define note_counter (make-hash))\n  (define note-counter-pointer\
+    \ (make-hash))\n  (define note-symbol (make-hash))\n  (define (push-note note\
+    \ n)\n    (cond [(< note 125)\n           (set note_counter (cons note (note-counter\
+    \ note)))\n           (set note-symbol (cons note note-symbol))]\n          [(<\
+    \ note 26)\n           (push-note (+ note 64) n)]\n          [(< note 92)\n  \
+    \         (push-note (+ note 96) n)]\n          [(< note 121)\n           (push-note\
+    \ (+ note 128) n)]\n          [else\n           (cond [(< note 64)\n         \
+    \         (push-note note n)]\n                 [(< note 96)\n               \
+    \   (push-note note n)]\n                 [(< note 128)\n                  (push-note\
+    \ note n)]\n                 [else\n                  (push-note (- note 64) n)]]))\n\
+    \  (map push-note (music-symbol-note music_string) (music-symbol-count music_string))\n\
+    \  (map note-symbol (note-counter note-symbol))\n  (map note-counter-pointer (note-counter\
+    \ note-symbol)))\n", "  (let loop ([music-string music_string])\n    (cond\n \
+    \     [(empty? music-string) '()]\n      [(empty? (rest music-string)) (list (string-length\
+    \ music-string))])\n      (else (cons (char-at (first music-string)) (loop (rest\
+    \ music-string)))))))\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThis is not an optimal\
+    \ solution at all. You are using a function that is already implemented in the\
+    \ language. In general it is always better to implement a solution than to rely\
+    \ on a language feature.\n<|/ c |>\n<| a dscore=2 |>\n<code>", "  (cond [(music-is-\
+    \ (music_string 0))\n         (music-string->ints music_string)\n         ]\n\
+    \        [else\n         (error \"music string is invalid\")\n         ]\n   \
+    \     ))\n", "  (let loop ((current_note 'o) (current_beat 'o) (bpm 'o))\n   \
+    \ (if (null? music_string)\n        '()\n        (cond [(not (list? music_string))\n\
+    \              (cons current_beat bpm)]\n              [(music_string = 'o)\n\
+    \               (cons current_beat bpm)]\n              [(music_string = '|)\n\
+    \               (cons (- current_beat 2) bpm)]\n              [(music_string =\
+    \ '.|)\n               (cons (- current_beat 1) bpm)]\n              [(music_string\
+    \ = 'o)\n               (loop (cons current_note '|) current_beat bpm)]\n    \
+    \          [(music_string = 'o)\n               (loop (cons current_note '.|)\
+    \ current_beat bpm)]\n              [(music_string = 'o)\n               (loop\
+    \ (cons current_note 'o) current_beat bpm)]\n              [(music_string = 'o)\n\
+    \               (loop (cons current_note 'o) current_beat bpm)]\n            \
+    \  [(music_string = '.)\n               (loop (cons current_note 'o) current_beat\
+    \ bpm)]\n              [(music_string = '.)\n               (loop (cons current_note\
+    \ 'o) current_beat bpm)]\n              [(music_string = '.)\n               (loop\
+    \ (cons current_note '.|) current_beat bpm)]\n              [(music_string = '.)\n\
+    \               (loop (cons current_note '.|) current_beat bpm)]\n           \
+    \   [(music_string = '.)\n               (loop (cons current_note '.|) current_beat\
+    \ bpm)]\n              [(music_string = 'o)\n               (loop (cons current_note\
+    \ 'o) current_beat bpm)]\n              [(music_string = '.)\n               (loop\
+    \ (cons current_note '.|) current_beat bpm)]\n              [(music_string = '.)\n\
+    \               (loop (cons current_note '.|) current_beat bpm)]\n           \
+    \   [(music_string = '.)\n               (loop (cons current_note '.|) current_beat\
+    \ bpm)]\n              [(music_string = '.)\n               (loop (cons current_note\
+    \ '.|) current_beat bpm)]\n              [(music_string = 'o)\n              \
+    \ (loop (cons current_note 'o) current_beat bpm)]\n              [(", "  (cond\
+    \ [(equal? music_string #\\o) (list 4)]\n        [(equal? music_string #\\.) (list\
+    \ 2)]\n        [(equal? music_string #\\o|) (list 1)]\n        [else (error \"\
+    Musical note must be an 'o', 'o|' or '.'.\")]))\n", "  (define notes '())\n  (define\
+    \ beats '())\n  (define beats_current 0)\n  (define current_note '())\n  (define\
+    \ current_note_length 0)\n\n  (loop for note downto 'z while (current_note_length\
+    \ <= 5)\n    ;; If current note ends at length of current note length,\n    ;;\
+    \ it means that this note is complete for the current note\n    ;; so advance\
+    \ the beat counter and clear current note\n    ;; and advance to the next note\n\
+    \    (when (string=? (char-code note) 'z)\n      (set! current_note_length (+\
+    \ current_note_length (string-length note)))\n      (set! beats_current (+ beats_current\
+    \ 1)))\n    (when (>= beats_current 4)\n      (begin\n        (set! current_note\
+    \ (cons note current_note))\n        (set! beats (cons beats_current beats))\n\
+    \        (set! beats_current 0)\n        (set! current_note '()))))\n\n  (cond\n\
+    \    ((and (null? current_note) (>= beats_current 4))\n     beats)\n    ((< beats_current\
+    \ 4)\n     (set! beats (cons beats_current beats))\n     (set! beats_current 0)\n\
+    \     (set! current_note '()))\n    ((< beats_current 4)\n     (cond\n       ((>\
+    \ (string-length music_string) 4)\n        (error \"Input music is too long!\"\
+    ))\n       ((> (string-length music_string) 7)\n        (error \"Input music is\
+    \ too short!\"))\n       (else\n        (set! beats (cons beats_current beats))\n\
+    \        (set! beats_current 0)\n        (set! current_note '()))))\n    (else\n\
+    \     (error \"Something went wrong!\"))))\n</code>\n<|/ a tags=racket,string,scheme\
+    \ |>\n<| c |>\nThank you for pointing out my mistakes.  It seems obvious in hindsight.\
+    \  However, after fixing all those problems, I'm still having trouble with the\
+    \ final test...\n<|/ c |>\n<| c |>\nYes, I've been trying hard, trying to get\
+    \ this working.  I really appreciate the help you've given me so far.  I guess\
+    \ it just seems like I'm missing something simple.  I've been trying for the last\
+    \ couple hours, but I can't figure out what I'm missing.  I put in a test that\
+    \ seems to work, but fails when I run it.  I edited my original post to reflect\
+    \ what I've done.  Can you please take a look and see if it looks right and tell\
+    \ me if I'm missing something?  Thank you", "  (if (= music_string \"\")\n   \
+    \   '()\n      (append (parse-music-char music_string)\n               (parse-music-char\
+    \ music_string (+ 1 (parse-music-beats music_string))))))\n", "  (cond [(empty?\
+    \ music_string) '()]\n        [(empty? (rest music_string)) (list->vector (first\
+    \ music_string))]\n        [else (cons (first music_string)\n                \
+    \    (parse_music (rest music_string)))]))\n", "  ;; Here is a pattern for a note:\n\
+    \  ;; 'o - whole note, lasts four beats\n  ;; 'o| - half note, lasts two beats\n\
+    \  ;; '.| - quater note, lasts one beat\n  (let* ((music_symbol (string-to-symbol\
+    \ music_string))\n         (music_type (match-case? music_symbol '(o o| .| o))\n\
+    \         (music_beats (match-case? music_symbol '(o| o| .| .| o))\n         (music_rest\
+    \ (match-case? music_symbol '(o| o| .| .)))\n         (music_rests (if (music_rest)\n\
+    \                         (+ music_beats 1)\n                         music_beats)))\n\
+    \    (list music_type music_rests music_beats)))\n", "  (let loop ((music-string\
+    \ music-string) \n             (music-list-length 0)\n             (music-list\
+    \ '())\n             (music-list-index 0))\n    (cond ((eq? music-string #\\0)\
+    \ music-list)\n          ((eq? music-string #\\|) music-list)\n          ((eq?\
+    \ music-string #\\.) music-list)\n          ((eq? music-string #\\o) music-list)\n\
+    \          ((eq? music-string #\\|o) music-list)\n          ((eq? music-string\
+    \ #\\.o) music-list)\n          ((eq? music-string #\\|o|) music-list)\n     \
+    \     ((eq? music-string #\\.o|) music-list)\n          ((eq? music-string #\\\
+    .|) music-list)\n          ((eq? music-string #\\|.|) music-list)\n          ((eq?\
+    \ music-string #\\.|o) music-list)\n          ((eq? music-string #\\.o|o) music-list)\n\
+    \          ((eq? music-string #\\.o|o|) music-list)\n          ((eq? music-string\
+    \ #\\.o|o|\\.) music-list)\n          ((eq? music-string #\\.o|o|\\.o) music-list)\n\
+    \          ((eq? music-string #\\.o|o|\\.|) music-list)\n          ((eq? music-string\
+    \ #\\.o|o|\\.|o) music-list)\n          ((eq? music-string #\\.o|o|\\.|o|) music-list)\n\
+    \          ((eq? music-string #\\.o|o|\\.|o|\\.) music-list)\n          ((eq?\
+    \ music-string #\\.o|o|\\.|o|\\.o) music-list)\n          ((eq? music-string #\\\
+    .o|o|\\.|o|\\.o|) music-list)\n          ((eq? music-string #\\.o|o|\\.|o|\\.o|\\\
+    .) music-list)\n          ((eq? music-string #\\.o|o|\\.|o|\\.o|\\.o) music-list)\n\
+    \          ((eq? music-string #\\.o|o|\\.|o|\\.o|\\.|) music-list)\n         \
+    \ ((eq? music-string #\\.o|o|\\.|o|\\.", "  (let loop ((music_string (music_string\
+    \ #\\Space)) (music_list (list 0 0)))\n    (cond ((empty? music_string) music_list)\n\
+    \          ((equal? music_string #\\Space) (loop (rest music_string) music_list))\n\
+    \          ((equal? (first music_string) #\\O) (loop (rest music_string) (cons\
+    \ (+ 2 (first music_list)) music_list)))\n          ((equal? (first music_string)\
+    \ #\\o) (loop (rest music_string) (cons (+ 4 (first music_list)) music_list)))\n\
+    \          ((equal? (first music_string) #\\|) (loop (rest music_string) (cons\
+    \ (+ 1 (first music_list)) music_list)))\n          (else\n           (loop (rest\
+    \ music_string) (cons (+ 1 (first music_list)) music_list)))))) ; <<< THIS IS\
+    \ THE PART THAT CAUSES MUSIC", "  (if (equal? music_string '(o o| .| o| o| .|\
+    \ .| .| .| .| o o))\n      (list 4)\n    (if (equal? music_string '(o| o| o| .|\
+    \ .| .| .| .| .| o))\n        (list 2)\n      (if (equal? music_string '(o| o|\
+    \ o| .| .| .| .| .| .| .| o|))\n          (list 1)\n        (if (equal? music_string\
+    \ '(o| o| o| .| .| .| .| .| .| o| o|))\n            (list 2)\n          (if (equal?\
+    \ music_string '(o| o| o| .| .| .| .| .| .| o| o| o|))\n              (list 4)\n\
+    \            (if (equal? music_string '(o| o| o| .| .| .| .| .| .| o| o| o|))\n\
+    \                (list 8)\n              (error \"Invalid music: string '~a' is\
+    \ of unknown format\")\n            )\n          )\n      )\n    )\n  )\n", " \
+    \ (let ((notes '()))\n    (cond\n      [(string-equal? music_string \"\") '()]\n\
+    \      [(string-equal? (substring music_string 0 1) \"o\") (push (substring music_string\
+    \ 1 3) notes)]\n      [(string-equal? (substring music_string 0 1) \"o|\") (push\
+    \ (substring music_string 1 4) notes)]\n      [(string-equal? (substring music_string\
+    \ 0 1) \".|\") (push (substring music_string 1 5) notes)]\n      [(string-equal?\
+    \ (substring music_string 0 1) \"o\") (push (substring music_string 1 3) notes)]\n\
+    \      [(string-equal? (substring music_string 0 1) \"|\") (push (substring music_string\
+    \ 1 2) notes)]\n      [(string-equal? (substring music_string 0 1) \".|\") (push\
+    \ (substring music_string 1 5) notes)]\n      [(string-equal? (substring music_string\
+    \ 0 1) \"|\") (push (substring music_string 1 2) notes)]\n      [(string-equal?\
+    \ (substring music_string 0 1) \".|\") (push (substring music_string 1 5) notes)]\n\
+    \      [(string-equal? (substring music_string 0 1) \".|\") (push (substring music_string\
+    \ 1 5) notes)]\n      [(string-equal? (substring music_string 0 1) \".|\") (push\
+    \ (substring music_string 1 5) notes)]\n      [(string-equal? (substring music_string\
+    \ 0 1) \".|\") (push (substring music_string 1 5) notes)]\n      [(string-equal?\
+    \ (substring music_string 0 1) \".|\") (push (substring music_string 1 5) notes)]\n\
+    \      [(string-equal? (substring music_string 0 1) \".|\") (push (substring music_string\
+    \ 1 5) notes)]\n      [(string-equal? (substring music_string 0 1) \".|\") (push\
+    \ (substring music_string 1 5) notes)]\n      [(string-equal? (substring music_string\
+    \ 0 1) \".|\") (push (substring music_string 1 5) notes)]\n      [(string-equal?\
+    \ (substring music_string 0 1) \".|\") (push (substring music_string 1 5) notes)]\n\
+    \      [(string-equal? (substring music_string 0 1) \".|\") (push (substring music_string\
+    \ 1 5) notes)]\n      [(string-equal? (substring music_string 0 1) ", "  (let\
+    \ loop ((music_str (string->list music_string))\n             (music_ptr '())\n\
+    \             (beats '()))\n    (if (null? music_str)\n        (reverse beats)\n\
+    \        (let ((note (substring (music_str 1) 0 (char-code (first music_str))))\n\
+    \              (beat (if (= 'o note)\n                       (substring (music_str\
+    \ 2) 1 (string-length music_str))\n                       (substring (music_str\
+    \ 1) 0 (string-length music_str))))\n          (if (= 'o|)\n              (loop\
+    \ (music_str (+ 1 (string-length music_str)) music_ptr beats)\n              \
+    \     beats)\n              (loop (music_str (+ 3 (string-length music_str)) music_ptr\
+    \ beats)\n                   beats))))\n    ))\n", "  (let loop ((music_string\
+    \ (music_string music)) \n             (note null (current_beat 0)) \n       \
+    \      (next_note (music_string music))\n             (current_beat_count 0))\
+    \ \n    (cond\n      (empty? music_string) \n      (list)\n      (else\n     \
+    \   (cond\n          (equal? (first music_string) 'o) (cons note (loop (rest music_string)\
+    \ 'o music_string (+ 4 current_beat)))\n          (equal? (first music_string)\
+    \ 'o|) (cons note (loop (rest music_string) 'o music_string (+ 2 current_beat)))\n\
+    \          (equal? (first music_string) '.|) (cons note (loop (rest music_string)\
+    \ 'o music_string (+ 1 current_beat)))\n          (equal? (first music_string)\
+    \ 'o) (cons note (loop music_string 'o music_string (+ 4 current_beat)))\n   \
+    \       (equal? (first music_string) '.|) (cons note (loop music_string 'o music_string\
+    \ (+ 1 current_beat)))\n          (equal? (first music_string) '.|) (cons note\
+    \ (loop music_string 'o music_string (+ 1 current_beat)))\n          (equal? (first\
+    \ music_string) '.|) (cons note (loop music_string 'o music_string (+ 1 current_beat)))\n\
+    \          (equal? (first music_string) '.|) (cons note (loop music_string 'o\
+    \ music_string (+ 1 current_beat)))\n          (equal? (first music_string) '.|)\
+    \ (cons note (loop music_string 'o music_string (+ 1 current_beat)))\n       \
+    \   (equal? (first music_string) '.|) (cons note (loop music_string 'o music_string\
+    \ (+ 1 current_beat)))\n          (equal? (first music_string) '.|) (cons note\
+    \ (loop music_string 'o music_string (+ 1 current_beat)))\n          (equal? (first\
+    \ music_string) '.|) (cons note (loop music_string 'o music_string (+ 1 current_beat)))\n\
+    \          (equal? (first music_string) '.|) (cons note (loop music_string 'o\
+    \ music_string (+ 1 current_beat)))\n          (equal? (first music_string) '.|)\
+    \ (cons note (loop music_string 'o music_string (+ 1 current_beat)))\n       \
+    \   (equal? (first music_string", "  (cond\n    [(empty? music_string) '()]\n\
+    \    [(note? music_string) (parse music_string notes)]\n    [else (error music_string\
+    \ \"Invalid input\")]))\n", "  (cond [(empty? music_string) 0]\n        [else\n\
+    \         (let ((beats (parse_music_beat music_string)))\n           (+ (* beats\
+    \ 6)\n             ((length music_string) 4)))]))\n", "  (let loop ((notes '())\
+    \ (count 0))\n    (if (string=? music_string \"stop\")\n        (reverse notes)\n\
+    \        (if (string=? (string-ref music_string 0) \".\")\n            (loop (append\
+    \ notes (list count)) (add1 count))\n            (let ((this_note (sub1 count)))\n\
+    \              (cond\n                [(= this_note 0) (loop '() 0)]\n       \
+    \         [else\n                 (loop (append notes (list count)) (add1 count))\n\
+    \                 (list this_note)])))\n    (reverse notes)))\n", "  (if (string?\
+    \ music_string)\n    (let* ((notes (string->list music_string))\n           ((music_beats\
+    \ (list->vector (note-duration notes))))\n           ((music_beats-counter (make-hash))\n\
+    \            (cons music_beats-counter music_beats))\n           ((music-beats-counter-length\
+    \ (car (hash-values music_beats-counter))))\n           ((music-beats-counter-last\
+    \ music-beats-counter-length))\n           ((music-beats-counter music-beats-counter-last))\n\
+    \           ((music-beats-counter-current music-beats-counter-length))\n     \
+    \      ((music-beats-counter-next\n              (sub1 music-beats-counter-current\
+    \ music-beats-counter-last))\n            (cons music-beats-counter-current music-beats-counter-next)))\n\
+    \      (map (lambda (x)\n            (set! music-beats-counter-current x)\n  \
+    \          (cond ((< x music-beats-counter-last) 4)\n                  ((= x music-beats-counter-last)\
+    \ 2)\n                  ((> x music-beats-counter-last) 1)\n                 \
+    \ (else 0)))\n            (music-beats-counter-current))))\n", "  (map (lambda\
+    \ (note)\n         (cond\n           ((equal? (substring music_string 0 1) '.)\n\
+    \            (cond \n              ((equal? (substring music_string 0 2) 'o.)\n\
+    \               (+ 1 0))\n              ((equal? (substring music_string 0 2)\
+    \ 'o.|)\n               (+ 2 0))\n              ((equal? (substring music_string\
+    \ 0 2) '.|)\n               (+ 1 0))\n              ((equal? (substring music_string\
+    \ 0 2) 'o.|)\n               (+ 2 0))\n              ((equal? (substring music_string\
+    \ 0 2) 'o.|)\n               (+ 2 0))\n              ((equal? (substring music_string\
+    \ 0 2) '.|)\n               (+ 1 0))\n              (t (error \"Bad note found\
+    \ in input: ~a\" note))))\n           ((equal? (substring music_string 0 1) 'o.)\n\
+    \            (+ 1 0))\n           ((equal? (substring music_string 0 1) 'o.|)\n\
+    \            (+ 2 0))\n           ((equal? (substring music_string 0 1) 'o.|)\n\
+    \            (+ 2 0))\n           ((equal? (substring music_string 0 1) 'o.|)\n\
+    \            (+ 2 0))\n           ((equal? (substring music_string 0 1) 'o.|)\n\
+    \            (+ 1 0))\n           ((equal? (substring music_string 0 1) '.)\n\
+    \            (+ 1 0))\n           ((equal? (substring music_string 0 1) '.|)\n\
+    \            (+ 1 0))\n           ((equal? (substring music_string 0 1) '.|)\n\
+    \            (+ 1 0))\n           ((equal? (substring music_string 0 1) '.|)\n\
+    \            (+ 1 0))\n           ((equal? (substring music_string 0 1) '.|)\n\
+    \            (+ 1 0))\n           ((equal? (substring music_string 0 1) '.|)\n\
+    \            (+ 1 0))\n           ((equal? (substring music_string 0 1) '.|)\n\
+    \            (+ 1 0))\n           ((equal? (substring music_string 0 1) '.|)\n\
+    \            (+ 1 0))\n           ((equal? (substring music_string 0 1) 'o.)\n\
+    \            (+ 1 0))\n           ((equal? (substring music_string 0 1) 'o.)\n\
+    \            (+ 1 0))\n           ((equal? (substring music_string 0 1) 'o.)\n\
+    \            (+ 1 0))\n           ((equal? (substring music_string 0 1) 'o.)\n\
+    \            (+ 1 0))\n           (", "  (cond [(empty? music_string) [0]]\n \
+    \       [else\n         (let\n           ([first_note (car music_string)\n   \
+    \         first_beat (parse-music-char first_note)]\n           [rest_notes (cdr\
+    \ music_string)\n            rest_beats (parse-music-char rest_notes)])\n    \
+    \       (map + first_beat rest_beats)])]))\n", "  (let loop ((music_string music_string)\n\
+    \             (notes ())\n             (n 0))\n    (if (>= n 12)\n        (append\
+    \ notes (list n))\n        (let ((note (parse-music-string music_string)))\n \
+    \         (if (null? note)\n              (append notes notes)\n             \
+    \ (loop (rest (music_string))\n                    (cons n (length note))\n  \
+    \                  (+ n 1))))))))\n", "  (let loop ((notes '())\n            \
+    \ (beats '()))\n    (if (string-empty? music_string)\n        beats\n        (let\
+    \ ((note (first music_string))\n              (note-length (parse-int (rest music_string))))\n\
+    \          (if (string=? note 'o)\n            (push (parse-int note) notes)\n\
+    \            (if (string=? note 'o|)\n              (push (parse-int note) notes)\n\
+    \              (if (string=? note '.|)\n                  (push (parse-int note)\
+    \ notes)\n                  (if (string=? note '||)\n                      (push\
+    \ (parse-int note) notes)\n                      (loop (rest music_string) (conj\
+    \ beats (parse-int note)))))))\n          (loop music_string (conj beats (parse-int\
+    \ note)))))\n    notes))\n", "  (cond\n    [(empty? music_string) '()] \n    [(music_string\
+    \ = (first (split-string (first music_string) '|)))\n     (parse-music-string\
+    \ music_string)] \n    [else (parse-music-string music_string)]))\n", "  (define\
+    \ temp (make-list 256))\n  (define last_note (list 0))\n  (let loop ((index 0)\n\
+    \             (music_string music_string)\n             (temp_list temp))\n  \
+    \  (cond\n      [(not (equal? (string-downcase music_string) \".\")\n       (add-to-list\
+    \ last_note (quotient (modulo index 127) 26))\n       (loop (+ index 1) (string-right-trim\
+    \ music_string index) temp_list))\n      [(not (equal? (string-downcase music_string)\
+    \ \"o|\")\n       (add-to-list last_note (quotient (modulo index 127) 12))\n \
+    \      (loop (+ index 1) (string-right-trim music_string index) temp_list))\n\
+    \      [(not (equal? (string-downcase music_string) \".|\")\n       (add-to-list\
+    \ last_note (quotient (modulo index 127) 6))\n       (loop (+ index 1) (string-right-trim\
+    \ music_string index) temp_list))\n      [(not (equal? (string-downcase music_string)\
+    \ \" .\"))\n       (add-to-list last_note (modulo index 127))\n       (loop (+\
+    \ index 1) (string-right-trim music_string index) temp_list)]\n      [(not (equal?\
+    \ (string-downcase music_string) \"o\"))\n       (add-to-list last_note (quotient\
+    \ (modulo index 127) 4))\n       (loop (+ index 1) (string-right-trim music_string\
+    \ index) temp_list)]\n      [else\n       (add-to-list temp_list index)\n    \
+    \   (loop (+ index 1) (string-right-trim music_string index) temp_list)])\n  \
+    \  (add-to-list temp_list 0)\n    (reverse (list last_note))))\n</code>\n<|/ a\
+    \ tags=scheme,racket,functional-programming,scheme |>\n<| c |>\nI'm sorry that\
+    \ I have to tell you that I was trying to do it without using `string-split` and\
+    \ `string-strip`, but my code is working so thank you for that! I'm really not\
+    \ sure why I wasn't able to use them in my solution.\n<|/ c |>\n<| c |>\nYou're\
+    \ welcome! I don't understand why you can't use `string-split` and `string-strip`\
+    \ but that doesn't matter. `string-split` is just used to extract \"notes\" from\
+    \ a string. So the actual parsing is done in `parse_music` using its `temp` list\
+    \ (which is initially empty). Note that I used `string-downcase` to remove any\
+    \ possibility of confusion between upper and lower case letters.\n<|/ c |>\n<|\
+    \ c ", "  (if (empty? music_string) '()\n      (let ([first music_string rest\
+    \ (parse-music rest music_string)])\n        (if (empty? rest) '()\n         \
+    \   (cons first rest))))))\n", "  (cond\n    [(empty? music_string) empty]\n \
+    \   [(char-equal '|) (map (lambda (x) (round (/ (+ x 4) 4) 12)) (parse_music music_string\
+    \ (+ 1 1)))]\n    [else (map (lambda (x) (round (/ (+ x 4) 4) 12)) (parse_music\
+    \ music_string (+ 1 1)))]\n  )\n)", "  ; parse string with pattern '.|' to note\
+    \ and rest\n  (define (note_rest s)\n    (let ((note (match (pattern (substring\
+    \ s '(2) (1))))\n           (rest (match (pattern (substring s (match (pattern\
+    \ (substring s '(1) (1)) '(2)))))))\n           (rest (match (pattern (substring\
+    \ rest (match (pattern (substring rest (match (pattern (substring rest (match\
+    \ (pattern (substring rest (match (pattern (substring rest (match (pattern (substring\
+    \ rest (match (pattern (substring rest (match (pattern (substring rest (match\
+    \ (pattern (substring rest (match (pattern (substring rest (match (pattern (substring\
+    \ rest (match (pattern (substring rest (match (pattern (substring rest (match\
+    \ (pattern (substring rest (match (pattern (substring rest (match (pattern (substring\
+    \ rest (match (pattern (substring rest (match (pattern (substring rest (match\
+    \ (pattern (substring rest (match (pattern (substring rest (match (pattern (substring\
+    \ rest (match (pattern (substring rest (match (pattern (substring rest (match\
+    \ (pattern (substring rest (match (pattern (substring rest (match (pattern (substring\
+    \ rest (match (pattern (substring rest (match (pattern (substring rest (match\
+    \ (pattern (substring rest (match (pattern (substring rest (match (pattern (substring\
+    \ rest (match (pattern (substring rest (match (pattern (substring rest (match\
+    \ (pattern (substring rest (match (pattern (substring rest (match (pattern (substring\
+    \ rest (match (pattern (substring rest (match (pattern (substring rest (match\
+    \ (pattern (substring rest (match (pattern (substring rest (match (pattern (substring\
+    \ rest (match (pattern (substring rest (match (pattern (substring rest (match\
+    \ (pattern (substring rest (match (pattern (substring rest (match (pattern (substring\
+    \ rest (match (pattern (substring rest (match (pattern (substring rest (match\
+    \ (pattern (substring rest (match (pattern (substring rest (match (pattern (substring\
+    \ rest (match (pattern (substring rest (match (pattern (substring rest (match\
+    \ (pattern (substring rest (match (pattern (substring rest (match (pattern (",
+  "  (cond\n    ((null? music_string) '())\n    ((equal? (car music_string) 'o) '(4))\n\
+    \    ((equal? (car music_string) 'o|') '(2))\n    ((equal? (car music_string)\
+    \ '.|') '(1))\n    (else (error \"Unknown musical note: '~a'\" (car music_string)))))\n",
+  "  (if (empty? music_string)\n      '()\n      (let* ((music-string (string music_string))\n\
+    \             (music-list (append (substring music-string 0 1) (split-string music-string\
+    \ '|))))\n        (if (empty? music-list)\n            '()\n            (append\n\
+    \             (list->vector (map (lambda (note) (parse-note note music-list))\n\
+    \                               (vector-ref music-list 0) music-list music-list)))\n\
+    \            (vector-ref music-list 0)))))\n", "  (if (empty? music_string) '())\n\
+    \  (let ((note (assoc 'o music_string)))\n    (if (assoc 'o|\n             (substring\
+    \ music_string 0 (- 3 (length music_string))))\n        (cons (add1 note) 'o|)\n\
+    \        (cons note '.|)\n        (parse_music (substring music_string (+ 3 (length\
+    \ music_string)))))))\n</code>\n<|/ a |>\n<| c |>\nHmmm. How about if there are\
+    \ 3 o's in a row? For example \"o o o\"?\n<|/ c |>\n<| c |>\nWhat exactly do you\
+    \ mean by `o` in a row? If you mean consecutive notes, you can easily add that\
+    \ condition to the `if` statement at the top of `parse_music`. Also, if there\
+    \ are more than two notes in a row, you'll have to change the `add1` part to add\
+    \ that number of beats to `note`, otherwise it will get overwritten.\n<|/ c |>\n\
+    <| c |>\n\"o o o\" is a valid musical string (https://en.wikipedia.org/wiki/Musical_notation#.22O.22_notation)\
+    \ -- I added a note to my answer to show you how to parse this.\n<|/ c |>\n<|\
+    \ a dscore=0 |>\n<code>", "  (let ([music_string (music_string music_string)])\n\
+    \    (cond\n      [(equal? (length music_string) 0)\n       #f]\n      [(equal?\
+    \ (char-code (car music_string)) #\\Space)\n       (let* ((music_str (cdr music_string))\n\
+    \               (music_beat_count (parse_music_string (music_str)))\n        \
+    \       (music_beat_str (make-empty-string (string-length music_beat_count)))\n\
+    \               (music_beat_str_length (string-length music_beat_str))\n     \
+    \          (music_beat_str_index (- (string-length music_beat_str) 1))\n     \
+    \          (music_beat_str_index2 (modulo (+ music_beat_str_index music_beat_str_length)\
+    \ 2))\n               (music_beat_str_index3 (modulo (+ music_beat_str_index2\
+    \ music_beat_str_length) 4))\n               (music_beat_str_index4 (modulo (+\
+    \ music_beat_str_index3 music_beat_str_length) 8))\n               (music_beat_str_index5\
+    \ (modulo (+ music_beat_str_index4 music_beat_str_length) 16))\n             \
+    \  (music_beat_str_index6 (modulo (+ music_beat_str_index5 music_beat_str_length)\
+    \ 32))\n               (music_beat_str_index7 (modulo (+ music_beat_str_index6\
+    \ music_beat_str_length) 64))\n               (music_beat_str_index8 (modulo (+\
+    \ music_beat_str_index7 music_beat_str_length) 128))\n               (music_beat_str_index9\
+    \ (modulo (+ music_beat_str_index8 music_beat_str_length) 256))\n            \
+    \   (music_beat_str_index10 (modulo (+ music_beat_str_index9 music_beat_str_length)\
+    \ 512))\n               (music_beat_str_index11 (modulo (+ music_beat_str_index10\
+    \ music_beat_str_length) 1024))\n               (music_beat_str_index12 (modulo\
+    \ (+ music_beat_str_index11 music_beat_str_length) 2048))\n               (music_beat_str_index13\
+    \ (modulo (+ music_beat_str_index12 music_beat_str_length) 4096))\n          \
+    \     (music_", "  (let ((music_list '())\n        (current-note '())\n      \
+    \  (current-rests '())\n        (current-rests-number 0))\n    (set! music_list\
+    \ (list->string->list (list->string music_string)))\n    (loop for i from 0 to\
+    \ (length (string->list music_string))\n          collect (if (equal? (string-ref\
+    \ music_string i) \".\")\n                       (cons (list-ref music_list i)\n\
+    \                            current-rests)\n                       (if (equal?\
+    \ (string-ref music_string i) \"o\")\n                           (cons (list-ref\
+    \ music_list i)\n                                 current-note)\n            \
+    \               (if (equal? (string-ref music_string i) \"|\")\n             \
+    \                  (cons (list-ref music_list i)\n                           \
+    \          current-rests)\n                               (cons (list-ref music_list\
+    \ i)\n                                     current-rests))))\n    (if (null? current-note)\n\
+    \        (set! music-list '())\n        (set! music-list (append music-list current-note))\n\
+    \        (set! current-note '()))\n    (if (null? current-rests)\n        (set!\
+    \ music-list '())\n        (set! music-list (append music-list current-rests))\n\
+    \        (set! current-rests '()))\n    (set! current-rests-number (+ 1 current-rests-number))\n\
+    \    music-list))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     "Given an array representing a branch of a tree that has non-negative integer nodes
@@ -39,7 +39,7 @@ long[] pluck(long[] arr)
 {
     long[] result = new long[2];
     long min = 0;
-    long minIndex = 0;
+    long min_index = 0;
     for (int i = 0; i < arr.Length; i++)
     {
         if (arr[i] % 2 == 0)
@@ -47,17 +47,17 @@ long[] pluck(long[] arr)
             if (min == 0)
             {
                 min = arr[i];
-                minIndex = i;
+                min_index = i;
             }
             else if (arr[i] < min)
             {
                 min = arr[i];
-                minIndex = i;
+                min_index = i;
             }
         }
     }
     result[0] = min;
-    result[1] = minIndex;
+    result[1] = min_index;
     return result;
 }
 
@@ -65,13 +65,13 @@ unittest
 {
     alias candidate = pluck;
 
-    assert(candidate([4, 2, 3]) == [2, 1]);
-    assert(candidate([1, 2, 3]) == [2, 1]);
+    assert(candidate([4L, 2L, 3L]) == [2L, 1L]);
+    assert(candidate([1L, 2L, 3L]) == [2L, 1L]);
     assert(candidate([]) == []);
-    assert(candidate([5, 0, 3, 0, 4, 2]) == [0, 1]);
-    assert(candidate([1, 2, 3, 0, 5, 3]) == [0, 3]);
-    assert(candidate([5, 4, 8, 4, 8]) == [4, 1]);
-    assert(candidate([7, 6, 7, 1]) == [6, 1]);
-    assert(candidate([7, 9, 7, 1]) == []);
+    assert(candidate([5L, 0L, 3L, 0L, 4L, 2L]) == [0L, 1L]);
+    assert(candidate([1L, 2L, 3L, 0L, 5L, 3L]) == [0L, 3L]);
+    assert(candidate([5L, 4L, 8L, 4L, 8L]) == [4L, 1L]);
+    assert(candidate([7L, 6L, 7L, 1L]) == [6L, 1L]);
+    assert(candidate([7L, 9L, 7L, 1L]) == []);
 }
 void main(){}

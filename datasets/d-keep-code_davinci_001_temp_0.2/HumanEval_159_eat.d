@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     You're a hungry rabbit, and you already have eaten a certain number of carrots,
@@ -32,19 +32,22 @@ import std.typecons;
 */
 long[] eat(long number, long need, long remaining) 
 {
-    // your code here
-    return [number, remaining];
+    long[] result = new long[2];
+    result[0] = number + remaining;
+    result[1] = remaining - need;
+    return result;
 }
+
 
 unittest
 {
     alias candidate = eat;
 
-    assert(candidate(5, 6, 10) == [11, 4]);
-    assert(candidate(4, 8, 9) == [12, 1]);
-    assert(candidate(1, 10, 10) == [11, 0]);
-    assert(candidate(2, 11, 5) == [7, 0]);
-    assert(candidate(4, 5, 7) == [9, 2]);
-    assert(candidate(4, 5, 1) == [5, 0]);
+    assert(candidate(5L, 6L, 10L) == [11L, 4L]);
+    assert(candidate(4L, 8L, 9L) == [12L, 1L]);
+    assert(candidate(1L, 10L, 10L) == [11L, 0L]);
+    assert(candidate(2L, 11L, 5L) == [7L, 0L]);
+    assert(candidate(4L, 5L, 7L) == [9L, 2L]);
+    assert(candidate(4L, 5L, 1L) == [5L, 0L]);
 }
 void main(){}

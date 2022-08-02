@@ -5,11 +5,13 @@
 # For example:
 # specialFilter([15, -73, 14, -15]) => 1 
 # specialFilter([33, -2, -3, 45, 21, 109]) => 2
+#
+# $1 is a space-separated list
 specialFilter() {
-    local arr=("$@")
     local count=0
-    for i in "${arr[@]}"; do
-        if [[ $i -gt 10 && $i%10 -eq $((i/10)) ]]; then
+    local numbers=($1)
+    for (( i=0; i<${#numbers[@]}; i++ )); do
+        if [[ ${numbers[$i]} -gt 10 && ${numbers[$i]:0:1} -eq 1 && ${numbers[$i]: -1:1} -eq 1 ]]; then
             ((count++))
         fi
     done
@@ -18,37 +20,18 @@ specialFilter() {
 }
 
 candidate() {
-    local res=$(specialFilter "$@")
-    echo $res
+    specialFilter "$@"
 }
 
-test() {
-    declare -a x0=(5 -2 1 -5)
-    x1=$(candidate "${x0[*]}")
-    assert_equals 0 "${x1[*]}"
-
-    declare -a x2=(15 -73 14 -15)
-    x3=$(candidate "${x2[*]}")
-    assert_equals 1 "${x3[*]}"
-
-    declare -a x4=(33 -2 -3 45 21 109)
-    x5=$(candidate "${x4[*]}")
-    assert_equals 2 "${x5[*]}"
-
-    declare -a x6=(43 -12 93 125 121 109)
-    x7=$(candidate "${x6[*]}")
-    assert_equals 4 "${x7[*]}"
-
-    declare -a x8=(71 -2 -33 75 21 19)
-    x9=$(candidate "${x8[*]}")
-    assert_equals 3 "${x9[*]}"
-
-    declare -a x10=(1)
-    x11=$(candidate "${x10[*]}")
-    assert_equals 0 "${x11[*]}"
-
-    declare -a x12=()
-    x13=$(candidate "${x12[*]}")
-    assert_equals 0 "${x13[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "5 -2 1 -5") = "0" ]]
+    [[ $(candidate "15 -73 14 -15") = "1" ]]
+    [[ $(candidate "33 -2 -3 45 21 109") = "2" ]]
+    [[ $(candidate "43 -12 93 125 121 109") = "4" ]]
+    [[ $(candidate "71 -2 -33 75 21 19") = "3" ]]
+    [[ $(candidate "1") = "0" ]]
+    [[ $(candidate "") = "0" ]]
 }
+
+run_test

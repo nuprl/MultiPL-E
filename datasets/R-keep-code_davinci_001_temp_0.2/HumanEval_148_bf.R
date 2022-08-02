@@ -27,12 +27,12 @@ bf("Mercury", "Uranus")
 
 test_humaneval <- function() {
 candidate <- bf
-    if(!identical(candidate('Jupiter', 'Neptune'), list('Saturn', 'Uranus'))){quit('no', 1)}
-    if(!identical(candidate('Earth', 'Mercury'), list('Venus'))){quit('no', 1)}
-    if(!identical(candidate('Mercury', 'Uranus'), list('Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn'))){quit('no', 1)}
-    if(!identical(candidate('Neptune', 'Venus'), list('Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus'))){quit('no', 1)}
-    if(!identical(candidate('Earth', 'Earth'), list())){quit('no', 1)}
-    if(!identical(candidate('Mars', 'Earth'), list())){quit('no', 1)}
-    if(!identical(candidate('Jupiter', 'Makemake'), list())){quit('no', 1)}
+    if(!identical(candidate('Jupiter', 'Neptune'), c('Saturn', 'Uranus'))){quit('no', 1)}
+    if(!identical(candidate('Earth', 'Mercury'), c('Venus'))){quit('no', 1)}
+    if(!identical(candidate('Mercury', 'Uranus'), c('Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn'))){quit('no', 1)}
+    if(!identical(candidate('Neptune', 'Venus'), c('Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus'))){quit('no', 1)}
+    if(!identical(candidate('Earth', 'Earth'), c())){quit('no', 1)}
+    if(!identical(candidate('Mars', 'Earth'), c())){quit('no', 1)}
+    if(!identical(candidate('Jupiter', 'Makemake'), c())){quit('no', 1)}
 }
 test_humaneval()

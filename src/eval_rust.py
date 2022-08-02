@@ -40,8 +40,8 @@ def eval_script(path: Path):
     return {
         "status": status,
         "exit_code": returncode,
-        "stdout": output.stdout,
-        "stderr": output.stderr,
+        "stdout": output.stdout.decode("utf-8"),
+        "stderr": output.stderr.decode("utf-8"),
     }
 
 if __name__ == "__main__":

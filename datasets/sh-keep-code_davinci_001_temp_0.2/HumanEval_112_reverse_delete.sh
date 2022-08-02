@@ -8,67 +8,50 @@
 # For s = "abcde", c = "ae", the result should be ('bcd',False)
 # For s = "abcdef", c = "b"  the result should be ('acdef',False)
 # For s = "abcdedcba", c = "ab", the result should be ('cdedc',True)
+#
+# $1 is a string
+# $2 is a string
 reverse_delete() {
     local s=$1
     local c=$2
-    local result=''
+    local result=""
+    local is_palindrome=false
     for (( i=0; i<${#s}; i++ )); do
         local char=${s:$i:1}
-        if [[ $c =~ $char ]]; then
-            continue
+        local is_in_c=false
+        for (( j=0; j<${#c}; j++ )); do
+            local c_char=${c:$j:1}
+            if [[ $char == $c_char ]]; then
+                is_in_c=true
+                break
+            fi
+        done
+        if [[ $is_in_c == false ]]; then
+            result+=$char
         fi
-        result+=$char
     done
-    if [[ $result == $result ]]; then
-        echo "$result"
-        echo "True"
-    else
-        echo "$result"
-        echo "False"
+    if [[ $result == $(echo $result | rev) ]]; then
+        is_palindrome=true
     fi
+    echo "$result $is_palindrome"
 
 }
 
 candidate() {
-    local res=$(reverse_delete "$@")
-    echo $res
+    reverse_delete "$@"
 }
 
-test() {
-    declare -a x1=("bcd" false)
-        x0=$(candidate "abcde" "ae")
-    assert_equals "${x1[*]}" "${x0[*]}"
-
-    declare -a x3=("acdef" false)
-        x2=$(candidate "abcdef" "b")
-    assert_equals "${x3[*]}" "${x2[*]}"
-
-    declare -a x5=("cdedc" true)
-        x4=$(candidate "abcdedcba" "ab")
-    assert_equals "${x5[*]}" "${x4[*]}"
-
-    declare -a x7=("dik" false)
-        x6=$(candidate "dwik" "w")
-    assert_equals "${x7[*]}" "${x6[*]}"
-
-    declare -a x9=("" true)
-        x8=$(candidate "a" "a")
-    assert_equals "${x9[*]}" "${x8[*]}"
-
-    declare -a x11=("abcdedcba" true)
-        x10=$(candidate "abcdedcba" "")
-    assert_equals "${x11[*]}" "${x10[*]}"
-
-    declare -a x13=("abcdedcba" true)
-        x12=$(candidate "abcdedcba" "v")
-    assert_equals "${x13[*]}" "${x12[*]}"
-
-    declare -a x15=("abba" true)
-        x14=$(candidate "vabba" "v")
-    assert_equals "${x15[*]}" "${x14[*]}"
-
-    declare -a x17=("" true)
-        x16=$(candidate "mamma" "mia")
-    assert_equals "${x17[*]}" "${x16[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "abcde" "ae") = "bcd false" ]]
+    [[ $(candidate "abcdef" "b") = "acdef false" ]]
+    [[ $(candidate "abcdedcba" "ab") = "cdedc true" ]]
+    [[ $(candidate "dwik" "w") = "dik false" ]]
+    [[ $(candidate "a" "a") = " true" ]]
+    [[ $(candidate "abcdedcba" "") = "abcdedcba true" ]]
+    [[ $(candidate "abcdedcba" "v") = "abcdedcba true" ]]
+    [[ $(candidate "vabba" "v") = "abba true" ]]
+    [[ $(candidate "mamma" "mia") = " true" ]]
 }
+
+run_test

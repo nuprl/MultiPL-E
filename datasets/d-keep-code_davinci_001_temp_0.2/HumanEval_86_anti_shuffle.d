@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Write a function that takes a string and returns an ordered version of it.
@@ -14,19 +14,23 @@ import std.typecons;
     anti_shuffle('Hello World!!!') returns 'Hello !!!Wdlor'
     
 */
-const(char)[] anti_shuffle(const(char)[] s) 
+string anti_shuffle(string s) 
+{
+    // Write your code here
+    string res = "";
+    for (int i = 0; i < s.length(); i++)
     {
-        var(char)[] result = new(char)[];
-        var(char)[] words = s.split(" ");
-        for(var(char)[] word in words)
+        if (s[i] == ' ')
         {
-            for(var(char) c in word)
-            {
-                result.push(c);
-            }
+            res += s[i];
         }
-        return result;
+        else
+        {
+            res += std.math.min(s[i], std.math.max(s[i], s[i]));
+        }
     }
+    return res;
+}
 
 unittest
 {

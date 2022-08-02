@@ -13,7 +13,658 @@ tests: "require 'test/unit'\nclass TestHumanEval < Test::Unit::TestCase\n  def t
   \ 5.0, 2.0], 0.1))\n    assert_equal(true, candidate.call([1.1, 2.2, 3.1, 4.1, 5.1],\
   \ 1.0))\n    assert_equal(false, candidate.call([1.1, 2.2, 3.1, 4.1, 5.1], 0.5))\n\
   \  end\nend\n"
-completions: []
+completions: ["  diffs = numbers.map { |x| x - threshold }\n  diffs.min <= diffs.max\n\
+    end", "  numbers.each_cons(2) do |first, second|\n    return true if first - second\
+    \ < threshold\n  end\n  false\nend\n</code>\nWe can use this in our has_close_elements\
+    \ method:\n<code>", "  return false if numbers.empty? || numbers.any? { |x| x\
+    \ < threshold }\n  \n  max_number = numbers.max\n  min_number = numbers.min\n\
+    \  \n  boolean = numbers.any? do |n|\n    (n - max_number) < threshold &&\n  \
+    \    (n - min_number) > threshold\n  end\n  \n  boolean\nend\n</code>\n<|/ a dscore=1\
+    \ tags=ruby,arrays,ruby-on-rails-5,ruby-on-rails |>\n<| c |>\nThis is an alternative\
+    \ approach to the problem. `Array#all?` does not have a `threshold` parameter.\n\
+    <|/ c |>\n<| a tags=ruby,arrays,ruby-on-rails-5,ruby-on-rails dscore=1 |>\n<code>",
+  "  return true if numbers.any? do |number|\n    (number - threshold < numbers[-2])\
+    \ &\n    (number - threshold > numbers[-1])\n  end rescue false\nend", "  return\
+    \ numbers.any? { |x| x - numbers.max((x, y)) <= threshold }\nend", "  numbers\
+    \ = numbers.to_a.dup\n  while numbers.any?\n    other = numbers.delete(numbers.min)\n\
+    \    return true if numbers.min - other < threshold or other - numbers.min < threshold\n\
+    \  end\n  false\nend\n</code>\n<|/ a dscore=0 tags=ruby |>\n<| a tags=ruby |>\n\
+    The most efficient way I have found to do this is as follows:\n<code>", "  numbers.sort.each\
+    \ do |n|\n    return true if n - numbers[0] > threshold\n  end\n  false\nend",
+  "  numbers.each do |number|\n    next_index = numbers.index(number + 1)\n    return\
+    \ true if next_index and next_index - number > threshold\n  end\n  false\nend\n\
+    </code>\n<|/ a tags=ruby,arrays,algorithm,hash |>\n<| a dscore=0 |>\nThe question\
+    \ has already been answered. Just to offer a more different approach. I know this\
+    \ is an old question but I thought I would add my solution anyways as I am learning\
+    \ Ruby at the moment and want to share a potential approach I have taken to this\
+    \ problem.\n<code>", "  numbers.sort.reverse\n  first, last = numbers.minmax\n\
+    \  numbers.compact!", "  numbers, threshold = check_if_numbers_are_numbers(numbers,\
+    \ threshold)\n  numbers.each do |number|\n    return false if numbers - [number].sort\n\
+    \  end\n  true\nend", "  sorted_numbers = numbers.sort\n  numbers_to_check = numbers.select\
+    \ { |number| number <= sorted_numbers.last }.sort\n  sorted_numbers_to_check =\
+    \ sorted_numbers.select { |number| number <= numbers_to_check.last }.sort\n  numbers_to_check.all?\
+    \ { |number| number - sorted_numbers_to_check.first < threshold }\nend\n</code>\n\
+    <|/ a dscore=2 |>\n<| a |>\nWe can use Enumerable#partition in Ruby 1.8.7 or later:\n\
+    <code>", "  numbers.each do |number|\n    number.each do |next_number|\n     \
+    \ return false if next_number - number > threshold\n    end\n  end\n  true\nend",
+  "  numbers.each do |number|\n    break if numbers.last > number\n    break if numbers.last\
+    \ < number\n    break if number - numbers.last < threshold\n    break if numbers.last\
+    \ - number < threshold\n  end\n  return false\nend", "  numbers.each do |number|\n\
+    \    return true if number-threshold < numbers && number+threshold > numbers\n\
+    \  end\n  false\nend", "  return numbers.any? {|i| numbers[i] - threshold < numbers[i-1]\
+    \ && numbers[i] - threshold < numbers[i+1]}\nend", "  # Create an array of all\
+    \ numbers, sorted.\n  sorted_numbers = numbers.sort\n  numbers.each do |n|\n \
+    \   # Find two numbers, one from array and one from sorted_numbers.\n    index\
+    \ = (sorted_numbers - [n]) * (sorted_numbers - [n]) / (n - sorted_numbers)\n \
+    \   return true if index >= threshold\n  end\n  false\nend\n</code>\n<|/ a dscore=2\
+    \ tags=ruby,arrays |>\n<| a dscore=1 |>\nI guess it could be done with some maths:\n\
+    <code>", "  numbers.each do |n|\n    diff = (n - numbers.last).abs\n    return\
+    \ false if diff < threshold\n  end\n  true\nend", "  return numbers.any? do |number|\n\
+    \    return false if number == 0.0\n    return true if number > threshold\n  \
+    \  return true if number < -threshold\n    (number - numbers.min).abs  <= threshold\n\
+    \    (number - numbers.max).abs <= threshold\n  end\nend", "  numbers.flatten.any?\
+    \ do |n|\n    Math.abs(n - numbers).abs < threshold\n  end\nend", "  numbers.sort.each\
+    \ do |number|\n    break if number - threshold < numbers[0] || threshold - number\
+    \ < numbers[-1]\n  end\n  true\nend\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThis\
+    \ does not take into account the fact that the two numbers might not be adjacent\
+    \ to each other but be \"closer than\" some threshold value.\n<|/ c |>\n<| c |>\n\
+    , yes, you are right. I guess I got confused by the wording \"closer to each other\
+    \ than\". OP might want to clarify this with more details on what is a \"close\
+    \ value\".\n<|/ c |>\n<| a tags=ruby,arrays,algorithm |>\nThis problem can be\
+    \ solved using dynamic programming as follows.\nThe concept is that if we find\
+    \ a \"close value\" between two numbers, then we can calculate its \"close value\"\
+    \ from scratch. For example, if the \"close value\" is one and the difference\
+    \ between the two numbers is zero, we can calculate its \"close value\" by simply\
+    \ adding the numbers. If its \"close value\" is greater than zero, then we know\
+    \ that the two numbers are closer than one but less than the original number's\
+    \ \"close value\".\nLet's see it in code for the input given as [[4, 2, 5], [4,\
+    \ 7, 2], [7, 0, 9]]\n<code>\nnumbers = [[4..8], [4..9], [7..12]]\nnumbers", " \
+    \ return numbers.any? do |num|\n    (num - numbers[0]).abs <= threshold\n  end\n\
+    end", "  numbers.each_cons(2) do |left, right|\n    return true if left - right\
+    \ < threshold\n  end\n  false\nend\n</code>\n<|/ a |>\n<| c |>\nThank you for\
+    \ giving me a clue.\n<|/ c |>\n<| a dscore=0 |>\n<code>", "  numbers = numbers.sort\n\
+    \  return ((numbers[1] - numbers[0]) < (numbers[2] - numbers[1])).all? do |number|\n\
+    \    ((numbers[1] - number[0]) < (numbers[2] - number[1])).all? do |number2|\n\
+    \      abs(number[0] - number[1]) <= threshold && abs(number[1] - number[2]) <=\
+    \ threshold\n    end\n  end\nend", "  numbers = numbers.sort_by { |x| x }\n  min_element\
+    \ = numbers.first\n  min_element_index = 0\n  min_distance = threshold\n  numbers.each\
+    \ do |number|\n    if (number - min_element) < min_distance\n      min_distance\
+    \ = number - min_element\n      min_element = number\n      min_element_index\
+    \ = numbers.index(number)\n    end\n  end\n  min_element_index != numbers.size\
+    \ - 1\nend", "    numbers = numbers.to_a # convert to array\n    numbers.sort!\n\
+    \    numbers.each do |el|\n        i, j = numbers.rindex(el)\n        return false\
+    \ if i != j\n    end\n    true\nend", "  numbers.each do |number|\n    yield(number)\
+    \ if yield(number)\n  end\nend", "  numbers.sort!\n  return true if (numbers.first\
+    \ <= threshold && numbers.last >= threshold) \n  return true if numbers.find {\
+    \ |n| n * (n-1) <= threshold } #this might not be optimal\n  false # No close\n\
+    end\n</code>\n<|/ a dscore=3 tags=ruby |>\n<| c |>\n\"In most cases Ruby already\
+    \ has this sort of functionality built in\". How about `[1,2,3,4,5,6].any?{ |x|\
+    \ x==1 || x==2 }` ? Or am I missing something here?\n<|/ c |>\n<| c |>\nThis does\
+    \ only give `True` when all numbers are close to each other. The OP asked if two\
+    \ numbers are closer than a threshold, not if a number occurs two or more times\
+    \ in a range.\n<|/ c |>\n<| c |>\nI changed it to `return true if (numbers.first\
+    \ <= threshold && numbers.last >= threshold)` and it returns `true` when there\
+    \ is a number that is closer to threshold than `numbers.first` and `numbers.last`\n\
+    <|/ c |>\n<| c |>\nThanks for spotting my mistake, I fixed the answer to account\
+    \ for that.\n<|/ c |>\n<| a dscore=3 |>\nIf you'd like to count how many times\
+    \ a range contains any two numbers, you can use the combination method of Array:\n\
+    <code>\n> [1,2].combination(2).count{|n| n.all? {|x| x.odd?}}\n=> 1\n</code>\n\
+    If you need it to be more efficient, you can just count the number of elements\
+    \ that are both less than the threshold, and greater than or equal to the threshold\
+    \ (where threshold is 2 in your example):\n<code>\n> [1,2].combination(2).count{\
+    \ |n| n.all? { |x| (x.odd? && x >= 2) || x == 1 } }\n=> 2\n</code>\n<|/ a tags=ruby\
+    \ |>\n<| c |>\nThanks for the answer. I think the second one would be the better\
+    \ one, since that way it doesn't need to create another array.\n<|/ c |>\n<| c\
+    \ |>\nI edited my answer, I hope it helps :)\n<|/ c |>\n<| a |>\nThe simplest\
+    \ way to do that is to create two ranges and compare the ranges:\n<code>", " \
+    \ numbers.each_cons(2) do |a, b|\n    return false unless ((a - b) < threshold\
+    \ * (a + b)) || ((a - b) > -threshold * (a + b))\n  end\n  true\nend\n</code>\n\
+    It will work in O(n) complexity. And it seems simple. \nIn terms of performance,\
+    \ I found it quite fast too.\n<|/ a dscore=2 |>\n<| a tags=ruby |>\nHow about\
+    \ this one:\n<code>", "  sorted_numbers = numbers.sort\n  n = numbers.size.positive\n\
+    \  for i in 0...n-1\n    if numbers[i] > numbers[i+1]\n      j = (i+1) % (n-1)\n\
+    \      if numbers[j] > numbers[i+1]\n        return true\n      end\n    end\n\
+    \  end\n  return false\nend", "  numbers_with_threshold = numbers.select {|number|\
+    \ abs(number - threshold) <= threshold}.uniq\n  numbers_with_threshold.any? {|number|\
+    \ numbers.any? {|other_number| other_number == number - threshold}}\nend", " \
+    \ has_close = false # will be true if any two numbers are closer than threshold\n\
+    \  numbers.each_index do |i|\n    j = numbers.size - i - 1\n    break if j >=\
+    \ 0\n    has_close = true\n    break if numbers[i] + numbers[j] > threshold\n\
+    \  end\n  has_close\nend", "  numbers.each_with_index do |number, index|\n   \
+    \ next_index = index + 1\n    next_number = numbers[next_index]\n    return false\
+    \ unless number == next_number\n    return false if number - next_number < threshold\n\
+    \  end\n  true\nend", "  numbers.each do |n|\n    numbers.each do |n|\n      return\
+    \ true if abs(n - threshold) < threshold\n    end\n  end\n  return false\nend",
+  "  numbers.any? { |n| n > threshold }\nend", "  numbers.reduce(true_slow?(threshold,\
+    \ false_slow?)) do |result, number|\n    result || numbers_are_close(numbers,\
+    \ threshold)\n  end\nend", "  numbers.each do |number|\n    break if numbers[number\
+    \ - 1] + number < threshold\n    break if numbers[number + 1] - number < threshold\n\
+    \  end\n  true\nend", "  numbers.any? { |num| abs(num - numbers.max) <= threshold\
+    \ }\nend", "  numbers.any? do |n|\n    next false if n.abs < threshold\n    difference\
+    \ = numbers.max_by(&:abs).abs - n\n    next false if difference < threshold\n\
+    \    next false if difference == 0\n    true\n  end\nend\n</code>\nI decided to\
+    \ use the method from here.\n<|/ a tags=ruby-on-rails,ruby,algorithm,ruby-on-rails-4\
+    \ dscore=2 |>\n<| c |>\nPlease see my edit to the question. It should be noted\
+    \ that the array can contain negative numbers.\n<|/ c |>\n<| c |>\nAdded the new\
+    \ solution based on your feedback.\n<|/ c |>\n<| a dscore=1 |>\nHere's a solution\
+    \ using sort! to sort both vectors by their absolute value and compare them.\n\
+    <code>", "  sorted_numbers = numbers.sort\n  numbers.each_index do |i|\n    return\
+    \ true if numbers[i] > sorted_numbers[i + 1]\n  end\n  false\nend", "  numbers.any?{\
+    \ |n| n.between?(threshold...threshold+threshold) }\nend", "  numbers.each do\
+    \ |num|\n    found = true\n    numbers.each do |other_num|\n      if abs(other_num\
+    \ - num) < threshold\n        found = false\n        break\n      end\n    end\n\
+    \    return found\n  end\n  return false\nend", "  numbers = numbers.map(&:to_f)\n\
+    \  index = 0\n  numbers.each do |n|\n    index = index + 1\n    return false if\
+    \ n.to_f - numbers[index - 1].to_f > threshold\n  end\n  return true\nend\n</code>\n\
+    <|/ a |>\n<| c |>\nNice answer! Just a side note, `Array.each` is not that much\
+    \ faster (just 2x). Using `Array.map` should be better (I benchmarked this and\
+    \ you are right), though your code is faster still.\n<|/ c |>\n<| a tags=ruby,sorting\
+    \ dscore=1 |>\nI believe a ruby solution is:\n<code>", "  numbers.sort.each do\
+    \ |number|\n    return false if number - numbers[0] > threshold\n    return true\
+    \ if number - numbers[2] > threshold\n  end\n  true\nend", "  return numbers.any?\
+    \ {|n| abs(n) - threshold <= 0.01 }\nend", "  numbers.any? do |n|\n    distance\
+    \ = get_distance(n, threshold)\n    (0...distance).any? do |i|\n      abs(n[i]\
+    \ - threshold) <= 0.1\n    end\n  end\nend", "  numbers.sort!\n  difference =\
+    \ numbers[1] - numbers[0]\n  return difference <= threshold and numbers.any? {\
+    \ |n| n < difference }\nend", "  numbers.uniq.sort!\n  numbers.each_cons(2) do\
+    \ |set|\n    break if set.sum <= threshold\n  end\n  true\nend\n</code>\n<|/ a\
+    \ |>\n<| a |>\nYou could also do this without having to calculate the total sum.\
+    \ Simply find two numbers that are closer to one another by summing the absolute\
+    \ values of their differences over the range of values.\n<code>", "  numbers.any?\
+    \ { |n| distance(n, threshold) < epsilon }\nend", "  numbers.inject(true) do |result,\
+    \ number|\n    result && abs(number - numbers.last) < threshold\n  end\nend",
+  "  numbers.each do |n|\n    found = numbers.find { |e| abs(n - e) < threshold }\n\
+    \    return true if found\n  end\n  false\nend", "  numbers.each do |number|\n\
+    \    closest_two_numbers = numbers - number\n    return true if closest_two_numbers.min([threshold]).abs\
+    \ <= threshold\n  end\n  false\nend", "  numbers.each do |number|\n    next unless\
+    \ number == numbers[0]\n    distance = threshold - number\n    distance_square\
+    \ = distance * distance\n    numbers.each do |other_number|\n      next if other_number\
+    \ == numbers[0]\n      next if other_number == numbers[-1]\n      distance_square\
+    \ = distance_square + other_number * other_number\n    end\n    return false if\
+    \ distance_square < 0\n    return true if distance_square == 0\n  end\n  true\n\
+    end", "  threshold = number.to_f(threshold)\n  numbers.any? { |number| number\
+    \ - threshold < number && number + threshold > number }\nend\n</code>\n<|/ a |>\n\
+    <| a |>\n<code>", "  numbers = numbers.to_a\n  return numbers.length > 1 && (numbers.map(&:round).each_cons(2).none?\
+    \ do |a|\n    a[0].abs < a[1].abs\n  end)\nend", "  # Convert input to array\n\
+    \  numbers = convert_to_array(numbers)\n  numbers = numbers.flatten", "    numbers.each\
+    \ do |n|\n        next if n < threshold\n        break if numbers.index(n) !=\
+    \ numbers.rindex(n)\n    end\n    true\nend", "  numbers.any?(|number| number\
+    \ - threshold <= number && number <= threshold + threshold)\nend", "  numbers.each\
+    \ do |number|\n    found = false\n    numbers.each do |other_number|\n      next\
+    \ unless other_number == number\n      next if other_number == number + threshold\n\
+    \      next if other_number == number - threshold\n      found = true\n      break\n\
+    \    end\n    return false unless found\n  end\n  return true\nend", "    numbers.sort.each\
+    \ do |i|\n        for j in (i+1)..numbers.count\n            if numbers[i] + numbers[j]\
+    \ < threshold\n                return true\n            end\n        end\n   \
+    \ end\n    return false\nend\n</code>\n<|/ a |>\n<| c |>\nThis solution works\
+    \ well if you don't have to check against multiple thresholds. One would also\
+    \ need to add an additional variable `has_close_elements`, as you do for the function\
+    \ `has_close_elements` itself.\n<|/ c |>\n<| a dscore=1 |>\nAn alternative solution\
+    \ using only Ruby :\n<code>", "  numbers.each_cons(2) do |n1, n2|\n    return\
+    \ true if fabs(n1 - n2) < threshold\n  end\n  false\nend\n</code>\n<|/ a tags=ruby,arrays\
+    \ |>\n<| c |>\nIt took me a while to figure out what `each_cons` is doing, but\
+    \ I got it now.\n<|/ c |>\n<| c |>\n`each_cons` takes an argument which is the\
+    \ size of the chunks to split the array into. So, if I understand correctly, `each_cons(2)`\
+    \ would split `numbers` into chunks of two elements.\n<|/ c |>\n<| c |>\nIt looks\
+    \ like the only reason you used `each_cons` is because you were trying to find\
+    \ whether two numbers are within `threshold` of each other. It could be done more\
+    \ simply and more clearly with a `each` loop.\n<|/ c |>\n<| c |>\nAh, yes you're\
+    \ absolutely right. It looks like I got caught by trying to do some pretty complicated\
+    \ code in my head. Thanks!\n<|/ c |>\n<| c |>\nWhy `each_cons` rather than `each_with_index`?\
+    \ What does it do?\n<|/ c |>\n<| a tags=ruby,arrays |>\n<code>\narr.count(*arr[0..-2])\n\
+    </code>\narr needs to be the same array as its self.\n<|/ a dscore=2 |>\n<| c\
+    \ |>\nHow does this differ from my answer?\n<|/ c |>\n<| c |>\nit works because\
+    \ count will search all occurrences of all the elements in the array (as opposed\
+    \ to count only searching one occurrence).\n<|/ c |>\n<| a tags=ruby,arrays |>\n\
+    <code>", "  numbers.each_cons(2) do |left, right|\n    return false if threshold\
+    \ >= left - right\n  end\n  true\nend\n</cell>\n<text>\nHow many numbers are in\
+    \ the list?", "  pairs = numbers.group_by { |x| x % 2 }\n  pairs.any? { |_, y|\
+    \ y >= threshold }\nend", "  difference = numbers.inject(0) do |difference, number|\n\
+    \    difference += (number - threshold)\n  end\n  difference > numbers.count /\
+    \ 2.0\nend", "  pairs = numbers.each_cons(2) do |a, b|\n    (a-b).abs <= threshold\n\
+    \  end\n  pairs.size == numbers.size\nend", "    numbers.each_with_index do |element,\
+    \ index|\n        numbers[index] = element if element > threshold\n    end\n \
+    \   return true unless numbers.all?\n    return false if numbers.uniq.count ==\
+    \ numbers.count\n    numbers.all? { |n| n <= threshold }\nend", "  return true\
+    \ if numbers.any? { |n| n - threshold <= numbers.max && n - threshold >= numbers.min\
+    \ }\n  false\nend\n</code>\n<|/ a dscore=0 |>\n<| c |>\n`if numbers.any?(&:<=>)`\
+    \ will give a wrong result if `numbers` contains `nil`.\n<|/ c |>\n<| c |>\n:\
+    \ You're absolutely right, thanks. I edited my answer. Although it looks like\
+    \ `numbers` may contain `nil` values, it would be quite hard to determine which\
+    \ values are `nil` and which aren't, so I believe `if numbers.any?(&:<=>) == -1`\
+    \ should be the way to go.\n<|/ c |>\n<| a |>\n<code>", "  numbers.each_cons(2)\
+    \ do |a, b|\n    return true if ((a - b) <= threshold).nonzero?\n  end\n  false\n\
+    end", "  numbers.each do |number|\n    found = false\n    numbers.each do |other|\n\
+    \      found = true if distance_between_points(number, other) < threshold\n  \
+    \  end\n    return false if found\n  end\n  true\nend", "  numbers.each_cons(2)\
+    \ do |a, b|\n    return true if distance(a, b) < threshold\n  end\n  false\nend",
+  "  numbers.each do |number|\n    numbers.each do |other|\n      return true if abs(number\
+    \ - other) < threshold\n    end\n  end\n  false\nend", "  numbers.each do |number|\n\
+    \    distance = numbers.map { |num| num - number }.max\n    return true if distance\
+    \ <= threshold\n  end\n  false\nend\n</code>\n<|/ a tags=algorithm,ruby |>\n<|\
+    \ a |>\nIt seems you want to check if a collection of numbers are close to each\
+    \ other by some threshold. One solution might be to sort the elements and then\
+    \ perform a binary search to find out if the threshold is satisfied. Here's an\
+    \ implementation:\n<code>", "  numbers.each_cons(2) do |a|\n    numbers.each_cons(2)\
+    \ do |b|\n      next if (a + b + threshold - 0.5).abs2 <= threshold\n      next\
+    \ true if a > b\n    end\n    next\n  end\n  false\nend", "  numbers.any? do |number|\n\
+    \    (number - threshold).abs < 0.0001\n  end\nend", "  return numbers.any? {\
+    \ |num| num - numbers.min < threshold }\nend", "  numbers.any? { |n| n - numbers[numbers.index(n)]\
+    \ < threshold }\nend\n</code>\n<|/ a tags=ruby,arrays,performance,math dscore=0\
+    \ |>\n<| c |>\n`(0...(numbers.length-1)).include?(numbers.index(n) + 1)` is probably\
+    \ faster, but that's not really a significant difference.\n<|/ c |>\n<| c |>\n\
+    `include?` is O(n) and `index` is O(logn)\n<|/ c |>\n<| c |>\nYes, but that's\
+    \ a lot more work than just using the `any?` method.\n<|/ c |>\n<| c |>\nTrue.\
+    \ Also, you should probably just use [the built-in `all?` method](http://ruby-doc.org/core/Enumerable.html#method-i-all-3F).\n\
+    <|/ c |>\n<| c |>\nThanks for your answer! I checked it, and it works fine. Could\
+    \ you explain me how does it work, how it works and why this solution works faster\
+    \ than other ones?\n<|/ c |>\n<| a tags=ruby,arrays,performance,math |>\nThis\
+    \ solution avoids using any and index methods.\n<code>", "  numbers.each do |number|\n\
+    \    return true if closest_element_index(number, numbers) < closest_element_index(number,\
+    \ threshold)\n  end\n  false\nend\n</pre>", "  numbers.any? do |num|\n    other_numbers\
+    \ = numbers - [num]\n    (other_numbers.length <= 1) or\n      (other_numbers.all?\
+    \ { |num| num - threshold < num < num + threshold }) or\n      (other_numbers.all?\
+    \ { |num| threshold < num < num + threshold }) or\n      (other_numbers.all? {\
+    \ |num| num - threshold > num > num + threshold })\n  end\nend", "    numbers.each\
+    \ do |number|\n        other_numbers = numbers.clone\n        other_numbers.reject!\
+    \ { |num| num == number }\n        if other_numbers.count > 1\n            other_numbers.each\
+    \ do |num|\n                if abs(num - number) <= threshold\n              \
+    \      return true\n                end\n            end\n        end\n    end\n\
+    \    false\nend", "  (0..numbers.size -1).any? do |i|\n    (numbers[i] - numbers[i\
+    \ + 1]) <= threshold\n  end\nend", "  numbers.any? do |n|\n    if n < threshold\n\
+    \      numbers.find { |x| x >= n } == n\n    else\n      numbers.find { |x| x\
+    \ <= n } == n\n    end\n  end\nend", "  numbers.each do |n|\n    i = numbers.index(n)\
+    \ + 1\n    j = numbers.index(n) - 1\n    if i != j and numbers[i] >= numbers[j]\
+    \ and i < j\n      return false\n    elsif i == j\n      break\n    end\n  end\n\
+    \  true\nend", "  numbers.inject(true) do |result,item|\n    result &= (item -\
+    \ threshold < numbers[item+1]) ? false : true\n  end\nend\n</code>\n<|/ a tags=ruby\
+    \ |>\n<| c |>\nThis is an elegant solution, and I'd use it, but I decided to go\
+    \ with my solution because I think it's more elegant in the way it is. Thanks\
+    \ for the input though.\n<|/ c |>\n<| a |>\n<code>", "  numbers.any? { |n| Math.abs(n\
+    \ - numbers[numbers.length - 1]) <= threshold }\nend", "  numbers.each_cons(2)\
+    \ do |a, b|\n    return true if a.abs < threshold * b.abs\n  end\n  false\nend\n\
+    </code>\n<|/ a tags=ruby dscore=4 |>\n<| c |>\nThis won't work if the list has\
+    \ a non-integer in it.  `2.to_f => 2.0` and `2.1.to_f => 2.1`, for example.  It\
+    \ also won't work if you pass it an array with negative numbers (i.e. `[0.1, -0.1,\
+    \ 0.1, 0.2, 0.3, -0.3]`).  It will throw an `ArgumentError`.\n<|/ c |>\n<| c |>\n\
+    Thanks for spotting that. I've updated my answer to use [`abs`](http://www.ruby-doc.org/core-2.1.1/Float.html#method-i-abs)\
+    \ to handle negative numbers. I'm not sure what you mean by an array with negative\
+    \ numbers, but I'll leave that as an exercise to the asker.\n<|/ c |>\n<| c |>\n\
+    `has_close_elements([2.1, 2.2, 2.3, 2.4], 0.5)` returns true, but `has_close_elements([2.1,\
+    \ 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8], 0.3)` returns false\n<|/ c |>\n<| c |>\n\
+    What is the expected return for `has_close_elements([2.1, 2.2, 2.3, 2.4, 2.5,\
+    \ 2.6, 2.7, 2.8], 0.3)`?\n<|/ c |>\n<| c |>\nI guess the OP wants to return true\
+    \ if there are two elements closer to each other than the given threshold for\
+    \ more than two elements or less than two elements.\n<|/ c |>\n<| a dscore=3 tags=ruby\
+    \ |>\nHere's a solution without looping:\n<code>", "  numbers.sort!\n  i = 0\n\
+    \  while i < numbers.size - 1 && numbers[i + 1] - numbers[i] < threshold\n   \
+    \ i += 1\n  end\n  i == numbers.size ? true : false\nend", "  numbers.each do\
+    \ |number|\n    index = numbers.index {|element| element == number}\n    next\
+    \ unless index\n    if index < numbers.size - 1\n      index2 = index + 1\n  \
+    \    break if index2 < numbers.size - 1\n      break if abs(numbers[index] - numbers[index2])\
+    \ <= threshold\n    end\n  end\n  true\nend", "  return false if numbers.empty?\
+    \ || numbers.any? { |n| n.abs > threshold }\n  (numbers.sort_by { |n| n }) * (numbers.sort_by\
+    \ { |n| -n }).any? { |n| n < threshold }\nend", "  # Sort the list, so it makes\
+    \ the algorithm more efficient\n  numbers = numbers.sort\n  # Check every two\
+    \ elements, one from each side\n  for i in range(numbers.length - 1)\n    for\
+    \ j in (i .. numbers.length - 1)\n      # Check if distance between i and j is\
+    \ less than threshold\n      # If so, return True\n      return numbers[i] - numbers[j]\
+    \ <= threshold\n  \n  # If we reached here, all numbers are within threshold of\
+    \ each\n  # other.  Return False\n  return false\nend", "  threshold = threshold.to_f\n\
+    \  numbers = [number.to_f for number in numbers] unless numbers.is_a?(Array)\n\
+    \  sorted_numbers = numbers.sort\n  return sorted_numbers.last(2) == sorted_numbers.first(2)\
+    \ &&\n    (sorted_numbers[1] - sorted_numbers[0]) <= threshold\nend\n</code>\n\
+    It would look like this. I used a similar method but with a better time complexity.\
+    \ On the other hand, your code has O(n\xB2) time complexity which is very slow.\n\
+    <|/ a dscore=1 tags=ruby-on-rails,ruby |>\n<| c |>\nCan I see your final code\
+    \ with `O(n)`? Also, please include a link to the original paper\n<|/ c |>\n<|\
+    \ c |>\nI included the final code in the answer.\n<|/ c |>\n<| c |>\nThe link\
+    \ is [here](http://www.cs.bham.ac.uk/~jxb/papers/Nice-Algorithms-for-Chemistry-In-Ruby-And-Rails.pdf)\n\
+    <|/ c |>\n<| c |>\nThis doesn't seem to work with the algorithm presented in that\
+    \ paper.\n<|/ c |>\n<| c |>\nIt looks like that paper was published with different\
+    \ notation. I've added some comments to my answer. Anyway, I've included my final\
+    \ code with my comments, take a look.\n<|/ c |>\n<| a |>\nI recently realized\
+    \ a very simple solution in Ruby using Enumerator::Lazy#take_while\n<code>\nmy_array\
+    \ = my_array.take_while{|item| item.to_f != my_array.last.to_f }\n</code>\nIt\
+    \ works because Enumerator::Lazy#last is lazy, meaning that it will only return\
+    \ one result rather than the entire array.\n<|/ a dscore=1 tags=ruby-on-rails,ruby\
+    \ |>\n<| a |>\nYou could try:\n<code>\nmy_array.select{|n| my_array.count{|n|\
+    \ n >= n} <= 2}\n</code>\nI haven't checked it though, maybe you can check what\
+    \ my_array.count() does for you. Maybe it uses O(n^2) algorithm as you mentioned.\n\
+    <|/ a dscore=0 tags=ruby-on-rails,ruby |>\n<| c |>\n`my_array.count` is `O(n)`.\
+    \ The `select` method runs in `O(n)` as well.\n<|/ c |>\n<| c |>\n: I think it's\
+    \ O(n^2) because `my_array.count` is executed each time on every element of ",
+  "  numbers.each do |number|\n    return false if closest_number(number, numbers,\
+    \ threshold) < threshold\n  end\n  true\nend", "  numbers.each_cons(2) do |a,\
+    \ b|\n    if sqrt(a * a + b * b) < threshold\n      return true\n    end\n  end\n\
+    \  return false\nend\n</code>\nTesting\n<code>", "  numbers.inject(true) do |res,number|\n\
+    \    res && abs(number - numbers[i - 1]) <= threshold\n  end\nend", "  numbers.each\
+    \ do |number|\n    other_numbers.any? do |other_number|\n      abs(number - other_number)\
+    \ < threshold\n    end\n  end\nend\n</code>\n<|/ a |>\n<| a tags=ruby,arrays,algorithm\
+    \ dscore=0 |>\nI wrote some code for this problem a while back.  It was very similar\
+    \ to some of what I had written before.  I wrote it a while back, don't remember\
+    \ if I wrote it back then or if I was in the middle of some kind of project. \
+    \ It was written in python, but you can easily convert it back to ruby, or any\
+    \ other language you're comfortable with.\nHere is the code:\n<code>", "  numbers.any?\
+    \ do |num|\n    (num - threshold).abs <= (threshold + num).abs\n  end\nend", " \
+    \ numbers.each_cons(2) do |a, b|\n    return true if b.abs < (threshold*threshold)\n\
+    \  end\n  false\nend", "  if numbers.length < 2\n    return false\n  \n  min_num\
+    \ = numbers.min\n  max_num = numbers.max\n  mid = (min_num + max_num)/2\n  \n\
+    \  if mid < threshold\n    return false\n  \n  # The two numbers are close\n \
+    \ return true\nend\n</cell>\n<cell>\n@test has_close_elements([1.0, 2.0, 3.0],\
+    \ 0.5)\n</cell>\n<cell>\n@test has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0],\
+    \ 0.3)\n</cell>\n<text>\nFinding the closest pair of points", "  numbers.any?\
+    \ do |x|\n    numbers.count { |y| abs(x - y) <= threshold } > 1\n  end\nend",
+  "  numbers.each_cons(2) do |first, second|\n    return true if first + threshold\
+    \ == second || second + threshold == first\n  end\n  false\nend", "  min_threshold\
+    \ = threshold - EPSILON\n  max_threshold = threshold + EPSILON", "  numbers.sort\
+    \ { |a, b| a - b }\n  numbers.uniq!\n  (numbers.length == 1) ? false : (numbers[1]\
+    \ - numbers[0] < threshold)\nend", "  return true if numbers.each do |number|\n\
+    \    return true if number - threshold > numbers.min or threshold - number > numbers.min\n\
+    \    return false\n  end\n  false\nend", "  pairs = numbers.group_by{ |num| num\
+    \ }\n  pairs.each_value do |pair|\n    first, last = pair.minmax\n    (last -\
+    \ first).abs < threshold if first != last\n  end\nend", "  # The difference between\
+    \ the numbers and threshold must be greater than the threshold\n  difference =\
+    \ numbers[1..-1] - threshold\n  return difference.min() < 0\nend", "  numbers.each_with_index.any?\
+    \ do |number, index|\n    if numbers[index] - number > threshold\n      true\n\
+    \    else\n      false\n    end\n  end\nend", "  numbers.any? do |number|\n  \
+    \  number.abs < threshold\n  end\nend", "  return numbers.any? { |n| n >= threshold\
+    \ }\nend", "  numbers.each do |number|\n    numbers.each do |other_number|\n \
+    \     other_threshold =\n        (other_number - number).abs * (other_number -\
+    \ number).abs / number\n      if other_threshold < threshold\n        break false\
+    \ if other_threshold == 0\n      end\n    end\n    break if numbers.length ==\
+    \ numbers.count\n  end\n  true\nend", "  numbers.any? do |number|\n    number\
+    \ < threshold && numbers.detect { |other| number + threshold < other }\n  end\n\
+    end", "  return false unless numbers.any?\n  numbers.min.abs < threshold || numbers.max.abs\
+    \ < threshold\nend", "  numbers = numbers.to_a\n  numbers.each do |num|\n    prev\
+    \ = num - 1\n    next = num + 1\n    return true if num == prev or num == next\n\
+    \    return true if num == prev or num == next\n    break if num == prev and next\
+    \ == next and next == numbers[-1]\n    break if num == prev and next == numbers[-1]\n\
+    \  end\n  return false\nend", "  numbers.each do |number|\n    next false if number\
+    \ == number\n    numbers.each do |other|\n      next false if other == number\n\
+    \      next false if number - other <= threshold\n    end\n    break\n  end\n\
+    \  true\nend", "  numbers = (numbers + [0.0]).sort\n  threshold.times do |i|\n\
+    \    break if numbers[i] == numbers[i + 1]\n    break if numbers[i] > numbers[i\
+    \ + 1] + threshold\n  end\n  numbers.length >= 2\nend", "  if numbers.empty?\n\
+    \    false\n  elsif numbers.length == 1\n    true\n  else\n    numbers.uniq.sort.each_cons(2).all?\
+    \ { |a, b| abs(a - b) < threshold }\n  end\nend", "  return numbers.any? { |n|\
+    \ n - numbers.min < threshold - n }\nend", "  return numbers.any? { |n| abs(n\
+    \ - threshold) < threshold }\nend", "  numbers.each_cons(2).any? do |a, b|\n \
+    \   (a - b).abs < threshold\n  end\nend\n</code>\nThe function each_cons(2) loops\
+    \ through pairs of numbers, a and b, starting with a. a and b are each compared\
+    \ using a < b. Once the pair is found the block is evaluated, and the pair is\
+    \ discarded. If there are any other pairs in the array, the block will be evaluated\
+    \ again with the next pair in the array, and so on, until there are only two pairs\
+    \ in the array. \nThe any? method checks if any element in the array evaluates\
+    \ to true, which means that the whole block will return true in the first iteration.\
+    \ \nAs you can see in the first example, the function returns true for [1.0, 2.0,\
+    \ 3.0], but false for the second example.\n<|/ a tags=ruby,arrays,ruby-on-rails,array-difference\
+    \ |>\n<| a |>\nHere is my contribution based on David Walsh's answer\n<code>\n\
+    arr1 = [1,2,3,4,5,6,7,8,9]\narr2 = [2,3,4,5]", "    numbers.each do |number|\n\
+    \        break if number == numbers.last\n        break if number == numbers.first\n\
+    \        break if Math.abs(number-numbers.last) < threshold\n        break if\
+    \ Math.abs(number-numbers.first) < threshold\n    end\n    numbers.any?\nend",
+  "  numbers_with_closed_set = numbers.reduce(:&)\n  numbers_with_closed_set.any?\
+    \ do |n|\n    abs(n - numbers_with_closed_set) < threshold\n  end\nend", "  return\
+    \ numbers.any? do |number|\n    distance_from_previous = numbers.map { |n| n.abs\
+    \ }.max\n    number.abs - distance_from_previous < threshold\n  end\nend\n</code>\n\
+    <|/ a |>\n<| a tags=ruby,arrays,loops dscore=0 |>\nA very naive and inefficient\
+    \ solution:\n<code>", "  return numbers.any? {|n| n.abs >= threshold}\nend", " \
+    \ numbers.each do |element|\n    return false if element - threshold < numbers.min\
+    \ || element - threshold > numbers.max\n  end\n  true\nend", "  numbers.map {\
+    \ |n| n - threshold }.any?\nend", "  numbers.any? do |number|\n    other_number\
+    \ = numbers.detect do |other_number|\n      abs(number - other_number) < threshold\n\
+    \    end\n    other_number.nil?\n  end\nend", "  if numbers.nil? or numbers.empty?\n\
+    \    false\n  else\n    numbers.all? do |num|\n      abs(num - threshold) < threshold\n\
+    \    end\n  end\nend", "  numbers.each_cons(2) do |a, b|\n    return true if b.abs\
+    \ < threshold\n  end\n  false\nend", "  sorted = numbers.sort\n  numbers.each\
+    \ do |number|\n    return false if number == sorted[0] or number == sorted[-1]\n\
+    \    break if number < sorted[sorted.length - 1]\n  end\n  true\nend", "  numbers.any?\
+    \ { |n| abs(n - threshold) <= threshold }\nend", "  numbers.each do |number|\n\
+    \    return true if number == numbers[0..-2] + numbers[-1]\n  end\n  false\nend",
+  "  numbers.any? do |number|\n    sorted_numbers.index{|n| n < number }.nil? &&\n\
+    \    sorted_numbers.index{|n| n < number + threshold }.nil?\n  end\nend", "  numbers.any?\
+    \ { |number| number == numbers.min || number == numbers.max }\nend", "  numbers.any?\
+    \ {|n| n - numbers[(numbers.count - 1)..-1].min < threshold}\nend", "    numbers.each\
+    \ do |number|\n        next false if number.abs > threshold\n        return false\
+    \ if number == numbers[0] || numbers[numbers.length - 1] == number\n        return\
+    \ true if number == numbers[1] || numbers[numbers.length - 2] == number\n    end\n\
+    \    true\nend\n</code>\n<|/ a dscore=0 |>\n<| c |>\nThis looks awesome, but you\
+    \ have a typo - `if number == numbers[0] || numbers[numbers.length - 1] == number`\
+    \ - should be `number == numbers[0] || number == numbers[numbers.length - 1]`.\
+    \ But I'm thinking about it, it would work even without that, right? The reason\
+    \ I ask is because I wasn't thinking about it that way.\n<|/ c |>\n<| c |>\nOops,\
+    \ that was my mistake. Edited. Thanks!\n<|/ c |>\n<| a dscore=0 tags=ruby |>\n\
+    Here is my solution using Ruby's sort to find the first and last element that\
+    \ differs from the others. If the first and last elements are equal, we have 2\
+    \ equal numbers, and the third element must be the minimum of the two numbers.\n\
+    <code>", "    numbers.each do |n|\n        n.each do |o|\n            return true\
+    \ if Math.abs(o-n) <= threshold\n        end\n    end\n    false\nend", "  numbers.each_cons(2)\
+    \ do |a, b|\n    return true if a.abs < threshold\n  end\n  false\nend", "  numbers\
+    \ = numbers.uniq\n  numbers.reject! {|number| number.nil? || number.zero? }\n\
+    \  numbers.any? do |number|\n    abs(number - numbers[1]) < threshold\n  end\n\
+    end", "  numbers.each do |number|\n    numbers.each do |next_number|\n      return\
+    \ true if distance(number, next_number) < threshold\n    end\n  end\n  false\n\
+    end", "  numbers.each_cons(2).any? do |a, b|\n    (a - b) < threshold\n  end\n\
+    end", "  numbers.flatten.sort.each_cons(2).with_index do |a,b|\n    (a - b).abs\
+    \ <= threshold\n  end.any?\nend\n</code>\n<|/ a dscore=2 tags=ruby |>\n<| c |>\n\
+    You can avoid `flatten` with `numbers.flatten.sort.each_cons(2).with_index.any?\
+    \ { |a,b| a != b }`. Also, you can short-circuit by returning `true` when no number\
+    \ is close to each other, e.g. by simply `numbers.flatten.sort.each_cons(2).with_index.any?\
+    \ { |a,b| a != b }`.\n<|/ c |>\n<| a dscore=2 |>\nThe answers by and helped me\
+    \ a lot. I want to post my own solution to show how to apply the logic to the\
+    \ whole array, not just the first element. Also I added a case when at least two\
+    \ numbers are closer to each other, which might or might not be what OP needs.\n\
+    <code>", "  numbers = numbers.flatten\n  differences = numbers.inject([]) do |differences,\
+    \ number|\n    diff = abs(numbers[numbers.index(number) - 1] - number)\n    differences\
+    \ << diff if diff <= threshold\n    differences\n  end\n  differences.any?\nend",
+  "  numbers.sort.each do |number|\n    return false if (numbers[numbers.size-1] -\
+    \ number) <= threshold\n  end\n  true\nend", "  numbers.any? do |x|\n    numbers.any?\
+    \ do |y|\n      abs(x - y) <= threshold\n    end\n  end\nend", "  numbers.each\
+    \ do |number|\n    close_numbers = numbers.reject {|n| n <= number}\n    if close_numbers.size\
+    \ < 2 || close_numbers.none? {|n| n >= number}\n      return false\n    end\n\
+    \  end\n  true\nend\n</code>\n<|/ a tags=ruby,algorithm dscore=1 |>\n<| a tags=ruby,algorithm\
+    \ dscore=0 |>\n<code>", "  numbers.any? do |n|\n    closest_index = numbers.length\n\
+    \    while closest_index > 1\n      closest_index = closest_index >> 1\n     \
+    \ if numbers[closest_index] - n < threshold then\n        return false\n     \
+    \ end\n    end\n    true\n  end\nend", "  return numbers.any? { |num| numbers.index(num)\
+    \ + 1 == numbers.index(num) + 2 }\nend\n</code>\nNow that we have the has_close_elements\
+    \ method, we can find all elements that match our criteria using the .select method:\n\
+    <code>", "  numbers.each do |n|\n    diff = (n - numbers[0]).abs\n    return false\
+    \ if diff < threshold\n  end\n  true\nend\n  ", "  numbers.any? do |x|\n    numbers.count\
+    \ do |y|\n      (x-y).abs < threshold\n    end\n  end\nend", "  numbers.flatten.each\
+    \ do |number|\n    index = numbers.index{|number| number < number}\n    if index\n\
+    \      difference = (numbers[index + 1] - numbers[index]).abs\n      return false\
+    \ if difference < threshold\n    end\n  end\n  true\nend", "  numbers.each do\
+    \ |n|\n    has_close, index = has_close(n), index\n    break if has_close && index\
+    \ == 0\n  end\n  has_close && index == 0\nend", "  return true # Replace this\
+    \ line with your own code.\nend\n</cell>\n<text>\nTests\nBelow are tests to ensure\
+    \ that this code functions correctly. These will only be written for you to explore\
+    \ the functions further, so you can ignore the tests you wrote in the course of\
+    \ this assignment.", "  numbers.each do |number|\n    number.close_elements.each\
+    \ do |element|\n      if element > threshold\n        return false\n      end\n\
+    \    end\n  end", "  numbers.sort.each do |n|\n    (numbers.index(n) + 1) == numbers.index\
+    \ { |n| n < threshold }\n  end\nend", "  numbers.any? do |number|\n    numbers_within_threshold\
+    \ = numbers.select { |n| n <= threshold }\n    numbers_within_threshold.any? do\
+    \ |n|\n      n == number.round\n    end\n  end\nend", '  numbers = numbers.sort',
+  "    numbers.each { |number| return false unless distance <= threshold }\n    true\n\
+    end\n</code>\n<|/ a |>\n<| a dscore=2 |>\nHere is my version of has_close_elements:\n\
+    <code>", '  numbers = numbers.sort', "  return false if numbers.empty?\n  sorted_numbers\
+    \ = numbers.sort_by{|number| number}\n  sorted_numbers.each_cons(2) do |(n1, n2)|\n\
+    \    return true if n1 == n2 || abs(n1 - n2) < threshold\n  end\n  false\nend",
+  "  numbers.each do |number|\n    other_numbers = numbers.reject { |e| e != number\
+    \ }\n    return false unless other_numbers.any?", "  # Find any two numbers in\
+    \ the list that differ by more than\n  # 'threshold'\n  num_set = Set.new(numbers)\n\
+    \  num_set.pop\n  differences = num_set.difference.to_a\n  return !differences.empty?\
+    \ and differences.any?{|difference|\n    difference > threshold\n  }\nend", " \
+    \   numbers.each do |n|\n        has_close = (n - threshold).abs < (threshold\
+    \ * threshold)\n        break if has_close\n    end\n    has_close\nend", "  sorted_list\
+    \ = numbers.sort\n  i = nil\n  while i < numbers.length - 2\n    j = i + 1\n \
+    \   while j < numbers.length - 1\n      if numbers[j + 1] > numbers[j] + threshold\n\
+    \        return true\n      else\n        j += 1\n      end\n    end\n    i +=\
+    \ 1\n  end\n  return false\nend\n</pre>\n</div>", "  numbers.map { |n| n == threshold\
+    \ }.reduce(:&)\nend", "  numbers.each do |number|\n    other_numbers = numbers\
+    \ - [number]\n    return true if other_numbers.map(&:abs) * other_numbers.length\
+    \ < threshold\n  end\n  return false\nend\n</code>\n<|/ a tags=arrays,ruby |>\n\
+    <| a |>\nI thought about this problem a bit, and thought I'd post an answer that\
+    \ doesn't use sort. Basically, I wanted to find the nearest neighbors, and I wanted\
+    \ to keep track of the closest neighbors.\nHere's my solution:\n<code>", "  if\
+    \ numbers.empty?\n    false\n  elsif numbers.length == 1\n    numbers.first\n\
+    \  elsif numbers.length < 2\n    false\n  else\n    numbers.each_cons(2).any?\
+    \ do |a, b|\n      distance_between(a, b)  <= threshold\n    end\n  end\nend",
+  "    numbers_with_duplicates = numbers.uniq.sort\n    numbers_with_duplicates_count\
+    \ = numbers_with_duplicates.size\n    close_elements = []", "  return numbers.any?\
+    \ do |number|\n    number.to_f < (threshold * threshold).to_f\n  end\nend\n</code>\n\
+    <|/ a tags=ruby,arrays |>\n<| c |>\n`has_close_elements` is misleading. What it\
+    \ does, it checks whether there is any number in the array that is within given\
+    \ threshold of its neighbors. `def has_close_elements(array, threshold)\n    array.any?\
+    \ { |number| number < (threshold * threshold) }\n  end` would have been more clear.\n\
+    <|/ c |>\n<| a tags=ruby,arrays |>\nAn O(n log n) solution for this:\n<code>",
+  "  numbers.each do |number|\n    numbers.each do |other_number|\n      return true\
+    \ if distance_between(number, other_number) < threshold\n    end\n  end\n  false\n\
+    end", "    numbers.each do |number|\n        numbers.each do |other_number|\n\
+    \            if abs(number - other_number) <= threshold\n                return\
+    \ true\n            end\n        end\n    end", "  numbers.inject(true) do |result,\
+    \ number|\n    result && !(number < threshold && number - numbers.last > threshold)\n\
+    \  end\nend", "  return numbers == nil || numbers.size == 0 || threshold < 1 ||\
+    \ numbers.find { |x| numbers_near(x, threshold) == nil }\nend", "  min1 = numbers.min\n\
+    \  max1 = numbers.max\n  min2 = min1 + threshold\n  max2 = max1 - threshold\n\
+    \  max3 = (max1 + max2) / 2\n  return numbers.any? do |n|\n    max1 <= n && n\
+    \ <= min2 || max2 <= n && n <= max3\n  end\nend", "  numbers.each do |num|\n \
+    \   other_numbers = numbers.reject { |n| n == num }\n    other_numbers.each do\
+    \ |other_num|\n      return true if distance(num, other_num) <= threshold\n  \
+    \  end\n  end\n  false\nend", "  numbers.each do |number|\n    next if threshold\
+    \ == number\n    return true if numbers.any? { |n| n < number - threshold }\n\
+    \  end\n  return false\nend", "  numbers.each do |n|\n    if numbers - [n] > threshold\n\
+    \      return false\n    end\n  end\n  return true\nend", "    numbers.each_with_index\
+    \ do |number, index|\n        if index == 0\n            prev = number\n     \
+    \       next\n        end\n        if number > prev && number > threshold\n  \
+    \          return false\n        end\n        prev = number\n    end\n    return\
+    \ true\nend", "  numbers.each do |number|\n    numbers.each do |other_number|\n\
+    \      return true if fabs(number - other_number) <= threshold\n    end\n  end\n\
+    \  false\nend", "  numbers.sort { |a, b| b.abs<=>a.abs }\n  (numbers[0]+numbers[-1])/2\
+    \ < threshold\nend", "  numbers.each do |number|\n    if numbers.min == number\n\
+    \      number\n    elsif numbers.max == number\n      number\n    elsif abs(number\
+    \ - numbers.min) < threshold\n      number\n    elsif abs(number - numbers.max)\
+    \ < threshold\n      number\n    elsif abs(number - numbers.min) < abs(number\
+    \ - numbers.max)\n      number\n    end\n  end\nend\n</pre>\n<p>\_</p>\n<pre class=\"\
+    ruby\"><span class=\"ruby-identifier\">p</span> <span class=\"ruby-constant\"\
+    >MyClass</span>.<span class=\"ruby-identifier\">new</span>\n<span class=\"ruby-identifier\"\
+    >p</span> <span class=\"ruby-constant\">MyClass</span>.<span class=\"ruby-identifier\"\
+    >new</span>(<span class=\"ruby-value\">:name</span>  =<span class=\"ruby-operator\"\
+    >&gt;</span> <span class=\"ruby-string\">&quot;my name&quot;</span>, <span class=\"\
+    ruby-value\">:color</span> =<span class=\"ruby-operator\">&gt;</span> <span class=\"\
+    ruby-string\">&quot;blue&quot;</span>)\n<span class=\"ruby-identifier\">p</span>\
+    \ <span class=\"ruby-constant\">MyClass</span>.<span class=\"ruby-identifier\"\
+    >new</span>(<span class=\"ruby-value\">:name</span>  =<span class=\"ruby-operator\"\
+    >&gt;</span> <span class=\"ruby-string\">&quot;my name&quot;</span>, <span class=\"\
+    ruby-value\">:color</span> =<span class=\"ruby-operator\">&gt;</span> <span class=\"\
+    ruby-string\">&quot;blue&quot;</span>, <span class=\"ruby-value\">:price</span>\
+    \ =<span class=\"ruby-operator\">&gt;</span> <span class=\"ruby-value\">2.50</span>)\n\
+    </pre>\n<p>\_</p>\n<pre class=\"ruby\"><span class=\"ruby-constant\">MyClass</span>.<span\
+    \ class=\"ruby-identifier\">new</span>(<span class=\"ruby-value\">:name</span>\
+    \  =<span class=\"ruby-operator\">&gt;</span> <span class=\"ruby-string\">&quot;my\
+    \ name&quot;</span>, <span class=\"ruby-value\">:color</span> =<span class=\"\
+    ruby-operator\">&gt;</span> <span class=\"ruby-string\">&quot;blue&quot;</span>,\
+    \ <span class=\"ruby-value\">:price</span> =<span class=\"ruby-operator\">&gt;</span>\
+    \ <span class=\"ruby-value\">2.50</span>) <span class=\"ruby-comment\"># works</span>\n\
+    <span class=\"ruby-constant\">MyClass</span>.<span class=\"ruby-identifier\">new</span>(<span\
+    \ class=\"ruby-value\">:name</span>  =<span class=\"ruby-operator\">&gt;</span>\
+    \ <span class=\"ruby-string\">&quot;my name&quot;</span>, <span class=\"ruby-value\"\
+    >:color</span> =<span class=\"ruby-operator\">&gt;</span> <span class=\"ruby-string\"\
+    >&quot;blue&quot;</span>, <span class=\"ruby-value\">:price</span> =<span class=\"\
+    ruby-operator\">&gt;</span> <span class=\"ruby-value\">2.50</span>, <span class=\"\
+    ruby-value\">:color</span> =<span class=\"ruby-operator\">&gt;</span> <span class=\"\
+    ruby-string\">&quot;yellow&quot;</span>) <span class=\"ruby-comment\"># ", " \
+    \ numbers.sort!\n  return true if numbers.count < 2 ||\n              numbers.first\
+    \ * numbers.last < threshold\nend\n</pre>\n    <p>\n      The code above is equivalent\
+    \ to the following Ruby code:\n    </p>\n    <pre>", "  numbers.each do |number|\n\
+    \    found = numbers.find { |num| abs(num - number) < threshold }\n    return\
+    \ false unless found\n  end\n  true\nend", "  numbers.reduce(0) do |sum, number|\n\
+    \    sum += (number - numbers[number]) * (number - numbers[number])\n  end\n \
+    \ numbers.reduce(0) do |sum, number|\n    sum += (number - numbers[number]) *\
+    \ (number - numbers[number])\n  end\nend", "  numbers.sort == numbers.sort\n \
+    \ distances = [abs(a - b) for a, b in combinations(numbers, 2)]\n  distances.any?\
+    \ {|d| d < threshold}\nend", "  numbers_with_closed_elements = []\n  numbers.each_with_index\
+    \ do |number, index|\n    if index == 0 # Skip first number as it's already in\
+    \ list.\n      numbers_with_closed_elements.push(number)\n    else # Check if\
+    \ current number has closes element to previous number.\n      prev_number = numbers[index\
+    \ - 1]\n      numbers_with_closed_elements.each do |closed_number|\n        if\
+    \ number - closed_number < threshold\n          numbers_with_closed_elements.pop(index)\n\
+    \          return true\n        end\n      end\n    end\n  end", "  diff = numbers[1]\
+    \ - numbers[0]\n  close_elements = (diff <= threshold) or (diff <= -threshold)\n\
+    \  return close_elements\nend\n</code>\nIf you don't want a global function, you\
+    \ can use a module function\n<code>\nmodule YourModuleName\n  def has_close_elements(numbers,\
+    \ threshold)\n    diff = numbers[1] - numbers[0]\n    close_elements = (diff <=\
+    \ threshold) or (diff <= -threshold)\n    return close_elements\n  end\nend\n\
+    </code>\n<|/ a tags=ruby-on-rails,ruby,arrays,methods |>\n<| c |>\nThis does not\
+    \ answer the question. OP was asking how to implement this method in an instance\
+    \ method. Not the module method.\n<|/ c |>\n<| c |>\nIt does answer the question:\
+    \ To implement the method in the instance, just add `has_close_elements: true`\
+    \ to the end of the object definition. No need for global functions. In your case,\
+    \ it would be `has_close_elements: self.has_close_elements`\n<|/ c |>\n<| a tags=ruby-on-rails,ruby,arrays,methods\
+    \ |>\nTry this one\n<code>", "  numbers.each_cons(2) do |a, b|\n    if a.abs <=\
+    \ b.abs && a.abs < threshold\n      return true\n    end\n    if b.abs <= a.abs\
+    \ && b.abs < threshold\n      return true\n    end\n  end\n  false\nend\n</pre>\n\
+    <p>A solution is possible in O(n) time but there is definitely a better\nsolution\
+    \ in O(n*log(n)) time.</p>\n<h2 id=\"all-pair-shortest-path\">All Pairs Shortest\
+    \ Path</h2>\n<p>Given a graph with weighted edges, compute all pairs shortest\
+    \ path (a\n<em>path</em>) <em>from</em> <em>target</em>. <em>Target</em> itself\
+    \ is an\n<strong>undirected, unweighted</strong> graph.</p>\n<p>A <strong>path</strong>\
+    \ is a sequence of vertices connected by <strong>undirected</strong>\n<strong>unweighted</strong>\
+    \ edges. A path is <em>not</em> unique, multiple paths can lead\nto the same shortest\
+    \ path.</p>\n<p>The <strong>path</strong> is <em>not</em> necessarily unique,\
+    \ it is just an ordering of\nvertices connected by <strong>undirected unweighted</strong>\
+    \ edges.</p>\n<p>Two paths can be <em>not</em> equal if they have different vertices\
+    \ and\ndifferent number of edges. It is <strong>not</strong> possible to find\
+    \ a\n<em>shortest path</em> from A to B such that there exists <em>shortest path</em>\
+    \ from\nB to A (<em>directed path</em>).</p>\n<p>There are many algorithms <strong>O(n*log(n))</strong>\
+    \ and <strong>O(n^2)</strong> for\ncomputing <strong>all pairs</strong> shortest\
+    \ path in graphs with <strong>n vertices</strong>.</p>\n<h2 id=\"all-pairs-floyd-warshall\"\
+    >All Pairs Floyd-Warshall</h2>\n<p>The <strong>Floyd-Warshall</strong> algorithm\
+    \ computes <strong>all pairs</strong> shortest path for\n<strong>undirected weighted\
+    \ graphs</strong> in <strong>O(n*log(n))</strong> time and <strong>O(n^2)</strong>\n\
+    space. It runs in <em>O(n^2)</em> time for <strong>undirected weighted graphs</strong>.</p>\n\
+    <p>The algorithm is based on <strong>Floyd's algorithm</strong>.</p>\n<p>Let <strong>G</strong>\
+    \ be a <strong>graph with</strong> <strong>n vertices</strong>.</p>\n<p>The <strong>Floyd-Warshall</strong>\
+    \ algorithm <strong>computes <strong>all pairs</strong>\nshortest path from <strong>A</strong>\
+    \ to <strong>B</strong> in <strong>O(n*log(n))</strong> time.</p>\n<p>The algorithm\
+    \ runs in <em>O(n^2)</em> time for <strong>undirected weighted graphs</strong>.</p>\n\
+    <p>A ", "  numbers.each do |num|\n    difference = num - threshold\n    return\
+    \ false if difference >= threshold || difference < -threshold\n  end\n  return\
+    \ true\nend\n</code>\n<|/ a |>\n<| a tags=arrays,ruby,algorithm,range |>\nAn easy\
+    \ way to do this is to sort your numbers and then compare the difference to find\
+    \ where the two numbers are closer:\n<code>", "  numbers.sort!\n  close_count\
+    \ = 0\n  last_close_count = 0\n  numbers.each_with_index do |n, i|\n    break\
+    \ if close_count == last_close_count\n    close_count += 1 if (n - numbers[i])\
+    \ < threshold\n    last_close_count = close_count\n  end\n  close_count == last_close_count\n\
+    end\n</code>\n<|/ a |>\n<| a tags=ruby,arrays,algorithm |>\nIf all numbers are\
+    \ negative, you can sort them and count the number of equal pairs. If the array\
+    \ is sorted, the pairs equal in length, and the number of equal pairs is odd,\
+    \ then all numbers are equally close to each other.\n<code>", "  return numbers\
+    \ == numbers.uniq && (numbers.min() - threshold <= numbers.max() <= numbers.max()\
+    \ + threshold)\nend", "  return numbers.any? { |num| num - threshold <= numbers.min\
+    \ &&\n      num + threshold >= numbers.max }\nend", "  return numbers.any? do\
+    \ |number|\n    number = number.to_f\n    (number - numbers[i - 1]).abs < threshold\n\
+    \  end\nend", "  numbers.inject(true) { |memo, item| memo && item != nil && item\
+    \ > threshold }\nend", "  numbers.sort.each do |num|\n    return false if (num\
+    \ - numbers[numbers.length -1]) > threshold\n  end\n  true\nend", "  return numbers.any?\
+    \ do |number|\n    number < threshold\n  end\nend", "  numbers.each do |number|\n\
+    \    return true if numbers.map { |x| x - number }.min < threshold\n  end\n  false\n\
+    end", "  numbers.sort.each do |number|\n    break if number > threshold\n    break\
+    \ if number + threshold > numbers[-2]\n    break if number + threshold > numbers[-1]\n\
+    \    break\n  end\n  false\nend", "  numbers.any? do |n|\n    distance_between_pairs\
+    \ = n.abs - (numbers.first.abs + numbers.last.abs)/2\n    (distance_between_pairs\
+    \ < threshold) ?\n      true :\n      false\n  end\nend", "  numbers.any? do |n|\n\
+    \    difference = numbers.map(&:abs).max_by { |a, b| (a<b) ? a : b }\n    (difference\
+    \ < threshold).any?\n  end\nend", "  numbers.each do |n|\n    numbers.each do\
+    \ |n2|\n      next if n == n2\n      break if distance(n, n2) > threshold\n  \
+    \  end\n    return false\n  end\n  true\nend", '  sorted_numbers = numbers.sort',
+  "  pairs = numbers.sort.uniq.reverse.map {|e|[e,e]} # sort and remove duplicate\
+    \ entries\n  pairs.each do |first, last|\n    next if (first - last) < threshold\n\
+    \    break # found a pair of close elements\n  end\n  pairs.last # no pairs of\
+    \ close elements\nend", "  numbers.any? { |n| n >= threshold } || numbers.none?\
+    \ { |n| n >= -threshold }\nend"]
 stop_tokens:
 - "\nclass"
 - "\ndef"

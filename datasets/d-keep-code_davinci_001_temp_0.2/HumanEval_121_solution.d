@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Given a non-empty list of integers, return the sum of all of the odd elements that are in even positions.
     
@@ -15,9 +15,12 @@ long solution(long[] lst)
     long sum = 0;
     for (int i = 0; i < lst.Length; i++)
     {
-        if (i % 2 == 0 && lst[i] % 2 != 0)
+        if (i % 2 == 0)
         {
-            sum += lst[i];
+            if (lst[i] % 2 != 0)
+            {
+                sum += lst[i];
+            }
         }
     }
     return sum;
@@ -28,12 +31,12 @@ unittest
 {
     alias candidate = solution;
 
-    assert(candidate([5, 8, 7, 1]) == 12);
-    assert(candidate([3, 3, 3, 3, 3]) == 9);
-    assert(candidate([30, 13, 24, 321]) == 0);
-    assert(candidate([5, 9]) == 5);
-    assert(candidate([2, 4, 8]) == 0);
-    assert(candidate([30, 13, 23, 32]) == 23);
-    assert(candidate([3, 13, 2, 9]) == 3);
+    assert(candidate([5L, 8L, 7L, 1L]) == 12L);
+    assert(candidate([3L, 3L, 3L, 3L, 3L]) == 9L);
+    assert(candidate([30L, 13L, 24L, 321L]) == 0L);
+    assert(candidate([5L, 9L]) == 5L);
+    assert(candidate([2L, 4L, 8L]) == 0L);
+    assert(candidate([30L, 13L, 23L, 32L]) == 23L);
+    assert(candidate([3L, 13L, 2L, 9L]) == 3L);
 }
 void main(){}

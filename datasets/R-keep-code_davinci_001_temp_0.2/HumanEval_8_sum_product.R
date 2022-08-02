@@ -22,10 +22,10 @@ sum_product([1, 2, 3, 4])
 
 test_humaneval <- function() {
 candidate <- sum_product
-    if(!identical(candidate(list()), list(0, 1))){quit('no', 1)}
-    if(!identical(candidate(list(1, 1, 1)), list(3, 1))){quit('no', 1)}
-    if(!identical(candidate(list(100, 0)), list(100, 0))){quit('no', 1)}
-    if(!identical(candidate(list(3, 5, 7)), list(15, 105))){quit('no', 1)}
-    if(!identical(candidate(list(10)), list(10, 10))){quit('no', 1)}
+    if(!identical(candidate(c()), c(0, 1))){quit('no', 1)}
+    if(!identical(candidate(c(1, 1, 1)), c(3, 1))){quit('no', 1)}
+    if(!identical(candidate(c(100, 0)), c(100, 0))){quit('no', 1)}
+    if(!identical(candidate(c(3, 5, 7)), c(15, 105))){quit('no', 1)}
+    if(!identical(candidate(c(10)), c(10, 10))){quit('no', 1)}
 }
 test_humaneval()

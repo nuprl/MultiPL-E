@@ -9,40 +9,28 @@
 # fruit_distribution("0 apples and 1 oranges",3) -> 3 - 0 - 1 = 2
 # fruit_distribution("2 apples and 3 oranges", 100) -> 100 - 2 - 3 = 95
 # fruit_distribution("100 apples and 1 oranges",120) -> 120 - 100 - 1 = 19
+#
+# $1 is a string
+# $2 is an integer
 fruit_distribution() {
-  local num_of_apples=$(echo $1 | grep -o -E '\d+ apples' | grep -o -E '[0-9]+')
-  local num_of_oranges=$(echo $1 | grep -o -E '\d+ oranges' | grep -o -E '[0-9]+')
-  local total_fruits=$2
-  local num_of_mangoes=$((total_fruits - num_of_apples - num_of_oranges))
-  echo $num_of_mangoes
+    # Write your code here
+    echo $2
 
 }
 
 candidate() {
-    local res=$(fruit_distribution "$@")
-    echo $res
+    fruit_distribution "$@"
 }
 
-test() {
-        x0=$(candidate "5 apples and 6 oranges" 19)
-    assert_equals 8 "${x0[*]}"
-
-        x1=$(candidate "5 apples and 6 oranges" 21)
-    assert_equals 10 "${x1[*]}"
-
-        x2=$(candidate "0 apples and 1 oranges" 3)
-    assert_equals 2 "${x2[*]}"
-
-        x3=$(candidate "1 apples and 0 oranges" 3)
-    assert_equals 2 "${x3[*]}"
-
-        x4=$(candidate "2 apples and 3 oranges" 100)
-    assert_equals 95 "${x4[*]}"
-
-        x5=$(candidate "2 apples and 3 oranges" 5)
-    assert_equals 0 "${x5[*]}"
-
-        x6=$(candidate "1 apples and 100 oranges" 120)
-    assert_equals 19 "${x6[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "5 apples and 6 oranges" "19") = "8" ]]
+    [[ $(candidate "5 apples and 6 oranges" "21") = "10" ]]
+    [[ $(candidate "0 apples and 1 oranges" "3") = "2" ]]
+    [[ $(candidate "1 apples and 0 oranges" "3") = "2" ]]
+    [[ $(candidate "2 apples and 3 oranges" "100") = "95" ]]
+    [[ $(candidate "2 apples and 3 oranges" "5") = "0" ]]
+    [[ $(candidate "1 apples and 100 oranges" "120") = "19" ]]
 }
+
+run_test

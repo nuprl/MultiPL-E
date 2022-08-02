@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Write a function that accepts a list of strings.
     The list contains different words. Return the word with maximum number
@@ -11,25 +11,36 @@ Write a function that accepts a list of strings.
     find_max(["aaaaaaa", "bb" ,"cc"]) == ""aaaaaaa"
     
 */
-const(char)[] find_max(const(char)[][] words) 
+string find_max(string[] words) 
 {
-    auto max_word = "";
-    auto max_len = 0;
-    foreach(word in words)
+    string max = "";
+    int max_count = 0;
+    for(int i = 0; i < words.length; i++)
     {
-        auto len = 0;
-        foreach(char in word)
+        string word = words[i];
+        int count = 0;
+        for(int j = 0; j < word.length; j++)
         {
-            len += 1;
+            if(word[j] != ' ')
+            {
+                count++;
+            }
         }
-        if(len > max_len)
+        if(count > max_count)
         {
-            max_len = len;
-            max_word = word;
+            max_count = count;
+            max = word;
         }
     }
-    return max_word;
+    return max;
 }
+string[] words = ["name", "of", "string"];
+find_max(words);
+string[] words = ["name", "enam", "game"];
+find_max(words);
+string[] words = ["aaaaaaa", "bb" ,"cc"];
+find_max(words);
+
 
 unittest
 {

@@ -27,14 +27,14 @@ triples_sum_to_zero <- function(l) {
 
 test_humaneval <- function() {
 candidate <- triples_sum_to_zero
-    if(!identical(candidate(list(1, 3, 5, 0)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(list(1, 3, 5, -1)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(list(1, 3, -2, 1)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(list(1, 2, 3, 7)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(list(1, 2, 5, 7)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(list(2, 4, -5, 3, 9, 7)), TRUE)){quit('no', 1)}
-    if(!identical(candidate(list(1)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(list(1, 3, 5, -100)), FALSE)){quit('no', 1)}
-    if(!identical(candidate(list(100, 3, 5, -100)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(c(1, 3, 5, 0)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(c(1, 3, 5, -1)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(c(1, 3, -2, 1)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(c(1, 2, 3, 7)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(c(1, 2, 5, 7)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(c(2, 4, -5, 3, 9, 7)), TRUE)){quit('no', 1)}
+    if(!identical(candidate(c(1)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(c(1, 3, 5, -100)), FALSE)){quit('no', 1)}
+    if(!identical(candidate(c(100, 3, 5, -100)), FALSE)){quit('no', 1)}
 }
 test_humaneval()

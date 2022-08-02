@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 This function takes a list l and returns a list l' such that
     l' is identical to l in the odd indicies, while its values at the even indicies are equal
@@ -12,18 +12,27 @@ This function takes a list l and returns a list l' such that
 */
 long[] sort_even(long[] l) 
 {
-    long[] l_even = l[0::2];
-    long[] l_odd = l[1::2];
-    l_even.sort();
-    return l_even + l_odd;
+    long[] l_prime = new long[l.length];
+    for (int i = 0; i < l.length; i++)
+    {
+        if (i % 2 == 0)
+        {
+            l_prime[i] = l[i];
+        }
+        else
+        {
+            l_prime[i] = l[i - 1];
+        }
+    }
+    return l_prime;
 }
 
 unittest
 {
     alias candidate = sort_even;
 
-    assert(candidate([1, 2, 3]) == [1, 2, 3]);
-    assert(candidate([5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10]) == [-10, 3, -5, 2, -3, 3, 5, 0, 9, 1, 123]);
-    assert(candidate([5, 8, -12, 4, 23, 2, 3, 11, 12, -10]) == [-12, 8, 3, 4, 5, 2, 12, 11, 23, -10]);
+    assert(candidate([1L, 2L, 3L]) == [1L, 2L, 3L]);
+    assert(candidate([5L, 3L, -5L, 2L, -3L, 3L, 9L, 0L, 123L, 1L, -10L]) == [-10L, 3L, -5L, 2L, -3L, 3L, 5L, 0L, 9L, 1L, 123L]);
+    assert(candidate([5L, 8L, -12L, 4L, 23L, 2L, 3L, 11L, 12L, -10L]) == [-12L, 8L, 3L, 4L, 5L, 2L, 12L, 11L, 23L, -10L]);
 }
 void main(){}

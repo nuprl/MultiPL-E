@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
  xs represent coefficients of a polynomial.
     xs[0] + xs[1] * x + xs[2] * x^2 + ....
@@ -12,9 +12,12 @@ import std.typecons;
 */
 long[] derivative(long[] xs) 
 {
-    long[] ys = new long[xs.length - 1];
-    for (int i = 1; i < xs.length; i++)
-        ys[i - 1] = i * xs[i];
+    var n = xs.Length;
+    var ys = new long[n - 1];
+    for (int i = 0; i < n - 1; i++)
+    {
+        ys[i] = xs[i + 1] * (i + 1);
+    }
     return ys;
 }
 
@@ -22,10 +25,10 @@ unittest
 {
     alias candidate = derivative;
 
-    assert(candidate([3, 1, 2, 4, 5]) == [1, 4, 12, 20]);
-    assert(candidate([1, 2, 3]) == [2, 6]);
-    assert(candidate([3, 2, 1]) == [2, 2]);
-    assert(candidate([3, 2, 1, 0, 4]) == [2, 2, 0, 16]);
-    assert(candidate([1]) == []);
+    assert(candidate([3L, 1L, 2L, 4L, 5L]) == [1L, 4L, 12L, 20L]);
+    assert(candidate([1L, 2L, 3L]) == [2L, 6L]);
+    assert(candidate([3L, 2L, 1L]) == [2L, 2L]);
+    assert(candidate([3L, 2L, 1L, 0L, 4L]) == [2L, 2L, 0L, 16L]);
+    assert(candidate([1L]) == []);
 }
 void main(){}

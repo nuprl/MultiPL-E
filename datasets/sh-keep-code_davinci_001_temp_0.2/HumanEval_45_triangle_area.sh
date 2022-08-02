@@ -2,27 +2,24 @@
 # Given length of a side and high return area for a triangle.
 # >>> triangle_area(5, 3)
 # 7.5
+#
+# $1 is an integer
+# $2 is an integer
 triangle_area() {
-    local base=$1
-    local height=$2
-    local area=$(echo "scale=2; $base * $height / 2" | bc)
+    local area=$(echo "scale=2; 0.5 * $1 * $2" | bc)
     echo $area
 
 }
 
 candidate() {
-    local res=$(triangle_area "$@")
-    echo $res
+    triangle_area "$@"
 }
 
-test() {
-        x0=$(candidate 5 3)
-    assert_equals 7.5 "${x0[*]}"
-
-        x1=$(candidate 2 2)
-    assert_equals 2.0 "${x1[*]}"
-
-        x2=$(candidate 10 8)
-    assert_equals 40.0 "${x2[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "5" "3") = "7.5" ]]
+    [[ $(candidate "2" "2") = "2.0" ]]
+    [[ $(candidate "10" "8") = "40.0" ]]
 }
+
+run_test

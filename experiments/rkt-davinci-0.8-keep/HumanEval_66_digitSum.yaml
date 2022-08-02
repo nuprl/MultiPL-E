@@ -11,7 +11,706 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate d
   ) 69)\n    (check-equal? (candidate \"woArBld\") 131)\n    (check-equal? (candidate\
   \ \"aAaaaXa\") 153)\n    (check-equal? (candidate \" How are yOu?\") 151)\n    (check-equal?\
   \ (candidate \"You arE Very Smart\") 327)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["    (apply + (filter (\u03BB (c) (and (>= c 65) (<= c 90))) (map char->integer\
+    \ s))))\n", "  (if (empty? s)\n      0\n      (+ (string-ref s 0)\n         (digitSum\
+    \ (substring s 1)))))\n</code>\nI am new in this language and I am not sure if\
+    \ I am doing it correctly. \nThanks in advance. \n\n\nA:\n\nTo extract the ASCII\
+    \ code of a character in Racket you can use the <code>char-&gt;integer</code>\
+    \ procedure, like this:\n<code>(char-&gt;integer (string-ref \"a\" 0))\n</code>\n\
+    This returns the ASCII code for the character <code>a</code>, which is <code>97</code>.\
+    \ But instead of using <code>char-&gt;integer</code> in your code, it's better\
+    \ to just use <code>string-ref</code>, which directly returns the ASCII code of\
+    \ the requested character.\nIn order to sum the ASCII codes of the characters\
+    \ that are uppercase, you can use the <code>upper-case?</code> predicate to filter\
+    \ them. In your case, to count only the upper case characters we can modify your\
+    \ code like this:\n<code>(define (digitSum s)\n  (if (empty? s)\n      0\n   \
+    \   (+ (if (upper-case? (string-ref s 0))\n             (string-ref s 0)\n   \
+    \          0)\n         (digitSum (substring s 1)))))\n</code>\nIf the current\
+    \ character is an upper case character, add its ASCII code to the sum, otherwise\
+    \ add <code>0</code>.\n", "  (let ([lst (string->list s)])\n    (apply + (for/list\
+    \ ([i lst])\n               (if (and (>= i 65) (<= i 90))\n                  \
+    \ i\n                   0)))))", "  (define (help s sum)\n    (cond [(empty? s)\
+    \ sum]\n          [(char-&gt;integer (car s)) &gt;= 65] [(char-&gt;integer (car\
+    \ s)) &lt;= 90] [else \n            (help (cdr s) (+ sum (char-&gt;integer (car\
+    \ s))))]\n          [else (help (cdr s) sum)]))\n  (help s 0))\n</code>\nI am\
+    \ not sure why this does not work as it appears correct to me.\nAny help would\
+    \ be appreciated.\n\n\nA:\n\nThe problem with your code is here:\n<code>[(char-&gt;integer\
+    \ (car s)) &gt;= 65] [(char-&gt;integer (car s)) &lt;= 90] [else \n        (help\
+    \ (cdr s) (+ sum (char-&gt;integer (car s))))]\n</code>\nThe first 2 lines are\
+    \ not the conditions, they are just the values returned by applying <code>char-&gt;integer</code>\
+    \ to <code>(car s)</code>. The test is in the third line: <code>[else...</code>.\n\
+    In Racket, <code>[condition1 exp1 condition2 exp2 ...]</code> evaluates to <code>exp1</code>\
+    \ if <code>condition1</code> evaluates to a true value.\nIf you wrote your test\
+    \ like:\n<code>[(&gt;= (char-&gt;integer (car s)) 65)\n (&lt;= (char-&gt;integer\
+    \ (car s)) 90)\n ...]\n</code>\nyou would get the effect you want. But a more\
+    \ idiomatic way to write this is:\n<code>[(&lt;= 65 (char-&gt;integer (car s))\
+    \ 90) ...]\n</code>\n", "  (cond\n    [(empty? s) 0]\n    [(upper? (first s))\
+    \ (+ 65 (digitSum (rest s)))]\n    [else (digitSum (rest s))]))\n", "  (cond\n\
+    \    ((null? s) 0)\n    ((char-alphabetic? (car s))\n     (+ (char->integer (car\
+    \ s)) (digitSum (cdr s))))\n    (else (digitSum (cdr s)))))\n", '  (string-fold
+    + 0 (string-map (lambda (x) (if (char-upper-case? x) (char->integer x) 0)) s)))',
+  "  (if (string=? s \"\")\n      0\n      (if (< 65 (string-ref s 0) 90)\n      \
+    \    (digitSum (substring s 1))\n          (+ (string-ref s 0) (digitSum (substring\
+    \ s 1))))))\n", "  (cond [(null? s) 0]\n        [(&gt; (char-&gt;integer (car\
+    \ s)) 64) (+ (char-&gt;integer (car s)) (digitSum (cdr s)))]\n        [(&gt; (char-&gt;integer\
+    \ (car s)) 96) (+ (char-&gt;integer (car s)) (digitSum (cdr s)))]\n        [else\
+    \ (digitSum (cdr s))]))\n</code>\nBut it's giving me this error: <code>index out\
+    \ of bounds; starting index 0 too small.</code>\n\n\nA:\n\nThe problem is that\
+    \ your function is not prepared to handle an empty string.\nRacket implicitly\
+    \ checks for null? and empty? in many places (for example, <code>cdr</code> returns\
+    \ the empty list instead of throwing an error if its argument is null), but in\
+    \ this case it isn't, because you are using <code>car</code> and <code>cdr</code>\
+    \ explicitly.\nLuckily, recursion with base cases is so common that Racket has\
+    \ a convenience function <code>for/fold</code> (documentation here) which folds\
+    \ over lists. For example, you can use the following code to sum up all the values\
+    \ in a list:\n<code>(for/fold ([sum 0]) ([i lst])\n  (+ sum i))\n</code>\nYou\
+    \ can add predicates for <code>for/fold</code> to only include certain elements\
+    \ (such as only the upper-case elements of a string). The <code>for/fold</code>\
+    \ form also makes it trivial to add a base case for when the list is empty, because\
+    \ it already has a way to specify a base case.\nI'd recommend reading the documentation\
+    \ for <code>for/fold</code> and trying to rewrite your code using it, then checking\
+    \ the solution if you get stuck.\n", "  (if (string=? s \"\")\n      0\n     \
+    \ (let ([next-char (string-ref s 0)])\n        (+ (if (char-uppercase? next-char)\
+    \ (char->integer next-char) 0)\n           (digitSum (substring s 1))))))\n",
+  "  (apply + (filter (lambda (x) (and (char? x) (>= x #\\A) (<= x #\\Z))) (string->list\
+    \ s))))\n", "  (reduce + (map char->integer\n                   (filter char-upper-case?\
+    \ (string->list s)))))", "  (cond\n    [(empty? s) 0]\n    [(char-upcase? (first\
+    \ s)) (+ (char->integer (first s)) (digitSum (rest s)))]\n    [else (digitSum\
+    \ (rest s))]))\n", "  (sum (map (\u03BB (c) (cond\n                        [(char=?\
+    \ c #\\A) 65]\n                        [(char=? c #\\B) 66]\n                \
+    \        [(char=? c #\\C) 67]\n                        [(char=? c #\\D) 68]\n\
+    \                        [(char=? c #\\E) 69]\n                        [(char=?\
+    \ c #\\F) 70]\n                        [(char=? c #\\G) 71]\n                \
+    \        [(char=? c #\\H) 72]\n                        [(char=? c #\\I) 73]\n\
+    \                        [(char=? c #\\J) 74]\n                        [(char=?\
+    \ c #\\K) 75]\n                        [(char=? c #\\L) 76]\n                \
+    \        [(char=? c #\\M) 77]\n                        [(char=? c #\\N) 78]\n\
+    \                        [(char=? c #\\O) 79]\n                        [(char=?\
+    \ c #\\P) 80]\n                        [(char=? c #\\Q) 81]\n                \
+    \        [(char=? c #\\R) 82]\n                        [(char=? c #\\S) 83]\n\
+    \                        [(char=? c #\\T) 84]\n                        [(char=?\
+    \ c #\\U) 85]\n                        [(char=? c #\\V) 86]\n                \
+    \        [(char=? c #\\W) 87]\n                        [(char=? c #\\X) 88]\n\
+    \                        [(char=? c #\\Y) 89]\n                        [(char=?\
+    \ c #\\Z) 90]\n                        [else 0]))\n            (string->list s))))\n",
+  "  (let* ([upperCase #rx\"[A-Z]\"]\n         [upperS (regexp-match upperCase s)])\n\
+    \    (apply + (map string->number upperS))))", "  (apply +\n         (map char->integer\n\
+    \              (remove (curry =? #\\a)\n                      (for/list ([ch (in-string\
+    \ s)])\n                        (if (char-upper-case? ch)\n                  \
+    \          ch))))))\n```\n\n```scheme", "  (if (string=? s \"\")\n      0\n  \
+    \    (if (and (<= #\\A (string-ref s 0)) (<= (string-ref s 0) #\\Z))\n       \
+    \   (+ (string-ref s 0) (digitSum (substring s 1)))\n          (digitSum (substring\
+    \ s 1)))))\n```\n\n```scheme", "  (accumulate + 0 (map char->integer (filter char-upper-case?\
+    \ (string->list s)))))\n```", "  (cond\n    [(empty? s) 0]\n    [(char-numeric?\
+    \ (first s)) (digitSum (rest s))]\n    [(char-upper-case? (first s)) (+ (char->integer\
+    \ (first s)) (digitSum (rest s)))]\n    [else (digitSum (rest s))]))\n", "  (define\
+    \ (map f l)\n    (if (null? l)\n        null\n        (cons (f (car l)) (map f\
+    \ (cdr l)))))\n  (define (filter p l)\n    (if (null? l)\n        null\n     \
+    \   (if (p (car l))\n            (cons (car l) (filter p (cdr l)))\n         \
+    \   (filter p (cdr l)))))\n  (define (sum l)\n    (if (null? l)\n        0\n \
+    \       (+ (car l) (sum (cdr l)))))\n  (define (is-upper? s)\n    (string-upper-case?\
+    \ s))\n  (sum (map string->number (filter is-upper? (string->list s)))))\n", '  (apply
+    + (map char->integer (filter (lambda (ch) (and (>= ch #\A) (<= ch #\Z))) s))))',
+  "  (for/sum ([c (in-string s)]\n            #:when (char-upper-case? c))\n    (char->integer\
+    \ c)))", "  (string-&gt;number (string-append (regexp-match #rx\"[A-Z]\" s))))\n",
+  "  (if (empty? s)\n      0\n      (+ (char->integer (string-ref s 0))\n        \
+    \ (if (char-upper-case? (string-ref s 0))\n             (digitSum (string-drop\
+    \ s 1))\n             (digitSum (string-drop s 1))))))\n", "  (foldl + 0 (map\
+    \ (\u03BB (c) (if (char-upper-case? c) (char->integer c) 0)) s)))\n", "    (let\
+    \ ([s (map char-upcase s)])\n      (foldl + 0 (filter (\u03BB (x) (and (<= x 90)\
+    \ (>= x 65))) s))))\n", "  (accumulate + 0 (map char->integer (regexp-match* #rx\"\
+    [A-Z]\" s))))\n", "  (apply + (for/list ([c (in-string s)]) (if (char-upcase?\
+    \ c) (char->integer c) 0))))\n</code>\nTest output:\n<code>digitSum \"\" =&gt;\
+    \ 0\ndigitSum \"abAB\" =&gt; 131\ndigitSum \"abcCd\" =&gt; 67\ndigitSum \"helloE\"\
+    \ =&gt; 69\ndigitSum \"woArBld\" =&gt; 131\ndigitSum \"aAaaaXa\" =&gt; 153\n</code>\n",
+  "  (if (string=? s \"\")\n      0\n      (if (&gt;= (char-&gt;integer (string-ref\
+    \ s 0)) 65)\n          (+ (char-&gt;integer (string-ref s 0)) (digitSum (substring\
+    \ s 1)))\n          (digitSum (substring s 1)))))\n</code>\nAnd here is the test:\n\
+    <code>#lang racket\n", "  (define (eqAny? l s)\n    (cond\n      [(empty? l) #f]\n\
+    \      [(eq? (first l) s) #t]\n      [else (eqAny? (rest l) s)]))\n  (cond\n \
+    \   [(empty? s) 0]\n    [(eqAny? '(\"A\" \"B\" \"C\" \"D\" \"E\" \"F\" \"G\" \"\
+    H\" \"I\" \"J\" \"K\" \"L\" \"M\" \"N\" \"O\" \"P\" \"Q\" \"R\" \"S\" \"T\" \"\
+    U\" \"V\" \"W\" \"X\" \"Y\" \"Z\") (first s)) (+ (char->integer (first s)) (digitSum\
+    \ (rest s)))]\n    [else (digitSum (rest s))]))\n", "  (define (acc sum x)\n \
+    \   (if (and (>= x 65) (<= x 90))\n        (+ sum x)\n        sum))\n  (foldl\
+    \ acc 0 (string->list s)))\n", "  (define (char-to-ascii c)\n    (integer->char\
+    \ (char->integer c)))\n  (define (is-upper? c)\n    (cond\n      [(eq? (char-to-ascii\
+    \ c) (char-to-ascii #\\A)) #t]\n      [(eq? (char-to-ascii c) (char-to-ascii #\\\
+    B)) #t]\n      [(eq? (char-to-ascii c) (char-to-ascii #\\C)) #t]\n      [(eq?\
+    \ (char-to-ascii c) (char-to-ascii #\\D)) #t]\n      [(eq? (char-to-ascii c) (char-to-ascii\
+    \ #\\E)) #t]\n      [(eq? (char-to-ascii c) (char-to-ascii #\\F)) #t]\n      [(eq?\
+    \ (char-to-ascii c) (char-to-ascii #\\G)) #t]\n      [(eq? (char-to-ascii c) (char-to-ascii\
+    \ #\\H)) #t]\n      [(eq? (char-to-ascii c) (char-to-ascii #\\I)) #t]\n      [(eq?\
+    \ (char-to-ascii c) (char-to-ascii #\\J)) #t]\n      [(eq? (char-to-ascii c) (char-to-ascii\
+    \ #\\K)) #t]\n      [(eq? (char-to-ascii c) (char-to-ascii #\\L)) #t]\n      [(eq?\
+    \ (char-to-ascii c) (char-to-ascii #\\M)) #t]\n      [(eq? (char-to-ascii c) (char-to-ascii\
+    \ #\\N)) #t]\n      [(eq? (char-to-ascii c) (char-to-ascii #\\O)) #t]\n      [(eq?\
+    \ (char-to-ascii c) (char-to-as", "  (apply + (filter (lambda (c) (and (char&lt;=\
+    \ #\\A c) (char&lt;= c #\\Z))) (string-&gt;list s))))\n", "  (let loop ([s s]\
+    \ [a 0])\n    (cond [(null? s) a]\n          [(not (digit? (car s))) (loop (cdr\
+    \ s) a)]\n          [else (loop (cdr s) (+ a (car s)))])))\n", "  (apply + (filter\
+    \ (\u03BB (c) (and (<= #\\A c) (<= c #\\Z))) s)))", "  (letrec ([d-s (lambda (s\
+    \ i sum) (if (char=? (string-ref s i) #\\0)\n                                \
+    \       sum\n                                       (d-s s (add1 i) (if (char-upper-case?\
+    \ (string-ref s i))\n                                                        \
+    \   (add1 sum (char->integer (string-ref s i)))\n                            \
+    \                               sum))))])\n    (d-s s 0 0)))\n", "  (apply + (map\
+    \ (\u03BB (c) (if (char-upcase? c) (- c 32) 0)) s)))\n", "  (apply + (map (lambda\
+    \ (c) (if (char-upper-case? c) (- c 32) 0)) s)))\n", "  (if (empty? s)\n     \
+    \ 0\n      (+ (char->integer (string-ref s 0))\n         (digitSum (substring\
+    \ s 1 (- (string-length s) 1))))))\n", "  (apply + (map (lambda (c)\n        \
+    \          (if (and (>= c 65) (<= c 90)) c 0))\n                (string->list\
+    \ s))))\n", "  (for/sum ([c (in-string s)]\n            #:when (char-upcase? c))\n\
+    \    (char->integer c)))\n", "  (apply + (map (\u03BB (x) (if (and (>= x 65) (<=\
+    \ x 90)) x 0)) (string->list s))))", "  (cond [(string=? s \"\")\n         0]\n\
+    \        [else\n         (let ([s (string-replace s \"a\" \"\")])\n          \
+    \ (let ([s (string-replace s \"b\" \"\")])\n             (let ([s (string-replace\
+    \ s \"c\" \"\")])\n               (let ([s (string-replace s \"d\" \"\")])\n \
+    \                (let ([s (string-replace s \"e\" \"\")])\n                  \
+    \ (let ([s (string-replace s \"f\" \"\")])\n                     (let ([s (string-replace\
+    \ s \"g\" \"\")])\n                       (let ([s (string-replace s \"h\" \"\"\
+    )])\n                         (let ([s (string-replace s \"i\" \"\")])\n     \
+    \                      (let ([s (string-replace s \"j\" \"\")])\n            \
+    \                 (let ([s (string-replace s \"k\" \"\")])\n                 \
+    \              (let ([s (string-replace s \"l\" \"\")])\n                    \
+    \             (let ([s (string-replace s \"m\" \"\")])\n                     \
+    \              (let ([s (string-replace s \"n\" \"\")])\n                    \
+    \                 (let ([s (string-replace s \"o\" \"\")])\n                 \
+    \                      (let ([s (string-replace s \"p\" \"\")])\n            \
+    \                             (let ([s (string-replace s \"q\" \"\")])\n     \
+    \                                      (let ([s (string-replace s \"r\" \"\")])\n\
+    \                                             (let ([s (string-replace s \"s\"\
+    \ \"\")])\n                                               (let ([s (string-replace\
+    \ s \"t\" \"\")])\n                                                 (let ([s (string-replace\
+    \ s \"u\" \"\")])\n                                                   (let ([s\
+    \ (string-replace s \"v\" \"\")])\n                                          \
+    \           (let ([s (string-replace s \"w\" \"\")])\n                       \
+    \                                (let ([s (string-replace s \"x\" \"\")])\n  \
+    \                                                       (let ([s (string-replace\
+    \ s \"y\" \"\")])\n                                                          \
+    \ (let ([s (string-replace s \"z\" \"\")])\n                                 \
+    \                            (let ([new_string (string->list s)])\n          \
+    \                                                     (", "  (if (empty? s)\n\
+    \      0\n      (+ (char->integer (string-ref s 0))\n         (digitSum (substring\
+    \ s 1)))))", '  (apply + (map char->integer (filter char-upcase? (string->list
+    s)))))', "  (apply + (map (lambda (i) (integer->char i))\n                (filter\
+    \ (lambda (i) (>= i 65) (<= i 90))\n                        (map char->integer\
+    \ (string->list s))))))\n", "  (cond\n    [(equal? s \"\") 0]\n    [else\n   \
+    \  (let\n       ([sums (+ (char->integer (string-ref s 0)) (digitSum (substring\
+    \ s 1)))])\n       (if (< sums 65)\n         (digitSum (substring s 1))\n    \
+    \     sums))]))", "  (define (isUpper? c)\n    (char=? (char-upcase c) c))\n \
+    \ (define (char-to-int c)\n    (- (char->integer c) (char->integer #\\0)))\n \
+    \ (foldl + 0 (map char-to-int (filter isUpper? s))))", "  (define (hasUpperChar\
+    \ s)\n    (not (string=? (string-downcase s) s)))\n  (define (isUpperChar s)\n\
+    \    (string=? (string-downcase s) (string-trim-right s 1)))\n  (define (sum acc\
+    \ x)\n    (cond\n      [(char=? #\\space x) acc]\n      [(hasUpperChar x) (+ acc\
+    \ (char->integer x))]\n      [else acc]))\n  (apply + (for/list ([x (in-string\
+    \ s)])\n              (if (isUpperChar x) (char->integer x) 0))))\n", "  (let\
+    \ ((sum 0))\n    (string-map\n     (lambda (ch)\n       (when (upper-char? ch)\n\
+    \         (set! sum (+ sum (char->integer ch)))))\n     s)\n    sum))\n", "  (if\
+    \ (string=? s \"\")\n      0\n      (if (and\n           (char-numeric? (string-ref\
+    \ s 0))\n           (char-numeric? (string-ref s (sub1 (string-length s)))))\n\
+    \          (+ (char->integer (string-ref s 0))\n             (char->integer (string-ref\
+    \ s (sub1 (string-length s)))))\n          (digitSum (substring s 1 (sub1 (string-length\
+    \ s)))))))\n", "  (let ([sum 0])\n    (for ([c (in-string s)])\n      (when (and\
+    \ (>= c #\\A) (<= c #\\Z))\n        (set! sum (+ sum c))))\n    sum))\n", "  (apply\
+    \ + (filter (lambda (x) (&gt; x 96)) (map char-&gt;integer (filter char-upper-case?\
+    \ (string-&gt;list s))))))\n</code>\nI wonder if this is readable, or if there\
+    \ are better ways to write it?\n\n\nA:\n\nRacket has some nice functions for this\
+    \ sort of thing.\n<code>(define (digit-sum s)\n  (apply +\n         (map char-&gt;integer\
+    \ (string-&gt;list (string-upcase s)))))\n</code>\n<code>string-upcase</code>\
+    \ is like <code>string-&gt;upper-case</code> but converts the entire string.\n",
+  "  (cond ((string=? s \"\") 0)\n        ((empty? s) 0)\n        ((or (char-numeric?\
+    \ (string-ref s 0))\n             (char-alphabetic? (string-ref s 0))\n      \
+    \       (char-whitespace? (string-ref s 0)))\n         (+ (digitSum (substring\
+    \ s 1))\n            (char->integer (string-ref s 0))))\n        (else (digitSum\
+    \ (substring s 1)))))", "  (apply + (map char->integer\n                  (filter\
+    \ char-upper-case?\n                          (string->list s)))))\n", '  (apply
+    + (map char->integer (filter (lambda (s) (char-upper-case? s)) s))))', "  (string-ref\
+    \ s 0))\n", "  (define (char-&gt;integer ch)\n    (string-&gt;number (string ch)))\n\
+    \  (define (accumulate-upper-chars s answer)\n    (cond ((string=? \"\" s) answer)\n\
+    \          ((= (char-&gt;integer (string-ref s 0)) (char-&gt;integer #\\A))\n\
+    \           (accumulate-upper-chars (substring s 1 (string-length s))\n      \
+    \                             (+ answer (char-&gt;integer (string-ref s 0)))))\n\
+    \          ((= (char-&gt;integer (string-ref s 0)) (char-&gt;integer #\\B))\n\
+    \           (accumulate-upper-chars (substring s 1 (string-length s))\n      \
+    \                             (+ answer (char-&gt;integer (string-ref s 0)))))\n\
+    \          ((= (char-&gt;integer (string-ref s 0)) (char-&gt;integer #\\C))\n\
+    \           (accumulate-upper-chars (substring s 1 (string-length s))\n      \
+    \                             (+ answer (char-&gt;integer (string-ref s 0)))))\n\
+    \          ((= (char-&gt;integer (string-ref s 0)) (char-&gt;integer #\\D))\n\
+    \           (accumulate-upper-chars (substring s 1 (string-length s))\n      \
+    \                             (+ answer (char-&gt;integer (string-ref s 0)))))\n\
+    \          ((= (char-&gt;integer (string-ref s 0)) (char-&gt;integer #\\E))\n\
+    \           (accumulate-upper-chars (substring s 1 (string-length s))\n      \
+    \                             (+ answer (char-&gt;integer (string-ref s 0)))))\n\
+    \          ((= (char-&gt;integer (string-ref s 0)) (char-&gt;integer #\\F))\n\
+    \           (accumulate-upper-chars (substring s 1 (string-length s))\n      \
+    \                             (+ answer (char-&gt;integer (string-ref s 0)))))\n\
+    \          ((= (char-&gt;integer (string-ref s 0)) (char-&gt;integer #\\G))\n\
+    \          ", "  (accumulate + 0 (map (lambda (x)\n                         (if\
+    \ (char-upcase? x) (sub1 (char->integer x)) 0))\n                       (string->list\
+    \ s))))\n", "  (apply + (map string-&gt;number\n                  (regexp-match*\
+    \ #rx\"[A-Z]\" (string-&gt;list s)))))\n", "  (sum (map char->integer\n      \
+    \        (filter (\u03BB (s) (>= s #\\A) (<= s #\\Z))\n                      (string->list\
+    \ s)))))", "  (foldr (lambda (c x)\n           (cond ((char-upcase? c)\n     \
+    \             (+ x (char->integer c)))\n                 (else x)))\n        \
+    \ 0\n         s))\n", "  (if (equal? s \"\")\n      0\n      (let loop ([s s]\
+    \ [sum 0])\n        (if (empty? s)\n            sum\n            (if (and (>=\
+    \ (car s) #\\A) (<= (car s) #\\Z))\n                (loop (cdr s) (+ sum (car\
+    \ s)))\n                (loop (cdr s) sum))))))\n", "  (cond [(empty? s) 0]\n\
+    \        [else (+ (if (<= (char->integer (car s)) 90) (char->integer (car s))\
+    \ 0)\n                 (digitSum (cdr s)))]))\n", "  (foldl (lambda (x acc)\n\
+    \           (if (and (>= x 65) (<= x 90))\n               (+ x acc)\n        \
+    \       acc))\n         0\n         (map char->integer (string->list s))))", " \
+    \ (define (getSum c)\n    (cond\n      [(string=? c \"\") 0]\n      [(string-ci=?\
+    \ c \"a\") 97]\n      [(string-ci=? c \"b\") 98]\n      [(string-ci=? c \"c\"\
+    ) 99]\n      [(string-ci=? c \"d\") 100]\n      [(string-ci=? c \"e\") 101]\n\
+    \      [(string-ci=? c \"f\") 102]\n      [(string-ci=? c \"g\") 103]\n      [(string-ci=?\
+    \ c \"h\") 104]\n      [(string-ci=? c \"i\") 105]\n      [(string-ci=? c \"j\"\
+    ) 106]\n      [(string-ci=? c \"k\") 107]\n      [(string-ci=? c \"l\") 108]\n\
+    \      [(string-ci=? c \"m\") 109]\n      [(string-ci=? c \"n\") 110]\n      [(string-ci=?\
+    \ c \"o\") 111]\n      [(string-ci=? c \"p\") 112]\n      [(string-ci=? c \"q\"\
+    ) 113]\n      [(string-ci=? c \"r\") 114]\n      [(string-ci=? c \"s\") 115]\n\
+    \      [(string-ci=? c \"t\") 116]\n      [(string-ci=? c \"u\") 117]\n      [(string-ci=?\
+    \ c \"v\") 118]\n      [(string-ci=? c \"w\") 119]\n      [(string-ci=? c \"x\"\
+    ) 120]\n      [(string-ci=? c \"y\") 121]\n      [(string-ci=? c \"z\") 122]\n\
+    \      [else 0]))\n  (if (string=? s \"\")\n      0\n      (+ (getSum (string-upper-case\
+    \ (substring s 0 1)))\n         (digitSum (substring s 1)))))\n```\n\n## Challenge\
+    \ 3\n```racket\n#lang racket\n", "  (cond\n    [(empty? s) 0]\n    [(equal? (char-upcase\
+    \ (first s)) (first s))\n     (+ (char->integer (first s)) (digitSum (rest s)))]\n\
+    \    [else (digitSum (rest s))]))\n", "  (let ([sum (+ (char->integer (string-ref\
+    \ s 0)) (char->integer (string-ref s 1)))])\n    (cond [(string=? s \"\") 0]\n\
+    \          [(and (>= sum 65) (<= sum 90)) (digitSum (substring s 1))]\n      \
+    \    [else (+ sum (digitSum (substring s 1)))])))", "  (sum (filter-map (\u03BB\
+    \ (c)\n                     (if (regexp-match #rx\"[A-Z]\" (string c))\n     \
+    \                    c\n                         #f))\n                   (string->list\
+    \ s))))", "  (cond\n    [(empty? s) 0]\n    [(char=? (string-ref s 0) (string-ref\
+    \ s 0) #:upper-case?) (+ (char->integer (string-ref s 0)) (digitSum (substring\
+    \ s 1)))]\n    [else (digitSum (substring s 1))]))\n", "  (apply + (map (lambda\
+    \ (x) (if (and (>= x 65) (<= x 90)) x 0)) (string->list s))))\n", '  (accumulate
+    + 0 (regexp-match #rx"[" (string->list s))))', "  (sum (map (\u03BB (c) (char->integer\
+    \ c)) (filter (\u03BB (c) (and (>= c #\\A) (<= c #\\Z))) s))))", "  (foldl + 0\n\
+    \          (map char->integer\n               (remove even?\n                \
+    \       (map integer->char\n                            (filter (lambda (x)\n\
+    \                                      (char=? x #\\a #\\A #\\b #\\B #\\c #\\\
+    C #\\d #\\D))\n                                    (map char->integer s)))))))\n",
+  "  (cond\n    [(empty? s) 0]\n    [(char-upcase? (first s)) (+ (char->integer (first\
+    \ s)) (digitSum (rest s)))]\n    [else (digitSum (rest s))]))", "  (if (null?\
+    \ s)\n      0\n      (+ (char->integer (char-upcase (car s)))\n         (digitSum\
+    \ (cdr s)))))", "  (cond ((string=? s \"\") 0)\n        ((char-upcase? (string-ref\
+    \ s 0)) (+ (char->integer (string-ref s 0)) (digitSum (substring s 1))))\n   \
+    \     (else (digitSum (substring s 1)))))\n", "  (if (string=? s \"\")\n     \
+    \ 0\n      (let ([char (string-ref s 0)])\n        (+ (* (if (char-upcase? char)\n\
+    \                 1\n                 0)\n              (char->integer char))\n\
+    \           (digitSum (substring s 1))))))\n```\n\n## Last digit of a number\n\
+    \n```#lang racket\n", "    (let loop ([i 0] [result 0])\n        (cond [(equal?\
+    \ i (string-length s)) result]\n              [(not (char-numeric? (string-ref\
+    \ s i))) result]\n              [else (loop (+ i 1) (+ result (char->integer (string-ref\
+    \ s i))))])))\n", "  (define (char-is-letter? ch)\n    (or (char=? ch #\\a) (char=?\
+    \ ch #\\b) (char=? ch #\\c) (char=? ch #\\d) (char=? ch #\\e) (char=? ch #\\f)\
+    \ (char=? ch #\\g) (char=? ch #\\h) (char=? ch #\\i) (char=? ch #\\j) (char=?\
+    \ ch #\\k) (char=? ch #\\l) (char=? ch #\\m) (char=? ch #\\n) (char=? ch #\\o)\
+    \ (char=? ch #\\p) (char=? ch #\\q) (char=? ch #\\r) (char=? ch #\\s) (char=?\
+    \ ch #\\t) (char=? ch #\\u) (char=? ch #\\v) (char=? ch #\\w) (char=? ch #\\x)\
+    \ (char=? ch #\\y) (char=? ch #\\z)))\n  (define (char-is-upper? ch)\n    (or\
+    \ (char=? ch #\\A) (char=? ch #\\B) (char=? ch #\\C) (char=? ch #\\D) (char=?\
+    \ ch #\\E) (char=? ch #\\F) (char=? ch #\\G) (char=? ch #\\H) (char=? ch #\\I)\
+    \ (char=? ch #\\J) (char=? ch #\\K) (char=? ch #\\L) (char=? ch #\\M) (char=?\
+    \ ch #\\N) (char=? ch #\\O) (char=? ch #\\P) (char=? ch #\\Q) (char=? ch #\\R)\
+    \ (char=? ch #\\S) (char=? ch #\\T) (char=? ch #\\U) (char=? ch #\\V) (char=?\
+    \ ch #\\W) (char=? ch #\\X) (char=? ch #\\Y) (char=? ch #\\Z)))\n  (define (char-value\
+    \ ch)", "  (let f ((s s) (summ 0))\n    (if (string-empty? s)\n        summ\n\
+    \        (f (substring s 1) (+ summ (string-&gt;number (string (string-&gt;char\
+    \ (substring s 0 1)) 10)))))))\n", "  (apply + (filter number? (map char->integer\
+    \ (filter char-upcase? (string->list s))))))\n```\n\n_Output_\n```scheme\n> (digitSum\
+    \ \"abAB\")\n131\n```\n\n## Implementation - Flatten List\n\n```scheme\n#lang\
+    \ racket\n", "  (apply + (map (\u03BB (x) (if (and (<= 65 x) (<= x 90)) x 0))\
+    \ (string->list s))))\n", "  (define (f x)\n    (if (equal? x #\\A) 65\n     \
+    \   (if (equal? x #\\B) 66\n            (if (equal? x #\\C) 67\n             \
+    \   (if (equal? x #\\D) 68\n                    (if (equal? x #\\E) 69\n     \
+    \                   (if (equal? x #\\F) 70\n                            (if (equal?\
+    \ x #\\G) 71\n                                (if (equal? x #\\H) 72\n       \
+    \                             (if (equal? x #\\I) 73\n                       \
+    \                 (if (equal? x #\\J) 74\n                                   \
+    \         (if (equal? x #\\K) 75\n                                           \
+    \     (if (equal? x #\\L) 76\n                                               \
+    \     (if (equal? x #\\M) 77\n                                               \
+    \         (if (equal? x #\\N) 78\n                                           \
+    \                 (if (equal? x #\\O) 79\n                                   \
+    \                             (if (equal? x #\\P) 80\n                       \
+    \                                             (if (equal? x #\\Q) 81\n       \
+    \                                                                 (if (equal?\
+    \ x #\\R) 82\n                                                               \
+    \             (if (equal? x #\\S) 83\n                                       \
+    \                                         (if (equal? x #\\T) 84\n           \
+    \                                                                         (if\
+    \ (equal? x #\\U) 85\n                                                       \
+    \                                 (if (equal? x #\\V) 86\n                   \
+    \                                                                         (if\
+    \ (equal? x #\\W) 87\n                                                       \
+    \                                         (if (equal? x #\\X) 88\n           \
+    \                                                                            \
+    \             (if (equal? x #\\Y) 89\n                                       \
+    \                                                                 (if (equal?\
+    \ x #\\Z) 90 0)))))))))))))))))))))))))))))))\n  (foldl + 0 (map f (string->list\
+    \ s))))\n", "  (define (digitsum-rec s)\n    (if (null? s)\n        0\n      \
+    \  (+ (if (char-upper-case? (car s))\n              (car s)\n              0)\n\
+    \           (digitsum-rec (cdr s)))))\n  (digitsum-rec (string->list s)))\n",
+  '  (reduce + (map ascii-code (filter char-upper-case? (string->list s)))))', " \
+    \ (define (isAlpha s)\n    (and\n     (not (char=? (string-ref s 0) #\\A))\n \
+    \    (not (char=? (string-ref s 0) #\\B))\n     (not (char=? (string-ref s 0)\
+    \ #\\C))\n     (not (char=? (string-ref s 0) #\\D))\n     (not (char=? (string-ref\
+    \ s 0) #\\E))\n     (not (char=? (string-ref s 0) #\\F))\n     (not (char=? (string-ref\
+    \ s 0) #\\G))\n     (not (char=? (string-ref s 0) #\\H))\n     (not (char=? (string-ref\
+    \ s 0) #\\I))\n     (not (char=? (string-ref s 0) #\\J))\n     (not (char=? (string-ref\
+    \ s 0) #\\K))\n     (not (char=? (string-ref s 0) #\\L))\n     (not (char=? (string-ref\
+    \ s 0) #\\M))\n     (not (char=? (string-ref s 0) #\\N))\n     (not (char=? (string-ref\
+    \ s 0) #\\O))\n     (not (char=? (string-ref s 0) #\\P))\n     (not (char=? (string-ref\
+    \ s 0) #\\Q))\n     (not (char=? (string-ref s 0) #\\R))\n     (not (char=? (string-ref\
+    \ s 0) #\\S))\n     (not (char=? (string-ref s 0) #\\T))\n     (not (char=? (string-ref\
+    \ s 0) #\\U))\n     (not (char=? (string-ref s 0) #\\V))\n     (not (char=? (string-ref\
+    \ s 0) #\\W))\n     (not (char=? (string-ref s 0) #\\X))\n     (not (char=? (string-ref\
+    \ s 0) #\\Y))\n     (not (char=? (string-ref s 0) #\\Z))))\n  (define (", "  (for/sum\
+    \ ([ch (in-string s)]\n            #:when (and (char&lt;= #\\A ch) (char&lt;=\
+    \ ch #\\Z)))\n    (char-&gt;integer ch)))\n</code>\n", "  (define (char-to-int\
+    \ char)\n    (subtract char #\\0))\n  (define (is-upper? char)\n    (integer?\
+    \ char)\n    (integer? #\\A)\n    (char-to-int char)\n    (char-to-int #\\A)\n\
+    \    (subtract char #\\A)\n    (subtract #\\Z #\\A)\n    (subtract char #\\A)\n\
+    \    (subtract #\\Z #\\A)\n    (>= (subtract char #\\A)\n        (subtract #\\\
+    Z #\\A))\n    (>= (subtract char #\\A)\n        (subtract #\\Z #\\A)))\n  (define\
+    \ (char-sum char)\n    (if (is-upper? char)\n        (char-to-int char)\n    \
+    \    0))\n  (apply + (map char-sum s)))\n", "  (define (str->int str)\n    (cond\n\
+    \      [(string=? str \"\") 0]\n      [(string=? str \"1\") 1]\n      [(string=?\
+    \ str \"2\") 2]\n      [(string=? str \"3\") 3]\n      [(string=? str \"4\") 4]\n\
+    \      [(string=? str \"5\") 5]\n      [(string=? str \"6\") 6]\n      [(string=?\
+    \ str \"7\") 7]\n      [(string=? str \"8\") 8]\n      [(string=? str \"9\") 9]\n\
+    \      [(string=? str \"0\") 0]))\n  (letrec\n    ((sum (lambda (s)\n        \
+    \    (cond\n              [(empty? s) 0]\n              [(char-upper-case? (first\
+    \ s))\n               (+ (str->int (symbol->string (digit->char (+ (char->integer\
+    \ (first s)) -55))))\n                  (sum (rest s)))]\n              [else\
+    \ (sum (rest s))]))))\n    (sum s)))\n", "  (apply + (map (lambda (i) (if (char-upper-case?\
+    \ i) (char->integer i) 0)) s)))\n", "  (define (to-int c)\n    (integer->char\
+    \ c))\n  (define (char-in-range c r)\n    (cond [(in-range? c r)\n           c]\n\
+    \          [else\n           #f]))\n  (define (in-range? c r)\n    (and (>= c\
+    \ (first r))\n         (<= c (second r))))\n  (define (char-to-ascii c)\n    (cond\
+    \ [(char-in-range c #\\A #\\Z)\n           (to-int c)]\n          [else\n    \
+    \       #f]))\n  (foldl + 0 (map char-to-ascii (string->list s))))\n", "  (if\
+    \ (empty? s)\n      0\n      (+ (if (char-upper-case? (string-ref s 0)) (char->integer\
+    \ (string-ref s 0)) 0)\n         (digitSum (substring s 1)))))\n", "  (if (equal?\
+    \ s \"\")\n      0\n      (cond ((char-upper-case? (string-ref s 0))\n       \
+    \      (+ (char->integer (string-ref s 0))\n                (digitSum (substring\
+    \ s 1))))\n            (else (digitSum (substring s 1))))))\n", "  (reduce + (map\
+    \ (lambda (ch)\n                   (if (char-ci&gt;=? ch #\\A)\n             \
+    \          (char-&gt;integer ch)\n                       0))\n               \
+    \  (string-&gt;list s))))\n</code>\n", "  (for/sum ([x (in-string s)] #:when (char-upper-case?\
+    \ x))\n    (char->integer x)))", "  (foldl (lambda (x acc)\n           (cond\n\
+    \             ((char-numeric? x) (+ acc x))\n             ((char-alphabetic? x)\
+    \ (if (char-upper-case? x) (+ acc x) acc))\n             (else acc)))\n      \
+    \   0\n         (string->list s)))\n", "  (define (helper s sum)\n    (cond\n\
+    \      [(string=? s \"\") sum]\n      [(char-upper-case? (string-ref s 0)) (helper\
+    \ (substring s 1) (+ sum (string-ref s 0)))]\n      [else (helper (substring s\
+    \ 1) sum)]))\n  (helper s 0))\n", "  (sum (map string-&gt;number (filter char-upper-case?\
+    \ (string-&gt;list s)))))\n", "    (if\n        (string=? \"\" s)\n        0\n\
+    \        (let* ([first-char (string-ref s 0)]\n               [rest-s (substring\
+    \ s 1)])\n            (if\n                (char&lt;=? #\\a first-char #\\z)\n\
+    \                (digitSum rest-s)\n                (+ (char-&gt;integer first-char)\
+    \ (digitSum rest-s))))))\n</code>\n", "  (if (empty? s)\n      0\n      (+ (char->integer\
+    \ (string-ref s 0))\n         (if (>= (char->integer (string-ref s 0)) 65)\n \
+    \            (digitSum (substring s 1))\n             0))))\n```\n\n```\n#lang\
+    \ racket\n", "  (if (null? s)\n      0\n      (+ (if (and (>= (char->integer (car\
+    \ s)) 65) (<= (char->integer (car s)) 90))\n           (char->integer (car s))\n\
+    \           0)\n         (digitSum (cdr s)))))\n", "  (apply + (filter even? (map\
+    \ char->integer (for/list ([c (in-string s)]) (if (char-upcase? c) c))))))\n",
+  "  (cond\n    [(= 0 (string-length s)) 0]\n    [else (+ (string-ref s 0) (digitSum\
+    \ (substring s 1)))]))\n</code>\nThe point is, if I run this code, I should get\
+    \ an error saying that the number of arguments to string-ref is incorrect. The\
+    \ problem is that I don't get any errors and the code runs as expected.\nI've\
+    \ tried searching for this problem and I've seen people with the same problem\
+    \ but they all were experiencing it in the REPL and the problem disappeared by\
+    \ restarting the REPL. This is not the case here. I'm using DrRacket on Windows.\n\
+    Any help will be appreciated.\n\n\nA:\n\nIt seems that this is actually expected\
+    \ behavior in some cases. For example:\n<code>(if (string? (list 1 2 3))\n   \
+    \ (string-ref \"foo\" 1)\n    \"bar\")\n</code>\nproduces no error and returns\
+    \ <code>#\\o</code>; the <code>string-ref</code> should have been called with\
+    \ only 1 argument. On the other hand,\n<code>(if (string? (list 1 2 3))\n    (string-ref)\n\
+    \    \"bar\")\n</code>\ngives an error. I can't figure out what's different between\
+    \ these two cases (I'm not sure whether the error is supposed to be produced in\
+    \ either one, tbh).\n", "  (cond\n    [(empty? s) 0]\n    [(and (<= #\\A (string-ref\
+    \ s 0)) (<= (string-ref s 0) #\\Z))\n     (+ (char->integer (string-ref s 0))\
+    \ (digitSum (substring s 1)))]\n    [else (digitSum (substring s 1))]))", "  (match\
+    \ s\n    [(string)\n     (apply +\n            (map (lambda (x)\n            \
+    \        (if (and (>= x #\\A) (<= x #\\Z))\n                        (- x #\\A\
+    \ #\\a)\n                        0))\n                 s))]))\n", "  (foldl +\
+    \ 0 (filter (lambda (x) (>= x 65) (<= x 90)) (map (lambda (x) (char->integer x))\
+    \ (string->list s)))))\n", "  (apply + (map char->integer\n                  (filter\
+    \ char-upcase?\n                          (string->list s)))))\n", "  (apply +\
+    \ (map char->integer (filter char-upcase? (string->list s)))))\n", "  (cond\n\
+    \    [(empty? s) 0]\n    [(char-upper-case? (first s)) (+ (char->integer (first\
+    \ s)) (digitSum (rest s)))]\n    [else (digitSum (rest s))]))\n```\n\n```racket\n\
+    #lang racket\n", "  (apply + (map (lambda (c) (char->integer c)) (filter (lambda\
+    \ (c) (char-upper-case? c)) s))))\n", "  (foldl + 0 (filter (\u03BB (c) (and (char-upper-case?\
+    \ c) (char-numeric? c))) s)))", "  (cond [(string=? s \"\") 0]\n        [else\
+    \ (+ (char->integer (string-ref s 0))\n                 (digitSum (substring s\
+    \ 1)))]))\n```\n\n## Reversed Words\n```racket\n#lang racket\n", "  (define (helper\
+    \ s sum)\n    (cond\n      [(string=? s \"\") sum]\n      [(and (not (char-numeric?\
+    \ (string-ref s 0))) (>= (char->integer (string-ref s 0)) 65) (<= (char->integer\
+    \ (string-ref s 0)) 90)) (helper (substring s 1) (+ sum (char->integer (string-ref\
+    \ s 0))))]\n      [else (helper (substring s 1) sum)]))\n  (helper s 0))", '  (apply
+    + (map char->integer (filter char-upper-case? (string->list s)))))', "  (if (string=?\
+    \ s \"\")\n      0\n      (let ([f (first s)]\n            [r (rest s)])\n   \
+    \     (cond\n         [(symbol=? f #\\A) (+ 65 (digitSum r))]\n         [(symbol=?\
+    \ f #\\B) (+ 66 (digitSum r))]\n         [(symbol=? f #\\C) (+ 67 (digitSum r))]\n\
+    \         [(symbol=? f #\\D) (+ 68 (digitSum r))]\n         [(symbol=? f #\\E)\
+    \ (+ 69 (digitSum r))]\n         [(symbol=? f #\\F) (+ 70 (digitSum r))]\n   \
+    \      [(symbol=? f #\\G) (+ 71 (digitSum r))]\n         [(symbol=? f #\\H) (+\
+    \ 72 (digitSum r))]\n         [(symbol=? f #\\I) (+ 73 (digitSum r))]\n      \
+    \   [(symbol=? f #\\J) (+ 74 (digitSum r))]\n         [(symbol=? f #\\K) (+ 75\
+    \ (digitSum r))]\n         [(symbol=? f #\\L) (+ 76 (digitSum r))]\n         [(symbol=?\
+    \ f #\\M) (+ 77 (digitSum r))]\n         [(symbol=? f #\\N) (+ 78 (digitSum r))]\n\
+    \         [(symbol=? f #\\O) (+ 79 (digitSum r))]\n         [(symbol=? f #\\P)\
+    \ (+ 80 (digitSum r))]\n         [(symbol=? f #\\Q) (+ 81 (digitSum r))]\n   \
+    \      [(symbol=? f #\\R) (+ 82 (digitSum r))]\n         [(symbol=? f #\\S) (+\
+    \ 83 (digitSum r))]\n         [(symbol=? f #\\T) (+ 84 (digitSum r))]\n      \
+    \   [(symbol=? f #\\U) (+ 85 (digitSum r))]\n         [(symbol=? f #\\V) (+ 86\
+    \ (digitSum r))]\n         [(symbol=? f #\\W) (+ 87 (digitSum r))]\n         [(symbol=?\
+    \ f #\\X) (+ 88 (", "  (cond\n    [(empty? s) 0]\n    [(not (char-numeric? (string-ref\
+    \ s 0))) (+ (char->integer (string-ref s 0)) (digitSum (substring s 1)))]\n  \
+    \  [else (digitSum (substring s 1))]))\n", "  (sum (map (lambda (x) (sub1 (char->integer\
+    \ x))) (filter char-upcase? (string->list s)))))\n", "  (cond\n    [(empty? s)\
+    \ 0]\n    [(char-upper-case? (string-ref s 0))\n     (+ (char->integer (string-ref\
+    \ s 0)) (digitSum (substring s 1)))]\n    [else (digitSum (substring s 1))]))\n",
+  "  (cond\n    [(string=? s \"\") 0]\n    [else\n     (cond\n       [(char&gt;=?\
+    \ (string-ref s 0) #\\A)\n        (+ (char-&gt;integer (string-ref s 0)) (digitSum\
+    \ (substring s 1)))]\n       [else (digitSum (substring s 1))])]))\n", '  (accumulate
+    + 0 (map (lambda (x) (- x 32)) (filter (lambda (y) (> y 64)) (map char->integer
+    (string->list s))))))', "  (for/sum ([c (in-string s)] #:when (>= c 65) #:when\
+    \ (<= c 90))\n    c))", "  (apply + (list->vector (map (\u03BB (char) (if (char&lt;=\
+    \ #\\A char #\\Z) (char-&gt;integer char) 0)) (string-&gt;list s)))))\n", "  (define\
+    \ (helper str counter)\n    (if (= counter (string-length str))\n        0\n \
+    \       (if (>= 65 (string-ref str counter))\n            (+ counter (helper str\
+    \ (+ counter 1)))\n            (helper str (+ counter 1)))))\n  (helper s 0))\n",
+  "  (apply + (filter (lambda (x) (and (>= x 65) (<= x 90))) (map char->integer (string->list\
+    \ s)))))\n", "  (apply + (map char->integer (filter char-upcase? (string->list\
+    \ s)))))\n```\n\n```\n#lang racket\n", "  (foldr (lambda (x acc)\n           (if\
+    \ (char-numeric? x)\n               (+ acc (char->integer x))\n              \
+    \ acc))\n         0 s))", "  (accumulate + 0 (map char->integer (regexp-match\
+    \ #rx\"[A-Z]\" s))))\n", '  (sum (map (lambda (x) (- x 32)) (filter char-upper-case?
+    (string->list s)))))', "  (if (string=? s \"\")\n      0\n      (if (and (<= (string-&gt;number\
+    \ (string-ref s 0)) 64)\n               (&gt;= (string-&gt;number (string-ref\
+    \ s 0)) 91))\n          (digitSum (substring s 1 (string-length s)))\n       \
+    \   (+ (string-&gt;number (string-ref s 0))\n             (digitSum (substring\
+    \ s 1 (string-length s)))))))\n", "  (let loop ((s s) (acc 0))\n    (cond\n  \
+    \    [(empty? s) acc]\n      [(in-range? (string-&gt;number (string-ref s 0))\
+    \ 65 90)\n       (loop (substring s 1) (+ acc (string-&gt;number (string-ref s\
+    \ 0))))]\n      [else (loop (substring s 1) acc)])))\n</code>\nIs there any clearer\
+    \ (better) way of doing this?\n\n\nA:\n\nYes, there is a shorter and clearer way:\n\
+    <code>(define (digit-sum s)\n  (apply +\n         (map (\u03BB (c) (if (in-range?\
+    \ c 65 90) c 0))\n              (string-&gt;list s))))\n</code>", "  (let ([sl\
+    \ (string->list s)])\n    (apply + (map (lambda (c) (if (char-upcase? c) (char->integer\
+    \ c) 0)) sl))))", "  (if (empty? s)\n      0\n      (+ (char-&gt;integer (string-ref\
+    \ s 0)) (digitSum (string-tail s)))))\n", "  (apply + (map (lambda (x) (char->integer\
+    \ x)) (filter (lambda (x) (and (>= x #\\A) (<= x #\\Z))) s))))\n", "  (cond\n\
+    \    [(string=? s \"\") 0]\n    [else\n     (let ([sList (string->list s)])\n\
+    \       (cond\n         [(= (car sList) (string-ref s 0))\n          (+ (car sList)\
+    \ (digitSum (string (cdr sList))))]\n         [else\n          (digitSum (string\
+    \ (cdr sList)))]))]))\n", "  (if (string=? s \"\")\n      0\n      (if (and (char&lt;=?\
+    \ #\\A (string-ref s 0)) (char&lt;=? (string-ref s 0) #\\Z))\n          (+ (char-&gt;integer\
+    \ (string-ref s 0)) (digitSum (substring s 1)))\n          (digitSum (substring\
+    \ s 1)))))\n</code>\nIn the book, the solution is:\n<code>#lang racket\n", " \
+    \ (if (equal? s \"\") 0\n      (+ (if (char-upcase? (string-ref s 0)) (string-ref\
+    \ s 0) 0)\n         (digitSum (substring s 1)))))", "  (apply + (map string-&gt;number\
+    \ (filter (lambda (x) (char-upper-case? x)) (string-&gt;list s)))))\n</code>\n\
+    How do I make the code more concise? How do I make it more readable? Do I break\
+    \ any functional programming rules?\n\n\nA:\n\nHere's another approach, which\
+    \ uses <code>foldl</code> and <code>string-map</code>:\n<code>(define (digit-sum\
+    \ s)\n  (foldl + 0\n         (string-map\n          (lambda (c) (if (char-upper-case?\
+    \ c) (char-&gt;integer c) 0))\n          s)))\n</code>\n", "  (sum (filter (curry\
+    \ char-upcase=? #t) (string->list s))))\n", "  (for/sum ([c (in-string s)] #:when\
+    \ (char-upcase? c))\n    (- (char->integer c) #x41)))\n", "  (displayln s)\n \
+    \ (cond [(string=? s \"\") 0]\n        [else (+ (digitSum (substring s 1 (string-length\
+    \ s)))\n                 (cond [(char-upcase? (string-ref s 0)) (char->integer\
+    \ (string-ref s 0))]\n                       [else 0]))]))", "  (cond ((= (string-length\
+    \ s) 0) 0)\n        ((and (char&lt;=? #\\A (string-ref s 0)) (char&lt;=? (string-ref\
+    \ s 0) #\\Z))\n         (+ (char-&gt;integer (string-ref s 0)) (digitSum (substring\
+    \ s 1))))\n        (else (digitSum (substring s 1)))))\n", "  (apply + (map (lambda\
+    \ (s) (char->integer s)) (filter char-upper-case? (string->list s)))))\n```\n\n\
+    ```racket\n#lang racket\n", "  (define (isUpper? c)\n    (and (&gt;= c 65) (&lt;=\
+    \ c 90)))\n  (define (sum l)\n    (if (null? l)\n        0\n        (+ (car l)\
+    \ (sum (cdr l)))))\n  (sum (filter isUpper? (string-&gt;list s))))\n", "  (apply\
+    \ + (filter (\u03BB (x) (>= x #x41) (<= x #x5A)) (string->list s))))\n", "  (apply\
+    \ +\n         (map (\u03BB (x) (if (char-upper-case? x) (char->integer x) 0))\n\
+    \              (string->list s))))\n", "  (apply + (map char->integer (filter\
+    \ char-upper-case? (string->list s)))))\n", "  (apply + (map char->integer (filter\
+    \ char-upcase? (string->list s)))))\n", '  (apply + (filter even? (map char->integer
+    (filter char-alphabetic? (string->list s))))))', "  (define (summ s)\n    (cond\n\
+    \      [(string=? s \"\")\n       0]\n      [(and (>= (string-ref s 0) 65)\n \
+    \           (<= (string-ref s 0) 90))\n       (+ (string-ref s 0) (summ (substring\
+    \ s 1)))]\n      [else\n       (summ (substring s 1))]))\n  (summ s))\n", "  (apply\
+    \ + (for/list ([e (in-string s)])\n            (cond\n              [(char-upper-case?\
+    \ e) (char->integer e)]\n              [else 0]))))", "  (if (string=? s \"\"\
+    )\n      0\n      (let ((char (string-ref s 0)))\n        (+ (if (and (&lt;= #\\\
+    A char) (&lt;= char #\\Z))\n               (- char #\\A)\n               0)\n\
+    \           (digitSum (substring s 1))))))\n", "  (foldl + 0 (map char->integer\
+    \ (filter (\u03BB (x) (and (>= x #\\A) (<= x #\\Z))) s))))\n", "  (let loop ((s\
+    \ s) (c 0))\n    (cond\n      [(null? s) c]\n      [(char-alphabetic? (car s))\n\
+    \       (if (char-upper-case? (car s))\n           (loop (cdr s) (+ c (car s)))\n\
+    \           (loop (cdr s) c))]\n      [else (loop (cdr s) c)])))\n", "  (if (zero?\
+    \ (string-length s))\n      0\n      (+ (if (>= (char->integer (string-ref s 0))\
+    \ 65)\n             (char->integer (string-ref s 0))\n             0)\n      \
+    \   (digitSum (substring s 1 (- (string-length s) 1))))))\n", "  (cond ((string=?\
+    \ s \"\") 0)\n        ((char-numeric? (string-ref s 0)) (digitSum (substring s\
+    \ 1)))\n        ((char-lower-case? (string-ref s 0)) (digitSum (substring s 1)))\n\
+    \        (else (+ (char->integer (string-ref s 0)) (digitSum (substring s 1))))))\n",
+  '  (sum (filter uppercase? (map char->integer (string->list s)))))', "  (apply +\
+    \ (for/list ([c (in-string s)])\n            (if (char-upcase? c) (char->integer\
+    \ c) 0))))", "  (define (check-and-sum c s)\n    (cond [(string=? c #\\A) (+ (ascii-&gt;integer\
+    \ c) s)]\n          [(string=? c #\\B) (+ (ascii-&gt;integer c) s)]\n        \
+    \  [(string=? c #\\C) (+ (ascii-&gt;integer c) s)]\n          [(string=? c #\\\
+    D) (+ (ascii-&gt;integer c) s)]\n          [(string=? c #\\E) (+ (ascii-&gt;integer\
+    \ c) s)]\n          [(string=? c #\\F) (+ (ascii-&gt;integer c) s)]\n        \
+    \  [(string=? c #\\G) (+ (ascii-&gt;integer c) s)]\n          [(string=? c #\\\
+    H) (+ (ascii-&gt;integer c) s)]\n          [(string=? c #\\I) (+ (ascii-&gt;integer\
+    \ c) s)]\n          [(string=? c #\\J) (+ (ascii-&gt;integer c) s)]\n        \
+    \  [(string=? c #\\K) (+ (ascii-&gt;integer c) s)]\n          [(string=? c #\\\
+    L) (+ (ascii-&gt;integer c) s)]\n          [(string=? c #\\M) (+ (ascii-&gt;integer\
+    \ c) s)]\n          [(string=? c #\\N) (+ (ascii-&gt;integer c) s)]\n        \
+    \  [(string=? c #\\O) (+ (ascii-&gt;integer c) s)]\n          [(string=? c #\\\
+    P) (+ (ascii-&gt;integer c) s)]\n          [(string=? c #\\Q) (+ (ascii-&gt;integer\
+    \ c) s)]\n          [(string=? c #\\R) (+ (ascii-&gt;integer c) s)]\n        \
+    \  [(string=? c #\\S) (+ (ascii-&gt;integer c) s)]\n          [(string=? c #\\\
+    T) (+ (ascii-&gt;integer c", "  (cond\n    [(string=? s \"\") 0]\n    [else\n\
+    \     (let* ([s (string-upcase s)]\n            [curr-char (string-ref s 0)]\n\
+    \            [sum-before-curr (digitSum (substring s 1 (string-length s))))])\n\
+    \       (+ sum-before-curr curr-char))]))\n", "  (let ([a 0])\n    (for/fold ([acc\
+    \ 0]) ([i (in-string s)])\n      (if (and (>= i 65) (<= i 90))\n          (+ acc\
+    \ i)\n          acc))))\n", "  (if (empty? s)\n      0\n      (+ (or (- (char-upcase\
+    \ (first s)) 32) (first s))\n         (digitSum (rest s)))))\n", "  (if (string=?\
+    \ s \"\")\n      0\n      (if (or (>= (char->integer (string-ref s 0)) 65) (>=\
+    \ (char->integer (string-ref s 0)) 97))\n          (+ (char->integer (string-ref\
+    \ s 0)) (digitSum (substring s 1)))\n          (digitSum (substring s 1)))))\n",
+  "  (if (empty? s)\n      0\n      (+\n       (if (char-upper-case? (first s))\n\
+    \           (char->integer (first s))\n           0)\n       (digitSum (rest s)))))",
+  "  (define (it sum lst)\n    (cond\n      [(empty? lst) sum]\n      [(or (= #\\\
+    A (car lst)) (= #\\B (car lst)) (= #\\C (car lst)) (= #\\D (car lst)) (= #\\E\
+    \ (car lst)) (= #\\F (car lst)) (= #\\G (car lst)) (= #\\H (car lst)) (= #\\I\
+    \ (car lst)) (= #\\J (car lst)) (= #\\K (car lst)) (= #\\L (car lst)) (= #\\M\
+    \ (car lst)) (= #\\N (car lst)) (= #\\O (car lst)) (= #\\P (car lst)) (= #\\Q\
+    \ (car lst)) (= #\\R (car lst)) (= #\\S (car lst)) (= #\\T (car lst)) (= #\\U\
+    \ (car lst)) (= #\\V (car lst)) (= #\\W (car lst)) (= #\\X (car lst)) (= #\\Y\
+    \ (car lst)) (= #\\Z (car lst)))\n       (it (+ sum (car lst)) (cdr lst))]\n \
+    \     [else (it sum (cdr lst))]))\n  (it 0 (string->list s)))\n", "  (foldr (lambda\
+    \ (x y)\n           (if (and (>= x 65) (<= x 90))\n               (+ x y)\n  \
+    \             y))\n         0\n         (string->list s)))\n```\n\n```\n#lang\
+    \ racket\n", "  (apply + (map (\u03BB (c)\n                  (if (or (char=? c\
+    \ #\\A) (char=? c #\\B) (char=? c #\\C) (char=? c #\\D) (char=? c #\\E) (char=?\
+    \ c #\\F) (char=? c #\\G) (char=? c #\\H) (char=? c #\\I) (char=? c #\\J) (char=?\
+    \ c #\\K) (char=? c #\\L) (char=? c #\\M) (char=? c #\\N) (char=? c #\\O) (char=?\
+    \ c #\\P) (char=? c #\\Q) (char=? c #\\R) (char=? c #\\S) (char=? c #\\T) (char=?\
+    \ c #\\U) (char=? c #\\V) (char=? c #\\W) (char=? c #\\X) (char=? c #\\Y) (char=?\
+    \ c #\\Z))\n                      (- c 96)\n                      0))\n      \
+    \          (string->list s))))\n", "  (sum-upper-chars-to-decimal (string->list\
+    \ s)))\n", "  (apply + (for/list ([c (in-string s)])\n            (cond\n    \
+    \          [(string-upcase? c) (string-&gt;number (string c))]\n             \
+    \ [else 0]))))\n</code>\nWhich produces the following:\n<code>&gt; (digitSum \"\
+    \")\n0\n&gt; (digitSum \"abAB\")\n131\n&gt; (digitSum \"abcCd\")\n67\n&gt; (digitSum\
+    \ \"helloE\")\n69\n&gt; (digitSum \"woArBld\")\n131\n&gt; (digitSum \"aAaaaXa\"\
+    )\n153\n</code>\nI'm pretty new to Racket, is there a more idiomatic way to do\
+    \ this that I'm missing?\n\n\nA:\n\nThere's really not a good way to make that\
+    \ <code>cond</code> any more readable.  I would write it like this:\n<code>(define\
+    \ (digitSum s)\n  (apply + (for/list ([c (in-string s)])\n            (if (string-upcase?\
+    \ c)\n                (string-&gt;number (string c))\n                0))))\n\
+    </code>\nWhat I'd personally do differently is just to use <code>filter</code>\
+    \ to get the values we want, and then <code>map</code> them to numbers:\n<code>(define\
+    \ (digitSum s)\n  (apply + (map string-&gt;number (filter string-upcase? (string-&gt;list\
+    \ s)))))\n</code>\nOf course, it's also worth noting that the <code>char-&gt;integer</code>\
+    \ function gives you the ASCII code for a character, so you can condense that\
+    \ into a single expression that uses <code>filter</code> and <code>map</code>\
+    \ to get the result:\n<code>(define (digitSum s)\n  (apply + (map char-&gt;integer\
+    \ (filter string-upcase? (string-&gt;list s)))))\n</code>\nOr you can use <code>foldr</code>\
+    \ to make it more explicit:\n<code>(define (digitSum s)\n  (foldr (lambda (c acc)\
+    \ (+ acc (char-&gt;integer c)))", "  (for/sum ([c (in-string s)]\n           \
+    \ #:when (char-upcase? c))\n            (char->integer c)))\n", "  (apply + (filter\n\
+    \            (lambda (c) (char-upper-case? c))\n            (string->list s))))\n",
+  "  (let ([sum 0])\n    (for ([i (in-list s)])\n      (when (and (>= i #\\A) (<=\
+    \ i #\\Z))\n        (set! sum (+ sum i))))\n    sum))\n", "  (define (up? ch)\n\
+    \    (and (>= ch 65) (<= ch 90)))\n  (define (dn? ch)\n    (and (>= ch 97) (<=\
+    \ ch 122)))\n  (define (sum s)\n    (foldr + 0 (map char->integer s)))\n  (sum\
+    \ (filter up? s)))\n", "  (for/sum ([c (in-string s)]\n            #:when (char-upcase?\
+    \ c))\n    (char->integer c)))\n```\n\n## Basic Mathematical Operations\n```racket\n\
+    #lang racket\n", "  (apply + (map char->integer (filter (lambda (x) (char-upper-case?\
+    \ x)) s))))\n", "  (cond\n    [(empty? s) 0]\n    [(and (<= #\\A (string-ref s\
+    \ 0)) (>= #\\Z (string-ref s 0)))\n     (+ (char->integer (string-ref s 0)) (digitSum\
+    \ (substring s 1)))]\n    [else (digitSum (substring s 1))]))\n", "  (foldl (lambda\
+    \ (c sum) (+ sum (if (or (= c #\\A) (= c #\\B) (= c #\\C) (= c #\\D) (= c #\\\
+    E) (= c #\\F)) (- c 55) 0))) 0 s))\n", "    (cond ((or (null? s) (empty? s)) 0)\n\
+    \          ((&gt;= (string-&gt;char s) 65) (+ (string-&gt;char s) (digitSum (substring\
+    \ s 1))))\n          (else (digitSum (substring s 1)))))\n</code>\nHowever my\
+    \ solution is not correct as according to my tests it returns 50 when it should\
+    \ return 131 for \"abAB\".\nI know there are other questions that do the same,\
+    \ but I would like to understand why my code is not working. Thanks in advance!\n\
+    \n\nA:\n\nI see two mistakes:\n\n<code>(string-&gt;char s)</code> is the first\
+    \ character of the string <code>s</code>, not all the characters. To get all the\
+    \ characters, you need to use <code>(string-&gt;list s)</code>. This is the reason\
+    \ why your code did not return anything for <code>\"abAB\"</code> as <code>(string-&gt;char\
+    \ \"abAB\")</code> returns 97, which is not greater than 65.\nIn the last line,\
+    \ you don't consider the case where the first character is an uppercase letter.\n\
+    \nHere is a corrected code:\n<code>(define (digitSum s)\n  (cond ((or (null? s)\
+    \ (empty? s)) 0)\n        ((&gt;= (string-&gt;char s) 65) (+ (string-&gt;char\
+    \ s) (digitSum (substring s 1))))\n        ((&lt; (string-&gt;char s) 65) (digitSum\
+    \ (substring s 1)))\n        (else (digitSum (substring s 1)))))\n</code>\nor\n\
+    <code>(define (digitSum s)\n  (cond ((or (null? s) (empty? s)) 0)\n        ((&gt;=\
+    \ (string-&gt;char s) 65) (+ (string-&gt;char s) (digitSum (substring s 1))))\n\
+    \        (else (digitSum (substring s 1)))))\n</code>\n", "  (cond [(empty? s)\
+    \ 0]\n        [else (+ (char-&gt;integer (char-upcase (string-ref s 0)))\n   \
+    \              (digitSum (substring s 1)))]))\n</code>\n", "  (define (sum-upper-ascii-codes\
+    \ s)\n    (apply + (filter (\u03BB (x) (and (<= 65 x) (<= x 90))) (map char->integer\
+    \ s))))\n  (cond\n    [(empty? s) 0]\n    [else (sum-upper-ascii-codes s)]))",
+  "  (displayln s)\n  (define (loop s acc)\n    (if (empty? s)\n        acc\n    \
+    \    (if (char-upper-case? (first s))\n            (loop (rest s) (+ acc (char->integer\
+    \ (first s))))\n            (loop (rest s) acc))))\n  (loop s 0))\n", "  (apply\
+    \ + (map (\u03BB (x) (cond [(number? x) x]\n                              [(char-upper-case?\
+    \ x) (char->integer x)]\n                              [else 0]))\n          \
+    \      (string->list s))))\n", "  (if (null? s)\n      0\n      (+ (char->integer\
+    \ (car s)) (digitSum (cdr s)))))\n", "  (apply + (filter even? (map char->integer\
+    \ (string-upcase s)))))\n", '  (apply + (map char->integer (filter char-upper-case?
+    (string->list s)))))', "  (apply + (for/list ([c (in-string s)])\n           \
+    \ (cond [(char-upcase? c) (char->integer c)]\n                  [else #f]))))\n",
+  "  (apply + (map (lambda (c) (if (char-upper-case? c) (char->integer c) 0)) (string->list\
+    \ s))))\n", "  (if (empty? s)\n      0\n      (+ (char-&gt;integer (string-&gt;upper-case\
+    \ (string-ref s 0)))\n         (digitSum (substring s 1)))))\n", "  (apply + (map\
+    \ (lambda (c) (char->integer c)) (filter char-upper-case? (string->list s)))))\n",
+  "  (if (string=? s \"\")\n      0\n      (let* ([ch (string-ref s 0)]\n        \
+    \     [ch-val (if (char-ci=? #\\a ch) 1\n                       (+ (char->integer\
+    \ ch) (char->integer (char-upcase ch))))])\n        (+ ch-val (digitSum (substring\
+    \ s 1))))))\n", '  (apply + (map (lambda (x) (char->integer x)) (filter char-upper-case?
+    (string->list s)))))', "  (apply + (filter (lambda (x) (<= x 90)) (string->list\
+    \ s))))\n```\n###Binary Addition\n```racket\n#lang racket\n", "  (apply + (for/list\
+    \ ([c (in-string s)])\n             (cond\n               [(char-upper-case? c)\
+    \ (char->integer c)]\n               [else 0]))))\n", "  (cond [(null? s) 0]\n\
+    \        [else (if (and (<= #\\A (car s)) (<= (car s) #\\Z))\n               \
+    \   (+ (car s) (digitSum (cdr s)))\n                  (digitSum (cdr s)))]))",
+  "  (cond [(zero? (string-length s))\n         0]\n        [else\n         (+ (char->integer\
+    \ (string-ref s 0))\n            (digitSum (substring s 1)))]))\n", "  (if (empty?\
+    \ s)\n      0\n      (+ (string-&gt;number (substring s 0 1)) (digitSum (substring\
+    \ s 1)))))\n", "  (apply + (filter even?\n                   (map ascii-numeric-value\n\
+    \                        (filter char-numeric? (string->list s))))))", "  (define\
+    \ (summable? c)\n    (char-upper-case? c))\n  (define (ascii-of c)\n    (char->integer\
+    \ c))\n  (accumulate +\n               0\n               (map ascii-of\n     \
+    \               (filter summable? s))))\n", "  (accumulate + 0 (map char->integer\
+    \ (filter char-upper-case? (string->list s)))))\n", "  (define (digitSum-inner\
+    \ s ssum)\n    (cond\n      [(empty? s) ssum]\n      [(and (char-uppercase? (first\
+    \ s)) (char-numeric? (first s)))\n       (digitSum-inner (rest s) (+ ssum (char->integer\
+    \ (first s))))]\n      [(and (char-uppercase? (first s)) (not (char-numeric? (first\
+    \ s))))\n       (digitSum-inner (rest s) (+ ssum (char->integer (first s))))]\n\
+    \      [else (digitSum-inner (rest s) ssum)]))\n  (digitSum-inner s 0))\n```\n\
+    \n```python\n# Task\n# Write a function that takes a string as input and returns\
+    \ the sum of the upper characters only'\n# ASCII codes.\n# Examples:\n# digitSum(\"\
+    \") => 0\n# digitSum(\"abAB\") => 131\n# digitSum(\"abcCd\") => 67\n# digitSum(\"\
+    helloE\") => 69\n# digitSum(\"woArBld\") => 131\n# digitSum(\"aAaaaXa\") => 153\n\
+    \ndef digitSum(s):\n    ssum = 0\n    for c in s:\n        if c.isupper() and\
+    \ c.isnumeric():\n            ssum += ord(c)\n        elif c.isupper() and not\
+    \ c.isnumeric():\n            ssum += ord(c)\n    return ssum\n```\n\n```scheme"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

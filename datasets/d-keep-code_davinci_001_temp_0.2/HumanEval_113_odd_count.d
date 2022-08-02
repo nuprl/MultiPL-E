@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Given a list of strings, where each string consists of only digits, return a list.
     Each element i of the output should be "the number of odd elements in the
@@ -13,22 +13,22 @@ Given a list of strings, where each string consists of only digits, return a lis
      "the number of odd elements 8n the str8ng 8 of the 8nput."]
     
 */
-const(char)[][] odd_count(const(char)[][] lst) 
+string[] odd_count(string[] lst) 
 {
-    const(char)[][] res = new const(char)[lst.length][];
-    for(int i = 0; i < lst.length; i++)
+    string[] ret = new string[lst.Length];
+    for (int i = 0; i < lst.Length; i++)
     {
-        int odd = 0;
-        for(int j = 0; j < lst[i].length; j++)
+        int count = 0;
+        for (int j = 0; j < lst[i].Length; j++)
         {
-            if(lst[i][j] - '0' % 2 != 0)
+            if (lst[i][j] - '0' % 2 == 1)
             {
-                odd++;
+                count++;
             }
         }
-        res[i] = "the number of odd elements " + odd + "n the str" + odd + " of the " + odd + "put.";
+        ret[i] = "the number of odd elements " + count + "n the str" + count + " of the " + count + "put.";
     }
-    return res;
+    return ret;
 }
 
 unittest
