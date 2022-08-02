@@ -171,6 +171,11 @@ class CPPTranslator:
     def gen_dict_type(self, ktype, vtype):
         return self.dict_type + "<%s,%s>"  % (ktype, vtype)
 
+    def is_primitive_type(self, t):
+        '''Return if a type is primitive type 
+        '''
+        return t in [self.float_type, self.bool_type, self.int_type]
+
     def wrap_in_brackets(self, s: str) -> str:
         '''Helper function to add brackets '()' around a string
         '''
@@ -191,7 +196,7 @@ class CPPTranslator:
             return self.wrap_in_brackets(right[0])
         
         #No need to coerce std::make_tuple
-        if right[0].find(self.make_tuple) == 0:
+        if self.make_tuple != "" and right[0].find(self.make_tuple) == 0:
             return right[0] 
         
         #No need to coerce empty optional
@@ -209,7 +214,7 @@ class CPPTranslator:
         else:
             type_to_coerce = type_to_coerce[0]
             coerced_type = right[0].replace(type_to_coerce, expected_type+"(")
-        
+        print (coerced_type)
         ##Remove extra brackets
         coerced_type = coerced_type.replace('(())', '()')
         return self.wrap_in_brackets(coerced_type)
@@ -271,6 +276,9 @@ class CPPTranslator:
             #Add _ around keyword
             return self.keywords[v], None
         return v, None
+    
+    def gen_type_cast(self, expr, new_type, current_type):
+        return f"({elem_type}){e[0]}"
 
     def gen_list(self, l: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.List]:
         """Translate a list with elements l
@@ -281,9 +289,9 @@ class CPPTranslator:
           return self.gen_make_list(self.int_type, ""), ast.List([ast.Name("int")])
         
         #Go through all types of list and prefer the bigger type        
-        elem_type = self.translate_pytype(l[0][1])
-        list_literal = self.gen_array_literal(", ".join([f"({elem_type}){e[0]}" for e in l]))
-        return self.gen_make_list(elem_type, list_literal), ast.List([l[0][1]])
+        elem_type = l[0][1]
+        list_literal = self.gen_array_literal(", ".join([self.gen_type_cast(e[0], elem_type, e[1]) for e in l]))
+        return self.gen_make_list(self.translate_pytype(elem_type), list_literal), ast.List([l[0][1]])
     
     def gen_optional_type(self, types):
         '''Generate C++ std::optional<T>'''

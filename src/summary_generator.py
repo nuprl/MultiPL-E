@@ -43,6 +43,10 @@ def main(printToShell=False, writeToFile=True):
             rf.close()
             sys.exit(1)
 
+    if len(sorted(dir.glob("*.results.yaml"))) == 0:
+        print('NOTE: results.yaml has not been generated.')
+        sys.exit(1)
+
     for problem_yaml_path in sorted(dir.glob("*.results.yaml")):
         with problem_yaml_path.open() as f:
             testResults = TestResults.load(f)

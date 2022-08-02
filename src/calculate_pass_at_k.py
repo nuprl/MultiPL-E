@@ -23,21 +23,27 @@ def main(k=1):
 
 
     #get lang results from the name of the csv 
-    #TODO: there is a better way to do this, but a
+    #there is probably a better way to do this, but I am not convinced 
+    #it is worth the time 
     fileName = str(rfile)
     removePrefix = fileName[fileName.rfind('/')+1:]
     lang = removePrefix[:removePrefix.find('-')]
     model = removePrefix[removePrefix.find('-')+1:-12]
 
+    partsOfModel = model.split('-')
     total = 0
     numTests = 0
 
     with open(f"../model_results/{lang}-{model}-pass-at-{k}.csv", 'w') as f:
         with open(rfile) as csvfile:
             problemReader = csv.reader(csvfile)
+            checkedN = False
             for problem in problemReader:
+                if not checkedN:
+                    check_for_n(problem)
+                    checkedN = True
+                #the value at problem[1] is the count of 'OK'
                 pk = pass_at_k(200, int(problem[1]), k)
-
                 #write out pass-at-k per problem to file
                 f.write(f'{problem[0]},{pk}\n')
                 total += pk
@@ -47,8 +53,17 @@ def main(k=1):
 
     #what rounding do we want? Sets up basic elements
     overall = open(f"../model_results/all-pass-at-{k}.csv", 'a') 
-    overall.write(f'{lang},{model},{round(total,3)},{numTests},{round(round(total,3)/numTests, 3)*100}%\n')
+    #we round the total sum of all pass at k values to three digits
+    overall.write(f'{lang},{partsOfModel[0]},{partsOfModel[1]},{partsOfModel[2]},{round(total,3)},{numTests},{total/numTests}\n')
     overall.close()
+
+def check_for_n(problem):
+    '''
+    check that n is what we think it is - checks problem 0 (200)
+    '''
+    if not sum([int(problem[1]), int(problem[2]), int(problem[3])]) == 200:
+        print('BIG ISSUE, N IS INCORRECT')
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
