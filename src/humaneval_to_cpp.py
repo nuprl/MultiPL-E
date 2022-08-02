@@ -109,7 +109,6 @@ class CPPTranslator:
 
                 return union_name
             case ast.Name(id="Any"):
-                raise Exception("Translator do not support translating Any")
                 return self.any_type;
             case ast.Constant(value=None):
                 return self.none_type
@@ -185,7 +184,7 @@ class CPPTranslator:
         '''Any `Type(' is found to coerce to a new type
         '''
 
-        return re.findall(".+\(", expr)
+        return re.findall(".+?\(", expr)
 
     def update_type(self, right: Tuple[ast.Expr, str], expected_type: Tuple[str]) -> str:
         '''Coerce type of the right expression if it is different from the
@@ -214,7 +213,9 @@ class CPPTranslator:
         else:
             type_to_coerce = type_to_coerce[0]
             coerced_type = right[0].replace(type_to_coerce, expected_type+"(")
-        print (coerced_type)
+        print(right[0])
+        print(type_to_coerce)
+        print(coerced_type)
         ##Remove extra brackets
         coerced_type = coerced_type.replace('(())', '()')
         return self.wrap_in_brackets(coerced_type)
@@ -278,7 +279,10 @@ class CPPTranslator:
         return v, None
     
     def gen_type_cast(self, expr, new_type, current_type):
-        return f"({elem_type}){e[0]}"
+        if self.translate_pytype(new_type) == self.any_type:
+            #No casts needed if it is any_type
+            return expr
+        return f"({self.translate_pytype(new_type)}){expr}"
 
     def gen_list(self, l: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.List]:
         """Translate a list with elements l
@@ -288,8 +292,15 @@ class CPPTranslator:
         if l == [] or l == ():
           return self.gen_make_list(self.int_type, ""), ast.List([ast.Name("int")])
         
-        #Go through all types of list and prefer the bigger type        
+        #Go through all types of list, if they all are different then
         elem_type = l[0][1]
+        same_elem_types = True
+        for e in l:
+            if self.translate_pytype(elem_type) != self.translate_pytype(e[1]):
+                same_elem_types = False
+        if not same_elem_types:
+            #If all types are not same then it probably is any
+            elem_type = ast.Name(id="Any")
         list_literal = self.gen_array_literal(", ".join([self.gen_type_cast(e[0], elem_type, e[1]) for e in l]))
         return self.gen_make_list(self.translate_pytype(elem_type), list_literal), ast.List([l[0][1]])
     
@@ -342,7 +353,7 @@ class CPPTranslator:
         A dictionary { "key1": val1, "key2": val2 } translates to map<?,?>{ ["key1"] = val1, ["key2"] = val2 }
         """
         if keys == [] and values == []:
-            dict_type = ast.Dict(ast.Name("None"), ast.Name("None"))
+            dict_type = ast.Dict(ast.Name("int"), ast.Name("int"))
             cpp_type = self.translate_pytype(dict_type)
             return self.gen_map(dict_type, ""), dict_type
         
