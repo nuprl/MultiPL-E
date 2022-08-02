@@ -58,7 +58,7 @@ class PerlTranslator:
         elif type(c) == str:
             return f'"{c}"'
         elif c is None:
-            return "#f" # NOTE(arjun): My guess
+            return "undef"
         return repr(c)
 
     def gen_var(self, v: str) -> str:
@@ -74,7 +74,7 @@ class PerlTranslator:
         return "(" + ", ".join(t) + ")"
 
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
-        return "(" + ", ".join(f"{k} => {v}" for k, v in zip(keys, values)) + ",)"
+        return "{" + ", ".join(f"{k} => {v}" for k, v in zip(keys, values)) + ",}"
 
     def gen_call(self, func: str, args: List[str]) -> str:
         """Translate a function call `func(args)`
