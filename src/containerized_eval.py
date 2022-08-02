@@ -14,7 +14,6 @@ import eval_python
 import eval_rust
 import eval_julia
 import eval_java
-import eval_python
 import eval_lua
 import eval_racket
 import eval_javascript
@@ -28,12 +27,12 @@ EVALUATORS = {
     "rb": (eval_ruby.eval_script, ".rb"),
     "lua": (eval_lua.eval_script, ".lua"),
     "python": (eval_python.eval_script, ".py"),
+    "py": (eval_python.eval_script, ".py"),
     "julia": (eval_julia.eval_script, ".jl"),
     "java" : (eval_java.eval_script, ".java"),
     "rust" : (eval_rust.eval_script, ".rs"),
     "swift": (eval_swift.eval_script, ".swift"),
     "lua": (eval_lua.eval_script, ".lua"),
-    "python": (eval_python.eval_script, ".py"),
     "racket": (eval_racket.eval_script, ".rkt"),
     "rkt": (eval_racket.eval_script, ".rkt"),
     "javascript": (eval_javascript.eval_script, ".js"),
