@@ -5,7 +5,7 @@ user = os.getenv("USER")
 if user == "a.guha":
   SUPPORTED = [ "php", "/rkt-" ]
 elif user == "l.phipps-costin":
-  SUPPORTED = [ "rust", "/rs-" ]
+  SUPPORTED = [ "rust", "/rs-", "/py-", "python" ]
 elif user == "zi.ya":
   SUPPORTED = [ "lua" ]
 else:
