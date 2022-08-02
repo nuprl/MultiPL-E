@@ -32,7 +32,7 @@ class PerlTranslator:
         """
         This code goes at the start of the test suite.
         """
-        return [ "use Data::Compare;\n", "", "sub testhumaneval {",f"    my $candidate = \&{entry_point};"]
+        return [ "use Test::Deep;\n", "", "sub testhumaneval {",f"    my $candidate = \&{entry_point};"]
 
     def test_suite_suffix_lines(self) -> List[str]:
         return ["}", "", "testhumaneval();"]
@@ -45,7 +45,7 @@ class PerlTranslator:
         == is the wrong operator for Java and OCaml.
         """
         arr_prefix = f"    " + "    ".join(array_list)
-        return arr_prefix+f"    if(Compare({left},{right})) "+"{\n        print \"ok!\" }else{\n        exit 1;\n        }"
+        return arr_prefix+f"    if(eq_deeply({left},{right})) "+"{\n        print \"ok!\" }else{\n        exit 1;\n        }"
 
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
@@ -67,14 +67,16 @@ class PerlTranslator:
 
     def gen_list(self, l: List[str]) -> str:
         idx = len(array_list)
-        array_list.append(f"my @arg{idx} = " + "(" + ", ".join(l) + ");\n")
-        return f"\\@arg{idx}"
+        #array_list.append(f"my @arg{idx} = " + "(" + ", ".join(l) + ");\n")
+        return "[" + ", ".join(l) + "]" 
+        #return f"\\@arg{idx}"
 
     def gen_tuple(self, t: List[str]) -> str:
-        return "(" + ", ".join(t) + ")"
+        return "[" + ", ".join([str(t) for t in t]) + "]"
+        #return "(" + ", ".join(t) + ")"
 
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
-        return "{" + ", ".join(f"{k} => {v}" for k, v in zip(keys, values)) + ",}"
+        return "{" + ", ".join(f"{k} => {v}" for k, v in zip(keys, values)) + "}"
 
     def gen_call(self, func: str, args: List[str]) -> str:
         """Translate a function call `func(args)`
@@ -86,5 +88,5 @@ class PerlTranslator:
 
 
 if __name__ == "__main__":
-    translator = PerlTranslator("perl")
+    translator = PerlTranslator("pl")
     main(translator)
