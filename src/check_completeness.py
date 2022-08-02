@@ -15,35 +15,42 @@ from pathlib import Path
 import yaml
 from concurrent.futures import ThreadPoolExecutor
 
-LANG = [ "rb", "lua", "rs", "rkt", "php", "cpp", "py", "jl", "js", "java" ]
+#for the moment, accepting we might have rust and rs code 
+LANG = [ "rb", "lua", "rs", "rkt", "php", "cpp", "py", "jl", "js", "java"]
 MODEL = [ "incoder", "davinci" ]
 TEMP = [ "0.2", "0.8" ]
 DOCSTRINGS = [ "keep", "remove" ]
 
 def check(lang, model, temp, docstrings):
+
     dir = Path("../experiments") / (lang + "-" + model + "-" + temp + "-" + docstrings)
     if not dir.exists():
         print(f"{lang},{docstrings},{model},{temp}")
         return
+
     problems = [ p for p in dir.glob("*.yaml") if not p.name.endswith(".results.yaml") ]
-    #if len(problems) != 161:
-    #    print(f"{dir} has {len(problems)} problems")
+    if len(problems) != 161:
+        print(f"{dir} has {len(problems)} problems")
+        #return
     
-    #TODO: this does not work for some reason?
+    #print(len(problems))
     for p in problems:
-        with p.open() as f:
-            problem = yaml.load(p)
-            if len(problem["completions"]) != 200:
-                print(f"{dir} has missing completions")
-                return
+        problem = yaml.load(open(p), yaml.Loader)
+        #print(problem['name'])
+        # if problem['name'] == 'HumanEval_94_skjkasdkd':
+        #     print(len(problem['completions']))
+        if len(problem['completions']) != 200 and len(problem['completions']) > 0:
+            print(f"{problem['name']} in {dir} has only {len(problem['completions'])} completions")
+            #return
 
 def check_all():
-    with ThreadPoolExecutor() as executor:
-        for model in MODEL:
-            for lang in LANG:
-                for temp in TEMP:
-                    for docstrings in DOCSTRINGS:
-                        executor.submit(check, lang, model, temp, docstrings)
+    #with ThreadPoolExecutor() as executor:
+    for model in MODEL:
+        for lang in LANG:
+            for temp in TEMP:
+                for docstrings in DOCSTRINGS:
+                    check(lang, model, temp, docstrings)
+                    #executor.submit(check, lang, model, temp, docstrings)
 
 if __name__ == "__main__":
     check_all()
