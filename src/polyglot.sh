@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --array=1-945
+#SBATCH --array=11-478
 #SBATCH --mem=48G
 #SBATCH --export=ALL
 #SBATCH --cpus-per-task=24
@@ -8,6 +8,15 @@
 #SBATCH --partition=express
 #SBATCH --exclusive
 module load oracle_java julia
+
+if [ $USER == "a.guha" ]; then
+  eval `spack load --sh php`
+elif [ $USER == "l.phipps-costin" ]; then
+  eval `spack load --sh ruby`
+else
+  echo "Unkown user account: $USER"
+fi
+
 cd /home/a.guha/repos/polyglot-codegen-evaluation/src
 FILE=`sed -n ${SLURM_ARRAY_TASK_ID}p files.txt`
 echo $FILE
