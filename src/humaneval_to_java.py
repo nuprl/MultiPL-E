@@ -141,11 +141,6 @@ class JavaTranslator(CPPTranslator):
 
         return java_prompt
     
-    def is_primitive_type(self, java_type):
-        '''Return if a type is primitive type 
-        '''
-        return java_type in [self.float_type, self.bool_type, self.int_type]
-
     def is_boxed_type(self, boxed_type):
         '''Return if a type is a boxed version of primitive type
         '''
