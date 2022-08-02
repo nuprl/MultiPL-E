@@ -20,15 +20,15 @@ class ScalaTranslator(CPPTranslator):
         self.float_type = "Float"
         self.int_type = "Long"
         self.bool_type = "Boolean"
-        self.none_type = "Optional.empty()"
+        self.none_type = "None"
         self.list_type = "List"
-        self.tuple_type = "Pair"
+        self.tuple_type = "Tuple2"
         self.dict_type = "Map"
-        self.optional_type = "Optional"
+        self.optional_type = "Option"
         self.any_type = "std::any"
         self.indent = "    "
-        self.make_tuple = "Pair.with"
-        self.make_optional = "Optional.of"
+        self.make_tuple = ""
+        self.make_optional = "Some"
 
     #Type creation and literal creation of List, Dict, Map, and Optional
     def gen_list_type(self, elem_type):
@@ -65,8 +65,8 @@ class ScalaTranslator(CPPTranslator):
         '''Generate Dict object from literal
             `HashMap<K, V>(Map.of({k,v}, {k,v}, ... })
         '''
-        java_type = self.translate_pytype(dict_type) + "(Map"
-        return f"{java_type}.of({map_literal}))"
+        java_type = self.translate_pytype(dict_type)
+        return f"{java_type}({map_literal})"
 
     def gen_optional_type(self, types):
         '''Generate Optional<T>
@@ -83,36 +83,24 @@ class ScalaTranslator(CPPTranslator):
         '''Generate Pair<T1, T2>'''
         return self.tuple_type + "[%s]" % ", ".join([et for et in elem_types])
 
-    def box_type(self, primitive_type):
-        '''Box a primitive type otherwise do not
-        '''
-        if self.is_primitive_type(primitive_type):
-            match primitive_type:
-                case "int":
-                    return "Integer"
-                case "float":
-                    return "Float"
-                case "long":
-                    return "Long"
-                case "boolean":
-                    return "Boolean"
-                case "double":
-                    return "Double"
-                case _other:
-                    raise Exception("Unknown primitive type '%s'"%primitive_type)
-        
-        return primitive_type
+    def gen_type_cast(self, expr, new_type, current_type):
+        cast_func = ".to"
+        match new_type:
+          case ast.Name(id="int"):
+            cast_func += self.int_type
+          case ast.Name(id="float"):
+            cast_func += self.float_type
+          case ast.Name(id="bool"):
+            cast_func += self.bool_type
+          case _other:
+            cast_func = ""
+
+        return f"{expr}{cast_func}"
 
     def module_imports(self) -> str:
         return "\n".join([
-            #"import java.util.*;",
-            #"import java.lang.reflect.*;",
-            #"import org.javatuples.*;",
-            #"import java.security.*;",
             "import scala.math._",
             "import scala.collection.mutable._",
-            #"import java.io.*;",
-            #"import java.util.stream.*;"
         ]) + "\n"
     
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
@@ -138,7 +126,7 @@ class ScalaTranslator(CPPTranslator):
         self.entry_point = to_camel_case(name)
         self.ret_ann = _returns
         self.translated_return_type = self.translate_pytype(_returns)
-        java_prompt = f"{self.module_imports()}{class_decl}{java_description}{self.indent}def {self.translated_return_type} {self.entry_point}({formal_arg_list})" + " {\n"
+        java_prompt = f"{self.module_imports()}{class_decl}{java_description}{self.indent}def {self.entry_point}({formal_arg_list}) : {self.translated_return_type}" + " = {\n"
 
         return java_prompt
     
@@ -150,43 +138,43 @@ class ScalaTranslator(CPPTranslator):
     def is_boxed_type(self, boxed_type):
         '''Return if a type is a boxed version of primitive type
         '''
-        return boxed_type in [self.box_type(t) for t in [self.float_type, self.bool_type, self.int_type]]
+        return boxed_type in [t for t in [self.float_type, self.bool_type, self.int_type]]
 
     def return_default_value(self, csharp_type):
         '''Recursively generate default value of a given Scala type based on following rules:
 
-            default(int) => 0
-            default(float) => 0.0
-            default(bool) => true
-            default(ArrayList<T>) => new ArrayList<T> ()
-            default(Pair<T, U>) => Pair.with(default(T), default(U))
-            default(Optional<T>) => Optional.empty()
+            default(Int) => 0
+            default(Float) => 0.0
+            default(Boolean) => true
+            default(List[T]) => List[T] ()
+            default(Tuple[T, U]) => (default(T), default(U))
+            default(Optional<T>) => None
             default(Any other object of type T) => new T()
         '''
         #TODO: This function is same as csharp(You can guess by the type). Combine them
         #into same functions
-        if self.is_primitive_type(csharp_type) or self.is_boxed_type(csharp_type):
-            if self.int_type in csharp_type or self.box_type(self.int_type) in csharp_type:
+        if self.is_primitive_type(csharp_type):
+            if self.int_type in csharp_type:
                 return "0"
-            elif self.float_type in csharp_type or self.box_type(self.float_type) in csharp_type:
+            elif self.float_type in csharp_type:
                 return "0.0f"
-            elif self.bool_type in csharp_type or self.box_type(self.bool_type) in csharp_type:
+            elif self.bool_type in csharp_type:
                 return "true"
         elif self.string_type == csharp_type:
             return '""'
-        elif csharp_type.find(f"{self.list_type}<") == 0:
-            elem_type = re.findall(rf'{self.list_type}<(.+)>', csharp_type)[0]
+        elif csharp_type.find(f"{self.list_type}[") == 0:
+            elem_type = re.findall(rf'{self.list_type}\[(.+)\]', csharp_type)[0]
             #List default is: new List<T>()
             return self.gen_make_list(elem_type, "")
-        elif csharp_type.find(f"{self.tuple_type}<") == 0 : #TODO: use gen_optional/gen_make_list to createthem and search for self.tuple_type
-            template_types = re.findall(rf'{self.tuple_type}<(.+),(.+)>', csharp_type)[0]
+        elif csharp_type.find(f"{self.tuple_type}[") == 0 : #TODO: use gen_optional/gen_make_list to createthem and search for self.tuple_type
+            template_types = re.findall(r'\[(.+),(.+)\]', csharp_type)[0]
             first_default = self.return_default_value(template_types[0].strip())
             second_default = self.return_default_value(template_types[1].strip())
             return self.gen_make_tuple(first_default + "," + second_default)
         elif csharp_type.find(self.optional_type) == 0:
-            return "Optional.empty()"
+            return "None"
         else:
-            return f"new {csharp_type}()"
+            return f"{csharp_type}()"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
@@ -196,9 +184,9 @@ class ScalaTranslator(CPPTranslator):
         """
 
         return [
-           # "return " + self.return_default_value(self.translated_return_type) + ";",
+           "return " + self.return_default_value(self.translated_return_type),
             self.indent + "}",
-            self.indent + "def main(args: Array[String]) {",
+            self.indent + "def main(args: Array[String]) = {",
         ]
     
     def test_suite_suffix_lines(self) -> List[str]:
@@ -210,7 +198,7 @@ class ScalaTranslator(CPPTranslator):
     
     def update_type(self, right: Tuple[ast.Expr, str], expected_type: Tuple[str]) -> str:
         if self.is_primitive_type(expected_type) and self.translate_pytype(right[1]) != expected_type:
-            return f"({expected_type}){right[0]}"
+            return self.gen_type_cast(right[0], expected_type, right[1])
 
         return CPPTranslator.update_type(self, right, expected_type) #TODO: Use super?
 
@@ -219,6 +207,7 @@ class ScalaTranslator(CPPTranslator):
         All tests are assertions that compare deep equality between left and right.
         In C++ using == checks for structural equality
         """
+        print(right[0], self.translated_return_type)
         right = self.update_type(right, self.translated_return_type)
         #Empty the union declarations
         self.union_decls = {}
@@ -234,11 +223,11 @@ class ScalaTranslator(CPPTranslator):
             Otherwise types are coerced similar to C++
         '''
         
-        if "Arrays.asList(" in expr:
-            return [expr[expr.index("new ")+len("new "):expr.index("Arrays.asList(")]]
-        if 'Optional.of(' in expr:
-            return []
-        return re.findall("new (.+)\(", expr)
+        # if "List(" in expr:
+        #     return [expr[expr.index("new ")+len("new "):expr.index("Arrays.asList(")]]        
+        o = re.findall(".+\(", expr)
+        print (o, expr)
+        return o
 
     def gen_literal(self, c: bool | str | int | float | None) -> Tuple[str, ast.Name]:
         """Translate a literal expression
@@ -247,8 +236,8 @@ class ScalaTranslator(CPPTranslator):
         if type(c) == float:
             return repr(c) + "f", ast.Name(id="float")
         if type(c) == int:
-            return repr(c), ast.Name(id="int")
-        return CPPTranslator.gen_literal(self, c)
+            return repr(c) + "l", ast.Name(id="int")
+        return super().gen_literal(c)
 
     def gen_call(self, func: str, args: List[Tuple[str, ast.Expr]]) -> Tuple[str, None]:
         """Translate a function call `func(args)`
