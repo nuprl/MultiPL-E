@@ -14,36 +14,36 @@ sub modp {
     return $n % $p;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&modp;
-        if(Compare($candidate->(3, 5),3)) {
+        if(eq_deeply($candidate->(3, 5),3)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1101, 101),2)) {
+        if(eq_deeply($candidate->(1101, 101),2)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(0, 101),1)) {
+        if(eq_deeply($candidate->(0, 101),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(3, 11),8)) {
+        if(eq_deeply($candidate->(3, 11),8)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(100, 101),1)) {
+        if(eq_deeply($candidate->(100, 101),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(30, 5),4)) {
+        if(eq_deeply($candidate->(30, 5),4)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(31, 5),3)) {
+        if(eq_deeply($candidate->(31, 5),3)) {
         print "ok!" }else{
         exit 1;
         }

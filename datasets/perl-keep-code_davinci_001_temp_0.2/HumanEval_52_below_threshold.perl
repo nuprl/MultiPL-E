@@ -13,53 +13,32 @@ sub below_threshold {
     return 1;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&below_threshold;
-    my @arg0 = (1, 2, 4, 10);
-    if(Compare($candidate->(\@arg0, 100),1)) {
+        if(eq_deeply($candidate->([1, 2, 4, 10], 100),1)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 4, 10);
-    my @arg1 = (1, 20, 4, 10);
-    if(Compare($candidate->(\@arg1, 5),"")) {
+        if(eq_deeply($candidate->([1, 20, 4, 10], 5),"")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 4, 10);
-    my @arg1 = (1, 20, 4, 10);
-    my @arg2 = (1, 20, 4, 10);
-    if(Compare($candidate->(\@arg2, 21),1)) {
+        if(eq_deeply($candidate->([1, 20, 4, 10], 21),1)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 4, 10);
-    my @arg1 = (1, 20, 4, 10);
-    my @arg2 = (1, 20, 4, 10);
-    my @arg3 = (1, 20, 4, 10);
-    if(Compare($candidate->(\@arg3, 22),1)) {
+        if(eq_deeply($candidate->([1, 20, 4, 10], 22),1)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 4, 10);
-    my @arg1 = (1, 20, 4, 10);
-    my @arg2 = (1, 20, 4, 10);
-    my @arg3 = (1, 20, 4, 10);
-    my @arg4 = (1, 8, 4, 10);
-    if(Compare($candidate->(\@arg4, 11),1)) {
+        if(eq_deeply($candidate->([1, 8, 4, 10], 11),1)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 4, 10);
-    my @arg1 = (1, 20, 4, 10);
-    my @arg2 = (1, 20, 4, 10);
-    my @arg3 = (1, 20, 4, 10);
-    my @arg4 = (1, 8, 4, 10);
-    my @arg5 = (1, 8, 4, 10);
-    if(Compare($candidate->(\@arg5, 10),"")) {
+        if(eq_deeply($candidate->([1, 8, 4, 10], 10),"")) {
         print "ok!" }else{
         exit 1;
         }

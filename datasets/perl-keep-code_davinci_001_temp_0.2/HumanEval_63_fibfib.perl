@@ -18,36 +18,36 @@ sub fibfib {
     return fibfib($n-1) + fibfib($n-2) + fibfib($n-3);
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&fibfib;
-        if(Compare($candidate->(2),1)) {
+        if(eq_deeply($candidate->(2),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1),0)) {
+        if(eq_deeply($candidate->(1),0)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(5),4)) {
+        if(eq_deeply($candidate->(5),4)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(8),24)) {
+        if(eq_deeply($candidate->(8),24)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(10),81)) {
+        if(eq_deeply($candidate->(10),81)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(12),274)) {
+        if(eq_deeply($candidate->(12),274)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(14),927)) {
+        if(eq_deeply($candidate->(14),927)) {
         print "ok!" }else{
         exit 1;
         }

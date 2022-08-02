@@ -17,28 +17,28 @@ sub closest_integer {
     return $result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&closest_integer;
-        if(Compare($candidate->("10"),10)) {
+        if(eq_deeply($candidate->("10"),10)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("14.5"),15)) {
+        if(eq_deeply($candidate->("14.5"),15)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("-15.5"),-16)) {
+        if(eq_deeply($candidate->("-15.5"),-16)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("15.3"),15)) {
+        if(eq_deeply($candidate->("15.3"),15)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("0"),0)) {
+        if(eq_deeply($candidate->("0"),0)) {
         print "ok!" }else{
         exit 1;
         }

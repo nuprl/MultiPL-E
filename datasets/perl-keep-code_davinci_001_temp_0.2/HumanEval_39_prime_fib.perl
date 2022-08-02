@@ -28,48 +28,48 @@ sub prime_fib {
     }
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&prime_fib;
-        if(Compare($candidate->(1),2)) {
+        if(eq_deeply($candidate->(1),2)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2),3)) {
+        if(eq_deeply($candidate->(2),3)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(3),5)) {
+        if(eq_deeply($candidate->(3),5)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(4),13)) {
+        if(eq_deeply($candidate->(4),13)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(5),89)) {
+        if(eq_deeply($candidate->(5),89)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(6),233)) {
+        if(eq_deeply($candidate->(6),233)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(7),1597)) {
+        if(eq_deeply($candidate->(7),1597)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(8),28657)) {
+        if(eq_deeply($candidate->(8),28657)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(9),514229)) {
+        if(eq_deeply($candidate->(9),514229)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(10),433494437)) {
+        if(eq_deeply($candidate->(10),433494437)) {
         print "ok!" }else{
         exit 1;
         }

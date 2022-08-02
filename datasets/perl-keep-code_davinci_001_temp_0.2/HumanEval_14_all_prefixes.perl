@@ -12,26 +12,20 @@ sub all_prefixes {
     return @prefixes;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&all_prefixes;
-    my @arg0 = ();
-    if(Compare($candidate->(""),\@arg0)) {
+        if(eq_deeply($candidate->(""),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ("a", "as", "asd", "asdf", "asdfg", "asdfgh");
-    if(Compare($candidate->("asdfgh"),\@arg1)) {
+        if(eq_deeply($candidate->("asdfgh"),["a", "as", "asd", "asdf", "asdfg", "asdfgh"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ("a", "as", "asd", "asdf", "asdfg", "asdfgh");
-    my @arg2 = ("W", "WW", "WWW");
-    if(Compare($candidate->("WWW"),\@arg2)) {
+        if(eq_deeply($candidate->("WWW"),["W", "WW", "WWW"])) {
         print "ok!" }else{
         exit 1;
         }

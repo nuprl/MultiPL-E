@@ -16,40 +16,40 @@ sub fizz_buzz {
     return $count;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&fizz_buzz;
-        if(Compare($candidate->(50),0)) {
+        if(eq_deeply($candidate->(50),0)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(78),2)) {
+        if(eq_deeply($candidate->(78),2)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(79),3)) {
+        if(eq_deeply($candidate->(79),3)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(100),3)) {
+        if(eq_deeply($candidate->(100),3)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(200),6)) {
+        if(eq_deeply($candidate->(200),6)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(4000),192)) {
+        if(eq_deeply($candidate->(4000),192)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(10000),639)) {
+        if(eq_deeply($candidate->(10000),639)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(100000),8026)) {
+        if(eq_deeply($candidate->(100000),8026)) {
         print "ok!" }else{
         exit 1;
         }

@@ -29,134 +29,56 @@ sub match_parens {
     return 'Yes';
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&match_parens;
-    my @arg0 = ("()(", ")");
-    if(Compare($candidate->(\@arg0),"Yes")) {
+        if(eq_deeply($candidate->(["()(", ")"]),"Yes")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("()(", ")");
-    my @arg1 = (")", ")");
-    if(Compare($candidate->(\@arg1),"No")) {
+        if(eq_deeply($candidate->([")", ")"]),"No")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("()(", ")");
-    my @arg1 = (")", ")");
-    my @arg2 = ("(()(())", "())())");
-    if(Compare($candidate->(\@arg2),"No")) {
+        if(eq_deeply($candidate->(["(()(())", "())())"]),"No")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("()(", ")");
-    my @arg1 = (")", ")");
-    my @arg2 = ("(()(())", "())())");
-    my @arg3 = (")())", "(()()(");
-    if(Compare($candidate->(\@arg3),"Yes")) {
+        if(eq_deeply($candidate->([")())", "(()()("]),"Yes")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("()(", ")");
-    my @arg1 = (")", ")");
-    my @arg2 = ("(()(())", "())())");
-    my @arg3 = (")())", "(()()(");
-    my @arg4 = ("(())))", "(()())((");
-    if(Compare($candidate->(\@arg4),"Yes")) {
+        if(eq_deeply($candidate->(["(())))", "(()())(("]),"Yes")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("()(", ")");
-    my @arg1 = (")", ")");
-    my @arg2 = ("(()(())", "())())");
-    my @arg3 = (")())", "(()()(");
-    my @arg4 = ("(())))", "(()())((");
-    my @arg5 = ("()", "())");
-    if(Compare($candidate->(\@arg5),"No")) {
+        if(eq_deeply($candidate->(["()", "())"]),"No")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("()(", ")");
-    my @arg1 = (")", ")");
-    my @arg2 = ("(()(())", "())())");
-    my @arg3 = (")())", "(()()(");
-    my @arg4 = ("(())))", "(()())((");
-    my @arg5 = ("()", "())");
-    my @arg6 = ("(()(", "()))()");
-    if(Compare($candidate->(\@arg6),"Yes")) {
+        if(eq_deeply($candidate->(["(()(", "()))()"]),"Yes")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("()(", ")");
-    my @arg1 = (")", ")");
-    my @arg2 = ("(()(())", "())())");
-    my @arg3 = (")())", "(()()(");
-    my @arg4 = ("(())))", "(()())((");
-    my @arg5 = ("()", "())");
-    my @arg6 = ("(()(", "()))()");
-    my @arg7 = ("((((", "((())");
-    if(Compare($candidate->(\@arg7),"No")) {
+        if(eq_deeply($candidate->(["((((", "((())"]),"No")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("()(", ")");
-    my @arg1 = (")", ")");
-    my @arg2 = ("(()(())", "())())");
-    my @arg3 = (")())", "(()()(");
-    my @arg4 = ("(())))", "(()())((");
-    my @arg5 = ("()", "())");
-    my @arg6 = ("(()(", "()))()");
-    my @arg7 = ("((((", "((())");
-    my @arg8 = (")(()", "(()(");
-    if(Compare($candidate->(\@arg8),"No")) {
+        if(eq_deeply($candidate->([")(()", "(()("]),"No")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("()(", ")");
-    my @arg1 = (")", ")");
-    my @arg2 = ("(()(())", "())())");
-    my @arg3 = (")())", "(()()(");
-    my @arg4 = ("(())))", "(()())((");
-    my @arg5 = ("()", "())");
-    my @arg6 = ("(()(", "()))()");
-    my @arg7 = ("((((", "((())");
-    my @arg8 = (")(()", "(()(");
-    my @arg9 = (")(", ")(");
-    if(Compare($candidate->(\@arg9),"No")) {
+        if(eq_deeply($candidate->([")(", ")("]),"No")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("()(", ")");
-    my @arg1 = (")", ")");
-    my @arg2 = ("(()(())", "())())");
-    my @arg3 = (")())", "(()()(");
-    my @arg4 = ("(())))", "(()())((");
-    my @arg5 = ("()", "())");
-    my @arg6 = ("(()(", "()))()");
-    my @arg7 = ("((((", "((())");
-    my @arg8 = (")(()", "(()(");
-    my @arg9 = (")(", ")(");
-    my @arg10 = ("(", ")");
-    if(Compare($candidate->(\@arg10),"Yes")) {
+        if(eq_deeply($candidate->(["(", ")"]),"Yes")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("()(", ")");
-    my @arg1 = (")", ")");
-    my @arg2 = ("(()(())", "())())");
-    my @arg3 = (")())", "(()()(");
-    my @arg4 = ("(())))", "(()())((");
-    my @arg5 = ("()", "())");
-    my @arg6 = ("(()(", "()))()");
-    my @arg7 = ("((((", "((())");
-    my @arg8 = (")(()", "(()(");
-    my @arg9 = (")(", ")(");
-    my @arg10 = ("(", ")");
-    my @arg11 = (")", "(");
-    if(Compare($candidate->(\@arg11),"Yes")) {
+        if(eq_deeply($candidate->([")", "("]),"Yes")) {
         print "ok!" }else{
         exit 1;
         }

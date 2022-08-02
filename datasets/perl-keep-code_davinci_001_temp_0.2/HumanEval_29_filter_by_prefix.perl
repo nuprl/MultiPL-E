@@ -8,22 +8,16 @@ sub filter_by_prefix {
     return grep { $_ =~ /^$prefix/ } @$strings;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&filter_by_prefix;
-    my @arg0 = ();
-    my @arg1 = ();
-    if(Compare($candidate->(\@arg0, "john"),\@arg1)) {
+        if(eq_deeply($candidate->([], "john"),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = ("xxx", "asd", "xxy", "john doe", "xxxAAA", "xxx");
-    my @arg3 = ("xxx", "xxxAAA", "xxx");
-    if(Compare($candidate->(\@arg2, "xxx"),\@arg3)) {
+        if(eq_deeply($candidate->(["xxx", "asd", "xxy", "john doe", "xxxAAA", "xxx"], "xxx"),["xxx", "xxxAAA", "xxx"])) {
         print "ok!" }else{
         exit 1;
         }

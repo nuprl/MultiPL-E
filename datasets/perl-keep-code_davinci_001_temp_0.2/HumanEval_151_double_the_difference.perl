@@ -16,64 +16,36 @@ sub double_the_difference {
     return $sum;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&double_the_difference;
-    my @arg0 = ();
-    if(Compare($candidate->(\@arg0),0)) {
+        if(eq_deeply($candidate->([]),0)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = (5.0, 4.0);
-    if(Compare($candidate->(\@arg1),25)) {
+        if(eq_deeply($candidate->([5.0, 4.0]),25)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = (5.0, 4.0);
-    my @arg2 = (0.1, 0.2, 0.3);
-    if(Compare($candidate->(\@arg2),0)) {
+        if(eq_deeply($candidate->([0.1, 0.2, 0.3]),0)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = (5.0, 4.0);
-    my @arg2 = (0.1, 0.2, 0.3);
-    my @arg3 = (-10.0, -20.0, -30.0);
-    if(Compare($candidate->(\@arg3),0)) {
+        if(eq_deeply($candidate->([-10.0, -20.0, -30.0]),0)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = (5.0, 4.0);
-    my @arg2 = (0.1, 0.2, 0.3);
-    my @arg3 = (-10.0, -20.0, -30.0);
-    my @arg4 = (-1.0, -2.0, 8.0);
-    if(Compare($candidate->(\@arg4),0)) {
+        if(eq_deeply($candidate->([-1.0, -2.0, 8.0]),0)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = (5.0, 4.0);
-    my @arg2 = (0.1, 0.2, 0.3);
-    my @arg3 = (-10.0, -20.0, -30.0);
-    my @arg4 = (-1.0, -2.0, 8.0);
-    my @arg5 = (0.2, 3.0, 5.0);
-    if(Compare($candidate->(\@arg5),34)) {
+        if(eq_deeply($candidate->([0.2, 3.0, 5.0]),34)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = (5.0, 4.0);
-    my @arg2 = (0.1, 0.2, 0.3);
-    my @arg3 = (-10.0, -20.0, -30.0);
-    my @arg4 = (-1.0, -2.0, 8.0);
-    my @arg5 = (0.2, 3.0, 5.0);
-    my @arg6 = (-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0);
-    if(Compare($candidate->(\@arg6),165)) {
+        if(eq_deeply($candidate->([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]),165)) {
         print "ok!" }else{
         exit 1;
         }

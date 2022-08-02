@@ -14,40 +14,40 @@ sub is_equal_to_sum_even {
     return $sum == $n;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&is_equal_to_sum_even;
-        if(Compare($candidate->(4),"")) {
+        if(eq_deeply($candidate->(4),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(6),"")) {
+        if(eq_deeply($candidate->(6),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(8),1)) {
+        if(eq_deeply($candidate->(8),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(10),1)) {
+        if(eq_deeply($candidate->(10),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(11),"")) {
+        if(eq_deeply($candidate->(11),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(12),1)) {
+        if(eq_deeply($candidate->(12),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(13),"")) {
+        if(eq_deeply($candidate->(13),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(16),1)) {
+        if(eq_deeply($candidate->(16),1)) {
         print "ok!" }else{
         exit 1;
         }

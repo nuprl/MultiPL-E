@@ -20,43 +20,28 @@ sub find_closest_elements {
     return($numbers->[$smallest_difference_index_1], $numbers->[$smallest_difference_index_2]);
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&find_closest_elements;
-    my @arg0 = (1.0, 2.0, 3.9, 4.0, 5.0, 2.2);
-    if(Compare($candidate->(\@arg0),(3.9, 4.0))) {
+        if(eq_deeply($candidate->([1.0, 2.0, 3.9, 4.0, 5.0, 2.2]),[3.9, 4.0])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1.0, 2.0, 3.9, 4.0, 5.0, 2.2);
-    my @arg1 = (1.0, 2.0, 5.9, 4.0, 5.0);
-    if(Compare($candidate->(\@arg1),(5.0, 5.9))) {
+        if(eq_deeply($candidate->([1.0, 2.0, 5.9, 4.0, 5.0]),[5.0, 5.9])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1.0, 2.0, 3.9, 4.0, 5.0, 2.2);
-    my @arg1 = (1.0, 2.0, 5.9, 4.0, 5.0);
-    my @arg2 = (1.0, 2.0, 3.0, 4.0, 5.0, 2.2);
-    if(Compare($candidate->(\@arg2),(2.0, 2.2))) {
+        if(eq_deeply($candidate->([1.0, 2.0, 3.0, 4.0, 5.0, 2.2]),[2.0, 2.2])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1.0, 2.0, 3.9, 4.0, 5.0, 2.2);
-    my @arg1 = (1.0, 2.0, 5.9, 4.0, 5.0);
-    my @arg2 = (1.0, 2.0, 3.0, 4.0, 5.0, 2.2);
-    my @arg3 = (1.0, 2.0, 3.0, 4.0, 5.0, 2.0);
-    if(Compare($candidate->(\@arg3),(2.0, 2.0))) {
+        if(eq_deeply($candidate->([1.0, 2.0, 3.0, 4.0, 5.0, 2.0]),[2.0, 2.0])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1.0, 2.0, 3.9, 4.0, 5.0, 2.2);
-    my @arg1 = (1.0, 2.0, 5.9, 4.0, 5.0);
-    my @arg2 = (1.0, 2.0, 3.0, 4.0, 5.0, 2.2);
-    my @arg3 = (1.0, 2.0, 3.0, 4.0, 5.0, 2.0);
-    my @arg4 = (1.1, 2.2, 3.1, 4.1, 5.1);
-    if(Compare($candidate->(\@arg4),(2.2, 3.1))) {
+        if(eq_deeply($candidate->([1.1, 2.2, 3.1, 4.1, 5.1]),[2.2, 3.1])) {
         print "ok!" }else{
         exit 1;
         }

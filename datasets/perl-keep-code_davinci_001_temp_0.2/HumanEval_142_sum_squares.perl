@@ -19,118 +19,52 @@ sub sum_squares {
     return $sum;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&sum_squares;
-    my @arg0 = (1, 2, 3);
-    if(Compare($candidate->(\@arg0),6)) {
+        if(eq_deeply($candidate->([1, 2, 3]),6)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (1, 4, 9);
-    if(Compare($candidate->(\@arg1),14)) {
+        if(eq_deeply($candidate->([1, 4, 9]),14)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (1, 4, 9);
-    my @arg2 = ();
-    if(Compare($candidate->(\@arg2),0)) {
+        if(eq_deeply($candidate->([]),0)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (1, 4, 9);
-    my @arg2 = ();
-    my @arg3 = (1, 1, 1, 1, 1, 1, 1, 1, 1);
-    if(Compare($candidate->(\@arg3),9)) {
+        if(eq_deeply($candidate->([1, 1, 1, 1, 1, 1, 1, 1, 1]),9)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (1, 4, 9);
-    my @arg2 = ();
-    my @arg3 = (1, 1, 1, 1, 1, 1, 1, 1, 1);
-    my @arg4 = (-1, -1, -1, -1, -1, -1, -1, -1, -1);
-    if(Compare($candidate->(\@arg4),-3)) {
+        if(eq_deeply($candidate->([-1, -1, -1, -1, -1, -1, -1, -1, -1]),-3)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (1, 4, 9);
-    my @arg2 = ();
-    my @arg3 = (1, 1, 1, 1, 1, 1, 1, 1, 1);
-    my @arg4 = (-1, -1, -1, -1, -1, -1, -1, -1, -1);
-    my @arg5 = (0);
-    if(Compare($candidate->(\@arg5),0)) {
+        if(eq_deeply($candidate->([0]),0)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (1, 4, 9);
-    my @arg2 = ();
-    my @arg3 = (1, 1, 1, 1, 1, 1, 1, 1, 1);
-    my @arg4 = (-1, -1, -1, -1, -1, -1, -1, -1, -1);
-    my @arg5 = (0);
-    my @arg6 = (-1, -5, 2, -1, -5);
-    if(Compare($candidate->(\@arg6),-126)) {
+        if(eq_deeply($candidate->([-1, -5, 2, -1, -5]),-126)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (1, 4, 9);
-    my @arg2 = ();
-    my @arg3 = (1, 1, 1, 1, 1, 1, 1, 1, 1);
-    my @arg4 = (-1, -1, -1, -1, -1, -1, -1, -1, -1);
-    my @arg5 = (0);
-    my @arg6 = (-1, -5, 2, -1, -5);
-    my @arg7 = (-56, -99, 1, 0, -2);
-    if(Compare($candidate->(\@arg7),3030)) {
+        if(eq_deeply($candidate->([-56, -99, 1, 0, -2]),3030)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (1, 4, 9);
-    my @arg2 = ();
-    my @arg3 = (1, 1, 1, 1, 1, 1, 1, 1, 1);
-    my @arg4 = (-1, -1, -1, -1, -1, -1, -1, -1, -1);
-    my @arg5 = (0);
-    my @arg6 = (-1, -5, 2, -1, -5);
-    my @arg7 = (-56, -99, 1, 0, -2);
-    my @arg8 = (-1, 0, 0, 0, 0, 0, 0, 0, -1);
-    if(Compare($candidate->(\@arg8),0)) {
+        if(eq_deeply($candidate->([-1, 0, 0, 0, 0, 0, 0, 0, -1]),0)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (1, 4, 9);
-    my @arg2 = ();
-    my @arg3 = (1, 1, 1, 1, 1, 1, 1, 1, 1);
-    my @arg4 = (-1, -1, -1, -1, -1, -1, -1, -1, -1);
-    my @arg5 = (0);
-    my @arg6 = (-1, -5, 2, -1, -5);
-    my @arg7 = (-56, -99, 1, 0, -2);
-    my @arg8 = (-1, 0, 0, 0, 0, 0, 0, 0, -1);
-    my @arg9 = (-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37);
-    if(Compare($candidate->(\@arg9),-14196)) {
+        if(eq_deeply($candidate->([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]),-14196)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (1, 4, 9);
-    my @arg2 = ();
-    my @arg3 = (1, 1, 1, 1, 1, 1, 1, 1, 1);
-    my @arg4 = (-1, -1, -1, -1, -1, -1, -1, -1, -1);
-    my @arg5 = (0);
-    my @arg6 = (-1, -5, 2, -1, -5);
-    my @arg7 = (-56, -99, 1, 0, -2);
-    my @arg8 = (-1, 0, 0, 0, 0, 0, 0, 0, -1);
-    my @arg9 = (-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37);
-    my @arg10 = (-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10);
-    if(Compare($candidate->(\@arg10),-1448)) {
+        if(eq_deeply($candidate->([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]),-1448)) {
         print "ok!" }else{
         exit 1;
         }

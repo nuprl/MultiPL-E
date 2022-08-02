@@ -25,56 +25,56 @@ sub correct_bracketing {
     return @$stack == 0;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&correct_bracketing;
-        if(Compare($candidate->("<>"),1)) {
+        if(eq_deeply($candidate->("<>"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("<<><>>"),1)) {
+        if(eq_deeply($candidate->("<<><>>"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("<><><<><>><>"),1)) {
+        if(eq_deeply($candidate->("<><><<><>><>"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("<><><<<><><>><>><<><><<>>>"),1)) {
+        if(eq_deeply($candidate->("<><><<<><><>><>><<><><<>>>"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("<<<><>>>>"),"")) {
+        if(eq_deeply($candidate->("<<<><>>>>"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("><<>"),"")) {
+        if(eq_deeply($candidate->("><<>"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("<"),"")) {
+        if(eq_deeply($candidate->("<"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("<<<<"),"")) {
+        if(eq_deeply($candidate->("<<<<"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(">"),"")) {
+        if(eq_deeply($candidate->(">"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("<<>"),"")) {
+        if(eq_deeply($candidate->("<<>"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("<><><<><>><>><<>"),"")) {
+        if(eq_deeply($candidate->("<><><<><>><>><<>"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("<><><<><>><>>><>"),"")) {
+        if(eq_deeply($candidate->("<><><<><>><>>><>"),"")) {
         print "ok!" }else{
         exit 1;
         }

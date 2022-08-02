@@ -8,20 +8,20 @@ sub string_sequence {
     return join(" ", 0..$n);
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&string_sequence;
-        if(Compare($candidate->(0),"0")) {
+        if(eq_deeply($candidate->(0),"0")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(3),"0 1 2 3")) {
+        if(eq_deeply($candidate->(3),"0 1 2 3")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(10),"0 1 2 3 4 5 6 7 8 9 10")) {
+        if(eq_deeply($candidate->(10),"0 1 2 3 4 5 6 7 8 9 10")) {
         print "ok!" }else{
         exit 1;
         }

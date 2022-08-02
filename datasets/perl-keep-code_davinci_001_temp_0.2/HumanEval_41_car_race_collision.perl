@@ -23,28 +23,28 @@ sub car_race_collision {
     return $collision;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&car_race_collision;
-        if(Compare($candidate->(2),4)) {
+        if(eq_deeply($candidate->(2),4)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(3),9)) {
+        if(eq_deeply($candidate->(3),9)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(4),16)) {
+        if(eq_deeply($candidate->(4),16)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(8),64)) {
+        if(eq_deeply($candidate->(8),64)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(10),100)) {
+        if(eq_deeply($candidate->(10),100)) {
         print "ok!" }else{
         exit 1;
         }

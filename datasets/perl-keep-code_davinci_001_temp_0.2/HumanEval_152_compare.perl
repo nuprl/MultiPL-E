@@ -17,54 +17,24 @@ sub compare {
     return @result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&compare;
-    my @arg0 = (1, 2, 3, 4, 5, 1);
-    my @arg1 = (1, 2, 3, 4, 2, -2);
-    my @arg2 = (0, 0, 0, 0, 3, 3);
-    if(Compare($candidate->(\@arg0, \@arg1),\@arg2)) {
+        if(eq_deeply($candidate->([1, 2, 3, 4, 5, 1], [1, 2, 3, 4, 2, -2]),[0, 0, 0, 0, 3, 3])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3, 4, 5, 1);
-    my @arg1 = (1, 2, 3, 4, 2, -2);
-    my @arg2 = (0, 0, 0, 0, 3, 3);
-    my @arg3 = (0, 0, 0, 0, 0, 0);
-    my @arg4 = (0, 0, 0, 0, 0, 0);
-    my @arg5 = (0, 0, 0, 0, 0, 0);
-    if(Compare($candidate->(\@arg3, \@arg4),\@arg5)) {
+        if(eq_deeply($candidate->([0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]),[0, 0, 0, 0, 0, 0])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3, 4, 5, 1);
-    my @arg1 = (1, 2, 3, 4, 2, -2);
-    my @arg2 = (0, 0, 0, 0, 3, 3);
-    my @arg3 = (0, 0, 0, 0, 0, 0);
-    my @arg4 = (0, 0, 0, 0, 0, 0);
-    my @arg5 = (0, 0, 0, 0, 0, 0);
-    my @arg6 = (1, 2, 3);
-    my @arg7 = (-1, -2, -3);
-    my @arg8 = (2, 4, 6);
-    if(Compare($candidate->(\@arg6, \@arg7),\@arg8)) {
+        if(eq_deeply($candidate->([1, 2, 3], [-1, -2, -3]),[2, 4, 6])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3, 4, 5, 1);
-    my @arg1 = (1, 2, 3, 4, 2, -2);
-    my @arg2 = (0, 0, 0, 0, 3, 3);
-    my @arg3 = (0, 0, 0, 0, 0, 0);
-    my @arg4 = (0, 0, 0, 0, 0, 0);
-    my @arg5 = (0, 0, 0, 0, 0, 0);
-    my @arg6 = (1, 2, 3);
-    my @arg7 = (-1, -2, -3);
-    my @arg8 = (2, 4, 6);
-    my @arg9 = (1, 2, 3, 5);
-    my @arg10 = (-1, 2, 3, 4);
-    my @arg11 = (2, 0, 0, 1);
-    if(Compare($candidate->(\@arg9, \@arg10),\@arg11)) {
+        if(eq_deeply($candidate->([1, 2, 3, 5], [-1, 2, 3, 4]),[2, 0, 0, 1])) {
         print "ok!" }else{
         exit 1;
         }

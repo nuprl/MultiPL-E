@@ -31,32 +31,32 @@ sub cycpattern_check {
     return 0;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&cycpattern_check;
-        if(Compare($candidate->("xyzw", "xyw"),"")) {
+        if(eq_deeply($candidate->("xyzw", "xyw"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("yello", "ell"),1)) {
+        if(eq_deeply($candidate->("yello", "ell"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("whattup", "ptut"),"")) {
+        if(eq_deeply($candidate->("whattup", "ptut"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("efef", "fee"),1)) {
+        if(eq_deeply($candidate->("efef", "fee"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("abab", "aabb"),"")) {
+        if(eq_deeply($candidate->("abab", "aabb"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("winemtt", "tinem"),1)) {
+        if(eq_deeply($candidate->("winemtt", "tinem"),1)) {
         print "ok!" }else{
         exit 1;
         }

@@ -21,76 +21,40 @@ sub factorize {
     return @factors;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&factorize;
-    my @arg0 = (2);
-    if(Compare($candidate->(2),\@arg0)) {
+        if(eq_deeply($candidate->(2),[2])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (2);
-    my @arg1 = (2, 2);
-    if(Compare($candidate->(4),\@arg1)) {
+        if(eq_deeply($candidate->(4),[2, 2])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (2);
-    my @arg1 = (2, 2);
-    my @arg2 = (2, 2, 2);
-    if(Compare($candidate->(8),\@arg2)) {
+        if(eq_deeply($candidate->(8),[2, 2, 2])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (2);
-    my @arg1 = (2, 2);
-    my @arg2 = (2, 2, 2);
-    my @arg3 = (3, 19);
-    if(Compare($candidate->(57),\@arg3)) {
+        if(eq_deeply($candidate->(57),[3, 19])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (2);
-    my @arg1 = (2, 2);
-    my @arg2 = (2, 2, 2);
-    my @arg3 = (3, 19);
-    my @arg4 = (3, 3, 19, 19);
-    if(Compare($candidate->(3249),\@arg4)) {
+        if(eq_deeply($candidate->(3249),[3, 3, 19, 19])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (2);
-    my @arg1 = (2, 2);
-    my @arg2 = (2, 2, 2);
-    my @arg3 = (3, 19);
-    my @arg4 = (3, 3, 19, 19);
-    my @arg5 = (3, 3, 3, 19, 19, 19);
-    if(Compare($candidate->(185193),\@arg5)) {
+        if(eq_deeply($candidate->(185193),[3, 3, 3, 19, 19, 19])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (2);
-    my @arg1 = (2, 2);
-    my @arg2 = (2, 2, 2);
-    my @arg3 = (3, 19);
-    my @arg4 = (3, 3, 19, 19);
-    my @arg5 = (3, 3, 3, 19, 19, 19);
-    my @arg6 = (3, 19, 19, 19);
-    if(Compare($candidate->(20577),\@arg6)) {
+        if(eq_deeply($candidate->(20577),[3, 19, 19, 19])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (2);
-    my @arg1 = (2, 2);
-    my @arg2 = (2, 2, 2);
-    my @arg3 = (3, 19);
-    my @arg4 = (3, 3, 19, 19);
-    my @arg5 = (3, 3, 3, 19, 19, 19);
-    my @arg6 = (3, 19, 19, 19);
-    my @arg7 = (2, 3, 3);
-    if(Compare($candidate->(18),\@arg7)) {
+        if(eq_deeply($candidate->(18),[2, 3, 3])) {
         print "ok!" }else{
         exit 1;
         }

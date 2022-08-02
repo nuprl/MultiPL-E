@@ -43,40 +43,40 @@ sub even_odd_palindrome {
     return ($even, $odd);
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&even_odd_palindrome;
-        if(Compare($candidate->(123),(8, 13))) {
+        if(eq_deeply($candidate->(123),[8, 13])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(12),(4, 6))) {
+        if(eq_deeply($candidate->(12),[4, 6])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(3),(1, 2))) {
+        if(eq_deeply($candidate->(3),[1, 2])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(63),(6, 8))) {
+        if(eq_deeply($candidate->(63),[6, 8])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(25),(5, 6))) {
+        if(eq_deeply($candidate->(25),[5, 6])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(19),(4, 6))) {
+        if(eq_deeply($candidate->(19),[4, 6])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(9),(4, 5))) {
+        if(eq_deeply($candidate->(9),[4, 5])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1),(0, 1))) {
+        if(eq_deeply($candidate->(1),[0, 1])) {
         print "ok!" }else{
         exit 1;
         }

@@ -24,36 +24,36 @@ sub words_in_sentence {
     return join ' ', @res;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&words_in_sentence;
-        if(Compare($candidate->("This is a test"),"is")) {
+        if(eq_deeply($candidate->("This is a test"),"is")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("lets go for swimming"),"go for")) {
+        if(eq_deeply($candidate->("lets go for swimming"),"go for")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("there is no place available here"),"there is no place")) {
+        if(eq_deeply($candidate->("there is no place available here"),"there is no place")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Hi I am Hussein"),"Hi am Hussein")) {
+        if(eq_deeply($candidate->("Hi I am Hussein"),"Hi am Hussein")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("go for it"),"go for it")) {
+        if(eq_deeply($candidate->("go for it"),"go for it")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("here"),"")) {
+        if(eq_deeply($candidate->("here"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("here is"),"is")) {
+        if(eq_deeply($candidate->("here is"),"is")) {
         print "ok!" }else{
         exit 1;
         }

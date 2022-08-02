@@ -13,48 +13,48 @@ sub check_if_last_char_is_a_letter {
     return $txt =~ /\w$/ ? 1 : 0;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&check_if_last_char_is_a_letter;
-        if(Compare($candidate->("apple"),"")) {
+        if(eq_deeply($candidate->("apple"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("apple pi e"),1)) {
+        if(eq_deeply($candidate->("apple pi e"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("eeeee"),"")) {
+        if(eq_deeply($candidate->("eeeee"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("A"),1)) {
+        if(eq_deeply($candidate->("A"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Pumpkin pie "),"")) {
+        if(eq_deeply($candidate->("Pumpkin pie "),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Pumpkin pie 1"),"")) {
+        if(eq_deeply($candidate->("Pumpkin pie 1"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(""),"")) {
+        if(eq_deeply($candidate->(""),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("eeeee e "),"")) {
+        if(eq_deeply($candidate->("eeeee e "),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("apple pie"),"")) {
+        if(eq_deeply($candidate->("apple pie"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("apple pi e "),"")) {
+        if(eq_deeply($candidate->("apple pi e "),"")) {
         print "ok!" }else{
         exit 1;
         }

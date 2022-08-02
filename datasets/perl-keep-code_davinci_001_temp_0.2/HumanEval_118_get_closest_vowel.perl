@@ -71,60 +71,60 @@ sub get_closest_vowel {
     my $l = 0;
     my $m = 0;
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&get_closest_vowel;
-        if(Compare($candidate->("yogurt"),"u")) {
+        if(eq_deeply($candidate->("yogurt"),"u")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("full"),"u")) {
+        if(eq_deeply($candidate->("full"),"u")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("easy"),"")) {
+        if(eq_deeply($candidate->("easy"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("eAsy"),"")) {
+        if(eq_deeply($candidate->("eAsy"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("ali"),"")) {
+        if(eq_deeply($candidate->("ali"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("bad"),"a")) {
+        if(eq_deeply($candidate->("bad"),"a")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("most"),"o")) {
+        if(eq_deeply($candidate->("most"),"o")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("ab"),"")) {
+        if(eq_deeply($candidate->("ab"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("ba"),"")) {
+        if(eq_deeply($candidate->("ba"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("quick"),"")) {
+        if(eq_deeply($candidate->("quick"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("anime"),"i")) {
+        if(eq_deeply($candidate->("anime"),"i")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Asia"),"")) {
+        if(eq_deeply($candidate->("Asia"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Above"),"o")) {
+        if(eq_deeply($candidate->("Above"),"o")) {
         print "ok!" }else{
         exit 1;
         }

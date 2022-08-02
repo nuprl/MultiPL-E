@@ -8,28 +8,28 @@ sub add {
     return $x + $y;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&add;
-        if(Compare($candidate->(0, 1),1)) {
+        if(eq_deeply($candidate->(0, 1),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1, 0),1)) {
+        if(eq_deeply($candidate->(1, 0),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2, 3),5)) {
+        if(eq_deeply($candidate->(2, 3),5)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(5, 7),12)) {
+        if(eq_deeply($candidate->(5, 7),12)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(7, 5),12)) {
+        if(eq_deeply($candidate->(7, 5),12)) {
         print "ok!" }else{
         exit 1;
         }

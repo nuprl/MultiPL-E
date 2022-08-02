@@ -21,40 +21,40 @@ sub compare_one {
     return;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&compare_one;
-        if(Compare($candidate->(1, 2),2)) {
+        if(eq_deeply($candidate->(1, 2),2)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1, 2.5),2.5)) {
+        if(eq_deeply($candidate->(1, 2.5),2.5)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2, 3),3)) {
+        if(eq_deeply($candidate->(2, 3),3)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(5, 6),6)) {
+        if(eq_deeply($candidate->(5, 6),6)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1, "2,3"),"2,3")) {
+        if(eq_deeply($candidate->(1, "2,3"),"2,3")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("5,1", "6"),"6")) {
+        if(eq_deeply($candidate->("5,1", "6"),"6")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("1", "2"),"2")) {
+        if(eq_deeply($candidate->("1", "2"),"2")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("1", 1),#f)) {
+        if(eq_deeply($candidate->("1", 1),undef)) {
         print "ok!" }else{
         exit 1;
         }

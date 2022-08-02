@@ -22,40 +22,40 @@ sub intersection {
     return $is_prime ? "YES" : "NO";
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&intersection;
-        if(Compare($candidate->((1, 2), (2, 3)),"NO")) {
+        if(eq_deeply($candidate->([1, 2], [2, 3]),"NO")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->((-1, 1), (0, 4)),"NO")) {
+        if(eq_deeply($candidate->([-1, 1], [0, 4]),"NO")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->((-3, -1), (-5, 5)),"YES")) {
+        if(eq_deeply($candidate->([-3, -1], [-5, 5]),"YES")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->((-2, 2), (-4, 0)),"YES")) {
+        if(eq_deeply($candidate->([-2, 2], [-4, 0]),"YES")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->((-11, 2), (-1, -1)),"NO")) {
+        if(eq_deeply($candidate->([-11, 2], [-1, -1]),"NO")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->((1, 2), (3, 5)),"NO")) {
+        if(eq_deeply($candidate->([1, 2], [3, 5]),"NO")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->((1, 2), (1, 2)),"NO")) {
+        if(eq_deeply($candidate->([1, 2], [1, 2]),"NO")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->((-2, -2), (-3, -2)),"NO")) {
+        if(eq_deeply($candidate->([-2, -2], [-3, -2]),"NO")) {
         print "ok!" }else{
         exit 1;
         }

@@ -18,40 +18,40 @@ sub even_odd_count {
     return ($even, $odd);
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&even_odd_count;
-        if(Compare($candidate->(7),(0, 1))) {
+        if(eq_deeply($candidate->(7),[0, 1])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(-78),(1, 1))) {
+        if(eq_deeply($candidate->(-78),[1, 1])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(3452),(2, 2))) {
+        if(eq_deeply($candidate->(3452),[2, 2])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(346211),(3, 3))) {
+        if(eq_deeply($candidate->(346211),[3, 3])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(-345821),(3, 3))) {
+        if(eq_deeply($candidate->(-345821),[3, 3])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(-2),(1, 0))) {
+        if(eq_deeply($candidate->(-2),[1, 0])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(-45347),(2, 3))) {
+        if(eq_deeply($candidate->(-45347),[2, 3])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(0),(1, 0))) {
+        if(eq_deeply($candidate->(0),[1, 0])) {
         print "ok!" }else{
         exit 1;
         }

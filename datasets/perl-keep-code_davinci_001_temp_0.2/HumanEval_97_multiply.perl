@@ -26,40 +26,40 @@ sub multiply {
     return $sign * $result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&multiply;
-        if(Compare($candidate->(148, 412),16)) {
+        if(eq_deeply($candidate->(148, 412),16)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(19, 28),72)) {
+        if(eq_deeply($candidate->(19, 28),72)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2020, 1851),0)) {
+        if(eq_deeply($candidate->(2020, 1851),0)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(14, -15),20)) {
+        if(eq_deeply($candidate->(14, -15),20)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(76, 67),42)) {
+        if(eq_deeply($candidate->(76, 67),42)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(17, 27),49)) {
+        if(eq_deeply($candidate->(17, 27),49)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(0, 1),0)) {
+        if(eq_deeply($candidate->(0, 1),0)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(0, 0),0)) {
+        if(eq_deeply($candidate->(0, 0),0)) {
         print "ok!" }else{
         exit 1;
         }

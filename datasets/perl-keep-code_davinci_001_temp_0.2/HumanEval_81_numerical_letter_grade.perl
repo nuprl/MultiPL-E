@@ -55,74 +55,32 @@ sub numerical_letter_grade {
     return @letter_grades;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&numerical_letter_grade;
-    my @arg0 = (4.0, 3, 1.7, 2, 3.5);
-    my @arg1 = ("A+", "B", "C-", "C", "A-");
-    if(Compare($candidate->(\@arg0),\@arg1)) {
+        if(eq_deeply($candidate->([4.0, 3, 1.7, 2, 3.5]),["A+", "B", "C-", "C", "A-"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (4.0, 3, 1.7, 2, 3.5);
-    my @arg1 = ("A+", "B", "C-", "C", "A-");
-    my @arg2 = (1.2);
-    my @arg3 = ("D+");
-    if(Compare($candidate->(\@arg2),\@arg3)) {
+        if(eq_deeply($candidate->([1.2]),["D+"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (4.0, 3, 1.7, 2, 3.5);
-    my @arg1 = ("A+", "B", "C-", "C", "A-");
-    my @arg2 = (1.2);
-    my @arg3 = ("D+");
-    my @arg4 = (0.5);
-    my @arg5 = ("D-");
-    if(Compare($candidate->(\@arg4),\@arg5)) {
+        if(eq_deeply($candidate->([0.5]),["D-"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (4.0, 3, 1.7, 2, 3.5);
-    my @arg1 = ("A+", "B", "C-", "C", "A-");
-    my @arg2 = (1.2);
-    my @arg3 = ("D+");
-    my @arg4 = (0.5);
-    my @arg5 = ("D-");
-    my @arg6 = (0.0);
-    my @arg7 = ("E");
-    if(Compare($candidate->(\@arg6),\@arg7)) {
+        if(eq_deeply($candidate->([0.0]),["E"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (4.0, 3, 1.7, 2, 3.5);
-    my @arg1 = ("A+", "B", "C-", "C", "A-");
-    my @arg2 = (1.2);
-    my @arg3 = ("D+");
-    my @arg4 = (0.5);
-    my @arg5 = ("D-");
-    my @arg6 = (0.0);
-    my @arg7 = ("E");
-    my @arg8 = (1.0, 0.3, 1.5, 2.8, 3.3);
-    my @arg9 = ("D", "D-", "C-", "B", "B+");
-    if(Compare($candidate->(\@arg8),\@arg9)) {
+        if(eq_deeply($candidate->([1.0, 0.3, 1.5, 2.8, 3.3]),["D", "D-", "C-", "B", "B+"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (4.0, 3, 1.7, 2, 3.5);
-    my @arg1 = ("A+", "B", "C-", "C", "A-");
-    my @arg2 = (1.2);
-    my @arg3 = ("D+");
-    my @arg4 = (0.5);
-    my @arg5 = ("D-");
-    my @arg6 = (0.0);
-    my @arg7 = ("E");
-    my @arg8 = (1.0, 0.3, 1.5, 2.8, 3.3);
-    my @arg9 = ("D", "D-", "C-", "B", "B+");
-    my @arg10 = (0.0, 0.7);
-    my @arg11 = ("E", "D-");
-    if(Compare($candidate->(\@arg10),\@arg11)) {
+        if(eq_deeply($candidate->([0.0, 0.7]),["E", "D-"])) {
         print "ok!" }else{
         exit 1;
         }

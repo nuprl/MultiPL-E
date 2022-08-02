@@ -11,54 +11,24 @@ sub common {
     return sort @common;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&common;
-    my @arg0 = (1, 4, 3, 34, 653, 2, 5);
-    my @arg1 = (5, 7, 1, 5, 9, 653, 121);
-    my @arg2 = (1, 5, 653);
-    if(Compare($candidate->(\@arg0, \@arg1),\@arg2)) {
+        if(eq_deeply($candidate->([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121]),[1, 5, 653])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 4, 3, 34, 653, 2, 5);
-    my @arg1 = (5, 7, 1, 5, 9, 653, 121);
-    my @arg2 = (1, 5, 653);
-    my @arg3 = (5, 3, 2, 8);
-    my @arg4 = (3, 2);
-    my @arg5 = (2, 3);
-    if(Compare($candidate->(\@arg3, \@arg4),\@arg5)) {
+        if(eq_deeply($candidate->([5, 3, 2, 8], [3, 2]),[2, 3])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 4, 3, 34, 653, 2, 5);
-    my @arg1 = (5, 7, 1, 5, 9, 653, 121);
-    my @arg2 = (1, 5, 653);
-    my @arg3 = (5, 3, 2, 8);
-    my @arg4 = (3, 2);
-    my @arg5 = (2, 3);
-    my @arg6 = (4, 3, 2, 8);
-    my @arg7 = (3, 2, 4);
-    my @arg8 = (2, 3, 4);
-    if(Compare($candidate->(\@arg6, \@arg7),\@arg8)) {
+        if(eq_deeply($candidate->([4, 3, 2, 8], [3, 2, 4]),[2, 3, 4])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 4, 3, 34, 653, 2, 5);
-    my @arg1 = (5, 7, 1, 5, 9, 653, 121);
-    my @arg2 = (1, 5, 653);
-    my @arg3 = (5, 3, 2, 8);
-    my @arg4 = (3, 2);
-    my @arg5 = (2, 3);
-    my @arg6 = (4, 3, 2, 8);
-    my @arg7 = (3, 2, 4);
-    my @arg8 = (2, 3, 4);
-    my @arg9 = (4, 3, 2, 8);
-    my @arg10 = ();
-    my @arg11 = ();
-    if(Compare($candidate->(\@arg9, \@arg10),\@arg11)) {
+        if(eq_deeply($candidate->([4, 3, 2, 8], []),[])) {
         print "ok!" }else{
         exit 1;
         }

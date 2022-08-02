@@ -14,44 +14,24 @@ sub get_positive {
     return \@r;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&get_positive;
-    my @arg0 = (-1, -2, 4, 5, 6);
-    my @arg1 = (4, 5, 6);
-    if(Compare($candidate->(\@arg0),\@arg1)) {
+        if(eq_deeply($candidate->([-1, -2, 4, 5, 6]),[4, 5, 6])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (-1, -2, 4, 5, 6);
-    my @arg1 = (4, 5, 6);
-    my @arg2 = (5, 3, -5, 2, 3, 3, 9, 0, 123, 1, -10);
-    my @arg3 = (5, 3, 2, 3, 3, 9, 123, 1);
-    if(Compare($candidate->(\@arg2),\@arg3)) {
+        if(eq_deeply($candidate->([5, 3, -5, 2, 3, 3, 9, 0, 123, 1, -10]),[5, 3, 2, 3, 3, 9, 123, 1])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (-1, -2, 4, 5, 6);
-    my @arg1 = (4, 5, 6);
-    my @arg2 = (5, 3, -5, 2, 3, 3, 9, 0, 123, 1, -10);
-    my @arg3 = (5, 3, 2, 3, 3, 9, 123, 1);
-    my @arg4 = (-1, -2);
-    my @arg5 = ();
-    if(Compare($candidate->(\@arg4),\@arg5)) {
+        if(eq_deeply($candidate->([-1, -2]),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (-1, -2, 4, 5, 6);
-    my @arg1 = (4, 5, 6);
-    my @arg2 = (5, 3, -5, 2, 3, 3, 9, 0, 123, 1, -10);
-    my @arg3 = (5, 3, 2, 3, 3, 9, 123, 1);
-    my @arg4 = (-1, -2);
-    my @arg5 = ();
-    my @arg6 = ();
-    my @arg7 = ();
-    if(Compare($candidate->(\@arg6),\@arg7)) {
+        if(eq_deeply($candidate->([]),[])) {
         print "ok!" }else{
         exit 1;
         }

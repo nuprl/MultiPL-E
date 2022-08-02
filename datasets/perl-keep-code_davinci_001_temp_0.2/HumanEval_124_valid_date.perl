@@ -21,72 +21,72 @@ sub valid_date {
     return 1;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&valid_date;
-        if(Compare($candidate->("03-11-2000"),1)) {
+        if(eq_deeply($candidate->("03-11-2000"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("15-01-2012"),"")) {
+        if(eq_deeply($candidate->("15-01-2012"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("04-0-2040"),"")) {
+        if(eq_deeply($candidate->("04-0-2040"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("06-04-2020"),1)) {
+        if(eq_deeply($candidate->("06-04-2020"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("01-01-2007"),1)) {
+        if(eq_deeply($candidate->("01-01-2007"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("03-32-2011"),"")) {
+        if(eq_deeply($candidate->("03-32-2011"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(""),"")) {
+        if(eq_deeply($candidate->(""),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("04-31-3000"),"")) {
+        if(eq_deeply($candidate->("04-31-3000"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("06-06-2005"),1)) {
+        if(eq_deeply($candidate->("06-06-2005"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("21-31-2000"),"")) {
+        if(eq_deeply($candidate->("21-31-2000"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("04-12-2003"),1)) {
+        if(eq_deeply($candidate->("04-12-2003"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("04122003"),"")) {
+        if(eq_deeply($candidate->("04122003"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("20030412"),"")) {
+        if(eq_deeply($candidate->("20030412"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("2003-04"),"")) {
+        if(eq_deeply($candidate->("2003-04"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("2003-04-12"),"")) {
+        if(eq_deeply($candidate->("2003-04-12"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("04-2003"),"")) {
+        if(eq_deeply($candidate->("04-2003"),"")) {
         print "ok!" }else{
         exit 1;
         }

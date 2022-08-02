@@ -15,28 +15,28 @@ sub largest_divisor {
     return $n;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&largest_divisor;
-        if(Compare($candidate->(3),1)) {
+        if(eq_deeply($candidate->(3),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(7),1)) {
+        if(eq_deeply($candidate->(7),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(10),5)) {
+        if(eq_deeply($candidate->(10),5)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(100),50)) {
+        if(eq_deeply($candidate->(100),50)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(49),7)) {
+        if(eq_deeply($candidate->(49),7)) {
         print "ok!" }else{
         exit 1;
         }

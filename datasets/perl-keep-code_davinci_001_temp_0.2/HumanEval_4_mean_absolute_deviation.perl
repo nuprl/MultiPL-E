@@ -15,26 +15,20 @@ sub mean_absolute_deviation {
     return $sum / @$numbers;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&mean_absolute_deviation;
-    my @arg0 = (1.0, 2.0);
-    if(Compare($candidate->(\@arg0),0.5)) {
+        if(eq_deeply($candidate->([1.0, 2.0]),0.5)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1.0, 2.0);
-    my @arg1 = (1.0, 2.0, 3.0, 4.0);
-    if(Compare($candidate->(\@arg1),1.0)) {
+        if(eq_deeply($candidate->([1.0, 2.0, 3.0, 4.0]),1.0)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1.0, 2.0);
-    my @arg1 = (1.0, 2.0, 3.0, 4.0);
-    my @arg2 = (1.0, 2.0, 3.0, 4.0, 5.0);
-    if(Compare($candidate->(\@arg2),1.2)) {
+        if(eq_deeply($candidate->([1.0, 2.0, 3.0, 4.0, 5.0]),1.2)) {
         print "ok!" }else{
         exit 1;
         }

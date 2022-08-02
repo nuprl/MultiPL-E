@@ -19,44 +19,24 @@ sub sort_third {
     return @l_prime;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&sort_third;
-    my @arg0 = (5, 6, 3, 4, 8, 9, 2);
-    my @arg1 = (2, 6, 3, 4, 8, 9, 5);
-    if(Compare($candidate->(\@arg0),\@arg1)) {
+        if(eq_deeply($candidate->([5, 6, 3, 4, 8, 9, 2]),[2, 6, 3, 4, 8, 9, 5])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (5, 6, 3, 4, 8, 9, 2);
-    my @arg1 = (2, 6, 3, 4, 8, 9, 5);
-    my @arg2 = (5, 8, 3, 4, 6, 9, 2);
-    my @arg3 = (2, 8, 3, 4, 6, 9, 5);
-    if(Compare($candidate->(\@arg2),\@arg3)) {
+        if(eq_deeply($candidate->([5, 8, 3, 4, 6, 9, 2]),[2, 8, 3, 4, 6, 9, 5])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (5, 6, 3, 4, 8, 9, 2);
-    my @arg1 = (2, 6, 3, 4, 8, 9, 5);
-    my @arg2 = (5, 8, 3, 4, 6, 9, 2);
-    my @arg3 = (2, 8, 3, 4, 6, 9, 5);
-    my @arg4 = (5, 6, 9, 4, 8, 3, 2);
-    my @arg5 = (2, 6, 9, 4, 8, 3, 5);
-    if(Compare($candidate->(\@arg4),\@arg5)) {
+        if(eq_deeply($candidate->([5, 6, 9, 4, 8, 3, 2]),[2, 6, 9, 4, 8, 3, 5])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (5, 6, 3, 4, 8, 9, 2);
-    my @arg1 = (2, 6, 3, 4, 8, 9, 5);
-    my @arg2 = (5, 8, 3, 4, 6, 9, 2);
-    my @arg3 = (2, 8, 3, 4, 6, 9, 5);
-    my @arg4 = (5, 6, 9, 4, 8, 3, 2);
-    my @arg5 = (2, 6, 9, 4, 8, 3, 5);
-    my @arg6 = (5, 6, 3, 4, 8, 9, 2, 1);
-    my @arg7 = (2, 6, 3, 4, 8, 9, 5, 1);
-    if(Compare($candidate->(\@arg6),\@arg7)) {
+        if(eq_deeply($candidate->([5, 6, 3, 4, 8, 9, 2, 1]),[2, 6, 3, 4, 8, 9, 5, 1])) {
         print "ok!" }else{
         exit 1;
         }

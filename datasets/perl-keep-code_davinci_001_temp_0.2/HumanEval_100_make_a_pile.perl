@@ -18,43 +18,28 @@ sub make_a_pile {
     return @pile;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&make_a_pile;
-    my @arg0 = (3, 5, 7);
-    if(Compare($candidate->(3),\@arg0)) {
+        if(eq_deeply($candidate->(3),[3, 5, 7])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 5, 7);
-    my @arg1 = (4, 6, 8, 10);
-    if(Compare($candidate->(4),\@arg1)) {
+        if(eq_deeply($candidate->(4),[4, 6, 8, 10])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 5, 7);
-    my @arg1 = (4, 6, 8, 10);
-    my @arg2 = (5, 7, 9, 11, 13);
-    if(Compare($candidate->(5),\@arg2)) {
+        if(eq_deeply($candidate->(5),[5, 7, 9, 11, 13])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 5, 7);
-    my @arg1 = (4, 6, 8, 10);
-    my @arg2 = (5, 7, 9, 11, 13);
-    my @arg3 = (6, 8, 10, 12, 14, 16);
-    if(Compare($candidate->(6),\@arg3)) {
+        if(eq_deeply($candidate->(6),[6, 8, 10, 12, 14, 16])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 5, 7);
-    my @arg1 = (4, 6, 8, 10);
-    my @arg2 = (5, 7, 9, 11, 13);
-    my @arg3 = (6, 8, 10, 12, 14, 16);
-    my @arg4 = (8, 10, 12, 14, 16, 18, 20, 22);
-    if(Compare($candidate->(8),\@arg4)) {
+        if(eq_deeply($candidate->(8),[8, 10, 12, 14, 16, 18, 20, 22])) {
         print "ok!" }else{
         exit 1;
         }

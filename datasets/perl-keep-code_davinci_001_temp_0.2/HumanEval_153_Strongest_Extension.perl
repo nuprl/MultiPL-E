@@ -30,89 +30,44 @@ sub Strongest_Extension {
     return "$class_name.$strongest_extension";
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&Strongest_Extension;
-    my @arg0 = ("tEN", "niNE", "eIGHt8OKe");
-    if(Compare($candidate->("Watashi", \@arg0),"Watashi.eIGHt8OKe")) {
+        if(eq_deeply($candidate->("Watashi", ["tEN", "niNE", "eIGHt8OKe"]),"Watashi.eIGHt8OKe")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("tEN", "niNE", "eIGHt8OKe");
-    my @arg1 = ("nani", "NazeDa", "YEs.WeCaNe", "32145tggg");
-    if(Compare($candidate->("Boku123", \@arg1),"Boku123.YEs.WeCaNe")) {
+        if(eq_deeply($candidate->("Boku123", ["nani", "NazeDa", "YEs.WeCaNe", "32145tggg"]),"Boku123.YEs.WeCaNe")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("tEN", "niNE", "eIGHt8OKe");
-    my @arg1 = ("nani", "NazeDa", "YEs.WeCaNe", "32145tggg");
-    my @arg2 = ("t", "eMptY", "nothing", "zeR00", "NuLl__", "123NoooneB321");
-    if(Compare($candidate->("__YESIMHERE", \@arg2),"__YESIMHERE.NuLl__")) {
+        if(eq_deeply($candidate->("__YESIMHERE", ["t", "eMptY", "nothing", "zeR00", "NuLl__", "123NoooneB321"]),"__YESIMHERE.NuLl__")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("tEN", "niNE", "eIGHt8OKe");
-    my @arg1 = ("nani", "NazeDa", "YEs.WeCaNe", "32145tggg");
-    my @arg2 = ("t", "eMptY", "nothing", "zeR00", "NuLl__", "123NoooneB321");
-    my @arg3 = ("Ta", "TAR", "t234An", "cosSo");
-    if(Compare($candidate->("K", \@arg3),"K.TAR")) {
+        if(eq_deeply($candidate->("K", ["Ta", "TAR", "t234An", "cosSo"]),"K.TAR")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("tEN", "niNE", "eIGHt8OKe");
-    my @arg1 = ("nani", "NazeDa", "YEs.WeCaNe", "32145tggg");
-    my @arg2 = ("t", "eMptY", "nothing", "zeR00", "NuLl__", "123NoooneB321");
-    my @arg3 = ("Ta", "TAR", "t234An", "cosSo");
-    my @arg4 = ("Tab", "123", "781345", "-_-");
-    if(Compare($candidate->("__HAHA", \@arg4),"__HAHA.123")) {
+        if(eq_deeply($candidate->("__HAHA", ["Tab", "123", "781345", "-_-"]),"__HAHA.123")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("tEN", "niNE", "eIGHt8OKe");
-    my @arg1 = ("nani", "NazeDa", "YEs.WeCaNe", "32145tggg");
-    my @arg2 = ("t", "eMptY", "nothing", "zeR00", "NuLl__", "123NoooneB321");
-    my @arg3 = ("Ta", "TAR", "t234An", "cosSo");
-    my @arg4 = ("Tab", "123", "781345", "-_-");
-    my @arg5 = ("HhAas", "okIWILL123", "WorkOut", "Fails", "-_-");
-    if(Compare($candidate->("YameRore", \@arg5),"YameRore.okIWILL123")) {
+        if(eq_deeply($candidate->("YameRore", ["HhAas", "okIWILL123", "WorkOut", "Fails", "-_-"]),"YameRore.okIWILL123")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("tEN", "niNE", "eIGHt8OKe");
-    my @arg1 = ("nani", "NazeDa", "YEs.WeCaNe", "32145tggg");
-    my @arg2 = ("t", "eMptY", "nothing", "zeR00", "NuLl__", "123NoooneB321");
-    my @arg3 = ("Ta", "TAR", "t234An", "cosSo");
-    my @arg4 = ("Tab", "123", "781345", "-_-");
-    my @arg5 = ("HhAas", "okIWILL123", "WorkOut", "Fails", "-_-");
-    my @arg6 = ("Die", "NowW", "Wow", "WoW");
-    if(Compare($candidate->("finNNalLLly", \@arg6),"finNNalLLly.WoW")) {
+        if(eq_deeply($candidate->("finNNalLLly", ["Die", "NowW", "Wow", "WoW"]),"finNNalLLly.WoW")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("tEN", "niNE", "eIGHt8OKe");
-    my @arg1 = ("nani", "NazeDa", "YEs.WeCaNe", "32145tggg");
-    my @arg2 = ("t", "eMptY", "nothing", "zeR00", "NuLl__", "123NoooneB321");
-    my @arg3 = ("Ta", "TAR", "t234An", "cosSo");
-    my @arg4 = ("Tab", "123", "781345", "-_-");
-    my @arg5 = ("HhAas", "okIWILL123", "WorkOut", "Fails", "-_-");
-    my @arg6 = ("Die", "NowW", "Wow", "WoW");
-    my @arg7 = ("Bb", "91245");
-    if(Compare($candidate->("_", \@arg7),"_.Bb")) {
+        if(eq_deeply($candidate->("_", ["Bb", "91245"]),"_.Bb")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("tEN", "niNE", "eIGHt8OKe");
-    my @arg1 = ("nani", "NazeDa", "YEs.WeCaNe", "32145tggg");
-    my @arg2 = ("t", "eMptY", "nothing", "zeR00", "NuLl__", "123NoooneB321");
-    my @arg3 = ("Ta", "TAR", "t234An", "cosSo");
-    my @arg4 = ("Tab", "123", "781345", "-_-");
-    my @arg5 = ("HhAas", "okIWILL123", "WorkOut", "Fails", "-_-");
-    my @arg6 = ("Die", "NowW", "Wow", "WoW");
-    my @arg7 = ("Bb", "91245");
-    my @arg8 = ("671235", "Bb");
-    if(Compare($candidate->("Sp", \@arg8),"Sp.671235")) {
+        if(eq_deeply($candidate->("Sp", ["671235", "Bb"]),"Sp.671235")) {
         print "ok!" }else{
         exit 1;
         }

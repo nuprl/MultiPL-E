@@ -9,53 +9,32 @@ sub words_string {
     return @a;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&words_string;
-    my @arg0 = ("Hi", "my", "name", "is", "John");
-    if(Compare($candidate->("Hi, my name is John"),\@arg0)) {
+        if(eq_deeply($candidate->("Hi, my name is John"),["Hi", "my", "name", "is", "John"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("Hi", "my", "name", "is", "John");
-    my @arg1 = ("One", "two", "three", "four", "five", "six");
-    if(Compare($candidate->("One, two, three, four, five, six"),\@arg1)) {
+        if(eq_deeply($candidate->("One, two, three, four, five, six"),["One", "two", "three", "four", "five", "six"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("Hi", "my", "name", "is", "John");
-    my @arg1 = ("One", "two", "three", "four", "five", "six");
-    my @arg2 = ("Hi", "my", "name");
-    if(Compare($candidate->("Hi, my name"),\@arg2)) {
+        if(eq_deeply($candidate->("Hi, my name"),["Hi", "my", "name"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("Hi", "my", "name", "is", "John");
-    my @arg1 = ("One", "two", "three", "four", "five", "six");
-    my @arg2 = ("Hi", "my", "name");
-    my @arg3 = ("One", "two", "three", "four", "five", "six");
-    if(Compare($candidate->("One,, two, three, four, five, six,"),\@arg3)) {
+        if(eq_deeply($candidate->("One,, two, three, four, five, six,"),["One", "two", "three", "four", "five", "six"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("Hi", "my", "name", "is", "John");
-    my @arg1 = ("One", "two", "three", "four", "five", "six");
-    my @arg2 = ("Hi", "my", "name");
-    my @arg3 = ("One", "two", "three", "four", "five", "six");
-    my @arg4 = ();
-    if(Compare($candidate->(""),\@arg4)) {
+        if(eq_deeply($candidate->(""),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("Hi", "my", "name", "is", "John");
-    my @arg1 = ("One", "two", "three", "four", "five", "six");
-    my @arg2 = ("Hi", "my", "name");
-    my @arg3 = ("One", "two", "three", "four", "five", "six");
-    my @arg4 = ();
-    my @arg5 = ("ahmed", "gamal");
-    if(Compare($candidate->("ahmed     , gamal"),\@arg5)) {
+        if(eq_deeply($candidate->("ahmed     , gamal"),["ahmed", "gamal"])) {
         print "ok!" }else{
         exit 1;
         }

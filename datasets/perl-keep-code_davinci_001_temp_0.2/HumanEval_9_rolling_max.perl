@@ -15,44 +15,24 @@ sub rolling_max {
     return \@result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&rolling_max;
-    my @arg0 = ();
-    my @arg1 = ();
-    if(Compare($candidate->(\@arg0),\@arg1)) {
+        if(eq_deeply($candidate->([]),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = (1, 2, 3, 4);
-    my @arg3 = (1, 2, 3, 4);
-    if(Compare($candidate->(\@arg2),\@arg3)) {
+        if(eq_deeply($candidate->([1, 2, 3, 4]),[1, 2, 3, 4])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = (1, 2, 3, 4);
-    my @arg3 = (1, 2, 3, 4);
-    my @arg4 = (4, 3, 2, 1);
-    my @arg5 = (4, 4, 4, 4);
-    if(Compare($candidate->(\@arg4),\@arg5)) {
+        if(eq_deeply($candidate->([4, 3, 2, 1]),[4, 4, 4, 4])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = (1, 2, 3, 4);
-    my @arg3 = (1, 2, 3, 4);
-    my @arg4 = (4, 3, 2, 1);
-    my @arg5 = (4, 4, 4, 4);
-    my @arg6 = (3, 2, 3, 100, 3);
-    my @arg7 = (3, 3, 3, 100, 100);
-    if(Compare($candidate->(\@arg6),\@arg7)) {
+        if(eq_deeply($candidate->([3, 2, 3, 100, 3]),[3, 3, 3, 100, 100])) {
         print "ok!" }else{
         exit 1;
         }

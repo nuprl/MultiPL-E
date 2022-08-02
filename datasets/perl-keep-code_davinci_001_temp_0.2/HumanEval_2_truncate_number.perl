@@ -10,20 +10,20 @@ sub truncate_number {
     return $number - $int;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&truncate_number;
-        if(Compare($candidate->(3.5),0.5)) {
+        if(eq_deeply($candidate->(3.5),0.5)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1.25),0.25)) {
+        if(eq_deeply($candidate->(1.25),0.25)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(123.0),0.0)) {
+        if(eq_deeply($candidate->(123.0),0.0)) {
         print "ok!" }else{
         exit 1;
         }

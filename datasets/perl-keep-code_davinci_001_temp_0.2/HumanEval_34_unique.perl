@@ -8,14 +8,12 @@ sub unique {
     return sort { $a <=> $b } keys %h;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&unique;
-    my @arg0 = (5, 3, 5, 2, 3, 3, 9, 0, 123);
-    my @arg1 = (0, 2, 3, 5, 9, 123);
-    if(Compare($candidate->(\@arg0),\@arg1)) {
+        if(eq_deeply($candidate->([5, 3, 5, 2, 3, 3, 9, 0, 123]),[0, 2, 3, 5, 9, 123])) {
         print "ok!" }else{
         exit 1;
         }

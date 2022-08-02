@@ -15,34 +15,24 @@ sub generate_integers {
     return @result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&generate_integers;
-    my @arg0 = (2, 4, 6, 8);
-    if(Compare($candidate->(2, 10),\@arg0)) {
+        if(eq_deeply($candidate->(2, 10),[2, 4, 6, 8])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (2, 4, 6, 8);
-    my @arg1 = (2, 4, 6, 8);
-    if(Compare($candidate->(10, 2),\@arg1)) {
+        if(eq_deeply($candidate->(10, 2),[2, 4, 6, 8])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (2, 4, 6, 8);
-    my @arg1 = (2, 4, 6, 8);
-    my @arg2 = (2, 4, 6, 8);
-    if(Compare($candidate->(132, 2),\@arg2)) {
+        if(eq_deeply($candidate->(132, 2),[2, 4, 6, 8])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (2, 4, 6, 8);
-    my @arg1 = (2, 4, 6, 8);
-    my @arg2 = (2, 4, 6, 8);
-    my @arg3 = ();
-    if(Compare($candidate->(17, 89),\@arg3)) {
+        if(eq_deeply($candidate->(17, 89),[])) {
         print "ok!" }else{
         exit 1;
         }

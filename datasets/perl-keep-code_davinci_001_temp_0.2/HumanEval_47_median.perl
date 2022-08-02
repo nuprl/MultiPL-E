@@ -14,43 +14,28 @@ sub median {
     }
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&median;
-    my @arg0 = (3, 1, 2, 4, 5);
-    if(Compare($candidate->(\@arg0),3)) {
+        if(eq_deeply($candidate->([3, 1, 2, 4, 5]),3)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 1, 2, 4, 5);
-    my @arg1 = (-10, 4, 6, 1000, 10, 20);
-    if(Compare($candidate->(\@arg1),8.0)) {
+        if(eq_deeply($candidate->([-10, 4, 6, 1000, 10, 20]),8.0)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 1, 2, 4, 5);
-    my @arg1 = (-10, 4, 6, 1000, 10, 20);
-    my @arg2 = (5);
-    if(Compare($candidate->(\@arg2),5)) {
+        if(eq_deeply($candidate->([5]),5)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 1, 2, 4, 5);
-    my @arg1 = (-10, 4, 6, 1000, 10, 20);
-    my @arg2 = (5);
-    my @arg3 = (6, 5);
-    if(Compare($candidate->(\@arg3),5.5)) {
+        if(eq_deeply($candidate->([6, 5]),5.5)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 1, 2, 4, 5);
-    my @arg1 = (-10, 4, 6, 1000, 10, 20);
-    my @arg2 = (5);
-    my @arg3 = (6, 5);
-    my @arg4 = (8, 1, 3, 9, 9, 2, 7);
-    if(Compare($candidate->(\@arg4),7)) {
+        if(eq_deeply($candidate->([8, 1, 3, 9, 9, 2, 7]),7)) {
         print "ok!" }else{
         exit 1;
         }

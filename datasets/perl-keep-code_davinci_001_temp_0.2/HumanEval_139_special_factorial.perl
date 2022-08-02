@@ -17,24 +17,24 @@ sub special_factorial {
     return $factorial;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&special_factorial;
-        if(Compare($candidate->(4),288)) {
+        if(eq_deeply($candidate->(4),288)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(5),34560)) {
+        if(eq_deeply($candidate->(5),34560)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(7),125411328000)) {
+        if(eq_deeply($candidate->(7),125411328000)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1),1)) {
+        if(eq_deeply($candidate->(1),1)) {
         print "ok!" }else{
         exit 1;
         }

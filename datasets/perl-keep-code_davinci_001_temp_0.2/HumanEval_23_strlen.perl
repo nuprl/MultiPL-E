@@ -8,20 +8,20 @@ sub strlen {
     return length($string);
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&strlen;
-        if(Compare($candidate->(""),0)) {
+        if(eq_deeply($candidate->(""),0)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("x"),1)) {
+        if(eq_deeply($candidate->("x"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("asdasnakj"),9)) {
+        if(eq_deeply($candidate->("asdasnakj"),9)) {
         print "ok!" }else{
         exit 1;
         }

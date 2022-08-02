@@ -13,32 +13,20 @@ sub incr_list {
     return \@r;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&incr_list;
-    my @arg0 = ();
-    my @arg1 = ();
-    if(Compare($candidate->(\@arg0),\@arg1)) {
+        if(eq_deeply($candidate->([]),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = (3, 2, 1);
-    my @arg3 = (4, 3, 2);
-    if(Compare($candidate->(\@arg2),\@arg3)) {
+        if(eq_deeply($candidate->([3, 2, 1]),[4, 3, 2])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = (3, 2, 1);
-    my @arg3 = (4, 3, 2);
-    my @arg4 = (5, 2, 5, 2, 3, 3, 9, 0, 123);
-    my @arg5 = (6, 3, 6, 3, 4, 4, 10, 1, 124);
-    if(Compare($candidate->(\@arg4),\@arg5)) {
+        if(eq_deeply($candidate->([5, 2, 5, 2, 3, 3, 9, 0, 123]),[6, 3, 6, 3, 4, 4, 10, 1, 124])) {
         print "ok!" }else{
         exit 1;
         }

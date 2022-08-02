@@ -14,28 +14,28 @@ sub fix_spaces {
     return $text;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&fix_spaces;
-        if(Compare($candidate->("Example"),"Example")) {
+        if(eq_deeply($candidate->("Example"),"Example")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Mudasir Hanif "),"Mudasir_Hanif_")) {
+        if(eq_deeply($candidate->("Mudasir Hanif "),"Mudasir_Hanif_")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Yellow Yellow  Dirty  Fellow"),"Yellow_Yellow__Dirty__Fellow")) {
+        if(eq_deeply($candidate->("Yellow Yellow  Dirty  Fellow"),"Yellow_Yellow__Dirty__Fellow")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Exa   mple"),"Exa-mple")) {
+        if(eq_deeply($candidate->("Exa   mple"),"Exa-mple")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("   Exa 1 2 2 mple"),"-Exa_1_2_2_mple")) {
+        if(eq_deeply($candidate->("   Exa 1 2 2 mple"),"-Exa_1_2_2_mple")) {
         print "ok!" }else{
         exit 1;
         }

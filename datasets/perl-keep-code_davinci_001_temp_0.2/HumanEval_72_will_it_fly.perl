@@ -18,53 +18,32 @@ sub will_it_fly {
     return $sum <= $w && is_palindrome($q);
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&will_it_fly;
-    my @arg0 = (3, 2, 3);
-    if(Compare($candidate->(\@arg0, 9),1)) {
+        if(eq_deeply($candidate->([3, 2, 3], 9),1)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 2, 3);
-    my @arg1 = (1, 2);
-    if(Compare($candidate->(\@arg1, 5),"")) {
+        if(eq_deeply($candidate->([1, 2], 5),"")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 2, 3);
-    my @arg1 = (1, 2);
-    my @arg2 = (3);
-    if(Compare($candidate->(\@arg2, 5),1)) {
+        if(eq_deeply($candidate->([3], 5),1)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 2, 3);
-    my @arg1 = (1, 2);
-    my @arg2 = (3);
-    my @arg3 = (3, 2, 3);
-    if(Compare($candidate->(\@arg3, 1),"")) {
+        if(eq_deeply($candidate->([3, 2, 3], 1),"")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 2, 3);
-    my @arg1 = (1, 2);
-    my @arg2 = (3);
-    my @arg3 = (3, 2, 3);
-    my @arg4 = (1, 2, 3);
-    if(Compare($candidate->(\@arg4, 6),"")) {
+        if(eq_deeply($candidate->([1, 2, 3], 6),"")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 2, 3);
-    my @arg1 = (1, 2);
-    my @arg2 = (3);
-    my @arg3 = (3, 2, 3);
-    my @arg4 = (1, 2, 3);
-    my @arg5 = (5);
-    if(Compare($candidate->(\@arg5, 5),1)) {
+        if(eq_deeply($candidate->([5], 5),1)) {
         print "ok!" }else{
         exit 1;
         }

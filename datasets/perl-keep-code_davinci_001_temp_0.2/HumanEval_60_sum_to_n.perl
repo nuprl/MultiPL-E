@@ -18,28 +18,28 @@ sub sum_to_n {
     return $sum;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&sum_to_n;
-        if(Compare($candidate->(1),1)) {
+        if(eq_deeply($candidate->(1),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(6),21)) {
+        if(eq_deeply($candidate->(6),21)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(11),66)) {
+        if(eq_deeply($candidate->(11),66)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(30),465)) {
+        if(eq_deeply($candidate->(30),465)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(100),5050)) {
+        if(eq_deeply($candidate->(100),5050)) {
         print "ok!" }else{
         exit 1;
         }

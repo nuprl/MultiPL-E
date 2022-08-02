@@ -17,56 +17,56 @@ sub change_base {
     return $result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&change_base;
-        if(Compare($candidate->(8, 3),"22")) {
+        if(eq_deeply($candidate->(8, 3),"22")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(9, 3),"100")) {
+        if(eq_deeply($candidate->(9, 3),"100")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(234, 2),"11101010")) {
+        if(eq_deeply($candidate->(234, 2),"11101010")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(16, 2),"10000")) {
+        if(eq_deeply($candidate->(16, 2),"10000")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(8, 2),"1000")) {
+        if(eq_deeply($candidate->(8, 2),"1000")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(7, 2),"111")) {
+        if(eq_deeply($candidate->(7, 2),"111")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2, 3),"2")) {
+        if(eq_deeply($candidate->(2, 3),"2")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(3, 4),"3")) {
+        if(eq_deeply($candidate->(3, 4),"3")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(4, 5),"4")) {
+        if(eq_deeply($candidate->(4, 5),"4")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(5, 6),"5")) {
+        if(eq_deeply($candidate->(5, 6),"5")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(6, 7),"6")) {
+        if(eq_deeply($candidate->(6, 7),"6")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(7, 8),"7")) {
+        if(eq_deeply($candidate->(7, 8),"7")) {
         print "ok!" }else{
         exit 1;
         }

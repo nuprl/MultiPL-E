@@ -12,48 +12,48 @@ sub x_or_y {
     }
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&x_or_y;
-        if(Compare($candidate->(7, 34, 12),34)) {
+        if(eq_deeply($candidate->(7, 34, 12),34)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(15, 8, 5),5)) {
+        if(eq_deeply($candidate->(15, 8, 5),5)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(3, 33, 5212),33)) {
+        if(eq_deeply($candidate->(3, 33, 5212),33)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1259, 3, 52),3)) {
+        if(eq_deeply($candidate->(1259, 3, 52),3)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(7919, -1, 12),-1)) {
+        if(eq_deeply($candidate->(7919, -1, 12),-1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(3609, 1245, 583),583)) {
+        if(eq_deeply($candidate->(3609, 1245, 583),583)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(91, 56, 129),129)) {
+        if(eq_deeply($candidate->(91, 56, 129),129)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(6, 34, 1234),1234)) {
+        if(eq_deeply($candidate->(6, 34, 1234),1234)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1, 2, 0),0)) {
+        if(eq_deeply($candidate->(1, 2, 0),0)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2, 2, 0),2)) {
+        if(eq_deeply($candidate->(2, 2, 0),2)) {
         print "ok!" }else{
         exit 1;
         }

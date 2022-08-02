@@ -11,48 +11,48 @@ sub any_int {
     return $x + $y == $z || $x + $z == $y || $y + $z == $x;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&any_int;
-        if(Compare($candidate->(2, 3, 1),1)) {
+        if(eq_deeply($candidate->(2, 3, 1),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2.5, 2, 3),"")) {
+        if(eq_deeply($candidate->(2.5, 2, 3),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1.5, 5, 3.5),"")) {
+        if(eq_deeply($candidate->(1.5, 5, 3.5),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2, 6, 2),"")) {
+        if(eq_deeply($candidate->(2, 6, 2),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(4, 2, 2),1)) {
+        if(eq_deeply($candidate->(4, 2, 2),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2.2, 2.2, 2.2),"")) {
+        if(eq_deeply($candidate->(2.2, 2.2, 2.2),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(-4, 6, 2),1)) {
+        if(eq_deeply($candidate->(-4, 6, 2),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2, 1, 1),1)) {
+        if(eq_deeply($candidate->(2, 1, 1),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(3, 4, 7),1)) {
+        if(eq_deeply($candidate->(3, 4, 7),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(3.0, 4, 7),"")) {
+        if(eq_deeply($candidate->(3.0, 4, 7),"")) {
         print "ok!" }else{
         exit 1;
         }

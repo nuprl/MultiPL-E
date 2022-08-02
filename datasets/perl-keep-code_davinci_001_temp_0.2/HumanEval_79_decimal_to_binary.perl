@@ -18,24 +18,24 @@ sub decimal_to_binary {
     return 'db' . $binary . 'db';
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&decimal_to_binary;
-        if(Compare($candidate->(0),"db0db")) {
+        if(eq_deeply($candidate->(0),"db0db")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(32),"db100000db")) {
+        if(eq_deeply($candidate->(32),"db100000db")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(103),"db1100111db")) {
+        if(eq_deeply($candidate->(103),"db1100111db")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(15),"db1111db")) {
+        if(eq_deeply($candidate->(15),"db1111db")) {
         print "ok!" }else{
         exit 1;
         }

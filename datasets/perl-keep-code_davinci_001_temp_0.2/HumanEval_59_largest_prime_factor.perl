@@ -16,28 +16,28 @@ sub largest_prime_factor {
     return $n;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&largest_prime_factor;
-        if(Compare($candidate->(15),5)) {
+        if(eq_deeply($candidate->(15),5)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(27),3)) {
+        if(eq_deeply($candidate->(27),3)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(63),7)) {
+        if(eq_deeply($candidate->(63),7)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(330),11)) {
+        if(eq_deeply($candidate->(330),11)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(13195),29)) {
+        if(eq_deeply($candidate->(13195),29)) {
         print "ok!" }else{
         exit 1;
         }

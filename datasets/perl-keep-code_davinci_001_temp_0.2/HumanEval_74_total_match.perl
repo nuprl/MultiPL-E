@@ -26,179 +26,44 @@ sub total_match {
     }
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&total_match;
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = ();
-    if(Compare($candidate->(\@arg0, \@arg1),\@arg2)) {
+        if(eq_deeply($candidate->([], []),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = ();
-    my @arg3 = ("hi", "admin");
-    my @arg4 = ("hi", "hi");
-    my @arg5 = ("hi", "hi");
-    if(Compare($candidate->(\@arg3, \@arg4),\@arg5)) {
+        if(eq_deeply($candidate->(["hi", "admin"], ["hi", "hi"]),["hi", "hi"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = ();
-    my @arg3 = ("hi", "admin");
-    my @arg4 = ("hi", "hi");
-    my @arg5 = ("hi", "hi");
-    my @arg6 = ("hi", "admin");
-    my @arg7 = ("hi", "hi", "admin", "project");
-    my @arg8 = ("hi", "admin");
-    if(Compare($candidate->(\@arg6, \@arg7),\@arg8)) {
+        if(eq_deeply($candidate->(["hi", "admin"], ["hi", "hi", "admin", "project"]),["hi", "admin"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = ();
-    my @arg3 = ("hi", "admin");
-    my @arg4 = ("hi", "hi");
-    my @arg5 = ("hi", "hi");
-    my @arg6 = ("hi", "admin");
-    my @arg7 = ("hi", "hi", "admin", "project");
-    my @arg8 = ("hi", "admin");
-    my @arg9 = ("4");
-    my @arg10 = ("1", "2", "3", "4", "5");
-    my @arg11 = ("4");
-    if(Compare($candidate->(\@arg9, \@arg10),\@arg11)) {
+        if(eq_deeply($candidate->(["4"], ["1", "2", "3", "4", "5"]),["4"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = ();
-    my @arg3 = ("hi", "admin");
-    my @arg4 = ("hi", "hi");
-    my @arg5 = ("hi", "hi");
-    my @arg6 = ("hi", "admin");
-    my @arg7 = ("hi", "hi", "admin", "project");
-    my @arg8 = ("hi", "admin");
-    my @arg9 = ("4");
-    my @arg10 = ("1", "2", "3", "4", "5");
-    my @arg11 = ("4");
-    my @arg12 = ("hi", "admin");
-    my @arg13 = ("hI", "Hi");
-    my @arg14 = ("hI", "Hi");
-    if(Compare($candidate->(\@arg12, \@arg13),\@arg14)) {
+        if(eq_deeply($candidate->(["hi", "admin"], ["hI", "Hi"]),["hI", "Hi"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = ();
-    my @arg3 = ("hi", "admin");
-    my @arg4 = ("hi", "hi");
-    my @arg5 = ("hi", "hi");
-    my @arg6 = ("hi", "admin");
-    my @arg7 = ("hi", "hi", "admin", "project");
-    my @arg8 = ("hi", "admin");
-    my @arg9 = ("4");
-    my @arg10 = ("1", "2", "3", "4", "5");
-    my @arg11 = ("4");
-    my @arg12 = ("hi", "admin");
-    my @arg13 = ("hI", "Hi");
-    my @arg14 = ("hI", "Hi");
-    my @arg15 = ("hi", "admin");
-    my @arg16 = ("hI", "hi", "hi");
-    my @arg17 = ("hI", "hi", "hi");
-    if(Compare($candidate->(\@arg15, \@arg16),\@arg17)) {
+        if(eq_deeply($candidate->(["hi", "admin"], ["hI", "hi", "hi"]),["hI", "hi", "hi"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = ();
-    my @arg3 = ("hi", "admin");
-    my @arg4 = ("hi", "hi");
-    my @arg5 = ("hi", "hi");
-    my @arg6 = ("hi", "admin");
-    my @arg7 = ("hi", "hi", "admin", "project");
-    my @arg8 = ("hi", "admin");
-    my @arg9 = ("4");
-    my @arg10 = ("1", "2", "3", "4", "5");
-    my @arg11 = ("4");
-    my @arg12 = ("hi", "admin");
-    my @arg13 = ("hI", "Hi");
-    my @arg14 = ("hI", "Hi");
-    my @arg15 = ("hi", "admin");
-    my @arg16 = ("hI", "hi", "hi");
-    my @arg17 = ("hI", "hi", "hi");
-    my @arg18 = ("hi", "admin");
-    my @arg19 = ("hI", "hi", "hii");
-    my @arg20 = ("hi", "admin");
-    if(Compare($candidate->(\@arg18, \@arg19),\@arg20)) {
+        if(eq_deeply($candidate->(["hi", "admin"], ["hI", "hi", "hii"]),["hi", "admin"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = ();
-    my @arg3 = ("hi", "admin");
-    my @arg4 = ("hi", "hi");
-    my @arg5 = ("hi", "hi");
-    my @arg6 = ("hi", "admin");
-    my @arg7 = ("hi", "hi", "admin", "project");
-    my @arg8 = ("hi", "admin");
-    my @arg9 = ("4");
-    my @arg10 = ("1", "2", "3", "4", "5");
-    my @arg11 = ("4");
-    my @arg12 = ("hi", "admin");
-    my @arg13 = ("hI", "Hi");
-    my @arg14 = ("hI", "Hi");
-    my @arg15 = ("hi", "admin");
-    my @arg16 = ("hI", "hi", "hi");
-    my @arg17 = ("hI", "hi", "hi");
-    my @arg18 = ("hi", "admin");
-    my @arg19 = ("hI", "hi", "hii");
-    my @arg20 = ("hi", "admin");
-    my @arg21 = ();
-    my @arg22 = ("this");
-    my @arg23 = ();
-    if(Compare($candidate->(\@arg21, \@arg22),\@arg23)) {
+        if(eq_deeply($candidate->([], ["this"]),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = ();
-    my @arg3 = ("hi", "admin");
-    my @arg4 = ("hi", "hi");
-    my @arg5 = ("hi", "hi");
-    my @arg6 = ("hi", "admin");
-    my @arg7 = ("hi", "hi", "admin", "project");
-    my @arg8 = ("hi", "admin");
-    my @arg9 = ("4");
-    my @arg10 = ("1", "2", "3", "4", "5");
-    my @arg11 = ("4");
-    my @arg12 = ("hi", "admin");
-    my @arg13 = ("hI", "Hi");
-    my @arg14 = ("hI", "Hi");
-    my @arg15 = ("hi", "admin");
-    my @arg16 = ("hI", "hi", "hi");
-    my @arg17 = ("hI", "hi", "hi");
-    my @arg18 = ("hi", "admin");
-    my @arg19 = ("hI", "hi", "hii");
-    my @arg20 = ("hi", "admin");
-    my @arg21 = ();
-    my @arg22 = ("this");
-    my @arg23 = ();
-    my @arg24 = ("this");
-    my @arg25 = ();
-    my @arg26 = ();
-    if(Compare($candidate->(\@arg24, \@arg25),\@arg26)) {
+        if(eq_deeply($candidate->(["this"], []),[])) {
         print "ok!" }else{
         exit 1;
         }

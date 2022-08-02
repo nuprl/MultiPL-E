@@ -43,48 +43,48 @@ sub is_multiply_prime {
     }
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&is_multiply_prime;
-        if(Compare($candidate->(5),"")) {
+        if(eq_deeply($candidate->(5),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(30),1)) {
+        if(eq_deeply($candidate->(30),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(8),1)) {
+        if(eq_deeply($candidate->(8),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(10),"")) {
+        if(eq_deeply($candidate->(10),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(125),1)) {
+        if(eq_deeply($candidate->(125),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(105),1)) {
+        if(eq_deeply($candidate->(105),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(126),"")) {
+        if(eq_deeply($candidate->(126),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(729),"")) {
+        if(eq_deeply($candidate->(729),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(891),"")) {
+        if(eq_deeply($candidate->(891),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1001),1)) {
+        if(eq_deeply($candidate->(1001),1)) {
         print "ok!" }else{
         exit 1;
         }

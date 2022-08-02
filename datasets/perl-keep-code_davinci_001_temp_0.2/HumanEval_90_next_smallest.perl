@@ -25,64 +25,36 @@ sub next_smallest {
     }
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&next_smallest;
-    my @arg0 = (1, 2, 3, 4, 5);
-    if(Compare($candidate->(\@arg0),2)) {
+        if(eq_deeply($candidate->([1, 2, 3, 4, 5]),2)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3, 4, 5);
-    my @arg1 = (5, 1, 4, 3, 2);
-    if(Compare($candidate->(\@arg1),2)) {
+        if(eq_deeply($candidate->([5, 1, 4, 3, 2]),2)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3, 4, 5);
-    my @arg1 = (5, 1, 4, 3, 2);
-    my @arg2 = ();
-    if(Compare($candidate->(\@arg2),#f)) {
+        if(eq_deeply($candidate->([]),undef)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3, 4, 5);
-    my @arg1 = (5, 1, 4, 3, 2);
-    my @arg2 = ();
-    my @arg3 = (1, 1);
-    if(Compare($candidate->(\@arg3),#f)) {
+        if(eq_deeply($candidate->([1, 1]),undef)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3, 4, 5);
-    my @arg1 = (5, 1, 4, 3, 2);
-    my @arg2 = ();
-    my @arg3 = (1, 1);
-    my @arg4 = (1, 1, 1, 1, 0);
-    if(Compare($candidate->(\@arg4),1)) {
+        if(eq_deeply($candidate->([1, 1, 1, 1, 0]),1)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3, 4, 5);
-    my @arg1 = (5, 1, 4, 3, 2);
-    my @arg2 = ();
-    my @arg3 = (1, 1);
-    my @arg4 = (1, 1, 1, 1, 0);
-    my @arg5 = (1, 1);
-    if(Compare($candidate->(\@arg5),#f)) {
+        if(eq_deeply($candidate->([1, 1]),undef)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3, 4, 5);
-    my @arg1 = (5, 1, 4, 3, 2);
-    my @arg2 = ();
-    my @arg3 = (1, 1);
-    my @arg4 = (1, 1, 1, 1, 0);
-    my @arg5 = (1, 1);
-    my @arg6 = (-35, 34, 12, -45);
-    if(Compare($candidate->(\@arg6),-35)) {
+        if(eq_deeply($candidate->([-35, 34, 12, -45]),-35)) {
         print "ok!" }else{
         exit 1;
         }

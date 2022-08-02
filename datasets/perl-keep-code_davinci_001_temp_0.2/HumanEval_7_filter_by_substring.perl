@@ -8,44 +8,24 @@ sub filter_by_substring {
     return grep { $_ =~ /$substring/ } @$strings;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&filter_by_substring;
-    my @arg0 = ();
-    my @arg1 = ();
-    if(Compare($candidate->(\@arg0, "john"),\@arg1)) {
+        if(eq_deeply($candidate->([], "john"),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = ("xxx", "asd", "xxy", "john doe", "xxxAAA", "xxx");
-    my @arg3 = ("xxx", "xxxAAA", "xxx");
-    if(Compare($candidate->(\@arg2, "xxx"),\@arg3)) {
+        if(eq_deeply($candidate->(["xxx", "asd", "xxy", "john doe", "xxxAAA", "xxx"], "xxx"),["xxx", "xxxAAA", "xxx"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = ("xxx", "asd", "xxy", "john doe", "xxxAAA", "xxx");
-    my @arg3 = ("xxx", "xxxAAA", "xxx");
-    my @arg4 = ("xxx", "asd", "aaaxxy", "john doe", "xxxAAA", "xxx");
-    my @arg5 = ("xxx", "aaaxxy", "xxxAAA", "xxx");
-    if(Compare($candidate->(\@arg4, "xx"),\@arg5)) {
+        if(eq_deeply($candidate->(["xxx", "asd", "aaaxxy", "john doe", "xxxAAA", "xxx"], "xx"),["xxx", "aaaxxy", "xxxAAA", "xxx"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = ("xxx", "asd", "xxy", "john doe", "xxxAAA", "xxx");
-    my @arg3 = ("xxx", "xxxAAA", "xxx");
-    my @arg4 = ("xxx", "asd", "aaaxxy", "john doe", "xxxAAA", "xxx");
-    my @arg5 = ("xxx", "aaaxxy", "xxxAAA", "xxx");
-    my @arg6 = ("grunt", "trumpet", "prune", "gruesome");
-    my @arg7 = ("grunt", "prune");
-    if(Compare($candidate->(\@arg6, "run"),\@arg7)) {
+        if(eq_deeply($candidate->(["grunt", "trumpet", "prune", "gruesome"], "run"),["grunt", "prune"])) {
         print "ok!" }else{
         exit 1;
         }

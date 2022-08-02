@@ -10,28 +10,28 @@ sub count_distinct_characters {
     return scalar keys %seen;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&count_distinct_characters;
-        if(Compare($candidate->(""),0)) {
+        if(eq_deeply($candidate->(""),0)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("abcde"),5)) {
+        if(eq_deeply($candidate->("abcde"),5)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("abcdecadeCADE"),5)) {
+        if(eq_deeply($candidate->("abcdecadeCADE"),5)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("aaaaAAAAaaaa"),1)) {
+        if(eq_deeply($candidate->("aaaaAAAAaaaa"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Jerry jERRY JeRRRY"),5)) {
+        if(eq_deeply($candidate->("Jerry jERRY JeRRRY"),5)) {
         print "ok!" }else{
         exit 1;
         }

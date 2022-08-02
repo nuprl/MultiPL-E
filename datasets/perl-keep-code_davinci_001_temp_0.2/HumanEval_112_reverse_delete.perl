@@ -19,44 +19,44 @@ sub reverse_delete {
     return ($result, $result eq reverse($result));
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&reverse_delete;
-    if(Compare($candidate->("abcde", "ae"),("bcd", ))) {
+        if(eq_deeply($candidate->("abcde", "ae"),["bcd", ""])) {
         print "ok!" }else{
         exit 1;
         }
-    if(Compare($candidate->("abcdef", "b"),("acdef", ))) {
+        if(eq_deeply($candidate->("abcdef", "b"),["acdef", ""])) {
         print "ok!" }else{
         exit 1;
         }
-    if(Compare($candidate->("abcdedcba", "ab"),("cdedc", ))) {
+        if(eq_deeply($candidate->("abcdedcba", "ab"),["cdedc", 1])) {
         print "ok!" }else{
         exit 1;
         }
-    if(Compare($candidate->("dwik", "w"),("dik", ))) {
+        if(eq_deeply($candidate->("dwik", "w"),["dik", ""])) {
         print "ok!" }else{
         exit 1;
         }
-    if(Compare($candidate->("a", "a"),("", ))) {
+        if(eq_deeply($candidate->("a", "a"),["", 1])) {
         print "ok!" }else{
         exit 1;
         }
-    if(Compare($candidate->("abcdedcba", ""),("abcdedcba", ))) {
+        if(eq_deeply($candidate->("abcdedcba", ""),["abcdedcba", 1])) {
         print "ok!" }else{
         exit 1;
         }
-    if(Compare($candidate->("abcdedcba", "v"),("abcdedcba", ))) {
+        if(eq_deeply($candidate->("abcdedcba", "v"),["abcdedcba", 1])) {
         print "ok!" }else{
         exit 1;
         }
-    if(Compare($candidate->("vabba", "v"),("abba", ))) {
+        if(eq_deeply($candidate->("vabba", "v"),["abba", 1])) {
         print "ok!" }else{
         exit 1;
         }
-    if(Compare($candidate->("mamma", "mia"),("", ))) {
+        if(eq_deeply($candidate->("mamma", "mia"),["", 1])) {
         print "ok!" }else{
         exit 1;
         }

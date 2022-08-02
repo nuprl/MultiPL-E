@@ -36,43 +36,28 @@ sub move_one_ball {
     return $arr;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&move_one_ball;
-    my @arg0 = (3, 4, 5, 1, 2);
-    if(Compare($candidate->(\@arg0),1)) {
+        if(eq_deeply($candidate->([3, 4, 5, 1, 2]),1)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 4, 5, 1, 2);
-    my @arg1 = (3, 5, 10, 1, 2);
-    if(Compare($candidate->(\@arg1),1)) {
+        if(eq_deeply($candidate->([3, 5, 10, 1, 2]),1)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 4, 5, 1, 2);
-    my @arg1 = (3, 5, 10, 1, 2);
-    my @arg2 = (4, 3, 1, 2);
-    if(Compare($candidate->(\@arg2),"")) {
+        if(eq_deeply($candidate->([4, 3, 1, 2]),"")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 4, 5, 1, 2);
-    my @arg1 = (3, 5, 10, 1, 2);
-    my @arg2 = (4, 3, 1, 2);
-    my @arg3 = (3, 5, 4, 1, 2);
-    if(Compare($candidate->(\@arg3),"")) {
+        if(eq_deeply($candidate->([3, 5, 4, 1, 2]),"")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (3, 4, 5, 1, 2);
-    my @arg1 = (3, 5, 10, 1, 2);
-    my @arg2 = (4, 3, 1, 2);
-    my @arg3 = (3, 5, 4, 1, 2);
-    my @arg4 = ();
-    if(Compare($candidate->(\@arg4),1)) {
+        if(eq_deeply($candidate->([]),1)) {
         print "ok!" }else{
         exit 1;
         }

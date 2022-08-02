@@ -18,34 +18,24 @@ sub f {
     return @res;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&f;
-    my @arg0 = (1, 2, 6, 24, 15);
-    if(Compare($candidate->(5),\@arg0)) {
+        if(eq_deeply($candidate->(5),[1, 2, 6, 24, 15])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 6, 24, 15);
-    my @arg1 = (1, 2, 6, 24, 15, 720, 28);
-    if(Compare($candidate->(7),\@arg1)) {
+        if(eq_deeply($candidate->(7),[1, 2, 6, 24, 15, 720, 28])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 6, 24, 15);
-    my @arg1 = (1, 2, 6, 24, 15, 720, 28);
-    my @arg2 = (1);
-    if(Compare($candidate->(1),\@arg2)) {
+        if(eq_deeply($candidate->(1),[1])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 6, 24, 15);
-    my @arg1 = (1, 2, 6, 24, 15, 720, 28);
-    my @arg2 = (1);
-    my @arg3 = (1, 2, 6);
-    if(Compare($candidate->(3),\@arg3)) {
+        if(eq_deeply($candidate->(3),[1, 2, 6])) {
         print "ok!" }else{
         exit 1;
         }

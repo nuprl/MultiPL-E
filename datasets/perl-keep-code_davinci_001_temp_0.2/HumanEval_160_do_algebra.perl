@@ -36,32 +36,20 @@ sub do_algebra {
     return $result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&do_algebra;
-    my @arg0 = ("**", "*", "+");
-    my @arg1 = (2, 3, 4, 5);
-    if(Compare($candidate->(\@arg0, \@arg1),37)) {
+        if(eq_deeply($candidate->(["**", "*", "+"], [2, 3, 4, 5]),37)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("**", "*", "+");
-    my @arg1 = (2, 3, 4, 5);
-    my @arg2 = ("+", "*", "-");
-    my @arg3 = (2, 3, 4, 5);
-    if(Compare($candidate->(\@arg2, \@arg3),9)) {
+        if(eq_deeply($candidate->(["+", "*", "-"], [2, 3, 4, 5]),9)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("**", "*", "+");
-    my @arg1 = (2, 3, 4, 5);
-    my @arg2 = ("+", "*", "-");
-    my @arg3 = (2, 3, 4, 5);
-    my @arg4 = ("//", "*");
-    my @arg5 = (7, 3, 4);
-    if(Compare($candidate->(\@arg4, \@arg5),8)) {
+        if(eq_deeply($candidate->(["//", "*"], [7, 3, 4]),8)) {
         print "ok!" }else{
         exit 1;
         }

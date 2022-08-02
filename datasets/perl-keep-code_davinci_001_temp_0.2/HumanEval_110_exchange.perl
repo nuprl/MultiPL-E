@@ -36,92 +36,36 @@ sub exchange {
     return "NO";
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&exchange;
-    my @arg0 = (1, 2, 3, 4);
-    my @arg1 = (1, 2, 3, 4);
-    if(Compare($candidate->(\@arg0, \@arg1),"YES")) {
+        if(eq_deeply($candidate->([1, 2, 3, 4], [1, 2, 3, 4]),"YES")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3, 4);
-    my @arg1 = (1, 2, 3, 4);
-    my @arg2 = (1, 2, 3, 4);
-    my @arg3 = (1, 5, 3, 4);
-    if(Compare($candidate->(\@arg2, \@arg3),"NO")) {
+        if(eq_deeply($candidate->([1, 2, 3, 4], [1, 5, 3, 4]),"NO")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3, 4);
-    my @arg1 = (1, 2, 3, 4);
-    my @arg2 = (1, 2, 3, 4);
-    my @arg3 = (1, 5, 3, 4);
-    my @arg4 = (1, 2, 3, 4);
-    my @arg5 = (2, 1, 4, 3);
-    if(Compare($candidate->(\@arg4, \@arg5),"YES")) {
+        if(eq_deeply($candidate->([1, 2, 3, 4], [2, 1, 4, 3]),"YES")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3, 4);
-    my @arg1 = (1, 2, 3, 4);
-    my @arg2 = (1, 2, 3, 4);
-    my @arg3 = (1, 5, 3, 4);
-    my @arg4 = (1, 2, 3, 4);
-    my @arg5 = (2, 1, 4, 3);
-    my @arg6 = (5, 7, 3);
-    my @arg7 = (2, 6, 4);
-    if(Compare($candidate->(\@arg6, \@arg7),"YES")) {
+        if(eq_deeply($candidate->([5, 7, 3], [2, 6, 4]),"YES")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3, 4);
-    my @arg1 = (1, 2, 3, 4);
-    my @arg2 = (1, 2, 3, 4);
-    my @arg3 = (1, 5, 3, 4);
-    my @arg4 = (1, 2, 3, 4);
-    my @arg5 = (2, 1, 4, 3);
-    my @arg6 = (5, 7, 3);
-    my @arg7 = (2, 6, 4);
-    my @arg8 = (5, 7, 3);
-    my @arg9 = (2, 6, 3);
-    if(Compare($candidate->(\@arg8, \@arg9),"NO")) {
+        if(eq_deeply($candidate->([5, 7, 3], [2, 6, 3]),"NO")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3, 4);
-    my @arg1 = (1, 2, 3, 4);
-    my @arg2 = (1, 2, 3, 4);
-    my @arg3 = (1, 5, 3, 4);
-    my @arg4 = (1, 2, 3, 4);
-    my @arg5 = (2, 1, 4, 3);
-    my @arg6 = (5, 7, 3);
-    my @arg7 = (2, 6, 4);
-    my @arg8 = (5, 7, 3);
-    my @arg9 = (2, 6, 3);
-    my @arg10 = (3, 2, 6, 1, 8, 9);
-    my @arg11 = (3, 5, 5, 1, 1, 1);
-    if(Compare($candidate->(\@arg10, \@arg11),"NO")) {
+        if(eq_deeply($candidate->([3, 2, 6, 1, 8, 9], [3, 5, 5, 1, 1, 1]),"NO")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3, 4);
-    my @arg1 = (1, 2, 3, 4);
-    my @arg2 = (1, 2, 3, 4);
-    my @arg3 = (1, 5, 3, 4);
-    my @arg4 = (1, 2, 3, 4);
-    my @arg5 = (2, 1, 4, 3);
-    my @arg6 = (5, 7, 3);
-    my @arg7 = (2, 6, 4);
-    my @arg8 = (5, 7, 3);
-    my @arg9 = (2, 6, 3);
-    my @arg10 = (3, 2, 6, 1, 8, 9);
-    my @arg11 = (3, 5, 5, 1, 1, 1);
-    my @arg12 = (100, 200);
-    my @arg13 = (200, 200);
-    if(Compare($candidate->(\@arg12, \@arg13),"YES")) {
+        if(eq_deeply($candidate->([100, 200], [200, 200]),"YES")) {
         print "ok!" }else{
         exit 1;
         }

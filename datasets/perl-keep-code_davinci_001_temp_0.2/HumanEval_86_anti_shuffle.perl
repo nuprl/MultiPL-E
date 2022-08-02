@@ -17,36 +17,36 @@ sub anti_shuffle {
     return $result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&anti_shuffle;
-        if(Compare($candidate->("Hi"),"Hi")) {
+        if(eq_deeply($candidate->("Hi"),"Hi")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("hello"),"ehllo")) {
+        if(eq_deeply($candidate->("hello"),"ehllo")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("number"),"bemnru")) {
+        if(eq_deeply($candidate->("number"),"bemnru")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("abcd"),"abcd")) {
+        if(eq_deeply($candidate->("abcd"),"abcd")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Hello World!!!"),"Hello !!!Wdlor")) {
+        if(eq_deeply($candidate->("Hello World!!!"),"Hello !!!Wdlor")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(""),"")) {
+        if(eq_deeply($candidate->(""),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Hi. My name is Mister Robot. How are you?"),".Hi My aemn is Meirst .Rboot How aer ?ouy")) {
+        if(eq_deeply($candidate->("Hi. My name is Mister Robot. How are you?"),".Hi My aemn is Meirst .Rboot How aer ?ouy")) {
         print "ok!" }else{
         exit 1;
         }

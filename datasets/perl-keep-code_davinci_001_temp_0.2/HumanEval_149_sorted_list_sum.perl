@@ -17,92 +17,36 @@ sub sorted_list_sum {
     return \@sorted_list;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&sorted_list_sum;
-    my @arg0 = ("aa", "a", "aaa");
-    my @arg1 = ("aa");
-    if(Compare($candidate->(\@arg0),\@arg1)) {
+        if(eq_deeply($candidate->(["aa", "a", "aaa"]),["aa"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("aa", "a", "aaa");
-    my @arg1 = ("aa");
-    my @arg2 = ("school", "AI", "asdf", "b");
-    my @arg3 = ("AI", "asdf", "school");
-    if(Compare($candidate->(\@arg2),\@arg3)) {
+        if(eq_deeply($candidate->(["school", "AI", "asdf", "b"]),["AI", "asdf", "school"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("aa", "a", "aaa");
-    my @arg1 = ("aa");
-    my @arg2 = ("school", "AI", "asdf", "b");
-    my @arg3 = ("AI", "asdf", "school");
-    my @arg4 = ("d", "b", "c", "a");
-    my @arg5 = ();
-    if(Compare($candidate->(\@arg4),\@arg5)) {
+        if(eq_deeply($candidate->(["d", "b", "c", "a"]),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("aa", "a", "aaa");
-    my @arg1 = ("aa");
-    my @arg2 = ("school", "AI", "asdf", "b");
-    my @arg3 = ("AI", "asdf", "school");
-    my @arg4 = ("d", "b", "c", "a");
-    my @arg5 = ();
-    my @arg6 = ("d", "dcba", "abcd", "a");
-    my @arg7 = ("abcd", "dcba");
-    if(Compare($candidate->(\@arg6),\@arg7)) {
+        if(eq_deeply($candidate->(["d", "dcba", "abcd", "a"]),["abcd", "dcba"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("aa", "a", "aaa");
-    my @arg1 = ("aa");
-    my @arg2 = ("school", "AI", "asdf", "b");
-    my @arg3 = ("AI", "asdf", "school");
-    my @arg4 = ("d", "b", "c", "a");
-    my @arg5 = ();
-    my @arg6 = ("d", "dcba", "abcd", "a");
-    my @arg7 = ("abcd", "dcba");
-    my @arg8 = ("AI", "ai", "au");
-    my @arg9 = ("AI", "ai", "au");
-    if(Compare($candidate->(\@arg8),\@arg9)) {
+        if(eq_deeply($candidate->(["AI", "ai", "au"]),["AI", "ai", "au"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("aa", "a", "aaa");
-    my @arg1 = ("aa");
-    my @arg2 = ("school", "AI", "asdf", "b");
-    my @arg3 = ("AI", "asdf", "school");
-    my @arg4 = ("d", "b", "c", "a");
-    my @arg5 = ();
-    my @arg6 = ("d", "dcba", "abcd", "a");
-    my @arg7 = ("abcd", "dcba");
-    my @arg8 = ("AI", "ai", "au");
-    my @arg9 = ("AI", "ai", "au");
-    my @arg10 = ("a", "b", "b", "c", "c", "a");
-    my @arg11 = ();
-    if(Compare($candidate->(\@arg10),\@arg11)) {
+        if(eq_deeply($candidate->(["a", "b", "b", "c", "c", "a"]),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("aa", "a", "aaa");
-    my @arg1 = ("aa");
-    my @arg2 = ("school", "AI", "asdf", "b");
-    my @arg3 = ("AI", "asdf", "school");
-    my @arg4 = ("d", "b", "c", "a");
-    my @arg5 = ();
-    my @arg6 = ("d", "dcba", "abcd", "a");
-    my @arg7 = ("abcd", "dcba");
-    my @arg8 = ("AI", "ai", "au");
-    my @arg9 = ("AI", "ai", "au");
-    my @arg10 = ("a", "b", "b", "c", "c", "a");
-    my @arg11 = ();
-    my @arg12 = ("aaaa", "bbbb", "dd", "cc");
-    my @arg13 = ("cc", "dd", "aaaa", "bbbb");
-    if(Compare($candidate->(\@arg12),\@arg13)) {
+        if(eq_deeply($candidate->(["aaaa", "bbbb", "dd", "cc"]),["cc", "dd", "aaaa", "bbbb"])) {
         print "ok!" }else{
         exit 1;
         }

@@ -30,40 +30,40 @@ sub encrypt {
     return $cipher;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&encrypt;
-        if(Compare($candidate->("hi"),"lm")) {
+        if(eq_deeply($candidate->("hi"),"lm")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("asdfghjkl"),"ewhjklnop")) {
+        if(eq_deeply($candidate->("asdfghjkl"),"ewhjklnop")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("gf"),"kj")) {
+        if(eq_deeply($candidate->("gf"),"kj")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("et"),"ix")) {
+        if(eq_deeply($candidate->("et"),"ix")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("faewfawefaewg"),"jeiajeaijeiak")) {
+        if(eq_deeply($candidate->("faewfawefaewg"),"jeiajeaijeiak")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("hellomyfriend"),"lippsqcjvmirh")) {
+        if(eq_deeply($candidate->("hellomyfriend"),"lippsqcjvmirh")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("dxzdlmnilfuhmilufhlihufnmlimnufhlimnufhfucufh"),"hbdhpqrmpjylqmpyjlpmlyjrqpmqryjlpmqryjljygyjl")) {
+        if(eq_deeply($candidate->("dxzdlmnilfuhmilufhlihufnmlimnufhlimnufhfucufh"),"hbdhpqrmpjylqmpyjlpmlyjrqpmqryjlpmqryjljygyjl")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("a"),"e")) {
+        if(eq_deeply($candidate->("a"),"e")) {
         print "ok!" }else{
         exit 1;
         }

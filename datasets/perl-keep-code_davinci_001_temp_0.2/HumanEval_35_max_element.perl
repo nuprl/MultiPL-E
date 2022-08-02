@@ -12,19 +12,16 @@ sub max_element {
     return $max;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&max_element;
-    my @arg0 = (1, 2, 3);
-    if(Compare($candidate->(\@arg0),3)) {
+        if(eq_deeply($candidate->([1, 2, 3]),3)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (5, 3, -5, 2, -3, 3, 9, 0, 124, 1, -10);
-    if(Compare($candidate->(\@arg1),124)) {
+        if(eq_deeply($candidate->([5, 3, -5, 2, -3, 3, 9, 0, 124, 1, -10]),124)) {
         print "ok!" }else{
         exit 1;
         }

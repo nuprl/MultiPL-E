@@ -14,24 +14,24 @@ sub how_many_times {
     return $count;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&how_many_times;
-        if(Compare($candidate->("", "x"),0)) {
+        if(eq_deeply($candidate->("", "x"),0)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("xyxyxyx", "x"),4)) {
+        if(eq_deeply($candidate->("xyxyxyx", "x"),4)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("cacacacac", "cac"),4)) {
+        if(eq_deeply($candidate->("cacacacac", "cac"),4)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("john doe", "john"),1)) {
+        if(eq_deeply($candidate->("john doe", "john"),1)) {
         print "ok!" }else{
         exit 1;
         }

@@ -6,20 +6,20 @@ sub triangle_area {
     return $a * $h / 2;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&triangle_area;
-        if(Compare($candidate->(5, 3),7.5)) {
+        if(eq_deeply($candidate->(5, 3),7.5)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2, 2),2.0)) {
+        if(eq_deeply($candidate->(2, 2),2.0)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(10, 8),40.0)) {
+        if(eq_deeply($candidate->(10, 8),40.0)) {
         print "ok!" }else{
         exit 1;
         }

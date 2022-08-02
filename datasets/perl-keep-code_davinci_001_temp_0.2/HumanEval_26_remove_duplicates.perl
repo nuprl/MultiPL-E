@@ -15,32 +15,20 @@ sub remove_duplicates {
     return \@result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&remove_duplicates;
-    my @arg0 = ();
-    my @arg1 = ();
-    if(Compare($candidate->(\@arg0),\@arg1)) {
+        if(eq_deeply($candidate->([]),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = (1, 2, 3, 4);
-    my @arg3 = (1, 2, 3, 4);
-    if(Compare($candidate->(\@arg2),\@arg3)) {
+        if(eq_deeply($candidate->([1, 2, 3, 4]),[1, 2, 3, 4])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = (1, 2, 3, 4);
-    my @arg3 = (1, 2, 3, 4);
-    my @arg4 = (1, 2, 3, 2, 4, 3, 5);
-    my @arg5 = (1, 4, 5);
-    if(Compare($candidate->(\@arg4),\@arg5)) {
+        if(eq_deeply($candidate->([1, 2, 3, 2, 4, 3, 5]),[1, 4, 5])) {
         print "ok!" }else{
         exit 1;
         }

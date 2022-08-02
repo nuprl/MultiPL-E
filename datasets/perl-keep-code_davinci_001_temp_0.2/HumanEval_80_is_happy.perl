@@ -38,40 +38,40 @@ sub is_happy {
     return 1;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&is_happy;
-        if(Compare($candidate->("a"),"")) {
+        if(eq_deeply($candidate->("a"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("aa"),"")) {
+        if(eq_deeply($candidate->("aa"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("abcd"),1)) {
+        if(eq_deeply($candidate->("abcd"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("aabb"),"")) {
+        if(eq_deeply($candidate->("aabb"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("adb"),1)) {
+        if(eq_deeply($candidate->("adb"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("xyy"),"")) {
+        if(eq_deeply($candidate->("xyy"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("iopaxpoi"),1)) {
+        if(eq_deeply($candidate->("iopaxpoi"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("iopaxioi"),"")) {
+        if(eq_deeply($candidate->("iopaxioi"),"")) {
         print "ok!" }else{
         exit 1;
         }

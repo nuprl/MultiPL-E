@@ -12,20 +12,20 @@ sub string_xor {
     return $r;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&string_xor;
-        if(Compare($candidate->("111000", "101010"),"010010")) {
+        if(eq_deeply($candidate->("111000", "101010"),"010010")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("1", "1"),"0")) {
+        if(eq_deeply($candidate->("1", "1"),"0")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("0101", "0000"),"0101")) {
+        if(eq_deeply($candidate->("0101", "0000"),"0101")) {
         print "ok!" }else{
         exit 1;
         }

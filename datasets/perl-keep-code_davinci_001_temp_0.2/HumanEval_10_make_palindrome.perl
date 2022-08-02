@@ -24,28 +24,28 @@ sub make_palindrome {
     return $palindrome;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&make_palindrome;
-        if(Compare($candidate->(""),"")) {
+        if(eq_deeply($candidate->(""),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("x"),"x")) {
+        if(eq_deeply($candidate->("x"),"x")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("xyz"),"xyzyx")) {
+        if(eq_deeply($candidate->("xyz"),"xyzyx")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("xyx"),"xyx")) {
+        if(eq_deeply($candidate->("xyx"),"xyx")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("jerry"),"jerryrrej")) {
+        if(eq_deeply($candidate->("jerry"),"jerryrrej")) {
         print "ok!" }else{
         exit 1;
         }

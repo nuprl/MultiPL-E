@@ -15,36 +15,36 @@ sub count_upper {
     return $count;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&count_upper;
-        if(Compare($candidate->("aBCdEf"),1)) {
+        if(eq_deeply($candidate->("aBCdEf"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("abcdefg"),0)) {
+        if(eq_deeply($candidate->("abcdefg"),0)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("dBBE"),0)) {
+        if(eq_deeply($candidate->("dBBE"),0)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("B"),0)) {
+        if(eq_deeply($candidate->("B"),0)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("U"),1)) {
+        if(eq_deeply($candidate->("U"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(""),0)) {
+        if(eq_deeply($candidate->(""),0)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("EEEE"),2)) {
+        if(eq_deeply($candidate->("EEEE"),2)) {
         print "ok!" }else{
         exit 1;
         }

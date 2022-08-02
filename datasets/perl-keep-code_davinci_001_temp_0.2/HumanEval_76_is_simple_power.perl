@@ -15,48 +15,48 @@ sub is_simple_power {
     return 0;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&is_simple_power;
-        if(Compare($candidate->(16, 2),1)) {
+        if(eq_deeply($candidate->(16, 2),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(143214, 16),"")) {
+        if(eq_deeply($candidate->(143214, 16),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(4, 2),1)) {
+        if(eq_deeply($candidate->(4, 2),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(9, 3),1)) {
+        if(eq_deeply($candidate->(9, 3),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(16, 4),1)) {
+        if(eq_deeply($candidate->(16, 4),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(24, 2),"")) {
+        if(eq_deeply($candidate->(24, 2),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(128, 4),"")) {
+        if(eq_deeply($candidate->(128, 4),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(12, 6),"")) {
+        if(eq_deeply($candidate->(12, 6),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1, 1),1)) {
+        if(eq_deeply($candidate->(1, 1),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1, 12),1)) {
+        if(eq_deeply($candidate->(1, 12),1)) {
         print "ok!" }else{
         exit 1;
         }

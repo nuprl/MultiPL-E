@@ -36,36 +36,36 @@ sub bf {
     return @result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&bf;
-        if(Compare($candidate->("Jupiter", "Neptune"),("Saturn", "Uranus"))) {
+        if(eq_deeply($candidate->("Jupiter", "Neptune"),["Saturn", "Uranus"])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Earth", "Mercury"),("Venus"))) {
+        if(eq_deeply($candidate->("Earth", "Mercury"),["Venus"])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Mercury", "Uranus"),("Venus", "Earth", "Mars", "Jupiter", "Saturn"))) {
+        if(eq_deeply($candidate->("Mercury", "Uranus"),["Venus", "Earth", "Mars", "Jupiter", "Saturn"])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Neptune", "Venus"),("Earth", "Mars", "Jupiter", "Saturn", "Uranus"))) {
+        if(eq_deeply($candidate->("Neptune", "Venus"),["Earth", "Mars", "Jupiter", "Saturn", "Uranus"])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Earth", "Earth"),())) {
+        if(eq_deeply($candidate->("Earth", "Earth"),[])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Mars", "Earth"),())) {
+        if(eq_deeply($candidate->("Mars", "Earth"),[])) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Jupiter", "Makemake"),())) {
+        if(eq_deeply($candidate->("Jupiter", "Makemake"),[])) {
         print "ok!" }else{
         exit 1;
         }

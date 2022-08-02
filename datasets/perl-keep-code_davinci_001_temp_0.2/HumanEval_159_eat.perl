@@ -29,53 +29,32 @@ sub eat {
     return [$eaten, $remaining - $eaten];
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&eat;
-    my @arg0 = (11, 4);
-    if(Compare($candidate->(5, 6, 10),\@arg0)) {
+        if(eq_deeply($candidate->(5, 6, 10),[11, 4])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (11, 4);
-    my @arg1 = (12, 1);
-    if(Compare($candidate->(4, 8, 9),\@arg1)) {
+        if(eq_deeply($candidate->(4, 8, 9),[12, 1])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (11, 4);
-    my @arg1 = (12, 1);
-    my @arg2 = (11, 0);
-    if(Compare($candidate->(1, 10, 10),\@arg2)) {
+        if(eq_deeply($candidate->(1, 10, 10),[11, 0])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (11, 4);
-    my @arg1 = (12, 1);
-    my @arg2 = (11, 0);
-    my @arg3 = (7, 0);
-    if(Compare($candidate->(2, 11, 5),\@arg3)) {
+        if(eq_deeply($candidate->(2, 11, 5),[7, 0])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (11, 4);
-    my @arg1 = (12, 1);
-    my @arg2 = (11, 0);
-    my @arg3 = (7, 0);
-    my @arg4 = (9, 2);
-    if(Compare($candidate->(4, 5, 7),\@arg4)) {
+        if(eq_deeply($candidate->(4, 5, 7),[9, 2])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (11, 4);
-    my @arg1 = (12, 1);
-    my @arg2 = (11, 0);
-    my @arg3 = (7, 0);
-    my @arg4 = (9, 2);
-    my @arg5 = (5, 0);
-    if(Compare($candidate->(4, 5, 1),\@arg5)) {
+        if(eq_deeply($candidate->(4, 5, 1),[5, 0])) {
         print "ok!" }else{
         exit 1;
         }

@@ -31,34 +31,24 @@ sub get_odd_collatz {
     return @odd_collatz;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&get_odd_collatz;
-    my @arg0 = (1, 5, 7, 11, 13, 17);
-    if(Compare($candidate->(14),\@arg0)) {
+        if(eq_deeply($candidate->(14),[1, 5, 7, 11, 13, 17])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 5, 7, 11, 13, 17);
-    my @arg1 = (1, 5);
-    if(Compare($candidate->(5),\@arg1)) {
+        if(eq_deeply($candidate->(5),[1, 5])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 5, 7, 11, 13, 17);
-    my @arg1 = (1, 5);
-    my @arg2 = (1, 3, 5);
-    if(Compare($candidate->(12),\@arg2)) {
+        if(eq_deeply($candidate->(12),[1, 3, 5])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 5, 7, 11, 13, 17);
-    my @arg1 = (1, 5);
-    my @arg2 = (1, 3, 5);
-    my @arg3 = (1);
-    if(Compare($candidate->(1),\@arg3)) {
+        if(eq_deeply($candidate->(1),[1])) {
         print "ok!" }else{
         exit 1;
         }

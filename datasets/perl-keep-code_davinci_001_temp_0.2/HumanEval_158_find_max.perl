@@ -22,103 +22,48 @@ sub find_max {
     return $max_word;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&find_max;
-    my @arg0 = ("name", "of", "string");
-    if(Compare($candidate->(\@arg0),"string")) {
+        if(eq_deeply($candidate->(["name", "of", "string"]),"string")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("name", "of", "string");
-    my @arg1 = ("name", "enam", "game");
-    if(Compare($candidate->(\@arg1),"enam")) {
+        if(eq_deeply($candidate->(["name", "enam", "game"]),"enam")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("name", "of", "string");
-    my @arg1 = ("name", "enam", "game");
-    my @arg2 = ("aaaaaaa", "bb", "cc");
-    if(Compare($candidate->(\@arg2),"aaaaaaa")) {
+        if(eq_deeply($candidate->(["aaaaaaa", "bb", "cc"]),"aaaaaaa")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("name", "of", "string");
-    my @arg1 = ("name", "enam", "game");
-    my @arg2 = ("aaaaaaa", "bb", "cc");
-    my @arg3 = ("abc", "cba");
-    if(Compare($candidate->(\@arg3),"abc")) {
+        if(eq_deeply($candidate->(["abc", "cba"]),"abc")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("name", "of", "string");
-    my @arg1 = ("name", "enam", "game");
-    my @arg2 = ("aaaaaaa", "bb", "cc");
-    my @arg3 = ("abc", "cba");
-    my @arg4 = ("play", "this", "game", "of", "footbott");
-    if(Compare($candidate->(\@arg4),"footbott")) {
+        if(eq_deeply($candidate->(["play", "this", "game", "of", "footbott"]),"footbott")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("name", "of", "string");
-    my @arg1 = ("name", "enam", "game");
-    my @arg2 = ("aaaaaaa", "bb", "cc");
-    my @arg3 = ("abc", "cba");
-    my @arg4 = ("play", "this", "game", "of", "footbott");
-    my @arg5 = ("we", "are", "gonna", "rock");
-    if(Compare($candidate->(\@arg5),"gonna")) {
+        if(eq_deeply($candidate->(["we", "are", "gonna", "rock"]),"gonna")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("name", "of", "string");
-    my @arg1 = ("name", "enam", "game");
-    my @arg2 = ("aaaaaaa", "bb", "cc");
-    my @arg3 = ("abc", "cba");
-    my @arg4 = ("play", "this", "game", "of", "footbott");
-    my @arg5 = ("we", "are", "gonna", "rock");
-    my @arg6 = ("we", "are", "a", "mad", "nation");
-    if(Compare($candidate->(\@arg6),"nation")) {
+        if(eq_deeply($candidate->(["we", "are", "a", "mad", "nation"]),"nation")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("name", "of", "string");
-    my @arg1 = ("name", "enam", "game");
-    my @arg2 = ("aaaaaaa", "bb", "cc");
-    my @arg3 = ("abc", "cba");
-    my @arg4 = ("play", "this", "game", "of", "footbott");
-    my @arg5 = ("we", "are", "gonna", "rock");
-    my @arg6 = ("we", "are", "a", "mad", "nation");
-    my @arg7 = ("this", "is", "a", "prrk");
-    if(Compare($candidate->(\@arg7),"this")) {
+        if(eq_deeply($candidate->(["this", "is", "a", "prrk"]),"this")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("name", "of", "string");
-    my @arg1 = ("name", "enam", "game");
-    my @arg2 = ("aaaaaaa", "bb", "cc");
-    my @arg3 = ("abc", "cba");
-    my @arg4 = ("play", "this", "game", "of", "footbott");
-    my @arg5 = ("we", "are", "gonna", "rock");
-    my @arg6 = ("we", "are", "a", "mad", "nation");
-    my @arg7 = ("this", "is", "a", "prrk");
-    my @arg8 = ("b");
-    if(Compare($candidate->(\@arg8),"b")) {
+        if(eq_deeply($candidate->(["b"]),"b")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("name", "of", "string");
-    my @arg1 = ("name", "enam", "game");
-    my @arg2 = ("aaaaaaa", "bb", "cc");
-    my @arg3 = ("abc", "cba");
-    my @arg4 = ("play", "this", "game", "of", "footbott");
-    my @arg5 = ("we", "are", "gonna", "rock");
-    my @arg6 = ("we", "are", "a", "mad", "nation");
-    my @arg7 = ("this", "is", "a", "prrk");
-    my @arg8 = ("b");
-    my @arg9 = ("play", "play", "play");
-    if(Compare($candidate->(\@arg9),"play")) {
+        if(eq_deeply($candidate->(["play", "play", "play"]),"play")) {
         print "ok!" }else{
         exit 1;
         }

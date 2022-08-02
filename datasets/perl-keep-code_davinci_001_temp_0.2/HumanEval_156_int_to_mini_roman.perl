@@ -54,64 +54,64 @@ sub int_to_mini_roman {
     return $roman;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&int_to_mini_roman;
-        if(Compare($candidate->(19),"xix")) {
+        if(eq_deeply($candidate->(19),"xix")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(152),"clii")) {
+        if(eq_deeply($candidate->(152),"clii")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(251),"ccli")) {
+        if(eq_deeply($candidate->(251),"ccli")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(426),"cdxxvi")) {
+        if(eq_deeply($candidate->(426),"cdxxvi")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(500),"d")) {
+        if(eq_deeply($candidate->(500),"d")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1),"i")) {
+        if(eq_deeply($candidate->(1),"i")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(4),"iv")) {
+        if(eq_deeply($candidate->(4),"iv")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(43),"xliii")) {
+        if(eq_deeply($candidate->(43),"xliii")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(90),"xc")) {
+        if(eq_deeply($candidate->(90),"xc")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(94),"xciv")) {
+        if(eq_deeply($candidate->(94),"xciv")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(532),"dxxxii")) {
+        if(eq_deeply($candidate->(532),"dxxxii")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(900),"cm")) {
+        if(eq_deeply($candidate->(900),"cm")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(994),"cmxciv")) {
+        if(eq_deeply($candidate->(994),"cmxciv")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1000),"m")) {
+        if(eq_deeply($candidate->(1000),"m")) {
         print "ok!" }else{
         exit 1;
         }

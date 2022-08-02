@@ -24,28 +24,28 @@ sub encode {
     return $encoded;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&encode;
-        if(Compare($candidate->("TEST"),"tgst")) {
+        if(eq_deeply($candidate->("TEST"),"tgst")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Mudasir"),"mWDCSKR")) {
+        if(eq_deeply($candidate->("Mudasir"),"mWDCSKR")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("YES"),"ygs")) {
+        if(eq_deeply($candidate->("YES"),"ygs")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("This is a message"),"tHKS KS C MGSSCGG")) {
+        if(eq_deeply($candidate->("This is a message"),"tHKS KS C MGSSCGG")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("I DoNt KnOw WhAt tO WrItE"),"k dQnT kNqW wHcT Tq wRkTg")) {
+        if(eq_deeply($candidate->("I DoNt KnOw WhAt tO WrItE"),"k dQnT kNqW wHcT Tq wRkTg")) {
         print "ok!" }else{
         exit 1;
         }

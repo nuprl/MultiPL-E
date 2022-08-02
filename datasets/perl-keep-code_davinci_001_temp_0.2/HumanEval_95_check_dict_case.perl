@@ -22,36 +22,36 @@ sub check_dict_case {
     return $is_lower || $is_upper;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&check_dict_case;
-        if(Compare($candidate->(("p" => "pineapple", "b" => "banana",)),1)) {
+        if(eq_deeply($candidate->({"p" => "pineapple", "b" => "banana"}),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(("p" => "pineapple", "A" => "banana", "B" => "banana",)),"")) {
+        if(eq_deeply($candidate->({"p" => "pineapple", "A" => "banana", "B" => "banana"}),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(("p" => "pineapple", "5" => "banana", "a" => "apple",)),"")) {
+        if(eq_deeply($candidate->({"p" => "pineapple", "5" => "banana", "a" => "apple"}),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(("Name" => "John", "Age" => "36", "City" => "Houston",)),"")) {
+        if(eq_deeply($candidate->({"Name" => "John", "Age" => "36", "City" => "Houston"}),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(("STATE" => "NC", "ZIP" => "12345",)),1)) {
+        if(eq_deeply($candidate->({"STATE" => "NC", "ZIP" => "12345"}),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(("fruit" => "Orange", "taste" => "Sweet",)),1)) {
+        if(eq_deeply($candidate->({"fruit" => "Orange", "taste" => "Sweet"}),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->((,)),"")) {
+        if(eq_deeply($candidate->({}),"")) {
         print "ok!" }else{
         exit 1;
         }

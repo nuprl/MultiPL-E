@@ -15,36 +15,36 @@ sub digits {
     return $product;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&digits;
-        if(Compare($candidate->(5),5)) {
+        if(eq_deeply($candidate->(5),5)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(54),5)) {
+        if(eq_deeply($candidate->(54),5)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(120),1)) {
+        if(eq_deeply($candidate->(120),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(5014),5)) {
+        if(eq_deeply($candidate->(5014),5)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(98765),315)) {
+        if(eq_deeply($candidate->(98765),315)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(5576543),2625)) {
+        if(eq_deeply($candidate->(5576543),2625)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2468),0)) {
+        if(eq_deeply($candidate->(2468),0)) {
         print "ok!" }else{
         exit 1;
         }

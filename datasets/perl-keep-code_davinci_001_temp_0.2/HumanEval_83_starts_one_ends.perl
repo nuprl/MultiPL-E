@@ -19,28 +19,28 @@ sub starts_one_ends {
     return $count;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&starts_one_ends;
-        if(Compare($candidate->(1),1)) {
+        if(eq_deeply($candidate->(1),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2),18)) {
+        if(eq_deeply($candidate->(2),18)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(3),180)) {
+        if(eq_deeply($candidate->(3),180)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(4),1800)) {
+        if(eq_deeply($candidate->(4),1800)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(5),18000)) {
+        if(eq_deeply($candidate->(5),18000)) {
         print "ok!" }else{
         exit 1;
         }

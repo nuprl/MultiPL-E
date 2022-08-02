@@ -38,64 +38,64 @@ sub is_nested {
     return @$stack == 0;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&is_nested;
-        if(Compare($candidate->("[[]]"),1)) {
+        if(eq_deeply($candidate->("[[]]"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("[]]]]]]][[[[[]"),"")) {
+        if(eq_deeply($candidate->("[]]]]]]][[[[[]"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("[][]"),"")) {
+        if(eq_deeply($candidate->("[][]"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("[]"),"")) {
+        if(eq_deeply($candidate->("[]"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("[[[[]]]]"),1)) {
+        if(eq_deeply($candidate->("[[[[]]]]"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("[]]]]]]]]]]"),"")) {
+        if(eq_deeply($candidate->("[]]]]]]]]]]"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("[][][[]]"),1)) {
+        if(eq_deeply($candidate->("[][][[]]"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("[[]"),"")) {
+        if(eq_deeply($candidate->("[[]"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("[]]"),"")) {
+        if(eq_deeply($candidate->("[]]"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("[[]][["),1)) {
+        if(eq_deeply($candidate->("[[]][["),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("[[][]]"),1)) {
+        if(eq_deeply($candidate->("[[][]]"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(""),"")) {
+        if(eq_deeply($candidate->(""),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("[[[[[[[["),"")) {
+        if(eq_deeply($candidate->("[[[[[[[["),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("]]]]]]]]"),"")) {
+        if(eq_deeply($candidate->("]]]]]]]]"),"")) {
         print "ok!" }else{
         exit 1;
         }

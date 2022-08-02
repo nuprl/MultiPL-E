@@ -15,44 +15,44 @@ sub triangle_area {
     }
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&triangle_area;
-        if(Compare($candidate->(3, 4, 5),6.0)) {
+        if(eq_deeply($candidate->(3, 4, 5),6.0)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1, 2, 10),-1)) {
+        if(eq_deeply($candidate->(1, 2, 10),-1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(4, 8, 5),8.18)) {
+        if(eq_deeply($candidate->(4, 8, 5),8.18)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2, 2, 2),1.73)) {
+        if(eq_deeply($candidate->(2, 2, 2),1.73)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1, 2, 3),-1)) {
+        if(eq_deeply($candidate->(1, 2, 3),-1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(10, 5, 7),16.25)) {
+        if(eq_deeply($candidate->(10, 5, 7),16.25)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2, 6, 3),-1)) {
+        if(eq_deeply($candidate->(2, 6, 3),-1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1, 1, 1),0.43)) {
+        if(eq_deeply($candidate->(1, 1, 1),0.43)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2, 2, 10),-1)) {
+        if(eq_deeply($candidate->(2, 2, 10),-1)) {
         print "ok!" }else{
         exit 1;
         }

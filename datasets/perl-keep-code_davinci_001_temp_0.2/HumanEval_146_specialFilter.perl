@@ -15,64 +15,36 @@ sub specialFilter {
     return $count;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&specialFilter;
-    my @arg0 = (5, -2, 1, -5);
-    if(Compare($candidate->(\@arg0),0)) {
+        if(eq_deeply($candidate->([5, -2, 1, -5]),0)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (5, -2, 1, -5);
-    my @arg1 = (15, -73, 14, -15);
-    if(Compare($candidate->(\@arg1),1)) {
+        if(eq_deeply($candidate->([15, -73, 14, -15]),1)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (5, -2, 1, -5);
-    my @arg1 = (15, -73, 14, -15);
-    my @arg2 = (33, -2, -3, 45, 21, 109);
-    if(Compare($candidate->(\@arg2),2)) {
+        if(eq_deeply($candidate->([33, -2, -3, 45, 21, 109]),2)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (5, -2, 1, -5);
-    my @arg1 = (15, -73, 14, -15);
-    my @arg2 = (33, -2, -3, 45, 21, 109);
-    my @arg3 = (43, -12, 93, 125, 121, 109);
-    if(Compare($candidate->(\@arg3),4)) {
+        if(eq_deeply($candidate->([43, -12, 93, 125, 121, 109]),4)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (5, -2, 1, -5);
-    my @arg1 = (15, -73, 14, -15);
-    my @arg2 = (33, -2, -3, 45, 21, 109);
-    my @arg3 = (43, -12, 93, 125, 121, 109);
-    my @arg4 = (71, -2, -33, 75, 21, 19);
-    if(Compare($candidate->(\@arg4),3)) {
+        if(eq_deeply($candidate->([71, -2, -33, 75, 21, 19]),3)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (5, -2, 1, -5);
-    my @arg1 = (15, -73, 14, -15);
-    my @arg2 = (33, -2, -3, 45, 21, 109);
-    my @arg3 = (43, -12, 93, 125, 121, 109);
-    my @arg4 = (71, -2, -33, 75, 21, 19);
-    my @arg5 = (1);
-    if(Compare($candidate->(\@arg5),0)) {
+        if(eq_deeply($candidate->([1]),0)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (5, -2, 1, -5);
-    my @arg1 = (15, -73, 14, -15);
-    my @arg2 = (33, -2, -3, 45, 21, 109);
-    my @arg3 = (43, -12, 93, 125, 121, 109);
-    my @arg4 = (71, -2, -33, 75, 21, 19);
-    my @arg5 = (1);
-    my @arg6 = ();
-    if(Compare($candidate->(\@arg6),0)) {
+        if(eq_deeply($candidate->([]),0)) {
         print "ok!" }else{
         exit 1;
         }

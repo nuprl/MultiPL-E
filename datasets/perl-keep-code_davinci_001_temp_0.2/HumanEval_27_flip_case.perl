@@ -7,20 +7,20 @@ sub flip_case {
     return $string;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&flip_case;
-        if(Compare($candidate->(""),"")) {
+        if(eq_deeply($candidate->(""),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Hello!"),"hELLO!")) {
+        if(eq_deeply($candidate->("Hello!"),"hELLO!")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("These violent delights have violent ends"),"tHESE VIOLENT DELIGHTS HAVE VIOLENT ENDS")) {
+        if(eq_deeply($candidate->("These violent delights have violent ends"),"tHESE VIOLENT DELIGHTS HAVE VIOLENT ENDS")) {
         print "ok!" }else{
         exit 1;
         }

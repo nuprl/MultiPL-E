@@ -62,414 +62,52 @@ sub minPath {
                 $i--;
            
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&minPath;
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (4, 5, 6);
-    my @arg2 = (7, 8, 9);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    my @arg4 = (1, 2, 1);
-    if(Compare($candidate->(\@arg3, 3),\@arg4)) {
+        if(eq_deeply($candidate->([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 3),[1, 2, 1])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (4, 5, 6);
-    my @arg2 = (7, 8, 9);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    my @arg4 = (1, 2, 1);
-    my @arg5 = (5, 9, 3);
-    my @arg6 = (4, 1, 6);
-    my @arg7 = (7, 8, 2);
-    my @arg8 = (\@arg5, \@arg6, \@arg7);
-    my @arg9 = (1);
-    if(Compare($candidate->(\@arg8, 1),\@arg9)) {
+        if(eq_deeply($candidate->([[5, 9, 3], [4, 1, 6], [7, 8, 2]], 1),[1])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (4, 5, 6);
-    my @arg2 = (7, 8, 9);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    my @arg4 = (1, 2, 1);
-    my @arg5 = (5, 9, 3);
-    my @arg6 = (4, 1, 6);
-    my @arg7 = (7, 8, 2);
-    my @arg8 = (\@arg5, \@arg6, \@arg7);
-    my @arg9 = (1);
-    my @arg10 = (1, 2, 3, 4);
-    my @arg11 = (5, 6, 7, 8);
-    my @arg12 = (9, 10, 11, 12);
-    my @arg13 = (13, 14, 15, 16);
-    my @arg14 = (\@arg10, \@arg11, \@arg12, \@arg13);
-    my @arg15 = (1, 2, 1, 2);
-    if(Compare($candidate->(\@arg14, 4),\@arg15)) {
+        if(eq_deeply($candidate->([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]], 4),[1, 2, 1, 2])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (4, 5, 6);
-    my @arg2 = (7, 8, 9);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    my @arg4 = (1, 2, 1);
-    my @arg5 = (5, 9, 3);
-    my @arg6 = (4, 1, 6);
-    my @arg7 = (7, 8, 2);
-    my @arg8 = (\@arg5, \@arg6, \@arg7);
-    my @arg9 = (1);
-    my @arg10 = (1, 2, 3, 4);
-    my @arg11 = (5, 6, 7, 8);
-    my @arg12 = (9, 10, 11, 12);
-    my @arg13 = (13, 14, 15, 16);
-    my @arg14 = (\@arg10, \@arg11, \@arg12, \@arg13);
-    my @arg15 = (1, 2, 1, 2);
-    my @arg16 = (6, 4, 13, 10);
-    my @arg17 = (5, 7, 12, 1);
-    my @arg18 = (3, 16, 11, 15);
-    my @arg19 = (8, 14, 9, 2);
-    my @arg20 = (\@arg16, \@arg17, \@arg18, \@arg19);
-    my @arg21 = (1, 10, 1, 10, 1, 10, 1);
-    if(Compare($candidate->(\@arg20, 7),\@arg21)) {
+        if(eq_deeply($candidate->([[6, 4, 13, 10], [5, 7, 12, 1], [3, 16, 11, 15], [8, 14, 9, 2]], 7),[1, 10, 1, 10, 1, 10, 1])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (4, 5, 6);
-    my @arg2 = (7, 8, 9);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    my @arg4 = (1, 2, 1);
-    my @arg5 = (5, 9, 3);
-    my @arg6 = (4, 1, 6);
-    my @arg7 = (7, 8, 2);
-    my @arg8 = (\@arg5, \@arg6, \@arg7);
-    my @arg9 = (1);
-    my @arg10 = (1, 2, 3, 4);
-    my @arg11 = (5, 6, 7, 8);
-    my @arg12 = (9, 10, 11, 12);
-    my @arg13 = (13, 14, 15, 16);
-    my @arg14 = (\@arg10, \@arg11, \@arg12, \@arg13);
-    my @arg15 = (1, 2, 1, 2);
-    my @arg16 = (6, 4, 13, 10);
-    my @arg17 = (5, 7, 12, 1);
-    my @arg18 = (3, 16, 11, 15);
-    my @arg19 = (8, 14, 9, 2);
-    my @arg20 = (\@arg16, \@arg17, \@arg18, \@arg19);
-    my @arg21 = (1, 10, 1, 10, 1, 10, 1);
-    my @arg22 = (8, 14, 9, 2);
-    my @arg23 = (6, 4, 13, 15);
-    my @arg24 = (5, 7, 1, 12);
-    my @arg25 = (3, 10, 11, 16);
-    my @arg26 = (\@arg22, \@arg23, \@arg24, \@arg25);
-    my @arg27 = (1, 7, 1, 7, 1);
-    if(Compare($candidate->(\@arg26, 5),\@arg27)) {
+        if(eq_deeply($candidate->([[8, 14, 9, 2], [6, 4, 13, 15], [5, 7, 1, 12], [3, 10, 11, 16]], 5),[1, 7, 1, 7, 1])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (4, 5, 6);
-    my @arg2 = (7, 8, 9);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    my @arg4 = (1, 2, 1);
-    my @arg5 = (5, 9, 3);
-    my @arg6 = (4, 1, 6);
-    my @arg7 = (7, 8, 2);
-    my @arg8 = (\@arg5, \@arg6, \@arg7);
-    my @arg9 = (1);
-    my @arg10 = (1, 2, 3, 4);
-    my @arg11 = (5, 6, 7, 8);
-    my @arg12 = (9, 10, 11, 12);
-    my @arg13 = (13, 14, 15, 16);
-    my @arg14 = (\@arg10, \@arg11, \@arg12, \@arg13);
-    my @arg15 = (1, 2, 1, 2);
-    my @arg16 = (6, 4, 13, 10);
-    my @arg17 = (5, 7, 12, 1);
-    my @arg18 = (3, 16, 11, 15);
-    my @arg19 = (8, 14, 9, 2);
-    my @arg20 = (\@arg16, \@arg17, \@arg18, \@arg19);
-    my @arg21 = (1, 10, 1, 10, 1, 10, 1);
-    my @arg22 = (8, 14, 9, 2);
-    my @arg23 = (6, 4, 13, 15);
-    my @arg24 = (5, 7, 1, 12);
-    my @arg25 = (3, 10, 11, 16);
-    my @arg26 = (\@arg22, \@arg23, \@arg24, \@arg25);
-    my @arg27 = (1, 7, 1, 7, 1);
-    my @arg28 = (11, 8, 7, 2);
-    my @arg29 = (5, 16, 14, 4);
-    my @arg30 = (9, 3, 15, 6);
-    my @arg31 = (12, 13, 10, 1);
-    my @arg32 = (\@arg28, \@arg29, \@arg30, \@arg31);
-    my @arg33 = (1, 6, 1, 6, 1, 6, 1, 6, 1);
-    if(Compare($candidate->(\@arg32, 9),\@arg33)) {
+        if(eq_deeply($candidate->([[11, 8, 7, 2], [5, 16, 14, 4], [9, 3, 15, 6], [12, 13, 10, 1]], 9),[1, 6, 1, 6, 1, 6, 1, 6, 1])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (4, 5, 6);
-    my @arg2 = (7, 8, 9);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    my @arg4 = (1, 2, 1);
-    my @arg5 = (5, 9, 3);
-    my @arg6 = (4, 1, 6);
-    my @arg7 = (7, 8, 2);
-    my @arg8 = (\@arg5, \@arg6, \@arg7);
-    my @arg9 = (1);
-    my @arg10 = (1, 2, 3, 4);
-    my @arg11 = (5, 6, 7, 8);
-    my @arg12 = (9, 10, 11, 12);
-    my @arg13 = (13, 14, 15, 16);
-    my @arg14 = (\@arg10, \@arg11, \@arg12, \@arg13);
-    my @arg15 = (1, 2, 1, 2);
-    my @arg16 = (6, 4, 13, 10);
-    my @arg17 = (5, 7, 12, 1);
-    my @arg18 = (3, 16, 11, 15);
-    my @arg19 = (8, 14, 9, 2);
-    my @arg20 = (\@arg16, \@arg17, \@arg18, \@arg19);
-    my @arg21 = (1, 10, 1, 10, 1, 10, 1);
-    my @arg22 = (8, 14, 9, 2);
-    my @arg23 = (6, 4, 13, 15);
-    my @arg24 = (5, 7, 1, 12);
-    my @arg25 = (3, 10, 11, 16);
-    my @arg26 = (\@arg22, \@arg23, \@arg24, \@arg25);
-    my @arg27 = (1, 7, 1, 7, 1);
-    my @arg28 = (11, 8, 7, 2);
-    my @arg29 = (5, 16, 14, 4);
-    my @arg30 = (9, 3, 15, 6);
-    my @arg31 = (12, 13, 10, 1);
-    my @arg32 = (\@arg28, \@arg29, \@arg30, \@arg31);
-    my @arg33 = (1, 6, 1, 6, 1, 6, 1, 6, 1);
-    my @arg34 = (12, 13, 10, 1);
-    my @arg35 = (9, 3, 15, 6);
-    my @arg36 = (5, 16, 14, 4);
-    my @arg37 = (11, 8, 7, 2);
-    my @arg38 = (\@arg34, \@arg35, \@arg36, \@arg37);
-    my @arg39 = (1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6);
-    if(Compare($candidate->(\@arg38, 12),\@arg39)) {
+        if(eq_deeply($candidate->([[12, 13, 10, 1], [9, 3, 15, 6], [5, 16, 14, 4], [11, 8, 7, 2]], 12),[1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (4, 5, 6);
-    my @arg2 = (7, 8, 9);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    my @arg4 = (1, 2, 1);
-    my @arg5 = (5, 9, 3);
-    my @arg6 = (4, 1, 6);
-    my @arg7 = (7, 8, 2);
-    my @arg8 = (\@arg5, \@arg6, \@arg7);
-    my @arg9 = (1);
-    my @arg10 = (1, 2, 3, 4);
-    my @arg11 = (5, 6, 7, 8);
-    my @arg12 = (9, 10, 11, 12);
-    my @arg13 = (13, 14, 15, 16);
-    my @arg14 = (\@arg10, \@arg11, \@arg12, \@arg13);
-    my @arg15 = (1, 2, 1, 2);
-    my @arg16 = (6, 4, 13, 10);
-    my @arg17 = (5, 7, 12, 1);
-    my @arg18 = (3, 16, 11, 15);
-    my @arg19 = (8, 14, 9, 2);
-    my @arg20 = (\@arg16, \@arg17, \@arg18, \@arg19);
-    my @arg21 = (1, 10, 1, 10, 1, 10, 1);
-    my @arg22 = (8, 14, 9, 2);
-    my @arg23 = (6, 4, 13, 15);
-    my @arg24 = (5, 7, 1, 12);
-    my @arg25 = (3, 10, 11, 16);
-    my @arg26 = (\@arg22, \@arg23, \@arg24, \@arg25);
-    my @arg27 = (1, 7, 1, 7, 1);
-    my @arg28 = (11, 8, 7, 2);
-    my @arg29 = (5, 16, 14, 4);
-    my @arg30 = (9, 3, 15, 6);
-    my @arg31 = (12, 13, 10, 1);
-    my @arg32 = (\@arg28, \@arg29, \@arg30, \@arg31);
-    my @arg33 = (1, 6, 1, 6, 1, 6, 1, 6, 1);
-    my @arg34 = (12, 13, 10, 1);
-    my @arg35 = (9, 3, 15, 6);
-    my @arg36 = (5, 16, 14, 4);
-    my @arg37 = (11, 8, 7, 2);
-    my @arg38 = (\@arg34, \@arg35, \@arg36, \@arg37);
-    my @arg39 = (1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6);
-    my @arg40 = (2, 7, 4);
-    my @arg41 = (3, 1, 5);
-    my @arg42 = (6, 8, 9);
-    my @arg43 = (\@arg40, \@arg41, \@arg42);
-    my @arg44 = (1, 3, 1, 3, 1, 3, 1, 3);
-    if(Compare($candidate->(\@arg43, 8),\@arg44)) {
+        if(eq_deeply($candidate->([[2, 7, 4], [3, 1, 5], [6, 8, 9]], 8),[1, 3, 1, 3, 1, 3, 1, 3])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (4, 5, 6);
-    my @arg2 = (7, 8, 9);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    my @arg4 = (1, 2, 1);
-    my @arg5 = (5, 9, 3);
-    my @arg6 = (4, 1, 6);
-    my @arg7 = (7, 8, 2);
-    my @arg8 = (\@arg5, \@arg6, \@arg7);
-    my @arg9 = (1);
-    my @arg10 = (1, 2, 3, 4);
-    my @arg11 = (5, 6, 7, 8);
-    my @arg12 = (9, 10, 11, 12);
-    my @arg13 = (13, 14, 15, 16);
-    my @arg14 = (\@arg10, \@arg11, \@arg12, \@arg13);
-    my @arg15 = (1, 2, 1, 2);
-    my @arg16 = (6, 4, 13, 10);
-    my @arg17 = (5, 7, 12, 1);
-    my @arg18 = (3, 16, 11, 15);
-    my @arg19 = (8, 14, 9, 2);
-    my @arg20 = (\@arg16, \@arg17, \@arg18, \@arg19);
-    my @arg21 = (1, 10, 1, 10, 1, 10, 1);
-    my @arg22 = (8, 14, 9, 2);
-    my @arg23 = (6, 4, 13, 15);
-    my @arg24 = (5, 7, 1, 12);
-    my @arg25 = (3, 10, 11, 16);
-    my @arg26 = (\@arg22, \@arg23, \@arg24, \@arg25);
-    my @arg27 = (1, 7, 1, 7, 1);
-    my @arg28 = (11, 8, 7, 2);
-    my @arg29 = (5, 16, 14, 4);
-    my @arg30 = (9, 3, 15, 6);
-    my @arg31 = (12, 13, 10, 1);
-    my @arg32 = (\@arg28, \@arg29, \@arg30, \@arg31);
-    my @arg33 = (1, 6, 1, 6, 1, 6, 1, 6, 1);
-    my @arg34 = (12, 13, 10, 1);
-    my @arg35 = (9, 3, 15, 6);
-    my @arg36 = (5, 16, 14, 4);
-    my @arg37 = (11, 8, 7, 2);
-    my @arg38 = (\@arg34, \@arg35, \@arg36, \@arg37);
-    my @arg39 = (1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6);
-    my @arg40 = (2, 7, 4);
-    my @arg41 = (3, 1, 5);
-    my @arg42 = (6, 8, 9);
-    my @arg43 = (\@arg40, \@arg41, \@arg42);
-    my @arg44 = (1, 3, 1, 3, 1, 3, 1, 3);
-    my @arg45 = (6, 1, 5);
-    my @arg46 = (3, 8, 9);
-    my @arg47 = (2, 7, 4);
-    my @arg48 = (\@arg45, \@arg46, \@arg47);
-    my @arg49 = (1, 5, 1, 5, 1, 5, 1, 5);
-    if(Compare($candidate->(\@arg48, 8),\@arg49)) {
+        if(eq_deeply($candidate->([[6, 1, 5], [3, 8, 9], [2, 7, 4]], 8),[1, 5, 1, 5, 1, 5, 1, 5])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (4, 5, 6);
-    my @arg2 = (7, 8, 9);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    my @arg4 = (1, 2, 1);
-    my @arg5 = (5, 9, 3);
-    my @arg6 = (4, 1, 6);
-    my @arg7 = (7, 8, 2);
-    my @arg8 = (\@arg5, \@arg6, \@arg7);
-    my @arg9 = (1);
-    my @arg10 = (1, 2, 3, 4);
-    my @arg11 = (5, 6, 7, 8);
-    my @arg12 = (9, 10, 11, 12);
-    my @arg13 = (13, 14, 15, 16);
-    my @arg14 = (\@arg10, \@arg11, \@arg12, \@arg13);
-    my @arg15 = (1, 2, 1, 2);
-    my @arg16 = (6, 4, 13, 10);
-    my @arg17 = (5, 7, 12, 1);
-    my @arg18 = (3, 16, 11, 15);
-    my @arg19 = (8, 14, 9, 2);
-    my @arg20 = (\@arg16, \@arg17, \@arg18, \@arg19);
-    my @arg21 = (1, 10, 1, 10, 1, 10, 1);
-    my @arg22 = (8, 14, 9, 2);
-    my @arg23 = (6, 4, 13, 15);
-    my @arg24 = (5, 7, 1, 12);
-    my @arg25 = (3, 10, 11, 16);
-    my @arg26 = (\@arg22, \@arg23, \@arg24, \@arg25);
-    my @arg27 = (1, 7, 1, 7, 1);
-    my @arg28 = (11, 8, 7, 2);
-    my @arg29 = (5, 16, 14, 4);
-    my @arg30 = (9, 3, 15, 6);
-    my @arg31 = (12, 13, 10, 1);
-    my @arg32 = (\@arg28, \@arg29, \@arg30, \@arg31);
-    my @arg33 = (1, 6, 1, 6, 1, 6, 1, 6, 1);
-    my @arg34 = (12, 13, 10, 1);
-    my @arg35 = (9, 3, 15, 6);
-    my @arg36 = (5, 16, 14, 4);
-    my @arg37 = (11, 8, 7, 2);
-    my @arg38 = (\@arg34, \@arg35, \@arg36, \@arg37);
-    my @arg39 = (1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6);
-    my @arg40 = (2, 7, 4);
-    my @arg41 = (3, 1, 5);
-    my @arg42 = (6, 8, 9);
-    my @arg43 = (\@arg40, \@arg41, \@arg42);
-    my @arg44 = (1, 3, 1, 3, 1, 3, 1, 3);
-    my @arg45 = (6, 1, 5);
-    my @arg46 = (3, 8, 9);
-    my @arg47 = (2, 7, 4);
-    my @arg48 = (\@arg45, \@arg46, \@arg47);
-    my @arg49 = (1, 5, 1, 5, 1, 5, 1, 5);
-    my @arg50 = (1, 2);
-    my @arg51 = (3, 4);
-    my @arg52 = (\@arg50, \@arg51);
-    my @arg53 = (1, 2, 1, 2, 1, 2, 1, 2, 1, 2);
-    if(Compare($candidate->(\@arg52, 10),\@arg53)) {
+        if(eq_deeply($candidate->([[1, 2], [3, 4]], 10),[1, 2, 1, 2, 1, 2, 1, 2, 1, 2])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, 2, 3);
-    my @arg1 = (4, 5, 6);
-    my @arg2 = (7, 8, 9);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    my @arg4 = (1, 2, 1);
-    my @arg5 = (5, 9, 3);
-    my @arg6 = (4, 1, 6);
-    my @arg7 = (7, 8, 2);
-    my @arg8 = (\@arg5, \@arg6, \@arg7);
-    my @arg9 = (1);
-    my @arg10 = (1, 2, 3, 4);
-    my @arg11 = (5, 6, 7, 8);
-    my @arg12 = (9, 10, 11, 12);
-    my @arg13 = (13, 14, 15, 16);
-    my @arg14 = (\@arg10, \@arg11, \@arg12, \@arg13);
-    my @arg15 = (1, 2, 1, 2);
-    my @arg16 = (6, 4, 13, 10);
-    my @arg17 = (5, 7, 12, 1);
-    my @arg18 = (3, 16, 11, 15);
-    my @arg19 = (8, 14, 9, 2);
-    my @arg20 = (\@arg16, \@arg17, \@arg18, \@arg19);
-    my @arg21 = (1, 10, 1, 10, 1, 10, 1);
-    my @arg22 = (8, 14, 9, 2);
-    my @arg23 = (6, 4, 13, 15);
-    my @arg24 = (5, 7, 1, 12);
-    my @arg25 = (3, 10, 11, 16);
-    my @arg26 = (\@arg22, \@arg23, \@arg24, \@arg25);
-    my @arg27 = (1, 7, 1, 7, 1);
-    my @arg28 = (11, 8, 7, 2);
-    my @arg29 = (5, 16, 14, 4);
-    my @arg30 = (9, 3, 15, 6);
-    my @arg31 = (12, 13, 10, 1);
-    my @arg32 = (\@arg28, \@arg29, \@arg30, \@arg31);
-    my @arg33 = (1, 6, 1, 6, 1, 6, 1, 6, 1);
-    my @arg34 = (12, 13, 10, 1);
-    my @arg35 = (9, 3, 15, 6);
-    my @arg36 = (5, 16, 14, 4);
-    my @arg37 = (11, 8, 7, 2);
-    my @arg38 = (\@arg34, \@arg35, \@arg36, \@arg37);
-    my @arg39 = (1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6);
-    my @arg40 = (2, 7, 4);
-    my @arg41 = (3, 1, 5);
-    my @arg42 = (6, 8, 9);
-    my @arg43 = (\@arg40, \@arg41, \@arg42);
-    my @arg44 = (1, 3, 1, 3, 1, 3, 1, 3);
-    my @arg45 = (6, 1, 5);
-    my @arg46 = (3, 8, 9);
-    my @arg47 = (2, 7, 4);
-    my @arg48 = (\@arg45, \@arg46, \@arg47);
-    my @arg49 = (1, 5, 1, 5, 1, 5, 1, 5);
-    my @arg50 = (1, 2);
-    my @arg51 = (3, 4);
-    my @arg52 = (\@arg50, \@arg51);
-    my @arg53 = (1, 2, 1, 2, 1, 2, 1, 2, 1, 2);
-    my @arg54 = (1, 3);
-    my @arg55 = (3, 2);
-    my @arg56 = (\@arg54, \@arg55);
-    my @arg57 = (1, 3, 1, 3, 1, 3, 1, 3, 1, 3);
-    if(Compare($candidate->(\@arg56, 10),\@arg57)) {
+        if(eq_deeply($candidate->([[1, 3], [3, 2]], 10),[1, 3, 1, 3, 1, 3, 1, 3, 1, 3])) {
         print "ok!" }else{
         exit 1;
         }

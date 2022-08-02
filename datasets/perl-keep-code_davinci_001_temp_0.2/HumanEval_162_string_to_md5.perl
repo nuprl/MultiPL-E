@@ -7,24 +7,24 @@ sub string_to_md5 {
     return md5_hex($text);
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&string_to_md5;
-        if(Compare($candidate->("Hello world"),"3e25960a79dbc69b674cd4ec67a72c62")) {
+        if(eq_deeply($candidate->("Hello world"),"3e25960a79dbc69b674cd4ec67a72c62")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(""),#f)) {
+        if(eq_deeply($candidate->(""),undef)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("A B C"),"0ef78513b0cb8cef12743f5aeb35f888")) {
+        if(eq_deeply($candidate->("A B C"),"0ef78513b0cb8cef12743f5aeb35f888")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("password"),"5f4dcc3b5aa765d61d8327deb882cf99")) {
+        if(eq_deeply($candidate->("password"),"5f4dcc3b5aa765d61d8327deb882cf99")) {
         print "ok!" }else{
         exit 1;
         }

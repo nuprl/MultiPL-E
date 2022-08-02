@@ -15,38 +15,38 @@ sub remove_vowels {
     return $text;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&remove_vowels;
-        if(Compare($candidate->(""),"")) {
+        if(eq_deeply($candidate->(""),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("abcdef
+        if(eq_deeply($candidate->("abcdef
 ghijklm"),"bcdf
 ghjklm")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("fedcba"),"fdcb")) {
+        if(eq_deeply($candidate->("fedcba"),"fdcb")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("eeeee"),"")) {
+        if(eq_deeply($candidate->("eeeee"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("acBAA"),"cB")) {
+        if(eq_deeply($candidate->("acBAA"),"cB")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("EcBOO"),"cB")) {
+        if(eq_deeply($candidate->("EcBOO"),"cB")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("ybcd"),"ybcd")) {
+        if(eq_deeply($candidate->("ybcd"),"ybcd")) {
         print "ok!" }else{
         exit 1;
         }

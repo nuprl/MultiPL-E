@@ -18,36 +18,36 @@ sub same_chars {
     return scalar(keys %chars0) == scalar(keys %chars1);
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&same_chars;
-        if(Compare($candidate->("eabcdzzzz", "dddzzzzzzzddeddabc"),1)) {
+        if(eq_deeply($candidate->("eabcdzzzz", "dddzzzzzzzddeddabc"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("abcd", "dddddddabc"),1)) {
+        if(eq_deeply($candidate->("abcd", "dddddddabc"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("dddddddabc", "abcd"),1)) {
+        if(eq_deeply($candidate->("dddddddabc", "abcd"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("eabcd", "dddddddabc"),"")) {
+        if(eq_deeply($candidate->("eabcd", "dddddddabc"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("abcd", "dddddddabcf"),"")) {
+        if(eq_deeply($candidate->("abcd", "dddddddabcf"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("eabcdzzzz", "dddzzzzzzzddddabc"),"")) {
+        if(eq_deeply($candidate->("eabcdzzzz", "dddzzzzzzzddddabc"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("aabb", "aaccc"),"")) {
+        if(eq_deeply($candidate->("aabb", "aaccc"),"")) {
         print "ok!" }else{
         exit 1;
         }

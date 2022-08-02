@@ -16,26 +16,20 @@ sub longest {
     return $longest;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&longest;
-    my @arg0 = ();
-    if(Compare($candidate->(\@arg0),#f)) {
+        if(eq_deeply($candidate->([]),undef)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ("x", "y", "z");
-    if(Compare($candidate->(\@arg1),"x")) {
+        if(eq_deeply($candidate->(["x", "y", "z"]),"x")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ("x", "y", "z");
-    my @arg2 = ("x", "yyy", "zzzz", "www", "kkkk", "abc");
-    if(Compare($candidate->(\@arg2),"zzzz")) {
+        if(eq_deeply($candidate->(["x", "yyy", "zzzz", "www", "kkkk", "abc"]),"zzzz")) {
         print "ok!" }else{
         exit 1;
         }

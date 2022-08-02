@@ -25,60 +25,60 @@ sub is_prime {
     return 1;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&is_prime;
-        if(Compare($candidate->(6),"")) {
+        if(eq_deeply($candidate->(6),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(101),1)) {
+        if(eq_deeply($candidate->(101),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(11),1)) {
+        if(eq_deeply($candidate->(11),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(13441),1)) {
+        if(eq_deeply($candidate->(13441),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(61),1)) {
+        if(eq_deeply($candidate->(61),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(4),"")) {
+        if(eq_deeply($candidate->(4),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1),"")) {
+        if(eq_deeply($candidate->(1),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(5),1)) {
+        if(eq_deeply($candidate->(5),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(11),1)) {
+        if(eq_deeply($candidate->(11),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(17),1)) {
+        if(eq_deeply($candidate->(17),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(85),"")) {
+        if(eq_deeply($candidate->(85),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(77),"")) {
+        if(eq_deeply($candidate->(77),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(255379),"")) {
+        if(eq_deeply($candidate->(255379),"")) {
         print "ok!" }else{
         exit 1;
         }

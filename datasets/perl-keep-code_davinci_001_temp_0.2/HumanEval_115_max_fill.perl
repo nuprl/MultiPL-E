@@ -46,86 +46,28 @@ sub max_fill {
     return $max;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&max_fill;
-    my @arg0 = (0, 0, 1, 0);
-    my @arg1 = (0, 1, 0, 0);
-    my @arg2 = (1, 1, 1, 1);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    if(Compare($candidate->(\@arg3, 1),6)) {
+        if(eq_deeply($candidate->([[0, 0, 1, 0], [0, 1, 0, 0], [1, 1, 1, 1]], 1),6)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (0, 0, 1, 0);
-    my @arg1 = (0, 1, 0, 0);
-    my @arg2 = (1, 1, 1, 1);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    my @arg4 = (0, 0, 1, 1);
-    my @arg5 = (0, 0, 0, 0);
-    my @arg6 = (1, 1, 1, 1);
-    my @arg7 = (0, 1, 1, 1);
-    my @arg8 = (\@arg4, \@arg5, \@arg6, \@arg7);
-    if(Compare($candidate->(\@arg8, 2),5)) {
+        if(eq_deeply($candidate->([[0, 0, 1, 1], [0, 0, 0, 0], [1, 1, 1, 1], [0, 1, 1, 1]], 2),5)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (0, 0, 1, 0);
-    my @arg1 = (0, 1, 0, 0);
-    my @arg2 = (1, 1, 1, 1);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    my @arg4 = (0, 0, 1, 1);
-    my @arg5 = (0, 0, 0, 0);
-    my @arg6 = (1, 1, 1, 1);
-    my @arg7 = (0, 1, 1, 1);
-    my @arg8 = (\@arg4, \@arg5, \@arg6, \@arg7);
-    my @arg9 = (0, 0, 0);
-    my @arg10 = (0, 0, 0);
-    my @arg11 = (\@arg9, \@arg10);
-    if(Compare($candidate->(\@arg11, 5),0)) {
+        if(eq_deeply($candidate->([[0, 0, 0], [0, 0, 0]], 5),0)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (0, 0, 1, 0);
-    my @arg1 = (0, 1, 0, 0);
-    my @arg2 = (1, 1, 1, 1);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    my @arg4 = (0, 0, 1, 1);
-    my @arg5 = (0, 0, 0, 0);
-    my @arg6 = (1, 1, 1, 1);
-    my @arg7 = (0, 1, 1, 1);
-    my @arg8 = (\@arg4, \@arg5, \@arg6, \@arg7);
-    my @arg9 = (0, 0, 0);
-    my @arg10 = (0, 0, 0);
-    my @arg11 = (\@arg9, \@arg10);
-    my @arg12 = (1, 1, 1, 1);
-    my @arg13 = (1, 1, 1, 1);
-    my @arg14 = (\@arg12, \@arg13);
-    if(Compare($candidate->(\@arg14, 2),4)) {
+        if(eq_deeply($candidate->([[1, 1, 1, 1], [1, 1, 1, 1]], 2),4)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (0, 0, 1, 0);
-    my @arg1 = (0, 1, 0, 0);
-    my @arg2 = (1, 1, 1, 1);
-    my @arg3 = (\@arg0, \@arg1, \@arg2);
-    my @arg4 = (0, 0, 1, 1);
-    my @arg5 = (0, 0, 0, 0);
-    my @arg6 = (1, 1, 1, 1);
-    my @arg7 = (0, 1, 1, 1);
-    my @arg8 = (\@arg4, \@arg5, \@arg6, \@arg7);
-    my @arg9 = (0, 0, 0);
-    my @arg10 = (0, 0, 0);
-    my @arg11 = (\@arg9, \@arg10);
-    my @arg12 = (1, 1, 1, 1);
-    my @arg13 = (1, 1, 1, 1);
-    my @arg14 = (\@arg12, \@arg13);
-    my @arg15 = (1, 1, 1, 1);
-    my @arg16 = (1, 1, 1, 1);
-    my @arg17 = (\@arg15, \@arg16);
-    if(Compare($candidate->(\@arg17, 9),2)) {
+        if(eq_deeply($candidate->([[1, 1, 1, 1], [1, 1, 1, 1]], 9),2)) {
         print "ok!" }else{
         exit 1;
         }

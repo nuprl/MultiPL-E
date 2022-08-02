@@ -40,112 +40,112 @@ sub file_name_check {
     my $substring_after_dot_is_valid_list_16 = 0;
     my $substring_after_dot_is_valid_
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&file_name_check;
-        if(Compare($candidate->("example.txt"),"Yes")) {
+        if(eq_deeply($candidate->("example.txt"),"Yes")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("1example.dll"),"No")) {
+        if(eq_deeply($candidate->("1example.dll"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("s1sdf3.asd"),"No")) {
+        if(eq_deeply($candidate->("s1sdf3.asd"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("K.dll"),"Yes")) {
+        if(eq_deeply($candidate->("K.dll"),"Yes")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("MY16FILE3.exe"),"Yes")) {
+        if(eq_deeply($candidate->("MY16FILE3.exe"),"Yes")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("His12FILE94.exe"),"No")) {
+        if(eq_deeply($candidate->("His12FILE94.exe"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("_Y.txt"),"No")) {
+        if(eq_deeply($candidate->("_Y.txt"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("?aREYA.exe"),"No")) {
+        if(eq_deeply($candidate->("?aREYA.exe"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("/this_is_valid.dll"),"No")) {
+        if(eq_deeply($candidate->("/this_is_valid.dll"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("this_is_valid.wow"),"No")) {
+        if(eq_deeply($candidate->("this_is_valid.wow"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("this_is_valid.txt"),"Yes")) {
+        if(eq_deeply($candidate->("this_is_valid.txt"),"Yes")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("this_is_valid.txtexe"),"No")) {
+        if(eq_deeply($candidate->("this_is_valid.txtexe"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("#this2_i4s_5valid.ten"),"No")) {
+        if(eq_deeply($candidate->("#this2_i4s_5valid.ten"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("@this1_is6_valid.exe"),"No")) {
+        if(eq_deeply($candidate->("@this1_is6_valid.exe"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("this_is_12valid.6exe4.txt"),"No")) {
+        if(eq_deeply($candidate->("this_is_12valid.6exe4.txt"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("all.exe.txt"),"No")) {
+        if(eq_deeply($candidate->("all.exe.txt"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("I563_No.exe"),"Yes")) {
+        if(eq_deeply($candidate->("I563_No.exe"),"Yes")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Is3youfault.txt"),"Yes")) {
+        if(eq_deeply($candidate->("Is3youfault.txt"),"Yes")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("no_one#knows.dll"),"Yes")) {
+        if(eq_deeply($candidate->("no_one#knows.dll"),"Yes")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("1I563_Yes3.exe"),"No")) {
+        if(eq_deeply($candidate->("1I563_Yes3.exe"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("I563_Yes3.txtt"),"No")) {
+        if(eq_deeply($candidate->("I563_Yes3.txtt"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("final..txt"),"No")) {
+        if(eq_deeply($candidate->("final..txt"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("final132"),"No")) {
+        if(eq_deeply($candidate->("final132"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("_f4indsartal132."),"No")) {
+        if(eq_deeply($candidate->("_f4indsartal132."),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(".txt"),"No")) {
+        if(eq_deeply($candidate->(".txt"),"No")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("s."),"No")) {
+        if(eq_deeply($candidate->("s."),"No")) {
         print "ok!" }else{
         exit 1;
         }

@@ -20,32 +20,20 @@ sub odd_count {
     return \@result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&odd_count;
-    my @arg0 = ("1234567");
-    my @arg1 = ("the number of odd elements 4n the str4ng 4 of the 4nput.");
-    if(Compare($candidate->(\@arg0),\@arg1)) {
+        if(eq_deeply($candidate->(["1234567"]),["the number of odd elements 4n the str4ng 4 of the 4nput."])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("1234567");
-    my @arg1 = ("the number of odd elements 4n the str4ng 4 of the 4nput.");
-    my @arg2 = ("3", "11111111");
-    my @arg3 = ("the number of odd elements 1n the str1ng 1 of the 1nput.", "the number of odd elements 8n the str8ng 8 of the 8nput.");
-    if(Compare($candidate->(\@arg2),\@arg3)) {
+        if(eq_deeply($candidate->(["3", "11111111"]),["the number of odd elements 1n the str1ng 1 of the 1nput.", "the number of odd elements 8n the str8ng 8 of the 8nput."])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("1234567");
-    my @arg1 = ("the number of odd elements 4n the str4ng 4 of the 4nput.");
-    my @arg2 = ("3", "11111111");
-    my @arg3 = ("the number of odd elements 1n the str1ng 1 of the 1nput.", "the number of odd elements 8n the str8ng 8 of the 8nput.");
-    my @arg4 = ("271", "137", "314");
-    my @arg5 = ("the number of odd elements 2n the str2ng 2 of the 2nput.", "the number of odd elements 3n the str3ng 3 of the 3nput.", "the number of odd elements 2n the str2ng 2 of the 2nput.");
-    if(Compare($candidate->(\@arg4),\@arg5)) {
+        if(eq_deeply($candidate->(["271", "137", "314"]),["the number of odd elements 2n the str2ng 2 of the 2nput.", "the number of odd elements 3n the str3ng 3 of the 3nput.", "the number of odd elements 2n the str2ng 2 of the 2nput."])) {
         print "ok!" }else{
         exit 1;
         }

@@ -15,43 +15,28 @@ sub add_elements {
     return $sum;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&add_elements;
-    my @arg0 = (1, -2, -3, 41, 57, 76, 87, 88, 99);
-    if(Compare($candidate->(\@arg0, 3),-4)) {
+        if(eq_deeply($candidate->([1, -2, -3, 41, 57, 76, 87, 88, 99], 3),-4)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, -2, -3, 41, 57, 76, 87, 88, 99);
-    my @arg1 = (111, 121, 3, 4000, 5, 6);
-    if(Compare($candidate->(\@arg1, 2),0)) {
+        if(eq_deeply($candidate->([111, 121, 3, 4000, 5, 6], 2),0)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, -2, -3, 41, 57, 76, 87, 88, 99);
-    my @arg1 = (111, 121, 3, 4000, 5, 6);
-    my @arg2 = (11, 21, 3, 90, 5, 6, 7, 8, 9);
-    if(Compare($candidate->(\@arg2, 4),125)) {
+        if(eq_deeply($candidate->([11, 21, 3, 90, 5, 6, 7, 8, 9], 4),125)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, -2, -3, 41, 57, 76, 87, 88, 99);
-    my @arg1 = (111, 121, 3, 4000, 5, 6);
-    my @arg2 = (11, 21, 3, 90, 5, 6, 7, 8, 9);
-    my @arg3 = (111, 21, 3, 4000, 5, 6, 7, 8, 9);
-    if(Compare($candidate->(\@arg3, 4),24)) {
+        if(eq_deeply($candidate->([111, 21, 3, 4000, 5, 6, 7, 8, 9], 4),24)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (1, -2, -3, 41, 57, 76, 87, 88, 99);
-    my @arg1 = (111, 121, 3, 4000, 5, 6);
-    my @arg2 = (11, 21, 3, 90, 5, 6, 7, 8, 9);
-    my @arg3 = (111, 21, 3, 4000, 5, 6, 7, 8, 9);
-    my @arg4 = (1);
-    if(Compare($candidate->(\@arg4, 1),1)) {
+        if(eq_deeply($candidate->([1], 1),1)) {
         print "ok!" }else{
         exit 1;
         }

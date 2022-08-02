@@ -15,60 +15,60 @@ sub simplify {
     return $xNumeratorMultDiv == $xDenominatorMultDiv ? 1 : 0;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&simplify;
-        if(Compare($candidate->("1/5", "5/1"),1)) {
+        if(eq_deeply($candidate->("1/5", "5/1"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("1/6", "2/1"),"")) {
+        if(eq_deeply($candidate->("1/6", "2/1"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("5/1", "3/1"),1)) {
+        if(eq_deeply($candidate->("5/1", "3/1"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("7/10", "10/2"),"")) {
+        if(eq_deeply($candidate->("7/10", "10/2"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("2/10", "50/10"),1)) {
+        if(eq_deeply($candidate->("2/10", "50/10"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("7/2", "4/2"),1)) {
+        if(eq_deeply($candidate->("7/2", "4/2"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("11/6", "6/1"),1)) {
+        if(eq_deeply($candidate->("11/6", "6/1"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("2/3", "5/2"),"")) {
+        if(eq_deeply($candidate->("2/3", "5/2"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("5/2", "3/5"),"")) {
+        if(eq_deeply($candidate->("5/2", "3/5"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("2/4", "8/4"),1)) {
+        if(eq_deeply($candidate->("2/4", "8/4"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("2/4", "4/2"),1)) {
+        if(eq_deeply($candidate->("2/4", "4/2"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("1/5", "5/1"),1)) {
+        if(eq_deeply($candidate->("1/5", "5/1"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("1/5", "1/5"),"")) {
+        if(eq_deeply($candidate->("1/5", "1/5"),"")) {
         print "ok!" }else{
         exit 1;
         }

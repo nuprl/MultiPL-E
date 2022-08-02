@@ -30,24 +30,24 @@ sub get_max_triples {
     return $max_triples;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&get_max_triples;
-        if(Compare($candidate->(5),1)) {
+        if(eq_deeply($candidate->(5),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(6),4)) {
+        if(eq_deeply($candidate->(6),4)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(10),36)) {
+        if(eq_deeply($candidate->(10),36)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(100),53361)) {
+        if(eq_deeply($candidate->(100),53361)) {
         print "ok!" }else{
         exit 1;
         }

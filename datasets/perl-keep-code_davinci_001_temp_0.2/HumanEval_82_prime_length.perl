@@ -18,72 +18,72 @@ sub prime_length {
     return 1;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&prime_length;
-        if(Compare($candidate->("Hello"),1)) {
+        if(eq_deeply($candidate->("Hello"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("abcdcba"),1)) {
+        if(eq_deeply($candidate->("abcdcba"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("kittens"),1)) {
+        if(eq_deeply($candidate->("kittens"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("orange"),"")) {
+        if(eq_deeply($candidate->("orange"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("wow"),1)) {
+        if(eq_deeply($candidate->("wow"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("world"),1)) {
+        if(eq_deeply($candidate->("world"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("MadaM"),1)) {
+        if(eq_deeply($candidate->("MadaM"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Wow"),1)) {
+        if(eq_deeply($candidate->("Wow"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(""),"")) {
+        if(eq_deeply($candidate->(""),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("HI"),1)) {
+        if(eq_deeply($candidate->("HI"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("go"),1)) {
+        if(eq_deeply($candidate->("go"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("gogo"),"")) {
+        if(eq_deeply($candidate->("gogo"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("aaaaaaaaaaaaaaa"),"")) {
+        if(eq_deeply($candidate->("aaaaaaaaaaaaaaa"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Madam"),1)) {
+        if(eq_deeply($candidate->("Madam"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("M"),"")) {
+        if(eq_deeply($candidate->("M"),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("0"),"")) {
+        if(eq_deeply($candidate->("0"),"")) {
         print "ok!" }else{
         exit 1;
         }

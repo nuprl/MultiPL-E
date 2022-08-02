@@ -13,40 +13,40 @@ sub iscube {
     return $a == int($a**(1/3))**3;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&iscube;
-        if(Compare($candidate->(1),1)) {
+        if(eq_deeply($candidate->(1),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(2),"")) {
+        if(eq_deeply($candidate->(2),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(-1),1)) {
+        if(eq_deeply($candidate->(-1),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(64),1)) {
+        if(eq_deeply($candidate->(64),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(180),"")) {
+        if(eq_deeply($candidate->(180),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1000),1)) {
+        if(eq_deeply($candidate->(1000),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(0),1)) {
+        if(eq_deeply($candidate->(0),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(1729),"")) {
+        if(eq_deeply($candidate->(1729),"")) {
         print "ok!" }else{
         exit 1;
         }

@@ -26,34 +26,24 @@ sub separate_paren_groups {
     return @paren_groups;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&separate_paren_groups;
-    my @arg0 = ("(()())", "((()))", "()", "((())()())");
-    if(Compare($candidate->("(()()) ((())) () ((())()())"),\@arg0)) {
+        if(eq_deeply($candidate->("(()()) ((())) () ((())()())"),["(()())", "((()))", "()", "((())()())"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("(()())", "((()))", "()", "((())()())");
-    my @arg1 = ("()", "(())", "((()))", "(((())))");
-    if(Compare($candidate->("() (()) ((())) (((())))"),\@arg1)) {
+        if(eq_deeply($candidate->("() (()) ((())) (((())))"),["()", "(())", "((()))", "(((())))"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("(()())", "((()))", "()", "((())()())");
-    my @arg1 = ("()", "(())", "((()))", "(((())))");
-    my @arg2 = ("(()(())((())))");
-    if(Compare($candidate->("(()(())((())))"),\@arg2)) {
+        if(eq_deeply($candidate->("(()(())((())))"),["(()(())((())))"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("(()())", "((()))", "()", "((())()())");
-    my @arg1 = ("()", "(())", "((()))", "(((())))");
-    my @arg2 = ("(()(())((())))");
-    my @arg3 = ("()", "(())", "(()())");
-    if(Compare($candidate->("( ) (( )) (( )( ))"),\@arg3)) {
+        if(eq_deeply($candidate->("( ) (( )) (( )( ))"),["()", "(())", "(()())"])) {
         print "ok!" }else{
         exit 1;
         }

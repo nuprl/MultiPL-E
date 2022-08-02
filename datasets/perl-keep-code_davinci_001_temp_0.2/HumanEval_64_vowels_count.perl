@@ -18,36 +18,36 @@ sub vowels_count {
     return $vowels;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&vowels_count;
-        if(Compare($candidate->("abcde"),2)) {
+        if(eq_deeply($candidate->("abcde"),2)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("Alone"),3)) {
+        if(eq_deeply($candidate->("Alone"),3)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("key"),2)) {
+        if(eq_deeply($candidate->("key"),2)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("bye"),1)) {
+        if(eq_deeply($candidate->("bye"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("keY"),2)) {
+        if(eq_deeply($candidate->("keY"),2)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("bYe"),1)) {
+        if(eq_deeply($candidate->("bYe"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("ACEDY"),3)) {
+        if(eq_deeply($candidate->("ACEDY"),3)) {
         print "ok!" }else{
         exit 1;
         }

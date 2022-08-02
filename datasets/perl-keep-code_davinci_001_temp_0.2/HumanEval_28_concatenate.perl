@@ -12,26 +12,20 @@ sub concatenate {
     return $result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&concatenate;
-    my @arg0 = ();
-    if(Compare($candidate->(\@arg0),"")) {
+        if(eq_deeply($candidate->([]),"")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ("x", "y", "z");
-    if(Compare($candidate->(\@arg1),"xyz")) {
+        if(eq_deeply($candidate->(["x", "y", "z"]),"xyz")) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ("x", "y", "z");
-    my @arg2 = ("x", "y", "z", "w", "k");
-    if(Compare($candidate->(\@arg2),"xyzwk")) {
+        if(eq_deeply($candidate->(["x", "y", "z", "w", "k"]),"xyzwk")) {
         print "ok!" }else{
         exit 1;
         }

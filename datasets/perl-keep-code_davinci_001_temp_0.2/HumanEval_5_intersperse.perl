@@ -15,32 +15,20 @@ sub intersperse {
     return $ret;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&intersperse;
-    my @arg0 = ();
-    my @arg1 = ();
-    if(Compare($candidate->(\@arg0, 7),\@arg1)) {
+        if(eq_deeply($candidate->([], 7),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = (5, 6, 3, 2);
-    my @arg3 = (5, 8, 6, 8, 3, 8, 2);
-    if(Compare($candidate->(\@arg2, 8),\@arg3)) {
+        if(eq_deeply($candidate->([5, 6, 3, 2], 8),[5, 8, 6, 8, 3, 8, 2])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = ();
-    my @arg2 = (5, 6, 3, 2);
-    my @arg3 = (5, 8, 6, 8, 3, 8, 2);
-    my @arg4 = (2, 2, 2);
-    my @arg5 = (2, 2, 2, 2, 2);
-    if(Compare($candidate->(\@arg4, 2),\@arg5)) {
+        if(eq_deeply($candidate->([2, 2, 2], 2),[2, 2, 2, 2, 2])) {
         print "ok!" }else{
         exit 1;
         }

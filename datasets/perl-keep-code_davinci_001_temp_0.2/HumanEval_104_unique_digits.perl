@@ -17,44 +17,24 @@ sub unique_digits {
     return @result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&unique_digits;
-    my @arg0 = (15, 33, 1422, 1);
-    my @arg1 = (1, 15, 33);
-    if(Compare($candidate->(\@arg0),\@arg1)) {
+        if(eq_deeply($candidate->([15, 33, 1422, 1]),[1, 15, 33])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (15, 33, 1422, 1);
-    my @arg1 = (1, 15, 33);
-    my @arg2 = (152, 323, 1422, 10);
-    my @arg3 = ();
-    if(Compare($candidate->(\@arg2),\@arg3)) {
+        if(eq_deeply($candidate->([152, 323, 1422, 10]),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (15, 33, 1422, 1);
-    my @arg1 = (1, 15, 33);
-    my @arg2 = (152, 323, 1422, 10);
-    my @arg3 = ();
-    my @arg4 = (12345, 2033, 111, 151);
-    my @arg5 = (111, 151);
-    if(Compare($candidate->(\@arg4),\@arg5)) {
+        if(eq_deeply($candidate->([12345, 2033, 111, 151]),[111, 151])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (15, 33, 1422, 1);
-    my @arg1 = (1, 15, 33);
-    my @arg2 = (152, 323, 1422, 10);
-    my @arg3 = ();
-    my @arg4 = (12345, 2033, 111, 151);
-    my @arg5 = (111, 151);
-    my @arg6 = (135, 103, 31);
-    my @arg7 = (31, 135);
-    if(Compare($candidate->(\@arg6),\@arg7)) {
+        if(eq_deeply($candidate->([135, 103, 31]),[31, 135])) {
         print "ok!" }else{
         exit 1;
         }

@@ -23,64 +23,36 @@ sub select_words {
     return @result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&select_words;
-    my @arg0 = ("little");
-    if(Compare($candidate->("Mary had a little lamb", 4),\@arg0)) {
+        if(eq_deeply($candidate->("Mary had a little lamb", 4),["little"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("little");
-    my @arg1 = ("Mary", "lamb");
-    if(Compare($candidate->("Mary had a little lamb", 3),\@arg1)) {
+        if(eq_deeply($candidate->("Mary had a little lamb", 3),["Mary", "lamb"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("little");
-    my @arg1 = ("Mary", "lamb");
-    my @arg2 = ();
-    if(Compare($candidate->("simple white space", 2),\@arg2)) {
+        if(eq_deeply($candidate->("simple white space", 2),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("little");
-    my @arg1 = ("Mary", "lamb");
-    my @arg2 = ();
-    my @arg3 = ("world");
-    if(Compare($candidate->("Hello world", 4),\@arg3)) {
+        if(eq_deeply($candidate->("Hello world", 4),["world"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("little");
-    my @arg1 = ("Mary", "lamb");
-    my @arg2 = ();
-    my @arg3 = ("world");
-    my @arg4 = ("Uncle");
-    if(Compare($candidate->("Uncle sam", 3),\@arg4)) {
+        if(eq_deeply($candidate->("Uncle sam", 3),["Uncle"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("little");
-    my @arg1 = ("Mary", "lamb");
-    my @arg2 = ();
-    my @arg3 = ("world");
-    my @arg4 = ("Uncle");
-    my @arg5 = ();
-    if(Compare($candidate->("", 4),\@arg5)) {
+        if(eq_deeply($candidate->("", 4),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("little");
-    my @arg1 = ("Mary", "lamb");
-    my @arg2 = ();
-    my @arg3 = ("world");
-    my @arg4 = ("Uncle");
-    my @arg5 = ();
-    my @arg6 = ("b", "c", "d", "f");
-    if(Compare($candidate->("a b c d e f", 1),\@arg6)) {
+        if(eq_deeply($candidate->("a b c d e f", 1),["b", "c", "d", "f"])) {
         print "ok!" }else{
         exit 1;
         }

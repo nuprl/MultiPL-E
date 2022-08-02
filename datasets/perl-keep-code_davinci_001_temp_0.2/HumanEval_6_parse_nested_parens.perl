@@ -22,26 +22,20 @@ sub parse_nested_parens {
     return @result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&parse_nested_parens;
-    my @arg0 = (2, 3, 1, 3);
-    if(Compare($candidate->("(()()) ((())) () ((())()())"),\@arg0)) {
+        if(eq_deeply($candidate->("(()()) ((())) () ((())()())"),[2, 3, 1, 3])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (2, 3, 1, 3);
-    my @arg1 = (1, 2, 3, 4);
-    if(Compare($candidate->("() (()) ((())) (((())))"),\@arg1)) {
+        if(eq_deeply($candidate->("() (()) ((())) (((())))"),[1, 2, 3, 4])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = (2, 3, 1, 3);
-    my @arg1 = (1, 2, 3, 4);
-    my @arg2 = (4);
-    if(Compare($candidate->("(()(())((())))"),\@arg2)) {
+        if(eq_deeply($candidate->("(()(())((())))"),[4])) {
         print "ok!" }else{
         exit 1;
         }

@@ -18,28 +18,28 @@ sub solve {
     return $sum;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&solve;
-        if(Compare($candidate->(1000),"1")) {
+        if(eq_deeply($candidate->(1000),"1")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(150),"110")) {
+        if(eq_deeply($candidate->(150),"110")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(147),"1100")) {
+        if(eq_deeply($candidate->(147),"1100")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(333),"1001")) {
+        if(eq_deeply($candidate->(333),"1001")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(963),"10010")) {
+        if(eq_deeply($candidate->(963),"10010")) {
         print "ok!" }else{
         exit 1;
         }

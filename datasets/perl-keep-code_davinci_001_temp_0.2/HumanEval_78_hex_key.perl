@@ -26,32 +26,32 @@ sub hex_key {
     return $count;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&hex_key;
-        if(Compare($candidate->("AB"),1)) {
+        if(eq_deeply($candidate->("AB"),1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("1077E"),2)) {
+        if(eq_deeply($candidate->("1077E"),2)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("ABED1A33"),4)) {
+        if(eq_deeply($candidate->("ABED1A33"),4)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("2020"),2)) {
+        if(eq_deeply($candidate->("2020"),2)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("123456789ABCDEF0"),6)) {
+        if(eq_deeply($candidate->("123456789ABCDEF0"),6)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("112233445566778899AABBCCDDEEFF00"),12)) {
+        if(eq_deeply($candidate->("112233445566778899AABBCCDDEEFF00"),12)) {
         print "ok!" }else{
         exit 1;
         }

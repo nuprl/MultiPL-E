@@ -17,28 +17,28 @@ sub circular_shift {
     return $result;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&circular_shift;
-        if(Compare($candidate->(100, 2),"001")) {
+        if(eq_deeply($candidate->(100, 2),"001")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(12, 2),"12")) {
+        if(eq_deeply($candidate->(12, 2),"12")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(97, 8),"79")) {
+        if(eq_deeply($candidate->(97, 8),"79")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(12, 1),"21")) {
+        if(eq_deeply($candidate->(12, 1),"21")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(11, 101),"11")) {
+        if(eq_deeply($candidate->(11, 101),"11")) {
         print "ok!" }else{
         exit 1;
         }

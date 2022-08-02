@@ -18,66 +18,40 @@ sub split_words {
     return $count;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&split_words;
-    my @arg0 = ("Hello", "world!");
-    if(Compare($candidate->("Hello world!"),\@arg0)) {
+        if(eq_deeply($candidate->("Hello world!"),["Hello", "world!"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("Hello", "world!");
-    my @arg1 = ("Hello", "world!");
-    if(Compare($candidate->("Hello,world!"),\@arg1)) {
+        if(eq_deeply($candidate->("Hello,world!"),["Hello", "world!"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("Hello", "world!");
-    my @arg1 = ("Hello", "world!");
-    my @arg2 = ("Hello", "world,!");
-    if(Compare($candidate->("Hello world,!"),\@arg2)) {
+        if(eq_deeply($candidate->("Hello world,!"),["Hello", "world,!"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("Hello", "world!");
-    my @arg1 = ("Hello", "world!");
-    my @arg2 = ("Hello", "world,!");
-    my @arg3 = ("Hello,Hello,world", "!");
-    if(Compare($candidate->("Hello,Hello,world !"),\@arg3)) {
+        if(eq_deeply($candidate->("Hello,Hello,world !"),["Hello,Hello,world", "!"])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("Hello", "world!");
-    my @arg1 = ("Hello", "world!");
-    my @arg2 = ("Hello", "world,!");
-    my @arg3 = ("Hello,Hello,world", "!");
-    if(Compare($candidate->("abcdef"),3)) {
+        if(eq_deeply($candidate->("abcdef"),3)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("Hello", "world!");
-    my @arg1 = ("Hello", "world!");
-    my @arg2 = ("Hello", "world,!");
-    my @arg3 = ("Hello,Hello,world", "!");
-    if(Compare($candidate->("aaabb"),2)) {
+        if(eq_deeply($candidate->("aaabb"),2)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("Hello", "world!");
-    my @arg1 = ("Hello", "world!");
-    my @arg2 = ("Hello", "world,!");
-    my @arg3 = ("Hello,Hello,world", "!");
-    if(Compare($candidate->("aaaBb"),1)) {
+        if(eq_deeply($candidate->("aaaBb"),1)) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ("Hello", "world!");
-    my @arg1 = ("Hello", "world!");
-    my @arg2 = ("Hello", "world,!");
-    my @arg3 = ("Hello,Hello,world", "!");
-    if(Compare($candidate->(""),0)) {
+        if(eq_deeply($candidate->(""),0)) {
         print "ok!" }else{
         exit 1;
         }

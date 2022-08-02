@@ -11,28 +11,28 @@ sub sort_numbers {
     return $sorted;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&sort_numbers;
-        if(Compare($candidate->(""),"")) {
+        if(eq_deeply($candidate->(""),"")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("three"),"three")) {
+        if(eq_deeply($candidate->("three"),"three")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("three five nine"),"three five nine")) {
+        if(eq_deeply($candidate->("three five nine"),"three five nine")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("five zero four seven nine eight"),"zero four five seven eight nine")) {
+        if(eq_deeply($candidate->("five zero four seven nine eight"),"zero four five seven eight nine")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->("six five four three two one zero"),"zero one two three four five six")) {
+        if(eq_deeply($candidate->("six five four three two one zero"),"zero one two three four five six")) {
         print "ok!" }else{
         exit 1;
         }

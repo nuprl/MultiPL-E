@@ -15,56 +15,56 @@ sub rounded_avg {
     return sprintf("0b%b", $r);
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&rounded_avg;
-        if(Compare($candidate->(1, 5),"0b11")) {
+        if(eq_deeply($candidate->(1, 5),"0b11")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(7, 13),"0b1010")) {
+        if(eq_deeply($candidate->(7, 13),"0b1010")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(964, 977),"0b1111001010")) {
+        if(eq_deeply($candidate->(964, 977),"0b1111001010")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(996, 997),"0b1111100100")) {
+        if(eq_deeply($candidate->(996, 997),"0b1111100100")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(560, 851),"0b1011000010")) {
+        if(eq_deeply($candidate->(560, 851),"0b1011000010")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(185, 546),"0b101101110")) {
+        if(eq_deeply($candidate->(185, 546),"0b101101110")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(362, 496),"0b110101101")) {
+        if(eq_deeply($candidate->(362, 496),"0b110101101")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(350, 902),"0b1001110010")) {
+        if(eq_deeply($candidate->(350, 902),"0b1001110010")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(197, 233),"0b11010111")) {
+        if(eq_deeply($candidate->(197, 233),"0b11010111")) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(7, 5),-1)) {
+        if(eq_deeply($candidate->(7, 5),-1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(5, 1),-1)) {
+        if(eq_deeply($candidate->(5, 1),-1)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(5, 5),"0b101")) {
+        if(eq_deeply($candidate->(5, 5),"0b101")) {
         print "ok!" }else{
         exit 1;
         }

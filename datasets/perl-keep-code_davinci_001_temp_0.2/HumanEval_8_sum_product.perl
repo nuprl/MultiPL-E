@@ -15,43 +15,28 @@ sub sum_product {
     return($sum, $product);
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&sum_product;
-    my @arg0 = ();
-    if(Compare($candidate->(\@arg0),(0, 1))) {
+        if(eq_deeply($candidate->([]),[0, 1])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = (1, 1, 1);
-    if(Compare($candidate->(\@arg1),(3, 1))) {
+        if(eq_deeply($candidate->([1, 1, 1]),[3, 1])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = (1, 1, 1);
-    my @arg2 = (100, 0);
-    if(Compare($candidate->(\@arg2),(100, 0))) {
+        if(eq_deeply($candidate->([100, 0]),[100, 0])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = (1, 1, 1);
-    my @arg2 = (100, 0);
-    my @arg3 = (3, 5, 7);
-    if(Compare($candidate->(\@arg3),(15, 105))) {
+        if(eq_deeply($candidate->([3, 5, 7]),[15, 105])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = (1, 1, 1);
-    my @arg2 = (100, 0);
-    my @arg3 = (3, 5, 7);
-    my @arg4 = (10);
-    if(Compare($candidate->(\@arg4),(10, 10))) {
+        if(eq_deeply($candidate->([10]),[10, 10])) {
         print "ok!" }else{
         exit 1;
         }

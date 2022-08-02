@@ -20,24 +20,24 @@ sub fib4 {
     return fib4($n-1) + fib4($n-2) + fib4($n-3) + fib4($n-4);
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&fib4;
-        if(Compare($candidate->(5),4)) {
+        if(eq_deeply($candidate->(5),4)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(8),28)) {
+        if(eq_deeply($candidate->(8),28)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(10),104)) {
+        if(eq_deeply($candidate->(10),104)) {
         print "ok!" }else{
         exit 1;
         }
-        if(Compare($candidate->(12),386)) {
+        if(eq_deeply($candidate->(12),386)) {
         print "ok!" }else{
         exit 1;
         }

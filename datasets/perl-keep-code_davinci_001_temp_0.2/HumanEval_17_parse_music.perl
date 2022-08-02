@@ -23,43 +23,28 @@ sub parse_music {
     return @music_beats;
 }
 
-use Data::Compare;
+use Test::Deep;
 
 
 sub testhumaneval {
     my $candidate = \&parse_music;
-    my @arg0 = ();
-    if(Compare($candidate->(""),\@arg0)) {
+        if(eq_deeply($candidate->(""),[])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = (4, 4, 4, 4);
-    if(Compare($candidate->("o o o o"),\@arg1)) {
+        if(eq_deeply($candidate->("o o o o"),[4, 4, 4, 4])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = (4, 4, 4, 4);
-    my @arg2 = (1, 1, 1, 1);
-    if(Compare($candidate->(".| .| .| .|"),\@arg2)) {
+        if(eq_deeply($candidate->(".| .| .| .|"),[1, 1, 1, 1])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = (4, 4, 4, 4);
-    my @arg2 = (1, 1, 1, 1);
-    my @arg3 = (2, 2, 1, 1, 4, 4, 4, 4);
-    if(Compare($candidate->("o| o| .| .| o o o o"),\@arg3)) {
+        if(eq_deeply($candidate->("o| o| .| .| o o o o"),[2, 2, 1, 1, 4, 4, 4, 4])) {
         print "ok!" }else{
         exit 1;
         }
-    my @arg0 = ();
-    my @arg1 = (4, 4, 4, 4);
-    my @arg2 = (1, 1, 1, 1);
-    my @arg3 = (2, 2, 1, 1, 4, 4, 4, 4);
-    my @arg4 = (2, 1, 2, 1, 4, 2, 4, 2);
-    if(Compare($candidate->("o| .| o| .| o o| o o|"),\@arg4)) {
+        if(eq_deeply($candidate->("o| .| o| .| o o| o o|"),[2, 1, 2, 1, 4, 2, 4, 2])) {
         print "ok!" }else{
         exit 1;
         }
