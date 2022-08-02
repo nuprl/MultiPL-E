@@ -110,7 +110,8 @@ class PromptVisitor(ast.NodeVisitor):
                     for i in range(len(funcCalls)):
                         desc += funcCalls[i] + '\n' + outputs[i] + '\n\n'
                 else: #else when there are no doctests
-                    desc = self.description
+                    print('skipping (no doctests to remove)')
+                    return None
             case _other:
                 raise Exception(f"bad doctest_transformation")
         return self.translator.translate_prompt(self.name, self.args, self.returns, desc)
