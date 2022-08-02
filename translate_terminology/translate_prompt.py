@@ -63,7 +63,7 @@ def translate_prompt(language, example):
 def main():
 	directory = Path(Path(__file__).parent, "..", "datasets", "originals-with-cleaned-doctests").resolve()
 	files = [Path.joinpath(directory,filename) for filename in os.listdir(directory)]
-	f = files[int(sys.argv[1])]
+	f = "../datasets/originals-with-cleaned-doctests/HumanEval_51_remove_vowels.py"
 	with open(f,'r') as sf:
 		src_text = sf.read().replace("'''",'"""')
 		for k in lang_dict.keys():
