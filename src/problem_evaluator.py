@@ -6,6 +6,7 @@ import json
 from problem_yaml import Problem, Result, ResultList, TestResults
 from concurrent.futures import ThreadPoolExecutor
 from tqdm import tqdm
+from containerized_eval import eval_script
 
 # Get working directory
 WORKING_DIR = Path(__file__).parent.parent
@@ -55,9 +56,9 @@ def evaluate_problem(problem_yaml_path: Path, max_workers: int):
     test_results.language = problem.language
     test_results.results = ResultList()
 
+
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        for json_strings in executor.map(lambda index: evaluate_problem_in_container(problem_yaml_path, index), range(num_problems)):
-            j = json.loads(json_strings)
+        for j in executor.map(lambda index: eval_script(problem, index), range(num_problems)):
             result_yaml = Result()
             result_yaml.program = j["program"]
             result_yaml.status = j["status"]
@@ -98,7 +99,6 @@ def main():
     if target.is_dir():
         evaluate_problems(target, args.max_workers)
     else:
-        print(f"Evaluating a single problem")
         evaluate_problem(target, args.max_workers)
 
 if __name__ == "__main__":

@@ -25,7 +25,7 @@ import tempfile
 import json
 
 EVALUATORS = {
-    "ruby": (eval_ruby.eval_script, ".rb"),
+    "rb": (eval_ruby.eval_script, ".rb"),
     "lua": (eval_lua.eval_script, ".lua"),
     "python": (eval_python.eval_script, ".py"),
     "julia": (eval_julia.eval_script, ".jl"),
@@ -35,17 +35,14 @@ EVALUATORS = {
     "lua": (eval_lua.eval_script, ".lua"),
     "python": (eval_python.eval_script, ".py"),
     "racket": (eval_racket.eval_script, ".rkt"),
+    "rkt": (eval_racket.eval_script, ".rkt"),
     "javascript": (eval_javascript.eval_script, ".js"),
     "cpp": (eval_cpp.eval_script, ".cpp"),
     "php": (eval_php.eval_script, ".php"),
 }
 
-def eval_in_thread(problem_yaml_path, index):
-    with open(problem_yaml_path) as f:
-        problem = Problem.load(f)
-
+def eval_script(problem, index):
     program = problem.prompt + problem.completions[index] + '\n' + problem.tests
-
     (eval_script, file_ext) = EVALUATORS[problem.language]
     with tempfile.NamedTemporaryFile(suffix=file_ext, delete=True) as f:
         f.write(program.encode("utf-8"))
@@ -62,6 +59,11 @@ def eval_in_thread(problem_yaml_path, index):
             "exit_code": result['exit_code'],
             "status": result['status']
         }
+
+def eval_in_thread(problem_yaml_path, index):
+    with open(problem_yaml_path) as f:
+        problem = Problem.load(f)
+    return eval_script(problem, index)
 
 def main():
     parser = argparse.ArgumentParser(description="Evaluate a problem")
