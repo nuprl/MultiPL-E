@@ -12,11 +12,13 @@ if [ $USER == "a.guha" ]; then
   eval `spack load --sh php lua racket`
 elif [ $USER == "l.phipps-costin" ]; then
   eval `spack load --sh ruby`
+elif [ $USER == "zi.ya" ]; then
+  eval `spack load --sh lua`
 else
   echo "Unkown user account: $USER"
 fi
 
-cd /home/a.guha/repos/polyglot-codegen-evaluation/src
+LUA_PATH="${PWD}/luaunit.lua"
 FILE=`sed -n ${SLURM_ARRAY_TASK_ID}p files.txt`
 echo $FILE
 python3 problem_evaluator.py --target $FILE --max-workers 24

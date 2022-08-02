@@ -6,6 +6,8 @@ if user == "a.guha":
   SUPPORTED = [ "php", "/rkt-" ]
 elif user == "l.phipps-coston":
   SUPPORTED = [ ]
+elif user == "zi.ya":
+  SUPPORTED = [ "lua" ]
 else:
     raise "Unknown user"
 

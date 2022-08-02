@@ -3,6 +3,7 @@
 #
 # This script runs the Luafied HumanEval programs in datasets/lua
 
+from libeval import run_without_exn
 import argparse
 from sys import exit
 import subprocess
@@ -10,39 +11,8 @@ from pathlib import Path
 from generic_eval import main as gmain
 
 def eval_script(path: Path):
-    try:
-        # Assumes exit-code 0 is all okay
-        # Need check=True for Lua to pass errors to CalledProcessError
-        output = subprocess.run(
-            ["lua", path], check=True, capture_output=True, timeout=5
-        )
-        if output.returncode == 0:
-            status = "OK"
-            out = output.stderr
-            error = output.stdout
-            returncode = 0
-        else:
-            raise Exception("there's an issue with check = True for Lua, INVESTIGATE!")
-    except subprocess.TimeoutExpired as exc:
-        status = "Timeout"
-        out = exc.stdout
-        error = exc.stderr
-        returncode = -1
-    except subprocess.CalledProcessError as exc:
-        returncode = exc.returncode
-        out = exc.stdout
-        error = exc.stderr
-        #failure with code 1 but no error message is an Exception from Failed tests
-        if len(error) < 1:
-            status = "Exception"
-        else: #everything that prints out an error message is a SyntaxError
-            status = "SyntaxError"
-    return {
-        "status": status,
-        "exit_code": returncode,
-        "stdout": str(out),
-        "stderr": str(error),
-    }
+    return run_without_exn(["lua", str(path)])
+    
 
 if __name__ == "__main__":
     gmain(eval_script, 'Lua', '.lua')
