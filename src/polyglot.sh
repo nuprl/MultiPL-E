@@ -1,5 +1,4 @@
 #!/bin/bash
-#SBATCH --array=11-478
 #SBATCH --mem=48G
 #SBATCH --export=ALL
 #SBATCH --cpus-per-task=24
@@ -10,7 +9,7 @@
 module load oracle_java julia
 
 if [ $USER == "a.guha" ]; then
-  eval `spack load --sh php`
+  eval `spack load --sh php lua racket`
 elif [ $USER == "l.phipps-costin" ]; then
   eval `spack load --sh ruby`
 else

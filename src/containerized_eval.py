@@ -35,6 +35,7 @@ EVALUATORS = {
     "lua": (eval_lua.eval_script, ".lua"),
     "python": (eval_python.eval_script, ".py"),
     "racket": (eval_racket.eval_script, ".rkt"),
+    "rkt": (eval_racket.eval_script, ".rkt"),
     "javascript": (eval_javascript.eval_script, ".js"),
     "cpp": (eval_cpp.eval_script, ".cpp"),
     "php": (eval_php.eval_script, ".php"),

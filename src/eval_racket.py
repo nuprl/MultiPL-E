@@ -2,35 +2,16 @@
 import os
 import subprocess
 from pathlib import Path
-
+from libeval import run_without_exn
 def eval_script(path: Path):
-    try: 
-        # Assumes exit-code 0 is all okay
-        # Run racket on the file, capturing stderr
-        output = subprocess.run(" ".join(["racket", str(path)]), capture_output=True, timeout=5)
-        if output.returncode == 0:
-            status = "OK"
+    output = run_without_exn(["racket", str(path)])
+    # rackunit produces exit code 0 even if tests fail.
+    if output["exit_code"] == 0 and len(output["stderr"]) > 0:
+        if 'read-syntax' in output["stderr"]:
+            output["status"] = "SyntaxError"
         else:
-            outmessage = str(output)
-            if 'read-syntax' in outmessage:
-                status = "SyntaxError"
-            else:
-                status = "Exception"
-        returncode = output.returncode
-    except subprocess.TimeoutExpired as exc:
-        status = "Timeout"
-        output = exc
-        returncode = -1
-    except subprocess.CalledProcessError as exc:
-        status = "Exception"
-        returncode = exc.returncode
-        output = exc
-    return {
-            "status": status,
-            "exit_code": returncode,
-            "stdout": str(output.stdout),
-            "stderr": str(output.stderr),
-                }
+            output["status"] = "Exception"
+    return output
 
 
 
