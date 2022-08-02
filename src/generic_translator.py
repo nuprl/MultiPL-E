@@ -76,7 +76,7 @@ class PromptVisitor(ast.NodeVisitor):
             case "keep":
                 desc = self.description
             case "remove":
-                doctestRegex = re.compile(r'>>>.*\)\n.*\n')
+                doctestRegex = re.compile(r'>>>.*\n.*\n')
                 desc = re.sub(doctestRegex, '', self.description)
                 if desc == self.description:
                     print('skipping (no doctests to remove)')
