@@ -1,6 +1,13 @@
 from pathlib import Path
+import os
 
-SUPPORTED = [ "cpp", "java", "jl" ]
+user = os.getenv("USER")
+if user == "a.guha":
+  SUPPORTED = [ "php", "lua", "racket" ]
+elif user == "l.phipps-coston":
+  SUPPORTED = [ ]
+else:
+    raise "Unknown user"
 
 count = 0
 files = [ ]
