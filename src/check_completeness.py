@@ -29,6 +29,7 @@ def check(lang, model, temp, docstrings):
     #if len(problems) != 161:
     #    print(f"{dir} has {len(problems)} problems")
     
+    #TODO: this does not work for some reason?
     for p in problems:
         with p.open() as f:
             problem = yaml.load(p)

@@ -11,7 +11,8 @@ module load oracle_java julia
 if [ $USER == "a.guha" ]; then
   eval `spack load --sh php lua racket`
 elif [ $USER == "l.phipps-costin" ]; then
-  eval `spack load --sh ruby`
+  export NVM_DIR="$HOME/.nvm"
+  . "$NVM_DIR/nvm.sh"
 elif [ $USER == "zi.ya" ]; then
   eval `spack load --sh lua`
 else
