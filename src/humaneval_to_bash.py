@@ -110,12 +110,12 @@ def py_to_bash(val):
     else:
         return val
 
-class BashTranslator:
+class Translator:
 
     stop = ["\n}"]
 
-    def __init__(self, file_ext):
-        self.file_ext = file_ext
+    def __init__(self):
+        self.file_ext = "sh"
         self.num = 0
         self.entry_point = ""
 
@@ -237,5 +237,5 @@ class BashTranslator:
         return "echo 0"
 
 if __name__ == "__main__":
-    translator = BashTranslator("sh")
+    translator = Translator()
     main(translator)

@@ -13,12 +13,12 @@ from generic_translator import main
 RET_TYPE_LOC = -1
 NULL_DICT = "___null_dict___"
 
-class DlangTranslator:
+class Translator:
     # TODO: what is the stop sequence for it?
     stop = ["\n\n", "\nvoid", "\nbool", "\nint"]
 
-    def __init__(self, file_ext):
-        self.file_ext = file_ext
+    def __init__(self):
+        self.file_ext = "d"
         self.require_libs = {"std.math"}
         self.func_type = None
 
@@ -194,5 +194,5 @@ class DlangTranslator:
     
 
 if __name__ == "__main__":
-    translator = DlangTranslator("d")
+    translator = Translator()
     main(translator)

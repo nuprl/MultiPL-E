@@ -11,14 +11,14 @@ from generic_translator import main
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 array_list = []
 
-class PerlTranslator:
+class Translator:
 
     USub = "-"
 
     stop = [ "\nsub", "\n#", "\n\n" ]
 
-    def __init__(self, file_ext):
-        self.file_ext = file_ext
+    def __init__(self):
+        self.file_ext = "pl"
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         global array_list
@@ -88,5 +88,5 @@ class PerlTranslator:
 
 
 if __name__ == "__main__":
-    translator = PerlTranslator("pl")
+    translator = Translator()
     main(translator)
