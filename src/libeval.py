@@ -15,7 +15,7 @@ def run_without_exn(args: List[str]):
         stdout = output.stdout
         stderr = output.stderr
         exit_code = output.returncode
-        status = "OK"
+        status = "OK" if exit_code == 0 else "Exception"
     except subprocess.TimeoutExpired as exc:
         stdout = exc.stdout
         stderr = exc.stderr
