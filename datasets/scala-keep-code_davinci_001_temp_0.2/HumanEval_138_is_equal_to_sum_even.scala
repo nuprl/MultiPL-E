@@ -6,25 +6,25 @@ object Problem {
     // is_equal_to_sum_even(4) == False
     // is_equal_to_sum_even(6) == False
     // is_equal_to_sum_even(8) == True
-    def isEqualToSumEven(n : Int) : Boolean = {
-        var sum = 0
-        var i = 0
-        while (sum < n) {
-            i += 2
-            sum += i
+    def isEqualToSumEven(n : Long) : Boolean = {
+        var sum = 0L
+        for (i <- 1L to n) {
+            if (i % 2 == 0) {
+                sum += i
+            }
         }
-        sum == n
+        return sum == n
 
     }
     def main(args: Array[String]) = {
-    assert(isEqualToSumEven((4)) == (false));
-    assert(isEqualToSumEven((6)) == (false));
-    assert(isEqualToSumEven((8)) == (true));
-    assert(isEqualToSumEven((10)) == (true));
-    assert(isEqualToSumEven((11)) == (false));
-    assert(isEqualToSumEven((12)) == (true));
-    assert(isEqualToSumEven((13)) == (false));
-    assert(isEqualToSumEven((16)) == (true));
+    assert(isEqualToSumEven((4l)) == (false));
+    assert(isEqualToSumEven((6l)) == (false));
+    assert(isEqualToSumEven((8l)) == (true));
+    assert(isEqualToSumEven((10l)) == (true));
+    assert(isEqualToSumEven((11l)) == (false));
+    assert(isEqualToSumEven((12l)) == (true));
+    assert(isEqualToSumEven((13l)) == (false));
+    assert(isEqualToSumEven((16l)) == (true));
     }
 
 }

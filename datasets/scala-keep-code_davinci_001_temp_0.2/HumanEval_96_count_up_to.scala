@@ -10,22 +10,29 @@ object Problem {
     // count_up_to(20) => [2,3,5,7,11,13,17,19]
     // count_up_to(1) => []
     // count_up_to(18) => [2,3,5,7,11,13,17]
-    def countUpTo(n : Int) : List[Int] = {
-        // TODO: Implement this function
-        return List()
+    def countUpTo(n : Long) : List[Long] = {
+        var primes = List[Long]()
+        var i = 2
+        while (i < n) {
+            if (isPrime(i)) {
+                primes = primes :+ i
+            }
+            i += 1
+        }
+        return primes
 
     }
     def main(args: Array[String]) = {
-    assert(countUpTo((5)).equals((List[Int](2.toInt, 3.toInt))));
-    assert(countUpTo((6)).equals((List[Int](2.toInt, 3.toInt, 5.toInt))));
-    assert(countUpTo((7)).equals((List[Int](2.toInt, 3.toInt, 5.toInt))));
-    assert(countUpTo((10)).equals((List[Int](2.toInt, 3.toInt, 5.toInt, 7.toInt))));
-    assert(countUpTo((0)).equals((List[Int]())));
-    assert(countUpTo((22)).equals((List[Int](2.toInt, 3.toInt, 5.toInt, 7.toInt, 11.toInt, 13.toInt, 17.toInt, 19.toInt))));
-    assert(countUpTo((1)).equals((List[Int]())));
-    assert(countUpTo((18)).equals((List[Int](2.toInt, 3.toInt, 5.toInt, 7.toInt, 11.toInt, 13.toInt, 17.toInt))));
-    assert(countUpTo((47)).equals((List[Int](2.toInt, 3.toInt, 5.toInt, 7.toInt, 11.toInt, 13.toInt, 17.toInt, 19.toInt, 23.toInt, 29.toInt, 31.toInt, 37.toInt, 41.toInt, 43.toInt))));
-    assert(countUpTo((101)).equals((List[Int](2.toInt, 3.toInt, 5.toInt, 7.toInt, 11.toInt, 13.toInt, 17.toInt, 19.toInt, 23.toInt, 29.toInt, 31.toInt, 37.toInt, 41.toInt, 43.toInt, 47.toInt, 53.toInt, 59.toInt, 61.toInt, 67.toInt, 71.toInt, 73.toInt, 79.toInt, 83.toInt, 89.toInt, 97.toInt))));
+    assert(countUpTo((5l)).equals((List[Long](2l.toLong, 3l.toLong))));
+    assert(countUpTo((6l)).equals((List[Long](2l.toLong, 3l.toLong, 5l.toLong))));
+    assert(countUpTo((7l)).equals((List[Long](2l.toLong, 3l.toLong, 5l.toLong))));
+    assert(countUpTo((10l)).equals((List[Long](2l.toLong, 3l.toLong, 5l.toLong, 7l.toLong))));
+    assert(countUpTo((0l)).equals((List[Long]())));
+    assert(countUpTo((22l)).equals((List[Long](2l.toLong, 3l.toLong, 5l.toLong, 7l.toLong, 11l.toLong, 13l.toLong, 17l.toLong, 19l.toLong))));
+    assert(countUpTo((1l)).equals((List[Long]())));
+    assert(countUpTo((18l)).equals((List[Long](2l.toLong, 3l.toLong, 5l.toLong, 7l.toLong, 11l.toLong, 13l.toLong, 17l.toLong))));
+    assert(countUpTo((47l)).equals((List[Long](2l.toLong, 3l.toLong, 5l.toLong, 7l.toLong, 11l.toLong, 13l.toLong, 17l.toLong, 19l.toLong, 23l.toLong, 29l.toLong, 31l.toLong, 37l.toLong, 41l.toLong, 43l.toLong))));
+    assert(countUpTo((101l)).equals((List[Long](2l.toLong, 3l.toLong, 5l.toLong, 7l.toLong, 11l.toLong, 13l.toLong, 17l.toLong, 19l.toLong, 23l.toLong, 29l.toLong, 31l.toLong, 37l.toLong, 41l.toLong, 43l.toLong, 47l.toLong, 53l.toLong, 59l.toLong, 61l.toLong, 67l.toLong, 71l.toLong, 73l.toLong, 79l.toLong, 83l.toLong, 89l.toLong, 97l.toLong))));
     }
 
 }

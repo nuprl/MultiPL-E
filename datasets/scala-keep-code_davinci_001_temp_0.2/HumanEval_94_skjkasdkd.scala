@@ -10,32 +10,26 @@ object Problem {
     // For lst = [0,724,32,71,99,32,6,0,5,91,83,0,5,6] the output should be 11
     // For lst = [0,81,12,3,1,21] the output should be 3
     // For lst = [0,8,1,2,1,7] the output should be 7
-    def skjkasdkd(lst : List[Int]) : Int = {
-        var max = 0
-        var sum = 0
+    def skjkasdkd(lst : List[Long]) : Long = {
+        var max = 0L
         for (i <- lst) {
             if (i > max) {
                 max = i
             }
         }
-        for (i <- lst) {
-            if (i == max) {
-                sum += i
-            }
-        }
-        return sum
+        return max
 
     }
     def main(args: Array[String]) = {
-    assert(skjkasdkd((List[Int](0.toInt, 3.toInt, 2.toInt, 1.toInt, 3.toInt, 5.toInt, 7.toInt, 4.toInt, 5.toInt, 5.toInt, 5.toInt, 2.toInt, 181.toInt, 32.toInt, 4.toInt, 32.toInt, 3.toInt, 2.toInt, 32.toInt, 324.toInt, 4.toInt, 3.toInt))) == (10));
-    assert(skjkasdkd((List[Int](1.toInt, 0.toInt, 1.toInt, 8.toInt, 2.toInt, 4597.toInt, 2.toInt, 1.toInt, 3.toInt, 40.toInt, 1.toInt, 2.toInt, 1.toInt, 2.toInt, 4.toInt, 2.toInt, 5.toInt, 1.toInt))) == (25));
-    assert(skjkasdkd((List[Int](1.toInt, 3.toInt, 1.toInt, 32.toInt, 5107.toInt, 34.toInt, 83278.toInt, 109.toInt, 163.toInt, 23.toInt, 2323.toInt, 32.toInt, 30.toInt, 1.toInt, 9.toInt, 3.toInt))) == (13));
-    assert(skjkasdkd((List[Int](0.toInt, 724.toInt, 32.toInt, 71.toInt, 99.toInt, 32.toInt, 6.toInt, 0.toInt, 5.toInt, 91.toInt, 83.toInt, 0.toInt, 5.toInt, 6.toInt))) == (11));
-    assert(skjkasdkd((List[Int](0.toInt, 81.toInt, 12.toInt, 3.toInt, 1.toInt, 21.toInt))) == (3));
-    assert(skjkasdkd((List[Int](0.toInt, 8.toInt, 1.toInt, 2.toInt, 1.toInt, 7.toInt))) == (7));
-    assert(skjkasdkd((List[Int](8191.toInt))) == (19));
-    assert(skjkasdkd((List[Int](8191.toInt, 123456.toInt, 127.toInt, 7.toInt))) == (19));
-    assert(skjkasdkd((List[Int](127.toInt, 97.toInt, 8192.toInt))) == (10));
+    assert(skjkasdkd((List[Long](0l.toLong, 3l.toLong, 2l.toLong, 1l.toLong, 3l.toLong, 5l.toLong, 7l.toLong, 4l.toLong, 5l.toLong, 5l.toLong, 5l.toLong, 2l.toLong, 181l.toLong, 32l.toLong, 4l.toLong, 32l.toLong, 3l.toLong, 2l.toLong, 32l.toLong, 324l.toLong, 4l.toLong, 3l.toLong))) == (10l));
+    assert(skjkasdkd((List[Long](1l.toLong, 0l.toLong, 1l.toLong, 8l.toLong, 2l.toLong, 4597l.toLong, 2l.toLong, 1l.toLong, 3l.toLong, 40l.toLong, 1l.toLong, 2l.toLong, 1l.toLong, 2l.toLong, 4l.toLong, 2l.toLong, 5l.toLong, 1l.toLong))) == (25l));
+    assert(skjkasdkd((List[Long](1l.toLong, 3l.toLong, 1l.toLong, 32l.toLong, 5107l.toLong, 34l.toLong, 83278l.toLong, 109l.toLong, 163l.toLong, 23l.toLong, 2323l.toLong, 32l.toLong, 30l.toLong, 1l.toLong, 9l.toLong, 3l.toLong))) == (13l));
+    assert(skjkasdkd((List[Long](0l.toLong, 724l.toLong, 32l.toLong, 71l.toLong, 99l.toLong, 32l.toLong, 6l.toLong, 0l.toLong, 5l.toLong, 91l.toLong, 83l.toLong, 0l.toLong, 5l.toLong, 6l.toLong))) == (11l));
+    assert(skjkasdkd((List[Long](0l.toLong, 81l.toLong, 12l.toLong, 3l.toLong, 1l.toLong, 21l.toLong))) == (3l));
+    assert(skjkasdkd((List[Long](0l.toLong, 8l.toLong, 1l.toLong, 2l.toLong, 1l.toLong, 7l.toLong))) == (7l));
+    assert(skjkasdkd((List[Long](8191l.toLong))) == (19l));
+    assert(skjkasdkd((List[Long](8191l.toLong, 123456l.toLong, 127l.toLong, 7l.toLong))) == (19l));
+    assert(skjkasdkd((List[Long](127l.toLong, 97l.toLong, 8192l.toLong))) == (10l));
     }
 
 }

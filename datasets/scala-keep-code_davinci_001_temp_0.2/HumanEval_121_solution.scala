@@ -6,10 +6,10 @@ object Problem {
     // solution([5, 8, 7, 1]) ==> 12
     // solution([3, 3, 3, 3, 3]) ==> 9
     // solution([30, 13, 24, 321]) ==>0
-    def solution(lst : List[Int]) : Int = {
-        var sum = 0
-        for (i <- 0 until lst.length) {
-            if (i % 2 == 0 && lst(i) % 2 != 0) {
+    def solution(lst : List[Long]) : Long = {
+        var sum = 0L
+        for(i <- 0 until lst.length){
+            if(i % 2 == 0 && lst(i) % 2 != 0){
                 sum += lst(i)
             }
         }
@@ -17,13 +17,13 @@ object Problem {
 
     }
     def main(args: Array[String]) = {
-    assert(solution((List[Int](5.toInt, 8.toInt, 7.toInt, 1.toInt))) == (12));
-    assert(solution((List[Int](3.toInt, 3.toInt, 3.toInt, 3.toInt, 3.toInt))) == (9));
-    assert(solution((List[Int](30.toInt, 13.toInt, 24.toInt, 321.toInt))) == (0));
-    assert(solution((List[Int](5.toInt, 9.toInt))) == (5));
-    assert(solution((List[Int](2.toInt, 4.toInt, 8.toInt))) == (0));
-    assert(solution((List[Int](30.toInt, 13.toInt, 23.toInt, 32.toInt))) == (23));
-    assert(solution((List[Int](3.toInt, 13.toInt, 2.toInt, 9.toInt))) == (3));
+    assert(solution((List[Long](5l.toLong, 8l.toLong, 7l.toLong, 1l.toLong))) == (12l));
+    assert(solution((List[Long](3l.toLong, 3l.toLong, 3l.toLong, 3l.toLong, 3l.toLong))) == (9l));
+    assert(solution((List[Long](30l.toLong, 13l.toLong, 24l.toLong, 321l.toLong))) == (0l));
+    assert(solution((List[Long](5l.toLong, 9l.toLong))) == (5l));
+    assert(solution((List[Long](2l.toLong, 4l.toLong, 8l.toLong))) == (0l));
+    assert(solution((List[Long](30l.toLong, 13l.toLong, 23l.toLong, 32l.toLong))) == (23l));
+    assert(solution((List[Long](3l.toLong, 13l.toLong, 2l.toLong, 9l.toLong))) == (3l));
     }
 
 }

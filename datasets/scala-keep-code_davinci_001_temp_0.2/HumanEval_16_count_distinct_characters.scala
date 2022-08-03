@@ -6,17 +6,20 @@ object Problem {
     // 3
     // >>> count_distinct_characters('Jerry')
     // 4
-    def countDistinctCharacters(string : String) : Int = {
-        val distinct = string.toLowerCase.distinct
-        distinct.length
+    def countDistinctCharacters(string : String) : Long = {
+        var distinct = Set[Char]()
+        for (c <- string) {
+            distinct += c.toLower
+        }
+        distinct.size
 
     }
     def main(args: Array[String]) = {
-    assert(countDistinctCharacters(("")) == (0));
-    assert(countDistinctCharacters(("abcde")) == (5));
-    assert(countDistinctCharacters(("abcdecadeCADE")) == (5));
-    assert(countDistinctCharacters(("aaaaAAAAaaaa")) == (1));
-    assert(countDistinctCharacters(("Jerry jERRY JeRRRY")) == (5));
+    assert(countDistinctCharacters(("")) == (0l));
+    assert(countDistinctCharacters(("abcde")) == (5l));
+    assert(countDistinctCharacters(("abcdecadeCADE")) == (5l));
+    assert(countDistinctCharacters(("aaaaAAAAaaaa")) == (1l));
+    assert(countDistinctCharacters(("Jerry jERRY JeRRRY")) == (5l));
     }
 
 }

@@ -6,15 +6,15 @@ object Problem {
     // [2, 5, 6]
     // >>> get_positive([5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10])
     // [5, 3, 2, 3, 9, 123, 1]
-    def getPositive(l : List[Int]) : List[Int] = {
-        return l.filter(_ > 0)
+    def getPositive(l : List[Long]) : List[Long] = {
+        l.filter(_ > 0)
 
     }
     def main(args: Array[String]) = {
-    assert(getPositive((List[Int](-1.toInt, -2.toInt, 4.toInt, 5.toInt, 6.toInt))).equals((List[Int](4.toInt, 5.toInt, 6.toInt))));
-    assert(getPositive((List[Int](5.toInt, 3.toInt, -5.toInt, 2.toInt, 3.toInt, 3.toInt, 9.toInt, 0.toInt, 123.toInt, 1.toInt, -10.toInt))).equals((List[Int](5.toInt, 3.toInt, 2.toInt, 3.toInt, 3.toInt, 9.toInt, 123.toInt, 1.toInt))));
-    assert(getPositive((List[Int](-1.toInt, -2.toInt))).equals((List[Int]())));
-    assert(getPositive((List[Int]())).equals((List[Int]())));
+    assert(getPositive((List[Long](-1l.toLong, -2l.toLong, 4l.toLong, 5l.toLong, 6l.toLong))).equals((List[Long](4l.toLong, 5l.toLong, 6l.toLong))));
+    assert(getPositive((List[Long](5l.toLong, 3l.toLong, -5l.toLong, 2l.toLong, 3l.toLong, 3l.toLong, 9l.toLong, 0l.toLong, 123l.toLong, 1l.toLong, -10l.toLong))).equals((List[Long](5l.toLong, 3l.toLong, 2l.toLong, 3l.toLong, 3l.toLong, 9l.toLong, 123l.toLong, 1l.toLong))));
+    assert(getPositive((List[Long](-1l.toLong, -2l.toLong))).equals((List[Long]())));
+    assert(getPositive((List[Long]())).equals((List[Long]())));
     }
 
 }

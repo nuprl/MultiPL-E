@@ -6,14 +6,14 @@ object Problem {
     // [5]
     // >>> filter_integers([1, 2, 3, 'abc', {}, []])
     // [1, 2, 3]
-    def filterIntegers(values : List[Any]) : List[Int] = {
-        values.filter(_.isInstanceOf[Int]).map(_.asInstanceOf[Int])
+    def filterIntegers(values : List[Any]) : List[Long] = {
+        values.filter(_.isInstanceOf[Long]).map(_.asInstanceOf[Long])
 
     }
     def main(args: Array[String]) = {
-    assert(filterIntegers((List[Any]())).equals((List[Int]())));
-    assert(filterIntegers((List[Any](4, Map[Int,Int](), List[Int](), 23.2f, 9, "adasd"))).equals((List[Int](4.toInt, 9.toInt))));
-    assert(filterIntegers((List[Any](3, "c", 3, 3, "a", "b"))).equals((List[Int](3.toInt, 3.toInt, 3.toInt))));
+    assert(filterIntegers((List[Any]())).equals((List[Long]())));
+    assert(filterIntegers((List[Any](4l, Map[Long,Long](), List[Long](), 23.2f, 9l, "adasd"))).equals((List[Long](4l.toLong, 9l.toLong))));
+    assert(filterIntegers((List[Any](3l, "c", 3l, 3l, "a", "b"))).equals((List[Long](3l.toLong, 3l.toLong, 3l.toLong))));
     }
 
 }

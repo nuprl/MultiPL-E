@@ -9,20 +9,20 @@ object Problem {
     // Constraints:
     // 1. 1 <= len(arr) <= 100
     // 2. 1 <= k <= len(arr)
-    def addElements(arr : List[Int], k : Int) : Int = {
-        var sum = 0
-        for (i <- 0 until k) {
+    def addElements(arr : List[Long], k : Long) : Long = {
+        var sum : Long = 0
+        for (i <- 0 to k.toInt - 1) {
             sum += arr(i)
         }
-        return sum
+        sum
 
     }
     def main(args: Array[String]) = {
-    assert(addElements((List[Int](1.toInt, -2.toInt, -3.toInt, 41.toInt, 57.toInt, 76.toInt, 87.toInt, 88.toInt, 99.toInt)), (3)) == (-4));
-    assert(addElements((List[Int](111.toInt, 121.toInt, 3.toInt, 4000.toInt, 5.toInt, 6.toInt)), (2)) == (0));
-    assert(addElements((List[Int](11.toInt, 21.toInt, 3.toInt, 90.toInt, 5.toInt, 6.toInt, 7.toInt, 8.toInt, 9.toInt)), (4)) == (125));
-    assert(addElements((List[Int](111.toInt, 21.toInt, 3.toInt, 4000.toInt, 5.toInt, 6.toInt, 7.toInt, 8.toInt, 9.toInt)), (4)) == (24));
-    assert(addElements((List[Int](1.toInt)), (1)) == (1));
+    assert(addElements((List[Long](1l.toLong, -2l.toLong, -3l.toLong, 41l.toLong, 57l.toLong, 76l.toLong, 87l.toLong, 88l.toLong, 99l.toLong)), (3l)) == (-4l));
+    assert(addElements((List[Long](111l.toLong, 121l.toLong, 3l.toLong, 4000l.toLong, 5l.toLong, 6l.toLong)), (2l)) == (0l));
+    assert(addElements((List[Long](11l.toLong, 21l.toLong, 3l.toLong, 90l.toLong, 5l.toLong, 6l.toLong, 7l.toLong, 8l.toLong, 9l.toLong)), (4l)) == (125l));
+    assert(addElements((List[Long](111l.toLong, 21l.toLong, 3l.toLong, 4000l.toLong, 5l.toLong, 6l.toLong, 7l.toLong, 8l.toLong, 9l.toLong)), (4l)) == (24l));
+    assert(addElements((List[Long](1l.toLong)), (1l)) == (1l));
     }
 
 }

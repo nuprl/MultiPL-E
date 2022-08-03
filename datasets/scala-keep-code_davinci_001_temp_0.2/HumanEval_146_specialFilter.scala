@@ -7,24 +7,18 @@ object Problem {
     // For example:
     // specialFilter([15, -73, 14, -15]) => 1 
     // specialFilter([33, -2, -3, 45, 21, 109]) => 2
-    def specialFilter(nums : List[Int]) : Int = {
-        var count = 0
-        for (i <- nums) {
-            if (i > 10 && (i % 10) % 2 == 1) {
-                count += 1
-            }
-        }
-        return count
+    def specialFilter(nums : List[Long]) : Long = {
+        nums.filter(x => (x > 10 && (x % 10) % 2 == 1)).length
 
     }
     def main(args: Array[String]) = {
-    assert(specialFilter((List[Int](5.toInt, -2.toInt, 1.toInt, -5.toInt))) == (0));
-    assert(specialFilter((List[Int](15.toInt, -73.toInt, 14.toInt, -15.toInt))) == (1));
-    assert(specialFilter((List[Int](33.toInt, -2.toInt, -3.toInt, 45.toInt, 21.toInt, 109.toInt))) == (2));
-    assert(specialFilter((List[Int](43.toInt, -12.toInt, 93.toInt, 125.toInt, 121.toInt, 109.toInt))) == (4));
-    assert(specialFilter((List[Int](71.toInt, -2.toInt, -33.toInt, 75.toInt, 21.toInt, 19.toInt))) == (3));
-    assert(specialFilter((List[Int](1.toInt))) == (0));
-    assert(specialFilter((List[Int]())) == (0));
+    assert(specialFilter((List[Long](5l.toLong, -2l.toLong, 1l.toLong, -5l.toLong))) == (0l));
+    assert(specialFilter((List[Long](15l.toLong, -73l.toLong, 14l.toLong, -15l.toLong))) == (1l));
+    assert(specialFilter((List[Long](33l.toLong, -2l.toLong, -3l.toLong, 45l.toLong, 21l.toLong, 109l.toLong))) == (2l));
+    assert(specialFilter((List[Long](43l.toLong, -12l.toLong, 93l.toLong, 125l.toLong, 121l.toLong, 109l.toLong))) == (4l));
+    assert(specialFilter((List[Long](71l.toLong, -2l.toLong, -33l.toLong, 75l.toLong, 21l.toLong, 19l.toLong))) == (3l));
+    assert(specialFilter((List[Long](1l.toLong))) == (0l));
+    assert(specialFilter((List[Long]())) == (0l));
     }
 
 }

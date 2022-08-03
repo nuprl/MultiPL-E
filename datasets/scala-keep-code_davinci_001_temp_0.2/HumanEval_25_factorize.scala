@@ -10,29 +10,29 @@ object Problem {
     // [5, 5]
     // >>> factorize(70)
     // [2, 5, 7]
-    def factorize(n : Int) : List[Int] = {
-        var factors = List[Int]()
-        var i = 2
+    def factorize(n : Long) : List[Long] = {
+        var factors = List[Long]()
+        var i = 2L
         while (i <= n) {
             if (n % i == 0) {
                 factors = factors :+ i
-                n = n / i
+                n /= i
             } else {
-                i = i + 1
+                i += 1
             }
         }
-        return factors
+        factors
 
     }
     def main(args: Array[String]) = {
-    assert(factorize((2)).equals((List[Int](2.toInt))));
-    assert(factorize((4)).equals((List[Int](2.toInt, 2.toInt))));
-    assert(factorize((8)).equals((List[Int](2.toInt, 2.toInt, 2.toInt))));
-    assert(factorize((57)).equals((List[Int](3.toInt, 19.toInt))));
-    assert(factorize((3249)).equals((List[Int](3.toInt, 3.toInt, 19.toInt, 19.toInt))));
-    assert(factorize((185193)).equals((List[Int](3.toInt, 3.toInt, 3.toInt, 19.toInt, 19.toInt, 19.toInt))));
-    assert(factorize((20577)).equals((List[Int](3.toInt, 19.toInt, 19.toInt, 19.toInt))));
-    assert(factorize((18)).equals((List[Int](2.toInt, 3.toInt, 3.toInt))));
+    assert(factorize((2l)).equals((List[Long](2l.toLong))));
+    assert(factorize((4l)).equals((List[Long](2l.toLong, 2l.toLong))));
+    assert(factorize((8l)).equals((List[Long](2l.toLong, 2l.toLong, 2l.toLong))));
+    assert(factorize((57l)).equals((List[Long](3l.toLong, 19l.toLong))));
+    assert(factorize((3249l)).equals((List[Long](3l.toLong, 3l.toLong, 19l.toLong, 19l.toLong))));
+    assert(factorize((185193l)).equals((List[Long](3l.toLong, 3l.toLong, 3l.toLong, 19l.toLong, 19l.toLong, 19l.toLong))));
+    assert(factorize((20577l)).equals((List[Long](3l.toLong, 19l.toLong, 19l.toLong, 19l.toLong))));
+    assert(factorize((18l)).equals((List[Long](2l.toLong, 3l.toLong, 3l.toLong))));
     }
 
 }

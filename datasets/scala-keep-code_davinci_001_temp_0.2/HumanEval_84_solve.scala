@@ -11,25 +11,22 @@ object Problem {
     // Constraints: 0 ≤ N ≤ 10000.
     // Output:
     // a string of binary number
-    def solve(N : Int) : String = {
+    def solve(N : Long) : String = {
         var sum = 0
-        var binary = ""
         var n = N
         while (n > 0) {
             sum += n % 2
-            binary = (n % 2).toString + binary
             n /= 2
         }
-        binary = sum.toString + binary
-        return binary
+        return sum.toString
 
     }
     def main(args: Array[String]) = {
-    assert(solve((1000)).equals(("1")));
-    assert(solve((150)).equals(("110")));
-    assert(solve((147)).equals(("1100")));
-    assert(solve((333)).equals(("1001")));
-    assert(solve((963)).equals(("10010")));
+    assert(solve((1000l)).equals(("1")));
+    assert(solve((150l)).equals(("110")));
+    assert(solve((147l)).equals(("1100")));
+    assert(solve((333l)).equals(("1001")));
+    assert(solve((963l)).equals(("10010")));
     }
 
 }
