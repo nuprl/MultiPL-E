@@ -16,10 +16,11 @@ import yaml
 from concurrent.futures import ThreadPoolExecutor
 
 #for the moment, accepting we might have rust and rs code 
-LANG = [ "rb", "lua", "rs", "rkt", "php", "cpp", "py", "jl", "js", "java"]
+LANG = [ "py", "sh","cs","cpp","d","go","java","js", "jl", "lua", "pl", "php", "r", "rkt", "rb", "rs","scala","swift","ts",]
 MODEL = [ "incoder", "davinci" ]
 TEMP = [ "0.2", "0.8" ]
-DOCSTRINGS = [ "keep", "remove" ]
+DOCSTRINGS = [ "keep", "remove", "transform" ]
+TERMS = [ "keep", "transform" ]
 
 def check(lang, model, temp, docstrings):
 
@@ -45,8 +46,8 @@ def check(lang, model, temp, docstrings):
 
 def check_all():
     #with ThreadPoolExecutor() as executor:
-    for model in MODEL:
-        for lang in LANG:
+    for lang in LANG:
+        for model in MODEL:
             for temp in TEMP:
                 for docstrings in DOCSTRINGS:
                     check(lang, model, temp, docstrings)
