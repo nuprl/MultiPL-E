@@ -8,25 +8,23 @@ object Problem {
     // the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
     // Example:
     // f(5) == [1, 2, 6, 24, 15]
-    def f(n : Int) : List[Int] = {
-        // BEGIN SOLUTION
-        var result = ListBuffer[Int]()
-        for (i <- 1 to n) {
+    def f(n : Long) : List[Long] = {
+        var result = ListBuffer[Long]()
+        for (i <- 1 to n.toInt) {
             if (i % 2 == 0) {
                 result += factorial(i)
             } else {
                 result += (1 to i).sum
             }
         }
-        return result.toList
-        // END SOLUTION
+        result.toList
 
     }
     def main(args: Array[String]) = {
-    assert(f((5)).equals((List[Int](1.toInt, 2.toInt, 6.toInt, 24.toInt, 15.toInt))));
-    assert(f((7)).equals((List[Int](1.toInt, 2.toInt, 6.toInt, 24.toInt, 15.toInt, 720.toInt, 28.toInt))));
-    assert(f((1)).equals((List[Int](1.toInt))));
-    assert(f((3)).equals((List[Int](1.toInt, 2.toInt, 6.toInt))));
+    assert(f((5l)).equals((List[Long](1l.toLong, 2l.toLong, 6l.toLong, 24l.toLong, 15l.toLong))));
+    assert(f((7l)).equals((List[Long](1l.toLong, 2l.toLong, 6l.toLong, 24l.toLong, 15l.toLong, 720l.toLong, 28l.toLong))));
+    assert(f((1l)).equals((List[Long](1l.toLong))));
+    assert(f((3l)).equals((List[Long](1l.toLong, 2l.toLong, 6l.toLong))));
     }
 
 }

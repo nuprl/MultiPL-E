@@ -6,9 +6,12 @@ object Problem {
     // Example
     // minSubArraySum([2, 3, 4, 1, 2, 4]) == 1
     // minSubArraySum([-1, -2, -3]) == -6
-    def minSubArraySum(nums : List[Int]) : Int = {
-        var minSum = Int.MaxValue
-        var sum = 0
+    def minSubArraySum(nums : List[Long]) : Long = {
+        if (nums.length == 0) {
+            return 0
+        }
+        var minSum = Long.MaxValue
+        var sum = 0L
         for (i <- 0 until nums.length) {
             sum += nums(i)
             if (sum < minSum) {
@@ -22,18 +25,18 @@ object Problem {
 
     }
     def main(args: Array[String]) = {
-    assert(minSubArraySum((List[Int](2.toInt, 3.toInt, 4.toInt, 1.toInt, 2.toInt, 4.toInt))) == (1));
-    assert(minSubArraySum((List[Int](-1.toInt, -2.toInt, -3.toInt))) == (-6));
-    assert(minSubArraySum((List[Int](-1.toInt, -2.toInt, -3.toInt, 2.toInt, -10.toInt))) == (-14));
-    assert(minSubArraySum((List[Int](0.toInt))) == (0));
-    assert(minSubArraySum((List[Int](0.toInt, 10.toInt, 20.toInt, 1000000.toInt))) == (0));
-    assert(minSubArraySum((List[Int](-1.toInt, -2.toInt, -3.toInt, 10.toInt, -5.toInt))) == (-6));
-    assert(minSubArraySum((List[Int](100.toInt, -1.toInt, -2.toInt, -3.toInt, 10.toInt, -5.toInt))) == (-6));
-    assert(minSubArraySum((List[Int](10.toInt, 11.toInt, 13.toInt, 8.toInt, 3.toInt, 4.toInt))) == (3));
-    assert(minSubArraySum((List[Int](100.toInt, -33.toInt, 32.toInt, -1.toInt, 0.toInt, -2.toInt))) == (-33));
-    assert(minSubArraySum((List[Int](-10.toInt))) == (-10));
-    assert(minSubArraySum((List[Int](7.toInt))) == (7));
-    assert(minSubArraySum((List[Int](1.toInt, -1.toInt))) == (-1));
+    assert(minSubArraySum((List[Long](2l.toLong, 3l.toLong, 4l.toLong, 1l.toLong, 2l.toLong, 4l.toLong))) == (1l));
+    assert(minSubArraySum((List[Long](-1l.toLong, -2l.toLong, -3l.toLong))) == (-6l));
+    assert(minSubArraySum((List[Long](-1l.toLong, -2l.toLong, -3l.toLong, 2l.toLong, -10l.toLong))) == (-14l));
+    assert(minSubArraySum((List[Long](-9999999999999999l.toLong))) == (-9999999999999999l));
+    assert(minSubArraySum((List[Long](0l.toLong, 10l.toLong, 20l.toLong, 1000000l.toLong))) == (0l));
+    assert(minSubArraySum((List[Long](-1l.toLong, -2l.toLong, -3l.toLong, 10l.toLong, -5l.toLong))) == (-6l));
+    assert(minSubArraySum((List[Long](100l.toLong, -1l.toLong, -2l.toLong, -3l.toLong, 10l.toLong, -5l.toLong))) == (-6l));
+    assert(minSubArraySum((List[Long](10l.toLong, 11l.toLong, 13l.toLong, 8l.toLong, 3l.toLong, 4l.toLong))) == (3l));
+    assert(minSubArraySum((List[Long](100l.toLong, -33l.toLong, 32l.toLong, -1l.toLong, 0l.toLong, -2l.toLong))) == (-33l));
+    assert(minSubArraySum((List[Long](-10l.toLong))) == (-10l));
+    assert(minSubArraySum((List[Long](7l.toLong))) == (7l));
+    assert(minSubArraySum((List[Long](1l.toLong, -1l.toLong))) == (-1l));
     }
 
 }

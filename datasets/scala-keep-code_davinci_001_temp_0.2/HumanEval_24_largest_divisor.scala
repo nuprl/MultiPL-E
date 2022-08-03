@@ -4,8 +4,8 @@ object Problem {
     // For a given number n, find the largest number that divides n evenly, smaller than n
     // >>> largest_divisor(15)
     // 5
-    def largestDivisor(n : Int) : Int = {
-        var i = n
+    def largestDivisor(n : Long) : Long = {
+        var i = n - 1
         while (i > 1) {
             if (n % i == 0) {
                 return i
@@ -16,11 +16,11 @@ object Problem {
 
     }
     def main(args: Array[String]) = {
-    assert(largestDivisor((3)) == (1));
-    assert(largestDivisor((7)) == (1));
-    assert(largestDivisor((10)) == (5));
-    assert(largestDivisor((100)) == (50));
-    assert(largestDivisor((49)) == (7));
+    assert(largestDivisor((3l)) == (1l));
+    assert(largestDivisor((7l)) == (1l));
+    assert(largestDivisor((10l)) == (5l));
+    assert(largestDivisor((100l)) == (50l));
+    assert(largestDivisor((49l)) == (7l));
     }
 
 }

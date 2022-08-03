@@ -11,16 +11,20 @@ object Problem {
     // example:
     // compare([1,2,3,4,5,1],[1,2,3,4,2,-2]) -> [0,0,0,0,3,3]
     // compare([0,5,0,0,0,4],[4,1,1,0,0,-2]) -> [4,4,1,0,0,6]
-    def compare(game : List[Int], guess : List[Int]) : List[Int] = {
-        // your code here
-        return List[Int]()
+    def compare(game : List[Long], guess : List[Long]) : List[Long] = {
+        // your code
+        var result = List[Long]()
+        for(i <- 0 until game.length){
+            result = result :+ abs(game(i) - guess(i))
+        }
+        result
 
     }
     def main(args: Array[String]) = {
-    assert(compare((List[Int](1.toInt, 2.toInt, 3.toInt, 4.toInt, 5.toInt, 1.toInt)), (List[Int](1.toInt, 2.toInt, 3.toInt, 4.toInt, 2.toInt, -2.toInt))).equals((List[Int](0.toInt, 0.toInt, 0.toInt, 0.toInt, 3.toInt, 3.toInt))));
-    assert(compare((List[Int](0.toInt, 0.toInt, 0.toInt, 0.toInt, 0.toInt, 0.toInt)), (List[Int](0.toInt, 0.toInt, 0.toInt, 0.toInt, 0.toInt, 0.toInt))).equals((List[Int](0.toInt, 0.toInt, 0.toInt, 0.toInt, 0.toInt, 0.toInt))));
-    assert(compare((List[Int](1.toInt, 2.toInt, 3.toInt)), (List[Int](-1.toInt, -2.toInt, -3.toInt))).equals((List[Int](2.toInt, 4.toInt, 6.toInt))));
-    assert(compare((List[Int](1.toInt, 2.toInt, 3.toInt, 5.toInt)), (List[Int](-1.toInt, 2.toInt, 3.toInt, 4.toInt))).equals((List[Int](2.toInt, 0.toInt, 0.toInt, 1.toInt))));
+    assert(compare((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 4l.toLong, 5l.toLong, 1l.toLong)), (List[Long](1l.toLong, 2l.toLong, 3l.toLong, 4l.toLong, 2l.toLong, -2l.toLong))).equals((List[Long](0l.toLong, 0l.toLong, 0l.toLong, 0l.toLong, 3l.toLong, 3l.toLong))));
+    assert(compare((List[Long](0l.toLong, 0l.toLong, 0l.toLong, 0l.toLong, 0l.toLong, 0l.toLong)), (List[Long](0l.toLong, 0l.toLong, 0l.toLong, 0l.toLong, 0l.toLong, 0l.toLong))).equals((List[Long](0l.toLong, 0l.toLong, 0l.toLong, 0l.toLong, 0l.toLong, 0l.toLong))));
+    assert(compare((List[Long](1l.toLong, 2l.toLong, 3l.toLong)), (List[Long](-1l.toLong, -2l.toLong, -3l.toLong))).equals((List[Long](2l.toLong, 4l.toLong, 6l.toLong))));
+    assert(compare((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 5l.toLong)), (List[Long](-1l.toLong, 2l.toLong, 3l.toLong, 4l.toLong))).equals((List[Long](2l.toLong, 0l.toLong, 0l.toLong, 1l.toLong))));
     }
 
 }

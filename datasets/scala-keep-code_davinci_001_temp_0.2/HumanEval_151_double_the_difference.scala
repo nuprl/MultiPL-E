@@ -8,10 +8,10 @@ object Problem {
     // double_the_difference([9, -2]) == 81
     // double_the_difference([0]) == 0  
     // If the input list is empty, return 0.
-    def doubleTheDifference(lst : List[Float]) : Int = {
-        var sum = 0
+    def doubleTheDifference(lst : List[Float]) : Long = {
+        var sum : Long = 0
         for (i <- lst) {
-            if (i % 2 != 0) {
+            if (i > 0 && i % 2 == 1) {
                 sum += i * i
             }
         }
@@ -19,13 +19,13 @@ object Problem {
 
     }
     def main(args: Array[String]) = {
-    assert(doubleTheDifference((List[Float]())) == (0));
-    assert(doubleTheDifference((List[Float](5.0f.toFloat, 4.0f.toFloat))) == (25));
-    assert(doubleTheDifference((List[Float](0.1f.toFloat, 0.2f.toFloat, 0.3f.toFloat))) == (0));
-    assert(doubleTheDifference((List[Float](-10.0f.toFloat, -20.0f.toFloat, -30.0f.toFloat))) == (0));
-    assert(doubleTheDifference((List[Float](-1.0f.toFloat, -2.0f.toFloat, 8.0f.toFloat))) == (0));
-    assert(doubleTheDifference((List[Float](0.2f.toFloat, 3.0f.toFloat, 5.0f.toFloat))) == (34));
-    assert(doubleTheDifference((List[Float](-9.0f.toFloat, -7.0f.toFloat, -5.0f.toFloat, -3.0f.toFloat, -1.0f.toFloat, 1.0f.toFloat, 3.0f.toFloat, 5.0f.toFloat, 7.0f.toFloat, 9.0f.toFloat))) == (165));
+    assert(doubleTheDifference((List[Float]())) == (0l));
+    assert(doubleTheDifference((List[Float](5.0f.toFloat, 4.0f.toFloat))) == (25l));
+    assert(doubleTheDifference((List[Float](0.1f.toFloat, 0.2f.toFloat, 0.3f.toFloat))) == (0l));
+    assert(doubleTheDifference((List[Float](-10.0f.toFloat, -20.0f.toFloat, -30.0f.toFloat))) == (0l));
+    assert(doubleTheDifference((List[Float](-1.0f.toFloat, -2.0f.toFloat, 8.0f.toFloat))) == (0l));
+    assert(doubleTheDifference((List[Float](0.2f.toFloat, 3.0f.toFloat, 5.0f.toFloat))) == (34l));
+    assert(doubleTheDifference((List[Float](-9.0f.toFloat, -7.0f.toFloat, -5.0f.toFloat, -3.0f.toFloat, -1.0f.toFloat, 1.0f.toFloat, 3.0f.toFloat, 5.0f.toFloat, 7.0f.toFloat, 9.0f.toFloat))) == (165l));
     }
 
 }

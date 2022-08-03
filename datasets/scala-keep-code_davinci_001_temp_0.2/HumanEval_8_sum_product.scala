@@ -7,22 +7,20 @@ object Problem {
     // (0, 1)
     // >>> sum_product([1, 2, 3, 4])
     // (10, 24)
-    def sumProduct(numbers : List[Int]) : Tuple2[Int, Int] = {
-        var sum = 0
-        var product = 1
-        for (num <- numbers) {
-            sum += num
-            product *= num
+    def sumProduct(numbers : List[Long]) : Tuple2[Long, Long] = {
+        if (numbers.isEmpty) {
+            (0, 1)
+        } else {
+            (numbers.sum, numbers.product)
         }
-        (sum, product)
 
     }
     def main(args: Array[String]) = {
-    assert(sumProduct((List[Int]())).equals(((0, 1))));
-    assert(sumProduct((List[Int](1.toInt, 1.toInt, 1.toInt))).equals(((3, 1))));
-    assert(sumProduct((List[Int](100.toInt, 0.toInt))).equals(((100, 0))));
-    assert(sumProduct((List[Int](3.toInt, 5.toInt, 7.toInt))).equals(((15, 105))));
-    assert(sumProduct((List[Int](10.toInt))).equals(((10, 10))));
+    assert(sumProduct((List[Long]())).equals(((0l, 1l))));
+    assert(sumProduct((List[Long](1l.toLong, 1l.toLong, 1l.toLong))).equals(((3l, 1l))));
+    assert(sumProduct((List[Long](100l.toLong, 0l.toLong))).equals(((100l, 0l))));
+    assert(sumProduct((List[Long](3l.toLong, 5l.toLong, 7l.toLong))).equals(((15l, 105l))));
+    assert(sumProduct((List[Long](10l.toLong))).equals(((10l, 10l))));
     }
 
 }

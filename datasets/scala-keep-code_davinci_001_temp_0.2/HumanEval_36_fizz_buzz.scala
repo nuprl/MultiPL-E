@@ -8,9 +8,9 @@ object Problem {
     // 2
     // >>> fizz_buzz(79)
     // 3
-    def fizzBuzz(n : Int) : Int = {
-        var count = 0
-        for (i <- 1 until n) {
+    def fizzBuzz(n : Long) : Long = {
+        var count = 0L
+        for (i <- 1L to n) {
             if (i % 11 == 0 || i % 13 == 0) {
                 count += 1
             }
@@ -19,14 +19,14 @@ object Problem {
 
     }
     def main(args: Array[String]) = {
-    assert(fizzBuzz((50)) == (0));
-    assert(fizzBuzz((78)) == (2));
-    assert(fizzBuzz((79)) == (3));
-    assert(fizzBuzz((100)) == (3));
-    assert(fizzBuzz((200)) == (6));
-    assert(fizzBuzz((4000)) == (192));
-    assert(fizzBuzz((10000)) == (639));
-    assert(fizzBuzz((100000)) == (8026));
+    assert(fizzBuzz((50l)) == (0l));
+    assert(fizzBuzz((78l)) == (2l));
+    assert(fizzBuzz((79l)) == (3l));
+    assert(fizzBuzz((100l)) == (3l));
+    assert(fizzBuzz((200l)) == (6l));
+    assert(fizzBuzz((4000l)) == (192l));
+    assert(fizzBuzz((10000l)) == (639l));
+    assert(fizzBuzz((100000l)) == (8026l));
     }
 
 }

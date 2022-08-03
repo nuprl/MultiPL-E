@@ -9,48 +9,53 @@ object Problem {
     // search([4, 1, 2, 2, 3, 1]) == 2
     // search([1, 2, 2, 3, 3, 3, 4, 4, 4]) == 3
     // search([5, 5, 4, 4, 4]) == -1
-    def search(lst : List[Int]) : Int = {
-        var max = -1
-        var maxFreq = 0
-        var freq = 0
+    def search(lst : List[Long]) : Long = {
+        var max = -1L
+        var maxFreq = 0L
+        var freq = 0L
         for (i <- lst) {
             if (i > 0) {
-                freq = lst.count(_ == i)
-                if (freq > maxFreq) {
+                if (i == max) {
+                    freq += 1
+                } else if (i > max) {
                     max = i
-                    maxFreq = freq
+                    freq = 1
                 }
             }
         }
-        return max
+        if (freq >= max) {
+            max
+        } else {
+            -1
+        }
 
     }
     def main(args: Array[String]) = {
-    assert(search((List[Int](5.toInt, 5.toInt, 5.toInt, 5.toInt, 1.toInt))) == (1));
-    assert(search((List[Int](4.toInt, 1.toInt, 4.toInt, 1.toInt, 4.toInt, 4.toInt))) == (4));
-    assert(search((List[Int](3.toInt, 3.toInt))) == (-1));
-    assert(search((List[Int](8.toInt, 8.toInt, 8.toInt, 8.toInt, 8.toInt, 8.toInt, 8.toInt, 8.toInt))) == (8));
-    assert(search((List[Int](2.toInt, 3.toInt, 3.toInt, 2.toInt, 2.toInt))) == (2));
-    assert(search((List[Int](2.toInt, 7.toInt, 8.toInt, 8.toInt, 4.toInt, 8.toInt, 7.toInt, 3.toInt, 9.toInt, 6.toInt, 5.toInt, 10.toInt, 4.toInt, 3.toInt, 6.toInt, 7.toInt, 1.toInt, 7.toInt, 4.toInt, 10.toInt, 8.toInt, 1.toInt))) == (1));
-    assert(search((List[Int](3.toInt, 2.toInt, 8.toInt, 2.toInt))) == (2));
-    assert(search((List[Int](6.toInt, 7.toInt, 1.toInt, 8.toInt, 8.toInt, 10.toInt, 5.toInt, 8.toInt, 5.toInt, 3.toInt, 10.toInt))) == (1));
-    assert(search((List[Int](8.toInt, 8.toInt, 3.toInt, 6.toInt, 5.toInt, 6.toInt, 4.toInt))) == (-1));
-    assert(search((List[Int](6.toInt, 9.toInt, 6.toInt, 7.toInt, 1.toInt, 4.toInt, 7.toInt, 1.toInt, 8.toInt, 8.toInt, 9.toInt, 8.toInt, 10.toInt, 10.toInt, 8.toInt, 4.toInt, 10.toInt, 4.toInt, 10.toInt, 1.toInt, 2.toInt, 9.toInt, 5.toInt, 7.toInt, 9.toInt))) == (1));
-    assert(search((List[Int](1.toInt, 9.toInt, 10.toInt, 1.toInt, 3.toInt))) == (1));
-    assert(search((List[Int](6.toInt, 9.toInt, 7.toInt, 5.toInt, 8.toInt, 7.toInt, 5.toInt, 3.toInt, 7.toInt, 5.toInt, 10.toInt, 10.toInt, 3.toInt, 6.toInt, 10.toInt, 2.toInt, 8.toInt, 6.toInt, 5.toInt, 4.toInt, 9.toInt, 5.toInt, 3.toInt, 10.toInt))) == (5));
-    assert(search((List[Int](1.toInt))) == (1));
-    assert(search((List[Int](8.toInt, 8.toInt, 10.toInt, 6.toInt, 4.toInt, 3.toInt, 5.toInt, 8.toInt, 2.toInt, 4.toInt, 2.toInt, 8.toInt, 4.toInt, 6.toInt, 10.toInt, 4.toInt, 2.toInt, 1.toInt, 10.toInt, 2.toInt, 1.toInt, 1.toInt, 5.toInt))) == (4));
-    assert(search((List[Int](2.toInt, 10.toInt, 4.toInt, 8.toInt, 2.toInt, 10.toInt, 5.toInt, 1.toInt, 2.toInt, 9.toInt, 5.toInt, 5.toInt, 6.toInt, 3.toInt, 8.toInt, 6.toInt, 4.toInt, 10.toInt))) == (2));
-    assert(search((List[Int](1.toInt, 6.toInt, 10.toInt, 1.toInt, 6.toInt, 9.toInt, 10.toInt, 8.toInt, 6.toInt, 8.toInt, 7.toInt, 3.toInt))) == (1));
-    assert(search((List[Int](9.toInt, 2.toInt, 4.toInt, 1.toInt, 5.toInt, 1.toInt, 5.toInt, 2.toInt, 5.toInt, 7.toInt, 7.toInt, 7.toInt, 3.toInt, 10.toInt, 1.toInt, 5.toInt, 4.toInt, 2.toInt, 8.toInt, 4.toInt, 1.toInt, 9.toInt, 10.toInt, 7.toInt, 10.toInt, 2.toInt, 8.toInt, 10.toInt, 9.toInt, 4.toInt))) == (4));
-    assert(search((List[Int](2.toInt, 6.toInt, 4.toInt, 2.toInt, 8.toInt, 7.toInt, 5.toInt, 6.toInt, 4.toInt, 10.toInt, 4.toInt, 6.toInt, 3.toInt, 7.toInt, 8.toInt, 8.toInt, 3.toInt, 1.toInt, 4.toInt, 2.toInt, 2.toInt, 10.toInt, 7.toInt))) == (4));
-    assert(search((List[Int](9.toInt, 8.toInt, 6.toInt, 10.toInt, 2.toInt, 6.toInt, 10.toInt, 2.toInt, 7.toInt, 8.toInt, 10.toInt, 3.toInt, 8.toInt, 2.toInt, 6.toInt, 2.toInt, 3.toInt, 1.toInt))) == (2));
-    assert(search((List[Int](5.toInt, 5.toInt, 3.toInt, 9.toInt, 5.toInt, 6.toInt, 3.toInt, 2.toInt, 8.toInt, 5.toInt, 6.toInt, 10.toInt, 10.toInt, 6.toInt, 8.toInt, 4.toInt, 10.toInt, 7.toInt, 7.toInt, 10.toInt, 8.toInt))) == (-1));
-    assert(search((List[Int](10.toInt))) == (-1));
-    assert(search((List[Int](9.toInt, 7.toInt, 7.toInt, 2.toInt, 4.toInt, 7.toInt, 2.toInt, 10.toInt, 9.toInt, 7.toInt, 5.toInt, 7.toInt, 2.toInt))) == (2));
-    assert(search((List[Int](5.toInt, 4.toInt, 10.toInt, 2.toInt, 1.toInt, 1.toInt, 10.toInt, 3.toInt, 6.toInt, 1.toInt, 8.toInt))) == (1));
-    assert(search((List[Int](7.toInt, 9.toInt, 9.toInt, 9.toInt, 3.toInt, 4.toInt, 1.toInt, 5.toInt, 9.toInt, 1.toInt, 2.toInt, 1.toInt, 1.toInt, 10.toInt, 7.toInt, 5.toInt, 6.toInt, 7.toInt, 6.toInt, 7.toInt, 7.toInt, 6.toInt))) == (1));
-    assert(search((List[Int](3.toInt, 10.toInt, 10.toInt, 9.toInt, 2.toInt))) == (-1));
+    assert(search((List[Long](5l.toLong, 5l.toLong, 5l.toLong, 5l.toLong, 1l.toLong))) == (1l));
+    assert(search((List[Long](4l.toLong, 1l.toLong, 4l.toLong, 1l.toLong, 4l.toLong, 4l.toLong))) == (4l));
+    assert(search((List[Long](3l.toLong, 3l.toLong))) == (-1l));
+    assert(search((List[Long](8l.toLong, 8l.toLong, 8l.toLong, 8l.toLong, 8l.toLong, 8l.toLong, 8l.toLong, 8l.toLong))) == (8l));
+    assert(search((List[Long](2l.toLong, 3l.toLong, 3l.toLong, 2l.toLong, 2l.toLong))) == (2l));
+    assert(search((List[Long](2l.toLong, 7l.toLong, 8l.toLong, 8l.toLong, 4l.toLong, 8l.toLong, 7l.toLong, 3l.toLong, 9l.toLong, 6l.toLong, 5l.toLong, 10l.toLong, 4l.toLong, 3l.toLong, 6l.toLong, 7l.toLong, 1l.toLong, 7l.toLong, 4l.toLong, 10l.toLong, 8l.toLong, 1l.toLong))) == (1l));
+    assert(search((List[Long](3l.toLong, 2l.toLong, 8l.toLong, 2l.toLong))) == (2l));
+    assert(search((List[Long](6l.toLong, 7l.toLong, 1l.toLong, 8l.toLong, 8l.toLong, 10l.toLong, 5l.toLong, 8l.toLong, 5l.toLong, 3l.toLong, 10l.toLong))) == (1l));
+    assert(search((List[Long](8l.toLong, 8l.toLong, 3l.toLong, 6l.toLong, 5l.toLong, 6l.toLong, 4l.toLong))) == (-1l));
+    assert(search((List[Long](6l.toLong, 9l.toLong, 6l.toLong, 7l.toLong, 1l.toLong, 4l.toLong, 7l.toLong, 1l.toLong, 8l.toLong, 8l.toLong, 9l.toLong, 8l.toLong, 10l.toLong, 10l.toLong, 8l.toLong, 4l.toLong, 10l.toLong, 4l.toLong, 10l.toLong, 1l.toLong, 2l.toLong, 9l.toLong, 5l.toLong, 7l.toLong, 9l.toLong))) == (1l));
+    assert(search((List[Long](1l.toLong, 9l.toLong, 10l.toLong, 1l.toLong, 3l.toLong))) == (1l));
+    assert(search((List[Long](6l.toLong, 9l.toLong, 7l.toLong, 5l.toLong, 8l.toLong, 7l.toLong, 5l.toLong, 3l.toLong, 7l.toLong, 5l.toLong, 10l.toLong, 10l.toLong, 3l.toLong, 6l.toLong, 10l.toLong, 2l.toLong, 8l.toLong, 6l.toLong, 5l.toLong, 4l.toLong, 9l.toLong, 5l.toLong, 3l.toLong, 10l.toLong))) == (5l));
+    assert(search((List[Long](1l.toLong))) == (1l));
+    assert(search((List[Long](8l.toLong, 8l.toLong, 10l.toLong, 6l.toLong, 4l.toLong, 3l.toLong, 5l.toLong, 8l.toLong, 2l.toLong, 4l.toLong, 2l.toLong, 8l.toLong, 4l.toLong, 6l.toLong, 10l.toLong, 4l.toLong, 2l.toLong, 1l.toLong, 10l.toLong, 2l.toLong, 1l.toLong, 1l.toLong, 5l.toLong))) == (4l));
+    assert(search((List[Long](2l.toLong, 10l.toLong, 4l.toLong, 8l.toLong, 2l.toLong, 10l.toLong, 5l.toLong, 1l.toLong, 2l.toLong, 9l.toLong, 5l.toLong, 5l.toLong, 6l.toLong, 3l.toLong, 8l.toLong, 6l.toLong, 4l.toLong, 10l.toLong))) == (2l));
+    assert(search((List[Long](1l.toLong, 6l.toLong, 10l.toLong, 1l.toLong, 6l.toLong, 9l.toLong, 10l.toLong, 8l.toLong, 6l.toLong, 8l.toLong, 7l.toLong, 3l.toLong))) == (1l));
+    assert(search((List[Long](9l.toLong, 2l.toLong, 4l.toLong, 1l.toLong, 5l.toLong, 1l.toLong, 5l.toLong, 2l.toLong, 5l.toLong, 7l.toLong, 7l.toLong, 7l.toLong, 3l.toLong, 10l.toLong, 1l.toLong, 5l.toLong, 4l.toLong, 2l.toLong, 8l.toLong, 4l.toLong, 1l.toLong, 9l.toLong, 10l.toLong, 7l.toLong, 10l.toLong, 2l.toLong, 8l.toLong, 10l.toLong, 9l.toLong, 4l.toLong))) == (4l));
+    assert(search((List[Long](2l.toLong, 6l.toLong, 4l.toLong, 2l.toLong, 8l.toLong, 7l.toLong, 5l.toLong, 6l.toLong, 4l.toLong, 10l.toLong, 4l.toLong, 6l.toLong, 3l.toLong, 7l.toLong, 8l.toLong, 8l.toLong, 3l.toLong, 1l.toLong, 4l.toLong, 2l.toLong, 2l.toLong, 10l.toLong, 7l.toLong))) == (4l));
+    assert(search((List[Long](9l.toLong, 8l.toLong, 6l.toLong, 10l.toLong, 2l.toLong, 6l.toLong, 10l.toLong, 2l.toLong, 7l.toLong, 8l.toLong, 10l.toLong, 3l.toLong, 8l.toLong, 2l.toLong, 6l.toLong, 2l.toLong, 3l.toLong, 1l.toLong))) == (2l));
+    assert(search((List[Long](5l.toLong, 5l.toLong, 3l.toLong, 9l.toLong, 5l.toLong, 6l.toLong, 3l.toLong, 2l.toLong, 8l.toLong, 5l.toLong, 6l.toLong, 10l.toLong, 10l.toLong, 6l.toLong, 8l.toLong, 4l.toLong, 10l.toLong, 7l.toLong, 7l.toLong, 10l.toLong, 8l.toLong))) == (-1l));
+    assert(search((List[Long](10l.toLong))) == (-1l));
+    assert(search((List[Long](9l.toLong, 7l.toLong, 7l.toLong, 2l.toLong, 4l.toLong, 7l.toLong, 2l.toLong, 10l.toLong, 9l.toLong, 7l.toLong, 5l.toLong, 7l.toLong, 2l.toLong))) == (2l));
+    assert(search((List[Long](5l.toLong, 4l.toLong, 10l.toLong, 2l.toLong, 1l.toLong, 1l.toLong, 10l.toLong, 3l.toLong, 6l.toLong, 1l.toLong, 8l.toLong))) == (1l));
+    assert(search((List[Long](7l.toLong, 9l.toLong, 9l.toLong, 9l.toLong, 3l.toLong, 4l.toLong, 1l.toLong, 5l.toLong, 9l.toLong, 1l.toLong, 2l.toLong, 1l.toLong, 1l.toLong, 10l.toLong, 7l.toLong, 5l.toLong, 6l.toLong, 7l.toLong, 6l.toLong, 7l.toLong, 7l.toLong, 6l.toLong))) == (1l));
+    assert(search((List[Long](3l.toLong, 10l.toLong, 10l.toLong, 9l.toLong, 2l.toLong))) == (-1l));
     }
 
 }

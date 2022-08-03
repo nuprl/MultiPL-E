@@ -12,36 +12,19 @@ object Problem {
     // select_words("simple white space", 2) ==> []
     // select_words("Hello world", 4) ==> ["world"]
     // select_words("Uncle sam", 3) ==> ["Uncle"]
-    def selectWords(s : String, n : Int) : List[String] = {
-        var result = List[String]()
-        var word = ""
-        var count = 0
-        for(c <- s) {
-            if(c == ' ') {
-                if(count == n) {
-                    result = word :: result
-                }
-                word = ""
-                count = 0
-            } else if(c.isLetter) {
-                word = word + c
-                count = count + 1
-            }
-        }
-        if(count == n) {
-            result = word :: result
-        }
-        result
+    def selectWords(s : String, n : Long) : List[String] = {
+        // your code here
+        return List()
 
     }
     def main(args: Array[String]) = {
-    assert(selectWords(("Mary had a little lamb"), (4)).equals((List[String]("little"))));
-    assert(selectWords(("Mary had a little lamb"), (3)).equals((List[String]("Mary", "lamb"))));
-    assert(selectWords(("simple white space"), (2)).equals((List[String]())));
-    assert(selectWords(("Hello world"), (4)).equals((List[String]("world"))));
-    assert(selectWords(("Uncle sam"), (3)).equals((List[String]("Uncle"))));
-    assert(selectWords((""), (4)).equals((List[String]())));
-    assert(selectWords(("a b c d e f"), (1)).equals((List[String]("b", "c", "d", "f"))));
+    assert(selectWords(("Mary had a little lamb"), (4l)).equals((List[String]("little"))));
+    assert(selectWords(("Mary had a little lamb"), (3l)).equals((List[String]("Mary", "lamb"))));
+    assert(selectWords(("simple white space"), (2l)).equals((List[String]())));
+    assert(selectWords(("Hello world"), (4l)).equals((List[String]("world"))));
+    assert(selectWords(("Uncle sam"), (3l)).equals((List[String]("Uncle"))));
+    assert(selectWords((""), (4l)).equals((List[String]())));
+    assert(selectWords(("a b c d e f"), (1l)).equals((List[String]("b", "c", "d", "f"))));
     }
 
 }

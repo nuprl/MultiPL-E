@@ -6,14 +6,18 @@ object Problem {
     // 0
     // >>> strlen('abc')
     // 3
-    def strlen(string : String) : Int = {
-        string.length
+    def strlen(string : String) : Long = {
+        var len = 0L
+        for (i <- 0 until string.length) {
+            len += 1
+        }
+        return len
 
     }
     def main(args: Array[String]) = {
-    assert(strlen(("")) == (0));
-    assert(strlen(("x")) == (1));
-    assert(strlen(("asdasnakj")) == (9));
+    assert(strlen(("")) == (0l));
+    assert(strlen(("x")) == (1l));
+    assert(strlen(("asdasnakj")) == (9l));
     }
 
 }

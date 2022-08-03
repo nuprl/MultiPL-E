@@ -6,26 +6,27 @@ object Problem {
     // Examples:
     // for x_or_y(7, 34, 12) == 34
     // for x_or_y(15, 8, 5) == 5
-    def xOrY(n : Int, x : Int, y : Int) : Int = {
+    def xOrY(n : Long, x : Long, y : Long) : Long = {
         // BEGIN SOLUTION
-        if (n % 2 == 0)
-            return y
-        else
-            return x
+        if (n % 2 == 0) {
+            y
+        } else {
+            x
+        }
         // END SOLUTION
 
     }
     def main(args: Array[String]) = {
-    assert(xOrY((7), (34), (12)) == (34));
-    assert(xOrY((15), (8), (5)) == (5));
-    assert(xOrY((3), (33), (5212)) == (33));
-    assert(xOrY((1259), (3), (52)) == (3));
-    assert(xOrY((7919), (-1), (12)) == (-1));
-    assert(xOrY((3609), (1245), (583)) == (583));
-    assert(xOrY((91), (56), (129)) == (129));
-    assert(xOrY((6), (34), (1234)) == (1234));
-    assert(xOrY((1), (2), (0)) == (0));
-    assert(xOrY((2), (2), (0)) == (2));
+    assert(xOrY((7l), (34l), (12l)) == (34l));
+    assert(xOrY((15l), (8l), (5l)) == (5l));
+    assert(xOrY((3l), (33l), (5212l)) == (33l));
+    assert(xOrY((1259l), (3l), (52l)) == (3l));
+    assert(xOrY((7919l), (-1l), (12l)) == (-1l));
+    assert(xOrY((3609l), (1245l), (583l)) == (583l));
+    assert(xOrY((91l), (56l), (129l)) == (129l));
+    assert(xOrY((6l), (34l), (1234l)) == (1234l));
+    assert(xOrY((1l), (2l), (0l)) == (0l));
+    assert(xOrY((2l), (2l), (0l)) == (2l));
     }
 
 }

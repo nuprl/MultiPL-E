@@ -8,16 +8,17 @@ object Problem {
     // 3
     // >>> how_many_times('aaaa', 'aa')
     // 3
-    def howManyTimes(string : String, substring : String) : Int = {
-        if (string.length() == 0 || substring.length() == 0) {
+    def howManyTimes(string : String, substring : String) : Long = {
+        if (string.length < substring.length) {
             return 0
         }
-        var count = 0
+        val len = substring.length
+        var count = 0L
         var i = 0
-        while (i < string.length()) {
-            if (string.substring(i, i + substring.length()).equals(substring)) {
+        while (i < string.length) {
+            if (string.substring(i, i + len) == substring) {
                 count += 1
-                i += substring.length()
+                i += len
             } else {
                 i += 1
             }
@@ -26,10 +27,10 @@ object Problem {
 
     }
     def main(args: Array[String]) = {
-    assert(howManyTimes((""), ("x")) == (0));
-    assert(howManyTimes(("xyxyxyx"), ("x")) == (4));
-    assert(howManyTimes(("cacacacac"), ("cac")) == (4));
-    assert(howManyTimes(("john doe"), ("john")) == (1));
+    assert(howManyTimes((""), ("x")) == (0l));
+    assert(howManyTimes(("xyxyxyx"), ("x")) == (4l));
+    assert(howManyTimes(("cacacacac"), ("cac")) == (4l));
+    assert(howManyTimes(("john doe"), ("john")) == (1l));
     }
 
 }

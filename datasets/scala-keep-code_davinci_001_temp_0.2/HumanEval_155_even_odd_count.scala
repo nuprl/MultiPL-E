@@ -5,30 +5,29 @@ object Problem {
     // Example:
     // even_odd_count(-12) ==> (1, 1)
     // even_odd_count(123) ==> (1, 2)
-    def evenOddCount(num : Int) : Tuple2[Int, Int] = {
-        var even = 0
-        var odd = 0
-        var n = num
-        while (n > 0) {
-            if (n % 2 == 0) {
+    def evenOddCount(num : Long) : Tuple2[Long, Long] = {
+        var even = 0L
+        var odd = 0L
+        var numStr = num.toString
+        for (i <- 0 until numStr.length) {
+            if (numStr(i) == '0' || numStr(i) == '2' || numStr(i) == '4' || numStr(i) == '6' || numStr(i) == '8') {
                 even += 1
             } else {
                 odd += 1
             }
-            n = n / 10
         }
         return (even, odd)
 
     }
     def main(args: Array[String]) = {
-    assert(evenOddCount((7)).equals(((0, 1))));
-    assert(evenOddCount((-78)).equals(((1, 1))));
-    assert(evenOddCount((3452)).equals(((2, 2))));
-    assert(evenOddCount((346211)).equals(((3, 3))));
-    assert(evenOddCount((-345821)).equals(((3, 3))));
-    assert(evenOddCount((-2)).equals(((1, 0))));
-    assert(evenOddCount((-45347)).equals(((2, 3))));
-    assert(evenOddCount((0)).equals(((1, 0))));
+    assert(evenOddCount((7l)).equals(((0l, 1l))));
+    assert(evenOddCount((-78l)).equals(((1l, 1l))));
+    assert(evenOddCount((3452l)).equals(((2l, 2l))));
+    assert(evenOddCount((346211l)).equals(((3l, 3l))));
+    assert(evenOddCount((-345821l)).equals(((3l, 3l))));
+    assert(evenOddCount((-2l)).equals(((1l, 0l))));
+    assert(evenOddCount((-45347l)).equals(((2l, 3l))));
+    assert(evenOddCount((0l)).equals(((1l, 0l))));
     }
 
 }

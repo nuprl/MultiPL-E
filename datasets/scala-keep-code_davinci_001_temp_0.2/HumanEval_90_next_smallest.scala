@@ -8,27 +8,23 @@ object Problem {
     // next_smallest([5, 1, 4, 3, 2]) == 2
     // next_smallest([]) == None
     // next_smallest([1, 1]) == None
-    def nextSmallest(lst : List[Int]) : Option[Int] = {
-        if (lst.isEmpty) {
+    def nextSmallest(lst : List[Long]) : Option[Long] = {
+        val sorted = lst.sorted
+        if (sorted.length < 2) {
             None
         } else {
-            val sorted = lst.sorted
-            if (sorted.length < 2) {
-                None
-            } else {
-                Some(sorted(1))
-            }
+            Some(sorted(1))
         }
 
     }
     def main(args: Array[String]) = {
-    assert(nextSmallest((List[Int](1.toInt, 2.toInt, 3.toInt, 4.toInt, 5.toInt))).equals(2));
-    assert(nextSmallest((List[Int](5.toInt, 1.toInt, 4.toInt, 3.toInt, 2.toInt))).equals(2));
-    assert(nextSmallest((List[Int]())).equals(None));
-    assert(nextSmallest((List[Int](1.toInt, 1.toInt))).equals(None));
-    assert(nextSmallest((List[Int](1.toInt, 1.toInt, 1.toInt, 1.toInt, 0.toInt))).equals(1));
-    assert(nextSmallest((List[Int](1.toInt, 1.toInt))).equals(None));
-    assert(nextSmallest((List[Int](-35.toInt, 34.toInt, 12.toInt, -45.toInt))).equals(-35));
+    assert(nextSmallest((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 4l.toLong, 5l.toLong))).equals(2l));
+    assert(nextSmallest((List[Long](5l.toLong, 1l.toLong, 4l.toLong, 3l.toLong, 2l.toLong))).equals(2l));
+    assert(nextSmallest((List[Long]())).equals(None));
+    assert(nextSmallest((List[Long](1l.toLong, 1l.toLong))).equals(None));
+    assert(nextSmallest((List[Long](1l.toLong, 1l.toLong, 1l.toLong, 1l.toLong, 0l.toLong))).equals(1l));
+    assert(nextSmallest((List[Long](1l.toLong, 1l.toLong))).equals(None));
+    assert(nextSmallest((List[Long](-35l.toLong, 34l.toLong, 12l.toLong, -45l.toLong))).equals(-35l));
     }
 
 }

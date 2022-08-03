@@ -7,27 +7,25 @@ object Problem {
     // digits(1)  == 1
     // digits(4)  == 0
     // digits(235) == 15
-    def digits(n : Int) : Int = {
-        var product = 1
+    def digits(n : Long) : Long = {
+        var res = 1L
         var nn = n
         while (nn > 0) {
-            val digit = nn % 10
-            if (digit % 2 == 1) {
-                product *= digit
-            }
+            val d = nn % 10
+            if (d % 2 == 1) res *= d
             nn /= 10
         }
-        product
+        res
 
     }
     def main(args: Array[String]) = {
-    assert(digits((5)) == (5));
-    assert(digits((54)) == (5));
-    assert(digits((120)) == (1));
-    assert(digits((5014)) == (5));
-    assert(digits((98765)) == (315));
-    assert(digits((5576543)) == (2625));
-    assert(digits((2468)) == (0));
+    assert(digits((5l)) == (5l));
+    assert(digits((54l)) == (5l));
+    assert(digits((120l)) == (1l));
+    assert(digits((5014l)) == (5l));
+    assert(digits((98765l)) == (315l));
+    assert(digits((5576543l)) == (2625l));
+    assert(digits((2468l)) == (0l));
     }
 
 }

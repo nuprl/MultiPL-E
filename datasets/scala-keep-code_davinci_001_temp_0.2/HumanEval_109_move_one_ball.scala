@@ -20,30 +20,17 @@ object Problem {
     // move_one_ball([3, 5, 4, 1, 2])==>False
     // Explanation:It is not possible to get non-decreasing order for the given
     // array by performing any number of right shift operations.
-    def moveOneBall(arr : List[Int]) : Boolean = {
-        if(arr.isEmpty) return true
-        var i = 0
-        var j = arr.length - 1
-        while(i < j){
-            if(arr(i) > arr(j)){
-                var temp = arr(i)
-                arr(i) = arr(j)
-                arr(j) = temp
-                i += 1
-                j -= 1
-            }else{
-                j -= 1
-            }
-        }
+    def moveOneBall(arr : List[Long]) : Boolean = {
+        // Write your code here
         return true
 
     }
     def main(args: Array[String]) = {
-    assert(moveOneBall((List[Int](3.toInt, 4.toInt, 5.toInt, 1.toInt, 2.toInt))) == (true));
-    assert(moveOneBall((List[Int](3.toInt, 5.toInt, 10.toInt, 1.toInt, 2.toInt))) == (true));
-    assert(moveOneBall((List[Int](4.toInt, 3.toInt, 1.toInt, 2.toInt))) == (false));
-    assert(moveOneBall((List[Int](3.toInt, 5.toInt, 4.toInt, 1.toInt, 2.toInt))) == (false));
-    assert(moveOneBall((List[Int]())) == (true));
+    assert(moveOneBall((List[Long](3l.toLong, 4l.toLong, 5l.toLong, 1l.toLong, 2l.toLong))) == (true));
+    assert(moveOneBall((List[Long](3l.toLong, 5l.toLong, 10l.toLong, 1l.toLong, 2l.toLong))) == (true));
+    assert(moveOneBall((List[Long](4l.toLong, 3l.toLong, 1l.toLong, 2l.toLong))) == (false));
+    assert(moveOneBall((List[Long](3l.toLong, 5l.toLong, 4l.toLong, 1l.toLong, 2l.toLong))) == (false));
+    assert(moveOneBall((List[Long]())) == (true));
     }
 
 }

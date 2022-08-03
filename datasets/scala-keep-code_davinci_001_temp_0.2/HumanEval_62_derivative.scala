@@ -8,20 +8,21 @@ object Problem {
     // [1, 4, 12, 20]
     // >>> derivative([1, 2, 3])
     // [2, 6]
-    def derivative(xs : List[Int]) : List[Int] = {
-        var result = List[Int]()
-        for (i <- 1 until xs.length) {
-            result = result :+ (i * xs(i))
+    def derivative(xs : List[Long]) : List[Long] = {
+        val n = xs.length
+        val ds = new Array[Long](n - 1)
+        for (i <- 1 until n) {
+            ds(i - 1) = xs(i) * i
         }
-        result
+        ds.toList
 
     }
     def main(args: Array[String]) = {
-    assert(derivative((List[Int](3.toInt, 1.toInt, 2.toInt, 4.toInt, 5.toInt))).equals((List[Int](1.toInt, 4.toInt, 12.toInt, 20.toInt))));
-    assert(derivative((List[Int](1.toInt, 2.toInt, 3.toInt))).equals((List[Int](2.toInt, 6.toInt))));
-    assert(derivative((List[Int](3.toInt, 2.toInt, 1.toInt))).equals((List[Int](2.toInt, 2.toInt))));
-    assert(derivative((List[Int](3.toInt, 2.toInt, 1.toInt, 0.toInt, 4.toInt))).equals((List[Int](2.toInt, 2.toInt, 0.toInt, 16.toInt))));
-    assert(derivative((List[Int](1.toInt))).equals((List[Int]())));
+    assert(derivative((List[Long](3l.toLong, 1l.toLong, 2l.toLong, 4l.toLong, 5l.toLong))).equals((List[Long](1l.toLong, 4l.toLong, 12l.toLong, 20l.toLong))));
+    assert(derivative((List[Long](1l.toLong, 2l.toLong, 3l.toLong))).equals((List[Long](2l.toLong, 6l.toLong))));
+    assert(derivative((List[Long](3l.toLong, 2l.toLong, 1l.toLong))).equals((List[Long](2l.toLong, 2l.toLong))));
+    assert(derivative((List[Long](3l.toLong, 2l.toLong, 1l.toLong, 0l.toLong, 4l.toLong))).equals((List[Long](2l.toLong, 2l.toLong, 0l.toLong, 16l.toLong))));
+    assert(derivative((List[Long](1l.toLong))).equals((List[Long]())));
     }
 
 }

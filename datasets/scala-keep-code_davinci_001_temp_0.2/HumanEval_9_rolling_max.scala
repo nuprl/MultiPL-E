@@ -5,23 +5,25 @@ object Problem {
     // in the sequence.
     // >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
     // [1, 2, 3, 3, 3, 4, 4]
-    def rollingMax(numbers : List[Int]) : List[Int] = {
-        var result = List[Int]()
-        var max = 0
-        for (i <- 0 until numbers.length) {
-            if (numbers(i) > max) {
-                max = numbers(i)
+    def rollingMax(numbers : List[Long]) : List[Long] = {
+        var rollingMax = List[Long]()
+        var max = 0L
+        for (i <- numbers) {
+            if (i > max) {
+                rollingMax = rollingMax :+ i
+                max = i
+            } else {
+                rollingMax = rollingMax :+ max
             }
-            result = result :+ max
         }
-        return result
+        return rollingMax
 
     }
     def main(args: Array[String]) = {
-    assert(rollingMax((List[Int]())).equals((List[Int]())));
-    assert(rollingMax((List[Int](1.toInt, 2.toInt, 3.toInt, 4.toInt))).equals((List[Int](1.toInt, 2.toInt, 3.toInt, 4.toInt))));
-    assert(rollingMax((List[Int](4.toInt, 3.toInt, 2.toInt, 1.toInt))).equals((List[Int](4.toInt, 4.toInt, 4.toInt, 4.toInt))));
-    assert(rollingMax((List[Int](3.toInt, 2.toInt, 3.toInt, 100.toInt, 3.toInt))).equals((List[Int](3.toInt, 3.toInt, 3.toInt, 100.toInt, 100.toInt))));
+    assert(rollingMax((List[Long]())).equals((List[Long]())));
+    assert(rollingMax((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 4l.toLong))).equals((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 4l.toLong))));
+    assert(rollingMax((List[Long](4l.toLong, 3l.toLong, 2l.toLong, 1l.toLong))).equals((List[Long](4l.toLong, 4l.toLong, 4l.toLong, 4l.toLong))));
+    assert(rollingMax((List[Long](3l.toLong, 2l.toLong, 3l.toLong, 100l.toLong, 3l.toLong))).equals((List[Long](3l.toLong, 3l.toLong, 3l.toLong, 100l.toLong, 100l.toLong))));
     }
 
 }

@@ -13,9 +13,7 @@ object Problem {
     // 4
     // >>> fibfib(8)
     // 24
-    def fibfib(n : Int) : Int = {
-        // Fill Up this function body
-        // You can add another function as well, if required
+    def fibfib(n : Long) : Long = {
         if (n == 0) {
             return 0
         }
@@ -25,17 +23,25 @@ object Problem {
         if (n == 2) {
             return 1
         }
-        return fibfib(n - 1) + fibfib(n - 2) + fibfib(n - 3)
+        var a = 0L
+        var b = 0L
+        var c = 1L
+        for (i <- 3 to n) {
+            a = b
+            b = c
+            c = a + b + c
+        }
+        return c
 
     }
     def main(args: Array[String]) = {
-    assert(fibfib((2)) == (1));
-    assert(fibfib((1)) == (0));
-    assert(fibfib((5)) == (4));
-    assert(fibfib((8)) == (24));
-    assert(fibfib((10)) == (81));
-    assert(fibfib((12)) == (274));
-    assert(fibfib((14)) == (927));
+    assert(fibfib((2l)) == (1l));
+    assert(fibfib((1l)) == (0l));
+    assert(fibfib((5l)) == (4l));
+    assert(fibfib((8l)) == (24l));
+    assert(fibfib((10l)) == (81l));
+    assert(fibfib((12l)) == (274l));
+    assert(fibfib((14l)) == (927l));
     }
 
 }

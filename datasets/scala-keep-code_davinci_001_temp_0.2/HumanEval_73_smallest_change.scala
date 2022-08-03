@@ -8,47 +8,30 @@ object Problem {
     // smallest_change([1,2,3,5,4,7,9,6]) == 4
     // smallest_change([1, 2, 3, 4, 3, 2, 2]) == 1
     // smallest_change([1, 2, 3, 2, 1]) == 0
-    def smallestChange(arr : List[Int]) : Int = {
-        var min = arr.length
+    def smallestChange(arr : List[Long]) : Long = {
+        // Write your code here.
+        var count = 0L
         var i = 0
-        while (i < arr.length) {
-            var j = i + 1
-            while (j < arr.length) {
-                var k = 0
-                var l = 0
-                while (k < arr.length) {
-                    if (k != i && k != j) {
-                        l = k
-                    }
-                    k += 1
-                }
-                if (arr(i) == arr(j) && arr(i) == arr(l)) {
-                    min = min min 3
-                } else if (arr(i) == arr(j)) {
-                    min = min min 2
-                } else if (arr(i) == arr(l)) {
-                    min = min min 2
-                } else if (arr(j) == arr(l)) {
-                    min = min min 2
-                } else {
-                    min = min min 1
-                }
-                j += 1
+        var j = arr.length - 1
+        while (i < j) {
+            if (arr(i) != arr(j)) {
+                count += 1
             }
             i += 1
+            j -= 1
         }
-        min
+        return count
 
     }
     def main(args: Array[String]) = {
-    assert(smallestChange((List[Int](1.toInt, 2.toInt, 3.toInt, 5.toInt, 4.toInt, 7.toInt, 9.toInt, 6.toInt))) == (4));
-    assert(smallestChange((List[Int](1.toInt, 2.toInt, 3.toInt, 4.toInt, 3.toInt, 2.toInt, 2.toInt))) == (1));
-    assert(smallestChange((List[Int](1.toInt, 4.toInt, 2.toInt))) == (1));
-    assert(smallestChange((List[Int](1.toInt, 4.toInt, 4.toInt, 2.toInt))) == (1));
-    assert(smallestChange((List[Int](1.toInt, 2.toInt, 3.toInt, 2.toInt, 1.toInt))) == (0));
-    assert(smallestChange((List[Int](3.toInt, 1.toInt, 1.toInt, 3.toInt))) == (0));
-    assert(smallestChange((List[Int](1.toInt))) == (0));
-    assert(smallestChange((List[Int](0.toInt, 1.toInt))) == (1));
+    assert(smallestChange((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 5l.toLong, 4l.toLong, 7l.toLong, 9l.toLong, 6l.toLong))) == (4l));
+    assert(smallestChange((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 4l.toLong, 3l.toLong, 2l.toLong, 2l.toLong))) == (1l));
+    assert(smallestChange((List[Long](1l.toLong, 4l.toLong, 2l.toLong))) == (1l));
+    assert(smallestChange((List[Long](1l.toLong, 4l.toLong, 4l.toLong, 2l.toLong))) == (1l));
+    assert(smallestChange((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 2l.toLong, 1l.toLong))) == (0l));
+    assert(smallestChange((List[Long](3l.toLong, 1l.toLong, 1l.toLong, 3l.toLong))) == (0l));
+    assert(smallestChange((List[Long](1l.toLong))) == (0l));
+    assert(smallestChange((List[Long](0l.toLong, 1l.toLong))) == (1l));
     }
 
 }

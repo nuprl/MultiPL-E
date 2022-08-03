@@ -8,14 +8,18 @@ object Problem {
     // split_words("Hello world!") ➞ ["Hello", "world!"]
     // split_words("Hello,world!") ➞ ["Hello", "world!"]
     // split_words("abcdef") == 3
-    def splitWords(txt : String) : Either[List[String], Int] = {
-        val words = txt.split("\\s+")
+    def splitWords(txt : String) : Either[List[String], Long] = {
+        val words = txt.split(" ")
         if (words.length == 1) {
-            val letters = txt.toLowerCase.toCharArray
-            val odd = letters.filter(c => (c - 'a') % 2 == 1).length
-            Right(odd)
+            val letters = words(0).toLowerCase
+            val count = letters.count(c => c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
+            if (count == 0) {
+                Right(letters.filter(c => c.isLetter).map(c => c.toLower).map(c => c - 'a').map(c => c % 2).sum)
+            } else {
+                Left(words)
+            }
         } else {
-            Left(words.toList)
+            Left(words)
         }
 
     }
@@ -24,10 +28,10 @@ object Problem {
     assert(splitWords(("Hello,world!")).equals(List[String]("Hello", "world!")));
     assert(splitWords(("Hello world,!")).equals(List[String]("Hello", "world,!")));
     assert(splitWords(("Hello,Hello,world !")).equals(List[String]("Hello,Hello,world", "!")));
-    assert(splitWords(("abcdef")).equals(3));
-    assert(splitWords(("aaabb")).equals(2));
-    assert(splitWords(("aaaBb")).equals(1));
-    assert(splitWords(("")).equals(0));
+    assert(splitWords(("abcdef")).equals(3l));
+    assert(splitWords(("aaabb")).equals(2l));
+    assert(splitWords(("aaaBb")).equals(1l));
+    assert(splitWords(("")).equals(0l));
     }
 
 }

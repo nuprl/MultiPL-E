@@ -58,7 +58,7 @@ object Problem {
 
     }
     def main(args: Array[String]) = {
-    assert(numericalLetterGrade((List[Float](4.0f.toFloat, 3.toFloat, 1.7f.toFloat, 2.toFloat, 3.5f.toFloat))).equals((List[String]("A+", "B", "C-", "C", "A-"))));
+    assert(numericalLetterGrade((List[Float](4.0f.toFloat, 3l.toFloat, 1.7f.toFloat, 2l.toFloat, 3.5f.toFloat))).equals((List[String]("A+", "B", "C-", "C", "A-"))));
     assert(numericalLetterGrade((List[Float](1.2f.toFloat))).equals((List[String]("D+"))));
     assert(numericalLetterGrade((List[Float](0.5f.toFloat))).equals((List[String]("D-"))));
     assert(numericalLetterGrade((List[Float](0.0f.toFloat))).equals((List[String]("E"))));

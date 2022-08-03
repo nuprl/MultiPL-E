@@ -8,26 +8,24 @@ object Problem {
     // Examples:
     // can_arrange([1,2,4,3,5]) = 3
     // can_arrange([1,2,3]) = -1
-    def canArrange(arr : List[Int]) : Int = {
-        val sorted = arr.sorted
-        var i = 0
-        var j = sorted.length - 1
-        while (i < j) {
-            if (sorted(i) + sorted(j) > sorted(j - 1)) {
-                j -= 1
-            } else {
-                i += 1
-            }
-        }
-        if (i == j) -1 else i
+    def canArrange(arr : List[Long]) : Long = {
+        // Create a map of the array
+        val map = arr.zipWithIndex.toMap
+        // Create a list of the indices of the elements which are not greater
+        // than or equal to the element immediately preceding it.
+        val indices = arr.zipWithIndex.filter(x => x._1 < x._2).map(x => x._2)
+        // If the list is empty, then return -1
+        if (indices.isEmpty) return -1
+        // Otherwise, return the last element of the list
+        else return indices.last
 
     }
     def main(args: Array[String]) = {
-    assert(canArrange((List[Int](1.toInt, 2.toInt, 4.toInt, 3.toInt, 5.toInt))) == (3));
-    assert(canArrange((List[Int](1.toInt, 2.toInt, 4.toInt, 5.toInt))) == (-1));
-    assert(canArrange((List[Int](1.toInt, 4.toInt, 2.toInt, 5.toInt, 6.toInt, 7.toInt, 8.toInt, 9.toInt, 10.toInt))) == (2));
-    assert(canArrange((List[Int](4.toInt, 8.toInt, 5.toInt, 7.toInt, 3.toInt))) == (4));
-    assert(canArrange((List[Int]())) == (-1));
+    assert(canArrange((List[Long](1l.toLong, 2l.toLong, 4l.toLong, 3l.toLong, 5l.toLong))) == (3l));
+    assert(canArrange((List[Long](1l.toLong, 2l.toLong, 4l.toLong, 5l.toLong))) == (-1l));
+    assert(canArrange((List[Long](1l.toLong, 4l.toLong, 2l.toLong, 5l.toLong, 6l.toLong, 7l.toLong, 8l.toLong, 9l.toLong, 10l.toLong))) == (2l));
+    assert(canArrange((List[Long](4l.toLong, 8l.toLong, 5l.toLong, 7l.toLong, 3l.toLong))) == (4l));
+    assert(canArrange((List[Long]())) == (-1l));
     }
 
 }

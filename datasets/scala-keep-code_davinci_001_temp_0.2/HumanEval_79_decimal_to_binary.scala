@@ -9,21 +9,21 @@ object Problem {
     // Examples:
     // decimal_to_binary(15)   # returns "db1111db"
     // decimal_to_binary(32)   # returns "db100000db"
-    def decimalToBinary(decimal : Int) : String = {
-        var binary = ""
-        var decimal_copy = decimal
-        while (decimal_copy > 0) {
-            binary = (decimal_copy % 2).toString + binary
-            decimal_copy = decimal_copy / 2
+    def decimalToBinary(decimal : Long) : String = {
+        var result = ""
+        var decimalNumber = decimal
+        while(decimalNumber > 0) {
+            result = (decimalNumber % 2).toString + result
+            decimalNumber = decimalNumber / 2
         }
-        "db" + binary + "db"
+        "db" + result + "db"
 
     }
     def main(args: Array[String]) = {
-    assert(decimalToBinary((0)).equals(("db0db")));
-    assert(decimalToBinary((32)).equals(("db100000db")));
-    assert(decimalToBinary((103)).equals(("db1100111db")));
-    assert(decimalToBinary((15)).equals(("db1111db")));
+    assert(decimalToBinary((0l)).equals(("db0db")));
+    assert(decimalToBinary((32l)).equals(("db100000db")));
+    assert(decimalToBinary((103l)).equals(("db1100111db")));
+    assert(decimalToBinary((15l)).equals(("db1111db")));
     }
 
 }

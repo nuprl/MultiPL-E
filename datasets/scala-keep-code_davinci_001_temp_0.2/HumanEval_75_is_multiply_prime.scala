@@ -7,27 +7,41 @@ object Problem {
     // Example:
     // is_multiply_prime(30) == True
     // 30 = 2 * 3 * 5
-    def isMultiplyPrime(a : Int) : Boolean = {
-        val primes = List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97)
-        val factors = primes.filter(a % _ == 0)
-        if (factors.length == 3) {
-            true
-        } else {
-            false
+    def isMultiplyPrime(a : Long) : Boolean = {
+        var i = 2
+        var j = 0
+        var k = 0
+        var flag = true
+        while(i < a && flag){
+            j = 2
+            k = 0
+            while(j < i && k == 0){
+                if(i % j == 0){
+                    k = 1
+                }
+                j += 1
+            }
+            if(k == 0){
+                if(a % i == 0){
+                    flag = false
+                }
+            }
+            i += 1
         }
+        flag
 
     }
     def main(args: Array[String]) = {
-    assert(isMultiplyPrime((5)) == (false));
-    assert(isMultiplyPrime((30)) == (true));
-    assert(isMultiplyPrime((8)) == (true));
-    assert(isMultiplyPrime((10)) == (false));
-    assert(isMultiplyPrime((125)) == (true));
-    assert(isMultiplyPrime((105)) == (true));
-    assert(isMultiplyPrime((126)) == (false));
-    assert(isMultiplyPrime((729)) == (false));
-    assert(isMultiplyPrime((891)) == (false));
-    assert(isMultiplyPrime((1001)) == (true));
+    assert(isMultiplyPrime((5l)) == (false));
+    assert(isMultiplyPrime((30l)) == (true));
+    assert(isMultiplyPrime((8l)) == (true));
+    assert(isMultiplyPrime((10l)) == (false));
+    assert(isMultiplyPrime((125l)) == (true));
+    assert(isMultiplyPrime((105l)) == (true));
+    assert(isMultiplyPrime((126l)) == (false));
+    assert(isMultiplyPrime((729l)) == (false));
+    assert(isMultiplyPrime((891l)) == (false));
+    assert(isMultiplyPrime((1001l)) == (true));
     }
 
 }
