@@ -25,7 +25,7 @@ class JavaTranslator(CPPTranslator):
         self.tuple_type = "Pair"
         self.dict_type = "HashMap"
         self.optional_type = "Optional"
-        self.any_type = "std::any"
+        self.any_type = "Object"
         self.indent = "    "
         self.make_tuple = "Pair.with"
         self.make_optional = "Optional.of"
@@ -83,6 +83,9 @@ class JavaTranslator(CPPTranslator):
         '''Generate Pair<T1, T2>'''
         return self.tuple_type + "<%s>" % ", ".join([self.box_type(et) for et in elem_types])
 
+    def gen_union(self, elems):
+        raise Exception("Union is not supported in Java")
+
     def box_type(self, primitive_type):
         '''Box a primitive type otherwise do not
         '''
@@ -123,7 +126,8 @@ class JavaTranslator(CPPTranslator):
             # We capitalize the first letter of each component except the first one
             # with the 'title' method and join them together.
             return components[0] + ''.join(x.title() for x in components[1:])
-
+        
+        self.reinit()
         class_decl = f"class {JAVA_CLASS_NAME} {{\n"
         indent = "    "
         comment_start = self.indent + "//"
@@ -161,7 +165,7 @@ class JavaTranslator(CPPTranslator):
         #into same functions
         if self.is_primitive_type(csharp_type) or self.is_boxed_type(csharp_type):
             if self.int_type in csharp_type or self.box_type(self.int_type) in csharp_type:
-                return "0"
+                return "0l"
             elif self.float_type in csharp_type or self.box_type(self.float_type) in csharp_type:
                 return "0.0f"
             elif self.bool_type in csharp_type or self.box_type(self.bool_type) in csharp_type:
@@ -190,7 +194,7 @@ class JavaTranslator(CPPTranslator):
         """
 
         return [
-           # "return " + self.return_default_value(self.translated_return_type) + ";",
+            # "return " + self.return_default_value(self.translated_return_type) + ";",
             self.indent + "}",
             self.indent + "public static void main(String[] args) {",
         ]
@@ -241,7 +245,7 @@ class JavaTranslator(CPPTranslator):
         if type(c) == float:
             return repr(c) + "f", ast.Name(id="float")
         if type(c) == int:
-            return repr(c), ast.Name(id="int")
+            return repr(c) + "l", ast.Name(id="int")
         return CPPTranslator.gen_literal(self, c)
 
     def gen_call(self, func: str, args: List[Tuple[str, ast.Expr]]) -> Tuple[str, None]:
