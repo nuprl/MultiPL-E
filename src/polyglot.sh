@@ -14,7 +14,7 @@ elif [ $USER == "l.phipps-costin" ]; then
   export NVM_DIR="$HOME/.nvm"
   . "$NVM_DIR/nvm.sh"
 elif [ $USER == "zi.ya" ]; then
-  eval `spack load --sh lua`
+  eval `spack load --sh lua dmd`
 else
   echo "Unkown user account: $USER"
 fi
