@@ -13,6 +13,7 @@ that do not end in .results.yaml (i.e., the problem files):
 """
 from pathlib import Path
 import yaml
+import sys
 from concurrent.futures import ThreadPoolExecutor
 
 #for the moment, accepting we might have rust and rs code 
@@ -22,7 +23,7 @@ TEMP = [ "0.2", "0.8" ]
 DOCSTRINGS = [ "keep", "remove", "transform" ]
 TERMS = [ "keep", "transform" ]
 
-def check(lang, model, temp, docstrings):
+def check(lang, model, temp, docstrings,noisy):
 
     dir = Path("../experiments") / (lang + "-" + model + "-" + temp + "-" + docstrings)
     if not dir.exists():
@@ -38,25 +39,28 @@ def check(lang, model, temp, docstrings):
     for p in problems:
         problem = yaml.load(open(p), yaml.Loader)
         if len(problem['completions']) != 200:
-            print(f"{problem['name']} in {dir} has only {len(problem['completions'])} completions")
+            if noisy:
+                print(f"{problem['name']} in {dir} has only {len(problem['completions'])} completions")
             pcount -= 1
 
     for p in tested_problems:
         problem = yaml.load(open(p), yaml.Loader)
         if len(problem['results']) != 200:
-            print(f"{problem['name']} in {dir} has only {len(problem['results'])} results")
+            if noisy:
+                print(f"{problem['name']} in {dir} has only {len(problem['results'])} results")
             tcount -= 1
 
     print(f"{lang},{docstrings},{model},{temp}: has {pcount} fully generated problems.")
     print(f"{lang},{docstrings},{model},{temp}: has {tcount} fully tested results.")
 
 def check_all():
+    noisy = True if sys.argv[1] == "noisy" else False
     #with ThreadPoolExecutor() as executor:
     for lang in LANG:
         for model in MODEL:
             for temp in TEMP:
                 for docstrings in DOCSTRINGS:
-                    check(lang, model, temp, docstrings)
+                    check(lang, model, temp, docstrings,noisy)
                     #executor.submit(check, lang, model, temp, docstrings)
 
 if __name__ == "__main__":
