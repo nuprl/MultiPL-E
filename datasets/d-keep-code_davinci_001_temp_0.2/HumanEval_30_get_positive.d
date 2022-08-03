@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Return only positive numbers in the list.
     >>> get_positive([-1, 2, -4, 5, 6])
@@ -10,10 +10,10 @@ Return only positive numbers in the list.
 */
 long[] get_positive(long[] l) 
 {
-    var result = new long[0];
-    for (int i = 0; i < l.length; i++) {
-        if (l[i] > 0) {
-            result = append(result, l[i]);
+    long[] result = new long[0];
+    for (long i : l) {
+        if (i > 0) {
+            result = append(result, i);
         }
     }
     return result;

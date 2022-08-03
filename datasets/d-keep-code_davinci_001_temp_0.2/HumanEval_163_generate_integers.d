@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given two positive integers a and b, return the even digits between a
@@ -13,8 +13,21 @@ import std.math;
 */
 long[] generate_integers(long a, long b) 
 {
-    // your code here
-    return [];
+    long[] result = new long[0];
+    if (a > b)
+    {
+        long temp = a;
+        a = b;
+        b = temp;
+    }
+    for (long i = a; i <= b; i++)
+    {
+        if (i % 2 == 0)
+        {
+            result = append(result, i);
+        }
+    }
+    return result;
 }
 
 unittest

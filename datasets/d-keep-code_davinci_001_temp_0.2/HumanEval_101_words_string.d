@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     You will be given a string of words separated by commas or spaces. Your task is

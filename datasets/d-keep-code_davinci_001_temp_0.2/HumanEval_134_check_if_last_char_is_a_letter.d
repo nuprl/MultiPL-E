@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Create a function that returns True if the last character
@@ -16,7 +16,7 @@ import std.math;
 */
 bool check_if_last_char_is_a_letter(string txt) 
 {
-    return std.math.is_alpha(txt[txt.size() - 1]);
+    return txt.length() > 0 && std.math.isalpha(txt[txt.length() - 1]);
 }
 
 unittest

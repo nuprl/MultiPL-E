@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  Given a string, find out how many distinct characters (regardless of case) does it consist of
     >>> count_distinct_characters('xyzXYZ')
@@ -10,15 +10,19 @@ import std.math;
 */
 long count_distinct_characters(string string) 
 {
-    long count = 0;
+    long distinct_characters = 0;
     foreach(char c in string)
     {
-        if(c != ' ')
+        if (c >= 'A' && c <= 'Z')
         {
-            count++;
+            c = char(c - 'A' + 'a');
+        }
+        if (c >= 'a' && c <= 'z')
+        {
+            distinct_characters++;
         }
     }
-    return count;
+    return distinct_characters;
 }
 
 unittest

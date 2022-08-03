@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  Filter an input list of strings only for ones that start with a given prefix.
     >>> filter_by_prefix([], 'a')
@@ -10,13 +10,10 @@ import std.math;
 */
 string[] filter_by_prefix(string[] strings, string prefix) 
 {
-    string[] filtered = [];
-    foreach(string s in strings) {
-        if(s.substr(0, prefix.length) == prefix) {
-            filtered.insertLast(s);
-        }
-    }
-    return filtered;
+    if (strings.length() == 0)
+        return [];
+    else
+        return filter(strings, (string s) -> starts_with(s, prefix));
 }
 
 unittest

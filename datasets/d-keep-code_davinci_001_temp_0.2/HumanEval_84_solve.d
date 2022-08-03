@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Given a positive integer N, return the total sum of its digits in binary.
     
@@ -17,13 +17,18 @@ Given a positive integer N, return the total sum of its digits in binary.
 */
 string solve(long N) 
 {
-    string result = "";
-    while (N > 0)
+    string binary = "";
+    int sum = 0;
+    while(N > 0)
     {
-        result = std.math.toBinary(N % 2) + result;
+        binary = std.math.to_string(N % 2) + binary;
         N = N / 2;
     }
-    return result;
+    for(int i = 0; i < binary.length(); i++)
+    {
+        sum += std.math.to_int(binary[i]);
+    }
+    return std.math.to_string(sum);
 }
 
 unittest

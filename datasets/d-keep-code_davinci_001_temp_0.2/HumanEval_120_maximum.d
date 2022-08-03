@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given an array arr of integers and a positive integer k, return a sorted list 
@@ -29,21 +29,10 @@ import std.math;
 long[] maximum(long[] arr, long k) 
 {
     long[] result = new long[k];
-    long[] temp = new long[k];
-    long[] copy = arr.clone();
-    for (int i = 0; i < k; i++) 
-    {
-        long max = Long.MIN_VALUE;
-        for (int j = 0; j < arr.length; j++) 
-        {
-            if (arr[j] > max) 
-            {
-                max = arr[j];
-            }
-        }
-        result[i] = max;
-        arr[arr.length - 1] = Long.MIN_VALUE;
-    }
+    long[] copy = arr.copyOf();
+    Arrays.sort(copy);
+    for (int i = 0; i < k; i++)
+        result[i] = copy[copy.length - 1 - i];
     return result;
 }
 

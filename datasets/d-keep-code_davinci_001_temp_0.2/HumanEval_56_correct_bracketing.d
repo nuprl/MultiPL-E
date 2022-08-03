@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  brackets is a string of "<" and ">".
     return True if every opening bracket has a corresponding closing bracket.
@@ -16,25 +16,19 @@ import std.math;
 */
 bool correct_bracketing(string brackets) 
 {
-    int i = 0;
-    int j = 0;
-    while (i < brackets.length())
-    {
-        if (brackets[i] == '<')
-        {
-            j++;
+    int count = 0;
+    for (int i = 0; i < brackets.size(); i++) {
+        if (brackets[i] == '<') {
+            count++;
+        } else {
+            count--;
         }
-        else if (brackets[i] == '>')
-        {
-            j--;
+        if (count < 0) {
+            return false;
         }
-        i++;
     }
-    return j == 0;
+    return count == 0;
 }
-/*
-    return True if brackets is a correct bracketing.
-    return False otherwise.
 
 unittest
 {

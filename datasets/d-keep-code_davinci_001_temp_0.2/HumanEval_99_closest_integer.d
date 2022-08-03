@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Create a function that takes a value (string) representing a number
@@ -21,7 +21,17 @@ import std.math;
 */
 long closest_integer(string value) 
 {
-    return std.math.round(std.typecons.parse_double(value));
+    long result = 0;
+    double num = std.math.parse_double(value);
+    if (num > 0)
+    {
+        result = std.math.ceil(num);
+    }
+    else
+    {
+        result = std.math.floor(num);
+    }
+    return result;
 }
 
 unittest

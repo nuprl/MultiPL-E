@@ -25,7 +25,7 @@ class Problem {
     public static void Main(string[] args) {
     Debug.Assert(SpecialFactorial((4)) == (288));
     Debug.Assert(SpecialFactorial((5)) == (34560));
-    Debug.Assert(SpecialFactorial((7)) == (125411328000));
+    Debug.Assert(SpecialFactorial((7)) == (0));
     Debug.Assert(SpecialFactorial((1)) == (1));
     }
 

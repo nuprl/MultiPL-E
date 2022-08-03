@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -11,7 +11,20 @@ import std.math;
 string sort_numbers(string numbers) 
 {
     string *numbers_array = explode(numbers, " ");
-    numbers_array = sort_array(numbers_array, (: $1 < $2 :));
+    int i,j;
+    string temp;
+    for(i=0;i<sizeof(numbers_array);i++)
+    {
+        for(j=i+1;j<sizeof(numbers_array);j++)
+        {
+            if(numbers_array[i] > numbers_array[j])
+            {
+                temp = numbers_array[i];
+                numbers_array[i] = numbers_array[j];
+                numbers_array[j] = temp;
+            }
+        }
+    }
     numbers = implode(numbers_array, " ");
     return numbers;
 }

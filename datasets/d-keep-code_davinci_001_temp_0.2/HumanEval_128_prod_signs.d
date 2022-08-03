@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     You are given an array arr of integers and you need to return
@@ -16,15 +16,14 @@ import std.math;
 Nullable!(long) prod_signs(long[] arr) 
 {
     if (arr.length == 0) {
-        return null;
+        return None;
     }
     var sum = 0;
     var prod = 1;
     for (var i = 0; i < arr.length; i++) {
         var num = arr[i];
-        var sign = num > 0 ? 1 : num < 0 ? -1 : 0;
-        sum += Math.abs(num);
-        prod *= sign;
+        sum += std.math.abs(num);
+        prod *= std.math.sign(num);
     }
     return sum * prod;
 }

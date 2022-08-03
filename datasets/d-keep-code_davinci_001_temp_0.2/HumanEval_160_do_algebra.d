@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given two lists operator, and operand. The first list has basic algebra operations, and 
@@ -28,8 +28,27 @@ import std.math;
 */
 long do_algebra(string[] operator, long[] operand) 
 {
-    // Write your code here
-    return 0;
+    long result = operand[0];
+    for (int i = 0; i < operator.length; i++) {
+        switch (operator[i]) {
+            case '+':
+                result += operand[i + 1];
+                break;
+            case '-':
+                result -= operand[i + 1];
+                break;
+            case '*':
+                result *= operand[i + 1];
+                break;
+            case '//':
+                result /= operand[i + 1];
+                break;
+            case '**':
+                result = result ** operand[i + 1];
+                break;
+        }
+    }
+    return result;
 }
 
 unittest

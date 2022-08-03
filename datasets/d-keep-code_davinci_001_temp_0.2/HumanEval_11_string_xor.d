@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  Input are two strings a and b consisting only of 1s and 0s.
     Perform binary XOR on these inputs and return result also as a string.
@@ -9,53 +9,51 @@ import std.math;
 */
 string string_xor(string a, string b) 
 {
-    string result = "";
-    for (int i = 0; i < a.length(); i++) {
-        if (a[i] == b[i]) {
-            result += '0';
-        } else {
-            result += '1';
+    int n = std.math.max(a.size(), b.size());
+    string res = "";
+    for (int i = 0; i < n; i++) {
+        if (i < a.size()) {
+            res += a[i];
+        }
+        if (i < b.size()) {
+            res += b[i];
         }
     }
-    return result;
+    return res;
 }
 string string_xor(string a, string b) 
 {
-    string result = "";
-    for (int i = 0; i < a.length(); i++) {
-        result += std.math.logical_xor(a[i], b[i]);
+    int n = std.math.max(a.size(), b.size());
+    string res = "";
+    for (int i = 0; i < n; i++) {
+        if (i < a.size()) {
+            res += a[i];
+        }
+        if (i < b.size()) {
+            res += b[i];
+        }
     }
-    return result;
+    return res;
 }
 string string_xor(string a, string b) 
 {
-    string result = "";
-    for (int i = 0; i < a.length(); i++) {
-        result += std.math.logical_xor(std.typecons.char_of(a[i]), std.typecons.char_of(b[i]));
+    int n = std.math.max(a.size(), b.size());
+    string res = "";
+    for (int i = 0; i < n; i++) {
+        if (i < a.size()) {
+            res += a[i];
+        }
+        if (i < b.size()) {
+            res += b[i];
+        }
     }
-    return result;
+    return res;
 }
-string string_xor(string a, string b) 
-{
-    string result = "";
-    for (int i = 0; i < a.length(); i++) {
-        result += std.math.logical_xor(std.typecons.char_of(a[i]), std.typecons.char_of(b[i]));
-    }
-    return result;
-}
-string string_xor(string a, string b) 
-{
-    string result = "";
-    for (int i = 0; i < a.length(); i++) {
-        result += std.math.logical_xor(std.typecons.char_of(a[i]), std.typecons.char_of(b[i]));
-    }
-    return result;
-}
-string string_xor(string a, string b) 
-{
-    string result = "";
-    for (int i = 0; i < a.length(); i++) {
-        result += std.math.logical_xor(std.typecons.char_of(a[i]), std.typecons.char_of(b
+/*
+    Return the number of 1s in the binary representation of n.
+    >>> count_bits(10)
+    2
+*/
 
 unittest
 {

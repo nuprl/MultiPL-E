@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given a dictionary, return True if all keys are strings in lower 
@@ -15,18 +15,13 @@ import std.math;
 */
 bool check_dict_case(Nullable!(string[string]) dict) 
 {
-    if (dict.HasValue)
+    if (dict == null) return false;
+    if (dict.Count == 0) return false;
+    foreach (var k in dict.Keys)
     {
-        for (int i = 0; i < dict.Value.Length; i++)
-        {
-            if (!char.IsLetter(dict.Value[i][0]))
-            {
-                return false;
-            }
-        }
-        return true;
+        if (!(k.ToLower() == k || k.ToUpper() == k)) return false;
     }
-    return false;
+    return true;
 }
 
 unittest

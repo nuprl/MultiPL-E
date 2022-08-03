@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 It is the last week of the semester and the teacher has to give the grades
     to students. The teacher has been making her own algorithm for grading.
@@ -86,6 +86,10 @@ string[] numerical_letter_grade(float[] grades)
     }
     return letter_grades;
 }
+string[] letter_grade_equation(float[] grades) 
+{
+    string[] letter_grades = new string[grades.length];
+    for (int i =
 
 unittest
 {

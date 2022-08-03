@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  xs represent coefficients of a polynomial.
     xs[0] + xs[1] * x + xs[2] * x^2 + ....
@@ -12,12 +12,9 @@ import std.math;
 */
 long[] derivative(long[] xs) 
 {
-    var n = xs.Length;
-    var ys = new long[n - 1];
-    for (int i = 0; i < n - 1; i++)
-    {
-        ys[i] = xs[i + 1] * (i + 1);
-    }
+    long[] ys = new long[xs.length - 1];
+    for (int i = 1; i < xs.length; i++)
+        ys[i - 1] = i * xs[i];
     return ys;
 }
 

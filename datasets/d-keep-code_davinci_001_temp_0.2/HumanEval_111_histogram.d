@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Given a string representing a space separated lowercase letters, return a dictionary
     of the letter with the most repetition and containing the corresponding count.
@@ -16,17 +16,16 @@ Given a string representing a space separated lowercase letters, return a dictio
 */
 Nullable!(long[string]) histogram(string test) 
 {
-    var dict = new long[string];
-    var str = test.Split(' ');
-    foreach (var item in str)
+    var dict = new Dictionary<string, long>();
+    foreach(var c in test.Split(' '))
     {
-        if (dict.ContainsKey(item))
+        if(dict.ContainsKey(c))
         {
-            dict[item] = dict[item] + 1;
+            dict[c]++;
         }
         else
         {
-            dict[item] = 1;
+            dict[c] = 1;
         }
     }
     return dict;

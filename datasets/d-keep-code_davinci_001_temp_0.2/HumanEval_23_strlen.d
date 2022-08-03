@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  Return length of given string
     >>> strlen('')
@@ -10,115 +10,8 @@ import std.math;
 */
 long strlen(string string) 
 {
-    return strlen(string);
+    return strlen_(string);
 }
-/*
- Return length of given string
-    >>> strlen('')
-    0
-    >>> strlen('abc')
-    3
-    
-*/
-long strlen(string string) 
-{
-    return strlen(string);
-}
-/*
- Return length of given string
-    >>> strlen('')
-    0
-    >>> strlen('abc')
-    3
-    
-*/
-long strlen(string string) 
-{
-    return strlen(string);
-}
-/*
- Return length of given string
-    >>> strlen('')
-    0
-    >>> strlen('abc')
-    3
-    
-*/
-long strlen(string string) 
-{
-    return strlen(string);
-}
-/*
- Return length of given string
-    >>> strlen('')
-    0
-    >>> strlen('abc')
-    3
-    
-*/
-long strlen(string string) 
-{
-    return strlen(string);
-}
-/*
- Return length of given string
-    >>> strlen('')
-    0
-    >>> strlen('abc')
-    3
-    
-*/
-long strlen(string string) 
-{
-    return strlen(string);
-}
-/*
- Return length of given string
-    >>> strlen('')
-    0
-    >>> strlen('abc')
-    3
-    
-*/
-long strlen(string string) 
-{
-    return strlen(string);
-}
-/*
- Return length of given string
-    >>> strlen('')
-    0
-    >>> strlen('abc')
-    3
-    
-*/
-long strlen(string string) 
-{
-    return strlen(string);
-}
-/*
- Return length of given string
-    >>> strlen('')
-    0
-    >>> strlen('abc')
-    3
-    
-*/
-long strlen(string string) 
-{
-    return strlen(string);
-}
-/*
- Return length of given string
-    >>> strlen('')
-    0
-    >>> strlen('abc')
-    3
-    
-*/
-long strlen(string string) 
-{
-    return
 
 unittest
 {
