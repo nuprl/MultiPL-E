@@ -126,7 +126,8 @@ class JavaTranslator(CPPTranslator):
             # We capitalize the first letter of each component except the first one
             # with the 'title' method and join them together.
             return components[0] + ''.join(x.title() for x in components[1:])
-
+        
+        self.reinit()
         class_decl = f"class {JAVA_CLASS_NAME} {{\n"
         indent = "    "
         comment_start = self.indent + "//"

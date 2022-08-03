@@ -114,7 +114,8 @@ class CsharpTranslator(CPPTranslator):
             # We capitalize the first letter of each component except the first one
             # with the 'title' method and join them together.
             return ''.join(x.title() for x in components)
-
+        
+        self.reinit()
         class_decl = f"class {CSHARP_CLASS_NAME} {{\n"
         indent = "    "
         comment_start = self.indent + "//"
