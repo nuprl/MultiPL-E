@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given a string text, replace all spaces in it with underscores, 
@@ -15,17 +15,25 @@ import std.math;
 string fix_spaces(string text) 
 {
     string res = "";
-    for(int i = 0; i < text.size(); i++)
+    for (int i = 0; i < text.length(); i++)
     {
-        if(text[i] == ' ')
+        if (text[i] == ' ')
         {
-            if(text[i+1] == ' ')
+            if (i == 0)
             {
-                res += '-';
+                res += "_";
+            }
+            else if (i == text.length() - 1)
+            {
+                res += "_";
+            }
+            else if (text[i - 1] == ' ')
+            {
+                res += "-";
             }
             else
             {
-                res += '_';
+                res += "_";
             }
         }
         else

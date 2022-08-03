@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 You will be given the name of a class (a string) and a list of extensions.
     The extensions are to be used to load additional classes to the class. The
@@ -20,30 +20,29 @@ You will be given the name of a class (a string) and a list of extensions.
 */
 string Strongest_Extension(string class_name, string[] extensions) 
 {
-    int max = 0;
-    string max_ext = "";
-    for (int i = 0; i < extensions.length; i++)
+    int max_strength = 0;
+    string max_extension = "";
+    for(int i = 0; i < extensions.length; i++)
     {
-        int cap = 0;
-        int sm = 0;
-        for (int j = 0; j < extensions[i].length; j++)
+        int strength = 0;
+        for(int j = 0; j < extensions[i].length; j++)
         {
-            if (extensions[i][j] >= 'A' && extensions[i][j] <= 'Z')
+            if(extensions[i][j] >= 'A' && extensions[i][j] <= 'Z')
             {
-                cap++;
+                strength++;
             }
-            else if (extensions[i][j] >= 'a' && extensions[i][j] <= 'z')
+            else if(extensions[i][j] >= 'a' && extensions[i][j] <= 'z')
             {
-                sm++;
+                strength--;
             }
         }
-        if (cap - sm > max)
+        if(strength > max_strength)
         {
-            max = cap - sm;
-            max_ext = extensions[i];
+            max_strength = strength;
+            max_extension = extensions[i];
         }
     }
-    return class_name + "." + max_ext;
+    return class_name + "." + max_extension;
 }
 
 unittest

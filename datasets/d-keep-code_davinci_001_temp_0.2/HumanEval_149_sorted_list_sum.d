@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Write a function that accepts a list of strings as a parameter,
     deletes the strings that have odd lengths from it,
@@ -18,34 +18,18 @@ Write a function that accepts a list of strings as a parameter,
 */
 string[] sorted_list_sum(string[] lst) 
 {
-    var lst_sorted = new string[lst.Length];
-    var lst_sorted_index = 0;
-    var lst_sorted_sum = 0;
-    var lst_sum = 0;
-    var lst_index = 0;
-    var lst_length = lst.Length;
-    var lst_length_index = 0;
-    var lst_length_sum = 0;
-    var lst_length_length = lst.Length;
-    var lst_length_length_index = 0;
-    var lst_length_length_sum = 0;
-    var lst_length_length_length = lst.Length;
-    var lst_length_length_length_index = 0;
-    var lst_length_length_length_sum = 0;
-    var lst_length_length_length_length = lst.Length;
-    var lst_length_length_length_length_index = 0;
-    var lst_length_length_length_length_sum = 0;
-    var lst_length_length_length_length_length = lst.Length;
-    var lst_length_length_length_length_length_index = 0;
-    var lst_length_length_length_length_length_sum = 0;
-    var lst_length_length_length_length_length_length = lst.Length;
-    var lst_length_length_length_length_length_length_index = 0;
-    var lst_length_length_length_length_length_length_sum = 0;
-    var lst_length_length_length_length_length_length_length = lst.Length;
-    var lst_length_length_length_length_length_length_length_index = 0;
-    var lst_length_length_length_length_length_length_length_sum = 0;
-    var lst_length_length_length_length_length_length_length_length = lst.Length;
-    var lst_length_length_length_length_length_length_length_length_index
+    string[] result = new string[lst.length];
+    int i = 0;
+    for (int j = 0; j < lst.length; j++) 
+    {
+        if (lst[j].length() % 2 == 0) 
+        {
+            result[i] = lst[j];
+            i++;
+        }
+    }
+    return result;
+}
 
 unittest
 {

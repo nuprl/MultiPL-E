@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Write a function that takes an integer a and returns True 
@@ -16,13 +16,15 @@ import std.math;
 */
 bool iscube(long a) 
 {
-    if(a == 0)
-        return true;
-    if(a < 0)
-        a = -a;
-    long b = std.math.cbrt(a);
-    return a == b*b*b;
+    return a == std.math.pow(std.math.cbrt(a), 3);
 }
+iscube(1)
+iscube(2)
+iscube(-1)
+iscube(64)
+iscube(0)
+iscube(180)
+
 
 unittest
 {

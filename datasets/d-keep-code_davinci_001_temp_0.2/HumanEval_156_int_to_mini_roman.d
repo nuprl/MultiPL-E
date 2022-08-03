@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given a positive integer, obtain its roman numeral equivalent as a string,
@@ -15,17 +15,32 @@ import std.math;
 string int_to_mini_roman(long number) 
 {
     string roman;
-    int thousands = number / 1000;
-    number %= 1000;
-    int hundreds = number / 100;
-    number %= 100;
-    int tens = number / 10;
-    number %= 10;
-    int ones = number;
-    roman += std.math.int_to_roman(thousands) + "m";
-    roman += std.math.int_to_roman(hundreds) + "c";
-    roman += std.math.int_to_roman(tens) + "x";
-    roman += std.math.int_to_roman(ones) + "i";
+    int i = 0;
+    while (number > 0) {
+        switch (number % 10) {
+            case 1:
+            case 2:
+            case 3:
+                roman = std.math.digits[i] + roman;
+                break;
+            case 4:
+                roman = std.math.digits[i] + std.math.digits[i + 1] + roman;
+                break;
+            case 5:
+                roman = std.math.digits[i + 1] + roman;
+                break;
+            case 6:
+            case 7:
+            case 8:
+                roman = std.math.digits[i + 1] + std.math.digits[i] * (number % 10 - 5) + roman;
+                break;
+            case 9:
+                roman = std.math.digits[i] + std.math.digits[i + 2] + roman;
+                break;
+        }
+        number /= 10;
+        i += 2;
+    }
     return roman;
 }
 

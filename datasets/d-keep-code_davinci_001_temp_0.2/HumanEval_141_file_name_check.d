@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Create a function which takes a string representing a file's name, and returns
     'Yes' if the the file's name is valid, and returns 'No' otherwise.
@@ -17,19 +17,18 @@ Create a function which takes a string representing a file's name, and returns
 */
 string file_name_check(string file_name) 
 {
-    // your code here
-    int dot_pos = file_name.find(".");
-    if (dot_pos == -1)
+    int dot_index = file_name.find(".");
+    if (dot_index == -1)
         return "No";
-    string before_dot = file_name.substr(0, dot_pos);
-    string after_dot = file_name.substr(dot_pos + 1);
-    if (before_dot.length() == 0)
+    string pre_dot = file_name.substr(0, dot_index);
+    string post_dot = file_name.substr(dot_index + 1);
+    if (pre_dot.length() == 0)
         return "No";
-    if (before_dot.length() > 3)
+    if (pre_dot.length() > 3)
         return "No";
-    if (before_dot.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") != -1)
+    if (!std.math.is_digit(pre_dot))
         return "No";
-    if (after_dot != "txt" && after_dot != "exe" && after_dot != "dll")
+    if (post_dot != "txt" && post_dot != "exe" && post_dot != "dll")
         return "No";
     return "Yes";
 }

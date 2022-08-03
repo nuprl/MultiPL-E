@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  Concatenate list of strings into a single string
     >>> concatenate([])
@@ -11,12 +11,92 @@ import std.math;
 string concatenate(string[] strings) 
 {
     string result = "";
-    foreach(string s in strings)
+    foreach(string s, strings)
     {
         result += s;
     }
     return result;
 }
+/*
+    >>> concatenate([])
+    ''
+    >>> concatenate(['a', 'b', 'c'])
+    'abc'
+*/
+string concatenate(string[] strings) 
+{
+    string result = "";
+    foreach(string s, strings)
+    {
+        result += s;
+    }
+    return result;
+}
+/*
+    >>> concatenate([])
+    ''
+    >>> concatenate(['a', 'b', 'c'])
+    'abc'
+*/
+string concatenate(string[] strings) 
+{
+    string result = "";
+    foreach(string s, strings)
+    {
+        result += s;
+    }
+    return result;
+}
+/*
+    >>> concatenate([])
+    ''
+    >>> concatenate(['a', 'b', 'c'])
+    'abc'
+*/
+string concatenate(string[] strings) 
+{
+    string result = "";
+    foreach(string s, strings)
+    {
+        result += s;
+    }
+    return result;
+}
+/*
+    >>> concatenate([])
+    ''
+    >>> concatenate(['a', 'b', 'c'])
+    'abc'
+*/
+string concatenate(string[] strings) 
+{
+    string result = "";
+    foreach(string s, strings)
+    {
+        result += s;
+    }
+    return result;
+}
+/*
+    >>> concatenate([])
+    ''
+    >>> concatenate(['a', 'b', 'c'])
+    'abc'
+*/
+string concatenate(string[] strings) 
+{
+    string result = "";
+    foreach(string s, strings)
+    {
+        result += s;
+    }
+    return result;
+}
+/*
+    >>> concatenate([])
+    ''
+    >>> concatenate(['a', 'b', 'c'])
+   
 
 unittest
 {

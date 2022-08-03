@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Imagine a road that's a perfectly straight infinitely long line.
@@ -19,7 +19,7 @@ long car_race_collision(long n)
     for (long i = 0; i < n; i++) {
         for (long j = i + 1; j < n; j++) {
             if (i % 2 == 0 && j % 2 == 1) {
-                collisions += 1;
+                collisions++;
             }
         }
     }

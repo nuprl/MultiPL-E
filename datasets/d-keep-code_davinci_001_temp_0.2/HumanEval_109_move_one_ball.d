@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 We have an array 'arr' of N integers arr[1], arr[2], ..., arr[N].The
     numbers in the array will be randomly ordered. Your task is to determine if
@@ -30,23 +30,68 @@ We have an array 'arr' of N integers arr[1], arr[2], ..., arr[N].The
 */
 bool move_one_ball(long[] arr) 
 {
-    if (arr.length() == 0)
+    // Write your code here
+    if(arr.length() == 0)
         return true;
-    int i = 0;
-    while (i < arr.length() - 1) {
-        if (arr[i] > arr[i + 1]) {
-            int j = i;
-            while (j > 0 && arr[j] > arr[j - 1]) {
-                swap(arr[j], arr[j - 1]);
-                j--;
-            }
-            i = 0;
-        }
-        else
-            i++;
-    }
-    return true;
-}
+    if(arr.length() == 1)
+        return true;
+    if(arr.length() == 2)
+        return true;
+    if(arr.length() == 3)
+        return true;
+    if(arr.length() == 4)
+        return true;
+    if(arr.length() == 5)
+        return true;
+    if(arr.length() == 6)
+        return true;
+    if(arr.length() == 7)
+        return true;
+    if(arr.length() == 8)
+        return true;
+    if(arr.length() == 9)
+        return true;
+    if(arr.length() == 10)
+        return true;
+    if(arr.length() == 11)
+        return true;
+    if(arr.length() == 12)
+        return true;
+    if(arr.length() == 13)
+        return true;
+    if(arr.length() == 14)
+        return true;
+    if(arr.length() == 15)
+        return true;
+    if(arr.length() == 16)
+        return true;
+    if(arr.length() == 17)
+        return true;
+    if(arr.length() == 18)
+        return true;
+    if(arr.length() == 19)
+        return true;
+    if(arr.length() == 20)
+        return true;
+    if(arr.length() == 21)
+        return true;
+    if(arr.length() == 22)
+        return true;
+    if(arr.length() == 23)
+        return true;
+    if(arr.length() == 24)
+        return true;
+    if(arr.length() == 25)
+        return true;
+    if(arr.length() == 26)
+        return true;
+    if(arr.length() == 27)
+        return true;
+    if(arr.length() == 28)
+        return true;
+    if(arr.length() == 29)
+        return true;
+    if(arr.length() == 30)
 
 unittest
 {

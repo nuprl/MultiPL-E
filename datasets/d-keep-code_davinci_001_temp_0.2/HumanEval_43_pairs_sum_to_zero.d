@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     pairs_sum_to_zero takes a list of integers as an input.

@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     You are given a list of two strings, both strings consist of open
@@ -18,21 +18,52 @@ import std.math;
 */
 string match_parens(string[] lst) 
 {
-    string s = lst[0];
-    string t = lst[1];
-    if (s.length() == 0) {
-        return "Yes";
+    string s1 = lst[0];
+    string s2 = lst[1];
+    string res = "";
+    int len1 = s1.length();
+    int len2 = s2.length();
+    int i = 0;
+    int j = 0;
+    while (i < len1 && j < len2)
+    {
+        if (s1[i] == '(' && s2[j] == ')')
+        {
+            res += s1[i];
+            res += s2[j];
+            i++;
+            j++;
+        }
+        else if (s1[i] == ')')
+        {
+            res += s1[i];
+            j++;
+        }
+        else if (s2[j] == '(')
+        {
+            res += s2[j];
+            i++;
+        }
+        else
+        {
+            return "No";
+        }
     }
-    if (t.length() == 0) {
-        return "No";
+    if (i < len1)
+    {
+        for (int k = i; k < len1; k++)
+        {
+            res += s1[k];
+        }
     }
-    if (s[0] == '(' && t[0] == ')') {
-        return match_parens([s.substr(1), t.substr(1)]);
+    if (j < len2)
+    {
+        for (int k = j; k < len2; k++)
+        {
+            res += s2[k];
+        }
     }
-    if (s[0] == ')' && t[0] == '(') {
-        return match_parens([s.substr(1), t.substr(1)]);
-    }
-    return "No";
+    return res;
 }
 
 unittest

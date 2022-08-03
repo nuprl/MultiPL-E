@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 You have to write a function which validates a given date string and
     returns True if the date is valid otherwise False.
@@ -24,43 +24,29 @@ You have to write a function which validates a given date string and
 bool valid_date(string date) 
 {
     // your code here
-    var date_arr = date.split('-');
-    var month = int.parse(date_arr[0]);
-    var day = int.parse(date_arr[1]);
-    var year = int.parse(date_arr[2]);
-    if(date.length == 10 && month > 0 && month < 13 && day > 0 && day < 32 && year > 0 && year < 9999)
-    {
-        if(month == 2)
-        {
-            if(day > 0 && day < 30)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else if(month == 4 || month == 6 || month == 9 || month == 11)
-        {
-            if(day > 0 && day < 31)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return true;
-        }
-    }
-    else
-    {
+    int month = std.parse(date.substr(0,2));
+    int day = std.parse(date.substr(3,2));
+    int year = std.parse(date.substr(6,4));
+    if(month < 1 || month > 12)
         return false;
+    if(day < 1 || day > 31)
+        return false;
+    if(month == 2)
+    {
+        if(day > 29)
+            return false;
     }
+    else if(month == 4 || month == 6 || month == 9 || month == 11)
+    {
+        if(day > 30)
+            return false;
+    }
+    else if(month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+    {
+        if(day > 31)
+            return false;
+    }
+    return true;
 }
 
 unittest

@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  From a given list of integers, generate a list of rolling maximum element found until given moment
     in the sequence.
@@ -11,8 +11,7 @@ long[] rolling_max(long[] numbers)
 {
     long[] result = new long[numbers.length];
     result[0] = numbers[0];
-    for (int i = 1; i < numbers.length; i++)
-    {
+    for (int i = 1; i < numbers.length; i++) {
         result[i] = std.math.max(numbers[i], result[i - 1]);
     }
     return result;

@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Add two numbers x and y
     >>> add(2, 3)

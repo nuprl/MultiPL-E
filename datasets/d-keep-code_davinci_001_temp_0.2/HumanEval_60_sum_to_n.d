@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 sum_to_n is a function that sums numbers from 1 to n.
     >>> sum_to_n(30)

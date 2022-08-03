@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Write a function that takes a message, and encodes in such a 
@@ -45,37 +45,6 @@ string encode(string message)
             else if (message[i] == 'y')
             {
                 encoded += 'z';
-            }
-            else
-            {
-                encoded += message[i];
-            }
-        }
-        else if (message[i] >= 'A' && message[i] <= 'Z')
-        {
-            if (message[i] == 'A')
-            {
-                encoded += 'B';
-            }
-            else if (message[i] == 'E')
-            {
-                encoded += 'F';
-            }
-            else if (message[i] == 'I')
-            {
-                encoded += 'J';
-            }
-            else if (message[i] == 'O')
-            {
-                encoded += 'P';
-            }
-            else if (message[i] == 'U')
-            {
-                encoded += 'V';
-            }
-            else if (message[i] == 'Y')
-            {
-                encoded += 'Z';
             }
             else
             {

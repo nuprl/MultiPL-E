@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Given an array of integers, sort the integers that are between 1 and 9 inclusive,
@@ -25,13 +25,12 @@ import std.math;
 */
 string[] by_length(long[] arr) 
 {
-  var len = arr.Length;
-  var res = new string[len];
-  for (var i = 0; i < len; i++)
-  {
-    res[i] = arr[i].ToString();
-  }
-  return res;
+    string[] result = new string[arr.Length];
+    for (int i = 0; i < arr.Length; i++)
+    {
+        result[i] = arr[i].ToString();
+    }
+    return result;
 }
 
 unittest
