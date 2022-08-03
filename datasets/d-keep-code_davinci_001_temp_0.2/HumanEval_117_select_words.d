@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Given a string s and a natural number n, you have been tasked to implement 
     a function that returns a list of all words from string s that contain exactly 
@@ -17,36 +17,29 @@ Given a string s and a natural number n, you have been tasked to implement
 string[] select_words(string s, long n) 
 {
     string[] words = s.Split(' ');
-    string[] result = new string[words.Length];
-    int count = 0;
+    string[] result = new string[0];
     for (int i = 0; i < words.Length; i++)
     {
         if (words[i].Length == 0)
         {
             continue;
         }
-        int consonants = 0;
+        int count = 0;
         for (int j = 0; j < words[i].Length; j++)
         {
             if (words[i][j] == 'a' || words[i][j] == 'e' || words[i][j] == 'i' || words[i][j] == 'o' || words[i][j] == 'u')
             {
-                continue;
+                count++;
             }
-            consonants++;
         }
-        if (consonants == n)
+        if (count == n)
         {
-            result[count] = words[i];
-            count++;
+            result = append(result, words[i]);
         }
     }
-    string[] final = new string[count];
-    for (int i = 0; i < count; i++)
-    {
-        final[i] = result[i];
-    }
-    return final;
+    return result;
 }
+
 
 unittest
 {

@@ -39,7 +39,7 @@ def translate_type(t, needs):
 
 TargetExp = str
 
-class PythonTranslator(LanguageTranslator[TargetExp]):
+class Translator(LanguageTranslator[TargetExp]):
 
     def stop(self):
         return ["\ndef", "\n#", "\nif", "\nclass"]
@@ -104,5 +104,5 @@ class PythonTranslator(LanguageTranslator[TargetExp]):
 
 
 if __name__ == "__main__":
-    main(PythonTranslator())
+    main(Translator())
 

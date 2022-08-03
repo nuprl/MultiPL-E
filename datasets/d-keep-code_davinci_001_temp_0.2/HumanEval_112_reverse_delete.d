@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Task
     We are given two strings s and c, you have to deleted all the characters in s that are equal to any character in c
@@ -22,7 +22,7 @@ Tuple!(string, bool) reverse_delete(string s, string c)
             result += s[i];
         }
     }
-    return (result, std.math.is_palindrome(result));
+    return (result, result.reverse() == result);
 }
 
 unittest

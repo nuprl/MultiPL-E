@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Write a function that takes a string and returns True if the string
     length is a prime number or False otherwise
@@ -13,7 +13,7 @@ Write a function that takes a string and returns True if the string
 bool prime_length(string string) 
 {
     int length = string.length();
-    if(length == 0 || length == 1)
+    if(length == 1)
     {
         return false;
     }

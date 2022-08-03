@@ -39,6 +39,7 @@ def eval_script(path: Path):
             status = "SyntaxError"
             returncode = build.returncode
             output = build
+            print(output.stderr)
         else:
             try:
                 # Assumes exit-code 0 is all okay

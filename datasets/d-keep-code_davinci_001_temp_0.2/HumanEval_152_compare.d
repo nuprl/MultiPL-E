@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 I think we all remember that feeling when the result of some long-awaited
     event is finally known. The feelings and thoughts you have at that moment are
@@ -18,18 +18,10 @@ I think we all remember that feeling when the result of some long-awaited
 */
 long[] compare(long[] game, long[] guess) 
 {
-    // your code here
     long[] result = new long[game.length];
     for (int i = 0; i < game.length; i++)
     {
-        if (game[i] == guess[i])
-        {
-            result[i] = 0;
-        }
-        else
-        {
-            result[i] = Math.abs(game[i] - guess[i]);
-        }
+        result[i] = Math.abs(game[i] - guess[i]);
     }
     return result;
 }

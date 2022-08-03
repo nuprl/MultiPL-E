@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Given an integer. return a tuple that has the number of even and odd digits respectively.
 
@@ -10,18 +10,21 @@ Given an integer. return a tuple that has the number of even and odd digits resp
 */
 Tuple!(long, long) even_odd_count(long num) 
 {
-    Tuple!(long, long) result;
-    result.first = 0;
-    result.second = 0;
-    while (num > 0) {
-        if (num % 2 == 0) {
-            result.first += 1;
-        } else {
-            result.second += 1;
+    var long even = 0;
+    var long odd = 0;
+    while(num != 0)
+    {
+        if(num % 2 == 0)
+        {
+            even++;
         }
-        num /= 10;
+        else
+        {
+            odd++;
+        }
+        num = num / 10;
     }
-    return result;
+    return (even, odd);
 }
 
 unittest

@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 In this problem, you will implement a function that takes two lists of numbers,
     and determines whether it is possible to perform an exchange of elements
@@ -16,53 +16,9 @@ In this problem, you will implement a function that takes two lists of numbers,
 */
 string exchange(long[] lst1, long[] lst2) 
 {
-    // Your code here
-    return "";
+    // Write your code here
+    return "YES";
 }
-/*
-In this problem, you will implement a function that takes a list of numbers,
-    and determines whether it is possible to perform an exchange of elements
-    between the list and a second list to make the second list a list of only
-    even numbers.
-    There is no limit on the number of exchanged elements between the two lists.
-    If it is possible to exchange elements between the list and the second list
-    to make the second list a list of only even numbers, return "YES".
-    Otherwise, return "NO".
-    For example:
-    exchange([1, 2, 3, 4], [1, 2, 3, 4]) => "YES"
-    exchange([1, 2, 3, 4], [1, 5, 3, 4]) => "NO"
-    It is assumed that the input lists will be non-empty.
-    
-*/
-string exchange(long[] lst1, long[] lst2) 
-{
-    // Your code here
-    return "";
-}
-/*
-In this problem, you will implement a function that takes a list of numbers,
-    and determines whether it is possible to perform an exchange of elements
-    between the list and a second list to make the second list a list of only
-    even numbers.
-    There is no limit on the number of exchanged elements between the two lists.
-    If it is possible to exchange elements between the list and the second list
-    to make the second list a list of only even numbers, return "YES".
-    Otherwise, return "NO".
-    For example:
-    exchange([1, 2, 3, 4], [1, 2, 3, 4]) => "YES"
-    exchange([1, 2, 3, 4], [1, 5, 3, 4]) => "NO"
-    It is assumed that the input lists will be non-empty.
-    
-*/
-string exchange(long[] lst1, long[] lst2) 
-{
-    // Your code here
-    return "";
-}
-/*
-In this problem, you will implement a function that takes a list of numbers,
-    and determines whether it is possible to perform an exchange of elements
-    between the list and a second list to
 
 unittest
 {

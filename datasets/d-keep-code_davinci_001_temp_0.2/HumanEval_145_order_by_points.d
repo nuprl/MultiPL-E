@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     Write a function which sorts the given list of integers
@@ -14,8 +14,35 @@ import std.math;
 */
 long[] order_by_points(long[] nums) 
 {
-    // Write your code here
-    return nums;
+    // your code here
+    long[] result = new long[nums.length];
+    long[] sum = new long[nums.length];
+    long[] index = new long[nums.length];
+    for(int i = 0; i < nums.length; i++)
+    {
+        long sum_of_digits = 0;
+        long index_of_digits = 0;
+        long temp = nums[i];
+        while(temp > 0)
+        {
+            sum_of_digits += temp % 10;
+            index_of_digits += temp % 10;
+            temp /= 10;
+        }
+        sum[i] = sum_of_digits;
+        index[i] = index_of_digits;
+    }
+    for(int i = 0; i < nums.length; i++)
+    {
+        for(int j = 0; j < nums.length; j++)
+        {
+            if(sum[i] == sum[j] && index[i] == index[j])
+            {
+                result[i] = nums[j];
+            }
+        }
+    }
+    return result;
 }
 
 unittest

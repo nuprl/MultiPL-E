@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     You are given a string representing a sentence,
@@ -23,19 +23,32 @@ import std.math;
 */
 string words_in_sentence(string sentence) 
 {
-    string res;
-    int len = sentence.length();
-    for (int i = 0; i < len; i++) {
-        if (sentence[i] == ' ') {
-            if (is_prime(sentence.substr(i - 1, 1).length())) {
-                res += sentence.substr(i - 1, 1);
+    string words = "";
+    string word = "";
+    int i = 0;
+    int j = 0;
+    while (i < sentence.length())
+    {
+        if (sentence[i] == ' ')
+        {
+            if (is_prime(word.length()))
+            {
+                words += word;
+                words += " ";
             }
+            word = "";
         }
+        else
+        {
+            word += sentence[i];
+        }
+        i++;
     }
-    if (is_prime(sentence.substr(len - 1, 1).length())) {
-        res += sentence.substr(len - 1, 1);
+    if (is_prime(word.length()))
+    {
+        words += word;
     }
-    return res;
+    return words;
 }
 
 unittest

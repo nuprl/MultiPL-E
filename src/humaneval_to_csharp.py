@@ -89,6 +89,9 @@ class CsharpTranslator(CPPTranslator):
             return "(" + self.optional_type + "<%s>" % elem_type + ")" + elem
         return elem
     
+    def gen_union(self, elems):
+        raise Exception("C# do not support union")
+
     #gen_tuple_type and gen_make_tuple are same as C++
 
     def module_imports(self) -> str:
@@ -111,7 +114,8 @@ class CsharpTranslator(CPPTranslator):
             # We capitalize the first letter of each component except the first one
             # with the 'title' method and join them together.
             return ''.join(x.title() for x in components)
-
+        
+        self.reinit()
         class_decl = f"class {CSHARP_CLASS_NAME} {{\n"
         indent = "    "
         comment_start = self.indent + "//"
@@ -177,7 +181,7 @@ class CsharpTranslator(CPPTranslator):
         """
 
         return [
-            "return " + self.return_default_value(self.translated_return_type) + ";",
+            # "return " + self.return_default_value(self.translated_return_type) + ";",
             self.indent + "}",
             self.indent + "public static void Main(string[] args) {", 
         ]
@@ -229,8 +233,8 @@ class CsharpTranslator(CPPTranslator):
         if type(c) == float:
             return repr(c) + "f", ast.Name(id="float")
         if type(c) == int:
-            return repr(c), ast.Name(id="int")
-        return CPPTranslator.gen_literal(self, c)
+            return repr(c)+"L", ast.Name(id="int")
+        return super().gen_literal(c)
 
     def gen_call(self, func: str, args: List[Tuple[str, ast.Expr]]) -> Tuple[str, None]:
         """Translate a function call `func(args)`

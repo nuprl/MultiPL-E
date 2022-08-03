@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     You are given a non-empty list of positive integers. Return the greatest integer that is greater than 
@@ -14,8 +14,23 @@ import std.math;
 */
 long search(long[] lst) 
 {
-    // your code here
-    return -1;
+    long max = -1;
+    long count = 0;
+    for (int i = 0; i < lst.length; i++)
+    {
+        if (lst[i] > 0)
+        {
+            if (lst[i] == count)
+            {
+                max = lst[i];
+            }
+            else if (lst[i] > count && lst[i] > max)
+            {
+                max = lst[i];
+            }
+        }
+    }
+    return max;
 }
 
 unittest

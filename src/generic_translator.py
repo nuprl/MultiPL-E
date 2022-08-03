@@ -88,27 +88,44 @@ class PromptVisitor(ast.NodeVisitor):
                 # translate_expr(py_ast, self.translator) to get the string for that expression in the target language
                 
                 #Split up the prompt from the doctests
-                promptAndDoctests = self.description.split('>>> ')
-                if len(promptAndDoctests) > 1: #checking if there are doctests
-                    doctestRegex = re.compile(r'.*\n.*\n')
+                #promptAndDoctests = self.description.split('>>>')
+                if '>>>' in self.description: #checking if there are doctests
+                    doctestRegex = re.compile(r'>>>.*\n.*\n')
                     onlyDocTests = []
-                    for test in (promptAndDoctests[1:]): #Removing each doctest from any junk
-                        onlyDocTests.append(doctestRegex.match(test).group())
-                    
-                    funcCalls = []
-                    outputs = []
-                    for doctest in onlyDocTests:
+                    for m in re.finditer(doctestRegex, self.description):
+                        onlyDocTests.append((m.start(),m.end()))
+                    desc = ''
+                    pos = 0
+                    for i in onlyDocTests:
+                        desc += self.description[pos:i[0]]
+                        doctest = self.description[i[0]:i[1]]
                         doclist = doctest.split('\n') #Splitting up the output from the function call of the doctest
-                        funcCalls.append(ast.parse(doclist[0].strip()).body[0].value)
-                        outputs.append(ast.parse(doclist[1].strip()).body[0].value)
-
-                    for i in range(len(funcCalls)):
-                        funcCalls[i] = translate_expr(self.translator, funcCalls[i])
-                        outputs[i] = translate_expr(self.translator, outputs[i])
+                        funcCall = ast.parse(doclist[0].strip('>>> ')).body[0].value
+                        output = ast.parse(doclist[1].strip()).body[0].value
+                        transl_funccall = translate_expr(self.translator, funcCall)
+                        transl_output = translate_expr(self.translator, output)
+                        desc += '>>> ' + transl_funccall + '\n    ' + str(transl_output) + '\n'
+                        pos = i[1]
                     
-                    desc = promptAndDoctests[0]
-                    for i in range(len(funcCalls)):
-                        desc += funcCalls[i] + '\n' + outputs[i] + '\n\n'
+                    desc += self.description[pos:]
+
+                    # for test in (promptAndDoctests[1:]): #Removing each doctest from any junk
+                    #     onlyDocTests.append(doctestRegex.match(test).group())
+                    
+                    # funcCalls = []
+                    # outputs = []
+                    # for doctest in onlyDocTests:
+                    #     doclist = doctest.split('\n') #Splitting up the output from the function call of the doctest
+                    #     funcCalls.append(ast.parse(doclist[0].strip()).body[0].value)
+                    #     outputs.append(ast.parse(doclist[1].strip()).body[0].value)
+
+                    # for i in range(len(funcCalls)):
+                    #     funcCalls[i] = translate_expr(self.translator, funcCalls[i])
+                    #     outputs[i] = translate_expr(self.translator, outputs[i])
+                    
+                    # desc = promptAndDoctests[0]
+                    # for i in range(len(funcCalls)):
+                    #     desc += funcCalls[i] + '\n' + outputs[i] + '\n\n'
                 else: #else when there are no doctests
                     print('skipping (no doctests to remove)')
                     return None

@@ -22,7 +22,7 @@ std::optional<std::string> longest(std::vector<std::string> strings) {
 }
 int main() {
     auto candidate = longest;
-    assert(candidate((std::vector<std::string>())) == (std::optional<std::string>({})));
-    assert(candidate((std::vector<std::string>({(std::string)"x", (std::string)"y", (std::string)"z"}))) == (std::optional<std::string>("x")));
-    assert(candidate((std::vector<std::string>({(std::string)"x", (std::string)"yyy", (std::string)"zzzz", (std::string)"www", (std::string)"kkkk", (std::string)"abc"}))) == (std::optional<std::string>("zzzz")));
+    assert(candidate((std::vector<std::string>())) == std::nullopt);
+    assert(candidate((std::vector<std::string>({(std::string)"x", (std::string)"y", (std::string)"z"}))) == "x");
+    assert(candidate((std::vector<std::string>({(std::string)"x", (std::string)"yyy", (std::string)"zzzz", (std::string)"www", (std::string)"kkkk", (std::string)"abc"}))) == "zzzz");
 }

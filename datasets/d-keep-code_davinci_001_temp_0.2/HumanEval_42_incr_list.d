@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 Return list with elements incremented by 1.
     >>> incr_list([1, 2, 3])
@@ -12,9 +12,7 @@ long[] incr_list(long[] l)
 {
     long[] r = new long[l.length];
     for (int i = 0; i < l.length; i++)
-    {
         r[i] = l[i] + 1;
-    }
     return r;
 }
 

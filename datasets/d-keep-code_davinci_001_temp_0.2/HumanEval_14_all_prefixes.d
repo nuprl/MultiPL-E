@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
  Return list of all prefixes from shortest to longest of the input string
     >>> all_prefixes('abc')
@@ -8,10 +8,11 @@ import std.math;
 */
 string[] all_prefixes(string string) 
 {
-    string[] prefixes = {""};
-    for (int i = 0; i < string.length; i++)
+    int length = len(string);
+    string[] prefixes = new string[length];
+    for (int i = 0; i < length; i++)
     {
-        prefixes = append(prefixes, prefixes.map(x -> x + string[i]));
+        prefixes[i] = string[0:i];
     }
     return prefixes;
 }
@@ -22,10 +23,11 @@ string[] all_prefixes(string string)
 */
 string[] all_suffixes(string string) 
 {
-    string[] suffixes = {""};
-    for (int i = 1; i <= string.length; i++)
+    int length = len(string);
+    string[] suffixes = new string[length];
+    for (int i = 0; i < length; i++)
     {
-        suffixes = append(suffixes, suffixes.map(x -> string[string.length - i] + x));
+        suffixes[i] = string[i:length];
     }
     return suffixes;
 }
@@ -36,36 +38,34 @@ string[] all_suffixes(string string)
 */
 string[] all_substrings(string string) 
 {
-    string[] substrings = {""};
-    for (int i = 0; i < string.length; i++)
+    int length = len(string);
+    string[] substrings = new string[length * (length + 1) / 2];
+    int index = 0;
+    for (int i = 0; i < length; i++)
     {
-        for (int j = i; j < string.length; j++)
+        for (int j = i; j < length; j++)
         {
-            substrings = append(substrings, string[i..j]);
+            substrings[index] = string[i:j];
+            index++;
         }
     }
     return substrings;
 }
 /*
- Return list of all substrings from shortest to longest of the input string
-    >>> all_substrings('abc')
-    ['a', 'ab', 'abc', 'b', 'bc', 'c']
+ Return list of all permutations of the input string
+    >>> all_permutations('abc')
+    ['abc', 'acb', 'bac', 'bca', 'cab', 'cba']
 */
-string[] all_substrings(string string, int length) 
+string[] all_permutations(string string) 
 {
-    string[] substrings = {""};
-    for (int i = 0; i < string.length; i++)
+    string[] permutations = new string[len(string)];
+    permutations[0] = string;
+    for (int i = 1; i < len(string); i++)
     {
-        for (int j = i; j < string.length; j++)
+        string[] new_permutations = new string[len(string)];
+        for (int j = 0; j < i; j++)
         {
-            if (j - i + 1 == length)
-            {
-                substrings = append(substrings, string[i..j]);
-            }
-        }
-    }
-    return substrings;
-}
+            new
 
 unittest
 {

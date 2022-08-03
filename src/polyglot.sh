@@ -11,10 +11,10 @@ module load oracle_java julia
 if [ $USER == "a.guha" ]; then
   eval `spack load --sh php lua racket`
 elif [ $USER == "l.phipps-costin" ]; then
-  export NVM_DIR="$HOME/.nvm"
-  . "$NVM_DIR/nvm.sh"
+  module load nodejs
+  export NODE_PATH=../node_modules
 elif [ $USER == "zi.ya" ]; then
-  eval `spack load --sh lua`
+  eval `spack load --sh lua dmd`
 else
   echo "Unkown user account: $USER"
 fi

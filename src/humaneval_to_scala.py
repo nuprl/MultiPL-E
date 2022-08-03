@@ -1,4 +1,5 @@
-# Authored by  Abhinav Jangda
+# Authored by  Abhinav Jangda based on humaneval_to_csharp.py using
+# Scala examples from Daniel
 # Copyright (c) 2022, Roblox Inc and University of Massachusetts Amherst
 #
 # This script translates problems from the OpenAI HumanEval dataset into Scala.
@@ -25,10 +26,11 @@ class ScalaTranslator(CPPTranslator):
         self.tuple_type = "Tuple2"
         self.dict_type = "Map"
         self.optional_type = "Option"
-        self.any_type = "std::any"
+        self.any_type = "Any"
         self.indent = "    "
         self.make_tuple = ""
         self.make_optional = "Some"
+        self.union_decls = {}
 
     #Type creation and literal creation of List, Dict, Map, and Optional
     def gen_list_type(self, elem_type):
@@ -83,6 +85,16 @@ class ScalaTranslator(CPPTranslator):
         '''Generate Pair<T1, T2>'''
         return self.tuple_type + "[%s]" % ", ".join([et for et in elem_types])
 
+    def gen_make_tuple(self, elems):
+        return "(" + elems + ")"
+    
+    def gen_union(self, elems):
+      if len(elems) == 2:
+        t = f"Either[{elems[0]}, {elems[1]}]"
+        self.union_decls[t] = {}
+        return t
+      raise Exception("Not support union of more than 2 elements")
+
     def gen_type_cast(self, expr, new_type, current_type):
         cast_func = ".to"
         match new_type:
@@ -112,7 +124,8 @@ class ScalaTranslator(CPPTranslator):
             # We capitalize the first letter of each component except the first one
             # with the 'title' method and join them together.
             return components[0] + ''.join(x.title() for x in components[1:])
-
+        
+        self.reinit()
         class_decl = f"object {SCALA_CLASS_NAME} {{\n"
         indent = "    "
         comment_start = self.indent + "//"
@@ -171,6 +184,9 @@ class ScalaTranslator(CPPTranslator):
             first_default = self.return_default_value(template_types[0].strip())
             second_default = self.return_default_value(template_types[1].strip())
             return self.gen_make_tuple(first_default + "," + second_default)
+        elif csharp_type.find(f"Either[") == 0:
+            template_types = re.findall(r'\[(.+),(.+)\]', csharp_type)[0]
+            return f"Left({self.return_default_value(template_types[0])})"
         elif csharp_type.find(self.optional_type) == 0:
             return "None"
         else:
@@ -184,7 +200,7 @@ class ScalaTranslator(CPPTranslator):
         """
 
         return [
-           "return " + self.return_default_value(self.translated_return_type),
+            # "return " + self.return_default_value(self.translated_return_type),
             self.indent + "}",
             self.indent + "def main(args: Array[String]) = {",
         ]
@@ -200,17 +216,16 @@ class ScalaTranslator(CPPTranslator):
         if self.is_primitive_type(expected_type) and self.translate_pytype(right[1]) != expected_type:
             return self.gen_type_cast(right[0], expected_type, right[1])
 
-        return CPPTranslator.update_type(self, right, expected_type) #TODO: Use super?
+        return super().update_type(right, expected_type)
 
     def deep_equality(self, left: Tuple[str, ast.Expr], right: Tuple[str, ast.Expr]) -> str:
         """
         All tests are assertions that compare deep equality between left and right.
         In C++ using == checks for structural equality
         """
-        print(right[0], self.translated_return_type)
+
         right = self.update_type(right, self.translated_return_type)
         #Empty the union declarations
-        self.union_decls = {}
         if self.is_primitive_type(self.translated_return_type):
             return f"    assert({left[0]} == {right});"
         else:
@@ -223,11 +238,7 @@ class ScalaTranslator(CPPTranslator):
             Otherwise types are coerced similar to C++
         '''
         
-        # if "List(" in expr:
-        #     return [expr[expr.index("new ")+len("new "):expr.index("Arrays.asList(")]]        
-        o = re.findall(".+\(", expr)
-        print (o, expr)
-        return o
+        return re.findall(".+?\(", expr)
 
     def gen_literal(self, c: bool | str | int | float | None) -> Tuple[str, ast.Name]:
         """Translate a literal expression

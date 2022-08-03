@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 You are given a string s.
     if s[i] is a letter, reverse its case from lower to upper or vise versa, 
@@ -15,7 +15,7 @@ You are given a string s.
 string solve(string s) 
 {
     string res = "";
-    for (int i = 0; i < s.size(); i++)
+    for (int i = 0; i < s.length(); i++)
     {
         if (isalpha(s[i]))
         {

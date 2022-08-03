@@ -30,7 +30,7 @@ class Problem {
     Debug.Assert(Minsubarraysum((new List<int>(new int[]{(int)2, (int)3, (int)4, (int)1, (int)2, (int)4}))) == (1));
     Debug.Assert(Minsubarraysum((new List<int>(new int[]{(int)-1, (int)-2, (int)-3}))) == (-6));
     Debug.Assert(Minsubarraysum((new List<int>(new int[]{(int)-1, (int)-2, (int)-3, (int)2, (int)-10}))) == (-14));
-    Debug.Assert(Minsubarraysum((new List<int>(new int[]{(int)-9999999999999999}))) == (-9999999999999999));
+    Debug.Assert(Minsubarraysum((new List<int>(new int[]{(int)0}))) == (0));
     Debug.Assert(Minsubarraysum((new List<int>(new int[]{(int)0, (int)10, (int)20, (int)1000000}))) == (0));
     Debug.Assert(Minsubarraysum((new List<int>(new int[]{(int)-1, (int)-2, (int)-3, (int)10, (int)-5}))) == (-6));
     Debug.Assert(Minsubarraysum((new List<int>(new int[]{(int)100, (int)-1, (int)-2, (int)-3, (int)10, (int)-5}))) == (-6));

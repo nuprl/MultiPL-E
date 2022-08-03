@@ -1,5 +1,5 @@
-import std.typecons;
 import std.math;
+import std.typecons;
 /*
 
     In this task, you will be given a string that represents a number of apples and oranges 
@@ -16,8 +16,23 @@ import std.math;
 */
 long fruit_distribution(string s, long n) 
 {
-    // your code here
-    return 0;
+    string[] arr = s.Split(' ');
+    long apples = 0;
+    long oranges = 0;
+    long mango = 0;
+    for (int i = 0; i < arr.Length; i++)
+    {
+        if (arr[i] == "apples")
+        {
+            apples = std.math.atoi(arr[i - 1]);
+        }
+        else if (arr[i] == "oranges")
+        {
+            oranges = std.math.atoi(arr[i - 1]);
+        }
+    }
+    mango = n - apples - oranges;
+    return mango;
 }
 
 unittest
