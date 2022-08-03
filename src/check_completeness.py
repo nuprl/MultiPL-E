@@ -54,7 +54,7 @@ def check(lang, model, temp, docstrings,noisy):
     print(f"{lang},{docstrings},{model},{temp}: has {tcount} fully tested results.")
 
 def check_all():
-    noisy = True if sys.argv[1] == "noisy" else False
+    noisy = True if len(sys.argv) > 1 else False
     #with ThreadPoolExecutor() as executor:
     for lang in LANG:
         for model in MODEL:
