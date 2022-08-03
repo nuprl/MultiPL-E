@@ -77,8 +77,5 @@ for b in benchmarks:
         for test in test_list:
             f.write('\t' + re.sub(main_function, 'candidate', test) + '\n')
         f.write(f"\ndef test_check():\n" + '\t' + f"check({main_function})")
-        f.write('\ntry:\n\ttest_check()\nexcept AssertionError:\n\tprint("ok")')
-    try:
-        os.system('python3 ' + filename)
-    except AssertionError:
-        print(main_function, 'ok')
+        #f.write('\ntry:\n\ttest_check()\nexcept AssertionError:\n\tprint("ok")')
+   
