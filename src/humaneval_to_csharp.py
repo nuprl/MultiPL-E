@@ -19,7 +19,7 @@ class CsharpTranslator(CPPTranslator):
         super().__init__(file_ext)
         self.string_type = "string"
         self.float_type = "float"
-        self.int_type = "int"
+        self.int_type = "long"
         self.bool_type = "bool"
         self.none_type = "null"
         self.list_type = "List"
@@ -233,9 +233,7 @@ class CsharpTranslator(CPPTranslator):
         if type(c) == float:
             return repr(c) + "f", ast.Name(id="float")
         if type(c) == int:
-            if c >= 1<<31 or c < -(1<<31):
-                c = 0
-            return repr(c), ast.Name(id="int")
+            return repr(c)+"L", ast.Name(id="int")
         return super().gen_literal(c)
 
     def gen_call(self, func: str, args: List[Tuple[str, ast.Expr]]) -> Tuple[str, None]:
