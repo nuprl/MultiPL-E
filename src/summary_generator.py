@@ -4,18 +4,11 @@ Written by Molly Q Feldman, based on code from Arjun Guha
 Given a *.results.yaml file, calculates the summary statistics for model success.
 '''
 import argparse
-import sys
+import os
 from pathlib import Path
 from problem_yaml import TestResults
 
-def main(printToShell=False, writeToFile=True):
-    '''
-    The goal of this problem is to generate summary statistics after creating the 
-    *.results.yaml files for each model run.
-
-    The flags in the arguments to main print the results to the shell (if you're too curious to wait)
-    and determine whether the results should be written to a .csv file 
-    '''
+def getDir():
 
     args = argparse.ArgumentParser()
     args.add_argument(
@@ -24,26 +17,38 @@ def main(printToShell=False, writeToFile=True):
     args = args.parse_args()
 
     dir = Path(args.dir)
+    return dir
+
+def makeSummary(dir, printToShell=False, writeToFile=True):
+    '''
+    The goal of this problem is to generate summary statistics after creating the 
+    *.results.yaml files for each model run.
+
+    The flags in the arguments to main print the results to the shell (if you're too curious to wait)
+    and determine whether the results should be written to a .csv file 
+    '''
+
     if not dir.exists():
         print("Directory does not exist: {}".format(dir))
-        sys.exit(1)
+        return
 
     #keep track of overall success 
     overallOK = 0
 
     model = str(dir)[str(dir).rfind("/"):]
-    results_file = Path("../model_results/" + model + "-summary.csv").resolve()
+    results_file = Path("../model_results/" + model + "-keep-summary.csv").resolve()
 
-    try: 
-        _ = open(results_file, "x") #try to create the new file
-    except:
-        # could keep track & check correct number of tests, but that varies atm 
+    try:
         with open(results_file, "r") as rf:
-            print('CAUTION: You probably have already run this script!')
+            print(f'You have already run this script for {model}')
             rf.close()
-            sys.exit(1)
-
-    assert len(sorted(dir.glob("*.results.yaml"))) != 0, 'NOTE: results.yaml has not been generated.'
+            return True
+    except:
+        pass
+        
+    if len(sorted(dir.glob("*.results.yaml"))) == 0:
+        print('NOTE: results.yaml has not been generated.')
+        return False
 
     for problem_yaml_path in sorted(dir.glob("*.results.yaml")):
         with problem_yaml_path.open() as f:
@@ -58,12 +63,15 @@ def main(printToShell=False, writeToFile=True):
                     counts['Exception'] += 1
                 else:
                     counts["OtherError"] += 1
+            if sum(counts.values()) != 200:
+                    print(f'{testResults.name} only has {sum(counts.values())} completions - aborting.')
+                    os.remove(results_file)
+                    return False
             if printToShell:
                 print(f'For the 200 attempts at {testResults.name}, we get the following results:')
                 print(f"{counts['OK']} Success, {counts['OtherError']} OtherError, {counts['Exception']} Exception")
             if writeToFile:
                 with open(results_file, "a") as wrf:
-                    assert sum(counts.values()) == 200, f'{testResults.name} only has {sum(counts.values())} completions'
                     countString = f"{testResults.name},{counts['OK']},{counts['OtherError']},{counts['Exception']}\n"
                     wrf.write(countString)
         if counts["OK"] > 0:
@@ -73,7 +81,9 @@ def main(printToShell=False, writeToFile=True):
 
     if printToShell:
         print(f'For {dir}, we get {overallOK} correct.')
+    return True
         
 if __name__ == "__main__":
-    main()
+    direct = getDir()
+    makeSummary(direct)
             
