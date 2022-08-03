@@ -6,14 +6,14 @@ object Problem {
     // [2, 3, 4]
     // >>> incr_list([5, 3, 5, 2, 3, 3, 9, 0, 123])
     // [6, 4, 6, 3, 4, 4, 10, 1, 124]
-    def incrList(l : List[Int]) : List[Int] = {
-        l.map(x => x + 1)
+    def incrList(l : List[Long]) : List[Long] = {
+        l.map(_ + 1)
 
     }
     def main(args: Array[String]) = {
-    assert(incrList((List[Int]())).equals((List[Int]())));
-    assert(incrList((List[Int](3.toInt, 2.toInt, 1.toInt))).equals((List[Int](4.toInt, 3.toInt, 2.toInt))));
-    assert(incrList((List[Int](5.toInt, 2.toInt, 5.toInt, 2.toInt, 3.toInt, 3.toInt, 9.toInt, 0.toInt, 123.toInt))).equals((List[Int](6.toInt, 3.toInt, 6.toInt, 3.toInt, 4.toInt, 4.toInt, 10.toInt, 1.toInt, 124.toInt))));
+    assert(incrList((List[Long]())).equals((List[Long]())));
+    assert(incrList((List[Long](3l.toLong, 2l.toLong, 1l.toLong))).equals((List[Long](4l.toLong, 3l.toLong, 2l.toLong))));
+    assert(incrList((List[Long](5l.toLong, 2l.toLong, 5l.toLong, 2l.toLong, 3l.toLong, 3l.toLong, 9l.toLong, 0l.toLong, 123l.toLong))).equals((List[Long](6l.toLong, 3l.toLong, 6l.toLong, 3l.toLong, 4l.toLong, 4l.toLong, 10l.toLong, 1l.toLong, 124l.toLong))));
     }
 
 }

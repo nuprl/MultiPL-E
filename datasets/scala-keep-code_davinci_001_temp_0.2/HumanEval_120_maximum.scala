@@ -16,27 +16,29 @@ object Problem {
     // 1. The length of the array will be in the range of [1, 1000].
     // 2. The elements in the array will be in the range of [-1000, 1000].
     // 3. 0 <= k <= len(arr)
-    def maximum(arr : List[Int], k : Int) : List[Int] = {
-        val sortedArr = arr.sorted
-        val result = new ListBuffer[Int]()
-        for (i <- 0 until k) {
-            result += sortedArr(i)
+    def maximum(arr : List[Long], k : Long) : List[Long] = {
+        if (k == 0) return List()
+        if (k >= arr.length) return arr
+        val sorted = arr.sorted
+        val res = new ListBuffer[Long]
+        for (i <- 0 until k.toInt) {
+            res += sorted(i)
         }
-        result.toList
+        res.toList
 
     }
     def main(args: Array[String]) = {
-    assert(maximum((List[Int](-3.toInt, -4.toInt, 5.toInt)), (3)).equals((List[Int](-4.toInt, -3.toInt, 5.toInt))));
-    assert(maximum((List[Int](4.toInt, -4.toInt, 4.toInt)), (2)).equals((List[Int](4.toInt, 4.toInt))));
-    assert(maximum((List[Int](-3.toInt, 2.toInt, 1.toInt, 2.toInt, -1.toInt, -2.toInt, 1.toInt)), (1)).equals((List[Int](2.toInt))));
-    assert(maximum((List[Int](123.toInt, -123.toInt, 20.toInt, 0.toInt, 1.toInt, 2.toInt, -3.toInt)), (3)).equals((List[Int](2.toInt, 20.toInt, 123.toInt))));
-    assert(maximum((List[Int](-123.toInt, 20.toInt, 0.toInt, 1.toInt, 2.toInt, -3.toInt)), (4)).equals((List[Int](0.toInt, 1.toInt, 2.toInt, 20.toInt))));
-    assert(maximum((List[Int](5.toInt, 15.toInt, 0.toInt, 3.toInt, -13.toInt, -8.toInt, 0.toInt)), (7)).equals((List[Int](-13.toInt, -8.toInt, 0.toInt, 0.toInt, 3.toInt, 5.toInt, 15.toInt))));
-    assert(maximum((List[Int](-1.toInt, 0.toInt, 2.toInt, 5.toInt, 3.toInt, -10.toInt)), (2)).equals((List[Int](3.toInt, 5.toInt))));
-    assert(maximum((List[Int](1.toInt, 0.toInt, 5.toInt, -7.toInt)), (1)).equals((List[Int](5.toInt))));
-    assert(maximum((List[Int](4.toInt, -4.toInt)), (2)).equals((List[Int](-4.toInt, 4.toInt))));
-    assert(maximum((List[Int](-10.toInt, 10.toInt)), (2)).equals((List[Int](-10.toInt, 10.toInt))));
-    assert(maximum((List[Int](1.toInt, 2.toInt, 3.toInt, -23.toInt, 243.toInt, -400.toInt, 0.toInt)), (0)).equals((List[Int]())));
+    assert(maximum((List[Long](-3l.toLong, -4l.toLong, 5l.toLong)), (3l)).equals((List[Long](-4l.toLong, -3l.toLong, 5l.toLong))));
+    assert(maximum((List[Long](4l.toLong, -4l.toLong, 4l.toLong)), (2l)).equals((List[Long](4l.toLong, 4l.toLong))));
+    assert(maximum((List[Long](-3l.toLong, 2l.toLong, 1l.toLong, 2l.toLong, -1l.toLong, -2l.toLong, 1l.toLong)), (1l)).equals((List[Long](2l.toLong))));
+    assert(maximum((List[Long](123l.toLong, -123l.toLong, 20l.toLong, 0l.toLong, 1l.toLong, 2l.toLong, -3l.toLong)), (3l)).equals((List[Long](2l.toLong, 20l.toLong, 123l.toLong))));
+    assert(maximum((List[Long](-123l.toLong, 20l.toLong, 0l.toLong, 1l.toLong, 2l.toLong, -3l.toLong)), (4l)).equals((List[Long](0l.toLong, 1l.toLong, 2l.toLong, 20l.toLong))));
+    assert(maximum((List[Long](5l.toLong, 15l.toLong, 0l.toLong, 3l.toLong, -13l.toLong, -8l.toLong, 0l.toLong)), (7l)).equals((List[Long](-13l.toLong, -8l.toLong, 0l.toLong, 0l.toLong, 3l.toLong, 5l.toLong, 15l.toLong))));
+    assert(maximum((List[Long](-1l.toLong, 0l.toLong, 2l.toLong, 5l.toLong, 3l.toLong, -10l.toLong)), (2l)).equals((List[Long](3l.toLong, 5l.toLong))));
+    assert(maximum((List[Long](1l.toLong, 0l.toLong, 5l.toLong, -7l.toLong)), (1l)).equals((List[Long](5l.toLong))));
+    assert(maximum((List[Long](4l.toLong, -4l.toLong)), (2l)).equals((List[Long](-4l.toLong, 4l.toLong))));
+    assert(maximum((List[Long](-10l.toLong, 10l.toLong)), (2l)).equals((List[Long](-10l.toLong, 10l.toLong))));
+    assert(maximum((List[Long](1l.toLong, 2l.toLong, 3l.toLong, -23l.toLong, 243l.toLong, -400l.toLong, 0l.toLong)), (0l)).equals((List[Long]())));
     }
 
 }

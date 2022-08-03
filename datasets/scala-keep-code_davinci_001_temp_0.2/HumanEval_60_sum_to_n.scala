@@ -12,16 +12,20 @@ object Problem {
     // 55
     // >>> sum_to_n(1)
     // 1
-    def sumToN(n : Int) : Int = {
-        return n * (n + 1) / 2
+    def sumToN(n : Long) : Long = {
+        var sum : Long = 0
+        for (i <- 1L to n) {
+            sum += i
+        }
+        return sum
 
     }
     def main(args: Array[String]) = {
-    assert(sumToN((1)) == (1));
-    assert(sumToN((6)) == (21));
-    assert(sumToN((11)) == (66));
-    assert(sumToN((30)) == (465));
-    assert(sumToN((100)) == (5050));
+    assert(sumToN((1l)) == (1l));
+    assert(sumToN((6l)) == (21l));
+    assert(sumToN((11l)) == (66l));
+    assert(sumToN((30l)) == (465l));
+    assert(sumToN((100l)) == (5050l));
     }
 
 }

@@ -10,29 +10,29 @@ object Problem {
     // '1000'
     // >>> change_base(7, 2)
     // '111'
-    def changeBase(x : Int, base : Int) : String = {
-        var result = ""
-        var n = x
-        while (n > 0) {
-            result = (n % base).toString + result
-            n = n / base
+    def changeBase(x : Long, base : Long) : String = {
+        var result = new StringBuilder()
+        var num = x
+        while (num > 0) {
+            result.append(num % base)
+            num /= base
         }
-        return result
+        result.reverse.toString
 
     }
     def main(args: Array[String]) = {
-    assert(changeBase((8), (3)).equals(("22")));
-    assert(changeBase((9), (3)).equals(("100")));
-    assert(changeBase((234), (2)).equals(("11101010")));
-    assert(changeBase((16), (2)).equals(("10000")));
-    assert(changeBase((8), (2)).equals(("1000")));
-    assert(changeBase((7), (2)).equals(("111")));
-    assert(changeBase((2), (3)).equals(("2")));
-    assert(changeBase((3), (4)).equals(("3")));
-    assert(changeBase((4), (5)).equals(("4")));
-    assert(changeBase((5), (6)).equals(("5")));
-    assert(changeBase((6), (7)).equals(("6")));
-    assert(changeBase((7), (8)).equals(("7")));
+    assert(changeBase((8l), (3l)).equals(("22")));
+    assert(changeBase((9l), (3l)).equals(("100")));
+    assert(changeBase((234l), (2l)).equals(("11101010")));
+    assert(changeBase((16l), (2l)).equals(("10000")));
+    assert(changeBase((8l), (2l)).equals(("1000")));
+    assert(changeBase((7l), (2l)).equals(("111")));
+    assert(changeBase((2l), (3l)).equals(("2")));
+    assert(changeBase((3l), (4l)).equals(("3")));
+    assert(changeBase((4l), (5l)).equals(("4")));
+    assert(changeBase((5l), (6l)).equals(("5")));
+    assert(changeBase((6l), (7l)).equals(("6")));
+    assert(changeBase((7l), (8l)).equals(("7")));
     }
 
 }

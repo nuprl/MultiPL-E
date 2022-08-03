@@ -6,26 +6,26 @@ object Problem {
     // 29
     // >>> largest_prime_factor(2048)
     // 2
-    def largestPrimeFactor(n : Int) : Int = {
-        var i = 2
-        var max = 0
-        while (i <= sqrt(n)) {
+    def largestPrimeFactor(n : Long) : Long = {
+        var i = 2L
+        var max = 1L
+        while (i <= n) {
             if (n % i == 0) {
                 max = i
-                n = n / i
+                n /= i
             } else {
-                i = i + 1
+                i += 1
             }
         }
         max
 
     }
     def main(args: Array[String]) = {
-    assert(largestPrimeFactor((15)) == (5));
-    assert(largestPrimeFactor((27)) == (3));
-    assert(largestPrimeFactor((63)) == (7));
-    assert(largestPrimeFactor((330)) == (11));
-    assert(largestPrimeFactor((13195)) == (29));
+    assert(largestPrimeFactor((15l)) == (5l));
+    assert(largestPrimeFactor((27l)) == (3l));
+    assert(largestPrimeFactor((63l)) == (7l));
+    assert(largestPrimeFactor((330l)) == (11l));
+    assert(largestPrimeFactor((13195l)) == (29l));
     }
 
 }

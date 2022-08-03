@@ -28,46 +28,43 @@ object Problem {
     // * 1 <= grid[:,1].length <= 10^2
     // * grid[i][j] -> 0 | 1
     // * 1 <= capacity <= 10
-    def maxFill(grid : List[List[Int]], capacity : Int) : Int = {
-        val n = grid.length
-        val m = grid(0).length
-        val dp = Array.fill(n, m)(0)
-        for (i <- 0 until n) {
-            for (j <- 0 until m) {
-                if (grid(i)(j) == 1) {
-                    dp(i)(j) = capacity
-                }
-            }
-        }
-        for (i <- 0 until n) {
-            for (j <- 0 until m) {
-                if (grid(i)(j) == 1) {
-                    if (i > 0) {
-                        dp(i)(j) = max(dp(i)(j), dp(i - 1)(j) + capacity)
+    def maxFill(grid : List[List[Long]], capacity : Long) : Long = {
+        // Fill the grid with water.
+        // Return the number of times you need to lower the buckets.
+        var max_fill = 0L
+        var water_fill = 0L
+        var row = 0
+        var col = 0
+        var row_len = grid.length
+        var col_len = grid(0).length
+        while (row < row_len) {
+            col = 0
+            while (col < col_len) {
+                if (grid(row)(col) == 1) {
+                    water_fill += 1
+                } else {
+                    if (water_fill > 0) {
+                        max_fill += 1
+                        water_fill = 0
                     }
-                    if (j > 0) {
-                        dp(i)(j) = max(dp(i)(j), dp(i)(j - 1) + capacity)
-                    }
                 }
+                col += 1
             }
-        }
-        var ans = 0
-        for (i <- 0 until n) {
-            for (j <- 0 until m) {
-                if (grid(i)(j) == 1) {
-                    ans = max(ans, dp(i)(j))
-                }
+            if (water_fill > 0) {
+                max_fill += 1
+                water_fill = 0
             }
+            row += 1
         }
-        ans
+        return max_fill
 
     }
     def main(args: Array[String]) = {
-    assert(maxFill((List[List[Int]](List[Int](0.toInt, 0.toInt, 1.toInt, 0.toInt), List[Int](0.toInt, 1.toInt, 0.toInt, 0.toInt), List[Int](1.toInt, 1.toInt, 1.toInt, 1.toInt))), (1)) == (6));
-    assert(maxFill((List[List[Int]](List[Int](0.toInt, 0.toInt, 1.toInt, 1.toInt), List[Int](0.toInt, 0.toInt, 0.toInt, 0.toInt), List[Int](1.toInt, 1.toInt, 1.toInt, 1.toInt), List[Int](0.toInt, 1.toInt, 1.toInt, 1.toInt))), (2)) == (5));
-    assert(maxFill((List[List[Int]](List[Int](0.toInt, 0.toInt, 0.toInt), List[Int](0.toInt, 0.toInt, 0.toInt))), (5)) == (0));
-    assert(maxFill((List[List[Int]](List[Int](1.toInt, 1.toInt, 1.toInt, 1.toInt), List[Int](1.toInt, 1.toInt, 1.toInt, 1.toInt))), (2)) == (4));
-    assert(maxFill((List[List[Int]](List[Int](1.toInt, 1.toInt, 1.toInt, 1.toInt), List[Int](1.toInt, 1.toInt, 1.toInt, 1.toInt))), (9)) == (2));
+    assert(maxFill((List[List[Long]](List[Long](0l.toLong, 0l.toLong, 1l.toLong, 0l.toLong), List[Long](0l.toLong, 1l.toLong, 0l.toLong, 0l.toLong), List[Long](1l.toLong, 1l.toLong, 1l.toLong, 1l.toLong))), (1l)) == (6l));
+    assert(maxFill((List[List[Long]](List[Long](0l.toLong, 0l.toLong, 1l.toLong, 1l.toLong), List[Long](0l.toLong, 0l.toLong, 0l.toLong, 0l.toLong), List[Long](1l.toLong, 1l.toLong, 1l.toLong, 1l.toLong), List[Long](0l.toLong, 1l.toLong, 1l.toLong, 1l.toLong))), (2l)) == (5l));
+    assert(maxFill((List[List[Long]](List[Long](0l.toLong, 0l.toLong, 0l.toLong), List[Long](0l.toLong, 0l.toLong, 0l.toLong))), (5l)) == (0l));
+    assert(maxFill((List[List[Long]](List[Long](1l.toLong, 1l.toLong, 1l.toLong, 1l.toLong), List[Long](1l.toLong, 1l.toLong, 1l.toLong, 1l.toLong))), (2l)) == (4l));
+    assert(maxFill((List[List[Long]](List[Long](1l.toLong, 1l.toLong, 1l.toLong, 1l.toLong), List[Long](1l.toLong, 1l.toLong, 1l.toLong, 1l.toLong))), (9l)) == (2l));
     }
 
 }

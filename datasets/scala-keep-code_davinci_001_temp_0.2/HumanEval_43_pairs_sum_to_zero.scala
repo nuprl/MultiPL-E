@@ -14,21 +14,26 @@ object Problem {
     // True
     // >>> pairs_sum_to_zero([1])
     // False
-    def pairsSumToZero(l : List[Int]) : Boolean = {
-        // your code here
+    def pairsSumToZero(l : List[Long]) : Boolean = {
+        val set = l.toSet
+        for (i <- set) {
+            if (i != 0 && set.contains(-i)) {
+                return true
+            }
+        }
         return false
 
     }
     def main(args: Array[String]) = {
-    assert(pairsSumToZero((List[Int](1.toInt, 3.toInt, 5.toInt, 0.toInt))) == (false));
-    assert(pairsSumToZero((List[Int](1.toInt, 3.toInt, -2.toInt, 1.toInt))) == (false));
-    assert(pairsSumToZero((List[Int](1.toInt, 2.toInt, 3.toInt, 7.toInt))) == (false));
-    assert(pairsSumToZero((List[Int](2.toInt, 4.toInt, -5.toInt, 3.toInt, 5.toInt, 7.toInt))) == (true));
-    assert(pairsSumToZero((List[Int](1.toInt))) == (false));
-    assert(pairsSumToZero((List[Int](-3.toInt, 9.toInt, -1.toInt, 3.toInt, 2.toInt, 30.toInt))) == (true));
-    assert(pairsSumToZero((List[Int](-3.toInt, 9.toInt, -1.toInt, 3.toInt, 2.toInt, 31.toInt))) == (true));
-    assert(pairsSumToZero((List[Int](-3.toInt, 9.toInt, -1.toInt, 4.toInt, 2.toInt, 30.toInt))) == (false));
-    assert(pairsSumToZero((List[Int](-3.toInt, 9.toInt, -1.toInt, 4.toInt, 2.toInt, 31.toInt))) == (false));
+    assert(pairsSumToZero((List[Long](1l.toLong, 3l.toLong, 5l.toLong, 0l.toLong))) == (false));
+    assert(pairsSumToZero((List[Long](1l.toLong, 3l.toLong, -2l.toLong, 1l.toLong))) == (false));
+    assert(pairsSumToZero((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 7l.toLong))) == (false));
+    assert(pairsSumToZero((List[Long](2l.toLong, 4l.toLong, -5l.toLong, 3l.toLong, 5l.toLong, 7l.toLong))) == (true));
+    assert(pairsSumToZero((List[Long](1l.toLong))) == (false));
+    assert(pairsSumToZero((List[Long](-3l.toLong, 9l.toLong, -1l.toLong, 3l.toLong, 2l.toLong, 30l.toLong))) == (true));
+    assert(pairsSumToZero((List[Long](-3l.toLong, 9l.toLong, -1l.toLong, 3l.toLong, 2l.toLong, 31l.toLong))) == (true));
+    assert(pairsSumToZero((List[Long](-3l.toLong, 9l.toLong, -1l.toLong, 4l.toLong, 2l.toLong, 30l.toLong))) == (false));
+    assert(pairsSumToZero((List[Long](-3l.toLong, 9l.toLong, -1l.toLong, 4l.toLong, 2l.toLong, 31l.toLong))) == (false));
     }
 
 }

@@ -8,31 +8,43 @@ object Problem {
     // >>> count_nums([]) == 0
     // >>> count_nums([-1, 11, -11]) == 1
     // >>> count_nums([1, 1, 2]) == 3
-    def countNums(arr : List[Int]) : Int = {
-        var count = 0
+    def countNums(arr : List[Long]) : Long = {
+        var count = 0L
         for (i <- arr) {
-            var sum = 0
-            var num = i
-            while (num > 0) {
-                sum += num % 10
-                num /= 10
-            }
-            if (sum > 0) {
-                count += 1
+            if (i < 0) {
+                var sum = 0L
+                var j = i
+                while (j != 0) {
+                    sum += j % 10
+                    j /= 10
+                }
+                if (sum > 0) {
+                    count += 1
+                }
+            } else {
+                var sum = 0L
+                var j = i
+                while (j != 0) {
+                    sum += j % 10
+                    j /= 10
+                }
+                if (sum > 0) {
+                    count += 1
+                }
             }
         }
         return count
 
     }
     def main(args: Array[String]) = {
-    assert(countNums((List[Int]())) == (0));
-    assert(countNums((List[Int](-1.toInt, -2.toInt, 0.toInt))) == (0));
-    assert(countNums((List[Int](1.toInt, 1.toInt, 2.toInt, -2.toInt, 3.toInt, 4.toInt, 5.toInt))) == (6));
-    assert(countNums((List[Int](1.toInt, 6.toInt, 9.toInt, -6.toInt, 0.toInt, 1.toInt, 5.toInt))) == (5));
-    assert(countNums((List[Int](1.toInt, 100.toInt, 98.toInt, -7.toInt, 1.toInt, -1.toInt))) == (4));
-    assert(countNums((List[Int](12.toInt, 23.toInt, 34.toInt, -45.toInt, -56.toInt, 0.toInt))) == (5));
-    assert(countNums((List[Int](0.toInt, 1.toInt))) == (1));
-    assert(countNums((List[Int](1.toInt))) == (1));
+    assert(countNums((List[Long]())) == (0l));
+    assert(countNums((List[Long](-1l.toLong, -2l.toLong, 0l.toLong))) == (0l));
+    assert(countNums((List[Long](1l.toLong, 1l.toLong, 2l.toLong, -2l.toLong, 3l.toLong, 4l.toLong, 5l.toLong))) == (6l));
+    assert(countNums((List[Long](1l.toLong, 6l.toLong, 9l.toLong, -6l.toLong, 0l.toLong, 1l.toLong, 5l.toLong))) == (5l));
+    assert(countNums((List[Long](1l.toLong, 100l.toLong, 98l.toLong, -7l.toLong, 1l.toLong, -1l.toLong))) == (4l));
+    assert(countNums((List[Long](12l.toLong, 23l.toLong, 34l.toLong, -45l.toLong, -56l.toLong, 0l.toLong))) == (5l));
+    assert(countNums((List[Long](0l.toLong, 1l.toLong))) == (1l));
+    assert(countNums((List[Long](1l.toLong))) == (1l));
     }
 
 }

@@ -7,26 +7,30 @@ object Problem {
     // For example:
     // choose_num(12, 15) = 14
     // choose_num(13, 12) = -1
-    def chooseNum(x : Int, y : Int) : Int = {
+    def chooseNum(x : Long, y : Long) : Long = {
         // IMPLEMENT THIS FUNCTION
-        var even = -1
-        for (i <- x to y) {
-            if (i % 2 == 0) {
-                even = i
+        var num = -1L
+        if(x%2==0 && y%2==0){
+            num = x
+            if(x>y){
+                num = y
+            }
+            if(x==y){
+                num = -1
             }
         }
-        even
+        return num
 
     }
     def main(args: Array[String]) = {
-    assert(chooseNum((12), (15)) == (14));
-    assert(chooseNum((13), (12)) == (-1));
-    assert(chooseNum((33), (12354)) == (12354));
-    assert(chooseNum((5234), (5233)) == (-1));
-    assert(chooseNum((6), (29)) == (28));
-    assert(chooseNum((27), (10)) == (-1));
-    assert(chooseNum((7), (7)) == (-1));
-    assert(chooseNum((546), (546)) == (546));
+    assert(chooseNum((12l), (15l)) == (14l));
+    assert(chooseNum((13l), (12l)) == (-1l));
+    assert(chooseNum((33l), (12354l)) == (12354l));
+    assert(chooseNum((5234l), (5233l)) == (-1l));
+    assert(chooseNum((6l), (29l)) == (28l));
+    assert(chooseNum((27l), (10l)) == (-1l));
+    assert(chooseNum((7l), (7l)) == (-1l));
+    assert(chooseNum((546l), (546l)) == (546l));
     }
 
 }

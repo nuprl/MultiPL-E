@@ -9,19 +9,19 @@ object Problem {
     // 288
     // The function will receive an integer as input and should return the special
     // factorial of this integer.
-    def specialFactorial(n : Int) : Int = {
-        var result = 1
-        for (i <- 2 to n) {
+    def specialFactorial(n : Long) : Long = {
+        var result = 1L
+        for (i <- 1L to n) {
             result *= i
         }
         return result
 
     }
     def main(args: Array[String]) = {
-    assert(specialFactorial((4)) == (288));
-    assert(specialFactorial((5)) == (34560));
-    assert(specialFactorial((7)) == (0));
-    assert(specialFactorial((1)) == (1));
+    assert(specialFactorial((4l)) == (288l));
+    assert(specialFactorial((5l)) == (34560l));
+    assert(specialFactorial((7l)) == (125411328000l));
+    assert(specialFactorial((1l)) == (1l));
     }
 
 }

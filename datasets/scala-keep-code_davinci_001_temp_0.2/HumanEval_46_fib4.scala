@@ -14,8 +14,7 @@ object Problem {
     // 8
     // >>> fib4(7)
     // 14
-    def fib4(n : Int) : Int = {
-        // TODO: Implement this function.
+    def fib4(n : Long) : Long = {
         if (n == 0) {
             return 0
         }
@@ -28,22 +27,24 @@ object Problem {
         if (n == 3) {
             return 0
         }
-        var prev = 0
-        var curr = 0
-        var next = 2
+        var a = 0L
+        var b = 0L
+        var c = 2L
+        var d = 0L
         for (i <- 4 to n) {
-            prev = curr
-            curr = next
-            next = curr + prev + prev
+            a = b
+            b = c
+            c = a + b + d
+            d = a
         }
-        return next
+        return c
 
     }
     def main(args: Array[String]) = {
-    assert(fib4((5)) == (4));
-    assert(fib4((8)) == (28));
-    assert(fib4((10)) == (104));
-    assert(fib4((12)) == (386));
+    assert(fib4((5l)) == (4l));
+    assert(fib4((8l)) == (28l));
+    assert(fib4((10l)) == (104l));
+    assert(fib4((12l)) == (386l));
     }
 
 }

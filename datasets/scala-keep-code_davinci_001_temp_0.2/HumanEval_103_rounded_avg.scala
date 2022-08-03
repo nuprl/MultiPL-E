@@ -10,28 +10,28 @@ object Problem {
     // rounded_avg(7, 5) => -1
     // rounded_avg(10, 20) => "0b1111"
     // rounded_avg(20, 33) => "0b11010"
-    def roundedAvg(n : Int, m : Int) : Either[String, Int] = {
+    def roundedAvg(n : Long, m : Long) : Either[String, Long] = {
         if (n > m) {
             Left("-1")
         } else {
             val avg = (n to m).sum / (m - n + 1)
-            Right(Integer.parseInt(avg.toBinaryString, 2))
+            Right(avg)
         }
 
     }
     def main(args: Array[String]) = {
-    assert(roundedAvg((1), (5)).equals("0b11"));
-    assert(roundedAvg((7), (13)).equals("0b1010"));
-    assert(roundedAvg((964), (977)).equals("0b1111001010"));
-    assert(roundedAvg((996), (997)).equals("0b1111100100"));
-    assert(roundedAvg((560), (851)).equals("0b1011000010"));
-    assert(roundedAvg((185), (546)).equals("0b101101110"));
-    assert(roundedAvg((362), (496)).equals("0b110101101"));
-    assert(roundedAvg((350), (902)).equals("0b1001110010"));
-    assert(roundedAvg((197), (233)).equals("0b11010111"));
-    assert(roundedAvg((7), (5)).equals(-1));
-    assert(roundedAvg((5), (1)).equals(-1));
-    assert(roundedAvg((5), (5)).equals("0b101"));
+    assert(roundedAvg((1l), (5l)).equals("0b11"));
+    assert(roundedAvg((7l), (13l)).equals("0b1010"));
+    assert(roundedAvg((964l), (977l)).equals("0b1111001010"));
+    assert(roundedAvg((996l), (997l)).equals("0b1111100100"));
+    assert(roundedAvg((560l), (851l)).equals("0b1011000010"));
+    assert(roundedAvg((185l), (546l)).equals("0b101101110"));
+    assert(roundedAvg((362l), (496l)).equals("0b110101101"));
+    assert(roundedAvg((350l), (902l)).equals("0b1001110010"));
+    assert(roundedAvg((197l), (233l)).equals("0b11010111"));
+    assert(roundedAvg((7l), (5l)).equals(-1l));
+    assert(roundedAvg((5l), (1l)).equals(-1l));
+    assert(roundedAvg((5l), (5l)).equals("0b101"));
     }
 
 }

@@ -5,20 +5,22 @@ object Problem {
     // Keep order of elements left the same as in the input.
     // >>> remove_duplicates([1, 2, 3, 2, 4])
     // [1, 3, 4]
-    def removeDuplicates(numbers : List[Int]) : List[Int] = {
-        val result = new ListBuffer[Int]()
-        for (num <- numbers) {
-            if (!result.contains(num)) {
-                result += num
+    def removeDuplicates(numbers : List[Long]) : List[Long] = {
+        var result = List[Long]()
+        var seen = Set[Long]()
+        for (n <- numbers) {
+            if (!seen.contains(n)) {
+                result = result :+ n
+                seen = seen + n
             }
         }
-        result.toList
+        return result
 
     }
     def main(args: Array[String]) = {
-    assert(removeDuplicates((List[Int]())).equals((List[Int]())));
-    assert(removeDuplicates((List[Int](1.toInt, 2.toInt, 3.toInt, 4.toInt))).equals((List[Int](1.toInt, 2.toInt, 3.toInt, 4.toInt))));
-    assert(removeDuplicates((List[Int](1.toInt, 2.toInt, 3.toInt, 2.toInt, 4.toInt, 3.toInt, 5.toInt))).equals((List[Int](1.toInt, 4.toInt, 5.toInt))));
+    assert(removeDuplicates((List[Long]())).equals((List[Long]())));
+    assert(removeDuplicates((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 4l.toLong))).equals((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 4l.toLong))));
+    assert(removeDuplicates((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 2l.toLong, 4l.toLong, 3l.toLong, 5l.toLong))).equals((List[Long](1l.toLong, 4l.toLong, 5l.toLong))));
     }
 
 }

@@ -4,14 +4,14 @@ object Problem {
     // Given length of a side and high return area for a triangle.
     // >>> triangle_area(5, 3)
     // 7.5
-    def triangleArea(a : Int, h : Int) : Float = {
-        return (a * h) / 2
+    def triangleArea(a : Long, h : Long) : Float = {
+        return 0.5 * a * h
 
     }
     def main(args: Array[String]) = {
-    assert(triangleArea((5), (3)) == (7.5f));
-    assert(triangleArea((2), (2)) == (2.0f));
-    assert(triangleArea((10), (8)) == (40.0f));
+    assert(triangleArea((5l), (3l)) == (7.5f));
+    assert(triangleArea((2l), (2l)) == (2.0f));
+    assert(triangleArea((10l), (8l)) == (40.0f));
     }
 
 }

@@ -11,30 +11,30 @@ object Problem {
     // is_simple_power(3, 2) => false
     // is_simple_power(3, 1) => false
     // is_simple_power(5, 3) => false
-    def isSimplePower(x : Int, n : Int) : Boolean = {
+    def isSimplePower(x : Long, n : Long) : Boolean = {
+        if (x == 1) {
+            return true
+        }
         if (x == n) {
             return true
         }
-        if (n == 1) {
+        if (x % n != 0) {
             return false
         }
-        if (x % n == 0) {
-            return isSimplePower(x / n, n)
-        }
-        return false
+        return isSimplePower(x / n, n)
 
     }
     def main(args: Array[String]) = {
-    assert(isSimplePower((16), (2)) == (true));
-    assert(isSimplePower((143214), (16)) == (false));
-    assert(isSimplePower((4), (2)) == (true));
-    assert(isSimplePower((9), (3)) == (true));
-    assert(isSimplePower((16), (4)) == (true));
-    assert(isSimplePower((24), (2)) == (false));
-    assert(isSimplePower((128), (4)) == (false));
-    assert(isSimplePower((12), (6)) == (false));
-    assert(isSimplePower((1), (1)) == (true));
-    assert(isSimplePower((1), (12)) == (true));
+    assert(isSimplePower((16l), (2l)) == (true));
+    assert(isSimplePower((143214l), (16l)) == (false));
+    assert(isSimplePower((4l), (2l)) == (true));
+    assert(isSimplePower((9l), (3l)) == (true));
+    assert(isSimplePower((16l), (4l)) == (true));
+    assert(isSimplePower((24l), (2l)) == (false));
+    assert(isSimplePower((128l), (4l)) == (false));
+    assert(isSimplePower((12l), (6l)) == (false));
+    assert(isSimplePower((1l), (1l)) == (true));
+    assert(isSimplePower((1l), (12l)) == (true));
     }
 
 }

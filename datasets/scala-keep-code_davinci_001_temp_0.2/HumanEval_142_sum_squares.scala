@@ -9,30 +9,29 @@ object Problem {
     // For lst = [1,2,3] the output should be 6
     // For lst = []  the output should be 0
     // For lst = [-1,-5,2,-1,-5]  the output should be -126
-    def sumSquares(lst : List[Int]) : Int = {
-        var sum = 0
+    def sumSquares(lst : List[Long]) : Long = {
+        var sum = 0L
         for(i <- 0 until lst.length){
-            if(i % 3 == 0){
-                sum += pow(lst(i),2).toInt
-            }else if(i % 4 == 0 && i % 3 != 0){
-                sum += pow(lst(i),3).toInt
-            }
+            if(i % 3 == 0)
+                sum += lst(i) * lst(i)
+            else if(i % 4 == 0 && i % 3 != 0)
+                sum += lst(i) * lst(i) * lst(i)
         }
-        return sum
+        sum
 
     }
     def main(args: Array[String]) = {
-    assert(sumSquares((List[Int](1.toInt, 2.toInt, 3.toInt))) == (6));
-    assert(sumSquares((List[Int](1.toInt, 4.toInt, 9.toInt))) == (14));
-    assert(sumSquares((List[Int]())) == (0));
-    assert(sumSquares((List[Int](1.toInt, 1.toInt, 1.toInt, 1.toInt, 1.toInt, 1.toInt, 1.toInt, 1.toInt, 1.toInt))) == (9));
-    assert(sumSquares((List[Int](-1.toInt, -1.toInt, -1.toInt, -1.toInt, -1.toInt, -1.toInt, -1.toInt, -1.toInt, -1.toInt))) == (-3));
-    assert(sumSquares((List[Int](0.toInt))) == (0));
-    assert(sumSquares((List[Int](-1.toInt, -5.toInt, 2.toInt, -1.toInt, -5.toInt))) == (-126));
-    assert(sumSquares((List[Int](-56.toInt, -99.toInt, 1.toInt, 0.toInt, -2.toInt))) == (3030));
-    assert(sumSquares((List[Int](-1.toInt, 0.toInt, 0.toInt, 0.toInt, 0.toInt, 0.toInt, 0.toInt, 0.toInt, -1.toInt))) == (0));
-    assert(sumSquares((List[Int](-16.toInt, -9.toInt, -2.toInt, 36.toInt, 36.toInt, 26.toInt, -20.toInt, 25.toInt, -40.toInt, 20.toInt, -4.toInt, 12.toInt, -26.toInt, 35.toInt, 37.toInt))) == (-14196));
-    assert(sumSquares((List[Int](-1.toInt, -3.toInt, 17.toInt, -1.toInt, -15.toInt, 13.toInt, -1.toInt, 14.toInt, -14.toInt, -12.toInt, -5.toInt, 14.toInt, -14.toInt, 6.toInt, 13.toInt, 11.toInt, 16.toInt, 16.toInt, 4.toInt, 10.toInt))) == (-1448));
+    assert(sumSquares((List[Long](1l.toLong, 2l.toLong, 3l.toLong))) == (6l));
+    assert(sumSquares((List[Long](1l.toLong, 4l.toLong, 9l.toLong))) == (14l));
+    assert(sumSquares((List[Long]())) == (0l));
+    assert(sumSquares((List[Long](1l.toLong, 1l.toLong, 1l.toLong, 1l.toLong, 1l.toLong, 1l.toLong, 1l.toLong, 1l.toLong, 1l.toLong))) == (9l));
+    assert(sumSquares((List[Long](-1l.toLong, -1l.toLong, -1l.toLong, -1l.toLong, -1l.toLong, -1l.toLong, -1l.toLong, -1l.toLong, -1l.toLong))) == (-3l));
+    assert(sumSquares((List[Long](0l.toLong))) == (0l));
+    assert(sumSquares((List[Long](-1l.toLong, -5l.toLong, 2l.toLong, -1l.toLong, -5l.toLong))) == (-126l));
+    assert(sumSquares((List[Long](-56l.toLong, -99l.toLong, 1l.toLong, 0l.toLong, -2l.toLong))) == (3030l));
+    assert(sumSquares((List[Long](-1l.toLong, 0l.toLong, 0l.toLong, 0l.toLong, 0l.toLong, 0l.toLong, 0l.toLong, 0l.toLong, -1l.toLong))) == (0l));
+    assert(sumSquares((List[Long](-16l.toLong, -9l.toLong, -2l.toLong, 36l.toLong, 36l.toLong, 26l.toLong, -20l.toLong, 25l.toLong, -40l.toLong, 20l.toLong, -4l.toLong, 12l.toLong, -26l.toLong, 35l.toLong, 37l.toLong))) == (-14196l));
+    assert(sumSquares((List[Long](-1l.toLong, -3l.toLong, 17l.toLong, -1l.toLong, -15l.toLong, 13l.toLong, -1l.toLong, 14l.toLong, -14l.toLong, -12l.toLong, -5l.toLong, 14l.toLong, -14l.toLong, 6l.toLong, 13l.toLong, 11l.toLong, 16l.toLong, 16l.toLong, 4l.toLong, 10l.toLong))) == (-1448l));
     }
 
 }

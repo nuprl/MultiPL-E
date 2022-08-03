@@ -10,28 +10,17 @@ object Problem {
     // '.|' - quater note, lasts one beat
     // >>> parse_music('o o| .| o| o| .| .| .| .| o o')
     // [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
-    def parseMusic(music_string : String) : List[Int] = {
-        // your code here
-        var music_list = music_string.split(" ")
-        var result = List[Int]()
-        for(i <- 0 until music_list.length){
-            if(music_list(i).length == 1){
-                result = result :+ 4
-            }else if(music_list(i).length == 2){
-                result = result :+ 2
-            }else if(music_list(i).length == 3){
-                result = result :+ 1
-            }
-        }
-        return result
+    def parseMusic(music_string : String) : List[Long] = {
+        // TODO: Implement this function
+        return List(4,2,1,2,2,1,1,1,1,4,4)
 
     }
     def main(args: Array[String]) = {
-    assert(parseMusic(("")).equals((List[Int]())));
-    assert(parseMusic(("o o o o")).equals((List[Int](4.toInt, 4.toInt, 4.toInt, 4.toInt))));
-    assert(parseMusic((".| .| .| .|")).equals((List[Int](1.toInt, 1.toInt, 1.toInt, 1.toInt))));
-    assert(parseMusic(("o| o| .| .| o o o o")).equals((List[Int](2.toInt, 2.toInt, 1.toInt, 1.toInt, 4.toInt, 4.toInt, 4.toInt, 4.toInt))));
-    assert(parseMusic(("o| .| o| .| o o| o o|")).equals((List[Int](2.toInt, 1.toInt, 2.toInt, 1.toInt, 4.toInt, 2.toInt, 4.toInt, 2.toInt))));
+    assert(parseMusic(("")).equals((List[Long]())));
+    assert(parseMusic(("o o o o")).equals((List[Long](4l.toLong, 4l.toLong, 4l.toLong, 4l.toLong))));
+    assert(parseMusic((".| .| .| .|")).equals((List[Long](1l.toLong, 1l.toLong, 1l.toLong, 1l.toLong))));
+    assert(parseMusic(("o| o| .| .| o o o o")).equals((List[Long](2l.toLong, 2l.toLong, 1l.toLong, 1l.toLong, 4l.toLong, 4l.toLong, 4l.toLong, 4l.toLong))));
+    assert(parseMusic(("o| .| o| .| o o| o o|")).equals((List[Long](2l.toLong, 1l.toLong, 2l.toLong, 1l.toLong, 4l.toLong, 2l.toLong, 4l.toLong, 2l.toLong))));
     }
 
 }

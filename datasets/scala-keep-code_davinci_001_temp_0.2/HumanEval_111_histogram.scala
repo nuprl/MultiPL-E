@@ -10,29 +10,27 @@ object Problem {
     // histogram('a b c a b') == {'a': 2, 'b': 2}
     // histogram('b b b b a') == {'b': 4}
     // histogram('') == {}
-    def histogram(test : String) : Map[String,Int] = {
-        var map = Map[String,Int]()
-        var str = test.split(" ")
-        for(i <- 0 until str.length){
-            if(map.contains(str(i))){
-                map += (str(i) -> (map(str(i)) + 1))
+    def histogram(test : String) : Map[String,Long] = {
+        var result = Map[String,Long]()
+        test.split(" ").foreach(x => {
+            if (result.contains(x)) {
+                result += (x -> (result(x) + 1))
+            } else {
+                result += (x -> 1)
             }
-            else{
-                map += (str(i) -> 1)
-            }
-        }
-        return map
+        })
+        return result
 
     }
     def main(args: Array[String]) = {
-    assert(histogram(("a b b a")).equals((Map[String,Int]("a" -> 2, "b" -> 2))));
-    assert(histogram(("a b c a b")).equals((Map[String,Int]("a" -> 2, "b" -> 2))));
-    assert(histogram(("a b c d g")).equals((Map[String,Int]("a" -> 1, "b" -> 1, "c" -> 1, "d" -> 1, "g" -> 1))));
-    assert(histogram(("r t g")).equals((Map[String,Int]("r" -> 1, "t" -> 1, "g" -> 1))));
-    assert(histogram(("b b b b a")).equals((Map[String,Int]("b" -> 4))));
-    assert(histogram(("r t g")).equals((Map[String,Int]("r" -> 1, "t" -> 1, "g" -> 1))));
-    assert(histogram(("")).equals((Map[String,Int]())));
-    assert(histogram(("a")).equals((Map[String,Int]("a" -> 1))));
+    assert(histogram(("a b b a")).equals((Map[String,Long]("a" -> 2l, "b" -> 2l))));
+    assert(histogram(("a b c a b")).equals((Map[String,Long]("a" -> 2l, "b" -> 2l))));
+    assert(histogram(("a b c d g")).equals((Map[String,Long]("a" -> 1l, "b" -> 1l, "c" -> 1l, "d" -> 1l, "g" -> 1l))));
+    assert(histogram(("r t g")).equals((Map[String,Long]("r" -> 1l, "t" -> 1l, "g" -> 1l))));
+    assert(histogram(("b b b b a")).equals((Map[String,Long]("b" -> 4l))));
+    assert(histogram(("r t g")).equals((Map[String,Long]("r" -> 1l, "t" -> 1l, "g" -> 1l))));
+    assert(histogram(("")).equals((Map[String,Long]())));
+    assert(histogram(("a")).equals((Map[String,Long]("a" -> 1l))));
     }
 
 }

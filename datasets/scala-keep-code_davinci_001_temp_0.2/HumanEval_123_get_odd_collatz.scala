@@ -12,25 +12,25 @@ object Problem {
     // 2. returned list sorted in increasing order.
     // For example:
     // get_odd_collatz(5) returns [1, 5] # The collatz sequence for 5 is [5, 16, 8, 4, 2, 1], so the odd numbers are only 1, and 5.
-    def getOddCollatz(n : Int) : List[Int] = {
-        var result = List[Int]()
-        var cur = n
-        while(cur != 1) {
-            if(cur % 2 == 0) {
-                cur = cur / 2
+    def getOddCollatz(n : Long) : List[Long] = {
+        var result = List[Long]()
+        var num = n
+        while(num > 1) {
+            if(num % 2 == 0) {
+                num = num / 2
             } else {
-                cur = 3 * cur + 1
+                num = 3 * num + 1
             }
-            result = cur :: result
+            result = result :+ num
         }
         result
 
     }
     def main(args: Array[String]) = {
-    assert(getOddCollatz((14)).equals((List[Int](1.toInt, 5.toInt, 7.toInt, 11.toInt, 13.toInt, 17.toInt))));
-    assert(getOddCollatz((5)).equals((List[Int](1.toInt, 5.toInt))));
-    assert(getOddCollatz((12)).equals((List[Int](1.toInt, 3.toInt, 5.toInt))));
-    assert(getOddCollatz((1)).equals((List[Int](1.toInt))));
+    assert(getOddCollatz((14l)).equals((List[Long](1l.toLong, 5l.toLong, 7l.toLong, 11l.toLong, 13l.toLong, 17l.toLong))));
+    assert(getOddCollatz((5l)).equals((List[Long](1l.toLong, 5l.toLong))));
+    assert(getOddCollatz((12l)).equals((List[Long](1l.toLong, 3l.toLong, 5l.toLong))));
+    assert(getOddCollatz((1l)).equals((List[Long](1l.toLong))));
     }
 
 }

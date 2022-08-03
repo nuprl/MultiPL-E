@@ -11,25 +11,25 @@ object Problem {
     // digitSum("helloE") => 69
     // digitSum("woArBld") => 131
     // digitSum("aAaaaXa") => 153
-    def digitSum(s : String) : Int = {
-        var sum = 0
-        for (i <- 0 until s.length) {
-            if (s(i).isUpper) {
-                sum += s(i).toInt
+    def digitSum(s : String) : Long = {
+        var sum : Long = 0
+        for (c <- s) {
+            if (c.isUpper) {
+                sum += c.toLong
             }
         }
         return sum
 
     }
     def main(args: Array[String]) = {
-    assert(digitSum(("")) == (0));
-    assert(digitSum(("abAB")) == (131));
-    assert(digitSum(("abcCd")) == (67));
-    assert(digitSum(("helloE")) == (69));
-    assert(digitSum(("woArBld")) == (131));
-    assert(digitSum(("aAaaaXa")) == (153));
-    assert(digitSum((" How are yOu?")) == (151));
-    assert(digitSum(("You arE Very Smart")) == (327));
+    assert(digitSum(("")) == (0l));
+    assert(digitSum(("abAB")) == (131l));
+    assert(digitSum(("abcCd")) == (67l));
+    assert(digitSum(("helloE")) == (69l));
+    assert(digitSum(("woArBld")) == (131l));
+    assert(digitSum(("aAaaaXa")) == (153l));
+    assert(digitSum((" How are yOu?")) == (151l));
+    assert(digitSum(("You arE Very Smart")) == (327l));
     }
 
 }

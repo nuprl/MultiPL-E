@@ -6,31 +6,16 @@ object Problem {
     // [1, 5, 653]
     // >>> common([5, 3, 2, 8], [3, 2])
     // [2, 3]
-    def common(l1 : List[Int], l2 : List[Int]) : List[Int] = {
-        var l1_s = l1.sorted
-        var l2_s = l2.sorted
-        var l = List[Int]()
-        var i = 0
-        var j = 0
-        while (i < l1_s.length && j < l2_s.length) {
-            if (l1_s(i) == l2_s(j)) {
-                l = l1_s(i) :: l
-                i += 1
-                j += 1
-            } else if (l1_s(i) < l2_s(j)) {
-                i += 1
-            } else {
-                j += 1
-            }
-        }
-        l.reverse
+    def common(l1 : List[Long], l2 : List[Long]) : List[Long] = {
+        val l1_set = l1.toSet
+        l2.filter(l1_set.contains(_)).sorted
 
     }
     def main(args: Array[String]) = {
-    assert(common((List[Int](1.toInt, 4.toInt, 3.toInt, 34.toInt, 653.toInt, 2.toInt, 5.toInt)), (List[Int](5.toInt, 7.toInt, 1.toInt, 5.toInt, 9.toInt, 653.toInt, 121.toInt))).equals((List[Int](1.toInt, 5.toInt, 653.toInt))));
-    assert(common((List[Int](5.toInt, 3.toInt, 2.toInt, 8.toInt)), (List[Int](3.toInt, 2.toInt))).equals((List[Int](2.toInt, 3.toInt))));
-    assert(common((List[Int](4.toInt, 3.toInt, 2.toInt, 8.toInt)), (List[Int](3.toInt, 2.toInt, 4.toInt))).equals((List[Int](2.toInt, 3.toInt, 4.toInt))));
-    assert(common((List[Int](4.toInt, 3.toInt, 2.toInt, 8.toInt)), (List[Int]())).equals((List[Int]())));
+    assert(common((List[Long](1l.toLong, 4l.toLong, 3l.toLong, 34l.toLong, 653l.toLong, 2l.toLong, 5l.toLong)), (List[Long](5l.toLong, 7l.toLong, 1l.toLong, 5l.toLong, 9l.toLong, 653l.toLong, 121l.toLong))).equals((List[Long](1l.toLong, 5l.toLong, 653l.toLong))));
+    assert(common((List[Long](5l.toLong, 3l.toLong, 2l.toLong, 8l.toLong)), (List[Long](3l.toLong, 2l.toLong))).equals((List[Long](2l.toLong, 3l.toLong))));
+    assert(common((List[Long](4l.toLong, 3l.toLong, 2l.toLong, 8l.toLong)), (List[Long](3l.toLong, 2l.toLong, 4l.toLong))).equals((List[Long](2l.toLong, 3l.toLong, 4l.toLong))));
+    assert(common((List[Long](4l.toLong, 3l.toLong, 2l.toLong, 8l.toLong)), (List[Long]())).equals((List[Long]())));
     }
 
 }

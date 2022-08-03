@@ -11,22 +11,22 @@ object Problem {
     // Examples:
     // >>> make_a_pile(3)
     // [3, 5, 7]
-    def makeAPile(n : Int) : List[Int] = {
-        var pile : List[Int] = List()
+    def makeAPile(n : Long) : List[Long] = {
+        var pile = List[Long]()
         var i = n
         while (i > 0) {
-            pile = pile :+ i
+            pile = i :: pile
             i = if (i % 2 == 0) i + 1 else i + 2
         }
         pile
 
     }
     def main(args: Array[String]) = {
-    assert(makeAPile((3)).equals((List[Int](3.toInt, 5.toInt, 7.toInt))));
-    assert(makeAPile((4)).equals((List[Int](4.toInt, 6.toInt, 8.toInt, 10.toInt))));
-    assert(makeAPile((5)).equals((List[Int](5.toInt, 7.toInt, 9.toInt, 11.toInt, 13.toInt))));
-    assert(makeAPile((6)).equals((List[Int](6.toInt, 8.toInt, 10.toInt, 12.toInt, 14.toInt, 16.toInt))));
-    assert(makeAPile((8)).equals((List[Int](8.toInt, 10.toInt, 12.toInt, 14.toInt, 16.toInt, 18.toInt, 20.toInt, 22.toInt))));
+    assert(makeAPile((3l)).equals((List[Long](3l.toLong, 5l.toLong, 7l.toLong))));
+    assert(makeAPile((4l)).equals((List[Long](4l.toLong, 6l.toLong, 8l.toLong, 10l.toLong))));
+    assert(makeAPile((5l)).equals((List[Long](5l.toLong, 7l.toLong, 9l.toLong, 11l.toLong, 13l.toLong))));
+    assert(makeAPile((6l)).equals((List[Long](6l.toLong, 8l.toLong, 10l.toLong, 12l.toLong, 14l.toLong, 16l.toLong))));
+    assert(makeAPile((8l)).equals((List[Long](8l.toLong, 10l.toLong, 12l.toLong, 14l.toLong, 16l.toLong, 18l.toLong, 20l.toLong, 22l.toLong))));
     }
 
 }

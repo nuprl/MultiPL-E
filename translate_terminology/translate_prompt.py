@@ -56,20 +56,25 @@ def translate_prompt(language, example):
 			tar_prompt += more_prompt+more_doctest
 		tar_prompt += translate_terms(language,fields,prompt[last:])
 
-	print(language+':',tar_prompt)
-	return before+tar_prompt+after
+	return before+'"""'+tar_prompt+'"""'+after
 
 
 def main():
 	directory = Path(Path(__file__).parent, "..", "datasets", "originals-with-cleaned-doctests").resolve()
 	files = [Path.joinpath(directory,filename) for filename in os.listdir(directory)]
-	f = "../datasets/originals-with-cleaned-doctests/HumanEval_51_remove_vowels.py"
-	with open(f,'r') as sf:
-		src_text = sf.read().replace("'''",'"""')
-		for k in lang_dict.keys():
-			translate_prompt(k,src_text)
-		translate_prompt("Python",src_text)
+	tar_dir = "../datasets/originals-with-cleaned-vocab"
+	for f in files:
 		print(f)
+		with open(f,'r') as sf:
+			src_text = sf.read().replace("'''",'"""')
+		for k in lang_dict.keys():
+			translated = translate_prompt(k,src_text)
+			tgt_text = tar_dir+f"-{lang_dict[k]['py']}"+"/"+str(f).split('/')[-1]
+			with open(tgt_text,'w') as tar_f:
+				tar_f.write(translated)
+
+
+		
 
 
 main()

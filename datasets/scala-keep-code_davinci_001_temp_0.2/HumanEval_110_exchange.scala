@@ -12,25 +12,28 @@ object Problem {
     // exchange([1, 2, 3, 4], [1, 2, 3, 4]) => "YES"
     // exchange([1, 2, 3, 4], [1, 5, 3, 4]) => "NO"
     // It is assumed that the input lists will be non-empty.
-    def exchange(lst1 : List[Int], lst2 : List[Int]) : String = {
+    def exchange(lst1 : List[Long], lst2 : List[Long]) : String = {
         // YOUR CODE HERE
-        var lst1_even = lst1.filter(_ % 2 == 0)
-        var lst2_even = lst2.filter(_ % 2 == 0)
-        if (lst1_even.length == lst1.length) {
-            return "YES"
-        } else {
+        var even1 = lst1.filter(_ % 2 == 0)
+        var even2 = lst2.filter(_ % 2 == 0)
+        if (even1.length == 0 || even2.length == 0) {
             return "NO"
         }
+        var even1_even2 = even1.intersect(even2)
+        if (even1_even2.length == 0) {
+            return "NO"
+        }
+        return "YES"
 
     }
     def main(args: Array[String]) = {
-    assert(exchange((List[Int](1.toInt, 2.toInt, 3.toInt, 4.toInt)), (List[Int](1.toInt, 2.toInt, 3.toInt, 4.toInt))).equals(("YES")));
-    assert(exchange((List[Int](1.toInt, 2.toInt, 3.toInt, 4.toInt)), (List[Int](1.toInt, 5.toInt, 3.toInt, 4.toInt))).equals(("NO")));
-    assert(exchange((List[Int](1.toInt, 2.toInt, 3.toInt, 4.toInt)), (List[Int](2.toInt, 1.toInt, 4.toInt, 3.toInt))).equals(("YES")));
-    assert(exchange((List[Int](5.toInt, 7.toInt, 3.toInt)), (List[Int](2.toInt, 6.toInt, 4.toInt))).equals(("YES")));
-    assert(exchange((List[Int](5.toInt, 7.toInt, 3.toInt)), (List[Int](2.toInt, 6.toInt, 3.toInt))).equals(("NO")));
-    assert(exchange((List[Int](3.toInt, 2.toInt, 6.toInt, 1.toInt, 8.toInt, 9.toInt)), (List[Int](3.toInt, 5.toInt, 5.toInt, 1.toInt, 1.toInt, 1.toInt))).equals(("NO")));
-    assert(exchange((List[Int](100.toInt, 200.toInt)), (List[Int](200.toInt, 200.toInt))).equals(("YES")));
+    assert(exchange((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 4l.toLong)), (List[Long](1l.toLong, 2l.toLong, 3l.toLong, 4l.toLong))).equals(("YES")));
+    assert(exchange((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 4l.toLong)), (List[Long](1l.toLong, 5l.toLong, 3l.toLong, 4l.toLong))).equals(("NO")));
+    assert(exchange((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 4l.toLong)), (List[Long](2l.toLong, 1l.toLong, 4l.toLong, 3l.toLong))).equals(("YES")));
+    assert(exchange((List[Long](5l.toLong, 7l.toLong, 3l.toLong)), (List[Long](2l.toLong, 6l.toLong, 4l.toLong))).equals(("YES")));
+    assert(exchange((List[Long](5l.toLong, 7l.toLong, 3l.toLong)), (List[Long](2l.toLong, 6l.toLong, 3l.toLong))).equals(("NO")));
+    assert(exchange((List[Long](3l.toLong, 2l.toLong, 6l.toLong, 1l.toLong, 8l.toLong, 9l.toLong)), (List[Long](3l.toLong, 5l.toLong, 5l.toLong, 1l.toLong, 1l.toLong, 1l.toLong))).equals(("NO")));
+    assert(exchange((List[Long](100l.toLong, 200l.toLong)), (List[Long](200l.toLong, 200l.toLong))).equals(("YES")));
     }
 
 }

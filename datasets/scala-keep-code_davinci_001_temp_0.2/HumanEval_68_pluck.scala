@@ -26,69 +26,26 @@ object Problem {
     // Constraints:
     // * 1 <= nodes.length <= 10000
     // * 0 <= node.value
-    def pluck(arr : List[Int]) : List[Int] = {
-        var minEven = Int.MaxValue
-        var minEvenIndex = -1
-        var minEvenIndex2 = -1
-        var minEvenIndex3 = -1
-        var minEvenIndex4 = -1
-        var minEvenIndex5 = -1
-        var minEvenIndex6 = -1
-        var minEvenIndex7 = -1
-        var minEvenIndex8 = -1
-        var minEvenIndex9 = -1
-        var minEvenIndex10 = -1
-        var minEvenIndex11 = -1
-        var minEvenIndex12 = -1
-        var minEvenIndex13 = -1
-        var minEvenIndex14 = -1
-        var minEvenIndex15 = -1
-        var minEvenIndex16 = -1
-        var minEvenIndex17 = -1
-        var minEvenIndex18 = -1
-        var minEvenIndex19 = -1
-        var minEvenIndex20 = -1
-        var minEvenIndex21 = -1
-        var minEvenIndex22 = -1
-        var minEvenIndex23 = -1
-        var minEvenIndex24 = -1
-        var minEvenIndex25 = -1
-        var minEvenIndex26 = -1
-        var minEvenIndex27 = -1
-        var minEvenIndex28 = -1
-        var minEvenIndex29 = -1
-        var minEvenIndex30 = -1
-        var minEvenIndex31 = -1
-        var minEvenIndex32 = -1
-        var minEvenIndex33 = -1
-        var minEvenIndex34 = -1
-        var minEvenIndex35 = -1
-        var minEvenIndex36 = -1
-        var minEvenIndex37 = -1
-        var minEvenIndex38 = -1
-        var minEvenIndex39 = -1
-        var minEvenIndex40 = -1
-        var minEvenIndex41 = -1
-        var minEvenIndex42 = -1
-        var minEvenIndex43 = -1
-        var minEvenIndex44 = -1
-        var minEvenIndex45 = -1
-        var minEvenIndex46 = -1
-        var minEvenIndex47 = -1
-        var minEvenIndex48 = -1
-        var minEvenIndex49 = -1
-
+    def pluck(arr : List[Long]) : List[Long] = {
+        // arr.filter(x => x % 2 == 0).sortWith(_ < _).headOption match {
+        //     case Some(x) => List(x, arr.indexOf(x))
+        //     case None => List()
+        // }
+        arr.filter(x => x % 2 == 0).sortWith(_ < _).headOption match {
+            case Some(x) => List(x, arr.indexOf(x))
+            case None => List()
+        }
 
     }
     def main(args: Array[String]) = {
-    assert(pluck((List[Int](4.toInt, 2.toInt, 3.toInt))).equals((List[Int](2.toInt, 1.toInt))));
-    assert(pluck((List[Int](1.toInt, 2.toInt, 3.toInt))).equals((List[Int](2.toInt, 1.toInt))));
-    assert(pluck((List[Int]())).equals((List[Int]())));
-    assert(pluck((List[Int](5.toInt, 0.toInt, 3.toInt, 0.toInt, 4.toInt, 2.toInt))).equals((List[Int](0.toInt, 1.toInt))));
-    assert(pluck((List[Int](1.toInt, 2.toInt, 3.toInt, 0.toInt, 5.toInt, 3.toInt))).equals((List[Int](0.toInt, 3.toInt))));
-    assert(pluck((List[Int](5.toInt, 4.toInt, 8.toInt, 4.toInt, 8.toInt))).equals((List[Int](4.toInt, 1.toInt))));
-    assert(pluck((List[Int](7.toInt, 6.toInt, 7.toInt, 1.toInt))).equals((List[Int](6.toInt, 1.toInt))));
-    assert(pluck((List[Int](7.toInt, 9.toInt, 7.toInt, 1.toInt))).equals((List[Int]())));
+    assert(pluck((List[Long](4l.toLong, 2l.toLong, 3l.toLong))).equals((List[Long](2l.toLong, 1l.toLong))));
+    assert(pluck((List[Long](1l.toLong, 2l.toLong, 3l.toLong))).equals((List[Long](2l.toLong, 1l.toLong))));
+    assert(pluck((List[Long]())).equals((List[Long]())));
+    assert(pluck((List[Long](5l.toLong, 0l.toLong, 3l.toLong, 0l.toLong, 4l.toLong, 2l.toLong))).equals((List[Long](0l.toLong, 1l.toLong))));
+    assert(pluck((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 0l.toLong, 5l.toLong, 3l.toLong))).equals((List[Long](0l.toLong, 3l.toLong))));
+    assert(pluck((List[Long](5l.toLong, 4l.toLong, 8l.toLong, 4l.toLong, 8l.toLong))).equals((List[Long](4l.toLong, 1l.toLong))));
+    assert(pluck((List[Long](7l.toLong, 6l.toLong, 7l.toLong, 1l.toLong))).equals((List[Long](6l.toLong, 1l.toLong))));
+    assert(pluck((List[Long](7l.toLong, 9l.toLong, 7l.toLong, 1l.toLong))).equals((List[Long]())));
     }
 
 }
