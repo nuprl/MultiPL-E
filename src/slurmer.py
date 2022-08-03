@@ -7,7 +7,7 @@ if user == "a.guha":
 elif user == "l.phipps-costin":
   SUPPORTED = [ "rust", "/rs-", "/py-", "python" ]
 elif user == "zi.ya":
-  SUPPORTED = [ "lua" ]
+  SUPPORTED = [ "lua", "/d-" ]
 else:
     raise "Unknown user"
 
