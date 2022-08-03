@@ -1,5 +1,4 @@
 #!/bin/bash
-#SBATCH --array=11-478
 #SBATCH --mem=48G
 #SBATCH --export=ALL
 #SBATCH --cpus-per-task=24
@@ -10,14 +9,17 @@
 module load oracle_java julia
 
 if [ $USER == "a.guha" ]; then
-  eval `spack load --sh php`
+  eval `spack load --sh php lua racket`
 elif [ $USER == "l.phipps-costin" ]; then
-  eval `spack load --sh ruby`
+  export NVM_DIR="$HOME/.nvm"
+  . "$NVM_DIR/nvm.sh"
+elif [ $USER == "zi.ya" ]; then
+  eval `spack load --sh lua`
 else
   echo "Unkown user account: $USER"
 fi
 
-cd /home/a.guha/repos/polyglot-codegen-evaluation/src
+LUA_PATH="${PWD}/luaunit.lua"
 FILE=`sed -n ${SLURM_ARRAY_TASK_ID}p files.txt`
 echo $FILE
 python3 problem_evaluator.py --target $FILE --max-workers 24

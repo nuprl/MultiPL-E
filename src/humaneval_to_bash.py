@@ -17,12 +17,12 @@
 # they call py_to_bash() to perform the translation.
 #
 # Known limitations:
-#   1. More than two layers of nesting is not supported
-#   2. Nested dictionaries are not supported
-#   3. List elements containing whitespace are not supported
+#   1. List elements containing whitespace are not supported
+#   2. More than two layers of nesting is not supported
+#   3. Nested dictionaries are not supported
 #
-# 1 and 2 do not occur in the dataset, but 3 does. The translator does not check for 1 or 2,
-# but will terminate if 3 is encountered.
+# 2 and 3 do not occur in the dataset, but 1 does.
+# The translator tries to check for these cases and terminates if they are encountered.
 import re
 import ast
 from typing import List
@@ -46,7 +46,7 @@ def quote(s):
 def unquote(s):
     return s[1:-1] if is_quoted(s) else s
 
-# Bash does not have type annotations, but we include comments explaining the encoding the tests us.
+# Bash does not have type annotations, but we include comments explaining the encoding the tests use.
 # List and Tuple -> space-separated list
 # Nested list -> newline-separated, space-separated list
 # Dictionary -> two column CSV in key,value order
@@ -78,31 +78,44 @@ def type_to_comment(t, i):
 
 # Translation of Python values into Bash strings is deferred until this point.
 # Non-list values have already been translated to Bash syntax.
-# There are three cases for lists:
-#   1. Empty list: this is translated to an empty string.
-#   2. Nested list: the inner lists are recursively translated (which results in
-#      a quoted, space-separated string), unquoted, and then joined with newlines.
-#   3. List: the elements are recursively translated (which results in quoted strings),
-#      unquoted, and then joined with spaces.
+# There are three cases:
+#   1.  Empty list: this is translated to an empty string.
+#   2a. List of dictionaries: not supported
+#   2b. Nested list with more than two layers of nesting: not supported
+#   2c. Nested list: the inner lists are recursively translated (which results in
+#       a quoted, space-separated string), unquoted, and then joined with newlines.
+#   2d. List: the elements are recursively translated (which results in quoted strings),
+#       unquoted, and then joined with spaces.
+#   3a. Nested dictionary: not supported
+#   3b. Dictionary: the dictionary is translated to CSV format, in key,value order.
 def py_to_bash(val):
-    if type(val) == list:
-        if len(val) == 0:
-            return '""'
-        elif all(type(v) == list for v in val):
+    if type(val) is list and len(val) == 0:
+        return '""'
+    elif type(val) is list:
+        if all(type(v) is dict for v in val):
+            raise Exception("Cannot translate list with dictionary as elements")
+        elif all(type(vv) is list for v in val for vv in v):
+            raise Exception("Cannot translate list with more than two layers of nesting")
+        elif all(type(v) is list for v in val):
             # Translate list to a string where the inner list is space separated and the outer list is newline separated
             return quote("\\n".join([unquote(py_to_bash(v)) for v in val]))
         else:
             # Translate list to a string with elements separated by spaces
             return quote(" ".join([unquote(py_to_bash(v)) for v in val]))
+    elif type(val) is dict:
+        if any(type(v) is not str for v in val.values()):
+            raise Exception("Cannot translate nested dictionary")
+        # Translate dictionary to CSV format
+        return quote("\\n".join(unquote(k) + "," + unquote(v) for k, v in val.items()))
     else:
         return val
 
-class BashTranslator:
+class Translator:
 
     stop = ["\n}"]
 
-    def __init__(self, file_ext):
-        self.file_ext = file_ext
+    def __init__(self):
+        self.file_ext = "sh"
         self.num = 0
         self.entry_point = ""
 
@@ -203,11 +216,13 @@ class BashTranslator:
         """Translate a dictionary with keys and values
         A dictionary { "key1": val1, "key2": val2 } translates to a CSV: key1,val1\nkey2,val2
 
+        Because we need to know what values we're passing around, pass around Python values.
+
         If any element contains whitespace, then we can't translate it.
         """
         if any(contains_whitespace(k) or contains_whitespace(v) for k, v in zip(keys, values)):
             raise Exception("Cannot translate list element that contains whitespace")
-        return quote("\\n".join(unquote(k) + "," + unquote(v) for k, v in zip(keys, values)))
+        return dict(zip(keys, values))
 
     def gen_call(self, func: str, args: List) -> str:
         """Translate a function call `func(args)`
@@ -222,5 +237,5 @@ class BashTranslator:
         return "echo 0"
 
 if __name__ == "__main__":
-    translator = BashTranslator("sh")
+    translator = Translator()
     main(translator)
