@@ -5,8 +5,10 @@ union Union_std_vector_std_string__long{
     long f1;    Union_std_vector_std_string__long(std::vector<std::string> _f0) : f0(_f0) {}
     Union_std_vector_std_string__long(long _f1) : f1(_f1) {}
     ~Union_std_vector_std_string__long() {}
-    bool operator==(Union_std_vector_std_string__long u2) {
-        return f0 == u2.f0 || f1 == u2.f1 ;
+    bool operator==(std::vector<std::string> f) {
+        return f0 == f ;
+    }    bool operator==(long f) {
+        return f1 == f ;
     }
 };
 // Given a string of words, return a list of words split on whitespace, if no whitespaces exists in the text you
@@ -19,21 +21,24 @@ union Union_std_vector_std_string__long{
 Union_std_vector_std_string__long split_words(std::string txt) {
     std::vector<std::string> res;
     std::stringstream ss(txt);
-    std::string word;
-    while (ss >> word) {
-        res.push_back(word);
+    std::string token;
+    while (std::getline(ss, token, ' ')) {
+        res.push_back(token);
+    }
+    if (res.size() == 0) {
+        res.push_back(txt);
     }
     return Union_std_vector_std_string__long(res);
 
 }
 int main() {
     auto candidate = split_words;
-    assert(candidate(("Hello world!")) == (Union_std_vector_std_string__long(std::string)"world!"})));
-    assert(candidate(("Hello,world!")) == (Union_std_vector_std_string__long(std::string)"world!"})));
-    assert(candidate(("Hello world,!")) == (Union_std_vector_std_string__long(std::string)"world,!"})));
-    assert(candidate(("Hello,Hello,world !")) == (Union_std_vector_std_string__long(std::string)"!"})));
-    assert(candidate(("abcdef")) == (Union_std_vector_std_string__long(3)));
-    assert(candidate(("aaabb")) == (Union_std_vector_std_string__long(2)));
-    assert(candidate(("aaaBb")) == (Union_std_vector_std_string__long(1)));
-    assert(candidate(("")) == (Union_std_vector_std_string__long(0)));
+    assert(candidate(("Hello world!")) == std::vector<std::string>({(std::string)"Hello", (std::string)"world!"}));
+    assert(candidate(("Hello,world!")) == std::vector<std::string>({(std::string)"Hello", (std::string)"world!"}));
+    assert(candidate(("Hello world,!")) == std::vector<std::string>({(std::string)"Hello", (std::string)"world,!"}));
+    assert(candidate(("Hello,Hello,world !")) == std::vector<std::string>({(std::string)"Hello,Hello,world", (std::string)"!"}));
+    assert(candidate(("abcdef")) == 3);
+    assert(candidate(("aaabb")) == 2);
+    assert(candidate(("aaaBb")) == 1);
+    assert(candidate(("")) == 0);
 }

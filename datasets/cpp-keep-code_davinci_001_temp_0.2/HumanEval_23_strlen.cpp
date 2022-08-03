@@ -5,16 +5,12 @@
 // 0
 // >>> strlen('abc')
 // 3
-long strlen(std::string string) {
-    long len = 0;
-    for (char c : string) {
-        len++;
-    }
-    return len;
+long string_length(std::string string) {
+    return string.length();
 
 }
 int main() {
-    auto candidate = strlen;
+    auto candidate = string_length;
     assert(candidate(("")) == (0));
     assert(candidate(("x")) == (1));
     assert(candidate(("asdasnakj")) == (9));

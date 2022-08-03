@@ -165,10 +165,10 @@ class CPPTranslator:
                 union += f"    ~{decl}()"+" {}\n"
                 
                 #Comparison operator
-                union += f"    bool operator==({decl} u2) {{\n"
-                comparisons = [f"{field} == u2.{field} " for type, field in fields.items()]
-                union += "        return " + "|| ".join(comparisons) + ";\n"
-                union += "    }"
+                for ty,field in fields.items():
+                    union += f"    bool operator==({ty} f) {{\n"
+                    union += "        return " + f"{field} == f " + ";\n"
+                    union += "    }"
                 union += "\n};\n"
             unions += union
             
