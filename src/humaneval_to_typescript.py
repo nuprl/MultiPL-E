@@ -70,13 +70,13 @@ def coerce(expr: str, type) -> str:
         case _: 
             return expr
 
-class TypeScriptTranslator:
+class Translator:
 
     stop = [ '\nfunction ', '\n/*', '\n//', '\nclass' ] # NOTE(carolyn): My guess
 
-    def __init__(self, file_ext):
+    def __init__(self):
         global needs_hashmap
-        self.file_ext = file_ext
+        self.file_ext = "ts"
         self.type = None
         self.is_candidate_result = False
 
@@ -157,5 +157,5 @@ class TypeScriptTranslator:
 
 
 if __name__ == "__main__":
-    translator = TypeScriptTranslator("ts")
+    translator = Translator()
     main(translator)

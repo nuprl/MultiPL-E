@@ -43,6 +43,8 @@ def main(printToShell=False, writeToFile=True):
             rf.close()
             sys.exit(1)
 
+    assert len(sorted(dir.glob("*.results.yaml"))) != 0, 'NOTE: results.yaml has not been generated.'
+
     for problem_yaml_path in sorted(dir.glob("*.results.yaml")):
         with problem_yaml_path.open() as f:
             testResults = TestResults.load(f)
@@ -61,6 +63,7 @@ def main(printToShell=False, writeToFile=True):
                 print(f"{counts['OK']} Success, {counts['OtherError']} OtherError, {counts['Exception']} Exception")
             if writeToFile:
                 with open(results_file, "a") as wrf:
+                    assert sum(counts.values()) == 200, f'{testResults.name} only has {sum(counts.values())} completions'
                     countString = f"{testResults.name},{counts['OK']},{counts['OtherError']},{counts['Exception']}\n"
                     wrf.write(countString)
         if counts["OK"] > 0:

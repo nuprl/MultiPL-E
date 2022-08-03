@@ -14,43 +14,39 @@ import eval_python
 import eval_rust
 import eval_julia
 import eval_java
-import eval_python
 import eval_lua
 import eval_racket
 import eval_javascript
 import eval_swift
 import eval_cpp
+import eval_php
 import tempfile
 import json
 
 EVALUATORS = {
-    "ruby": (eval_ruby.eval_script, ".rb"),
+    "rb": (eval_ruby.eval_script, ".rb"),
     "lua": (eval_lua.eval_script, ".lua"),
     "python": (eval_python.eval_script, ".py"),
+    "py": (eval_python.eval_script, ".py"),
     "julia": (eval_julia.eval_script, ".jl"),
     "java" : (eval_java.eval_script, ".java"),
     "rust" : (eval_rust.eval_script, ".rs"),
     "swift": (eval_swift.eval_script, ".swift"),
     "lua": (eval_lua.eval_script, ".lua"),
-    "python": (eval_python.eval_script, ".py"),
     "racket": (eval_racket.eval_script, ".rkt"),
+    "rkt": (eval_racket.eval_script, ".rkt"),
     "javascript": (eval_javascript.eval_script, ".js"),
-    "cpp": (eval_cpp.eval_script, ".cpp")
+    "cpp": (eval_cpp.eval_script, ".cpp"),
+    "php": (eval_php.eval_script, ".php"),
 }
 
-def eval_in_thread(problem_yaml_path, index):
-    with open(problem_yaml_path) as f:
-        problem = Problem.load(f)
-
+def eval_script(problem, index):
     program = problem.prompt + problem.completions[index] + '\n' + problem.tests
-
     (eval_script, file_ext) = EVALUATORS[problem.language]
     with tempfile.NamedTemporaryFile(suffix=file_ext, delete=True) as f:
         f.write(program.encode("utf-8"))
         f.flush()
-        result = eval_script(f.name)
-        result_yaml = Result()
-        result_yaml.program = program
+        result = eval_script(Path(f.name))
         # Only save the first 2K of output from the running program. Any futher
         # output is very likely an exceptionally long stack trace or a long
         # series of prints.
@@ -62,6 +58,11 @@ def eval_in_thread(problem_yaml_path, index):
             "exit_code": result['exit_code'],
             "status": result['status']
         }
+
+def eval_in_thread(problem_yaml_path, index):
+    with open(problem_yaml_path) as f:
+        problem = Problem.load(f)
+    return eval_script(problem, index)
 
 def main():
     parser = argparse.ArgumentParser(description="Evaluate a problem")

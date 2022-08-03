@@ -11,13 +11,14 @@ from typing import List
 from generic_translator import main
 
 RET_TYPE_LOC = -1
+NULL_DICT = "___null_dict___"
 
-class DlangTranslator:
+class Translator:
     # TODO: what is the stop sequence for it?
     stop = ["\n\n", "\nvoid", "\nbool", "\nint"]
 
-    def __init__(self, file_ext):
-        self.file_ext = file_ext
+    def __init__(self):
+        self.file_ext = "d"
         self.require_libs = {"std.math"}
         self.func_type = None
 
@@ -29,7 +30,7 @@ class DlangTranslator:
                         slice_type = self.translate_type(slice)
                         return f"{slice_type}[]"
                     case "Union":
-                        raise Exception(f"Union is not supported")
+                        raise Exception("Union is not supported")
                     case "Tuple":
                         match slice:
                             case ast.Tuple(elts,_ctx):
@@ -42,7 +43,8 @@ class DlangTranslator:
                         match slice:
                             case ast.Tuple([ast.Name(k), ast.Name(v)], _ctx):
                                 key, value = self.translate_type(k), self.translate_type(v)
-                                return f"{value}[{key}]"
+                                # Dlang associative arrays doesn't allow empty arrays, so we are wrapping it with Nullable.
+                                return f"Nullable!({value}[{key}])"
                     case "Optional":
                         self.require_libs.add("std.typecons")
                         return "Nullable!({})".format(self.translate_type(slice))
@@ -55,7 +57,7 @@ class DlangTranslator:
             case ast.Name("bool"):
                 return "bool"
             case ast.Name("str") | "str":
-                return "const(char)[]"
+                return "string"
             case _other:
                 raise Exception("Unsupported type")
     
@@ -93,15 +95,24 @@ class DlangTranslator:
         ]
 
     def is_null_stub(self, var, value):
-        if value == "None":
+        if value == "None" or value == "___null_dict___":
             return f"assert({var}.isNull);"
         else:
+            value = value.replace(".nullable","")
             return f"assert(!{var}.isNull && {var}.get == {value});"
 
     def deep_equality(self, left: str, right: str) -> str:
         """
         All tests are assertions that compare deep equality between left and right.
         """
+        # :(
+        for argi in range(len(self.func_type) - 1):
+            ty = self.func_type[argi][0]
+
+            if re.fullmatch(r"Nullable!\(.+\[.+\]\)", ty) != None:
+                left = left.replace(NULL_DICT, ty + ".init", 1)
+
+
         ret_type = self.func_type[RET_TYPE_LOC][0] 
         # A check of the test cases tell me that all of the Optional (-> Nullables) are in return position.
         if ret_type.startswith("Null"):
@@ -125,6 +136,8 @@ class DlangTranslator:
         elif type(c) == str:
             c = c.replace('"', '\\"')
             return f'"{c}"'
+        elif type(c) == int:
+            return repr(c) + "L"
         return repr(c)
 
     def gen_var(self, v: str) -> str:
@@ -147,7 +160,11 @@ class DlangTranslator:
         """Translate a dictionary with keys and values
         { "key1": val1, "key2": val2 } => [ "key1": val1, "key2": val2 ]
         """
-        return "[" + ", ".join(f"{k}: {v}" for k, v in zip(keys, values)) + "]"
+        if keys:
+            return "[" + ", ".join(f"{k}: {v}" for k, v in zip(keys, values)) + "].nullable"
+        else:
+            # an empty dictionary. How to generate this actually depends on the typed context...
+            return NULL_DICT
 
     def gen_call(self, func: str, args: List[str]) -> str:
         """Translate a function call `func(args)`
@@ -159,8 +176,23 @@ class DlangTranslator:
             translated_args.append(value)
         
         return func + "(" + ", ".join(translated_args) + ")"
+
+    def no_completion_prompt_stub(self) -> str:
+        """
+        A default stub to create a syntactically valid translation in case of not performing completion.
+        For example, for Rust this could be:
+
+            todo!()
+        }
+        
+        """
+        return """
+{
+    throw new Exception("unimplemented!");
+}
+        """
     
 
 if __name__ == "__main__":
-    translator = DlangTranslator("d")
+    translator = Translator()
     main(translator)
