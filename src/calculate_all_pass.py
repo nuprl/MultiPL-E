@@ -56,7 +56,7 @@ def entry_point(
         sys.exit(1)
  
     k = list(map(int, k.split(",")))
-    results = evaluate_functional_correctness(rfile, k)
+    results = evaluate_functional_correctness(rfile)
     print(results)
 
 def estimate_pass_at_k(
@@ -95,12 +95,12 @@ def evaluate_functional_correctness(
     """
 
     #find the necessary parts of the filename
-    #example sample_file is lua-davinci-0.2-keep-summary.csv
+    #example sample_file is lua-davinci-0.2-keep-keep-summary.csv
     fileAsString = str(sample_file)
-    terminology = "keep"
+    terminology = "keep" #TODO: will need to change / adapt to the rename of the results
     partsOfFileName = fileAsString[fileAsString.rfind('/')+1:].split('-')
     lang, model, temp, doctests = partsOfFileName[0], partsOfFileName[1], partsOfFileName[2], partsOfFileName[3]
-  
+
     for allK in k:
         total, correct = [], []
         with open(sample_file) as csvfile:
