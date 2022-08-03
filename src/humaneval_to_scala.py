@@ -125,7 +125,7 @@ class ScalaTranslator(CPPTranslator):
             # with the 'title' method and join them together.
             return components[0] + ''.join(x.title() for x in components[1:])
         
-        self.union_decls = {}
+        self.reinit()
         class_decl = f"object {SCALA_CLASS_NAME} {{\n"
         indent = "    "
         comment_start = self.indent + "//"
