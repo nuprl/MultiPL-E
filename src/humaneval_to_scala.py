@@ -1,4 +1,5 @@
-# Authored by  Abhinav Jangda
+# Authored by  Abhinav Jangda based on humaneval_to_csharp.py using
+# Scala examples from Daniel
 # Copyright (c) 2022, Roblox Inc and University of Massachusetts Amherst
 #
 # This script translates problems from the OpenAI HumanEval dataset into Scala.
