@@ -20,6 +20,7 @@ import eval_javascript
 import eval_swift
 import eval_cpp
 import eval_php
+import eval_dlang
 import tempfile
 import json
 
@@ -38,6 +39,7 @@ EVALUATORS = {
     "javascript": (eval_javascript.eval_script, ".js"),
     "cpp": (eval_cpp.eval_script, ".cpp"),
     "php": (eval_php.eval_script, ".php"),
+    "humaneval_to_dlang.py": (eval_dlang.eval_script, ".d")
 }
 
 def eval_script(problem, index):
