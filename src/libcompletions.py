@@ -8,7 +8,7 @@ import argparse
 import sys
 from pathlib import Path
 from torch.utils.tensorboard import SummaryWriter
-
+from tqdm import tqdm
 
 def parameterized_main(completion_function, model_name: str, max_to_generate: int):
     args = argparse.ArgumentParser()
@@ -29,11 +29,10 @@ def parameterized_main(completion_function, model_name: str, max_to_generate: in
         comment=f" Running {model_name} on {args.dir} with max_to_generate={max_to_generate}"
     )
 
-    problems = filter(lambda f: not f.name.endswith(".results.yaml"), sorted(dir.glob("*.yaml")))
+    problems = list(filter(lambda f: not f.name.endswith(".results.yaml"), sorted(dir.glob("*.yaml"))))
 
-    for problem_n, problem_yaml_path in enumerate(problems):
-        writer.add_scalar(f"Progress", problem_n, problem_n)
-        writer.add_text('Filename', str(problem_yaml_path), problem_n)
+    for problem_yaml_path in problems:
+        print(problem_yaml_path)
 
         with problem_yaml_path.open() as f:
             problem = Problem.load(f)
@@ -49,7 +48,7 @@ def parameterized_main(completion_function, model_name: str, max_to_generate: in
 
         while num_completions_required > 0:
             num_samples = min(num_completions_required, args.max_samples)
-            writer.add_scalar('num_completions_required', num_completions_required, problem_n)
+            print(num_completions_required)
 
             completions = completion_function(
                 prompt=problem.prompt,
