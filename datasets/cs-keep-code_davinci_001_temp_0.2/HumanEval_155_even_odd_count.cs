@@ -26,14 +26,14 @@ class Problem {
 
     }
     public static void Main(string[] args) {
-    Debug.Assert(EvenOddCount((7)).Equals((Tuple.Create(0, 1))));
-    Debug.Assert(EvenOddCount((-78)).Equals((Tuple.Create(1, 1))));
-    Debug.Assert(EvenOddCount((3452)).Equals((Tuple.Create(2, 2))));
-    Debug.Assert(EvenOddCount((346211)).Equals((Tuple.Create(3, 3))));
-    Debug.Assert(EvenOddCount((-345821)).Equals((Tuple.Create(3, 3))));
-    Debug.Assert(EvenOddCount((-2)).Equals((Tuple.Create(1, 0))));
-    Debug.Assert(EvenOddCount((-45347)).Equals((Tuple.Create(2, 3))));
-    Debug.Assert(EvenOddCount((0)).Equals((Tuple.Create(1, 0))));
+    Debug.Assert(EvenOddCount((7)).Equals((new Tuple<int, int>(new int[]{(int)0, (int)1}))));
+    Debug.Assert(EvenOddCount((-78)).Equals((new Tuple<int, int>(new int[]{(int)1, (int)1}))));
+    Debug.Assert(EvenOddCount((3452)).Equals((new Tuple<int, int>(new int[]{(int)2, (int)2}))));
+    Debug.Assert(EvenOddCount((346211)).Equals((new Tuple<int, int>(new int[]{(int)3, (int)3}))));
+    Debug.Assert(EvenOddCount((-345821)).Equals((new Tuple<int, int>(new int[]{(int)3, (int)3}))));
+    Debug.Assert(EvenOddCount((-2)).Equals((new Tuple<int, int>(new int[]{(int)1, (int)0}))));
+    Debug.Assert(EvenOddCount((-45347)).Equals((new Tuple<int, int>(new int[]{(int)2, (int)3}))));
+    Debug.Assert(EvenOddCount((0)).Equals((new Tuple<int, int>(new int[]{(int)1, (int)0}))));
     }
 
 }
