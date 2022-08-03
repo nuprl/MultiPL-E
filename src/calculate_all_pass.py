@@ -97,24 +97,21 @@ def evaluate_functional_correctness(
     #find the necessary parts of the filename
     #example sample_file is lua-davinci-0.2-keep-summary.csv
     fileAsString = str(sample_file)
+    terminology = "keep"
     partsOfFileName = fileAsString[fileAsString.rfind('/')+1:].split('-')
     lang, model, temp, doctests = partsOfFileName[0], partsOfFileName[1], partsOfFileName[2], partsOfFileName[3]
   
     for allK in k:
         total, correct = [], []
-        with open(f"../model_results/{lang}-{model}-pass-at-{k}.csv", 'w') as f:
-            with open(sample_file) as csvfile:
-                problemReader = csv.reader(csvfile)
-                checkedN = False
-                for problem in problemReader:
-                    #the value at problem[1] is the count of 'OK'
-                    pk = estimate_pass_at_k([200], [int(problem[1])], allK)
-                    #write out pass-at-k per problem to file, because why not
-                    f.write(f'{problem[0]},{pk}\n')
-                    #we CANNOT run this without this file being true, as summary_generator will not produce the sample_file
-                    #unless n is 200
-                    total.append(200) 
-                    correct.append(int(problem[1]))  
+        with open(sample_file) as csvfile:
+            problemReader = csv.reader(csvfile)
+            for problem in problemReader:
+                #the value at problem[1] is the count of 'OK'
+                pk = estimate_pass_at_k([200], [int(problem[1])], allK)
+                #we CANNOT run this without this file being true, as summary_generator will not produce the sample_file
+                #unless n is 200
+                total.append(200) 
+                correct.append(int(problem[1]))  
         total = np.array(total)
         correct = np.array(correct)
 
@@ -123,7 +120,7 @@ def evaluate_functional_correctness(
             #what rounding do we want? Sets up basic elements
             overall = open(f"../model_results/all-pass-at-{allK}.csv", 'a') 
             #we round the total sum of all pass at k values to three digits
-            overall.write(f'{lang},{model},{temp},{doctests},{allK},{len(total)},{pass_at_k}\n')
+            overall.write(f'{lang},{model},{temp},{doctests},{terminology},{allK},{len(total)},{pass_at_k}\n')
             overall.close()
 
     return pass_at_k
