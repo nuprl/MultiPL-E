@@ -13,7 +13,8 @@
 # Therefore, this creates some slight issues with the translation, but it is
 # possible to translate the code by using python's ast annotations, which is what we have done here.
 #
-# Unfortunately, Go does not have Union, Tuple or Optional types, so we reject those.
+# Unfortunately, Go does not have Union or Optional types, so we reject those. However,
+# go does not have Tuples either, but we do not reject those, instead we translate them to interface slices.
 # For testing, Go does not have a real testing framework, therefore we ship a small testing program
 # with each problem. For equality, we have exploited Go's value formatting (the "%v" format), which
 # will create the same string if two values are equal. Additionally, all go test filenames have to
@@ -42,7 +43,7 @@ def translate_type(t):
                 case "Union":
                     raise Exception("Union unsupported")
                 case "Tuple":
-                    raise Exception("Tuple unsupported")
+                    return "[]interface{}"
                 case "Dict":
                     match slice:
                         case ast.Tuple([ast.Name(k), ast.Name(v)], _ctx):
@@ -280,8 +281,7 @@ import (
         """Translate a tuple with elements t
         A tuple (x, y, z) translates to { x, y, z }
         """
-        # maybe we can do a interface slice?
-        raise Exception("Tuple unsupported")
+        return "[]interface{}{" + ", ".join([self.patch_empty(e, None) for e in t]) + "}"
 
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
         """Translate a dictionary with keys and values
