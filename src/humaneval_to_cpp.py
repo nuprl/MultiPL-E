@@ -127,6 +127,10 @@ class CPPTranslator:
                 print(f"Unhandled annotation: {ast.dump(ann)}")
                 raise Exception(f"Unhandled annotation: {ann}")
         
+    def reinit(self):
+        #Reinitialize internal state for each file
+        self.tuple_has_ellipsis = False
+        self.union_decls = {}
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         '''Translate Python prompt to C++.
@@ -137,7 +141,7 @@ class CPPTranslator:
         CPP_description = (
             comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" +comment_start + " ", description.strip()) + "\n"
         )
-        self.union_decls = {}
+        self.reinit()
         self.args_type = [self.translate_pytype(arg.annotation) for arg in args]
         formal_args = [f"{self.translate_pytype(arg.annotation)} {self.gen_var(arg.arg)[0]}" for arg in args]
         formal_arg_list = ", ".join(formal_args)
