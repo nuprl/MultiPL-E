@@ -61,8 +61,8 @@ def codex_completion(
                 writer.add_text('Log', f"Rate-limited twice in a row. Exiting. Decrease n{n} by 2")
                 n = min(1, n/2)
                 writer.add_text('Log', f"New n {n}")
-            writer.add_text('Log', "*** Rate limit error. Sleeping for 1 minute. ***")
-            writer.add_text('Log', str(e))
+            print("*** Rate limit error. Sleeping for 1 minute. ***")
+            print('Log', str(e))
             rate_limited = True
             time.sleep(60)
 
