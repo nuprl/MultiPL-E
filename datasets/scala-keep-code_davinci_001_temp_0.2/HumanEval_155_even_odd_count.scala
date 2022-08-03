@@ -21,14 +21,14 @@ object Problem {
 
     }
     def main(args: Array[String]) = {
-    assert(evenOddCount((7)).equals((Tuple2[Int, Int](0.toInt, 1.toInt))));
-    assert(evenOddCount((-78)).equals((Tuple2[Int, Int](1.toInt, 1.toInt))));
-    assert(evenOddCount((3452)).equals((Tuple2[Int, Int](2.toInt, 2.toInt))));
-    assert(evenOddCount((346211)).equals((Tuple2[Int, Int](3.toInt, 3.toInt))));
-    assert(evenOddCount((-345821)).equals((Tuple2[Int, Int](3.toInt, 3.toInt))));
-    assert(evenOddCount((-2)).equals((Tuple2[Int, Int](1.toInt, 0.toInt))));
-    assert(evenOddCount((-45347)).equals((Tuple2[Int, Int](2.toInt, 3.toInt))));
-    assert(evenOddCount((0)).equals((Tuple2[Int, Int](1.toInt, 0.toInt))));
+    assert(evenOddCount((7)).equals(((0, 1))));
+    assert(evenOddCount((-78)).equals(((1, 1))));
+    assert(evenOddCount((3452)).equals(((2, 2))));
+    assert(evenOddCount((346211)).equals(((3, 3))));
+    assert(evenOddCount((-345821)).equals(((3, 3))));
+    assert(evenOddCount((-2)).equals(((1, 0))));
+    assert(evenOddCount((-45347)).equals(((2, 3))));
+    assert(evenOddCount((0)).equals(((1, 0))));
     }
 
 }
