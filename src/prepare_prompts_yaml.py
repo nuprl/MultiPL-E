@@ -38,7 +38,6 @@ from humaneval_to_rust import RustTranslator
 from humaneval_to_racket import RacketTranslator
 from humaneval_to_php import PHPTranslator
 from humaneval_to_cpp import CPPTranslator
-from humaneval_to_python import PythonTranslator
 from humaneval_to_julia import JuliaTranslator
 from humaneval_to_java import JavaTranslator
 from problem_yaml import Problem
@@ -50,7 +49,6 @@ TRANSLATORS = {
     "rkt": RacketTranslator("racket"),
     "php": PHPTranslator("php"),
     "cpp": CPPTranslator("cpp"),
-    "py": PythonTranslator(),
     "jl": JuliaTranslator("jl"),
     "js": JavaScriptTranslator(),
     "java": JavaTranslator("java")
@@ -110,7 +108,7 @@ def main():
         (prompt, tests) = result
         problem_file = Problem()
         problem_file.name = original_name
-        problem_file.language = args.lang
+        problem_file.language = args.lang if args.lang in TRANSLATORS else translator.file_ext()
         problem_file.prompt = prompt
         problem_file.tests = tests
         problem_file.stop_tokens = get_stop_from_translator(translator)
