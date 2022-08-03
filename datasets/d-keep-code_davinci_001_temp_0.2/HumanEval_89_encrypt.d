@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Create a function encrypt that takes a string as an argument and
     returns a string encrypted with the alphabet being rotated. 
@@ -12,9 +12,27 @@ Create a function encrypt that takes a string as an argument and
     encrypt('et') returns 'ix'
     
 */
-const(char)[] encrypt(const(char)[] s) 
+string encrypt(string s) 
 {
-    return s;
+    string alphabet = "abcdefghijklmnopqrstuvwxyz";
+    string newAlphabet = "";
+    for (int i = 0; i < alphabet.length(); i++)
+    {
+        if (i + 2 < alphabet.length())
+        {
+            newAlphabet += alphabet[i + 2];
+        }
+        else
+        {
+            newAlphabet += alphabet[(i + 2) - alphabet.length()];
+        }
+    }
+    string encrypted = "";
+    for (int i = 0; i < s.length(); i++)
+    {
+        encrypted += newAlphabet[alphabet.indexOf(s[i])];
+    }
+    return encrypted;
 }
 /*
 Create a function decrypt that takes a string as an argument and
@@ -27,21 +45,32 @@ Create a function decrypt that takes a string as an argument and
     decrypt('kj') returns 'gf'
     decrypt('ix') returns 'et'
 */
-const(char)[] decrypt(const(char)[] s) 
+string decrypt(string s) 
 {
-    return s;
+    string alphabet = "abcdefghijklmnopqrstuvwxyz";
+    string newAlphabet = "";
+    for (int i = 0; i < alphabet.length(); i++)
+    {
+        if (i + 2 < alphabet.length())
+        {
+            newAlphabet += alphabet[i + 2];
+        }
+        else
+        {
+            newAlphabet += alphabet[(i + 2) - alphabet.length()];
+        }
+    }
+    string decrypted = "";
+    for (int i = 0; i < s.length(); i++)
+    {
+        decrypted += alphabet[newAlphabet.indexOf(s[i])];
+    }
+    return decrypted;
 }
 /*
-Create a function encrypt_file that takes a string as an argument and
+Create a function encrypt that takes a string as an argument and
     returns a string encrypted with the alphabet being rotated. 
-    The alphabet should be rotated in a manner such that the letters 
-    shift down by two multiplied to two places.
-    For example:
-    encrypt_file('hi') returns 'lm'
-    encrypt_file('asdfghjkl') returns 'ewhjklnop'
-    encrypt_file('gf') returns 'kj'
-    encrypt_file('et') returns 'ix'
-*/
+    The alphabet should be rotated in a manner such
 
 unittest
 {

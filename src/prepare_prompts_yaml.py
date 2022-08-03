@@ -74,7 +74,11 @@ def main():
 
     args = args.parse_args()
 
-    if args.lang not in TRANSLATORS:
+    if args.lang in TRANSLATORS:
+        translator = TRANSLATORS[args.lang]
+    elif args.lang.endswith(".py"):
+        translator = __import__(args.lang[:-3]).Translator()
+    else:
         print(f"Unknown language: {args.lang}")
         sys.exit(1)
 
@@ -87,7 +91,7 @@ def main():
         print(f"Target directory {target_dir} does not exist")
         sys.exit(1)
 
-    translator = TRANSLATORS[args.lang]
+    
 
     for original in list_originals(args.doctests).values():
         # original.name with .yaml extension

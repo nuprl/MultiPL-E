@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
  Out of list of strings, return the longest one. Return the first one in case of multiple
     strings of the same length. Return None in case the input list is empty.
@@ -11,15 +11,18 @@ import std.typecons;
     'ccc'
     
 */
-Nullable!(const(char)[]) longest(const(char)[][] strings) 
+Nullable!(string) longest(string[] strings) 
 {
-    if (strings.length() == 0)
+    if (strings.length() == 0) {
         return null;
-    auto max = strings[0];
-    for (auto s : strings)
-        if (s.length() > max.length())
-            max = s;
-    return max;
+    }
+    string longest = strings[0];
+    for (int i = 1; i < strings.length(); i++) {
+        if (strings[i].length() > longest.length()) {
+            longest = strings[i];
+        }
+    }
+    return longest;
 }
 
 unittest

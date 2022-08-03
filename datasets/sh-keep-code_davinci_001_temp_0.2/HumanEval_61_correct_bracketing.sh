@@ -9,66 +9,50 @@
 # True
 # >>> correct_bracketing(")(()")
 # False
+#
+# $1 is a string
 correct_bracketing() {
     local brackets="$1"
-    local count=0
-    for (( i=0; i<${#brackets}; i++ )); do
-        case "${brackets:$i:1}" in
-            "(" )
-                (( count++ ))
-                ;;
-            ")" )
-                (( count-- ))
-                ;;
-        esac
-        if (( count < 0 )); then
-            return 1
+    local stack=""
+    local len=${#brackets}
+    local i=0
+    while [ $i -lt $len ]; do
+        local char=${brackets:$i:1}
+        if [ "$char" == "(" ]; then
+            stack+="$char"
+        elif [ "$char" == ")" ]; then
+            if [ -z "$stack" ]; then
+                return 1
+            fi
+            stack=${stack:0:${#stack}-1}
         fi
+        i=$((i+1))
     done
-    (( count == 0 ))
+    if [ -z "$stack" ]; then
+        return 0
+    fi
+    return 1
 
 }
 
 candidate() {
-    local res=$(correct_bracketing "$@")
-    echo $res
+    correct_bracketing "$@"
 }
 
-test() {
-        x0=$(candidate "()")
-    assert_equals true "${x0[*]}"
-
-        x1=$(candidate "(()())")
-    assert_equals true "${x1[*]}"
-
-        x2=$(candidate "()()(()())()")
-    assert_equals true "${x2[*]}"
-
-        x3=$(candidate "()()((()()())())(()()(()))")
-    assert_equals true "${x3[*]}"
-
-        x4=$(candidate "((()())))")
-    assert_equals false "${x4[*]}"
-
-        x5=$(candidate ")(()")
-    assert_equals false "${x5[*]}"
-
-        x6=$(candidate "(")
-    assert_equals false "${x6[*]}"
-
-        x7=$(candidate "((((")
-    assert_equals false "${x7[*]}"
-
-        x8=$(candidate ")")
-    assert_equals false "${x8[*]}"
-
-        x9=$(candidate "(()")
-    assert_equals false "${x9[*]}"
-
-        x10=$(candidate "()()(()())())(()")
-    assert_equals false "${x10[*]}"
-
-        x11=$(candidate "()()(()())()))()")
-    assert_equals false "${x11[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "()") = "true" ]]
+    [[ $(candidate "(()())") = "true" ]]
+    [[ $(candidate "()()(()())()") = "true" ]]
+    [[ $(candidate "()()((()()())())(()()(()))") = "true" ]]
+    [[ $(candidate "((()())))") = "false" ]]
+    [[ $(candidate ")(()") = "false" ]]
+    [[ $(candidate "(") = "false" ]]
+    [[ $(candidate "((((") = "false" ]]
+    [[ $(candidate ")") = "false" ]]
+    [[ $(candidate "(()") = "false" ]]
+    [[ $(candidate "()()(()())())(()") = "false" ]]
+    [[ $(candidate "()()(()())()))()") = "false" ]]
 }
+
+run_test

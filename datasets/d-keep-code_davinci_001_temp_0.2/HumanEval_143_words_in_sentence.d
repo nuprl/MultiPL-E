@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     You are given a string representing a sentence,
@@ -21,20 +21,21 @@ import std.typecons;
         * sentence contains only letters
     
 */
-const(char)[] words_in_sentence(const(char)[] sentence) 
+string words_in_sentence(string sentence) 
 {
-    const(char)[] words = [];
-    int start = 0;
-    for(int i = 0; i < len(sentence); i++)
-    {
-        if(sentence[i] == ' ')
-        {
-            words.append(sentence[start:i]);
-            start = i + 1;
+    string res;
+    int len = sentence.length();
+    for (int i = 0; i < len; i++) {
+        if (sentence[i] == ' ') {
+            if (is_prime(sentence.substr(i - 1, 1).length())) {
+                res += sentence.substr(i - 1, 1);
+            }
         }
     }
-    words.append(sentence[start:len(sentence)]);
-    return words;
+    if (is_prime(sentence.substr(len - 1, 1).length())) {
+        res += sentence.substr(len - 1, 1);
+    }
+    return res;
 }
 
 unittest

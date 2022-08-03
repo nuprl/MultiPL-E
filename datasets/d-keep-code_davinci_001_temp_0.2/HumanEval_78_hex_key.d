@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 You have been tasked to write a function that receives 
     a hexadecimal number as a string and counts the number of hexadecimal 
@@ -19,12 +19,12 @@ You have been tasked to write a function that receives
     For num = "2020" the output should be 2.
     
 */
-long hex_key(const(char)[] num) 
+long hex_key(string num) 
 {
     long key = 0;
-    for(int i = 0; i < num.size(); i++)
+    for (int i = 0; i < num.length(); i++)
     {
-        if(num[i] == '2' || num[i] == '3' || num[i] == '5' || num[i] == '7' || num[i] == 'B' || num[i] == 'D')
+        if (num[i] == '2' || num[i] == '3' || num[i] == '5' || num[i] == '7' || num[i] == 'B' || num[i] == 'D')
         {
             key++;
         }
@@ -36,11 +36,11 @@ unittest
 {
     alias candidate = hex_key;
 
-    assert(candidate("AB") == 1);
-    assert(candidate("1077E") == 2);
-    assert(candidate("ABED1A33") == 4);
-    assert(candidate("2020") == 2);
-    assert(candidate("123456789ABCDEF0") == 6);
-    assert(candidate("112233445566778899AABBCCDDEEFF00") == 12);
+    assert(candidate("AB") == 1L);
+    assert(candidate("1077E") == 2L);
+    assert(candidate("ABED1A33") == 4L);
+    assert(candidate("2020") == 2L);
+    assert(candidate("123456789ABCDEF0") == 6L);
+    assert(candidate("112233445566778899AABBCCDDEEFF00") == 12L);
 }
 void main(){}

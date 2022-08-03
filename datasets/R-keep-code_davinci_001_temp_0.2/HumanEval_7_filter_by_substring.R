@@ -10,7 +10,7 @@ filter_by_substring <- function(strings, substring) {
 
 test_humaneval <- function() {
 candidate <- filter_by_substring
-    if(!identical(candidate(list(), 'john'), list())){quit('no', 1)}
+    if(!identical(candidate(c(), 'john'), c())){quit('no', 1)}
     if(!identical(candidate(c('xxx', 'asd', 'xxy', 'john doe', 'xxxAAA', 'xxx'), 'xxx'), c('xxx', 'xxxAAA', 'xxx'))){quit('no', 1)}
     if(!identical(candidate(c('xxx', 'asd', 'aaaxxy', 'john doe', 'xxxAAA', 'xxx'), 'xx'), c('xxx', 'aaaxxy', 'xxxAAA', 'xxx'))){quit('no', 1)}
     if(!identical(candidate(c('grunt', 'trumpet', 'prune', 'gruesome'), 'run'), c('grunt', 'prune'))){quit('no', 1)}

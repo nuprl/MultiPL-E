@@ -7,17 +7,15 @@ import std.math;
     ['abc', 'bacd', 'array']
     
 */
-const(char)[][] filter_by_substring(const(char)[][] strings, const(char)[] substring) 
+string[] filter_by_substring(string[] strings, string substring) 
 {
-    if(strings.size() == 0)
-        return strings;
-    if(substring.size() == 0)
-        return strings;
-    const(char)[] result = [];
-    for(const(char)[] string : strings)
+    string[] result;
+    foreach(string s in strings)
     {
-        if(string.contains(substring))
-            result.push(string);
+        if(s.Contains(substring))
+        {
+            result.Add(s);
+        }
     }
     return result;
 }

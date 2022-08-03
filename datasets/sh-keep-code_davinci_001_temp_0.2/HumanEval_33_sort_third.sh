@@ -6,50 +6,32 @@
 # [1, 2, 3]
 # >>> sort_third([5, 6, 3, 4, 8, 9, 2])
 # [2, 6, 3, 4, 8, 9, 5]
+#
+# $1 is a space-separated list
 sort_third() {
-    local l=$1
-    local l_new=()
-    local l_new_index=0
-    for ((i=0; i<${#l[@]}; i++)); do
-        if [[ $((i%3)) -eq 0 ]]; then
-            l_new[$l_new_index]=${l[$i]}
-            l_new_index=$((l_new_index+1))
-        fi
-    done
-    for ((i=0; i<${#l[@]}; i++)); do
-        if [[ $((i%3)) -ne 0 ]]; then
-            l_new[$l_new_index]=${l[$i]}
-            l_new_index=$((l_new_index+1))
-        fi
-    done
-    echo ${l_new[@]}
+  local l=$1
+  local l_prime=()
+  for i in $l; do
+    if [[ $((i % 3)) -eq 0 ]]; then
+      l_prime+=($i)
+    else
+      l_prime+=($i)
+    fi
+  done
+  echo ${l_prime[@]}
 
 }
 
 candidate() {
-    local res=$(sort_third "$@")
-    echo $res
+    sort_third "$@"
 }
 
-test() {
-    declare -a x2=(2 6 3 4 8 9 5)
-    declare -a x0=(5 6 3 4 8 9 2)
-    x1=$(candidate "${x0[*]}")
-    assert_equals "${x2[*]}" "${x1[*]}"
-
-    declare -a x5=(2 8 3 4 6 9 5)
-    declare -a x3=(5 8 3 4 6 9 2)
-    x4=$(candidate "${x3[*]}")
-    assert_equals "${x5[*]}" "${x4[*]}"
-
-    declare -a x8=(2 6 9 4 8 3 5)
-    declare -a x6=(5 6 9 4 8 3 2)
-    x7=$(candidate "${x6[*]}")
-    assert_equals "${x8[*]}" "${x7[*]}"
-
-    declare -a x11=(2 6 3 4 8 9 5 1)
-    declare -a x9=(5 6 3 4 8 9 2 1)
-    x10=$(candidate "${x9[*]}")
-    assert_equals "${x11[*]}" "${x10[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "5 6 3 4 8 9 2") = "2 6 3 4 8 9 5" ]]
+    [[ $(candidate "5 8 3 4 6 9 2") = "2 8 3 4 6 9 5" ]]
+    [[ $(candidate "5 6 9 4 8 3 2") = "2 6 9 4 8 3 5" ]]
+    [[ $(candidate "5 6 3 4 8 9 2 1") = "2 6 3 4 8 9 5 1" ]]
 }
+
+run_test

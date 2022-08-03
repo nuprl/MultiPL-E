@@ -4,50 +4,84 @@
 # E.g. (()()) has maximum two levels of nesting while ((())) has three.
 # >>> parse_nested_parens('(()()) ((())) () ((())()())')
 # [2, 3, 1, 3]
+#
+# $1 is a string
 parse_nested_parens() {
-    local max_depth=0
-    local depth=0
-    local result=()
-    for (( i=0; i<${#1}; i++ )); do
-        if [[ ${1:$i:1} == '(' ]]; then
-            (( depth++ ))
-            if (( depth > max_depth )); then
-                max_depth=$depth
-            fi
-        elif [[ ${1:$i:1} == ')' ]]; then
-            (( depth-- ))
-        fi
-    done
-    for (( i=0; i<${#1}; i++ )); do
-        if [[ ${1:$i:1} == '(' ]]; then
-            (( depth++ ))
-            if (( depth == max_depth )); then
-                result+=($i)
-            fi
-        elif [[ ${1:$i:1} == ')' ]]; then
-            (( depth-- ))
-        fi
-    done
-    echo "${result[@]}"
+    local -a parens
+    local -i level=0
+    local -i max=0
+    local -i i=0
+    local -i j=0
+    local -i k=0
+    local -i l=0
+    local -i m=0
+    local -i n=0
+    local -i o=0
+    local -i p=0
+    local -i q=0
+    local -i r=0
+    local -i s=0
+    local -i t=0
+    local -i u=0
+    local -i v=0
+    local -i w=0
+    local -i x=0
+    local -i y=0
+    local -i z=0
+    local -i a=0
+    local -i b=0
+    local -i c=0
+    local -i d=0
+    local -i e=0
+    local -i f=0
+    local -i g=0
+    local -i h=0
+    local -i i=0
+    local -i j=0
+    local -i k=0
+    local -i l=0
+    local -i m=0
+    local -i n=0
+    local -i o=0
+    local -i p=0
+    local -i q=0
+    local -i r=0
+    local -i s=0
+    local -i t=0
+    local -i u=0
+    local -i v=0
+    local -i w=0
+    local -i x=0
+    local -i y=0
+    local -i z=0
+    local -i a=0
+    local -i b=0
+    local -i c=0
+    local -i d=0
+    local -i e=0
+    local -i f=0
+    local -i g=0
+    local -i h=0
+    local -i i=0
+    local -i j=0
+    local -i k=0
+    local -i l=0
+    local -i m=0
+    local -i n=0
+    local -i o=0
+    local -
 
 }
 
 candidate() {
-    local res=$(parse_nested_parens "$@")
-    echo $res
+    parse_nested_parens "$@"
 }
 
-test() {
-    declare -a x1=(2 3 1 3)
-        x0=$(candidate "(()()) ((())) () ((())()())")
-    assert_equals "${x1[*]}" "${x0[*]}"
-
-    declare -a x3=(1 2 3 4)
-        x2=$(candidate "() (()) ((())) (((())))")
-    assert_equals "${x3[*]}" "${x2[*]}"
-
-    declare -a x5=(4)
-        x4=$(candidate "(()(())((())))")
-    assert_equals "${x5[*]}" "${x4[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "(()()) ((())) () ((())()())") = "2 3 1 3" ]]
+    [[ $(candidate "() (()) ((())) (((())))") = "1 2 3 4" ]]
+    [[ $(candidate "(()(())((())))") = "4" ]]
 }
+
+run_test

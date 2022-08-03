@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
  Return a greatest common divisor of two integers a and b
     >>> greatest_common_divisor(3, 5)
@@ -10,19 +10,20 @@ import std.typecons;
 */
 long greatest_common_divisor(long a, long b) 
 {
-    if (b == 0)
+    if (b == 0) {
         return a;
-    else
+    } else {
         return greatest_common_divisor(b, a % b);
+    }
 }
 
 unittest
 {
     alias candidate = greatest_common_divisor;
 
-    assert(candidate(3, 7) == 1);
-    assert(candidate(10, 15) == 5);
-    assert(candidate(49, 14) == 7);
-    assert(candidate(144, 60) == 12);
+    assert(candidate(3L, 7L) == 1L);
+    assert(candidate(10L, 15L) == 5L);
+    assert(candidate(49L, 14L) == 7L);
+    assert(candidate(144L, 60L) == 12L);
 }
 void main(){}

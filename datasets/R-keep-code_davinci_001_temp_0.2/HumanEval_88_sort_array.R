@@ -27,7 +27,7 @@ sort_array(c(2, 4, 3, 0, 1, 5, 6))
 
 test_humaneval <- function() {
 candidate <- sort_array
-    if(!identical(candidate(list()), list())){quit('no', 1)}
+    if(!identical(candidate(c()), c())){quit('no', 1)}
     if(!identical(candidate(c(5)), c(5))){quit('no', 1)}
     if(!identical(candidate(c(2, 4, 3, 0, 1, 5)), c(0, 1, 2, 3, 4, 5))){quit('no', 1)}
     if(!identical(candidate(c(2, 4, 3, 0, 1, 5, 6)), c(6, 5, 4, 3, 2, 1, 0))){quit('no', 1)}

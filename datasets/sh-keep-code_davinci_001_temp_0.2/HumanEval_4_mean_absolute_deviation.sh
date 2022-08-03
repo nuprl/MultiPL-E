@@ -6,48 +6,34 @@
 # MAD = average | x - x_mean |
 # >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
 # 1.0
+#
+# $1 is a space-separated list
 mean_absolute_deviation() {
-    local -a arr=("$@")
-    local -i len=${#arr[@]}
-    local -i sum=0
-    local -i mean=0
-    local -i i=0
-    local -i j=0
-    local -i diff=0
-    local -i abs=0
-    local -i mad=0
-
-    for (( i=0; i<$len; i++ )); do
-        sum=$(( sum + arr[$i] ))
+    local sum=0
+    local count=0
+    local mean=0
+    for num in $@; do
+        sum=$(echo "$sum + $num" | bc -l)
+        count=$(echo "$count + 1" | bc -l)
     done
-    mean=$(( sum / len ))
-
-    for (( i=0; i<$len; i++ )); do
-        diff=$(( arr[$i] - mean ))
-        abs=$(( abs + diff ))
+    mean=$(echo "$sum / $count" | bc -l)
+    local sum_deviation=0
+    for num in $@; do
+        sum_deviation=$(echo "$sum_deviation + abs($num - $mean)" | bc -l)
     done
-    mad=$(( abs / len ))
-
-    echo "$mad"
+    echo $(echo "$sum_deviation / $count" | bc -l)
 
 }
 
 candidate() {
-    local res=$(mean_absolute_deviation "$@")
-    echo $res
+    mean_absolute_deviation "$@"
 }
 
-test() {
-    declare -a x0=(1.0 2.0)
-    x1=$(candidate "${x0[*]}")
-    assert_equals 0.5 "${x1[*]}"
-
-    declare -a x2=(1.0 2.0 3.0 4.0)
-    x3=$(candidate "${x2[*]}")
-    assert_equals 1.0 "${x3[*]}"
-
-    declare -a x4=(1.0 2.0 3.0 4.0 5.0)
-    x5=$(candidate "${x4[*]}")
-    assert_equals 1.2 "${x5[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "1.0 2.0") = "0.5" ]]
+    [[ $(candidate "1.0 2.0 3.0 4.0") = "1.0" ]]
+    [[ $(candidate "1.0 2.0 3.0 4.0 5.0") = "1.2" ]]
 }
+
+run_test

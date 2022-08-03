@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given an array arr of integers, find the minimum number of elements that
@@ -14,7 +14,7 @@ import std.typecons;
 */
 long smallest_change(long[] arr) 
 {
-    // Write your code here
+    // your code goes here
     return 0;
 }
 
@@ -22,13 +22,13 @@ unittest
 {
     alias candidate = smallest_change;
 
-    assert(candidate([1, 2, 3, 5, 4, 7, 9, 6]) == 4);
-    assert(candidate([1, 2, 3, 4, 3, 2, 2]) == 1);
-    assert(candidate([1, 4, 2]) == 1);
-    assert(candidate([1, 4, 4, 2]) == 1);
-    assert(candidate([1, 2, 3, 2, 1]) == 0);
-    assert(candidate([3, 1, 1, 3]) == 0);
-    assert(candidate([1]) == 0);
-    assert(candidate([0, 1]) == 1);
+    assert(candidate([1L, 2L, 3L, 5L, 4L, 7L, 9L, 6L]) == 4L);
+    assert(candidate([1L, 2L, 3L, 4L, 3L, 2L, 2L]) == 1L);
+    assert(candidate([1L, 4L, 2L]) == 1L);
+    assert(candidate([1L, 4L, 4L, 2L]) == 1L);
+    assert(candidate([1L, 2L, 3L, 2L, 1L]) == 0L);
+    assert(candidate([3L, 1L, 1L, 3L]) == 0L);
+    assert(candidate([1L]) == 0L);
+    assert(candidate([0L, 1L]) == 1L);
 }
 void main(){}

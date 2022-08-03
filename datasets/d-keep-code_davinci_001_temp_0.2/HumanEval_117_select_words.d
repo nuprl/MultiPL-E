@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Given a string s and a natural number n, you have been tasked to implement 
     a function that returns a list of all words from string s that contain exactly 
@@ -14,44 +14,50 @@ Given a string s and a natural number n, you have been tasked to implement
     select_words("Uncle sam", 3) ==> ["Uncle"]
     
 */
-const(char)[][] select_words(const(char)[] s, long n) 
+string[] select_words(string s, long n) 
 {
-    if(s.length == 0)
-        return new const(char)[][]{};
-    const(char)[][] result = new const(char)[][]{};
-    for(long i = 0; i < s.length; i++)
+    string[] words = s.Split(' ');
+    string[] result = new string[words.Length];
+    int count = 0;
+    for (int i = 0; i < words.Length; i++)
     {
-        long count = 0;
-        for(long j = i; j < s.length; j++)
+        if (words[i].Length == 0)
         {
-            if(s[j] == ' ')
-                break;
-            if(s[j] != 'a' && s[j] != 'e' && s[j] != 'i' && s[j] != 'o' && s[j] != 'u')
-                count++;
-            if(count == n)
+            continue;
+        }
+        int consonants = 0;
+        for (int j = 0; j < words[i].Length; j++)
+        {
+            if (words[i][j] == 'a' || words[i][j] == 'e' || words[i][j] == 'i' || words[i][j] == 'o' || words[i][j] == 'u')
             {
-                const(char)[] temp = new const(char)[s.length - j];
-                for(long k = 0; k < temp.length; k++)
-                    temp[k] = s[j + k];
-                result.add(temp);
-                break;
+                continue;
             }
+            consonants++;
+        }
+        if (consonants == n)
+        {
+            result[count] = words[i];
+            count++;
         }
     }
-    return result;
+    string[] final = new string[count];
+    for (int i = 0; i < count; i++)
+    {
+        final[i] = result[i];
+    }
+    return final;
 }
-
 
 unittest
 {
     alias candidate = select_words;
 
-    assert(candidate("Mary had a little lamb", 4) == ["little"]);
-    assert(candidate("Mary had a little lamb", 3) == ["Mary", "lamb"]);
-    assert(candidate("simple white space", 2) == []);
-    assert(candidate("Hello world", 4) == ["world"]);
-    assert(candidate("Uncle sam", 3) == ["Uncle"]);
-    assert(candidate("", 4) == []);
-    assert(candidate("a b c d e f", 1) == ["b", "c", "d", "f"]);
+    assert(candidate("Mary had a little lamb", 4L) == ["little"]);
+    assert(candidate("Mary had a little lamb", 3L) == ["Mary", "lamb"]);
+    assert(candidate("simple white space", 2L) == []);
+    assert(candidate("Hello world", 4L) == ["world"]);
+    assert(candidate("Uncle sam", 3L) == ["Uncle"]);
+    assert(candidate("", 4L) == []);
+    assert(candidate("a b c d e f", 1L) == ["b", "c", "d", "f"]);
 }
 void main(){}

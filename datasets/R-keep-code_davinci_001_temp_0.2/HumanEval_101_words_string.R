@@ -14,7 +14,7 @@ candidate <- words_string
     if(!identical(candidate('One, two, three, four, five, six'), c('One', 'two', 'three', 'four', 'five', 'six'))){quit('no', 1)}
     if(!identical(candidate('Hi, my name'), c('Hi', 'my', 'name'))){quit('no', 1)}
     if(!identical(candidate('One,, two, three, four, five, six,'), c('One', 'two', 'three', 'four', 'five', 'six'))){quit('no', 1)}
-    if(!identical(candidate(''), list())){quit('no', 1)}
+    if(!identical(candidate(''), c())){quit('no', 1)}
     if(!identical(candidate('ahmed     , gamal'), c('ahmed', 'gamal'))){quit('no', 1)}
 }
 test_humaneval()

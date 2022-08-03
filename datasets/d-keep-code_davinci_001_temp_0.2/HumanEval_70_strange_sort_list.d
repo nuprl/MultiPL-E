@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given list of integers, return list in strange order.
@@ -26,14 +26,14 @@ unittest
 {
     alias candidate = strange_sort_list;
 
-    assert(candidate([1, 2, 3, 4]) == [1, 4, 2, 3]);
-    assert(candidate([5, 6, 7, 8, 9]) == [5, 9, 6, 8, 7]);
-    assert(candidate([1, 2, 3, 4, 5]) == [1, 5, 2, 4, 3]);
-    assert(candidate([5, 6, 7, 8, 9, 1]) == [1, 9, 5, 8, 6, 7]);
-    assert(candidate([5, 5, 5, 5]) == [5, 5, 5, 5]);
+    assert(candidate([1L, 2L, 3L, 4L]) == [1L, 4L, 2L, 3L]);
+    assert(candidate([5L, 6L, 7L, 8L, 9L]) == [5L, 9L, 6L, 8L, 7L]);
+    assert(candidate([1L, 2L, 3L, 4L, 5L]) == [1L, 5L, 2L, 4L, 3L]);
+    assert(candidate([5L, 6L, 7L, 8L, 9L, 1L]) == [1L, 9L, 5L, 8L, 6L, 7L]);
+    assert(candidate([5L, 5L, 5L, 5L]) == [5L, 5L, 5L, 5L]);
     assert(candidate([]) == []);
-    assert(candidate([1, 2, 3, 4, 5, 6, 7, 8]) == [1, 8, 2, 7, 3, 6, 4, 5]);
-    assert(candidate([0, 2, 2, 2, 5, 5, -5, -5]) == [-5, 5, -5, 5, 0, 2, 2, 2]);
-    assert(candidate([111111]) == [111111]);
+    assert(candidate([1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L]) == [1L, 8L, 2L, 7L, 3L, 6L, 4L, 5L]);
+    assert(candidate([0L, 2L, 2L, 2L, 5L, 5L, -5L, -5L]) == [-5L, 5L, -5L, 5L, 0L, 2L, 2L, 2L]);
+    assert(candidate([111111L]) == [111111L]);
 }
 void main(){}

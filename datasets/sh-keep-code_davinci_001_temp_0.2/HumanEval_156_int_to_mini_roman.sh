@@ -6,96 +6,77 @@
 # >>> int_to_mini_roman(19) == 'xix'
 # >>> int_to_mini_roman(152) == 'clii'
 # >>> int_to_mini_roman(426) == 'cdxxvi'
+#
+# $1 is an integer
 int_to_mini_roman() {
-    local -i num=$1
-    local -i thousands=0
-    local -i hundreds=0
-    local -i tens=0
-    local -i ones=0
-    local -i thousands_digit=0
-    local -i hundreds_digit=0
-    local -i tens_digit=0
-    local -i ones_digit=0
-    local -i thousands_roman=0
-    local -i hundreds_roman=0
-    local -i tens_roman=0
-    local -i ones_roman=0
-    local -i thousands_roman_string=''
-    local -i hundreds_roman_string=''
-    local -i tens_roman_string=''
-    local -i ones_roman_string=''
-    local -i thousands_roman_string_lower=''
-    local -i hundreds_roman_string_lower=''
-    local -i tens_roman_string_lower=''
-    local -i ones_roman_string_lower=''
-    local -i thousands_roman_string_upper=''
-    local -i hundreds_roman_string_upper=''
-    local -i tens_roman_string_upper=''
-    local -i ones_roman_string_upper=''
-    local -i thousands_roman_string_lower_final=''
-    local -i hundreds_roman_string_lower_final=''
-    local -i tens_roman_string_lower_final=''
-    local -i ones_roman_string_lower_final=''
-    local -i thousands_roman_string_upper_final=''
-    local -i hundreds_roman_string_upper_final=''
-    local -i tens_roman_string_upper_final=''
-    local -i ones_roman_string_upper_final=''
-    local -i thousands_roman_string_final=''
-    local -i hundreds_roman_string_final=''
-    local -i tens_roman_string_final=''
-    local -i ones_roman_string_final=''
-    local -i thousands_roman_string_final_lower=''
-    local -i hundreds_roman_string_final_lower=''
-    local -
+  local -i num=$1
+  local -i i
+  local -i v
+  local -i x
+  local -i l
+  local -i c
+  local -i d
+  local -i m
+  local -i roman
+  local -i roman_i
+  local -i roman_v
+  local -i roman_x
+  local -i roman_l
+  local -i roman_c
+  local -i roman_d
+  local -i roman_m
+  local -i roman_num
+  local -i roman_i_num
+  local -i roman_v_num
+  local -i roman_x_num
+  local -i roman_l_num
+  local -i roman_c_num
+  local -i roman_d_num
+  local -i roman_m_num
+  local -i roman_num_num
+  local -i roman_i_num_num
+  local -i roman_v_num_num
+  local -i roman_x_num_num
+  local -i roman_l_num_num
+  local -i roman_c_num_num
+  local -i roman_d_num_num
+  local -i roman_m_num_num
+  local -i roman_num_num_num
+  local -i roman_i_num_num_num
+  local -i roman_v_num_num_num
+  local -i roman_x_num_num_num
+  local -i roman_l_num_num_num
+  local -i roman_c_num_num_num
+  local -i roman_d_num_num_num
+  local -i roman_m_num_num_num
+  local -i roman_num_num_num_num
+  local -i roman_i_num_num_num_num
+  local -i roman_v_num_num_num_num
+  local -i roman_x_num_num_num_num
+  local -i roman_
 
 }
 
 candidate() {
-    local res=$(int_to_mini_roman "$@")
-    echo $res
+    int_to_mini_roman "$@"
 }
 
-test() {
-        x0=$(candidate 19)
-    assert_equals "xix" "${x0[*]}"
-
-        x1=$(candidate 152)
-    assert_equals "clii" "${x1[*]}"
-
-        x2=$(candidate 251)
-    assert_equals "ccli" "${x2[*]}"
-
-        x3=$(candidate 426)
-    assert_equals "cdxxvi" "${x3[*]}"
-
-        x4=$(candidate 500)
-    assert_equals "d" "${x4[*]}"
-
-        x5=$(candidate 1)
-    assert_equals "i" "${x5[*]}"
-
-        x6=$(candidate 4)
-    assert_equals "iv" "${x6[*]}"
-
-        x7=$(candidate 43)
-    assert_equals "xliii" "${x7[*]}"
-
-        x8=$(candidate 90)
-    assert_equals "xc" "${x8[*]}"
-
-        x9=$(candidate 94)
-    assert_equals "xciv" "${x9[*]}"
-
-        x10=$(candidate 532)
-    assert_equals "dxxxii" "${x10[*]}"
-
-        x11=$(candidate 900)
-    assert_equals "cm" "${x11[*]}"
-
-        x12=$(candidate 994)
-    assert_equals "cmxciv" "${x12[*]}"
-
-        x13=$(candidate 1000)
-    assert_equals "m" "${x13[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "19") = "xix" ]]
+    [[ $(candidate "152") = "clii" ]]
+    [[ $(candidate "251") = "ccli" ]]
+    [[ $(candidate "426") = "cdxxvi" ]]
+    [[ $(candidate "500") = "d" ]]
+    [[ $(candidate "1") = "i" ]]
+    [[ $(candidate "4") = "iv" ]]
+    [[ $(candidate "43") = "xliii" ]]
+    [[ $(candidate "90") = "xc" ]]
+    [[ $(candidate "94") = "xciv" ]]
+    [[ $(candidate "532") = "dxxxii" ]]
+    [[ $(candidate "900") = "cm" ]]
+    [[ $(candidate "994") = "cmxciv" ]]
+    [[ $(candidate "1000") = "m" ]]
 }
+
+run_test

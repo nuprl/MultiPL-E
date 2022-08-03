@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
     the last couple centuries. However, what people don't know is Tribonacci sequence.
@@ -20,36 +20,36 @@ Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in
 */
 long[] tri(long n) 
 {
-    long[] ret = new long[n + 1];
-    ret[0] = 1;
-    ret[1] = 3;
+    long[] result = new long[n + 1];
+    result[0] = 1;
+    result[1] = 3;
     for (int i = 2; i <= n; i++)
     {
         if (i % 2 == 0)
         {
-            ret[i] = 1 + ret[i / 2];
+            result[i] = 1 + (i / 2);
         }
         else
         {
-            ret[i] = ret[i - 1] + ret[i - 2] + ret[i + 1];
+            result[i] = result[i - 1] + result[i - 2] + result[i + 1];
         }
     }
-    return ret;
+    return result;
 }
 
 unittest
 {
     alias candidate = tri;
 
-    assert(candidate(3) == [1, 3, 2, 8]);
-    assert(candidate(4) == [1, 3, 2, 8, 3]);
-    assert(candidate(5) == [1, 3, 2, 8, 3, 15]);
-    assert(candidate(6) == [1, 3, 2, 8, 3, 15, 4]);
-    assert(candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]);
-    assert(candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]);
-    assert(candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]);
-    assert(candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]);
-    assert(candidate(0) == [1]);
-    assert(candidate(1) == [1, 3]);
+    assert(candidate(3L) == [1L, 3L, 2L, 8L]);
+    assert(candidate(4L) == [1L, 3L, 2L, 8L, 3L]);
+    assert(candidate(5L) == [1L, 3L, 2L, 8L, 3L, 15L]);
+    assert(candidate(6L) == [1L, 3L, 2L, 8L, 3L, 15L, 4L]);
+    assert(candidate(7L) == [1L, 3L, 2L, 8L, 3L, 15L, 4L, 24L]);
+    assert(candidate(8L) == [1L, 3L, 2L, 8L, 3L, 15L, 4L, 24L, 5L]);
+    assert(candidate(9L) == [1L, 3L, 2L, 8L, 3L, 15L, 4L, 24L, 5L, 35L]);
+    assert(candidate(20L) == [1L, 3L, 2L, 8L, 3L, 15L, 4L, 24L, 5L, 35L, 6L, 48L, 7L, 63L, 8L, 80L, 9L, 99L, 10L, 120L, 11L]);
+    assert(candidate(0L) == [1L]);
+    assert(candidate(1L) == [1L, 3L]);
 }
 void main(){}

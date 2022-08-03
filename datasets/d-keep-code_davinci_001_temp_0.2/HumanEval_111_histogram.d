@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Given a string representing a space separated lowercase letters, return a dictionary
     of the letter with the most repetition and containing the corresponding count.
@@ -14,34 +14,67 @@ Given a string representing a space separated lowercase letters, return a dictio
 
     
 */
-long[const(char)[]] histogram(const(char)[] test) 
+Nullable!(long[string]) histogram(string test) 
 {
-    long[const(char)[]] result = {};
-    for (int i = 0; i < test.length; i++)
+    var dict = new long[string];
+    var str = test.Split(' ');
+    foreach (var item in str)
     {
-        if (result[test[i]] == null)
+        if (dict.ContainsKey(item))
         {
-            result[test[i]] = 1;
+            dict[item] = dict[item] + 1;
         }
         else
         {
-            result[test[i]]++;
+            dict[item] = 1;
         }
     }
-    return result;
+    return dict;
 }
 
 unittest
 {
     alias candidate = histogram;
 
-    assert(candidate("a b b a") == ["a": 2, "b": 2]);
-    assert(candidate("a b c a b") == ["a": 2, "b": 2]);
-    assert(candidate("a b c d g") == ["a": 1, "b": 1, "c": 1, "d": 1, "g": 1]);
-    assert(candidate("r t g") == ["r": 1, "t": 1, "g": 1]);
-    assert(candidate("b b b b a") == ["b": 4]);
-    assert(candidate("r t g") == ["r": 1, "t": 1, "g": 1]);
-    assert(candidate("") == []);
-    assert(candidate("a") == ["a": 1]);
+{
+        auto result = candidate("a b b a");
+        assert(!result.isNull && result.get == ["a": 2L, "b": 2L]);
+}
+
+{
+        auto result = candidate("a b c a b");
+        assert(!result.isNull && result.get == ["a": 2L, "b": 2L]);
+}
+
+{
+        auto result = candidate("a b c d g");
+        assert(!result.isNull && result.get == ["a": 1L, "b": 1L, "c": 1L, "d": 1L, "g": 1L]);
+}
+
+{
+        auto result = candidate("r t g");
+        assert(!result.isNull && result.get == ["r": 1L, "t": 1L, "g": 1L]);
+}
+
+{
+        auto result = candidate("b b b b a");
+        assert(!result.isNull && result.get == ["b": 4L]);
+}
+
+{
+        auto result = candidate("r t g");
+        assert(!result.isNull && result.get == ["r": 1L, "t": 1L, "g": 1L]);
+}
+
+{
+        auto result = candidate("");
+        assert(result.isNull);
+}
+
+{
+        auto result = candidate("a");
+        assert(!result.isNull && result.get == ["a": 1L]);
+}
+
 }
 void main(){}

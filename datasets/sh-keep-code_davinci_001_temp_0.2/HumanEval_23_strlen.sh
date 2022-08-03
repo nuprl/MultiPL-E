@@ -4,30 +4,22 @@
 # 0
 # >>> strlen('abc')
 # 3
+#
+# $1 is a string
 strlen() {
-    local str="$1"
-    local len=0
-    while [ "${str}" != "" ]; do
-        str="${str#?}"
-        len=$((len+1))
-    done
-    echo "${len}"
+    echo "${#1}"
 
 }
 
 candidate() {
-    local res=$(strlen "$@")
-    echo $res
+    strlen "$@"
 }
 
-test() {
-        x0=$(candidate "")
-    assert_equals 0 "${x0[*]}"
-
-        x1=$(candidate "x")
-    assert_equals 1 "${x1[*]}"
-
-        x2=$(candidate "asdasnakj")
-    assert_equals 9 "${x2[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "") = "0" ]]
+    [[ $(candidate "x") = "1" ]]
+    [[ $(candidate "asdasnakj") = "9" ]]
 }
+
+run_test

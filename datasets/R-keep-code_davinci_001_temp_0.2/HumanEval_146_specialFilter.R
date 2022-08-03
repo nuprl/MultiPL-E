@@ -17,6 +17,6 @@ candidate <- specialFilter
     if(!identical(candidate(c(43, -12, 93, 125, 121, 109)), 4)){quit('no', 1)}
     if(!identical(candidate(c(71, -2, -33, 75, 21, 19)), 3)){quit('no', 1)}
     if(!identical(candidate(c(1)), 0)){quit('no', 1)}
-    if(!identical(candidate(list()), 0)){quit('no', 1)}
+    if(!identical(candidate(c()), 0)){quit('no', 1)}
 }
 test_humaneval()

@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Return the largest prime factor of n. Assume n > 1 and is not a prime.
     >>> largest_prime_factor(13195)
@@ -11,10 +11,14 @@ Return the largest prime factor of n. Assume n > 1 and is not a prime.
 long largest_prime_factor(long n) 
 {
     long i = 2;
-    while (i < n) {
-        if (n % i == 0) {
+    while (n > i) 
+    {
+        if (n % i == 0) 
+        {
             n = n / i;
-        } else {
+        }
+        else 
+        {
             i = i + 1;
         }
     }
@@ -25,10 +29,10 @@ unittest
 {
     alias candidate = largest_prime_factor;
 
-    assert(candidate(15) == 5);
-    assert(candidate(27) == 3);
-    assert(candidate(63) == 7);
-    assert(candidate(330) == 11);
-    assert(candidate(13195) == 29);
+    assert(candidate(15L) == 5L);
+    assert(candidate(27L) == 3L);
+    assert(candidate(63L) == 7L);
+    assert(candidate(330L) == 11L);
+    assert(candidate(13195L) == 29L);
 }
 void main(){}

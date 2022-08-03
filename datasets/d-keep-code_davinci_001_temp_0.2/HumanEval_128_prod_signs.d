@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     You are given an array arr of integers and you need to return
@@ -16,14 +16,15 @@ import std.typecons;
 Nullable!(long) prod_signs(long[] arr) 
 {
     if (arr.length == 0) {
-        return None;
+        return null;
     }
     var sum = 0;
     var prod = 1;
     for (var i = 0; i < arr.length; i++) {
         var num = arr[i];
-        sum += std.math.abs(num);
-        prod *= std.math.sign(num);
+        var sign = num > 0 ? 1 : num < 0 ? -1 : 0;
+        sum += Math.abs(num);
+        prod *= sign;
     }
     return sum * prod;
 }
@@ -33,18 +34,18 @@ unittest
     alias candidate = prod_signs;
 
 {
-        auto result = candidate([1, 2, 2, -4]);
-        assert(!result.isNull && result.get == -9);
+        auto result = candidate([1L, 2L, 2L, -4L]);
+        assert(!result.isNull && result.get == -9L);
 }
 
 {
-        auto result = candidate([0, 1]);
-        assert(!result.isNull && result.get == 0);
+        auto result = candidate([0L, 1L]);
+        assert(!result.isNull && result.get == 0L);
 }
 
 {
-        auto result = candidate([1, 1, 1, 2, 3, -1, 1]);
-        assert(!result.isNull && result.get == -10);
+        auto result = candidate([1L, 1L, 1L, 2L, 3L, -1L, 1L]);
+        assert(!result.isNull && result.get == -10L);
 }
 
 {
@@ -53,23 +54,23 @@ unittest
 }
 
 {
-        auto result = candidate([2, 4, 1, 2, -1, -1, 9]);
-        assert(!result.isNull && result.get == 20);
+        auto result = candidate([2L, 4L, 1L, 2L, -1L, -1L, 9L]);
+        assert(!result.isNull && result.get == 20L);
 }
 
 {
-        auto result = candidate([-1, 1, -1, 1]);
-        assert(!result.isNull && result.get == 4);
+        auto result = candidate([-1L, 1L, -1L, 1L]);
+        assert(!result.isNull && result.get == 4L);
 }
 
 {
-        auto result = candidate([-1, 1, 1, 1]);
-        assert(!result.isNull && result.get == -4);
+        auto result = candidate([-1L, 1L, 1L, 1L]);
+        assert(!result.isNull && result.get == -4L);
 }
 
 {
-        auto result = candidate([-1, 1, 1, 0]);
-        assert(!result.isNull && result.get == 0);
+        auto result = candidate([-1L, 1L, 1L, 0L]);
+        assert(!result.isNull && result.get == 0L);
 }
 
 }

@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     You are given a positive integer n. You have to create an integer array a of length n.
@@ -18,10 +18,14 @@ import std.typecons;
 long get_max_triples(long n) 
 {
     long max_triples = 0;
-    for (long i = 1; i < n; i++) {
-        for (long j = i + 1; j < n; j++) {
-            for (long k = j + 1; k < n; k++) {
-                if ((i * i + i + 1 + j * j + j + 1 + k * k + k + 1) % 3 == 0) {
+    for (long i = 1; i < n; i++) 
+    {
+        for (long j = i + 1; j < n; j++) 
+        {
+            for (long k = j + 1; k < n; k++) 
+            {
+                if ((i * i + j * j + k * k) % 3 == 0) 
+                {
                     max_triples++;
                 }
             }
@@ -34,9 +38,9 @@ unittest
 {
     alias candidate = get_max_triples;
 
-    assert(candidate(5) == 1);
-    assert(candidate(6) == 4);
-    assert(candidate(10) == 36);
-    assert(candidate(100) == 53361);
+    assert(candidate(5L) == 1L);
+    assert(candidate(6L) == 4L);
+    assert(candidate(10L) == 36L);
+    assert(candidate(100L) == 53361L);
 }
 void main(){}

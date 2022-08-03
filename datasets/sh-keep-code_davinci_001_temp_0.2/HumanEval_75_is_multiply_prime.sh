@@ -5,61 +5,41 @@
 # Example:
 # is_multiply_prime(30) == True
 # 30 = 2 * 3 * 5
+#
+# $1 is an integer
 is_multiply_prime() {
-  local num=$1
-  local prime_list=()
-  local i=2
-  while [ $i -lt $num ]
-  do
-    if [ $((num % i)) -eq 0 ]
-    then
-      prime_list+=($i)
-    fi
-    i=$((i+1))
-  done
-  if [ ${#prime_list[@]} -eq 0 ]
-  then
-    echo "True"
-  else
-    echo "False"
-  fi
+    local number=$1
+    local prime_number=2
+    local is_multiply_prime=true
+    while [ $prime_number -lt $number ]
+    do
+        if [ $((number % prime_number)) -eq 0 ]
+        then
+            is_multiply_prime=false
+            break
+        fi
+        prime_number=$((prime_number + 1))
+    done
+    echo $is_multiply_prime
 
 }
 
 candidate() {
-    local res=$(is_multiply_prime "$@")
-    echo $res
+    is_multiply_prime "$@"
 }
 
-test() {
-        x0=$(candidate 5)
-    assert_equals false "${x0[*]}"
-
-        x1=$(candidate 30)
-    assert_equals true "${x1[*]}"
-
-        x2=$(candidate 8)
-    assert_equals true "${x2[*]}"
-
-        x3=$(candidate 10)
-    assert_equals false "${x3[*]}"
-
-        x4=$(candidate 125)
-    assert_equals true "${x4[*]}"
-
-        x5=$(candidate 105)
-    assert_equals true "${x5[*]}"
-
-        x6=$(candidate 126)
-    assert_equals false "${x6[*]}"
-
-        x7=$(candidate 729)
-    assert_equals false "${x7[*]}"
-
-        x8=$(candidate 891)
-    assert_equals false "${x8[*]}"
-
-        x9=$(candidate 1001)
-    assert_equals true "${x9[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "5") = "false" ]]
+    [[ $(candidate "30") = "true" ]]
+    [[ $(candidate "8") = "true" ]]
+    [[ $(candidate "10") = "false" ]]
+    [[ $(candidate "125") = "true" ]]
+    [[ $(candidate "105") = "true" ]]
+    [[ $(candidate "126") = "false" ]]
+    [[ $(candidate "729") = "false" ]]
+    [[ $(candidate "891") = "false" ]]
+    [[ $(candidate "1001") = "true" ]]
 }
+
+run_test

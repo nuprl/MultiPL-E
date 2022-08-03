@@ -12,13 +12,13 @@ from humaneval_to_cpp import CPPTranslator, DOCSTRING_LINESTART_RE
 JAVA_CLASS_NAME = "Problem"
 
 class JavaTranslator(CPPTranslator):
-    stop = ["    }\n    //","    }\n    p", "    }\n}","\n    }\n"]
+    stop = ["\n    }\n"]
 
     def __init__(self, file_ext):
         super().__init__(file_ext)
         self.string_type = "String"
         self.float_type = "float"
-        self.int_type = "int"
+        self.int_type = "long"
         self.bool_type = "boolean"
         self.none_type = "Optional.empty()"
         self.list_type = "ArrayList"
@@ -141,11 +141,6 @@ class JavaTranslator(CPPTranslator):
 
         return java_prompt
     
-    def is_primitive_type(self, java_type):
-        '''Return if a type is primitive type 
-        '''
-        return java_type in [self.float_type, self.bool_type, self.int_type]
-
     def is_boxed_type(self, boxed_type):
         '''Return if a type is a boxed version of primitive type
         '''
@@ -195,7 +190,7 @@ class JavaTranslator(CPPTranslator):
         """
 
         return [
-            "return " + self.return_default_value(self.translated_return_type) + ";",
+           # "return " + self.return_default_value(self.translated_return_type) + ";",
             self.indent + "}",
             self.indent + "public static void main(String[] args) {",
         ]

@@ -8,97 +8,40 @@
 # '.|' - quater note, lasts one beat
 # >>> parse_music('o o| .| o| o| .| .| .| .| o o')
 # [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
+#
+# $1 is a string
 parse_music() {
-    local -i beats=0
-    local -a result
-    local -i i=0
-    local -i j=0
-    local -i k=0
-    local -i l=0
-    local -i m=0
-    local -i n=0
-    local -i o=0
-    local -i p=0
-    local -i q=0
-    local -i r=0
-    local -i s=0
-    local -i t=0
-    local -i u=0
-    local -i v=0
-    local -i w=0
-    local -i x=0
-    local -i y=0
-    local -i z=0
-    local -i a=0
-    local -i b=0
-    local -i c=0
-    local -i d=0
-    local -i e=0
-    local -i f=0
-    local -i g=0
-    local -i h=0
-    local -i i=0
-    local -i j=0
-    local -i k=0
-    local -i l=0
-    local -i m=0
-    local -i n=0
-    local -i o=0
-    local -i p=0
-    local -i q=0
-    local -i r=0
-    local -i s=0
-    local -i t=0
-    local -i u=0
-    local -i v=0
-    local -i w=0
-    local -i x=0
-    local -i y=0
-    local -i z=0
-    local -i a=0
-    local -i b=0
-    local -i c=0
-    local -i d=0
-    local -i e=0
-    local -i f=0
-    local -i g=0
-    local -i h=0
-    local -i i=0
-    local -i j=0
-    local -i k=0
-    local -i l=0
-    local -i m=0
-    local -i n=0
-    local -i o=0
-    local -i p=0
-    local -i q
+    local beats=()
+    local beat=0
+    for (( i=0; i<${#1}; i++ )); do
+        case "${1:$i:1}" in
+            "o")
+                beat=4
+                ;;
+            "o|")
+                beat=2
+                ;;
+            ".|")
+                beat=1
+                ;;
+        esac
+        beats+=($beat)
+    done
+    echo "${beats[@]}"
 
 }
 
 candidate() {
-    local res=$(parse_music "$@")
-    echo $res
+    parse_music "$@"
 }
 
-test() {
-    declare -a x1=()
-        x0=$(candidate "")
-    assert_equals "${x1[*]}" "${x0[*]}"
-
-    declare -a x3=(4 4 4 4)
-        x2=$(candidate "o o o o")
-    assert_equals "${x3[*]}" "${x2[*]}"
-
-    declare -a x5=(1 1 1 1)
-        x4=$(candidate ".| .| .| .|")
-    assert_equals "${x5[*]}" "${x4[*]}"
-
-    declare -a x7=(2 2 1 1 4 4 4 4)
-        x6=$(candidate "o| o| .| .| o o o o")
-    assert_equals "${x7[*]}" "${x6[*]}"
-
-    declare -a x9=(2 1 2 1 4 2 4 2)
-        x8=$(candidate "o| .| o| .| o o| o o|")
-    assert_equals "${x9[*]}" "${x8[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "") = "" ]]
+    [[ $(candidate "o o o o") = "4 4 4 4" ]]
+    [[ $(candidate ".| .| .| .|") = "1 1 1 1" ]]
+    [[ $(candidate "o| o| .| .| o o o o") = "2 2 1 1 4 4 4 4" ]]
+    [[ $(candidate "o| .| o| .| o o| o o|") = "2 1 2 1 4 2 4 2" ]]
 }
+
+run_test

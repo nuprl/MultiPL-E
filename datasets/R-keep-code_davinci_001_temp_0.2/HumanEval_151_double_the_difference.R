@@ -27,7 +27,7 @@ double_the_difference <- function(lst) {
 
 test_humaneval <- function() {
 candidate <- double_the_difference
-    if(!identical(candidate(list()), 0)){quit('no', 1)}
+    if(!identical(candidate(c()), 0)){quit('no', 1)}
     if(!identical(candidate(c(5.0, 4.0)), 25)){quit('no', 1)}
     if(!identical(candidate(c(0.1, 0.2, 0.3)), 0)){quit('no', 1)}
     if(!identical(candidate(c(-10.0, -20.0, -30.0)), 0)){quit('no', 1)}

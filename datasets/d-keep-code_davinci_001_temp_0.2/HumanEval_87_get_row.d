@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     You are given a 2 dimensional data, as a nested lists,
@@ -23,18 +23,29 @@ import std.typecons;
 */
 Tuple!(long, long)[] get_row(long[][] lst, long x) 
 {
-    return null;
+    Tuple!(long, long)[] result = [];
+    for (long i = 0; i < lst.length; i++)
+    {
+        for (long j = 0; j < lst[i].length; j++)
+        {
+            if (lst[i][j] == x)
+            {
+                result.push((i, j));
+            }
+        }
+    }
+    return result;
 }
 
 unittest
 {
     alias candidate = get_row;
 
-    assert(candidate([[1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 1, 6], [1, 2, 3, 4, 5, 1]], 1) == [tuple(0, 0), tuple(1, 4), tuple(1, 0), tuple(2, 5), tuple(2, 0)]);
-    assert(candidate([[1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6]], 2) == [tuple(0, 1), tuple(1, 1), tuple(2, 1), tuple(3, 1), tuple(4, 1), tuple(5, 1)]);
-    assert(candidate([[1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6], [1, 1, 3, 4, 5, 6], [1, 2, 1, 4, 5, 6], [1, 2, 3, 1, 5, 6], [1, 2, 3, 4, 1, 6], [1, 2, 3, 4, 5, 1]], 1) == [tuple(0, 0), tuple(1, 0), tuple(2, 1), tuple(2, 0), tuple(3, 2), tuple(3, 0), tuple(4, 3), tuple(4, 0), tuple(5, 4), tuple(5, 0), tuple(6, 5), tuple(6, 0)]);
-    assert(candidate([], 1) == []);
-    assert(candidate([[1]], 2) == []);
-    assert(candidate([[], [1], [1, 2, 3]], 3) == [tuple(2, 2)]);
+    assert(candidate([[1L, 2L, 3L, 4L, 5L, 6L], [1L, 2L, 3L, 4L, 1L, 6L], [1L, 2L, 3L, 4L, 5L, 1L]], 1L) == [tuple(0L, 0L), tuple(1L, 4L), tuple(1L, 0L), tuple(2L, 5L), tuple(2L, 0L)]);
+    assert(candidate([[1L, 2L, 3L, 4L, 5L, 6L], [1L, 2L, 3L, 4L, 5L, 6L], [1L, 2L, 3L, 4L, 5L, 6L], [1L, 2L, 3L, 4L, 5L, 6L], [1L, 2L, 3L, 4L, 5L, 6L], [1L, 2L, 3L, 4L, 5L, 6L]], 2L) == [tuple(0L, 1L), tuple(1L, 1L), tuple(2L, 1L), tuple(3L, 1L), tuple(4L, 1L), tuple(5L, 1L)]);
+    assert(candidate([[1L, 2L, 3L, 4L, 5L, 6L], [1L, 2L, 3L, 4L, 5L, 6L], [1L, 1L, 3L, 4L, 5L, 6L], [1L, 2L, 1L, 4L, 5L, 6L], [1L, 2L, 3L, 1L, 5L, 6L], [1L, 2L, 3L, 4L, 1L, 6L], [1L, 2L, 3L, 4L, 5L, 1L]], 1L) == [tuple(0L, 0L), tuple(1L, 0L), tuple(2L, 1L), tuple(2L, 0L), tuple(3L, 2L), tuple(3L, 0L), tuple(4L, 3L), tuple(4L, 0L), tuple(5L, 4L), tuple(5L, 0L), tuple(6L, 5L), tuple(6L, 0L)]);
+    assert(candidate([], 1L) == []);
+    assert(candidate([[1L]], 2L) == []);
+    assert(candidate([[], [1L], [1L, 2L, 3L]], 3L) == [tuple(2L, 2L)]);
 }
 void main(){}

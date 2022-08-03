@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Your task is to implement a function that will simplify the expression
     x * n. The function returns True if x * n evaluates to a whole number and False
@@ -13,19 +13,11 @@ Your task is to implement a function that will simplify the expression
     simplify("7/10", "10/2") = False
     
 */
-bool simplify(const(char)[] x, const(char)[] n) 
+bool simplify(string x, string n) 
 {
-    auto x_num = parse_int(x);
-    auto x_den = parse_int(x);
-    auto n_num = parse_int(n);
-    auto n_den = parse_int(n);
-    auto x_numerator = x_num * n_den;
-    auto x_denominator = x_den * n_num;
-    auto gcd = math.gcd(x_numerator, x_denominator);
-    if (x_numerator / gcd == x_num && x_denominator / gcd == x_den)
-        return true;
-    else
-        return false;
+    int numerator = std.math.gcd(std.typecons.parseInt(x.substr(0, x.find("/"))), std.typecons.parseInt(n.substr(0, n.find("/"))));
+    int denominator = std.math.gcd(std.typecons.parseInt(x.substr(x.find("/") + 1)), std.typecons.parseInt(n.substr(n.find("/") + 1)));
+    return std.math.gcd(numerator, denominator) == 1;
 }
 
 unittest

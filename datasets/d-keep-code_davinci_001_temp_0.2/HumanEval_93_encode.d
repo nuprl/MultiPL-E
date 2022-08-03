@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Write a function that takes a message, and encodes in such a 
@@ -15,9 +15,79 @@ import std.typecons;
     'tHKS KS C MGSSCGG'
     
 */
-const(char)[] encode(const(char)[] message) 
+string encode(string message) 
 {
-    return null;
+    string encoded = "";
+    for (int i = 0; i < message.length(); i++)
+    {
+        if (message[i] >= 'a' && message[i] <= 'z')
+        {
+            if (message[i] == 'a')
+            {
+                encoded += 'b';
+            }
+            else if (message[i] == 'e')
+            {
+                encoded += 'f';
+            }
+            else if (message[i] == 'i')
+            {
+                encoded += 'j';
+            }
+            else if (message[i] == 'o')
+            {
+                encoded += 'p';
+            }
+            else if (message[i] == 'u')
+            {
+                encoded += 'v';
+            }
+            else if (message[i] == 'y')
+            {
+                encoded += 'z';
+            }
+            else
+            {
+                encoded += message[i];
+            }
+        }
+        else if (message[i] >= 'A' && message[i] <= 'Z')
+        {
+            if (message[i] == 'A')
+            {
+                encoded += 'B';
+            }
+            else if (message[i] == 'E')
+            {
+                encoded += 'F';
+            }
+            else if (message[i] == 'I')
+            {
+                encoded += 'J';
+            }
+            else if (message[i] == 'O')
+            {
+                encoded += 'P';
+            }
+            else if (message[i] == 'U')
+            {
+                encoded += 'V';
+            }
+            else if (message[i] == 'Y')
+            {
+                encoded += 'Z';
+            }
+            else
+            {
+                encoded += message[i];
+            }
+        }
+        else
+        {
+            encoded += message[i];
+        }
+    }
+    return encoded;
 }
 
 unittest

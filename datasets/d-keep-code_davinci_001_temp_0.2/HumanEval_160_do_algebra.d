@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given two lists operator, and operand. The first list has basic algebra operations, and 
@@ -26,7 +26,7 @@ import std.typecons;
 
     
 */
-long do_algebra(const(char)[][] operator, long[] operand) 
+long do_algebra(string[] operator, long[] operand) 
 {
     // Write your code here
     return 0;
@@ -36,8 +36,8 @@ unittest
 {
     alias candidate = do_algebra;
 
-    assert(candidate(["**", "*", "+"], [2, 3, 4, 5]) == 37);
-    assert(candidate(["+", "*", "-"], [2, 3, 4, 5]) == 9);
-    assert(candidate(["//", "*"], [7, 3, 4]) == 8);
+    assert(candidate(["**", "*", "+"], [2L, 3L, 4L, 5L]) == 37L);
+    assert(candidate(["+", "*", "-"], [2L, 3L, 4L, 5L]) == 9L);
+    assert(candidate(["//", "*"], [7L, 3L, 4L]) == 8L);
 }
 void main(){}

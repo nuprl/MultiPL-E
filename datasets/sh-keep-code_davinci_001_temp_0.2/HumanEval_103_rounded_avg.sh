@@ -8,8 +8,11 @@
 # rounded_avg(7, 5) => -1
 # rounded_avg(10, 20) => "0b1111"
 # rounded_avg(20, 33) => "0b11010"
+#
+# $1 is an integer
+# $2 is an integer
 rounded_avg() {
-    if [ $1 -gt $2 ]; then
+    if [[ $1 -gt $2 ]]; then
         echo "-1"
     else
         sum=$(( ($2 - $1 + 1) * ($1 + $2) / 2 ))
@@ -19,45 +22,23 @@ rounded_avg() {
 }
 
 candidate() {
-    local res=$(rounded_avg "$@")
-    echo $res
+    rounded_avg "$@"
 }
 
-test() {
-        x0=$(candidate 1 5)
-    assert_equals "0b11" "${x0[*]}"
-
-        x1=$(candidate 7 13)
-    assert_equals "0b1010" "${x1[*]}"
-
-        x2=$(candidate 964 977)
-    assert_equals "0b1111001010" "${x2[*]}"
-
-        x3=$(candidate 996 997)
-    assert_equals "0b1111100100" "${x3[*]}"
-
-        x4=$(candidate 560 851)
-    assert_equals "0b1011000010" "${x4[*]}"
-
-        x5=$(candidate 185 546)
-    assert_equals "0b101101110" "${x5[*]}"
-
-        x6=$(candidate 362 496)
-    assert_equals "0b110101101" "${x6[*]}"
-
-        x7=$(candidate 350 902)
-    assert_equals "0b1001110010" "${x7[*]}"
-
-        x8=$(candidate 197 233)
-    assert_equals "0b11010111" "${x8[*]}"
-
-        x9=$(candidate 7 5)
-    assert_equals -1 "${x9[*]}"
-
-        x10=$(candidate 5 1)
-    assert_equals -1 "${x10[*]}"
-
-        x11=$(candidate 5 5)
-    assert_equals "0b101" "${x11[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "1" "5") = "0b11" ]]
+    [[ $(candidate "7" "13") = "0b1010" ]]
+    [[ $(candidate "964" "977") = "0b1111001010" ]]
+    [[ $(candidate "996" "997") = "0b1111100100" ]]
+    [[ $(candidate "560" "851") = "0b1011000010" ]]
+    [[ $(candidate "185" "546") = "0b101101110" ]]
+    [[ $(candidate "362" "496") = "0b110101101" ]]
+    [[ $(candidate "350" "902") = "0b1001110010" ]]
+    [[ $(candidate "197" "233") = "0b11010111" ]]
+    [[ $(candidate "7" "5") = "-1" ]]
+    [[ $(candidate "5" "1") = "-1" ]]
+    [[ $(candidate "5" "5") = "0b101" ]]
 }
+
+run_test

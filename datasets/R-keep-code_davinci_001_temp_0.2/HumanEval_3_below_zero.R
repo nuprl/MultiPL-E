@@ -23,7 +23,7 @@ below_zero <- function(operations) {
 
 test_humaneval <- function() {
 candidate <- below_zero
-    if(!identical(candidate(list()), FALSE)){quit('no', 1)}
+    if(!identical(candidate(c()), FALSE)){quit('no', 1)}
     if(!identical(candidate(c(1, 2, -3, 1, 2, -3)), FALSE)){quit('no', 1)}
     if(!identical(candidate(c(1, 2, -4, 5, 6)), TRUE)){quit('no', 1)}
     if(!identical(candidate(c(1, -1, 2, -2, 5, -5, 4, -4)), FALSE)){quit('no', 1)}

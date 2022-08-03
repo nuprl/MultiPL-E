@@ -13,19 +13,20 @@
 # Constraints:
 # * 1 <= len(sentence) <= 100
 # * sentence contains only letters
+#
+# $1 is a string
 words_in_sentence() {
-    local sentence=$1
+    local sentence="$1"
     local words=()
     local word=""
     local i=0
-    while [ $i -lt ${#sentence} ]; do
+    for ((i=0; i<${#sentence}; i++)); do
         if [[ "${sentence:$i:1}" == " " ]]; then
             words+=("$word")
             word=""
         else
             word="$word${sentence:$i:1}"
         fi
-        i=$((i+1))
     done
     words+=("$word")
     echo "${words[@]}"
@@ -33,30 +34,18 @@ words_in_sentence() {
 }
 
 candidate() {
-    local res=$(words_in_sentence "$@")
-    echo $res
+    words_in_sentence "$@"
 }
 
-test() {
-        x0=$(candidate "This is a test")
-    assert_equals "is" "${x0[*]}"
-
-        x1=$(candidate "lets go for swimming")
-    assert_equals "go for" "${x1[*]}"
-
-        x2=$(candidate "there is no place available here")
-    assert_equals "there is no place" "${x2[*]}"
-
-        x3=$(candidate "Hi I am Hussein")
-    assert_equals "Hi am Hussein" "${x3[*]}"
-
-        x4=$(candidate "go for it")
-    assert_equals "go for it" "${x4[*]}"
-
-        x5=$(candidate "here")
-    assert_equals "" "${x5[*]}"
-
-        x6=$(candidate "here is")
-    assert_equals "is" "${x6[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "This is a test") = "is" ]]
+    [[ $(candidate "lets go for swimming") = "go for" ]]
+    [[ $(candidate "there is no place available here") = "there is no place" ]]
+    [[ $(candidate "Hi I am Hussein") = "Hi am Hussein" ]]
+    [[ $(candidate "go for it") = "go for it" ]]
+    [[ $(candidate "here") = "" ]]
+    [[ $(candidate "here is") = "is" ]]
 }
+
+run_test

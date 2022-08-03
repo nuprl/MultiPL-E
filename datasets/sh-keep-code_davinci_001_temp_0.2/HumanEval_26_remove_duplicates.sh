@@ -3,53 +3,32 @@
 # Keep order of elements left the same as in the input.
 # >>> remove_duplicates([1, 2, 3, 2, 4])
 # [1, 3, 4]
+#
+# $1 is a space-separated list
 remove_duplicates() {
-    local arr=("$@")
+    local result=()
     local i=0
     local j=0
-    local k=0
-    local len=${#arr[@]}
-    local temp=0
-    while [ $i -lt $len ]; do
-        j=0
-        while [ $j -lt $len ]; do
-            if [ $i -ne $j ]; then
-                if [ ${arr[$i]} -eq ${arr[$j]} ]; then
-                    temp=${arr[$i]}
-                    unset arr[$i]
-                    arr=( "${arr[@]}" )
-                    arr[$j]=$temp
-                    len=${#arr[@]}
-                    j=0
-                fi
-            fi
-            j=$((j+1))
-        done
-        i=$((i+1))
+    local item=''
+    for item in $1; do
+        if [[ ${result[$i]} != $item ]]; then
+            result[$i]=$item
+            ((i++))
+        fi
     done
-    echo "${arr[@]}"
+    echo ${result[@]}
 
 }
 
 candidate() {
-    local res=$(remove_duplicates "$@")
-    echo $res
+    remove_duplicates "$@"
 }
 
-test() {
-    declare -a x2=()
-    declare -a x0=()
-    x1=$(candidate "${x0[*]}")
-    assert_equals "${x2[*]}" "${x1[*]}"
-
-    declare -a x5=(1 2 3 4)
-    declare -a x3=(1 2 3 4)
-    x4=$(candidate "${x3[*]}")
-    assert_equals "${x5[*]}" "${x4[*]}"
-
-    declare -a x8=(1 4 5)
-    declare -a x6=(1 2 3 2 4 3 5)
-    x7=$(candidate "${x6[*]}")
-    assert_equals "${x8[*]}" "${x7[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "") = "" ]]
+    [[ $(candidate "1 2 3 4") = "1 2 3 4" ]]
+    [[ $(candidate "1 2 3 2 4 3 5") = "1 4 5" ]]
 }
+
+run_test

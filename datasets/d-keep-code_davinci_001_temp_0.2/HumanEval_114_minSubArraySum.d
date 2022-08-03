@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Given an array of integers nums, find the minimum sum of any non-empty sub-array
@@ -11,38 +11,32 @@ import std.typecons;
 */
 long minSubArraySum(long[] nums) 
 {
-    long min = nums[0];
+    long minSum = nums[0];
     long sum = 0;
-    for(int i = 0; i < nums.length; i++)
+    for (int i = 0; i < nums.length; i++)
     {
         sum += nums[i];
-        if(sum < min)
-        {
-            min = sum;
-        }
-        if(sum > 0)
-        {
-            sum = 0;
-        }
+        minSum = std.math.min(minSum, sum);
+        sum = std.math.min(sum, 0);
     }
-    return min;
+    return minSum;
 }
 
 unittest
 {
     alias candidate = minSubArraySum;
 
-    assert(candidate([2, 3, 4, 1, 2, 4]) == 1);
-    assert(candidate([-1, -2, -3]) == -6);
-    assert(candidate([-1, -2, -3, 2, -10]) == -14);
-    assert(candidate([-9999999999999999]) == -9999999999999999);
-    assert(candidate([0, 10, 20, 1000000]) == 0);
-    assert(candidate([-1, -2, -3, 10, -5]) == -6);
-    assert(candidate([100, -1, -2, -3, 10, -5]) == -6);
-    assert(candidate([10, 11, 13, 8, 3, 4]) == 3);
-    assert(candidate([100, -33, 32, -1, 0, -2]) == -33);
-    assert(candidate([-10]) == -10);
-    assert(candidate([7]) == 7);
-    assert(candidate([1, -1]) == -1);
+    assert(candidate([2L, 3L, 4L, 1L, 2L, 4L]) == 1L);
+    assert(candidate([-1L, -2L, -3L]) == -6L);
+    assert(candidate([-1L, -2L, -3L, 2L, -10L]) == -14L);
+    assert(candidate([-9999999999999999L]) == -9999999999999999L);
+    assert(candidate([0L, 10L, 20L, 1000000L]) == 0L);
+    assert(candidate([-1L, -2L, -3L, 10L, -5L]) == -6L);
+    assert(candidate([100L, -1L, -2L, -3L, 10L, -5L]) == -6L);
+    assert(candidate([10L, 11L, 13L, 8L, 3L, 4L]) == 3L);
+    assert(candidate([100L, -33L, 32L, -1L, 0L, -2L]) == -33L);
+    assert(candidate([-10L]) == -10L);
+    assert(candidate([7L]) == 7L);
+    assert(candidate([1L, -1L]) == -1L);
 }
 void main(){}

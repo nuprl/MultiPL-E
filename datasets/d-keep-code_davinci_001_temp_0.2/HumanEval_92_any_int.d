@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     Create a function that takes 3 numbers.
@@ -21,22 +21,37 @@ import std.typecons;
 */
 bool any_int(float x, float y, float z) 
 {
-    return (x == y + z) || (y == x + z) || (z == x + y);
+    if (x == y + z)
+    {
+        return true;
+    }
+    else if (y == x + z)
+    {
+        return true;
+    }
+    else if (z == x + y)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 unittest
 {
     alias candidate = any_int;
 
-    assert(candidate(2, 3, 1) == true);
-    assert(candidate(2.5, 2, 3) == false);
-    assert(candidate(1.5, 5, 3.5) == false);
-    assert(candidate(2, 6, 2) == false);
-    assert(candidate(4, 2, 2) == true);
+    assert(candidate(2L, 3L, 1L) == true);
+    assert(candidate(2.5, 2L, 3L) == false);
+    assert(candidate(1.5, 5L, 3.5) == false);
+    assert(candidate(2L, 6L, 2L) == false);
+    assert(candidate(4L, 2L, 2L) == true);
     assert(candidate(2.2, 2.2, 2.2) == false);
-    assert(candidate(-4, 6, 2) == true);
-    assert(candidate(2, 1, 1) == true);
-    assert(candidate(3, 4, 7) == true);
-    assert(candidate(3.0, 4, 7) == false);
+    assert(candidate(-4L, 6L, 2L) == true);
+    assert(candidate(2L, 1L, 1L) == true);
+    assert(candidate(3L, 4L, 7L) == true);
+    assert(candidate(3.0, 4L, 7L) == false);
 }
 void main(){}

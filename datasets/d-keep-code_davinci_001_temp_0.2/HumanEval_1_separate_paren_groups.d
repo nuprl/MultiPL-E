@@ -8,25 +8,30 @@ import std.math;
     ['()', '(())', '(()())']
     
 */
-const(char)[][] separate_paren_groups(const(char)[] paren_string) 
+string[] separate_paren_groups(string paren_string) 
 {
-    const(char)[] result = new(char)[];
-    int count = 0;
-    int start = 0;
-    for(int i = 0; i < paren_string.length; i++)
+    string[] result;
+    int open_count = 0;
+    int close_count = 0;
+    string current = "";
+    for (int i = 0; i < paren_string.Length; i++)
     {
-        if(paren_string[i] == '(')
+        if (paren_string[i] == '(')
         {
-            count++;
+            open_count++;
+            current += paren_string[i];
         }
-        else if(paren_string[i] == ')')
+        else if (paren_string[i] == ')')
         {
-            count--;
+            close_count++;
+            current += paren_string[i];
         }
-        if(count == 0)
+        if (open_count == close_count)
         {
-            result.push(paren_string.slice(start, i + 1));
-            start = i + 1;
+            result.Add(current);
+            current = "";
+            open_count = 0;
+            close_count = 0;
         }
     }
     return result;

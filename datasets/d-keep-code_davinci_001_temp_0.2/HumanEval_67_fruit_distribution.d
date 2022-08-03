@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 
     In this task, you will be given a string that represents a number of apples and oranges 
@@ -14,8 +14,9 @@ import std.typecons;
     fruit_distribution("100 apples and 1 oranges",120) -> 120 - 100 - 1 = 19
     
 */
-long fruit_distribution(const(char)[] s, long n) 
+long fruit_distribution(string s, long n) 
 {
+    // your code here
     return 0;
 }
 
@@ -23,12 +24,12 @@ unittest
 {
     alias candidate = fruit_distribution;
 
-    assert(candidate("5 apples and 6 oranges", 19) == 8);
-    assert(candidate("5 apples and 6 oranges", 21) == 10);
-    assert(candidate("0 apples and 1 oranges", 3) == 2);
-    assert(candidate("1 apples and 0 oranges", 3) == 2);
-    assert(candidate("2 apples and 3 oranges", 100) == 95);
-    assert(candidate("2 apples and 3 oranges", 5) == 0);
-    assert(candidate("1 apples and 100 oranges", 120) == 19);
+    assert(candidate("5 apples and 6 oranges", 19L) == 8L);
+    assert(candidate("5 apples and 6 oranges", 21L) == 10L);
+    assert(candidate("0 apples and 1 oranges", 3L) == 2L);
+    assert(candidate("1 apples and 0 oranges", 3L) == 2L);
+    assert(candidate("2 apples and 3 oranges", 100L) == 95L);
+    assert(candidate("2 apples and 3 oranges", 5L) == 0L);
+    assert(candidate("1 apples and 100 oranges", 120L) == 19L);
 }
 void main(){}

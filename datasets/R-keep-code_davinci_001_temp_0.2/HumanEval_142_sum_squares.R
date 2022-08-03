@@ -23,7 +23,7 @@ test_humaneval <- function() {
 candidate <- sum_squares
     if(!identical(candidate(c(1, 2, 3)), 6)){quit('no', 1)}
     if(!identical(candidate(c(1, 4, 9)), 14)){quit('no', 1)}
-    if(!identical(candidate(list()), 0)){quit('no', 1)}
+    if(!identical(candidate(c()), 0)){quit('no', 1)}
     if(!identical(candidate(c(1, 1, 1, 1, 1, 1, 1, 1, 1)), 9)){quit('no', 1)}
     if(!identical(candidate(c(-1, -1, -1, -1, -1, -1, -1, -1, -1)), -3)){quit('no', 1)}
     if(!identical(candidate(c(0)), 0)){quit('no', 1)}

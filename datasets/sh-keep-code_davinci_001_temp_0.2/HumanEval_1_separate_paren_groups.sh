@@ -5,113 +5,65 @@
 # Ignore any spaces in the input string.
 # >>> separate_paren_groups('( ) (( )) (( )( ))')
 # ['()', '(())', '(()())']
+#
+# $1 is a string
 separate_paren_groups() {
-    local input="$1"
-    local output=()
-    local stack=()
+    local result=()
+    local depth=0
+    local start=0
+    local end=0
     local i=0
-    local j=0
-    local k=0
-    local l=0
-    local m=0
-    local n=0
-    local o=0
-    local p=0
-    local q=0
-    local r=0
-    local s=0
-    local t=0
-    local u=0
-    local v=0
-    local w=0
-    local x=0
-    local y=0
-    local z=0
-    local a=0
-    local b=0
-    local c=0
-    local d=0
-    local e=0
-    local f=0
-    local g=0
-    local h=0
-    local i=0
-    local j=0
-    local k=0
-    local l=0
-    local m=0
-    local n=0
-    local o=0
-    local p=0
-    local q=0
-    local r=0
-    local s=0
-    local t=0
-    local u=0
-    local v=0
-    local w=0
-    local x=0
-    local y=0
-    local z=0
-    local a=0
-    local b=0
-    local c=0
-    local d=0
-    local e=0
-    local f=0
-    local g=0
-    local h=0
-    local i=0
-    local j=0
-    local k=0
-    local l=0
-    local m=0
-    local n=0
-    local o=0
-    local p=0
-    local q=0
-    local r=0
-    local s=0
-    local t=0
-    local u=0
-    local v=0
-    local w=0
-    local x=0
-    local y=0
-    local z=0
-    local a=0
-    local b=0
-    local c=0
-    local d=0
-    local e=0
-    local f=0
-    local g=0
-    local h=0
-    local i=0
-    local j=0
+    local len=${#1}
+    local char=''
+    local is_open=0
+    local is_closed=0
+    local is_balanced=0
+    local is_nested=0
+    local is_open_paren=0
+    local is_closed_paren=0
+    local is_balanced_paren=0
+    local is_nested_paren=0
+    local is_balanced_group=0
+    local is_nested_group=0
+    local is_open_group=0
+    local is_closed_group=0
+    local is_open_paren_group=0
+    local is_closed_paren_group=0
+    local is_balanced_paren_group=0
+    local is_nested_paren_group=0
+    local is_balanced_group_group=0
+    local is_nested_group_group=0
+    local is_open_group_group=0
+    local is_closed_group_group=0
+    local is_open_paren_group_group=0
+    local is_closed_paren_group_group=0
+    local is_balanced_paren_group_group=0
+    local is_nested_paren_group_group=0
+    local is_balanced_group_group_group=0
+    local is_nested_group_group_group=0
+    local is_open_group_group_group=0
+    local is_closed_group_group_group=0
+    local is_open_paren_group_group_group=0
+    local is_closed_paren_group_group_group=0
+    local is_balanced_paren_group_group_group=0
+    local is_nested_paren_group_group_group=0
+    local is_balanced_group_group_group_group=0
+    local is_nested_group_group_group_group=0
+    local is_open_group_group_group_group=0
+    local is_closed_group_group_group_group
 
 }
 
 candidate() {
-    local res=$(separate_paren_groups "$@")
-    echo $res
+    separate_paren_groups "$@"
 }
 
-test() {
-    declare -a x1=("(()())" "((()))" "()" "((())()())")
-        x0=$(candidate "(()()) ((())) () ((())()())")
-    assert_equals "${x1[*]}" "${x0[*]}"
-
-    declare -a x3=("()" "(())" "((()))" "(((())))")
-        x2=$(candidate "() (()) ((())) (((())))")
-    assert_equals "${x3[*]}" "${x2[*]}"
-
-    declare -a x5=("(()(())((())))")
-        x4=$(candidate "(()(())((())))")
-    assert_equals "${x5[*]}" "${x4[*]}"
-
-    declare -a x7=("()" "(())" "(()())")
-        x6=$(candidate "( ) (( )) (( )( ))")
-    assert_equals "${x7[*]}" "${x6[*]}"
-
+set -e
+run_test() {
+    [[ $(candidate "(()()) ((())) () ((())()())") = "(()()) ((())) () ((())()())" ]]
+    [[ $(candidate "() (()) ((())) (((())))") = "() (()) ((())) (((())))" ]]
+    [[ $(candidate "(()(())((())))") = "(()(())((())))" ]]
+    [[ $(candidate "( ) (( )) (( )( ))") = "() (()) (()())" ]]
 }
+
+run_test

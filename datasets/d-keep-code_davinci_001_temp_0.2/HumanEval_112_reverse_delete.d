@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
 Task
     We are given two strings s and c, you have to deleted all the characters in s that are equal to any character in c
@@ -12,26 +12,17 @@ Task
     For s = "abcdedcba", c = "ab", the result should be ('cdedc',True)
     
 */
-Tuple!(const(char)[], bool) reverse_delete(const(char)[] s, const(char)[] c) 
+Tuple!(string, bool) reverse_delete(string s, string c) 
 {
-    var(char)[] result = new(char, 0);
-    var(bool) is_palindrome = true;
-    for (int i = 0; i < s.length; i++)
+    string result = "";
+    for (int i = 0; i < s.length(); i++)
     {
         if (c.indexOf(s[i]) == -1)
         {
-            result.push(s[i]);
+            result += s[i];
         }
     }
-    for (int i = 0; i < result.length; i++)
-    {
-        if (result[i] != result[result.length - i - 1])
-        {
-            is_palindrome = false;
-            break;
-        }
-    }
-    return (result, is_palindrome);
+    return (result, std.math.is_palindrome(result));
 }
 
 unittest

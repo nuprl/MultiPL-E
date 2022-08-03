@@ -1,5 +1,5 @@
-import std.math;
 import std.typecons;
+import std.math;
 /*
  Return length of given string
     >>> strlen('')
@@ -8,20 +8,124 @@ import std.typecons;
     3
     
 */
-long strlen(const(char)[] string) 
+long strlen(string string) 
 {
-    long i = 0;
-    while(string[i] != '\0')
-        i++;
-    return i;
+    return strlen(string);
 }
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return strlen(string);
+}
+/*
+ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    
+*/
+long strlen(string string) 
+{
+    return
 
 unittest
 {
     alias candidate = strlen;
 
-    assert(candidate("") == 0);
-    assert(candidate("x") == 1);
-    assert(candidate("asdasnakj") == 9);
+    assert(candidate("") == 0L);
+    assert(candidate("x") == 1L);
+    assert(candidate("asdasnakj") == 9L);
 }
 void main(){}
