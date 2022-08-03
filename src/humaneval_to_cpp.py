@@ -47,6 +47,8 @@ class CPPTranslator:
         self.dict_type = "std::map"
         self.optional_type = "std::optional"
         self.any_type = "std::any"
+        #A special case when Tuple has Ellipsis then always generate list instead of tuples
+        self.tuple_has_ellipsis = False 
         #C++ Keywords found in the dataset as variable and their idiomatic replacement
         self.keywords = {"operator": "op", "strlen" : "string_length"}
         self.make_tuple = "std::make_tuple"
@@ -59,6 +61,18 @@ class CPPTranslator:
 
     def gen_array_literal(self, list_contents):
         return "{" + list_contents + "}"
+
+    def gen_union(self, elems):
+        union_elems_types = []
+        union_decl = {}
+        for i,e in enumerate(elems):
+            elem_type = e
+            union_elems_types += [elem_type]
+            union_decl[elem_type] = f"f{i}" 
+        union_name = ("Union_%s"%("_".join(union_elems_types))).replace("::", "_").replace("<", "_").replace(">", "_")
+        if union_name not in self.union_decls:
+            self.union_decls[union_name] = union_decl
+        return union_name
 
     def translate_pytype(self, ann: ast.expr | None) -> str:
         '''Traverses an AST annotation and translate Python type annotation to C++ Type
@@ -91,23 +105,17 @@ class CPPTranslator:
                 return self.gen_list_type(self.translate_pytype(elem_type))
             case ast.Subscript(value=ast.Name(id="Tuple"), slice=elts):
                 if type(elts) is ast.Tuple:
+                    #If there is an ellipsis then convert it to a List
+                    for elt in elts.elts:
+                        if type(elt) == ast.Constant and str(elt.value) == "Ellipsis":
+                            self.tuple_has_ellipsis = True
+                            return self.gen_list_type(self.translate_pytype(elts.elts[0]))
                     return self.translate_pytype(elts)
                 return self.translate_pytype(elts)
             case ast.Subscript(value=ast.Name(id="Optional"), slice=elem_type):
                 return self.gen_optional_type(self.translate_pytype(elem_type))
             case ast.Subscript(value=ast.Name(id="Union"), slice=ast.Tuple(elts=elems)):
-                #Not supporting Union
-                union_elems_types = []
-                union_decl = {}
-                for i,e in enumerate(elems):
-                    elem_type = self.translate_pytype(e)
-                    union_elems_types += [elem_type]
-                    union_decl[elem_type] = f"f{i}" 
-                union_name = ("Union_%s"%("_".join(union_elems_types))).replace("::", "_").replace("<", "_").replace(">", "_")
-                if union_name not in self.union_decls:
-                    self.union_decls[union_name] = union_decl
-
-                return union_name
+                return self.gen_union([self.translate_pytype(e) for e in elems])
             case ast.Name(id="Any"):
                 return self.any_type;
             case ast.Constant(value=None):
@@ -129,6 +137,7 @@ class CPPTranslator:
         CPP_description = (
             comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" +comment_start + " ", description.strip()) + "\n"
         )
+        self.union_decls = {}
         self.args_type = [self.translate_pytype(arg.annotation) for arg in args]
         formal_args = [f"{self.translate_pytype(arg.annotation)} {self.gen_var(arg.arg)[0]}" for arg in args]
         formal_arg_list = ", ".join(formal_args)
@@ -186,10 +195,14 @@ class CPPTranslator:
 
         return re.findall(".+?\(", expr)
 
-    def update_type(self, right: Tuple[ast.Expr, str], expected_type: Tuple[str]) -> str:
+    def update_type(self, right: Tuple[str, ast.Expr], expected_type: Tuple[str]) -> str:
         '''Coerce type of the right expression if it is different from the
             expected type function
         '''
+
+        #No need to coerce union
+        if expected_type in self.union_decls:
+            return right[0]
 
         if self.translate_pytype(right[1]) == expected_type:
             return self.wrap_in_brackets(right[0])
@@ -213,9 +226,7 @@ class CPPTranslator:
         else:
             type_to_coerce = type_to_coerce[0]
             coerced_type = right[0].replace(type_to_coerce, expected_type+"(")
-        print(right[0])
-        print(type_to_coerce)
-        print(coerced_type)
+        
         ##Remove extra brackets
         coerced_type = coerced_type.replace('(())', '()')
         return self.wrap_in_brackets(coerced_type)
@@ -251,7 +262,6 @@ class CPPTranslator:
         """
         right = self.update_type(right, self.translated_return_type)
         #Empty the union declarations
-        self.union_decls = {}
         return f"    assert({left[0]} == {right});"
 
     def gen_literal(self, c: bool | str | int | float | None) -> Tuple[str, ast.Name]:
@@ -296,7 +306,9 @@ class CPPTranslator:
         elem_type = l[0][1]
         same_elem_types = True
         for e in l:
-            if self.translate_pytype(elem_type) != self.translate_pytype(e[1]):
+            if self.translate_pytype(elem_type) != self.translate_pytype(e[1]) and \
+                not self.is_primitive_type(self.translate_pytype(e[1])):
+                #Primitive type can be casted to other primitive types but not objects
                 same_elem_types = False
         if not same_elem_types:
             #If all types are not same then it probably is any
@@ -318,9 +330,13 @@ class CPPTranslator:
         """Translate a tuple with elements t
         A tuple (x, y, z) translates to make_tuple{ x, y, z }
         """
+        if self.tuple_has_ellipsis:
+            #generate list when Tuple can be of variable type
+            return self.gen_list(t)
+
         if t == [] or t == ():
             #Empty Tuple is at the bottom of expr tree
-            return self.gen_tuple_type(self.int_type), ast.Tuple([ast.Name("int")])
+            return self.gen_make_tuple(""), ast.Tuple([ast.Name("int")])
 
         #If there is none then add std::optional<?>
         contains_none = self.none_type in ", ".join([e[0] for e in t])
