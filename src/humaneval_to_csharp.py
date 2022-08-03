@@ -89,6 +89,9 @@ class CsharpTranslator(CPPTranslator):
             return "(" + self.optional_type + "<%s>" % elem_type + ")" + elem
         return elem
     
+    def gen_union(self, elems):
+        raise Exception("C# do not support union")
+
     #gen_tuple_type and gen_make_tuple are same as C++
 
     def module_imports(self) -> str:
@@ -177,7 +180,7 @@ class CsharpTranslator(CPPTranslator):
         """
 
         return [
-            "return " + self.return_default_value(self.translated_return_type) + ";",
+            # "return " + self.return_default_value(self.translated_return_type) + ";",
             self.indent + "}",
             self.indent + "public static void Main(string[] args) {", 
         ]
@@ -232,7 +235,7 @@ class CsharpTranslator(CPPTranslator):
             if c >= 1<<31 or c < -(1<<31):
                 c = 0
             return repr(c), ast.Name(id="int")
-        return super().gen_literal(self, c)
+        return super().gen_literal(c)
 
     def gen_call(self, func: str, args: List[Tuple[str, ast.Expr]]) -> Tuple[str, None]:
         """Translate a function call `func(args)`
