@@ -10,15 +10,15 @@ from generic_translator import main
 
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
-class RTranslator:
+class Translator:
     '''R Translator
     '''
 
     stop = [ '\n#', '\n```']
     
-    def __init__(self, file_ext):
-        self.file_ext = file_ext
-    
+    def __init__(self):
+        self.file_ext = 'r'
+
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         r_description = (
             "# " + re.sub(DOCSTRING_LINESTART_RE, "\n# ", description.strip()) + "\n"
