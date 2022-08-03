@@ -18,7 +18,1639 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate i
   \    (check-equal? (candidate (list 1 2) (list 3 5)) \"NO\")\n    (check-equal?\
   \ (candidate (list 1 2) (list 1 2)) \"NO\")\n    (check-equal? (candidate (list\
   \ -2 -2) (list -3 -2)) \"NO\")\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (if (or (and (&lt;= (cadr interval1) (car interval2))\n         \
+    \      (&lt;= (cadr interval2) (car interval1)))\n          (and (&lt;= (cadr\
+    \ interval2) (car interval1))\n               (&lt;= (cadr interval1) (car interval2))))\n\
+    \      \"NO\"\n      (let* ((intersect (if (&lt; (car interval1) (car interval2))\n\
+    \                            (cons (car interval2) (cadr interval1))\n       \
+    \                     (cons (car interval1) (cadr interval2))))\n            \
+    \ (start (car intersect))\n             (end (cadr intersect)))\n        (if (or\
+    \ (= start end)\n                (= start (+ end 1)))\n            \"NO\"\n  \
+    \          (if (null? (filter (\u03BB (x) (= 0 (modulo end x)))\n            \
+    \                   (range (add1 start) end)))\n                \"YES\"\n    \
+    \            \"NO\")))))\n</code>\nanother case with the same behaviour, but with\
+    \ a different <code>intersection</code>\n<code>;; [input/output] samples:", " \
+    \ (let ((interval3 (list (max (car interval1) (car interval2)) (min (cadr interval1)\
+    \ (cadr interval2)))))\n    (cond\n      ((not (and (&gt; (car interval3) (cadr\
+    \ interval3))\n                 (&lt; (car interval3) (cadr interval3))))\n  \
+    \     \"NO\")\n      ((not (is-prime (abs (- (car interval3) (cadr interval3)))))\n\
+    \       \"NO\")\n      (else \"YES\"))))\n", "  (if (&lt;= (cadr interval1) (car\
+    \ interval2))\n      \"NO\"\n      (let ((i (max (car interval1) (car interval2))))\n\
+    \        (if (&lt;= i (min (cadr interval1) (cadr interval2)))\n            (if\
+    \ (= (modulo i 2) 0)\n                \"NO\"\n                \"YES\")\n     \
+    \       \"NO\"))))\n</code>\nI want to know if there is a way to improve the function.\n\
+    For example, I don't know if in the second <code>if</code> I can change the test\
+    \ to <code>(&lt;= i (cadr interval2))</code> because <code>interval2</code> is\
+    \ always the second one.\n\n\nA:\n\nYou can remove a few conditions and make the\
+    \ code simpler. For example, the following code is equivalent to your original\
+    \ code:\n<code>(define (intersection interval1 interval2)\n  (let* ((start (max\
+    \ (car interval1) (car interval2)))\n         (end (min (cadr interval1) (cadr\
+    \ interval2))))\n    (if (&lt;= start end)\n        (if (even? (- end start))\n\
+    \            \"NO\"\n            \"YES\")\n        \"NO\")))\n</code>\nBut we\
+    \ can do better, because the conditions are not needed at all. Consider this version:\n\
+    <code>(define (intersection interval1 interval2)\n  (if (even? (- (min (cadr interval1)\
+    \ (cadr interval2))\n                (max (car interval1) (car interval2))))\n\
+    \      \"NO\"\n      \"YES\"))\n</code>\nOr this one:\n<code>(define (intersection\
+    \ interval1 interval2)\n  (and (even? (- (min (cadr interval1) (cadr interval2))\n\
+    \                (max (car interval1) (car interval2))))\n       \"NO\"\n    \
+    \   \"YES\"))\n</code>\nOr even this one:\n<code>(define (intersection interval1\
+    \ interval2)\n  (let* ((start (max (car interval1) (car interval2)))\n       \
+    \  (end (min (cadr interval1) (cadr interval2))))\n    (if (even? (- end start))",
+  "  (define (intersection interval1 interval2)\n  (define (getLength interval)\n\
+    \    (- (second interval) (first interval)))\n  (define (getIntersection interval1\
+    \ interval2)\n    (cond [(or (&lt; (second interval1) (first interval2))\n   \
+    \            (&lt; (second interval2) (first interval1)))\n           (values\
+    \ (second interval1) 0)]\n          [(= (first interval1) (first interval2))\n\
+    \           (values (first interval1)\n                   (if (&lt; (second interval1)\
+    \ (second interval2))\n                       (getLength interval1)\n        \
+    \               (getLength interval2)))]\n          [(= (second interval1) (second\
+    \ interval2))\n           (values (second interval1)\n                   (if (&lt;\
+    \ (first interval1) (first interval2))\n                       (getLength interval1)\n\
+    \                       (getLength interval2)))]\n          [(= (first interval1)\
+    \ (second interval2))\n           (values (first interval1)\n                \
+    \   (if (&lt; (second interval1) (first interval2))\n                       (getLength\
+    \ interval1)\n                       (getLength interval2)))]\n          [(= (second\
+    \ interval1) (first interval2))\n           (values (second interval1)\n     \
+    \              (if (&lt; (first interval1) (second interval2))\n             \
+    \          (getLength interval1)\n                       (getLength interval2)))]\n\
+    \          [(and (&lt; (first interval1) (first interval2))\n                (&lt;\
+    \ (second interval2) (second interval1)))\n           (values (first interval2)\n\
+    \                   (getLength interval2))]\n          [(and (&lt; (first interval2)\
+    \ (first interval1))\n                (&lt; (second interval1) (second interval2)))\n\
+    \           (values (first interval1)\n                   (getLength interval1))]\n\
+    \          [else (values (first interval1) (getLength interval1))]))\n  (define\
+    \ (isPrime? n)\n    (cond [(= n 2) #t]\n          [(= n 3) #t]\n          [(=\
+    \ n 5) #t]\n          [(= n 7) #t]\n          [(or (= n 0) (= n 1)) #f]\n    \
+    \      [(= (remainder", "  (cond [(empty? interval1) 'NO]\n        [(empty? interval2)\
+    \ 'NO]\n        [(interval-contains? interval1 (first interval2))\n         (intersection\
+    \ interval1 (rest interval2))]\n        [(interval-contains? interval2 (first\
+    \ interval1))\n         (interval-length (first interval1) (first interval2))]\n\
+    \        [else\n         (intersection (rest interval1) interval2)]))\n", "  \"\
+    intersection of two intervals\"\n  (let* ([start1 (car interval1)]\n         [end1\
+    \ (cadr interval1)]\n         [start2 (car interval2)]\n         [end2 (cadr interval2)])\n\
+    \    (cond\n      ((>= start1 start2) (cond\n                           ((>= end1\
+    \ end2) (list start2 end1))\n                           (else (list start2 end2))))\n\
+    \      (else (cond\n             ((>= end1 end2) (list start1 end1))\n       \
+    \      (else (list start1 end2)))))))\n", "  (let ((lowest  (max (car interval1)\
+    \ (car interval2)))\n        (highest (min (cadr interval1) (cadr interval2))))\n\
+    \    (if (&lt; lowest highest)\n        (let ((length (- highest lowest)))\n \
+    \         (cond\n            ((or (= length 0) (= length 1))\n             \"\
+    NO\")\n            ((and (= length 2) (= (car interval1) 1))\n             \"\
+    YES\")\n            ((prime? length)\n             \"YES\")\n            (else\n\
+    \             \"NO\")))\n        \"NO\")))\n", "  (let ([start (max (first interval1)\
+    \ (first interval2))]\n        [end (min (second interval1) (second interval2))])\n\
+    \    (if (&lt; start end)\n        (if (prime? (- end start))\n            \"\
+    YES\"\n            \"NO\")\n        \"NO\")))\n", "  (let* ([start1 (car interval1)]\n\
+    \         [end1 (cadr interval1)]\n         [start2 (car interval2)]\n       \
+    \  [end2 (cadr interval2)])\n    (list (max start1 start2) (min end1 end2))))\n",
+  "    (let ((intersect (and (or (<= (cadr interval1) (cadr interval2))\n        \
+    \                      (>= (car interval1) (car interval2)))\n               \
+    \           (or (<= (cadr interval1) (car interval2))\n                      \
+    \        (>= (car interval1) (cadr interval2))))))\n        (if intersect\n  \
+    \          (if (prime? (- (max (car interval1) (car interval2))\n            \
+    \               (min (cadr interval1) (cadr interval2))))\n                \"\
+    YES\"\n                \"NO\")\n            \"NO\")))\n", "  (let* ([start1 (car\
+    \ interval1)]\n         [end1 (cadr interval1)]\n         [start2 (car interval2)]\n\
+    \         [end2 (cadr interval2)])\n    (if (or (< end1 start2) (< end2 start1))\n\
+    \        \"NO\"\n        (let* ([intersection-start (max start1 start2)]\n   \
+    \            [intersection-end (min end1 end2)]\n               [intersection-length\
+    \ (- intersection-end intersection-start 1)])\n          (if (= intersection-length\
+    \ 1)\n              \"NO\"\n              (let loop ([i 2])\n                (if\
+    \ (= i intersection-length)\n                    \"YES\"\n                   \
+    \ (if (= (mod intersection-length i) 0)\n                        \"NO\"\n    \
+    \                    (loop (+ i 1))))))))))\n", "  (local ((define (between? x\
+    \ interval)\n            (and (&gt;= x (car interval))\n                 (&lt;=\
+    \ x (cadr interval)))))\n    (cond [(between? (car interval1) interval2) (car\
+    \ interval1)]\n          [(between? (cadr interval1) interval2) (cadr interval1)]\n\
+    \          [(between? (car interval2) interval1) (car interval2)]\n          [(between?\
+    \ (cadr interval2) interval1) (cadr interval2)]\n          [else #f])))\n", " \
+    \ (cond\n    [(empty? interval1) \"NO\"]\n    [(empty? interval2) \"NO\"]\n  \
+    \  [(> (head interval1) (head interval2)) \"NO\"]\n    [(> (head interval2) (head\
+    \ interval1)) \"NO\"]\n    [(> (tail interval1) (tail interval2)) (intersection\
+    \ interval2 interval1)]\n    [(> (tail interval2) (tail interval1)) (intersection\
+    \ interval1 interval2)]\n    [else (prime? (- (tail interval1) (head interval1)))]))\n",
+  "  (define (interval-length interval) (- (second interval) (first interval)))\n\
+    \  (define (intersection-length interval1 interval2)\n    (max (min (second interval1)\
+    \ (second interval2))\n         (max (first interval1) (first interval2))))\n\
+    \  (define (intersection-interval interval1 interval2)\n    (cons (intersection-length\
+    \ interval1 interval2)\n          (intersection-length interval1 interval2)))\n\
+    \  (define (is-prime? n)\n    (cond ((= n 1) #f)\n          ((= n 2) #t)\n   \
+    \       ((even? n) #f)\n          (else (for/and ([i (in-range 3 n 2)])\n    \
+    \               (not (zero? (modulo n i)))))))\n  (define (intersection-length-is-prime?\
+    \ interval1 interval2)\n    (is-prime? (interval-length (intersection-interval\
+    \ interval1 interval2))))\n  (cond ((> (first interval1) (second interval2)) #f)\n\
+    \        ((> (first interval2) (second interval1)) #f)\n        (else (intersection-length-is-prime?\
+    \ interval1 interval2))))\n", "  (let*\n      ([start1 (car interval1)]\n    \
+    \   [end1 (cadr interval1)]\n       [start2 (car interval2)]\n       [end2 (cadr\
+    \ interval2)])\n    (if (&lt; start1 start2)\n        (intersection interval2\
+    \ interval1)\n        (let ([new-start (max start1 start2)]\n              [new-end\
+    \ (min end1 end2)])\n          (if (&lt; new-start new-end)\n              (define\
+    \ (prime? n)\n                (if (= n 1)\n                    #f\n          \
+    \          (if (= n 2)\n                        #t\n                        (define\
+    \ (checker n i)\n                          (if (= i n)\n                     \
+    \         #t\n                              (if (= (modulo n i) 0)\n         \
+    \                         #f\n                                  (checker n (+\
+    \ i 1)))))\n                        (checker n 2))))\n              (prime? (-\
+    \ new-end new-start))\n              \"NO\"))))\n</code>\nracket environment returns\
+    \ this error :\n    expand: unbound identifier in module in: checker\n", "  (let*\
+    \ ((a (car interval1))\n         (b (cadr interval1))\n         (c (car interval2))\n\
+    \         (d (cadr interval2))\n         (start (max a c))\n         (end (min\
+    \ b d)))\n    (cond\n      [(< start end)\n       (let ((len (- end start)))\n\
+    \         (and (and (> len 0) (and (> len 1) (= 0 (remainder len 2))))\n     \
+    \         (= 1 (remainder len 2))))]\n      [else #f])))\n", "  (if (< (max (car\
+    \ interval1) (car interval2))\n         (min (cadr interval1) (cadr interval2)))\n\
+    \      (list (max (car interval1) (car interval2))\n            (min (cadr interval1)\
+    \ (cadr interval2)))\n      '()))", "  (cond\n    [(and (>= (cadr interval1) (car\
+    \ interval2))\n          (>= (cadr interval2) (car interval1)))\n     (if (= (list-ref\
+    \ (list-ref (list-ref (list-ref (integers-from-interval (list (max (car interval1)\
+    \ (car interval2))\n                                                         \
+    \                             (min (cadr interval1) (cadr interval2)))\n     \
+    \                                                                          (filter\
+    \ prime? (integers-from-interval (list (max (car interval1) (car interval2))\n\
+    \                                                                            \
+    \                                              (min (cadr interval1) (cadr interval2))))))\n\
+    \                                                      0)\n                  \
+    \               0)\n                 1)\n         \"NO\"\n         \"YES\")]\n\
+    \    [else \"NO\"]))\n", "  (define start\n    (if (&gt; (car interval1) (car\
+    \ interval2))\n        (car interval1)\n        (car interval2)))\n  (define end\n\
+    \    (if (&lt; (cdr interval1) (cdr interval2))\n        (cdr interval1)\n   \
+    \     (cdr interval2)))\n  (if (&lt; start end)\n      (if (and (&gt; (length\
+    \ (filter prime? (make-list (- end start) (- end start 1)))) 0)\n            \
+    \   (prime? (- end start)))\n          \"YES\"\n          \"NO\")\n      \"NO\"\
+    ))", "  (if (or (not (intersect? interval1 interval2))\n          (not (prime?\
+    \ (intersection-len interval1 interval2))))\n      \"NO\"\n      \"YES\"))\n",
+  "  (let ([interval1-start (first interval1)]\n        [interval1-end (second interval1)]\n\
+    \        [interval2-start (first interval2)]\n        [interval2-end (second interval2)])\n\
+    \    (cond\n      [(<= interval1-start interval2-start) (list interval2-start\
+    \ interval1-end)]\n      [else (list interval1-start interval2-end)])))\n", " \
+    \ (let ((start (max (car interval1) (car interval2)))\n        (end (min (cadr\
+    \ interval1) (cadr interval2))))\n    (if (&lt;= start end)\n        ;; intersection\
+    \ exists, and its length is end - start + 1\n        (cond ((zero? (remainder\
+    \ (sub1 (- end start)) 2))\n               \"NO\")\n              ((zero? (remainder\
+    \ (sub1 (- end start)) 3))\n               \"NO\")\n              ((zero? (remainder\
+    \ (sub1 (- end start)) 5))\n               \"NO\")\n              ((zero? (remainder\
+    \ (sub1 (- end start)) 7))\n               \"NO\")\n              (else\n    \
+    \           \"YES\"))\n        \"NO\")))\n", "  (cond ((null? interval1) '())\n\
+    \        ((null? interval2) '())\n        ((<= (car interval1) (car interval2))\n\
+    \         (intersection (cdr interval1) interval2))\n        ((> (car interval1)\
+    \ (car interval2))\n         (intersection interval1 (cdr interval2)))))\n", " \
+    \ (let*\n      ((high-start (max (cadr interval1) (cadr interval2)))\n       (low-end\
+    \ (min (car interval1) (car interval2)))\n       (high-start2 (max (car interval1)\
+    \ (car interval2)))\n       (low-end2 (min (cadr interval1) (cadr interval2))))\n\
+    \    (cond\n     ((and (integer? high-start) (integer? low-end))\n      (if (=\
+    \ high-start low-end)\n          \"NO\"\n          (let*\n              ((length\
+    \ (- high-start low-end))\n               (min-start (min (car interval1) (car\
+    \ interval2)))\n               (max-end (max (cadr interval1) (cadr interval2))))\n\
+    \            (if (prime? length)\n                \"YES\"\n                (if\
+    \ (< min-start max-end)\n                    \"NO\"\n                    (intersection\
+    \ interval1 interval2)))))\n      )\n     ((and (integer? high-start2) (integer?\
+    \ low-end2))\n      (if (= high-start2 low-end2)\n          \"NO\"\n         \
+    \ (let*\n              ((length (- high-start2 low-end2))\n               (min-start\
+    \ (min (car interval1) (car interval2)))\n               (max-end (max (cadr interval1)\
+    \ (cadr interval2))))\n            (if (prime? length)\n                \"YES\"\
+    \n                (if (< min-start max-end)\n                    \"NO\"\n    \
+    \                (intersection interval1 interval2)))))\n      )\n     (else\n\
+    \      \"NO\"))))\n", "  (local [(define start1 (first interval1))\n         \
+    \ (define end1 (second interval1))\n          (define start2 (first interval2))\n\
+    \          (define end2 (second interval2))\n          (define (is-intersect)\n\
+    \            (cond [(< start1 start2) (and (<= start2 end1) (<= start1 end2))]\n\
+    \                  [(> start1 start2) (and (<= start1 end2) (<= start2 end1))]\n\
+    \                  [else (= start1 start2)]))\n          (define (intersect-length)\n\
+    \            (cond [(< start1 start2) (min end1 end2)]\n                  [(>\
+    \ start1 start2) (min end1 end2)]\n                  [else (min (- end1 start1)\
+    \ (- end2 start2))]))\n          (define (is-prime number)\n            (local\
+    \ [(define (prime-iter curr-divisor)\n                       (cond [(> (* curr-divisor\
+    \ curr-divisor) number) #t]\n                             [(zero? (remainder number\
+    \ curr-divisor)) #f]\n                             [else (prime-iter (+ curr-divisor\
+    \ 1))]))]\n                     (prime-iter 2)))\n          (define (is-prime-intersect)\n\
+    \            (is-prime (intersect-length)))\n          (define (is-intersect-exist)\n\
+    \            (cond [(< start1 start2) (and (<= start2 end1) (<= start1 end2))]\n\
+    \                  [(> start1 start2) (and (<= start1 end2) (<= start2 end1))]\n\
+    \                  [else (= start1 start2)]))]\n        (cond [(is-intersect-exist)\
+    \ (is-prime-intersect)]\n              [else #f])))\n", "  (let* ([start1 (first\
+    \ interval1)]\n         [end1 (second interval1)]\n         [start2 (first interval2)]\n\
+    \         [end2 (second interval2)])\n    (if (and (&lt;= start2 end1) (&lt;=\
+    \ start1 end2))\n        (let* ([bigger (if (&gt; start1 start2) start1 start2)]\n\
+    \               [smaller (if (&lt; end1 end2) end1 end2)]\n               [len\
+    \ (- smaller bigger 1)])\n          (if (eq? 0 (modulo len 2))\n             \
+    \ \"NO\"\n              \"YES\"))\n        \"NO\")))\n</code>\n", "  (define (interval-length\
+    \ interval)\n    (- (cadr interval) (car interval)))\n  (define (intersecting?\
+    \ interval1 interval2)\n    (and (>= (car interval1) (car interval2))\n      \
+    \   (<= (car interval1) (cadr interval2))\n         (>= (cadr interval1) (car\
+    \ interval2))\n         (<= (cadr interval1) (cadr interval2))))\n  (define (between?\
+    \ x interval)\n    (and (>= x (car interval))\n         (<= x (cadr interval))))\n\
+    \  (define (check-prime n)\n    (define (is-prime? n divisor)\n      (cond\n \
+    \       [(= divisor n) #t]\n        [(zero? (modulo n divisor)) #f]\n        [else\
+    \ (is-prime? n (+ divisor 1))]))\n    (is-prime? n 2))\n  (define (intersection-point\
+    \ interval1 interval2)\n    (cond\n      [(between? (car interval1) interval2)\
+    \ (car interval1)]\n      [(between? (cadr interval1) interval2) (cadr interval1)]\n\
+    \      [(between? (car interval2) interval1) (car interval2)]\n      [(between?\
+    \ (cadr interval2) interval1) (cadr interval2)]\n      [else 0]))\n  (define (intersection-length\
+    \ interval1 interval2)\n    (cond\n      [(not (intersecting? interval1 interval2))\
+    \ 0]\n      [(= (intersection-point interval1 interval2) (car interval1))\n  \
+    \     (- (cadr interval1) (car interval2))]\n      [(= (intersection-point interval1\
+    \ interval2) (cadr interval1))\n       (- (cadr interval2) (car interval1))]\n\
+    \      [(= (intersection-point interval1 interval2) (car interval2))\n       (-\
+    \ (cadr interval2) (car interval1))]\n      [(= (intersection-point interval1\
+    \ interval2) (cadr interval2))\n       (- (cadr interval1) (car interval2))]\n\
+    \      [else 0]))\n  (cond\n    [(= (intersection-length interval1 interval2)",
+  "  (let ((start (max (car interval1) (car interval2)))\n        (end (min (cadr\
+    \ interval1) (cadr interval2))))\n    (if (&lt; start end)\n        (if (prime?\
+    \ (- end start))\n            \"YES\"\n            \"NO\")\n        \"NO\")))\n",
+  "  (define (max-min max min)\n    (if (> max min) max min))\n  (define (min-max\
+    \ max min)\n    (if (< max min) max min))\n  (let ([start (max-min (car interval1)\
+    \ (car interval2))]\n        [end (min-max (cadr interval1) (cadr interval2))])\n\
+    \    (if (>= start end) \"NO\"\n        (let ([len (- end start)])\n         \
+    \ (if (and (integer? len) (> len 0))\n              (if (prime? len) \"YES\" \"\
+    NO\")\n              \"NO\")))))\n", "  (let* ([n1 (list-ref interval1 0)]\n \
+    \        [n2 (list-ref interval1 1)]\n         [n3 (list-ref interval2 0)]\n \
+    \        [n4 (list-ref interval2 1)]\n         [n5 (min n2 n4)]\n         [n6\
+    \ (max n1 n3)])\n    (if (&lt;= n5 n6)\n        (if (prime? (- n5 n6))\n     \
+    \       \"YES\"\n            \"NO\")\n        \"NO\")))\n", "  (define start1\
+    \ (car interval1))\n  (define end1 (cadr interval1))\n  (define start2 (car interval2))\n\
+    \  (define end2 (cadr interval2))\n  (define start (max start1 start2))\n  (define\
+    \ end (min end1 end2))\n  (define (is-prime? num)\n    (define (prime? num acc)\n\
+    \      (if (= acc 1) #t\n          (if (= (modulo num acc) 0) #f\n           \
+    \   (prime? num (- acc 1)))))\n    (prime? num (quotient num 2)))\n  (if (<= start\
+    \ end)\n      (if (is-prime? (- end start)) \"YES\" \"NO\")\n      \"NO\"))\n",
+  "  (let* ([x (max (car interval1) (car interval2))]\n         [y (min (cadr interval1)\
+    \ (cadr interval2))])\n    (if (&lt; x y)\n        (if (= 2 (length (filter (lambda\
+    \ (z) (= 0 (mod y z))) (range 1 (add1 y))))))\n            \"YES\"\n         \
+    \   \"NO\")\n        \"NO\")))\n", "  (if (&lt; (cdr interval1) (car interval2))\n\
+    \      \"NO\"\n      (let*\n          ((interval_intersection (cons (max (car\
+    \ interval1) (car interval2))\n                                        (min (cdr\
+    \ interval1) (cdr interval2))))\n           (len (max (- (cdr interval_intersection)\
+    \ (car interval_intersection)) 0)))\n        (if (equal? len 0)\n            \"\
+    NO\"\n            (if (prime? len)\n                \"YES\"\n                \"\
+    NO\")))))\n", "    (values (max (car interval1) (car interval2))\n           \
+    \ (min (cadr interval1) (cadr interval2))))\n", "  (define (intersection-helper\
+    \ interval)\n    (define (min-helper x1 x2)\n      (if (&lt; x1 x2) x1 x2))\n\
+    \    (define (max-helper x1 x2)\n      (if (&gt; x1 x2) x1 x2))\n    (define (min-end-helper\
+    \ interval)\n      (min-helper (cadr interval) (cadr interval2)))\n    (define\
+    \ (max-start-helper interval)\n      (max-helper (car interval) (car interval2)))\n\
+    \    (list (max-start-helper interval) (min-end-helper interval)))\n  (define\
+    \ (intersection-check interval)\n    (if (&lt; (car interval) (cadr interval))\
+    \ \"YES\" \"NO\"))\n  (if (&lt; (cadr interval1) (car interval2))\n      \"NO\"\
+    \n      (intersection-check (intersection-helper interval1))))\n</code>\nWhen\
+    \ I run the Racket IDE with <code>#lang racket</code> the <code>intersection</code>\
+    \ function runs fine. \nAlso, the exercise requires me to use the <code>#lang\
+    \ eopl</code> language, which I did and then I get this error:\n<code>;Welcome\
+    \ to DrRacket, version 6.11 [3m].", "  (cond\n    [(< (cadr interval1) (car interval2))\
+    \ \"NO\"]\n    [(> (car interval1) (cadr interval2)) \"NO\"]\n    [else\n    \
+    \ (if (prime? (- (cadr interval1) (car interval2)))\n         \"YES\"\n      \
+    \   \"NO\")]))\n", "  (define (is-prime? n)\n    (cond [(= n 1) #f]\n        \
+    \  [(= n 2) #t]\n          [(= (remainder n 2) 0) #f]\n          [else\n     \
+    \      (let loop ([i 3])\n             (cond [(= i n) #t]\n                  \
+    \ [(= (remainder n i) 0) #f]\n                   [else (loop (+ i 2))]))]))\n\
+    \  (let* ([start1 (car interval1)]\n         [end1 (cadr interval1)]\n       \
+    \  [start2 (car interval2)]\n         [end2 (cadr interval2)])\n    (if (and (&lt;=\
+    \ start1 end1)\n             (&lt;= start2 end2)\n             (&lt;= start1 start2)\n\
+    \             (&lt;= end1 end2))\n        (is-prime? (- end1 start2))\n      \
+    \  \"NO\")))\n", "  (define (interval-length interval) (- (cadr interval) (car\
+    \ interval)))\n  (define (prime? n)\n    (define (prime-rec n i)\n      (if (=\
+    \ n 1)\n        #f\n        (if (= n i)\n          #t\n          (if (= (modulo\
+    \ n i) 0)\n            #f\n            (prime-rec n (+ i 1))))))\n  (prime-rec\
+    \ n 2))\n  (define (intersection-length interval1 interval2)\n    (if (or (&lt;\
+    \ (cadr interval1) (car interval2)) (&lt; (cadr interval2) (car interval1)))\n\
+    \      -1\n      (min (cadr interval1) (cadr interval2)) - (max (car interval1)\
+    \ (car interval2))))\n  (define (intersection? interval1 interval2)\n    (let\
+    \ ((n (intersection-length interval1 interval2)))\n      (if (= n -1)\n      \
+    \  \"NO\"\n        (if (prime? n)\n          \"YES\"\n          \"NO\"))))\n \
+    \ (intersection? interval1 interval2))\n</code>\nand here is the error:\n<code>cd\
+    \ C:\\Users\\Omar\\Desktop\\prog\\prac\\prime\n\"C:\\Program Files\\Racket\\racket.exe\"\
+    \ --lib \"C:\\Program Files\\Racket\\collects\" \"intersection.rkt\"\ninternal\
+    \ error in run-timer: [thread 1] context...:\n\n[thread 1] context...:\n\nMzScheme\
+    \ runtime error: failed to run user handler\n\nargs: (0)\n\ncontext...:\n\n[thread\
+    \ 1] context...:\n\nargs: (0)\n\ncontext...:\n\n[thread 1] context...:\n\nargs:\
+    \ (0)\n\ncontext...:\n\n[thread 1] context...:\n\nargs: (0)\n\ncontext...:\n\n\
+    [thread 1] context...:\n\nargs: (0)\n\ncontext...:\n\n[thread 1] context...:\n\
+    \nargs: (0)\n\ncontext...:\n\n[thread 1] context...:\n\nargs: (0)\n\ncontext...:\n\
+    \n[thread 1] context...:\n", "  (let\n      ([start1 (first interval1)]\n    \
+    \   [end1 (last interval1)]\n       [start2 (first interval2)]\n       [end2 (last\
+    \ interval2)])\n    (cond\n      [(and (<= start1 start2) (<= start2 end1)) (if\
+    \ (<= end2 end1) (cons start2 end2) (cons start2 end1))]\n      [(and (<= start2\
+    \ start1) (<= start1 end2)) (if (<= end1 end2) (cons start1 end1) (cons start1\
+    \ end2))]\n      [else (cons 'no 'no)])))\n", "  \"Return the length of the intersection\
+    \ of the given intervals.\"\n  (let* ([[start1 end1] interval1]\n         [[start2\
+    \ end2] interval2]\n         (start (max start1 start2))\n         (end (min end1\
+    \ end2)))\n    (if (&lt;= start end)\n        (- end start)\n        0)))\n",
+  "  (define (interval-length interval)\n    (- (cadr interval) (car interval)))\n\
+    \  (define (intersection-length interval1 interval2)\n    (interval-length \n\
+    \     (list (max (car interval1) (car interval2))\n           (min (cadr interval1)\
+    \ (cadr interval2)))))\n  (define (intersect? interval1 interval2)\n    (if (&gt;\
+    \ (car interval1) (cadr interval2))\n        #f\n        (if (&gt; (car interval2)\
+    \ (cadr interval1))\n            #f\n            #t)))\n  (define (prime? n)\n\
+    \    (if (= n 2)\n        #t\n        (if (= n 1)\n            #f\n          \
+    \  (not (some (lambda (x)\n                         (= (modulo n x) 0))\n    \
+    \                   (range 2 n))))))\n  (define (is-intersection-prime? interval1\
+    \ interval2)\n    (if (intersect? interval1 interval2)\n        (prime? (intersection-length\
+    \ interval1 interval2))\n        #f))\n  (is-intersection-prime? interval1 interval2))\n\
+    </code>\n", "  (let ([smaller (if (and (&lt;= (first interval1) (first interval2))\n\
+    \                        (&lt;= (second interval1) (second interval2)))\n    \
+    \                 interval1\n                     interval2)]\n        [larger\
+    \ (if (and (&lt;= (first interval1) (first interval2))\n                     \
+    \   (&lt;= (second interval1) (second interval2)))\n                    interval2\n\
+    \                    interval1)])\n    (if (&lt; (second smaller) (first larger))\n\
+    \        \"NO\"\n        (let ([intersection-length (- (min (second smaller) (second\
+    \ larger))\n                                      (max (first smaller) (first\
+    \ larger)))])\n          (if (prime? intersection-length)\n              \"YES\"\
+    \n              \"NO\")))))\n", "  (let* ([start1 (car interval1)]\n         [end1\
+    \ (cadr interval1)]\n         [start2 (car interval2)]\n         [end2 (cadr interval2)])\n\
+    \    (cond\n      [(or (< start1 start2) (< end1 end2)) \"NO\"]\n      [(and (>\
+    \ start1 start2) (> end1 end2)) \"NO\"]\n      [(let* ([start (if (> start1 start2)\
+    \ start1 start2)]\n               [end (if (< end1 end2) end1 end2)]\n       \
+    \        [len (- end start)])\n         (if (or (= start end)\n              \
+    \   (= len 1)\n                 (= len 2))\n             \"NO\"\n            \
+    \ (if (zero? (modulo len 2))\n                 \"NO\"\n                 (let*\
+    \ ([sqrt-len (sqrt len)]\n                        [prime? #t])\n             \
+    \      (for ([i 3 (+ i 2)])\n                     (if (> i sqrt-len)\n       \
+    \                  (void)\n                         (if (zero? (modulo len i))\n\
+    \                             (begin\n                               (set! prime?\
+    \ #f)\n                               (void))\n                             (void))))\n\
+    \                   (if prime?\n                       \"YES\"\n             \
+    \          \"NO\")))))])\n      [(let* ([start (if (< start1 start2) start1 start2)]\n\
+    \               [end (if (> end1 end2) end1 end2)]\n               [len (- end\
+    \ start)])\n         (if (or (= start end)\n                 (= len 1)\n     \
+    \            (= len 2))\n             \"NO\"\n             (if (zero? (modulo\
+    \ len 2))\n                 \"NO\"\n                 (let* ([sqrt-len (sqrt len)]\n\
+    \                        [prime? #t])\n                   (for ([i 3 (+ i 2)])\n\
+    \                     (if (> i sqrt-len)\n                         (void)\n  \
+    \                       (if (zero? (modulo len i))\n                         \
+    \    (begin\n                               (set! prime? #f)\n               \
+    \                (void))\n                             (void))))\n           \
+    \        (if prime?\n                       \"YES\"\n                       \"\
+    NO\")))))])\n      [else \"NO\"])))\n", "  (let ([start1 (car interval1)]\n  \
+    \      [end1 (cadr interval1)]\n        [start2 (car interval2)]\n        [end2\
+    \ (cadr interval2)])\n    (if (&lt; end1 start2)\n        \"NO\"\n        (if\
+    \ (&lt; end2 start1)\n            \"NO\"\n            (if (&lt; start1 start2)\n\
+    \                (if (&lt; end1 end2)\n                    (if (prime? (- end2\
+    \ start2))\n                        \"YES\"\n                        \"NO\")\n\
+    \                    (if (prime? (- end1 start2))\n                        \"\
+    YES\"\n                        \"NO\"))\n                (if (&lt; end1 end2)\n\
+    \                    (if (prime? (- end1 start1))\n                        \"\
+    YES\"\n                        \"NO\")\n                    (if (prime? (- end2\
+    \ start1))\n                        \"YES\"\n                        \"NO\")))))))",
+  "    (if (< (first interval1) (first interval2))\n        (intersection interval2\
+    \ interval1)\n        (if (< (first interval2) (second interval1))\n         \
+    \   (if (> (second interval2) (second interval1))\n                (list (first\
+    \ interval2) (second interval1))\n                interval2)\n            '())))\n",
+  "  \"intersection of two intervals\"\n  (define (interval-intersection-length inter1\
+    \ inter2)\n    (if (&lt;= (second inter1) (first inter2))\n        0\n       \
+    \ (max (- (second inter1) (first inter2)) 0)))\n  (define (check-if-prime length)\n\
+    \    (if (&lt; length 2)\n        'NO\n        (define (prime? n)\n          (define\
+    \ (is-divisible? n d)\n            (= (remainder n d) 0))\n          (define (next-divisor\
+    \ n d)\n            (if (is-divisible? n d)\n                d\n             \
+    \   (next-divisor n (+ d 1))))\n          (= n (next-divisor n 2)))\n    (if (prime?\
+    \ length)\n        'YES\n        'NO)))\n  (check-if-prime (interval-intersection-length\
+    \ interval1 interval2)))\n</code>\nThe code seems to be working for the test cases.\n\
+    What I'm struggling with is solving the task without using define or cond statements,\n\
+    and only using lambda functions.\nIf you have any idea how to do that, please\
+    \ answer me.\nThanks!\n\n\nA:\n\nAs I wrote in my comment above, <code>define</code>\
+    \ is not a function, it's a language construct. However, there are other ways\
+    \ to express the same idea, sometimes more elegantly, more clearly and in a way\
+    \ that resembles more closely the original mathematical definition. In the case\
+    \ of <code>define</code>, you can use <code>letrec</code>:\n<code>(letrec ((f\
+    \ (lambda (x) (+ x 1))))\n  (f 1))\n</code>\n<code>define</code> is a special\
+    \ form and cannot be used as a function. But that doesn't mean there aren't other\
+    \ ways to express the same ideas; it's just a question of how well does it translate\
+    \ mathematically.\n", "  (let* ((int1-start (car interval1))\n         (int1-end\
+    \ (cadr interval1))\n         (int2-start (car interval2))\n         (int2-end\
+    \ (cadr interval2))\n         (int-start (max int1-start int2-start))\n      \
+    \   (int-end (min int1-end int2-end)))\n    (cond\n      [(and (= int-start int1-start)\
+    \ (= int-end int1-end)) \"YES\"]\n      [(and (= int-start int2-start) (= int-end\
+    \ int2-end)) \"YES\"]\n      [(or (< int-start int-end) (= int-start int-end))\n\
+    \       (cond\n         [(prime? (- int-end int-start)) \"YES\"]\n         [else\
+    \ \"NO\"])]\n      [else \"NO\"])))\n", "    (let* ([start1 (car interval1)]\n\
+    \           [end1 (cadr interval1)]\n           [start2 (car interval2)]\n   \
+    \        [end2 (cadr interval2)])\n        (cond\n            [(or (< end1 start2)\
+    \ (< end2 start1)) \"NO\"]\n            [else\n             (define (intersection-length\
+    \ start1 end1 start2 end2)\n                 (min end1 end2) - (max start1 start2)\
+    \ + 1)\n             (let* ([ilength (intersection-length start1 end1 start2 end2)]\n\
+    \                    [prime? (lambda (x)\n                              (if (<\
+    \ x 2)\n                                  #f\n                               \
+    \   (if (zero? (remainder x 2))\n                                      #f\n  \
+    \                                    (let loop ([x 3])\n                     \
+    \                     (if (< (* x x) x)\n                                    \
+    \          #t\n                                              (if (zero? (remainder\
+    \ x x))\n                                                  #f\n              \
+    \                                    (loop (+ x 2))))))))])\n                (if\
+    \ (prime? ilength)\n                    \"YES\"\n                    \"NO\"))])))\n",
+  "  (let* ([a (min (car interval1) (car interval2))]\n         [b (max (cadr interval1)\
+    \ (cadr interval2))]\n         [intersect (list (max (car interval1) (car interval2))\n\
+    \                          (min (cadr interval1) (cadr interval2)))])\n    (if\
+    \ (&lt; (car intersect) (cadr intersect))\n        (if (prime? (- (cadr intersect)\
+    \ (car intersect)))\n            \"YES\"\n            \"NO\")\n        \"NO\"\
+    )))\n", "  (define (interval-length interval)\n    (- (cadr interval) (car interval)))\n\
+    \  (define (intersection-interval i1 i2)\n    (if (&lt; (cadr i1) (car i2))\n\
+    \        i2\n        (list (max (car i1) (car i2))\n              (min (cadr i1)\
+    \ (cadr i2)))))\n  (define (is-prime? n)\n    (if (= n 2) #t\n        (if (or\
+    \ (even? n) (&lt; n 2)) #f\n            (let loop ((i 3))\n              (if (&gt;\
+    \ i (sqrt n)) #t\n                  (if (zero? (modulo n i)) #f\n            \
+    \          (loop (+ i 2))))))))\n  (let ((intersection (intersection-interval\
+    \ interval1 interval2)))\n    (if (null? intersection) \"NO\"\n        (if (is-prime?\
+    \ (interval-length intersection)) \"YES\" \"NO\"))))\n</code>\n", "    (cond [(and\
+    \ (< (car interval1) (car interval2)) (< (car interval2) (cdr interval1)))\n \
+    \          (cond [(prime-interval? interval2) \"YES\"]\n                 [else\
+    \ \"NO\"])]\n          [(and (< (car interval2) (car interval1)) (< (car interval1)\
+    \ (cdr interval2)))\n           (cond [(prime-interval? interval1) \"YES\"]\n\
+    \                 [else \"NO\"])]\n          [else \"NO\"]))", "  (define start1\
+    \ (car interval1))\n  (define end1 (cadr interval1))\n  (define start2 (car interval2))\n\
+    \  (define end2 (cadr interval2))\n  (define start (max start1 start2))\n  (define\
+    \ end (min end1 end2))\n  (if (&lt; start end)\n      (if (prime? (- end start))\n\
+    \          \"YES\"\n          \"NO\")\n      \"NO\"))", "  (let ([start (- (max\
+    \ (car interval1) (car interval2)))]\n        [end (min (cadr interval1) (cadr\
+    \ interval2))])\n    (if (< start end)\n        (if (prime? (- end start))\n \
+    \           \"YES\"\n            \"NO\")\n        \"NO\")))\n", "  (define (interval-intersect?\
+    \ x1 y1 x2 y2)\n    (let ((interval-length (if (&lt; x1 x2)\n                \
+    \               (cond [(&lt; y1 x2) 0]\n                                     [(&lt;\
+    \ y1 y2) (- y1 x2)]\n                                     [else (- y2 x2)])\n\
+    \                               (cond [(&lt; y2 x1) 0]\n                     \
+    \                [(&lt; y2 y1) (- y2 x1)]\n                                  \
+    \   [else (- y1 x1)]))))\n      (define (is-prime? x)\n        (cond [(= x 1)\
+    \ #f]\n              [(= x 2) #t]\n              [(= (remainder x 2) 0) #f]\n\
+    \              [else (define (check-divisor i)\n                      (cond [(&gt;\
+    \ i (sqrt x)) #t]\n                            [(= (remainder x i) 0) #f]\n  \
+    \                          [else (check-divisor (+ i 1))]))\n                \
+    \    (check-divisor 3)]))\n      (if (is-prime? interval-length)\n          \"\
+    YES\"\n          \"NO\")))\n  (interval-intersect? (car interval1) (cadr interval1)\
+    \ (car interval2) (cadr interval2)))\n</code>\n", "  (let ((lo (max (car interval1)\
+    \ (car interval2)))\n        (hi (min (cadr interval1) (cadr interval2))))\n \
+    \   (if (&lt; lo hi)\n        (if (prime? (- hi lo))\n            \"YES\"\n  \
+    \          \"NO\")\n        \"NO\")))\n", "  (define (is-prime n)\n    (define\
+    \ (check n i)\n      (cond ((= i n) #t)\n            ((= (modulo n i) 0) #f)\n\
+    \            (else (check n (+ i 1)))))\n    (if (or (&lt; n 2) (= n 2))\n   \
+    \     #t\n        (check n 2)))\n  (define (intersect interval1 interval2)\n \
+    \   (cond ((or (&lt; (car interval1) (car interval2)) (&gt; (cadr interval1) (cadr\
+    \ interval2)))\n           '())\n          ((&lt; (car interval2) (car interval1))\n\
+    \           (intersect interval1 (list (car interval1) (cadr interval2))))\n \
+    \         ((&gt; (cadr interval2) (cadr interval1))\n           (intersect interval1\
+    \ (list (car interval2) (cadr interval1))))\n          (else interval1)))\n  (cond\
+    \ ((null? (intersect interval1 interval2)) \"NO\")\n        ((is-prime (- (cadr\
+    \ (intersect interval1 interval2)) (car (intersect interval1 interval2)))) \"\
+    YES\")\n        (else \"NO\")))\n</code>\n", "  (let ([mstart (max (car interval1)\
+    \ (car interval2))]\n        [mend (min (cadr interval1) (cadr interval2))])\n\
+    \    (cond\n      [(> mstart mend) \"NO\"]\n      [(> (cadr interval1) (cadr interval2))\
+    \ \"NO\"]\n      [(> (car interval1) (car interval2)) \"NO\"]\n      [(= mstart\
+    \ mend) (if (prime? mstart) \"YES\" \"NO\")]\n      [else \"YES\"])))\n", "  (match\
+    \ interval1\n    [(list start1 end1)\n     (match interval2\n       [(list start2\
+    \ end2)\n        (cond\n          [(and (<= start1 start2)\n                (<=\
+    \ start2 end1))\n           (list start2 end1)]\n          [(and (<= start2 start1)\n\
+    \                (<= start1 end2))\n           (list start1 end2)]\n         \
+    \ [else '()])]\n       [(else '())])]\n    [(else '())])\n)\n", "  (cond\n   \
+    \ [(and (and (not (= (car interval1) (car interval2)))\n               (not (=\
+    \ (cadr interval1) (cadr interval2))))\n          (and (< (car interval1) (car\
+    \ interval2))\n               (< (cadr interval1) (cadr interval2))))\n     \"\
+    NO\"]\n    [(or (or (or (equal? (car interval1) (car interval2))\n           \
+    \      (equal? (cadr interval1) (cadr interval2)))\n             (and (and (<\
+    \ (car interval1) (car interval2))\n                        (< (cadr interval1)\
+    \ (cadr interval2)))\n                  (and (< (car interval2) (car interval1))\n\
+    \                       (< (cadr interval2) (cadr interval1)))))\n         (equal?\
+    \ interval1 interval2))\n     \"YES\"]\n    [(and (and (< (car interval1) (car\
+    \ interval2))\n               (< (cadr interval1) (cadr interval2)))\n       \
+    \   (and (< (car interval2) (car interval1))\n               (< (cadr interval2)\
+    \ (cadr interval1))))\n     (is-prime (abs (- (car interval1) (car interval2))))]\n\
+    \    [(and (and (< (car interval1) (car interval2))\n               (< (cadr interval1)\
+    \ (cadr interval2)))\n          (and (< (car interval2) (car interval1))\n   \
+    \            (< (cadr interval2) (cadr interval1))))\n     (is-prime (abs (- (cadr\
+    \ interval1) (cadr interval2))))]\n    [(and (and (< (car interval1) (car interval2))\n\
+    \               (< (cadr interval1) (cadr interval2)))\n          (and (< (car\
+    \ interval2) (car interval1))\n               (< (cadr interval2) (cadr interval1))))\n\
+    \     (is-prime (abs (- (car interval1) (car interval2))))]\n    [(and (and (<\
+    \ (car interval1) (car interval2))\n               (< (cadr interval1) (cadr interval2)))\n\
+    \          (and (< (car interval2) (car interval1))\n               (< (cadr interval2)\
+    \ (cadr interval1))))\n     (is-prime (abs (- (c", "  (define (is-intersect? interval1\
+    \ interval2)\n    (cond\n      ((and (< (car interval1) (car interval2)) (< (car\
+    \ interval2) (cadr interval1))) #t)\n      ((and (< (car interval2) (car interval1))\
+    \ (< (car interval1) (cadr interval2))) #t)\n      (else #f)))\n  (define (min2\
+    \ a b)\n    (if (< a b) a b))\n  (define (max2 a b)\n    (if (> a b) a b))\n \
+    \ (define (intersect interval1 interval2)\n    (define (length interval)\n   \
+    \   (if (< (car interval) (cadr interval))\n          (- (cadr interval) (car\
+    \ interval))\n          (- (car interval) (cadr interval))))\n    (define (distance\
+    \ a b)\n      (if (< a b)\n          (- b a)\n          (- a b)))\n    (define\
+    \ (is-prime? n)\n      (define (iter i)\n        (if (= i n) #t\n            (if\
+    \ (= (modulo n i) 0) #f\n                (iter (+ i 1)))))\n      (iter 2))\n\
+    \    (cond\n      ((and (is-intersect? interval1 interval2) (not (= (length interval1)\
+    \ 0)) (not (= (length interval2) 0)))\n       (is-prime? (distance (min2 (car\
+    \ interval1) (car interval2)) (max2 (cadr interval1) (cadr interval2)))))\n  \
+    \    (else #f)))\n  (if (is-intersect? interval1 interval2)\n      (if (intersect\
+    \ interval1 interval2) \"YES\" \"NO\")\n      \"NO\"))", "  (define (intersection-helper\
+    \ interval1 interval2)\n    (if (and (>= (car interval1) (car interval2))\n  \
+    \           (<= (car interval1) (cdr interval2)))\n        (values (car interval1)\
+    \ (cdr interval2))\n        (if (and (>= (car interval2) (car interval1))\n  \
+    \               (<= (car interval2) (cdr interval1)))\n            (values (car\
+    \ interval2) (cdr interval1))\n            (if (and (>= (car interval1) (car interval2))\n\
+    \                     (>= (cdr interval1) (cdr interval2)))\n                (values\
+    \ (car interval2) (cdr interval2))\n                (if (and (>= (car interval2)\
+    \ (car interval1))\n                         (>= (cdr interval2) (cdr interval1)))\n\
+    \                    (values (car interval1) (cdr interval1))\n              \
+    \      (values -1 -1)))))\n      )\n  (define (intersection-helper2 interval1\
+    \ interval2)\n    (cond\n      [(and (>= (car interval1) (car interval2))\n  \
+    \          (<= (car interval1) (cdr interval2)))\n       (values (car interval1)\
+    \ (cdr interval2))]\n      [(and (>= (car interval2) (car interval1))\n      \
+    \      (<= (car interval2) (cdr interval1)))\n       (values (car interval2) (cdr\
+    \ interval1))]\n      [(and (>= (car interval1) (car interval2))\n           \
+    \ (>= (cdr interval1) (cdr interval2)))\n       (values (car interval2) (cdr interval2))]\n\
+    \      [(and (>= (car interval2) (car interval1))\n            (>= (cdr interval2)\
+    \ (cdr interval1)))\n       (values (car interval1) (cdr interval1))]\n      [else\
+    \ (values -1 -1)]))\n  (define (is-prime? n)\n    (if (= n 1) #f\n        (define\
+    \ (helper num)\n          (if (= num n) #t\n              (if (= (modulo n num)\
+    \ 0) #f\n                  (helper (+ num 1)))))\n        (", "  (let* ([start1\
+    \ (car interval1)]\n         [end1 (cadr interval1)]\n         [start2 (car interval2)]\n\
+    \         [end2 (cadr interval2)])\n    (if (and (&lt;= start2 end1) (&lt;= start1\
+    \ end2))\n        (if (= (length (intersection-list start1 end1 start2 end2))\
+    \ 0)\n            \"NO\"\n            (if (is-prime (length (intersection-list\
+    \ start1 end1 start2 end2)))\n                \"YES\"\n                \"NO\"\
+    ))\n        \"NO\")))\n", "  (let* ([lowest-start (min (car interval1) (car interval2))]\n\
+    \         [highest-end (max (cadr interval1) (cadr interval2))]\n         [intersection\
+    \ (make-interval lowest-start highest-end)])\n    (displayln intersection)\n \
+    \   (if (&lt; (car intersection) (cadr intersection))\n        (if (prime? (-\
+    \ (cadr intersection) (car intersection) -1))\n            \"YES\"\n         \
+    \   \"NO\")\n        \"NO\")))\n", "  (let* ([a (min (vector-ref interval1 0)\
+    \ (vector-ref interval2 0))]\n         [b (max (vector-ref interval1 1) (vector-ref\
+    \ interval2 1))]\n         [c (max (vector-ref interval1 0) (vector-ref interval2\
+    \ 0))]\n         [d (min (vector-ref interval1 1) (vector-ref interval2 1))])\n\
+    \    (cond [(or (&lt; c a) (&gt; d b)) \"NO\"]\n          [(&lt;= (- d a) 1) \"\
+    NO\"]\n          [else (if (prime? (- d a)) \"YES\" \"NO\")])))\n</code>\nThe\
+    \ better solution with improved readability:\n<code>#lang racket\n", "  (define\
+    \ a (max (car interval1) (car interval2)))\n  (define b (min (cadr interval1)\
+    \ (cadr interval2)))\n  (cond\n    ((or (< a b) (= a b))\n     (cond\n       ((and\
+    \ (< a b) (= a b)) \"NO\")\n       ((prime? (- b a)) \"YES\")\n       (else \"\
+    NO\")))\n    (else \"NO\")))\n", "  (define (interval-len interval) (- (cadr interval)\
+    \ (car interval)))\n  (define (interval-intersect? interval1 interval2)\n    (and\
+    \ (>= (cadr interval1) (car interval2))\n         (>= (cadr interval2) (car interval1))))\n\
+    \  (let ((intersection-len (- (interval-len interval1)\n                     \
+    \        (interval-len interval2))))\n    (if (interval-intersect? interval1 interval2)\n\
+    \        (if (prime? intersection-len)\n            \"YES\"\n            \"NO\"\
+    )\n        \"NO\")))\n", "  (let* ([start-1 (car interval1)]\n         [end-1\
+    \ (cadr interval1)]\n         [start-2 (car interval2)]\n         [end-2 (cadr\
+    \ interval2)])\n    (if (&lt;= end-1 start-2)\n        \"NO\"\n        (let* ([start\
+    \ (max start-1 start-2)]\n               [end (min end-1 end-2)])\n          (if\
+    \ (&lt; start end)\n              (let* ([length (- end start)])\n           \
+    \     (if (prime? length)\n                    \"YES\"\n                    \"\
+    NO\"))\n              \"NO\")))))\n", "  (if (not (intersect? interval1 interval2))\n\
+    \      \"NO\"\n      (if (prime? (length-of-intersection interval1 interval2))\n\
+    \          \"YES\"\n          \"NO\")))\n", "  (if (cond\n       [(and (<= (car\
+    \ interval1) (car interval2)) (<= (car interval2) (cdr interval1)))\n        (cond\n\
+    \         [(and (<= (car interval2) (cdr interval1)) (<= (cdr interval1) (cdr\
+    \ interval2)))\n          (cons (car interval2) (cdr interval1))]\n         [(and\
+    \ (<= (car interval1) (cdr interval2)) (<= (cdr interval2) (cdr interval1)))\n\
+    \          (cons (car interval1) (cdr interval2))])]\n       [(and (<= (car interval2)\
+    \ (car interval1)) (<= (car interval1) (cdr interval2)))\n        (cond\n    \
+    \     [(and (<= (car interval1) (cdr interval2)) (<= (cdr interval2) (cdr interval1)))\n\
+    \          (cons (car interval1) (cdr interval2))]\n         [(and (<= (car interval2)\
+    \ (cdr interval1)) (<= (cdr interval1) (cdr interval2)))\n          (cons (car\
+    \ interval2) (cdr interval1))])])\n      (define subresult\n        (sub1 (cons\
+    \ (cdr (intersection interval1 interval2)) (car (intersection interval1 interval2)))))\n\
+    \      (if (equal? (length subresult) 0)\n          \"NO\"\n          (cond\n\
+    \           [(equal? (length subresult) 1) \"YES\"]\n           [(equal? (cdr\
+    \ subresult) 2) \"YES\"]\n           [else \"NO\"])))\n  \"NO\")\n", "  (if (and\
+    \ (&gt;= (first interval1) (first interval2))\n           (&lt;= (first interval1)\
+    \ (second interval2)))\n      \"YES\"\n      \"NO\"))\n", "  (define (is-prime?\
+    \ n)\n    (if (&lt; n 2)\n        #f\n        (not (for/or ([x (in-range (sub1\
+    \ n) 2)]\n                      #:when (zero? (modulo n x)))\n               \
+    \    #t))))\n  (define (interval-length interval)\n    (subtract (cadr interval)\
+    \ (car interval)))\n  (define (intersect interval1 interval2)\n    (define (between?\
+    \ a low high)\n      (and (&lt;= low a) (&lt;= a high)))\n    (define (interval-points\
+    \ interval)\n      (for/list ([i (in-range (car interval) (cadr interval))])\n\
+    \        i))\n    (let* ([p1 (interval-points interval1)]\n           [p2 (interval-points\
+    \ interval2)]\n           [i (find common-points p1)])\n      (and i (cons (cons\
+    \ (car i) (car i)) '()))))\n  (let* ([interval (intersect interval1 interval2)])\n\
+    \    (if interval\n        (if (is-prime? (interval-length interval))\n      \
+    \      \"YES\"\n            \"NO\")\n        \"NO\")))\n", "  (define (intersect?\
+    \ interval1 interval2)\n    (and (&gt;= (cadr interval1) (car interval2))\n  \
+    \       (&lt;= (car interval1) (cadr interval2))))\n  (define (intersection intervals)\n\
+    \    (let ((max (apply max (map car intervals)))\n          (min (apply min (map\
+    \ cadr intervals))))\n      (if (&lt;= max min) `(,max ,min) #f)))\n  (define\
+    \ (is-prime? n)\n    (define (find-factor n test-factor)\n      (if (&gt; test-factor\
+    \ (sqrt n)) n\n          (if (= (modulo n test-factor) 0) test-factor\n      \
+    \        (find-factor n (+ test-factor 1)))))\n    (= (find-factor n 2) n))\n\
+    \  (let ((intersection (intersection (list interval1 interval2))))\n    (if (is-prime?\
+    \ (- (cadr intersection) (car intersection))) \"YES\" \"NO\")))\n</code>\n", " \
+    \ (define (interval-intersect? i1 i2)\n    (and (<= (car i1) (cadr i2)) (<= (car\
+    \ i2) (cadr i1))))\n  (define (interval-intersection i1 i2)\n    (if (interval-intersect?\
+    \ i1 i2)\n        (cons (max (car i1) (car i2)) (min (cadr i1) (cadr i2)))\n \
+    \       '()))\n  (define (interval-length i)\n    (- (cadr i) (car i)))\n  (define\
+    \ (is-prime? n)\n    (not (any (lambda (x) (= (modulo n x) 0))\n             \
+    \ (range 2 (floor (sqrt n))))))\n  (let ((i (interval-intersection interval1 interval2)))\n\
+    \    (if (empty? i)\n        \"NO\"\n        (if (is-prime? (interval-length i))\n\
+    \            \"YES\"\n            \"NO\"))))\n", "  (let* ([start1 (car interval1)]\n\
+    \         [end1 (cadr interval1)]\n         [start2 (car interval2)]\n       \
+    \  [end2 (cadr interval2)])\n    (cond\n      [(and (<= start1 start2) (<= start2\
+    \ end1)) (list start2 (min end1 end2))]\n      [(and (<= start2 start1) (<= start1\
+    \ end2)) (list start1 (min end1 end2))]\n      [else #f])))\n", "  (define start1\
+    \ (car interval1))\n  (define end1 (cadr interval1))\n  (define start2 (car interval2))\n\
+    \  (define end2 (cadr interval2))\n  (define start (max start1 start2))\n  (define\
+    \ end (min end1 end2))\n  (define len (- end start))\n  (if (positive? len)\n\
+    \      (if (or (= len 1) (= len 2))\n          \"NO\"\n          (letrec ([(prime?)\
+    \ (lambda (i)\n                               (if (= i 2)\n                  \
+    \                 #t\n                                   (if (even? i)\n     \
+    \                                  #f\n                                      \
+    \ (letrec ([(next?) (lambda (n)\n                                            \
+    \               (if (= n i)\n                                                \
+    \               #t\n                                                         \
+    \      (if (zero? (modulo i n))\n                                            \
+    \                       #f\n                                                 \
+    \                  (next? (+ n 1)))))]\n                                     \
+    \             (next? 3)))))]\n            (if (prime? len)\n                \"\
+    YES\"\n                \"NO\")))\n      \"NO\"))\n", "  (if (&lt;= (first interval1)\
+    \ (first interval2))\n      (if (&lt;= (second interval1) (first interval2))\n\
+    \          \"NO\"\n          (if (&lt;= (second interval1) (second interval2))\n\
+    \              (if (prime? (- (second interval1) (first interval2)))\n       \
+    \           \"YES\"\n                  \"NO\")\n              (if (prime? (- (second\
+    \ interval2) (first interval2)))\n                  \"YES\"\n                \
+    \  \"NO\")))\n      (if (&lt;= (second interval1) (first interval2))\n       \
+    \   \"NO\"\n          (if (&lt;= (second interval1) (second interval2))\n    \
+    \          (if (prime? (- (second interval1) (first interval2)))\n           \
+    \       \"YES\"\n                  \"NO\")\n              (if (prime? (- (second\
+    \ interval2) (first interval2)))\n                  \"YES\"\n                \
+    \  \"NO\")))))\n", "  (define (in-interval? interval)\n    (and (<= (car interval)\
+    \ (cadr interval))\n         (>= (car interval) (car interval1))\n         (<=\
+    \ (car interval) (cadr interval1))\n         (>= (cadr interval) (car interval1))\n\
+    \         (<= (cadr interval) (cadr interval1))))\n  (define (not-zero? (x)) (not\
+    \ (= x 0)))\n  (define (is-prime? (n))\n    (cond [(= n 1) #f]\n          [(=\
+    \ n 2) #t]\n          [(= n 3) #t]\n          [(= n 5) #t]\n          [(= n 7)\
+    \ #t]\n          [(= n 11) #t]\n          [(= n 13) #t]\n          [(= n 17) #t]\n\
+    \          [(= n 19) #t]\n          [(= n 23) #t]\n          [(= n 29) #t]\n \
+    \         [(= n 31) #t]\n          [(= n 37) #t]\n          [(= n 41) #t]\n  \
+    \        [(= n 43) #t]\n          [(= n 47) #t]\n          [(= n 53) #t]\n   \
+    \       [(= n 59) #t]\n          [(= n 61) #t]\n          [(= n 67) #t]\n    \
+    \      [(= n 71) #t]\n          [(= n 73) #t]\n          [(= n 79) #t]\n     \
+    \     [(= n 83) #t]\n          [(= n 89) #t]\n          [(= n 97) #t]\n      \
+    \    [else (and (not-zero? (modulo n 2))\n                     (not-zero? (modulo\
+    \ n 3))\n                     (not-zero? (modulo n 5))\n                     (not-zero?\
+    \ (modulo n 7))\n                     (not-zero? (modulo n 11))\n            \
+    \         (not-zero? (modulo n 13))\n                     (not-zero? (modulo n\
+    \ 17))\n                     (not-zero? (modulo n 19))\n                     (not-zero?\
+    \ (modulo n 23))\n                     (not-zero? (modulo n 29))\n           \
+    \          (", "  (define (gcd a b)\n    (if (= b 0)\n        a\n        (gcd\
+    \ b (remainder a b))))\n  (define (lcm a b)\n    (/ (* a b) (gcd a b)))\n  (define\
+    \ (overlap-interval interv1 interv2)\n    (if (<= (last interv1) (first interv2))\
+    \ \n        '()\n        (if (<= (last interv2) (first interv1))\n           \
+    \ '()\n            (list (max (first interv1) (first interv2))\n             \
+    \     (min (last interv1) (last interv2))))))\n  (define (prime? n)\n    (define\
+    \ (prime-iter i)\n      (if (= i 2)\n          #t\n          (if (= (remainder\
+    \ n i) 0)\n              #f\n              (prime-iter (sub1 i)))))\n    (if (=\
+    \ n 1)\n        #f\n        (prime-iter (sub1 n))))\n  (define (intersecting-length?\
+    \ interval1 interval2)\n    (if (prime? (abs (- (first interval1) (first interval2))))\n\
+    \        \"YES\"\n        \"NO\"))\n  (if (null? (overlap-interval interval1 interval2))\n\
+    \      \"NO\"\n      (intersecting-length? interval1 interval2)))", "  (local\
+    \ [(define (interval-length interval)\n             (- (cadr interval) (car interval)))\n\
+    \          (define (end1) (cadr interval1))\n          (define (end2) (cadr interval2))\n\
+    \          (define (start1) (car interval1))\n          (define (start2) (car\
+    \ interval2))\n          (define (interval-intersection interval1 interval2)\n\
+    \            (cons (max (car interval1) (car interval2))\n                  (min\
+    \ (cadr interval1) (cadr interval2))))\n          (define (intersection-length\
+    \ interval)\n            (if (&lt;= (interval-length interval) 0)\n          \
+    \      #f\n                interval))\n          (define (is-prime? n)\n     \
+    \       (let loop ([i 2])\n              (if (&gt; i (sqrt n))\n             \
+    \     #t\n                  (if (= (modulo n i) 0)\n                      #f\n\
+    \                      (loop (+ i 1))))))]\n    (if (not (intersection-length\
+    \ (interval-intersection interval1 interval2)))\n        \"NO\"\n        (if (is-prime?\
+    \ (interval-length (intersection-length (interval-intersection interval1 interval2))))\n\
+    \            \"YES\"\n            \"NO\"))))\n</code>\nAnother version without\
+    \ local\n<code>#lang racket\n", "  (define (intersect interval1 interval2)\n \
+    \   (cond\n      [(or (< (car interval1) (car interval2))\n           (> (cadr\
+    \ interval1) (cadr interval2)))\n       'false]\n      [else\n       (list\n \
+    \       (if (< (car interval1) (car interval2))\n            (car interval2)\n\
+    \            (car interval1))\n        (if (> (cadr interval1) (cadr interval2))\n\
+    \            (cadr interval2)\n            (cadr interval1)))]))\n  (define (is-prime\
+    \ n)\n    (define (divides? n m)\n      (= (remainder n m) 0))\n    (define (find-divisor\
+    \ n test-divisor)\n      (cond\n        [(> (square test-divisor) n) n]\n    \
+    \    [(divides? n test-divisor) test-divisor]\n        [else (find-divisor n (+\
+    \ test-divisor 1))]))\n    (= (find-divisor n 2) n))\n  (define (primes-only lst)\n\
+    \    (cond\n      [(null? lst) '()]\n      [(is-prime (car lst)) (cons (car lst)\
+    \ (primes-only (cdr lst)))]\n      [else (primes-only (cdr lst))]))\n  (define\
+    \ (find-length lst)\n    (cond\n      [(null? lst) 0]\n      [else (+ 1 (find-length\
+    \ (cdr lst)))]))\n  (define (result n)\n    (cond\n      [(= n 1) \"NO\"]\n  \
+    \    [(= n 2) \"YES\"]\n      [else \"NO\"]))\n  (result (find-length (primes-only\
+    \ (intersect interval1 interval2)))))", "  (define (min x y)\n    (if (&lt; x\
+    \ y) x y))\n  (define (max x y)\n    (if (&gt; x y) x y))\n  (define (intersection-interval\
+    \ interval1 interval2)\n    (list (max (car interval1) (car interval2))\n    \
+    \      (min (cadr interval1) (cadr interval2))))\n  (define (length-of-interval\
+    \ interval)\n    (- (cadr interval) (car interval)))\n  (define (is-prime? n)\n\
+    \    (define (helper p)\n      (if (&gt; p (/ n 2)) #t\n          (if (= (modulo\
+    \ n p) 0) #f\n              (helper (+ p 1)))))\n    (helper 2))\n  (define (intersection-length\
+    \ interval1 interval2)\n    (let ((i (intersection-interval interval1 interval2)))\n\
+    \      (length-of-interval i)))\n  (define (intersection-is-prime? interval1 interval2)\n\
+    \    (let ((i (intersection-interval interval1 interval2)))\n      (if (&lt; (car\
+    \ i) (cadr i))\n          (if (is-prime? (intersection-length interval1 interval2))\n\
+    \              \"YES\"\n              \"NO\")\n          \"NO\")))\n  (intersection-is-prime?\
+    \ interval1 interval2))\n</code>\n", "  (let* ([start1 (car interval1)]\n    \
+    \     [end1 (cadr interval1)]\n         [start2 (car interval2)]\n         [end2\
+    \ (cadr interval2)])\n    (let ([start (max start1 start2)]\n          [end (min\
+    \ end1 end2)])\n      (if (&lt;= start end)\n          (list start end)\n    \
+    \      'NO))))\n", "  (define (prime? n)\n    (if (= n 1)\n        #f\n      \
+    \  (not (for/or ([d (in-range 2 (floor (sqrt n)))])\n                  (= (modulo\
+    \ n d) 0)))))\n  (define (interval-intersection i1 i2)\n    (let* ([l1 (length\
+    \ i1)]\n           [l2 (length i2)]\n           [s1 (list-ref i1 0)]\n       \
+    \    [s2 (list-ref i2 0)]\n           [e1 (list-ref i1 (- l1 1))]\n          \
+    \ [e2 (list-ref i2 (- l2 1))])\n      (if (and (<= s1 e2) (<= s2 e1))\n      \
+    \    (let* ([start (max s1 s2)]\n                 [end (min e1 e2)])\n       \
+    \     (if (= (- end start) 0)\n                \"NO\"\n                (if (prime?\
+    \ (- end start))\n                    \"YES\"\n                    \"NO\")))\n\
+    \          \"NO\")))\n  (interval-intersection interval1 interval2))\n", "  (define\
+    \ (in-interval x i)\n    (and (<= (car i) x) (<= x (cdr i))))\n  (define (intersects\
+    \ i1 i2)\n    (and (in-interval (car i1) i2) (in-interval (cdr i1) i2))\n    (and\
+    \ (in-interval (car i2) i1) (in-interval (cdr i2) i1)))\n  (cond [(not (intersects\
+    \ interval1 interval2)) \"NO\"]\n        [(or (= (car interval1) (car interval2))\n\
+    \             (= (cdr interval1) (cdr interval2))) \"YES\"]\n        [else \"\
+    NO\"]))\n", "  (let* ((int1-start (car interval1))\n         (int1-end (cadr interval1))\n\
+    \         (int2-start (car interval2))\n         (int2-end (cadr interval2))\n\
+    \         (lower-end (max int1-start int2-start))\n         (upper-end (min int1-end\
+    \ int2-end)))\n    (if (&lt; lower-end upper-end)\n        (if (prime? (- upper-end\
+    \ lower-end))\n            \"YES\"\n            \"NO\")\n        \"NO\")))\n",
+  "  (let ([start1 (car interval1)]\n        [end1 (cadr interval1)]\n        [start2\
+    \ (car interval2)]\n        [end2 (cadr interval2)])\n    (cond [(< start1 start2)\
+    \ (intersection interval2 interval1)]\n          [(and (>= start1 start2) (<=\
+    \ end1 end2)) interval2]\n          [(and (>= start1 start2) (>= end1 end2)) (list\
+    \ start2 end1)]\n          [(and (<= start1 start2) (<= end1 end2)) interval1]\n\
+    \          [(and (<= start1 start2) (>= end1 end2)) (list start1 end2)]\n    \
+    \      [else 'no-intersection])))\n", "  (define (range start end)\n    (let loop\
+    \ ([start start] [end end] [res '()])\n      (if (= start end)\n          (reverse\
+    \ (cons start res))\n          (loop (+ start 1) end (cons start res)))))\n  (define\
+    \ (is-prime? num)\n    (if (= num 1)\n        #f\n        (define (iter num div)\n\
+    \          (if (= num div)\n              #t\n              (if (= (modulo num\
+    \ div) 0)\n                  #f\n                  (iter num (+ div 1)))))\n \
+    \       (iter num 2)))\n  (define (interval-string interval)\n    (string-append\
+    \ \"(\" (number->string (car interval)) \",\" (number->string (cadr interval))\
+    \ \")\"))\n  (define (interval-length interval)\n    (- (cadr interval) (car interval)))\n\
+    \  (define (interval-intersection? interval1 interval2)\n    (let* ([min-start\
+    \ (min (car interval1) (car interval2))]\n           [max-end (max (cadr interval1)\
+    \ (cadr interval2))]\n           [intersection (list min-start max-end)])\n  \
+    \    (if (= min-start max-end)\n          #f\n          (and (> (interval-length\
+    \ intersection) 0)\n               (and (>= (car interval1) min-start)\n     \
+    \               (<= (cadr interval1) max-end))\n               (and (>= (car interval2)\
+    \ min-start)\n                    (<= (cadr interval2) max-end))))))\n  (define\
+    \ (interval-intersection interval1 interval2)\n    (let* ([min-start (min (car\
+    \ interval1) (car interval2))]\n           [max-end (max (cadr interval1) (cadr\
+    \ interval2))]\n           [intersection (list min-start max-end)])\n      (if\
+    \ (= min-start max-end)\n          (list 0)\n          intersection)))\n  (define\
+    \ (interval-print interval)\n    (printf \"interval: ~a\\n\" (interval-string\
+    \ interval)))\n  (define (intersection-print interval)\n    (printf \"intersection:\
+    \ ~a\\", "  (define start-interval-1 (car interval1))\n  (define end-interval-1\
+    \ (cdr interval1))\n  (define start-interval-2 (car interval2))\n  (define end-interval-2\
+    \ (cdr interval2))\n  (define is-prime? (lambda (n)\n\t\t      (and (not (= n\
+    \ 0))\n\t\t\t   (not (= n 1))\n\t\t\t   (not (even? n))\n\t\t\t   (for/and ([i\
+    \ (in-range 3 n (add1 (quotient n 2)))])\n\t\t\t\t    (not (zero? (modulo n i)))))))\n\
+    \  (cond\n    [(< end-interval-1 start-interval-2)\n     \"NO\"]\n    [(> start-interval-1\
+    \ end-interval-2)\n     \"NO\"]\n    [else\n     (let ([start (max start-interval-1\
+    \ start-interval-2)]\n\t   [end (min end-interval-1 end-interval-2)])\n      \
+    \ (cond\n\t [(is-prime? (- end start))\n\t  \"YES\"]\n\t [else\n\t  \"NO\"]))]))\n",
+  "  (let ([min (max (car interval1) (car interval2))]\n        [max (min (cadr interval1)\
+    \ (cadr interval2))])\n    (if (&lt;= min max)\n        (if (prime? (- max min))\n\
+    \            \"YES\"\n            \"NO\")\n        \"NO\")))\n", "  (let* ([i1-start\
+    \ (car interval1)]\n         [i1-end (cadr interval1)]\n         [i2-start (car\
+    \ interval2)]\n         [i2-end (cadr interval2)])\n    (if (&lt; i1-start i2-start)\n\
+    \        (intersection (list i2-start i1-end) interval2)\n        (list (max i1-start\
+    \ i2-start) (min i1-end i2-end)))))\n", "  (let ([bgn (max (car interval1) (car\
+    \ interval2))]\n        [end (min (cadr interval1) (cadr interval2))])\n    (cond\
+    \ [(and (> bgn 0) (< bgn end)) (list bgn end)]\n          [else \"NO\"])))\n",
+  "  (match interval1\n    [(list start1 end1)\n     (match interval2\n       [(list\
+    \ start2 end2)\n        (cond [(> start1 end2) #f]\n              [(> start2 end1)\
+    \ #f]\n              [else (list (max start1 start2) (min end1 end2))])])]))\n",
+  "  (define start-max (max (car interval1) (car interval2)))\n  (define end-min (min\
+    \ (cadr interval1) (cadr interval2)))\n  (define (is-prime n)\n    (cond\n   \
+    \   [(= n 1) #f]\n      [(= n 2) #t]\n      [(= n 3) #t]\n      [(= n 5) #t]\n\
+    \      [(= n 7) #t]\n      [(= n 11) #t]\n      [(= n 13) #t]\n      [(= n 17)\
+    \ #t]\n      [(= n 19) #t]\n      [(= n 23) #t]\n      [(= n 29) #t]\n      [(=\
+    \ n 31) #t]\n      [(= n 37) #t]\n      [(= n 41) #t]\n      [(= n 43) #t]\n \
+    \     [(= n 47) #t]\n      [(= n 53) #t]\n      [(= n 59) #t]\n      [(= n 61)\
+    \ #t]\n      [(= n 67) #t]\n      [(= n 71) #t]\n      [(= n 73) #t]\n      [(=\
+    \ n 79) #t]\n      [(= n 83) #t]\n      [(= n 89) #t]\n      [(= n 97) #t]\n \
+    \     [else #f]))\n  (if (&lt; start-max end-min)\n      (if (is-prime (- end-min\
+    \ start-max))\n          \"YES\"\n          \"NO\")\n      \"NO\"))\n", "  (let\
+    \ ((start1 (car interval1))\n        (end1 (cadr interval1))\n        (start2\
+    \ (car interval2))\n        (end2 (cadr interval2)))\n    (cond ((and (&lt;= start1\
+    \ start2) (&lt;= start2 end1))\n           (list start2 (if (&lt; end1 end2) end1\
+    \ end2)))\n          ((and (&lt;= start2 start1) (&lt;= start1 end2))\n      \
+    \     (list start1 (if (&lt; end2 end1) end2 end1)))\n          (else #f))))\n",
+  "  \"returns NO if the intervals don't intersect\"\n  (let* ((p1 (car interval1))\n\
+    \         (q1 (cadr interval1))\n         (p2 (car interval2))\n         (q2 (cadr\
+    \ interval2))\n         (a (max p1 p2))\n         (b (min q1 q2)))\n    (cond\n\
+    \      [(< a b) \"YES\"]\n      [(< a q2) \"NO\"]\n      [else \"NO\"])))\n",
+  "  (cond\n    [(or (eq? (length (intersection interval1 interval2)) 0)\n       \
+    \  (= (length (intersection interval1 interval2)) 1)) \"NO\"]\n    [(prime? (length\
+    \ (intersection interval1 interval2))) \"YES\"]\n    [else \"NO\"]))\n", "  (let*\
+    \ ((min-start (min (car interval1) (car interval2)))\n         (max-end (max (cadr\
+    \ interval1) (cadr interval2)))\n         (start (max (car interval1) (car interval2)))\n\
+    \         (end (min (cadr interval1) (cadr interval2))))\n    (if (&lt;= start\
+    \ end)\n        (if (prime? (- end start))\n            \"YES\"\n            \"\
+    NO\")\n        \"NO\")))\n", "  (let* ([start1 (car interval1)]\n         [end1\
+    \ (cadr interval1)]\n         [start2 (car interval2)]\n         [end2 (cadr interval2)])\n\
+    \    (if (not (<= start2 end1))\n        \"NO\"\n        (let* ([min-start (max\
+    \ start1 start2)]\n               [max-end (min end1 end2)]\n               [length\
+    \ (- max-end min-start)])\n          (if (zero? length)\n              \"NO\"\n\
+    \              (if (prime? length)\n                  \"YES\"\n              \
+    \    \"NO\"))))))\n", "  (let ([i1-start (car interval1)]\n        [i1-end (cadr\
+    \ interval1)]\n        [i2-start (car interval2)]\n        [i2-end (cadr interval2)])\n\
+    \    (if (and (<= i2-start i1-end) (<= i1-start i2-end))\n        (define (prime?\
+    \ n)\n          (cond\n            [(= n 2) #t]\n            [(= n 3) #t]\n  \
+    \          [(= n 5) #t]\n            [(= n 7) #t]\n            [(= n 11) #t]\n\
+    \            [(= n 13) #t]\n            [(= n 17) #t]\n            [(= n 19) #t]\n\
+    \            [(= n 23) #t]\n            [(= n 29) #t]\n            [(= n 31) #t]\n\
+    \            [(= n 37) #t]\n            [(= n 41) #t]\n            [(= n 43) #t]\n\
+    \            [(= n 47) #t]\n            [(= n 53) #t]\n            [(= n 59) #t]\n\
+    \            [(= n 61) #t]\n            [(= n 67) #t]\n            [(= n 71) #t]\n\
+    \            [(= n 73) #t]\n            [(= n 79) #t]\n            [(= n 83) #t]\n\
+    \            [(= n 89) #t]\n            [(= n 97) #t]\n            [else #f]))\n\
+    \        (if (<= i1-start i2-start)\n            (let ([interval (cons i2-start\
+    \ i1-end)])\n              (if (prime? (- (cadr interval) (car interval)))\n \
+    \                 \"YES\"\n                  \"NO\"))\n            (let ([interval\
+    \ (cons i1-start i2-end)])\n              (if (prime? (- (cadr interval) (car\
+    \ interval)))\n                  \"YES\"\n                  \"NO\"))))\n     \
+    \   \"NO\")))\n", "  (cond\n    [(or (< (second interval1) (first interval2))\n\
+    \         (< (second interval2) (first interval1))) \"NO\"]\n    [else (prime?\
+    \ (abs (- (max (first interval1) (first interval2))\n                        \
+    \  (min (second interval1) (second interval2)))))\n          ? \"YES\" : \"NO\"\
+    ]))\n", "  (define (interval-length interval)\n    (- (cadr interval) (car interval)))\n\
+    \  (define (interval-to-list interval)\n    (for/list ((n (in-range (car interval)\
+    \ (cadr interval))))\n      n))\n  (define (intersection-length interval1 interval2)\n\
+    \    (length (intersection (interval-to-list interval1)\n                    \
+    \      (interval-to-list interval2))))\n  (define (intersect interval1 interval2)\n\
+    \    (and (<= (car interval1) (cadr interval2))\n         (<= (car interval2)\
+    \ (cadr interval1))))\n  (define (prime? n)\n    (define (inner n divisor)\n \
+    \     (cond\n        [(= n divisor) true]\n        [(= (modulo n divisor) 0) false]\n\
+    \        [else (inner n (+ divisor 1))]))\n    (inner n 2))\n  (cond\n    [(and\
+    \ (intersect interval1 interval2) (prime? (intersection-length interval1 interval2)))\
+    \ \"YES\"]\n    [(and (intersect interval1 interval2) (not (prime? (intersection-length\
+    \ interval1 interval2)))) \"NO\"]\n    [else \"NO\"]))\n", "  (let* ((start1 (car\
+    \ interval1))\n         (end1 (cadr interval1))\n         (start2 (car interval2))\n\
+    \         (end2 (cadr interval2))\n         (min-start (min start1 start2))\n\
+    \         (max-end (max end1 end2))\n         (start (max start1 start2))\n  \
+    \       (end (min end1 end2)))\n    (if (&lt; start end)\n        (cond\n    \
+    \      ((prime? (- end start)) \"YES\")\n          (else \"NO\"))\n        \"\
+    NO\")))\n", "  (if (and (<= (car interval1) (car interval2)) (<= (car interval2)\
+    \ (cdr interval1)))\n      (cond [(= (car interval1) (car interval2)) (list (car\
+    \ interval1) (min (cdr interval1) (cdr interval2)))]\n            [(= (cdr interval1)\
+    \ (cdr interval2)) (list (max (car interval1) (car interval2)) (cdr interval1))]\n\
+    \            [(< (car interval1) (car interval2)) (list (car interval2) (min (cdr\
+    \ interval1) (cdr interval2)))]\n            [(> (car interval1) (car interval2))\
+    \ (list (car interval1) (min (cdr interval1) (cdr interval2)))]\n            [else\
+    \ (list 0 0)])\n      'no-intersection))\n", "  (let ([i1s (car interval1)]\n\
+    \        [i1e (cadr interval1)]\n        [i2s (car interval2)]\n        [i2e (cadr\
+    \ interval2)])\n    (cond [(< i1s i2s) (intersection interval2 interval1)]\n \
+    \         [(> i1e i2s) (cons i2s i1e)]\n          [(> i1s i2e) '()]\n        \
+    \  [else (cons i1s i2e)])))\n", "  (define a (first interval1))\n  (define b (second\
+    \ interval1))\n  (define c (first interval2))\n  (define d (second interval2))\n\
+    \  (cond [(and (&lt;= a b) (&lt;= c d))\n         (define m (min a c))\n     \
+    \    (define n (max b d))\n         (define k (max m n))\n         (cond [(= a\
+    \ b) 'NO]\n               [(= c d) 'NO]\n               [(= m n) 'NO]\n      \
+    \         [(= k n) 'NO]\n               [else (if (prime? (- k m)) 'YES 'NO)])]\n\
+    \        [else 'NO]))\n", "  (define (length interval)\n    (- (cadr interval)\
+    \ (car interval)))\n  (define (intersection? interval1 interval2)\n    (and (>=\
+    \ (cadr interval1) (car interval2))\n         (>= (cadr interval2) (car interval1))))\n\
+    \  (define (intersection-interval interval1 interval2)\n    (list (max (car interval1)\
+    \ (car interval2))\n          (min (cadr interval1) (cadr interval2))))\n  (define\
+    \ (is-prime? n)\n    (let loop ((i n))\n      (cond ((< i 2) #f)\n           \
+    \ ((= n (remainder i n)) #t)\n            (else (loop (- i 1))))))\n  (cond ((not\
+    \ (intersection? interval1 interval2)) \"NO\")\n        ((is-prime? (length (intersection-interval\
+    \ interval1 interval2))) \"YES\")\n        (else \"NO\")))", "  (cond [(empty?\
+    \ interval1) 'no]\n        [(empty? interval2) 'no]\n        [(not (intersect?\
+    \ interval1 interval2)) 'no]\n        [else (intersect interval1 interval2)]))\n",
+  "  (define (gcd a b)\n    (if (= b 0)\n        a\n        (gcd b (remainder a b))))\n\
+    \  (define (lcm a b)\n    (if (= a 0)\n        0\n        (/ (* a b) (gcd a b))))\n\
+    \  (define (prime? n)\n    (define (prime-rec? n i)\n      (if (= i 1)\n     \
+    \     #t\n          (if (= (remainder n i) 0)\n              #f\n            \
+    \  (prime-rec? n (- i 1)))))\n    (if (= n 0)\n        #f\n        (prime-rec?\
+    \ n (- n 1))))\n  (define (disjoin? start1 end1 start2 end2)\n    (or (<= end1\
+    \ start2) (<= end2 start1)))\n  (define (intersection-start start1 end1 start2\
+    \ end2)\n    (if (< start1 start2)\n        start2\n        start1))\n  (define\
+    \ (intersection-end start1 end1 start2 end2)\n    (if (> end1 end2)\n        end2\n\
+    \        end1))\n  (define (intersection-length start1 end1 start2 end2)\n   \
+    \ (- (intersection-end start1 end1 start2 end2)\n       (intersection-start start1\
+    \ end1 start2 end2)))\n  (define (all-primes start1 end1 start2 end2)\n    (cond\
+    \ ((disjoin? start1 end1 start2 end2) \"NO\")\n          ((prime? (intersection-length\
+    \ start1 end1 start2 end2)) \"YES\")\n          (else \"NO\")))\n  (all-primes\
+    \ (car interval1) (cadr interval1) (car interval2) (cadr interval2)))\n", "  (cond\
+    \ [(and (&lt;= (first interval1) (first interval2)) (&lt;= (first interval2) (second\
+    \ interval1)))\n         (list (first interval2) (second interval1))]\n      \
+    \  [(and (&lt;= (first interval2) (first interval1)) (&lt;= (first interval1)\
+    \ (second interval2)))\n         (list (first interval1) (second interval2))]\n\
+    \        [else \"NO\"]))\n", "  (cond\n    [(= (first interval1) (first interval2))\
+    \ (cons (first interval1) (intersection (rest interval1) (rest interval2)))]\n\
+    \    [(= (first interval1) (second interval2)) (cons (first interval1) (intersection\
+    \ (rest interval1) (rest interval2)))]\n    [(= (second interval1) (first interval2))\
+    \ (cons (second interval1) (intersection (rest interval1) (rest interval2)))]\n\
+    \    [(= (second interval1) (second interval2)) (cons (second interval1) (intersection\
+    \ (rest interval1) (rest interval2)))]\n    [(number? (first interval1)) (intersection\
+    \ (rest interval1) interval2)]\n    [(number? (first interval2)) (intersection\
+    \ interval1 (rest interval2))]\n    [else '(no-intersection)]))\n", "  (cond [(and\
+    \ (<= (car interval1) (car interval2)) (<= (car interval2) (cdr interval1)))\n\
+    \         (cond [(= (car interval2) (cdr interval1))\n                (list (car\
+    \ interval2) (car interval2))]\n               [else (list (car interval2) (cdr\
+    \ interval1))])]\n        [(and (<= (car interval2) (car interval1)) (<= (car\
+    \ interval1) (cdr interval2)))\n         (cond [(= (car interval1) (cdr interval2))\n\
+    \                (list (car interval1) (car interval1))]\n               [else\
+    \ (list (car interval1) (cdr interval2))])]\n        [else '()]))\n", "  (if (not\
+    \ (intersect interval1 interval2))\n      \"NO\"\n      (if (prime? (length-of-intersection\
+    \ interval1 interval2))\n          \"YES\"\n          \"NO\")))\n", "  (define\
+    \ (is-intersect interval1 interval2)\n    (and (>= (first interval1) (first interval2))\n\
+    \         (<= (first interval1) (second interval2))))\n  (cond\n    [(is-intersect\
+    \ interval1 interval2)\n     (cons (max (first interval1) (first interval2))\n\
+    \           (min (second interval1) (second interval2)))]\n    [(is-intersect\
+    \ interval2 interval1)\n     (cons (max (first interval2) (first interval1))\n\
+    \           (min (second interval2) (second interval1)))]\n    [else '(NO NO)]))\n",
+  "  (define (intersection-first first1 first2)\n    (if (&gt; first1 first2)\n  \
+    \      first1\n        first2))\n  (define (intersection-last last1 last2)\n \
+    \   (if (&lt; last1 last2)\n        last1\n        last2))\n  (define (intersection-length\
+    \ last1 last2)\n    (if (&lt; last1 last2)\n        (- last1 1)\n        (- last2\
+    \ 1)))\n  (if (&lt; (+ (intersection-first (car interval1) (car interval2))\n\
+    \            (intersection-last (cdr interval1) (cdr interval2)))\n          (*\
+    \ (car interval1)\n             (car interval2)))\n      (if (equal? (intersection-length\
+    \ (cdr interval1) (cdr interval2)) 1)\n          \"NO\"\n          \"YES\")\n\
+    \      \"NO\"))\n</code>\nThis is my code for checking whether the length of the\
+    \ intersection is a prime number. I think it's pretty clean and it's works as\
+    \ expected.\nMy issue is that I have to give the output as <code>\"YES\"</code>\
+    \ or <code>\"NO\"</code> instead of <code>#t</code> and <code>#f</code>. I feel\
+    \ like converting back and forth between <code>#t</code> and <code>#f</code> and\
+    \ the <code>\"YES\"</code> and <code>\"NO\"</code> is bad design and I want to\
+    \ get rid of it.\nHow can I achieve this?\nThanks in advance!\n\n\nA:\n\nIn Racket,\
+    \ <code>if</code> is basically a function that takes 3 arguments, an expression,\
+    \ and the expressions to evaluate if the first expression is true or false. It's\
+    \ equivalent to this function:\n<code>(define (if test t-branch f-branch)\n  (if\
+    \ test t-branch f-branch))\n</code>\nSo, instead of this:\n<code>(if (equal? (intersection-length\
+    \ (cdr interval1) (cdr interval2)) 1)\n    \"NO\"\n    \"YES\")\n</code>\nYou\
+    \ can use <code>if</code> like this:\n<code>(if (=", "  (define (intersection-helper\
+    \ interval1 interval2)\n    (if (&lt;= (cadr interval1) (car interval2))\n   \
+    \     #f\n        (if (&lt;= (cadr interval2) (car interval1))\n            #f\n\
+    \            (let* ([m (min (car interval1) (car interval2))]\n              \
+    \     [n (max (cadr interval1) (cadr interval2))]\n                   [o (max\
+    \ (car interval1) (car interval2))]\n                   [p (min (cadr interval1)\
+    \ (cadr interval2))])\n              (list m n o p)))))\n  (define (prime? n)\n\
+    \    (if (= n 1)\n        #f\n        (if (= n 2)\n            #t\n          \
+    \  (if (odd? n)\n                (let loop ([d 3])\n                  (if (&gt;\
+    \ d (sqrt n))\n                      #t\n                      (if (zero? (modulo\
+    \ n d))\n                          #f\n                          (loop (+ d 2)))))\n\
+    \                #f))))\n  (define (abs x)\n    (if (&lt; x 0)\n        (- x)\n\
+    \        x))\n  (define (difference interval)\n    (abs (- (cadr interval) (car\
+    \ interval))))\n  (let ([inter (intersection-helper interval1 interval2)])\n \
+    \   (if inter\n        (if (prime? (difference inter))\n            \"YES\"\n\
+    \            \"NO\")\n        \"NO\")))\n</code>\n", "  \"return a list containing\
+    \ the intersection of interval1 and interval2.\"\n  (let* ([start1 (car interval1)]\n\
+    \         [end1 (cadr interval1)]\n         [start2 (car interval2)]\n       \
+    \  [end2 (cadr interval2)])\n    (let ([max-start (max start1 start2)]\n     \
+    \     [min-end (min end1 end2)])\n      (if (&gt;= max-start min-end)\n      \
+    \    (list max-start min-end)\n          '()))))", "  (define (prime? n)\n   \
+    \ (cond ((< n 2) #f)\n          ((or (= n 2) (= n 3)) #t)\n          ((even? n)\
+    \ #f)\n          (else\n           (define (iter k)\n             (or (= n (*\
+    \ k k))\n                 (and (< k (/ n 2))\n                      (not (zero?\
+    \ (modulo n k)))\n                      (iter (+ k 1)))))\n           (iter 3))))\n\
+    \  (define (interval? a b c d)\n    (and (<= a c)\n         (<= c b)\n       \
+    \  (<= c d)\n         (<= d b)))\n  (define (intersect-interval a b c d)\n   \
+    \ (and (interval? a b c d)\n         (list (max a c) (min b d))))\n  (define (interval-length\
+    \ int)\n    (- (cadr int) (car int)))\n  (if (intersect-interval (car interval1)\
+    \ (cadr interval1) (car interval2) (cadr interval2))\n      (if (prime? (interval-length\
+    \ (intersect-interval (car interval1) (cadr interval1) (car interval2) (cadr interval2))))\n\
+    \          \"YES\"\n          \"NO\")\n      \"NO\"))\n", "  (cond [(or (= (car\
+    \ interval1) (car interval2)) (= (cadr interval1) (cadr interval2))) 'NO]\n  \
+    \      [(or (&lt; (car interval1) (car interval2)) (&lt; (cadr interval1) (cadr\
+    \ interval2))) 'NO]\n        [else (list (max (car interval1) (car interval2))\
+    \ (min (cadr interval1) (cadr interval2)))]))", "  (let ((interval1-start (car\
+    \ interval1))\n        (interval1-end (cadr interval1))\n        (interval2-start\
+    \ (car interval2))\n        (interval2-end (cadr interval2)))\n    (if (or (<\
+    \ interval1-start interval2-start)\n            (< interval2-start interval1-start))\n\
+    \        (if (and (<= interval1-start interval2-start)\n                 (<= interval2-start\
+    \ interval1-end))\n            (cons interval2-start interval1-end)\n        \
+    \    (cons interval1-start interval2-end))\n        (if (and (<= interval2-start\
+    \ interval1-start)\n                 (<= interval1-start interval2-end))\n   \
+    \         (cons interval1-start interval2-end)\n            (cons interval2-start\
+    \ interval1-end)))))\n", "  (if (&lt; (cadr interval1) (car interval2))\n    \
+    \  \"NO\"\n      (let-values ([(start end)\n                    (if (&lt; (car\
+    \ interval1) (car interval2))\n                        (values (car interval2)\
+    \ (cadr interval1))\n                        (values (car interval1) (cadr interval2)))])\n\
+    \        (if (&lt;= start end)\n            \"NO\"\n            (if (prime? (-\
+    \ end start))\n                \"YES\"\n                \"NO\")))))\n</code>\n",
+  "  (let* ([start-max (max (first interval1) (first interval2))]\n         [end-min\
+    \ (min (second interval1) (second interval2))])\n    (cond\n      [(< start-max\
+    \ end-min)\n       (cond\n         [(prime? (- end-min start-max)) \"YES\"]\n\
+    \         [else \"NO\"])]\n      [else \"NO\"])))\n", "  (let* ([start1 (car interval1)]\n\
+    \         [end1 (cadr interval1)]\n         [start2 (car interval2)]\n       \
+    \  [end2 (cadr interval2)])\n    (let* ([start (max start1 start2)]\n        \
+    \   [end (min end1 end2)])\n      (if (&lt; start end)\n          (let* ([interval\
+    \ (list start end)])\n            (let* ([interval-length (- (cadr interval) (car\
+    \ interval))])\n              (if (prime? interval-length)\n                 \
+    \ \"YES\"\n                  \"NO\")))\n          \"NO\"))))\n", "  (let* ((i1-start\
+    \ (vector-ref interval1 0))\n         (i1-end (vector-ref interval1 1))\n    \
+    \     (i2-start (vector-ref interval2 0))\n         (i2-end (vector-ref interval2\
+    \ 1))\n         (intersects? (lambda (i1-start i1-end i2-start i2-end)\n     \
+    \                   (and (&lt;= i2-start i1-end) (&lt;= i1-start i2-end))))\n\
+    \         (intersection (lambda (i1-start i1-end i2-start i2-end)\n          \
+    \               (vector (max i1-start i2-start)\n                            \
+    \     (min i1-end i2-end)))))\n    (cond\n      ((intersects? i1-start i1-end\
+    \ i2-start i2-end)\n       (let* ((intersection-start (max i1-start i2-start))\n\
+    \              (intersection-end (min i1-end i2-end))\n              (intersection-length\
+    \ (- intersection-end intersection-start 1)))\n         (cond\n           ((=\
+    \ intersection-length 0)\n            \"NO\")\n           ((= intersection-length\
+    \ 1)\n            \"NO\")\n           ((and (= intersection-length 2) (or (= intersection-start\
+    \ 2) (= intersection-end 2)))\n            \"YES\")\n           ((= (modulo intersection-length\
+    \ 2) 0)\n            \"NO\")\n           ((find-divisor? intersection-length 3))\n\
+    \           (else\n            \"YES\"))))\n      (else\n       \"NO\"))))\n",
+  "  (define start1 (car interval1))\n  (define end1 (cadr interval1))\n  (define\
+    \ start2 (car interval2))\n  (define end2 (cadr interval2))\n  (define start-intersection\
+    \ (max start1 start2))\n  (define end-intersection (min end1 end2))\n  (define\
+    \ intersected (if (&lt; start-intersection end-intersection)\n               \
+    \          (list start-intersection end-intersection)\n                      \
+    \   'NO))\n  (if (equal? intersected 'NO)\n      \"NO\"\n      (if (prime? (-\
+    \ end-intersection start-intersection))\n          \"YES\"\n          \"NO\")))\n\
+    </code>\n\n<code>(define (prime? n)\n  (if (= n 1) #f\n      (if (= n 2) #t\n\
+    \          (if (even? n) #f\n              (define (loop i)\n                (if\
+    \ (&gt; i (quotient n 2)) #t\n                    (if (even? i) (loop (+ i 1))\n\
+    \                        (if (zero? (remainder n i)) #f\n                    \
+    \        (loop (+ i 1))))))\n              (loop 3)))))\n</code>\n", "  (let*\
+    \ ([start1 (car interval1)]\n         [end1 (cadr interval1)]\n         [start2\
+    \ (car interval2)]\n         [end2 (cadr interval2)])\n    (let ([min (max start1\
+    \ start2)]\n          [max (min end1 end2)])\n      (if (&lt;= min max)\n    \
+    \      (if (&lt; 2 (max (- max min) 1))\n              (if (or (prime? (- max\
+    \ min))\n                      (prime? (- max min 1)))\n                  \"YES\"\
+    \n                  \"NO\")\n              \"NO\")\n          \"NO\"))))\n", " \
+    \ (define (gcd a b)\n    (cond\n      [(= b 0) a]\n      [else (gcd b (modulo\
+    \ a b))]))\n  (define (lcm a b)\n    (if (= a 0)\n        0\n        (* b (/ a\
+    \ (gcd a b)))))\n  (define (length-interval interval)\n    (- (cadr interval)\
+    \ (car interval)))\n  (define (is-prime? num)\n    (and (> num 1)\n         (not\
+    \ (exists (lambda (i) (= (modulo num i) 0))\n                     (range 2 (exact-floor\
+    \ (sqrt num)))))))\n  (define (start-interval interval)\n    (car interval))\n\
+    \  (define (end-interval interval)\n    (cadr interval))\n  (cond\n    [(and (>=\
+    \ (start-interval interval1) (start-interval interval2)) (>= (start-interval interval1)\
+    \ (end-interval interval2))) \"NO\"]\n    [(and (<= (start-interval interval1)\
+    \ (start-interval interval2)) (<= (end-interval interval1) (start-interval interval2)))\
+    \ \"NO\"]\n    [else (define (length-interval1 interval1 interval2)\n        \
+    \   (define (gcd a b)\n             (cond\n               [(= b 0) a]\n      \
+    \         [else (gcd b (modulo a b))]))\n           (define (lcm a b)\n      \
+    \       (if (= a 0)\n                 0\n                 (* b (/ a (gcd a b)))))\n\
+    \           (define (length-interval interval)\n             (- (cadr interval)\
+    \ (car interval)))\n           (lcm (length-interval interval1) (length-interval\
+    \ interval2)))\n          (cond\n            [(is-prime? (length-interval1 interval1\
+    \ interval2)) \"YES\"]\n            [else \"NO\"])]))\n", "  (define (find-start\
+    \ interval1 interval2)\n    (if (&gt; (car interval1) (car interval2))\n     \
+    \   (car interval1)\n        (car interval2)))\n  (define (find-end interval1\
+    \ interval2)\n    (if (&lt; (cadr interval1) (cadr interval2))\n        (cadr\
+    \ interval1)\n        (cadr interval2)))\n  (define (is-prime? n)\n    (if (&lt;\
+    \ n 2)\n        #f\n        (let ((s (round (sqrt n))))\n          (not (for/or\
+    \ ([i (in-range 2 (+ 1 s))])\n                      (&lt; 0 (modulo n i)))))))\n\
+    \  (define start (find-start interval1 interval2))\n  (define end (find-end interval1\
+    \ interval2))\n  (if (&lt; start end)\n      (if (is-prime? (- end start))\n \
+    \         \"YES\"\n          \"NO\")\n      \"NO\"))\n", "  (let* ([start1 (car\
+    \ interval1)]\n         [end1 (cadr interval1)]\n         [start2 (car interval2)]\n\
+    \         [end2 (cadr interval2)])\n    (cond [(> start1 end2) \"NO\"]\n     \
+    \     [(> start2 end1) \"NO\"]\n          [else\n           (if (prime-number?\
+    \ (- (max start1 start2) (min end1 end2)))\n               \"YES\"\n         \
+    \      \"NO\")])))", "  (let ([a (max (car interval1) (car interval2))]\n    \
+    \    [b (min (cadr interval1) (cadr interval2))])\n    (if (&lt; a b)\n      \
+    \  (if (prime? (- b a))\n            \"YES\"\n            \"NO\")\n        \"\
+    NO\")))\n", "  (define start1 (car interval1))\n  (define end1 (cadr interval1))\n\
+    \  (define start2 (car interval2))\n  (define end2 (cadr interval2))\n  (if (&lt;\
+    \ start1 start2)\n      (intersection interval2 interval1)\n      (if (&lt; end1\
+    \ start2)\n          \"NO\"\n          (if (&lt; end1 end2)\n              (define\
+    \ length (- end1 start2))\n              (define length (- end2 start2)))\n  \
+    \        (if (or (= length 0) (= length 1))\n              \"NO\"\n          \
+    \    (define (is-prime n)\n                (define (iter n x)\n              \
+    \    (if (= n 1)\n                      #t\n                      (if (= (modulo\
+    \ n x) 0)\n                          #f\n                          (iter (- n\
+    \ 1) (+ x 1)))))\n                (iter n 2))\n            (if (is-prime length)\n\
+    \                \"YES\"\n                \"NO\")))))\n</code>\nTest cases:\n\
+    <code>(test\n  (intersection '(1 2) '(3 4)) =&gt; \"NO\"\n  (intersection '(3\
+    \ 4) '(1 2)) =&gt; \"NO\"\n  (intersection '(2 3) '(3 4)) =&gt; \"NO\"\n  (intersection\
+    \ '(3 4) '(2 3)) =&gt; \"NO\"\n  (intersection '(1 2) '(1 2)) =&gt; \"NO\"\n \
+    \ (intersection '(2 3) '(1 2)) =&gt; \"NO\"\n  (intersection '(1 2) '(2 3)) =&gt;\
+    \ \"NO\"\n  (intersection '(1 3) '(2 4)) =&gt; \"NO\"\n  (intersection '(2 4)\
+    \ '(1 3)) =&gt; \"NO\"\n  (intersection '(3 4) '(1 4)) =&gt; \"NO\"\n  (intersection\
+    \ '(1 4) '(3 4)) =&gt; \"NO\"\n  (intersection '(1 3) '(1 4)) =&gt; \"NO\"\n \
+    \ (intersection '(1 4) '(1 3)) =&gt; \"NO\"\n  (intersection '(1 3) '(", "  (define\
+    \ (is-prime number)\n    (and (&gt; number 1)\n         (not (andmap (lambda (i)\
+    \ (zerop? (modulo number i)))\n                      (iota 2 (floor (sqrt number)))))))\n\
+    \  (define (interval-length interval)\n    (- (cadr interval) (car interval)))\n\
+    \  (define (intersect? interval1 interval2)\n    (or (and (&lt;= (car interval1)\
+    \ (car interval2))\n             (&lt;= (car interval2) (cadr interval1)))\n \
+    \       (and (&lt;= (car interval2) (car interval1))\n             (&lt;= (car\
+    \ interval1) (cadr interval2)))))\n  (cond\n    [(and (intersect? interval1 interval2)\n\
+    \          (is-prime (interval-length interval1))\n          (is-prime (interval-length\
+    \ interval2)))\n     \"YES\"]\n    [else \"NO\"]))\n</code>\n", "  \"intersection\
+    \ of two intervals\"\n  (define (interval? i)\n    \"is it an interval?\"\n  \
+    \  (and (pair? i) (eq? (length i) 2)\n         (integer? (car i)) (integer? (cadr\
+    \ i))))\n  (if (not (interval? interval1))\n      (error \"interval1 must be an\
+    \ interval\"))\n  (if (not (interval? interval2))\n      (error \"interval2 must\
+    \ be an interval\"))\n  (let ((start1 (car interval1))\n        (end1 (cadr interval1))\n\
+    \        (start2 (car interval2))\n        (end2 (cadr interval2)))\n    (define\
+    \ (less-or-equal? m n)\n      \"is m less than or equal to n?\"\n      (or (<\
+    \ m n) (eq? m n)))\n    (define (least-of a b)\n      \"smaller of a and b\"\n\
+    \      (if (< a b) a b))\n    (define (greatest-of a b)\n      \"greater of a\
+    \ and b\"\n      (if (< a b) b a))\n    (define (length-of-interval i)\n     \
+    \ \"length of an interval\"\n      (- (cadr i) (car i)))\n    (if (and (less-or-equal?\
+    \ start1 end1)\n             (less-or-equal? start2 end2))\n        (let ((lower\
+    \ (greatest-of start1 start2))\n              (upper (least-of end1 end2)))\n\
+    \          (if (less-or-equal? lower upper)\n              (length-of-interval\
+    \ (list lower upper))\n              0))\n        0)))\n", "  (define first-interval-start\
+    \ (car interval1))\n  (define first-interval-end (cadr interval1))\n  (define\
+    \ second-interval-start (car interval2))\n  (define second-interval-end (cadr\
+    \ interval2))\n  (if (< second-interval-start first-interval-start)\n      (intersection\
+    \ interval2 interval1)\n      (if (<= first-interval-end second-interval-start)\n\
+    \          \"NO\"\n          (if (<= second-interval-end first-interval-end)\n\
+    \              (is-prime (- second-interval-start first-interval-start))\n   \
+    \           (is-prime (- first-interval-end second-interval-start))))))\n", " \
+    \ (let ((start1 (first interval1))\n        (end1 (second interval1))\n      \
+    \  (start2 (first interval2))\n        (end2 (second interval2)))\n    (cond ((>\
+    \ start1 end2) \"NO\")\n          ((> start2 end1) \"NO\")\n          ((= start1\
+    \ end2) \"NO\")\n          ((= start2 end1) \"NO\")\n          ((= start1 start2)\n\
+    \           (if (= end1 end2) \"YES\"\n               (intersection (list start1\
+    \ (- end1 1)) interval2)))\n          ((= end1 end2)\n           (if (= start1\
+    \ start2) \"YES\"\n               (intersection interval1 (list (- start2 1) end2))))\n\
+    \          ((< start1 start2)\n           (intersection (list start1 (- start2\
+    \ 1)) interval2))\n          ((> start1 start2)\n           (intersection interval1\
+    \ (list (- start1 1) end2)))\n          (else \"YES\"))))\n", "  (let ([start\
+    \ (max (car interval1) (car interval2))]\n        [end (min (cadr interval1) (cadr\
+    \ interval2))])\n    (cond [(< start end) (list start end)]\n          [else (list\
+    \ -1 -1)])))\n", "  (if (&lt; (car interval1) (car interval2))\n      (intersection\
+    \ interval2 interval1)\n      (if (&lt; (car interval2) (cadr interval1))\n  \
+    \        (if (&lt; (cadr interval2) (cadr interval1))\n              interval2\n\
+    \              (list (car interval2) (cadr interval1)))\n          '())))\n",
+  "  (list (max (list-ref interval1 0) (list-ref interval2 0))\n        (min (list-ref\
+    \ interval1 1) (list-ref interval2 1))))\n", "  (cond\n    [(equal? (car interval1)\
+    \ (car interval2)) \"NO\"]\n    [(> (car interval1) (car interval2)) (intersection\
+    \ interval2 interval1)]\n    [(and (<= (car interval1) (car interval2))\n    \
+    \      (<= (car interval2) (cdr interval1)))\n     (define start (car interval2))\n\
+    \     (define end (min (cdr interval1) (cdr interval2)))\n     (if (or (= start\
+    \ 1) (= end 1)) \"NO\"\n         (equal? (length (filter (lambda (x) (zero? (modulo\
+    \ end x))) (range 2 end))) 0)\n         \"YES\" \"NO\")]\n    [else \"NO\"]))\n",
+  "  (let* ([min-max (max (car interval1) (car interval2))]\n         [max-min (min\
+    \ (cadr interval1) (cadr interval2))])\n    (if (&lt;= min-max max-min)\n    \
+    \    (if (prime? (- max-min min-max))\n            \"YES\"\n            \"NO\"\
+    )\n        \"NO\")))\n", "  (define (length interval)\n    (- (cadr interval)\
+    \ (car interval)))\n  (define (intersection? interval1 interval2)\n    (and (equal?\
+    \ (car interval1) (car interval2))\n         (equal? (cadr interval1) (cadr interval2))))\n\
+    \  (define (same? interval1 interval2)\n    (and (&lt;= (car interval1) (car interval2))\n\
+    \         (&lt;= (cadr interval1) (cadr interval2))))\n  (define (interval-start\
+    \ interval1 interval2)\n    (if (&lt; (car interval1) (car interval2))\n     \
+    \   (car interval2)\n        (car interval1)))\n  (define (interval-end interval1\
+    \ interval2)\n    (if (&gt; (cadr interval1) (cadr interval2))\n        (cadr\
+    \ interval2)\n        (cadr interval1)))\n  (define (is-prime? number)\n    (define\
+    \ (prime? number)\n      (define (divisible? a b)\n        (= (remainder a b)\
+    \ 0))\n      (define (find-divisor n test-divisor)\n        (cond ((&gt; (square\
+    \ test-divisor) n) n)\n              ((divisible? n test-divisor) test-divisor)\n\
+    \              (else (find-divisor n (+ test-divisor 1)))))\n      (= (find-divisor\
+    \ n 2) n))\n    (if (&lt;= number 2)\n        #f\n        (prime? number)))\n\
+    \  (if (or (intersection? interval1 interval2)\n          (same? interval1 interval2))\n\
+    \      \"YES\"\n      (if (and (&lt;= (interval-start interval1 interval2)\n \
+    \                  (interval-end interval1 interval2))\n               (is-prime?\
+    \ (- (interval-end interval1 interval2)\n                             (interval-start\
+    \ interval1 interval2))))\n          \"YES\"\n          \"NO\")))\n</code>\n",
+  "  (let* ([lower (max (car interval1) (car interval2))]\n         [upper (min (cadr\
+    \ interval1) (cadr interval2))])\n    (if (&lt; lower upper)\n        (if (is-prime\
+    \ (- upper lower))\n            \"YES\"\n            \"NO\")\n        \"NO\")))\n",
+  "  (cond [(or (< (car interval1) (car interval2))\n             (> (cadr interval1)\
+    \ (cadr interval2)))\n         \"NO\"]\n        [(or (= (car interval1) (car interval2))\n\
+    \             (= (cadr interval1) (cadr interval2)))\n         (integer? (car\
+    \ interval1))]\n        [else\n         (let ([start (max (car interval1) (car\
+    \ interval2))]\n               [end (min (cadr interval1) (cadr interval2))])\n\
+    \           (integer? (- end start)))]))", "  (define start \n    (max (car interval1)\
+    \ (car interval2)))\n  (define end \n    (min (cadr interval1) (cadr interval2)))\n\
+    \  (if (&lt;= start end)\n      (list start end)\n      'none))\n", "  (let ((start1\
+    \ (car interval1))\n        (end1 (cadr interval1))\n        (start2 (car interval2))\n\
+    \        (end2 (cadr interval2)))\n    (if (&lt; start1 start2)\n        (intersection\
+    \ interval2 interval1)\n        (if (&lt; end1 start2)\n            \"NO\"\n \
+    \           (if (&lt; end1 end2)\n                (check-prime (- end1 start2))\n\
+    \                (check-prime (- end2 start2)))))))\n", "  (let ([start (max (first\
+    \ interval1) (first interval2))]\n        [end (min (second interval1) (second\
+    \ interval2))])\n    (if (&lt; start end)\n        (if (prime? (- end start))\n\
+    \            \"YES\"\n            \"NO\")\n        \"NO\")))\n", "  (let ([len1\
+    \ (- (cadr interval1) (car interval1))]\n        [len2 (- (cadr interval2) (car\
+    \ interval2))])\n    (if (not (interval? interval1))\n        (if (not (interval?\
+    \ interval2)) \"NO\" \"NO\")\n        (if (not (interval? interval2)) \"NO\"\n\
+    \            (if (not (intersect interval1 interval2)) \"NO\"\n              \
+    \  (prime-length-interval? interval1 interval2))))))\n", "  (let* ((left (max\
+    \ (car interval1) (car interval2)))\n         (right (min (cadr interval1) (cadr\
+    \ interval2))))\n    (if (&lt; left right)\n        (if (prime? (- right left))\n\
+    \            \"YES\"\n            \"NO\")\n        \"NO\")))\n", "  (let ([intersection\
+    \ (list (min (cadr interval1) (cadr interval2))\n                            (max\
+    \ (car interval1) (car interval2)))])\n    (if (< (cadr intersection) (car intersection))\n\
+    \        \"NO\"\n        (if (prime? (- (cadr intersection) (car intersection)))\n\
+    \            \"YES\"\n            \"NO\"))))\n", "  (let* ((fst-start (car interval1))\n\
+    \         (fst-end (cadr interval1))\n         (snd-start (car interval2))\n \
+    \        (snd-end (cadr interval2))\n         (lower-bound (max fst-start snd-start))\n\
+    \         (upper-bound (min fst-end snd-end)))\n    (cond\n      [(or (empty?\
+    \ (range lower-bound upper-bound))\n           (= lower-bound upper-bound)) \"\
+    NO\"]\n      [(or (= (abs (- lower-bound upper-bound)) 1)\n           (prime?\
+    \ (- upper-bound lower-bound))) \"YES\"]\n      [else \"NO\"])))\n", "  (let ((start1\
+    \ (car interval1))\n        (end1 (cadr interval1))\n        (start2 (car interval2))\n\
+    \        (end2 (cadr interval2)))\n    (if (or (> start1 end2) (< start2 end1))\n\
+    \        \"NO\"\n        (if (is-prime (abs (- end1 start2)))\n            \"\
+    YES\"\n            \"NO\"))))\n", "  (let* ([lower (max (car interval1) (car interval2))]\n\
+    \         [upper (min (cadr interval1) (cadr interval2))])\n    (if (< lower upper)\n\
+    \        (list lower upper)\n        '())))", "  (let ([s1 (car interval1)]\n\
+    \        [e1 (cadr interval1)]\n        [s2 (car interval2)]\n        [e2 (cadr\
+    \ interval2)])\n    (cond\n      [(<= s1 s2)\n       (cond\n         [(<= e1 s2)\
+    \ \"NO\"]\n         [(<= e1 e2) (length-is-prime? (- e1 s2))]\n         [else\
+    \ (length-is-prime? (- e2 s2))])]\n      [(<= s2 s1)\n       (cond\n         [(<=\
+    \ e2 s1) \"NO\"]\n         [(<= e2 e1) (length-is-prime? (- e2 s1))]\n       \
+    \  [else (length-is-prime? (- e1 s1))])])))\n", "  (define (interval-start interval)\
+    \ (car interval))\n  (define (interval-end interval) (cadr interval))\n  (define\
+    \ (interval-length interval) (- (interval-end interval) (interval-start interval)))\n\
+    \  (define (interval-intersect interval1 interval2)\n    (define (maybe-smaller-n\
+    \ smaller larger)\n      (define (smaller-n? n) (and (&gt;= n (interval-start\
+    \ smaller)) (&lt;= n (interval-end smaller))))\n      (define (larger-n? n) (and\
+    \ (&gt;= n (interval-start larger)) (&lt;= n (interval-end larger))))\n      (if\
+    \ (smaller-n? (interval-start larger)) (interval-start larger) (interval-start\
+    \ smaller)))\n    (define (maybe-larger-n smaller larger)\n      (define (smaller-n?\
+    \ n) (and (&gt;= n (interval-start smaller)) (&lt;= n (interval-end smaller))))\n\
+    \      (define (larger-n? n) (and (&gt;= n (interval-start larger)) (&lt;= n (interval-end\
+    \ larger))))\n      (if (larger-n? (interval-end smaller)) (interval-end smaller)\
+    \ (interval-end larger)))\n    (define (intersect? interval1 interval2)\n    \
+    \  (or (and (&gt;= (interval-start interval1) (interval-start interval2)) (&lt;=\
+    \ (interval-start interval1) (interval-end interval2)))\n          (and (&gt;=\
+    \ (interval-start interval2) (interval-start interval1)) (&lt;= (interval-start\
+    \ interval2) (interval-end interval1)))))\n    (define (no-intersect? interval1\
+    \ interval2)\n      (and (&gt; (interval-start interval1) (interval-end interval2))\
+    \ (&gt; (interval-start interval2) (interval-end interval1))))\n    (cond\n  \
+    \    [(no-intersect? interval1 interval2) \"NO\"]\n      [(intersect? interval1\
+    \ interval2)\n       (define (prime", "  (let* ((range1 (range (car interval1)\
+    \ (cadr interval1)))\n         (range2 (range (car interval2) (cadr interval2)))\n\
+    \         (intersection (intersection range1 range2)))\n    (cond ((zero? (length\
+    \ intersection)) \"NO\")\n          ((prime? (length intersection)) \"YES\")\n\
+    \          (else \"NO\"))))\n", "  (for/list ([v (in-list (range (max (cadr interval1)\
+    \ (cadr interval2))\n                               (min (caddr interval1) (caddr\
+    \ interval2))))])\n    (cons (cadr interval1) v)))\n", "  (define (interval-length\
+    \ interval)\n    (- (cadr interval) (car interval)))\n  (define (intersect? interval1\
+    \ interval2)\n    (or (and (<= (car interval1) (car interval2))\n            \
+    \ (<= (car interval2) (cadr interval1)))\n        (and (<= (car interval2) (car\
+    \ interval1))\n             (<= (car interval1) (cadr interval2)))))\n  (define\
+    \ (find-intersection interval1 interval2)\n    (cond\n      [(and (<= (car interval1)\
+    \ (car interval2))\n            (<= (car interval2) (cadr interval1)))\n     \
+    \  (list (car interval2) (cadr interval1))]\n      [(and (<= (car interval2) (car\
+    \ interval1))\n            (<= (car interval1) (cadr interval2)))\n       (list\
+    \ (car interval1) (cadr interval2))]\n      [else '(0 0)]))\n  (define (prime?\
+    \ n)\n    (define (prime-helper n i)\n      (cond\n        [(= n 1) #f]\n    \
+    \    [(= n 2) #t]\n        [(= n i) #t]\n        [(even? n) #f]\n        [(= (modulo\
+    \ n i) 0) #f]\n        [else (prime-helper n (+ i 1))]))\n    (prime-helper n\
+    \ 2))\n  (cond\n    [(intersect? interval1 interval2)\n     (if (prime? (interval-length\
+    \ (find-intersection interval1 interval2)))\n         \"YES\"\n         \"NO\"\
+    )]\n    [else \"NO\"]))\n", "  (let ([start-min (min (car interval1) (car interval2))]\n\
+    \        [end-max (max (cadr interval1) (cadr interval2))])\n    (cond\n     \
+    \ [(>= start-min end-max) \"NO\"] ;intervals don't intersect\n      [(and (not\
+    \ (positive? (interval-length (list start-min end-max))))\n            (prime?\
+    \ (interval-length (list start-min end-max)))) \"YES\"]\n      [else \"NO\"])))\n",
+  "    ;; if no intersection, return '()\n    (when (&gt;= (first interval1) (second\
+    \ interval2)) '())\n    (when (&gt;= (first interval2) (second interval1)) '())\n\
+    \    ;; else, return a list containing the interval\n    (list (max (first interval1)\
+    \ (first interval2)) (min (second interval1) (second interval2))))\n", "  (let*\
+    \ ([lowest-start-value  (max (car interval1) (car interval2))]\n         [highest-end-value\
+    \   (min (cadr interval1) (cadr interval2))]\n         [range-length        (-\
+    \ highest-end-value lowest-start-value)])\n    (if (&lt; lowest-start-value highest-end-value)\n\
+    \        (if (prime? range-length)\n            \"YES\"\n            \"NO\")\n\
+    \        \"NO\")))\n</code>\n", "  (let ([lower (max (first interval1) (first\
+    \ interval2))]\n        [upper (min (second interval1) (second interval2))])\n\
+    \    (if (&lt; lower upper)\n        (if (prime? (- upper lower))\n          \
+    \  \"YES\"\n            \"NO\")\n        \"NO\")))\n", "  \"Return the length\
+    \ of the intersection of the two intervals\"\n  (define (get-interval-length interval)\n\
+    \    (apply - (car interval) (last interval)))\n  (define (get-intersection start1\
+    \ end1 start2 end2)\n    (let ([start (max start1 start2)]\n          [end (min\
+    \ end1 end2)])\n      (if (< start end)\n          (- end start)\n          0)))\n\
+    \  (get-intersection (car interval1) (last interval1)\n                    (car\
+    \ interval2) (last interval2)))\n", "  (define (lcm x y)\n    (let ([a (max x\
+    \ y)]\n          [b (min x y)])\n      (for/fold ([result a]) ([n (in-range b\
+    \ (+ 1 b))])\n        (let ([lcm-of-result (/ (* n result) (gcd n result))])\n\
+    \          (if (zero? lcm-of-result)\n              result\n              lcm-of-result)))))\n\
+    \  (define (gcd x y)\n    (let ([a (max x y)]\n          [b (min x y)])\n    \
+    \  (for/fold ([result b]) ([n (in-range b (+ 1 b))])\n        (if (zero? (modulo\
+    \ a n))\n            n\n            result))))\n  (define (intersection-length\
+    \ interval1 interval2)\n    (define start (max (car interval1) (car interval2)))\n\
+    \    (define end (min (cadr interval1) (cadr interval2)))\n    (if (&lt; start\
+    \ end)\n        (- end start)\n        0))\n  (define (is-prime? n)\n    (define\
+    \ limit (sqrt n))\n    (for/and ([i (in-range 2 (+ 1 limit))])\n      (zero? (modulo\
+    \ n i))))\n  (define length (intersection-length interval1 interval2))\n  (if\
+    \ (zero? length)\n      \"NO\"\n      (if (is-prime? length)\n          \"YES\"\
+    \n          \"NO\")))\n</code>\n", "  (let ([x (max (first interval1) (first interval2))]\n\
+    \        [y (min (last interval1) (last interval2))])\n    (if (&lt; x y)\n  \
+    \      (values x y)\n        (values #f #f))))\n", "  (let ([low-start (max (car\
+    \ interval1) (car interval2))]\n        [high-end (min (cadr interval1) (cadr\
+    \ interval2))])\n    (if (&lt; low-start high-end)\n        (if (or (= low-start\
+    \ 1) (= high-end 1))\n            \"NO\"\n            (string-contains? \"13579\"\
+    \ (number-&gt;string (abs (- low-start high-end)))))\n        \"NO\")))\n", " \
+    \ (define (interval-union x y)\n    (cons (min (car x) (car y)) (max (cdr x) (cdr\
+    \ y))))\n  (define (interval-intersection x y)\n    (cons (max (car x) (car y))\
+    \ (min (cdr x) (cdr y))))\n  (define (interval-length x)\n    (- (cdr x) (car\
+    \ x)))\n  (define (is-prime? x)\n    (cond\n      [(= x 2) #t]\n      [(= x 3)\
+    \ #t]\n      [(= x 5) #t]\n      [(= x 7) #t]\n      [(= x 11) #t]\n      [(=\
+    \ x 13) #t]\n      [(= x 17) #t]\n      [(= x 19) #t]\n      [(= x 23) #t]\n \
+    \     [(= x 29) #t]\n      [(= x 31) #t]\n      [(= x 37) #t]\n      [(= x 41)\
+    \ #t]\n      [(= x 43) #t]\n      [(= x 47) #t]\n      [(= x 53) #t]\n      [(=\
+    \ x 59) #t]\n      [(= x 61) #t]\n      [(= x 67) #t]\n      [(= x 71) #t]\n \
+    \     [(= x 73) #t]\n      [(= x 79) #t]\n      [(= x 83) #t]\n      [(= x 89)\
+    \ #t]\n      [(= x 97) #t]\n      [#t #f]))\n  (let ((union (interval-union interval1\
+    \ interval2))\n        (intersection (interval-intersection interval1 interval2)))\n\
+    \    (if (or (&lt; (car intersection) (car union))\n            (&gt; (cdr intersection)\
+    \ (cdr union)))\n        \"NO\"\n        (if (is-prime? (interval-length intersection))\n\
+    \            \"YES\"\n            \"NO\"))))\n</code>\nThe runtime of the is-prime?\
+    \ function is the reason why I am asking this question.\n\n\nA:\n\nThe usual trick\
+    \ for speeding up these kinds of algorithms is to", "  (let ((intervals (max (first\
+    \ interval1) (first interval2)))\n        (interends (min (second interval1) (second\
+    \ interval2))))\n    (list intervals interends)))\n", "  (define (interval-length\
+    \ interval)\n    (- (cadr interval) (car interval)))\n  (define (intersects? interval1\
+    \ interval2)\n    (and (>= (car interval1) (car interval2))\n         (<= (car\
+    \ interval1) (cadr interval2))\n         (>= (cadr interval1) (car interval2))\n\
+    \         (<= (cadr interval1) (cadr interval2))))\n  (define (is-prime? n)\n\
+    \    (define (is-prime-helper? n i)\n      (if (< i (/ n 2))\n          (if (=\
+    \ (modulo n i) 0)\n              #f\n              (is-prime-helper? n (+ i 1)))\n\
+    \          #t))\n  (is-prime-helper? n 2))\n  (if (intersects? interval1 interval2)\n\
+    \      (let ((interval (list (max (car interval1) (car interval2))\n         \
+    \                   (min (cadr interval1) (cadr interval2)))))\n        (if (is-prime?\
+    \ (interval-length interval))\n            \"YES\"\n            \"NO\"))\n   \
+    \   \"NO\"))\n", "  (define (interval-overlap interval1 interval2)\n    (and (>=\
+    \ (car interval1) (car interval2))\n         (<= (car interval1) (cdr interval2))\n\
+    \         (>= (cdr interval1) (car interval2))\n         (<= (cdr interval1) (cdr\
+    \ interval2))))\n  (if (interval-overlap interval1 interval2)\n      (let ((overlap-start\
+    \ (max (car interval1) (car interval2)))\n            (overlap-end (min (cdr interval1)\
+    \ (cdr interval2))))\n        (define (prime? n)\n          (if (= n 2)\n    \
+    \          #t\n              (if (= n 1)\n                  #f\n             \
+    \     (if (odd? n)\n                      (let loop ((d 3))\n                \
+    \        (if (> (* d d) n)\n                            #t\n                 \
+    \           (if (zero? (modulo n d))\n                                #f\n   \
+    \                             (loop (+ d 2)))))\n                      #f))))\n\
+    \        (if (prime? (- overlap-end overlap-start 1))\n            \"YES\"\n \
+    \           \"NO\"))\n      \"NO\"))\n", "  (cond\n    [(and (&lt;= (car interval1)\
+    \ (car interval2))\n          (&lt;= (car interval2) (cdr interval1)))\n     (interval\
+    \ (car interval2) (cdr interval1))]\n    [(and (&lt;= (car interval2) (car interval1))\n\
+    \          (&lt;= (car interval1) (cdr interval2)))\n     (interval (car interval1)\
+    \ (cdr interval2))]\n    [else (interval 'no 'no)]))\n", "  (let*\n      ((interval1-start\
+    \ (first interval1))\n       (interval1-end (second interval1))\n       (interval2-start\
+    \ (first interval2))\n       (interval2-end (second interval2))\n       (intersection-start\
+    \ (max interval1-start interval2-start))\n       (intersection-end (min interval1-end\
+    \ interval2-end)))\n    (if (&lt; intersection-start intersection-end)\n     \
+    \   (let*\n            ((intersection-length (- intersection-end intersection-start))\n\
+    \             (is-prime (letrec\n                            ((aux (lambda (n\
+    \ curr-divisor)\n                                    (if (= n 1)\n           \
+    \                             #t\n                                        (if\
+    \ (= 0 (modulo n curr-divisor))\n                                            #f\n\
+    \                                            (aux n (+ curr-divisor 1)))))))\n\
+    \                          (aux intersection-length 2))))\n          (if is-prime\n\
+    \              \"YES\"\n              \"NO\"))\n        \"NO\")))\n</code>\n",
+  "  (let* ([start1 (car interval1)]\n         [end1 (cadr interval1)]\n         [start2\
+    \ (car interval2)]\n         [end2 (cadr interval2)])\n    (if (or (&lt; start1\
+    \ end2) (&lt; start2 end1))\n        (let ([start (max start1 start2)]\n     \
+    \         [end (min end1 end2)])\n          (if (prime? (- end start))\n     \
+    \         \"YES\"\n              \"NO\"))\n        \"NO\")))\n</code>\nThis works\
+    \ as expected, however, the algorithm to calculate if a number is prime, is slow.\n\
+    Since the number is bound to be small, I was wondering if there is a way to do\
+    \ this in Racket?\nOn the hackerrank website, there is an explanation for Python,\
+    \ for example,\n<code>def is_prime(n):\n    if n == 1:\n        return False\n\
+    \    for i in range(2, int(n**0.5)+1):\n        if n % i == 0:\n            return\
+    \ False\n    return True\n</code>\nHowever, I can't translate this to Racket,\
+    \ and was hoping you can help me.\nNote: while Racket is a functional language,\
+    \ I am looking for an imperative solution to this task.\nThanks\n\n\nA:\n\nYou\
+    \ can still use loops but the Sieve of Eratosthenes is by far the most efficient\
+    \ way to find primes:\n<code>(define (primes-sieve n)\n  (let* ([sieve (make-vector\
+    \ n false)]\n         [primes (list 2)])\n    (do ([i 3 (+ i 2)])\n        ((&gt;\
+    \ i n) primes)\n      (unless (vector-ref sieve i)\n        (set! primes (cons\
+    \ i primes))\n        (do ([j (+ i i) (+ j i)])\n            ((&gt; j n) '())\n\
+    \          (vector-set! sieve j true))))))\n", "  (let* ([int1-start (car interval1)]\n\
+    \         [int1-end (cadr interval1)]\n         [int2-start (car interval2)]\n\
+    \         [int2-end (cadr interval2)])\n    (cond ((&gt; int1-start int2-end)\
+    \ \"NO\")\n          ((&gt; int2-start int1-end) \"NO\")\n          ((&gt; (-\
+    \ int1-end int2-start) (+ 1 (sqrt (- int1-end int2-start)))) \"NO\")\n       \
+    \   (else \"YES\"))))\n", "  (define (union a b)\n    (let ((min (min a b))\n\
+    \          (max (max a b)))\n      (define (f x)\n        (if (&lt;= min x max)\n\
+    \            x\n            (if (&lt;= min x min)\n                min\n     \
+    \           max)))\n      (f 1)))\n  (define (intersect a b)\n    (let ((min (min\
+    \ a b))\n          (max (max a b)))\n      (define (f x)\n        (if (&lt;= min\
+    \ x max)\n            x\n            (if (&lt;= min x min)\n                min\n\
+    \                max)))\n      (f 1)))\n  (define (is-prime n)\n    (if (= n 2)\n\
+    \        #t\n        (if (odd? n)\n            (begin\n              (define (loop\
+    \ i)\n                (if (&lt;= n i)\n                    #f\n              \
+    \      (if (zero? (modulo n i))\n                        #f\n                \
+    \        (loop (+ i 2)))))\n              (loop 3))\n            #f)))\n  (define\
+    \ (length l)\n    (if (null? l)\n        0\n        (+ 1 (length (cdr l)))))\n\
+    \  (define (prime-interval? i1 i2)\n    (if (is-prime (length (intersect i1 i2)))\n\
+    \        \"YES\"\n        \"NO\"))\n  (if (or (null? interval1)\n          (null?\
+    \ interval2))\n      \"NO\"\n      (prime-interval? interval1 interval2)))\n",
+  "  (let*\n      ;; find the intersection:\n      ((intersection (if (<= (car interval1)\
+    \ (car interval2))\n                         interval1 interval2))\n       (intersection\
+    \ (if (<= (cadr interval1) (cadr interval2))\n                         intersection\
+    \ (list (car interval1) (cadr interval2)))))\n    (if (or (equal? (car intersection)\
+    \ (cadr intersection))\n            (or (> (car interval1) (cadr interval2))\n\
+    \                (> (car interval2) (cadr interval1))))\n        \"NO\"\n    \
+    \    (let*\n            ;; Check if the length of the intersection is a prime\
+    \ number:\n            ((length (- (cadr intersection) (car intersection)))\n\
+    \             (is-prime? (lambda (n)\n                          (if (< n 2)\n\
+    \                              #f\n                              (cond ((= n 2)\
+    \ #t)\n                                    ((even? n) #f)\n                  \
+    \                  (else (for/or ((i (in-range 3 (+ n 1) 2)))\n              \
+    \                                    (zero? (modulo n i)))))))))\n          (if\
+    \ (is-prime? length)\n              \"YES\"\n              \"NO\")))))\n```\n\n\
+    ## Tests\n\n```racket\n#lang racket\n", "  (let* ([start1 (first interval1)]\n\
+    \         [end1 (second interval1)]\n         [start2 (first interval2)]\n   \
+    \      [end2 (second interval2)])\n    (if (&lt; start1 start2)\n        (if (&lt;=\
+    \ start2 end1)\n            (list start2 end1)\n            \"NO\")\n        (if\
+    \ (&lt;= start1 end2)\n            (list start1 end2)\n            \"NO\"))))",
+  "  (cond\n    [(and (<= (car interval1) (car interval2)) (>= (cadr interval1) (cadr\
+    \ interval2))) \"YES\"]\n    [(and (<= (car interval2) (car interval1)) (>= (cadr\
+    \ interval2) (cadr interval1))) \"YES\"]\n    [(and (<= (car interval1) (car interval2))\
+    \ (<= (cadr interval1) (cadr interval2))) \"YES\"]\n    [(and (<= (car interval2)\
+    \ (car interval1)) (<= (cadr interval2) (cadr interval1))) \"YES\"]\n    [else\
+    \ \"NO\"]))\n", "  (let ([start1 (first interval1)]\n        [end1 (second interval1)]\n\
+    \        [start2 (first interval2)]\n        [end2 (second interval2)])\n    (if\
+    \ (&lt;= start2 end1)\n        (if (&lt;= start1 end2)\n            (if (&lt;\
+    \ start1 start2)\n                (cons start2 end1)\n                (cons start1\
+    \ end2))\n            \"NO\")\n        \"NO\")))", "  (define (interval-length\
+    \ interval)\n    (- (cadr interval) (car interval)))\n  (define (interval-intersection\
+    \ interval1 interval2)\n    (cond\n      [(> (car interval1) (car interval2))\
+    \ (interval-intersection interval2 interval1)]\n      [(> (cadr interval1) (car\
+    \ interval2))\n       (values (car interval2) (cadr interval1))]\n      [else\
+    \ (values (car interval1) (car interval1))]))\n  (cond\n    [(or (null? interval1)\
+    \ (null? interval2)) \"NO\"]\n    [(or (or (null? (car interval1)) (null? (cadr\
+    \ interval1)))\n         (or (null? (car interval2)) (null? (cadr interval2))))\
+    \ \"NO\"]\n    [(< (car interval1) (car interval2)) (intersection interval2 interval1)]\n\
+    \    [(> (cadr interval1) (cadr interval2)) (intersection interval2 interval1)]\n\
+    \    [else\n     (define (is-prime? n)\n       (and (not (zero? n))\n        \
+    \    (not (any (lambda (i) (= (modulo n i) 0))\n                      (range 2\
+    \ (truncate (sqrt n)))))))\n     (if (is-prime? (interval-length (interval-intersection\
+    \ interval1 interval2)))\n         \"YES\"\n         \"NO\")]))\n", "  (let* ([start1\
+    \ (car interval1)]\n         [end1 (cadr interval1)]\n         [start2 (car interval2)]\n\
+    \         [end2 (cadr interval2)])\n    (let* ([max-start (max start1 start2)]\n\
+    \           [min-end (min end1 end2)])\n      (if (< max-start min-end)\n    \
+    \      (let ([length (- min-end max-start)])\n            (if (= 1 length)\n \
+    \               \"NO\"\n                (if (for/and ([i (in-range 2 length)])\n\
+    \                             (not (= 0 (mod length i))))\n                  \
+    \  \"YES\"\n                    \"NO\")))\n          \"NO\"))))\n", "  (let* ([min-start\
+    \ (if (&lt; (car interval1) (car interval2)) (car interval1) (car interval2))]\n\
+    \         [max-end (if (&gt; (cadr interval1) (cadr interval2)) (cadr interval1)\
+    \ (cadr interval2))]\n         [interval-len (- max-end min-start)])\n    (if\
+    \ (&lt; interval-len 0) \"NO\" (if (prime? interval-len) \"YES\" \"NO\"))))\n",
+  "  (let* ([start1 (first interval1)]\n         [end1 (second interval1)]\n     \
+    \    [start2 (first interval2)]\n         [end2 (second interval2)])\n    (let*\
+    \ ([start (max start1 start2)]\n           [end (min end1 end2)])\n      (if (positive?\
+    \ (- end start))\n          (if (and (integer? (/ (- end start) 2))\n        \
+    \           (not (integer? (/ (- end start) 1))))\n              \"YES\"\n   \
+    \           \"NO\")\n          \"NO\"))))", "  (define (interval-intersection\
+    \ interval1 interval2)\n    (let* ([start1 (car interval1)]\n           [end1\
+    \ (cadr interval1)]\n           [start2 (car interval2)]\n           [end2 (cadr\
+    \ interval2)])\n      (list (max start1 start2) (min end1 end2))))\n  (define\
+    \ (not-intersect? interval1 interval2)\n    (or (< (car interval1) (car interval2))\n\
+    \        (< (car interval2) (car interval1))))\n  (let ([intersection (interval-intersection\
+    \ interval1 interval2)])\n    (if (not-intersect? interval1 interval2)\n     \
+    \   \"NO\"\n        (let* ([intersection-start (car intersection)]\n         \
+    \      [intersection-end (cadr intersection)]\n               [intersection-length\
+    \ (- intersection-end intersection-start)])\n          (if (prime? intersection-length)\n\
+    \              \"YES\"\n              \"NO\")))))\n", "  (define (sorted-list\
+    \ interval)\n    (list (list-ref interval 0) (list-ref interval 1)))\n  (define\
+    \ (between? a b c)\n    (and (<= b a) (<= a c)))\n  (define (primes? a b)\n  \
+    \  (or (= a 1) (every prime? (list->set (range a (+ b 1))))))\n  (define (interval-intersection\
+    \ i1 i2)\n    (define (interval->list i)\n      (list (list-ref i 0) (list-ref\
+    \ i 1)))\n    (cond [(= i1 i2) i1]\n          [(between? (list-ref i1 0) (list-ref\
+    \ i2 0) (list-ref i1 1))\n           (list (list-ref i2 0) (list-ref i1 1))]\n\
+    \          [(between? (list-ref i1 0) (list-ref i2 1) (list-ref i1 1))\n     \
+    \      (list (list-ref i1 0) (list-ref i2 1))]\n          [(between? (list-ref\
+    \ i2 0) (list-ref i1 0) (list-ref i2 1))\n           (list (list-ref i1 0) (list-ref\
+    \ i2 1))]\n          [(between? (list-ref i2 0) (list-ref i1 1) (list-ref i2 1))\n\
+    \           (list (list-ref i2 0) (list-ref i1 1))]\n          [else #f]))\n \
+    \ (define (interval-length i)\n    (- (list-ref i 1) (list-ref i 0)))\n  (define\
+    \ (interval-intersection-length i1 i2)\n    (interval-length (interval-intersection\
+    \ i1 i2)))\n  (define (interval-primes? i1 i2)\n    (primes? (interval-intersection-length\
+    \ i1 i2) (interval-intersection-length i1 i2)))\n  (cond [(equal? interval1 interval2)\
+    \ #t]\n        [(equal? interval1 #f) #f]\n        [(equal? interval2 #f) #f]\n\
+    \        [else (", "  (define (isPrime n)\n    (cond ((= n 1) #f)\n          ((=\
+    \ n 2) #t)\n          ((even? n) #f)\n          (else\n           (let recur ((i\
+    \ 3))\n             (if (&gt; i (sqrt n))\n                 #t\n             \
+    \    (if (zero? (modulo n i))\n                     #f\n                     (recur\
+    \ (+ i 2))))))))\n  (define (intersection-length start1 end1 start2 end2)\n  \
+    \  (cond ((&lt; start1 start2) (- end2 start1))\n          ((&lt; start2 start1)\
+    \ (- end1 start2))\n          (else (- start1 start2))))\n  (cond ((&lt; (car\
+    \ interval1) (car interval2))\n         (cond ((&lt; (cdr interval1) (car interval2))\n\
+    \                \"NO\")\n               ((&lt; (cdr interval1) (cdr interval2))\n\
+    \                (if (isPrime (intersection-length (car interval1) (cdr interval1)\
+    \ (car interval2) (cdr interval2)))\n                    \"YES\"\n           \
+    \         \"NO\"))\n               (else\n                (if (isPrime (intersection-length\
+    \ (car interval1) (cdr interval1) (car interval2) (cdr interval2)))\n        \
+    \            \"YES\"\n                    \"NO\"))))\n        ((&lt; (car interval2)\
+    \ (car interval1))\n         (cond ((&lt; (cdr interval2) (car interval1))\n \
+    \               \"NO\")\n               ((&lt; (cdr interval2) (cdr interval1))\n\
+    \                (if (isPrime (intersection-length (car interval1) (cdr interval1)\
+    \ (car interval2) (cdr interval2)))\n                    \"YES\"\n           \
+    \         \"NO\"))\n               (else\n                (if (isPrime (intersection-length\
+    \ (car interval1) (cdr interval1) (car interval2) (cdr interval2)))\n        \
+    \            \"YES\"\n                    \"NO\"))))\n        (else\n        \
+    \ (cond ((&lt; (cdr interval1) (cdr interval2))\n                (if (isPrime\
+    \ (intersection-length (car interval1) (cdr interval", "  (define (interval interval)\n\
+    \    (for/list ([i (in-range (car interval) (cadr interval))]) i))\n  (define\
+    \ (intersect interval1 interval2)\n    (cond [(empty? interval1) empty]\n    \
+    \      [(empty? interval2) empty]\n          [(< (car interval1) (car interval2))\n\
+    \           (intersect (cdr interval1) interval2)]\n          [(> (car interval1)\
+    \ (car interval2))\n           (intersect interval1 (cdr interval2))]\n      \
+    \    [else (cons (car interval1)\n                      (intersect (cdr interval1)\
+    \ (cdr interval2)))]))\n  (define (prime? n)\n    (if (= n 2)\n        #t\n  \
+    \      (if (= n 1)\n            #f\n            (let loop ([x (ceiling (/ n 2))])\n\
+    \              (if (zero? (modulo n x))\n                  #f\n              \
+    \    (if (= x 2)\n                      #t\n                      (loop (- x 1))))))))\n\
+    \  (define (intersection-length interval)\n    (define (length interval)\n   \
+    \   (if (empty? interval)\n          0\n          (+ 1 (length (cdr interval)))))\n\
+    \    (length (intersect (interval interval1) (interval interval2))))\n  (cond\
+    \ [(empty? (intersect (interval interval1) (interval interval2))) \"NO\"]\n  \
+    \      [(prime? (intersection-length interval1)) \"YES\"]\n        [else \"NO\"\
+    ]))", "  (define (interval-intersect-p interval1 interval2)\n    (if (&lt; (car\
+    \ interval1) (car interval2))\n        (interval-intersect-p interval2 interval1)\n\
+    \        (let ((max (max (car interval1) (car interval2)))\n              (min\
+    \ (min (cadr interval1) (cadr interval2))))\n          (and (&lt;= max min)\n\
+    \               (&lt;= max (cadr interval1))\n               (&lt;= max (cadr\
+    \ interval2))\n               (&lt;= min (car interval1))\n               (&lt;=\
+    \ min (car interval2))))))\n  (define (prime-p n)\n    (let loop ((i 2))\n   \
+    \   (cond ((&gt; i (/ n 2)) #t)\n            ((= (modulo n i) 0) #f)\n       \
+    \     (else (loop (+ i 1))))))\n  (let ((interval (if (interval-intersect-p interval1\
+    \ interval2)\n                      (if (&lt; (car interval1) (car interval2))\n\
+    \                          (cons (car interval2) (cadr interval1))\n         \
+    \                 (cons (car interval1) (cadr interval2)))\n                 \
+    \     (cons 0 0))))\n    (if (eq? interval '(0 0))\n        \"NO\"\n        (if\
+    \ (prime-p (- (cadr interval) (car interval)))\n            \"YES\"\n        \
+    \    \"NO\"))))\n", "    (if\n        (equal? (interval-length interval1) 0)\n\
+    \        \"NO\"\n        (if\n            (equal? (interval-length interval2)\
+    \ 0)\n            \"NO\"\n            (if\n                (and\n            \
+    \        (between? (first interval1) (second interval1) (first interval2))\n \
+    \                   (between? (first interval1) (second interval1) (second interval2)))\n\
+    \                (prime-test? (interval-length interval1))\n                (if\n\
+    \                    (and\n                        (between? (first interval2)\
+    \ (second interval2) (first interval1))\n                        (between? (first\
+    \ interval2) (second interval2) (second interval1)))\n                    (prime-test?\
+    \ (interval-length interval2))\n                    (if\n                    \
+    \    (between? (first interval1) (second interval1) (first interval2))\n     \
+    \                   (prime-test? (interval-length\n                          \
+    \            (cons (first interval2) (second interval1))))\n                 \
+    \       (if\n                            (between? (first interval2) (second interval2)\
+    \ (first interval1))\n                            (prime-test? (interval-length\n\
+    \                                          (cons (first interval1) (second interval2))))\n\
+    \                            \"NO\")))))))\n", "  (if (and (>= (cadr interval1)\
+    \ (car interval2))\n           (>= (cadr interval2) (car interval1)))\n      (let*\
+    \ ([min (max (car interval1) (car interval2))]\n             [max (min (cadr interval1)\
+    \ (cadr interval2))])\n        (if (= min max)\n            (list min max)\n \
+    \           (cons min (cdr (intersection (list max (cadr interval1)) (list max\
+    \ (cadr interval2)))))))\n      '()))\n", "  (define (intersectionRange start1\
+    \ end1 start2 end2)\n    (let* ((start (if (&gt; start1 start2) start1 start2))\n\
+    \           (end (if (&lt; end1 end2) end1 end2)))\n      (list start end)))\n\
+    \  (let* ((intersectionRange (intersectionRange (car interval1) (cadr interval1)\n\
+    \                                               (car interval2) (cadr interval2)))\n\
+    \         (intersectionRangeLen (if (equal? intersectionRange null) 0 (- (cadr\
+    \ intersectionRange) (car intersectionRange)))))\n    (if (= intersectionRangeLen\
+    \ 0) \"NO\"\n        (if (prime? intersectionRangeLen) \"YES\" \"NO\"))))\n</code>\n\
+    The problem is that this code always returns \"NO\", which is not true, see the\
+    \ tests:\n<code>(check-equal? (intersection '(1 3) '(2 4)) \"NO\")", "  (let-values\
+    \ (((min max) (if (&lt; (cadr interval1) (cadr interval2))\n                 \
+    \             interval1\n                              interval2)))\n    (if (&lt;\
+    \ (car interval1) (car interval2))\n        min\n        interval2)))\n", "  (let*\
+    \ ([start1 (car interval1)]\n         [end1 (cadr interval1)]\n         [start2\
+    \ (car interval2)]\n         [end2 (cadr interval2)])\n    (cond\n      [(> start1\
+    \ end2) \"NO\"]\n      [(> start2 end1) \"NO\"]\n      [(number-is-prime? (abs\
+    \ (- start1 end2))) \"YES\"]\n      [(number-is-prime? (abs (- start2 end1)))\
+    \ \"YES\"]\n      [else \"NO\"])))\n", "  (define low (max (car interval1) (car\
+    \ interval2)))\n  (define high (min (cadr interval1) (cadr interval2)))\n  (cond\
+    \ ((or (< low high) (prime? (- high low))) \"YES\")\n        (else \"NO\")))\n",
+  "  (let* (\n      ;; ;; does not work if the intervals are open\n      ;; (intersection\
+    \ (interval-intersection interval1 interval2))\n      ;; (length (integer-sqrt\
+    \ (+ 1 (- (cdr intersection) (car intersection))))))\n      (length (integer-sqrt\
+    \ (+ 1 (- (cdr interval2) (car interval1))))))\n    (cond\n      ((&lt; length\
+    \ 1) \"NO\")\n      ((= length 1) \"NO\")\n      ((= length 2) \"YES\")\n    \
+    \  ((even? length) \"NO\")\n      (else (prime? (sub1 length)))\n    )\n  )\n\
+    )\n", "  (define (intersect interval1 interval2)\n    (if (not (and (<= (car interval1)\
+    \ (car interval2)) (<= (car interval2) (cdr interval1))))\n        \"NO\"\n  \
+    \      (define (is-prime n)\n          (cond ((= n 1) #f)\n                ((=\
+    \ n 2) #t)\n                ((>= (modulo n 2) 1) (is-prime (- n 1)))\n       \
+    \         (else #f)))\n      (define (max x y)\n        (if (> x y) x y))\n  \
+    \    (define (min x y)\n        (if (< x y) x y))\n      (define (len-interval\
+    \ interval)\n        (- (cdr interval) (car interval)))\n      (if (&gt; (max\
+    \ (car interval1) (car interval2)) (min (cdr interval1) (cdr interval2)))\n  \
+    \        \"NO\"\n          (if (is-prime (len-interval (cons (max (car interval1)\
+    \ (car interval2)) (min (cdr interval1) (cdr interval2)))))\n              \"\
+    YES\"\n              \"NO\"))))))", "  (let*\n      ([start1 (car interval1)]\n\
+    \       [end1 (cadr interval1)]\n       [start2 (car interval2)]\n       [end2\
+    \ (cadr interval2)])\n    (cond\n     [(< start1 start2)\n      (intersection\
+    \ interval2 interval1)]\n     [(>= start1 start2)\n      (let ([common-start start2]\n\
+    \            [common-end (if (< end1 end2) end1 end2)])\n        (if (> common-start\
+    \ common-end)\n            \"NO\"\n            (if (prime-length? common-start\
+    \ common-end)\n                \"YES\"\n                \"NO\")))])))\n", "  (define\
+    \ start1 (car interval1))\n  (define end1 (cadr interval1))\n  (define start2\
+    \ (car interval2))\n  (define end2 (cadr interval2))\n  (define start3 (max start1\
+    \ start2))\n  (define end3 (min end1 end2))\n  (define length (abs (- end3 start3)))\n\
+    \  (cond ((< length 0) \"NO\")\n        ((prime? length) \"YES\")\n        (else\
+    \ \"NO\")))", "  (cond ((and (<= (car interval1) (car interval2))\n          \
+    \    (<= (car interval2) (cdr interval1)))\n         (list (car interval2) (cdr\
+    \ interval1)))\n        ((and (<= (car interval2) (car interval1))\n         \
+    \     (<= (car interval1) (cdr interval2)))\n         (list (car interval1) (cdr\
+    \ interval2)))\n        (else '(\"NO\"))))\n", "  (define (interval-length interval)\n\
+    \    (- (cadr interval) (car interval)))\n  (define (intersection-length interval1\
+    \ interval2)\n    (define (intersection-interval interval1 interval2)\n      (if\
+    \ (and (&lt;= (car interval1) (car interval2))\n               (&lt;= (car interval2)\
+    \ (cadr interval1)))\n          interval2\n          (if (and (&lt;= (car interval2)\
+    \ (car interval1))\n                   (&lt;= (car interval1) (cadr interval2)))\n\
+    \              interval1\n              'no-intersection)))\n    (let ([intersection-interval\
+    \ (intersection-interval interval1 interval2)])\n      (if (eq? intersection-interval\
+    \ 'no-intersection)\n          'no-intersection\n          (interval-length intersection-interval))))\n\
+    \  (define (is-prime? n)\n    (and (&gt; n 1)\n         (for/and ([i (in-range\
+    \ 2 (quotient n 2))])\n           (not (= (remainder n i) 0)))))\n  (define (result\
+    \ interval1 interval2)\n    (let ([intersection-length (intersection-length interval1\
+    \ interval2)])\n      (if (eq? intersection-length 'no-intersection)\n       \
+    \   \"NO\"\n          (if (is-prime? intersection-length)\n              \"YES\"\
+    \n              \"NO\"))))\n  (result interval1 interval2))\n", "  (let ([start1\
+    \ (car interval1)]\n        [end1 (cadr interval1)]\n        [start2 (car interval2)]\n\
+    \        [end2 (cadr interval2)])\n    (cond\n      [(< end1 start2) \"NO\"]\n\
+    \      [(> start1 end2) \"NO\"]\n      [else (intersection-length (vector start1\
+    \ end1 start2 end2))])))\n", "  (let* ([s1 (car interval1)]\n         [e1 (cadr\
+    \ interval1)]\n         [s2 (car interval2)]\n         [e2 (cadr interval2)])\n\
+    \    (if (and (&lt;= s2 e1) (&lt;= s1 e2))\n        (if (&lt; s1 s2)\n       \
+    \     (cons s2 e1)\n            (cons s1 e2))\n        \"NO\")))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

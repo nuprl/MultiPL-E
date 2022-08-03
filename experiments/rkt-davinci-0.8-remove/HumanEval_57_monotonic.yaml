@@ -9,7 +9,822 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate m
   \ 4 1 1 0)) #t)\n    (check-equal? (candidate (list 1 2 3 2 5 60)) #f)\n    (check-equal?\
   \ (candidate (list 1 2 3 4 5 60)) #t)\n    (check-equal? (candidate (list 9 9 9\
   \ 9)) #t)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (cond\n    [(null? l) #t]\n    [(= (length l) 1) #t]\n    [(or (=\
+    \ (apply min l) (first l))\n         (= (apply max l) (first l)))\n     (monotonic\
+    \ (rest l))]\n    [else #f]))\n", "  (define (monotonic-aux l increasing?)\n \
+    \   (if (null? l)\n        #t\n        (let ((new-increasing? (if increasing?\n\
+    \                                   (&lt;= (car l) (cadr l))\n               \
+    \                    (&gt;= (car l) (cadr l)))))\n          (and new-increasing?\
+    \ (monotonic-aux (cdr l) new-increasing?)))))\n  (monotonic-aux l #t))\n", " \
+    \   (if (&lt; (length l) 2)\n        #t\n        (or (monotonic-increasing (rest\
+    \ l) (first l))\n            (monotonic-decreasing (rest l) (first l)))))\n",
+  "  (let* ([first (first l)]\n         [comparator (if (&gt; first (second l)) &gt;\
+    \ &lt;)])\n    (apply and (map comparator l))))\n", "  (cond ((null? l) #t)\n\
+    \        ((null? (cdr l)) #t)\n        ((null? (cddr l))\n         (cond ((< (car\
+    \ l) (cadr l))\n                (and (null? (cddr l)) #t))\n               ((>\
+    \ (car l) (cadr l))\n                (and (null? (cddr l)) #t))\n            \
+    \   (else #f)))\n        (else\n         (let ((dir (cond ((> (car l) (cadr l))\
+    \ -1)\n                          ((< (car l) (cadr l)) 1)\n                  \
+    \        (else #f))))\n           (cond ((not (number? dir)) #f)\n           \
+    \      ((< dir 0) (and (monotonic (cdr l)) #t))\n                 ((> dir 0) (and\
+    \ (monotonic (cdr l)) #t))\n                 (else #f))))))\n", "    (cond [(empty?\
+    \ l) #t]\n          [(empty? (rest l)) #t]\n          [(> (first l) (second l))\n\
+    \              (and (monotonic (rest l)) (or (= (first l) (second l)) (> (first\
+    \ l) (second l))))]\n          [(< (first l) (second l))\n              (and (monotonic\
+    \ (rest l)) (or (= (first l) (second l)) (< (first l) (second l))))]))\n", " \
+    \ (cond\n    ((null? l) #t)\n    ((null? (cdr l)) #t)\n    ((> (car l) (cadr l))\
+    \ (monotonic (cdr l)))\n    ((< (car l) (cadr l)) (monotonic (cdr l)))\n    (else\
+    \ #f)))\n", "  (cond\n    [(null? l) #t]\n    [(null? (cdr l)) #t]\n    [(= (car\
+    \ l) (cadr l)) (monotonic (cdr l))]\n    [(or (< (car l) (cadr l)) (> (car l)\
+    \ (cadr l))) (monotonic (cdr l))]\n    [else #f]))\n", "  (if (null? l)\n    \
+    \  '()\n      (if (null? (cdr l))\n          '()\n          (if (null? (cddr l))\n\
+    \              '()\n              (let ([inc? \n                     (apply >\
+    \ l)])\n                (every inc? (cdr l)))))))\n\n", "  (cond [(empty? l) #t]\n\
+    \        [(empty? (rest l)) #t]\n        [(and (<= (first l) (second l)) (monotonic\
+    \ (rest l))) #t]\n        [(and (>= (first l) (second l)) (monotonic (rest l)))\
+    \ #t]\n        [else #f]))\n", "  (or (monotonic-increasing l)\n      (monotonic-decreasing\
+    \ l)))\n", "  (define (all-same? l)\n    (let loop ([l l])\n      (if (null? (cdr\
+    \ l))\n          #t\n          (and (equal? (car l) (cadr l))\n              \
+    \ (loop (cdr l))))))\n  (define (all-monotonic? l)\n    (let loop ([l l])\n  \
+    \    (if (null? (cdr l))\n          #t\n          (and (<= (car l) (cadr l))\n\
+    \               (loop (cdr l))))))\n  (cond [(empty? l) #t]\n        [(all-same?\
+    \ l) #t]\n        [(and (all-monotonic? l) (all-monotonic? (reverse l))) #t]\n\
+    \        [else #f]))\n", "  (or (monotonic-increasing l)\n      (monotonic-decreasing\
+    \ l)))\n", "  (cond [(or (null? l)\n             (null? (cdr l)))\n         #t]\n\
+    \        [(let ([d (car l)]\n               [ds (cdr l)])\n           (for/and\
+    \ ([d2 ds])\n             (or (> d d2)\n                 (< d d2))))\n       \
+    \  #t]\n        [else\n         #f]))\n", "  (let ([decreasing? (apply < l)])\n\
+    \    (andmap (match-lambda [(_ a b) (if decreasing? (<= a b) (>= a b))]) (in-naturals\
+    \ l))))\n```\n\n##### Examples\n\n```racket\n> (monotonic (list 1 2 3 3 3 3 3\
+    \ 3))\n#t\n> (monotonic (list 1 2 3 4 5 6 7 1))\n#f\n> (monotonic (list 1 2 3\
+    \ 4 5 4 3 2 1))\n#t\n> (monotonic (list 9 8 7 6 5 4 3 2 1))\n#t\n> (monotonic\
+    \ (list 1 1 1 1))\n#t\n> (monotonic (list 1))\n#t\n> (monotonic '())\n#t\n```\n\
+    \n### Challenge 4\n\nWrite a function called `chain` that takes a function and\
+    \ a variable number of arguments and returns a function that will apply the function\
+    \ to the arguments and return the result.\n\n#### Signature\n\n```racket", " \
+    \ (or\n   (monotonic-increasing l)\n   (monotonic-decreasing l)))\n", "  (cond\n\
+    \    [(empty? l) true]\n    [(null? (rest l)) true]\n    [(or (and (< (first l)\
+    \ (second l))\n              (monotonic (rest l)))\n         (and (> (first l)\
+    \ (second l))\n              (monotonic (rest l))))\n     true]\n    [else false]))\n",
+  "  (local [(define (go lst inc)\n            (cond [(empty? lst) #t]\n         \
+    \         [(apply inc (take lst 2)) (go (rest lst) inc)]\n                  [else\
+    \ #f]))]\n    (and (apply <= (take l 2))\n         (go (rest l) <=)\n        \
+    \ (apply >= (take l 2))\n         (go (rest l) >=))))\n", "  (cond [(empty? l)\
+    \ true]\n        [(empty? (rest l)) true]\n        [(or (> (first l) (second l))\n\
+    \             (< (first l) (second l)))\n         (monotonic (rest l))]\n    \
+    \    [else false]))\n", "  (cond\n    [(empty? l) #t]\n    [(one? l) #t]\n   \
+    \ [(monotonic-inc (rest l)) #t]\n    [(monotonic-dec (rest l)) #t]\n    [else\
+    \ #f]))\n", "  (cond [(null? l) #t]\n        [(null? (cdr l)) #t]\n        [(or\
+    \ (< (car l) (cadr l))\n             (> (car l) (cadr l)))\n         (monotonic\
+    \ (cdr l))]\n        [else #f]))\n\n", "  (monotonic-helper l 'none))\n", "  (or\
+    \ (increasing l) (decreasing l)))\n", "  (define (is-mono l)\n    (if (and (list?\
+    \ l) (not (null? l)))\n        (let ([a (car l)]\n              [b (cadr l)])\n\
+    \          (cond [(< a b)\n                 (cond [(not (list? (cdr l)))\n   \
+    \                     (list #t #t)]\n                       [else\n          \
+    \              (is-mono (cdr l))])]\n                [(> a b)\n              \
+    \   (cond [(not (list? (cdr l)))\n                        (list #t #f)]\n    \
+    \                   [else\n                        (is-mono (cdr l))])]\n    \
+    \            [else\n                 (list #f #f)]))\n        (list #f #f)))\n\
+    \  (if (and (list? l) (not (null? l)))\n      (let ([result (is-mono l)])\n  \
+    \      (if (car result)\n            (cadr result)\n            #f))\n      #f))\n",
+  "  (cond [(empty? l) #t]\n        [(empty? (rest l)) #t]\n        [(< (first l)\
+    \ (second l))\n         (and (monotonic (rest l)) (monotonic (rest (rest l))))]\n\
+    \        [(> (first l) (second l))\n         (and (monotonic (rest l)) (monotonic\
+    \ (rest (rest l))))]\n        [else #f]))\n", "  (cond [(empty? l) #t]\n     \
+    \   [(= (first l) (second l)) (monotonic (rest l))]\n        [(< (first l) (second\
+    \ l))\n         (and (monotonic (rest l))\n              (<= (first l) (last l)))]\n\
+    \        [(> (first l) (second l))\n         (and (monotonic (rest l))\n     \
+    \         (>= (first l) (last l)))]))\n", "  (let loop ([l l] [prev (car l)] [decreasing?\
+    \ #f])\n    (if (null? l)\n        (not decreasing?)\n        (if (or (< prev\
+    \ (car l)) (> prev (car l)))\n            (loop (cdr l) (car l) #t)\n        \
+    \    (loop (cdr l) (car l) decreasing?)))))\n", "  (and (not (null? l))\n    \
+    \   (or (or (null? (cdr l))\n               (equal? (car l) (cadr l)))\n     \
+    \      (let ((next (cadr l)))\n             (and (equal? (car l) next)\n     \
+    \             (monotonic (cdr l)))))))\n", "  (define (recur l)\n    (if (null?\
+    \ (cdr l))\n        #t\n        (if (and (>= (car l) (cadr l)) (recur (cdr l)))\n\
+    \            #t\n            #f)))\n  (recur l))\n", "  (define (helper l dir)\n\
+    \    (cond [(null? l) '()]\n          [(null? (cdr l)) true]\n          [(= (car\
+    \ l) (cadr l)) (helper (cdr l) 'same)]\n          [(and dir (= dir 'up)\n    \
+    \            (< (car l) (cadr l))) (helper (cdr l) 'up)]\n          [(and dir\
+    \ (= dir 'down)\n                (> (car l) (cadr l))) (helper (cdr l) 'down)]\n\
+    \          [else #f]))\n  (helper l 'same))\n", "  (cond ((null? l) true)\n  \
+    \      ((null? (cdr l)) true)\n        ((if (< (car l) (cadr l))\n           \
+    \  (and (monotonic (cdr l)) true)\n             (and (monotonic (cdr l)) true)))\n\
+    \        (else false)))\n", "  (or (monotonic-increasing l)\n      (monotonic-decreasing\
+    \ l)))\n", "  (or (monotonic-increasing l)\n      (monotonic-decreasing l)))\n",
+  "  (let loop ([l l] [dir (if (empty? l) 0 (if (> (car l) (cadr l)) -1 1))])\n  \
+    \  (if (empty? l) #t\n        (if (= dir 0) #f\n            (if (or (and (= dir\
+    \ 1) (< (car l) (cadr l)))\n                    (and (= dir -1) (> (car l) (cadr\
+    \ l))))\n                (loop (cdr l) dir)\n                #f)))))\n", "   \
+    \ (cond [(empty? l) #t]\n          [(empty? (rest l)) #t]\n          [(or (and\
+    \ (< (first l) (second l))\n                    (monotonic (rest l)))\n      \
+    \         (and (> (first l) (second l))\n                    (monotonic (rest\
+    \ l))))\n           #t]\n          [else #f]))\n```\n\n- `(monotonic (list 1 2\
+    \ 3 4)) ==> #t`\n- `(monotonic (list 1 2 4 3)) ==> #f`\n- `(monotonic (list 1\
+    \ 4 2 3)) ==> #f`\n- `(monotonic (list 4 3 2 1)) ==> #t`\n- `(monotonic (list\
+    \ 3 3 3 3)) ==> #t`\n- `(monotonic (list)) ==> #t`\n\n## Excercise 4\n\nA note\
+    \ on this exercise: The core functionality of the `dip` function can be replicated\
+    \ in three short lines of code. If you choose to use `dip`, then you are only\
+    \ required to implement the helper function `insert` (just as you would if you\
+    \ were using `list->set`). Note that your code for `insert` will be called by\
+    \ the `dip` function.\n\n**a)**\n\n```racket\n#lang racket\n", "  (define (increasing\
+    \ l)\n    (cond ((null? l) #t)\n          ((null? (cdr l)) #t)\n          ((<\
+    \ (car l) (cadr l)) (increasing (cdr l)))\n          (else #f)))\n  (define (decreasing\
+    \ l)\n    (cond ((null? l) #t)\n          ((null? (cdr l)) #t)\n          ((>\
+    \ (car l) (cadr l)) (decreasing (cdr l)))\n          (else #f)))\n  (or (increasing\
+    \ l) (decreasing l)))", "  (if (empty? l)\n      #t\n      (cond\n        [(=\
+    \ (second l) (first l)) (monotonic (rest l))]\n        [(> (second l) (first l))\
+    \ (and (>= (second l) (first l)) (monotonic (rest l)))]\n        [(< (second l)\
+    \ (first l)) (and (<= (second l) (first l)) (monotonic (rest l)))])))\n", "  (cond\n\
+    \    [(null? l) true]\n    [(null? (cdr l)) true]\n    [(or (= (car l) (cadr l))\n\
+    \         (< (car l) (cadr l))\n         (> (car l) (cadr l)))\n     (monotonic\
+    \ (cdr l))]\n    [else false]))\n```", "  (if (null? l)\n      #t\n      (let*\
+    \ ((step (if (< (car l) (cadr l))\n                       '+\n               \
+    \        '-))\n             (next (lambda (n) (step n 1)))\n             (all-monotonic?\
+    \ (lambda (l)\n                               (cond ((null? l)\n             \
+    \                         #t)\n                                     ((< (car l)\
+    \ (next (car l)))\n                                      (all-monotonic? (cdr\
+    \ l)))\n                                     ((> (car l) (next (car l)))\n   \
+    \                                   (all-monotonic? (cdr l)))\n              \
+    \                       (else\n                                      #f)))))\n\
+    \        (all-monotonic? l))))\n", "  (if (null? l)\n      #t\n      (cond ((null?\
+    \ (cdr l)) #t)\n            ((< (car l) (cadr l))\n             (and (monotonic\
+    \ (cdr l))\n                  #t))\n            ((> (car l) (cadr l))\n      \
+    \       (and (monotonic (cdr l))\n                  #t))\n            (else #f))))\n",
+  "  (cond\n    [(&lt; (length l) 2) #t]\n    [(or (and (not (null? (cdr l)))\n  \
+    \            (or (&lt; (car l) (cadr l))\n                  (&gt; (car l) (cadr\
+    \ l))))\n         (and (not (null? (cddr l)))\n              (or (&lt; (cadr l)\
+    \ (caddr l))\n                  (&gt; (cadr l) (caddr l)))))\n     (monotonic\
+    \ (cdr l))]\n    [else #f]))\n", "  (cond\n    [(null? l) true]\n    [(null? (cdr\
+    \ l)) true]\n    [(= (car l) (cadr l)) (monotonic (cdr l))]\n    [(> (car l) (cadr\
+    \ l))\n     (and (monotonic (cdr l)) (apply > (cdr l)))]\n    [(< (car l) (cadr\
+    \ l))\n     (and (monotonic (cdr l)) (apply < (cdr l)))]))\n", "  (cond\n    [(null?\
+    \ l)\n     #t]\n    [(null? (cdr l))\n     #t]\n    [(< (car l) (cadr l))\n  \
+    \   (if (null? (cddr l))\n         #t\n         (let ([l2 (cdr l)])\n        \
+    \   (let loop ([l l2])\n             (cond\n               [(> (car l) (cadr l))\n\
+    \                #f]\n               [(null? (cddr l))\n                #t]\n\
+    \               [else\n                (loop (cdr l))]))))]\n    [(> (car l) (cadr\
+    \ l))\n     (if (null? (cddr l))\n         #t\n         (let ([l2 (cdr l)])\n\
+    \           (let loop ([l l2])\n             (cond\n               [(< (car l)\
+    \ (cadr l))\n                #f]\n               [(null? (cddr l))\n         \
+    \       #t]\n               [else\n                (loop (cdr l))]))))]\n    [else\n\
+    \     #f]))\n", "  (define (increasing? l)\n    (cond\n      [(empty? l) #t]\n\
+    \      [(empty? (rest l)) #t]\n      [(< (first l) (first (rest l))) (increasing?\
+    \ (rest l))]\n      [else #f]))\n  (define (decreasing? l)\n    (cond\n      [(empty?\
+    \ l) #t]\n      [(empty? (rest l)) #t]\n      [(> (first l) (first (rest l)))\
+    \ (decreasing? (rest l))]\n      [else #f]))\n  (or (increasing? l) (decreasing?\
+    \ l)))\n", "  (define (ascending? l)\n    (cond\n      [(empty? l) #t]\n     \
+    \ [(null? (rest l)) #t]\n      [(< (first l) (second l)) (ascending? (rest l))]\n\
+    \      [else #f]))\n  (define (descending? l)\n    (cond\n      [(empty? l) #t]\n\
+    \      [(null? (rest l)) #t]\n      [(> (first l) (second l)) (descending? (rest\
+    \ l))]\n      [else #f]))\n  (or (ascending? l) (descending? l)))\n\n", "  (match\
+    \ l\n    [(list)\n     #t]\n    [(list x)\n     #t]\n    [(list x y z ...)\n \
+    \    (cond [(< x y)\n            (and (>= y z) (monotonic (list y z ...)))]\n\
+    \           [(> x y)\n            (and (<= y z) (monotonic (list y z ...)))]\n\
+    \           [else\n            #f])]))\n", "  (cond ((empty? l) true)\n      \
+    \  ((or (and (positive? (first l))\n                  (every positive? (rest l)))\n\
+    \             (and (negative? (first l))\n                  (every negative? (rest\
+    \ l))))\n         true)\n        (else false)))\n", "  (or\n   (increasing? l)\n\
+    \   (decreasing? l)))\n", "  (if (or (null? l) (null? (cdr l)))\n      #t\n  \
+    \    (let* ([first (car l)]\n             [second (cadr l)])\n        (if (< first\
+    \ second)\n            (and (monotonic (cdr l)) #t)\n            (and (monotonic\
+    \ (cdr l)) #t)))))\n\n", "  (let loop ([l l] [o 'dont-care])\n    (if (null? l)\n\
+    \        #t\n        (let ([c (car l)] [r (cdr l)])\n          (if (null? r)\n\
+    \              #t\n              (let ([n (car r)])\n                (cond [(or\
+    \ (= o '<) (= o 'dont-care))\n                       (if (< c n)\n           \
+    \                (loop r '<)\n                           #f)]\n              \
+    \        [(or (= o '>) (= o 'dont-care))\n                       (if (> c n)\n\
+    \                           (loop r '>)\n                           #f)])))))))\n",
+  "  (define (sign-check l)\n    (if (null? (cdr l)) #t\n        (and\n         (>=\
+    \ (car l) (cadr l))\n         (sign-check (cdr l)))))\n  (define (s-check l)\n\
+    \    (if (null? (cdr l)) #t\n        (and\n         (<= (car l) (cadr l))\n  \
+    \       (s-check (cdr l)))))\n  (or (sign-check l) (s-check l)))\n", "  (or (monotonic-increasing\
+    \ l)\n      (monotonic-decreasing l)))\n", "  (if (null? l)\n      #t\n      (monotonic-helper\
+    \ (cdr l) (car l) (<))))\n", "  (or (apply < l)\n      (apply > l)))\n", "  (cond\n\
+    \    [(or (null? l) (null? (cdr l))) #t]\n    [(> (car l) (cadr l))\n     (and\
+    \ (monotonic (cdr l)) #t)]\n    [(< (car l) (cadr l))\n     (and (monotonic (cdr\
+    \ l)) #t)]\n    [else #f]))\n", "  (or (increasing l) (decreasing l)))\n", " \
+    \ (define (iter cnt l)\n    (if (empty? l)\n        #t\n        (if (negative?\
+    \ cnt)\n            (if (> (car l) (cadr l))\n                (iter cnt (cdr l))\n\
+    \                #f)\n            (if (< (car l) (cadr l))\n                (iter\
+    \ cnt (cdr l))\n                #f))))\n  (cond ((empty? l) #t)\n        ((empty?\
+    \ (cdr l)) #t)\n        ((< (car l) (cadr l)) (iter 1 (cdr l)))\n        ((> (car\
+    \ l) (cadr l)) (iter -1 (cdr l)))\n        (else #f)))\n", "  (or (monotonic-increasing\
+    \ l)\n      (monotonic-decreasing l)))\n", "  (if (null? l) #t\n      (define\
+    \ (mono-helper l direction)\n        (if (null? l) #t\n            (if (= (car\
+    \ l) (cadr l)) (mono-helper (cdr l) direction)\n                (if (eq? direction\
+    \ 0) (mono-helper (cdr l) (if (&gt; (car l) (cadr l)) -1 1))\n               \
+    \     (and (= direction (if (&gt; (car l) (cadr l)) -1 1)) (mono-helper (cdr l)\
+    \ direction))))))\n      (mono-helper l 0)))\n", "  (cond\n    [(null? l) #t]\n\
+    \    [(null? (cdr l)) #t]\n    [(< (car l) (cadr l)) (monotonic (cdr l))]\n  \
+    \  [(> (car l) (cadr l)) (monotonic (cdr l))]\n    [else #f]))\n", "  (define\
+    \ (cons-p? l)\n    (cond [(empty? l) #f]\n          [(cons? (cdr l)) #t]\n   \
+    \       [else #f]))\n  (cond [(empty? l) #t]\n        [(cons-p? l)\n         (and\n\
+    \          (cond [(> (car l) (cadr l)) #t]\n                [(< (car l) (cadr\
+    \ l)) #t]\n                [else #f])\n          (monotonic (cdr l)))]\n     \
+    \   [else #f]))\n", "  (let loop ([l l] [inc? #t] [dec? #t])\n    (if (or (empty?\
+    \ l) (empty? (rest l)))\n        (or inc? dec?)\n        (let ([a (first l)] [b\
+    \ (second l)])\n          (if (and (not (zero? (compare a b))) (not (= (compare\
+    \ a b) (compare b a))))\n              #f\n              (loop (rest l)\n    \
+    \                (and inc? (< a b))\n                    (and dec? (> a b))))))))\n",
+  "  (define (increasing l)\n    (if (null? (cdr l))\n        #t\n        (and (&lt;=\
+    \ (car l) (cadr l))\n             (increasing (cdr l)))))\n  (define (decreasing\
+    \ l)\n    (if (null? (cdr l))\n        #t\n        (and (&gt;= (car l) (cadr l))\n\
+    \             (decreasing (cdr l)))))\n  (or (increasing l) (decreasing l)))\n",
+  "  (let loop ([l l] [state 'unset])\n    (cond [(empty? l) true]\n          [(empty?\
+    \ (rest l)) true]\n          [(= (first l) (second l)) (loop (rest l) state)]\n\
+    \          [(or (= state 'unset) (= state (sign (sub1 (first l) (second l))))\n\
+    \           (loop (rest l) (sign (sub1 (first l) (second l)))))\n           false])))\n\
+    </code>\nI use this to find a list of lists of neighbors of a given node at a\
+    \ given depth.\n<code>#lang racket\n", "  (cond\n    [(empty? l) (error \"empty\"\
+    )]\n    [(empty? (rest l)) #t]\n    [(= (first l) (second l)) (monotonic (rest\
+    \ l))]\n    [(> (first l) (second l))\n     (monotonic-helper (rest l) -1)]\n\
+    \    [(< (first l) (second l))\n     (monotonic-helper (rest l) 1)]))\n", "  (cond\
+    \ [(empty? l) false]\n        [(empty? (rest l)) true]\n        [(= (first l)\
+    \ (second l)) (monotonic (rest l))]\n        [(> (first l) (second l)) (monotonic\
+    \ (map sub1 (rest l)))]\n        [(< (first l) (second l)) (monotonic (map add1\
+    \ (rest l)))]))\n", "  (if (empty? l)\n      #t\n      (let ((head (car l))\n\
+    \            (tail (cdr l)))\n        (if (empty? tail)\n            #t\n    \
+    \        (let ((next (car tail)))\n              (cond\n               [(< head\
+    \ next)\n                (monotonic tail)]\n               [(> head next)\n  \
+    \              (monotonic tail)]\n               [else\n                #f]))))))\n",
+  "  (define (positive)\n    (and (&gt; 1 2) (&gt; 2 3)))\n  (define (negative)\n\
+    \    (and (&lt; 1 2) (&lt; 2 3)))\n  (cond\n    [(empty? l) #t]\n    [(= (length\
+    \ l) 1) #t]\n    [(and (positive) (negative)) #f]\n    [(or (positive) (negative))\
+    \ (monotonic (rest l))]))\n</code>\nI am trying to make that last cond case a\
+    \ little cleaner by replacing it with the following:\n<code>(cond\n  [(or (positive)\
+    \ (negative)) #t]\n  [else (monotonic (rest l))])\n</code>\nIs there a way I can\
+    \ make it so the or (positive) (negative) portion of the first cond case just\
+    \ returns true or false?\n\n\nA:\n\nIt's not entirely clear what you're trying\
+    \ to do, but if you just want the first two values of the list to be non-decreasing\
+    \ or non-increasing, you can use <code>andmap</code> instead of <code>and</code>:\n\
+    <code>(define (monotonic l)\n  (cond [(empty? l) #t]\n        [(= (length l) 1)\
+    \ #t]\n        [(not (andmap (\u03BB (n) (&lt; n (rest n))) l)) #f]\n        [else\
+    \ (monotonic (rest l))]))\n</code>\n", "  (define (mono-rec l d)\n    (cond [(empty?\
+    \ l) #t]\n          [(empty? (rest l)) #t]\n          [(or (= (first l) (second\
+    \ l))\n               (= (first l) (+ (second l) d)))\n           (mono-rec (rest\
+    \ l) d)]\n          [else #f]))\n  (if (empty? l)\n      #t\n      (cond [(= (first\
+    \ l) (second l)) (mono-rec (rest l) 0)]\n            [(> (first l) (second l))\
+    \ (mono-rec (rest l) -1)]\n            [else (mono-rec (rest l) 1)])))\n", " \
+    \ (if (null? l)\n      #t\n      (define (helper l n)\n          (if (null? l)\n\
+    \              #t\n              (if (and (< n (car l)) (= 1 (- (car l) n)))\n\
+    \                  (helper (cdr l) (car l))\n                  #f)))\n      (helper\
+    \ (cdr l) (car l))))\n", "  (let ([decreasing? (apply &lt;= (cdr l))]\n      \
+    \  [increasing? (apply &gt;= (cdr l))])\n    (and (or decreasing? increasing?)\n\
+    \         (monotonic (cdr l)))))\n", "  (cond\n    [(empty? l) true]\n    [(empty?\
+    \ (rest l)) true]\n    [(> (first l) (second l)) (monotonic (rest l))]\n    [(<\
+    \ (first l) (second l)) (monotonic (rest l))]\n    [else false]))\n```\n\n```scheme\n\
+    #lang racket\n", "  (or (monotonic-increasing l)\n      (monotonic-decreasing\
+    \ l)))\n", "  (define (loop l sign)\n    (cond\n      [(empty? l) #t]\n      [(empty?\
+    \ (rest l)) #t]\n      [(not (= sign (compare (first l) (second l)))) #f]\n  \
+    \    [else (loop (rest l) sign)]))\n  (loop l (compare (first l) (second l))))\n",
+  "  (let loop ([lst l] [decreasing? #f] [increasing? #f])\n    (cond [(null? lst)\
+    \ #t]\n          [(null? (cdr lst)) (and (not decreasing?) increasing?)]\n   \
+    \       [(< (car lst) (cadr lst))\n           (loop (cdr lst) #f #t)]\n      \
+    \    [(> (car lst) (cadr lst))\n           (loop (cdr lst) #t #f)]\n         \
+    \ [else #f])))\n", "  (cond [(empty? l) true]\n        [(empty? (rest l)) true]\n\
+    \        [(> (first l) (second l)) monotonic (rest l)]\n        [(< (first l)\
+    \ (second l)) monotonic (rest l)]\n        [else false]))\n", "  (define (aux\
+    \ l sign)\n    (cond\n      [(empty? l) #t]\n      [(empty? (rest l)) #t]\n  \
+    \    [(or (= sign 1) (= sign -1))\n       (if (and (= (first l) (first (rest l)))\n\
+    \                (= (signum (sub1 (first l))) sign))\n           (aux (rest l)\
+    \ sign)\n           #f)]\n      [else\n       (aux (rest l) (signum (sub1 (first\
+    \ l))))]))\n  (aux l 0))\n", "  (cond\n    [(null? l) #t]\n    [(null? (cdr l))\
+    \ #t]\n    [(or (and (= (car l) (car (cdr l))) (monotonic (cdr l)))\n        \
+    \ (and (< (car l) (car (cdr l))) (monotonic-ascending (cdr l)))\n         (and\
+    \ (> (car l) (car (cdr l))) (monotonic-descending (cdr l)))) #t]\n    [else #f]))\n",
+  "  (cond [(empty? l) #t]\n        [(empty? (rest l)) #t]\n        [(< (first l)\
+    \ (second l)) (monotonic (rest l))]\n        [(> (first l) (second l)) (monotonic\
+    \ (rest l))]\n        [else #f]))\n", "  (cond ((null? l) #t)\n        ((null?\
+    \ (cdr l)) #t)\n        ((> (car l) (cadr l)) (and (monotonic (cdr l)) (>= (car\
+    \ l) (cadr l))))\n        ((> (car l) (cadr l)) (and (monotonic (cdr l)) (<= (car\
+    \ l) (cadr l))))))\n", "  (and (not (null? l))\n       (not (null? (cdr l)))\n\
+    \       (or (and (or (> (car l) (cadr l))\n                    (= (car l) (cadr\
+    \ l)))\n                (monotonic (cdr l)))\n           (and (or (< (car l) (cadr\
+    \ l))\n                    (= (car l) (cadr l)))\n                (monotonic (cdr\
+    \ l))))))\n", "  (and (list? l)\n       (or (null? (cdr l))\n           (and (number?\
+    \ (car l))\n                (number? (cadr l))\n                (if (< (car l)\
+    \ (cadr l))\n                    (monotonic (cdr l))\n                    (or\
+    \ (= (car l) (cadr l))\n                        (monotonic (cdr l))))))))\n",
+  "  (if (null? l)\n      #t\n      (monotonic-helper l 'either #f)))\n", "  (cond\
+    \ ((empty? l) #t)\n        ((< (second l) (first l)) (monotonic-increasing (rest\
+    \ l)))\n        ((> (second l) (first l)) (monotonic-decreasing (rest l)))\n \
+    \       (else #f)))\n", "  (cond\n    [(empty? l) #t]\n    [(empty? (rest l))\
+    \ #t]\n    [(< (first l) (second l)) (monotonic (rest l))]\n    [(> (first l)\
+    \ (second l)) (monotonic (rest l))]\n    [else #f]))\n", "  (define (monotonic-helper\
+    \ l up)\n    (if (null? l)\n        #t\n        (cond [(null? (cdr l)) #t]\n \
+    \             [(and up (or (positive? (car l)) (positive? (cadr l))))\n      \
+    \         (monotonic-helper (cdr l) up)]\n              [(and (not up) (or (negative?\
+    \ (car l)) (negative? (cadr l))))\n               (monotonic-helper (cdr l) up)]\n\
+    \              [else #f])))\n  (monotonic-helper l #t))\n", "  (cond [(empty?\
+    \ l) #t]\n        [(null? (cdr l)) #t]\n        [(< (car l) (cadr l)) (monotonic\
+    \ (cdr l))]\n        [(> (car l) (cadr l)) (monotonic (cdr l))]\n        [else\
+    \ #f]))\n```\n\n```racket\n#lang racket\n", "  (cond\n    [(empty? l) #t]\n  \
+    \  [(empty? (rest l)) #t]\n    [(or (and (not (positive? (last (rest l)))) (negative?\
+    \ (first l)))\n         (and (not (negative? (last (rest l)))) (positive? (first\
+    \ l))))\n     (monotonic (rest l))]\n    [else #f]))\n</code>\n", "  (and (&gt;\
+    \ (length l) 1)\n       (let* ([diff-sign (diff-sign (car l) (cadr l))]\n    \
+    \          [different-sign-p (if (eq? diff-sign 0) #f (not (zero? diff-sign)))]\n\
+    \              [all-same-sign-p (all-same-sign (list-tail l) diff-sign)])\n  \
+    \       (or different-sign-p all-same-sign-p))))\n", "  (match l\n    [(and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and x) y) z) a) b) c) d) e) f) g) h) i) j) k) l) m) n) o) p) q) r)\
+    \ s)\n     (or\n      ;; increasing\n      (and (monotonic (list x y z a b c d\
+    \ e f g h i j k l m n o p q r s))\n           (&lt; x y) (&lt; y z) (&lt; z a)\
+    \ (&lt; a b) (&lt; b c) (&lt; c d) (&lt; d e) (&lt; e f) (&lt; f g) (&lt; g h)\
+    \ (&lt; h i) (&lt; i j) (&lt; j k) (&lt; k l) (&lt; l m) (&lt; m n) (&lt; n o)\
+    \ (&lt; o p) (&lt; p q) (&lt; q r) (&lt; r s))\n      ;; decreasing\n      (and\
+    \ (monotonic (list x y z a b c d e f g h i j k l m n o p q r s))\n           (&gt;\
+    \ x y) (&gt; y z) (&gt; z a) (&gt; a b) (&gt; b c) (&gt; c d) (&gt; d e) (&gt;\
+    \ e f) (&gt; f g) (&gt; g h) (&gt; h i) (&gt; i j) (&gt; j k) (&gt; k l) (&gt;\
+    \ l m) (&gt; m n) (&gt; n o) (&gt; o p) (&gt; p q) (&gt; q r) (&gt; r s)))]))\n\
+    </code>\nSome tests:\n<code>&gt; (monotonic (list))\n#t\n&gt; (monotonic (list\
+    \ 1))\n#t\n&gt; (monotonic (list 1 2))\n#t\n&gt; (monotonic (list 2 1))\n#t\n\
+    &gt; (monotonic (list 1", "  (and\n   (cond\n    [(empty? l) #t]\n    [(and (=\
+    \ (length l) 1) (not (cons? (first l)))) #t]\n    [(and (not (empty? (rest l)))\n\
+    \     (< (first l) (second l))) (monotonic (rest l))]\n    [(and (not (empty?\
+    \ (rest l)))\n     (> (first l) (second l))) (monotonic (rest l))]\n    [else\
+    \ #f])\n   #t))\n", "  (cond [(null? l) false]\n        [(null? (cdr l)) true]\n\
+    \        [(or (< (car l) (cadr l))\n             (> (car l) (cadr l)))\n     \
+    \    (monotonic (cdr l))]\n        [else false]))\n", "  (cond\n    [(empty? l)\
+    \ true]\n    [(empty? (rest l)) true]\n    [(or (equal? (first l) (second l))\n\
+    \         (and (&lt; (first l) (second l))\n              (monotonic (rest l))))\n\
+    \     true]\n    [else false]))\n", "  (or (and (null? (cdr l)) #t)\n      (and\
+    \ (<= (car l) (cadr l))\n           (monotonic (cdr l)))))\n", "  (cond\n    [(null?\
+    \ l) #t]\n    [(null? (cdr l)) #t]\n    [(< (car l) (cadr l)) (monotonic (cdr\
+    \ l))]\n    [(> (car l) (cadr l)) (monotonic (cdr l))]\n    [else #f]))\n", " \
+    \ (let loop ([l l] [dir #f])\n    (cond [(null? l) #t]\n          [(null? (cdr\
+    \ l)) #t]\n          [(equal? (car l) (cadr l)) (loop (cdr l) dir)]\n        \
+    \  [(and (number? (car l)) (number? (cadr l)))\n           (let ([d (< (car l)\
+    \ (cadr l))])\n             (cond [(not dir) (loop (cdr l) d)]\n             \
+    \      [(equal? dir d) (loop (cdr l) dir)]\n                   [else #f]))]\n\
+    \          [else #f])))\n", "  (let loop ([l l] [i 0])\n    (if (empty? l) #t\n\
+    \        (let ([x (first l)] [y (second l)])\n          (if (and (= i 0) (not\
+    \ (zero? x)))\n              (loop (rest l) (+ i 1))\n              (if (= x y)\n\
+    \                  (loop (rest l) (+ i 1))\n                  (if (or (and (>\
+    \ x y) (= i 0))\n                          (and (> x y) (= i 1))\n           \
+    \               (and (< x y) (= i 0))\n                          (and (< x y)\
+    \ (= i -1)))\n                      (loop (rest l) (- i 1))\n                \
+    \      #f)))))))\n```\n\n```racket\n#lang racket\n", "  (if (empty? l)\n     \
+    \ #t\n      (define check-mono (cons (<= (first l) (second l)) check-mono))\n\
+    \      (if (empty? (rest l))\n          (apply and check-mono)\n          (monotonic\
+    \ (rest l)))))\n```\n\n```\n#lang racket\n", "  (cond\n    [(empty? l) #t]\n \
+    \   [(empty? (rest l)) #t]\n    [(or (< (first l) (second l)) (> (first l) (second\
+    \ l)))\n     (monotonic (rest l))]\n    [else #f]))\n", "  (cond\n    [(empty?\
+    \ l) true]\n    [(and\n      (and (positive? (car l)) (negative? (cadr l)))\n\
+    \      (and (negative? (car l)) (positive? (cadr l))))\n      false]\n    [else\
+    \ (monotonic (cdr l))]))\n</code>\nI get this error:\n<code>monotonic.rkt:5:29:\
+    \ and: bad syntax; has 0 parts after an open paren, but 2 parts were expected\n\
+    \  context...:\n   /Applications/Racket v6.6/collects/racket/private/misc.rkt:87:2:\
+    \ check-and/or/cond-exp\n   /Applications/Racket v6.6/collects/racket/private/misc.rkt:102:2:\
+    \ check-and/or/cond-clause\n   /Applications/Racket v6.6/collects/racket/private/misc.rkt:102:2:\
+    \ check-and/or/cond-clauses\n   /Applications/Racket v6.6/collects/racket/private/misc.rkt:102:2:\
+    \ check-and/or/cond-exp\n   /Applications/Racket v6.6/collects/racket/private/misc.rkt:102:2:\
+    \ check-and/or/cond-clause\n   /Applications/Racket v6.6/collects/racket/private/misc.rkt:102:2:\
+    \ check-and/or/cond-clauses\n   /Applications/Racket v6.6/collects/racket/private/misc.rkt:102:2:\
+    \ check-and/or/cond-exp\n   /Applications/Racket v6.6/collects/racket/private/misc.rkt:102:2:\
+    \ check-and/or/cond-clause\n   /Applications/Racket v6.6/collects/racket/private/misc.rkt:102:2:\
+    \ check-and/or/cond-clauses\n   /Applications/Racket v6.6/collects/racket/private/misc.rkt:102:2:\
+    \ check-and/or/cond-exp", "  (cond\n    [(empty? l) true]\n    [(empty? (rest\
+    \ l)) true]\n    [(if (if (if (if (if (if (if (&lt; (first l) (second l)) true\
+    \ #f)\n                     (&lt; (second l) (third l)) #f)\n                \
+    \     (&lt; (third l) (fourth l)) #f)\n                     (&lt; (fourth l) (fifth\
+    \ l)) #f)\n                     (&lt; (fifth l) (sixth l)) #f)\n             \
+    \        (&lt; (sixth l) (seventh l)) #f)\n            (monotonic (rest l)) #f)\n\
+    </code>\nI can't find the solution to this problem, so I figure I might as well\
+    \ try to use recursion. I tried to write a function that checks if the first element\
+    \ is less than the second, then checks if the second is less than the third, and\
+    \ so on until the very last element. But it doesn't work.\n\n\nA:\n\nIf you want\
+    \ to check if a list is monotonically decreasing you could define a procedure\
+    \ like this:\n<code>(define (decreasing? lst)\n  (if (null? (rest lst)) \n   \
+    \   #t \n      (and (&lt; (first lst) (second lst)) (decreasing? (rest lst)))))\n\
+    </code>\nI started from the general case, a list with at least two elements, and\
+    \ for that I checked the condition of being decreasing with <code>and</code> because\
+    \ the list has to be monotonically decreasing from the beginning to the end. \n\
+    Then, I arrived to the base case that is when the list has only one element. In\
+    \ that case, I just return <code>#t</code> because a list of one element is monotonically\
+    \ decreasing.\n", "  (cond\n    [(null? l) #t]\n    [(null? (cdr l)) #t]\n   \
+    \ [(and (&lt;= (car l) (cadr l))\n          (monotonic (cdr l))) #t]\n    [(and\
+    \ (&gt;= (car l) (cadr l))\n          (monotonic (cdr l))) #t]\n    [else #f]))\n",
+  "  (define (check l direction)\n    (cond [(empty? l) #t]\n          [(or (= 1 (length\
+    \ l))\n               (empty? (rest l))) #t]\n          [(= direction 0)\n   \
+    \        (let* ([a (first l)]\n                  [b (second l)])\n           \
+    \  (if (< a b)\n                 (check (rest l) +1)\n                 (if (>\
+    \ a b)\n                     (check (rest l) -1)\n                     (check\
+    \ (rest l) 0))))]\n          [(< direction 0)\n           (cond [(< (first l)\
+    \ (second l)) #f]\n                 [else (check (rest l) direction)])]\n    \
+    \      [(> direction 0)\n           (cond [(> (first l) (second l)) #f]\n    \
+    \             [else (check (rest l) direction)])]))\n  (check l 0))\n", "  (cond\
+    \ [(empty? l) true]\n        [(null? (cdr l)) true]\n        [(< (car l) (cadr\
+    \ l)) (monotonic (cdr l))]\n        [(> (car l) (cadr l)) (monotonic (cdr l))]\n\
+    \        [else false]))", "  (match l\n    [(list) #t]\n    [(list x (list y z\
+    \ ...))\n     (if (and (<= x y)\n              (monotonic (list y z ...)))\n \
+    \        #t\n         #f)]))\n", "  (if (null? l) \n      'True\n      (let* ([first\
+    \ (car l)]\n             [tail (cdr l)]\n             [increasing? (null? (filter\
+    \ (lambda (item) (< item first)) tail))]\n             [decreasing? (null? (filter\
+    \ (lambda (item) (> item first)) tail))])\n        (or increasing? decreasing?))))\n",
+  "  (define (increasing? l)\n    (cond [(null? l) #t]\n          [(null? (cdr l))\
+    \ #t]\n          [(< (car l) (cadr l)) (increasing? (cdr l))]\n          [else\
+    \ #f]))\n  (define (decreasing? l)\n    (cond [(null? l) #t]\n          [(null?\
+    \ (cdr l)) #t]\n          [(> (car l) (cadr l)) (decreasing? (cdr l))]\n     \
+    \     [else #f]))\n  (or (increasing? l) (decreasing? l)))\n", "  (define (monotonic-aux\
+    \ l sign)\n    (if (null? l)\n        #t\n        (let ([a (car l)]\n        \
+    \      [b (cadr l)])\n          (if (and (not (eq? a b))\n                   (eq?\
+    \ sign (sign-of-a-b a b)))\n              (monotonic-aux (cdr l) sign)\n     \
+    \         #f))))\n  (if (null? l)\n      #t\n      (monotonic-aux (cdr l) (sign-of-a-b\
+    \ (car l) (cadr l)))))\n", "  (or (monotonic-increasing l)\n      (monotonic-decreasing\
+    \ l)))\n", "  (cond\n    [(null? l) #t]\n    [(null? (cdr l)) #t]\n    [(and (null?\
+    \ (cddr l))\n          (or (apply < l)\n              (apply > l))) #t]\n    [(or\
+    \ (and (apply < l)\n              (monotonic (cdr l)))\n         (and (apply >\
+    \ l)\n              (monotonic (cdr l)))) #t]\n    [else #f]))\n```\n\n### Iterative\
+    \ version\n\n```#lang racket\n", "  (cond [(empty? l) true]\n        [(empty?\
+    \ (rest l)) true]\n        [(and (positive? (sub1 (second l))) (negative? (sub1\
+    \ (first l)))) false]\n        [(and (negative? (sub1 (second l))) (positive?\
+    \ (sub1 (first l)))) false]\n        [else (monotonic (rest l))]))\n", "  (or\
+    \ (monotonic-increasing l)\n      (monotonic-decreasing l)))\n", "  (if (null?\
+    \ l)\n      #t\n      (monotonic-rec l (car l) #f)))\n", "  (and (andmap < l)\n\
+    \       (andmap > l)))\n```\n\n```racket\n#lang racket\n", "    (and (not (null?\
+    \ l))\n         (let loop ((lst (cdr l))\n                    (prev (car l))\n\
+    \                    (incr? (> (car l) (cadr l))))\n             (if (null? lst)\n\
+    \                 #t\n                 (and (if incr?\n                      \
+    \    (> prev (car lst))\n                          (< prev (car lst)))\n     \
+    \                 (loop (cdr lst) (car lst) incr?))))))\n", "  (monotonic-helper\
+    \ l < #f))\n", "  (cond\n    [(empty? l) (error \"empty list\")]\n    [(empty?\
+    \ (rest l)) #t]\n    [(positive? (minus (rest (first l)) (first l))) (monotonic\
+    \ (rest l))]\n    [(negative? (minus (rest (first l)) (first l))) (monotonic (rest\
+    \ l))]\n    [else #f]))\n</code>\nThe reason for two separate calls to <code>minus</code>\
+    \ is to ensure that we keep the sign. If we simply subtract <code>(rest (first\
+    \ l))</code> from <code>(first l)</code>, we would get <code>0</code> when they\
+    \ are equal.\n", "  (let loop ([l l] [s (car l)] [t (cadr l)])\n    (cond\n  \
+    \    [(empty? l) #t]\n      [(< s t) (loop (cdr l) t (caddr l))]\n      [(> s\
+    \ t) (loop (cdr l) t (caddr l))]\n      [else #f])))\n", "  (if (null? l)\n  \
+    \    #t\n      (let* ((next (cdr l))\n             (dir (not (equal? (car l) (car\
+    \ next)))))\n        (if dir\n            (and (eq? dir (not (equal? (car next)\
+    \ (car (cdr next)))))\n                 (monotonic next))\n            #t))))\n",
+  "    (cond [(empty? l) true]\n          [(empty? (rest l)) true]\n          [(<\
+    \ (first l) (second l)) (monotonic (rest l))]\n          [(> (first l) (second\
+    \ l)) (monotonic (rest l))]\n          [else false]))\n", "  (let loop ([x l]\
+    \ [prev #f])\n    (cond [(null? x) #t]\n          [(null? prev) (loop (cdr x)\
+    \ (car x))]\n          [(> (car x) prev) (loop (cdr x) (car x))]\n          [(<\
+    \ (car x) prev) (loop (cdr x) (car x))]\n          [else #f])))\n", "  (cond [(empty?\
+    \ l) #t]\n        [(monotonic-help l (first l)) #t]\n        [else #f]))\n", " \
+    \ (or (monotonic-increasing l)\n      (monotonic-decreasing l)))\n", "  (or (monotonic-increasing\
+    \ l)\n      (monotonic-decreasing l)))\n", "  (define (helper l)\n    (cond [(null?\
+    \ l) true]\n          [(null? (cdr l)) true]\n          [(if (< (car l) (cadr\
+    \ l))\n              (helper (cdr l))\n              (if (or (= (car l) (cadr\
+    \ l))\n                      (helper (cdr l)))\n                  true\n     \
+    \             false))]))\n  (helper l))\n", "  (or (monotonic-increasing l)\n\
+    \      (monotonic-decreasing l)))\n", "  (let ([dir (if (zero? (length l))\n \
+    \                '()\n                 (if (> (first l) (second l))\n        \
+    \             'descending\n                     'ascending))])\n    (for/and ([e\
+    \ (in-list (rest l))])\n      (if (eq? dir 'ascending)\n          (<= (second\
+    \ e) (first e))\n          (>= (second e) (first e))))))\n", "  (letrec\n    ([is-increasing?\
+    \ (\u03BB (l)\n                       (or (null? l)\n                        \
+    \   (and (not (= (car l) (cadr l)))\n                                (if (&lt;\
+    \ (car l) (cadr l))\n                                    (is-increasing? (cdr\
+    \ l))\n                                    #f))))]\n     [is-decreasing? (\u03BB\
+    \ (l)\n                       (or (null? l)\n                           (and (not\
+    \ (= (car l) (cadr l)))\n                                (if (&gt; (car l) (cadr\
+    \ l))\n                                    (is-decreasing? (cdr l))\n        \
+    \                            #f))))])\n    (or (is-increasing? l)\n        (is-decreasing?\
+    \ l))))\n", "  (if (null? l)\n      #t\n      (let ([tmp l])\n        (cond [(null?\
+    \ (cdr l)) #t]\n              [(and (equal? (car l) (cadr l))\n              \
+    \  (monotonic (cdr l))) #t]\n              [(and (or (and (> (car l) (cadr l))\n\
+    \                            (monotonic (cdr l)))\n                         (and\
+    \ (< (car l) (cadr l))\n                              (monotonic (cdr l)))) #t)]\n\
+    \              [else #f]))))\n", "  (or (monotonic-increasing l)\n      (monotonic-decreasing\
+    \ l)))\n", "  (define (is-increasing l)\n    (and (pair? l)\n         (or (null?\
+    \ (cdr l))\n             (and (<= (car l) (cadr l))\n                  (is-increasing\
+    \ (cdr l))))))\n  (define (is-decreasing l)\n    (and (pair? l)\n         (or\
+    \ (null? (cdr l))\n             (and (>= (car l) (cadr l))\n                 \
+    \ (is-decreasing (cdr l))))))\n  (or (is-increasing l)\n      (is-decreasing l)))\n",
+  "  (define (help i j)\n    (if (&lt; i (- (length l) 1))\n        (if (or (and (&lt;\
+    \ i 0) (= (list-ref l i) (list-ref l j)))\n                (and (&gt;= i 0) (=\
+    \ (list-ref l i) (list-ref l j))))\n            (help (+ i 1) (+ j 1))\n     \
+    \       #f)\n        #t))\n  (help 0 1))\n</code>\nand the test:\n<code>#lang\
+    \ racket\n", "  (let ([increasing? (apply < l)]\n        [decreasing? (apply >\
+    \ l)])\n    (or increasing? decreasing?)))\n", "  (cond [(empty? l) #t]\n    \
+    \    [(empty? (rest l)) #t]\n        [(> (first l) (second l)) (monotonic-all-greater?\
+    \ (rest l))]\n        [(< (first l) (second l)) (monotonic-all-lesser? (rest l))]\n\
+    \        [else #f]))\n", "  (cond\n    [(empty? l) #t]\n    [(or (= (first l)\
+    \ (second l))\n         (positive? (sub1 (first l)))\n         (negative? (sub1\
+    \ (first l))))\n     (monotonic (rest l))]\n    [else #f]))\n</code>\n", "  (let\
+    \ loop ([l l] [i 0])\n    (cond [(null? l) true]\n          [(< i (length l))\n\
+    \           (cond [(or (= (car l) (cadr l))\n                       (not (or (=\
+    \ (car l) (+ (cadr l) 1))\n                                (= (car l) (- (cadr\
+    \ l) 1)))))\n                  false]\n                 [else (loop (cdr l) (+\
+    \ i 1))])])))\n", "  (cond ((= (length l) 0) #t)\n        ((= (length l) 1) #t)\n\
+    \        ((or (= (length l) 2) (= (length l) 3))\n         (let* ([e1 (first l)]\n\
+    \                [e2 (second l)]\n                [e3 (third l)])\n          \
+    \ (if (= e1 e2)\n               #t\n               (if (and (> e1 e2) (> e2 e3))\n\
+    \                   #t\n                   (if (and (< e1 e2) (< e2 e3))\n   \
+    \                    #t\n                       #f)))))\n        (else\n     \
+    \    (let* ([e1 (first l)]\n                [e2 (second l)]\n                [e3\
+    \ (third l)])\n           (and (if (and (> e1 e2) (> e2 e3))\n               \
+    \     #t\n                    (if (and (< e1 e2) (< e2 e3))\n                \
+    \        #t\n                        #f))\n                (monotonic (rest l)))))))\n\
+    \n", "  (cond [(empty? l) true]\n        [(or (= (first l) (second l))\n     \
+    \        (pos? (sub1 (length l))))\n         (monotonic (rest l))]\n        [else\
+    \ false]))\n", "  (define (iter l curr-direction)\n    (cond ((null? l) #t)\n\
+    \          ((null? (cdr l)) #t)\n          ((and (positive? (car l)) (negative?\
+    \ (cadr l))) #f)\n          ((and (negative? (car l)) (positive? (cadr l))) #f)\n\
+    \          (else (iter (cdr l) (car l)))))\n  (iter l (car l)))\n", "  (cond ((empty?\
+    \ l) true)\n        ((and (and (empty? (cdr l)) true)\n              (and (empty?\
+    \ (cddr l)) true)) true)\n        ((and (= (first l) (second l))\n           \
+    \   (monotonic (cdr l))) true)\n        ((or (positive? (sub1 (first l)))\n  \
+    \           (negative? (sub1 (first l))))\n         (cond ((= (first l) (second\
+    \ l))\n                (monotonic (cdr l)))\n               ((and (< (first l)\
+    \ (second l))\n                     (monotonic (cdr l))) true)\n             \
+    \  ((and (> (first l) (second l))\n                     (monotonic (cdr l))) true)\n\
+    \               (else false)))\n        (else false)))\n```\n\n## Problem 3\n\n\
+    In the `set` operation of the `bag` type, it is also possible to just add a\n\
+    new pair to the list as an alternative to replacing an existing pair. Why is\n\
+    this a bad idea?\n\nIf two pairs have the same key but different values, you would\
+    \ have a situation\nin which there are two different values for a single key.\
+    \ This would violate\nthe mathematical definition of a set.\n\n## Problem 4\n\n\
+    Add a fifth operation to the `bag` type called `union`. The `union` operation\n\
+    should accept two bags as arguments and should produce a new bag which contains\n\
+    all elements of both bags.\n\n```racket\n#lang racket\n", "  (local [(define (ascending?\
+    \ l)\n            (cond [(empty? l) #t]\n                  [(empty? (rest l))\
+    \ #t]\n                  [(> (first l) (second l)) #f]\n                  [else\
+    \ (ascending? (rest l))]))\n          (define (descending? l)\n            (cond\
+    \ [(empty? l) #t]\n                  [(empty? (rest l)) #t]\n                \
+    \  [(< (first l) (second l)) #f]\n                  [else (descending? (rest l))]))]\n\
+    \    (or (ascending? l) (descending? l))))\n", "  (cond\n    [(null? l) #t]\n\
+    \    [(null? (cdr l)) #t]\n    [(< (car l) (cadr l)) (monotonic (cdr l))]\n  \
+    \  [(> (car l) (cadr l)) (monotonic (cdr l))]\n    [else #f]))\n", "  (match l\n\
+    \    [() #t]\n    [(list a b . rest) (if (and (not (zero? (- a b)))\n        \
+    \                        (or (positive? (- a b))\n                           \
+    \         (negative? (- a b))))\n                           (monotonic (cons b\
+    \ rest))\n                           #f)]))\n", "  (define (mono-helper lst direction)\n\
+    \    (cond\n      [(empty? lst) #t]\n      [(empty? (rest lst)) #t]\n      [(=\
+    \ direction 0)\n       (cond\n         [(> (first lst) (second lst)) (mono-helper\
+    \ (rest lst) 1)]\n         [(< (first lst) (second lst)) (mono-helper (rest lst)\
+    \ -1)]\n         [else #f])]\n      [(= direction 1)\n       (cond\n         [(>\
+    \ (first lst) (second lst)) (mono-helper (rest lst) 1)]\n         [else #f])]\n\
+    \      [(= direction -1)\n       (cond\n         [(< (first lst) (second lst))\
+    \ (mono-helper (rest lst) -1)]\n         [else #f])]))\n  (mono-helper l 0))\n",
+  "    (cond\n        [(empty? l) true]\n        [(one? l) true]\n        [(= (first\
+    \ l) (second l)) (monotonic (rest l))]\n        [(or (> (first l) (second l))\n\
+    \             (< (first l) (second l)))\n         (monotonic (rest l))]\n    \
+    \    [else false]))\n", "  (cond\n    [(empty? l) true]\n    [(empty? (rest l))\
+    \ true]\n    [(cond [(< (first l) (second l)) true]\n           [(> (first l)\
+    \ (second l)) true]\n           [else false])\n     (monotonic (rest l))]\n  \
+    \  [else false]))\n", "  (cond\n    [(empty? l) true]\n    [(= (length l) 1) true]\n\
+    \    [(< (first l) (second l))\n     (and (monotonic (rest l))\n          (apply\
+    \ <= (rest l)))]\n    [(> (first l) (second l))\n     (and (monotonic (rest l))\n\
+    \          (apply >= (rest l)))]\n    [else false]))\n", "  (define (iter lst\
+    \ incr)\n    (if (empty? lst)\n        #t\n        (if (incr (first lst) (second\
+    \ lst))\n            (iter (rest lst) incr)\n            #f)))\n  (if (empty?\
+    \ l)\n      #t\n      (cond ((iter l >) #t)\n            ((iter l <) #t)\n   \
+    \         (else #f))))", "  (define (ascending? a b) (< a b))\n  (define (descending?\
+    \ a b) (> a b))\n  (define (ifelse p t f) (if p t f))\n  (define (monotonic? lst)\n\
+    \    (cond ((or (null? lst) (null? (cdr lst))) true)\n          ((ifelse (ascending?\
+    \ (car lst) (cadr lst))\n                   (descending? (car lst) (cadr lst))\n\
+    \                   (ascending? (car lst) (cadr lst)))\n           (monotonic?\
+    \ (cdr lst)))))\n  (monotonic? l))\n", "  (let* ([type (monotonic-type l)])\n\
+    \    (case type\n      [(equal?) #t]\n      [(equal? '<) (apply < (cdr l))]\n\
+    \      [(equal? '>) (apply > (cdr l))]\n      [else #f])))\n", "  (if (null? l)\
+    \ #t\n    (or (or (null? (cdr l)) (monotonic (cdr l))) \n        (and (&lt;= (car\
+    \ l) (cadr l)) (monotonic (cdr l)))\n        (and (&gt;= (car l) (cadr l)) (monotonic\
+    \ (cdr l))))))\n", "  (or\n   (andmap < l)\n   (andmap > l)))\n", "  (cond\n \
+    \   [(&lt; (length l) 2) #t]\n    [(or (negative? (sub1 (length l))) (negative?\
+    \ (sub1 (sub1 (length l))))) (error \"monotonic: not enough elements\")]\n   \
+    \ [(= (car l) (cadr l))\n     (monotonic (cdr l))]\n    [(= (car l) (sub1 (cadr\
+    \ l)))\n     (and (number? (car l))\n          (number? (cadr l))\n          (monotonic\
+    \ (cdr l)))]\n    [(= (car l) (add1 (cadr l)))\n     (and (number? (car l))\n\
+    \          (number? (cadr l))\n          (monotonic (cdr l)))]\n    [else #f]))\n",
+  "  (cond\n    [(empty? l) true]\n    [(empty? (rest l)) true]\n    [(and (not (empty?\
+    \ (rest l))) (< (first l) (second l))) (monotonic (rest l))]\n    [(and (not (empty?\
+    \ (rest l))) (> (first l) (second l))) (monotonic (rest l))]\n    [else false]))\n\
+    ```\n\n### Task 10\nDefine a procedure `(pair sum lst)` that takes a number and\
+    \ a list of numbers as\ninput and returns `#t` if there are two numbers in the\
+    \ list whose sum is the\ninput number and `#f` otherwise.\n\n```racket\n#lang\
+    \ racket\n", "  (or\n   (and (null? (cdr l)) (cons #t '()))\n   (and (monotonic\
+    \ (cdr l))\n        (let ([cd (cdr l)])\n          (or\n           (null? cd)\n\
+    \           (and (<= (car l) (car cd)) (cons #t '()))\n           (and (>= (car\
+    \ l) (car cd)) (cons #t '())))))))\n", "  (cond [(empty? l) true]\n        [(empty?\
+    \ (rest l)) true]\n        [(or (< (first l) (second l))\n             (> (first\
+    \ l) (second l)))\n         (monotonic (rest l))]\n        [else false]))\n",
+  "  (cond\n    [(null? l) #t]\n    [(null? (cdr l)) #t]\n    [(> (car l) (cadr l))\n\
+    \     (monotonic (cdr l))]\n    [(< (car l) (cadr l))\n     (monotonic (cdr l))]\n\
+    \    [else #f]))\n", "  (cond [(empty? l) #t]\n        [(empty? (rest l)) #t]\n\
+    \        [(< (first l) (second l)) (monotonic (rest l))]\n        [(> (first l)\
+    \ (second l)) (monotonic (rest l))]\n        [else #f]))\n```\n\n```racket\n#lang\
+    \ racket\n", "  (cond [(null? l) #t]\n        [(null? (cdr l)) #t]\n        [(and\
+    \ (<= (car l) (cadr l)) (monotonic (cdr l))) #t]\n        [(and (>= (car l) (cadr\
+    \ l)) (monotonic (cdr l))) #t]\n        [else #f]))\n", "  (define (monotonic-help\
+    \ l prev max)\n    (if (empty? l)\n        #t\n        (let ([current (first l)])\n\
+    \          (cond [(and (positive? prev) (positive? current) (positive? max))\n\
+    \                 (if (<= current prev)\n                     #f\n           \
+    \          (monotonic-help (rest l) current prev))]\n                [(and (negative?\
+    \ prev) (negative? current) (negative? max))\n                 (if (>= current\
+    \ prev)\n                     #f\n                     (monotonic-help (rest l)\
+    \ current prev))]\n                [(and (positive? prev) (negative? current))\n\
+    \                 (monotonic-help (rest l) current prev)]\n                [(and\
+    \ (negative? prev) (positive? current))\n                 (monotonic-help (rest\
+    \ l) current prev)]\n                [else (monotonic-help (rest l) current prev)])\n\
+    \          )\n        )\n    )\n  (if (empty? l)\n      #t\n      (monotonic-help\
+    \ (rest l) (first l) (first l))\n    )\n  )\n", "  (match l\n    [(list first\
+    \ second)\n     (let* ([cmp (< first second)]\n            [result (list cmp)]\n\
+    \            [pred (if cmp > <)])\n       (for/fold ([res result]) ([next (in-list\
+    \ (cdr l))])\n         (if (apply pred res next)\n             (cons next res)\n\
+    \             '())\n         )\n       )\n     ]\n    [_ #f]\n    )\n  )\n", " \
+    \ (if (empty? l)\n      #t\n      (let ([c (first l)])\n        (if (empty? (rest\
+    \ l))\n            #t\n            (let ([d (first (rest l))])\n             \
+    \ (if (< c d)\n                  (and (monotonic (rest l)) #t)\n             \
+    \     (if (> c d)\n                      (and (monotonic (rest l)) #t)\n     \
+    \                 #f)))))))\n", "  (define (increasing l)\n    (cond\n      [(empty?\
+    \ l) #t]\n      [(empty? (rest l)) #t]\n      [(< (first l) (second l)) (increasing\
+    \ (rest l))]\n      [else #f]))\n  (define (decreasing l)\n    (cond\n      [(empty?\
+    \ l) #t]\n      [(empty? (rest l)) #t]\n      [(> (first l) (second l)) (decreasing\
+    \ (rest l))]\n      [else #f]))\n  (or (increasing l) (decreasing l)))\n```\n\n\
+    ```racket\n#lang racket\n", "  (or (all-increasing l) (all-decreasing l)))\n",
+  "  (cond\n    ((empty? l) #t)\n    ((< (first l) (second l))\n     (or (empty? (rest\
+    \ (rest l)))\n         (and (monotonic (rest (rest l)))\n              (or (<\
+    \ (first (rest (rest l))) (second (rest (rest l))))\n                  (> (first\
+    \ (rest (rest l))) (second (rest (rest l))))))))\n    ((> (first l) (second l))\n\
+    \     (or (empty? (rest (rest l)))\n         (and (monotonic (rest (rest l)))\n\
+    \              (or (< (first (rest (rest l))) (second (rest (rest l))))\n    \
+    \              (> (first (rest (rest l))) (second (rest (rest l))))))))\n    (else\
+    \ #f)))\n", "  (let ((decreasing? (or (null? l)\n                         (and\
+    \ (list? l)\n                              (null? (cdr l)))))\n        (increasing?\
+    \ (or (null? l)\n                         (and (list? l)\n                   \
+    \           (null? (cdr l))))))\n    (define (worker l)\n      (if (null? l)\n\
+    \          #t\n          (let* ((next (cdr l))\n                 (next? (or (null?\
+    \ next)\n                            (and (list? next)\n                     \
+    \            (null? (cdr next))))))\n            (if (or (not (number? (car l)))\n\
+    \                    (not (number? (car next))))\n                #f\n       \
+    \         (if (and (not next?)\n                         (not (equal? (car l)\
+    \ (car next))))\n                    #t\n                    (if decreasing?\n\
+    \                        (if (&lt; (car l) (car next))\n                     \
+    \       (worker next)\n                            #f)\n                     \
+    \   (if increasing?\n                            (if (&gt; (car l) (car next))\n\
+    \                                (worker next)\n                             \
+    \   #f)\n                            (if (&lt; (car l) (car next))\n         \
+    \                       (worker next #f)\n                                (worker\
+    \ next #t)))))))))\n    (worker l)))\n</code>\n", "  (cond [(empty? l) #t]\n \
+    \       [(empty? (rest l)) #t]\n        [(< (first l) (second l))\n         (monotonic\
+    \ (rest l))]\n        [(> (first l) (second l))\n         (monotonic (rest l))]\n\
+    \        [else #f]))\n", "  (cond [(null? l) #t]\n        [(< (car l) (car (cdr\
+    \ l))) (monotonic (cdr l))]\n        [(> (car l) (car (cdr l))) (monotonic (cdr\
+    \ l))]\n        [else #f]))\n", "  (cond [(empty? l) #t]\n        [(empty? (rest\
+    \ l)) #t]\n        [(< (first l) (second l)) (monotonic (rest l))]\n        [(>\
+    \ (first l) (second l)) (monotonic (rest l))]\n        [else #f]))\n", "  (cond\n\
+    \    [(null? l) '()]\n    [(and (null? (cdr l)) '()) #t]\n    [(and (not (null?\
+    \ (cdr l))) (null? (cddr l)))\n     (cond [(< (car l) (cadr l)) #t]\n        \
+    \   [(> (car l) (cadr l)) #t]\n           [else #f])]\n    [(and (not (null? (cdr\
+    \ l))) (not (null? (cddr l))))\n     (cond\n       [(and (< (car l) (cadr l))\
+    \ (< (cadr l) (caddr l)))\n        (monotonic (cdr l))]\n       [(and (> (car\
+    \ l) (cadr l)) (> (cadr l) (caddr l)))\n        (monotonic (cdr l))]\n       [else\
+    \ #f])]))\n", "  (let loop ([current l]\n             [prev (first l)])\n    (cond\
+    \ [(empty? current) #t]\n          [(>= (first current) prev) (loop (rest current)\
+    \ (first current))]\n          [(<= (first current) prev) (loop (rest current)\
+    \ (first current))]\n          [else #f])))\n", "  (let ((asc (lambda (x y) (<\
+    \ x y)))\n        (desc (lambda (x y) (> x y))))\n    (or (for/and ([x (in-list\
+    \ l)]\n                  [y (in-list (cdr l))])\n        (asc x y))\n        (for/and\
+    \ ([x (in-list l)]\n                  [y (in-list (cdr l))])\n        (desc x\
+    \ y)))))\n", "    (let loop ([l l] [direction 'either])\n        (cond [(null?\
+    \ l) #t]\n              [(null? (cdr l)) #t]\n              [(and (= (car l) (cadr\
+    \ l))\n                    (not (eq? direction 'either)))\n               (loop\
+    \ (cdr l) direction)]\n              [(and (not (eq? direction 'either))\n   \
+    \                 (not (= (car l) (cadr l)))\n                    (not (eq? direction\n\
+    \                              (if (< (car l) (cadr l)) 'up 'down))))\n      \
+    \         #f]\n              [else (loop (cdr l)\n                          (if\
+    \ (eq? direction 'either)\n                              (if (< (car l) (cadr\
+    \ l)) 'up 'down)\n                              direction))])))\n```\n\n## Problem\
+    \ 8 - Generate Language for a Regular Expression\n\n_Regular expressions are used\
+    \ to describe regular languages. (The language of a regular expression is the\
+    \ set of strings matched by the regular expression.) There are many algorithms\
+    \ to generate regular languages from regular expressions. One is to first convert\
+    \ the regular expression to a non-deterministic finite state automaton and then\
+    \ convert that automaton to a deterministic finite state automaton. The language\
+    \ of the resulting automaton is the language of the original regular expression.\
+    \ (See [Deterministic Finite State Automaton](https://en.wikipedia.org/wiki/Deterministic_finite_automaton)\
+    \ and [Nondeterministic Finite State Automaton](https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton).)\n\
+    \nWrite a function gen-lang that takes a regular expression (represented as a\
+    \ string) and returns the language of the regular expression. Hint: use the gen-nfa\
+    \ function from the previous problem to generate the nfa, then convert that nfa\
+    \ to a dfa and then convert that dfa to a list of strings.\n\nFor example:\n\n\
+    ```racket", "  (case (length l)\n    [(0) #t]\n    [(1) #t]\n    [(2)\n     (let\
+    \ ([(a b) l])\n       (if (< a b)\n           (< a b)\n           (> a b)))]\n\
+    \    [else\n     (let-values ([(a b c . rest) l])\n       (if (< a b)\n      \
+    \     (and (< a b) (monotonic (cons b c rest)))\n           (and (> a b) (monotonic\
+    \ (cons b c rest)))))]))\n", "  (cond [(empty? l)  #t]\n        [(empty? (rest\
+    \ l)) #t]\n        [(and (<= (first l) (second l)) (monotonic (rest l))) #t]\n\
+    \        [(and (>= (first l) (second l)) (monotonic (rest l))) #t]\n        [else\
+    \ #f]))\n```\n\n```\n> (monotonic '(4 6 7 8 9 10))\n#t\n> (monotonic '(5 4 3 2\
+    \ 1))\n#t\n> (monotonic '(5 4 4 3 2 1))\n#f\n```\n\n### 3.9\n\n```racket\n#lang\
+    \ racket\n", "  (or (monoIncreasing l) (monoDecreasing l)))\n", "  (cond [(null?\
+    \ l) #t]\n        [(null? (cdr l)) #t]\n        [(> (car l) (cadr l))\n      \
+    \   (if (null? (cddr l))\n             #t\n             (and (monotonic (cdr l))\n\
+    \                  (monotonic (cddr l))))]\n        [(< (car l) (cadr l))\n  \
+    \       (if (null? (cddr l))\n             #t\n             (and (monotonic (cdr\
+    \ l))\n                  (monotonic (cddr l))))]\n        [else #f]))\n```\n\n\
+    ## Challenge 1\n\nDefine a procedure, `(zip lat1 lat2)`, that takes two lists\
+    \ as arguments and returns one list. That list contains all the elements of the\
+    \ two lists, alternating between elements from the first list and elements from\
+    \ the second list.\n\n```racket", "  (letrec ([loop ([lst l] [prev #f])\n    \
+    \        (cond [(null? lst) #t]\n                  [(pair? lst)\n            \
+    \       (if (and prev\n                            (<= prev (car lst)))\n    \
+    \                   (loop (cdr lst) (car lst))\n                       #f)]\n\
+    \                  [else #f])])\n    (loop l #f)))\n", "  (define (monotonic-aux\
+    \ l)\n    (cond\n      [(empty? l) #t]\n      [(empty? (rest l)) #t]\n      [(<\
+    \ (first l) (second l)) (monotonic-aux (rest l))]\n      [(> (first l) (second\
+    \ l)) (monotonic-aux (rest l))]\n      [else #f]))\n  (monotonic-aux l))\n", " \
+    \ (if (null? l)\n      #t\n      (case (car l)\n        ((=) (monotonic-increasing\
+    \ (cdr l)))\n        ((>) (monotonic-decreasing (cdr l)))\n        ((<) (monotonic-increasing\
+    \ (cdr l)))\n        (else #f))))\n", "  (case (length l)\n    [(0) #t]\n    [(1)\
+    \ #t]\n    [(n)\n     (cond\n       [(> (first l) (second l)) (and (monotonic\
+    \ (rest l)) (<= (first l) (second l)))]\n       [(< (first l) (second l)) (and\
+    \ (monotonic (rest l)) (>= (first l) (second l)))]\n       [else #f])]))\n", " \
+    \ (if (or (null? l) (null? (cdr l)))\n      #t\n      (let* ([prev (car l)]\n\
+    \             [curr (cadr l)]\n             [mono (if (equal? prev curr)\n   \
+    \                    #t\n                       (if (negative? (sub1 prev))\n\
+    \                           (positive? (sub1 curr))\n                        \
+    \   (negative? (sub1 curr))))])\n        (and mono (monotonic (cdr l))))))\n",
+  "  (cond\n    [(empty? l)\n     #t]\n    [(< (first l) (second l))\n     (monotonic\
+    \ (rest l))]\n    [(> (first l) (second l))\n     (monotonic (rest l))]\n    [else\n\
+    \     #f]))\n", "  (define (ascending? lst)\n    (if (or (null? lst) (null? (cdr\
+    \ lst)))\n        #t\n        (and (&lt;= (car lst) (cadr lst)) (ascending? (cdr\
+    \ lst)))))\n  (define (descending? lst)\n    (if (or (null? lst) (null? (cdr lst)))\n\
+    \        #t\n        (and (&gt;= (car lst) (cadr lst)) (descending? (cdr lst)))))\n\
+    \  (cond ((and (ascending? l) (descending? l)) #f)\n        ((ascending? l) #t)\n\
+    \        ((descending? l) #t)\n        (else #f)))\n", "  (define (seq-diff l)\n\
+    \    (cond\n      [(empty? l) '()]\n      [(empty? (rest l)) '()]\n      [else\
+    \ (cons (- (first l) (second l)) (seq-diff (rest l)))]))\n  (define (positive\
+    \ l)\n    (cond\n      [(empty? l) #t]\n      [(and (positive? (first l)) (positive\
+    \ (rest l)))]))\n  (define (negative l)\n    (cond\n      [(empty? l) #t]\n  \
+    \    [(and (negative? (first l)) (negative (rest l)))]))\n  (cond\n    [(and (positive\
+    \ (seq-diff l)) (negative (seq-diff l)))]))\n</code>\nIs there a better way to\
+    \ solve this?\n\n\nA:\n\nI can't help but notice that the code you've posted contains\
+    \ three procedures that are identical except for the name: <code>positive</code>,\
+    \ <code>negative</code> and <code>monotonic</code>. There are many possible ways\
+    \ to tackle this problem, and you can use <code>foldr</code> and <code>map</code>\
+    \ to simplify your code a lot, but the point I'd like to highlight is that this\
+    \ is a perfect example of where a higher-order procedure can be used, and also\
+    \ a perfect example of where a procedure passed as argument to another procedure\
+    \ can help us simplify the code. In this case, I'd write a generic <code>any-of</code>\
+    \ procedure, that'll take as arguments a list and a predicate, and it'll tell\
+    \ us if the predicate is verified for any element in the list. This is how the\
+    \ code looks like:\n<code>(define (any-of l pred?)\n  (cond ((null? l) #f)\n \
+    \       ((pred? (car l)) #t)\n        (else (any-of (cdr l) pred?))))\n</code>\n\
+    And then, we can use this procedure to define a <code>all-of</code> procedure,\
+    \ that's essentially the same code but with <code>pred?</code> inverted:\n<code>(define\
+    \ (all-of l pred?)\n  (cond ((null? l) #t)\n        ((pred? (car l)) #f)\n   \
+    \    ", "  (let loop ([l l] [first-elem (car l)] [state #f])\n    (cond\n    \
+    \  [(null? l) true]\n      [(or (and state #t)\n           (and (positive? (sub1\
+    \ (car l)))\n                (negative? (sub1 first-elem))))\n       (loop (cdr\
+    \ l) (car l) #t)]\n      [(or (and state #f)\n           (and (negative? (sub1\
+    \ (car l)))\n                (positive? (sub1 first-elem))))\n       (loop (cdr\
+    \ l) (car l) #f)]\n      [else\n       false])))\n", "  (or (increasing? l) (decreasing?\
+    \ l)))\n", "  (define (iter l prev)\n    (cond ((null? l) #t)\n          ((and\
+    \ (null? (cdr l)) #t) #t)\n          ((and (and (&lt; prev (car l)) (&lt; (car\
+    \ l) (cadr l))) (iter (cdr l) (car l))) #t)\n          ((and (and (&gt; prev (car\
+    \ l)) (&gt; (car l) (cadr l))) (iter (cdr l) (car l))) #t)\n          (else #f)))\n\
+    \  (iter (cdr l) (car l)))\n", "  (define (inner l)\n    (cond [(empty? l) #t]\n\
+    \          [(empty? (rest l)) #t]\n          [(and (<= (first l) (second l))\n\
+    \                (inner (rest l))) #t]\n          [(and (>= (first l) (second\
+    \ l))\n                (inner (rest l))) #t]\n          [else #f]))\n  (inner\
+    \ l))\n\n", "  (cond ((null? l) '())\n        ((or (null? (cdr l)) (null? (cddr\
+    \ l))) #t)\n        ((< (car l) (cadr l))\n         (and (monotonic (cdr l)) #t))\n\
+    \        ((> (car l) (cadr l))\n         (and (monotonic (cdr l)) #t))\n     \
+    \   (else #f)))\n", "  (cond\n    [(empty? l) True]\n    [(empty? (rest l)) True]\n\
+    \    [(apply >= (rest l)) (monotonic (rest l))]\n    [(apply <= (rest l)) (monotonic\
+    \ (rest l))]\n    [else False]))\n", "  (match l\n    [(list) true]\n    [(list\
+    \ a rest ...)\n     (cond [(null? rest) true]\n           [(> a (car rest)) (monotonic\
+    \ (cons a (cdr rest)))]\n           [(< a (car rest)) (monotonic (cons a (cdr\
+    \ rest)))]\n           [else false])]))\n", "  (match l\n    [(cons a (cons b\
+    \ (cons c ...)))\n     (and (monotonic (cons b (cons c ...)))\n          (or (and\
+    \ (positive? a) (positive? b) (> a b))\n              (and (negative? a) (negative?\
+    \ b) (< a b))))]\n    [(cons a (cons b ...)) \n     (and (monotonic (cons b ...))\n\
+    \          (or (and (positive? a) (positive? b) (> a b))\n              (and (negative?\
+    \ a) (negative? b) (< a b))))]\n    [_ true]))\n", "  (cond\n    [(null? l) #t]\n\
+    \    [(null? (cdr l)) #t]\n    [(> (car l) (cadr l)) (monotonic (cdr l))]\n  \
+    \  [(< (car l) (cadr l)) (monotonic (cdr l))]\n    [else #f]))\n", "  (define\
+    \ (increase l)\n    (if (empty? l)\n        #t\n        (cond ((empty? (rest l))\
+    \ #t)\n              ((> (first l) (second l)) #f)\n              (else (increase\
+    \ (rest l))))))\n  (define (decrease l)\n    (if (empty? l)\n        #t\n    \
+    \    (cond ((empty? (rest l)) #t)\n              ((< (first l) (second l)) #f)\n\
+    \              (else (decrease (rest l))))))\n  (cond ((not (empty? l))\n    \
+    \     (or (increase l) (decrease l)))\n        (else #f)))\n", "  (cond [(empty?\
+    \ l) #t]\n        [(null? (cdr l)) #t]\n        [(or (< (car l) (cadr l))\n  \
+    \           (> (car l) (cadr l)))\n         (monotonic (cdr l))]\n        [else\
+    \ #f]))\n```\n\n```racket\n#lang racket\n", "  (define (sort a b)\n    (cond ((<\
+    \ a b) 'less)\n          ((> a b) 'greater)\n          (else 'equal)))\n  (define\
+    \ (iterate prev l)\n    (cond ((null? l) #t)\n          ((eq? 'less (sort prev\
+    \ (car l)))\n           (iterate (car l) (cdr l)))\n          ((eq? 'greater (sort\
+    \ prev (car l)))\n           (iterate (car l) (cdr l)))\n          (else #f)))\n\
+    \  (iterate (car l) (cdr l)))\n", "  (define (iter lst a)\n    (cond ((null? lst)\
+    \ #t)\n          ((null? (cdr lst)) #t)\n          ((positive? (sub1 (car lst)))\n\
+    \           (cond ((> a 0) (iter (cdr lst) a))\n                 ((zero? a) (iter\
+    \ (cdr lst) 1))\n                 ((< a 0) #f)))\n          ((negative? (sub1\
+    \ (car lst)))\n           (cond ((< a 0) (iter (cdr lst) a))\n               \
+    \  ((zero? a) (iter (cdr lst) -1))\n                 ((> a 0) #f)))\n        \
+    \  (else #f)))\n  (iter l 0))\n", "  (cond\n    [(empty? l) true]\n    [(empty?\
+    \ (rest l)) true]\n    [(< (first l) (second l))\n     (monotonic (rest l))]\n\
+    \    [(> (first l) (second l))\n     (monotonic (rest l))]\n    [else false]))\n",
+  "  (or (monotonic-increasing l)\n      (monotonic-decreasing l)))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

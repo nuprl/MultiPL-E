@@ -9,7 +9,1089 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate s
   \ (list 5 3 -5 2 -3 3 9 0 123 1 -10)) (list -10 3 -5 2 -3 3 5 0 9 1 123))\n    (check-equal?\
   \ (candidate (list 5 8 -12 4 23 2 3 11 12 -10)) (list -12 8 3 4 5 2 12 11 23 -10))\n\
   ))\n\n(test-humaneval)"
-completions: []
+completions: ["  (cond [(null? l) l]\n        [(null? (cdr l)) l]\n        [else (cons\
+    \ (car l)\n                    (cons (sort (cdr (car (cdr l))))\n            \
+    \              (sort_even (cdr (cdr l)))))]))\n</code>\nWhy does the function\
+    \ not terminate when given the following list:\n<code>(sort_even '(1 2 3 4 5 6\
+    \ 7 8 9 10))\n</code>\nIt says that the recursive call stack is at a maximum.\
+    \ Does this have to do with using <code>cons</code>?\nThanks for any help.\n\n\
+    \nA:\n\nThere are several problems. The first is that you're using the wrong <code>sort</code>\
+    \ function. This one:\n<code>(define (sort_even l)\n  (cond [(null? l) l]\n  \
+    \      [(null? (cdr l)) l]\n        [else (cons (car l)\n                    (cons\
+    \ (sort (cdr (car (cdr l)))) ; &lt;--- here!\n                          (sort_even\
+    \ (cdr (cdr l)))))]))\n</code>\nis the problem. The <code>sort</code> procedure\
+    \ expects an arbitrary predicate and a list, but you're just passing it a list,\
+    \ which will cause an error.\nAlso, you have a problem with the recursive call,\
+    \ because you're always passing the cdr of the cdr of the cdr of the cdr, and\
+    \ that's why you're stuck in an infinite loop. Here's how you can fix it:\n<code>(define\
+    \ (sort-even lst)\n  (cond [(null? lst)\n         lst]\n        [(null? (cdr lst))\n\
+    \         lst]\n        [else\n         (cons (car lst)\n               (cons\
+    \ (sort &lt; (cadr lst))\n                     (sort-even (cddr lst))))]))\n</code>\n\
+    A few notes:\n\n<code>l</code> is not a very meaningful name for a list, so I\
+    \ renamed it to <code>lst</code>.\nthe <code>cadr</code> and <code>cddr</code>\
+    \ procedures are very useful. You can use <code>car</code>", "  (if (and (null?\
+    \ l) (null? (cdr l)))\n      l\n      (if (even? (length l))\n          (append\
+    \ (list (sort (car l))) (list (cadr l)) (sort_even (cddr l)))\n          (append\
+    \ (list (car l)) (sort_even (cdr l))))))\n", "  (cond\n    [(null? l)\n     '()]\n\
+    \    [(null? (cdr l))\n     l]\n    [else\n     (cons (car l)\n           (cons\
+    \ (sort (cdr (cdr l)))\n                 (cdr (cdr l))))]))\n", "  (cond [(empty?\
+    \ l) empty]\n        [(empty? (rest l)) l]\n        [else (cons (first l) (sort_even\
+    \ (cons (merge (sort (first (rest l))) (second (rest l))) (rest (rest (rest l))))))]))\n",
+  "  (define (sort_even_helper l l')\n    (if (= (length l) 0)\n        l'\n     \
+    \   (if (= (remainder (length l) 2) 0)\n            (sort_even_helper (rest l)\
+    \ (append l' (list (sort (first l)))))\n            (sort_even_helper (rest l)\
+    \ (append l' (list (first l)))))))\n  (sort_even_helper l '()))\n</code>\nThis\
+    \ code works as expected, but when I try to shorten it by utilizing the map procedure,\
+    \ I get incorrect behavior:\n<code>#lang racket\n", "  (cond\n    [(empty? l)\
+    \ empty]\n    [(empty? (rest l)) l]\n    [else (append (list (first l))\n    \
+    \              (quicksort (rest (rest l)))\n                  (list (first (rest\
+    \ l))))]))", "  (cond\n    [(null? l) '()]\n    [(empty? (rest l)) l]\n    [else\
+    \ (cons (first l)\n                (sort (sort_even (rest l))))]))\n</code>\n\
+    Sample output: \n<code>&gt; (sort_even '(1 2 3 4 5 6 7 8 9))\n'(1 3 5 7 9 8 6\
+    \ 4 2)\n</code>\nHere is the code for sort, for those of you who are not familiar\
+    \ with this function:\n<code>#lang racket\n", "  (cond [(empty? l) '()]\n    \
+    \    [(empty? (rest l)) l]\n        [else\n         (let ([sorted-evens (sort\
+    \ (rest l))])\n           (cons (first l) (cons (first sorted-evens) (sort_even\
+    \ (rest sorted-evens)))))]))\n", "  (map (\u03BB (i l)\n         (if (even? i)\n\
+    \             (sort < l)\n             l))\n       (build-list (add1 (length l))\
+    \ (\u03BB (i) i))\n       l))\n", "  (letrec ([aux (lambda (l i)\n           \
+    \       (cond [(empty? l) empty]\n                        [(= i 0)\n         \
+    \                (cons (sort (first l))\n                               (aux (rest\
+    \ l) 1))]\n                        [else\n                         (cons (first\
+    \ l)\n                               (aux (rest l) (modulo (+ i 1) 2)))]))])\n\
+    \    (aux l 0)))\n", "  (if (null? l)\n      (list)\n      (cons (car l)\n   \
+    \         (if (null? (cdr l))\n                (list)\n                (sort (cdr\
+    \ (cdr l)))\n                (cons (car (cdr l))\n                      (sort_even\
+    \ (cdr (cdr l))))))))\n</code>\nThis code doesn't do what I want it to, but I'm\
+    \ not sure what's wrong. Any help would be appreciated.\n\n\nA:\n\nI think it's\
+    \ better to split the cases for odd and even numbers of elements in the input\
+    \ list. We can do it with a simple <code>cond</code>, or we can use the syntactic\
+    \ sugar for <code>cond</code> that's provided by <code>case</code>:\n<code>(define\
+    \ (sort-even lst)\n  (case (length lst)\n    [(0) '()]\n    [(1) lst]\n    [(even?)\n\
+    \     (list-append (list (car lst))\n                  (sort (cadr lst))\n   \
+    \               (sort-even (cddr lst)))]\n    [(odd?)\n     (list-append (list\
+    \ (car lst))\n                  (sort-even (cdr lst)))]))\n</code>\nNote that\
+    \ it's better to use <code>list-append</code> when we're constructing a new list,\
+    \ instead of using lots of <code>cons</code>. Here we're also taking advantage\
+    \ of the <code>cadr</code> and <code>cddr</code> procedures that are provided\
+    \ by Racket, to extract the second element and the rest of the list (respectively).\n\
+    As you can see, it's not that difficult to write a recursive solution to this\
+    \ problem. That's why we don't provide you with a solution in the DrRacket language.\
+    \ You should write the solution in your own words.\n", "  (cond\n    [(empty?\
+    \ l) empty]\n    [(pair? (first l)) (append (list (sort_even (first l))) (sort_even\
+    \ (rest l)))]\n    [(= (remainder (length l) 2) 0)\n     (cons (sort (first l)\
+    \ (rest l)) (sort_even (rest (rest l))))]\n    [else (cons (first l) (sort_even\
+    \ (rest l)))]))\n", "  (if (null? l)\n      '()\n      (cons (car l)\n       \
+    \     (sort (cdr (cdr l)) <)\n            (sort_even (cdr l)))))\n", '  (sort-even-wrapper
+    l 1))', "  (define (helper l1 l2)\n    (cond [(null? l1) l2]\n          [(null?\
+    \ l2) l1]\n          [(< (car l1) (car l2)) (cons (car l1) (helper (cdr l1) l2))]\n\
+    \          [else (cons (car l2) (helper l1 (cdr l2)))]))\n  (cond [(null? l) '()]\n\
+    \        [(null? (cdr l)) l]\n        [else (cons (car l) (helper (quicksort (cadr\
+    \ l)) (sort_even (cddr l))))]))\n", "  (if (null? l)\n      l\n      (if (null?\
+    \ (cdr l))\n          l\n          (cons (car l)\n                (cons (sort\
+    \ (cadr l))\n                      (sort_even (cddr l)))))))\n</code>\nThe following\
+    \ test cases are in the same file:\n<code>(test \"sort_even() works on a list\
+    \ with an even number of elements\"\n      (equal? '(\"a\" (1 3 2)) (sort_even\
+    \ '(\"a\" (2 3 1)))))\n", "  (cond\n    [(empty? l) '()]\n    [(empty? (rest l))\
+    \ (first l)]\n    [else\n      (cons (first l)\n            (sort (rest (rest\
+    \ l))) (rest l))]))\n", "  (if (null? l)\n      l\n      (cons (car l)\n     \
+    \       (sort_even (cddr l)))))\n", "  (cond\n    [(empty? l) empty]\n    [(empty?\
+    \ (rest l)) l]\n    [else (append (list (first l))\n                  (sort_even\
+    \ (quicksort (rest (rest l))))\n                  (list (second l)))]))\n", " \
+    \ (define (sort_even_inner l)\n    (if (null? l)\n        '()\n        (if (odd?\
+    \ (car l))\n            (cons (car l) (sort_even_inner (cdr l)))\n           \
+    \ (cons (sort (car l)) (sort_even_inner (cdr l))))))\n  (sort_even_inner l))\n\
+    </code>\nThe result:\n<code>&gt; (sort_even '((1 2 3 4) (5 6 7 8) (9 10 11 12)))\n\
+    '((1 2 3 4) (8 7 6 5) (12 11 10 9))\n</code>\n", "  (cond [(empty? l) empty]\n\
+    \        [(empty? (rest l)) l]\n        [else (cons (first l)\n              \
+    \      (cons (sort (rest (first (rest l))))\n                          (sort_even\
+    \ (rest (rest l)))))]))\n</code>\nI can't figure out what the last line is supposed\
+    \ to do. I think he's trying to create a list l' that starts with the first element\
+    \ of l and then somehow sort the list of all the remaining elements, but I have\
+    \ no idea how.\n\n\nA:\n\nIf I understand this correctly, it's supposed to take\
+    \ a list of numbers and sort each even-indexed element, e.g. (1 3 2 1) -> (1 1\
+    \ 2 3).\nIf you want to write a recursive function to sort a list, you would generally\
+    \ want to take the smallest element from the list, remove it from the list, then\
+    \ append it to the result of sorting the remaining elements of the list.\nIf you\
+    \ want to sort a list of lists, you would generally want to take the smallest\
+    \ element from the list of lists, remove it from the list of lists, then append\
+    \ it to the result of sorting the remaining elements of the list of lists.\nThis\
+    \ implies that if you want to sort a list of numbers, you would generally want\
+    \ to take the smallest element from the list of numbers, remove it from the list\
+    \ of numbers, then append it to the result of sorting the remaining elements of\
+    \ the list of numbers.\nThis implies that if you want to sort a list of lists\
+    \ of numbers, you would generally want to take the smallest element from the list\
+    \ of lists of numbers, remove it from the list of lists of numbers, then append\
+    \ it to the result of sorting the remaining elements of the list of lists of numbers.\n\
+    Then it's a case of turning this general algorithm into code.\n", "  (if (= 0\
+    \ (remainder (length l) 2))\n      (sort (append (filter (lambda (x) (odd? x))\
+    \ l)\n                    (sort (filter (lambda (x) (even? x)) l))))\n      (append\
+    \ (filter (lambda (x) (odd? x)) l)\n              (sort (filter (lambda (x) (even?\
+    \ x)) l)))))\n", "    (map (lambda (even odd)\n        (list (sort even) odd))\n\
+    \        (filter even? (enumerate l))\n        (filter odd? (enumerate l))))\n",
+  "  (cond ((empty? l) (list '()))\n        ((empty? (rest l)) l)\n        (else\n\
+    \         (list (list-ref l 0)\n               (sort (list-ref l 1))\n       \
+    \        (sort_even (cddr l))))))\n</code>\nAs you can see I currently only deal\
+    \ with empty list, lists of length 1 and otherwise lists (I'm pretty sure I've\
+    \ made a mistake here).\nI've tried to use the <code>cddr</code> function to get\
+    \ to the empty list, but when I do it simply returns <code>'()</code>. The <code>cddr</code>\
+    \ is used so I can recursively apply the function to the rest of the list.\nWith\
+    \ my current understanding I feel as though I'm really close to achieving what\
+    \ I want, but I can't seem to get there.\nI would really appreciate any help.\n\
+    \n\nA:\n\nI've made a few changes to your code, I'll try to explain why each was\
+    \ needed. The first thing I noticed is that your base case for the empty list\
+    \ is wrong: it should return the empty list, not a list containing an empty list,\
+    \ that's not what you want. This is what the revised function looks like:\n<code>(define\
+    \ (sort_even l)\n  (cond ((empty? l) '())\n        ((empty? (rest l)) l)\n   \
+    \     (else\n         (cons (list-ref l 0)\n               (cons (sort (list-ref\
+    \ l 1))\n                     (sort_even (cddr l)))))))\n</code>\n<code>cons</code>\
+    \ is needed instead of <code>list</code> because the <code>list</code> function\
+    \ returns a flat list, while we need to construct an actual list.\nIt's also worth\
+    \ mentioning that when reading the documentation of these kind of functions, the\
+    \ first thing to look at is the contract, in this case, the contract for <code>list</code>\
+    \ is:\n<blockquote>\n<p><code>&lt;code&gt;(list obj ...)&lt;/code&gt;</code></p>\n\
+    <p>Returns a newly allocated list whose elements are obj ...</p>\n</blockquote>\n\
+    Note that it says the elements are the given objects, not", "  (cond\n    [(null?\
+    \ l) '()]\n    [(null? (cdr l)) l]\n    [(null? (cdr (cdr l))) l]\n    [else\n\
+    \      (cond\n        [(null? (cdr (cdr (cdr l)))) (cons (car l) (cons (sort (list\
+    \ (cadr l) (caddr l))) (cdddr l)))]\n        [else (cons (car l) (cons (sort (list\
+    \ (cadr l) (caddr l))) (sort_even (cdddr l))))])]))\n", "  (cond [(empty? l) empty]\n\
+    \        [(empty? (rest l)) l]\n        [else (cons (first l)\n              \
+    \      (cons (sort (rest (first (rest l))))\n                          (sort_even\
+    \ (rest (rest l)))))]))\n", "   (cond\n     [(empty? l) empty]\n     [(empty?\
+    \ (rest l)) l]\n     [else\n      (cons\n       (first l)\n       (sort_even\n\
+    \        (cons\n         (sort (rest (first (rest l))))\n         (rest (rest\
+    \ l))))]))\n</code>\nFor example,\n<code>(sort_even (list 2 5 1 9 7 4))\n</code>\n\
+    should return\n<code>(list 2 (list 1 5) 9 (list 4 7))\n</code>\nand\n<code>(sort_even\
+    \ (list 1 2 3 4 5 6 7 8 9 10))\n</code>\nshould return\n<code>(list 1 (list 2\
+    \ 4 6 8 10) 3 (list 5 7 9))\n</code>\nHere is another example:\n<code>(sort_even\
+    \ (list 2 5 1 9 7 4))", "  (cond ((null? l) '())\n        ((null? (cdr l)) l)\n\
+    \        (else\n         (append (list (car l))\n                 (sort (cdr (cdr\
+    \ l)))\n                 (list (cadr l))))))\n</code>\n", "  (if (null? l)\n \
+    \     '()\n      (letrec ([h (car l)]\n               [sort_even-2 (lambda (ls)\n\
+    \                              (if (null? ls)\n                              \
+    \    '()\n                                  (append (list (car ls))\n        \
+    \                                  (list (sort (cdr ls)))\n                  \
+    \                        (sort_even-2 (cddr ls)))))]\n               [sorted-evens\
+    \ (sort_even-2 l)])\n        (append (list h)\n                sorted-evens))))\n",
+  "    (define (append_or_nth l n)\n        (if (empty? l)\n            '()\n    \
+    \        (if (= n 1)\n                (cons (first l) (append_or_nth (rest l)\
+    \ (+ n 1)))\n                (cons (sort (first l)) (append_or_nth (rest l) (+\
+    \ n 1))))))\n    (append_or_nth l 1))\n", "  (if (null? l)\n      '()\n      (append\
+    \ (list (first l))\n              (sort (sort_even (rest l))))))\n", "\t(cond\
+    \ ((null? l) '())\n\t\t  ((null? (cdr l)) l)\n\t\t  (else (cons (car l)\n\t\t\t\
+    \t\t  (cons (sort (cadr l))\n\t\t\t\t\t\t\t(sort_even (cddr l)))))))\n", "  (if\
+    \ (or (empty? l) (empty? (rest l)))\n      l\n      (list (first l) (merge-sort\
+    \ (rest (rest l))) (sort_even (rest l)))))\n", "  (define (map_help fun lst)\n\
+    \    (if (null? lst) '()\n        (cons (fun (car lst)) (map_help fun (cdr lst)))))\n\
+    \  (define (filter_help pred lst)\n    (if (null? lst) '()\n        (if (pred\
+    \ (car lst)) (cons (car lst) (filter_help pred (cdr lst)))\n            (filter_help\
+    \ pred (cdr lst)))))\n  (define (sort_help lst)\n    (cond ((null? lst) '())\n\
+    \          ((null? (cdr lst)) lst)\n          (else (let ((max (apply max lst)))\n\
+    \                  (cons max (sort_help (remove max lst)))))))\n  (define (list_reverse\
+    \ lst)\n    (if (null? lst) '()\n        (append (list_reverse (cdr lst)) (list\
+    \ (car lst)))))\n  (define (get_even lst)\n    (filter_help even? lst))\n  (define\
+    \ (get_odd lst)\n    (filter_help odd? lst))\n  (cond ((null? l) '())\n      \
+    \  ((null? (cdr l)) l)\n        (else (let ((odd_l (get_odd l))\n            \
+    \        (even_l (get_even l)))\n                (let ((sorted_even_l (sort_help\
+    \ even_l)))\n                  (append (list_reverse odd_l) sorted_even_l))))))\n",
+  "  (let loop ([l l] [l' '()] [i 0])\n    (if (null? l)\n        (reverse l')\n \
+    \       (if (even? i)\n            (loop (cdr l) (cons (sort (list (car l))) l')\
+    \ (+ i 1))\n            (loop (cdr l) (cons (car l) l') (+ i 1))))))\n", "  (if\
+    \ (null? l)\n      '()\n      (cons (car l)\n            (if (null? (cdr l))\n\
+    \                '()\n                (sort (cdr (cdr l))\n                  \
+    \    (lambda (x y)\n                        (&lt; x y)))))))\n</code>\nwhich returns\n\
+    <code>&gt; (sort_even '(1 2 3 4 5 6 7 8 9))\n'(1 2 5 3 4 6 7 8 9)\n</code>\nwhile\
+    \ doing\n<code>&gt; (sort_even '(1 2 3 4 5 6 7 8 9 10))\n'(1 2 5 4 3 6 7 8 9 10)\n\
+    </code>\nI realize that this is because the <code>car</code> and <code>cdr</code>\
+    \ pair of the <code>cdr</code> of the <code>cdr</code> of the list aren't kept\
+    \ together in the sort, but I'm not sure how to fix this.\nWhat would be the idiomatic\
+    \ way to keep the pairs together, yet still sort the even indicies?\n\n\nA:\n\n\
+    The specific problem here is that your sort function is operating on only the\
+    \ even elements of the list, but that doesn't mean that you have to change the\
+    \ sort to fix this.\nIf you modify the sort_even function to include both the\
+    \ odd and even elements of the list and then use the built-in append to combine\
+    \ them, the sort should work correctly.\n<code>(define (sort_even l)\n  (if (null?\
+    \ l)\n      '()\n      (append\n        (list (car l))\n        (sort (cdr (cdr\
+    \ l))\n              (lambda (x y)\n                (&lt; x y))))))\n</code>\n",
+  "  (let loop([l l] [result '()])\n    (if (empty? l)\n        (reverse result)\n\
+    \        (let ([odd (car l)] [even (cadr l)])\n          (loop (cddr l) (cons\
+    \ odd (cons (sort even <) result)))))))\n", "  (if (null? l)\n      l\n      (if\
+    \ (null? (cdr l))\n          l\n          (if (null? (cddr l))\n             \
+    \ l\n              (if (null? (cdddr l))\n                  l\n              \
+    \    (cons (car l)\n                        (cons (sort (cadr l))\n          \
+    \                    (sort_even (cddr l)))))))))\n", "  (if (empty? l)\n     \
+    \ empty\n      (begin\n        (set! l (quicksort (filter even? (rest l))))\n\
+    \        (cons (first l)\n              (if (even? (rest l))\n               \
+    \   (sort_even (rest l))\n                  (cons (first (rest l))\n         \
+    \               (sort_even (rest (rest l)))))))))\n</code>\nThis is my quick sort\
+    \ function:\n<code>#lang racket\n", "  (if (or (null? l) (null? (cdr l)))\n  \
+    \    l\n      (if (null? (cdr (cdr l)))\n          (cdr l)\n          (if (null?\
+    \ (cdr (cdr (cdr l))))\n              (cons (car l) (cons (car (cdr (cdr l)))\
+    \ (cdr (cdr l))))\n              (let* ([evens (list (car (cdr l)) (car (cdr (cdr\
+    \ l))) (car (cdr (cdr (cdr l)))))]\n                     [odds (list (car l) (car\
+    \ (cdr (cdr (cdr (cdr l))))) (car (cdr (cdr (cdr (cdr (cdr l))))))])\n       \
+    \              [sorted_evens (sort < evens)]\n                     [tail (sort_even\
+    \ (cdr (cdr (cdr (cdr (cdr l))))))])\n                (append (append odds sorted_evens)\
+    \ tail))))))\n", "  (define (l2li l i)\n    (cond ((null? l) '())\n          ((=\
+    \ i 1) (cons (car l) (l2li (cdr l) (+ i 1))))\n          ((= i 0) (sort (cons\
+    \ (car l) (l2li (cdr l) (+ i 1)))))))\n  (l2li l 0))\n</code>\nHowever, when I\
+    \ try to run the code, I get this error:\n<code>#lang racket\n", "  (cond\n  \
+    \  [(null? l) '()]\n    [(empty? (rest l)) (rest l)]\n    [(and (empty? (rest\
+    \ (rest l))) (pair? (rest l))) (rest l)]\n    [(and (pair? (first l)) (pair? (rest\
+    \ l)))\n     (cons (first l) (sort_even (cons (sort (first (rest l))) (rest (rest\
+    \ l)))))]\n    [else (cons (first l) (sort_even (rest l)))]))\n", "  (cond [(empty?\
+    \ l) empty]\n        [(empty? (rest l)) (list (first l))]\n        [else\n   \
+    \      (append (list (first l))\n                 (sort (rest (rest l)))\n   \
+    \              (list (first (rest l))))]))\n", "  (if (empty? l)\n      '()\n\
+    \      (cons (first l)\n            (if (not (empty? (rest l)))\n            \
+    \    (cons (sort (rest (first (split l))))\n                      (sort_even (second\
+    \ (split l))))\n                '()))))\n", "  (if (or (empty? l) (empty? (rest\
+    \ l)))\n      l\n      (cons (first l)\n            (sort (rest (rest l)))\n \
+    \           (sort_even (rest l)))))\n", "  (if (empty? l)\n      '()\n      (cond\
+    \ ((empty? (rest l))\n             l)\n            ((empty? (rest (rest l)))\n\
+    \             (cons (first l)\n                   (sort (rest l))))\n        \
+    \    (else\n             (cons (first l)\n                   (merge (sort (first\
+    \ (rest l)))\n                          (sort_even (rest (rest l)))))))))\n",
+  "  (cond\n    [(null? l) '()]\n    [(null? (cdr l)) l]\n    [else\n     (if (even?\
+    \ (car l))\n         (cons (list-sort < (car l)) (sort_even (cdr l)))\n      \
+    \   (cons (car l) (sort_even (cdr l))))]))\n", "  (cond\n    [(empty? l) empty]\n\
+    \    [(empty? (rest l)) l]\n    [else\n     (let ([odds (odd_indices l)]\n   \
+    \        [evens (even_indices l)])\n       (append odds (sort evens)))]))\n",
+  "  (match l\n    [('() . _) ()]\n    [(list . rest)\n     (cons (car l) (merge (sort_even\
+    \ (evens rest)) (sort_even (odds rest))))]))\n", "  (local [(define (helper l\
+    \ even)\n            (cond [(empty? l) even]\n                  [(empty? (rest\
+    \ l)) (append even (list (first l)))]\n                  [(even? (first l)) (helper\
+    \ (rest l) (append even (list (sort (first l)))))\n                   (else (helper\
+    \ (rest l) (append even (list (first l)))))]))]\n  (helper l empty)))\n", "  (if\
+    \ (null? l)\n      '()\n      (let ([l1 (sort_even (cdr l))])\n        (if (even?\
+    \ (length l))\n            (append (list (sort (car l1))) (list (car l)))\n  \
+    \          (append (list (car l)) l1)))))\n", "  (if (null? l)\n      l\n    \
+    \  (cons (car l)\n            (if (not (pair? (cdr l)))\n                (cdr\
+    \ l)\n                (sort_even-helper (sort (cdr l)))))))\n", "  (if (null?\
+    \ l)\n      '()\n      (cons (car l) (sort (sort_even (cdr l))))))\n", "    (if\
+    \ (null? l)\n        '()\n        (cond\n          [(= (remainder (length l) 2)\
+    \ 0)\n           (cons (sort (car l)) (sort_even (cdr l)))]\n          [else\n\
+    \           (cons (car l) (sort_even (cdr l)))])))\n</code>\nI get:\n<code>; Application:\
+    \ not a procedure;", "  (define (sort_even_rec l)\n    (cond\n      [(empty? l)\
+    \ empty]\n      [(empty? (rest l)) l]\n      [else\n       (cons (first l)\n \
+    \            (cons (sort (rest (first (partition even? (rest l)))))\n        \
+    \           (sort_even_rec (second (partition even? (rest l))))))]))\n  (sort_even_rec\
+    \ l))\n", "  (letrec ([even-indexes (filter even? (map add1 (iota (length l))))]\n\
+    \           [odd-indexes (filter odd? (map add1 (iota (length l))))])\n    (append\n\
+    \     (map (lambda (index) (list-ref l index)) even-indexes)\n     (map (lambda\
+    \ (index) (list-ref l index)) odd-indexes))))\n</code>\nI'm still new to Racket\
+    \ and have only basic knowledge of Scheme. I'm trying to improve my ability in\
+    \ Racket and would love any feedback and criticism. Thanks!\n\n\nA:\n\nVery nice\
+    \ solution! A couple of suggestions, though.\nFirst, I would use the <code>in-list</code>\
+    \ and <code>not-in-list</code> functions instead of <code>filter</code> for filtering\
+    \ odd and even indexes:\n<code>(define (sort_even l)\n  (letrec ([even-indexes\
+    \ (map add1 (iota (length l)))]\n           [odd-indexes (map add1 (iota (length\
+    \ l)))])\n    (append\n     (map (lambda (index) (list-ref l index))\n       \
+    \   (in-list (even? add1) even-indexes))\n     (map (lambda (index) (list-ref\
+    \ l index))\n          (not-in-list (even? add1) odd-indexes)))))\n</code>\nSecond,\
+    \ since you're using <code>list-ref</code> and <code>list-set!</code> to mutate\
+    \ the list, there's no need to create two lists with the even and odd indexes,\
+    \ since the list doesn't change. You can use the same list twice:\n<code>(define\
+    \ (sort_even l)\n  (letrec ([indexes (map add1 (iota (length l)))])\n    (append\n\
+    \     (map (lambda (index) (list-ref l index))\n          (in-list (even? add1)\
+    \ indexes))\n     (map (lambda (index) (list-ref l index))\n          (not-in-list\
+    \ (even? add1) indexes)))))\n</code>\nFinally, you can use <code>map-indexed</code>\
+    \ to avoid the need to", "  (cond\n    [(empty? l) empty]\n    [(empty? (rest\
+    \ l)) l]\n    [else\n     (cons (first l)\n           (cons (sort (rest (first\
+    \ (rest l))))\n                 (sort_even (rest (rest l)))))]))\n</code>\nI'm\
+    \ getting a \"compile: missing expression in: (rest (first (rest l)))\" error.\
+    \ Can anyone help me figure out what I'm doing wrong here?\n\n\nA:\n\nYou have\
+    \ the parameters for <code>rest</code> reversed.\nAlso, <code>sort</code> takes\
+    \ a list as an argument, not a single element.\n<code>(define (sort_even l)\n\
+    \  (cond\n    [(empty? l) empty]\n    [(empty? (rest l)) l]\n    [else\n     (cons\
+    \ (first l)\n           (cons (sort (rest (first (rest l))))\n               \
+    \  (sort_even (rest (rest l)))))]))\n</code>\n", "  (cond\n    [(empty? l) empty]\n\
+    \    [(empty? (rest l)) (list (first l))]\n    [else\n      (list (first l)\n\
+    \            (insertion-sort (rest (rest l)))\n            (sort_even (rest (rest\
+    \ (rest l)))))]))\n", "  (cond [(empty? l) empty]\n        [(empty? (rest l))\
+    \ l]\n        [else\n         (cons (first l)\n               (append (sort (rest\
+    \ (first (rest l))))\n                       (sort_even (rest (rest l)))))]))\n",
+  "  (cond\n    [(empty? l) empty]\n    [(odd? (length l)) sort_even (rest l)]\n \
+    \   [else (cons (sort (first l)) (sort_even (rest l)))]))\n</code>\nI'm trying\
+    \ to do this in a clean way, but I'm having trouble with the syntax.\nI'm not\
+    \ quite sure what I'm trying to do. What I want to do is to have the function\
+    \ go through each element of the list, and for each element, take the first element\
+    \ and make it the first element of the new list, the second element and make it\
+    \ the second element of the new list, the third element and make it the third\
+    \ element of the new list, the fourth element, sort it, and make it the fourth\
+    \ element of the new list, the fifth element and make it the fifth element of\
+    \ the new list, the sixth element, sort it, and make it the sixth element of the\
+    \ new list, and so on.\nThanks.\n\n\nA:\n\nYour code seems fine and it works!\n\
+    But if I understand correctly, you are trying to do this without using the <code>sort</code>\
+    \ procedure.\nIn that case, let's just consider the recursive case:\n<code>(define\
+    \ (sort_even l)\n  (cond\n    [(empty? l) empty]\n    [(odd? (length l)) sort_even\
+    \ (rest l)]\n    [else (cons (first l)\n                (cons (sort_even (second\
+    \ l))\n                      (sort_even (rest (rest l)))))]))\n</code>\n\nEdit:\
+    \ Actually, the above code has a bug: if the last element is an even index, it\
+    \ would not be sorted.\nIt can be fixed by adding a check:\n<code>(define (sort_even\
+    \ l)\n  (cond\n    [(empty? l) empty]\n    [(odd? (length l)) sort_even (rest\
+    \ l)]\n    [(null? (rest l)) l] ; this is the fix\n    [else (cons (first l)\n\
+    \                (cons (sort_even (second l))\n                      (sort_even\
+    \ (rest (rest l)))))]))\n</code>\nBut this code can be further improved by one\
+    \ extra condition:\n<code>(define (sort_even l)\n  (cond\n    [(empty? l", " \
+    \ (define (not-even? x) (odd? x))\n  (define (map-second f l)\n    (map (lambda\
+    \ (x) (cons (car x) (f (cdr x)))) l))\n  (define (map-even f l)\n    (map-second\
+    \ f (filter (lambda (x) (not-even? (car x))) l)))\n  (define (map-odd f l)\n \
+    \   (map-second f (filter (lambda (x) (even? (car x))) l)))\n  (append (map-odd\
+    \ (lambda (x) x) l)\n          (map-even sort l)))\n</code>\nNow, one thing that\
+    \ I'd like to do is to define the function <code>map-odd</code> as a composition\
+    \ of <code>map-second</code> and <code>filter</code>, but I don't know how to\
+    \ do this properly. (I can do it in python, but I can't get it to work in racket.)\n\
+    Update:\nI had an idea that I could remove the <code>filter</code> call from <code>map-odd</code>\
+    \ by defining a helper function <code>map-odd-helper</code> that takes an additional\
+    \ argument, the predicate:\n<code>(define (map-odd-helper pred f l)\n  (map-second\
+    \ f (filter pred l)))\n</code>\nand then in <code>map-odd</code>, call it with\
+    \ the predicate <code>(lambda (x) (even? (car x)))</code> (see the first <code>map-odd</code>\
+    \ call below).\nHowever, this idea doesn't seem to work, because I get the following\
+    \ error:\n<code>application: not a procedure;\n expected a procedure that can\
+    \ be applied to arguments\n  given: #&lt;procedure:even?&gt;\n  arguments...:\
+    \ [none]\n</code>\nHere is the code for the definitions:\n<code>#lang racket\n",
+  "  (if (empty? l) empty\n      (append (list (first l))\n              (sort_even_helper\
+    \ (list (first (rest l))) (rest (rest l)))\n              (list (last l)))))\n",
+  "  (if (null? l) '()\n      (cons (car l)\n            (sort_even\n            \
+    \ (map car (map sort (map (lambda (x) (cons x '())) (cdr l))))))))\n", "  (define\
+    \ (helper l1 l2 acc)\n    (cond\n      [(null? l1) acc]\n      [(null? l2) (helper\
+    \ (cdr l1) (cdr l2) (append acc (list (car l1))))]\n      [(< (car l1) (car l2))\
+    \ (helper (cdr l1) l2 (append acc (list (car l1))))]\n      [else (helper l1 (cdr\
+    \ l2) (append acc (list (car l2))))]))\n  (if (null? l)\n      l\n      (helper\
+    \ (cdr l) (cdr (cdr l)) (list (car l)))))\n", "  (cond [(empty? l) '()]\n    \
+    \    [(empty? (rest l)) l]\n        [else (cons (first l)\n                  \
+    \  (list_merge (sort (rest (first (rest l))))\n                              \
+    \  (sort_even (rest (rest l)))))]))\n", "  (if (empty? l)\n      empty\n     \
+    \ (if (empty? (rest l))\n          l\n          (if (zero? (modulo (length l)\
+    \ 2))\n              (cons (sort (first l)) (sort_even (rest l)))\n          \
+    \    (cons (first l) (sort_even (rest l)))))))\n</code>\nI have come up with the\
+    \ correct output, but I am getting the error:\n<code>sort_even: expects argument\
+    \ of type &lt;list&gt;; given 3\n</code>\nIt seems to be throwing the error when\
+    \ the recursion hits a value that is not a list. Is there a way to fix this problem\
+    \ without changing the function?\n\n\nA:\n\nThe error message is telling you that\
+    \ your procedure is being given an integer, where you want it to be given a list.\
+    \ This is occurring because you are using <code>sort</code>, which sorts lists.\
+    \ However, if the argument is not a list, it will throw the error message you\
+    \ were seeing.\nUse <code>sort-list</code> instead. <code>sort-list</code> will\
+    \ sort a list, and returns an empty list if the argument was not a list.\n<code>(define\
+    \ (sort_even l)\n  (if (empty? l)\n      empty\n      (if (empty? (rest l))\n\
+    \          l\n          (if (zero? (modulo (length l) 2))\n              (cons\
+    \ (sort-list (first l)) (sort_even (rest l)))\n              (cons (first l) (sort_even\
+    \ (rest l)))))))\n</code>\n", "    (cond [(empty? l) empty]\n          [(empty?\
+    \ (rest l)) l]\n          [else (cons (first l)\n                      (sort_even\
+    \ (quicksort (rest (rest l)))))]))\n", "  (local ((define (s_e l odd)\n      \
+    \       (cond [(empty? l) empty]\n                   [(odd? odd)\n           \
+    \         (cons (first l) (s_e (rest l) (add1 odd)))]\n                   [else\n\
+    \                    (cons (sort (first l)) (s_e (rest l) (add1 odd)))])))\n \
+    \   (s_e l 0)))\n</code>\nMy question is, is there any way to make this function\
+    \ without the helper function? I have tried to write the function without the\
+    \ s_e helper but have failed, so I'm wondering if it is possible.\n\n\nA:\n\n\
+    What I would do, is to make a <code>map</code> function, a la <code>map</code>\
+    \ in common lisp. Then your function would be a call to <code>map</code> with\
+    \ the appropriate arguments.\nSo you can do\n<code>(define (map f l)\n  (cond\
+    \ ((empty? l) '())\n        (else (cons (f (first l)) (map f (rest l))))))\n</code>\n\
+    and your function becomes\n<code>(define (sort_even l)\n  (map (lambda (e) (if\
+    \ (even? e) (sort e) e)) l))\n</code>\n", "  (if (empty? l)\n      '()\n     \
+    \ (if (odd? (length l))\n          (cons (car l) (sort_even (cdr l)))\n      \
+    \    (cons (sort (car l)) (sort_even (cdr l))))))\n", "  (cond [(empty? l) empty]\n\
+    \        [(and (empty? (rest l)) (empty? (rest (rest l)))) l]\n        [(even?\
+    \ (rest l))\n         (cons (first l)\n               (cons (sort (rest (rest\
+    \ l)))\n                     (sort_even (rest (rest (rest l))))))]\n        [else\n\
+    \         (cons (first l)\n               (cons (first (rest l))\n           \
+    \          (sort_even (rest (rest l)))))]))\n", "  (cond\n    ((null? l) '())\n\
+    \    ((null? (cdr l)) l)\n    (else (append (list (car l))\n                 \
+    \  (sort_even (cdr (sort (cdr l))))))))\n</code>\nMy code works properly when\
+    \ given a list with an odd number of elements, but it will fail when given a list\
+    \ with an even number of elements.\nExample input:\n<code>(sort_even '(3 5 4 2\
+    \ 1)) ; '(3 1 4 2 5)", "  (if (empty? l) \n      empty\n      (cond\n       [(even?\
+    \ (length l)) (append (sort_even (rest l)) (first l))]\n       [else (cons (sort_even\
+    \ (rest l)) (first l))])))\n", "  (if (empty? l) empty\n      (if (empty? (rest\
+    \ l)) l\n          (if (even? (length l)) (cons (quicksort (first l)) (cons (sort_even\
+    \ (rest l)) empty))\n              (cons (first l) (cons (sort_even (rest l))\
+    \ empty))))))\n", "  (cond\n    ((empty? l) empty)\n    ((even? (first l)) (cons\
+    \ (merge (sort_even (rest l)) (first l)) (sort_even (rest l))))\n    (else (cons\
+    \ (first l) (sort_even (rest l))))))\n</code>\nFor instance:\n<code>(sort_even\
+    \ (list 2 3 1 5 4)) \n</code>\nreturns\n<code>(list 1 2 3 4 5)\n</code>\nThis\
+    \ works fine, but because it calls <code>merge</code> n times it is O(n*n). I\
+    \ have unsuccessfully tried to modify this function to use the divide and conquer\
+    \ <code>merge</code> algorithm. Any ideas?\n\n\nA:\n\nIf you want to use the divide\
+    \ and conquer merge to your function, you have to divide your list in two sublists\
+    \ and merge the even's sublist, something like that:\n<code>(define (sort_even\
+    \ l)\n  (define (even? l) (empty? l))\n  (define (odd? l) (not (empty? l)))\n\
+    \  (define (merge-evens l1 l2)\n    (cond ((empty? l1) l2)\n          ((empty?\
+    \ l2) l1)\n          ((&lt; (first l1) (first l2)) (cons (first l1) (merge-evens\
+    \ (rest l1) l2)))\n          (else (cons (first l2) (merge-evens l1 (rest l2))))))\n\
+    \  (cond ((empty? l) empty)\n        ((even? l) (first l))\n        ((odd? l)\
+    \ (merge-evens (sort_even (first l)) (sort_even (rest l))))))\n</code>\n", " \
+    \ (define (sort_even_helper l out)\n    (cond\n      [(null? l) (reverse out)]\n\
+    \      [(null? (cdr l)) (reverse (cons (car l) out))]\n      [else (sort_even_helper\
+    \ (cddr l) (cons (cadr l) (cons (car l) out)))]))\n  (sort_even_helper l null))\n",
+  "  (define (helper l even)\n    (cond\n      [(empty? l) (reverse even)]\n     \
+    \ [(empty? (rest l)) (reverse (cons (first l) even))]\n      [else\n       (helper\
+    \ (rest (rest l))\n               (cons (sort < (cons (first l) (first (rest l))))\
+    \ even))]))\n  (helper l empty))\n```\n\n## Exercise 3\n```racket\n#lang racket\n",
+  "  (cond [(empty? l) empty]\n        [(even? (length l)) (append\n             \
+    \                (sort-by < (filter even? (range (length l))))\n             \
+    \                (filter odd? (range (length l))))]\n        [else (append (filter\
+    \ even? (range (length l)))\n                      (sort-by < (filter odd? (range\
+    \ (length l)))))]))\n", "  (match l\n    [(list odd even ...)\n     (cons odd\
+    \ (sort even ...))]\n    [_ (list)]))\n", "  (if (null? l)\n      '()\n      (cons\
+    \ (car l) (merge (sort (cadr l)) (sort_even (cddr l))))))\n", "  (if (empty? l)\
+    \ empty\n      (cons (first l)\n            (if (even? (length l)) (sort (take\
+    \ l 2))\n                (take l 2)))))\n</code>\nI am new to scheme so I'm not\
+    \ really sure how to implement this. Here's what I have so far.\n\n\nA:\n\nI think\
+    \ you want to do the following:\n\nIf the list is empty, return the empty list;\n\
+    Otherwise, return the first element (no matter what), followed by either the <code>nthcdr</code>\
+    \ of that list if the length is odd or the sorted <code>nthcdr</code> of that\
+    \ list if the length is even.\n\nNote that <code>nthcdr</code> gives you the list\
+    \ from the nth element on. So <code>(nthcdr 0 list)</code> gives you the whole\
+    \ list and <code>(nthcdr 1 list)</code> gives you the list without the first element.\n",
+  "  (map (lambda (x)\n         (if (even? x)\n             (sort (list (list-ref\
+    \ l x)))\n             (list (list-ref l x))))\n       (build-list (length l)\
+    \ (lambda (x) x))))\n", "  (cond [(empty? l) empty]\n        [(empty? (rest l))\
+    \ (list (first l))]\n        [else (list-append (list (first l))\n           \
+    \                (bubble-sort (rest (rest l)))\n                           (list\
+    \ (second l)))]))\n", "  (cond ((empty? l) empty)\n\t((null? (rest l)) (list (first\
+    \ l)))\n\t(else\n\t (cons (first l)\n\t       (sort (rest (rest l)))\n\t     \
+    \  (rest l)))))\n", "  (if (null? l)\n      '()\n      (cons (car l)\n       \
+    \     (sort_even (sort (cdr l))))))\n", "    (define (sort_even_helper l l_odd)\n\
+    \        (cond\n            [(= (length l) 1) l_odd]\n            [(= (length\
+    \ l) 2) (append l_odd (list (sort (list (second l) (first l)))))]\n          \
+    \  [else (sort_even_helper (rest (rest l)) (append l_odd (list (first l))))]))\n\
+    \    (sort_even_helper l '()))\n", "  (cond\n    [(= 1 (length l)) l]\n    [else\
+    \ (cond\n            [(= 0 (modulo (length l) 2)) (cons (sort (first l)) (sort_even\
+    \ (rest l)))]\n            [else (cons (first l) (sort_even (rest l)))]\n    \
+    \        )]\n    )\n  )\n", "  (if (= (length l) 0)\n      l\n      (if (= (length\
+    \ l) 1)\n\t  l\n\t  (if (= (length l) 2)\n\t      (if (> (list-ref l 0) (list-ref\
+    \ l 1))\n\t\t  (list (list-ref l 1) (list-ref l 0))\n\t\t  l)\n\t      (append\
+    \ (list (list-ref l 0))\n\t\t      (insertion_sort (list-ref l 1))\n\t\t     \
+    \ (sort_even (rest (rest l))))))))\n", "  (if (null? l)\n      l\n      (cons\
+    \ (car l)\n            (sort_even\n             (cons (sort (cdr l))\n       \
+    \            (cddr l))))))\n", "  (define (add-sorted item l)\n    (if (null?\
+    \ l)\n        (list item)\n        (if (< item (car l))\n            (cons item\
+    \ l)\n            (cons (car l) (add-sorted item (cdr l))))))\n  (if (null? l)\n\
+    \      '()\n      (if (null? (cdr l))\n          l\n          (cons (car l) (add-sorted\
+    \ (car (cdr l)) (sort_even (cdr (cdr l))))))))\n", "  (if (null? l)\n      (list)\n\
+    \      (if (null? (cdr l))\n          (list (car l))\n          (if (null? (cdr\
+    \ (cdr l)))\n              (list (car l) (cadr l))\n              (if (equal?\
+    \ 0 (modulo (length l) 2))\n                  (append (list (car l)) (sort_even\
+    \ (cdr l)))\n                  (cons (car l) (sort_even (cdr (sort_even (cdr l))))))))))\n",
+  "  (sort-indexes (list-ref l) (list-ref l 0) (list-ref l 1)))\n", "  (cond\n   \
+    \ [(empty? l) empty]\n    [(empty? (rest l)) l]\n    [else (cons (first l)\n \
+    \               (cons (list-sort < (rest (first (rest l))))\n                \
+    \      (sort_even (rest (rest l)))))]))\n", "  (cond\n    [(empty? l) empty]\n\
+    \    [(empty? (rest l)) l]\n    [else (cons (first l)\n                (cons (quicksort\
+    \ (rest (first (rest l))))\n                      (sort_even (rest (rest l)))))]))\n\
+    </code>\nAnd here is the quicksort:\n<code>#lang racket\n", "  (cond\n    [(null?\
+    \ l) '()]\n    [(null? (cdr l)) l]\n    [else\n     (cons (car l)\n          \
+    \ (sort (cdr (cdr l))))]))\n", "  (cond\n    [(empty? l) empty]\n    [(= (remainder\
+    \ (length l) 2) 0)\n     (cons (sort (first l)) (sort_even (rest l)))]\n    [else\n\
+    \     (cons (first l) (sort_even (rest l)))]))\n", "  (map (lambda (x y)\n   \
+    \      (if (even? x)\n             (list-sort (lambda (a b) (< a b)) y)\n    \
+    \         y))\n       (range (length l))\n       l))\n", "  (if (= (length l)\
+    \ 0)\n      '()\n      (list (list-ref l 0)\n            (sort (list-ref l 1))\n\
+    \            (sort_even (list-ref l 2)))))\n</code>\nI can't figure out how to\
+    \ make the function recurse in such a way that it doesn't eventually fail with\
+    \ this error:\n<code>&gt; (sort_even '(1 5 3 2 4 3 7 9 8 5 1))", "  (cond\n  \
+    \  [(empty? l) empty]\n    [(empty? (rest l)) (list (first l))]\n    [else\n \
+    \    (cons (first l)\n           (sort (first (rest l))\n                 (sort_even\
+    \ (rest (rest l)))))]))\n", "\t;; If the list is empty, return the empty list.\n\
+    \t(if (null? l)\n\t\t'()\n\t\t;; If the list has one element, return a list with\
+    \ one element.\n\t\t(if (null? (cdr l))\n\t\t\tl\n\t\t\t;; If the list has more\
+    \ than one element, return the sorted even and odd indicies.\n\t\t\t(cons (car\
+    \ l) (sort_even_helper (cdr l))))))\n", "  (cond\n    [(empty? l) empty]\n   \
+    \ [(empty? (rest l)) l]\n    [else\n     (cons (first l)\n           (cons (sort\
+    \ (rest (first (rest l))))\n                 (sort_even (rest (rest l)))))]))\n\
+    ```\n\n```racket\n#lang racket\n", "  (cond\n    [(empty? l) empty]\n    [(empty?\
+    \ (rest l)) l]\n    [else\n     (cons (first l)\n           (cons (quicksort (rest\
+    \ (rest l)))\n                 (sort_even (rest (rest (rest l))))))]))\n", " \
+    \ (cond\n    [(empty? l) empty]\n    [(empty? (rest l)) l]\n    [else (append\
+    \ (list (first l))\n                  (sort (rest (rest l)))\n               \
+    \   (rest l))]))\n", "  (define (helper1 l)\n    (if (empty? l)\n        empty\n\
+    \        (cons (car l) (helper1 (cddr l)))))\n  (define (helper2 l)\n    (if (empty?\
+    \ l)\n        empty\n        (cons (sort (car l)) (helper2 (cddr l)))))\n  (define\
+    \ (helper3 l)\n    (if (empty? l)\n        empty\n        (cons (car l) (helper3\
+    \ (cdr l)))))\n  (append (helper1 l) (helper2 l))\n  )\n", "  (cond\n    [(empty?\
+    \ l) '()]\n    [(= (remainder (length l) 2) 0)\n      (cons (merge (sort (first\
+    \ l)) (sort_even (rest l))) (rest l))]\n    [else (cons (first l) (sort_even (rest\
+    \ l)))]))\n", "  (define (sort_even_helper l eo s)\n    (cond ((null? l) (reverse\
+    \ s))\n          ((even? eo) (sort_even_helper (cdr l) (add1 eo) (cons (sort (cons\
+    \ (car l) s)) (cdr s))))\n          (else (sort_even_helper (cdr l) (add1 eo)\
+    \ (cons (car l) s)))))\n  (sort_even_helper l 0 '()))\n", "  (local [(define (sort_even_h\
+    \ l l_next l_sorted)\n            (cond [(empty? l) (reverse l_sorted)]\n    \
+    \              [(empty? l_next) (reverse l_sorted)]\n                  [else (sort_even_h\
+    \ (cdr l) (cdr l_next)\n                                     (cons (car l) (cons\
+    \ (sort (car l_next)) l_sorted)))]))]\n    (sort_even_h l (cdr l) empty)))\n",
+  "  (if (null? l)\n      '()\n      (cons (car l)\n            (sort_even (cddr l)))))\n",
+  "  (let loop ([remaining l]\n             [new-list '()])\n    (cond [(null? remaining)\
+    \ new-list]\n          [(even? (car remaining))\n           (loop (cdr remaining)\n\
+    \                 (append (list (car remaining))\n                         (list\
+    \ (sort (cadr remaining)))\n                         (cddr remaining)))]\n   \
+    \       [else (loop (cdr remaining)\n                      (append (list (car\
+    \ remaining))\n                              (cdr remaining)))])))\n</code>\n\
+    As you can see, I have a helper function <code>loop</code> that recurs on the\
+    \ list <code>remaining</code> and the new list that I am building up <code>new-list</code>.\
+    \ The first <code>cond</code> is when the list is empty, in which case I simply\
+    \ return the new list. The second <code>cond</code> is when the current head is\
+    \ an even number. In this case, I append a list onto the beginning of <code>new-list</code>\
+    \ that includes the even number, a list with <code>(sort (cadr remaining))</code>,\
+    \ and <code>(cddr remaining)</code>. This will sort the list and put it at the\
+    \ correct index, while still keeping the original values of all the other indices.\
+    \ The final <code>cond</code> is when the current head is an odd number. In this\
+    \ case, I simply append the value <code>(car remaining)</code> onto the new list,\
+    \ followed by <code>(cdr remaining)</code>, which ensures that the values of the\
+    \ odd indicies of <code>remaining</code> are not changed.\nI believe that this\
+    \ algorithm runs in <code>O(n^2)</code> time. I am having a hard time finding\
+    \ the maximum number of iterations, which would give me the O notation. I believe\
+    \ it is <code>n^2</code> because the first time, <code>sort</code> will take <code>n</code>\
+    \ iterations. Each time after that, <code>sort</code> will have to deal with smaller\
+    \ and smaller lists until we have a list of size <code>1</code>, which will not\
+    \ need any iterations at all. In total, I think that this algorithm will take\
+    \ <code>n</code> iterations for the first value, <code>n", "  (if (empty? l) '()\n\
+    \      (cons (first l)\n            (if (even? (length l))\n                (sort_even\
+    \ (sort (rest l)))\n                (sort_even (rest l))))))\n", "  (if (empty?\
+    \ l)\n      empty\n      (if (empty? (rest l))\n          l\n          (cons (first\
+    \ l)\n                (sort_even (cons (sort (rest (first (rest l))))\n      \
+    \                           (rest (rest l))))))))\n</code>\nAs you can see, I\
+    \ am trying to build the list from the front and am using cons to add the first\
+    \ element of the input list to the front of the result. The problem is that I\
+    \ am unable to add the first element of the first list in the tail of the input\
+    \ list to the end of the output list.\nHere is my input:\n<code>(sort_even '(1\
+    \ 2 3 4 5 6 7 8 9))\n</code>\nHere is my expected output:\n<code>'(1 3 5 7 9 2\
+    \ 4 6 8)\n</code>\nHere is the output of my function:\n<code>'(1 '(2 3 4 5 6 7\
+    \ 8 9))\n</code>\nIf I could just get <code>sort_even</code> to perform <code>cons</code>\
+    \ on the list that is currently the first element in the tail of the input list,\
+    \ I would be done. I can't think of a way to get the list out of the list so that\
+    \ I can cons it onto the end of the result.\n\n\nA:\n\nLet's analyze your code:\n\
+    <code>(define (sort_even l)\n  (if (empty? l)\n      empty\n      (if (empty?\
+    \ (rest l))\n          l\n          (cons (first l)\n                (sort_even\
+    \ (cons (sort (rest (first (rest l))))\n                                 (rest\
+    \ (rest l))))))))\n</code>\nYou're almost there, this is what the function should\
+    \ be:\n<code>(define (sort_even l)\n  (if (empty? l)\n      empty\n      (if (empty?\
+    \ (rest l))\n          l\n          (cons (first l)\n                (cons (sort\
+    \ (rest (first (rest l))))\n                      (sort_even (rest (rest l))))))))\n\
+    </code>\nThe only difference is here:\n<code>(cons (sort (rest (first (rest l))))\n\
+    \      (sort_even (rest (rest l))))\n</code>\nYou already", "  (cond\n    [(empty?\
+    \ l) empty]\n    [(empty? (rest l)) l]\n    [else (append (list (first l))\n \
+    \                   (sort (second l))\n                    (sort_even (rest (rest\
+    \ l))))]))\n</code>\nAs an example, if I pass <code>(list 1 2 3 4 5 6)</code>\
+    \ to <code>sort_even</code>, it should return <code>(list 1 4 2 5 3 6)</code>.\n\
+    I have a suspicion it has something to do with the way that I am calling <code>sort</code>\
+    \ in the <code>else</code> clause in the <code>cond</code>, but I'm not sure what\
+    \ to change. I thought the recursive calls would help build the list correctly,\
+    \ but something isn't working properly. I'm also curious if there is a way to\
+    \ do this using <code>map</code> in Racket.\nAny help is greatly appreciated.\n\
+    \n\nA:\n\nI think you want to use <code>list-sort</code> instead of <code>sort</code>\
+    \ in your code.\nQuoting the documentation:\n<blockquote>\n<p>Like <code>&lt;code&gt;sort&lt;/code&gt;</code>,\
+    \ but sorts the elements of <code>&lt;code&gt;lst&lt;/code&gt;</code> (instead\
+    \ of <code>&lt;code&gt;alist&lt;/code&gt;</code>) with the given <code>&lt;code&gt;compare&lt;/code&gt;</code>\
+    \ procedure. The result is a list of the same length as <code>&lt;code&gt;lst&lt;/code&gt;</code>,\
+    \ containing the same elements as <code>&lt;code&gt;lst&lt;/code&gt;</code> but\
+    \ in the given order.</p>\n</blockquote>\n", "  (if (null? l) l\n      (if (null?\
+    \ (cdr l)) l\n          (let* ([h (car l)]\n                 [t (cdr l)]\n   \
+    \              [h1 (car t)]\n                 [t1 (cdr t)])\n            (if (null?\
+    \ t1) (cons h (cons h1 t1))\n                (cons h (cons (merge h1 (car t1)\
+    \ (cdr t1)) (sort_even t1))))))))\n", "  (cond\n    [(empty? l) empty]\n    [(empty?\
+    \ (rest l)) l]\n    [else\n     (cons (first l)\n           (cons (sort (second\
+    \ l))\n                 (sort_even (rest (rest l)))))]))\n", "  (cond [(empty?\
+    \ l) '()]\n        [(empty? (rest l)) l]\n        [else (append (list (first l))\n\
+    \                      (list (sort (first (rest l))))\n                      (sort_even\
+    \ (rest (rest l))))]))\n", "  (cond [(empty? l) empty]\n        [(empty? (rest\
+    \ l)) (cons (first l) empty)]\n        [else (cons (first l) (sort_even (sort\
+    \ (rest (rest l)))))]))\n", "  (cond\n    [(empty? l) empty]\n    [(empty? (rest\
+    \ l)) l]\n    [else\n      (cons (first l)\n            (cons (sort (rest (first\
+    \ (rest l))))\n                  (sort_even (rest (rest l)))))]))\n", "  (map\
+    \ list (range 0 (length l)) l))\n", "  (cond\n    [(empty? l) empty]\n    [(=\
+    \ 0 (remainder (length l) 2)) (append (sort (first l)) (sort_even (rest l)))]\n\
+    \    [else (append (first l) (sort_even (rest l)))]))\n</code>\nMy problem is\
+    \ that this recursively calls (sort_even) on the list, which in turn calls the\
+    \ function on the first element of the list, which is a list itself. This goes\
+    \ on until the recursion runs out of stack space.\nHow do I go about implementing\
+    \ this?\n\n\nA:\n\nMy first reaction is that you should use <code>quasiquote</code>\
+    \ and <code>unquote</code> instead of <code>append</code> and <code>list</code>\
+    \ to build the output list. For example:\n<code>(define (sort-even l)\n  (match\
+    \ l\n    [(list odd even ...) `(,odd (unquote (sort even)) ...)]))\n</code>\n\
+    This is simple and concise, but if your input list is large, the output list will\
+    \ be as large as the input list, and the recursive calls will consume a lot of\
+    \ stack space.  To avoid that, you should reverse the list before you start, and\
+    \ build the result by consing to the end of the result:\n<code>(define (sort-even\
+    \ l)\n  (match (reverse l)\n    [(list even ... odd) (reverse (sort-even* odd\
+    \ (sort even)))]))\n", "  (cond\n    [(empty? l) empty]\n    [(empty? (rest l))\
+    \ (list (first l))]\n    [else\n     (append\n      (list (first l))\n      (sort\
+    \ (rest (rest l)))\n      (list (second l)))]))\n", "  (if (empty? l)\n      empty\n\
+    \      (if (even? (first l))\n          (cons (sort_even (rest l))\n         \
+    \       (sort (filter (lambda (n) (even? n)) l)))\n          (cons (first l)\n\
+    \                (sort_even (rest l))))))\n", "  (local [(define (even l)\n  \
+    \          (if (and (pair? l) (null? (cdr l)))\n                l\n          \
+    \      (if (pair? l)\n                    (cons (car l) (even (cddr l)))\n   \
+    \                 l)))\n          (define (odd l)\n            (if (and (pair?\
+    \ l) (null? (cdr l)))\n                l\n                (if (pair? l)\n    \
+    \                (cons (car (cdr l)) (odd (cddr l)))\n                    l)))\n\
+    \          (define (sort l)\n            (if (pair? l)\n                (if (=\
+    \ (car l) (car (cdr l)))\n                    (cons (car l) (sort (cdr l)))\n\
+    \                    (cons (car l) (sort (cons (car (cdr l)) (cdr (cdr l))))))\n\
+    \                l))]\n    (if (null? l)\n        l\n        (append (sort (even\
+    \ l)) (odd l)))))\n</code>\n", "  (if (null? l)\n      '()\n      (if (null? (cdr\
+    \ l))\n          l\n          (append (list (car l))\n                  (merge-sort\
+    \ (cdr l))\n                  (list (car (cdr l)))))))\n", "  (let loop ((l l)\
+    \ (new-l '()) (i 0))\n    (cond ((null? l) (reverse new-l))\n          ((= i 1)\n\
+    \           (loop (cdr l) (cons (car l) new-l) 0))\n          (else\n        \
+    \   (loop (cdr l) (cons (sort (car l)) new-l) (+ i 1))))))\n</code>\nA sample\
+    \ run:\n<code>&gt; (sort_even '((1 2 3) (4 5 6) (7 8 9)))\n'((1 2 3) (4 5 6) (7\
+    \ 8 9))\n&gt; (sort_even '((5 4 3) (6 7 8) (9 1 2)))\n'((5 4 3) (1 2 6 7 8) (9))\n\
+    </code>\n", "  (let loop ((l l) (l2 (list (if (null? l) '() (sort (cadr l)))))\
+    \ (n 0))\n    (if (null? l)\n        (reverse l2)\n        (loop (cdr l) (cons\
+    \ (if (zero? (remainder n 2)) (car l) (car l2)) l2) (+ n 1)))))\n</code>\n", " \
+    \ (cond [(null? l) '()]\n        [(empty? (rest l)) l]\n        [else (cons (first\
+    \ l)\n                    (cons (quicksort (rest (rest l)))\n                \
+    \          (sort_even (rest (rest (rest l))))))]))\n", "  (if (null? l)\n    \
+    \  l\n      (if (null? (cdr l))\n          l\n          (if (null? (cddr l))\n\
+    \              l\n              (cons (car l)\n                    (cons (sort\
+    \ (cadr l))\n                          (sort_even (cddr l))))))))\n", "  (if (null?\
+    \ l)\n      '()\n      (if (null? (cdr l))\n          (list (car l))\n       \
+    \   (list (car l)\n                (sort (cadr l))\n                (sort_even\
+    \ (cddr l))))))\n", "  (letrec ([loop (lambda (i l)\n                   (if (null?\
+    \ l)\n                       (list)\n                       (if (even? i)\n  \
+    \                         (cons (sort (car l) (cdr l)) (loop (+ i 1) (cdr l)))\n\
+    \                           (cons (car l) (loop (+ i 1) (cdr l))))))])\n    (loop\
+    \ 0 l)))\n", "  (cond [(empty? l) empty]\n        [(empty? (rest l)) l]\n    \
+    \    [else (append (list (first l))\n                      (list (sort (rest (first\
+    \ (rest l)))))\n                      (sort_even (rest (rest l))))]))\n</code>\n\
+    My Racket version of this program gives me an error when I try to run it:\n<code>application:\
+    \ not a procedure;\n expected a procedure that can be applied to arguments\n \
+    \ given: #&lt;procedure:...ard-even-lst&gt;\n  arguments...:\n   #&lt;procedure:...ard-even-lst&gt;\n\
+    </code>\nI've tried to look at the code and figure out where the problem is and\
+    \ I'm stuck. \nI'd greatly appreciate any help.\n\n\nA:\n\nYou have some problems,\
+    \ here's a working version of the code with a test:\n<code>(define (sort_even\
+    \ l)\n  (cond [(empty? l) empty]\n        [(empty? (rest l)) l]\n        [else\
+    \ (append (list (first l))\n                      (list (sort (rest (first (rest\
+    \ l)))))\n                      (sort_even (rest (rest l))))]))\n", "    (if (null?\
+    \ l)\n        '()\n        (if (odd? (length l))\n            (append (list (car\
+    \ l)) (sort_even (cdr l)))\n            (append (list (quick-sort (cadr l) (car\
+    \ l))) (sort_even (cddr l))))))\n", "  (if (empty? l)\n      empty\n      (cons\
+    \ (first l)\n            (if (odd? (length l))\n                (sort_even (rest\
+    \ l))\n                (cons (sort (rest (first l)))\n                      (sort_even\
+    \ (rest (rest l))))))))\n</code>\nThis is what I have so far but I get an error\
+    \ message saying \"application: not a procedure;\n expected a procedure that can\
+    \ be applied to arguments\" when I try the function on (list 'a 'b 'c 'd 'e 'f).\
+    \ \n\n\nA:\n\nTwo big problems. First, you're trying to apply <code>sort</code>\
+    \ to a single element, which is wrong. Second, you're trying to compare two lists\
+    \ using <code>=</code> when <code>equal?</code> must be used to compare lists\
+    \ for equality. Also, you're using <code>first</code> when you should be using\
+    \ <code>car</code> and <code>rest</code> when you should be using <code>cdr</code>.\
+    \ Try this instead:\n<code>(define (sort_even l)\n  (if (empty? l)\n      empty\n\
+    \      (cons (car l)\n            (if (odd? (length l))\n                (sort_even\
+    \ (cdr l))\n                (cons (sort (cdr (car l)))\n                     \
+    \ (sort_even (cdr (cdr l))))))))\n</code>\n", "  (cond\n    [(empty? l) empty]\n\
+    \    [(empty? (rest l)) l]\n    [else (cons (first l)\n                (cons (sort\
+    \ (rest (first (rest l))))\n                      (sort_even (rest (rest l)))))]))\n\
+    </code>\nI'm confused as to why an error is being thrown when the program runs.\n\
+    \n\nA:\n\nThe problem is with the use of <code>rest</code> in the <code>else</code>\
+    \ clause. <code>rest</code> takes a list, and so you should be using it as follows:\n\
+    <code>(define (sort_even l)\n  (cond\n    [(empty? l) empty]\n    [(empty? (rest\
+    \ l)) l]\n    [else (cons (first l)\n                (cons (sort (rest (first\
+    \ (rest l))))\n                      (sort_even (rest (rest l)))))]))\n</code>\n",
+  "  (if (null? l)\n      l\n      (cons (car l)\n            (map sort (reverse (cdr\
+    \ l))))))\n</code>\nI am not sure how to build a helper function called sort that\
+    \ sorts the even indicies from the list l. \n\n\nA:\n\nHere's a recursive solution,\
+    \ that sorts the even elements of the list in reverse order:\n<code>(define (sort-even\
+    \ lst)\n  (if (null? lst)\n      empty\n      (if (null? (cdr lst))\n        \
+    \  lst\n          (cons (car lst)\n                (cons (apply min (cdr lst))\n\
+    \                      (sort-even (cddr lst)))))))\n</code>\nAnd here's an example\
+    \ of usage:\n<code>(sort-even '(1 3 5 7 9 2 4 6 8 10))\n=&gt; '(1 3 5 7 9 2 10\
+    \ 8 6 4)\n</code>\nIf you don't like recursion, it's possible to obtain the same\
+    \ result using <code>map</code>, <code>for/fold</code> and <code>foldr</code>\
+    \ as you suggested, but the solution is going to be more verbose. I recommend\
+    \ mastering recursion first, then moving on to advanced Racket features.\n", " \
+    \ (cond\n    [(empty? l) empty]\n    [(empty? (rest l)) (list (first l))]\n  \
+    \  [else\n     (cons (first l)\n           (cons (sort (rest (rest l)))\n    \
+    \             (sort_even (rest l))))]))\n", "  (cond [(empty? l) empty]\n    \
+    \    [(empty? (rest l)) l]\n        [else (cons (first l) (cons (insertion_sort\
+    \ (first (rest l))) (sort_even (rest (rest l)))))]))\n", "  (if (null? l)\n  \
+    \    l\n      (cons (car l)\n            (sort_even (car (cdr (cdr l)))))))\n\
+    </code>\nThis function returns \n<code>'(1 2 3 4)\n</code>\nfor the input\n<code>'(1\
+    \ 3 2 4)\n</code>\nbut\n<code>'(1 2 3 4 5)\n</code>\nfor the input\n<code>'(1\
+    \ 3 2 4 5)\n</code>\nwhat am I doing wrong?\n\n\nA:\n\nThere are a couple of problems.\n\
+    First, you have an extra <code>cdr</code> in your recursive call. That's messing\
+    \ up your list. You're ending up at the third element of the list, rather than\
+    \ the second. It should be <code>(cdr (cdr l))</code> instead of <code>(cdr (cdr\
+    \ (cdr l)))</code>.\nSecond, you've got the order wrong. Since you're building\
+    \ up the result from scratch, the first element of the result should be the first\
+    \ element of the input. The second element of the result should be the second\
+    \ element of the input, sorted. The third element of the result should be the\
+    \ third element of the input, and so on. The only case where you skip an element\
+    \ is in the recursive call. You need to switch the order that you append the two\
+    \ halves of the list.\nThird, it's not clear from your post that you realize how\
+    \ you're doing the sorting. You sort the second half of the list, then prepend\
+    \ the first half of the list to it. This will only work properly if the second\
+    \ half of the list is sorted. If it isn't, the second half of the result will\
+    \ be messed up.\nIf the list is guaranteed to be of even length, it's much simpler\
+    \ to sort the second half and then append it. If you don't care that the second\
+    \ half is sorted, you can just use <code>append</code> as your base case instead\
+    \ of <code>null?</code>.\n<code>(define (sort_even l)\n  (if (null? l)\n     \
+    \ l\n      (append (list (car l))\n              (sort lst:sort-list (cdr (cdr\
+    \ l))))))\n</code>\nIf you do", "  (if (even? (length l))\n      (error \"List\
+    \ has even length\")\n      (letrec\n        ([x (first l)]\n         [xs (rest\
+    \ l)]\n         [h (evens_helper xs xs)]\n         [y (first h)]\n         [ys\
+    \ (rest h)])\n        (if (null? xs)\n            (list x)\n            (append\
+    \ (list x) (sort y) (sort_even ys))))))\n", "  (cond\n    [(null? l) empty]\n\
+    \    [(null? (cdr l)) l]\n    [else (cons (car l) (sort_even (cddr l)))]))\n</code>\n\
+    I know that the only issue with this code is the <code>(cddr l)</code> part of\
+    \ the function. I just don't know how to properly apply my <code>sort</code> function\
+    \ so that it orders the values in the even indicies of the list.\n\n\nA:\n\nThe\
+    \ procedure is missing a few steps. In particular, it must first sort the sublist\
+    \ that contains the even-indexed elements, which is a list of size <code>n</code>\
+    \ if the original list has <code>2n+1</code> elements. Then, it must combine the\
+    \ sorted even-indexed sublist with the original odd-indexed elements.\nThus, <code>sort_even</code>\
+    \ would be defined as follows:\n<code>(define (sort_even l)\n  (cond\n    [(null?\
+    \ l) empty]\n    [(null? (cdr l)) l]\n    [else\n     (append (list (car l))\n\
+    \             (sort (cddr l))\n             (list (cadr l)))]))\n</code>\nIf <code>l</code>\
+    \ is <code>(1 2 3 4 5)</code>, then the first <code>cond</code> case is not satisfied,\
+    \ so the second one is tested. Since <code>(null? (cdr l))</code> is false, the\
+    \ third case is evaluated, which returns the result of the expression\n<code>(append\
+    \ (list (car l))\n        (sort (cddr l))\n        (list (cadr l)))\n</code>\n\
+    Suppose <code>sort</code> returns <code>(4 2)</code> when applied to <code>(cddr\
+    \ l)</code>. Then the expression above evaluates to\n<code>(append (list 1) (sort\
+    \ (cddr l)) (list 3))\n= (append (list 1) (4 2) (list 3))\n= (1 4 2 3)\n</code>\n\
+    Of course, <code>sort</code> and <code>append</code> are functions defined in\
+    \ the Racket library, so", "  (cond\n    [(empty? l) empty]\n    [(empty? (rest\
+    \ l)) l]\n    [else (if (even? (first l))\n             (cons (first l) (sort_even\
+    \ (rest l)))\n             (cons (first l) (sort_even (rest l))))]))\n</code>\n\
+    An example of an input and the correct output:\n<code>(sort_even '(1 2 3 4 5 6\
+    \ 7 8 9))\n'(1 2 4 3 6 5 8 7 9)\n</code>\nHowever, the output I get is:\n<code>'(1\
+    \ 2 3 4 5 6 7 8 9)\n</code>\nThe only thing I can think of is that in the recursion\
+    \ step it is not actually moving on to the next iteration, or perhaps I am misunderstanding\
+    \ the use of <code>first</code> and <code>rest</code>.\nI would greatly appreciate\
+    \ any help to get me going in the right direction, I am very much a novice with\
+    \ Scheme.\n\n\nA:\n\nTry this:\n<code>(define (sort_even l)\n  (cond\n    [(empty?\
+    \ l) empty]\n    [(empty? (rest l)) l]\n    [else (if (even? (first l))\n    \
+    \         (cons (first l) (sort_even (rest l)))\n             (cons (first l)\
+    \ (sort_even (rest l))))]))\n</code>\nThis will work as you expect.\nIn your code,\
+    \ you didn't sort anything. You just checked odd/even.\n<code>(define (sort_even\
+    \ l)\n  (cond\n    [(empty? l) empty]\n    [(empty? (rest l)) l]\n    [else (if\
+    \ (even? (first l))\n             (cons (first l) (sort_even (rest l)))\n    \
+    \         (cons (first l) (sort_even (rest l))))]))\n</code>\nIn order to sort\
+    \ the even elements, you have to make a recursive call on the sublist of even\
+    \ elements and sort it.\n<code>(define (sort_even l)\n  (cond\n    [(empty? l)\
+    \ empty]\n    [(empty? (rest l)) l]\n    [else (if (even? (first l))\n       \
+    \      (cons (first", "  (define (even_indicies l)\n    (let loop ((l l) (i 0)\
+    \ (ans '()))\n      (cond ((null? l) (reverse ans))\n            ((even? i) (loop\
+    \ (cdr l) (+ i 1) (cons (car l) ans)))\n            (else (loop (cdr l) (+ i 1)\
+    \ ans)))))\n  (define (odd_indicies l)\n    (let loop ((l l) (i 0) (ans '()))\n\
+    \      (cond ((null? l) (reverse ans))\n            ((odd? i) (loop (cdr l) (+\
+    \ i 1) (cons (car l) ans)))\n            (else (loop (cdr l) (+ i 1) ans)))))\n\
+    \  (define (merge l1 l2)\n    (let loop ((l1 l1) (l2 l2) (ans '()))\n      (cond\
+    \ ((null? l1) (append (reverse ans) l2))\n            ((null? l2) (append (reverse\
+    \ ans) l1))\n            ((< (car l1) (car l2)) (loop (cdr l1) l2 (cons (car l1)\
+    \ ans)))\n            (else (loop l1 (cdr l2) (cons (car l2) ans))))))\n  (define\
+    \ (sort_even_helper l1 l2)\n    (merge l1 (sort (reverse l2))))\n  (sort_even_helper\
+    \ (odd_indicies l) (even_indicies l)))\n", "  (if (or (null? l) (null? (cdr l)))\n\
+    \      l\n      (cons (car l)\n            (sort_even (sort (cddr l))))))\n</code>\n\
+    Please help me figure out what's wrong with my function.\n\n\nA:\n\nYou should\
+    \ explain exactly what is wrong with your function: what it does and what you\
+    \ expect it to do.\nThe only problem I can see is that you are sorting the wrong\
+    \ sublist:\n<code>(define (sort_even l)\n  (if (or (null? l) (null? (cdr l)))\n\
+    \      l\n      (cons (car l)\n            (sort_even (sort (cdr l))))))\n</code>\n\
+    That should fix it.\n", "  (define (helper l' c l)\n    (cond\n      [(null? l)\
+    \ l']\n      [(= c 1) (helper (cons (sort (car l)) l') 0 (cdr l))]\n      [else\
+    \ (helper (cons (car l) l') 0 (cdr l))]))\n  (helper '() 1 l))\n", "  (cond\n\
+    \    [(empty? l) empty]\n    [(empty? (rest l)) l]\n    [else (cons (first l)\n\
+    \t\t(sort_even (cons (sort (rest (first (rest l))))\n\t\t\t\t (rest (rest l)))))]))\n",
+  "  (cond [(empty? l) empty]\n        [(empty? (rest l)) l]\n        [else (cons\
+    \ (first l)\n                    (cons (sort (rest (first (rest l))))\n      \
+    \                    (sort_even (rest (rest l)))))]))\n", "   (cond\n    [(empty?\
+    \ l) empty]\n    [(and (rest l) (not (empty? (rest l))))\n     (cons (first l)\
+    \ (sort_even (cons (sort (rest (first (rest l)))) (sort_even (rest (rest l))))))]\n\
+    \    [else (cons (first l) empty)]))\n", "  (cond [(empty? l) empty]\n       \
+    \ [(empty? (rest l)) l]\n        [else (cons (first l)\n                    (cons\
+    \ (sort (rest (first (rest l))))\n                          (sort_even (rest (rest\
+    \ l)))))]))\n", "    (cond\n        [(null? l) '()]\n        [(and (null? (cdr\
+    \ l)) (null? (cddr l))) '()]\n        [(and (null? (cdr l)) (not (null? (cddr\
+    \ l)))) (list (list-ref l 1))]\n        [else (append (list (list-ref l 0)) (list\
+    \ (sort (list-ref l 1))) (sort_even (cddr l)))]))\n", "  (cond [(empty? l) empty]\n\
+    \        [(empty? (rest l)) l]\n        [else\n         (list (first l)\n    \
+    \           (sort (rest (first (rest l))))\n               (sort_even (rest (rest\
+    \ l))))]))\n", "  (cond\n    [(null? l) l]\n    [(null? (cdr l)) l]\n    [(null?\
+    \ (cddr l)) (cons (car l) (sort (cons (cadr l) '())))]\n    [else (cons (car l)\
+    \ (cons (sort (cdr l)) (sort_even (cddr l))))]))\n", "  (cond\n    [(null? l)\
+    \ '()]\n    [(null? (cdr l)) l]\n    [else (cons (car l) (sort (cdr (cdr l))))]))\n\
+    </code>\nFor example, <code>(sort_even '(1 2 4 6 5 3))</code> returns <code>(1\
+    \ 4 6 2 5 3)</code>. \nI know the last line is wrong, but I don't know how to\
+    \ fix it. I know I need to add the cdr of the cdr of l to the list before I sort\
+    \ it, but I don't know how to do that. \n\n\nA:\n\nYou were almost there. The\
+    \ only thing that you're missing is that you need to recurse with the rest of\
+    \ the list:\n<code>(define (sort_even l)\n  (cond\n    [(null? l) '()]\n    [(null?\
+    \ (cdr l)) l]\n    [else (cons (car l) (sort_even (sort (cdr (cdr l)))))]))\n\
+    </code>\nYou can also simplify the code, by testing for the empty list and then\
+    \ just working with the <code>car</code> and <code>cdr</code> of the given list,\
+    \ like this:\n<code>(define (sort_even l)\n  (if (null? l)\n      '()\n      (cons\
+    \ (car l) (sort_even (sort (cdr (cdr l)))))))\n</code>\n", "  (define (sorted-values\
+    \ l)\n    (sort (filter even? (map first l)) <))\n  (define (make-new-list l)\n\
+    \    (cond ((empty? l) empty)\n          ((first l) (cons (first l) (cons (first\
+    \ (sorted-values l)) (make-new-list (rest l)))))\n          (else (cons (first\
+    \ (sorted-values l)) (make-new-list (rest l))))))\n  (make-new-list l))\n</code>\n\
+    As you can see, I use two helper functions, <code>sorted-values</code> and <code>make-new-list</code>.\
+    \ I don't know if that is the best way to write such a function.\nI was wondering\
+    \ if I could write this more clearly and efficiently.\n\n\nA:\n\nI would rename\
+    \ <code>sort_even</code> to <code>sort-even-indices</code>, and maybe <code>make-new-list</code>\
+    \ to <code>sort-even-indices-of-values</code>.\n<code>sort-even-indices</code>\
+    \ should call <code>sort-even-indices-of-values</code>, which should call <code>sort-even-indices-of-values*</code>,\
+    \ that just does the core.  That is, I would build the new list from the end to\
+    \ the beginning, thus avoiding reversing the list and having to convert it back\
+    \ to a list.\nI would also use <code>build-list</code> instead of recursion:\n\
+    <code>(define (sort-even-indices-of-values* l)\n  (build-list (length l)\n   \
+    \           (lambda (i)\n                (if (odd? i)\n                    (list-ref\
+    \ l i)\n                    (sort (filter even? (list-ref l i)) &lt;)))))\n",
+  "  (if (null? l)\n      '()\n      (append (list (first l))\n\t      (list (sort\
+    \ (rest l)))\n\t      (sort_even (rest (rest l))))))\n", "  (if (null? l)\n  \
+    \    null\n      (cons (car l)\n            (if (null? (cdr l))\n            \
+    \    null\n                (cons (sort (cadr l))\n                      (sort_even\
+    \ (cddr l)))))))\n</code>\nHowever, when I execute this code I get\n<code>sort_even:\
+    \ unbound identifier in module in: sort\n</code>\nThis seems like an incredibly\
+    \ basic error, but I can't seem to find the problem. Any help would be greatly\
+    \ appreciated.\n\n\nA:\n\n<code>sort</code> is a function defined in the <code>racket/list</code>\
+    \ module. You need to import it in your program.\n<code>(require racket/list)\n\
+    </code>\nOr you can import a module, for instance <code>racket</code>, which imports\
+    \ also <code>racket/list</code>.\n<code>(require racket)\n</code>\n", "  (if (null?\
+    \ l)\n      '()\n      (cons (first l)\n            (cond ((null? (rest l))\n\
+    \                   (rest l))\n                  ((= (remainder (length l) 2)\
+    \ 0)\n                   (cons (sort (cons (first (rest l)) (sort_even (rest (rest\
+    \ l))))\n                               <)\n                         (sort_even\
+    \ (rest (rest l)))))\n                  (else (cons (first (rest l))\n       \
+    \                       (sort_even (rest (rest l)))))))))\n", "  (cond [(empty?\
+    \ l) empty]\n        [(not (list? (rest l))) l]\n        [else (cons (first l)\n\
+    \                    (cons (sort (rest (first (rest l))))\n                  \
+    \        (sort_even (rest (rest l)))))]))\n", "  (cond\n    [(empty? l) empty]\n\
+    \    [(empty? (rest l)) l]\n    [else (append (list (first l))\n             \
+    \     (list (selection-sort (first (rest l))))\n                  (sort_even (rest\
+    \ (rest l))))]))\n", "  (if (empty? l)\n      empty\n      (if (empty? (rest l))\n\
+    \          l\n          (if (empty? (rest (rest l)))\n              l\n      \
+    \        (cons (first l) (cons (sort (rest (rest l))) (sort_even (rest (rest (rest\
+    \ l))))))))))\n</code>\nI believe the issue I am having is with my base case,\
+    \ where I am returning an empty list. I can't seem to find a good way to return\
+    \ the first two values in l, then the second two values in l, after those values\
+    \ have been sorted. The above code was my best attempt. Any advice would be appreciated.\n\
+    \n\nA:\n\nI'll give you some hints - a function to get the first element of a\
+    \ list is <code>car</code> and the function to get the rest of the list is <code>cdr</code>.\
+    \ You can also use the <code>list</code> procedure to build a list from some elements.\n",
+  "  (if (null? l)\n      '()\n      (if (null? (cdr l))\n          l\n          (if\
+    \ (even? (length l))\n              (append (list (list-sort < (car l))) (sort_even\
+    \ (cdr l)))\n              (append (list (car l)) (sort_even (cdr l)))))))\n",
+  "  (define (sort_even_helper l l' odd ind)\n    (cond ((null? l) l')\n         \
+    \ ((and (= odd 0) (not (null? (cdr l))))\n           (sort_even_helper (cdr l)\
+    \ l' 1 (+ ind 1)))\n          ((and (= odd 1) (not (null? (cdr l))))\n       \
+    \    (sort_even_helper (cdr l) (append l' (list (sort (list (car l)) <))) 0 (+\
+    \ ind 1)))\n          (else (append l' (list (car l))))))\n  (sort_even_helper\
+    \ l '() 0 0))\n", "  (cond [(empty? l) empty]\n        [(empty? (rest l)) l]\n\
+    \        [else (cons (first l)\n                    (sort_even (interleave (bubble_sort\
+    \ (rest (rest l)))\n                                           (rest (rest (rest\
+    \ l))))))]))", "  (if (empty? l) empty\n      (cons (first l) (insert-sorted (sort_even\
+    \ (rest l))))))\n", "  (cond\n    [(empty? l) empty]\n    [(empty? (rest l)) l]\n\
+    \    [else\n     (cons (first l)\n           (sort (rest (rest l)))\n        \
+    \   (sort_even (rest l)))]))\n", "  (cond\n    [(empty? l) empty]\n    [(empty?\
+    \ (rest l)) l]\n    [else (cons (first l)\n                (cons (sort (rest (first\
+    \ (rest l))))\n                      (sort_even (rest (rest l)))))]))\n</code>\n\
+    I would expect (sort_even '(1 2 3 4 5 6)) to equal '(1 2 4 5 3 6), but it equals\
+    \ '(1 2 4 5 2 6) instead. I can't figure out where I'm going wrong.\n\n\nA:\n\n\
+    I think what you want is\n<code>(define (sort_even l)\n  (cond\n    [(empty? l)\
+    \ empty]\n    [(empty? (rest l)) l]\n    [else (cons (first l)\n             \
+    \   (cons (sort (first (rest l)))\n                      (sort_even (rest (rest\
+    \ l)))))]))\n</code>\nThe reason is that in your version you are calling <code>sort</code>\
+    \ with a list that has the last value twice, so you get the result <code>'(2 2)</code>\
+    \ instead of <code>'(2)</code>.\n", "  (cond [(empty? l) (list)]\n        [(empty?\
+    \ (rest l)) (list (first l))]\n        [else (cons (first l)\n               \
+    \     (sort_even (cons (sort (rest (first (rest l))))\n                      \
+    \               (rest (rest l)))))]))", "  (cond ((null? l) '())\n        ((null?\
+    \ (cdr l)) l)\n        (else (cons (car l) (cons (sort (cadr l)) (sort_even (cddr\
+    \ l)))))))\n", "  (define (sort_even_helper l i)\n    (cond\n      [(empty? l)\
+    \ empty]\n      [(= i 1) (sort_even_helper (rest l) 0)]\n      [(> i 1) (cons\
+    \ (first l) (sort_even_helper (rest l) (- i 1)))]\n      [else (append (sort (first\
+    \ l)) (sort_even_helper (rest l) 0))]))\n  (sort_even_helper l 0))\n", "    (cond\n\
+    \        [(empty? l) empty]\n        [(empty? (rest l)) l]\n        [else (cons\
+    \ (first l)\n                    (sort (rest (rest l)))\n                    (sort_even\
+    \ (rest (rest l))))]))\n", "  (cond ((empty? l) '())\n        ((even? (length\
+    \ l)) (cons (sort (first l)) (sort_even (rest l))))\n        (else (cons (first\
+    \ l) (sort_even (rest l))))))\n", "  (cond\n    [(empty? l) empty]\n    [(empty?\
+    \ (rest l)) l]\n    [else\n     (cons (first l)\n           (sort_even (quicksort\
+    \ (rest (rest l)))))\n     ]))\n", "  (if (null? l)\n      '()\n      (if (even?\
+    \ (car l))\n          (cons (sort l) (sort_even (cdr l)))\n          (cons (car\
+    \ l) (sort_even (cdr l))))))\n</code>\nI've tried a couple of ways of doing this,\
+    \ but I can't seem to get it quite right.\n\n\nA:\n\nThis should do it:\n<code>(define\
+    \ (sort-even lst)\n  (map-in-order (lambda (p) (if (even? p) (sort (list p)) (list\
+    \ p))) lst))\n</code>\nFor example:\n<code>(sort-even '(1 2 3 4 5 6 7 8 9))\n\
+    =&gt; '(1 (2 4 6 8) 3 (5 7 9))\n</code>\n", "  (cond [(empty? l) empty]\n    \
+    \    [(and (even? (car l)) (odd? (cadr l)))\n         (cons (sort (car l)) (cons\
+    \ (cadr l) (sort_even (cddr l))))]\n        [else (cons (car l) (sort_even (cdr\
+    \ l)))]))\n", "  (local ((define (helper l counter sorted)\n            (cond\n\
+    \              [(empty? l) '()]\n              [(= (remainder counter 2) 0) (cons\
+    \ (sort (first l)) (helper (rest l) (+ counter 1) (sort (first l))))]\n      \
+    \        [else (cons (first l) (helper (rest l) (+ counter 1) sorted))])))\n \
+    \   (helper l 0 '())))\n</code>\nAm I going about this wrong? I have a feeling\
+    \ I have way overcomplicated it, but I was not sure of a way to sort the even\
+    \ indicies. \n\n\nA:\n\nA simpler way to get the same result:\n<code>(define (sort-even\
+    \ lst)\n  (map (lambda (e1 e2)\n         (if (even? e1)\n             (sort e2)\n\
+    \             e2))\n       (range (length lst))\n       lst))\n</code>\n", " \
+    \ (cond\n    [(= (remainder (length l) 2) 1)\n     (sort_even (append l (list\
+    \ (last l))))]\n    [(empty? l) empty]\n    [(= (length l) 2) (list (first l)\
+    \ (last l))]\n    [else (append (list (first l) (list-sort < (cadr l))) (sort_even\
+    \ (cddr l)))]))\n", "  (cond\n    [(empty? l) empty]\n    [(empty? (rest l)) l]\n\
+    \    [else\n     (let* ([first (first l)]\n            [second (first (rest l))]\n\
+    \            [third (first (rest (rest l)))]\n            [new-rest (cond\n  \
+    \                      [(and (empty? third) (empty? second))\n               \
+    \          empty]\n                        [(and (empty? third) (not (empty? second)))\n\
+    \                         (list second)]\n                        [(and (not (empty?\
+    \ third)) (empty? second))\n                         (list third)]\n         \
+    \               [(and (not (empty? third)) (not (empty? second)))\n          \
+    \               (if (< second third)\n                             (list second\
+    \ third)\n                             (list third second))])]\n            [new-l\
+    \ (cons first new-rest)])\n       (cons first (sort_even (rest new-l))))]))\n",
+  "  (if (empty? l)\n      '()\n      (cons (first l)\n            (sort_even (rest\
+    \ (sort l))))))\n</code>\nThis returns the error <code>application: not a procedure;\n\
+    \ expected a procedure that can be applied to arguments\n  given: '(2 4 5 3 1)</code>\n\
+    I understand that what I've written is in the form\n<code>(define (sort_even l)\n\
+    \  (if (empty? l)\n      '()\n      (cons (first l)\n            'rest(sort l)))))\n\
+    </code>\nbut I'm not sure how to fix it. I'm very new to racket, so any help would\
+    \ be appreciated.\n\n\nA:\n\nYou have to have the <code>rest</code> and <code>sort</code>\
+    \ functions applied to the same list. Currently, you're applying <code>rest</code>\
+    \ to the quoted list <code>'(sort l)</code>, which is why it's throwing an error.\n\
+    You also don't need to quote the list argument for <code>sort</code>, because\
+    \ that's what <code>sort</code> does, take a list and sort it.\n<code>(define\
+    \ (sort_even l)\n  (if (empty? l)\n      '()\n      (cons (first l)\n        \
+    \    (sort_even (rest (sort l))))))\n</code>\n", "  (cond\n    [(null? l) '()]\n\
+    \    [(null? (cdr l)) l]\n    [(and (null? (cdr (cdr l))) (not (null? (cdr l))))\n\
+    \     (cons (car l) (sort (cdr l)))]\n    [else (cons (car l) (sort_even (cdr\
+    \ (sort (cdr l)))))]))\n", "    (cond [(empty? l) empty]\n        [(empty? (rest\
+    \ l)) l]\n        [else\n            (cons (first l)\n                (cons (sort\
+    \ (rest (first (rest l))))\n                (sort_even (rest (rest l)))))]))\n\
+    </code>\nHowever, this function returns an error at the even indices instead of\
+    \ the sorted list, so I'm not sure what I'm doing wrong. \nThe error is:\nsort_even:\
+    \ contract violation\n  expected: (listof (listof Number))\n  given: '(() () ()\
+    \ () ())\n  in: the 1st argument of\n      (-&gt; (listof (listof Number)) (listof\
+    \ (listof Number)))\n    contract from: (-&gt; (listof (listof Number)) (listof\
+    \ (listof Number)))\nThanks for your help.\n\n\nA:\n\nHint: the third case is\
+    \ the key part of the problem, the others are trivial. You're using the <code>sort</code>\
+    \ procedure in a wrong way, and that's what's causing the problem. Instead of\
+    \ <code>(sort (rest (first (rest l))))</code> you need to get a list that contains\
+    \ the even-numbered elements of the list, and then call <code>sort</code> on it.\
+    \ It will look something like this:\n<code>(cond [(empty? l) empty]\n      [(empty?\
+    \ (rest l)) l]\n      [else\n       (cons (first l)\n             (cons (sort\
+    \ (map ...))\n                   (sort_even (rest (rest l)))))]))\n</code>\nWhat's\
+    \ the <code>map</code> procedure going to do with the list that contains the even-numbered\
+    \ elements?\n", "  (if (empty? l)\n      empty\n      (if (empty? (rest l))\n\
+    \          l\n          (if (even? (first l))\n              (begin\n        \
+    \        (cons (sort (first l)) (sort_even (rest l)))\n                )\n   \
+    \           (begin\n                (cons (first l) (sort_even (rest l)))\n  \
+    \              )\n              )\n          )\n      )\n  )\n", "  (if (= (length\
+    \ l) 0)\n      '()\n      (let* ((h (car l))\n             (t (cdr l))\n     \
+    \        (h2 (car t))\n             (t2 (cdr t)))\n        (if (= (length l) 1)\n\
+    \            l\n            (if (= (length l) 2)\n                (cons h (cons\
+    \ (sort h2) '()))\n                (cons h (cons (sort h2) (sort_even t2))))))))\n",
+  "  (if (not (list? l))\n      l\n      (list-&gt;stream\n       (cons (stream-first\
+    \ l)\n             (if (not (list? (stream-rest l)))\n                 (stream-rest\
+    \ l)\n                 (cons (stream-sort &lt; (stream-rest l))\n            \
+    \           (stream-drop 2 (stream-rest l))))))))\n</code>\nI don't get any errors,\
+    \ but when I try it out in the interpreter, it doesn't work:\n<code>&gt; (sort_even\
+    \ '(1 2 3 4 5 6 7 8 9))", "  (if (null? l)\n      null\n      (cons (car l)\n\
+    \            (quicksort (sort_even (cdr l))))))\n</code>\nHowever, this code does\
+    \ not achieve what I want it to achieve. This code simply returns a list of the\
+    \ odd indicies with the even indicies as null values.\n\n\nA:\n\nThat's because\
+    \ it's not clear where you want the sorting done, so I took the \"simple\" route\
+    \ and did it on the tail of the recursion:\n<code>(define (sort-even l)\n  (if\
+    \ (null? l)\n      null\n      (cons (car l)\n            (sort (sort-even (cdr\
+    \ l))))))\n</code>\nIt sounds as if you're trying to make this simpler than it\
+    \ actually is.  If you're really trying to sort the even elements, you need to\
+    \ do something like this:\n<code>(define (sort-even l)\n  (if (null? l)\n    \
+    \  null\n      (cons (car l)\n            (cons (sort (cadr l))\n            \
+    \      (sort-even (cddr l))))))\n</code>\nThat is, go from the innermost recursive\
+    \ call to the outermost, and start building the answer, matching the elements\
+    \ as you go.\n", "  (define (odd? x) (= 1 (remainder x 2)))\n  (cond\n    [(null?\
+    \ l) '()]\n    [(odd? (car l))\n     (cons (car l) (sort_even (cdr l)))]\n   \
+    \ [else\n     (cons (sort (car l)) (sort_even (cdr l)))]))\n</code>\nI get the\
+    \ following error.\n<code> sort_even.rkt:13:6: racket/list: no such module\n</code>\n\
+    I've also tried <code>(require racket/list)</code> at the top of the file, which\
+    \ results in the same error. I don't know what the problem is. I am using Racket\
+    \ 5.2.1.\n\n\nA:\n\nThere are two issues here:\n\n<code>sort</code> is not a function\
+    \ in Racket. I think you are looking for <code>sort</code> in the <code>racket/list</code>\
+    \ library.\n<code>sort</code> is not a function that takes a list as an argument\
+    \ in <code>racket/list</code>. It takes either a list of numbers or a list of\
+    \ comparable things. If you want to sort a list of lists, you can use <code>sort-list</code>.\n\
+    \nFixing these two issues, your code should work (with the <code>require</code>).\n",
+  "  (if (null? l) '()\n      (cons (car l) (insertion_sort (cddr l)))\n      )\n\
+    \  )\n", "  (sort (cdr l) <))\n", "  (letrec ((helper (lambda (l position)\n \
+    \   (cond\n      [(empty? l) empty]\n      [(empty? (rest l)) (list (first l))]\n\
+    \      [(even? position)\n       (cons (first l) (helper (rest l) (add1 position)))]\n\
+    \      [else\n       (cons (first l) (sort_even (rest l)))]))))\n    (helper l\
+    \ 0)))\n", "  (cond\n    [(null? l) '()]\n    [(null? (cdr l)) l]\n    [else\n\
+    \     (let ([x (first l)]\n           [y (second l)]\n           [z (sort_even\
+    \ (cddr l))])\n       (append (list x (sort y)) z))]))\n", "  (if (null? l)\n\
+    \      '()\n      (let ((l2 (cdr l)))\n        (append (list (car l))\n      \
+    \          (sort (filter (lambda (x) (even? x)) l2))\n                (filter\
+    \ (lambda (x) (odd? x)) l2)))))\n", "  (cond [(empty? l) empty]\n        [(empty?\
+    \ (rest l)) l]\n        [else (cons (first l)\n                    (cons (sort\
+    \ (rest (first (rest l))))\n                          (sort_even (rest (rest l)))))]))\n",
+  "  (if (= (modulo (length l) 2) 0)\n      (sort_even_even_l l)\n      (sort_even_odd_l\
+    \ l)))\n", "  (define (evens l)\n    (filter even? (range 0 (length l))))\n  (define\
+    \ (odds l)\n    (filter odd? (range 0 (length l))))\n  (define (sort-evens l)\n\
+    \    (filter-map identity (sort (filter (lambda (x) (not (null? x))) (map vector-ref\
+    \ l (evens l))))))\n  (filter-map identity (sort (filter (lambda (x) (not (null?\
+    \ x))) (map vector-ref l (odds l))))))\n</code>\nI am hoping to have a function\
+    \ that works not only on lists but also on vectors.\n\n\nA:\n\nThe problem is\
+    \ that you're trying to sort a vector, but the <code>sort</code> procedure expects\
+    \ a list as input. To fix this, use the <code>vector-&gt;list</code> procedure:\n\
+    <code>(sort (vector-&gt;list (vector 2 5 1 8)))\n</code>\n", "  (cond\n    [(empty?\
+    \ l) (quote ())]\n    [(empty? (rest l)) l]\n    [else\n     (append\n      (list\
+    \ (first l))\n      (sort (rest (sort_even (rest l)))))]))\n", "  (if (null? l)\n\
+    \      '()\n      (cons (first l)\n            (sort_even (map (lambda (a) (sort\
+    \ a)) (cdr l))))))\n</code>\nHere's an example run:\n<code>&gt; (sort_even '(1\
+    \ 2 (5 2 4) 3))\n'(1 (2 4 5) 3)\n</code>\n", "  (cond\n    [(empty? l) empty]\n\
+    \    [(empty? (rest l)) l]\n    [else (cons (first l)\n                (cons (sort\
+    \ (rest (first (rest l))))\n                      (sort_even (rest (rest l)))))]))\n",
+  "  (map (lambda (lst ele)\n         (if (odd? ele)\n             (list (list-ref\
+    \ lst ele))\n             (sort (list (list-ref lst ele)) (lambda (a b) (&lt;\
+    \ a b)))))\n       l\n       (build-list (length l) (lambda (x) x))))\n</code>\n\
+    Sample call:\n<code>(sort_even '(1 2 4 3 5 4))\n</code>\nThis returns:\n<code>'(1\
+    \ (2 3 4) 3 (2 3 4) 5 (2 3 4))\n</code>\nHowever, I tried the same code in Racket,\
+    \ and it returns:\n<code>'(1 (2 3 4) 3 (2 3 4) 5 (2 3 4)\n</code>\nI can't figure\
+    \ out what I'm doing wrong in Racket.\n\n\nA:\n\nThe problem is that you're passing\
+    \ the sublists as arguments to <code>sort</code>, but <code>sort</code> is designed\
+    \ to work with a single list argument, not an indefinite number of them. To do\
+    \ what you want, you need to first use <code>apply</code> to call <code>sort</code>\
+    \ with all of the sublists as arguments and then combine the result with the <code>car</code>\
+    \ of the sublist:\n<code>(define (sort_even l)\n  (map (lambda (lst ele)\n   \
+    \      (if (odd? ele)\n             (list (list-ref lst ele))\n             (apply\
+    \ sort (list (list-ref lst ele)))))\n       l\n       (build-list (length l) (lambda\
+    \ (x) x))))\n</code>\nThen the output looks like this:\n<code>&gt; (sort_even\
+    \ '(1 2 4 3 5 4))\n'(1 (2 3 4) 3 (2 3 4) 5 (2 3 4))\n</code>\nThe other alternative\
+    \ is to remove the <code>apply</code> and just sort the sublist directly:\n<code>(define\
+    \ (sort_even l)\n  (map (lambda (lst ele)\n         (if (odd? ele)\n         \
+    \    (list (list-ref lst ele))\n             (sort (list-ref l", "  (define (odd?\
+    \ i)\n    (and (not (zero? i)) (even? (- i 1))))\n  (define (sort_even_1 l so_far)\n\
+    \    (cond ((null? l)\n           (reverse so_far))\n          ((odd? (length\
+    \ so_far))\n           (sort_even_1 (cdr l) (cons (car l) so_far)))\n        \
+    \  (else\n           (sort_even_1 (cdr l) (cons (sort < (car l)) so_far)))))\n\
+    \  (sort_even_1 l '()))\n", "  (if (null? l)\n      '()\n      (append (list (car\
+    \ l))\n              (sort (cdr l)))))\n", "  (if (empty? l) l\n      (cond [(=\
+    \ 0 (modulo (length l) 2)) (sort_even (butlast l))]\n            [else (sort_even\
+    \ (rest l))])))", "  (list-indexes (sort l))\n  (list-indexes (sort (odd-indexes\
+    \ l))))\n</code>\nThe only code that I have is the following (this code works\
+    \ and it is not the point of my question):\n<code>#lang racket\n", "  (if (empty?\
+    \ l)\n      empty\n      (if (empty? (rest l))\n          l\n          (cons (first\
+    \ l) (cons (sort (first (rest l))) (sort_even (rest (rest l))))))))\n</code>\n\
+    Trying to sort <code>(sort_even '(1 2 3 4 5 6))</code> for example, causes a contract\
+    \ violation as follows:\n<code>sort_even: contract violation\n  expected: list?\n\
+    \  given: #&lt;procedure:...ect/list.rkt:158:1&gt;\n  in: the 1st argument of\n\
+    \      (-&gt;-&gt; (list? list?) list?)\n  contract from: &lt;pkgs&gt;/racket-lib/scrbl/list.rkt\n\
+    \  blaming: &lt;pkgs&gt;/racket-lib/scrbl/list.rkt\n   (assuming the contract\
+    \ is correct)\n  at: &lt;pkgs&gt;/racket-lib/scrbl/list.rkt:158:1\n  context...:\n\
+    \   /home/hanoi/racket/share/pkgs/scrbl/list.rkt:158:0: concat\n   /home/hanoi/racket/share/pkgs/scrbl/list.rkt:158:9\n\
+    \   /home/hanoi/racket/share/pkgs/scrbl/list.rkt:159:9\n   /home/hanoi/racket/share/pkgs/scrbl/list.rkt:161:9\n\
+    \   /home/hanoi/racket/share/pkgs/scrbl/list.rkt:162:9\n   /home/hanoi/racket/share/pkgs/scrbl/list.rkt:163:9\n\
+    \   /home/hanoi/racket/share/pkgs/scrbl/list.rkt:164:9\n   /home/hanoi/racket/share/pkgs/scrbl/list.rkt:165:9\n\
+    \   /home/hanoi/racket/share/pkgs/scrbl/", "  (cond\n    [(null? l) null]\n  \
+    \  [(empty? (rest l)) (list (first l))]\n    [else\n     (let-values ([(a b) (split_even\
+    \ l)])\n       (append (list (first l)) (merge_sorted a b)))]))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

@@ -11,7 +11,1342 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate e
   \  (check-equal? (candidate \"This is a message\") \"tHKS KS C MGSSCGG\")\n    (check-equal?\
   \ (candidate \"I DoNt KnOw WhAt tO WrItE\") \"k dQnT kNqW wHcT Tq wRkTg\")\n))\n\
   \n(test-humaneval)"
-completions: []
+completions: ["  (if (string=? message \"\")\n      \"\"\n      (let ((c (string-ref\
+    \ message 0)))\n        (cond ((char-lower-case? c) (string-upper-case c))\n \
+    \             ((char-upper-case? c) (string-lower-case c))\n              (else\
+    \ c)))))\n</code>\nAll of the functions I call in the <code>cond</code> are giving\
+    \ me a <code>unbound identifier</code> error. I don't see how this is possible\
+    \ since I've imported all of the necessary libraries. Any ideas on how to fix\
+    \ this?\n\n\nA:\n\nI believe you're looking for <code>string-upcase</code> and\
+    \ <code>string-downcase</code>.\n", "  (define (shift-char num c)\n    (let ([c\
+    \ (char-upcase c)])\n      (cond [(and (<= #\\A c) (<= c #\\Z))\n            \
+    \ (char (+ c (- num 26)))]\n            [else c])))\n  (for/fold ([acc '()]) ([c\
+    \ (in-string message)])\n    (cond [(member c '(#\\A #\\E #\\I #\\O #\\U))\n \
+    \          (cons (shift-char 2 c) acc)]\n          [else (cons (shift-char 1 c)\
+    \ acc)])))\n", "  (define vowels '(#\\a #\\e #\\i #\\o #\\u))\n  (define (encode-letter\
+    \ l)\n    (cond\n      [(member l vowels)\n       (list-ref vowels (modulo (+\
+    \ (list-index (char-downcase l) vowels) 2)\n                                (length\
+    \ vowels)))]\n      [else (char-upcase l)]))\n  (string-append (map encode-letter\
+    \ (string->list message))))\n</code>\n", "  (define (swapc c)\n    (if (char-upper-case?\
+    \ c)\n        (char-downcase c)\n        (char-upcase c)))\n  (define (encode-char\
+    \ c)\n    (define (vowel? c)\n      (member c '#(#\\a #\\e #\\i #\\o #\\u)))\n\
+    \    (define (nextn n)\n      (if (&lt;= n #\\z)\n          (+ n 2)\n        \
+    \  (+ n 4)))\n    (if (vowel? c)\n        (nextn c)\n        c))\n  (string-&gt;list\n\
+    \   (string-map swapc (string-map encode-char (string-&gt;list message)))))\n",
+  "  (for/list ([c (in-string message)])\n    (cond [(= #\\A (char-upcase c)) #\\\
+    C]\n          [(= #\\E (char-upcase c)) #\\G]\n          [(= #\\I (char-upcase\
+    \ c)) #\\K]\n          [(= #\\O (char-upcase c)) #\\Q]\n          [(= #\\U (char-upcase\
+    \ c)) #\\W]\n          [(or (= #\\a (char-upcase c))\n               (= #\\e (char-upcase\
+    \ c))\n               (= #\\i (char-upcase c))\n               (= #\\o (char-upcase\
+    \ c))\n               (= #\\u (char-upcase c)))\n           (char-upcase c)]\n\
+    \          [else\n           (char-downcase c)])))\n", "  (letrec ([message-helper\
+    \ (lambda (str count)\n                             (cond [(= count (string-length\
+    \ str))\n                                    \"\"]\n                         \
+    \          [(char-alphabetic? (string-ref str count))\n                      \
+    \              (string-append\n                                     (string-upcase/downcase\
+    \ (string-ref str count))\n                                     (message-helper\
+    \ str (+ count 1)))]\n                                   [else\n             \
+    \                       (string-append\n                                     (string-ref\
+    \ str count)\n                                     (message-helper str (+ count\
+    \ 1)))]))])\n    (message-helper message 0)))\n", "  \n  ;; Write this function\
+    \ here\n  (define (alpha-replace c1 c2 c3)\n    (if (= c1 c2) c3 c1))\n  \n  (define\
+    \ (swap-case c)\n    (if (char-lower-case? c)\n        (char-upcase c)\n     \
+    \   (char-downcase c)))\n  \n  (define (vowel? c)\n    (or (= c #\\a) (= c #\\\
+    e) (= c #\\i) (= c #\\o) (= c #\\u)))\n  \n  (define (vowel-replace c)\n    (cond\
+    \ ((= c #\\a) #\\c)\n          ((= c #\\e) #\\g)\n          ((= c #\\i) #\\k)\n\
+    \          ((= c #\\o) #\\q)\n          ((= c #\\u) #\\y)\n          (else c)))\n\
+    \  \n  (letrec ([transform (lambda (lst)\n                        (cond [(null?\
+    \ lst) '()]\n                              [(vowel? (car lst))\n             \
+    \                  (cons (vowel-replace (car lst)) (transform (cdr lst)))]\n \
+    \                             [else\n                               (cons (swap-case\
+    \ (car lst)) (transform (cdr lst)))]))])\n    (apply string (transform (string->list\
+    \ message)))))\n", "  (map (lambda (char)\n          (if (vowel? char)\n     \
+    \         (next-letter (next-letter char))\n              (swap-case char)))\n\
+    \       message))\n", "  (define chars (string->list message))\n  (define (encode-char\
+    \ c)\n    (cond\n      [(char-alphabetic? c)\n       (string-&gt;char (string-downcase\
+    \ (list-&gt;string (encode-char-list (string-&gt;list (string-upcase (char-&gt;string\
+    \ c)))))))]\n      [else c]))\n  (list-&gt;string (map encode-char chars)))\n",
+  "  (define vowels (list #\\a #\\e #\\i #\\o #\\u))\n  (define (next-letter letter\
+    \ shift)\n    (integer->char (+ (char->integer letter) shift)))\n  (define (after-vowel?\
+    \ letter)\n    (if (member letter vowels)\n        #t\n        #f))\n  (define\
+    \ (encode-letter letter)\n    (cond ((char-alphabetic? letter)\n           (if\
+    \ (char-lower-case? letter)\n               (if (after-vowel? letter)\n      \
+    \             (next-letter letter 2)\n                   (next-letter letter 7))\n\
+    \               (if (after-vowel? letter)\n                   (next-letter letter\
+    \ 2)\n                   (next-letter letter 7))))\n          (else letter)))\n\
+    \  (map encode-letter message))\n", "  (cond [(empty? message) empty]\n      \
+    \  [else (cons (encode-char (first message)) (encode (rest message)))]))\n", " \
+    \ (map (lambda (char)\n         (cond\n           [(char-alphabetic? char) (string-upcase\
+    \ (string char))]\n           [else char]))\n       message))\n", "  (map (lambda\
+    \ (x)\n         (if (= (char-upcase x) x)\n             (char-downcase x)\n  \
+    \           (char-upcase x)))\n       message))\n", "  (string-append \"encrypted\
+    \ \" message))\n", "  (map (lambda (x)\n         (cond ((letter? x) (if (vowel?\
+    \ x)\n                                (next-2 x)\n                           \
+    \     (next-2 (upcase x))))\n               (else x)))\n       message))", " \
+    \ \n  (define (vowel? c)\n    (or (char=? c #\\a) (char=? c #\\e) (char=? c #\\\
+    i) (char=? c #\\o) (char=? c #\\u)))\n  (define (next-vowel c)\n    (cond [(char=?\
+    \ c #\\a) #\\c]\n          [(char=? c #\\e) #\\g]\n          [(char=? c #\\i)\
+    \ #\\k]\n          [(char=? c #\\o) #\\q]\n          [(char=? c #\\u) #\\w]\n\
+    \          [else c]))\n  (define (swap-case c)\n    (if (char-upper-case? c) (char-downcase\
+    \ c) (char-upcase c)))\n  (define (my-map f lst)\n    (if (null? lst) lst\n  \
+    \      (cons (f (car lst)) (my-map f (cdr lst)))))\n  (define (flip lst)\n   \
+    \ (if (null? lst) lst\n        (append (flip (cdr lst)) (list (car lst)))))\n\
+    \  (if (not (string? message)) message\n      (list->string (flip (my-map \n \
+    \                          (lambda (x) (if (vowel? x) \n                     \
+    \                     (next-vowel x) \n                                      \
+    \    (swap-case x))) \n                           (string->list message))))))\n\
+    </code>\nI try to make it functional, in the spirit of Racket. I started out with\
+    \ a pretty clean solution until I realized that the message needed to be reversed.\
+    \ This made things a little uglier. Perhaps I'm missing something in the library\
+    \ that could help me out.\nI like that I'm not using <code>cond</code> in <code>next-vowel</code>\
+    \ (which could have been much uglier). I'm also pretty happy with the <code>my-map</code>\
+    \ function. It was exactly the situation I needed to do this.\nThe rest is pretty\
+    \ ugly: <code>flip</code> and <code>en", "  (let loop ([message message]\n   \
+    \          [result '()])\n    (cond\n      [(null? message) (list->string (reverse\
+    \ result))]\n      [(char-vowel? (car message))\n       (let* ([vowel (car message)]\n\
+    \              [new-vowel (char-vowel (+ vowel 2))])\n         (loop (cdr message)\
+    \ (cons new-vowel result)))]\n      [else\n       (loop (cdr message) (cons (char-swap\
+    \ (car message)) result))])))\n", "  (cond [(string=? message \"\") \"\"]\n  \
+    \      [else (encode-helper message)]))\n", "  (let ([lower (string-&gt;list (string-downcase\
+    \ message))]\n        [upper (string-&gt;list (string-upcase message))])\n   \
+    \ (map (lambda (x y)\n           (let ([l (car (string-&gt;list x))]\n       \
+    \          [u (car (string-&gt;list y))])\n             (cond\n              \
+    \ [(equal? (cdr (assoc l '((#\\a . #\\c)\n                                   \
+    \    (#\\e . #\\g)\n                                       (#\\i . #\\k)\n   \
+    \                                    (#\\o . #\\q)\n                         \
+    \              (#\\u . #\\s))))\n                (string (cdr (assoc u '((#\\\
+    C . #\\A)\n                                        (#\\G . #\\E)\n           \
+    \                             (#\\K . #\\I)\n                                \
+    \        (#\\Q . #\\O)\n                                        (#\\S . #\\U)))))]\n\
+    \               [else x])))\n         lower upper)))\n", "  (let ([message (string-&gt;list\
+    \ message)])\n    (map (lambda (c)\n           (cond\n             ((char-ci=?\
+    \ c #\\a) #\\c)\n             ((char-ci=? c #\\e) #\\g)\n             ((char-ci=?\
+    \ c #\\i) #\\k)\n             ((char-ci=? c #\\o) #\\q)\n             ((char-ci=?\
+    \ c #\\u) #\\w)\n             ((char-ci=? c #\\y) #\\a)\n             (else\n\
+    \              (if (char-lower-case? c)\n                  (char-upcase c)\n \
+    \                 (char-downcase c)))))\n         message)))\n</code>\n", "  (cond\
+    \ [(empty? message) empty]\n        [else (cons (encode-char (first message))\n\
+    \                    (encode (rest message)))]))\n", "  (map char-upcase\n   \
+    \    (map (lambda (c)\n              (let ([index (index-of-char c \"aeiouyAEIOUY\"\
+    )])\n                (cond\n                  [index (char-upcase (list-ref \"\
+    CDEFGHIJKLMNOPQRSTUVWXYZABC\" index))]\n                  [else c])))\n      \
+    \      message)))\n", "  (map (lambda (char)\n         (if (not (char-alphabetic?\
+    \ char))\n             char\n             (case (char-upcase char)\n         \
+    \      ((#\\A #\\E #\\I #\\O #\\U)\n                (let ([alphabet (list->string\
+    \ \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\")])\n                  (string-ref alphabet (modulo\
+    \ (+ (string-index alphabet char) 2) 26))))\n               (else (char-swap-case\
+    \ char)))))\n       message))\n", "  (define (enc-char ch)\n    (define (lower-to-upper\
+    \ lower-case-char)\n      (integer->char (+ (char->integer lower-case-char) (-\
+    \ #\\A #\\a))))\n    (define (upper-to-lower upper-case-char)\n      (integer->char\
+    \ (+ (char->integer upper-case-char) (- #\\a #\\A))))\n    (define (encode-vowel)\n\
+    \      (cond ((and (char=? ch #\\a) (not (char=? ch #\\y)))\n             (lower-to-upper\
+    \ #\\c))\n            ((char=? ch #\\e)\n             (lower-to-upper #\\g))\n\
+    \            ((char=? ch #\\i)\n             (lower-to-upper #\\k))\n        \
+    \    ((char=? ch #\\o)\n             (lower-to-upper #\\q))\n            ((char=?\
+    \ ch #\\u)\n             (lower-to-upper #\\y))\n            ((char=? ch #\\A)\n\
+    \             (upper-to-lower #\\C))\n            ((char=? ch #\\E)\n        \
+    \     (upper-to-lower #\\G))\n            ((char=? ch #\\I)\n             (upper-to-lower\
+    \ #\\K))\n            ((char=? ch #\\O)\n             (upper-to-lower #\\Q))\n\
+    \            ((char=? ch #\\U)\n             (upper-to-lower #\\Y))\n        \
+    \    (else ch)))\n    (cond ((char-alphabetic? ch)\n           (encode-vowel))\n\
+    \          (else ch)))\n  (string-map enc-char message))\n", "  (cond\n    [(or\
+    \ (eq? message \"\") (eq? message \" \"))\n     message]\n    [else\n     (cond\n\
+    \       [(and (letter? (string-ref message 0))\n             (in-range-inclusive\
+    \ (char->integer (string-ref message 0)) 65 90))\n        (string-append\n   \
+    \      (char->string (integer->char (+ 2 (char->integer (string-ref message 0)))))\n\
+    \         (encode (substring message 1)))]\n       [(and (letter? (string-ref\
+    \ message 0))\n             (in-range-inclusive (char->integer (string-ref message\
+    \ 0)) 97 122))\n        (string-append\n         (char->string (integer->char\
+    \ (+ 2 (char->integer (string-ref message 0)))))\n         (encode (substring\
+    \ message 1)))]\n       [else\n        (string-append\n         (string-ref message\
+    \ 0)\n         (encode (substring message 1)))]\n       )]\n    ])\n  )\n", " \
+    \ (define vowels '(#\\a #\\e #\\i #\\o #\\u))\n  (define (encode-char? c)\n  \
+    \  (if (member c vowels)\n        (encode-vowel c)\n        (encode-non-vowel\
+    \ c)))\n  (let loop ((msg (string->list message))\n             (new-message '()))\n\
+    \    (if (null? msg)\n        (list->string (reverse new-message))\n        (loop\
+    \ (cdr msg)\n              (cons (encode-char? (car msg)) new-message)))))\n",
+  "    (cond ((null? message) '())\n          ((vowel? (car message))\n          \
+    \ (cons (number->char (+ (char->number (car message)) 2))\n                 (encode\
+    \ (cdr message))))\n          ((upper-case? (car message))\n           (cons (char-downcase\
+    \ (car message))\n                 (encode (cdr message))))\n          ((lower-case?\
+    \ (car message))\n           (cons (char-upcase (car message))\n             \
+    \    (encode (cdr message))))\n          (else (cons (car message)\n         \
+    \             (encode (cdr message))))))\n", "  (define (is_vowel? c) (member\
+    \ c '(#\\a #\\e #\\i #\\o #\\u)))\n  (define (rotate_2_forward x)\n    (cond\n\
+    \      [(is_vowel? x) (char (modulo (+ (char->integer x) 2) 26) #\\a)]\n     \
+    \ [else x]))\n  (define (swap-case c) (char (if (char-ci&gt;=? #\\a c) (- (char->integer\
+    \ c) 32) (+ (char->integer c) 32)) #\\a))\n  (string-&gt;list\n   (string-map\
+    \ swap-case\n               (string-map rotate_2_forward\n                   \
+    \        (string-map swap-case message)))))\n", "  (map (lambda (x)\n        \
+    \ (if (vowel? x) (next-next-char x) x))\n       (map (lambda (x)\n           \
+    \   (if (letter? x) (swap-case x) x))\n            message)))\n", "  (define (helper\
+    \ str i acc)\n    (if (&lt; i (string-length str))\n        (if (member (char-downcase\
+    \ (string-ref str i)) '(#\\a #\\e #\\i #\\o #\\u))\n            (helper str (+\
+    \ i 1) (string-append acc (code (string-ref str i))))\n            (helper str\
+    \ (+ i 1) (string-append acc (string-ref str i))))\n        acc))\n  (helper message\
+    \ 0 \"\"))\n", "  (local [(define (encode-character m)\n            (cond\n  \
+    \            [(vowel? m)\n               (if (eq? (vowel-position m) 6)\n    \
+    \               (vowel-char 0)\n                   (vowel-char (+ (vowel-position\
+    \ m) 2)))]\n              [(letter? m)\n               (if (upper-case? m)\n \
+    \                  (char-downcase m)\n                   (char-upcase m))]\n \
+    \             [else m]))\n           (define (vowel? m)\n             (or (eq?\
+    \ m #\\a)\n                 (eq? m #\\e)\n                 (eq? m #\\i)\n    \
+    \             (eq? m #\\o)\n                 (eq? m #\\u)))\n           (define\
+    \ (vowel-position m)\n             (cond\n               [(eq? m #\\a) 0]\n  \
+    \             [(eq? m #\\e) 1]\n               [(eq? m #\\i) 2]\n            \
+    \   [(eq? m #\\o) 3]\n               [(eq? m #\\u) 4]))\n           (define (vowel-char\
+    \ pos)\n             (cond\n               [(eq? pos 0) #\\a]\n              \
+    \ [(eq? pos 1) #\\e]\n               [(eq? pos 2) #\\i]\n               [(eq?\
+    \ pos 3) #\\o]\n               [(eq? pos 4) #\\u]\n               [(eq? pos 5)\
+    \ #\\y]\n               [(eq? pos 6) #\\b]))]\n    (string-map encode-character\
+    \ message)))\n", "  (if (not (string? message))\n      (display \"Please enter\
+    \ a string\")\n      (apply string (map \n\t\t       (lambda (c)\n\t\t\t (cond\
+    \ ((eq? (char-upcase c) c)\n\t\t\t\t(char-downcase c))\n\t\t\t       ((eq? (char-downcase\
+    \ c) c)\n\t\t\t\t(char-upcase c))\n\t\t\t       ((equal? c #\\a)\n\t\t\t\t#\\\
+    c)\n\t\t\t       ((equal? c #\\e)\n\t\t\t\t#\\g)\n\t\t\t       ((equal? c #\\\
+    i)\n\t\t\t\t#\\k)\n\t\t\t       ((equal? c #\\o)\n\t\t\t\t#\\q)\n\t\t\t      \
+    \ ((equal? c #\\u)\n\t\t\t\t#\\w)\n\t\t\t       ((equal? c #\\A)\n\t\t\t\t#\\\
+    C)\n\t\t\t       ((equal? c #\\E)\n\t\t\t\t#\\G)\n\t\t\t       ((equal? c #\\\
+    I)\n\t\t\t\t#\\K)\n\t\t\t       ((equal? c #\\O)\n\t\t\t\t#\\Q)\n\t\t\t      \
+    \ ((equal? c #\\U)\n\t\t\t\t#\\W)\n\t\t\t       (else c)))\n\t\t       (string->list\
+    \ message)))))\n", "  (for/list ([c (in-string message)])\n    (cond\n      [(char-alphabetic?\
+    \ c)\n       (char-upcase (char-downcase c))]\n      [(char-vowel? c)\n      \
+    \ (next-vowel (char-downcase c))]\n      [else\n       c])))\n", "  (message)\n\
+    \  (cond\n    [(eq? message #\\A) #\\C]\n    [(eq? message #\\E) #\\G]\n    [(eq?\
+    \ message #\\I) #\\K]\n    [(eq? message #\\O) #\\Q]\n    [(eq? message #\\U)\
+    \ #\\W]\n    [(eq? message #\\a) #\\c]\n    [(eq? message #\\e) #\\g]\n    [(eq?\
+    \ message #\\i) #\\k]\n    [(eq? message #\\o) #\\q]\n    [(eq? message #\\u)\
+    \ #\\w]\n    [else \n      (cond\n        [(eq? message #\\B) #\\b]\n        [(eq?\
+    \ message #\\D) #\\d]\n        [(eq? message #\\F) #\\f]\n        [(eq? message\
+    \ #\\H) #\\h]\n        [(eq? message #\\J) #\\j]\n        [(eq? message #\\L)\
+    \ #\\l]\n        [(eq? message #\\N) #\\n]\n        [(eq? message #\\P) #\\p]\n\
+    \        [(eq? message #\\R) #\\r]\n        [(eq? message #\\T) #\\t]\n      \
+    \  [(eq? message #\\V) #\\v]\n        [(eq? message #\\X) #\\x]\n        [(eq?\
+    \ message #\\Z) #\\z]\n        [(eq? message #\\b) #\\B]\n        [(eq? message\
+    \ #\\d) #\\D]\n        [(eq? message #\\f) #\\F]\n        [(eq? message #\\h)\
+    \ #\\H]\n        [(eq? message #\\j) #\\J]\n        [(eq? message #\\l) #\\L]\n\
+    \        [(eq? message #\\n) #\\N]\n        [(eq? message #\\p) #\\P]\n      \
+    \  [(eq? message #\\r) #\\R]\n        [(eq? message #\\t) #\\T]\n        [(eq?\
+    \ message #\\v) #\\V]\n        [(eq? message #\\x) #\\X]\n        [(eq", "  (string-append\
+    \ (map (lambda (x) (if (char-alphabetic? x) (encode-char x) x)) message)))\n",
+  "    (define (swap-case message)\n        (cond\n            [(empty? message) empty]\n\
+    \            [(char-upper-case? (first message)) (cons (char-downcase (first message))\
+    \ (swap-case (rest message)))]\n            [(char-lower-case? (first message))\
+    \ (cons (char-upcase (first message)) (swap-case (rest message)))]\n         \
+    \   [else (cons (first message) (swap-case (rest message)))]))\n    (define (replace-letter\
+    \ message)\n        (cond\n            [(empty? message) empty]\n            [(equal?\
+    \ (first message) #\\a) (cons #\\c (replace-letter (rest message)))]\n       \
+    \     [(equal? (first message) #\\e) (cons #\\g (replace-letter (rest message)))]\n\
+    \            [(equal? (first message) #\\i) (cons #\\k (replace-letter (rest message)))]\n\
+    \            [(equal? (first message) #\\o) (cons #\\q (replace-letter (rest message)))]\n\
+    \            [(equal? (first message) #\\u) (cons #\\w (replace-letter (rest message)))]\n\
+    \            [else (cons (first message) (replace-letter (rest message)))]))\n\
+    \    (replace-letter (swap-case message)))\n</code>\nHere's the output:\n<code>Welcome\
+    \ to DrRacket, version 6.8.0.5--2017-05-25(1b5fde9/a) [3m].\nLanguage: racket,\
+    \ with debugging; memory limit: 128 MB.\n&gt; (encode \"ABC ef\")\n'(\"B\" \"\
+    D\" \"F\" \" \" \"G\" \"H\")\n&gt; (encode \"abc ef\")\n'(\"B\" \"D\" \"F\" \"\
+    \ \" \"G\" \"H\")\n&gt; (encode \"abc ef\")\n'(\"B\" \"D\" \"F\" \" \" \"G\" \"\
+    H\")\n&gt; (encode \"abc ef\")\n'(\"B\" \"D\" \"F\" \" \" \"G\" \"H\")\n&gt; (encode\
+    \ \"abc ef\")\n'(\"B\" \"D\" \"F", "  (for/list ([c (in-string message)])\n  \
+    \  (cond\n      [(char-alphabetic? c)\n       (define space (char-downcase c))\n\
+    \       (define offset (add1 (modulo (- (char-downcase c) 97) 26)))\n       (define\
+    \ translated-space (cond\n                                 [(char=? space #\\\
+    a) #\\c]\n                                 [(char=? space #\\e) #\\g]\n      \
+    \                           [(char=? space #\\i) #\\k]\n                     \
+    \            [(char=? space #\\o) #\\q]\n                                 [(char=?\
+    \ space #\\u) #\\w]\n                                 [else (number->char (+ space\
+    \ offset))]))\n       (cond\n         [(char-lower-case? c) translated-space]\n\
+    \         [else (char-upcase translated-space)])]\n      [else c])))", "  (let\
+    \ ([alphabet '(\"a\" \"b\" \"c\" \"d\" \"e\" \"f\" \"g\" \"h\" \"i\" \"j\" \"\
+    k\" \"l\" \"m\" \"n\" \"o\" \"p\" \"q\" \"r\" \"s\" \"t\" \"u\" \"v\" \"w\" \"\
+    x\" \"y\" \"z\")])\n    (define (sub alphabet index)\n      (if (= index 0)\n\
+    \        (list (list-ref alphabet (- (length alphabet) 2)))\n        (cons (list-ref\
+    \ alphabet (- index 2)) (sub alphabet (- index 1)))))\n    (define (encode-letter\
+    \ alphabet letter)\n      (if (null? alphabet)\n        (error \"Unrecognized\
+    \ letter!\")\n        (if (char=? (string-ref letter 0) (string-ref (car alphabet)\
+    \ 0))\n          (if (char=? (string-ref letter 0) #\\a)\n            (string-append\
+    \ (string-upcase (string-ref letter 0)) (string-downcase (substring letter 1)))\n\
+    \            (string-append (string-downcase (string-ref letter 0)) (string-upcase\
+    \ (substring letter 1))))\n          (encode-letter (cdr alphabet) letter))))\n\
+    \    (define (my-map f lst)\n      (if (null? lst)\n        '()\n        (cons\
+    \ (f (car lst)) (my-map f (cdr lst)))))\n    (define (encoder alphabet message)\n\
+    \      (if (null? message)\n        message\n        (if (member (string-ref (car\
+    \ message) 0) alphabet)\n          (cons (encode-letter alphabet (car message))\
+    \ (encoder alphabet (cdr message)))\n          (cons (car message) (encoder alphabet\
+    \ (cdr message))))))\n    (define (vowels-encoder alphabet message)\n      (if\
+    \ (null? message)\n        message\n        (if (member (string-ref (car message)\
+    \ 0) (my-map string-downcase (my-map string-ref alphabet)))\n          (cons (sub\
+    \ alphabet (position (string-ref (car message) 0) alphabet)) (vowels-encoder alphabet\
+    \ (cdr message)))", "  (for/list ([c (in-string message)])\n    (cond\n      [(vowel?\
+    \ c) (next-vowel c)]\n      [(alpha? c) (next-letter c)]\n      [else c])))\n",
+  "  (string-upcase message))\n", "  (list->string\n   (map\n    (lambda (c)\n   \
+    \   (if (char-alphabetic? c)\n          (if (char-vowel? c)\n              (char->integer\
+    \ (char (mod (- (char-upcase c) 1) 26) +))\n              (char->integer (char\
+    \ (mod (- (char-upcase c) 1) 26) +)))\n          c))\n    (string->list message))))\n",
+  "  (string-append \n   \"Encoded message is: \"\n   (map \n    (lambda (c)\n   \
+    \   (if (and (member c '(\"a\" \"e\" \"i\" \"o\" \"u\"))\n               (and\
+    \ (char-&gt;integer c) (&lt; (char-&gt;integer c) 122)))\n          (integer-&gt;char\
+    \ (+ (char-&gt;integer c) 2))\n        (if (and (member c '(\"A\" \"E\" \"I\"\
+    \ \"O\" \"U\"))\n                 (and (char-&gt;integer c) (&lt; (char-&gt;integer\
+    \ c) 90)))\n            (integer-&gt;char (+ (char-&gt;integer c) 2))\n      \
+    \    (if (or (and (member c '(\"a\" \"e\" \"i\" \"o\" \"u\"))\n              \
+    \         (and (char-&gt;integer c) (&gt;= (char-&gt;integer c) 122)))\n     \
+    \             (and (member c '(\"A\" \"E\" \"I\" \"O\" \"U\"))\n             \
+    \          (and (char-&gt;integer c) (&gt;= (char-&gt;integer c) 90))))\n    \
+    \          (integer-&gt;char (- (char-&gt;integer c) 24))\n            (if (or\
+    \ (and (member c '(\"b\" \"c\" \"d\" \"f\" \"g\" \"h\" \"j\" \"k\" \"l\" \"m\"\
+    \ \"n\" \"p\" \"q\" \"r\" \"s\" \"t\" \"v\" \"w\" \"x\" \"y\" \"z\"))\n      \
+    \                   (and (char-&gt;integer c) (&gt;= (char-&gt;integer c) 122)))\n\
+    \                    (and (member c '(\"B\" \"C\" \"D\" \"F\" \"G\" \"H\" \"J\"\
+    \ \"K\" \"L\" \"M\" \"N\" \"P\" \"Q\" \"R\" \"S\" \"T\" \"V\" \"W\" \"X\" \"Y\"\
+    \ \"Z\"))\n                         (and (char-&gt;integer c) (&gt;= (char-&gt;integer\
+    \ c) 90))))\n                (integer-&gt;char", "  (define letters-with-vowels-replaced\n\
+    \    (map (lambda (letter)\n           (cond [(member? letter '(#\\a #\\e #\\\
+    i #\\o #\\u))\n                  (string-ref \"defghjklmnpqrstvwxyzabc\"\n   \
+    \                           (- (string-index \"abcdefghijklmnopqrstuvwxyz\"\n\
+    \                                               letter)\n                    \
+    \             2))]\n                  [else letter]))\n         message))\n  (map\
+    \ char-upcase letters-with-vowels-replaced))", "  (local \n   ((define alphabet\
+    \ (list->string \"abcdefghijklmnopqrstuvwxyz\"))\n    (define vowels (list->string\
+    \ \"aeiou\"))\n    (define (find-index of-vowel in-alphabet)\n      (find-index-in\
+    \ of-vowel in-alphabet 0))\n    (define (find-index-in of-vowel in-alphabet index)\n\
+    \      (if (= index (string-length in-alphabet))\n          -1\n          (if\
+    \ (= (string-ref in-alphabet index) of-vowel)\n              index\n         \
+    \     (find-index-in of-vowel in-alphabet (+ index 1)))))\n    (define (encrypt-this\
+    \ char)\n      (if (in-string? char vowels)\n          (string-ref alphabet (+\
+    \ (find-index char vowels) 2))\n          (string-ref alphabet (find-index (string-upcase\
+    \ char) alphabet))))\n    (define (in-string? char string)\n      (or (= (string-index\
+    \ string char) 0)\n          (> (string-index string char) 0)))\n    (define (swap-case\
+    \ char)\n      (if (char-upper-case? char)\n          (char-downcase char)\n \
+    \         (char-upcase char))))\n    (local ((define (encrypt message)\n     \
+    \        (if (equal? message \"\")\n                 \"\"\n                 (string-append\
+    \ (string (encrypt-this (string-ref message 0)))\n                           \
+    \     (encrypt (substring message 1))))))\n      (string-map swap-case (encrypt\
+    \ message)))))\n", "  (local [(define (is-vowel? c)\n            (cond [(or (=?\
+    \ c #\\A) (=? c #\\E) (=? c #\\I) (=? c #\\O) (=? c #\\U)) #t]\n             \
+    \     [else #f]))\n          (define (encode-char c)\n            (cond [(is-vowel?\
+    \ c) (encode-vowel c)]\n                  [else (encode-letter c)]))\n       \
+    \   (define (encode-vowel c)\n            (cond [(=? c #\\A) #\\C]\n         \
+    \         [(=? c #\\E) #\\G]\n                  [(=? c #\\I) #\\K]\n         \
+    \         [(=? c #\\O) #\\Q]\n                  [(=? c #\\U) #\\W]))\n       \
+    \   (define (encode-letter c)\n            (if (upper-case? c) (lower-case c)\
+    \ (upper-case c)))]\n    (map encode-char message)))\n", '  (string-upcase message))',
+  "  (list->string (list-map (lambda (char)\n                            (cond ((char-alphabetic?\
+    \ char)\n                                   (string-ref (string-upcase\n     \
+    \                                           (map (lambda (x)\n               \
+    \                                        (if (member x '(\"A\" \"E\" \"I\" \"\
+    O\" \"U\"))\n                                                           (string-ref\
+    \ \"CDEFGHIJKLMNOPQRSTUVWXYZAB\" (add1 (string-ci&gt;=? \"CDEFGHIJKLMNOPQRSTUVWXYZAB\"\
+    \ (string-upcase x)) 2))\n                                                   \
+    \        x))\n                                                     (string-upcase\n\
+    \                                                      (string-downcase\n    \
+    \                                                   (string-downcase\n       \
+    \                                                 (string-downcase message)))))\n\
+    \                                                   0))\n                    \
+    \                           (string-ref \"CDEFGHIJKLMNOPQRSTUVWXYZAB\" (string-ci&gt;=?\
+    \ \"CDEFGHIJKLMNOPQRSTUVWXYZAB\" (string-upcase char))))\n                   \
+    \                       ((char-lower-case? char)\n                           \
+    \                (string-ref (string-upcase\n                                \
+    \                        (map (lambda (x)\n                                  \
+    \                             (if (member x '(\"a\" \"e\" \"i\" \"o\" \"u\"))\n\
+    \                                                                   (string-ref\
+    \ \"cdefghijklmnopqrstuvwxyzab\" (add1 (string-ci&gt;=? \"cdefghijklmnopqrstuvwxyzab\"\
+    \ (string-upcase x)) 2))\n                                                   \
+    \                x))\n                                                       \
+    \      (string-upcase\n                                                      \
+    \        (string-downcase\n                                                  \
+    \             (string-downcase\n                                             \
+    \                   (string-downcase message)))))\n                          \
+    \                              0))\n                                         \
+    \           (string-ref \"cdefghijklmnopqrstuvwxyzab\" (string-ci&gt;=? \"cdefghijklmnopqrstuvwxyzab\"\
+    \ (string-upcase char)))))\n                                          (else\n\
+    \                                           char)))\n                        \
+    \  (", "  (define (code-list lst)\n    (map (lambda (c) (if (char-vowel? c) (code-character\
+    \ c) c)) lst))\n  (list->string (code-list (string->list message))))\n", "  (define\
+    \ (helper c)\n    (if (char-numeric? c)\n        c\n        (cond\n         [(char-upcase?\
+    \ c) (char-downcase c)]\n         [(char-lower-case? c) (char-upcase c)]\n   \
+    \      [else c])))\n  (string-append (map helper message)))\n</code>\nBut it doesn't\
+    \ work properly. If I call <code>(encode \"this is\")</code> it returns <code>\"\
+    TgTt Is\"</code>.\n\n\nA:\n\nI don't know why you're getting that result, but\
+    \ here's a way to swap cases and your encoding function:\n<code>(define (swap-case\
+    \ c)\n  (cond\n    [(char-upcase? c) (char-downcase c)]\n    [(char-lower-case?\
+    \ c) (char-upcase c)]\n    [else c]))\n", "  (letrec ([encoder (lambda (m n)\n\
+    \                      (cond [(empty? m) (list)]\n                           \
+    \ [(eq? (car m) #\\a) (cons #\\c (encoder (cdr m) (+ n 1)))]\n               \
+    \             [(eq? (car m) #\\e) (cons #\\g (encoder (cdr m) (+ n 1)))]\n   \
+    \                         [(eq? (car m) #\\i) (cons #\\k (encoder (cdr m) (+ n\
+    \ 1)))]\n                            [(eq? (car m) #\\o) (cons #\\q (encoder (cdr\
+    \ m) (+ n 1)))]\n                            [(eq? (car m) #\\u) (cons #\\w (encoder\
+    \ (cdr m) (+ n 1)))]\n                            [(eq? (car m) #\\y) (cons #\\\
+    a (encoder (cdr m) (+ n 1)))]\n                            [(eq? (car m) #\\A)\
+    \ (cons #\\C (encoder (cdr m) (+ n 1)))]\n                            [(eq? (car\
+    \ m) #\\E) (cons #\\G (encoder (cdr m) (+ n 1)))]\n                          \
+    \  [(eq? (car m) #\\I) (cons #\\K (encoder (cdr m) (+ n 1)))]\n              \
+    \              [(eq? (car m) #\\O) (cons #\\Q (encoder (cdr m) (+ n 1)))]\n  \
+    \                          [(eq? (car m) #\\U) (cons #\\W (encoder (cdr m) (+\
+    \ n 1)))]\n                            [(eq? (car m) #\\Y) (cons #\\A (encoder\
+    \ (cdr m) (+ n 1)))]\n                            [(eq? (car m) #\\b) (cons #\\\
+    B (encoder (cdr m) (+ n 1)))]\n                            [(eq? (car m) #\\c)\
+    \ (cons #\\C (encoder (cdr m) (+ n 1)))]\n                            [(eq? (car\
+    \ m) #\\d) (cons #\\D (encoder (cdr m) (+ n 1)))]\n                          \
+    \  [(eq?", "  (map (lambda (c)\n         (if (char-alphabetic? c)\n          \
+    \   (encode-char c)\n             c))\n       message))\n", "  (string-append\
+    \ (string-map encode-char message)))\n", "  (map (lambda (x) (cond [(char-upcase?\
+    \ x) (char-downcase x)]\n                           [(char-lower-case? x) (char-upcase\
+    \ x)]\n                           [else x]))\n       (map (lambda (x) (cond [(member\
+    \ x '(\"a\" \"e\" \"i\" \"o\" \"u\"))\n                               (list-ref\
+    \ '(\"c\" \"f\" \"k\" \"p\" \"t\")\n                                         (position\
+    \ x '(\"a\" \"e\" \"i\" \"o\" \"u\")))]\n                              [else x]))\n\
+    \            (string->list message))))\n", "  (if (null? message)\n      '()\n\
+    \      (cons (vowel-swap (car message))\n            (encode (cdr message)))))\n",
+  "  (cond\n    [(empty? message) empty]\n    [else (cons (encode-letter (first message))\n\
+    \t\t(encode (rest message)))]))\n", "  (define alphabet \"abcdefghijklmnopqrstuvwxyz\"\
+    )\n  (define (position c lst)\n    (cond\n      [(empty? lst) #f]\n      [(char=?\
+    \ c (first lst)) 0]\n      [else (add1 (position c (rest lst)))]))\n  (define\
+    \ (encode-char c)\n    (define p (position c alphabet))\n    (cond\n      [(or\
+    \ (char=? c #\\a) (char=? c #\\e) (char=? c #\\i) (char=? c #\\o) (char=? c #\\\
+    u)) (list-ref alphabet (+ p 2))]\n      [(char=? c #\\z) #\\b]\n      [(char=?\
+    \ c #\\y) #\\a]\n      [(char=? c #\\x) #\\z]\n      [else (list-ref alphabet\
+    \ (+ p 1))]))\n  (define (encode-lst lst)\n    (cond\n      [(empty? lst) empty]\n\
+    \      [else (cons (encode-char (first lst)) (encode-lst (rest lst)))]))\n  (encode-lst\
+    \ (string->list (string-map char-upcase message))))\n", "  (string-upcase message))\n",
+  "    (cond [(empty? message) empty]\n          [else (cons (encode-letter (first\
+    \ message))\n                      (encode (rest message)))]))\n", "  (string-map\
+    \ (lambda (c) \n                (if (char-ci&gt;=? c #\\a)\n                 \
+    \   (let* ([idx (char-&gt;integer c)]\n                           [new-idx (+\
+    \ idx 2)])\n                      (if (integer-&gt;char new-idx)\n           \
+    \               (integer-&gt;char new-idx)\n                          c))\n  \
+    \                  c))\n              message))\n", "  (map char-upcase message))\n",
+  "  (define vowels '(a e i o u))\n  (define nexts (append (list (char-downcase 'a))\
+    \ (rest vowels)))\n  (define l (length message))\n  (define result-str \"\")\n\
+    \  (define (process-char ch)\n    (cond [(char-alphabetic? ch)\n           (define\
+    \ (vowel? ch)\n             (assoc ch vowels))\n           (define (next-vowel\
+    \ ch)\n             (list-ref nexts (list-index ch vowels)))\n           (define\
+    \ (next-vowel? ch)\n             (assoc ch nexts))\n           (define (swap-case\
+    \ ch)\n             (if (char-uppercase? ch)\n                 (char-downcase\
+    \ ch)\n                 (char-upcase ch)))\n           (define (append-vowel ch)\n\
+    \             (cond [(vowel? ch) (string-append result-str (list (next-vowel ch)))]\n\
+    \                   [(next-vowel? ch) (string-append result-str (list (list-ref\
+    \ vowels (list-index ch nexts))))]\n                   [else (string-append result-str\
+    \ (list ch))]))\n           (define (next-ch)\n             (append-vowel (swap-case\
+    \ ch)))\n           (next-ch)]\n          [else (string-append result-str (list\
+    \ ch))]))\n  (for ((i (in-range l)))\n    (set! result-str (process-char (string-ref\
+    \ message i))))\n  result-str)\n", "  (define (is-vowel? ch)\n    (or (equal?\
+    \ ch #\\a) (equal? ch #\\e) (equal? ch #\\i) (equal? ch #\\o) (equal? ch #\\u)))\n\
+    \  (define (get-next-letter-pos ch)\n    (local ((define (find-next-letter pos)\n\
+    \              (define pos (+ 1 pos))\n              (if (= pos 26)\n        \
+    \          0\n                  (if (char-alphabetic? (integer->char pos))\n \
+    \                     pos\n                      (find-next-letter pos)))))\n\
+    \      (find-next-letter (- (char->integer ch) (char->integer #\\a)))))\n  (string-join\n\
+    \   (map\n    (lambda (ch)\n      (cond\n        [(char-alphabetic? ch)\n    \
+    \     (if (is-vowel? ch)\n             (integer->char (get-next-letter-pos ch))\n\
+    \             (integer->char (modulo (+ (char->integer ch) 32) (char->integer\
+    \ #\\z))))]\n        [else ch]))\n    (string->list message))))\n", "  (define\
+    \ (vowel? c) (or (char=? c #\\a) (char=? c #\\e) (char=? c #\\i) (char=? c #\\\
+    o) (char=? c #\\u)))\n  (define (replace-vowel l)\n    (cond\n      [(char=? l\
+    \ #\\a) #\\c]\n      [(char=? l #\\e) #\\g]\n      [(char=? l #\\i) #\\k]\n  \
+    \    [(char=? l #\\o) #\\q]\n      [(char=? l #\\u) #\\y]\n      [else l]))\n\
+    \  (define (swap-case l)\n    (if (char-upper-case? l)\n      (char-downcase l)\n\
+    \      (char-upcase l)))\n  (define (work l)\n    (if (vowel? l)\n      (replace-vowel\
+    \ l)\n      (swap-case l)))\n  (string-&gt;list\n    (list-&gt;string\n      (map\
+    \ work\n        (string-&gt;list message)))))\n", "  (map (lambda (char)\n   \
+    \      (if (char-alphabetic? char)\n             (cond [(char-lower-case? char)\n\
+    \                    (char-upcase char)]\n                   [(char-upper-case?\
+    \ char)\n                    (char-downcase char)])\n             char))\n   \
+    \    message))\n", "    (apply string (map (lambda (c) (encode-char c)) message)))\n",
+  "  (define (isVowel? c)\n    (member c '(#\\a #\\e #\\i #\\o #\\u)))\n  (define\
+    \ (shift2 c)\n    (if (isVowel? c)\n        (cond\n          [(equal? c #\\z)\
+    \ #\\b]\n          [(equal? c #\\y) #\\a]\n          [else (integer->char (+ (char->integer\
+    \ c) 2))])\n        c))\n  (define (swap-case c)\n    (if (char-alphabetic? c)\n\
+    \        (if (char-upper-case? c)\n            (char-downcase c)\n           \
+    \ (char-upcase c))\n        c))\n  (string-&gt;list (string-map shift2 (string-map\
+    \ swap-case message))))\n", "  (local ((define (upcase? char)\n            (not\
+    \ (char-ci&lt;=? char #\\Z)))\n          (define (vowel? char)\n            (or\
+    \ (equal? char #\\a)\n                (equal? char #\\e)\n                (equal?\
+    \ char #\\i)\n                (equal? char #\\o)\n                (equal? char\
+    \ #\\u)))\n          (define (shift-vowel char)\n            (if (equal? char\
+    \ #\\u)\n                #\\a\n                (if (equal? char #\\z)\n      \
+    \              #\\b\n                    (integer-&gt;char (+ (char-&gt;integer\
+    \ char) 2)))))\n          (define (shift-char char)\n            (if (vowel? char)\n\
+    \                (shift-vowel char)\n                char)))\n    (string-&gt;list\n\
+    \     (string-map (lambda (char)\n                   (if (upcase? char)\n    \
+    \                   (char-downcase char)\n                       (char-upcase\
+    \ char)))\n                 message))))\n</code>\nThe above works for only alphabetic\
+    \ characters.\n", "  (string-append\n   (map \n    (lambda (char)\n      (if (char-alphabetic?\
+    \ char)\n          (if (char-lower-case? char)\n              (char-upcase char)\n\
+    \              (char-downcase char))\n          char))\n    message)\n   (map\
+    \ \n    (lambda (char)\n      (cond \n       [(char=? char #\\a) #\\c]\n     \
+    \  [(char=? char #\\e) #\\g]\n       [(char=? char #\\i) #\\k]\n       [(char=?\
+    \ char #\\o) #\\q]\n       [(char=? char #\\u) #\\w]\n       [(char=? char #\\\
+    A) #\\C]\n       [(char=? char #\\E) #\\G]\n       [(char=? char #\\I) #\\K]\n\
+    \       [(char=? char #\\O) #\\Q]\n       [(char=? char #\\U) #\\W]\n       [else\
+    \ char]))\n    message))\n  )\n", "  (string-map (\u03BB (char)\n            \
+    \    (cond\n                  [(vowel? char) (encode-vowel char)]\n          \
+    \        [(consonant? char) (encode-consonant char)]\n                  [else\
+    \ char]))\n              message))\n", "  (cond\n    [(empty? message) empty]\n\
+    \    [else\n     (cons\n      (encode-char (first message))\n      (encode (rest\
+    \ message)))]))", "  (let ([fun (lambda (e x)\n               (let ([pos (string-index\
+    \ e x)])\n                 (if (not (equal? -1 pos))\n                     (string-ref\
+    \ e (+ 2 pos))\n                     x)))])\n    (for/fold ([new-message \"\"\
+    ]) ([i (in-range (string-length message))])\n      (string-append new-message\n\
+    \                     (cond\n                       [(char-lower-case? (string-ref\
+    \ message i)) (char-upcase (string-ref message i))]\n                       [(char-upper-case?\
+    \ (string-ref message i)) (char-downcase (string-ref message i))]\n          \
+    \             [else (fun \"aeiou\" (string-ref message i))])))))\n", "  (define\
+    \ (loop str)\n    (let ([c (string-ref str 0)])\n      (cond\n        [(string=?\
+    \ str \"\") #f]\n        [(not (char-alphabetic? c)) (loop (substring str 1))]\n\
+    \        [(char-upper-case? c) (cons (char-downcase c) (loop (substring str 1)))]\n\
+    \        [(char-lower-case? c) (cons (char-upcase c) (loop (substring str 1)))]\n\
+    \        [(char-numeric? c) (cons c (loop (substring str 1)))]\n        [(char=?\
+    \ c #\\u) (cons #\\a (loop (substring str 1)))]\n        [(char=? c #\\o) (cons\
+    \ #\\e (loop (substring str 1)))]\n        [(char=? c #\\i) (cons #\\c (loop (substring\
+    \ str 1)))]\n        [(char=? c #\\e) (cons #\\g (loop (substring str 1)))]\n\
+    \        [(char=? c #\\a) (cons #\\i (loop (substring str 1)))]\n        [else\
+    \ (cons c (loop (substring str 1)))])))\n  (apply string (loop message)))\n",
+  "  (map (lambda (c)\n         (cond ((char-alphabetic? c)\n                (apply-mapping\
+    \ c (compose-alphabet (map char->integer (string->list \"abcdefghijklmnopqrstuvwxyz\"\
+    )))))\n               (else c)))\n       (string->list message)))\n", "  (define\
+    \ (next-letter c)\n    (let ([next (char-upcase c)])\n      (cond [(eq? next #\\\
+    A) #\\C]\n            [(eq? next #\\E) #\\G]\n            [(eq? next #\\I) #\\\
+    K]\n            [(eq? next #\\O) #\\Q]\n            [(eq? next #\\U) #\\W]\n \
+    \           [else (add1 next)])))\n  (build-string (string-length message)\n \
+    \               (lambda (i) (let ([c (string-ref message i)])\n              \
+    \                (if (or (char-upper-case? c) (char-lower-case? c))\n        \
+    \                          (next-letter c)\n                                 \
+    \ c)))))", "  (define the-letters \"abcdefghijklmnopqrstuvwxyz\")\n  (define the-vowels\
+    \ \"aeiou\")\n  (cond\n    [(empty? message) empty]\n    [(char-alphabetic? (first\
+    \ message))\n     (cond [(member (char-downcase (first message)) the-vowels)\n\
+    \            (cons (third (segment (char-downcase (first message)) the-vowels))\n\
+    \                  (encode (rest message)))]\n           [else (cons (first message)\
+    \ (encode (rest message)))])]\n    [else (cons (first message) (encode (rest message)))]))\n",
+  "  (map (lambda (char)\n         (if (or (char-alphabetic? char)\n             \
+    \    (char-upper-case? char))\n             (match (char-upcase char)\n      \
+    \         ['A #\\C]\n               ['E #\\G]\n               ['I #\\K]\n    \
+    \           ['O #\\Q]\n               ['U #\\S]\n               ['Y #\\W]\n  \
+    \             [else (char-downcase char)])\n             char))\n       message))",
+  "  (define (swap message)\n    (map \n     (lambda (c)\n       (cond \n        \
+    \ ((char-downcase? c) (char-upcase c))\n         ((char-upcase? c) (char-downcase\
+    \ c))\n         (else c)))\n     message))\n  (define (enc-vowel message)\n  \
+    \  (map \n     (lambda (c)\n       (cond \n         ((char=? c #\\a) #\\c)\n \
+    \        ((char=? c #\\e) #\\g)\n         ((char=? c #\\i) #\\k)\n         ((char=?\
+    \ c #\\o) #\\q)\n         ((char=? c #\\u) #\\y)\n         ((char=? c #\\A) #\\\
+    C)\n         ((char=? c #\\E) #\\G)\n         ((char=? c #\\I) #\\K)\n       \
+    \  ((char=? c #\\O) #\\Q)\n         ((char=? c #\\U) #\\Y)\n         (else c)))\n\
+    \     message))\n  (enc-vowel (swap message)))\n", '  (string-upcase message))',
+  "  (define (next c)\n    (if (eq? c #\\z) #\\a\n        (integer->char (+ 1 (char->integer\
+    \ c)))))\n  (define (next-next c)\n    (if (eq? c #\\z) #\\b\n        (if (eq?\
+    \ c #\\y) #\\a\n            (integer->char (+ 2 (char->integer c))))))\n  (define\
+    \ (swap c)\n    (if (and (character-downcase? c) (not (eq? c #\\a)))\n       \
+    \ (character-upcase c)\n        (if (and (character-upcase? c) (not (eq? c #\\\
+    A)))\n            (character-downcase c)\n            c)))\n  (define (vowel?\
+    \ c)\n    (or (eq? c #\\a) (eq? c #\\e) (eq? c #\\i) (eq? c #\\o) (eq? c #\\u)))\n\
+    \  (define (encode-char c)\n    (if (vowel? c)\n        (next-next c)\n      \
+    \  (if (vowel? (next c))\n            (next-next (next c))\n            (swap\
+    \ c))))\n  (string-map encode-char message))\n", "  ;; to do\n  )\n", "  (let*\
+    \ ([letters (string->list message)]\n         [is_vowel? (curryr string-contains\
+    \ \"aAeEiIoOuU\")]\n         [vowels-set \"aAeEiIoOuU\"]\n         [next-vowel\
+    \ (lambda (vowel)\n                       (and (string-contains vowels-set vowel)\n\
+    \                            (char-upcase\n                             (string-ref\
+    \ vowels-set\n                                         (modulo (+ (string-index\
+    \ vowels-set vowel) 2)\n                                                 (string-length\
+    \ vowels-set))))))]\n         [transform-if-vowel (lambda (letter)\n         \
+    \                      (cond [(is_vowel? letter) (next-vowel letter)]\n      \
+    \                               [else letter]))]\n         [transformed-letters\
+    \ (map transform-if-vowel letters)]\n         [case-flip (lambda (letter)\n  \
+    \                    (if (char-alphabetic? letter)\n                         \
+    \ (if (char-upcase? letter)\n                              (char-downcase letter)\n\
+    \                              (char-upcase letter))\n                       \
+    \   letter))]\n         [encoded-letters (map case-flip transformed-letters)])\n\
+    \    (list->string encoded-letters)))\n", "  (string-upcase (string-append (string-downcase\
+    \ message) \"s\")))\n", "  (define (next-vowel c)\n    (cond\n      [(char=? c\
+    \ #\\a) #\\c]\n      [(char=? c #\\e) #\\g]\n      [(char=? c #\\i) #\\k]\n  \
+    \    [(char=? c #\\o) #\\q]\n      [(char=? c #\\u) #\\w]\n      [else c]))\n\
+    \  (define (next-consonant c)\n    (cond\n      [(char=? c #\\b) #\\d]\n     \
+    \ [(char=? c #\\c) #\\e]\n      [(char=? c #\\d) #\\f]\n      [(char=? c #\\f)\
+    \ #\\h]\n      [(char=? c #\\g) #\\j]\n      [(char=? c #\\h) #\\k]\n      [(char=?\
+    \ c #\\j) #\\m]\n      [(char=? c #\\k) #\\n]\n      [(char=? c #\\l) #\\p]\n\
+    \      [(char=? c #\\m) #\\r]\n      [(char=? c #\\n) #\\s]\n      [(char=? c\
+    \ #\\p) #\\t]\n      [(char=? c #\\q) #\\v]\n      [(char=? c #\\r) #\\w]\n  \
+    \    [(char=? c #\\s) #\\x]\n      [(char=? c #\\t) #\\y]\n      [(char=? c #\\\
+    v) #\\z]\n      [(char=? c #\\w) #\\a]\n      [(char=? c #\\x) #\\b]\n      [(char=?\
+    \ c #\\y) #\\d]\n      [(char=? c #\\z) #\\f]\n      [else c]))\n  (define (encode-letter\
+    \ c)\n    (cond\n      [(char-ci=? c #\\a) (next-vowel #\\a)]\n      [(char-ci=?\
+    \ c #\\e) (next-vowel #\\e)]\n      [(char-ci=? c #\\i) (next", "  \n  ;; Convert\
+    \ string to lowercase\n  (define (convert-to-lower message)\n    (string-map (lambda\
+    \ (x) (char-downcase x)) message))\n  \n  ;; Convert string to lowercase\n  (define\
+    \ (convert-to-upper message)\n    (string-map (lambda (x) (char-upcase x)) message))\n\
+    \  \n  ;; Swap case\n  (define (swap-case message)\n    (cond ((string-upcase?\
+    \ message) (convert-to-lower message))\n          ((string-lowercase? message)\
+    \ (convert-to-upper message))\n          (else message)))\n  \n  ;; A map of vowels\
+    \ and their respective 2 places ahead\n  (define map-a\n    (list '(\"a\" . \"\
+    c\")\n          '(\"e\" . \"g\")\n          '(\"i\" . \"k\")\n          '(\"o\"\
+    \ . \"q\")\n          '(\"u\" . \"y\")))\n  \n  ;; Function that swaps vowels\
+    \ with letter 2 places ahead\n  (define (swap-vowels message)\n    (define (swap-vowels-help\
+    \ message)\n      (cond ((string-empty? message) \"\")\n            ((member (substring\
+    \ message 0 1) (map car map-a))\n             (string-append (cdr (assoc (substring\
+    \ message 0 1) map-a))\n                            (swap-vowels-help (substring\
+    \ message 1))))\n            (else (string-append (substring message 0 1)\n  \
+    \                               (swap-vowels-help (substring message 1))))))\n\
+    \    (swap-vowels-help message))\n  \n  ;; Apply functions\n  (swap-vowels (swap-case\
+    \ message)))", "  (for/list ([m (in-string message)])\n            (cond [(char-lower-case?\
+    \ m)\n                   (char-upcase m)]\n                  [(char-upper-case?\
+    \ m)\n                   (char-downcase m)]\n                  [(char=? m #\\\
+    a)\n                   #\\c]\n                  [(char=? m #\\e)\n           \
+    \        #\\g]\n                  [(char=? m #\\i)\n                   #\\k]\n\
+    \                  [(char=? m #\\o)\n                   #\\q]\n              \
+    \    [(char=? m #\\u)\n                   #\\w]\n                  [else\n   \
+    \                m])))\n", "  (string-map\n   (lambda (x)\n     (let ([lx (string-downcase\
+    \ x)])\n       (cond\n         [(char-alphabetic? x)\n          (let ([ix (string-index\
+    \ \"aeiou\" lx)])\n            (if ix (char-upcase (+ lx 2)) (char-upcase x)))]\n\
+    \         [else x])))\n   message))\n", "  (define (isVowel? c)\n    (or (equal?\
+    \ c #\\a)\n        (equal? c #\\e)\n        (equal? c #\\i)\n        (equal? c\
+    \ #\\o)\n        (equal? c #\\u)))\n  (define (encodeChar c)\n    (cond ((isVowel?\
+    \ c) (encodeVowel c))\n          ((and (char-lower-case? c) (char-upper-case?\
+    \ c)) (encodeCase c))\n          (else c)))\n  (define (encodeVowel c)\n    (cond\
+    \ ((equal? c #\\a) #\\c)\n          ((equal? c #\\e) #\\g)\n          ((equal?\
+    \ c #\\i) #\\k)\n          ((equal? c #\\o) #\\q)\n          ((equal? c #\\u)\
+    \ #\\y)))\n  (define (encodeCase c)\n    (if (char-lower-case? c) (char-upcase\
+    \ c) (char-downcase c)))\n  (list->string (map encodeChar (string->list message))))\n",
+  "  (string-join\n   (map (\u03BB (c)\n          (cond\n            [(char-numeric?\
+    \ c) c]\n            [(char-alphabetic? c) (cond\n                           \
+    \        [(char-lower-case? c)\n                                    (encode-character\
+    \ (char-upcase c))]\n                                   [(char-upper-case? c)\n\
+    \                                    (encode-character (char-downcase c))])]\n\
+    \            [else c]))\n        (string->list message))))\n", "  (define (character-mapper\
+    \ c)\n    (if (vowel? c)\n        (character-shift c 2)\n        (character-toggle-case\
+    \ c)))\n  (string-&gt;list (string-map character-mapper message)))\n</code>\n\
+    Here's a screen shot of what happens when I run the code\n\nI have added the language\
+    \ \"racket\" to the question, because I am using the character-mapper function\
+    \ from the racket library.  I don't believe this is a Racket specific question\
+    \ though. \n\n\nA:\n\nYou could try to <code>define</code> the <code>encode</code>\
+    \ function first, before you use it.\nAlso, you could use <code>let</code> instead\
+    \ of <code>define</code> in <code>encode</code>.\n", "  (define alpha-string \"\
+    abcdefghijklmnopqrstuvwxyz\")\n  (define vowel-string \"aeiou\")\n  (map (lambda\
+    \ (letter)\n         (define (vowel? letter)\n           (if (string-contains\
+    \ vowel-string letter)\n               #t\n               #f))\n         (define\
+    \ (recode letter)\n           (string-ref alpha-string (+ 2 (string-index alpha-string\
+    \ letter))))\n         (if (vowel? letter)\n             (recode letter)\n   \
+    \          letter))\n       message))\n", "  (let* ([message (string-downcase\
+    \ message)]\n         [message-list (string-&gt;list message)]\n         [encoded\
+    \ (list)]\n         [vowels (list #\\a #\\e #\\i #\\o #\\u)])\n    (map (lambda\
+    \ (x)\n           (if (not (member x vowels))\n               (cond ((char=? (char-upcase\
+    \ x) x)\n                      (append encoded (list (char-downcase x))))\n  \
+    \                   ((char=? (char-downcase x) x)\n                      (append\
+    \ encoded (list (char-upcase x)))))\n               (append encoded (list (increment-letter\
+    \ x 2)))))\n         message-list)))\n", "  (build-string\n   (string-length message)\n\
+    \   (lambda (i)\n     (if (char-numeric? (string-ref message i))\n         (string-ref\
+    \ message i)\n         (if (char-alphabetic? (string-ref message i))\n       \
+    \      (let ([x (string-ref message i)])\n               (cond [(char-lower-case?\
+    \ x)\n                      (if (char-vowel? x)\n                          (encode-letter\
+    \ x #\\a #\\e #\\i #\\o #\\u)\n                          (char-upcase x))]\n \
+    \                    [(char-upper-case? x)\n                      (if (char-vowel?\
+    \ x)\n                          (encode-letter x #\\A #\\E #\\I #\\O #\\U)\n \
+    \                         (char-downcase x))]))\n             (string-ref message\
+    \ i))))))\n", "  (for/list ([letter (in-string message)])\n    (let ([letter (string-downcase\
+    \ letter)])\n      (cond\n        [(char-in-range? letter #\\a #\\z)\n       \
+    \  (if (or (char=? letter #\\a)\n                 (char=? letter #\\e)\n     \
+    \            (char=? letter #\\i)\n                 (char=? letter #\\o)\n   \
+    \              (char=? letter #\\u))\n             (next-next-letter letter)\n\
+    \             (letter))]\n        [else letter]))))\n</code>\n", "  (define (is-vowel\
+    \ c)\n    (member c '(#\\a #\\e #\\i #\\o #\\u #\\A #\\E #\\I #\\O #\\U)))\n \
+    \ (define (encode-char c)\n    (cond [(is-vowel c) (list-ref (list #\\c #\\d #\\\
+    f #\\g #\\h #\\j #\\k #\\l #\\m #\\n #\\p #\\q #\\r #\\s #\\t #\\v #\\w #\\x #\\\
+    y #\\z #\\C #\\D #\\F #\\G #\\H #\\J #\\K #\\L #\\M #\\N #\\P #\\Q #\\R #\\S #\\\
+    T #\\V #\\W #\\X #\\Y #\\Z) (+ 2 (char-&gt;integer c)))]\n          [else (char-upcase\
+    \ c)]))\n  (string-&gt;list message))\n</code>\nUpdate\nMy code works now, but\
+    \ it's not replacing the vowels. I tried this in the command line. I get a list\
+    \ of the characters, but they are not transformed. Can someone help me?\n<code>&gt;\
+    \ (encode \"The quick brown fox jumps over the lazy dog.\")", "  (define (encode-char\
+    \ c)\n    (define vowels (list #\\a #\\e #\\i #\\o #\\u))\n    (define alphabet\
+    \ (list #\\a #\\b #\\c #\\d #\\e #\\f #\\g #\\h #\\i #\\j #\\k #\\l #\\m #\\n\
+    \ #\\o #\\p #\\q #\\r #\\s #\\t #\\u #\\v #\\w #\\x #\\y #\\z))\n    (if (character-upcase?\
+    \ c)\n        (if (member c vowels)\n            (if (equal? c #\\u)\n       \
+    \         (list-ref alphabet 0)\n                (list-ref alphabet (+ 2 (index-of\
+    \ c alphabet))))\n            (character-downcase c))\n        (if (member c vowels)\n\
+    \            (if (equal? c #\\u)\n                (list-ref alphabet 0)\n    \
+    \            (list-ref alphabet (+ 2 (index-of c alphabet))))\n            (character-upcase\
+    \ c))))\n  (define (encode-string s)\n    (define (encode-string-helper ls)\n\
+    \      (if (null? ls)\n          '()\n          (cons (encode-char (car ls)) (encode-string-helper\
+    \ (cdr ls)))))\n    (encode-string-helper (string->list s)))\n  (string-append\
+    \ (encode-string message)))\n", "  (let ([vowels '(#\\a #\\e #\\i #\\o #\\u)])\n\
+    \    (for/fold ([result '()]) ([letter (in-string message)])\n      (let ([i (find-vowel\
+    \ vowels letter)])\n        (if i\n            (cons (circular-list-ref vowels\
+    \ (+ i 2)) result)\n            (cons (swap-case letter) result))))))\n", "  (map\n\
+    \   (\u03BB (ch)\n     (if (char-alphabetic? ch)\n         (char-downcase\n  \
+    \        (cond\n            [(char=? ch #\\a) #\\c]\n            [(char=? ch #\\\
+    e) #\\g]\n            [(char=? ch #\\i) #\\k]\n            [(char=? ch #\\o) #\\\
+    q]\n            [(char=? ch #\\u) #\\w]\n            [else (char-upcase ch)]))\n\
+    \         ch))\n   message))\n", "  (char-upcase #\\a))\n", "  (map (lambda (c)\n\
+    \         (cond\n           [(char-numeric? c) c]\n           [(char-alphabetic?\
+    \ c)\n            (let ((new-char\n                   (cond\n                \
+    \     [(char-upper-case? c) (char-downcase c)]\n                     [(char-lower-case?\
+    \ c) (char-upcase c)])))\n              (string-append\n               (string\
+    \ (modulo (+ (char->integer new-char) 2) 26)\n                       #\\a)))]))\n\
+    \       message))\n```\n\n```racket\n#lang racket\n", "  (call-with-input-string\n\
+    \   message\n   (lambda (port)\n     (string-join\n      (for/list ([c (in-port\
+    \ port)])\n        (if (char-alphabetic? c)\n            (if (char-lower-case?\
+    \ c)\n                (char-upcase c)\n                (char-downcase c))\n  \
+    \          c))\n      \"\"))))\n", "  (for/list ([char (in-string message)])\n\
+    \    (cond [(char-alphabetic? char)\n           (string-downcase (string-upcase\
+    \ char))]\n          [(vowel? char)\n           (next-vowel char)]\n         \
+    \ [else char])))\n", "  (define (swap-case c)\n    (if (char-upper-case? c)\n\
+    \        (char-downcase c)\n        (char-upcase c)))\n  (define (alphabet-shift\
+    \ c)\n    (if (= c #\\z)\n        #\\b\n        (char-upcase (integer->char (+\
+    \ 1 (char->integer c))))))\n  (define (encode-char c)\n    (cond [(char-vowel?\
+    \ c)\n           (alphabet-shift c)]\n          [else\n           (swap-case c)]))\n\
+    \  (for/list ([c (in-string message)])\n    (encode-char c)))\n", "    (if (null?\
+    \ message)\n    (list)\n    (cons (if (or (= (char-upcase (car message)) (car\
+    \ message)) (= (char-downcase (car message)) (car message)))\n              (if\
+    \ (or (= (car message) #\\a) (= (car message) #\\e) (= (car message) #\\i) (=\
+    \ (car message) #\\o) (= (car message) #\\u))\n                  (if (>= (car\
+    \ message) #\\a)\n                  (+ (car message) 3)\n                  (-\
+    \ (car message) 23))\n              (if (>= (car message) #\\A)\n            \
+    \      (+ (car message) 3)\n                  (- (car message) 23)))\n       \
+    \   (car message))\n            (encode (cdr message)))))\n", "  (string-append\n\
+    \   (map\n    (lambda (c)\n      (cond\n        [(eq? c #\\a) (list-ref (list\
+    \ #\\c #\\e #\\i #\\o #\\u) 0)]\n        [(eq? c #\\e) (list-ref (list #\\c #\\\
+    e #\\i #\\o #\\u) 1)]\n        [(eq? c #\\i) (list-ref (list #\\c #\\e #\\i #\\\
+    o #\\u) 2)]\n        [(eq? c #\\o) (list-ref (list #\\c #\\e #\\i #\\o #\\u) 3)]\n\
+    \        [(eq? c #\\u) (list-ref (list #\\c #\\e #\\i #\\o #\\u) 4)]\n       \
+    \ [(char-lower-case? c) (char-upcase c)]\n        [(char-upper-case? c) (char-lower-case\
+    \ c)]\n        [else c]))\n    message)))\n", "  (string-append (map char-upcase\
+    \ message) (map char-downcase message)))\n", "  (let ([vowels (list #\\a #\\e\
+    \ #\\i #\\o #\\u)]\n        [msg (string->list message)])\n    (apply string\n\
+    \      (map (\u03BB (c)\n              (cond [(member c vowels)\n            \
+    \         (vector-ref vowels\n                                 (modulo (+ (vector-index\
+    \ vowels c) 2)\n                                         (vector-length vowels)))]\n\
+    \                    [(char-alphabetic? c)\n                     (char-upcase\
+    \ c)]\n                    [else c]))\n            msg))))\n", "  (let ([vowels\
+    \ \"aeiou\"])\n    (for/string ([c (in-string message)])\n      (cond\n      \
+    \  [(char-alphabetic? c)\n         (if (char-lower-case? c)\n             (if\
+    \ (member (char-downcase c) vowels)\n                 (char-upcase (char-next\
+    \ (char-next (char-downcase c))))\n                 (char-upcase c))\n       \
+    \      (if (member (char-downcase c) vowels)\n                 (char-downcase\
+    \ (char-next (char-next (char-downcase c))))\n                 (char-downcase\
+    \ c)))]\n        [else c]))))", "  (map (lambda (c)\n         (if (vowel? c)\n\
+    \             (number->char (+ (char->number c) 2))\n             (if (letter?\
+    \ c)\n                 (if (upper-case? c)\n                     (lower-case c)\n\
+    \                     (upper-case c))\n                 c)))\n       message))\n",
+  "  (cond [(empty? message) empty]\n        [else\n         (cons (swap-case (first\
+    \ message))\n               (cons (replace-vowel (first message))\n          \
+    \           (encode (rest message))))]))\n", "  (define (enc char)\n    (cond\n\
+    \      [(letter? char) (if (vowel? char)\n                          (next-next-letter\
+    \ char)\n                        (swap-case char))]\n      [else char]))\n  (string-&gt;list\
+    \ (string-map enc message)))\n", "  (for/list ([c (in-string message)])\n    (cond\
+    \ [(char-alphabetic? c)\n           (if (char-lower-case? c)\n               (char-upcase\
+    \ c)\n               (char-downcase c))]\n          [(char-vowel? c)\n       \
+    \    (define vowel-list '(\"a\" \"e\" \"i\" \"o\" \"u\"))\n           (define\
+    \ alpha \"abcdefghijklmnopqrstuvwxyz\")\n           (define (vowel-map vl)\n \
+    \            (cond [(empty? vl)\n                    #f]\n                   [(string=?\
+    \ c (first vl))\n                    (cursor (string-index alpha c) alpha)]\n\
+    \                   [else\n                    (vowel-map (rest vl))]))\n    \
+    \       (define (cursor pos string)\n             (if (= pos 0)\n            \
+    \     (list-ref string 2)\n                 (cursor (- pos 1) string)))\n    \
+    \       (vowel-map vowel-list)]\n          [else c])))\n", "  (define (encode-helper\
+    \ message is-encoded)\n    (cond ((empty? message) is-encoded)\n          ((=\
+    \ (string-length message) 1) (string-append is-encoded message))\n          (else\
+    \ (if (char-alphabetic? (first message))\n                   (if (char-lower-case?\
+    \ (first message))\n                       (encode-helper (rest message)\n   \
+    \                                   (string-append is-encoded\n              \
+    \                                       (list (char-upcase (first message)))))\n\
+    \                       (encode-helper (rest message)\n                      \
+    \                (string-append is-encoded\n                                 \
+    \                    (list (char-downcase (first message))))))\n             \
+    \      (encode-helper (rest message) (string-append is-encoded (list (first message))))))))\n\
+    \  (encode-helper message \"\"))", "  (define (is-vowel? char)\n    (or (char=?\
+    \ char #\\a)\n        (char=? char #\\e)\n        (char=? char #\\i)\n       \
+    \ (char=? char #\\o)\n        (char=? char #\\u)))\n  (define (swapcase char)\n\
+    \    (if (char-ci&gt;=? char #\\a)\n        (if (char-ci&lt;=? char #\\z)\n  \
+    \          (char-upcase char)\n            char)\n        (if (char-ci&gt;=? char\
+    \ #\\A)\n            (if (char-ci&lt;=? char #\\Z)\n                (char-downcase\
+    \ char)\n                char)\n            char)))\n  (define (shift-letter char)\n\
+    \    (integer-&gt;char (+ (char-&gt;integer char) 2)))\n  (define (translate char)\n\
+    \    (if (is-vowel? char)\n        (shift-letter char)\n        char))\n  (string-&gt;list\
+    \ (map translate (string-&gt;list (map swapcase message)))))\n", "  (define alphabet\
+    \ \"abcdefghijklmnopqrstuvwxyz\")\n  (define vowels \"aeiou\")\n  (define (encode-char\
+    \ c)\n    (cond [(char-ci=? c #\\a) (string-ref alphabet 4)]\n          [(char-ci=?\
+    \ c #\\e) (string-ref alphabet 8)]\n          [(char-ci=? c #\\i) (string-ref\
+    \ alphabet 10)]\n          [(char-ci=? c #\\o) (string-ref alphabet 12)]\n   \
+    \       [(char-ci=? c #\\u) (string-ref alphabet 20)]\n          [(char-ci=? c\
+    \ #\\y) (string-ref alphabet 25)]\n          [(char-ci=? c #\\ ) #\\ ]\n     \
+    \     [else (if (char-ci=? c (char-upcase c))\n                   (char-downcase\
+    \ c)\n                   (char-upcase c))]))\n  (string-map encode-char message))\n",
+  "  (cond\n    [(empty? message) empty]\n    [else\n     (cons\n      (swap-case\
+    \ (first message))\n      (encode (rest message)))]))\n", "  (cond \n    [(empty?\
+    \ message) '()]\n    [(and (char-alphabetic? (first message)) \n          (char-lower-case?\
+    \ (first message)))\n     (cons (char-upcase (first message)) (encode (rest message)))]\n\
+    \    [(and (char-alphabetic? (first message)) \n          (char-upper-case? (first\
+    \ message)))\n     (cons (char-downcase (first message)) (encode (rest message)))]\n\
+    \    [(and (char-alphabetic? (first message)) \n          (eq? (first message)\
+    \ #\\a))\n     (cons #\\c (encode (rest message)))]\n    [(and (char-alphabetic?\
+    \ (first message)) \n          (eq? (first message) #\\e))\n     (cons #\\g (encode\
+    \ (rest message)))]\n    [(and (char-alphabetic? (first message)) \n         \
+    \ (eq? (first message) #\\i))\n     (cons #\\k (encode (rest message)))]\n   \
+    \ [(and (char-alphabetic? (first message)) \n          (eq? (first message) #\\\
+    o))\n     (cons #\\q (encode (rest message)))]\n    [(and (char-alphabetic? (first\
+    \ message)) \n          (eq? (first message) #\\u))\n     (cons #\\w (encode (rest\
+    \ message)))]\n    [(and (char-alphabetic? (first message)) \n          (eq? (first\
+    \ message) #\\A))\n     (cons #\\C (encode (rest message)))]\n    [(and (char-alphabetic?\
+    \ (first message)) \n          (eq? (first message) #\\E))\n     (cons #\\G (encode\
+    \ (rest message)))]\n    [(and (char-alphabetic? (first message)) \n         \
+    \ (eq? (first message) #\\I))\n     (cons #\\K (encode (rest message)))]\n   \
+    \ [(and (char-alphabetic? (first message)) \n          (eq? (first message) #\\\
+    O))\n     (cons #\\Q (encode (rest message)))]\n    [(and (char-alphabetic? (first",
+  "  (let loop ([idx 0] [msg message])\n    (cond\n      [(= idx (string-length msg))\
+    \ msg]\n      [else (let ([cur (string-ref msg idx)])\n              (string-set!\
+    \ msg idx (encode-letter cur))\n              (loop (+ idx 1) msg))])))", "  (map\
+    \ (lambda (char)\n\t (cond\n\t  ((or (equal? char #\\a)\n\t       (equal? char\
+    \ #\\e)\n\t       (equal? char #\\i)\n\t       (equal? char #\\o)\n\t       (equal?\
+    \ char #\\u))\n\t   (list-ref (append (list->string \"cdfghjklmnpqrstvwxyz\")\n\
+    \t\t\t     (list->string \"bcdfghjklmnpqrstvwxyz\"))\n\t\t     (char-downcase\
+    \ char)))\n\t  ((char-alphabetic? char)\n\t   (char-upcase char))\n\t  (else\n\
+    \t   char)))\n\t(string->list message)))\n", "  (for/list ([c (in-string message)])\n\
+    \    (cond\n      [(char-alphabetic? c)\n       (define alphabet (string->list\
+    \ \"abcdefghijklmnopqrstuvwxyz\"))\n       (define shifted-alphabet (list-ref\
+    \ alphabet (modulo (+ (string-index (string-upcase c) alphabet) 2) 26)))\n   \
+    \    (if (char-lower-case? c)\n           (string-downcase shifted-alphabet)\n\
+    \           shifted-alphabet)]\n      [else c])))\n</code>\nExpected result:\n\
+    <code>&gt; (encode \"hello\")\n'(\"j\" \"g\" \"n\" \"n\" \"q\")\n&gt; (encode\
+    \ \"cat\")\n'(\"edv\")\n&gt; (encode \"attack\")\n'(\"cvvcem\")\n</code>\nActual\
+    \ result:\n<code>&gt; (encode \"hello\")\n'(\"j\" \"g\" \"n\" \"n\" \"q\")\n&gt;\
+    \ (encode \"cat\")\n'(\"edv\")\n&gt; (encode \"attack\")\n'(\"cvvcem\")\n</code>\n",
+  "    (map (lambda (c)\n          (if (letter? c)\n            (if (vowel? c)\n \
+    \             (encode-vowel c)\n              (encode-letter c))\n           \
+    \ c))\n         message))\n", "  (define (vowel-transpose char)\n    (define vowels\
+    \ (string-&gt;list \"aeiou\"))\n    (cond\n      [(string-contains? vowels char)\
+    \ \n       (list-ref vowels (+ 2 (string-index char vowels)))]\n      [else (char-upcase\
+    \ char)]))\n  (list-&gt;string (map vowel-transpose (string-&gt;list message))))\n",
+  "  (apply string\n         (map (lambda (char)\n                (if (vowel? char)\n\
+    \                    (modulo (+ (position char (string-&gt;list \"abcdefghijklmnopqrstuvwxyz\"\
+    )) 2) 26)\n                    (char-downcase char)))\n              (string-&gt;list\
+    \ message))))\n", "  (string-map \n   (lambda (c)\n     (cond \n       ((or (equal?\
+    \ c #\\a)\n            (equal? c #\\e)\n            (equal? c #\\i)\n        \
+    \    (equal? c #\\o)\n            (equal? c #\\u))\n        (if (equal? c #\\\
+    u)\n            #\\a\n            (integer->char \n             (+ 2 (char->integer\
+    \ c)))))\n       ((or (equal? c #\\A)\n            (equal? c #\\E)\n         \
+    \   (equal? c #\\I)\n            (equal? c #\\O)\n            (equal? c #\\U))\n\
+    \        (if (equal? c #\\U)\n            #\\A\n            (integer->char \n\
+    \             (+ 2 (char->integer c)))))\n       (else\n        (if (char-lower-case?\
+    \ c)\n            (char-upcase c)\n            (char-downcase c)))))\n   message))\n",
+  "  (define s \"abcdefghijklmnopqrstuvwxyz\")\n  (define ls (string->list s))\n \
+    \ (define s2 (string-append s (string-append s s)))\n  (define ls2 (string->list\
+    \ s2))\n  (define (get-index c)\n    (list-ref ls (string-index c s)))\n  (define\
+    \ (encode-char c)\n    (if (char-alphabetic? c)\n      (if (char-numeric? (get-index\
+    \ c))\n        (string-ref s2 (get-index c))\n        (string-ref s2 (+ (get-index\
+    \ c) 2)))\n      c))\n  (define (encode-string ls)\n    (if (null? ls)\n     \
+    \ '()\n      (cons (encode-char (car ls)) (encode-string (cdr ls)))))\n  (apply\
+    \ string-append (encode-string (string->list message))))\n", "  (define (vowel?\
+    \ ch)\n    (member ch '(#\\a #\\e #\\i #\\o #\\u)))\n  (define (case-swap ch)\n\
+    \    (if (char-upcase? ch)\n        (char-downcase ch)\n        (char-upcase ch)))\n\
+    \  (define (shift-vowel ch)\n    (define (find-index-of-vowel chs)\n      (cond\
+    \ [(empty? chs)\n             0]\n            [(vowel? (first chs))\n        \
+    \     0]\n            [else\n             (+ 1 (find-index-of-vowel (rest chs)))]))\n\
+    \    (list-ref '(#\\b #\\c #\\d #\\f #\\g #\\h #\\j #\\k #\\l #\\m #\\n #\\p #\\\
+    q #\\r #\\s #\\t #\\v #\\w #\\x #\\y #\\z)\n              (find-index-of-vowel\
+    \ message)))\n  (define (encode-helper message encoding)\n    (cond [(empty? message)\n\
+    \           (reverse encoding)]\n          [(vowel? (first message))\n       \
+    \    (encode-helper (rest message) (cons (shift-vowel (first message)) encoding))]\n\
+    \          [else\n           (encode-helper (rest message) (cons (case-swap (first\
+    \ message)) encoding))]))\n  (encode-helper message '()))", "  (local [(define\
+    \ (second-character char)\n            (string-ref \"bcdfghjklmnpqrstvwxyz\"\n\
+    \                        (- (string-length (string-&gt;list \"abcdefghijklmnopqrstuvwxyz\"\
+    ))\n                           (string-length (string-&gt;list (string char))))))\n\
+    \           (define (is-vowel? char)\n             (member (string-downcase (string\
+    \ char))\n                     (string-&gt;list \"aeiou\")))\n           (define\
+    \ (encode-char char)\n             (cond [(char-alphabetic? char)\n          \
+    \          (if (is-vowel? char)\n                        (second-character char)\n\
+    \                        (string-downcase char))]\n                   [else char]))]\n\
+    \    (string-join (map encode-char (string-&gt;list message)))))\n</code>\nHow\
+    \ can I improve the <code>second-character</code> function and make it more readable?\n\
+    Is there a built-in function that I could use to transform a character into the\
+    \ next one in the alphabet?\nIs there any other way to make the code more idiomatic?\n\
+    \n\nA:\n\nHere is one way to write <code>second-character</code> more idiomatically:\n\
+    <code>(define (second-character char)\n  (string-ref \"bcdfghjklmnpqrstvwxyz\"\
+    \n              (- (string-length (string-&gt;list \"abcdefghijklmnopqrstuvwxyz\"\
+    ))\n                 (string-length (string-&gt;list (string char))))))\n</code>\n\
+    Using <code>string-length</code> is a very inefficient way to get the index of\
+    \ a character in a string.  It is much faster to use <code>string-position</code>\
+    \ or <code>string-ci-position</code> to get the index.  For example:\n<code>(define\
+    \ (next-character char)\n  (string-ref (string #\\b #\\c #\\d #\\f #\\g #\\h #\\\
+    j #\\k #\\l #\\m #\\n #\\p #\\q #\\r #\\s #\\", "  (define (swap-case c)\n   \
+    \ (if (char-ci&gt;=? c #\\a)\n        (char-upcase c)\n        (char-downcase\
+    \ c)))\n  (define (vowel-position c)\n    (list-ref '(#\\a #\\e #\\i #\\o #\\\
+    u)\n              (if (member c '(#\\a #\\e #\\i #\\o #\\u))\n               \
+    \   (- (char-&gt;integer c) 97)\n                  (error \"Character ~a is not\
+    \ a vowel\" c))))\n  (define (is-vowel? c)\n    (member c '(#\\a #\\e #\\i #\\\
+    o #\\u)))\n  (define (is-alpha? c)\n    (and (char-ci&gt;=? c #\\a) (char-ci&lt;=?\
+    \ c #\\z)))\n  (define (encode-letter c)\n    (cond [(is-alpha? c)\n         \
+    \  (if (is-vowel? c)\n               (list-ref '(#\\c #\\f #\\j #\\o #\\t)\n \
+    \                        (modulo (- (char-&gt;integer c) 97) 5))\n           \
+    \    (swap-case c))]\n          [else c]))\n  (list-&gt;string (map encode-letter\
+    \ (string-&gt;list message))))\n", "  (if (empty? message)\n      empty\n    \
+    \  (cons (if (letter? (first message))\n                (let ((char (char-upcase\
+    \ (first message))))\n                  (if (member char '#(#\\A #\\E #\\I #\\\
+    O #\\U))\n                      (if (= char #\\Z)\n                          #\\\
+    B\n                          (integer->char (add1 (add1 (char->integer char)))))\n\
+    \                      char))\n                (first message))\n            (encode\
+    \ (rest message)))))\n", "  (let ([alphabet (string-&gt;list \"abcdefghijklmnopqrstuvwxyz\"\
+    )])\n    (string-&gt;list\n     (for/list ([c (in-string message)])\n       (if\
+    \ (char-alphabetic? c)\n           (if (char-numeric? c)\n               (if (even?\
+    \ c)\n                   (char-&gt;integer c)\n                   (char-&gt;integer\
+    \ c))\n               (if (even? c)\n                   c\n                  \
+    \ c))\n           (if (char-numeric? c)\n               (if (even? c)\n      \
+    \             (integer-&gt;char c)\n                   (integer-&gt;char c))\n\
+    \               (if (even? c)\n                   c\n                   c)))))))\n",
+  "  (define vowels \"aeiou\")\n  (define alphabet \"abcdefghijklmnopqrstuvwxyz\"\
+    )\n  (define (swap-case c)\n    (if (char-alphabetic? c)\n        (if (char-lower-case?\
+    \ c)\n            (char-upcase c)\n            (char-downcase c))\n        c))\n\
+    \  (define (is-vowel? c)\n    (memq c (string->list vowels)))\n  (define (next-vowel\
+    \ c)\n    (define (next-vowel-iter list-of-vowels)\n      (if (null? list-of-vowels)\n\
+    \          #\\e\n          (if (eq? (car list-of-vowels) c)\n              (car\
+    \ (cdr (cdr list-of-vowels)))\n              (next-vowel-iter (cdr list-of-vowels)))))\n\
+    \    (next-vowel-iter (string->list vowels)))\n  (define (encode-char c)\n   \
+    \ (if (is-vowel? c)\n        (next-vowel c)\n        c))\n  (define (encode-message\
+    \ str)\n    (if (empty? str)\n        \"\"\n        (string-append (string (swap-case\
+    \ (encode-char (string-ref str 0))))\n                       (encode-message (substring\
+    \ str 1)))))\n  (encode-message message))\n", "  (define (swap-case c)\n    (cond\
+    \ [(and (char-lower-case? c) (char-upper-case? c)) c]\n          [(char-lower-case?\
+    \ c) (char-upcase c)]\n          [(char-upper-case? c) (char-downcase c)]\n  \
+    \        [else c]))\n  (define (vowel? c)\n    (member c '#(#\\a #\\e #\\i #\\\
+    o #\\u)))\n  (define (after c)\n    (if (vowel? c)\n        (modulo (+ (char-code\
+    \ c) 2) 26)\n        (char-code c)))\n  (define (to-vowel i)\n    (list->string\
+    \ (map char-from-integer (list i))))\n  (define (encode-letter l)\n    (swap-case\
+    \ (to-vowel (after (char-upcase l)))))\n  (list->string (map encode-letter (string->list\
+    \ message))))\n", "  (map (lambda (character)\n         (cond\n           [(char-upcase?\
+    \ character) (downcase character)]\n           [(char-lowercase? character) (upcase\
+    \ character)]\n           [else character]))\n       message))\n", "  (if (string-empty?\
+    \ message)\n      \"\"\n      (let ([char (string-ref message 0)])\n        (if\
+    \ (char-alphabetic? char)\n            (string-append\n             (if (or (equal?\
+    \ char #\\A) (equal? char #\\a))\n                 (string #\\C)\n           \
+    \      (if (or (equal? char #\\E) (equal? char #\\e))\n                     (string\
+    \ #\\G)\n                     (if (or (equal? char #\\I) (equal? char #\\i))\n\
+    \                         (string #\\K)\n                         (if (or (equal?\
+    \ char #\\O) (equal? char #\\o))\n                             (string #\\Q)\n\
+    \                             (if (or (equal? char #\\U) (equal? char #\\u))\n\
+    \                                 (string #\\W)\n                            \
+    \     (string (char-upcase char))\n                                 )\n      \
+    \                       )\n                         )\n                     )\n\
+    \                 )\n             )\n            (string (char-upcase char))\n\
+    \            )\n        (encode (substring message 1))\n        )\n      )\n \
+    \ )\n", "  (cond\n    [(string=? message \"\") message]\n    [(char-numeric? (string-ref\
+    \ message 0))\n     (string-append (number->string (char->integer (string-ref\
+    \ message 0)))\n                    (encode (substring message 1)))]\n    [(char-upper-case?\
+    \ (string-ref message 0))\n     (string-append (char-downcase (string-ref message\
+    \ 0))\n                    (encode (substring message 1)))]\n    [(char-lower-case?\
+    \ (string-ref message 0))\n     (string-append (char-upcase (string-ref message\
+    \ 0))\n                    (encode (substring message 1)))]\n    [else\n     (string-append\
+    \ (string-ref message 0)\n                    (encode (substring message 1)))]))\n",
+  "  (for/list ([c (in-string message)])\n    (cond \n      [(char-lower-case? c)\
+    \ (char-upcase c)]\n      [(char-upper-case? c) (char-downcase c)]\n      [else\
+    \ c])))\n", "  (cond [(empty? message) empty]\n        [else (cons (enc (first\
+    \ message)) (encode (rest message)))]))\n", "  (map\n   (lambda (x)\n     (if\
+    \ (string-ci=? x \"a\") (string-append (string-upcase \"c\") \" \")\n        \
+    \ (if (string-ci=? x \"e\") (string-append (string-upcase \"g\") \" \")\n    \
+    \         (if (string-ci=? x \"i\") (string-append (string-upcase \"k\") \" \"\
+    )\n                 (if (string-ci=? x \"o\") (string-append (string-upcase \"\
+    q\") \" \")\n                     (if (string-ci=? x \"u\") (string-append (string-upcase\
+    \ \"s\") \" \")\n                         (if (vowel? x) (string-append (string-upcase\
+    \ (vowel->next x)) \" \")\n                             (string-append (string-upcase\
+    \ x) \" \")))))))))\n   (string->list message)))\n", "  (let ([vowels (list #\\\
+    a #\\e #\\i #\\o #\\u)]\n        [letter-set (list #\\a #\\b #\\c #\\d #\\e #\\\
+    f #\\g #\\h #\\i #\\j #\\k #\\l #\\m #\\n #\\o #\\p #\\q #\\r #\\s #\\t #\\u #\\\
+    v #\\w #\\x #\\y #\\z)]\n        [encoded-message (string-append)])\n    (for\
+    \ ([c (in-string message)])\n      (cond\n        [(not (char-set=? (char-set\
+    \ c) letter-set))\n         (string-append encoded-message (string c))]\n    \
+    \    [(char-set=? (char-set c) vowels)\n         (string-append encoded-message\
+    \ (string (list-ref (list-index vowels c) letter-set)))]\n        [(char-set=?\
+    \ (char-set c) (char-set-complement letter-set))\n         (string-append encoded-message\
+    \ (string (char-downcase c)))]\n        [else\n         (string-append encoded-message\
+    \ (string (char-upcase c)))]))\n    encoded-message))\n", "  (map (lambda (char)\n\
+    \         (let* ([upper-case? (char-upper-case? char)]\n                [char\
+    \ (char-downcase char)]\n                [i (string-index \"aeiou\" char)])\n\
+    \           (if (positive? i)\n               (if (= i 4)\n                  \
+    \ (if upper-case? #\\a #\\A)\n                   (char+ (string-ref \"aeiou\"\
+    \ i) 2))\n           (if upper-case? (char-upcase char) char))))\n       message))\n",
+  "  (string-append\n   (map (lambda (ch)\n\t  (let ((case (char-upcase ch)))\n\t\
+    \    (cond ((eq? case ch) (char-downcase ch))\n\t\t  ((eq? case ch) (char-upcase\
+    \ ch)))))\n\tmessage)))", "  (list->string\n   (map\n    (lambda (c)\n      (cond\
+    \ ((char-alphabetic? c) (change-case c))\n            ((vowel? c) (change-vowel\
+    \ c))\n            (else c)))\n    (string->list message))))\n", "    (string-join\n\
+    \     (map\n      (lambda (x)\n        (if (char-alphabetic? x)\n            (if\
+    \ (vowel? x)\n                (next-next-char x)\n                (swap-case x))\n\
+    \            x))\n      (string->list message))))\n", "  ; Stolen from the homework.\n\
+    \  (define char->num\n    (lambda (c) (- (char-&gt;integer c) (char-&gt;integer\
+    \ #\\a))))\n  (define num->char\n    (lambda (n) (integer-&gt;char (+ (char-&gt;integer\
+    \ #\\a) n))))\n  (define rot-char\n    (lambda (n c) (num-&gt;char (modulo (+\
+    \ (char-&gt;num c) n) 26))))\n  (map (lambda (c) (rot-char 2 c)) message))\n</code>\n",
+  "  (for/fold ([results '()]) ([m message])\n    (match m\n      [(or #\\a #\\e #\\\
+    i #\\o #\\u) (append results (list (+ m 2)))]\n      [(or #\\A #\\E #\\I #\\O\
+    \ #\\U) (append results (list (+ m 2)))]\n      [else (append results (list m))])))\n",
+  "  (define vowel-chars (string-&gt;list \"aeiou\"))\n  (string-&gt;list message)\n\
+    \  (map (lambda (c)\n          (cond ((char-numeric? c) c)\n                ((char-&gt;integer\
+    \ c) (+ (char-&gt;integer c) 2))\n                (else (if (in-list? c vowel-chars)\n\
+    \                          (-&gt;char (+ (char-&gt;integer c) 2))\n          \
+    \                (char-upcase c)))))\n        (string-&gt;list message)))\n</code>\n\
+    It works for some cases, but for vowels it returns the wrong character.\nIt does\
+    \ the upper/lower case conversion correctly though. Any help will be appreciated.\n\
+    \n\nA:\n\nI think you should use char-alphabetic? rather than char-numeric?, as\
+    \ you wanted to skip digits.\nAlso, you don't need to call string->list twice.\n\
+    And I think you should use char->integer->char instead of ->char.\nI tested it\
+    \ and got this working.\n<code>(define (encode message)\n  (define vowel-chars\
+    \ (string-&gt;list \"aeiou\"))\n  (map (lambda (c)\n         (cond ((char-alphabetic?\
+    \ c)\n                (if (in-list? c vowel-chars)\n                    (char-&gt;integer-&gt;char\
+    \ (+ (char-&gt;integer c) 2))\n                    (char-upcase c)))\n       \
+    \        (else c)))\n       (string-&gt;list message)))\n</code>\n", "  (map (lambda\
+    \ (x)\n         (cond\n           ((char-alphabetic? x) (if (char-lower-case?\
+    \ x)\n                                     (char-upcase x)\n                 \
+    \                    (char-downcase x)))\n           ((char=? x #\\a) #\\c)\n\
+    \           ((char=? x #\\e) #\\g)\n           ((char=? x #\\i) #\\k)\n      \
+    \     ((char=? x #\\o) #\\q)\n           ((char=? x #\\u) #\\w)\n           (else\
+    \ x)))\n       message))", "  (define (swap-case ch)\n    (if (char-numeric? ch)\
+    \ ch\n        (if (char-lower-case? ch) (char-upcase ch)\n            (char-downcase\
+    \ ch))))\n  (define (new-vowel ch)\n    (if (char-numeric? ch) ch\n        (if\
+    \ (or (char=? ch #\\a) (char=? ch #\\e) (char=? ch #\\i) (char=? ch #\\o) (char=?\
+    \ ch #\\u))\n            (list-ref '(#\\c #\\d #\\f #\\g #\\h) (- (string-index\
+    \ \"aeiou\" (string ch)) 1))\n            ch)))\n  (define (transform message)\n\
+    \    (cond ((empty? message) '())\n          (else (cons (new-vowel (swap-case\
+    \ (first message)))\n                      (transform (rest message))))))\n  (string-join\
+    \ (transform (string->list message))))\n", "  (let loop ((message message)\n \
+    \            (result '()))\n    (cond\n      [(null? message) (reverse result)]\n\
+    \      [else\n       (let ((char (string-ref message 0)))\n         (loop (substring\
+    \ message 1)\n               (cons (cond\n                      [(or (char-lower-case?\
+    \ char) (char-upper-case? char))\n                       (char-upcase (next-letter\
+    \ char))]\n                      [else char])\n                     result)))])))\n",
+  "  (map\n   (lambda (x)\n     (cond\n       [(char-alphabetic? x)\n        (let\
+    \ \n            ((a (string-&gt;number \n                 (string-&gt;symbol \n\
+    \                  (string-downcase \n                   (symbol-&gt;string (number-&gt;string\
+    \ (char-&gt;integer x)))))))))\n          (char-&gt;integer \n           (string-&gt;symbol\
+    \ \n            (string-downcase \n             (symbol-&gt;string \n        \
+    \      (number-&gt;string \n               (+ a \n                  (if \n   \
+    \                   (memq a '(0 4 8 12 16 20 24 28 32 36 40 44 48 52 56 60)) \n\
+    \                      2 \n                      4))))))))]\n       [else x]))\n\
+    \   (string-&gt;list message)))\n", "  (if (null? message)\n      '()\n      (cons\
+    \ (encode-char (car message))\n            (encode (cdr message)))))\n", "  (map\
+    \ (lambda (c)\n         (if (char-vowel? c)\n             (char-next (char-next\
+    \ c))\n             (swap-case c)))\n       message))\n", "  (map (lambda (x)\n\
+    \         (if (and (char-alphabetic? x)\n                  (char-lower-case? x))\n\
+    \             (char-upcase x)\n             (char-downcase x)))\n       message))\n",
+  "  (define (letter? c)\n    (char-alphabetic? c))\n  (define (vowel? c)\n    (or\
+    \ (equal? c #\\a)\n        (equal? c #\\e)\n        (equal? c #\\i)\n        (equal?\
+    \ c #\\o)\n        (equal? c #\\u)))\n  (define (encode-char c)\n    (cond\n \
+    \     [(equal? c #\\A) #\\B]\n      [(equal? c #\\B) #\\C]\n      [(equal? c #\\\
+    C) #\\D]\n      [(equal? c #\\D) #\\E]\n      [(equal? c #\\E) #\\F]\n      [(equal?\
+    \ c #\\F) #\\G]\n      [(equal? c #\\G) #\\H]\n      [(equal? c #\\H) #\\I]\n\
+    \      [(equal? c #\\I) #\\J]\n      [(equal? c #\\J) #\\K]\n      [(equal? c\
+    \ #\\K) #\\L]\n      [(equal? c #\\L) #\\M]\n      [(equal? c #\\M) #\\N]\n  \
+    \    [(equal? c #\\N) #\\O]\n      [(equal? c #\\O) #\\P]\n      [(equal? c #\\\
+    P) #\\Q]\n      [(equal? c #\\Q) #\\R]\n      [(equal? c #\\R) #\\S]\n      [(equal?\
+    \ c #\\S) #\\T]\n      [(equal? c #\\T) #\\U]\n      [(equal? c #\\U) #\\V]\n\
+    \      [(equal? c #\\V) #\\W]\n      [(equal? c #\\W) #\\X]\n      [(equal? c\
+    \ #\\X) #\\Y]\n      [(equal? c #\\Y) #\\Z]\n      [(equal? c #\\Z) #\\A]\n  \
+    \    [(equal? c #\\a) #\\c]\n      [(equal? c #\\b) #\\d]\n      [(equal? c #\\\
+    c) #\\e]\n      [(equal? c #\\d", "  (string-map (lambda (ch)\n              \
+    \  (cond\n                  [(char-alphabetic? ch)\n                   (cond\n\
+    \                     [(char-upper-case? ch)\n                      (char-downcase\
+    \ ch)]\n                     [(char-lower-case? ch)\n                      (char-upcase\
+    \ ch)])]\n                  [(memq ch '(#\\a #\\e #\\i #\\o #\\u))\n         \
+    \          (next (next ch))]\n                  [else\n                   ch]))\n\
+    \              message))\n</code>\nHere's an example run:\n<code>Welcome to DrRacket,\
+    \ version 6.1.1 [3m].\nLanguage: racket [custom]; memory limit: 256 MB.\n&gt;\
+    \ (encode \"Hello World!\")\n\"HLLL WLRLL!\"\n&gt; (encode \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\"\
+    )\n\"CDEFGHIJKLMNOPQRSTUVWXYZAB\"\n&gt; (encode \"aaaaaaaaaaa\")\n\"ccccccccccc\"\
+    \n&gt; \n</code>\n", "  ;;(error \"encode not implemented yet\")\n  (list->string\n\
+    \   (map (lambda (c) (if (char-alphabetic? c)\n                        (string-&gt;list\
+    \ (format \"~a\" c))\n                        (list c)))\n        (string-&gt;list\
+    \ message))))\n", "  (map\n   (lambda (ch)\n     (cond\n       ((memq ch '(#\\\
+    a #\\e #\\i #\\o #\\u))\n        (string-ref (string #\\c #\\e #\\g #\\i #\\k\
+    \ #\\m #\\o #\\q #\\s #\\u #\\w #\\y) \n                    (index (string #\\\
+    a #\\e #\\i #\\o #\\u) ch)))\n       ((char-downcase ch) ch)\n       ((char-upcase\
+    \ ch) (char-downcase ch))\n       (else ch)))\n   (string->list message)))", " \
+    \ (define (encodable? ch)\n    (char-alphabetic? ch))\n  (define (vowel? ch)\n\
+    \    (member ch '(#\\a #\\e #\\i #\\o #\\u)))\n  (define (next ch)\n    (if (char-ci=?\
+    \ ch #\\z) #\\a (char+ ch 1)))\n  (define (skip-two ch)\n    (if (char-ci=? ch\
+    \ #\\y) #\\b (char+ ch 2)))\n  (define (encode-letter ch)\n    (cond ((vowel?\
+    \ ch) (skip-two ch))\n          ((encodable? ch) (next ch))\n          (else ch)))\n\
+    \  (define (encode-msg msg)\n    (if (null? msg)\n        null\n        (cons\
+    \ (encode-letter (car msg))\n              (encode-msg (cdr msg)))))\n  (define\
+    \ (swap-case ch)\n    (if (char-alphabetic? ch)\n        (if (char-ci=? ch (car\
+    \ msg))\n            (next ch)\n            (char-upcase ch))\n        ch))\n\
+    \  (define (swap-msg msg)\n    (if (null? msg)\n        null\n        (cons (swap-case\
+    \ (car msg))\n              (swap-msg (cdr msg)))))\n  (define (join-msg msg)\n\
+    \    (list->string (swap-msg (encode-msg (string->list msg)))))\n  (join-msg message))\n",
+  "  (define (next-vowel vowel)\n    (cond [(equal? vowel \"a\") \"c\"]\n        \
+    \  [(equal? vowel \"e\") \"g\"]\n          [(equal? vowel \"i\") \"k\"]\n    \
+    \      [(equal? vowel \"o\") \"q\"]\n          [(equal? vowel \"u\") \"y\"]\n\
+    \          [(equal? vowel \"y\") \"a\"]))\n  (define (encode-char c)\n    (cond\
+    \ [(char-vowel? c) (next-vowel (string-&gt;char c))]\n          [(char-numeric?\
+    \ c) c]\n          [(char-&gt;integer c)\n           (if (char-upper-case? c)\n\
+    \               (integer-&gt;char (- (char-&gt;integer c) 32))\n             \
+    \  (integer-&gt;char (+ (char-&gt;integer c) 32)))]))\n  (string-join (map (lambda\
+    \ (c) (string (encode-char c)))\n                     (string-&gt;list message))))\n",
+  "  ;; your code here\n)", "  (for/list ([i (in-list message)])\n    (match i\n \
+    \     [#\\a #\\c]\n      [#\\e #\\g]\n      [#\\i #\\k]\n      [#\\o #\\q]\n \
+    \     [#\\u #\\w]\n      [#\\A #\\C]\n      [#\\E #\\G]\n      [#\\I #\\K]\n \
+    \     [#\\O #\\Q]\n      [#\\U #\\W]\n      [else (if (char-lower-case? i) (char-upcase\
+    \ i) (char-downcase i))])))\n", "  (cond\n    [(empty? message) empty]\n    [else\
+    \ (cons (encode1 (first message))\n                (encode (rest message)))]))\n",
+  "  (build-string (string-length message) (lambda (i)\n                         \
+    \                 (string-set! message i \n                                  \
+    \                      (cond\n                                               \
+    \          ((char-alphabetic? (string-ref message i))\n                      \
+    \                                    (if (char-upper-case? (string-ref message\
+    \ i))\n                                                              (char-downcase\
+    \ (string-ref message i))\n                                                  \
+    \            (char-upcase (string-ref message i))))\n                        \
+    \                                 ((char-equal? (string-ref message i) #\\a)\n\
+    \                                                          #\\c)\n           \
+    \                                              ((char-equal? (string-ref message\
+    \ i) #\\e)\n                                                          #\\g)\n\
+    \                                                         ((char-equal? (string-ref\
+    \ message i) #\\i)\n                                                         \
+    \ #\\k)\n                                                         ((char-equal?\
+    \ (string-ref message i) #\\o)\n                                             \
+    \             #\\q)\n                                                        \
+    \ ((char-equal? (string-ref message i) #\\u)\n                               \
+    \                           #\\w)\n                                          \
+    \               (else\n                                                      \
+    \    (string-ref message i))))))\n  message)\n", "  (regexp-replace* #rx\"[aeiou]\"\
+    \ message\n                   (lambda (input)\n                     (string-upcase\n\
+    \                      (list-ref \"abcdefghijklmnopqrstuvwxyz\"\n            \
+    \                    (+ (string-index input (string-downcase input)) 2))))))\n",
+  "  (string-map (lambda (c) \n                (cond \n                  [(char-alphabetic?\
+    \ c)\n                   (if (char-lower-case? c)\n                       (char-upcase\
+    \ c)\n                       (char-downcase c))]\n                  [(char=? c\
+    \ #\\a) #\\c]\n                  [(char=? c #\\e) #\\g]\n                  [(char=?\
+    \ c #\\i) #\\k]\n                  [(char=? c #\\o) #\\q]\n                  [(char=?\
+    \ c #\\u) #\\w]\n                  [else c]))\n              message))\n", " \
+    \ (if (null? message) '()\n      (cond [(char-vowel? (car message)) (cons (next-next-vowel\
+    \ (car message)) (encode (cdr message)))]\n            [(char-lower-case? (car\
+    \ message)) (cons (char-upcase (car message)) (encode (cdr message)))]\n     \
+    \       [(char-upper-case? (car message)) (cons (char-downcase (car message))\
+    \ (encode (cdr message)))]\n            [else (cons (car message) (encode (cdr\
+    \ message)))])))\n", "  (map\n   (lambda (c)\n     (if (or (char=? c #\\a) (char=?\
+    \ c #\\e) (char=? c #\\i) (char=? c #\\o) (char=? c #\\u))\n         (char-downcase\
+    \ (char-upcase (char+ c 2)))\n         (char-upcase (char-downcase c))))\n   message))\n",
+  "  (letrec ([is-vowel? (lambda (char) (or (char=? char #\\a) (char=? char #\\e)\
+    \ (char=? char #\\i) (char=? char #\\o) (char=? char #\\u)))]\n           [encode-letter\
+    \ (lambda (char)\n                            (cond [(char=? char #\\a) #\\c]\n\
+    \                                  [(char=? char #\\e) #\\g]\n               \
+    \                   [(char=? char #\\i) #\\k]\n                              \
+    \    [(char=? char #\\o) #\\q]\n                                  [(char=? char\
+    \ #\\u) #\\w]\n                                  [else (char-upcase char)]))])\n\
+    \    (string-map encode-letter message)))\n", "  (define alphabet \"abcdefghijklmnopqrstuvwxyz\"\
+    )\n  (define (letter-to-n l)\n    (list-ref alphabet (string-index alphabet l)))\n\
+    \  (define (n-to-letter n)\n    (list-ref alphabet n))\n  (define (convert-char\
+    \ c)\n    (if (string-contains? \"aeiou\" c)\n        (n-to-letter (modulo (+\
+    \ (letter-to-n c) 2) 26))\n        (if (string-contains? \"AEIOU\" c)\n      \
+    \      (n-to-letter (modulo (+ (letter-to-n (string-downcase c)) 2) 26))\n   \
+    \         (if (string-contains? \"bcdfghjklmnpqrstvwxyz\" c)\n               \
+    \ (string-upcase c)\n                (string-downcase c)))))\n  (for/list ([c\
+    \ (in-string message)])\n    (convert-char c)))\n</code>\nI've tried to use <code>map</code>\
+    \ in place of <code>for/list</code> but that didn't work as I expected it to and\
+    \ I feel like there's some place where I can do it without all the if statements.\
+    \ This just feels horribly wrong, but I'm not sure where to go from here.\n\n\n\
+    A:\n\nI think you have the big picture, but you seem to be missing some of the\
+    \ details and common patterns of functional programming in Racket.\n\nIn Racket,\
+    \ we typically use uppercase for non-data things and lowercase for data. So <code>Alphabet</code>\
+    \ and <code>message</code> are good, but <code>convert-char</code> should probably\
+    \ be <code>convert-char!</code> (because it's a procedure that mutates the message).\
+    \ And <code>n-to-letter</code> should probably be <code>letter-at</code> (because\
+    \ it's a procedure that accesses a data structure).\nIn Racket, <code>string-downcase</code>\
+    \ and <code>string-upcase</code> are procedures that perform the operations you\
+    \ need. If you want to convert a <code>char</code> to", "  (mapv string-&gt;number\
+    \ (string-&gt;list message)))\n", "  (let loop ([i 0] [encoded '()])\n    (if\
+    \ (= i (string-length message))\n        (list->string (reverse encoded))\n  \
+    \      (let* ([c (string-ref message i)]\n               [lc (char-downcase c)]\n\
+    \               [encoded-c\n                (cond\n                 [(char-alphabetic?\
+    \ c)\n                  (cond\n                   [(char-vowel? lc)\n        \
+    \            (let* ([i (+ i 2)]\n                           [vowel-c (string-ref\
+    \ message i)])\n                      (char-upcase vowel-c))]\n              \
+    \     [else lc])]\n                 [else c])])\n          (loop (+ i 1) (cons\
+    \ encoded-c encoded))))))\n", "  (string-append (cons (char-upcase (string-ref\
+    \ message 0))\n                           (encode-helper (substring message 1)))))",
+  "  (vector-map (lambda (char)\n                (if (char-alphabetic? char)\n   \
+    \                 (if (char-lower-case? char)\n                        (char-upcase\
+    \ char)\n                        (char-downcase char))\n                    char))\n\
+    \              message))\n", "  ;; TODO: return the encoded message\n  (display\
+    \ message))\n", "  ; Replace with your code\n  )", "  (if (empty? message)\n \
+    \     empty\n      (string-append (encode-char (first message))\n            \
+    \         (encode (rest message)))))\n", "  (letrec\n    ((encoded-vowel (lambda\
+    \ (char) (cond [(char=? char #\\a) #\\c]\n                                   \
+    \       [(char=? char #\\e) #\\g]\n                                          [(char=?\
+    \ char #\\i) #\\k]\n                                          [(char=? char #\\\
+    o) #\\q]\n                                          [(char=? char #\\u) #\\w]\n\
+    \                                          [else char]))))\n    (string-append\n\
+    \      (map (lambda (c) (if (char-alphabetic? c) (char-upcase c) c)) message)\n\
+    \      (map (lambda (c) (if (char-alphabetic? c) (encoded-vowel c) c)) message))))\n",
+  "  (define (swapcase ch)\n    (if (char-alphabetic? ch)\n        (if (char-lower-case?\
+    \ ch)\n            (char-upcase ch)\n            (char-downcase ch))\n       \
+    \ ch))\n  (define (vowel-to-code ch)\n    (if (char-vowel? ch)\n        (char\
+    \ (modulo (+ (char->integer ch) 2) 26) #\\a)\n        ch))\n  (define (encode-char\
+    \ ch)\n    (vowel-to-code (swapcase ch)))\n  (string-map encode-char message))\n",
+  "  (cond [(empty? message) empty]\n        [else (cons (encode-letter (first message))\n\
+    \                    (encode (rest message)))]))\n", "  (map (lambda (x)\n   \
+    \      (match x\n           [(? char-alphabetic? _)\n            (char-upcase\
+    \ x)]\n           [_ x]))\n       message))\n", "  (define (my-map-number fn n)\n\
+    \    (if (zero? n)\n        '()\n        (cons (fn n) (my-map-number fn (- n 1)))))\n\
+    \  (map (lambda (c)\n         (if (char-alphabetic? c)\n             (let ((c-code\
+    \ (char-&gt;integer c)))\n               (if (and (&gt;= c-code char-&gt;integer\
+    \ #\\a)\n                        (&lt;= c-code char-&gt;integer #\\z))\n     \
+    \              (integer-&gt;char (modulo (- c-code char-&gt;integer #\\a) 26)\
+    \ char-&gt;integer char-&gt;integer)\n                   (integer-&gt;char (modulo\
+    \ (- c-code char-&gt;integer #\\A) 26) char-&gt;integer char-&gt;integer)))\n\
+    \             c))\n        message))\n", "  (define (next-vowel vowel)\n    (case\
+    \ vowel\n      ((#\\a #\\e #\\i #\\o #\\u) (char (+ (char-code vowel) 2)))\n \
+    \     (else vowel)))\n  (define (encode-char c)\n    (case c\n      ((#\\a #\\\
+    e #\\i #\\o #\\u) (next-vowel c))\n      ((#\\A #\\E #\\I #\\O #\\U) (next-vowel\
+    \ (char->integer (char-downcase c))))\n      ((#\\y #\\Y) #\\b)\n      ((#\\z\
+    \ #\\Z) #\\c)\n      (else c)))\n  (map encode-char message))\n", "  (string-upcase\n\
+    \   (string-replace* message\n                    [\"a\" \"C\"]\n            \
+    \        [\"A\" \"C\"]\n                    [\"e\" \"G\"]\n                  \
+    \  [\"E\" \"G\"]\n                    [\"i\" \"K\"]\n                    [\"I\"\
+    \ \"K\"]\n                    [\"o\" \"M\"]\n                    [\"O\" \"M\"\
+    ]\n                    [\"u\" \"Q\"]\n                    [\"U\" \"Q\"])))\n</code>\n\
+    And the test suite:\n<code>#lang racket\n", "  (if (string=? message \"\")\n \
+    \     \"\"\n      (cons (encode-char (string-ref message 0))\n            (encode\
+    \ (substring message 1)))))\n", "  (define (letters-list s)\n    (if (string=?\
+    \ (substring s 0 1) \"\")\n        null\n        (cons (substring s 0 1)\n   \
+    \           (letters-list (substring s 1)))))\n  (define (find-vowel message)\n\
+    \    (cond ((eq? (string-upcase (substring message 0 1)) \"A\") 0)\n         \
+    \ ((eq? (string-upcase (substring message 0 1)) \"E\") 1)\n          ((eq? (string-upcase\
+    \ (substring message 0 1)) \"I\") 2)\n          ((eq? (string-upcase (substring\
+    \ message 0 1)) \"O\") 3)\n          ((eq? (string-upcase (substring message 0\
+    \ 1)) \"U\") 4)\n          (else (find-vowel (substring message 1)))))\n  (define\
+    \ (inc-letter letter)\n    (cond ((eq? letter 'z) #\\a)\n          ((eq? letter\
+    \ 'Z) #\\A)\n          (else (char+ letter 1))))\n  (define (inc-letter-twice\
+    \ letter)\n    (define (inc-once letter)\n      (inc-letter (inc-letter letter)))\n\
+    \    (inc-once letter))\n  (define (encode-letter message)\n    (define (get-letter)\n\
+    \      (if (string=? (substring message 0 1) \"\")\n          #\\a\n         \
+    \ (string->char (substring message 0 1))))\n    (define (get-letter-after-vowel-removal)\n\
+    \      (cond ((eq? (find-vowel message) 0) (substring message 1))\n          \
+    \  ((eq? (find-vowel message) 1) (substring message 1))\n            ((eq? (find-vowel\
+    \ message) 2) (substring message 1))\n            ((eq? (find-vowel message) 3)\
+    \ (substring message 1))\n            ((eq? (find-vowel message) 4) (substring\
+    \ message 1))\n            (else (encode-letter (substring message 1)))))\n  \
+    \  (if (char-alphabetic? (get-letter))\n        (char-upcase (get-letter))\n \
+    \       (", "  (string-upcase (string-downcase (string-upcase (string-downcase\
+    \ message)))))\n", "  (let loop ((message message) (encoded '()))\n    (if (empty?\
+    \ message)\n      (list->string (reverse encoded))\n      (let* ((next-char (first\
+    \ message))\n\t     (encoded-char (cond ((letter? next-char)\n\t\t\t\t  (encode-letter\
+    \ next-char))\n\t\t\t\t (else next-char))))\n\t(loop (rest message) (cons encoded-char\
+    \ encoded))))))", "  (define (helper-map ls)\n    (if (null? ls)\n        '()\n\
+    \        (cons (helper (car ls)) (helper-map (cdr ls)))))\n  (define (helper item)\n\
+    \    (cond\n      [(in-alphabet? item) (encode-letter item)]\n      [else item]))\n\
+    \  (define (encode-letter l)\n    (define v (vowel-index l))\n    (define c (consonant-index\
+    \ l))\n    (cond\n      [(even? v) (consonant (add1 (add1 v)))]\n      [(odd?\
+    \ v) (consonant (add1 (add1 c)))]\n      [else l]))\n  (define (consonant v)\n\
+    \    (if (= v 26)\n        (consonant 1)\n        (char-upcase (consonant-char\
+    \ v))))\n  (define (vowel v)\n    (if (= v 5)\n        (vowel 1)\n        (char-downcase\
+    \ (vowel-char v))))\n  (define (vowel-index l)\n    (define (helper-vowel-index\
+    \ xs i)\n      (if (null? xs)\n          0\n          (if (eq? (car xs) l)\n \
+    \             i\n              (helper-vowel-index (cdr xs) (add1 i)))))\n   \
+    \ (helper-vowel-index (string->list vowels) 1))\n  (define (consonant-index l)\n\
+    \    (define (helper-consonant-index xs i)\n      (if (null? xs)\n          0\n\
+    \          (if (eq? (car xs) l)\n              i\n              (helper-consonant-index\
+    \ (cdr xs) (add1 i)))))\n    (helper-consonant-index (string->list consonants)\
+    \ 1))\n  (define (in-alphabet? l)\n    (define alphabet (string-append vowels\
+    \ consonants))\n    (define (helper-in-alphabet? xs)\n      (if (null? xs)\n \
+    \         #", "  (let ([m (string-&gt;list message)])\n    (string-join\n    \
+    \ (map (lambda (x)\n            (if (or (char-alphabetic? x)\n               \
+    \     (char-numeric? x))\n                (if (char-numeric? x)\n            \
+    \        (make-string 1 x)\n                    (let ([y (char-&gt;integer x)])\n\
+    \                      (if (and (not (char-whitespace? x))\n                 \
+    \              (char-upcase? x))\n                          (integer-&gt;char\
+    \ (mod (+ y (- (char-&gt;integer #\\A)\n                                     \
+    \                  (char-&gt;integer #\\a))\n                                \
+    \                  (- #\\Z #\\a))\n                                          \
+    \    (- #\\Z #\\a)))\n                          (integer-&gt;char (mod (+ y 2)\n\
+    \                                              (- #\\Z #\\a))))))\n          \
+    \      (if (char-whitespace? x)\n                    \" \"\n                 \
+    \   \"\")))\n          m)))\n</code>\nHere's my implementation.\n\n\nA:\n\nAlthough\
+    \ it is not a straight-forward and perfect implementation, we can still have a\
+    \ look at different parts of it.\n\nDefine a helper named <code>encode-char</code>\n\
+    Since the major function <code>encode</code> is concerned with changing the char,\
+    \ you can define a helper <code>encode-char</code> to do this.\nThis can make\
+    \ your code more readable.\n<code>(define (encode-char x)\n  (cond\n    [(char-upcase?\
+    \ x)\n     (integer-&gt;char (+ 2 (- (char-&gt;integer x)\n                  \
+    \          (char-&gt;integer #\\A))))]\n    [(char-downcase? x)\n     (integer-&gt;char\
+    \ (+ 2 (- (char-&gt;integer x)\n                            (char-&gt;integer\
+    \ #\\a))))]\n    [else x]))\n</code>\nFix the return value of empty strings\n\
+    <code>encode</code> should return a string, however your implementation returns\
+    \ a list (which is a special case of string, actually).\nAnd we can also simplify\
+    \ the <code>", "  ; helper function to swap the case of a character\n  (define\
+    \ (swap-case ch)\n    (if (char-upper-case? ch)\n      (char-downcase ch)\n  \
+    \    (char-upcase ch)))\n  ; helper function to transpose vowel\n  (define (transpose-vowel\
+    \ ch)\n    (define alph \"abcdefghijklmnopqrstuvwxyz\")\n    (define vowels \"\
+    aeiou\")\n    (define vowels-shifted \"cgkmoqsuwy\")\n    (define (index-of-ch\
+    \ ch lst)\n      (cond\n        [(null? lst) #f]\n        [(char=? ch (car lst))\
+    \ 0]\n        [else (+ 1 (index-of-ch ch (cdr lst)))]))\n    (if (char-vowel?\
+    \ ch)\n      (string-ref vowels-shifted (index-of-ch ch vowels))\n      ch))\n\
+    \  ; helper function to encode a single character\n  (define (char-encode ch)\n\
+    \    (transpose-vowel (swap-case ch)))\n  ; main function\n  (list->string (map\
+    \ char-encode (string->list message))))\n", "  (define (next-vowel ch)\n    (cond\n\
+    \      [(equal? ch #\\a) #\\c]\n      [(equal? ch #\\e) #\\g]\n      [(equal?\
+    \ ch #\\i) #\\k]\n      [(equal? ch #\\o) #\\q]\n      [(equal? ch #\\u) #\\w]\n\
+    \      [else #\\z]))\n  (define (encode-char ch)\n    (cond\n      [(char-alphabetic?\
+    \ ch)\n       (cond\n         [(char-lower-case? ch) (char-upcase ch)]\n     \
+    \    [(char-upper-case? ch) (char-downcase ch)]\n         [else ch])]\n      [(or\
+    \ (equal? ch #\\a) (equal? ch #\\e) (equal? ch #\\i)\n           (equal? ch #\\\
+    o) (equal? ch #\\u))\n       (next-vowel ch)]\n      [else ch]))\n  (string-map\
+    \ encode-char message))\n</code>\n", "  (define (get-vowel-offset c)\n    (if\
+    \ (= c #\\A) #\\C\n      (if (= c #\\E) #\\G\n        (if (= c #\\I) #\\K\n  \
+    \        (if (= c #\\O) #\\Q\n            (if (= c #\\U) #\\W\n              #\\\
+    C))))))\n  (define (swap-case c)\n    (if (char-lower-case? c) (char-upcase c)\
+    \ (char-downcase c)))\n  (define (encode-char c)\n    (if (char-vowel? c) (get-vowel-offset\
+    \ c) c))\n  (define (encode-message message acc)\n    (if (null? message) acc\n\
+    \      (encode-message (cdr message)\n                      (string-append acc\n\
+    \                                     (string (swap-case (encode-char (car message))))))))\n\
+    \  (encode-message (string->list message) \"\"))\n", "  (map (lambda (c)\n   \
+    \      (cond ((char-lower-case? c)\n                (char-upcase c))\n       \
+    \        ((char-upper-case? c)\n                (char-downcase c))\n         \
+    \      (else\n                (case (char-downcase c)\n                  ((#\\\
+    a #\\e #\\i #\\o #\\u)\n                   (integer->char (modulo (+ (char->integer\
+    \ c) 2) 26)))\n                  (else c)))))\n       message))\n", "  (cond [(string-empty?\
+    \ message) empty]\n        [else\n         (cons (encode-character (string-ref\
+    \ message 0))\n               (encode (substring message 1)))]))\n", "  (define\
+    \ vowels '(#\\a #\\e #\\i #\\o #\\u))\n  (define (encode-letter c)\n    (cond\
+    \ ((char-alphabetic? c)\n           (if (char-vowel? c)\n               (modulo\
+    \ (+ (char-code c) 2) 26)\n               (modulo (+ (char-code c) 1) 26)))\n\
+    \          (else c)))\n  (apply string (map (lambda (c)\n                    \
+    \   (integer->char (encode-letter c)))\n                     message)))", "  ;;;;\
+    \ your code here \n  )\n</code>\nI'm pretty new to Racket, so I'm assuming that\
+    \ somehow I need to import the alphabet, convert the text to a list and then check\
+    \ each element of the list to see whether it is an uppercase or lowercase and\
+    \ if it's a vowel. I also think I need to somehow change the vowels to their corresponding\
+    \ character in the alphabet, but I don't know how to do that.\nAnyone have any\
+    \ ideas?\n\n\nA:\n\nCheck out the <code>string-upcase</code> and <code>string-downcase</code>\
+    \ procedures for swapping case, and the <code>char-&gt;integer</code> and <code>integer-&gt;char</code>\
+    \ procedures for getting the numerical value of a character and vice versa.\n",
+  "  (string-upcase\n   (string-join\n    (map (lambda (char)\n           (cond\n\
+    \             [(vowel? char)\n              (encode-char char)]\n            \
+    \ [(char-alphabetic? char)\n              (string-downcase char)]\n          \
+    \   [else char]))\n         (string->list message))\n    \"\")))\n", "  (define\
+    \ vowels \"aeiouAEIOU\")\n  (define (encode-char c)\n    (cond\n      [(member\
+    \ c vowels) (next-next-char c)]\n      [(char-alphabetic? c) (char-upcase c)]\n\
+    \      [else c]))\n  (string-&gt;list (string-map encode-char message)))\n</code>\n\
+    \n<code>(encode \"This is a test of the emergency broadcast system\")\n\nOutput:\n\
+    '(#\\W #\\H #\\H #\\S #\\B #\\K #\\F #\\G #\\B #\\H #\\H #\\W #\\H #\\F #\\G #\\\
+    K #\\B #\\H #\\H #\\W #\\H #\\W #\\H #\\F #\\G #\\K #\\W #\\K #\\F #\\G #\\B #\\\
+    H #\\H #\\W #\\H #\\F #\\G #\\W #\\B #\\H #\\H #\\W #\\H #\\F #\\G #\\K #\\W #\\\
+    K #\\F #\\G #\\B #\\H #\\H #\\W #\\H #\\F #\\G #\\W #\\B #\\H #\\H #\\W #\\H #\\\
+    F #\\G #\\K #\\W #\\K #\\F #\\G #\\B #\\H #\\H #\\W #\\H #\\F #\\G #\\W #\\B #\\\
+    H #\\H #\\W #\\H #\\F #\\G #\\K #\\W #\\K #\\F #\\G #\\B #\\H #\\H #\\W #\\H #\\\
+    F #\\G #\\W #\\B #\\H #\\H #\\W #\\H #\\F #\\G #\\K #\\W #\\K #\\F #\\G #\\B #\\\
+    H #\\H #\\W #\\H #\\F #\\G #\\W #\\B #\\H #\\H #\\W #\\H #\\F #\\G #\\K #\\W #\\\
+    K #\\F #\\G #\\B #\\H", "  ;; first swap case\n  (for/list ([c message])\n   \
+    \ (if (char-alphabetic? c)\n        (if (char-lower-case? c)\n            (char-upcase\
+    \ c)\n            (char-downcase c))\n        c))\n  ;; now replace vowels with\n\
+    \  ;; what appears 2 ahead of them\n  (for/list ([c message])\n    (cond [(char-ci=?\
+    \ c #\\a) #\\c]\n          [(char-ci=? c #\\e) #\\g]\n          [(char-ci=? c\
+    \ #\\i) #\\k]\n          [(char-ci=? c #\\o) #\\q]\n          [(char-ci=? c #\\\
+    u) #\\w]\n          [else c])))\n", "  (string-join\n   (map (lambda (c)\n   \
+    \       (cond\n            [(string-ci=? c \"a\") #\\c]\n            [(string-ci=?\
+    \ c \"e\") #\\g]\n            [(string-ci=? c \"i\") #\\k]\n            [(string-ci=?\
+    \ c \"o\") #\\m]\n            [(string-ci=? c \"u\") #\\q]\n            [(char-alphabetic?\
+    \ c) (if (char-upper-case? c)\n                                       (char-downcase\
+    \ c)\n                                       (char-upcase c))]\n            [else\
+    \ c]))\n        (string->list message)))\n  )\n", "  (cond\n    [(empty? message)\
+    \ empty]\n    [else\n     (cons (swap-case (first message)) (encode (rest message)))]))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

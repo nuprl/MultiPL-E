@@ -10,7 +10,1489 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate t
   \    (check-equal? (candidate (list 2 4 -5 3 9 7)) #t)\n    (check-equal? (candidate\
   \ (list 1)) #f)\n    (check-equal? (candidate (list 1 3 5 -100)) #f)\n    (check-equal?\
   \ (candidate (list 100 3 5 -100)) #f)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (let loop ((i 0) (j 1) (k 2))\n    (if (&gt;= i (- (length l) 3))\
+    \ #f\n        (if (= 0 (+ (list-ref l i) (list-ref l j) (list-ref l k))) #t\n\
+    \            (if (&gt;= k (- (length l) 1))\n                (if (&gt;= j (- (length\
+    \ l) 2)) (loop (+ i 1) (+ i 2) (+ i 3))\n                    (loop i (+ j 1) (+\
+    \ j 2)))\n                (loop i j (+ k 1)))))))\n</code>\nAny feedback is welcome.\n\
+    \n\nA:\n\nI want to start by saying that the solution is not entirely correct.\
+    \ First of all, it is not the case that the function returns <code>#f</code> if\
+    \ there are no triples that sum to zero. It actually hangs in this case, since\
+    \ it will keep trying <code>i</code>, <code>j</code>, and <code>k</code> until\
+    \ they're outside the bounds of the list (which they will never be).\nI want to\
+    \ explain why this is the case, but I think that will take longer than it would\
+    \ take to actually implement a working solution. So I'll skip that part for now\
+    \ and implement a working solution.\nThe most important part of that solution\
+    \ is the use of <code>for</code>, which you can use to generate distinct triples.\
+    \ For instance, if we have the list <code>'(1 2 3 4 5)</code>, then the following\
+    \ expression:\n<code>(for ([i '(1 2 3 4 5)]\n      [j '(2 3 4 5)]\n      [k '(3\
+    \ 4 5)])\n  (list i j k))\n</code>\nreturns the list of lists:\n<code>'((1 2 3)\
+    \ (1 2 4) (1 2 5) (1 3 4) (1 3 5) (1 4 5) (2 3 4) (2 3 5) (2 4 5) (3 4 5))\n</code>\n\
+    We can use this to generate the triples that we want to check if they sum to zero:\n\
+    <code>(define (triples-sum-to-zero? l)\n  (define-values (triples end)\n    (for\
+    \ ([", "  (letrec ([pairs (filter (\u03BB (x) (member (make-list -1 * x) l)) l)]\n\
+    \           [triples (filter (\u03BB (x) (member (make-list -1 * x) pairs)) pairs)])\n\
+    \    (not (empty? triples))))\n</code>\nNow, I know that this is an <code>O(n^2)</code>\
+    \ algorithm, but I'm trying to understand why this doesn't perform as well as\
+    \ I'd expect, since it should be <code>O(n log n)</code> (as far as I understand).\
+    \ Here are the results of the time function:\n<code>&gt; (time (triples_sum_to_zero\
+    \ (build-list 50000 add1)))\ncpu time: 96 real time: 96 gc time: 0\n#t\n</code>\n\
+    <code>&gt; (time (triples_sum_to_zero (build-list 100000 add1)))\ncpu time: 511\
+    \ real time: 511 gc time: 0\n#t\n</code>\n<code>&gt; (time (triples_sum_to_zero\
+    \ (build-list 200000 add1)))\ncpu time: 2112 real time: 2114 gc time: 0\n#t\n\
+    </code>\nHowever, I would expect the run times to be closer to linear. What am\
+    \ I missing here?\n\n\nA:\n\nYes, this algorithm is <code>O(n^2)</code>. The <code>filter</code>\
+    \ calls on <code>l</code> and <code>pairs</code> are <code>O(n^2)</code> and the\
+    \ <code>member</code> call is <code>O(n)</code>.\n", "  (define (helper l1 l2)\n\
+    \    (cond [(empty? l1) #f]\n          [(empty? l2) (helper (rest l1) l)]\n  \
+    \        [(zero? (+ (first l1) (first l2))) #t]\n          [else (helper l1 (rest\
+    \ l2))]))\n  (helper l (rest l)))\n</code>\nMy question is basically in the title:\
+    \ I think that I understand what they are doing in general, but I don't really\
+    \ understand how the helper function works (the actual O(n^2) solution). It seems\
+    \ like the main problem I have is that I don't understand how the <code>else</code>\
+    \ clause works.\nI know that <code>l1</code> is the element that we are looking\
+    \ for in the first call to <code>helper</code>, and <code>l2</code> is the rest\
+    \ of the elements in the list. In the base case, the <code>else</code> clause\
+    \ seems to work correctly (in the sense that it only runs for lists of size <code>&gt;=\
+    \ 3</code>).\n<code>(helper l (rest l))</code> returns a boolean value.\nHowever,\
+    \ when we run <code>(helper l1 (rest l2))</code>, I don't understand what the\
+    \ values of <code>l1</code> and <code>l2</code> are. Specifically, does <code>l1</code>\
+    \ remain the same and only <code>l2</code> gets shortened, or is <code>l1</code>\
+    \ also shortened? I think that the former is the case, but I'm not sure.\n\n\n\
+    A:\n\nIf we start with the scheme:\n<code>(helper l1 l2)\n</code>\nAnd the data\
+    \ structure (list):\n<code>(1 2 3 4 5 6 7 8 9)\n</code>\nThen <code>l1</code>\
+    \ is the first element, and <code>l2</code> is the rest, so <code>l1</code> is\
+    \ <code>1</code> and <code>l2</code> is <code>(2 3 4 5 6 7 8 9)</code>.\n<code>(helper\
+    \ l1 (rest l2", "  (cond\n    [(= (length l) 3) (= (+ (car l) (cadr l) (caddr\
+    \ l)) 0)]\n    [else (or (triples_sum_to_zero (append (list (car l)) (cdr l)))\n\
+    \              (triples_sum_to_zero (cdr l)))]))\n</code>\nI'm using the following\
+    \ to test the function:\n<code>#lang racket\n", "  (local [(define (helper lst)\n\
+    \            (cond [(empty? lst) false]\n                  [(and (memq (list-ref\
+    \ lst 0) lst)\n                        (memq (list-ref lst 1) lst)\n         \
+    \               (memq (list-ref lst 2) lst)) true]\n                  [else (helper\
+    \ (rest lst))]))]\n    (helper l)))\n", "  (letrec \n    ([l1 l]\n     [l2 (cdr\
+    \ l)]\n     [l3 (cdr (cdr l))])\n    (cond\n      [(null? l1) false]\n      [(null?\
+    \ l2) (triples_sum_to_zero l2)]\n      [(null? l3) (triples_sum_to_zero l3)]\n\
+    \      [(and (not (equal? l1 l2)) (not (equal? l1 l3)) (not (equal? l2 l3)) (=\
+    \ (+ l1 l2 l3) 0)) true]\n      [else (triples_sum_to_zero (cdr l))])))\n", " \
+    \ (define (helper l1 l2)\n    (cond\n      [(empty? l1) #f]\n      [(and (member\
+    \ (- (first l1) (first l2)) l2)\n            (member (- (first l1) (first l2))\
+    \ l1)) #t]\n      [else (helper (rest l1) l2)]))\n  (helper l l))\n</code>\nIt\
+    \ works well if there's only one triple of numbers that sum to zero in the list,\
+    \ but returns <code>#t</code> multiple times if there's more than one. I thought\
+    \ I could fix this by changing the line\n<code>[else (helper (rest l1) l2)]\n\
+    </code>\nto\n<code>[else (and (not (member (- (first l1) (first l2)) l2))\n  \
+    \         (and (not (member (- (first l1) (first l2)) l1))\n                (helper\
+    \ (rest l1) l2)))]\n</code>\nbut that broke everything. I'm wondering if there's\
+    \ a way to ensure that the <code>helper</code> function only returns <code>#t</code>\
+    \ once.\n\n\nA:\n\nyou can just use <code>#t</code> as a base case, then cond\
+    \ on not that as you have above and break it into multiple lines to make it easier\
+    \ to read, something like this:\n<code>(define (triples_sum_to_zero l)\n  (define\
+    \ (helper l1 l2)\n    (cond\n      [(empty? l1) #f]\n      [(and (member (- (first\
+    \ l1) (first l2)) l2)\n            (member (- (first l1) (first l2)) l1)) #t]\n\
+    \      [(not (member (- (first l1) (first l2)) l2))\n       (helper (rest l1)\
+    \ l2)]\n      [(not (member (- (first l1) (first l2)) l1))\n       (helper (rest\
+    \ l1) l2)]\n      [else (helper (rest l1) l2)]))\n  (helper l l))\n</code>\n",
+  "  (let ([len (length l)])\n    (cond\n      [(and (<= len 2) (zero? (sum l))) #t]\n\
+    \      [(zero? (remainder len 3))\n       (and\n         (zero? (remainder (sum\
+    \ (take l 3)) 3))\n         (triples_sum_to_zero (drop l 3)))]\n      [else (triples_sum_to_zero\
+    \ (drop l 1))])))\n", "  (cond\n    [(empty? l) false]\n    [(= 0 (apply + (take\
+    \ 3 l))) true]\n    [else (triples_sum_to_zero (rest l))]))\n</code>\n<code>#lang\
+    \ racket\n", "  (cond ((null? l) #f)\n        ((null? (cdr l)) #f)\n        ((null?\
+    \ (cddr l)) #f)\n        ((and (not (member (- (car l) (cadr l)) (cddr l)))\n\
+    \              (not (member (- (car l) (caddr l)) (cdr l)))\n              (not\
+    \ (member (- (cadr l) (caddr l)) (cdr l))))\n         #f)\n        (else #t)))\n",
+  "  (if (empty? l)\n      #f\n      (if (= 3 (length l))\n          (or (= (sum l)\
+    \ 0)\n              (triples_sum_to_zero (rest l)))\n          (or (triples_sum_to_zero\
+    \ (list (list-ref l 0) (list-ref l 1) (list-ref l 2)))\n              (triples_sum_to_zero\
+    \ (list (list-ref l 0) (list-ref l 1) (list-ref l 3)))\n              (triples_sum_to_zero\
+    \ (list (list-ref l 0) (list-ref l 2) (list-ref l 3)))\n              (triples_sum_to_zero\
+    \ (list (list-ref l 1) (list-ref l 2) (list-ref l 3)))\n              (triples_sum_to_zero\
+    \ (rest l))))))\n", "  (cond\n    [(empty? l) false]\n    [(or (zero? (sum (first\
+    \ l) (second l) (third l)))\n         (zero? (sum (first l) (third l) (fourth\
+    \ l)))\n         (zero? (sum (second l) (third l) (fourth l))))\n     true]\n\
+    \    [else (triples_sum_to_zero (rest l))]))\n</code>\nhowever, this code will\
+    \ only work for lists with at least four elements, and it uses the sum function:\n\
+    <code>#lang racket\n", "  ;; if l is empty, l has no elements, so there are no\
+    \ triples summing to zero.\n  (if (null? l)\n      #f\n      ;; if l has length\
+    \ 1, it has no pairs, so there are no triples summing to zero.\n      (if (= (length\
+    \ l) 1)\n          #f\n          ;; otherwise, let's find the first element of\
+    \ l.\n          (let ((n (car l)))\n            ;; if n is zero, return true,\
+    \ because the list contains three zeros.\n            (if (= n 0)\n          \
+    \      #t\n                ;; otherwise, we have to get all of the numbers in\
+    \ l that sum to -n.\n                ;; we can do this with a helper function.\n\
+    \                (let ((pairs (pairs_sum_to l -n)))\n                  ;; if there\
+    \ are no pairs, then n is not part of a triple.\n                  (if (null?\
+    \ pairs)\n                      (triples_sum_to_zero (cdr l))\n              \
+    \        ;; otherwise, there's a match!\n                      #t)))))))\n", " \
+    \ (let loop ([l l])\n    (cond [(empty? l) false]\n          [(or (and (member\
+    \ (car l) (cdr l))\n                    (member (- (car l)) (cdr l)))\n      \
+    \         (loop (cdr l)))]\n          [else true])))\n</code>\n", "  (let ([n\
+    \ (length l)])\n    (for/or ([i (in-range n)]\n             [j (in-range n)]\n\
+    \             [k (in-range n)])\n      (and (not (equal? i j))\n           (not\
+    \ (equal? i k))\n           (not (equal? j k))\n           (equal? 0 (+ (list-ref\
+    \ l i) (list-ref l j) (list-ref l k)))))))\n", "  (andmap (lambda (x)\n      \
+    \      (andmap (lambda (y)\n                      (andmap (lambda (z)\n      \
+    \                          (= (+ x y z) 0))\n                              (cdr\
+    \ (cdr (cdr l)))))\n                    (cdr (cdr l))))\n          (cdr l)))\n",
+  "  (cond\n    [(empty? l) #f]\n    [(empty? (rest l)) #f]\n    [(empty? (rest (rest\
+    \ l))) #f]\n    [(or (= (+ (first l) (first (rest l)) (first (rest (rest l))))\
+    \ 0)\n         (triples_sum_to_zero (rest l)))\n     #t]\n    [else #f]))\n</code>\n\
+    Is there a way to write this code more cleanly?\n\n\nA:\n\nA helper procedure\
+    \ is a good idea, but your code above is not correct.\nI'd suggest you try to\
+    \ first write <code>any_triple_sum_to_zero</code> in a very simple way, then improve\
+    \ on it.\nIn fact, your helper procedure <code>any_triple_sum_to_zero</code> can\
+    \ be made more general to something like this:\n<code>(define (any_triple_sum_to_zero?\
+    \ lst predicate)\n  (cond\n    [(empty? lst) #f]\n    [(empty? (rest lst)) #f]\n\
+    \    [(empty? (rest (rest lst))) #f]\n    [(predicate (first lst) (first (rest\
+    \ lst)) (first (rest (rest lst))))\n     #t]\n    [else (any_triple_sum_to_zero?\
+    \ (rest lst) predicate)]))\n</code>\nThis helper procedure takes a list <code>lst</code>\
+    \ and a 3-argument procedure <code>predicate</code> and returns <code>#t</code>\
+    \ if and only if the <code>predicate</code> is true on some triple of elements\
+    \ in <code>lst</code>.\nNow you can write your <code>triples_sum_to_zero</code>\
+    \ as\n<code>(define (triples_sum_to_zero lst)\n  (any_triple_sum_to_zero? lst\
+    \ (lambda (x y z) (= (+ x y z) 0))))\n</code>\nNote how similar <code>triples_sum_to_zero</code>\
+    \ is to <code>any_triple_sum_to_zero?</code>.  One is so similar to the other\
+    \ that", "  (and (not (empty? l))\n       (or (triples_sum_to_zero_r (first l)\
+    \ (rest l) (rest l))\n           (triples_sum_to_zero (rest l)))))\n", "    ;;\
+    \ if l is empty, it does not have three distinct elements.\n    (if (null? l)\n\
+    \        #f\n        ;; check if there are three distinct elements that sum to\
+    \ zero\n        ;; by looking through every distinct pair of numbers in l\n  \
+    \      ;; to see if they add up to zero.\n        (let ([cdr-l (cdr l)])\n   \
+    \         (or\n                ;; this is the base case: there are no more pairs\n\
+    \                ;; to check. if we've made it this far, then there\n        \
+    \        ;; are no pairs that sum to zero.\n                (null? cdr-l)\n  \
+    \              ;; check if there are three distinct elements that sum to zero\n\
+    \                ;; by looking at every element in cdr-l to see if it adds\n \
+    \               ;; up to zero with the current element.\n                (or\n\
+    \                    ;; this is the base case: there are no more numbers\n   \
+    \                 ;; to check. if we've made it this far, then there\n       \
+    \             ;; are no triples that sum to zero.\n                    (null?\
+    \ (cdr cdr-l))\n                    ;; if the current element adds up to zero\
+    \ with some\n                    ;; number later in the list, then the list has\
+    \ the\n                    ;; desired property.\n                    (or\n   \
+    \                     (= 0 (+ (car l) (car cdr-l) (car (cdr cdr-l))))\n      \
+    \                  ;; if the current element does not add up to zero\n       \
+    \                 ;; with any number later in the list, then\n               \
+    \         ;; we need to check the next pair.\n                        (triples_sum_to_zero\
+    \ (cdr cdr-l))))\n                ;; if the current pair does not add up to zero,\n\
+    \                ;; then we need to check the next pair.\n                (triples_sum_to_zero\
+    \ cdr-l)))))\n</code>\nThe following test cases confirm that this function works\
+    \ as expected:\n<code>&gt; (triples_sum_to_zero (list 1 2 3 4 5))\n#f\n&gt; (triples_sum_to_zero\
+    \ (list 1 -1 2 -2 3 -3 4 -4 5 -5))\n#t\n&gt; (triples_sum_to_zero (list))\n#f\n\
+    &gt; (triples_sum_to_zero (", "  (cond\n    [(empty? l) false]\n    [(and (member\
+    \ (first l) (rest l)) (member (first l) (rest (rest l)))) true]\n    [else (triples_sum_to_zero\
+    \ (rest l))]))\n", "  (and\n   (list? l)\n   (or\n    ;; list has length 3\n \
+    \   (and\n     (= (length l) 3)\n     (zero? (+ (car l) (cadr l) (caddr l))))\n\
+    \    ;; list has length > 3\n    (and\n     (> (length l) 3)\n     (or\n     \
+    \ ;; triple_sum_to_zero is True for the rest of the list\n      (triples_sum_to_zero\
+    \ (cdr l))\n      ;; triple_sum_to_zero is True for the remainder of the list\n\
+    \      (triples_sum_to_zero (cons (car l) (cddr l))))))))\n```\n\n```racket\n\
+    #lang racket\n", "  (cond [(empty? l) false]\n        [(= (first l) 0)\n     \
+    \    (or (empty? (rest l))\n             (and (empty? (rest (rest l)))\n     \
+    \             (or (empty? (rest (rest (rest l))))\n                      (and\
+    \ (= (first (rest (rest (rest l)))) 0)\n                           (or (empty?\
+    \ (rest (rest (rest (rest l)))))\n                               (and (= (first\
+    \ (rest (rest (rest (rest l))))) 0)\n                                    (not\
+    \ (empty? (rest (rest (rest (rest (rest l)))))))))))))]\n        [else (or (triples_sum_to_zero\
+    \ (rest l))\n                  (and (not (empty? (rest l)))\n                \
+    \       (or (triples_sum_to_zero (cons (first l) (cons (first (rest l)) (rest\
+    \ (rest l)))))\n                           (and (not (empty? (rest (rest l))))\n\
+    \                                (or (triples_sum_to_zero (cons (first l) (cons\
+    \ (first (rest (rest l))) (rest (rest (rest l))))))\n                        \
+    \            (and (not (empty? (rest (rest (rest l)))))\n                    \
+    \                     (triples_sum_to_zero (cons (first l) (cons (first (rest\
+    \ (rest (rest l)))) (rest (rest (rest (rest l))))))))))))))]))\n", "  (cond [(empty?\
+    \ l) false]\n        [(find_triple_sum_to_zero (first l) (rest l)) true]\n   \
+    \     [else (triples_sum_to_zero (rest l))]))\n", "  (let* ([n (length l)]\n \
+    \        [a (sort < l)]\n         [i 0]\n         [p 0]\n         [q 0])\n   \
+    \ (let ([found #f])\n      (let loop ([i 0])\n        (when (and (not found)\n\
+    \                   (< i (- n 2)))\n          (set! p (+ i 1))\n          (set!\
+    \ q (- n 1))\n          (let loop2 ([p (+ i 1)])\n            (when (and (not\
+    \ found)\n                       (< p (- n 1)))\n              (when (= (+ (list-ref\
+    \ a i) (list-ref a p) (list-ref a q)) 0)\n                (set! found #t))\n \
+    \             (loop2 (+ p 1)))))\n        (loop (+ i 1))))\n      found)))\n",
+  "  (cond [(empty? l) #f]\n        [(= (length l) 1) #f]\n        [(= (length l)\
+    \ 2) #f]\n        [else\n         (cond [(= (+ (first l) (second l) (third l))\
+    \ 0) #t]\n               [else (triples_sum_to_zero (rest l))])]))\n", "  (define\
+    \ (has_one_zero l)\n    (cond\n      [(null? l) #f]\n      [(= (first l) 0) #t]\n\
+    \      [else (has_one_zero (rest l))]))\n  (cond\n    [(or (null? l) (null? (rest\
+    \ l)) (null? (rest (rest l)))) #f]\n    [(= (first l) (second l) (third l)) (triples_sum_to_zero\
+    \ (rest (rest (rest l))))]\n    [(= (first l) (second l)) (triples_sum_to_zero\
+    \ (rest (rest l)))]\n    [(= (first l) (third l)) (triples_sum_to_zero (rest (rest\
+    \ l)))]\n    [(= (second l) (third l)) (triples_sum_to_zero (rest (rest l)))]\n\
+    \    [(= (first l) (second l) (third l)) (triples_sum_to_zero (rest (rest (rest\
+    \ l))))]\n    [(= (+ (first l) (second l) (third l)) 0) #t]\n    [else (triples_sum_to_zero\
+    \ (rest (rest (rest l))))]))\n", "  ;; if l has fewer than three elements, return\
+    \ False\n  (if (< (length l) 3)\n      #f\n      ;; else,\n      ;; create an\
+    \ empty hash table\n      (define ht (make-hash))\n      ;; iterate over each\
+    \ element of l\n      (for ([e (in-list l)])\n        ;; insert e in the hash\
+    \ table\n        (hash-set! ht e e)\n        ;; if (- e) is in the hash table,\
+    \ then there is a triple that sums to zero\n        (if (hash-ref ht (- e))\n\
+    \            (begin\n              ;; return True\n              #t\n        \
+    \      ;; do not evaluate the rest of the for loop\n              (for/break))\n\
+    \            ;; else, do nothing\n            (void)))\n      ;; if the for loop\
+    \ completes, return False\n      #f))\n", "  (cond\n    ((null? l) #f)\n    ((=\
+    \ (length l) 1) #f)\n    ((= (length l) 2) #f)\n    (else\n     (let ([x (first\
+    \ l)]\n           [tail (rest l)])\n       (cond\n         ((member 0 tail) #t)\n\
+    \         ((member (- 0 x) tail) #t)\n         (else (triples_sum_to_zero tail)))))))\n",
+  "  (cond\n    [(empty? l) #f]\n    [(empty? (rest l)) #f]\n    [(empty? (rest (rest\
+    \ l))) #f]\n    [(= 0 (apply + (take l 3))) #t]\n    [else (triples_sum_to_zero\
+    \ (rest l))]))\n", "  (or (member 0 l) (triples_sum_to_zero_aux l)))\n", "  (if\
+    \ (null? l) \n      #f\n      (if (triples_sum_to_zero_h l (cdr l) (cddr l))\n\
+    \          #t\n          (triples_sum_to_zero (cdr l)))))\n", "  (and (length\
+    \ l)\n       (let loop ((l l) (l2 (cdr l)) (l3 (cddr l)))\n         (cond ((and\
+    \ (length l) (length l2) (length l3))\n                (or (and (number? (car\
+    \ l)) (number? (car l2)) (number? (car l3)))\n                    (loop (cdr l)\
+    \ (cdr l2) (cdr l3))))\n               (else #f)))))\n", "  ;; first we sort the\
+    \ list.\n  (define l (sort l &lt;))\n  ;; we then set the pointer at the beginning\
+    \ of the list\n  (define ptr1 0)\n  ;; and the second pointer at the second element\
+    \ of the list\n  (define ptr2 1)\n  ;; we do a loop that runs until the first\
+    \ pointer reaches the end of the list\n  (do ([ptr1 (add1 ptr1)])\n      ((&gt;=\
+    \ ptr1 (length l)))\n    ;; and inside that loop, another one that runs until\
+    \ the second pointer\n    ;; reaches the end of the list\n    (do ([ptr2 (add1\
+    \ ptr2)])\n        ((&gt;= ptr2 (length l)))\n      ;; if the sum of the two numbers\
+    \ pointed at by the two pointers equals\n      ;; zero,\n      (if (= (+ (list-ref\
+    \ l ptr1) (list-ref l ptr2)) 0)\n          ;; we return true\n          (return\
+    \ #t)))))\n", "  (and (pair? l)\n       (member 0 (map + l l))))\n</code>\n",
+  "  (cond [(empty? l)\n         false]\n        [(and (member (car l) (cdr l))\n\
+    \              (member (- (car l)) (cdr l)))\n         true]\n        [else\n\
+    \         (triples_sum_to_zero (cdr l))]))\n", "  (if (null? l) #f ;list is empty\n\
+    \      (let ([myFirst (car l)])\n        (if (cdr l)\n            (if (or (and\
+    \ (member (car l) (cdr l))\n                         (member (- (car l)) (cdr\
+    \ l)))\n                    (triples_sum_to_zero (cdr l)))\n                #t\n\
+    \                #f)\n            #f)))) ;list has only one element\n", "  (letrec\
+    \ ([triples (lambda (x xs y ys z zs)\n                      (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (", "  (cond\n    [(empty? l) (error \"Empty list!\")]\n    [(one? (length l))\
+    \ #f]\n    [(two? (length l)) (cond\n                         [(zero? (+ (first\
+    \ l) (second l))) #t]\n                         [else #f])]\n    [else (or (triples_sum_to_zero\
+    \ (drop l 3))\n              (and (zero? (+ (first l) (second l) (third l))) #t))]))\n",
+  "  (cond [(empty? l) false]\n        [(member? 0 l) (triples_sum_to_zero (remove\
+    \ 0 l))]\n        [else\n         (define l2 (remove-first (first l) l))\n   \
+    \      (if (empty? l2)\n             (triples_sum_to_zero (rest l))\n        \
+    \     (define x (- 0 (first l)))\n             (if (member? x l2)\n          \
+    \       true\n                 (triples_sum_to_zero (rest l))))]))\n", "  (letrec\
+    \ ([has_zero? (\u03BB (l) (member 0 l))]\n           [has_pos_and_neg (\u03BB\
+    \ (l) (and (has_zero? l) (not (has_zero? (remq 0 l)))))]\n           [has_three_nums?\
+    \ (\u03BB (l) (has_pos_and_neg (map (\u03BB (n) (- 0 n)) l)))]\n           [is_distinct?\
+    \ (\u03BB (l) (and (has_three_nums? l) (not (has_zero? l))))])\n    (or (is_distinct?\
+    \ l) (has_three_nums? l))))\n", "  (define (helper l count)\n    (cond\n     \
+    \ [(empty? l)\n       (if (= count 3) True False)]\n      [(member (first l) (rest\
+    \ l)) (helper (rest l) (+ count 1))]\n      [else (helper (rest l) count)]))\n\
+    \  (helper l 0))\n</code>\n", "  (if (null? l)\n      #f\n      (or (distinct_triple?\
+    \ (car l) (cdr l))\n          (triples_sum_to_zero (cdr l)))))\n", "  (or (and\
+    \ (integer? (car l))\n           (integer? (cadr l))\n           (integer? (caddr\
+    \ l))\n           (= (apply + (list (car l) (cadr l) (caddr l))) 0))\n      (triples_sum_to_zero\
+    \ (cdr l))))\n", "  ;; n determines the length of the first section of the list.\n\
+    \  ;; check_list is a helper function. check_list will take a list as input\n\
+    \  ;; and return True if there are two distinct elements in the list that sum\n\
+    \  ;; to the negative of the first element of the list. check_list will return\n\
+    \  ;; False otherwise.\n  (define (check_list l)\n    (define (check_sub_list\
+    \ l min max)\n      (cond\n        ;; if min is greater than or equal to max,\
+    \ we've found a pair of\n        ;; elements that sum to the negative of the first\
+    \ element of the list\n        ((>= min max) #t)\n        ;; otherwise, if the\
+    \ sum of the element at index min and the element\n        ;; at index max is\
+    \ the negative of the first element of the list,\n        ;; return True\n   \
+    \     ((= (- (list-ref l 0) (list-ref l min) (list-ref l max)) 0) #t)\n      \
+    \  ;; otherwise, if the sum of the element at index min and the element\n    \
+    \    ;; at index max is less than the negative of the first element of the\n \
+    \       ;; list, increment min and check the sum of the element at the new\n \
+    \       ;; index min and the element at index max\n        ((< (- (list-ref l\
+    \ 0) (list-ref l min) (list-ref l max)) 0)\n         (check_sub_list l (+ min\
+    \ 1) max))\n        ;; otherwise, decrement max and check the sum of the element\
+    \ at index\n        ;; min and the element at the new index max\n        (else\
+    \ (check_sub_list l min (- max 1)))))\n    ;; if the length of the list is less\
+    \ than 3, we can return False\n    (if (< (length l) 3) #f\n        ;; otherwise,\
+    \ we call check_sub_list with the list and the indices\n        ;; 0 and (- (length\
+    \ l) 1)\n        (check_sub_list l 0 (- (length l) 1))))\n  ;; if the length of\
+    \ the list is less than 3, we can return False\n  (if (< (length l) 3) #f\n  \
+    \    ;; otherwise, we create a list that is the sorted version of the list\n \
+    \     ;; l and call check_list with it\n      (", "  ;; sort the list\n  (define\
+    \ sorted (list-sort l <))\n  ;; iterate through the list.\n  ;; for each element,\
+    \ create a list of all the elements to the right of it.\n  ;; use helper function\
+    \ to check if the two elements to the right add up to\n  ;; the negative of the\
+    \ current element.\n  (cond [(empty? sorted) false]\n        [else (or (helper\
+    \ (car sorted) (cdr sorted))\n                  (triples_sum_to_zero (cdr sorted)))]))\n",
+  "  (cond [(null? l) #f]\n        [(and (equal? (list-ref l 0) (list-ref l 1))\n\
+    \              (equal? (list-ref l 0) (list-ref l 2))) (triples_sum_to_zero (cdr\
+    \ l))]\n        [(zero? (+ (list-ref l 0) (list-ref l 1) (list-ref l 2))) #t]\n\
+    \        [else (triples_sum_to_zero (cdr l))]))\n", "  (cond\n    [(or (empty?\
+    \ l) (empty? (rest l)) (empty? (rest (rest l)))) #f]\n    [(= (apply + (take l\
+    \ 3)) 0) #t]\n    [else (triples_sum_to_zero (rest l))]))\n", "  (cond\n    ((null?\
+    \ l) #f)\n    ((and\n      (member (- (car l) (car (cdr l))) (cdr (cdr l)))\n\
+    \      (member (- (car l) (car (cdr (cdr l)))) (cdr l)))\n      #t)\n    (else\
+    \ (triples_sum_to_zero (cdr l)))))\n", "  (cond\n    [(or (empty? l) (empty? (rest\
+    \ l)) (empty? (rest (rest l)))) #f]\n    [(zero? (+ (first l) (second l) (third\
+    \ l))) #t]\n    [else (triples_sum_to_zero (rest l))]))\n</code>\n<code>#lang\
+    \ racket\n", "  (if (= (length l) 3)\n      (zero? (+ (car l) (cadr l) (caddr\
+    \ l)))\n      (letrec ([l1 (cons (car l) l)]\n               [l2 (cons (cadr l)\
+    \ l)]\n               [l3 (cons (caddr l) l)])\n        (and (triples_sum_to_zero\
+    \ l1)\n             (triples_sum_to_zero l2)\n             (triples_sum_to_zero\
+    \ l3)))))\n", "  (not (null? (match (remove (curry = 0) (remove-duplicates l))\n\
+    \            [() _] #f\n            [((? number? x) (? number? y) (? number? z)\
+    \ ...) #t]))))\n</code>\nThe main difference is the use of a pattern match on\
+    \ the input list, instead of calls to <code>car</code> and <code>cdr</code>. \
+    \ A match can also be used to try different patterns until one of them succeeds,\
+    \ but here there is only one pattern.\n", "  ;; Given a list l, lst1 is l without\
+    \ the first element and lst2 is l without\n  ;; the last element.\n  (let* ([lst1\
+    \ (cdr l)]\n         [lst2 (butlast l)])\n    ;; If lst1 and lst2 are empty, return\
+    \ False.\n    (if (and (null? lst1) (null? lst2))\n        #f\n        ;; Otherwise,\
+    \ check if the first element of lst1, the last element of\n        ;; lst2, and\
+    \ the first element of l are all equal to -x where x is the\n        ;; sum of\
+    \ the first element of l and the last element of lst2, or check\n        ;; if\
+    \ triples_sum_to_zero is true for lst1 and lst2.\n        (or (and (= (+ (car\
+    \ l) (car lst2)) (- (car lst1) (car l)))\n                 (= (car l) (- (car\
+    \ lst1) (car lst2))))\n            (triples_sum_to_zero lst1)\n            (triples_sum_to_zero\
+    \ lst2)))))\n", "  (cond [(empty? l) false]\n        [(empty? (cdr l)) false]\n\
+    \        [(empty? (cddr l)) false]\n        [else (if (or (and (= (+ (first l)\
+    \ (second l) (third l)) 0)\n                           (not (member (first l)\
+    \ (cddr l))))\n                      (triples_sum_to_zero (cdr l)))\n        \
+    \           true\n                   false)]))\n", "  (let loop ([l l])\n    (cond\n\
+    \      [(empty? l) #f]\n      [(/= (length l) 3)\n       (loop (rest l))]\n  \
+    \    [(= (apply + l) 0) #t]\n      [else (loop (rest l))])))\n", "  (if (null?\
+    \ l)\n      #f\n      (let ([h (car l)])\n        (if (null? (cdr l))\n      \
+    \      #f\n            (let ([m (car (cdr l))])\n              (if (null? (cdr\
+    \ (cdr l)))\n                  #f\n                  (let ([t (car (cdr (cdr l))])])\n\
+    \                    (if (= (+ h m t) 0)\n                        #t\n       \
+    \                 (triples_sum_to_zero (cdr l)))))))))\n", "  ;; use sets because\
+    \ of the distinct property; use a queue/list as a set\n  ;; (list is a queue)\n\
+    \  (define (helper negativePositive zero)\n    (cond\n      [(null? l) (not (empty?\
+    \ zero))]\n      [(null? negativePositive)\n       (if (empty? zero)\n       \
+    \    (helper (list (car l))\n                    (list (car l))\n            \
+    \        (list (car l)))\n           (helper negativePositive zero))]\n      [(>=\
+    \ (car l) 0)\n       (helper (cons (car l) negativePositive)\n               \
+    \ zero\n                (list (car l)))]\n      [(< (car l) 0)\n       (if (in?\
+    \ (car l) negativePositive)\n           (helper negativePositive zero)\n     \
+    \      (helper negativePositive zero (list (car l))))]))\n  (helper '() '() '()))\n",
+  "  (cond\n    [(empty? l) #f]\n    [(or (member (abs (car l)) (rest l))\n      \
+    \   (member (abs (car l)) (map abs (rest l)))) #t]\n    [else (triples_sum_to_zero\
+    \ (rest l))]))\n", "  (or (and (member 0 l)\n           (member 0 l)\n       \
+    \    (member 0 l))\n      (and (member (abs (car l)) l)\n           (member (-\
+    \ (car l)) l)\n           (member (- (car l)) l))))\n", "  ;; your code here\n\
+    \  (cond\n    [(empty? l) #f]\n    [(and (number? (first l))\n         (number?\
+    \ (second l))\n         (number? (third l)))\n      (if (= (first l) 0)\n    \
+    \    (if (= (second l) 0)\n          (if (= (third l) 0)\n            #t\n   \
+    \         #f)\n          #f)\n        #f)]\n    [else (triples_sum_to_zero (rest\
+    \ l))]))\n", "  (let ([pos_l (filter positive? l)]\n        [neg_l (filter negative?\
+    \ l)])\n    (and (distinct? pos_l)\n         (distinct? neg_l)\n         (andmap\
+    \ (lambda (x) (andmap (lambda (y) (andmap (lambda (z) (= (+ x y z) 0)) neg_l))\
+    \ pos_l)) pos_l))))\n", "  (cond\n    [(empty? l) false]\n    [(let ((r (- 0 (first\
+    \ l))))\n       (member r (rest l)))\n     true]\n    [else (triples_sum_to_zero\
+    \ (rest l))]))\n", "    (zero? (length (filter (lambda (triple)\n            \
+    \                  (equal? 0 (apply + triple)))\n                            (map\
+    \ (lambda (el)\n                                   (pair (list (list el (second\
+    \ l))\n                                               (list el (third l))\n  \
+    \                                             (list (second l) (third l)))))\n\
+    \                                 l)))))\n</code>\nThis solution generates all\
+    \ possible unique triples for the input list, tests whether each triple sums to\
+    \ zero, and returns True if any do.\nThis does not work in cases where there are\
+    \ duplicate numbers in the input list. It's also pretty verbose, but that's what\
+    \ you get with a functional language.\n", "  (define (check l i)\n    (if (&lt;\
+    \ i (- (length l) 2))\n        (or (or (or (= (+ (list-ref l i) (list-ref l (+\
+    \ i 1)) (list-ref l (+ i 2))) 0)\n                    (= (+ (list-ref l i) (list-ref\
+    \ l (+ i 1)) (list-ref l (- (length l) 1))) 0)\n                    (= (+ (list-ref\
+    \ l i) (list-ref l (- (length l) 2)) (list-ref l (- (length l) 1))) 0))\n    \
+    \            (check l (+ i 1)))\n        #f))\n  (check l 0))\n</code>\nDoes anyone\
+    \ have any idea why this is so?\n\n\nA:\n\nRather than hard-coding the <code>i+1</code>\
+    \ and <code>i+2</code> parts, you could use the following helper:\n<code>(define\
+    \ (take-nth n xs)\n  (cond ((null? xs) xs)\n        ((= n 0) (list (car xs)))\n\
+    \        (else (cons (car xs) (take-nth (- n 1) (cdr xs))))))\n</code>\nWhich\
+    \ gives you <code>(take-nth 2 '(-1 3 0))</code> ==> <code>'(3 0)</code>.\nThis\
+    \ allows you to do things like <code>(+ (list-ref l i) (take-nth 1 (drop l i)))</code>.\n",
+  "  (if (null? l) #f\n      (if (member (zero? (- (car l) (cadr l) (caddr l))) '(#t\
+    \ #f)) #t\n          (triples_sum_to_zero (cdr l)))))\n", "  (define (find-third\
+    \ l num1 num2)\n    (cond ((null? l) #f)\n          ((= (car l) (- num1 num2))\
+    \ #t)\n          (else (find-third (cdr l) num1 num2))))\n  (define (triples-inner\
+    \ l)\n    (cond ((null? l) #f)\n          ((find-third (cdr l) (car l) (car (cdr\
+    \ l))) #t)\n          (else (triples-inner (cdr l)))))\n  (triples-inner l))\n\
+    </code>\nAnd the tests:\n<code>#lang racket\n", "  (cond\n    [(empty? l) False]\n\
+    \    [(and (elem (first l) (rest l)) (elem (- (first l)) (rest l))) True]\n  \
+    \  [else (triples_sum_to_zero (rest l))]))\n", "  (local [(define (nub l)\n  \
+    \          (cond [(empty? l) '()]\n                  [(member (first l) (rest\
+    \ l)) (nub (rest l))]\n                  [else (cons (first l) (nub (rest l)))]))\n\
+    \          (define (group3-help l)\n            (cond [(or (empty? l) (empty?\
+    \ (rest l)) (empty? (rest (rest l)))) '()]\n                  [else (cons (list\
+    \ (first l) (second l) (third l))\n                              (group3-help\
+    \ (rest (rest (rest l)))))]))\n          (define (group3 l)\n            (group3-help\
+    \ (nub l)))]\n    (cond [(empty? l) False]\n          [(empty? (rest l)) False]\n\
+    \          [(empty? (rest (rest l))) False]\n          [(member (list 0 0 0) (group3\
+    \ l)) True]\n          [else (or (triples_sum_to_zero (rest l))\n            \
+    \        (triples_sum_to_zero (rest (rest l)))\n                    (triples_sum_to_zero\
+    \ (rest (rest (rest l)))))])))\n", "  (letrec\n    ([triples_helper (lambda (l)\n\
+    \      (cond\n        [(empty? l) #f]\n        [(and (positive? (first l))\n \
+    \             (negative? (first (rest l)))\n              (zero? (+ (first l)\
+    \ (first (rest l)) (first (rest (rest l))))))\n          #t]\n        [else (triples_helper\
+    \ (rest l))]))])\n    (triples_helper (sort l compare))\n    )\n  )\n", "  (cond\n\
+    \    [(or (null? l) (null? (cdr l)) (null? (cddr l)))\n     #f]\n    [(and (=\
+    \ (list-ref l 0) (list-ref l 1))\n          (= (list-ref l 0) (list-ref l 2)))\n\
+    \     #f]\n    [(= (+ (list-ref l 0) (list-ref l 1) (list-ref l 2)) 0)\n     #t]\n\
+    \    [else\n     (triples_sum_to_zero (cdr l))]))\n", "  (define (iter list sum)\n\
+    \    (if (empty? list)\n        '()\n        (define (iter2 ls sum2)\n       \
+    \   (if (empty? ls)\n              '()\n              (define (iter3 ls2 sum3)\n\
+    \                (if (empty? ls2)\n                    '()\n                 \
+    \   (if (= sum3 0)\n                        (list sum3)\n                    \
+    \    (iter3 (rest ls2) (+ sum3 (first ls2))))))\n              (append (iter3\
+    \ (rest ls) (+ sum2 (first ls))) (iter2 (rest ls) sum2))))\n        (append (iter2\
+    \ (rest list) (+ sum (first list))) (iter (rest list) sum))))\n  (if (empty? l)\n\
+    \      #f\n      (if (empty? (iter l 0))\n          #f\n          #t)))\n</code>\n\
+    the algorithm is the following:\n<code>sum = 0\nsum2 = 0\nsum3 = 0\nif (sum3 ==\
+    \ 0) return true\nif not call iter3 with the next element\nif empty return false\n\
+    if not empty call iter2 with the next element\nif empty return false\nif not empty\
+    \ call iter with the next element\n</code>\nthe problem is that when the algorithm\
+    \ gets called for the first time, it always returns #f and I don't know why, since\
+    \ the first element of the list is never 0. I really can't find a way to test\
+    \ this code. Thank you.\n\n\nA:\n\nYou haven't described the problem you're trying\
+    \ to solve, which is why there are so many questions in your post. And, if you\
+    \ have a problem that you're trying to solve, it's much easier to describe the\
+    \ problem, than to post the program you've written, that doesn't work, and ask\
+    \ people to pick out the problem, because the problem is almost never in the code.\
+    \ The problem is usually in a misunderstanding of the program.\nHere's a much\
+    \ simpler solution:\n<code>(define (triples-sum-to-zero l)\n  (cond ((or (null?\
+    \ l) (null? (cdr l)) (null? (cddr l))) #f)\n        ((or (zero? (apply + l))\n\
+    \             (zero? (apply + (cdr l)))\n             (zero?", "  (define (distinct?\
+    \ a b c)\n    (and (not (= a b))\n         (not (= a c))\n         (not (= b c))))\n\
+    \  (or (or (= (sum l) 0)\n          (= (sum (cdr l)) 0)\n          (= (sum (cddr\
+    \ l)) 0))\n      (triples_sum_to_zero (cdr l))))\n", "  (cond\n    ((null? l)\
+    \ #f)\n    ((zero? (length l)) #f)\n    ((= (length l) 1) #f)\n    ((= (length\
+    \ l) 2) #f)\n    (else\n     (or\n      (triples_sum_to_zero (cdr l))\n      (let*\
+    \ ((l-head (car l))\n             (l-rest (cdr l))\n             (l-rest-pairs\
+    \ (pairs l-rest)))\n        (if (null? l-rest-pairs)\n            #f\n       \
+    \     (or\n             (let* ((l-rest-pairs-head (car l-rest-pairs))\n      \
+    \              (l-rest-pairs-head-a (car l-rest-pairs-head))\n               \
+    \     (l-rest-pairs-head-b (cdr l-rest-pairs-head)))\n               (if (zero?\
+    \ (+ l-head l-rest-pairs-head-a l-rest-pairs-head-b))\n                   #t\n\
+    \                   #f))\n             (triples_sum_to_zero (cdr l-rest-pairs)))))))))\n",
+  "  (define (helper l h)\n    (cond [(empty? l) #f]\n          [(empty? (remove l\
+    \ (hash-ref h (hash-refer-equal (first l))))) #f]\n          [(equal? 0 (+ (hash-ref\
+    \ h (hash-refer-equal (first l))) (hash-ref h (hash-refer-equal (- (first l))))))\
+    \ #t]\n          [else (helper (rest l) h)]))\n  (helper l (build-hash l)))\n",
+  "    (and (not (null? l)) (or (subset-sum-to-zero l 3) (triples_sum_to_zero (cdr\
+    \ l)))))\n", "  (cond ((= (length l) 0) #f)\n        ((= (length l) 1) #f)\n \
+    \       ((= (length l) 2) #f)\n        ((= (length l) 3) (sum_to_zero (car l)\
+    \ (cadr l) (caddr l)))\n        (else (or (triples_sum_to_zero (list (car l) (cadr\
+    \ l) (caddr l)))\n                  (triples_sum_to_zero (cdr l))))))\n</code>\n",
+  "  (if (null? l) false\n    (for/or ([i (in-list l)]\n             [j (in-list l)]\n\
+    \             [k (in-list l)])\n      (and (not (= i j))\n           (not (= i\
+    \ k))\n           (not (= j k))\n           (= (+ i j k) 0)))))\n</code>\nI suspect\
+    \ that there is a better way to do this. I have written tests (not shown here)\
+    \ that show that my code works as expected. \nOne thing I considered is to sort\
+    \ the list and then use a binary search to look for complements, but it seems\
+    \ like it would be a lot more code, and maybe not that efficient, either.\nIs\
+    \ there a better way?\n\n\nA:\n\nThe problem can be solved in <code>O(n^2)</code>\
+    \ time, so there is no need to use a binary search:\n<code>(define (triples-sum-to-zero\
+    \ l)\n  (and (not (null? l))\n       (let loop ([l (sort &lt; l)] [i (car l)]\
+    \ [i-next (cadr l)])\n         (cond [(null? i-next) #f]\n               [(or\
+    \ (= i 0)\n                    (let loop ([sum (+ (abs i) i-next)] [j i-next]\
+    \ [j-next (caddr l)])\n                      (cond [(null? j-next) #f]\n     \
+    \                       [(let ([sum2 (+ sum (abs j))])\n                     \
+    \          (if (&lt; sum2 0) (loop sum2 j-next (cdddr l))\n                  \
+    \                 (member sum2 l)))\n                             #t]\n      \
+    \                      [else (loop sum j-next (cdddr l))])))\n               \
+    \ #t]\n               [else (loop (cdr l) i-next (cddr l))]))))\n</code>\nIn the\
+    \ inner <code>loop</code> procedure we create a list of all possible sums of two\
+    \ elements from the input list, by adding the absolute value of the first element\
+    \ to the second one, and then going through all the remaining elements one by\
+    \ one. If the sum is bigger than 0, we stop the process and <code>member</code>\
+    \ will return <code>", "  (cond\n    [(empty? l) (error \"empty list\")]\n   \
+    \ [(and (empty? (rest l)) (= (first l) 0)) false]\n    [(and (empty? (rest l))\
+    \ (not (= (first l) 0))) false]\n    [(and (empty? (rest (rest l))) (zero? (+\
+    \ (first l) (second l)))) true]\n    [(and (empty? (rest (rest l))) (not (zero?\
+    \ (+ (first l) (second l))))) false]\n    [else (or\n            (triples_sum_to_zero\
+    \ (append (rest l) (list (first l))))\n            (triples_sum_to_zero (append\
+    \ (list (second l)) (list (third l)) (rest (rest (rest l))))))]))\n", "    (define\
+    \ (triples_sum_to_zero-impl l)\n        (define (all_pairs l)\n            (cond\n\
+    \                [(null? l) '()]\n                [(null? (cdr l)) '()]\n    \
+    \            [else (cons (list (car l) (cadr l)) (all_pairs (cdr l)))]))\n   \
+    \     (define (sum_zero? x y)\n            (eq? 0 (+ x y)))\n        (define (find-third-that-sums-to-zero\
+    \ l x y)\n            (cond\n                [(null? l) '()]\n               \
+    \ [(sum_zero? x y (car l)) (car l)]\n                [else (find-third-that-sums-to-zero\
+    \ (cdr l) x y)]))\n        (cond\n            [(= (length l) 3) (and (sum_zero?\
+    \ (car l) (cadr l) (caddr l)) l)]\n            [(> (length l) 3) (find-third-that-sums-to-zero\
+    \ (cdr l) (car l) (cadr l))]\n            [else '()]))\n    (not (null? (triples_sum_to_zero-impl\
+    \ l))))\n", "  (if (null? l)\n      #f\n      (or (triples_sum_to_zero (cdr l))\n\
+    \          (member* 0 (map + (build_list (car l) (cdr l)))))))\n", "  ;; i need\
+    \ a way to enumerate all the ways of selecting three distinct\n  ;; elements from\
+    \ a list of length N, where N is the length of l.\n  ;; if i can do that, then\
+    \ i just need to test that the sum of each of\n  ;; those triples is 0.\n\n  ;;\
+    \ permutations-of-length-3 takes a list as input, and produces a list\n  ;; of\
+    \ all the distinct permutations of three elements of that list.\n  ;; for example,\
+    \ the list '(1 2 3 4) produces '( (1 2 3) (1 2 4) (1 3 4) (2 3 4) )\n  (define\
+    \ (permutations-of-length-3 l)\n    (cond [ (= (length l) 0) '() ]\n         \
+    \ [ (= (length l) 1) '() ]\n          [ (= (length l) 2) '() ]\n          [ (=\
+    \ (length l) 3) (list l) ]\n          [ else\n            (let ([first-el (first\
+    \ l)]\n                  [l-minus-first (rest l)])\n              (map (lambda\
+    \ (perm) (cons first-el perm))\n                   (permutations-of-length-3 l-minus-first)))\
+    \ ]))\n\n  ;; this is just a test case. i'm trying to check that\n  ;; permutations-of-length-3\
+    \ is working.\n  (displayln (permutations-of-length-3 '(1 2 3 4)))\n\n  ;; sum_of_elements\
+    \ takes a list of numbers as input, and computes\n  ;; the sum of the elements\
+    \ of that list.\n  (define (sum_of_elements l)\n    (cond [ (= (length l) 0) 0\
+    \ ]\n          [ else\n            (+ (first l) (sum_of_elements (rest l))) ]))\n\
+    \n  ;; is_zero takes a number as input, and returns True if the number is 0,\n\
+    \  ;; and False otherwise.\n  (define (is_zero n)\n    (= n 0))\n\n  ;; sum_is_zero_predicate\
+    \ takes a list of numbers as input, and returns\n  ;; True if the sum of those\
+    \ numbers is 0, and False otherwise.\n  (define (sum_is_zero_predicate l)\n  \
+    \  (is_zero (", "  (define (helper l s)\n    (if (null? l)\n        #f\n     \
+    \   (let ((a (car l))\n              (b (cadr l))\n              (c (caddr l)))\n\
+    \          (or (and (= a b) (= b c) (= c a))\n              (or (and (= (- a b)\
+    \ c) (= (- a b) (- a c)))\n                  (or (and (= (- a b) c) (= (- a b)\
+    \ (- b c)))\n                      (or (and (= (- a b) c) (= (- a b) (- c a)))\n\
+    \                          (or (and (= (- a b) c) (= (- a b) (- c b)))\n     \
+    \                         (or (and (= (- a b) c) (= (- a b) (- b a)))\n      \
+    \                            (or (and (= (- a b) c) (= (- a b) (- a c)))\n   \
+    \                                   (or (and (= (- a b) c) (= (- a b) (- c a)))\n\
+    \                                          (or (and (= (- a b) c) (= (- a b) (-\
+    \ b c)))\n                                              (or (and (= (- a b) c)\
+    \ (= (- a b) (- c b)))\n                                                  (helper\
+    \ (cdr l) (cons a s)))))))))))))))\n  (helper l '()))\n</code>\nThe function is\
+    \ supposed to return true if there are three numbers in the list that sum to zero\
+    \ (e.g. (-2, 2, 0) or (0, 0, 0)).\nThe code I have above is not working as desired\
+    \ and just returns false, regardless of the list.\nCan anyone help me to figure\
+    \ out what is wrong?\nI know it's a bit verbose, but that's how I've been taught\
+    \ to program and it does help me understand it, though I know it's not very efficient.\n\
+    \n\nA:\n\n<code>(define (triples_sum_to_zero l)\n  (define (helper l s)\n    (if\
+    \ (null? l)\n        #f\n        (let ((a (car l))\n              (b (cadr l))\n\
+    \              (c (caddr l)))\n          (or (and (= a b) (= b c) (= c a))\n \
+    \             (or", "  (let loop ([x (car l)] [xs (cdr l)])\n    (if (and (pair?\
+    \ xs) (pair? (cdr xs)))\n        (let* ([y (car xs)] [z (car (cdr xs))])\n   \
+    \       (if (and (distinct? x y z)\n                   (zero? (+ x y z)))\n  \
+    \            true\n              (loop x (cdr xs))))\n        false)))\n", " \
+    \ (let ((n (length l)))\n    (cond\n      [(< n 3) false]\n      [(and (memv (list-ref\
+    \ l 0) (list-ref l 1))\n            (memv (list-ref l 0) (list-ref l 2))) false]\n\
+    \      [(= (list-ref l 0) (list-ref l 1) (list-ref l 2)) false]\n      [(zero?\
+    \ (+ (list-ref l 0) (list-ref l 1) (list-ref l 2))) true]\n      [else (triples_sum_to_zero\
+    \ (cdr l))])))\n", "  (define (inner l sum)\n    (cond\n      [(empty? l) #f]\n\
+    \      [(equal? sum 0) #t]\n      [else (or (inner (rest l) (+ sum (first l)))\n\
+    \                (inner (rest l) sum))]))\n  (or (inner l 0)\n      (inner (rest\
+    \ l) 0)\n      (inner (rest (rest l)) 0)))\n", "  (define (triples_sum_to_zero_helper\
+    \ l nums)\n    (cond\n      [(empty? l) False]\n      [(member (- (first l) (first\
+    \ nums)) (rest nums)) True]\n      [else (triples_sum_to_zero_helper (rest l)\
+    \ (cons (first l) nums))]))\n  (triples_sum_to_zero_helper (rest l) (list (first\
+    \ l))))\n</code>\nThe <code>triples_sum_to_zero_helper</code> function is a helper\
+    \ function that checks all of the previous numbers in the list against the current\
+    \ one, to see if any triple sum to zero. \nAgain, I'm more looking for feedback\
+    \ on style and best practices, although other things are welcome.\n\n\nA:\n\n\
+    Well, there are a few problems with your code that might not be noticeable at\
+    \ first sight.\nFirst, you should use <code>empty?</code> to check if a list is\
+    \ empty, not <code>(null? l)</code>.\nSecond, you should use <code>set!</code>\
+    \ to modify a variable, not <code>define</code>.\nThird, you should use <code>rest</code>\
+    \ instead of <code>(cdr l)</code> and <code>first</code> instead of <code>(car\
+    \ l)</code>\nNext, I am a big proponent of using let to provide scope for your\
+    \ helper functions and variables. So your code would look like this:\n<code>#lang\
+    \ racket\n", "    (cond ((null? l) #f)\n          ((= (length l) 3)\n        \
+    \   (or (= (sum3 l) 0)\n               (triples_sum_to_zero (cdr l))))\n     \
+    \     (else\n           (or (triples_sum_to_zero (cdr l))\n               (triples_sum_to_zero\
+    \ (cddr l))\n               (triples_sum_to_zero (cdddr l))))))\n", "  (and (elem\
+    \ 0 l)\n       (and (and (elem (/ 0 (first l)) (rest l))\n                 (elem\
+    \ (/ 0 (first (rest l))) (rest (rest l))))\n            (and (and (elem (/ 0 (first\
+    \ l)) (rest l))\n                      (elem (/ 0 (first (rest (rest l)))) (rest\
+    \ (rest (rest l)))))\n                 (and (and (elem (/ 0 (first (rest l)))\
+    \ (rest (rest l)))\n                           (elem (/ 0 (first (rest (rest l))))\
+    \ (rest (rest (rest l)))))\n                      (and (and (elem (/ 0 (first\
+    \ (rest l))) (rest (rest l)))\n                                (elem (/ 0 (first\
+    \ (rest (rest (rest l))))) (rest (rest (rest (rest l))))))\n                 \
+    \          (and (and (elem (/ 0 (first (rest (rest l)))) (rest (rest (rest l))))\n\
+    \                                     (elem (/ 0 (first (rest (rest (rest l)))))(rest\
+    \ (rest (rest (rest l))))))\n                                (and (and (elem (/\
+    \ 0 (first (rest (rest l)))) (rest (rest (rest l))))\n                       \
+    \                   (elem (/ 0 (first (rest (rest (rest (rest l))))))(rest (rest\
+    \ (rest (rest (rest l)))))))\n                                     (and (and (elem\
+    \ (/ 0 (first (rest (rest (rest l))))) (rest (rest (rest (rest l)))))\n      \
+    \                                         (elem (/ 0 (first (rest (rest (rest\
+    \ (rest l))))))(rest (rest (rest (rest (rest l)))))))\n                      \
+    \                    (and (and (elem (/ 0 (first (rest (rest (rest l))))) (rest\
+    \ (rest (rest (rest l)))))\n                                                 \
+    \   (elem (/ 0 (first (rest (rest (rest (rest (rest l)))))))(rest (rest (rest\
+    \ (rest (rest (rest l))))))))\n                                              \
+    \ (and (and (elem (/ 0 (first (rest (rest (rest (rest l)))))) (rest (rest (rest\
+    \ (rest (rest l))))))\n                                                      \
+    \   (elem (/ 0 (first (rest (rest (rest (", "  (cond\n    [(empty? l) #f]\n  \
+    \  [(not (empty? (truncate-left (truncate-right l)))) #t]\n    [else (triples_sum_to_zero\
+    \ (rest l))]))\n", "  (letrec ([triples-sum-to-zero (lambda (l)\n            \
+    \                      (cond [(empty? l) #f]\n                               \
+    \         [(member-of-three? (first l) (rest l)) #t]\n                       \
+    \                 [else (triples-sum-to-zero (rest l))]))]\n           [member-of-three?\
+    \ (lambda (a l)\n                               (let ([b (first l)]\n        \
+    \                             [c (second l)])\n                              \
+    \   (cond [(empty? l) #f]\n                                       [(= (- a b c)\
+    \ 0) #t]\n                                       [else (member-of-three? a (rest\
+    \ l))]))))])\n    (triples-sum-to-zero l)))\n", "  ;; We first call sort and then\
+    \ reverse on the list to get a list\n  ;; that is in descending order.\n  (define\
+    \ l-descending (reverse (sort l &gt;)))\n  ;; We call recursive_triples_sum_to_zero\
+    \ on the sorted list to do the\n  ;; work of finding triples that sum to zero.\n\
+    \  (recursive_triples_sum_to_zero l-descending #f))\n", "    (and (and (and (&lt;\
+    \ (length l) 3) #f) #f) #f))\n</code>\nThis is what I have so far. I have been\
+    \ struggling with this problem for a while and have not come up with a solution.\
+    \ I am completely stuck.\n\n\nA:\n\nHint\nIf you are using nested <code>and</code>'s\
+    \ you can use the <code>every</code> function which applies a predicate function\
+    \ to each element of a list and returns <code>#t</code> if all elements return\
+    \ <code>#t</code>.\nTo find if there exists three distinct elements that sum to\
+    \ zero, consider all possible combinations and if any of them sum to zero return\
+    \ <code>#t</code>, otherwise <code>#f</code>.\n", "  (let ((dict (make-hash)))\n\
+    \    (for ([x l])\n      (hash-set! dict x (cons 0 '())))\n    (for ([x l]\n \
+    \         [y l])\n      (if (not (eq? x y))\n          (hash-set! dict (+ x y)\
+    \ (cons (cons x y)\n                                        (hash-ref dict (+\
+    \ x y))))))\n    (for ([x l])\n      (if (not (null? (hash-ref dict (- 0 x))))\n\
+    \          (return #t)))\n    #f))\n</code>\nIt's not the most elegant code. It\
+    \ could probably be improved by using <code>for/fold</code> instead of the nested\
+    \ <code>for</code> loops. It doesn't take advantage of the fact that we can end\
+    \ the search early if we ever find a solution.\nIt might be worth noting that\
+    \ the original version of this code used <code>alist-&gt;hash</code> instead of\
+    \ <code>make-hash</code>, which is probably more clear. However, it got a lot\
+    \ slower when I switched to <code>make-hash</code>, so I'm not sure what the tradeoff\
+    \ there is.\n", "  (let loop ([l l])\n    (cond [(empty? l) #f]\n          [(=\
+    \ (length l) 1) (loop (rest l))]\n          [(= (length l) 2)\n           (let*\
+    \ ([f (first l)]\n                  [s (second l)]\n                  [th (- (abs\
+    \ f) (abs s))])\n             (if (member th (rest l))\n                 #t\n\
+    \                 (loop (rest l))))]\n          [else\n           (let* ([f (first\
+    \ l)]\n                  [s (second l)]\n                  [th (third l)])\n \
+    \            (if (and (and (= f s) (= (abs f) (abs th)))\n                   \
+    \   (member (- f) (rest l)))\n                 #t\n                 (loop (rest\
+    \ l))))])))", "  (define (one-of-the-three l1 l2 l3)\n    (if (null? l1)\n   \
+    \     #f\n        (or (and (member (car l1) l2) (member (car l1) l3))\n      \
+    \      (one-of-the-three (cdr l1) l2 l3))))\n  (define (sum-to-zero? l1 l2 l3)\n\
+    \    (and (one-of-the-three l1 l2 l3)\n         (one-of-the-three l2 l1 l3)\n\
+    \         (one-of-the-three l3 l1 l2)))\n  (let ([l1 (list)]\n        [l2 (list)]\n\
+    \        [l3 (list)])\n    (if (or (empty? l) (= (length l) 1) (= (length l) 2))\n\
+    \        #f\n        (begin\n          (set! l1 (list (car l)))\n          (set!\
+    \ l2 (list (cadr l)))\n          (set! l3 (list (caddr l)))\n          (if (sum-to-zero?\
+    \ l1 l2 l3)\n              #t\n              (triples_sum_to_zero (cdr l)))))))\n\
+    </code>\nI am having trouble understanding why the code runs so slowly.  Here\
+    \ is the output when I run my code on the same input as in the textbook's solution.\n\
+    <code>Welcome to DrRacket, version 6.1.1 [3m].\nLanguage: racket; memory limit:\
+    \ 128 MB.\n&gt; (time (triples_sum_to_zero (build-list 10000 (lambda (x) x))))\n\
+    cpu time: 20 real time: 20 gc time: 0\n#t\n&gt; (time (triples_sum_to_zero (build-list\
+    \ 10000 (lambda (x) (* x -1)))))\ncpu time: 50 real time: 50 gc time: 0\n#f\n\
+    &gt; (time (triples_sum_to_zero (build-list 10000 (lambda (x) (* x 2)))))\ncpu\
+    \ time: 60 real time: 60 gc time: 0\n#f\n&gt; (time (triples_sum_to", "  (let*\
+    \ ([len (length l)]\n         [lenm1 (- len 1)]\n         [lenm2 (- len 2)])\n\
+    \    (cond [(= len 0) #f]\n          [(= len 1) #f]\n          [(= len 2) #f]\n\
+    \          [(= len 3)\n           (and (not (= (car l) (cadr l)))\n          \
+    \      (not (= (car l) (caddr l)))\n                (not (= (cadr l) (caddr l)))\n\
+    \                (not (or (and (= (car l) 0) (= (cadr l) 0))\n               \
+    \          (and (= (car l) 0) (= (caddr l) 0))\n                         (and\
+    \ (= (cadr l) 0) (= (caddr l) 0))))\n                (= (apply + l) 0))]\n   \
+    \       [else\n           (or (triples_sum_to_zero (append (list (car l)) (cdr\
+    \ l)))\n               (triples_sum_to_zero (append (list (cadr l)) (cddr l)))\n\
+    \               (triples_sum_to_zero (append (list (caddr l)) (cdddr l))))])))\n",
+  "  (or (find-triple-sum-to-zero l)\n      (and (not (empty? l))\n           (triples_sum_to_zero\
+    \ (rest l)))))\n", "  (cond ((or (null? l) (null? (cdr l)) (null? (cddr l)))\n\
+    \         #f)\n        ((or (equal? (+ (car l) (cadr l) (caddr l)) 0)\n      \
+    \       (triples_sum_to_zero (cdr l)))\n         #t)\n        (else #f)))\n</code>\n",
+  "    (cond\n        [(null? l) #f]\n        [(zero? (list-ref l 1)) (or (zero? (list-ref\
+    \ l 0)) (zero? (list-ref l 2)))]\n        [(triples_sum_to_zero (cdr l)) #t]\n\
+    \        [else (triples_sum_to_zero (cdr l))]))\n", "  (cond\n    [(empty? l)\
+    \ #f]\n    [(and (not (empty? (rest l)))\n          (not (empty? (rest (rest l)))))\n\
+    \     (let ([a (first l)]\n           [b (first (rest l))]\n           [c (first\
+    \ (rest (rest l)))])\n       (or (= (+ a b c) 0)\n           (triples_sum_to_zero\
+    \ (rest l))))]\n    [else (triples_sum_to_zero (rest l))]))\n</code>\nAnd here\
+    \ is the Python version:\n<code>#lang python\n\n# triples_sum_to_zero takes a\
+    \ list of integers as an input.\n# it returns True if there are three distinct\
+    \ elements in the list that\n# sum to zero, and False otherwise.\ndef triples_sum_to_zero(L):\n\
+    \    if not L:\n        return False\n    elif len(L) &gt;= 3:\n        a = L[0]\n\
+    \        b = L[1]\n        c = L[2]\n        return (a + b + c == 0) or triples_sum_to_zero(L[1:])\n\
+    \    else:\n        return triples_sum_to_zero(L[1:])\n</code>\nYou can see that\
+    \ the Python version is slightly shorter because the <code>or</code> operator\
+    \ is a little bit more concise than the one in Racket.  Also, in Python, the <code>elif</code>\
+    \ clause is a little bit more concise than the <code>and</code> clause in Racket.\n",
+  "  (define (triples-sum-to-zero-1 l i)\n    (if (&lt; i (- (length l) 2))\n    \
+    \    (if (member 0 (map (lambda (x) (- (+ x (list-ref l i) (list-ref l (+ i 1))))\
+    \ (list-ref l (+ i 2)))) l))\n            #t\n            (triples-sum-to-zero-1\
+    \ l (+ i 1)))\n        #f))\n  (triples-sum-to-zero-1 l 0))\n</code>\nThe above\
+    \ code seems to work correctly, however, is it possible to do the above without\
+    \ defining a second function, triples-sum-to-zero-1?\n\n\nA:\n\nNot really. You\
+    \ want to test that a certain condition holds for every triple, but we don't have\
+    \ a function <code>every</code> that applies a function to every triple, analogous\
+    \ to the function <code>map</code> that applies a function to every element. We\
+    \ can write a function <code>all-triples</code> that returns a list of all triples\
+    \ from a list, and use <code>every</code> to test the condition for all triples.\n\
+    <code>(define (all-triples l)\n  (if (empty? l)\n      lst\n      (append (all-triples\
+    \ (rest l))\n              (map (lambda (lst) (cons (first l) lst))\n        \
+    \           (all-triples (rest l))))))\n", "  (define (has-triple? l)\n    (cond\n\
+    \      [(empty? l) (error \"has-triple? expects a non-empty list\")]\n      [(=\
+    \ 3 (length l)) (if (= 0 (apply + l)) #t #f)]\n      [else (cond\n           \
+    \   [(has-triple? (rest l)) #t]\n              [else (has-triple? (rest (rest\
+    \ l)))]\n              )]\n      )\n    )\n  (has-triple? l)\n  )\n", "  (and\
+    \ (not (null? l))\n       (or (check-triple l l l)\n           (triples_sum_to_zero\
+    \ (cdr l)))))\n", "  (let ([l_len (length l)])\n    (define (is_zero? n) (= n\
+    \ 0))\n    (define (one_before_end? i) (= i (- l_len 1)))\n    (define (triple_found?)\n\
+    \      (local ((define (before_end? i) (= i (- l_len 2))))\n        (for/or ([i\
+    \ (in-range l_len)] #:when (is_zero? (apply + (list (list-ref l i) (list-ref l\
+    \ (+ i 1)) (list-ref l (+ i 2))))))\n          #t)))\n    (cond [(= l_len 3) (is_zero?\
+    \ (apply + l))]\n          [(= l_len 2) #f]\n          [(= l_len 1) #f]\n    \
+    \      [(= l_len 0) #f]\n          [else (triple_found?)])))\n", "  (not (null?\
+    \ (zero-sum-triples-helper l (quotient (length l) 3)))))\n", "  (or (and (member\
+    \ 0 l) (member (0- 0) l) (member 0 l))\n      (and (member 1 l) (member (0- 1)\
+    \ l) (member 0 l))\n      (and (member 2 l) (member (0- 2) l) (member 0 l))\n\
+    \      (and (member 3 l) (member (0- 3) l) (member 0 l))\n      (and (member 4\
+    \ l) (member (0- 4) l) (member 0 l))\n      (and (member 5 l) (member (0- 5) l)\
+    \ (member 0 l))\n      (and (member 6 l) (member (0- 6) l) (member 0 l))\n   \
+    \   (and (member 7 l) (member (0- 7) l) (member 0 l))\n      (and (member 8 l)\
+    \ (member (0- 8) l) (member 0 l))\n      (and (member 9 l) (member (0- 9) l) (member\
+    \ 0 l))\n      (and (member 10 l) (member (0- 10) l) (member 0 l))\n      (and\
+    \ (member 11 l) (member (0- 11) l) (member 0 l))\n      (and (member 12 l) (member\
+    \ (0- 12) l) (member 0 l))\n      (and (member 13 l) (member (0- 13) l) (member\
+    \ 0 l))\n      (and (member 14 l) (member (0- 14) l) (member 0 l))\n      (and\
+    \ (member 15 l) (member (0- 15) l) (member 0 l))\n      (and (member 16 l) (member\
+    \ (0- 16) l) (member 0 l))\n      (and (member 17 l) (member (0- 17) l) (member\
+    \ 0 l))\n      (and (member 18 l) (member (0- 18) l) (member 0 l))\n      (and\
+    \ (member 19 l) (member (0- 19) l) (member 0 l))\n      (and (member 20 l) (member\
+    \ (0- 20) l) (member 0 l))\n      (and (member 21 l) (member (0- 21) l) (member\
+    \ 0 l))\n      (and", "  (define (triples_sum_to_zero_helper l)\n    (cond ((null?\
+    \ l) #f)\n          ((= 3 (length l)) (and (= (list-ref l 0) (list-ref l 1))\n\
+    \                                 (= (list-ref l 0) (list-ref l 2))))\n      \
+    \    (else (or (triples_sum_to_zero_helper (list (list-ref l 0)\n            \
+    \                                         (list-ref l 1)\n                   \
+    \                                  (list-ref l 2)))\n                   (triples_sum_to_zero_helper\
+    \ (list (list-ref l 0)\n                                                     (list-ref\
+    \ l 1)\n                                                     (list-ref l 3)))\n\
+    \                   (triples_sum_to_zero_helper (list (list-ref l 0)\n       \
+    \                                              (list-ref l 2)\n              \
+    \                                       (list-ref l 3)))\n                   (triples_sum_to_zero_helper\
+    \ (list (list-ref l 1)\n                                                     (list-ref\
+    \ l 2)\n                                                     (list-ref l 3))))))\n\
+    \  (triples_sum_to_zero_helper l))\n</code>\nHere's a sample run:\n<code>&gt;\
+    \ (triples_sum_to_zero (list 1 2 3 4 5 6))\n'#f\n&gt; (triples_sum_to_zero (list\
+    \ 0 1 2 3 4 5))\n'#t\n&gt; (triples_sum_to_zero (list -1 1 2 3 4 5))\n'#t\n&gt;\
+    \ (triples_sum_to_zero (list -1 -1 1 2 3 4 5))\n'#t\n&gt; (triples_sum_to_zero\
+    \ (list -1 0 1 2 3 4 5))\n'#t\n&gt; (triples_sum_to_zero (list -1 -1 -1 0 1 2\
+    \ 3 4 5))\n'#t\n&gt; (triples_sum_to_zero (list -1 -1 -1 0 0 1 2 3 4 5))\n'#t\n\
+    &gt; (triples_sum_to_zero (list -1 -1 -1 0", "  (cond ((= (length l) 3) (zero?\
+    \ (+ (car l) (cadr l) (caddr l))))\n        ((&gt; (length l) 3) (or (triples_sum_to_zero\
+    \ (cons (car l) (cdr l)))\n                              (triples_sum_to_zero\
+    \ (cdr l))))\n        (else #f)))\n</code>\nAbove code is working as expected.\
+    \ However, while I was debugging, I realized that the portion below was being\
+    \ called repeatedly. \n<code>(or (triples_sum_to_zero (cons (car l) (cdr l)))\n\
+    \    (triples_sum_to_zero (cdr l)))\n</code>\nI think this is because of cons.\
+    \ I tried to use list instead of cons, but it didn't work. Any suggestion how\
+    \ can I improve this function?\n\n\nA:\n\nI think that you are looking for something\
+    \ like this:\n<code>(define (triples_sum_to_zero l)\n  (define (helper lst)\n\
+    \    (cond ((null? lst) #f)\n          ((= (length lst) 3)\n           (zero?\
+    \ (+ (car lst) (cadr lst) (caddr lst))))\n          (else (or (helper (cons (car\
+    \ lst) (cdr lst)))\n                    (helper (cdr lst))))))\n  (helper l))\n\
+    </code>\nIf you want to avoid building a new list for every recursive call you\
+    \ can use an accumulator, something like this:\n<code>(define (triples_sum_to_zero\
+    \ l)\n  (define (helper lst acc)\n    (cond ((null? lst) #f)\n          ((= (length\
+    \ acc) 3)\n           (zero? (+ (car acc) (cadr acc) (caddr acc))))\n        \
+    \  (else (or (helper (cdr lst) acc)\n                    (helper (cdr lst) (cons\
+    \ (car lst) acc))))))\n  (helper l '()))\n</code>\n", "  (cond ((empty? l) #f)\n\
+    \        ((number? (car l)) (triples_sum_to_zero (cdr l)))\n        ((and (number?\
+    \ (car (cdr l))) (number? (car (cdr (cdr l)))))\n         (if (= (+ (car l) (car\
+    \ (cdr l)) (car (cdr (cdr l)))) 0)\n             #t\n             (triples_sum_to_zero\
+    \ (cdr l))))\n        (else (triples_sum_to_zero (cdr l)))))\n", "  (and (member\
+    \ 0 l)\n       (member (- 0 (car l)) (cdr l))\n       (member (- 0 (cadr l)) (cddr\
+    \ l))))\n", "  ;; Use foldl to get the pairs list.\n  (define (pairs l)\n    (foldl\
+    \ (lambda (x acc)\n             (append (map (lambda (y) (list x y))\n       \
+    \                   (cdr l))\n                     acc))\n           '()\n   \
+    \        l))\n  ;; Map the pairs list to the sum of each pair.\n  ;; Get all distinct\
+    \ pairs, removing duplicates.\n  (define (uniq-distinct-pairs l)\n    (remove-duplicates\
+    \ (map (lambda (x) (map sum x)) (pairs l))))\n  ;; Filter the triples that sum\
+    \ to zero.\n  (filter (lambda (x) (= (sum x) 0))\n          (pairs (cdr l))))\n",
+  "  (let* ([combs (combinations l 3)]\n         (triples (map (lambda (x) (list-set\
+    \ x)) combs)))\n    (map (lambda (t) (eq? (apply + t) 0)) triples)))\n```\n\n\
+    ```python\n# lang python\n\n# triples_sum_to_zero takes a list of integers as\
+    \ an input.\n# it returns True if there are three distinct elements in the list\
+    \ that\n# sum to zero, and False otherwise.\ndef triples_sum_to_zero(l):\n   \
+    \ return [sum(t) == 0 for t in combinations(l, 3)]\n```\n\nIn the `combinations`\
+    \ function, we make use of the fact that the predicate\n`member?` is a function\
+    \ of *two* arguments. This allows us to make it a [higher-order\nfunction](https://en.wikipedia.org/wiki/Higher-order_function)\
+    \ and pass the\nfunction to the `filter` function.\n\n```python\ndef combinations(l,\
+    \ r):\n    \"generate all combinations of length r from list l\"\n    def _combinations(l,\
+    \ r, depth):\n        if r == 0:\n            return [[]]\n        return [fst\
+    \ + [snd] for fst in _combinations(l, r - 1, depth + 1)\n                for snd\
+    \ in l[depth:] if not member(snd, fst)]\n    return _combinations(l, r, 0)\n```\n\
+    \n```racket", "  (define (triples_sum_to_zero_helper l a b c)\n    (if (null?\
+    \ l)\n        #f\n        (or (eq? (+ a b c) 0)\n            (triples_sum_to_zero_helper\
+    \ (cdr l) b c (car l)))))\n  (triples_sum_to_zero_helper l (car l) (cadr l) (caddr\
+    \ l)))\n", "  ;; Your code goes here.\n  (sort l #&lt;)\n  )\n", "  (define (helper\
+    \ l prev1 prev2)\n    (cond ((null? l) #f)\n          ((= (apply + (list prev1\
+    \ prev2 (car l))) 0) #t)\n          (else (helper (cdr l) prev2 (car l)))))\n\
+    \  (helper (cdr l) (car l) (car (cdr l))))\n", "  (define (helper l)\n    (cond\
+    \ [(null? l) #f]\n          [(and (memq (- (car l) (car (cdr l))) (cdr (cdr l)))\
+    \ (not (memq 0 l))) #t]\n          [else (helper (cdr l))]))\n  (if (&gt; (length\
+    \ l) 2)\n      (helper (sort l))\n      #f))\n</code>\nThe idea is to check if\
+    \ the list contains three distinct elements that sum to zero.\nThe function <code>memq</code>\
+    \ returns <code>#t</code> if the first element is in the list, so I'm checking\
+    \ if the difference between the first element of the list and the second is in\
+    \ the list, after sorting it. I'm also checking if the list doesn't contain the\
+    \ number zero already, otherwise the function would return true for <code>(triples_sum_to_zero\
+    \ '(0 0 0))</code>. Is this the most efficient solution? It should be O(n^2) but\
+    \ I don't know how to compute the complexity.\n\n\nA:\n\nYou can do this more\
+    \ efficiently by first sorting the list, and then iterating from the left and\
+    \ from the right, so that you can sum the two elements. This way you can perform\
+    \ the check in <code>O(n log n)</code> time, which is more efficient than your\
+    \ solution.\nThe reason this is more efficient is that you don't have to iterate\
+    \ over the entire list to find elements to sum. Instead, you start at the beginning\
+    \ of the list and at the end, and work your way towards the middle. Note: if the\
+    \ list doesn't have three distinct elements that sum to zero then the algorithm\
+    \ will still have to go through the entire list once.\nHere's a rough outline\
+    \ of the algorithm:\n<code>(define (triples-sum-to-zero l)\n  (let loop ((l (sort\
+    \ l))\n             (i 0)\n             (j (sub1 (length l))))\n    (cond ((or\
+    \ (&lt; i j) (&lt; j 2)) #f)\n          ((&gt; (+ (list-ref l i) (list-ref l j))\
+    \ 0) (loop l i (sub1 j)))\n          ((&lt; (+ (list-ref l i)", "  (let loop ([l\
+    \ l])\n    (cond [(empty? l) #f]\n          [(empty? (rest l)) (cond [(and (member\
+    \ 0 l) (= 1 (length l))) #t]\n                                    [else #f])]\n\
+    \          [(or (member 0 l)\n               (and (member (apply + (list-ref l\
+    \ 0) (list-ref l 1) (list-ref l 2)) l)\n                    (member (apply - (list-ref\
+    \ l 0) (list-ref l 1) (list-ref l 2)) l))) #t]\n          [else (loop (rest l))])))\n\
+    </code>\nSample Racket Interactions:\n<code>&gt; (triples_sum_to_zero (list 1\
+    \ 2 3 4 5))\n#f\n&gt; (triples_sum_to_zero (list 0 0 0 0))\n#t\n&gt; (triples_sum_to_zero\
+    \ (list 0 0 0 -1))\n#t\n&gt; (triples_sum_to_zero (list 0 0 0 0 -1 1))\n#t\n&gt;\
+    \ (triples_sum_to_zero (list 1 -1 1 -1 1))\n#t\n&gt; (triples_sum_to_zero (list\
+    \ 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1\
+    \ -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1\
+    \ 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1\
+    \ -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1\
+    \ 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1 -1 1", "  (let loop ((lst l)\
+    \ (n (length l)) (i 0))\n    (if (&lt; i (- n 2))\n        (if (member\n     \
+    \        (- 0 (list-ref lst i) (list-ref lst (+ i 1)) (list-ref lst (+ i 2)))\n\
+    \             lst)\n            #t\n            (loop lst n (+ i 1)))\n      \
+    \  #f)))\n</code>\n", "  (or (= (length l) 3)\n      (cond\n        [(pair? l)\
+    \ (let ([x (car l)])\n                      (or (triples_sum_to_zero (cons x (cdr\
+    \ l)))\n                          (triples_sum_to_zero (cdr l))))]\n        [else\
+    \ false])))\n", "  (if (null? l)\n      #f\n      (let* ((first (car l))\n   \
+    \          (rest (cdr l))\n             (complement (* -1 first)))\n        (or\
+    \ (sum_to_zero first rest complement)\n            (triples_sum_to_zero rest)))))\n",
+  "  (define (helper pos curr)\n    (cond\n      ((= (length curr) 3)\n       (if\
+    \ (= (apply + curr) 0)\n           true\n           false))\n      ((= pos (length\
+    \ l))\n       false)\n      (else\n       (or (helper (+ pos 1) (cons (list-ref\
+    \ l pos) curr))\n           (helper (+ pos 1) curr)))))\n  (helper 0 '()))\n",
+  "  (define (next_index i)\n    (if (= i (- (length l) 1))\n        false\n     \
+    \   (+ i 1)))\n  (define (next_inner_index i j)\n    (if (= j (- (length l) 1))\n\
+    \        (next_index i)\n        (+ j 1)))\n  (define (i-loop i)\n    (define\
+    \ (j-loop j)\n      (define (k-loop k)\n        (if (= k (- (length l) 1))\n \
+    \           (j-loop (next_inner_index i j))\n            (if (= (+ (list-ref l\
+    \ i) (list-ref l j) (list-ref l k)) 0)\n                true\n               \
+    \ (k-loop (next_index k)))))\n      (k-loop (next_inner_index i j)))\n    (j-loop\
+    \ (next_index i)))\n  (i-loop 0))\n", "  (cond\n    [else (not (null? (triples_sum_to_zero_helper\
+    \ l 0)))]))\n", "  (letrec\n    ([unique_triples (lambda (l1 l2 l3)\n        (append\n\
+    \          (cons l1 l2)\n          (cons l2 l3)\n          (cons l3 l1)))]\n \
+    \   [add-zero? (lambda (l)\n        (if (empty? l)\n          #f\n          (if\
+    \ (= (sum (car l)) 0)\n            #t\n            (add-zero? (cdr l)))))]\n \
+    \   [triple_sum_to_zero (lambda (l1 l2 l3)\n        (and\n          (add-zero?\
+    \ (unique_triples l1 l2 l3))\n          (empty? (remove (unique_triples l1 l2\
+    \ l3) (append l1 l2 l3)))))]\n    (triple_sum_to_zero (range (- (length l) 3))\
+    \ (range (- (length l) 2)) (range (- (length l) 1)))))\n  #f)\n</code>\nThis is\
+    \ basically an implementation of the backtracking algorithm.\nAs a side note,\
+    \ the function add-zero? is basically the same as what's in the question (but\
+    \ written in a different way). \n", "  (and (sums_to_zero (list (list (car l)\
+    \ (cadr l) (caddr l))))\n       (or (triples_sum_to_zero (cdr l))\n          \
+    \ (triples_sum_to_zero (cddr l))\n           (triples_sum_to_zero (cdddr l)))))\n",
+  "  (cond ((null? l) #f)\n        ((equal? (count_positive_and_negative l) #t) #t)\n\
+    \        (else (triples_sum_to_zero (cdr l)))))\n", "  (let ([result #f])\n  \
+    \  (for/or ([a l] [b l] [c l])\n      (when (and (not (= a b))\n             \
+    \    (not (= a c))\n                 (not (= b c))\n                 (= (+ a b\
+    \ c) 0))\n        (set! result #t)))\n    result))\n", "  ;; helper function.\
+    \ Given a list, it returns a list of pairs which sum to 0.\n  (define (get_zeros\
+    \ l)\n    (cond\n      [(null? l) '()]\n      [(null? (cdr l)) '()]\n      [else\n\
+    \       (let* ([f (car l)]\n              [s (car (cdr l))]\n              [r\
+    \ (get_zeros (cdr l))])\n         (if (= (+ f s) 0)\n             (cons (list\
+    \ f s) r)\n             r))]))\n  ;; helper function. Given a list of integers,\
+    \ it returns a list of triples\n  ;; which sum to 0.\n  (define (get_triples l)\n\
+    \    (cond\n      [(null? l) '()]\n      [(null? (cdr l)) '()]\n      [else\n\
+    \       (let* ([f (car l)]\n              [r (get_triples (cdr l))]\n        \
+    \      [zeros (get_zeros (cdr l))])\n         (cond\n           [(null? zeros)\
+    \ r]\n           [else\n            (cons (list f (car (car zeros)) (cadr (car\
+    \ zeros))) r)]))]))\n  (if (null? l)\n      #f\n      (let* ([triples (get_triples\
+    \ l)])\n        (cond\n          [(null? triples) #f]\n          [else\n     \
+    \      (let* ([t (car triples)]\n                  [r (cdr triples)])\n      \
+    \       (if (not (member t r))\n                 #t\n                 #f))]))))\n\
+    </code>\n", "  (define (sort l)\n    (if (empty? l) empty\n        (let ((sort-rest\
+    \ (sort (rest l))))\n          (if (&lt; (first l) (first sort-rest))\n      \
+    \        (cons (first l) sort-rest)\n              (cons (first sort-rest) (sort\
+    \ (cons (first l) (rest sort-rest))))))))\n  (define (distinct? l)\n    (cond\
+    \ ((or (empty? l) (empty? (rest l))) true)\n          ((= (first l) (first (rest\
+    \ l))) false)\n          (else (distinct? (rest l)))))\n  (define (triples-sum-to-zero?\
+    \ l)\n    (define (tstz-helper l)\n      (cond ((and (empty? l) (empty? (rest\
+    \ l))) false)\n            ((and (empty? l) (empty? (rest (rest l)))) false)\n\
+    \            ((and (empty? l) (empty? (rest (rest (rest l))))) false)\n      \
+    \      ((zero? (+ (first l) (first (rest l)) (first (rest (rest l)))))\n     \
+    \        true)\n            (else (tstz-helper (rest l)))))\n  (tstz-helper (sort\
+    \ l)))\n</code>\n", "  (cond\n    [(null? l) false]\n    [(and (member (- (car\
+    \ l) (cadr l)) (cddr l)) (not (equal? (car l) (cadr l)))) true]\n    [else (triples_sum_to_zero\
+    \ (cdr l))]))\n", "  (letrec ([even? (\u03BB (n) (= (remainder n 2) 0))]\n   \
+    \        [odd? (\u03BB (n) (not (even? n)))]\n           [triples_sum_to_zero_helper\
+    \ (\u03BB (l)\n                                        (cond [(empty? l) #f]\n\
+    \                                              [(odd? (length l)) (triples_sum_to_zero_helper\
+    \ (rest l))]\n                                              [(empty? (rest l))\
+    \ #f]\n                                              [(empty? (rest (rest l)))\
+    \ #f]\n                                              [(= (sum (first l) (first\
+    \ (rest l)) (first (rest (rest l)))) 0) #t]\n                                \
+    \              [else (triples_sum_to_zero_helper (rest l))]))])\n    (triples_sum_to_zero_helper\
+    \ l)))\n</code>\n", "  (let loop ([l l])\n    (cond [(empty? l) #f]\n        \
+    \  [(empty? (rest l)) #f]\n          [(empty? (rest (rest l))) #f]\n         \
+    \ [(cond [(= 0 (+ (first l) (second l) (third l))) #t]\n                 [else\
+    \ (loop (rest l))])])))\n", "  (cond\n    [(empty? l) #f]\n    [(empty? (rest\
+    \ l)) #f]\n    [(empty? (rest (rest l))) #f]\n    [(zero? (+ (first l) (first\
+    \ (rest l)) (first (rest (rest l))))) #t]\n    [else (triples_sum_to_zero (rest\
+    \ l))]))\n", "  (define (helper [h1 : (listof number)] [h2 : (listof number)])\n\
+    \    (define (threesum [a : number] [b : number] [c : number])\n      (= (+ a\
+    \ b c) 0))\n    (match (threesum h1 h2 (car l))\n      [(or #t #f) l]\n      [_\
+    \ helper (cdr l)]))\n  (helper (car l) (cdr l)))\n```\n\n```racket\n#lang racket\n",
+  "  (letrec ((sums l)\n           (triples null))\n    (cond ((null? l) false)\n\
+    \          ((null? (cdr l)) false)\n          ((member (list (car l) 0 (- (car\
+    \ l))) triples) true)\n          (else (begin\n                  (set! sums (append\
+    \ sums (list (list (car l) 0 (- (car l))))))\n                  (set! triples\
+    \ (append triples (list (list (car l) 0 (- (car l))))))\n                  (triples_sum_to_zero\
+    \ (cdr l)))))))\n", "  (define (helper l1 l2 l3)\n    (define (sum l)\n      (if\
+    \ (null? l)\n          0\n          (+ (car l) (sum (cdr l)))))\n    (and (not\
+    \ (null? l1))\n         (not (null? l2))\n         (not (null? l3))\n        \
+    \ (or (and (= (sum l1) 0) (= (sum l2) 0) (= (sum l3) 0))\n             (helper\
+    \ (cdr l1) (cdr l2) (cdr l3)))))\n  (cond ((null? l) #f)\n        ((null? (cdr\
+    \ l)) #f)\n        ((null? (cddr l)) #f)\n        (else (helper l l l))))\n",
+  "  (define (aux l)\n    (cond ((and (empty? l) (empty? (cdr l)) (empty? (cddr l)))\
+    \ #f)\n          ((empty? l) (aux (cdr l)))\n          ((empty? (cdr l)) (aux\
+    \ (cddr l)))\n          ((empty? (cddr l)) (aux (cdr l)))\n          ((zero? (+\
+    \ (car l) (cadr l) (caddr l))) #t)\n          (else (aux (cdr l)))))\n  (aux l))\n\
+    </code>\nThe first line works:\n<code>(triples_sum_to_zero '(1 2 -3))\n\n#t\n\
+    </code>\nHowever, the second line errors out:\n<code>(triples_sum_to_zero '(1\
+    \ 2 3))\n\nempty-list?: expects argument of type &lt;list-of? any&gt;; given 3\n\
+    </code>\nAnd I don't understand what <code>empty-list?: expects argument of type\
+    \ &lt;list-of? any&gt;; given 3</code> means.\n\n\nA:\n\nYour question is what\
+    \ <code>empty-list?: expects argument of type &lt;list-of? any&gt;; given 3</code>\
+    \ means.\n<code>empty-list?</code> is a function that takes a list and returns\
+    \ <code>#t</code> if the list is empty and <code>#f</code> otherwise.  It does\
+    \ not take an integer.  So you get the error message.\nRead the docs for more\
+    \ details.\n", "  (define (unseen-pair? n)\n    (for/or ([x (in-list l)]\n   \
+    \          [y (in-list l)])\n      (and (not (= n x))\n           (not (= n y))\n\
+    \           (= n (+ x y)))))\n  (for/or ([n (in-list l)])\n    (unseen-pair? n)))\n",
+  "  ;; this function returns a set of unique elements in the list\n  (define (remove_duplicates\
+    \ l)\n    (cond [(empty? l) empty]\n          [(member (first l) (rest l)) (remove_duplicates\
+    \ (rest l))]\n          [else (cons (first l) (remove_duplicates (rest l)))]))\n\
+    \  ;; this function makes a list of all pairs in the list\n  (define (pairs l)\n\
+    \    (cond [(empty? l) empty]\n          [else (append (map (lambda (x) (list\
+    \ (first l) x)) (rest l))\n                         (pairs (rest l)))]))\n  ;;\
+    \ this function checks whether a list has exactly three distinct elements\n  (define\
+    \ (distinct_three l)\n    (if (empty? l)\n        false\n        (if (empty? (rest\
+    \ l))\n            false\n            (if (empty? (rest (rest l)))\n         \
+    \       false\n                (if (equal? (first l) (second l))\n           \
+    \         (distinct_three (rest l))\n                    (if (equal? (first l)\
+    \ (third l))\n                        (distinct_three (rest l))\n            \
+    \            (if (equal? (second l) (third l))\n                            (distinct_three\
+    \ (rest l))\n                            true)))))))\n  ;; this function checks\
+    \ whether a list has three elements that sum to zero\n  (define (sum_to_zero l)\n\
+    \    (if (empty? l)\n        false\n        (if (empty? (rest l))\n          \
+    \  false\n            (if (equal? (+ (first l) (second l) (third l)) 0)\n    \
+    \            true\n                (sum_to_zero (rest l))))))\n  ;; this function\
+    \ checks if the list contains two elements whose sum is equal\n  ;; to the negative\
+    \ of the third element\n  (define (exists_pair_sum l)\n    (cond [(empty? l) false]\n\
+    \          [else (or (exists_pair_sum (rest l))\n                    (member (-\
+    \ (first l) (second l))\n                            (remove_duplicates (rest\
+    \ l))))]))\n  ;; this function checks if the list contains three elements that\
+    \ sum to zero\n  (define (", "  ;; make a list of all the possible triples, checking\
+    \ if any sum to zero\n  (if (null? l)\n      #f\n      (or (equal? 0 (+ (car l)\
+    \ (cadr l) (caddr l)))\n          (triples_sum_to_zero (cdr l)))))\n```\n\n```racket\n\
+    #lang racket\n", "  (define (triples_sum_to_zero_helper l count)\n    (cond\n\
+    \      [(empty? l) false]\n      [(and (= 0 (list-ref l 0)) (zero? count)) true]\n\
+    \      [(and (= 0 (list-ref l 0)) (negative? count)) false]\n      [(zero? count)\
+    \ (triples_sum_to_zero_helper (rest l) (- (list-ref l 0)))]\n      [(negative?\
+    \ count) (triples_sum_to_zero_helper (rest l) (+ (list-ref l 0)))]\n      [else\
+    \ (triples_sum_to_zero_helper (rest l) count)]))\n  (triples_sum_to_zero_helper\
+    \ l 0))\n</code>\n", "  (define (triples_sum_to_zero-helper a b l)\n    (cond\
+    \ ((or (null? l) (null? b)) #f)\n          ((= (+ a b (car l)) 0) #t)\n      \
+    \    (else (triples_sum_to_zero-helper a b (cdr l)))))\n  (cond ((null? l) #f)\n\
+    \        ((triples_sum_to_zero-helper (car l) (car (cdr l)) (cdr (cdr l))) #t)\n\
+    \        (else (triples_sum_to_zero (cdr l)))))\n", "  (cond\n    [(null? l) #f]\n\
+    \    [(or (= (length l) 1) (= (length l) 2)) #f]\n    [else\n     (let [(v (car\
+    \ l))\n           (l2 (cdr l))\n           (l3 (cdr l2))]\n       (cond\n    \
+    \     [(zero? (+ v (car l2) (car l3))) #t]\n         [else (triples_sum_to_zero\
+    \ l)]))]))\n", "  (define (sum_to_zero x y)\n    (if (= (- x y) 0)\n        #t\n\
+    \        #f))\n  (if (empty? l)\n      #f\n      (or (sum_to_zero (car l) (cadr\
+    \ l))\n          (triples_sum_to_zero (cdr l)))))\n</code>\nThis function is not\
+    \ correct as a solution to the problem. You will have to modify it to meet the\
+    \ requirements of the problem. \nIn your recursive call to <code>triples_sum_to_zero</code>,\
+    \ you are calling it on a list that is one element shorter than the input list.\
+    \ \nYou are using <code>cadr</code> to get the second element of the list. You\
+    \ may want to use <code>cddr</code> to get the list after the first two elements\
+    \ of the list.\n", "  (and (not (empty? l))\n       (or (triples_sum_to_zero_helper\
+    \ l 0)\n           (triples_sum_to_zero (rest l)))))\n", "  (if (or (empty? l)\
+    \ (empty? (cdr l)) (empty? (cddr l)))\n      #f\n      (if (zero? (+ (car l) (cadr\
+    \ l) (caddr l)))\n          #t\n          (triples_sum_to_zero (cdr l)))))\n</code>\n\
+    The <code>if</code> check at the beginning of the function is simply to check\
+    \ if the list is too short to have three distinct elements.  If that is the case,\
+    \ we can return <code>#f</code> right away.  In most cases, the list will be long\
+    \ enough, and we can check to see if the first three elements sum to zero.  If\
+    \ they do, we return <code>#t</code>, otherwise we call <code>triples_sum_to_zero</code>\
+    \ recursively on the rest of the list.\n", "  (let ((len (length l)))\n    (if\
+    \ (&lt; len 3)\n        #f\n        (if (= len 3)\n            (if (zero? (+ (car\
+    \ l) (cadr l) (caddr l)))\n                #t\n                #f)\n         \
+    \   (let* ((head (car l))\n                   (tail (cdr l))\n               \
+    \    (tail-sum-to-zero (triples_sum_to_zero tail)))\n              (if tail-sum-to_zero\n\
+    \                  tail-sum-to-zero\n                  (triples_sum_to_zero (cons\
+    \ head (cdr tail)))))))))\n</code>\n", "  (and (pair? l) (pair? (cdr l)) (pair?\
+    \ (cddr l))))\n", "  (define (helper x l2)\n    (or\n     (member (list x (* -1\
+    \ (car l2))) (cdr l2))\n     (member (list (* -1 (car l2)) x) (cdr l2))\n    \
+    \ (helper x (cdr l2))))\n  (or\n   (helper (car l) (cdr l))\n   (triples_sum_to_zero\
+    \ (cdr l))))\n", "  (or (and (member 0 l)\n           (member 0 l)\n         \
+    \  (member 0 l))\n      (and (member 1 l)\n           (member -1 l)\n        \
+    \   (member 0 l))\n      (and (member 2 l)\n           (member -2 l)\n       \
+    \    (member 0 l))\n      (and (member 3 l)\n           (member -3 l)\n      \
+    \     (member 0 l))\n      (and (member 4 l)\n           (member -4 l)\n     \
+    \      (member 0 l))\n      (and (member 5 l)\n           (member -5 l)\n    \
+    \       (member 0 l))\n      (and (member 6 l)\n           (member -6 l)\n   \
+    \        (member 0 l))\n      (and (member 7 l)\n           (member -7 l)\n  \
+    \         (member 0 l))\n      (and (member 8 l)\n           (member -8 l)\n \
+    \          (member 0 l))\n      (and (member 9 l)\n           (member -9 l)\n\
+    \           (member 0 l))\n      (and (member 10 l)\n           (member -10 l)\n\
+    \           (member 0 l))\n      (and (member 11 l)\n           (member -11 l)\n\
+    \           (member 0 l))\n      (and (member 12 l)\n           (member -12 l)\n\
+    \           (member 0 l))\n      (and (member 13 l)\n           (member -13 l)\n\
+    \           (member 0 l))\n      (and (member 14 l)\n           (member -14 l)\n\
+    \           (member 0 l))\n      (and (member 15 l)\n           (member -15 l)\n\
+    \           (member 0 l))\n      (and (member 16 l)\n           (member -16 l)\n\
+    \           (member 0 l))\n      (and (member 17 l)\n           (member -17 l)\n\
+    \           (member 0 l))\n      (and (member 18 l)\n           (member -18 l)\n\
+    \           (member 0 l))\n      (and (member 19 l)\n           (member -19 l)\n\
+    \           (member 0 l))\n      (and (member 20 l)\n           (member -20 l)\n\
+    \           (member 0 l))\n      (and (member 21", "  (cond\n    [(or (null? l)\
+    \ (null? (cdr l)) (null? (cddr l))) #f]\n    [else\n     (or (equal? 0 (+ (car\
+    \ l) (cadr l) (caddr l)))\n         (triples_sum_to_zero (cdr l)))]))\n", "  (cond\
+    \ ((null? l) #f)\n        ((null? (cdr l)) #f)\n        ((null? (cddr l)) #f)\n\
+    \        ((= (+ (car l) (cadr l) (caddr l)) 0) #t)\n        (else (triples_sum_to_zero\
+    \ (cdr l)))))\n", "  (letrec ([sort (lambda (l) (cond [(empty? l) empty]\n   \
+    \                                [else (cons (min l)\n                       \
+    \                        (sort (remove (min l) l)))]))]\n           [two_sums_to_zero\
+    \ (lambda (l l2)\n                               (cond [(empty? l) #f]\n     \
+    \                                [(empty? l2) (two_sums_to_zero (cdr l)\n    \
+    \                                                                (sort (cdr l)))]\n\
+    \                                     [(= (car l) (car l2)) (two_sums_to_zero\
+    \ (cdr l) l2)]\n                                     [(= (car l) (- (car l2)))\
+    \ #t]\n                                     [else (if (&lt; (car l) (car l2))\n\
+    \                                              (two_sums_to_zero (cdr l) l2)\n\
+    \                                              (two_sums_to_zero l (cdr l2)))]))])\n\
+    \    (cond [(empty? l) #f]\n          [(empty? (cdr l)) #f]\n          [(two_sums_to_zero\
+    \ (cdr l) (sort (cdr l))) #t]\n          [else (triples_sum_to_zero (cdr l))])))\n\
+    </code>\n", "  (cond\n    [(empty? l) false]\n    [(= (first l) 0) true]\n   \
+    \ [else (any (lambda (n) (= (- n (first l)) (first l))) (rest l))]))\n", "  (define\
+    \ (find-triple l)\n    (cond\n      [(empty? l) #f]\n      [(empty? (rest l))\
+    \ #f]\n      [(empty? (rest (rest l))) #f]\n      [(and (= (sum3 (car l) (car\
+    \ (rest l)) (car (rest (rest l)))) 0)\n        (= (car l) (car (rest l)) (car\
+    \ (rest (rest l)))))]\n      [else (find-triple (rest l))]))\n  (find-triple l))\n\
+    </code>\nI can't figure out why my code isn't working. I think I'm recursing through\
+    \ <code>l</code> well enough. My <code>sum3</code> function works and I believe\
+    \ my <code>empty?</code> function works. I've spent hours on this, can anyone\
+    \ give me a hint as to what's going on?\n\n\nA:\n\nThis should do it. I used <code>foldr</code>\
+    \ to sum three elements, and I added some comments.\n<code>(define (triples_sum_to_zero\
+    \ l)\n  (define (find-triple l)\n    (cond\n      [(empty? l) #f]            \
+    \                     ; if the list is empty then there's no three elements, so\
+    \ return #f\n      [(empty? (rest l)) #f]                         ; if there's\
+    \ only one element then there's no three elements, so return #f\n      [(empty?\
+    \ (rest (rest l))) #f]                   ; if there's only two elements then there's\
+    \ no three elements, so return #f\n      [(zero? (foldr + 0 (take l 3))) (take\
+    \ l 3)]     ; if the sum of the first three elements is zero then return them,\
+    \ otherwise continue\n      [else (find-triple (rest l))]))                 ;\
+    \ get the rest of the list, and continue searching\n  (find-triple l))\n</code>\n",
+  "  (cond\n    [(null? l) #f]\n    [(and (member (- (car l) (cadr l)) (cddr l))\n\
+    \          (member (- (car l) (caddr l)) (cddr l))) #t]\n    [else (triples_sum_to_zero\
+    \ (cdr l))]))\n</code>\nIt works, but I know it's not the most efficient approach\
+    \ possible. What would be the most efficient approach to this problem?\n\n\nA:\n\
+    \nIf you can use Racket's built-in <code>sort</code> function, it will be faster\
+    \ than your implementation, which goes over all elements of the list, then go\
+    \ over all of them again, then go over all of them again, so it's <code>O(n^3)</code>.\n\
+    <code>(define (triples_sum_to-zero l)\n  (let ([sorted (sort &lt; l)])\n    (let\
+    \ loop ([i 0] [j 1] [k (sub1 (length sorted))])\n      (cond\n        [(or (&lt;\
+    \ j i) (&lt;= k j)) #f]\n        [(= (+ (list-ref sorted i) (list-ref sorted j)\
+    \ (list-ref sorted k)) 0) #t]\n        [(&lt; (+ (list-ref sorted i) (list-ref\
+    \ sorted j) (list-ref sorted k)) 0)\n         (loop i (add1 j) k)]\n        [else\
+    \ (loop i j (sub1 k))]))))\n</code>\nThis is a variation of the 3sum algorithm,\
+    \ which is <code>O(n^2)</code>.\n", "  (cond\n    [(empty? l) false]\n    [(and\
+    \ (= (car l) 0)\n          (and (= (cadr l) 0)\n               (and (= (caddr\
+    \ l) 0)\n                    true)))\n     true]\n    [else\n     (or (triples_sum_to_zero\
+    \ (cdr l))\n         (triples_sum_to_zero (append (list (car l)) (cddr l))))]))\n",
+  "  (cond\n    [(empty? l) false]\n    [(empty? (rest l)) false]\n    [(empty? (rest\
+    \ (rest l))) false]\n    [else\n     (let*\n         ([a (first l)]\n        \
+    \  [b (first (rest l))]\n          [c (first (rest (rest l)))]\n          [r (rest\
+    \ (rest (rest l)))]\n          [sum (+ a b c)])\n       (cond\n         [(zero?\
+    \ sum) true]\n         [else (or (triples_sum_to_zero (cons b (cons c r)))\n \
+    \                  (triples_sum_to_zero (cons a (cons c r)))\n               \
+    \    (triples_sum_to_zero (cons a (cons b r))))]))]))\n", "  (let ((n (length\
+    \ l)))\n    (for ([i (in-range n)])\n      (let ((a (list-ref l i)))\n       \
+    \ (for ([j (in-range (+ i 1) n)])\n          (let ((b (list-ref l j)))\n     \
+    \       (for ([k (in-range (+ j 1) n)])\n              (let ((c (list-ref l k)))\n\
+    \                (if (= (+ a b c) 0) (return #t))))))))\n    #f))\n</code>\n",
+  "  ;; if the list is empty\n  (if (null? l)\n      ;; then there is no triple that\
+    \ sum to zero\n      #f\n      ;; so we have to check the rest of the list\n \
+    \     (let\n          ;; let's get the list's first element and the rest of the\
+    \ list\n          ;; as we do for all recursive cases\n          ((first (car\
+    \ l))\n           (rest (cdr l)))\n        ;; now we want to get all pairs, whose\
+    \ first element is the first\n        ;; element of the list, and the other two\
+    \ numbers in the pair are\n        ;; the two other numbers of the triple, whose\
+    \ sum is zero.\n        ;; so we define an inner function, that extracts all possible\
+    \ pairs\n        ;; whose first element is the same as the first element of the\
+    \ list\n        (define (extract-all-pairs-with-first-as-first l)\n          ;;\
+    \ if the list is empty, then there are no more possible pairs\n          (if (null?\
+    \ l)\n              ;; so we return an empty list\n              '()\n       \
+    \       ;; so we have to check the rest of the list\n              (let\n    \
+    \              ;; let's get the list's first element and the rest of the list\n\
+    \                  ;; as we do for all recursive cases\n                  ((first\
+    \ (car l))\n                   (rest (cdr l)))\n                ;; now that we\
+    \ have extracted the rest of the list\n                ;; and the first element\
+    \ of the list, we have to compare\n                ;; the first element of the\
+    \ list to the first element of the pair\n                ;; so that we can add\
+    \ the pair to the pairs list, if they are equal\n                (if (equal? first\
+    \ (car first))\n                    ;; let's extract the rest of the pairs\n \
+    \                   (extract-all-pairs-with-first-as-first rest)\n           \
+    \         ;; otherwise let's return the pair (list) consisting of the\n      \
+    \              ;; first element of the list and the first element of the rest\n\
+    \                    ;; of the list, and the rest of the pairs\n             \
+    \       (cons (list first (car rest))\n                          (extract-all-pairs-with-first-as-first\
+    \ rest))))))\n        ;; now we have extracted all pairs with the same first element.\n\
+    \        ;; let's map the function summing the first and the second element of\n\
+    \       ", "  (define (helper l n)\n    (cond\n      [(null? l) #f]\n      [(member\
+    \ (- (car l) n) (cdr l)) #t]\n      [else (helper (cdr l) n)]))\n  (cond\n   \
+    \ [(null? l) #f]\n    [(member (- (car l)) (cdr l)) #t]\n    [else (helper (cdr\
+    \ l) (car l))]))", "  (if (empty? l)\n      #f\n      (or (triples_sum_to_zero\
+    \ (rest l))\n          (and (pair? (cdr l))\n               (or (= 0 (+ (car l)\
+    \ (cadr l) (caddr l)))\n                   (= 0 (+ (car l) (cadr l) (cadddr l))))))))\n\
+    ```\n\n# Example 2\n\n```#lang racket\n", "  (define (triples l)\n    (cond\n\
+    \      [(empty? l) empty]\n      [(empty? (rest l)) empty]\n      [(empty? (rest\
+    \ (rest l))) empty]\n      [else (cons (list (first l) (second l) (third l))\n\
+    \                  (triples (rest (rest (rest l)))))]))\n  (define (triple_sum_to_zero\
+    \ t)\n    (cond\n      [(empty? t) false]\n      [(= 0 (+ (first t) (second t)\
+    \ (third t))) true]\n      [else (triple_sum_to_zero (rest t))]))\n  (triple_sum_to_zero\
+    \ (triples l)))\n</code>\nThe triples function basically just helps me get all\
+    \ combinations of three elements from the list. I then call the triple_sum_to_zero\
+    \ function to help me figure out if there are any elements in the triple list\
+    \ that sum to zero.\nIs there a more elegant way of doing this in Racket?\n\n\n\
+    A:\n\nAs others have noted, what you're doing here is called a <code>forall</code>\
+    \ predicate. So you can use <code>for/forall</code> here, which is a lot more\
+    \ concise and readable than using <code>cond</code> for control flow.\nBut if\
+    \ you're going to use <code>for/forall</code>, you can just use the built-in <code>sum</code>\
+    \ function, and all you have to do is write a predicate that checks whether a\
+    \ list sums to zero. That is, you can just write:\n<code>(define (triples-sum-to-zero\
+    \ lst)\n  (for/forall ([a lst]\n               [b lst]\n               [c lst])\n\
+    \    (zero? (sum (list a b c)))))\n</code>\n", "  (cond [(null? l) false]\n  \
+    \      [(null? (cdr l)) false]\n        [(null? (cddr l)) false]\n        [else\
+    \ (or (and (= (+ (car l) (cadr l) (caddr l)) 0) true)\n                  (triples_sum_to_zero\
+    \ (cdr l)))]))\n", "  ;; Define your solution below this line:\n  (define (helper\
+    \ l n result)\n    (cond\n      [(= n 3)\n       (if (not (null? l))\n       \
+    \    (if (= (car l) 0) (append result (list 0)) result)\n           result)]\n\
+    \      [(= n 2)\n       (if (not (null? l))\n           (if (= (car l) 0) (helper\
+    \ (cdr l) (+ n 1) (append result (list 0)))\n               (helper (cdr l) n\
+    \ result))\n           result)]\n      [(= n 1)\n       (if (not (null? l))\n\
+    \           (if (= (car l) 0) (helper (cdr l) (+ n 1) (append result (list 0)))\n\
+    \               (helper (cdr l) n result))\n           result)]\n      [(= n 0)\n\
+    \       (if (not (null? l))\n           (if (= (car l) 0) (helper (cdr l) (+ n\
+    \ 1) (append result (list 0)))\n               (helper (cdr l) n result))\n  \
+    \         result)]))\n  (if (= 3 (length (helper l 0 '()))) #t #f))\n", "  (define\
+    \ (helper lst)\n    (if (null? lst)\n        #f\n        (if (zero? (apply + (take\
+    \ 3 lst)))\n            #t\n            (helper (cdr lst)))))\n  (helper l))\n",
+  "  (define (helper l i a)\n    (if (or (&lt; (add1 i) (length l))\n            (&lt;\
+    \ (add1 a) (length l)))\n        (if (and (and (list-ref l i) (list-ref l a))\n\
+    \                 (or (= (+ (list-ref l i) (list-ref l a)) 0)\n              \
+    \       (= (+ (list-ref l i) (list-ref l a)) 0)))\n            #t\n          \
+    \  (helper l i (add1 a)))\n        #f))\n  (define (looper l i)\n    (if (&lt;\
+    \ i (length l))\n        (if (helper l i (add1 i))\n            #t\n         \
+    \   (looper l (add1 i)))\n        #f))\n  (looper l 0))\n</code>\nExamples of\
+    \ it working\n<code>&gt; (triples_sum_to_zero '(0 0 0))\n#t\n&gt; (triples_sum_to_zero\
+    \ '(0 1 0))\n#t\n&gt; (triples_sum_to_zero '(0 1 -1))\n#t\n&gt; (triples_sum_to_zero\
+    \ '(1 2 3))\n#f\n&gt; (triples_sum_to_zero '(1 0 -1))\n#t\n&gt; (triples_sum_to_zero\
+    \ '(1 0 -1 3 4 5 6))\n#t\n&gt; (triples_sum_to_zero '(1 0 -1 3 4 5 6 2))\n#t\n\
+    &gt; (triples_sum_to_zero '(1 0 -1 3 4 5 6 2 1))\n#t\n&gt; (triples_sum_to_zero\
+    \ '(1 0 -1 3 4 5 6 2 1 3))\n#t\n&gt; (triples_sum_to_zero '(1 0 -1 3 4 5 6 2 1\
+    \ 3 0))\n#t\n&gt; (triples_sum_to_zero '(1 0 -1 3 4 5 6 2 1 3 0 1))\n#t\n&gt;\
+    \ (triples_sum_to_zero '(1 0 -1 3 4 5 6 2 1 3 0 1 -1))", "  (let ([n (length l)])\n\
+    \    (define (rec l i)\n      (cond\n        [(= i n) false]\n        [(and\n\
+    \          (member (car l) (cdr l))\n          (member (- (car l)) (cdr l)))\n\
+    \         true]\n        [else (rec (cdr l) (+ i 1))]))\n    (rec l 0)))\n", " \
+    \ (and (and (and (member (list 0 1 -1) l) (not (member (list 1 0 -1) l)))\n  \
+    \          (and (member (list 0 2 -2) l) (not (member (list 2 0 -2) l))))\n  \
+    \     (and (and (member (list 0 3 -3) l) (not (member (list 3 0 -3) l)))\n   \
+    \         (and (member (list 0 4 -4) l) (not (member (list 4 0 -4) l))))))\n</code>\n\
+    First, is my syntax correct?\nSecond, I'm sure that this code is really bad and\
+    \ unnecessary. How do I improve it?\n\n\nA:\n\nHere's an approach:\n<code>(define\
+    \ (triples-sum-to-zero lst)\n  (let loop ([xs lst] [acc '()])\n    (cond [(empty?\
+    \ xs) #f]\n          [(member x (rest xs)) (loop (rest xs) (cons* x -x acc))]\n\
+    \          [else (loop (rest xs) acc)])))\n</code>\nNote that this function assumes\
+    \ that the list contains no duplicates, but the problem doesn't specify this.\
+    \ In the general case there are many more ways to represent the same elements\
+    \ in a list, depending on whether the input list contains duplicates or not. For\
+    \ example, <code>(list 1 1 -2)</code> and <code>(list 1 -2 1)</code> are two different\
+    \ ways to represent the same elements. There are <code>2^n</code> different ways\
+    \ to arrange the same set of <code>n</code> elements in a list, and because of\
+    \ this the problem is considered to be computationally hard.\n", "  (define (helper\
+    \ lst)\n    (cond [(empty? lst) #f]\n          [(empty? (rest lst)) #f]\n    \
+    \      [(empty? (rest (rest lst))) #f]\n          [(= (sum (take 3 lst)) 0) #t]\n\
+    \          [else (helper (rest lst))]))\n  (helper l))\n", "  (let ((result #f))\n\
+    \    (for ([i (in-range (length l))])\n      (let ((j (+ i 1))\n            (k\
+    \ (+ i 2)))\n        (for ([j (in-range j (+ (length l) 1))])\n          (for\
+    \ ([k (in-range k (+ (length l) 1))])\n            (when (and (not (number= (+\
+    \ (list-ref l i) (list-ref l j) (list-ref l k)) 0))\n                       (not\
+    \ result))\n              (set! result #t))))))\n    result))\n</code>\nI'd like\
+    \ to know how I can improve my recursive algorithm so that it works. Also, I'd\
+    \ like to know if my iterative algorithm is the most efficient way to tackle this\
+    \ problem.\n\n\nA:\n\nThe problem with your recursive solution is that you are\
+    \ not actually checking all the different combinations in the recursion, but instead\
+    \ you are simply checking the same element (the first one) against itself. The\
+    \ reason is that you are only passing the tail of the list to the recursive call\
+    \ in <code>triples_sum_to_zero'</code>.\nSo instead of passing only the tail of\
+    \ the list, you need to pass the tail of the list with the first element removed.\
+    \ You can do this by calling\n<code>(define (tail-without-first l)\n  (cdr l))\n\
+    </code>\ninstead of \n<code>(define (tail-without-first l)\n  (cdr (cdr l)))\n\
+    </code>\nin your recursive implementation. \nAs for your iterative implementation,\
+    \ I would recommend to try to remove all the unnecessary <code>#f</code>s and\
+    \ <code>#t</code>s you are using, and just return the result of your <code>when</code>.\
+    \ Something like\n<code>(define (triples_sum_to_zero l)\n  (let ((result #f))\n\
+    \    (for ([i (in-range (length l))])\n      (let ((j (+ i 1))\n            (k\
+    \ (+ i 2)))\n        (for ([j (in-range j (+ (length l) 1))])\n          (for\
+    \ ([k (in-range k (+ (length l) 1))])\n            (when (not (", "  (let loop\
+    \ ([l l])\n    (cond\n      [(empty? l) #f]\n      [(= 0 (sum (car l) (cadr l)\
+    \ (caddr l))) #t]\n      [else (loop (cdr l))])))\n</code>\n", "  (define (helper\
+    \ l1 l2 l3)\n    (cond [(null? l1) #f]\n          [(and (member (zero? ( + (car\
+    \ l1) (car l2) (car l3))) l2)\n                (member (zero? ( + (car l1) (car\
+    \ l2) (car l3))) l3)) #t]\n          [else (helper (cdr l1) l2 l3)]))\n  (helper\
+    \ l l l))\n", "  (cond\n    [(empty? l) #f]\n    [(eq? 0 (list-ref l 0)) #t]\n\
+    \    [else (or (triples_sum_to_zero (cdr l))\n              (triples_sum_to_zero\
+    \ (cdr l))\n              (triples_sum_to_zero (cdr l)))]))\n</code>\nI understand\
+    \ how the code works, but I don't understand why it works.  In particular, how\
+    \ is <code>(triples_sum_to_zero (cdr l))</code> different from <code>(triples_sum_to_zero\
+    \ (cdr l))</code> and <code>(triples_sum_to_zero (cdr l))</code>?\n\n\nA:\n\n\
+    In the else clause of the triples_sum_to_zero function. The three or expressions\
+    \ are\n<code>(triples_sum_to_zero (cdr l))", "  (define counter 0)\n  (define\
+    \ (sum_to_zero l)\n    (let ((counter (+ counter 1)))\n      (if (= counter 3)\n\
+    \          (and (= (first l) 0) (sum_to_zero (rest l)))\n          (or (and (=\
+    \ (first l) 0) (sum_to_zero (rest l)))\n              (sum_to_zero (rest l))))))\n\
+    \  (sum_to_zero l))\n", "  ;; takes a list of integers and returns a triple containing\
+    \ three elements\n  ;; in the list that sum to zero, or #f if such a triple does\
+    \ not exist.\n  (define (triple_sums_to_zero_helper lst)\n    (cond [(empty? lst)\
+    \ #f]\n          [(member? (- (first lst) (second lst)) (rest (rest lst)))\n \
+    \          (list (first lst) (second lst) (- (first lst) (second lst)))]\n   \
+    \       [else (triple_sums_to_zero_helper (rest lst))]))\n  (cond [(empty? l)\
+    \ #f]\n        [(not (triple_sums_to_zero_helper l))\n         (triples_sum_to_zero\
+    \ (rest l))]\n        [else #t]))\n", "  (define (sum_to_zero x y z)\n    (= 0\
+    \ (+ x y z)))\n  (define (triples_helper l out)\n    (cond\n      [(empty? l)\
+    \ out]\n      [(empty? (rest l)) out]\n      [(empty? (rest (rest l))) out]\n\
+    \      [else (triples_helper (rest l) (or (sum_to_zero (first l) (first (rest\
+    \ l)) (first (rest (rest l)))) out))]))\n  (triples_helper l #f))\n</code>\nHere\
+    \ is my attempt at solving the same problem with high-order procedures:\n<code>#lang\
+    \ racket\n", "  (if (null? l)\n      #f\n      (let* ([e1 (car l)]\n         \
+    \    [remainder (cdr l)]\n             [e2 (car remainder)]\n             [remainder2\
+    \ (cdr remainder)])\n        (if (null? remainder2)\n            #f\n        \
+    \    (let* ([e3 (car remainder2)]\n                   [remainder3 (cdr remainder2)])\n\
+    \              (if (and (not (member e2 remainder))\n                       (not\
+    \ (member e3 remainder))\n                       (not (member e3 remainder2))\n\
+    \                       (not (member e2 remainder3))\n                       (and\
+    \ (= (+ e1 e2 e3) 0)))\n                  #t\n                  (triples_sum_to_zero\
+    \ remainder2)))))))\n", "  (and (distinct? l)\n       (not (null? l))\n      \
+    \ (or (equal? (exact-sum-to-zero? l) #t)\n           (triples_sum_to_zero (rest\
+    \ l)))))\n</code>\nAnd that's all there is to it!\n\n\nA:\n\nLet's see what you've\
+    \ done and why it doesn't work.\nAt first you're trying to get the sum of three\
+    \ elements:\n<code>(+ (first l) (first (rest l)) (first (rest (rest l))))\n</code>\n\
+    The problem is that you're using <code>first</code> and <code>rest</code> on a\
+    \ list which has the same size as the original one.\nWhat you should do is take\
+    \ the first element and sum it with all the elements in the tail.\nThen, you need\
+    \ to recursively call your procedure and do the same, but with the <code>rest</code>\
+    \ of the list.\nFinally, you need to \"throw away\" the first element of the original\
+    \ list, since you've already tested it in the recursive call.\nAfter all this\
+    \ changes, it would look like this:\n<code>(define (triples_sum_to_zero l)\n \
+    \ (and (distinct? l)\n       (not (null? l))\n       (or (sum-to-zero? l)\n  \
+    \         (triples_sum_to_zero (rest l)))))\n", "  (let* ([sorted (sort l <)]\n\
+    \         [neg (filter (\u03BB (i) (< i 0)) sorted)]\n         [pos (filter (\u03BB\
+    \ (i) (>= i 0)) sorted)])\n    (define (triples_sum_to_zero_helper pos neg left)\n\
+    \      (cond [(empty? pos) #f]\n            [(empty? neg) (triples_sum_to_zero_helper\
+    \ (rest pos) sorted (first pos))]\n            [(empty? left) (triples_sum_to_zero_helper\
+    \ (rest pos) sorted (first pos))]\n            [(and (>= (first pos) (- (first\
+    \ neg) (first left)))\n                  (<= (first pos) (+ (first neg) (first\
+    \ left)))) #t]\n            [(> (first pos) (+ (first neg) (first left))) (triples_sum_to_zero_helper\
+    \ pos (rest neg) left)]\n            [else (triples_sum_to_zero_helper pos neg\
+    \ (rest left))]))\n    (triples_sum_to_zero_helper pos neg (rest pos))))\n", " \
+    \ (let* ([set (set)]\n         [negative-set (set)]\n         [zero-set (set)])\n\
+    \    (map (lambda (x)\n           (cond\n             [(set-member? x set) #f]\n\
+    \             [(zero? x) (set-add! zero-set x)]\n             [(< x 0) (set-add!\
+    \ negative-set x)]\n             [else (set-add! set x)]))\n         l)\n    (if\
+    \ (set-member? 0 zero-set)\n        #t\n        (and (not (empty? negative-set))\n\
+    \             (not (empty? set))))))\n", "  (or (equal? (list (list + - * 1 2\
+    \ 3 4)\n                    (list * + - 1 2 3 4)\n                    (list *\
+    \ + - 1 2 3 4)\n                    (list * + - 1 2 3 4)\n                   \
+    \ (list * + - 1 2 3 4)\n                    (list * + - 1 2 3 4)\n           \
+    \         (list * + - 1 2 3 4)\n                    (list * + - 1 2 3 4)\n   \
+    \                 (list * + - 1 2 3 4)\n                    (list * + - 1 2 3\
+    \ 4)\n                    (list * + - 1 2 3 4)\n                    (list * +\
+    \ - 1 2 3 4)\n                    (list * + - 1 2 3 4)\n                    (list\
+    \ * + - 1 2 3 4)\n                    (list * + - 1 2 3 4)\n                 \
+    \   (list * + - 1 2 3 4)\n                    (list * + - 1 2 3 4)\n         \
+    \           (list * + - 1 2 3 4)\n                    (list * + - 1 2 3 4)\n \
+    \                   (list * + - 1 2 3 4)\n                    (list * + - 1 2\
+    \ 3 4)\n                    (list * + - 1 2 3 4)\n                    (list *\
+    \ + - 1 2 3 4)\n                    (list * + - 1 2 3 4)\n                   \
+    \ (list * + - 1 2 3 4)\n                    (list * + - 1 2 3 4)\n           \
+    \         (list * + - 1 2 3 4)\n                    (list * + - 1 2 3 4)\n   \
+    \                 (list * + - 1 2 3 4)\n                    (list * + - 1 2 3\
+    \ 4)\n                    (list * + - 1 2 3 4)\n                    (list * +\
+    \ - 1 2 3 4)\n                    (list * + - 1 2 3 4)\n                    (list\
+    \ * + - 1 2 3 4)\n                    (list * + - 1 2 3 4)\n                 \
+    \   (list * + - 1 2 3 4)\n                    (list * + - 1 2 3 4)\n         \
+    \           (list * + - 1 2 3 4)\n                    (list * + - 1 2 3 4)\n \
+    \                   (list * + - 1 2 3 4)\n                    (list * + - 1 2\
+    \ 3 4)\n                    (list * + - 1 2 3 4)\n", "  (define (triples_sum_to_zero_aux\
+    \ n l1)\n    (cond\n      [(empty? l1) false]\n      [(zero? (+ n (first l1)))\
+    \ true]\n      [else (triples_sum_to_zero_aux n (rest l1))]))\n  (cond\n    [(empty?\
+    \ l) false]\n    [(triples_sum_to_zero_aux (first l) (rest l)) true]\n    [else\
+    \ (triples_sum_to_zero (rest l))]))\n</code>\nTrying to run it in DrRacket:\n\
+    <code>&gt; (triples_sum_to_zero '(1 2 3))\ntrue\n&gt; (triples_sum_to_zero '(1\
+    \ 2 4))\nfalse\n&gt; (triples_sum_to_zero '(1 2 -3))\ntrue\n&gt; (triples_sum_to_zero\
+    \ '(1 2 -1))\nfalse\n</code>\n", "  ;; distinct_triples takes a list of integers\
+    \ and returns a list of all\n  ;; possible triplets from the list.\n  (define\
+    \ (distinct_triples l)\n    (if (null? l)\n        '()\n        (append (map (lambda\
+    \ (x) (list (car l) x)) (cdr l))\n                (distinct_triples (cdr l)))))\n\
+    \  ;; We find the triples by taking the list of integers and finding all\n  ;;\
+    \ distinct triplets. Then we check each triple to see if it sums to zero.\n  (define\
+    \ (triples_list l)\n    (if (null? l)\n        #f\n        (or (= (apply + (car\
+    \ l)) 0)\n            (triples_list (cdr l)))))\n  (triples_list (distinct_triples\
+    \ l)))\n", "  (define (triples_sum_to_zero_helper lst)\n    (if (null? lst)\n\
+    \        '()\n        (append (list (list (list (car lst) 0 (- (car lst))))\n\
+    \                      (list (list (car lst) 0 (- (car lst))))\n             \
+    \         (list (list (car lst) 0 (- (car lst))))\n                      (list\
+    \ (list (car lst) 0 (- (car lst))))\n                      (list (list (car lst)\
+    \ 0 (- (car lst))))\n                      (list (list (car lst) 0 (- (car lst))))\n\
+    \                      (list (list (car lst) 0 (- (car lst))))\n             \
+    \         (list (list (car lst) 0 (- (car lst))))\n                      (list\
+    \ (list (car lst) 0 (- (car lst))))\n                      (list (list (car lst)\
+    \ 0 (- (car lst))))\n                      (list (list (car lst) 0 (- (car lst))))\n\
+    \                      (list (list (car lst) 0 (- (car lst))))\n             \
+    \         (list (list (car lst) 0 (- (car lst))))\n                      (list\
+    \ (list (car lst) 0 (- (car lst))))\n                      (list (list (car lst)\
+    \ 0 (- (car lst))))\n                      (list (list (car lst) 0 (- (car lst))))\n\
+    \                      (list (list (car lst) 0 (- (car lst))))\n             \
+    \         (list (list (car lst) 0 (- (car lst))))\n                      (list\
+    \ (list (car lst) 0 (- (car lst))))\n                      (list (list (car lst)\
+    \ 0 (- (car lst))))\n                      (list (list (car lst) 0 (- (car lst))))\n\
+    \                      (list (list (car lst) 0 (- (car lst))))\n             \
+    \         (list (list (car lst) 0 (- (car lst))))\n                      (list\
+    \ (list (car lst) 0 (- (car lst))))\n                      (list (list (car lst)\
+    \ 0 (- (car lst))))\n                      (list (list (car lst) 0 (- (car lst))))\n\
+    \                      (list (list (", "  (define (helper l acc)\n    (if (null?\
+    \ l)\n        false\n        (if (member? (- 0 (car l)) acc)\n            true\n\
+    \            (helper (cdr l) (cons (car l) acc)))))\n  (helper l '()))\n", " \
+    \ (and (not (null? l))\n       (or (zero? (apply + (take 3 l)))\n           (triples_sum_to_zero\
+    \ (cdr l)))))\n</code>\nI haven't written the <code>take</code> function, but\
+    \ it's easy enough to do.\nBy the way, the value of <code>(null? '(1 2 3))</code>\
+    \ is <code>#f</code>, and the value of <code>(null? '())</code> is <code>#t</code>.\n",
+  "  ;; sort list\n  (set! l (sort l <))\n  ;; iterate through the list\n  (for ([i\
+    \ (in-range (length l))])\n    ;; iterate through each pair of elements\n    (for\
+    \ ([j (in-range i (+ i 1) (length l))])\n      ;; iterate through each remaining\
+    \ element\n      (for ([k (in-range j (+ j 1) (length l))])\n        ;; get the\
+    \ three elements i, j, and k and check their sum\n        (if (= (+ (list-ref\
+    \ l i) (list-ref l j) (list-ref l k)) 0)\n            (return #t)))))\n  #f)\n",
+  "  (if (null? l)\n      #f\n      (or (triples_sum_to_zero (cdr l))\n          (let\
+    \ loop ([l l] [rest (cdr l)])\n            (if (null? rest)\n                #f\n\
+    \                (let ([c (list-ref l 0)]\n                      [b (list-ref\
+    \ rest 0)])\n                  (if (and (integer? (- c b))\n                 \
+    \          (assoc (- c b) (cdr (cdr rest))))\n                      #t\n     \
+    \                 (loop l (cdr rest)))))))))\n", "    (check-expect (triples_sum_to_zero\
+    \ '(1 2 -3)) true)\n    (check-expect (triples_sum_to_zero '(1 2 3)) false)\n\
+    \    (check-expect (triples_sum_to_zero '(1 2 0 -1)) true)\n    (check-expect\
+    \ (triples_sum_to_zero '(1 2 0 1)) false)\n    (check-expect (triples_sum_to_zero\
+    \ '(0 1 2 3)) false)\n    (define (helper l1 l2 l3)\n        (cond [(empty? l1)\
+    \ false]\n              [(member? (- (first l1) (first l2)) l3) true]\n      \
+    \        [else (helper (rest l1) l2 l3)]))\n    (define (helper2 l1 l2)\n    \
+    \    (cond [(empty? l1) false]\n              [(helper (rest l1) l2 l2) true]\n\
+    \              [else (helper2 (rest l1) l2)]))\n    (helper2 l l))\n", "  ;; first,\
+    \ check to see if l has fewer than three elements, in which case\n  ;; we immediately\
+    \ return False\n  (if (< (length l) 3)\n      #f\n      ;; if l has at least three\
+    \ elements, first sort it\n      (let* ([sorted (sort l <)]\n             ;; then\
+    \ collect all of the unique elements in sorted into a set,\n             ;; and\
+    \ store that set in unique_sorted_elements\n             [unique_sorted_elements\
+    \ (set-&gt;list (set sorted))]\n             ;; and see if there are any elements\
+    \ in unique_sorted_elements\n             ;; which are either less than or equal\
+    \ to zero, or greater than\n             ;; or equal to zero.  if there aren't,\
+    \ then we immediately return\n             ;; False.\n             [numbers_less_than_or_equal_to_zero\
+    \ (filter (lambda (n) (&lt;= n 0)) unique_sorted_elements)]\n             [numbers_greater_than_or_equal_to_zero\
+    \ (filter (lambda (n) (&gt;= n 0)) unique_sorted_elements)]\n             [numbers_to_check\
+    \ (if (or (null? numbers_less_than_or_equal_to_zero)\n                       \
+    \                (null? numbers_greater_than_or_equal_to_zero))\n            \
+    \                      (list 0)\n                                  (append numbers_less_than_or_equal_to_zero\
+    \ numbers_greater_than_or_equal_to_zero))])\n        ;; now, loop through each\
+    \ element of numbers_to_check\n        (for/or ([n numbers_to_check])\n      \
+    \    ;; look to see if there are other two elements in sorted\n          ;; that\
+    \ sum to -n.  if there are, then we have a triple which\n          ;; sums to\
+    \ zero, so we can immediately return True.\n          (member? (- 0 n) (remove\
+    \ n sorted))))))\n</code>\nIt's not the fastest possible solution, but it's not\
+    \ too bad, either.  It passes all of the supplied test cases.\n", "  (cond ((empty?\
+    \ l) #f)\n        ((null? (cdr l)) #f)\n        ((null? (cddr l)) #f)\n      \
+    \  ((= (list-ref l 0) (+ (list-ref l 1) (list-ref l 2))) #t)\n        (else (triples_sum_to_zero\
+    \ (cdr l)))))\n", "  ;; helper function to append a list (l) with an integer (n)\n\
+    \  (define (append_list l n)\n    (cond\n      ;; if l is empty, return the element\
+    \ (n)\n      [(empty? l) (list n)]\n      ;; otherwise, append the element (n)\
+    \ to the end of l\n      [else (append l (list n))]))\n  ;; helper function that\
+    \ takes two lists as inputs, adds all\n  ;; permutations of the two lists and\
+    \ adds the results to a new list,\n  ;; and returns the new list\n  (define (all_permutations\
+    \ l1 l2)\n    (cond\n      ;; if l1 is empty, return all permutations of l2 with\
+    \ 0\n      [(empty? l1) (append_list (append_list l2 0) 0)]\n      ;; if l2 is\
+    \ empty, return all permutations of l1 with 0\n      [(empty? l2) (append_list\
+    \ (append_list l1 0) 0)]\n      ;; if both lists are not empty, return the results\
+    \ of the recursive\n      ;; calls and append them to the end of each list\n \
+    \     [else (append (all_permutations (append_list l1 (first l2)) (rest l2))\n\
+    \                    (all_permutations (append_list l2 (first l1)) (rest l1)))]))\n\
+    \  ;; helper function that takes a list as an input, removes all elements\n  ;;\
+    \ from the list equal to zero, and returns the new list\n  (define (remove_zero\
+    \ l)\n    (cond\n      ;; if l is empty, return the empty list\n      [(empty?\
+    \ l) (list)]\n      ;; if the first element is zero, recurse on the rest of the\
+    \ list\n      [(= (first l) 0) (remove_zero (rest l))]\n      ;; otherwise, return\
+    \ the first element and recurse on the rest of the list\n      [else (cons (first\
+    \ l) (remove_zero (rest l)))]))\n  ;; helper function that takes a list as an\
+    \ input, removes all duplicates\n  ;; from the list, and returns the new list\n\
+    \  (define (remove_duplicates l)\n    (cond\n      ;; if l is empty, return the\
+    \ empty list\n      [(empty? l)", "  (cond ((null? l) #f)\n        ((= (length\
+    \ l) 1) #f)\n        ((= (length l) 2) #f)\n        ((= (length l) 3)\n      \
+    \   (let ((a (list-ref l 0))\n               (b (list-ref l 1))\n            \
+    \   (c (list-ref l 2)))\n           (= (+ a b c) 0)))\n        (else\n       \
+    \  (let ((a (list-ref l 0))\n               (b (list-ref l 1))\n             \
+    \  (c (list-ref l 2)))\n           (or (= (+ a b c) 0)\n               (triples_sum_to_zero\
+    \ (cons b (cons c (cdr (cdr (cdr l)))))))))))\n", "  (define (helper l sumset\
+    \ index)\n    (cond [(empty? l) false]\n          [(positive? index)\n       \
+    \    (helper (rest l) (set-add (car l) sumset) (- index 1))]\n          [(not\
+    \ (empty? sumset))\n           (or (helper (rest l) sumset index)\n          \
+    \     (helper (rest l) (set-remove (car l) sumset) index))]\n          [else (helper\
+    \ (rest l) (set-add (car l) sumset) (- index 1))]))\n  (helper l empty-set 3))\n\
+    </code>\n", "  (define (search l sub_list)\n    (cond\n      [(empty? l) false]\n\
+    \      [(member (- (first l) (first sub_list)) (rest l)) true]\n      [else (search\
+    \ (rest l) sub_list)]))\n  (cond\n    [(or (empty? l) (= (length l) 1) (= (length\
+    \ l) 2)) false]\n    [(search (rest l) (first l)) true]\n    [else (triples_sum_to_zero\
+    \ (rest l))]))\n</code>\n", "  (let loop ([l l])\n    (cond [(null? l) False]\n\
+    \          [(and (member (car l) (cdr l))\n                (member (car l) (cddr\
+    \ l))) True]\n          [else (loop (cdr l))])))\n", "  (let loop ([l l])\n  \
+    \  (cond [(empty? l) #f]\n          [(member? (- (first l)) (rest l)) #t]\n  \
+    \        [else (loop (rest l))])))\n", "  (define (helper l)\n    (if (null? l)\n\
+    \        #f\n        (or (or (or (zero? (+ (car l) (cadr l) (caddr l)))\n    \
+    \                (zero? (+ (car l) (cadr l) (cadddr l))))\n                (zero?\
+    \ (+ (car l) (caddr l) (cadddr l))))\n            (helper (cdr l)))))\n  (helper\
+    \ l))\n", "  (cond ((null? l) #f)\n        ((and (number? (car l))\n         \
+    \     (and (number? (cadr l))\n                   (and (number? (caddr l))\n \
+    \                       (= (+ (car l) (cadr l) (caddr l)) 0))))\n         #t)\n\
+    \        (else (triples_sum_to_zero (cdr l)))))\n</code>\nI would appreciate any\
+    \ feedback and help in improving my coding style and the efficiency of my code.\
+    \ \n\n\nA:\n\nYour indentation is off and you're missing <code>;</code> after\
+    \ many of your <code>define</code>s.  There's also some incorrect use of parentheses.\
+    \  For example, the following is equivalent to <code>(and (number? (car l)) (and\
+    \ (number? (cadr l)) (and (number? (caddr l)) (= (+ (car l) (cadr l) (caddr l))\
+    \ 0))))</code> but also equivalent to <code>(and (number? (car l)) (number? (cadr\
+    \ l)) (number? (caddr l)) (= (+ (car l) (cadr l) (caddr l)) 0))</code>.  I'd write\
+    \ that clause as <code>(and (number? (car l)) (number? (cadr l)) (number? (caddr\
+    \ l)) (= (+ (car l) (cadr l) (caddr l)) 0))</code>.\nThe use of <code>cond</code>\
+    \ is completely unnecessary here.  This could instead be written using a <code>andmap</code>.\
+    \  I'd also note that <code>number?</code> returns true for <code>infinity</code>\
+    \ and <code>-infinity</code>, so there's the opportunity for confusion (especially\
+    \ if the function is meant to only accept integers).\nAlso, this is missing the\
+    \ case of a list with fewer than three elements.  You should either return <code>#f</code>\
+    \ in that case or raise an error (or both).\n<code>#lang racket\n", "  (cond\n\
+    \    [(empty? l) #f]\n    [(and (and (member 0 l) (member (- 0 (first l)) (rest\
+    \ l))) (member (first l) (rest (rest l)))) #t]\n    [else (triples_sum_to_zero\
+    \ (rest l))]))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

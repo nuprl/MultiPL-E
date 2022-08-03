@@ -6,7 +6,583 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate a
   \    (check-equal? (candidate (list 4 88)) 88)\n    (check-equal? (candidate (list\
   \ 4 5 6 7 2 122)) 122)\n    (check-equal? (candidate (list 4 0 6 7)) 0)\n    (check-equal?\
   \ (candidate (list 4 4 6 8)) 12)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (letrec ([odds (filter even? (range 1 (add1 (length lst)) 2))]\n\
+    \           [idxs (map (\u03BB (x) (- x 1)) odds)])\n    (foldr + 0 (map (\u03BB\
+    \ (i) (list-ref lst i)) idxs))))\n", "  (define (add-odds lst acc)\n    (cond\n\
+    \      [(empty? lst) acc]\n      [(and (even? (first lst)) (odd? (rest lst)))\
+    \ (add-odds (rest lst) (+ acc (first lst)))]\n      [else (add-odds (rest lst)\
+    \ acc)]))\n  (add-odds lst 0))\n", "  (if (null? lst)\n      0\n      (if (not\
+    \ (even? (car lst)))\n          (add (cdr lst))\n          (+ (car lst) (add (cdr\
+    \ lst))))))\n", "  (cond [(null? lst) 0]\n        [(not (odd? (car lst))) (add\
+    \ (cdr lst))]\n        [else (+ (car lst) (add (cdr lst)))]))\n", "  (cond [(empty?\
+    \ lst) 0]\n        [(even? (remainder (first lst) 2)) (+ (first lst) (add (rest\
+    \ lst)))]\n        [else (add (rest lst))]))\n", "  (if (null? lst)\n      0\n\
+    \      (let ((sum (if (even? (car lst)) (car lst) 0)))\n        (+ sum (add (cdr\
+    \ lst))))))\n</code>\nBut I got a timeout error. What is wrong with my code?\n\
+    \n\nA:\n\n<code>(define (add-even-at-odd-indices lst)\n  (apply + (filter even?\
+    \ (filter odd? (map (lambda (x y) (* x y)) lst (iota (length lst)))))))\n</code>\n\
+    It sounds like you're new to Racket, so I'll explain what this code does. Racket\
+    \ has lists and sequences, and you can convert between them easily using <code>list</code>\
+    \ and <code>seq</code>. I'm using <code>seq</code> here to make the code clearer.\n\
+    <code>(iota 5)</code> is <code>(0 1 2 3 4)</code>, <code>(map (lambda (x y) (*\
+    \ x y)) lst (iota (length lst)))</code> is multiplying each element of the list\
+    \ with its index, so for <code>lst</code> is <code>(2 4 6 8)</code> we get <code>(0\
+    \ 8 12 24)</code>.\n<code>(filter odd? ...)</code> filters this list to contain\
+    \ only the odd indices, so we now have <code>(8 24)</code>.\n<code>(filter even?\
+    \ ...)</code> filters this list to contain only the even values, so we now have\
+    \ <code>(8)</code>.\n<code>(apply + ...)</code> is adding all of the elements\
+    \ of the list, so we get <code>8</code>.\nI've used <code>seq</code> in this answer\
+    \ to make the answer easier to understand, but you could have done all of this\
+    \ in one go with <code>list</code>. The following two lines both return <code>8</code>:\n\
+    <code>(apply + (filter even? (filter odd? (map (lambda (x y) (* x y)) lst (list-tabulate\
+    \ (length lst) (lambda (i) i))))))", "  (if (empty? lst)\n      0\n      (define\
+    \ (even-odd? pos)\n        (if (zero? (modulo pos 2)) #t #f))\n      (define (even?\
+    \ n)\n        (if (zero? (modulo n 2)) #t #f))\n      (if (even-odd? (list-ref\
+    \ lst (sub1 (length lst))))\n          (add (rest lst))\n          (if (even?\
+    \ (first lst))\n              (add (cons (+ (first lst) (add (rest lst))) (rest\
+    \ (rest lst))))\n              (add (rest lst))))))\n</code>\nIt would be good\
+    \ if you could tell me what I am doing wrong.\n\n\nA:\n\nWhen you think about\
+    \ your code, in the case of <code>(even-odd? (list-ref lst (sub1 (length lst))))</code>\
+    \ being <code>#t</code>, you're basically asking if the last element is even and\
+    \ at an odd index. This is indeed <code>#t</code> because the last element has\
+    \ index <code>(sub1 (length lst))</code>, which is equal to <code>(sub1 (add1\
+    \ (length (rest lst))))</code>, which is equal to <code>(sub1 (add1 (sub1 (length\
+    \ lst))))</code>, which is equal to <code>(sub1 (sub1 (sub1 (length lst))))</code>,\
+    \ which is equal to <code>(sub1 (sub1 0))</code>, which is equal to <code>1</code>,\
+    \ which is an odd number.\nThis means that your <code>if</code> statement is always\
+    \ false, and therefore the evaluation never reaches the next <code>if</code> statement.\n\
+    As a side note, you're doing some very odd things with your <code>rest</code>s\
+    \ and <code>add</code>s. For example, the expression\n<code>(add (cons (+ (first\
+    \ lst) (add (rest lst))) (rest (rest lst))))\n</code>\nmeans:\n\n<code>(add (rest\
+    \ lst))</code> will add all the elements from the second one onwards.\n<code>(first\
+    \ lst)</code> will get the", "  (define (even x)\n    (= (remainder x 2) 0))\n\
+    \  (foldl + 0 (filter even (cdr (filter even lst)))))", "  (cond\n    [(empty?\
+    \ lst) (empty)]\n    [(null? (cdr lst)) (empty)]\n    [else (cons (car lst) (add\
+    \ (cddr lst)))]))\n</code>\nBut this runs into some problems. \n<code>=&gt; (add\
+    \ '(4 1 3 2 3))\n'(4 2)\n</code>\nI would like to achieve the output <code>'(4\
+    \ 2 3)</code>. \nHow should I tackle this? \n\n\nA:\n\nHere's an alternative solution\
+    \ using <code>filter</code> and <code>every</code>:\n<code>(define (add-even-odd-index\
+    \ lst)\n  (filter even?\n          (every (lambda (e l)\n                   (append\
+    \ l (list e)))\n                 lst\n                 '())))\n</code>\nFor example:\n\
+    <code>(add-even-odd-index '(4 1 3 2 3))\n=&gt; '(4 2 3)\n</code>\n", "  (define\
+    \ (add-evens lst)\n    (cond ((null? lst) 0)\n          ((even? (car lst)) (+\
+    \ (car lst) (add-evens (cdr lst))))\n          (else (add-evens (cdr lst)))))\n\
+    \  (define (add-odds lst)\n    (cond ((null? lst) 0)\n          ((odd? (car lst))\
+    \ (+ (car lst) (add-odds (cdr lst))))\n          (else (add-odds (cdr lst)))))\n\
+    \  (+ (add-evens lst) (add-odds (cdr lst))))\n</code>\nI have this recursive function\
+    \ that traverses over a list and adds the even numbers at odd positions, and the\
+    \ odd numbers at even positions. My problem is that I get the correct answer,\
+    \ but there is a warning about undefined behavior.\n<code>; #&lt;procedure:add-evens&gt;:\
+    \ undefined behavior:  application: not a procedure;", "  (cond\n    [(null? lst)\
+    \ 0]\n    [(odd? (car lst)) (+ (car lst) (add (cdr lst)))]\n    [else (add (cdr\
+    \ lst))]))\n", "  (if (null? lst)\n      0\n      (add-next lst 0 0))\n)\n", " \
+    \ (apply + (filter-map (lambda (x)\n                         (and (odd? (car x))\n\
+    \                              (even? (cadr x))\n                            \
+    \  (cadr x)))\n                       (enumerate lst))))", "  (accumulate + 0\
+    \ (cddr (filter even? (range 1 (add1 (length lst)))))))\n", "  (cond [(= (length\
+    \ lst) 1) (car lst)]\n        [else (+ (car lst) (add (cddr lst)))]))\n</code>\n\
+    I think is a good code for a novice. However, I have not tested it with a lot\
+    \ of examples.\nPlease, review and suggest improvements.\n\n\nA:\n\nYour function\
+    \ is almost a tail-recursive factorial function. Here is how I would rewrite it:\n\
+    <code>(define (add lst)\n  (define (sum lst acc)\n    (cond [(empty? lst) acc]\n\
+    \          [(odd? (length lst)) (sum (cdr lst) (+ acc (car lst)))]\n         \
+    \ [else (sum (cdr lst) acc)]))\n  (sum lst 0))\n</code>\nThis way you do not need\
+    \ to check the number of elements in the list, since you pass the accumulated\
+    \ sum as an argument.\n", "  (local [(define (odd? x)\n            (and (not (zero?\
+    \ x)) (even? x)))\n          (define (idx? x)\n            (odd? x))\n       \
+    \   (define (add-even-odd-indices lst)\n            (cond [(empty? lst) 0]\n \
+    \                 [(and (even? (first lst)) (idx? (length lst)))\n           \
+    \        (+ (first lst) (add-even-odd-indices (rest lst)))]\n                \
+    \  [else (add-even-odd-indices (rest lst))]))]\n    (add-even-odd-indices lst)))\n",
+  "  (if (null? lst)\n      0\n      (if (even? (car lst))\n          (+ (car lst)\
+    \ (add (cdr lst)))\n          (add (cdr lst)))))\n", "  (define (helper lst acc\
+    \ i)\n    (cond [(= i (- (length lst) 1)) (cons (acc+ (list-ref lst i)) acc)]\n\
+    \          [(= (modulo i 2) 1) (helper lst (cons (acc+ (list-ref lst i)) acc)\
+    \ (+ i 1))]\n          [else (helper lst acc (+ i 1))]))\n  (helper lst (list)\
+    \ 0))\n</code>\nThe error I'm getting is: <code>;;; application: not a procedure;</code>\n\
+    I'm not sure what I'm doing wrong, any help would be appreciated.\n\n\nA:\n\n\
+    You need to use <code>+</code> instead of <code>acc+</code> when you add the numbers.\
+    \ Also, the final sum should be <code>acc+</code> of the accumulated sum so far\
+    \ and the last element.\nThis is the fixed code:\n<code>(define (add lst)\n  (define\
+    \ (helper lst acc i)\n    (cond [(= i (- (length lst) 1)) (acc+ (list-ref lst\
+    \ i) acc)]\n          [(= (modulo i 2) 1) (helper lst (acc+ (list-ref lst i) acc)\
+    \ (+ i 1))]\n          [else (helper lst acc (+ i 1))]))\n  (helper lst 0 0))\n\
+    </code>\n", "  (define (add0 lst total idx)\n    (cond\n      [(empty? lst) total]\n\
+    \      [(and (even? idx) (even? (first lst))) (add0 (rest lst) (+ total (first\
+    \ lst)) (+ idx 1))]\n      [else (add0 (rest lst) total (+ idx 1))]))\n  (add0\
+    \ lst 0 0))\n", "  (apply +\n         (filter even?\n                 (filter-map\
+    \ cdr\n                             (filter even?\n                          \
+    \           (enumerate-interval 0 (sub1 (length lst))))))))\n", '  (add-helper
+    lst (length lst) 0))', "  (for/fold ([sum 0]) ([i (in-list lst)])\n    (if (and\
+    \ (even? i) (odd? (list-ref lst (- (length lst) (length (list i))))))\n      \
+    \  (+ sum i)\n        sum)))\n", "  (if (empty? lst)\n      0\n      (cond\n \
+    \       [(even? (first lst)) (+ (first lst) (add (rest lst)))]\n        [else\
+    \ (add (rest lst))])))\n</code>\nHere is the result:\n<code>&gt; (define lst '(1\
+    \ 3 5 7))\n&gt; (add lst)\n- : number\n--&gt; 0\n</code>\nWhat is wrong?\n\n\n\
+    A:\n\nThe problem is that you are adding the <code>first</code> of the list only\
+    \ when it is even, but you are not checking if the <code>first</code> is at an\
+    \ odd index. The way to do this is to divide the index by 2 and check if the remainder\
+    \ is zero.\n<code>(define (add lst)\n  (if (empty? lst)\n      0\n      (cond\n\
+    \        [(even? (remainder (rest lst) 2)) (+ (first lst) (add (rest lst)))]\n\
+    \        [else (add (rest lst))])))\n</code>\n", "  (cond\n    [(= 1 (length lst))\
+    \ (first lst)]\n    [(odd? (second lst)) (+ (first lst) (add (rest (rest lst))))]\n\
+    \    [else (add (rest (rest lst)))]))\n", "  (cond ((null? lst) 0)\n        ((even?\
+    \ (first lst)) (add (rest lst)) (+ (first lst) (second lst)))\n        (else (add\
+    \ (rest lst)))))\n</code>\nHow do I write a condition using add? \n\n\nA:\n\n\
+    It would be better to use a <code>for/fold</code> loop for this, instead of trying\
+    \ to do everything recursively. See this answer for an example.\nIt is also possible\
+    \ to write a recursive solution. You just need to pass along the index as an extra\
+    \ argument:\n<code>(define (add lst idx)\n  (cond ((null? lst) 0)\n        ((=\
+    \ (remainder idx 2) 0)\n         (+ (first lst) (add (rest lst) (+ idx 1))))\n\
+    \        (else (add (rest lst) (+ idx 1)))))\n</code>\n", "  (define (helper pos\
+    \ index lst)\n    (cond [(empty? lst) index]\n          [(and (= 1 (remainder\
+    \ pos 2)) (= 0 (remainder (first lst) 2)))\n           (helper (+ pos 1) (+ index\
+    \ (first lst)) (rest lst))]\n          [else (helper (+ pos 1) index (rest lst))]))\n\
+    \  (helper 1 0 lst))\n", "  (foldl (\u03BB (e t) (+ t (if (odd? e) e 0))) 0 lst))\n",
+  "  (if (even? (car lst))\n      (+ (car lst) (add (cdr lst)))\n      (add (cdr lst))))\n",
+  "  (if (and (null? (cdr lst))\n           (even? (car lst)))\n      (car lst)\n\
+    \      (if (and (even? (car lst))\n               (odd? (length lst)))\n     \
+    \     (+ (car lst) (add (cdr lst)))\n          (add (cdr lst)))))\n", "  (foldl\
+    \ + 0 (filter-odd-indices-of-even lst)))\n", "  (apply + (filter odd? (filter\
+    \ even? (range (length lst)))))\n)", "  (cond\n    [(empty? lst) 0]\n    [(and\
+    \ (even? (first lst)) (odd? (index-of lst))) (+ (first lst) (add (rest lst)))]\n\
+    \    [else (add (rest lst))]))\n", "  (cond ((empty? lst) 0)\n        ((= (modulo\
+    \ (length lst) 2) 0) (add (rest lst)))\n        ((= (modulo (first lst) 2) 0)\
+    \ (+ (first lst) (add (rest lst))))\n        (else (add (rest lst)))))\n", " \
+    \ (cond\n    [(empty? lst) 0]\n    [(odd? (remainder (first lst) 2)) (+ (first\
+    \ lst) (add (rest lst)))]\n    [else (add (rest lst))]))\n", "  (cond [(empty?\
+    \ lst) (error \"Empty list\")]\n        [(zero? (remainder (car lst) 2)) (+ (car\
+    \ lst) (add (cdr lst)))]\n        [else (add (cdr lst))]))\n", "  (cond\n    [(empty?\
+    \ lst) 0]\n    [(odd? (car lst)) (add (cdr lst))]\n    [else (+ (car lst) (add\
+    \ (cdr lst)))]))\n", "  (if (null? lst)\n      0\n      (cond\n        [(= 1 (modulo\
+    \ (first lst) 2))\n         (+ (add (rest lst)) (first lst))]\n        [else\n\
+    \         (add (rest lst))])))\n", "  (cond\n    [(null? lst) lst]\n    [(zero?\
+    \ (modulo (car lst) 2)) (add (cdr lst))]\n    [else (+ (car lst) (add (cdr lst)))]))\n",
+  "  (cond\n    [(null? lst) 0]\n    [(odd? (car lst)) (add (cdr lst))]\n    [else\
+    \ (+ (car lst) (add (cdr lst)))]))\n", "  (let loop ((lst lst) (acc 0))\n    (cond\n\
+    \      [(null? lst) acc]\n      [(= 1 (modulo (cadr lst) 2)) (loop (cddr lst)\
+    \ (+ acc (cadr lst)))]\n      [else (loop (cddr lst) acc)])))\n", "  (define (f\
+    \ lst result acc)\n    (if (null? lst)\n        result\n        (f (cdr lst)\n\
+    \           (if (and (even? (car lst)) (odd? acc))\n               (+ result (car\
+    \ lst))\n               result)\n           (+ acc 1))))\n  (f lst 0 0))\n", " \
+    \ (if (null? lst)\n      0\n      (if (even? (car lst))\n          (+ (car lst)\
+    \ (add (cdr lst)))\n          (add (cdr lst)))))", "  (if (null? lst)\n      '()\n\
+    \      (if (even? (car lst))\n          (if (odd? (car (cdr lst)))\n         \
+    \     (cons (car lst) (add (cdr lst)))\n              (add (cdr lst)))\n     \
+    \     (add (cdr lst)))))\n</code>\nI'm curious how to solve this problem without\
+    \ the if-else block.\n\n\nA:\n\nHere's one way that might help you to see how\
+    \ things work:\n<code>(define (add lst)\n  (if (null? lst)\n      '()\n      (add\
+    \ (cdr lst))))\n</code>\nThis program recursively calls itself with a list that's\
+    \ one element shorter than before. What happens if you do that until the list\
+    \ is empty? You'll recurse until you run out of elements.\nWhat's the result of\
+    \ <code>(add '(1 2 3 4 5 6 7 8 9))</code>? It's <code>'()</code>, that's what.\
+    \ The program so far does nothing but ignore every element in the list.\nHow do\
+    \ you get it to do something with the elements? You need to add something like\
+    \ this:\n<code>(define (add lst)\n  (if (null? lst)\n      '()\n      (cons (car\
+    \ lst) (add (cdr lst)))))\n</code>\nThis program does the same thing as before,\
+    \ but it also adds each element of the list as it recurses. What's the result\
+    \ of <code>(add '(1 2 3 4 5 6 7 8 9))</code>? It's <code>(1 2 3 4 5 6 7 8 9)</code>,\
+    \ that's what. It just reverses the list.\nNow the problem is to filter out the\
+    \ even numbers and to put the odd numbers back in the right order. How do you\
+    \ filter out the even numbers? Try this:\n<code>(define (add lst)\n  (if (null?\
+    \ lst)\n      '()\n      (if (even? (car lst))\n          (add (cdr lst))\n  \
+    \        (cons (car lst) (add (cdr lst))))))\n</code>\nWhat's the result of <code>(add\
+    \ '(1 2 3", "  (cond\n    [(null? lst) 0]\n    [(odd? (cadr lst)) (+ (cadr lst)\
+    \ (add (cddr lst)))]\n    [else (add (cddr lst))]))\n", "  (cond [(empty? lst)\
+    \ 0]\n        [(= 1 (modulo (car lst) 2)) (add (cdr lst))]\n        [else (+ (car\
+    \ lst) (add (cdr lst)))]))\n</code>\nWhat does <code>(= 1 (modulo (car lst) 2))</code>\
+    \ mean in the second condition?\n\n\nA:\n\nIt uses <code>modulo</code> to determine\
+    \ whether the current element is odd, i.e. not divisible by 2. This is done by\
+    \ using the modulo operator <code>%</code> which returns the remainder of the\
+    \ first argument divided by the second. If the remainder is 1, then the current\
+    \ element is odd, and is skipped. If the remainder is not 1, then the current\
+    \ element is even and is added to the accumulator. The accumulator is initially\
+    \ <code>0</code>, and will hold the sum of all even elements in odd positions.\n\
+    Using modulo is not the only way to solve this problem, but in this case it makes\
+    \ sense. Notice that it doesn't work if the list contains negative numbers, because\
+    \ the modulo operator always returns a positive value.\n", "  (cond [(empty? lst)\
+    \ 0]\n        [(even? (first lst))\n         (+ (first lst) (add (rest lst)))]\n\
+    \        [else\n         (add (rest lst))]))\n", "  (cond [(empty? lst) empty]\n\
+    \        [(odd? (first lst)) (add (rest lst))]\n        [else (add (rest lst))]))\n",
+  "  (if (= 1 (length lst))\n      (car lst)\n      (+ (car lst) (add (cddr lst)))))\n",
+  "  (if (empty? lst)\n      0\n      (if (even? (car lst))\n          (+ (car lst)\
+    \ (add (cdr lst)))\n          (add (cdr lst)))))\n", "  (cond\n    [(null? lst)\
+    \ 0]\n    [(odd? (car lst)) (add (cdr lst))]\n    [else (+ (car lst) (add (cdr\
+    \ lst)))]))", "  (if (null? lst)\n      0\n      (if (even? (first lst))\n   \
+    \       (+ (first lst) (add (rest lst)))\n          (add (rest lst)))))\n</code>\n\
+    Is there a better way to do it? \n\n\nA:\n\nYou can get rid of the first <code>if</code>\
+    \ altogether, since if the list is empty there is nothing to add:\n<code>(define\
+    \ (add lst)\n  (if (null? lst)\n      0\n      (if (even? (first lst))\n     \
+    \     (+ (first lst) (add (rest lst)))\n          (add (rest lst)))))\n</code>\n\
+    This is also more efficient since you don't need to check if the list is empty\
+    \ twice.\nYou could also use the built-in <code>add-odd-evens</code> function\
+    \ from the Racket built-in <code>math/base</code> library:\n<code>(require math/base)\n",
+  "  (car (cddr lst)))\n", "  (if (null? lst)\n      0\n      (if (odd? (car lst))\n\
+    \          (car lst)\n          0)))\n", "  (cond\n    [(empty? lst) 0]\n    [(=\
+    \ (modulo (first lst) 2) 0) (+ (first lst) (add (rest lst)))]\n    [else (add\
+    \ (rest lst))]))\n</code>\nThe following examples return <code>21</code>:\n<code>(add\
+    \ (list 1 2 3 4 5 6 7 8 9 10))", "  (if (or (empty? lst) (empty? (rest lst)))\n\
+    \      0\n      (cond\n        [(even? (first lst)) (+ (first lst) (add (rest\
+    \ (rest lst))))]\n        [else (add (rest lst))])))\n</code>\nOutput\n<code>Welcome\
+    \ to DrRacket, version 6.10 [3m].\nLanguage: racket [custom]; memory limit: 1024\
+    \ MB.\n\n&gt; (add '(0 1 2 3 4 5 6 7 8 9))\n24\n&gt; (add '(1 3 5 7 9))\n0\n&gt;\
+    \ (add '(2 4 6 8 10))\n30\n&gt; (add '(1 2 3 4 5 6 7 8 9 10))\n25\n&gt; \n</code>\n",
+  "  (apply + (filter even? (filter-index even? lst))))\n", "  (if (null? lst)\n \
+    \     0\n      (cond\n        ((= (remainder (car lst) 2) 0) (+ (car lst) (add\
+    \ (cdr lst))))\n        (else (add (cdr lst))))))\n</code>\nI have tried implementing\
+    \ this in C# as shown below. It works for the inputs for example 2,4,5,6,8,10,12,13,14\
+    \ but fails for 2,4,5,6,8,10,12,14. What am I doing wrong?\n<code>public static\
+    \ int Add(List&lt;int&gt; lst)\n{\n    int sum = 0;\n    int index = 0;\n    foreach\
+    \ (int i in lst)\n    {\n        if (i % 2 == 0 &amp;&amp; index % 2 != 0)\n \
+    \       {\n            sum += i;\n        }\n        index++;\n    }\n    return\
+    \ sum;\n}\n</code>\n\n\nA:\n\nYou're calculating the sum over all even indices,\
+    \ but you should be calculating the sum over the odd indices.\n\nUnrelated to\
+    \ the question, but note that your Racket solution has a space leak: it will keep\
+    \ increasing the memory use for long-enough inputs, since it keeps the entire\
+    \ list in memory. It should instead use a tail call to avoid that:\n<code>(define\
+    \ (add lst)\n  (define (add-inner sum lst)\n    (if (null? lst)\n        sum\n\
+    \        (cond\n          ((= (remainder (car lst) 2) 0) (add-inner (+ sum (car\
+    \ lst)) (cdr lst)))\n          (else (add-inner sum (cdr lst))))))\n  (add-inner\
+    \ 0 lst))\n</code>\n", "  (cond\n    [(empty? lst) empty]\n    [(odd? (count lst))\n\
+    \     (add (rest lst))]\n    [else\n     (cons (first lst) (add (rest lst)))]))\n",
+  "  (cond [(empty? lst) empty]\n        [(= (remainder (first lst) 2) 0) (first lst)]\n\
+    \        [else (add (rest lst))]))\n", "  (if (empty? lst)\n      0\n      (add-even-index\
+    \ (rest lst))))\n", "  (define (loop lst acc i)\n    (cond\n      [(empty? lst)\
+    \ acc]\n      [(= i 1) (loop (rest lst) (+ acc (first lst)) 0)]\n      [else (loop\
+    \ (rest lst) acc 0)]))\n  (loop lst 0 1))", '  (add-helper lst 0 1))', "  (define\
+    \ sum 0)\n  (for ([index (in-range (length lst))]\n        [ele lst])\n    (when\
+    \ (and (even? index) (even? ele))\n      (set! sum (+ sum ele))))\n  sum)\n",
+  "  (cond [(null? lst) '()]\n        [(odd? (car lst)) (add (cdr lst))]\n       \
+    \ [else (cons (car lst) (add (cdr lst)))]))", "  (let ((sum 0))\n    (for ([i\
+    \ (in-range (length lst))])\n      (if (and (even? i) (even? (list-ref lst i)))\n\
+    \        (set! sum (+ sum (list-ref lst i)))))\n    sum))\n", "  (apply + (filter\
+    \ even? (filter-odd-indices lst))))\n", "  (if (null? lst)\n      0\n      (if\
+    \ (odd? (car lst))\n          (add (cdr lst))\n          (+ (car lst) (add (cdr\
+    \ lst))))))\n</code>\n", "  (cond\n    ((empty? lst) 0)\n    ((= (remainder (length\
+    \ lst) 2) 1) (+ (car lst) (add (cdr lst))))\n    (else (add (cdr lst)))))\n",
+  "  (if (empty? lst) 0\n      (add (cdr (cdr lst)))\n      (if (odd? (car lst))\n\
+    \          (add (cdr lst))\n          (add (cdr lst))\n      (if (odd? (car lst))\n\
+    \          (add (cdr lst))\n          (add (cdr lst))\n      (if (odd? (car lst))\n\
+    \          (add (cdr lst))\n          (add (cdr lst))\n      (if (odd? (car lst))\n\
+    \          (add (cdr lst))\n          (add (cdr lst))\n      (if (odd? (car lst))\n\
+    \          (add (cdr lst))\n          (add (cdr lst))\n      (if (odd? (car lst))\n\
+    \          (add (cdr lst))\n          (add (cdr lst))\n      (if (odd? (car lst))\n\
+    \          (add (cdr lst))\n          (add (cdr lst))\n      (if (odd? (car lst))\n\
+    \          (add (cdr lst))\n          (add (cdr lst))\n      (if (odd? (car lst))\n\
+    \          (add (cdr lst))\n          (add (cdr lst))\n      (if (odd? (car lst))\n\
+    \          (add (cdr lst))\n          (add (cdr lst))\n      (if (odd? (car lst))\n\
+    \          (add (cdr lst))\n          (add (cdr lst))\n      (if (odd? (car lst))\n\
+    \          (add (cdr lst))\n          (add (cdr lst))\n      (if (odd? (car lst))\n\
+    \          (add (cdr lst))\n          (add (cdr lst))\n      (if (odd? (car lst))\n\
+    \          (add (cdr lst))\n          (add (cdr lst))\n      (if (odd? (car lst))\n\
+    \          (add (cdr lst))\n          (add (cdr lst))\n      (if (odd? (", " \
+    \ (if (null? lst)\n      0\n      (if (even? (car lst))\n          (+ (car lst)\
+    \ (add (cdr lst)))\n          (add (cdr lst)))))\n", "    (cond \n        [(null?\
+    \ lst) 0]\n        [(even? (car lst)) (+ (car lst) (add (cdr lst)))]\n       \
+    \ [else (add (cdr lst))]))\n", "  (cond\n    [(empty? lst) 0]\n    [(odd? (index\
+    \ lst)) (+ (first lst) (add (rest lst)))]\n    [else (add (rest lst))]))\n", " \
+    \ (cond ((null? lst) '())\n        ((= (remainder (car lst) 2) 0) (car lst))\n\
+    \        (else (add (cdr lst)))))\n", "  (cond [(empty? lst) 0]\n        [(and\
+    \ (even? (first lst))\n              (odd? (remainder (length lst) 2)))\n    \
+    \     (+ (first lst) (add (rest lst)))]\n        [else (add (rest lst))]))\n",
+  "  (if (empty? lst)\n      0\n      (if (even? (first lst))\n          (+ (add (rest\
+    \ lst)) (first lst))\n          (add (rest lst)))))\n</code>\nI created a contract\
+    \ for add:\n<code>#lang racket\n", "  (accumulate + 0 (map (lambda (x) (cond\n\
+    \                                    [(and (even? x) (odd? (index lst x))) x]\n\
+    \                                    [else 0])) lst)))\n", "  (foldl (lambda (x\
+    \ y)\n           (if (and (even? x) (odd? y))\n               (+ x y)\n      \
+    \         y))\n         0\n         lst))\n", "  (if (and (not (null? lst)) (even?\
+    \ (car lst)))\n      (+ (car lst) (add (cdr lst)))\n      (add (cdr lst))))",
+  "  (apply + (map (lambda (x) (if (even? x) x 0))\n                (filter (lambda\
+    \ (x) (odd? x)) lst))))", "    (for/fold ([n 0]) ([i (in-list lst)])\n       \
+    \ (if (and (even? i) (odd? n)) (+ n i) n)))\n", "  (for/fold ([sum 0]) ([v (in-list\
+    \ lst)])\n    (if (and (even? v) (odd? (list-ref lst (sub1 (for/fold ([count 1])\
+    \ ([v (in-list lst)])\n                                                      \
+    \         (add1 count))))))\n        (add sum v)\n        (add sum 0))))\n", " \
+    \   (if (null? lst)\n        0\n        (if (odd? (car lst))\n            (add\
+    \ (cdr lst))\n            (+ (car lst) (add (cdr lst))))))\n", "  (cond ((null?\
+    \ lst) 0)\n        ((= (remainder (car lst) 2) 0) (+ (car lst) (add (cdr lst))))\n\
+    \        (else (add (cdr lst)))))\n", "  (cond [(empty? lst) 0]\n        [(even?\
+    \ (car lst)) (+ (car lst) (add (cdr lst)))]\n        [else (add (cdr lst))]))\n",
+  "  (let loop ([lst lst] [res 0])\n    (if (null? lst)\n        res\n        (loop\
+    \ (cdr lst)\n              (+ res\n                 (if (even? (car lst))\n  \
+    \                   0\n                     (car lst)))))))\n", "    (for/fold\
+    \ ([sum 0]) ([e (in-list lst)])\n    (if (and (even? e) (odd? (list-ref lst (in-naturals))))\n\
+    \        (+ sum e)\n        sum)))\n", "  (cond ((null? lst) '())\n        ((=\
+    \ (remainder (first lst) 2) 0)\n          (if (odd? (length lst)) (+ (first lst)\
+    \ (last lst)) (first lst)))\n        (else (if (odd? (length lst)) (last lst)\
+    \ '()))))\n</code>\ntest cases:\n<code>(check-expect (add '(1 2 3 4 5 6)) 6)",
+  "  (for/fold ([even-sum 0])\n            ([i (in-list lst)])\n    (if (and (odd?\
+    \ i) (even? i))\n        (+ even-sum i)\n        even-sum)))\n", "  (let loop\
+    \ ((lst lst) (res 0))\n    (if (empty? lst)\n        res\n        (let ((x (first\
+    \ lst))\n              (lst (rest lst)))\n          (if (and (even? x) (odd? (length\
+    \ lst)))\n              (loop lst (+ res x))\n              (loop lst res))))))",
+  "  (foldl + 0 (foldl append null (map (lambda (e)\n                            \
+    \            (if (and (even? e) (odd? (list-ref lst (car e))))\n             \
+    \                               (list e)\n                                   \
+    \         null))\n                                      (build-list (length lst)\
+    \ identity)))))\n", "  (let loop ((n 1) (sum 0) (lst lst))\n    (cond\n      [(null?\
+    \ lst) sum]\n      [(even? n) (loop (+ n 1) (+ sum (car lst)) (cdr lst))]\n  \
+    \    [else (loop (+ n 1) sum (cdr lst))])))\n", "  (let ([l (filter odd? (build-list\
+    \ (length lst) (lambda (i) (+ i 1))))])\n    (filter even? (map (lambda (i) (list-ref\
+    \ lst i)) l))))\n", "  (foldl + 0 (filter (lambda (x) (even? x)) (drop-right lst\
+    \ (odd? (length lst))))))\n", "  (cond ((null? lst) 0)\n        ((= (modulo (length\
+    \ lst) 2) 0) (+ (car lst) (add (cdr lst))))\n        (else (add (cdr lst)))))",
+  "  (apply +\n         (for/list ([el (in-list lst)\n                     :when (and\
+    \ (even? el)\n                                (odd? (list-ref lst (list-index\
+    \ lst el))))])\n           el)))\n", "  (foldl + 0 (filter even? (build-list (length\
+    \ lst) (lambda (x) (list-ref lst x))))))\n</code>\nThanks in advance!\n\n\nA:\n\
+    \nThe problem is that you are using <code>length</code> of the list when you should\
+    \ be using the index in the list. \nYou want to use a <code>lambda</code> that\
+    \ starts at 1 and increments by 2.\n<code>(define (add lst)\n  (foldl + 0 (filter\
+    \ even? (build-list (length lst) (lambda (x) (list-ref lst (+ x 1) 2))))))\n</code>\n",
+  "  (cond\n    [(null? lst) 0]\n    [(even? (car lst)) (+ (car lst) (add (cdr lst)))]\n\
+    \    [else (add (cdr lst))]))\n", "  (apply + (filter odd? (filter even? (map\
+    \ add1 (range (length lst)))))))\n", "  (cond\n    [(empty? lst) empty]\n    [(even?\
+    \ (first lst)) (add (rest lst))]\n    [else (cons (first lst) (add (rest lst)))]))\n",
+  "  (cond [(null? lst) 0]\n        [(and (even? (car lst))\n              (odd? (count\
+    \ lst)))\n         (+ (car lst) (add (cdr lst)))]\n        [else (add (cdr lst))]))\n\
+    </code>\n", "  (cond [(empty? lst) 0]\n        [(odd? (length lst)) (add (cdr\
+    \ lst))]\n        [else (+ (car lst) (add (cdr lst)))]))", "  (cond\n    [(empty?\
+    \ lst) 0]\n    [(even? (first lst)) (add (rest lst))]\n    [else (+ (first lst)\
+    \ (add (rest lst)))]))\n", "  (accumulate + 0 (filter-odd-indices (filter-even\
+    \ lst))))\n", "  (cond\n    [(null? lst) #f]\n    [(even? (second lst)) (add (rest\
+    \ (rest lst))) + (second lst)]\n    [else (add (rest (rest lst)))]))\n", "  (let\
+    \ lop ([lst lst] [odd? #t] [sum 0])\n    (cond [(null? lst) sum]\n          [(and\
+    \ (odd? (car lst)) (not odd?)) (lop (cdr lst) #t (+ sum (car lst)))]\n       \
+    \   [else (lop (cdr lst) (not odd?) sum)])))\n</code>\nThe above works, but the\
+    \ problem is that it's an accumulator pattern, which seems to be exactly what\
+    \ the author of the question is trying to avoid.\nHere is a version of the function\
+    \ that does not use an accumulator, but is obviously not as efficient, since it\
+    \ creates and traverses two lists (though, as I commented, I'm not sure that it's\
+    \ less efficient than the author's version):\n<code>#lang racket\n", "  (cond\
+    \ [(null? lst) 0]\n        [(odd? (car lst)) (add (cdr lst))]\n        [else (+\
+    \ (car lst) (add (cdr lst)))]))\n", "  (cond\n    [(empty? lst) 0]\n    [(even?\
+    \ (first lst)) (+ (first lst) (add (rest lst)))]\n    [else (add (rest lst))]))\n\
+    </code>\nThis works fine, but I'd like to know if there's a way to do it with\
+    \ a <code>for/fold</code> loop or something, because I think <code>for/fold</code>\
+    \ loops are what are supposed to be used when you want to sum something from a\
+    \ list.\nThanks!\n\n\nA:\n\nYes, you can. Here's a correct solution, using <code>for/fold</code>:\n\
+    <code>(define (add lst)\n  (for/fold ([result 0])\n            ([item (in-list\
+    \ lst)\n              :when (even? item)])\n    (+ result item)))\n</code>\nThis\
+    \ is equivalent to:\n<code>(define (add lst)\n  (for/fold ([result 0])\n     \
+    \       ([item (in-list lst)])\n    (if (even? item)\n        (+ result item)\n\
+    \        result)))\n</code>\nIt can also be written using <code>map</code>, this\
+    \ works but it's not necessary:\n<code>(define (add lst)\n  (for/fold ([result\
+    \ 0])\n            ([item (in-list (map (curry even? 1) lst))])\n    (+ result\
+    \ item)))\n</code>\n", "  (cond\n    ((even? (length lst)) (sum (filter even?\
+    \ (filter odd? (enumerate lst)))))\n    (else (sum (filter even? (filter even?\
+    \ (enumerate lst)))))))\n", "  (cond\n    [(empty? lst) 0]\n    [(even? (first\
+    \ lst)) (add (rest lst))]\n    [else (+ (first lst) (add (rest lst)))]))\n", " \
+    \ (if (null? lst)\n      0\n      (let ([v (car lst)])\n        (if (even? v)\n\
+    \            (+ v (add (cddr lst)))\n            (add (cdr lst))))))\n", "  (for/fold\
+    \ ([sum 0]) ([val (in-list lst)])\n    (if (and (odd? (index-of val lst)) (even?\
+    \ val))\n        (+ sum val)\n        sum)))\n</code>\n", "  (cond [(empty? lst)\
+    \ 0]\n        [(odd? (length lst)) (+ (list-ref lst (quotient (length lst) 2))\n\
+    \                                 (add (cdr lst)))]\n        [else (add (cdr lst))]))\n\
+    </code>\nSee also: How to write a recursive function in Racket?\n", "  (if (empty?\
+    \ lst)\n      0\n      (if (odd? (length lst))\n          (add (rest lst))\n \
+    \         (+ (first lst) (add (rest lst))))))\n", "  (if (null? lst)\n      0\n\
+    \      (if (zero? (remainder (car lst) 2))\n          (+ (car lst) (add (cdr lst)))\n\
+    \          (add (cdr lst)))))\n", "  (let loop ([lst lst] [even? #t] [acc 0])\n\
+    \    (cond [(null? lst) acc]\n          [(even? (car lst))\n           (loop (cdr\
+    \ lst)\n                 (not even?)\n                 (+ acc (car lst)))]\n \
+    \         [else (loop (cdr lst) (not even?) acc)])))\n", "  (let loop ([lst lst]\
+    \ [result 0])\n    (if (empty? lst)\n        result\n        (loop (rest lst)\
+    \ (if (even? (first lst))\n                             (+ result (first lst))\n\
+    \                             result)))))\n", "  (for/fold ([sum 0]) ([elem lst]\
+    \ [index (in-naturals)])\n    (if (and (even? index) (even? elem))\n        (+\
+    \ sum elem)\n        sum)))\n", "  (cond [(empty? lst) empty]\n        [(empty?\
+    \ (rest lst)) (first lst)]\n        [else (+ (first lst) (add (rest (rest lst))))]))\n",
+  "  (let loop ([lst lst] [out 0])\n    (cond\n      [(empty? lst) out]\n      [(even?\
+    \ (first lst)) (loop (rest lst) (+ out (first lst)))]\n      [else (loop (rest\
+    \ lst) out)])))\n", "  (foldl + 0 (filter even? (filter-index odd? lst))))\n</code>\n\
+    and this should do the job\n", "  (cond\n    [(null? lst) 0]\n    [(and (even?\
+    \ (car lst)) (odd? (cdr lst)))\n     (+ (car lst) (add (cdr lst)))]\n    [else\
+    \ (add (cdr lst))]))", "  (define (find-even-indexes lst acc)\n    (cond ((null?\
+    \ lst) acc)\n          ((number? (car lst))\n           (if (even? (car lst))\n\
+    \               (find-even-indexes (cdr lst) (cons (car lst) acc))\n         \
+    \      (find-even-indexes (cdr lst) acc)))\n          (else (find-even-indexes\
+    \ (cdr lst) acc))))\n  (apply + (find-even-indexes lst '())))\n", "  (cond\n \
+    \   [(empty? lst) 0]\n    [(odd? (first lst)) (add (rest lst))]\n    [else (+\
+    \ (first lst) (add (rest lst)))]))\n", "    (cond [(empty? lst) 0]\n         \
+    \ [(even? (list-ref lst 0)) (+ (list-ref lst 0) (add (rest lst)))]\n         \
+    \ [else (add (rest lst))]))\n", "  (accumulate + 0 (filter even? (filter-odd lst))))\n",
+  "  (let* ([evens (filter even? lst)]\n         [odd-evens (filter (lambda (num)\
+    \ (odd? (index-of num lst))) evens)])\n    (reduce + odd-evens)))", "  (for/fold\
+    \ ([sum 0]) ([i (in-indexed lst)])\n    (if (and (even? (cdr i))\n           \
+    \  (odd? (car i)))\n        (+ sum (cdr i))\n        sum)))\n", "  (cond [(null?\
+    \ lst) 0]\n        [(and (even? (car lst))\n              (odd? (index lst)))\n\
+    \         (+ (car lst) (add (cdr lst)))]\n        [else (add (cdr lst))]))\n",
+  "  (for/fold ([acc 0]) ([i (in-indexed lst)])\n    (if (and (odd? (second i))\n\
+    \             (even? (first i)))\n        (+ acc (first i))\n        acc)))\n",
+  "  (apply + (filter odd? (filter even? (range (add1 (length lst)))))))\n", "  (cond\n\
+    \    [(empty? lst) 0]\n    [(number? (first lst))\n     (if (even? (first lst))\
+    \ (add (rest lst)) (+ (first lst) (add (rest lst))))]\n    [else (add (rest lst))]))",
+  "  (cond\n    [(null? lst) 0]\n    [(null? (cdr lst)) (car lst)]\n    [(not(zero?\
+    \ (remainder (car lst) 2))) (+ (car lst) (add (cdr (cdr lst))))]\n    [else (add\
+    \ (cdr (cdr lst)))]))\n", "  (cond [(null? lst) 0]\n        [(even? (car lst))\
+    \ (car lst)]\n        [else (+ (car lst) (add (cdr lst)))]))\n", "  (cond\n  \
+    \  [(empty? lst) 0]\n    [(odd? (rest lst)) (+ (first lst) (add (rest (rest lst))))]\n\
+    \    [else (add (rest lst))]))", "  (apply + (filter odd? (filter even? (range\
+    \ 1 (add1 (length lst)))))))\n", "  (let ([acc 0])\n    (for/fold ([acc 0])\n\
+    \              ([i (in-list lst)])\n              (if (and (odd? i) (even? i))\
+    \ (+ acc i) acc))))\n", "  (for/fold ([sum 0]) ([i (in-list lst)])\n    (if (and\
+    \ (even? i) (odd? (position i lst))) (+ sum i))))\n", "  (let* ((odds (map (\u03BB\
+    \ (n) (if (even? n) n 0)) (evens lst)))\n         (evens (map (\u03BB (n) (if\
+    \ (odd? n) n 0)) (odds lst))))\n    (apply + odds evens)))\n</code>\nThe above\
+    \ code works, but is there a more elegant way to write it? (I'm new to Racket\
+    \ and functional programming in general.)\n\n\nA:\n\n<code>(define (add lst)\n\
+    \  (apply + (for/fold ([sum 0]) ([n lst] #:when (odd? n))\n                (set!\
+    \ sum (+ sum n)))))\n</code>\n", "  (cond\n    [(empty? lst) 0]\n    [(odd? (second\
+    \ lst)) (+ (first lst) (add (rest (rest lst))))]\n    [else (add (rest (rest lst)))]))\n",
+  "  (if (empty? lst) 0\n      (if (even? (car lst))\n          (+ (car lst) (add\
+    \ (cdr lst)))\n          (add (cdr lst)))))\n", "  (cond\n    [(empty? lst) 0]\n\
+    \    [(even? (first lst)) (+ (first lst) (add (rest lst)))]\n    [else (add (rest\
+    \ lst))]))\n", "  (define (process-odd-nums lst s)\n    (if (null? lst)\n    \
+    \    s\n        (if (zero? (remainder (car lst) 2))\n            (process-odd-nums\
+    \ (cdr lst) (+ s (car lst)))\n            (process-odd-nums (cdr lst) s))))\n\
+    \  (process-odd-nums (cdr lst) 0))\n", "  (let ([sum 0])\n    (for ([x lst])\n\
+    \      (when (and (even? x) (odd? (position x lst)))\n        (set! sum (+ sum\
+    \ x))))\n    sum))\n", "  (foldl + 0 (filter odd? (filter even? (range 1 (add1\
+    \ (length lst)))))))\n", "  (cond\n    [(null? lst) 0]\n    [(even? (car lst))\
+    \ (+ (car lst) (add (cdr lst)))]\n    [else (add (cdr lst))]))\n", "  (cond\n\
+    \    [(empty? lst) (error \"Empty list.\")]\n    [(empty? (rest lst)) (first lst)]\n\
+    \    [(even? (first lst))\n     (+ (first lst) (add (rest (rest lst))))]\n   \
+    \ [else (add (rest lst))]))\n", "  (cond\n    [(empty? lst) empty]\n    [(and\
+    \ (even? (first lst)) (odd? (length lst))) (add (rest lst))]\n    [(and (odd?\
+    \ (first lst)) (even? (length lst))) (add (rest lst))]\n    [else (cons (first\
+    \ lst) (add (rest lst)))]))\n", "  (cond ((empty? lst) 0)\n        ((and (odd?\
+    \ (rest lst)) (even? (second lst)))\n         (+ (second lst) (add (rest (rest\
+    \ lst)))))\n        (else (add (rest lst)))))\n", "  (apply + (list-ref lst #:even?\
+    \ #t #:odd? #t)))\n", "  (apply + (filter odd? (filter even? (enumerate lst)))))\n",
+  '  (apply + (list-index-filter (add1 0) (lambda (x i) (and (even? i) (even? x)))
+    lst)))', "  (cond [(empty? lst) 0]\n        [(odd? (length lst)) (add (rest lst))]\n\
+    \        [else (+ (first lst) (add (rest lst)))]))\n", "  (local ((define lst-pairs\
+    \ (map (lambda (x) (list (even? x) x)) lst)))\n    (apply + (filter (lambda (x)\
+    \ (car x)) lst-pairs) (filter (lambda (x) (not (car x))) lst-pairs))))\n\n", " \
+    \ (cond [(empty? lst) 0]\n        [(and (even? (second lst)) (odd? (first lst)))\
+    \ (+ (second lst) (add (rest (rest lst))))]\n        [else (add (rest lst))]))\n",
+  "  (cond\n    [(empty? lst) empty]\n    [(even? (first lst)) (add (rest lst))]\n\
+    \    [else (cons (first lst) (add (rest lst)))]))\n", "  (if (null? lst)\n   \
+    \   0\n      (if (odd? (car lst))\n          (add (cdr lst))\n          (+ (car\
+    \ lst) (add (cdr lst))))))\n", "  (cond\n    [(empty? lst) 0]\n    [(not (zero?\
+    \ (modulo (first lst) 2))) (+ (add (rest lst)) (first lst))]\n    [else (add (rest\
+    \ lst))]))\n", "  (define (sum-i lst i)\n    (cond [(empty? lst) (list)]\n   \
+    \       [(even? i) (cons (+ (car lst) (sum-i (cdr lst) (add1 i))) (sum-i (cdr\
+    \ lst) (add1 i)))]\n          [else (sum-i (cdr lst) (add1 i))]))\n  (sum-i lst\
+    \ 0))\n", "  (cond [(empty? lst) empty]\n        [(empty? (rest lst)) empty]\n\
+    \        [else (+ (first lst) (add (rest (rest lst))))]))\n", "  (if (= 0 (remainder\
+    \ (length lst) 2))\n      (+ (list-ref lst 0) (list-ref lst (sub1 (length lst))))\n\
+    \      (+ (list-ref lst 0) (list-ref lst (sub1 (length lst))) (add (cdr (cdr lst))))))\n",
+  "  (add-helper lst 0 0))\n", "  (foldl (lambda (a b) (+ a b)) 0 (let loop ([lst\
+    \ lst] [acc '()])\n                                    (cond\n               \
+    \                       [(empty? lst) (reverse acc)]\n                       \
+    \               [(odd? (rest lst)) (loop (cddr lst) (cons (cadr lst) acc))]\n\
+    \                                      [else (loop (cddr lst) acc)]))))\n", " \
+    \ (define (helper (cur lst sum))\n    (cond\n      [(null? lst) sum]\n      [(odd?\
+    \ cur) (helper (+ cur 1) (cdr lst) (+ sum (car lst)))]\n      [else (helper (+\
+    \ cur 1) (cdr lst) sum)]))\n  (helper 0 lst 0))", "  (cond\n    [(empty? lst)\
+    \ 0]\n    [(even? (first lst)) (+ (first lst) (add (rest lst)))]\n    [else (add\
+    \ (rest lst))]))", "  (cond [(empty? lst) (empty)]\n        [(= (modulo (first\
+    \ lst) 2) 0)\n         (cond [(odd? (length lst)) (add (rest lst))]\n        \
+    \       [else (+ (first lst) (add (rest lst)))]\n               )]\n        [else\
+    \ (add (rest lst))]\n        )\n  )\n", '  (filter even? lst))', "  (letrec ([helper\
+    \ (lambda (lst index)\n                     (cond [(empty? lst) 0]\n         \
+    \                  [(and (odd? index)\n                                 (even?\
+    \ (first lst)))\n                            (+ (first lst) (helper (rest lst)\
+    \ (+ index 1)))]\n                           [else (helper (rest lst) (+ index\
+    \ 1))]))])\n    (helper lst 0)))", '  (apply + (filter even? (filter-odd-indices
+    lst))))', "  (if (null? lst)\n      0\n      (if (even? (car lst))\n         \
+    \ (+ (car lst) (add (cdr lst)))\n          (add (cdr lst)))))\n", "  (cond\n \
+    \   [(empty? lst) 0]\n    [(even? (first lst)) (+ (first lst) (add (rest lst)))]\n\
+    \    [else (add (rest lst))]))\n", "  (cond ((null? lst) (error \"Please input\
+    \ a non-empty list\"))\n        ((null? (cdr lst)) lst)\n        ((and (even?\
+    \ (car lst)) (odd? (cadr lst))) (+ (car lst) (cadr lst)))\n        (else (+ (add\
+    \ (cdr lst)) (add (cddr lst))))))", "  (cond [(empty? lst) empty]\n        [(odd?\
+    \ (length lst)) (add (rest lst))]\n        [else (add (rest lst))]))\n</code>\n\
+    Any help is appreciated.\n\n\nA:\n\nYou will want to first filter out the elements\
+    \ you want to add, then call <code>foldl</code> on them (or <code>foldr</code>\
+    \ if the order matters).\nHere's a solution using the <code>even?</code> and <code>odd?</code>\
+    \ predicates and <code>foldl</code>:\n<code>(define (add-odd-even lst)\n  (foldl\
+    \ + 0 (filter even? (filter odd? lst))))\n</code>\nOr using <code>foldr</code>:\n\
+    <code>(define (add-odd-even lst)\n  (foldr + 0 (filter even? (filter odd? lst))))\n\
+    </code>\nOr with a <code>lambda</code>\n<code>(define (add-odd-even lst)\n  (foldl\
+    \ (lambda (x acc) (+ x acc)) 0 (filter even? (filter odd? lst))))\n</code>\n",
+  "  (cond\n    [(empty? lst) 0]\n    [(empty? (rest lst)) 0]\n    [(= 0 (modulo (car\
+    \ lst) 2)) (+ (car lst) (add (rest (rest lst))))]\n    [else (add (rest (rest\
+    \ lst)))]))\n", "  (if (null? lst)\n      0\n      (if (even? (car lst))\n   \
+    \       (+ (car lst) (add (cdr lst)))\n          (add (cdr lst)))))\n</code>\n\
+    and this is another solution using a helper function:\n<code>#lang racket\n",
+  "  (add-helper (map (lambda (lst) (cadr lst)) (filter (lambda (lst) (odd? (car lst)))\
+    \ (index-items lst))) 0))\n", "  (for/fold ([sum 0]) ([item lst] [index (in-naturals)])\n\
+    \    (cond\n      [(and (even? index) (even? item)) (+ sum item)]\n      [else\
+    \ sum])))\n", "  (define (helper lst acc)\n    (cond [(null? lst) acc]\n     \
+    \     [(even? (car lst)) (helper (cdr lst) (+ acc (car lst)))]\n          [else\
+    \ (helper (cdr lst) acc)]))\n  (helper lst 0))\n", "  (if (empty? lst) 0\n   \
+    \   (if (even? (car lst)) (+ (car lst) (add (cdr lst)))\n          (add (cdr lst)))))\n",
+  "  (define (help lst counter acc)\n    (cond [(empty? lst) acc]\n          [(= (even?\
+    \ counter) (even? (first lst))) (help (rest lst) (+ counter 1) (+ acc (first lst)))]\n\
+    \          [else (help (rest lst) (+ counter 1) acc)]))\n  (help lst 0 0))", " \
+    \ (cond [(null? lst) 0]\n        [(zero? (remainder (car lst) 2)) (+ (car lst)\
+    \ (add (cdr lst)))]\n        [else (add (cdr lst))]))", "  (sum-odd-even lst 0))\n",
+  "  (cond [(null? lst) 0]\n        [(not (even? (car lst))) (add (cdr lst))]\n  \
+    \      [else (+ (car lst) (add (cdr lst)))]))\n", "  (cond\n    [(empty? lst)\
+    \ 0]\n    [(odd? (rest lst)) (+ (first lst) (add (rest (rest lst))))]\n    [else\
+    \ (add (rest lst))]))\n", "  (if (empty? lst)\n      0\n      (if (zero? (modulo\
+    \ (first lst) 2))\n          (+ (first lst) (add (rest lst)))\n          (add\
+    \ (rest lst)))))\n", "  (cond\n    [(= (length lst) 1) (first lst)]\n    [(= (remainder\
+    \ (length lst) 2) 0) (if (= (remainder (first lst) 2) 0)\n                   \
+    \                       (+ (first lst) (add (rest lst)))\n                   \
+    \                       (add (rest lst)))]\n    [else (if (= (remainder (first\
+    \ lst) 2) 0)\n             (+ (first lst) (add (rest lst)))\n             (add\
+    \ (rest lst)))]))\n", "  (let loop ((lst lst) (sum 0))\n    (cond\n      [(empty?\
+    \ lst) sum]\n      [(zero? (modulo (car lst) 2)) (loop (cdr lst) (+ sum (car lst)))]\n\
+    \      [else (loop (cdr lst) sum)])))\n</code>\nThis solution uses the <code>modulo</code>\
+    \ function to detect if an element is even.\n", "  (reduce + 0 (filter even? (filter-odds\
+    \ lst))))\n</code>\nI found this one online, but I don't understand the syntax\
+    \ of using filter-odds in this way (and I'm not sure how to look it up). Any help\
+    \ would be appreciated!\n\n\nA:\n\nYou should write:\n<code>(define (add lst)\n\
+    \  (reduce + 0 (filter even? (filter-odds lst))))\n</code>\nHere <code>filter-odds</code>\
+    \ is a variable, or symbol, you have defined somewhere else.\n", "  (if (empty?\
+    \ lst)\n      0\n      (if (odd? (car lst))\n          (add (cdr lst))\n     \
+    \     (+ (car lst) (add (cdr lst))))))\n</code>\n", "  (accumulate + 0 (filter\
+    \ even? (filter odd? (range 1 (add1 (length lst)))))))\n</code>\n", "  (cond ((empty?\
+    \ lst) 0)\n        ((even? (first lst)) (+ (first lst) (add (rest lst))))\n  \
+    \      (else (add (rest lst)))))\n", "  (apply + (filter-odd (filter even? lst))))\n",
+  "  (let loop ([lst lst] [evens 0])\n    (if (null? lst)\n        evens\n       \
+    \ (let ([next (first lst)])\n          (if (and (even? next) (odd? (length lst)))\n\
+    \              (loop (rest lst) (+ evens next))\n              (loop (rest lst)\
+    \ evens))))))\n", "  (cond\n    [(= (length lst) 1) 0]\n    [(even? (car lst))\
+    \ (+ (car lst) (add (cdr lst)))]\n    [else (add (cdr lst))]))\n", "  (if (null?\
+    \ lst)\n      0\n      (if (odd? (length lst))\n          (add (cdr lst))\n  \
+    \        (+ (car lst) (add (cdr lst))))))\n", "  (sum (filter-odds (filter-evens\
+    \ lst))))\n", "  (cond [(empty? lst) 0]\n        [(empty? (rest lst)) 0]\n   \
+    \     [else (+ (first lst)\n                 (add (rest (rest lst))))]))\n</code>\n\
+    i.e. <code>(add '(1 2 3 4 5 6))</code> should result in <code>2 + 4 + 6 = 12</code>\n\
+    I know that <code>(first lst)</code> gets me the first element of the list but\
+    \ how do I get the element at a specific index?\nI can use <code>(rest lst)</code>\
+    \ to get the tail of the list, but is there a function that I can use to get the\
+    \ rest of the tail?\nI know I can use <code>(nth lst 2)</code> to get the element\
+    \ at index 2, but there must be a better way\n\n\nA:\n\nThere are no functions\
+    \ in Racket that operate on lists at an index. If you want to get the nth element\
+    \ of a list you have to do it recursively, like so:\n<code>(define (nth lst n)\n\
+    \  (if (= n 0)\n      (first lst)\n      (nth (rest lst) (- n 1))))\n</code>\n",
+  "  (let loop ([lst lst] [i 0] [total 0])\n    (cond\n      [(empty? lst) total]\n\
+    \      [(and (odd? i) (even? (first lst))) (loop (rest lst) (+ i 1) (+ total (first\
+    \ lst)))]\n      [else (loop (rest lst) (+ i 1) total)])))\n", "  (define (addit\
+    \ l i sum)\n    (cond [(null? l) sum]\n          [(= (modulo i 2) 1)\n       \
+    \    (addit (cdr l) (+ i 1) (+ sum (car l)))]\n          [else (addit (cdr l)\
+    \ (+ i 1) sum)]))\n  (addit lst 0 0))\n", "  (cond [(empty? lst) 0]\n        [(even?\
+    \ (first lst)) (+ (first lst) (add (rest lst)))]\n        [else (add (rest lst))]))",
+  "  (cond [(empty? lst) empty]\n        [(= 1 (remainder (first lst) 2)) (add (rest\
+    \ lst))]\n        [else (first lst) + (add (rest lst))]))\n</code>\nAny help is\
+    \ appreciated!\n\n\nA:\n\n<code>(define (add lst)\n  (cond [(empty? lst) 0]\n\
+    \        [(= 1 (remainder (first lst) 2)) (add (rest lst))]\n        [else (+\
+    \ (first lst) (add (rest lst)))]))\n</code>\n1) Your solution doesn't work. You\
+    \ have to return a number. <code>empty</code> isn't a number.\n2) Recursion works\
+    \ as: \n<code>add(...) -&gt; add(rest(...))\n</code>\nand not\n<code>add(...)\
+    \ + add(rest(...))\n</code>\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"
