@@ -16,7 +16,1498 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate m
   \ (list 0 0 0)) 5) 0)\n    (check-equal? (candidate (list (list 1 1 1 1) (list 1\
   \ 1 1 1)) 2) 4)\n    (check-equal? (candidate (list (list 1 1 1 1) (list 1 1 1 1))\
   \ 9) 2)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (cond [(empty? grid) 0]\n        [else (+ capacity (max_fill (drop\
+    \ (first grid) (sub1 capacity)) capacity))]))\n", "  ;; given a grid and capacity\
+    \ return the number of times we\n  ;; need to fill the buckets to empty the wells\n\
+    \  (if (empty? grid) 0\n      (add1 (max_fill (map (lambda (row) (apply max (map\
+    \ sub1 row)))\n                            (map (lambda (row) (map - row capacity))\
+    \ grid))\n              capacity))))", "  (define (fill-wells grid capacity row)\n\
+    \    (if (equal? row (length grid)) 0\n      (let ([water (count 1 (list-ref grid\
+    \ row))])\n        (let ([filling (- capacity water)])\n          (if (> filling\
+    \ 0)\n              (for/sum ([j (in-range filling)])\n                (list-set\
+    \ grid row (- 1 (list-ref grid row))))\n              0))\n        (+ filling\
+    \ (fill-wells grid capacity (+ row 1))))))\n  (fill-wells grid capacity 0))\n",
+  "  (for/sum ([row grid])\n    (for/fold ([this-well 0] [max-so-far 0])\n       \
+    \ ([elem row])\n      (if (zero? elem)\n          (if (positive? this-well)\n\
+    \              (begin\n                (set! max-so-far (max max-so-far this-well))\n\
+    \                (set! this-well 0))\n              (values max-so-far this-well))\n\
+    \          (values max-so-far (+ this-well 1))))))\n", "  (define (max-subarray\
+    \ lst)\n    (for/fold ([acc 0]\n               [best 0])\n        ([x lst])\n\
+    \      (let ([new-acc (max 0 (+ acc x))])\n        (values new-acc (max new-acc\
+    \ best)))))\n  (for/fold ([k 0])\n      ([sub (in-list grid)])\n    (let ([max-sub\
+    \ (max-subarray sub)])\n      (if (< max-sub capacity)\n          (values (+ k\
+    \ (quotient capacity max-sub)) k)\n          (values k k)))))\n", "  (apply max\
+    \ grid))\n", "  (define (accum grid capacity m)\n    (if (equal? capacity 0)\n\
+    \        m\n        (let ((w (vector-ref grid 0)))\n          (if (equal? w 0)\n\
+    \              (accum (vector-drop grid 1) capacity m)\n              (accum (vector-drop\
+    \ grid 1) (- capacity 1) (+ m 1))))))\n  (if (vector? grid)\n      (accum grid\
+    \ capacity 0)\n      (let ((m 0))\n        (for ([i (in-range (vector-length grid))])\n\
+    \          (set! m (+ m (max_fill (vector-ref grid i) capacity))))\n        m)))",
+  "  (cond ((null? grid) 0)\n        ((not (notany? (lambda (x) (not (eq? x 1))) (car\
+    \ grid)))\n         (max_fill (cdr grid) capacity))\n        (else (min (reduce\
+    \ max (car grid)) capacity))))\n", "  (cond [(empty? grid) 0]\n        [else\n\
+    \         (define well\n           (apply max (map \n                      (lambda\
+    \ (well) (/ (apply + well) capacity)) \n                      grid)))\n      \
+    \   (cond [(empty? (map (lambda (row) (cdr (split row (lambda (x) (not (= x 1))))))\
+    \ grid))\n                0]\n               [else (+ well (max_fill (map (lambda\
+    \ (row) (cdr (split row (lambda (x) (not (= x 1)))))) grid) capacity))])]))\n",
+  "  (define (max_fill_inner grid capacity)\n    (define (max_fill_inner_helper grid\
+    \ capacity acc)\n      (if (or (null? grid) (null? (car grid)))\n          acc\n\
+    \          (max_fill_inner_helper (cdr grid) capacity (+ capacity\n          \
+    \                                             (accumulate + 0 (car grid))))))\n\
+    \    (max_fill_inner_helper grid capacity 0))\n  (define (accumulate op init lst)\n\
+    \    (if (null? lst)\n        init\n        (op (car lst) (accumulate op init\
+    \ (cdr lst)))))\n  (define (empty_row row capacity)\n    (cond ((null? row) 0)\n\
+    \          ((= 0 (car row)) (empty_row (cdr row) capacity))\n          ((<= capacity\
+    \ (car row)) (empty_row (cdr row) (- capacity (car row))))\n          (else (empty_row\
+    \ (cdr row) 0))))\n  (define (empty_grid grid capacity)\n    (cond ((null? grid)\
+    \ 0)\n          ((and (null? (car grid)) (null? (cdr grid))) 0)\n          ((null?\
+    \ (car grid)) (empty_grid (cdr grid) capacity))\n          (else (+ (empty_row\
+    \ (car grid) capacity)\n                   (empty_grid (cdr grid) capacity)))))\n\
+    \  (empty_grid grid (max_fill_inner grid capacity)))\n", "  (cond [(empty? grid)\
+    \ 0]\n        [else (+ capacity\n                 (min (max_fill (rest grid) capacity)\n\
+    \                      (list-ref (first grid) 0)))]))", "  (cond\n    [(empty?\
+    \ grid) 0]\n    [else (+ 1 (max_fill (map (\u03BB (row) (map - capacity row))\
+    \ grid) capacity))]))", "  (let ([num-rows (length grid)]\n        [num-cols (length\
+    \ (car grid))])\n    (let loop ([row 0] [col 0] [num-drops 0])\n      (when (and\
+    \ (< row num-rows) (< col num-cols))\n        (if (not (zero? (vector-ref (vector-ref\
+    \ grid row) col)))\n            (if (>= capacity (vector-ref (vector-ref grid\
+    \ row) col))\n                (loop (+ row 1) col num-drops)\n               \
+    \ (loop row (+ col 1) (+ num-drops (- capacity (vector-ref (vector-ref grid row)\
+    \ col)))))\n            (loop row (+ col 1) num-drops))))))\n", "  (let loop ((i\
+    \ 0) (max 0))\n    (cond\n      [(= i (length grid)) max]\n      [else\n     \
+    \  (let loop ((j 0) (current 0))\n         (cond\n           [(= j (length (car\
+    \ grid))) (loop (+ i 1) (max current max))]\n           [(= 1 (list-ref (car grid)\
+    \ j)) (loop (+ j 1) (+ current 1))]\n           [else (loop (+ j 1) current)]))])))\n",
+  "  (define (empty grid)\n    (apply max (map sum grid)))\n  (define (fill grid)\n\
+    \    (map (lambda (line) (map (lambda (x) (- capacity x)) line)) grid))\n  (define\
+    \ (add grid1 grid2)\n    (map (lambda (line1 line2) (map + line1 line2)) grid1\
+    \ grid2))\n  (define (water_in_wells grid)\n    (apply + (map sum grid)))\n  (define\
+    \ (count_fills grid)\n    (if (not (empty grid))\n        (+ 1 (count_fills (add\
+    \ grid (fill grid))))\n        0))\n  (count_fills grid))\n", "  (accumulate\n\
+    \   (lambda (x y) (if (&gt; x y) x y))\n   grid))\n", "  (define wells (vector->list\
+    \ grid))\n  (define (fill_well well)\n    (for*/fold ([buckets 0]) ([row well]\
+    \ [i (in-naturals)])\n      (cond [(= 0 row) buckets]\n            [(< row capacity)\
+    \ (+ buckets capacity)]\n            [else (+ buckets capacity (- row capacity))])))\n\
+    \  (for*/fold ([result 0]) ([well wells])\n    (+ result (fill_well well))))\n",
+  "  (letrec ([heights (map max grid)]\n           [cols (apply max heights)]\n  \
+    \         [buckets (make-vector cols capacity)]\n           [total (apply + heights)]\n\
+    \           [fill_buckets (lambda (height)\n                           (for ((bucket\
+    \ buckets)\n                                 #:when (and (> height 0) (= (vector-ref\
+    \ bucket) 0)))\n                             (set! height (- height capacity))\n\
+    \                             (vector-set! bucket capacity))\n               \
+    \            (if (> height 0)\n                               (error \"not enough\
+    \ buckets\")))])\n    (for ([col cols])\n      (fill_buckets (vector-ref heights\
+    \ col)))\n    (apply + buckets)))\n", "  (define (sum_to_capacity n m)\n    (if\
+    \ (= 1 n) m\n        (sum_to_capacity (- n 1) (+ m capacity))))\n  (define (list_sum\
+    \ l)\n    (if (null? l) 0\n        (+ (car l) (list_sum (cdr l)))))\n  (define\
+    \ (max_fill_helper grid capacity sum)\n    (if (null? grid) 0\n        (if (<=\
+    \ sum (list_sum (car grid)))\n            (begin (printf \"G:~a Sum:~a\\n\" (car\
+    \ grid) sum)\n                   (max_fill_helper (cdr grid) capacity (sum_to_capacity\
+    \ (length (car grid)) 0)))\n            (begin (printf \"G:~a Sum:~a\\n\" (car\
+    \ grid) sum)\n                   (+ 1 (max_fill_helper (cdr grid) capacity sum))))))\n\
+    \  (max_fill_helper grid capacity 0))\n", "  (if (empty? grid)\n      0\n    \
+    \  (if (>= capacity (sum (first grid)))\n          (+ 1 (max_fill (rest grid)\
+    \ capacity))\n          (let ([count 0])\n            (for ([i (in-range (length\
+    \ (first grid)))])\n              (let ([x (first (first grid))])\n          \
+    \      (if (= x 1)\n                    (begin\n                      (vector-set!\
+    \ (first grid) i 0)\n                      (set! count (+ 1 count))\n        \
+    \              (if (> count capacity)\n                          (error \"Too\
+    \ many 1s in first column\"))))))\n            (max_fill (rest grid) capacity))))))\n",
+  "  (cond\n    [(empty? grid) 0]\n    [else (max capacity\n               (max_fill\
+    \ (rest grid)\n                         (if (empty? (rest grid))\n           \
+    \                  0\n                             (max 0 (- capacity (head (rest\
+    \ grid)))))))]))", "  (cond\n    [(null? grid) 0]\n    [else\n     (min (max_fill\
+    \ (cdr grid) capacity)\n          (floor (/ (+ (apply max grid) capacity) capacity)))]))\n",
+  "  (define (single-fill grid)\n    (define (max-row-height grid)\n      (foldl max\
+    \ 0 (map max-row-height-single grid)))\n    (define (max-row-height-single row)\n\
+    \      (foldl (\u03BB (e acc) (if (= e 1) (+ acc 1) acc)) 0 row))\n    (define\
+    \ (fill-min-row grid row-height)\n      (define (fill-single-row row row-height)\n\
+    \        (foldl (\u03BB (e acc) (if (= e 1) (cons (- capacity row-height) acc)\
+    \ (cons e acc))) '() row))\n      (map (\u03BB (e) (fill-single-row e row-height))\
+    \ grid))\n    (if (not (any? (\u03BB (e) (= e 1)) (flatten grid))) grid\n    \
+    \    (begin (display grid) (newline) (single-fill (fill-min-row grid (max-row-height\
+    \ grid))))))\n  (define (deep-copy grid)\n    (foldl (\u03BB (e acc) (cons (foldl\
+    \ (\u03BB (e1 acc1) (cons e1 acc1)) '() e) acc)) '() grid))\n  (define (count-fills\
+    \ grid)\n    (if (eq? grid (deep-copy grid)) 1\n        (+ 1 (count-fills (single-fill\
+    \ grid)))))\n  (count-fills grid))\n", "  (define (fill grid capacity i)\n   \
+    \ (if (and (pair? grid)\n             (pair? (car grid)))\n        (cons (map\
+    \ (\u03BB (x) (min capacity x)) (car grid))\n              (fill (cdr grid) capacity\
+    \ (add1 i)))\n        i))\n  (fill grid capacity 0))\n", "  (define (inner i j\
+    \ m)\n    (if (= i (length grid))\n        m\n        (let ((n (min capacity (-\
+    \ (length (vector-ref grid i)) j))))\n          (if (= n 0)\n              (inner\
+    \ (+ i 1) 0 m)\n              (inner i (+ j n) (+ m n))))))\n  (inner 0 0 0))\n",
+  "  (define (fill-row row acc)\n    (cond\n      [(empty? row) acc]\n      [(<= acc\
+    \ 0) (fill-row (rest row) capacity)]\n      [(empty? (rest row)) (add1 acc)]\n\
+    \      [else (fill-row (rest row) (sub1 acc))]))\n  (apply + (map (lambda (row)\
+    \ (fill-row row capacity)) grid)))\n", "  (let loop ((grid grid) (capacity capacity)\
+    \ (n_fill 0))\n    (let ((max_row (apply max (map length grid))))\n      (if (=\
+    \ max_row capacity)\n          n_fill\n          (loop (map (lambda (row)\n  \
+    \                     (append (take capacity row) (drop capacity row)))\n    \
+    \                 grid)\n                capacity\n                (+ n_fill 1))))))\n",
+  "  (define grid-length (length grid))\n  (define row-length (length (vector-ref\
+    \ grid 0)))\n  (define (loop i total)\n    (cond ((= i grid-length) total)\n \
+    \         (else (loop (+ i 1)\n                      (+ total (max 0 (- capacity\
+    \ (vector-ref grid i))))))))\n  (loop 0 0))\n", "  (define (in-bounds x y) (and\
+    \ (< x (length grid))\n                               (< y (length (car grid)))))\n\
+    \  (define (get-water x y) (if (in-bounds x y)\n                             \
+    \ (list-ref (list-ref grid x) y)\n                              0))\n  (define\
+    \ (fill-cell x y)\n    (cond\n      [(= (get-water x y) 0) \n       (list 0 (build-list\
+    \ (length (car grid)) (\u03BB (x) 0)))]\n      [(= capacity 1)\n       (list 1\
+    \ (build-list (length (car grid)) (\u03BB (x) 0)))]\n      [else\n       (define\
+    \ (fill-water x y)\n         (cond\n           [(= (get-water x y) 1) (list 1\
+    \ (build-list (length (car grid)) (\u03BB (x) 0)))]\n           [(and (in-bounds\
+    \ x y)\n                 (= (get-water x y) 0))\n            (list 0 (build-list\
+    \ (length (car grid)) (\u03BB (x) 0)))]\n           [else (let ([water-left (get-water\
+    \ x y)])\n                   (cond\n                     [(= water-left capacity)\
+    \ (list capacity (build-list (length (car grid)) (\u03BB (x) 0)))]\n         \
+    \            [else\n                      (let ([fills (map (\u03BB (coords) (fill-water\
+    \ (car coords) (cadr coords)))\n                                        (list\
+    \ (list (+ x 1) y) (list x (+ y 1))))])\n                        (let ([fill-counts\
+    \ (map (\u03BB (x) (car x)) fills)]\n                              [fill-water\
+    \ (map (\u03BB (x) (cadr x)) fills)])\n                          (list (apply\
+    \ + fill-counts)\n                                (apply map + fill-water))))]))]))\n\
+    \            (let ([fills (fill-water x y)])\n              (cons (+ (car fills)\
+    \ 1)\n                    (list-set (cadr fills) y 1))))]))\n  (let ([filled (map\
+    \ (\u03BB (x) (fill-cell 0 x)) (range (length (car grid))))])\n    (apply max\
+    \ (", "  (define (recurse wells capacity)\n    (match (remove zero? wells)\n \
+    \     [(list) capacity]\n      [(list x xs)\n       (if (> capacity x)\n     \
+    \      (recurse xs capacity)\n           (recurse (map (lambda (w) (- w capacity))\
+    \ xs) capacity))]))\n  (recurse grid capacity))", "  (define (max-fill-row-tail\
+    \ row total)\n    (cond [(null? row) total]\n          [(= (car row) 1)\n    \
+    \       (max-fill-row-tail (cdr row) (add1 total))]\n          [else\n       \
+    \    (max-fill-row-tail (cdr row) total)]))\n  (define (max-fill-row row)\n  \
+    \  (max-fill-row-tail row 0))\n  (define (max-fill-grid-tail grid total)\n   \
+    \ (cond [(null? grid) total]\n          [else\n           (max-fill-grid-tail\
+    \ (cdr grid)\n                               (add1\n                         \
+    \       (/ (max-fill-row (car grid)) capacity)))]))\n  (max-fill-grid-tail grid\
+    \ 0))\n", "  (define (helper grid cap acc)\n    (cond\n      [(empty? grid) acc]\n\
+    \      [(<= (array-length (first grid)) 0) acc]\n      [else\n       (define first-well\
+    \ (first grid))\n       (define (new-first-well i)\n         (cond\n         \
+    \  [(<= i 0) (array)]\n           [(< (first-well i) cap) (new-first-well (- i\
+    \ 1))]\n           [else (array-append (new-first-well (- i 1))\n            \
+    \                   (array cap))]))\n       (helper (rest grid) cap (+ acc 1))]))\n\
+    \  (helper grid capacity 0))\n", "  (let loop ([grid grid] [result 0])\n    (let*\
+    \ ([max-well (apply max (map max grid))]\n           [filled (map (lambda (w)\
+    \ (if (< w max-well) (+ w capacity) w)) grid)])\n      (if (every (lambda (w)\
+    \ (<= w max-well)) filled)\n          result\n          (loop filled (+ result\
+    \ 1))))))", "  (define row-maxes\n    (for/list ([row grid])\n      (for/fold\
+    \ ([max 0]) ([e (in-list row)])\n        (max e max))))\n  (define max-counts\n\
+    \    (for/list ([max row-maxes])\n      (count max capacity)))\n  (apply max (apply\
+    \ + max-counts)))\n", "  (define len (length grid))\n  (define fill_table (make-vector\
+    \ len 0))\n  (define (max-fill-helper grid fill-table capacity i)\n    (cond [(=\
+    \ i len) fill-table]\n          [else\n           (let ([next-row (vector-ref\
+    \ grid i)])\n             (let ([fill-row (vector-ref fill-table i)])\n      \
+    \         (let ([fill-row-new (map + capacity next-row)])\n                 (vector-set!\
+    \ fill-table i (map + fill-row fill-row-new))\n                 (max-fill-helper\
+    \ grid fill-table capacity (+ i 1))))))]))\n  (define filled-table (max-fill-helper\
+    \ grid fill-table capacity 0))\n  (define max-row (apply max (vector-ref filled-table\
+    \ 0)))\n  (define (max-row-helper filled-table max-row i)\n    (cond [(= i len)\
+    \ max-row]\n          [else\n           (let ([val (vector-ref filled-table i)])\n\
+    \             (if (>= val max-row)\n                 (max-row-helper filled-table\
+    \ val (+ i 1))\n                 (max-row-helper filled-table max-row (+ i 1))))]))\n\
+    \  (max-row-helper filled-table max-row 1))\n", "  (match grid\n    [(list) 0]\n\
+    \    [(cons hd tl)\n     (define a (foldl (lambda (acc elem) (+ acc elem)) 0 hd))\n\
+    \     (define max_next (max_fill tl capacity))\n     (define fills (+ (/ a capacity)\
+    \ (modulo a capacity)))\n     (define n (* fills capacity))\n     (if (> n a)\n\
+    \         max_next\n         (max max_next fills))]))\n", "  (define total-water\
+    \ 0)\n  (define (fill-row)\n    (cond\n      [(not (row-full?)) 0]\n      [(empty-row?)\
+    \ 1]\n      [else (+ 1 (max (fill-row (sub1 capacity))\n                     \
+    \ (fill-row capacity)))]))\n  (for ([r grid])\n    (set! total-water (+ total-water\
+    \ (fill-row r))))\n  total-water)\n", "  ;; TODO: fill this in\n  #f)\n", "  (define\
+    \ rows (build-list (length grid)\n            (lambda (i) (vector-ref grid i))))\n\
+    \  (define cols (vector->list grid))\n  (define fill-a-row\n    (lambda (row)\n\
+    \      (define fill-a-well\n        (lambda (well count)\n          (if (or (zero?\
+    \ well) (= well capacity))\n              count\n              (fill-a-well (add1\
+    \ well) (add1 count)))))\n      (list->vector (map fill-a-well row))))\n  (define\
+    \ fill-a-col\n    (lambda (col)\n      (define fill-a-well\n        (lambda (well\
+    \ count)\n          (if (or (zero? well) (= well capacity))\n              count\n\
+    \              (fill-a-well (add1 well) (add1 count)))))\n      (list->vector\
+    \ (map fill-a-well col))))\n  (add (apply max (map fill-a-row rows))\n       (apply\
+    \ max (map fill-a-col cols))))\n", "  (match grid [(list) capacity]\n        \
+    \     [(cons (cons h t) r)\n              (if (> h capacity)\n               \
+    \   (max_fill (cons (list capacity) r) capacity)\n                  (max_fill\
+    \ r (- capacity h)))]))\n", "  (define mx (apply max (map (\u03BB (x) (apply +\
+    \ x)) grid)))\n  (cond ((< mx capacity) mx)\n        ((= mx capacity) mx)\n  \
+    \      ((> mx capacity) (max_fill (map (\u03BB (x) (map (\u03BB (y) (cond ((=\
+    \ y capacity) 0)\n                                                           \
+    \       ((= y 0) 0)\n                                                        \
+    \          ((> y capacity) (- y capacity))\n                                 \
+    \                                 (else (- capacity y))))\n                  \
+    \                            x))\n                                    grid)\n\
+    \                               capacity))))\n", "  (foldl\n   (lambda (g d) (min\
+    \ capacity (apply max g)))\n   capacity\n   grid))\n", "  (let ([max_fill_helper\
+    \ (lambda (grid capacity)\n                           (let loop ([rows grid] [times\
+    \ 0])\n                             (cond [(empty? rows) times]\n            \
+    \                       [else\n                                    (let ([fill\
+    \ (calculate-required-fill (first rows) capacity)])\n                        \
+    \              (if (zero? fill)\n                                          (loop\
+    \ (rest rows) times)\n                                          (loop (rest rows)\
+    \ (+ times fill))))])))])\n    (max_fill_helper grid capacity)))\n", "  (define\
+    \ (count res sum grid capacity)\n    (cond [(and (empty? grid) (= sum capacity))\
+    \ (+ res 1)]\n          [(empty? grid) 0]\n          [(= sum capacity) (count\
+    \ (+ res 1) 0 grid capacity)]\n          [else (let* ([curr (first grid)]\n  \
+    \                    [new-sum (+ sum curr)]\n                      [new-grid (rest\
+    \ grid)])\n                  (count res new-sum new-grid capacity))]))\n  (count\
+    \ 0 0 grid capacity))\n", "  (let loop ((grid grid) (start 0) (result 0))\n  \
+    \  (if (&lt; start (vector-length grid))\n        (let* ((well (vector-ref grid\
+    \ start))\n               (fill (max-fill-well well capacity))\n             \
+    \  (capacity (- capacity fill)))\n          (loop (vector-set! grid start (empty-well\
+    \ well))\n                (+ start 1)\n                (+ result fill)))\n   \
+    \     result)))\n</code>\nThe two functions <code>max-fill-well</code> and <code>empty-well</code>\
+    \ are trivial ones which I leave as an exercise to the reader. The function <code>max-fill</code>\
+    \ is also very simple. We take the first well, fill it up as much as possible,\
+    \ and then advance to the next well.\nThe problem is that when <code>max-fill</code>\
+    \ finds that there is no more water to remove (i.e. <code>capacity</code> is 0),\
+    \ it still has to go through the vector and empty all the wells (it is not allowed\
+    \ to leave a well partially filled). The only way I can think of doing that is\
+    \ by using mutation, which I don't want to do. Is there a way to avoid mutation\
+    \ but still have a constant time traversal?\n\n\nA:\n\nI think your algorithm\
+    \ is solid.  But I'm not sure if it's really helpful to use vectors instead of\
+    \ lists.  Vectors are better at random access, but it's not really helping you\
+    \ here, because you want to walk the whole list anyway.  (If you want to prevent\
+    \ the use of mutation, you could use immutable data types.)\n", "  (displayln\
+    \ \"grid:\" grid)\n  (displayln \"capacity:\" capacity)\n  (define (max_fill-helper\
+    \ grid capacity buckets)\n    (cond [(empty? grid) buckets]\n          [(empty?\
+    \ (first grid)) (max_fill-helper (rest grid) capacity buckets)]\n          [(max_fill-helper\
+    \ (rest grid) capacity (+ 1 buckets))]))\n  (max_fill-helper grid capacity 0))\n",
+  "  (cond\n    [(empty? grid) 0]\n    [else\n     (let*\n         ([row-max (apply\
+    \ max (car grid))]\n          [fill-row (repeat row-max 1)]\n          [diff (sub1\
+    \ (vector-length fill-row))]\n          [buckets (remainder diff capacity)])\n\
+    \       (+ buckets (max_fill (cdr grid) capacity)))]))\n", "  (if (zero? capacity)\
+    \ 0\n      (let* ([rows (length grid)]\n             [cols (length (first grid))]\n\
+    \             [fill-bucket (make-table (lambda () 0))]\n             [nbr-buckets\
+    \ (for/fold ([sum 0]) ([i (in-range cols)])\n                            (add1\
+    \ sum (if (positive? (vector-ref (first grid) i)) sum 1)))]\n             [min-nbr-buckets\
+    \ (for/fold ([max nbr-buckets]) ([i (in-range rows)])\n                      \
+    \           (min max (for/fold ([sum 0]) ([j (in-range cols)])\n             \
+    \                              (add1 sum (if (positive? (vector-ref (vector-ref\
+    \ grid i) j)) sum 1)))))]\n             [fill-bucket (lambda (n)\n           \
+    \                 (for*/fold ([filled (make-vector n 0)]) ([i (in-range rows)]\
+    \ [j (in-range cols)])\n                                (let* ([current-fill (vector-ref\
+    \ filled j)]\n                                       [current-depth (vector-ref\
+    \ (vector-ref grid i) j)])\n                                  (cond [(positive?\
+    \ current-depth)\n                                         (let* ([new-fill (+\
+    \ current-fill current-depth)]\n                                             \
+    \   [result (if (> new-fill capacity) (quotient new-fill capacity) 0)])\n    \
+    \                                       (vector-set! filled j (- new-fill (* capacity\
+    \ result)))\n                                           (if (> new-fill capacity)\
+    \ (add1 result) result))]\n                                        [else 0])))))]\n\
+    \             [max-fill (for/fold ([max 0]) ([i (in-range rows)])\n          \
+    \                  (max max (apply + (fill-bucket min-nbr-buckets))))])\n    \
+    \    (add1 (quotient max-fill capacity)))))", "  (define h (length grid))\n  (define\
+    \ w (length (first grid)))\n  (define (fill-index i j)\n    (cond [(= i h) j]\n\
+    \          [(>= j w) (+ (fill-index (add1 i) 0) 1)]\n          [(= (grid-ref grid\
+    \ i j) 0) (fill-index i (add1 j))]\n          [else (+ (fill-index i (add1 j))\
+    \ capacity)]))\n  (fill-index 0 0))", "  (define wells (hash))\n  (for ([row grid])\n\
+    \    (for ([col row])\n      (hash-set! wells col (add1 (hash-ref wells col 0)))))\n\
+    \  (define count 0)\n  (for ([key (in-hash wells)])\n    (define fill (- capacity\
+    \ (hash-ref wells key 0)))\n    (when (&gt; fill 0)\n      (for ([row grid])\n\
+    \        (for ([col row])\n          (when (&gt;= fill (sub1 (hash-ref wells col\
+    \ 0)))\n            (set! fill (- fill (sub1 (hash-ref wells col 0))))\n     \
+    \       (hash-set! wells col 0))))\n      (set! count (add1 count))))\n  count)\n",
+  "  (define filled (make-vector (vector-length grid) capacity))\n  (define (fill\
+    \ i)\n    (if (&lt; i (vector-length grid))\n        (begin\n          (vector-set!\
+    \ filled i (max (- capacity\n                                        (vector-ref\
+    \ grid i))\n                                     (vector-ref filled (+ i 1))))\n\
+    \          (fill (+ i 1)))))\n  (define (fill2 i)\n    (cond\n      [(&lt; i (vector-length\
+    \ grid))\n       (begin\n         (vector-set! filled i (max (- capacity\n   \
+    \                                    (vector-ref grid i))\n                  \
+    \                  (vector-ref filled (+ i 1))))\n         (fill2 (+ i 1)))]\n\
+    \      [else 0]))\n  (define (fill3 i)\n    (define (fill-helper i)\n      (let\
+    \ ((new-value (max (- capacity\n                              (vector-ref grid\
+    \ i))\n                           (vector-ref filled (+ i 1)))))\n        (vector-set!\
+    \ filled i new-value)\n        (if (&lt; i (vector-length grid))\n           \
+    \ (fill-helper (+ i 1)))))\n    (fill-helper i))\n  (fill3 0)\n  filled)\n", " \
+    \ (define well-height (car grid))\n  (define empty-wells (build-empty-wells well-height))\n\
+    \  (define (empty-wells grid capacity empty-wells)\n    (if (= grid '()) empty-wells\n\
+    \        (empty-wells (cdr grid) capacity \n                     (fill-wells (car\
+    \ grid) capacity empty-wells))))\n  (length (empty-wells (cdr grid) capacity empty-wells)))",
+  "  (define (count_nonzero-columns grid)\n    (if (null? grid) 0\n      (+ (length\
+    \ (filter (\u03BB (x) (not (zero? x))) (car grid)))\n         (count_nonzero-columns\
+    \ (cdr grid)))))\n  (define (max-value-columns grid)\n    (if (null? grid) 0\n\
+    \      (max (apply max (car grid))\n           (max-value-columns (cdr grid)))))\n\
+    \  (define (make-empty grid)\n    (map (\u03BB (row) (map (\u03BB (v) 0) row))\
+    \ grid))\n  (define (extract grid capacity)\n    (if (null? grid) empty\n    \
+    \  (let* ([n (min capacity (max-value-columns grid))]\n             [grid (map\
+    \ (\u03BB (row) (map (\u03BB (v) (max 0 (- v n))) row)) grid)])\n        (cons\
+    \ (map (\u03BB (v) (if (zero? v) 0 (- capacity v))) (car grid))\n            \
+    \  (extract (cdr grid) capacity)))))\n  (let* ([empty (make-empty grid)]\n   \
+    \      [nonzero-columns (count_nonzero-columns grid)]\n         [last-grid (iterate\
+    \ (\u03BB (g) (extract g capacity)) grid)]\n         [steps (length (take-while\
+    \ (\u03BB (g) (not= g empty)) last-grid))])\n    (if (zero? nonzero-columns) 0\
+    \ (+ steps 1))))\n", "  (define (max-sum-fill grid capacity)\n    (max-sum-fill-helper\
+    \ grid capacity 0))\n  (define (max-sum-fill-helper grid capacity acc)\n    (cond\n\
+    \      [(empty? grid) acc]\n      [(= (sum (first grid)) capacity)\n       (max-sum-fill-helper\
+    \ (rest grid) capacity (+ acc 1))]\n      [else (max-sum-fill-helper (rest grid)\
+    \ capacity acc)]))\n  (max-sum-fill grid capacity))\n", "  (accumulate\n   (lambda\
+    \ (grid capacity acc)\n     (match-define (list cols rows) (dimensions grid))\n\
+    \     (if (empty? grid) acc\n       (let* ([offset (min-list (map (lambda (row)\
+    \ \n                                        (first (positions 1 row)))\n     \
+    \                                 grid))]\n              [max-fill-offset (max-list\
+    \ (map (lambda (row) \n                                                (first\
+    \ (positions 1 row)))\n                                              grid))]\n\
+    \              [wells-filled (- max-fill-offset offset)]\n              [buckets-lowered\
+    \ (/ wells-filled capacity)])\n         (if (and (= wells-filled capacity)\n \
+    \                 (= buckets-lowered 0))\n             (values (cons (cons 1 wells-filled)\
+    \ acc)\n                     (grid-remove-columns offset capacity grid))\n   \
+    \          (values (cons (cons buckets-lowered wells-filled) acc)\n          \
+    \           (grid-remove-columns offset capacity grid))))))\n   '()\n   grid\n\
+    \   capacity))", "  (define wells (length grid))\n  (define levels (vector-length\
+    \ (vector-ref grid 0)))\n  (define (loop steps water_remaining)\n    (cond [(=\
+    \ wells 0) steps]\n          [(< water_remaining 0) #f]\n          [else (loop\
+    \ (add1 steps)\n                      (let loop_f ((i (- wells 1)) (max_level\
+    \ -1))\n                        (cond [(= i -1) max_level]\n                 \
+    \             [(< max_level 0) (loop_f (- i 1) (- capacity 1))]\n            \
+    \                  [(>= (vector-ref (vector-ref grid i) max_level) 0)\n      \
+    \                         (loop_f (- i 1) (add1 max_level))]\n               \
+    \               [else\n                               (begin\n               \
+    \                  (vector-set! (vector-ref grid i) max_level -1)\n          \
+    \                       (loop_f (- i 1) (- capacity 1)))]))\n                \
+    \      (- water_remaining capacity)))]))\n  (loop 0 capacity))", "  (cond\n  \
+    \  [(null? grid) capacity]\n    [(= (apply max (car grid)) 0) (max_fill (cdr grid)\
+    \ capacity)]\n    [else (max_fill (cdr grid) (+ capacity 1))]))\n", "  (define\
+    \ (max_water water)\n    (apply max water))\n  (define (lower_bucket water)\n\
+    \    (map (lambda (x) (- x capacity)) water))\n  (define (min_times water)\n \
+    \   (for/fold ([count 0]) ([x water])\n      (if (negative? x)\n          (add1\
+    \ count)\n          count)))\n  (min_times (iterate lower_bucket (map max_water\
+    \ grid))))\n", "  (local [(define (max_fill' grid capacity)\n            (cond\
+    \ [(empty? grid) 0]\n                  [(>= capacity 0) capacity]\n          \
+    \        [else (max_fill' (rest grid) (+ capacity (max (first grid))))]))]\n \
+    \   (max_fill' grid 0)))\n", "  (apply max (map (lambda (i) \n               \
+    \     (/ capacity i)) \n                  (map sum grid))))", "  (define res 0)\n\
+    \  (define full 0)\n  (for ((i (in-range (vector-length grid))))\n    (set! full\
+    \ 0)\n    (for ((j (in-range (vector-length (vector-ref grid i)))))\n      (if\
+    \ (= 1 (vector-ref (vector-ref grid i) j))\n          (set! full (+ full 1))\n\
+    \          (set! full 0)))\n    (set! res (+ res (quotient (+ full capacity) capacity))))\n\
+    \  res)", "  (define accumulator (make-list (length grid) 0))\n  (for/fold ([max\
+    \ 0]) ([i (in-range (length grid))])\n    (define row (list-ref grid i))\n   \
+    \ (define filled (min capacity (apply + row)))\n    (define to-fill (max (- capacity\
+    \ filled) 0))\n    (define place (modulo i (length accumulator)))\n    (define\
+    \ total (+ filled (list-ref accumulator place)))\n    (list-set! accumulator place\
+    \ total)\n    (max max total)))\n", "  ;; find the first zero\n  ;; find the first\
+    \ unit\n  ;; subtract them\n  ;; and then repeat\n  (local [(define (find-zero-at-column\
+    \ grid column)\n    (for/first ([row (in-vector grid)])\n      (and (vector-ref\
+    \ row column) (zero? (vector-ref row column)))))\n    (define (find-unit-at-column\
+    \ grid column)\n      (for/first ([row (in-vector grid)])\n        (and (vector-ref\
+    \ row column) (not (zero? (vector-ref row column))))))\n    (define (find-first-zero\
+    \ grid)\n      (for/first ([i (in-range (vector-length (vector-ref grid 0)))])\n\
+    \        (find-zero-at-column grid i)))\n    (define (fill-row grid row capacity)\n\
+    \      (for ([i (in-range (vector-length row))])\n        (cond [(= (vector-ref\
+    \ row i) 0) (vector-set! row i capacity)]\n              [(< capacity (vector-ref\
+    \ row i)) (vector-set! row i capacity)]\n              [else (vector-set! row\
+    \ i 0)])))\n    (define (fill-grid grid capacity)\n      (for/vector ([row (in-vector\
+    \ grid)])\n        (fill-row grid row capacity) row))\n    (define (fill-columns\
+    \ grid capacity)\n      (for/vector ([row (in-vector grid)])\n        (for/vector\
+    \ ([i (in-range (vector-length row))])\n          (cond [(= (vector-ref row i)\
+    \ 0) (vector-set! row i capacity)]\n                [(< capacity (vector-ref row\
+    \ i)) (vector-set! row i capacity)]\n                [else (vector-set! row i\
+    \ 0)])\n          i)))\n    (define (count-zeros grid)\n      (for/sum ([row (in-vector\
+    \ grid)])\n        (for/sum ([i (in-range (vector-length row))])\n          (if\
+    \ (zero? (vector-ref row i)) 1 0))))\n    (define (count-units grid)\n      (for/sum\
+    \ ([row (in-vector grid)])\n        (for/sum ([i", "  (define (fill-wells grid\
+    \ capacity)\n    (cond\n      [(null? grid)\n       grid]\n      [(<= (apply max\
+    \ (car grid)) capacity)\n       (cons (car grid) (fill-wells (cdr grid) capacity))]\n\
+    \      [else\n       (cons (map (lambda (x) (if (> x capacity) (- x capacity)\
+    \ 0)) (car grid))\n             (fill-wells (cdr grid) capacity))]))\n  (define\
+    \ (count-fills grid capacity)\n    (cond\n      [(null? grid)\n       0]\n   \
+    \   [(> (apply max (car grid)) capacity)\n       (+ 1 (count-fills (fill-wells\
+    \ grid capacity) capacity))]\n      [else\n       (count-fills (cdr grid) capacity)]))\n\
+    \  (count-fills grid capacity))\n", "  (let loop ([grid grid] [capacity capacity]\
+    \ [buckets 0])\n    (if (empty? grid) buckets\n        (loop (rest grid) capacity\
+    \ (+ buckets capacity))))\n", "  (define (go grid capacity)\n    (let* ([len (length\
+    \ grid)]\n           [first-well (car grid)]\n           [first-fill (apply min\
+    \ capacity first-well)]\n           [second-well (car (cdr grid))]\n         \
+    \  [second-fill (apply min first-fill second-well)])\n      (cond ((= len 1) first-fill)\n\
+    \            ((= len 2) second-fill)\n            (else\n             (go (cdr\
+    \ grid) (- second-fill))))))\n  (go grid capacity))", "  (apply max grid))\n",
+  "  (define (filling-count lst)\n    (cond ((null? lst) 0)\n          ((or (null?\
+    \ (cdr lst))\n               (= (car lst) (cadr lst)))\n           (add1 (filling-count\
+    \ (cdr lst))))\n          (else 0)))\n  (foldl + 0 (map filling-count grid)))",
+  "  ;; how much water we can fill in a row\n  (define (fill_row row)\n    (let ((in-a-row\
+    \ 0))\n      (for ([x row])\n        (if (= x 1)\n            (set! in-a-row (add1\
+    \ in-a-row))\n            (begin\n              (if (> in-a-row capacity)\n  \
+    \                (set! in-a-row capacity)\n                  (set! in-a-row 0))))\n\
+    \        in-a-row))\n  ;; how much water we can fill in a column\n  (define (fill_col\
+    \ col)\n    (let ((in-a-col 0))\n      (for ([x col])\n        (if (= x 1)\n \
+    \           (set! in-a-col (add1 in-a-col))\n            (begin\n            \
+    \  (if (> in-a-col capacity)\n                  (set! in-a-col capacity)\n   \
+    \               (set! in-a-col 0))))\n        in-a-col))\n  ;; fill in a grid\
+    \ row by row\n  (define (fill_row_by_row grid)\n    (define (empty_a_row grid\
+    \ capacity row)\n      (let ((index 0))\n        (for ([x row])\n          (if\
+    \ (= x 1)\n              (set! index (add1 index))\n              (set! row (set-col!\
+    \ row index 0))))\n        grid))\n  (define (all_empty grid)\n    (define (has_empty-cells?\
+    \ grid)\n      (for ([x grid])\n        (for ([y x])\n          (if (= y 1)\n\
+    \              (return #t))))\n      #f)\n    (let ([l grid])\n      (if (has_empty-cells?\
+    \ l)\n          (begin\n            (set! l (empty_a_row l capacity (car l)))\n\
+    \            (all_empty l))\n          l)))\n  (define (fill_col_by_col grid)\n\
+    \    (define (empty_a_col grid capacity col)\n      (let ((index 0))\n       \
+    \ (for ([x col])\n          (if (= x 1)\n              (set! index (add1 index))\n\
+    \              (set! col (set-", "  (cond\n    [(= capacity 1)\n     (define (count\
+    \ x)\n       (cond\n         [(= x 0) 0]\n         [(= x 1) 1]))\n     (apply\
+    \ + (map count (apply append grid)))]\n    [(> capacity 1)\n     (define num_wells\
+    \ (length grid))\n     (define (num_water well)\n       (length (filter (lambda\
+    \ (x) (= x 1)) well)))\n     (define water (map num_water grid))\n     (define\
+    \ avg (/ (apply + water) num_wells))\n     (define (overflow well)\n       (-\
+    \ (num_water well) avg))\n     (define (fill_grid water)\n       (map (lambda\
+    \ (x)\n              (cond\n                [(> x 0) 1]\n                [else\
+    \ 0]))\n            water))\n     (define overflows (map overflow grid))\n   \
+    \  (define (clean g)\n       (filter (lambda (x) (> (num_water x) 0)) g))\n  \
+    \   (define well_buckets\n       (clean (map fill_grid overflows)))\n     (define\
+    \ fillers (map num_water well_buckets))\n     (+ (max_fill well_buckets capacity)\n\
+    \        (max_fill (map (lambda (x y) (- x y)) grid fillers) capacity))]))", " \
+    \ (if (not (null? grid))\n      (let* ([top (car grid)]\n             [rest (cdr\
+    \ grid)]\n             [full-rows (count_full top capacity)]\n             [rest-buckets\
+    \ (max_fill rest capacity)])\n        (+ full-rows rest-buckets))\n      0))\n",
+  "  (cond\n    [(null? grid) 0]\n    [else (define l (max_fill (cdr grid) capacity))\n\
+    \          (define fill-cnt\n            (cond\n              [(>= (car grid)\
+    \ capacity) (exact-integer-sqrt (car grid))]\n              [else (car grid)]))\n\
+    \          (+ l fill-cnt)]))\n", "  (define filled (make-vector (vector-length\
+    \ grid) 0))\n  (for ([i (in-range (vector-length grid))])\n    (for ([j (in-range\
+    \ (vector-length (vector-ref grid i)))])\n      (if (vector-ref (vector-ref grid\
+    \ i) j)\n          (vector-set! filled i (add1 (vector-ref filled i))))))\n  (define\
+    \ length (vector-length filled))\n  (define max (apply max filled))\n  (define\
+    \ steps (quotient max capacity))\n  (define current-step 0)\n  (define current-row\
+    \ 0)\n  (define (next-row)\n    (if (&gt;= current-row length)\n        0\n  \
+    \      (add1 current-row)))\n  (define (has-water)\n    (if (&gt;= (vector-ref\
+    \ filled current-row) current-step)\n        1\n        0))\n  (define (pour-water)\n\
+    \    (for ([i (in-range (vector-length (vector-ref grid current-row)))])\n   \
+    \   (if (vector-ref (vector-ref grid current-row) i)\n          (begin\n     \
+    \       (vector-set! (vector-ref grid current-row) i 0)\n            (vector-set!\
+    \ filled current-row (sub1 (vector-ref filled current-row)))))))\n  (define (output-grid)\n\
+    \    (for ([i (in-range (vector-length grid))])\n      (printf \"~a\\n\" (vector-ref\
+    \ grid i))))\n  (define (output-filled)\n    (for ([i (in-range (vector-length\
+    \ filled))])\n      (printf \"~a \" (vector-ref filled i))))\n  (printf \"max:\
+    \ ~a\\n\" max)\n  (printf \"steps: ~a\\n\" steps)\n  (printf \"grid:\\n\")\n \
+    \ (output-grid)\n  (printf \"filled:\\n\")\n  (output-filled)\n  (printf \"\\\
+    n\")\n  (printf \"~a\\n\" (add1 (for/fold ([current-step 0]) ([i (in-range steps)])\n\
+    \                       (if (eq? (has-water) 1)\n", "  (define (max-fill-r grid\
+    \ capacity sum max-fill)\n    (if (null? grid)\n        (apply max (append max-fill\
+    \ (list sum)))\n        (let* ([well (car grid)]\n               [max-well-fill\
+    \ (min capacity (apply + well))]\n               [fill (min sum max-well-fill)])\n\
+    \          (max-fill-r (cdr grid) capacity (- sum fill) (append max-fill (list\
+    \ fill))))))\n  (max-fill-r grid capacity capacity '()))\n", "  (define (capacity-left\
+    \ grid capacity capacity-left)\n    (define first-well (first grid))\n    (cond\n\
+    \      ((null? grid) capacity-left)\n      ((empty? (first grid)) (capacity-left\
+    \ grid capacity capacity-left))\n      ((not (empty? (first grid)))\n       (capacity-left\
+    \ (rest grid)\n                      capacity\n                      (if (> capacity\
+    \ capacity-left)\n                          capacity\n                       \
+    \   capacity-left)))))\n  (define (empty? well)\n    (empty? (filter (lambda (x)\
+    \ (= x 1)) well)))\n  (define (filled? well)\n    (not (empty? well)))\n  (define\
+    \ (fill well)\n    (map (lambda (x)\n           (if (= x 1)\n               0\n\
+    \               x))\n         well))\n  (define (lower-bucket grid capacity)\n\
+    \    (cond\n      ((null? grid) 0)\n      ((empty? (first grid)) (lower-bucket\
+    \ (rest grid) capacity))\n      ((filled? (first grid))\n       (fill (first grid))\n\
+    \       (lower-bucket (rest grid) capacity))\n      (else\n       (lower-bucket\
+    \ (rest grid) capacity))))\n  (define (remove-empties grid)\n    (filter filled?\
+    \ grid))\n  (define (filled-count grid)\n    (apply + (map (lambda (well)\n  \
+    \                  (count (lambda (x) (= x 1)) well))\n                  grid)))\n\
+    \  (if (= capacity 0)\n      0\n      (let ((initial-capacity (capacity-left grid\
+    \ capacity capacity)))\n        (if (= initial-capacity 0)\n            0\n  \
+    \          (let ((bucket-fill (filled-count grid)))\n              (cond\n   \
+    \             ((= bucket-fill capacity)\n                 (- (filled-count grid)\
+    \ (filled-count (rest grid))))\n                ((< bucket-fill capacity) initial-capacity)\n\
+    \                (else\n                 (lower-bucket grid capacity)\n      \
+    \           (filled-count grid))))))))", "  (for/sum ([row grid])\n    (define\
+    \ (fill capacity)\n      (cond [(>= capacity (length row))\n             capacity]\n\
+    \            [(= (length row) 1)\n             (if (> capacity 0)\n          \
+    \       (- capacity 1)\n                 capacity)]\n            [else\n     \
+    \        (min (fill (max (- capacity (apply max row)) 0))\n                  (add1\
+    \ (fill (- capacity 1))))]))\n    (fill capacity)))", "  (let loop ([grid grid]\
+    \ [count 0])\n    (cond [(= count capacity) count]\n          [(empty? grid) count]\n\
+    \          [else (loop (map (lambda (row) (fill row capacity)) grid) (+ count\
+    \ 1))])))\n", "  (define (max_fill-row grid-row capacity row)\n    (if (null?\
+    \ grid-row)\n        row\n        (let* ((count (count-row grid-row capacity))\n\
+    \               (fill (row-fill grid-row capacity)))\n          (if (= fill capacity)\n\
+    \              (max_fill-row (cdr grid-row) capacity row)\n              (max_fill-row\
+    \ (cdr grid-row) fill (+ row count))))))\n  (max_fill-row grid capacity 0))\n",
+  "  (define (max-fill-row row)\n    (foldl + 0 (filter (\u03BB (x) (= x 1)) row)))\n\
+    \  (define (max-fill-col col)\n    (apply max (map (\u03BB (row) (max-fill-row\
+    \ row)) col)))\n  (let ((max-fill (apply max (map max-fill-col grid))))\n    (if\
+    \ (> max-fill capacity)\n        (* (ceiling (/ max-fill capacity)) capacity)\n\
+    \        max-fill)))\n", "  (foldl (lambda (row sum) (+ sum (- capacity (apply\
+    \ max row)))) 0 grid))\n", "  (for*/sum ([rows (in-list grid)]\n             [buckets\
+    \ (in-range capacity)]\n             #:when (list-ref rows buckets))\n    1))\n",
+  "  (define (min-bucket* grid bucket)\n    (apply min (map (lambda (w) (quotient\
+    \ w bucket)) grid)))\n  (define (min-bucket grid bucket)\n    (if (= bucket 0)\n\
+    \        0\n        (min-bucket* grid bucket)))\n  (define (fill grid capacity)\n\
+    \    (cond [(empty? grid) 0]\n          [(and (empty? (rest grid)) (positive?\
+    \ (first grid))) 1]\n          [else (let ([fullest-bucket (min-bucket grid capacity)])\n\
+    \                  (+ fullest-bucket (fill (map - grid fullest-bucket) capacity)))]))\n\
+    \  (fill grid capacity))\n</code>\nThe <code>max_fill</code> function above solves\
+    \ the problem.\nThe function <code>fill</code> (inside <code>max_fill</code>)\n\
+    <code>(define (fill grid capacity)\n  (cond [(empty? grid) 0]\n        [(and (empty?\
+    \ (rest grid)) (positive? (first grid))) 1]\n        [else (let ([fullest-bucket\
+    \ (min-bucket grid capacity)])\n                (+ fullest-bucket (fill (map -\
+    \ grid fullest-bucket) capacity)))]))\n</code>\ngoes over the grid row by row,\
+    \ filling the buckets up to capacity, \nsubtracting the filled amount from the\
+    \ well,\nreducing the capacity by the filled amount\nand returning the number\
+    \ of times it has lowered the buckets.\nThis is then solved by the <code>max_fill</code>\
+    \ function, which goes over all bucket sizes from 1 to capacity and returns the\
+    \ minimum number of bucket-lowerings for each case.\nThe function <code>min-bucket</code>\
+    \ makes sure that it does not divide by zero,\nand <code>min-bucket*</code> is\
+    \ the function that does the actual work of calculating the minimum needed amount\
+    \ of water to fill buckets up to capacity.\nPlease provide your feedback and suggestions\
+    \ on how to improve this code.\n\n\nA:\n\nI'm going to focus on the two main functions\
+    \ that seem to be doing the bulk of the work: <code>min-bucket</code> and <code>fill</code>.\
+    \  The first thing that I noticed is that they are poorly", "  (cond [(null? grid)\
+    \ 0]\n        [else (+ (max_fill_helper (car grid) capacity) (max_fill (cdr grid)\
+    \ capacity))]))\n", "  (let* ([len (length grid)]\n         [cap-vec (make-vector\
+    \ len capacity)]\n         [prev-vec (make-vector len 0)])\n    (for ([i (in-range\
+    \ len)])\n      (let ([row (vector-ref grid i)])\n        (for ([j (in-range len)])\n\
+    \          (let ([cur-well (vector-ref row j)])\n            (when (not (= cur-well\
+    \ 0))\n              (let ([prev-well (vector-ref prev-vec j)])\n            \
+    \    (let ([cur-cap (vector-ref cap-vec j)])\n                  (cond\n      \
+    \              [(= prev-well 0)\n                     (vector-set! cap-vec j (-\
+    \ cur-cap 1))]\n                    [(= prev-well 1)\n                     (vector-set!\
+    \ cap-vec j (- cur-cap 1))]\n                    [(not (= prev-well 1))\n    \
+    \                 (vector-set! cap-vec j capacity)])))\n              (vector-set!\
+    \ prev-vec j cur-well))))))\n    cap-vec))\n", "  (define water 0)\n  (define\
+    \ rows (length grid))\n  (define cols (length (first grid)))\n  (for ([r (in-range\
+    \ rows)])\n    (for ([c (in-range cols)])\n      (set! water (+ water (grid r\
+    \ c)))\n      (set! capacity (- capacity (grid r c)))\n      (if (< capacity 0)\n\
+    \          (set! capacity 0))))\n  (if (= capacity 0)\n      (/ water 2)\n   \
+    \   -1))\n", "  (let ([max-fill (apply max grid)])\n    (let f ([grid grid] [current-fill\
+    \ 0] [buckets 0])\n      (cond\n        [(empty? grid) buckets]\n        [(>=\
+    \ max-fill capacity)\n         (f (rest grid) max-fill (+ buckets 1))]\n     \
+    \   [else\n         (f (rest grid)\n            (apply max (map + (first grid)\
+    \ current-fill))\n            (+ buckets 1))]))))\n```\n\n```\n#lang racket\n",
+  "  (define (count-fill wells)\n    (define (cur-fill well rest)\n      (if (null?\
+    \ rest)\n          (if (= well capacity)\n              1\n              0)\n\
+    \          (+ (if (> (+ well (car rest)) capacity)\n                 1\n     \
+    \            0)\n             (cur-fill (if (> (+ well (car rest)) capacity)\n\
+    \                           (- capacity (car rest))\n                        \
+    \   (+ well (car rest)))\n                       (cdr rest)))))\n    (cur-fill\
+    \ 0 wells))\n  (count-fill (map (\u03BB (r) (foldr + 0 r)) grid)))\n", "  (define\
+    \ (max-list ls)\n    (apply max ls))\n  (define (min-list ls)\n    (apply min\
+    \ ls))\n  (define (apply-to-all f ls)\n    (for/list ([l ls])\n      (f l)))\n\
+    \  (define (count-1s ls)\n    (for/fold ([count 0]) ([l ls])\n      (if (= l 1)\n\
+    \          (add1 count)\n          count)))\n  (define (zeros-to-ones ls)\n  \
+    \  (for/list ([l ls])\n      (if (= l 0)\n          1\n          l)))\n  (define\
+    \ (sum-list ls)\n    (for/fold ([sum 0]) ([l ls])\n      (add1 sum l)))\n  (define\
+    \ (sum-water grid capacity)\n    (define (sum-row row)\n      (cond [(<= (sum-list\
+    \ row) capacity)\n             0]\n            [else\n             (- capacity\
+    \ (count-1s row))]))\n    (apply-to-all sum-row grid))\n  (define (sum-water-per-row\
+    \ grid capacity)\n    (define (sum-water-per-row-helper grid capacity)\n     \
+    \ (define (sum-row row)\n        (cond [(<= (sum-list row) capacity)\n       \
+    \        (zeros-to-ones row)]\n              [else\n               (for/list ([l\
+    \ row])\n                 (if (= l 1)\n                     0\n              \
+    \       l))]))\n      (apply-to-all sum-row grid))\n    (define (all-rows-emptied?\
+    \ grid)\n      (andmap (lambda (row)\n                (apply = (cons 0 row)))\n\
+    \              grid))\n    (define (loop grid)\n      (cond [(all-rows-emptied?\
+    \ grid)\n             0]\n            [else\n             (add1 (loop (sum-water-per-row-helper\
+    \ grid capacity)))]))\n    (loop grid))\n  (max-list (sum-water grid capacity)))",
+  "  (define (f_max_fill grid capacity max-fill)\n    (let ((bucket-fill 0)\n    \
+    \      (next-max-fill 0))\n      (for/fold ([bucket-fill 0] [next-max-fill 0])\
+    \ ([well grid])\n        (let ((next-bucket-fill (- capacity well)))\n       \
+    \   (if (< next-bucket-fill 0)\n              (begin\n                (set! bucket-fill\
+    \ 0)\n                (set! next-max-fill 0))\n              (begin\n        \
+    \        (set! bucket-fill (+ bucket-fill next-bucket-fill))\n               \
+    \ (set! next-max-fill (max next-max-fill bucket-fill))))))\n      (if (> next-max-fill\
+    \ max-fill)\n          (f_max_fill grid capacity next-max-fill)\n          max-fill)))\n\
+    \  (f_max_fill grid capacity 0))\n", "  (define buckets (make-vector capacity\
+    \ 0))\n  (define (fill buckets grid)\n    (for ([row grid])\n      (vector-for-each\n\
+    \       (lambda (elt)\n         (cond\n           [(not (zero? elt))\n       \
+    \     (for ([bucket (in-vector buckets)])\n              (when (zero? bucket)\n\
+    \                (vector-set! buckets bucket capacity)\n                (set!\
+    \ row (map (lambda (x) (if (zero? x) x (- x 1))) row))))]))\n       row)))\n \
+    \ (fill buckets grid)\n  (vector-ref buckets 0))\n", "  (let lp ((grid grid) (row-sum\
+    \ (map sum grid)) (col-sum (apply map list row-sum)) (count 0))\n    (cond\n \
+    \     [(for/and ([x (in-list grid)]) (every? (<= capacity x)))]\n      [(for/and\
+    \ ([x (in-list col-sum)]) (every? (<= capacity x)))]\n      [else\n       (lp\
+    \ (map (\u03BB (r) (if (every? (<= capacity r) (apply map list row-sum)) r (map-with-index\
+    \ (\u03BB (c s) (if (or (= 0 s) (= capacity s)) c (- c capacity))) r))) grid)\
+    \ (map (\u03BB (r) (if (every? (<= capacity r) (apply map list row-sum)) r (map-with-index\
+    \ (\u03BB (c s) (if (or (= 0 s) (= capacity s)) s (- s capacity))) r))) row-sum)\
+    \ (map (\u03BB (r) (if (every? (<= capacity r) (apply map list col-sum)) r (map-with-index\
+    \ (\u03BB (c s) (if (or (= 0 s) (= capacity s)) s (- s capacity))) r))) col-sum)\
+    \ (+ count 1))])]))\n", "  (cond [(null? grid) 0]\n        [else (max (max_fill\
+    \ (cdr grid) capacity)\n                   (floor (apply min (car grid))\n   \
+    \                       capacity))]))\n", "  (empty-grid grid capacity))\n", " \
+    \ (define (helper grid capacity)\n    (cond\n      [(empty? grid) 0]\n      [(empty?\
+    \ (first grid)) (helper (rest grid) capacity)]\n      [else\n       (let ([row\
+    \ (first grid)]\n             [rest (rest grid)])\n         (begin\n         \
+    \  (set! row (cons capacity row))\n           (for ([i (in-range (length row))])\n\
+    \             (when (not (= (list-ref row i) capacity))\n               (for ([j\
+    \ (in-range i)])\n                 (set! (list-ref row j) (+ (list-ref row j)\
+    \ (- capacity (list-ref row i))))\n                 (set! (list-ref row i) capacity))))\n\
+    \           (+ 1 (helper rest capacity)))))]))\n  (helper grid capacity))\n",
+  "  (define (max_fill_helper grid capacity to_fill)\n    (if (= to_fill 0)\n    \
+    \    capacity\n        (if (equal? (car grid) (make-list (length (car grid)) 1))\n\
+    \            to_fill\n            (max_fill_helper (cdr grid) capacity (+ to_fill\
+    \ capacity)))))\n  (max_fill_helper grid capacity 0))\n", "  (define (max-row)\n\
+    \    (foldl\n     (lambda (row best)\n       (if (> row best) row best))\n   \
+    \  0\n     grid))\n  (define (num-ones x)\n    (cond\n      [(empty? x) 0]\n \
+    \     [(= 1 (first x)) (+ 1 (num-ones (rest x)))]\n      [else (num-ones (rest\
+    \ x))]))\n  (define (one-row? row)\n    (= (num-ones row) (length row)))\n  (define\
+    \ (fixed-fill row capacity)\n    (cond\n      [(one-row? row) (cons capacity row)]\n\
+    \      [(zero? capacity) (cons 0 row)]\n      [else (cons (- capacity 1) row)]))\n\
+    \  (define (fixed-fill-grid grid capacity)\n    (map (lambda (row) (fixed-fill\
+    \ row capacity)) grid))\n  (if (one-row? (first grid))\n      (cons (max-row)\
+    \ (fixed-fill-grid grid capacity))\n      (fixed-fill-grid grid capacity)))\n",
+  "  (cond [(null? grid) 0]\n        [else\n         (let* ([wells (car grid)]\n \
+    \               [next-row (cdr grid)]\n                [next-row-fill (max_fill\
+    \ next-row capacity)]\n                [wells-filled (fill wells capacity)])\n\
+    \           (+ next-row-fill wells-filled))]))\n", "  (if (= capacity 0)\n   \
+    \   0\n      (apply max (map (lambda (well)\n                        (apply +\
+    \ (map (lambda (el)\n                                         (/ el capacity))\n\
+    \                                     well)))\n                      grid))))\n",
+  "  (define (empty-row row)\n    (define (num-filled start end)\n      (if (&gt;=\
+    \ start end)\n          0\n          (+ (if (vector-ref row start) 1 0)\n    \
+    \         (num-filled (+ start 1) end))))\n    (vector (list-&gt;vector (build-list\
+    \ (vector-length row)\n                                       (\u03BB (x) 0)))))\n\
+    \  (define (fill row)\n    (define (num-filled start end)\n      (if (&gt;= start\
+    \ end)\n          0\n          (+ (if (vector-ref row start) 1 0)\n          \
+    \   (num-filled (+ start 1) end))))\n    (vector (list-&gt;vector (build-list\
+    \ (vector-length row)\n                                       (\u03BB (x) 1)))))\n\
+    \  (define (top-row row)\n    (define (num-filled start end)\n      (if (&gt;=\
+    \ start end)\n          0\n          (+ (if (vector-ref row start) 1 0)\n    \
+    \         (num-filled (+ start 1) end))))\n    (define (next-top-row start end)\n\
+    \      (if (&gt;= start end)\n          #f\n          (if (vector-ref row start)\n\
+    \              (list-&gt;vector (build-list (- end start)\n                  \
+    \                      (\u03BB (x) 1)))\n              (next-top-row (+ start\
+    \ 1) end))))\n    (if (&gt;= capacity (num-filled 0 (vector-length row)))\n  \
+    \      (next-top-row 0 (vector-length row))\n        (fill row)))\n  (define (not-full\
+    \ start end)\n    (if (&gt;= start end)\n        #f\n        (or (not (vector-equal?\
+    \ (vector-ref grid start)\n                                (fill (vector-ref grid\
+    \ start))))\n            (not-full (+ start 1) end))))\n  (define (next-step acc\
+    \ start end)\n    (if (&gt;= start end)\n        acc\n        (if (vector-equal?\
+    \ (vector-ref grid start)\n                           (empty-row (vector-ref grid\
+    \ start)))\n            (next-step acc (+ start 1) end)\n            (next-step",
+  "  (define (max_well_fill row)\n    (cond [(null? row) 0]\n          [(= (car row)\
+    \ 1) 1]\n          [else (max (max_well_fill (cdr row)) 0)]))\n  (define (fill\
+    \ grid capacity)\n    (cond [(null? grid) 0]\n          [(null? (car grid)) 0]\n\
+    \          [else (+ (max_well_fill (car grid))\n                   (fill (cdr\
+    \ grid) capacity))]))\n  (define (fill_full_wells_til_empty grid capacity)\n \
+    \   (cond [(null? grid) 0]\n          [(null? (car grid)) 0]\n          [else\
+    \ (if (= (max_well_fill (car grid)) capacity)\n                    (+ capacity\
+    \ (fill_full_wells_til_empty (cdr grid) capacity))\n                    0)]))\n\
+    \  (define (fill_in_between grid capacity)\n    (cond [(null? grid) 0]\n     \
+    \     [(null? (car grid)) 0]\n          [else (+ (cond [(= 0 (max_well_fill (car\
+    \ grid))) 0]\n                        [(= 1 (max_well_fill (car grid))) 1]\n \
+    \                       [else (cond [(= capacity (- capacity (max_well_fill (car\
+    \ grid)))) (- capacity (max_well_fill (car grid)))]\n                        \
+    \            [else capacity])])\n                   (fill_in_between (cdr grid)\
+    \ capacity))]))\n  (+ (fill grid capacity)\n     (fill_full_wells_til_empty grid\
+    \ capacity)\n     (fill_in_between grid capacity)))\n", "  (define (f grid capacity)\n\
+    \    (define (non-zeros xs)\n      (define (f xs n acc)\n        (cond [(empty?\
+    \ xs) acc]\n              [(= 0 (first xs)) (f (rest xs) n (+ acc 1))]\n     \
+    \         [else (f (rest xs) n (+ acc 1))]))\n      (f xs (length xs) 0))\n  \
+    \  (define (max_elem xs)\n      (define (g xs i)\n        (cond [(empty? xs) i]\n\
+    \              [(< i (first xs)) (g (rest xs) (first xs))]\n              [else\
+    \ (g (rest xs) i)]))\n      (g xs 0))\n    (define (diff grid n)\n      (build-list\
+    \ n (lambda (i) (- (list-ref grid i) n))))\n    (define (non-negative grid)\n\
+    \      (build-list (length grid) (lambda (i) (if (> (list-ref grid i) 0) (list-ref\
+    \ grid i) 0))))\n    (define (make-negative grid)\n      (build-list (length grid)\
+    \ (lambda (i) (if (> (list-ref grid i) 0) (- (list-ref grid i)) 0))))\n    (define\
+    \ (make-positive grid)\n      (build-list (length grid) (lambda (i) (if (< (list-ref\
+    \ grid i) 0) (- (list-ref grid i)) 0))))\n    (define (update_grid grid count)\n\
+    \      (if (empty? grid) grid\n          (if (> count (first grid))\n        \
+    \      (cons 0 (update_grid (rest grid) (- count (first grid))))\n           \
+    \   (cons (- (first grid) count) (update_grid (rest grid) 0)))))\n    (define\
+    \ (subset grid)\n      (build-list capacity (lambda (i) (list-ref grid i))))\n\
+    \    (define (subset-fill grid count)\n      (cons (subset grid) (subset-fill\
+    \ (update_grid grid count) count)))\n    (define (count-subsets grid count)\n\
+    \      (build-list (length grid) (lambda (i) (sub", "  (define grid/columns (vector-length\
+    \ (vector-ref grid 0)))\n  (define (map-wells f)\n    (apply values\n        \
+    \   (for/vector ((row grid))\n             (apply f row))))\n  (define (max-well-fill)\n\
+    \    (apply values\n           (for/vector ((row grid))\n             (reduce\
+    \ + row))))\n  (define (bottom-up-fill)\n    (for/fold ([max-well-fill (max-well-fill)])\n\
+    \               ([(well-fill _) (in-list (map-wells vector-ref))])\n      (if\
+    \ (&gt; max-well-fill well-fill)\n          (- max-well-fill well-fill)\n    \
+    \      0)))\n  (let ([bottles-to-fill (bottom-up-fill)])\n    (/ bottles-to-fill\
+    \ capacity)))\n</code>\nOutput:\n<code>&gt; (max-fill #2(#(1 1 0 1 1 1 1 1 1 1)\
+    \ #(1 1 1 1 1 1 1 1 1 1) #(1 1 1 1 1 1 1 1 1 1) #(1 1 1 1 1 1 1 1 1 1) #(1 1 1\
+    \ 1 1 1 1 1 1 1) #(1 1 1 1 1 1 1 1 1 1) #(1 1 1 1 1 1 1 1 1 1) #(1 1 1 1 1 1 1\
+    \ 1 1 1) #(1 1 1 1 1 1 1 1 1 1) #(1 1 1 1 1 1 1 1 1 1)) 3)\n3\n&gt; (max-fill\
+    \ #2(#(1 1 0 1 1 1 1 1 1 1) #(1 1 1 1 1 1 1 1 1 1) #(1 1 1 1 1 1 1 1 1 1) #(1\
+    \ 1 1 1 1 1 1 1 1 1) #(1 1 1 1 1 1 1 1 1 1) #(1 1 1 1 1 1 1 1 1 1) #(1 1 1 1 1\
+    \ 1 1 1 1 1) #(1 1 1 1 1 1 1 1 1 1) #(1 1 1 1 1 1 1 1 1 1) #(1 1 1 1 1 1 1 1 1\
+    \ 1)) 2)\n5\n&gt; (max-fill #2(", "  ;; compute the maximum quantity of water\
+    \ you can extract\n  ;; from each row.\n  ;; * grid is a list of rows (i.e., a\
+    \ 2d-array). Each row is\n  ;;   a list of 0s and 1s.\n  ;; * capacity is the\
+    \ maximum quantity of water that each\n  ;;   bucket can hold\n  ;; * return a\
+    \ list of integers where list[i] is the maximum\n  ;;   quantity of water you\
+    \ can extract from row i.\n  (map\n   (lambda (row)\n     (apply min capacity\
+    \ (map count row)))\n   grid))\n", "  ;; If a well is not empty, we can make it\
+    \ empty.\n  ;; Therefore, we can use the height of the tallest well as a lower\
+    \ bound.\n  ;; We then loop through the rows, calculating the number of necessary\
+    \ fillings.\n  ;; The algorithm works because the height of the tallest well is\
+    \ a lower bound.\n  ;; Time complexity is O(n), where n is the number of wells.\n\
+    \  (for/fold ([count 0]) ([i (in-range (length grid))])\n    (let ([height (apply\
+    \ max (grid i))])\n      (if (= height 0) count\n          (+ count\n        \
+    \     (/ height capacity)\n             (if (not (zero? (mod height capacity)))\
+    \ 1 0))))))\n", "  (define (max_col grid)\n    (apply max (map (\u03BB (col) (apply\
+    \ + col)) (transpose grid))))\n  (define (fill_water grid)\n    (define (water-row\
+    \ row)\n      (map (\u03BB (x) (- capacity x)) row))\n    (map water-row grid))\n\
+    \  (let loop ([grid grid] [count 0])\n    (cond [(empty? grid) count]\n      \
+    \    [else\n           (let ([count (+ count (max_col grid))])\n             (loop\
+    \ (fill_water grid) count))])))", "  (define (fill grid capacity)\n    (cond\n\
+    \      [(empty? grid) capacity]\n      [(empty? (first grid)) (fill (rest grid)\
+    \ capacity)]\n      [(= capacity 0) (fill (rest grid) capacity)]\n      [else\
+    \ (fill (rest grid) (+ capacity (first grid)))]))\n  (define (fill_grid grid capacity)\n\
+    \    (cond\n      [(empty? grid) 0]\n      [(= capacity (fill (first grid) capacity))\
+    \ (fill_grid (rest grid) capacity)]\n      [else (+ 1 (fill_grid (rest grid) capacity))]))\n\
+    \  (fill_grid grid capacity))\n", "  (cond\n    [(empty? grid) 0]\n    [else (add1\
+    \ (max_fill (map (lambda (row) (fill-row row capacity)) grid) capacity))]))\n",
+  "  (define filled (map (lambda (row) (map (lambda (num) (if (= num 1) capacity num))\
+    \ row)) grid))\n  (define (extract-rows filled-grid row)\n    (if (= row (length\
+    \ filled-grid))\n        filled-grid\n        (extract-rows (map (lambda (arr)\
+    \ (if (= (car arr) row) (remove-values row arr) arr)) filled-grid) (add1 row))))\n\
+    \  (define (extract-columns filled-grid col)\n    (if (= col (length (car filled-grid)))\n\
+    \        filled-grid\n        (extract-columns (map (lambda (arr) (if (= (list-ref\
+    \ arr col) col) (remove-values col arr) arr)) filled-grid) (add1 col))))\n  (define\
+    \ (count-fill-steps filled-grid)\n    (if (andmap zero? (car filled-grid))\n \
+    \       (count-fill-steps (extract-rows filled-grid 0))\n        (if (andmap zero?\
+    \ (map list-ref filled-grid 0))\n            (count-fill-steps (extract-columns\
+    \ filled-grid 0))\n            (count-fill-steps (extract-rows (extract-columns\
+    \ filled-grid 0) 0)))))\n  (count-fill-steps filled))\n", "  (define (mf grid\
+    \ capacity)\n    (for/fold ([res (cons 0 #f)]) ([row grid])\n      (let-values\
+    \ ([(filled remain) (with-handlers ([exn:fail? (\u03BB(e) (values #f #f))])\n\
+    \                                      (try (fill row capacity)))])\n        (if\
+    \ (and filled remain)\n            (cons (+ (car res) 1) remain)\n           \
+    \ (cons (car res) #f)))))\n  (if (mf grid capacity)\n      (car (mf grid capacity))\n\
+    \      -1))\n", "  (local [(define (compute-goal grid)\n            (apply max\
+    \ (map sum grid)))\n          (define (make-fill-structure grid capacity)\n  \
+    \          (build-list (length grid)\n                        (\u03BB (i)\n  \
+    \                        (vector-copy grid i))))\n          (define (fill-row\
+    \ row capacity)\n            (apply min (cons capacity row)))\n          (define\
+    \ (fill grid capacity)\n            (apply vector-set! (make-fill-structure grid\
+    \ capacity)\n                               (map (\u03BB (i) (fill-row (vector-ref\
+    \ grid i) capacity))\n                                    (build-list (length\
+    \ grid) (\u03BB (i) i)))))\n          (define (fill_count grid capacity fill_goal)\n\
+    \            (local [(define (check-empty grid capacity)\n                   \
+    \   (apply max (map (\u03BB (i) (sum (vector-ref grid i)))\n                 \
+    \                     (build-list (length grid) (\u03BB (i) i)))))\n         \
+    \           (define (sum_add? current-sum fill-goal)\n                      (and\
+    \ (> current-sum fill-goal)\n                           (= 0 (- current-sum fill-goal))))\n\
+    \                    (define (sum_sub? current-sum fill-goal)\n              \
+    \        (and (> fill-goal current-sum)\n                           (= 0 (- fill-goal\
+    \ current-sum))))]\n              (define current-sum (check-empty grid capacity))\n\
+    \              (cond [(or (sum_add? current-sum fill-goal)\n                 \
+    \        (sum_sub? current-sum fill-goal))\n                     0]\n        \
+    \            [else\n                     (add1 (fill_count (fill grid capacity)\
+    \ capacity fill_goal))])))\n          (define (fill_it grid capacity)\n      \
+    \      (fill_count grid capacity (compute-goal grid)))]\n    (fill_it grid capacity)))\n",
+  "  ;; Greedy algorithm by finding the shortest path to fill all the wells\n  ;;\
+    \ To fill the well from the bottom up, we can use a binary search of the\n  ;;\
+    \ optimal height to fill the wells to empty all of them.\n  ;; The time complexity\
+    \ of this algorithm is O(n log n)\n  (define (helper grid i low high)\n    (cond\
+    \ [(< low high) \n           (let* ([mid (/ (+ low high) 2)]\n               \
+    \   [fill_amount (apply + (map (lambda (row)\n                               \
+    \                (- capacity (- mid (apply max row))))\n                     \
+    \                        grid))])\n             (cond [(= fill_amount 0) mid]\n\
+    \                   [(< fill_amount 0)\n                    (helper grid i (+\
+    \ mid 1) high)]\n                   [else\n                    (helper grid i\
+    \ low (- mid 1))]))]\n          [else low]))\n  (let* ([low 0]\n         [high\
+    \ (apply max (map (lambda (row)\n                                 (apply max row))\n\
+    \                               grid))]\n         [ans (helper grid 0 low high)])\n\
+    \    (if (= ans high) -1 ans)))\n", "  (define (max_fill2 grid capacity i)\n \
+    \   (if (not (empty? grid))\n      (begin\n        (println (first grid))\n  \
+    \      (max_fill2 (rest grid) capacity (+ i 1)))))\n  (max_fill2 grid capacity\
+    \ 0))\n", "  (define fill_bucket\n    (lambda (well)\n      (define bucket_size\
+    \ 0)\n      (for ((i (in-range (vector-length well))))\n        (define (fill)\n\
+    \          (if (zero? (vector-ref well i))\n              (values 0 i)\n     \
+    \         (begin\n                (vector-set! well i (sub1 (vector-ref well i)))\n\
+    \                (set! bucket_size (add1 bucket_size))\n                (if (&gt;=\
+    \ bucket_size capacity)\n                    (values bucket_size i)\n        \
+    \            (fill)))))\n        (values (fill))))))\n  (define fill_wells\n \
+    \   (lambda (wells)\n      (define (fill wells)\n        (if (empty? wells)\n\
+    \            (values 0 0)\n            (begin\n              (define (aux wells)\n\
+    \                (define (fill)\n                  (if (empty? wells)\n      \
+    \                (values 0 0)\n                      (begin\n                \
+    \        (define fill_size (apply max_fill (rest wells)))\n                  \
+    \      (if (empty? wells)\n                            (values fill_size 0)\n\
+    \                            (begin\n                              (vector-set!\
+    \ (first wells) (- (vector-length (first wells)) fill_size))\n               \
+    \               (values fill_size (vector-length (first wells))))))))\n      \
+    \          (values (fill)))\n              (let ((a (aux wells)))\n          \
+    \      (if (zero? (car a))\n                    (values 0 (add1 (cadr a)))\n \
+    \                   (values (add1 (car a)) (cadr a))))))))\n      (values (fill\
+    \ wells))))\n  (define grid_size (vector-length grid))\n  (define (fill_row)\n\
+    \    (if (zero? grid_size)\n        (values 0 0)\n        (begin\n          (let\
+    \ ((a (apply fill_wells (rest grid))))\n            (if (zero? (car a))\n    \
+    \            (values 0 (add1 (cadr a)))\n                (values (add1 (car a))\
+    \ (cadr a)))))))\n  (values (fill_row)))\n</code>\nThe main idea is to have an\
+    \ initial matrix grid filled with water.\nThe wells are represented by rows and\
+    \ the water by 1.\n", "  (define (max_fill_helper grid capacity result)\n    (define\
+    \ (lower-bucket-helper row)\n      (if (= capacity 0)\n          (list 0)\n  \
+    \        (cons (if (and (list? row) (> (car row) 0))\n                    (begin\
+    \ (set! capacity (- capacity 1)) 1)\n                    0)\n                (lower-bucket-helper\
+    \ (cdr row)))))\n    (if (and (list? grid) (list? (car grid)))\n        (begin\
+    \ (define r (max_fill_helper (cdr grid) capacity result))\n               (if\
+    \ (= capacity 0)\n                   (cons (apply + (reverse (lower-bucket-helper\
+    \ (car grid)))) r)\n                   (cons 0 r)))\n        '()))\n  (max_fill_helper\
+    \ grid capacity '()))\n", "  (define-values (wells-length buckets-length)\n  \
+    \  (for/fold ([max-rows 0] [max-cols 0]) ([row grid])\n      (define-values (cols-length)\
+    \ (for/fold ([cols 0]) ([col row])\n                                     (when\
+    \ (eq? 1 col)\n                                       (values (add1 cols))))\n\
+    \      (values (if (> cols-length max-cols) cols-length max-cols)\n          \
+    \    (if (> cols-length max-rows) cols-length max-rows)))))\n  (define buckets\
+    \ (make-vector buckets-length capacity))\n  (let ([times 0])\n    (for ([well\
+    \ grid])\n      (for ([bucket (in-vector buckets)])\n        (for ([level-index\
+    \ (in-naturals)])\n          (let ([level (add1 level-index)])\n            (when\
+    \ (and (< level capacity)\n                       (eq? 1 (vector-ref well bucket)))\n\
+    \              (vector-set! bucket level 0)\n              (vector-set! well bucket\
+    \ 0)\n              (set! times (add1 times))))))\n    times))\n ", "  (match\
+    \ grid\n    [() 0]\n    [(cons well next)\n     (define (well_is_empty? well)\n\
+    \       (and (member 0 well) (not (member 1 well))))\n     (cond [(well_is_empty?\
+    \ well)\n            (max_fill next capacity)]\n           [else\n           \
+    \ (define (fill_from_well well capacity)\n              (match well\n        \
+    \        [() 0]\n                [(cons el rest)\n                 (define (el_is_out_of_well?\
+    \ well capacity)\n                   (>= capacity (length well)))\n          \
+    \       (cond [(el_is_out_of_well? well capacity)\n                        (+\
+    \ capacity (length well))]\n                       [(= 1 el)\n               \
+    \         (fill_from_well rest (- capacity 1))]\n                       [else\n\
+    \                        (fill_from_well rest capacity)])]))\n            (+ 1\
+    \ (max_fill next capacity))]])))", "  (define (mf-fill-row row capacity)\n   \
+    \ (define (mf-fill-row-helper capacity row water-level)\n      (cond\n       \
+    \ [(null? row) capacity]\n        [(= (car row) 0) (mf-fill-row-helper capacity\
+    \ (cdr row) water-level)]\n        [(<= water-level (car row)) (mf-fill-row-helper\
+    \ capacity (cdr row) (car row))]\n        [else (mf-fill-row-helper (- capacity\
+    \ 1) (cdr row) water-level)]))\n    (mf-fill-row-helper capacity row capacity))\n\
+    \  (define (mf-fill-grid grid capacity)\n    (cond\n      [(null? grid) 0]\n \
+    \     [else (+ (mf-fill-row (car grid) capacity) (mf-fill-grid (cdr grid) capacity))]))\n\
+    \  (mf-fill-grid grid capacity))\n", "  (define (max_fill_helper grid capacity)\n\
+    \    (cond\n      [(empty? grid) 0]\n      [(>= capacity (apply max (first grid)))\n\
+    \       (max_fill_helper (rest grid) capacity)]\n      [else\n       (+ 1 (max_fill_helper\
+    \ (rest grid) capacity))]))\n  (max_fill_helper grid capacity))\n", "  (define\
+    \ (bucket_height n)\n    (min n capacity))\n  (define (row_fill grid capacity)\n\
+    \    (apply min (map bucket_height grid)))\n  (define (water_fill grid capacity)\n\
+    \    (apply max (map row_fill grid)))\n  (water_fill grid capacity))", "  (define\
+    \ (max-value-index-row row)\n    (local ((define (max-index-row pos max_index\
+    \ max_value)\n             (cond ((or (null? row) (= max_value capacity))\n  \
+    \                  max_index)\n                   ((= (car row) 1)\n         \
+    \           (max-index-row (cdr row) (+ pos 1) (+ max_value 1)))\n           \
+    \        (else\n                    (max-index-row (cdr row) (+ pos 1) max_value)))))\n\
+    \      (max-index-row 0 0 0)))\n  (define (max-value-index grid)\n    (local ((define\
+    \ (get-max-of-rows grid max_index max_value)\n             (cond ((null? grid)\n\
+    \                    max_index)\n                   ((> max_value (max-value-index-row\
+    \ (car grid)))\n                    (get-max-of-rows (cdr grid) (+ (length grid)\
+    \ (- (max-value-index-row (car grid)) (max-value-index-row (car (cdr grid))))\
+    \ 1)\n                                     (max-value-index-row (car grid))))\n\
+    \                   (else\n                    (get-max-of-rows (cdr grid) (+\
+    \ (length grid) (- (max-value-index-row (car grid)) (max-value-index-row (car\
+    \ (cdr grid)))) 1)\n                                     max_value)))))\n    \
+    \  (get-max-of-rows grid 0 0)))\n  (define (set-row-to-zero row index)\n    (cond\
+    \ ((null? row)\n           row)\n          ((= index 0)\n           (cons 0 (set-row-to-zero\
+    \ (cdr row) (+ index 1))))\n          (else\n           (cons (car row) (set-row-to-zero\
+    \ (cdr row) (+ index 1))))))\n  (define (set-grid-to-zero grid index)\n    (cond\
+    \ ((null? grid)\n           grid)\n          ((= index 0)\n           (cons (set-row-to-zero\
+    \ (car grid) 0) (set-grid-to-zero (cdr grid) (+ index 1))))\n          (else\n\
+    \           (cons (car grid) (set-grid-to", "  (define (rows_to_fill acc rows)\n\
+    \    (if (empty? rows)\n        acc\n        (rows_to_fill (+ acc (ceiling (/\
+    \ (max_row_fill (first rows)) capacity))) (rest rows))))\n  (rows_to_fill 0 grid))\n",
+  "  (define (max_fill_helper grid capacity)\n    (cond [(null? grid) 0]\n       \
+    \   [(not (number? (car grid)))\n           (max_fill_helper (cdr grid) capacity)]\n\
+    \          [(>= (car grid) capacity)\n           (+ 1 (max_fill_helper (cons (-\
+    \ (car grid) capacity) (cdr grid)) capacity))]\n          [else\n           (max_fill_helper\
+    \ (cdr grid) capacity)]))\n  (max_fill_helper grid capacity))\n", "  ;; sum of\
+    \ wells\n  (define max (for/sum ([row grid])\n                (apply max row)))\n\
+    \  ;; ceil(max / capacity) -> #of buckets\n  (ceiling (/ max capacity)))\n", " \
+    \ (define (max_row row)\n    (local [(define (fill_left acc row i)\n         \
+    \     (cond [(>= i 0) (fill_left (+ acc (vector-ref row i)) row (- i 1))]\n  \
+    \                  [else acc]))\n            (define (fill_right acc row i)\n\
+    \              (cond [(< i (vector-length row)) (fill_right (+ acc (vector-ref\
+    \ row i)) row (+ i 1))]\n                    [else acc]))]\n      (max (fill_left\
+    \ 0 row (vector-length row))\n           (fill_right 0 row 0))))\n  (local [(define\
+    \ (fill_row row i)\n            (if (or (zero? i)\n                    (= capacity\
+    \ (max_row row)))\n                (cons (max_row row) i)\n                (fill_row\
+    \ row (+ i 1))))]\n    (local [(define (fill_rows grid j i)\n              (if\
+    \ (= i (vector-length grid))\n                  j\n                  (fill_rows\
+    \ grid (+ j (cdr (fill_row (vector-ref grid i) 0))) (+ i 1))))]\n      (fill_rows\
+    \ grid 0 0))))\n", "  (define (max_in_col col)\n    (for/max ([row (in-list grid)])\n\
+    \      (if (zero? (vector-ref row col))\n          0\n          1)))\n  (define\
+    \ (max_in_row row)\n    (apply max (vector-ref row (range (vector-length row)))))\n\
+    \  (define (times-to-fill height)\n    (ceiling (/ height capacity)))\n  (define\
+    \ (accumulate-height grid height)\n    (map (lambda (row)\n           (map (lambda\
+    \ (col)\n                  (if (and (not (zero? col))\n                      \
+    \     (> col height))\n                      (times-to-fill col)\n           \
+    \           0))\n               row))\n         grid))\n  (for/sum ([col (in-range\
+    \ (vector-length (car grid)))])\n    (let ([max-col (max_in_col col)])\n     \
+    \ (accumulate-height grid max-col)))\n  )\n</code>\n", "  (define (max-fill-helper\
+    \ grid capacity)\n    (cond [(empty? grid) 0]\n          [(>= capacity (count_ones\
+    \ (first grid))) (max-fill-helper (rest grid) capacity)]\n          [else (+ 1\
+    \ (max-fill-helper (map (\u03BB (x) (- x capacity)) (first grid)) capacity))]))\n\
+    \  (max-fill-helper grid capacity))\n", "  (define max-height (apply max (map\
+    \ maximum grid)))\n  (define (max-on-height h)\n    (apply + (map (lambda (row)\n\
+    \                    (sum (map (lambda (c)\n                                (if\
+    \ (>= c h) 1 0))\n                              row)))\n                  grid)))\n\
+    \  (define (test-fill fill-limit fill-target)\n    (define max-fill (apply max\
+    \ (map maximum grid)))\n    (define (does-fill-fit limit target)\n      (if (>\
+    \ max-fill limit)\n          #f\n          (>= (+ target (max-on-height limit))\
+    \ capacity)))\n    (define (binary-search lo hi)\n      (if (= hi (+ lo 1))\n\
+    \          hi\n          (let ((mid (quotient (+ lo hi) 2)))\n            (if\
+    \ (does-fill-fit mid fill-target)\n                (binary-search lo mid)\n  \
+    \              (binary-search mid hi)))))\n    (binary-search 1 max-height))\n\
+    \  (define (max-on-height height)\n    (apply + (map (lambda (row)\n         \
+    \           (sum (map (lambda (c)\n                                (if (>= c height)\
+    \ 1 0))\n                              row)))\n                  grid)))\n  (define\
+    \ (test-fill fill-limit fill-target)\n    (define max-fill (apply max (map maximum\
+    \ grid)))\n    (define (does-fill-fit limit target)\n      (if (> max-fill limit)\n\
+    \          #f\n          (>= (+ target (max-on-height limit)) capacity)))\n  \
+    \  (define (binary-search lo hi)\n      (if (= hi (+ lo 1))\n          hi\n  \
+    \        (let ((mid (quotient (+ lo hi) 2)))\n            (if (does-fill-fit mid\
+    \ fill-target)\n                (binary-search lo mid)\n                (binary-search\
+    \ mid hi)))))\n    (binary-search 1 max-height))\n  (cond ((= max-height capacity)\
+    \ 0)\n        ((= max-height capacity) 0)\n        ((= max-height 1) (/ (apply\
+    \ + (map sum grid)) capacity))\n        (else \n         (+ 1 (test-fill (- max-height\
+    \ 1) (max-on", "  (define (take-diff grid)\n    (for/list ([row grid])\n     \
+    \ (subtract (vector-ref row 0) (vector-ref row 1))))\n  (define (max-well-pair\
+    \ grid)\n    (for/fold ([total 0]) ([row grid])\n      (values (+ total (vector-ref\
+    \ row 0)))))\n  (define (max-well-counter grid)\n    (for/fold ([total 0]) ([row\
+    \ grid])\n      (values (+ total (if (eq? (vector-ref row 0) 1) 1 0)))))\n  (define\
+    \ (check-first grid)\n    (if (eq? (vector-ref (vector-ref grid 0) 0) 1)\n   \
+    \     (vector (vector-ref grid 0) 1)\n        (vector (vector-ref grid 0) 0)))\n\
+    \  (define (check-last grid)\n    (if (eq? (vector-ref (vector-ref grid (- (vector-length\
+    \ grid) 1)) 0) 1)\n        (vector (vector-ref grid (- (vector-length grid) 1))\
+    \ 1)\n        (vector (vector-ref grid (- (vector-length grid) 1)) 0)))\n  (define\
+    \ (check-middle grid)\n    (let ([new-grid (for/list ([row grid])\n          \
+    \            (vector (vector-ref row 0) (vector-ref row 1)))])\n      (for ([row\
+    \ grid])\n        (define (row->vec row)\n          (vector (vector-ref row 0)\
+    \ (vector-ref row 1)))\n        (define (b-or-w->num b-or-w)\n          (if (eq?\
+    \ b-or-w 1) 1 0))\n        (define (vec->row vec)\n          (vector (vector-ref\
+    \ vec 0) (vector-ref vec 1)))\n        (define (num->b-or-w num)\n          (if\
+    \ (eq? num 1) 1 0))\n        (define (add-b-or-w b-or-w-vec-1 b-or-w-vec-2)\n\
+    \          (vector (vector-ref b-or-w-vec-1 0) (+ (vector-ref b-or-w-vec-1 1)\n\
+    \                                                  (vector-ref", "  (define (fill_row\
+    \ row cap)\n    (for/fold ([count 0] [curr-row row])\n      ([water (in-list row)])\n\
+    \      (cond\n        [(and (positive? cap) (positive? water)) \n         (set!\
+    \ cap (- cap 1))\n         (set! curr-row (cons 0 curr-row))\n         (set! count\
+    \ (+ count 1))]\n        [else\n         (set! curr-row (cons water curr-row))])\n\
+    \      (values count (reverse curr-row))))\n  (define (fill_grid grid cap)\n \
+    \   (for/fold ([count 0] [curr-grid grid])\n      ([row (in-list grid)])\n   \
+    \   (let* ([fill (fill_row row cap)]\n             [count-add (car fill)]\n  \
+    \           [row-add (cadr fill)])\n        (set! count (+ count count-add))\n\
+    \        (set! curr-grid (cons row-add curr-grid)))\n      (values count (reverse\
+    \ curr-grid))))\n  (car (fill_grid grid capacity)))", "  (define (gcd a b)\n \
+    \   (if (= b 0)\n        a\n        (gcd b (remainder a b))))\n  (define (lcm\
+    \ a b)\n    (/ (* a b) (gcd a b)))\n  (define (max-per-row row)\n    (if (null?\
+    \ row)\n        0\n        (max (car row) (max-per-row (cdr row)))))\n  (define\
+    \ (non-empty-rows grid)\n    (filter (lambda (row) (not (null? row))) grid))\n\
+    \  (define (reduce-by-max grid capacity)\n    (map (lambda (row) (map (lambda\
+    \ (cell) (if (> cell capacity) (- cell capacity) 0)) row)) grid))\n  (define (find-max-fill\
+    \ gd cap)\n    (let ([reduced (reduce-by-max gd cap)])\n      (if (null? reduced)\n\
+    \          0\n          (+ cap (find-max-fill reduced cap)))))\n  (define (empty-cols\
+    \ gd)\n    (for/fold ([acc (cons (make-vector (vector-length (car gd)) 0) '())]\n\
+    \               [empty #f])\n               ([row gd])\n      (if (not (empty?\
+    \ row))\n          (vector-append acc (list row))\n          acc)))\n  (let ([max-per-row\
+    \ (map max-per-row (empty-cols grid))])\n    (apply lcm max-per-row)))\n", " \
+    \ (local ((define (fill-all-grid!)\n            (for/vector ((w (in-list grid)))\n\
+    \              (fill-all-row! w capacity))))\n    (define (fill-all-row! row capacity)\n\
+    \      (local ((define (fill-row! row capacity)\n                (if (&gt;= capacity\
+    \ (current-fill row))\n                    0\n                    (vector-length\
+    \ row))))\n        (cond ((and (negative? capacity) (empty? row))\n          \
+    \     0)\n              ((and (empty? row) (&gt;= capacity 0))\n             \
+    \  1)\n              ((and (not (empty? row)) (&gt;= capacity 0))\n          \
+    \     (add1 (fill-row! row capacity)))\n              (else 0))))\n    (fill-all-grid!)))\n",
+  "  (define (init_buckets-with-water grid)\n    (for/list ((row grid))\n      (for/list\
+    \ ((item row))\n        item)))\n  (define (fill-buckets buckets capacity)\n \
+    \   (define (first-bucket buckets)\n      (if (or (null? buckets) (null? (car\
+    \ buckets)))\n          (cons 0 buckets)\n          (cons 0 (cdr buckets))))\n\
+    \    (if (or (null? buckets) (null? (car buckets)))\n        (cons 0 buckets)\n\
+    \        (let ((bucket-is-filled? (lambda (item) (if (= capacity item) 1 0))))\n\
+    \          (cons (+ (car buckets) (car (car buckets)))\n                (cons\
+    \ (car (map bucket-is-filled? (car buckets)))\n                      (cdr buckets))))))\n\
+    \  (define (first-bucket buckets)\n    (if (or (null? buckets) (null? (car buckets)))\n\
+    \        (cons 0 buckets)\n        (cons 0 (cdr buckets))))\n  (define (lowered-buckets\
+    \ buckets)\n    (if (or (null? buckets) (null? (car buckets)))\n        buckets\n\
+    \        (cons (map - (car buckets) (cdr buckets))\n              (cdr buckets))))\n\
+    \  (define (repeated-fill buckets bucket-capacity)\n    (if (or (null? buckets)\
+    \ (null? (car buckets)))\n        buckets\n        (let ((fill (first-bucket buckets)))\n\
+    \          (if (= 0 (car fill))\n              (repeated-fill (cons (car buckets)\
+    \ (cdr buckets)) bucket-capacity)\n              (cons fill (repeated-fill (lowered-buckets\
+    \ buckets) bucket-capacity))))))\n  (repeated-fill (init-buckets-with-water grid)\
+    \ capacity))\n", "  (displayln (format \"grid: ~a\" grid))\n  (displayln (format\
+    \ \"capacity: ~a\" capacity))\n  (define (fill wells index)\n    (define row (car\
+    \ wells))\n    (define rest (cdr wells))\n    (define count (count-ones row))\n\
+    \    (displayln (format \"index: ~a\" index))\n    (displayln (format \"row: ~a\"\
+    \ row))\n    (displayln (format \"count: ~a\" count))\n    (if (zero? count)\n\
+    \        (if (empty? rest)\n            0\n            (fill rest (+ index 1)))\n\
+    \        (+ count (fill rest (+ index 1)))))\n  (define wells (map (\u03BB (i)\
+    \ (nth-list i grid)) (range 0 (length grid))))\n  (fill wells 0))\n", "  (define\
+    \ total_sum (apply + grid))\n  (define num_buckets 0)\n  (define next_index 0)\n\
+    \  (define current_sum 0)\n  (define (gcd a b) (if (= b 0) a (gcd b (remainder\
+    \ a b))))\n  (define lcm (lambda (a b) (let ((common (gcd a b))) (/ (* a b) common))))\n\
+    \  (define (bucket_fill)\n    (set! num_buckets (+ num_buckets 1))\n    (set!\
+    \ current_sum (+ current_sum capacity))\n    (set! next_index (+ next_index 1))\n\
+    \    (if (>= current_sum total_sum)\n      num_buckets\n      (if (<= next_index\
+    \ (length grid))\n        (if (<= current_sum (list-ref grid next_index))\n  \
+    \        (bucket_fill)\n          (set! current_sum 0)\n          (bucket_fill))\n\
+    \        (set! next_index 0)\n        (bucket_fill))))\n  (bucket_fill))\n", " \
+    \ (let ([wells (map (\u03BB (e) (vector (car e) 0)) grid)])\n    (define (fill-well\
+    \ well amount)\n      (cond [(= (vector-ref well 1) (vector-ref well 0)) 0]\n\
+    \            [(and (< amount capacity) (< (vector-ref well 1) (vector-ref well\
+    \ 0)))\n             (vector-set! well 1 (+ (vector-ref well 1) amount))\n   \
+    \          0]\n            [else\n             (vector-set! well 1 (vector-ref\
+    \ well 0))\n             amount]))\n    (for/fold ([count 0]) ([i (in-range (length\
+    \ wells))])\n      (define (calc-fill-count n)\n        (let ([prev-well (vector-ref\
+    \ wells (- i 1))]\n              [well (vector-ref wells i)])\n          (define\
+    \ prev-filling (- (vector-ref prev-well 0) (vector-ref prev-well 1)))\n      \
+    \    (define prev-empty (- capacity prev-filling))\n          (define filling\
+    \ (- (vector-ref well 0) (vector-ref well 1)))\n          (define empty (- capacity\
+    \ filling))\n          (cond [(< filling prev-empty)\n                 (+ n 1\
+    \ (vector-ref well 1))]\n                [(< prev-filling empty)\n           \
+    \      (+ n 1 filling)]\n                [else\n                 (+ n capacity)])))\n\
+    \      (cond [(= i 0) (fill-well (vector-ref wells i) capacity)]\n           \
+    \ [else (calc-fill-count count)]))))", "  (let* ([n (length grid)]\n         [cols\
+    \ (length (car grid))]\n         [fills (for*/list ([i (in-range n)]\n       \
+    \                     [j (in-range cols)])\n                   (list (list i j)\
+    \ (max (list-ref (list-ref grid i) j) 0)))])\n    fills))\n", "  (define (num-filled-buckets\
+    \ row)\n    (define (helper xs acc)\n      (cond [(null? xs) acc]\n          \
+    \  [(= (car xs) 1) (helper (cdr xs) (+ acc 1))]\n            [else (helper (cdr\
+    \ xs) acc)]))\n    (helper row 0))\n  (define (fill num-buckets capacity)\n  \
+    \  (define (helper current n filled)\n      (cond [(= current n) (cons filled\
+    \ '())]\n            [(= n (+ current capacity)) (helper (+ current capacity)\
+    \ n (+ filled 1))]\n            [else (helper (+ current 1) n filled)]))\n   \
+    \ (helper 0 num-buckets 0))\n  (define (max_fill_helper grid acc)\n    (cond [(null?\
+    \ grid) acc]\n          [else (max_fill_helper (cdr grid) (+ acc (fill (num-filled-buckets\
+    \ (car grid)) capacity)))]))\n  (max_fill_helper grid 0))\n", "  (define (max-row\
+    \ row)\n    (let/ec exit\n      (for/fold ([max 0]) ([x row])\n        (cond [(>\
+    \ x max) (exit (+ x max))]\n              [else max]))))\n  (define (min-row row)\n\
+    \    (let/ec exit\n      (for/fold ([min 0]) ([x row])\n        (cond [(> min\
+    \ x) (exit (+ x min))]\n              [else min]))))\n  (define (max-rows grid)\n\
+    \    (for/fold ([max 0]) ([row grid])\n      (max max (max-row row))))\n  (define\
+    \ (min-rows grid)\n    (for/fold ([min 0]) ([row grid])\n      (min min (min-row\
+    \ row))))\n  (define (min-max grid)\n    (min (max-rows grid) (min-rows grid)))\n\
+    \  (define (fill-bucket min-row max-row capacity)\n    (if (>= min-row capacity)\n\
+    \        (max 0 (- min-row capacity))\n        (max 0 max-row)))\n  (define (fill-grid\
+    \ grid capacity)\n    (for/fold ([fill 0]) ([row grid])\n      (let* ([min (min-row\
+    \ row)]\n             [max (max-row row)])\n        (+ fill (fill-bucket min max\
+    \ capacity)))))\n  (fill-grid grid capacity))", "  (define (sum-rows row col)\n\
+    \    (define (sum-col col)\n      (if (eq? col 0)\n          0\n          (+ (vector-ref\
+    \ row col) (sum-col (- col 1)))))\n    (sum-col (- (vector-length row) 1)))\n\
+    \  (define (num-full-rows grid capacity)\n    (define (num-full-row row capacity)\n\
+    \      (define (num-of-full capacity row-sum)\n        (if (< capacity row-sum)\n\
+    \            (+ (quotient row-sum capacity) 1)\n            (quotient row-sum\
+    \ capacity)))\n      (num-of-full capacity (sum-rows row capacity)))\n    (define\
+    \ (num-full grid capacity)\n      (if (eq? (vector-length grid) 0)\n         \
+    \ 0\n          (+ (num-full-row (vector-ref grid 0) capacity) (num-full (vector-subvector\
+    \ grid 1 (vector-length grid)) capacity))))\n    (num-full grid capacity))\n \
+    \ (define (num-empty-rows-remaining grid capacity)\n    (if (eq? (vector-length\
+    \ grid) 0)\n        0\n        (+ (num-empty-rows-remaining (vector-subvector\
+    \ grid 1 (vector-length grid)) capacity) 1)))\n  (+ (num-full-rows grid capacity)\
+    \ (num-empty-rows-remaining grid capacity)))\n", "  (define (bucket_fills grid\
+    \ capacity)\n    (accumulate + 0 (map (lambda (r) (exact-floor (/ capacity r)))\
+    \ grid)))\n  (cond\n    [(<= capacity (accumulate + 0 grid))\n     (bucket_fills\
+    \ grid capacity)]\n    [else\n     (+ (bucket_fills grid capacity) (max_fill (map\
+    \ - capacity grid) capacity))]))\n", "  (define (max_fill-rec cur col)\n    (define\
+    \ filled (apply max (map (lambda (well)\n                                    \
+    \ (- capacity (apply + well (drop col (repeat 0)))))\n                       \
+    \            grid)))\n    (if (= filled cur)\n        0\n        (+ (max_fill-rec\
+    \ filled (+ col 1)) 1)))\n  (max_fill-rec 0 0))\n", "  (apply max\n         (map\
+    \ (\u03BB (row)\n                (apply -\n                       capacity\n \
+    \                      (map (\u03BB (c)\n                              (if (equal?\
+    \ c 1)\n                                  1\n                                \
+    \  0))\n                           row)))\n              grid)))\n", "  (define\
+    \ (water-left capacity grid-row)\n    (let loop ([grid-row grid-row] [capacity\
+    \ capacity])\n      (cond [(null? grid-row) capacity]\n            [(= (car grid-row)\
+    \ 0) (loop (cdr grid-row) capacity)]\n            [(< capacity 1) 0]\n       \
+    \     [else (loop (cdr grid-row) (- capacity 1))])))\n  (define (water-right capacity\
+    \ grid-row)\n    (let loop ([grid-row (reverse grid-row)] [capacity capacity])\n\
+    \      (cond [(null? grid-row) capacity]\n            [(= (car grid-row) 0) (loop\
+    \ (cdr grid-row) capacity)]\n            [(< capacity 1) 0]\n            [else\
+    \ (loop (cdr grid-row) (- capacity 1))])))\n  (define (empty-well grid-row capacity)\n\
+    \    (cond [(empty? grid-row) 0]\n          [(>= capacity (length grid-row)) (length\
+    \ grid-row)]\n          [else (+ (water-left capacity grid-row) (water-right capacity\
+    \ grid-row))]))\n  (apply max (map (\u03BB (grid-row) (empty-well grid-row capacity))\
+    \ grid)))\n", "  (if (empty? grid)\n      (list 'rows 0 'cols 0)\n      (let ([row-size\
+    \ (size (first grid))]\n            [col-size (size grid)])\n        (let ([col-count\
+    \ (count-cols grid capacity)]\n              [row-count (count-rows grid capacity)])\n\
+    \          (if (> col-count row-count)\n              (list 'rows 0 'cols col-count)\n\
+    \              (list 'rows row-count 'cols 0))))))\n", "  (define (dfs grid start\
+    \ capacity)\n    (define (choose-next vlst)\n      (match vlst\n        [(cons\
+    \ x xs) (if (vector-ref grid (+ start x)) x (choose-next xs))]\n        [else\
+    \ 0]))\n    (define (loop capacity)\n      (match grid\n        [(cons v rest)\
+    \ (if (not (vector-ref v start))\n                           (loop capacity)\n\
+    \                           (let* ([next (choose-next (vector -1 0 1))]\n    \
+    \                              [remaining (if (zero? capacity) 0\n           \
+    \                                    (- capacity next))])\n                  \
+    \           (if (zero? next)\n                                 (begin\n      \
+    \                             (vector-set! v start 0)\n                      \
+    \             (+ 1 (loop capacity)))\n                                 (if (zero?\
+    \ remaining)\n                                     (begin\n                  \
+    \                     (vector-set! v start 0)\n                              \
+    \         (+ 1 (loop capacity)))\n                                     (begin\n\
+    \                                       (vector-set! v (+ start next) 0)\n   \
+    \                                    (loop remaining))))))]\n        [else 0]))\n\
+    \    (loop capacity))\n  (dfs grid 0 capacity))\n", "  (if (= capacity 1)\n  \
+    \    (if (empty? grid)\n          0\n          (if (all_ones? grid)\n        \
+    \      (length grid)\n              (max_fill (remove-row grid) capacity)))\n\
+    \      (let ((row-number-of-ones (lambda (row)\n                             \
+    \     (count row #\\1))))\n        (if (all_ones? grid)\n            (length grid)\n\
+    \            (max_fill\n             (remove-row grid)\n             (- capacity\n\
+    \                (apply min (map row-number-of-ones grid))))))))\n", "  (for/fold\
+    \ ([wells (apply max (map list-ref grid))]\n             [buckets 0])\n      ([column\
+    \ (in-list grid)])\n    (match column\n      [(list 1 ...) (values (+ capacity\
+    \ wells) (+ buckets 1))]\n      [(list 0 ...) (values capacity (+ buckets 1))])))\n",
+  "  (define filled_water 0)\n  (define well_depth (for/list ([r grid])\n        \
+    \               (reduce max 0 r)))\n  (define fill_fun (lambda (row)\n       \
+    \              (for/fold ([total_fill 0]) ([water row])\n                    \
+    \   (cond\n                         [(> water capacity)\n                    \
+    \      (set! total_fill (+ total_fill capacity))\n                          (set!\
+    \ filled_water (+ filled_water capacity))\n                          total_fill]\n\
+    \                         [(> (+ water filled_water) capacity)\n             \
+    \             (set! total_fill (+ total_fill capacity))\n                    \
+    \      (set! filled_water capacity)\n                          total_fill]\n \
+    \                        [else\n                          (set! total_fill (+\
+    \ total_fill water))\n                          (set! filled_water (+ filled_water\
+    \ water))\n                          total_fill]))))\n  (apply + (map fill_fun\
+    \ grid)))\n", "  (cond\n    [else 0]))\n", "  (define (fill ws)\n    (map (\u03BB\
+    \ (w) (if (eq? w 0) capacity w)) ws))\n  (define (sub bs)\n    (map (\u03BB (b)\
+    \ (if (eq? b 0) 0 (- b 1))) bs))\n  (define (subtract_col g1 g2)\n    (for/list\
+    \ ([i (in-naturals)]\n               #:when (nonzero? (vector-ref g1 i)))\n  \
+    \    (subtract (vector-ref g1 i) (vector-ref g2 i))))\n  (define (subtract_grid\
+    \ g1 g2)\n    (for/list ([i (in-naturals)]\n               #:when (nonzero? (vector-ref\
+    \ g1 i)))\n      (subtract_col (vector-ref g1 i) (vector-ref g2 i))))\n  (define\
+    \ (subtract_grids gs1 gs2)\n    (for/list ([i (in-naturals)]\n               #:when\
+    \ (nonzero? (vector-ref gs1 i)))\n      (subtract_grid (vector-ref gs1 i) (vector-ref\
+    \ gs2 i))))\n  (define gs\n    (for/fold ([gs (make-vector 0)])\n        ([w (in-list\
+    \ grid)])\n      (vector-append gs (list (fill w)))))\n  (for/fold ([cs (make-vector\
+    \ 0)])\n      ([g (in-vector gs)])\n    (vector-append cs (list (sub g)))))",
+  "  ;; using a queue to keep track of where we've been\n  (let ((queue (queue))\n\
+    \        (result 0))\n    (define (enqueue-coords i j)\n      (queue-enqueue (cons\
+    \ i j) queue))\n    (define (queue-empty?)\n      (queue-empty? queue))\n    (define\
+    \ (dequeue-coords)\n      (queue-dequeue queue))\n    (define (update-grid-with-water\
+    \ grid new-coords)\n      (define (update-one-row grid i j)\n        (cond\n \
+    \         [(< j capacity) (vector-set! grid i (+ j (vector-ref grid i)))]\n  \
+    \        [else (vector-set! grid i j)]))\n      (for ((coord new-coords))\n  \
+    \      (update-one-row grid (car coord) (cdr coord))))\n    (define (find-coords\
+    \ grid)\n      (let ((row-no (vector-length grid))\n            (max-col (vector-length\
+    \ (vector-ref grid 0)))\n            (col-no 0)\n            (coords '()))\n \
+    \       (define (find-nonzero-and-enqueue row)\n          (let loop ((col-no 0))\n\
+    \            (cond\n              [(= col-no max-col) col-no]\n              [(>=\
+    \ (vector-ref row col-no) 1) (begin\n                                        \
+    \       (enqueue-coords col-no row-no)\n                                     \
+    \          (loop (+ col-no 1)))]\n              [else (loop (+ col-no 1))])))\n\
+    \        (define (find-nonzero-and-enqueue-helper grid)\n          (let loop ((row-no\
+    \ 0))\n            (cond\n              [(= row-no (vector-length grid)) '()]\n\
+    \              [(>= (find-nonzero-and-enqueue (vector-ref grid row-no)) 1) (begin\n\
+    \                                                                           (loop\
+    \ (+ row-no 1)))]\n              [else (loop (+ row-no 1))])))\n        (find-nonzero-and-enqueue-helper\
+    \ grid)))\n    (define (loop grid)\n      (if (queue-empty?)\n          (vector-length\
+    \ grid)", "  (let ([rows (length grid)])\n    (for/fold ([max-diff 0]) ([i (in-range\
+    \ rows)])\n      (max-diff (max-diff (abs (- capacity (apply + (grid i)))))))))",
+  "  (for/fold ([water 0]) ([row grid])\n    (let* ([well_capacity (vector-length\
+    \ row)]\n           [row_fill (for/fold ([row_water 0]) ([row_spot row])\n   \
+    \          (if (eq? row_spot 1)\n                 (+ row_water 1)\n          \
+    \       row_water))]\n           [needed (min well_capacity capacity)]\n     \
+    \      [this_fill (min needed row_fill)])\n      (+ water this_fill))))\n", " \
+    \ (define (fill-wells grid capacity)\n    (cond\n      [(null? grid) 0]\n    \
+    \  [(and (null? (cdr grid)) (= 1 (car grid))) \n       (exact-integer-sqrt capacity)]\n\
+    \      [else\n       (define (extract-from-well well)\n         (if (null? well)\n\
+    \             '()\n             (cons (car well)\n                   (extract-from-well\
+    \ (cdr well)))))\n       (define current-row (car grid))\n       (define remaining-rows\
+    \ (cdr grid))\n       (define empty-row (make-vector (vector-length current-row)\
+    \ 0))\n       (define extracted-row (extract-from-well current-row))\n       (cons\
+    \ empty-row (fill-wells (cons extracted-row remaining-rows) capacity))]))\n  (length\
+    \ (fill-wells grid capacity)))\n", "  (define (solution grid)\n    (let loop ([remaining-water\
+    \ capacity] [water-list (list)])\n      (let ([wells (car grid)])\n        (if\
+    \ (equal? wells (list))\n            (cons remaining-water water-list)\n     \
+    \       (let ([next-water (min remaining-water (string-length wells))])\n    \
+    \          (loop (- remaining-water next-water)\n                    (cons next-water\
+    \ water-list)))))))\n  (define (find-water grid)\n    (let loop ([grid grid] [filled-list\
+    \ (list)])\n      (let ([wells (car grid)])\n        (if (equal? wells (list))\n\
+    \            (cons 0 filled-list)\n            (let ([next-water (string-length\
+    \ wells)])\n              (loop (cdr grid)\n                    (cons next-water\
+    \ filled-list)))))))\n  (define (set-water water-list)\n    (map string->number\
+    \ water-list))\n  (define (solve grid)\n    (let* ([remaining-water capacity]\n\
+    \           [filled-wells (find-water grid)]\n           [filled-water (car filled-wells)]\n\
+    \           [filled-list (cdr filled-wells)])\n      (if (> filled-water 0)\n\
+    \          (+ 1 (solve (set-water filled-list)))\n          (apply min (map car\
+    \ (map solution grid))))))\n  (apply min (map car (map solution grid))))\n", " \
+    \ (define (fill-line line)\n    (cond\n      [(empty? line) 0]\n      [(= capacity\
+    \ (apply max line)) capacity]\n      [else (fill-line (cdr line))]))\n  (define\
+    \ (fill grid)\n    (cond\n      [(empty? grid) 0]\n      [(= capacity (fill-line\
+    \ (car grid))) capacity]\n      [else (fill (cdr grid))]))\n  (define (filling\
+    \ grid capacity)\n    (cond\n      [(zero? capacity) 0]\n      [(empty? grid)\
+    \ capacity]\n      [(= capacity (apply max (car grid))) (filling (cdr grid) 0)]\n\
+    \      [else (filling (cdr grid) (- capacity (fill-line (car grid))))]))\n  (filling\
+    \ grid capacity))", "  (define row-len (vector-length (vector-ref grid 0)))\n\
+    \  (define sum (apply + (vector->list (vector-ref grid 0))))\n  (define full-wells\
+    \ (quotient sum capacity))\n  (define empty-positions (remainder sum capacity))\n\
+    \  (if (= empty-positions 0)\n      (+ full-wells (max_fill (vector-copy (vector-copy\
+    \ grid 0) 1 (+ row-len 1)) capacity))\n      (+ full-wells 1))\n  )\n", "  (define\
+    \ (fill grid i capacity)\n    (cond\n      [(null? grid) 0]\n      [(null? (car\
+    \ grid)) i]\n      [(zero? capacity) i]\n      [(= (car (car grid)) 1) (+ i (fill\
+    \ (cdr grid) 0 capacity))]\n      [else (fill (cdr grid) (+ i 1) capacity)]))\n\
+    \  (fill grid 0 capacity))\n", "  (if (null? grid)\n      0\n      (max (min capacity\
+    \ (apply + grid))\n           (max_fill (map - grid capacity) capacity))))\n",
+  "  (match grid\n    [(list) 0]\n    [(cons (cons val rest) others)\n     (match\
+    \ val\n       [0 (max_fill others capacity)]\n       [1 (+ (max_fill others capacity)\
+    \ capacity)])]))\n", "  (define (gcd a b)\n    (if (= b 0)\n      a\n      (gcd\
+    \ b (remainder a b))))\n  (define (reduce-row row)\n    (let loop ((m (car row))\
+    \ (row (cdr row)))\n      (if (null? row)\n        m\n        (loop (min m (car\
+    \ row)) (cdr row)))))\n  (let loop ((grid grid) (times 0))\n    (if (null? grid)\n\
+    \      (if (= times 0)\n        (- capacity 1)\n        times)\n      (loop (cdr\
+    \ grid) (+ times capacity (reduce-row (car grid)))))))\n", "  (apply max grid))\n",
+  "  (define (max-depth grid)\n    (apply max (map max grid)))\n  (define (apply-water\
+    \ grid depth)\n    (map (lambda (w) (map - w depth)) grid))\n  (define (fill-water\
+    \ grid)\n    (let loop ([water-level (max-depth grid)]\n               [tries\
+    \ 0])\n      (let* ([new-grid (apply-water grid water-level)]\n             [new-level\
+    \ (max-depth new-grid)])\n        (if (> new-level 0)\n            (loop new-level\
+    \ (+ tries 1))\n            tries))))\n  (fill-water grid))\n", "  (letrec ([wells\
+    \ (map sum grid)]\n           [row-pairs (zip wells grid)]\n           [level\
+    \ (reduce min (map car row-pairs))]\n           [cur-grid (map (\u03BB (x) (-\
+    \ (car x) level)) row-pairs)]\n           [water-left (map \u03BB ([water-left\
+    \ water-row])\n                           (if (= water-left 0) 0\n           \
+    \                    (reduce min\n                                       (map\
+    \ (\u03BB (x) (- capacity x))\n                                            water-row)))))\n\
+    \            cur-grid]\n           [need-water (map (\u03BB (x) (if (> x 0) 1\
+    \ 0)) water-left)]\n           [watered (map (\u03BB (x y) (if (= 0 x) y 0))\n\
+    \                         need-water\n                         cur-grid)]\n  \
+    \         [watered-level (map sum watered)]\n           [watered-row-pairs (zip\
+    \ watered-level watered)]\n           [level-water (reduce +\n               \
+    \                 (map (\u03BB (x) (* level (car x)))\n                      \
+    \               watered-row-pairs))])\n    (if (= level-water 0) level\n     \
+    \   (+ level (max_fill cur-grid capacity)))))\n", "  ;; max_fill : List(List(Integer))\
+    \ Integer Integer -> Integer\n  ;; Map wells to the amount of water they contain.\n\
+    \  ;; max_fill looks like this:\n  ;;           max_fill(grid, capacity) = [(0,\
+    \ capacity-1), (1, capacity-1), (2, capacity-1)]\n  (map (lambda (well) (cons\
+    \ (car well) (- capacity (cdr well))))\n       (map (lambda (row) (cons (length\
+    \ row) (count 1 row))) grid)))\n  ", "  (define (fill-rows grid capacity)\n  \
+    \  (if (empty? grid)\n        grid\n        (cons (bucket-row (first grid) capacity)\
+    \ (fill-rows (rest grid) capacity))))\n  (define (bucket-row row capacity)\n \
+    \   (let loop ([c capacity] [r row])\n      (if (zero? c)\n          r\n     \
+    \     (if (zero? (first r))\n              (loop c (rest r))\n              (loop\
+    \ (- c 1) (rest r))))))\n  (cond ((empty? grid) 0)\n        ((>= capacity (length\
+    \ (first grid))) (max_fill (rest grid) capacity))\n        (else (+ 1 (max_fill\
+    \ (fill-rows grid capacity) capacity)))))\n", "  (local [(define (fill-wells-impl\
+    \ grid capacity grid-sum)\n            (cond [(and (null? grid) (zero? grid-sum))\
+    \ 0]\n                  [(and (null? grid) (> grid-sum 0)) capacity]\n       \
+    \           [(and (list? (car grid)) (null? (cdr grid))) (fill-wells-impl (cdr\
+    \ grid) capacity (+ capacity (- capacity (car grid)))))\n                  [(and\
+    \ (list? (car grid)) (list? (cadr grid)))\n                   (cond [(> (+ capacity\
+    \ (- capacity (car grid))) (car (cadr grid))) (fill-wells-impl (cdr grid) capacity\
+    \ (+ capacity (- capacity (car grid))))]\n                         [else (fill-wells-impl\
+    \ (cdr grid) capacity (+ capacity (- capacity (car (cadr grid)))))]\n        \
+    \                 )]\n                  )]\n           )\n          (define (fill-wells\
+    \ grid capacity)\n            (fill-wells-impl grid capacity 0)\n            )\n\
+    \          ]\n    (fill-wells grid capacity)\n    )\n  )\n", "  (cond [(empty?\
+    \ grid) 0]\n        [else\n         (apply min\n                (map (lambda (row)\n\
+    \                       (sum (map water->1 row)))\n                     grid))]))",
+  "  (define (check-row row)\n    (define (get-unit-count row)\n      (apply + (map\
+    \ (lambda (x) (if (= x 1) 1 0)) row)))\n    (if (> (get-unit-count row) capacity)\n\
+    \        (error \"Well over capacity\")\n        row))\n  (define (make-next-fill\
+    \ well-count)\n    (cond\n      [(= well-count capacity) (map (lambda (x) 0) (build-list\
+    \ capacity add1))]\n      [else (build-list (add1 well-count) (lambda (x) 1))]))\n\
+    \  (define (loop grid)\n    (cond\n      [(null? grid) 0]\n      [else\n     \
+    \  (define row (car grid))\n       (define next-row (make-next-fill (get-unit-count\
+    \ row)))\n       (add1 (loop (cons next-row (cdr grid))))]))\n  (check-grid grid\
+    \ capacity)\n  (loop grid))\n", "  (let ([n (length grid)])\n    (define (fill\
+    \ grid start count)\n      (cond [(>= start n) count]\n            [(not (zero?\
+    \ (car grid)))\n             (let ([fill (min capacity (car grid))])\n       \
+    \        (cons (- (car grid) fill) (cdr grid)))]\n            [else (cons 0 (cdr\
+    \ grid))]))\n    (define (water_fill grid count)\n      (if (andmap zero? grid)\
+    \ count\n          (water_fill (foldr fill grid (iota n)) (add1 count))))\n  \
+    \  (water_fill grid 0)))\n", "  (define (fill grid cap)\n    (if (every? 0? grid)\n\
+    \        0\n        (let-values ([(min-col max-col) (min-max-cols grid)])\n  \
+    \        ( + 1\n             (fill (overfill-grid grid cap capacity)\n       \
+    \            (+ cap (max-col-sum grid max-col) (- (length grid))))))))\n  (define\
+    \ (overfill-grid grid cap capacity)\n    (for/fold ([new-grid empty]) ([r grid])\n\
+    \      (vector-append new-grid\n                     (vector (vector-map - (vector-map\
+    \ * (vector-map + capacity (vector-map abs (- cap r))) r))))))\n  (define (max-col-sum\
+    \ grid max-col)\n    (apply max (map (lambda (i) (apply + (map (lambda (r) (vector-ref\
+    \ r i)) grid))) (range 0 max-col))))\n  (define (min-max-cols grid)\n    (values\
+    \ (apply min (map vector-length grid))\n            (apply max (map vector-length\
+    \ grid))))\n  (fill grid 0))\n", "  (let ([height (length grid)])\n    (foldl\
+    \ (\u03BB (well counter)\n             (for/fold ([sum 0]) ([i (in-range 0 height)])\n\
+    \               (let ([well_unit (vector-ref well i)])\n                 (cond\n\
+    \                   [(>= well_unit capacity)\n                    (begin\n   \
+    \                   (vector-set! well i (- well_unit capacity))\n            \
+    \          (add1 counter))]\n                   [(= well_unit capacity)\n    \
+    \                (begin\n                      (vector-set! well i 0)\n      \
+    \                (add1 counter))]\n                   [else\n                \
+    \    (begin\n                      (vector-set! well i 0)\n                  \
+    \    counter)])))))\n           0\n           grid)))\n", "  (define N (length\
+    \ grid))\n  (define width (length (vector-ref grid 0)))\n  (define result (make-vector\
+    \ N 0))\n  (for ([row grid])\n    (for ([i (in-range width)])\n      (when (not\
+    \ (zero? (vector-ref row i)))\n        (vector-set! result (scalar-ref row i)\n\
+    \                     (+ (scalar-ref result (scalar-ref row i)) 1)))))\n  (vector-reduce\
+    \ max result))", "  (let ([(buckets grid) (rows (for/list ([row grid])\n     \
+    \                          (for/fold ([buckets 0]) ([cell row])\n            \
+    \                     (if (zero? cell)\n                                     buckets\n\
+    \                                     (add1 buckets)))))]\n        [max-buckets\
+    \ (apply max buckets)]\n        [max-depth (apply max grid)])\n    (apply + (for/list\
+    \ ([x (in-range 1 max-depth)])\n                (let ([filled-buckets (for/list\
+    \ ([i (in-range (length grid))])\n                                         (if\
+    \ (<= (* x capacity) (list-ref grid i))\n                                    \
+    \         (list-ref buckets i)\n                                             0))]\n\
+    \                      [filled (apply + filled-buckets)])\n                  (if\
+    \ (>= filled max-buckets)\n                      0\n                      (add1\
+    \ (max-fill (map (\u03BB (row) (sub1 row)) grid) capacity))))))))\n", "  (define\
+    \ total 0)\n  (for ([row grid])\n    (set! total (+ total capacity))\n    (set!\
+    \ total (- total (count row 0))))\n  total)\n", "  (apply max (map (lambda (row)\
+    \ (max-fill-row row capacity)) grid)))\n", "  (define (fill well cap)\n    (if\
+    \ (zero? (car well)) (rest well)\n        (cons (max 0 (- (car well) cap)) (rest\
+    \ well))))\n  (define (fill-cols grid capacity)\n    (define (apply-fill col)\n\
+    \      (lambda (row) (fill row capacity)))\n    (apply map grid (map apply-fill\
+    \ grid)))\n  (define (loop grid)\n    (define (fill-all grid)\n      (define (fill-all-row\
+    \ row)\n        (if (and (zero? (car row)) (not (empty? (rest row)))) (fill-all-row\
+    \ (rest row))\n            row))\n      (map fill-all-row grid))\n    (cond [(empty?\
+    \ grid) '()]\n          [(zero? (car (car grid))) (loop (rest grid))]\n      \
+    \    [else (cons (fill-all grid) (loop (fill-cols grid capacity)))]))\n  (if (zero?\
+    \ (max-fill grid)) 0\n      (+ 1 (length (loop grid)))))\n", "  (define (max_fill1\
+    \ grid capacity sum)\n    (cond [(empty? grid) sum]\n          [(>= sum capacity)\
+    \ (max_fill1 (rest grid) capacity 0)]\n          [(max_fill1 (rest grid) capacity\
+    \ (+ sum (first grid))) (+ 1 sum)]))\n  (max_fill1 grid capacity 0))\n", "  (let*\n\
+    \    ((s-grid (map sum grid))\n     (f-grid (map (curryr / capacity) s-grid))\n\
+    \     (f-max (apply max f-grid))\n     (f-min (apply min f-grid)))\n    (if (equal?\
+    \ f-max f-min)\n      f-max\n      (+ f-max (max_fill grid f-max)))))\n", "  (if\
+    \ (equal? grid null) 0\n      (max_fill (cdr grid) capacity (max_fill-row (car\
+    \ grid) capacity))))\n", "  (define (max-in-col col)\n    (apply max (map (lambda\
+    \ (row) (apply + (map first (filter (lambda (x) (= (second x) col)) (map (lambda\
+    \ (c) (list (if (= c #\\1) 1 0) (remainder c capacity))) (string->list (vector-ref\
+    \ grid col))))))) (range 0 (vector-length grid)))))\n  (apply + (map max-in-col\
+    \ (range 0 (vector-length (vector-ref grid 0))))))\n", "  (define (max-index-of-row\
+    \ l)\n    (for/fold ([index -1] [max-value -1]) ([i l])\n      (define value (car\
+    \ i))\n      (if (> value max-value)\n          (values i value)\n          (values\
+    \ index max-value))))\n  (define (empty-row row capacity)\n    (for/fold ([index\
+    \ 0] [curr-val 0]) ([i row])\n      (if (< index capacity)\n          (if (= (car\
+    \ i) 1)\n              (values (+ index 1) 0)\n              (values index (+\
+    \ curr-val 1)))\n          (values index curr-val))))\n  (define (search rows\
+    \ capacity)\n    (for/fold ([buckets 0] [rows (list-rest rows)]) ([i rows])\n\
+    \      (let* ([row (car i)]\n             [max-index (max-index-of-row row)]\n\
+    \             [max-value (car max-index)]\n             [index (cdr max-index)])\n\
+    \        (if (= max-value 0)\n            (values buckets (list-rest rows))\n\
+    \            (let* ([empty-index (empty-row row capacity)]\n                 \
+    \  [curr-val (car empty-index)]\n                   [buckets (+ buckets 1)])\n\
+    \              (values buckets (cons curr-val (list-rest rows))))))))\n  (car\
+    \ (search grid capacity)))\n", "  (define (fill_helper grid capacity)\n    (if\
+    \ (= capacity 0)\n        0\n        (apply max (map sum grid))))\n  (fill_helper\
+    \ grid capacity))\n", "  (define (helper row max-fill total)\n    (cond\n    \
+    \  [(null? row) 0]\n      [(= capacity max-fill) (+ 1 (helper (cdr row) (car row)\
+    \ 0))]\n      [(and (= 0 (car row)) (< max-fill capacity)) (helper (cdr row) (car\
+    \ row) 0)]\n      [(= 0 (car row)) (helper (cdr row) (car row) 0)]\n      [(=\
+    \ capacity (+ max-fill (car row))) (+ 1 (helper (cdr row) (car row) 0))]\n   \
+    \   [(> (+ max-fill (car row)) capacity) (+ 1 (helper (cdr row) (- capacity (car\
+    \ row)) 0))]\n      [else (helper (cdr row) (+ max-fill (car row)) 0)]))\n  (helper\
+    \ grid 0 0))\n", "  (cond\n    [(empty? grid) (list 0)]\n    [(empty? (car grid))\
+    \ (cons 0 (max_fill (cdr grid) capacity))]\n    [else (cons (max capacity (car\
+    \ (car grid))) (max_fill (cdr grid) capacity))]))\n", "  (define (max-of-list\
+    \ xs)\n    (if (null? xs)\n        0\n        (max (car xs) (max-of-list (cdr\
+    \ xs)))))\n  (define (min-of-list xs)\n    (if (null? xs)\n        0\n       \
+    \ (min (car xs) (min-of-list (cdr xs)))))\n  (define (fill-bucket grid)\n    (let\
+    \ loop ([grid grid] [bucket-fill 0])\n      (if (null? grid)\n          bucket-fill\n\
+    \          (let* ([curr-bucket-fill (max-of-list (car grid))]\n              \
+    \   [new-bucket-fill (- bucket-fill capacity curr-bucket-fill)])\n           \
+    \ (if (< new-bucket-fill 0)\n                (loop (cdr grid) (- new-bucket-fill))\n\
+    \                (loop (cdr grid) new-bucket-fill))))))\n  (define (min-of-cols\
+    \ grid)\n    (if (null? grid)\n        0\n        (min (car (car grid)) (min-of-cols\
+    \ (cdr grid)))))\n  (define (fill-wells grid)\n    (let loop ([grid grid] [fill\
+    \ 0])\n      (if (null? grid)\n          fill\n          (let* ([curr-fill (min-of-cols\
+    \ grid)]\n                 [new-fill (+ fill curr-fill)])\n            (loop (map\
+    \ (lambda (row) (map (lambda (x) (- x curr-fill)) row)) grid) new-fill)))))\n\
+    \  (define (max-fill grid capacity)\n    (max (fill-bucket grid) (fill-wells grid)))\n\
+    \  (max-fill grid capacity))", "  (let ((per_well-capacity (max_fill-per-well\
+    \ grid capacity)))\n    (printf \"per_well-capacity: ~a~n\" per_well-capacity)\n\
+    \    (for/fold ([total-capacity 0]) ([well-capacity per_well-capacity])\n    \
+    \  (+ total-capacity well-capacity))))\n", "  (match grid\n    ('() 0)\n    ((cons\
+    \ row grid-rest)\n     (let* ([row-num 1]\n            [fill (max_fill grid-rest\
+    \ capacity)]\n            [row-fill (if (empty? (filter zero? row))\n        \
+    \                  0\n                          (ceiling (/ (accumulate + row)\
+    \ capacity)))]\n            [new-fill (+ fill row-fill)])\n       new-fill))))\n\
+    </code>\n", "  (if (null? grid)\n      '()\n      (cons (min (min capacity (sum\
+    \ (car grid))) capacity)\n            (max_fill (cdr grid) capacity))))\n", " \
+    \ (local [(define (max-fill/row* row sum)\n            (if (null? row)\n     \
+    \           sum\n                (max-fill/row* (cdr row) (+ sum (car row)))))\n\
+    \          (define (max-fill/rows* rows sum)\n            (if (null? rows)\n \
+    \               sum\n                (max-fill/rows* (cdr rows) (+ sum (max-fill/row*\
+    \ (car rows) 0)))))\n          (define (max-fill/col* col sum)\n            (if\
+    \ (null? col)\n                sum\n                (max-fill/col* (cdr col) (+\
+    \ sum (car col)))))\n          (define (max-fill/cols* cols sum)\n           \
+    \ (if (null? cols)\n                sum\n                (max-fill/cols* (cdr\
+    \ cols) (+ sum (max-fill/col* (car cols) 0)))))\n          (define (max-fill/grid*\
+    \ grid sum)\n            (if (null? grid)\n                sum\n             \
+    \   (max-fill/grid* (cdr grid) (+ sum (max-fill/rows* (car grid) 0)))))\n    \
+    \      (define (max-fill/rows rows sum)\n            (if (null? rows)\n      \
+    \          sum\n                (max-fill/rows (cdr rows) (+ sum (length (car\
+    \ rows))))))\n          (define (max-fill/cols cols sum)\n            (if (null?\
+    \ cols)\n                sum\n                (max-fill/cols (cdr cols) (+ sum\
+    \ (length (car cols))))))\n          (define (max-fill/grid grid sum)\n      \
+    \      (if (null? grid)\n                sum\n                (max-fill/grid (cdr\
+    \ grid) (+ sum (max-fill/rows (car grid) 0)))))\n          (define (max-fill/col\
+    \ grid sum)\n            (if (null? grid)\n                sum\n             \
+    \   (max-fill/col (cdr grid) (+ sum (max-fill/cols (car grid) 0)))))\n       \
+    \   (define (max-fill/all col sum)\n            (if (null? col)\n            \
+    \    sum\n                (max-fill/all (c", "  (for/sum ([row grid])\n    (match\
+    \ (sort (map exact-round (map (/ capacity (length row)) row)))\n      [() 0]\n\
+    \      [_ 1])))\n", "  (let ((max_row (apply max grid)))\n    (if (zero? max_row)\n\
+    \        0\n        (+ (count max_row grid)\n           (max_fill (map (lambda\
+    \ (r) (sub1-r r max_row)) grid) capacity)))))\n", "  (define (max_well grid)\n\
+    \    (for/max ([w (in-list grid)])\n      (apply max w)))\n  (if (&lt; capacity\
+    \ (max_well grid))\n      (cons (max_well grid) capacity)\n      '()))\n", " \
+    \ (define (fill grid capacity)\n    (match grid\n      [(list) 0]\n      [(cons\
+    \ (list) (cons row (cons other-rows '())))\n       (fill other-rows capacity)]\n\
+    \      [(cons (cons 0 row) (cons other-rows '()))\n       (fill other-rows capacity)]\n\
+    \      [(cons (cons 1 row) (cons other-rows '()))\n       (add1 (fill (cons row\
+    \ other-rows) capacity))]))\n  (define (fill-wells buckets grid)\n    (match buckets\n\
+    \      [(list) (match grid\n                 [(list) 0]\n                 [(cons\
+    \ (list) (cons row (cons other-rows '())))\n                  (fill-wells (repeat\
+    \ capacity) other-rows)]\n                 [(cons (cons 1 row) (cons other-rows\
+    \ '()))\n                  (add1 (fill-wells (cons (add1 (car buckets)) (cdr buckets))\n\
+    \                                    other-rows))]\n                 [(cons (cons\
+    \ 0 row) (cons other-rows '()))\n                  (fill-wells (cons (car buckets)\
+    \ (cdr buckets)) other-rows)])]\n      [(cons x (cons other-buckets '()))\n  \
+    \     (match grid\n         [(list) (error \"buckets don't match wells\")]\n \
+    \        [(cons (list) (cons row (cons other-rows '())))\n          (fill-wells\
+    \ other-buckets other-rows)]\n         [(cons (cons 1 row) (cons other-rows '()))\n\
+    \          (add1 (fill-wells (cons (add1 x) other-buckets) other-rows))]\n   \
+    \      [(cons (cons 0 row) (cons other-rows '()))\n          (fill-wells (cons\
+    \ x other-buckets) other-rows)])])\n  (define wells (grid-to-wells grid))\n  (fill-wells\
+    \ (repeat capacity) wells))\n", "  (local [(define (fill-to-capacity grid capacity)\n\
+    \             (cond [(empty? grid) empty]\n                   [(= capacity 0)\
+    \ (first grid)]\n                   [(= capacity (apply + (first grid))) (rest\
+    \ grid)]\n                   [else\n                    (if (= 1 (first (first\
+    \ grid)))\n                        (fill-to-capacity (rest grid) (- capacity 1))\n\
+    \                        (fill-to-capacity (rest grid) capacity))]))]\n    (define\
+    \ (remove-empty-buckets grid)\n      (cond [(empty? grid) empty]\n           \
+    \ [(zero? (apply + (first grid))) (remove-empty-buckets (rest grid))]\n      \
+    \      [else (cons (first grid) (remove-empty-buckets (rest grid)))]))\n    (define\
+    \ (bucket_drops grid capacity)\n      (cond [(empty? grid) 0]\n            [else\
+    \ (+ 1 (bucket_drops (remove-empty-buckets (fill-to-capacity grid capacity)) capacity))]))\n\
+    \    (bucket_drops grid capacity)))\n", "  (displayln grid)\n  (displayln capacity)\n\
+    \  (displayln \"TODO\")\n  42)\n", "  (define (wells_sum i) (sum (list-ref grid\
+    \ i)))\n  (define (wells_filled capacity wells_sum)\n    (cond [(< capacity wells_sum)\
+    \ capacity]\n          [else (exact-floor (/ wells_sum capacity))]))\n  (define\
+    \ (wells_filled_times capacity wells_sum)\n    (cond [(< capacity wells_sum) capacity]\n\
+    \          [else (exact-floor (/ wells_sum capacity))]))\n  (define (wells_remainder\
+    \ capacity wells_sum)\n    (cond [(< capacity wells_sum) (- wells_sum capacity)]\n\
+    \          [else 0]))\n  (define (wells_remainder_times capacity wells_sum)\n\
+    \    (cond [(< capacity wells_sum) (- wells_sum capacity)]\n          [else 0]))\n\
+    \  (define (wells_filled_counter capacity wells_sum)\n    (if (< capacity wells_sum)\
+    \ capacity 0))\n  (apply max (map (lambda (i)\n                    (apply + (map\
+    \ (lambda (j)\n                                    (wells_filled capacity (wells_sum\
+    \ j)))\n                                  (range i (add1 i)))))\n            \
+    \      (range 0 (length grid)))))", "  (define (bucket-fill-level buckets)\n \
+    \   (max (map (lambda (b)\n                (- capacity b))\n              buckets)))\n\
+    \  (define (fill-buckets buckets fill-level)\n    (for/list ([b buckets])\n  \
+    \    (min fill-level b)))\n  (define (empty-buckets buckets)\n    (for/list ([b\
+    \ buckets])\n      (- b)))\n  (define (reduce-buckets buckets)\n    (for/list\
+    \ ([b buckets])\n      (max 0 (- b))))\n  (define (scan buckets row-fill-level)\n\
+    \    (append (fill-buckets buckets row-fill-level)\n            (reduce-buckets\
+    \ buckets)))\n  (define (bucket-scan grid bucket-width)\n    (let* ([fill-level\
+    \ (bucket-fill-level (first grid))]\n           [columns (map (lambda (row)\n\
+    \                           (scan row fill-level))\n                         grid)])\n\
+    \      (let loop ([columns columns]\n                 [fill-levels (reverse (map\
+    \ (lambda (row)\n                                              (bucket-fill-level\
+    \ row))\n                                            (reverse columns)))])\n \
+    \       (cond [(null? fill-levels) 0]\n              [(= fill-level (first fill-levels))\
+    \ (loop (map empty-buckets columns)\n                                        \
+    \               (rest fill-levels))]\n              [else (+ 1 (loop (map reduce-buckets\
+    \ columns)\n                               fill-levels))]))))\n  (let ([width\
+    \ (length (first grid))])\n    (bucket-scan grid width)))", "  (define wells (for/list\
+    \ ([well grid]) (apply max (list->vector well))))\n  (define well_len (vector-length\
+    \ wells))\n  (define (solve max-water water)\n    (if (and (= water 0) (= max-water\
+    \ 0))\n        0\n        (if (>= max-water water)\n            (solve (- max-water\
+    \ water) capacity)\n            (add1 (solve max-water (- water max-water))))))\n\
+    \  (solve (apply max wells) capacity))", "  (define (total-water grid)\n    (apply\
+    \ + grid))\n  (define (number-of-lines grid)\n    (length grid))\n  (define (water-extracted\
+    \ grid capacity)\n    (apply min (map (lambda (row) (min capacity (apply max row)))\
+    \ grid)))\n  (define (times grid capacity)\n    (if (= (total-water grid) 0)\n\
+    \        0\n        (+ 1 (times (map (lambda (row) (map (lambda (level) (max 0\
+    \ (- level (water-extracted grid capacity)))) row)) grid) capacity))))\n  (times\
+    \ grid capacity))"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

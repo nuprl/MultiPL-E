@@ -12,7 +12,616 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate o
   \ 54 -98 2 -3)) (list -3 -32 -98 -11 1 2 43 54))\n    (check-equal? (candidate (list\
   \ 1 2 3 4 5 6 7 8 9 10 11)) (list 1 10 2 11 3 4 5 6 7 8 9))\n    (check-equal? (candidate\
   \ (list 0 6 6 -76 -21 23 4)) (list -76 -21 0 4 23 6 6))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (sort nums\n        (lambda (n1 n2) (< (sum-digits n1) (sum-digits\
+    \ n2)))))\n", "  ;; return ordered list of indices\n  (sort (map (lambda (i) (cons\
+    \ (sum (digits (vector-ref nums i))) i))\n             (range (vector-length nums)))\n\
+    \        <))\n", "  (for/fold ([result '()]) ([n (in-list nums)])\n    (define\
+    \ sum-of-digits (sum-of-digits n))\n    (define idx (list-index n nums))\n   \
+    \ (define size (length result))\n    (define i (for/fold ([i 0]) ([x (in-list\
+    \ result)])\n                (if (&lt; (sum-of-digits x) sum-of-digits)\n    \
+    \                (add1 i)\n                    i)))\n    (cond ((= i size) (append\
+    \ result (list n)))\n          ((&lt; idx (list-ref result i)) (prepend n (take\
+    \ result i))\n                                     (append (drop result i) (list\
+    \ n)))\n          (else (append (take result i) (list n) (drop result i))))))\n\
+    </code>\nI use <code>for/fold</code> so I could use the index of a digit relative\
+    \ to the list.\nExpected output:\n<code>(order-by-points '(91 1 35 13 58)) -&gt;\
+    \ '(1 35 13 58 91)\n</code>\nActual output:\n<code>(order-by-points '(91 1 35\
+    \ 13 58)) -&gt; '(1 35 13 58 91)\n</code>\nI need to know if there is a more efficient\
+    \ solution. Also, I would like to know if my use of <code>for/fold</code> is okay.\n\
+    \n\nA:\n\nSince you're using Racket, you can use <code>sort</code> from the <code>data/sort</code>\
+    \ module. That module is full of variations on sorting.\n<code>#lang racket\n",
+  "  (sort (map sum-num-digits\n             (for/list ([i (in-range (length nums))])\n\
+    \               (list (list-ref nums i) i)))\n        (\u03BB (n1 n2) (< (cadr\
+    \ n1) (cadr n2)))))", "  (match nums\n    [() '()]\n    [(cons n ns)\n     (let-values\
+    \ ([(smaller larger) (partition (\u03BB (x) (&lt; (sum-digits x) (sum-digits n)))\
+    \ ns)])\n       (append (order_by_points smaller) (list n) (order_by_points larger)))]))\n\
+    </code>\nThe error:\n<code>module: identifier (partition ...) is not defined\n\
+    \  in: (partition (\u03BB (x) (&lt; (sum-digits x) (sum-digits n))) ns)\n</code>\n\
+    What am I doing wrong?\n\n\nA:\n\nYou're importing the wrong library. You need\
+    \ to import <code>list</code> instead of <code>racket/list</code>.\n<code>#lang\
+    \ racket\n", "  (define (my-sum num)\n    (cond [(zero? num) 0]\n          [else\
+    \ (+ (modulo num 10) (my-sum (quotient num 10)))]))\n  (sort (lambda (x y) (<\
+    \ (my-sum x) (my-sum y))) nums))\n", "  (sort nums\n        (lambda (a b)\n  \
+    \        (or (= (sum-digits a) (sum-digits b))\n              (< a b)))))\n",
+  "  (local [(define (impl orig index)\n            (define (sum-digits n)\n     \
+    \         (if (zero? n)\n                  0\n                  (+ (remainder\
+    \ n 10) (sum-digits (quotient n 10)))))\n            (define (sort-by-points curr\
+    \ max)\n              (if (null? max)\n                  curr\n              \
+    \    (sort-by-points (append curr (list (list (list-ref orig (car (car max)))\
+    \ (sum-digits (list-ref orig (car (car max))))))) (cdr max))))\n            (define\
+    \ (find-max lst)\n              (if (null? lst)\n                  '()\n     \
+    \             (if (< (sum-digits (list-ref orig (car (car lst)))) (sum-digits\
+    \ (list-ref orig (car (car (cdr lst))))))\n                      (find-max (cdr\
+    \ lst))\n                      (cons (car lst) (find-max (cdr lst))))))\n    \
+    \        (sort-by-points '() (find-max index)))\n           (define (build-index\
+    \ lst)\n             (if (null? lst)\n                 '()\n                 (cons\
+    \ (list (car lst) (sum-digits (car lst))) (build-index (cdr lst)))))\n       \
+    \    (define (prepare lst)\n             (impl lst (build-index lst)))\n     \
+    \      (define (clean lst)\n             (map cadr lst))]\n    (clean (prepare\
+    \ nums))))\n", "  (sort nums #:key sum-digits #:compare compare))\n", "  (letrec\
+    \ ([digits (for/list ([n nums])\n                    (if (negative? n) (add1 (*\
+    \ n -1)) n))]\n           [sums (for/list ([n nums])\n                   (apply\
+    \ + (number->list n)))])\n    (let* ([zipped (zip nums sums)]\n           [sorted\
+    \ (sort zipped\n                         < #:key (lambda (x) (cadr x)))])\n  \
+    \    (for/list ([sorted sorted])\n        (car sorted)))))\n", "  (sort (for/list\
+    \ ([n (in-list nums)])\n         [n (digits-sum n)])\n        #:key cdr\n    \
+    \    #:cmp <))", "  (sort nums <\n        #:key (\u03BB (x) (for/sum ([i (in-string\
+    \ (number->string x))])\n                             (char-&gt;integer i)))))",
+  "  (sort nums\n        (lambda (a b)\n          (cond [(or (= (sum-digits a) (sum-digits\
+    \ b))\n                     (< a b)) #f]\n                [else #t]))))\n", " \
+    \ (sort nums #:key (lambda (num) (sum-digits num))))\n", "  (if (null? nums)\n\
+    \      '()\n      (append (list (car nums))\n              (order_by_points\n\
+    \               (list-remove (car nums)\n                            (sort (filter\
+    \ (lambda (n)\n                                            (<= (sum-digits (car\
+    \ nums))\n                                                (sum-digits n)))\n \
+    \                                         (cdr nums))\n                      \
+    \          <))))))", "  (sort nums\n        (lambda (x y)\n          (< (sum-digits\
+    \ x) (sum-digits y)))))\n", "  (sort (map (\u03BB (x) (cons x (map (\u03BB (x)\
+    \ (- (integer->char x) #\\0)) (string->list (number->string x))))) nums)\n   \
+    \      (\u03BB (x y) (or (= (cdr x) (cdr y))\n                      (< (sum (cdr\
+    \ x)) (sum (cdr y)))))))\n```\n\n### How to run your tests\n\n```bash\n$ racket\
+    \ 01-basic-syntax/tests.rkt\n```\n\n### How to submit your code for review\n\n\
+    1. Push your changes to a topic branch in your fork of the repository.\n1. [Submit\
+    \ a pull request](https://github.com/exercism/racket/compare/).\n1. [Sign up for\
+    \ an account](http://exercism.io/sign_up) on Exercism, if you haven't already.\n\
+    1. [Download the command-line tool](http://exercism.io/clients/cli) and follow\
+    \ the instructions to configure it.\n1. Use the command-line tool to fetch, test,\
+    \ and submit your exercise.\n1. The pull request will now be reviewed by other\
+    \ Exercism users who are practicing the same exercise.\n\n## Source\n\n[https://github.com/exercism/problem-specifications/issues/860](https://github.com/exercism/problem-specifications/issues/860)\n\
+    \n## Submitting Incomplete Solutions\nIt's possible to submit an incomplete solution\
+    \ so you can see how others have completed the exercise.", "  (define (sum-of-digits\
+    \ num)\n    (if (equal? num 0)\n        0\n        (+ (modulo num 10) (sum-of-digits\
+    \ (quotient num 10)))))\n  (define (sort-by-points-helper lst)\n    (cond ((empty?\
+    \ lst) '())\n          ((null? (cdr lst)) lst)\n          (else (let ((smallest\
+    \ (car lst))\n                       (rest (cdr lst)))\n                  (cond\
+    \ ((< (sum-of-digits (car rest)) (sum-of-digits smallest))\n                 \
+    \        (cons (car rest) (sort-by-points-helper (cons smallest (cdr rest)))))\n\
+    \                        (else (cons smallest (sort-by-points-helper rest))))))))\n\
+    \  (sort-by-points-helper nums))\n", "  (sort (map (lambda (num)\n\t       (cons\
+    \ num\n\t\t     (reduce + 0 (map (lambda (n) (exact->inexact n))\n\t\t\t\t   \
+    \   (string->list (number->string num))))))\n\t     nums)\n\t(lambda (a b) (<\
+    \ (cdr a) (cdr b)))))\n", "  (define (order_by_points-helper count nums)\n   \
+    \ (cond [(empty? nums) empty]\n          [else (define (compare-sum a b)\n   \
+    \                (cond [(= (sum-digits a) (sum-digits b))\n                  \
+    \        (if (< a b) #t #f)]\n                         [(< (sum-digits a) (sum-digits\
+    \ b)) #t]\n                         [else #f]))\n                 (let ([best-candidate\
+    \ (first nums)])\n                   (for ([x (in-list (rest nums))])\n      \
+    \               (when (compare-sum x best-candidate)\n                       (set!\
+    \ best-candidate x)))\n                   (cons best-candidate\n             \
+    \            (order_by_points-helper (add1 count)\n                          \
+    \                       (remove best-candidate nums))))]))\n  (order_by_points-helper\
+    \ 0 nums))", "  (sort nums (\u03BB (a b) (or (and (zero? (modulo a 10)) (zero?\
+    \ (modulo b 10)))\n                           (or (< (modulo a 10) (modulo b 10))\n\
+    \                               (< (quotient a 10) (quotient b 10)))))))\n", " \
+    \ (sort nums\n        (lambda (num1 num2)\n          (< (apply + (build-list (length\
+    \ (number->string num1))\n                                  (lambda (x) (string->number\
+    \ (string-ref (number->string num1) x)))))\n             (apply + (build-list\
+    \ (length (number->string num2))\n                                  (lambda (x)\
+    \ (string->number (string-ref (number->string num2) x)))))))))\n", "  (sort (map\
+    \ (lambda (num)\n               (cons num (apply + (string->list (number->string\
+    \ num)))))\n             nums)\n        (lambda (a b)\n          (< (cdr a) (cdr\
+    \ b)))))\n", "  (sort nums (lambda (x y)\n               (&lt; (sum-digits x)\
+    \ (sum-digits y)))))\n", "  (sort nums #:key\n        (lambda (x)\n          (apply\
+    \ + (map string->number (string-&gt;list (number-&gt;string x)))))))\n</code>\n\
+    And it gives the following error:\n<code>application: not a procedure;\n expected\
+    \ a procedure that can be applied to arguments\n  given: '(1 5 3 9 7)\n  arguments...:\n\
+    \   1\n   5\n   3\n   9\n   7\n</code>\nI want to return a list of numbers from\
+    \ the function and I want to order it by the sum of the digits from each number.\
+    \ For example the sum of digits of 5 is 5 and the sum of digits of 11 is 2. I'm\
+    \ using DrRacket 6.8.\n\n\nA:\n\nYou have one paren too many in the sort:\n<code>(sort\
+    \ nums #:key (lambda (x)\n</code>\nshould be\n<code>(sort nums #:key (lambda (x)\n\
+    </code>\nFor every nested parenthesis, <code>)</code> closes the most recent <code>(</code>.\n",
+  "  (sort nums < #:key (compose sum-digits list)))\n", "  (map fst (sort (for/list\
+    \ ([num nums]) (cons num (sum-digits num)))\n                  < #:key cdr)))",
+  "  (sort nums (\u03BB (a b) (&lt; (sum-digits a) (sum-digits b)))))\n", "  (sort\
+    \ (for/list ([n nums])\n          [(list->number (flatten (number->list n))) n])\n\
+    \        < :key first))\n", "  (sort nums (\u03BB (a b)\n               (< (+\
+    \ (integer->list a) (integer->list b))\n                  (+ (integer->list b)\
+    \ (integer->list a))))))\n", "  (sort nums (lambda (x y)\n               (or (<\
+    \ (sum-digits x) (sum-digits y))\n                   (and (= (sum-digits x) (sum-digits\
+    \ y))\n                        (< x y))))))", "  (sort (for/list ([idx (in-range\
+    \ (length nums))]\n                   [el nums])\n         (list (sum (string->list\
+    \ (number->string el))) idx el))\n        < #:key first))\n", "  (sort nums\n\
+    \        (lambda (x y) (or (&lt; x y) (&lt; x y)))))\n</code>\nI have been trying\
+    \ this for a while now with no luck. Any help would be appreciated.\n\n\nA:\n\n\
+    This function is a bit long, but it does the job:\n<code>(define (get-sum-of-digits\
+    \ n)\n  (cond ((= n 0) 0)\n        (else (+ (modulo n 10)\n                 (get-sum-of-digits\
+    \ (quotient n 10))))))\n", "  (sort (for/list ([e nums])\n            [e (sum\
+    \ (string->list (number->string e)))])\n        < #:key second))\n", "  (sort\
+    \ nums\n        (lambda (x y)\n          (if (= (sum-digits x) (sum-digits y))\n\
+    \              (< (index-of nums x) (index-of nums y))\n              (< (sum-digits\
+    \ x) (sum-digits y))))))\n", "  (define (list-sum lst)\n    (foldl + 0 lst))\n\
+    \  (define (get-points num)\n    (list-sum (string->list (number->string num))))\n\
+    \  (define (points-sort lst)\n    (sort lst (\u03BB (a b)\n                (<\
+    \ (get-points a) (get-points b)))))\n  (define (index-sort lst)\n    (sort lst\
+    \ (\u03BB (a b)\n                (< (index-of a lst) (index-of b lst)))))\n  (index-sort\
+    \ (points-sort nums)))\n", "  (sort (map (lambda (x)\n               (cons (sum-digits\
+    \ x)\n                     x))\n             nums)\n        <))\n", "  (sort nums\n\
+    \        (lambda (a b)\n          (< (sum-digits a) (sum-digits b)))))", "  (map\
+    \ first\n       (sort <\n            (for/list ([n nums])\n              (cons\
+    \ n (sum-digits n))))))\n", "  (sort (map (lambda (x) (list x (apply + (map string->number\
+    \ (string-&gt;list (number-&gt;string x)))))) nums)\n        &lt; (lambda (x y)\n\
+    \           (or (&lt; (cadr x) (cadr y))\n               (and (= (cadr x) (cadr\
+    \ y))\n                    (&lt; (car x) (car y)))))))\n</code>\nYour function\
+    \ returns a list, so you can just compare it with the original list to check if\
+    \ it's sorted correctly.\n", "  (sort nums (\u03BB (x y) (< (sum-digits x) (sum-digits\
+    \ y)))))\n", "  (sort nums (\u03BB (x y) (< (sum-digits x) (sum-digits y)))))\n",
+  "  '())\n", "  (sort nums (lambda (x y) (< (sum-digits x) (sum-digits y)))))\n",
+  "  (sort (map (lambda (x) (list x (sum-digits x))) nums)\n        (lambda (x y)\
+    \ (< (cadr x) (cadr y)))))\n</code>\nSo I just made a list of lists, where each\
+    \ sublist has the number and the sum of its digits, then sorted that list using\
+    \ a lambda function to compare the two lists at index 1 (the sum of digits).\n\
+    Is there a way I can sort the list without making the sublists?\nI was thinking\
+    \ of using <code>sort-by</code> with a lambda, but I can't figure out how to write\
+    \ the lambda.\nThanks.\n\n\nA:\n\nYou're probably looking for this procedure:\n\
+    <code>(sort nums\n      (lambda (a b)\n        (&lt; (sum-digits a) (sum-digits\
+    \ b))))\n</code>\nThis makes no use of <code>map</code> and <code>list</code>,\
+    \ nor of any sublists.\n", "  (sort (map (\u03BB (x) (list x (foldl + 0 (string->list\
+    \ (number->string x)))))\n             nums)\n        <))\n", "  (match nums\n\
+    \    (() empty)\n    ((head . tail)\n     (let ([min-head (find-min-head head\
+    \ tail)])\n       (cons min-head (order-by-points (remove-from-list min-head nums)))))))\n",
+  "  (sort nums\n        (lambda (x y)\n          (cond\n            ((&lt; (sum-digits\
+    \ x) (sum-digits y)) #t)\n            ((&gt; (sum-digits x) (sum-digits y)) #f)\n\
+    \            ((&lt; x y) #t)\n            (else #f)))))\n", "  (sort nums\n  \
+    \      #:key (lambda (x)\n               (sum (map (lambda (y) (string->number\
+    \ (string y)))\n                         (string-&gt;list (number-&gt;string x)))))))\n",
+  '  (sort nums (lambda (a b) (&lt; (sum-digits a) (sum-digits b)))))', "  (define\
+    \ (sum-digits n)\n    (if (zero? n)\n        0\n        (+ (remainder n 10) (sum-digits\
+    \ (quotient n 10)))))\n  (sort (map (lambda (n)\n               (cons n (sum-digits\
+    \ n)))\n             nums)\n        (lambda (x y)\n          (cond\n         \
+    \   [(< (cdr x) (cdr y)) #t]\n            [(> (cdr x) (cdr y)) #f]\n         \
+    \   [else (string<? (symbol->string (car x))\n                            (symbol->string\
+    \ (car y)))]))))\n```\n\n```\n> (order-by-points '(1 2 3 4 5))\n'(5 4 3 2 1)\n\
+    > (order-by-points '(11 12 13 14 15))\n'(1 2 3 4 5)\n> (order-by-points '(11 12\
+    \ 13 14 15 16))\n'(1 3 2 4 5 6)\n> (order-by-points '(116 115 2 12 12 11 113 114\
+    \ 1))\n'(1 2 3 4 5 6)\n```\n\n### This is a template\n\n```racket\n#lang racket\n",
+  "  (define (sum-digits nums)\n    (apply + (map string->number (string-&gt;list\
+    \ (number-&gt;string nums)))))\n  (sort (map list nums)\n        (lambda (lst1\
+    \ lst2)\n          (&lt; (sum-digits (car lst1))\n             (sum-digits (car\
+    \ lst2))))))", "  (sort nums\n        (lambda (x y) (or (and (= (sum-digits x)\
+    \ (sum-digits y)) (&lt; x y))\n                          (&lt; (sum-digits x)\
+    \ (sum-digits y))))))\n", "  (sort nums (\u03BB (x y) (if (= (sum-digits x) (sum-digits\
+    \ y))\n\t\t\t  (&lt; (position x nums) (position y nums))\n\t\t\t  (&lt; (sum-digits\
+    \ x) (sum-digits y))))))\n", "  (define (sum-digits n)\n    (cond\n      [(zero?\
+    \ n) 0]\n      [else (+ (remainder n 10) (sum-digits (quotient n 10)))]))\n  (sort\
+    \ nums (\u03BB (x y)\n               (< (sum-digits x) (sum-digits y)))))\n",
+  "  (sort nums\n    (lambda (n1 n2)\n      (< (sum-digits n1) (sum-digits n2)))))\n",
+  "  (sort nums < #:key (compose sum-digits list)))\n", "  (sort nums\n        (lambda\
+    \ (x y)\n          (and\n           (<= (reduce + (map string->number (string-&gt;list\
+    \ (number-&gt;string x))))\n               (reduce + (map string-&gt;number (string-&gt;list\
+    \ (number-&gt;string y)))))\n           ))))\n", "  (sort nums\n    (lambda (x\
+    \ y)\n      (< (+ (quotient x 10) (remainder x 10))\n         (+ (quotient y 10)\
+    \ (remainder y 10))))))\n", "  (define (get-sum n)\n    (if (equal? n 0)\n   \
+    \     0\n        (+ n (get-sum (quotient n 10)))))\n  (quicksort (\u03BB (x y)\
+    \ (&lt; (get-sum x) (get-sum y))) nums))\n", "  (sort nums (\u03BB (a b) (< (sum-digits\
+    \ a) (sum-digits b)))))\n", "  (sort nums #:key (lambda (x) (sum-digits x))))\n",
+  "  (define (add-digits num-str)\n    (for/sum ([i (in-string num-str)])\n      (+\
+    \ (string-&gt;number (string i)))))\n  (sort &lt; (for/list ([n (in-list nums)])\n\
+    \           (list (add-digits (number-&gt;string n)) n))\n         (\u03BB (a\
+    \ b)\n           (&lt; (first a) (first b)))))\n", "  (sort nums #:key (lambda\
+    \ (x) (sum (integer->list x)))))\n```\n\n```racket\n#lang racket\n", "  (sort\
+    \ nums (\u03BB (x y)\n               (<= (sum-digits x) (sum-digits y)))))", " \
+    \ (sort nums #:key (\u03BB (n) (+ (quotient n 100) (quotient (remainder n 100)\
+    \ 10) (remainder n 10)))))\n", "  (define all-sums (for/list ([n nums]) (sum-digits\
+    \ n)))\n  (sort nums < #:key (lambda (e) (list-ref all-sums e))))\n```\n\n```",
+  "  (define (sum_digits n)\n    (let loop ([n n] [res 0])\n      (if (zero? n)\n\
+    \          res\n          (loop (quotient n 10) (+ res (remainder n 10))))))\n\
+    \  (sort (lambda (x y) (&lt; (sum_digits x) (sum_digits y))) nums))\n", "  (sort\
+    \ nums\n    (lambda (n1 n2)\n      (< (sum-digits n1) (sum-digits n2)))))\n",
+  "  (sort (for/list ([n nums]) (list n (sum-digits n)))\n        (\u03BB (x y) (cond\
+    \ ((> (cadr x) (cadr y)) #t)\n                       ((< (cadr x) (cadr y)) #f)\n\
+    \                       ((> (car x) (car y)) #t)\n                       ((< (car\
+    \ x) (car y)) #f)\n                       (#t #f)))))\n", '  (sort nums #:key
+    (compose (apply +) (string->list) number->string)))', "  (sort (for/list ([n nums])\n\
+    \            (cons n (sum-digits n)))\n        (lambda (n1 n2)\n          (< (cdr\
+    \ n1) (cdr n2)))))\n", "  (define (sum-digits ns)\n    (apply + (map (\u03BB (i)\
+    \ (char->integer (integer->char i))) ns)))\n  (sort\n   nums\n   <\n   (\u03BB\
+    \ (i j) (string<? (number->string (sum-digits (number->string i)))\n         \
+    \              (number->string (sum-digits (number->string j)))))))\n```\n\n[^1]:\
+    \ _Three cheers for Leo_\n\n[^2]: _Ruby is an effective language for writing domain-specific\
+    \ languages,\n      and would make a good basis for a language like LabVIEW_",
+  "  (list-sort (lambda (a b) (< (sum-digits a) (sum-digits b))) nums))\n", "  (sort\
+    \ nums (lambda (a b) (&lt; (sum-digits a) (sum-digits b)))))\n", "  (sort nums\
+    \ sum-digits))\n", "  ;; ...\n  )\n", "  ;; Write your code here\n  )\n", "  (sort\
+    \ (map (\u03BB (n)\n               (list n (apply + (map string-&gt;number (string-&gt;list\
+    \ (number-&gt;string n))))))\n             nums)\n        (\u03BB (n1 n2)\n  \
+    \        (if (= (cadr n1) (cadr n2))\n              (&lt; (car n1) (car n2))\n\
+    \              (&lt; (cadr n1) (cadr n2))))))\n", "  (sort nums (lambda (x y)\
+    \ (or (< (sum-digits x) (sum-digits y))\n                               (and (=\
+    \ (sum-digits x) (sum-digits y))\n                                    (< (list-ref\
+    \ nums x) (list-ref nums y)))))))\n", "  (sort nums <\n        #:key (compose\
+    \ sum-digits-list string->number)))\n", "  '((5 0 -1) (7) (10) (5 1) (10 2) (5\
+    \ 2 -1) (5 2 -1)))\n", "  (sort nums (\u03BB (x y)\n               (< (+ (remainder\
+    \ x 10) (quotient x 10))\n                  (+ (remainder y 10) (quotient y 10))))))\n\
+    ```\n\n### Task 3: Comparing lists\n\nWrite a function which compares two lists\
+    \ of integers and returns the\nsmallest item in both lists. If lists are not of\
+    \ equal length,\nyou can ignore extra items on the longer list.\n\n```#lang racket\n",
+  "  (sort (map (lambda (num index)\n               (list num (let loop ([sum 0] [num\
+    \ (inexact->exact (truncate (/ num 10)))])\n                           (if (zero?\
+    \ num)\n                               sum\n                               (loop\
+    \ (+ sum (remainder num 10)) (inexact->exact (truncate (/ num 10))))))))\n   \
+    \          nums)\n        (lambda (a b)\n          (< (cadr a) (cadr b)))))",
+  "  (sort (list->vector nums) \n        <\n        (\u03BB (n1 n2)\n          (or\
+    \ (= (sum-digits n1) (sum-digits n2))\n              (< (vector-ref nums n1) (vector-ref\
+    \ nums n2))))))\n", "  (define (sum-digits num)\n    (let loop ([rest (number->string\
+    \ num)]\n               [ans 0])\n      (cond [(empty? rest) ans]\n          \
+    \  [else (loop (rest (string->number (substring rest 1)))\n                  \
+    \      (+ ans (string->number (substring rest 0 1))))])))\n  (define (sum-digits-list\
+    \ lst)\n    (define (helper lst acc)\n      (cond [(empty? lst) acc]\n       \
+    \     [else (helper (rest lst) (cons (sum-digits (first lst)) acc))]))\n    (helper\
+    \ lst '()))\n  (local [(define (remove lst x)\n            (cond [(empty? lst)\
+    \ empty]\n                  [(equal? (first lst) x) (rest lst)]\n            \
+    \      [else (cons (first lst) (remove (rest lst) x))]))]\n    (define (order-by-points-helper\
+    \ lst acc)\n      (cond [(empty? lst) acc]\n            [else (order-by-points-helper\
+    \ (remove lst (min lst))\n                                          (cons (min\
+    \ lst) acc))]))\n    (order-by-points-helper (sum-digits-list nums) '())))\n",
+  "    (sort nums\n\t  (lambda (num1 num2)\n\t      (< (accumulate + (map string->number\
+    \ (string-&gt;list (number-&gt;string num1))))\n\t\t (accumulate + (map string->number\
+    \ (string-&gt;list (number-&gt;string num2))))))))\n", "  ;; TODO: your code here\n\
+    \  (sort nums (lambda (n1 n2)\n    (< (sum-digits n1) (sum-digits n2)))))\n",
+  "  (letrec ([sums (map (curryr +) (map digits nums))])\n    (let ([pairs (map (lambda\
+    \ (numsum) (list (car numsum) (cadr numsum))) (reverse (sort (map list nums sums)\
+    \ (curryr > (flip <) (flip <)))))]\n          [sums (reverse (sort sums <))])\n\
+    \      (for/list ([p (in-list pairs)]\n                 [s (in-list sums)])\n\
+    \        (if (= (cadr p) s)\n            (car p)\n            (error \"This should\
+    \ never happen.\"))))))\n", "  (sort nums #:key (\u03BB (x) (+ (quotient x 100)\
+    \ (quotient (remainder x 100) 10) (remainder x 10)))))\n", "  ;; your code goes\
+    \ here\n  )\n```\n\nYour function should behave as follows:\n\n```racket", " \
+    \ ;; must return: '(3 2 13 14 14)\n  (sort nums (\u03BB (x y) (< (sum-digits x)\
+    \ (sum-digits y)))))\n", "  ;; Your code here\n  )\n", "  (sort nums #:key (\u03BB\
+    \ (num) (+ (remainder num 10) (quotient num 10)))))\n", "  (sort\n   (zip nums\
+    \ (map (lambda (x) (sum_digits x)) nums))\n   (lambda (p1 p2)\n     (< (cdr p1)\
+    \ (cdr p2)))))\n", "  (sort nums (lambda (x y)\n               (< (sum-digits\
+    \ x) (sum-digits y)))))\n", "  (define (digit_sum n)\n    (cond [(= n 0) 0]\n\
+    \          [else (+ (modulo n 10) (digit_sum (quotient n 10)))]))\n  (quicksort\
+    \ nums (\u03BB (x y) (< (digit_sum x) (digit_sum y)))))\n", "  (sort nums #:key\n\
+    \    (lambda (num)\n      (accumulate + 0 (string->list (number->string num))))))\n",
+  "  (sort nums (\u03BB (a b) (&lt; (accumulate + (number-&gt;digits a))\n       \
+    \                   (accumulate + (number-&gt;digits b))))))\n", "  (sort nums\
+    \ < \n        #:key (\u03BB (n)\n               (foldl (+) 0 (digits n)))))\n\
+    </code>\nand it works on <code>order_by_points' [22, 532, 12, 92, 24, 15, 35,\
+    \ 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,\
+    \ 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,\
+    \ 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,\
+    \ 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,\
+    \ 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,\
+    \ 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,\
+    \ 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,\
+    \ 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,\
+    \ 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,\
+    \ 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,\
+    \ 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,\
+    \ 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,", "  (sort (map (lambda\
+    \ (x) (cons x (apply + (string->list (number->string x))))) nums)\n        (lambda\
+    \ (x y) (if (= (cdr x) (cdr y))\n                          (< (car x) (car y))\n\
+    \                          (< (cdr x) (cdr y))))))\n", "  (sort nums (lambda (x\
+    \ y)\n               (< (sum-digits x) (sum-digits y)))))\n", "  (list-sort\n\
+    \   (lambda (x y)\n     (if (= (sum-digits x) (sum-digits y))\n         (< (list-ref\
+    \ nums (list-index nums x))\n            (list-ref nums (list-index nums y)))\n\
+    \         (< (sum-digits x) (sum-digits y))))\n   nums))\n", "  (sort nums #:key\
+    \ sum-digits))\n", "  ;; sort nums according to the sum of their digits.\n  (sort\
+    \ nums (\u03BB (x y) (even? (sum-digits x)))))\n", "  (sort nums\n        (lambda\
+    \ (n1 n2)\n          (< (sum-digits n1) (sum-digits n2)))))\n", "  (sort nums\
+    \ (lambda (x y)\n               (< (sum-digits x) (sum-digits y)))))", "  ;; add\
+    \ your code here\n  )", "  (define (order_by_points-helper nums index acc)\n \
+    \   (cond\n      [(null? nums) acc]\n      [else (order_by_points-helper (cdr\
+    \ nums) (+ index 1) (cons (cons (car nums) index) acc))]))\n  (define (convert-sums-to-list\
+    \ sums acc)\n    (cond\n      [(null? sums) acc]\n      [else (convert-sums-to-list\
+    \ (cdr sums) (cons (car sums) acc))]))\n  (define (get-sum-of-digits n acc)\n\
+    \    (cond\n      [(zero? n) acc]\n      [else (get-sum-of-digits (quotient n\
+    \ 10) (+ acc (remainder n 10)))])\n    )\n  (define (sum-index-pairs numbers acc)\n\
+    \    (cond\n      [(null? numbers) acc]\n      [else (sum-index-pairs (cdr numbers)\
+    \ (cons (cons (get-sum-of-digits (car numbers) 0) (cdr (car numbers))) acc))]))\n\
+    \  (define (sort-pairs pairs acc)\n    (cond\n      [(null? pairs) acc]\n    \
+    \  [else (sort-pairs (cdr pairs) (cons (car (sort (cons (car pairs) acc) < #:key\
+    \ (car (car (cons (car pairs) acc)))))) acc))]))\n  (define (get-index numbers\
+    \ index)\n    (cond\n      [(null? numbers) false]\n      [(equal? (cdr (car numbers))\
+    \ index) (car (car numbers))]\n      [else (get-index (cdr numbers) index)]))\n\
+    \  (define (finalize-sorted-list numbers index acc)\n    (cond\n      [(null?\
+    \ numbers) acc]\n      [else (finalize-sorted-list (cdr numbers) (+ index 1) (cons\
+    \ (get-index numbers index) acc))]))\n  (define (helper numbers acc)\n    (cond\n\
+    \      [(null? numbers) acc]\n      [else (helper (cdr numbers) (cons (car numbers)\
+    \ acc))]))\n  (finalize", "  (sort (map (lambda (x) (list x (sum-digits x))) nums)\n\
+    \        (lambda (a b) (< (cadr a) (cadr b)))))\n", "  (sort nums\n    (lambda\
+    \ (x y)\n      (< (sum-digits x) (sum-digits y)))))\n", "  (sort nums\n      \
+    \  (lambda (x y)\n          (< (+ (remainder x 10)\n                (/ x 10))\n\
+    \             (+ (remainder y 10)\n                (/ y 10))))))\n", "  (sort\
+    \ nums\n        (lambda (a b)\n          (or (zero? (modulo (+ (remainder a 10)\
+    \ (remainder b 10)) 10))\n              (< (remainder a 10) (remainder b 10))))))\n",
+  "  (quicksort nums (lambda (x y)\n                    (&lt; (sum-digits x) (sum-digits\
+    \ y)))))\n", "  (sort nums + <))\n", "  (sort nums sum-of-digits<=?))\n", "  (sort\
+    \ nums (lambda (n1 n2) (or (= (sum-digits n1) (sum-digits n2))\n             \
+    \                     (&lt; n1 n2)))))\n", "  (cond\n    [(empty? nums) '()]\n\
+    \    [else\n     (local ((define (extract-number num)\n                (cond\n\
+    \                  [(empty? num) '()]\n                  [else\n             \
+    \      (cons (first num) (extract-number (rest num)))])))\n            (define\
+    \ (sum-of-digits num)\n              (cond\n                [(empty? num) 0]\n\
+    \                [else\n                 (+ (first num) (sum-of-digits (rest num)))])))\n\
+    \     (for/fold ([nums nums] [sorted '()]) ([i (in-range (length nums))])\n  \
+    \     (append-into sorted (filter (lambda (num) (= (sum-of-digits (extract-number\
+    \ (list num))) (sum-of-digits (extract-number (list (list-ref nums i)))))) nums))))]))\n",
+  "  (sort\n   (map-indexed (lambda (idx num)\n                  (cons num idx))\n\
+    \                nums)\n   (lambda (pair1 pair2)\n     (or (&lt; (sum-digits (car\
+    \ pair1))\n             (sum-digits (car pair2)))\n         (&lt; (cdr pair1)\n\
+    \             (cdr pair2))))))\n", "  (sort nums sum-of-digits<=?))\n", "  (sort\
+    \ nums\n    (lambda (x y)\n      (or (zero? (- (sum-digits x) (sum-digits y)))\n\
+    \          (< x y)))))\n", "  (sort nums (\u03BB (x y) (&lt; x y))))\n", "  (define\
+    \ (digit-sum n)\n    (if (zero? n)\n        0\n        (+ (remainder n 10) (digit-sum\
+    \ (quotient n 10)))))\n  (define (increasing? n1 n2)\n    (if (= (digit-sum n1)\
+    \ (digit-sum n2))\n        (if (&lt; n1 n2)\n            #t\n            #f)\n\
+    \        (&lt; (digit-sum n1) (digit-sum n2))))\n  (sort increasing? nums))\n\
+    </code>\nThat works for your example.  But for\n<code>(order-by-points '(1 2 3\
+    \ 10 11 12 4 5 6 7 8 9 13 14 15))\n=&gt; '(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15)\n\
+    </code>\nSo you may want to handle that case.\n", "  (define (sum n)\n    (cond\n\
+    \      [(zero? n) 0]\n      [else\n       (+ (remainder n 10) (sum (quotient n\
+    \ 10)))]))\n  (sort < nums\n        (lambda (x y)\n          (and\n          \
+    \ (or\n            (and (= (sum x) (sum y))\n                 (< x y))\n     \
+    \       (< (sum x) (sum y)))\n           true\n           false))))\n", "  (define\
+    \ (digit-sum num)\n    (if (zero? num)\n        0\n        (+ (remainder num 10)\
+    \ (digit-sum (quotient num 10)))))\n  (for ([i (in-range (length nums))])\n  \
+    \ (let* ([n (list-ref nums i)]\n          [n-sum (digit-sum n)])\n     (for ([j\
+    \ (in-range (add1 i))])\n       (let* ([m (list-ref nums j)]\n              [m-sum\
+    \ (digit-sum m)])\n         (when (< n-sum m-sum)\n           (set! nums (list-set\
+    \ nums i m))\n           (set! nums (list-set nums j n)))))))\n  nums)\n", " \
+    \   (sort nums (\u03BB (x y) (&lt; (sum-digits x) (sum-digits y)))))\n", '  (sort
+    nums < #:key (lambda (a) (accumulate + 0 (string->list (number->string a))))))',
+  "  (for/fold ([ordered '()]) ([n (in-list nums)])\n    (let ((current-sum (foldr\
+    \ + 0 (string->list (number->string n)))))\n      (cons n ordered))))\n", "(sort\
+    \ nums\n      (lambda (x y) (if (= (sum-digits x) (sum-digits y))\n          \
+    \              (< (index nums x) (index nums y))\n                        (< (sum-digits\
+    \ x) (sum-digits y))\n                        ))))\n", "  (sort nums #:key (lambda\
+    \ (x) (sum (number->digits x)))))\n", "  (sort (list->hash nums) <:\n        (\u03BB\
+    \ (k v) (apply + (list->vector (string->list (number->string k)))))))\n", "  (sort\
+    \ nums #:key (lambda (n) (+ (remainder n 10) (quotient n 10)))))\n", "  (sort\
+    \ (sort-by (lambda (n) (sum-digits n)) nums)\n        <\n        :key (lambda\
+    \ (n) (list-ref nums n))))\n", "  (sort nums\n        #:key (\u03BB (n)\n    \
+    \           (accumulate + 0 (string->list (number->string n))))))\n", "  (sort\
+    \ (map (lambda (i) (cons i (sum_digits i))) (range (length nums)))\n        #:key\
+    \ cadr\n        #:cmp <\n        #:key cdr))\n</code>\n\n<code>;; Write a function\
+    \ which computes the sum of all digits in given integer.", "  (sort nums (\u03BB\
+    \ (n1 n2)\n              (or (zero? (modulo n1 10))\n                  (zero?\
+    \ (modulo n2 10))\n                  (and (positive? (modulo n1 10))\n       \
+    \                (positive? (modulo n2 10))\n                       (< (sum-digits\
+    \ n1) (sum-digits n2)))))))\n", "  (sort nums\n        #:key (lambda (i) (+ (quotient\
+    \ i 100) (quotient (remainder i 100) 10) (remainder i 10)))\n        #:key #<\
+    \ void >))\n", "  (sort nums sum-of-digits&lt;?))\n</code>\nMy solution:\n<code>#lang\
+    \ racket\n", "  (sort nums\n        (lambda (a b)\n          (< (sum-digits a)\
+    \ (sum-digits b)))))\n", "  (sort nums (lambda (a b)\n               (or (&lt;\
+    \ (sum-digits a) (sum-digits b))\n                   (and (= (sum-digits a) (sum-digits\
+    \ b))\n                        (&lt; (index a nums) (index b nums)))))))\n", " \
+    \ (sort nums\n        (lambda (a b)\n          (if (= (sum-digits a) (sum-digits\
+    \ b))\n              (< (index-of nums a) (index-of nums b))\n              (<\
+    \ (sum-digits a) (sum-digits b))))))", "  '())\n", "  (define (get-sum num)\n\
+    \    (if (zero? num) 0 (+ (remainder num 10) (get-sum (quotient num 10)))))\n\
+    \  (define (nth x l)\n    (if (null? l) '() (cons (car l) (nth (- x 1) (cdr l)))))\n\
+    \  (let loop ((unsorted nums) (sorted '()))\n    (cond ((null? unsorted) sorted)\n\
+    \          (else (loop (cdr unsorted) (append (nth (get-sum (car unsorted)) unsorted)\
+    \ sorted))))))\n", "  (sort nums\n        #:key (\u03BB (n)\n               (apply\
+    \ + (for/list ([d (in-list (list->string (number->string n)))])\n            \
+    \                    (string->number (string d)))))))\n", "  (sort (sort nums\
+    \ (lambda (x y) (< x y)))\n        (lambda (x y) (< (sum-digits x) (sum-digits\
+    \ y)))))", "  (cond\n    [(empty? nums) empty]\n    [else\n     (local\n     \
+    \  [(define (cmp a b)\n          (cond\n            [(> (+ (quotient a 10) (remainder\
+    \ a 10))\n               (+ (quotient b 10) (remainder b 10)))\n             #t]\n\
+    \            [(< (+ (quotient a 10) (remainder a 10))\n               (+ (quotient\
+    \ b 10) (remainder b 10)))\n             #f]\n            [else\n            \
+    \ (cond\n               [(> (quotient a 10) (quotient b 10))\n               \
+    \ #t]\n               [(< (quotient a 10) (quotient b 10))\n                #f]\n\
+    \               [else\n                #f])]))]\n       (sort cmp nums))]))\n",
+  "  ;; returns (list 25 0 20)\n  )\n</code>\nI'm using racket.\nI think I have to\
+    \ use <code>sort</code> or <code>sort-by</code> but I don't know how to use them.\
+    \ I also have to use <code>accumulate</code> in order to sum the digits.\n\n\n\
+    A:\n\n<code>#lang racket\n", "  (define (sum-of-digits n)\n    (if (zero? n)\n\
+    \        0\n        (+ (remainder n 10) (sum-of-digits (quotient n 10)))))\n \
+    \ (quicksort nums (lambda (x y)\n                    (< (sum-of-digits x) (sum-of-digits\
+    \ y)))))\n```\n\n```scheme\n#lang racket\n", "  (sort (map (\u03BB (num) (cons\
+    \ num (sum-digits num))) nums)\n        (\u03BB (x y) (string<? (number->string\
+    \ (cdr x)) (number->string (cdr y))))))\n", "  (sort nums\n        #:key (\u03BB\
+    \ (n) (string-&gt;number (string-append (number-&gt;string (+ (remainder n 10))\n\
+    \                                                                  (remainder\
+    \ (quotient n 10) 10))\n                                                     (number-&gt;string\
+    \ (quotient n 100)))))))", "  (sort (map (lambda (num) (cons num (f num))) nums)\n\
+    \        (lambda (e1 e2) (and (eq? (car e1) (car e2))\n                      \
+    \       (not (eq? (cdr e1) (cdr e2))))\n               (if (eq? (cdr e1) (cdr\
+    \ e2))\n                   (eq? (position (car e1) nums) (position (car e2) nums))\n\
+    \                   (< (cdr e1) (cdr e2))))))", "  (define (sum-digits n)\n  \
+    \  (if (zero? n)\n        0\n        (+ (remainder n 10) (sum-digits (quotient\
+    \ n 10)))))\n  (sort nums\n        #:key sum-digits\n        #:cmp (lambda (x\
+    \ y) (if (= (sum-digits x) (sum-digits y))\n                               (inexact->exact\
+    \ (compare x y))\n                               (inexact->exact (compare (sum-digits\
+    \ x) (sum-digits y)))))))\n", "  (sort nums (\u03BB (x y)\n               (> (sum-digits\
+    \ x) (sum-digits y)))))\n", "  (sort nums <\n        #:key (lambda (n)\n     \
+    \           (apply + (integer->list n 10)))))\n", "  (let ([nums-and-sums (map\
+    \ (lambda (x i) (cons x (+ (modulo x 10) (quotient x 10)))) nums (iota (length\
+    \ nums)))])\n    (for ([i (in-range (length nums))])\n      (list-ref (sort nums-and-sums\
+    \ (lambda (a b) (&lt; (cdr a) (cdr b)))) i))))\n</code>\n", "  ;; sample tests\n\
+    \  (test\n    (order_by_points '(1 5 3 4 2 8 6 7 9 10))\n    '(1 2 3 4 5 6 7 8\
+    \ 9 10))\n    (order_by_points '(90 899 9))\n    '(9 90 899))\n    ;; your code\
+    \ here\n    (cond\n      [(empty? nums) null]\n      [else\n       (displayln\
+    \ nums)\n       (displayln (sort nums < :key (lambda (a) (+ (remainder a 10) (quotient\
+    \ a 10)))))\n       (let* ([xs (sort nums < :key (lambda (a) (+ (remainder a 10)\
+    \ (quotient a 10))))]\n              [ys (reverse xs)])\n         (append xs ys))]))\n\
+    ```\n\n### \u041D\u0430\u043F\u0438\u0448\u0438 \u0444\u0443\u043D\u043A\u0446\
+    \u0438\u0458\u0430 \u0448\u0442\u043E \u0432\u0440\u0430\u045C\u0430 \u0441\u043F\
+    \u0438\u0441\u043E\u043A \u043E\u0434 \u043F\u0430\u0440\u043E\u0432\u0438 \u0438\
+    \u0437\u043C\u0435\u0453\u0443 \u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0438\
+    \u0442\u0435 \u043E\u0434 \u0434\u0430\u0434\u0435\u043D\u0438\u043E\u0442 \u0441\
+    \u043F\u0438\u0441\u043E\u043A\n```#lang racket\n", "  ;; helper function that\
+    \ returns sum of digits in a given number\n  (define (sum_of_digits num)\n   \
+    \ (if (zero? num)\n        0\n        (+ (remainder num 10) (sum_of_digits (quotient\
+    \ num 10)))))\n  ;; function that reorders a list of numbers based on their\n\
+    \  ;; sum of digits in ascending order\n  (define (merge-sort-nums n)\n    (define\
+    \ (merge-two-nums n1 n2)\n      (cond ((null? n1) n2)\n            ((null? n2)\
+    \ n1)\n            ((< (sum_of_digits (car n1)) (sum_of_digits (car n2)))\n  \
+    \           (cons (car n1) (merge-two-nums (cdr n1) n2)))\n            (else (cons\
+    \ (car n2) (merge-two-nums n1 (cdr n2))))))\n    (define (halve lst)\n      (let\
+    \ loop ((s (length lst)) (lst lst) (fst '()) (snd '()))\n        (cond ((= s 0)\
+    \ (values fst snd))\n              ((= s 1) (values fst (cons (car lst) snd)))\n\
+    \              (else (loop (- s 2) (cdr (cdr lst))\n                         \
+    \ (cons (car lst) fst)\n                          (cons (cadr lst) snd))))))\n\
+    \    (define (merge-sort lst)\n      (let ((lst-length (length lst)))\n      \
+    \  (cond ((<= lst-length 1) lst)\n              (else (let-values (((fst snd)\
+    \ (halve lst)))\n                      (merge-two-nums (merge-sort fst) (merge-sort\
+    \ snd)))))))\n    (merge-sort n))\n  (merge-sort-nums nums))\n", "  (match nums\n\
+    \    ['() '()]\n    [(cons x xs)\n     (define (total n)\n       (if (zero? n)\n\
+    \           0\n           (+ (remainder n 10) (total (quotient n 10)))))\n   \
+    \  (define (merge a b)\n       (match a\n         ['() b]\n         [(cons aa\
+    \ as)\n          (match b\n            ['() a]\n            [(cons bb bs)\n  \
+    \           (if (> (total aa) (total bb))\n                 (cons bb (merge a\
+    \ bs))\n                 (cons aa (merge as b)))]\n            'else 'else)]\n\
+    \         'else 'else))\n     (merge (list x) (order_by_points xs))]\n    'else\
+    \ 'else))\n", "    (define (sum-digits n)\n        (if (= n 0)\n            0\n\
+    \            (+ (modulo n 10) (sum-digits (quotient n 10)))))\n    (define (merge\
+    \ n l)\n        (if (null? l)\n            (list n)\n            (if (<= (sum-digits\
+    \ n) (sum-digits (car l)))\n                (cons n l)\n                (cons\
+    \ (car l) (merge n (cdr l))))))\n    (define (merge-sort l)\n        (if (null?\
+    \ l)\n            l\n            (merge (car l) (merge-sort (cdr l)))))\n    (merge-sort\
+    \ nums))\n```\n\n## Sample Input\n\n```racket", "  (sort nums\n        (lambda\
+    \ (x y)\n          (let ([xs (sum-digits x)]\n                [ys (sum-digits\
+    \ y)])\n            (cond [(> xs ys) #t]\n                  [(= xs ys) (&lt; x\
+    \ y)]\n                  [else #f])))))\n", "  (sort nums < '(lambda (a b) (<\
+    \ (sum-digits a) (sum-digits b)))))\n", "  (sort nums (lambda (x y)\n        \
+    \       (< (sum-digits x) (sum-digits y)))))\n", "  (sort nums\n        (lambda\
+    \ (a b)\n          (< (sum-digits a) (sum-digits b)))))\n", "  (sort nums (lambda\
+    \ (a b) (< (sum-digits a) (sum-digits b)))))\n", "  (cond [(empty? nums) empty]\n\
+    \        [else (cons (cond [(empty? (cdr nums)) empty]\n                     \
+    \     [else (cond [(empty? (cdr (cdr nums))) empty]\n                        \
+    \             [else (find-min-num nums empty)])])\n                     (order_by_points\
+    \ (remove-num nums empty)))]))\n", "  (sort (list->vector nums)\n    (lambda (a\
+    \ b)\n      (or (&lt; (sum-digits a) (sum-digits b))\n          (&lt; a b)))))\n",
+  "  (let loop ([nums nums] [acc '()])\n    (cond [(empty? nums) (reverse acc)]\n\
+    \          [else (loop (rest nums)\n                      (cons (first nums) acc))])))\n",
+  "  (sort (map (\u03BB (index num)\n               (list num\n                  \
+    \   (apply + (map char-&gt;integer (string-&gt;list (number-&gt;string num))))\n\
+    \                     index))\n             (iota (length nums))\n           \
+    \  nums)\n        (\u03BB (x y) (&lt; (list-ref x 1) (list-ref y 1)\n        \
+    \             (list-ref x 2) (list-ref y 2)))))\n", "  (sort nums\n        (lambda\
+    \ (n1 n2)\n          (if (= (sum-digits n1) (sum-digits n2))\n              (<\
+    \ (index-of n1 nums) (index-of n2 nums))\n              (< (sum-digits n1) (sum-digits\
+    \ n2))))))\n", "  ;; your code here\n  (letrec ([sum-digits (lambda (n)\n    \
+    \                     (if (= 0 n)\n                             0\n          \
+    \                   (+ (modulo n 10)\n                                (sum-digits\
+    \ (quotient n 10)))))]\n           [sort (lambda (nums)\n                   (if\
+    \ (null? nums)\n                       '()\n                       (let ([smallest\
+    \ (min (car nums) (cadr nums))])\n                         (cons smallest\n  \
+    \                             (sort (filter (lambda (x)\n                    \
+    \                           (not (= x smallest)))\n                          \
+    \                   nums))))))])\n    (sort (sort nums (lambda (a b)\n       \
+    \                (< (sum-digits a) (sum-digits b))))\n          (lambda (a b)\n\
+    \            (< (sum-digits a) (sum-digits b))))))\n", "  (define (my-sum n)\n\
+    \    (if (zero? n)\n        0\n        (+ (remainder n 10) (my-sum (quotient n\
+    \ 10)))))\n  (define (helper acc i xs)\n    (if (null? xs)\n        acc\n    \
+    \    (let ([x (car xs)])\n          (helper (cons (list (my-sum x) x i) acc) (+\
+    \ i 1) (cdr xs)))))\n  (define sum-xs (helper '() 0 nums))\n  (define ord-sum-xs\
+    \ (sort sum-xs (lambda (x y) (< (car x) (car y)))))\n  (define (extract-nums acc\
+    \ ys)\n    (if (null? ys)\n        acc\n        (let ([y (car ys)])\n        \
+    \  (extract-nums (cons (caddr y) acc) (cdr ys)))))\n  (extract-nums '() ord-sum-xs))\n",
+  "  (sort nums < (lambda (n1 n2)\n                 (let ([n1-sum (sum-digits n1)]\n\
+    \                       [n2-sum (sum-digits n2)])\n                   (if (= n1-sum\
+    \ n2-sum)\n                       (< (index nums n1) (index nums n2))\n      \
+    \                 (< n1-sum n2-sum))))))\n", "  (sort (map (\u03BB (i) (list (sum-digits\
+    \ i) i)) (index-of nums))\n        (\u03BB (l1 l2) (< (first l1) (first l2)))))\n",
+  "  (sort nums\n        (lambda (x y)\n          (let ([x-sum (calc-sum x)]\n   \
+    \             [y-sum (calc-sum y)])\n            (if (< x-sum y-sum)\n       \
+    \         #t\n                (if (> x-sum y-sum)\n                    #f\n  \
+    \                  (< (pos x nums) (pos y nums))))))))\n", "  (sort nums (\u03BB\
+    \ (x y) (&lt; (sum-digits x) (sum-digits y)))))\n", "  (sort nums (\u03BB (a b)\
+    \ (or\n                       (< (sum-digits a) (sum-digits b))\n            \
+    \           (and\n                        (= (sum-digits a) (sum-digits b))\n\
+    \                        (< a b))))))\n", "  (sort nums (\u03BB (n1 n2) (if (=\
+    \ (sum-digits n1) (sum-digits n2))\n                            (< n1 n2)\n  \
+    \                          (< (sum-digits n1) (sum-digits n2))))))\n", "  (sort\n\
+    \   (map (\u03BB (p)\n          (list (sum-digits (first p))\n               \
+    \ (first p)\n                (second p)))\n        (enumerate nums))\n   (\u03BB\
+    \ (x y) (< (first x) (first y)))))\n", "  '())\n", "  (define (sum-digits num)\n\
+    \    (cond [(zero? num) 0]\n          [else (+ (modulo num 10) (sum-digits (quotient\
+    \ num 10)))]))\n  (sort nums #:key sum-digits))\n```\n\n```racket\n> (order-by-points\
+    \ '(123 124))\n'(124 123)\n> (order-by-points '(123 13))\n'(13 123)\n> (order-by-points\
+    \ '(1 13))\n'(1 13)\n> (order-by-points '(1242 33))\n'(33 1242)\n> (order-by-points\
+    \ '(1 13 42))\n'(1 13 42)\n> (order-by-points '(1 42 13))\n'(1 13 42)\n> (order-by-points\
+    \ '(-5 -5))\n'(-5 -5)\n> (order-by-points '(-55 -55))\n'(-55 -55)\n> (order-by-points\
+    \ '(-55 -54))\n'(-54 -55)\n> (order-by-points '(-54 -55))\n'(-54 -55)\n> (order-by-points\
+    \ '(-60 -55))\n'(-55 -60)\n> (order-by-points '(-61 -55))\n'(-55 -61)\n> (order-by-points\
+    \ '(-55 -55 -60))\n'(-55 -55 -60)\n> (order-by-points '(-55 -55 -59))\n'(-55 -55\
+    \ -59)\n> (order-by-points '(-55 -55 -61))\n'(-55 -55 -61)\n> (order-by-points\
+    \ '(-4 -4 -4))\n'(-4 -4 -4)\n> (order-by-points '(1 3 5 6 8 9))\n'(1 3 5 6 8 9)\n\
+    > (order-by-points '(1 3 5 6 8 9 -1))\n'(-1 1 3 5 6 8 9)\n> (order-by-points '(1\
+    \ 3 5 6 8 9 -5))\n'(-5 1 3 5 6 8 9)\n> (order-by-points '(1 3 5 6 8 9 -6))", " \
+    \ (sort nums < #:key \n          (lambda (num) (sum-digits num))))\n", "  (sort\
+    \ (map (lambda (n)\n               (cons n (sum-digits n)))\n             nums)\n\
+    \        (lambda (x y)\n          (if (= (cdr x) (cdr y))\n              (< (car\
+    \ x) (car y))\n              (< (cdr x) (cdr y))))))", "  (sort nums\n    (lambda\
+    \ (n1 n2)\n      (< (sum-digits n1) (sum-digits n2)))))\n", "  (sort nums\n  \
+    \      (lambda (n1 n2)\n          (define (sum-digits n)\n            (if (= n\
+    \ 0)\n                0\n                (+ (modulo n 10) (sum-digits (quotient\
+    \ n 10)))))\n          (< (sum-digits n1) (sum-digits n2)))))\n", '  (sort nums
+    #:key (lambda (i) (for/sum ([d (in-list (integer->list i))]) d))))', "  (sort\
+    \ nums (\u03BB (x y)\n\t       (or (< (sum-digits x) (sum-digits y))\n\t\t   (and\
+    \ (= (sum-digits x) (sum-digits y))\n\t\t\t(< (position x nums) (position y nums)))))))\n",
+  "  (sort nums\n        (lambda (n1 n2)\n          (< (+ (remainder n1 10)\n    \
+    \            (remainder (quotient n1 10) 10)\n                (remainder (quotient\
+    \ n1 100) 10))\n             (+ (remainder n2 10)\n                (remainder\
+    \ (quotient n2 10) 10)\n                (remainder (quotient n2 100) 10))\n  \
+    \           ))))\n", "  ;; your code here)\n</code>\nI think you can use Racket's\
+    \ <code>sort</code> to get the job done.\n<code>(define (sum-digits n)\n  (if\
+    \ (&lt; n 10)\n      n\n      (+ (modulo n 10) (sum-digits (quotient n 10)))))\n",
+  "  '())\n", "  (sort (map (lambda (num) (cons num (number->string num))) nums)\n\
+    \        (lambda (n1 n2)\n          (&lt; (string-&gt;number (cdr n1))\n     \
+    \        (string-&gt;number (cdr n2))))))\n", "  (sort nums (lambda (x y) (and\
+    \ (or (= (sum-digits x) (sum-digits y))\n                                    (<\
+    \ (sum-digits x) (sum-digits y)))\n                               (< (index-of\
+    \ x nums) (index-of y nums))))))\n", "  (for/list ([x nums]) x))\n", "  (match\
+    \ nums\n    ('() '())\n    ((cons v vs)\n     (define (digits n)\n       (if (=\
+    \ n 0) '()\n           (cons (remainder n 10) (digits (quotient n 10)))))\n  \
+    \   (let ((sorted-pairs\n            (sort (for/list ([n nums])\n            \
+    \        (cons n (apply + (digits n))))\n                  < #:key car)))\n  \
+    \     (map car sorted-pairs)))))\n", "  (if (empty? nums)\n      empty\n     \
+    \ (define sorted-nums\n        (sort (for/list ([x nums])\n               (cons\
+    \ x (quotient (apply + (map number->string (string->list (number->string x))))\
+    \ 10)))\n              (lambda (n1 n2) (< (cdr n1) (cdr n2)))))\n      (map car\
+    \ sorted-nums)))", "  (sort (map (lambda (x)\n               (cons x (sum-digits\
+    \ x)))\n             nums)\n        (lambda (x y) (< (cdr x) (cdr y)))))\n", " \
+    \ (sort nums \n    (lambda (x y)\n      (if (&lt; (sum-digits x) (sum-digits y))\n\
+    \          #t\n          (if (&gt; (sum-digits x) (sum-digits y))\n          \
+    \    #f\n              (&lt; (index-num x nums) (index-num y nums)))))))\n</code>\n\
+    I am trying to implement the above code in Python. I tried the following code\
+    \ but it does not work. I am not sure how to do what has been written in the Racket\
+    \ code in Python.\n<code># Write a function which sorts the given list of integers\n\
+    # in ascending order according to the sum of their digits.\n# Note: if there are\
+    \ several items with similar sum of their digits,\n# order them based on their\
+    \ index in original list.\n# For example:\n#print order_by_points([1, 10, 6, 2,\
+    \ 8, 9, 0, 1, 3, 7, 5, 4])\n\ndef order_by_points(nums):\n    #YOUR CODE GOES\
+    \ HERE\n    #print nums\n    return sorted(nums, key=sum_digits)\n</code>\n\n\n\
+    A:\n\n<code>def order_by_points(nums):\n    return sorted(nums, key=lambda n:\
+    \ (sum(map(int, str(n))), nums.index(n)))\n</code>\n", "  (sort (for/list ([n\
+    \ nums]) (cons n (sum-digits n)))\n        < #:key car))\n", "  (sort (map (lambda\
+    \ (n i) (list n i)) nums (iota (length nums)))\n        (lambda (n1 n2) (or (and\
+    \ (equal? (sum-digits (car n1)) (sum-digits (car n2)))\n                     \
+    \            (&lt; (cadr n1) (cadr n2)))\n                            (&lt; (sum-digits\
+    \ (car n1)) (sum-digits (car n2)))))))\n", "  (sort nums\n        #:key (lambda\
+    \ (n)\n               (apply + (string->list (number->string n))))))\n```\n\n\
+    ### Answer\n\n```racket\n#lang racket\n", "  (sort nums\n        (lambda (num1\
+    \ num2)\n          (< (sum-digits num1) (sum-digits num2)))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

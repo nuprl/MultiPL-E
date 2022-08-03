@@ -19,7 +19,1207 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate m
   \ \"(()(\")) \"No\")\n    (check-equal? (candidate (list \")(\" \")(\")) \"No\"\
   )\n    (check-equal? (candidate (list \"(\" \")\")) \"Yes\")\n    (check-equal?\
   \ (candidate (list \")\" \"(\")) \"Yes\")\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (andmap balanced? (list lst))\n)\n", "  (define (balance parens)\n\
+    \    (cond\n      [(empty? parens) 0]\n      [(char=? (first parens) #\\() (add1\
+    \ (balance (rest parens)))]\n      [(char=? (first parens) #\\)) (sub1 (balance\
+    \ (rest parens)))]))\n  (define (bad-parens? str)\n    (not (member (balance str)\
+    \ (list 0))))\n  (define (mix s1 s2)\n    (if (empty? s1)\n        (list s2)\n\
+    \        (append (map (lambda (m) (string-append s1 m)) (mix s2 (substring s1\
+    \ 1)))\n                (mix (substring s1 1) s2))))\n  (cond\n    [(bad-parens?\
+    \ (first lst)) \"No\"]\n    [(bad-parens? (second lst)) \"No\"]\n    [(empty?\
+    \ (filter bad-parens? (mix (first lst) (second lst)))) \"Yes\"]\n    [else \"\
+    No\"]))\n</code>\nTests:\n<code>(check-expect (match_parens '(\"(()))\" \"()\"\
+    )) \"No\")", "  (let ([l (car lst)]\n        [r (cadr lst)])\n    (string=? (string-append\
+    \ l r) (cadr (string-match \"\\\\(\\\\)\\\\|()\" (string-append l r))))))\n",
+  "  (cond ((empty? lst) 0)\n        ((char=? (car lst) #\\() 1)\n        ((char=?\
+    \ (car lst) #\\)) -1)\n        (else 0)))\n", "  (define (count-parens str)\n\
+    \    (cond [(empty? str) 0]\n          [(equal? (first str) #\\() +1]\n      \
+    \    [(equal? (first str) #\\)) -1]\n          [else (count-parens (rest str))]))\n\
+    \  (define (count-parens-concat x y)\n    (+ (count-parens x) (count-parens y)))\n\
+    \  (if (or (negative? (count-parens-concat (first lst) (second lst)))\n      \
+    \    (positive? (count-parens-concat (second lst) (first lst))))\n      \"No\"\
+    \n      \"Yes\"))\n", "  (let ((s1 (cadr lst))\n        (s2 (caddr lst)))\n  \
+    \  (let ((f1 (lambda (lst s)\n                (if (null? lst)\n              \
+    \      '()\n                    (if (equal? (car lst) s)\n                   \
+    \     (list (list (car lst)))\n                        (append (f1 (cdr lst) s)\n\
+    \                                (list (list (car lst))))))))\n          (f2 (lambda\
+    \ (p)\n                (if (null? p)\n                    0\n                \
+    \    (if (equal? (car p) \"(\")\n                        (1+ (f2 (cdr p)))\n \
+    \                       (- (f2 (cdr p))))))))\n      (let ((res1 (f1 s1 '('))\n\
+    \            (res2 (f1 s2 '(')))\n        (let ((s1-cnt (f2 res1))\n         \
+    \     (s2-cnt (f2 res2)))\n          (if (equal? s1-cnt 0)\n              (if\
+    \ (equal? s2-cnt 0)\n                  \"Yes\"\n                  \"No\")\n  \
+    \            (if (equal? s2-cnt 0)\n                  \"No\"\n               \
+    \   (let ((f3 (lambda (lst1 lst2)\n                              (if (null? lst1)\n\
+    \                                  (if (null? lst2)\n                        \
+    \              '()\n                                      (append (f3 lst1 (cdr\
+    \ lst2))\n                                              (list (car lst2))))\n\
+    \                                  (if (null? lst2)\n                        \
+    \              (append (f3 (cdr lst1) lst2)\n                                \
+    \              (list (car lst1)))\n                                      (append\
+    \ (f3 (cdr lst1) lst2)\n                                              (list (car\
+    \ lst1))\n                                              (list (car lst2))))))))\n\
+    \                    (let ((res3 (f3 res1 res2)))\n                      (if (equal?\
+    \ (f2 res3) 0)\n                          \"Yes\"\n                          \"\
+    No\"))))))))))\n", "  (match lst\n    ['() 'Yes]\n    [(list s1 s2)\n     (cond\n\
+    \       [(null? s1) (match_parens (list s2 '()))]\n       [(null? s2) (match_parens\
+    \ (list '() s1))]\n       [(string=? (string-append s1 s2)\n                 \
+    \ (string-join (append (string-&gt;list s1) (string-&gt;list s2))\n          \
+    \                     \"\"))\n        'Yes]\n       [else 'No])]))\n", "  (match\
+    \ lst\n    [(list '( open . close ) s)\n     (and (or (= open 0) (= close 0))\n\
+    \          (and (or (and (= open 0) (= close 1))\n                   (and (= open\
+    \ 1) (= close 0)))\n               (match-parens (list (cons (- open 1) (- close\
+    \ 1)) s))))]\n    [(list '( open . close ) '( open1 . close1 ))\n     (and (or\
+    \ (= open 0) (= close 0))\n          (and (or (and (= open 0) (= close 1))\n \
+    \                  (and (= open 1) (= close 0)))\n               (match-parens\
+    \ (list (cons (- open 1) (- close 1)) (cons (- open1 1) (- close1 1))))))]\n \
+    \   [(list _ _) #f]))\n</code>\n", "  (define (parens-counter str)\n    (cond\n\
+    \      [(empty? str) 0]\n      [(char=? (first str) #\\() (+ 1 (parens-counter\
+    \ (rest str)))]\n      [(char=? (first str) #\\)) (- 1 (parens-counter (rest str)))]))\n\
+    \  (cond\n    [(= (parens-counter (first lst)) (parens-counter (second lst)))\
+    \ \"Yes\"]\n    [else \"No\"]))\n", "  (let loop ([l (car lst)] [r (cadr lst)]\
+    \ [n 0])\n    (cond\n      [(and (empty? l) (empty? r))\n       (if (= n 0) 'Yes\
+    \ 'No)]\n      [(and (empty? l) (not (empty? r)))\n       (loop l (rest r) (-\
+    \ n 1))]\n      [(and (not (empty? l)) (empty? r))\n       (loop (rest l) r (+\
+    \ n 1))]\n      [(char=? (first l) ?\\()\n       (loop (rest l) r (+ n 1))]\n\
+    \      [(char=? (first l) ?\\))\n       (loop (rest l) r (- n 1))]\n      [(char=?\
+    \ (first r) ?\\()\n       (loop l (rest r) (+ n 1))]\n      [(char=? (first r)\
+    \ ?\\))\n       (loop l (rest r) (- n 1))])))\n", "  (define (match_parens lst)\n\
+    \    (define (aux lst)\n      (cond [(empty? lst) #t]\n            [(empty? (cdr\
+    \ lst)) (and (char=? (car lst) #\\() #t)]\n            [(char=? (car lst) #\\\
+    ()) (aux (cdr lst))]\n            [(char=? (car lst) #\\)) (and (char=? (cadr\
+    \ lst) #\\() #t)]\n            [else #f]))\n    (define (flatten lst)\n      (if\
+    \ (list? lst)\n          (flatten (car lst))\n          lst))\n    (if (aux (flatten\
+    \ lst))\n        \"Yes\"\n        \"No\"))\n  (if (list? lst)\n      (match_parens\
+    \ lst)\n      (if (string? lst)\n          (match_parens (string->list lst))\n\
+    \          \"No\")))", "  (define (loop lst n)\n    (if (null? lst)\n        (if\
+    \ (= n 0) 'Yes 'No)\n        (if (equal? (car lst) '(')\n            (loop (cdr\
+    \ lst) (+ n 1))\n            (if (> n 0)\n                (loop (cdr lst) (- n\
+    \ 1))\n                'No))))\n  (loop lst 0))\n", "  (if (empty? lst)\n    \
+    \  'No\n      (if (equal? (car lst) 'Yes)\n          'Yes\n          (match_parens\
+    \ (cdr lst)))))\n", "  (let ((left 0) (right 0))\n    (for ([c (in-list (car lst))])\n\
+    \      (if (char=? c #\\()\n          (set! left (add1 left))\n          (set!\
+    \ right (add1 right))))\n    (for ([c (in-list (cadr lst))])\n      (if (char=?\
+    \ c #\\()\n          (set! left (add1 left))\n          (set! right (add1 right))))\n\
+    \    (if (> left right)\n        \"Yes\"\n        \"No\")))\n", "  (define (bal-paren\
+    \ parens)\n    (cond\n      [(null? parens) #t]\n      [(eq? (first parens) '())\
+    \ #f]\n      [else (bal-paren (rest parens))]))\n  (define (to-parens str)\n \
+    \   (if (string-null? str)\n        '()\n        (cons (substring str 0 1) (to-parens\
+    \ (substring str 1)))))\n  (define (to-string parens)\n    (if (null? parens)\n\
+    \        \"\"\n        (string-append (car parens) (to-string (cdr parens)))))\n\
+    \  (if (null? lst)\n      (if (bal-paren (first lst))\n          \"Yes\"\n   \
+    \       \"No\")\n      (if (bal-paren (first lst))\n          (if (bal-paren (to-parens\
+    \ (string-append (to-string (first lst)) (to-string (second lst)))))\n       \
+    \       \"Yes\"\n              \"No\")\n          (if (bal-paren (to-parens (string-append\
+    \ (to-string (second lst)) (to-string (first lst)))))\n              \"Yes\"\n\
+    \              \"No\"))))))\n", "  (cond [(empty? lst) #f]\n        [(andmap string=?\
+    \ (car lst) (cdr lst)) #t]\n        [else (match_parens (cdr lst))]))\n", "  (cond\
+    \ [(empty? lst) 'Yes]\n        [(not (all-parens? (first lst))) 'No]\n       \
+    \ [(not (balanced? (first lst))) 'No]\n        [(not (all-parens? (second lst)))\
+    \ 'No]\n        [(not (balanced? (second lst))) 'No]\n        [else (if (balanced?\
+    \ (string-append (first lst) (second lst)))\n                 'Yes\n         \
+    \        'No)]))\n", "  (match lst\n    ['() 'No]\n    [(list s1 s2)\n     (cond\
+    \ [(empty? s1) (match_parens (list (reverse s2) '()))]\n           [(empty? s2)\
+    \ (match_parens (list '() (reverse s1)))]\n           [else\n            (match\
+    \ (cons (first s1) (first s2))\n              ['(() No]\n              ['() 'Yes]\n\
+    \              [else (match_parens (list (rest s1) (rest s2)))])])]))\n", "  (define\
+    \ (is-good? str)\n    (define (helper lst acc)\n      (cond [(empty? lst) (zero?\
+    \ acc)]\n            [(char=? (first lst) #\\()\n             (helper (rest lst)\
+    \ (+ acc 1))]\n            [(char=? (first lst) #\\))\n             (helper (rest\
+    \ lst) (- acc 1))]))\n    (helper (string->list str) 0))\n  (define (concat-all-possibles\
+    \ lst acc)\n    (cond [(empty? lst) acc]\n          [(cons? (first lst))\n   \
+    \        (concat-all-possibles (rest lst)\n                                 (append\
+    \ (first lst) acc))]\n          [else (concat-all-possibles (rest lst)\n     \
+    \                                 (append (list (first lst)) acc))]))\n  (define\
+    \ (helper acc)\n    (cond [(empty? acc) (list 'No)]\n          [(is-good? (first\
+    \ acc)) (list 'Yes)]\n          [else (helper (rest acc))]))\n  (helper (concat-all-possibles\
+    \ lst '())))", "  (match lst\n    [(list s1 s2)\n     (define (parenthese-diff-count\
+    \ lst)\n       (cond [(empty? lst) 0]\n             [(char=? (first lst) #\\()\
+    \ 1]\n             [(char=? (first lst) #\\)) -1]\n             [else (parenthese-diff-count\
+    \ (rest lst))]))\n     (cond [(= (parenthese-diff-count s1) (parenthese-diff-count\
+    \ s2)) \"Yes\"]\n           [else \"No\"])]))\n", "  (let/ec break\n    (match\
+    \ lst\n      [`(,x . ,xs)\n       (let ([left? (equal? (symbol-&gt;string x) \"\
+    (\")])\n         (for/fold ([left 0] [right 0]) ([y ys])\n           (cond\n \
+    \            [(equal? y \"(\")\n              (values (add1 left) right)]\n  \
+    \           [(equal? y \")\")\n              (cond\n                [(and (negative?\
+    \ right) (negative? left)) (break \"No\")]\n                [(&gt; left right)\
+    \ (values left (add1 right))]\n                [else (break \"No\")])])))]\n \
+    \     [_ \"No\"])))\n", "  (let loop ([s1 (car lst)] [s2 (cadr lst)] [stack '()])\n\
+    \    (cond [(and (empty? s1) (empty? s2) (empty? stack)) 'Yes]\n          [(and\
+    \ (empty? s1) (empty? s2) (not (empty? stack))) 'No]\n          [(and (empty?\
+    \ s1) (not (empty? s2))) (loop (string-append s1 s2) \"\" stack)]\n          [(and\
+    \ (not (empty? s1)) (empty? s2)) (loop s1 s1 stack)]\n          [(char=? (string-ref\
+    \ s1 0) #\\() (loop (substring s1 1) s2 (cons #\\( stack))]\n          [(char=?\
+    \ (string-ref s1 0) #\\))\n           (if (eq? #\\( (car stack))\n           \
+    \    (loop (substring s1 1) s2 (cdr stack))\n               (loop (substring s1\
+    \ 1) s2 stack))]\n          [else (loop (substring s1 1) s2 stack)])))\n", " \
+    \ (cond ((null? lst) #t)\n        ((= (length lst) 1) #f)\n        ((equal? (car\
+    \ lst) \")\") #f)\n        ((equal? (car lst) \"(\")\n         (match_parens (append\
+    \ (list (cadr lst)) (cddr lst))))\n        (else #f)))\n", "  (cond [(empty? lst)\
+    \ 'Yes]\n        [(= (list-ref lst 0) #\\() (match_parens (list-tail lst))]\n\
+    \        [(= (list-ref lst 0) #\\)) 'No]))\n</code>\nThis is a very minimalistic\
+    \ solution that assumes that your lists won't include anything else than <code>#\\\
+    (</code> and <code>#\\)</code>. If you want to make it better, you'll have to\
+    \ add guards for elements of the list that are not parentheses.\n", "  (cond\n\
+    \    [(or (eq? lst '(())) (eq? lst '()))\n     (string-append \"Yes\")]\n    [(and\
+    \ (pair? lst) (not (null? lst)))\n     (string-append \"No\")]\n    [else\n  \
+    \   (string-append \"Error\")]))\n", "  (if (empty? lst)\n      #t\n      (let*\
+    \ ([str1 (car lst)]\n             [str2 (cadr lst)]\n             [parens '(0)])\n\
+    \        (for ([c (string-&gt;list str1)])\n          (if (equal? (symbol-&gt;string\
+    \ c) \"(\")\n              (set! parens (cons 0 parens))\n              (set!\
+    \ parens (cons 1 (cdr parens)))))\n        (for ([c (string-&gt;list str2)])\n\
+    \          (if (equal? (symbol-&gt;string c) \"(\")\n              (set! parens\
+    \ (cons 0 parens))\n              (set! parens (cons 1 (cdr parens)))))\n    \
+    \    (if (equal? (length parens) 0)\n            #t\n            (check_parens\
+    \ parens)))))\n", "  (cond\n    [(null? lst) #t]\n    [(char=? (first lst) ?()])\n\
+    \    [else (match_parens (rest lst))]))\n", "  (define (iter counter str acc)\n\
+    \    (if (null? str)\n        (if (= counter 0)\n            (reverse acc)\n \
+    \           '())\n        (let ((h (car str)))\n          (cond\n            [(eq?\
+    \ h #\\() (iter (add1 counter) (cdr str) (cons #\\( acc))]\n            [(eq?\
+    \ h #\\)) (if (eq? counter 0)\n                             '()\n            \
+    \                 (iter (sub1 counter) (cdr str) (cons #\\) acc)))]))))\n  (let\
+    \ ([str1 (car lst)]\n        [str2 (cadr lst)])\n    (define (check str)\n   \
+    \   (define (iter acc)\n        (let ((str2 (iter (add1 acc) str)))\n        \
+    \  (if (null? str2)\n              '()\n              (iter acc))))\n      (let\
+    \ ([str1 (iter 0 str)])\n        (if (null? str1)\n            '()\n         \
+    \   (list str1 str2))))\n    (let ([good (append (check str1) (check str2))])\n\
+    \      (if (null? good)\n          '(\"No\")\n          (reverse good)))))\n",
+  "  (define parentheses (list #\\( #\\)))\n  (define (parens-okay p)\n    (cond [(empty?\
+    \ p)\n           #t]\n          [(member (first p) parentheses)\n           (parens-okay\
+    \ (rest p))]\n          [else\n           (if (and (string=? (string (first p))\
+    \ \")\")\n                    (string=? (string (first (rest p))) \"(\"))\n  \
+    \             (parens-okay (rest (rest p)))\n               #f)]))\n  (string=?\
+    \ (string-append (first lst) (second lst))\n            \"()\")\n  (cond [(string=?\
+    \ (string-append (first lst) (second lst)) \"()\")\n         #t]\n        [(or\
+    \ (not (parens-okay (string-append (first lst) (second lst))))\n             (not\
+    \ (string=? (string-append (first lst) (second lst))\n                       \
+    \     (string-append (second lst) (first lst)))))\n         #f]\n        [else\n\
+    \         #t]))", "  (define (count-parens str count)\n    (cond\n      [(= (string-length\
+    \ str) 0) count]\n      [(char=? (string-ref str 0) #\\()\n       (count-parens\
+    \ (substring str 1) (+ count 1))]\n      [(char=? (string-ref str 0) #\\))\n \
+    \      (count-parens (substring str 1) (- count 1))]))\n  (define (check-parens\
+    \ str)\n    (cond\n      [(negative? (count-parens str 0)) #f]\n      [else #t]))\n\
+    \  (cond\n    [(check-parens (string-append (list-ref lst 0) (list-ref lst 1)))\n\
+    \     \"Yes\"]\n    [else \"No\"]))\n", "  (if (null? lst)\n      \"Yes\"\n  \
+    \    (let ((paren1 (car lst))\n            (paren2 (cadr lst)))\n        (if (not\
+    \ (eq? (length paren1) (length paren2)))\n            \"No\"\n            (let\
+    \ loop ((pn1 paren1)\n                       (pn2 paren2)\n                  \
+    \     (pn1-open 0)\n                       (pn2-open 0))\n              (if (and\
+    \ (null? pn1) (null? pn2))\n                  \"Yes\"\n                  (let\
+    \ ((nxt1 (car pn1))\n                        (nxt2 (car pn2)))\n             \
+    \       (cond ((and (not (null? nxt1)) (eq? nxt1 #\\())\n                    \
+    \       (loop (cdr pn1) pn2 (+ pn1-open 1) pn2-open))\n                      \
+    \    ((and (not (null? nxt2)) (eq? nxt2 #\\() )\n                           (loop\
+    \ pn1 (cdr pn2) pn1-open (+ pn2-open 1)))\n                          ((and (not\
+    \ (null? nxt1)) (eq? nxt1 #\\)))\n                           (if (and (&gt; pn1-open\
+    \ 0) (eq? nxt2 #\\)))\n                               (loop (cdr pn1) (cdr pn2)\
+    \ (- pn1-open 1) (- pn2-open 1))\n                               \"No\"))\n  \
+    \                        (else \"No\")))))))))\n</code>\n", "  (display (is-balanced?\
+    \ (string-append (car lst) (cadr lst)))))\n", "  (cond\n    [(empty? lst) 'Yes]\n\
+    \    [(empty? (first lst)) (match_parens (rest lst))]\n    [(member (first lst)\
+    \ '(\"()\" \")(\" \")(\" \"((\") ) 'Yes]\n    [else 'No]))\n</code>\nHere is my\
+    \ attempt at matching the parentheses. It only seems to work on the first example.\
+    \ When I try the second and third examples, it returns 'Yes'. I know that I need\
+    \ some sort of recursive function to match the parentheses in the list. I'm new\
+    \ to Racket and would love some help on this.\nThanks.\n", "  (let loop ([lst\
+    \ lst] [current-parens 0])\n    (cond [(null? lst) (cond [(zero? current-parens)\
+    \ 'Yes] [else 'No])]\n          [(char=? (car lst) #\\() (loop (cdr lst) (+ current-parens\
+    \ 1))]\n          [(char=? (car lst) #\\)) (loop (cdr lst) (- current-parens 1))]\n\
+    \          [else (loop (cdr lst) current-parens)])))", "  (define (balance-parens\
+    \ lst)\n    (cond\n      [(empty? lst) '(0 0)]\n      [(char=? (first lst) #\\\
+    () (begin\n                                   (define result (balance-parens (rest\
+    \ lst)))\n                                   (cons (+ 1 (first result)) (second\
+    \ result)))]\n      [(char=? (first lst) #\\)) (begin\n                      \
+    \             (define result (balance-parens (rest lst)))\n                  \
+    \                 (cons (first result) (+ 1 (second result))))]))\n  (define (is-valid?\
+    \ lst)\n    (and (positive? (first lst))\n         (zero? (second lst))))\n  (is-valid?\
+    \ (balance-parens (car lst))))\n", "  (match lst\n    ['() #t]\n    [(cons '(\
+    \ cons '(' (cons '( cons '( cons '( cons ')' 'No') 'Yes')\n\t\t\t     '( cons\
+    \ '( cons '( cons '( cons '( cons '(' 'No') 'Yes') 'No') 'Yes') 'No'))\n\t\t\t\
+    \   '( cons '( cons '( cons '( cons '( cons ')' 'No') 'Yes') 'No') 'Yes') 'No'))\n\
+    \t    '( cons '( cons '( cons '( cons '( cons '(' 'No') 'Yes') 'No') 'Yes') 'No'))\n\
+    \t  '( cons '( cons '( cons '( cons '( cons ')' 'No') 'Yes') 'No') 'Yes') 'No'))\n\
+    \      'No']))\n", "  (define (matches ch1 ch2)\n    (cond ((equal? ch1 #\\()\
+    \ (equal? ch2 #\\)))\n          ((equal? ch1 #\\)) (equal? ch2 #\\())))\n  (define\
+    \ (is-good str)\n    (local [(define (check i cnt)\n              (cond ((= i\
+    \ (string-length str)) (= cnt 0))\n                    ((= cnt -1) #f)\n     \
+    \               ((equal? (string-ref str i) #\\() (check (+ i 1) (+ cnt 1)))\n\
+    \                    ((equal? (string-ref str i) #\\)) (check (+ i 1) (- cnt 1)))))\n\
+    \      (check 0 0)])\n  (cond [(is-good (apply string-append lst)) \"Yes\"]\n\
+    \        [else \"No\"]))\n", "  (cond ((null? lst) 0)\n        ((string=? (car\
+    \ lst) \"(\") (+ 1 (match_parens (cdr lst))))\n        ((string=? (car lst) \"\
+    )\") (- 1 (match_parens (cdr lst))))))", "  (equal? '() (parentheses-count lst)))\n",
+  "  (let loop ([lst (car lst)] [acc 0])\n    (if (null? lst)\n        (if (zero?\
+    \ acc)\n            'Yes\n            'No)\n        (if (equal? (car lst) #\\\
+    ()\n            (loop (cdr lst) (+ acc 1))\n            (if (zero? acc)\n    \
+    \            'No\n                (loop (cdr lst) (- acc 1)))))))\n", "  (let\
+    \ ([parens-stack (vector)])\n    (for ([s lst])\n      (for ([c s])\n        (cond\n\
+    \          [else (cond\n                  [(char=? c #\\() (vector-push #\\( parens-stack)]\n\
+    \                  [(char=? c #\\)) (when (vector-empty? parens-stack)\n     \
+    \                              (error \"Unbalanced\"))\n                     \
+    \             (vector-pop parens-stack)])])))\n    (cond\n      [(vector-empty?\
+    \ parens-stack) \"Yes\"]\n      [else \"No\"])))", "  (define (accum lst count)\n\
+    \    (cond [(null? lst) (if (zero? count) 'Yes 'No)]\n          [(equal? (car\
+    \ lst) '()(+) (accum (cdr lst) (+ count 1))]\n          [(equal? (car lst) '()-)\
+    \ (if (zero? count) 'No (accum (cdr lst) (- count 1)))]\n          [else (accum\
+    \ (cdr lst) count)]))\n  (accum lst 0))\n</code>\nHowever, the above code always\
+    \ returns <code>No</code>.  How can I fix it?\n\n\nA:\n\nThe problem is that you\
+    \ are using an <code>cond</code> with multiple clauses that have the same predicate.\
+    \ That's wrong, since only the first clause will be considered by the program\
+    \ (there is no need to check the other clauses), and this is causing incorrect\
+    \ results. Try rewriting it like this:\n<code>(define (match_parens lst)\n  (define\
+    \ (accum lst count)\n    (cond [(null? lst) (if (zero? count) 'Yes 'No)]\n   \
+    \       [(equal? (car lst) '()(+) (accum (cdr lst) (+ count 1))]\n          [(equal?\
+    \ (car lst) '()-) (if (zero? count) 'No (accum (cdr lst) (- count 1)))]\n    \
+    \      [else (accum (cdr lst) count)]))\n  (accum lst 0))\n</code>\n", "  (define\
+    \ (paren-p c) (or (char=? c #\\() (char=? c #\\))))\n  (define (paren-good-p str)\
+    \ (equal? 0 (check-parens str)))\n  (define (paren-good-strs strs)\n    (cond\
+    \ ((null? strs) #t)\n          ((null? (cdr strs)) #t)\n          ((paren-good-p\
+    \ (string-append (car strs) (cadr strs))) #t)\n          (else #f)))\n  (define\
+    \ (check-parens str)\n    (let loop ((cs (string->list str)) (parens 0))\n   \
+    \   (cond ((null? cs) parens)\n            ((char=? (car cs) #\\() (+ parens 1))\n\
+    \            ((char=? (car cs) #\\)) (- parens 1))\n            (else (loop (cdr\
+    \ cs) parens)))))\n  (let ((strs (map (\u03BB (l) (filter paren-p l)) lst)))\n\
+    \    (if (paren-good-strs strs) \"Yes\" \"No\")))\n", "  (if (null? lst) #t\n\
+    \      (if (equal? (car lst) \")\") #f\n          (match_parens (cdr lst)))))",
+  "  (if (null? lst)\n      'Yes\n      (if (eq? (car lst) 'Yes)\n          (car (cdr\
+    \ lst))\n          (if (eq? (caar lst) (cadar lst))\n              (match_parens\
+    \ (cdr lst))\n              (list 'Yes (cdr lst))))))\n", "  (define (match-parens-helper\
+    \ s)\n    (let ([opens 0]\n          [closes 0])\n      (let loop ([lst s])\n\
+    \        (cond [(empty? lst)\n               (= opens closes)]\n             \
+    \ [(equal? (first lst) #\\()\n               (set! opens (+ opens 1))\n      \
+    \         (loop (rest lst))]\n              [(equal? (first lst) #\\))\n     \
+    \          (set! closes (+ closes 1))\n               (loop (rest lst))]\n   \
+    \           [else\n               #f]))))\n  (match-parens-helper (string-append\
+    \ (first lst) (second lst)))\n  'Yes)", "  (let* ([open (count '(' (car lst))]\n\
+    \         [close (count ')' (car lst))]\n         [open2 (count '(' (cadr lst))]\n\
+    \         [close2 (count ')' (cadr lst))])\n    (if (and (= open (+ open2 close2))\n\
+    \             (= close (+ close2 open2)))\n        'Yes\n        'No)))\n", " \
+    \ (define (check p lst)\n    (cond\n      [(null? lst) (zero? p)]\n      [(eq?\
+    \ (car lst) '\\()\n       (check (+ p 1) (cdr lst))]\n      [(eq? (car lst) '\\\
+    ))\n       (and (not (zero? p))\n            (check (- p 1) (cdr lst)))]))\n \
+    \ (let ([s1 (car lst)]\n        [s2 (cadr lst)])\n    (if (check 0 s1)\n     \
+    \   (if (check 0 s2)\n            \"Yes\"\n            (if (check 0 (reverse s2))\n\
+    \                \"Yes\"\n                \"No\"))\n        (if (check 0 (reverse\
+    \ s1))\n            (if (check 0 s2)\n                \"Yes\"\n              \
+    \  (if (check 0 (reverse s2))\n                    \"Yes\"\n                 \
+    \   \"No\"))\n            \"No\"))))\n", "  (define n0 (apply + (map (lambda (c)\
+    \ (if (equal? c #\\() 1 -1)) (car lst))))\n  (define n1 (apply + (map (lambda\
+    \ (c) (if (equal? c #\\() 1 -1)) (cadr lst))))\n  (if (and (even? n0) (even? n1))\n\
+    \      \"Yes\"\n      \"No\"))\n", "  (if (empty? lst) \"Yes\"\n      (let ([lefts\
+    \ (string-count (first lst) #\\()]\n            [rights (string-count (first lst)\
+    \ #\\))])\n        (if (< lefts rights) \"No\"\n            (match_parens (rest\
+    \ lst))))))\n", "  (cond\n    [(empty? lst) #f]\n    [(equal? '() (car lst)) (match_parens\
+    \ (cdr lst))]\n    [(equal? '(()) (car lst)) (match_parens (cdr lst))]\n    [(equal?\
+    \ '((())) (car lst)) (match_parens (cdr lst))]\n    [(equal? '(()()) (car lst))\
+    \ (match_parens (cdr lst))]\n    [(equal? '(())() (car lst)) (match_parens (cdr\
+    \ lst))]\n    [(equal? '()() (car lst)) (match_parens (cdr lst))]\n    [(equal?\
+    \ '(())(()) (car lst)) (match_parens (cdr lst))]\n    [(equal? '(())()() (car\
+    \ lst)) (match_parens (cdr lst))]\n    [(equal? '()()() (car lst)) (match_parens\
+    \ (cdr lst))]\n    [(equal? '()(()) (car lst)) (match_parens (cdr lst))]\n   \
+    \ [(equal? '(())(())() (car lst)) (match_parens (cdr lst))]\n    [(equal? '()(())()\
+    \ (car lst)) (match_parens (cdr lst))]\n    [(equal? '(())()(()) (car lst)) (match_parens\
+    \ (cdr lst))]\n    [(equal? '()()(()) (car lst)) (match_parens (cdr lst))]\n \
+    \   [(equal? '(())(())(()) (car lst)) (match_parens (cdr lst))]\n    [(equal?\
+    \ '()(())(()) (car lst)) (match_parens (cdr lst))]\n    [(equal? '(())()()() (car\
+    \ lst)) (match_parens (cdr lst))]\n    [(equal? '()()()() (car lst)) (match_parens\
+    \ (cdr lst))]\n    [(equal? '(())(())()() (car lst)) (match_parens (cdr lst",
+  "  (define (incr lst)\n    (for/fold ([acc (list 0)])\n              ([el lst])\n\
+    \      (cond [(equal? el \"(\") (cons (+ 1 (car acc)) (cdr acc))]\n          \
+    \  [(equal? el \")\") (cons (- (car acc) 1) (cdr acc))]\n            [else (error\
+    \ \"illegal el\")])))\n  (define (illegals lst)\n    (for/fold ([acc (list 0)])\n\
+    \              ([el lst])\n      (if (equal? (car acc) -1)\n          acc\n  \
+    \        (cond [(equal? el \"(\") (cons (+ 1 (car acc)) (cdr acc))]\n        \
+    \        [(equal? el \")\") (cons (- (car acc) 1) (cdr acc))]\n              \
+    \  [else (error \"illegal el\")]))))\n  (define (valid-p? lst)\n    (if (empty?\
+    \ lst)\n        #t\n        (if (equal? (car lst) 0)\n            #t\n       \
+    \     #f)))\n  (define (conc-str lst)\n    (apply string-append lst))\n  (define\
+    \ (valid-p? lst)\n    (if (empty? lst)\n        #t\n        (if (equal? (car lst)\
+    \ 0)\n            #t\n            #f)))\n  (cond [(and (valid-p? (incr (conc-str\
+    \ lst)))\n              (valid-p? (illegals (conc-str lst)))) \"Yes\"]\n     \
+    \   [else \"No\"]))\n", "  (cond\n    ((not lst) '())\n    ((list? (car lst))\n\
+    \     (append (match_parens (car lst)) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '(()) '(()))\n     (append '(()) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '())\n     (append '(()) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '()())\n     (append '(()) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '())\n     (append '(()) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '())\n     (append '(()) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '())\n     (append '(()) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '())\n     (append '(()) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '())\n     (append '(()) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '())\n     (append '(()) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '())\n     (append '(()) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '())\n     (append '(()) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '())\n     (append '(()) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '())\n     (append '(()) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '())\n     (append '(()) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '())\n     (append '(()) (match_parens (cdr lst))))\n    ((equal?\
+    \ (car lst) '())\n     (append '(()) (match_parens (c", "  (cond\n    ((null?\
+    \ lst) 'Yes)\n    ((not (even? (length lst))) 'No)\n    ((not (string=? \"\" (concatenate\
+    \ (string (first lst)) (string (second lst))))) 'No)\n    (else (match_parens\
+    \ (rest (rest lst))))))\n", "  (define (count-parens lst)\n    (cond [(empty?\
+    \ lst) 0]\n          [(eq? (first lst) #\\() (add1 (count-parens (rest lst)))]\n\
+    \          [(eq? (first lst) #\\)) (sub1 (count-parens (rest lst)))]))\n  (cond\
+    \ [(zero? (count-parens (first lst))) #t]\n        [(zero? (count-parens (second\
+    \ lst))) #t]\n        [else #f]))\n", "  (let ([open  (string-length (filter (\u03BB\
+    \ (ch) (equal? ch #\\( )) (car lst)))])\n    (let ([close (string-length (filter\
+    \ (\u03BB (ch) (equal? ch #\\) )) (car lst)))])\n      (let ([possible? (cond\
+    \ [(< open close) #f]\n                             [(> open close) #f]\n    \
+    \                         [else #t])])\n        (cond [possible?\n           \
+    \    (cond [(empty? (cdr lst)) 'Yes]\n                     [else (match_parens\
+    \ (cdr lst))])]\n              [else 'No])))))\n", "  (or (string=? (car lst)\
+    \ \"\")\n      (and (list? (car lst)) (match_parens (car lst)))\n      (and (string?\
+    \ (car lst))\n           (string-submatch? (regexp \"^\\\\((\\\\([^()]*\\\\)|)+\\\
+    \\)$\") (car lst)))\n      (and (string? (car lst))\n           (string-submatch?\
+    \ (regexp \"^\\\\(\\\\([^()]*\\\\)|)+\\\\)$\") (car lst)))))", "  (define (counter\
+    \ lst)\n    (cond\n      [(empty? lst) 0]\n      [(equal? (first lst) '()) (counter\
+    \ (rest lst))]\n      [(equal? (first lst) '()') (counter (rest lst))]\n     \
+    \ [(empty? (rest lst)) (cond\n                              [(equal? (first lst)\
+    \ '(') 1]\n                              [(equal? (first lst) ')') -1])]\n   \
+    \   [(equal? (first lst) '(') (+ 1 (counter (rest lst)))]\n      [(equal? (first\
+    \ lst) ')') (- 1 (counter (rest lst)))]))\n  (cond\n    [(= (counter (car lst))\
+    \ 0) 'Yes]\n    [(= (counter (car lst)) (counter (cadr lst))) 'Yes]\n    [else\
+    \ 'No]))", "  (map (lambda (in)\n         (andmap\n          (lambda (i)\n   \
+    \         (equal? i \"(\"))\n          in))\n       lst))\n", "  (cond [(empty?\
+    \ lst) 'Yes]\n        [(or (equal? (first lst) '())\n             (and (equal?\
+    \ (first lst) '(')\n                  (equal? (second lst) '(')))\n         (match_parens\
+    \ (rest lst))]\n        [(and (equal? (first lst) '(')\n              (equal?\
+    \ (second lst) ')'))\n         (match_parens (rest (rest lst)))]\n        [else\
+    \ 'No]))\n", "  (define (helper depth res)\n    (match lst\n      ('() (if (=\
+    \ depth 0) res #f))\n      ((cons '(' _) (helper (+ depth 1) res))\n      ((cons\
+    \ ')' _) (if (= depth 0) #f (helper (- depth 1) res)))\n      ((cons _ xs) (helper\
+    \ depth (append res xs)))))\n  (if (helper 0 '()) (string-join (reverse (helper\
+    \ 0 '())) \"\") \"No\"))\n</code>\n", "  (define (go-parens lst count)\n    (if\
+    \ (null? lst)\n        count\n        (go-parens (cdr lst)\n                 \
+    \  (if (string=? (car lst) \"(\")\n                       (+ count 1)\n      \
+    \                 (- count 1)))))\n  (and (= (go-parens (car lst) 0) 0)\n    \
+    \   (= (go-parens (cadr lst) 0) 0)))\n", "  (if (null? lst)\n      \"\"\n    \
+    \  (string-append (car lst) (match_parens (cdr lst)))))\n", "  (if (empty? lst)\n\
+    \      \"\"\n      (string-append (match_parens (cdr lst)) (car lst))))\n", " \
+    \ (define (parens-ok? str)\n    (let loop ([open 0] [str str])\n      (cond [(empty?\
+    \ str)\n             (zero? open)]\n            [(char=? (first str) #\\()\n \
+    \            (loop (+ open 1) (rest str))]\n            [(char=? (first str) #\\\
+    ))\n             (and (not (zero? open))\n                  (loop (- open 1) (rest\
+    \ str)))]\n            [else\n             (loop open (rest str))])))\n  (if (parens-ok?\
+    \ (string-append (first lst) (second lst)))\n      \"Yes\"\n      \"No\"))\n",
+  "  (match lst\n         [('( . rest) (match_parens rest (add1 (pending)))]\n   \
+    \      [(') . rest) (match_parens rest (sub1 (pending)))]\n         [else (match\
+    \ (pending)\n                     [(zero?) 'yes]\n                     [else 'no])]))\n",
+  "  (cond\n    ((null? lst) \"Yes\")\n    ((zero? (length lst)) \"Yes\")\n    ((not\
+    \ (string? (car lst))) (match_parens (cdr lst)))\n    ((not (string? (cadr lst)))\
+    \ (match_parens (cdr lst)))\n    ((and (string? (car lst)) (string? (cadr lst)))\n\
+    \     (match_parens (list (string-append (car lst) (cadr lst)) (cddr lst))))))\n",
+  "  (define (accum s)\n    (cond [(empty? s) #t]\n          [(char=? (first s) #\\\
+    () (accum (rest s))]\n          [(char=? (first s) #\\)) (if (empty? (rest s))\n\
+    \                                       #f\n                                 \
+    \      (char=? (second s) #\\())]))\n  (define (parens-string? str)\n    (cond\
+    \ [(string=? str \"\") #t]\n          [(and (char=? (string-ref str 0) #\\()\n\
+    \                (char=? (string-ref str (sub1 (string-length str))) #\\)))\n\
+    \           (parens-string? (substring str 1 (sub1 (string-length str))))]\n \
+    \         [else #f]))\n  (define (parens? str)\n    (and (parens-string? str)\n\
+    \         (accum (string->list str))))\n  (define (check-parens str)\n    (cond\
+    \ [(parens? str) 'Yes]\n          [else 'No]))\n  (define (concat-str1-str2 str1\
+    \ str2)\n    (string-append str1 str2))\n  (define (concat-str2-str1 str1 str2)\n\
+    \    (string-append str2 str1))\n  (define (check-concat lst)\n    (cond [(equal?\
+    \ (check-parens (concat-str1-str2 (car lst) (cadr lst)))\n                  (check-parens\
+    \ (concat-str2-str1 (car lst) (cadr lst))))\n           (check-parens (concat-str1-str2\
+    \ (car lst) (cadr lst)))]\n          [else (check-parens (concat-str2-str1 (car\
+    \ lst) (cadr lst)))]))\n  (cond [(or (empty? lst)\n             (and (empty? (car\
+    \ lst))\n                  (empty? (cadr lst))))\n         \"Yes\"]\n        [else\
+    \ (check-concat lst)]))\n", "  (equal? (string-length (car lst)) (string-length\
+    \ (cadr lst))))\n", "  (cond\n    [(empty? lst) \"Yes\"]\n    [(empty? (cdr lst))\
+    \ \"Yes\"]\n    [(not (empty? (run lst))) \"Yes\"]\n    [else \"No\"]))\n", " \
+    \ (match lst\n         [('() _)\n          'Yes]\n         [(list? (car lst))\n\
+    \          (match_parens lst)]\n         [(pair? (car lst))\n          (match_parens\
+    \ lst)]\n         [else\n          'No]))\n</code>\nI already tried \n<code>(list?\
+    \ '(()) '(()))", "  (if (list? lst)\n      (if (equal? (length lst) 2)\n     \
+    \     (if (and (string? (car lst)) (string? (cadr lst)))\n              (let*\
+    \ ([s1 (car lst)]\n                     [s2 (cadr lst)]\n                    \
+    \ [len1 (string-length s1)]\n                     [len2 (string-length s2)]\n\
+    \                     [s1-o (count (string-&gt;list s1) #\\())]\n            \
+    \         [s1-c (count (string-&gt;list s1) #\\))]\n                     [s2-o\
+    \ (count (string-&gt;list s2) #\\())]\n                     [s2-c (count (string-&gt;list\
+    \ s2) #\\))]\n                     [s1-c2 (count (string-&gt;list (append s1 s2))\
+    \ #\\))]\n                     [s2-c2 (count (string-&gt;list (append s2 s1))\
+    \ #\\))])\n                (if (and (equal? s1-o s1-c) (equal? s2-o s2-c))\n \
+    \                   (if (or (= s1-c2 0) (= s2-c2 0))\n                       \
+    \ \"Yes\"\n                        \"No\")\n                    \"No\"))\n   \
+    \           \"No\")\n          \"No\")\n      \"No\"))\n", "  (match lst\n   \
+    \ [('() '()) (list 'Yes)]\n    [((list a '()) (list b '()))\n     (define (matcher\
+    \ c-num t-num)\n       (match (c-num t-num)\n         [(< 1 0) #f]\n         [(<\
+    \ 0 1) #f]\n         [(= 0 0) #t]\n         [(> 0 0) (matcher (- c-num 1) (- t-num\
+    \ 1))]\n         [(> 0 0) (matcher (- c-num 1) (- t-num 1))]\n         [(> 1 0)\
+    \ (and\n                   (matcher (- c-num 1) (- t-num 1))\n               \
+    \    (matcher (- c-num 1) t-num))]\n         [(> 0 1) (and\n                 \
+    \  (matcher (- c-num 1) (- t-num 1))\n                   (matcher c-num (- t-num\
+    \ 1)))]))\n     (matcher (count a #\\() (count b #\\()))]))\n", "  (cond\n   \
+    \ [(null? lst) 'Yes]\n    [(pair? lst) (match_parens (append (car lst) (cdr lst)))]\n\
+    \    [(string=? \"(\" \")\") 'No]\n    [(string=? \")\" \"(\") 'No]\n    [else\
+    \ 'Yes]))\n</code>\nIf the list is null, then the list is valid. If the list isn't\
+    \ null, then it should append the first and last element of the list and check\
+    \ the list again. If the first and last elements are either \"(\" or \")\", then\
+    \ it's not valid.\nWhen I try it though, I'm getting this error:\n<code>; application:\
+    \ not a procedure;", "  (let ([s1 (car lst)]\n        [s2 (cadr lst)])\n    (let\
+    \ ([s (string-append s1 s2)])\n      (define (good? s)\n        (cond [(empty?\
+    \ s) 'Yes]\n              [(equal? (string-ref s 0) #\\()\n               (good?\
+    \ (substring s 1))]\n              [(equal? (string-ref s 0) #\\))\n         \
+    \      (let ([pos (find-right-paren s)])\n                 (if (equal? pos (string-length\
+    \ s))\n                     'No\n                     (good? (substring s 1 pos))))]))\n\
+    \      (good? s))))\n", "  (cond [(empty? lst) 'no]\n        [(empty? (rest lst))\
+    \ 'no]\n        [else (match-strings (first lst) (second lst))]))\n", "  (cond\n\
+    \    [(empty? lst) #f]\n    [(null? (cdr lst))\n     (cond\n       [(empty? (car\
+    \ lst)) #t]\n       [else #f])]\n    [else\n     (match_parens (append (car lst)\
+    \ (cdr lst)))]))", "  (local [(define (is-balanced? s)\n            (let ([stack\
+    \ (list)])\n              (for ([c s])\n                (cond [(equal? c #\\()\
+    \ (push 1 stack)]\n                      [(equal? c #\\)) (if (empty? stack)\n\
+    \                                          #f\n                              \
+    \            (pop stack))]))\n              (empty? stack)))\n          (define\
+    \ (possible? s1 s2)\n            (is-balanced? (string-append s1 s2)))]\n    (cond\
+    \ [(possible? (first lst) (second lst)) \"Yes\"]\n          [(possible? (second\
+    \ lst) (first lst)) \"Yes\"]\n          [else \"No\"])))\n", "  (define (close-parens\
+    \ s)\n    (cond ((equal? s \"\") 0)\n          ((equal? (string-ref s 0) #\\()\
+    \ (add1 (close-parens (substring s 1))))\n          ((equal? (string-ref s 0)\
+    \ #\\)) (sub1 (close-parens (substring s 1))))))\n  (define (is-good-string s)\n\
+    \    (equal? (close-parens s) 0))\n  (cond ((null? lst) \"No\")\n        ((is-good-string\
+    \ (string-append (car lst) (cadr lst))) \"Yes\")\n        ((is-good-string (string-append\
+    \ (cadr lst) (car lst))) \"Yes\")\n        (else \"No\")))\n", "  (match lst\n\
+    \    [(list s1 s2)\n     (if (or (not (string? s1)) (not (string? s2)))\n    \
+    \     \"No\"\n         (let ([s1-count 0]\n               [s2-count 0])\n    \
+    \       (for ([ch (in-string s1)])\n             (match ch\n               [#\\\
+    ( (set! s1-count (+ s1-count 1))]\n               [#\\) (set! s1-count (- s1-count\
+    \ 1))]))\n           (for ([ch (in-string s2)])\n             (match ch\n    \
+    \           [#\\( (set! s2-count (+ s2-count 1))]\n               [#\\) (set!\
+    \ s2-count (- s2-count 1))]))\n           (cond [(or (< s1-count 0) (< s2-count\
+    \ 0)) \"No\"]\n                 [(and (= s1-count 0) (= s2-count 0)) \"Yes\"]\n\
+    \                 [(and (= s1-count 0) (/= s2-count 0)) \"Yes\"]\n           \
+    \      [(and (/= s1-count 0) (= s2-count 0)) \"Yes\"]\n                 [(and\
+    \ (/= s1-count 0) (/= s2-count 0))\n                  (and (string=? (regexp-replace*\
+    \ #px\"\\\\)\" \"\" s1) \"\")\n                       (string=? (regexp-replace*\
+    \ #px\"\\\\)\" \"\" s2) \"\")\n                       \"Yes\")]\n            \
+    \     [else \"No\"]))))]))\n", "  (cond ((null? lst) 'Yes)\n        ((null? (cdr\
+    \ lst)) 'Yes)\n        ((equal? (car lst) '())(match_parens (cdr lst)))\n    \
+    \    ((equal? (car lst) '(()))(match_parens (cdr lst)))\n        ((equal? (car\
+    \ lst) '())'Yes)\n        ((equal? (car lst) '(()))'Yes)\n        (else 'No)))\n",
+  "  (cond\n    [(empty? lst) 0]\n    [(string=? (first lst) \"(\") (+ 1 (match_parens\
+    \ (rest lst)))]\n    [(string=? (first lst) \")\") (- 1 (match_parens (rest lst)))]))",
+  "  (define (bal c l)\n    (case c\n      [(#\\() (cons (add1 l) (rest l))]\n   \
+    \   [(#\\)) (if (zero? l) (cons 0 (rest l)) (cons (sub1 l) (rest l)))]))\n  (define\
+    \ (move s)\n    (regexp-match #rx\"([()]*)\" s))\n  (define (match first second)\n\
+    \    (let loop ([first (move first)]\n               [second (move second)]\n\
+    \               [bal 0])\n      (cond [(or (null? first) (null? second))\n   \
+    \          (if (zero? bal) #t #f)]\n            [(empty? (first first))\n    \
+    \         (loop (rest first) second bal)]\n            [(empty? (first second))\n\
+    \             (loop first (rest second) bal)]\n            [else\n           \
+    \  (let ([newbal (bal (string-ref (first first) 0) bal)])\n               (if\
+    \ (zero? (first newbal))\n                   (loop (cons (substring (first first)\
+    \ 1) (rest first))\n                         (cons (substring (first second) 1)\
+    \ (rest second))\n                         (rest newbal))\n                  \
+    \ (loop (rest first) (rest second) newbal)))])))\n  (if (match (list (car lst))\
+    \ (list (cadr lst)))\n      \"Yes\"\n      \"No\"))\n", "  (cond\n    [(empty?\
+    \ lst) 'Yes]\n    [(apply < (map string-length lst)) 'No]\n    [(andmap balanced?\
+    \ lst) 'Yes]\n    [else 'No]))\n", "  (define (helper s left open)\n    (cond\n\
+    \      [(empty? s) (and (zero? left) (zero? open))]\n      [(eq? (first s) #\\\
+    () (helper (rest s) (add1 left) (add1 open))]\n      [(eq? (first s) #\\)) (and\
+    \ (not (zero? open)) (helper (rest s) (sub1 left) (sub1 open)))]))\n  (define\
+    \ (helper2 s)\n    (helper s 0 0))\n  (or (helper2 (first lst)) (helper2 (second\
+    \ lst))))\n", "  (cond\n    [(empty? lst) 'Yes]\n    [(and (equal? (car lst) \"\
+    )\") (not (equal? (cadr lst) \"(\"))) 'No]\n    [else (match_parens (cdr lst))]))\n",
+  "  (cond\n    [(empty? lst) #f]\n    [(balanced? (car lst)) #t]\n    [else (match_parens\
+    \ (cdr lst))]))\n", "  (match lst\n    [(list (list a b) (list c d))\n     (if\
+    \ (string=? (list-ref a 0) \")\")\n         (if (string=? (list-ref c 0) \"(\"\
+    ) \"Yes\" \"No\")\n         (if (string=? (list-ref c 0) \")\") \"Yes\" \"No\"\
+    ))]))\n", "  (define (acc-parens lst num)\n    (cond\n      [(null? lst) (equal?\
+    \ num 0)]\n      [(equal? (car lst) \")\")\n       (if (positive? num)\n     \
+    \      (acc-parens (cdr lst) (- num 1))\n           #f)]\n      [(equal? (car\
+    \ lst) \"(\")\n       (acc-parens (cdr lst) (+ num 1))]))\n  (define (good-string?\
+    \ str)\n    (acc-parens (string->list str) 0))\n  (cond\n    [(and (good-string?\
+    \ (string-append (car lst) (cadr lst)))\n          (good-string? (string-append\
+    \ (cadr lst) (car lst))))\n     \"Yes\"]\n    [else \"No\"]))\n", "  (string-append\
+    \ (list-ref lst 0) (list-ref lst 1)))\n", "  (cond ((null? lst) 'Yes)\n      \
+    \  ((not (string? (car lst))) 'No)\n        ((negative? (string-length (car lst)))\
+    \ 'No)\n        ((= (string-length (car lst)) 0) 'Yes)\n        ((not (equal?\
+    \ \"(\" (string-ref (car lst) 0))) 'No)\n        ((equal? 0 (odd? (string-length\
+    \ (car lst)))) 'No)\n        ((even? (string-length (car lst))) 'Yes)\n      \
+    \  (else (match_parens (cdr lst)))))\n", "  (define (is_good? str)\n    (define\
+    \ (parens_to_str lst)\n      (string-join (map symbol->string lst)))\n    (equal?\
+    \ (parens_to_str (filter (lambda (e) (equal? e '(')) str))\n             (parens_to_str\
+    \ (filter (lambda (e) (equal? e ')')) str))))\n  (define (matched? str)\n    (if\
+    \ (equal? str '())\n        #t\n        (if (equal? (car str) '(')\n         \
+    \   (if (equal? (cadr str) ')')\n                (matched? (cddr str))\n     \
+    \           #f)\n            #f)))\n  (define (concat-and-match str1 str2)\n \
+    \   (if (or (is_good? str1) (is_good? str2))\n        (if (or (is_good? (string-append\
+    \ str1 str2))\n                (is_good? (string-append str2 str1)))\n       \
+    \     #t\n            #f)\n        #f))\n  (cond ((not (is_good? (car lst)))\n\
+    \         \"No\")\n        ((not (is_good? (cadr lst)))\n         \"No\")\n  \
+    \      ((matched? (string-append (car lst) (cadr lst)))\n         \"Yes\")\n \
+    \       ((matched? (string-append (cadr lst) (car lst)))\n         \"Yes\")\n\
+    \        (else \"No\")))\n", "  (cond\n    [(and (string? (first lst)) (string?\
+    \ (second lst)))\n     (define (parens-balance? str)\n       (letrec ([paren-count\
+    \ (let ([parens-count 0])\n                               (lambda (x)\n      \
+    \                           (cond\n                                   [(equal?\
+    \ x #\\() (begin (set! parens-count (+ parens-count 1)) parens-count)]\n     \
+    \                              [(equal? x #\\)) (begin (set! parens-count (- parens-count\
+    \ 1)) parens-count)])))]\n                     [parens-balanced? (lambda (x) (and\
+    \ (>= x 0) (= 0 x)))]\n                     [parens-ok? (lambda (str)\n      \
+    \                             (cond\n                                     [(empty?\
+    \ str) #t]\n                                     [else (and (parens-balanced?\
+    \ (paren-count (first str)))\n                                               \
+    \ (parens-ok? (rest str)))]))])\n         (parens-ok? str)))\n     (cond\n   \
+    \    [(and (parens-balance? (first lst)) (parens-balance? (second lst)))\n   \
+    \     (cond\n          [(parens-balance? (string-append (first lst) (second lst)))\
+    \ 'Yes]\n          [else 'No])]\n       [else 'No])]\n    [else 'No]))\n", " \
+    \ (define (loop s open)\n    (cond\n      [(empty? s)\n       (if (= open 0) 'Yes\
+    \ 'No)]\n      [(string=? (first s) \"(\")\n       (loop (rest s) (+ open 1))]\n\
+    \      [(string=? (first s) \")\")\n       (if (> open 0)\n           (loop (rest\
+    \ s) (- open 1))\n           'No)]))\n  (loop (flatten lst) 0))", "  (and\n  \
+    \ (and\n    (andmap (\u03BB (x) (x (vector-ref (car lst) 0))) '(= - equal?))\n\
+    \    (andmap (\u03BB (x) (x (vector-ref (cadr lst) 0))) '(= - equal?)))\n   (or\
+    \ (match_parens (list (substring (car lst) 1) (substring (cadr lst) 1)))\n   \
+    \    (match_parens (list (substring (car lst) 1) (cadr lst)))\n       (match_parens\
+    \ (list (car lst) (substring (cadr lst) 1))))))", '  (string-append (list-ref
+    lst 0) (list-ref lst 1)))', "  (define (matches-open? x) (equal? x \"(\"))\n \
+    \ (define (matches-close? x) (equal? x \")\"))\n  (define (pairs-match? x y) (equal?\
+    \ x \"(\" y \")\"))\n  (define (is-good? lst) (null? (filter matches-close? lst)))\n\
+    \  (define (match-parens lst-1 lst-2)\n    (define (matches? x y) (pairs-match?\
+    \ x y))\n    (define (match-parens-rec lst-1 lst-2)\n      (define (match-close-parens\
+    \ lst)\n        (let ([x (car lst)]\n              [xs (cdr lst)])\n         \
+    \ (cond\n            [(null? xs) (cons x xs)]\n            [(matches? x (car xs))\
+    \ (match-close-parens xs)]\n            [else (cons x (match-close-parens xs))])))\n\
+    \      (cond\n        [(null? lst-1) lst-2]\n        [(null? lst-2) lst-1]\n \
+    \       [(matches? (car lst-1) (car lst-2)) (match-close-parens (match-parens-rec\
+    \ (cdr lst-1) (cdr lst-2)))]\n        [else (append (match-close-parens lst-1)\
+    \ (match-close-parens lst-2))]))\n    (and (is-good? (append lst-1 lst-2)) (is-good?\
+    \ (match-parens-rec lst-1 lst-2))))\n  (define (matches-recur matches lst)\n \
+    \   (cond\n      [(null? lst) matches]\n      [(matches-open? (car lst)) (matches-recur\
+    \ (cons \"(\" matches) (cdr lst))]\n      [(matches-close? (car lst)) (matches-recur\
+    \ (cons \")\" matches) (cdr lst))]\n      [else (matches-recur matches (cdr lst))]))\n\
+    \  (define (", "  (match lst\n    [(list x y)\n     (if (= (list-ref x 0) 40)\n\
+    \         (if (= (list-ref y (- (string-length y) 1)) 41) 'Yes)\n         (if\
+    \ (= (list-ref y 0) 41)\n             (if (= (list-ref x (- (string-length x)\
+    \ 1)) 40) 'Yes)\n             'No))]))", "  (match lst\n    [`(\"\" \"\" ,@_)\n\
+    \     'Yes]\n    [`(,(regexp \"#[^(]*\" left) \"\" ,@_)\n     (match_parens (list\
+    \ left \"\"))]\n    [`(\"\" ,(regexp \"#[^)]*\" right) ,@_)\n     (match_parens\
+    \ (list \"\" right))]\n    [`(,(regexp \"#[^(]*\" left) ,(regexp \"#[^)]*\" right)\
+    \ ,@_)\n     (match_parens (list left right))]\n    [`(\"(\" ,(regexp \"#[^)]*\"\
+    \ right) ,@_)\n     (match_parens (list \"\" right))]\n    [`(,(regexp \"#[^(]*\"\
+    \ left) \")\" ,@_)\n     (match_parens (list left \"\"))]\n    [_\n     'No]))\n",
+  "  (if (null? lst) 'Yes\n      (if (not (eq? (check-parens (car lst)) 'Yes)) 'No\n\
+    \          (if (not (eq? (check-parens (cadr lst)) 'Yes)) 'No\n              (if\
+    \ (eq? (match-parens (cons (cons (car lst) (cadr lst))\n                     \
+    \                       (cddr lst)))) 'Yes\n                  'No)))))\n", " \
+    \ (match lst\n    [`(#,l #,r)\n     (cond\n       [(null? l)\n        \"Yes\"\
+    ]\n       [(char=? (car l) #\\()\n        (match_parens (list (substring l 1)\
+    \ (string-append r \")\")))]\n       [(char=? (car r) #\\))\n        (match_parens\
+    \ (list (string-append l \"(\" ) (substring r 1)))]\n       [else\n        \"\
+    No\"])]))\n", "  (define (go lst total)\n    (cond\n      [(and (empty? lst) (=\
+    \ total 0))\n       \"Yes\"]\n      [(or (empty? lst) (< total 0))\n       \"\
+    No\"]\n      [else\n       (let ([char (car lst)])\n         (go (cdr lst)\n \
+    \            (if (eq? char #\\()\n                 (+ total 1)\n             \
+    \    (- total 1))))]))\n  (go lst 0))\n", "  (cond [(empty? lst) 'Yes]\n     \
+    \   [(equal? (count-parens (first lst)) 0) (match_parens (rest lst))]\n      \
+    \  [(equal? (count-parens (last lst)) 0) (match_parens (butlast lst))]\n     \
+    \   [else 'No]))\n", "  (let ([l (car lst)]\n        [r (cadr lst)])\n    (or\
+    \ (and (empty? l) (empty? r))\n        (and (first l)\n             (equal? (first\
+    \ l) ')')\n             (match_parens (list (rest l) (cons (first l) r))))\n \
+    \       (and (first r)\n             (equal? (first r) '(')\n             (match_parens\
+    \ (list (cons (first r) l) (rest r))))\n        (and (first l)\n             (equal?\
+    \ (first l) '(')\n             (match_parens (list (rest l) r)))\n        (and\
+    \ (first r)\n             (equal? (first r) ')')\n             (match_parens (list\
+    \ l (rest r)))))))\n", "  (define (pop-or-defo lst)\n    (match lst\n        \
+    \   [(list) '()]\n           [(list x xs)\n            (cond [(equal? x '()) (pop-or-defo\
+    \ xs)]\n                  [(equal? x '(') (list xs)]\n                  [(equal?\
+    \ x ')') (list (list) xs)]\n                  [else (list (list x) xs)])]))\n\
+    \  (define (process lst1 lst2 result)\n    (match lst1\n           [(list) (process\
+    \ lst2 '() result)]\n           [(list x xs)\n            (cond [(equal? x '())\
+    \ (process xs lst2 result)]\n                  [(equal? x '(') (process xs lst2\
+    \ (cons x result))]\n                  [(equal? x ')')\n                   (if\
+    \ (member '(' result)\n                       (process xs lst2 (remove '(' result))\n\
+    \                       (process lst2 '() result))]\n                  [else (process\
+    \ xs lst2 (cons x result))])]))\n  (cond [(null? lst) 'Yes]\n        [(empty?\
+    \ (process (car lst) '() '())) 'Yes]\n        [else 'No]))", "  (cond\n    [(empty?\
+    \ lst) 'Yes]\n    [(string=? (first lst) \")\") 'No]\n    [else (match_parens\
+    \ (rest lst))]))\n</code>\nI have problems determining whether it's possible to\
+    \ concatenate the two strings. The concept isn't difficult, but I can't seem to\
+    \ figure out how to implement it.\nI believe I'm on the right track.\n\n\nA:\n\
+    \nSince this is homework, I'll just give some hints.\nAssuming you have a function\
+    \ <code>balance</code> that checks whether a string is balanced, then one approach\
+    \ is to try balancing the concatenation of both strings, but in all possible ways,\
+    \ and see if any of them give a balanced string. \nIn the case of only two strings,\
+    \ the only way to concatenate them is to concatenate one of them to the beginning\
+    \ of the other. So you just need to try concatenating the first string to the\
+    \ beginning of the second string, and the second string to the beginning of the\
+    \ first string. If either of these strings is balanced, you return <code>Yes</code>.\
+    \ If not, you return <code>No</code>.\nThe function <code>balance</code> you are\
+    \ looking for is a good candidate for tail recursion. \n", "  (cond\n    [(empty?\
+    \ lst) \"Yes\"]\n    [(zero? (string-length (car lst))) (match_parens (cdr lst))]\n\
+    \    [(zero? (string-length (cadr lst))) (match_parens (cons (car lst) (cddr lst)))]\n\
+    \    [(zero? (car lst)) \"No\"]\n    [(char=? #\\( (car lst))\n     (let ([str\
+    \ (string-append (car lst) (cadr lst))])\n       (if (balanced? str)\n       \
+    \    (match_parens (cons str (cddr lst)))\n           (match_parens (cons (string-append\
+    \ (car lst) (string #\\) (cadr lst))) (cddr lst)))))\n     ]\n    [(char=? #\\\
+    ) (car lst))\n     (let ([str (string-append (car lst) (cadr lst))])\n       (if\
+    \ (balanced? str)\n           (match_parens (cons str (cddr lst)))\n         \
+    \  (match_parens (cons (string-append (car lst) (string #\\( (cadr lst))) (cddr\
+    \ lst)))))\n     ]\n    [else \"No\"]))\n", "  (if (match_parens-rec (first lst)\
+    \ (second lst))\n      \"Yes\"\n      \"No\"))\n", "  (match lst\n    [(list paren-a\
+    \ paren-b)\n     (define (paren-is-balanced parens)\n       (cond [(empty? parens)\
+    \ #t]\n             [(eq? (car parens) ')') #f]\n             [else (paren-is-balanced\
+    \ (cdr parens))]))\n     (define (is-good-parens parens)\n       (cond [(empty?\
+    \ parens) #t]\n             [(eq? (car parens) ')') (if (paren-is-balanced (cdr\
+    \ parens))\n                                          (is-good-parens (cdr parens))\n\
+    \                                          #f)]\n             [else (is-good-parens\
+    \ (cdr parens))]))\n     (define (parens->str parens)\n       (cond [(empty? parens)\
+    \ \"\"]\n             [else (string-append (car parens) (parens->str (cdr parens)))]))\n\
+    \     (define (concat-str str-a str-b)\n       (string-append str-a str-b))\n\
+    \     (define (concat-parens parens-a parens-b)\n       (cond [(is-good-parens\
+    \ (append parens-a parens-b)) 'Yes]\n             [(is-good-parens (append parens-b\
+    \ parens-a)) 'Yes]\n             [else 'No]))\n     (concat-parens (string->list\
+    \ paren-a) (string->list paren-b))]))\n", "  (cond\n    [(empty? lst) true]\n\
+    \    [(char=? (car lst) #\\( ) (match_parens (cdr lst))]\n    [(char=? (car lst)\
+    \ #\\) ) (match_parens (cdr lst))]\n    [else false]))", "  (define (paren-balance\
+    \ s)\n    (let loop ([s s] [count 0])\n      (cond [(empty? s) (= count 0)]\n\
+    \            [(char=? (first s) #\\() (loop (rest s) (+ count 1))]\n         \
+    \   [(char=? (first s) #\\)) (loop (rest s) (- count 1))]\n            [else (loop\
+    \ (rest s) count)])))\n  (match-define (list s1 s2) lst)\n  (match (paren-balance\
+    \ (string-append s1 s2))\n    [(? = 0) \"Yes\"]\n    [_ \"No\"]))\n", "  (match\
+    \ lst\n    [(list (cons _ '(#\\( . _)) s)\n     (if (paren-balanced? s)\n    \
+    \     'Yes\n         'No)]\n    [(list '(#\\) . _) _) 'No]\n    [(list '(#\\(\
+    \ . _) _) 'Yes]))\n  )\n", "  (cond\n    [(null? lst) 'Yes]\n    [(null? (cdr\
+    \ lst)) 'Yes]\n    [(and (eq? (car lst) '()) (eq? (cadr lst) '())) 'Yes]\n   \
+    \ [(and (eq? (car lst) '()) (eq? (cadr lst) '())) 'Yes]\n    [(and (eq? (car lst)\
+    \ '()) (eq? (cadr lst) '())) 'Yes]\n    [(eq? (car lst) '()) 'Yes]\n    [(eq?\
+    \ (car lst) '()) 'Yes]\n    [(eq? (car lst) '()) 'Yes]\n    [(and (eq? (car lst)\
+    \ '()) (eq? (cadr lst) '())) 'Yes]\n    [(and (eq? (car lst) '()) (eq? (cadr lst)\
+    \ '())) 'Yes]\n    [(and (eq? (car lst) '()) (eq? (cadr lst) '())) 'Yes]\n   \
+    \ [(eq? (car lst) '()) 'Yes]\n    [(eq? (car lst) '()) 'Yes]\n    [(eq? (car lst)\
+    \ '()) 'Yes]\n    [(and (eq? (car lst) '()) (eq? (cadr lst) '())) 'Yes]\n    [(and\
+    \ (eq? (car lst) '()) (eq? (cadr lst) '())) 'Yes]\n    [(and (eq? (car lst) '())\
+    \ (eq? (cadr lst) '())) 'Yes]\n    [(eq? (car lst) '()) 'Yes]\n    [(eq? (car\
+    \ lst) '()) 'Yes]\n    [(eq? (car lst) '()) 'Yes]\n    [(and (eq? (car lst) '())\
+    \ (eq? (cadr lst) '())) 'Yes]\n    [(and (eq? (car lst) '()) (eq? (cadr lst) '()))\
+    \ 'Yes]\n    [(and (eq? (car lst) '()) (eq? (cadr lst) '())) 'Yes]", "  (define\
+    \ (paren-p c)\n    (or (equal? c #\\() (equal? c #\\))))\n  (define (check-parens\
+    \ lst)\n    (cond ((null? lst) #t)\n          ((eq? (car lst) #\\() 1)\n     \
+    \     ((eq? (car lst) #\\)) -1)\n          (else (check-parens (cdr lst)))))\n\
+    \  (define (paren-count lst)\n    (if (null? lst)\n        '()\n        (cons\
+    \ (check-parens lst) (paren-count (cdr lst)))))\n  (define (accumulate n lst)\n\
+    \    (if (null? lst)\n        n\n        (accumulate (+ n (car lst)) (cdr lst))))\n\
+    \  (define (find-parens lst)\n    (if (null? lst)\n        '(())\n        (let\
+    \ ((paren-count (accumulate 0 (car lst))))\n          (cons (cons (car lst) paren-count)\
+    \ (find-parens (cdr lst))))))\n  (define (is-good lst)\n    (if (null? lst)\n\
+    \        #t\n        (and (not (equal? (cdr (car lst)) 0)) (is-good (cdr lst)))))\n\
+    \  (define (find-good lst)\n    (if (null? lst)\n        '(())\n        (if (is-good\
+    \ (car lst))\n            (cons (car lst) (find-good (cdr lst)))\n           \
+    \ (find-good (cdr lst)))))\n  (define (find-best lst)\n    (if (null? lst)\n \
+    \       '(())\n        (if (or (null? (cdr lst)) (equal? (cdr (car lst)) (cdr\
+    \ (cadr lst))))\n            (cons (car lst) (find-best (cdr lst)))\n        \
+    \    (find-best (cdr lst)))))\n  (define (find-best-parens lst)\n    (find-best\
+    \ (find-good (find-parens lst", "  (let loop ([l (first lst)] [r (second lst)])\n\
+    \    (cond [(null? l) r]\n          [(null? r) l]\n          [(char=? (car l)\
+    \ #\\() l]\n          [(char=? (car r) #\\)) r]\n          [else (loop (cdr l)\
+    \ (cdr r))])))\n", "  (if (null? lst)\n      #t\n      (let ((open-paren-counter\
+    \ 0)\n            (close-paren-counter 0))\n        (for ((c (in-list (car lst))))\n\
+    \          (cond ((equal? c #\\()\n                 (inc open-paren-counter))\n\
+    \                ((equal? c #\\))\n                 (inc close-paren-counter))))\n\
+    \        (and (<= open-paren-counter (length (car lst)))\n             (<= close-paren-counter\
+    \ (length (car lst)))\n             (<= close-paren-counter open-paren-counter)))))\n",
+  "  (define (check x)\n    (cond [(empty? x) 'Yes]\n          [(eq? (first x) (last\
+    \ x)) (check (rest (butlast x)))]\n          [else 'No]))\n  (check (string-&gt;list\
+    \ (apply string-append lst))))\n</code>\nExamples:\n<code>&gt; (match_parens '(\"\
+    (\" \"(\"))\n'Yes\n&gt; (match_parens '(\"(\" \")\"))\n'No\n&gt; (match_parens\
+    \ '(\"(\" \"(\")\n'No\n&gt; (match_parens '(\"(\" \"()\")\n'Yes\n&gt; (match_parens\
+    \ '(\"(())\" \"()\")\n'Yes\n&gt; (match_parens '(\"(()\" \"()\")\n'No\n&gt; (match_parens\
+    \ '(\"(()\" \")\")\n'No\n&gt; (match_parens '(\"(\" \"))\")\n'No\n&gt; (match_parens\
+    \ '(\"(\" \")))))))))\")\n'No\n&gt; (match_parens '(\"(\" \")))))))))\")\n'No\n\
+    &gt; (match_parens '(\"(\" \")))))\")\n'No\n&gt; (match_parens '(\"(\" \")))))))))\"\
+    )\n'No\n&gt; (match_parens '(\"(\" \"))))))\")))\n'No\n&gt; (match_parens '(\"\
+    (\" \"))))))\")))))\n'No\n&gt; (match_parens '(\"(()\" \"))))))\")))\n'No\n&gt;\
+    \ (match_parens '(\"(()\" \"))))))\")))))\n'No\n&gt; (match_parens '(\"(()\" \"\
+    ))))))\")))\n'No\n&gt; (match_parens '(\"(()\" \"))))))\")))))\n'No\n&gt; (match_parens\
+    \ '(\"()\" \"))))))\")))\n'No\n&gt; (match_parens '(\"()\" \"))))))\")))))\n'No\n\
+    &gt; (match_parens '(\"()\" \"))))))\")))\n'No\n&gt; (match_parens '(\"()\"",
+  "  (let f ([lst lst] [chars (make-string)] [indent 0])\n    (match lst\n      [(cons\
+    \ first (cons second rest))\n       (match first\n         [(list \"(\" \")\"\
+    )\n          (f rest chars indent)]\n         [(list \")\" \"(\")\n          (f\
+    \ rest (string-append chars (string first)) (+ indent 1))]\n         [else\n \
+    \         (f (cons second rest) (string-append chars (string first)) indent)])]\n\
+    \      [else\n       (string-append (apply string (reverse chars)) (string lst))])))\n",
+  "  (cond\n    [(null? lst) 0]\n    [(eq? (car lst) \"(\") (add1 (match_parens (cdr\
+    \ lst)))]\n    [(eq? (car lst) \")\") (sub1 (match_parens (cdr lst)))]))\n", " \
+    \ (cond [(empty? lst) 'Yes]\n        [(check-parens (car lst)) (match_parens (cdr\
+    \ lst))]\n        [else 'No]))\n", "  (define str1 (vector-ref lst 0))\n  (define\
+    \ str2 (vector-ref lst 1))\n  (define (aux-match-parens str vec)\n    (cond\n\
+    \      [(string=? \"\" str) \"Yes\"]\n      [(vector-length vec) (aux-match-parens\
+    \ (string-drop str 1) vec)]\n      [(equal? (string-ref str 0) (vector-ref vec\
+    \ 0)) (aux-match-parens (string-drop str 1) (vector-tail vec))]\n      [else (aux-match-parens\
+    \ str (vector-tail vec))]))\n  (aux-match-parens (string-append str1 str2) (vector\
+    \ \"(\") \"No\"))\n", "  (apply\n   (case (length lst)\n     [1 (lambda (s)\n\
+    \          (zero? (string-length s)))]\n     [2 (lambda (s1 s2)\n          (let\
+    \ loop ([s1 s1] [s2 s2])\n            (cond\n              [(empty? s1) (zero?\
+    \ (string-length s2))]\n              [(empty? s2) (zero? (string-length s1))]\n\
+    \              [(equal? #\\( (string-ref s1 0)) (loop (substring s1 1) s2)]\n\
+    \              [(equal? #\\) (string-ref s2 0)) (loop s1 (substring s2 1))]\n\
+    \              [else (loop s1 (substring s2 1))])))])\n   lst))\n", "  (let loop\
+    \ ([lst lst] [level 0])\n    (cond [(empty? lst) #t]\n          [(zero? level)\
+    \ #f]\n          [(and (equal? (first lst) #\\() (< 0 level)) (loop (rest lst)\
+    \ (+ level 1))]\n          [(and (equal? (first lst) #\\)) (> 0 level)) (loop\
+    \ (rest lst) (- level 1))]\n          [else (loop (rest lst) level)])))\n", " \
+    \ (define (match-stack x)\n    (cond\n      ((empty? x) 'OK)\n      ((equal? (first\
+    \ x) ')') 'ERROR)\n      (else (match-stack (rest x)))))\n  (cond\n    ((equal?\
+    \ (length lst) 0) 'OK)\n    ((match-stack (string->list (first lst))) 'OK)\n \
+    \   (else 'ERROR)))\n", "  (define (parenthesis-count str)\n    (cond\n      [(empty?\
+    \ str) 0]\n      [(char=? (first str) #\\() 1]\n      [(char=? (first str) #\\\
+    )) -1]\n      [else (parenthesis-count (rest str))]))\n  (define (count lst acc)\n\
+    \    (cond\n      [(empty? lst) acc]\n      [else (count (rest lst) (+ acc (parenthesis-count\
+    \ (first lst))))]))\n  (if (= (count lst 0) 0) 'Yes 'No))\n", "  (cond\n    [(empty?\
+    \ lst) 'Yes]\n    [(and (positive? (count-all '(' (first lst)))\n\t  (positive?\
+    \ (count-all ')' (rest lst))))\n     (match_parens (rest lst))]\n    [else 'No]))\n",
+  "  (letrec\n      ((on-stack (make-vector 16 0))\n       (n-parens 0)\n       (sum-parens\
+    \ 0)\n       (max-parens 0)\n       (min-parens 0)\n       (n-parens-string 0)\n\
+    \       (sum-parens-string 0)\n       (max-parens-string 0)\n       (min-parens-string\
+    \ 0)\n       (n-parens-string2 0)\n       (sum-parens-string2 0)\n       (max-parens-string2\
+    \ 0)\n       (min-parens-string2 0)\n       (compute-parens (lambda (char)\n \
+    \                        (case char\n                           ('(\n        \
+    \                    (begin\n                              (vector-set! on-stack\
+    \ (string->number (string char))\n                                           (+\
+    \ 1 (vector-ref on-stack (string->number (string char)))))\n                 \
+    \             (set! n-parens (+ 1 n-parens))\n                              (set!\
+    \ sum-parens (+ 1 sum-parens))\n                              (set! max-parens\
+    \ (max max-parens (vector-ref on-stack (string->number (string char)))))\n   \
+    \                           (set! min-parens (min min-parens (vector-ref on-stack\
+    \ (string->number (string char)))))))\n                           (')\n      \
+    \                      (begin\n                              (vector-set! on-stack\
+    \ (string->number (string char))\n                                           (-\
+    \ 1 (vector-ref on-stack (string->number (string char)))))\n                 \
+    \             (set! n-parens (+ 1 n-parens))\n                              (set!\
+    \ sum-parens (- 1 sum-parens))\n                              (set! max-parens\
+    \ (max max-parens (vector-ref on-stack (string->number (string char)))))\n   \
+    \                           (set! min-parens (min min-parens (vector-ref on-stack\
+    \ (string->number (string char))))))))))\n       (process-string (lambda (s)\n\
+    \                         (let loop ((i 0))\n                           (if (<\
+    \ i (string-length s))\n                               (begin\n              \
+    \                   (compute-parens (string", "  (cond\n    [(empty? lst) '()]\n\
+    \    [(member (car lst) '(\")\" \")\")) '(\"(\" \"(\" \")\")]\n    [(member (car\
+    \ lst) '(\"(\" \"(\")) '(\"(\" \")\")]\n    [else (match_parens (cdr lst))]))\n",
+  "  (cond ((or (equal? (first lst) \"\") (equal? (second lst) \"\"))\n         (list-ref\
+    \ lst 0))\n        ((equal? (first lst) \"(\")\n         (match_parens (list (string-append\
+    \ (list-ref lst 0) (list-ref lst 1))\n                             (string-append\
+    \ (list-ref lst 1) (list-ref lst 0)))))\n        ((equal? (first lst) \")\")\n\
+    \         (match_parens (list (string-append (list-ref lst 1) (list-ref lst 0))\n\
+    \                             (string-append (list-ref lst 0) (list-ref lst 1)))))\n\
+    \        (else \"No\")))\n", "  (cond [(empty? lst) empty]\n        [(zero? (string-length\
+    \ (string-append (first lst) (second lst)))) \"Yes\"]\n        [else \"No\"]))\n",
+  "  (let loop ([lst (reverse lst)] [curr-parens 0] [num-open 0])\n    (cond [(empty?\
+    \ lst) (and (= num-open 0)\n                             (= curr-parens 0))]\n\
+    \          [(string=? (first lst) \"(\")\n           (loop (rest lst) (+ curr-parens\
+    \ 1) (+ num-open 1))]\n          [(string=? (first lst) \")\")\n           (loop\
+    \ (rest lst) (- curr-parens 1) (- num-open 1))]\n          [else #f])))\n", " \
+    \ (let ([s1 (list-ref lst 0)]\n        [s2 (list-ref lst 1)])\n    (let loop ([s1\
+    \ (string->list s1)]\n               [s2 (string->list s2)]\n               [parens\
+    \ '()])\n      (cond [(null? s1)\n             (cond [(empty? parens) \"Yes\"\
+    ]\n                   [else \"No\"])]\n            [(char=? (car s1) #\\()\n \
+    \            (loop (cdr s1) s2 (cons (car s1) parens))]\n            [(char=?\
+    \ (car s1) #\\))\n             (cond [(empty? parens) \"No\"]\n              \
+    \     [(char=? (car parens) #\\()\n                    (loop (cdr s1) s2 (cdr\
+    \ parens))]\n                   [else \"No\"])]\n            [(char=? (car s2)\
+    \ #\\()\n             (loop s1 (cdr s2) (cons (car s2) parens))]\n           \
+    \ [(char=? (car s2) #\\))\n             (cond [(empty? parens) \"No\"]\n     \
+    \              [(char=? (car parens) #\\()\n                    (loop s1 (cdr\
+    \ s2) (cdr parens))]\n                   [else \"No\"])]\n            [else (loop\
+    \ s1 s2 parens)]))))\n", "  (andmap\n   (lambda (x) (match x\n               [('())\
+    \  #t]\n               [('()(  #f]\n               [(')((  #f]\n             \
+    \  [(')()  #t]\n               [('(()  #t]\n               [('())( #f]\n     \
+    \          [('())()#t]\n               [('())) #f]\n               [('()))(#f]\n\
+    \               [('())))(#f]\n               [('())))((#f]\n               [('(())\
+    \  #t]\n               [('(()(  #f]\n               [('(())( #f]\n           \
+    \    [('(())) #f]\n               [('(()))(#f]\n               [('(())))(#f]\n\
+    \               [('(())))((#f]\n               [('(())))(((#f]\n             \
+    \  [('(())))(()#t]\n               [('(())))(()(#f]\n               [('(())))(())(#f]\n\
+    \               [('(())))(()) #f]\n               [('(())))(())(#f]\n        \
+    \       [('(())))(())()#t]\n               [('(())))(())()(#f]\n             \
+    \  [('(())))(())())(#f]\n               [('(())))(())())) #f]\n              \
+    \ [('(())))(())()))(#f]\n               [('(())))(())())))(#f]\n             \
+    \  [('(())))(())())))((#f]\n               [('(())))(())())))(()#t]\n        \
+    \       [('(())))(())())))(()(#f]\n               [('(())))(())())))(())(#f]\n\
+    \               [('(())))(())())))(()) #f]\n               [('(())))(())())))(())(#f]\n\
+    \               [('(())))(())())))(())()#t]\n               [('(())))(())())))(())()(#f]\n\
+    \               [('(())))(())())))(())())(#f]\n               [", "  (let ([cnt-open\
+    \ 0]\n        [cnt-close 0])\n    (match lst\n      [(list _ _)\n       (for ([i\
+    \ (in-list lst)])\n         (if (eq? (car i) '())\n             (set! cnt-open\
+    \ (+ cnt-open 1))\n             (set! cnt-close (+ cnt-close 1))))\n       (if\
+    \ (&gt; cnt-open cnt-close)\n           'yes\n           'no)]\n      [_ 'no])))\n",
+  "  (cond\n    [(null? lst) 'No]\n    [(and (eq? (string-length (car lst)) (string-length\
+    \ (cadr lst)))\n          (string-contains? (car lst) \")\")\n          (string-contains?\
+    \ (cadr lst) \"(\"))\n     (match_parens (append (list (string-append (car lst)\
+    \ (cadr lst))) (cddr lst)))]\n    [(and (string-null? (car lst)) (string-null?\
+    \ (cadr lst))) 'Yes]\n    [else (match_parens (cdr lst))]))\n", "  (cond ((string-null?\
+    \ (car lst))\n         (cond ((string-null? (cadr lst))\n                'Yes)\n\
+    \               ((match_parens (cons (cadr lst) (cons (car lst) (cddr lst))))\n\
+    \                'Yes)\n               (else\n                'No)))\n       \
+    \ ((string=? (car lst) \")\")\n         (cond ((string-null? (cadr lst))\n   \
+    \             'No)\n               ((string=? (cadr lst) \"(\")\n            \
+    \    (match_parens (cons (string-append (car lst) (cadr lst)) (cddr lst))))\n\
+    \               (else\n                (match_parens (cons (cadr lst) (cons (car\
+    \ lst) (cddr lst)))))))\n        (else\n         (match_parens (cons (cadr lst)\
+    \ (cons (car lst) (cddr lst)))))))\n", "  (cond\n    [(empty? lst) 'Yes]\n   \
+    \ [(empty? (first lst)) (match_parens (rest lst))]\n    [(char=? #\\( (first (first\
+    \ lst)))\n     (match_parens (append (list (append (rest (first lst)) (second\
+    \ lst))) (rest (rest lst))))]\n    [(char=? #\\) (first (first lst)))\n     (match_parens\
+    \ (append (list (append (first (rest lst)) (rest (first lst)))) (rest (rest lst))))]\n\
+    \    [else 'No]))\n", "  (match lst\n    [(list (list (list (list? parens) _))\
+    \ (list (list (list? parens) _)))\n     (define (good-p open close)\n       (and\
+    \ (= (count open parens) (count close parens))\n            (not (contains open\
+    \ parens))\n            (not (contains close parens))))\n     (define (good-pair\
+    \ open close)\n       (and (good-p open close)\n            (good-p close open)))\n\
+    \     (if (good-pair #\\( #\\))\n         \"Yes\"\n         \"No\")]))\n</code>\n\
+    This code works as intended. Is there a cleaner way to check if a string only\
+    \ contains specific characters?\n\n\nA:\n\nYou can use regular expressions for\
+    \ that:\n<code>(define (counts chs s)\n  (map (\u03BB (c) (count c s)) chs))\n",
+  "  (match lst\n    [(list s1 s2)\n     (if (and (= (count \"(\" s1) (count \")\"\
+    \ s1))\n              (= (count \"(\" s2) (count \")\" s2)))\n         \"Yes\"\
+    \n         \"No\")]))\n", "  (cond [(empty? lst) #t]\n        [(empty? (cdr lst))\
+    \ #t]\n        [(equal? (car lst) \"(\")\n         (match_parens (cons (car (cdr\
+    \ lst)) (cdr (cdr lst))))]\n        [(equal? (car lst) \")\")\n         (match_parens\
+    \ (cdr lst))]))\n", "  (cond\n    [(empty? lst) #f]\n    [(and (eq? (car lst)\
+    \ '(') (eq? (cadr lst) ')'))\n     #t]\n    [else (match_parens (cdr lst))]))\n",
+  "  (define (count lst sym)\n    (match lst\n      [(list) (if (eq? sym '(') 0 'false)]\n\
+    \      [(cons s ss)\n       (cond [(char=? s sym) (+ 1 (count ss sym))]\n    \
+    \         [(char=? s (if (eq? sym '(') ')' '(')) (- 1 (count ss sym))]\n     \
+    \        [else 'false])]))\n  (let ([x (count (car lst) '(')]\n        [y (count\
+    \ (cadr lst) '(')])\n    (if (and (number? x) (number? y))\n        (if (and (not\
+    \ (= 0 x)) (not (= 0 y)))\n            (if (= (abs x) (abs y)) 'yes 'no)\n   \
+    \       'yes)\n      'no)))\n", "  (cond ((null? lst) '(0 0))\n        ((and (char=?\
+    \ (car lst) #\\()\n              (char=? (cadr lst) #\\)))\n         (match_parens\
+    \ (cddr lst)))\n        ((char=? (car lst) #\\() '((add1 (cadr (match_parens (cdr\
+    \ lst)))) 0))\n        ((char=? (car lst) #\\)) '((cadr (match_parens (cdr lst)))\
+    \ (add1 (car (match_parens (cdr lst))))))\n        (else (match_parens (cdr lst)))))\n",
+  "  (let loop ([seen 0] [list lst])\n    (cond [(null? list) (= seen 0)]\n      \
+    \    [(< seen 0) #f]\n          [(string=? (car list) \"(\") (loop (+ seen 1)\
+    \ (cdr list))]\n          [(string=? (car list) \")\") (loop (- seen 1) (cdr list))])))\n",
+  "  (if (empty? lst)\n      '()\n      (list (list-ref lst 0)\n            (list-ref\
+    \ lst (- (length lst) 1)))))\n", "  (and (and (good-lst-p (car lst)) (good-lst-p\
+    \ (cadr lst)))\n       (or (is-good-concat (car lst) (cadr lst))\n           (is-good-concat\
+    \ (cadr lst) (car lst)))))\n", "  (let* ((str1 (car lst))\n         (str2 (cadr\
+    \ lst))\n         (str3 (string-append str1 str2))\n         (str4 (string-append\
+    \ str2 str1)))\n    (if (and (balanced? str3) (balanced? str4))\n        \"Yes\"\
+    \n        \"No\")))\n", "  (define (is-balanced? str)\n    (andmap\n     (lambda\
+    \ (str)\n       (and (null? (str-index str #\\( ))\n            (null? (str-index\
+    \ str #\\) ))))\n     (list str)))\n  (define (count str)\n    (+ (string-length\
+    \ (str-index str #\\( ))\n       (string-length (str-index str #\\) ))))\n  (cond\
+    \ [(null? lst) \"Yes\"]\n        [(andmap is-balanced? lst) \"Yes\"]\n       \
+    \ [(andmap is-balanced? (list (string-append (car lst) (cadr lst)))) \"Yes\"]\n\
+    \        [(andmap is-balanced? (list (string-append (cadr lst) (car lst)))) \"\
+    Yes\"]\n        [else \"No\"]))\n", "  (apply string=? lst))\n", "  (cond\n  \
+    \  [(null? lst) 'No]\n    [(and (equal? (length (car lst)) 1)\n          (equal?\
+    \ (string-length (cadr lst)) 1))\n     (cond\n       [(equal? (car (car lst))\
+    \ #\\() 'Yes]\n       [(equal? (car (cadr lst)) #\\() 'Yes]\n       [else 'No])]\n\
+    \    [else\n     (if (equal? (length (car lst)) (string-length (cadr lst)))\n\
+    \         (cond\n           [(and (equal? (car (car lst)) #\\()\n            \
+    \     (equal? (car (cadr lst)) #\\))\n            'Yes)]\n           [(and (equal?\
+    \ (car (car lst)) #\\))\n                 (equal? (car (cadr lst)) #\\()\n   \
+    \         'Yes)]\n           [else 'No])\n         'No)]))\n</code>\nI think the\
+    \ code works, but it seems a bit too clunky to me. For example, I'd like to extract\
+    \ out the first <code>cond</code> because I feel it is standing out from the rest\
+    \ of the code, but I don't know how to approach that. Any pointers?\n\n\nA:\n\n\
+    Your code is fine in general. In fact, it does not have any major problems.\n\
+    There are, however, some minor issues.\nVariable names\nThe name <code>lst</code>\
+    \ suggests a list of lists, but it is really a list of two strings. You could\
+    \ rename it to <code>parens</code> or <code>strings</code>.\nUse <code>cond</code>\
+    \ consistently\nThe final <code>cond</code> is a bit inconsistent, as it branches\
+    \ over <code>equal?</code> values, but also over a <code>boolean</code> value.\
+    \ You could rewrite it to the following:\n<code>    (if (equal? (length (car lst))\
+    \ (string-length (cadr lst)))\n        (cond\n          [(and (equal? (car (car\
+    \ lst)) #\\()\n                (equal? (car (cadr lst)) #\\))\n           'Yes)]\n\
+    \          [(and (equal? (car (car l", "  (define (good str)\n    (cond\n    \
+    \  [(empty? str) #t]\n      [(= (count (\u03BB (x) (eq? x #\\()) str)\n      \
+    \    (count (\u03BB (x) (eq? x #\\))) str))\n       (good (substring str 1 (sub1\
+    \ (string-length str))))]\n      [else #f]))\n  (cond\n    [(and (empty? (first\
+    \ lst)) (empty? (second lst))) \"Yes\"]\n    [(good (string-append (first lst)\
+    \ (second lst))) \"Yes\"]\n    [(good (string-append (second lst) (first lst)))\
+    \ \"Yes\"]\n    [else \"No\"]))\n", "  (define (parens-str? str)\n    (define\
+    \ (parens-str-helper str stk)\n      (cond [(empty? str)\n             (empty?\
+    \ stk)]\n            [(char=? (first str) #\\()\n             (parens-str-helper\
+    \ (rest str) (cons #\\( stk))]\n            [(char=? (first str) #\\))\n     \
+    \        (cond [(empty? stk)\n                    #f]\n                   [else\n\
+    \                    (parens-str-helper (rest str) (rest stk))])]\n          \
+    \  [else #f]))\n    (parens-str-helper str '()))\n  (define (concat-parens strs)\n\
+    \    (string-append (list-ref strs 0) (list-ref strs 1)))\n  (define (is-good?\
+    \ lst)\n    (define (good-left str)\n      (cond [(empty? str)\n             #t]\n\
+    \            [(char=? (first str) #\\()\n             (good-left (rest str))]\n\
+    \            [(char=? (first str) #\\))\n             #f]\n            [else #f]))\n\
+    \    (define (good-right str)\n      (cond [(empty? str)\n             #t]\n \
+    \           [(char=? (first str) #\\))\n             (good-right (rest str))]\n\
+    \            [(char=? (first str) #\\()\n             #f]\n            [else #f]))\n\
+    \    (define (good-middle str)\n      (define (good-middle-helper str stk)\n \
+    \       (cond [(empty? str)\n               (empty? stk)]\n              [(char=?\
+    \ (first str) #\\()\n               (good-middle-helper (rest str) (cons #\\(\
+    \ stk))]\n              [(char=? (first str) #\\))\n               (cond [(empty?\
+    \ stk)\n                      #f]\n                     [else\n              \
+    \        (good-middle-helper (rest str) (rest stk))])]\n              [else #f]))\n\
+    \      (good-middle-helper str '()))\n    (cond [(not (equal? (list", "  (if (or\
+    \ (null? lst) (null? (cdr lst)))\n      'No\n      (cond ((eq? (car lst) '())\
+    \ 'Yes)\n            ((eq? (car lst) '(') 'No)\n            ((eq? (car lst) ')')\
+    \ 'No)\n            (else (match_parens (cdr lst))))))\n</code>\nAny suggestions\
+    \ on how to fix this error? (It's my first time using Racket and working with\
+    \ strings)\n\n\nA:\n\nYour code is looking at the wrong thing - in the question\
+    \ it asks \"a list of two strings\" not a list of two lists.\nThere are two issues.\
+    \ One - racket has strings built in - so you should not be passing a list of characters.\n\
+    Secondly, you have to check if the strings match, not the list. The error you\
+    \ are getting is that you are trying to compare a list to a character.\n<code>#lang\
+    \ racket\n", "  (define (match-parens-iter original ls paren-count)\n    (cond\
+    \ [(null? ls)\n           (if (and (not (null? original)) (= paren-count 0))\n\
+    \               \"Yes\"\n               \"No\")]\n          [(equal? (car ls)\
+    \ \"(\")\n           (match-parens-iter original (cdr ls) (+ paren-count 1))]\n\
+    \          [(equal? (car ls) \")\")\n           (match-parens-iter original (cdr\
+    \ ls) (- paren-count 1))]\n          [else\n           (match-parens-iter (append\
+    \ original (list (car ls))) (cdr ls) paren-count)]))\n  (let ([paren-count 0])\n\
+    \    (match-parens-iter '() lst paren-count)))\n", "  (if (null? lst)\n      \"\
+    Yes\"\n      (if (= (first lst) '(')\n          (if (= (last lst) ')')\n     \
+    \         (match_parens (rest (butlast lst)))\n              \"No\")\n       \
+    \   \"No\")))\n", "  (let ([n-parens (cond [(empty? lst) 0]\n                \
+    \        [(string=? (first lst) \"(\") (+ 1 (match_parens (rest lst)))]\n    \
+    \                    [(string=? (first lst) \")\") (- 1 (match_parens (rest lst)))]\n\
+    \                        [else (match_parens (rest lst))])])\n    (and (>= n-parens\
+    \ 0) n-parens)))\n", "  (define (matching-parens str)\n    (cond ((string=? str\
+    \ \"\") \"\")\n          ((string=? str \"()\") \"\")\n          ((string=? (substring\
+    \ str 0 1) \"(\")\n           (matching-parens (substring str 1)))\n         \
+    \ ((string=? (substring str (- (string-length str) 1)) \")\")\n           (matching-parens\
+    \ (substring str 0 (- (string-length str) 1))))\n          (else \"(\")))\n  (define\
+    \ str1 (string-append (list-ref lst 0) (list-ref lst 1)))\n  (cond ((string=?\
+    \ (matching-parens str1) \"\") \"Yes\")\n        (else \"No\")))\n", "  (cond\
+    \ [(empty? lst) true]\n        [(not (pair? lst)) false]\n        [(equal? (car\
+    \ lst) \"(\" )\n         (if (equal? (cadr lst) \")\")\n             (match_parens\
+    \ (cddr lst))\n             (match_parens (cons (cadr lst) (cddr lst))))]\n  \
+    \      [(equal? (car lst) \")\" )\n         (if (equal? (cadr lst) \"(\")\n  \
+    \           (match_parens (cddr lst))\n             (match_parens (cons (cadr\
+    \ lst) (cddr lst))))]))\n", "  (cond\n    [(empty? lst) \"Yes\"]\n    [(empty?\
+    \ (rest lst)) \"Yes\"]\n    [(empty? (rest (rest lst))) \"Yes\"]\n    [else (cond\n\
+    \            [(and (string=? (string-ref (car lst) 0) \")\")\n               \
+    \   (string=? (string-ref (car (rest lst)) 0) \")\"))\n             (match_parens\
+    \ (rest (rest lst)))]\n            [(and (string=? (string-ref (car lst) 0) \"\
+    (\")\n                  (string=? (string-ref (car (rest lst)) 0) \")\"))\n  \
+    \           (match_parens (append (list (string-append (car lst) (car (rest lst))))\n\
+    \                                   (rest (rest lst))))]\n            [(and (string=?\
+    \ (string-ref (car lst) 0) \")\")\n                  (string=? (string-ref (car\
+    \ (rest lst)) 0) \"(\"))\n             (match_parens (append (list (string-append\
+    \ (car lst) (car (rest lst))))\n                                   (rest (rest\
+    \ lst))))]\n            [else (match_parens (append (list (car (rest lst))) (list\
+    \ (car lst)) (rest (rest lst))))])])\n)", "  (define good_parens \"()\")\n  (if\
+    \ (eq? (length lst) 2)\n      (let ([s1 (first lst)]\n            [s2 (second\
+    \ lst)])\n        (cond [(string-index s1 #\\( )\n               (string-index\
+    \ s2 #\\( )]\n              [(string-index s1 #\\) )\n               (string-index\
+    \ s2 #\\) )]\n              [else\n               #f]))\n      (error \"lst must\
+    \ be length 2\")))", "  (cond [(empty? lst) \"Yes\"]\n        [(and (member \"\
+    )\" (car lst)) (member \"(\" (cadr lst))) \"Yes\"]\n        [else \"No\"]))\n",
+  "  (case (count_parens lst)\n    [(0) \"Yes\"]\n    [(1) \"No\"]\n    [(2) (if (zero?\
+    \ (modulo (abs (- (car lst) (cadr lst))) 4))\n             \"Yes\"\n         \
+    \    \"No\")]))\n", "  (cond [(empty? lst) \"Yes\"]\n        [(empty? (rest lst))\
+    \ \"Yes\"]\n        [(and (= (string-length (car lst)) 1)\n              (= (string-length\
+    \ (cadr lst)) 1))\n         (string-append (car lst) (cadr lst))]\n        [else\
+    \ (string-append (car lst) (cadr lst))]))\n", "  (equal? (list-ref lst 0) '(())\n\
+    \          (list-ref lst 1) '()))\n", "  (cond [(empty? lst) 0]\n        [(char=?\
+    \ (first lst) #\\() (+ 1 (match_parens (rest lst)))]\n        [(char=? (first\
+    \ lst) #\\)) (- 1 (match_parens (rest lst)))]))\n", "  (cond [(empty? lst) #f]\n\
+    \        [(or (equal? (first lst) \"Yes\")\n             (equal? (first lst) \"\
+    No\")) (first lst)]\n        [else (match_parens (rest lst))]))\n", "  (and (equal?\
+    \ 2 (length lst))\n       (equal? (length (car lst)) (length (cadr lst)))\n  \
+    \     (let loop ([l (car lst)] [r (cadr lst)])\n         (cond [(and (null? l)\
+    \ (null? r)) #t]\n               [(or (null? l) (null? r)) #f]\n             \
+    \  [(char=? (car l) ?\\)) (loop (cdr l) (cdr r))]\n               [(char=? (car\
+    \ r) ?\\() (loop (cdr l) (cdr r))]\n               [else loop (cdr l) (cdr r)]))))\n\
+    </code>\n", "  (define (is-good? str)\n    (cond ((null? str) '())\n         \
+    \ ((eq? (car str) '(')\n           (is-good? (cdr str)))\n          ((eq? (car\
+    \ str) ')')\n           (if (null? (cdr str))\n               #f\n           \
+    \    (if (eq? (car (cdr str)) ')')\n                   (is-good? (cdr (cdr str)))\n\
+    \                   #f)))\n          (else '())))\n  (let* ([string1 (car lst)]\n\
+    \         [string2 (car (cdr lst))]\n         [str1 (string->list string1)]\n\
+    \         [str2 (string->list string2)])\n    (cond ((and (is-good? str1) (is-good?\
+    \ str2)) 'Yes)\n          ((or (is-good? str1) (is-good? str2)) 'No)\n       \
+    \   (else 'No))))\n", "  (define (find-balance-point str)\n    (let loop ([i 0]\
+    \ [open 0] [close 0])\n      (cond\n        [(= i (string-length str)) (- open\
+    \ close)]\n        [(char=? (string-ref str i) #\\()\n         (loop (+ i 1) (+\
+    \ open 1) close)]\n        [(char=? (string-ref str i) #\\))\n         (loop (+\
+    \ i 1) open (+ close 1))]\n        [else (loop (+ i 1) open close)])))\n  (define\
+    \ (can-concat a b)\n    (let ([balance-a (find-balance-point a)]\n          [balance-b\
+    \ (find-balance-point b)])\n      (and (and (= (abs balance-a) (string-length\
+    \ a))\n                (= (abs balance-b) (string-length b)))\n           (or\
+    \ (and (> balance-a 0) (< balance-b 0))\n               (and (< balance-a 0) (>\
+    \ balance-b 0))))))\n  (define (concat-or-not a b)\n    (if (and (not (string=?\
+    \ a \"\")) (not (string=? b \"\")))\n        (if (can-concat a b) \"Yes\" \"No\"\
+    )\n        \"Yes\"))\n  (apply concat-or-not lst))", "  (define (count-l lst)\n\
+    \    (cond ((null? lst) 0)\n          ((equal? (car lst) #\\() (+ 1 (count-l (cdr\
+    \ lst))))\n          (else (count-l (cdr lst)))))\n  (define (count-r lst)\n \
+    \   (cond ((null? lst) 0)\n          ((equal? (car lst) #\\)) (+ 1 (count-r (cdr\
+    \ lst))))\n          (else (count-r (cdr lst)))))\n  (if (> (count-l (cadr lst))\
+    \ (count-r (car lst))) 'Yes 'No))", "  (define (helper lst1 lst2)\n    (cond\n\
+    \      [(empty? lst1) (append lst2 lst1)]\n      [(empty? lst2) (append lst1 lst2)]\n\
+    \      [(char=? (first lst1) ?\\() (helper (rest lst1) (cons (first lst1) lst2))]\n\
+    \      [(char=? (first lst1) ?\\))\n       (and (not (empty? lst2))\n        \
+    \    (char=? (first lst2) ?\\()\n            (helper (rest lst1) (rest lst2)))]\n\
+    \      [else (helper (rest lst1) lst2)]))\n  (and (empty? (helper (list->string\
+    \ (first lst)) null))\n       (empty? (helper (list->string (second lst)) null))))",
+  "  (define (parens-left s) (count (lambda (c) (eq? c #\\()) s))\n  (define (parens-right\
+    \ s) (count (lambda (c) (eq? c #\\))) s))\n  (define (count pred xs)\n    (for/sum\
+    \ ([x xs] #:when (pred x)) 1))\n  (define (balanced? s)\n    (and\n     (= (parens-left\
+    \ s) (parens-right s))\n     (not (positive? (count-prefix (lambda (c) (eq? c\
+    \ #\\)) s))\n                (count-prefix (lambda (c) (eq? c #\\())) s)))))\n\
+    \  (define (count-prefix pred s)\n    (for/sum ([x (in-range (string-length s))]\n\
+    \              #:when (pred (string-ref s x)))\n      1))\n  (define (combine\
+    \ s1 s2)\n    (cond\n      [(empty? s1) s2]\n      [(empty? s2) s1]\n      [else\
+    \ (cons (car s1) (combine (cdr s1) s2))]))\n  (and (balanced? (car lst))\n   \
+    \    (balanced? (cadr lst))\n       (let ([combined (combine (string->list (car\
+    \ lst))\n                                (string->list (cadr lst)))])\n      \
+    \   (balanced? (list->string combined)))))", "  (define (is-good str)\n    (define\
+    \ (paren-count str)\n      (if (string-empty? str)\n          0\n          (if\
+    \ (string=? (string-ref str 0) #\\()\n              (+ 1 (paren-count (string-drop\
+    \ str 1)))\n              (- 1 (paren-count (string-drop str 1))))))\n    (= (paren-count\
+    \ str) 0))\n  (define (concat? str1 str2)\n    (or (is-good (string-append str1\
+    \ str2))\n        (is-good (string-append str2 str1))))\n  (cond ((= 0 (length\
+    \ lst))\n         #f)\n        ((= 1 (length lst))\n         (is-good (list-ref\
+    \ lst 0)))\n        (else\n         (or (concat? (list-ref lst 0) (list-ref lst\
+    \ 1))\n             (match_parens (append (list (list-ref lst 1))\n          \
+    \                         (list-rest (list-rest lst))))))))\n", "  (match lst\n\
+    \    [`(,s1 ,s2)\n     (match-parens s1 s2)]))\n", "  (cond\n    [(empty? lst)\
+    \ 'Yes]\n    [(is-left? (first lst))\n     (if (has-match? (rest lst))\n     \
+    \    (match_parens (remove-match (rest lst)))\n         'No)]\n    [else 'No]))\n",
+  "  (if (null? lst)\n      '()\n      (if (equal? (car lst) '())\n          (cdr\
+    \ lst)\n          (cons (car lst) (match_parens (cdr lst))))))\n", "  (define\
+    \ (make-helper n)\n    (cond ((zero? n) #\"\")\n          ((negative? n) (string-append\
+    \ (make-helper (+ n 1)) \")\"))\n          (else (string-append (make-helper (-\
+    \ n 1)) \"(\"))))\n  (define (count-parens s)\n    (define (count-helper s n)\n\
+    \      (cond ((string-empty? s) n)\n            ((equal? (string-ref s 0) #\"\
+    (\") (count-helper (substring s 1) (+ n 1)))\n            ((equal? (string-ref\
+    \ s 0) #\")\") (count-helper (substring s 1) (- n 1)))\n            (else (error\
+    \ \"invalid input\"))))\n    (count-helper s 0))\n  (define (is-balanced s)\n\
+    \    (zero? (count-parens s)))\n  (define (concat-parens s1 s2)\n    (string-append\
+    \ s1 s2))\n  (cond ((is-balanced (car lst)) (concat-parens (car lst) (cadr lst)))\n\
+    \        ((is-balanced (cadr lst)) (concat-parens (car lst) (cadr lst)))\n   \
+    \     ((and (not (is-balanced (car lst))) (not (is-balanced (cadr lst))))\n  \
+    \       (cond ((> (count-parens (car lst)) (count-parens (cadr lst)))\n      \
+    \          (cond ((> (+ (count-parens (car lst)) (count-parens (cadr lst))) 0)\n\
+    \                       (concat-parens (make-helper (- (count-parens (car lst))\
+    \ (count-parens (cadr lst))))\n                                      (concat-parens\
+    \ (car lst) (cadr lst))))\n                      (else \"No\")))\n           \
+    \    ((< (count-parens (car lst)) (count-parens (cadr lst)))\n               \
+    \ (cond ((> (+ (count-parens (car lst)) (count-parens (cadr lst))) 0)\n      \
+    \                 (concat-parens (concat-parens (car lst)", "  (define (paren-balance\
+    \ cnt lst)\n    (cond\n      [(empty? lst) (eq? cnt 0)]\n      [(eq? (first lst)\
+    \ '()) cnt]\n      [(eq? (first lst) ') (paren-balance (- cnt 1) (rest lst))]\n\
+    \      [else (paren-balance (+ cnt 1) (rest lst))]))\n  (cond\n    [(empty? lst)\
+    \ #f]\n    [(paren-balance 0 (first lst)) #t]\n    [else (match-parens (rest lst))]))",
+  "  (cond [(empty? lst) #t]\n        [(char=? (first lst) #\\)) #f]\n        [else\
+    \ (match_parens (rest lst))]))\n", "  (and (define (valid str i)\n           (cond\
+    \ [(< i 0) #f]\n                 [(empty? str) (= i 0)]\n                 [(char=?\
+    \ (string-ref str 0) #\\() (valid (substring str 1) (+ i 1))]\n              \
+    \   [(char=? (string-ref str 0) #\\)) (valid (substring str 1) (- i 1))]))\n \
+    \      (or (valid (list-ref lst 0) 0)\n           (valid (list-ref lst 1) 0))))",
+  "  (define (is-good? str)\n    (andmap (lambda (paren)\n              (and (equal?\
+    \ (count paren str)\n                           (count (list-ref '() '(())) str))))\n\
+    \            '(())))\n  (cond [(and (is-good? (car lst))\n              (is-good?\
+    \ (cadr lst))) 'Yes]\n        [else 'No]))\n", "  (match lst\n    [(list s1 s2)\
+    \ (cond [(balance-parens? s1) 'Yes]\n                        [(balance-parens?\
+    \ s2) 'Yes]\n                        [else 'No])]))", "  (define (count-parens\
+    \ s)\n    (cond\n      [(empty? s) 0]\n      [(eq? (first s) #\\() 1]\n      [(eq?\
+    \ (first s) #\\)) -1]\n      [else (count-parens (rest s))]))\n  (cond\n    [(eq?\
+    \ (count-parens (first lst)) (count-parens (second lst))) \"Yes\"]\n    [else\
+    \ \"No\"]))", "  (define (match-parens-helper lst sum)\n    (cond\n      [(empty?\
+    \ lst) (zero? sum)]\n      [(char=? (first lst) #\\() (match-parens-helper (rest\
+    \ lst) (+ sum 1))]\n      [(char=? (first lst) #\\)) (and (> sum 0) (match-parens-helper\
+    \ (rest lst) (- sum 1)))]))\n  (cond\n    [(match-parens-helper (first lst) 0)\n\
+    \     (cond\n       [(match-parens-helper (second lst) 0) #t]\n       [else #f])]\n\
+    \    [else #f]))", "  (define (is_balanced str)\n    (cond [(empty? str) true]\n\
+    \          [(and (equal? (first str) #\\()\n                (is_balanced (rest\
+    \ str))) true]\n          [(and (equal? (first str) #\\))\n                (is_balanced\
+    \ (rest str))) true]\n          [else false]))\n  (define (match-helper str1 str2)\n\
+    \    (cond [(is_balanced str1) 'Yes]\n          [(is_balanced str2) 'Yes]\n  \
+    \        [(match-helper (string-append str1 str2) (string-append str2 str1))]\n\
+    \          [else 'No]))\n  (match-helper (first lst) (second lst)))\n", "  (define\
+    \ (match-paren p s)\n    (cond\n      [(eq? p \"(\")(+ s 1)]\n      [(eq? p \"\
+    )\")(- s 1)]))\n  (define (helper lst)\n    (cond\n      [(empty? lst) 0]\n  \
+    \    [else (match-paren (first lst) (helper (rest lst)))]))\n  (cond\n    [(eq?\
+    \ (helper (first lst)) 0) \"Yes\"]\n    [else \"No\"]))", "  (display lst)\n \
+    \ (display \"\\n\")\n  (let ((s1 (car lst))\n        (s2 (cadr lst)))\n    (display\
+    \ \"s1 = \")\n    (display s1)\n    (display \"\\n\")\n    (display \"s2 = \"\
+    )\n    (display s2)\n    (display \"\\n\")\n    (let loop ((s s1)\n          \
+    \     (i 0)\n               (flag #f))\n      (if (and (null? s) (= i 0))\n  \
+    \        (if flag\n              \"Yes\"\n              (loop s2 0 #t))\n    \
+    \      (if (null? s)\n              \"No\"\n              (if (char=? (car s)\
+    \ #\\()\n                  (loop (cdr s) (+ i 1) flag)\n                  (if\
+    \ (= i 0)\n                      \"No\"\n                      (loop (cdr s) (-\
+    \ i 1) flag))))))))\n", "  (cond [(null? lst) \"Yes\"]\n        [(not (or (equal?\
+    \ (car lst) \"(\" )\n                  (equal? (car lst) \")\" ))) \"Yes\"]\n\
+    \        [(equal? (car lst) \"(\" )\n         (match_parens (cdr lst))]\n    \
+    \    [(equal? (car lst) \")\" )\n         (if (equal? (car (cdr lst)) \")\")\n\
+    \             (match_parens (cdr (cdr lst)))\n             \"No\")]))\n", "  (define\
+    \ (iter par-str)\n    (let ((counter 0))\n      (for ([c (in-string par-str)])\n\
+    \        (if (equal? c #\\()\n            (set! counter (+ counter 1))\n     \
+    \       (set! counter (- counter 1))))\n      counter))\n  (match lst\n    [(list\
+    \ str1 str2)\n     (cond\n       [(< (iter str1) 0) \"No\"]\n       [(< (iter\
+    \ str2) 0) \"No\"]\n       [(= 0 (+ (iter str1) (iter str2))) \"Yes\"]\n     \
+    \  [else \"No\"])]))\n", "  (define (count-parens str)\n    (define (count-parens-iter\
+    \ count str)\n      (if (empty? str)\n          count\n          (if (equal? (first\
+    \ str) ?\\()\n              (count-parens-iter (+ count 1) (rest str))\n     \
+    \         (count-parens-iter (- count 1) (rest str)))))\n    (count-parens-iter\
+    \ 0 str))\n  (define (too-many-open-parens str1 str2)\n    (< (- (count-parens\
+    \ str1) (count-parens str2)) 0))\n  (define (too-many-close-parens str1 str2)\n\
+    \    (> (- (count-parens str1) (count-parens str2)) 0))\n  (define (open-parens\
+    \ str)\n    (> (count-parens str) 0))\n  (define (close-parens str)\n    (< (count-parens\
+    \ str) 0))\n  (if (and (too-many-open-parens (first lst) (rest lst))\n       \
+    \    (too-many-close-parens (first lst) (rest lst)))\n      \"No\"\n      (if\
+    \ (and (open-parens (first lst))\n               (open-parens (rest lst)))\n \
+    \         \"Yes\"\n          (if (and (close-parens (first lst))\n           \
+    \        (close-parens (rest lst)))\n              \"Yes\"\n              \"No\"\
+    ))))\n", "  (cond [(empty? lst) #f]\n        [(equal? (car lst) \")\")\n     \
+    \    (if (match_parens (cdr lst))\n             (cons (car lst) (match_parens\
+    \ (cdr lst)))\n             #f)]\n        [(match_parens (cdr lst))\n        \
+    \ (cons (car lst) (match_parens (cdr lst)))]\n        [else (match_parens (cdr\
+    \ lst))]))", "  (cond\n    [(null? lst)\n     #t]\n    [(null? (cdr lst))\n  \
+    \   (string=? (string-append (car lst) (cadr lst)) \"()\")]\n    [else\n     (or\
+    \ (match_parens (cdr lst))\n         (string=? (string-append (car lst) (cadr\
+    \ lst)) \"()\"))]))\n", "  (cond ((list? lst)\n         (and (list? (car lst))\
+    \ (match_parens (car lst)))\n         (and (list? (cdr lst)) (match_parens (cdr\
+    \ lst))))\n        ((equal? lst '(())) #t)\n        (else (error \"Bad argument\"\
+    ))))\n", "  (match lst\n    [`(,a ,b) (let ([opened-parens (string-&gt;list a)]\n\
+    \                   [closed-parens (string-&gt;list b)])\n                 (andmap\
+    \ (lambda (o)\n                           (member o closed-parens))\n        \
+    \                 opened-parens))]))\n", "  (define (balance str)\n    (let loop\
+    \ ([str str] [acc 0])\n      (cond\n        [(empty? str)\n         (= acc 0)]\n\
+    \        [(and (string=? (first str) \"(\") (= acc 0))\n         (loop (rest str)\
+    \ (+ acc 1))]\n        [(and (string=? (first str) \")\") (> acc 0))\n       \
+    \  (loop (rest str) (- acc 1))]\n        [else\n         #f])))\n  (define (parens1\
+    \ str1 str2)\n    (or (and (balance str1) (balance str2))\n        (and (balance\
+    \ str1) (balance (string-append str2 str1)))\n        (and (balance str2) (balance\
+    \ (string-append str1 str2)))))\n  (cond\n    [(empty? lst)\n     #f]\n    [(parens1\
+    \ (first lst) (second lst))\n     \"Yes\"]\n    [else\n     \"No\"]))", "  (cond\
+    \ [(null? lst) 'Yes]\n        [(not (string? (car lst))) (error 'match_parens\
+    \ \"List contains non-string\")]\n        [(null? (cdr lst)) 'Yes]\n        [(not\
+    \ (string? (cadr lst))) (error 'match_parens \"List contains non-string\")]\n\
+    \        [else (good-str? (string-append (car lst) (cadr lst)))]))\n", "  (cond\n\
+    \    [(empty? lst) #t]\n    [(null? (cdr lst)) #t]\n    [(string=? (car lst) \"\
+    (\" ) (match_parens (cdr lst))]\n    [(string=? (car lst) \")\" ) (match_parens\
+    \ (cdr lst))]\n    [(string=? (car lst) (car (cdr lst))) (match_parens (cdr lst))]\n\
+    \    [else false]))\n", "  (let loop ([lst lst] [open 0] [closed 0])\n    (cond\
+    \ [(empty? lst) #t]\n          [(char=? (car lst) #\\()\n           (loop (cdr\
+    \ lst) (+ open 1) closed)]\n          [(char=? (car lst) #\\))\n           (cond\
+    \ [(zero? open) #f]\n                 [else (loop (cdr lst) (- open 1) (+ closed\
+    \ 1))])])))\n", "  (cond [(empty? lst) 0]\n        [(char=? (first lst) #\\()\n\
+    \         (+ 1 (match_parens (rest lst)))]\n        [(char=? (first lst) #\\))\n\
+    \         (- 1 (match_parens (rest lst)))]))\n", "  (define (go s lst)\n    (cond\
+    \ [(empty? lst) (cond [(zero? s) 'Yes)\n                             (else 'No)])\n\
+    \          [(string=? (first lst) \"(\") (go (+ s 1) (rest lst))]\n          [(string=?\
+    \ (first lst) \")\") (go (- s 1) (rest lst))]))\n  (go 0 lst))\n</code>\nExamples:\n\
+    <code>&gt; (match_parens '(\"()\" \"()\"))\nYes\n&gt; (match_parens '(\"(())\"\
+    \ \")\"))\nNo\n&gt; (match_parens '(\"(())\" \"(())\"))\nYes\n&gt; (match_parens\
+    \ '(\"(())\" \"(()\"))\nNo\n&gt; (match_parens '(\"())\" \"())\"))\nNo\n&gt; (match_parens\
+    \ '(\"(())))\" \"()())\"))\nNo\n&gt; (match_parens '(\"(())))\" \"())))\"))\n\
+    No\n&gt; (match_parens '(\"((())\" \")\"))\nNo\n&gt; (match_parens '(\"(())\"\
+    \ \")\"))\nNo\n&gt; (match_parens '(\"()\" \"((()))\"))\nYes\n&gt; (match_parens\
+    \ '(\"(()\" \"())\"))\nYes\n&gt; (match_parens '(\"()())\" \"()())\"))\nNo\n&gt;\
+    \ (match_parens '(\"())\" \"())\"))\nNo\n&gt; (match_parens '(\"()\" \"()())\"\
+    ))\nNo\n&gt; (match_parens '(\"((()))\" \"()()\"))\nYes\n&gt; (match_parens '(\"\
+    ((())\" \")\"))\nNo\n&gt; (match_parens '(\"(())\" \")\"))\nNo\n&gt; (match_parens\
+    \ '(\"(())\" \"())\"))\nYes\n&gt; (match_parens '(\"(((())))\" \"()()\"))\nYes\n\
+    &gt; (match_parens '(\"(())\" \"(\"))\nNo\n&gt; (match"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

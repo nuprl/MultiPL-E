@@ -13,7 +13,878 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate s
   \ \"!\"))\n    (check-equal? (candidate \"abcdef\") 3)\n    (check-equal? (candidate\
   \ \"aaabb\") 2)\n    (check-equal? (candidate \"aaaBb\") 1)\n    (check-equal? (candidate\
   \ \"\") 0)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (cond\n    ((string-contains txt \" \") (string-split txt #\\space))\n\
+    \    ((string-contains txt \",\") (string-split txt #\\,))\n    (else (length\
+    \ \n           (filter (lambda (x) (= 1 (modulo x 2)))\n                   (map\
+    \ (lambda (x) (- (char->integer x) (char->integer #\\a)))\n                  \
+    \      (string->list txt)))))))\n", "  (cond\n    [(string-empty? txt) 0]\n  \
+    \  [(string-index txt #\\space) (split_words (string-drop txt (string-index txt\
+    \ #\\space)))]\n    [(string-index txt #\\,) (split_words (string-drop txt (string-index\
+    \ txt #\\,)))]\n    [else (+ 1 (split_words (string-tail txt)))]))\n", "  (cond\n\
+    \    [(empty? txt) empty]\n    [(whitespace? (car txt)) (split_words (cdr txt))]\n\
+    \    [(comma? (car txt)) (split_words (cdr txt))]\n    [else\n     (cons (car\
+    \ txt) (split_words (cdr txt)))]))\n", "  (cond\n    ((empty? (string-length txt))\
+    \ (list))\n    ((empty? (string-index txt #\\,))\n     (if (not (empty? (string-index\
+    \ txt #\\ )))\n         (cons (substring txt 0 (string-index txt #\\ ))\n    \
+    \           (split_words (substring txt (+ (string-index txt #\\ ) 1) (string-length\
+    \ txt))))\n         (list txt)))\n    (else\n     (cons (substring txt 0 (string-index\
+    \ txt #\\,))\n           (split_words (substring txt (+ (string-index txt #\\\
+    ,)) (string-length txt)))))))\n", "  (cond [(empty? txt) empty]\n        [(find\
+    \ (char-set-contains? #\\, (string->char-set \",\")) txt) (map string->number\
+    \ (split-string txt #\\,))]\n        [(empty? (find (char-set-contains? #\\  (string->char-set\
+    \ \" \")) txt)) (length (filter odd? (map char->integer (string->list txt))))]\n\
+    \        [else (split-string txt #\\ )]))\n\n```\n\n```racket\n#lang racket\n",
+  "  (if (empty? (regexp-match #rx\"[ ]\" txt))\n      (if (empty? (regexp-match #rx\"\
+    [,]\" txt))\n          (count-lower-case-odd txt)\n          (split-commas txt))\n\
+    \      (split-whitespace txt)))\n", "  (let ([sp (string-index txt #\\space)]\n\
+    \        [cm (string-index txt #\\,)]\n        )\n    (cond [(and (positive? sp)\n\
+    \                (positive? cm))\n           (if (< sp cm)\n               (split_words\
+    \ (string-trim txt #\\space))\n               (split_words (string-trim txt #\\\
+    ,)))]\n          [(positive? sp)\n           (split_words (string-trim txt #\\\
+    space))]\n          [(positive? cm)\n           (split_words (string-trim txt\
+    \ #\\,))]\n          [else\n           (count-pred (lambda (c) (= 1 (modulo (char->integer\
+    \ c) 2)))\n                       (string->list (string-downcase txt)))])))\n",
+  "  (cond ((and (string? txt) (> (string-length txt) 0))\n         (cond ((string-contains\
+    \ txt #\\,  )\n                (split-at-positions #\\,  txt))\n             \
+    \  ((string-contains txt #\\space)\n                (split-at-positions #\\space\
+    \ txt))\n               (else (count-odd-alphabet-letters txt))))\n        (else\
+    \ '())))\n", "  (if (= 1 (count-words txt))\n      (count-odd-letters txt)\n \
+    \     (split-on-commas txt)))\n", "  (cond ((string-index txt #\\space) (string-split\
+    \ txt #\\space))\n        ((string-index txt #\\,) (string-split txt #\\,))\n\
+    \        (else (count-odd txt))))\n", "  (cond\n    [(empty? txt) empty]\n   \
+    \ [(string-contains? txt #\\ ) (split-at (regexp-index txt #rx\" \") txt)]\n \
+    \   [(string-contains? txt #\\,) (split-at (regexp-index txt #rx\",\") txt)]\n\
+    \    [else (count (string-fold (\u03BB (c i) (cons c i)) '() (regexp-replace txt\
+    \ #rx\"[A-Za-z]\" \"\")))]))\n</code>\nThanks for any help or feedback!\n\n\n\
+    A:\n\nYou can't use <code>string-contains?</code> or <code>regexp-index</code>\
+    \ on a string - these function expect a <code>regexp</code> as the first argument.\
+    \ What you want to do is to use <code>regexp-match</code> instead:\n<code>(define\
+    \ (split_words txt)\n  (cond\n    [(empty? txt) empty]\n    [(regexp-match #rx\"\
+    \ \" txt) (split-at (regexp-match #rx\" \" txt) txt)]\n    [(regexp-match #rx\"\
+    ,\" txt) (split-at (regexp-match #rx\",\" txt) txt)]\n    [else (count (string-fold\
+    \ (\u03BB (c i) (cons c i)) '() (regexp-replace txt #rx\"[A-Za-z]\" \"\")))]))\n\
+    </code>\n", "  (cond\n    [(empty? txt) empty]\n    [(string-contains txt #\\\
+    ,) (split (string-split txt #\\,) #\\,)]\n    [(string-contains txt #\\space)\
+    \ (split (string-split txt #\\space) #\\space)]\n    [else (split-words-helper\
+    \ txt)]))\n", "  (define (count lst)\n    (define (helper i)\n      (cond [(empty?\
+    \ (rest lst)) i]\n            [(even? (ord (first lst))) (helper i)]\n       \
+    \     [else (helper (+ i 1))]))\n    (helper 0))\n  (cond [(empty? txt) 0]\n \
+    \       [(string-index txt #\\, 0) (count (string->list txt))]\n        [(string-index\
+    \ txt #\\space 0) (count (string->list txt))]\n        [else (count (string->list\
+    \ txt))]))", "  (define (is_lower? c) (and (char&lt;= #\\a c) (char&lt;= c #\\\
+    z)))\n  (define (is_odd? n) (= (remainder n 2) 1))\n  (define (odd-lower-count\
+    \ s)\n    (cond\n      [(empty? s) 0]\n      [(is_lower? (first s)) (odd-lower-count\
+    \ (rest s))]\n      [else (+ (is_odd? (char-&gt;integer (first s))) (odd-lower-count\
+    \ (rest s)))]))\n  (cond\n    [(string-contains txt #\\ ) (string-split txt #\\\
+    \ )]\n    [(string-contains txt #\\,) (string-split txt #\\,)]\n    [else (odd-lower-count\
+    \ txt)]))\n</code>\nYou want to count the number of lowercase characters with\
+    \ odd order in the alphabet. I'd count the number of lowercase characters with\
+    \ even order in the alphabet, and subtract that number from 26. That's more efficient\
+    \ and clearer.\n<code>#lang racket\n", "  (cond\n    ((regexp-match #rx\" \" txt)\n\
+    \     (map string-trim (regexp-split #rx\" \" txt)))\n    ((regexp-match #rx\"\
+    ,\" txt)\n     (map string-trim (regexp-split #rx\",\" txt)))\n    (else\n   \
+    \  (length (filter odd? (map (lambda (x) (- x (string-ref \"a\" 0))) (string->list\
+    \ txt)))))))\n", "  (if (empty? (regexp-match #rx\" \" txt))\n      (if (empty?\
+    \ (regexp-match #rx\",\" txt))\n          (split_odd_letters txt)\n          (regexp-split\
+    \ #rx\",\" txt))\n      (regexp-split #rx\" \" txt)))\n", "  (define (odd-chars\
+    \ txt)\n    (let ([ls (string->list txt)])\n      (apply + (map (lambda (c) (modulo\
+    \ (char->integer c) 2)) ls))))\n  (let ([whitespace? (string-contains txt #\\\
+    space)])\n    (if whitespace?\n        (map string-downcase (string-split txt\
+    \ #\\space))\n        (let ([comma? (string-contains txt #\\,)])\n          (if\
+    \ comma?\n              (map string-downcase (string-split txt #\\,))\n      \
+    \        (odd-chars txt))))))\n", "  (cond [(empty? txt)\n\t '()]\n\t[(regexp-match?\
+    \ #rx\"\\s\" txt)\n\t (split-string txt #rx\"\\s\")]\n\t[(regexp-match? #rx\"\
+    ,\" txt)\n\t (split-string txt #rx\",\")]\n\t[else\n\t (let loop ([n (string-length\
+    \ txt)] [acc 0])\n\t   (cond [(zero? n)\n\t\t  acc]\n\t\t [(even? (char-&gt;integer\
+    \ (string-ref txt (- n 1))))\n\t\t  (loop (- n 1) acc)]\n\t\t [else\n\t\t  (loop\
+    \ (- n 1) (+ acc 1))]))]))\n</code>\nAnd when I run it:\n<code>&gt; (split_words\
+    \ \"hello, world\")\n'(\"hello\" \"world\")\n\n&gt; (split_words \"dsfdsf\")\n\
+    3\n\n&gt; (split_words \"hello world\")\n'(\"hello\" \"world\")\n</code>\n", " \
+    \ (cond\n    [(string=? \"\" txt) (list)]\n    [(string-contains txt #\\ ) (list\
+    \ (string-before txt #\\ ) (string-after txt #\\ ))]\n    [(string-contains txt\
+    \ #\\,) (list (string-before txt #\\,) (string-after txt #\\,))]\n    [else (list\
+    \ (- (char->integer (string-ref txt 0)) 97))]))\n```\n\n```scheme\n#lang racket\n",
+  "  (if (string-contains txt #\\ )\n    (cond\n      ((even? (length txt)) (split_words\
+    \ (string-take txt (sub1 (string-length txt)))))\n      ((string-contains txt\
+    \ #\\,) (string-contains txt #\\a))\n      (else (string-contains txt #\\b))\n\
+    \    )\n    (cond\n      ((string-contains txt #\\,) (split_words (string-take\
+    \ txt (sub1 (string-length txt)))))\n      ((even? (length txt)) (string-contains\
+    \ txt #\\a))\n      (else (string-contains txt #\\b))\n    )\n  )\n)\n", "  (cond\
+    \ ((string-contains? txt \" \") (string-split txt))\n        ((string-contains?\
+    \ txt \",\") (string-split txt \",\"))\n        (else (string-length (regexp-match\
+    \ (regexp (string-append \"([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])\"\n    \
+    \                                                \"([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a-z])([a",
+  "  (cond [(empty? txt) '()]\n        [(char-whitespace? (first txt)) (split_words\
+    \ (rest txt))]\n        [(char-ci=? (first txt) #\\,) (split_words (rest txt))]\n\
+    \        [else (cons (first txt) (split_words (rest txt)))]))\n", "  (error \"\
+    not implemented\"))\n", "  (cond ((string-index txt #\\space) => words)\n    \
+    \    ((string-index txt #\\,) => (lambda (x) (apply string-split txt #\\,)))\n\
+    \        (else (count-odd-chars txt))))\n", "  (if (string-contains? txt \" \"\
+    )\n      (string-split txt \" \")\n      (if (string-contains? txt \",\")\n  \
+    \        (string-split txt \",\")\n          (check-odds txt))))", "  (cond [(string-empty?\
+    \ txt) #f]\n\t[(string-contains txt #\\space) (string-split txt #\\space)]\n\t\
+    [(string-contains txt #\\,) (string-split txt #\\,)]\n\t[else (count-lowercase-odds\
+    \ txt)]))\n", "  (if (string-contains txt #\\ )\n      (string-split txt #\\ )\n\
+    \      (if (string-contains txt #\\,)\n          (string-split txt #\\,)\n   \
+    \       (len (filter odd? (map (lambda (c) (- (char->integer c) (char->integer\
+    \ #\\a))) (string->list txt)))))))\n\n\n", "  (string-split txt #\\space))\n",
+  "  (cond [(empty? txt) empty]\n        [(member (first txt) '(#\\space #\\newline\
+    \ #\\tab)) (cons (first txt) (split_words (rest txt)))]\n        [else txt]))\n",
+  "  (cond\n    [(string-contains? txt \" \") (string-split txt)]\n    [(string-contains?\
+    \ txt \",\") (string-split txt \",\")]\n    [else (length (filter odd? (map (\u03BB\
+    \ (x) (- x ord('a'))) (string->list txt))))]))\n", "  (if (zero? (string-length\
+    \ txt)) (list '())\n      (if (string-empty? (string-trim txt))\n          (list\
+    \ '())\n          (define (alphabetical-order txt)\n            (if (zero? (string-length\
+    \ txt)) 0\n                (if (string-empty? (string-trim txt)) 0\n         \
+    \           (let* ([s (string-downcase txt)]\n                           [ch (string-head\
+    \ s)]\n                           [n (string-ref s 0)])\n                    \
+    \  (if (odd? n) (+ 1 (alphabetical-order (string-tail s)))\n                 \
+    \         (alphabetical-order (string-tail s)))))))\n          (if (string-contains\
+    \ txt #\\, ) (string-split txt #\\,)\n              (if (string-contains txt #\\\
+    space) (string-split txt #\\space)\n                  (alphabetical-order txt))))))\n",
+  "  (if (empty? (regexp-match #rx\"\\s\" txt))\n      (if (empty? (regexp-match #rx\"\
+    ,\" txt))\n          (length (filter (\u03BB (x) (odd? x)) (map char->integer\
+    \ (string->list txt))))\n          (split-string txt \",\"))\n      (split-string\
+    \ txt #rx\"\\s\")))\n", "  (cond\n    [(string=? txt \"\") 0]\n    [(string-contains?\
+    \ txt #\\,) (count-odd-lower-case txt)]\n    [(string-contains? txt #\\space)\
+    \ (count-lower-case txt)]\n    [else (count-odd-lower-case txt)]))\n", "  (cond\
+    \ ((string-contains txt \" \") (string-split txt #\\space))\n        ((string-contains\
+    \ txt \",\") (string-split txt #\\,))\n        (else (string-lower-case txt))))\n\
+    </code>\nThe problem I have is that it returns <code>(1 3)</code> when I expect\
+    \ <code>3</code> because <code>1</code> is the length of the string. How can I\
+    \ get rid of that extra <code>1</code>?\nThe tests I'm running are:\n<code>(equal?\
+    \ 3 (split_words \"abcdef\"))", "  (cond [(empty? txt) empty]\n        [(equal?\
+    \ #\\, (first txt)) (rest txt)]\n        [(equal? #\\  (first txt)) (list (list->string\
+    \ (rest txt))) ]\n        [else (split_words (rest txt))]))\n", "  (define alphabet\
+    \ \"abcdefghijklmnopqrstuvwxyz\")\n  (define pos (string-index txt \" \"))\n \
+    \ (define com (string-index txt \",\"))\n  (if (&gt; pos 0)\n    (cons (substring\
+    \ txt 0 pos)\n          (split_words (substring txt (+ pos 1) (string-length txt))))\n\
+    \    (if (&gt; com 0)\n      (cons (substring txt 0 com)\n            (split_words\
+    \ (substring txt (+ com 1) (string-length txt))))\n      (count-odd-alphabet-index\
+    \ (string-&gt;list txt)))))\n", "  (cond [(empty? txt) empty]\n        [(find\
+    \ txt #\\, 0) (split txt #\\,)]\n        [(find txt #\\ ) (split txt #\\ )]\n\
+    \        [else (list-ref (list-ref txt 0) 5)]))\n", "  (cond\n    [(string-empty?\
+    \ txt) '()]\n    [(string-contains txt #\\,) (append-map string-split (regexp-match\
+    \ #rx\"[a-zA-Z]*\" txt))]\n    [(string-contains txt #\\space) (string-split txt\
+    \ #\\space)]\n    [else\n     (apply + (map (\u03BB (x) (if (odd? (string-ref\
+    \ x 0)) 1 0))\n                   (filter (\u03BB (x) (char-alphabetic? (string-ref\
+    \ x 0))) (string->list txt))))]))\n", "\t(if (not (zero? (string-length txt)))\n\
+    \t\t(let* ([txt (string-trim txt)]\n\t\t\t   [words (string-split txt #\\space)]\n\
+    \t\t\t   [lst (filter (lambda (word)\n\t\t\t   \t\t\t\t  (not (empty? word)))\
+    \ words)])\n\t\t\t(if (not (empty? lst))\n\t\t\t\tlst\n\t\t\t\t(let* ([words (string-split\
+    \ txt #\\,)])\n\t\t\t\t\t(if (not (empty? words))\n\t\t\t\t\t\twords\n\t\t\t\t\
+    \t\t(list (count-lower-case-odd-order txt))))))\n\t\t'()))\n", "  (define (split_words_helper\
+    \ txt accum)\n    (cond\n      [(string-empty? txt) accum]\n      [(char-whitespace?\
+    \ (string-ref txt 0)) accum]\n      [(string-contains? txt \",\") (split_words_helper\
+    \ (string-replace txt \",\" \" \") accum)]\n      [else (split_words_helper (string-drop\
+    \ txt 1) (add1 accum))]))\n  (cond\n    [(string-contains? txt \" \") (split_words_helper\
+    \ txt (string-split txt))]\n    [(string-contains? txt \",\") (split_words_helper\
+    \ txt (string-split txt))]\n    [else (split_words_helper txt 0)]))\n", "\t(or\n\
+    \t (split-string txt #rx\"[ \\t]+\")\n\t (split-string txt #rx\",\")\n\t (count-odd-chars\
+    \ txt)))\n", "  (if (string-contains txt #\\,)\n      (split-string txt \",\"\
+    )\n      (count-lower-case-odd txt)))\n", "  (if (equal? (string-index txt #\\\
+    space) #f)\n      (if (equal? (string-index txt #\\,) #f)\n          (sum_odd_chars\
+    \ txt)\n          (split_on_commas txt))\n      (split_on_spaces txt)))\n", " \
+    \ (or (list-split-words txt)\n      (list-split-commas txt)\n      (count-odd-letters\
+    \ txt)))\n", "  (cond ((empty? (regexp-match #rx\"\\s\" txt)) (split_words_without_spaces\
+    \ txt))\n        ((empty? (regexp-match #rx\",\" txt)) (split_words_without_commas\
+    \ txt))\n        (else (split_words_with_spaces txt))))\n", "  (cond\n    [(empty?\
+    \ txt) empty]\n    [(regexp-match #rx\"\\s\" txt)\n     (map symbol->string (regexp-match\
+    \ #rx\"\\w+\" txt))]\n    [(regexp-match #rx\",\" txt)\n     (map symbol->string\
+    \ (regexp-match #rx\"\\w+\" txt))]\n    [else \n     (length (filter (lambda (x)\
+    \ (= (modulo (char->integer x) 2) 1))\n                     (string->list txt)))]))\n",
+  "  (if (string-contains txt #\\, )\n      (regexp-split #rx\"[[:space:]]+\" txt)\n\
+    \      (if (string-contains txt #\\ )\n        (string-split txt #\\,)\n     \
+    \   (count-if (lambda (c) (odd? (- (char->integer c) (char->integer #\\a)))) (string->list\
+    \ txt)))))\n", "  (display txt)\n  (cond \n    [(regexp-match #rx\" \" txt) (regexp-split\
+    \ #rx\" \" txt)]\n    [(regexp-match #rx\",\" txt) (regexp-split #rx\",\" txt)]\n\
+    \    [else (display (count (map odd-order (string->list txt))))]))\n", "  (cond\
+    \ ((string-contains txt \" \")\n         (string-split txt \" \"))\n        ((string-contains\
+    \ txt \",\")\n         (string-split txt \",\"))\n        (else\n         (count_odd_chars\
+    \ txt))))\n", "  (cond\n    ((not (empty? (regexp-match #rx\" \" txt))) (regexp-split\
+    \ #rx\" \" txt))\n    ((not (empty? (regexp-match #rx\",\" txt))) (regexp-split\
+    \ #rx\",\" txt))\n    (else (odd-length-string txt))))\n", "  (cond ((string-contains\
+    \ txt #\\space) (string-split txt #\\space))\n        ((string-contains txt #\\\
+    ,) (string-split txt #\\,))\n        (else (string-length (string-filter odd?\
+    \ (string->list txt)) ) ) ))\n", "  (cond [(string-contains txt #\\space) (string-split\
+    \ txt #\\space)]\n        [(string-contains txt #\\,) (string-split txt #\\,)]\n\
+    \        [else (count-odds (string->list txt))]))\n", "  (cond [(string=? \"\"\
+    \ txt) (list)]\n        [(string-index txt #\\space)\n         (cons (substring\
+    \ txt 0 (string-index txt #\\space))\n               (split_words (substring txt\
+    \ (+ 1 (string-index txt #\\space)))))]\n        [(string-index txt #\\,)\n  \
+    \       (cons (substring txt 0 (string-index txt #\\,))\n               (split_words\
+    \ (substring txt (+ 1 (string-index txt #\\,)))))]\n        [else (count-odds\
+    \ txt)]))\n", "  (if (regexp-match #rx\"\\\\s+\" txt)\n      (regexp-split #rx\"\
+    \\\\s+\" txt)\n      (if (regexp-match #rx\",\" txt)\n          (regexp-split\
+    \ #rx\",\" txt)\n          (filter (lambda (ch) (odd? (char-&gt;integer ch)))\
+    \ txt))))\n</code>\nThe error I get is this one:\n<code>&gt; (split_words \"abcdef\"\
+    )\n. . odd?: expects type &lt;number&gt; as 1st argument, given: #\\a; other arguments\
+    \ were: . . . \n</code>\nI don't know what is wrong, when i test the code with\
+    \ \n<code>(odd? (char-&gt;integer #\\a))\n</code>\nit works. I don't know what\
+    \ is wrong with the filter.\n\n\nA:\n\nThe issue is that filter expects a predicate,\
+    \ or a function that returns true or false. You are passing it a string. Try something\
+    \ like this:\n<code>(filter (lambda (ch) (odd? (char-&gt;integer ch))) (string-&gt;list\
+    \ txt))\n</code>\n", "  (cond\n    [(empty? txt) empty]\n    [(contains? txt #\\\
+    space) (split_words (string-split txt #\\space))]\n    [(contains? txt #\\,) (split_words\
+    \ (string-split txt #\\,))]\n    [else (string-length (string-filter (\u03BB (l)\
+    \ (odd? (char->integer l))) txt))]))\n</code>\nThe <code>split_words</code> function\
+    \ works:\n<code>&gt; (split_words \"ab cde\")\n'(#\\a #\\b #\\c #\\d #\\e)\n&gt;\
+    \ (split_words \"ab cde\")\n'(#\\a #\\b #\\c #\\d #\\e)\n&gt; (split_words \"\
+    ab cde\")\n'(#\\a #\\b #\\c #\\d #\\e)\n&gt; (split_words \"abcdef\")\n3\n&gt;\
+    \ (split_words \"abcdef\")\n3\n&gt; (split_words \"abcd ef\")\n'(#\\a #\\b #\\\
+    c #\\d #\\e #\\f)\n&gt; (split_words \"abcd,ef\")\n'(#\\a #\\b #\\c #\\d #\\e\
+    \ #\\f)\n&gt; (split_words \"abcd\")\n1\n&gt; (split_words \"abcd\")\n1\n&gt;\
+    \ (split_words \"abcdef\")\n3\n&gt; (split_words \"abcdef\")\n3\n&gt; (split_words\
+    \ \"abcd ef\")\n'(#\\a #\\b #\\c #\\d #\\e #\\f)\n&gt; (split_words \"abcd,ef\"\
+    )\n'(#\\a #\\b #\\c #\\d #\\e #\\f)\n&gt; (split_words \"abcd\")\n1\n&gt; (split_words\
+    \ \"abcd\")\n1\n</code>\nAnd this is the code with \"new\" library that I am porting:\n\
+    <code>#lang racket\n", "  (or (list-split txt #\\space)\n      (list-split txt\
+    \ #\\,)\n      (count-odd-letters txt)))\n", "  (cond ((empty? (regexp-match #rx\"\
+    \ \" txt))\n         (cond ((empty? (regexp-match #rx\",\" txt))\n           \
+    \     (cond ((empty? (regexp-match #rx\"[a-z]\" txt))\n                      \
+    \ -1)\n                      (else\n                       (let* ([txt (string->list\
+    \ txt)]\n                              [cnt (count (lambda (x)\n             \
+    \                               (char=? (char-downcase x) (char-upcase x)))\n\
+    \                                          txt)])\n                         (cond\
+    \ ((= (modulo cnt 2) 0)\n                                0)\n                \
+    \               (else\n                                1))))))\n             \
+    \   (cond ((empty? (regexp-match #rx\",\" txt))\n                       -1)\n\
+    \                      (else\n                       (length (string-split txt\
+    \ #\\,))))))\n         (cond ((empty? (regexp-match #rx\" \" txt))\n         \
+    \       -1)\n               (else\n                (length (string-split txt #\\\
+    space))))))", "\t(if (regexp-match #rx\"[ ,]\" txt)\n\t\t(string-split txt #\\\
+    , #\\space)\n\t\t(count-odd-chars txt)))\n", "  (cond [(regexp-match #rx\"[\\\
+    s]\" txt) (string-split txt #\\space)]\n        [(regexp-match #rx\",\" txt) (string-split\
+    \ txt #\\,)]\n        [else (check txt)]))\n", "  ; A list of the individual words\n\
+    \  (if (string-contains txt #\\space)\n    (list-of-words txt)\n    (if (string-contains\
+    \ txt #\\,)\n      (list-of-words-comma txt)\n      (count-lowercase-odd txt)\n\
+    \    )\n  )\n)\n", "  (cond\n    [(string=? (string-length txt) 0) empty]\n  \
+    \  [(string-contains? txt \" \") (string-split txt)]\n    [(string-contains? txt\
+    \ \",\") (string-split txt \",\")]\n    [else (count-lower-case-odd-letter txt)]))\n",
+  "  (cond\n    [(empty? txt) empty]\n    [(not (string-contains? txt #\\Space)) (if\
+    \ (not (string-contains? txt #\\,)) (number_of_lower_case_chars_with_odd_order\
+    \ txt) (string-split txt #\\,))]\n    [else (string-split txt #\\Space)]))\n",
+  "  (cond ((find-char-in-str (string-contains-char? txt #\\ )) txt)\n        ((find-char-in-str\
+    \ (string-contains-char? txt #\\,)) txt)\n        (else txt)))\n", "  (cond ((not\
+    \ (string-contains txt #\\space))\n         (cond ((not (string-contains txt #\\\
+    ,))\n                (calc_odd_chars txt))\n               (else (split_on_commas\
+    \ txt))))\n        (else (split_on_whitespace txt))))\n", "  (cond [(regexp-match\
+    \ #rx\"\\\\s+\" txt) (string-split txt #rx\"\\\\s+\")]\n        [(regexp-match\
+    \ #rx\",\" txt)   (string-split txt #rx\",\")]\n        [else                \
+    \         (count (odd? (lower-case-idx))\n                                   \
+    \        (string->list txt))]))\n", "\t(cond [(string-contains txt #\\,)\n\t\t\
+    \   (cond [(empty? (string-split txt #\\,))\n\t\t\t\t  0]\n\t\t\t\t [else\n\t\t\
+    \t\t  (split_words (string-join (string-split txt #\\,) \" \"))])]\n\t\t  [(string-contains\
+    \ txt #\\ )\n\t\t   (string-split txt #\\ )]\n\t\t  [else\n\t\t   (length (filter\
+    \ even? (map (lambda (c) (- (char->integer c) (char->integer #\\a))) (string->list\
+    \ txt))))]))\n", "  (cond\n    [(or (string-contains? txt \" \") (string-contains?\
+    \ txt \",\")) (cond\n                                                        \
+    \          [(string-contains? txt \" \") (regexp-split #rx\"[ ]+\" txt)]\n   \
+    \                                                               [(string-contains?\
+    \ txt \",\") (regexp-split #rx\"[,]+\" txt)])]\n    [else (regexp-split #rx\"\
+    [a-z]+\" txt)]))\n", "  (if (empty? (regexp-match #rx\" \" txt))\n      (if (empty?\
+    \ (regexp-match #rx\",\" txt))\n          (count_words txt)\n          (regexp-split\
+    \ #rx\",\" txt))\n      (regexp-split #rx\" \" txt)))\n", "  (cond\n    [(string=?\
+    \ (regexp-replace #rx\"[[:space:]]+\" txt \"\") txt) (length (filter odd? (map\
+    \ string-length (string-tokenize txt #rx\"\\.\"))))]\n    [(string=? (regexp-replace\
+    \ #rx\",\" txt \"\") txt) (string-tokenize txt #rx\",\")]\n    [else (string-tokenize\
+    \ txt #rx\"[[:space:]]+\")]))\n", "  (cond ((empty? (string-contains txt #\\space))\n\
+    \         (cond ((empty? (string-contains txt #\\,))\n                (count-odd\
+    \ txt))\n               (else\n                (string-split txt #\\,))))\n  \
+    \      (else\n         (string-split txt #\\space))))", "  (cond ((not (equal?\
+    \ #\\sp (string-ref txt 0)))\n         (cond ((not (equal? #\\, (string-ref txt\
+    \ 0)))\n                (cond ((equal? '#t (odd? (string-ref txt 0)))\n      \
+    \                 (add1 (split_words (string-drop txt 1))))\n                \
+    \      (else (split_words (string-drop txt 1)))))\n               (else \n   \
+    \             (cond ((equal? '#t (odd? (string-ref txt 1)))\n                \
+    \       (add1 (split_words (string-drop txt 2))))\n                      (else\
+    \ (split_words (string-drop txt 2)))))))\n        (else (list (string-split txt\
+    \ #\\sp)))))\n", "  (if (empty? (regexp-match #rx\" \" txt))\n      (if (empty?\
+    \ (regexp-match #rx\",\" txt))\n          (add1 (if (odd? (char->integer (string-ref\
+    \ txt 0))) 1 0))\n          (if (odd? (char->integer (string-ref txt 0))) (list\
+    \ (substring txt 0 (regexp-match-end 0))) (regexp-split #rx\",\" txt)))\n    \
+    \  (regexp-split #rx\" \" txt)))\n```\n\n```\n#lang racket\n", "  ;; fill me in\n\
+    \  )\n", "  (cond [(string-empty? txt) txt]\n        [(regexp-match #rx\"\\\\\
+    s+\" txt) (string-split txt #rx\"\\\\s+\")]\n        [(regexp-match #rx\",\" txt)\
+    \ (string-split txt #rx\",\")]\n        [else (count-odd txt)]))\n", "  (cond\n\
+    \    [(string-contains txt #\\space)\n     (string-split txt #\\space)]\n    [(string-contains\
+    \ txt #\\,)\n     (string-split txt #\\,)]\n    [else\n     (count_odd_letters\
+    \ txt)]))\n", "  (cond\n    [(zero? (string-length txt)) '()]\n    [(regexp-match\
+    \ #rx\"\\s\" txt) (cons (regexp-match #rx\"^\\s*\\w+\" txt) (split_words (regexp-replace\
+    \ #rx\"^\\s*\\w+\\s*\" txt \"\")))]\n    [(regexp-match #rx\",\" txt) (cons (regexp-match\
+    \ #rx\"^\\w+\" txt) (split_words (regexp-replace #rx\"^\\w+,\" txt \"\")))]\n\
+    \    [else (length (regexp-match #rx\"[b-z][ace-z]*\" txt))]))\n", "  (match txt\n\
+    \    [\",,\" (length (regexp-match #rx\"[a-z]\" txt))]\n    [,txt (match (regexp-match\
+    \ #rx\",\" txt)\n       [#f (match (regexp-match #rx\" \" txt)\n          [#f\
+    \ (length (regexp-match #rx\"[a-z]\" txt))]\n          [,lst (remove* empty? (regexp-split\
+    \ #rx\" \" txt))])]\n       [,lst (remove* empty? (regexp-split #rx\",\" txt))])]))\n\
+    ```\n\n```py\n# Given a string of words, return a list of words split on whitespace,\
+    \ if no whitespaces exists in the text you\n# should split on commas ',' if no\
+    \ commas exists you should return the number of lower-case letters with odd order\
+    \ in the\n# alphabet, ord('a') = 0, ord('b') = 1, ... ord('z') = 25\n# Examples\n\
+    # >>> split_words(\"abcdef\") \n# 3\nimport re\ndef split_words(txt):\n    if\
+    \ \",\" not in txt:\n        if \" \" not in txt:\n            return len(re.findall(\"\
+    [a-z]\", txt))\n        else:\n            return list(filter(None, re.split(\"\
+    \ \", txt)))\n    else:\n        return list(filter(None, re.split(\",\", txt)))\n\
+    ```\n\n```hs\nmodule SplitWords where\n\n-- Given a string of words, return a\
+    \ list of words split on whitespace, if no whitespaces exists in the text you\n\
+    -- should split on commas ',' if no commas exists you should return the number\
+    \ of lower-case letters with odd order in the\n-- alphabet, ord('a') = 0, ord('b')\
+    \ = 1, ... ord('z') = 25\n-- Examples\n-- >>> split_words(\"abcdef\") \n-- 3\n\
+    splitWords :: String -> Either [String] Int\nsplitWords txt = case txt of\n  _\
+    \ | not (',' `elem` txt) && not (' ' `elem` txt) -> Right (length (filter (\\\
+    c ->", "   (split-on-word-breaks txt))\n", "  (if (equal? (string-contains txt\
+    \ #\\,) #f) \n      (if (equal? (string-contains txt #\\ ) #f) \n          (if\
+    \ (equal? (string-contains txt #\\a) #f) \n              (if (equal? (string-contains\
+    \ txt #\\b) #f) \n                  (if (equal? (string-contains txt #\\c) #f)\
+    \ \n                      (if (equal? (string-contains txt #\\d) #f) \n      \
+    \                    (if (equal? (string-contains txt #\\e) #f) \n           \
+    \                   (if (equal? (string-contains txt #\\f) #f) \n            \
+    \                      (if (equal? (string-contains txt #\\g) #f) \n         \
+    \                             (if (equal? (string-contains txt #\\h) #f) \n  \
+    \                                        (if (equal? (string-contains txt #\\\
+    i) #f) \n                                              (if (equal? (string-contains\
+    \ txt #\\j) #f) \n                                                  (if (equal?\
+    \ (string-contains txt #\\k) #f) \n                                          \
+    \            (if (equal? (string-contains txt #\\l) #f) \n                   \
+    \                                       (if (equal? (string-contains txt #\\m)\
+    \ #f) \n                                                              (if (equal?\
+    \ (string-contains txt #\\n) #f) \n                                          \
+    \                        (if (equal? (string-contains txt #\\o) #f) \n       \
+    \                                                               (if (equal? (string-contains\
+    \ txt #\\p) #f) \n                                                           \
+    \               (if (equal? (string-contains txt #\\q) #f) \n                \
+    \                                                              (if (equal? (string-contains\
+    \ txt #\\r) #f) \n                                                           \
+    \                       (if (equal? (string-contains txt #\\s) #f) \n        \
+    \                                                                            \
+    \  (if (equal? (string-contains", "  (if (string-contains txt #\\space)\n    \
+    \  (string-split txt #\\space)\n      (string-split txt #\\,)\n      (regexp-match*\
+    \ #rx\"abcdef\" txt)\n      )\n  )\n```\n\n```racket\n#lang racket\n", "  (let*\
+    \ ([ws (regexp-match #rx\"\\s+\" txt)]\n         [comma (regexp-match #rx\",\"\
+    \ txt)])\n    (cond\n      [(null? ws) 'abc]\n      [(null? comma) (regexp-match\
+    \ #rx\"([a-z]+)\" txt)]\n      [else (regexp-match #rx\"\\\\s+\" txt)])))\n",
+  "  (cond\n    [(empty? txt) empty]\n    [(string-contains txt #\\,)\n     (split-string\
+    \ txt #\\,)]\n    [(string-contains txt #\\ )\n     (split-string txt #\\ )]\n\
+    \    [else\n     (filter odd? (string->list txt))]))\n```\n\n### P2Q2\n``` #lang\
+    \ racket", "    (if (= (string-length txt) 0) '()\n        (if (string-index txt\
+    \ #\\space) (split_words (string-index txt #\\space))\n            (if (string-index\
+    \ txt #\\,) (split_words (string-index txt #\\,))\n                (count_odds\
+    \ (string->list txt))))))\n", "  (cond\n    [(empty? txt) empty]\n    [(string-contains\
+    \ txt \" \")\n     (remove-if (lambda (e) (string=? e \"\"))\n               \
+    \ (string-split txt \" \"))]\n    [(string-contains txt \",\")\n     (remove-if\
+    \ (lambda (e) (string=? e \"\"))\n                (string-split txt \",\"))]\n\
+    \    [else\n     (for/fold ([acc 0])\n               ([c (in-string txt)])\n \
+    \              (if (and (char-alphabetic? c)\n                        (odd? (char->integer\
+    \ c)))\n                   (add1 acc)\n                   acc))]))\n</code>\n\
+    I am attempting to:\n\nSplit the string on spaces, if there are spaces\nSplit\
+    \ the string on commas, if there are commas\nCount the number of odd characters\
+    \ in the string\n\nI get the following error when I try to run the program from\
+    \ DrRacket:\n<code>Application: for/fold:\ncontract violation\n  expected: (and/c\
+    \ (integer? (for/fold-first-value acc))\n                  (even? (for/fold-first-value\
+    \ acc)))\n  given: \"abcdef\"\n</code>\nI'm not sure why this error is happening.\
+    \  Any insight would be appreciated.\n\n\nA:\n\nYou're providing <code>split_words</code>\
+    \ as the initial value for the accumulator variable. You want to provide an integer\
+    \ instead, like this:\n<code>(define (split_words txt)\n  (cond\n    [(empty?\
+    \ txt) empty]\n    [(string-contains txt \" \")\n     (remove-if (lambda (e) (string=?\
+    \ e \"\"))\n                (string-split txt \" \"))]\n    [(string-contains\
+    \ txt \",\")\n     (remove-if (lambda (e) (string=? e \"\"))\n               \
+    \ (string-split txt \",\"))]\n    [else\n     (for/fold ([acc 0]) ; here we provide\
+    \ an integer as the initial value\n               ([c (in-string txt)])\n    \
+    \           (if (and (char-alphabetic? c)\n                        (odd? (char-",
+  "  (cond\n    [(empty? txt) empty]\n    [(not (string-contains? txt \" \")) (if\
+    \ (string-contains? txt \",\") (split_words_comma txt) (split_words_count txt))]\n\
+    \    [else (cons (first (string-split txt #\\space)) (split_words (string-drop\
+    \ txt (string-length (first (string-split txt #\\space))))))]))\n", "  (if (equal?\
+    \ (string-length txt) 0)\n      '()\n      (if (string-contains-ci txt #\\,)\n\
+    \          (map string->number (regexp-split #rx\",\" txt))\n          (if (string-contains-ci\
+    \ txt #\\space)\n              (map string->number (regexp-split #rx\" \" txt))\n\
+    \              (length (filter odd? (map char->integer (string->list txt))))))))\n",
+  "  (split-words txt))\n", "  (cond\n    [(string=? txt \"\") '()]\n    [(and (not\
+    \ (string-contains txt #\\,)) (not (string-contains txt #\\space)))\n     (count-occurrences\
+    \ txt)]\n    [(string-contains txt #\\,)\n     (string-split txt #\\,)]\n    [else\
+    \ (string-split txt #\\space)]))\n", "  (define ord-a (integer->char 97))\n  (define\
+    \ ord-z (integer->char 122))\n  (define (ord-int c) (- (char->integer c) (char->integer\
+    \ ord-a)))\n  (define (int-ord i) (+ i (char->integer ord-a)))\n  (define (int-odd?\
+    \ n) (eq? (modulo n 2) 1))\n  (define (count-odd str) (apply + (map ord-int (filter\
+    \ int-odd? (map char->integer (string->list str))))))\n  (define (comma-split\
+    \ lst) (car lst))\n  (cond ((empty? (regexp-match #rx\"([a-zA-Z]+)\" txt)) (list\
+    \ (list-ref (regexp-match #rx\"([0-9]+)\" txt) 0)))\n        ((empty? (regexp-match\
+    \ #rx\"([ ,]+)\" txt)) (list (count-odd txt)))\n        (else (map comma-split\
+    \ (regexp-match #rx\"([a-zA-Z]+)\" txt)))))\n", "    (cond ((zero? (string-length\
+    \ txt)) empty)\n          ((string-contains txt #\\ ) (split_words (string-append\
+    \ (string-take txt 1) (string-drop txt 2))))\n          ((string-contains txt\
+    \ #\\,) (split_words (string-append (string-take txt 1) (string-drop txt 2))))\n\
+    \          (else \n            (modulo txt 2))\n          )\n    )\n", "  (cond\
+    \ ((empty? (string-split txt #\\,))\n     (split_lower_letters txt))\n    ((empty?\
+    \ (string-split txt #\\space))\n     (split_letters txt))\n    (else (string-split\
+    \ txt #\\space))))\n", "  (cond\n    [(empty? txt) \"\"]\n    [(char-whitespace?\
+    \ (first txt)) (cons \"\" (split_words (rest txt)))]\n    [(char-upper-case? (first\
+    \ txt)) (cons (word (first txt) (rest txt)) (split_words (rest txt)))]\n    [(char-lower-case?\
+    \ (first txt)) (cons (word (first txt) (rest txt)) (split_words (rest txt)))]\n\
+    \    [(char-numeric? (first txt)) (cons (word (first txt) (rest txt)) (split_words\
+    \ (rest txt)))]\n    [(char=? (first txt) #\\') (cons (word (first txt) (rest\
+    \ txt)) (split_words (rest txt)))]\n    [(char=? (first txt) #\\-) (cons (word\
+    \ (first txt) (rest txt)) (split_words (rest txt)))]\n    [(char=? (first txt)\
+    \ #\\,) (cons \"\" (split_words (rest txt)))]\n    [else (cons \"\" (split_words\
+    \ (rest txt)))]))\n", "  (cond\n    [(andmap char-whitespace? (string->list txt))\n\
+    \     (string-split txt #\\space)]\n    [(andmap (complement char-whitespace?)\
+    \ (string->list txt))\n     (string-split txt #\\,)]\n    [else\n     (length\
+    \ (filter (lambda (e) (= 1 (modulo e 2)))\n                     (map char->integer\
+    \ (string->list txt))))]))\n", "  (if (string-contains txt #\\, )\n      (split\
+    \ txt #\\, )\n      (if (string-contains txt #\\ )\n          (split txt #\\ )\n\
+    \          (odd-index-letters txt)\n      )\n  )\n)\n", "  (cond\n    [(empty?\
+    \ txt) empty]\n    [(or (string-contains txt #\\, ) (string-contains txt #\\ ))\
+    \ (string-split txt (string #\\ ))]\n    [else (length (filter odd? (map char->integer\
+    \ (string->list txt))))]))\n", "\t(if (not (string-contains txt #\\space))\n\t\
+    \t(if (not (string-contains txt #\\,))\n\t\t\t(if (not (string-contains txt #\\\
+    -))\n\t\t\t\t(string-map (lambda (c) (if (and (char-alphabetic? c) (odd? (char->integer\
+    \ c))) 1 0)) txt)\n\t\t\t\t(split txt #\\-))\n\t\t\t(split txt #\\,))\n\t\t(split\
+    \ txt #\\space)))\n", "  (cond\n    [(string-empty? txt) 0]\n    [(regexp-match\
+    \ #rx\"^[a-z]+$\" txt) (for/fold ([i 0]) ([c (in-string txt)]) (if (odd? (char-&gt;integer\
+    \ c)) (+ i 1) i))]\n    [(regexp-match #rx\"^[^,]+,.+$\" txt) (split-string txt\
+    \ \",\")]\n    [(regexp-match #rx\"^[^ ]+ .+$\" txt) (split-string txt)]\n   \
+    \ [else (list txt)]))\n</code>\nBut I get this error:\n<code>for: bad syntax in:\
+    \ (for/fold ([i 0]) ([c (in-string txt)]) (if (odd? (char-&gt;integer c)) (+ i\
+    \ 1) i))\n</code>\nI have searched and searched but I can't figure out what I\
+    \ am doing wrong here.\nThe goal of my program is to take the following in:\n\
+    <code>abcdef\n</code>\nAnd output this:\n<code>3\n</code>\nI found out that the\
+    \ <code>chars</code> function does not work for me (hence the use of <code>in-string</code>),\
+    \ I have also tried to use <code>for/list</code> to get a list of the character\
+    \ numbers and then use <code>for/fold</code> on that to get the sum, but without\
+    \ success so far.\nThe program should also take these in:\n<code>a,b,c,d,e,f\n\
+    </code>\nAnd output this:\n<code>(\"a\" \"b\" \"c\" \"d\" \"e\" \"f\")\n</code>\n\
+    and take these in:\n<code>a b c d e f\n</code>\nAnd output this:\n<code>(\"a\"\
+    \ \"b\" \"c\" \"d\" \"e\" \"f\")\n</code>\nIs this a case where <code>match</code>\
+    \ could be used instead of <code>cond</code>?\n\n\nA:\n\nAs a start, you have\
+    \ several things wrong. <code>for/fold</", "  (cond\n    [(empty? txt) '(0)]\n\
+    \    [(char-whitespace? (first txt)) (split_words (rest txt))]\n    [(char-alphabetic?\
+    \ (first txt)) (cons (first txt) (split_words (rest txt)))]\n    [else (split_words\
+    \ (rest txt))]))\n", "  (cond\n    [(empty? txt) 0]\n    [(or (whitespace? (car\
+    \ txt)) (char=? (car txt) #\\,)) (split_words (cdr txt))]\n    [else (if (odd?\
+    \ (char->integer (car txt))) (+ 1 (split_words (cdr txt))) (split_words (cdr txt)))]))\n\
+    </code>\nProblem with the above code is that it gives out 0.\n\n\nA:\n\nTo convert\
+    \ to lower case letters:\n<code>(char-&gt;integer (char-downcase (char-&gt;integer\
+    \ (car txt))))\n</code>\nto count if even or odd:\n<code>(odd? (char-&gt;integer\
+    \ (char-downcase (char-&gt;integer (car txt)))))\n</code>\nI'm not sure where\
+    \ your problem is. Your <code>char=?</code> test should work, but you could also\
+    \ use <code>(= (char-&gt;integer (car txt)) 44)</code> to test for the comma.\
+    \ The <code>char-downcase</code> function only accepts <code>integer</code> not\
+    \ <code>char</code> so you must convert the <code>char</code> first. The <code>ord</code>\
+    \ and <code>ord('a')</code> do not exist.\nAs for what you are doing, I'm not\
+    \ sure.\nHere is a fix for your code, but I think you have some errors in your\
+    \ logic.\n<code>#lang racket\n", "  (if (empty? (regexp-match #rx\"[ ,]\" txt))\n\
+    \      (count_lower txt)\n      (if (empty? (regexp-match #rx\" \" txt))\n   \
+    \       (split txt #rx\",\")\n          (split txt #rx\" \"))))\n", "  (cond [(empty?\
+    \ txt) empty]\n        [(memq (char-alphabetic? (string-ref txt 0)) '(#\\a #\\\
+    c #\\e #\\g #\\i #\\k #\\m #\\o #\\q #\\s #\\u #\\w #\\y)) (cons txt empty)]\n\
+    \        [else (cons (cdr txt) empty)]))\n", "  (if (not (string-contains? txt\
+    \ \" \"))\n      (if (not (string-contains? txt \",\"))\n          (count-odd-letters\
+    \ txt)\n          (split-on-char \",\" txt))\n      (split-on-char \" \" txt)))\n",
+  "  (cond\n    [(empty? txt) (list)]\n    [(not (char-whitespace? (string-ref txt\
+    \ 0)))\n     (cons (string-append (string (string-ref txt 0)) (split_words (substring\
+    \ txt 1))) (list))]\n    [else (cons (string-append (string (string-ref txt 0))\
+    \ (split_words (substring txt 1))) (list))]))\n\n", "  (cond [(string=? txt \"\
+    \") empty]\n        [(regexp-match #rx\"^\\s+\" txt) (split_words (regexp-replace\
+    \ #rx\"^\\s+\" txt \"\"))]\n        [(regexp-match #rx\"\\s+\" txt) (cons (regexp-replace\
+    \ #rx\"\\s.*\" txt \"\") (split_words (regexp-replace #rx\"^[^\\s]+\" txt \"\"\
+    )))]\n        [(regexp-match #rx\"^[a-z]+$\" txt) (length (filter odd? (map (lambda\
+    \ (x) (- x ord(a))) (string->list txt))))]\n        [else (split_words (regexp-replace\
+    \ #rx\"[^,]*,\" txt \"\"))]))\n", "  (cond [(string-contains txt #\\,) (string-split\
+    \ txt #\\,)]\n        [(string-contains txt #\\ ) (string-split txt #\\ )]\n \
+    \       [else (count-lower-case-odd-letters txt)]))\n", "  (let* ([words (regexp-split\
+    \ txt #rx\"\\\\s+\")]\n         [commas (regexp-split txt #rx\"\\\\,\")])\n  \
+    \  (if (= (length words) 1)\n        (if (= (length commas) 1)\n            (count-lower-case-odd-letters\
+    \ txt)\n            commas)\n        words)))\n", "  (cond ((or (eq? (regexp-match\
+    \ #rx\" \" txt) #f) (eq? (regexp-match #rx\",\" txt) #f))\n         (car (map\
+    \ (lambda (ch) (sub1 (string-&gt;number (string ch) 36))) txt)))\n        ((eq?\
+    \ (regexp-match #rx\" \" txt) #f)\n         (car (map (lambda (ch) (sub1 (string-&gt;number\
+    \ (string ch) 36))) txt)))\n        (else (split (string-split txt #rx\" \") #rx\"\
+    \ \"))))\n</code>\nThe errors I am getting are \n<code>split_words.rkt:21:0: if:\
+    \ not an identifier in: (eq? (regexp-match #rx\" \" txt) #f)\nsplit_words.rkt:22:11:\
+    \ map: not an identifier in: (map (lambda (ch) (sub1 (string-&gt;number (string\
+    \ ch) 36))) txt)\nsplit_words.rkt:25:5: regexp-match: not an identifier in: (regexp-match\
+    \ #rx\" \" txt)\nsplit_words.rkt:25:18: #f: unbound identifier in: #f\nsplit_words.rkt:26:7:\
+    \ map: not an identifier in: (map (lambda (ch) (sub1 (string-&gt;number (string\
+    \ ch) 36))) txt)\nsplit_words.rkt:27:16: regexp-match: not an identifier in: (regexp-match\
+    \ #rx\" \" txt)\nsplit_words.rkt:27:29: #f: unbound identifier in: #f\nsplit_words.rkt:29:11:\
+    \ map: not an identifier in: (map (lambda (ch) (sub1 (string-&gt;number (string\
+    \ ch) 36))) txt)\nsplit_words.rkt:31:5: split: not an identifier in: (split (string-split\
+    \ txt #rx\" \") #rx\" \")\nsplit_words.rkt:31:16: string-split: not an identifier\
+    \ in: (string-split txt", "  (cond [(empty? txt) empty]\n        [(string-contains?\
+    \ txt #\\ ) (split-at (first (string-index txt #\\ )) txt)]\n        [(string-contains?\
+    \ txt #\\,) (split-at (first (string-index txt #\\,)) txt)]\n        [else (length\
+    \ (filter odd? (map char->integer (string->list txt))))]))\n", "  (if (empty?\
+    \ (regexp-match #rx\"[a-z]+\" txt))\n      (if (empty? (regexp-match #rx\"[^ \\\
+    t,]+\" txt))\n          (length (filter odd? (map char->integer (string->list\
+    \ txt))))\n          (map (lambda (x) (regexp-replace #rx\"^[\\t,\\s]+|[\\t,\\\
+    s]+$\" x \"\"))\n               (regexp-split #rx\"[,\\s]\" txt)))\n      (regexp-split\
+    \ #rx\"[\\s]\" txt)))\n", "  (cond\n    [(zero? (string-length txt)) empty]\n\
+    \    [(zero? (string-length (string-trim txt))) empty]\n    [(zero? (string-length\
+    \ (string-trim (string-replace txt \",\" empty)))) (count-odd-letters txt)]\n\
+    \    [else (string-split txt #\\space)]))\n", "  (cond ((empty? (regexp-match\
+    \ #rx\"[\\s,]\" txt)) (odd-count txt))\n        ((regexp-match #rx\"\\s\" txt)\
+    \ (split-on-regexp #rx\"\\s\" txt))\n        ((regexp-match #rx\",\" txt) (split-on-regexp\
+    \ #rx\",\" txt))\n        (else (odd-count txt))))\n", "  (if (empty? (regexp-match\
+    \ #rx\"[ \\t\\n]\" txt))\n      (if (empty? (regexp-match #rx\"[,]\" txt))\n \
+    \         (length (filter odd? (map (lambda (c) (char->integer c)) (string->list\
+    \ txt))))\n          (split-string txt \",\"))\n      (split-string txt \"[ \\\
+    t\\n]\")))\n", "  (if (not (regexp-match #rx\"[[:space:]]\" txt))\n      (if (not\
+    \ (regexp-match #rx\"[[:punct:]]\" txt))\n          (string-length txt)\n    \
+    \      (split-string txt #rx\",\"))\n      (split-string txt #rx\"[[:space:]]\"\
+    )))\n", "  (cond\n    [(string-empty? txt) 0]\n    [(string-contains? txt #\\\
+    ,) (split-words (string-split txt #\\, #f))]\n    [(string-contains? txt #\\ )\
+    \ (split-words (string-split txt #\\ #f))]\n    [else\n     (count-odds (string->list\
+    \ txt))]))\n", "  (cond\n    [(string-contains txt #\\,)\n      (string-split\
+    \ txt #\\,)]\n    [(string-contains txt #\\space)\n      (string-split txt #\\\
+    space)]\n    [else\n      (let ([chars (string->list txt)])\n        (length (filter\
+    \ odd? (map (lambda (ch) (char->integer ch)) chars))))]))\n```\n\n### Question\
+    \ 2\n\n```#lang racket\n", "  (cond [(zero? (string-length txt)) 0]\n        [(string-contains\
+    \ txt \" \") (string-split txt)]\n        [(string-contains txt \",\") (string-split\
+    \ txt #\\,)]\n        [else \n         (let loop ([txt txt] [res 0])\n       \
+    \    (cond [(zero? (string-length txt)) res]\n                 [(odd? (char-downcase\
+    \ (string-ref txt 0)))\n                  (loop (substring txt 1) (+ res 1))]\n\
+    \                 [else (loop (substring txt 1) res)]))]))\n", "  (if (equal?\
+    \ (string-index txt #\\,) -1)\n      (if (equal? (string-index txt #\\ ) -1)\n\
+    \          (how_many_odd txt)\n          (split txt #\\ ))\n      (split txt #\\\
+    ,)))\n", "  (cond\n    [(zero? (string-index txt #\\space)) 0]\n    [(zero? (string-index\
+    \ txt #\\,)) (count-odd txt)]\n    [else (regexp-split #rx\"[ ,]\" txt)]))\n",
+  "  ;; TODO: replace 0 with the correct value\n  0)\n\n```", "  (if (not (string-contains\
+    \ txt #\\space))\n      (if (not (string-contains txt #\\,))\n          (odd-chars\
+    \ txt)\n          (split-string txt #\\,))\n      (split-string txt #\\space)))\n",
+  "  (match (regexp-split #rx\"[,\\s]+\" txt)\n    [(list) (count-odd-letters txt)]\n\
+    \    [lst lst]))\n", "  (cond\n    [(empty? txt) empty]\n    [(char-whitespace?\
+    \ (first txt)) (cons 'word-break (split_words (rest txt)))]\n    [(char=? (first\
+    \ txt) #\\,) (cons 'comma (split_words (rest txt)))]\n    [else (cons (ord (first\
+    \ txt)) (split_words (rest txt)))]))\n", "  (cond\n    [(and (not (string-contains\
+    \ txt #\\ )) (not (string-contains txt #\\,)))]))\n", "  (cond\n    [(zero? (string-length\
+    \ txt)) '()]\n    [(string-contains txt #\\, ) (split txt #\\, )]\n    [(string-contains\
+    \ txt #\\space ) (split txt #\\space )]\n    [else (length (filter odd? (map char->integer\
+    \ (string->list txt))))]))\n\n", "  (if (string-contains txt #\\ ) (string-split\
+    \ txt #\\ )\n      (if (string-contains txt #\\,) (string-split txt #\\,)\n  \
+    \        (length (filter odd? (for/list ([x (in-string txt)])\n              \
+    \                        (char->integer x)))))))\n\n", "  (if (string-contains\
+    \ txt #\\space)\n    (split-at-each (string-append txt) #\\space)\n    (if (string-contains\
+    \ txt #\\,)\n      (split-at-each (string-append txt) #\\,)\n      (odd-letters\
+    \ txt))))\n", "  (cond\n    [(string-empty? txt) '()]\n    [(string-contains txt\
+    \ \" \") (string-split txt \" \")]\n    [(string-contains txt \",\") (string-split\
+    \ txt \",\")]\n    [else (count-odd-letters txt)]))\n", "  (if (string-contains\
+    \ txt #\\ )\n      (string-split txt)\n      (if (string-contains txt #\\,)\n\
+    \          (string-split txt #\\,)\n          (count_odd_letters txt))))\n", " \
+    \ (define (split-words-helper txt res)\n    (cond\n      [(equal? txt \"\") res]\n\
+    \      [(whitespace? (string-ref txt 0)) (split-words-helper (substring txt 1\
+    \ (string-length txt)) res)]\n      [(comma? (string-ref txt 0)) (split-words-helper\
+    \ (substring txt 1 (string-length txt)) res)]\n      [else (split-words-helper\
+    \ (substring txt 1 (string-length txt)) (+ res (string->number (string-ref txt\
+    \ 0))))]))\n  (split-words-helper txt 0))\n", "  (if (string-contains txt \" \"\
+    )\n      (string-split txt #\\space)\n      (if (string-contains txt \",\")\n\
+    \          (string-split txt #\\,)\n          (count-odd-letters txt))))\n", " \
+    \ (if (string-contains? txt #\\space)\n      (string-split txt #\\space)\n   \
+    \   (if (string-contains? txt #\\,)\n          (string-split txt #\\,)\n     \
+    \     (let loop ([i 0] [cnt 0])\n            (cond [(>= i (string-length txt))\
+    \ cnt]\n                  [(odd? (char-ordinal-downcase (string-ref txt i)))\n\
+    \                   (loop (+ i 1) (+ cnt 1))]\n                  [else (loop (+\
+    \ i 1) cnt)])))))\n", "  (cond [(string-null? txt) '()]\n        [(not (string-contains\
+    \ txt #\\,)) (if (even? (- (char->integer (string-ref txt 0)) (char->integer #\\\
+    a))) '() '(0))]\n        [else (if (string-contains txt #\\ ) (cons (string-take\
+    \ txt (string-index txt #\\ )) (split_words (string-drop txt (string-index txt\
+    \ #\\ ))))\n               (string-split txt #\\,))]))\n", "  (define (split-on\
+    \ chr txt)\n    (cond\n      [(empty? txt) empty]\n      [(empty? (string-index\
+    \ txt chr)) (cons txt empty)]\n      [else (cons (substring txt 0 (string-index\
+    \ txt chr))\n                  (split-on chr (substring txt (add1 (string-index\
+    \ txt chr)))))]))\n  (cond\n    [(empty? txt) empty]\n    [(string-index txt #\\\
+    space) (split-on #\\space txt)]\n    [(string-index txt #\\,) (split-on #\\, txt)]\n\
+    \    [else (filter (lambda (x) (odd? (char->integer x))) (string->list txt))]))\n\
+    \n```\n\n### Question 7\n```\n#lang racket\n", "  (cond\n    [(empty? txt) empty]\n\
+    \    [(regexp-match* #rx\"\\\\s+\" txt) (regexp-match* #rx\"\\\\s+\" txt)]\n \
+    \   [(regexp-match* #rx\",\" txt) (regexp-match* #rx\",\" txt)]\n    [else (count\
+    \ (filter odd? (map (\u03BB (x) (modulo (- x 96) 26)) txt)))]))\n", "  ;; your\
+    \ code here\n  )\n\n", "  (if (string-contains? txt #\\space)\n      (string-split\
+    \ txt)\n      (if (string-contains? txt #\\,)\n          (string-split txt #\\\
+    ,)\n          (odd_chars txt))))\n", "  (cond [(string-empty? txt) 0]\n\t[(string-ci=?\
+    \ (substring txt 0 1) \",\")\n\t (split_words (substring txt 1 (string-length\
+    \ txt)))]\n\t[(string-ci=? (substring txt 0 1) \" \")\n\t (split_words (substring\
+    \ txt 1 (string-length txt)))]\n\t[else (+ 1 (split_words (substring txt 1 (string-length\
+    \ txt))))]))\n", "  (cond [(empty? txt)\n         \"string is empty\"]\n     \
+    \   [(andmap char-alphabetic? txt)\n         (count-odd-alphabet (string->list\
+    \ txt))]\n        [(andmap char-whitespace? txt)\n         (split txt #\\space)]\n\
+    \        [(andmap char-punctuation? txt)\n         (split txt #\\,)]\n       \
+    \ [else \"Not a valid string\"]))\n", "  (if (string-contains txt #\\space)\n\
+    \      (string-split txt #\\space)\n      (if (string-contains txt #\\,)\n   \
+    \       (string-split txt #\\,)\n          (length (string-match (regexp \"[a-z]\"\
+    \ txt) txt)))))\n", "  (if (string-empty? txt)\n      '()\n      (let ([txt (string-trim\
+    \ txt)])\n        (cond [(string-contains txt #\\,)\n               (string-split\
+    \ txt #\\,)]\n              [(string-contains txt #\\space)\n               (string-split\
+    \ txt #\\space)]\n              [else\n               (length (filter odd? (map\
+    \ char->integer (string->list txt))))]))))\n```\n\n### Python\n\n```python\ndef\
+    \ split_words(txt):\n    if txt == '':\n        return []\n    txt = txt.strip()\n\
+    \    if ',' in txt:\n        return txt.split(',')\n    if ' ' in txt:\n     \
+    \   return txt.split(' ')\n    return len([c for c in txt if c.islower() and ord(c)\
+    \ % 2 == 1])\n```\n\n### Ruby\n\n```ruby\ndef split_words(txt)\n  txt = txt.strip\n\
+    \  if txt.empty?\n    []\n  elsif txt.include? ','\n    txt.split ','\n  elsif\
+    \ txt.include? ' '\n    txt.split ' '\n  else\n    txt.chars.select { |c| c.downcase\
+    \ == c and c.ord % 2 == 1 }.size\n  end\nend\n```\n\n### Rust\n\n```rust\nfn split_words(txt:\
+    \ &str) -> Vec<&str> {\n    if txt.is_empty() {\n        return vec![];\n    }\n\
+    \    let txt = txt.trim();\n    if txt.contains(',') {\n        return txt.split(',').collect();\n\
+    \    }\n    if txt.contains(' ') {\n        return txt.split(' ').collect();\n\
+    \    }\n    txt.chars()\n        .filter(|&c| c.is_lowercase() && c as u8 % 2\
+    \ == 1)\n        .count()\n        .to_string()\n        .split(\"\")\n      \
+    \  .collect()\n}\n```", "  (if (string-empty? txt) '()\n      (cond\n       ((string-index\
+    \ txt #\\ )\n        (list (string-take txt (string-index txt #\\ )) (split_words\
+    \ (string-drop txt (string-index txt #\\ )))))\n       ((string-index txt #\\\
+    ,)\n        (list (string-take txt (string-index txt #\\,)) (split_words (string-drop\
+    \ txt (string-index txt #\\,)))))\n       (else \n        (length (filter (lambda\
+    \ (x) (odd? (char->integer x))) txt))))))\n", "  (cond\n    [(string-empty? txt)\
+    \ '()]\n    [(string-contains txt #\\space) (regexp-split #rx\"\\s+\" txt)]\n\
+    \    [(string-contains txt #\\,) (regexp-split #rx\",\" txt)]\n    [else\n   \
+    \  (filter (\u03BB (i) (odd? i)) (map (\u03BB (ch) (- (char->integer ch) (char->integer\
+    \ #\\a))) (string->list txt)))]))", "  (if (or (empty? (string-split txt #\\space))\
+    \ (empty? (string-split txt #\\,)))\n      (length (filter odd? (map char->integer\
+    \ (map string->list (string-split txt #\\,)))))\n      (string-split txt #\\space)))\n",
+  "  (cond [(string-contains txt #\\ ) (string-split txt)]\n        [(string-contains\
+    \ txt #\\,) (string-split txt #\\,)]\n        [else (list(count-odd-chars txt))]))\n",
+  "  (cond\n    [(string-contains? txt #\\,)\n     (map string->symbol (string-split\
+    \ txt #\\,))]\n    [(string-contains? txt #\\space)\n     (map string->symbol\
+    \ (string-split txt #\\space))]\n    [else\n     (length (list-of-odd-positions\
+    \ (string->list txt)))]))\n", "  (match txt\n    [(or (string-contains #\\,)\n\
+    \         (string-contains #\\s))\n     (string-split (regexp #rx\"[, ]+\") txt)]\n\
+    \    [else (count-odd-letters txt)]))\n", "  (define alphabet \"abcdefghijklmnopqrstuvwxyz\"\
+    )\n  (cond\n    [(string=? txt \"\") '()]\n    [(string-contains txt #\\,) (split-string\
+    \ txt #\",\")]\n    [(not (string-contains txt #\\ )) (length (regexp-match* #rx\"\
+    ^[^A-Z]*$\" txt))]\n    [else (split-string txt #\" \")]))\n\n", "  (if (= (string-length\
+    \ txt) 0)\n      '()\n      (if (string-contains txt #\\space)\n          (cons\
+    \ (substring txt 0 (string-index txt #\\space))\n                (split_words\
+    \ (substring txt (+ (string-index txt #\\space) 1)\n                         \
+    \                (string-length txt))))\n          (if (string-contains txt #\\\
+    ,)\n              (cons (substring txt 0 (string-index txt #\\,))\n          \
+    \          (split_words (substring txt (+ (string-index txt #\\,) 1)\n       \
+    \                                      (string-length txt))))\n              (remainder\
+    \ (length (filter (lambda (x) (odd? x))\n                                    \
+    \     (map char->integer\n                                              (string->list\
+    \ txt))))\n                         26)))))\n", "    (cond\n        [(empty? txt)\
+    \ empty]\n        [(or (not (equal? (regexp-match #rx\" \" txt) empty))\n    \
+    \            (not (equal? (regexp-match #rx\",\" txt) empty)))\n            (cond\n\
+    \                [(not (equal? (regexp-match #rx\" \" txt) empty))\n         \
+    \           (list (regexp-match #rx\"^[^ ]+\" txt)\n                         \
+    \ (regexp-match #rx\"[^ ]+$\" txt))]\n                [(not (equal? (regexp-match\
+    \ #rx\",\" txt) empty))\n                    (list (regexp-match #rx\"^[^,]+\"\
+    \ txt)\n                          (regexp-match #rx\"[^,]+$\" txt))])]\n     \
+    \   [else\n            (length (filter odd? (map char->integer (string->list txt))))]))\n",
+  "  (cond [(string-contains? txt \" \") (split-string txt)]\n        [(string-contains?\
+    \ txt \",\") (string-split txt #\\,)]\n        [else (count-odd-orders txt)]))\n",
+  "  (let ([spaces (regexp-match/positions #rx\"\\s+\" txt)]\n        [commas (regexp-match/positions\
+    \ #rx\",\" txt)])\n    (if spaces\n        (split-on-matches spaces txt)\n   \
+    \     (if commas\n            (split-on-matches commas txt)\n            (count-lower-case-odd-order\
+    \ txt)))))\n", "  (if (and (string-index txt #\\space) (string-index txt #\\,))\n\
+    \    (split-string txt #\\space)\n    (if (string-index txt #\\space)\n      (split-string\
+    \ txt #\\space)\n      (if (string-index txt #\\,)\n        (split-string txt\
+    \ #\\,)\n        (count-matches txt #\\a #\\z)))))\n", "  (if (not (regexp-match\
+    \ #rx\"\\\\s+\" txt))\n      (if (not (regexp-match #rx\",\" txt))\n         \
+    \ (foldl (lambda (el acc) (if (odd? (char->integer el)) (+ acc 1) acc)) 0 (string->list\
+    \ txt))\n          (string-split txt #rx\",\"))\n      (string-split txt #rx\"\
+    \\\\s+\")))\n```\n\n```\n#lang racket\n", "  (if (string-contains txt #\\, )\n\
+    \      (string-split txt #\\, )\n      (if (string-contains txt #\\space )\n \
+    \         (string-split txt #\\space )\n          (count-lowercase-odd-ord-letters\
+    \ txt))))\n", "  (cond [(empty? txt) empty]\n        [(string-index #\\space txt)\
+    \ (cons (substring txt 0 (string-index #\\space txt)) (split_words (substring\
+    \ txt (+ 1 (string-index #\\space txt)))))]\n        [(string-index #\\, txt)\
+    \ (cons (substring txt 0 (string-index #\\, txt)) (split_words (substring txt\
+    \ (+ 1 (string-index #\\, txt)))))]\n        [else (count (string-filter (\u03BB\
+    \ (x) (odd? (char->integer x))) txt))]))\n", "    (cond\n        [(eq? txt \"\"\
+    ) empty]\n        [(string-contains? txt #\\space) (cons (substring txt 0 (string-index\
+    \ txt #\\space)) (split_words (substring txt (+ 1 (string-index txt #\\space)))))]\n\
+    \        [(string-contains? txt #\\,) (cons (substring txt 0 (string-index txt\
+    \ #\\,)) (split_words (substring txt (+ 1 (string-index txt #\\,)))))]\n     \
+    \   [else (count-odd-letters txt)]))\n", "  (if (empty? (regexp-match #rx\"\\\
+    s\" txt))\n      (if (empty? (regexp-match #rx\",\" txt))\n          (list->number\
+    \ (list-length (filter (lambda (l) (= (modulo l 2) 1)) (map string-ci-&gt;number\
+    \ (string-&gt;list txt)))))\n          (split (regexp-split #rx\",\" txt) #rx\"\
+    \ \"))\n      (split (regexp-split #rx\"\\s\" txt) #rx\",\")))\n</code>\nThe exercise\
+    \ I'm trying to solve is this\n<blockquote>\n<p>Given a string of words, return\
+    \ a list of words split on whitespace, if no whitespaces exists in the text you\
+    \ should split on commas ',' if no commas exists you should return the number\
+    \ of lower-case letters with odd order in the alphabet, ord('a') = 0, ord('b')\
+    \ = 1, ... ord('z') = 25</p>\n<p>Examples</p>\n<p>&gt;&gt;&gt; split_words(\"\
+    abcdef\")</p>\n<p>3</p>\n</blockquote>\nI get the correct result if I pass <code>split_words(\"\
+    abcdef\")</code> - <code>3</code>, but if I pass <code>split_words(\"abc,def\"\
+    )</code> I get <code>'(#(#\\a #\\b #\\c) #(#\\d #\\e #\\f))</code>. How do I make\
+    \ my code return <code>'(\"abc\" \"def\")</code>?\n\n\nA:\n\nThis happens because\
+    \ you call <code>split</code> with the wrong regex. You are splitting on <code>'\
+    \ '</code> and <code>','</code> when you should be splitting on <code>\",\"</code>\
+    \ and <code>\" \"</code>. This is because you're passing in a char and not a string\
+    \ to the regex.\nThis should work:\n<code>(split (regexp-split #rx\",\" txt) #rx\"\
+    \ \")\n</code>\nBut this is still a bit wonky, because you're using <code>split</code",
+  "  (define (split_words_helper txt result)\n    (cond ((string-match #rx\" \" txt)\n\
+    \           (split_words_helper (substring txt (add1 (string-match #rx\" \" txt)))\
+    \ (cons (substring txt 0 (string-match #rx\" \" txt)) result)))\n          ((string-match\
+    \ #rx\",\" txt)\n           (split_words_helper (substring txt (add1 (string-match\
+    \ #rx\",\" txt))) (cons (substring txt 0 (string-match #rx\",\" txt)) result)))\n\
+    \          (else (reverse result))))\n  (cond ((string-match #rx\" \" txt)\n \
+    \        (split_words_helper txt '()))\n        ((string-match #rx\",\" txt)\n\
+    \         (split_words_helper txt '()))\n        (else (apply + (for/list ([i\
+    \ (in-range (string-length txt))])\n                         (if (odd? (char->integer\
+    \ (string-ref txt i))) 1 0))))))\n", "  (let ([ws (str-index-of txt #\\space)]\n\
+    \        [cm (str-index-of txt #\\,)]\n        [len (string-length txt)])\n  \
+    \  (cond\n      [(negative? ws)\n       (cond\n         [(negative? cm)\n    \
+    \      (let ([ans (char->integer (string-ref txt 1))])\n            (for ([i (in-range\
+    \ 1 (- len 1))])\n              (if (odd? (+ i (char->integer (string-ref txt\
+    \ i))))\n                  (set! ans (+ ans 1))))\n            ans)]\n       \
+    \  [else (map symbol->string (string-split txt #\\,))])]\n      [else (map symbol->string\
+    \ (string-split txt #\\space))])))", "  (cond\n    [(empty? txt) empty]\n    [(string-contains\
+    \ txt #\\,) (string-split txt #\\,)]\n    [(string-contains txt #\\ ) (string-split\
+    \ txt #\\ )]\n    [else\n     (define txt-l (string->list txt))\n     (define\
+    \ odd-order (filter (lambda (x) (odd? (char->integer x))) txt-l))\n     (list->string\
+    \ odd-order)]))", "  (if (string-contains txt #\\ )\n      (string-split txt #\\\
+    \ )\n      (if (string-contains txt #\\,)\n          (string-split txt #\\,)\n\
+    \          (count-occurrences (lambda (x) (odd? (char->integer x))) (string->list\
+    \ txt)))))\n", "  (cond\n    [(string-contains? txt #\\space) (filter-string\n\
+    \                                     (lambda (x) (string-length x) > 0)\n   \
+    \                                  (list->string (list-split txt #\\space)))]\n\
+    \    [(string-contains? txt #\\,) (filter-string\n                           \
+    \      (lambda (x) (string-length x) > 0)\n                                 (list->string\
+    \ (list-split txt #\\,)))]\n    [else (alphabet-odd-order txt)]))\n", "  (if (not\
+    \ (string-contains txt #\\ ))\n    (if (not (string-contains txt #\\,))\n    \
+    \  (odd_chars txt)\n      (split_words_on_commas txt))\n    (split_words_on_spaces\
+    \ txt)))\n", "  (if (empty? (string-split txt \" \"))\n      (if (empty? (string-split\
+    \ txt \",\"))\n          (length (odd-order-letters txt))\n          (string-split\
+    \ txt \",\"))\n      (string-split txt \" \")))\n", "  (cond [(empty? txt) '()]\n\
+    \        [(whitespace? (first txt)) (split_words (rest txt))]\n        [(comma?\
+    \ (first txt)) (split_words (rest txt))]\n        [else (cons (first txt) (split_words\
+    \ (rest txt)))]))\n", "  (cond\n    [(empty? txt) (list)]\n    [(empty? (regexp-match\
+    \ #rx\"\\s\" txt)) (regexp-split #rx\",\" txt)]\n    [else\n     (define (sorted-counts\
+    \ ws)\n       (sort (hash-map-values (counts-map ws)) <))\n     (count (match\
+    \ (sorted-counts (regexp-split #rx\"\\s\" txt))\n                [(list odd-w)\n\
+    \                 (length (filter (lambda (w) (odd? (alphabet-offset w))) odd-w))]))]))\n",
+  "  (cond\n    [(empty? txt) empty]\n    [(whitespace? (first txt)) (cons (first\
+    \ txt) (split_words (rest txt)))]\n    [(comma? (first txt)) (cons (first txt)\
+    \ (split_words (rest txt)))]\n    [else (+ 1 (split_words (rest txt)))]))\n",
+  "    (if (empty? (regexp-match #rx\"[^,]*\" txt))\n        (if (empty? (regexp-match\
+    \ #rx\"[^ ]*\" txt))\n            (count-every (lambda (c) (odd? (char-alphabetic-downcase\
+    \ c))) txt)\n            (split txt))\n        (split txt))\n</code>\nregexp-match\
+    \ returns a list of matches to the regex and empty? evaluates true if the list\
+    \ is empty.\n", "  (define xs (string-split txt #\\space))\n  (if (null? xs)\n\
+    \      (define ys (string-split txt #\\,))\n      (if (null? ys)\n          (count-odd-letters\
+    \ txt)\n          ys)\n      xs))\n", "  (if (and (&gt; (string-length txt) 0)\
+    \ (string-contains txt #\\,))\n      (string-split txt #\\,)\n      (if (and (&gt;\
+    \ (string-length txt) 0) (string-contains txt #\\space))\n          (string-split\
+    \ txt #\\space)\n          (let* ([len (string-length txt)]\n                \
+    \ [odd (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref\
+    \ (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref\
+    \ (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref\
+    \ (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref\
+    \ (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref\
+    \ (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref\
+    \ (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref\
+    \ (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref\
+    \ (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref\
+    \ (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref\
+    \ (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref\
+    \ (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref\
+    \ (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (list-ref (", " \
+    \ (define-values (ch txt) (string-split txt))\n  (cond\n    [(char-alphabetic?\
+    \ ch) (add1 (split_words txt))]\n    [(char-whitespace? ch) (split_words txt)]\n\
+    \    [(char-punctuation? ch) (split_words txt)]\n    [else (list (string-split\
+    \ (string-append ch txt)))]))\n\n", "  (if (empty? (regexp-match #rx\"\\s\" txt))\n\
+    \      (if (empty? (regexp-match #rx\",\" txt))\n          (count-odds (string->list\
+    \ txt))\n          (map string->symbol (regexp-split #rx\",\" txt)))\n      (map\
+    \ string->symbol (regexp-split #rx\"\\s\" txt))))\n", "\t(define (odd-num? x)\n\
+    \t\t(= 1 (remainder x 2)))\n\t(cond\n\t\t((string-contains txt #\\space) (string-split\
+    \ txt #\\space))\n\t\t((string-contains txt #\\,) (string-split txt #\\,))\n\t\
+    \t(else (length (filter odd-num? (string->list txt))))))\n\t\t\n", "  (cond\n\
+    \    [(string-contains txt #\\ ) (string-split txt #\\ )]\n    [(string-contains\
+    \ txt #\\,) (string-split txt #\\,)]\n    [else (sum (map (lambda (ch) (odd? (char->integer\
+    \ ch))) (string->list txt)))]))\n", "  (cond [(empty? txt) empty]\n        [(search-regexp\
+    \ #rx\"\\\\s+\" txt) (filter (\u03BB (x) (not (empty? x))) (regexp-split #rx\"\
+    \\\\s+\" txt))]\n        [(search-regexp #rx\",\" txt) (filter (\u03BB (x) (not\
+    \ (empty? x))) (regexp-split #rx\",\" txt))]\n        [else (length (filter (\u03BB\
+    \ (x) (= (modulo x 2) 1)) (string->list txt)))]))\n```\n\n## Task 1.2\n```racket\n\
+    #lang racket\n", "  (split-string txt \"[, ]+\"))\n\n", "  (if (not (empty? (split-string\
+    \ txt #rx\"\\\\s+\")))\n      (split-string txt #rx\"\\\\s+\")\n      (if (not\
+    \ (empty? (split-string txt #rx\",\")))\n          (split-string txt #rx\",\"\
+    )\n          (length (filter (lambda (c) (= (modulo (+ c 1) 2) 1))\n         \
+    \            (map char->integer (string->list txt)))))))\n", "  (if (string-contains\
+    \ txt #\\ )\n      (match (string-split txt #\\ )\n        (() (error \"No whitespace\
+    \ found\"))\n        ((x ...) (list x ...)))\n      (if (string-contains txt #\\\
+    ,)\n          (match (string-split txt #\\,)\n            (() (error \"No commas\
+    \ found\"))\n            ((x ...) (list x ...)))\n          (count_odds (string->list\
+    \ txt)))))\n", "  (if (equal? (string-contains txt #\\, ) #f)\n      (string-length\
+    \ txt)\n      (string-split txt \", \")))\n  \n \n", "  (cond\n    [(string-empty?\
+    \ txt) (list)]\n    [(string-every char-whitespace? txt) (list)]\n    [(string-every\
+    \ (lambda (x) (or (char-whitespace? x) (equal? x #\\,))) txt) (list (length (string-filter\
+    \ odd? (string->list (string-downcase txt)))))]\n    [else (cons (first (string-split\
+    \ txt #\\ )) (split_words (second (string-split txt #\\ ))))])\n)\n", "  (cond\n\
+    \    [(string-contains txt #\\space) (regexp-split txt #rx\"[ \\t]+\")]\n    [(string-contains\
+    \ txt #\\,) (regexp-split txt #rx\"[,]+\")]\n    [else (count-odds (string->list\
+    \ txt))]))\n", "  (let ([order (make-hash)])\n    (map (lambda (c) (hash-set!\
+    \ order c (remainder (+ c 1) 2))) (iota 26))\n    (cond [(regexp-match #rx\"\\\
+    \\s+\" txt)\n           (regexp-split #rx\"\\\\s+\" txt)]\n          [(regexp-match\
+    \ #rx\",\" txt)\n           (regexp-split #rx\",\" txt)]\n          [else\n  \
+    \         (length (filter (lambda (c) (hash-ref order (char->integer c))) (string->list\
+    \ txt)))])\n          ))\n", "  (if (not (zero? (string-length txt)))\n      (if\
+    \ (char-alphabetic? (string-ref txt 0))\n          (let ((c (string-ref txt 0)))\n\
+    \            (if (odd? (- (char->integer c) (char->integer #\\a)))\n         \
+    \       (+ 1 (split_words (substring txt 1)))\n                (split_words (substring\
+    \ txt 1))))\n          (if (char-whitespace? (string-ref txt 0))\n           \
+    \   (split_words (substring txt 1))\n              (if (char=? (string-ref txt\
+    \ 0) #\\,)\n                  (split_words (substring txt 1))\n              \
+    \    (split_words (substring txt 1)))))))\n  0)\n", "  (cond ((string-contains\
+    \ txt #\\space) (string-split txt))\n        ((string-contains txt #\\,) (string-split\
+    \ txt #\\,))\n        (else (length (filter odd? (map char->integer (string->list\
+    \ txt)))))))\n", "  (list-of-words (string-split txt (regexp #rx\" \"))\n    \
+    \             (string-split txt (regexp #rx\",\"))\n                 (lower-case-chars\
+    \ txt)))\n", "  (cond ((string-contains txt #\\space) (split-string txt \" \"\
+    ))\n        ((string-contains txt #\\,) (split-string txt \",\"))\n        (else\
+    \ (count-all-lowercase-letters txt))))\n", "  ...)\n```\n\n```#lang racket", " \
+    \ ;; Your code goes here\n  )\n```\n\n#### Solution\n\n```racket\n#lang racket\n",
+  "  (list->set (regexp-split #rx\"\\s+\" txt)))\n```\n\nBut when I run it in *Racket\
+    \ REPL*, it gives me a nasty error:\n\n```\n> (split_words \"abcdef\")\nstx: undefined;\n\
+    \ cannot reference an identifier before its definition\n  in module: top-level\n\
+    \   context...:\n      regexp-split\n      regexp-split-each\n      regexp-split-each-cjk\n\
+    \      regexp-split-each-ccs\n      regexp-split-each-addr\n      regexp-split-each-punc\n\
+    \      regexp-split-each-num\n      regexp-split-each-kdata\n      regexp-split-each-cdata\n\
+    \      regexp-split-each-cjk-with-a\n      regexp-split-each-cjk-with-b\n    \
+    \  regexp-split-each-hira\n      regexp-split-each-kata\n      regexp-split-each-hangul\n\
+    \      regexp-split-each-cjk-with-lvt\n      regexp-split-each-symbol\n      regexp-split-each-digit\n\
+    \      regexp-split-each-other\n      regexp-split-each-script\n      stx:<\n\
+    ```\n\nI googled and tried to find something similar but no luck. I suspect it\
+    \ has something to do with *Racket REPL* versus *Racket IDE* but I could not figure\
+    \ out a reasonable solution.\n\nThen I tried to run the same code in *Racket IDE*,\
+    \ and it did not raise any error and printed the expected output.\n\nSo I guess\
+    \ the problem has nothing to do with *Racket REPL* but my code. I do not understand\
+    \ why it works in *Racket IDE* but not in *Racket REPL*.\n\nI have no idea what\
+    \ the problem is. Can someone help? Thanks!", "  (cond\n    [(string-contains?\
+    \ txt #\\space)\n     (string-split txt)]\n    [(string-contains? txt #\\,)\n\
+    \     (string-split txt)]\n    [else\n     (count-lowercase-odd txt)]))\n", " \
+    \ (cond [(string-contains? txt #\\space)\n         (map string->number\n     \
+    \         (string-split txt #\\space))]\n        [(string-contains? txt #\\,)\n\
+    \         (map string->number\n              (string-split txt #\\,))]\n     \
+    \   [else\n         (count-chars txt)]))\n", "  (match txt\n    [\"\" (error \"\
+    An empty string was entered\")]\n    [_ (split_words_h txt)]))\n", "  ;; checks\
+    \ if txt has whitespace or commas then splits the string on these deliminators\n\
+    \  (cond [(regexp-match #rx\"\\s+\" txt) (regexp-split #rx\"\\s+\" txt)]\n   \
+    \     [(regexp-match #rx\",\" txt) (regexp-split #rx\",\" txt)]\n        ;; if\
+    \ no deliminators exist then it checks to see if the text only contains lowercase\
+    \ letters\n        ;; then it calls odd_count to check which letters are in odd\
+    \ order \n        [else\n         (cond [(regexp-match #rx\"[a-z]+\" txt) (odd_count\
+    \ txt)]\n               [else 0])]))\n", "  (cond\n    [(string-contains? txt\
+    \ \" \")\n     (string-split txt #\\space)]\n    [(string-contains? txt \",\"\
+    )\n     (string-split txt #\\,)]\n    [else\n     (length (filter (lambda (c)\
+    \ (odd? (char->integer c))) (string->list txt)))]))\n", "\t(match txt\n\t\t[(list)\
+    \ (list)]\n\t\t[(list (? whitespace) . xs) (split_words xs)]\n\t\t[(list (? char-whitespace?)\
+    \ . xs) (split_words xs)]\n\t\t[(list (? char-numeric?) . xs) (split_words xs)]\n\
+    \t\t[(list x . xs) (cons x (split_words xs))]))\n", "  (cond\n    [(string-contains\
+    \ txt \" \") (string-split txt \" \")]\n    [(string-contains txt \",\") (string-split\
+    \ txt \",\")]\n    [else (odd-chars txt)]))\n", "  (cond\n    [(string-contains\
+    \ txt #\\space)\n     (split-string txt)]\n    [(string-contains txt #\\,)\n \
+    \    (split-string txt #\\,)]\n    [else\n     (odd-letters-count txt)]))\n",
+  "  (cond [(empty? txt) empty]\n        [(char-whitespace? (first txt)) (split_words\
+    \ (rest txt))]\n        [(char-lower-case? (first txt)) (+ 1 (split_words (rest\
+    \ txt)))]\n        [else txt]))\n</code>\nEverything seems to be fine, but when\
+    \ I run a test using the following code:\n<code>#lang racket\n", "  (if (string-empty?\
+    \ txt)\n      empty\n      (or (or (string-split txt #\\space) (string-split txt\
+    \ #\\,))\n          (count-lower-case-odd-letters txt))))\n", "  (cond ((string-contains\
+    \ txt #\\space) (string-split txt #\\space))\n        ((string-contains txt #\\\
+    ,) (string-split txt #\\,))\n        (else (count-odd-occuring-letters txt))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

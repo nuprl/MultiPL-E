@@ -7,7 +7,600 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate c
   \ (list 1 5 653))\n    (check-equal? (candidate (list 5 3 2 8) (list 3 2)) (list\
   \ 2 3))\n    (check-equal? (candidate (list 4 3 2 8) (list 3 2 4)) (list 2 3 4))\n\
   \    (check-equal? (candidate (list 4 3 2 8) (list )) (list ))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (sort-list (set-intersect l1 l2)))\n", "  (cond [(empty? l1) empty]\n\
+    \        [(member (first l1) l2)\n         (cons (first l1) (common (rest l1)\
+    \ l2))]\n        [else (common (rest l1) l2)]))\n", "  (sort (set-intersect l1\
+    \ l2)\n        &lt;))\n", "  (define l3\n    (foldr\n      (lambda (elem lst)\n\
+    \        (if (member elem l2)\n            (cons elem lst)\n            lst))\n\
+    \      '()\n      l1))\n  (sort l3 <))\n</code>\nI tried to use <code>foldr</code>\
+    \ in order to get rid of <code>append</code> from the solution. Is it a good solution\
+    \ or is there an easy way to remove the <code>append</code> from the solution?\n\
+    \n\nA:\n\nFolding the list is a good approach, but this code is not the most idiomatic\
+    \ Racket code, nor is it the most efficient one. The most idiomatic approach is\
+    \ to use the built-in <code>intersection</code> procedure:\n<code>(define (common\
+    \ l1 l2)\n  (intersection l1 l2 &lt;))\n</code>\nSo as to understand how to write\
+    \ this in terms of a custom <code>foldr</code>, it's important to understand how\
+    \ this procedure works. Basically, we want to \"pick\" from the first list, only\
+    \ those elements that also appear in the second one. We could use a <code>for/set</code>\
+    \ to do it:\n<code>(define (common l1 l2)\n  (for/set ([x l1] #:when (member x\
+    \ l2))\n    x))\n</code>\nUsing <code>for/set</code> here is more efficient than\
+    \ using the <code>member</code> procedure inside a <code>for/list</code>, because\
+    \ with the former we'll only look at each element of the second list once (we\
+    \ do a set intersection), while with the latter we'll look at each element of\
+    \ the second list <code>N</code> times, where <code>N</code> is the number of\
+    \ elements in the first list.\nNow, it's not hard to write <code>for/set</code>\
+    \ in terms of a <code>foldr</code>:\n<code>(define (common l1 l2)\n  (foldr (lambda\
+    \ (x s)\n           (if (member x l2)\n               (hash-set s x)\n       \
+    \        s))\n         (hash-set)\n         l1))\n", "  (sort (remq-duplicates\
+    \ (append l1 l2)) <))\n", "  (sort (remove-duplicates (append l1 l2)) <))\n",
+  "  (sort (remove-duplicates (append l1 l2)) <))\n", "  (cond [(null? l1) '()]\n\
+    \        [(member (car l1) l2)\n         (cons (car l1) (common (cdr l1) l2))]\n\
+    \        [else (common (cdr l1) l2)]))\n", "  (cond\n    [(or (null? l1) (null?\
+    \ l2)) empty]\n    [(equal? (car l1) (car l2))\n     (cons (car l1) (common (cdr\
+    \ l1) (cdr l2)))]\n    [(< (car l1) (car l2)) (common (cdr l1) l2)]\n    [else\
+    \ (common l1 (cdr l2))]))\n", "  (cond\n    [(or (null? l1) (null? l2)) '()]\n\
+    \    [(member (car l1) l2) (cons (car l1) (common (cdr l1) l2))]\n    [else (common\
+    \ (cdr l1) l2)]))\n", "  (remove-duplicates\n   (sort (append l1 l2))\n   equal?))\n\
+    </code>\nThat's pretty clear to me, but I'd like to know if the scheme people\
+    \ have a better way to code it.\n\n\nA:\n\nThe <code>append</code> is unnecessary,\
+    \ as <code>remove-duplicates</code> takes two or more inputs.\nThe <code>sort</code>\
+    \ is also unnecessary, since <code>remove-duplicates</code> already removes duplicates,\
+    \ so the only duplicates you'll be left with are ones across the inputs.\nThe\
+    \ <code>sort</code> is also a bit of a misnomer, since the function is called\
+    \ <code>sort</code> but the Racket documentation calls it <code>merge-sort</code>.\
+    \ That's because it's a stable sort. You probably don't need that, so if you just\
+    \ want a quick unsorted (but unique) result, you can use <code>remove-duplicates*</code>.\n\
+    So, a slightly simpler way might be\n<code>(define (common l1 l2)\n  (remove-duplicates*\
+    \ l1 l2))\n</code>", "  (set-intersection (set l1) (set l2)))\n</code>\nThe result\
+    \ is\n<code>&gt; (common '(a b c d e) '(c e f g h))\n'(c e)\n</code>\n", "  (sort\
+    \ (uniq (append l1 l2)) &lt;))\n</code>\n<code>&gt; (common '(a b) '(b c))\n'(a\
+    \ b c)\n</code>\n", "  (define (helper l1 l2 acc)\n    (cond [(empty? l1) (reverse\
+    \ acc)]\n          [(empty? l2) (reverse acc)]\n          [(eq? (first l1) (first\
+    \ l2))\n           (helper (rest l1) (rest l2) (cons (first l1) acc))]\n     \
+    \     [(< (first l1) (first l2))\n           (helper (rest l1) l2 acc)]\n    \
+    \      [else (helper l1 (rest l2) acc)]))\n  (helper (quick-sort l1) (quick-sort\
+    \ l2) empty))\n", "  (define (unique l)\n    (if (null? l)\n        (list)\n \
+    \       (cons (car l) (unique (remove (car l) (cdr l))))))\n  (sort (unique (append\
+    \ l1 l2))\n        <))\n", "  (sort (unique (append l1 l2)) <))\n", "  (let loop\
+    \ ((l1 l1) (l2 l2) (acc '()))\n    (cond ((or (null? l1) (null? l2)) (reverse\
+    \ acc))\n          ((eq? (car l1) (car l2)) (loop (cdr l1) (cdr l2) (cons (car\
+    \ l1) acc)))\n          ((< (car l1) (car l2)) (loop (cdr l1) l2 acc))\n     \
+    \     (else (loop l1 (cdr l2) acc)))))\n```\n\n``` clojure", "  (let loop ([l1\
+    \ l1] [l2 l2] [acc '()])\n    (cond\n      [(null? l1) acc]\n      [(member (car\
+    \ l1) l2) (loop (cdr l1) l2 (cons (car l1) acc))]\n      [else (loop (cdr l1)\
+    \ l2 acc)])))\n", "  (set-difference (append l1 l2) (append (set-difference l1\
+    \ l2) (set-difference l2 l1))))\n</code>\nWhat is the best or easiest way to write\
+    \ such a function?\n\n\nA:\n\nHere is one solution:\n<code>(define (common l1\
+    \ l2)\n  (let loop ([l1 l1] [l2 l2])\n    (cond [(null? l1) '()]\n          [(member\
+    \ (car l1) l2) (cons (car l1) (loop (cdr l1) l2))]\n          [else (loop (cdr\
+    \ l1) l2)])))\n</code>\nIt is not sorting. \n", "  (sort (unique (append l1 l2))\
+    \ <))\n", "  (let f ([s1 (sort l1 <)] [s2 (sort l2 <)])\n    (cond [(or (null?\
+    \ s1) (null? s2)) '()]\n          [(= (car s1) (car s2)) (cons (car s1) (f (cdr\
+    \ s1) (cdr s2)))]\n          [else (f (cdr s1) s2)])))\n", "  (define (inner l1\
+    \ l2 acc)\n    (if (and (pair? l1) (pair? l2))\n        (if (= (car l1) (car l2))\n\
+    \            (inner (cdr l1) (cdr l2) (cons (car l1) acc))\n            (if (&lt;\
+    \ (car l1) (car l2))\n                (inner (cdr l1) l2 acc)\n              \
+    \  (inner l1 (cdr l2) acc)))\n        acc))\n  (inner (sort l1 &lt;) (sort l2\
+    \ &lt;) '()))\n", "  (define (unique l)\n    (cond [(empty? l) empty]\n      \
+    \    [(member (first l) (rest l)) (unique (rest l))]\n          [else (cons (first\
+    \ l) (unique (rest l)))]))\n  (define (common-list l1 l2)\n    (cond [(empty?\
+    \ l1) empty]\n          [(member (first l1) l2) (cons (first l1) (common-list\
+    \ (rest l1) l2))]\n          [else (common-list (rest l1) l2)]))\n  (sort (unique\
+    \ (common-list l1 l2)) <))\n", "  (sort (unique (append l1 l2)) <))\n", "  (sort\
+    \ (unique (append l1 l2))))\n</code>\nI need to maintain the original order of\
+    \ elements in the output list, so I can't rely on <code>sort</code> to sort the\
+    \ output. The solution I'm looking for needs to work in at least Racket. \nEdit:\
+    \ The order of elements in the output list should be the first occurrence of the\
+    \ element in the input lists.\nExample:\n<code>(common '(1 2 3 1 2) '(2 3 4))\n\
+    =&gt; '(1 2 3)\n</code>\n\n\nA:\n\nThere's a small problem with the output you're\
+    \ looking for: \n<code>(common '(1 2 3 1 2) '(2 3 4))\n</code>\nYou've said that\
+    \ you want the output list to contain <code>1</code> and <code>2</code>, but if\
+    \ you look at the output, you also have <code>3</code>. I'm going to assume that\
+    \ your output should be <code>(1 2)</code> instead, because otherwise you wouldn't\
+    \ be able to specify the order: <code>3</code> comes before <code>1</code> in\
+    \ the second list, and after <code>2</code> in the first list.\nHere's one way\
+    \ to get the output you want:\n<code>(define (common-elements l1 l2)\n  (define\
+    \ (taken lst s)\n    (and (not (null? lst))\n         (or (member (car lst) s)\n\
+    \             (taken (cdr lst) (cons (car lst) s)))))\n  (define (common lst1\
+    \ lst2 acc)\n    (if (or (null? lst1) (null? lst2))\n        acc\n        (if\
+    \ (member (car lst1) lst2)\n            (common (cdr lst1) (remove (car lst1)\
+    \ lst2) (cons (car lst1) acc))\n            (common (cdr lst1) lst2 acc))))\n\
+    \  (common l1 l2 '()))\n</code>\nAnd here's another:\n<code>(define (common-elements\
+    \ l1 l2)\n  (define (common lst1 lst2 l", "  (let loop ((l1 l1) (l2 l2) (result\
+    \ '()))\n    (cond ((or (null? l1) (null? l2)) (sort result <))\n          ((=\
+    \ (car l1) (car l2)) (loop (cdr l1) (cdr l2) (cons (car l1) result)))\n      \
+    \    ((< (car l1) (car l2)) (loop (cdr l1) l2 result))\n          (else (loop\
+    \ l1 (cdr l2) result)))))\n", "  (sort\n   (unique (append l1 l2))\n   (lambda\
+    \ (x y)\n     (&lt; x y))))\n", "  (define (common-help l1 l2 acc)\n    (cond\n\
+    \      [(empty? l1) acc]\n      [(empty? l2) acc]\n      [(equal? (first l1) (first\
+    \ l2)) (common-help (rest l1) (rest l2) (cons (first l1) acc))]\n      [(< (first\
+    \ l1) (first l2)) (common-help (rest l1) l2 acc)]\n      [else (common-help l1\
+    \ (rest l2) acc)]))\n  (sort (common-help l1 l2 '()) #:key first))\n", "  (sort\
+    \ (remove-duplicates (append l1 l2)) &lt;))\n", "  (set-intersection (set l1)\
+    \ (set l2)))\n", "  (apply set-intersection (list l1 l2)))\n", "  (sort (set-intersect\
+    \ (set l1) (set l2)) <))\n", "  (sort \n   (remove-duplicates \n    (append l1\
+    \ l2))\n   <))\n", "  (let ((l (intersection l1 l2)))\n    (quicksort l #:key\
+    \ car)))\n", "  (sort (remove-duplicates (intersection l1 l2))))\n", "  (sort\
+    \ (unique (append l1 l2)) &lt;))\n", "  (sort (remove-duplicates (append l1 l2))\
+    \ <))\n", "  (sort (remove-duplicates (append l1 l2)) #:key identity))\n", " \
+    \ (set-intersection equal? l1 l2))\n", "  (sort (uniq (map cons l1 l2)) <))\n",
+  "  (sort\n   (remove-duplicates\n    (map (\u03BB (x)\n           (if (member x\
+    \ l2)\n               x\n               '()))\n         l1))\n   <))\n```\n\n\
+    **Nim**\n\n```nim\nproc common(l1, l2: seq[int]): seq[int] =\n  result = @[]\n\
+    \  for i in l1:\n    if i in l2:\n      result.add(i)\n  result.sort()\n```\n\n\
+    **Perl 6**\n\n```perl6\n# Return sorted unique common elements for two lists.\n\
+    sub common(@l1, @l2) {\n  my @c = @l1.grep(@l2).unique.sort;\n}\n```\n\n**Python**\n\
+    \n```python\n# Return sorted unique common elements for two lists.\ndef common(l1,\
+    \ l2):\n  l1, l2 = set(l1), set(l2)\n  return sorted(l1 & l2)\n```\n\n**Ruby**\n\
+    \n```ruby\n# Return sorted unique common elements for two lists.\ndef common(l1,\
+    \ l2)\n  (l1 & l2).sort\nend\n```\n\n**Rust**\n\n```rust\nfn common(l1: &[i32],\
+    \ l2: &[i32]) -> Vec<i32> {\n  let mut l3: Vec<i32> = Vec::new();\n  for e in\
+    \ l1 {\n    if l2.contains(e) {\n      l3.push(*e);\n    }\n  }\n  l3.sort();\n\
+    \  l3\n}\n```\n\n**Scala**\n\n```scala\n// Return sorted unique common elements\
+    \ for two lists.\ndef common(l1: List[Int], l2: List[Int]): List[Int] = {\n  l1.intersect(l2).distinct.sorted\n\
+    }\n```\n\n**Standard ML**\n\n```sml\nfun common (l1, l2) =\n  let val s = List.merge\
+    \ (Int.compare, l1, l", "  (cond [(or (null? l1) (null? l2)) '()]\n        [(memq\
+    \ (car l1) l2)\n         (cons (car l1) (common (cdr l1) l2))]\n        [else\
+    \ (common (cdr l1) l2)]))\n</code>\nThe <code>memq</code> predicate (shorthand\
+    \ for <code>memv</code> since the elements of my list are symbols and not arbitrary\
+    \ values) determines whether the first element of <code>l1</code> is in <code>l2</code>.\
+    \ If so, we add that element to the list of results and compare the rest of <code>l1</code>\
+    \ to <code>l2</code>. If not, we just compare the rest of <code>l1</code> to <code>l2</code>.\n\
+    When I tried my first example with this new function, I discovered that it works\
+    \ on a list of symbols, but not on a list of lists.\n<code>&gt; (common '(b c\
+    \ d) '(a b c d))\n'(b c d)\n&gt; (common '((b c d)) '((a b c d)))\n'()\n</code>\n\
+    This is because the <code>memq</code> predicate only compares the first element\
+    \ of <code>l1</code> to the elements of <code>l2</code>. To make the function\
+    \ work on a list of lists, we need to use the <code>equal?</code> predicate instead\
+    \ of <code>memq</code>.\n<code>;; Return sorted unique common elements for two\
+    \ lists.", "  (if (empty? l1)\n      empty\n      (if (empty? l2)\n          empty\n\
+    \          (if (equal? (first l1) (first l2))\n              (cons (first l1)\
+    \ (common (rest l1) (rest l2)))\n              (if (&lt; (first l1) (first l2))\n\
+    \                  (common (rest l1) l2)\n                  (common l1 (rest l2)))))))\n\
+    </code>\n", "  (sort \n   (unique \n    (append l1 l2))\n   <))\n</code>\nHere\
+    \ is my problem with this definition:\n<code>&gt; (common '(a b c a) '(c c d b))\n\
+    '(a b c d)\n&gt; (common '(a) '(a b))\n'(a b)\n</code>\nI would like to have a\
+    \ new version of common that reverses the order of the result, so that it returns\
+    \ <code>'(d c b a)</code> and <code>'(b a)</code>, and I would like to do this\
+    \ without creating temporary lists. \nThe following is a new definition that almost\
+    \ works:\n<code>;; Return sorted unique common elements for two lists in reverse\
+    \ order.", "  (let loop ((result '())\n             (l1 l1)\n             (l2\
+    \ l2))\n    (cond\n      ((and (null? l1) (null? l2)) (sort result &lt;))\n  \
+    \    ((null? l1) result)\n      ((null? l2) result)\n      ((eq? (car l1) (car\
+    \ l2))\n       (loop (cons (car l1) result) (cdr l1) (cdr l2)))\n      ((&lt;\
+    \ (car l1) (car l2)) (loop result (cdr l1) l2))\n      (else (loop result l1 (cdr\
+    \ l2))))))\n", "  (sort (set-intersect (set l1) (set l2)) <))\n", "  (sort\n \
+    \  (unique (append l1 l2))\n   <))\n", "  (define (common-helper l1 l2 acc)\n\
+    \    (if (null? l1)\n        acc\n        (if (member (car l1) l2)\n         \
+    \   (common-helper (cdr l1) l2 (cons (car l1) acc))\n            (common-helper\
+    \ (cdr l1) l2 acc))))\n  (sort (common-helper l1 l2 '()) <))\n", "  (cond\n  \
+    \  [(and (empty? l1) (empty? l2)) '()]\n    [(empty? l1) (common (list (first\
+    \ l2)) (rest l2))]\n    [(empty? l2) (common (list (first l1)) (rest l1))]\n \
+    \   [(equal? (first l1) (first l2))\n     (cons (first l1) (common (rest l1) (rest\
+    \ l2)))]\n    [(< (first l1) (first l2)) (common (rest l1) l2)]\n    [else (common\
+    \ l1 (rest l2))]))\n", "  (sort (remove-duplicates (append l1 l2)) <))\n", " \
+    \ (cond [(null? l1) '()]\n        [(null? l2) '()]\n        [(equal? (car l1)\
+    \ (car l2))\n         (cons (car l1) (common (cdr l1) (cdr l2)))]\n        [(&lt;\
+    \ (car l1) (car l2)) (common (cdr l1) l2)]\n        [else (common l1 (cdr l2))]))\n",
+  "  (define (unique-elements l)\n    (if (null? l)\n        '()\n        (if (member\
+    \ (car l) (cdr l))\n            (unique-elements (cdr l))\n            (cons (car\
+    \ l) (unique-elements (cdr l))))))\n  (sort (unique-elements (append l1 l2)) (lambda\
+    \ (a b) (&lt; a b))))\n", "  (remove-duplicates (append l1 l2) (lambda (x y) (eq?\
+    \ x y))))\n", "  (cond [(empty? l1) empty]\n        [(empty? l2) empty]\n    \
+    \    [(member (first l1) l2) (cons (first l1) (common (rest l1) l2))]\n      \
+    \  [else (common (rest l1) l2)]))\n", "  (for/list ([x (in-list l1)]\n       \
+    \      [y (in-list l2)])\n    (when (equal? x y)\n      x)))\n", "  (cond [(empty?\
+    \ l1) empty]\n        [(empty? l2) empty]\n        [(= (first l1) (first l2))\n\
+    \         (cons (first l1) (common (rest l1) (rest l2)))]\n        [(&lt; (first\
+    \ l1) (first l2))\n         (common (rest l1) l2)]\n        [(&gt; (first l1)\
+    \ (first l2))\n         (common l1 (rest l2))]))\n", "  (let* ([len1 (length l1)]\n\
+    \         [len2 (length l2)]\n         [(s1 . i1) (loop (max len1 len2) l1 0)]\n\
+    \         [s2 (loop len2 l2)])\n    (common-helper s1 i1 s2)))\n", "  (foldl (\u03BB\
+    \ (x l) (if (in-list? x l2) (cons x l) l)) empty l1))\n", "  (define (drop-first\
+    \ l) (cdr l))\n  (define (drop-last l)\n    (reverse (drop-first (reverse l))))\n\
+    \  (define (remove-first l e)\n    (if (eq? (car l) e)\n        (drop-first l)\n\
+    \        (cons (car l) (remove-first (drop-first l) e))))\n  (define (remove-all\
+    \ l e)\n    (if (eq? (car l) e)\n        (remove-all (drop-first l) e)\n     \
+    \   (cons (car l) (remove-all (drop-first l) e))))\n  (define (unique l)\n   \
+    \ (if (null? l)\n        '()\n        (cons (car l) (unique (remove-all (drop-first\
+    \ l) (car l))))))\n  (define (common-all l1 l2)\n    (if (null? l1)\n        '()\n\
+    \        (if (null? l2)\n            '()\n            (let ((x (car l1)))\n  \
+    \            (if (memq x l2)\n                  (cons x (common-all (drop-first\
+    \ l1) (remove-first l2 x)))\n                  (common-all (drop-first l1) l2))))))\n\
+    \  (unique (common-all (unique l1) (unique l2))))\n</code>\nTest cases\n<code>&gt;\
+    \ (common '(1 2 3) '(1 3 4))\n'(1 3)\n&gt; (common '(1 2 3) '(1 2))\n'(1 2)\n\
+    &gt; (common '(1 2 3) '(3 2 1))\n'(1 2 3)\n&gt; (common '(1 2) '(3 4))\n'()\n\
+    &gt; (common '(a b c d e f g h i j k l m n o p q r s t u v w x y z) '(a b c d\
+    \ e f g h i j k l m n o p q r s t u v w x y z))\n'(a b c d e f g h i j k l m n\
+    \ o p q r s t u v w x y z)\n&gt; (common '(1 1 2 2 3", "  (sort (remove-duplicates\
+    \ (append l1 l2)) #:key identity))\n", "  (let ([l3 (intersection l1 l2)])\n \
+    \   (sort l3 <)))\n", "  (cond\n    [(and (null? l1) (null? l2)) '()]\n    [(or\
+    \ (null? l1) (null? l2)) '()]\n    [(and (symbol=? (car l1) (car l2))\n      \
+    \    (member (car l1) (cdr l1))\n          (member (car l1) (cdr l2)))\n     (cons\
+    \ (car l1) (common (cdr l1) (cdr l2)))]\n    [(and (symbol=? (car l1) (car l2))\n\
+    \          (not (member (car l1) (cdr l1)))\n          (not (member (car l1) (cdr\
+    \ l2))))\n     (cons (car l1) (common (cdr l1) (cdr l2)))]\n    [(symbol<? (car\
+    \ l1) (car l2)) (common (cdr l1) l2)]\n    [(symbol<? (car l2) (car l1)) (common\
+    \ l1 (cdr l2))]))\n", "  (let loop ((sorted-l1 (sort l1 <))\n             (sorted-l2\
+    \ (sort l2 <))\n             (result '()))\n    (cond ((or (null? sorted-l1) (null?\
+    \ sorted-l2))\n           result)\n          ((< (car sorted-l1) (car sorted-l2))\n\
+    \           (loop (cdr sorted-l1) sorted-l2 result))\n          ((< (car sorted-l2)\
+    \ (car sorted-l1))\n           (loop sorted-l1 (cdr sorted-l2) result))\n    \
+    \      (else\n           (loop (cdr sorted-l1) (cdr sorted-l2)\n             \
+    \    (cons (car sorted-l1) result))))))\n", "  (sort\n   (remove-duplicates\n\
+    \    (append l1 l2))\n   <))\n", "  (define xs (sort l1 (lambda (x y) (&lt; x\
+    \ y))))\n  (define ys (sort l2 (lambda (x y) (&lt; x y))))\n  (if (or (null? xs)\
+    \ (null? ys))\n      '()\n      (if (= (car xs) (car ys))\n          (cons (car\
+    \ xs) (common (cdr xs) (cdr ys)))\n          (if (&lt; (car xs) (car ys))\n  \
+    \            (common (cdr xs) ys)\n              (common xs (cdr ys))))))\n",
+  "  (cond [(or (null? l1) (null? l2)) null]\n        [(= (car l1) (car l2)) (cons\
+    \ (car l1) (common (cdr l1) (cdr l2)))]\n        [(< (car l1) (car l2)) (common\
+    \ (cdr l1) l2)]\n        [else (common l1 (cdr l2))]))\n", "  (let ([l1 (sort\
+    \ l1 <)]\n        [l2 (sort l2 <)])\n    (if (null? l1) (list)\n        (if (null?\
+    \ l2) (list)\n            (cond\n              [(= (car l1) (car l2))\n      \
+    \         (cons (car l1) (common (cdr l1) (cdr l2)))]\n              [(&lt; (car\
+    \ l1) (car l2))\n               (common (cdr l1) l2)]\n              [else\n \
+    \              (common l1 (cdr l2))])))))\n", "  (define (common-iter lst1 lst2)\n\
+    \    (cond\n      [(null? lst1) '()]\n      [(null? lst2) '()]\n      [(eq? (car\
+    \ lst1) (car lst2))\n       (cons (car lst1) (common-iter (cdr lst1) (cdr lst2)))]\n\
+    \      [(< (car lst1) (car lst2))\n       (common-iter (cdr lst1) lst2)]\n   \
+    \   [else (common-iter lst1 (cdr lst2))]))\n  (common-iter (sort l1 <) (sort l2\
+    \ <)))\n", "  (sort l1 #:cmp (\u03BB (a b)\n                   (member b l2))))\n",
+  "  (cond\n    [(empty? l1) empty]\n    [(member (first l1) l2)\n     (cons (first\
+    \ l1) (common (rest l1) l2))]\n    [else (common (rest l1) l2)]))\n", "  (cond\
+    \ [(empty? l1) '()]\n        [(member (first l1) l2)\n         (cons (first l1)\
+    \ (common (rest l1) l2))]\n        [else (common (rest l1) l2)]))\n", "  (sort\
+    \ l1 &lt;=?))\n", "  (sort (remove-duplicates (intersection l1 l2)) <))\n</code>\n\
+    ... then the result is correct.\nWhat is wrong in the latter case?\n\n\nA:\n\n\
+    Your question\n<blockquote>\n<p>What is wrong in the latter case?</p>\n</blockquote>\n\
+    is answerable.  You're not asking for an alternative solution (which I'm sure\
+    \ is possible) but rather an explanation of the problem.\nI'm no Racket expert,\
+    \ but I am a Haskell expert and can answer the question with a Haskell implementation\
+    \ instead.\n<code>data List a = Nil | Cons a (List a)\n\nheadList :: List a -&gt;\
+    \ a\nheadList Nil = error \"head: empty list\"\nheadList (Cons a _) = a\n\ntailList\
+    \ :: List a -&gt; List a\ntailList Nil = error \"tail: empty list\"\ntailList\
+    \ (Cons _ l) = l\n\nconsList :: a -&gt; List a -&gt; List a\nconsList = Cons\n\
+    \nsortList :: Ord a =&gt; List a -&gt; List a\nsortList = ...\n\nremoveDups ::\
+    \ Eq a =&gt; List a -&gt; List a\nremoveDups = ...\n\ncommon :: Eq a =&gt; Ord\
+    \ a =&gt; List a -&gt; List a -&gt; List a\ncommon l1 l2 = \n  let common' Nil\
+    \ _ = Nil\n      common' _ Nil = Nil\n      common' (Cons x xs) ys = \n      \
+    \  if elem x ys\n        then consList x (common' xs ys)\n        else common'\
+    \ xs ys\n  in sortList (removeDups (common' l1 l2))\n</code>\nIf you're familiar\
+    \ with Haskell, then you can just compare this to the Racket implementation. \
+    \ If you're not, I can assure you that my implementation is equivalent to the\
+    \ Racket implementation, with the same type signature.\nThere are two problems\
+    \ with this implementation:\n\n<code>sortList</code> is applied to the <code>removeDups</code>\
+    \ results.  This is unnecessary.\nThe <code>if</code>-<code>then</code", "  (sort\
+    \ (remove-duplicates (append l1 l2)) &lt;))\n", "  (sort (remove-duplicates (append\
+    \ l1 l2)) #<))\n", "  (cond [(empty? l1) empty]\n        [(member (first l1) l2)\
+    \ (cons (first l1) (common (rest l1) l2))]\n        [else (common (rest l1) l2)]))\n",
+  "  (set-intersection (set l1) (set l2)))\n", "  (define (l1-in-l2? e l2)\n    (let\
+    \ loop ([l2 l2])\n      (if (null? l2)\n          #f\n          (if (equal? e\
+    \ (car l2))\n              #t\n              (loop (cdr l2))))))\n  (let loop\
+    \ ([l1 l1] [result '()])\n    (if (null? l1)\n        (sort result (lambda (e1\
+    \ e2) (&lt; e1 e2)))\n        (if (l1-in-l2? (car l1) l2)\n            (loop (cdr\
+    \ l1) (cons (car l1) result))\n            (loop (cdr l1) result)))))\n</code>\n\
+    This should be fairly easy to understand.\n", "  (for/list ([x (in-list l1)]\n\
+    \             [y (in-list l2)])\n    (when (member x l2)\n      (list x))))\n",
+  "  (if (null? l1)\n      (if (null? l2) '() l2)\n      (if (null? l2) l1\n     \
+    \     (define (rec lst1 lst2 acc)\n            (cond\n              [(null? lst1)\
+    \ acc]\n              [(null? lst2) acc]\n              [(equal? (car lst1) (car\
+    \ lst2))\n               (rec (cdr lst1) (cdr lst2) (cons (car lst1) acc))]\n\
+    \              [(> (car lst1) (car lst2))\n               (rec lst1 (cdr lst2)\
+    \ acc)]\n              [else (rec (cdr lst1) lst2 acc)]))\n        (reverse (rec\
+    \ l1 l2 '())))))\n", "  (set-intersection (set l1) (set l2)))\n", "  (sort (remove-duplicates\
+    \ (append l1 l2)) &lt;))\n", "  (let loop ([l1 l1] [l2 l2] [result '()])\n   \
+    \ (cond\n      [(empty? l1)  result]\n      [(empty? l2)  result]\n      [(member\
+    \ (first l1) l2) (loop (rest l1) l2 (cons (first l1) result))]\n      [else (loop\
+    \ (rest l1) l2 result)])))\n", "  (sort (list-set= l1 l2) &lt;))\n", "  (let\n\
+    \    ((u1 (unique l1))\n     (u2 (unique l2)))\n    (unique\n      (filter\n \
+    \       (lambda (a) (memq a u2))\n        u1))))\n", "  (define l\n    (filter\
+    \ (lambda (i) (member i l2)) l1))\n  (cond [(empty? l) empty]\n        [else (set-remove-duplicates\
+    \ l)]))\n", "  (match-define (list l1a l1b) (break-list l1))\n  (match-define\
+    \ (list l2a l2b) (break-list l2))\n  (cond\n    [(and (empty? l1) (empty? l2))\
+    \ empty]\n    [(empty? l1) empty]\n    [(empty? l2) empty]\n    [(and (= (first\
+    \ l1) (first l2)) (empty? l1a) (empty? l2a)) (cons (first l1) (common l1b l2b))]\n\
+    \    [(and (= (first l1) (first l2)) (empty? l1a) (empty? l2b)) (cons (first l1)\
+    \ (common l1b l2a))]\n    [(and (= (first l1) (first l2)) (empty? l1b) (empty?\
+    \ l2a)) (cons (first l1) (common l1a l2b))]\n    [(and (= (first l1) (first l2))\
+    \ (empty? l1b) (empty? l2b)) (cons (first l1) (common l1a l2a))]\n    [(and (=\
+    \ (first l1) (first l2)) (and (not (empty? l1a)) (not (empty? l2a))) (and (not\
+    \ (empty? l1b)) (not (empty? l2b)))) (append (common l1a l2a) (common l1b l2b))]\n\
+    \    [(and (= (first l1) (first l2)) (and (not (empty? l1a)) (not (empty? l2a)))\
+    \ (and (empty? l1b) (empty? l2b))) (append (common l1a l2a) (common l1b l2b))]\n\
+    \    [(and (= (first l1) (first l2)) (and (empty? l1a) (empty? l2a)) (and (not\
+    \ (empty? l1b)) (not (empty? l2b)))) (append (common l1a l2a) (common l1b l2b))]\n\
+    \    [(and (= (first l1) (first l2)) (and (not (empty?", "  (sort (remq* '() (list-union\n\
+    \                      (map (lambda (x) (if (member x l2) (list x) '())) l1)\n\
+    \                      (map (lambda (x) (if (member x l1) (list x) '())) l2)))\n\
+    \        &lt;))\n", "  (let\n    ([commons (let loop ([l1 l1] [l2 l2] [commons\
+    \ (list)])\n                (cond\n                  [(null? l1) commons]\n  \
+    \                [(null? l2) commons]\n                  [(= (car l1) (car l2))\n\
+    \                   (loop (cdr l1) (cdr l2) (cons (car l1) commons))]\n      \
+    \            [(&lt; (car l1) (car l2)) (loop (cdr l1) l2 commons)]\n         \
+    \         [else (loop l1 (cdr l2) commons)]))])\n    (sort commons &lt;)))\n",
+  "  (let loop ([l1 l1] [l2 l2] [acc '()])\n    (cond\n      [(empty? l1) acc]\n \
+    \     [(empty? l2) acc]\n      [(eq? (first l1) (first l2))\n       (loop (rest\
+    \ l1) (rest l2) (cons (first l1) acc))]\n      [(&lt; (first l1) (first l2))\n\
+    \       (loop (rest l1) l2 acc)]\n      [else\n       (loop l1 (rest l2) acc)])))\n",
+  "  (let ([u1 (flatten (map (\u03BB (x)\n                            (filter (\u03BB\
+    \ (y) (not (equal? x y)))\n                                    l1))\n        \
+    \                  l1))]\n        [u2 (flatten (map (\u03BB (x)\n            \
+    \                (filter (\u03BB (y) (not (equal? x y)))\n                   \
+    \                 l2))\n                          l2))])\n    (if (null? u1)\n\
+    \        '()\n        (if (null? u2)\n            '()\n            (let ([e (common\
+    \ (car u1) (car u2))])\n              (if (null? e)\n                  (common\
+    \ (cdr u1) (cdr u2))\n                  (cons e (common (cdr u1) (cdr u2)))))))))\n\
+    </code>\nThe <code>flatten</code> is to remove duplicates in the elements and\
+    \ the <code>common</code> is to remove common elements between two lists and also\
+    \ remove duplicates.\nI have gone through the steps at https://stackoverflow.com/a/41286481/623735\
+    \ but still can't figure out the error.\n\nI have also tried this\n<code>#lang\
+    \ racket\n", "  (sort (uniq (intersect l1 l2)) <))\n</code>\nMy question: Is there\
+    \ a way to perform this using a higher-order function?\nThe use of <code>uniq</code>\
+    \ is optional, but it is easy to add it and I think that it provides a good example\
+    \ of what I am trying to accomplish.\n\n\nA:\n\nThe standard library contains\
+    \ <code>set-intersection</code>, which is a function that calculates the intersection\
+    \ of two sets, which are represented as lists.  In your specific case:\n<code>(define\
+    \ (common l1 l2)\n  (set-intersection l1 l2 &lt;))\n</code>\nOf course, if you\
+    \ want to return the result sorted, you can do that by applying <code>sort</code>\
+    \ to the result.\n", "  (sort\n   (set-intersection (set l1) (set l2))\n   <))\n",
+  "  (let loop ((l1 l1) (l2 l2) (out (list)))\n    (cond ((null? l1) out)\n      \
+    \    ((member (car l1) l2) (loop (cdr l1) l2 (cons (car l1) out)))\n         \
+    \ (else (loop (cdr l1) l2 out)))))\n", "  (set-intersection (set l1) (set l2)))\n",
+  "  (set-intersection\n   (list->set l1)\n   (list->set l2)))\n", "  (define (common-helper\
+    \ l1 l2 acc)\n    (cond\n      [(null? l1)\n       (sort acc #:key car)]\n   \
+    \   [(null? l2)\n       (sort acc #:key car)]\n      [(eq? (car l1) (car l2))\n\
+    \       (common-helper (cdr l1) (cdr l2) (cons (car l1) acc))]\n      [(&lt; (car\
+    \ l1) (car l2))\n       (common-helper (cdr l1) l2 acc)]\n      [(&gt; (car l1)\
+    \ (car l2))\n       (common-helper l1 (cdr l2) acc)]))\n  (common-helper l1 l2\
+    \ '()))\n", "  (let ([l1 (sort l1 <)]\n        [l2 (sort l2 <)])\n    (list-set\
+    \ (list-intersect l1 l2) <)))\n", "  (sort\n   (unique\n    (filter (lambda (elt)\
+    \ (member elt l2)) l1))\n   &lt;))\n", "  (cond [(empty? l1) '()]\n        [(empty?\
+    \ l2) '()]\n        [(member (first l1) l2)\n         (list (first l1))]\n   \
+    \     [else (common (rest l1) l2)]))\n", "  (define (iter l1 l2 acc)\n    (cond\
+    \ [(empty? l1) '()]\n          [(empty? l2) '()]\n          [(= (first l1) (first\
+    \ l2)) (iter (rest l1) (rest l2) (cons (first l1) acc))]\n          [(> (first\
+    \ l1) (first l2)) (iter l1 (rest l2) acc)]\n          [(< (first l1) (first l2))\
+    \ (iter (rest l1) l2 acc)]))\n  (iter (sort l1 <) (sort l2 <) '()))\n", "  (cond\n\
+    \    [(empty? l1) empty]\n    [(empty? l2) empty]\n    [(member (first l1) l2)\n\
+    \     (cons (first l1) (common (rest l1) l2))]\n    [else (common (rest l1) l2)]))\n",
+  "  (sort (unique (append l1 l2)) <))\n", "  (let loop ([l1 l1] [l2 l2] [acc '()])\n\
+    \    (cond\n      [(null? l1) acc]\n      [(null? l2) acc]\n      [(equal? (car\
+    \ l1) (car l2)) (loop (cdr l1) (cdr l2) (cons (car l1) acc))]\n      [(< (car\
+    \ l1) (car l2)) (loop (cdr l1) l2 acc)]\n      [else (loop l1 (cdr l2) acc)])))\n",
+  "  (cond\n    [(empty? l1) empty]\n    [(empty? l2) empty]\n    [(equal? (first\
+    \ l1) (first l2))\n     (cons (first l1) (common (rest l1) (rest l2)))]\n    [(&lt;\
+    \ (first l1) (first l2)) (common (rest l1) l2)]\n    [else (common l1 (rest l2))]))\n",
+  "  (let loop ([l1 l1] [l2 l2] [result '()])\n    (cond [(null? l1) result]\n   \
+    \       [(null? l2) result]\n          [(eq? (car l1) (car l2))\n           (loop\
+    \ (cdr l1) (cdr l2) (cons (car l1) result))]\n          [(< (car l1) (car l2))\
+    \ (loop (cdr l1) l2 result)]\n          [else (loop l1 (cdr l2) result)])))\n",
+  "  (sort (set-intersect (set l1) (set l2)) <))\n", "  (sort (remove-duplicates (intersection\
+    \ l1 l2))\n        <))\n</code>\n", "  (sort (remove-duplicates (filter (lambda\
+    \ (x) (memq x l2)) l1)) #<))\n", "  (define (ins l item)\n    (if (null? l)\n\
+    \        (list item)\n        (if (= item (car l))\n            l\n          \
+    \  (cons item l))))\n  (cond ((null? l1) '())\n        ((null? l2) '())\n    \
+    \    ((= (car l1) (car l2))\n         (cons (car l1) (common (cdr l1) (cdr l2))))\n\
+    \        ((< (car l1) (car l2))\n         (common (cdr l1) l2))\n        (else\n\
+    \         (common l1 (cdr l2)))))\n", "  (sort (remove-duplicates (intersection\
+    \ l1 l2)) <))\n", "  (list-set-intersect (sort l1 <) (sort l2 <)))\n```\n\n##\
+    \ [Reverse a string](https://www.codewars.com/kata/reversed-strings/train/racket)\n\
+    \n```racket\n#lang racket\n", "  (sort (set-intersect l1 l2) <))\n", "  (sort\
+    \ (dedup (append l1 l2)) <))\n", "  (sort (delete-duplicates (append l1 l2)) &lt;))\n",
+  "  (define s1 (set l1))\n  (define s2 (set l2))\n  (set-intersection s1 s2))\n",
+  "  (define (common_helper l1 l2 ret)\n    (if (empty? l1)\n        ret\n       \
+    \ (let ([l2-val (car l2)])\n          (cond\n           [(empty? l2) ret]\n  \
+    \         [(or (= l2-val (car l1)) (and (number? l2-val) (number? (car l1)) (=\
+    \ l2-val (car l1))))\n            (common_helper (cdr l1) (cdr l2) (cons l2-val\
+    \ ret))]\n           [(< l2-val (car l1)) (common_helper l1 (cdr l2) ret)]\n \
+    \          [else (common_helper (cdr l1) l2 ret)]))))\n  (reverse (common_helper\
+    \ l1 l2 '())))\n", "  (sort\n   (unique\n    (cond\n      [(empty? l1) '()]\n\
+    \      [(empty? l2) '()]\n      [(memq (first l1) l2) (cons (first l1) (common\
+    \ (rest l1) l2))]\n      [else (common (rest l1) l2)]))\n   <))\n", "  (set-intersection\
+    \ (sort l1 <) (sort l2 <)))\n", "  (cond\n    [(empty? l1) empty]\n    [(member\
+    \ (first l1) l2)\n     (cons (first l1) (common (rest l1) l2))]\n    [else (common\
+    \ (rest l1) l2)]))\n</code>\nI have learnt that this implementation is not tail\
+    \ recursive. How can I make it tail recursive?\n\n\nA:\n\nThis won't be tail-recursive\
+    \ since the recursive procedure is called before the cons operation.  What you\
+    \ could do is first iterate over the first list to get the common elements, and\
+    \ then iterate over the second list to eliminate duplicates and sort.  The sort\
+    \ can be done in a tail-recursive manner by building a new list.\n", "  (define\
+    \ (common-rec l1 l2)\n    (match l1\n      [() '()]\n      [(cons c1 rest1)\n\
+    \       (cond\n         [(empty? l2) '()]\n         [(member c1 l2) (cons c1 (common-rec\
+    \ rest1 l2))]\n         [else (common-rec rest1 l2)])]))\n  (sort (common-rec\
+    \ l1 l2) <))\n", "  (cond\n    [(null? l1) '()]\n    [(null? l2) '()]\n    [(equal?\
+    \ (car l1) (car l2))\n     (cons (car l1) (common (cdr l1) (cdr l2)))]\n    [(<\
+    \ (car l1) (car l2)) (common (cdr l1) l2)]\n    [else (common l1 (cdr l2))]))\n",
+  "  (define (uniq lst)\n    (filter (lambda (x) (member x lst)) lst))\n  (sort (uniq\
+    \ (append l1 l2)) &lt;))\n</code>\nThis solution runs in linear time in terms\
+    \ of the number of list members. It performs one pass over each list and uses\
+    \ O(n log n) comparisons to sort the combined list.\n", "  (sort (delete-duplicates\
+    \ (intersection l1 l2)) <))\n", "  (sort (remove-duplicates (append l1 l2)) <))\n",
+  "  (define (distinct-unsorted l1 l2)\n    (cond\n      ((null? l1) '())\n      ((member\
+    \ (car l1) l2) (cons (car l1) (distinct-unsorted (cdr l1) l2)))\n      (else (distinct-unsorted\
+    \ (cdr l1) l2))))\n  (sort (distinct-unsorted l1 l2) <))\n", "  (let ([r (set-intersection\
+    \ eq? (set l1) (set l2))])\n    (define (sort-unique l)\n      (if (empty? l)\n\
+    \          '()\n          (cons (first l) (sort-unique (filter (negate eq? (first\
+    \ l)) (rest l))))))\n    (sort-unique r)))\n", "  (cond ((null? l1) l2)\n    \
+    \    ((null? l2) l1)\n        ((= (car l1) (car l2))\n         (cons (car l1)\
+    \ (common (cdr l1) (cdr l2))))\n        ((&lt; (car l1) (car l2))\n         (common\
+    \ (cdr l1) l2))\n        ((&gt; (car l1) (car l2))\n         (common l1 (cdr l2)))))\n",
+  "  (sort\n   remove-duplicates\n   (cond [(empty? l1) empty]\n         [(empty?\
+    \ l2) empty]\n         [(member (first l1) l2) (cons (first l1) (common (rest\
+    \ l1) l2))]\n         [else (common (rest l1) l2)])))\n</code>\nNote, however,\
+    \ that this is a very na\xEFve implementation. It would be better to use a hashtable\
+    \ to keep track of the elements of one list and <code>filter</code> the other\
+    \ list.\n", "  (sort (remove-duplicates (append l1 l2)) <))\n", "  (define (helper\
+    \ l1 l2 acc)\n    (cond [(empty? l1) acc]\n          [(empty? l2) acc]\n     \
+    \     [(and (equal? (first l1) (first l2))\n                (not (member (first\
+    \ l1) acc)))\n           (helper (rest l1) (rest l2) (cons (first l1) acc))]\n\
+    \          [(or (equal? (first l1) (first l2))\n               (and (equal? (first\
+    \ l1) (first l2))\n                    (member (first l1) acc)))\n           (helper\
+    \ (rest l1) (rest l2) acc)]\n          [(or (> (first l1) (first l2))\n      \
+    \         (= (first l1) (first l2)))\n           (helper l1 (rest l2) acc)]\n\
+    \          [else (helper (rest l1) l2 acc)]))\n  (reverse (helper l1 l2 '())))\n",
+  "  (define (member-loop list item)\n    (if (null? list) #f\n      (if (equal? (car\
+    \ list) item) #t\n          (member-loop (cdr list) item))))\n  (define (intersection\
+    \ l1 l2)\n    (cond ((null? l1) '())\n          ((member-loop l2 (car l1)) (cons\
+    \ (car l1) (intersection (cdr l1) l2)))\n          (else (intersection (cdr l1)\
+    \ l2))))\n  (define (unique l)\n    (cond ((null? l) '())\n          ((member-loop\
+    \ (cdr l) (car l)) (unique (cdr l)))\n          (else (cons (car l) (unique (cdr\
+    \ l))))))\n  (sort (unique (intersection l1 l2)) <))\n", "  (sort\n   (set-intersection\
+    \ (set l1) (set l2))\n   <))\n", "  (let ([l1-set (set l1)]\n        [l2-set (set\
+    \ l2)])\n    (sort (set-intersect l1-set l2-set) <)))\n", "  (cond [(or (null?\
+    \ l1) (null? l2)) '()]\n        [(and (member (car l1) l2) (not (member (car l1)\
+    \ (cdr l1))))\n         (cons (car l1) (common (cdr l1) l2))]\n        [else (common\
+    \ (cdr l1) l2)]))\n", "  (sort (unique (append l1 l2)) <))\n", "  (define (count\
+    \ l elem)\n    (cond [(empty? l) 0]\n          [(equal? (first l) elem)\n    \
+    \       (+ 1 (count (rest l) elem))]\n          [else (count (rest l) elem)]))\n\
+    \  (define (remove-elem l elem)\n    (cond [(empty? l) empty]\n          [(equal?\
+    \ (first l) elem) (remove-elem (rest l) elem)]\n          [else (cons (first l)\
+    \ (remove-elem (rest l) elem))]))\n  (define (remove-dups l)\n    (cond [(empty?\
+    \ l) empty]\n          [(zero? (count (rest l) (first l)))\n           (cons (first\
+    \ l) (remove-dups (rest l)))]\n          [else (remove-dups (remove-elem (rest\
+    \ l) (first l)))]))\n  (remove-dups (append l1 l2)))\n</code>\nAnd here's a test:\n\
+    <code>#lang racket\n", "  (sort (remv (append l1 l2) (union l1 l2)) <))\n", " \
+    \ (set-intersection (set l1) (set l2)))\n", "  (remove-duplicates (intersection\
+    \ (sort l1 <) (sort l2 <))))\n", "  (define (uniques l)\n    (sort (list-set l)\
+    \ <))\n  (cond\n    [(empty? l1) empty]\n    [(empty? l2) empty]\n    [(member\
+    \ (first l1) l2)\n     (cons (first l1) (common (rest l1) l2))]\n    [else (common\
+    \ (rest l1) l2)]))\n", "  (sort (set-intersect (set l1) (set l2)) <))\n", "  (sort\n\
+    \   (set-intersection (set l1) (set l2))\n   <))\n", "  (cond [(or (null? l1)\
+    \ (null? l2)) '()]\n        [(member (car l1) l2) (cons (car l1) (common (cdr\
+    \ l1) l2))]\n        [else (common (cdr l1) l2)]))\n", "  (cond [(null? l1) '()]\n\
+    \        [(null? l2) '()]\n        [(null? (member (car l1) l2)) (common (cdr\
+    \ l1) l2)]\n        [else (cons (car l1) (common (cdr l1) l2))]))\n</code>\n",
+  "  (cond\n    [(or (null? l1) (null? l2)) empty]\n    [(member (car l1) l2) (cons\
+    \ (car l1) (common (cdr l1) l2))]\n    [else (common (cdr l1) l2)]))\n", "  (sort\
+    \ (set-intersect eq? l1 l2) <))\n", "  (let/ec break\n    (map (lambda (item)\n\
+    \            (if (member item l2)\n                (break item)))\n         l1)))\n",
+  "  (sort (set-intersect l1 l2) <))\n", "  (sort (set-intersect (list->set l1) (list->set\
+    \ l2)) <))\n", "  (define (helper l1 l2 acc)\n    (cond\n      [(empty? l1) (reverse\
+    \ acc)]\n      [(empty? l2) (reverse acc)]\n      [(member (first l1) l2) (helper\
+    \ (rest l1) l2 (cons (first l1) acc))]\n      [else (helper (rest l1) l2 acc)]))\n\
+    \  (sort (helper l1 l2 '()) string<?))\n", "  (sort (remove-duplicates (append\
+    \ l1 l2)) <))\n```\n\n```racket\n#lang racket\n", "  (define (common-helper l1\
+    \ l2 out)\n    (if (empty? l1)\n        out\n        (if (memq (first l1) l2)\n\
+    \            (common-helper (rest l1) l2 (cons (first l1) out))\n            (common-helper\
+    \ (rest l1) l2 out))))\n  (sort < (common-helper l1 l2 '())))\n", "  (let ([f\
+    \ (sort < (append l1 l2))])\n    (list-cdr (filter (\u03BB (e) (list-member? e\
+    \ f)) f))))\n", "  (cond [(and (empty? l1) (empty? l2)) empty]\n        [(and\
+    \ (empty? l1) (not (empty? l2))) empty]\n        [(and (not (empty? l1)) (empty?\
+    \ l2)) empty]\n        [(and (not (empty? l1)) (not (empty? l2)))\n         (cond\
+    \ [(eq? (first l1) (first l2))\n                (cons (first l1) (common (rest\
+    \ l1) (rest l2)))]\n               [(eq? (first l1) (first (rest l2)))\n     \
+    \           (cons (first l1) (common (rest l1) (rest l2)))]\n               [(eq?\
+    \ (first (rest l1)) (first l2))\n                (cons (first l2) (common (rest\
+    \ l1) (rest l2)))]\n               [(eq? (first (rest l1)) (first (rest l2)))\n\
+    \                (cons (first (rest l1)) (common (rest l1) (rest l2)))]\n    \
+    \           [else (common (rest l1) (rest l2))])])\n  )\n</code>\nAlthough it\
+    \ works well, it looks very ugly. Can you help me rewrite it in a more elegant\
+    \ way?\n\n\nA:\n\nYou don't actually need most of the <code>cond</code> cases:\n\
+    <code>(define (common l1 l2)\n  (cond [(empty? l1) '()]\n        [(empty? l2)\
+    \ '()]\n        [(eq? (first l1) (first l2))\n         (cons (first l1) (common\
+    \ (rest l1) (rest l2)))]\n        [(eq? (first l1) (first (rest l2)))\n      \
+    \   (cons (first l1) (common (rest l1) (rest l2)))]\n        [(eq? (first (rest\
+    \ l1)) (first l2))\n         (cons (first l2) (common (rest l1) (rest l2)))]\n\
+    \        [(eq? (first (rest l1)) (first (rest l2)))\n         (cons (first (rest\
+    \ l1)) (common (rest l1) (rest l2)))]\n        [else (common (", "  (sort (remove-duplicates\
+    \ (append l1 l2)) #&lt;))\n", "  (cond\n    [(empty? l1) '()]\n    [(empty? l2)\
+    \ '()]\n    [(member (first l1) l2)\n     (cons (first l1) (common (rest l1) l2))]\n\
+    \    [else (common (rest l1) l2)]))\n", "  (sort\n   (set-intersection\n    (set\
+    \ l1)\n    (set l2))\n   <))\n</code>\nMy question is whether this is idiomatic\
+    \ in Racket or whether there is a more common approach that I missed.\nUpdate:\
+    \ Here is a more principled approach:\n<code>#lang racket\n", "  (filter (curry\
+    \ common-element? l2) l1))\n", "  (if (null? l1)\n      '()\n      (if (member\
+    \ (car l1) l2)\n          (cons (car l1) (common (cdr l1) l2))\n          (common\
+    \ (cdr l1) l2))))\n", "  (define acc '(())\n    (for ([e l1])\n      (when (member\
+    \ e l2)\n        (set! acc (cons e acc))))\n    (remove-duplicates (sort acc <))))\n",
+  "  (list-set (list-set l1) l2))\n", "  (set-intersection (sort l1 #:key car) (sort\
+    \ l2 #:key car) #:key car))\n", "  (sort (remove-duplicates (append l1 l2)) <))\n\
+    ```\n\n```racket", "  (cond [(or (null? l1) (null? l2)) '()]\n        [(member\
+    \ (car l1) l2) (cons (car l1) (common (cdr l1) l2))]\n        [else (common (cdr\
+    \ l1) l2)]))\n", "  (remove-duplicates\n   (sort (flatten (map (lambda (x) (if\
+    \ (member x l2) (list x))) l1)) <)))\n", "  (cond\n    [(null? l1) '()]\n    [(member\
+    \ (car l1) l2) (cons (car l1) (common (cdr l1) l2))]\n    [else (common (cdr l1)\
+    \ l2)]))\n", "  (sort (remv-dups (append l1 l2)) <))\n", "  (remove-duplicates\
+    \ (sort (append l1 l2))))\n</code>\nExplanation\n\nSort the two lists.\nAppend\
+    \ the two lists.\nRemove duplicates.\n\nTest\n<code>#lang racket\n", "  (sort\n\
+    \   unique\n   (remove-duplicates (append l1 l2))))\n", "  (sort\n   (filter (\u03BB\
+    \ (x) (member x l1)) l2)\n   (\u03BB (x y) (string<? x y))))\n", "  (sort \n \
+    \  (let loop ([l1 l1] [l2 l2] [acc '()])\n     (cond\n       [(or (null? l1) (null?\
+    \ l2)) acc]\n       [(member (car l1) l2) (loop (cdr l1) l2 (cons (car l1) acc))]\n\
+    \       [else (loop (cdr l1) l2 acc)]))\n   <))\n", "  (if (or (null? l1) (null?\
+    \ l2))\n      '()\n      (if (equal? (car l1) (car l2))\n          (cons (car\
+    \ l1) (common (cdr l1) (cdr l2)))\n          (if (&lt; (car l1) (car l2))\n  \
+    \            (common (cdr l1) l2)\n              (common l1 (cdr l2))))))\n",
+  "  (sort (set-intersect eq? l1 l2) <))\n", "  (sort (list-set l1 l2) <))\n", " \
+    \ (sort (remv (set l1) l2) <))\n</code>\nThis would be used like so:\n<code>&gt;\
+    \ (common '(1 2 3) '(2 3 4))\n'(2 3)\n</code>\nHow do I do this in the following\
+    \ syntax?\n<code>(define (common l1 l2)\n  ...\n)\n</code>\nI tried this but it's\
+    \ not working:\n<code>(define (common l1 l2)\n  (define (remv)\n    (cond\n  \
+    \    [(null? l1) l2]\n      [(member (car l1) l2) (remv (cdr l1) (cdr l2))]\n\
+    \      [else (remv (cdr l1) l2)]))\n  (sort (remv (set l1) l2) &lt;))\n</code>\n\
+    \n\nA:\n\nYou're on the right track. Two things are wrong with your code:\n1)\
+    \ You're not using <code>remv</code> as you think you are. You're using it recursively\
+    \ as if it were just <code>remv</code>, i.e. you're using it as if it were just\
+    \ another function name. The <code>remv</code>-function is in scope, but not used\
+    \ as you think it is. (It's easy to accidentally confuse when you have nested\
+    \ functions, which is why I generally don't like that syntax).\n2) <code>cdr</code>\
+    \ is not a function you can put in a <code>cond</code>-clause. <code>cdr</code>\
+    \ needs an argument.\nSo, fix those two things, and you should be good. Here's\
+    \ one way of writing it:\n<code>(define (common l1 l2)\n  (define (remv l1 l2)\n\
+    \    (cond\n      [(null? l1) l2]\n      [(member (car l1) l2) (remv (cdr l1)\
+    \ (cdr l2))]\n      [else (remv (cdr l1) l2)]))\n  (sort (remv (set l1) l2) &lt;))\n\
+    </code>\n", "  (define (commons l1 l2 acc)\n    (cond\n      [(or (null? l1) (null?\
+    \ l2))\n       (sort (remove-duplicates acc) &lt;)]\n      [(empty? (set-difference\
+    \ l2 (list (car l1))))\n       (commons (cdr l1) l2 (cons (car l1) acc))]\n  \
+    \    [else\n       (commons (cdr l1) l2 acc)]))\n  (commons l1 l2 '()))\n", " \
+    \ (sort (set-intersect l1 l2) #:key cadr))\n", "  (sort (remove-duplicates (append\
+    \ l1 l2)) <))\n", "  (if (null? l1)\n      '()\n      (if (member (car l1) l2)\n\
+    \          (cons (car l1) (common (cdr l1) l2))\n          (common (cdr l1) l2))))\n",
+  "  (if (null? l1) '()\n      (if (null? l2) '()\n          (let ([r (common (cdr\
+    \ l1) l2)])\n            (if (member (car l1) l2)\n                (cons (car\
+    \ l1) r)\n                r)))))\n", "  (sort (remove-duplicates (intersection\
+    \ l1 l2)) <))\n", "  (cond ((or (null? l1) (null? l2)) '())\n        ((= (car\
+    \ l1) (car l2))\n         (cons (car l1) (common (cdr l1) (cdr l2))))\n      \
+    \  ((&lt; (car l1) (car l2)) (common (cdr l1) l2))\n        ((&gt; (car l1) (car\
+    \ l2)) (common l1 (cdr l2)))))\n", "  (sort (distinct (append l1 l2)) &lt;))\n\
+    </code>\nI understand how to write a single function that takes a single list\
+    \ argument and reverses the list.  How do I write this function in Racket where\
+    \ I can pass in two lists as arguments and reverse both lists?\nI want to be able\
+    \ to call this function in the following way:\n<code>(reverse-lists '(1 2 3) '(4\
+    \ 5 6))\n</code>\nand get the following result:\n<code>'((3 2 1) (6 5 4))\n</code>\n\
+    \n\nA:\n\nThe <code>reverse</code> function works on one list at a time:\n<code>(reverse\
+    \ '(1 2 3))\n=&gt; '(3 2 1)\n</code>\nBut there's nothing stopping you from using\
+    \ it twice in a row:\n<code>(list (reverse '(1 2 3)) (reverse '(4 5 6)))\n=&gt;\
+    \ '((3 2 1) (6 5 4))\n</code>\nThis is just a matter of using the right functions\
+    \ in the right order.\n", "  (sort (remove-duplicates (append l1 l2)) <))\n",
+  "  (sort (set-intersect l1 l2) <))\n", "  (sort (remove-duplicates (filter (lambda\
+    \ (x) (member x l2)) l1)) <))\n", "  (sort (remove-duplicates (append l1 l2))\
+    \ &lt;))\n", "  (cond [(or (null? l1) (null? l2)) '()]\n        [(member (car\
+    \ l1) l2)\n         (cons (car l1) (common (cdr l1) l2))]\n        [else (common\
+    \ (cdr l1) l2)]))\n", "  (cond\n    [(empty? l1) '()]\n    [(empty? l2) '()]\n\
+    \    [(memq (first l1) l2)\n     (define tmp (common (rest l1) l2))\n     (if\
+    \ (memq (first l1) tmp)\n         tmp\n         (cons (first l1) tmp))]\n    [else\
+    \ (common (rest l1) l2)]))\n", "  (sort (remove-duplicates (append l1 l2)) <))\n",
+  "  (sort (list-set l1 l2) (lambda (x y) (&lt; x y))))\n", "  (sort (remove-duplicates\
+    \ (list-intersect l1 l2)) #&lt;))\n", "  (define (common-helper l1 l2)\n    (cond\n\
+    \      [(empty? l1) '()]\n      [(empty? l2) '()]\n      [(equal? (first l1) (first\
+    \ l2))\n       (cons (first l1) (common-helper (rest l1) (rest l2)))]\n      [(<\
+    \ (first l1) (first l2))\n       (common-helper (rest l1) l2)]\n      [else (common-helper\
+    \ l1 (rest l2))]))\n  (define (remove-dups l)\n    (cond\n      [(empty? l) '()]\n\
+    \      [(equal? (first l) (second l))\n       (remove-dups (rest l))]\n      [else\
+    \ (cons (first l) (remove-dups (rest l)))]))\n  (remove-dups (common-helper (sort\
+    \ l1 <) (sort l2 <))))\n", "  (sort (remove-duplicates (append l1 l2)) #&lt;))\n",
+  "  (sort (remdup (append l1 l2)) &lt;))\n", "  (sort (remove-duplicates (append\
+    \ l1 l2)) <))\n", "  (letrec ([r (sort (append (intersect (sort l1) (sort l2))\
+    \ '()))])\n    (cond\n      [(empty? r) empty]\n      [(equal? (first r) (second\
+    \ r)) (common (rest r) (rest r))]\n      [else (cons (first r) (common (rest r)\
+    \ (rest r)))])))\n", "  (sort\n   (set-intersection\n    (set l1)\n    (set l2))\n\
+    \   <))\n", "  (define (member-of lst elt)\n    (cond\n      [(null? lst) #f]\n\
+    \      [(eq? (car lst) elt) #t]\n      [else (member-of (cdr lst) elt)]))\n  (cond\n\
+    \    [(null? l1) '()]\n    [(member-of l2 (car l1))\n     (cons (car l1) (common\
+    \ (cdr l1) l2))]\n    [else (common (cdr l1) l2)]))\n</code>\nThe basic idea is\
+    \ to loop through the first list and check if each element is a member of the\
+    \ second list. If so, add it to the result.\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

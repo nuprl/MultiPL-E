@@ -10,7 +10,664 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate h
   \ 5.9 4.0 5.0) 0.8) #f)\n    (check-equal? (candidate (list 1.0 2.0 3.0 4.0 5.0\
   \ 2.0) 0.1) #t)\n    (check-equal? (candidate (list 1.1 2.2 3.1 4.1 5.1) 1.0) #t)\n\
   \    (check-equal? (candidate (list 1.1 2.2 3.1 4.1 5.1) 0.5) #f)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (let* ([numbers-sorted (sort numbers <)]\n         [next-numbers-sorted\
+    \ (cdr numbers-sorted)])\n    (or (map (\u03BB (n nn)\n               (and (<\
+    \ n threshold) (< nn threshold) (< (- nn n) threshold)))\n             numbers-sorted\n\
+    \             next-numbers-sorted)\n        (has_close_elements next-numbers-sorted\
+    \ threshold))))\n", "  (for/or ([current-index (in-range (length numbers))]\n\
+    \           [current-number (in-list numbers)])\n    (for/or ([compared-index\
+    \ (in-range (length numbers))]\n             [compared-number (in-list numbers)])\n\
+    \      (and (not (= current-index compared-index))\n           (< (abs (- current-number\
+    \ compared-number)) threshold)))))\n", "  (for/or ([n numbers]\n           [o\
+    \ numbers]\n           #:when (and (not (= n o))\n                       (< (abs\
+    \ (- n o)) threshold)))\n    #t))\n", "  (define (inner acc)\n    (cond\n    \
+    \  [(null? acc) false]\n      [(< (abs (- (first acc) (first numbers))) threshold)\
+    \ true]\n      [else (inner (rest acc))]))\n  (inner (rest numbers)))\n", "  (define\
+    \ (loop numbers threshold)\n    (if (null? numbers)\n        #f\n        (let\
+    \ ([num (car numbers)])\n          (if (loop (cdr numbers) threshold)\n      \
+    \        #t\n              (let ([num (car numbers)])\n                (and (null?\
+    \ (cdr numbers)) #f)\n                (let ([num2 (cadr numbers)])\n         \
+    \         (if (< (abs (- num num2)) threshold)\n                      #t\n   \
+    \                   (loop (cdr numbers) threshold))))))))\n  (loop numbers threshold))\n",
+  "  (cond ((not (null? numbers))\n         (let ([first (car numbers)]\n        \
+    \       [rest (cdr numbers)])\n           (cond ((has_close_elements rest threshold)\n\
+    \                  #t)\n                 ((any? (\u03BB (element) (eq? threshold\
+    \ (abs (- element first)))) rest)\n                  #t)\n                 (else\n\
+    \                  #f))))\n        (else\n         #f)))\n", "  (let loop ([numbers\
+    \ numbers])\n    (match numbers\n      [(list (list fst rst ...) (list snd ...))\n\
+    \       (if (&lt; (- fst snd) threshold)\n           #t\n           (loop (list\
+    \ rst ...)))]\n      [else #f])))\n", "  (for*/or ([a numbers]\n            [b\
+    \ (in-list numbers #:when (not (= a b)))]\n            #:when (< (abs (- a b))\
+    \ threshold))\n    #t))\n", "  (cond\n    [(empty? numbers) #f]\n    [(< threshold\
+    \ (magnitude (- (first numbers) (second numbers)))) #t]\n    [else (has_close_elements\
+    \ (rest numbers) threshold)]))\n", "  (cond\n    [(empty? numbers) false]\n  \
+    \  [(has_close_elements\n      (cdr numbers)\n      threshold\n      (car numbers))\n\
+    \      true]\n    [else\n      (has_close_elements\n        (cdr numbers)\n  \
+    \      threshold\n        (car numbers))]))\n", "  (cond [(empty? numbers) #f]\n\
+    \        [(= (count numbers) 1) #f]\n        [(or (> (first numbers) (+ (second\
+    \ numbers) threshold))\n             (> (second numbers) (+ (first numbers) threshold)))\n\
+    \         #t]\n        [else (has_close_elements (rest numbers) threshold)]))\n",
+  "  (for/or ([first numbers]\n           [second (in-list (cdr numbers))])\n    (<\
+    \ (abs (- first second)) threshold)))\n```\n\n## How to run\n\nOpen `sieve.rkt`\
+    \ in your favourite Racket distribution and run it.\n\n## License\n\n[GNU General\
+    \ Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html)", "  (let\
+    \ loop ([numbers numbers])\n    (or (null? numbers)\n        (let* ([head (car\
+    \ numbers)]\n               [tail (cdr numbers)]\n               [distance (apply\
+    \ min (map (lambda (e) (abs (- e head))) tail))])\n          (or (= distance 0)\n\
+    \              (&lt; distance threshold)\n              (loop tail))))))\n", " \
+    \ (cond\n    [(empty? numbers) #f]\n    [(or (empty? (rest numbers))\n       \
+    \  (&lt;= (abs (- (first numbers) (first (rest numbers)))) threshold))\n     #t]\n\
+    \    [else (has_close_elements (rest numbers) threshold)]))\n", "  (let loop ([numbers\
+    \ numbers])\n    (if (or (null? numbers) (null? (cdr numbers)))\n        #f\n\
+    \        (let ([diff (abs (- (car numbers) (cadr numbers)))])\n          (if (&lt;\
+    \ diff threshold)\n              #t\n              (loop (cdr numbers)))))))\n",
+  "  (define (loop numbers)\n    (cond [(empty? numbers) #f]\n          [(empty? (rest\
+    \ numbers)) #f]\n          [(< (abs (- (first numbers) (first (rest numbers))))\
+    \ threshold) #t]\n          [else (loop (rest numbers))]))\n  (loop numbers))\n",
+  "  (cond\n    [(empty? numbers) #f]\n    [(empty? (rest numbers)) #f]\n    [(< (abs\
+    \ (- (first numbers) (first (rest numbers)))) threshold) #t]\n    [else (has_close_elements\
+    \ (rest numbers) threshold)]))\n```\n\nTo improve the code, we have to go right\
+    \ to the bottom, examine the last case,\nand start unrolling it. The first thing\
+    \ to notice is that we make the same\ncomparison again and again, i.e. the one\
+    \ between the first and the second\nelement, the third and the fourth, and so\
+    \ on. This suggests to group the\nelements by pairs and compare the pairs. To\
+    \ do this, we define a function\n`pairwise-helper` that consumes a list of elements\
+    \ and returns another list\nwhose elements are pairs of subsequent elements of\
+    \ the input list. If the list\nhas an odd number of elements, the last element\
+    \ is dropped.\n\n```racket", "  (cond\n    [(empty? numbers)\n     #f]\n    [(empty?\
+    \ (rest numbers))\n     #f]\n    [else\n     (if (< (abs (- (first numbers) (first\
+    \ (rest numbers)))) threshold)\n         #t\n         (has_close_elements (rest\
+    \ numbers) threshold))]))\n```\n\n##### I.1.4 Scheme\n\n```scheme", "  (cond\n\
+    \    [(null? numbers) #f]\n    [(null? (cdr numbers)) #f]\n    [(< (abs (- (car\
+    \ numbers) (cadr numbers))) threshold) #t]\n    [else (has_close_elements (cdr\
+    \ numbers) threshold)]))\n", "  (if (null? numbers) #f\n      (let ((closest_after\
+    \ (find_closest_after (car numbers) (cdr numbers) threshold)))\n        (if closest_after\n\
+    \            #t\n            (has_close_elements (cdr numbers) threshold)))))\n",
+  "  (let loop ([numbers numbers])\n    (if (null? numbers)\n        #f\n        (let\
+    \ loop ([numbers (cdr numbers)])\n          (if (null? numbers)\n            \
+    \  #f\n              (if (&lt; (abs (- (car numbers) (car (cdr numbers)))) threshold)\n\
+    \                  #t\n                  (loop (cdr numbers))))))))\n", "  (cond\n\
+    \    [(null? numbers) #f]\n    [(null? (cdr numbers)) #f]\n    [(< (abs (- (car\
+    \ numbers) (cadr numbers))) threshold) #t]\n    [else (has_close_elements (cdr\
+    \ numbers) threshold)]))\n```\n\n3. Given a list of numbers, return the difference\
+    \ between the largest and smallest\nnumber in the list.\n\n```racket\n#lang racket\n",
+  "  (let loop ([numbers numbers])\n    (cond\n      [(empty? numbers) #f]\n     \
+    \ [(< (abs (- (first numbers) (second numbers))) threshold) #t]\n      [else (loop\
+    \ (rest numbers))])))\n", "  (if (null? numbers)\n      #f\n      (let ([next-numbers\
+    \ (cdr numbers)])\n        (or (apply min (map (lambda (x) (abs (- x (car numbers))))\
+    \ next-numbers))\n            (has_close_elements next-numbers threshold)))))\n",
+  "  (define (has_close_elements_iter current_element remaining_elements threshold)\n\
+    \    (if (not (null? remaining_elements))\n        (or (< (abs (- current_element\
+    \ (car remaining_elements))) threshold)\n            (has_close_elements_iter\
+    \ current_element (cdr remaining_elements) threshold))\n        #f))\n  (if (null?\
+    \ numbers)\n      #f\n      (or (has_close_elements_iter (car numbers) (cdr numbers)\
+    \ threshold)\n          (has_close_elements (cdr numbers) threshold))))\n", " \
+    \ (let* ([closest (sort numbers <)]\n         ([result false]))\n    (for* ([i\
+    \ (in-range (sub1 (length closest)))])\n      (if (< (abs (- (list-ref closest\
+    \ i) (list-ref closest (add1 i)))) threshold)\n          (set! result true)))\n\
+    \    result))\n", "  (begin\n    (for/or ([x numbers] [y (in-list (rest numbers))])\n\
+    \      (abs (- x y)))))\n", "  (cond\n    [(null? numbers) false]\n    [(null?\
+    \ (cdr numbers)) false]\n    [(< (abs (- (car numbers) (cadr numbers))) threshold)\
+    \ true]\n    [else (has_close_elements (cdr numbers) threshold)]))\n", "  (for/or\
+    \ ([i numbers] [j (rest numbers)])\n    (< (abs (- i j)) threshold)))\n", "  (and\
+    \ (= (length numbers) (length (remove-duplicates numbers)))\n       (for/or ([n1\
+    \ numbers]\n                [n2 (in-list numbers 'not)])\n         (< (abs (-\
+    \ n1 n2)) threshold))))\n", "  (match numbers\n    [(list) #f]\n    [(list x (list\
+    \ y ...))\n     (or (< (- x y) threshold)\n         (has_close_elements (list\
+    \ y ...) threshold))]))\n", "  (cond\n    ((null? numbers) #f)\n    ((null? (cdr\
+    \ numbers)) #f)\n    ((< (abs (- (car numbers) (cadr numbers))) threshold) #t)\n\
+    \    (else (has_close_elements (cdr numbers) threshold))))\n", "  (let loop ([numbers\
+    \ numbers])\n    (if (null? numbers)\n        #f\n        (let ((n (car numbers)))\n\
+    \          (or (let loop ([remaining (cdr numbers)])\n                (if (null?\
+    \ remaining)\n                    #f\n                    (let ((m (car remaining)))\n\
+    \                      (if (&lt; (abs (- n m)) threshold)\n                  \
+    \        #t\n                          (loop (cdr remaining))))))\n          \
+    \    (loop (cdr numbers)))))))\n", "  (if (null? numbers) #f\n      (let ((next\
+    \ (cdr numbers)))\n        (if (null? next) #f\n            (let ((rest (has_close_elements\
+    \ next threshold)))\n              (if (or (< (- (car numbers) (car next)) threshold)\n\
+    \                      rest)\n                  #t\n                  #f))))))\n",
+  "  (let loop ([numbers numbers])\n    (match numbers\n      [(cons (cons num1 (cons\
+    \ num2 rest)) more)\n       (if (&lt; (abs (- num1 num2)) threshold)\n       \
+    \    true\n           (loop (append more (list (cons num1 (cons num2 rest))))))]\n\
+    \      [else false])))\n", "  (cond ((empty? numbers) #f)\n        ((null? (cdr\
+    \ numbers)) #f)\n        ((<= (abs (- (car numbers) (cadr numbers))) threshold)\
+    \ #t)\n        (else (has_close_elements (cdr numbers) threshold))))\n", "  (cond\
+    \ [(empty? numbers) false]\n        [(has_closer_neighbour? (first numbers) (rest\
+    \ numbers) threshold) true]\n        [else (has_close_elements (rest numbers)\
+    \ threshold)]))\n", "  (let loop ([numbers numbers])\n    (cond\n      [(empty?\
+    \ numbers) false]\n      [(not (empty? (rest numbers)))\n       (let ([a (first\
+    \ numbers)]\n             [b (first (rest numbers))])\n         (if (&lt; (abs\
+    \ (- a b)) threshold)\n             true\n             (loop (rest numbers))))]\n\
+    \      [else false])))\n", "  (cond ((empty? numbers)\n         #f)\n        ((null?\
+    \ (cdr numbers))\n         #f)\n        ((&lt; (abs (- (car numbers) (cadr numbers)))\
+    \ threshold)\n         #t)\n        (else\n         (has_close_elements (cdr numbers)\
+    \ threshold))))\n", "  (if (or (null? numbers) (null? (cdr numbers)))\n      #f\n\
+    \      (let* ([first (car numbers)]\n             [second (cadr numbers)]\n  \
+    \           [distance (abs (- first second))])\n        (if (< distance threshold)\n\
+    \            #t\n            (has_close_elements (cdr numbers) threshold)))))\n",
+  "  (cond\n    [(empty? numbers) #f]\n    [(empty? (rest numbers)) #f]\n    [(< (abs\
+    \ (- (first numbers) (first (rest numbers)))) threshold) #t]\n    [else (has_close_elements\
+    \ (rest numbers) threshold)]))\n", "  (let loop ([numbers numbers])\n    (cond\
+    \ [(empty? numbers) #f]\n          [(empty? (rest numbers)) #f]\n          [(<\
+    \ (abs (- (first numbers) (first (rest numbers)))) threshold) #t]\n          [else\
+    \ (loop (rest numbers))])))\n", "  (let loop ([tail (cdr numbers)]\n         \
+    \    [head numbers])\n    (cond [(empty? tail) #f]\n          [(< (abs (- (car\
+    \ tail) (car head))) threshold) #t]\n          [else (loop (cdr tail) head)])))\n",
+  "  (let loop ([numbers numbers])\n    (match numbers\n      [(list) #f]\n      [(list\
+    \ a (list b ...))\n       (if (< (abs (- a b)) threshold)\n           #t\n   \
+    \        (loop (list b ...)))])))\n", "  (for/or ([a numbers]\n           [b (in-list\
+    \ numbers)])\n    (and (not (= a b))\n         (< (abs (- a b)) threshold))))\n",
+  "  (let loop ([xs (rest numbers)] [ys numbers])\n    (if (null? xs)\n        #f\n\
+    \        (if (< (abs (- (first xs) (first ys))) threshold)\n            #t\n \
+    \           (loop (rest xs) (rest ys))))))\n", "  (define (elements_close? x y)\n\
+    \    (< (abs (- x y)) threshold))\n  (for/or ([x numbers]\n           [y (in-list\
+    \ (cdr numbers))])\n    (elements_close? x y)))\n", "  (let loop ([numbers numbers])\n\
+    \    (cond [(empty? numbers) #f]\n          [(empty? (rest numbers)) #f]\n   \
+    \       [(< (abs (- (first numbers) (first (rest numbers)))) threshold) #t]\n\
+    \          [else (loop (rest numbers))])))\n", "  (cond [(empty? numbers) #f]\n\
+    \        [(null? (cdr numbers)) #f]\n        [(abs (- (car numbers) (cadr numbers)))\
+    \ &lt; threshold]\n        [else (has_close_elements (cdr numbers) threshold)]))\n",
+  "  (cond\n    [(empty? numbers) false]\n    [(rest numbers) (or (abs (- (first numbers)\
+    \ (first (rest numbers))))\n                        (has_close_elements (rest\
+    \ numbers) threshold))]))\n</code>\nI tried to implement it like above, but this\
+    \ code does not work. (It still returns true even if there are no close numbers).\
+    \ What am I doing wrong?\n\n\nA:\n\nIf you'd like to reuse the <code>abs</code>\
+    \ function it's probably a good idea to abstract away the logic of comparing two\
+    \ numbers.\n<code>(define (is-closer-than? n1 n2 threshold)\n  (&lt; (abs (- n1\
+    \ n2)) threshold))\n</code>\nWith this function you can implement <code>has-close-elements</code>\
+    \ in a very similar way as your original implementation:\n<code>(define (has-close-elements\
+    \ numbers threshold)\n  (cond\n    [(empty? numbers) #f]\n    [(empty? (rest numbers))\
+    \ #f]\n    [else\n     (or (is-closer-than? (first numbers) (first (rest numbers))\
+    \ threshold)\n         (has-close-elements (rest numbers) threshold))]))\n</code>\n\
+    You also need to check if <code>(rest numbers)</code> is empty, otherwise the\
+    \ procedure will fail.\n", "  (define (is_closer x y threshold)\n    (< (abs (-\
+    \ x y)) threshold))\n  (let loop ([lst numbers])\n    (if (null? lst)\n      \
+    \  #f\n        (or (is_closer (car lst) (cadr lst) threshold)\n            (loop\
+    \ (cdr lst))))))\n", "  (cond [(empty? numbers) false]\n        [(empty? (rest\
+    \ numbers)) false]\n        [else (or (>= (abs (- (first numbers) (first (rest\
+    \ numbers)))) threshold)\n                   (has_close_elements (rest numbers)\
+    \ threshold))]))\n", "  (cond\n    [(empty? numbers)\n     #f]\n    [(empty? (rest\
+    \ numbers))\n     #f]\n    [else\n     (or (> (abs (- (first numbers) (first (rest\
+    \ numbers)))) threshold)\n         (has_close_elements (rest numbers) threshold))]))\n\
+    </code>\n", "  (define (has_close_elements-iter numbers)\n    (if (empty? numbers)\n\
+    \        #f\n        (let* ([first (first numbers)]\n               [rest (rest\
+    \ numbers)]\n               [closest (argmin (\u03BB (number) (abs (- first number)))\
+    \ rest)])\n          (if (< (abs (- first closest)) threshold)\n             \
+    \ #t\n              (has_close_elements-iter rest)))))\n  (has_close_elements-iter\
+    \ numbers))\n", "  (cond\n    [(null? numbers) #f]\n    [(= (length numbers) 1)\
+    \ #f]\n    [(< (abs (- (car numbers) (cadr numbers))) threshold) #t]\n    [else\
+    \ (has_close_elements (cdr numbers) threshold)]))\n", "  (and (not (null? numbers))\n\
+    \       (or (< (abs (- (car numbers) (cadr numbers))) threshold)\n           (has_close_elements\
+    \ (cdr numbers) threshold))))\n", "  (let ([elements (sort numbers)])\n    (let\
+    \ loop ([elements elements])\n      (cond [(empty? elements) #f]\n           \
+    \ [(< (abs (- (first elements) (second elements))) threshold) #t]\n          \
+    \  [else (loop (rest elements))]))))\n", "  (let loop ([remaining numbers]\n \
+    \            [next-remaining (cdr remaining)])\n    (if (or (null? remaining)\
+    \ (null? next-remaining))\n        #f\n        (if (< (abs (- (car remaining)\
+    \ (car next-remaining))) threshold)\n            #t\n            (loop (cdr remaining)\
+    \ (cdr next-remaining))))))\n```\n\n```scheme\n#lang racket\n", "  (cond\n   \
+    \ [(empty? numbers) #f]\n    [(has_smaller_distance_than? (rest numbers) (first\
+    \ numbers) threshold) #t]\n    [else (has_close_elements (rest numbers) threshold)]))\n",
+  "  (let loop ([num-list numbers]\n             [prev-num (first num-list)])\n  \
+    \  (cond\n      [(empty? num-list)\n       #f]\n      [(<= threshold (abs (- (first\
+    \ num-list) prev-num)))\n       #t]\n      [else\n       (loop (rest num-list)\
+    \ (first num-list))])))\n", "  (for/or ([x numbers]\n           [y (in-list numbers)])\n\
+    \    (< (abs (- x y)) threshold)))\n", "  (cond [(empty? numbers) #f]\n      \
+    \  [(empty? (rest numbers)) #f]\n        [(< (abs (- (first numbers) (first (rest\
+    \ numbers)))) threshold) #t]\n        [else (has_close_elements (rest numbers)\
+    \ threshold)]))\n", "  (let loop ([numbers numbers])\n    (cond [(empty? numbers)\
+    \ #f]\n          [(empty? (rest numbers)) #f]\n          [(<= (abs (- (first numbers)\
+    \ (first (rest numbers)))) threshold) #t]\n          [else (loop (rest numbers))])))\n",
+  "  (if (or (null? numbers) (null? (cdr numbers))) #f\n      (let ([current-number\
+    \ (car numbers)]\n            [next-number (cadr numbers)])\n        (if (> (abs\
+    \ (- current-number next-number)) threshold)\n            (has_close_elements\
+    \ (cdr numbers) threshold)\n            #t))))\n", "  (define (helper current_closest\
+    \ l)\n    (cond\n      [(empty? l) (and (not (null? current_closest))\n      \
+    \                 (< (abs (- (first current_closest) (second current_closest)))\n\
+    \                          threshold))]\n      [(< (abs (- (first l) (first current_closest)))\n\
+    \          threshold)\n       (helper (list (first l) (first current_closest))\
+    \ (rest l))]\n      [else (helper (list (first l) (first current_closest)) (rest\
+    \ l))]))\n  (helper (list (first numbers) (first numbers)) (rest numbers)))\n",
+  "  (for/or ([n1 numbers]\n           [n2 (in-list numbers)])\n    (cond [(< (abs\
+    \ (- n1 n2)) threshold) true]\n          [else false])))\n", "  (let loop ([numbers\
+    \ numbers])\n    (if (null? numbers)\n        #f\n        (let ([current (car\
+    \ numbers)])\n          (and (not (null? (cdr numbers)))\n               (or (<\
+    \ (abs (- current (car (cdr numbers)))) threshold)\n                   (loop (cdr\
+    \ numbers))))))))\n", "  (for/or ([i (in-range (length numbers))]\n          \
+    \ [j (in-range (add1 i) (length numbers))])\n    (and (not (zero? (abs (- (list-ref\
+    \ numbers i) (list-ref numbers j)))))\n         (< (abs (- (list-ref numbers i)\
+    \ (list-ref numbers j))) threshold))))\n", "  (for/or ([a numbers]\n         \
+    \  [b (rest numbers)])\n    (let ([d (- a b)])\n      (and (&lt; d 0) (&lt; (-\
+    \ 0 d) threshold)))))\n", "  (define (has_close_element? numbers threshold)\n\
+    \    (cond\n      [(empty? numbers) #f]\n      [(< (abs (- (first numbers) (second\
+    \ numbers))) threshold) #t]\n      [else (has_close_element? (rest numbers) threshold)]))\n\
+    \  (has_close_element? (sort numbers <) threshold))\n", "  (cond\n    [(empty?\
+    \ numbers) #f]\n    [(< (abs (- (first numbers) (second numbers))) threshold)\
+    \ #t]\n    [else (has_close_elements (rest numbers) threshold)]))\n", "  (define\
+    \ (helper first-num rest-of-numbers)\n    (cond\n      [(empty? rest-of-numbers)\
+    \ false]\n      [(< (abs (- first-num (first rest-of-numbers))) threshold) true]\n\
+    \      [else (helper first-num (rest rest-of-numbers))]))\n  (or (helper (first\
+    \ numbers) (rest numbers))\n      (has_close_elements (rest numbers) threshold)))\n",
+  "  (define (check_all_pairs numbers threshold)\n    (cond\n      [(null? numbers)\
+    \ false]\n      [(null? (cdr numbers)) false]\n      [(< (abs (- (car numbers)\
+    \ (cadr numbers))) threshold) true]\n      [else (check_all_pairs (cdr numbers)\
+    \ threshold)]))\n  (check_all_pairs numbers threshold))\n", "  (cond\n    [(empty?\
+    \ numbers) #f]\n    [(empty? (rest numbers)) #f]\n    [(< (abs (- (first numbers)\
+    \ (first (rest numbers)))) threshold) #t]\n    [else (has_close_elements (rest\
+    \ numbers) threshold)]))\n", "  (cond [(empty? numbers)\n         #f]\n      \
+    \  [(= 1 (length numbers))\n         #f]\n        [else\n         (let ([first-number\
+    \ (first numbers)]\n               [rest-of-numbers (rest numbers)])\n       \
+    \    (or (has_close_elements rest-of-numbers threshold)\n               (let ([first-number-closer-than-threshold\n\
+    \                      (lambda (n)\n                        (< (- first-number\
+    \ n) threshold))])\n                 (member first-number-closer-than-threshold\
+    \ rest-of-numbers))))]))\n```\n\n```racket\n#lang racket\n", "  (foldl (lambda\
+    \ (current-element remaining-elements)\n           (or (foldl (lambda (x comparison-result)\n\
+    \                        (if (and (not comparison-result)\n                  \
+    \               (<= (abs (- current-element x)) threshold))\n                \
+    \            #t\n                            #f))\n                      #f\n\
+    \                      remaining-elements)\n               remaining-elements))\n\
+    \         #f\n         numbers))\n", "  (cond\n    [(empty? numbers) #f]\n   \
+    \ [(or (empty? (rest numbers)) (empty? (rest (rest numbers)))) #f]\n    [(or (<\
+    \ (- (first numbers) (second numbers)) threshold)\n         (< (- (first numbers)\
+    \ (third numbers)) threshold))\n     #t]\n    [else (has_close_elements (rest\
+    \ numbers) threshold)]))\n```\n\n### 2.4.4 Quantifying over list elements\n\n\
+    To \"disregard the structure of a list\" we can use a `for/fold` statement:\n\n\
+    ```#lang racket\n", "  (let loop ([numbers numbers])\n    (cond [(null? numbers)\
+    \ #f]\n          [(= (length numbers) 1) #f]\n          [(< (- (first numbers)\
+    \ (second numbers)) threshold) #t]\n          [else (loop (rest numbers))])))\n",
+  "  (define (check_two lst)\n    (match lst\n      [(list x xs)\n       (if (< (abs\
+    \ (- x (car xs))) threshold)\n           #t\n           (check_two xs))]\n   \
+    \   [_\n       #f]))\n  (check_two numbers))\n", "  (cond\n    ((null? numbers)\
+    \ #f)\n    ((null? (cdr numbers)) #f)\n    ((< (abs (- (car numbers) (cadr numbers)))\
+    \ threshold) #t)\n    (else (has_close_elements (cdr numbers) threshold))))\n",
+  "  (cond\n    [(empty? numbers) #f]\n    [(= (rest numbers) (first numbers))\n \
+    \    (has_close_elements (rest numbers) threshold)]\n    [(< (abs (- (first numbers)\
+    \ (second numbers))) threshold) #t]\n    [else (has_close_elements (rest numbers)\
+    \ threshold)]))\n", "  (or (or (and (< (abs (- (car numbers) (cadr numbers)))\
+    \ threshold)\n               #t)\n          (has_close_elements (cdr numbers)\
+    \ threshold))\n      #f))\n", "  (cond\n    [(empty? numbers) #f]\n    [(empty?\
+    \ (rest numbers)) #f]\n    [(< (abs (- (first numbers) (first (rest numbers))))\
+    \ threshold) #t]\n    [else (has_close_elements (rest numbers) threshold)]))\n",
+  "  (cond\n    [(empty? numbers) #f]\n    [(or (or\n            (= (distance (first\
+    \ numbers) (second numbers)) threshold)\n            (= (distance (first numbers)\
+    \ (third numbers)) threshold))\n        (has_close_elements (rest numbers) threshold))\n\
+    \     #t]\n    [else #f]))\n", "  (define (helper left right)\n    (cond [(empty?\
+    \ left) false]\n          [(empty? right) (helper (rest left) (rest left))]\n\
+    \          [(< (- (first left) (first right)) threshold) true]\n          [else\
+    \ (helper left (rest right))]))\n  (helper numbers numbers))\n", "  (let loop\
+    \ ([numbers numbers])\n    (cond [(empty? numbers) #f]\n          [(empty? (rest\
+    \ numbers)) #f]\n          [(< (abs (- (first numbers) (first (rest numbers))))\
+    \ threshold) #t]\n          [else (loop (rest numbers))])))\n", "  (and (not (null?\
+    \ numbers)) \n       (or (smaller_than_threshold? (car numbers) (cadr numbers)\
+    \ threshold)\n           (has_close_elements (cdr numbers) threshold))))\n", " \
+    \ (letrec ([check-pair (lambda (numbers threshold)\n                        (cond\
+    \ [(empty? numbers) #f]\n                              [(<= (abs (- (first numbers)\
+    \ (second numbers))) threshold) #t]\n                              [else (check-pair\
+    \ (rest numbers) threshold)]))])\n    (check-pair numbers threshold)))\n", " \
+    \ (for/or ([a numbers]\n           [b (in-list numbers)])\n    (&lt; (abs (- a\
+    \ b)) threshold)))\n", "  (cond\n    [(empty? numbers) #f]\n    [(empty? (rest\
+    \ numbers)) #f]\n    [(< (abs (- (first numbers) (first (rest numbers)))) threshold)\
+    \ #t]\n    [else (has_close_elements (rest numbers) threshold)]))\n", "  (if (empty?\
+    \ numbers)\n      #f\n      (let ([head (first numbers)]\n            [tail (rest\
+    \ numbers)])\n        (or (>= (abs (- head (first tail))) threshold)\n       \
+    \     (has_close_elements tail threshold)))))\n", "  (if (empty? numbers)\n  \
+    \    #f\n      (let ([distance-to-rest (apply min (map (lambda (n) (abs (- (first\
+    \ numbers) n))) (rest numbers)))])\n        (or (>= distance-to-rest threshold)\n\
+    \            (has_close_elements (rest numbers) threshold)))))\n", "  (cond\n\
+    \    [(empty? numbers) #f]\n    [(empty? (rest numbers)) #f]\n    [(close? (first\
+    \ numbers) (second numbers) threshold) #t]\n    [else (has_close_elements (rest\
+    \ numbers) threshold)]))\n", "  (foldl (lambda (a b)\n           (or a b))\n \
+    \        #f\n         (map (lambda (x)\n                (foldl (lambda (a b)\n\
+    \                         (or a b))\n                      #f\n              \
+    \        (map (lambda (y)\n                             (&lt; (abs (- x y)) threshold))\n\
+    \                           numbers)))\n              numbers)))\n", "  (cond\
+    \ [(empty? numbers)\n         #f]\n        [(empty? (rest numbers))\n        \
+    \ #f]\n        [else\n         (cond [(< (abs (- (first numbers) (first (rest\
+    \ numbers)))) threshold)\n                #t]\n               [else\n        \
+    \        (has_close_elements (rest numbers) threshold)])]))\n", "  (let ([first-number\
+    \ (car numbers)])\n    (cond\n      [(null? numbers) #f]\n      [(< (abs (- first-number\
+    \ (car (cdr numbers)))) threshold) #t]\n      [else (has_close_elements (cdr numbers)\
+    \ threshold)])))\n", "  (let loop ([numbers numbers])\n    (match numbers\n  \
+    \    ((list-rest . cons)\n       (let ([smaller-difference\n              (apply\
+    \ min (for/list ([a-i (in-list (rest numbers))]\n                            \
+    \        [b-i (in-list numbers)])\n                           (abs (- a-i b-i))))])\n\
+    \         (if (<= smaller-difference threshold)\n             #t\n           \
+    \  (loop (rest numbers)))))\n      (else #f))))\n", "  (define (c? n1 n2)\n  \
+    \  (< (abs (- n1 n2)) threshold))\n  (cond ((null? numbers) #f)\n        ((null?\
+    \ (cdr numbers)) #f)\n        ((c? (car numbers) (cadr numbers)) #t)\n       \
+    \ (else (has_close_elements (cdr numbers) threshold))))\n", "  (cond [(empty?\
+    \ numbers) #f]\n        [(empty? (rest numbers)) #f]\n        [(< (abs (- (first\
+    \ numbers) (first (rest numbers)))) threshold) #t]\n        [else (has_close_elements\
+    \ (rest numbers) threshold)]))\n", "  (cond [(empty? numbers) #f]\n        [(=\
+    \ (count numbers) 1) #f]\n        [(< (abs (- (first numbers) (first (rest numbers))))\
+    \ threshold) #t]\n        [else (has_close_elements (rest numbers) threshold)]))\n",
+  "  (for/or ([x numbers]\n           [y (in-list numbers (cdr (in-list numbers)))])\n\
+    \    (let* ([distance (abs (- x y))])\n      (and (not (= distance 0))\n     \
+    \      (< distance threshold)))))\n", "  (let loop ([numbers numbers])\n    (cond\n\
+    \      [(empty? numbers) #f]\n      [(empty? (rest numbers)) #f]\n      [(< (abs\
+    \ (- (first numbers) (first (rest numbers)))) threshold) #t]\n      [else (loop\
+    \ (rest numbers))])))\n", "  (define (aux numbers last-num)\n    (cond ((null?\
+    \ numbers) #f)\n          ((< (abs (- (car numbers) last-num)) threshold) #t)\n\
+    \          (else (aux (cdr numbers) (car numbers)))))\n  (cond ((null? numbers)\
+    \ #f)\n        (else (aux (cdr numbers) (car numbers)))))\n", "  (cond\n    [(null?\
+    \ numbers) false]\n    [(null? (cdr numbers)) false]\n    [(< (abs (- (car numbers)\
+    \ (cadr numbers))) threshold) true]\n    [else (has_close_elements (cdr numbers)\
+    \ threshold)]))\n", "  (let loop ([numbers numbers])\n    (cond\n      [(null?\
+    \ numbers) #f]\n      [(null? (cdr numbers)) #f]\n      [(abs (- (car numbers)\
+    \ (cadr numbers))) &lt; threshold #t]\n      [else (loop (cdr numbers))])))\n",
+  "  (cond\n    [(empty? numbers) #f]\n    [(and (empty? (rest numbers)) (empty? (rest\
+    \ (rest numbers)))) #f]\n    [(< (abs (- (first numbers) (first (rest numbers))))\
+    \ threshold) #t]\n    [else (has_close_elements (rest numbers) threshold)]))\n",
+  "  (for/or ([x numbers]\n           [y (in-list numbers)])\n    (and (not (= x y))\n\
+    \         (< (abs (- x y)) threshold))))\n", "  (for/or ([i (in-range (length\
+    \ numbers))]\n           [j (in-range (add1 i) (length numbers))])\n    (and (not\
+    \ (zero? (sub1 j)))\n         (&lt; (abs (- (list-ref numbers i) (list-ref numbers\
+    \ j))) threshold))))\n", "  (match numbers\n    [(_ (cons a b))\n     (or\n  \
+    \    (has_close_elements (cons a (cdr numbers)) threshold)\n      (has_close_elements\
+    \ (cons b (cdr numbers)) threshold)\n      (< (abs (- a b)) threshold))]\n   \
+    \ [_ #f]))\n", "  (define (check-elements lst)\n    (if (empty? lst) #f\n    \
+    \    (let* ([first (first lst)]\n               [rest (rest lst)]\n          \
+    \     [elements-minus-first (check-elements rest)])\n          (cond [(empty?\
+    \ rest) #f]\n                [(< (- (first rest) first) threshold) (cons first\
+    \ elements-minus-first)]\n                [else elements-minus-first]))))\n  (check-elements\
+    \ numbers))\n", "  (cond\n    [(empty? numbers) #f]\n    [(< (abs (- (first numbers)\
+    \ (second numbers))) threshold) #t]\n    [else (has_close_elements (rest numbers)\
+    \ threshold)]))\n", "  (cond [(empty? numbers) false]\n        [(not (empty? (rest\
+    \ numbers)))\n         (let* ([num (first numbers)]\n                [rest (rest\
+    \ numbers)]\n                [closer-to-num (filter (\u03BB (x) (< (abs (- num\
+    \ x)) threshold)) rest)])\n           (if (empty? closer-to-num)\n           \
+    \    (has_close_elements rest threshold)\n               true))]\n        [else\
+    \ false]))\n```\n\nComplexity:\n- Space: O(n)\n- Time: O(n\xB2)\n\n## Check if\
+    \ two lists have a common element\n\n```#lang racket\n", "  (define (has_close_elements?\
+    \ lst)\n    (cond\n      [(null? lst) false]\n      [(< (abs (- (car lst) (cadr\
+    \ lst))) threshold) true]\n      [else (has_close_elements? (cdr lst))]))\n  (has_close_elements?\
+    \ (sort numbers <)))\n", "  (let loop ([numbers numbers])\n    (cond\n      [(null?\
+    \ numbers) #f]\n      [(< (abs (- (car numbers) (cadr numbers))) threshold) #t]\n\
+    \      [else (loop (cdr numbers))])))\n", "  (and (pair? numbers)\n       (or\
+    \ (abs (- (car numbers) (cadr numbers)))\n           (has_close_elements (cdr\
+    \ numbers) threshold))))\n", "  (or (equal? (length numbers) 0)\n      (or (has_close_elements\
+    \ (cdr numbers) threshold)\n          (or (number-within-threshold? (car numbers)\
+    \ (cadr numbers) threshold)\n              (number-within-threshold? (car numbers)\
+    \ (last numbers) threshold)))))\n", "  (let ((close-pairs (make-hash))\n     \
+    \   (result #f))\n    (for ([number numbers])\n      (for ([other-number numbers])\n\
+    \        (when (and (not (eq? number other-number))\n                   (not (hash-has-key?\
+    \ close-pairs number)))\n          (let ((distance (abs (- number other-number))))\n\
+    \            (when (&lt; distance threshold)\n              (hash-set! close-pairs\
+    \ number #t)\n              (set! result #t))))))\n    result))\n</code>\nExample:\n\
+    <code>&gt; (has-close-elements '(1 2 3 4 5) 3)\n#f\n&gt; (has-close-elements '(1\
+    \ 2 3 4 5) 2)\n#t\n&gt; (has-close-elements '(1 2 3 4 5) 1)\n#t\n</code>\n", " \
+    \ (let loop ([numbers numbers])\n    (match numbers\n      [(cons f s)\n     \
+    \  (or (cond [(< (abs (- f s)) threshold) true]\n                  [else false])\n\
+    \           (loop s))]\n      [else false])))\n", "  (cond\n    [(empty? numbers)\
+    \ #f]\n    [(empty? (rest numbers)) #f]\n    [(> (abs (- (first numbers) (first\
+    \ (rest numbers)))) threshold) #f]\n    [else #t]))\n", "  (for/or ([i (in-list\
+    \ numbers)]\n           [j (in-list numbers)])\n    (and (not (= i j))\n     \
+    \    (< (abs (- i j)) threshold))))\n", "  (if (null? numbers)\n      #f\n   \
+    \   (or (any_closer_than? (cdr numbers) (car numbers) threshold)\n          (has_close_elements\
+    \ (cdr numbers) threshold))))\n", "  (define (has_close_elements_iter numbers\
+    \ numbers-rest threshold)\n    (if (null? numbers-rest)\n        #f\n        (let\
+    \ ([a (car numbers)]\n              [b (car numbers-rest)])\n          (if (>\
+    \ (abs (- a b)) threshold)\n              (has_close_elements_iter numbers (cdr\
+    \ numbers-rest) threshold)\n              #t))))\n  (has_close_elements_iter numbers\
+    \ (cdr numbers) threshold))\n", "  (cond [(empty? numbers) #f]\n        [(empty?\
+    \ (rest numbers)) #f]\n        [(< (abs (- (first numbers) (first (rest numbers))))\
+    \ threshold) #t]\n        [else (has_close_elements (rest numbers) threshold)]))\n",
+  "  (let loop ([numbers numbers])\n    (match numbers\n      [(list) #f]\n      [(list\
+    \ a b c ...)\n       (if (> (abs (- a b)) threshold)\n           (loop (list b\
+    \ c ...))\n           #t)])))\n", "  (cond [(null? numbers) #f]\n        [(null?\
+    \ (cdr numbers)) #f]\n        [(< (abs (- (car numbers) (cadr numbers))) threshold)\
+    \ #t]\n        [else (has_close_elements (cdr numbers) threshold)]))\n", "  (define\
+    \ (helper lst)\n    (if (or (null? lst) (null? (cdr lst)))\n        #f\n     \
+    \   (or (&lt; (abs (- (car lst) (car (cdr lst)))) threshold)\n            (helper\
+    \ (cdr lst)))))\n  (helper numbers))\n", "  (let loop ([rest (cdr numbers)]\n\
+    \             [last (car numbers)])\n    (if (null? rest)\n        #f\n      \
+    \  (if (< (abs (- (car rest) last)) threshold)\n            #t\n            (loop\
+    \ (cdr rest) (car rest))))))\n", "  (or (number_are_close (car numbers) (cadr\
+    \ numbers) threshold)\n      (has_close_elements (cdr numbers) threshold)))\n",
+  "  (if (null? numbers)\n      #f\n      (if (any_close_to (car numbers) (cdr numbers)\
+    \ threshold)\n          #t\n          (has_close_elements (cdr numbers) threshold))))\n",
+  "  (or\n   (empty? numbers)\n   (let ((diff (- (car numbers) (cadr numbers))))\n\
+    \     (and\n      (or (&lt; diff threshold)\n          (has_close_elements (cdr\
+    \ numbers) threshold))\n      (= (- (car numbers) (cadr numbers)) diff)))))\n\
+    </code>\nYou can also try it here. I guess it's not efficient, but it works.\n",
+  "  (cond\n    [(empty? numbers) false]\n    [(empty? (rest numbers)) false]\n  \
+    \  [else\n     (if (> (abs (- (first numbers) (first (rest numbers)))) threshold)\n\
+    \         (has_close_elements (rest numbers) threshold)\n         true)]))\n",
+  "  (cond\n    [(empty? numbers) #f]\n    [(or (empty? (rest numbers)) (empty? (rest\
+    \ (rest numbers)))) #f]\n    [(< (abs (- (first numbers) (second numbers))) threshold)\
+    \ #t]\n    [else (has_close_elements (rest numbers) threshold)]))\n", "  (cond\
+    \ [(empty? numbers) false]\n        [(pair? numbers) (define (loop els curr-threshold)\n\
+    \                           (cond [(empty? els) false]\n                     \
+    \            [(< (abs (- (first els) (second els)))\n                        \
+    \             curr-threshold) true]\n                                 [else (loop\
+    \ (rest els) curr-threshold)]))\n         (loop (sort < numbers) threshold)]\n\
+    \        [else false]))\n", "  (or (null? numbers)\n      (let* ([head (car numbers)]\n\
+    \             [rest (cdr numbers)]\n             [close-pairs (filter (\u03BB\
+    \ (x) (&lt; (abs (- head x)) threshold)) rest)])\n        (and (not (null? close-pairs))\n\
+    \             #t\n             (has_close_elements rest threshold)))))\n", " \
+    \ (cond\n    [(empty? numbers) #f]\n    [(= (length numbers) 1) #f]\n    [(< (abs\
+    \ (- (first numbers) (second numbers))) threshold) #t]\n    [else (has_close_elements\
+    \ (rest numbers) threshold)]))\n", "  (for/or ([number numbers]\n           #:when\
+    \ (for/or ([number2 numbers]\n                           #:when (< (abs (- number\
+    \ number2)) threshold))\n                     #t))\n    #t))\n", "  (cond ((empty?\
+    \ numbers) #f)\n        ((empty? (rest numbers)) #f)\n        ((&lt; (abs (- (first\
+    \ numbers) (first (rest numbers)))) threshold) #t)\n        (else (has_close_elements\
+    \ (rest numbers) threshold))))\n", "  (let loop ([numbers numbers])\n    (cond\n\
+    \      [(empty? numbers)\n       false]\n      [(and (not (empty? (rest numbers)))\n\
+    \            (<= (abs (- (first numbers) (second numbers))) threshold))\n    \
+    \   true]\n      [else\n       (loop (rest numbers))])))\n", "  (cond [(null?\
+    \ numbers) #f]\n        [(empty? (cdr numbers)) #f]\n        [(< (abs (- (car\
+    \ numbers) (cadr numbers))) threshold) #t]\n        [else (has_close_elements\
+    \ (cdr numbers) threshold)]))\n", "  (if (null? numbers)\n      #f\n      (if\
+    \ (has_close_elements (cdr numbers) threshold)\n          #t\n          (let ((number\
+    \ (car numbers)))\n            (or (closer_than_threshold? number threshold (cdr\
+    \ numbers))\n                (has_close_elements (cdr numbers) threshold))))))\n",
+  "  (cond ((null? numbers) #f)\n        ((null? (cdr numbers)) #f)\n        ((abs\
+    \ (- (car numbers) (cadr numbers)))\n         (let ((rest-has-closer #f))\n  \
+    \         (cond ((&lt; (abs (- (car numbers) (cadr numbers))) threshold) #t)\n\
+    \                 (else (has_close_elements (cdr numbers) threshold)))))\n   \
+    \     (else (has_close_elements (cdr numbers) threshold))))\n", "  (cond ((or\
+    \ (null? numbers) (null? (cdr numbers))) #f)\n        ((< (abs (- (car numbers)\
+    \ (cadr numbers))) threshold) #t)\n        (else (has_close_elements (cdr numbers)\
+    \ threshold))))\n", "  (cond ((or (null? numbers) (null? (cdr numbers))) #f)\n\
+    \        ((&lt; (abs (- (car numbers) (cadr numbers))) threshold) #t)\n      \
+    \  (else (has_close_elements (cdr numbers) threshold))))\n", "  (define (inner\
+    \ prev numbers threshold)\n    (if (null? numbers)\n        #f\n        (let ([curr\
+    \ (car numbers)])\n          (if (&lt; (- prev curr) threshold)\n            \
+    \  #t\n              (inner curr (cdr numbers) threshold)))))\n  (if (null? numbers)\n\
+    \      #f\n      (inner (car numbers) (cdr numbers) threshold)))\n", "  (cond\n\
+    \    [(empty? numbers) #f]\n    [(has_close_elements (rest numbers) threshold\
+    \ (first numbers)) #t]\n    [else (has_close_elements (rest numbers) threshold\
+    \ (first numbers))]))\n", "  (cond [(empty? numbers) #f]\n        [(<= (abs (-\
+    \ (first numbers) (second numbers))) threshold) #t]\n        [else (has_close_elements\
+    \ (rest numbers) threshold)]))\n```\n\n### How to execute\n\n```bash\n# Download\
+    \ repository\n$ git clone https://github.com/prawn-cake/LISP-homework.git\n\n\
+    # Run racket\n$ racket\n\n# Execute file\n> (load \"has_close_elements.rkt\")\n\
+    > (has_close_elements '(1 2 3 4 5) 5)\n> (has_close_elements '(-3 -2 -1 0 1) 2)\n\
+    ```", "  (for/or ([x numbers]\n           [y (in-list numbers (cdr (in-list numbers)))])\n\
+    \    (< (abs (- x y)) threshold)))\n", "  (cond [(empty? numbers) #f]\n      \
+    \  [(empty? (rest numbers)) #f]\n        [(< (abs (- (first numbers) (first (rest\
+    \ numbers)))) threshold) #t]\n        [else (has_close_elements (rest numbers)\
+    \ threshold)]))\n", "  (cond [(empty? numbers) false]\n        [(= (rest numbers)\
+    \ empty) false]\n        [(< (abs (- (first numbers) (first (rest numbers))))\
+    \ threshold) true]\n        [else (has_close_elements (rest numbers) threshold)]))\n",
+  "  (cond [(empty? numbers)\n         false]\n        [(empty? (rest numbers))\n\
+    \         false]\n        [else\n         (let ([x (first numbers)]\n        \
+    \       [y (first (rest numbers))])\n           (cond [(> (abs (- x y)) threshold)\n\
+    \                  (has_close_elements (rest numbers) threshold)]\n          \
+    \       [else\n                  true]))]))\n", "  (cond\n    [(empty? numbers)\
+    \ #f]\n    [(< (abs (- (first numbers) (second numbers))) threshold) #t]\n   \
+    \ [else (has_close_elements (rest numbers) threshold)]))\n", "  (let loop ([head\
+    \ (car numbers)] [tail (cdr numbers)])\n    (or (empty? tail)\n        (and (<\
+    \ (abs (- head (car tail))) threshold)\n             #t)\n        (loop (car tail)\
+    \ (cdr tail)))))\n", "  (cond [(empty? numbers) false]\n        [(empty? (rest\
+    \ numbers)) false]\n        [else\n         (let ([current-num (first numbers)]\n\
+    \               [rest-nums (rest numbers)])\n           (cond [(> (abs (- current-num\
+    \ (first rest-nums))) threshold)\n                  (has_close_elements rest-nums\
+    \ threshold)]\n                 [else true]))]))\n", "  (cond [(empty? numbers)\
+    \ false]\n        [(empty? (rest numbers)) false]\n        [else (or (not (zero?\
+    \ (abs (- (first numbers) (second numbers)))))\n                  (has_close_elements\
+    \ (rest numbers) threshold))]))\n", "  (cond [(empty? numbers)\n         false]\n\
+    \        [(< (abs (- (first numbers) (second numbers))) threshold)\n         true]\n\
+    \        [else\n         (has_close_elements (rest numbers) threshold)]))\n",
+  "  (define (has_close_elements_helper numbers threshold)\n    (if (null? numbers)\n\
+    \        #f\n        (let* ([previous-element (car numbers)]\n               [next-elements\
+    \ (cdr numbers)])\n          (if (and (not (null? next-elements))\n          \
+    \         (< (abs (- (car next-elements) previous-element)) threshold))\n    \
+    \          #t\n              (has_close_elements_helper next-elements threshold)))))\n\
+    \  (has_close_elements_helper (sort numbers <) threshold))\n```\n\n```racket\n\
+    #lang racket\n", "  (cond [(empty? numbers) #f]\n        [(and (rest numbers)\
+    \ (< (abs (- (first numbers) (second numbers))) threshold)) #t]\n        [else\
+    \ (has_close_elements (rest numbers) threshold)]))\n", "  (let loop ([numbers\
+    \ numbers])\n    (cond\n      [(null? numbers) #f]\n      [(null? (cdr numbers))\
+    \ #f]\n      [(< (abs (- (car numbers) (cadr numbers))) threshold) #t]\n     \
+    \ [else (loop (cdr numbers))])))\n", "  (let loop ([numbers numbers])\n    (if\
+    \ (empty? numbers)\n        #f\n        (if (or (positive? (- (second numbers)\
+    \ (first numbers)))\n                (not (empty? (cddr numbers))))\n        \
+    \    (loop (cdr numbers))\n            #t))))\n</code>\nI wonder if there's a\
+    \ way to use <code>for</code> here. I know that if I wanted to check, say, if\
+    \ <code>number</code> is present in the list, I could say <code>(for/or ([i numbers])\
+    \ (= i number))</code>, but I want to check something more complicated.\nIn my\
+    \ example, I don't need to know which two numbers are closer than the threshold,\
+    \ so I don't care about the indices of the numbers that are close to each other.\
+    \ I just need to know if there are any.\nI could obviously say <code>(for/or ([i\
+    \ numbers]) (for/or ([j numbers]) (has-close-elements i j threshold)))</code>,\
+    \ but it doesn't seem nice.\n\n\nA:\n\nYour solution is pretty good to me. I would\
+    \ write it like this:\n<code>(define (has-close-elements lst max-distance)\n \
+    \ (define (dist a b)\n    (abs (- a b)))\n  (let loop ([lst lst])\n    (and (not\
+    \ (empty? lst))\n         (or (&lt; (dist (first lst) (second lst)) max-distance)\n\
+    \             (loop (cdr lst))))))\n</code>\nThis is almost the same, but I think\
+    \ it is clearer because it extracts the local function <code>dist</code> to calculate\
+    \ the distance between numbers.\nNote: I used <code>and</code> and <code>or</code>\
+    \ instead of <code>if</code>, because it felt more natural to me.\n", "  (cond\
+    \ [(empty? numbers) false]\n        [(= (count numbers) 1) false]\n        [else\
+    \ (or (has_close_elements (rest numbers) threshold)\n                  (has_close_elements\
+    \ (remove-first-of (first numbers) numbers) threshold))]))\n", "  (or (empty?\
+    \ numbers)\n      (let ([first (first numbers)]\n            [rest (rest numbers)])\n\
+    \        (or (= first threshold)\n            (let ([min (argmin rest (\u03BB\
+    \ (n) (abs (- n first))))])\n              (< (abs (- first min)) threshold))))))\n",
+  "  (if (empty? numbers)\n      #f\n      (if (null? (cdr numbers))\n          #f\n\
+    \          (if (&lt; (abs (- (car numbers) (cadr numbers))) threshold)\n     \
+    \         #t\n              (has_close_elements (cdr numbers) threshold)))))\n",
+  "  (letrec ([find-close (lambda (numbers found)\n                        (cond\n\
+    \                          [(empty? numbers) found]\n                        \
+    \  [(find-close (cdr numbers) (cons (first numbers) found))]\n               \
+    \           [else #f]))])\n    (find-close numbers (list (first numbers)))))\n\
+    </code>\nThis works for me:\n<code>#lang racket\n", "  (not (null? (find (curryr\
+    \ < threshold) (take-between-each numbers)))))\n", "  (define (has_close_elements?\
+    \ numbers threshold)\n    (cond\n      ((null? numbers) #f)\n      ((or (null?\
+    \ (cdr numbers))\n           (>= (abs (- (car numbers) (cadr numbers))) threshold))\n\
+    \       (has_close_elements? (cdr numbers) threshold))\n      (else #t)))\n  (has_close_elements?\
+    \ (sort < numbers) threshold))\n", "  (for*/or ([n1 numbers]\n            [n2\
+    \ (in-list numbers)])\n           (< (abs (- n1 n2)) threshold)))\n```\n\n## Day\
+    \ 2 - [N-Queens Problem](https://en.wikipedia.org/wiki/Eight_queens_puzzle)\n\
+    ### Problem\nWrite a function that takes a number n, representing the number of\
+    \ queens, and returns all possible ways to place the queens on a chess board,\
+    \ such that they are not attacking each other.\n\n### Solution\n```racket\n#lang\
+    \ racket\n", "  (cond\n    [(empty? numbers) #f]\n    [(empty? (rest numbers))\
+    \ #f]\n    [(< (abs (- (first numbers) (first (rest numbers)))) threshold) #t]\n\
+    \    [else (has_close_elements (rest numbers) threshold)]))\n", "  (let loop ([rest\
+    \ (cdr numbers)]\n             [curr (car numbers)])\n    (cond [(empty? rest)\
+    \ false]\n          [(< (abs (- (car rest) curr)) threshold) true]\n         \
+    \ [else (loop (cdr rest) curr)])))\n", "  (if (empty? numbers)\n      false\n\
+    \      (if (close-enough? (first numbers) (second numbers) threshold)\n      \
+    \    true\n          (has_close_elements (rest numbers) threshold))))\n", "  (cond\n\
+    \    [(empty? numbers) #f]\n    [(close? (first numbers) (second numbers) threshold)\
+    \ #t]\n    [else (has_close_elements (rest numbers) threshold)]))\n", "  (define\
+    \ (has_close_elements_iter list threshold)\n    (if (null? list)\n        #f\n\
+    \        (or (or (abs (- (car list) (cadr list))) threshold)\n            (has_close_elements_iter\
+    \ (cdr list) threshold))))\n  (has_close_elements_iter (sort < numbers) threshold))\n",
+  "  (letrec ((has-close-elements (lambda (numbers)\n                            \
+    \     (if (null? numbers)\n                                     #f\n         \
+    \                            (or (close-to-any? (car numbers) (cdr numbers) threshold)\n\
+    \                                         (has-close-elements (cdr numbers)))))))\n\
+    \    (has-close-elements numbers)))\n", "  (let ((diff (- (car numbers) (cadr\
+    \ numbers))))\n    (cond ((zero? diff) #t)\n          ((negative? diff) (has_close_elements\
+    \ (cons (car numbers) (cddr numbers)) threshold))\n          ((&lt; diff threshold)\
+    \ #t)\n          (else (has_close_elements (cdr numbers) threshold)))))\n", " \
+    \ (cond\n    [(empty? numbers) false]\n    [(empty? (rest numbers)) false]\n \
+    \   [else\n     (let ([first (first numbers)]\n           [second (second numbers)])\n\
+    \       (if (&lt; (abs (- first second)) threshold)\n           true\n       \
+    \    (has_close_elements (rest numbers) threshold)))]))\n", "  (let loop ([numbers\
+    \ numbers])\n    (cond\n      [(empty? numbers) false]\n      [(empty? (rest numbers))\
+    \ false]\n      [(>= threshold (abs (- (first numbers) (first (rest numbers)))))\n\
+    \       (or (has_close_elements (rest numbers) threshold) true)]\n      [else\
+    \ (loop (rest numbers))])))\n", "  (for*/or ([a numbers] [b numbers])\n    (<\
+    \ (abs (- a b)) threshold)))\n", "  (let ((length (length numbers)))\n    (define\
+    \ (helper first second)\n      (cond ((or (&lt;= first (- length 2)) (&lt;= second\
+    \ (- length 1))) #f)\n            ((&lt; (abs (- (list-ref numbers first) (list-ref\
+    \ numbers second))) threshold) #t)\n            (else (helper (+ first 1) (+ second\
+    \ 1)))))\n    (helper 0 1)))\n", "  (cond\n    [(empty? numbers) #f]\n    [(empty?\
+    \ (rest numbers)) #f]\n    [(< (abs (- (first numbers) (first (rest numbers))))\
+    \ threshold) #t]\n    [else (has_close_elements (rest numbers) threshold)]))\n\
+    \n", "  (if (or (null? numbers) (null? (cdr numbers))) #f\n      (let* ([current\
+    \ (car numbers)]\n             [next (cadr numbers)]\n             [next-result\
+    \ (has_close_elements (cdr numbers) threshold)])\n        (or (close? current\
+    \ next threshold) next-result))))\n", "  (if (null? numbers)\n      #f\n     \
+    \ (let ((current-number (car numbers))\n            (remaining-numbers (cdr numbers)))\n\
+    \        (if (null? remaining-numbers)\n            #f\n            (let ((closest-numbers\
+    \ (closest-number-pair current-number remaining-numbers threshold)))\n       \
+    \       (if (null? closest-numbers)\n                  (has_close_elements remaining-numbers\
+    \ threshold)\n                  (begin\n                    (println (list (car\
+    \ closest-numbers) \"and\" (cadr closest-numbers) \"are closest\"))\n        \
+    \            (list (car closest-numbers) (cadr closest-numbers))))))))))\n", " \
+    \ (define (helper sofar)\n    (match sofar\n      [(list) false]\n      [(list\
+    \ first-sofar rest-sofar)\n       (cond [(has_numbers_smaller_than rest-sofar\
+    \ (- first-sofar threshold))\n              true]\n             [(has_numbers_smaller_than\
+    \ rest-sofar (- threshold first-sofar))\n              true]\n             [else\
+    \ (helper rest-sofar)])]))\n  (helper numbers))\n", "  (define (closer a b) (&lt;\
+    \ (abs (- a b)) threshold))\n  (for/or ([x numbers]\n           [y (rest numbers)])\n\
+    \    (closer x y)))\n", "  (cond\n    [(null? numbers) #f]\n    [(< (- (first\
+    \ numbers) (second numbers)) threshold) #t]\n    [else (has_close_elements (rest\
+    \ numbers) threshold)]))\n", "  (cond\n    [(empty? numbers) #f]\n    [(empty?\
+    \ (rest numbers)) #f]\n    [(< (abs (- (first numbers) (first (rest numbers))))\
+    \ threshold) #t]\n    [else (has_close_elements (rest numbers) threshold)]))\n",
+  "  (for/or ([n1 numbers]\n           [n2 (in-list numbers)])\n    (and (not (= n1\
+    \ n2))\n         (&lt; (abs (- n1 n2)) threshold))))\n", "  (let loop ([numbers\
+    \ numbers])\n    (cond\n      [(null? numbers) #f]\n      [(> (abs (- (car numbers)\
+    \ (cadr numbers))) threshold)\n       (loop (cdr numbers))]\n      [else #t])))\n",
+  "  (cond\n    [(empty? numbers) #f]\n    [(empty? (rest numbers)) #f]\n    [(<=\
+    \ (abs (- (first numbers) (first (rest numbers)))) threshold) #t]\n    [else (has_close_elements\
+    \ (rest numbers) threshold)]))\n", "  (match numbers\n    [(cons head tail)\n\
+    \     (or (abs (- head (car tail)))\n         (has_close_elements tail threshold))]\n\
+    \    [else #f]))\n", "  (if (or (null? numbers) (null? (cdr numbers)))\n     \
+    \ #f\n      (or (&lt; (abs (- (car numbers) (cadr numbers))) threshold)\n    \
+    \      (has_close_elements (cdr numbers) threshold))))\n", "  (cond\n    [(empty?\
+    \ numbers) #f]\n    [(empty? (rest numbers)) #f]\n    [(< (abs (- (first numbers)\
+    \ (first (rest numbers)))) threshold) #t]\n    [else (has_close_elements (rest\
+    \ numbers) threshold)]))\n", "  (letrec ((closer? (lambda (x y)\n            \
+    \         (< (abs (- x y)) threshold))))\n    (let loop ((rest (cdr numbers))\n\
+    \               (last (car numbers)))\n      (cond\n        ((null? rest) #f)\n\
+    \        ((closer? last (car rest)) #t)\n        (else (loop (cdr rest) (car rest)))))))\n",
+  "  (cond\n    [(empty? numbers)\n     #f]\n    [(< (abs (- (first numbers) (second\
+    \ numbers))) threshold)\n     #t]\n    [else\n     (has_close_elements (rest numbers)\
+    \ threshold)]))\n", "  (let loop ([numbers numbers])\n    (if (or (null? numbers)\
+    \ (null? (cdr numbers)))\n        #f\n        (if (< (abs (- (car numbers) (cadr\
+    \ numbers))) threshold)\n            #t\n            (loop (cdr numbers))))))\n",
+  "  (cond ((null? numbers) #f)\n        ((not (close? (car numbers) (cadr numbers)\
+    \ threshold))\n         (has_close_elements (cdr numbers) threshold))\n      \
+    \  (else #t)))\n", "  (if (null? numbers) #f\n      (let ([r (cdr numbers)])\n\
+    \        (if (null? r) #f\n            (or (pair-equal? (car numbers) (car r)\
+    \ threshold)\n                (has_close_elements r threshold))))))\n", "  (or\
+    \ (null? numbers)\n      (let ([first (car numbers)]\n            [rest (cdr numbers)])\n\
+    \        (or (> (- first (car rest)) threshold)\n            (has_close_elements\
+    \ rest threshold)))))\n", "  (define (has_close_elements-acc numbers threshold\
+    \ lowest-so-far)\n    (if (null? numbers)\n        #f\n        (let ([lowest-so-far\
+    \ (if (< lowest-so-far (car numbers))\n                                 (car numbers)\n\
+    \                                 lowest-so-far)])\n          (if (and (number?\
+    \ (car numbers))\n                   (< (- (car numbers) lowest-so-far) threshold))\n\
+    \              #t\n              (has_close_elements-acc (cdr numbers) threshold\
+    \ lowest-so-far)))))\n  (has_close_elements-acc numbers threshold (car numbers)))\n",
+  "  (if (null? numbers)\n      #f\n      (or (has_closer_elements (cdr numbers) (car\
+    \ numbers) threshold)\n          (has_close_elements (cdr numbers) threshold))))\n",
+  "  (cond\n    [(empty? numbers) #f]\n    [(null? (rest numbers)) #f]\n    [(< (abs\
+    \ (- (first numbers) (first (rest numbers)))) threshold) #t]\n    [else (has_close_elements\
+    \ (rest numbers) threshold)]))\n", "  (cond\n    [(empty? numbers) false]\n  \
+    \  [(equal? threshold 0) true]\n    [(or (or (and (equal? (first numbers) (+ (second\
+    \ numbers) 1))\n                      (has_close_elements (rest numbers) threshold))\n\
+    \                 (and (equal? (first numbers) (- (second numbers) 1))\n     \
+    \                 (has_close_elements (rest numbers) threshold)))\n          \
+    \    (has_close_elements (rest numbers) threshold))\n      true]\n    [else false]))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

@@ -5,16 +5,16 @@ def sum_squares(lst: List[float]) -> int:
     You need to return the sum of squared numbers in the given list,
     round each element in the list to the upper int(Ceiling) first.
     Examples:
-    >>> lst 
-    [1,2,3]
-    >>> lst 
-    [1,4,9]
-    >>> lst 
-    [1,3,5,7]
-    >>> lst 
-    [1.4,4.2,0]
-    >>> lst 
-    [-2.4,1,1]
+    >>> lst([1,2,3])
+    14
+    >>> lst([1,4,9])
+    98
+    >>> lst([1,3,5,7])
+    84
+    >>> lst([1.4,4.2,0])
+    29
+    >>> lst([-2.4,1,1])
+    6
     
 
     """

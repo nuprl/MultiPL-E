@@ -7,7 +7,701 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate r
   \    (check-equal? (candidate (list )) (list ))\n    (check-equal? (candidate (list\
   \ 1 2 3 4)) (list 1 2 3 4))\n    (check-equal? (candidate (list 1 2 3 2 4 3 5))\
   \ (list 1 4 5))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (let ([seen '()])\n    (for ([n numbers])\n      (unless (member\
+    \ n seen)\n        (set! seen (cons n seen))\n        (displayln n)))))\n", " \
+    \ (foldl (lambda (seen x)\n           (if (hash-has-key? seen x)\n           \
+    \    seen\n               (hash-set seen x 0)))\n         (make-hash)\n      \
+    \   numbers))\n", "  (filter (lambda (x) (count x numbers) 1) numbers))\n", " \
+    \ (remove-duplicates numbers '()))\n", "  (cond\n    [(empty? numbers) empty]\n\
+    \    [(cons? numbers)\n     (if (member (first numbers) (rest numbers))\n    \
+    \     (remove_duplicates (rest numbers))\n         (cons (first numbers) (remove_duplicates\
+    \ (rest numbers))))]))\n", "  (define (remove-duplicates-rec numbers seen result)\n\
+    \    (cond [(empty? numbers) result]\n          [(equal? (first numbers) (first\
+    \ seen)) (remove-duplicates-rec (rest numbers) seen result)]\n          [(member\
+    \ (first numbers) seen) (remove-duplicates-rec (rest numbers) seen result)]\n\
+    \          [else (remove-duplicates-rec (rest numbers) (cons (first numbers) seen)\
+    \ (cons (first numbers) result))]))\n  (reverse (remove-duplicates-rec numbers\
+    \ '() '())))\n", "  (for/list ([n numbers] #:when (count (filter equal? numbers\
+    \ n) n))\n    n))\n", "  (let ([unique (sort numbers <)])\n    (let loop ([unique\
+    \ unique] [left unique])\n      (cond [(null? unique) '()]\n            [(empty?\
+    \ left) unique]\n            [(= (first unique) (first left))\n             (loop\
+    \ (rest unique) (rest left))]\n            [else (cons (first unique) (loop (rest\
+    \ unique) (rest left)))]))))\n", "  (foldl (lambda (e result)\n           (cond\n\
+    \             [(not (member e result)) (cons e result)]\n             [else result]))\n\
+    \         '()\n         numbers))\n</code>\nbut my implementation is much simpler\n\
+    <code>#lang racket\n", "  (define (inner nums-seen acc nums)\n    (if (null? nums)\n\
+    \        (reverse acc)\n        (if (member (car nums) nums-seen)\n          \
+    \  (inner nums-seen acc (cdr nums))\n            (inner (cons (car nums) nums-seen)\
+    \ (cons (car nums) acc) (cdr nums)))))\n  (inner '() '() numbers))\n", "  (foldl\
+    \ (lambda (x acc) (if (member x acc) acc (cons x acc)))\n         empty\n    \
+    \     numbers))\n</code>\nIs there a more elegant way to do this in Racket?\n\n\
+    \nA:\n\nThis is not a Racket-specific question, and I don't know of any existing\
+    \ solution, but it's not too hard to define:\n<code>(define (remove-duplicates\
+    \ lst)\n  (let loop ((lst lst) (acc '()))\n    (match lst\n      [() acc]\n  \
+    \    [(cons x y)\n       (if (member x acc)\n           (loop y acc)\n       \
+    \    (loop y (cons x acc)))])))\n</code>\n", "  (cond [(empty? numbers) '()]\n\
+    \        [(member (first numbers) (rest numbers)) (remove_duplicates (rest numbers))]\n\
+    \        [else (cons (first numbers) (remove_duplicates (rest numbers)))]))\n",
+  "  (define (dedup n accu)\n    (cond\n      [(empty? n) (reverse accu)]\n      [(member\
+    \ (first n) accu) (dedup (rest n) accu)]\n      [else (dedup (rest n) (cons (first\
+    \ n) accu))]))\n  (dedup numbers '()))\n</code>\n", "  (cond [(empty? numbers)\
+    \ empty]\n        [(not (member (first numbers) (rest numbers)))\n         (cons\
+    \ (first numbers) (remove_duplicates (rest numbers)))]\n        [else (remove_duplicates\
+    \ (rest numbers))]))\n", "  (let loop ([numbers numbers] [result '()])\n    (if\
+    \ (null? numbers)\n        result\n        (if (member (car numbers) (cdr numbers))\n\
+    \            (loop (cdr numbers) result)\n            (loop (cdr numbers) (cons\
+    \ (car numbers) result))))))\n</code>\nThis problem is somewhat similar to the\
+    \ \"remove duplicates\" exercise from the 99 problems in Prolog and in F#, but\
+    \ I feel it is significantly more difficult. Although I find this solution rather\
+    \ elegant, the use of the <code>member</code> function seems unsatisfactory because\
+    \ it removes the possibility of using tail recursion. I'm certain that it can\
+    \ be done using tail recursion, but I don't know how. Is it possible?\n\n\nA:\n\
+    \nYes it's possible, and I think it's also a better solution than the one in my\
+    \ answer to the question you linked to:\n<code>(define (remove-duplicates lst)\n\
+    \  (let loop ([lst lst] [acc '()])\n    (cond\n      [(null? lst) (reverse acc)]\n\
+    \      [(member (car lst) (cdr lst)) (loop (cdr lst) acc)]\n      [else (loop\
+    \ (cdr lst) (cons (car lst) acc))])))\n</code>\n", "  (letrec ([rdups (lambda\
+    \ (accum input)\n                    (if (null? input)\n                     \
+    \   accum\n                        (if (member (car input) (cdr input))\n    \
+    \                        (rdups accum (cdr input))\n                         \
+    \   (rdups (cons (car input) accum) (cdr input)))))])\n    (reverse (rdups '()\
+    \ numbers))))\n", "  (foldl (lambda (number result)\n           (if (member number\
+    \ result)\n               result\n               (cons number result)))\n    \
+    \     null\n         numbers))\n</code>\n...and using a hash table as a set:\n\
+    <code>#lang racket\n", "  (define (remove_duplicates_work numbers seen-numbers)\n\
+    \    (cond\n      [(empty? numbers) seen-numbers]\n      [(member (first numbers)\
+    \ seen-numbers)\n       (remove_duplicates_work (rest numbers) seen-numbers)]\n\
+    \      [else\n       (remove_duplicates_work (rest numbers) (cons (first numbers)\
+    \ seen-numbers))]))\n  (remove_duplicates_work numbers empty))\n", "  (foldl (lambda\
+    \ (n result)\n           (if (member n result)\n               result\n      \
+    \         (cons n result)))\n         '()\n         numbers))\n</code>\nMy problem:\
+    \ The function <code>remove_duplicates</code> works for <code>'(1 2 3 4 5 6)</code>,\
+    \ but does not for <code>'(1 2 3 4 1 2 3 4 5 6)</code>\n-- Update --\nI was able\
+    \ to solve my problem:\n<code>#lang racket\n", "  (let loop ([acc '()] [seen '()]\
+    \ [numbers numbers])\n    (cond [(empty? numbers) (reverse acc)]\n          [(member\
+    \ (first numbers) seen) (loop acc seen (rest numbers))]\n          [else (loop\
+    \ (cons (first numbers) acc)\n                      (cons (first numbers) seen)\n\
+    \                      (rest numbers))])))\n", "  (define numbers-set (set numbers))\n\
+    \  (filter (lambda (x) (member x numbers-set)) numbers))\n", "  (cond\n    [(empty?\
+    \ numbers) empty]\n    [(member (first numbers) (rest numbers)) (remove_duplicates\
+    \ (rest numbers))]\n    [else (cons (first numbers) (remove_duplicates (rest numbers)))]))\n",
+  "  (define (apply-to-pairs fn lst)\n    (if (null? lst)\n        '()\n        (if\
+    \ (null? (cdr lst))\n            lst\n            (cons (fn (car lst) (cadr lst))\n\
+    \                  (apply-to-pairs fn (cdr lst))))))\n  (define (pair-equals?\
+    \ p1 p2)\n    (and (equal? (car p1) (car p2))\n         (equal? (cdr p1) (cdr\
+    \ p2))))\n  (define (filter-pairs-with-duplicates pairs)\n    (if (null? pairs)\n\
+    \        '()\n        (if (null? (cdr pairs))\n            (car pairs)\n     \
+    \       (if (pair-equals? (car pairs) (cadr pairs))\n                (filter-pairs-with-duplicates\
+    \ (cdr pairs))\n                (cons (car pairs)\n                      (filter-pairs-with-duplicates\
+    \ (cdr pairs)))))))\n  (filter-pairs-with-duplicates (apply-to-pairs list numbers)))\n",
+  "  (let ([seen (make-hasheq)])\n    (for/list ([n numbers])\n      (if (hash-ref\
+    \ seen n #f)\n          '()\n          (hash-set! seen n 'x)\n          n))))\n",
+  "  (define (remove-duplicates-iter numbers seen)\n    (cond\n      [(empty? numbers)\
+    \ '()]\n      [(member (first numbers) seen) (remove-duplicates-iter (rest numbers)\
+    \ seen)]\n      [else (cons (first numbers) (remove-duplicates-iter (rest numbers)\
+    \ (cons (first numbers) seen)))]))\n  (remove-duplicates-iter numbers '()))\n",
+  "  (foldl (lambda (acc x) (if (member x acc) acc (cons x acc))) '() numbers))\n\
+    </code>\nHow do I do it without using <code>member</code> or <code>foldl</code>?\n\
+    \n\nA:\n\nHere's one solution:\n<code>(define (remove-duplicates nums)\n  (for/list\
+    \ ([n (in-list nums)]\n             #:when (not (member n (cdr (rest nums)))))\n\
+    \    n))\n</code>\nWe're going through each number in the list, and if it's not\
+    \ in the rest of the list, then we keep it.\n", "  (cond [(empty? numbers) empty]\n\
+    \        [(member (first numbers) (rest numbers))\n         (remove_duplicates\
+    \ (rest numbers))]\n        [else (cons (first numbers)\n                    (remove_duplicates\
+    \ (rest numbers)))]))\n", "  (if (null? numbers)\n      '()\n      (let ([x (car\
+    \ numbers)])\n        (cons x (remove_duplicates (filter (lambda (e) (not (equal?\
+    \ e x))) (cdr numbers)))))))\n", "  (cond\n    [(empty? numbers) (list)]\n   \
+    \ [(equal? (first numbers) (second numbers))\n     (remove_duplicates (rest numbers))]\n\
+    \    [else\n     (cons (first numbers) (remove_duplicates (rest numbers)))]))\n",
+  "  (set! numbers (remove-duplicates-1 numbers))\n  (for/list ([n numbers])\n   \
+    \ (cons n 0)))\n", "  (define (helper list_so_far numbers)\n    (cond\n      [(empty?\
+    \ numbers)\n       list_so_far]\n      [(member (first numbers) list_so_far)\n\
+    \       (helper list_so_far (rest numbers))]\n      [else\n       (helper (append\
+    \ list_so_far (list (first numbers))) (rest numbers))]))\n  (helper '() numbers))\n",
+  "  (foldl (lambda (x res)\n           (if (not (member x res))\n               (cons\
+    \ x res)\n               res))\n         '()\n         numbers))\n", "  (let remove_duplicates\
+    \ ([numbers numbers] [acc '()])\n    (cond [(empty? numbers) (reverse acc)]\n\
+    \          [(member (first numbers) (rest numbers))\n           (remove_duplicates\
+    \ (rest numbers) acc)]\n          [else (remove_duplicates (rest numbers) (cons\
+    \ (first numbers) acc))])))\n</code>\nIt's just a normal recursive function, I\
+    \ think?\n\n\nA:\n\nYou're using \n<code>(member (first numbers) (rest numbers))\n\
+    </code>\nThis searches for the first element in the rest of the numbers.\nSo for\
+    \ the input <code>(1 2 3 4 1)</code> you have <code>(2 3 4 1)</code> for the <code>rest</code>.\
+    \ If you check for <code>1</code> in that list you have a match, but it's not\
+    \ the first one in the input, so you shouldn't remove it yet.\nIf your input was\
+    \ <code>(1 2 3 4 1 2)</code> you would remove <code>1</code> but you shouldn't.\n",
+  "  (let* ([numbers (sort numbers <)]\n         [occurrences (list-tabulate (length\
+    \ numbers)\n                                     (lambda (i) (count (list-ref\
+    \ numbers i) numbers)))])\n    (for/list ([n (in-list numbers)]\n            \
+    \   #:when (not (zero? (list-ref occurrences (list-position n numbers)))))\n \
+    \     n)))\n", "  (match numbers\n    [`() '()]\n    [`(,n) '(n)]\n    [`(,n ,nums\
+    \ ...)\n     (if (contains nums n)\n         (remove_duplicates nums)\n      \
+    \   (cons n (remove_duplicates nums)))]))\n", "  (for/list ([n numbers]\n    \
+    \         #:when (null? (memq n (cdr numbers))))\n    n))\n", "  (filter (lambda\
+    \ (n)\n            (filter (= n) numbers))\n          numbers))\n", "  (define\
+    \ (remove_duplicates_iter numbers seen)\n    (cond\n      [(empty? numbers) empty]\n\
+    \      [(member (first numbers) seen) (remove_duplicates_iter (rest numbers) seen)]\n\
+    \      [else (cons (first numbers) (remove_duplicates_iter (rest numbers) (cons\
+    \ (first numbers) seen)))]))\n  (remove_duplicates_iter numbers empty))\n", " \
+    \ (define (remove_duplicates_helper numbers seen_items)\n    (if (null? numbers)\n\
+    \        '()\n        (let ([this_number (car numbers)])\n          (if (memq\
+    \ this_number seen_items)\n              (remove_duplicates_helper (cdr numbers)\
+    \ seen_items)\n              (cons this_number (remove_duplicates_helper (cdr\
+    \ numbers) (cons this_number seen_items)))))))\n  (remove_duplicates_helper numbers\
+    \ '()))\n", "  (cond\n    [(empty? numbers) empty]\n    [(member (first numbers)\
+    \ (rest numbers)) (remove_duplicates (rest numbers))]\n    [else (cons (first\
+    \ numbers) (remove_duplicates (rest numbers)))]))\n", "  (foldl (lambda (x result)\n\
+    \           (cond ((member x result) result)\n                 (else (cons x result))))\n\
+    \         '()\n         numbers))\n", "  (define (iter numbers acc seen)\n   \
+    \ (cond\n      [(empty? numbers) acc]\n      [(set-member? (first numbers) seen)\
+    \ (iter (rest numbers) acc seen)]\n      [else (iter (rest numbers) (append (list\
+    \ (first numbers)) acc) (set-add (first numbers) seen))]))\n  (reverse (iter numbers\
+    \ (list) (set))))\n", "  (for/list ([x (in-list numbers)]\n             #:when\
+    \ (not (in-list (rest numbers) x)))\n    x))\n", "  (cond ((null? numbers) '())\n\
+    \        ((member (car numbers) (cdr numbers))\n         (remove_duplicates (cdr\
+    \ numbers)))\n        (else (cons (car numbers) (remove_duplicates (cdr numbers))))))\n",
+  "  (hash-remove (hash-copy numbers)))\n", "  (cond [(empty? numbers) empty]\n  \
+    \      [(memq (first numbers) (rest numbers))\n         (remove_duplicates (rest\
+    \ numbers))]\n        [else (cons (first numbers)\n                    (remove_duplicates\
+    \ (rest numbers)))]))\n", "  (let loop ([remaining numbers]\n             [seen\
+    \ '()])\n    (cond [(empty? remaining)\n           (reverse seen)]\n         \
+    \ [(member (first remaining) seen)\n           (loop (rest remaining) seen)]\n\
+    \          [else\n           (loop (rest remaining) (cons (first remaining) seen))])))\n",
+  "  (cond\n    [(empty? numbers) empty]\n    [(member (first numbers) (rest numbers))\
+    \ (remove_duplicates (rest numbers))]\n    [else (cons (first numbers) (remove_duplicates\
+    \ (rest numbers)))]))\n", "  (define (remove-duplicates-iter candidates seen)\n\
+    \    (cond [(empty? candidates) empty]\n          [(member (first candidates)\
+    \ seen)\n           (remove-duplicates-iter (rest candidates) seen)]\n       \
+    \   [else (cons (first candidates)\n                      (remove-duplicates-iter\
+    \ (rest candidates)\n                                              (cons (first\
+    \ candidates) seen)))]))\n  (remove-duplicates-iter numbers empty))\n", "  (let\
+    \ ((numbers-set (set numbers)))\n    (filter (lambda (n) (set-member? n numbers-set))\
+    \ numbers)))\n", "  (define seen (hash))\n  (for/list ([n numbers])\n    (when\
+    \ (not (hash-ref seen n #f))\n      (hash-set! seen n #t)\n      n)))\n</code>\n",
+  "  (define (uniq list)\n    (cond\n      [(empty? list) empty]\n      [(member (first\
+    \ list) (rest list)) (uniq (rest list))]\n      [else (cons (first list) (uniq\
+    \ (rest list)))]))\n  (uniq numbers))\n</code>\nand this works correctly and passes\
+    \ tests.\nEDIT: I want to add that I'm aware that I could use <code>filter</code>\
+    \ instead of <code>cond</code> and get pretty much the same result, however it's\
+    \ not the point of this question.\n\n\nA:\n\nThe problem is that, although <code>member</code>\
+    \ is defined as a function that takes two arguments, the second of which is a\
+    \ list, it actually takes <code>n</code> arguments where <code>n</code> is the\
+    \ length of the list, but your code treats it as taking just two arguments.\n\
+    The easiest way to fix this is to just <code>apply</code> <code>member</code>\
+    \ to the values you have:\n<code>(define (uniq list)\n  (cond\n    [(empty? list)\
+    \ empty]\n    [(apply member (first list) (rest list)) (uniq (rest list))]\n \
+    \   [else (cons (first list) (uniq (rest list)))]))\n</code>\nBut that's a bit\
+    \ of a hack, and the Racket standard libraries provide a better way. You can use\
+    \ <code>any</code> with a <code>lambda</code> that returns <code>#t</code> if\
+    \ the two values are equal:\n<code>(define (uniq list)\n  (cond\n    [(empty?\
+    \ list) empty]\n    [(any (lambda (v) (equal? (first list) v)) (rest list)) (uniq\
+    \ (rest list))]\n    [else (cons (first list) (uniq (rest list)))]))\n</code>\n\
+    Another way to do this would be to sort the list, then run through it looking\
+    \ for values that are the same as the previous value. This would be more efficient\
+    \ than your current solution (it is O(n log n) instead of O(n^2)), but would not\
+    \ preserve the ordering of the input.\n", "  (removed-duplicates/from-numbers/to-numbers\
+    \ numbers '()))\n", "  (let loop ([numbers numbers] [result '()])\n    (if (empty?\
+    \ numbers)\n        result\n        (if (member (first numbers) (rest numbers))\n\
+    \            (loop (rest numbers) result)\n            (loop (rest numbers) (cons\
+    \ (first numbers) result))))))\n", "  (define (rm-dup nums acc-list)\n    (cond\n\
+    \      [(empty? nums) (reverse acc-list)]\n      [(in-list? (first nums) acc-list)\
+    \ (rm-dup (rest nums) acc-list)]\n      [else (rm-dup (rest nums) (cons (first\
+    \ nums) acc-list))]))\n  (rm-dup numbers '()))\n", "  (cond\n    [(empty? numbers)\
+    \ empty]\n    [(member (first numbers) (rest numbers)) (remove_duplicates (rest\
+    \ numbers))]\n    [else (cons (first numbers) (remove_duplicates (rest numbers)))]))\n\
+    </code>\n", "  (cond [(empty? numbers) empty]\n        [(null? (member (first\
+    \ numbers) (rest numbers)))\n         (cons (first numbers) (remove_duplicates\
+    \ (rest numbers)))]\n        [else (remove_duplicates (rest numbers))]))\n", " \
+    \ (define (in_list? n l)\n    (cond\n      [(empty? l) false]\n      [(equal?\
+    \ n (first l)) true]\n      [else (in_list? n (rest l))]))\n  (define (filter_acc\
+    \ list1 list2)\n    (cond\n      [(empty? list1) list2]\n      [(in_list? (first\
+    \ list1) list2) (filter_acc (rest list1) list2)]\n      [else (filter_acc (rest\
+    \ list1) (cons (first list1) list2))]))\n  (reverse (filter_acc numbers (list))))\n",
+  "  (sort (hash-remove-duplicates (apply hash numbers)) &lt;))\n", "  (filter (compose\
+    \ not member?) numbers numbers))\n", "  (foldl (lambda (n ns)\n           (if\
+    \ (member n ns)\n               ns\n               (cons n ns)))\n         '()\n\
+    \         numbers))\n", "  (cond\n    [(empty? numbers) empty]\n    [(define head\
+    \ (first numbers))\n     (if (member head (rest numbers))\n         (remove_duplicates\
+    \ (rest numbers))\n         (cons head (remove_duplicates (rest numbers))))]))\n\
+    </code>\nI have been searching for a solution for quite a while now, but I can't\
+    \ find anything. Either I am missing something or this is an obvious thing.\n\
+    What am I doing wrong?\n", "  (define new-list '())\n  (define (test-number number)\n\
+    \    (if (eq? (member number new-list) '())\n        (set! new-list (cons number\
+    \ new-list))))\n  (map test-number numbers)\n  new-list)\n", "  (foldl (lambda\
+    \ (x acc) (if (member x acc) acc (cons x acc)))\n         '()\n         numbers))\n",
+  "  (cond\n    [(empty? numbers) empty]\n    [(member (first numbers) (rest numbers))\
+    \ (remove_duplicates (rest numbers))]\n    [else (cons (first numbers) (remove_duplicates\
+    \ (rest numbers)))]))\n", "  (cond\n    [(empty? numbers) '()]\n    [(member (first\
+    \ numbers) (rest numbers)) (remove_duplicates (rest numbers))]\n    [else (cons\
+    \ (first numbers) (remove_duplicates (rest numbers)))]))\n", "  (accumulate\n\
+    \   cons\n   '()\n   (remove-duplicates-1\n    (accumulate\n     (lambda (number\
+    \ all-numbers)\n       (cons number all-numbers))\n     '()\n     numbers))))\n",
+  "  (filter (lambda (x) (not (memq x (cdr numbers)))) numbers))\n", "  (if (null?\
+    \ numbers)\n      '()\n      (cons (car numbers)\n            (remove_duplicates\
+    \ (foldr (\u03BB (x y) (if (member x y) y (cons x y)))\n                     \
+    \                 (cdr numbers)\n                                      (cdr numbers))))))\n\
+    </code>\n", "  (let ([left (list)])\n    (for ([n (in-list numbers)])\n      (when\
+    \ (not (memq n left))\n        (set! left (cons n left))))\n    (reverse left)))\n",
+  "  (let ([h (make-hash)])\n    (for ([n numbers])\n      (hash-set! h n n))\n  \
+    \  (hash-values h)))\n", "  (let ([unique-numbers (unique numbers)])\n    (for/list\
+    \ ([n (in-list numbers)])\n      (if (member n unique-numbers)\n          n\n\
+    \          (begin (set! unique-numbers (remove n unique-numbers)) '())))))\n</code>\n\
+    I'm looking for a way to refactor this to\n\nnot have to use <code>set!</code>\n\
+    or to have to have <code>unique-numbers</code> as a local variable\n\nI've considered\
+    \ using <code>let/cc</code> but don't see how it could be used.\n\n\nA:\n\nI would\
+    \ start by defining a local <code>remove</code> procedure (like <code>member</code>\
+    \ in <code>racket/list</code> library) and using the regular <code>for</code>\
+    \ loop (not the <code>for/list</code> syntax):\n<code>(define (remove x lst)\n\
+    \  (cond ((null? lst) '())\n        ((equal? x (car lst)) (cdr lst))\n       \
+    \ (else (cons (car lst) (remove x (cdr lst))))))\n", "  (define (remove_duplicates_helper\
+    \ numbers result)\n    (cond\n      [(empty? numbers) (reverse result)]\n    \
+    \  [(member (first numbers) result) (remove_duplicates_helper (rest numbers) result)]\n\
+    \      [else (remove_duplicates_helper (rest numbers) (cons (first numbers) result))]))\n\
+    \  (remove_duplicates_helper numbers '()))\n", "  (cond [(empty? numbers) empty]\n\
+    \        [(member (first numbers) (rest numbers))\n         (remove_duplicates\
+    \ (rest numbers))]\n        [else (cons (first numbers)\n                    (remove_duplicates\
+    \ (rest numbers)))]))\n</code>\nTest cases:\n<code>&gt; (remove_duplicates empty)\n\
+    '()\n&gt; (remove_duplicates (list 1 2 3))\n'(1 2 3)\n&gt; (remove_duplicates\
+    \ (list 1 2 2 3 3 3))\n'(1)\n&gt; (remove_duplicates (list 1 2 2 3))\n'(1 3)\n\
+    &gt; (remove_duplicates (list 1 1 2 2 3))\n'(3)\n&gt; (remove_duplicates (list\
+    \ 1 1 2 2 3 3))\n'()\n</code>\n", "  (define (remove_duplicates-acc numbers accum)\n\
+    \    (if (empty? numbers)\n        accum\n        (if (member (first numbers)\
+    \ (rest numbers))\n            (remove_duplicates-acc (rest numbers) accum)\n\
+    \            (remove_duplicates-acc (rest numbers) (cons (first numbers) accum)))))\n\
+    \  (reverse (remove_duplicates-acc numbers null)))\n", "  (accumulate remove-duplicates\
+    \ '() numbers))\n", "  (filter (lambda (e) (count numbers e)) numbers))\n</code>\n\
+    <code>#lang racket\n", "  (define helper (lambda (numbers-left result)\n    (if\
+    \ (null? numbers-left)\n        result\n        (if (member (car numbers-left)\
+    \ result)\n            (helper (cdr numbers-left) result)\n            (helper\
+    \ (cdr numbers-left) (cons (car numbers-left) result))))))\n  (helper numbers\
+    \ '()))\n", "  (cond [(empty? numbers) empty]\n        [(member (first numbers)\
+    \ (rest numbers))\n         (remove_duplicates (rest numbers))]\n        [else\
+    \ (cons (first numbers)\n                    (remove_duplicates (rest numbers)))]))\n",
+  "  (define seen (list))\n  (for/list ([n numbers])\n    (if (member n seen)\n  \
+    \      (void)\n        (begin\n          (set! seen (cons n seen))\n         \
+    \ n))))\n", "  (let ([set (set-add-list null numbers)])\n    (for/list ([n (in-list\
+    \ numbers)])\n      (if (set-member? set n)\n          (begin\n            (set-remove!\
+    \ set n)\n            n)))))\n", "  (let loop ([x numbers] [y '()])\n    (cond\
+    \ [(empty? x) y]\n          [(memq (first x) (rest x)) (loop (rest x) y)]\n  \
+    \        [else (loop (rest x) (cons (first x) y))])))\n", "  (for/list ([n numbers]\
+    \ #:when (first (remove-duplicates (append numbers '(0)))))\n    n))\n", "  (match\
+    \ numbers\n    [(list) '()]\n    [(list n ...)\n     (if (any (lambda (x) (equal?\
+    \ x n)) (list ...))\n         (remove_duplicates (list ...))\n         (cons n\
+    \ (remove_duplicates (list ...))))]))\n", "  (let loop ([numbers numbers] [result\
+    \ null])\n    (if (null? numbers)\n        (reverse result)\n        (let ([n\
+    \ (car numbers)])\n          (if (member n (cdr numbers))\n              (loop\
+    \ (cdr numbers) result)\n              (loop (cdr numbers) (cons n result)))))))\n",
+  "  (remove-duplicates-helper (filter (\u03BB (n) (not (assoc n numbers))) numbers)\n\
+    \                            (filter (\u03BB (n) (assoc n numbers)) numbers)))\n",
+  "  (hash-remove-duplicates numbers hash-equal))\n", "  (let ([seen '()])\n    (foldl\
+    \ (lambda (x y)\n             (if (memq x seen)\n                 y\n        \
+    \         (cons x y)))\n           '()\n           numbers)))\n</code>\nNow, although\
+    \ the code above works and passes the tests, I'm not sure it's optimal:\n\nIt's\
+    \ quadratic in time, which is not what the challenge asks for.\nIt's not consistent\
+    \ with the order of elements of the input list, which is what the challenge asks\
+    \ for.  If a duplicate appears before the unique first occurrence, it will be\
+    \ dropped and the order of elements will change.\nI'm also not sure if it's optimal\
+    \ in terms of efficiency.  The list is folded from the back to the front, and\
+    \ therefore the <code>cons</code> operation will always build a new list and traverse\
+    \ to the end of the <code>seen</code> list.  A better solution could probably\
+    \ create the new list by starting at the front, and avoiding building a <code>seen</code>\
+    \ list by using a different function to lookup in it.\n\nHow could I improve the\
+    \ code above?\n\n\nA:\n\nThe <code>memq</code> function is linear in the length\
+    \ of the list that it searches, so your code is quadratic in time.  You can achieve\
+    \ linear time by maintaining a set of the seen elements, instead of a list.  A\
+    \ set is like a list, but only contains distinct elements and is implemented so\
+    \ that lookups are efficient.  In Racket, sets are implemented by vectors, and\
+    \ you can construct a vector from a list with <code>vector-&gt;immutable-vector</code>.\
+    \  Use <code>vector-memq</code> instead of <code>memq</code> in your code.\n",
+  "  (remove-duplicates-inner numbers '()))\n", "  (define helper-set (set))\n  (define\
+    \ result-list (list))\n  (for ([n numbers])\n    (unless (set-member? n helper-set)\n\
+    \      (set! helper-set (set-add n helper-set))\n      (set! result-list (cons\
+    \ n result-list))))\n  (reverse result-list))\n", "  (remove-duplicates-aux numbers\
+    \ '()))\n", "  (define (last_unique_from numbers unique)\n    (if (null? numbers)\n\
+    \        (reverse unique)\n        (let ((n (car numbers)))\n          (if (member\
+    \ n numbers)\n              (last_unique_from (cdr numbers) unique)\n        \
+    \      (last_unique_from (cdr numbers) (cons n unique))))))\n  (last_unique_from\
+    \ numbers '()))\n", "  (cond\n    [(empty? numbers) '()]\n    [(empty? (cdr numbers))\
+    \ numbers]\n    [(member (car numbers) (cdr numbers)) (remove_duplicates (cdr\
+    \ numbers))]\n    [else (cons (car numbers) (remove_duplicates (cdr numbers)))]))\n",
+  "  (map (lambda (n)\n         (if (count n numbers) 1 n))\n       numbers))\n",
+  "  (sort (remove-duplicates numbers #:equal? equal?)\n        <))\n```\n\n```scheme\n\
+    #lang racket\n", "  (reverse (foldl (lambda (n acc) (if (member n acc) acc (cons\
+    \ n acc))) '() numbers)))", "  (define (remdup lst seen)\n    (if (null? lst)\
+    \ '()\n      (if (member (car lst) seen) (remdup (cdr lst) seen)\n        (cons\
+    \ (car lst) (remdup (cdr lst) (cons (car lst) seen))))))\n  (remdup numbers '()))\n\
+    </code>\nI'm using <code>member</code> to determine if an element has been seen.\n\
+    It's not clear to me that this is much slower than using a hash table, and I'm\
+    \ not sure I see the advantage of using a hash table here.\nWhat am I missing?\n\
+    Thanks!\n\n\nA:\n\nIf you don't care about retaining order, you can use a <code>set</code>\
+    \ (or <code>hash-set</code>):\n<code>(define (remove-duplicates lst)\n  (set-&gt;list\
+    \ (build-set lst)))\n</code>\n", "  (cond\n    [(empty? numbers) empty]\n    [(eq?\
+    \ (first numbers) (second numbers))\n     (remove_duplicates (rest numbers))]\n\
+    \    [else\n     (cons (first numbers) (remove_duplicates (rest numbers)))]))\n",
+  "  (local [(define seen '())\n          (define (seen? n) (member n seen))\n   \
+    \       (define (recur ns)\n            (match ns\n              ['() '()]\n \
+    \             [(cons x xs)\n               (if (seen? x)\n                   (recur\
+    \ xs)\n                   (cons x (recur xs)))]))]\n    (recur numbers)))\n</code>\n\
+    This is not a very efficient solution, because <code>member</code> has to traverse\
+    \ all elements seen so far, which is growing in length. I'll leave it as an exercise\
+    \ to make a more efficient solution.\n", "  (define (remove_duplicates-core numbers\
+    \ acc)\n    (match numbers\n      [(list) acc]\n      [(cons head tail)\n    \
+    \   (if (member head tail)\n           (remove_duplicates-core tail acc)\n   \
+    \        (remove_duplicates-core tail (cons head acc)))]))\n  (reverse (remove_duplicates-core\
+    \ numbers '())))\n", "  (define (iter result count_list)\n    (if (null? numbers)\n\
+    \        result\n        (let* ([n (car numbers)]\n               [count (count\
+    \ n count_list)])\n          (if (zero? count)\n              (iter (cons n result)\
+    \ (cons (cons n 1) count_list))\n              (iter result (cons (cons n (+ count\
+    \ 1)) count_list))))))\n  (iter '() '()))\n</code>\nMy first question is, if I\
+    \ want to use a <code>hash-table</code> to store the counts, I can do something\
+    \ like this,\n<code>#lang racket\n", "  (foldl (lambda (n ns)\n           (if\
+    \ (memq n ns)\n               ns\n               (cons n ns)))\n         '()\n\
+    \         numbers))\n", "  (cond [(empty? numbers) empty]\n        [(member? (first\
+    \ numbers) (rest numbers))\n         (remove_duplicates (rest numbers))]\n   \
+    \     [else (cons (first numbers) (remove_duplicates (rest numbers)))]))\n", " \
+    \ (let loop ([numbers numbers] [accum '()])\n    (if (null? numbers)\n       \
+    \ accum\n        (if (member (car numbers) (cdr numbers))\n            (loop (cdr\
+    \ numbers) accum)\n            (loop (cdr numbers) (cons (car numbers) accum))))))\n",
+  "  (define (to-set numbers)\n    (foldl cons null numbers))\n  (define (remove-duplicates\
+    \ numbers)\n    (reverse (foldl\n              (lambda (number result)\n     \
+    \           (if (member number (to-set result))\n                    result\n\
+    \                    (cons number result)))\n              null\n            \
+    \  numbers)))\n  (remove-duplicates numbers))\n", "  (define (remove_duplicates_iter\
+    \ numbers result)\n    (cond [(empty? numbers) result]\n          [(member (first\
+    \ numbers) (rest numbers)) (remove_duplicates_iter (rest numbers) result)]\n \
+    \         [else (remove_duplicates_iter (rest numbers) (append result (list (first\
+    \ numbers))))]))\n  (remove_duplicates_iter numbers (list)))\n\n", "  (define\
+    \ (memolize func)\n    (let ((cache (make-hash)))\n      (lambda (arg)\n     \
+    \   (hash-ref (hash-set! cache arg (func arg)) arg))))\n  (define (remove-duplicates-hlpr\
+    \ numbers)\n    (if (null? numbers)\n        '()\n        (let ((x (car numbers))\n\
+    \              (xs (cdr numbers)))\n          (if (member x xs)\n            \
+    \  (remove-duplicates-hlpr xs)\n              (cons x (remove-duplicates-hlpr\
+    \ xs))))))\n  (remove-duplicates-hlpr numbers))\n", "  (if (null? numbers)\n \
+    \     '()\n      (cons (car numbers)\n            (remove_duplicates (filter (lambda\
+    \ (x) (not (equal? x (car numbers)))) (cdr numbers))))))\n", "  (cond\n    [(empty?\
+    \ numbers) empty]\n    [(in-list? (first numbers) (rest numbers))\n     (remove_duplicates\
+    \ (rest numbers))]\n    [else\n     (cons (first numbers) (remove_duplicates (rest\
+    \ numbers)))]))\n", "  (foldl\n   (lambda (unique number)\n     (if (member number\
+    \ unique)\n         unique\n         (cons number unique)))\n   '()\n   numbers))\n",
+  "  (define (helper result number)\n    (cond ((list-index number result) => (\u03BB\
+    \ (n) (list-remove result n)))\n          (else (cons number result))))\n  (list->set\
+    \ (foldl helper '() numbers)))\n", "  (let loop ([numbers numbers] [res '()])\n\
+    \    (if (null? numbers)\n        res\n        (let ([number (car numbers)])\n\
+    \          (if (member number (cdr numbers))\n              (loop (cdr numbers)\
+    \ res)\n              (loop (cdr numbers) (cons number res)))))))\n", "  (define\
+    \ unique-numbers (list))\n  (define unique-index 0)\n  (for ([index (in-range\
+    \ (length numbers))])\n    (define current-number (list-ref numbers index))\n\
+    \    (define is-unique (not (number-in-list? current-number unique-numbers)))\n\
+    \    (when is-unique\n      (set! unique-numbers (append unique-numbers (list\
+    \ current-number)))\n      (set! unique-index (+ unique-index 1))))\n  (append\
+    \ (take unique-numbers unique-index) (list)))\n", "  (let loop ([numbers numbers]\
+    \ [acc '()])\n    (cond [(empty? numbers) (reverse acc)]\n          [(memq (first\
+    \ numbers) acc) (loop (rest numbers) acc)]\n          [else (loop (rest numbers)\
+    \ (cons (first numbers) acc))])))\n", "  (for/list ([number numbers]\n       \
+    \      #:when (not (member number (remove number numbers))))\n    number))\n",
+  "  (let loop ([numbers numbers] [ret '()])\n    (cond [(empty? numbers) (reverse\
+    \ ret)]\n          [(= (count (first numbers) numbers) 1)\n           (loop (rest\
+    \ numbers) (cons (first numbers) ret))]\n          [else (loop (rest numbers)\
+    \ ret)])))\n", "  (cond\n    [(empty? numbers) empty]\n    [(empty? (cdr numbers))\
+    \ numbers]\n    [(member (car numbers) (cdr numbers)) (remove_duplicates (cdr\
+    \ numbers))]\n    [else (cons (car numbers) (remove_duplicates (cdr numbers)))]))",
+  "  (define (remove_duplicates_helper numbers unique-numbers)\n    (if (empty? numbers)\n\
+    \        unique-numbers\n        (let ([n (first numbers)])\n          (if (member\
+    \ n unique-numbers)\n              (remove_duplicates_helper (rest numbers) unique-numbers)\n\
+    \              (remove_duplicates_helper (rest numbers) (cons n unique-numbers))))))\n\
+    \  (remove_duplicates_helper numbers '()))\n", "  (cond\n    [(empty? numbers)\
+    \ empty]\n    [(member (first numbers) (rest numbers)) (remove_duplicates (rest\
+    \ numbers))]\n    [else (cons (first numbers) (remove_duplicates (rest numbers)))]))\n",
+  "  (hash-remove-duplicates numbers))\n", "  (let ([occurrences (hash)])\n    (for\
+    \ ([i numbers])\n      (hash-set! occurrences i\n                 (add1 (hash-ref\
+    \ occurrences i 0))))\n    (for/list ([i numbers])\n      (if (= 1 (hash-ref occurrences\
+    \ i 0))\n          i))))\n", "  (list-ref numbers 1))\n", "  (let ([new-list '()])\n\
+    \    (for ([number numbers])\n      (cond\n        [(member number new-list) #f]\n\
+    \        [else (set! new-list (cons number new-list))]))\n    (reverse new-list)))\n",
+  "  (cond [(empty? numbers) '()]\n        [(member (first numbers) (rest numbers))\
+    \ (remove_duplicates (rest numbers))]\n        [else (cons (first numbers) (remove_duplicates\
+    \ (rest numbers)))]))\n", "  (cond\n    [(empty? numbers) empty]\n    [(member\
+    \ (first numbers) (rest numbers)) (remove_duplicates (rest numbers))]\n    [else\
+    \ (cons (first numbers) (remove_duplicates (rest numbers)))]))\n", "  (cond\n\
+    \    [(empty? numbers) '()]\n    [(equal? (first numbers) (second numbers))\n\
+    \     (remove_duplicates (rest numbers))]\n    [else\n     (cons (first numbers)\
+    \ (remove_duplicates (rest numbers)))]))\n", "  (for/list ([num (in-list numbers)])\n\
+    \    (when (no-duplicates? num numbers)\n      num)))\n", "  (define (recur numbers\
+    \ seen-numbers)\n    (cond\n      ((null? numbers) '())\n      ((member (car numbers)\
+    \ seen-numbers) (recur (cdr numbers) seen-numbers))\n      (else (cons (car numbers)\
+    \ (recur (cdr numbers) (cons (car numbers) seen-numbers))))))\n  (recur numbers\
+    \ '()))\n", "  (cond\n    [(empty? numbers) (quote ())]\n    [(member (first numbers)\
+    \ (rest numbers)) (remove_duplicates (rest numbers))]\n    [else (cons (first\
+    \ numbers) (remove_duplicates (rest numbers)))]))\n", "  (cond [(empty? numbers)\
+    \ empty]\n        [(null? (member (first numbers) (rest numbers)))\n         (cons\
+    \ (first numbers) (remove_duplicates (rest numbers)))]\n        [else (remove_duplicates\
+    \ (rest numbers))]))\n", "  (cond\n    [(empty? numbers) empty]\n    [(empty?\
+    \ (cdr numbers)) numbers]\n    [(member (car numbers) (cdr numbers)) (remove_duplicates\
+    \ (cdr numbers))]\n    [else (cons (car numbers) (remove_duplicates (cdr numbers)))]))\n",
+  "  (let ([unique-numbers (vector)]\n        [duplicates (vector)])\n    (for ([n\
+    \ numbers])\n      (if (andmap unique-numbers (\u03BB (a) (not (= a n))))\n  \
+    \        (vector-append! unique-numbers (vector n))\n          (vector-append!\
+    \ duplicates (vector n))))\n    (vector-append unique-numbers (vector-remove-all\
+    \ duplicates numbers))))\n", "  (define (remove-number number rest-of-numbers)\n\
+    \    (cond\n      ((null? rest-of-numbers) '(0))\n      ((= number (car rest-of-numbers))\n\
+    \       (remove-number number (cdr rest-of-numbers)))\n      (else (cons number\
+    \ rest-of-numbers))))\n  (define (remove-duplicates-iter remaining-numbers result)\n\
+    \    (cond\n      ((null? remaining-numbers) result)\n      (else (remove-duplicates-iter\n\
+    \             (remove-number (car remaining-numbers)\n                       \
+    \     (cdr remaining-numbers))\n             (cons (car remaining-numbers) result)))))\n\
+    \  (reverse (remove-duplicates-iter numbers '())))\n", "  (filter (lambda (x)\
+    \ (not (member x (remove x numbers)))) numbers))\n", "  (define (remove_helper\
+    \ numbers seen)\n    (cond\n      [(empty? numbers) seen]\n      [(memq (first\
+    \ numbers) seen) (remove_helper (rest numbers) seen)]\n      [else (remove_helper\
+    \ (rest numbers) (cons (first numbers) seen))]))\n  (remove_helper numbers '()))\n",
+  "  (cond ((empty? numbers) '())\n        ((member (first numbers) (rest numbers))\n\
+    \         (remove_duplicates (rest numbers)))\n        (else (cons (first numbers)\n\
+    \                    (remove_duplicates (rest numbers))))))\n</code>\nIt can be\
+    \ tested like this:\n<code>&gt; (remove_duplicates '(1 2 2 3 4 5 5 5))\n'(1 3\
+    \ 4)\n&gt; (remove_duplicates '(1 1 1 2 3 4 5 6 6 7 8 9 10 11 11))\n'(2 3 4 5\
+    \ 7 8 9 10)\n</code>\nI'm sure there's a much more elegant solution using <code>filter</code>\
+    \ or <code>remove</code> instead of <code>member</code>?\n\n\nA:\n\nI think this\
+    \ works.\n<code>(define (remove-duplicates lst)\n  (cond [(empty? lst) empty]\n\
+    \        [(member (first lst) (rest lst)) (remove-duplicates (rest lst))]\n  \
+    \      [else (cons (first lst) (remove-duplicates (rest lst)))]))\n</code>\n",
+  "  (let ([numbers (sort numbers <)])\n    (let loop ([numbers numbers] [uniques\
+    \ '()])\n      (if (null? numbers)\n          (reverse uniques)\n          (let\
+    \ ([head (car numbers)]\n                [tail (cdr numbers)])\n            (if\
+    \ (null? tail)\n                (reverse (cons head uniques))\n              \
+    \  (if (= head (car tail))\n                    (loop (cdr tail) uniques)\n  \
+    \                  (loop tail (cons head uniques)))))))))\n", "  (define (helper\
+    \ acc numbers)\n    (cond\n      [(empty? numbers) (reverse acc)]\n      [(member\
+    \ (first numbers) acc) (helper acc (rest numbers))]\n      [else (helper (cons\
+    \ (first numbers) acc) (rest numbers))]))\n  (helper empty numbers))\n</code>\n\
+    Note that I use <code>member</code> from Racket. It's a bit of a cheat, but it's\
+    \ built in, so I think it's still fine for a coding challenge. If you were actually\
+    \ writing a real program, you'd probably want to use <code>hash</code> or <code>hashq</code>\
+    \ to store the set of seen elements in.\n", "  (cond\n    [(empty? numbers) (void)]\n\
+    \    [(not (empty? (cdr numbers)))\n     (if (member (car numbers) (cdr numbers))\n\
+    \         (remove_duplicates (cdr numbers))\n         (cons (car numbers) (remove_duplicates\
+    \ (cdr numbers))))]\n    [else (cons (car numbers) (void))]))\n</code>\nMy question\
+    \ is, how can I improve the algorithm? Specifically, I'm concerned about the base\
+    \ case:\n<code>(define (remove_duplicates numbers)\n  (cond\n    [(empty? numbers)\
+    \ (void)]\n    [(not (empty? (cdr numbers)))\n     (if (member (car numbers) (cdr\
+    \ numbers))\n         (remove_duplicates (cdr numbers))\n         (cons (car numbers)\
+    \ (remove_duplicates (cdr numbers))))]\n    [else (cons (car numbers) (void))]))\n\
+    </code>\nIn the case of the base case where we have a <code>#t</code> value from\
+    \ the <code>empty?</code> function, I'm sure it works, but I think it's ugly.\n\
+    Can I do better?\n\n\nA:\n\nI think you can do better, by using tail recursion\
+    \ and adding a base case for empty lists.\n<code>(define (remove-duplicates numbers)\n\
+    \  (define (dups-helper numbers acc seen)\n    (cond\n      [(empty? numbers)\
+    \ (reverse acc)]\n      [(member (car numbers) seen) (dups-helper (cdr numbers)\
+    \ acc seen)]\n      [else (dups-helper (cdr numbers) (cons (car numbers) acc)\
+    \ (cons (car numbers) seen))]))\n  (dups-helper numbers '() '()))\n</code>\nThis\
+    \ is essentially doing the same thing as you are, but it's more efficient, and\
+    \ also it has less visual noise, as the <code>void</code> has been replaced with\
+    \ an empty list.\n", "  (remove (lambda (x) (count x numbers) > 1) numbers))\n",
+  "  (remove-duplicates-helper numbers '()))\n", "  (define (rdup-help process unprocess\
+    \ accum)\n    (if (null? unprocess)\n        accum\n        (if (member (car unprocess)\
+    \ process)\n            (rdup-help (cdr unprocess) (cdr unprocess) accum)\n  \
+    \          (rdup-help (cons (car unprocess) process) (cdr unprocess) (cons (car\
+    \ unprocess) accum)))))\n  (reverse (rdup-help '() numbers '())))\n", "  (remove*\
+    \ (set numbers) numbers))\n</code>\nI want to know if there is an easier way to\
+    \ do this, and if it has a name.\n", "  (foldl (lambda (x l)\n            (if\
+    \ (member x l)\n                l\n                (cons x l)))\n         '()\n\
+    \         numbers))\n", "  (for/list ([n numbers]\n             #:when (not (member\
+    \ n (remove n numbers))))\n    n))\n", "  (let loop ([numbers numbers] [seen '()])\n\
+    \    (cond [(empty? numbers) '()]\n          [(member (first numbers) seen) (loop\
+    \ (rest numbers) seen)]\n          [else (cons (first numbers) (loop (rest numbers)\
+    \ (cons (first numbers) seen)))])))\n", "  (define (remove_duplicates_help numbers\
+    \ seen)\n    (cond\n      [(empty? numbers) empty]\n      [(member (first numbers)\
+    \ seen) (remove_duplicates_help (rest numbers) seen)]\n      [else (cons (first\
+    \ numbers) (remove_duplicates_help (rest numbers) (cons (first numbers) seen)))]))\n\
+    \  (remove_duplicates_help numbers empty))\n", "  (cond [(empty? numbers) empty]\n\
+    \        [(rest numbers) #t]\n        [else (cons (first numbers) (remove_duplicates\
+    \ (rest numbers)))]))\n</code>\nI can't quite figure out how to do what I'm trying\
+    \ to do.  I want to first find the duplicates, which I think I can do with member?,\
+    \ and then remove them.\nThoughts?\n\n\nA:\n\nI suggest you use SRFI 1's <code>remove</code>\
+    \ function, which takes a predicate and a list, and returns a list in which all\
+    \ elements for which the predicate returns true have been removed. (See http://srfi.schemers.org/srfi-1/srfi-1.html.)\n\
+    In your case, you'll want a predicate that checks whether an element is a member\
+    \ of the original list or not. You could also use it if you get past this homework\
+    \ and move on to more advanced things.\n", "  (define (unique_helper uniques result)\n\
+    \    (cond [(empty? uniques) result]\n          [(member (first uniques) result)\
+    \ (unique_helper (rest uniques) result)]\n          [else (unique_helper (rest\
+    \ uniques) (cons (first uniques) result))]))\n  (unique_helper numbers '()))\n\
+    </code>\nTest cases:\n<code>(check-expect (remove_duplicates '(1 2 3 4 5 1 2 3\
+    \ 4 5)) '(1 2 3 4 5))", "  (define (remove_duplicates_internal nums seen)\n  \
+    \  (cond\n      [(empty? nums) (reverse seen)]\n      [(= (length (member (first\
+    \ nums) seen)) 0)\n       (remove_duplicates_internal (rest nums) (cons (first\
+    \ nums) seen))]\n      [else (remove_duplicates_internal (rest nums) seen)]))\n\
+    \  (remove_duplicates_internal numbers empty))\n", "  (remove (lambda (x) (member\
+    \ x (rest numbers))) numbers))\n", "  (letrec ([index (index numbers)]\n     \
+    \      [index-length (index-length index)]\n           [index-mapto (index-mapto\
+    \ (lambda (x) (not (positive? (index-length x)))))]\n           [filter-index\
+    \ (index-filter index-mapto)])\n    (index-mapto index-length identity)))\n",
+  "  (match numbers\n    ['() '()]\n    [(cons h t) (cond\n                 [(member\
+    \ h t) (remove_duplicates t)]\n                 [else (cons h (remove_duplicates\
+    \ t))])]))\n", "  (match numbers\n    [(list) empty]\n    [(list head tail)\n\
+    \     (let ([tail (remove_duplicates tail)])\n       (if (member head tail)\n\
+    \           tail\n           (cons head tail)))]))\n", "  (foldl (lambda (x result)\n\
+    \           (if (member x result)\n               result\n               (cons\
+    \ x result)))\n         '()\n         numbers))\n", "  (cond\n    [(empty? numbers)\
+    \ empty]\n    [(empty? (rest numbers)) (list (first numbers))]\n    [(member (first\
+    \ numbers) (rest numbers)) (remove_duplicates (rest numbers))]\n    [else (cons\
+    \ (first numbers) (remove_duplicates (rest numbers)))]))\n", "  (let loop ([numbers\
+    \ numbers] [result '()])\n    (cond [(empty? numbers) result]\n          [(member\
+    \ (first numbers) (rest numbers)) (loop (rest numbers) result)]\n          [else\
+    \ (loop (rest numbers) (cons (first numbers) result))])))\n", "  (filter (lambda\
+    \ (x) (count x numbers)) numbers))\n", "  (for/list ([n numbers]\n           \
+    \  #:when (count (lambda (x) (equal? x n)) numbers)\n             #:unless (>\
+    \ (count (lambda (x) (equal? x n)) numbers) 1))\n    n))\n", "  (define (remove-duplicates-iter\
+    \ unique-numbers numbers)\n    (cond\n      [(empty? numbers) unique-numbers]\n\
+    \      [(member? (first numbers) unique-numbers) (remove-duplicates-iter unique-numbers\
+    \ (rest numbers))]\n      [else (remove-duplicates-iter (append unique-numbers\
+    \ (list (first numbers))) (rest numbers))]))\n  (remove-duplicates-iter empty\
+    \ numbers))\n", "  (define (remove_duplicates_iter result nums)\n    (if (empty?\
+    \ nums)\n        result\n        (if (member (first nums) (rest nums))\n     \
+    \       (remove_duplicates_iter result (rest nums))\n            (remove_duplicates_iter\
+    \ (append result (list (first nums))) (rest nums)))))\n  (remove_duplicates_iter\
+    \ '() numbers))\n", "  (for/fold ([numbers numbers]) ([number numbers])\n    (if\
+    \ (member number numbers)\n        numbers\n        (cons number numbers))))\n",
+  "  (cond [(empty? numbers)\n          empty]\n        [(pair? numbers)\n       \
+    \   (if (member (first numbers) (rest numbers))\n              (remove_duplicates\
+    \ (rest numbers))\n              (cons (first numbers) (remove_duplicates (rest\
+    \ numbers))))]\n        [else empty]))\n", "  (foldl (lambda (n seen)\n      \
+    \     (if (hash-has-key? seen n)\n               seen\n               (hash-set\
+    \ seen n true)))\n         (make-hash)\n         numbers))\n", "  (define (insert_new_at_front\
+    \ x list)\n    (cond ((null? list) (list x))\n          ((equal? x (car list))\
+    \ list)\n          (else (cons x list))))\n  (define (remove_duplicates_from_sorted_list\
+    \ list)\n    (cond ((null? list) '())\n          ((null? (cdr list)) list)\n \
+    \         ((equal? (car list) (cadr list)) (remove_duplicates_from_sorted_list\
+    \ (cdr list)))\n          (else (cons (car list) (remove_duplicates_from_sorted_list\
+    \ (cdr list))))))\n  (remove_duplicates_from_sorted_list (foldl insert_new_at_front\
+    \ '() numbers)))", "  (foldl (lambda (x y) (cond ((empty? y) (cons x y))\n   \
+    \                          ((> (count x numbers) 1) y)\n                     \
+    \        (else (cons x y))))\n         '()\n         numbers))\n", "  (define\
+    \ (remove_duplicates_helper numbers new_list)\n    (cond\n      [(empty? numbers)\
+    \ new_list]\n      [(member (first numbers) new_list) (remove_duplicates_helper\
+    \ (rest numbers) new_list)]\n      [else (remove_duplicates_helper (rest numbers)\
+    \ (append new_list (list (first numbers))))]))\n  (remove_duplicates_helper numbers\
+    \ empty))\n", "  (letrec ([uniques (reverse (in-first-out (build-integers-stack)))])\n\
+    \    (in-first-out\n     (lambda (s)\n       (cond\n         [(empty? s) (void)]\n\
+    \         [(is-unique? (first s)) (push (first s) uniques)]\n         [else (in-first-out\
+    \ (rest s))]))\n     numbers)))\n", "  (cond [(empty? numbers) empty]\n      \
+    \  [(member (first numbers) (rest numbers))\n         (remove_duplicates (rest\
+    \ numbers))]\n        [else (cons (first numbers)\n                    (remove_duplicates\
+    \ (rest numbers)))]))\n</code>\nThis gives the correct answer for the tests but\
+    \ is missing a check for an empty list as input.\n\n\nA:\n\nYou have to compute\
+    \ the list of duplicates before you remove them. So you should first compute the\
+    \ list of duplicates and then remove them from the input list.\nSomething like\
+    \ this:\n<code>(define (remove-duplicates lst)\n  (remove-all-duplicates lst (duplicates\
+    \ lst)))\n", "  (let ((seen '()))\n    (for/list ([n (in-list numbers)])\n   \
+    \   (cond\n        [(member n seen) (void)]\n        [else (set! seen (cons n\
+    \ seen)) n]))))\n</code>\n", "  (cond [(empty? numbers) empty]\n        [(member\
+    \ (first numbers) (rest numbers))\n         (remove_duplicates (rest numbers))]\n\
+    \        [else (cons (first numbers)\n                    (remove_duplicates (rest\
+    \ numbers)))]))\n", "  (let ([counts (list->count-list numbers)])\n    (filter\
+    \ (\u03BB (n) (= (count n counts) 1)) numbers)))\n", "  (foldl (lambda (x result)\n\
+    \           (if (member x result)\n               result\n               (cons\
+    \ x result)))\n         '()\n         numbers))\n", "  (let ((seen-numbers (list)))\n\
+    \    (remove (lambda (number)\n              (if (member number seen-numbers)\n\
+    \                  (begin (set! seen-numbers (cons number seen-numbers))\n   \
+    \                      #t)\n                  (begin (set! seen-numbers (cons\
+    \ number seen-numbers))\n                         #f)))\n            numbers)))\n",
+  "  (define (check_duplicates lst seen)\n    (if (null? lst)\n        seen\n    \
+    \    (if (member (car lst) seen)\n            (check_duplicates (cdr lst) seen)\n\
+    \            (check_duplicates (cdr lst) (cons (car lst) seen)))))\n  (check_duplicates\
+    \ numbers '()))\n", "  (match numbers\n    ('() '())\n    ((cons head tail)\n\
+    \     (cond\n       [(memq head tail) (remove_duplicates tail)]\n       [else\
+    \ (cons head (remove_duplicates tail))]))))", "  (define (remove-from-list xs\
+    \ element)\n    (cond\n      [(empty? xs) empty]\n      [(first xs) == element]\n\
+    \      [else (cons (first xs) (remove-from-list (rest xs) element))]))\n  (cond\n\
+    \    [(empty? numbers) empty]\n    [else (cons (first numbers) (remove-from-list\
+    \ (remove-from-list (rest numbers) (first numbers)) (first numbers)))]))\n</code>\n\
+    The <code>cond</code> block in the inner helper function seems to be a little\
+    \ redundant, but I'm not sure how to remove it. Also, is there a better way to\
+    \ do this?\n\n\nA:\n\nYou can use <code>remove</code> instead of the inner function.\n\
+    Racket's docs for <code>remove</code> say:\n<blockquote>\n<p>Like <code>&lt;code&gt;remove*&lt;/code&gt;</code>,\
+    \ but does not preserve the initial order of the list\u2019s elements.</p>\n</blockquote>\n\
+    But that's not true as of Racket 6.1:\n<code>&gt; (remove odd? '(1 2 3 4))\n'(2\
+    \ 4)\n</code>\nSo in your case, you can just use <code>remove</code> with <code>memq</code>\
+    \ and <code>rest</code>:\n<code>(define (remove-duplicates nums)\n  (cond\n  \
+    \  [(empty? nums) empty]\n    [else (cons (first nums)\n                (remove\
+    \ (memq (first nums) (rest nums))\n                        (rest nums)))]))\n\
+    </code>\n", "  (cond\n    [(empty? numbers) empty]\n    [(member (first numbers)\
+    \ (rest numbers)) (remove_duplicates (rest numbers))]\n    [else (cons (first\
+    \ numbers) (remove_duplicates (rest numbers)))]))\n", "  (let ([uniques '()])\n\
+    \    (for ([n (in-list numbers)])\n      (unless (member n uniques)\n        (set!\
+    \ uniques (cons n uniques))))\n    (reverse uniques)))\n", "  (define (remove_duplicates_helper\
+    \ numbers result)\n    (cond\n      [(empty? numbers) (reverse result)]\n    \
+    \  [(member (first numbers) result) (remove_duplicates_helper (rest numbers) result)]\n\
+    \      [else (remove_duplicates_helper (rest numbers) (cons (first numbers) result))]))\n\
+    \  (remove_duplicates_helper numbers '()))\n</code>\n", "  (let ([table (make-hash)])\n\
+    \    (for ([i numbers])\n      (let ([value (hash-ref table i #f)])\n        (cond\n\
+    \          [(not value) (hash-set! table i i)]\n          [(number? value) (hash-remove!\
+    \ table i)])))\n    (list->vector (hash-values table))))\n", "  (remvoedups-with-boundary\
+    \ numbers #f #f '()))\n", "  (foldl (lambda (x xs)\n           (if (member x xs)\n\
+    \               xs\n               (cons x xs)))\n         '()\n         numbers))\n",
+  "  (filter (compose2 (complement (flip member? numbers))\n                    (compose2\
+    \ (foldl cons '())\n                              cdr))\n          numbers))\n",
+  "  (let* ([numbers (sort numbers <)]\n         [uniques (remove-duplicates numbers)])\n\
+    \    (if (empty? uniques)\n        (error \"No unique elements\")\n        (remove-duplicates\
+    \ uniques))))\n", "  (define (remove-duplicates' to-search found)\n    (if (empty?\
+    \ to-search)\n        (reverse found)\n        (let ((n (first to-search)))\n\
+    \          (if (member n found)\n              (remove-duplicates' (rest to-search)\
+    \ found)\n              (remove-duplicates' (rest to-search) (cons n found))))))\n\
+    \  (remove-duplicates' numbers '()))\n</code>\nSo I know that this can be implemented\
+    \ in a functional way with a fold, but I'm not sure how to remove the duplicates\
+    \ as I see them and not after the fold has completed.\n\n\nA:\n\nYou can use <code>fold</code>\
+    \ to build the result (reversed) list, but then you need to take care of reversing\
+    \ it. Here's an example:\n<code>(define (remove-duplicates list)\n  (foldl (lambda\
+    \ (el result)\n           (if (member el result)\n               result\n    \
+    \           (cons el result)))\n         '()\n         list))\n</code>\nAlso,\
+    \ I've simplified the procedure, since it doesn't need to take care of removing\
+    \ duplicates as it goes. We can use the <code>member</code> function to check\
+    \ if the element is already in the result list, in which case it won't be added\
+    \ again.\nBut now we have the list in reverse order, we just need to reverse it\
+    \ again to get the original order:\n<code>(define (remove-duplicates list)\n \
+    \ (reverse (foldl (lambda (el result)\n                    (if (member el result)\n\
+    \                        result\n                        (cons el result)))\n\
+    \                  '()\n                  list)))\n</code>\nNote that the order\
+    \ of the resulting list is preserved, and it only contains elements that occur\
+    \ once, no duplicates:\n<code>(remove-duplicates '(1 2 3 4 1 2 3 4))\n=&gt; '(1\
+    \ 2 3 4)\n</code>\n", "  (define sorted_numbers (sort numbers <))\n  (define (remove_dups\
+    \ n acc)\n    (if (empty? n)\n        acc\n        (if (equal? (first n) (second\
+    \ n))\n            (remove_dups (rest (rest n)) acc)\n            (remove_dups\
+    \ (rest n) (cons (first n) acc)))))\n  (reverse (remove_dups sorted_numbers '())))\n",
+  "  (cond\n    [(empty? numbers) empty]\n    [(member (first numbers) (rest numbers))\
+    \ (remove_duplicates (rest numbers))]\n    [else (cons (first numbers) (remove_duplicates\
+    \ (rest numbers)))]))\n", "  (cond [(empty? numbers) empty]\n        [(member\
+    \ (first numbers) (rest numbers))\n         (remove_duplicates (rest numbers))]\n\
+    \        [else (cons (first numbers)\n                    (remove_duplicates (rest\
+    \ numbers)))]))\n", "  (let loop ([numbers numbers] [seen '()])\n    (cond [(empty?\
+    \ numbers) '()]\n          [(member (first numbers) seen) (loop (rest numbers)\
+    \ seen)]\n          [else (cons (first numbers) (loop (rest numbers) (cons (first\
+    \ numbers) seen)))])))\n", "  (cond [(empty? numbers) empty]\n        [(member\
+    \ (first numbers) (rest numbers))\n         (remove_duplicates (rest numbers))]\n\
+    \        [else (cons (first numbers)\n                    (remove_duplicates (rest\
+    \ numbers)))]))\n", "  (foldl\n   (lambda (x acc)\n     (if (member x acc)\n \
+    \        acc\n         (cons x acc)))\n   empty\n   numbers))\n", "  (cond [(empty?\
+    \ numbers) empty]\n        [(member (first numbers) (rest numbers))\n        \
+    \ (remove_duplicates (rest numbers))]\n        [else (cons (first numbers)\n \
+    \                   (remove_duplicates (rest numbers)))]))\n", "  (define (remove_duplicates\
+    \ numbers acc)\n    (if (null? numbers)\n        acc\n        (if (member (car\
+    \ numbers) (cdr numbers))\n            (remove_duplicates (cdr numbers) acc)\n\
+    \            (remove_duplicates (cdr numbers) (cons (car numbers) acc)))))\n \
+    \ (reverse (remove_duplicates numbers '())))\n</code>\n", "  (define (has-duplicates\
+    \ numbers)\n    (define (recur ns)\n      (define (aux a b)\n        (cond ((=\
+    \ a b) #t)\n              ((empty? b) #f)\n              ((member a b) #t)\n \
+    \             (else (aux a (rest b)))))\n      (cond ((empty? ns) #f)\n      \
+    \      ((aux (first ns) (rest ns)) #t)\n            (else (recur (rest ns)))))\n\
+    \    (recur numbers))\n  (define (recur ns)\n    (cond ((empty? ns) empty)\n \
+    \         ((= 1 (count (first ns) ns)) (cons (first ns) (recur (rest ns))))\n\
+    \          (else (recur (rest ns)))))\n  (cond ((has-duplicates numbers) (recur\
+    \ numbers))\n        (else numbers)))\n", "  (let loop ([numbers numbers] [acc\
+    \ '()])\n    (cond [(empty? numbers) (reverse acc)]\n          [(member (first\
+    \ numbers) (rest numbers)) (loop (rest numbers) acc)]\n          [else (loop (rest\
+    \ numbers) (cons (first numbers) acc))])))\n", "  (cond\n    [(empty? numbers)\
+    \ empty]\n    [(member (first numbers) (rest numbers)) (remove_duplicates (rest\
+    \ numbers))]\n    [else (cons (first numbers) (remove_duplicates (rest numbers)))]))\n",
+  "  (remove duplicates? numbers))\n", "  (remove-duplicates2 numbers '()))\n", " \
+    \ (remove-duplicates numbers '()))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

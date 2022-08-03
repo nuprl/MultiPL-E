@@ -104,7 +104,7 @@ class PromptVisitor(ast.NodeVisitor):
                         output = ast.parse(doclist[1].strip()).body[0].value
                         transl_funccall = translate_expr(self.translator, funcCall)
                         transl_output = translate_expr(self.translator, output)
-                        desc += '>>> ' + transl_funccall + '\n' + str(transl_output) + '\n'
+                        desc += '>>> ' + transl_funccall + '\n    ' + str(transl_output) + '\n'
                         pos = i[1]
                     
                     desc += self.description[pos:]
