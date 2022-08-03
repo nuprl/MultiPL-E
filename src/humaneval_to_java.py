@@ -241,7 +241,7 @@ class JavaTranslator(CPPTranslator):
         if type(c) == float:
             return repr(c) + "f", ast.Name(id="float")
         if type(c) == int:
-            return repr(c), ast.Name(id="int")
+            return repr(c) + "l", ast.Name(id="int")
         return CPPTranslator.gen_literal(self, c)
 
     def gen_call(self, func: str, args: List[Tuple[str, ast.Expr]]) -> Tuple[str, None]:
