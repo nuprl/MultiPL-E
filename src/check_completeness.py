@@ -37,18 +37,28 @@ def check(lang, model, temp, docstrings,noisy):
     tcount = len(tested_problems)
     
     for p in problems:
-        problem = yaml.load(open(p), yaml.Loader)
-        if len(problem['completions']) != 200:
-            if noisy:
-                print(f"{problem['name']} in {dir} has only {len(problem['completions'])} completions")
+        try:
+            problem = yaml.load(open(p), yaml.Loader)
+            if len(problem['completions']) != 200:
+                if noisy:
+                    print(f"{problem['name']} in {dir} has only {len(problem['completions'])} completions")
+                pcount -= 1
+        except:
             pcount -= 1
+            if noisy:
+                print(f"Error in file {str(p)} in {dir}")
 
     for p in tested_problems:
-        problem = yaml.load(open(p), yaml.Loader)
-        if len(problem['results']) != 200:
+        try:
+            problem = yaml.load(open(p), yaml.Loader)
+            if len(problem['results']) != 200:
+                if noisy:
+                    print(f"{problem['name']} in {dir} has only {len(problem['results'])} results")
+                tcount -= 1
+        except:
+            pcount -= 1
             if noisy:
-                print(f"{problem['name']} in {dir} has only {len(problem['results'])} results")
-            tcount -= 1
+                print(f"Error in file {str(p)} in {dir}")
 
     print(f"{lang},{docstrings},{model},{temp}: has {pcount} fully generated problems.")
     print(f"{lang},{docstrings},{model},{temp}: has {tcount} fully tested results.")
