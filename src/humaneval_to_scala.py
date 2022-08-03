@@ -199,7 +199,7 @@ class ScalaTranslator(CPPTranslator):
         """
 
         return [
-            "return " + self.return_default_value(self.translated_return_type),
+            # "return " + self.return_default_value(self.translated_return_type),
             self.indent + "}",
             self.indent + "def main(args: Array[String]) = {",
         ]
