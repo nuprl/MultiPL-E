@@ -8,69 +8,69 @@ object Problem {
     // >>> int_to_mini_roman(19) == 'xix'
     // >>> int_to_mini_roman(152) == 'clii'
     // >>> int_to_mini_roman(426) == 'cdxxvi'
-    def intToMiniRoman(number : Int) : String = {
+    def intToMiniRoman(number : Long) : String = {
         var result = ""
-        var n = number
-        while (n > 0) {
-            if (n >= 1000) {
+        var num = number
+        while (num > 0) {
+            if (num >= 1000) {
                 result += "m"
-                n -= 1000
-            } else if (n >= 900) {
+                num -= 1000
+            } else if (num >= 900) {
                 result += "cm"
-                n -= 900
-            } else if (n >= 500) {
+                num -= 900
+            } else if (num >= 500) {
                 result += "d"
-                n -= 500
-            } else if (n >= 400) {
+                num -= 500
+            } else if (num >= 400) {
                 result += "cd"
-                n -= 400
-            } else if (n >= 100) {
+                num -= 400
+            } else if (num >= 100) {
                 result += "c"
-                n -= 100
-            } else if (n >= 90) {
+                num -= 100
+            } else if (num >= 90) {
                 result += "xc"
-                n -= 90
-            } else if (n >= 50) {
+                num -= 90
+            } else if (num >= 50) {
                 result += "l"
-                n -= 50
-            } else if (n >= 40) {
+                num -= 50
+            } else if (num >= 40) {
                 result += "xl"
-                n -= 40
-            } else if (n >= 10) {
+                num -= 40
+            } else if (num >= 10) {
                 result += "x"
-                n -= 10
-            } else if (n >= 9) {
+                num -= 10
+            } else if (num >= 9) {
                 result += "ix"
-                n -= 9
-            } else if (n >= 5) {
+                num -= 9
+            } else if (num >= 5) {
                 result += "v"
-                n -= 5
-            } else if (n >= 4) {
+                num -= 5
+            } else if (num >= 4) {
                 result += "iv"
-                n -= 4
-            } else if (n >= 1) {
+                num -= 4
+            } else if (num >= 1) {
                 result += "i"
-                n -= 1
+                num -= 1
             }
         }
         return result
 
     }
     def main(args: Array[String]) = {
-    assert(intToMiniRoman((19)).equals(("xix")));
-    assert(intToMiniRoman((152)).equals(("clii")));
-    assert(intToMiniRoman((251)).equals(("ccli")));
-    assert(intToMiniRoman((426)).equals(("cdxxvi")));
-    assert(intToMiniRoman((500)).equals(("d")));
-    assert(intToMiniRoman((1)).equals(("i")));
-    assert(intToMiniRoman((4)).equals(("iv")));
-    assert(intToMiniRoman((43)).equals(("xliii")));
-    assert(intToMiniRoman((90)).equals(("xc")));
-    assert(intToMiniRoman((94)).equals(("xciv")));
-    assert(intToMiniRoman((532)).equals(("dxxxii")));
-    assert(intToMiniRoman((900)).equals(("cm")));
-    assert(intToMiniRoman((994)).equals(("cmxciv")));
-    assert(intToMiniRoman((1000)).equals(("m")));
+    assert(intToMiniRoman((19l)).equals(("xix")));
+    assert(intToMiniRoman((152l)).equals(("clii")));
+    assert(intToMiniRoman((251l)).equals(("ccli")));
+    assert(intToMiniRoman((426l)).equals(("cdxxvi")));
+    assert(intToMiniRoman((500l)).equals(("d")));
+    assert(intToMiniRoman((1l)).equals(("i")));
+    assert(intToMiniRoman((4l)).equals(("iv")));
+    assert(intToMiniRoman((43l)).equals(("xliii")));
+    assert(intToMiniRoman((90l)).equals(("xc")));
+    assert(intToMiniRoman((94l)).equals(("xciv")));
+    assert(intToMiniRoman((532l)).equals(("dxxxii")));
+    assert(intToMiniRoman((900l)).equals(("cm")));
+    assert(intToMiniRoman((994l)).equals(("cmxciv")));
+    assert(intToMiniRoman((1000l)).equals(("m")));
     }
 
 }

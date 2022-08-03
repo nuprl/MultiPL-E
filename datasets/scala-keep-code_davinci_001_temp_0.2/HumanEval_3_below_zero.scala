@@ -8,24 +8,28 @@ object Problem {
     // False
     // >>> below_zero([1, 2, -4, 5])
     // True
-    def belowZero(operations : List[Int]) : Boolean = {
-        var balance = 0
-        for (i <- operations) {
-            balance += i
-            if (balance < 0) {
-                return true
+    def belowZero(operations : List[Long]) : Boolean = {
+        var balance = 0L
+        for (op <- operations) {
+            if (op > 0) {
+                balance += op
+            } else {
+                balance -= op
+                if (balance < 0) {
+                    return true
+                }
             }
         }
         return false
 
     }
     def main(args: Array[String]) = {
-    assert(belowZero((List[Int]())) == (false));
-    assert(belowZero((List[Int](1.toInt, 2.toInt, -3.toInt, 1.toInt, 2.toInt, -3.toInt))) == (false));
-    assert(belowZero((List[Int](1.toInt, 2.toInt, -4.toInt, 5.toInt, 6.toInt))) == (true));
-    assert(belowZero((List[Int](1.toInt, -1.toInt, 2.toInt, -2.toInt, 5.toInt, -5.toInt, 4.toInt, -4.toInt))) == (false));
-    assert(belowZero((List[Int](1.toInt, -1.toInt, 2.toInt, -2.toInt, 5.toInt, -5.toInt, 4.toInt, -5.toInt))) == (true));
-    assert(belowZero((List[Int](1.toInt, -2.toInt, 2.toInt, -2.toInt, 5.toInt, -5.toInt, 4.toInt, -4.toInt))) == (true));
+    assert(belowZero((List[Long]())) == (false));
+    assert(belowZero((List[Long](1l.toLong, 2l.toLong, -3l.toLong, 1l.toLong, 2l.toLong, -3l.toLong))) == (false));
+    assert(belowZero((List[Long](1l.toLong, 2l.toLong, -4l.toLong, 5l.toLong, 6l.toLong))) == (true));
+    assert(belowZero((List[Long](1l.toLong, -1l.toLong, 2l.toLong, -2l.toLong, 5l.toLong, -5l.toLong, 4l.toLong, -4l.toLong))) == (false));
+    assert(belowZero((List[Long](1l.toLong, -1l.toLong, 2l.toLong, -2l.toLong, 5l.toLong, -5l.toLong, 4l.toLong, -5l.toLong))) == (true));
+    assert(belowZero((List[Long](1l.toLong, -2l.toLong, 2l.toLong, -2l.toLong, 5l.toLong, -5l.toLong, 4l.toLong, -4l.toLong))) == (true));
     }
 
 }

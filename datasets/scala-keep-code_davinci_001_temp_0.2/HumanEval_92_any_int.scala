@@ -19,16 +19,16 @@ object Problem {
 
     }
     def main(args: Array[String]) = {
-    assert(anyInt(2, 3, 1) == (true));
-    assert(anyInt((2.5f), 2, 3) == (false));
-    assert(anyInt((1.5f), 5, (3.5f)) == (false));
-    assert(anyInt(2, 6, 2) == (false));
-    assert(anyInt(4, 2, 2) == (true));
+    assert(anyInt(2l, 3l, 1l) == (true));
+    assert(anyInt((2.5f), 2l, 3l) == (false));
+    assert(anyInt((1.5f), 5l, (3.5f)) == (false));
+    assert(anyInt(2l, 6l, 2l) == (false));
+    assert(anyInt(4l, 2l, 2l) == (true));
     assert(anyInt((2.2f), (2.2f), (2.2f)) == (false));
-    assert(anyInt(-4, 6, 2) == (true));
-    assert(anyInt(2, 1, 1) == (true));
-    assert(anyInt(3, 4, 7) == (true));
-    assert(anyInt((3.0f), 4, 7) == (false));
+    assert(anyInt(-4l, 6l, 2l) == (true));
+    assert(anyInt(2l, 1l, 1l) == (true));
+    assert(anyInt(3l, 4l, 7l) == (true));
+    assert(anyInt((3.0f), 4l, 7l) == (false));
     }
 
 }

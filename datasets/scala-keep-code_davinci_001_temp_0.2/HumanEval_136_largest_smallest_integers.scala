@@ -9,47 +9,34 @@ object Problem {
     // largest_smallest_integers([2, 4, 1, 3, 5, 7]) == (None, 1)
     // largest_smallest_integers([]) == (None, None)
     // largest_smallest_integers([0]) == (None, None)
-    def largestSmallestIntegers(lst : List[Int]) : Tuple2[Option[Int], Option[Int]] = {
+    def largestSmallestIntegers(lst : List[Long]) : Tuple2[Option[Long], Option[Long]] = {
         if (lst.isEmpty) {
             (None, None)
         } else {
-            var maxNegative = None : Option[Int]
-            var minPositive = None : Option[Int]
-            for (i <- lst) {
-                if (i < 0) {
-                    if (maxNegative.isEmpty) {
-                        maxNegative = Some(i)
-                    } else {
-                        if (i > maxNegative.get) {
-                            maxNegative = Some(i)
-                        }
-                    }
-                } else {
-                    if (minPositive.isEmpty) {
-                        minPositive = Some(i)
-                    } else {
-                        if (i < minPositive.get) {
-                            minPositive = Some(i)
-                        }
-                    }
-                }
+            val neg = lst.filter(x => x < 0)
+            val pos = lst.filter(x => x > 0)
+            if (neg.isEmpty) {
+                (None, Some(pos.min))
+            } else if (pos.isEmpty) {
+                (Some(neg.max), None)
+            } else {
+                (Some(neg.max), Some(pos.min))
             }
-            (maxNegative, minPositive)
         }
 
     }
     def main(args: Array[String]) = {
-    assert(largestSmallestIntegers((List[Int](2.toInt, 4.toInt, 1.toInt, 3.toInt, 5.toInt, 7.toInt))).equals((Some(None), Some(1))));
-    assert(largestSmallestIntegers((List[Int](2.toInt, 4.toInt, 1.toInt, 3.toInt, 5.toInt, 7.toInt, 0.toInt))).equals((Some(None), Some(1))));
-    assert(largestSmallestIntegers((List[Int](1.toInt, 3.toInt, 2.toInt, 4.toInt, 5.toInt, 6.toInt, -2.toInt))).equals((-2, 1)));
-    assert(largestSmallestIntegers((List[Int](4.toInt, 5.toInt, 3.toInt, 6.toInt, 2.toInt, 7.toInt, -7.toInt))).equals((-7, 2)));
-    assert(largestSmallestIntegers((List[Int](7.toInt, 3.toInt, 8.toInt, 4.toInt, 9.toInt, 2.toInt, 5.toInt, -9.toInt))).equals((-9, 2)));
-    assert(largestSmallestIntegers((List[Int]())).equals((Some(None), Some(None))));
-    assert(largestSmallestIntegers((List[Int](0.toInt))).equals((Some(None), Some(None))));
-    assert(largestSmallestIntegers((List[Int](-1.toInt, -3.toInt, -5.toInt, -6.toInt))).equals((Some(-1), Some(None))));
-    assert(largestSmallestIntegers((List[Int](-1.toInt, -3.toInt, -5.toInt, -6.toInt, 0.toInt))).equals((Some(-1), Some(None))));
-    assert(largestSmallestIntegers((List[Int](-6.toInt, -4.toInt, -4.toInt, -3.toInt, 1.toInt))).equals((-3, 1)));
-    assert(largestSmallestIntegers((List[Int](-6.toInt, -4.toInt, -4.toInt, -3.toInt, -100.toInt, 1.toInt))).equals((-3, 1)));
+    assert(largestSmallestIntegers((List[Long](2l.toLong, 4l.toLong, 1l.toLong, 3l.toLong, 5l.toLong, 7l.toLong))).equals((Some(None), Some(1l))));
+    assert(largestSmallestIntegers((List[Long](2l.toLong, 4l.toLong, 1l.toLong, 3l.toLong, 5l.toLong, 7l.toLong, 0l.toLong))).equals((Some(None), Some(1l))));
+    assert(largestSmallestIntegers((List[Long](1l.toLong, 3l.toLong, 2l.toLong, 4l.toLong, 5l.toLong, 6l.toLong, -2l.toLong))).equals((-2l, 1l)));
+    assert(largestSmallestIntegers((List[Long](4l.toLong, 5l.toLong, 3l.toLong, 6l.toLong, 2l.toLong, 7l.toLong, -7l.toLong))).equals((-7l, 2l)));
+    assert(largestSmallestIntegers((List[Long](7l.toLong, 3l.toLong, 8l.toLong, 4l.toLong, 9l.toLong, 2l.toLong, 5l.toLong, -9l.toLong))).equals((-9l, 2l)));
+    assert(largestSmallestIntegers((List[Long]())).equals((Some(None), Some(None))));
+    assert(largestSmallestIntegers((List[Long](0l.toLong))).equals((Some(None), Some(None))));
+    assert(largestSmallestIntegers((List[Long](-1l.toLong, -3l.toLong, -5l.toLong, -6l.toLong))).equals((Some(-1l), Some(None))));
+    assert(largestSmallestIntegers((List[Long](-1l.toLong, -3l.toLong, -5l.toLong, -6l.toLong, 0l.toLong))).equals((Some(-1l), Some(None))));
+    assert(largestSmallestIntegers((List[Long](-6l.toLong, -4l.toLong, -4l.toLong, -3l.toLong, 1l.toLong))).equals((-3l, 1l)));
+    assert(largestSmallestIntegers((List[Long](-6l.toLong, -4l.toLong, -4l.toLong, -3l.toLong, -100l.toLong, 1l.toLong))).equals((-3l, 1l)));
     }
 
 }

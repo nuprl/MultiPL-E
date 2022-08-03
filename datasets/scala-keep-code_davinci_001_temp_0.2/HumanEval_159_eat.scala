@@ -23,23 +23,23 @@ object Problem {
     // * 0 <= need <= 1000
     // * 0 <= remaining <= 1000
     // Have fun :)
-    def eat(number : Int, need : Int, remaining : Int) : List[Int] = {
+    def eat(number : Long, need : Long, remaining : Long) : List[Long] = {
         var eaten = number + remaining
-        var remaining_after = remaining - need
-        if (remaining_after < 0) {
-            eaten = eaten + remaining_after
-            remaining_after = 0
+        if (eaten >= need) {
+            eaten -= need
+            List(eaten, 0)
+        } else {
+            List(eaten, remaining - eaten)
         }
-        return List(eaten, remaining_after)
 
     }
     def main(args: Array[String]) = {
-    assert(eat((5), (6), (10)).equals((List[Int](11.toInt, 4.toInt))));
-    assert(eat((4), (8), (9)).equals((List[Int](12.toInt, 1.toInt))));
-    assert(eat((1), (10), (10)).equals((List[Int](11.toInt, 0.toInt))));
-    assert(eat((2), (11), (5)).equals((List[Int](7.toInt, 0.toInt))));
-    assert(eat((4), (5), (7)).equals((List[Int](9.toInt, 2.toInt))));
-    assert(eat((4), (5), (1)).equals((List[Int](5.toInt, 0.toInt))));
+    assert(eat((5l), (6l), (10l)).equals((List[Long](11l.toLong, 4l.toLong))));
+    assert(eat((4l), (8l), (9l)).equals((List[Long](12l.toLong, 1l.toLong))));
+    assert(eat((1l), (10l), (10l)).equals((List[Long](11l.toLong, 0l.toLong))));
+    assert(eat((2l), (11l), (5l)).equals((List[Long](7l.toLong, 0l.toLong))));
+    assert(eat((4l), (5l), (7l)).equals((List[Long](9l.toLong, 2l.toLong))));
+    assert(eat((4l), (5l), (1l)).equals((List[Long](5l.toLong, 0l.toLong))));
     }
 
 }

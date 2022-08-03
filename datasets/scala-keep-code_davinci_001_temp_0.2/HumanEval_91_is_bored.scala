@@ -9,28 +9,18 @@ object Problem {
     // 0
     // >>> is_bored("The sky is blue. The sun is shining. I love this weather")
     // 1
-    def isBored(S : String) : Int = {
+    def isBored(S : String) : Long = {
         // Write your code here
-        var bored = 0
-        var i = 0
-        while (i < S.length) {
-            if (S(i) == '.' || S(i) == '?' || S(i) == '!') {
-                if (S(i-1) == 'I') {
-                    bored += 1
-                }
-            }
-            i += 1
-        }
-        return bored
+        return 0
 
     }
     def main(args: Array[String]) = {
-    assert(isBored(("Hello world")) == (0));
-    assert(isBored(("Is the sky blue?")) == (0));
-    assert(isBored(("I love It !")) == (1));
-    assert(isBored(("bIt")) == (0));
-    assert(isBored(("I feel good today. I will be productive. will kill It")) == (2));
-    assert(isBored(("You and I are going for a walk")) == (0));
+    assert(isBored(("Hello world")) == (0l));
+    assert(isBored(("Is the sky blue?")) == (0l));
+    assert(isBored(("I love It !")) == (1l));
+    assert(isBored(("bIt")) == (0l));
+    assert(isBored(("I feel good today. I will be productive. will kill It")) == (2l));
+    assert(isBored(("You and I are going for a walk")) == (0l));
     }
 
 }

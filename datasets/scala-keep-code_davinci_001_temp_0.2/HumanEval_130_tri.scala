@@ -16,33 +16,37 @@ object Problem {
     // first n + 1 numbers of the Tribonacci sequence.
     // Examples:
     // tri(3) = [1, 3, 2, 8]
-    def tri(n : Int) : List[Int] = {
-        var ret = List[Int]()
-        var i = 1
-        while (i <= n) {
-            if (i == 1) {
-                ret = ret :+ 3
-            } else if (i % 2 == 0) {
-                ret = ret :+ 1
+    def tri(n : Long) : List[Long] = {
+        var ret = List[Long]()
+        var a = 1
+        var b = 1
+        var c = 1
+        for (i <- 1 to n) {
+            ret = ret :+ c
+            if (i % 2 == 0) {
+                c = a + b
+                a = b
+                b = c
             } else {
-                ret = ret :+ ret(i - 1) + ret(i - 2) + ret(i - 3)
+                c = a + b + c
+                a = b
+                b = c
             }
-            i += 1
         }
         return ret
 
     }
     def main(args: Array[String]) = {
-    assert(tri((3)).equals((List[Int](1.toInt, 3.toInt, 2.toInt, 8.toInt))));
-    assert(tri((4)).equals((List[Int](1.toInt, 3.toInt, 2.toInt, 8.toInt, 3.toInt))));
-    assert(tri((5)).equals((List[Int](1.toInt, 3.toInt, 2.toInt, 8.toInt, 3.toInt, 15.toInt))));
-    assert(tri((6)).equals((List[Int](1.toInt, 3.toInt, 2.toInt, 8.toInt, 3.toInt, 15.toInt, 4.toInt))));
-    assert(tri((7)).equals((List[Int](1.toInt, 3.toInt, 2.toInt, 8.toInt, 3.toInt, 15.toInt, 4.toInt, 24.toInt))));
-    assert(tri((8)).equals((List[Int](1.toInt, 3.toInt, 2.toInt, 8.toInt, 3.toInt, 15.toInt, 4.toInt, 24.toInt, 5.toInt))));
-    assert(tri((9)).equals((List[Int](1.toInt, 3.toInt, 2.toInt, 8.toInt, 3.toInt, 15.toInt, 4.toInt, 24.toInt, 5.toInt, 35.toInt))));
-    assert(tri((20)).equals((List[Int](1.toInt, 3.toInt, 2.toInt, 8.toInt, 3.toInt, 15.toInt, 4.toInt, 24.toInt, 5.toInt, 35.toInt, 6.toInt, 48.toInt, 7.toInt, 63.toInt, 8.toInt, 80.toInt, 9.toInt, 99.toInt, 10.toInt, 120.toInt, 11.toInt))));
-    assert(tri((0)).equals((List[Int](1.toInt))));
-    assert(tri((1)).equals((List[Int](1.toInt, 3.toInt))));
+    assert(tri((3l)).equals((List[Long](1l.toLong, 3l.toLong, 2l.toLong, 8l.toLong))));
+    assert(tri((4l)).equals((List[Long](1l.toLong, 3l.toLong, 2l.toLong, 8l.toLong, 3l.toLong))));
+    assert(tri((5l)).equals((List[Long](1l.toLong, 3l.toLong, 2l.toLong, 8l.toLong, 3l.toLong, 15l.toLong))));
+    assert(tri((6l)).equals((List[Long](1l.toLong, 3l.toLong, 2l.toLong, 8l.toLong, 3l.toLong, 15l.toLong, 4l.toLong))));
+    assert(tri((7l)).equals((List[Long](1l.toLong, 3l.toLong, 2l.toLong, 8l.toLong, 3l.toLong, 15l.toLong, 4l.toLong, 24l.toLong))));
+    assert(tri((8l)).equals((List[Long](1l.toLong, 3l.toLong, 2l.toLong, 8l.toLong, 3l.toLong, 15l.toLong, 4l.toLong, 24l.toLong, 5l.toLong))));
+    assert(tri((9l)).equals((List[Long](1l.toLong, 3l.toLong, 2l.toLong, 8l.toLong, 3l.toLong, 15l.toLong, 4l.toLong, 24l.toLong, 5l.toLong, 35l.toLong))));
+    assert(tri((20l)).equals((List[Long](1l.toLong, 3l.toLong, 2l.toLong, 8l.toLong, 3l.toLong, 15l.toLong, 4l.toLong, 24l.toLong, 5l.toLong, 35l.toLong, 6l.toLong, 48l.toLong, 7l.toLong, 63l.toLong, 8l.toLong, 80l.toLong, 9l.toLong, 99l.toLong, 10l.toLong, 120l.toLong, 11l.toLong))));
+    assert(tri((0l)).equals((List[Long](1l.toLong))));
+    assert(tri((1l)).equals((List[Long](1l.toLong, 3l.toLong))));
     }
 
 }

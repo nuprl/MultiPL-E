@@ -16,37 +16,30 @@ object Problem {
     // Note:
     // 1. 1 <= n <= 10^3
     // 2. returned tuple has the number of even and odd integer palindromes respectively.
-    def evenOddPalindrome(n : Int) : Tuple2[Int, Int] = {
-        var even = 0
-        var odd = 0
-        for (i <- 1 to n) {
-            val str = i.toString
-            val len = str.length
-            var isEven = true
-            for (j <- 0 until len / 2) {
-                if (str(j) != str(len - 1 - j)) {
-                    isEven = false
-                    break
+    def evenOddPalindrome(n : Long) : Tuple2[Long, Long] = {
+        var even = 0L
+        var odd = 0L
+        for (i <- 1L to n) {
+            if (isPalindrome(i)) {
+                if (i % 2 == 0) {
+                    even += 1
+                } else {
+                    odd += 1
                 }
-            }
-            if (isEven) {
-                even += 1
-            } else {
-                odd += 1
             }
         }
         return (even, odd)
 
     }
     def main(args: Array[String]) = {
-    assert(evenOddPalindrome((123)).equals(((8, 13))));
-    assert(evenOddPalindrome((12)).equals(((4, 6))));
-    assert(evenOddPalindrome((3)).equals(((1, 2))));
-    assert(evenOddPalindrome((63)).equals(((6, 8))));
-    assert(evenOddPalindrome((25)).equals(((5, 6))));
-    assert(evenOddPalindrome((19)).equals(((4, 6))));
-    assert(evenOddPalindrome((9)).equals(((4, 5))));
-    assert(evenOddPalindrome((1)).equals(((0, 1))));
+    assert(evenOddPalindrome((123l)).equals(((8l, 13l))));
+    assert(evenOddPalindrome((12l)).equals(((4l, 6l))));
+    assert(evenOddPalindrome((3l)).equals(((1l, 2l))));
+    assert(evenOddPalindrome((63l)).equals(((6l, 8l))));
+    assert(evenOddPalindrome((25l)).equals(((5l, 6l))));
+    assert(evenOddPalindrome((19l)).equals(((4l, 6l))));
+    assert(evenOddPalindrome((9l)).equals(((4l, 5l))));
+    assert(evenOddPalindrome((1l)).equals(((0l, 1l))));
     }
 
 }

@@ -6,21 +6,18 @@ object Problem {
     // []
     // >>> intersperse([1, 2, 3], 4)
     // [1, 4, 2, 4, 3]
-    def intersperse(numbers : List[Int], delimeter : Int) : List[Int] = {
+    def intersperse(numbers : List[Long], delimeter : Long) : List[Long] = {
         if (numbers.length == 0) {
             return List()
+        } else {
+            return numbers.head :: List(delimeter) ::: intersperse(numbers.tail, delimeter)
         }
-        var result = List(numbers(0))
-        for (i <- 1 until numbers.length) {
-            result = result ::: List(delimeter) ::: List(numbers(i))
-        }
-        return result
 
     }
     def main(args: Array[String]) = {
-    assert(intersperse((List[Int]()), (7)).equals((List[Int]())));
-    assert(intersperse((List[Int](5.toInt, 6.toInt, 3.toInt, 2.toInt)), (8)).equals((List[Int](5.toInt, 8.toInt, 6.toInt, 8.toInt, 3.toInt, 8.toInt, 2.toInt))));
-    assert(intersperse((List[Int](2.toInt, 2.toInt, 2.toInt)), (2)).equals((List[Int](2.toInt, 2.toInt, 2.toInt, 2.toInt, 2.toInt))));
+    assert(intersperse((List[Long]()), (7l)).equals((List[Long]())));
+    assert(intersperse((List[Long](5l.toLong, 6l.toLong, 3l.toLong, 2l.toLong)), (8l)).equals((List[Long](5l.toLong, 8l.toLong, 6l.toLong, 8l.toLong, 3l.toLong, 8l.toLong, 2l.toLong))));
+    assert(intersperse((List[Long](2l.toLong, 2l.toLong, 2l.toLong)), (2l)).equals((List[Long](2l.toLong, 2l.toLong, 2l.toLong, 2l.toLong, 2l.toLong))));
     }
 
 }

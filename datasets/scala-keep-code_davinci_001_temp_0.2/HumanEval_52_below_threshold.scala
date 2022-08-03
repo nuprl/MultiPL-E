@@ -6,17 +6,17 @@ object Problem {
     // True
     // >>> below_threshold([1, 20, 4, 10], 5)
     // False
-    def belowThreshold(l : List[Int], t : Int) : Boolean = {
-        l.forall(_ < t)
+    def belowThreshold(l : List[Long], t : Long) : Boolean = {
+        l.foldLeft(true)((a, b) => a && b < t)
 
     }
     def main(args: Array[String]) = {
-    assert(belowThreshold((List[Int](1.toInt, 2.toInt, 4.toInt, 10.toInt)), (100)) == (true));
-    assert(belowThreshold((List[Int](1.toInt, 20.toInt, 4.toInt, 10.toInt)), (5)) == (false));
-    assert(belowThreshold((List[Int](1.toInt, 20.toInt, 4.toInt, 10.toInt)), (21)) == (true));
-    assert(belowThreshold((List[Int](1.toInt, 20.toInt, 4.toInt, 10.toInt)), (22)) == (true));
-    assert(belowThreshold((List[Int](1.toInt, 8.toInt, 4.toInt, 10.toInt)), (11)) == (true));
-    assert(belowThreshold((List[Int](1.toInt, 8.toInt, 4.toInt, 10.toInt)), (10)) == (false));
+    assert(belowThreshold((List[Long](1l.toLong, 2l.toLong, 4l.toLong, 10l.toLong)), (100l)) == (true));
+    assert(belowThreshold((List[Long](1l.toLong, 20l.toLong, 4l.toLong, 10l.toLong)), (5l)) == (false));
+    assert(belowThreshold((List[Long](1l.toLong, 20l.toLong, 4l.toLong, 10l.toLong)), (21l)) == (true));
+    assert(belowThreshold((List[Long](1l.toLong, 20l.toLong, 4l.toLong, 10l.toLong)), (22l)) == (true));
+    assert(belowThreshold((List[Long](1l.toLong, 8l.toLong, 4l.toLong, 10l.toLong)), (11l)) == (true));
+    assert(belowThreshold((List[Long](1l.toLong, 8l.toLong, 4l.toLong, 10l.toLong)), (10l)) == (false));
     }
 
 }

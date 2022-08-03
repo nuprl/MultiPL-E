@@ -16,32 +16,40 @@ object Problem {
     // False
     // >>> is_prime(1)
     // False
-    def isPrime(n : Int) : Boolean = {
-        if (n <= 1) {
+    def isPrime(n : Long) : Boolean = {
+        if (n < 2) {
             return false;
         }
-        for (i <- 2 to sqrt(n).toInt) {
+        if (n == 2) {
+            return true;
+        }
+        if (n % 2 == 0) {
+            return false;
+        }
+        var i = 3;
+        while (i * i <= n) {
             if (n % i == 0) {
                 return false;
             }
+            i += 2;
         }
         return true;
 
     }
     def main(args: Array[String]) = {
-    assert(isPrime((6)) == (false));
-    assert(isPrime((101)) == (true));
-    assert(isPrime((11)) == (true));
-    assert(isPrime((13441)) == (true));
-    assert(isPrime((61)) == (true));
-    assert(isPrime((4)) == (false));
-    assert(isPrime((1)) == (false));
-    assert(isPrime((5)) == (true));
-    assert(isPrime((11)) == (true));
-    assert(isPrime((17)) == (true));
-    assert(isPrime((85)) == (false));
-    assert(isPrime((77)) == (false));
-    assert(isPrime((255379)) == (false));
+    assert(isPrime((6l)) == (false));
+    assert(isPrime((101l)) == (true));
+    assert(isPrime((11l)) == (true));
+    assert(isPrime((13441l)) == (true));
+    assert(isPrime((61l)) == (true));
+    assert(isPrime((4l)) == (false));
+    assert(isPrime((1l)) == (false));
+    assert(isPrime((5l)) == (true));
+    assert(isPrime((11l)) == (true));
+    assert(isPrime((17l)) == (true));
+    assert(isPrime((85l)) == (false));
+    assert(isPrime((77l)) == (false));
+    assert(isPrime((255379l)) == (false));
     }
 
 }

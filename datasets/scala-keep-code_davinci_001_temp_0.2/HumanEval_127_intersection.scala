@@ -17,30 +17,27 @@ object Problem {
     // intersection((1, 2), (2, 3)) ==> "NO"
     // intersection((-1, 1), (0, 4)) ==> "NO"
     // intersection((-3, -1), (-5, 5)) ==> "YES"
-    def intersection(interval1 : Tuple2[Int, Int], interval2 : Tuple2[Int, Int]) : String = {
-        val start = max(interval1._1, interval2._1)
-        val end = min(interval1._2, interval2._2)
-        if (start > end) "NO"
-        else {
-            val length = end - start + 1
-            if (length == 1) "NO"
-            else {
-                val isPrime = (2 to length).forall(length % _ != 0)
-                if (isPrime) "YES"
-                else "NO"
-            }
+    def intersection(interval1 : Tuple2[Long, Long], interval2 : Tuple2[Long, Long]) : String = {
+        val intersection = (interval1._1 max interval2._1, interval1._2 min interval2._2)
+        if (intersection._1 > intersection._2) "NO"
+        else if (intersection._2 - intersection._1 == 1) "YES"
+        else if (intersection._2 - intersection._1 == 2) {
+            val primes = List(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97)
+            if (primes.contains(intersection._2 - intersection._1)) "YES"
+            else "NO"
         }
+        else "NO"
 
     }
     def main(args: Array[String]) = {
-    assert(intersection(((1, 2)), ((2, 3))).equals(("NO")));
-    assert(intersection(((-1, 1)), ((0, 4))).equals(("NO")));
-    assert(intersection(((-3, -1)), ((-5, 5))).equals(("YES")));
-    assert(intersection(((-2, 2)), ((-4, 0))).equals(("YES")));
-    assert(intersection(((-11, 2)), ((-1, -1))).equals(("NO")));
-    assert(intersection(((1, 2)), ((3, 5))).equals(("NO")));
-    assert(intersection(((1, 2)), ((1, 2))).equals(("NO")));
-    assert(intersection(((-2, -2)), ((-3, -2))).equals(("NO")));
+    assert(intersection(((1l, 2l)), ((2l, 3l))).equals(("NO")));
+    assert(intersection(((-1l, 1l)), ((0l, 4l))).equals(("NO")));
+    assert(intersection(((-3l, -1l)), ((-5l, 5l))).equals(("YES")));
+    assert(intersection(((-2l, 2l)), ((-4l, 0l))).equals(("YES")));
+    assert(intersection(((-11l, 2l)), ((-1l, -1l))).equals(("NO")));
+    assert(intersection(((1l, 2l)), ((3l, 5l))).equals(("NO")));
+    assert(intersection(((1l, 2l)), ((1l, 2l))).equals(("NO")));
+    assert(intersection(((-2l, -2l)), ((-3l, -2l))).equals(("NO")));
     }
 
 }

@@ -12,31 +12,29 @@ object Problem {
     // 13
     // >>> prime_fib(5)
     // 89
-    def primeFib(n : Int) : Int = {
-        var a = 0
-        var b = 1
-        var c = 0
-        var i = 0
-        while (i < n) {
-            c = a + b
-            a = b
-            b = c
-            i = i + 1
+    def primeFib(n : Long) : Long = {
+        var fib = new ArrayBuffer[Long]()
+        fib += 1
+        fib += 2
+        var i = 2
+        while(i < n) {
+            fib += fib(i-1) + fib(i-2)
+            i += 1
         }
-        return c
+        fib(n.toInt)
 
     }
     def main(args: Array[String]) = {
-    assert(primeFib((1)) == (2));
-    assert(primeFib((2)) == (3));
-    assert(primeFib((3)) == (5));
-    assert(primeFib((4)) == (13));
-    assert(primeFib((5)) == (89));
-    assert(primeFib((6)) == (233));
-    assert(primeFib((7)) == (1597));
-    assert(primeFib((8)) == (28657));
-    assert(primeFib((9)) == (514229));
-    assert(primeFib((10)) == (433494437));
+    assert(primeFib((1l)) == (2l));
+    assert(primeFib((2l)) == (3l));
+    assert(primeFib((3l)) == (5l));
+    assert(primeFib((4l)) == (13l));
+    assert(primeFib((5l)) == (89l));
+    assert(primeFib((6l)) == (233l));
+    assert(primeFib((7l)) == (1597l));
+    assert(primeFib((8l)) == (28657l));
+    assert(primeFib((9l)) == (514229l));
+    assert(primeFib((10l)) == (433494437l));
     }
 
 }

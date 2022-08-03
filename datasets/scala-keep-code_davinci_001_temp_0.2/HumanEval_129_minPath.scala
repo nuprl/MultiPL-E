@@ -24,62 +24,51 @@ object Problem {
     // Output: [1, 2, 1]
     // Input: grid = [ [5,9,3], [4,1,6], [7,8,2]], k = 1
     // Output: [1]
-    def minPath(grid : List[List[Int]], k : Int) : List[Int] = {
+    def minPath(grid : List[List[Long]], k : Long) : List[Long] = {
         val N = grid.length
-        val M = grid(0).length
-        val dp = Array.fill(N, M, k + 1)(0)
+        val dp = Array.ofDim[Long](N, N, k + 1)
         for (i <- 0 until N) {
-            for (j <- 0 until M) {
-                for (l <- 0 to k) {
-                    if (i == 0 && j == 0) {
-                        dp(i)(j)(l) = grid(i)(j)
-                    } else if (i == 0) {
-                        dp(i)(j)(l) = dp(i)(j - 1)(l) + grid(i)(j)
-                    } else if (j == 0) {
-                        dp(i)(j)(l) = dp(i - 1)(j)(l) + grid(i)(j)
-                    } else {
-                        dp(i)(j)(l) = grid(i)(j) + min(dp(i - 1)(j)(l), dp(i)(j - 1)(l))
+            for (j <- 0 until N) {
+                dp(i)(j)(0) = grid(i)(j)
+            }
+        }
+        for (i <- 0 until N) {
+            for (j <- 0 until N) {
+                for (l <- 1 until k + 1) {
+                    if (i > 0) {
+                        dp(i)(j)(l) = dp(i)(j)(l) min dp(i - 1)(j)(l - 1)
+                    }
+                    if (j > 0) {
+                        dp(i)(j)(l) = dp(i)(j)(l) min dp(i)(j - 1)(l - 1)
                     }
                 }
             }
         }
-        val res = ArrayBuffer[Int]()
-        var i = N - 1
-        var j = M - 1
-        var l = k
-        while (i != 0 || j != 0) {
-            if (i == 0) {
-                res += grid(i)(j)
-                j -= 1
-            } else if (j == 0) {
-                res += grid(i)(j)
-                i -= 1
-            } else {
-                if (dp(i - 1)(j)(l) <= dp(i)(j - 1)(l)) {
-                    res += grid(i)(j)
-                    i -= 1
-                } else {
-                    res += grid(i)(j)
-                    j -= 1
-                }
+        val ans = Array.ofDim[Long](k + 1)
+        ans(k) = dp(N - 1)(N - 1)(k)
+        for (l <- k - 1 to 0 by -1) {
+            if (i > 0) {
+                ans(l) = ans(l + 1) min dp(i - 1)(j)(l)
             }
-            l -= 1
+            if (j > 0) {
+                ans(l) = ans(l + 1) min dp(i)(j - 1)(l)
+            }
         }
-        res.reverse.toList
+        ans.toList
 
     }
     def main(args: Array[String]) = {
-    assert(minPath((List[List[Int]](List[Int](1.toInt, 2.toInt, 3.toInt), List[Int](4.toInt, 5.toInt, 6.toInt), List[Int](7.toInt, 8.toInt, 9.toInt))), (3)).equals((List[Int](1.toInt, 2.toInt, 1.toInt))));
-    assert(minPath((List[List[Int]](List[Int](5.toInt, 9.toInt, 3.toInt), List[Int](4.toInt, 1.toInt, 6.toInt), List[Int](7.toInt, 8.toInt, 2.toInt))), (1)).equals((List[Int](1.toInt))));
-    assert(minPath((List[List[Int]](List[Int](1.toInt, 2.toInt, 3.toInt, 4.toInt), List[Int](5.toInt, 6.toInt, 7.toInt, 8.toInt), List[Int](9.toInt, 10.toInt, 11.toInt, 12.toInt), List[Int](13.toInt, 14.toInt, 15.toInt, 16.toInt))), (4)).equals((List[Int](1.toInt, 2.toInt, 1.toInt, 2.toInt))));
-    assert(minPath((List[List[Int]](List[Int](6.toInt, 4.toInt, 13.toInt, 10.toInt), List[Int](5.toInt, 7.toInt, 12.toInt, 1.toInt), List[Int](3.toInt, 16.toInt, 11.toInt, 15.toInt), List[Int](8.toInt, 14.toInt, 9.toInt, 2.toInt))), (7)).equals((List[Int](1.toInt, 10.toInt, 1.toInt, 10.toInt, 1.toInt, 10.toInt, 1.toInt))));
-    assert(minPath((List[List[Int]](List[Int](8.toInt, 14.toInt, 9.toInt, 2.toInt), List[Int](6.toInt, 4.toInt, 13.toInt, 15.toInt), List[Int](5.toInt, 7.toInt, 1.toInt, 12.toInt), List[Int](3.toInt, 10.toInt, 11.toInt, 16.toInt))), (5)).equals((List[Int](1.toInt, 7.toInt, 1.toInt, 7.toInt, 1.toInt))));
-    assert(minPath((List[List[Int]](List[Int](11.toInt, 8.toInt, 7.toInt, 2.toInt), List[Int](5.toInt, 16.toInt, 14.toInt, 4.toInt), List[Int](9.toInt, 3.toInt, 15.toInt, 6.toInt), List[Int](12.toInt, 13.toInt, 10.toInt, 1.toInt))), (9)).equals((List[Int](1.toInt, 6.toInt, 1.toInt, 6.toInt, 1.toInt, 6.toInt, 1.toInt, 6.toInt, 1.toInt))));
-    assert(minPath((List[List[Int]](List[Int](12.toInt, 13.toInt, 10.toInt, 1.toInt), List[Int](9.toInt, 3.toInt, 15.toInt, 6.toInt), List[Int](5.toInt, 16.toInt, 14.toInt, 4.toInt), List[Int](11.toInt, 8.toInt, 7.toInt, 2.toInt))), (12)).equals((List[Int](1.toInt, 6.toInt, 1.toInt, 6.toInt, 1.toInt, 6.toInt, 1.toInt, 6.toInt, 1.toInt, 6.toInt, 1.toInt, 6.toInt))));
-    assert(minPath((List[List[Int]](List[Int](2.toInt, 7.toInt, 4.toInt), List[Int](3.toInt, 1.toInt, 5.toInt), List[Int](6.toInt, 8.toInt, 9.toInt))), (8)).equals((List[Int](1.toInt, 3.toInt, 1.toInt, 3.toInt, 1.toInt, 3.toInt, 1.toInt, 3.toInt))));
-    assert(minPath((List[List[Int]](List[Int](6.toInt, 1.toInt, 5.toInt), List[Int](3.toInt, 8.toInt, 9.toInt), List[Int](2.toInt, 7.toInt, 4.toInt))), (8)).equals((List[Int](1.toInt, 5.toInt, 1.toInt, 5.toInt, 1.toInt, 5.toInt, 1.toInt, 5.toInt))));
-    assert(minPath((List[List[Int]](List[Int](1.toInt, 2.toInt), List[Int](3.toInt, 4.toInt))), (10)).equals((List[Int](1.toInt, 2.toInt, 1.toInt, 2.toInt, 1.toInt, 2.toInt, 1.toInt, 2.toInt, 1.toInt, 2.toInt))));
-    assert(minPath((List[List[Int]](List[Int](1.toInt, 3.toInt), List[Int](3.toInt, 2.toInt))), (10)).equals((List[Int](1.toInt, 3.toInt, 1.toInt, 3.toInt, 1.toInt, 3.toInt, 1.toInt, 3.toInt, 1.toInt, 3.toInt))));
+    assert(minPath((List[List[Long]](List[Long](1l.toLong, 2l.toLong, 3l.toLong), List[Long](4l.toLong, 5l.toLong, 6l.toLong), List[Long](7l.toLong, 8l.toLong, 9l.toLong))), (3l)).equals((List[Long](1l.toLong, 2l.toLong, 1l.toLong))));
+    assert(minPath((List[List[Long]](List[Long](5l.toLong, 9l.toLong, 3l.toLong), List[Long](4l.toLong, 1l.toLong, 6l.toLong), List[Long](7l.toLong, 8l.toLong, 2l.toLong))), (1l)).equals((List[Long](1l.toLong))));
+    assert(minPath((List[List[Long]](List[Long](1l.toLong, 2l.toLong, 3l.toLong, 4l.toLong), List[Long](5l.toLong, 6l.toLong, 7l.toLong, 8l.toLong), List[Long](9l.toLong, 10l.toLong, 11l.toLong, 12l.toLong), List[Long](13l.toLong, 14l.toLong, 15l.toLong, 16l.toLong))), (4l)).equals((List[Long](1l.toLong, 2l.toLong, 1l.toLong, 2l.toLong))));
+    assert(minPath((List[List[Long]](List[Long](6l.toLong, 4l.toLong, 13l.toLong, 10l.toLong), List[Long](5l.toLong, 7l.toLong, 12l.toLong, 1l.toLong), List[Long](3l.toLong, 16l.toLong, 11l.toLong, 15l.toLong), List[Long](8l.toLong, 14l.toLong, 9l.toLong, 2l.toLong))), (7l)).equals((List[Long](1l.toLong, 10l.toLong, 1l.toLong, 10l.toLong, 1l.toLong, 10l.toLong, 1l.toLong))));
+    assert(minPath((List[List[Long]](List[Long](8l.toLong, 14l.toLong, 9l.toLong, 2l.toLong), List[Long](6l.toLong, 4l.toLong, 13l.toLong, 15l.toLong), List[Long](5l.toLong, 7l.toLong, 1l.toLong, 12l.toLong), List[Long](3l.toLong, 10l.toLong, 11l.toLong, 16l.toLong))), (5l)).equals((List[Long](1l.toLong, 7l.toLong, 1l.toLong, 7l.toLong, 1l.toLong))));
+    assert(minPath((List[List[Long]](List[Long](11l.toLong, 8l.toLong, 7l.toLong, 2l.toLong), List[Long](5l.toLong, 16l.toLong, 14l.toLong, 4l.toLong), List[Long](9l.toLong, 3l.toLong, 15l.toLong, 6l.toLong), List[Long](12l.toLong, 13l.toLong, 10l.toLong, 1l.toLong))), (9l)).equals((List[Long](1l.toLong, 6l.toLong, 1l.toLong, 6l.toLong, 1l.toLong, 6l.toLong, 1l.toLong, 6l.toLong, 1l.toLong))));
+    assert(minPath((List[List[Long]](List[Long](12l.toLong, 13l.toLong, 10l.toLong, 1l.toLong), List[Long](9l.toLong, 3l.toLong, 15l.toLong, 6l.toLong), List[Long](5l.toLong, 16l.toLong, 14l.toLong, 4l.toLong), List[Long](11l.toLong, 8l.toLong, 7l.toLong, 2l.toLong))), (12l)).equals((List[Long](1l.toLong, 6l.toLong, 1l.toLong, 6l.toLong, 1l.toLong, 6l.toLong, 1l.toLong, 6l.toLong, 1l.toLong, 6l.toLong, 1l.toLong, 6l.toLong))));
+    assert(minPath((List[List[Long]](List[Long](2l.toLong, 7l.toLong, 4l.toLong), List[Long](3l.toLong, 1l.toLong, 5l.toLong), List[Long](6l.toLong, 8l.toLong, 9l.toLong))), (8l)).equals((List[Long](1l.toLong, 3l.toLong, 1l.toLong, 3l.toLong, 1l.toLong, 3l.toLong, 1l.toLong, 3l.toLong))));
+    assert(minPath((List[List[Long]](List[Long](6l.toLong, 1l.toLong, 5l.toLong), List[Long](3l.toLong, 8l.toLong, 9l.toLong), List[Long](2l.toLong, 7l.toLong, 4l.toLong))), (8l)).equals((List[Long](1l.toLong, 5l.toLong, 1l.toLong, 5l.toLong, 1l.toLong, 5l.toLong, 1l.toLong, 5l.toLong))));
+    assert(minPath((List[List[Long]](List[Long](1l.toLong, 2l.toLong), List[Long](3l.toLong, 4l.toLong))), (10l)).equals((List[Long](1l.toLong, 2l.toLong, 1l.toLong, 2l.toLong, 1l.toLong, 2l.toLong, 1l.toLong, 2l.toLong, 1l.toLong, 2l.toLong))));
+    assert(minPath((List[List[Long]](List[Long](1l.toLong, 3l.toLong), List[Long](3l.toLong, 2l.toLong))), (10l)).equals((List[Long](1l.toLong, 3l.toLong, 1l.toLong, 3l.toLong, 1l.toLong, 3l.toLong, 1l.toLong, 3l.toLong, 1l.toLong, 3l.toLong))));
     }
 
 }

@@ -14,27 +14,22 @@ object Problem {
     // from two integers, the one you should return is the one that is the
     // farthest from zero. For example closest_integer("14.5") should
     // return 15 and closest_integer("-14.5") should return -15.
-    def closestInteger(value : String) : Int = {
+    def closestInteger(value : String) : Long = {
         val num = value.toDouble
-        val int = num.toInt
-        val diff = abs(num - int)
-        if (diff == 0) {
-            int
+        val numInt = num.toLong
+        if (num - numInt >= 0.5) {
+            numInt + 1
         } else {
-            if (diff > 0.5) {
-                int + 1
-            } else {
-                int
-            }
+            numInt
         }
 
     }
     def main(args: Array[String]) = {
-    assert(closestInteger(("10")) == (10));
-    assert(closestInteger(("14.5")) == (15));
-    assert(closestInteger(("-15.5")) == (-16));
-    assert(closestInteger(("15.3")) == (15));
-    assert(closestInteger(("0")) == (0));
+    assert(closestInteger(("10")) == (10l));
+    assert(closestInteger(("14.5")) == (15l));
+    assert(closestInteger(("-15.5")) == (-16l));
+    assert(closestInteger(("15.3")) == (15l));
+    assert(closestInteger(("0")) == (0l));
     }
 
 }

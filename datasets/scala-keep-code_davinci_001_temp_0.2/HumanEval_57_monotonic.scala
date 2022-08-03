@@ -8,25 +8,27 @@ object Problem {
     // False
     // >>> monotonic([4, 1, 0, -10])
     // True
-    def monotonic(l : List[Int]) : Boolean = {
-        var isIncreasing = true
-        var isDecreasing = true
-        for (i <- 1 until l.length) {
-            if (l(i) < l(i-1)) isIncreasing = false
-            if (l(i) > l(i-1)) isDecreasing = false
+    def monotonic(l : List[Long]) : Boolean = {
+        if (l.length < 2) {
+            return true
         }
-        isIncreasing || isDecreasing
+        val sorted = l.sorted
+        val sortedRev = l.sorted.reverse
+        if (sorted == l || sortedRev == l) {
+            return true
+        }
+        return false
 
     }
     def main(args: Array[String]) = {
-    assert(monotonic((List[Int](1.toInt, 2.toInt, 4.toInt, 10.toInt))) == (true));
-    assert(monotonic((List[Int](1.toInt, 2.toInt, 4.toInt, 20.toInt))) == (true));
-    assert(monotonic((List[Int](1.toInt, 20.toInt, 4.toInt, 10.toInt))) == (false));
-    assert(monotonic((List[Int](4.toInt, 1.toInt, 0.toInt, -10.toInt))) == (true));
-    assert(monotonic((List[Int](4.toInt, 1.toInt, 1.toInt, 0.toInt))) == (true));
-    assert(monotonic((List[Int](1.toInt, 2.toInt, 3.toInt, 2.toInt, 5.toInt, 60.toInt))) == (false));
-    assert(monotonic((List[Int](1.toInt, 2.toInt, 3.toInt, 4.toInt, 5.toInt, 60.toInt))) == (true));
-    assert(monotonic((List[Int](9.toInt, 9.toInt, 9.toInt, 9.toInt))) == (true));
+    assert(monotonic((List[Long](1l.toLong, 2l.toLong, 4l.toLong, 10l.toLong))) == (true));
+    assert(monotonic((List[Long](1l.toLong, 2l.toLong, 4l.toLong, 20l.toLong))) == (true));
+    assert(monotonic((List[Long](1l.toLong, 20l.toLong, 4l.toLong, 10l.toLong))) == (false));
+    assert(monotonic((List[Long](4l.toLong, 1l.toLong, 0l.toLong, -10l.toLong))) == (true));
+    assert(monotonic((List[Long](4l.toLong, 1l.toLong, 1l.toLong, 0l.toLong))) == (true));
+    assert(monotonic((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 2l.toLong, 5l.toLong, 60l.toLong))) == (false));
+    assert(monotonic((List[Long](1l.toLong, 2l.toLong, 3l.toLong, 4l.toLong, 5l.toLong, 60l.toLong))) == (true));
+    assert(monotonic((List[Long](9l.toLong, 9l.toLong, 9l.toLong, 9l.toLong))) == (true));
     }
 
 }

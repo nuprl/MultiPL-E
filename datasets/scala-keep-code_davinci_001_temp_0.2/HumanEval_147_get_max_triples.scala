@@ -11,29 +11,33 @@ object Problem {
     // Explanation: 
     // a = [1, 3, 7, 13, 21]
     // The only valid triple is (1, 7, 13).
-    def getMaxTriples(n : Int) : Int = {
-        var count = 0
-        var a = ArrayBuffer[Int]()
-        for (i <- 1 to n) {
-            a += i * i - i + 1
-        }
-        for (i <- 0 until n) {
-            for (j <- i + 1 until n) {
-                for (k <- j + 1 until n) {
-                    if ((a(i) + a(j) + a(k)) % 3 == 0) {
+    def getMaxTriples(n : Long) : Long = {
+        var count = 0L
+        var i = 1L
+        var j = 1L
+        var k = 1L
+        while(i < n) {
+            j = i + 1
+            while(j < n) {
+                k = j + 1
+                while(k < n) {
+                    if((i + j + k) % 3 == 0) {
                         count += 1
                     }
+                    k += 1
                 }
+                j += 1
             }
+            i += 1
         }
         return count
 
     }
     def main(args: Array[String]) = {
-    assert(getMaxTriples((5)) == (1));
-    assert(getMaxTriples((6)) == (4));
-    assert(getMaxTriples((10)) == (36));
-    assert(getMaxTriples((100)) == (53361));
+    assert(getMaxTriples((5l)) == (1l));
+    assert(getMaxTriples((6l)) == (4l));
+    assert(getMaxTriples((10l)) == (36l));
+    assert(getMaxTriples((100l)) == (53361l));
     }
 
 }

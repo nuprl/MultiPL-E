@@ -10,9 +10,10 @@ object Problem {
     // 2
     // >>> vowels_count("ACEDY")
     // 3
-    def vowelsCount(s : String) : Int = {
-        var count = 0
-        for (c <- s) {
+    def vowelsCount(s : String) : Long = {
+        var count = 0L
+        for (i <- 0 until s.length) {
+            val c = s.charAt(i)
             if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
                 count += 1
             }
@@ -21,13 +22,13 @@ object Problem {
 
     }
     def main(args: Array[String]) = {
-    assert(vowelsCount(("abcde")) == (2));
-    assert(vowelsCount(("Alone")) == (3));
-    assert(vowelsCount(("key")) == (2));
-    assert(vowelsCount(("bye")) == (1));
-    assert(vowelsCount(("keY")) == (2));
-    assert(vowelsCount(("bYe")) == (1));
-    assert(vowelsCount(("ACEDY")) == (3));
+    assert(vowelsCount(("abcde")) == (2l));
+    assert(vowelsCount(("Alone")) == (3l));
+    assert(vowelsCount(("key")) == (2l));
+    assert(vowelsCount(("bye")) == (1l));
+    assert(vowelsCount(("keY")) == (2l));
+    assert(vowelsCount(("bYe")) == (1l));
+    assert(vowelsCount(("ACEDY")) == (3l));
     }
 
 }

@@ -7,21 +7,23 @@ object Problem {
     // generate_integers(2, 8) => [2, 4, 6, 8]
     // generate_integers(8, 2) => [2, 4, 6, 8]
     // generate_integers(10, 14) => []
-    def generateIntegers(a : Int, b : Int) : List[Int] = {
-        val list = ListBuffer[Int]()
-        for (i <- a to b) {
+    def generateIntegers(a : Long, b : Long) : List[Long] = {
+        val result = new ListBuffer[Long]()
+        var i = a
+        while (i <= b) {
             if (i % 2 == 0) {
-                list += i
+                result += i
             }
+            i += 1
         }
-        return list.toList
+        result.toList
 
     }
     def main(args: Array[String]) = {
-    assert(generateIntegers((2), (10)).equals((List[Int](2.toInt, 4.toInt, 6.toInt, 8.toInt))));
-    assert(generateIntegers((10), (2)).equals((List[Int](2.toInt, 4.toInt, 6.toInt, 8.toInt))));
-    assert(generateIntegers((132), (2)).equals((List[Int](2.toInt, 4.toInt, 6.toInt, 8.toInt))));
-    assert(generateIntegers((17), (89)).equals((List[Int]())));
+    assert(generateIntegers((2l), (10l)).equals((List[Long](2l.toLong, 4l.toLong, 6l.toLong, 8l.toLong))));
+    assert(generateIntegers((10l), (2l)).equals((List[Long](2l.toLong, 4l.toLong, 6l.toLong, 8l.toLong))));
+    assert(generateIntegers((132l), (2l)).equals((List[Long](2l.toLong, 4l.toLong, 6l.toLong, 8l.toLong))));
+    assert(generateIntegers((17l), (89l)).equals((List[Long]())));
     }
 
 }

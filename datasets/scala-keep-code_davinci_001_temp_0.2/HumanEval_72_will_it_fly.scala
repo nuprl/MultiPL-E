@@ -12,19 +12,27 @@ object Problem {
     // # 3+2+3 is less than the maximum possible weight, and it's balanced.
     // will_it_fly([3], 5) ➞ True
     // # 3 is less than the maximum possible weight, and it's balanced.
-    def willItFly(q : List[Int], w : Int) : Boolean = {
+    def willItFly(q : List[Long], w : Long) : Boolean = {
         val sum = q.sum
-        val isPalindrome = q == q.reverse
-        sum <= w && isPalindrome
+        if (sum > w) {
+            false
+        } else {
+            val reverse = q.reverse
+            if (q == reverse) {
+                true
+            } else {
+                false
+            }
+        }
 
     }
     def main(args: Array[String]) = {
-    assert(willItFly((List[Int](3.toInt, 2.toInt, 3.toInt)), (9)) == (true));
-    assert(willItFly((List[Int](1.toInt, 2.toInt)), (5)) == (false));
-    assert(willItFly((List[Int](3.toInt)), (5)) == (true));
-    assert(willItFly((List[Int](3.toInt, 2.toInt, 3.toInt)), (1)) == (false));
-    assert(willItFly((List[Int](1.toInt, 2.toInt, 3.toInt)), (6)) == (false));
-    assert(willItFly((List[Int](5.toInt)), (5)) == (true));
+    assert(willItFly((List[Long](3l.toLong, 2l.toLong, 3l.toLong)), (9l)) == (true));
+    assert(willItFly((List[Long](1l.toLong, 2l.toLong)), (5l)) == (false));
+    assert(willItFly((List[Long](3l.toLong)), (5l)) == (true));
+    assert(willItFly((List[Long](3l.toLong, 2l.toLong, 3l.toLong)), (1l)) == (false));
+    assert(willItFly((List[Long](1l.toLong, 2l.toLong, 3l.toLong)), (6l)) == (false));
+    assert(willItFly((List[Long](5l.toLong)), (5l)) == (true));
     }
 
 }

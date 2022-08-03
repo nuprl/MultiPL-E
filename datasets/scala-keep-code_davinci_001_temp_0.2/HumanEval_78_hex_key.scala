@@ -17,23 +17,36 @@ object Problem {
     // For num = "ABED1A33" the output should be 4.
     // For num = "123456789ABCDEF0" the output should be 6.
     // For num = "2020" the output should be 2.
-    def hexKey(num : String) : Int = {
-        var count = 0
+    def hexKey(num : String) : Long = {
+        var key : Long = 0
         for (i <- 0 until num.length) {
-            if (num(i) == '2' || num(i) == '3' || num(i) == '5' || num(i) == '7' || num(i) == 'B' || num(i) == 'D') {
-                count += 1
+            val c : Char = num.charAt(i)
+            if (c == 'A') {
+                key += 10
+            } else if (c == 'B') {
+                key += 11
+            } else if (c == 'C') {
+                key += 12
+            } else if (c == 'D') {
+                key += 13
+            } else if (c == 'E') {
+                key += 14
+            } else if (c == 'F') {
+                key += 15
+            } else {
+                key += c.toInt - 48
             }
         }
-        return count
+        key
 
     }
     def main(args: Array[String]) = {
-    assert(hexKey(("AB")) == (1));
-    assert(hexKey(("1077E")) == (2));
-    assert(hexKey(("ABED1A33")) == (4));
-    assert(hexKey(("2020")) == (2));
-    assert(hexKey(("123456789ABCDEF0")) == (6));
-    assert(hexKey(("112233445566778899AABBCCDDEEFF00")) == (12));
+    assert(hexKey(("AB")) == (1l));
+    assert(hexKey(("1077E")) == (2l));
+    assert(hexKey(("ABED1A33")) == (4l));
+    assert(hexKey(("2020")) == (2l));
+    assert(hexKey(("123456789ABCDEF0")) == (6l));
+    assert(hexKey(("112233445566778899AABBCCDDEEFF00")) == (12l));
     }
 
 }
