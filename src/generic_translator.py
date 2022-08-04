@@ -110,15 +110,12 @@ class PromptVisitor(ast.NodeVisitor):
                         doclist = doctest.split('\n') #Splitting up the output from the function call of the doctest
                         funcCall = ast.parse(doclist[0].strip('>>> ')).body[0].value
                         output = ast.parse(doclist[1].strip()).body[0].value
-                        def strip_type(a):
-                            if type(a) == type(("a", "b")):
-                                return a[0]
-                            elif type(a) == type("a"):
-                                return a
-                            else:
-                                raise Exception("got bad type")
-                        transl_funccall = strip_type(translate_expr(self.translator, funcCall))
-                        transl_output = strip_type(translate_expr(self.translator, output))
+                        transl_funccall = translate_expr(self.translator, funcCall)
+                        transl_output = translate_expr(self.translator, output)
+                        if hasattr(self.translator, "finalize"):
+                            transl_funccall = self.translator.finalize(transl_funccall, "lhs")
+                            transl_output = self.translator.finalize(transl_output, "rhs")
+                        # Why is this str() here?
                         desc += '>>> ' + transl_funccall + '\n    ' + str(transl_output) + '\n'
                         pos = i[1]
                     
@@ -192,6 +189,9 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
                 try:
                     left = translate_expr(translator, left)
                     right = translate_expr(translator, right)
+                    if hasattr(translator, "finalize"):
+                        left = translator.finalize(left, "lhs")
+                        right = translator.finalize(right, "rhs")
                     test_cases.append(translator.deep_equality(left, right))
                 except Exception as e:
                     print(f"Exception translating expressions for {filename}: {e}")
