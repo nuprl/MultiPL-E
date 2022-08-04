@@ -11,14 +11,14 @@ from generic_translator import main
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
 
-class RacketTranslator:
+class Translator:
 
     USub = "-"
 
     stop = [ '\n(define ', '\n#|', '\n;', '\n(' ]
 
-    def __init__(self, file_ext):
-        self.file_ext = file_ext
+    def file_ext(self):
+        return "rkt"
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         racket_description = "#lang racket\n\n;; " + re.sub(DOCSTRING_LINESTART_RE, "\n;; ", description.strip()) + "\n"
@@ -77,5 +77,5 @@ class RacketTranslator:
 
 
 if __name__ == "__main__":
-    translator = RacketTranslator("racket")
+    translator = Translator()
     main(translator)

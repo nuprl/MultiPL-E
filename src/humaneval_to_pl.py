@@ -17,8 +17,8 @@ class Translator:
 
     stop = [ "\nsub", "\n#", "\n\n" ]
 
-    def __init__(self):
-        self.file_ext = "pl"
+    def file_ext(self):
+        return "pl"
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         global array_list
