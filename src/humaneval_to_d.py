@@ -172,12 +172,8 @@ class Translator:
         """Translate a function call `func(args)`
         f(x, y, z) => f(x, y, z)
         """
-        translated_args = []
-        for value, type_name in zip(args, self.func_type):
-            ty, _name = type_name
-            translated_args.append(value)
-        
-        return func + "(" + ", ".join(translated_args) + ")"
+
+        return func + "(" + ", ".join(args) + ")"
 
     def no_completion_prompt_stub(self) -> str:
         """
