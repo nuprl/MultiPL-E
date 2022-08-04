@@ -1,7 +1,7 @@
 '''
 Run to get all pass@k results for provided combinations.
 
-CAUTION: does not currently handle terms differences due to the way results files are formatted.
+CAUTION: will produce output regardless of completion situation
 
 written by Molly Feldman, based on code by Arjun Guha 
 '''
@@ -10,9 +10,8 @@ from calculate_all_pass import evaluate_functional_correctness
 from pathlib import Path
 from csv import reader
 
-#TODO: do for all languages or necessary subset - right now this is a good test set 
-
-LANG = ['rkt']#,'d']#[ "py", "sh","cs","cpp","d","go","java","js", "jl", "lua", "pl", "php", "r", "rkt", "rb", "rs","scala","swift","ts",]
+LANG = ["py", "js", "ts", "java", "d", "r", "rs", "jl", "sh", "cs", \
+          "go", "lua", "pl", "php", "rb",  "scala", "swift"] #CANNOT RUN "cpp", "rkt"]
 MODEL = [ "incoder", "davinci" ]
 TEMP = [ "0.2"] # come back to this
 

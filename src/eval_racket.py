@@ -6,7 +6,7 @@ from libeval import run_without_exn
 def eval_script(path: Path):
     output = run_without_exn(["racket", str(path)])
     # rackunit produces exit code 0 even if tests fail.
-    if output["exit_code"] == 0 and len(output["stderr"]) > 0:
+    if len(output["stderr"]) > 0:
         if 'read-syntax' in output["stderr"]:
             output["status"] = "SyntaxError"
         else:
