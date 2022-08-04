@@ -1,0 +1,1498 @@
+name: HumanEval_125_split_words
+language: lua
+prompt: "-- Given a string of words, return a table of words split on whitespace,\
+  \ if no whitespaces exists in the text you\n-- should split on commas ',' if no\
+  \ commas exists you should return the number of lower-case letters with odd order\
+  \ in the\n-- alphabet, ord('a') = 0, ord('b') = 1, ... ord('z') = 25\n-- Examples\n\
+  -- >>> split_words('Hello world!')\n-- {'Hello', 'world!'}\n-- >>> split_words('Hello,world!')\n\
+  -- {'Hello', 'world!'}\n-- >>> split_words('abcdef')\n-- 3\nlocal function split_words(txt)\n"
+tests: "lu = require('luaunit')\n\nfunction test_humaneval()\nlocal candidate = split_words\n\
+  \    lu.assertEquals(candidate('Hello world!'), {'Hello', 'world!'})\n    lu.assertEquals(candidate('Hello,world!'),\
+  \ {'Hello', 'world!'})\n    lu.assertEquals(candidate('Hello world,!'), {'Hello',\
+  \ 'world,!'})\n    lu.assertEquals(candidate('Hello,Hello,world !'), {'Hello,Hello,world',\
+  \ '!'})\n    lu.assertEquals(candidate('abcdef'), 3)\n    lu.assertEquals(candidate('aaabb'),\
+  \ 2)\n    lu.assertEquals(candidate('aaaBb'), 1)\n    lu.assertEquals(candidate(''),\
+  \ 0)\nend\n\nos.exit(lu.LuaUnit.run())"
+completions: ["    local words = {}\n    local n = 0\n    for word in txt:gmatch('%S+')\
+    \ do\n        words[#words + 1] = word\n    end\n    if #words == 0 then\n   \
+    \     for c in txt:gmatch('.') do\n            local o = c:byte() - string.byte('a')\n\
+    \            if o % 2 == 1 then\n                n = n + 1\n            end\n\
+    \        end\n    end\n    return #words > 0 and words or n\nend", "    local\
+    \ words = {}\n    local word = ''\n    local odd_count = 0\n    for i = 1, #txt\
+    \ do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n\
+    \            if #word > 0 then\n                words[#words + 1] = word\n   \
+    \             word = ''\n            end\n        else\n            word = word\
+    \ .. c\n            if i % 2 == 1 then\n                odd_count = odd_count\
+    \ + (c:byte() - string.byte('a'))\n            end\n        end\n    end\n   \
+    \ if #word > 0 then\n        words[#words + 1] = word\n    end\n    if #words\
+    \ > 0 then\n        return words\n    else\n        return odd_count\n    end\n\
+    end", "    local words = {}\n    for word in string.gmatch(txt, \"[^%s]+\") do\n\
+    \        table.insert(words, word)\n    end\n    if #words == 0 then\n       \
+    \ words = {}\n        for word in string.gmatch(txt, \"[^,]+\") do\n         \
+    \   table.insert(words, word)\n        end\n        if #words == 0 then\n    \
+    \        local count = 0\n            for i = 1, #txt do\n                local\
+    \ c = string.byte(txt, i) - string.byte('a')\n                if c % 2 == 1 then\n\
+    \                    count = count + 1\n                end\n            end\n\
+    \            return count\n        end\n    end\n    return words\nend", "   \
+    \ local words = {}\n    local word = ''\n    local count = 0\n    for i = 1, #txt\
+    \ do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n\
+    \            if word ~= '' then\n                words[#words + 1] = word\n  \
+    \              word = ''\n            end\n        else\n            word = word\
+    \ .. c\n            if c:lower() == c then\n                local ord = c:byte()\
+    \ - string.byte('a')\n                if ord % 2 == 1 then\n                 \
+    \   count = count + 1\n                end\n            end\n        end\n   \
+    \ end\n    if word ~= '' then\n        words[#words + 1] = word\n    end\n   \
+    \ if #words == 0 then\n        return count\n    end\n    return words\nend",
+  "    local words = {}\n    local len = #txt\n    local i = 1\n    local j = 1\n\
+    \    while i <= len do\n        if txt:sub(i, i) == ' ' then\n            words[#words\
+    \ + 1] = txt:sub(j, i - 1)\n            j = i + 1\n        elseif txt:sub(i, i)\
+    \ == ',' then\n            words[#words + 1] = txt:sub(j, i - 1)\n           \
+    \ j = i + 1\n        end\n        i = i + 1\n    end\n    if #words == 0 then\n\
+    \        local odd = 0\n        for i = 1, len do\n            if txt:sub(i, i):byte()\
+    \ % 2 == 1 then\n                odd = odd + 1\n            end\n        end\n\
+    \        return odd\n    end\n    words[#words + 1] = txt:sub(j, len)\n    return\
+    \ words\nend", "    local words = {}\n    local word = ''\n    local count = 0\n\
+    \    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' '\
+    \ or c == ',' then\n            if word ~= '' then\n                words[#words\
+    \ + 1] = word\n                word = ''\n            end\n        else\n    \
+    \        word = word .. c\n        end\n    end\n    if word ~= '' then\n    \
+    \    words[#words + 1] = word\n    end\n    if #words == 0 then\n        for i\
+    \ = 1, #txt do\n            local c = txt:sub(i, i)\n            if c:lower()\
+    \ == c then\n                local ord = string.byte(c) - string.byte('a')\n \
+    \               if ord % 2 == 1 then\n                    count = count + 1\n\
+    \                end\n            end\n        end\n        return count\n   \
+    \ end\n    return words\nend", "    local words = {}\n    for word in txt:gmatch('%S+')\
+    \ do\n        words[#words + 1] = word\n    end\n    if #words == 0 then\n   \
+    \     for word in txt:gmatch('%a+') do\n            words[#words + 1] = word\n\
+    \        end\n    end\n    if #words == 0 then\n        local count = 0\n    \
+    \    for i = 1, #txt do\n            if txt:byte(i) % 2 == 1 then\n          \
+    \      count = count + 1\n            end\n        end\n        return count\n\
+    \    end\n    return words\nend", "    local words = {}\n    local n = 0\n   \
+    \ for word in txt:gmatch('%S+') do\n        words[#words + 1] = word\n    end\n\
+    \    if #words == 0 then\n        for i = 1, #txt do\n            if txt:byte(i)\
+    \ - 97 == i % 2 then\n                n = n + 1\n            end\n        end\n\
+    \        return n\n    end\n    return words\nend", "    local words = {}\n  \
+    \  local word = ''\n    local count = 0\n    for i = 1, #txt do\n        local\
+    \ c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n            if word\
+    \ ~= '' then\n                words[#words + 1] = word\n                word =\
+    \ ''\n            end\n        else\n            word = word .. c\n          \
+    \  if c:lower() == c then\n                local ord = c:byte() - string.byte('a')\n\
+    \                if ord % 2 == 1 then\n                    count = count + 1\n\
+    \                end\n            end\n        end\n    end\n    if word ~= ''\
+    \ then\n        words[#words + 1] = word\n    end\n    if #words == 0 then\n \
+    \       return count\n    end\n    return words\nend", "    local words = {}\n\
+    \    local n = 0\n    for word in txt:gmatch('%S+') do\n        words[#words +\
+    \ 1] = word\n    end\n    if #words == 0 then\n        for c in txt:gmatch('%a')\
+    \ do\n            n = n + (c:byte() - ord('a')) % 2\n        end\n    end\n  \
+    \  return #words > 0 and words or n\nend", "    local words = {}\n    local word\
+    \ = ''\n    local count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        if c == ' ' or c == ',' then\n            if word ~= '' then\n \
+    \               words[#words + 1] = word\n                word = ''\n        \
+    \    end\n        else\n            word = word .. c\n            if c:lower()\
+    \ == c and c:upper() == c then\n                count = count + 1\n          \
+    \  end\n        end\n    end\n    if word ~= '' then\n        words[#words + 1]\
+    \ = word\n    end\n    if #words > 0 then\n        return words\n    else\n  \
+    \      return count\n    end\nend", "    local words = {}\n    for word in txt:gmatch('%S+')\
+    \ do\n        table.insert(words, word)\n    end\n    if #words == 0 then\n  \
+    \      local count = 0\n        for i = 1, #txt do\n            if (i % 2) ==\
+    \ 1 then\n                count = count + txt:byte(i) - string.byte('a')\n   \
+    \         end\n        end\n        return count\n    end\n    return words\n\
+    end", "    local words = {}\n    local word = ''\n    local odd_count = 0\n  \
+    \  for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or\
+    \ c == ',' then\n            if word ~= '' then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. c\n            if i % 2 == 1 then\n                odd_count\
+    \ = odd_count + (c:byte() - ord('a'))\n            end\n        end\n    end\n\
+    \    if word ~= '' then\n        table.insert(words, word)\n    end\n    if #words\
+    \ == 0 then\n        return odd_count\n    else\n        return words\n    end\n\
+    end", "    local words = {}\n    for word in string.gmatch(txt, \"%S+\") do\n\
+    \        table.insert(words, word)\n    end\n    if #words > 0 then\n        return\
+    \ words\n    end\n    local odd_letters = 0\n    for letter in string.gmatch(txt,\
+    \ \"%a\") do\n        local ord = string.byte(letter) - string.byte('a')\n   \
+    \     if ord % 2 == 1 then\n            odd_letters = odd_letters + 1\n      \
+    \  end\n    end\n    return odd_letters\nend", "    local words = {}\n    local\
+    \ i = 1\n    for word in txt:gmatch('%S+') do\n        words[i] = word\n     \
+    \   i = i + 1\n    end\n    if #words == 0 then\n        local count = 0\n   \
+    \     for c in txt:gmatch('.') do\n            if c:byte() - 97 % 2 == 1 then\n\
+    \                count = count + 1\n            end\n        end\n        return\
+    \ count\n    end\n    return words\nend", "    local words = {}\n    local word\
+    \ = ''\n    local odd_count = 0\n    for i = 1, #txt do\n        local char =\
+    \ txt:sub(i, i)\n        if char == ' ' or char == ',' then\n            if word\
+    \ ~= '' then\n                table.insert(words, word)\n                word\
+    \ = ''\n            end\n        else\n            word = word .. char\n     \
+    \       if i % 2 == 1 then\n                local ord = string.byte(char) - string.byte('a')\n\
+    \                if ord % 2 == 1 then\n                    odd_count = odd_count\
+    \ + 1\n                end\n            end\n        end\n    end\n    if word\
+    \ ~= '' then\n        table.insert(words, word)\n    end\n    if #words > 0 then\n\
+    \        return words\n    else\n        return odd_count\n    end\nend", "  \
+    \  if txt:find(' ') then\n        return txt:split(' ')\n    elseif txt:find(',')\
+    \ then\n        return txt:split(',')\n    else\n        local count = 0\n   \
+    \     for i = 1, #txt do\n            local c = txt:sub(i, i)\n            if\
+    \ c:byte() >= 97 and c:byte() <= 122 and i % 2 == 1 then\n                count\
+    \ = count + 1\n            end\n        end\n        return count\n    end\nend",
+  "    local words = {}\n    local word = ''\n    local count = 0\n    for i = 1,\
+    \ #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n\
+    \            if word ~= '' then\n                table.insert(words, word)\n \
+    \               word = ''\n            end\n        else\n            word = word\
+    \ .. c\n        end\n    end\n    if word ~= '' then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    end\n    for\
+    \ i = 1, #txt do\n        local c = txt:sub(i, i)\n        local n = string.byte(c)\
+    \ - string.byte('a')\n        if n % 2 == 1 then\n            count = count +\
+    \ 1\n        end\n    end\n    return count\nend", "    local words = {}\n   \
+    \ local word = ''\n    local count = 0\n    for i = 1, #txt do\n        local\
+    \ c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n            if #word\
+    \ > 0 then\n                table.insert(words, word)\n                word =\
+    \ ''\n            end\n        else\n            word = word .. c\n        end\n\
+    \    end\n    if #word > 0 then\n        table.insert(words, word)\n    end\n\
+    \    if #words > 0 then\n        return words\n    else\n        for i = 1, #txt\
+    \ do\n            local c = txt:sub(i, i)\n            local n = string.byte(c)\
+    \ - string.byte('a')\n            if n % 2 == 1 then\n                count =\
+    \ count + 1\n            end\n        end\n        return count\n    end\nend",
+  "    -- TODO: Implement\n    local words = {}\n    local word = ''\n    local count\
+    \ = 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c ==\
+    \ ' ' or c == ',' then\n            if word ~= '' then\n                words[#words\
+    \ + 1] = word\n                word = ''\n            end\n        else\n    \
+    \        word = word .. c\n        end\n    end\n    if word ~= '' then\n    \
+    \    words[#words + 1] = word\n    end\n    if #words > 0 then\n        return\
+    \ words\n    else\n        for i = 1, #txt do\n            local c = txt:sub(i,\
+    \ i)\n            local n = string.byte(c) - string.byte('a')\n            if\
+    \ n % 2 == 1 then\n                count = count + 1\n            end\n      \
+    \  end\n        return count\n    end\nend", "    local words = {}\n    local\
+    \ i = 1\n    local j = 1\n    local len = #txt\n    while i <= len do\n      \
+    \  local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n           \
+    \ if i > j then\n                words[#words + 1] = txt:sub(j, i - 1)\n     \
+    \       end\n            j = i + 1\n        end\n        i = i + 1\n    end\n\
+    \    if i > j then\n        words[#words + 1] = txt:sub(j, i - 1)\n    end\n \
+    \   if #words == 0 then\n        local cnt = 0\n        for i = 1, len do\n  \
+    \          local c = txt:sub(i, i)\n            if (c:byte() - ord('a')) % 2 ==\
+    \ 1 then\n                cnt = cnt + 1\n            end\n        end\n      \
+    \  return cnt\n    end\n    return words\nend", "    local words = {}\n    local\
+    \ word = \"\"\n    local odd_letters = 0\n    for i = 1, #txt do\n        local\
+    \ c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n            if word\
+    \ ~= \"\" then\n                table.insert(words, word)\n                word\
+    \ = \"\"\n            end\n        else\n            word = word .. c\n      \
+    \  end\n        if c:match(\"[a-z]\") then\n            local ord = string.byte(c)\
+    \ - string.byte('a')\n            if ord % 2 == 1 then\n                odd_letters\
+    \ = odd_letters + 1\n            end\n        end\n    end\n    if word ~= \"\"\
+    \ then\n        table.insert(words, word)\n    end\n    if #words > 0 then\n \
+    \       return words\n    else\n        return odd_letters\n    end\nend", " \
+    \   local words = {}\n    for word in txt:gmatch('%S+') do\n        words[#words\
+    \ + 1] = word\n    end\n    if #words == 0 then\n        local count = 0\n   \
+    \     for i = 1, #txt do\n            if (txt:byte(i) - ord('a')) % 2 == 1 then\n\
+    \                count = count + 1\n            end\n        end\n        return\
+    \ count\n    end\n    return words\nend", "  local words = {}\n  local word =\
+    \ ''\n  local odd_count = 0\n  for i = 1, #txt do\n    local c = txt:sub(i, i)\n\
+    \    if c == ' ' or c == ',' then\n      if #word > 0 then\n        words[#words\
+    \ + 1] = word\n        word = ''\n      end\n    else\n      word = word .. c\n\
+    \      if (c:byte() - ord('a')) % 2 == 1 then\n        odd_count = odd_count +\
+    \ 1\n      end\n    end\n  end\n  if #word > 0 then\n    words[#words + 1] = word\n\
+    \  end\n  if #words > 0 then\n    return words\n  else\n    return odd_count\n\
+    \  end\nend", "    local words = {}\n    local word = ''\n    local count = 0\n\
+    \    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' '\
+    \ or c == ',' then\n            if word ~= '' then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. c\n        end\n    end\n    if word ~= '' then\n        table.insert(words,\
+    \ word)\n    end\n    if #words == 0 then\n        for i = 1, #txt do\n      \
+    \      local c = txt:sub(i, i)\n            local o = string.byte(c) - string.byte('a')\n\
+    \            if o % 2 == 1 then\n                count = count + 1\n         \
+    \   end\n        end\n        return count\n    end\n    return words\nend", " \
+    \   -- TODO: Implement this function\n    return {}\nend", "    local words =\
+    \ {}\n    local word = ''\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        if c == ' ' or c == ',' then\n            if #word > 0 then\n  \
+    \              table.insert(words, word)\n                word = ''\n        \
+    \    end\n        else\n            word = word .. c\n        end\n    end\n \
+    \   if #word > 0 then\n        table.insert(words, word)\n    end\n    if #words\
+    \ > 0 then\n        return words\n    end\n    local count = 0\n    for i = 1,\
+    \ #txt do\n        local c = txt:sub(i, i)\n        local o = string.byte(c) -\
+    \ string.byte('a')\n        if o % 2 == 1 then\n            count = count + 1\n\
+    \        end\n    end\n    return count\nend", "    local words = {}\n    local\
+    \ word = ''\n    local count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        if c == ' ' or c == ',' then\n            if #word > 0 then\n  \
+    \              table.insert(words, word)\n                word = ''\n        \
+    \    end\n        else\n            word = word .. c\n        end\n    end\n \
+    \   if #word > 0 then\n        table.insert(words, word)\n    end\n    if #words\
+    \ > 0 then\n        return words\n    else\n        for i = 1, #txt do\n     \
+    \       local c = txt:sub(i, i)\n            local n = string.byte(c) - string.byte('a')\n\
+    \            if n % 2 == 1 then\n                count = count + 1\n         \
+    \   end\n        end\n        return count\n    end\nend", "    local words =\
+    \ {}\n    local word = ''\n    local count = 0\n    for i = 1, #txt do\n     \
+    \   local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n          \
+    \  if #word > 0 then\n                table.insert(words, word)\n            \
+    \    word = ''\n            end\n        else\n            word = word .. c\n\
+    \        end\n    end\n    if #word > 0 then\n        table.insert(words, word)\n\
+    \    end\n    if #words > 0 then\n        return words\n    else\n        for\
+    \ i = 1, #txt do\n            local c = txt:sub(i, i)\n            local ord =\
+    \ string.byte(c) - string.byte('a')\n            if ord % 2 == 1 then\n      \
+    \          count = count + 1\n            end\n        end\n        return count\n\
+    \    end\nend", "    local words = {}\n    for word in txt:gmatch('%S+') do\n\
+    \        table.insert(words, word)\n    end\n    if #words == 0 then\n       \
+    \ local sum = 0\n        for i = 1, #txt do\n            local c = txt:sub(i,\
+    \ i)\n            local ord = string.byte(c) - string.byte('a')\n            if\
+    \ ord % 2 == 1 then\n                sum = sum + 1\n            end\n        end\n\
+    \        return sum\n    end\n    return words\nend", "    -- TODO: Implement\n\
+    \    return {}\nend", "    local words = {}\n    local i = 1\n    for word in\
+    \ string.gmatch(txt, \"[^%s]+\") do\n        words[i] = word\n        i = i +\
+    \ 1\n    end\n    if #words == 0 then\n        words = {}\n        i = 1\n   \
+    \     for word in string.gmatch(txt, \"[^,]+\") do\n            words[i] = word\n\
+    \            i = i + 1\n        end\n        if #words == 0 then\n           \
+    \ local count = 0\n            for i = 1, #txt do\n                local c = string.byte(txt,\
+    \ i)\n                if c >= 97 and c <= 122 and i % 2 == 1 then\n          \
+    \          count = count + 1\n                end\n            end\n         \
+    \   return count\n        end\n    end\n    return words\nend", "    local words\
+    \ = {}\n    local word = ''\n    local odd_count = 0\n    for i = 1, #txt do\n\
+    \        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n     \
+    \       if word ~= '' then\n                table.insert(words, word)\n      \
+    \          word = ''\n            end\n        else\n            word = word ..\
+    \ c\n            if i % 2 == 1 then\n                odd_count = odd_count + 1\n\
+    \            end\n        end\n    end\n    if word ~= '' then\n        table.insert(words,\
+    \ word)\n    end\n    if #words == 0 then\n        return odd_count\n    else\n\
+    \        return words\n    end\nend", "    local words = {}\n    local word =\
+    \ ''\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c ==\
+    \ ' ' or c == ',' then\n            if #word > 0 then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     local count = 0\n        for i = 1, #txt do\n            local c = txt:sub(i,\
+    \ i)\n            local o = string.byte(c) - string.byte('a')\n            if\
+    \ o % 2 == 1 then\n                count = count + 1\n            end\n      \
+    \  end\n        return count\n    end\nend", "    local words = {}\n    local\
+    \ word = ''\n    local count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        if c == ' ' or c == ',' then\n            if #word > 0 then\n  \
+    \              table.insert(words, word)\n                word = ''\n        \
+    \    end\n        else\n            word = word .. c\n        end\n    end\n \
+    \   if #word > 0 then\n        table.insert(words, word)\n    end\n    if #words\
+    \ > 0 then\n        return words\n    else\n        for i = 1, #txt do\n     \
+    \       local c = txt:sub(i, i)\n            local ord = string.byte(c) - string.byte('a')\n\
+    \            if ord % 2 == 1 then\n                count = count + 1\n       \
+    \     end\n        end\n        return count\n    end\nend", "  -- TODO: Implement\n\
+    end", "    local words = {}\n    local i = 1\n    for word in txt:gmatch('%S+')\
+    \ do\n        words[i] = word\n        i = i + 1\n    end\n    if #words == 0\
+    \ then\n        local count = 0\n        for c in txt:gmatch('.') do\n       \
+    \     if c:byte() >= 97 and c:byte() <= 122 and (c:byte() - 96) % 2 == 1 then\n\
+    \                count = count + 1\n            end\n        end\n        return\
+    \ count\n    end\n    return words\nend", "    local words = {}\n    local word\
+    \ = ''\n    local count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        if c == ' ' or c == ',' then\n            if #word > 0 then\n  \
+    \              words[#words + 1] = word\n                word = ''\n         \
+    \   end\n        else\n            word = word .. c\n        end\n    end\n  \
+    \  if #word > 0 then\n        words[#words + 1] = word\n    end\n    if #words\
+    \ > 0 then\n        return words\n    end\n    for i = 1, #txt do\n        local\
+    \ c = txt:sub(i, i)\n        local n = string.byte(c) - string.byte('a')\n   \
+    \     if n % 2 == 1 then\n            count = count + 1\n        end\n    end\n\
+    \    return count\nend", "  local words = {}\n  local word = ''\n  local odd_count\
+    \ = 0\n  for i = 1, #txt do\n    local c = txt:sub(i, i)\n    if c == ' ' or c\
+    \ == ',' then\n      if #word > 0 then\n        words[#words + 1] = word\n   \
+    \     word = ''\n      end\n    else\n      word = word .. c\n      local ord\
+    \ = string.byte(c) - string.byte('a')\n      if ord % 2 == 1 then\n        odd_count\
+    \ = odd_count + 1\n      end\n    end\n  end\n  if #word > 0 then\n    words[#words\
+    \ + 1] = word\n  end\n  if #words > 0 then\n    return words\n  else\n    return\
+    \ odd_count\n  end\nend", "    local words = {}\n    local word = ''\n    local\
+    \ count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n       \
+    \ if c == ' ' or c == ',' then\n            if #word > 0 then\n              \
+    \  words[#words + 1] = word\n                word = ''\n            end\n    \
+    \    else\n            word = word .. c\n        end\n    end\n    if #word >\
+    \ 0 then\n        words[#words + 1] = word\n    end\n    if #words > 0 then\n\
+    \        return words\n    end\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        local n = string.byte(c) - string.byte('a')\n        if n % 2 ==\
+    \ 1 then\n            count = count + 1\n        end\n    end\n    return count\n\
+    end", "    local words = {}\n    local word = ''\n    for i = 1, #txt do\n   \
+    \     local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n        \
+    \    if #word > 0 then\n                table.insert(words, word)\n          \
+    \      word = ''\n            end\n        else\n            word = word .. c\n\
+    \        end\n    end\n    if #word > 0 then\n        table.insert(words, word)\n\
+    \    end\n    if #words > 0 then\n        return words\n    else\n        local\
+    \ count = 0\n        for i = 1, #txt do\n            local c = txt:sub(i, i)\n\
+    \            local o = string.byte(c) - string.byte('a')\n            if o % 2\
+    \ == 1 then\n                count = count + 1\n            end\n        end\n\
+    \        return count\n    end\nend", "    local words = {}\n    local word =\
+    \ ''\n    local count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        if c == ' ' or c == ',' then\n            if word ~= '' then\n \
+    \               table.insert(words, word)\n                word = ''\n       \
+    \     end\n        else\n            word = word .. c\n        end\n    end\n\
+    \    if word ~= '' then\n        table.insert(words, word)\n    end\n    if #words\
+    \ == 0 then\n        for i = 1, #txt do\n            local c = txt:sub(i, i)\n\
+    \            local o = string.byte(c) - string.byte('a')\n            if o % 2\
+    \ == 1 then\n                count = count + 1\n            end\n        end\n\
+    \        return count\n    end\n    return words\nend", "    local words = {}\n\
+    \    local count = 0\n    for word in txt:gmatch('%w+') do\n        words[#words\
+    \ + 1] = word\n    end\n    if #words == 0 then\n        for i = 1, #txt do\n\
+    \            if txt:sub(i, i):lower():byte() % 2 == 1 then\n                count\
+    \ = count + 1\n            end\n        end\n        return count\n    end\n \
+    \   return words\nend", "    local words = {}\n    local word = ''\n    local\
+    \ count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n       \
+    \ if c == ' ' or c == ',' then\n            if word ~= '' then\n             \
+    \   words[#words + 1] = word\n                word = ''\n            end\n   \
+    \     else\n            word = word .. c\n            if c:lower() == c then\n\
+    \                local ord = string.byte(c) - string.byte('a')\n             \
+    \   if ord % 2 == 1 then\n                    count = count + 1\n            \
+    \    end\n            end\n        end\n    end\n    if word ~= '' then\n    \
+    \    words[#words + 1] = word\n    end\n    if #words == 0 then\n        return\
+    \ count\n    end\n    return words\nend", "    local words = {}\n    local word\
+    \ = ''\n    local odd_count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        if c == ' ' or c == ',' then\n            if #word > 0 then\n  \
+    \              table.insert(words, word)\n                word = ''\n        \
+    \    end\n        else\n            word = word .. c\n            if i % 2 ==\
+    \ 1 then\n                odd_count = odd_count + 1\n            end\n       \
+    \ end\n    end\n    if #word > 0 then\n        table.insert(words, word)\n   \
+    \ end\n    if #words > 0 then\n        return words\n    else\n        return\
+    \ odd_count\n    end\nend", "    local words = {}\n    local word = ''\n    local\
+    \ odd_count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n   \
+    \     if c == ' ' or c == ',' then\n            if word ~= '' then\n         \
+    \       words[#words + 1] = word\n                word = ''\n            end\n\
+    \        else\n            word = word .. c\n            if c:lower() == c and\
+    \ c:upper() ~= c then\n                local ord = string.byte(c) - string.byte('a')\n\
+    \                if ord % 2 == 1 then\n                    odd_count = odd_count\
+    \ + 1\n                end\n            end\n        end\n    end\n    if word\
+    \ ~= '' then\n        words[#words + 1] = word\n    end\n    if #words == 0 then\n\
+    \        return odd_count\n    else\n        return words\n    end\nend", "  \
+    \  local t = {}\n    local i = 1\n    local j = 1\n    local n = 0\n    while\
+    \ j <= #txt do\n        if txt:sub(j, j) == ' ' or txt:sub(j, j) == ',' then\n\
+    \            if i < j then\n                t[#t + 1] = txt:sub(i, j - 1)\n  \
+    \              n = n + 1\n            end\n            i = j + 1\n        end\n\
+    \        j = j + 1\n    end\n    if i <= j then\n        t[#t + 1] = txt:sub(i,\
+    \ j - 1)\n        n = n + 1\n    end\n    if n == 0 then\n        n = 0\n    \
+    \    for i = 1, #txt do\n            if txt:sub(i, i) >= 'a' and txt:sub(i, i)\
+    \ <= 'z' and (i % 2) == 1 then\n                n = n + 1\n            end\n \
+    \       end\n    end\n    return n == 0 and t or n\nend", "    local words = {}\n\
+    \    for word in txt:gmatch('%S+') do\n        table.insert(words, word)\n   \
+    \ end\n    if #words == 0 then\n        local count = 0\n        for i = 1, #txt\
+    \ do\n            if (txt:byte(i) - ord('a')) % 2 == 1 then\n                count\
+    \ = count + 1\n            end\n        end\n        return count\n    end\n \
+    \   return words\nend", "    local words = {}\n    local word = ''\n    for i\
+    \ = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ','\
+    \ then\n            if #word > 0 then\n                table.insert(words, word)\n\
+    \                word = ''\n            end\n        else\n            word =\
+    \ word .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     local count = 0\n        for i = 1, #txt do\n            local c = txt:sub(i,\
+    \ i)\n            local o = string.byte(c) - string.byte('a')\n            if\
+    \ o % 2 == 1 then\n                count = count + 1\n            end\n      \
+    \  end\n        return count\n    end\nend", "    local words = {}\n    local\
+    \ word = ''\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n       \
+    \ if c == ' ' or c == ',' then\n            if #word > 0 then\n              \
+    \  table.insert(words, word)\n                word = ''\n            end\n   \
+    \     else\n            word = word .. c\n        end\n    end\n    if #word >\
+    \ 0 then\n        table.insert(words, word)\n    end\n    if #words > 0 then\n\
+    \        return words\n    else\n        local count = 0\n        for i = 1, #txt\
+    \ do\n            local c = txt:sub(i, i)\n            local ord = string.byte(c)\
+    \ - string.byte('a')\n            if ord % 2 == 1 then\n                count\
+    \ = count + 1\n            end\n        end\n        return count\n    end\nend",
+  "    local words = {}\n    local word = ''\n    local count = 0\n    for i = 1,\
+    \ #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n\
+    \            if word ~= '' then\n                table.insert(words, word)\n \
+    \               word = ''\n            end\n        else\n            word = word\
+    \ .. c\n        end\n    end\n    if word ~= '' then\n        table.insert(words,\
+    \ word)\n    end\n    if #words == 0 then\n        for i = 1, #txt do\n      \
+    \      local c = txt:sub(i, i)\n            local o = string.byte(c) - string.byte('a')\n\
+    \            if o % 2 == 1 then\n                count = count + 1\n         \
+    \   end\n        end\n        return count\n    end\n    return words\nend", " \
+    \   local words = {}\n    local word = ''\n    for i = 1, #txt do\n        local\
+    \ c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n            if #word\
+    \ > 0 then\n                table.insert(words, word)\n                word =\
+    \ ''\n            end\n        else\n            word = word .. c\n        end\n\
+    \    end\n    if #word > 0 then\n        table.insert(words, word)\n    end\n\
+    \    if #words > 0 then\n        return words\n    else\n        local count =\
+    \ 0\n        for i = 1, #txt do\n            local c = txt:sub(i, i)\n       \
+    \     local o = string.byte(c) - string.byte('a')\n            if o % 2 == 1 then\n\
+    \                count = count + 1\n            end\n        end\n        return\
+    \ count\n    end\nend", "    local words = {}\n    for word in txt:gmatch('%S+')\
+    \ do\n        table.insert(words, word)\n    end\n    if #words == 0 then\n  \
+    \      local odd = 0\n        for i = 1, #txt do\n            local c = txt:sub(i,\
+    \ i)\n            if c:lower() ~= c:upper() then\n                local o = c:lower():byte()\
+    \ - string.byte('a')\n                if o % 2 == 1 then\n                   \
+    \ odd = odd + 1\n                end\n            end\n        end\n        return\
+    \ odd\n    end\n    return words\nend", "    local words = {}\n    local word\
+    \ = ''\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c\
+    \ == ' ' or c == ',' then\n            if #word > 0 then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    end\n    local\
+    \ odd = 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        local\
+    \ o = c:byte() - string.byte('a')\n        if o % 2 == 1 then\n            odd\
+    \ = odd + 1\n        end\n    end\n    return odd\nend", "    local words = {}\n\
+    \    local word = ''\n    local count = 0\n    for i = 1, #txt do\n        local\
+    \ c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n            if word\
+    \ ~= '' then\n                words[#words + 1] = word\n                word =\
+    \ ''\n            end\n        else\n            word = word .. c\n          \
+    \  if c:lower() == c:sub(1, 1) and i % 2 == 1 then\n                count = count\
+    \ + 1\n            end\n        end\n    end\n    if word ~= '' then\n       \
+    \ words[#words + 1] = word\n    end\n    if #words > 0 then\n        return words\n\
+    \    else\n        return count\n    end\nend", "    local words = {}\n    local\
+    \ word = ''\n    local count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        if c == ' ' or c == ',' then\n            if #word > 0 then\n  \
+    \              table.insert(words, word)\n                word = ''\n        \
+    \    end\n        else\n            word = word .. c\n        end\n    end\n \
+    \   if #word > 0 then\n        table.insert(words, word)\n    end\n    if #words\
+    \ > 0 then\n        return words\n    else\n        for i = 1, #txt do\n     \
+    \       local c = txt:sub(i, i)\n            local ord = string.byte(c) - string.byte('a')\n\
+    \            if ord % 2 == 1 then\n                count = count + 1\n       \
+    \     end\n        end\n        return count\n    end\nend", "    -- your code\
+    \ here\n    local t = {}\n    local i = 1\n    local j = 1\n    local k = 1\n\
+    \    local count = 0\n    local flag = 0\n    while i <= #txt do\n        if txt:sub(i,\
+    \ i) == ' ' then\n            t[j] = txt:sub(k, i - 1)\n            j = j + 1\n\
+    \            k = i + 1\n            flag = 1\n        elseif txt:sub(i, i) ==\
+    \ ',' then\n            t[j] = txt:sub(k, i - 1)\n            j = j + 1\n    \
+    \        k = i + 1\n            flag = 1\n        elseif txt:sub(i, i) >= 'a'\
+    \ and txt:sub(i, i) <= 'z' then\n            if (i - k) % 2 == 1 then\n      \
+    \          count = count + 1\n            end\n        end\n        i = i + 1\n\
+    \    end\n    if flag == 1 then\n        return t\n    else\n        return count\n\
+    \    end\nend", "    -- TODO: Implement\n    return nil\nend", "    local words\
+    \ = {}\n    local word = ''\n    local odd_count = 0\n    for i = 1, #txt do\n\
+    \        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n     \
+    \       if word ~= '' then\n                table.insert(words, word)\n      \
+    \          word = ''\n            end\n        else\n            word = word ..\
+    \ c\n            if i % 2 == 1 then\n                odd_count = odd_count + 1\n\
+    \            end\n        end\n    end\n    if word ~= '' then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     return odd_count\n    end\nend", "    local words = {}\n    local word =\
+    \ ''\n    local count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        if c == ' ' or c == ',' then\n            if #word > 0 then\n  \
+    \              words[#words + 1] = word\n                word = ''\n         \
+    \   end\n        else\n            word = word .. c\n        end\n    end\n  \
+    \  if #word > 0 then\n        words[#words + 1] = word\n    end\n    if #words\
+    \ > 0 then\n        return words\n    end\n    for i = 1, #txt do\n        local\
+    \ c = txt:sub(i, i)\n        local o = string.byte(c) - string.byte('a')\n   \
+    \     if o % 2 == 1 then\n            count = count + 1\n        end\n    end\n\
+    \    return count\nend", "    local words = {}\n    for word in txt:gmatch('%S+')\
+    \ do\n        table.insert(words, word)\n    end\n    if #words == 0 then\n  \
+    \      local count = 0\n        for i = 1, #txt do\n            if (txt:byte(i)\
+    \ - ord('a')) % 2 == 1 then\n                count = count + 1\n            end\n\
+    \        end\n        return count\n    end\n    return words\nend", "    local\
+    \ words = {}\n    for word in txt:gmatch('%S+') do\n        table.insert(words,\
+    \ word)\n    end\n    if #words == 0 then\n        local sum = 0\n        for\
+    \ i = 1, #txt do\n            local c = txt:sub(i, i)\n            if c:lower()\
+    \ == c and c:byte() % 2 == 1 then\n                sum = sum + 1\n           \
+    \ end\n        end\n        return sum\n    end\n    return words\nend", "   \
+    \ local words = {}\n    local word = ''\n    local odd_letters = 0\n    for i\
+    \ = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ','\
+    \ then\n            if #word > 0 then\n                table.insert(words, word)\n\
+    \                word = ''\n            end\n        else\n            word =\
+    \ word .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     for i = 1, #txt do\n            local c = txt:sub(i, i)\n            local\
+    \ ord = string.byte(c) - string.byte('a')\n            if ord % 2 == 1 then\n\
+    \                odd_letters = odd_letters + 1\n            end\n        end\n\
+    \        return odd_letters\n    end\nend", "    local words = {}\n    local i\
+    \ = 1\n    local j = 1\n    while i <= #txt do\n        if txt:sub(i, i) == '\
+    \ ' then\n            words[j] = txt:sub(1, i - 1)\n            j = j + 1\n  \
+    \          txt = txt:sub(i + 1)\n            i = 1\n        elseif txt:sub(i,\
+    \ i) == ',' then\n            words[j] = txt:sub(1, i - 1)\n            j = j\
+    \ + 1\n            txt = txt:sub(i + 1)\n            i = 1\n        else\n   \
+    \         i = i + 1\n        end\n    end\n    if #words == 0 then\n        local\
+    \ count = 0\n        for i = 1, #txt do\n            if txt:sub(i, i) ~= ' ' and\
+    \ txt:sub(i, i) ~= ',' then\n                if (ord(txt:sub(i, i)) - ord('a'))\
+    \ % 2 == 1 then\n                    count = count + 1\n                end\n\
+    \            end\n        end\n        return count\n    else\n        words[j]\
+    \ = txt\n        return words\n    end\nend", "  -- TODO: Implement\nend", " \
+    \   local words = {}\n    local word = ''\n    local count = 0\n    for i = 1,\
+    \ #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n\
+    \            if #word > 0 then\n                table.insert(words, word)\n  \
+    \              word = ''\n            end\n        else\n            word = word\
+    \ .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    end\n    for\
+    \ i = 1, #txt do\n        local c = txt:sub(i, i)\n        local ord = string.byte(c)\
+    \ - string.byte('a')\n        if ord % 2 == 1 then\n            count = count\
+    \ + 1\n        end\n    end\n    return count\nend", "    local words = {}\n \
+    \   local word = ''\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n\
+    \        if c == ' ' or c == ',' then\n            if #word > 0 then\n       \
+    \         table.insert(words, word)\n                word = ''\n            end\n\
+    \        else\n            word = word .. c\n        end\n    end\n    if #word\
+    \ > 0 then\n        table.insert(words, word)\n    end\n    if #words > 0 then\n\
+    \        return words\n    end\n    local count = 0\n    for i = 1, #txt do\n\
+    \        local c = txt:sub(i, i)\n        local o = string.byte(c) - string.byte('a')\n\
+    \        if o % 2 == 1 then\n            count = count + 1\n        end\n    end\n\
+    \    return count\nend", "    local words = {}\n    for word in txt:gmatch('%S+')\
+    \ do\n        table.insert(words, word)\n    end\n    if #words == 0 then\n  \
+    \      local sum = 0\n        for i = 1, #txt do\n            local c = txt:sub(i,\
+    \ i)\n            if c:lower() == c then\n                sum = sum + (i % 2)\n\
+    \            end\n        end\n        return sum\n    end\n    return words\n\
+    end", "    local words = {}\n    local word = ''\n    local count = 0\n    for\
+    \ i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c ==\
+    \ ',' then\n            if word ~= '' then\n                words[#words + 1]\
+    \ = word\n                word = ''\n            end\n        else\n         \
+    \   word = word .. c\n            if c:lower() == c:sub(1, 1) and i % 2 == 1 then\n\
+    \                count = count + 1\n            end\n        end\n    end\n  \
+    \  if word ~= '' then\n        words[#words + 1] = word\n    end\n    if #words\
+    \ == 0 then\n        return count\n    end\n    return words\nend", "    local\
+    \ words = {}\n    local word = ''\n    local count = 0\n    for i = 1, #txt do\n\
+    \        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n     \
+    \       if word ~= '' then\n                table.insert(words, word)\n      \
+    \          word = ''\n            end\n        else\n            word = word ..\
+    \ c\n        end\n    end\n    if word ~= '' then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    end\n    for\
+    \ i = 1, #txt do\n        local c = txt:sub(i, i)\n        local ord = string.byte(c)\
+    \ - string.byte('a')\n        if ord % 2 == 1 then\n            count = count\
+    \ + 1\n        end\n    end\n    return count\nend", "    local words = {}\n \
+    \   local word = ''\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n\
+    \        if c == ' ' or c == ',' then\n            if #word > 0 then\n       \
+    \         table.insert(words, word)\n                word = ''\n            end\n\
+    \        else\n            word = word .. c\n        end\n    end\n    if #word\
+    \ > 0 then\n        table.insert(words, word)\n    end\n    if #words > 0 then\n\
+    \        return words\n    end\n    local odd = 0\n    for i = 1, #txt do\n  \
+    \      local c = txt:sub(i, i)\n        local o = c:byte() - string.byte('a')\n\
+    \        if o % 2 == 1 then\n            odd = odd + 1\n        end\n    end\n\
+    \    return odd\nend", "    local words = {}\n    local word = ''\n    local i\
+    \ = 1\n    while i <= #txt do\n        local c = txt:sub(i, i)\n        if c ==\
+    \ ' ' or c == ',' then\n            if #word > 0 then\n                words[#words\
+    \ + 1] = word\n                word = ''\n            end\n        else\n    \
+    \        word = word .. c\n        end\n        i = i + 1\n    end\n    if #word\
+    \ > 0 then\n        words[#words + 1] = word\n    end\n    if #words > 0 then\n\
+    \        return words\n    end\n    local odd = 0\n    for i = 1, #txt do\n  \
+    \      local c = txt:sub(i, i)\n        local o = c:byte() - ord('a')\n      \
+    \  if o % 2 == 1 then\n            odd = odd + 1\n        end\n    end\n    return\
+    \ odd\nend", "    local words = {}\n    local word = ''\n    local count = 0\n\
+    \    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' '\
+    \ or c == ',' then\n            if #word > 0 then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     for i = 1, #txt do\n            local c = txt:sub(i, i)\n            local\
+    \ n = c:byte() - string.byte('a')\n            if n % 2 == 1 then\n          \
+    \      count = count + 1\n            end\n        end\n        return count\n\
+    \    end\nend", "    local words = {}\n    local word = ''\n    local count =\
+    \ 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c ==\
+    \ ' ' or c == ',' then\n            if #word > 0 then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     for i = 1, #txt do\n            local c = txt:sub(i, i)\n            local\
+    \ n = string.byte(c) - string.byte('a')\n            if n % 2 == 1 then\n    \
+    \            count = count + 1\n            end\n        end\n        return count\n\
+    \    end\nend", "    local words = {}\n    local word = ''\n    local odd_count\
+    \ = 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c ==\
+    \ ' ' or c == ',' then\n            if #word > 0 then\n                words[#words\
+    \ + 1] = word\n                word = ''\n            end\n        else\n    \
+    \        word = word .. c\n        end\n        if c >= 'a' and c <= 'z' and i\
+    \ % 2 == 1 then\n            odd_count = odd_count + 1\n        end\n    end\n\
+    \    if #word > 0 then\n        words[#words + 1] = word\n    end\n    if #words\
+    \ > 0 then\n        return words\n    else\n        return odd_count\n    end\n\
+    end", "    local words = {}\n    local word = ''\n    local odd_count = 0\n  \
+    \  for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or\
+    \ c == ',' then\n            if word ~= '' then\n                words[#words\
+    \ + 1] = word\n                word = ''\n            end\n        else\n    \
+    \        word = word .. c\n            local ord = string.byte(c) - string.byte('a')\n\
+    \            if ord % 2 == 1 then\n                odd_count = odd_count + 1\n\
+    \            end\n        end\n    end\n    if word ~= '' then\n        words[#words\
+    \ + 1] = word\n    end\n    if #words == 0 then\n        return odd_count\n  \
+    \  else\n        return words\n    end\nend", "    local words = {}\n    for word\
+    \ in txt:gmatch('%S+') do\n        words[#words + 1] = word\n    end\n    if #words\
+    \ == 0 then\n        local sum = 0\n        for i = 1, #txt do\n            local\
+    \ c = txt:sub(i, i)\n            local o = c:byte() - string.byte('a')\n     \
+    \       if o % 2 == 1 then\n                sum = sum + 1\n            end\n \
+    \       end\n        return sum\n    end\n    return words\nend", "    local words\
+    \ = {}\n    local n = 0\n    for word in txt:gmatch('%S+') do\n        words[#words\
+    \ + 1] = word\n    end\n    if #words == 0 then\n        for c in txt:gmatch('.')\
+    \ do\n            local o = c:byte() - string.byte('a')\n            if o % 2\
+    \ == 1 then\n                n = n + 1\n            end\n        end\n    end\n\
+    \    return #words > 0 and words or n\nend", "    local words = {}\n    local\
+    \ word = ''\n    local odd_count = 0\n    for i = 1, #txt do\n        local c\
+    \ = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n            if word ~=\
+    \ '' then\n                table.insert(words, word)\n                word = ''\n\
+    \            end\n        else\n            word = word .. c\n            if i\
+    \ % 2 == 1 then\n                local ord = string.byte(c) - string.byte('a')\n\
+    \                if ord % 2 == 1 then\n                    odd_count = odd_count\
+    \ + 1\n                end\n            end\n        end\n    end\n    if word\
+    \ ~= '' then\n        table.insert(words, word)\n    end\n    if #words > 0 then\n\
+    \        return words\n    else\n        return odd_count\n    end\nend", "  \
+    \  local words = {}\n    local i = 1\n    for word in txt:gmatch('%S+') do\n \
+    \       words[i] = word\n        i = i + 1\n    end\n    if #words == 0 then\n\
+    \        local count = 0\n        for c in txt:gmatch('.') do\n            if\
+    \ c:byte() >= 97 and c:byte() <= 122 and (c:byte() - 96) % 2 == 1 then\n     \
+    \           count = count + 1\n            end\n        end\n        return count\n\
+    \    end\n    return words\nend", "    local words = {}\n    local word = ''\n\
+    \    local i = 1\n    local odd_count = 0\n    while i <= #txt do\n        local\
+    \ c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n            if word\
+    \ ~= '' then\n                words[#words + 1] = word\n                word =\
+    \ ''\n            end\n        else\n            word = word .. c\n        end\n\
+    \        i = i + 1\n    end\n    if word ~= '' then\n        words[#words + 1]\
+    \ = word\n    end\n    if #words > 0 then\n        return words\n    end\n   \
+    \ for i = 1, #txt do\n        local c = txt:sub(i, i)\n        local ord = string.byte(c)\
+    \ - string.byte('a')\n        if ord % 2 == 1 then\n            odd_count = odd_count\
+    \ + 1\n        end\n    end\n    return odd_count\nend", "    local words = {}\n\
+    \    for word in string.gmatch(txt, '[^%s]+') do\n        table.insert(words,\
+    \ word)\n    end\n    if #words == 0 then\n        words = {}\n        for word\
+    \ in string.gmatch(txt, '[^,]+') do\n            table.insert(words, word)\n \
+    \       end\n        if #words == 0 then\n            local count = 0\n      \
+    \      for i = 1, #txt do\n                local c = string.byte(txt, i)\n   \
+    \             if c >= 97 and c <= 122 and i % 2 == 1 then\n                  \
+    \  count = count + 1\n                end\n            end\n            return\
+    \ count\n        end\n    end\n    return words\nend", "    local words = {}\n\
+    \    local word = ''\n    local count = 0\n    for i = 1, #txt do\n        local\
+    \ c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n            if word\
+    \ ~= '' then\n                table.insert(words, word)\n                word\
+    \ = ''\n            end\n        else\n            word = word .. c\n        end\n\
+    \    end\n    if word ~= '' then\n        table.insert(words, word)\n    end\n\
+    \    if #words > 0 then\n        return words\n    end\n    for i = 1, #txt do\n\
+    \        local c = txt:sub(i, i)\n        local o = string.byte(c) - string.byte('a')\n\
+    \        if o % 2 == 1 then\n            count = count + 1\n        end\n    end\n\
+    \    return count\nend", "    local words = {}\n    local word = ''\n    local\
+    \ count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n       \
+    \ if c == ' ' or c == ',' then\n            if #word > 0 then\n              \
+    \  table.insert(words, word)\n                word = ''\n            end\n   \
+    \     else\n            word = word .. c\n        end\n    end\n    if #word >\
+    \ 0 then\n        table.insert(words, word)\n    end\n    if #words > 0 then\n\
+    \        return words\n    end\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        local n = string.byte(c) - string.byte('a')\n        if n % 2 ==\
+    \ 1 then\n            count = count + 1\n        end\n    end\n    return count\n\
+    end", "    local words = {}\n    local word = ''\n    local count = 0\n    for\
+    \ i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c ==\
+    \ ',' then\n            if #word > 0 then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     for i = 1, #txt do\n            local c = txt:sub(i, i)\n            local\
+    \ o = string.byte(c) - string.byte('a')\n            if o % 2 == 1 then\n    \
+    \            count = count + 1\n            end\n        end\n        return count\n\
+    \    end\nend", "    if txt:find('%s') then\n        return txt:split('%s')\n\
+    \    elseif txt:find(',') then\n        return txt:split(',')\n    else\n    \
+    \    local count = 0\n        for i = 1, #txt do\n            local c = txt:sub(i,\
+    \ i)\n            if c:lower() == c and c:byte() % 2 == 1 then\n             \
+    \   count = count + 1\n            end\n        end\n        return count\n  \
+    \  end\nend", "    if txt:find(' ') then\n        return txt:split(' ')\n    elseif\
+    \ txt:find(',') then\n        return txt:split(',')\n    else\n        local count\
+    \ = 0\n        for i = 1, #txt do\n            local c = txt:sub(i, i)\n     \
+    \       local n = c:byte() - 97\n            if n % 2 == 1 then\n            \
+    \    count = count + 1\n            end\n        end\n        return count\n \
+    \   end\nend", "    local words = {}\n    local i = 1\n    local j = 1\n    local\
+    \ len = string.len(txt)\n    while i <= len do\n        if string.sub(txt, i,\
+    \ i) == ' ' then\n            words[j] = string.sub(txt, 1, i - 1)\n         \
+    \   j = j + 1\n            txt = string.sub(txt, i + 1, len)\n            i =\
+    \ 1\n            len = string.len(txt)\n        elseif string.sub(txt, i, i) ==\
+    \ ',' then\n            words[j] = string.sub(txt, 1, i - 1)\n            j =\
+    \ j + 1\n            txt = string.sub(txt, i + 1, len)\n            i = 1\n  \
+    \          len = string.len(txt)\n        else\n            i = i + 1\n      \
+    \  end\n    end\n    if len > 0 then\n        words[j] = txt\n    end\n    if\
+    \ #words == 0 then\n        local count = 0\n        for i = 1, len do\n     \
+    \       if string.byte(txt, i) % 2 == 1 then\n                count = count +\
+    \ 1\n            end\n        end\n        return count\n    end\n    return words\n\
+    end", "    local words = {}\n    local word = ''\n    local count = 0\n    for\
+    \ i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c ==\
+    \ ',' then\n            if #word > 0 then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     for i = 1, #txt do\n            local c = txt:sub(i, i)\n            local\
+    \ n = string.byte(c) - string.byte('a')\n            if n % 2 == 1 then\n    \
+    \            count = count + 1\n            end\n        end\n        return count\n\
+    \    end\nend", "    local words = {}\n    local word = ''\n    local odd_count\
+    \ = 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c ==\
+    \ ' ' or c == ',' then\n            if word ~= '' then\n                words[#words\
+    \ + 1] = word\n                word = ''\n            end\n        else\n    \
+    \        word = word .. c\n            if c:lower() == c and c:upper() ~= c then\n\
+    \                local ord = c:byte() - string.byte('a')\n                if ord\
+    \ % 2 == 1 then\n                    odd_count = odd_count + 1\n             \
+    \   end\n            end\n        end\n    end\n    if word ~= '' then\n     \
+    \   words[#words + 1] = word\n    end\n    if #words == 0 then\n        return\
+    \ odd_count\n    else\n        return words\n    end\nend", "    local words =\
+    \ {}\n    local word = ''\n    local count = 0\n    for i = 1, #txt do\n     \
+    \   local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n          \
+    \  if #word > 0 then\n                table.insert(words, word)\n            \
+    \    word = ''\n            end\n        else\n            word = word .. c\n\
+    \        end\n    end\n    if #word > 0 then\n        table.insert(words, word)\n\
+    \    end\n    if #words > 0 then\n        return words\n    else\n        for\
+    \ i = 1, #txt do\n            local c = txt:sub(i, i)\n            local o = string.byte(c)\
+    \ - string.byte('a')\n            if o % 2 == 1 then\n                count =\
+    \ count + 1\n            end\n        end\n        return count\n    end\nend",
+  "\tif txt:find(' ') then\n\t\treturn txt:split(' ')\n\telseif txt:find(',') then\n\
+    \t\treturn txt:split(',')\n\telse\n\t\tlocal count = 0\n\t\tfor i = 1, #txt do\n\
+    \t\t\tlocal c = txt:sub(i, i)\n\t\t\tlocal n = c:byte() - 97\n\t\t\tif n % 2 ==\
+    \ 1 then\n\t\t\t\tcount = count + 1\n\t\t\tend\n\t\tend\n\t\treturn count\n\t\
+    end\nend", "    local words = {}\n    local word = ''\n    local count = 0\n \
+    \   for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or\
+    \ c == ',' then\n            if #word > 0 then\n                words[#words +\
+    \ 1] = word\n                word = ''\n            end\n        else\n      \
+    \      word = word .. c\n        end\n    end\n    if #word > 0 then\n       \
+    \ words[#words + 1] = word\n    end\n    if #words > 0 then\n        return words\n\
+    \    end\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        local\
+    \ ord = string.byte(c) - string.byte('a')\n        if ord % 2 == 1 then\n    \
+    \        count = count + 1\n        end\n    end\n    return count\nend", "  \
+    \  local words = {}\n    local word = ''\n    for i = 1, #txt do\n        local\
+    \ c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n            if #word\
+    \ > 0 then\n                table.insert(words, word)\n                word =\
+    \ ''\n            end\n        else\n            word = word .. c\n        end\n\
+    \    end\n    if #word > 0 then\n        table.insert(words, word)\n    end\n\
+    \    if #words > 0 then\n        return words\n    else\n        local count =\
+    \ 0\n        for i = 1, #txt do\n            local c = txt:sub(i, i)\n       \
+    \     local o = string.byte(c) - string.byte('a')\n            if o % 2 == 1 then\n\
+    \                count = count + 1\n            end\n        end\n        return\
+    \ count\n    end\nend", "    local words = {}\n    local word = ''\n    for c\
+    \ in txt:gmatch('.') do\n        if c == ' ' or c == ',' then\n            if\
+    \ word ~= '' then\n                table.insert(words, word)\n               \
+    \ word = ''\n            end\n        else\n            word = word .. c\n   \
+    \     end\n    end\n    if word ~= '' then\n        table.insert(words, word)\n\
+    \    end\n    if #words == 0 then\n        local count = 0\n        for i = 1,\
+    \ #txt do\n            local c = txt:sub(i, i)\n            local o = string.byte(c)\
+    \ - string.byte('a')\n            if o % 2 == 1 then\n                count =\
+    \ count + 1\n            end\n        end\n        return count\n    end\n   \
+    \ return words\nend", "    local words = {}\n    local word = ''\n    local odd_count\
+    \ = 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c ==\
+    \ ' ' or c == ',' then\n            if #word > 0 then\n                words[#words\
+    \ + 1] = word\n                word = ''\n            end\n        else\n    \
+    \        word = word .. c\n            if c:lower() == c and c:upper() == c then\n\
+    \                odd_count = odd_count + 1\n            end\n        end\n   \
+    \ end\n    if #word > 0 then\n        words[#words + 1] = word\n    end\n    if\
+    \ #words > 0 then\n        return words\n    else\n        return odd_count\n\
+    \    end\nend", "    local words = {}\n    local word = ''\n    local count =\
+    \ 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c ==\
+    \ ' ' or c == ',' then\n            if #word > 0 then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     for i = 1, #txt do\n            local c = txt:sub(i, i)\n            local\
+    \ n = string.byte(c) - string.byte('a')\n            if n % 2 == 1 then\n    \
+    \            count = count + 1\n            end\n        end\n        return count\n\
+    \    end\nend", "    local words = {}\n    for word in txt:gmatch('%S+') do\n\
+    \        table.insert(words, word)\n    end\n    if #words == 0 then\n       \
+    \ local sum = 0\n        for i = 1, #txt do\n            local c = txt:sub(i,\
+    \ i)\n            local n = string.byte(c) - string.byte('a')\n            if\
+    \ n % 2 == 1 then\n                sum = sum + 1\n            end\n        end\n\
+    \        return sum\n    end\n    return words\nend", "    local words = {}\n\
+    \    local word = ''\n    local odd_count = 0\n    for i = 1, #txt do\n      \
+    \  local char = txt:sub(i, i)\n        if char == ' ' or char == ',' then\n  \
+    \          if word ~= '' then\n                words[#words + 1] = word\n    \
+    \            word = ''\n            end\n        else\n            word = word\
+    \ .. char\n            if char:lower() == char and char:upper() ~= char then\n\
+    \                local ord = string.byte(char) - string.byte('a')\n          \
+    \      if ord % 2 == 1 then\n                    odd_count = odd_count + 1\n \
+    \               end\n            end\n        end\n    end\n    if word ~= ''\
+    \ then\n        words[#words + 1] = word\n    end\n    if #words == 0 then\n \
+    \       return odd_count\n    else\n        return words\n    end\nend", "   \
+    \ local words = {}\n    for word in txt:gmatch('[^%s]+') do\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    end\n    for\
+    \ word in txt:gmatch('[^,]+') do\n        table.insert(words, word)\n    end\n\
+    \    if #words > 0 then\n        return words\n    end\n    local count = 0\n\
+    \    for c in txt:gmatch('[a-z]') do\n        if (string.byte(c) - string.byte('a'))\
+    \ % 2 == 1 then\n            count = count + 1\n        end\n    end\n    return\
+    \ count\nend", "    local words = {}\n    local i = 1\n    for word in string.gmatch(txt,\
+    \ \"%S+\") do\n        words[i] = word\n        i = i + 1\n    end\n    if #words\
+    \ == 0 then\n        local count = 0\n        for c in string.gmatch(txt, \"%a\"\
+    ) do\n            local ord = string.byte(c) - string.byte('a')\n            if\
+    \ ord % 2 == 1 then\n                count = count + 1\n            end\n    \
+    \    end\n        return count\n    end\n    return words\nend", "    local words\
+    \ = {}\n    local word = ''\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        if c == ' ' or c == ',' then\n            if #word > 0 then\n  \
+    \              table.insert(words, word)\n                word = ''\n        \
+    \    end\n        else\n            word = word .. c\n        end\n    end\n \
+    \   if #word > 0 then\n        table.insert(words, word)\n    end\n    if #words\
+    \ > 0 then\n        return words\n    else\n        local count = 0\n        for\
+    \ i = 1, #txt do\n            local c = txt:sub(i, i)\n            local o = string.byte(c)\
+    \ - string.byte('a')\n            if o % 2 == 1 then\n                count =\
+    \ count + 1\n            end\n        end\n        return count\n    end\nend",
+  "    local words = {}\n    local word = ''\n    local odd_count = 0\n    for i =\
+    \ 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ','\
+    \ then\n            if #word > 0 then\n                words[#words + 1] = word\n\
+    \                word = ''\n            end\n        else\n            word =\
+    \ word .. c\n            if c:lower() == c and c:upper() == c then\n         \
+    \       -- skip non-alphabetic characters\n            else\n                local\
+    \ ord = c:lower():byte() - string.byte('a')\n                if ord % 2 == 1 then\n\
+    \                    odd_count = odd_count + 1\n                end\n        \
+    \    end\n        end\n    end\n    if #word > 0 then\n        words[#words +\
+    \ 1] = word\n    end\n    if #words > 0 then\n        return words\n    else\n\
+    \        return odd_count\n    end\nend", "    local words = {}\n    for word\
+    \ in txt:gmatch('%S+') do\n        table.insert(words, word)\n    end\n    if\
+    \ #words == 0 then\n        local odd_count = 0\n        for i = 1, #txt do\n\
+    \            local c = txt:sub(i, i)\n            if c:lower() ~= c:upper() then\n\
+    \                local ord = string.byte(c) - string.byte('a')\n             \
+    \   if ord % 2 == 1 then\n                    odd_count = odd_count + 1\n    \
+    \            end\n            end\n        end\n        return odd_count\n   \
+    \ end\n    return words\nend", "    local words = {}\n    local word = ''\n  \
+    \  for c in txt:gmatch('.') do\n        if c == ' ' or c == ',' then\n       \
+    \     if word ~= '' then\n                table.insert(words, word)\n        \
+    \        word = ''\n            end\n        else\n            word = word ..\
+    \ c\n        end\n    end\n    if word ~= '' then\n        table.insert(words,\
+    \ word)\n    end\n    if #words == 0 then\n        local count = 0\n        for\
+    \ i = 1, #txt do\n            local c = txt:sub(i, i)\n            local o = c:byte()\
+    \ - ord('a')\n            if o % 2 == 1 then\n                count = count +\
+    \ 1\n            end\n        end\n        return count\n    end\n    return words\n\
+    end", "    local words = {}\n    for word in txt:gmatch('%S+') do\n        table.insert(words,\
+    \ word)\n    end\n    if #words == 0 then\n        local count = 0\n        for\
+    \ i = 1, #txt do\n            local c = txt:sub(i, i)\n            if c:lower()\
+    \ == c and c:byte() % 2 == 1 then\n                count = count + 1\n       \
+    \     end\n        end\n        return count\n    end\n    return words\nend",
+  "    local words = {}\n    local word = ''\n    local count = 0\n    for i = 1,\
+    \ #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n\
+    \            if #word > 0 then\n                words[#words + 1] = word\n   \
+    \             word = ''\n            end\n        else\n            word = word\
+    \ .. c\n        end\n    end\n    if #word > 0 then\n        words[#words + 1]\
+    \ = word\n    end\n    if #words > 0 then\n        return words\n    end\n   \
+    \ for i = 1, #txt do\n        local c = txt:sub(i, i)\n        local o = string.byte(c)\
+    \ - string.byte('a')\n        if o % 2 == 1 then\n            count = count +\
+    \ 1\n        end\n    end\n    return count\nend", "    local words = {}\n   \
+    \ local word = ''\n    local count = 0\n    for i = 1, #txt do\n        local\
+    \ c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n            if #word\
+    \ > 0 then\n                table.insert(words, word)\n                word =\
+    \ ''\n            end\n        else\n            word = word .. c\n        end\n\
+    \    end\n    if #word > 0 then\n        table.insert(words, word)\n    end\n\
+    \    if #words > 0 then\n        return words\n    else\n        for i = 1, #txt\
+    \ do\n            local c = txt:sub(i, i)\n            local n = string.byte(c)\
+    \ - string.byte('a')\n            if n % 2 == 1 then\n                count =\
+    \ count + 1\n            end\n        end\n        return count\n    end\nend",
+  "    local words = {}\n    for word in txt:gmatch('%S+') do\n        table.insert(words,\
+    \ word)\n    end\n    if #words == 0 then\n        local count = 0\n        for\
+    \ i = 1, #txt do\n            local c = txt:sub(i, i)\n            if c:lower()\
+    \ == c and (i % 2) == 1 then\n                count = count + 1\n            end\n\
+    \        end\n        return count\n    end\n    return words\nend", "    local\
+    \ words = {}\n    local word = ''\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        if c == ' ' or c == ',' then\n            if #word > 0 then\n  \
+    \              table.insert(words, word)\n                word = ''\n        \
+    \    end\n        else\n            word = word .. c\n        end\n    end\n \
+    \   if #word > 0 then\n        table.insert(words, word)\n    end\n    if #words\
+    \ > 0 then\n        return words\n    else\n        local count = 0\n        for\
+    \ i = 1, #txt do\n            local c = txt:sub(i, i)\n            local ord =\
+    \ string.byte(c) - string.byte('a')\n            if ord % 2 == 1 then\n      \
+    \          count = count + 1\n            end\n        end\n        return count\n\
+    \    end\nend", "    local words = {}\n    local word = ''\n    local count =\
+    \ 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c ==\
+    \ ' ' or c == ',' then\n            if #word > 0 then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     for i = 1, #txt do\n            local c = txt:sub(i, i)\n            local\
+    \ n = string.byte(c) - string.byte('a')\n            if n % 2 == 1 then\n    \
+    \            count = count + 1\n            end\n        end\n        return count\n\
+    \    end\nend", "    local words = {}\n    local word = ''\n    local odd_count\
+    \ = 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c ==\
+    \ ' ' or c == ',' then\n            if word ~= '' then\n                words[#words\
+    \ + 1] = word\n                word = ''\n            end\n        else\n    \
+    \        word = word .. c\n            if c:lower() == c and c:upper() ~= c then\n\
+    \                local ord = string.byte(c) - string.byte('a')\n             \
+    \   if ord % 2 == 1 then\n                    odd_count = odd_count + 1\n    \
+    \            end\n            end\n        end\n    end\n    if word ~= '' then\n\
+    \        words[#words + 1] = word\n    end\n    if #words == 0 then\n        return\
+    \ odd_count\n    else\n        return words\n    end\nend", "    local words =\
+    \ {}\n    for word in txt:gmatch('%S+') do\n        words[#words + 1] = word\n\
+    \    end\n    if #words == 0 then\n        for word in txt:gmatch('%a+') do\n\
+    \            words[#words + 1] = word\n        end\n    end\n    if #words ==\
+    \ 0 then\n        local odd = 0\n        for char in txt:gmatch('%a') do\n   \
+    \         if char:byte() % 2 == 1 then\n                odd = odd + 1\n      \
+    \      end\n        end\n        return odd\n    end\n    return words\nend",
+  "    local words = {}\n    local word = ''\n    local odd_count = 0\n    for i =\
+    \ 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ','\
+    \ then\n            if word ~= '' then\n                table.insert(words, word)\n\
+    \                word = ''\n            end\n        else\n            word =\
+    \ word .. c\n            if i % 2 == 1 then\n                odd_count = odd_count\
+    \ + 1\n            end\n        end\n    end\n    if word ~= '' then\n       \
+    \ table.insert(words, word)\n    end\n    if #words == 0 then\n        return\
+    \ odd_count\n    else\n        return words\n    end\nend", "    local words =\
+    \ {}\n    local word = ''\n    local odd_count = 0\n    local split_char = ' '\n\
+    \    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == split_char\
+    \ then\n            if #word > 0 then\n                table.insert(words, word)\n\
+    \                word = ''\n            end\n        elseif c == ',' then\n  \
+    \          if #word > 0 then\n                table.insert(words, word)\n    \
+    \            word = ''\n            end\n            split_char = ','\n      \
+    \  else\n            word = word .. c\n            if c:lower() == c then\n  \
+    \              local ord = string.byte(c) - string.byte('a')\n               \
+    \ if ord % 2 == 1 then\n                    odd_count = odd_count + 1\n      \
+    \          end\n            end\n        end\n    end\n    if #word > 0 then\n\
+    \        table.insert(words, word)\n    end\n    if #words > 0 then\n        return\
+    \ words\n    else\n        return odd_count\n    end\nend", "    local words =\
+    \ {}\n    local word = ''\n    local odd_count = 0\n    for i = 1, #txt do\n \
+    \       local ch = txt:sub(i, i)\n        if ch == ' ' or ch == ',' then\n   \
+    \         if #word > 0 then\n                table.insert(words, word)\n     \
+    \           word = ''\n            end\n        else\n            word = word\
+    \ .. ch\n            local ord = string.byte(ch) - string.byte('a')\n        \
+    \    if ord % 2 == 1 then\n                odd_count = odd_count + 1\n       \
+    \     end\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     return odd_count\n    end\nend", "    local words = {}\n    local word =\
+    \ ''\n    local count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        if c == ' ' or c == ',' then\n            if #word > 0 then\n  \
+    \              words[#words + 1] = word\n                word = ''\n         \
+    \   end\n        else\n            word = word .. c\n        end\n    end\n  \
+    \  if #word > 0 then\n        words[#words + 1] = word\n    end\n    if #words\
+    \ > 0 then\n        return words\n    end\n    for i = 1, #txt do\n        local\
+    \ c = txt:sub(i, i)\n        local n = string.byte(c) - string.byte('a')\n   \
+    \     if n % 2 == 1 then\n            count = count + 1\n        end\n    end\n\
+    \    return count\nend", "    local words = {}\n    local word = ''\n    for i\
+    \ = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ','\
+    \ then\n            if #word > 0 then\n                table.insert(words, word)\n\
+    \                word = ''\n            end\n        else\n            word =\
+    \ word .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    end\n    local\
+    \ count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n       \
+    \ local o = string.byte(c) - string.byte('a')\n        if o % 2 == 1 then\n  \
+    \          count = count + 1\n        end\n    end\n    return count\nend", " \
+    \   local words = {}\n    local word = ''\n    local count = 0\n    for i = 1,\
+    \ #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n\
+    \            if #word > 0 then\n                words[#words + 1] = word\n   \
+    \             word = ''\n            end\n        else\n            word = word\
+    \ .. c\n        end\n    end\n    if #word > 0 then\n        words[#words + 1]\
+    \ = word\n    end\n    if #words > 0 then\n        return words\n    end\n   \
+    \ for i = 1, #txt do\n        local c = txt:sub(i, i)\n        local n = string.byte(c)\
+    \ - string.byte('a')\n        if n % 2 == 1 then\n            count = count +\
+    \ 1\n        end\n    end\n    return count\nend", "    local words = {}\n   \
+    \ for word in txt:gmatch('%S+') do\n        table.insert(words, word)\n    end\n\
+    \    if #words > 0 then\n        return words\n    end\n    local letters = {}\n\
+    \    for letter in txt:gmatch('%a') do\n        table.insert(letters, letter)\n\
+    \    end\n    if #letters > 0 then\n        local count = 0\n        for i, letter\
+    \ in ipairs(letters) do\n            if i % 2 == 1 then\n                local\
+    \ ord = string.byte(letter) - string.byte('a')\n                if ord % 2 ==\
+    \ 1 then\n                    count = count + 1\n                end\n       \
+    \     end\n        end\n        return count\n    end\n    return nil\nend", " \
+    \   local words = {}\n    for word in txt:gmatch('%S+') do\n        words[#words\
+    \ + 1] = word\n    end\n    if #words > 0 then\n        return words\n    end\n\
+    \    local letters = {}\n    for letter in txt:gmatch('%a') do\n        letters[#letters\
+    \ + 1] = letter\n    end\n    if #letters > 0 then\n        local odd_count =\
+    \ 0\n        for _, letter in ipairs(letters) do\n            if (letter:byte()\
+    \ - 97) % 2 == 1 then\n                odd_count = odd_count + 1\n           \
+    \ end\n        end\n        return odd_count\n    end\n    return nil\nend", " \
+    \   local words = {}\n    local word = ''\n    local odd = 0\n    for i = 1, #txt\
+    \ do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n\
+    \            if #word > 0 then\n                words[#words + 1] = word\n   \
+    \             word = ''\n            end\n        else\n            word = word\
+    \ .. c\n        end\n    end\n    if #word > 0 then\n        words[#words + 1]\
+    \ = word\n    end\n    if #words > 0 then\n        return words\n    else\n  \
+    \      for i = 1, #txt do\n            local c = txt:sub(i, i)\n            local\
+    \ o = string.byte(c) - string.byte('a')\n            if o % 2 == 1 then\n    \
+    \            odd = odd + 1\n            end\n        end\n        return odd\n\
+    \    end\nend", "    local words = {}\n    for word in txt:gmatch('[^%s]+') do\n\
+    \        table.insert(words, word)\n    end\n    if #words == 0 then\n       \
+    \ local count = 0\n        for i = 1, #txt do\n            if txt:byte(i) - ord('a')\
+    \ % 2 == 1 then\n                count = count + 1\n            end\n        end\n\
+    \        return count\n    end\n    return words\nend", "    local words = {}\n\
+    \    local n = 0\n    for w in txt:gmatch('[^%s]+') do\n        words[#words +\
+    \ 1] = w\n        n = n + 1\n    end\n    if n == 0 then\n        n = 0\n    \
+    \    for w in txt:gmatch('[^,]+') do\n            words[#words + 1] = w\n    \
+    \        n = n + 1\n        end\n    end\n    if n == 0 then\n        n = 0\n\
+    \        for c in txt:gmatch('.') do\n            local o = c:byte() - string.byte('a')\n\
+    \            if o % 2 == 1 then\n                n = n + 1\n            end\n\
+    \        end\n    end\n    return n == 0 and words or n\nend", "    local words\
+    \ = {}\n    for word in txt:gmatch('%S+') do\n        table.insert(words, word)\n\
+    \    end\n    if #words == 0 then\n        local odd_letters = 0\n        for\
+    \ letter in txt:gmatch('%a') do\n            if (string.byte(letter) - string.byte('a'))\
+    \ % 2 == 1 then\n                odd_letters = odd_letters + 1\n            end\n\
+    \        end\n        return odd_letters\n    end\n    return words\nend", " \
+    \   local words = {}\n    local word = ''\n    local odd_count = 0\n    for i\
+    \ = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ','\
+    \ then\n            if #word > 0 then\n                words[#words + 1] = word\n\
+    \                word = ''\n            end\n        else\n            word =\
+    \ word .. c\n        end\n        if c >= 'a' and c <= 'z' and i % 2 == 1 then\n\
+    \            odd_count = odd_count + 1\n        end\n    end\n    if #word > 0\
+    \ then\n        words[#words + 1] = word\n    end\n    if #words > 0 then\n  \
+    \      return words\n    else\n        return odd_count\n    end\nend", "    local\
+    \ words = {}\n    local word = ''\n    local count = 0\n    for i = 1, #txt do\n\
+    \        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n     \
+    \       if #word > 0 then\n                words[#words + 1] = word\n        \
+    \        word = ''\n            end\n        else\n            word = word ..\
+    \ c\n        end\n    end\n    if #word > 0 then\n        words[#words + 1] =\
+    \ word\n    end\n    if #words > 0 then\n        return words\n    end\n    for\
+    \ i = 1, #txt do\n        local c = txt:sub(i, i)\n        local o = string.byte(c)\
+    \ - string.byte('a')\n        if o % 2 == 1 then\n            count = count +\
+    \ 1\n        end\n    end\n    return count\nend", "    local words = {}\n   \
+    \ local i = 1\n    for word in string.gmatch(txt, \"%S+\") do\n        words[i]\
+    \ = word\n        i = i + 1\n    end\n    if #words == 0 then\n        local count\
+    \ = 0\n        for i = 1, #txt do\n            local c = string.byte(txt, i) -\
+    \ string.byte('a')\n            if c % 2 == 1 then\n                count = count\
+    \ + 1\n            end\n        end\n        return count\n    end\n    return\
+    \ words\nend", "    local words = {}\n    for word in txt:gmatch('%S+') do\n \
+    \       words[#words + 1] = word\n    end\n    if #words == 0 then\n        for\
+    \ word in txt:gmatch('[^,]+') do\n            words[#words + 1] = word\n     \
+    \   end\n    end\n    if #words == 0 then\n        local count = 0\n        for\
+    \ i = 1, #txt do\n            local c = txt:sub(i, i)\n            if c >= 'a'\
+    \ and c <= 'z' and i % 2 == 1 then\n                count = count + 1\n      \
+    \      end\n        end\n        return count\n    end\n    return words\nend",
+  "    if txt:find(' ') then\n        return txt:split(' ')\n    elseif txt:find(',')\
+    \ then\n        return txt:split(',')\n    else\n        local count = 0\n   \
+    \     for i = 1, #txt do\n            local c = txt:sub(i, i)\n            if\
+    \ c:lower() == c and c:byte() % 2 == 1 then\n                count = count + 1\n\
+    \            end\n        end\n        return count\n    end\nend", "    local\
+    \ words = {}\n    local word = ''\n    local odd_count = 0\n    for i = 1, #txt\
+    \ do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n\
+    \            if #word > 0 then\n                table.insert(words, word)\n  \
+    \              word = ''\n            end\n        else\n            word = word\
+    \ .. c\n            if c:lower() == c and c:upper() == c then\n              \
+    \  -- skip non-alphabet characters\n            else\n                local ord\
+    \ = string.byte(c) - string.byte('a')\n                if ord % 2 == 1 then\n\
+    \                    odd_count = odd_count + 1\n                end\n        \
+    \    end\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     return odd_count\n    end\nend", "    if txt:find('%s') then\n        return\
+    \ txt:split('%s')\n    elseif txt:find(',') then\n        return txt:split(',')\n\
+    \    else\n        local count = 0\n        for i = 1, #txt do\n            local\
+    \ c = txt:sub(i, i)\n            if c:byte() - ord('a') % 2 == 1 then\n      \
+    \          count = count + 1\n            end\n        end\n        return count\n\
+    \    end\nend", "    local words = {}\n    for word in txt:gmatch('%S+') do\n\
+    \        table.insert(words, word)\n    end\n    if #words == 0 then\n       \
+    \ local count = 0\n        for i = 1, #txt do\n            local c = txt:sub(i,\
+    \ i)\n            if c:lower() == c and (i % 2) == 1 then\n                count\
+    \ = count + 1\n            end\n        end\n        return count\n    end\n \
+    \   return words\nend", "    local words = {}\n    local word = ''\n    local\
+    \ count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n       \
+    \ if c == ' ' or c == ',' then\n            if #word > 0 then\n              \
+    \  words[#words + 1] = word\n                word = ''\n            end\n    \
+    \    else\n            word = word .. c\n        end\n    end\n    if #word >\
+    \ 0 then\n        words[#words + 1] = word\n    end\n    if #words > 0 then\n\
+    \        return words\n    end\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        local n = string.byte(c) - string.byte('a')\n        if n % 2 ==\
+    \ 1 then\n            count = count + 1\n        end\n    end\n    return count\n\
+    end", "    local words = {}\n    local i = 1\n    for word in string.gmatch(txt,\
+    \ \"%S+\") do\n        words[i] = word\n        i = i + 1\n    end\n    if #words\
+    \ == 0 then\n        local odd_count = 0\n        for c in string.gmatch(txt,\
+    \ \"%a\") do\n            if string.byte(c) % 2 == 1 then\n                odd_count\
+    \ = odd_count + 1\n            end\n        end\n        return odd_count\n  \
+    \  end\n    return words\nend", "    local words = {}\n    for word in txt:gmatch('%w+')\
+    \ do\n        table.insert(words, word)\n    end\n    if #words == 0 then\n  \
+    \      local count = 0\n        for i = 1, #txt do\n            if txt:byte(i)\
+    \ - ord('a') % 2 == 1 then\n                count = count + 1\n            end\n\
+    \        end\n        return count\n    end\n    return words\nend", "    local\
+    \ words = {}\n    local i = 1\n    for word in txt:gmatch('%S+') do\n        words[i]\
+    \ = word\n        i = i + 1\n    end\n    if #words == 0 then\n        local count\
+    \ = 0\n        for c in txt:gmatch('.') do\n            local n = c:byte() - string.byte('a')\n\
+    \            if n % 2 == 1 then\n                count = count + 1\n         \
+    \   end\n        end\n        return count\n    end\n    return words\nend", " \
+    \   local words = {}\n    local word = ''\n    local count = 0\n    for i = 1,\
+    \ #txt do\n        local char = txt:sub(i, i)\n        if char == ' ' or char\
+    \ == ',' then\n            if word ~= '' then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. char\n        end\n    end\n    if word ~= '' then\n       \
+    \ table.insert(words, word)\n    end\n    if #words == 0 then\n        for i =\
+    \ 1, #txt do\n            local char = txt:sub(i, i)\n            local ord =\
+    \ string.byte(char) - string.byte('a')\n            if ord % 2 == 1 then\n   \
+    \             count = count + 1\n            end\n        end\n        return\
+    \ count\n    end\n    return words\nend", "  local words = {}\n  for word in txt:gmatch('%S+')\
+    \ do\n    words[#words + 1] = word\n  end\n  if #words == 0 then\n    local count\
+    \ = 0\n    for i = 1, #txt do\n      local c = txt:sub(i, i)\n      if c:match('%l')\
+    \ and i % 2 == 1 then\n        count = count + 1\n      end\n    end\n    return\
+    \ count\n  end\n  return words\nend", "    local words = {}\n    local word =\
+    \ ''\n    local count = 0\n    for i = 1, #txt do\n        local char = txt:sub(i,\
+    \ i)\n        if char == ' ' or char == ',' then\n            if word ~= '' then\n\
+    \                table.insert(words, word)\n                word = ''\n      \
+    \      end\n        else\n            word = word .. char\n        end\n    end\n\
+    \    if word ~= '' then\n        table.insert(words, word)\n    end\n    if #words\
+    \ > 0 then\n        return words\n    end\n    for i = 1, #txt do\n        local\
+    \ char = txt:sub(i, i)\n        if char >= 'a' and char <= 'z' and i % 2 == 1\
+    \ then\n            count = count + 1\n        end\n    end\n    return count\n\
+    end", "    local words = {}\n    local word = ''\n    local count = 0\n    for\
+    \ i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c ==\
+    \ ',' then\n            if #word > 0 then\n                words[#words + 1] =\
+    \ word\n                word = ''\n            end\n        else\n           \
+    \ word = word .. c\n            if c:lower() == c:sub(1, 1) and i % 2 == 1 then\n\
+    \                count = count + 1\n            end\n        end\n    end\n  \
+    \  if #word > 0 then\n        words[#words + 1] = word\n    end\n    if #words\
+    \ > 0 then\n        return words\n    else\n        return count\n    end\nend",
+  "    local words = {}\n    for word in txt:gmatch('%S+') do\n        words[#words\
+    \ + 1] = word\n    end\n    if #words == 0 then\n        for word in txt:gmatch('%a+')\
+    \ do\n            words[#words + 1] = word\n        end\n    end\n    if #words\
+    \ == 0 then\n        local count = 0\n        for i = 1, #txt do\n           \
+    \ local c = txt:sub(i, i)\n            if c:lower() == c and c:byte() % 2 == 1\
+    \ then\n                count = count + 1\n            end\n        end\n    \
+    \    return count\n    end\n    return words\nend", "    local words = {}\n  \
+    \  local word = ''\n    local count = 0\n    for i = 1, #txt do\n        local\
+    \ c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n            if word\
+    \ ~= '' then\n                words[#words + 1] = word\n                word =\
+    \ ''\n            end\n        else\n            word = word .. c\n        end\n\
+    \    end\n    if word ~= '' then\n        words[#words + 1] = word\n    end\n\
+    \    if #words > 0 then\n        return words\n    end\n    for i = 1, #txt do\n\
+    \        local c = txt:sub(i, i)\n        local ord = string.byte(c) - string.byte('a')\n\
+    \        if ord % 2 == 1 then\n            count = count + 1\n        end\n  \
+    \  end\n    return count\nend", "    if txt:find(' ') then\n        return txt:split('\
+    \ ')\n    elseif txt:find(',') then\n        return txt:split(',')\n    else\n\
+    \        local count = 0\n        for i = 1, #txt do\n            local c = txt:sub(i,\
+    \ i)\n            if c:lower() == c and c:byte() % 2 == 1 then\n             \
+    \   count = count + 1\n            end\n        end\n        return count\n  \
+    \  end\nend", "    if txt:find(' ') then\n        return txt:split(' ')\n    elseif\
+    \ txt:find(',') then\n        return txt:split(',')\n    else\n        local count\
+    \ = 0\n        for i = 1, #txt do\n            local c = txt:sub(i, i)\n     \
+    \       if c:lower() == c and c:byte() % 2 == 1 then\n                count =\
+    \ count + 1\n            end\n        end\n        return count\n    end\nend",
+  "    local words = {}\n    for word in txt:gmatch('%S+') do\n        words[#words\
+    \ + 1] = word\n    end\n    if #words == 0 then\n        local count = 0\n   \
+    \     for i = 1, #txt do\n            local c = txt:sub(i, i)\n            if\
+    \ c >= 'a' and c <= 'z' and i % 2 == 1 then\n                count = count + 1\n\
+    \            end\n        end\n        return count\n    end\n    return words\n\
+    end", "    local words = {}\n    local word = ''\n    local odd_count = 0\n  \
+    \  for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or\
+    \ c == ',' then\n            if #word > 0 then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. c\n            if string.byte(c) % 2 == 1 then\n           \
+    \     odd_count = odd_count + 1\n            end\n        end\n    end\n    if\
+    \ #word > 0 then\n        table.insert(words, word)\n    end\n    if #words >\
+    \ 0 then\n        return words\n    else\n        return odd_count\n    end\n\
+    end", "    local words = {}\n    local word = ''\n    local count = 0\n    for\
+    \ i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c ==\
+    \ ',' then\n            if #word > 0 then\n                words[#words + 1] =\
+    \ word\n                word = ''\n            end\n        else\n           \
+    \ word = word .. c\n        end\n    end\n    if #word > 0 then\n        words[#words\
+    \ + 1] = word\n    end\n    if #words > 0 then\n        return words\n    end\n\
+    \    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        local ord =\
+    \ string.byte(c) - string.byte('a')\n        if ord % 2 == 1 then\n          \
+    \  count = count + 1\n        end\n    end\n    return count\nend", "    local\
+    \ words = {}\n    local word = ''\n    local count = 0\n    for i = 1, #txt do\n\
+    \        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n     \
+    \       if #word > 0 then\n                table.insert(words, word)\n       \
+    \         word = ''\n            end\n        else\n            word = word ..\
+    \ c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     for i = 1, #txt do\n            local c = txt:sub(i, i)\n            local\
+    \ o = string.byte(c) - string.byte('a')\n            if o % 2 == 1 then\n    \
+    \            count = count + 1\n            end\n        end\n        return count\n\
+    \    end\nend", "    local words = {}\n    local word = ''\n    local count =\
+    \ 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c ==\
+    \ ' ' or c == ',' then\n            if #word > 0 then\n                words[#words\
+    \ + 1] = word\n                word = ''\n            end\n        else\n    \
+    \        word = word .. c\n        end\n    end\n    if #word > 0 then\n     \
+    \   words[#words + 1] = word\n    end\n    if #words > 0 then\n        return\
+    \ words\n    end\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n  \
+    \      local o = c:byte() - 97\n        if o % 2 == 1 then\n            count\
+    \ = count + 1\n        end\n    end\n    return count\nend", "    local words\
+    \ = {}\n    local word = ''\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        if c == ' ' or c == ',' then\n            if #word > 0 then\n  \
+    \              table.insert(words, word)\n                word = ''\n        \
+    \    end\n        else\n            word = word .. c\n        end\n    end\n \
+    \   if #word > 0 then\n        table.insert(words, word)\n    end\n    if #words\
+    \ > 0 then\n        return words\n    else\n        local count = 0\n        for\
+    \ i = 1, #txt do\n            local c = txt:sub(i, i)\n            local o = string.byte(c)\
+    \ - string.byte('a')\n            if o % 2 == 1 then\n                count =\
+    \ count + 1\n            end\n        end\n        return count\n    end\nend",
+  "    local words = {}\n    local i = 1\n    for word in txt:gmatch('%S+') do\n \
+    \       words[i] = word\n        i = i + 1\n    end\n    if #words == 0 then\n\
+    \        local count = 0\n        for i = 1, #txt do\n            if txt:byte(i)\
+    \ - 96 & 1 == 1 then\n                count = count + 1\n            end\n   \
+    \     end\n        return count\n    end\n    return words\nend", "    local words\
+    \ = {}\n    local word = ''\n    local count = 0\n    for i = 1, #txt do\n   \
+    \     local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n        \
+    \    if #word > 0 then\n                words[#words + 1] = word\n           \
+    \     word = ''\n            end\n        else\n            word = word .. c\n\
+    \        end\n    end\n    if #word > 0 then\n        words[#words + 1] = word\n\
+    \    end\n    if #words > 0 then\n        return words\n    end\n    for i = 1,\
+    \ #txt do\n        local c = txt:sub(i, i)\n        local o = string.byte(c) -\
+    \ string.byte('a')\n        if o % 2 == 1 then\n            count = count + 1\n\
+    \        end\n    end\n    return count\nend", "    local words = {}\n    for\
+    \ word in string.gmatch(txt, \"[^%s]+\") do\n        table.insert(words, word)\n\
+    \    end\n    if #words == 0 then\n        for word in string.gmatch(txt, \"[^,]+\"\
+    ) do\n            table.insert(words, word)\n        end\n    end\n    if #words\
+    \ == 0 then\n        local count = 0\n        for i = 1, #txt do\n           \
+    \ local c = string.byte(txt, i)\n            if c >= string.byte('a') and c <=\
+    \ string.byte('z') and i % 2 == 1 then\n                count = count + 1\n  \
+    \          end\n        end\n        return count\n    end\n    return words\n\
+    end", "    local words = {}\n    local i = 1\n    local j = 1\n    local n = 0\n\
+    \    while true do\n        local c = txt:sub(i, i)\n        if c == ' ' or c\
+    \ == ',' or c == '' then\n            if i > j then\n                words[#words\
+    \ + 1] = txt:sub(j, i - 1)\n            end\n            if c == '' then\n   \
+    \             break\n            end\n            j = i + 1\n        elseif c:match('%l')\
+    \ then\n            n = n + (ord(c) % 2)\n        end\n        i = i + 1\n   \
+    \ end\n    if #words == 0 then\n        return n\n    end\n    return words\n\
+    end", "    local words = {}\n    for word in txt:gmatch('%S+') do\n        words[#words\
+    \ + 1] = word\n    end\n    if #words == 0 then\n        local count = 0\n   \
+    \     for c in txt:gmatch('[a-z]') do\n            if (c:byte() - 97) % 2 == 1\
+    \ then\n                count = count + 1\n            end\n        end\n    \
+    \    return count\n    end\n    return words\nend", "    local words = {}\n  \
+    \  local i = 1\n    for word in txt:gmatch('%S+') do\n        words[i] = word\n\
+    \        i = i + 1\n    end\n    if #words == 0 then\n        local count = 0\n\
+    \        for c in txt:gmatch('[a-z]') do\n            if (c:byte() - 97) % 2 ==\
+    \ 1 then\n                count = count + 1\n            end\n        end\n  \
+    \      return count\n    end\n    return words\nend", "    local words = {}\n\
+    \    local i = 1\n    for word in txt:gmatch('%S+') do\n        words[i] = word\n\
+    \        i = i + 1\n    end\n    if #words == 0 then\n        local count = 0\n\
+    \        for c in txt:gmatch('.') do\n            if c:byte() >= 97 and c:byte()\
+    \ <= 122 and (c:byte() - 96) % 2 == 1 then\n                count = count + 1\n\
+    \            end\n        end\n        return count\n    end\n    return words\n\
+    end", "  local t = {}\n  local i = 1\n  local j = 1\n  local k = 1\n  local n\
+    \ = 0\n  local c = 0\n  local s = 0\n  local e = 0\n  local f = 0\n  local l =\
+    \ string.len(txt)\n  while i <= l do\n    j = i\n    while j <= l and string.byte(txt,\
+    \ j) ~= 32 and string.byte(txt, j) ~= 44 do\n      j = j + 1\n    end\n    if\
+    \ j > i then\n      if j < l then\n        k = j + 1\n        while k <= l and\
+    \ string.byte(txt, k) ~= 32 and string.byte(txt, k) ~= 44 do\n          k = k\
+    \ + 1\n        end\n        if k > j + 1 then\n          t[#t + 1] = string.sub(txt,\
+    \ i, j - 1)\n          i = k\n        else\n          i = j\n        end\n   \
+    \   else\n        t[#t + 1] = string.sub(txt, i, j - 1)\n        i = j\n     \
+    \ end\n    else\n      i = j + 1\n    end\n  end\n  if #t == 0 then\n    while\
+    \ i <= l do\n      c = string.byte(txt, i)\n      if c >= 97 and c <= 122 then\n\
+    \        if (c - 97) % 2 == 0 then\n          s = s + 1\n        else\n      \
+    \    e = e + 1\n        end\n      end\n      i = i + 1\n    end\n    if s > e\
+    \ then\n      f = e\n    else\n      f = s\n    end\n    return f\n  else\n  \
+    \  return t\n  end\nend", "    local words = {}\n    local word = ''\n    for\
+    \ i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c ==\
+    \ ',' then\n            if #word > 0 then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     local count = 0\n        for i = 1, #txt do\n            local c = txt:sub(i,\
+    \ i)\n            local o = string.byte(c) - string.byte('a')\n            if\
+    \ o % 2 == 1 then\n                count = count + 1\n            end\n      \
+    \  end\n        return count\n    end\nend", "    local words = {}\n    local\
+    \ word = ''\n    local odd_count = 0\n    for i = 1, #txt do\n        local c\
+    \ = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n            if word ~=\
+    \ '' then\n                table.insert(words, word)\n                word = ''\n\
+    \            end\n        else\n            word = word .. c\n            if i\
+    \ % 2 == 1 then\n                odd_count = odd_count + 1\n            end\n\
+    \        end\n    end\n    if word ~= '' then\n        table.insert(words, word)\n\
+    \    end\n    if #words > 0 then\n        return words\n    else\n        return\
+    \ odd_count\n    end\nend", "    local words = {}\n    for word in txt:gmatch('%S+')\
+    \ do\n        table.insert(words, word)\n    end\n    if #words == 0 then\n  \
+    \      local count = 0\n        for i = 1, #txt do\n            local c = txt:sub(i,\
+    \ i)\n            if c:lower() == c and (i % 2) == 1 then\n                count\
+    \ = count + 1\n            end\n        end\n        return count\n    end\n \
+    \   return words\nend", "    local words = {}\n    local word = ''\n    local\
+    \ count = 0\n    for i = 1, #txt do\n        local char = txt:sub(i, i)\n    \
+    \    if char == ' ' or char == ',' then\n            if #word > 0 then\n     \
+    \           words[#words + 1] = word\n                word = ''\n            end\n\
+    \        else\n            word = word .. char\n            if char:lower() ==\
+    \ char:sub(1, 1) and char:lower() == char:sub(1, 1):byte() % 2 == 1 then\n   \
+    \             count = count + 1\n            end\n        end\n    end\n    if\
+    \ #word > 0 then\n        words[#words + 1] = word\n    end\n    if #words > 0\
+    \ then\n        return words\n    else\n        return count\n    end\nend", " \
+    \   local words = {}\n    local i = 1\n    for word in txt:gmatch('%S+') do\n\
+    \        words[i] = word\n        i = i + 1\n    end\n    if #words == 0 then\n\
+    \        local sum = 0\n        for i = 1, #txt do\n            if txt:byte(i)\
+    \ - ord('a') % 2 == 1 then\n                sum = sum + 1\n            end\n \
+    \       end\n        return sum\n    end\n    return words\nend", "    local words\
+    \ = {}\n    local i = 1\n    local j = 1\n    local count = 0\n    while i <=\
+    \ #txt do\n        if txt:sub(i, i) == ' ' or txt:sub(i, i) == ',' then\n    \
+    \        if i > j then\n                words[#words + 1] = txt:sub(j, i - 1)\n\
+    \            end\n            j = i + 1\n        elseif txt:sub(i, i) >= 'a' and\
+    \ txt:sub(i, i) <= 'z' then\n            count = count + (i - j) % 2\n       \
+    \ end\n        i = i + 1\n    end\n    if i > j then\n        words[#words + 1]\
+    \ = txt:sub(j, i - 1)\n    end\n    if #words == 0 then\n        return count\n\
+    \    else\n        return words\n    end\nend", "    local words = {}\n    for\
+    \ word in txt:gmatch('%S+') do\n        words[#words + 1] = word\n    end\n  \
+    \  if #words == 0 then\n        for word in txt:gmatch('%a+') do\n           \
+    \ words[#words + 1] = word\n        end\n    end\n    if #words == 0 then\n  \
+    \      local count = 0\n        for i = 1, #txt do\n            if txt:byte(i)\
+    \ % 2 == 1 then\n                count = count + 1\n            end\n        end\n\
+    \        return count\n    end\n    return words\nend", "    local words = {}\n\
+    \    local word = ''\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n\
+    \        if c == ' ' or c == ',' then\n            if #word > 0 then\n       \
+    \         table.insert(words, word)\n                word = ''\n            end\n\
+    \        else\n            word = word .. c\n        end\n    end\n    if #word\
+    \ > 0 then\n        table.insert(words, word)\n    end\n    if #words > 0 then\n\
+    \        return words\n    else\n        local count = 0\n        for i = 1, #txt\
+    \ do\n            local c = txt:sub(i, i)\n            local o = string.byte(c)\
+    \ - string.byte('a')\n            if o % 2 == 1 then\n                count =\
+    \ count + 1\n            end\n        end\n        return count\n    end\nend",
+  "    local words = {}\n    for word in txt:gmatch('%S+') do\n        table.insert(words,\
+    \ word)\n    end\n    if #words == 0 then\n        local odd_letters = 0\n   \
+    \     for i = 1, #txt do\n            local c = txt:sub(i, i)\n            if\
+    \ c:lower() ~= c:upper() then\n                if (c:lower():byte() - 97) % 2\
+    \ == 1 then\n                    odd_letters = odd_letters + 1\n             \
+    \   end\n            end\n        end\n        return odd_letters\n    end\n \
+    \   return words\nend", "    local words = {}\n    local word = \"\"\n    for\
+    \ i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == \" \" or c\
+    \ == \",\" then\n            if #word > 0 then\n                table.insert(words,\
+    \ word)\n                word = \"\"\n            end\n        else\n        \
+    \    word = word .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     local count = 0\n        for i = 1, #txt do\n            local c = txt:sub(i,\
+    \ i)\n            local o = string.byte(c) - string.byte('a')\n            if\
+    \ o % 2 == 1 then\n                count = count + 1\n            end\n      \
+    \  end\n        return count\n    end\nend", "    local words = {}\n    local\
+    \ word = ''\n    local count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        if c == ' ' or c == ',' then\n            if #word > 0 then\n  \
+    \              table.insert(words, word)\n                word = ''\n        \
+    \    end\n        else\n            word = word .. c\n        end\n    end\n \
+    \   if #word > 0 then\n        table.insert(words, word)\n    end\n    if #words\
+    \ > 0 then\n        return words\n    else\n        for i = 1, #txt do\n     \
+    \       local c = txt:sub(i, i)\n            local o = c:byte() - string.byte('a')\n\
+    \            if o % 2 == 1 then\n                count = count + 1\n         \
+    \   end\n        end\n        return count\n    end\nend", "    local words =\
+    \ {}\n    local n = 0\n    for word in string.gmatch(txt, \"[^%s,]+\") do\n  \
+    \      table.insert(words, word)\n        n = n + 1\n    end\n    if n == 0 then\n\
+    \        for c in string.gmatch(txt, \"[a-z]\") do\n            n = n + (string.byte(c)\
+    \ - string.byte('a')) % 2\n        end\n    end\n    return n == 0 and words or\
+    \ n\nend", "    local words = {}\n    local word = ''\n    local odd_count = 0\n\
+    \    for c in txt:gmatch('.') do\n        if c == ' ' or c == ',' then\n     \
+    \       if word ~= '' then\n                words[#words + 1] = word\n       \
+    \         word = ''\n            end\n        else\n            word = word ..\
+    \ c\n            if c:lower() == c then\n                odd_count = odd_count\
+    \ + (c:byte() % 2)\n            end\n        end\n    end\n    if word ~= '' then\n\
+    \        words[#words + 1] = word\n    end\n    if #words > 0 then\n        return\
+    \ words\n    else\n        return odd_count\n    end\nend", "    local words =\
+    \ {}\n    local word = ''\n    local count = 0\n    for i = 1, #txt do\n     \
+    \   local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n          \
+    \  if #word > 0 then\n                table.insert(words, word)\n            \
+    \    word = ''\n            end\n        else\n            word = word .. c\n\
+    \        end\n    end\n    if #word > 0 then\n        table.insert(words, word)\n\
+    \    end\n    if #words > 0 then\n        return words\n    else\n        for\
+    \ i = 1, #txt do\n            local c = txt:sub(i, i)\n            local n = string.byte(c)\
+    \ - string.byte('a')\n            if n % 2 == 1 then\n                count =\
+    \ count + 1\n            end\n        end\n        return count\n    end\nend",
+  "    local words = {}\n    local i = 1\n    for word in txt:gmatch('%S+') do\n \
+    \       words[i] = word\n        i = i + 1\n    end\n    if #words == 0 then\n\
+    \        local count = 0\n        for c in txt:gmatch('.') do\n            if\
+    \ c:byte() >= 97 and c:byte() <= 122 and (c:byte() - 96) % 2 == 1 then\n     \
+    \           count = count + 1\n            end\n        end\n        return count\n\
+    \    end\n    return words\nend", "    local words = {}\n    for word in txt:gmatch('%S+')\
+    \ do\n        table.insert(words, word)\n    end\n    if #words == 0 then\n  \
+    \      local sum = 0\n        for i = 1, #txt do\n            local c = txt:sub(i,\
+    \ i)\n            local n = string.byte(c) - string.byte('a')\n            if\
+    \ n % 2 == 1 then\n                sum = sum + 1\n            end\n        end\n\
+    \        return sum\n    end\n    return words\nend", "    local words = {}\n\
+    \    local i = 1\n    local j = 1\n    local n = 0\n    while true do\n      \
+    \  local c = txt:sub(i, i)\n        if c == ' ' or c == ',' or c == '' then\n\
+    \            if i > j then\n                words[#words + 1] = txt:sub(j, i -\
+    \ 1)\n            end\n            if c == '' then\n                break\n  \
+    \          end\n            j = i + 1\n        elseif c:match('%a') then\n   \
+    \         local ord = c:byte() - ord('a')\n            if ord % 2 == 0 then\n\
+    \                n = n + 1\n            end\n        end\n        i = i + 1\n\
+    \    end\n    if #words == 0 then\n        return n\n    end\n    return words\n\
+    end", "    local words = {}\n    local word = ''\n    local count = 0\n    for\
+    \ i = 1, #txt do\n        local char = txt:sub(i, i)\n        if char == ' ' or\
+    \ char == ',' then\n            if word ~= '' then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. char\n        end\n    end\n    if word ~= '' then\n       \
+    \ table.insert(words, word)\n    end\n    if #words == 0 then\n        for i =\
+    \ 1, #txt do\n            local char = txt:sub(i, i)\n            local ord =\
+    \ string.byte(char) - string.byte('a')\n            if ord % 2 == 1 then\n   \
+    \             count = count + 1\n            end\n        end\n        return\
+    \ count\n    end\n    return words\nend", "    local words = {}\n    for word\
+    \ in txt:gmatch('%S+') do\n        table.insert(words, word)\n    end\n    if\
+    \ #words == 0 then\n        local count = 0\n        for i = 1, #txt do\n    \
+    \        local c = txt:sub(i, i)\n            if c:lower() == c and c:byte() %\
+    \ 2 == 1 then\n                count = count + 1\n            end\n        end\n\
+    \        return count\n    end\n    return words\nend", "    local words = {}\n\
+    \    local word = ''\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n\
+    \        if c == ' ' or c == ',' then\n            if #word > 0 then\n       \
+    \         table.insert(words, word)\n                word = ''\n            end\n\
+    \        else\n            word = word .. c\n        end\n    end\n    if #word\
+    \ > 0 then\n        table.insert(words, word)\n    end\n    if #words > 0 then\n\
+    \        return words\n    else\n        local count = 0\n        for i = 1, #txt\
+    \ do\n            local c = txt:sub(i, i)\n            local o = string.byte(c)\
+    \ - string.byte('a')\n            if o % 2 == 1 then\n                count =\
+    \ count + 1\n            end\n        end\n        return count\n    end\nend",
+  "    local words = {}\n    for word in txt:gmatch('%S+') do\n        table.insert(words,\
+    \ word)\n    end\n    if #words == 0 then\n        local sum = 0\n        for\
+    \ i = 1, #txt do\n            if (i % 2 == 1) and (txt:byte(i) >= 97) and (txt:byte(i)\
+    \ <= 122) then\n                sum = sum + 1\n            end\n        end\n\
+    \        return sum\n    end\n    return words\nend", "    local words = {}\n\
+    \    for word in txt:gmatch('%S+') do\n        table.insert(words, word)\n   \
+    \ end\n    if #words == 0 then\n        local count = 0\n        for i = 1, #txt\
+    \ do\n            if txt:byte(i) - 96 % 2 == 1 then\n                count = count\
+    \ + 1\n            end\n        end\n        return count\n    end\n    return\
+    \ words\nend", "    local words = {}\n    local word = ''\n    local count = 0\n\
+    \    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c == ' '\
+    \ or c == ',' then\n            if word ~= '' then\n                words[#words\
+    \ + 1] = word\n                word = ''\n            end\n        else\n    \
+    \        word = word .. c\n            if c:lower() == c:sub(1, 1) and i % 2 ==\
+    \ 1 then\n                count = count + 1\n            end\n        end\n  \
+    \  end\n    if word ~= '' then\n        words[#words + 1] = word\n    end\n  \
+    \  if #words > 0 then\n        return words\n    else\n        return count\n\
+    \    end\nend", "    local words = {}\n    local word = ''\n    local count =\
+    \ 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n        if c ==\
+    \ ' ' or c == ',' then\n            if #word > 0 then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    else\n   \
+    \     for i = 1, #txt do\n            local c = txt:sub(i, i)\n            if\
+    \ c >= 'a' and c <= 'z' then\n                local n = c:byte() - 'a':byte()\n\
+    \                if n % 2 == 0 then\n                    count = count + 1\n \
+    \               end\n            end\n        end\n        return count\n    end\n\
+    end", "    local words = {}\n    for word in txt:gmatch('%S+') do\n        table.insert(words,\
+    \ word)\n    end\n    if #words == 0 then\n        local count = 0\n        for\
+    \ i = 1, #txt do\n            if txt:byte(i) - ord('a') % 2 == 1 then\n      \
+    \          count = count + 1\n            end\n        end\n        return count\n\
+    \    end\n    return words\nend", "    local words = {}\n    local i = 1\n   \
+    \ for word in txt:gmatch('%S+') do\n        words[i] = word\n        i = i + 1\n\
+    \    end\n    if #words == 0 then\n        local count = 0\n        for c in txt:gmatch('.')\
+    \ do\n            if c:byte() >= 97 and c:byte() <= 122 and (c:byte() - 96) %\
+    \ 2 == 1 then\n                count = count + 1\n            end\n        end\n\
+    \        return count\n    end\n    return words\nend", "    local words = {}\n\
+    \    for word in txt:gmatch('%S+') do\n        table.insert(words, word)\n   \
+    \ end\n    if #words == 0 then\n        local count = 0\n        for i = 1, #txt\
+    \ do\n            local c = txt:sub(i, i)\n            if c:lower() == c and (i\
+    \ % 2) == 1 then\n                count = count + 1\n            end\n       \
+    \ end\n        return count\n    end\n    return words\nend", "    local words\
+    \ = {}\n    local i = 1\n    for word in txt:gmatch('%S+') do\n        words[i]\
+    \ = word\n        i = i + 1\n    end\n    if #words > 0 then\n        return words\n\
+    \    end\n    local odd_letters = 0\n    for c in txt:gmatch('.') do\n       \
+    \ if c:lower() ~= c:upper() then\n            local ord = string.byte(c:lower())\
+    \ - string.byte('a')\n            if ord % 2 == 1 then\n                odd_letters\
+    \ = odd_letters + 1\n            end\n        end\n    end\n    return odd_letters\n\
+    end", "    if txt:find(' ') then\n        return txt:split(' ')\n    elseif txt:find(',')\
+    \ then\n        return txt:split(',')\n    else\n        local count = 0\n   \
+    \     for i = 1, #txt do\n            if txt:byte(i) % 2 == 1 then\n         \
+    \       count = count + 1\n            end\n        end\n        return count\n\
+    \    end\nend", "    local words = {}\n    local word = ''\n    for i = 1, #txt\
+    \ do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n\
+    \            if #word > 0 then\n                table.insert(words, word)\n  \
+    \              word = ''\n            end\n        else\n            word = word\
+    \ .. c\n        end\n    end\n    if #word > 0 then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    end\n    local\
+    \ count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n       \
+    \ local o = c:byte() - string.byte('a')\n        if o % 2 == 1 then\n        \
+    \    count = count + 1\n        end\n    end\n    return count\nend", "  local\
+    \ words = {}\n  local i = 1\n  local j = 1\n  local n = 0\n  while true do\n \
+    \   local c = txt:sub(i, i)\n    if c == ' ' or c == ',' or c == '' then\n   \
+    \   if i > j then\n        words[#words + 1] = txt:sub(j, i - 1)\n      end\n\
+    \      if c == '' then\n        break\n      end\n      j = i + 1\n    end\n \
+    \   i = i + 1\n  end\n  if #words == 0 then\n    for i = 1, #txt do\n      local\
+    \ c = txt:sub(i, i)\n      local o = c:byte() - string.byte('a')\n      if o >=\
+    \ 0 and o < 26 then\n        n = n + (o % 2 == 0 and -1 or 1)\n      end\n   \
+    \ end\n    return n\n  end\n  return words\nend", "    local words = {}\n    local\
+    \ word = ''\n    local count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i,\
+    \ i)\n        if c == ' ' or c == ',' then\n            if #word > 0 then\n  \
+    \              table.insert(words, word)\n                word = ''\n        \
+    \    end\n        else\n            word = word .. c\n        end\n    end\n \
+    \   if #word > 0 then\n        table.insert(words, word)\n    end\n    if #words\
+    \ > 0 then\n        return words\n    else\n        for i = 1, #txt do\n     \
+    \       local c = txt:sub(i, i)\n            local n = string.byte(c) - string.byte('a')\n\
+    \            if n % 2 == 1 then\n                count = count + 1\n         \
+    \   end\n        end\n        return count\n    end\nend", "    local words =\
+    \ {}\n    local i = 1\n    local j = 1\n    local n = 0\n    while true do\n \
+    \       local c = txt:sub(i, i)\n        if c == ' ' or c == ',' or c == '' then\n\
+    \            if i > j then\n                words[#words + 1] = txt:sub(j, i -\
+    \ 1)\n            end\n            if c == '' then\n                break\n  \
+    \          end\n            j = i + 1\n        elseif c >= 'a' and c <= 'z' then\n\
+    \            n = n + (i - 1) % 2\n        end\n        i = i + 1\n    end\n  \
+    \  if #words == 0 then\n        return n\n    end\n    return words\nend", " \
+    \   local words = {}\n    local count = 0\n    for word in txt:gmatch('%S+') do\n\
+    \        words[#words + 1] = word\n    end\n    if #words == 0 then\n        for\
+    \ i = 1, #txt do\n            if txt:sub(i, i):lower():byte() % 2 == 1 then\n\
+    \                count = count + 1\n            end\n        end\n        return\
+    \ count\n    end\n    return words\nend", "  local words = {}\n  local word =\
+    \ ''\n  local count = 0\n  for i = 1, #txt do\n    local c = txt:sub(i, i)\n \
+    \   if c == ' ' or c == ',' then\n      if #word > 0 then\n        words[#words\
+    \ + 1] = word\n        word = ''\n      end\n    else\n      word = word .. c\n\
+    \    end\n  end\n  if #word > 0 then\n    words[#words + 1] = word\n  end\n  if\
+    \ #words > 0 then\n    return words\n  end\n  for i = 1, #txt do\n    local c\
+    \ = txt:sub(i, i)\n    local ord = string.byte(c) - string.byte('a')\n    if ord\
+    \ % 2 == 1 then\n      count = count + 1\n    end\n  end\n  return count\nend",
+  "    local words = {}\n    local word = ''\n    local odd_count = 0\n    for i =\
+    \ 1, #txt do\n        local char = txt:sub(i, i)\n        if char == ' ' or char\
+    \ == ',' then\n            if word ~= '' then\n                table.insert(words,\
+    \ word)\n                word = ''\n            end\n        else\n          \
+    \  word = word .. char\n            if i % 2 == 1 then\n                odd_count\
+    \ = odd_count + 1\n            end\n        end\n    end\n    if word ~= '' then\n\
+    \        table.insert(words, word)\n    end\n    if #words > 0 then\n        return\
+    \ words\n    else\n        return odd_count\n    end\nend", "  local words = {}\n\
+    \  local word = ''\n  local count = 0\n  for i = 1, #txt do\n    local c = txt:sub(i,\
+    \ i)\n    if c == ' ' or c == ',' then\n      if word ~= '' then\n        words[#words\
+    \ + 1] = word\n        word = ''\n      end\n    else\n      word = word .. c\n\
+    \    end\n  end\n  if word ~= '' then\n    words[#words + 1] = word\n  end\n \
+    \ if #words > 0 then\n    return words\n  end\n  for i = 1, #txt do\n    local\
+    \ c = txt:sub(i, i)\n    local o = string.byte(c) - string.byte('a')\n    if o\
+    \ % 2 == 1 then\n      count = count + 1\n    end\n  end\n  return count\nend",
+  "    local words = {}\n    local word = ''\n    local count = 0\n    for i = 1,\
+    \ #txt do\n        local c = txt:sub(i, i)\n        if c == ' ' or c == ',' then\n\
+    \            if word ~= '' then\n                table.insert(words, word)\n \
+    \               word = ''\n            end\n        else\n            word = word\
+    \ .. c\n        end\n    end\n    if word ~= '' then\n        table.insert(words,\
+    \ word)\n    end\n    if #words > 0 then\n        return words\n    end\n    for\
+    \ i = 1, #txt do\n        local c = txt:sub(i, i)\n        local o = c:byte()\
+    \ - string.byte('a')\n        if o % 2 == 1 then\n            count = count +\
+    \ 1\n        end\n    end\n    return count\nend", "    local words = {}\n   \
+    \ for word in txt:gmatch('%S+') do\n        words[#words + 1] = word\n    end\n\
+    \    if #words == 0 then\n        for word in txt:gmatch('[^,]+') do\n       \
+    \     words[#words + 1] = word\n        end\n    end\n    if #words == 0 then\n\
+    \        local count = 0\n        for i = 1, #txt do\n            local c = txt:sub(i,\
+    \ i)\n            if c:match('%l') and i % 2 == 1 then\n                count\
+    \ = count + 1\n            end\n        end\n        return count\n    end\n \
+    \   return words\nend", "    local words = {}\n    local word = ''\n    local\
+    \ count = 0\n    for i = 1, #txt do\n        local c = txt:sub(i, i)\n       \
+    \ if c == ' ' or c == ',' then\n            if #word > 0 then\n              \
+    \  table.insert(words, word)\n                word = ''\n            end\n   \
+    \     else\n            word = word .. c\n        end\n    end\n    if #word >\
+    \ 0 then\n        table.insert(words, word)\n    end\n    if #words > 0 then\n\
+    \        return words\n    else\n        for i = 1, #txt do\n            local\
+    \ c = txt:sub(i, i)\n            local n = string.byte(c) - string.byte('a')\n\
+    \            if n % 2 == 1 then\n                count = count + 1\n         \
+    \   end\n        end\n        return count\n    end\nend", "    local words =\
+    \ {}\n    for word in txt:gmatch('%S+') do\n        words[#words + 1] = word\n\
+    \    end\n    if #words == 0 then\n        local count = 0\n        for i = 1,\
+    \ #txt do\n            if (txt:byte(i) - ord('a')) % 2 == 1 then\n           \
+    \     count = count + 1\n            end\n        end\n        return count\n\
+    \    end\n    return words\nend"]
+stop_tokens:
+- "\nlocal"
+- "\nfunction"
+- "\n--"
+- "\n\n"
