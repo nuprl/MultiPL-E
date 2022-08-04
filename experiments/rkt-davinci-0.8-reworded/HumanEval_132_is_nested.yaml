@@ -16,7 +16,153 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate i
   ) #f)\n    (check-equal? (candidate \"[[]][[\") #t)\n    (check-equal? (candidate\
   \ \"[[][]]\") #t)\n    (check-equal? (candidate \"\") #f)\n    (check-equal? (candidate\
   \ \"[[[[[[[[\") #f)\n    (check-equal? (candidate \"]]]]]]]]\") #f)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (define (helper string stack)\n    (cond\n      [(empty? string)\
+    \ (equal? 0 (length stack))]\n      [(equal? (string-ref string 0) #\\[) (helper\
+    \ (substring string 1) (cons #\\[ stack))]\n      [(equal? (string-ref string\
+    \ 0) #\\]) (if (equal? (car stack) #\\[)\n                                   \
+    \           (helper (substring string 1) (cdr stack))\n                      \
+    \                        #f)]))\n  (helper string '()))\n", "  (let loop ([string\
+    \ string] [stack (list)])\n    (cond [(empty? string) (empty? stack)]\n      \
+    \    [(and (eq? (first string) #\\[) (empty? stack)) (loop (rest string) (cons\
+    \ #\\[ stack))]\n          [(and (eq? (first string) #\\]) (eq? (first stack)\
+    \ #\\[)) (loop (rest string) (rest stack))]\n          [(or (eq? (first string)\
+    \ #\\[) (eq? (first string) #\\])) (loop (rest string) stack)]\n          [else\
+    \ (loop (rest string) stack)])))\n", "  (define (check-nest string)\n    (define\
+    \ (iter rest seen)\n      (if (empty? rest)\n          (if (empty? seen)\n   \
+    \           #t\n              #f)\n          (if (eq? (first rest) \"[\")\n  \
+    \            (iter (rest rest) (cons (first rest) seen))\n              (if (empty?\
+    \ seen)\n                  #f\n                  (iter (rest rest) (rest seen))))))\n\
+    \    (iter string '()))\n  (check-nest string))\n</code>\nbut I don't know how\
+    \ to convert it to Python.\nWhat I have so far is this:\n<code>def is_nested(s):\n\
+    \    def check_nest(s):\n        def iter(rest, seen):\n            if not rest:\n\
+    \                if not seen:\n                    return True\n             \
+    \   else:\n                    return False\n            if rest[0] == \"[\":\n\
+    \                iter(rest[1:], seen.append(rest[0]))\n            else:\n   \
+    \             if not seen:\n                    return False\n               \
+    \ else:\n                    iter(rest[1:], seen[1:])\n        iter(s, [])\n \
+    \   check_nest(s)\n</code>\nBut it doesn't work at all (it gives only <code>None</code>).\
+    \ What am I doing wrong?\n\n\nA:\n\nIt seems you've misunderstood how <code>list.append</code>\
+    \ works. From the docs:\n<blockquote>\n<p>L.append(object) -- append object to\
+    \ end</p>\n<p>Return Value</p>\n<p>None</p>\n</blockquote>\nThat is, <code>append</code>\
+    \ returns <code>None</code> (it doesn't return the modified list).\nSince you're\
+    \ calling <code>iter</code> with the result of <code>seen.append(rest[0])</code>,\
+    \ you're calling it with <code>None</code> instead of a list. This will cause\
+    \ <code>not seen</code> to be <code>True</code> in every recursive call (since\
+    \ <code>seen</code> is never assigned a list), which means the recursive calls\
+    \ will always return <code>False</code>.\nUse <code", "\t(let* ([valid-left-brackets\
+    \ '(#\\[)]\n\t\t\t\t [valid-right-brackets '(#\\])]\n\t\t\t\t [chars (string->list\
+    \ string)]\n\t\t\t\t [nested? (let recur ([stack '()] [remaining chars])\n\t\t\
+    \t\t\t\t\t\t\t\t(if (empty? remaining)\n\t\t\t\t\t\t\t\t\t\t\t\t(not (empty? stack))\n\
+    \t\t\t\t\t\t\t\t\t\t\t\t(let ([char (car remaining)])\n\t\t\t\t\t\t\t\t\t\t\t\t\
+    \t(cond\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t [(member char valid-left-brackets)\n\t\t\
+    \t\t\t\t\t\t\t\t\t\t\t\t\t(recur (cons char stack) (cdr remaining))]\n\t\t\t\t\
+    \t\t\t\t\t\t\t\t\t\t [(member char valid-right-brackets)\n\t\t\t\t\t\t\t\t\t\t\
+    \t\t\t\t\t(recur (cdr stack) (cdr remaining))]\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t [else\n\
+    \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(recur stack (cdr remaining))]))))])\n\t\tnested?))\n",
+  "  (define (iter string sum)\n    (cond\n      [(empty? string)\n       (if (positive?\
+    \ sum) #f\n           #t)]\n      [(char=? (first string) #\\[)\n       (iter\
+    \ (rest string) (+ sum 1))]\n      [(char=? (first string) #\\])\n       (if (negative?\
+    \ sum) #f\n           (iter (rest string) (- sum 1)))]))\n  (iter string 0))\n\
+    ```", "  (cond [(empty? string) #f]\n        [(empty? (rest string)) #f]\n   \
+    \     [(and (equal? (first string) #\\[)\n              (equal? (last string)\
+    \ #\\]))\n         (is_nested (substring string 1 (- (string-length string) 1)))]\n\
+    \        [else\n         (or (equal? (first string) #\\[)\n             (equal?\
+    \ (last string) #\\])\n             (is_nested (rest string))\n             (is_nested\
+    \ (substring string 0 (- (string-length string) 1))))]))\n", "  (cond ((empty?\
+    \ string) #f)\n        ((or (= (first string) #\\[) (is_nested (rest string)))\n\
+    \         (if (and (not (empty? (rest string))) (= (second string) #\\]))\n  \
+    \           #t\n             (is_nested (rest string))))\n        (else #f)))",
+  "  (cond\n    [(empty? string) #f]\n    [(= (string-length string) 2) #t]\n    [(string=?\
+    \ (string-append (take (string-length string) string) \"[\") \"[]\") #t]\n   \
+    \ [(string=? (string-append (take (string-length string) string) \"]\") \"[]\"\
+    ) #t]\n    [else (is_nested (drop (string-length string) string))]))\n", "  (define\
+    \ (square-brackets? char)\n    (member char '(#\\[ #\\])))\n  (define (nested?\
+    \ stack char)\n    (cond ((member char '(#\\]))\n           (and (not (empty?\
+    \ stack))\n                (eq? (first stack) #\\[)))\n          ((eq? char #\\\
+    [)\n           (and (empty? stack)\n                (not (member #\\] stack))))\n\
+    \          (else (and (not (empty? stack))\n                     (not (member\
+    \ #\\] stack))))))\n  (define (helper stack char)\n    (cond ((empty? stack)\n\
+    \           (cons char stack))\n          ((nested? stack char)\n           (cons\
+    \ char stack))\n          (else stack)))\n  (define (make-stack string)\n    (foldl\
+    \ helper '() string))\n  (let ((stack (make-stack (filter square-brackets? string))))\n\
+    \    (and (not (empty? stack))\n         (eq? (first stack) #\\[)\n         (nested?\
+    \ stack (first stack)))))\n", "  (define (iter start end)\n    (cond\n      [(>\
+    \ end start) #f]\n      [(string-ref string start) (iter (+ start 1) end)]\n \
+    \     [(string-ref string end) (iter start (- end 1))]\n      [else (list (= end\
+    \ (+ start 1)) (= start (- end 1)))]))\n  (if (= (string-length string) 2) (iter\
+    \ 0 1) (if (even? (string-length string)) #f (iter 0 (- (string-length string)\
+    \ 1)))))\n```\n\n```racket\n#lang racket\n", "  (if (not (string? string))\n \
+    \     (is_nested (symbol->string string)))\n  (displayln string)\n  (define opening-brackets\
+    \ (list #\\[))\n  (define closing-brackets (list #\\]))\n  (define substring (substring\
+    \ string 0 1))\n  (define tail (substring string 1 (string-length string)))\n\
+    \  (define brackets (list substring))\n  (define (inner string)\n    (define substring\
+    \ (substring string 0 1))\n    (define tail (substring string 1 (string-length\
+    \ string)))\n    (define brackets (cons substring brackets))\n    (if (string=?\
+    \ tail \"\")\n        (check-brackets (reverse brackets))\n        (inner tail)))\n\
+    \  (inner tail))\n", "  (define (helper count start-bracket s)\n    (if (string-empty?\
+    \ s)\n        (if (equal? count 0)\n            #t\n            #f)\n        (if\
+    \ (equal? (string-ref s 0) start-bracket)\n            (helper (add1 count) start-bracket\
+    \ (substring s 1))\n            (if (zero? count)\n                (helper 1 (string-ref\
+    \ s 0) (substring s 1))\n                (helper (sub1 count) start-bracket (substring\
+    \ s 1))))))\n  (helper 0 \"\" string))\n```\n\n## String functions\n\n[Racket\
+    \ String Function Documentation](https://docs.racket-lang.org/reference/strings.html)\n\
+    \n[Racket String and List Functions](https://docs.racket-lang.org/reference/pairs.html)\n\
+    \n[Racket Character Functions](https://docs.racket-lang.org/reference/characters.html)\n\
+    \n[Racket String and Character Constants](https://docs.racket-lang.org/reference/string-constants.html)\n\
+    \n[Racket String Length](https://docs.racket-lang.org/reference/strings.html#%28def._%28%28lib._racket%2Fstring..rkt%29._string-length%29%29)\n\
+    \n[Racket String Index](https://docs.racket-lang.org/reference/strings.html#%28def._%28%28lib._racket%2Fstring..rkt%29._string-ref%29%29)\n\
+    \n[Racket Character Comparison](https://docs.racket-lang.org/reference/characters.html#%28def._%28%28lib._racket%2Fprivate%2Fmisc..rkt%29._char=%3f%29%29)\n\
+    \n[Racket Character Equality](https://docs.racket-lang.org/reference/characters.html#%28def._%28%28lib._racket%2Fprivate%2Fmisc..rkt%29._char-ci=%3f%29%29)\n\
+    \n[Racket String Subsequence](https://docs.racket-", "  (cond\n    [(empty? string)\
+    \ #f]\n    [(= (count-all-open-brackets string) (count-all-closed-brackets string))\
+    \ #f]\n    [else #t]))\n", "  (if (equal? (string-length string) 0)\n      #f\n\
+    \      (define (helper string open square-brackets counter)\n        (if (equal?\
+    \ (string-length string) 0)\n            (if (or (equal? counter 0) (equal? counter\
+    \ 1))\n                #f\n                #t)\n            (if (and (equal? open\
+    \ #\\[) (equal? (string-ref string 0) #\\]))\n                (helper (substring\
+    \ string 1) open square-brackets (add1 counter))\n                (if (and (equal?\
+    \ open #\\[) (equal? (string-ref string 0) #\\[))\n                    (helper\
+    \ (substring string 1) (string-ref string 0) (add1 square-brackets) counter)\n\
+    \                    (if (and (equal? open #\\]) (equal? (string-ref string 0)\
+    \ #\\[))\n                        (helper (substring string 1) (string-ref string\
+    \ 0) (add1 square-brackets) counter)\n                        (if (and (equal?\
+    \ open #\\]) (equal? (string-ref string 0) #\\]))\n                          \
+    \  (if (zero? square-brackets)\n                                (helper (substring\
+    \ string 1) (string-ref string 0) square-brackets counter)\n                 \
+    \               (helper (substring string 1) (string-ref string 0) (sub1 square-brackets)\
+    \ counter))\n                            (helper (substring string 1) (string-ref\
+    \ string 0) square-brackets counter)))))))\n      (helper string #\\[ 0 0)))\n\
+    \  ", "    (define (helper string accumulator)\n        (cond\n            [(empty?\
+    \ string) accumulator]\n            [(and (<= accumulator 0) (not (empty? string)))\
+    \ #f]\n            [(equal? (first string) \"[\") (helper (rest string) (+ accumulator\
+    \ 1))]\n            [(equal? (first string) \"]\") (helper (rest string) (- accumulator\
+    \ 1))]))\n    (if (= (length string) 0)\n        #f\n        (helper string 0)))\n",
+  "  (define (is_nested-helper str count)\n    (if (string-empty? str)\n        (if\
+    \ (= count 0)\n            #t\n            #f)\n        (if (char=? (string-ref\
+    \ str 0) #\\[)\n            (is_nested-helper (substring str 1) (+ count 1))\n\
+    \            (if (= count 0)\n                #f\n                (is_nested-helper\
+    \ (substring str 1) (- count 1))))))\n  (is_nested-helper string 0))\n```", " \
+    \ (define (helper bs string)\n    (cond [(empty? string) (empty? bs)]\n      \
+    \    [(equal? (first string) \"[\")\n           (helper (cons (first string) bs)\
+    \ (rest string))]\n          [(equal? (first string) \"]\")\n           (cond\
+    \ [(empty? bs) #f]\n                 [else (helper (rest bs) (rest string))])]))\n\
+    \  (helper empty string))\n```\n\n```#lang racket\n", "  (is_nested_inner (string->list\
+    \ string) 0))\n", "  (define (is_nested-inner string expected)\n    (if (null?\
+    \ string)\n        (= expected 0)\n        (let ((char (car string)))\n      \
+    \    (if (char=? char #\\[)\n              (is_nested-inner (cdr string) (+ expected\
+    \ 1))\n              (if (char=? char #\\])\n                  (if (= expected\
+    \ 0)\n                      #f\n                      (is_nested-inner (cdr string)\
+    \ (- expected 1)))\n                  #f)))))\n  (is_nested-inner string 0))\n\
+    ```\n\n### CSS Colors\n\n```#lang racket\n", "  (define (helper string i j)\n\
+    \    (if (= i j)\n        string\n        (if (equal? (string-ref string i) (string-ref\
+    \ string (+ j 1)))\n            (helper (string-append (substring string 0 i)\n\
+    \                                   (substring string (+ i 2) (+ j 2)))\n    \
+    \                 i (- j 2))\n            (helper string (+ i 1) j))))\n  (define\
+    \ (helper2 str i j)\n    (if (= i j)\n        #t\n        (if (equal? (string-ref\
+    \ str i) (string-ref str j))\n            (helper2 str (+ i 1) (+ j 1))\n    \
+    \        #f)))\n  (let ((str (helper string 0 (- (string-length string) 1))))\n\
+    \    (if (= (string-length str) 0)\n        #f\n        (helper2 str 0 (- (string-length\
+    \ str) 1)))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

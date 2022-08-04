@@ -6,6 +6,69 @@ prompt: "#!/bin/bash\n# Return list of all prefixes from shortest to longest of 
 tests: "}\n\ncandidate() {\n    all_prefixes \"$@\"\n}\n\nset -e\nrun_test() {\n \
   \   [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"asdfgh\") = \"a as asd\
   \ asdf asdfg asdfgh\" ]]\n    [[ $(candidate \"WWW\") = \"W WW WWW\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local -a prefixes\n    prefixes=($1)\n    for ((i=${#prefixes[@]}-1;\
+    \ i>=0; i--)); do\n        prefixes[$i]=\"${prefixes[$i]}${prefixes[$((i+1))]}\"\
+    \n    done\n    prefixes=($prefixes[@])\n    echo ${prefixes[@]}", "    local\
+    \ -r pattern=$1\n\n    local -r prefix_array=( )\n    # This is more efficient\
+    \ than running find_prefix_in_string once\n    # and iterating through the result\
+    \ multiple times.\n    local -r prefix_length=${#pattern}\n    for (( c=0; c<prefix_length;\
+    \ c++ )); do\n        local -r substring=${pattern:${prefix_length-c}:${prefix_length}}\n\
+    \        local -r prefix=$(find_prefix_in_string \"${substring}\")\n        prefix_array+=(\
+    \ \"$prefix\" )\n    done\n\n    echo \"${prefix_array[*]}\"", "  local prefix\n\
+    \  prefix=\"${1:0:1}\"\n  local i\n  for (( i=1; i<=${#1}; i++ )); do\n    local\
+    \ prefix=\"${prefix}${1:i:1}\"\n  done\n  echo \"${prefix}\"", "\techo \"$1\"\
+    \ |\n\tsort |\n\tawk '{ for (i=1; i<=length($0); i++) { printf \"%s[%d]%s\", substr($0,1,i),\
+    \ i, substr($0,i+1); } } '", "    local string prefixes prefix suffix\n    string=$1\n\
+    \    prefixes=()\n    while [[ $string ]]; do\n        prefix=\"${string%%/*}\"\
+    \n        if [[ $prefix ]]; then\n            suffix=\"${string#*$prefix}\"\n\
+    \            prefixes+=(\"$prefix/$suffix\")\n        fi\n        string=${string#?}\n\
+    \    done\n    echo ${prefixes[*]}", "    local prefix_array=()\n    local prefix=''\n\
+    \    while [ $1 ]; do\n        prefix=$1\n        prefix_array+=(\"$prefix\")\n\
+    \        shift\n    done\n    echo \"${prefix_array[@]}\"", "    local s=$1\n\
+    \    local -a list\n    local prefix\n\n    for prefix in \"${(LC_ALL=C echo \"\
+    $s//\" | sort -u)}\"; do\n        [[ $s == $prefix* ]] && list+=(\"$prefix\")\
+    \ || list+=(\"$prefix$s\")\n    done\n    echo \"${list[@]:1}\"", "  local prefixes=()\n\
+    \  local prefix=\"${1#$1}\"\n  local prefix_len=\"${#prefix}\"\n  local -i i\n\
+    \  for (( i=0; i<${#prefix}; i++ )); do\n    local char new_prefix\n    char=\"\
+    ${prefix:$i:1}\"\n    new_prefix=\"${prefix/#?/${char}}\"\n    prefixes[${i}]=$new_prefix\n\
+    \  done\n  echo \"${prefixes[@]}\"", "    local cur=${1:-''}\n    local prefix=''\n\
+    \    local all\n    all=( $cur )\n    for (( i=1 ; i <= ${#all[@]} ; i++ )); do\n\
+    \        cur=${all[$((i-1))]}\n        if [[ \"$cur\" == \"$all[0]\" ]]; then\n\
+    \            prefix=$prefix$all[0]\n        else\n            prefix=$prefix$all[$i]\n\
+    \        fi\n    done\n    echo $prefix", "    local string=$1\n    local shortest\
+    \ longest\n    local i prefix\n    shortest=\"\"\n    longest=\"\"\n    for ((i=0;i<${#string};i++));\
+    \ do\n        prefix=${string:$i:1}\n        if [ -z \"${shortest}\" ]; then\n\
+    \            shortest=${prefix}\n        else\n            if [ \"${shortest}\"\
+    \ == \"${prefix}\" ]; then\n                shortest=${prefix}\n            else\n\
+    \                longest=\"${shortest}\"\n                shortest=${prefix}\n\
+    \            fi\n        fi\n    done\n    echo \"${shortest} ${longest}\"", " \
+    \   string=\"${1}\"\n\n    prefix_list=()\n    for (( i=1; i<=${#string}; i++\
+    \ )); do\n        prefix_list+=(\"${string:$i:1}\")\n    done\n\n    echo \"${prefix_list[@]}\"",
+  "    local -n input=\"$1\"\n    local -n prefixes=()\n\n    for length in ${input:0:${#input}};\
+    \ do\n        prefixes=(\"${prefixes[@]}\" ${input:$length:1})\n    done\n\n \
+    \   IFS=\n    echo \"${prefixes[*]}\"", "    local prefix_length\n    for prefix_length\
+    \ in $(seq 0 \"${#1}\" -1 ); do\n        local prefix\n        local i\n     \
+    \   for prefix in \"${1:0:${prefix_length}}\"; do\n            for (( i = 0; i\
+    \ < ${prefix_length}; i++ )); do\n                local sub\n                for\
+    \ sub in \"${1:${i}:}\"; do\n                    local subprefix\n           \
+    \         for subprefix in \"${prefix:0:${i}}\"; do\n                        echo\
+    \ \"$subprefix$sub\"\n                    done\n                done\n       \
+    \     done\n        done\n    done", "\techo $1 | perl -ne 'BEGIN {=(); }\n\t\t\
+    for (my $i = 0; $i < ($#ARGV + 1); $i++) {\n\t\t\t$hash{$ARGV[$i]} = $i;\n\t\t\
+    }\n\t\tprint \"$_\\n\" foreach (keys %hash); \n\t\tprint scalar keys %hash;\n\t\
+    '", "  local prefix_array output\n  prefix_array=()\n  while [ \"$1\" ]; do\n\
+    \    prefix_array+=(\"$1\")\n    shift\n  done\n  output=\"${prefix_array[@]}\"\
+    \n  printf '%s\\n' \"${prefix_array[@]}\"\n  return 0", "  local prefix_list\n\
+    \  local n=1\n  prefix_list=( $1 )\n  for (( n=0; n<${#prefix_list[@]}; n++ ));\
+    \ do\n    prefix_list[n]=$prefix_list[n]:$2\n  done\n  echo \"${prefix_list[@]}\"",
+  "  local string=$1\n  local prefixes=()\n  local length=0\n  local currlen=0\n \
+    \ while [[ $currlen -ne $length ]]; do\n    length=$(( $currlen + $length ))\n\
+    \    prefixes=(\"${prefixes[*]}\" $1)\n  done\n  echo ${prefixes[*]}", "    local\
+    \ str=${1:?'ERROR: input is not a string'}\n    local prefix_list=\"\"\n    local\
+    \ prefixes=\"\"\n    for ((i=0; i<${#str}; i++)); do\n        prefix_list+=\"\
+    $prefixes ${str:$i:1}\"\n    done\n    eval \"$prefixes\"", "    local n=$1\n\
+    \    local f=$2\n    shift 2\n    local x\n    for (( x=0 ; x<n ; x++ )); do\n\
+    \        local t=$f\n        f=$f$x\n        [[ \"$f\" =~ $t ]] && echo \"$f\"\
+    \n    done", '    echo "$1" | tr a-z A-Z']
 stop_tokens:
 - "\n}"

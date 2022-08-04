@@ -13,7 +13,108 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate c
   \    (check-equal? (candidate \"efef\" \"fee\") #t)\n    (check-equal? (candidate\
   \ \"abab\" \"aabb\") #f)\n    (check-equal? (candidate \"winemtt\" \"tinem\") #t)\n\
   ))\n\n(test-humaneval)"
-completions: []
+completions: ["  (cond [(string=? a b) #t]\n        [(and (string-contains? a b) (string-contains?\
+    \ b a)) #t]\n        [else #f]))\n</code>\nWould this be ok? I am not sure if\
+    \ I'm on the right path and how I could, eventually, check for the rotations.\
+    \ \n\n\nA:\n\nI think you are on the right track.\nYou don't need the strings\
+    \ to be equal: you only need them to be substrings of each other.\nThe \"else\"\
+    \ case is not required, because the answer is already #f by default.\nThe rotations\
+    \ are obtained from the second string through the sequence of <code>substring</code>\
+    \ calls:\n<code>(substring b 1 (add1 (string-length b)))", "  (define start\n\
+    \    (lambda (c-string sub-string)\n      (let ((sub-string-c (string->list sub-string)))\n\
+    \        (cond ((null? c-string) #f)\n              ((equal? (car c-string) (car\
+    \ sub-string-c)) (start (cdr c-string) (cdr sub-string-c)))\n              ((equal?\
+    \ (car c-string) (last sub-string-c)) (start (cdr c-string) (reverse (butlast\
+    \ sub-string-c))))\n              (else (start (cdr c-string) sub-string-c))))))\n\
+    \  (start (string->list a) b))\n", "  (define (c p)\n    (if (= p (string-length\
+    \ b))\n        (regexp-match? (regexp a) b)\n        (or (regexp-match? (regexp\
+    \ (substring b p (string-length b))) a)\n            (c (+ p 1)))))\n  (c 0))\n",
+  "  (define (cycpattern_check_helper c d)\n    (define (helper a b c d count)\n \
+    \     (if (= count (string-length b))\n          #t\n          (if (and (char=?\
+    \ (string-ref a c) (string-ref b d))\n                  (not (and (char=? (string-ref\
+    \ a c) (string-ref b 0))\n                            (char=? (string-ref a (+\
+    \ c 1) (string-ref b 0))\n                                    (char=? (string-ref\
+    \ a (- c 1) (string-ref b 0))))))\n              (helper a b (+ c 1) (+ d 1) (+\
+    \ count 1))\n              (helper a b (+ c 1) d count))))\n    (helper a b c\
+    \ d 0))\n  (define (rotate a)\n    (string-append (substring a 1) (string (string-ref\
+    \ a 0))))\n  (if (or (cycpattern_check_helper 0 0)\n          (cycpattern_check_helper\
+    \ 0 0 (rotate b))\n          (cycpattern_check_helper 0 0 (rotate (rotate b)))\n\
+    \          (cycpattern_check_helper 0 0 (rotate (rotate (rotate b)))))\n     \
+    \ #t\n      #f))", "  (define (rotate word)\n    (string-append (substring word\
+    \ 1) (string (string-ref word 0))))\n  (define (rec word1 word2 rot)\n    (if\
+    \ (= word1 word2)\n        #t\n        (if (and (string&lt;=? word1 word2)\n \
+    \                (string-contains word1 word2))\n            #t\n            (rec\
+    \ (rotate word1) word2 (+ rot 1)))))\n  (rec a b 0))\n</code>\nCould someone guide\
+    \ me on how to get this right?\n\n\nA:\n\nYou can use the <code>string-index</code>\
+    \ procedure to get the position of the first occurrence of the rotated <code>b</code>\
+    \ in <code>a</code> and test if it is zero or not:\n<code>(define (cycpattern_check\
+    \ a b)\n  (define (rotate word)\n    (string-append (substring word 1) (string\
+    \ (string-ref word 0))))\n  (define (rec word1 word2 rot)\n    (cond ((string=?\
+    \ word1 word2) #t)\n          ((string&lt;=? word1 word2)\n           (zero? (string-index\
+    \ word1 word2)))\n          (else (rec (rotate word1) word2 (+ rot 1)))))\n  (rec\
+    \ a b 0))\n</code>\nIf you want to treat <code>a</code> and <code>b</code> as\
+    \ sets of characters, you can do it:\n<code>(define (cycpattern_check a b)\n \
+    \ (define (rotate word)\n    (string-append (substring word 1) (string (string-ref\
+    \ word 0))))\n  (define (rec word1 word2 rot)\n    (cond ((string=? word1 word2)\
+    \ #t)\n          ((string&lt;=? word1 word2)\n           (every (lambda (c) (member\
+    \ c word1)) word2))\n          (else (rec (rotate word1) word2 (+ rot 1)))))\n\
+    \  (rec a b 0))\n</code>\nFinally, if you want to use regexes to solve the problem,\
+    \ you can use SRFI 115:\n<code>(require srfi", "  (let* ([b-length (string-length\
+    \ b)]\n         [a-length (string-length a)]\n         [b-size (quotient b-length\
+    \ 2)]\n         [a-start (quotient (string-length a) 2)]\n         [a-end (+ (quotient\
+    \ (string-length a) 2) 1)]\n         [a-left (substring a 0 a-start)]\n      \
+    \   [a-right (substring a a-end a-length)])\n    (cond\n      [(string=? a-left\
+    \ b) #t]\n      [(string=? a-right b) #t]\n      [(string=? a b) #t]\n      [else\
+    \ #f])))\n", "  (let ([s (string-append b b)])\n    (and (not (equal? b a))\n\
+    \         (regexp-match s a))))\n</code>\n", "  (define (rotate str)\n    (let*\
+    \ ([len (string-length str)]\n           [rest (substring str 1 len)]\n      \
+    \     [first (substring str 0 1)])\n      (string-append rest first)))\n  (define\
+    \ (rotate-chars str)\n    (let* ([len (string-length str)]\n           [rest (substring\
+    \ str 1 len)]\n           [first (substring str 0 1)])\n      (list->string (append\
+    \ (string->list rest) (list first)))))\n  (define (rotate-chars* str)\n    (let*\
+    \ ([len (string-length str)]\n           [rest (substring str 1 len)]\n      \
+    \     [first (substring str 0 1)])\n      (list->string (cons first (string->list\
+    \ rest)))))\n  (define (rotate-chars-rec str)\n    (let* ([len (string-length\
+    \ str)]\n           [rest (substring str 1 len)]\n           [first (substring\
+    \ str 0 1)])\n      (list->string (append (list first) (string->list rest)))))\n\
+    \  (define (rotate-chars-rec* str)\n    (let* ([len (string-length str)]\n   \
+    \        [rest (substring str 1 len)]\n           [first (substring str 0 1)])\n\
+    \      (list->string (cons first (string->list rest)))))\n  (define (rotate-rec\
+    \ b)\n    (cond ((string=? b \"\") #f)\n          ((string-contains? a b) #t)\n\
+    \          (else (rotate-rec (rotate-chars-rec b)))))\n  (cond ((< (string-length\
+    \ b) 2) #f)\n        ((rotate-rec b) #t)\n        (else #f)))\n", "  (let recur\
+    \ ((a a) (b b) (i 0))\n    (cond [(equal? a b) #t]\n          [(zero? i) (recur\
+    \ a (string-append (substring b -1 1) (substring b 0 (- (string-length b) 1)))\
+    \ (+ i 1))]\n          [else #f])))\n", "  (define (rotate-str str)\n    (string-append\
+    \ (substring str 1) (string-take str 1)))\n  (if (empty? b)\n      #t\n      (or\
+    \ (string-contains? a b)\n          (cycpattern_check a (rotate-str b)))))\n",
+  "  (define b-cyclic (string-append b b))\n  (substring? b-cyclic a))\n", "  (or\
+    \ (= b \"\")\n      (and (substring? a b) #t)\n      (cycpattern_check a (substring\
+    \ b 1 (- (string-length b) 1)))\n      )\n  )", "  (cond\n    [(null? b) #t]\n\
+    \    [(string-contains a b) #t]\n    [else (cycpattern_check a (string-rotate\
+    \ b))]))\n", "  (let ([r (string-append b b)])\n    (if (string-contains a r)\n\
+    \        #t\n        #f)))\n", "  (if (= (string-length a) (string-length b))\n\
+    \      #f\n      (define (rotate s pos)\n        (let ([a (substring s 0 pos)]\n\
+    \              [b (substring s pos)])\n          (string-append b a)))\n     \
+    \ (define (rotate-all s)\n        (letrec ([step (lambda (s pos)\n           \
+    \              (if (= pos (string-length s))\n                             '()\n\
+    \                             (cons (rotate s pos) (step s (+ pos 1)))))]\n  \
+    \             [rotations (step s 0)])\n          rotations))\n      (letrec ([rotations\
+    \ (rotate-all b)]\n               [check #f])\n        (if (null? rotations)\n\
+    \            #f\n            (for ([r (in-list rotations)])\n              (if\
+    \ (string-contains a r)\n                  (set! check #t)\n                 \
+    \ (set! check #f)))\n            check))))\n```\n\n## Intervals 2\n\n```#lang\
+    \ racket\n", "  (if (string=? a b) #t\n    (let loop ([i (string-length b)])\n\
+    \      (cond\n        [(< i 0) #f]\n        [(string-contains a (string-append\
+    \ (substring b i) (substring b 0 (- i)))) #t]\n        [else (loop (- i 1))]))))",
+  "  (cond\n    [(= (string-length a) (string-length b)) #f]\n    [else (or\n    \
+    \        (string-contains? a b)\n            (cycpattern_check a (rotation a b)))]))\n",
+  "  (if (string=? b \"\")\n      #t\n      (if (string-contains a b)\n          #t\n\
+    \          (cycpattern_check a (substring b 1)))))", "  (define (substring a b)\n\
+    \    (regexp-match #rx(a) b))\n  (substring a b))\n", "  (let loop ([x (string-&gt;list\
+    \ b)]\n             [y a])\n    (cond [(empty? x) #t]\n          [(string-contains?\
+    \ y (list-&gt;string x)) #t]\n          [else (loop (append (rest x) (list (first\
+    \ x))) y)])))\n</code>"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

@@ -14,6 +14,186 @@ tests: "}\n\ncandidate() {\n    int_to_mini_roman \"$@\"\n}\n\nset -e\nrun_test(
   ) = \"xciv\" ]]\n    [[ $(candidate \"532\") = \"dxxxii\" ]]\n    [[ $(candidate\
   \ \"900\") = \"cm\" ]]\n    [[ $(candidate \"994\") = \"cmxciv\" ]]\n    [[ $(candidate\
   \ \"1000\") = \"m\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    [[ \"$1\" =~ ^[0-9]+$ ]] || return 1\n    # Convert the integer\
+    \ into an array of characters.\n    local int_chars=(\"$1\")\n    # Initialize\
+    \ variables.\n    local num_chars=0\n    local num_chars_in_word=0 # Characters\
+    \ used for the current word.\n    local num_digits=0\n    local int_value=0\n\
+    \    local i=0 j=0\n    # Loop through each character and convert it to its corresponding\
+    \ roman numeral equivalent.\n    for((i=0; i < \"${#int_chars[@]}\"; i++ )); do\n\
+    \        # Convert the character into its roman numeral.\n        int_value=$(printf\
+    \ '%03o' \"${int_chars[i]}\" | bc)\n        # Split the word into individual characters.\n\
+    \        int_value=${int_value//[!\"<>]/}\n        # If the current character\
+    \ is the last character in the word, then add it to the string.\n        if [\
+    \ \"$i\" -eq \"$(( ${#int_chars[@]} - 1 ))\" ]; then\n            num_chars=\"\
+    ${num_chars}${int_value}\"\n        else\n            # Convert the current word\
+    \ into individual characters.\n            int_chars[$i]=$(printf '%03o' \"${int_chars[$i]}\"\
+    \ | bc)\n            num_chars_in_word=$(( $num_chars_in_word + ${#int_chars[$i]}\
+    \ ))\n            # Concatenate the current character to the current word.\n \
+    \           num_chars=\"${num_chars}${int_chars[$i]}\"\n            # Check if\
+    \ the last character of the word is numerical.\n            if [[ ${int_chars[$((\
+    \ $i + 1 ))]} =~ ^[0-9]+$ ]]; then\n                # If so, add it to the current\
+    \ word and update the number of digits.\n                num_digits=$(( $num_digits\
+    \ + ${#int_chars[$i]} ))\n            else\n                # If not, add it to\
+    \ the current word.\n                num_chars=\"${num_chars}${int_chars[$i]}\"\
+    \n            fi\n        fi\n    done\n\n    echo $num_chars", "  local num=$1\n\
+    \  if [ $num -lt 1 -o $num -lt 1000 ]; then\n    echo \"int_to_mini_roman: argument\
+    \ out of range: $num\"\n    return 1\n  fi\n  local roman_numeral=''\n  for ((\
+    \ i = 1; i <= $(( $num / 10 )); i++ )); do\n    local current_digit=$(($num %\
+    \ 10))\n    roman_numeral=$(($roman_numeral + $current_digit))\n  done\n  local\
+    \ roman_numeral\n  roman_numeral=$(echo \"$roman_numeral\" | tr ' ' '')\n  roman_numeral=$(echo\
+    \ \"$roman_numeral\" | tr ',' '')\n  local suffix=''\n  if [[ $roman_numeral =~\
+    \ ^(x|vi|ii)(x|vi|ii)(x|vi|ii)$ ]]; then\n    suffix='i'\n  else\n    suffix='v'\n\
+    \  fi\n  roman_numeral=$(echo \"$roman_numeral\" | tr ' ' ' ')\n  roman_numeral=$(echo\
+    \ \"$roman_numeral\" | tr ',' ' ')\n  local roman_numeral_in_lowercase\n  roman_numeral_in_lowercase=$(echo\
+    \ \"$roman_numeral\" | tr '[:upper:]' '[:lower:]')\n  roman_numeral_in_lowercase=$(echo\
+    \ \"$roman_numeral_in_lowercase\" | tr ' ' '')\n  roman_numeral_in_lowercase=$(echo\
+    \ \"$roman_numeral_in_lowercase\" | tr ',' '')\n  echo \"$roman_numeral_in_lowercase$suffix\"",
+  "  # $1 is an integer\n  local -r num=$1\n  local -r roman=()\n  local roman_num\n\
+    \  local roman_num_tmp\n  local i\n\n  local base\n\n  for i in {0..1000}; do\n\
+    \    base=$((($i % 100) + 1))\n    roman_num=$(($base*1000))\n    roman_num_tmp=$(($roman_num\
+    \ + $i))\n    if [ $roman_num_tmp -gt 1000 ]; then\n      roman_num_tmp=$(($roman_num_tmp\
+    \ - 1000))\n      roman_num=$(($roman_num / 10))\n    fi\n    roman+=($roman_num_tmp)\n\
+    \  done\n\n  echo \"${roman[@]}\"", "  # Only accept integers <= 1000\n  local\
+    \ num=${1}; shift\n  # If num is negative, do negative values\n  if [ \"${num}\"\
+    \ -lt 0 ]; then\n    local -a negatives=( $(for ((i=${num};;)); do echo \"-${i}\"\
+    ; i=$(( i - 1 )); done) )\n    num=${negatives[${#negatives[*]}]}\n  fi\n  # If\
+    \ num is negative, do negative values\n  if [ \"${num}\" -lt 0 ]; then\n    echo\
+    \ \"${num}\" | awk '{print \"-\" $1}'\n  else\n    local romans=( $(for ((i=${num};;));\
+    \ do printf \"%%%ds\" \"$i\"; i=$(( i - 1 )); done ))\n    echo \"${romans[${#romans[*]}]}\"\
+    \n  fi", "  local num=$1\n  if [ $num -ne 1 ] && [ $num -ne 1000 ]; then\n   \
+    \ echo 'invalid input - must be integer between 1 and 1000'\n    return\n  fi\n\
+    \n  local num_roman\n  local num_roman_prefix\n  local num_roman_suffix\n  local\
+    \ num_roman_numerals\n  local i\n\n  num_roman=()\n  num_roman_prefix=()\n  num_roman_suffix=()\n\
+    \  num_roman_numerals=()\n  i=1\n  while [ $i -le $num ]; do\n    if [ $i -ge\
+    \ 1000 ]; then\n      num_roman_numerals[$(( i - 1 ))]=$(( i - 1 ))\n    fi\n\
+    \    num_roman[$(( i ))]=$(( num % 10 ))\n    num_roman_prefix[$(( i ))]=$(( num\
+    \ / 10 ))\n    num_roman_suffix[$(( i ))]=$(( num % 10 ))\n    (( i++ ))\n  done\n\
+    \  num_roman_numerals_string=$(echo ${num_roman_numerals[*]} | tr ' ' ',')\n\n\
+    \  num_roman_numerals_string=$(echo ${num_roman_numerals[*]} | tr ' ' ',')\n\n\
+    \  num_roman_numerals_string=${num_roman_numerals[*]} # put back together\n  num_roman_numerals_string=$(echo\
+    \ ${num_roman_numerals[*]} | tr ' ' ',')\n\n  num_roman_numerals_string=${num_roman_numerals[*]}\
+    \ # put back together\n  num_roman_numerals_string=$(echo ${num_roman_numerals[*]}\
+    \ | tr ' ' ',')\n\n  num_roman_numerals_string=${num_roman_numerals[*]} # put\
+    \ back together\n  num_roman_numerals_string=$(echo ${num_roman_numerals[*]} |\
+    \ tr ' ' ',')\n\n  num_roman_numerals_string=${num_roman_numerals[*]} # put back\
+    \ together\n  num_roman_numerals_string=$(echo ${num_roman_numerals[*]} | tr '\
+    \ ' ',')\n\n  num_roman_numerals_string=${num_roman_numerals[*]} # put back together\n\
+    \  num_roman_numerals_string=$(echo ${num_roman_numerals[*]} | tr ' ' ',')\n\n\
+    \  num_roman_numerals_string=${num_roman_", "  local num=$1\n  if [ ${#num} -gt\
+    \ 1 ]\n  then\n    echo ${num:0:1}\n  fi", "\tlet string=$1\n\twhile [[ $string\
+    \ -gt 1000 ]]; do\n\t\tstring=$(echo \"$string\" | cut -d \"-\" -f 1)\n\tdone\n\
+    \twhile [[ $string < 1 ]]; do\n\t\tstring=$(echo \"$string\" | cut -d \"-\" -f\
+    \ 1)\n\tdone\n\tlet string=string*100\n\twhile [[ $string > 1000 ]]; do\n\t\t\
+    string=$(echo \"$string\" | cut -d \"-\" -f 1)\n\tdone\n\tlet string=string/100\n\
+    \tlet num=string%100\n\tlet string=$(echo \"$num\" | rev | cut -d \" \" -f 1)\n\
+    \twhile [[ $string != \"0\" ]]; do\n\t\tstring=$(echo \"$string\" | cut -d \"\
+    -\" -f 1)\n\tdone\n\techo $string", "    local num=\"$1\"\n    if [[ ${num} -lt\
+    \ 1 || ${num} -gt 1000 ]]\n    then\n        echo \"Error: invalid input for int_to_mini_roman\"\
+    \n        return 1\n    fi\n\n    # Get the hundreds place and number of hundreds\n\
+    \    local hundreds=\"${num / 100}\"\n    local num_hundreds=\"${num % 100}\"\n\
+    \n    # Check for invalid hundreds\n    if [[ ${num_hundreds} -lt 0 || ${num_hundreds}\
+    \ -gt 9 ]]\n    then\n        echo \"Error: invalid input for int_to_mini_roman\"\
+    \n        return 1\n    fi\n\n    local mini_roman=\"x\"\n    local i\n    for\
+    \ ((i=1; i<=${num_hundreds}; i++)); do\n        mini_roman=\"${mini_roman}c\"\n\
+    \    done\n\n    if [[ ${hundreds} -gt 0 ]]\n    then\n        mini_roman=\"${mini_roman}x\"\
+    \n    fi\n\n    # Add the hundreds place\n    mini_roman=\"${mini_roman}${hundreds}\"\
+    \n\n    return ${mini_roman}", "  local num=$1\n  local roman_num=''\n  local\
+    \ roman numerals=$(echo 'M{M{G{C{L{X{I{V{\n  local i\n  for ((i=0; i<=num; i++));\
+    \ do\n    roman=$roman${roman_num:+}$(i%5)\n    roman_num=$(i//5)\n  done\n  roman=${roman#M}\n\
+    \  roman=${roman%G}\n  roman=${roman#C}\n  roman=${roman%L}\n  roman=${roman#X}\n\
+    \  roman=${roman#I}\n  roman=${roman#V}\n  roman=${roman%$1}\n  echo \"$roman\"",
+  "    local int_to_roman_roman roman_numeral_table\n    int_to_roman_roman=\"$( roman_numeral_table.txt\
+    \ )\"\n    echo \"$int_to_roman_roman\"", "    local i num $1 output next\n  \
+    \  for ((i=$1; i; i=i/10)) ; do\n        for (( num=\"$i\"; num; num-=10 )) ;\
+    \ do\n            output=\"$output$i\"\n        done\n        case \"$num\" in\n\
+    \            I) output=\"$output$i\"\n            ;;\n            V) output=\"\
+    $output$i\"\n            ;;\n            IV) output=\"$output$i\"\n          \
+    \  ;;\n            IX) output=\"$output$i\"\n            ;;\n            II) output=\"\
+    $output$i\"\n            ;;\n            III) output=\"$output$i\"\n         \
+    \   ;;\n            IV) output=\"$output$i\"\n            ;;\n            IX)\
+    \ output=\"$output$i\"\n            ;;\n            V) output=\"$output$i\"\n\
+    \            ;;\n            I) output=\"$output$i\"\n            ;;\n       \
+    \ esac\n    done\n    echo \"${output^^}\"", "    local num=$1\n    local roman=\"\
+    \"\n\n    # Validate integer range\n    if [ $num -gt 1000 ] || [ $num -le 1 ];\
+    \ then\n        return \"\"\n    fi\n\n    # Iterate from highest to lowest roman\n\
+    \    for i in {000..$(($num-1000))}; do\n        roman=$roman$((i+100)).\"$i\"\
+    \n    done\n\n    # Convert from integer to roman\n    echo $roman | tr ' ' '-'",
+  "    [ $# -eq 1 ] || die \"Usage: $0 integer\"\n    local num=$1\n    roman_numbers=$(echo\
+    \ \"$num\" | sed -e 's/^/II/' -e 's/$/II/')\n    local roman_num\n    local i=0\n\
+    \    roman_num=\"\"\n    while [ $i -lt $num -a $i -lt ${#roman_numbers} ]; do\n\
+    \        roman_num+=$roman_numbers[$i]\n        i=$((i+1))\n    done\n    roman_num+=$roman_numbers[$i]\n\
+    \    echo \"${roman_num,,}\"", "  if [ $1 -lt 1 || $1 -gt 1000 ]; then\n    echo\
+    \ \"Error! Integer '$1' is out of range (must be between 1 and 1000).\"\n  fi\n\
+    \  # the romanization of 'x' -> '#'\n  local romanize='#'\n  # if the number is\
+    \ negative, subtract it from the max\n  local min=$(( ${1} * 10 ))\n  if [ $1\
+    \ -gt 0 ]; then\n    local max=$(( ${1} + 10 ))\n  else\n    local max=$(( ${1}\
+    \ - 10 ))\n  fi\n  # for each letter in the alphabet\n  for i in {a..z} {A..Z};\
+    \ do\n    # if the number is less than the alphabet, subtract it from the max\n\
+    \    if [ $i -le $min ]; then\n      local num=${i}\n    else\n      local num=${num}0\n\
+    \    fi\n    # obtain the integer form of the roman numeral\n    local roman=$(echo\
+    \ \"$romanize\" | sed -n \"s/$i.*/$num/\")\n    # obtain the roman numeral\n \
+    \   local romanized=$romanize$i\n    # add the new roman numeral to the string\n\
+    \    romanized=$romanized$(echo \"$roman\" | tr '[:upper:]' '[:lower:]')\n   \
+    \ # update the romanize string\n    romanize=$romanized\n  done\n  # convert $roman\
+    \ to lowercase\n  local roman=${roman,,}\n  local romanize=${romanize,,}\n  echo\
+    \ \"$romanize\"", "    if [ $# -ne 1 ] ; then\n        echo \"Usage: $0 num\"\
+    \ >&2\n        return 1\n    fi\n\n    # Turn parameters into integers\n    #\
+    \ $1 is the integer to be converted\n    local num=$1\n    local miniroman=\"\"\
+    \n\n    if [ $(echo $num |  awk '{print $1}') -ne 1 ] ; then\n        return 0\n\
+    \    fi\n\n    if [ $num -lt 1 -o $num -gt 1000 ] ; then\n        return 0\n \
+    \   fi\n\n    local numbase=$(echo $num |  awk '{print $1}')\n    local miniromanbase=$(echo\
+    \ $num |  awk '{print $2}')\n\n    local i\n    for ((i=1; i <= $num; i++))\n\
+    \    do\n        if [[ $miniromanbase == 0 ]] ; then\n            miniromanbase=$numbase\n\
+    \        fi\n        miniroman=\"$miniroman$miniromanbase\"\n        miniromanbase=$(expr\
+    \ ${miniromanbase} + 1)\n    done\n\n    echo $miniroman", "    local num=$1\n\
+    \    # Convert num to string, trim leading and trailing whitespace, and get rid\
+    \ of leading zero.\n    local str_num=\"$(echo $num | sed -e 's/^\\(0\\|$\\)/\\\
+    1/')\"\n    # Remove spaces from string.\n    str_num=\"$(echo $str_num | sed\
+    \ -e 's/ //g')\"\n    # If no number given, return empty string.\n    if [ -z\
+    \ \"$str_num\" ]\n    then\n        echo \"$str_num\"\n        return\n    fi\n\
+    \    # Remove trailing zeros from string.\n    str_num=\"$(echo $str_num | sed\
+    \ -e 's/\\(0\\)$//g')\"\n    # Round up (add \"i\") to the number to the power\
+    \ of ten.\n    str_num=\"$(echo \"$str_num\" | sed -e 's/\\(.\\)\\(10\\)\\/\\\
+    1\\10\\1\\/g')\"\n    # Round down (subtract \"i\") to the number to the power\
+    \ of ten.\n    str_num=\"$(echo \"$str_num\" | sed -e 's/\\(.\\)\\(10\\)\\/\\\
+    1\\-\\1\\/g')\"\n    # Strip off everything up to the first digit.\n    str_num=\"\
+    $(echo \"$str_num\" | sed -e 's/\\(.\\)\\(10\\)\\/\\1/')\"\n    # If no number\
+    \ given, return empty string.\n    if [ -z \"$str_num\" ]\n    then\n        echo\
+    \ \"$str_num\"\n        return\n    fi\n    # Return the string.\n    echo \"\
+    $str_num\"", "  local num=$1\n  # Check if num is less than or equal to 1\n  if\
+    \ [ $num -lt 1 ]; then\n    echo \"Invalid integer: \\\"$num\\\"\"\n    return\
+    \ 1\n  fi\n\n  # Build up a string of roman numerals\n  local roman_numerals=()\n\
+    \  roman_numerals=( a b c d e f g h i j k l m n o p q r s t u v w x y z )\n  roman_numerals=(\
+    \ \"${roman_numerals[@]/#/}\" )\n\n  # Add num of each of roman numeral to our\
+    \ string\n  local num_roman=\n  for (( roman_numeral_index=0; roman_numeral_index\
+    \ < ${#roman_numerals[@]} && roman_numeral_index < $num; roman_numeral_index+=2\
+    \ )); do\n    num_roman=\"$num_roman ${roman_numerals[roman_numeral_index]}\"\n\
+    \  done\n\n  # Remove leading zeros from num_roman\n  num_roman=\"${num_roman::1}\"\
+    \n\n  # Return our string\n  echo \"$num_roman\"", "  local num=$1\n  local roman='XIV'\n\
+    \  if (( num >= 100 )); then\n    local last_num=100\n    while (( last_num+1\
+    \ < num )); do\n      local last_num=last_num+1\n      roman=roman'IX'\n    done\n\
+    \    local last_num=num\n    while (( last_num > 0 )); do\n      local last_num=last_num-1\n\
+    \      roman=roman'V'\n    done\n  fi\n  if (( num > 0 )); then\n    while ((\
+    \ num > 0 )); do\n      roman=roman'I'\n      num=num-1\n    done\n  fi\n  echo\
+    \ \"$roman\"", "  local num=$1\n\n  local roman=$(cat <<- EOF\n    I \n    V \n\
+    \    X \n    L \n    C \n    D\n    M\n    \n    IV\n    VI\n    IX\n    IL\n\
+    \    IC\n    ID\n    DM\n    \n    III\n    II\n    I\n    II\n    \n    XII\n\
+    \    XI\n    XI\n    XII\n    XIV\n    XV\n    XVI\n    XVII\n    XVIII\n    XIX\n\
+    \    XLI\n    XLE\n    XLII\n    XLEI\n    XLIII\n    XLIV\n    XLIVI\n    XLIVII\n\
+    \    XLIVIII\n    XLIX\n    XL\n    XLE\n    XLI\n    XLII\n    XLIII\n    XLIV\n\
+    \    XLIVI\n    XLIVII\n    XLIVIII\n    XLIX\n    XLX\n    XL\n    XLX\n  EOF\n\
+    \  )\n\n  echo $roman | sed -e \"s/^\\([ICM]\\)/\\1\\n/g\" -e \"s/^[V]/\\1/g\"\
+    \ -e \"s/^I/I/g\" -e \"s/^X/V/g\" -e \"s/^L/L/g\" -e \"s/^C/I/g\" -e \"s/^D/L/g\"\
+    \ -e \"s/^M/M/g\" -e \"s/^[XLIV]/X/g\" -e \"s/^[XI]\\([LM]\\)/\\1/g\" -e \"s/^I/I/g\"\
+    \ -e \"s/^V/V/g\" -e \"s/^X/V/g\" -e \"s/^L/L/g\" -e \"s/^C/I/g\" -e \"s/^D/L/g\"\
+    \ -e \"s/^M/M/g\" -e \"s/^[XLIV]/X/g\" -e \"s/^[XI]\\([LM]\\)/\\1/g\" -e \"s/^I/I/g\"\
+    \ -e \"s/^V/V/g\" -e \"s/^X/V/g\" -e \"s/^L/L/g\" -e \"s/^C/I/g\" -e \"s/^D/L/g\"\
+    \ -e \"s/^M/M/g\" -e \"s/^[XLIV]/X/g\" -e \"s/^[XI]\\([LM]\\)/\\1/g\" -e \"s/^I/I/g\"\
+    \ -e \"", "    local number=$1\n    local roman='' # initialize roman\n    local\
+    \ roman_numbers='' # initialize roman_numbers\n    local i\n    local roman_numerals=''\
+    \ # initialize roman_numerals\n    local i\n    for (( i = 1000; i > 0; i-- ));\
+    \ do\n        roman_numerals+=$(( number % 10 ))\n        roman_numbers+=$(roman_numeral)\n\
+    \        roman+=$(( i ))\n        (( number = number / 10 ))\n    done\n    roman+=$roman_numbers\n\
+    \    roman=$(echo $roman | sed 's/^0*//')\n    echo $roman"]
 stop_tokens:
 - "\n}"

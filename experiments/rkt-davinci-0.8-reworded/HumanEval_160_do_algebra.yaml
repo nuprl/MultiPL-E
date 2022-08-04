@@ -14,7 +14,143 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate d
   \    (check-equal? (candidate (list \"**\" \"*\" \"+\") (list 2 3 4 5)) 37)\n  \
   \  (check-equal? (candidate (list \"+\" \"*\" \"-\") (list 2 3 4 5)) 9)\n    (check-equal?\
   \ (candidate (list \"//\" \"*\") (list 7 3 4)) 8)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (cond [(empty? operator) (first operand)]\n        [else (letrec\
+    \ ([head-operator (first operator)]\n                       [remain-operator (rest\
+    \ operator)]\n                       [head-operand (first operand)]\n        \
+    \               [head-remain-operand (first (rest operand))]\n               \
+    \        [remain-operand (rest (rest operand))])\n                (cond [(= head-operator\
+    \ '+) (+ head-operand (do_algebra remain-operator remain-operand))]\n        \
+    \              [(= head-operator '-) (- head-operand (do_algebra remain-operator\
+    \ remain-operand))]\n                      [(= head-operator '*) (* head-operand\
+    \ (do_algebra remain-operator remain-operand))]\n                      [(= head-operator\
+    \ '//) (quotient head-operand (do_algebra remain-operator remain-operand))]\n\
+    \                      [(= head-operator '**) (expt head-operand (do_algebra remain-operator\
+    \ remain-operand))]))]))\n  )\n", "  (define (do_algebra_helper operator operand)\n\
+    \    (cond\n      [(null? operator) (car operand)]\n      [(not (null? operator))\n\
+    \       (cond\n         [(string=? (car operator) \"+\") (+ (car operand) (do_algebra_helper\
+    \ (cdr operator) (cdr operand)))]\n         [(string=? (car operator) \"-\") (-\
+    \ (car operand) (do_algebra_helper (cdr operator) (cdr operand)))]\n         [(string=?\
+    \ (car operator) \"*\") (* (car operand) (do_algebra_helper (cdr operator) (cdr\
+    \ operand)))]\n         [(string=? (car operator) \"//\") (quotient (car operand)\
+    \ (do_algebra_helper (cdr operator) (cdr operand)))]\n         [(string=? (car\
+    \ operator) \"**\") (expt (car operand) (do_algebra_helper (cdr operator) (cdr\
+    \ operand))))]\n       )]))\n  (do_algebra_helper operator operand))\n", "  (cond\
+    \ [(empty? operator) (first operand)]\n        [else (let* ([op (first operator)]\n\
+    \                     [n1 (first operand)]\n                     [n2 (second operand)])\n\
+    \                (cond [(equal? op '+) (+ n1 n2)]\n                      [(equal?\
+    \ op '-) (- n1 n2)]\n                      [(equal? op '*) (* n1 n2)]\n      \
+    \                [(equal? op '//) (quotient n1 n2)]\n                      [(equal?\
+    \ op '**) (expt n1 n2)]))]))\n</code>\nAs far as I can tell I'm supposed to use\
+    \ recursion and the function do_algebra to accomplish this, but I am not sure\
+    \ how I would accomplish it. \n\n\nA:\n\nWe can write a simple procedure that\
+    \ uses recursion to evaluate the mathematical expression represented by the operator\
+    \ and operand lists:\n<code>(define (do-algebra operator operand)\n  (cond [(empty?\
+    \ operator) (first operand)]\n        [else (let* ([op (first operator)]\n   \
+    \                  [n1 (first operand)]\n                     [n2 (second operand)])\n\
+    \                (cond [(equal? op '+) (+ n1 n2)]\n                      [(equal?\
+    \ op '-) (- n1 n2)]\n                      [(equal? op '*) (* n1 n2)]\n      \
+    \                [(equal? op '//) (quotient n1 n2)]\n                      [(equal?\
+    \ op '**) (expt n1 n2)]))]))\n</code>\nAnd here are some examples:\n<code>(do-algebra\
+    \ '() '(1))\n=&gt; 1\n", "  (define (op-helper oper operator)\n    (cond\n   \
+    \   [(eq? operator '+ ) (+ oper (first operand))]\n      [(eq? operator '- ) (-\
+    \ oper (first operand))]\n      [(eq? operator '* ) (* oper (first operand))]\n\
+    \      [(eq? operator '// ) (quotient oper (first operand))]\n      [(eq? operator\
+    \ '** ) (expt oper (first operand))]))\n  (cond\n    [(null? operator) (first\
+    \ operand)]\n    [(null? operand) (do_algebra (rest operator) operand)]\n    [else\
+    \ (do_algebra (rest operator) (cons (op-helper (first operand) (first operator))\
+    \ (rest operand)))]))\n", "    ;; YOUR CODE GOES HERE\n)", "  (apply -\n    (apply\
+    \ +\n      (apply *\n        (apply quotient\n          (apply expt (cdr operator)\
+    \ (cdr operand))\n          (car operand))\n        (car (cdr operand)))\n   \
+    \   (car (cdr (cdr operand))))\n    (car (cdr (cdr (cdr operand))))))\n</code>\n",
+  "  (foldl (lambda (op value) (op value))\n         (car operand)\n         (map\
+    \ (lambda (x y) (eval (list (symbol->string x) x y))) operator (cdr operand))))",
+  "  (let loop ((operator operator)\n             (operand operand)\n            \
+    \ (result 0))\n    (if (null? operator)\n        result\n        (case (car operator)\n\
+    \          [(+)] (loop (cdr operator) (cdr operand) (+ result (car operand)))\n\
+    \          [(-)] (loop (cdr operator) (cdr operand) (- result (car operand)))\n\
+    \          [*](loop (cdr operator) (cdr operand) (* result (car operand)))\n \
+    \         [//](loop (cdr operator) (cdr operand) (quotient result (car operand)))\n\
+    \          [**](loop (cdr operator) (cdr operand) (expt result (car operand)))))))\n",
+  "  (cond ((null? operator) 'error)\n        ((equal? (car operator) '+) (apply +\
+    \ operand))\n        ((equal? (car operator) '-) (apply - operand))\n        ((equal?\
+    \ (car operator) '*) (apply * operand))\n        ((equal? (car operator) '//)\
+    \ (apply // operand))\n        ((equal? (car operator) '**) (apply ** operand))\n\
+    \        (else 'error)))\n", "  (define (recur ops opsd)\n    (if (null? ops)\
+    \ (car opsd)\n      (recur (cdr ops)\n             (cons (- (apply (symbol->string\
+    \ (car ops)) (car opsd) (cadr opsd))\n                      (if (null? (cddr opsd))\
+    \ 0 (recur ops (cddr opsd))))\n                   (cddr opsd)))))\n  (recur operator\
+    \ operand))\n", "  (define (convert-operator op)\n    (cond\n      [(equal? op\
+    \ '+') +]\n      [(equal? op '-') -]\n      [(equal? op '*') *]\n      [(equal?\
+    \ op '//') /]\n      [(equal? op '**') expt]))\n  (define (iter-algebra ops opd\
+    \ result)\n    (if (null? ops)\n        result\n        (iter-algebra (cdr ops)\
+    \ (cdr opd) (apply (convert-operator (car ops)) result (car opd)))))\n  (iter-algebra\
+    \ operator operand (car operand)))\n", "  (apply - (map (lambda (op a b)\n   \
+    \               (cond ((equal? op '+) (+ a b))\n                        ((equal?\
+    \ op '-) (- a b))\n                        ((equal? op '*) (* a b))\n        \
+    \                ((equal? op '//) (floor (/ a b)))\n                        ((equal?\
+    \ op '**) (expt a b))))\n                operator\n                operand)))\n",
+  "  (let ((result (car operand)))\n    (for ([pair (in-list (map (curry zip operator\
+    \ operand)))]\n          #:when (pair? pair))\n      (set! result\n          \
+    \  (cond\n              [(= (car pair) '+) (+ result (cadr pair))]\n         \
+    \     [(= (car pair) '-) (- result (cadr pair))]\n              [(= (car pair)\
+    \ '*) (* result (cadr pair))]\n              [(= (car pair) '//) (quotient result\
+    \ (cadr pair))]\n              [(= (car pair) '**) (expt result (cadr pair))])))\n\
+    \    result))\n", "  (apply -\n         (foldl\n          (lambda (f g) (list\
+    \ (eval (list f 'g)) g))\n          (list (first operand))\n          (zip operator\
+    \ (rest operand)))))\n</code>\n", "  (match operator\n    [()\n     (error \"\
+    No operator\")]\n    [(cons op ops)\n     (match operand\n       [()\n       \
+    \ (error \"No operand\")]\n       [(cons o1 (cons o2 os))\n        (match op\n\
+    \          [\"+\" (+ o1 (do_algebra ops (cons o2 os)))]\n          [\"-\" (- o1\
+    \ (do_algebra ops (cons o2 os)))]\n          [\"*\" (* o1 (do_algebra ops (cons\
+    \ o2 os)))]\n          [\"//\" (quotient o1 (do_algebra ops (cons o2 os)))]\n\
+    \          [\"**\" (expt o1 (do_algebra ops (cons o2 os)))]\n          [_ (error\
+    \ \"Invalid operator\")])]\n       [_ (error \"Invalid operand\")])]\n    [_ (error\
+    \ \"Invalid operator\")]))\n", "  (let ([dop (lambda (op r a b)\n            \
+    \   (cond\n                 ((equal? op '+) (add1 r))\n                 ((equal?\
+    \ op '-) (sub1 r))\n                 ((equal? op '*) (add1 r (* a b)))\n     \
+    \            ((equal? op '//) (add1 r (quotient a b)))\n                 ((equal?\
+    \ op '**) (add1 r (expt a b)))\n                 (else (error \"Operator error\"\
+    \ op))))])\n    (cond\n      ((null? operator) (car operand))\n      ((null? (cdr\
+    \ operand)) (error \"Operator error\" operator))\n      (else (dop (car operator)\
+    \ 0 (car operand) (do_algebra (cdr operator) (cdr operand)))))))\n", "  (cond\n\
+    \    [(null? operator) (car operand)]\n    [(equal? (car operator) '+) (+ (car\
+    \ operand) (do_algebra (cdr operator) (cdr operand)))]\n    [(equal? (car operator)\
+    \ '-) (- (car operand) (do_algebra (cdr operator) (cdr operand)))]\n    [(equal?\
+    \ (car operator) '*) (* (car operand) (do_algebra (cdr operator) (cdr operand)))]\n\
+    \    [(equal? (car operator) '//) (floor (/ (car operand) (do_algebra (cdr operator)\
+    \ (cdr operand))))]\n    [(equal? (car operator) '**) (expt (car operand) (do_algebra\
+    \ (cdr operator) (cdr operand)))]))\n", "  (if (= 0 (length operator))\n     \
+    \ (car operand)\n      (match (car operator)\n        ['+ (do_algebra (cdr operator)\
+    \ (cons (+ (car operand) (cadr operand)) (cddr operand)))]\n        ['* (do_algebra\
+    \ (cdr operator) (cons (* (car operand) (cadr operand)) (cddr operand)))]\n  \
+    \      ['- (do_algebra (cdr operator) (cons (- (car operand) (cadr operand)) (cddr\
+    \ operand)))]\n        ['// (do_algebra (cdr operator) (cons (quotient (car operand)\
+    \ (cadr operand)) (cddr operand)))]\n        ['** (do_algebra (cdr operator) (cons\
+    \ (expt (car operand) (cadr operand)) (cddr operand)))])))\n", "  (define (next-operator\
+    \ operator)\n    (cdr operator))\n  (define (next-operand operand)\n    (cdr operand))\n\
+    \  (define (get-operator operator)\n    (car operator))\n  (define (get-operand\
+    \ operand)\n    (car operand))\n  (define (do-operation operator operand)\n  \
+    \  (cond [(equal? operator '+)\n           (+ (get-operand operand) (get-operand\
+    \ (next-operand operand)))]\n          [(equal? operator '-)\n           (- (get-operand\
+    \ operand) (get-operand (next-operand operand)))]\n          [(equal? operator\
+    \ '*)\n           (* (get-operand operand) (get-operand (next-operand operand)))]\n\
+    \          [(equal? operator '//)\n           (floor (/ (get-operand operand)\
+    \ (get-operand (next-operand operand))))]\n          [(equal? operator '**)\n\
+    \           (expt (get-operand operand) (get-operand (next-operand operand)))]))\n\
+    \  (if (null? operator)\n      (get-operand operand)\n      (do_algebra (next-operator\
+    \ operator)\n                  (cons (do-operation (get-operator operator) operand)\n\
+    \                        (next-operand operand)))))\n</code>\nTest cases:\n<code>(define\
+    \ (example-test-case operator operand expected-result)\n  (printf \"operator:\
+    \ ~s operand: ~s expected-result: ~s actual-result: ~s ... \" operator operand\
+    \ expected-result (do_algebra operator operand))\n  (if (equal? (do_algebra operator\
+    \ operand) expected-result)\n      (printf \"passed.\\n\")\n      (printf \"failed.\\\
+    n\")))\n", "  (if (eq? operator '+ )\n    (+ (list-ref operand 0) (list-ref operand\
+    \ 1))\n    (if (eq? operator '- )\n      (- (list-ref operand 0) (list-ref operand\
+    \ 1))\n      (if (eq? operator '* )\n        (* (list-ref operand 0) (list-ref\
+    \ operand 1))\n        (if (eq? operator '// )\n          (// (list-ref operand\
+    \ 0) (list-ref operand 1))\n          (if (eq? operator '** )\n            (**\
+    \ (list-ref operand 0) (list-ref operand 1))\n            (string-append \"Unknown\
+    \ operation: \" operator)))))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

@@ -15,6 +15,168 @@ tests: "    }\n    def main(args: Array[String]) = {\n    assert(separateParenGr
   (()(())((())))\")).equals((List[String](\"(()(())((())))\"))));\n    assert(separateParenGroups((\"\
   ( ) (( )) (( )( ))\")).equals((List[String](\"()\", \"(())\", \"(()())\"))));\n\
   \    }\n\n}\n"
-completions: []
+completions: ["        val tokens = paren_string.filterNot(_ == ' ').toList\n    \
+    \    def find_match(tokens : List[Char], acc : List[Char]) : (List[Char], List[Char])\
+    \ = {\n            val (acc_, tokens_) = tokens match {\n                case\
+    \ Nil => (acc, Nil)\n                case '(' :: t => find_match(t, '(' :: acc)\n\
+    \                case ')' :: t => find_match(t, ')' :: acc)\n            }\n \
+    \           (acc_.reverse, tokens_)\n        }\n        val res = new ListBuffer[String]\n\
+    \        var tokens_ : List[Char] = tokens\n        while (!tokens_.isEmpty) {\n\
+    \            val (group, tokens__) = find_match(tokens_, Nil)\n            res\
+    \ += group.mkString\n            tokens_ = tokens__\n        }\n        res.toList",
+  '        ???', "        def dfs(i : Int, stack : List[Int], groups : List[String])\
+    \ : List[String] = {\n            if (i == paren_string.length) {\n          \
+    \      if (stack.length == 0) {\n                    groups\n                }\
+    \ else {\n                    throw new Error(\"Unbalanced parenthesis.\")\n \
+    \               }\n            } else {\n                if (paren_string(i) ==\
+    \ '(') {\n                    dfs(i + 1, i :: stack, groups)\n               \
+    \ } else if (paren_string(i) == ')') {\n                    if (stack.length ==\
+    \ 0) {\n                        throw new Error(\"Unbalanced parenthesis.\")\n\
+    \                    } else {\n                        val s = stack.head\n  \
+    \                      val new_groups = if (s == i - 1) groups else (paren_string.substring(s,\
+    \ i + 1) :: groups)\n                        dfs(i + 1, stack.tail, new_groups)\n\
+    \                    }\n                } else {\n                    dfs(i +\
+    \ 1, stack, groups)\n                }\n            }\n        }\n        dfs(0,\
+    \ List(), List())", "        def separate(paren_string : String, index : Int,\
+    \ stack : Stack[Char], current : StringBuilder, result : ListBuffer[String]) :\
+    \ List[String] = {\n            if (index == paren_string.length) {\n        \
+    \        if (stack.isEmpty) {\n                    current.append(paren_string.charAt(index\
+    \ - 1))\n                    result += current.toString\n                    result.toList\n\
+    \                }\n                else\n                    throw new IllegalArgumentException(\"\
+    unmatched parentheses\")\n            }\n            else {\n                val\
+    \ c = paren_string.charAt(index)\n                if (c == ' ')\n            \
+    \        separate(paren_string, index + 1, stack, current, result)\n         \
+    \       else if (c == '(') {\n                    if (stack.isEmpty)\n       \
+    \                 separate(paren_string, index + 1, stack.push(c), current.append(c),\
+    \ result)\n                    else\n                        separate(paren_string,\
+    \ index + 1, stack.push(c), current.append(c), result)\n                }\n  \
+    \              else if (c == ')') {\n                    if (stack.isEmpty)\n\
+    \                        throw new IllegalArgumentException(\"unmatched parentheses\"\
+    )\n                    else {\n                        if (stack.size == 1) {\n\
+    \                            result += current.append(c).toString\n          \
+    \                  separate(paren_string, index + 1, stack.pop, new StringBuilder(),\
+    \ result)\n                        }\n                        else\n         \
+    \                   separate(paren_string, index + 1, stack.pop, current.append(c),\
+    \ result)\n                    }\n                }\n                else\n  \
+    \                  throw new IllegalArgumentException(\"illegal parentheses\"\
+    )\n            }\n        }\n        if (paren_string.length == 0)\n         \
+    \   List[String]()\n        else\n            separate(paren_string, 0, new Stack[Char],\
+    \ new StringBuilder(), new ListBuffer[String])", "      var stack : Stack[Char]\
+    \ = new Stack()\n      var count : Map[Int, List[String]] = Map()\n      for (c\
+    \ <- paren_string) {\n        if (c == '(') {\n          stack.push(c)\n     \
+    \   } else if (c == ')') {\n          stack.pop()\n        }\n        if (stack.isEmpty)\
+    \ {\n          if (count.contains(paren_string.indexOf(c))) {\n            count(paren_string.indexOf(c))\
+    \ = c.toString :: count(paren_string.indexOf(c))\n          } else {\n       \
+    \     count(paren_string.indexOf(c)) = List(c.toString)\n          }\n       \
+    \ }\n      }\n      count.toList.map(x => x._2.mkString(\"\")).sorted", "    \
+    \    val left_paren = '('\n        val right_paren = ')'\n        val stack =\
+    \ new ArrayStack[Char]\n        val groups = new ArrayBuffer[String]\n       \
+    \ val buf = new StringBuilder\n        def isEmpty(ch : Char) : Boolean = ch ==\
+    \ ' '\n        def isLeftParen(ch : Char) : Boolean = ch == left_paren\n     \
+    \   def isRightParen(ch : Char) : Boolean = ch == right_paren\n        def addToBuffer(ch\
+    \ : Char) = buf += ch\n        for (i <- 0 until paren_string.length) {\n    \
+    \        val ch = paren_string(i)\n            if (isEmpty(ch)) {\n          \
+    \      // skip\n            } else if (isLeftParen(ch)) {\n                stack.push(ch)\n\
+    \                addToBuffer(ch)\n            } else if (isRightParen(ch)) {\n\
+    \                if (stack.isEmpty) {\n                    throw new IllegalArgumentException(\"\
+    Unbalanced parentheses\")\n                }\n                stack.pop\n    \
+    \            addToBuffer(ch)\n                if (stack.isEmpty) {\n         \
+    \           groups += buf.toString\n                    buf.clear\n          \
+    \      }\n            } else {\n                throw new IllegalArgumentException(\"\
+    Invalid character: \" + ch)\n            }\n        }\n        if (!stack.isEmpty)\
+    \ {\n            throw new IllegalArgumentException(\"Unbalanced parentheses\"\
+    )\n        }\n        groups.toList", "        var index = 0\n        var start\
+    \ = 0\n        var res = List[String]()\n        var current = paren_string\n\
+    \        while (index < current.length) {\n            if (current(index) == '(')\
+    \ {\n                start = index\n            } else if (current(index) == ')')\
+    \ {\n                res = res :+ current.substring(start, index + 1)\n      \
+    \          current = current.substring(0, start) + current.substring(index + 1)\n\
+    \                index = start\n            }\n            index += 1\n      \
+    \  }\n        res", "        // Take the parent string and split it into groups\
+    \ at the ' '\n        // Then loop through each group to determine which ones\
+    \ are closed properly\n        val group_strs = paren_string.split(\" \").toList\n\
+    \        val closed_groups = for {\n            group <- group_strs\n        \
+    \    if isClosed(group)\n        } yield group\n        closed_groups", "    \
+    \    var groups = List[String]()\n        var group = new StringBuilder\n    \
+    \    var depth = 0\n        for (c <- paren_string) {\n            if (c == '(')\
+    \ {\n                if (depth == 0) {\n                    group = new StringBuilder\n\
+    \                }\n                depth += 1\n                group += c\n \
+    \           } else if (c == ')') {\n                depth -= 1\n             \
+    \   group += c\n                if (depth == 0) {\n                    groups\
+    \ = groups :+ group.toString\n                }\n            }\n        }\n  \
+    \      groups", "        var strs = new ArrayBuffer[String]\n        var count\
+    \ = 0\n        var start = 0\n        for (i <- 0 until paren_string.length) {\n\
+    \            val char = paren_string(i)\n            if (char == '(') count +=\
+    \ 1\n            else if (char == ')') count -= 1\n            if (count == 0)\
+    \ {\n                strs += paren_string.substring(start, i + 1)\n          \
+    \      start = i + 1\n            }\n        }\n        strs.toList", "      \
+    \  if (paren_string.length == 0) return List()\n        var count = 0\n      \
+    \  var idx = 0\n        var lst = List[String]()\n        for (c <- paren_string)\
+    \ {\n            if (c == '(') count += 1\n            else if (c == ')') count\
+    \ -= 1\n            if (count == 0) {\n                lst = lst :+ paren_string.substring(0,\
+    \ idx + 1)\n                lst = lst ::: separateParenGroups(paren_string.substring(idx\
+    \ + 1))\n                return lst\n            }\n            idx += 1\n   \
+    \     }\n        return lst", "        var result = List[String]()\n        var\
+    \ tmp = \"\"\n        var left = 0\n        var right = 0\n        for (c <- paren_string)\
+    \ {\n            if (c == '(') {\n                left += 1\n                tmp\
+    \ += c\n            } else if (c == ')') {\n                right += 1\n     \
+    \           tmp += c\n            }\n            if (left == right) {\n      \
+    \          result = tmp :: result\n                tmp = \"\"\n              \
+    \  left = 0\n                right = 0\n            }\n        }\n        result.reverse",
+  "      val ret = Buffer[String]()\n      var current_paren_group = new StringBuilder()\n\
+    \      var depth = 0\n      for (c <- paren_string) {\n        if (c == '(') {\n\
+    \          depth += 1\n          current_paren_group.append(c)\n        } else\
+    \ if (c == ')') {\n          depth -= 1\n          current_paren_group.append(c)\n\
+    \          if (depth == 0) {\n            ret += current_paren_group.toString\n\
+    \            current_paren_group = new StringBuilder()\n          }\n        }\n\
+    \      }\n      ret.toList", "        // Use stack to track the location of the\
+    \ open parentheses.\n        val stack = new Stack[Int]\n        var open_paren_idx\
+    \ = 0\n        val paren_list = new ListBuffer[String]\n        // Iterate through\
+    \ the string, add open parentheses and their location to the stack, and add groups\
+    \ of\n        // parentheses to the list\n        for (i <- 0 until paren_string.length)\
+    \ {\n            if (paren_string(i) == '(') {\n                stack.push(i)\n\
+    \            } else if (paren_string(i) == ')') {\n                open_paren_idx\
+    \ = stack.pop\n                paren_list += paren_string.substring(open_paren_idx,\
+    \ i + 1)\n            }\n        }\n        paren_list.toList", "    \tval ret\
+    \ = new ListBuffer[String]\n    \tvar open = 0\n    \tvar close = 0\n    \tvar\
+    \ start = 0\n    \tvar end = 0\n    \tvar parens = paren_string.filter {_ != '\
+    \ '}\n    \tfor (i <- 0 until parens.length) {\n    \t\tif (parens(i) == '(')\
+    \ open += 1\n    \t\telse close += 1\n    \t\tif (open > 0 && open == close) {\n\
+    \    \t\t\tend = i\n    \t\t\tret += parens.substring(start, end + 1)\n    \t\t\
+    \topen = 0\n    \t\t\tclose = 0\n    \t\t\tstart = i + 1\n    \t\t}\n    \t}\n\
+    \    \tret.toList", "        var paren_groups = List[String]()\n        var current_paren_group\
+    \ = \"\"\n        var parentheses = paren_string.replace(\" \", \"\")\n      \
+    \  for (paren <- parentheses) {\n            if (paren == '(') {\n           \
+    \     if (current_paren_group.length > 0) paren_groups = paren_groups :+ current_paren_group\n\
+    \                current_paren_group = \"(\"\n            } else {\n         \
+    \       current_paren_group += \")\"\n            }\n        }\n        if (current_paren_group.length\
+    \ > 0) paren_groups = paren_groups :+ current_paren_group\n        paren_groups",
+  "        val res = new ArrayBuffer[String]\n        def getToken(stack : List[Char],\
+    \ current : String, idx : Int) : Unit = {\n            if (idx == paren_string.length)\
+    \ {\n                if (stack.isEmpty) res += current\n                return\n\
+    \            }\n            val c = paren_string(idx)\n            if (c == '(')\
+    \ getToken(c :: stack, current + c, idx + 1)\n            else if (c == ')') {\n\
+    \                if (stack.isEmpty) return\n                val top = stack.head\n\
+    \                if (top == '(') getToken(stack.tail, current + c, idx + 1)\n\
+    \            }\n            else getToken(stack, current + c, idx + 1)\n     \
+    \   }\n        getToken(Nil, \"\", 0)\n        res.toList", "        var result\
+    \ = List[String]()\n        for (i <- 0 until paren_string.length) {\n       \
+    \     var j = i\n            var balance = 0\n            while (j < paren_string.length\
+    \ && !(paren_string(j) == ' ' && balance == 0)) {\n                if (paren_string(j)\
+    \ == '(') balance += 1\n                else if (paren_string(j) == ')') balance\
+    \ -= 1\n                j += 1\n            }\n            if (balance == 0) result\
+    \ = result :+ paren_string.substring(i, j)\n        }\n        return result",
+  "        var res = new ArrayBuffer[String]()\n        var cur = new ArrayBuffer[Char]()\n\
+    \        var depth = 0\n        for (c <- paren_string) {\n            if (c ==\
+    \ '(') {\n                depth += 1\n                cur += c\n            }\
+    \ else if (c == ')') {\n                depth -= 1\n                cur += c\n\
+    \                if (depth == 0) {\n                    res += cur.mkString\n\
+    \                    cur.clear\n                }\n            }\n        }\n\
+    \        res.toList", "    \t\tvar result = List[String]()\n    \t\tvar stack\
+    \ = new Stack[Int]()\n    \t\tvar start = 0\n    \t\tvar end = 0\n    \t\tfor\
+    \ (i <- 0 until paren_string.length()) {\n    \t\t\tif (paren_string(i) == '(')\
+    \ {\n    \t\t\t\tstack.push(i)\n    \t\t\t} else if (paren_string(i) == ')') {\n\
+    \    \t\t\t\tstart = stack.pop()\n    \t\t\t\tend = i\n    \t\t\t\tresult = paren_string.substring(start,\
+    \ end + 1) :: result\n    \t\t\t}\n    \t\t}\n    \t\tresult"]
 stop_tokens:
 - "\n    }\n"

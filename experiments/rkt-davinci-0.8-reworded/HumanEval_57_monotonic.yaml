@@ -11,7 +11,107 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate m
   \ 4 1 1 0)) #t)\n    (check-equal? (candidate (list 1 2 3 2 5 60)) #f)\n    (check-equal?\
   \ (candidate (list 1 2 3 4 5 60)) #t)\n    (check-equal? (candidate (list 9 9 9\
   \ 9)) #t)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (cond [(empty? l)\n         #t]\n        [(= (length l) 1)\n    \
+    \     #t]\n        [(equal? (first l) (second l))\n         (monotonic (rest l))]\n\
+    \        [(> (first l) (second l))\n         (and (>= (first l) (third l))\n \
+    \             (monotonic (rest l)))]\n        [(< (first l) (second l))\n    \
+    \     (and (<= (first l) (third l))\n              (monotonic (rest l)))]))",
+  "  (and (and (or (null? (cdr l))\n                (and (< (car l) (cadr l))\n  \
+    \                   (monotonic (cdr l))))\n            (not (list? (cdr l))))\n\
+    \       #t))\n", "  (local [(define (mono_aux l acc)\n            (cond [(empty?\
+    \ l) acc]\n                  [(empty? (rest l)) acc]\n                  [(or (=\
+    \ (first l) (second l))\n                       (= (first l) (- (second l) 1))\n\
+    \                       (= (first l) (+ (second l) 1)))\n                   (mono_aux\
+    \ (rest l) acc)]\n                  [else false]))]\n    (mono_aux l true)))\n",
+  "  (cond\n    ((null? l) #t)\n    ((null? (cdr l)) #t)\n    ((< (car l) (cadr l))\
+    \ (monotonic (cdr l)))\n    ((> (car l) (cadr l)) (monotonic (cdr l)))\n    (else\
+    \ #f)))\n", "  (if (null? l) #t\n      (let ([head (car l)]\n            [tail\
+    \ (cdr l)])\n        (or (and (null? tail) #t)\n            (and (monotonic tail)\n\
+    \                 (or (and (>= head (car tail)) #t)\n                     (and\
+    \ (<= head (car tail)) #t)))))))\n</code>\nI tried to use tail recursion in my\
+    \ solution. My first solution didn't use tail recursion and it had good performance,\
+    \ but I wasn't happy with the implementation. I really want to learn how to write\
+    \ tail recursive functions.\nI know there are two other ways to implement <code>monotonic</code>\
+    \ as a fold function. I wrote that function as well and it runs in \\$\\mathcal{O}(n)\\\
+    $. However, I decided to use tail recursion instead, which is \\$\\mathcal{O}(n)\\\
+    $ in space and time.\nDoes the implementation seem correct and idiomatic Racket?\n\
+    \n\nA:\n\nHere's a tail-recursive solution with the same \\$\\mathcal{O}(n)\\\
+    $ time complexity:\n<code>(define (monotonic l)\n  (define (mono l ascending)\n\
+    \    (if (null? l) #t\n        (if (null? (cdr l)) #t\n            (if (if ascending\
+    \ (&gt;= (car l) (cadr l)) (&lt;= (car l) (cadr l)))\n                (mono (cdr\
+    \ l) ascending)\n                #f))))\n  (if (null? l) #t\n      (mono (cdr\
+    \ l) (&gt; (car l) (cadr l)))))\n</code>\nSince we need to check a pair of elements\
+    \ to determine whether the elements of the list are ascending or descending, we\
+    \ use <code>ascending</code> to signal the desired direction. When we encounter\
+    \ a pair of elements that are inconsistent with the direction, we immediately\
+    \ return <code>#f</code>.\n", "  (let ((opn (cut > <)))\n    (and (opn (car l)\
+    \ (cadr l))\n         (every (cut opn <>) l))))\n", "  (cond [(empty? l) #t]\n\
+    \        [(empty? (rest l)) #t]\n        [(> (first l) (second l))\n         (and\
+    \ (not (member (first l) (rest l)))\n              (monotonic (rest l)))]\n  \
+    \      [(< (first l) (second l))\n         (and (not (member (first l) (rest l)))\n\
+    \              (monotonic (rest l)))]\n        [else #f]))\n", "  (cond\n    [(null?\
+    \ l) #t]\n    [(not (null? (cdr l)))\n     (cond\n       [(< (car l) (cadr l))\n\
+    \        (and (monotonic (cdr l))\n             (monotonic (cons (cadr l) (cddr\
+    \ l))))]\n       [(> (car l) (cadr l))\n        (and (monotonic (cdr l))\n   \
+    \          (monotonic (cons (cadr l) (cddr l))))]\n       [else #f])]\n    [else\
+    \ #t]))\n", "  (if (empty? l) #t\n      (let loop ([l (rest l)] [c (first l)])\n\
+    \        (if (empty? l) #t\n            (let ([n (first l)])\n              (if\
+    \ (<= c n) (loop (rest l) n) #f))))))", "  (cond [(null? l) #t]\n        [(null?\
+    \ (cdr l)) #t]\n        [(and (>= (car l) (cadr l)) (monotonic (cdr l))) #t]\n\
+    \        [(and (<= (car l) (cadr l)) (monotonic (cdr l))) #t]\n        [else #f]))\n",
+  "  (cond [(empty? l) #t]\n        [(and (not (empty? (rest l)))\n              (or\
+    \ (= (first l) (first (rest l)))\n                  (> (first l) (first (rest\
+    \ l)))))\n         (monotonic (rest l))]\n        [else #f]))\n", "  (cond\n \
+    \   ((null? l) #t)\n    ((and (null? (cdr l)) (null? (cddr l))) #t)\n    ((and\
+    \ (null? (cdr l)) (not (null? (cddr l))))\n     (let ((trend (if (< (car l) (cadr\
+    \ l)) 'increasing 'decreasing)))\n       (foldl\n        (lambda (x acc)\n   \
+    \       (and\n           (if (eq? trend 'increasing) (< x acc) (> x acc))\n  \
+    \         acc))\n        #t (cdr l))))\n    (else\n     (let ((trend (if (< (car\
+    \ l) (cadr l)) 'increasing 'decreasing)))\n       (foldl\n        (lambda (x acc)\n\
+    \          (and\n           (if (eq? trend 'increasing) (< x acc) (> x acc))\n\
+    \           acc))\n        #t l)))))\n", "  (and (cond\n        [(null? l) #t]\n\
+    \        [(null? (cdr l)) #t]\n        [(< (car l) (cadr l)) (monotonic (cdr l))]\n\
+    \        [(> (car l) (cadr l)) (monotonic (cdr l))]\n        [else #f])\n    \
+    \   #t))\n", "  (cond [(null? l) #t]\n        [(< (car l) (cadr l)) (monotonic\
+    \ (cdr l))]\n        [(> (car l) (cadr l)) (monotonic (cdr l))]\n        [else\
+    \ #f]))\n", "  (cond [(null? l) #t]\n        [(null? (cdr l)) #t]\n        [(=\
+    \ (car l) (cadr l))\n         (monotonic (cdr l))]\n        [(and (> (car l) (cadr\
+    \ l)) (not (any-negative? (cdr l))))\n         (monotonic (cdr l))]\n        [(and\
+    \ (< (car l) (cadr l)) (not (any-positive? (cdr l))))\n         (monotonic (cdr\
+    \ l))]\n        [else #f]))\n", "  (or (or (accumulate-increasing l) (accumulate-decreasing\
+    \ l)) #f))\n", "  (cond ((empty? l) #t)\n        ((and (empty? (rest l)) #t) #t)\n\
+    \        ((and (equal? (rest l) (empty)) #t) #t)\n        ((and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (", "  (cond ((null? l) #t)\n        ((null? (cdr l)) #t)\n      \
+    \  ((> (car l) (cadr l)) (and (equal? (cddr l) (cdr l)) (monotonic (cdr l))))\n\
+    \        ((< (car l) (cadr l)) (and (equal? (cddr l) (cdr l)) (monotonic (cdr\
+    \ l))))\n        (else #f)))\n", "  (or (define (increasing ls)\n        (if (null?\
+    \ (cdr ls))\n            #t\n            (if (&lt; (car ls) (cadr ls))\n     \
+    \           (increasing (cdr ls))\n                #f)))\n      (define (decreasing\
+    \ ls)\n        (if (null? (cdr ls))\n            #t\n            (if (&gt; (car\
+    \ ls) (cadr ls))\n                (decreasing (cdr ls))\n                #f)))\n\
+    \      (or (increasing l) (decreasing l))))\n</code>\nI can run tests with <code>check-expect</code>\
+    \ and <code>check-within</code> but I want to go a step further and create a testbed\
+    \ function which runs monotonic on all three of my test cases. \n<code>(check-expect\
+    \ (monotonic (list 1 2 4 20)) #t)", "  (define (asc? l)\n    (cond [(empty? l)\
+    \ #t]\n          [(empty? (rest l)) #t]\n          [(< (first l) (first (rest\
+    \ l))) (asc? (rest l))]\n          [else #f]))\n  (define (desc? l)\n    (cond\
+    \ [(empty? l) #t]\n          [(empty? (rest l)) #t]\n          [(> (first l) (first\
+    \ (rest l))) (desc? (rest l))]\n          [else #f]))\n  (cond [(asc? l) #t]\n\
+    \        [(desc? l) #t]\n        [else #f]))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

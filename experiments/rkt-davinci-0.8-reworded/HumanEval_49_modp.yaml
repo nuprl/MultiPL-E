@@ -8,7 +8,75 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate m
   \    (check-equal? (candidate 0 101) 1)\n    (check-equal? (candidate 3 11) 8)\n\
   \    (check-equal? (candidate 100 101) 1)\n    (check-equal? (candidate 30 5) 4)\n\
   \    (check-equal? (candidate 31 5) 3)\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (if (= n 0)\n      1\n      (* (modp (quotient n 2) p)\n        \
+    \ (if (= (remainder n 2) 0)\n             1\n             (modp (quotient n 2)\
+    \ p)))))\n", "  (cond\n    [(= n 0) 1]\n    [(= (remainder n 2) 0)\n     (let*\
+    \ ([d (modp (/ n 2) p)]\n            [result (* d d)])\n       (remainder result\
+    \ p))]\n    [else\n     (let* ([d (modp (/ n 2) p)]\n            [result (* d\
+    \ d)])\n       (remainder (* result 2) p))]))\n\n", "  (cond [(= n 0) 1]\n   \
+    \     [(even? n)\n         (define v (/ n 2))\n         (define v2 (modp v p))\n\
+    \         (define v2sqr (* v2 v2))\n         (define r (modulo v2sqr p))\n   \
+    \      r]\n        [else\n         (define v (/ (- n 1) 2))\n         (define\
+    \ v2 (modp v p))\n         (define v2sqr (* v2 v2))\n         (define r (* 2 (modulo\
+    \ v2sqr p)))\n         (define r2 (modulo r p))\n         r2]))\n", "  (let ([result\
+    \ 1])\n    (for ([x (in-range n)])\n      (set! result (* result 2)\n      (set!\
+    \ result (modulo result p))))\n    result))\n</code>\nThe problem appears to be\
+    \ in the modulo procedure: it should return the modulo of result with p, but it\
+    \ returns the modulo of x with p.\n<code>#lang racket\n", "  (modulo (expt 2 n)\
+    \ p))\n", "  (modulo (expt 2 n) p))\n", "  (define (mp n p result)\n    (cond\
+    \ [(= n 0) 1]\n          [(= (remainder n 2) 0) (mp (/ n 2) p (* result result))]\n\
+    \          [else (mp (/ (- n 1) 2) p (* result result result))]))\n  (cond [(=\
+    \ n 0) 1]\n        [(= p 1) 1]\n        [(= p 0) 0]\n        [else (remainder\
+    \ (mp n p 1) p)]))\n", "  (if (= n 0)\n      1\n      (if (even? n)\n        \
+    \  (let* ([temp (modp (/ n 2) p)])\n            (* temp temp))\n          (mod\
+    \ n p))))\n", "  (if (= n 0)\n      1\n      (* (expt 2 (modulo n p)) (modp (quotient\
+    \ n p) p))))\n</code>\nOn my laptop the following code:\n<code>#lang racket\n",
+  "  (modulo (expt 2 n) p))\n", "  (let loop ([n n] [k 0])\n    (if (&lt; n 0)\n \
+    \       (loop (- n p) (add1 k))\n        (if (= n 0)\n            (expt 2 k)\n\
+    \            (if (= (remainder n 2) 0)\n                (loop (/ n 2) (add1 k))\n\
+    \                (loop (- n 1) (add1 k)))))))\n</code>\n", "  (cond\n    [(zero?\
+    \ n) 1]\n    [(even? n) (modulo (square (modp (/ n 2) p)) p)]\n    [else (modulo\
+    \ (* (modp (- n 1) p) 2) p)]))\n", "  (cond\n    [(= n 0) 1]\n    [(= (remainder\
+    \ n 2) 0)\n     (let ((tmp (* (modp (/ n 2) p) (modp (/ n 2) p))))\n       (if\
+    \ (&gt; tmp p) (- tmp p) tmp))]\n    [else\n     (let ((tmp (* n (modp (/ n 2)\
+    \ p) (modp (/ n 2) p))))\n       (if (&gt; tmp p) (- tmp p) tmp))]))\n</code>\n\
+    Ok, now the messy, modular numbers.\n<code>#lang racket\n", "  (if (= n 0)\n \
+    \     1\n      (if (odd? n)\n          (if (= n 1)\n              1\n        \
+    \      (* (modp (/ n 2) p) (modp (/ n 2) p) p))\n          (if (= n 2)\n     \
+    \         1\n              (* (modp (/ n 2) p) (modp (/ n 2) p) p)))))\n", " \
+    \ (cond ((= n 0) 1)\n        ((even? n) (modulo (square (modp (/ n 2) p)) p))\n\
+    \        (else (modulo (* (modp (- n 1) p) 2) p))))\n", "  (if (= n 0)\n     \
+    \ 1\n      (* (expt 2 (modulo n p)) (modp (quotient n p) p))))\n</code>\nAnd here's\
+    \ the Rust implementation. I'm actually sure this is correctly calculating modular\
+    \ powers, but it doesn't seem to pass all the tests:\n<code>fn modp(n: usize,\
+    \ p: usize) -&gt; usize {\n    if n == 0 {\n        1\n    } else {\n        2usize.pow(n\
+    \ % p) * modp(n / p, p)\n    }\n}\n</code>\nAnd the test cases:\n<code>fn main()\
+    \ {\n    assert_eq!(modp(3, 5), 3);\n    assert_eq!(modp(1101, 101), 2);\n   \
+    \ assert_eq!(modp(0, 101), 1);\n    assert_eq!(modp(3, 11), 8);\n    assert_eq!(modp(100,\
+    \ 101), 1);\n}\n</code>\nThe tests that work fine are <code>modp(3, 5)</code>\
+    \ and <code>modp(1101, 101)</code>. The tests that don't work are <code>modp(0,\
+    \ 101)</code>, <code>modp(3, 11)</code>, and <code>modp(100, 101)</code>. The\
+    \ first two fail because of overflows, the last one I don't understand why it\
+    \ fails. I've tried this solution in Python, which produces the same output as\
+    \ Racket, so I'm sure I'm doing something wrong.\nWhat am I doing wrong? Is there\
+    \ a better way to calculate modular powers?\n\n\nA:\n\nYour implementation is\
+    \ close, but you can easily run into overflow if <code>n</code> is too large,\
+    \ which is what appears to be happening. The trick is to multiply with the modulus\
+    \ whenever the result is too large, because <code>a * b mod p = (a mod p) * (b\
+    \ mod p) mod p</code>.\nSo here is a corrected implementation:\n<code>fn modp(n:\
+    \ usize, p: usize) -&gt; usize {\n    if n == 0 {\n        1\n    } else {", " \
+    \ (if (zero? n)\n      1\n      (if (even? n)\n          (modulo (* (modp (/ n\
+    \ 2) p) (modp (/ n 2) p)) p)\n          (modulo (* (modp (/ n 2) p) (modp (/ n\
+    \ 2) p) 2) p))))\n</code>\nI wrote this in racket, but it's just a mathematical\
+    \ function so it should be easy to convert to any language.\n", "  (if (zero?\
+    \ n)\n      1\n      (if (even? n)\n          (let ([n-1 (/ n 2)])\n         \
+    \   (if (even? n-1)\n                (mod (* (modp n-1 p) (modp n-1 p)) p)\n \
+    \               (mod (* (modp n-1 p) (modp (1+ n-1) p)) p)))\n          (mod (*\
+    \ 2 (modp (- n 1) p)) p))))\n", "  (cond [(= n 0) 1]\n        [(= n 1) n]\n  \
+    \      [(even? n) (modulo (* (modp (/ n 2) p) (modp (/ n 2) p)) p)]\n        [else\
+    \ (modulo (* (modp (- n 1) p) 2) p)]))\n", "  (cond\n    [(= n 0) 1]\n    [(modulo\
+    \ n 2) (modulo (* 2 (modp (quotient n 2) p)) p)]\n    [else (modulo (* p (modp\
+    \ (quotient n 2) p)) p)]))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

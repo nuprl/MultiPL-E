@@ -6,6 +6,113 @@ prompt: "/// Given a positive integer n, return the count of the numbers of n-di
 tests: "}\n\nfn main() {\n    let candidate = starts_one_ends;\n    assert_eq!(candidate(1),\
   \ 1);\n    assert_eq!(candidate(2), 18);\n    assert_eq!(candidate(3), 180);\n \
   \   assert_eq!(candidate(4), 1800);\n    assert_eq!(candidate(5), 18000);\n}\n"
-completions: []
+completions: ["    // First construct the set of n-digit numbers that have a 1 at\
+    \ the end\n    let mut ones_at_end = Vec::new();\n    for i in 1..10 {\n     \
+    \   for j in 0..i {\n            let mut num = i;\n            for _ in 1..n {\n\
+    \                num = num * 10 + j;\n            }\n            ones_at_end.push(num);\n\
+    \        }\n    }\n\n    // Find out how many of them are valid\n    let mut count\
+    \ = 0;\n    for num in ones_at_end {\n        let mut num_clone = num;\n     \
+    \   while num_clone > 0 {\n            if num_clone % 10 > 1 {\n             \
+    \   break;\n            }\n            num_clone /= 10;\n        }\n        if\
+    \ num_clone == 0 {\n            count += 1;\n        }\n    }\n\n    // Multiply\
+    \ the number by 2 because the number of ones at the start is the\n    // same\
+    \ as the number of ones at the end.\n    2 * count", "    if n <= 1 {\n      \
+    \  return 1;\n    }\n    let mut count = 0;\n    for i in 1..n {\n        count\
+    \ += starts_one_ends(i) * starts_one_ends(n - i);\n    }\n    count", "    let\
+    \ mut arr = vec![0; 10];\n    arr[0] = 1;\n    for i in 1..n {\n        let mut\
+    \ sum = 0;\n        for j in 0..10 {\n            sum += arr[j];\n           \
+    \ arr[j] = sum;\n        }\n    }\n    arr.iter().sum()", "    let mut total =\
+    \ 0;\n    let mut cur = 0;\n    for d in 0..n {\n        cur = cur * 10 + 1;\n\
+    \        total += cur;\n    }\n    total", "    // For example:\n    // n = 1,\
+    \ then 1\n    // n = 2, then there are 10 + 11 = 21 positive numbers, but ignore\
+    \ the\n    // number 0. Then it is 21 - 1 = 20.\n    // n = 3, then the number\
+    \ of 2-digit starts with 1 is 20, and the number\n    // of 2-digit ends with\
+    \ 1 is 10. So it is 20 * 10 + 10 = 210.\n    // n = 4, then the number of 3-digit\
+    \ starts with 1 is 210, and the number\n    // of 3-digit ends with 1 is 20. So\
+    \ it is 210 * 10 + 20 = 2210.\n    //\n    // So we can get the pattern:\n   \
+    \ // f(1) = 1\n    // f(2) = 20\n    // f(3) = 210\n    // f(4) = 2210\n    //\
+    \ f(5) = 22210\n    // ...\n    // f(n) = 10 * f(n - 1) + f(n - 2) for n >= 3\n\
+    \    //\n    // Furthermore, we can find there is a Fibonacci-like recurrence:\n\
+    \    // f(1) = 1\n    // f(2) = 20\n    // f(3) = 220\n    // f(4) = 2420\n  \
+    \  // f(5) = 26420\n    // ...\n    // f(n) = 100 * f(n - 1) + f(n - 2) for n\
+    \ >= 3\n    //\n    // We can find the Fibonacci-like sequence by replacing 1\
+    \ with 100, and 20\n    // with 0.\n    //\n    // So the final algorithm is:\n\
+    \    // f(1) = 1\n    // f(2) = 20\n    // f(n) = 10 * f(n - 1) + f(n - 2) for\
+    \ n >= 3\n    let mut f1 = 1;\n    let mut f2 = 20;\n    let mut f;\n    for _\
+    \ in 3..n + 1 {\n        f = 10 * f1 + f2;\n        f1 = f2;\n        f2 = f;\n\
+    \    }\n    f", "    // We could make a recursive function to compute this. This\
+    \ recursive function\n    // will have a base case of n = 1, which returns 2.\n\
+    \    // It will also have a recurrence relation: f(n) = 11 * f(n - 1) + 10 * 10^(n\
+    \ - 2)\n    // where f(n) is the number of integers that start or end with 1.\n\
+    \    // However, this is not the most efficient way to compute this.\n    // The\
+    \ other way to compute this is to use the fact that this number is simply\n  \
+    \  // 10^(n - 1) + 9 * 10^(n - 2).\n    // For example, 2-digit numbers that start\
+    \ or end with 1 are 11 to 19, 21 to 29,\n    // 31 to 39, 41 to 49, 51 to 59,\
+    \ 61 to 69, 71 to 79, 81 to 89, 91 to 99.\n    // These are the numbers from 11\
+    \ to 99, minus the numbers from 10 to 90.\n    // Since 10 to 90 is 9 * 10^(2\
+    \ - 1), our formula is simply the sum of\n    // 10^(2 - 1) and 9 * 10^(2 - 2),\
+    \ which is 10^1 + 9 * 10^0, which is 19.\n    // For 3-digit numbers, we have\
+    \ a similar breakdown. If a number starts or ends\n    // with 1, then it must\
+    \ be in the range of 111 to 199, 211 to 299, ..., 911 to 999.\n    // This is\
+    \ all the 3-digit numbers, minus the range of 110 to 990.\n    // Since the range\
+    \ of 110 to 990 is 9 * 10^(3 - 1), and we have 10^(3 - 1) for\n    // the rest\
+    \ of the 3-digit numbers, we can just add these two numbers together,\n    //\
+    \ which gives us 10^2 + 9 * 10^1, which is 109.\n    // We can continue this logic\
+    \ for any number of digits.\n    // Note that this recurrence relation is somewhat\
+    \ similar to the one above,\n    // with the exception that we don't have the\
+    \ f(n - 1) term, because\n    // 10^(n - 1) is not dependent on any other values.\n\
+    \    // This is simply the sum of 10^(n - 1) and 9 * 10", "    let mut sum = 0;\n\
+    \    for i in 0..n {\n        sum += 10isize.pow(i);\n    }\n    sum * 2", " \
+    \   let e = (10 as isize).pow(n as u32);\n    let t = (10 as isize).pow((n - 1)\
+    \ as u32);\n    let a = ((e - 1) - (e - t)) / 10;\n    let b = e - 10 * a;\n \
+    \   if n == 1 {\n        a + b\n    } else {\n        starts_one_ends(n - 1) +\
+    \ a + b\n    }", "    // Return the number of n-digit numbers with a given first\
+    \ digit and last\n    // digit.\n    fn counts(first: isize, last: isize, digits:\
+    \ isize) -> isize {\n        if digits == 1 {\n            return 1;\n       \
+    \ }\n\n        // The first digit can't be 1, otherwise it'll be a one-digit number.\n\
+    \        // Also, the first digit can't be 3, or else it'll be an one-digit\n\
+    \        // number.\n        let mut count = (10 - last - first) * 10i64.pow(digits\
+    \ - 2) as isize;\n\n        // If the first digit is one and the last is the same,\
+    \ then the\n        // remaining digits must be a number without any ones.\n \
+    \       if first == 1 && last == 1 {\n            // This is the number of numbers\
+    \ without any ones.\n            count += 10i64.pow(digits - 2) as isize - 1;\n\
+    \        }\n\n        count\n    }\n\n    let mut count = 0;\n\n    // Count the\
+    \ numbers with a first digit of 1.\n    count += counts(1, 1, n) + counts(1, 0,\
+    \ n);\n\n    // Count the numbers with a last digit of 1.\n    count += counts(0,\
+    \ 1, n) + counts(1, 1, n);\n\n    count", "    // The number of n-digit numbers\
+    \ starting or ending with 1 is given by\n    // the number of n-digit numbers\
+    \ - the number of n-digit numbers without 1.\n    // The number of n-digit numbers\
+    \ without 1 is given by 10^(n-1) * 9.\n    (10_isize.pow(n - 1) * 9) - (9_isize.pow(n\
+    \ - 1) * 9)", "    let length = n as usize;\n    let mut fib = Fibonacci::new(length);\n\
+    \    let mut prev = 0;\n    let mut count = 0;\n    while fib.len() < length +\
+    \ 1 {\n        count += prev * fib.next().unwrap();\n        prev = fib.next().unwrap();\n\
+    \    }\n    return count;", "    if n <= 0 {\n        return 0;\n    }\n    let\
+    \ mut res = 0;\n    let mut prev = 0;\n    let mut cur = 0;\n    for i in 0..n\
+    \ {\n        if i == 0 {\n            cur = 1;\n        } else if i == 1 {\n \
+    \           cur = 9;\n        } else {\n            let tmp = cur;\n         \
+    \   cur = cur * 9 + prev;\n            prev = tmp;\n        }\n        res +=\
+    \ cur;\n    }\n    res", "    let mut result = 0;\n    for i in 1..(n + 1) {\n\
+    \        result += number_of_one(i);\n    }\n    result", "    if n == 1 {\n \
+    \       1\n    } else {\n        starts_one_ends(n - 1) + starts_one_ends(n -\
+    \ 2)\n    }", "    if n <= 1 {\n        return 0;\n    }\n\n    let mut starts\
+    \ = pow(9, n - 1);\n    let mut ends = pow(10, n - 1);\n\n    if n >= 2 {\n  \
+    \      starts += pow(9, n - 2);\n    }\n\n    if n >= 3 {\n        ends += pow(9,\
+    \ n - 2);\n    }\n\n    starts + ends", "    if n == 1 {\n        return 10;\n\
+    \    }\n    let mut count = 9;\n    for _ in 2..n {\n        count *= 9;\n   \
+    \ }\n    count + starts_one_ends(n - 1)", "    if n <= 1 {\n        return 1;\n\
+    \    }\n    9 * starts_one_ends(n - 1)", "    if n == 1 {\n        return 1;\n\
+    \    }\n    let mut count = 2;\n    let mut m = 2;\n    while m <= n {\n     \
+    \   count *= 9;\n        m += 1;\n    }\n    count", "    if n == 1 {\n      \
+    \  return 2;\n    }\n\n    let mut dp = vec![vec![0; 10]; (n + 1) as usize];\n\
+    \    let mut count = 0;\n\n    // dp[i][j] represents the count of i-digit numbers\
+    \ which end with j\n    for j in 1..10 {\n        dp[1][j] = 1;\n    }\n\n   \
+    \ for i in 2..=n {\n        for j in 0..10 {\n            for k in 0..10 {\n \
+    \               if k == 0 && j == 0 {\n                    dp[i as usize][j] =\
+    \ 0;\n                } else {\n                    dp[i as usize][j] += dp[(i\
+    \ - 1) as usize][k];\n                }\n            }\n        }\n    }\n\n \
+    \   for j in 1..10 {\n        count += dp[n as usize][j];\n    }\n\n    count",
+  "    if n == 1 {\n        return 10;\n    }\n    if n == 2 {\n        return 20;\n\
+    \    }\n    let mut result = 0;\n    result += starts_one_ends(n - 1);\n    result\
+    \ += starts_one_ends(n - 2);\n    result"]
 stop_tokens:
 - "\n}"

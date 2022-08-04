@@ -12,6 +12,103 @@ tests: "}\n\ncandidate() {\n    count_nums \"$@\"\n}\n\nset -e\nrun_test() {\n  
   \ 0 1 5\") = \"5\" ]]\n    [[ $(candidate \"1 100 98 -7 1 -1\") = \"4\" ]]\n   \
   \ [[ $(candidate \"12 23 34 -45 -56 0\") = \"5\" ]]\n    [[ $(candidate \"0 1\"\
   ) = \"1\" ]]\n    [[ $(candidate \"1\") = \"1\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local num_str=\"$1\"\n  local digits=\"\"\n  local count=0\n  while\
+    \ [[ \" $num_str \" =~ ((-*|[+])([0-9]+)) ]]; do\n    local neg=false\n    local\
+    \ digit=$BASH_REMATCH[2]\n    if [[ \" $num_str \" =~ (^[-]*$|^[+]*$) ]]; then\n\
+    \      neg=true\n      num_str=\"$num_str$digit\"\n    fi\n    digits=\"$digits$digit\"\
+    \n    count=$((count+1))\n  done\n  if [[ ${#digits} -gt 0 ]]; then\n    local\
+    \ n=0\n    while [[ \" $digits \" =~ (^[+-]*$|^[-]*$) ]]; do\n      digits=\"\
+    $digits${BASH_REMATCH[1]}\"\n      n=$((n+1))\n    done\n    if [[ ${n} -eq 1\
+    \ ]]; then\n      digits=\"$digits\"\n    fi\n    echo \"$count\"\n  else\n  \
+    \  echo \"0\"\n  fi", "  local arr=($1)\n  local nums=$(count_digits_nums ${arr[@]})\n\
+    \  [[ -z $nums ]]||return 0\n  echo \"$nums\"", "  local nums=$1\n  local digits=$2\n\
+    \  local sum_of_digits=$3\n  local num_sum=0\n  local index=0\n\n  while [ $index\
+    \ -le ${#nums[*]} ]; do\n    (( num_sum += $(( ${nums[$index]} % $digits )) ))\n\
+    \    (( index += 1 ))\n  done\n\n  echo \"$num_sum\"", "    local arr=$1\n   \
+    \ local result\n    for num in $arr; do\n        (( result = $num + $result ))\n\
+    \    done\n    echo $result", "    local array=$1\n    local digits=0\n    local\
+    \ digit\n    local elements=${#array[@]}\n    local count=0\n    local sign\n\
+    \    local result\n    local num\n\n    for (( i=0; i<${#array[@]}; i++ )); do\n\
+    \        if [[ ${array[$i]} == \"-\" ]]; then\n            sign=${array[$((i+1))]}\n\
+    \            i=$((i+2))\n        else\n            sign=1\n        fi\n\n    \
+    \    digit=$((${array[$i]}*$sign))\n        result=$((${digits:+$digits}+digit))\n\
+    \        if (( $result > 0 )) ; then\n            count=$((count+1))\n       \
+    \ fi\n        digits=$result\n    done\n\n    return $count", "  local num_list=\"\
+    $1\"\n  local num=0 sum=0\n  local -n num_arr=\"num_arr\"\n\n  for num in \"${num_list[@]}\"\
+    ; do\n    ((sum+=num))\n  done\n\n  # If there is a negative number, the sign\
+    \ of its first digit is\n  # negative. Remove it before the digits are summed.\n\
+    \  if (( sum < 0 )); then\n    sum=$(echo \"${sum}\" | cut -c1)\n  fi\n\n  num_arr+=(\"\
+    ${num_list[@]:0:-1}\")\n  num_arr+=(\"${num_list[@]}\")\n\n  # The number of elements\
+    \ which has a sum of digits > 0 is returned.\n  printf \"$sum\\n\"", "    local\
+    \ sum=0\n    local num=$(echo \"${1}\" | tr \" \" \"\\n\")\n\n    for n in \"\
+    ${num[@]}\"; do\n        if [[ $n =~ ^-?[0-9]+$ ]]; then\n            sum=\"$((\
+    \ sum + $n ))\"\n        elif [[ $n =~ ^-?[0-9][0-9]*$ ]]; then\n            sum=\"\
+    $(( sum - $(( 10#$n )) ))\"\n        else\n            sum=\"$(( sum + $(( 10#$n\
+    \ )) ))\"\n        fi\n    done\n    echo \"$sum\"", "  # TODO: add test for negative\
+    \ numbers, e.g. -001, -020, -0100, etc.\n  local sum=0\n  local count=0\n  local\
+    \ element=0\n  shift\n\n  while test \"$#\" -gt 0\n  do\n    local i=\"$1\"\n\
+    \    local j=\"$(( 10#$i + $2 ))\"\n    if test \"$j\" -lt 10 && test \"$j\" -gt\
+    \ 0\n    then\n      sum=$(($sum+$i))\n      count=$(( count+1 ))\n    fi\n  \
+    \  shift\n  done\n\n  echo $sum, $count", "    local numbers=$1 count=0\n    for\
+    \ number in $numbers; do\n        local sign\n        if [[ $number =~ (^-?[0-9]+)$\
+    \ ]]; then\n            sign=${number%?}\n        else\n            sign=0\n \
+    \       fi\n        local digits=${number//-?/ } count=$(( 1 + $count ))\n   \
+    \     if [[ ${digits:0:1} == ${digits:1} ]]; then\n            if [[ ${digits}\
+    \ -ge 0 ]]; then\n                digits=$(( ${digits} - 1 ))\n            else\n\
+    \                digits=$(( ${digits} - 2 ))\n            fi\n        fi\n   \
+    \     if [[ ${digits:0:1} != 0 ]]; then\n            if (( ${digits} < 4 )); then\n\
+    \                echo \"Bad sign: ${sign}, digits=$digits\"\n            else\n\
+    \                if (( ${digits} >= 0 )); then\n                    echo \"Bad\
+    \ sign: ${sign}, digits=$digits\"\n                else\n                    count=$((\
+    \ ${digits} )); count=$(( ${count} - 1 ))\n                fi\n            fi\n\
+    \        fi\n    done\n    echo ${count}", "    local -n arr=$1 sum=0\n    IFS=$'\\\
+    n' read -r -a arr <<<\"$1\"\n    for i in \"${arr[@]}\"; do\n        if (( i >\
+    \ 0 )) && (( i % 10 > 0 )) ; then\n            (( sum += i ))\n        fi\n  \
+    \  done\n    echo \"$sum\"", "  local IFS=' '\n  local i n sum\n  for (( i=0;\
+    \ i < \"${#1[@]}\"; i++ )); do\n    n=\"${1+i}\"\n    sum=0\n    while (( n>0\
+    \ )); do\n      (( sum+=n % 10 ))\n      n=\"$(( n / 10 ))\"\n    done\n    #\
+    \ check if sum is > 0\n    if [[ ${sum} -gt 0 ]]; then\n      echo -n \"$i \"\n\
+    \    fi\n  done", "  local array=\"$1\"\n  local -a result\n\n  if [ \"${array[@]}\"\
+    \ = \"\" ]; then\n    result=\"0\"\n  else\n    result=$(\n      # $array is the\
+    \ array\n      set -- ${array[@]}\n      # $1 is the first element of the array\n\
+    \      set -- \"$1\"\n      # $2 is the rest of the array\n      IFS=' '\n   \
+    \   echo \"$@\" | grep -v '^--'\n    )\n  fi\n\n  IFS=','; echo \"$result\" |\
+    \ wc -l", "\tlocal number=$1\n\techo $(( $# % 10 + ${number:0:1}) )", "    local\
+    \ -n result=$1\n    local num\n    for num in \"${@:3}\"; do\n        local numStr=$(printf\
+    \ \"%.${#num}s\" \"$num\")\n        local count=$(printf \"$numStr\" | \\\n  \
+    \                       grep -Eo '^[+-]{1,}[0-9]+$')\n        result+=$(echo \"\
+    $count\" | bc)\n    done\n    printf \"%s\\n\" \"$result\"", "    local arr=$1\n\
+    \    local -i num_negative=0\n    # Loop over the array\n    local -i sum=0\n\
+    \    for num in ${arr[@]}; do\n        local digits=$((num % 10))\n        ((\
+    \ num > 0 )) && num_negative=$((-num_negative))\n        (( sum += digits ))\n\
+    \    done\n    (( sum > 0 )) && num_negative=$((-num_negative))\n    (( num_negative\
+    \ > 0 )) && sum=$((num_negative - sum))\n    (( sum > 0 )) && echo $sum", "  #\
+    \ $1 is expected to be an array\n  local nums=\"${1}\"\n\n  # Convert $nums to\
+    \ an array\n  IFS=$'\\n' read -r -d '' -a nums <<< \"${nums}\"\n\n  # Sum each\
+    \ element of the array\n  local sum\n\n  for element in \"${nums[@]}\"; do\n \
+    \   (( sum += element ))\n  done\n\n  # If sum is positive, then $nums contains\
+    \ at least one positive integer\n  if (( \"${sum}\" > 0 )); then\n    echo ${#nums[@]}\n\
+    \  else\n    # If the sum is negative, then $nums contains at least one negative\
+    \ integer\n    if [[ \"${sum}\" < 0 ]]; then\n      echo ${#nums[@]}\n    else\n\
+    \      # Otherwise, there is at least one integer with a sum > 0\n      echo -1\n\
+    \    fi\n  fi", "  # Your code here\n  if [ $# == 0 ]\n  then\n    return 0\n\
+    \  else\n    echo \"${1}\" | awk '{\n      for(i=1; i<NF; i++)\n      {\n    \
+    \    sum = 0\n        for(j=1; j<=i; j++)\n        {\n          sum+=$(echo \"\
+    ${1}[j-1]*$j\" | bc)\n        }\n        if(sum > 0)\n        {\n          count++\n\
+    \        }\n      }\n    }\n    END {\n      print \"The list has \" count \"\
+    \ elements\"\n    }'\n  fi", "        echo -n 'echo ' >> /tmp/tmpcount.sh\n  \
+    \      echo -n '[ $# -gt 0 ] && echo -n \"$@\" | tr \" \" \"\\n\" | sort -n |\
+    \ uniq -c | while read num; do' >> /tmp/tmpcount.sh\n        echo -n '[ $num -gt\
+    \ 0 ] && echo -n \"$$num\"' >> /tmp/tmpcount.sh\n        echo -n 'done' >> /tmp/tmpcount.sh\n\
+    \        ./tmp/tmpcount.sh\n        rm /tmp/tmpcount.sh", "  local array=\"$1\"\
+    \n  local num=0 i\n  local sign\n  for ((i = 0; i <= ${#array}; i++)); do\n  \
+    \  sign=\"${array[$i]}\" && break\n  done\n  if [[ -z ${sign} ]]; then\n    sign=1\n\
+    \  fi\n  for ((i = 0; i <= ${#array}; i++)); do\n    ((num += ${array[$i]} % 10))\
+    \ || break\n  done\n  [[ -z ${array[$i]} ]] || echo -n ${sign} ${num}", "    local\
+    \ array=\"$1\"\n    local len=0\n    local csum=0\n    local j=0\n    for i in\
+    \ \"${array[@]}\"; do\n        # Skip negative numbers since -(-123) = -(123)\n\
+    \        if [ \"$i\" -lt 0 ]; then\n            continue\n        fi\n       \
+    \ csum+=$(echo \"$i\" | awk '{print $1}')\n        len=$((len + csum))\n     \
+    \   j=$((j + 1))\n    done\n    echo \"$len\""]
 stop_tokens:
 - "\n}"

@@ -19,6 +19,165 @@ tests: "    }\n    def main(args: Array[String]) = {\n    assert(doAlgebra((List
   \ 3l.toLong, 4l.toLong, 5l.toLong))) == (9l));\n    assert(doAlgebra((List[String](\"\
   //\", \"*\")), (List[Long](7l.toLong, 3l.toLong, 4l.toLong))) == (8l));\n    }\n\
   \n}\n"
-completions: []
+completions: ["        // see https://en.wikipedia.org/wiki/Order_of_operations\n\
+    \        // see https://en.wikipedia.org/wiki/Order_of_operations#Programming_languages\n\
+    \        // Scala language has the following order of operations\n        // a\
+    \ + b * c - d / e ^ f == a + (b * c) - (d / (e ^ f))\n        // a ^ b ^ c ==\
+    \ a ^ (b ^ c)\n        if (op.length != operand.length - 1) throw new IllegalArgumentException()\n\
+    \        var expression = \"\"\n        var i = 0\n        while (i < op.length)\
+    \ {\n            expression += s\"${operand(i)} ${op(i)} \"\n            i +=\
+    \ 1\n        }\n        expression += s\"${operand(i)}\"\n        return eval(expression)",
+  "        def operation(op1 : String, op2 : String, n1 : Long, n2 : Long) : Long\
+    \ = {\n            op1 match {\n                case \"+\" => n1 + n2\n      \
+    \          case \"-\" => n1 - n2\n                case \"*\" => n1 * n2\n    \
+    \            case \"//\" => n1 / n2\n                case \"**\" => pow(n1, n2).toLong\n\
+    \            }\n        }\n        def solve(op : List[String], operand : List[Long])\
+    \ : Long = {\n            if (op.length == 1) operation(op(0), op(0), operand(0),\
+    \ operand(1))\n            else {\n                val index = op.indexOf(\"**\"\
+    )\n                if (index == -1) operation(op(0), op(0), operand(0), operand(1))\n\
+    \                else operation(op(index), op(index), operand(index), operand(index\
+    \ + 1))\n            }\n        }\n        def evaluate(op : List[String], operand\
+    \ : List[Long]) : (List[String], List[Long]) = {\n            if (op.length ==\
+    \ 1) (op, operand)\n            else {\n                val index = op.indexOf(\"\
+    **\")\n                if (index == -1) (op.tail, operand.tail)\n            \
+    \    else (op.patch(index, List(solve(op.slice(index, index + 2), operand.slice(index,\
+    \ index + 2)).toString), 2), operand.patch(index, List(solve(op.slice(index, index\
+    \ + 2), operand.slice(index, index + 2))), 2))\n            }\n        }\n   \
+    \     def helper(op : List[String], operand : List[Long]) : Long = {\n       \
+    \     if (op.length == 1) solve(op, operand)\n            else {\n           \
+    \     val x = evaluate(op, operand)\n                helper(x._1, x._2)\n    \
+    \        }\n        }\n        helper(op, operand)", "        (op zip operand.tail).foldLeft(operand.head)\
+    \ {case (a, (b, c)) =>\n            b match {\n                case \"+\" => a\
+    \ + c\n                case \"-\" => a - c\n                case \"*\" => a *\
+    \ c\n                case \"//\" => a / c\n                case \"**\" => pow(a,\
+    \ c).toLong\n            }\n        }", "        op.indices.foldLeft((operand.head,\
+    \ operand.tail))((acc, i) => {\n            (op(i) match {\n                case\
+    \ \"+\" => acc._1 + acc._2.head\n                case \"-\" => acc._1 - acc._2.head\n\
+    \                case \"*\" => acc._1 * acc._2.head\n                case \"//\"\
+    \ => acc._1 / acc._2.head\n                case \"**\" => pow(acc._1, acc._2.head).toLong\n\
+    \            }, acc._2.tail)\n        })._1", "        val builder = new StringBuilder()\n\
+    \        for ((oper, i) <- operand.zipWithIndex) {\n            if (i != 0) {\n\
+    \                builder.append(op(i - 1))\n            }\n            builder.append(oper)\n\
+    \        }\n        eval(builder.toString())", "        var res = operand(0)\n\
+    \        for (i <- 0 until op.length) {\n            if (op(i) == \"+\") res +=\
+    \ operand(i + 1)\n            else if (op(i) == \"-\") res -= operand(i + 1)\n\
+    \            else if (op(i) == \"*\") res *= operand(i + 1)\n            else\
+    \ if (op(i) == \"//\") res /= operand(i + 1)\n            else if (op(i) == \"\
+    **\") res = pow(res, operand(i + 1)).toLong\n        }\n        res", "      \
+    \  var stack = new Stack[Long]\n        var index = 0\n        while (index <\
+    \ op.length) {\n            var calc = op(index) match {\n                case\
+    \ \"+\" => operand(index) + operand(index + 1)\n                case \"-\" =>\
+    \ operand(index) - operand(index + 1)\n                case \"*\" => operand(index)\
+    \ * operand(index + 1)\n                case \"//\" => operand(index) / operand(index\
+    \ + 1)\n                case \"**\" => pow(operand(index), operand(index + 1)).toLong\n\
+    \            }\n            stack.push(calc)\n            index += 1\n       \
+    \ }\n        stack.pop", "        var stack = new Stack[Long]\n        var opStack\
+    \ = new Stack[String]\n        for (i <- 0 until op.length) {\n            stack.push(operand(i))\n\
+    \            stack.push(operand(i + 1))\n            val num1 = stack.pop\n  \
+    \          val num2 = stack.pop\n            val s = opStack.pop\n           \
+    \ stack.push(s match {\n                case \"+\" => num1 + num2\n          \
+    \      case \"-\" => num1 - num2\n                case \"*\" => num1 * num2\n\
+    \                case \"//\" => num1 / num2\n                case \"**\" => pow(num1,\
+    \ num2).toLong\n            })\n        }\n        return stack.pop", "      \
+    \  var ans = operand(0)\n        for (i <- 1 until operand.length) {\n       \
+    \     op(i - 1) match {\n                case \"+\" => ans += operand(i)\n   \
+    \             case \"-\" => ans -= operand(i)\n                case \"*\" => ans\
+    \ *= operand(i)\n                case \"//\" => ans = ans / operand(i)\n     \
+    \           case \"**\" => ans = pow(ans, operand(i)).toLong\n            }\n\
+    \        }\n        ans", "        var expression = operand(0).toString\n    \
+    \    for (i <- 0 until op.length) expression += \" \" + op(i) + \" \" + operand(i\
+    \ + 1)\n        return eval(expression)", "\t\t// Write your code here\n\t\t0",
+  "        def getNext(lst : List[Long], i : Int) : Long = {\n            if (i <\
+    \ lst.length) lst(i)\n            else 0\n        }\n        def recur(i : Int,\
+    \ lst : List[Long]) : Long = {\n            if (i < op.length) {\n           \
+    \     op(i) match {\n                    case \"+\" => lst(i) + recur(i + 1, lst)\n\
+    \                    case \"-\" => lst(i) - recur(i + 1, lst)\n              \
+    \      case \"*\" => lst(i) * recur(i + 1, lst)\n                    case \"//\"\
+    \ => lst(i) / recur(i + 1, lst)\n                    case \"**\" => pow(lst(i),\
+    \ recur(i + 1, lst)).toLong\n                }\n            }\n            else\
+    \ lst(i)\n        }\n        recur(0, operand)", "        val n = op.length\n\
+    \        var q = Array.ofDim[Long](n + 1, n + 1)\n        var w = Array.ofDim[Long](n\
+    \ + 1, n + 1)\n        for (i <- 0 to n) {\n            q(i)(i) = operand(i)\n\
+    \            w(i)(i) = operand(i)\n        }\n        for (l <- 2 to n + 1) {\n\
+    \            for (i <- 0 to n - l + 1) {\n                val j = i + l - 1\n\
+    \                q(i)(j) = Long.MaxValue\n                w(i)(j) = Long.MinValue\n\
+    \                for (k <- i to j - 1) {\n                    var t1 = 0L\n  \
+    \                  var t2 = 0L\n                    if (op(k) == \"+\") {\n  \
+    \                      t1 = q(i)(k) + q(k + 1)(j)\n                        t2\
+    \ = w(i)(k) + w(k + 1)(j)\n                    } else if (op(k) == \"-\") {\n\
+    \                        t1 = q(i)(k) - q(k + 1)(j)\n                        t2\
+    \ = w(i)(k) - w(k + 1)(j)\n                    } else if (op(k) == \"*\") {\n\
+    \                        t1 = q(i)(k) * q(k + 1)(j)\n                        t2\
+    \ = w(i)(k) * w(k + 1)(j)\n                    } else if (op(k) == \"//\") {\n\
+    \                        t1 = q(i)(k) / q(k + 1)(j)\n                        t2\
+    \ = w(i)(k) / w(k + 1)(j)\n                    } else if (op(k) == \"**\") {\n\
+    \                        t1 = q(i)(k) ^ q(k + 1)(j)\n                        t2\
+    \ = w(i)(k) ^ w(k + 1)(j)\n                    }\n                    if (t1 <\
+    \ q(i)(j)) q(i)(j) = t1\n                    if (t2 > w(i)(j)) w(i)(j) = t2\n\
+    \                }\n            }\n        }\n       ", "        val stack = new\
+    \ Stack[Long]\n        val op1 = new Stack[String]\n        for (i <- 0 until\
+    \ op.length) {\n            if (op(i) == \"**\") {\n                val result\
+    \ = pow(stack.pop, operand(i + 1)).toLong\n                stack.push(result)\n\
+    \            } else {\n                stack.push(operand(i))\n              \
+    \  op1.push(op(i))\n            }\n        }\n        stack.push(operand(operand.length\
+    \ - 1))\n        var result = stack.pop\n        while (!stack.isEmpty) {\n  \
+    \          val t = stack.pop\n            result = op1.pop match {\n         \
+    \       case \"+\" => t + result\n                case \"-\" => t - result\n \
+    \               case \"*\" => t * result\n                case \"//\" => t / result\n\
+    \            }\n        }\n        result", "    \tvar stack = ListBuffer[Long]()\n\
+    \    \tfor (i <- 0 until op.length) {\n    \t\tval n1 = stack.remove(stack.length\
+    \ - 1)\n    \t\tval n2 = operand(i + 1)\n    \t\tif (op(i) == \"+\") stack +=\
+    \ (n1 + n2)\n    \t\telse if (op(i) == \"-\") stack += (n1 - n2)\n    \t\telse\
+    \ if (op(i) == \"*\") stack += (n1 * n2)\n    \t\telse if (op(i) == \"//\") stack\
+    \ += (n1 / n2)\n    \t\telse if (op(i) == \"**\") stack += (pow(n1, n2).toLong)\n\
+    \    \t}\n    \treturn stack(0)", "        var st = new Stack[Long]\n        for\
+    \ (i <- operand) st.push(i)\n        for (i <- op) {\n            val b = st.pop()\n\
+    \            val a = st.pop()\n            st.push(i match {\n               \
+    \ case \"+\" => a + b\n                case \"-\" => a - b\n                case\
+    \ \"*\" => a * b\n                case \"//\" => a / b\n                case \"\
+    **\" => pow(a, b).toLong\n            })\n        }\n        st.pop()", "    \
+    \    if (op.length != operand.length - 1) throw new IllegalArgumentException(\"\
+    operand list should have more operands than operator list\")\n        if (op.length\
+    \ == 0) throw new IllegalArgumentException(\"at least one operator is needed\"\
+    )\n        if (operand.length < 2) throw new IllegalArgumentException(\"at least\
+    \ two operands are needed\")\n        var stack = new Stack[Long]\n        for\
+    \ (i <- 0 until operand.length) {\n            stack.push(operand(i))\n      \
+    \      if (i < op.length) {\n                val op2 = stack.pop\n           \
+    \     val op1 = stack.pop\n                op(i) match {\n                   \
+    \ case \"+\" => stack.push(op1 + op2)\n                    case \"-\" => stack.push(op1\
+    \ - op2)\n                    case \"*\" => stack.push(op1 * op2)\n          \
+    \          case \"//\" => stack.push(op1 / op2)\n                    case \"**\"\
+    \ => stack.push(pow(op1, op2).toLong)\n                    case _ => throw new\
+    \ IllegalArgumentException(\"operator \" + op(i) + \" is not supported\")\n  \
+    \              }\n            }\n        }\n        stack.pop", "        val stack\
+    \ = new Stack[Long]\n        for (i <- 0 until op.length) {\n            stack.push(operand(i\
+    \ + 1))\n            stack.push(operand(i))\n            stack.push(op(i))\n \
+    \           if (op(i) == \"*\") {\n                stack.pop\n               \
+    \ stack.push(stack.pop * stack.pop)\n            } else if (op(i) == \"/\") {\n\
+    \                stack.pop\n                stack.push(stack.pop / stack.pop)\n\
+    \            } else if (op(i) == \"+\") {\n                stack.pop\n       \
+    \         stack.push(stack.pop + stack.pop)\n            } else if (op(i) == \"\
+    -\") {\n                stack.pop\n                stack.push(stack.pop - stack.pop)\n\
+    \            } else if (op(i) == \"**\") {\n                stack.pop\n      \
+    \          stack.push(pow(stack.pop, stack.pop).toLong)\n            }\n     \
+    \   }\n        stack.pop", "        var x = 0\n        var stack = new Stack[Long]\n\
+    \        while (x < operand.length) {\n            if (x == 0) {\n           \
+    \     stack.push(operand(x))\n            } else {\n                val stackTop\
+    \ = stack.pop\n                val result = \n                    op(x - 1) match\
+    \ {\n                        case \"+\" => stackTop + operand(x)\n           \
+    \             case \"-\" => stackTop - operand(x)\n                        case\
+    \ \"*\" => stackTop * operand(x)\n                        case \"//\" => stackTop\
+    \ / operand(x)\n                        case \"**\" => pow(stackTop, operand(x)).toLong\n\
+    \                    }\n                stack.push(result)\n            }\n  \
+    \          x += 1\n        }\n        stack.pop", "        if (op.length == 0)\
+    \ {\n            operand(0)\n        } else {\n            val len = op.length\n\
+    \            var total = operand(0)\n            for (i <- 0 until len) {\n  \
+    \              if (op(i) == \"+\") {\n                    total += operand(i +\
+    \ 1)\n                } else if (op(i) == \"-\") {\n                    total\
+    \ -= operand(i + 1)\n                } else if (op(i) == \"*\") {\n          \
+    \          total *= operand(i + 1)\n                } else if (op(i) == \"//\"\
+    ) {\n                    total /= operand(i + 1)\n                } else if (op(i)\
+    \ == \"**\") {\n                    total = pow(total, operand(i + 1)).toLong\n\
+    \                }\n            }\n            total\n        }"]
 stop_tokens:
 - "\n    }\n"
