@@ -19,7 +19,7 @@ def getDir():
     dir = Path(args.dir)
     return dir
 
-def makeSummary(dir, printToShell=False, writeToFile=True):
+def makeSummary(dir, lang, model, temp, doc, term, printToShell=False, writeToFile=True):
     '''
     The goal of this problem is to generate summary statistics after creating the 
     *.results.yaml files for each model run.
@@ -35,8 +35,7 @@ def makeSummary(dir, printToShell=False, writeToFile=True):
     #keep track of overall success 
     overallOK = 0
 
-    model = str(dir)[str(dir).rfind("/"):]
-    results_file = Path("../model_results/" + model + "-keep-summary.csv").resolve()
+    results_file = Path("../model_results/" +lang+"-"+model+"-"+temp+"-"+doc+"-"+term+"-summary.csv").resolve()
 
     try:
         with open(results_file, "r") as rf:
@@ -63,9 +62,10 @@ def makeSummary(dir, printToShell=False, writeToFile=True):
                     counts['Exception'] += 1
                 else:
                     counts["OtherError"] += 1
-            if sum(counts.values()) != 200:
-                    print(f'{testResults.name} only has {sum(counts.values())} completions - aborting.')
-                    return False
+            #TODO (molly): turn on when doing final counts 
+            # if sum(counts.values()) != 200:
+            #         print(f'{testResults.name} only has {sum(counts.values())} completions - aborting.')
+            #         return False
             if printToShell:
                 print(f'For the 200 attempts at {testResults.name}, we get the following results:')
                 print(f"{counts['OK']} Success, {counts['OtherError']} OtherError, {counts['Exception']} Exception")
