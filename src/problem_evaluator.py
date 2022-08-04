@@ -46,19 +46,28 @@ def evaluate_problem(problem_yaml_path: Path, max_workers: int):
         return
 
     test_results_path = get_test_results_yaml_path(problem_yaml_path)
-    if test_results_path.exists():
-        return
+
+    if not test_results_path.exists():
+        test_results = TestResults()
+        test_results.name = problem.name
+        test_results.language = problem.language
+        test_results.results = ResultList()
+    else:
+        with test_results_path.open() as f:
+            test_results = TestResults.load(f)
 
     num_problems = len(problem.completions)
 
-    test_results = TestResults()
-    test_results.name = problem.name
-    test_results.language = problem.language
-    test_results.results = ResultList()
+    if len(test_results.results) == num_problems:
+        return
+    elif len(test_results.results) > num_problems:
+        print(f"ERROR more results than completions for {problem_yaml_path}")
+        return
 
+    min_problem = len(test_results.results)
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        for j in executor.map(lambda index: eval_script(problem, index), range(num_problems)):
+        for j in executor.map(lambda index: eval_script(problem, index), range(min_problem, num_problems)):
             result_yaml = Result()
             result_yaml.program = j["program"]
             result_yaml.status = j["status"]

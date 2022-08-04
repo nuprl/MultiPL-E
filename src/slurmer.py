@@ -1,3 +1,4 @@
+import yaml
 from pathlib import Path
 import os
 
@@ -13,20 +14,25 @@ else:
 
 count = 0
 files = [ ]
+
 for p in Path("../experiments").glob("*/*.yaml"):
     if p.name.endswith(".results.yaml"):
         continue
     if "-remove" in str(p):
         continue
-    if p.with_suffix(".results.yaml").exists():
-        continue
+
     p_str = str(p)
     if not any([ lang in p_str for lang in SUPPORTED ]):
         continue
-    if p.stat().st_size < (1024 * 8):
+
+    results_path = p.with_suffix(".results.yaml")
+
+    if results_path.exists() and p.stat().st_mtime < results_path.stat().st_mtime:
         continue
-    count += 1
+    
     files.append(p_str)
+    count += 1
+
 print(f"wrote {count} upcoming yaml paths to files.txt")
 
 with open("files.txt", "w") as f:

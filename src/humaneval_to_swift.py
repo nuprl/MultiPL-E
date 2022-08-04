@@ -556,25 +556,12 @@ class Translator(LanguageTranslator[TargetExp]):
     def gen_call(self, func: TargetExp, args: List[TargetExp]) -> TargetExp:
         return ast.Call(func, args)
 
-    def deep_equality(self, left: TargetExp, right: TargetExp) -> str:
+    # These are in fact str, as finalize() turned them so
+    def deep_equality(self, left: str, right: str) -> str:
         """
         All tests are assertions that compare deep equality between left and right.
         """
-
-        assert isinstance(left, ast.Call)
-        assert isinstance(left.func, ast.Name)
-        assert left.func.id == 'candidate'
-
-        call_args_py = left.args
-        assert len(call_args_py) == len(self.param_names_types)
-
-        call_args_swift = ", ".join(
-            f"{param_name}: {translate_expr_at_type_toplevel(arg, param_type_swift)}" 
-            for (arg, (param_name, param_type_swift)) in zip(call_args_py, self.param_names_types)
-        )
-        assert_val_swift = translate_expr_at_type_toplevel(right, self.return_type)
-
-        return f"assert({self.candidate_name}({call_args_swift}) == {assert_val_swift})"
+        return f"assert({left} == {right})"
 
     def translate_type(self, python_type: ast.expr | None) -> SwiftType:
         assert python_type is not None
@@ -699,7 +686,24 @@ func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
         """
         return "\tfatalError(\"unimplemented\")"
 
+    def finalize(self, py_expr, context):
+        match context:
+            case "lhs":
+                assert isinstance(py_expr, ast.Call)
+                assert isinstance(py_expr.func, ast.Name)
 
+                call_args_py = py_expr.args
+                assert len(call_args_py) == len(self.param_names_types)
+
+                call_args_swift = ", ".join(
+                    f"{param_name}: {translate_expr_at_type_toplevel(arg, param_type_swift)}" 
+                    for (arg, (param_name, param_type_swift)) in zip(call_args_py, self.param_names_types)
+                )
+                return f"{self.candidate_name}({call_args_swift})"
+            case "rhs":
+                return translate_expr_at_type_toplevel(py_expr, self.return_type)
+            case _other:
+                raise Exception("bad finalize context")
 
 
 if __name__ == "__main__":
