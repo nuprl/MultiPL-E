@@ -28,5 +28,5 @@ fi
 LUA_PATH="${PWD}/luaunit.lua"
 FILE=`sed -n ${SLURM_ARRAY_TASK_ID}p $LIST_FILES`
 echo $FILE
-#python3 problem_evaluator.py --target $FILE --max-workers 24
+python3 problem_evaluator.py --target $FILE --max-workers 24
 
