@@ -4,7 +4,7 @@ def special_factorial(n: int) -> int:
     brazilian_factorial(n) = n! * (n-1)! * (n-2)! * ... * 1!
     where n > 0
 
-    
+    For example:
     >>> special_factorial(4)
     288
 

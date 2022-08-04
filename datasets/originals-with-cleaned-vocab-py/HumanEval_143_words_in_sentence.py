@@ -7,8 +7,11 @@ def words_in_sentence(sentence: str) -> str:
     whose lengths are prime numbers,
     the order of the words in the new string should be the same as the original one.
 
+    Example 1:
     >>> words_in_sentence("This is a test")
     "is"
+
+    Example 2:
     >>> words_in_sentence("lets go for swimming")
     "go for"
     

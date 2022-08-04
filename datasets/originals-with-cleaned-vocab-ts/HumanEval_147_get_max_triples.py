@@ -9,6 +9,9 @@ def get_max_triples(n: int) -> int:
     Example :
     >>> get_max_triples(5)
     1
+        Explanation: 
+        a = [1, 3, 7, 13, 21]
+        The only valid triple is (1, 7, 13).
     """
     ### Canonical solution below ###
     A = [i*i - i + 1 for i in range(1,n+1)]

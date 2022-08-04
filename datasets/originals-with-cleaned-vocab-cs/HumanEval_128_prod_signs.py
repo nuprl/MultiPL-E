@@ -8,6 +8,7 @@ def prod_signs(arr: List[int]) -> Optional[int]:
     of each number in the list, represented by 1, -1 or 0.
     Note: return null for empty arr.
 
+    Example:
     >>> prod_signs([1, 2, 2, -4]) 
     9
     >>> prod_signs([0, 1])

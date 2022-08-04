@@ -39,11 +39,7 @@ def check(candidate):
     assert candidate("ABED1A33") == 4, "Third test error: " + str(candidate("ABED1A33"))      
     assert candidate("2020") == 2, "Fourth test error: " + str(candidate("2020"))  
     assert candidate("123456789ABCDEF0") == 6, "Fifth test error: " + str(candidate("123456789ABCDEF0"))      
-    assert candidate("112233445566778899AABBCCDDEEFF00") == 12, "Sixth test error: " + str(candidate("112233445566778899AABBCCDDEEFF00"))  
-
-
-    # Check some edge cases that are easy to work out by hand.
-    assert candidate([]) == 0
+    assert candidate("112233445566778899AABBCCDDEEFF00") == 12, "Sixth test error: " + str(candidate("112233445566778899AABBCCDDEEFF00"))
 
 def test_check():
     check(hex_key)

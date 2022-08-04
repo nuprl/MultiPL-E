@@ -1,6 +1,6 @@
 from typing import List
 
-def odd_count(lst: List[str]) -> str:
+def odd_count(lst: List[str]) -> List[str]:
     """Given a table of strings, where each string consists of only digits, return a table.
     Each element i of the output should be "the number of odd elements in the
     string i of the input." where all the i's should be replaced by the number
