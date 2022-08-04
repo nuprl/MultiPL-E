@@ -7,16 +7,17 @@ import re
 import ast
 from typing import List, Optional, Tuple
 from generic_translator import main
-from humaneval_to_cpp import CPPTranslator, DOCSTRING_LINESTART_RE
+from humaneval_to_cpp import DOCSTRING_LINESTART_RE
+import humaneval_to_cpp
 
 CSHARP_CLASS_NAME = "Problem"
 #Refactoring needed
 
-class CsharpTranslator(CPPTranslator):
+class Translator(humaneval_to_cpp.Translator):
     stop = ["\n    }\n"]
 
-    def __init__(self, file_ext):
-        super().__init__(file_ext)
+    def __init__(self):
+        super().__init__()
         self.string_type = "string"
         self.float_type = "float"
         self.int_type = "long"
@@ -32,6 +33,9 @@ class CsharpTranslator(CPPTranslator):
         self.keywords["base"] = "numBase"
         self.keywords["decimal"] = "decimalNum"
         self.make_tuple = "Tuple.Create"
+
+    def file_ext(self):
+        return "cs"
 
     #Type creation and literal creation of List, Dict, Map, and Optional
     def gen_list_type(self, elem_type):
@@ -246,5 +250,5 @@ class CsharpTranslator(CPPTranslator):
         return func_name + "(" + ", ".join([self.update_type(args[i], self.args_type[i]) for i in range(len(args))]) + ")", None
 
 if __name__ == "__main__":
-    translator = CsharpTranslator("cs")
+    translator = Translator()
     main(translator)

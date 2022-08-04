@@ -31,23 +31,7 @@ import argparse
 import sys
 from generic_translator import list_originals, translate_prompt_and_tests, get_stop_from_translator
 from pathlib import Path
-from humaneval_to_javascript import JavaScriptTranslator
-from humaneval_to_racket import RacketTranslator
-from humaneval_to_php import PHPTranslator
-from humaneval_to_cpp import CPPTranslator
-from humaneval_to_julia import JuliaTranslator
-from humaneval_to_java import JavaTranslator
 from problem_yaml import Problem
-
-TRANSLATORS = {
-    "rkt": RacketTranslator("racket"),
-    "php": PHPTranslator("php"),
-    "cpp": CPPTranslator("cpp"),
-    "jl": JuliaTranslator("jl"),
-    "js": JavaScriptTranslator(),
-    "java": JavaTranslator("java")
-}
-
 
 def main():
     args = argparse.ArgumentParser()
@@ -68,13 +52,7 @@ def main():
 
     args = args.parse_args()
 
-    if args.lang in TRANSLATORS:
-        translator = TRANSLATORS[args.lang]
-    elif args.lang.endswith(".py"):
-        translator = __import__(args.lang[:-3]).Translator()
-    else:
-        print(f"Unknown language: {args.lang}")
-        sys.exit(1)
+    translator = __import__(args.lang[:-3]).Translator()
 
     if args.doctests not in ["keep", "remove", "transform"]:
         print(f"Unknown doctests option: {args.doctests}")
@@ -103,7 +81,7 @@ def main():
         (prompt, tests) = result
         problem_file = Problem()
         problem_file.name = original_name
-        problem_file.language = args.lang if args.lang in TRANSLATORS else translator.file_ext()
+        problem_file.language = translator.file_ext()
         problem_file.prompt = prompt
         problem_file.tests = tests
         problem_file.stop_tokens = get_stop_from_translator(translator)

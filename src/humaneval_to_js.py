@@ -12,12 +12,12 @@ from generic_translator import main
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
 
-class JavaScriptTranslator:
+class Translator:
 
     stop = ["\nfunction ", "\n/*", "\n//", "\nconsole.log"]
 
-    def __init__(self):
-        self.file_ext = "js"
+    def file_ext(self):
+        return "js"
 
     def translate_prompt(
         self, name: str, args: List[ast.arg], _returns, description: str
@@ -85,5 +85,5 @@ class JavaScriptTranslator:
 
 
 if __name__ == "__main__":
-    translator = JavaScriptTranslator("js")
+    translator = Translator()
     main(translator)

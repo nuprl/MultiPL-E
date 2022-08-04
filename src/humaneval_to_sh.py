@@ -115,9 +115,11 @@ class Translator:
     stop = ["\n}"]
 
     def __init__(self):
-        self.file_ext = "sh"
         self.num = 0
         self.entry_point = ""
+
+    def file_ext(self):
+        return "sh"
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         bash_description = (

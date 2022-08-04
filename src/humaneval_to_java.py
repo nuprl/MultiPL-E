@@ -7,15 +7,16 @@ import re
 import ast
 from typing import List, Optional, Tuple
 from generic_translator import main
-from humaneval_to_cpp import CPPTranslator, DOCSTRING_LINESTART_RE
+from humaneval_to_cpp import DOCSTRING_LINESTART_RE
+import humaneval_to_cpp
 
 JAVA_CLASS_NAME = "Problem"
 
-class JavaTranslator(CPPTranslator):
+class Translator(humaneval_to_cpp.Translator):
     stop = ["\n    }\n"]
 
-    def __init__(self, file_ext):
-        super().__init__(file_ext)
+    def __init__(self):
+        super().__init__()
         self.string_type = "String"
         self.float_type = "float"
         self.int_type = "long"
@@ -29,6 +30,9 @@ class JavaTranslator(CPPTranslator):
         self.indent = "    "
         self.make_tuple = "Pair.with"
         self.make_optional = "Optional.of"
+
+    def file_ext(self):
+        return "java"
 
     #Type creation and literal creation of List, Dict, Map, and Optional
     def gen_list_type(self, elem_type):
@@ -210,7 +214,7 @@ class JavaTranslator(CPPTranslator):
         if self.is_primitive_type(expected_type) and self.translate_pytype(right[1]) != expected_type:
             return f"({expected_type}){right[0]}"
 
-        return CPPTranslator.update_type(self, right, expected_type) #TODO: Use super?
+        return humaneval_to_cpp.Translator.update_type(self, right, expected_type) #TODO: Use super?
 
     def deep_equality(self, left: Tuple[str, ast.Expr], right: Tuple[str, ast.Expr]) -> str:
         """
@@ -246,7 +250,7 @@ class JavaTranslator(CPPTranslator):
             return repr(c) + "f", ast.Name(id="float")
         if type(c) == int:
             return repr(c) + "l", ast.Name(id="int")
-        return CPPTranslator.gen_literal(self, c)
+        return humaneval_to_cpp.Translator.gen_literal(self, c)
 
     def gen_call(self, func: str, args: List[Tuple[str, ast.Expr]]) -> Tuple[str, None]:
         """Translate a function call `func(args)`
@@ -258,5 +262,5 @@ class JavaTranslator(CPPTranslator):
         return func_name + "(" + ", ".join([self.update_type(args[i], self.args_type[i]) for i in range(len(args))]) + ")", None
 
 if __name__ == "__main__":
-    translator = JavaTranslator("java")
+    translator = Translator()
     main(translator)
