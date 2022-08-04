@@ -1,0 +1,1242 @@
+name: HumanEval_129_minPath
+language: d
+results:
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    assert(grid.length == grid[0].length);\n    assert(grid.length\
+    \ >= 2);\n    assert(k >= 1);\n    class Pair\n    {\n        long[] path;\n \
+    \       long sum;\n    }\n    struct S\n    {\n        Pair[] a;\n        long\
+    \ size;\n        long[][] grid;\n        long[][] visited;\n        long[][] map;\n\
+    \        long k;\n        bool[][] neighbor;\n        bool[][] direction;\n  \
+    \      bool[][] next_direction;\n        long[] dx;\n        long[] dy;\n    \
+    \    long n;\n        long cur;\n        bool flag;\n        this(long[] path,\
+    \ long[][] grid, long k) \n        {\n            this.a = new Pair[(grid.length)\
+    \ * (grid.length) * 10];\n            this.size = 0;\n            this.grid =\
+    \ grid;\n            this.visited = new long[grid.length][grid.length];\n    \
+    \        this.map = new long[grid.length][grid.length];\n            this.k =\
+    \ k;\n            this.neighbor = new bool[grid.length][grid.length];\n      \
+    \      this.direction = new bool[grid.length][grid.length];\n            this.next_direction\
+    \ = new bool[grid.length][grid.length];\n            this.dx = new long[4];\n\
+    \            this.dy = new long[4];\n            this.dx[0] = -1;\n          \
+    \  this.dy[0] = 0;\n            this.dx[1] = 1;\n            this.dy[1] = 0;\n\
+    \            this.dx[2] = 0;\n            this.dy[2] = -1;\n            this.dx[3]\
+    \ = 0;\n            this.dy[3] = 1;\n            this.n = grid.length;\n     \
+    \       this.cur = 0;\n            this.flag = false;\n            long i = 0;\n\
+    \            while (i < n) \n            {\n                long j = 0;\n    \
+    \            while (j < n) \n                {\n                    map[i][j]\
+    \ = grid[i][j];\n                    j++;\n                }\n\nunittest\n{\n\
+    \    alias candidate = minPath;\n\n    assert(candidate([[1L, 2L, 3L], [4L, 5L,\
+    \ 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);\n    assert(candidate([[5L, 9L, 3L],\
+    \ [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);\n    assert(candidate([[1L, 2L, 3L,\
+    \ 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L) == [1L,\
+    \ 2L, 1L, 2L]);\n    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L, 1L],\
+    \ [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L, 10L,\
+    \ 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L, 7L,\
+    \ 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);\n    assert(candidate([[11L,\
+    \ 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L)\
+    \ == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);\n    assert(candidate([[12L, 13L,\
+    \ 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) ==\
+    \ [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L,\
+    \ 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n\
+    \    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L,\
+    \ 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n    assert(candidate([[1L, 2L], [3L, 4L]], 10L)\
+    \ == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L],\
+    \ [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmp3l7ee7fn.d(93): Error: found `unittest` instead of statement\\\
+    n/tmp/tmp3l7ee7fn.d(109): Error: found `End of File` when expecting `}` following\
+    \ compound statement\\n/tmp/tmp3l7ee7fn.d(109): Error: `}` expected following\
+    \ members in `struct` declaration at /tmp/tmp3l7ee7fn.d(43)\\n/tmp/tmp3l7ee7fn.d(109):\
+    \ Error: found `End of File` when expecting `}` following compound statement\\\
+    nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmp3l7ee7fn.d\", \"\
+    -I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    import std.stdio;\n    int N = grid.length;\n    int[][]\
+    \ valueToIndex = new int[N][N];\nunittest\n{\n    alias candidate = minPath;\n\
+    \n    assert(candidate([[1L, 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L,\
+    \ 2L, 1L]);\n    assert(candidate([[5L, 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]],\
+    \ 1L) == [1L]);\n    assert(candidate([[1L, 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L,\
+    \ 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L) == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L,\
+    \ 4L, 13L, 10L], [5L, 7L, 12L, 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L)\
+    \ == [1L, 10L, 1L, 10L, 1L, 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L],\
+    \ [6L, 4L, 13L, 15L], [5L, 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L,\
+    \ 1L, 7L, 1L]);\n    assert(candidate([[11L, 8L, 7L, 2L], [5L, 16L, 14L, 4L],\
+    \ [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L) == [1L, 6L, 1L, 6L, 1L, 6L, 1L,\
+    \ 6L, 1L]);\n    assert(candidate([[12L, 13L, 10L, 1L], [9L, 3L, 15L, 6L], [5L,\
+    \ 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L,\
+    \ 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L, 7L, 4L], [3L, 1L, 5L], [6L, 8L,\
+    \ 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n    assert(candidate([[6L,\
+    \ 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L, 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n\
+    \    assert(candidate([[1L, 2L], [3L, 4L]], 10L) == [1L, 2L, 1L, 2L, 1L, 2L, 1L,\
+    \ 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L], [3L, 2L]], 10L) == [1L, 3L, 1L,\
+    \ 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpfz4wnfu3.d(38): Error: found `unittest` instead of statement\\\
+    nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmpfz4wnfu3.d\", \"\
+    -I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    int n = grid.length;\n    int[][] dis = new int[n][n];\n\
+    \    Pair!(int[], int[])[] init = new Pair!(int[], int[])[1];\n    init[0] = Pair(new\
+    \ int[1], new int[1]);\n    init[0].first[0] = 0;\n    init[0].second[0] = 0;\n\
+    \    for (int i = 0; i < n; i++)\n        for (int j = 0; j < n; j++)\n      \
+    \      dis[i][j] = inf;\n    dis[0][0] = 0;\n    long[] res = new long[(int)k];\n\
+    \    int[] dx = new int[4];\n    int[] dy = new int[4];\n    dx[0] = 1;\n    dy[0]\
+    \ = 0;\n    dx[1] = -1;\n    dy[1] = 0;\n    dx[2] = 0;\n    dy[2] = 1;\n    dx[3]\
+    \ = 0;\n    dy[3] = -1;\n    while (true)\n    {\n        int nn = init.length;\n\
+    \        boolean flag = false;\n        Pair!(int[], int[])[] nxt = new Pair!(int[],\
+    \ int[])[nn];\n        for (int i = 0; i < nn; i++)\n        {\n            int[]\
+    \ now = init[i].first;\n            int[] pre = init[i].second;\n            int\
+    \ len = now.length;\n            if (len == k)\n            {\n              \
+    \  flag = true;\n                for (int j = 0; j < k; j++)\n               \
+    \     res[j] = grid[now[j] / n][now[j] % n];\n                break;\n       \
+    \     }\n            int nl = len + 1;\n            int[] prv = new int[nl];\n\
+    \            for (int j = 0; j < len; j++)\n                prv[j] = now[j];\n\
+    \            int nowlast = now[len - 1];\n            int x = nowlast / n;\n \
+    \           int y = nowlast % n;\n            for\nunittest\n{\n    alias candidate\
+    \ = minPath;\n\n    assert(candidate([[1L, 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]],\
+    \ 3L) == [1L, 2L, 1L]);\n    assert(candidate([[5L, 9L, 3L], [4L, 1L, 6L], [7L,\
+    \ 8L, 2L]], 1L) == [1L]);\n    assert(candidate([[1L, 2L, 3L, 4L], [5L, 6L, 7L,\
+    \ 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L) == [1L, 2L, 1L, 2L]);\n\
+    \    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L, 1L], [3L, 16L, 11L, 15L],\
+    \ [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L, 10L, 1L]);\n    assert(candidate([[8L,\
+    \ 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L, 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L)\
+    \ == [1L, 7L, 1L, 7L, 1L]);\n    assert(candidate([[11L, 8L, 7L, 2L], [5L, 16L,\
+    \ 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L) == [1L, 6L, 1L, 6L, 1L,\
+    \ 6L, 1L, 6L, 1L]);\n    assert(candidate([[12L, 13L, 10L, 1L], [9L, 3L, 15L,\
+    \ 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) == [1L, 6L, 1L, 6L, 1L, 6L,\
+    \ 1L, 6L, 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L, 7L, 4L], [3L, 1L, 5L],\
+    \ [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n    assert(candidate([[6L,\
+    \ 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L, 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n\
+    \    assert(candidate([[1L, 2L], [3L, 4L]], 10L) == [1L, 2L, 1L, 2L, 1L, 2L, 1L,\
+    \ 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L], [3L, 2L]], 10L) == [1L, 3L, 1L,\
+    \ 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpgj9ogj0p.d(45): Error: C style cast illegal, use `cast(int)k`\\\
+    n/tmp/tmpgj9ogj0p.d(81): Error: found `unittest` when expecting `(`\\n/tmp/tmpgj9ogj0p.d(97):\
+    \ Error: found `main` when expecting `.` following void\\n/tmp/tmpgj9ogj0p.d(97):\
+    \ Error: found `(` when expecting identifier following `void`.\\n/tmp/tmpgj9ogj0p.d(97):\
+    \ Error: found `)` when expecting `;` following `for` condition\\n/tmp/tmpgj9ogj0p.d(97):\
+    \ Error: found `End of File` when expecting `)`\\n/tmp/tmpgj9ogj0p.d(97): Error:\
+    \ found `End of File` instead of statement\\n/tmp/tmpgj9ogj0p.d(97): Error: found\
+    \ `End of File` when expecting `}` following compound statement\\n/tmp/tmpgj9ogj0p.d(97):\
+    \ Error: found `End of File` when expecting `}` following compound statement\\\
+    n/tmp/tmpgj9ogj0p.d(97): Error: found `End of File` when expecting `}` following\
+    \ compound statement\\nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmpgj9ogj0p.d\"\
+    , \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    immutable int W = grid.length;\n    immutable int H =\
+    \ grid[0].length;\n    if (k == 1) return [grid[0][0]];\n    if (k > W * H) return\
+    \ [grid[0][0]];\n    immutable int dx = [-1, 1, 0, 0];\n    immutable int dy =\
+    \ [0, 0, -1, 1];\n    enum OP { ADD, SUB }\n    struct Path\n    {\n        long[][]\
+    \ grid;\n        int x;\n        int y;\n        long value;\n        long steps;\n\
+    \        OP operation;\n        int opI;\n        long[] order;\n        long[][]\
+    \ visited;\n        typeof(this)[] children;\n    }\n    auto path = typeof(null)();\n\
+    \    auto visited = new long[W][H];\n    foreach (ref l; visited)\n        foreach\
+    \ (ref r; l)\n            r = 0;\n    auto queue = new ArrayQueue!Path();\n  \
+    \  auto ans = new Path(grid: grid,\n                        x: 0,\n          \
+    \              y: 0,\n                        value: grid[0][0],\n           \
+    \             steps: 1,\n                        operation: OP.ADD,\n        \
+    \                opI: 0,\n                        order: [grid[0][0]],\n     \
+    \                   visited: visited);\n    path = ans;\n    visited[0][0] = 1;\n\
+    \    auto steps = W * H - 1;\n    while (steps--)\n    {\n        auto cur = queue.front;\n\
+    \        queue.popFront();\n        int x = cur.x;\n        int y = cur.y;\n \
+    \       foreach (i; 0 .. 4)\n        {\n            int newX = x + dx[i];\n  \
+    \          int newY = y + dy[i];\n            if (newX < 0 || newX >= W || newY\
+    \ < 0 || newY >= H) continue;\n            if (visited[newX][newY] == 1) continue;\n\
+    \            visited[newX][newY] = 1;\n            auto curOrder = cur.order.dup;\n\
+    \            auto curVisited = visited.dup;\n            curOrder ~= grid[newX][newY];\n\
+    unittest\n{\n    alias candidate = minPath;\n\n    assert(candidate([[1L, 2L,\
+    \ 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);\n    assert(candidate([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);\n    assert(candidate([[1L,\
+    \ 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L)\
+    \ == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L,\
+    \ 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L,\
+    \ 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L,\
+    \ 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);\n    assert(candidate([[11L,\
+    \ 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L)\
+    \ == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);\n    assert(candidate([[12L, 13L,\
+    \ 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) ==\
+    \ [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L,\
+    \ 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n\
+    \    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L,\
+    \ 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n    assert(candidate([[1L, 2L], [3L, 4L]], 10L)\
+    \ == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L],\
+    \ [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmps9kbtwhs.d(61): Error: found `:` when expecting `,`\\n/tmp/tmps9kbtwhs.d(62):\
+    \ Error: found `:` when expecting `,`\\n/tmp/tmps9kbtwhs.d(63): Error: found `:`\
+    \ when expecting `,`\\n/tmp/tmps9kbtwhs.d(64): Error: found `:` when expecting\
+    \ `,`\\n/tmp/tmps9kbtwhs.d(65): Error: found `:` when expecting `,`\\n/tmp/tmps9kbtwhs.d(66):\
+    \ Error: found `:` when expecting `,`\\n/tmp/tmps9kbtwhs.d(67): Error: found `:`\
+    \ when expecting `,`\\n/tmp/tmps9kbtwhs.d(68): Error: found `:` when expecting\
+    \ `,`\\n/tmp/tmps9kbtwhs.d(69): Error: found `:` when expecting `,`\\n/tmp/tmps9kbtwhs.d(89):\
+    \ Error: found `unittest` instead of statement\\n/tmp/tmps9kbtwhs.d(105): Error:\
+    \ found `End of File` when expecting `}` following compound statement\\n/tmp/tmps9kbtwhs.d(105):\
+    \ Error: found `End of File` when expecting `}` following compound statement\\\
+    nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmps9kbtwhs.d\", \"\
+    -I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{ \n    long N = cast(long)grid.length;\n    struct Path\n \
+    \   {\n        long[] ord_values;\n        long val;\n        long[][] board;\n\
+    \        long[][] parent;\n        long[][] path_board;\n        long[][] path_dir;\n\
+    \        long val_idx;\n        long start_r;\n        long start_c;\n       \
+    \ long dir_r;\n        long dir_c;\n    }\n    auto cmp = (Path p1, Path p2) =>\
+    \ \n    {\n        foreach(i, a; p1.ord_values)\n        {\n            if(a <\
+    \ p2.ord_values[i])\n                return 1;\n            else if(a > p2.ord_values[i])\n\
+    \                return -1;\n        }\n        return 0;\n    };\n    auto idx\
+    \ = (long r, long c) => r * N + c;\n    auto get_val = (long[][] grid, long r,\
+    \ long c) => grid[r][c];\n    auto check_coords = (long r, long c) => r >= 0 &&\
+    \ r < N && c >= 0 && c < N;\n    auto get_empty_path = () =>\n    {\n        Path\
+    \ path;\n        path.ord_values = new long[];\n        path.board = new long[N][N];\n\
+    \        path.parent = new long[N][N];\n        path.path_board = new long[N][N];\n\
+    \        path.path_dir = new long[N][N];\n        return path;\n    };\n    auto\
+    \ get_path = (long[][] grid, long r, long c, long k) =>\n    {\n        Path path\
+    \ = get_empty_path();\n        path.start_r = r;\n        path.start_c = c;\n\
+    \        path.val = get_val(grid, r, c);\n        path.board[r][c] = 1;\n    \
+    \    return path;\n    };\n    auto print_board = (long[][] board) =>\n    {\n\
+    \        foreach(r; board)\n        {\n            foreach(c; r)\n\nunittest\n\
+    {\n    alias candidate = minPath;\n\n    assert(candidate([[1L, 2L, 3L], [4L,\
+    \ 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);\n    assert(candidate([[5L, 9L,\
+    \ 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);\n    assert(candidate([[1L,\
+    \ 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L)\
+    \ == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L,\
+    \ 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L,\
+    \ 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L,\
+    \ 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);\n    assert(candidate([[11L,\
+    \ 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L)\
+    \ == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);\n    assert(candidate([[12L, 13L,\
+    \ 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) ==\
+    \ [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L,\
+    \ 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n\
+    \    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L,\
+    \ 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n    assert(candidate([[1L, 2L], [3L, 4L]], 10L)\
+    \ == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L],\
+    \ [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmply87pe9b.d(89): Error: found `unittest` instead of statement\\\
+    n/tmp/tmply87pe9b.d(105): Error: found `End of File` when expecting `}` following\
+    \ compound statement\\n/tmp/tmply87pe9b.d(105): Error: semicolon expected following\
+    \ auto declaration, not `End of File`\\n/tmp/tmply87pe9b.d(105): Error: found\
+    \ `End of File` when expecting `}` following compound statement\\nFailed: [\"\
+    dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmply87pe9b.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    int N = grid.length;\n    dlong path_len = k;\n    dlong[][]\
+    \ min_path = dlong[N][N];\n    for (int i = 0; i < N; i++)\n    {\n        for\
+    \ (int j = 0; j < N; j++)\n        {\n            min_path[i][j] = dlong.init;\n\
+    \        }\n    }\n    int[][] dir = [[0, 1], [0, -1], [1, 0], [-1, 0]];\n   \
+    \ dlong[][] dp = dlong[N][N];\n    for (int i = 0; i < N; i++)\n    {\n      \
+    \  for (int j = 0; j < N; j++)\n        {\n            dp[i][j] = dlong.init;\n\
+    \        }\n    }\n    for (int x1 = 0; x1 < N; x1++)\n    {\n        for (int\
+    \ y1 = 0; y1 < N; y1++)\n        {\n            for (int i = 0; i < N; i++)\n\
+    \            {\n                for (int j = 0; j < N; j++)\n                {\n\
+    \                    dp[i][j] = dlong.init;\n                }\n            }\n\
+    \            dp[x1][y1] = dlong(grid[x1][y1]);\n            min_path[x1][y1] =\
+    \ dlong([x1, y1]);\n            long len = 0;\n            while (len < path_len)\n\
+    \            {\n                long[][] new_dp = long[N][N];\n              \
+    \  for (int i = 0; i < N; i++)\n                {\n                    for (int\
+    \ j = 0; j < N; j++)\n                    {\n                        new_dp[i][j]\
+    \ = long.init;\n                    }\n                }\n                foreach\
+    \ (int x; 0 .. N)\n                {\n                    foreach (int y; 0 ..\
+    \ N)\n                    {\n                        if (dp[x][y] != long.init)\n\
+    \                        {\n                            foreach (int[] d; dir)\n\
+    \                            {\n                                int nx = x + d\n\
+    unittest\n{\n    alias candidate = minPath;\n\n    assert(candidate([[1L, 2L,\
+    \ 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);\n    assert(candidate([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);\n    assert(candidate([[1L,\
+    \ 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L)\
+    \ == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L,\
+    \ 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L,\
+    \ 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L,\
+    \ 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);\n    assert(candidate([[11L,\
+    \ 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L)\
+    \ == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);\n    assert(candidate([[12L, 13L,\
+    \ 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) ==\
+    \ [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L,\
+    \ 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n\
+    \    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L,\
+    \ 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n    assert(candidate([[1L, 2L], [3L, 4L]], 10L)\
+    \ == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L],\
+    \ [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmp4ul2yw8y.d(70): Error: found `[` when expecting `.` following\
+    \ long\\n/tmp/tmp4ul2yw8y.d(70): Error: semicolon expected, not `]`\\n/tmp/tmp4ul2yw8y.d(70):\
+    \ Error: found `]` instead of statement\\n/tmp/tmp4ul2yw8y.d(87): Error: semicolon\
+    \ expected, not `unittest`\\n/tmp/tmp4ul2yw8y.d(87): Error: found `unittest` instead\
+    \ of statement\\n/tmp/tmp4ul2yw8y.d(103): Error: found `End of File` when expecting\
+    \ `}` following compound statement\\n/tmp/tmp4ul2yw8y.d(103): Error: found `End\
+    \ of File` when expecting `}` following compound statement\\n/tmp/tmp4ul2yw8y.d(103):\
+    \ Error: found `End of File` when expecting `}` following compound statement\\\
+    n/tmp/tmp4ul2yw8y.d(103): Error: found `End of File` when expecting `}` following\
+    \ compound statement\\n/tmp/tmp4ul2yw8y.d(103): Error: found `End of File` when\
+    \ expecting `}` following compound statement\\n/tmp/tmp4ul2yw8y.d(103): Error:\
+    \ found `End of File` when expecting `}` following compound statement\\n/tmp/tmp4ul2yw8y.d(103):\
+    \ Error: found `End of File` when expecting `}` following compound statement\\\
+    nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmp4ul2yw8y.d\", \"\
+    -I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    import std.algorithm;\n    import std.range;\n    import\
+    \ std.array;\n    import std.conv;\n    import std.typecons;\n    import std.math;\n\
+    \    // BFS.\n    auto N = grid.length;\n    if (N == 0)\n        return null;\n\
+    \    // Longer path, less cost.\n    auto less = (a, b) => a.length < b.length;\n\
+    \    // Less cost, longer path.\n    auto greater = (a, b) => a.length > b.length;\n\
+    \    // Initialize a priority queue with inverse of path lengths.\n    auto queue\
+    \ = PriorityQueue!(long[], greater)();\n    // Initialize the distances from all\
+    \ cells to the root to maximum.\n    auto dist = new size_t[N][N];\n    // Initialize\
+    \ the previous cell for all cell to null.\n    auto prev = new tuple!(size_t,\
+    \ size_t)[N][N];\n    // Initialize distances to maximum.\n    foreach (ref i;\
+    \ dist)\n        foreach (ref j; i)\n            j = size_t.max;\n    // Add root\
+    \ to the queue.\n    queue.insert([grid[0][0]]);\n    // Set distance to root\
+    \ to 0.\n    dist[0][0] = 0;\n    // While there are cells in the queue.\n   \
+    \ while (!queue.empty)\n    {\n        // Pop the top cell from the queue.\n \
+    \       auto cell = queue.popFront();\n        // Pop its value.\n        auto\
+    \ value = cell[$ - 1];\n        // Get its location.\n        auto c = tuple(value\
+    \ % N, value / N);\n        // If we have enough length, stop.\n        if (dist[c[0]][c[1]]\
+    \ == k)\n            break;\n        // If we have enough length, continue.\n\
+    \        if (dist[c[0]][c[1]] >= k)\n            continue;\n        // Add all\
+    \ neighbors to the queue.\n        foreach (d; tuple(-1, 0, 1))\n        {\n \
+    \           auto n = tuple(c[0] + d, c[1] + d);\n            if (n[0\nunittest\n\
+    {\n    alias candidate = minPath;\n\n    assert(candidate([[1L, 2L, 3L], [4L,\
+    \ 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);\n    assert(candidate([[5L, 9L,\
+    \ 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);\n    assert(candidate([[1L,\
+    \ 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L)\
+    \ == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L,\
+    \ 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L,\
+    \ 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L,\
+    \ 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);\n    assert(candidate([[11L,\
+    \ 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L)\
+    \ == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);\n    assert(candidate([[12L, 13L,\
+    \ 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) ==\
+    \ [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L,\
+    \ 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n\
+    \    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L,\
+    \ 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n    assert(candidate([[1L, 2L], [3L, 4L]], 10L)\
+    \ == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L],\
+    \ [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpp47dbf_w.d(83): Error: found `unittest` when expecting `,`\\\
+    n/tmp/tmpp47dbf_w.d(99): Error: found `void` when expecting `,`\\n/tmp/tmpp47dbf_w.d(99):\
+    \ Error: found `{` when expecting `,`\\n/tmp/tmpp47dbf_w.d(99): Error: expression\
+    \ expected, not `}`\\n/tmp/tmpp47dbf_w.d(99): Error: found `End of File` when\
+    \ expecting `,`\\n/tmp/tmpp47dbf_w.d(99): Error: found `End of File` when expecting\
+    \ `]`\\n/tmp/tmpp47dbf_w.d(99): Error: found `End of File` when expecting `)`\\\
+    n/tmp/tmpp47dbf_w.d(99): Error: found `End of File` instead of statement\\n/tmp/tmpp47dbf_w.d(99):\
+    \ Error: found `End of File` when expecting `}` following compound statement\\\
+    n/tmp/tmpp47dbf_w.d(99): Error: found `End of File` when expecting `}` following\
+    \ compound statement\\n/tmp/tmpp47dbf_w.d(99): Error: found `End of File` when\
+    \ expecting `}` following compound statement\\nFailed: [\"dmd\", \"-unittest\"\
+    , \"-v\", \"-o-\", \"/tmp/tmpp47dbf_w.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    static assert(grid.length > 1);\n    static assert(grid[0].length\
+    \ > 1);\n    static assert(k > 0);\n    static assert(grid.length == grid[0].length);\n\
+    \    static assert(grid.length * grid[0].length == k * (k + 1) / 2);\n    static\
+    \ assert(grid.length * grid[0].length == sum(grid));\n    static assert(!any!(i\
+    \ => grid[i[0]][i[1]] < 1 || grid[i[0]][i[1]] > grid.length * grid[0].length)(grid.map!(i\
+    \ => tuple(i, 0 .. grid[0].length))));\n    static assert(!any!(i => grid[i[0]][i[1]]\
+    \ < 1 || grid[i[0]][i[1]] > grid.length * grid[0].length)(grid.map!(i => tuple(0\
+    \ .. grid.length, i))));\n    static assert(!any!(i => grid[i[0]][i[1]] < 1 ||\
+    \ grid[i[0]][i[1]] > grid.length * grid[0].length)(grid.map!(i => tuple(0 .. grid.length,\
+    \ 0 .. grid[0].length))));\n    static assert(!any!(i => grid[i[0]][i[1]] < 1\
+    \ || grid[i[0]][i[1]] > grid.length * grid[0].length)(grid.map!(i => tuple(grid.length\
+    \ .. 0, i))));\n    static assert(!any!(i => grid[i[0]][i[1]] < 1 || grid[i[0]][i[1]]\
+    \ > grid.length * grid[0].length)(grid.map!(i => tuple(grid.length .. 0, grid[0].length\
+    \ .. 0))));\n    static assert(!any!(i => grid[i[0]][i[1]] < 1 || grid[i[0]][i[1]]\
+    \ > grid.length * grid[0].length)(grid.map!(i => tuple(0 .. grid.length, grid[0].length\
+    \ .. 0))));\n    //static assert(!any\nunittest\n{\n    alias candidate = minPath;\n\
+    \n    assert(candidate([[1L, 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L,\
+    \ 2L, 1L]);\n    assert(candidate([[5L, 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]],\
+    \ 1L) == [1L]);\n    assert(candidate([[1L, 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L,\
+    \ 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L) == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L,\
+    \ 4L, 13L, 10L], [5L, 7L, 12L, 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L)\
+    \ == [1L, 10L, 1L, 10L, 1L, 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L],\
+    \ [6L, 4L, 13L, 15L], [5L, 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L,\
+    \ 1L, 7L, 1L]);\n    assert(candidate([[11L, 8L, 7L, 2L], [5L, 16L, 14L, 4L],\
+    \ [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L) == [1L, 6L, 1L, 6L, 1L, 6L, 1L,\
+    \ 6L, 1L]);\n    assert(candidate([[12L, 13L, 10L, 1L], [9L, 3L, 15L, 6L], [5L,\
+    \ 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L,\
+    \ 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L, 7L, 4L], [3L, 1L, 5L], [6L, 8L,\
+    \ 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n    assert(candidate([[6L,\
+    \ 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L, 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n\
+    \    assert(candidate([[1L, 2L], [3L, 4L]], 10L) == [1L, 2L, 1L, 2L, 1L, 2L, 1L,\
+    \ 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L], [3L, 2L]], 10L) == [1L, 3L, 1L,\
+    \ 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpy7r1hgxf.d(41): Error: found `..` when expecting `,`\\n/tmp/tmpy7r1hgxf.d(42):\
+    \ Error: found `..` when expecting `,`\\n/tmp/tmpy7r1hgxf.d(43): Error: found\
+    \ `..` when expecting `,`\\n/tmp/tmpy7r1hgxf.d(43): Error: found `..` when expecting\
+    \ `,`\\n/tmp/tmpy7r1hgxf.d(44): Error: found `..` when expecting `,`\\n/tmp/tmpy7r1hgxf.d(45):\
+    \ Error: found `..` when expecting `,`\\n/tmp/tmpy7r1hgxf.d(45): Error: found\
+    \ `..` when expecting `,`\\n/tmp/tmpy7r1hgxf.d(46): Error: found `..` when expecting\
+    \ `,`\\n/tmp/tmpy7r1hgxf.d(46): Error: found `..` when expecting `,`\\n/tmp/tmpy7r1hgxf.d(48):\
+    \ Error: found `unittest` instead of statement\\nFailed: [\"dmd\", \"-unittest\"\
+    , \"-v\", \"-o-\", \"/tmp/tmpy7r1hgxf.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    long[][] memo = new long[grid.length][grid[0].length];\n\
+    \    for (int i = 0; i < memo.length; i++)\n        memo[i] = new long[grid[0].length];\n\
+    \    \n    long[] path = new long[k];\n    long[][] pathMatrix = new long[grid.length][grid[0].length];\n\
+    \    for (int i = 0; i < pathMatrix.length; i++)\n        pathMatrix[i] = new\
+    \ long[grid[0].length];\n    \n    Tuple!(long, long) cell = tuple(0L, 0L);\n\
+    \    return minPathHelper(grid, k, cell, memo, path, pathMatrix);\n}\nunittest\n\
+    {\n    alias candidate = minPath;\n\n    assert(candidate([[1L, 2L, 3L], [4L,\
+    \ 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);\n    assert(candidate([[5L, 9L,\
+    \ 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);\n    assert(candidate([[1L,\
+    \ 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L)\
+    \ == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L,\
+    \ 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L,\
+    \ 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L,\
+    \ 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);\n    assert(candidate([[11L,\
+    \ 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L)\
+    \ == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);\n    assert(candidate([[12L, 13L,\
+    \ 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) ==\
+    \ [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L,\
+    \ 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n\
+    \    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L,\
+    \ 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n    assert(candidate([[1L, 2L], [3L, 4L]], 10L)\
+    \ == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L],\
+    \ [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpi1roon3u.d(35): Error: variable `grid` cannot be read at compile\
+    \ time\\n/tmp/tmpi1roon3u.d(40): Error: variable `grid` cannot be read at compile\
+    \ time\\n/tmp/tmpi1roon3u.d(45): Error: undefined identifier `minPathHelper`\\\
+    nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmpi1roon3u.d\", \"\
+    -I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    typeof(return) result = new long[0];\n    long n = grid.length;\n\
+    \    long[][] v = new long[n][n];\n    long[][] b = new long[n][n];\n    for (long\
+    \ i = 0; i < n; i++)\n    {\n        for (long j = 0; j < n; j++)\n        {\n\
+    \            v[i][j] = 1L << 62;\n            b[i][j] = 1L << 62;\n        }\n\
+    \    }\n    v[0][0] = 0L;\n    for (long i = 0; i < n; i++)\n    {\n        for\
+    \ (long j = 0; j < n; j++)\n        {\n            if (i > 0)\n            {\n\
+    \                long v1 = v[i - 1][j] + abs(grid[i][j] - grid[i - 1][j]);\n \
+    \               if (v1 < v[i][j])\n                {\n                    v[i][j]\
+    \ = v1;\n                    b[i][j] = b[i - 1][j] * grid[i][j];\n           \
+    \     }\n                else if (v1 == v[i][j])\n                {\n        \
+    \            b[i][j] = min(b[i][j], b[i - 1][j] * grid[i][j]);\n             \
+    \   }\n            }\n            if (j > 0)\n            {\n                long\
+    \ v1 = v[i][j - 1] + abs(grid[i][j] - grid[i][j - 1]);\n                if (v1\
+    \ < v[i][j])\n                {\n                    v[i][j] = v1;\n         \
+    \           b[i][j] = b[i][j - 1] * grid[i][j];\n                }\n         \
+    \       else if (v1 == v[i][j])\n                {\n                    b[i][j]\
+    \ = min(b[i][j], b[i][j - 1] * grid[i][j]);\n                }\n            }\n\
+    \        }\n    }\n    assert(v[n - 1][n - 1] <= k);\n    long x = n - 1;\n\n\
+    unittest\n{\n    alias candidate = minPath;\n\n    assert(candidate([[1L, 2L,\
+    \ 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);\n    assert(candidate([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);\n    assert(candidate([[1L,\
+    \ 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L)\
+    \ == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L,\
+    \ 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L,\
+    \ 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L,\
+    \ 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);\n    assert(candidate([[11L,\
+    \ 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L)\
+    \ == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);\n    assert(candidate([[12L, 13L,\
+    \ 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) ==\
+    \ [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L,\
+    \ 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n\
+    \    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L,\
+    \ 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n    assert(candidate([[1L, 2L], [3L, 4L]], 10L)\
+    \ == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L],\
+    \ [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpc70iyyiz.d(83): Error: found `unittest` instead of statement\\\
+    nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmpc70iyyiz.d\", \"\
+    -I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    auto N = grid.length;\n    auto dp = new long[N, N][];\n\
+    \    foreach (row, col; 0 .. N) \n    {\n        dp[row][col] = new long[][1];\n\
+    \        dp[row][col][0] = cast(long[])[grid[row][col]];\n    }\n    foreach (k_,\
+    \ k_v; 2 .. k + 1) \n    {\n        foreach (row, col; 0 .. N) \n        {\n \
+    \           dp[row][col] = new long[][3];\n            dp[row][col][0] = cast(long[])[grid[row][col]];\n\
+    \            if (row + 1 < N) \n            {\n                dp[row][col][1]\
+    \ = min(dp[row][col][0], dp[row + 1][col][0]);\n            }\n            if\
+    \ (col + 1 < N) \n            {\n                dp[row][col][2] = min(dp[row][col][0],\
+    \ dp[row][col + 1][0]);\n            }\n            auto k_v_c = k_v - 1;\n  \
+    \          foreach (index; 1 .. 3) \n            {\n                if (dp[row][col][index].length\
+    \ < k_v_c) \n                {\n                    continue;\n              \
+    \  }\n                auto row_add = index == 1 ? row + 1 : row;\n           \
+    \     auto col_add = index == 2 ? col + 1 : col;\n                dp[row][col][0]\
+    \ = min(dp[row][col][0], dp[row_add][col_add][0]);\n            }\n        }\n\
+    \    }\n    return dp[0][0][0];\n}\nunittest\n{\n    alias candidate = minPath;\n\
+    \n    assert(candidate([[1L, 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L,\
+    \ 2L, 1L]);\n    assert(candidate([[5L, 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]],\
+    \ 1L) == [1L]);\n    assert(candidate([[1L, 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L,\
+    \ 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L) == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L,\
+    \ 4L, 13L, 10L], [5L, 7L, 12L, 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L)\
+    \ == [1L, 10L, 1L, 10L, 1L, 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L],\
+    \ [6L, 4L, 13L, 15L], [5L, 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L,\
+    \ 1L, 7L, 1L]);\n    assert(candidate([[11L, 8L, 7L, 2L], [5L, 16L, 14L, 4L],\
+    \ [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L) == [1L, 6L, 1L, 6L, 1L, 6L, 1L,\
+    \ 6L, 1L]);\n    assert(candidate([[12L, 13L, 10L, 1L], [9L, 3L, 15L, 6L], [5L,\
+    \ 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L,\
+    \ 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L, 7L, 4L], [3L, 1L, 5L], [6L, 8L,\
+    \ 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n    assert(candidate([[6L,\
+    \ 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L, 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n\
+    \    assert(candidate([[1L, 2L], [3L, 4L]], 10L) == [1L, 2L, 1L, 2L, 1L, 2L, 1L,\
+    \ 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L], [3L, 2L]], 10L) == [1L, 3L, 1L,\
+    \ 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmp4sxabe1c.d(36): Error: found `,` when expecting `]`\\n/tmp/tmp4sxabe1c.d(36):\
+    \ Error: semicolon expected following auto declaration, not `N`\\n/tmp/tmp4sxabe1c.d(36):\
+    \ Error: found `]` when expecting `;` following statement\\n/tmp/tmp4sxabe1c.d(37):\
+    \ Error: found `..` when expecting `)`\\n/tmp/tmp4sxabe1c.d(37): Error: found\
+    \ `)` when expecting `;` following statement\\n/tmp/tmp4sxabe1c.d(42): Error:\
+    \ found `..` when expecting `)`\\n/tmp/tmp4sxabe1c.d(42): Error: found `)` when\
+    \ expecting `;` following statement\\n/tmp/tmp4sxabe1c.d(44): Error: found `..`\
+    \ when expecting `)`\\n/tmp/tmp4sxabe1c.d(44): Error: found `)` when expecting\
+    \ `;` following statement\\nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\",\
+    \ \"/tmp/tmp4sxabe1c.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    auto m = grid.length;\n    auto n = grid[0].length;\n\
+    \    auto dp = map!(a => map!(b => tuple(b, tuple(long.max, tuple.init)))(n.iota))(m.iota);\n\
+    \    foreach (i; 0 .. m) \n    {\n        foreach (j; 0 .. n) \n        {\n  \
+    \          if (i == 0 && j == 0) \n            {\n                dp[i][j] = tuple(grid[i][j],\
+    \ tuple(0L, tuple(1L)));\n            } \n            else \n            {\n \
+    \               dp[i][j] = tuple(grid[i][j], tuple(long.max, tuple.init));\n \
+    \               foreach (prev; [tuple(i - 1, j), tuple(i, j - 1)]) \n        \
+    \        {\n                    if (prev[0] >= 0 && prev[1] >= 0) \n         \
+    \           {\n                        if (dp[prev[0]][prev[1]][1][0] != long.max)\
+    \ \n                        {\n                            dp[i][j] = tuple(grid[i][j],\
+    \ tuple(dp[prev[0]][prev[1]][1][0] + (dp[prev[0]][prev[1]][0] == grid[i][j] ?\
+    \ 0L : 1L), tuple(dp[prev[0]][prev[1]][1][1]) ~ tuple(dp[prev[0]][prev[1]][0])));\n\
+    \                        }\n                    }\n                }\n       \
+    \     }\n        }\n    }\n    return dp[m - 1][n - 1][1][1][1 .. k + 1];\n}\n\
+    unittest\n{\n    alias candidate = minPath;\n\n    assert(candidate([[1L, 2L,\
+    \ 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);\n    assert(candidate([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);\n    assert(candidate([[1L,\
+    \ 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L)\
+    \ == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L,\
+    \ 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L,\
+    \ 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L,\
+    \ 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);\n    assert(candidate([[11L,\
+    \ 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L)\
+    \ == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);\n    assert(candidate([[12L, 13L,\
+    \ 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) ==\
+    \ [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L,\
+    \ 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n\
+    \    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L,\
+    \ 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n    assert(candidate([[1L, 2L], [3L, 4L]], 10L)\
+    \ == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L],\
+    \ [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpygu0rswx.d(37): Error: template instance `map!((a) => map!((b)\
+    \ => tuple(b, tuple((long).max, tuple.init)))(n.iota))` template `map` is not\
+    \ defined\\nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmpygu0rswx.d\"\
+    , \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{ \n    // If a cell of the grid is <i, j>, an edge is like\
+    \ <i, j> -> <i, j - 1> \n    // or <i, j> -> <i - 1, j> or <i, j> -> <i + 1, j>\
+    \ or <i, j> -> <i, j + 1>. \n    //\n    // So, the graph is a grid graph.\n \
+    \   auto n = grid.length;\nunittest\n{\n    alias candidate = minPath;\n\n   \
+    \ assert(candidate([[1L, 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L,\
+    \ 1L]);\n    assert(candidate([[5L, 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\
+    \ == [1L]);\n    assert(candidate([[1L, 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L,\
+    \ 11L, 12L], [13L, 14L, 15L, 16L]], 4L) == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L,\
+    \ 4L, 13L, 10L], [5L, 7L, 12L, 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L)\
+    \ == [1L, 10L, 1L, 10L, 1L, 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L],\
+    \ [6L, 4L, 13L, 15L], [5L, 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L,\
+    \ 1L, 7L, 1L]);\n    assert(candidate([[11L, 8L, 7L, 2L], [5L, 16L, 14L, 4L],\
+    \ [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L) == [1L, 6L, 1L, 6L, 1L, 6L, 1L,\
+    \ 6L, 1L]);\n    assert(candidate([[12L, 13L, 10L, 1L], [9L, 3L, 15L, 6L], [5L,\
+    \ 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L,\
+    \ 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L, 7L, 4L], [3L, 1L, 5L], [6L, 8L,\
+    \ 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n    assert(candidate([[6L,\
+    \ 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L, 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n\
+    \    assert(candidate([[1L, 2L], [3L, 4L]], 10L) == [1L, 2L, 1L, 2L, 1L, 2L, 1L,\
+    \ 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L], [3L, 2L]], 10L) == [1L, 3L, 1L,\
+    \ 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpq_0eggng.d(40): Error: found `unittest` instead of statement\\\
+    nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmpq_0eggng.d\", \"\
+    -I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    auto gs = grid.length;\n    auto res = new long[k];\n\
+    \    auto currentPath = new long[k];\n    auto steps = new long[k];\n    auto\
+    \ paths = appender!(long[])();\n    auto minPath = new long[k];\n    int min_len\
+    \ = 0;\n    //@nogc @nothrow @safe \n    auto less = (ref const(long)[] a, ref\
+    \ const(long)[] b) @safe pure nothrow nogc\n    {\n        for (int i = 0; i <\
+    \ a.length; i++)\n        {\n            if (a[i] < b[i])\n                return\
+    \ true;\n            else if (a[i] > b[i])\n                return false;\n  \
+    \      }\n        return false;\n    };\n    //@nogc @nothrow @safe \n    auto\
+    \ rec = (int i, int j, int len) @safe pure nothrow nogc\n    {\n        if (len\
+    \ >= k)\n        {\n            if (len == k)\n            {\n               \
+    \ paths.put(currentPath.dup);\n                if (min_len == 0 || less(currentPath,\
+    \ minPath))\n                {\n                    min_len = len;\n         \
+    \           minPath = currentPath.dup;\n                }\n            }\n   \
+    \         return;\n        }\n        if (i > 0)\n        {\n            currentPath[len]\
+    \ = grid[i - 1][j];\n            steps[len] = 1;\n            rec(i - 1, j, len\
+    \ + 1);\n        }\n        if (i < gs - 1)\n        {\n            currentPath[len]\
+    \ = grid[i + 1][j];\n            steps[len] = 2;\n            rec(i + 1, j, len\
+    \ + 1);\n        }\n        if (j > 0)\n        {\n            currentPath[len]\
+    \ = grid[i][j - 1];\n            steps[len] = 3;\n            rec(i, j - 1, len\
+    \ + 1);\n        }\n        if (j < gs - 1)\n        {\n            currentPath[len]\
+    \ = grid[i][j + 1];\nunittest\n{\n    alias candidate = minPath;\n\n    assert(candidate([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);\n    assert(candidate([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);\n    assert(candidate([[1L,\
+    \ 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L)\
+    \ == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L,\
+    \ 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L,\
+    \ 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L,\
+    \ 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);\n    assert(candidate([[11L,\
+    \ 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L)\
+    \ == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);\n    assert(candidate([[12L, 13L,\
+    \ 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) ==\
+    \ [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L,\
+    \ 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n\
+    \    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L,\
+    \ 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n    assert(candidate([[1L, 2L], [3L, 4L]], 10L)\
+    \ == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L],\
+    \ [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmptzf4u27v.d(43): Error: expression expected, not `ref`\\n/tmp/tmptzf4u27v.d(43):\
+    \ Error: found `const` when expecting `)`\\n/tmp/tmptzf4u27v.d(43): Error: found\
+    \ `)` when expecting `.` following long\\n/tmp/tmptzf4u27v.d(43): Error: found\
+    \ `[` when expecting identifier following `long`.\\n/tmp/tmptzf4u27v.d(43): Error:\
+    \ found `]` when expecting `,`\\n/tmp/tmptzf4u27v.d(43): Error: expression expected,\
+    \ not `ref`\\n/tmp/tmptzf4u27v.d(43): Error: found `const` when expecting `,`\\\
+    n/tmp/tmptzf4u27v.d(43): Error: found `)` when expecting `.` following long\\\
+    n/tmp/tmptzf4u27v.d(43): Error: found `[` when expecting identifier following\
+    \ `long`.\\n/tmp/tmptzf4u27v.d(43): Error: found `]` when expecting `)`\\n/tmp/tmptzf4u27v.d(43):\
+    \ Error: found `b` when expecting `,`\\n/tmp/tmptzf4u27v.d(43): Error: semicolon\
+    \ expected following auto declaration, not `@`\\n/tmp/tmptzf4u27v.d(44): Error:\
+    \ no identifier for declarator `nogc`\\n/tmp/tmptzf4u27v.d(53): Deprecation: use\
+    \ `{ }` for an empty statement, not `;`\\n/tmp/tmptzf4u27v.d(55): Error: found\
+    \ `i` when expecting `.` following int\\n/tmp/tmptzf4u27v.d(55): Error: found\
+    \ `,` when expecting identifier following `int`.\\n/tmp/tmptzf4u27v.d(55): Error:\
+    \ found `int` when expecting `)`\\n/tmp/tmptzf4u27v.d(55): Error: semicolon expected\
+    \ following auto declaration, not `j`\\n/tmp/tmptzf4u27v.d(55): Error: found `len`\
+    \ when expecting `.` following int\\n/tmp/tmptzf4u27v.d(55): Error: found `)`\
+    \ when expecting identifier following `int`.\\n/tmp/tmptzf4u27v.d(55): Error:\
+    \ found `@` when expecting `;` following statement\\nFailed: [\"dmd\", \"-unittest\"\
+    , \"-v\", \"-o-\", \"/tmp/tmptzf4u27v.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    struct Node\n    {\n        ulong x;\n        ulong y;\n\
+    \        long value;\n        long[] path;\n        @disable this(this);\n   \
+    \     @disable this(Node);\n        @disable this(ulong, ulong, long, long[]);\n\
+    \        @disable this(ulong, ulong, long);\n        auto to_string()\n      \
+    \  {\n            return format(\"[%s, %s]\", x, y);\n        }\n    }\n    Node[][]\
+    \ nodes = new Node[grid.length][];\n    foreach(i, row; grid)\n    {\n       \
+    \ nodes[i] = new Node[row.length];\n        foreach(j, value; row)\n        {\n\
+    \            nodes[i][j] = Node(i, j, value);\n        }\n    }\n    struct Queue\n\
+    \    {\n        private ulong[] xs;\n        private ulong[] ys;\n        private\
+    \ long[] values;\n        private long[][] paths;\n        ulong head = 0;\n \
+    \       ulong tail = 0;\n        private Node[][] nodes;\n        this(Node[][]\
+    \ nodes)\n        {\n            this.nodes = nodes;\n            import std.array;\n\
+    \            auto max_length = (ulong)unchecked(reduce!((a, b) => a + b)(map!(r\
+    \ => r.length)(nodes)));\n            xs = new ulong[max_length];\n          \
+    \  ys = new ulong[max_length];\n            values = new long[max_length];\n \
+    \           paths = new long[max_length][];\n        }\n        void push(ulong\
+    \ x, ulong y)\n        {\n            if (nodes[x][y].path.length > 0)\n     \
+    \       {\n                return;\n            }\n            xs[tail] = x;\n\
+    \            ys[tail] = y;\n            values[tail] = nodes[x][y].value;\n  \
+    \          paths[tail] = new long[0];\n            tail = (tail + 1) % xs.length;\n\
+    \        }\n        auto front()\n        {\n            auto x = xs[head];\n\
+    \            auto y =\nunittest\n{\n    alias candidate = minPath;\n\n    assert(candidate([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);\n    assert(candidate([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);\n    assert(candidate([[1L,\
+    \ 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L)\
+    \ == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L,\
+    \ 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L,\
+    \ 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L,\
+    \ 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);\n    assert(candidate([[11L,\
+    \ 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L)\
+    \ == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);\n    assert(candidate([[12L, 13L,\
+    \ 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) ==\
+    \ [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L,\
+    \ 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n\
+    \    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L,\
+    \ 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n    assert(candidate([[1L, 2L], [3L, 4L]], 10L)\
+    \ == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L],\
+    \ [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpwl38ftkr.d(72): Error: C style cast illegal, use `cast(ulong)unchecked(reduce!((a,\
+    \ b) => a + b)(map!((r) => r.length)(nodes)))`\\n/tmp/tmpwl38ftkr.d(94): Error:\
+    \ expression expected, not `unittest`\\n/tmp/tmpwl38ftkr.d(95): Error: semicolon\
+    \ expected following auto declaration, not `{`\\n/tmp/tmpwl38ftkr.d(110): Error:\
+    \ found `End of File` when expecting `}` following compound statement\\n/tmp/tmpwl38ftkr.d(110):\
+    \ Error: `}` expected following members in `struct` declaration at /tmp/tmpwl38ftkr.d(59)\\\
+    n/tmp/tmpwl38ftkr.d(110): Error: found `End of File` when expecting `}` following\
+    \ compound statement\\nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmpwl38ftkr.d\"\
+    , \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    import std.algorithm : sort;\n    import std.range :\
+    \ zip;\n    long sz = grid.length;\n    assert(sz == grid[0].length);\n    assert(k\
+    \ <= sz * sz);\n    bool[][] vis = new bool[][](sz, sz);\n    Queue!(Tuple!(int,\
+    \ int)) q = new Queue!(Tuple!(int, int));\n    q.put(tuple(0, 0));\n    long[]\
+    \ res = new long[k];\n    long[] cur = new long[k];\n    res[0] = grid[0][0];\n\
+    \    cur[0] = grid[0][0];\n    for (long i = 1; i < k; i++)\n    {\n        res[i]\
+    \ = long.max;\n        cur[i] = long.max;\n    }\n    vis[0][0] = true;\n    while\
+    \ (!q.empty)\n    {\n        auto [i, j] = q.get;\n        if (i < sz - 1 && !vis[i\
+    \ + 1][j])\n        {\n            vis[i + 1][j] = true;\n            q.put(tuple(i\
+    \ + 1, j));\n            long[] tmp = cur.dup;\n            tmp[0] = grid[i +\
+    \ 1][j];\n            sort(tmp);\n            if (lexicographicalCompare(tmp,\
+    \ res))\n            {\n                res = tmp;\n            }\n        }\n\
+    \        if (j < sz - 1 && !vis[i][j + 1])\n        {\n            vis[i][j +\
+    \ 1] = true;\n            q.put(tuple(i, j + 1));\n            long[] tmp = cur.dup;\n\
+    \            tmp[0] = grid[i][j + 1];\n            sort(tmp);\n            if\
+    \ (lexicographicalCompare(tmp, res))\n            {\n                res = tmp;\n\
+    \            }\n        }\n        if (i > 0 && !vis[i - 1][j])\n        {\n \
+    \           vis[i - 1][j] = true;\n            q.put(tuple(i - 1, j\nunittest\n\
+    {\n    alias candidate = minPath;\n\n    assert(candidate([[1L, 2L, 3L], [4L,\
+    \ 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);\n    assert(candidate([[5L, 9L,\
+    \ 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);\n    assert(candidate([[1L,\
+    \ 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L)\
+    \ == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L,\
+    \ 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L,\
+    \ 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L,\
+    \ 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);\n    assert(candidate([[11L,\
+    \ 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L)\
+    \ == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);\n    assert(candidate([[12L, 13L,\
+    \ 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) ==\
+    \ [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L,\
+    \ 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n\
+    \    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L,\
+    \ 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n    assert(candidate([[1L, 2L], [3L, 4L]], 10L)\
+    \ == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L],\
+    \ [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpbhgrn3be.d(55): Error: basic type expected, not `[`\\n/tmp/tmpbhgrn3be.d(55):\
+    \ Error: found `,` when expecting `]`\\n/tmp/tmpbhgrn3be.d(55): Error: semicolon\
+    \ expected, not `]`\\n/tmp/tmpbhgrn3be.d(55): Error: found `]` instead of statement\\\
+    n/tmp/tmpbhgrn3be.d(84): Error: found `unittest` when expecting `,`\\n/tmp/tmpbhgrn3be.d(100):\
+    \ Error: found `void` when expecting `,`\\n/tmp/tmpbhgrn3be.d(100): Error: found\
+    \ `{` when expecting `,`\\n/tmp/tmpbhgrn3be.d(100): Error: expression expected,\
+    \ not `}`\\n/tmp/tmpbhgrn3be.d(100): Error: found `End of File` when expecting\
+    \ `,`\\n/tmp/tmpbhgrn3be.d(100): Error: found `End of File` when expecting `)`\\\
+    n/tmp/tmpbhgrn3be.d(100): Error: found `End of File` when expecting `,`\\n/tmp/tmpbhgrn3be.d(100):\
+    \ Error: found `End of File` when expecting `)`\\n/tmp/tmpbhgrn3be.d(100): Error:\
+    \ found `End of File` when expecting `;` following statement\\n/tmp/tmpbhgrn3be.d(100):\
+    \ Error: found `End of File` when expecting `}` following compound statement\\\
+    n/tmp/tmpbhgrn3be.d(100): Error: found `End of File` when expecting `}` following\
+    \ compound statement\\n/tmp/tmpbhgrn3be.d(100): Error: found `End of File` when\
+    \ expecting `}` following compound statement\\nFailed: [\"dmd\", \"-unittest\"\
+    , \"-v\", \"-o-\", \"/tmp/tmpbhgrn3be.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    auto N = grid.length;\n    long[] arr;\n    if (k <=\
+    \ N)\n    {\n        arr = new long[k];\n        for (size_t i = 0; i < k; i++)\n\
+    \            arr[i] = grid[0][i];\n    }\n    else\n    {\n        arr = new long[N];\n\
+    \        for (size_t i = 0; i < N; i++)\n            arr[i] = grid[0][i];\n  \
+    \      long[] temp = minPath(grid, k - N);\n        arr ~= temp;\n    }\n    return\
+    \ arr;\n}\nunittest\n{\n    alias candidate = minPath;\n\n    assert(candidate([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);\n    assert(candidate([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);\n    assert(candidate([[1L,\
+    \ 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L)\
+    \ == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L,\
+    \ 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L,\
+    \ 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L,\
+    \ 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);\n    assert(candidate([[11L,\
+    \ 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L)\
+    \ == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);\n    assert(candidate([[12L, 13L,\
+    \ 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) ==\
+    \ [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L,\
+    \ 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n\
+    \    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L,\
+    \ 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n    assert(candidate([[1L, 2L], [3L, 4L]], 10L)\
+    \ == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L],\
+    \ [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'core.exception.AssertError@/tmp/tmphf5hgwy5.d(57): unittest failure\\\
+    n----------------\\n??:? _d_unittestp [0x429f09]\\n??:? void tmphf5hgwy5.__unittest_L53_C1()\
+    \ [0x42814b]\\n??:? void tmphf5hgwy5.__modtest() [0x4290f4]\\n??:? int core.runtime.runModuleUnitTests().__foreachbody2(object.ModuleInfo*)\
+    \ [0x42f557]\\n??:? int object.ModuleInfo.opApply(scope int delegate(object.ModuleInfo*)).__lambda2(immutable(object.ModuleInfo*))\
+    \ [0x429be6]\\n??:? int rt.minfo.moduleinfos_apply(scope int delegate(immutable(object.ModuleInfo*))).__foreachbody2(ref\
+    \ rt.sections_elf_shared.DSO) [0x42c1fd]\\n??:? int rt.sections_elf_shared.DSO.opApply(scope\
+    \ int delegate(ref rt.sections_elf_shared.DSO)) [0x42c28c]\\n??:? int rt.minfo.moduleinfos_apply(scope\
+    \ int delegate(immutable(object.ModuleInfo*))) [0x42c189]\\n??:? int object.ModuleInfo.opApply(scope\
+    \ int delegate(object.ModuleInfo*)) [0x429bbd]\\n??:? runModuleUnitTests [0x42f32d]\\\
+    n??:? void rt.dmain2._d_run_main(int, char**, extern (C) int function(char[][])*).runAll()\
+    \ [0x42a3cc]\\n??:? void rt.dmain2._d_run_main(int, char**, extern (C) int function(char[][])*).tryExec(scope\
+    \ void delegate()) [0x42a353]\\n??:? _d_run_main [0x42a2be]\\n??:? main [0x429107]\\\
+    n??:? __libc_start_main [0x6aeec554]\\n1/1 unittests FAILED\\n'"
+  exit_code: 1
+  status: Exception
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    long N = grid.length;\n    if (N == 0)\n        return\
+    \ [];\n    else if (N == 1)\n        return [grid[0][0]];\n    else if (k == 1)\n\
+    \        return [minElement(grid)];\n    \n    long[][] cost = new long[N][N];\n\
+    \    for (int i = 0; i < N; i++)\n        for (int j = 0; j < N; j++)\n      \
+    \      cost[i][j] = long.max;\n    cost[0][0] = grid[0][0];\n    for (int pathLength\
+    \ = 2; pathLength <= k; pathLength++)\n    {\n        for (int i = 0; i < N; i++)\n\
+    \        {\n            for (int j = 0; j < N; j++)\n            {\n         \
+    \       if (i == 0 && j == 0)\n                    continue;\n               \
+    \ if (i > 0)\n                    cost[i][j] = min(cost[i][j], cost[i - 1][j]\
+    \ + grid[i][j]);\n                if (j > 0)\n                    cost[i][j] =\
+    \ min(cost[i][j], cost[i][j - 1] + grid[i][j]);\n                if (i < N - 1)\n\
+    \                    cost[i][j] = min(cost[i][j], cost[i + 1][j] + grid[i][j]);\n\
+    \                if (j < N - 1)\n                    cost[i][j] = min(cost[i][j],\
+    \ cost[i][j + 1] + grid[i][j]);\n            }\n        }\n    }\n    long least\
+    \ = cost[0][0];\n    for (int i = 0; i < N; i++)\n        for (int j = 0; j <\
+    \ N; j++)\n            least = min(least, cost[i][j]);\n    long[][] possibleLeastPaths\
+    \ = new long[N * N][N * N];\n    int[] possibleLeastPathsLength = new int[N *\
+    \ N];\n    int possibleLeastPathsCount = 0;\n    for (int i = 0; i < N; i++)\n\
+    \    {\n       \nunittest\n{\n    alias candidate = minPath;\n\n    assert(candidate([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);\n    assert(candidate([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);\n    assert(candidate([[1L,\
+    \ 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L)\
+    \ == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L,\
+    \ 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L,\
+    \ 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L,\
+    \ 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);\n    assert(candidate([[11L,\
+    \ 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L)\
+    \ == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);\n    assert(candidate([[12L, 13L,\
+    \ 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) ==\
+    \ [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L,\
+    \ 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n\
+    \    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L,\
+    \ 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n    assert(candidate([[1L, 2L], [3L, 4L]], 10L)\
+    \ == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L],\
+    \ [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmp4lzplo4k.d(77): Error: found `unittest` instead of statement\\\
+    n/tmp/tmp4lzplo4k.d(93): Error: found `End of File` when expecting `}` following\
+    \ compound statement\\nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmp4lzplo4k.d\"\
+    , \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{\n    int n = grid.length;\n    int[][] edges = new int[n *\
+    \ n][n * n];\n    foreach (i; 0 .. n)\n    {\n        foreach (j; 0 .. n)\n  \
+    \      {\n            if (i < n - 1)\n                edges[i * n + j][(i + 1)\
+    \ * n + j] = 1;\n            if (j < n - 1)\n                edges[i * n + j][i\
+    \ * n + j + 1] = 1;\n        }\n    }\n    typedef WeightedGraph!(int, int) WeightedGraph;\n\
+    \    auto graph = WeightedGraph(n * n, edges, 1);\n    auto dijkstra = dijkstraShortestPath!(WeightedGraph);\n\
+    \    auto vals = new uint[n * n];\n    auto w = n * n;\n    foreach (i; 0 .. n)\n\
+    \    {\n        foreach (j; 0 .. n)\n        {\n            w--;\n           \
+    \ vals[i * n + j] = w;\n        }\n    }\n    return dijkstra(graph, 0, vals).path;\n\
+    }\nunittest\n{\n    alias candidate = minPath;\n\n    assert(candidate([[1L, 2L,\
+    \ 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L, 2L, 1L]);\n    assert(candidate([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L) == [1L]);\n    assert(candidate([[1L,\
+    \ 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L, 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L)\
+    \ == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L, 4L, 13L, 10L], [5L, 7L, 12L,\
+    \ 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L) == [1L, 10L, 1L, 10L, 1L,\
+    \ 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L], [6L, 4L, 13L, 15L], [5L,\
+    \ 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L, 1L, 7L, 1L]);\n    assert(candidate([[11L,\
+    \ 8L, 7L, 2L], [5L, 16L, 14L, 4L], [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L)\
+    \ == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L]);\n    assert(candidate([[12L, 13L,\
+    \ 10L, 1L], [9L, 3L, 15L, 6L], [5L, 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) ==\
+    \ [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L,\
+    \ 7L, 4L], [3L, 1L, 5L], [6L, 8L, 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n\
+    \    assert(candidate([[6L, 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L,\
+    \ 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n    assert(candidate([[1L, 2L], [3L, 4L]], 10L)\
+    \ == [1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L],\
+    \ [3L, 2L]], 10L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpbvo2xgzh.d(47): Error: found `WeightedGraph` when expecting `;`\
+    \ following statement\\n/tmp/tmpbvo2xgzh.d(47): Error: found `,` when expecting\
+    \ `.` following int\\n/tmp/tmpbvo2xgzh.d(47): Error: found `int` when expecting\
+    \ identifier following `int`.\\n/tmp/tmpbvo2xgzh.d(47): Error: found `WeightedGraph`\
+    \ when expecting `;` following statement\\n/tmp/tmpbvo2xgzh.d(47): Deprecation:\
+    \ use `{ }` for an empty statement, not `;`\\nFailed: [\"dmd\", \"-unittest\"\
+    , \"-v\", \"-o-\", \"/tmp/tmpbvo2xgzh.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.math;\nimport std.typecons;\n/*\n\n    Given a grid with N\
+    \ rows and N columns (N >= 2) and a positive integer k, \n    each cell of the\
+    \ grid contains a value. Every integer in the range [1, N * N]\n    inclusive\
+    \ appears exactly once on the cells of the grid.\n\n    You have to find the minimum\
+    \ path of length k in the grid. You can start\n    from any cell, and in each\
+    \ step you can move to any of the neighbor cells,\n    in other words, you can\
+    \ go to cells which share an edge with you current\n    cell.\n    Please note\
+    \ that a path of length k means visiting exactly k cells (not\n    necessarily\
+    \ distinct).\n    You CANNOT go off the grid.\n    A path A (of length k) is considered\
+    \ less than a path B (of length k) if\n    after making the ordered arrays of\
+    \ the values on the cells that A and B go\n    through (let's call them lst_A\
+    \ and lst_B), lst_A is lexicographically less\n    than lst_B, in other words,\
+    \ there exist an integer index i (1 <= i <= k)\n    such that lst_A[i] < lst_B[i]\
+    \ and for any j (1 <= j < i) we have\n    lst_A[j] = lst_B[j].\n    It is guaranteed\
+    \ that the answer is unique.\n    Return an ordered array of the values on the\
+    \ cells that the minimum path go through.\n\n    Examples:    \n    >>> minPath([[1L,\
+    \ 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L)\n    [1L, 2L, 1L]\n\n    >>> minPath([[5L,\
+    \ 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]], 1L)\n    [1L]\n    \n*/\nlong[] minPath(long[][]\
+    \ grid, long k) \n{ \n    long N = grid.length;\n    Tuple!(long, long, long)[]\
+    \ my_queue = [Tuple!(long, long, long)(0L, 0L, 1L)];\n    long[][] ans = new long[][](N,\
+    \ N);\n    /*\n    ans[i][j] = k\n    means the minimum path of length k which\
+    \ arrives at grid[i][j]\n    */\n    foreach(i; 0 .. N)\n        foreach(j; 0\
+    \ .. N)\n            ans[i][j] = 2L * k;\n    ans[0][0] = grid[0][0];\n    while(my_queue.length\
+    \ != 0)\n    {\n        Tuple!(long, long, long) curr = my_queue[0];\n       \
+    \ my_queue = my_queue[1 .. $];\n        long i = curr[0], j = curr[1], len = curr[2];\n\
+    \        if(i + 1 < N && ans[i + 1][j] > ans[i][j] + grid[i + 1][j])\n       \
+    \ {\n            ans[i + 1][j] = ans[i][j] + grid[i + 1][j];\n            my_queue\
+    \ ~= Tuple!(long, long, long)(i + 1, j, len + 1);\n        }\n        if(i - 1\
+    \ >= 0 && ans[i - 1][j] > ans[i][j] + grid[i - 1][j])\n        {\n           \
+    \ ans[i - 1][j] = ans[i][j] + grid[i - 1][j];\n            my_queue ~= Tuple!(long,\
+    \ long, long)(i - 1, j, len + 1);\n        }\n        if(j + 1 < N && ans[i][j\
+    \ + 1] > ans[i][j] + grid[i][j + 1])\n        {\n            ans[i][j + 1] = ans[i][j]\
+    \ + grid[i][j + 1];\n            my_queue ~= Tuple!(long, long, long)(i, j + 1,\
+    \ len + 1);\n        }\n        if(j - 1\nunittest\n{\n    alias candidate = minPath;\n\
+    \n    assert(candidate([[1L, 2L, 3L], [4L, 5L, 6L], [7L, 8L, 9L]], 3L) == [1L,\
+    \ 2L, 1L]);\n    assert(candidate([[5L, 9L, 3L], [4L, 1L, 6L], [7L, 8L, 2L]],\
+    \ 1L) == [1L]);\n    assert(candidate([[1L, 2L, 3L, 4L], [5L, 6L, 7L, 8L], [9L,\
+    \ 10L, 11L, 12L], [13L, 14L, 15L, 16L]], 4L) == [1L, 2L, 1L, 2L]);\n    assert(candidate([[6L,\
+    \ 4L, 13L, 10L], [5L, 7L, 12L, 1L], [3L, 16L, 11L, 15L], [8L, 14L, 9L, 2L]], 7L)\
+    \ == [1L, 10L, 1L, 10L, 1L, 10L, 1L]);\n    assert(candidate([[8L, 14L, 9L, 2L],\
+    \ [6L, 4L, 13L, 15L], [5L, 7L, 1L, 12L], [3L, 10L, 11L, 16L]], 5L) == [1L, 7L,\
+    \ 1L, 7L, 1L]);\n    assert(candidate([[11L, 8L, 7L, 2L], [5L, 16L, 14L, 4L],\
+    \ [9L, 3L, 15L, 6L], [12L, 13L, 10L, 1L]], 9L) == [1L, 6L, 1L, 6L, 1L, 6L, 1L,\
+    \ 6L, 1L]);\n    assert(candidate([[12L, 13L, 10L, 1L], [9L, 3L, 15L, 6L], [5L,\
+    \ 16L, 14L, 4L], [11L, 8L, 7L, 2L]], 12L) == [1L, 6L, 1L, 6L, 1L, 6L, 1L, 6L,\
+    \ 1L, 6L, 1L, 6L]);\n    assert(candidate([[2L, 7L, 4L], [3L, 1L, 5L], [6L, 8L,\
+    \ 9L]], 8L) == [1L, 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n    assert(candidate([[6L,\
+    \ 1L, 5L], [3L, 8L, 9L], [2L, 7L, 4L]], 8L) == [1L, 5L, 1L, 5L, 1L, 5L, 1L, 5L]);\n\
+    \    assert(candidate([[1L, 2L], [3L, 4L]], 10L) == [1L, 2L, 1L, 2L, 1L, 2L, 1L,\
+    \ 2L, 1L, 2L]);\n    assert(candidate([[1L, 3L], [3L, 2L]], 10L) == [1L, 3L, 1L,\
+    \ 3L, 1L, 3L, 1L, 3L, 1L, 3L]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpek_idwmk.d(67): Error: found `unittest` when expecting `)`\\\
+    n/tmp/tmpek_idwmk.d(83): Error: found `End of File` when expecting `}` following\
+    \ compound statement\\n/tmp/tmpek_idwmk.d(83): Error: found `End of File` when\
+    \ expecting `}` following compound statement\\nFailed: [\"dmd\", \"-unittest\"\
+    , \"-v\", \"-o-\", \"/tmp/tmpek_idwmk.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError

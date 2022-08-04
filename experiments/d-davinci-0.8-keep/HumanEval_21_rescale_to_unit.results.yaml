@@ -1,0 +1,538 @@
+name: HumanEval_21_rescale_to_unit
+language: d
+results:
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{ \n    auto min_num = min(numbers);\n    auto max_num = max(numbers);\n\
+    \    auto transform = [=](float x) { return (x - min_num) / (max_num - min_num);\
+    \ };\n    return numbers.map!transform;\n}\nunittest\n{\n    alias candidate =\
+    \ rescale_to_unit;\n\n    assert(candidate([2.0, 49.9]) == [0.0, 1.0]);\n    assert(candidate([100.0,\
+    \ 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0, 2.0, 3.0, 4.0, 5.0]) == [0.0,\
+    \ 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0, 1.0, 5.0, 3.0, 4.0]) ==\
+    \ [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0, 11.0, 15.0, 13.0,\
+    \ 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmp5c1ws2xf.d(14): Error: expression expected, not `=`\\n/tmp/tmp5c1ws2xf.d(14):\
+    \ Error: found `x` when expecting `.` following float\\n/tmp/tmp5c1ws2xf.d(14):\
+    \ Error: found `)` when expecting identifier following `float`.\\n/tmp/tmp5c1ws2xf.d(14):\
+    \ Error: found `{` when expecting `,`\\n/tmp/tmp5c1ws2xf.d(14): Error: expression\
+    \ expected, not `return`\\n/tmp/tmp5c1ws2xf.d(14): Error: found `;` when expecting\
+    \ `,`\\n/tmp/tmp5c1ws2xf.d(14): Error: expression expected, not `}`\\n/tmp/tmp5c1ws2xf.d(14):\
+    \ Error: found `;` when expecting `,`\\n/tmp/tmp5c1ws2xf.d(15): Error: expression\
+    \ expected, not `return`\\n/tmp/tmp5c1ws2xf.d(15): Error: found `numbers` when\
+    \ expecting `,`\\n/tmp/tmp5c1ws2xf.d(15): Error: found `;` when expecting `,`\\\
+    n/tmp/tmp5c1ws2xf.d(16): Error: expression expected, not `}`\\n/tmp/tmp5c1ws2xf.d(17):\
+    \ Error: found `unittest` when expecting `,`\\n/tmp/tmp5c1ws2xf.d(27): Error:\
+    \ found `void` when expecting `,`\\n/tmp/tmp5c1ws2xf.d(27): Error: found `{` when\
+    \ expecting `,`\\n/tmp/tmp5c1ws2xf.d(27): Error: expression expected, not `}`\\\
+    n/tmp/tmp5c1ws2xf.d(27): Error: found `End of File` when expecting `,`\\n/tmp/tmp5c1ws2xf.d(27):\
+    \ Error: found `End of File` when expecting `)`\\n/tmp/tmp5c1ws2xf.d(27): Error:\
+    \ semicolon expected following auto declaration, not `End of File`\\n/tmp/tmp5c1ws2xf.d(27):\
+    \ Error: found `End of File` when expecting `}` following compound statement\\\
+    nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmp5c1ws2xf.d\", \"\
+    -I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n    auto min_value = min(numbers);\n    auto max_value = max(numbers);\n\
+    \    auto delta = max_value - min_value;\n    auto scaled = [n - min_value for\
+    \ n in numbers];\n    auto scaled_and_normalized = [n / delta for n in scaled];\n\
+    \    return scaled_and_normalized;\n}\n/* \n Given n numbers:\n    1. rescale_to_unit\
+    \ them\n    2. create a list with n+1 elements so that the first element is 0\
+    \ and the last element is 1\n    3. pair each element of the rescaled list with\
+    \ the element to its right and the element to its left in the new list\n    4.\
+    \ obtain the differences between those elements\n    5. build a dictionary that\
+    \ maps the original number to its difference\n    >>> rescale_to_unit_and_integrate([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    {1.0: 0.0, 2.0: 0.25, 3.0: 0.25, 4.0: 0.25, 5.0: 0.25}\n\
+    \ */\nfloat[] rescale_to_unit_and_integrate(float[] numbers) \n{\n    auto scaled\
+    \ = rescale_to_unit(numbers);\n    auto boundaries = [0] ~ [1];\n    auto boundary_with_neighbors\
+    \ = [tuple(scaled[i-1], b, scaled[i]) for i, b in enumerate(boundaries)];\n  \
+    \  auto delta = [b[1] - b[0] for b in boundary_with_neighbors] ~ [b[2] - b[1]\
+    \ for b in boundary_with_neighbors];\n    auto delta_map = [tuple(numbers[i],\
+    \ d) for i, d in enumerate(delta)];\n    return delta_map;\n}\nunittest\n{\n \
+    \   alias candidate = rescale_to_unit;\n\n    assert(candidate([2.0, 49.9]) ==\
+    \ [0.0, 1.0]);\n    assert(candidate([100.0, 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0]) == [0.0, 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0,\
+    \ 1.0, 5.0, 3.0, 4.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0,\
+    \ 11.0, 15.0, 13.0, 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmp9i3xwgwv.d(15): Error: comma expected separating array initializers,\
+    \ not `for`\\n/tmp/tmp9i3xwgwv.d(15): Error: semicolon expected following auto\
+    \ declaration, not `n`\\n/tmp/tmp9i3xwgwv.d(15): Error: found `]` when expecting\
+    \ `;` following statement\\n/tmp/tmp9i3xwgwv.d(15): Deprecation: use `{ }` for\
+    \ an empty statement, not `;`\\n/tmp/tmp9i3xwgwv.d(16): Error: comma expected\
+    \ separating array initializers, not `for`\\n/tmp/tmp9i3xwgwv.d(16): Error: semicolon\
+    \ expected following auto declaration, not `n`\\n/tmp/tmp9i3xwgwv.d(16): Error:\
+    \ found `]` when expecting `;` following statement\\n/tmp/tmp9i3xwgwv.d(16): Deprecation:\
+    \ use `{ }` for an empty statement, not `;`\\n/tmp/tmp9i3xwgwv.d(33): Error: comma\
+    \ expected separating array initializers, not `for`\\n/tmp/tmp9i3xwgwv.d(33):\
+    \ Error: semicolon expected following auto declaration, not `i`\\n/tmp/tmp9i3xwgwv.d(33):\
+    \ Error: found `]` when expecting `;` following statement\\n/tmp/tmp9i3xwgwv.d(33):\
+    \ Deprecation: use `{ }` for an empty statement, not `;`\\n/tmp/tmp9i3xwgwv.d(34):\
+    \ Error: found `for` when expecting `,`\\n/tmp/tmp9i3xwgwv.d(34): Error: found\
+    \ `for` when expecting `,`\\n/tmp/tmp9i3xwgwv.d(35): Error: comma expected separating\
+    \ array initializers, not `for`\\n/tmp/tmp9i3xwgwv.d(35): Error: semicolon expected\
+    \ following auto declaration, not `i`\\n/tmp/tmp9i3xwgwv.d(35): Error: found `]`\
+    \ when expecting `;` following statement\\n/tmp/tmp9i3xwgwv.d(35): Deprecation:\
+    \ use `{ }` for an empty statement, not `;`\\nFailed: [\"dmd\", \"-unittest\"\
+    , \"-v\", \"-o-\", \"/tmp/tmp9i3xwgwv.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n  float[] result;\n  float min = reduce!min(numbers);\n  float\
+    \ max = reduce!max(numbers);\n  foreach(float number; numbers)\n  {\n    float\
+    \ scaled_number = (number - min) / (max - min);\n    result ~= scaled_number;\n\
+    \  }\n  return result;\n}\n/*\n  Given a list of numbers and a target value, find\
+    \ the two numbers in the list that\n    are closest to the target\n    >>> find_two_closest([3,\
+    \ 8, 9, 10, 11, 20], 4)\n    [3, 8]\n*/\nfloat[] find_two_closest(float[] numbers,\
+    \ float target)\n{\n  float min_distance = min!(abs(numbers[0] - target), abs(numbers[1]\
+    \ - target));\n  float[] result = [numbers[0], numbers[1]];\n  foreach(float number;\
+    \ numbers)\n  {\n    float distance = abs(number - target);\n    if(distance <\
+    \ min_distance)\n    {\n      min_distance = distance;\n      result = [number,\
+    \ number];\n    }\n    else if(distance == min_distance)\n    {\n      result\
+    \ ~= number;\n    }\n  }\n  return result;\n}\n/*\n  Given a list of numbers,\
+    \ find the k numbers that are closest to the target\n    >>> find_k_closest([3,\
+    \ 8, 9, 10, 11, 20], 4, 4)\n    [3, 8, 9, 10]\n*/\nfloat[] find_k_closest(float[]\
+    \ numbers, float target, int k)\n{\n  float[] result;\n  auto distances = map!(n\
+    \ => abs(n - target))(numbers);\n  foreach(i; k)\n  {\n    auto min_distance =\
+    \ min!(distances);\n    auto index = distances.indexOf(min_distance);\n    result\
+    \ ~= numbers[index];\n    distances[index] = std.numeric.fmax;\n  }\n  return\
+    \ result;\n}\n/*\n  Given a list of numbers, find the list of numbers whose sum\
+    \ is closest to the target\n    >>> find_\nunittest\n{\n    alias candidate =\
+    \ rescale_to_unit;\n\n    assert(candidate([2.0, 49.9]) == [0.0, 1.0]);\n    assert(candidate([100.0,\
+    \ 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0, 2.0, 3.0, 4.0, 5.0]) == [0.0,\
+    \ 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0, 1.0, 5.0, 3.0, 4.0]) ==\
+    \ [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0, 11.0, 15.0, 13.0,\
+    \ 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpj6qov7wk.d(65): Error: unterminated /* */ comment\\nFailed: [\"\
+    dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmpj6qov7wk.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n    float max = reduce!max(numbers);\n    float min = reduce!min(numbers);\n\
+    \    float len = max - min;\n    return map!(n => (n - min) / len)(numbers);\n\
+    }\nunittest\n{\n    alias candidate = rescale_to_unit;\n\n    assert(candidate([2.0,\
+    \ 49.9]) == [0.0, 1.0]);\n    assert(candidate([100.0, 49.9]) == [1.0, 0.0]);\n\
+    \    assert(candidate([1.0, 2.0, 3.0, 4.0, 5.0]) == [0.0, 0.25, 0.5, 0.75, 1.0]);\n\
+    \    assert(candidate([2.0, 1.0, 5.0, 3.0, 4.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n\
+    \    assert(candidate([12.0, 11.0, 15.0, 13.0, 14.0]) == [0.25, 0.0, 1.0, 0.5,\
+    \ 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpek3do95j.d(12): Error: template instance `reduce!max` template\
+    \ `reduce` is not defined\\n/tmp/tmpek3do95j.d(13): Error: template instance `reduce!min`\
+    \ template `reduce` is not defined\\n/tmp/tmpek3do95j.d(15): Error: template instance\
+    \ `map!((n) => (n - min) / len)` template `map` is not defined, did you mean max?\\\
+    nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmpek3do95j.d\", \"\
+    -I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n\tfloat min = minElement(numbers);\n\tfloat max = maxElement(numbers);\n\
+    \t\n\tfloat[] result = numbers.dup;\n\tresult -= min;\n\tresult /= (max - min);\n\
+    \t\n\treturn result;\n}\nunittest\n{\n    alias candidate = rescale_to_unit;\n\
+    \n    assert(candidate([2.0, 49.9]) == [0.0, 1.0]);\n    assert(candidate([100.0,\
+    \ 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0, 2.0, 3.0, 4.0, 5.0]) == [0.0,\
+    \ 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0, 1.0, 5.0, 3.0, 4.0]) ==\
+    \ [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0, 11.0, 15.0, 13.0,\
+    \ 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmppelpds3x.d(12): Error: undefined identifier `minElement`\\n/tmp/tmppelpds3x.d(13):\
+    \ Error: undefined identifier `maxElement`\\n/tmp/tmppelpds3x.d(16): Error: invalid\
+    \ array operation `result -= min` (possible missing [])\\n/tmp/tmppelpds3x.d(17):\
+    \ Error: invalid array operation `result /= max - min` (possible missing [])\\\
+    nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmppelpds3x.d\", \"\
+    -I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n\tassert(numbers.length >= 2);\nunittest\n{\n    alias candidate\
+    \ = rescale_to_unit;\n\n    assert(candidate([2.0, 49.9]) == [0.0, 1.0]);\n  \
+    \  assert(candidate([100.0, 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0]) == [0.0, 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0,\
+    \ 1.0, 5.0, 3.0, 4.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0,\
+    \ 11.0, 15.0, 13.0, 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpszsgyz7x.d(13): Error: found `unittest` instead of statement\\\
+    nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmpszsgyz7x.d\", \"\
+    -I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n    float max_value = max(numbers);\n    float min_value = min(numbers);\n\
+    \    float[] scaled_numbers = numbers.map!((x)=>(x-min_value)/(max_value-min_value));\n\
+    \    return scaled_numbers;\n}\nunittest\n{\n    alias candidate = rescale_to_unit;\n\
+    \n    assert(candidate([2.0, 49.9]) == [0.0, 1.0]);\n    assert(candidate([100.0,\
+    \ 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0, 2.0, 3.0, 4.0, 5.0]) == [0.0,\
+    \ 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0, 1.0, 5.0, 3.0, 4.0]) ==\
+    \ [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0, 11.0, 15.0, 13.0,\
+    \ 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmptimalaoc.d(12): Error: undefined identifier `max`, did you mean\
+    \ function `fmax`?\\n/tmp/tmptimalaoc.d(13): Error: undefined identifier `min`,\
+    \ did you mean function `main`?\\n/tmp/tmptimalaoc.d(14): Error: no property `map`\
+    \ for type `float[]`\\nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmptimalaoc.d\"\
+    , \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n    auto result = numbers.dup;\n    result[] = (result[] - min(result[])).map!(a\
+    \ => a / max(result[]));\n    return result;\n}\nunittest\n{\n    alias candidate\
+    \ = rescale_to_unit;\n\n    assert(candidate([2.0, 49.9]) == [0.0, 1.0]);\n  \
+    \  assert(candidate([100.0, 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0]) == [0.0, 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0,\
+    \ 1.0, 5.0, 3.0, 4.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0,\
+    \ 11.0, 15.0, 13.0, 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpam5cnc59.d(13): Error: undefined identifier `min`, did you mean\
+    \ function `main`?\\nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmpam5cnc59.d\"\
+    , \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n    immutable float min_value = min(numbers);\n    immutable float\
+    \ max_value = max(numbers);\n    immutable float range = max_value - min_value;\n\
+    \    if (range==0)\n        return uniform(0.0, 0.0, numbers.length);\n    else\n\
+    \        return [ (x-min_value)/range for x in numbers ];\n}\nunittest\n{\n  \
+    \  alias candidate = rescale_to_unit;\n\n    assert(candidate([2.0, 49.9]) ==\
+    \ [0.0, 1.0]);\n    assert(candidate([100.0, 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0]) == [0.0, 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0,\
+    \ 1.0, 5.0, 3.0, 4.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0,\
+    \ 11.0, 15.0, 13.0, 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmp7be4gv1i.d(18): Error: found `for` when expecting `,`\\nFailed:\
+    \ [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmp7be4gv1i.d\", \"-I/tmp\"\
+    ]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n    float[] result = new float[numbers.length];\n    auto max_value\
+    \ = max(numbers);\n    auto min_value = min(numbers);\n    auto range = max_value\
+    \ - min_value;\n    foreach(i, number; numbers) \n    {\n        result[i] = (number\
+    \ - min_value) / range;\n    }\n    return result;\n}\n/*\n Given a list of numbers\
+    \ (at least two) and a method of interpolation,\n    apply a linear transform\
+    \ to that list,\n    such that the smallest number will become 0 and the largest\
+    \ will become 1\n    >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0], Interpolation.Linear)\n\
+    \    [0.0, 0.25, 0.5, 0.75, 1.0]\n    >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0], Interpolation.Cosine)\n    [0.0, 0.222520933956, 0.5, 0.777475963053,\
+    \ 1.0]\n*/\nfloat[] rescale_to_unit(float[] numbers, Interpolation interpolation)\
+    \ \n{\n    float[] result = new float[numbers.length];\n    auto max_value = max(numbers);\n\
+    \    auto min_value = min(numbers);\n    auto range = max_value - min_value;\n\
+    \    foreach(i, number; numbers) \n    {\n        result[i] = interpolation((number\
+    \ - min_value) / range);\n    }\n    return result;\n}\n/*\n Given a list of numbers\
+    \ (at least two) and a method of interpolation,\n    apply a linear transform\
+    \ to that list,\n    such that the smallest number will become 0 and the largest\
+    \ will become 1\n    Also, the numbers at the given indices will be set to the\
+    \ given values\n    >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0], [0.0, 4.0],\
+    \ Interpolation.Linear)\n    [0.0, 0.25, 0.\nunittest\n{\n    alias candidate\
+    \ = rescale_to_unit;\n\n    assert(candidate([2.0, 49.9]) == [0.0, 1.0]);\n  \
+    \  assert(candidate([100.0, 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0]) == [0.0, 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0,\
+    \ 1.0, 5.0, 3.0, 4.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0,\
+    \ 11.0, 15.0, 13.0, 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmp6qcb22pg.d(43): Error: unterminated /* */ comment\\nFailed: [\"\
+    dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmp6qcb22pg.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n    float minimum, maximum;\n    float[] result;\n    float range;\n\
+    \    int i;\n    int n = $;\n    if (numbers.length < 2)\n    {\n        assert(0);\n\
+    \    }\n    minimum = numbers[0];\n    maximum = numbers[0];\n    foreach (num;\
+    \ numbers)\n    {\n        if (num < minimum) minimum = num;\n        if (num\
+    \ > maximum) maximum = num;\n    }\n    range = maximum - minimum;\n    result\
+    \ = new float[];\n    foreach (num; numbers)\n    {\n        result ~= (num -\
+    \ minimum) / range;\n    }\n    return result;\n}\n/*\n Given a text, transform\
+    \ to lower case and remove all punctuation characters\n*/\nstring remove_punctuation(string\
+    \ text)\n{\n    string result;\n    foreach (char; text.toLower())\n    {\n  \
+    \      if (('a' <= char && char <= 'z') || ('0' <= char && char <= '9'))\n   \
+    \     {\n            result ~= char;\n        }\n    }\n    return result;\n}\n\
+    /*\nGiven a text, convert to a list of words, with all punctuation removed\n*/\n\
+    string[] words(string text)\n{\n    string word;\n    string[] result;\n    foreach\
+    \ (char; remove_punctuation(text))\n    {\n        if (char != ' ')\n        {\n\
+    \            word ~= char;\n        }\n        else\n        {\n            result\
+    \ ~= word;\n            word = \"\";\n        }\n    }\n    result ~= word;\n\
+    \    return result;\n}\n/*\n Given a list of words, count the number of occurrences\
+    \ of each word\n*/\nunittest\n{\n    alias candidate = rescale_to_unit;\n\n  \
+    \  assert(candidate([2.0, 49.9]) == [0.0, 1.0]);\n    assert(candidate([100.0,\
+    \ 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0, 2.0, 3.0, 4.0, 5.0]) == [0.0,\
+    \ 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0, 1.0, 5.0, 3.0, 4.0]) ==\
+    \ [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0, 11.0, 15.0, 13.0,\
+    \ 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmp20d816t9.d(16): Error: `$` is valid only inside [] of index or\
+    \ slice\\n/tmp/tmp20d816t9.d(42): Error: no identifier for declarator `char`\\\
+    n/tmp/tmp20d816t9.d(44): Error: found `&&` when expecting `.` following char\\\
+    n/tmp/tmp20d816t9.d(44): Error: found `char` when expecting identifier following\
+    \ `char`.\\n/tmp/tmp20d816t9.d(44): Error: found `<=` when expecting `)`\\n/tmp/tmp20d816t9.d(44):\
+    \ Error: found `122U` when expecting `)`\\n/tmp/tmp20d816t9.d(44): Error: found\
+    \ `)` instead of statement\\n/tmp/tmp20d816t9.d(49): Error: declaration expected,\
+    \ not `return`\\n/tmp/tmp20d816t9.d(50): Error: unrecognized declaration\\nFailed:\
+    \ [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmp20d816t9.d\", \"-I/tmp\"\
+    ]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n    float min;\n    float max;\n    float result;\n    float[]\
+    \ result_array;\n    result_array = new float[];\n    result_array = numbers;\n\
+    \    min = min(numbers);\n    max = max(numbers);\n    foreach(item; numbers)\n\
+    \    {\n        result = (item - min) / (max - min);\n        append(result_array,\
+    \ result);\n    }\n    return result_array;\n}\nunittest\n{\n    alias candidate\
+    \ = rescale_to_unit;\n\n    assert(candidate([2.0, 49.9]) == [0.0, 1.0]);\n  \
+    \  assert(candidate([100.0, 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0]) == [0.0, 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0,\
+    \ 1.0, 5.0, 3.0, 4.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0,\
+    \ 11.0, 15.0, 13.0, 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpse_xs_nl.d(16): Error: new can only create structs, dynamic arrays\
+    \ or class objects, not `float[]`\\'s\\n/tmp/tmpse_xs_nl.d(18): Error: function\
+    \ expected before `()`, not `min` of type `float`\\n/tmp/tmpse_xs_nl.d(19): Error:\
+    \ function expected before `()`, not `max` of type `float`\\n/tmp/tmpse_xs_nl.d(23):\
+    \ Error: undefined identifier `append`\\nFailed: [\"dmd\", \"-unittest\", \"-v\"\
+    , \"-o-\", \"/tmp/tmpse_xs_nl.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n    auto min_and_max = minmax(numbers);\n    auto scale = 1 /\
+    \ (min_and_max.max - min_and_max.min);\n    auto shift = -(min_and_max.min * scale);\n\
+    \    auto scaled_and_shifted = map!(a => (a*scale) + shift)(numbers);\n    return\
+    \ scaled_and_shifted;\n}\n/*\n Given list of numbers (of at least two elements),\
+    \ apply a linear transform to that list,\n    such that the values that are one\
+    \ standard deviation below the mean will become 0\n    and the values that are\
+    \ one standard deviation above the mean will become 1\n    >>> rescale_to_unit([3.5,\
+    \ 5.5, 7.5, 9.5])\n    [0.0, 0.5, 1.0, 1.5]\n*/\nfloat[] standardize(float[] numbers)\n\
+    {\n    auto total = reduce!((a, b) => a + b)(numbers);\n    auto average = total\
+    \ / numbers.length;\n    auto variances = map!(a => (a - average) ^^ 2)(numbers);\n\
+    \    auto sum_of_variances = reduce!((a, b) => a + b)(variances);\n    auto standard_deviation\
+    \ = sqrt(sum_of_variances / (numbers.length - 1));\n    auto min_and_max = minmax(numbers);\n\
+    \    auto max_z_score = (min_and_max.max - average) / standard_deviation;\n  \
+    \  auto min_z_score = (min_and_max.min - average) / standard_deviation;\n    auto\
+    \ scale = 1 / (max_z_score - min_z_score);\n    auto shift = -(min_z_score * scale);\n\
+    \    auto scaled_and_shifted = map!(a => (a*scale) + shift)(numbers);\n    return\
+    \ scaled_and_shifted;\n}\nunittest\n{\n    alias candidate = rescale_to_unit;\n\
+    \n    assert(candidate([2.0, 49.9]) == [0.0, 1.0]);\n    assert(candidate([100.0,\
+    \ 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0, 2.0, 3.0, 4.0, 5.0]) == [0.0,\
+    \ 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0, 1.0, 5.0, 3.0, 4.0]) ==\
+    \ [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0, 11.0, 15.0, 13.0,\
+    \ 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpg86pm9xf.d(12): Error: undefined identifier `minmax`\\n/tmp/tmpg86pm9xf.d(15):\
+    \ Error: template instance `map!((a) => a * scale + shift)` template `map` is\
+    \ not defined\\n/tmp/tmpg86pm9xf.d(27): Error: template instance `reduce!((a,\
+    \ b) => a + b)` template `reduce` is not defined\\n/tmp/tmpg86pm9xf.d(29): Error:\
+    \ template instance `map!((a) => (a - average) ^^ 2)` template `map` is not defined\\\
+    n/tmp/tmpg86pm9xf.d(30): Error: template instance `reduce!((a, b) => a + b)` template\
+    \ `reduce` is not defined\\n/tmp/tmpg86pm9xf.d(32): Error: undefined identifier\
+    \ `minmax`\\n/tmp/tmpg86pm9xf.d(37): Error: template instance `map!((a) => a *\
+    \ scale + shift)` template `map` is not defined\\nFailed: [\"dmd\", \"-unittest\"\
+    , \"-v\", \"-o-\", \"/tmp/tmpg86pm9xf.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{ \n    // if numbers is empty or has only one number, return the\
+    \ numbers immediately\n    if (numbers.length == 0 || numbers.length == 1)\n \
+    \       return numbers;\n    \n    float min_val = min(numbers);\n    float max_val\
+    \ = max(numbers);\n    float diff = max_val - min_val;\n    \n    // if the diff\
+    \ is zero, return the numbers immediately\n    if (diff == 0)\n        return\
+    \ numbers;\n    \n    float[] transformed_numbers = new float[numbers.length];\n\
+    \    foreach (i, f; numbers)\n        transformed_numbers[i] = (f - min_val) /\
+    \ diff;\n    return transformed_numbers;\n}\nunittest\n{\n    alias candidate\
+    \ = rescale_to_unit;\n\n    assert(candidate([2.0, 49.9]) == [0.0, 1.0]);\n  \
+    \  assert(candidate([100.0, 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0]) == [0.0, 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0,\
+    \ 1.0, 5.0, 3.0, 4.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0,\
+    \ 11.0, 15.0, 13.0, 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpoylhbuiw.d(16): Error: undefined identifier `min`, did you mean\
+    \ function `main`?\\n/tmp/tmpoylhbuiw.d(17): Error: undefined identifier `max`,\
+    \ did you mean function `fmax`?\\nFailed: [\"dmd\", \"-unittest\", \"-v\", \"\
+    -o-\", \"/tmp/tmpoylhbuiw.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n    float max_value = numbers[0];\n    float min_value = numbers[0];\n\
+    \    foreach(n; numbers) \n    {\n        if (n > max_value)\n            max_value\
+    \ = n;\n        if (n < min_value)\n            min_value = n;\n    }\n    float[]\
+    \ result = [];\n    float range = max_value - min_value;\n    foreach(n; numbers)\
+    \ \n    {\n        result ~= (n - min_value) / range;\n    }\n    return result;\n\
+    }\nunittest\n{\n    alias candidate = rescale_to_unit;\n\n    assert(candidate([2.0,\
+    \ 49.9]) == [0.0, 1.0]);\n    assert(candidate([100.0, 49.9]) == [1.0, 0.0]);\n\
+    \    assert(candidate([1.0, 2.0, 3.0, 4.0, 5.0]) == [0.0, 0.25, 0.5, 0.75, 1.0]);\n\
+    \    assert(candidate([2.0, 1.0, 5.0, 3.0, 4.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n\
+    \    assert(candidate([12.0, 11.0, 15.0, 13.0, 14.0]) == [0.25, 0.0, 1.0, 0.5,\
+    \ 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: b''
+  exit_code: 0
+  status: OK
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n    int max_idx = 0;\n    int min_idx = 0;\n    for (int i = 0;\
+    \ i < numbers.length; i++)\n    {\n        if (numbers[i] > numbers[max_idx])\n\
+    \        {\n            max_idx = i;\n        }\n        if (numbers[i] < numbers[min_idx])\n\
+    \        {\n            min_idx = i;\n        }\n    }\n    // max_idx = i;\n\
+    \    // min_idx = i;\n    auto max_value = numbers[max_idx];\n    auto min_value\
+    \ = numbers[min_idx];\n    assert(max_value != min_value);\n    auto scaled =\
+    \ numbers.map!(n => (n - min_value) / (max_value - min_value));\n    return scaled;\n\
+    }\nunittest\n{\n    alias candidate = rescale_to_unit;\n\n    assert(candidate([2.0,\
+    \ 49.9]) == [0.0, 1.0]);\n    assert(candidate([100.0, 49.9]) == [1.0, 0.0]);\n\
+    \    assert(candidate([1.0, 2.0, 3.0, 4.0, 5.0]) == [0.0, 0.25, 0.5, 0.75, 1.0]);\n\
+    \    assert(candidate([2.0, 1.0, 5.0, 3.0, 4.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n\
+    \    assert(candidate([12.0, 11.0, 15.0, 13.0, 14.0]) == [0.25, 0.0, 1.0, 0.5,\
+    \ 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpznsw8lrd.d(30): Error: no property `map` for type `float[]`\\\
+    nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmpznsw8lrd.d\", \"\
+    -I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n  float min = minElement(numbers);\n  float max = maxElement(numbers);\n\
+    \  return numbers.map!((number) { return (number - min) / (max - min); });\n}\n\
+    /*\n Given two lists, zip them into one list of tuples, where the first item is\
+    \ from the first list,\n    the second from the second list.\n    >>> zip([1,\
+    \ 2, 3], [4, 5, 6])\n    [(1, 4), (2, 5), (3, 6)]\n*/\nunittest\n{\n    alias\
+    \ candidate = rescale_to_unit;\n\n    assert(candidate([2.0, 49.9]) == [0.0, 1.0]);\n\
+    \    assert(candidate([100.0, 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0]) == [0.0, 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0,\
+    \ 1.0, 5.0, 3.0, 4.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0,\
+    \ 11.0, 15.0, 13.0, 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpa6mibmzu.d(12): Error: undefined identifier `minElement`\\n/tmp/tmpa6mibmzu.d(13):\
+    \ Error: undefined identifier `maxElement`\\n/tmp/tmpa6mibmzu.d(14): Error: no\
+    \ property `map` for type `float[]`\\nFailed: [\"dmd\", \"-unittest\", \"-v\"\
+    , \"-o-\", \"/tmp/tmpa6mibmzu.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n    auto len = numbers.length;\n    if (len < 2) \n    {\n   \
+    \     return numbers;\n    }\n    auto min_value = min(numbers);\n    auto max_value\
+    \ = max(numbers);\n    auto ratio = (max_value - min_value) / (len - 1);\n   \
+    \ if (ratio == 0) \n    {\n        return numbers;\n    }\n    return numbers.map!(x\
+    \ => (x - min_value) / ratio);\n}\n/*\n    Same as rescale_to_unit(), but the\
+    \ list can have more than two elements\n    >>> equal_distance_scale([1.0, 2.0,\
+    \ 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    >>> equal_distance_scale([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0, 6.0])\n    [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]\n*/\nfloat[] equal_distance_scale(float[]\
+    \ numbers) \n{\n    auto len = numbers.length;\n    if (len < 2) \n    {\n   \
+    \     return numbers;\n    }\n    auto ratio = 1 / (len - 1);\n    return numbers.map!(x\
+    \ => x * ratio);\n}\n/*\n    Given a list of numbers, will apply the rescale_to_unit()\
+    \ or equal_distance_scale() depending on the value of the argument\n    >>> equal_distance_scale([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    >>> equal_distance_scale([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0, 6.0])\n    [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]\n*/\nfloat[] rescale_to_unit_or_even_distance(float[]\
+    \ numbers, bool even_distance) \n{\n    if (even_distance) \nunittest\n{\n   \
+    \ alias candidate = rescale_to_unit;\n\n    assert(candidate([2.0, 49.9]) == [0.0,\
+    \ 1.0]);\n    assert(candidate([100.0, 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0]) == [0.0, 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0,\
+    \ 1.0, 5.0, 3.0, 4.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0,\
+    \ 11.0, 15.0, 13.0, 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmp6pc4ckvk.d(53): Error: found `unittest` instead of statement\\\
+    nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmp6pc4ckvk.d\", \"\
+    -I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n     float min = numbers[0];\n     float max = numbers[0];\n \
+    \    foreach(number; numbers[1..$]) \n     {\n         if (number < min)\n   \
+    \      {\n             min = number;\n         }\n         if (number > max)\n\
+    \         {\n             max = number;\n         }\n     }\n     float factor\
+    \ = 1.0 / (max - min);\n     float[] new_list = new float[];\n     foreach(number;\
+    \ numbers) \n     {\n         new_list ~= (number - min) * factor;\n     }\n \
+    \    return new_list;\n}\nunittest\n{\n    alias candidate = rescale_to_unit;\n\
+    \n    assert(candidate([2.0, 49.9]) == [0.0, 1.0]);\n    assert(candidate([100.0,\
+    \ 49.9]) == [1.0, 0.0]);\n    assert(candidate([1.0, 2.0, 3.0, 4.0, 5.0]) == [0.0,\
+    \ 0.25, 0.5, 0.75, 1.0]);\n    assert(candidate([2.0, 1.0, 5.0, 3.0, 4.0]) ==\
+    \ [0.25, 0.0, 1.0, 0.5, 0.75]);\n    assert(candidate([12.0, 11.0, 15.0, 13.0,\
+    \ 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmp7_gdkbs1.d(26): Error: new can only create structs, dynamic arrays\
+    \ or class objects, not `float[]`\\'s\\nFailed: [\"dmd\", \"-unittest\", \"-v\"\
+    , \"-o-\", \"/tmp/tmp7_gdkbs1.d\", \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError
+- program: "import std.typecons;\nimport std.math;\n/*\n Given list of numbers (of\
+    \ at least two elements), apply a linear transform to that list,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \n*/\nfloat[] rescale_to_unit(float[]\
+    \ numbers) \n{\n    //@debug println(numbers);\n    assert(numbers.length >= 2);\n\
+    \    const min = minElement(numbers);\n    const max = maxElement(numbers);\n\
+    \    const range = max - min;\n    const result = numbers.map!(x => (x - min)\
+    \ / range);\n    //@debug println(result);\n    return result;\n}\n/*\n Given\
+    \ a sequence of numbers, return first differences\n     >>> first_differences([1,\
+    \ 2, 4, 7, 0])\n     [1, 2, 3, -7]\n*/\nfloat[] first_differences(float[] data)\n\
+    {\n    return data[1 .. $].zip(data[0 .. $ - 1]).map!(x => x[0] - x[1]);\n}\n\
+    /*\n Given a list of numbers, and a target number, find all points where the list\
+    \ crosses the target\n     >>> find_crossings([1, 2, 4, 7, 0], 3)\n     [2]\n\
+    */\nsize_t[] find_crossings(float[] data, float target)\n{\n    return data[1\
+    \ .. $].zip(data[0 .. $ - 1]).\n            filter!(x => x[0] - x[1] > 0 && x[0]\
+    \ > target && x[1] < target).\n            map!(x => x[0]).\n            map!(x\
+    \ => x.idx);\n}\nunittest\n{\n    alias candidate = rescale_to_unit;\n\n    assert(candidate([2.0,\
+    \ 49.9]) == [0.0, 1.0]);\n    assert(candidate([100.0, 49.9]) == [1.0, 0.0]);\n\
+    \    assert(candidate([1.0, 2.0, 3.0, 4.0, 5.0]) == [0.0, 0.25, 0.5, 0.75, 1.0]);\n\
+    \    assert(candidate([2.0, 1.0, 5.0, 3.0, 4.0]) == [0.25, 0.0, 1.0, 0.5, 0.75]);\n\
+    \    assert(candidate([12.0, 11.0, 15.0, 13.0, 14.0]) == [0.25, 0.0, 1.0, 0.5,\
+    \ 0.75]);\n}\nvoid main(){}"
+  stdout: b''
+  stderr: "b'/tmp/tmpt2x2zh_r.d(14): Error: undefined identifier `minElement`\\n/tmp/tmpt2x2zh_r.d(15):\
+    \ Error: undefined identifier `maxElement`\\n/tmp/tmpt2x2zh_r.d(17): Error: no\
+    \ property `map` for type `float[]`\\n/tmp/tmpt2x2zh_r.d(28): Error: no property\
+    \ `zip` for type `float[]`\\n/tmp/tmpt2x2zh_r.d(37): Error: no property `zip`\
+    \ for type `float[]`\\nFailed: [\"dmd\", \"-unittest\", \"-v\", \"-o-\", \"/tmp/tmpt2x2zh_r.d\"\
+    , \"-I/tmp\"]\\n'"
+  exit_code: 1
+  status: SyntaxError

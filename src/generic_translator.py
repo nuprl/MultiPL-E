@@ -82,6 +82,14 @@ class PromptVisitor(ast.NodeVisitor):
                     print('skipping (no doctests to remove)')
                     return None
             case "transform":
+                # We first run the translate_prompt with the original
+                # prompt. This is a hack! We need each script to have some sort
+                # of setup method that remembers type information and such. But,
+                # people have already done so in translate_prompt because it used
+                # to be called first all the time. Calling it here as a setup
+                # function should hopefully(!) not break anything
+                self.translator.translate_prompt(self.name, self.args, self.returns, self.description)
+
                 # Steps:
                 # Find the Python expression and result in each doctest
                 # py_ast = ast.parse("PYTHON EXPRESSION", "bogus filename")
@@ -104,7 +112,11 @@ class PromptVisitor(ast.NodeVisitor):
                         output = ast.parse(doclist[1].strip()).body[0].value
                         transl_funccall = translate_expr(self.translator, funcCall)
                         transl_output = translate_expr(self.translator, output)
-                        desc += '>>> ' + str(transl_funccall) + '\n    ' + str(transl_output) + '\n'
+                        if hasattr(self.translator, "finalize"):
+                            transl_funccall = self.translator.finalize(transl_funccall, "lhs")
+                            transl_output = self.translator.finalize(transl_output, "rhs")
+                        # Why is this str() here?
+                        desc += '>>> ' + transl_funccall + '\n    ' + str(transl_output) + '\n'
                         pos = i[1]
                     
                     desc += self.description[pos:]
@@ -177,6 +189,9 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
                 try:
                     left = translate_expr(translator, left)
                     right = translate_expr(translator, right)
+                    if hasattr(translator, "finalize"):
+                        left = translator.finalize(left, "lhs")
+                        right = translator.finalize(right, "rhs")
                     test_cases.append(translator.deep_equality(left, right))
                 except Exception as e:
                     print(f"Exception translating expressions for {filename}: {e}")
@@ -308,10 +323,10 @@ def get_stop_from_translator(translator) -> List[str]:
         return translator.stop
 
 def get_file_ext_from_translator(translator):
-    if isinstance(translator, LanguageTranslator):
-        return translator.file_ext()
-    else:
+    if type(translator.file_ext) == type(""):
         return translator.file_ext
+    else:
+        return translator.file_ext()
 
 def list_originals(root):
     directory = Path(Path(__file__).parent, "..", "datasets").resolve()

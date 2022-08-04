@@ -146,7 +146,6 @@ class Translator:
     def __init__(self):
         global needs_hashmap
         self.type = None
-        self.is_candidate_result = False
 
     def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str) -> Optional[str]:
         global needs_hashmap
@@ -199,10 +198,7 @@ class Translator:
         # This is a total hack. It only works for a very stupid reason:
         # Left is compiled before right, and in the test suite, candidate is
         # never on the rhs
-        if self.is_candidate_result:
-            right = coerce(right, self.type[1])
-            self.is_candidate_result = False
-        return "    assert_eq!({}, {});".format(left, right)
+        return "    assert_eq!({left}, {right});"
 
     # NOTE(arjun): Really, no Nones?
     def gen_literal(self, c: bool | str | int | float):
@@ -248,9 +244,17 @@ class Translator:
         A function call f(x, y, z) translates to f(x, y, z)
         """
         if func == "candidate":
-            self.is_candidate_result = True
             args = [coerce(arg, self.type[0][i]) for i, arg in enumerate(args)]
         return func + "(" + ", ".join(args) + ")"
+
+    def finalize(self, result, context) -> str:
+        match context:
+            case "lhs":
+                return result
+            case "rhs":
+                return coerce(result, self.type[1])
+            case _other:
+                raise Exception("bad context to finalize")
 
 
 if __name__ == "__main__":
