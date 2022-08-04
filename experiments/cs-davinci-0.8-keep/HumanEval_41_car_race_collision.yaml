@@ -15,6 +15,163 @@ tests: "    }\n    public static void Main(string[] args) {\n    Debug.Assert(Ca
   \ == (4L));\n    Debug.Assert(CarRaceCollision((3L)) == (9L));\n    Debug.Assert(CarRaceCollision((4L))\
   \ == (16L));\n    Debug.Assert(CarRaceCollision((8L)) == (64L));\n    Debug.Assert(CarRaceCollision((10L))\
   \ == (100L));\n    }\n\n}\n"
-completions: []
+completions: ["        // YOUR CODE GOES HERE\n        return 0;", "        // Use\
+    \ dynamic programming.   In state (i,j) i represents how far left to right cars\n\
+    \        // have moved and j represents how far right to left cars have moved.\
+    \   There are n\n        // cars so i and j can be as big as n - 1.   In a state,\
+    \ we simply observe that:\n        // state (i+1,j) is reached by cars (i,j+1)\
+    \ not colliding and state (i,j+1) is\n        // reached by cars (i+1,j) not colliding.\
+    \ \n        long[,] dp = new long[n, n];\n        dp[0, 0] = 1;\n        for (long\
+    \ i = 0; i < n; i++) {\n            for (long j = 0; j < n; j++) {\n         \
+    \       if (i > 0) dp[i, j] += dp[i - 1, j];\n                if (j > 0) dp[i,\
+    \ j] += dp[i, j - 1];\n            }\n        }\n        // dp[n-1,n-1] is the\
+    \ total number of ways to get from start to end.\n        // The number of ways\
+    \ that involve at least one collision is all ways - all ways without collisions.\n\
+    \        return dp[n - 1, n - 1] - dp[n - 1, n - 1] / 2;", "        long ret =\
+    \ 0;\n        long curpos = 1;\n        long curcnt = n;\n        for (long colcnt\
+    \ = n; colcnt > 0; colcnt /= 2) {\n            // curpos represents the number\
+    \ of cars to the left of the\n            // first car of the left-to-right moving\
+    \ set.\n            // colcnt represents the number of cars of the left-to-right\n\
+    \            // moving set.\n            // curcnt represents the number of cars\
+    \ of the right-to-left\n            // moving set.\n            ret += curpos\
+    \ * colcnt;\n            curpos += curcnt;\n            curcnt /= 2;\n       \
+    \ }\n        return ret;", "        // Note that any number of collisions will\
+    \ happen at the same place, i.e. for some t.\n        // We can use binary search\
+    \ to find the earliest t at which there is a collision.\n        // Note that\
+    \ we can deduce a lower bound (tlo) and an upper bound (thi) on t in the following\
+    \ way:\n        // If a car with position x collided with a car with position\
+    \ y at time t, then these cars \n        // must satisfy the equation: x + t =\
+    \ y - t.  Therefore, we can simply use the following as\n        // tlo and thi:\n\
+    \        long tlo = 0;\n        long thi = long.MaxValue;\n        while (tlo\
+    \ <= thi) {\n            long tmid = (tlo + thi) / 2;\n            // The cars\
+    \ collide at time t.  We will construct a directed graph where\n            //\
+    \ each vertex is a car, and there is an edge from x to y in the graph\n      \
+    \      // if and only if car x will ever collide with car y at some time t.\n\
+    \            // We will count the number of strongly connected components in this\n\
+    \            // graph.  Now, if there are more than 1 strongly connected components,\n\
+    \            // that means that if a car is inside that component, it will collide\
+    \ with\n            // itself.  That means that there will be a collision at time\
+    \ t; so we\n            // set thi = tmid - 1 and continue.\n            if (numberOfStronglyConnectedComponentsInCarCollisionGraph(n,\
+    \ tmid) > 1) {\n                thi = tmid - 1;\n            }\n            //\
+    \ On the other hand, if there is only 1 strongly connected component,\n      \
+    \      // it must mean that there is at least one vertex with no incoming\n  \
+    \          // or outgoing edges.  This vertex means a car that will go on forever\n\
+    \            // without colliding with anything else.  This means that if t <=\
+    \ tmid,\n            // there will be no collisions at that point in time.  Therefore,\
+    \ we\n            // set tlo = tmid + 1 and continue.\n            else {\n  \
+    \              tlo = tmid + 1;\n            }\n        }\n        // Now, tlo\
+    \ > thi;  that means that there is a t such that cars collide\n        //", " \
+    \       // \n        // your code goes here\n        //", "        // The way\
+    \ to think about this problem is that there's a graph, where the\n        // vertices\
+    \ are the car positions, and each car forms an edge.  The question\n        //\
+    \ we want to solve is the number of edge-disjoint path pairs in the graph.\n \
+    \       // Using the theorem that the number of edge-disjoint path pairs is equal\
+    \ to\n        // the number of perfect matchings in the graph, we can solve it\
+    \ using\n        // a variant of Karp-Sipser matching algorithm.\n        // Specifically,\
+    \ define a bipartite graph where the two parts are the cars\n        // moving\
+    \ left to right and right to left respectively.  The position of\n        // the\
+    \ car forms the vertex.  For each car, add an edge to the car in\n        // the\
+    \ other group at the position where the cars would collide.\n        // This graph\
+    \ has a perfect matching iff no collision occurs.\n        // The maximum cardinality\
+    \ matching algorithm we'll use is the Karp-Sipser\n        // variant that takes\
+    \ O(n^2 log n) time.  This is not the fastest algorithm\n        // (e.g. the\
+    \ Hopcroft-Karp algorithm takes O(sqrt(n) m) time), but because\n        // the\
+    \ graph's edge density is low, Karp-Sipser is still much faster than\n       \
+    \ // more efficient algorithms.\n        // (Note that one can represent this\
+    \ problem as a flow problem as well; however,\n        // the flow solution will\
+    \ not run in sublinear time, and will take O(n^3) time,\n        // which is much\
+    \ slower than the matching solution.)\n        // Note that the algorithm we use\
+    \ is not actually Karp-Sipser; it's a\n        // variant that uses O(n^2) space\
+    \ instead of O(n^2 log n) space.\n        Debug.Assert(n >= 0);\n        // The\
+    \ graph we'll compute is bipartite.  We'll use two arrays (one for\n        //\
+    \ each side) to represent the vertices.  Each vertex is a long value representing\n\
+    \        // the position of the car.\n        // For the left side, the positions\
+    \ are 1, 2, ..., n.\n        // For the right side, the positions are 2n, 2n-1,\
+    \ ..., n+1.\n", "        // imagine if the cars were a bunch of points on a line.\
+    \  n points to the left,\n        // n points to the right.  starting at 0.\n\
+    \        // NOTE the following is related to the problem but not directly related:\n\
+    \        // Problem - \"Given a bunch of points on a line, find the number of\
+    \ parings such that\n        // the product of the distance between the 2 points\
+    \ is maximal\"\n        // Answer: Look at the set of points P-P.  Sort the results.\
+    \  Look at the difference between\n        // two points.  The last (maximal)\
+    \ difference should be between the right most point in P and the right\n     \
+    \   // most point in P.  Or, you could sort the set of points.  Then look at the\
+    \ difference between\n        // each point and its right neighbor.  The maximal\
+    \ difference is the maximal product.\n        // END NOTE\n        // SO, we have\
+    \ n points in the first set, from -2n to 0, each separated by a distance of 1.\n\
+    \        // And we have n points in the second set, from 0 to 2n, each separated\
+    \ by a distance of 1.\n        // What is the number of collisions.  This is not\
+    \ the maximal distance in the first set times\n        // the maximal distance\
+    \ in the second set because the difference is \"wrapped\".\n        // That is,\
+    \ the maximal distance in the first set is abs(-2n), which is the same as\n  \
+    \      // the maximal distance in the second set, which is abs(2n).\n        //\
+    \ Also, the two sets start at 0, so the distance between the sets is 0.\n    \
+    \    // This can only happen once.\n        // So, the answer is 2n-1.\n     \
+    \   return 2 * n - 1;", "        // This is a correct solution that takes O(n\
+    \ log n) time.\n        // But we want to solve this problem in O(n) time.\n \
+    \       // # of collisions= # of times a car on the right meets a car on the left\n\
+    \        //                 = # of times that a car on the right passes a car\
+    \ on the left\n        //                 = # of times that a car on the right\
+    \ is overtaken by a car on the left\n        //                 = # of times that\
+    \ a car on the right is overtaken by any car\n        //                 = # of\
+    \ cars overtaking a car on the right\n        //                 = # of cars on\
+    \ the left\n        //                 = n\n        // Essentially we are counting\
+    \ the number of inversions in the order\n        // of the cars on the left (with\
+    \ the cars on the right being the inverse order).\n        //              return\
+    \ MergeSortInversionCount(n);\n\n        // MergeSortInversionCount(n) takes O(n\
+    \ log n) time; but we have a O(n) solution.\n        // We just need to do it.\
+    \  The key idea is to count inversions in reverse order.\n        // Suppose we\
+    \ are given an integer array A of size n.\n        // We define the following\
+    \ array B of size n where B[i]=A[n-1-i].\n        // We can see that the number\
+    \ of inversions in A is the same as the number of inversions in B.\n        //\
+    \ Suppose we want to count the number of inversions in B using merge sort.\n \
+    \       // Then we can define the following merge-sort routine, which sorts in\
+    \ ascending order:\n        //     merge_sort(A, lo, hi)\n        //         if\
+    \ lo < hi\n        //             mid = lo + (hi-lo)/2\n        //           \
+    \  merge_sort(A, lo, mid)\n        //             merge_sort(A, mid+1, hi)\n \
+    \       //             merge(A, lo, mid, hi)\n        // Suppose we are merging\
+    \ the sorted subarrays A[lo..mid] and A[mid+1..hi].\n        // Let j=mid+1. \
+    \ Then we know that A[mid]>=A[mid+1]>=A[mid+2]>=...>=A[hi].\n        //", "  \
+    \      long i, j, c=0;\n        // Each time around the outer loop, we have n\
+    \ left-to-right cars and n right-to-left cars.\n        // We count the number\
+    \ of collisions.\n        for (i=0; i<n; i++) {\n            for (j=0; j<n; j++)\
+    \ {\n                // This is the speed of the left-to-right car.\n        \
+    \        long leftToRightSpeed = i+1;\n                // This is the speed of\
+    \ the right-to-left car.\n                long rightToLeftSpeed = n-j;\n     \
+    \           // If their sum is a perfect square, they will hit each other in a\
+    \ collision.\n                if (IsPerfectSquare(leftToRightSpeed + rightToLeftSpeed))\
+    \ {\n                    c++;\n                }\n            }\n        }\n \
+    \       return c;", '        return (n * (n - 1)) / 2;', "        // Your code\
+    \ goes here\n        long collision = 0;\n        for (long i = 0; i < n; i++)\
+    \ {\n            for (long j = 0; j < n; j++) {\n                if (i == j) {\n\
+    \                    continue;\n                }\n                long x = j\
+    \ - i;\n                long y = n - (j + i);\n                if (x * y < 0)\
+    \ {\n                    collision++;\n                }\n            }\n    \
+    \    }\n        return collision;", '        return (long)Math.Ceiling(n * 1.0
+    / 2);', "        long N = n;\n        if (N > 500) {\n            return N * (N\
+    \ - 1) / 2;\n        }\n\n        long[] a = new long[N];\n        for (long i\
+    \ = 0; i < N; i++) {\n            a[i] = i;\n        }\n        long[] b = new\
+    \ long[N];\n        for (long i = 0; i < N; i++) {\n            b[i] = N - i -\
+    \ 1;\n        }\n        return CarRaceCollisionBruteForce(a, b);", '        return
+    n * (n - 1) / 2;', '        return n*(n-1)/2;', "        long count = 0;\n   \
+    \     for (long i = 1; i <= n; i++) {\n            for (long j = i; j <= n; j++)\
+    \ {\n                if (gcd(i, j) == 1) {\n                    count++;\n   \
+    \             }\n            }\n        }\n        return count;", "        long\
+    \ k = 0;\n        long output = 0;\n        while (k < n) {\n            long\
+    \ k2 = 0;\n            while (k2 < n) {\n                if (k == k2) {\n    \
+    \                k2 = k2 + 1;\n                    continue;\n               \
+    \ }\n                long l = Math.Abs(k - k2);\n                if (l % 2 ==\
+    \ 0) {\n                    l = l / 2;\n                }\n                else\
+    \ {\n                    l = (l + 1) / 2;\n                }\n               \
+    \ output = output + l;\n                k2 = k2 + 1;\n            }\n        \
+    \    k = k + 1;\n        }\n        return output;", "        long k = n;\n  \
+    \      long result = 0;\n        for (int i = 1; i <= n; i++) {\n            result\
+    \ += k;\n            k--;\n        }\n        return result;", "        long x\
+    \ = 2;\n        long numOfCollisions = 1;\n        while (true) {\n          \
+    \  long temp = 2 * x + 1;\n            if (x > n) {\n                break;\n\
+    \            }\n            numOfCollisions += temp;\n            x *= 2;\n  \
+    \      }\n        numOfCollisions -= n;\n        return numOfCollisions;", " \
+    \       long result = 0;\n        // Implement your solution here.\n        return\
+    \ result;"]
 stop_tokens:
 - "\n    }\n"

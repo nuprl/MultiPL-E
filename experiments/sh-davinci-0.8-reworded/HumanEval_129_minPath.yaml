@@ -31,6 +31,230 @@ tests: "}\n\ncandidate() {\n    minPath \"$@\"\n}\n\nset -e\nrun_test() {\n    [
   \  [[ $(candidate \"6 1 5\\n3 8 9\\n2 7 4\" \"8\") = \"1 5 1 5 1 5 1 5\" ]]\n  \
   \  [[ $(candidate \"1 2\\n3 4\" \"10\") = \"1 2 1 2 1 2 1 2 1 2\" ]]\n    [[ $(candidate\
   \ \"1 3\\n3 2\" \"10\") = \"1 3 1 3 1 3 1 3 1 3\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    python - <<END\nimport sys\nfrom ast import literal_eval\nfrom\
+    \ itertools import combinations\nimport pprint\n\ndef leq(a, b):\n    for i in\
+    \ range(len(a)):\n        if a[i] < b[i]:\n            return True\n        elif\
+    \ a[i] > b[i]:\n            return False\n    return True\n\ndef getPaths(grid,\
+    \ path, k):\n    if len(path) == k:\n        return [path]\n    candidates = []\n\
+    \    cell = path[-1]\n    for c in [(cell[0]-1, cell[1]), (cell[0]+1, cell[1]),\
+    \ (cell[0], cell[1]-1), (cell[0], cell[1]+1)]:\n        if c[0] >= 0 and c[0]\
+    \ < len(grid) and c[1] >= 0 and c[1] < len(grid[0]) and c not in path:\n     \
+    \       candidates.append(c)\n    paths = []\n    for c in candidates:\n     \
+    \   paths.extend(getPaths(grid, path + [c], k))\n    return paths\n\ndef mkStr(s):\n\
+    \    return \"\\\"{}\\\"\".format(s)\n\ndef minPath(grid, k):\n    minPath = []\n\
+    \    for i in range(len(grid)):\n        for j in range(len(grid[0])):\n     \
+    \       paths = getPaths(grid, [(i, j)], k)\n            for p in paths:\n   \
+    \             p_lst = [grid[c[0]][c[1]] for c in p]\n                if len(minPath)\
+    \ == 0 or leq(p_lst, minPath):\n                    minPath = p_lst\n    print(str([mkStr(s)\
+    \ for s in minPath]).replace(\"'\", \"\"))\n\ngrid = literal_eval(\"[\" + sys.argv[1].replace(\"\
+    \\n\", \",\") + \"]\")\nk = int(sys.argv[2])\nminPath(grid, k)\nEND", "\tlocal\
+    \ grid=$1\n\tlocal k=$2\n\tlocal N=$(wc -l <<< \"$grid\")\n\tlocal indices=\"\
+    $(seq 1 $N)\"\n\tlocal comb=$(echo $indices | xargs -n1 | comb)\n\tlocal all_comb=$(echo\
+    \ \"$comb\" | awk '{ for (i = 1; i <= NF; i++) print $i }')\n\tlocal all_perm=$(echo\
+    \ \"$all_comb\" | awk '{ for (i = 1; i <= NF; i++) print $i }')\n\t\n\tlocal min_perm=\"\
+    \"\n\tlocal min_val=\"\"\n\t\n\tlocal perm=\"\"\n\tlocal val=\"\"\n\t\n\tfor perm\
+    \ in $all_perm; do\n\t\tval=$(echo \"$grid\" | eval \"awk '{ print \\$$perm }'\"\
+    )\n\t\tif [ -z \"$min_val\" ]; then\n\t\t\tmin_val=$val\n\t\t\tmin_perm=$perm\n\
+    \t\telse\n\t\t\tif [ \"$val\" \\< \"$min_val\" ]; then\n\t\t\t\tmin_val=$val\n\
+    \t\t\t\tmin_perm=$perm\n\t\t\tfi\n\t\tfi\n\tdone\n\t\n\t\n\t\n\tprintf \"$min_perm\"",
+  "\tlocal line\n\tlocal -a grid\n\tlocal -i i=0\n\tlocal -i j=0\n\tlocal -i N=$(wc\
+    \ -l <<< \"$1\")\n\tlocal -i i_start=$((N-1))\n\tlocal -i j_start=$((N-1))\n\t\
+    local -i k=$2\n\tlocal -i k_remaining=$k\n\tlocal -i k_inc=0\n\tlocal -i i_inc=0\n\
+    \tlocal -i j_inc=0\n\tlocal -i i_temp=0\n\tlocal -i j_temp=0\n\tlocal -i k_temp=0\n\
+    \tlocal -i v_best=99999999\n\tlocal -i v_temp=0\n\tlocal -i v_temp2=0\n\tlocal\
+    \ -i val_i=0\n\tlocal -i val_j=0\n\tlocal -i val_k=0\n\tlocal -i i_best=0\n\t\
+    local -i j_best=0\n\tlocal -i k_best=0\n\tlocal -i N_pad=0\n\tlocal -i N_fmt=$(printf\
+    \ '%d' $N)\n\tlocal -i k_fmt=$(printf '%d' $k)\n\tlocal -i pi_fmt=$(printf '%d'\
+    \ $i_start)\n\tlocal -i pj_fmt=$(printf '%d' $j_start)\n\tlocal -i k_pad=0\n\t\
+    local -i pi_pad=0\n\tlocal -i pj_pad=0\n\tlocal -i i_pad=0\n\tlocal -i j_pad=0\n\
+    \tlocal -i v_fmt=0\n\tlocal -i i_fmt=0\n\tlocal -i j_fmt=0\n\tlocal -i k_inc_fmt=0\n\
+    \tlocal -i i_inc_fmt=0\n\tlocal -i j_inc_fmt=0\n\tlocal -i i_temp_fmt=0\n\tlocal\
+    \ -i j_temp_fmt=0\n\tlocal -i k_temp_fmt=0\n\tlocal -i v_best_fmt=0\n\tlocal -",
+  "  local grid=$1\n  local k=$2\n  local minPath=$(echo \"$grid\" | ./getPath.awk\
+    \ -v k=$k)\n  python -c \"print($minPath)\"", "    # check the number of arguments\n\
+    \    if [ $# -ne 2 ]; then\n        echo \"Usage: $(basename $0) <grid> <path_length>\"\
+    \n        exit 1\n    fi\n    # check for the required commands\n    if ! hash\
+    \ bc 2>/dev/null; then\n        echo \"$(basename $0): bc command not found\"\n\
+    \        exit 1\n    fi\n    # assign the arguments to variables\n    grid=\"\
+    $1\"\n    path_length=\"$2\"\n    # check that the grid is not empty\n    if [\
+    \ -z \"$grid\" ]; then\n        echo \"Error: grid must not be empty\"\n     \
+    \   exit 1\n    fi\n    # check that the grid is NxN\n    if [ \"$(echo \"$grid\"\
+    \ | wc -l)\" -ne \"$(echo \"$grid\" | tr -s \" \" | cut -d \" \" -f 1 | sort -u\
+    \ | wc -l)\" ]; then\n        echo \"Error: grid must be a square\"\n        exit\
+    \ 1\n    fi\n    # check that the grid contains numbers 1 to N^2\n    if [ \"\
+    $(echo \"$grid\" | tr -d \" \" | sort -u | tr \"\\n\" \" \")\" != \"$(seq 1 \"\
+    $(echo \"$grid\" | wc -l | bc)^2\" | tr \"\\n\" \" \")\" ]; then\n        echo\
+    \ \"Error: grid must contain numbers 1 to N^2\"\n        exit 1\n    fi\n    #\
+    \ check that the path length is > 0\n    if [ \"$path_length\" -le 0 ]; then\n\
+    \        echo \"Error: path length must be greater than 0\"\n        exit 1\n\
+    \    fi\n    # check that the path length is not greater than N^2\n    if [ \"\
+    $path_length\" -gt \"$(echo \"$grid\" | wc -l | bc)^2\" ]; then\n        echo\
+    \ \"Error: path length must not be greater than N^2\"\n        exit 1\n    fi\n\
+    \    # remove the newlines from the grid\n    grid=\"$(echo \"$grid\" | tr \"\\\
+    n\" \" \")\"\n    # get the number of rows\n    rows=\"$(echo \"$grid\" | wc -w\
+    \ | bc)\"\n    # create a vector of the values in the", "    local grid=\"$1\"\
+    \n    local path_length=\"$2\"\n    local min_path=\n    local -a path\n    local\
+    \ row=0\n    local col=0\n    local i\n    local N\n    local j\n    local k\n\
+    \    local l\n    local str\n    local current_path_value\n    local cur_val\n\
+    \    local min_val\n    local val\n    local -a best_path\n    IFS=$'\\n' read\
+    \ -r -d '' -a a <<< \"$grid\"\n    IFS=$' '\n    N=${#a[@]}\n    for (( i = 0;\
+    \ i < N; i++ )); do\n        read -r -a b <<< \"${a[$i]}\"\n        for (( j =\
+    \ 0; j < N; j++ )); do\n            read -r -a c <<< \"${b[$j]}\"\n          \
+    \  IFS=$'\\n' read -r -d '' -a grid[$i,$j] <<< \"${c[0]}\"\n        done\n   \
+    \ done\n    # for (( i = 0; i < N; i++ )); do\n    #     for (( j = 0; j < N;\
+    \ j++ )); do\n    #         echo ${grid[$i,$j]}\n    #     done\n    # done\n\
+    \    path[0]=$row\n    path[1]=$col\n    current_path_value=${grid[$row,$col]}\n\
+    \    for (( i = 1; i < path_length; i++ )); do\n        min_val=\n        for\
+    \ (( j = 0; j < 4; j++ )); do\n            cur_val=\n            case $j in\n\
+    \                0)  # go up\n                    if (( row > 0 )); then\n   \
+    \                     val=${grid[$((row - 1)),$col]}\n                       \
+    \ if (( val < current_path_value )); then\n                            cur_val=\"\
+    $val\"\n                        fi\n                    fi\n                 \
+    \   ;;\n                1)  # go right\n                    if (( col < N - 1\
+    \ )); then\n                        val=${grid[$row,$((col + 1))]}\n         \
+    \               if (( val < current_path_value )); then\n                    \
+    \        cur_val=\"$", "    GRID=$1\n    K=$2\n    # Put all the values of the\
+    \ grid in a hashtable\n    # key = position tuple: \"col_index row_index\"\n \
+    \   # value = cell value\n    declare -A CELLS\n    ROW_INDEX=0\n    for row in\
+    \ $GRID; do\n        COL_INDEX=0\n        for cell in $row; do\n            CELLS[\"\
+    $COL_INDEX $ROW_INDEX\"]=$cell\n            COL_INDEX=$((COL_INDEX + 1))\n   \
+    \     done\n        ROW_INDEX=$((ROW_INDEX + 1))\n    done\n    # Convert GRID\
+    \ to a space-separated list of positive integers.\n    GRID=$(echo $GRID | tr\
+    \ \" \" \" \" | tr \"\\n\" \" \")\n    # Get the number of rows and columns.\n\
+    \    N=$(echo $GRID | wc -w)\n    N=$((N ** 0.5))\n    # Put all the possible\
+    \ starting positions in a queue.\n    # Each position is in the form of \"col_index\
+    \ row_index\"\n    declare -a QUEUE\n    for (( i = 0; i < N; i++ )); do\n   \
+    \     for (( j = 0; j < N; j++ )); do\n            QUEUE+=( \"$i $j\" )\n    \
+    \    done\n    done\n    # Put all the paths in a list.\n    # Each path is in\
+    \ the form of a newline-separated string.\n    # Each line of a path is in the\
+    \ form of \"col_index row_index\".\n    declare -a PATHS\n    while [ ${#QUEUE[@]}\
+    \ -gt 0 ]; do\n        # Get a position from the queue.\n        POSITION=${QUEUE[0]}\n\
+    \        QUEUE=(\"${QUEUE[@]:1}\")\n        # Get the col and row indices of the\
+    \ current position.\n        CURRENT_COL_INDEX=$(echo $POSITION | cut -d \" \"\
+    \ -f 1)\n        CURRENT_ROW_INDEX=$(echo $POSITION | cut -d \" \" -f 2)\n   \
+    \     # Get the value of the current position.\n        CURRENT_", "    local\
+    \ matrix=\"$1\"\n    local k=\"$2\"\n    echo \"matrix: $matrix\"\n    echo \"\
+    k: $k\"", "  min_path=\n  min_path_len=9999\n  for i in $(seq 1 $((`echo $1 |\
+    \ wc -w`))); do\n    tmp=`echo $1 | cut -d \" \" -f $i`\n    for j in $(seq 1\
+    \ $((`echo $1 | wc -w`))); do\n      if [ $j -ne $i ]; then\n        tmp=`echo\
+    \ \"$tmp $(echo $1 | cut -d \" \" -f $j)\"`\n        for k in $(seq 1 $((`echo\
+    \ $1 | wc -w`))); do\n          if [ $k -ne $i ] && [ $k -ne $j ]; then\n    \
+    \        tmp=`echo \"$tmp $(echo $1 | cut -d \" \" -f $k)\"`\n            if [\
+    \ $k -gt $(($2 - 2)) ]; then\n              if [ `echo \"$tmp\" | tr \" \" \"\\\
+    n\" | sort -g | tr \"\\n\" \" \"` \\\n                \\< $min_path ]; then\n\
+    \                min_path=`echo \"$tmp\" | tr \" \" \"\\n\" | sort -g | tr \"\\\
+    n\" \" \"`\n              fi\n            fi\n            tmp=`echo \"$tmp\" |\
+    \ cut -d \" \" -f 1-2`\n          fi\n        done\n        tmp=`echo \"$tmp\"\
+    \ | cut -d \" \" -f 1`\n      fi\n    done\n  done\n  echo \"[`echo $min_path\
+    \ | tr \" \" \", \"`]\"", "    local result=()\n    local array=()\n    local\
+    \ path=()\n    local n=$(echo \"$1\" | wc -l)\n    local idx=0\n    local minPath_getArray()\
+    \ {\n        local n=$1\n        local i=0\n        local j=0\n        for ((\
+    \ i = 0; i < n; i++ )); do\n            for (( j = 0; j < n; j++ )); do\n    \
+    \            local elem=$(echo \"$1\" | awk \"{NR == $(($i + 1))} {print \\$$(($j\
+    \ + 1))}\")\n                array[$i,$j]=$elem\n            done\n        done\n\
+    \    }\n    local minPath_getPath() {\n        local n=$1\n        local i=0\n\
+    \        local j=0\n        local k=0\n        local m=$(($n - 1))\n        for\
+    \ (( i = 0; i < n; i++ )); do\n            for (( j = 0; j < n; j++ )); do\n \
+    \               local elem=${array[$i,$j]}\n                local right=${array[$i,$j]}\n\
+    \                local left=${array[$i,$j]}\n                local top=${array[$i,$j]}\n\
+    \                local bottom=${array[$i,$j]}\n                if [[ $(($j + 1))\
+    \ -lt $n ]]; then\n                    right=${array[$i,$(($j + 1))]}\n      \
+    \          fi\n                if [[ $(($j - 1)) -ge 0 ]]; then\n            \
+    \        left=${array[$i,$(($j - 1))]}\n                fi\n                if\
+    \ [[ $(($i - 1)) -ge 0 ]]; then\n                    top=${array[$(($i - 1)),$j]}\n\
+    \                fi\n                if [[ $(($i + 1)) -lt $n ]]; then\n     \
+    \               bottom=${array[$(($i + 1)),$j]}\n                fi\n        \
+    \        local min=$elem\n                local minIdx=0\n                if [[\
+    \ $right -lt $min ]]; then\n                    min=$right\n                 \
+    \   minIdx=1\n                fi\n                if [[ $left -lt $min ]]; then\n",
+  "  local grid=\"$1\"\n  local k=\"$2\"\n  # Local variable(s) used for memoization\n\
+    \  local dp=()\n  local visited=()\n  # Local function(s) used only in this bash\
+    \ function\n  function getPosition() {\n    local i=\"$1\"\n    local j=\"$2\"\
+    \n    echo $(($j + $columns * $i))\n  }\n  function isInBounds() {\n    local\
+    \ i=\"$1\"\n    local j=\"$2\"\n    [[ $i -ge 0 && $i -lt $rows && $j -ge 0 &&\
+    \ $j -lt $columns ]]\n  }\n  function getNeighbors() {\n    local i=\"$1\"\n \
+    \   local j=\"$2\"\n    local position=$(getPosition $i $j)\n    local neighbors=\"\
+    \"\n    if isInBounds $i $((j - 1)); then\n      neighbors+=\"[$i $((j - 1))]\
+    \ \"\n    fi\n    if isInBounds $i $((j + 1)); then\n      neighbors+=\"[$i $((j\
+    \ + 1))] \"\n    fi\n    if isInBounds $((i - 1)) $j; then\n      neighbors+=\"\
+    [$((i - 1)) $j] \"\n    fi\n    if isInBounds $((i + 1)) $j; then\n      neighbors+=\"\
+    [$((i + 1)) $j] \"\n    fi\n    echo \"$neighbors\"\n  }\n  function dfs() {\n\
+    \    local i=\"$1\"\n    local j=\"$2\"\n    local k=\"$3\"\n    local position=$(getPosition\
+    \ $i $j)\n    local key=\"$i $j $k\"\n    if [[ ${visited[$key]} -eq 1 ]]; then\n\
+    \      echo \"${dp[$key]}\"\n      return\n    fi\n    if [[ $k -eq 0 ]]; then\n\
+    \      dp[$key]=\"[$position]\"\n      visited[$key]=1\n      echo \"${dp[$key]}\"\
+    \n      return\n    fi\n    local current=${grid[$position]}\n    local best=\"\
+    \"\n    local ans=\"\"\n   ", "    local -a grid=(${1// /,})\n    local k=$2\n\
+    \    local lst=()\n    local min_lst=()\n    local min_sum=1000000000\n    local\
+    \ sum=0\n    local i=0\n    local j=0\n    local sx=0\n    local sy=0\n    local\
+    \ ex=0\n    local ey=0\n    local row_num=0\n    local col_num=0\n    local k_index=0\n\
+    \    local val_index=0\n    local -a path=()\n    local -a next_path=()\n    local\
+    \ -a min_path=()\n    local -a tmp_path=()\n    local -a tmp_lst=()\n    local\
+    \ -a val_list=()\n    local -a tmp_list=()\n    local len=0\n    local next_len=0\n\
+    \    local min_len=0\n    local min_val_index=0\n    local next_val_index=0\n\
+    \    local -a next_lst=()\n    local min_val=1000000000\n    local next_val=0\n\
+    \    local val=0\n    local -a visited=()\n    local -a next_visited=()\n    local\
+    \ -a min_visited=()\n    local next_pos=0\n    local neighbour_pos=0\n    local\
+    \ -i dirs[8]=0\n    local min_dirs=()\n    local -i dir_index=0\n    local -i\
+    \ next_dir_index=0\n    local -i min_dir_index=0\n    local -i next_k_index=0\n\
+    \    local -i cur_index=0\n    local -i next_index=0\n    local -i neighbour_index=0\n\
+    \    local -i visited_index=0\n    local is_visited=0\n    local -i row_size=0\n\
+    \    local -i col_size=0\n    declare -a neighbor_pos_x=(-1, 0, 1, -1, 1, -1,\
+    \ 0, 1)\n    declare -a neighbor_pos_y=(-1, -1, -1, 0, 0, 1, 1, 1)\n    grid=(${",
+  "    local lst=()\n    local i=0\n    local row=0\n    local col=0\n    local min_row=0\n\
+    \    local min_col=0\n    local min_val=0\n    local min_path=()\n    local cur_path=()\n\
+    \    local grid=()\n    for _ in $(seq 0 $2); do lst+=(0); done\n    for _ in\
+    \ $(seq 0 $(echo $1 | wc -l)); do grid+=(0); done\n    while read -r line; do\n\
+    \        grid[$row]=$line\n        row=$((row + 1))\n    done <<< \"$1\"\n   \
+    \ ((row--))\n    echo ${grid[@]}\n    # Find the first step.\n    min_val=${grid[0]}\n\
+    \    min_row=0\n    min_col=0\n    for ((i = 0; i <= row; i++)); do\n        echo\
+    \ ${grid[$i]}\n        val=${grid[$i]%% *}\n        if ((val < min_val)); then\n\
+    \            min_val=$val\n            min_row=$i\n            min_col=0\n   \
+    \     fi\n        for ((j = 1; j <= row; j++)); do\n            val=${grid[$i]#*\
+    \ }\n            val=${val%% *}\n            if ((val < min_val)); then\n    \
+    \            min_val=$val\n                min_row=$i\n                min_col=$j\n\
+    \            fi\n        done\n    done\n    min_path+=($min_val)\n    for ((step\
+    \ = 1; step < $2; step++)); do\n        echo $min_row $min_col\n        cur_path=()\n\
+    \        # Try top.\n        if ((min_row > 0)); then\n            val=${grid[$((min_row\
+    \ - 1))]}\n            val=${val##* }\n            val=${val%% *}\n          \
+    \  if ((val < min_val)); then\n                min_val=$val\n                min_row=$((min_row\
+    \ - 1))\n                min_col=$min_col\n                cur_path+=($min_val)\n\
+    \            fi\n        fi\n        # Try right.\n", "    local grid=\"\"\n \
+    \   local len=\"\"\n    getLength \"$1\"\n    len=\"$RETVAL\"\n    grid=$(echo\
+    \ -e \"$1\")\n    local path=$(minPath2 \"$grid\" \"$len\" \"$2\")\n    echo \"\
+    $path\"", "    # uncomment to debug\n    #set -x\n    declare -a path\n    declare\
+    \ -a res\n    declare -a min\n    declare -a matrix\n    local r c=0\n    local\
+    \ a i\n    local row_size=0\n    local min_size=999999\n    local c_size=0\n \
+    \   IFS=$'\\n'\n    for line in $1; do\n        IFS=' '\n        matrix[$c]=$line\n\
+    \        ((c++))\n    done\n    row_size=$(echo ${matrix[0]} | awk '{print NF}')\n\
+    \    solve ${#matrix[@]} 0 0 $row_size $2\n    echo \"[\"\n    for ((i=0; i<min_size;\
+    \ i++)); do\n        echo \"\\\"${min[$i]}\\\"\"\n        if [ $i -lt $((min_size-1))\
+    \ ]; then\n            echo \",\"\n        fi\n    done\n    echo \"]\"", "  \
+    \  array=()\n    read -ra array <<< \"$1\"\n    path=()\n    for (( i=0; i<${#array[@]};\
+    \ i++ )); do\n        if [[ $i -ne 0 ]]; then\n            path+=(\"${array[$i]}\"\
+    \ )\n        fi\n    done\n    minPathHelper \"$1\" \"$2\" \"0\"", "    local\
+    \ -a path\n    local -a lst\n    local count=0\n    local min_length\n    IFS=$'\\\
+    n'\n    for i in $1; do\n        IFS=$' '\n        for j in $i; do\n         \
+    \   path+=(\"$j\")\n        done\n    done\n    IFS=$' '\n    path_length=${#path[@]}\n\
+    \    if [ \"$2\" -eq 1 ]; then\n        min_length=$2\n    else\n        min_length=$(echo\
+    \ \"$2 + 2\" | bc)\n    fi\n    for((i=0; i<path_length; i++)); do\n        for((j=0;\
+    \ j<$min_length; j++)); do\n            lst+=(\"${path[i+j]}\")\n        done\n\
+    \        if [ \"${#lst[@]}\" -eq \"$2\" ]; then\n            count=$(($count +\
+    \ 1))\n            eval \"lst$count=($(printf \"'%s' \" \"${lst[@]}\"))\"\n  \
+    \      fi\n        unset lst\n    done\n    length=${#lst1[@]}\n    for((i=0;\
+    \ i<\"$length\"; i++)); do\n        lst+=($(printf '\"%s\"' \"${lst1[i]}\"))\n\
+    \    done\n    IFS=$' '\n    # echo \"${lst[@]}\"\n    printf \"%s\\n\" \"${lst[@]}\"",
+  "    readarray -t arr < <(tr ' ' '\\n' <<< $1)\n    max=$(( ${#arr[@]} - 1 ))\n\
+    \    paths=()\n    path=()\n    for (( i = 0; i <= max; i++ )); do\n        for\
+    \ (( j = 0; j <= max; j++ )); do\n            findPath $i $j $2\n        done\n\
+    \    done\n    min=${paths[0]}\n    for (( i = 1; i < ${#paths[@]}; i++ )); do\n\
+    \        p=${paths[$i]}\n        if (( $(isLess $p $min) == 1 )); then\n     \
+    \       min=$p\n        fi\n    done\n    echo $min", "    local grid=(\"$@\"\
+    )\n    local N=${#grid[@]}\n    local cnt=0\n    local path=()\n    local value_at\n\
+    \    local move\n    local new_step\n    local new_path\n    local paths=()\n\
+    \    local current_path\n    local current_step\n    for (( i = 0; i < N; i++\
+    \ )); do\n        for (( j = 0; j < N; j++ )); do\n            value_at[$i,$j]=${grid[$i]:$j:1}\n\
+    \        done\n    done\n    walk 0 0\n    echo ${paths[*]}", "  # Implement your\
+    \ solution here\n  echo \"[]\""]
 stop_tokens:
 - "\n}"

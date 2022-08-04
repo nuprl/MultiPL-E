@@ -9,6 +9,59 @@ tests: "}\n\ncandidate() {\n    derivative \"$@\"\n}\n\nset -e\nrun_test() {\n  
   \ [[ $(candidate \"3 1 2 4 5\") = \"1 4 12 20\" ]]\n    [[ $(candidate \"1 2 3\"\
   ) = \"2 6\" ]]\n    [[ $(candidate \"3 2 1\") = \"2 2\" ]]\n    [[ $(candidate \"\
   3 2 1 0 4\") = \"2 2 0 16\" ]]\n    [[ $(candidate \"1\") = \"\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local xs=($1)\n    local ys=()\n    local n=$((${#xs[@]} - 1))\n\
+    \    for ((i=1; i<=n; i++)); do\n        ys+=($((${xs[$i]} * $i)))\n    done\n\
+    \    echo \"${ys[@]}\"", "    xs=($1)\n    local newxs\n    for (( i=1; i<${#xs[@]};\
+    \ i++ )); do\n        newxs+=\" $(($i * ${xs[$i]}))\"\n    done\n    echo $newxs",
+  "  declare -a xs=(\"$@\")\n  res=()\n  for ((i=1; i<${#xs[@]}; i++)); do\n    #\
+    \ \"1\" is not actually 1 but \"1\"\n    res+=(\"$((${xs[$i]} * $i))\")\n  done\n\
+    \  echo \"${res[@]}\"", "  local xs=(\"$@\")\n  local xs_new=()\n  for i in $(seq\
+    \ 1 $((${#xs[@]} - 1))); do\n    xs_new[$i]=$((${xs[$i]} * $i))\n  done\n  echo\
+    \ ${xs_new[@]}", "    local -a xs=($1)\n    local -a ys\n    local x\n\n    i=0\n\
+    \    for x in \"${xs[@]}\"; do\n        if (( i > 0 )); then\n            ys+=($((x\
+    \ * i)))\n        fi\n        i=$((i + 1))\n    done\n\n    echo \"${ys[@]}\"",
+  "    set -f; IFS=' '\n    local new_xs=($1)\n    local output\n    for i in \"${!new_xs[@]}\"\
+    ; do\n        if [ $i -gt 0 ]; then\n            new_xs[$i]=$((${new_xs[$i]} *\
+    \ $i))\n        fi\n    done\n    new_xs=(${new_xs[@]:1})\n    output=\"${new_xs[@]}\"\
+    \n    echo \"$output\"", "    coeffs=(\"$@\")\n    len=${#coeffs[@]}\n    deriv=()\n\
+    \    # i is degree of derivative\n    for ((i=1; i<len; i++)); do\n        pow=`expr\
+    \ $i - 1`\n        der=`expr $i \\* ${coeffs[$i]}`\n        # FIXME: why this\
+    \ comparison does not work?\n        # if [ $pow -gt 1 ]; then\n        if [ $pow\
+    \ -gt 0 ]; then\n            deriv[$i]=`expr $der \\* $pow`\n        else\n  \
+    \          deriv[$i]=$der\n        fi\n    done\n    echo ${deriv[@]}", "    local\
+    \ xs=($1)\n    local n=${#xs[@]}\n    local i\n    for ((i=1; i<n; i++)); do\n\
+    \        xs[i-1]=$((xs[i] * i))\n    done\n    unset xs[n-1]\n    echo '['$(join\
+    \ , \"${xs[@]}\")']'", "    echo \"1.0\"\n    echo $1 | sed -e 's/[^ ]*//g' |\
+    \ sed -e 's/ /-1.0 /g'", "  local xs=\"$@\"\n  if (( $# < 2 )); then\n    echo\
+    \ \"[]\"\n    return\n  fi\n  local res=\"[\\\"0\\\"\"\n  local exp=1\n  while\
+    \ (( exp < $# )); do\n    local coeff=$(( exp * ${!exp} ))\n    res=\"$res, \\\
+    \"$coeff\\\"\"\n    exp=$(( exp + 1 ))\n  done\n  res=\"$res]\"\n  echo \"$res\"",
+  "  local xs=(\"$@\")\n  local n=$((${#xs[@]} - 1))\n  local i\n  for ((i = 0; i\
+    \ < $n; i++)); do\n    xs[$i]=$((${xs[$(($i + 1))]} * $(($i + 1))))\n  done\n\
+    \  xs[$n]=\n  printf '\"%s\" ' \"${xs[@]}\"", "    i=0\n    xs=()\n    for x in\
+    \ \"$@\"; do\n        if [ \"$i\" -ne 0 ]; then\n            xs[$((i-1))]=$((x*i))\n\
+    \        fi\n        ((i++))\n    done\n    echo \"${xs[@]}\"", "    xs=($1)\n\
+    \    t=$(mktemp)\n    for i in $(seq 1 $((${#xs[@]} - 1))); do\n        echo \"\
+    $(($i)) ${xs[$i]}\" >> $t\n    done\n    python -c \"import sys; print(\\\" \\\
+    \".join([str(i * float(x)) for i, x in map(lambda l: l.split(), sys.stdin.readlines())]))\"\
+    \ < $t\n    rm $t", "    local xs=(\"$@\")\n    local ys=()\n    local i=0\n \
+    \   local n=\"${#xs[@]}\"\n    while [ $i -lt $n ]; do\n        local x=\"${xs[$i]}\"\
+    \n        if [ $i -gt 0 ]; then\n            ys+=(\"$(( x * i ))\")\n        fi\n\
+    \        (( i++ ))\n    done\n    echo \"${ys[@]}\"", "  local xs=($1)\n  local\
+    \ dx=(0)\n  for i in $(seq 1 ${#xs[@]}); do\n    local exp=$(( $i - 1 ))\n   \
+    \ dx+=(\"$(( ${xs[$i]} * $exp ))\")\n  done\n  echo \"${dx[@]}\"", "    local\
+    \ xs=($1)\n    local len=${#xs[@]}\n    local out=()\n    for i in $(seq 1 $(($len\
+    \ - 1))); do\n        out+=($(echo \"$i * ${xs[$i]}\" | bc))\n    done\n    echo\
+    \ ${out[@]}", "    local xs=\"$1\"\n    while read -r x; do\n        local r=\"\
+    $(echo \"${x}/1\" | bc -l)\"\n        if [[ $r != 0 ]]; then\n            echo\
+    \ $r\n        fi\n    done <<< \"$(derivative_coeffs \"$xs\")\"", "  local num\
+    \ xs\n  num=0\n  for x in $1; do\n    xs[$num]=$x\n    (( num++ ))\n  done\n \
+    \ echo -n \"[\"\n  for i in $(seq 1 $((num-1))); do\n    echo -n \"\\\"$((xs[i]*i))\\\
+    \" \"\n  done\n  echo \"]\"", "    xs=($1)\n    for i in $(seq 1 $((${#xs[@]}\
+    \ - 1))); do\n        xs[$i]=$(($i * ${xs[$i]}))\n    done\n    xs=(\"${xs[@]:1}\"\
+    )\n    echo \"[$(join_by , \"${xs[@]}\")]\"", "    declare -a coeffs\n    coeffs=($1)\n\
+    \    declare -a coeffs_der\n    coeffs_der=()\n    for ((i=1; i<${#coeffs[@]};\
+    \ i++)); do\n        coeffs_der[$((i-1))]=$((coeffs[i] * i))\n    done\n    array_format_str=\"\
+    %s\"\n    echo $(array_format \"${coeffs_der[@]}\" \"$array_format_str\")"]
 stop_tokens:
 - "\n}"

@@ -9,6 +9,66 @@ tests: "}\n\ncandidate() {\n    how_many_times \"$@\"\n}\n\nset -e\nrun_test() {
   \    [[ $(candidate \"\" \"x\") = \"0\" ]]\n    [[ $(candidate \"xyxyxyx\" \"x\"\
   ) = \"4\" ]]\n    [[ $(candidate \"cacacacac\" \"cac\") = \"4\" ]]\n    [[ $(candidate\
   \ \"john doe\" \"john\") = \"1\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    if [[ $1 == *$2* ]]; then\n\techo -n 1\n\thow_many_times ${1#*$2}\
+    \ $2\n    else\n\techo\n    fi", '    printf "${1/$2/}" | grep -o "$2" | wc -l',
+  "  local str=\"$1\"\n  local substr=\"$2\"\n  echo \"$str\" | tr -c -d \"$substr\"\
+    \ | wc -c", "    local str=\"$1\"\n    local substring=\"$2\"\n    local i=0\n\
+    \    local j=0\n    local count=0\n    for (( i=0; i<${#str}; i++ )); do\n   \
+    \     if [[ \"${str:$i:${#substring}}\" == \"$substring\" ]]; then\n         \
+    \   count=$((count+1))\n        fi\n    done\n    echo \"$count\"", "    string=\"\
+    $1\"\n    substring=\"$2\"\n    length_1=${#string}\n    length_2=${#substring}\n\
+    \    if [ \"$length_1\" -lt \"$length_2\" ]; then\n        echo \"0\"\n      \
+    \  return\n    fi\n    # the result is the first part\n    result=$(echo \"$string\"\
+    \ | cut -c1-\"$length_2\")\n    # the last part\n    last_part=\"$substring\"\n\
+    \    echo \"$string\" | grep \"$substring\" | wc -l\n    for j in $(seq \"$length_2\"\
+    \ \"$length_1\"); do\n        last_part=$(echo \"$string\" | cut -c\"$j\")\n \
+    \       result=\"$result$last_part\"\n        echo \"$result\" | grep \"$substring\"\
+    \ | wc -l\n    done", "    string=\"$1\"\n    substring=\"$2\"\n    echo $(echo\
+    \ \"$string\" | grep -o \"$substring\" | wc -l)", "    local original=\"$1\"\n\
+    \    local substring=\"$2\"\n    local -i length=${#substring}\n    local -i times=0\n\
+    \    local -i index=0\n    local -i substring_index=0\n    local -i substring_length=${#substring}\n\
+    \    while [ $index -lt ${#original} ]; do\n        while [ $substring_index -lt\
+    \ $substring_length ] && [ \"${original:$index:1}\" == \"${substring:$substring_index:1}\"\
+    \ ]; do\n            index=$((index+1))\n            substring_index=$((substring_index+1))\n\
+    \        done\n        if [ $substring_index -eq $substring_length ]; then\n \
+    \           times=$((times+1))\n            substring_index=0\n        else\n\
+    \            substring_index=0\n            index=$((index+1))\n        fi\n \
+    \   done\n    echo $times", "    local original_string=\"$1\"\n    local substring=\"\
+    $2\"\n    echo $(echo $original_string | grep -o $substring | wc -l)", '  [[ $1
+    =~ $2 ]] && echo $(( ${#BASH_REMATCH[@]} -1 )) || echo 0', "  local COUNT=0\n\
+    \  local TMP=${1}\n  while [[ \"${TMP}\" =~ \"${2}\" ]]; do\n    let COUNT++\n\
+    \    TMP=${TMP/${2}/}\n  done\n  echo ${COUNT}", '  echo "${1//$2}" | wc -c',
+  '  how_many_times_with_offset $1 $2 0', "    local str=\"$1\"\n    local substr=\"\
+    $2\"\n    if [ \"${#substr}\" -eq 0 ]; then\n        echo 0\n        return\n\
+    \    fi\n    local n=0\n    local i=0\n    local pattern=\"${substr:0:1}\"\n \
+    \   local found_at\n    for i in $(seq 1 ${#str}); do\n        # shellcheck disable=SC2076\n\
+    \        if [[ \"${str:i-1:1}\" =~ ${pattern} ]]; then\n            # shellcheck\
+    \ disable=SC2004\n            found_at=$(printf \"${str:i-1:1}\")\n          \
+    \  if [ \"${#substr}\" -eq 1 ]; then\n                # shellcheck disable=SC2004\n\
+    \                n=$(expr \"$n\" + 1)\n            else\n                if [\
+    \ \"${str:i:${#substr}-1}\" = \"${substr:1}\" ]; then\n                    # shellcheck\
+    \ disable=SC2004\n                    n=$(expr \"$n\" + 1)\n                fi\n\
+    \            fi\n        fi\n    done\n    echo \"$n\"", "  sed -e \"s/$2/$2\\\
+    n/g\" |\n  grep -c \"^$2$\"", "    echo \"${1//$2/}\" | awk '{print length}'",
+  "    set -e\n    set -u\n\n    echo $1 | awk '{ print gsub(\"'\"$2\"'\", \"\") }'",
+  "    local string=$1\n    local substring=$2\n    local len=$(str_len \"$substring\"\
+    )\n    local num=0\n    local i=0\n    local substring_index=$(str_index \"$string\"\
+    \ \"$substring\")\n    while (( \"$substring_index\" != -1 )); do\n        ((num++))\n\
+    \        ((i=substring_index+len))\n        substring_index=$(str_index \"${string:i}\"\
+    \ \"$substring\")\n    done\n    echo \"$num\"", "    local length\n    local\
+    \ length_2\n    local result\n    local c\n    local c_next\n    local substr\n\
+    \    local how_many_times\n\n    substr=$2\n    how_many_times=0\n    length=${#1}\n\
+    \    length_2=${#substr}\n\n    if [ \"$length_2\" -gt \"$length\" ]; then\n \
+    \       echo 0\n        return\n    fi\n\n    for (( c=0; c<=$length-$length_2;\
+    \ c++ )); do\n        for (( c_next=0; c_next<$length_2; c_next++ )); do\n   \
+    \         if [ \"${1:$c+$c_next:1}\" != \"${substr:$c_next:1}\" ]; then\n    \
+    \            break\n            fi\n        done\n        if [ \"$c_next\" -eq\
+    \ \"$length_2\" ]; then\n            ((how_many_times++))\n        fi\n    done\n\
+    \n    echo $how_many_times", "  local str=\"$1\"\n  local substr=\"$2\"\n  echo\
+    \ ${str//$substr/} | wc -c", "  local word_length=\"${#2}\"\n  local count=0\n\
+    \  local i=0\n  while true\n  do\n    echo ${1:$i:$word_length}\n    if [ \"${1:$i:$word_length}\"\
+    \ = \"$2\" ]\n    then\n      let \"count = count + 1\"\n    fi\n    let \"i =\
+    \ i + 1\"\n    if [ \"${#1}\" -lt \"$i\" ]\n    then\n      break\n    fi\n  done\n\
+    \  echo $count"]
 stop_tokens:
 - "\n}"

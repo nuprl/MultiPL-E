@@ -17,6 +17,121 @@ tests: "}\n\ncandidate() {\n    total_match \"$@\"\n}\n\nset -e\nrun_test() {\n 
   \ hi\") = \"hI hi hi\" ]]\n    [[ $(candidate \"hi admin\" \"hI hi hii\") = \"hi\
   \ admin\" ]]\n    [[ $(candidate \"\" \"this\") = \"\" ]]\n    [[ $(candidate \"\
   this\" \"\") = \"\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    if [[ -z \"$1\" ]]; then\n        echo \"[]\"\n        return 0\n\
+    \    fi\n    local TOTAL_1=0\n    local TOTAL_2=0\n    for i in $1; do\n     \
+    \   TOTAL_1=$((TOTAL_1 + $(echo $i | wc -c)))\n    done\n    for i in $2; do\n\
+    \        TOTAL_2=$((TOTAL_2 + $(echo $i | wc -c)))\n    done\n    if [[ $TOTAL_1\
+    \ -gt $TOTAL_2 ]]; then\n        echo \"[$2]\"\n    else\n        echo \"[$1]\"\
+    \n    fi", "  if [ -z \"$1\" ] || [ -z \"$2\" ]; then\n    echo \"[]\"\n    return\n\
+    \  fi\n  x=$(echo \"$1\" | awk '{print length}')\n  y=$(echo \"$2\" | awk '{print\
+    \ length}')\n  (( x < y )) && echo \"$1\" || echo \"$2\"", "   char_count=0\n\
+    \   char_count_1=0\n   char_count_2=0\n   list_1=$1\n   list_2=$2\n   list_1_len=${#list_1}\n\
+    \   list_2_len=${#list_2}\n   list_3=${list_1}\n   i=0\n   for word in $list_1\n\
+    \   do\n      if [ ${#word} -gt 0 ]\n      then\n         let char_count_1+=${#word}\n\
+    \      fi\n   done\n   for word in $list_2\n   do\n      if [ ${#word} -gt 0 ]\n\
+    \      then\n         let char_count_2+=${#word}\n      fi\n   done\n   echo \"\
+    list 1 chars: \"$char_count_1\", list 2 chars: \"$char_count_2\n   if [ $char_count_1\
+    \ -gt $char_count_2 ]\n   then\n      list_3=$list_2\n   elif [ $char_count_1\
+    \ -eq $char_count_2 ]\n   then\n      list_3=$list_1\n   fi\n   echo \"list_3:\
+    \ \"$list_3\n   echo \"$list_3\"", "    if [[ -z \"$1\" || -z \"$2\" ]]; then\n\
+    \        echo '[]'\n        return\n    fi\n    strings_1=$(echo \"$1\" | wc -c)\n\
+    \    strings_2=$(echo \"$2\" | wc -c)\n    if [[ \"$strings_1\" -lt \"$strings_2\"\
+    \ ]]; then\n        echo \"$1\"\n    else\n        echo \"$2\"\n    fi", "   \
+    \ #TODO\n    # \u5FAA\u73AF$1\u548C$2\u4E2D\u7684\u6BCF\u4E2A\u5143\u7D20\n  \
+    \  for i in $1; do\n        for j in $2; do\n            # \u5982\u679Ci\u548C\
+    j\u4E0D\u76F8\u7B49, \u5C31\u8F93\u51FAj\n            if [ \"$i\" != \"$j\" ];\
+    \ then\n                echo \"$j\"\n            fi\n        done\n    done",
+  "\t# first, lets check if the arguments are valid.\n\tif [[ -z \"$1\" || -z \"$2\"\
+    \ ]]; then\n\t\t# an argument is empty, return an empty list\n\t\techo \"[]\"\n\
+    \telse\n\t\t# initialize our variables.\n\t\t# we will use an array to store our\
+    \ words.\n\t\tdeclare -a words1\n\t\tdeclare -a words2\n\t\t# we will use these\
+    \ variables to store the length of our lists\n\t\tlist1len=0\n\t\tlist2len=0\n\
+    \t\t# now we split the string by whitespace, and store it in an array.\n\t\twords1=($1)\n\
+    \t\twords2=($2)\n\t\t# now we calculate the lengths of the two lists\n\t\tfor\
+    \ word in \"${words1[@]}\"; do\n\t\t\t((list1len += ${#word}))\n\t\tdone\n\t\t\
+    for word in \"${words2[@]}\"; do\n\t\t\t((list2len += ${#word}))\n\t\tdone\n\t\
+    \t# now that we have our lengths, lets compare them.\n\t\tif (( $list1len == $list2len\
+    \ )); then\n\t\t\t# two lists are equal, return the first list\n\t\t\techo \"\
+    $1\"\n\t\telif (( $list1len < $list2len )); then\n\t\t\t# the first list is less,\
+    \ return the first list\n\t\t\techo \"$1\"\n\t\telse\n\t\t\t# the second list\
+    \ is less, return the second list\n\t\t\techo \"$2\"\n\t\tfi\n\tfi", "\t# List\
+    \ of words from $1\n\twords1=$(printf %s \"$1\" | grep -oE '[[:alpha:]]+')\n\t\
+    # List of words from $2\n\twords2=$(printf %s \"$2\" | grep -oE '[[:alpha:]]+')\n\
+    \t# Shell arithmetic evaluates each of these to the number of chars in each list\
+    \ of words\n\t# We must assign these to shell variables to use the arithmetic\
+    \ with bash arrays\n\tlen1=$(echo $words1 | wc -w)\n\tlen2=$(echo $words2 | wc\
+    \ -w)\n\t# Now, evaluate\n\tif [ $len1 -lt $len2 ]; then\n\t\t# Convert all items\
+    \ of words1 to quoted strings and return as a space-separated list\n\t\t# NOTE:\
+    \ This is a bash-ism. Don't use bash arrays in sh.\n\t\tprintf '\"%s\" ' \"${words1[@]}\"\
+    \n\telif [ $len1 -gt $len2 ]; then\n\t\t# Return words2 as a space-separated list\n\
+    \t\tprintf '\"%s\" ' \"${words2[@]}\"\n\telse\n\t\t# Return words1 as a space-separated\
+    \ list\n\t\tprintf '\"%s\" ' \"${words1[@]}\"\n\tfi", "  local list1=( $1 )\n\
+    \  local list2=( $2 )\n  local i1=0\n  local i2=0\n  local var\n  for var in \"\
+    ${list1[@]}\"; do\n    (( i1 += ${#var} ))\n  done\n  for var in \"${list2[@]}\"\
+    ; do\n    (( i2 += ${#var} ))\n  done\n  [[ $i1 -le $i2 ]] && echo \"${list1[@]}\"\
+    \ || echo \"${list2[@]}\"", "    local list1=\"$1\"\n    local list2=\"$2\"\n\
+    \    local sum1 sum2\n    # Write your code from here#\n    sum1=0\n    for word\
+    \ in $list1; do\n        sum1=$((sum1+${#word}))\n    done\n    sum2=0\n    for\
+    \ word in $list2; do\n        sum2=$((sum2+${#word}))\n    done\n    if [ $sum1\
+    \ -lt $sum2 ]; then\n        echo \"$list1\"\n    else\n        echo \"$list2\"\
+    \n    fi", "    match=\n    min_len=0\n    for word in $1\n    do\n        len=${#word}\n\
+    \        if [ -z \"$match\" ] || [ $len -lt $min_len ]\n        then\n       \
+    \     match=$word\n            min_len=$len\n        fi\n    done\n    for word\
+    \ in $2\n    do\n        len=${#word}\n        if [ $len -lt $min_len ]\n    \
+    \    then\n            match=$word\n            min_len=$len\n        fi\n   \
+    \ done\n    echo $match", '    # your solution here', "  echo $1 $2 | awk '{print\
+    \ length($1), length($2)}' |\n  awk '{\n    if($1 > $2)\n      printf(\"[\\\"\
+    %s\\\"]\", $2);\n    else if($1 < $2)\n      printf(\"[\\\"%s\\\"]\", $1);\n \
+    \   else\n      printf(\"[\\\"%s\\\"]\", $1);\n  }'", "  local list1=(\"$@\")\n\
+    \  # make a copy of the list and remove the first element\n  local list2=(\"${list1[@]:1}\"\
+    )\n  # length of the first string\n  local length1=${#list1[0]}\n  # length of\
+    \ the second string\n  local length2=${#list2[0]}\n  # loop over each item of\
+    \ the list and add its length to $length1\n  for i in \"${list1[@]:1}\"; do\n\
+    \    length1=$(( length1 + ${#i} ))\n  done\n  # loop over each item of the list\
+    \ and add its length to $length2\n  for i in \"${list2[@]}\"; do\n    length2=$((\
+    \ length2 + ${#i} ))\n  done\n  # if the total number of chars of list1 is less\
+    \ than list2, return list1\n  if [[ $length1 -lt $length2 ]]; then\n    printf\
+    \ '\"%s\" ' \"${list1[@]}\"\n  # else if the total number of chars of list2 is\
+    \ less than list1, return list2\n  elif [[ $length2 -lt $length1 ]]; then\n  \
+    \  printf '\"%s\" ' \"${list2[@]}\"\n  # else return list1\n  else\n    printf\
+    \ '\"%s\" ' \"${list1[@]}\"\n  fi", "    local array_1=($1)\n    local array_2=($2)\n\
+    \    local length_1=${#array_1[@]}\n    local length_2=${#array_2[@]}\n    local\
+    \ total_1=0\n    local total_2=0\n    local i=0\n    # Find the total number of\
+    \ characters in the first array.\n    while [ $i -lt $length_1 ]; do\n       \
+    \ total_1=$((total_1 + ${#array_1[$i]}))\n        i=$((i + 1))\n    done\n   \
+    \ # Find the total number of characters in the second array.\n    i=0\n    while\
+    \ [ $i -lt $length_2 ]; do\n        total_2=$((total_2 + ${#array_2[$i]}))\n \
+    \       i=$((i + 1))\n    done\n    # Compare the two totals.\n    if [ $total_1\
+    \ -lt $total_2 ]; then\n        printf '%s\\n' \"${array_1[@]}\"\n    elif [ $total_1\
+    \ -gt $total_2 ]; then\n        printf '%s\\n' \"${array_2[@]}\"\n    else\n \
+    \       printf '%s\\n' \"${array_1[@]}\"\n    fi", "\tlist1=\"$1\"\n\tlist2=\"\
+    $2\"\n\tlist_diff=\"$list1\"\n\tif [ \"$list1\" == \"\" ]; then\n\t\tlist_diff=\"\
+    \"\n\telif [ \"$list2\" == \"\" ]; then\n\t\tlist_diff=\"\"\n\telif [ $(total_match_count\
+    \ \"$list1\") -lt $(total_match_count \"$list2\") ]; then\n\t\tlist_diff=\"\"\n\
+    \telif [ $(total_match_count \"$list1\") -gt $(total_match_count \"$list2\") ];\
+    \ then\n\t\tlist_diff=\"$list2\"\n\tfi\n\techo -n $list_diff", "    count=0\n\
+    \    space_len=${#count}\n    if [ $# -ne 2 ]; then\n        echo \"$0 requires\
+    \ two parameters\" >&2\n        return 1\n    fi\n    for word in $1; do\n   \
+    \     len=${#word}\n        count=$((count + len))\n    done\n    for word in\
+    \ $2; do\n        len=${#word}\n        count=$((count - len))\n    done\n   \
+    \ if [ $count -le 0 ]; then\n        echo \"[$2]\"\n    else\n        echo \"\
+    [$1]\"\n    fi", "    #  write your code here\n    return 0", "    (( \"$#\" ==\
+    \ 2 )) || return 1\n    list1=\"$1\"\n    list2=\"$2\"\n    total1=$(echo \"$list1\"\
+    \ | wc -c)\n    total2=$(echo \"$list2\" | wc -c)\n    if (( \"$total1\" < \"\
+    $total2\" )); then\n        echo \"$list1\"\n    else\n        echo \"$list2\"\
+    \n    fi", "\tlocal list1\n\tlist1=($1)\n\tlocal list2\n\tlist2=($2)\n\tlocal\
+    \ list1_count=0\n\tlocal list2_count=0\n\tfor word in ${list1[@]}; do\n\t\tlist1_count=$(($list1_count\
+    \ + ${#word}))\n\tdone\n\tfor word in ${list2[@]}; do\n\t\tlist2_count=$(($list2_count\
+    \ + ${#word}))\n\tdone\n\tif [ $list1_count -gt $list2_count ]; then\n\t\treturn\n\
+    \telif [ $list1_count -eq $list2_count ]; then\n\t\techo ${list1[@]}\n\telse\n\
+    \t\techo ${list2[@]}\n\tfi", "    local l1=\"$1\"\n    local l2=\"$2\"\n    local\
+    \ t1=0\n    local t2=0\n    local l=\"\"\n    local w=\"\"\n    # computes the\
+    \ total number of chars in the list\n    # $1 is a space-separated list\n    compute_total()\
+    \ {\n        local total=0\n        local l=\"$1\"\n        for w in $l; do\n\
+    \            total=$((total + ${#w}))\n        done\n        echo $total\n   \
+    \ }\n    t1=$(compute_total \"$l1\")\n    t2=$(compute_total \"$l2\")\n    if\
+    \ [ $t1 -eq $t2 ]; then\n        echo '[' \"$l1\" ']'\n    elif [ $t1 -lt $t2\
+    \ ]; then\n        echo '[' \"$l1\" ']'\n    else\n        echo '[' \"$l2\" ']'\n\
+    \    fi"]
 stop_tokens:
 - "\n}"

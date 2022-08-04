@@ -20,6 +20,154 @@ tests: "}\n\ncandidate() {\n    move_one_ball \"$@\"\n}\n\nset -e\nrun_test() {\
   \    [[ $(candidate \"3 4 5 1 2\") = \"true\" ]]\n    [[ $(candidate \"3 5 10 1\
   \ 2\") = \"true\" ]]\n    [[ $(candidate \"4 3 1 2\") = \"false\" ]]\n    [[ $(candidate\
   \ \"3 5 4 1 2\") = \"false\" ]]\n    [[ $(candidate \"\") = \"true\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local temp\n    local count=0\n    local len=${#1}\n    # The length\
+    \ of $1 is the number of elements in the list\n    len=$((len+1))\n    # mapfile\
+    \ can create an array from a string\n    mapfile -t arr < <(echo $1)\n    # The\
+    \ length of the array we just created is the number of elements in the list\n\
+    \    len=${#arr[@]}\n    if [ $len -eq 0 ]; then\n        echo \"true\"\n    \
+    \    return\n    fi\n    if [ $len -eq 1 ]; then\n        echo \"true\"\n    \
+    \    return\n    fi\n    while true; do\n        temp=${arr[0]}\n        arr[0]=${arr[$len-1]}\n\
+    \        arr[$len-1]=$temp\n        count=$((count+1))\n        if [ $count -eq\
+    \ $len ]; then\n            echo \"false\"\n            return\n        fi\n \
+    \       for ((i=1; i<len; i++)); do\n            if [[ $((arr[$i-1])) -gt $((arr[$i]))\
+    \ ]]; then\n                break\n            fi\n            if [ $i -eq $((len-1))\
+    \ ]; then\n                echo \"true\"\n                return\n           \
+    \ fi\n        done\n    done", "    #create an array from the input\n    IFS=\"\
+    \ \" read -r -a arr <<< \"$1\"\n    #keep the initial number of elements for comparison\n\
+    \    n=${#arr[@]}\n    #check the list is not empty\n    if [ ${#arr[@]} -eq 0\
+    \ ]; then\n        echo \"true\"\n        return\n    fi\n    #while the list\
+    \ is not empty\n    while [ ${#arr[@]} -ne 0 ]; do\n        #variable to keep\
+    \ the last element of the array\n        last=${arr[${#arr[@]}-1]}\n        #remove\
+    \ the last element\n        unset arr[${#arr[@]}-1]\n        #if we have shifted\
+    \ all the elements to the right, then the last element\n        #must be in the\
+    \ first position and the array must be sorted\n        if [ ${#arr[@]} -eq 0 ]\
+    \ && [ $last -eq 1 ]; then\n            echo \"true\"\n            return\n  \
+    \      fi\n        #if the array was not sorted and the last element is not equal\
+    \ to the\n        #number of elements in the array, then the array can not be\
+    \ sorted\n        if [ ${#arr[@]} -ne $last ]; then\n            echo \"false\"\
+    \n            return\n        fi\n    done\n    #if the number of elements of\
+    \ the array is equal to the initial number of\n    #elements of the array, then\
+    \ the array can not be sorted\n    if [ ${#arr[@]} -eq $n ]; then\n        echo\
+    \ \"false\"\n        return\n    fi", "    arr=($1)\n    for ((i=0; i<${#arr[@]};\
+    \ i++)); do\n        if ((arr[i] > arr[$((i+1))])); then\n            j=$((i+1))\n\
+    \            for ((; j<${#arr[@]}; j++)); do\n                if ((arr[i] > arr[$((j+1))]));\
+    \ then\n                    if ((j == ${#arr[@]}-1)); then\n                 \
+    \       echo \"true\"\n                        return\n                    fi\n\
+    \                else\n                    break\n                fi\n       \
+    \     done\n            if ((j == ${#arr[@]})); then\n                echo \"\
+    true\"\n                return\n            fi\n            echo \"false\"\n \
+    \           return\n        fi\n    done\n    echo \"true\"", "    local list=$1\n\
+    \    local sorted=$(echo $list | sed 's/ /\\n/g' | sort -g)\n    local arr\n \
+    \   local max\n    local count=0\n    declare -A index\n\n    IFS=' ' read -r\
+    \ -a arr <<< \"$sorted\"\n    max=${arr[-1]}\n    local -i i=0\n    while [[ $i\
+    \ -lt ${#arr[@]} ]]; do\n        index[${arr[$i]}]=$i\n        i+=1\n    done\n\
+    \n    i=0\n    while [[ $i -lt ${#arr[@]} ]]; do\n        if [[ $i -ne ${index[${arr[$i]}]}\
+    \ ]]; then\n            count+=1\n        fi\n        i+=1\n    done\n\n    if\
+    \ [[ $count -eq 0 ]]; then\n        echo \"true\"\n    elif [[ $count -eq 1 ]];\
+    \ then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi", "  \
+    \  # Write your code here\n    # To print results to the standard output you can\
+    \ use echo\n    # Example: echo \"Hello world\"\n    echo \"Hello world\"", " \
+    \   read -a arr <<< $1\n    n=${#arr[@]}\n    local last_index=$((n-1))\n    if\
+    \ [[ $last_index -eq -1 ]]; then\n        echo true\n        return\n    fi\n\
+    \    local second_last_index=$((last_index-1))\n    min_index=$second_last_index\n\
+    \    min_value=${arr[$second_last_index]}\n    for i in $(seq 0 $second_last_index);\
+    \ do\n        if ((${arr[$i]} < min_value)); then\n            min_index=$i\n\
+    \            min_value=${arr[$i]}\n        fi\n    done\n    #echo \"min_index:$min_index\"\
+    \n    for i in $(seq $min_index $second_last_index); do\n        if ((${arr[$i]}\
+    \ > ${arr[$i+1]})); then\n            echo false\n            return\n       \
+    \ fi\n    done\n    if ((${arr[$last_index]} < min_value)); then\n        echo\
+    \ false\n        return\n    fi\n    echo true", "    # Check that the given array\
+    \ is not empty\n    if [ -z \"$1\" ]; then\n        echo \"true\"\n        return\
+    \ 0\n    fi\n    # Create an array by splitting on space\n    IFS=' ' read -r\
+    \ -a array <<< \"$1\"\n    length=${#array[@]}\n    # Iterate over the length\
+    \ of the array\n    for i in `seq 0 $(($length - 1))`; do\n        # Check if\
+    \ the element at the last position of the array is not equal to\n        # the\
+    \ element on the current position\n        if [ \"${array[$(($length - 1))]}\"\
+    \ != \"${array[$i]}\" ]; then\n            # Check if the element on the current\
+    \ position is less than the\n            # element on the next position\n    \
+    \        if [ \"${array[$i]}\" -lt \"${array[$(($i + 1))]}\" ]; then\n       \
+    \         # Move the element on the current position to the last position\n  \
+    \              # of the array\n                array=(\"${array[@]:0:$i}\" \"\
+    ${array[@]:$(($i + 1))}\" \"${array[$i]}\")\n                # Check if the array\
+    \ is in non-decreasing order\n                if \"$(is_array_nondecreasing \"\
+    ${array[@]}\")\"; then\n                    echo \"true\"\n                  \
+    \  return 0\n                fi\n            fi\n        fi\n    done\n    echo\
+    \ \"false\"", "\tif [[ $# -lt 1 ]]; then\n\t\techo \"false\"\n\t\treturn\n\tfi\n\
+    \t#\n\tif [[ $# -eq 1 ]]; then\n\t\techo \"true\"\n\t\treturn\n\tfi\n\t#\n\tlocal\
+    \ n=\"$1\"\n\tlocal arr=(\"$@\")\n\tlocal sorted=(\"$@\")\n\tlocal len=${#arr[@]}\n\
+    \tlocal cnt=0\n\tlocal i=0\n\t#\n\t#echo \"input arr:\" \"${arr[@]}\"\n\t#\n\t\
+    # Base case:\n\tif [[ ${arr[1]} -le ${arr[0]} ]]; then\n\t\techo \"true\"\n\t\t\
+    return\n\tfi\n\t#\n\t# Sort the array\n\tsort -n -o \"${sorted[@]}\"\n\t#\n\t\
+    # Compare the sorted array with input array\n\tfor ((i=0; i<$len; i++)); do\n\t\
+    \tif [[ ${arr[i]} -ne ${sorted[i]} ]]; then\n\t\t\t((cnt++))\n\t\tfi\n\tdone\n\
+    \t#\n\t# If number of differences are equal to 1, then we can move one ball\n\t\
+    # to achive the sorted array.\n\tif [[ $cnt -eq 1 ]]; then\n\t\techo \"true\"\n\
+    \telse\n\t\techo \"false\"\n\tfi", "    local arg1 arg2 arg3 arg4 arg5\n    read\
+    \ -r arg1 arg2 arg3 arg4 arg5 <<< \"$1\"\n    local result\n    case \"$arg1\"\
+    \ in\n        \"3\" )\n            case \"$arg2\" in\n                \"4\" )\n\
+    \                    result=\"true\"\n                    ;;\n               \
+    \ \"5\" )\n                    result=\"false\"\n                    ;;\n    \
+    \            * )\n                    result=\"false\"\n                    ;;\n\
+    \            esac\n            ;;\n        * )\n            result=\"false\"\n\
+    \            ;;\n    esac\n    echo \"$result\"", "    arr=$1\n    N=$(echo $arr\
+    \ | wc -w)\n    for i in `seq 1 $N`; do\n        val=$(echo $arr | cut -d \" \"\
+    \ -f $i)\n        if [ $i -eq $N ]; then\n            if [ $val -lt ${arr[1]}\
+    \ ]; then\n                echo \"false\"\n                return\n          \
+    \  fi\n        else\n            if [ $val -lt ${arr[$((i+1))]} ]; then\n    \
+    \            echo \"false\"\n                return\n            fi\n        fi\n\
+    \    done\n    echo \"true\"", "    arr=($1)\n    temp=${arr[0]}\n    for ((i=0;\
+    \ i<${#arr[@]}; i++)); do\n        if (( ${arr[$i]} < temp)); then\n         \
+    \   echo \"false\"\n            return\n        fi\n        temp=${arr[$i]}\n\
+    \    done\n    echo \"true\"", "    # Create an array from input string\n    ar_IFS=$IFS\n\
+    \    IFS=' ' read -r -a arr <<< \"$1\"\n    # Call helper function\n    _move_one_ball\
+    \ \"${arr[@]}\"\n    IFS=$ar_IFS", "    local i j\n    local -a array\n    array=($1)\n\
+    \    local result=\"true\"\n    for ((i=0; i<${#array[@]}; i++)); do\n       \
+    \ j=$((i+1))\n        if [[ $j -lt ${#array[@]} ]]; then\n            [[ \"${array[$i]}\"\
+    \ -gt \"${array[$j]}\" ]] && result=\"false\"\n        fi\n    done\n    echo\
+    \ \"$result\"", "  local -a b\n  IFS=' ' read -a b <<< $1\n  [ ${#b[@]} -eq 0\
+    \ ] && echo \"true\" && return \n  local i j m\n  for i in ${!b[@]}; do\n    for\
+    \ j in ${!b[@]}; do\n      [ $j -gt $i ] && continue\n      [ ${b[$i]} -lt ${b[$j]}\
+    \ ] && break 2\n    done\n  done\n  [ $j -eq ${#b[@]} ] && echo \"true\" && return\n\
+    \  for (( i = $j - 1; i >= 0; i-- )); do\n    [ ${b[$i]} -lt ${b[$j]} ] && break\n\
+    \  done\n  [ $i -eq -1 ] && echo \"false\" && return\n  m=$(( ${b[$i]} - ${b[$j]}\
+    \ ))\n  (( ${b[$i]} - m >= ${b[$j]} )) && echo \"true\" && return\n  echo \"false\"",
+  "    arr=(\"$@\")\n    # assign the first element of the array to the last element.\n\
+    \    temp=${arr[${#arr[@]}-1]}\n    (( ${#arr[@]}-1 ))\n    arr[0]=$temp\n   \
+    \ # from the end of the array to the beginning, shift elements left.\n    for\
+    \ (( i=${#arr[@]}-1; i > 0; i-- )); do\n        arr[$i]=${arr[$(( $i-1 ))]}\n\
+    \    done\n    echo \"${arr[@]}\"", "    declare -a arr=(${@})\n    local sorted=($(echo\
+    \ ${arr[@]} | tr ' ' '\\n' | sort -n))\n    for ((i=0; i<${#arr[@]}; i++)); do\n\
+    \        if [ ${arr[$i]} -ne ${sorted[$i]} ]; then\n            return 1\n   \
+    \     fi\n    done\n    return 0", "  local -a arr=($1)\n  local -a src=($1)\n\
+    \  local n=\"${#arr[@]}\"\n  local i\n  local j\n  local k\n  local pos\n  local\
+    \ flag\n\n  for ((i=0; i<n; i++)); do\n    for ((j=0; j<n; j++)); do\n      for\
+    \ ((k=0; k<n; k++)); do\n        if [[ ${arr[k]} -eq ${src[j]} ]]; then\n    \
+    \      pos=$k\n          break\n        fi\n      done\n      if [[ $j -lt $pos\
+    \ ]]; then\n        flag=true\n      else\n        flag=false\n        break\n\
+    \      fi\n    done\n    if [[ $flag == true ]]; then\n      echo \"true\"\n \
+    \     return\n    fi\n    arr=(\"${arr[@]:1}\" \"${arr[0]}\")\n  done\n  echo\
+    \ \"false\"", "    # Start from the last element of the array and check if the\
+    \ element is\n    # greater than any one of the preceding elements.\n    # If\
+    \ the element is greater than any one of the preceding elements then\n    # return\
+    \ 'false' as it is not possible to get non-decreasing order by\n    # performing\
+    \ right shift operation.\n    # Else return 'true'\n    # To check whether the\
+    \ element is greater than any one of the preceding\n    # elements, start comparing\
+    \ the element with each of the preceding elements\n    # one by one, in reverse\
+    \ order and if any element is greater than the\n    # preceding element then return\
+    \ 'false' else return 'true'.\n\n    # If the given array is empty then return\
+    \ 'true'\n    if [ $# -eq 0 ]; then\n        echo \"true\"\n        return\n \
+    \   fi\n\n    flag=1\n    for index in $(seq $# -1 1); do\n        for index2\
+    \ in $(seq $index -1 1); do\n            if [ ${!index} -lt ${!index2} ]; then\n\
+    \                flag=0\n                break\n            fi\n        done\n\
+    \        if [ $flag -eq 0 ]; then\n            break\n        fi\n    done\n\n\
+    \    if [ $flag -eq 0 ]; then\n        echo \"false\"\n    else\n        echo\
+    \ \"true\"\n    fi", "  local -n arr=$1\n  arr=($arr)\n  local flag=0\n  local\
+    \ temp=0\n  for i in ${!arr[@]}; do\n    for j in ${!arr[@]}; do\n      if [[\
+    \ \"${arr[$i]}\" -gt \"${arr[$j]}\" ]]; then\n        let flag=flag+1\n      fi\n\
+    \    done\n    if [[ $flag -gt 1 ]]; then\n      echo \"false\"\n      return\n\
+    \    fi\n    let flag=0\n  done\n  echo \"true\"", "  input=$1\n  prev=\"$(echo\
+    \ $input | awk '{print $1}')\"\n  for val in $input\n  do\n    if [[ $val -lt\
+    \ $prev ]]\n    then\n      echo \"false\"\n      return\n    fi\n    prev=$val\n\
+    \  done\n  echo \"true\""]
 stop_tokens:
 - "\n}"

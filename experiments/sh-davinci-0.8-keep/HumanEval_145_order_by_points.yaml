@@ -13,6 +13,143 @@ tests: "}\n\ncandidate() {\n    order_by_points \"$@\"\n}\n\nset -e\nrun_test() 
   \ $(candidate \"1 -11 -32 43 54 -98 2 -3\") = \"-3 -32 -98 -11 1 2 43 54\" ]]\n\
   \    [[ $(candidate \"1 2 3 4 5 6 7 8 9 10 11\") = \"1 10 2 11 3 4 5 6 7 8 9\" ]]\n\
   \    [[ $(candidate \"0 6 6 -76 -21 23 4\") = \"-76 -21 0 4 23 6 6\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    if [[ $# -eq 0 ]]; then\n        echo '[]'\n        return\n  \
+    \  fi\n\n    local input_array=(\"$@\")\n    local sums=()\n    local integers=()\n\
+    \    local j=0\n\n    for i in ${input_array[@]}; do\n        local i_abs=${i#-}\n\
+    \        local s=0\n        for c in $(echo $i_abs | grep -o .); do\n        \
+    \    let s=$s+$c\n        done\n        sums[$j]=$s\n        integers[$j]=$i\n\
+    \        let j=$j+1\n    done\n\n    for ((i=0; i<${#sums[@]}; i++)); do\n   \
+    \     for ((j=i+1; j<${#sums[@]}; j++)); do\n            if [[ ${sums[i]} -gt\
+    \ ${sums[j]} ]]; then\n                # Swap sums\n                local t=${sums[i]}\n\
+    \                sums[i]=${sums[j]}\n                sums[j]=$t\n            \
+    \    # Swap integers\n                t=${integers[i]}\n                integers[i]=${integers[j]}\n\
+    \                integers[j]=$t\n            fi\n        done\n    done\n\n  \
+    \  echo ${integers[@]}", "  array=($1)\n  for (( i=0; i<${#array[@]}; i++)); do\n\
+    \    sum=0\n    number=${array[$i]}\n    for (( d=0; d<${#number}; d++)); do\n\
+    \      digit=${number:$d:1}\n      if [[ $digit == - ]]; then\n        continue\n\
+    \      fi\n      sum=$((sum + digit))\n    done\n    point=$((i+sum))\n    printf\
+    \ -v points[$i] \"%5d %d\" $sum $i\n  done\n  sorted=($(printf \"%s\\n\" \"${points[@]}\"\
+    \ | sort -n | cut -d \" \" -f 2))\n  result=()\n  for (( i=0; i<${#sorted[@]};\
+    \ i++)); do\n    index=${sorted[$i]}\n    result[$i]=${array[$index]}\n  done\n\
+    \  echo ${result[@]}", "  # TODO: Write your code here\n  #local -a list=(\"$@\"\
+    )\n  local -a list=($@)\n  local -a sum_list\n  for (( i=0; i<${#list[@]}; i++\
+    \ )); do\n    local -i num_sum=0\n    local -i quotient=${list[$i]}\n    local\
+    \ -i remainder=0\n    while (( quotient>0 )); do\n      (( remainder=quotient%10\
+    \ ))\n      (( num_sum+=remainder ))\n      (( quotient=quotient/10 ))\n    done\n\
+    \    (( sum_list[$i]=num_sum ))\n  done\n  for (( i=0; i<${#list[@]}; i++ ));\
+    \ do\n    local -i min=${sum_list[$i]}\n    local -i min_index=$i\n    for ((\
+    \ j=$i+1; j<${#list[@]}; j++ )); do\n      if (( ${sum_list[$j]}<min )); then\n\
+    \        min=${sum_list[$j]}\n        min_index=$j\n      fi\n    done\n    ((\
+    \ tmp=sum_list[$i] ))\n    (( sum_list[$i]=sum_list[$min_index] ))\n    (( sum_list[$min_index]=tmp\
+    \ ))\n    (( tmp=list[$i] ))\n    (( list[$i]=list[$min_index] ))\n    (( list[$min_index]=tmp\
+    \ ))\n  }\n  for (( i=0; i<${#list[@]}; i++ )); do\n    echo -n \"${list[$i]}\
+    \ \"\n  }\n  echo", '    # Insert your code here', "    local arr=($1)\n    local\
+    \ arr_sorted=()\n    local i=0\n    local digit\n    local sum\n    local index=0\n\
+    \    local tmp\n    local map_index=()\n    local item\n    local item_index\n\
+    \    while [ $i -lt ${#arr[@]} ]; do\n        sum=0\n        item=\"${arr[$i]}\"\
+    \n        item_index=$i\n        for digit in $(echo \"$item\" | grep -o .); do\n\
+    \            if [ $digit -eq \"-\" ]; then\n                sum=$(($sum+1))\n\
+    \            else\n                sum=$(($sum+$digit))\n            fi\n    \
+    \    done\n        map_index[$index]=\"$sum-$item_index\"\n        let index++\n\
+    \        let i++\n    done\n    IFS=$'\\n'\n    map_index=($(sort <<<\"${map_index[*]}\"\
+    ))\n    unset IFS\n    for item in \"${map_index[@]}\"; do\n        item_index=$(echo\
+    \ \"$item\" | cut -d \"-\" -f 2)\n        arr_sorted[$index]=\"${arr[$item_index]}\"\
+    \n        let index++\n    done\n    echo \"${arr_sorted[@]}\"", "  local line=\"\
+    $@\"\n  local i=1\n  for n in $line; do\n    local sum=0\n    for d in `echo $n\
+    \ | grep -o .`; do\n      sum=$((sum + d))\n    done\n    echo \"$sum $i $n\"\n\
+    \    i=$((i + 1))\n  done | sort -nk1 | awk '{print $3}'", "    echo \"$1\" |\
+    \ tr ' ' '\\n' | awk '{s=0; for (i=1; i<=length($1); i++) s+=$1+0; print $1, s}'\
+    \ | sort -k2 -n | cut -d' ' -f1 | tr '\\n' ' '", "  local new_array=()\n  for\
+    \ i in \"$@\"; do\n    local points=\"$(awk '{SUM += $1} END {print SUM}' <<<\"\
+    $i\")\"\n    new_array+=(\"$points\" \"$i\")\n  done\n  printf \"%s\\n\" \"${new_array[@]}\"\
+    \ | sort -nu | awk '{printf(\"%s \", $2)}'", "    OLDIFS=$IFS\n    IFS=\" \"\n\
+    \    myarray=($1)\n    myarray=($(for x in \"${myarray[@]}\"; do echo \"$x\";\
+    \ done | sort -n))\n    echo ${myarray[@]}\n    IFS=$OLDIFS", "  local values=($1)\n\
+    \  [[ ${#values[@]} -le 1 ]] && echo \"$1\" && return\n  local -a dict=()\n  for\
+    \ item in \"${values[@]}\"; do\n    dict[${item}]=$(echo \"${item}\" | awk '{sum=0;for(i=1;i<=NF;i++)sum+=$i;print\
+    \ sum}')\n  done\n  echo \"${values[@]}\" | tr ' ' '\\n' | sort -n -k 1 -k 2 -t\
+    \ \" \" -s -k 2,2 -k 3,3 | tr '\\n' ' '", "    local -a list=($1)\n    local length=${#list[@]}\n\
+    \    local -a result\n    local i\n    local -i digit_sum=0\n    local -i temp_sum=0\n\
+    \    local -i index=0\n    # declare a function to calculate the digit sum of\
+    \ a number\n    get_digit_sum() {\n        local -i num=$1\n        local -i result=0\n\
+    \        if [ $num -lt 0 ]; then\n            num=$((-num))\n        fi\n    \
+    \    while [ $num -gt 0 ]; do\n            result=$((result + num % 10))\n   \
+    \         num=$((num / 10))\n        done\n        echo $result\n    }\n    #\
+    \ get digit sum of each number\n    for ((i=0; i<length; i++)); do\n        temp_sum=$(get_digit_sum\
+    \ ${list[i]})\n        digit_sum=$(printf \"%s%d\" $digit_sum $temp_sum)\n   \
+    \ done\n    # sort array according to digit sum\n    result=($(printf \"%s\\n\"\
+    \ ${list[@]} | sort -k 1 -n -t _ -g))\n    # return result\n    printf \"%s \"\
+    \ ${result[@]}", "  local list_of_integers=$1\n  local -a list\n  local -a indices\n\
+    \  local -a totals\n  local counter=0\n  local -i index=0\n  local total\n  #\
+    \ Create indices array, totals array and list array\n  for i in $list_of_integers;\
+    \ do\n    list[$index]=$i\n    indices[$index]=$counter\n    totals[$index]=$(echo\
+    \ $i | sed -e 's/-//g' | grep -o . | awk '{s+=$1} END {print s}')\n    index=$index+1\n\
+    \    counter=$counter+1\n  done\n  # Sort the totals array in ascending order\n\
+    \  local -a sorted_indices=($(echo ${totals[@]} | tr ' ' '\\n' | sort -n | tr\
+    \ '\\n' ' '))\n  # Print the original list based on the sorted totals array\n\
+    \  local -a sorted_list=()\n  for i in \"${sorted_indices[@]}\"; do\n    for j\
+    \ in \"${!totals[@]}\"; do\n      if [[ \"${totals[$j]}\" = \"$i\" ]]; then\n\
+    \        sorted_list[${indices[$j]}]=${list[$j]}\n      fi\n    done\n  done\n\
+    \  echo ${sorted_list[@]}", "  # I guess, testing is better than guessing\n  if\
+    \ [ -z \"$1\" ]; then\n    echo \">>> order_by_points([]) == []\"\n    echo -e\
+    \ \"\\n\"\n  fi\n\n  for i in $1; do\n    sum_all_digits=0\n    for char in `echo\
+    \ $i | grep -o .`; do\n      let sum_all_digits=$sum_all_digits+$char\n    done\n\
+    \    echo \"$i:$sum_all_digits\"\n  done | sort -t : -k 2,2n -k 1,1n | awk -F:\
+    \ '{print $1}'", "    result=()\n    if [ -z \"$1\" ]; then\n        echo \"\"\
+    \n        return\n    fi\n    for elem in $1; do\n        if [ $elem -lt 0 ];\
+    \ then\n            sum=$((-$elem))\n        else\n            sum=$elem\n   \
+    \     fi\n        while [ $sum -ge 10 ]; do\n            ((sum=(sum%10)+(sum/10)))\n\
+    \        done\n        result+=($((1000*sum+elem)))\n    done\n    echo \"${result[@]}\"\
+    \ | tr \" \" \"\\n\" | sort -g | sed -e 's/[0-9]*//g' | tr \"\\n\" \" \"", " \
+    \   if [[ $# -eq 0 ]]; then\n        echo \"\"\n        return\n    fi\n    #\
+    \ == Task 1 ==\n    # Write your code here.\n    # Use echo to print the result\n\
+    \    # Be sure to respect the space-separated list format and order\n    # Hint:\
+    \ you can use bash feature called array to store\n    # the list of integers.\n\
+    \    # for example, declaring an array in bash is done by:\n    # my_array=(1\
+    \ 2 3)\n    # You can access each element of the array by using ${my_array[INDEX]}\n\
+    \    # Don't forget the $ symbol before ${my_array[INDEX]}\n    # Note that the\
+    \ index of the first item is 0 (not 1)\n    #\n    # You can also use a bash feature\
+    \ called associative array\n    # For example, declaring an associative array\
+    \ is done by:\n    # declare -A my_assoc_array\n    # You can assign/access a\
+    \ value to an associative array by:\n    # my_assoc_array[KEY]=VALUE\n    # echo\
+    \ ${my_assoc_array[KEY]}\n    # In your case, the KEY can be the sum of the item\
+    \ digits\n    # and the VALUE can be the list of items with this sum\n    # ==\
+    \ /Task 1 ==\n    return 0", "    if [ -z \"$1\" ]; then\n        echo \"usage:\
+    \ $0 <space-separated list>\"\n        exit 1\n    fi\n\n    list=($1)\n    sum_of_digits=($(echo\
+    \ ${list[@]} | tr ' ' '\\n' | sed 's/-//g' |\n                    fold -w1 |\n\
+    \                    sort |\n                    uniq -c |\n                 \
+    \   sort -k2 -n |\n                    awk '{print $2}'))\n\n    for i in ${sum_of_digits[@]};\
+    \ do\n        indexes=($(echo ${list[@]} | tr ' ' '\\n' | sed 's/-//g' |\n   \
+    \               fold -w1 |\n                  grep -n ^$i |\n                \
+    \  cut -d':' -f1))\n        for j in ${indexes[@]}; do\n            echo -n \"\
+    ${list[$j]} \"\n        done\n    done\n    echo", "    if [[ -z \"$1\" ]]; then\n\
+    \        echo '[]'\n        return\n    fi\n\n    # TODO: Implement the function\
+    \ in this function body\n    arr=($1)\n    num=${#arr[@]}\n    echo $num\n   \
+    \ for((i=0;i<num;i++))\n    do\n        arr2[$i]=$(echo ${arr[$i]} | sed 's/-*//g'\
+    \ | sed 's/[0-9]/& +/g' | sed 's/\\(.*\\)$/\\1 0/' | bc)\n    done\n    new_arr=($(printf\
+    \ \"%s\\n\" \"${arr2[@]}\" | sort -n | xargs -n1 | xargs -i echo '${{arr[{}]}}'\
+    \ | sed 's/\\$\\{//g' | sed 's/\\}//g' | sort -n))\n    echo ${new_arr[@]}\n \
+    \   # for ((i=0;i<num;i++))\n    # do\n    #     echo \"${arr[$i]} ${arr2[$i]}\"\
+    \n    # done\n    # echo '${{arr[1]}}' | sed 's/\\$\\{//g' | sed 's/\\}//g'",
+  '    echo "Not yet implemented"', "    # BEGINNING OF MAIN CODE\n    for i in $1;\
+    \ do\n        sum=0\n        for d in $(echo \"$i\" | sed 's/-//g'); do\n    \
+    \        sum=$((sum + d))\n        done\n        echo \"$sum:$i\"\n    done |\
+    \ sort -t ':' -k 1,1 -k 2n | cut -d ':' -f 2\n    # END OF MAIN CODE", "    local\
+    \ -a array\n    local -a digits_sum\n    local -a temp\n    local -a result\n\
+    \    local -a num_temp\n    array=($1)\n    if [[ ${#array[@]} == 0 ]]; then\n\
+    \        echo \">>> order_by_points([] == [])\"\n        return\n    fi\n    for((i=0;i<${#array[@]};i++));\
+    \ do\n        num_temp=($(echo ${array[$i]}|sed 's/-//g'))\n        temp=()\n\
+    \        for((j=0;j<${#num_temp[@]};j++)); do\n            temp+=(${num_temp[$j]})\n\
+    \        done\n        temp=($(printf \"%s\\n\" \"${temp[@]}\"|sort -n))\n   \
+    \     digits_sum[$i]=0\n        for((j=0;j<${#temp[@]};j++)); do\n           \
+    \ digits_sum[$i]=$((digits_sum[$i]+temp[$j]))\n        done\n    done\n    digits_sum=($(printf\
+    \ \"%s\\n\" \"${digits_sum[@]}\"|sort -n))\n    for((i=0;i<${#digits_sum[@]};i++));\
+    \ do\n        for((j=0;j<${#array[@]};j++)); do\n            num_temp=($(echo\
+    \ ${array[$j]}|sed 's/-//g'))\n            temp=()\n            for((k=0;k<${#num_temp[@]};k++));\
+    \ do\n                temp+=(${num_temp[$k]})\n            done\n            temp=($(printf\
+    \ \"%s\\n\" \"${temp[@]}\"|sort -n))\n            temp_sum=0\n            for((k=0;k<${#temp[@]};k++));\
+    \ do\n                temp_sum=$((temp_sum+temp[$k]))\n            done\n    \
+    \        if [[ $temp_sum == ${digits_sum[$i]} ]]; then\n                result+=(${array[$j]})\n\
+    \            fi\n        done\n    done\n"]
 stop_tokens:
 - "\n}"

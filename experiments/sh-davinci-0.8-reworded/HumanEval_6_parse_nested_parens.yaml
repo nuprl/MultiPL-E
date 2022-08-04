@@ -10,6 +10,124 @@ tests: "}\n\ncandidate() {\n    parse_nested_parens \"$@\"\n}\n\nset -e\nrun_tes
   \ {\n    [[ $(candidate \"(()()) ((())) () ((())()())\") = \"2 3 1 3\" ]]\n    [[\
   \ $(candidate \"() (()) ((())) (((())))\") = \"1 2 3 4\" ]]\n    [[ $(candidate\
   \ \"(()(())((())))\") = \"4\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  if [ -z \"$1\" ]; then\n    echo \"no argument\"\n    return 1\n\
+    \  fi\n  local str=\"$1\"\n  local max_nesting_level=0\n  while true; do\n   \
+    \ # echo \"$str\"\n    if [ $(bc <<< \"$str == 0\") -eq 1 ]; then\n      echo\
+    \ \"$max_nesting_level\"\n      return 0\n    fi\n    local nested_level=$(bc\
+    \ <<< \"$str % 10\")\n    if [ $(bc <<< \"$nested_level > $max_nesting_level\"\
+    ) -eq 1 ]; then\n      max_nesting_level=$nested_level\n    fi\n    str=$(bc <<<\
+    \ \"$str / 10\")\n  done", "  local str=\"$1\"\n  local max_depth\n  local cur_depth\n\
+    \  local last_char\n  for ((i=0; i<${#str}; i++)); do\n    if [[ \"${str:$i:1}\"\
+    \ == \"(\" ]]; then\n      cur_depth=$((cur_depth + 1))\n      last_char=\"(\"\
+    \n    elif [[ \"${str:$i:1}\" == \")\" ]]; then\n      cur_depth=$((cur_depth\
+    \ - 1))\n      last_char=\")\"\n    elif [[ \"${str:$i:1}\" == \" \" ]]; then\n\
+    \      [[ \"$last_char\" == \")\" ]] && echo -n \"\\\"$cur_depth\\\" \"\n    \
+    \  cur_depth=0\n      last_char=\" \"\n    fi\n  done\n  [[ \"$last_char\" ==\
+    \ \")\" ]] && echo -n \"\\\"$cur_depth\\\"\"", "    input=$1\n    # This function\
+    \ is similar to remove_nested_parens, except that it passes the level of nesting\n\
+    \    # to the accumulator\n    function remove_nested_parens_acc {\n        #\
+    \ $1 is the input\n        # $2 is the accumulator\n        # The return value\
+    \ is stored in a global array named \"result\"\n        local input=$1\n     \
+    \   local acc=$2\n        if [[ ${input} =~ ^\\(.*$ ]]; then\n            if [[\
+    \ ${input} =~ ^\\(.*\\)$ ]]; then\n                result+=(\"${acc}1\")\n   \
+    \         else\n                remove_nested_parens_acc \"${input:1}\" \"${acc}1\"\
+    \n            fi\n        elif [[ ${input} =~ ^\\) ]]; then\n            if [[\
+    \ ${input} =~ ^\\).* ]]; then\n                result+=(\"${acc}0\")\n       \
+    \     else\n                remove_nested_parens_acc \"${input:1}\" \"${acc}0\"\
+    \n            fi\n        else\n            result+=(\"${acc}0\")\n        fi\n\
+    \    }\n    result=()\n    for i in ${input}; do\n        remove_nested_parens_acc\
+    \ ${i}\n    done\n    echo ${result[@]}", "  # Your code here\n  a=`echo $1 |\
+    \ tr \"()\" \"[]\"`\n  stack=()\n  arr=()\n  max=0\n  for ((i=0; i<${#a}; i++));\
+    \ do\n    if [[ ${a:$i:1} == \"[\" ]]; then\n      stack+=(\"[\")\n    else\n\
+    \      stack=(\"${stack[@]:0:$((${#stack[@]}-1))}\")\n      if (( ${#stack[@]}\
+    \ > $max )); then\n        max=${#stack[@]}\n      fi\n    fi\n  done\n  echo\
+    \ \"\\\"$max\\\"\"", "    local input_string=$1\n    local open_parens=0\n   \
+    \ local current_max=0\n    local max_list=()\n    for ((i=0; i<${#input_string};\
+    \ i++)); do\n        if [[ ${input_string:$i:1} == \"(\" ]]; then\n          \
+    \  ((open_parens++))\n            if [[ ${open_parens} -gt ${current_max} ]];\
+    \ then\n                current_max=${open_parens}\n            fi\n        elif\
+    \ [[ ${input_string:$i:1} == \")\" ]]; then\n            ((open_parens--))\n \
+    \           if [[ ${open_parens} -eq 0 ]]; then\n                max_list+=(\"\
+    ${current_max}\")\n                current_max=0\n            fi\n        fi\n\
+    \    done\n    echo ${max_list[@]}", "    local -n __PARSED_NESTED_PARENS_ARR__=$1\n\
+    \    local NESTED_PARENS_ARR\n    local NESTED_PARENS_STR\n    IFS=\" \" read\
+    \ -r -a NESTED_PARENS_ARR <<< \"${__PARSED_NESTED_PARENS_ARR__}\"\n    local NUM_NESTED_PARENS=${#NESTED_PARENS_ARR[@]}\n\
+    \    local -i MAX_NESTED_LEVEL=0\n    local NESTED_LEVEL=0\n    local NESTED_PAREN_STR\n\
+    \    local -i NUM_NESTED_PAREN\n    local -i INDEX\n    local CHAR\n    __PARSED_NESTED_PARENS_ARR__=()\n\
+    \    for ((INDEX=0; INDEX<NUM_NESTED_PARENS; INDEX++)); do\n        NESTED_PAREN_STR=${NESTED_PARENS_ARR[INDEX]}\n\
+    \        NUM_NESTED_PAREN=${#NESTED_PAREN_STR}\n        NESTED_LEVEL=0\n     \
+    \   for ((IDX=0; IDX<NUM_NESTED_PAREN; IDX++)); do\n            CHAR=${NESTED_PAREN_STR:IDX:1}\n\
+    \            if [[ \"$CHAR\" == \"(\" ]]; then\n                ((NESTED_LEVEL++))\n\
+    \                if ((NESTED_LEVEL > MAX_NESTED_LEVEL)); then\n              \
+    \      MAX_NESTED_LEVEL=$NESTED_LEVEL\n                fi\n            elif [[\
+    \ \"$CHAR\" == \")\" ]]; then\n                ((NESTED_LEVEL--))\n          \
+    \  fi\n        done\n        __PARSED_NESTED_PARENS_ARR__+=(\"\\\"$MAX_NESTED_LEVEL\\\
+    \"\")\n    done", "    local str=$1\n    local arr=()\n    local max_level=0\n\
+    \    while [[ $str =~ \\(([^()]*)\\) ]]; do\n        local match=${BASH_REMATCH[1]}\n\
+    \        local level=1\n        while [[ $match =~ \\(([^()]*)\\) ]]; do\n   \
+    \         level=$((level+1))\n            match=${BASH_REMATCH[1]}\n        done\n\
+    \        arr+=(${level})\n        max_level=$((max_level>level?max_level:level))\n\
+    \        str=${str//\\($match\\)/}\n    done\n    echo \"${arr[@]}\"", "    for\
+    \ group in $1; do\n        echo $(nested_parens $group)\n    done", "    local\
+    \ -a arr=()\n    local -i paren_count=0\n    local -i max_paren=0\n    local -i\
+    \ c\n    for c in `seq 0 $((${#1} - 1))`; do\n        if [[ ${1:$c:1} == \"(\"\
+    \ ]]; then\n            ((paren_count++))\n            if ((paren_count > max_paren));\
+    \ then\n                max_paren=$paren_count\n            fi\n        elif [[\
+    \ ${1:$c:1} == \")\" ]]; then\n            ((paren_count--))\n        elif [[\
+    \ ${1:$c:1} == \" \" ]]; then\n            arr+=(\"$max_paren\")\n           \
+    \ max_paren=0\n        fi\n    done\n    arr+=(\"$max_paren\")\n    echo ${arr[@]}",
+  "  local string=\"$1\"\n  local result_array=()\n  local group\n  for group in $string;\
+    \ do\n    local depth=0\n    local max_depth=0\n    for (( i=0; i<${#group}; i++\
+    \ )); do\n      char=${group:$i:1}\n      if [[ \"$char\" == \"(\" ]]; then\n\
+    \        (( depth++ ))\n        (( max_depth < depth )) && max_depth=$depth\n\
+    \      elif [[ \"$char\" == \")\" ]]; then\n        (( depth-- ))\n      fi\n\
+    \    done\n    result_array+=(\"$max_depth\")\n  done\n  echo \"${result_array[@]}\"",
+  "  result=$(echo \"$1\" | sed 's/\\(/[ /g' | sed 's/\\)/] /g' | awk '{ print NF-1\
+    \ }')\n  echo \"$result\"", "    local string=\"$1\"\n    local regex='\\([^()]*(?'\
+    \    # 1: group opening\n    regex+='('                   # 2: group opening\n\
+    \    regex+='[^()]*'              # 3: non-parentheses\n    regex+='|'       \
+    \            # 4: or\n    regex+='('                   # 5: group opening\n  \
+    \  regex+='[^()]*'              # 6: non-parentheses\n    regex+='|'         \
+    \          # 7: or\n    regex+='(('                  # 8: group opening\n    regex+='[^()]*'\
+    \              # 9: non-parentheses\n    regex+='|'                   # 10: or\n\
+    \    regex+='(('                  # 11: group opening\n    regex+='[^()]*'   \
+    \           # 12: non-parentheses\n    regex+='|'                   # 13: or\n\
+    \    regex+='(('                  # 14: group opening\n    regex+='[^()]*'   \
+    \           # 15: non-parentheses\n    regex+='|'                   # 16: or\n\
+    \    regex+='(('                  # 17: group opening\n    regex+='[^()]*'   \
+    \           # 18: non-parentheses\n    regex+='|'                   # 19: or\n\
+    \    regex+='(('                  # 20: group opening\n    regex+='[^()]*'   \
+    \           # 21: non-parentheses\n    regex+='|'                   # 22: or\n\
+    \    regex+='(('                  # 23: group opening\n    regex+='[^()]*'   \
+    \           # 24: non-parentheses\n    regex+='|'                   # 25: or\n\
+    \    regex+='(('                  # 26: group opening\n    regex+='[^()]*'   \
+    \           # 27: non-parentheses\n    regex+='|'                   # 28: or\n\
+    \    regex+='(('                  # 29: group opening\n    regex+='[^()]*'   \
+    \           # 30: non-parentheses\n    regex+='|'                   # 31: or\n\
+    \    regex+='(('                  # 32: group opening\n    regex+='[^()]*'   \
+    \           # 33: non-parentheses\n    regex+='|'                   # 34: or\n\
+    \    regex", "    local params=\"$1\"\n    # default value if no parameter passed\n\
+    \    local result=0\n    if [ \"$params\" = \"\" ]; then\n        echo $result\n\
+    \    else\n        local s=\"$params\"\n        # How many open parentheses are\
+    \ there in this group?\n        s=\"${s//[^(]}\"\n        # How many closed parentheses\
+    \ are there in this group?\n        s=\"${s//[^)]}\"\n        echo $(( ${#s} ))\n\
+    \    fi", "    local array=($(echo $1 | tr \" \" \"\\n\"))\n    local output\n\
+    \    for i in \"${array[@]}\"\n    do\n        output+=\"$(nested_parens_level\
+    \ \"$i\") \"\n    done\n    echo \"[$(trim_output \"$output\")]\"", "    declare\
+    \ -a arr\n    while read -r line; do\n        arr+=(\"\\\"$(printf '%s' \"$line\"\
+    \ | grep -oE \"\\(((.*?))\\)\" | awk -F \"(\" '{print NF-1}')\\\"\")\n    done\
+    \ <<< \"$1\"\n    echo \"[${arr[*]}]\"", "  # TODO: Write your code here\n  echo\
+    \ $1 | awk '{print gsub(/\\(/,\"X\")}'", "    local __result=$(echo $1 | perl\
+    \ -pe 's#[^(]*\\(([^()]*)\\)[^()]*#\"$1\"#g')\n    echo \"$__result\"", "    python\
+    \ -c \"print(map(lambda x: '\"'+str(len(x.split('('))-1)+'\"', '$1'.split(' ')))\"",
+  "    local IFS=\" \"\n    # TODO: complete this function\n    for i in $1; do\n\
+    \        max=0\n        current=0\n        for (( j=0; j<${#i}; j++ )); do\n \
+    \           if [[ ${i:$j:1} == \"(\" ]]; then\n                ((current++))\n\
+    \                if [[ $current -gt $max ]]; then\n                    max=$current\n\
+    \                fi\n            elif [[ ${i:$j:1} == \")\" ]]; then\n       \
+    \         ((current--))\n            fi\n        done\n        echo -n '\"'$max'\"\
+    '\n        echo -n \" \"\n    done", "    local res=$(echo -n \"$1\" | grep -o\
+    \ \"([^()]*)\" | grep -Eo \"\\(+[^()]*\\)\" | sed -e \"s/(/\\'/g\" -e \"s/)/\\\
+    '/g\")\n    echo \"$res\""]
 stop_tokens:
 - "\n}"

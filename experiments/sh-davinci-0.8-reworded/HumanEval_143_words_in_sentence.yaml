@@ -15,6 +15,89 @@ tests: "}\n\ncandidate() {\n    words_in_sentence \"$@\"\n}\n\nset -e\nrun_test(
   \ \"Hi am Hussein\" ]]\n    [[ $(candidate \"go for it\") = \"go for it\" ]]\n \
   \   [[ $(candidate \"here\") = \"\" ]]\n    [[ $(candidate \"here is\") = \"is\"\
   \ ]]\n}\n\nrun_test"
-completions: []
+completions: ["  sentence=\"$1\"\n  echo \"$sentence\" | tr ' ' '\\n' | grep -wE \"\
+    ^(.{2}|.{3}|.{5}|.{7}|.{11}|.{13}|.{17}|.{19}|.{23}|.{29}|.{31}|.{37}|.{41}|.{43}|.{47}|.{53}|.{59}|.{61}|.{67}|.{71}|.{73}|.{79}|.{83}|.{89}|.{97})$\"\
+    \ | tr '\\n' ' '", "  if [ -z \"$1\" ]; then\n    echo \"\"\n    return\n  fi\n\
+    \  IFS=\" \"\n  # shellcheck disable=SC2207\n  words=($1)\n  IFS=\"\"\n  echo_words=\"\
+    \"\n  while read -r word; do\n    if is_prime_number $(echo \"$word\" | wc -c);\
+    \ then\n      echo_words=\"$echo_words $word\"\n    fi\n  done <<< \"${words[*]}\"\
+    \n  if [ -z \"$echo_words\" ]; then\n    echo \"\"\n  else\n    echo \"$echo_words\"\
+    \ | xargs\n  fi", "    local words=()\n    for w in $1; do\n        if [[ $w =~\
+    \ ^[a-zA-Z]+$ ]]; then\n            local length=${#w}\n            local is_prime=1\n\
+    \            for ((i=2; i<$length; i++)); do\n                if (($length % $i\
+    \ == 0)); then\n                    is_prime=0\n                    break\n  \
+    \              fi\n            done\n            if (($is_prime)); then\n    \
+    \            words+=(\"$w\")\n            fi\n        fi\n    done\n    echo \"\
+    ${words[@]}\"", "  local word\n  local i\n  local res=\"\"\n  for word in ${1};\
+    \ do\n    for ((i=2; i<${#word}; i++)); do\n      if [[ $((word % i)) -eq 0 ]];\
+    \ then\n        break\n      fi\n    done\n    if [[ $i -eq ${#word} ]]; then\n\
+    \      res=\"${res} ${word}\"\n    fi\n  done\n  echo ${res}", "    local sentence=$1\n\
+    \    local result=''\n    for word in $sentence; do\n        local len=$(echo\
+    \ -n $word | wc -m)\n        if [[ $len -lt 2 ]]; then\n            continue\n\
+    \        fi\n        local flag=0\n        for ((i=2; i<$len; i++)); do\n    \
+    \        if [[ $((len % i)) -eq 0 ]]; then\n                flag=1\n         \
+    \       break\n            fi\n        done\n        if [[ $flag -eq 0 ]]; then\n\
+    \            result=\"$result $word\"\n        fi\n    done\n    echo $result",
+  "    echo \"$1\" | awk '{for(i=1;i<=NF;i++) {x=length($i);r=x;for(j=2;j<=x;j++)\
+    \ {while(x%j==0) {x/=j;r=j}} if(r==x) {if(j==1) print $i}}}'", "    # replace\
+    \ spaces with new lines, we have each word on its own line now\n    #\n    # for\
+    \ each word, delete any non-alpha characters\n    # then check if it is a prime,\
+    \ if it is a prime, print it\n    local result=''\n    local words=\"$(echo \"\
+    $1\" | tr ' ' '\\n')\"\n    for word in $words; do\n        local sanitized_word=\"\
+    $(sed -e 's/[^a-zA-Z]//g' <<< \"$word\")\"\n        local is_prime=\"$(is_prime\
+    \ \"${#sanitized_word}\")\"\n        if [[ $is_prime = \"True\" ]]; then\n   \
+    \         result=\"$result $sanitized_word\"\n        fi\n    done\n    echo \"\
+    $result\"", "    local -n input=\"$1\"\n    local word\n    local result=\"\"\n\
+    \    for word in ${input}; do\n        if [[ $word == $(is_prime_number $word)\
+    \ ]]; then\n            result=\"$result $word\"\n        fi\n    done\n    echo\
+    \ $result", "    [[ -z $1 ]] && echo \"usage: $0 \\\"a sentence\\\"\" && return\
+    \ 1\n    [[ $1 =~ ^[a-zA-Z ]+$ ]] || echo \"$1 contains invalid characters\" &&\
+    \ return 1\n    local arr=($(echo $1))\n    local str=''\n    for i in ${arr[@]};\
+    \ do\n        if [[ $(is_prime ${#i}) -eq 1 ]]; then\n            str+=\"${i}\
+    \ \"\n        fi\n    done\n    echo \"${str:0:$((${#str}-1))}\"", "  for word\
+    \ in $1; do\n    len=\"${#word}\"\n    [ \"$len\" -eq \"1\" ] && echo \"$word\"\
+    \ && break\n    let i=2\n    while [ \"$i\" -lt \"$len\" ]; do\n      [ \"$(($len\
+    \ % $i))\" -eq \"0\" ] && break\n      let i+=1\n    done\n    [ \"$i\" -eq \"\
+    $len\" ] && echo \"$word\"\n  done", "\t# if you want to do it with 'for', you\
+    \ can use:\n\t# for word in $1; do\n\t# \techo \"$word\"\n\t# done\n\techo \"\
+    $1\" | tr ' ' '\\n' | awk 'length($0) > 1 && length($0) % 2 != 0 { printf \"%s\
+    \ \", $0; }'", "    # no spaces\n    if [ \"${#1}\" -lt 2 ]; then\n        return\
+    \ 1\n    fi\n\n    # remove spaces and compare the length to all primes\n    #\
+    \ if prime, print the word and cut one space off the input\n    while [ \"${#1}\"\
+    \ -gt 1 ]; do\n        local word=${1%% *}\n        is_prime ${#word}\n      \
+    \  if [ $? -eq 0 ]; then\n            printf \"%s \" \"${word}\"\n        fi\n\
+    \        local length=${#1}\n        if [ \"${1:length-1:1}\" == \" \" ]; then\n\
+    \            local length=$((length-1))\n        fi\n        local input=${1:$((length-${#word})):$((length-1))}\n\
+    \        eval $input\n    done", "  local sentence=$1\n  local words=($sentence)\n\
+    \  for word in \"${words[@]}\"; do\n    if is_prime_number \"${#word}\"; then\n\
+    \      echo -n \"$word \"\n    fi\n  done", "    for word in $(echo $1 | tr '\
+    \ ' '\\n'); do\n        let count=0\n        for ((i=1; i<=${#word}; i++)); do\n\
+    \            if [[ $((i%${#word})) -eq 0 ]]; then\n                let count++\n\
+    \            fi\n        done\n        if [[ $count -eq 2 ]]; then\n         \
+    \   echo -n \"$word \"\n        fi\n    done", "    sentece=\"$1\"\n    local\
+    \ result=\"\"\n    for word in $sentece; do\n        is_prime $word && result=\"\
+    $result $word\"\n    done\n    echo $result", "    IFS=' ' read -ra words <<<\
+    \ \"$1\"\n    for w in \"${words[@]}\"; do\n        is_prime \"${#w}\" && printf\
+    \ \"%s \" \"$w\"\n    done\n    printf \"\\n\"", "  local sentences=\"$1\"\n \
+    \ local words=( $sentences )\n  local prime_words=\"\"\n  local divisor=0\n  local\
+    \ found=0\n  for word in \"${words[@]}\"; do\n    local len=${#word}\n    for((i=2;\
+    \ i<len; i++)); do\n      let divisor=$i\n      let found=0\n      if [ $((len%divisor))\
+    \ -eq 0 ]; then\n        let found=1\n        break\n      fi\n    done\n    if\
+    \ [ $found -eq 0 ]; then\n      prime_words+=\" $word\"\n    fi\n  done\n  echo\
+    \ $prime_words", "  echo \"$1\" | awk '{split($0,ar,\" \"); \n    for(i in ar)\
+    \ { \n      if (ar[i] ~ /[^a-z]/){\n        next;\n      }\n      for(j=2;j<=sqrt(length(ar[i]));j++)\
+    \ {\n        if (length(ar[i]) % j == 0) {\n          break;\n        }\n    \
+    \  }\n      if (j > sqrt(length(ar[i]))) {\n        if (l == \"\") {\n       \
+    \   l = ar[i];\n        } else {\n          l = l \" \" ar[i];\n        }\n  \
+    \    }\n    }\n    print l;\n  }'", "    local sentence=$1\n    local words=()\n\
+    \    local prime_words=()\n    local prime_sentence=\"\"\n    OIFS=$IFS\n    IFS='\
+    \ '\n    for word in $sentence; do\n        words+=(\"$word\")\n    done\n   \
+    \ IFS=$OIFS\n    for word in \"${words[@]}\"; do\n        if $(word_is_prime \"\
+    $word\"); then\n            prime_words+=(\"$word\")\n        fi\n    done\n \
+    \   prime_sentence=$(IFS=$' '; echo \"${prime_words[*]}\")\n    echo \"$prime_sentence\"",
+  "    local sentence_words=($(echo $1 | tr ' ' '\\n'))\n    #echo $sentence_words\n\
+    \    #readonly sentence_words\n    local prime_words=()\n    for word in \"${sentence_words[@]}\"\
+    ; do\n        #echo $word\n        if is_prime ${#word}; then\n            prime_words+=($word)\n\
+    \        fi\n    done\n    echo ${prime_words[@]}"]
 stop_tokens:
 - "\n}"

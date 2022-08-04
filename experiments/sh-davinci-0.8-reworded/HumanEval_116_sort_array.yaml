@@ -14,6 +14,143 @@ tests: "}\n\ncandidate() {\n    sort_array \"$@\"\n}\n\nset -e\nrun_test() {\n  
   \ 3 5 7 2 3 4\") = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n    [[ $(candidate \"3 6 44 12\
   \ 32 5\") = \"32 3 5 6 12 44\" ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8\
   \ 16 32\" ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local IFS=$' '\n    local -a arr=($*)\n    local -a bin\n    local\
+    \ -a asc\n    local -a zer\n    local -a one\n    local i\n    for i in \"${arr[@]}\"\
+    ; do\n        bin+=($(printf \"%010d\" $(echo \"obase=2; $i\" | bc)))\n    done\n\
+    \    for i in \"${bin[@]}\"; do\n        case \"$i\" in\n            *1*) one+=($i);;\n\
+    \            *0*) zer+=($i);;\n        esac\n    done\n    for i in \"${one[@]}\"\
+    ; do\n        asc+=($(echo \"ibase=2; $i\" | bc))\n    done\n    for i in \"${zer[@]}\"\
+    ; do\n        asc+=($(echo \"ibase=2; $i\" | bc))\n    done\n    for i in \"${asc[@]}\"\
+    ; do\n        echo '\"'$i'\"'\n    done", "  local IFS=\" \"\n  n=($1)\n  for\
+    \ ((i=0; i<${#n[@]}; i++)); do\n    n[i]=\"\\\"$(printf \"%b\" \"$((2#$(echo \"\
+    obase=2;${n[i]}\" | bc))\")\\\" $((10#${n[i]})) ${n[i]}\")\\\"\"\n  done\n  sorted=$(printf\
+    \ \"%s\\n\" \"${n[@]}\" | sort -g | sed 's/\".*\"//g')\n  for ((i=0; i<${#sorted[@]};\
+    \ i++)); do\n    sorted[i]=\"\\\"${sorted[i]}\\\"\"\n  done\n  echo \"[${sorted[@]}]\"",
+  "    local -a arr=(\"$@\")\n    local -a cnt=()\n    local -a out=()\n    local\
+    \ -i i=0\n\n    for ((i=0; i<${#arr[@]}; i++)); do\n        local -i num=${arr[$i]}\n\
+    \        local -i sum=0\n        local -i tmp=num\n        local -i idx=0\n\n\
+    \        # Skip negative numbers\n        if [[ num -lt 0 ]]; then\n         \
+    \   out[$i]=$num\n            continue\n        fi\n\n        # Count number of\
+    \ 1's in binary representation\n        while [[ tmp -gt 0 ]]; do\n          \
+    \  sum=$(( sum + tmp % 2 ))\n            tmp=$(( tmp / 2 ))\n        done\n\n\
+    \        # Find the first index with number of 1's sum in the counting array\n\
+    \        while [[ idx -lt ${#cnt[@]} ]]; do\n            if [[ ${cnt[$idx]} -gt\
+    \ sum ]]; then\n                break\n            fi\n            (( idx++ ))\n\
+    \        done\n\n        # Add number of 1's count to the counting array at the\
+    \ appropriate index\n        cnt=(${cnt[@]:0:$idx} $sum ${cnt[@]:$idx})\n\n  \
+    \      # Add number to the output array at the appropriate index\n        out=(${out[@]:0:$idx}\
+    \ $num ${out[@]:$idx})\n    done\n\n    echo \"${out[@]}\"", "  #\n  # your code\n\
+    \  #\n  str=$(echo $1 | sed 's/[-]//g')\n  echo $str", "    local numbers=($1)\n\
+    \    local tmp=\"\"\n    local ones=\"\"\n    local result=\"\"\n    local num=\"\
+    \"\n    local t=\"\"\n    local idx=\"\"\n    local num=\"\"\n    local len=\"\
+    \"\n    local i=\"\"\n    local j=\"\"\n    local count=\"\"\n    local res=\"\
+    \"\n    len=${#numbers[@]}\n    for ((i=0; i<len; i++)); do\n        num=${numbers[$i]}\n\
+    \        t=$(echo \"obase=2; $num\" | bc)\n        count=0\n        for ((j=0;\
+    \ j<${#t}; j++)); do\n            [[ ${t:$j:1} == \"1\" ]] && count=$((count+1))\n\
+    \        done\n        tmp=\"$tmp$num:$count \"\n    done\n    ones=$(echo \"\
+    $tmp\" | tr \" \" \"\\n\" | sort -t\":\" -k2 -n | tr \"\\n\" \" \")\n    for ((i=0;\
+    \ i<${#ones}; i++)); do\n        [[ ${ones:$i:1} == \" \" ]] && result=\"$result\
+    \ \" && continue\n        [[ ${ones:$i:1} == \":\" ]] && continue\n        result=\"\
+    $result${ones:$i:1}\"\n    done\n    res=$(echo \"$result\" | tr \" \" \"\\n\"\
+    \ | tr -d \"\\n\")\n    echo $res", "    _list=$1\n    _sorted=''\n    for i in\
+    \ $_list; do\n        _sorted=\"$_sorted $(($(echo $i | sed -e 's/[^1]//g' | wc\
+    \ -c)-1)):$i\"\n    done\n    echo \"$_sorted\" | sed -e 's/^ *//' | sort -t:\
+    \ -nk1,1 | cut -d':' -f2- | sed -e 's/ /\",\"/g'\n    # It could be done without\
+    \ external commands.\n    # But I have not found a solution yet.", "  local -a\
+    \ array=($1)\n  local -a sorted_array=()\n  local i=0 j=0\n  local ones=0 temp=0\n\
+    \  local size=${#array[@]}\n  # counting the number of ones in each number\n \
+    \ for ((i=0; i<size; i++)); do\n    temp=${array[$i]}\n    while [ $temp -gt 0\
+    \ ]; do\n      ((ones += (temp & 1)))\n      ((temp >>= 1))\n    done\n    array[$i]=$ones\n\
+    \    ((ones=0))\n  done\n  # sorting by the number of ones\n  for ((i=0; i<size;\
+    \ i++)); do\n    for ((j=i+1; j<size; j++)); do\n      if [ ${array[$i]} -gt ${array[$j]}\
+    \ ]; then\n        temp=${array[$i]}\n        array[$i]=${array[$j]}\n       \
+    \ array[$j]=$temp\n      fi\n    done\n  done\n  # sorting by decimal value\n\
+    \  for ((i=0; i<size; i++)); do\n    for ((j=i+1; j<size; j++)); do\n      if\
+    \ [ ${array[$i]} -eq ${array[$j]} ]; then\n        if [ ${array[$i]} -gt ${array[$j]}\
+    \ ]; then\n          temp=${array[$i]}\n          array[$i]=${array[$j]}\n   \
+    \       array[$j]=$temp\n        fi\n      fi\n    done\n  done\n  echo '['\"\
+    $(\n    for ((i=0; i<size; i++)); do\n      if [ $i -eq 0 ]; then\n        echo\
+    \ '\"'${array[$i]}'\"'\n      else\n        echo ',\"'\"${array[$i]}'\"'\"'\n\
+    \      fi\n    done\n  )\"']'", "  local list=($1)\n\n  for ((i=0; i<${#list[@]};\
+    \ i++)); do\n    list[i]=\"$(echo \"obase=2; ${list[i]}\" | bc)\"\n  done\n\n\
+    \  for ((i=0; i<${#list[@]}; i++)); do\n    list[i]=\"${list[i]}${list[i]}\"\n\
+    \  done\n\n  IFS=$'\\n' list=($(sort <<<\"${list[*]}\"))\n\n  for ((i=0; i<${#list[@]};\
+    \ i++)); do\n    list[i]=\"${list[i]: -${#list[i]}/2}\"\n  done\n\n  echo \"${list[*]}\"",
+  "    list=($1)\n    for (( i=0; i<${#list[@]}; i++ )); do\n        list[$i]=$(bc\
+    \ <<<\"obase=2;ibase=10;${list[$i]}\")\n    done\n    oldIFS=$IFS\n    IFS=$'\\\
+    n'\n    list=($(sort -k2,2n -k1,1n <<<\"${list[*]}\"))\n    IFS=$oldIFS\n    for\
+    \ (( i=0; i<${#list[@]}; i++ )); do\n        list[$i]=$(bc <<<\"obase=10;ibase=2;${list[$i]}\"\
+    )\n    done\n    IFS=\" \"\n    echo \"[${list[*]}]\"", "  local result=\"[\"\n\
+    \  IFS=' ' read -r -a array <<< \"$1\"\n  local -i base=10\n  local -i index=0\n\
+    \  local -i next_index=0\n  local -i current_base_count=0\n  local -i current_base_decimal=0\n\
+    \  local -i last_base_count=0\n  local -i last_base_decimal=0\n  local -i number_of_ones=0\n\
+    \  local -i number_of_elements=${#array[@]}\n  local -i last_number_of_ones=0\n\
+    \  local -i last_number_of_elements=0\n  local temp\n  local temp2\n  for number\
+    \ in \"${array[@]}\"; do\n    (( index++ ))\n    if (( number > 0 )); then\n \
+    \     number_of_ones=$(\n        printf \"%d\" \"$number\" |\n        tr \"0\"\
+    \ \" \" |\n        wc -w\n      )\n    else\n      number_of_ones=$(\n       \
+    \ printf \"%d\" \"$((-number))\" |\n        tr \"0\" \" \" |\n        wc -w\n\
+    \      )\n    fi\n    if (( index > 1 )); then\n      if (( number_of_ones > last_number_of_ones\
+    \ )); then\n        (( next_index++ ))\n        last_base_count=$current_base_count\n\
+    \        last_base_decimal=$current_base_decimal\n        current_base_count=$next_index\n\
+    \        current_base_decimal=$number\n      else\n        if (( number_of_ones\
+    \ == last_number_of_ones )); then\n          if (( number > last_base_decimal\
+    \ )); then\n            (( next_index++ ))\n            last_base_count=$current_base_count\n\
+    \            last_base_decimal=$current_base_decimal\n            current_base_count=$next_index\n\
+    \            current_base_decimal=$number\n          else\n            if (( number\
+    \ < last_base_decimal )); then\n              (( next_index++ ))\n           \
+    \   last_base_count=$current_base_count\n              last_base_decimal=$current_base_decimal\n\
+    \              current", "  local ARRAY=($1)\n  local SORTED_ARRAY=()\n  local\
+    \ I=0\n  local J=0\n  local MIN=0\n  for ((I=0; I<${#ARRAY[@]}; I++)); do\n  \
+    \  MIN=${ARRAY[I]}\n    for ((J=I+1; J<${#ARRAY[@]}; J++)); do\n      if [[ $((ARRAY[J]))\
+    \ -lt $((MIN)) ]]; then\n        MIN=${ARRAY[J]}\n        ARRAY[J]=${ARRAY[I]}\n\
+    \        ARRAY[I]=$MIN\n      fi\n    done\n    SORTED_ARRAY[I]=$MIN\n  done\n\
+    \  echo ${SORTED_ARRAY[@]}", "    local _list=\"$@\"\n    _list=$(echo \"$_list\"\
+    \ | tr ' ' '\\n' | sort -t'.' -nk2)\n    _list=$(echo \"$_list\" | tr '\\n' '\
+    \ ')\n    echo \"$_list\"", "    arr=()\n    for n in $1; do\n        nn=$(echo\
+    \ -n \"$n\" | sed 's/-//g')\n        bin=$(echo -n \"$nn\" | xargs printf '%b')\n\
+    \        arr+=(\"$nn,$bin\")\n    done\n    IFS=$'\\n' sorted=($(sort -t, -k2,2r\
+    \ -k1,1n <<<\"${arr[*]}\"))\n    unset IFS\n    for n in \"${sorted[@]}\"; do\n\
+    \        echo -n \"\\\"${n%,*}\\\" \"\n    done", "  declare -a a\n  IFS=' ' read\
+    \ -ra a <<<\"$1\"\n  for ((i=0; i<${#a[@]}; i++)); do\n    a[i]=\"$(printf '%x\\\
+    t%d\\n' \"${a[i]}\" \"${a[i]}\")\"\n  done\n  printf '%s\\n' \"${a[@]}\" | sort\
+    \ -t$'\\t' -k1,1nr -k2,2n | cut -f2", "  local arr=(\"$@\")\n  echo \"${arr[@]}\"\
+    \ | tr \" \" \"\\n\" | sort -n -t \"\" -k 1.9 | tr \"\\n\" \" \"", "    # get\
+    \ unique count of 1s in binary representation\n    # store in array with the corresponding\
+    \ index of original array\n    local arr=(\"$@\")\n    local count_ones=()\n \
+    \   for i in \"${arr[@]}\"; do\n        local num_ones=`echo \"obase=2;${i}\"\
+    \ | bc | grep -o 1 | wc -l`\n        count_ones+=($num_ones)\n    done\n    #\
+    \ sort and swap based on number of 1s in binary representation\n    for i in \"\
+    ${!count_ones[@]}\"; do\n        for j in \"${!count_ones[@]}\"; do\n        \
+    \    if [ \"${count_ones[$i]}\" -lt \"${count_ones[$j]}\" ]; then\n          \
+    \      local temp=\"${count_ones[$i]}\"\n                count_ones[$i]=\"${count_ones[$j]}\"\
+    \n                count_ones[$j]=\"$temp\"\n                temp=\"${arr[$i]}\"\
+    \n                arr[$i]=\"${arr[$j]}\"\n                arr[$j]=\"$temp\"\n\
+    \            elif [ \"${count_ones[$i]}\" -eq \"${count_ones[$j]}\" ]; then\n\
+    \                if [ \"${arr[$i]}\" -lt \"${arr[$j]}\" ]; then\n            \
+    \        local temp=\"${count_ones[$i]}\"\n                    count_ones[$i]=\"\
+    ${count_ones[$j]}\"\n                    count_ones[$j]=\"$temp\"\n          \
+    \          temp=\"${arr[$i]}\"\n                    arr[$i]=\"${arr[$j]}\"\n \
+    \                   arr[$j]=\"$temp\"\n                fi\n            fi\n  \
+    \      done\n    done\n    # return array\n    IFS=$'\\n'\n    echo \"[${arr[*]}]\"",
+  "\tlocal last_idx=$(( ${#} - 1 ))\n\n\tif [ ${#} -eq 0 ]; then\n\t\techo \"-\"\n\
+    \t\treturn\n\tfi\n\n\tfor i in $(echo ${*} | xargs -n1 | sort -r); do\n\t\tif\
+    \ [ ${i} -lt 0 ]; then\n\t\t\tcontinue\n\t\tfi\n\n\t\tif [ ${i} -eq 0 ]; then\n\
+    \t\t\techo -n \"\\\"${i}\\\"\"\n\t\t\tif [ ${last_idx} -gt 0 ]; then\n\t\t\t\t\
+    echo -n \" \"\n\t\t\tfi\n\t\t\tlast_idx=$(( ${last_idx} - 1 ))\n\t\t\tcontinue\n\
+    \t\tfi\n\n\t\techo -n \"\\\"${i}\\\"\"\n\t\tif [ ${last_idx} -gt 0 ]; then\n\t\
+    \t\techo -n \" \"\n\t\tfi\n\t\tlast_idx=$(( ${last_idx} - 1 ))\n\tdone\n\n\tfor\
+    \ i in $(echo ${*} | xargs -n1 | sort -n); do\n\t\tif [ ${i} -gt 0 ]; then\n\t\
+    \t\tcontinue\n\t\tfi\n\n\t\techo -n \"\\\"${i}\\\"\"\n\t\tif [ ${last_idx} -gt\
+    \ 0 ]; then\n\t\t\techo -n \" \"\n\t\tfi\n\t\tlast_idx=$(( ${last_idx} - 1 ))\n\
+    \tdone", "    # Your solution here\n    numbers=($1)\n    answer=()\n    for number\
+    \ in ${numbers[@]}; do\n        binary=$(dec2bin $number)\n        answer+=(\"\
+    $number $binary\")\n    done\n    echo \"${answer[@]}\" | sed 's/ /\\n/g' | sort\
+    \ -n -t ' ' -k 2 -k 1 | cut -d ' ' -f 1", "  for num in $1; do\n    echo $num\
+    \ $(printf \"%d\" 0b$(printf \"%b\" $num | grep -o 1 | wc -l))\n  done | sort\
+    \ -k2 -n -k3 | awk '{print $1}' | sed 's/^/-/' | tr '\\n' ' ' | sed 's/^/\"/'\
+    \ | sed 's/ $/\"/'", "  local numbers=$(echo \"$1\" | sed 's/\\([^ ]*\\)/\"\\\
+    1\"/g' | tr ' ' '\\n')\n  local numbers_sorted=$(echo \"$numbers\" | sort -t'\
+    \ ' -n -k3 -k2)\n  echo \"$numbers_sorted\" | sed 's/\"//g' | tr '\\n' ' '"]
 stop_tokens:
 - "\n}"

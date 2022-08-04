@@ -11,6 +11,170 @@ tests: "}\n\ncandidate() {\n    monotonic \"$@\"\n}\n\nset -e\nrun_test() {\n   
   \    [[ $(candidate \"1 2 3 2 5 60\") = \"false\" ]]\n    [[ $(candidate \"1 2 3\
   \ 4 5 60\") = \"true\" ]]\n    [[ $(candidate \"9 9 9 9\") = \"true\" ]]\n}\n\n\
   run_test"
-completions: []
+completions: ["    local list=($1)\n    local i\n    local len=${#list[@]}\n    local\
+    \ inc=0\n    local dec=0\n    for ((i=0; i<len-1; i++)); do\n        if ((list[i]\
+    \ < list[i+1])); then\n            inc=1\n        elif ((list[i] > list[i+1]));\
+    \ then\n            dec=1\n        fi\n    done\n    ((inc + dec)) || return 0\n\
+    \    return 1", "    local list=($1)\n    local direction=0\n    local last=${list[0]}\n\
+    \    for i in ${list[@]:1}; do\n        if (( i > last )); then\n            if\
+    \ (( direction < 0 )); then\n                return 1\n            fi\n      \
+    \      direction=1\n        elif (( i < last )); then\n            if (( direction\
+    \ > 0 )); then\n                return 1\n            fi\n            direction=-1\n\
+    \        fi\n        last=$i\n    done\n    return 0", "    local -a list=($1)\n\
+    \    local -a diffs\n    local i\n    for ((i=0; i<${#list[@]}-1; i++)); do\n\
+    \        diffs[i]=$((list[i+1]-list[i]))\n    done\n    local -a uniq_diffs=($(echo\
+    \ \"${diffs[@]}\" | tr ' ' '\\n' | sort -u | tr '\\n' ' '))\n    if [[ ${#uniq_diffs[@]}\
+    \ -eq 1 ]]; then\n        return 0\n    elif [[ ${#uniq_diffs[@]} -eq 2 ]]; then\n\
+    \        if [[ ${uniq_diffs[0]} -eq 0 || ${uniq_diffs[1]} -eq 0 ]]; then\n   \
+    \         return 0\n        fi\n    fi\n    return 1", "    local -a arr=($1)\n\
+    \    local -i i=0\n    local -i len=${#arr[@]}\n    local -i inc=0\n    local\
+    \ -i dec=0\n    local -i res=0\n    local -i prev=0\n    local -i curr=0\n   \
+    \ local -i next=0\n\n    if [ $len -lt 2 ]; then\n        return 0\n    fi\n\n\
+    \    prev=${arr[0]}\n    curr=${arr[1]}\n    if [ $prev -lt $curr ]; then\n  \
+    \      inc=1\n    elif [ $prev -gt $curr ]; then\n        dec=1\n    fi\n\n  \
+    \  for ((i=1; i<$len-1; i++)); do\n        prev=${arr[$i]}\n        next=${arr[$i+1]}\n\
+    \        if [ $prev -lt $next ]; then\n            if [ $dec -eq 1 ]; then\n \
+    \               res=1\n                break\n            fi\n            inc=1\n\
+    \        elif [ $prev -gt $next ]; then\n            if [ $inc -eq 1 ]; then\n\
+    \                res=1\n                break\n            fi\n            dec=1\n\
+    \        fi\n    done\n\n    return $res", "    local -a a=($1)\n    local -i\
+    \ i=0\n    local -i n=${#a[@]}\n    local -i incr=0\n    local -i decr=0\n   \
+    \ local -i result=0\n    while (( i < n-1 )); do\n        if (( a[i] < a[i+1]\
+    \ )); then\n            (( incr++ ))\n        elif (( a[i] > a[i+1] )); then\n\
+    \            (( decr++ ))\n        fi\n        (( i++ ))\n    done\n    (( incr\
+    \ == n-1 || decr == n-1 )) && result=1\n    echo $result", "    local -a arr\n\
+    \    IFS=' ' read -r -a arr <<< \"$1\"\n    local -i i\n    local -i len=${#arr[@]}\n\
+    \    local -i inc=0\n    local -i dec=0\n    for ((i=0; i<len-1; i++)); do\n \
+    \       if (( arr[i] < arr[i+1] )); then\n            (( inc++ ))\n        elif\
+    \ (( arr[i] > arr[i+1] )); then\n            (( dec++ ))\n        fi\n    done\n\
+    \    if (( inc == len-1 || dec == len-1 )); then\n        echo \"True\"\n    else\n\
+    \        echo \"False\"\n    fi", "    local -a array\n    read -a array <<< \"\
+    $1\"\n    local -i i\n    local -i len=${#array[@]}\n    local -i inc=0\n    local\
+    \ -i dec=0\n    for ((i=0; i<len-1; i++)); do\n        if ((array[i] < array[i+1]));\
+    \ then\n            inc=1\n        elif ((array[i] > array[i+1])); then\n    \
+    \        dec=1\n        fi\n    done\n    ((inc == 1 && dec == 0)) || ((inc ==\
+    \ 0 && dec == 1))", "    local list=($1)\n    local len=${#list[@]}\n    local\
+    \ i=0\n    local increasing=0\n    local decreasing=0\n    local prev=${list[0]}\n\
+    \    for ((i=1; i<len; i++)); do\n        if [[ ${list[i]} -gt $prev ]]; then\n\
+    \            increasing=1\n        elif [[ ${list[i]} -lt $prev ]]; then\n   \
+    \         decreasing=1\n        fi\n        if [[ $increasing -eq 1 && $decreasing\
+    \ -eq 1 ]]; then\n            return 1\n        fi\n        prev=${list[i]}\n\
+    \    done\n    return 0", "    local -a arr=($1)\n    local i=0\n    local len=${#arr[@]}\n\
+    \    local -a diffs\n    local -a abs_diffs\n    local -a sorted_diffs\n    local\
+    \ -a sorted_abs_diffs\n    local -a sorted_diffs_asc\n    local -a sorted_diffs_desc\n\
+    \    local -a sorted_abs_diffs_asc\n    local -a sorted_abs_diffs_desc\n    local\
+    \ -a sorted_diffs_asc_str\n    local -a sorted_diffs_desc_str\n    local -a sorted_abs_diffs_asc_str\n\
+    \    local -a sorted_abs_diffs_desc_str\n    local -a sorted_diffs_asc_str_joined\n\
+    \    local -a sorted_diffs_desc_str_joined\n    local -a sorted_abs_diffs_asc_str_joined\n\
+    \    local -a sorted_abs_diffs_desc_str_joined\n    local -a sorted_diffs_asc_str_joined_trimmed\n\
+    \    local -a sorted_diffs_desc_str_joined_trimmed\n    local -a sorted_abs_diffs_asc_str_joined_trimmed\n\
+    \    local -a sorted_abs_diffs_desc_str_joined_trimmed\n    local -a sorted_diffs_asc_str_joined_trimmed_joined\n\
+    \    local -a sorted_diffs_desc_str_joined_trimmed_joined\n    local -a sorted_abs_diffs_asc_str_joined_trimmed_joined\n\
+    \    local -a sorted_abs_diffs_desc_str_joined_trimmed_joined\n    local -a sorted_diffs_asc_str_joined_trimmed_joined_trimmed\n\
+    \    local -a sorted_diffs_desc_str_joined_trimmed_joined_trimmed\n    local -a\
+    \ sorted_abs_diffs_asc_str_joined_trimmed_joined_trimmed\n    local -a sorted_abs_diffs_desc_str_joined_trimmed_joined_trimmed\n\
+    \    local -a sorted_diffs", "    local -a a=($1)\n    local -a b=($1)\n    local\
+    \ -a c=($1)\n    local -a d=($1)\n    local -a e=($1)\n    local -a f=($1)\n \
+    \   local -a g=($1)\n    local -a h=($1)\n    local -a i=($1)\n    local -a j=($1)\n\
+    \    local -a k=($1)\n    local -a l=($1)\n    local -a m=($1)\n    local -a n=($1)\n\
+    \    local -a o=($1)\n    local -a p=($1)\n    local -a q=($1)\n    local -a r=($1)\n\
+    \    local -a s=($1)\n    local -a t=($1)\n    local -a u=($1)\n    local -a v=($1)\n\
+    \    local -a w=($1)\n    local -a x=($1)\n    local -a y=($1)\n    local -a z=($1)\n\
+    \    local -a aa=($1)\n    local -a ab=($1)\n    local -a ac=($1)\n    local -a\
+    \ ad=($1)\n    local -a ae=($1)\n    local -a af=($1)\n    local -a ag=($1)\n\
+    \    local -a ah=($1)\n    local -a ai=($1)\n    local -a aj=($1)\n    local -a\
+    \ ak=($1)\n    local -a al=($1)\n    local -a am=($1)\n    local -a an=($1)\n\
+    \    local -a ao=($1)\n    local -a ap=($1)\n    local -a aq=($1)\n    local -a\
+    \ ar=($1)\n    local -a as=($1)\n    local -a at=($1)\n    local -a au=($1)\n\
+    \    local -a av=($1)\n    local -a aw=($1)\n    local -a ax=($1)\n    local -a\
+    \ ay", "    local -a list=($1)\n    local -i i=0\n    local -i n=${#list[@]}\n\
+    \    local -i increasing=0\n    local -i decreasing=0\n    local -i diff=0\n \
+    \   local -i prev_diff=0\n    local -i prev_diff_sign=0\n    local -i diff_sign=0\n\
+    \    local -i prev_diff_sign_changed=0\n    local -i diff_sign_changed=0\n   \
+    \ local -i prev_diff_sign_changed_count=0\n    local -i diff_sign_changed_count=0\n\
+    \    local -i prev_diff_sign_changed_count_max=0\n    local -i diff_sign_changed_count_max=0\n\
+    \    local -i prev_diff_sign_changed_count_max_index=0\n    local -i diff_sign_changed_count_max_index=0\n\
+    \    local -i prev_diff_sign_changed_count_max_value=0\n    local -i diff_sign_changed_count_max_value=0\n\
+    \    local -i prev_diff_sign_changed_count_max_value_index=0\n    local -i diff_sign_changed_count_max_value_index=0\n\
+    \    local -i prev_diff_sign_changed_count_max_value_index_value=0\n    local\
+    \ -i diff_sign_changed_count_max_value_index_value=0\n    local -i prev_diff_sign_changed_count_max_value_index_value_index=0\n\
+    \    local -i diff_sign_changed_count_max_value_index_value_index=0\n    local\
+    \ -i prev_diff_sign_changed_count_max_value_index_value_index_value=0\n    local\
+    \ -i diff_sign_changed_count_max_value_index_value_index_value=0\n    local -i\
+    \ prev_diff_sign_changed_count_max_value_index_value_index_value_index=0\n   \
+    \ local -i diff_sign_changed_count_max_value_index_value_index_value_index=0\n\
+    \    local -i prev_diff_", "    local -a arr\n    arr=($1)\n    local -i i\n \
+    \   local -i len=${#arr[@]}\n    local -i incr=0\n    local -i decr=0\n    for\
+    \ ((i=0; i<len-1; i++)); do\n        if (( arr[i] < arr[i+1] )); then\n      \
+    \      incr=1\n        elif (( arr[i] > arr[i+1] )); then\n            decr=1\n\
+    \        fi\n    done\n    (( incr == 1 && decr == 0 )) || (( incr == 0 && decr\
+    \ == 1 ))", "    local -a arr\n    arr=($1)\n    local i\n    local len=${#arr[@]}\n\
+    \    local inc=0\n    local dec=0\n    for ((i=0; i<len-1; i++)); do\n       \
+    \ if ((arr[i] < arr[i+1])); then\n            inc=1\n        elif ((arr[i] > arr[i+1]));\
+    \ then\n            dec=1\n        fi\n    done\n    ((inc == 1 && dec == 0))\
+    \ || ((inc == 0 && dec == 1))", "    local -a arr\n    IFS=\" \" read -r -a arr\
+    \ <<< \"$1\"\n    local -i i\n    local -i len=${#arr[@]}\n    local -i is_increasing=1\n\
+    \    local -i is_decreasing=1\n    for ((i=1; i<len; i++)); do\n        if ((arr[i]\
+    \ < arr[i-1])); then\n            is_increasing=0\n        elif ((arr[i] > arr[i-1]));\
+    \ then\n            is_decreasing=0\n        fi\n    done\n    ((is_increasing\
+    \ || is_decreasing))", "    local -a list=($1)\n    local -i i\n    local -i len=${#list[@]}\n\
+    \    local -i increasing=1\n    local -i decreasing=1\n    for ((i=1; i<len; i++));\
+    \ do\n        if ((list[i] < list[i-1])); then\n            increasing=0\n   \
+    \     elif ((list[i] > list[i-1])); then\n            decreasing=0\n        fi\n\
+    \    done\n    ((increasing || decreasing))", "    local -a list=($1)\n    local\
+    \ -a diffs\n    local -i i\n    local -i n=${#list[@]}\n    local -i d\n    local\
+    \ -i sign\n    local -i prev_sign\n    local -i prev_d\n    local -i prev_i\n\
+    \    local -i is_monotonic=1\n    local -i is_increasing=1\n    local -i is_decreasing=1\n\
+    \    local -i is_constant=1\n    local -i is_non_constant=1\n    local -i is_non_increasing=1\n\
+    \    local -i is_non_decreasing=1\n    local -i is_strictly_increasing=1\n   \
+    \ local -i is_strictly_decreasing=1\n    local -i is_non_strictly_increasing=1\n\
+    \    local -i is_non_strictly_decreasing=1\n    local -i is_strictly_monotonic=1\n\
+    \    local -i is_non_strictly_monotonic=1\n    local -i is_non_monotonic=1\n \
+    \   local -i is_empty=1\n    local -i is_non_empty=1\n    local -i is_single=1\n\
+    \    local -i is_non_single=1\n    local -i is_pair=1\n    local -i is_non_pair=1\n\
+    \    local -i is_triple=1\n    local -i is_non_triple=1\n    local -i is_quadruple=1\n\
+    \    local -i is_non_quadruple=1\n    local -i is_quintuple=1\n    local -i is_non_quintuple=1\n\
+    \    local -i is_sextuple=1\n    local -i is_non_sextuple=1\n    local -i is_septuple=1\n\
+    \    local -i is_non_septuple=1\n    local -i is_octuple=1\n    local -i is_non_octuple=1\n\
+    \    local -i is_nontuple=1\n    local -i is_non_nontuple=1", "    local -a list=($1)\n\
+    \    local -a diffs=()\n    local -i i=0\n    local -i len=${#list[@]}\n    local\
+    \ -i prev=${list[0]}\n    local -i curr=0\n    local -i diff=0\n    local -i is_monotonic=1\n\
+    \    local -i is_increasing=1\n    local -i is_decreasing=1\n\n    for ((i=1;\
+    \ i<len; i++)); do\n        curr=${list[i]}\n        diff=$((curr - prev))\n \
+    \       diffs+=($diff)\n        prev=$curr\n    done\n\n    for ((i=0; i<len;\
+    \ i++)); do\n        if [[ ${diffs[i]} -lt 0 ]]; then\n            is_increasing=0\n\
+    \        elif [[ ${diffs[i]} -gt 0 ]]; then\n            is_decreasing=0\n   \
+    \     fi\n    done\n\n    if [[ $is_increasing -eq 0 && $is_decreasing -eq 0 ]];\
+    \ then\n        is_monotonic=0\n    fi\n\n    echo $is_monotonic", "    local\
+    \ -a arr=($1)\n    local -i i=0\n    local -i len=${#arr[@]}\n    local -i incr=0\n\
+    \    local -i decr=0\n    local -i res=0\n    local -i prev=0\n    local -i curr=0\n\
+    \n    if (( len < 2 )); then\n        echo \"True\"\n        return 0\n    fi\n\
+    \n    prev=${arr[0]}\n    for (( i=1; i<len; i++ )); do\n        curr=${arr[i]}\n\
+    \        if (( curr > prev )); then\n            incr=1\n        elif (( curr\
+    \ < prev )); then\n            decr=1\n        fi\n        prev=$curr\n    done\n\
+    \n    if (( incr == 1 && decr == 1 )); then\n        res=0\n    else\n       \
+    \ res=1\n    fi\n\n    if (( res == 1 )); then\n        echo \"True\"\n    else\n\
+    \        echo \"False\"\n    fi", "    local -a arr\n    local -i i\n    local\
+    \ -i len\n    local -i incr\n    local -i prev\n    local -i curr\n    arr=($1)\n\
+    \    len=${#arr[@]}\n    if (( len < 2 )); then\n        echo True\n        return\n\
+    \    fi\n    prev=${arr[0]}\n    for (( i=1; i<len; i++ )); do\n        curr=${arr[i]}\n\
+    \        if (( prev < curr )); then\n            incr=1\n            break\n \
+    \       elif (( prev > curr )); then\n            incr=0\n            break\n\
+    \        fi\n    done\n    for (( i=1; i<len; i++ )); do\n        curr=${arr[i]}\n\
+    \        if (( incr && prev > curr )) || (( !incr && prev < curr )); then\n  \
+    \          echo False\n            return\n        fi\n        prev=$curr\n  \
+    \  done\n    echo True", "    local -a list=($1)\n    local -i i=0\n    local\
+    \ -i len=${#list[@]}\n    local -i inc=0\n    local -i dec=0\n    local -i prev=0\n\
+    \    local -i curr=0\n    local -i next=0\n    local -i ret=0\n\n    if [ $len\
+    \ -eq 0 ]; then\n        return 0\n    fi\n\n    prev=${list[0]}\n    for ((i=1;\
+    \ i<len; i++)); do\n        curr=${list[i]}\n        if [ $i -eq $((len-1)) ];\
+    \ then\n            next=${list[0]}\n        else\n            next=${list[i+1]}\n\
+    \        fi\n\n        if [ $curr -gt $prev ]; then\n            inc=1\n     \
+    \   elif [ $curr -lt $prev ]; then\n            dec=1\n        fi\n\n        if\
+    \ [ $inc -eq 1 -a $dec -eq 1 ]; then\n            ret=1\n            break\n \
+    \       fi\n\n        if [ $inc -eq 1 -a $curr -gt $next ]; then\n           \
+    \ ret=1\n            break\n        fi\n\n        if [ $dec -eq 1 -a $curr -lt\
+    \ $next ]; then\n            ret=1\n            break\n        fi\n\n        prev=$curr\n\
+    \    done\n\n    return $ret"]
 stop_tokens:
 - "\n}"

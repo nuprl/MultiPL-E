@@ -11,6 +11,107 @@ tests: "}\n\ncandidate() {\n    next_smallest \"$@\"\n}\n\nset -e\nrun_test() {\
   ) = \"None\" ]]\n    [[ $(candidate \"1 1 1 1 0\") = \"1\" ]]\n    [[ $(candidate\
   \ \"1 1\") = \"None\" ]]\n    [[ $(candidate \"-35 34 12 -45\") = \"-35\" ]]\n}\n\
   \nrun_test"
-completions: []
+completions: ["    # Get the 2nd smallest element.\n    # Sort the list and then remove\
+    \ the first 2 elements.\n    # Awk prints the next field if the list has 3 or\
+    \ more elements.\n    # Otherwise, awk prints \"None\".\n    echo \"$1\" | tr\
+    \ ' ' '\\n' | sort -n | tail -n +2 | awk '{print ((NF>2) ? $2 : \"None\")}'",
+  "    sorted_array=($(sort -n <<< \"$1\"))\n    num_elements=\"${#sorted_array[@]}\"\
+    \n    if [ \"$num_elements\" -lt 2 ]; then\n        return 1\n    fi\n    result=0\n\
+    \    prev_num=${sorted_array[0]}\n    for num in \"${sorted_array[@]:1}\"; do\n\
+    \        if [ \"$num\" -ne \"$prev_num\" ]; then\n            result=\"$num\"\n\
+    \            break\n        fi\n        prev_num=\"$num\"\n    done\n    if [\
+    \ \"$result\" -eq 0 ]; then\n        return 1\n    fi\n    echo \"$result\"",
+  "\tif [ $# -eq 0 ]; then\n\t\treturn 1\n\tfi\n\t\n\tsmallest=`echo $@ | tr ' ' '\\\
+    n' | sort -n | head -n 1`\n\techo $@ | tr ' ' '\\n' | sort -n | grep -v \"$smallest\"\
+    \ | head -n 1", "\tlocal -a list\n\tlocal a b\n\tlist=($1)\n\tif (( ${#list[@]}\
+    \ < 2 )); then\n\t\techo \"None\"\n\t\treturn\n\tfi\n\t((a=${list[0]}))\n\t((b=${list[1]}))\n\
+    \tfor i in ${list[@]}; do\n\t\t((i < a)) && ((b=a)) && ((a=i)) ||\n\t\t((i < b))\
+    \ && ((b=i))\n\tdone\n\t((b==a)) && echo \"None\" || echo $b", "  set -e\n  if\
+    \ [ $# -eq 0 ]; then\n    printf \"next_smallest() expects a non-empty, space-separated\
+    \ list of integers\\n\"\n    exit 1\n  fi\n  for i in $@; do\n    if [[ ! $i =~\
+    \ ^[0-9]+$ ]]; then\n      printf \"next_smallest() expects a non-empty, space-separated\
+    \ list of integers\\n\"\n      exit 1\n    fi\n  done\n  printf \"$@\\n\" | sort\
+    \ -n | uniq -c | sort -n | awk '{ if (NR == 2) { print $2 } }'", "\t# exit 1\n\
+    \tfor i in $1; do\n\t\tlet \"j = $i + 1\"\n\t\tif [[ \"$j\" -ge \"$1\" ]]; then\n\
+    \t\t\tlet \"j = $i - 1\"\n\t\t\tif [[ \"$j\" -le \"$1\" ]]; then\n\t\t\t\techo\
+    \ \"out\"\n\t\t\t\texit 1\n\t\t\tfi\n\t\tfi\n\tdone", "  local nums=($1)\n  local\
+    \ min min_idx min2 min2_idx\n  let min=${nums[0]}\n  let min_idx=0\n  let min2=${nums[0]}\n\
+    \  let min2_idx=0\n  for (( i=1; i<${#nums[@]}; i++ )); do\n    if (( ${nums[$i]}\
+    \ < min )); then\n      let min2=min\n      let min2_idx=min_idx\n      let min=${nums[$i]}\n\
+    \      let min_idx=$i\n    elif (( ${nums[$i]} < min2 && ${nums[$i]} != min ));\
+    \ then\n      let min2=${nums[$i]}\n      let min2_idx=$i\n    fi\n  done\n  if\
+    \ (( min2 == min )); then\n    return\n  fi\n  echo \"$min2\"", "    local min\n\
+    \    local min2\n    local num\n    [[ -z $1 ]] && return\n    min=$1\n    [[\
+    \ -z $2 ]] && return\n    min2=$2\n    [[ $min -gt $min2 ]] && {\n        min=$min2\n\
+    \        min2=$1\n    }\n    shift 2\n    for num in $@\n    do\n        [[ $num\
+    \ -lt $min ]] && {\n            min2=$min\n            min=$num\n        }\n \
+    \       [[ $num -lt $min2 && $num -ne $min ]] && min2=$num\n    done\n    echo\
+    \ $min2", '    _next_smallest_sort_input "$1" | head -n 2 | tail -n 1', "  local\
+    \ -a array\n  local -i len i\n  IFS=' ' read -r -a array <<< \"$1\"\n  len=${#array[@]}\n\
+    \  if [[ $len -lt 2 ]]; then\n    echo 'None'\n    return\n  fi\n  array=($(echo\
+    \ \"${array[*]}\" | tr ' ' '\\n' | sort -g | uniq))\n  len=${#array[@]}\n  if\
+    \ [[ $len -lt 2 ]]; then\n    echo 'None'\n    return\n  fi\n  for ((i=1; i<len;\
+    \ i++)); do\n    if [[ ${array[i]} -ne ${array[i-1]} ]]; then\n      echo \"${array[i]}\"\
+    \n      return\n    fi\n  done\n  echo 'None'", "    if [ $# -eq 0 ]; then\n \
+    \       echo \"None\"\n    elif [ $# -eq 1 ]; then\n        echo \"None\"\n  \
+    \  else\n        # echo $1 | tr ' ' '\\n' | sort -nu | head -n2 | tail -n1\n \
+    \       echo $1 | tr ' ' '\\n' | awk '{c[$1]++} END {for (i in c) {p++; if (p==2)\
+    \ {print i; exit};}}'\n    fi", "  # brute force solution, O(n)\n  # parse arguments\
+    \ into an array\n  arr=($1)\n  # declare min variable, initialize with first element\
+    \ of the array\n  min=${arr[0]}\n  # declare another variable to keep second smallest\
+    \ element\n  second_min=None\n  # loop through the array, starting from the second\
+    \ element\n  for ((i=1; i<${#arr[@]}; i++)); do\n    # if current element is smaller\
+    \ than min, update min\n    # and set second_min to previous min\n    if (( arr[i]\
+    \ < min )); then\n      second_min=$min\n      min=${arr[i]}\n    # else if current\
+    \ element is bigger than min but smaller than second_min,\n    # then update second_min\n\
+    \    elif (( second_min == None || (arr[i] < second_min && arr[i] > min) )); then\n\
+    \      second_min=${arr[i]}\n    fi\n  done\n  # return second_min\n  echo $second_min",
+  "    # Sort list into an array\n    local sorted_array=($(echo \"$@\" | sed 's/\
+    \ /\\n/g' | sort -n))\n    # Grab length of array\n    local arr_len=${#sorted_array[@]}\n\
+    \    # Check for two values of the same value (eg. 2x 1's)\n    for (( i=0; i<$arr_len;\
+    \ i++ )); do\n        if [[ \"${sorted_array[$i]}\" == \"${sorted_array[$i+1]}\"\
+    \ ]]; then\n            return 1\n        fi\n    done\n    # Grab the index of\
+    \ the second smallest value\n    local small_index=$(($arr_len - 2))\n    echo\
+    \ \"${sorted_array[$small_index]}\"", "    local smallest=999999\n    local next=999999\n\
+    \    while [ -n \"$1\" ]; do\n        if [ \"$1\" -lt \"$smallest\" ]; then\n\
+    \            next=$smallest\n            smallest=$1\n        elif [ \"$1\" -lt\
+    \ \"$next\" ] && [ \"$1\" -ne \"$smallest\" ]; then\n            next=$1\n   \
+    \     fi\n        shift\n    done\n    if [ \"$next\" -eq 999999 ]; then\n   \
+    \     echo \"None\"\n    else\n        echo \"$next\"\n    fi", "    min=$1\n\
+    \    for i in $1; do\n        [[ $i -lt $min ]] && min=$i\n    done\n    unset\
+    \ min2\n    for i in $1; do\n        [[ $i -lt $min ]] && continue\n        [[\
+    \ $i -gt $min ]] && [[ -z $min2 ]] && min2=$i\n        [[ $i -gt $min ]] && [[\
+    \ $i -lt $min2 ]] && min2=$i\n    done\n    [[ -z $min2 ]] && echo None || echo\
+    \ $min2", "\t# Use the sort command\n\t# For only the second element use 'head\
+    \ -2'\n\t# Extract the second element using 'tail -1'\n\t# In case there is no\
+    \ such element return None\n\t#\n\t# To extract only the 2nd smallest element\
+    \ use 'head -n 2'\n\t# To extract only the last line use 'tail -n 1'\n\t#\n\t\
+    # TODO\n\techo \"Not implemented yet.\"", "    list=(\"$@\")\n    len=${#list[@]}\n\
+    \    if [[ $len -eq 0 ]]; then\n        return 1\n    fi\n    if [[ $len -eq 1\
+    \ ]]; then\n        return 1\n    fi\n    min=${list[0]}\n    min2=$min\n    for\
+    \ (( i=1; i<len; i++ )); do\n        if [[ ${list[$i]} -lt $min ]]; then\n   \
+    \         min2=$min\n            min=${list[$i]}\n        fi\n        if [[ ${list[$i]}\
+    \ -gt $min ]] && [[ ${list[$i]} -lt $min2 ]]; then\n            min2=${list[$i]}\n\
+    \        fi\n    done\n    if [[ $min2 -eq $min ]]; then\n        return 1\n \
+    \   fi\n    echo $min2", "    if [ $# -lt 1 ]; then\n        return 2\n    fi\n\
+    \    if [ $# -eq 1 ]; then\n        return 0\n    fi\n    for i in $@; do\n  \
+    \      for j in $@; do\n            if [ $i -lt $j ]; then\n                echo\
+    \ $i $j\n            fi\n        done\n    done | sort -n | head -n 2 | tail -n\
+    \ 1", "  local -a l=($1)\n  [ ${#l[@]} -eq 0 ] && echo None && return 0\n  local\
+    \ -a u=($(echo ${l[@]} | tr ' ' '\\n' | sort -u))\n  [ ${#u[@]} -eq 1 ] && echo\
+    \ None && return 0\n  [ ${#u[@]} -eq 2 ] && echo \"${u[0]}\" && return 0\n  echo\
+    \ \"${u[1]}\"", "    arr=($1)\n    # $smallest is the smallest element\n    local\
+    \ smallest=\"${arr[0]}\"\n    local s_index=0\n    # $2nd is the 2nd smallest\
+    \ element\n    local 2nd=\"\"\n    local s_index=0\n    # $i is used to loop through\
+    \ the array\n    local i=0\n    # $len is the length of the array\n    local len=${#arr[@]}\n\
+    \    # $is_first is used to determine if we need to assign the first value or\
+    \ the second\n    local is_first=1\n    if [ $len -eq 0 ]; then\n        echo\
+    \ \"None\"\n        return 0\n    fi\n    if [ $len -eq 1 ]; then\n        echo\
+    \ \"None\"\n        return 0\n    fi\n    for i in \"${arr[@]}\"; do\n       \
+    \ if [ $i -lt $smallest ]; then\n            smallest=$i\n            s_index=$i\n\
+    \        fi\n    done\n    for i in \"${arr[@]}\"; do\n        if [ $i -eq $smallest\
+    \ ]; then\n            continue\n        fi\n        if [ $is_first -eq 1 ]; then\n\
+    \            2nd=$i\n            is_first=0\n        fi\n        if [ $i -lt $2nd\
+    \ ]; then\n            2nd=$i\n        fi\n    done\n    echo $2nd"]
 stop_tokens:
 - "\n}"

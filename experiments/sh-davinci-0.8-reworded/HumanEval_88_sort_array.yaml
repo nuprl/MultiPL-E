@@ -15,6 +15,129 @@ tests: "}\n\ncandidate() {\n    sort_array \"$@\"\n}\n\nset -e\nrun_test() {\n  
   \ \"6 5 4 3 2 1 0\" ]]\n    [[ $(candidate \"2 1\") = \"1 2\" ]]\n    [[ $(candidate\
   \ \"15 42 87 32 11 0\") = \"0 11 15 32 42 87\" ]]\n    [[ $(candidate \"21 14 23\
   \ 11\") = \"23 21 14 11\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    input=$(echo \"$1\" | sed 's/ /\",\"/g')\n    sum_res=$(echo \"\
+    $1\" | sed 's/ / + /g')\n    sum_res=$(($sum_res))\n    echo \"[\\\"$input\\\"\
+    ]\" | jq \"if .[0] + .[-1] % 2 == 0 then sort_by(.|tonumber) else sort_by(- .|tonumber)\
+    \ end\"", "  if [ -z \"$1\" ]; then\n    echo '[]'\n    return\n  fi\n  local\
+    \ -a arr\n  IFS=' ' read -r -a arr <<< \"$1\"\n  local sum=$((arr[0] + arr[-1]))\n\
+    \  if [ $((sum % 2)) -eq 0 ]; then\n    # asc\n    for((i=0;i<${#arr[@]};i++));\
+    \ do\n      for((j=i+1;j<${#arr[@]};j++)); do\n        if [ \"${arr[i]}\" -gt\
+    \ \"${arr[j]}\" ]; then\n          local temp=${arr[j]}\n          arr[j]=${arr[i]}\n\
+    \          arr[i]=$temp\n        fi\n      done\n    done\n  else\n    # desc\n\
+    \    for((i=0;i<${#arr[@]};i++)); do\n      for((j=i+1;j<${#arr[@]};j++)); do\n\
+    \        if [ \"${arr[i]}\" -lt \"${arr[j]}\" ]; then\n          local temp=${arr[j]}\n\
+    \          arr[j]=${arr[i]}\n          arr[i]=$temp\n        fi\n      done\n\
+    \    done\n  fi\n  local result=\"[\"\n  for v in \"${arr[@]}\"; do\n    result=\"\
+    $result\\\"$v\\\",\"\n  done\n  echo \"${result%?}]\"", "  if [[ $# -eq 0 ]];\
+    \ then\n    echo '[]'\n    return\n  fi\n  # convert input to array\n  arr=()\n\
+    \  while IFS= read -r line; do\n    arr+=(\"$line\")\n  done <<<\"$*\"\n  # main\
+    \ part\n  sum_of_first_and_last=`expr \"${arr[0]}\" + \"${arr[${#arr[@]}-1]}\"\
+    `\n  if ((sum_of_first_and_last % 2 == 0)); then\n    IFS=\" \" echo ${arr[*]}\
+    \ | tr ' ' '\\n' | sort -rn | xargs -n1 printf '\"%s\" '\n  else\n    IFS=\" \"\
+    \ echo ${arr[*]} | tr ' ' '\\n' | sort -n | xargs -n1 printf '\"%s\" '\n  fi",
+  "  [[ $# -eq 0 ]] && return 0\n  local arr=( \"$@\" )\n  local sum=$(( arr[0] +\
+    \ arr[-1] ))\n  local len=$#\n  local res=''\n  if (( sum % 2 == 0 )); then\n\
+    \    for (( i = 0; i < len; i++ )); do\n      res+=\"${arr[$i]} \"\n    done\n\
+    \  else\n    for (( i = len - 1; i >= 0; i-- )); do\n      res+=\"${arr[$i]} \"\
+    \n    done\n  fi\n  printf '%s' \"${res% }\"", "  if [ $# -eq 0 ]; then\n    echo\
+    \ \"[]\"\n  else\n    result=\"[\"\n    for v in $1; do\n      result=\"$result\\\
+    \"$v\\\",\"\n    done\n    result=\"${result::-1}]\"\n    if [ $(( $(echo $1 |\
+    \ awk '{print $1}') + $(echo $1 | awk '{print $NF}') )) -eq 0 ]; then\n      echo\
+    \ $result\n    else\n      echo $result | rev | cut -c 2- | rev\n    fi\n  fi",
+  "  local __array=$(echo $1 | awk '{ for (i=1; i<=NF; i++) print $i }')\n  local\
+    \ __sum=$(echo $1 | awk '{ sum = 0; for (i=1; i<=NF; i++) sum += $i; print sum\
+    \ }')\n  local __sorted\n  if [ $(($__sum % 2)) -eq 0 ]; then\n    __sorted=$(echo\
+    \ $__array | awk '{ n=NF; for (i=n; i>=1; i--) printf(\"%s \", $i) }')\n  else\n\
+    \    __sorted=$(echo $__array | awk '{ for (i=1; i<=NF; i++) printf(\"%s \", $i)\
+    \ }')\n  fi\n  echo $(echo $__sorted | awk '{ n=NF; for (i=1; i<=n; i++) printf(\"\
+    %s\", \"\\\"\"$i\"\\\"\") }')", "  declare -a lst=()\n  # @TODO: Implement this\
+    \ function\n  return \"${lst[@]}\"", "    local -a ary\n    read -a ary <<< \"\
+    $1\"\n    if [[ $((${ary[0]} + ${ary[-1]}))%2 -eq 0 ]]; then\n        for ((i=0;\
+    \ i<${#ary[@]}; i++)); do\n            for ((j=0; j<${#ary[@]}-1; j++)); do\n\
+    \                if [[ ${ary[j]} -lt ${ary[j+1]} ]]; then\n                  \
+    \  tmp=${ary[j]}\n                    ary[j]=${ary[j+1]}\n                   \
+    \ ary[j+1]=$tmp\n                fi\n            done\n        done\n    else\n\
+    \        for ((i=0; i<${#ary[@]}; i++)); do\n            for ((j=0; j<${#ary[@]}-1;\
+    \ j++)); do\n                if [[ ${ary[j]} -gt ${ary[j+1]} ]]; then\n      \
+    \              tmp=${ary[j]}\n                    ary[j]=${ary[j+1]}\n       \
+    \             ary[j+1]=$tmp\n                fi\n            done\n        done\n\
+    \    fi\n    echo -n \"[\"\n    for ((i=0; i<${#ary[@]}; i++)); do\n        if\
+    \ [[ $i -lt $((${#ary[@]}-1)) ]]; then\n            echo -n \"\\\"${ary[$i]}\\\
+    \", \"\n        else\n            echo -n \"\\\"${ary[$i]}\\\"\"\n        fi\n\
+    \    done\n    echo \"]\"", "  if [[ $# -ne 1 ]]; then\n    echo \"usage: $0 '1\
+    \ 2 3'\"\n    return 1\n  fi\n  declare -a arr=($1)\n  if [[ ${#arr[@]} -eq 0\
+    \ ]]; then\n    echo \"[]\"\n    return 0\n  fi\n  local first=${arr[0]}\n  local\
+    \ last=${arr[-1]}\n  local sum=$(( $first + $last ))\n  if [[ $(($sum%2)) -eq\
+    \ 0 ]]; then\n    IFS=$'\\n' arr=($(sort -r <<<\"${arr[*]}\"))\n  else\n    IFS=$'\\\
+    n' arr=($(sort <<<\"${arr[*]}\"))\n  fi\n  echo '['$(printf '\"%s\", ' \"${arr[@]}\"\
+    )']'", "  local array=($1)\n  if [ ${#array[@]} -eq 0 ]; then\n    echo \"[]\"\
+    \n  elif [ ${#array[@]} -eq 1 ]; then\n    echo \"[\\\"${array[0]}\\\"]\"\n  else\n\
+    \    local first=$(head -n 1 <<< \"$1\")\n    local last=$(tail -n 1 <<< \"$1\"\
+    )\n    local sum=$((first + last))\n    local sorted_numbers\n    if [ $((sum\
+    \ % 2)) -eq 0 ]; then\n      sorted_numbers=$(echo \"$1\" | sort -nr)\n    else\n\
+    \      sorted_numbers=$(echo \"$1\" | sort -n)\n    fi\n    local result=$(sed\
+    \ 's/^/\\\"/;s/$/\\\"/;s/ /\\\", \\\"/g' <<< \"$sorted_numbers\")\n    echo \"\
+    [${result}]\"\n  fi", "  declare -a list=($1)\n  declare -a even=(${list[*]:0:$((\
+    \ ${#list[@]}/2 ))})\n  declare -a odd=(${list[*]:$(( ${#list[@]}/2 ))})\n  declare\
+    \ -a even_sorted=()\n  declare -a odd_sorted=()\n  declare -a result=()\n  while\
+    \ [[ ${#even[@]} -gt 0 ]]; do\n    even_sorted+=(\"${even[0]}\")\n    even=(\"\
+    ${even[@]:1}\")\n    if [[ ${#odd[@]} -gt 0 ]]; then\n      odd_sorted+=(\"${odd[-1]}\"\
+    )\n      odd=(\"${odd[@]:0:$(( ${#odd[@]}-1 ))}\")\n    fi\n  done\n  [[ $((${even_sorted[0]}+${even_sorted[-1]}))%2\
+    \ -eq 0 ]] && result=(\"${even_sorted[@]}\") || result=(\"${even_sorted[@]}\"\
+    \ \"${odd_sorted[@]}\")\n  printf \"%s\" \"[\"\n  for i in ${!result[@]}; do\n\
+    \    [[ $i -eq 0 ]] && printf \"%s\" \"\\\"${result[$i]}\\\"\" || printf \"%s\"\
+    \ \", \\\"${result[$i]}\\\"\"\n  done\n  printf \"%s\" \"]\"", "  local a=\"$(echo\
+    \ \"$1\" | tr ' ' '\\n' | sort -n)\"\n  local s=${a:0:1}\n  local l=${a:(-1)}\n\
+    \  ((s+l))&1 && echo \"$a\" || echo \"$a\" | tac", "  arr=($1)\n  if [ $(( ${arr[0]}\
+    \ + ${arr[-1]} )) -eq 1 ]; then\n    echo ${arr[@]} | tr ' ' '\\n' | sort -nr\
+    \ | tr '\\n' ' '\n  else\n    echo ${arr[@]} | tr ' ' '\\n' | sort -n | tr '\\\
+    n' ' '\n  fi", "    printf '%s\\n' $1 | jq -c \"[. | tostring] | sort_by(.[0])\
+    \ | sort_by(.[-1]) | sort_by(.[0] + .[-1])\"", "    local -a a=($1)\n    local\
+    \ -a r=()\n    local l=${#a[@]}\n    if (( l < 2 )); then\n        for i in \"\
+    ${a[@]}\"; do\n            r+=(\"\\\"$i\\\"\")\n        done\n    else\n     \
+    \   local s=$(( a[0] + a[-1] ))\n        if (( s % 2 )); then\n            a=($(for\
+    \ i in \"${a[@]}\"; do echo \"$i\"; done | sort -n))\n        else\n         \
+    \   a=($(for i in \"${a[@]}\"; do echo \"$i\"; done | sort -n -r))\n        fi\n\
+    \        for i in \"${a[@]}\"; do\n            r+=(\"\\\"$i\\\"\")\n        done\n\
+    \    fi\n    echo \"[${r[*]}]\"", "    local n_list=($1)\n    local len=${#n_list[@]}\n\
+    \    local first=${n_list[0]}\n    local last=${n_list[-1]}\n    local out_list=()\n\
+    \    local is_even=$(((first + last) % 2))\n    for ((i = 0; i < len; i++)); do\n\
+    \        if ((is_even)); then\n            out_list[i]=${n_list[len - i - 1]}\n\
+    \        else\n            out_list[i]=${n_list[i]}\n        fi\n    done\n  \
+    \  printf \"[\\\"%s\\\"]\" \"${out_list[@]}\"", "  if [[ $# -lt 1 ]]; then\n \
+    \   echo \"[]\"\n    return 0\n  fi\n  if [[ $# -eq 1 ]]; then\n    echo \"[\\\
+    \"$1\\\"]\"\n    return 0\n  fi\n  local input=\"$1\"\n  local -i first=\"${input%%\
+    \ *}\"\n  local last=\"${input##* }\"\n  local -i sum=$((first + last))\n  local\
+    \ -a out\n  if (( sum % 2 == 0 )); then\n    input=\"$(tr \" \" \"\\n\" <<< \"\
+    $input\" | sort -nr)\"\n  else\n    input=\"$(tr \" \" \"\\n\" <<< \"$input\"\
+    \ | sort -n)\"\n  fi\n  while read -r number; do\n    out+=(\"\\\"$number\\\"\"\
+    )\n  done <<< \"$input\"\n  echo \"[${out[*]}]\"", "  local -n array=\"$1\"\n\
+    \  local result=()\n  local cosh_value=0\n  local index=0\n  local value=0\n \
+    \ for value in ${array[@]}; do\n    result+=(\"$(printf \"%s\" \"$value\")\")\n\
+    \  done\n  cosh_value=$((array[0] + array[-1]))\n  index=0\n  if ((cosh_value\
+    \ % 2 == 0)); then\n    while ((index < ${#result[@]} / 2)); do\n      local tmp=\"\
+    ${result[$index]}\"\n      result[$index]=\"${result[${#result[@]} - $index -\
+    \ 1]}\"\n      result[${#result[@]} - $index - 1]=\"$tmp\"\n      ((index++))\n\
+    \    done\n  else\n    while ((index < ${#result[@]} / 2)); do\n      local tmp=\"\
+    ${result[$index]}\"\n      result[$index]=\"${result[${#result[@]} - $index -\
+    \ 1]}\"\n      result[${#result[@]} - $index - 1]=\"$tmp\"\n      ((index++))\n\
+    \    done\n  fi\n  printf \"%s\" \"[\"\n  printf \"%s\" \"${result[0]}\"\n  shift\n\
+    \  while (($# != 0)); do\n    printf \"%s\" \", \"$1\"\"\n    shift\n  done\n\
+    \  printf \"%s\" \"]\"", "  list=($1)\n  even=0\n  odd=0\n  length=${#list[@]}\n\
+    \  for i in $(seq 0 $(($length - 1))); do\n    if [[ $((($i + ${list[$i]})))%2\
+    \ -eq 0 ]]; then\n      even+=1\n    else\n      odd+=1\n    fi\n  done\n  if\
+    \ [[ $((even % 2)) -eq 0 ]]; then\n    for i in $(seq 0 $(($length - 1))); do\n\
+    \      if [[ $((($i + ${list[$i]})))%2 -eq 0 ]]; then\n        echo \\\"${list[$i]}\\\
+    \"\n      fi\n    done\n    for i in $(seq 0 $(($length - 1))); do\n      if [[\
+    \ $((($i + ${list[$i]})))%2 -ne 0 ]]; then\n        echo \\\"${list[$i]}\\\"\n\
+    \      fi\n    done\n  else\n    for i in $(seq 0 $(($length - 1))); do\n    \
+    \  if [[ $((($i + ${list[$i]})))%2 -ne 0 ]]; then\n        echo \\\"${list[$i]}\\\
+    \"\n      fi\n    done\n    for i in $(seq 0 $(($length - 1))); do\n      if [[\
+    \ $((($i + ${list[$i]})))%2 -eq 0 ]]; then\n        echo \\\"${list[$i]}\\\"\n\
+    \      fi\n    done\n  fi", "  declare -a input=($1)\n  if [ ${#input[@]} -eq\
+    \ 0 ]; then\n    echo \"[]\"\n  elif [ ${#input[@]} -eq 1 ]; then\n    echo \"\
+    [\\\"${input[0]}\\\"]\"\n  else\n    if [ $(( ${input[0]} + ${input[-1]} )) -eq\
+    \ 0 ]; then\n      sort_array_dec \"$1\"\n    else\n      sort_array_asc \"$1\"\
+    \n    fi\n  fi"]
 stop_tokens:
 - "\n}"

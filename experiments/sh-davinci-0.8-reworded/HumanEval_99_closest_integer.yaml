@@ -12,6 +12,59 @@ tests: "}\n\ncandidate() {\n    closest_integer \"$@\"\n}\n\nset -e\nrun_test() 
   \    [[ $(candidate \"10\") = \"10\" ]]\n    [[ $(candidate \"14.5\") = \"15\" ]]\n\
   \    [[ $(candidate \"-15.5\") = \"-16\" ]]\n    [[ $(candidate \"15.3\") = \"15\"\
   \ ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    # To round a number n to its closest integer, we can use\n    #\
+    \ n + 0.5 (if n is positive) or n - 0.5 (if n is negative)\n    if [[ $1 =~ ^([-+]?[0-9]*[.]?[0-9]+)$\
+    \ ]]; then\n        if (( $(bc <<< \"$1 > 0\") )); then\n            echo $(bc\
+    \ <<< \"$1 + 0.5\") | cut -d '.' -f 1\n        else\n            echo $(bc <<<\
+    \ \"$1 - 0.5\") | cut -d '.' -f 1\n        fi\n    else\n        echo \"Argument\
+    \ must be a number\"\n    fi", "  awk -v x=$1 'BEGIN {printf \"%d\\n\", x}'",
+  "  if [ $(echo $1 | cut -d. -f2) -eq 50 ]; then\n    echo $(expr $(echo $1 | cut\
+    \ -d. -f1) + $(echo $1 | cut -d. -f2)/100)\n  else\n    echo $(echo $1 | cut -d.\
+    \ -f1)\n  fi", "\t# Get rid of the sign\n\t(( ${1#-} < ${1%+} )) && echo \"-${1%+}\"\
+    \ && return\n\techo \"${1%+}\"", "  local -a a\n  # Split on decimal.\n  IFS='.'\
+    \ read -ra a <<< \"$1\"\n  # If no decimal, just echo the arg.\n  [[ -z \"${a[1]}\"\
+    \ ]] && echo \"$1\" && return\n  # If whole number is 0 and there is a non-zero\
+    \ digit after the decimal,\n  # then echo 1 and return.\n  if [[ \"${a[0]}\" ==\
+    \ \"0\" ]] && [[ \"${a[1]:0:1}\" != \"0\" ]]; then\n    echo \"1\"\n    return\n\
+    \  fi\n  # If the whole number is 0, echo 0 and return.\n  [[ \"${a[0]}\" == \"\
+    0\" ]] && echo \"0\" && return\n  # If the first digit after the decimal is less\
+    \ than 5, echo the whole\n  # number and return.\n  if [[ \"${a[1]:0:1}\" -lt\
+    \ 5 ]]; then\n    echo \"${a[0]}\"\n    return\n  fi\n  # If the first digit after\
+    \ the decimal is 5 or greater, echo the\n  # whole number plus 1 and return.\n\
+    \  if [[ \"${a[1]:0:1}\" -ge 5 ]]; then\n    echo \"$((a[0] + 1))\"\n    return\n\
+    \  fi", '  printf "%d" "$1"', "  case $1 in\n    *.*) echo ${1%%.*} ;;\n    *)\
+    \ echo $1 ;;\n  esac", '  printf "%0.f" "$1"', "    if [[ $1 == *.* ]]; then\n\
+    \        printf \"%s\" \"${1%.*}\"\n    else\n        printf \"%s\" \"$1\"\n \
+    \   fi", "    # TODO: You can try using the printf command to do the roundings.\n\
+    \    echo $1 | awk '{printf(\"%d\\n\", $1)}'", "  if [ -z \"$1\" ]; then\n   \
+    \ echo \"No parameter provided.\"\n    return 1\n  fi\n  printf %.0f \"$1\"",
+  "    # if a number has a decimal point, round it away from zero\n    if [[ $1 =~\
+    \ ^-?[0-9]+\\.[0-9]+$ ]]; then\n        if [[ $1 > 0 ]]; then\n            # round\
+    \ up\n            echo $(( ${1%.*} + 1 ))\n        else\n            # round down\n\
+    \            echo $(( ${1%.*} - 1 ))\n        fi\n    else\n        # otherwise\
+    \ just print the number\n        echo $1\n    fi", "  number=$1\n  if (( $(echo\
+    \ \"${number} < 0\" | bc -l) )); then\n    echo $(echo \"${number} - 0.5\" | bc)\
+    \ | cut -d\".\" -f1\n  else\n    echo $(echo \"${number} + 0.5\" | bc) | cut -d\"\
+    .\" -f1\n  fi", "    local n=$1\n    local -i int=${n%.*}    # Remove decimals\n\
+    \    local -i dec=${n#*.}    # Remove integers\n    local -i result\n    if [[\
+    \ $dec -ge 50 ]]; then\n        (( result = int + 1 ))\n    else\n        (( result\
+    \ = int ))\n    fi\n    echo $result", "    # use awk to convert the number to\
+    \ an integer\n    # use s to sort numerically, from smallest to largest\n    #\
+    \ use head to return only the first line (first number)\n    echo \"$1\" | awk\
+    \ '{printf(\"%d\\n\", $1)}' | s -n | head -n 1", '    echo "scale=0; $1/1" | bc',
+  "  # return the string that is closest to $1 \n  # if |num1| - $1 < |num2| - $1,\
+    \ then return num1\n  # if |num1| - $1 == |num2| - $1, then return num1 if num1\
+    \ > 0, else return num2\n  # otherwise return num2\n  local num1=$(printf \"%.0f\"\
+    \ \"$1\")\n  local num2=$((num1 + 1))\n  local diff1=$(echo \"$1 - $num1\" | bc\
+    \ -l)\n  local diff2=$(echo \"$num2 - $1\" | bc -l)\n  if [[ \"$(printf \"%.0f\"\
+    \ \"$diff1\")\" -lt \"$(printf \"%.0f\" \"$diff2\")\" ]]; then\n    echo \"$num1\"\
+    \n  elif [[ \"$(printf \"%.0f\" \"$diff1\")\" -eq \"$(printf \"%.0f\" \"$diff2\"\
+    )\" ]]; then\n    if [[ \"$num1\" -gt 0 ]]; then\n      echo \"$num1\"\n    else\n\
+    \      echo \"$num2\"\n    fi\n  else\n    echo \"$num2\"\n  fi", '  printf "%.0f"
+    "$1"', "  local rv=$(echo $1 | awk '{printf \"%d\", $1}')\n  local decimals=$(echo\
+    \ $1 | awk '{printf \"%f\", $1}' | awk -F. '{print $2}')\n  local abs_decimals=$(echo\
+    \ $decimals | awk '{print $1*$1}')\n  if [ $abs_decimals -lt 5 ]; then\n    echo\
+    \ $rv\n  else\n    if [ $(echo $1 | cut -c 1) = \"-\" ]; then\n      echo $((rv\
+    \ - 1))\n    else\n      echo $((rv + 1))\n    fi\n  fi", '    printf "%d" "$1"']
 stop_tokens:
 - "\n}"

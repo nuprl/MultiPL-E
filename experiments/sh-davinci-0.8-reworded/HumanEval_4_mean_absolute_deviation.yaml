@@ -10,6 +10,110 @@ tests: "}\n\ncandidate() {\n    mean_absolute_deviation \"$@\"\n}\n\nset -e\nrun
   \ {\n    [[ $(candidate \"1.0 2.0\") = \"0.5\" ]]\n    [[ $(candidate \"1.0 2.0\
   \ 3.0 4.0\") = \"1.0\" ]]\n    [[ $(candidate \"1.0 2.0 3.0 4.0 5.0\") = \"1.2\"\
   \ ]]\n}\n\nrun_test"
-completions: []
+completions: ["  if [ -z \"$1\" ]; then\n    echo \"\"\n    return\n  fi\n  local\
+    \ mean=$(echo \"$1\" | python -c \"\nimport sys\nimport numpy as np\nprint np.mean(np.array(map(float,\
+    \ sys.stdin.read().split())))\n\")\n  echo \"$1\" | python -c \"\nimport sys\n\
+    import numpy as np\nprint np.mean(np.absolute(np.array(map(float, sys.stdin.read().split()))\
+    \ - $mean))\n\"", "    all=(${1})\n    s=0\n    for element in ${all[@]}; do\n\
+    \        s=$(echo \"$s + abs($element - (${all[@]} / ${#all[@]}))\" | bc -l)\n\
+    \    done\n    average=$(echo \"$s / ${#all[@]}\" | bc -l)\n    echo $average",
+  "    local list=\"$1\"\n    echo \"$list\" | awk '\n        BEGIN {\n          \
+    \  sum = 0\n            x_mean = 0\n            count = 0\n        }\n       \
+    \ {\n            sum += $1\n            count++\n        }\n        END {\n  \
+    \          x_mean = sum / count\n            sum = 0\n            for (i = 1;\
+    \ i <= count; i++) {\n                sum += (x_mean - $i)\n            }\n  \
+    \          print sum / count\n        }\n    '", "    echo \"$1\" | awk '{ x =\
+    \ 0; for (i = 1; i <= NF; i++) { x += $i; } x /= NF;\n        for (i = 1; i <=\
+    \ NF; i++) { s += abs($i - x); } print s / NF; }'", "  IFS=\" \" read -r -a array\
+    \ <<< \"$1\"\n  length=${#array[@]}\n  sum=0\n  for value in \"${array[@]}\";\
+    \ do\n    sum=$(echo \"$sum + $value\" | bc -l)\n  done\n  mean=$(echo \"$sum\
+    \ / $length\" | bc -l)\n  sum=0\n  for value in \"${array[@]}\"; do\n    sum=$(echo\
+    \ \"$sum + abs($value - $mean)\" | bc -l)\n  done\n  mad=$(echo \"$sum / $length\"\
+    \ | bc -l)\n  echo \"$mad\"", "  mean=$(echo \"$1\" | mean)\n  data_array=($1)\n\
+    \  data_len=$(echo \"$1\" | wc -w)\n  total=0\n  for (( i=0; i<$data_len; i++\
+    \ )); do\n    v=${data_array[$i]}\n    total=$(bc <<< \"scale=4; $total + abs($v\
+    \ - $mean)\")\n  done\n  bc <<< \"scale=4; $total / $data_len\"", "  # get mean\n\
+    \  local center=$(mean \"$1\")\n  # abs distance from center\n  local distances=$(echo\
+    \ \"$1\" | awk -v center=\"$center\" '{print int(sqrt(center - $1)^2)}')\n  #\
+    \ average distance\n  mean \"$distances\"", "    local data=$1\n    local mad=$(echo\
+    \ \"$data\" | awk '{sum=0; num_elements=0;\n                                 \
+    \    for (i=1; i<=NF; i++) {\n                                         sum +=\
+    \ $i;\n                                         num_elements += 1;\n         \
+    \                            }\n                                     print sum/num_elements;\n\
+    \                                     }')\n    mad=$(echo \"$data\" | awk -v mad=$mad\
+    \ '{\n                                          sum=0;\n                     \
+    \                     num_elements=0;\n                                      \
+    \    for (i=1; i<=NF; i++) {\n                                              sum\
+    \ += abs($i - mad);\n                                              num_elements\
+    \ += 1;\n                                          }\n                       \
+    \                   print sum/num_elements;\n                                \
+    \          }')\n    echo $mad", "    echo $1 | tr ' ' '\\n' | awk '{ sum += $1;\
+    \ count += 1; } END { print sum / count; }' | awk '{ print $1; }'", "    local\
+    \ x_mean\n    x_mean=$(mean \"$@\")\n    local x\n    x=$(echo \"$@\" | tr ' '\
+    \ '\\n' | awk -v mean=$x_mean '{print ($1-mean)}' | \\\n        tr '\\n' ' ')\n\
+    \    #echo \"x=$x\"\n    local x_abs\n    x_abs=$(echo \"$x\" | tr ' ' '\\n' |\
+    \ awk '{print (0.0+($1>0?$1:-$1))}' | \\\n        tr '\\n' ' ')\n    #echo \"\
+    x_abs=$x_abs\"\n    local mean_x_abs\n    mean_x_abs=$(mean \"$x_abs\")\n    echo\
+    \ \"$mean_x_abs\"", "    total=0.0\n    x_mean=$(mean $1)\n    for x in $1; do\n\
+    \        total=$(python -c \"print $total + abs($x - $x_mean)\")\n    done\n \
+    \   echo $(python -c \"print $total / $#\")", "\tvals=\"$1\"\n\tif [ -z \"$vals\"\
+    \ ]; then\n\t\techo 0\n\t\treturn\n\tfi\n\t#mean=\"$(echo $vals | sed 's/ /\\\
+    n/g' | awk '{ total += $1; count++ } END { print total/count }')\"\n\t#mean=\"\
+    $(awk \"BEGIN { print $(echo $vals | sed 's/ /+/g')/5 }\")\"\n\tmean=\"$(echo\
+    \ $vals | awk '{ total += $1; count++ } END { print total/count }')\"\n\tmad=\"\
+    $(echo $vals | sed 's/ /\\n/g' | awk -v mean=$mean '{ total += sqrt(($1-mean)*($1-mean));\
+    \ count++ } END { print total/count }')\"\n\techo $mad", "    # Extract mean and\
+    \ divide by the number of elements\n    mean=$( echo \"$1\" | awk '{ total +=\
+    \ $1; count++ } END { print total/count }' )\n    # Replace each element with\
+    \ the difference between it and the mean\n    diffs=$( echo \"$1\" | awk -v mean=\"\
+    $mean\" '{ print $1 - mean }' )\n    # Get the absolute value of each difference\n\
+    \    abs_diffs=$( echo \"$diffs\" | awk '{ print ($1 < 0 ? $1 * -1 : $1) }' )\n\
+    \    # Take the mean of the absolute differences\n    echo \"$abs_diffs\" | awk\
+    \ '{ total += $1; count++ } END { print total/count }'", "    if [[ $# -ne 1 ]];\
+    \ then\n        echo \"ERROR in $FUNCNAME: Provide exactly one argument.\"\n \
+    \       exit 1\n    fi\n    check_command 'bc'\n    check_command 'echo'\n   \
+    \ check_command 'awk'\n    check_command 'sort'\n    check_command 'head'\n  \
+    \  check_command 'tail'\n    check_command 'wc'\n    check_command 'cut'\n   \
+    \ check_command 'uniq'\n    check_command 'rm'\n    # remove leading/trailing\
+    \ whitespace and any duplicate whitespace:\n    echo $1 | tr -s ' ' | tr -d '\\\
+    n' > mad_tmp.txt\n    # sort numerically, get the mean, and sort again alphabetically:\n\
+    \    sort -n mad_tmp.txt > mad_tmp_sorted.txt\n    # get length of dataset:\n\
+    \    n=$(wc -l mad_tmp_sorted.txt | cut -d' ' -f1)\n    # calculate mean:\n  \
+    \  x_mean=$(echo \"scale=3; $(head -n $n mad_tmp_sorted.txt | tr '\\n' '+') 0\"\
+    \ | bc -l | cut -d. -f1)\n    x_mean=$(echo \"scale=3; $x_mean / $n\" | bc -l)\n\
+    \    # calculate sum of absolute difference between each element and mean:\n \
+    \   sum_abs_dev=0\n    while read x; do\n        sum_abs_dev=$(echo \"scale=3;\
+    \ $sum_abs_dev + abs($x - $x_mean)\" | bc -l)\n    done < mad_tmp_sorted.txt\n\
+    \    # calculate average absolute difference and output result:\n    echo \"scale=3;\
+    \ $sum_abs_dev / $n\" | bc -l\n    rm mad_tmp*.txt", "  local mean\n  mean=$(mean\
+    \ \"$@\")\n  eval echo \\($(echo \"$@\" | tr ' ' '+' | sed \"s/^/$mean - /\")\\\
+    ) | bc -l | tr '\\n' '+' | sed 's/+$//' | awk '{printf \"%.10f\", ($0)/NR}'",
+  "  local x_mean=\"$(mean \"$@\")\"\n  local num_elements=\"$(echo \"$@\" | wc -w)\"\
+    \n  local sum=0\n  local element\n  for element in $@; do\n    local term=\"$(echo\
+    \ \"${element} - ${x_mean}\" | bc -l)\"\n    local abs_term=\"$(echo \"if (${term}\
+    \ < 0) ${term} * -1 else ${term}\" | bc -l)\"\n    sum=\"$(echo \"${sum} + ${abs_term}\"\
+    \ | bc -l)\"\n  done\n  echo \"$(echo \"${sum} / ${num_elements}\" | bc -l)\"",
+  "  local -a input\n  input=( $( echo \"$@\" | tr ' ' '\\n' ) )\n  mean \"${input[@]}\"\
+    \ | awk '{print \"(\"$1\"-\"$2\")\"}' | paste -sd+ | bc -l | awk '{print $1/'${#input[@]}'}'",
+  "    if [ $# -eq 0 ]; then\n        echo \"Usage: $(basename $0) [-v] vals\" >&2\n\
+    \        return 1\n    fi\n    # input_numbers is a string of space-separated\
+    \ numbers: \"1.0 2.0 3.0 4.0\"\n    input_numbers=\"$1\"\n    # empty string\n\
+    \    total_numbers=0\n    # Create a vector of space-separated numbers.\n    while\
+    \ read -r number; do\n        input_numbers_vector[$total_numbers]=$number\n \
+    \       ((total_numbers+=1))\n    done <<<\"$input_numbers\"\n    # Calculate\
+    \ mean\n    # Sample mean for $input_numbers_vector\n    mean=$(mean $input_numbers)\n\
+    \    # Using bash array to store the absolute differences from mean.\n    # A\
+    \ vector of absolute difference from mean.\n    i=0\n    for number in \"${input_numbers_vector[@]}\"\
+    ; do\n        deviation=$(echo \"$number - $mean\" | bc -l)\n        abs_deviation=$(echo\
+    \ \"if ($deviation < 0) -1 * $deviation else $deviation\" | bc -l)\n        absolute_deviations[$i]=$abs_deviation\n\
+    \        ((i+=1))\n    done\n    # Calculate Mean Absolute Deviation\n    abs_deviations_sum=$(echo\
+    \ \"${absolute_deviations[@]}\" | tr ' ' '+' | bc -l)\n    mean_absolute_deviation=$(echo\
+    \ \"$abs_deviations_sum / $total_numbers\" | bc -l)\n    echo \"$mean_absolute_deviation\"",
+  "  seq $1 | statistics -m -s | awk '{ print $2 }'", "    local data=($1)\n    local\
+    \ mean=$(mean $1)\n    local abs_diff=0\n    local sum_abs_diff=0\n    for i in\
+    \ ${data[@]}; do\n        abs_diff=$(python -c \"print abs($i - $mean)\")\n  \
+    \      sum_abs_diff=$(python -c \"print $sum_abs_diff + $abs_diff\")\n    done\n\
+    \    local mad=$(python -c \"print $sum_abs_diff / len(${data[@]})\")\n    echo\
+    \ $mad"]
 stop_tokens:
 - "\n}"

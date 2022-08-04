@@ -11,6 +11,125 @@ tests: "}\n\ncandidate() {\n    rescale_to_unit \"$@\"\n}\n\nset -e\nrun_test() 
   \ 0.75 1.0\" ]]\n    [[ $(candidate \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0 0.5\
   \ 0.75\" ]]\n    [[ $(candidate \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0 1.0 0.5\
   \ 0.75\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local list=$1\n    local min=$(echo \"$list\" | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | sort -n | tail -n 1)\n    local new_list=\"\
+    \"\n    for el in $list; do\n        new_list+=$(echo \"$el\" $(echo \"($el -\
+    \ $min) / ($max - $min)\" | bc -l) | awk '{printf(\"%s %.4f \", $1, $2)}')\n \
+    \   done\n    local new_list=$(echo \"$new_list\" | tr -s ' ')\n    echo \"[\"\
+    $(echo \"$new_list\" | cut -d ' ' -f 2- | sed 's/[ ][ ]*/\", \"/g')\"]\"", " \
+    \   # Define transform\n    local m\n    m=$(bc -l <<< \"$(minmax_scale \"$1\"\
+    )\")\n    # Apply transform\n    local v\n    for v in $1\n    do\n        bc\
+    \ -l <<< \"$m*($v-($minx))+0\"\n    done", "    local arr\n    # shellcheck disable=SC2207\n\
+    \    arr=( $1 )\n    local max=${arr[0]}\n    local min=${arr[0]}\n    local i\n\
+    \    for i in \"${arr[@]}\"; do\n        max=$(python -c \"print(max($i, $max))\"\
+    )\n        min=$(python -c \"print(min($i, $min))\")\n    done\n    for i in \"\
+    ${arr[@]}\"; do\n        echo $(python -c \"print($i - $min) / ($max - $min)\"\
+    )\n    done", "    local -a list_orig=($1)\n    local -a list_trans=()\n    local\
+    \ -i i\n    local -i num_elements=${#list_orig[@]}\n    local -i max_element=$(sort\
+    \ -g -r <<< ${list_orig[@]} | head -n 1)\n    local -i min_element=$(sort -g -r\
+    \ <<< ${list_orig[@]} | tail -n 1)\n    local -i diff=$(( max_element - min_element\
+    \ ))\n    for (( i=0; i<num_elements; i++ )); do\n        list_trans+=($(python3\
+    \ -c \"print(${list_orig[$i]} - $min_element) / $diff\"))\n    done\n    echo\
+    \ ${list_trans[@]}", "    local max min\n    max=$(echo \"$1\" | tr ' ' '\\n'\
+    \ | sort -nr | head -n 1)\n    min=$(echo \"$1\" | tr ' ' '\\n' | sort -nr | tail\
+    \ -n 1)\n    echo \"$1\" | tr ' ' '\\n' | awk -v max=\"$max\" -v min=\"$min\"\
+    \ '{printf \"%f\\n\", ($1-min)/(max-min)}' | \\\n        tr '\\n' ' ' | sed 's/[[:space:]]*$//g'\
+    \ | sed 's/ /\", \"/g' | sed 's/^/\"/g' | sed 's/$/\"/g'", "    if [ $# -lt 2\
+    \ ]; then\n        return\n    fi\n    local list=\"$@\"\n    local min=$(echo\
+    \ $list | awk '{ min = $(1); for (i=2; i<=NF; i++) { if ($i < min) { min = $i;\
+    \ } } print min; }')\n    local max=$(echo $list | awk '{ max = $(1); for (i=2;\
+    \ i<=NF; i++) { if ($i > max) { max = $i; } } print max; }')\n    local delta=$(echo\
+    \ \"${max} - ${min}\" | bc -l)\n    if [ \"$delta\" == \"0\" ]; then\n       \
+    \ echo \"$list\" | awk '{ for (i=1; i<=NF; i++) { printf(\"\\\"%f\\\" \", 0);\
+    \ } }'\n    else\n        echo \"$list\" | awk -v min=\"$min\" -v delta=\"$delta\"\
+    \ '{ for (i=1; i<=NF; i++) { printf(\"\\\"%f\\\" \", ($i - min) / delta); } }'\n\
+    \    fi", "  local IFS=$' ' read -r -a input_arr <<< \"$1\"\n  local max_val\n\
+    \  local min_val\n  local range\n  local output_arr\n  local output_string\n \
+    \ local i\n\n  max_val=${input_arr[0]}\n  min_val=${input_arr[0]}\n  for ((i=0;\
+    \ i<${#input_arr[@]}; i++)); do\n    if (( $(echo \"${input_arr[$i]} > $max_val\"\
+    \ | bc -l) )); then\n      max_val=${input_arr[$i]}\n    fi\n    if (( $(echo\
+    \ \"${input_arr[$i]} < $min_val\" | bc -l) )); then\n      min_val=${input_arr[$i]}\n\
+    \    fi\n  done\n  range=$(echo \"$max_val - $min_val\" | bc -l)\n  if (( $(echo\
+    \ \"$range == 0\" | bc -l) )); then\n    echo \"Range is zero! Taking middle.\"\
+    \n    range=1\n    min_val=$(echo \"($max_val + $min_val) / 2\" | bc -l)\n  fi\n\
+    \  for ((i=0; i<${#input_arr[@]}; i++)); do\n    output_arr+=($(echo \"(${input_arr[$i]}\
+    \ - $min_val) / $range\" | bc -l))\n  done\n  output_string=$(echo ${output_arr[@]}\
+    \ | sed 's/ /\", \"/g')\n  echo \"[\\\"$output_string\\\"]\"", "    local first_number\
+    \ second_number\n    read -ra numbers <<<\"$1\"\n    first_number=${numbers[0]}\n\
+    \    second_number=${numbers[1]}\n    local min=$first_number\n    local max=$second_number\n\
+    \    if (( $(echo \"$second_number < $first_number\" | bc -l) )); then\n     \
+    \   min=$second_number\n        max=$first_number\n    fi\n    for number in \"\
+    ${numbers[@]:2}\"; do\n        if (( $(echo \"$number < $min\" | bc -l) )); then\n\
+    \            min=$number\n        fi\n        if (( $(echo \"$number > $max\"\
+    \ | bc -l) )); then\n            max=$number\n        fi\n    done\n    for number\
+    \ in \"${numbers[@]}\"; do\n        if (( $(echo \"$max == $min\" | bc -l) ));\
+    \ then\n            echo '\"1.0\"'\n        else\n            echo $(echo 'scale=4;\
+    \ 1.0*('$number'-'$min')/('$max'-'$min')' | bc -l)\n        fi\n    done", " \
+    \ local numbers=($1)\n  local min=${numbers[0]}\n  local max=${numbers[0]}\n \
+    \ local num_numbers=${#numbers[@]}\n  local number\n  local output=()\n  local\
+    \ i\n  for number in \"${numbers[@]}\"; do\n    if (($number < $min)); then\n\
+    \      min=$number\n    fi\n    if (($number > $max)); then\n      max=$number\n\
+    \    fi\n  done\n  # calculate rescaled values\n  for ((i=0; i<num_numbers; i++));\
+    \ do\n    local num_output=$(python -c \"print (${numbers[$i]} - $min) / ($max\
+    \ - $min)\")\n    output+=($num_output)\n  done\n  echo \"${output[@]}\"", " \
+    \   local -r numbers=\"$1\"\n    local -a transformed_numbers=()\n    # get the\
+    \ maximum number\n    local -r max_number=$(echo \"$numbers\" | tr \" \" \"\\\
+    n\" | sort -nr | head -n 1)\n    # get the minimum number\n    local -r min_number=$(echo\
+    \ \"$numbers\" | tr \" \" \"\\n\" | sort -n | head -n 1)\n    # get the range\
+    \ from min to max\n    local -r range=$(bc <<< \"$max_number - $min_number\")\n\
+    \    for number in $numbers; do\n        # apply the linear tranform to the number,\
+    \ such that it will be in the range [0, 1]\n        local new_number=$(bc <<<\
+    \ \"scale=5; ($number - $min_number) / $range\")\n        # round to 5 decimal\
+    \ places\n        new_number=$(printf \"%.5f\" \"$new_number\")\n        transformed_numbers+=(\"\
+    $new_number\")\n    done\n    printf '%s\\n' \"${transformed_numbers[@]}\"", " \
+    \   # Try to find the minimum and maximum of the list\n    # so that we can linearly\
+    \ rescale to unit\n    min=`python -c \"import sys; print min(map(float, sys.argv[1:]))\"\
+    \ $1`\n    max=`python -c \"import sys; print max(map(float, sys.argv[1:]))\"\
+    \ $1`\n    echo $(python -c \"import sys; print '[\\\"' + '\\\", \\\"'.join(map(str,\
+    \ map(lambda x: (float(x) - $min) / ($max - $min), sys.argv[1:]))) + '\\\"]'\"\
+    ) $1", "    local data=$1\n    local min=$(echo \"${data}\" | awk '{print $1}')\n\
+    \    local max=$(echo \"${data}\" | awk '{print $NF}')\n    local range=$(echo\
+    \ \"${max} - ${min}\" | bc)\n    # The first number will have to be a special\
+    \ case (divide by zero error)\n    local transformed=$(echo \"${data}\" | awk\
+    \ '{printf(\"%.2f \",$1/'${range}')}')\n    # All other numbers are transformed\
+    \ using min and range\n    transformed=$(echo \"${data}\" | awk '{for(i=2;i<=NF;i++)\
+    \ printf(\"%.2f \",($i-'${min}')/'${range}')}')\n    # Print a json array\n  \
+    \  echo \"[${transformed// /,}]\"", "  local -r numbers=\"$1\"\n  local -r min=$(bash_min\
+    \ \"$numbers\")\n  local -r max=$(bash_max \"$numbers\")\n  local -r rangelen=$(echo\
+    \ \"$max - $min\" | bc -l)\n  local -r scale=$(echo \"1 / $rangelen\" | bc -l)\n\
+    \  echo \"$numbers\" | awk -v min=\"$min\" -v scale=\"$scale\" '{print \"\\\"\"\
+    \ (scale * ($1 - min)) \"\\\"\"}' | paste -s -d , -", "    local min=\"$(min_of_list\
+    \ \"$1\")\"\n    local max=\"$(max_of_list \"$1\")\"\n    local result=()\n  \
+    \  for n in \"$1\"; do\n        n=$(echo \"$n - $min\" | bc -l)\n        n=$(echo\
+    \ \"$n / ($max - $min)\" | bc -l)\n        result+=(\"$n\")\n    done\n    echo\
+    \ \"${result[@]}\"", "    if [[ -z \"$1\" ]]; then\n        echo \"\"\n      \
+    \  return\n    fi\n    local min=$(echo \"$1\" | xargs -n1 | sort -g | head -n1)\n\
+    \    local max=$(echo \"$1\" | xargs -n1 | sort -g | tail -n1)\n    echo \"$1\"\
+    \ | xargs -n1 | awk -v min=$min -v max=$max '{ printf \"\\\"%s\\\", \", ($1-min)/(max-min)\
+    \ }' | sed 's/, $//'", "  local ar=(\"$@\")\n  local min=\"${ar[0]}\"\n  local\
+    \ max=\"${ar[0]}\"\n  local ar2=()\n  for el in \"${ar[@]}\"; do\n    if [[ \"\
+    ${el}\" -lt \"${min}\" ]]; then\n      min=\"${el}\"\n    fi\n    if [[ \"${el}\"\
+    \ -gt \"${max}\" ]]; then\n      max=\"${el}\"\n    fi\n  done\n  for el in \"\
+    ${ar[@]}\"; do\n    ar2+=(\"$(echo \"scale=4; ${el} / ${max}\" | bc -l)\")\n \
+    \ done\n  echo \"[\"$(array_to_strings \"${ar2[@]}\")\"]\"", "    local min max\
+    \ rescaled\n    min=$(echo \"$1\" | tr ' ' '\\n' | sort -n | head -n 1)\n    max=$(echo\
+    \ \"$1\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    rescaled=$(echo \"$1\" | tr\
+    \ ' ' '\\n' | awk -v max=\"$max\" -v min=\"$min\" '\n    {\n        printf \"\
+    %.2f\\n\", ($1 - min) / (max - min)\n    }')\n    echo \"$rescaled\"", "    local\
+    \ numbers=$1\n    local min=\"$(echo \"$numbers\" | tr \" \" \"\\n\" | sort -n\
+    \ | head -n 1)\"\n    local max=\"$(echo \"$numbers\" | tr \" \" \"\\n\" | sort\
+    \ -n | tail -n 1)\"\n    local x=\"$(echo \"$numbers\" | tr \" \" \"\\n\" | sort\
+    \ -n | tail -n +2 | head -n -1)\"\n    echo \"$x\" |\n    {\n        while read\
+    \ number; do\n            echo \"scale=2; ($number - $min) / ($max - $min)\" |\
+    \ bc\n        done\n    }", "    local -r numbers=\"$1\"\n    if [ \"$(echo $numbers\
+    \ | wc -w)\" -lt 2 ]; then\n        echo -n $numbers\n        return\n    fi\n\
+    \    local -r min=$(echo $numbers | tr ' ' '\\n' | sort -n | head -n 1)\n    local\
+    \ -r max=$(echo $numbers | tr ' ' '\\n' | sort -n | tail -n 1)\n    echo -n $numbers\
+    \ | tr ' ' '\\n' | awk -v min=$min -v max=$max '{printf \"%s \", ($1-min)/(max-min)}'",
+  "  local _list_raw=($@)\n  local _list_len=${#_list_raw[@]}\n  local _min=$(min\
+    \ \"${_list_raw[@]}\")\n  local _max=$(max \"${_list_raw[@]}\")\n  local _list_scaled=()\n\
+    \  for ((i=0; i<${_list_len}; i++)); do\n    _list_scaled+=($(echo \"scale=4;\
+    \ (${_list_raw[$i]} - $_min) / ($_max - $_min)\" | bc -l))\n  done\n  printf '%s\\\
+    n' \"${_list_scaled[@]}\""]
 stop_tokens:
 - "\n}"

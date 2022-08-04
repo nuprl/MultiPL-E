@@ -18,6 +18,148 @@ tests: "}\n\ncandidate() {\n    match_parens \"$@\"\n}\n\nset -e\nrun_test() {\n
   \ \")(() (()(\") = \"No\" ]]\n    [[ $(candidate \")( )(\") = \"No\" ]]\n    [[\
   \ $(candidate \"( )\") = \"Yes\" ]]\n    [[ $(candidate \") (\") = \"Yes\" ]]\n\
   }\n\nrun_test"
-completions: []
+completions: ["    if [[ $(($(tr -cd '(' <<< \"$1\" | wc -c) - $(tr -cd ')' <<< \"\
+    $1\" | wc -c))) -eq 0 ]]; then\n        echo \"Yes\"\n    else\n        echo \"\
+    No\"\n    fi", "    local str=$1; shift\n    declare -a t=(${str// / })\n    declare\
+    \ -a parens=(${t[0]})\n\n    for (( i=1; i<${#t[@]}; i++ )); do\n        for ((\
+    \ j=0; j<${#t[$i]}; j++ )); do\n            local p=${t[$i]:$j:1}\n          \
+    \  case $p in\n                '(')\n                    parens+=('(')\n     \
+    \               ;;\n                ')')\n                    if [ ${#parens[@]}\
+    \ -eq 0 ] \\\n                        || [ ${parens[${#parens[@]}-1]} != '(' ];\
+    \ then\n                        echo 'No'\n                        return\n  \
+    \                  fi\n                    unset parens[${#parens[@]}-1]\n   \
+    \                 ;;\n            esac\n        done\n    done\n\n    if [ ${#parens[@]}\
+    \ -eq 0 ]; then\n        echo 'Yes'\n    else\n        echo 'No'\n    fi", " \
+    \ open_parens=$(grep -o '(' <<< $1 | wc -l)\n  close_parens=$(grep -o ')' <<<\
+    \ $1 | wc -l)\n  if [[ open_parens -eq close_parens ]]; then\n    echo \"Yes\"\
+    \n  else\n    echo \"No\"\n  fi", "  local s1=\"$1\"\n  local s2=\"$2\"\n  local\
+    \ concat=$(echo \"$s1$s2\" | sed 's/\\(/1/g;s/\\)/-1/g')\n  local sum=0\n  for\
+    \ i in $concat; do\n    ((sum+=$i))\n    if ((sum<0)); then\n      echo \"No\"\
+    \n      return\n    fi\n  done\n  echo \"Yes\"", "    local open_parens=0\n  \
+    \  for i in $1; do\n        if [[ \"$i\" == \"(\" ]]; then\n            ((open_parens++))\n\
+    \        elif [[ \"$i\" == \")\" ]]; then\n            ((open_parens--))\n   \
+    \     fi\n        if ((open_parens < 0)); then\n            echo \"No\"\n    \
+    \        return\n        fi\n    done\n    if ((open_parens == 0)); then\n   \
+    \     echo \"Yes\"\n    else\n        echo \"No\"\n    fi", "  local s=${1// /}\n\
+    \  local -i lc=0 rc=0\n  while [[ -n $s ]]; do\n    if [[ $s =~ ^[(] ]]; then\n\
+    \      (( lc++ ))\n    else\n      (( rc++ ))\n    fi\n    s=${s#?}\n  done\n\
+    \  (( lc == rc )) && echo \"Yes\" || echo \"No\"", "  local readonly parens=$1\n\
+    \  local readonly open_paren='('\n  local readonly close_paren=')'\n  local readonly\
+    \ correct='Yes'\n  local readonly incorrect='No'\n  local current_balance=0\n\
+    \  for ((i=0; i<${#parens}; i++)); do\n    if [[ ${parens:$i:1} == $open_paren\
+    \ ]]; then\n      ((current_balance++))\n    elif [[ ${parens:$i:1} == $close_paren\
+    \ ]]; then\n      ((current_balance--))\n    fi\n    if [[ $current_balance -lt\
+    \ 0 ]]; then\n      echo $incorrect\n      return 0\n    fi\n  done\n  if [[ $current_balance\
+    \ -eq 0 ]]; then\n    echo $correct\n  else\n    echo $incorrect\n  fi", "   \
+    \ local str=($1)\n    local match=\"Yes\"\n    local str1=${str[0]}\n    local\
+    \ str2=${str[1]}\n    local exp=0\n    for ((i=0; i<${#str1}; i++)); do\n    \
+    \    if [[ ${str1:$i:1} == \"(\" ]]; then\n            exp=1\n        else\n \
+    \           exp=0\n        fi\n        for ((j=0; j<${#str2}; j++)); do\n    \
+    \        if [[ ${str2:$j:1} == \"(\" ]]; then\n                exp=1\n       \
+    \     else\n                exp=0\n            fi\n            if [[ $exp == 1\
+    \ ]]; then\n                if [[ ${str2:$j:1} == \")\" ]]; then\n           \
+    \         match=\"Yes\"\n                    break\n                else\n   \
+    \                 match=\"No\"\n                fi\n            else\n       \
+    \         if [[ ${str2:$j:1} == \"(\" ]]; then\n                    match=\"Yes\"\
+    \n                    break\n                else\n                    match=\"\
+    No\"\n                fi\n            fi\n        done\n        if [[ $match ==\
+    \ \"No\" ]]; then\n            break\n        fi\n    done\n    echo $match",
+  "    local str=$1\n    local n_left_paren=0\n    local n_right_paren=0\n    local\
+    \ n_paren=0\n    for (( i=0; i<${#str}; i++ )); do\n        local c=${str:$i:1}\n\
+    \        case $c in\n            \"(\")\n                n_left_paren=$((n_left_paren+1))\n\
+    \                n_paren=$((n_paren+1))\n                ;;\n            \")\"\
+    )\n                n_right_paren=$((n_right_paren+1))\n                n_paren=$((n_paren-1))\n\
+    \                ;;\n        esac\n        if [[ $n_paren -lt 0 ]]; then\n   \
+    \         echo \"No\"\n            return\n        fi\n    done\n    if [[ $n_left_paren\
+    \ -eq $n_right_paren ]]; then\n        echo \"Yes\"\n    else\n        echo \"\
+    No\"\n    fi", "    declare -A pairs\n    pairs=( [\"(\"]=\")\" [\"{\"]=\"}\"\
+    \ [\"[\"]=\"]\" )\n    declare -a open\n    local len=0\n    for p in $(echo $1);\
+    \ do\n        len=${#open[@]}\n        if [ $len -gt 0 ] && [ \"${pairs[${open[$len-1]}]}\"\
+    \ == \"$p\" ]; then\n            unset open[$len-1]\n        else\n          \
+    \  open+=(\"$p\")\n        fi\n    done\n    [ ${#open[@]} -eq 0 ] && echo \"\
+    Yes\" || echo \"No\"", "    if [[ \"$#\" -ne 1 ]]; then\n        echo \"Usage:\
+    \ $0 <string-of-parens>\"\n        exit 1\n    fi\n    parens_string=\"$1\"\n\
+    \    # if there are odd number of parens then it cannot be balanced\n    if [[\
+    \ $(wc -c <<< \"$parens_string\") % 2 -ne 0 ]]; then\n        echo \"No\"\n  \
+    \      exit 0\n    fi\n    # Keep track of the number of open parens\n    current_num_open_parens=0\n\
+    \    for (( i=0; i<${#parens_string}; i++ )); do\n        char=\"${parens_string:$i:1}\"\
+    \n        # Increment the number of open parens\n        if [[ \"$char\" == \"\
+    (\" ]]; then\n            ((current_num_open_parens++))\n        # Decrement the\
+    \ number of open parens\n        elif [[ \"$char\" == \")\" ]]; then\n       \
+    \     ((current_num_open_parens--))\n        else\n            echo \"Usage: $0\
+    \ <string-of-parens>\"\n            exit 1\n        fi\n        # If at any point\
+    \ there are negative open parens then it is\n        # impossible to balance\n\
+    \        if [[ \"$current_num_open_parens\" -lt 0 ]]; then\n            echo \"\
+    No\"\n            exit 0\n        fi\n    done\n    # If the number of open parens\
+    \ is 0 then it is balanced\n    if [[ \"$current_num_open_parens\" -eq 0 ]]; then\n\
+    \        echo \"Yes\"\n    else\n        echo \"No\"\n    fi", "    local INPUT=$1\n\
+    \    local O_BAL=0\n    local C_BAL=0\n    local i=0\n    local LETTER=''\n  \
+    \  for ((i=0; i<${#INPUT}; i++)); do\n        LETTER=${INPUT:$i:1}\n        case\
+    \ $LETTER in\n            '(')\n                O_BAL=$((O_BAL+1))\n         \
+    \       ;;\n            ')')\n                C_BAL=$((C_BAL+1))\n           \
+    \     ;;\n        esac\n        if [[ $C_BAL -gt $O_BAL ]]; then\n           \
+    \ echo \"No\"\n            return\n        fi\n    done\n    if [[ $O_BAL -eq\
+    \ $C_BAL ]]; then\n        echo \"Yes\"\n    else\n        echo \"No\"\n    fi",
+  "  local first_parens=$(echo $1 | cut -d' ' -f1)\n  local second_parens=$(echo $1\
+    \ | cut -d' ' -f2)\n  local found=\"Yes\"\n  local open_parens=0\n  local close_parens=0\n\
+    \  if [[ ${#first_parens} -ne ${#second_parens} ]]; then\n    found=\"No\"\n \
+    \ else\n    for (( i=0; i<${#first_parens}; i++ )); do\n      if [[ \"${first_parens:$i:1}\"\
+    \ == \"(\" ]]; then\n        open_parens=$((open_parens+1))\n      elif [[ \"\
+    ${first_parens:$i:1}\" == \")\" ]]; then\n        close_parens=$((close_parens+1))\n\
+    \      fi\n      if [[ \"${second_parens:$i:1}\" == \"(\" ]]; then\n        open_parens=$((open_parens+1))\n\
+    \      elif [[ \"${second_parens:$i:1}\" == \")\" ]]; then\n        close_parens=$((close_parens+1))\n\
+    \      fi\n      if [[ $open_parens -lt $close_parens ]]; then\n        found=\"\
+    No\"\n        break\n      fi\n    done\n  fi\n  echo $found", "  local str1=$(echo\
+    \ \"$1\" | cut -d' ' -f1)\n  local str2=$(echo \"$1\" | cut -d' ' -f2)\n  local\
+    \ str=\"$str1$str2\"\n  # There is a way to make a good string if and only if\
+    \ a good string can be made\n  # with 0 close parentheses and with 1 close parentheses.\n\
+    \  # Use bash's built-in regex matching.\n  if [[ \"$str\" =~ ^\\(\\)*$ ]] ||\
+    \ [[ \"$str\" =~ ^\\(\\)\\(\\)*$ ]]; then\n    echo \"Yes\"\n  else\n    echo\
+    \ \"No\"\n  fi", "    # trim trailing and leading spaces\n    str=\"$(echo \"\
+    $1\" | xargs)\"\n    # The length of a string is equal to the sum of the length\
+    \ of the first\n    # string and the second string, divided by two.\n    # The\
+    \ concatenation of the two strings should always be even.\n    if [[ $((${#str}\
+    \ % 2)) == 1 ]]; then\n        echo \"No\"\n        return\n    fi\n    # there\
+    \ shouldn't be a '(' without a ')'\n    if [[ \"${str}\" =~ \\(.*\\( ]]; then\n\
+    \        echo \"No\"\n        return\n    fi\n    # there shouldn't be a ')' without\
+    \ a '('\n    if [[ \"${str}\" =~ \\).*\\) ]]; then\n        echo \"No\"\n    \
+    \    return\n    fi\n    # If a '(' exists, there should be a ')' after it\n \
+    \   if [[ \"${str}\" =~ \\([^\\)]*$ ]]; then\n        echo \"No\"\n        return\n\
+    \    fi\n    # If a ')' exists, there should be a '(' before it\n    if [[ \"\
+    ${str}\" =~ ^[^\\(]*\\) ]]; then\n        echo \"No\"\n        return\n    fi\n\
+    \    echo \"Yes\"", "    local str1 str2 ret\n    read -r str1 str2 <<< \"$1\"\
+    \n    if [[ $str1 == ')' ]] && [[ $str2 == '(' ]]; then\n        ret='No'\n  \
+    \  elif [[ $str1 == '(' ]] && [[ $str2 == ')' ]]; then\n        ret='Yes'\n  \
+    \  elif [[ $str1 == '(' ]] && [[ $str2 == '(' ]]; then\n        ret='Yes'\n  \
+    \  elif [[ $str1 == ')' ]] && [[ $str2 == ')' ]]; then\n        ret='Yes'\n  \
+    \  else\n        ret='No'\n    fi\n    echo \"$ret\"", "    list=$1\n    s1=$(echo\
+    \ \"$list\" | awk '{print $1}')\n    s2=$(echo \"$list\" | awk '{print $2}')\n\
+    \    res1=$(is_balanced \"$s1\")\n    res2=$(is_balanced \"$s2\")\n    if [[ $res1\
+    \ == \"No\" && $res2 == \"No\" ]]; then\n        echo \"No\"\n    elif [[ $res1\
+    \ == \"Yes\" && $res2 == \"Yes\" ]]; then\n        echo \"Yes\"\n    else\n  \
+    \      echo \"Yes\"\n    fi", "  local parens=${1// /}\n  local good=1\n  local\
+    \ i=0\n  for (( i=0; i<${#parens}; i++ )); do\n    if [[ \"${parens:$i:1}\" ==\
+    \ \"(\" ]]; then\n      ((good++))\n    else\n      ((good--))\n    fi\n    if\
+    \ ((good < 0)); then\n      break\n    fi\n  done\n  if ((good == 0)); then\n\
+    \    echo \"Yes\"\n  else\n    echo \"No\"\n  fi", "  local parens=$1\n\n  if\
+    \ [[ $parens =~ ^[\\)\\( ]*$ ]]; then\n    local parens_balanced=0\n    local\
+    \ matches=0\n    for (( i=0; i<${#parens}; i++ )); do\n      local c=${parens:$i:1}\n\
+    \      if [[ $c == \"(\" ]]; then\n        parens_balanced=$((parens_balanced\
+    \ + 1))\n      else\n        if [[ $c == \")\" ]]; then\n          parens_balanced=$((parens_balanced\
+    \ - 1))\n        fi\n      fi\n      matches=$((matches + parens_balanced))\n\
+    \    done\n    if [[ $matches -eq 0 ]]; then\n      echo \"Yes\"\n    else\n \
+    \     echo \"No\"\n    fi\n  else\n    echo \"Not all the characters are valid\"\
+    \n  fi", "    # A function that counts how many open and close parens we have\n\
+    \    count_parens() {\n        local open_parens=\"$(tr -cd \"(\" <<< \"${1}\"\
+    )\"\n        local close_parens=\"$(tr -cd \")\" <<< \"${1}\")\"\n        echo\
+    \ \"${#open_parens} ${#close_parens}\"\n    }\n    # Get the number of open and\
+    \ close parens for the first string\n    local first_parens=\"$(count_parens \"\
+    ${1}\")\"\n    # Get the number of open and close parens for the second string\n\
+    \    local second_parens=\"$(count_parens \"${2}\")\"\n    # If the total number\
+    \ of open and close parens is not equal between the two\n    # strings, then it\
+    \ is impossible to make a string with equal number of open\n    # and close parens.\n\
+    \    [[ \"$((first_parens + second_parens))\" != \"0 0\" ]] && echo \"No\" &&\
+    \ return\n    # If the string is balanced, then it is possible to make a good\
+    \ string.\n    echo \"Yes\""]
 stop_tokens:
 - "\n}"

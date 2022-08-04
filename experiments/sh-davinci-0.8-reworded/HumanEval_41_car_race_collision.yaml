@@ -13,6 +13,161 @@ tests: "}\n\ncandidate() {\n    car_race_collision \"$@\"\n}\n\nset -e\nrun_test
   \ {\n    [[ $(candidate \"2\") = \"4\" ]]\n    [[ $(candidate \"3\") = \"9\" ]]\n\
   \    [[ $(candidate \"4\") = \"16\" ]]\n    [[ $(candidate \"8\") = \"64\" ]]\n\
   \    [[ $(candidate \"10\") = \"100\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  # The left-to-right cars are the integers in [1, n]\n  # The right-to-left\
+    \ cars are [1, n] in reverse order\n  # The left-to-right cars have to drive n\
+    \ units; the right-to-left cars have to drive 1 unit.\n  # So the left-to-right\
+    \ cars are 1/n the speed of the right-to-left cars.\n  #\n  # The left-to-right\
+    \ cars start at 0, 1, 2, ..., n-1; the right-to-left cars start at n, n-1, ...,\
+    \ 1.\n  #\n  # We want to know the number of left-to-right cars that pass the\
+    \ position of a right-to-left car\n  # before the right-to-left car passes that\
+    \ position.  The right-to-left car passes that position\n  # after the right-to-left\
+    \ car has traveled 1 unit.  The left-to-right car passes the position\n  # after\
+    \ the left-to-right car has traveled n units.  This means the left-to-right car\
+    \ passes\n  # the position after n-1 units; otherwise, the right-to-left car would\
+    \ have passed the position.\n  #\n  # The left-to-right car with value x passes\
+    \ the position after x-1 units.\n  # The right-to-left car with value x passes\
+    \ the position after x-1 units.\n  #\n  # That is, the positions at which the\
+    \ cars pass the position is from 1 to n-1, inclusive.\n  # The value of the left-to-right\
+    \ car at the position is x if x-1 is one of these values.\n  # The value of the\
+    \ right-to-left car at the position is x if x-1 is one of these values.\n  #\n\
+    \  # Of these, there are x-1 left-to-right cars, and n-x+1 right-to-left cars.\n\
+    \  # We want to find the number of cars that pass the position.\n  #\n  # The\
+    \ left-to-right cars are the values in [1, n].\n  # The right-to-left cars are\
+    \ the values in [1, n].\n  #\n  # The left-to-right cars have", "    local n=$1\n\
+    \    local hits=0\n    for ((i=1; i<n; i++)); do\n        for ((j=i+1; j<=n; j++));\
+    \ do\n            if [ $((i % j)) -eq 0 ]; then\n                ((hits++))\n\
+    \            fi\n        done\n    done\n    echo $hits", "    local n=$1\n\n\
+    \    # If the number of cars is odd, then there is a single car moving in\n  \
+    \  # both directions (i.e. left to right and right to left).  Every car\n    #\
+    \ collides with every other car; hence, the number of collisions is\n    # (n-1)+(n-3)+(n-5)+...+3+1.\
+    \  We can write this as n(n-1)/2.\n    if [ $(( n % 2 )) -eq 1 ]; then\n     \
+    \   echo $(( n * (n - 1) / 2 ))\n        return\n    fi\n\n    # If the number\
+    \ of cars is even, then there are two cars moving in both\n    # directions. \
+    \ Every car collides with every other car except one;\n    # hence, the number\
+    \ of collisions is\n    # (n-2)+(n-4)+(n-6)+...+4+2\n    # = (n^2-n-4)/2\n   \
+    \ echo $(( (n * n - n - 4) / 2 ))", "  local num_cars_l2r=$1\n  local num_cars_r2l=$1\n\
+    \  local ret_val=0\n  local i=0\n  local j=0\n  local dist_l2r=0\n  local dist_r2l=0\n\
+    \  for ((i=0; i<num_cars_l2r; i++)); do\n    ((dist_l2r += i))\n  done\n  for\
+    \ ((j=0; j<num_cars_r2l; j++)); do\n    ((dist_r2l += j))\n  done\n  ((ret_val\
+    \ = dist_l2r - dist_r2l))\n  echo $ret_val", "  local n\n  check_num \"$1\" 'n'\
+    \ || return $?\n  local half_n=$((n / 2))\n  local collisions=$((half_n * half_n))\n\
+    \  if ((n % 2 == 1)); then\n    collisions=$((collisions + half_n))\n  fi\n  echo\
+    \ \"$collisions\"", "  i=0\n  j=0\n  c=0\n  while read f; do\n    while read g;\
+    \ do\n      if [ $f -eq $g ]; then\n        c=$((c+1))\n      fi\n      j=$((j+1))\n\
+    \    done < <(seq 1 $1)\n    i=$((i+1))\n  done < <(seq 1 $1)\n  echo \"$c\"",
+  "    local i=0\n    local j=0\n    local n=$1\n    local collision=0\n    for ((\
+    \ i=0; i<$n; i++ ))\n    do\n        for (( j=0; j<$n; j++ ))\n        do\n  \
+    \          collision=$(( $collision + 1 ))\n        done\n    done\n    echo $collision",
+  '    echo $(( ($1 - 1) * $1 / 2 ))', "  if [ \"$1\" -lt 0 ]; then\n    echo \"error:\
+    \ $1 is not a non-negative integer\" >&2\n    return\n  fi\n  echo \"$1\" | awk\
+    \ '{\n    if ($1 < 0) {\n      print \"error: \" $1 \" is not a non-negative integer\"\
+    \ > \"/dev/stderr\"\n      exit\n    }\n    print $1 * $1\n  }'", "    # We don't\
+    \ need to check numbers below 1 as our race can't\n    # have less than 2 cars.\n\
+    \    if [ $1 -lt 1 ]; then\n        return\n    fi\n\n    # To achieve linear\
+    \ time complexity, we are going to use 2 arrays.\n    # The first array records\
+    \ the location of left-to-right cars, while\n    # the second array records the\
+    \ location of right-to-left cars.\n    # As we iterate through the numbers between\
+    \ 1 and $1, we are going to\n    # add the current number to the first array,\
+    \ iff the current number is\n    # odd.  Otherwise, we add the current number\
+    \ to the second array.\n    # At each iteration, we are going to check whether\
+    \ the current number\n    # has collided with an element in the other array. \
+    \ If it has, we are\n    # going to increment our collision count.\n    #\n  \
+    \  # We don't know the size of our array.  So, we are going to\n    # use associative\
+    \ arrays in bash.  Note that the location of the\n    # cars is our array index.\n\
+    \    local left_to_right_cars=()\n    local right_to_left_cars=()\n    local collisions=0\n\
+    \n    for i in $(seq 1 $1); do\n        if [ $((i % 2)) -eq 1 ]; then\n      \
+    \      left_to_right_cars[$i]=$i\n        else\n            right_to_left_cars[$i]=$i\n\
+    \        fi\n    done\n\n    for i in $(seq 1 $1); do\n        if [ $((i % 2))\
+    \ -eq 1 ]; then\n            if [ ! -z \"${right_to_left_cars[$i]}\" ]; then\n\
+    \                collisions=$((collisions + 1))\n            fi\n        else\n\
+    \            if [ ! -z \"${left_to_right_cars[$i]}\" ]; then\n               \
+    \ collisions=$((collisions + 1))\n            fi\n        fi\n    done\n\n   \
+    \ echo $collisions", "    # There are only two cases where cars collide.\n   \
+    \ # (1) Two cars happen to be at the same position at the same time.\n    # (2)\
+    \ Two cars happen to be at the exact same speed, and they are moving in opposite\
+    \ directions.\n    #\n    # Case (1) is easy to detect since we can model time\
+    \ as step numbers, so\n    # a collision at time $t is equivalent to having two\
+    \ cars at the same position\n    # at the same step number.\n    #\n    # Case\
+    \ (2) is tricky to detect since we don't have access to the speed of the cars,\n\
+    \    # only their positions.  However, there is a nice approach:\n    #\n    #\
+    \ Suppose we take the positions of two cars and sort them as a pair.\n    # (a,\
+    \ b) and (c, d) are two pairs.  If a+b = c+d, then the pair (a, b) is a collision.\n\
+    \    #\n    # The beauty of this is that it works for the case of a collision\
+    \ between a \"left-to-right\"\n    # car and a \"right-to-left\" car.  If a car\
+    \ is moving left to right, then its position\n    # will be increasing monotonically.\
+    \  If a car is moving right to left, then its position\n    # will be decreasing\
+    \ monotonically.  So take the cars at positions (a, b) and (c, d)\n    # and arrange\
+    \ them as a pair.  The left car is moving left to right, so its position increases\n\
+    \    # and is represented by the first number in the pair.  The right car is moving\
+    \ right to left,\n    # so its position decreases and is represented by the second\
+    \ number in the pair.\n    #\n    # If a car moves from position 2 to position\
+    \ 4, then it is represented by the pair (2, 4).\n    # If a car moves from position\
+    \ 4 to position 2, then it is represented by the pair (4, 2).\n    # If a car\
+    \ moves from position 2 to position 3, then it is represented by the pair (2,\
+    \ 3).\n    # If a car moves from position 3 to position 2, then it is represented\
+    \ by the pair (3, 2).\n    #\n    # In all cases, the left car (moving left to\
+    \ right", "    # write your code here\n    if [[ $1 -lt 0 ]]; then\n        echo\
+    \ \"Error: invalid number\"\n        return 1\n    fi\n    echo $(( $1*($1-1)/2\
+    \ ))", "  collision_count=0\n  num_cars=$1\n  left_to_right=()\n  right_to_left=()\n\
+    \  time=0\n  while (( num_cars > 0 )) ; do\n    if (( $RANDOM % 2 == 0 )) ; then\n\
+    \      left_to_right+=( \"$time\" )\n    else\n      right_to_left+=( \"$time\"\
+    \ )\n    fi\n    (( num_cars -= 1 ))\n    (( time += 1 ))\n  done\n  for right_car\
+    \ in \"${right_to_left[@]}\" ; do\n    for left_car in \"${left_to_right[@]}\"\
+    \ ; do\n      if (( right_car < left_car )) ; then\n        (( collision_count\
+    \ += 1 ))\n      fi\n    done\n  done\n  echo $collision_count", "    local retval=1\
+    \ # 0 if call is incorrect\n    (( $# == 1 )) || return $retval\n    local input=$1\n\
+    \    [[ $input =~ ^[0-9]+$ ]] || return $retval\n    (( input > 0 )) || return\
+    \ $retval\n    local output=$((input*(input-1)/2))\n    echo \"$output\"\n   \
+    \ return 0", "   local n=$1\n   # let n be the number of cars in each direction\n\
+    \n   # let L[i] be the position of the ith car going from left to right\n   #\
+    \ let R[i] be the position of the ith car going from right to left\n   # So L[1]\
+    \ and R[1] are the cars closest to each other, and they will collide\n   # Let's\
+    \ compute the position of L[i] and R[i]\n   # and compute the number of collisions\
+    \ in O(n) time\n   # Car i position, going right to left, starts at -n+i-1\n \
+    \  # Car i position, going left to right, starts at n-i\n   #\n   # To compute\
+    \ the number of collisions, we need to count the number of pairs (L[i], R[i])\n\
+    \   # such that L[i] == R[i]\n   # Another way to say that is the number of pairs\
+    \ such that R[i] == -L[i]\n   # So we compute n-1+1 pairs R[i], -L[i], i=1..n\n\
+    \   # Compute the number of collisions in O(n) time:\n   # Step 1: Sort R[i] in\
+    \ O(n log n) time\n   # Step 2: Using a binary search, find the number of -L[i]\
+    \ that are less than R[i], for each i\n   # That's the number of cars that are\
+    \ on the left side of R[i], i.e. the number of\n   # cars that will collide with\
+    \ R[i]\n   # Total time: O(n log n)\n\n   # Step 1: sort the R[i] array in O(n\
+    \ log n) time\n   local -a R=()\n   for ((i=1; i<=n; i++)); do\n      R[i]=-n+i-1\n\
+    \   done\n   # We can run a quick sort on the R array\n   _quicksort_helper R\n\
+    \n   # Step 2: use binary search to find the number of -L[i] that are less than\
+    \ R[i], for each i\n   local num_collisions=0\n   for ((i=1; i<=n; i++)); do\n\
+    \      L[", "    if [[ $1 -eq 1 ]]; then\n        echo 0\n    else\n        #\
+    \ n=1, n=2 have no collisions\n        echo $(( (1+$1)*$1/2 - 2 ))\n    fi", " \
+    \ # TODO\n  echo \"TODO\"", "  local n=\"$1\"\n  local collisions=0\n  local i=0\n\
+    \  local car_left_at\n  local car_right_at\n  local zeroes\n\n  # Break down $n\
+    \ into an array that contains each digit of $n.\n  # For example, if $n is 12345,\
+    \ the array will contain {1, 2, 3, 4, 5}.\n  read -r -a array <<< \"$(echo \"\
+    $n\" | sed -e 's/\\(.\\)/\\1 /g')\"\n\n  while [ \"$i\" -lt \"${#array[@]}\" ];\
+    \ do\n    # Find out the position of the leftmost car going left to right.\n \
+    \   car_left_at=$(echo \"${array[i]}\" | sed -e 's/\\(.\\)/\\1 /g' | awk '{print\
+    \ $1}')\n\n    # Find out the position of the rightmost car going right to left.\n\
+    \    car_right_at=$(echo \"${array[i]}\" | sed -e 's/\\(.\\)/\\1 /g' | awk '{print\
+    \ $2}')\n\n    # The number of collisions is the sum of the position of the leftmost\
+    \ car\n    # going left to right and the position of the rightmost car going right\
+    \ to left.\n    collisions=$((collisions + car_left_at + car_right_at))\n\n  \
+    \  # Some digits are 0.  We can ignore those.\n    if [ \"$car_left_at\" -eq 0\
+    \ ] && [ \"$car_right_at\" -eq 0 ]; then\n      # This digit is 0.  Ignore it.\n\
+    \      continue\n    else\n      # This digit is a number between 1 and 9.  Do\
+    \ not ignore it.\n      # Show some progress to the user.\n      echo -n \"${car_left_at}${car_right_at}\
+    \ \"\n    fi\n\n    # Add leading zeroes.\n    zeroes=$(echo $((10 ** (i - 1))))\n\
+    \    car_left_at=$(printf \"%0$zeroes\"\"d\" \"$car_left_at\")\n    car_right_at=$(printf\
+    \ \"%0$zeroes\"\"d\" \"$car_right_at\")\n\n", "\tif [[ $1 -le 0 ]]; then\n\t\t\
+    echo \"error: car_race_collision\"\n\t\treturn 1\n\tfi\n\techo \"$(expr $1 \\\
+    * \\( $1 - 1 \\) / 2)\"", "    # $1 is an integer\n    number_of_divisors() {\n\
+    \        # Returns the number of positive integers that evenly divide $1\n   \
+    \     # Be careful that this function may cause a divide by zero error\n     \
+    \   # if $1 is zero\n        local -i count=0\n        local -i j=1\n        local\
+    \ -i parameter=$1\n        while [ $j -le $parameter ]\n        do\n         \
+    \   if [ $((parameter % j)) -eq 0 ]\n            then\n                count=$((count\
+    \ + 1))\n            fi\n            j=$((j + 1))\n        done\n        echo\
+    \ $count\n    }\n    local -i i=0\n    local -i answer=0\n    local -i parameter=$1\n\
+    \    while [ $i -lt $parameter ]\n    do\n        i=$((i + 1))\n        answer=$((answer\
+    \ + number_of_divisors(i)))\n    done\n    echo $answer"]
 stop_tokens:
 - "\n}"

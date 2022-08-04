@@ -17,6 +17,96 @@ tests: "}\n\ncandidate() {\n    hex_key \"$@\"\n}\n\nset -e\nrun_test() {\n    [
   \ [[ $(candidate \"ABED1A33\") = \"4\" ]]\n    [[ $(candidate \"2020\") = \"2\"\
   \ ]]\n    [[ $(candidate \"123456789ABCDEF0\") = \"6\" ]]\n    [[ $(candidate \"\
   112233445566778899AABBCCDDEEFF00\") = \"12\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local key=$1\n    local hex_prime_digit=(\"2\" \"3\" \"5\" \"7\"\
+    \ \"B\" \"D\")\n    local result=0\n    for i in {0..5}\n    do\n        result=$((\
+    \ ${result} + $(string_count \"${key}\" \"${hex_prime_digit[$i]}\") ))\n    done\n\
+    \    echo ${result}", "\tprintf $1 | \\\n\t\ttr '[0-9A-F]' '[0123456789]' | \\\
+    \n\t\ttr '\\n' ',' | \\\n\t\ttr ' ' ',' | \\\n\t\tsed -e 's/,*$//'", "  # Strip\
+    \ spaces for easier parsing\n  local num=$(echo \"$1\" | tr -d ' ')\n  local -i\
+    \ count=0\n  local i\n\n  if [[ $num =~ [^0-9A-F] ]]; then\n    return 1\n  fi\n\
+    \n  # Create array of valid prime digits to check against later\n  declare -a\
+    \ prime=(2 3 5 7 B D)\n\n  # Check each char of the input hex string\n  for ((i=0;\
+    \ i<${#num}; i++)); do\n    local -i digit=$(printf '%d' \"'${num:$i:1}\")\n \
+    \   local -i found=0\n\n    # check each prime digit\n    for x in \"${prime[@]}\"\
+    ; do\n      # We will not be using the pipe trick, but instead explicit check\n\
+    \      #   to see if any one of the prime digits is equal to the current\n   \
+    \   #   digit. This is because we want to count the number of valid digits\n \
+    \     #   for the output, not the total number of items (duplicates included)\n\
+    \      #   like the pipe trick would count.\n      if [[ \"$digit\" -eq \"$x\"\
+    \ ]]; then\n        found=1\n        break\n      fi\n    done\n\n    # Add the\
+    \ prime digit if one was found\n    ((count+=found))\n  done\n\n  echo \"$count\"",
+  "  local key=\"$1\"\n  local result=0\n  #\n  # test whether it is empty string\n\
+    \  #\n  if [ -z \"$key\" ]; then\n    result=0\n  else\n    #\n    # start with\
+    \ 0 count, then loop over each character\n    #\n    local count=0\n    for ((i=0;\
+    \ i<${#key}; i++)); do\n      local ch=\"${key:$i:1}\"\n      #\n      # test\
+    \ whether current character is a prime or not\n      #\n      if [ \"$ch\" ==\
+    \ \"2\" ] || [ \"$ch\" == \"3\" ] || [ \"$ch\" == \"5\" ] || [ \"$ch\" == \"7\"\
+    \ ] || [ \"$ch\" == \"B\" ] || [ \"$ch\" == \"D\" ]; then\n        ((count++))\n\
+    \      fi\n    done\n    result=$count\n  fi\n  echo $result", "\t# You can use\
+    \ this function\n\t# is_prime_dec $n\n\tif [[ $1 == *\"2\"* ]]; then\n\t\tprime=1\n\
+    \telif [[ $1 == *\"3\"* ]]; then\n\t\tprime=1\n\telif [[ $1 == *\"5\"* ]]; then\n\
+    \t\tprime=1\n\telif [[ $1 == *\"7\"* ]]; then\n\t\tprime=1\n\telif [[ $1 == *\"\
+    B\"* ]]; then\n\t\tprime=1\n\telif [[ $1 == *\"D\"* ]]; then\n\t\tprime=1\n\t\
+    else\n\t\tprime=0\n\tfi\n\techo $prime", "\t# I'm sure you could do something\
+    \ like this a lot cleaner but this is the \n\t# only way I can think of it right\
+    \ now\n\techo \"$1\" | grep -o '[0-9]' | wc -l\n\techo \"$1\" | grep -o '[2]'\
+    \ | wc -l\n\techo \"$1\" | grep -o '[3]' | wc -l\n\techo \"$1\" | grep -o '[5]'\
+    \ | wc -l\n\techo \"$1\" | grep -o '[7]' | wc -l\n\techo \"$1\" | grep -o '[A]'\
+    \ | wc -l\n\techo \"$1\" | grep -o '[B]' | wc -l\n\techo \"$1\" | grep -o '[D]'\
+    \ | wc -l", "    # Determine if we can use GNU sed. If so, use extended regular\
+    \ expression\n    # to create the substitution string, else build the string manually.\n\
+    \    sed_opts='s/[0-9A-F]//g'\n    sed -E /-E/s/// 2> /dev/null && sed_opts='s/[0-9A-F]//g'\n\
+    \    # Create an array of the alphabet, omitting the letters that\n    # represent\
+    \ the hex digits 0-9 and then join them on a space.\n    # Perform the substitution\
+    \ on the input string with the sed\n    # options defined above, then pipe the\
+    \ result to wc to count\n    # the number of characters in the string.\n    echo\
+    \ {A..F} | tr -d {0..9} | sed -e \"$sed_opts\" | wc -c", "  echo \"$1\" | grep\
+    \ -o '[0-9A-F]' | grep -v '[1-9]' | wc -l", "    # If a key is a hex digit and\
+    \ is a prime number then return 1.\n    if (echo $1 | grep -iqE '[0-9a-f]{1}')\n\
+    \    then\n        case $1 in\n            2) echo 1 ;;\n            3) echo 1\
+    \ ;;\n            5) echo 1 ;;\n            7) echo 1 ;;\n            b) echo\
+    \ 1 ;;\n            d) echo 1 ;;\n            e) echo 1 ;;\n            *) echo\
+    \ 0 ;;\n        esac\n    else\n        echo 0\n    fi", "  #  1. Convert a hexadecimal\
+    \ number to a decimal number\n  #  2. Count the number of hexadecimal digits that\
+    \ are primes\n  echo -n $1 | sed 's/[0-9]/& /g;s/[A-F]/& /g' | xargs -n1 | sed\
+    \ 's/[A-F]/& /g' |\\\n  xargs -n1 | awk '{print \"16#\"$1}' | bc | \\\n  awk '{printf(\"\
+    %s \", ($1-1)%6)}' | grep -oE '[13579]' | wc -l", "\tlocal hex\n\tlocal key=0\n\
+    \tlocal total=0\n\tlocal primes=()\n\tlocal digits=()\n\tlocal c=0\n\t\n\tif [\
+    \ \"$1\" == \"\" ]; then\n\t\techo -1\n\t\treturn\n\tfi\n\t\n\t# Digits are 0,\
+    \ 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F.\n\t# Prime numbers are 2, 3, 5,\
+    \ 7, 11, 13, 17,...\n\t# So you have to determine a number of the following digits:\
+    \ \n\t# 2, 3, 5, 7, B (=decimal 11), D (=decimal 13).\n\t# Note: you may assume\
+    \ the input is always correct or empty string, \n\t# and symbols A,B,C,D,E,F are\
+    \ always uppercase.\n\t\n\t# map digits to hex\n\thex=( 0 1 2 3 4 5 6 7 8 9 A\
+    \ B C D E F )\n\t# map hex values to primes\n\tprimes=( 0 0 0 0 0 0 0 0 0 0 2\
+    \ 3 5 7 11 13 )\n\t\n\tfor (( c=0; c<${#1}; c++ )); do\n\t\thex=${1:$c:1}\n\t\t\
+    key=${hex[$hex]}\n\t\tif [ $key -gt 1 ]; then\n\t\t\tdigits[$total]=$key\n\t\t\
+    \t(( total++ ))\n\t\tfi\n\tdone\n\t\n\techo $total", "    echo $1 | sed -e 's/[0-9]//g'\
+    \ -e 's/[A-F]//g' | wc -c", "  num=${1^^}\n  hex=\"$(echo $num | grep -o [0-9A-F])\"\
+    \n  hex_1=\"$(echo $hex | grep -o [0-9])\"\n  hex_2=\"$(echo $hex | grep -o [A-F])\"\
+    \n  hex_3=\"$(echo $hex_2 | sed -e 's/[A-F]/1/g')\"\n  hex_count=\"$(echo $hex_1$hex_3\
+    \ | grep -o [2-7ABD] | wc -c)\"\n  echo $hex_count", "\tif [[ $1 =~ ^[0-9A-F]+$\
+    \ ]]; then\n\t\techo \"$1\" | tr -cd \"2357BDF\" | wc -c\n\telse\n\t\techo 0\n\
+    \tfi", "   #set -x\n   declare -A hex_key\n   local hex_digit_key=\"0x\"\n   local\
+    \ index=0\n   for hex_digit in 0 1 2 3 4 5 6 7 8 9 A B C D E F\n   do\n      hex_key[$hex_digit_key$hex_digit]=$index\n\
+    \      ((index++))\n   done\n   echo ${hex_key[$1]}", "    key=0\n    if [[ \"\
+    $1\" =~ ^[0-9] ]]; then\n        key=$((key + ${#1}))\n    fi\n    if [[ \"$1\"\
+    \ =~ [2-7] ]]; then\n        key=$((key + 1))\n    fi\n    if [[ \"$1\" =~ [a-f]\
+    \ ]]; then\n        key=$((key + 5))\n    fi\n    echo $key", "    if [ \"$#\"\
+    \ != \"1\" ]; then\n        echo \"Invalid input.\"\n        return 1\n    fi\n\
+    \    string=$1\n    if [ \"${string}\" == \"\" ]; then\n        echo 0\n     \
+    \   return 0\n    fi\n    IFS=\"ABCDEF\"\n    for c in ${string}; do\n       \
+    \ case ${c} in\n            0|1|4|6|8|9) let num++;;\n            2|3|5|7) let\
+    \ num+=2;;\n            *) let num--;;\n        esac\n    done\n    unset IFS\n\
+    \    if [ ${num} -ge 0 ]; then\n        echo ${num}\n    else\n        echo 0\n\
+    \    fi", "    echo $1 | sed -e 's/[a-f]/x/gi'", "    case $1 in\n\t0|1|2|3|4|5|6|7|8|9|A|B|C|D|E|F)\
+    \ echo 1;;\n\t*) echo 0;;\n    esac", "    HEX=(0 1 2 3 4 5 6 7 8 9 A B C D E\
+    \ F)\n    NUM=(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15)\n    local hex_num=\"$1\"\
+    \n    local hex_keys=()\n    local temp_num=0\n    local hex_keys_counter=0\n\
+    \    local i=0\n    local j=0\n    for ((i=0; i<${#hex_num}; i++)); do\n     \
+    \   for ((j=0; j<${#HEX[@]}; j++)); do\n            if [[ \"${hex_num:$i:1}\"\
+    \ == \"${HEX[$j]}\" ]]; then\n                temp_num=${NUM[$j]}\n          \
+    \      hex_keys+=(\"$temp_num\")\n            fi\n        done\n    done\n   \
+    \ echo ${hex_keys[@]}"]
 stop_tokens:
 - "\n}"

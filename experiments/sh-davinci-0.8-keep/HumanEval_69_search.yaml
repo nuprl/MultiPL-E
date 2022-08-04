@@ -28,6 +28,97 @@ tests: "}\n\ncandidate() {\n    search \"$@\"\n}\n\nset -e\nrun_test() {\n    [[
   \ 10 9 7 5 7 2\") = \"2\" ]]\n    [[ $(candidate \"5 4 10 2 1 1 10 3 6 1 8\") =\
   \ \"1\" ]]\n    [[ $(candidate \"7 9 9 9 3 4 1 5 9 1 2 1 1 10 7 5 6 7 6 7 7 6\"\
   ) = \"1\" ]]\n    [[ $(candidate \"3 10 10 9 2\") = \"-1\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local freq=$(echo $1 | tr ' ' '\\n' | sort | uniq -c | awk '{print\
+    \ $1, $2}')\n  local max=0\n  while read -r line\n  do\n    local cnt=$(echo $line\
+    \ | awk '{print $1}')\n    local num=$(echo $line | awk '{print $2}')\n    if\
+    \ [[ $cnt -ge $num ]] && [[ $num -gt $max ]]\n    then\n      max=$num\n    fi\n\
+    \  done <<< \"$freq\"\n  echo ${max:--1}", '  echo "Not yet implemented"', " \
+    \   [ -z \"$1\" ] && { echo -1; return; }\n\n    local min_frequency=0;\n    local\
+    \ max_value=0;\n    local frequency=0;\n    local int;\n\n    for int in $1; do\n\
+    \        [ \"$int\" -gt \"$max_value\" ] && max_value=\"$int\";\n        [ \"\
+    $int\" -gt \"$min_frequency\" ] && min_frequency=\"$int\";\n    done\n\n    for\
+    \ ((int=1; int<=\"$max_value\"; int++)); do\n        frequency=$(echo \"$1\" |\
+    \ tr ' ' '\\n' | grep -c \"^$int$\")\n        [ \"$frequency\" -ge \"$int\" ]\
+    \ && { echo \"$int\"; return; }\n    done\n\n    echo -1;", "    count=($(echo\
+    \ \"$1\" | tr ' ' '\\n' | sort | uniq -c | sort -r | tr -s ' '))\n    for i in\
+    \ $(seq 0 1 $((${#count[@]}-1))); do\n        if [ ${count[i*2]} -ge ${count[i*2+1]}\
+    \ ]; then\n            echo ${count[i*2+1]}\n            return\n        fi\n\
+    \    done\n    echo -1", "  set -- ${1// /_}\n  for ((i=1; i < $#; i++)); do\n\
+    \    if [ \"${!i}\" -eq \"$((i-1))\" ]; then\n      printf \"%s\\n\" \"${!i}\"\
+    \n      return\n    fi\n  done\n  printf \"%s\\n\" -1", "    local max freq\n\
+    \    for x in $1; do\n        [[ $x -gt $max ]] && max=$x\n    done\n    for x\
+    \ in $(seq $max); do\n        freq=$(grep -o \"\\<$x\\>\" <<<\"$1\" | wc -l)\n\
+    \        [[ $freq -ge $x ]] && echo $x && break\n    done\n    [[ $freq -lt $x\
+    \ ]] && echo -1", "    declare -A count\n    for number in $@; do\n        ((count[$number]++))\n\
+    \    done\n    max_number=\n    max_count=\n    for number in $@; do\n       \
+    \ if [[ ${count[$number]} -ge $number ]]; then\n            if [[ $number -gt\
+    \ $max_number ]]; then\n                max_number=$number\n                max_count=${count[$number]}\n\
+    \            fi\n        fi\n    done\n    if [[ -z $max_number ]]; then\n   \
+    \     echo -1\n    else\n        echo $max_number\n    fi", "\tlocal -a ar\n\t\
+    read -a ar <<< \"$@\"\n\tlocal -i i=0 j n\n\tlocal -i max=0 r=-1\n\tfor (( i=0;\
+    \ i<\"${#ar[@]}\"; i++ )); do\n\t\t(( n = ar[i] ))\n\t\t(( max < n )) && max=\"\
+    $n\"\n\t\tfor (( j=i+1; j<\"${#ar[@]}\"; j++ )); do\n\t\t\t(( n == ar[j] )) &&\
+    \ (( ar[j] = 0 ))\n\t\tdone\n\tdone\n\tfor (( i=0; i<\"${#ar[@]}\"; i++ )); do\n\
+    \t\t(( n = ar[i] ))\n\t\t(( n > 0 && n <= max && n <= i )) && (( r = n ))\n\t\
+    done\n\techo \"$r\"", "    printf \"%s\\n\" \"$1\" | sort -n | uniq -c | sort\
+    \ -rn | awk '$1 >= $2 { print $2 }' | head -n 1", "    for i in $1; do\n     \
+    \   if [[ $i == `echo $1 | tr \" \" \"\\n\" | grep -c $i` ]]; then\n         \
+    \   echo $i\n            return\n        fi\n    done\n    echo -1", "    mapfile\
+    \ -t array <<< \"$1\" # read a space-separated list into an array\n    printf\
+    \ '%s\\n' \"${array[@]}\" | sort -n | uniq -c | sort -rn | awk '\n    BEGIN {\n\
+    \        found=-1\n    }\n    $1 >= $2 {\n        found=$2\n        exit\n   \
+    \ }\n    END {\n        print found\n    }'", "   [ $# -eq 0 ] && return\n\n \
+    \  echo \"$*\" \\\n      | tr ' ' '\\n' \\\n      | sort -n \\\n      | uniq -c\
+    \ \\\n      | awk '$1 >= $2 { if ( max == 0 || $2 > max ) max = $2 } END { print\
+    \ max == 0 ? -1 : max }'", "    # First call sort to sort the items in the list\
+    \ with increasing order\n    local arr=( $( echo $1 | tr ' ' '\\n' | sort -n )\
+    \ )\n    # Now we go through each item in the list, and check if its frequency\
+    \ is greater than or equal to\n    # itself. Since the list is sorted in increasing\
+    \ order, if the frequency is greater than or equal to\n    # the item, it must\
+    \ be the greatest item in the list.\n    for item in ${arr[@]}; do\n        #\
+    \ Get the frequency of the item\n        local freq=`echo $1 | tr ' ' '\\n' |\
+    \ grep -c \"^$item\\$\"`\n        # If the frequency is greater than or equal\
+    \ to the item, we should stop immediately and return\n        # this item.\n \
+    \       if [ $freq -ge $item ]; then\n            echo $item\n            return\n\
+    \        fi\n    done\n    # If we reach here, that means there is no item whose\
+    \ frequency is greater than or equal to itself.\n    # Then we return -1 to represent\
+    \ this.\n    echo -1", "    local lst=($1)\n    local g=-1\n    for ((i=0; i<${#lst[@]};\
+    \ i++)); do\n        local c=${lst[$i]}\n        ((c<=g)) && continue\n      \
+    \  local n=$(count $c ${lst[@]:$i})\n        ((n>=c)) && g=$c\n    done\n    echo\
+    \ $g", "  if [ -z \"$1\" ]; then\n    return 0\n  fi\n  # split the space-separated\
+    \ list into an array\n  local a=( $1 )\n  # find the maximum element\n  local\
+    \ max=${a[0]}\n  for e in \"${a[@]}\"; do\n    (( $e > $max )) && max=$e\n  done\n\
+    \  # count the frequencies\n  local freq=0\n  for e in \"${a[@]}\"; do\n    ((\
+    \ $e == $max )) && (( ++freq ))\n  done\n  # compare\n  (( $freq >= $max )) &&\
+    \ echo $max || echo -1", "    local q h\n    for i in $1; do \n        h=$(echo\
+    \ $1 | sed \"s/ $i/ /g\" | wc -w)\n        [[ $h -eq $i ]] && (( q > $i || q ==\
+    \ 0 )) && q=$i\n    done\n    [[ ! $q ]] && q=-1\n    echo $q", "    typeset -A\
+    \ dict\n    for i in $1; do\n        dict[$i]=$((++dict[$i]))\n    done\n    #\
+    \ Now dict is an associative array whose keys are integers from $1,\n    # and\
+    \ whose values are the frequencies.\n    max=-1\n    for i in ${!dict[@]}; do\n\
+    \        if ((i > max)) && ((i <= dict[i])); then\n            max=$i\n      \
+    \  fi\n    done\n    echo $max", "    max=0\n    max_number=-1\n    declare -A\
+    \ hash\n    while [ $# -gt 0 ]; do\n        number=$1\n        if [ $number -gt\
+    \ $max ]; then\n            max=$number\n        fi\n        hash[$number]=$((hash[$number]+1))\n\
+    \        shift\n    done\n    for number in $(seq 1 $max); do\n        if [ -z\
+    \ ${hash[$number]} ]; then\n            continue\n        fi\n        if [ ${hash[$number]}\
+    \ -ge $number ]; then\n            max_number=$number\n        fi\n    done\n\
+    \    echo $max_number", "    # echo all integer frequencies, sort by frequency,\
+    \ highest frequency first\n    # key = integer (cut field 2), value = frequency\
+    \ (cut field 1)\n    # sort with -n: numerical sort, -r: reverse sort\n    echo\
+    \ \"$1\" | sed 's/[[:space:]]/\\n/g' | sort | uniq -c | sort -n -r", "  # Not\
+    \ sure if it is the fastest way to do that, but it is working\n  # Put all the\
+    \ values in an array\n  array=( $1 )\n  # Put the same values in another array,\
+    \ we will sort it,\n  # cut the end and check if it is greater than 0\n  array2=(\
+    \ $1 )\n  # Sort the array\n  array2=( $(printf '%s\\n' \"${array2[@]}\" | sort\
+    \ -n) )\n  # Remove the last value\n  array2=( ${array2[@]:0:$((${#array2[@]}-1))}\
+    \ )\n  # Check if it is greater than 0\n  if [ ${array2[${#array2[@]}-1]} -gt\
+    \ 0 ]; then\n    # We will sort the first array and check if it's length is higher\
+    \ than the value of the element\n    # We will sort our array from the highest\
+    \ value to the lowest one\n    array=( $(printf '%s\\n' \"${array[@]}\" | sort\
+    \ -nr) )\n    # Check if the length of the array is higher than the value of the\
+    \ element\n    # If yes, then we found our value\n    if [ ${#array[@]} -ge ${array[0]}\
+    \ ]; then\n      echo ${array[0]}\n    else\n      echo -1\n    fi\n  else\n \
+    \   echo -1\n  fi"]
 stop_tokens:
 - "\n}"

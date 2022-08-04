@@ -13,6 +13,183 @@ tests: "}\n\ncandidate() {\n    compare_one \"$@\"\n}\n\nset -e\nrun_test() {\n 
   6\") = \"6\" ]]\n    [[ $(candidate \"1\" \"2,3\") = \"2,3\" ]]\n    [[ $(candidate\
   \ \"5,1\" \"6\") = \"6\" ]]\n    [[ $(candidate \"1\" \"2\") = \"2\" ]]\n    [[\
   \ $(candidate \"1\" \"1\") = \"None\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  # If $1 and $2 are both integers, we need to remove all commas\n\
+    \  # But if only one of $1 and $2 are integers, then we need to remove all periods\n\
+    \  case \"$1\" in\n    *[!0-9]*)\n      case \"$2\" in\n        *[!0-9]*)\n  \
+    \        # Both of $1 and $2 are real numbers (represented as strings)\n     \
+    \     if [[ \"$1\" > \"$2\" ]]; then\n            echo \"$1\"\n          elif\
+    \ [[ \"$1\" < \"$2\" ]]; then\n            echo \"$2\"\n          else\n     \
+    \       echo \"None\"\n          fi\n          ;;\n        *)\n          # Only\
+    \ $2 is an integer\n          if [[ \"$1\" > \"$2\" ]]; then\n            echo\
+    \ \"$1\"\n          elif [[ \"$1\" < \"$2\" ]]; then\n            echo \"$2\"\n\
+    \          else\n            echo \"None\"\n          fi\n          ;;\n     \
+    \ esac\n      ;;\n    *)\n      case \"$2\" in\n        *[!0-9]*)\n          #\
+    \ Only $1 is an integer\n          if [[ \"$1\" > \"$2\" ]]; then\n          \
+    \  echo \"$1\"\n          elif [[ \"$1\" < \"$2\" ]]; then\n            echo \"\
+    $2\"\n          else\n            echo \"None\"\n          fi\n          ;;\n\
+    \        *)\n          # Both of $1 and $2 are integers\n          if [[ \"$1\"\
+    \ > \"$2\" ]]; then\n            echo \"$1\"\n          elif [[ \"$1\" < \"$2\"\
+    \ ]]; then\n            echo \"$2\"\n          else\n            echo \"None\"\
+    \n          fi\n          ;;\n      esac\n      ;;\n  esac", "if [[ $1 -gt $2\
+    \ ]]; then\n    echo $1\nelif [[ $1 -lt $2 ]]; then\n    echo $2\nelse\n    echo\
+    \ \"None\"\nfi", "    # Check if arguments are integers\n    if [[ $1 =~ ^[0-9]+$\
+    \ ]] && [[ $2 =~ ^[0-9]+$ ]]; then\n        # Check if $1 is greater than $2\n\
+    \        if [[ $1 -gt $2 ]]; then\n            echo $1\n        elif [[ $1 -lt\
+    \ $2 ]]; then\n            echo $2\n        else\n            echo \"None\"\n\
+    \        fi\n    # Check if arguments are floats\n    elif [[ $1 =~ ^[0-9]+\\\
+    .[0-9]+$ ]] && [[ $2 =~ ^[0-9]+\\.[0-9]+$ ]]; then\n        # Check if $1 is greater\
+    \ than $2\n        if [[ $1 -gt $2 ]]; then\n            echo $1\n        elif\
+    \ [[ $1 -lt $2 ]]; then\n            echo $2\n        else\n            echo \"\
+    None\"\n        fi\n    # Check if arguments are floats\n    elif [[ $1 =~ ^[0-9]+\\\
+    ,[0-9]+$ ]] && [[ $2 =~ ^[0-9]+\\,[0-9]+$ ]]; then\n        # Check if $1 is greater\
+    \ than $2\n        if [[ $1 -gt $2 ]]; then\n            echo $1\n        elif\
+    \ [[ $1 -lt $2 ]]; then\n            echo $2\n        else\n            echo \"\
+    None\"\n        fi\n    else\n        echo \"None\"\n    fi", "    # if the first\
+    \ argument is a float, the second argument is a float, or if the first\n    #\
+    \ argument is a float, the second argument is a float, or if the first argument\
+    \ is\n    # a float and the second argument is a string and the string can be\
+    \ converted to a\n    # float and the float is greater than the first argument\
+    \ then print the float.\n    if [[ $1 =~ ^[0-9]+\\.[0-9]+$ && $2 =~ ^[0-9]+\\\
+    .[0-9]+$ && \\\n        $(python -c \"print($2 > $1)\") = \"True\" ]] ; then\n\
+    \        echo \"$2\"\n    # If the first argument is a float, the second argument\
+    \ is a string, and the string\n    # can be converted to a float and the float\
+    \ is greater than the first argument then\n    # print the float.\n    elif [[\
+    \ $1 =~ ^[0-9]+\\.[0-9]+$ && $2 =~ ^[0-9]+\\,[0-9]+$ && \\\n        $(python -c\
+    \ \"print(float($2.replace(',', '.')) > $1)\") = \"True\" ]] ; then\n        echo\
+    \ \"$2\"\n    # If the first argument is a string, the second argument is a float,\
+    \ and the string\n    # can be converted to a float and the float is greater than\
+    \ the first argument then\n    # print the float.\n    elif [[ $1 =~ ^[0-9]+\\\
+    ,[0-9]+$ && $2 =~ ^[0-9]+\\.[0-9]+$ && \\\n        $(python -c \"print(float($1.replace(',',\
+    \ '.')) > $2)\") = \"True\" ]] ; then\n        echo \"$1\"\n    # If the first\
+    \ argument is a string, the second argument is a string, and the first\n    #\
+    \ string can be converted to a float, the second string can be converted to a\
+    \ float,\n    # and the second float is greater than the first float then print\
+    \ the second float.\n    elif [[ $1 =~ ^[0-9]+\\,[0-9]+$ && $2 =~ ^[0-9]+\\,[0-9]+$\
+    \ && \\\n       ", "  if [ $(echo \"$1 > $2\" | bc -l) -eq 1 ]; then\n    echo\
+    \ \"$1\"\n  elif [ $(echo \"$1 < $2\" | bc -l) -eq 1 ]; then\n    echo \"$2\"\n\
+    \  else\n    echo \"None\"\n  fi", "    local str1=$1\n    local str2=$2\n   \
+    \ local value1=0\n    local value2=0\n    local isfloat1=0\n    local isfloat2=0\n\
+    \    if [[ $str1 =~ ^-?[0-9]+$ ]]; then\n        value1=$((10#$str1))\n    elif\
+    \ [[ $str1 =~ ^-?[0-9]+[.,][0-9]+$ ]]; then\n        value1=$(python -c \"print\
+    \ float('$str1')\")\n        isfloat1=1\n    else\n        echo \"$str1 is not\
+    \ a valid number\"\n        return 1\n    fi\n    if [[ $str2 =~ ^-?[0-9]+$ ]];\
+    \ then\n        value2=$((10#$str2))\n    elif [[ $str2 =~ ^-?[0-9]+[.,][0-9]+$\
+    \ ]]; then\n        value2=$(python -c \"print float('$str2')\")\n        isfloat2=1\n\
+    \    else\n        echo \"$str2 is not a valid number\"\n        return 1\n  \
+    \  fi\n    if [ \"$value1\" -eq \"$value2\" ]; then\n        echo \"None\"\n \
+    \   elif [ \"$value1\" -gt \"$value2\" ]; then\n        if [ \"$isfloat1\" -eq\
+    \ \"1\" ]; then\n            echo \"$value1\"\n        else\n            echo\
+    \ \"$str1\"\n        fi\n    else\n        if [ \"$isfloat2\" -eq \"1\" ]; then\n\
+    \            echo \"$value2\"\n        else\n            echo \"$str2\"\n    \
+    \    fi\n    fi", "    local a=$1\n    local b=$2\n    if [[ $a == $b ]]; then\n\
+    \        echo \"None\"\n    elif [[ $a == *.* ]] && [[ $b == *.* ]]; then\n  \
+    \      if [[ $(bc <<< \"$a > $b\") -eq 1 ]]; then\n            echo $a\n     \
+    \   else\n            echo $b\n        fi\n    elif [[ $a == *.* ]] && [[ $b !=\
+    \ *.* ]]; then\n        if [[ $(bc <<< \"$a > $b\") -eq 1 ]]; then\n         \
+    \   echo $a\n        else\n            echo $b\n        fi\n    elif [[ $a !=\
+    \ *.* ]] && [[ $b == *.* ]]; then\n        if [[ $(bc <<< \"$a > $b\") -eq 1 ]];\
+    \ then\n            echo $a\n        else\n            echo $b\n        fi\n \
+    \   else\n        if [[ $a -gt $b ]]; then\n            echo $a\n        else\n\
+    \            echo $b\n        fi\n    fi", "    first=`echo \"$1\" | tr \",\"\
+    \ \".\"`\n    second=`echo \"$2\" | tr \",\" \".\"`\n    if [ $(bc <<< \"$first\
+    \ > $second\") -eq 1 ]; then\n        echo \"$1\"\n    elif [ $(bc <<< \"$first\
+    \ < $second\") -eq 1 ]; then\n        echo \"$2\"\n    else\n        echo \"None\"\
+    \n    fi", "    if [[ $(is_a_float $1) = 1 ]] && [[ $(is_a_float $2) = 1 ]]; then\n\
+    \        local x=$(echo \"$1>$2\" | bc -l)\n        [[ $x = 1 ]] && echo $1 ||\
+    \ echo $2\n    elif [[ $(is_an_int $1) = 1 ]] && [[ $(is_an_int $2) = 1 ]]; then\n\
+    \        [[ $1 -gt $2 ]] && echo $1 || echo $2\n    elif [[ $(is_an_int $1) =\
+    \ 1 ]] && [[ $(is_a_float $2) = 1 ]]; then\n        echo $2\n    elif [[ $(is_a_float\
+    \ $1) = 1 ]] && [[ $(is_an_int $2) = 1 ]]; then\n        echo $1\n    else\n \
+    \       echo \"None\"\n    fi", "\t# declare float 1 and convert to float\n\t\
+    local num1=$(echo $1 | tr -d ',.' | sed -e 's/^0*//')\n\tlocal num2=$(echo $2\
+    \ | tr -d ',.' | sed -e 's/^0*//')\n\t# If the values are equal, return None\n\
+    \tif [ \"$num1\" == \"$num2\" ]; then\n\t\techo \"None\"\n\t# If integer is greater\
+    \ than float\n\telif [ \"$num1\" -gt \"$num2\" ]; then\n\t\techo $1\n\t# If float\
+    \ is greater than integer\n\telse\n\t\techo $2\n\tfi", "    # Check if $1 is an\
+    \ integer and $2 is an integer.\n    if [[ $1 =~ ^[0-9]+$ ]] && [[ $2 =~ ^[0-9]+$\
+    \ ]]; then\n        if [ $1 -lt $2 ]; then\n            echo $2\n        elif\
+    \ [ $1 -gt $2 ]; then\n            echo $1\n        else\n            echo \"\
+    None\"\n        fi\n    # Check if $1 is a float and $2 is a float.\n    elif\
+    \ [[ $1 =~ ^[0-9]+\\.[0-9]+$ ]] && [[ $2 =~ ^[0-9]+\\.[0-9]+$ ]]; then\n     \
+    \   if [ $(echo \"$1 < $2\" | bc) -eq 1 ]; then\n            echo $2\n       \
+    \ elif [ $(echo \"$1 > $2\" | bc) -eq 1 ]; then\n            echo $1\n       \
+    \ else\n            echo \"None\"\n        fi\n    # Check if $1 is a float and\
+    \ $2 is a float with a comma as decimal point.\n    elif [[ $1 =~ ^[0-9]+\\.[0-9]+$\
+    \ ]] && [[ $2 =~ ^[0-9]+\\,[0-9]+$ ]]; then\n        # Replace , with . in $2.\n\
+    \        second=${2//,/.}\n        if [ $(echo \"$1 < $second\" | bc) -eq 1 ];\
+    \ then\n            echo $second\n        elif [ $(echo \"$1 > $second\" | bc)\
+    \ -eq 1 ]; then\n            echo $1\n        else\n            echo \"None\"\n\
+    \        fi\n    # Check if $1 is a float with a comma as decimal point and $2\
+    \ is a float.\n    elif [[ $1 =~ ^[0-9]+\\,[0-9]+$ ]] && [[ $2 =~ ^[0-9]+\\.[0-9]+$\
+    \ ]]; then\n        # Replace , with . in $1.\n        first=${1//,/.}\n     \
+    \   if [ $(echo \"$first < $2\" | bc) -eq 1 ]; then\n            echo $2\n   \
+    \     elif [ $(echo \"$first > $2\" | bc) -eq 1 ]; then", "  echo \"$1 $2\" |\
+    \ awk '{\n    if ($1 == $2) {\n      printf(\"None\")\n    } else if ($1 > $2)\
+    \ {\n      printf(\"%s\", $1)\n    } else {\n      printf(\"%s\", $2)\n    }\n\
+    \  }'", "    if [ $(is_int $1) = 1 ]; then\n        if [ $(is_int $2) = 1 ]; then\n\
+    \            if [ $1 -lt $2 ]; then\n                echo $2\n            elif\
+    \ [ $1 -gt $2 ]; then\n                echo $1\n            else\n           \
+    \     echo \"None\"\n            fi\n        elif [ $(is_float $2) = 1 ]; then\n\
+    \            echo $2\n        else\n            echo $2\n        fi\n    elif\
+    \ [ $(is_float $1) = 1 ]; then\n        if [ $(is_int $2) = 1 ]; then\n      \
+    \      echo $1\n        elif [ $(is_float $2) = 1 ]; then\n            if [ $(bc\
+    \ <<< \"$1 < $2\") -eq 1 ]; then\n                echo $2\n            elif [\
+    \ $(bc <<< \"$1 > $2\") -eq 1 ]; then\n                echo $1\n            else\n\
+    \                echo \"None\"\n            fi\n        else\n            echo\
+    \ $1\n        fi\n    else\n        if [ $(is_int $2) = 1 ]; then\n          \
+    \  echo $1\n        elif [ $(is_float $2) = 1 ]; then\n            echo $1\n \
+    \       else\n            if [ \"$1\" \\< \"$2\" ]; then\n                echo\
+    \ $2\n            elif [ \"$1\" \\> \"$2\" ]; then\n                echo $1\n\
+    \            else\n                echo \"None\"\n            fi\n        fi\n\
+    \    fi", "  a=${1//,/.}\n  b=${2//,/.}\n  if [[ $a -gt $b ]]; then\n    echo\
+    \ $a\n  elif [[ $a -lt $b ]]; then\n    echo $b\n  else\n    echo \"None\"\n \
+    \ fi", "    if [ $1 -eq $2 ]; then\n        echo \"None\"\n    elif [ $1 -gt $2\
+    \ ]; then\n        echo $1\n    else\n        echo $2\n    fi", "  # Test if $1\
+    \ is an integer\n  if [[ $1 =~ ^[0-9]+$ ]]; then\n    if [[ $2 =~ ^[0-9]+$ ]];\
+    \ then\n      # Test if both are integers\n      if [ $1 -lt $2 ]; then\n    \
+    \    echo $2\n      elif [ $1 -gt $2 ]; then\n        echo $1\n      else\n  \
+    \      echo \"None\"\n      fi\n    else\n      # Test if only $1 is an integer\n\
+    \      if [[ $2 =~ ^[0-9]+,[0-9]+$ ]]; then\n        # Test if $2 is a float\n\
+    \        temp=$(printf \"%.2f\" $(echo $2 | sed 's/,/./'))\n        if [ $1 -lt\
+    \ $temp ]; then\n          echo $2\n        elif [ $1 -gt $temp ]; then\n    \
+    \      echo $1\n        else\n          echo \"None\"\n        fi\n      else\n\
+    \        # If $2 is a string\n        if [ $1 -lt $2 ]; then\n          echo $2\n\
+    \        elif [ $1 -gt $2 ]; then\n          echo $1\n        else\n         \
+    \ echo \"None\"\n        fi\n      fi\n    fi\n  else\n    # Test if $1 is a float\n\
+    \    if [[ $1 =~ ^[0-9]+\\.[0-9]+$ ]]; then\n      if [[ $2 =~ ^[0-9]+\\.[0-9]+$\
+    \ ]]; then\n        # Test if both are floats\n        if [ $(printf \"%.2f\"\
+    \ $1) -lt $(printf \"%.2f\" $2) ]; then\n          echo $2\n        elif [ $(printf\
+    \ \"%.2f\" $1) -gt $(printf \"%.2f\" $2) ]; then\n          echo $1\n        else\n\
+    \          echo \"None\"\n        fi\n      else\n        # Test if only $1 is\
+    \ a float\n        if [[ $2 =~ ^[0-9]+,[0-9]+$ ]]; then\n          # Test if $2\
+    \ is a float\n          temp=$(printf \"%.2f\" $(echo $2 | sed 's/,/./'))\n  \
+    \        if [ $(printf \"%.2", "    if [ \"$(awk -v a=\"$1\" -v b=\"$2\" 'BEGIN{print(a==b)}')\"\
+    \ == \"1\" ]; then\n        echo \"None\"\n    elif [ \"$(awk -v a=\"$1\" -v b=\"\
+    $2\" 'BEGIN{print(a>b)}')\" == \"1\" ]; then\n        echo \"$1\"\n    else\n\
+    \        echo \"$2\"\n    fi", "  # We do an integer check first.\n  if [[ $1\
+    \ -eq $2 ]]; then\n    echo \"None\"\n  elif [[ $1 -gt $2 ]]; then\n    echo $1\n\
+    \  else\n    echo $2\n  fi", "    # write your code here\n    [[ $1 =~ [0-9]+([,.][0-9]+)?\
+    \ ]] && FLOAT1=${BASH_REMATCH[0]}\n    [[ $2 =~ [0-9]+([,.][0-9]+)? ]] && FLOAT2=${BASH_REMATCH[0]}\n\
+    \    if [ ${FLOAT1} ] && [ ${FLOAT2} ]; then\n        if [ $(echo \"${FLOAT1}\
+    \ > ${FLOAT2}\" | bc) -eq 1 ]; then\n            echo \"${FLOAT1}\"\n        elif\
+    \ [ $(echo \"${FLOAT1} < ${FLOAT2}\" | bc) -eq 1 ]; then\n            echo \"\
+    ${FLOAT2}\"\n        else\n            echo \"None\"\n        fi\n    elif [ ${FLOAT1}\
+    \ ]; then\n        echo \"${FLOAT1}\"\n    elif [ ${FLOAT2} ]; then\n        echo\
+    \ \"${FLOAT2}\"\n    else\n        echo \"None\"\n    fi", "    # Using tr to\
+    \ substitute commas for dots for numbers given as strings in the european format.\n\
+    \    # Doing this to not depend on the locale to be able to use the format: 1,23,\
+    \ or 1.23\n    echo \"$1\" | tr ',' '.' > /tmp/compare_one_tmp1\n    echo \"$2\"\
+    \ | tr ',' '.' > /tmp/compare_one_tmp2\n    # If the first argument is a number\
+    \ and its value is greater than or equal to the second argument,\n    # and the\
+    \ second argument is also a number, then print the first argument.\n    if [ \"\
+    $(cat /tmp/compare_one_tmp1)\" -ge \"$(cat /tmp/compare_one_tmp2)\" ] && [ \"\
+    $(cat /tmp/compare_one_tmp2)\" -eq \"$(cat /tmp/compare_one_tmp2)\" ]; then\n\
+    \        # Print the first argument.\n        echo \"$1\"\n    elif [ \"$(cat\
+    \ /tmp/compare_one_tmp1)\" -eq \"$(cat /tmp/compare_one_tmp1)\" ] && [ \"$(cat\
+    \ /tmp/compare_one_tmp2)\" -ge \"$(cat /tmp/compare_one_tmp1)\" ]; then\n    \
+    \    # Print the second argument.\n        echo \"$2\"\n    else\n        # Print\
+    \ None if the arguments are equal.\n        echo \"None\"\n    fi\n    # Delete\
+    \ the temporary files that were created.\n    rm /tmp/compare_one_tmp1\n    rm\
+    \ /tmp/compare_one_tmp2"]
 stop_tokens:
 - "\n}"

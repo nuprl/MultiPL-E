@@ -11,6 +11,117 @@ tests: "}\n\ncandidate() {\n    separate_paren_groups \"$@\"\n}\n\nset -e\nrun_t
   \ ]]\n    [[ $(candidate \"() (()) ((())) (((())))\") = \"() (()) ((())) (((())))\"\
   \ ]]\n    [[ $(candidate \"(()(())((())))\") = \"(()(())((())))\" ]]\n    [[ $(candidate\
   \ \"( ) (( )) (( )( ))\") = \"() (()) (()())\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local string=\"$1\"\n    local array=()\n    local tmp=\"\"\n \
+    \   local depth=0\n    for ((i=0; i<${#string}; i++)); do\n        # ignore spaces\n\
+    \        if [[ \"${string:$i:1}\" != \" \" ]]; then\n            tmp+=\"${string:$i:1}\"\
+    \n            if [[ \"${string:$i:1}\" == \"(\" ]]; then\n                ((depth++))\n\
+    \            else\n                ((depth--))\n            fi\n            if\
+    \ [[ $depth == 0 ]]; then\n                array+=(\"$tmp\")\n               \
+    \ tmp=\"\"\n            fi\n        fi\n    done\n    echo \"${array[@]}\"", " \
+    \ local input=${1//[[:space:]]/}\n  local parens_level=0\n  local parens_history=()\n\
+    \  local in_parens=()\n  local out_parens=()\n  local output=()\n  local ch\n\
+    \  local i\n\n  for ((i=0; i<${#input}; i++)); do\n    ch=${input:$i:1}\n    if\
+    \ [[ $ch == \"(\" ]]; then\n      (( parens_level += 1 ))\n      parens_history+=($ch)\n\
+    \      in_parens+=($ch)\n    elif [[ $ch == \")\" ]]; then\n      parens_history+=($ch)\n\
+    \      if (( parens_level > 0 )); then\n        (( parens_level -= 1 ))\n    \
+    \    in_parens+=($ch)\n      else\n        out_parens+=($ch)\n      fi\n    fi\n\
+    \  done\n\n  if (( parens_level > 0 )); then\n    echo \"Invalid input. Parentheses\
+    \ level should be 0. Level: $parens_level\"\n    return\n  fi\n\n  while [[ ${#parens_history[@]}\
+    \ -gt 0 ]]; do\n    ch=${parens_history[0]}\n    if [[ $ch == \"(\" ]]; then\n\
+    \      (( parens_level += 1 ))\n      in_parens+=($ch)\n    elif [[ $ch == \"\
+    )\" ]]; then\n      if (( parens_level > 0 )); then\n        (( parens_level -=\
+    \ 1 ))\n        in_parens+=($ch)\n      else\n        out_parens+=($ch)\n    \
+    \  fi\n    fi\n    parens_history=(\"${parens_history[@]:1}\")\n  done\n\n  input=${in_parens[@]}\n\
+    \  output+=($input)\n  in_parens=()\n  parens_level=0\n  parens_history=()\n\n\
+    \  while [[ ${#parens_history[@]} -gt 0 ]]; do\n    ch=${parens_history[0]}\n\
+    \    if [[ $ch == \"(\" ]]; then", "    local output\n    local input=${1// /}\n\
+    \    local -a groups\n\n    local open_paren_count\n    local close_paren_count\n\
+    \    local current_token\n\n    while read -n 1 -d '' current_token; do\n    \
+    \    case \"$current_token\" in\n            '(')\n                open_paren_count=$((open_paren_count\
+    \ + 1))\n                ;;\n            ')')\n                close_paren_count=$((close_paren_count\
+    \ + 1))\n                ;;\n        esac\n\n        output+=\"$current_token\"\
+    \n\n        if [[ $open_paren_count -eq $close_paren_count ]]; then\n        \
+    \    groups+=(\"$output\")\n            output=\n            open_paren_count=0\n\
+    \            close_paren_count=0\n        fi\n    done <<< \"$input\"\n\n    printf\
+    \ \"%s\" \"${groups[@]}\"", "\tlocal count=0\n\tlocal len=$((${#1} - 1))\n\tlocal\
+    \ out=\n\tfor i in $(seq 0 $len); do\n\t\tif [[ ${1:$i:1} == \"(\" ]]; then\n\t\
+    \t\tif (( count == 0 )); then\n\t\t\t\tout=\"${out} \\\"(\"\n\t\t\telse\n\t\t\t\
+    \tout=\"${out}(\"\n\t\t\tfi\n\t\t\t((count++))\n\t\telif [[ ${1:$i:1} == \")\"\
+    \ ]]; then\n\t\t\tout=\"${out})\\\"\"\n\t\t\t((count--))\n\t\tfi\n\tdone\n\techo\
+    \ \"[${out}]\"", "    # Your code goes here\n    # echo \"[$1]\"\n    # echo \"\
+    [$(echo \"$1\" | tr -d \" \")]\"\n    local regex_nonspace=\"[[:graph:]]\"\n \
+    \   local regex_space=\"[[:space:]]\"\n    local regex_nonspace_or_space=\"[[:graph:][:space:]]\"\
+    \n    local regex_nonspace_or_space_or_newline=\"[[:graph:][:space:]\n]\"\n  \
+    \  local regex_nonspace_or_space_or_newline_or_punctuation=\"[[:graph:][:space:]\n\
+    .?!:;,\\*]\"\n    local regex_nonspace_or_space_or_newline_or_punctuation_or_paren_open=\"\
+    [[:graph:][:space:]\n.?!:;,\\*()\"\n    local regex_nonspace_or_space_or_newline_or_punctuation_or_paren_open_or_paren_close=\"\
+    [[:graph:][:space:]\n.?!:;,\\*())]\"\n    local regex_nonspace_or_space_or_newline_or_punctuation_or_paren_open_or_paren_close_or_brace_open=\"\
+    [[:graph:][:space:]\n.?!:;,\\*())]{\"\n    local regex_nonspace_or_space_or_newline_or_punctuation_or_paren_open_or_paren_close_or_brace_open_or_brace_close=\"\
+    [[:graph:][:space:]\n.?!:;,\\*())]{}\"\n    local regex_nonspace_or_space_or_newline_or_punctuation_or_paren_open_or_paren_close_or_brace_open_or_brace_close_or_quote=\"\
+    [[:graph:][:space:]\n.?!:;,\\*())]{}\\\"\"\n    local regex_nonspace_or_space_or_newline_or_punctuation_or_paren_open_or_paren_close_or_brace_open_or_brace_close_or_quote_",
+  "\n# Your solution goes here:\n", '    echo $1', "    sed -n -e 's/\\(/\\1/gp' -e\
+    \ 's/\\(/\\1/gp'", "    local paren=$1\n    local paren=$(echo $paren | sed -e\
+    \ 's/ //g')\n    local outer_paren=$(echo $paren | sed -e 's/()//g')\n    local\
+    \ outer_paren=$(echo $outer_paren | sed -e 's/\\(\\(\\)*\\)//g')\n    local outer_paren_count=$(echo\
+    \ $outer_paren | sed -e 's/(//g' | sed -e 's/)//g' | wc -c)\n    local outer_paren_count=$((outer_paren_count/2))\n\
+    \    local ret_val=\"\\\"\"\n    for (( i=0; i<outer_paren_count; i++ )); do\n\
+    \        ret_val+=\"(\"\n    done\n    for (( i=0; i<outer_paren_count; i++ ));\
+    \ do\n        ret_val+=\")\"\n    done\n    local ret_val+=\"\\\"\"\n    echo\
+    \ $ret_val", "  local MATCHES\n  local TMP_FILE\n  TMP_FILE=$(mktemp)\n  grep\
+    \ -Po '\\([^()]*\\)' <<< $1 | sed 's/ //g' > $TMP_FILE\n  MATCHES=($(cat $TMP_FILE))\n\
+    \  rm $TMP_FILE\n  echo ${MATCHES[@]}", "    echo $1 | grep -o -P '\\([^\\(\\\
+    )]*\\)'", "    IFS='\\n' read -d '' -r -a input <<< \"$1\"\n    declare -a output=()\n\
+    \    num_open=0\n    temp=\"\"\n    for i in \"${input[@]}\"; do\n        if [[\
+    \ $i =~ ^\\([[:space:]]*$ ]]; then\n            num_open=$((num_open+1))\n   \
+    \         temp=\"${temp}$i\"\n        elif [[ $i =~ ^[[:space:]]*\\)[[:space:]]*$\
+    \ ]]; then\n            if [ $num_open -gt 0 ]; then\n                num_open=$((num_open-1))\n\
+    \                temp=\"${temp}$i\"\n            fi\n        elif [[ $i =~ ^[[:space:]]*\\\
+    )([[:space:]]*\\)([[:space:]]*)$ ]]; then\n            if [ $num_open -gt 0 ];\
+    \ then\n                num_open=$((num_open-1))\n                temp=\"${temp}$i\"\
+    \n            fi\n        elif [[ $i =~ ^[[:space:]]*\\([[:space:]]*\\)([[:space:]]*)$\
+    \ ]]; then\n            if [ $num_open -gt 0 ]; then\n                num_open=$((num_open-1))\n\
+    \                temp=\"${temp}$i\"\n            fi\n        else\n          \
+    \  if [ $num_open -gt 0 ]; then\n                temp=\"${temp}$i\"\n        \
+    \    fi\n        fi\n        if [ $num_open -eq 0 ]; then\n            output+=(\"\
+    $temp\")\n            temp=\"\"\n        fi\n    done\n    echo \"${output[@]}\"",
+  "  # Internal variables\n  local input=$1\n  local open_paren=\"(\"\n  local close_paren=\"\
+    )\"\n  local group_count=0\n  local group=\"\"\n  local groups=()\n\n  # Strip\
+    \ whitespace\n  input=${input// /}\n\n  # Iterate over input string\n  for ((\
+    \ i=0; i<${#input}; i++ )); do\n    # Build a new group\n    if [[ ${input:$i:1}\
+    \ == $open_paren ]]; then\n      ((group_count++))\n      group=\"$group$open_paren\"\
+    \n    # Pop the finished group onto the list\n    elif [[ ${input:$i:1} == $close_paren\
+    \ ]]; then\n      ((group_count--))\n      group=\"$group$close_paren\"\n    \
+    \  groups+=(\"$group\")\n      group=\"\"\n    fi\n  done\n\n  echo \"${groups[@]}\"",
+  "\t# write your code here\n\techo $1", "  declare -a separated_groups\n  group=\"\
+    \"\n  old_IFS=$IFS\n  IFS=\"\"\n  while read -r -n1 c; do\n    if [[ $c == \"\
+    (\" ]]; then\n      group=$group$c\n    elif [[ $c == \")\" ]]; then\n      group=$group$c\n\
+    \      separated_groups=(\"${separated_groups[@]}\" $group)\n      group=\"\"\n\
+    \    fi\n  done <<< \"$1\"\n  IFS=$old_IFS\n  echo \"${separated_groups[@]}\"",
+  "    if [[ $# -ne 1 ]]; then\n        echo \"ERROR: wrong number of arguments to\
+    \ separate_paren_groups\" >&2\n        return 1\n    fi\n    s=\"$1\"\n    # in\
+    \ case the input is something like \" () ( () ( ( ) ) ) \"\n    s=\"${s// /}\"\
+    \n    # in case the input is something like \")((())(()))()\"\n    s=\"${s#*)}\"\
+    \n    s=\"${s%*(}\"\n    results=\"\"\n    while [ ! -z \"$s\" ]; do\n       \
+    \ # compute the length of the longest balanced nested parentheses\n        # in\
+    \ the current string\n        nesting_level=0\n        longest_balanced_length=0\n\
+    \        # record the length when the nesting level becomes zero\n        # this\
+    \ marks the end of a balanced group of parentheses\n        for (( i=0; i<${#s};\
+    \ i++ )); do\n            (( nesting_level+=(s:$i:1)=='(' ))\n            (( nesting_level-=(s:$i:1)==')'\
+    \ ))\n            if (( nesting_level==0 )); then\n                longest_balanced_length=$i\n\
+    \            fi\n        done\n        (( longest_balanced_length++ ))\n     \
+    \   # store the longest balanced string in results, and\n        # remove it from\
+    \ the rest of the string\n        results=\"$results \\\"${s:0:longest_balanced_length}\\\
+    \"\"\n        s=\"${s:longest_balanced_length}\"\n    done\n    echo \"[$results]\"",
+  '    :', "\tlocal groups=$(echo $1 | sed 's/ //g')\n\tlocal group\n\tfor group in\
+    \ $groups; do\n\t\tparentheses_check $group\n\t\t[[ $? -eq 0 ]] && echo \"\\\"\
+    $group\\\"\"\n\tdone", "    result=\"[\";\n    j=0;\n    # Assuming the characters\
+    \ to be string are ASCII with lower bound 0\n    for ((i=0; i<${#1}; i++)); do\n\
+    \        c=${1:$i:1};\n        if [ \"$c\" = \"(\" ]; then\n            j=$(($j+1));\n\
+    \        elif [ \"$c\" = \")\" ]; then\n            j=$(($j-1));\n        fi\n\
+    \        if [ $j -eq 0 ]; then\n            result=$result'\"'\"$sub\"'\"\",\n\
+    \            sub=\"\";\n        else\n            sub=$sub$c;\n        fi\n  \
+    \  done\n    echo $result\"]\";", "  groups=()\n\n  while [[ \"$1\" =~ \\(([^\\\
+    (\\)]*)\\) ]]; do\n    groups+=($(printf '\"%s\"' \"${BASH_REMATCH[1]}\"))\n \
+    \   1=\"${1#*)\"\n  done\n\n  echo \"${groups[@]}\""]
 stop_tokens:
 - "\n}"

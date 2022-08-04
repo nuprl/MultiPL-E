@@ -11,6 +11,97 @@ tests: "}\n\ncandidate() {\n    next_smallest \"$@\"\n}\n\nset -e\nrun_test() {\
   ) = \"None\" ]]\n    [[ $(candidate \"1 1 1 1 0\") = \"1\" ]]\n    [[ $(candidate\
   \ \"1 1\") = \"None\" ]]\n    [[ $(candidate \"-35 34 12 -45\") = \"-35\" ]]\n}\n\
   \nrun_test"
-completions: []
+completions: ["\t# If there's nothing in the list, return \"None\"\n\tif [ \"$1\"\
+    \ == \"\" ]; then\n\t\techo \"None\"\n\t\treturn\n\tfi\n\n\t# Convert the space-separated\
+    \ list into an array, then sort it\n\t# as numeric values.\n\tlist=( $1 )\n\t\
+    sorted=$(printf \"%s\\n\" \"${list[@]}\" | sort -n)\n\n\t# The 2nd smallest element\
+    \ is the 2nd element of the sorted list\n\techo ${sorted[1]}", "    local list=($1)\n\
+    \    local min_index min_element second_min_index second_min_element\n    if [\
+    \ ${#list[@]} -eq 0 ]; then\n        echo \"None\"\n        return\n    fi\n \
+    \   if [ ${#list[@]} -eq 1 ]; then\n        echo \"None\"\n        return\n  \
+    \  fi\n    min_index=0\n    min_element=${list[0]}\n    second_min_index=1\n \
+    \   second_min_element=${list[1]}\n    for ((i=0; i<${#list[@]}; i++)); do\n \
+    \       if [ ${list[$i]} -lt $min_element ]; then\n            second_min_index=$min_index\n\
+    \            second_min_element=$min_element\n            min_index=$i\n     \
+    \       min_element=${list[$i]}\n        elif [ ${list[$i]} -lt $second_min_element\
+    \ ]; then\n            second_min_index=$i\n            second_min_element=${list[$i]}\n\
+    \        fi\n    done\n    echo $second_min_element", "\tif [ $# -eq 0 ]; then\n\
+    \t\techo \"None\"\n\t\treturn 0\n\tfi\n\tlocal numbers=($1)\n\tlocal min=${numbers[0]}\n\
+    \tlocal smin=${numbers[0]}\n\tfor ((i=1; i<${#numbers[@]}; i++)); do\n\t\tif ((\
+    \ numbers[i] < min )); then\n\t\t\tmin=${numbers[i]}\n\t\telif (( numbers[i] <\
+    \ smin )); then\n\t\t\tsmin=${numbers[i]}\n\t\tfi\n\tdone\n\tif (( smin == min\
+    \ )); then\n\t\techo \"None\"\n\telse\n\t\techo $smin\n\tfi", "    [ -z \"$1\"\
+    \ ] && echo \"None\" && return 0\n    local i sorted orig=\"$1\"\n    i=\"$(echo\
+    \ \"$1\" | xargs -n1 | sort -n)\"\n    sorted=\"$i\"\n    i=\"$(echo \"$i\" |\
+    \ uniq)\"\n    [ \"$sorted\" = \"$i\" ] && echo \"None\" && return 0\n    for\
+    \ j in $i; do\n        [ \"$(echo \"$orig\" | grep -c \"^$j$\")\" -gt 1 ] && echo\
+    \ \"$i\" | grep -v \"$j\" | head -n1 && return 0\n    done", "    local smallest=''\n\
+    \    local nsmallest=''\n    for n in $1; do\n        if [ \"$smallest\" == ''\
+    \ ]; then\n            smallest=$n\n        elif [ \"$nsmallest\" == '' ]; then\n\
+    \            if [ \"$n\" -gt \"$smallest\" ]; then\n                nsmallest=$smallest\n\
+    \                smallest=$n\n            else\n                nsmallest=$n\n\
+    \            fi\n        elif [ \"$n\" -lt \"$smallest\" ]; then\n           \
+    \ nsmallest=$smallest\n            smallest=$n\n        elif [ \"$n\" -lt \"$nsmallest\"\
+    \ ]; then\n            nsmallest=$n\n        fi\n    done\n    echo $nsmallest",
+  "  local list=($1)\n  local smallest=${list[0]}\n  local next_smallest=\n  local\
+    \ this\n  for this in \"${list[@]}\"; do\n    if [[ $this -lt $smallest ]]; then\n\
+    \      next_smallest=$smallest\n      smallest=$this\n    elif [[ $this -lt $next_smallest\
+    \ ]]; then\n      next_smallest=$this\n    fi\n  done\n  if [[ -z $next_smallest\
+    \ ]]; then\n    echo \"None\"\n  else\n    echo $next_smallest\n  fi", "    if\
+    \ [ -z \"$1\" ]; then\n        echo \"None\"\n        return 0\n    fi\n    local\
+    \ x1 x2;\n    for n in $1; do\n        if [ -z \"$x1\" ]; then\n            x1=$n\n\
+    \        elif [ -z \"$x2\" ]; then\n            if [ \"$n\" -lt \"$x1\" ]; then\n\
+    \                x2=$x1\n                x1=$n\n            else\n           \
+    \     x2=$n\n            fi\n        else\n            if [ \"$n\" -lt \"$x1\"\
+    \ ]; then\n                x2=$x1\n                x1=$n\n            elif [ \"\
+    $n\" -lt \"$x2\" ]; then\n                x2=$n\n            fi\n        fi\n\
+    \    done\n    if [ -z \"$x2\" ]; then\n        echo \"None\"\n    else\n    \
+    \    echo \"$x2\"\n    fi", "    [ -z \"$1\" ] && echo \"None\" && return\n  \
+    \  local arr=($1)\n    local min=${arr[0]}\n    local next=${arr[0]}\n    local\
+    \ count=0\n    for ((i=0; i<${#arr[@]}; i++)); do\n        if [ ${arr[$i]} -lt\
+    \ $min ]; then\n            min=${arr[$i]}\n        fi\n    done\n    for ((i=0;\
+    \ i<${#arr[@]}; i++)); do\n        if [ ${arr[$i]} -gt $min ]; then\n        \
+    \    next=${arr[$i]}\n            ((count++))\n            break\n        fi\n\
+    \    done\n    for ((i=0; i<${#arr[@]}; i++)); do\n        if [ ${arr[$i]} -gt\
+    \ $min ] && [ ${arr[$i]} -lt $next ]; then\n            next=${arr[$i]}\n    \
+    \    fi\n    done\n    [ $count -eq 0 ] && echo \"None\" || echo $next", "   \
+    \ python3 -c \"\nfrom collections import Counter\n\nl = list(map(int, '$1'.split()))\n\
+    _, c = Counter(l).most_common(1)[0]\n\nif c >= 2:\n    print(None)\nelse:\n  \
+    \  print(sorted(l)[1])\n\"", "    if [ $# -eq 0 ]; then\n        echo \"None\"\
+    \n        return\n    fi\n    IFS=' ' read -ra nums <<< \"$@\"\n    nums=($(printf\
+    \ \"%s\\n\" \"${nums[@]}\" | sort -n))\n    if [ ${#nums[@]} -eq 1 ]; then\n \
+    \       echo \"None\"\n        return\n    fi\n    # check if nums are different\n\
+    \    if [ \"${nums[0]}\" -eq \"${nums[1]}\" ]; then\n        echo \"None\"\n \
+    \       return\n    fi\n    echo \"${nums[1]}\"", '  sort -n -r <(echo $1) | tail
+    -n 2 | head -n 1', "  if [ -z \"$1\" ]; then\n    echo \"None\"\n    return 0\n\
+    \  fi\n  if [ -z \"$(echo \"$1\" | tr ' ' '\\n' | sort -n | uniq -u)\" ]; then\n\
+    \    echo \"None\"\n    return 0\n  fi\n  echo \"$1\" | tr ' ' '\\n' | sort -n\
+    \ | uniq -u | head -n 2 | tail -n 1", "    [ -z \"$1\" ] && echo \"None\" && return\n\
+    \    values=($(tr ' ' '\\n' <<< \"$1\" | sort -n))\n    second=$((values[1]))\n\
+    \    if [[ \"${values[0]}\" == \"$second\" ]]; then\n        echo \"None\"\n \
+    \   else\n        echo \"$second\"\n    fi", "    # write your code here\n   \
+    \ echo \"None\"", "  if [ -z \"$1\" ]; then\n    echo \"None\"\n    return\n \
+    \ fi\n  local input=($1)\n  local sorted=($(echo \"${input[@]}\" | tr ' ' '\\\
+    n' | sort -n))\n  local second_smallest=${sorted[1]}\n  if [ \"$second_smallest\"\
+    \ == \"${sorted[0]}\" ]; then\n    echo \"None\"\n  else\n    echo \"$second_smallest\"\
+    \n  fi", "  if [ -z \"$1\" ]; then\n    echo \"None\"\n    return 0\n  fi\n  local\
+    \ a\n  local -i count=0\n  local min=`echo \"$@\" | tr \" \" \"\\n\" | sort -g\
+    \ | head -n 1`\n  for a in $@; do\n    if [ \"$a\" -gt \"$min\" ]; then\n    \
+    \  echo \"$a\"\n      return 0\n    fi\n  done\n  echo \"None\"", "  local sorted=\"\
+    $(echo \"$@\" | tr ' ' '\\n' | sort -n)\"\n  local smallest=\"$(echo \"$sorted\"\
+    \ | sed '1q;d')\"\n  for element in $sorted; do\n    (( $element > $smallest ))\
+    \ && echo \"$element\" && return\n  done\n  echo \"None\"", '    # your code here',
+  "    # echo \"Parameter 1: $1\"\n    # We need to sort it in ASC order\n    # echo\
+    \ \"$(printf \"%s\\n\" $1 | sort -n)\"\n\n    # Check for empty string\n    if\
+    \ [ \"$1\" = \"\" ]; then\n        echo \"None\"\n        return 0\n    fi\n\n\
+    \    # Check for duplicates\n    if [ \"$(printf \"%s\\n\" $1 | sort -nu | uniq\
+    \ -d)\" != \"\" ]; then\n        echo \"None\"\n        return 0\n    fi\n\n \
+    \   echo \"$(printf \"%s\\n\" $1 | sort -n | sed -n '2p')\"", "    [ -z \"$1\"\
+    \ ] && echo \"None\" && return\n    # convert $1 to array\n    IFS=' ' read -r\
+    \ -a array <<< \"$1\"\n    # sort the array\n    sorted_array=($(printf '%s\\\
+    n' \"${array[@]}\" | sort -n))\n    # if the array is only two element and they\
+    \ are the same, return None\n    [ \"${sorted_array[0]}\" = \"${sorted_array[1]}\"\
+    \ ] && echo \"None\" && return\n    # return the 2nd smallest element in the array\n\
+    \    echo \"${sorted_array[1]}\""]
 stop_tokens:
 - "\n}"

@@ -20,6 +20,234 @@ tests: "}\n\ncandidate() {\n    intersection \"$@\"\n}\n\nset -e\nrun_test() {\n
   \ -1\") = \"NO\" ]]\n    [[ $(candidate \"1 2\" \"3 5\") = \"NO\" ]]\n    [[ $(candidate\
   \ \"1 2\" \"1 2\") = \"NO\" ]]\n    [[ $(candidate \"-2 -2\" \"-3 -2\") = \"NO\"\
   \ ]]\n}\n\nrun_test"
-completions: []
+completions: ["\t# get intervals\n\tIFS=' ' read -a interval1 <<< $1\n\tIFS=' ' read\
+    \ -a interval2 <<< $2\n\t# store them in int1, int2\n\tint1=(${interval1[@]})\n\
+    \tint2=(${interval2[@]})\n\t# calculate intersection\n\tif [[ ${int1[0]} -ge ${int2[0]}\
+    \ ]]; then\n\t\tif [[ ${int1[0]} -le ${int2[1]} ]]; then\n\t\t\tintersect1=${int1[0]}\n\
+    \t\telse\n\t\t\treturn 2\n\t\tfi\n\telse\n\t\tif [[ ${int2[0]} -le ${int1[1]}\
+    \ ]]; then\n\t\t\tintersect1=${int2[0]}\n\t\telse\n\t\t\treturn 2\n\t\tfi\n\t\
+    fi\n\tif [[ ${int1[1]} -ge ${int2[1]} ]]; then\n\t\tif [[ ${int1[1]} -ge ${int2[0]}\
+    \ ]]; then\n\t\t\tintersect2=${int1[1]}\n\t\telse\n\t\t\treturn 2\n\t\tfi\n\t\
+    else\n\t\tif [[ ${int2[1]} -ge ${int1[0]} ]]; then\n\t\t\tintersect2=${int2[1]}\n\
+    \t\telse\n\t\t\treturn 2\n\t\tfi\n\tfi\n\t# check if it is prime or not\n\tif\
+    \ [[ $((intersect2-intersect1)) -eq 0 ]]; then\n\t\treturn 2\n\tfi\n\tif [[ $((intersect2-intersect1))\
+    \ -eq 1 ]]; then\n\t\treturn 1\n\tfi\n\tif [[ $((intersect2-intersect1)) -eq 2\
+    \ ]]; then\n\t\treturn 1\n\tfi\n\tif [[ $((intersect2-intersect1)) -eq 3 ]]; then\n\
+    \t\treturn 0\n\tfi\n\tif [[ $((intersect2-intersect1)) -eq 4 ]]; then\n\t\treturn\
+    \ 1\n\tfi\n\tfor i in $(seq 3 2 $(($((intersect2-intersect1))/2))); do\n\t\tif\
+    \ [[ $", "  local start1=$(echo $1 | cut -d ' ' -f 1)\n  local end1=$(echo $1\
+    \ | cut -d ' ' -f 2)\n  local start2=$(echo $2 | cut -d ' ' -f 1)\n  local end2=$(echo\
+    \ $2 | cut -d ' ' -f 2)\n  local max_start=$(echo -e \"$start1\\n$start2\" | sort\
+    \ -r | head -n 1)\n  local min_end=$(echo -e \"$end1\\n$end2\" | sort -n | head\
+    \ -n 1)\n  local length=$((min_end - max_start))\n  if [[ $length -lt 0 ]]; then\n\
+    \    echo \"NO\"\n  else\n    local counter=0\n    for (( c=2; c<=$length; c++\
+    \ )); do\n      if [[ $((length % c)) -eq 0 ]]; then\n        ((counter++))\n\
+    \      fi\n    done\n    if [[ $counter -lt 2 ]]; then\n      echo \"YES\"\n \
+    \   else\n      echo \"NO\"\n    fi\n  fi", "    local startA=$(echo $1 | awk\
+    \ '{print $1}')\n    local endA=$(echo $1 | awk '{print $2}')\n    local startB=$(echo\
+    \ $2 | awk '{print $1}')\n    local endB=$(echo $2 | awk '{print $2}')\n    local\
+    \ startC\n    local endC\n    if [ $startA -gt $startB ]; then\n        startC=$startA\n\
+    \    else\n        startC=$startB\n    fi\n    if [ $endA -lt $endB ]; then\n\
+    \        endC=$endA\n    else\n        endC=$endB\n    fi\n    if [ $startC -gt\
+    \ $endC ]; then\n        echo \"NO\"\n    else\n        local length=$(($endC\
+    \ - $startC + 1))\n        if [[ $length -eq 1 || $length -eq 2 || $length -eq\
+    \ 3 || $length -eq 5 || $length -eq 7 ]]; then\n            echo \"YES\"\n   \
+    \     else\n            echo \"NO\"\n        fi\n    fi", "    local l1=$(echo\
+    \ $1 | cut -d \" \" -f 1)\n    local l2=$(echo $1 | cut -d \" \" -f 2)\n    local\
+    \ r1=$(echo $2 | cut -d \" \" -f 1)\n    local r2=$(echo $2 | cut -d \" \" -f\
+    \ 2)\n    # test for left range less than or equal to right range\n    if [[ $l1\
+    \ -gt $r1 ]]; then\n        local tmp=$l1\n        l1=$r1\n        r1=$tmp\n \
+    \   fi\n    # test for left range greater than or equal to right range\n    if\
+    \ [[ $l2 -gt $r2 ]]; then\n        local tmp=$l2\n        l2=$r2\n        r2=$tmp\n\
+    \    fi\n    # check for intersection\n    if [[ $l1 -le $r2 && $l2 -le $r1 ]];\
+    \ then\n        # get prime number\n        echo \"YES\"\n    else\n        echo\
+    \ \"NO\"\n    fi", "  # hahah\n  echo \"NO\"", "    local start1=${1% *}\n   \
+    \ local end1=${1#* }\n    local start2=${2% *}\n    local end2=${2#* }\n    local\
+    \ max=0\n    local min=0\n    local i=0\n    local j=0\n    local k=0\n    # NOTE:\
+    \ if the two interval don't intersect, return NO\n    if [ \"$start1\" -gt \"\
+    $end2\" ] || [ \"$start2\" -gt \"$end1\" ]; then\n        echo \"NO\"\n      \
+    \  return 0\n    fi\n    if [ \"$start1\" -gt \"$start2\" ]; then\n        max=$start1\n\
+    \    else\n        max=$start2\n    fi\n    if [ \"$end1\" -gt \"$end2\" ]; then\n\
+    \        min=$end2\n    else\n        min=$end1\n    fi\n    # echo \"max: $max,\
+    \ min: $min\"\n    if [ \"$min\" -gt \"$max\" ]; then\n        # NOTE: the case\
+    \ when min is equals to max\n        # means the length of the intersection is\
+    \ 0\n        if [ \"$min\" -eq \"$max\" ]; then\n            echo \"NO\"\n   \
+    \         return 0\n        fi\n        let i=$min-$max-1\n        # echo \"i:\
+    \ $i\"\n        let j=$i\n        while (( j > 0 )); do\n            # echo \"\
+    j: $j\"\n            if (( i % j == 0 )); then\n                echo \"NO\"\n\
+    \                return 0\n            fi\n            let j--\n        done\n\
+    \        echo \"YES\"\n        return 0\n    fi\n    echo \"NO\"\n    return 0",
+  "    arr=($1)\n    brr=($2)\n    a=${arr[0]}\n    b=${arr[1]}\n    c=${brr[0]}\n\
+    \    d=${brr[1]}\n    echo $(is_intersect \"$a\" \"$b\" \"$c\" \"$d\")", '  #
+    write your code here', '    # write your code here', "  line=$(echo \"${1}\" |\
+    \ sed -e 's/ /\\n/g' | sort -n | head -n1)\n  column=$(echo \"${2}\" | sed -e\
+    \ 's/ /\\n/g' | sort -n | head -n1)\n  line2=$(echo \"${1}\" | sed -e 's/ /\\\
+    n/g' | sort -rn | head -n1)\n  column2=$(echo \"${2}\" | sed -e 's/ /\\n/g' |\
+    \ sort -rn | head -n1)\n  nums=(\"${line}\" \"${column}\" \"${line2}\" \"${column2}\"\
+    )\n  nums=$(echo \"${nums[@]}\" | sed -e 's/ /\\n/g' | sort -n | uniq)\n  [ ${#nums[@]}\
+    \ -eq 2 ] && intersection1=0 || intersection1=$(echo \"${nums[@]}\" | awk '{if($1==$2){print\
+    \ $1}else{print $2-$1}}')\n  [ ${#nums[@]} -eq 2 ] && intersection2=0 || intersection2=$(echo\
+    \ \"${nums[@]}\" | awk '{if($2==$3){print $2}else{print $3-$2}}')\n  [ ${#nums[@]}\
+    \ -eq 2 ] && intersection3=0 || intersection3=$(echo \"${nums[@]}\" | awk '{if($3==$4){print\
+    \ $3}else{print $4-$3}}')\n  is_prime(){\n    [ $1 -le 1 ] && return 1\n    [\
+    \ $1 -eq 2 ] && return 0\n    [ $(( $1 % 2 )) -eq 0 ] && return 1\n    for ((i=3;\
+    \ i<=$(( $1 / 2 )); i=i+2)) ; do\n      [ $(( $1 % i )) -eq 0 ] && return 1\n\
+    \    done\n    return 0\n  }\n  [ $(is_prime ${intersection1}) -eq 0 ] && echo\
+    \ \"YES\" || [ $(is_prime ${intersection2}) -eq 0 ] && echo \"YES\" || [ $(is",
+  "    echo $1 $2 | awk 'BEGIN {FS=\" \"} {\n        a[1]=$1; a[2]=$2;\n        b[1]=$3;\
+    \ b[2]=$4;\n        if (a[1]>b[1]) {\n            t[1]=a[1]; t[2]=a[2];\n    \
+    \        a[1]=b[1]; a[2]=b[2];\n            b[1]=t[1]; b[2]=t[2];\n        }\n\
+    \        if (a[2]>=b[1]) {\n            c[1]=b[1];\n            if (a[2]<b[2])\
+    \ {\n                c[2]=a[2];\n            } else {\n                c[2]=b[2];\n\
+    \            }\n            if (c[1]==c[2]) {\n                print \"NO\";\n\
+    \            } else {\n                for (i=2; i<=c[2]; i++) {\n           \
+    \         if (i<c[1]) {\n                        continue;\n                 \
+    \   }\n                    if (c[2]%i==0) {\n                        if (i<c[2])\
+    \ {\n                            print \"NO\";\n                            exit;\n\
+    \                        }\n                    }\n                }\n       \
+    \         print \"YES\";\n            }\n        } else {\n            print \"\
+    NO\";\n        }\n    }'", "    # this function is for internal use\n    # $1\
+    \ is an integer\n    # $2 is an integer\n    # return \"true\" if $1 is in range\
+    \ [$2, $3]\n    in_range() {\n        if [[ ($1 -le $2) && ($1 -ge $3) ]]; then\n\
+    \            echo \"true\"\n        else\n            echo \"false\"\n       \
+    \ fi\n    }\n    local i1_b=$(echo $1 | cut -d' ' -f1)\n    local i1_e=$(echo\
+    \ $1 | cut -d' ' -f2)\n    local i2_b=$(echo $2 | cut -d' ' -f1)\n    local i2_e=$(echo\
+    \ $2 | cut -d' ' -f2)\n    # there are four cases when you have two intervals:\n\
+    \    # 1. they overlap, 2. they don't overlap,\n    # 3. one is inside the other\
+    \ and 4. they have common points\n    if [[ $(in_range $i1_b $i2_b $i2_e) == \"\
+    true\" ]]; then\n        if [[ $(in_range $i1_e $i2_b $i2_e) == \"true\" ]]; then\n\
+    \            # case 3\n            local res=$(($i1_e - $i1_b + 1))\n        else\n\
+    \            # case 1\n            local res=$(($i1_e - $i2_b + 1))\n        fi\n\
+    \    elif [[ $(in_range $i1_e $i2_b $i2_e) == \"true\" ]]; then\n        # case\
+    \ 1\n        local res=$(($i2_e - $i1_b + 1))\n    elif [[ $(in_range $i2_b $i1_b\
+    \ $i1_e) == \"true\" ]]; then\n        if [[ $(in_range $i2_e $i1_b $i1_e) ==\
+    \ \"true\" ]]; then\n            # case 4\n            local res=$(($i2_e - $i2_b\
+    \ + 1))\n        else\n            # case 3\n            local res=$(($i2_e -\
+    \ $", "  a=\"$1\"\n  b=\"$2\"\n  echo \"$1\"\n  echo \"$2\"\n  s1=$(echo \"$a\"\
+    \ | cut -d' ' -f1)\n  e1=$(echo \"$a\" | cut -d' ' -f2)\n  s2=$(echo \"$b\" |\
+    \ cut -d' ' -f1)\n  e2=$(echo \"$b\" | cut -d' ' -f2)\n  # first, find the start\
+    \ and end of intersection\n  # then find the length of the intersection\n  # if\
+    \ the length is prime, return \"YES\"\n  # else, return \"NO\"\n  # if the two\
+    \ intervals don't intersect, return \"NO\"\n  #\n  #  s1 e1     start of interval\
+    \ 1\n  #  s2 e2     start of interval 2\n  #\n  #          s2\n  #  s1\n  #  \
+    \        e2\n  #  e1\n  #\n  #  s1 e1   s2 e2\n  #  s2 e2   s1 e1\n  #\n  #  s1\
+    \ e1\n  #        s2\n  #\n  #  s1 e1\n  #           e2\n  #\n  #            s1\n\
+    \  #        s2\n  #\n  #            s1\n  #           e2\n  if [ $s1 -le $s2 ]\n\
+    \  then\n    if [ $e1 -le $s2 ]\n    then\n      # no intersection\n      result=\"\
+    NO\"\n    elif [ $e1 -le $e2 ]\n    then\n      # start of intersection\n    \
+    \  start=$s2\n      # end of intersection\n      end=$e1\n      # length of intersection\n\
+    \      length=$(( $end - $start + 1 ))\n      if [[ ( $(is_prime $length) == \"\
+    true\" ) ]]\n      then\n        result=\"YES\"\n      else\n        result=\"\
+    NO\"\n      fi\n    else\n      # start of intersection\n      start=$s2\n   \
+    \   # end of intersection\n      end=$e2\n      # length of intersection\n   \
+    \   length=$(( $end - $start + 1 ))\n      if [[ ( $(is_prime", "    read -a start_a\
+    \ <<< \"$1\"\n    read -a end_a <<< \"$2\"\n    read -a start_b <<< \"$3\"\n \
+    \   read -a end_b <<< \"$4\"\n    start_a=${start_a[0]}\n    end_a=${end_a[0]}\n\
+    \    start_b=${start_b[0]}\n    end_b=${end_b[0]}\n    range_start=$(python -c\
+    \ \"print(max($start_a, $start_b))\")\n    range_end=$(python -c \"print(min($end_a,\
+    \ $end_b))\")\n    if [[ $range_start -gt $range_end ]]; then\n        echo \"\
+    NO\"\n    else\n        range_length=$(python -c \"print($range_end - $range_start)\"\
+    )\n        for ((i=2; i<=$range_length; i++)); do\n            if [[ $range_length\
+    \ -eq 1 ]]; then\n                echo \"NO\"\n                return\n      \
+    \      elif [[ $range_length -eq 2 ]]; then\n                echo \"YES\"\n  \
+    \              return\n            elif [[ $range_length -eq 3 ]]; then\n    \
+    \            echo \"YES\"\n                return\n            elif [[ $range_length\
+    \ -eq 5 ]]; then\n                echo \"YES\"\n                return\n     \
+    \       elif [[ $range_length -eq 7 ]]; then\n                echo \"YES\"\n \
+    \               return\n            elif [[ $range_length -eq 11 ]]; then\n  \
+    \              echo \"YES\"\n                return\n            elif [[ $range_length\
+    \ -eq 13 ]]; then\n                echo \"YES\"\n                return\n    \
+    \        elif [[ $range_length -eq 17 ]]; then\n                echo \"YES\"\n\
+    \                return\n            elif [[ $range_length -eq 19 ]]; then\n \
+    \               echo \"YES\"\n                return\n            elif [[ $range_length\
+    \ -eq 23 ]]; then\n                echo \"YES\"\n                return\n    \
+    \        elif [[ $range_length -eq 29 ]]; then\n                echo \"YES\"\n\
+    \                return\n            elif [[ $range_length -eq 31 ]]; then\n \
+    \               echo \"YES\"\n                return\n            el", "  local\
+    \ a1=\"$(echo $1 | cut -d' ' -f1)\"\n  local a2=\"$(echo $1 | cut -d' ' -f2)\"\
+    \n  local b1=\"$(echo $2 | cut -d' ' -f1)\"\n  local b2=\"$(echo $2 | cut -d'\
+    \ ' -f2)\"\n  local result\n  if [ \"$b1\" -ge \"$a1\" ] && [ \"$b1\" -le \"$a2\"\
+    \ ]; then\n    result=\"$b1\"\n  elif [ \"$a1\" -ge \"$b1\" ] && [ \"$a1\" -le\
+    \ \"$b2\" ]; then\n    result=\"$a1\"\n  else\n    result=0\n  fi\n  local stop\n\
+    \  if [ \"$b2\" -ge \"$a1\" ] && [ \"$b2\" -le \"$a2\" ]; then\n    stop=\"$b2\"\
+    \n  elif [ \"$a2\" -ge \"$b1\" ] && [ \"$a2\" -le \"$b2\" ]; then\n    stop=\"\
+    $a2\"\n  else\n    stop=0\n  fi\n  if [ $result -eq 0 ] || [ $stop -eq 0 ]; then\n\
+    \    echo \"NO\"\n  else\n    result=\"$((result - stop + 1))\"\n    if [ $result\
+    \ -eq 1 ]; then\n      echo \"NO\"\n    else\n      # echo \"Checking if prime:\
+    \ $result\"\n      if [ $(is_prime $result) -eq 1 ]; then\n        echo \"YES\"\
+    \n      else\n        echo \"NO\"\n      fi\n    fi\n  fi", "  # split the intervals\n\
+    \  local -a e1 e2\n  read -a e1 <<< \"${1// /$'\\n'}\"\n  read -a e2 <<< \"${2//\
+    \ /$'\\n'}\"\n  # extract the intersection of the intervals\n  local -i istart=\"\
+    $(max \"${e1[0]}\" \"${e2[0]}\")\"\n  local -i iend=\"$(min \"${e1[1]}\" \"${e2[1]}\"\
+    )\"\n  # if there is no intersection, return NO\n  [[ $istart -gt $iend ]] &&\
+    \ echo \"NO\" && return\n  # if the length of the intersection is not prime, return\
+    \ NO\n  [[ $(( iend - istart + 1 )) -ne 2 ]] && echo \"NO\" && return\n  # if\
+    \ the length of the intersection is prime, return YES\n  echo \"YES\"", "    local\
+    \ from from1 from2 to to1 to2\n    from1=$(echo $1 | awk '{print $1}')\n    to1=$(echo\
+    \ $1 | awk '{print $2}')\n    from2=$(echo $2 | awk '{print $1}')\n    to2=$(echo\
+    \ $2 | awk '{print $2}')\n    # takes max of the first interval's start\n    #\
+    \ and the second interval's start\n    if [[ $from1 -ge $from2 ]]; then\n    \
+    \    from=$from1\n    else\n        from=$from2\n    fi\n    # takes min of the\
+    \ first interval's end\n    # and the second interval's end\n    if [[ $to1 -le\
+    \ $to2 ]]; then\n        to=$to1\n    else\n        to=$to2\n    fi\n    # if\
+    \ the start of the first interval is\n    # greater than or equal to the end of\
+    \ the\n    # second interval, the intervals don't intersect\n    if [[ $from -ge\
+    \ $to ]]; then\n        echo \"NO\"\n    else\n        # if the length of the\
+    \ intersection is\n        # a prime number, echo \"YES\", else echo \"NO\"\n\
+    \        if [[ $(($to - $from)) -eq 2 ]]; then\n            echo \"YES\"\n   \
+    \     else\n            echo \"NO\"\n        fi\n    fi", "\t# Step 1: Get the\
+    \ two intervals\n\t# Step 2: Get the lowest of their intervals\n\t# Step 3: Get\
+    \ the highest of their intervals\n\t# Step 4: Take the difference\n\t# Step 5:\
+    \ Is the difference a prime number?\n\t# Step 6: Return YES or NO\n\tlocal interval_1_low\
+    \ interval_1_high interval_2_low interval_2_high interval_low interval_high interval_diff\
+    \ prime_answer\n\tinterval_1_low=$(echo $1 | cut -d' ' -f1)\n\tinterval_1_high=$(echo\
+    \ $1 | cut -d' ' -f2)\n\tinterval_2_low=$(echo $2 | cut -d' ' -f1)\n\tinterval_2_high=$(echo\
+    \ $2 | cut -d' ' -f2)\n\tif [ $interval_1_low -le $interval_2_low ]; then\n\t\t\
+    interval_low=$interval_1_low\n\telse\n\t\tinterval_low=$interval_2_low\n\tfi\n\
+    \tif [ $interval_1_high -ge $interval_2_high ]; then\n\t\tinterval_high=$interval_1_high\n\
+    \telse\n\t\tinterval_high=$interval_2_high\n\tfi\n\tinterval_diff=$(expr $interval_high\
+    \ - $interval_low)\n\tif [ $interval_diff -eq 0 ]; then\n\t\tprime_answer=\"NO\"\
+    \n\telse\n\t\tprime_answer=$(python -c \"print('YES' if $interval_diff == 2 or\
+    \ (1 not in [$interval_diff % x for x in range(2, int(str(int($interval_diff/2))+1))])\
+    \ else 'NO')\")\n\tfi\n\techo $prime_answer", "    # echo \"1st interval: $1\"\
+    \n    # echo \"2nd interval: $2\"\n    # split the string into an array by space\n\
+    \    # https://stackoverflow.com/questions/10586153/split-string-into-an-array-in-bash\n\
+    \    arr1=($1)\n    arr2=($2)\n    # print the array\n    # https://www.cyberciti.biz/faq/bash-for-loop/\n\
+    \    # https://stackoverflow.com/questions/11456992/how-to-print-a-loop-in-bash\n\
+    \    # echo \"1st interval's elements: \"\n    # for element in ${arr1[@]}\n \
+    \   # do\n    #     echo \"$element\"\n    # done\n    # echo \"2nd interval's\
+    \ elements: \"\n    # for element in ${arr2[@]}\n    # do\n    #     echo \"$element\"\
+    \n    # done\n    # find the least left\n    # if arr1[0] <= arr2[0]\n    #  \
+    \   start = arr1[0]\n    # else\n    #     start = arr2[0]\n    # find the greatest\
+    \ right\n    # if arr1[1] <= arr2[1]\n    #     end = arr2[1]\n    # else\n  \
+    \  #     end = arr1[1]\n    # if the left boundry is greater than right boundry\n\
+    \    # the interval doesn't intersect\n    # if start > end\n    #     echo \"\
+    NO\"\n    #     return\n    # verify if the length of the interval is a prime\
+    \ number\n    # if the length is 1, it is not a prime number\n    # if end - start\
+    \ + 1 == 1\n    #     echo \"NO\"\n    #     return\n    # find the greatest common\
+    \ divisor of the length of the interval\n    # http://www.tldp.org/LDP/abs/html/comparison-ops.html\n\
+    \    # greater or equal\n    # if (( end - start + 1 >= 2 ))\n    #     echo \"\
+    YES\"\n    # else\n    #     echo \"NO\"\n    # fi\n    # if start > end\n   \
+    \ #     echo \"", "    local start1=$(echo $1 | awk '{print $1}')\n    local end1=$(echo\
+    \ $1 | awk '{print $2}')\n    local start2=$(echo $2 | awk '{print $1}')\n   \
+    \ local end2=$(echo $2 | awk '{print $2}')\n    if [[ $start1 -le $start2 ]];\
+    \ then\n        local start=$start2\n    else\n        local start=$start1\n \
+    \   fi\n    if [[ $end1 -ge $end2 ]]; then\n        local end=$end2\n    else\n\
+    \        local end=$end1\n    fi\n    local intersection=$((end - start + 1))\n\
+    \    if [[ $intersection -le 0 ]]; then\n        echo \"NO\"\n    elif [[ $intersection\
+    \ -le 2 ]]; then\n        echo \"NO\"\n    elif [[ $intersection -eq 3 ]]; then\n\
+    \        echo \"YES\"\n    elif [[ $intersection -eq 5 ]]; then\n        echo\
+    \ \"YES\"\n    elif [[ $intersection -eq 7 ]]; then\n        echo \"YES\"\n  \
+    \  elif [[ $intersection -eq 11 ]]; then\n        echo \"YES\"\n    elif [[ $intersection\
+    \ -eq 13 ]]; then\n        echo \"YES\"\n    elif [[ $intersection -eq 17 ]];\
+    \ then\n        echo \"YES\"\n    elif [[ $intersection -eq 19 ]]; then\n    \
+    \    echo \"YES\"\n    elif [[ $intersection -eq 23 ]]; then\n        echo \"\
+    YES\"\n    elif [[ $intersection -eq 29 ]]; then\n        echo \"YES\"\n    elif\
+    \ [[ $intersection -eq 31 ]]; then\n        echo \"YES\"\n    elif [[ $intersection\
+    \ -eq 37 ]]; then\n        echo \"YES\"\n    elif [[ $intersection -eq 41 ]];\
+    \ then\n        echo \"YES\"\n    elif [[ $intersection -eq 43 ]]; then\n    \
+    \    echo \"YES\"\n    elif [[ $intersection -eq 47 ]]; then\n        echo \"\
+    YES\"\n    elif [[ $intersection -eq 53 ]]; then\n        echo \"YES\"\n    elif\
+    \ [[ $intersection -eq 59"]
 stop_tokens:
 - "\n}"

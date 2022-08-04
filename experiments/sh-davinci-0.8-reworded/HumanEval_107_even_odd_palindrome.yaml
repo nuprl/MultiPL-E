@@ -15,6 +15,152 @@ tests: "}\n\ncandidate() {\n    even_odd_palindrome \"$@\"\n}\n\nset -e\nrun_tes
   6 8\" ]]\n    [[ $(candidate \"25\") = \"5 6\" ]]\n    [[ $(candidate \"19\") =\
   \ \"4 6\" ]]\n    [[ $(candidate \"9\") = \"4 5\" ]]\n    [[ $(candidate \"1\")\
   \ = \"0 1\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  if [[ ! \"$1\" =~ ^[0-9]+$ ]]; then\n    echo \"\"\n    return\n\
+    \  fi\n  local n=\"$1\"\n  local even_count=0\n  local odd_count=0\n  local head=0\n\
+    \  local tail=0\n  local digits=1\n  while [[ \"$n\" -ge \"$((10**$digits))\"\
+    \ ]]; do\n    digits=$((digits+1))\n  done\n  for (( i=1; i<=n; i++ )); do\n \
+    \   (( digits == 1 )) && (( i % 2 == 0 )) && (( even_count++ )) && continue\n\
+    \    (( digits == 1 )) && (( i % 2 == 1 )) && (( odd_count++ )) && continue\n\
+    \    head=0\n    tail=0\n    for (( j=1; j<=digits/2; j++ )); do\n      head=$((\
+    \ head + (i/(10**(j-1))) % 10 ))\n      tail=$(( tail + (i/(10**(digits-j))) %\
+    \ 10 ))\n      (( j != digits/2 )) && head=$(( head * 10 ))\n      (( j != digits/2\
+    \ )) && tail=$(( tail * 10 ))\n    done\n    (( head == tail )) && (( i % 2 ==\
+    \ 0 )) && (( even_count++ )) && continue\n    (( head == tail )) && (( i % 2 ==\
+    \ 1 )) && (( odd_count++ )) && continue\n  done\n  echo \"[\\\"$even_count\\\"\
+    , \\\"$odd_count\\\"]\"", "  if [ $# -eq 0 ]; then\n    echo \"Error: Must provide\
+    \ an integer.\"\n    exit 1\n  fi\n  # You can also use regex below, but it is\
+    \ a little bit slow.\n  # if [[ ! $1 =~ ^[1-9][0-9]*$ ]]; then\n  #   echo \"\
+    Error: Must provide an integer.\"\n  #   exit 1\n  # fi\n  if [ $1 -lt 1 ] ||\
+    \ [ $1 -gt 1000 ]; then\n    echo \"Error: Must provide an integer that falls\
+    \ within the range(1, 10^3), inclusive.\"\n    exit 1\n  fi\n  # You can also\
+    \ use the following script to do the job, but it is a little bit slow.\n  # echo\
+    \ $(seq 1 $1) | tr \" \" \"\\n\" | awk '$1==revnum($1)' | awk '$1%2==0' | wc -l\n\
+    \  # echo $(seq 1 $1) | tr \" \" \"\\n\" | awk '$1==revnum($1)' | awk '$1%2==1'\
+    \ | wc -l\n  even_num=0\n  odd_num=0\n  for ((i=1; i<=$1; i++)); do\n    rev_num=0\n\
+    \    temp_num=$i\n    while [ $temp_num -gt 0 ]; do\n      rem=$(($temp_num %\
+    \ 10))\n      rev_num=$(($rev_num * 10 + $rem))\n      temp_num=$(($temp_num /\
+    \ 10))\n    done\n    if [ $i -eq $rev_num ]; then\n      if [ $((i % 2)) -eq\
+    \ 0 ]; then\n        even_num=$((even_num + 1))\n      else\n        odd_num=$((odd_num\
+    \ + 1))\n      fi\n    fi\n  done\n  echo \"[\\\"$even_num\\\", \\\"$odd_num\\\
+    \"]\"", "    local even_count=0\n    local odd_count=0\n    # Count even and odd\
+    \ integer palindromes\n    for i in $(seq 1 $1); do\n        if [[ $i -eq $(reverse_int\
+    \ $i) ]]; then\n            #echo \"$i is palindrome\"\n            if [[ $((i\
+    \ % 2)) -eq 0 ]]; then\n                even_count=$((even_count + 1))\n     \
+    \       else\n                odd_count=$((odd_count + 1))\n            fi\n \
+    \       fi\n    done\n    echo \"[\\\"$even_count\\\", \\\"$odd_count\\\"]\"",
+  "  if [ -z \"$1\" ]; then\n    # echo \"even_odd_palindrome should not be empty.\"\
+    \n    echo \"Input is empty\"\n    exit 1\n  fi\n  # for debugging\n  # echo \"\
+    find palindrome in range($1)\"\n  local range=$1\n  local even=0\n  local odd=0\n\
+    \  for ((i=1; i<=\"$range\"; i++)); do\n    # For debugging\n    # echo \"$i:\
+    \ $(is_palindrome $i)\"\n    if is_palindrome $i; then\n      # For debugging\n\
+    \      # echo \"$i is palindrome\"\n      if [ $((i%2)) -eq 0 ]; then\n      \
+    \  even=$((even+1))\n      else\n        odd=$((odd+1))\n      fi\n    fi\n  done\n\
+    \  echo \"['\"$even\"', '\"$odd\"']\"", "  local i is_palindrome_num num_even_palindrome\
+    \ num_odd_palindrome\n  num_even_palindrome=0\n  num_odd_palindrome=0\n  for ((i=1;\
+    \ i<=$1; i++)); do\n    is_palindrome_num=$(is_palindrome \"$i\")\n    if [[ $is_palindrome_num\
+    \ -eq 1 ]]; then\n      if (( i % 2 == 0 )); then\n        (( num_even_palindrome\
+    \ += 1 ))\n      else\n        (( num_odd_palindrome += 1 ))\n      fi\n    fi\n\
+    \  done\n  echo \"[$num_even_palindrome, $num_odd_palindrome]\"", "  local _number=$1\n\
+    \  local -a _even_odd\n  for _palindrome in $(seq 1 ${_number}); do\n    if [[\
+    \ $(is_palindrome ${_palindrome}) -eq 1 ]]; then\n      local _palindrome_type=\"\
+    odd\"\n      if [[ $(is_even ${_palindrome}) -eq 1 ]]; then\n        _palindrome_type=\"\
+    even\"\n      fi\n      _even_odd+=(\"${_palindrome_type}\")\n    fi\n  done\n\
+    \  printf \"%s\\n\" \"${_even_odd[@]}\" | sort | uniq -c | tr -s ' ' | tr ' '\
+    \ '\\n'", "  local n=\"$1\"\n  # The sequence of palindromes where the number\
+    \ of digits of them are even is:\n  # 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 33,\
+    \ 44, 55, 66, 77, 88, 99, ...\n  # The sequence of palindromes where the number\
+    \ of digits of them are odd is:\n  # 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 33, 44,\
+    \ 55, 66, 77, 88, 99, 101, ...\n  # Because 9 is the largest number that forms\
+    \ a palindrome of even number of digits.\n  # And 99 is the largest number that\
+    \ forms a palindrome of odd number of digits.\n  # Then the number of palindromes\
+    \ that fall within the range (1, n) is\n  # [n / 10] + [n / 100] + [n / 100] +\
+    \ 1\n  # where [x] is the greatest integer that is less than or equal to x.\n\
+    \  # Palindromes of even number of digits are:\n  # 0, 1, 2, 3, 4, 5, 6, 7, 8,\
+    \ 9, 11, 22, 33, 44, 55, 66, 77, 88, 99, ...\n  # Palindromes of odd number of\
+    \ digits are:\n  # 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 33, 44, 55, 66, 77, 88,\
+    \ 99, 101, ...\n  # Palindromes of even number of digits are:\n  # 9, 99, 999,\
+    \ 9999, 99999, 999999, 9999999, 99999999, 999999999, ...\n  # where 9 is the largest\
+    \ number that forms a palindrome of even number of digits.\n  # Palindromes of\
+    \ odd number of digits are:\n  # 9, 99, 999, 9999, 99999, 999999, 9999999, 99999999,\
+    \ 999999999, ...\n  # where 99 is the largest number that forms a palindrome of\
+    \ odd number of digits.\n  # Thus for an integer n, the number of palindromes\
+    \ of even number of digits that\n  # fall within the", "  if [[ $1 -eq 0 ]]; then\n\
+    \    echo \"[\\\"0\\\", \\\"0\\\"]\"\n    return\n  fi\n  # num1 is the number\
+    \ of even integer palindromes, num2 is the number of odd integer palindromes\n\
+    \  num1=0\n  num2=0\n  for i in $(seq 1 $1); do\n    # temp is to indicate whether\
+    \ the integer palindrome is even or odd\n    temp=$(echo $i | rev)\n    if [[\
+    \ $i -eq $temp ]]; then\n      if [[ $(expr $i % 2) -eq 0 ]]; then\n        num1=$(expr\
+    \ $num1 + 1)\n      else\n        num2=$(expr $num2 + 1)\n      fi\n    fi\n \
+    \ done\n  echo \"[\\\"$num1\\\", \\\"$num2\\\"]\"", "  function isPalindrome()\
+    \ {\n    local string=\"$@\"\n    local reverse=\"\"\n    for ((i=${#string}-1;\
+    \ i>=0; i--)); do\n      reverse=\"${reverse}${string:$i:1}\"\n    done\n    if\
+    \ [[ \"$string\" == \"$reverse\" ]]; then\n      return 0\n    else\n      return\
+    \ 1\n    fi\n  }\n  local even=0\n  local odd=0\n  for((i=1; i<=$1; i++)); do\n\
+    \    if isPalindrome \"$i\"; then\n      if (( $i % 2 == 0 )); then\n        ((\
+    \ even++ ))\n      else\n        (( odd++ ))\n      fi\n    fi\n  done\n  echo\
+    \ \"[\\\"$even\\\", \\\"$odd\\\"]\"", "    local even_palindrome odd_palindrome\n\
+    \    even_palindrome=0\n    odd_palindrome=0\n    for number in $(seq 1 $1); do\n\
+    \        if is_palindrome $number; then\n            if is_even $number; then\n\
+    \                (( even_palindrome++ ))\n            else\n                ((\
+    \ odd_palindrome++ ))\n            fi\n        fi\n    done\n    printf \"%s %s\"\
+    \ $even_palindrome $odd_palindrome", "    if [[ \"$1\" =~ ^-?[0-9]+$ ]]; then\n\
+    \        local even=0\n        local odd=0\n        for (( i=1; i<=$1; i++ ));\
+    \ do\n            local num=$i\n            local rev=0\n            while [[\
+    \ $num -gt 0 ]]; do\n                local digit=$(( $num % 10 ))\n          \
+    \      rev=$(( rev * 10 + digit ))\n                num=$(( num / 10 ))\n    \
+    \        done\n            if [[ $i -eq $rev ]]; then\n                if [[ $((\
+    \ i % 2 )) -eq 0 ]]; then\n                    even=$(( even + 1 ))\n        \
+    \        else\n                    odd=$(( odd + 1 ))\n                fi\n  \
+    \          fi\n        done\n        echo \"[\\\"$even\\\", \\\"$odd\\\"]\"\n\
+    \    else\n        echo \"[\\\"0\\\", \\\"0\\\"]\"\n    fi", "    if [ -z \"$1\"\
+    \ ]; then\n        echo \"Empty input\"\n        return\n    fi\n    n=$1\n  \
+    \  even_counter=0\n    odd_counter=0\n    while [ $n -ge 1 ]; do\n        rev_num=0\n\
+    \        num=$n\n        while [ $num -gt 0 ]; do\n            remainder=$(( $num\
+    \ % 10 ))\n            rev_num=$(( $rev_num * 10 + $remainder ))\n           \
+    \ num=$(( $num / 10 ))\n        done\n        if [ $rev_num -eq $n ]; then\n \
+    \           if [ $(( $n % 2 )) -eq 0 ]; then\n                (( even_counter++\
+    \ ))\n            else\n                (( odd_counter++ ))\n            fi\n\
+    \        fi\n        (( n-- ))\n    done\n    echo -e \"[\\\"$even_counter\\\"\
+    , \\\"$odd_counter\\\"]\"", "  if [ \"$1\" -lt 1 ] || [ \"$1\" -gt 1000 ]; then\n\
+    \    printf \"Error: 'n' should be in [1, 1000]\" >&2\n    exit 1\n  fi\n  num_odd=0\n\
+    \  num_even=0\n  for n in $(seq 1 \"$1\"); do\n    if is_palindrome \"$n\"; then\n\
+    \      if [ \"$((n % 2))\" -eq 0 ]; then\n        num_even=$((num_even + 1))\n\
+    \      else\n        num_odd=$((num_odd + 1))\n      fi\n    fi\n  done\n  printf\
+    \ '[\"%s\", \"%s\"]' \"$num_even\" \"$num_odd\"", "  local number=$1\n  local\
+    \ result=(0 0)\n  local digit=\"\"\n  local digit_length=\"\"\n  local base=\"\
+    \"\n  local mod=\"\"\n  local reversed=\"\"\n  local palindrome=\"\"\n  local\
+    \ i=\"\"\n  for (( i=1; i<=number; i++ )); do\n    # obtain digits of $i.\n  \
+    \  base=10\n    reversed=\"\"\n    digit_length=${#i}\n    for (( x=0; x<digit_length;\
+    \ x++ )); do\n      digit=$(( i%base ))\n      reversed=\"$reversed$digit\"\n\
+    \      i=$(( i/base ))\n    done\n    i=$(( reversed ))\n    palindrome=$(( i%2\
+    \ ))\n    if [ $palindrome -eq 0 ]; then\n      result[0]=$(( result[0]+1 ))\n\
+    \    else\n      result[1]=$(( result[1]+1 ))\n    fi\n  done\n  echo \"[\\\"\
+    ${result[0]}\\\", \\\"${result[1]}\\\"]\"", "    if [[ $1 =~ ^[0-9]+$ ]]; then\n\
+    \        local even_count=$(get_even_palindrome_count $1)\n        local odd_count=$(get_odd_palindrome_count\
+    \ $1)\n        echo ['\"$even_count\"', '\"$odd_count\"']\n    else\n        return\
+    \ 1\n    fi", "  local -r LIMIT=\"$1\"\n  local -i EVEN\n  local -i ODD\n  EVEN=0\n\
+    \  ODD=0\n  for ((i=1; i<=LIMIT; i++)); do\n    if check_palindrome \"$i\"; then\n\
+    \      if [[ $((i % 2)) -eq 0 ]]; then\n        EVEN=$((EVEN + 1))\n      else\n\
+    \        ODD=$((ODD + 1))\n      fi\n    fi\n  done\n  echo \"['\\\"$EVEN\\\"\
+    ', '\\\"$ODD\\\"']\"", "  if [[ $1 =~ ^[0-9]+$ ]]; then\n    local even=0\n  \
+    \  local odd=0\n    for ((i=1; i<=$1; i++)); do\n      if $(is_palindrome $i);\
+    \ then\n        if ((i%2==0)); then\n          ((even++))\n        else\n    \
+    \      ((odd++))\n        fi\n      fi\n    done\n    echo \"[\\\"$even\\\", \\\
+    \"$odd\\\"]\"\n  else\n    echo \"\\\"Error: Input must be an integer\\\"\"\n\
+    \  fi", '  # Write your solution here', "  local even=0\n  local odd=0\n  for\
+    \ ((i=1; i<=$1; i++)); do\n    local palindrome_number=$(reverse_integer \"$i\"\
+    )\n    if [[ $i -eq $palindrome_number ]]; then\n      if [[ $((i%2)) -eq 0 ]];\
+    \ then\n        even=$((even+1))\n      else\n        odd=$((odd+1))\n      fi\n\
+    \    fi\n  done\n  echo \"['\"$even\"', '\"$odd\"']\"", "    if [[ $1 =~ ^[0-9]+$\
+    \ ]]; then\n        local even_count=0\n        local odd_count=0\n        for\
+    \ ((i=1; i<=$1; i++)); do\n            local temp=$i\n            local reverse=0\n\
+    \            while [[ $temp -gt 0 ]]; do\n                local remainder=$((temp%10))\n\
+    \                reverse=$((reverse*10+remainder))\n                temp=$((temp/10))\n\
+    \            done\n            if [[ $i -eq $reverse ]]; then\n              \
+    \  if [[ $((i%2)) -eq 0 ]]; then\n                    even_count=$((even_count+1))\n\
+    \                else\n                    odd_count=$((odd_count+1))\n      \
+    \          fi\n            fi\n        done\n        local result=[\"$even_count\"\
+    , \"$odd_count\"]\n        echo $result\n    else\n        echo \"\\\"error\\\"\
+    \"\n    fi"]
 stop_tokens:
 - "\n}"

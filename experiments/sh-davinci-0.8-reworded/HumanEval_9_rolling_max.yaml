@@ -8,6 +8,80 @@ tests: "}\n\ncandidate() {\n    rolling_max \"$@\"\n}\n\nset -e\nrun_test() {\n 
   \  [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"1 2 3 4\") = \"1 2 3 4\"\
   \ ]]\n    [[ $(candidate \"4 3 2 1\") = \"4 4 4 4\" ]]\n    [[ $(candidate \"3 2\
   \ 3 100 3\") = \"3 3 3 100 100\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    arr=($1)\n    max=${arr[0]}\n    for i in \"${arr[@]}\"\n    do\n\
+    \        if [[ \"$i\" -gt \"$max\" ]]; then\n            max=$i\n        fi\n\
+    \        echo \"\\\"$max\\\"\"\n    done", "  # Internal variable for storing\
+    \ current max value\n  # shellcheck disable=SC2034\n  local _max\n\n  # Iterate\
+    \ over the list\n  local e\n  for e in \"$@\"; do\n    # Current max is the maximum\
+    \ of current and previous value\n    _max=$(echo \"$_max $e\" | awk '{print $1\
+    \ > $2 ? $1 : $2}')\n    # Print result\n    echo \"\\\"$_max\\\"\"\n  done",
+  "    local list=$1;\n    local maxtemp=$(echo $list | cut -d ' ' -f 1);\n    local\
+    \ max=$maxtemp;\n    for i in $list; do\n        if [ $max -lt $i ]; then\n  \
+    \          max=$i;\n        fi\n        echo \\\"$max\\\";\n    done", "    local\
+    \ array\n    array=( $1 )\n    local size=${#array[@]}\n    local max=$(echo ${array[0]}\
+    \ | bc)\n    local output=()\n    output+=( $max )\n    local i\n    for (( i=1;\
+    \ i<$size; i++ )); do\n        local current=$(echo ${array[$i]} | bc)\n     \
+    \   if [[ $(echo \"$max < $current\" | bc) -eq 1 ]]; then\n            max=$current\n\
+    \        fi\n        output+=( $max )\n    done\n    echo \"${output[@]}\"", " \
+    \ seq=$1\n  awk -v seq=\"$seq\" '\n  BEGIN {\n    split(seq, arr, \" \")\n   \
+    \ for (i = 1; i <= length(arr); i++) {\n      printf \"%s\\n\", arr[i]\n     \
+    \ for (j = 1; j < i; j++) {\n        if (arr[j] > arr[i]) {\n          printf\
+    \ \"%s\\n\", arr[j]\n        } else {\n          printf \"%s\\n\", arr[i]\n  \
+    \      }\n      }\n    }\n  }'", "    for i in $1; do\n        max=$i\n      \
+    \  for j in $1; do\n            if [[ $j -gt $max ]]; then\n                max=$j\n\
+    \            fi\n        done\n        echo '\"'$max'\"'\n    done", "    declare\
+    \ -a rms\n    local -i rm_i=0\n    for e in ${1// / }; do\n        rms[$rm_i]=$(max\
+    \ \"${rms[@]}\" \"$e\")\n        let rm_i+=1\n    done\n    printf '%s\\n' \"\
+    ${rms[@]}\"", "  local max\n  local current_value\n  local max_value\n  max=0\n\
+    \  while [ -n \"$1\" ]; do\n    current_value=$1\n    shift\n    if [ ${current_value}\
+    \ -gt ${max} ]; then\n      max=${current_value}\n    fi\n    printf '\"%s\" '\
+    \ \"${max}\"\n  done", "    local arg_list=()\n    local arg_max=0\n    for arg\
+    \ in $@; do\n        if (( $arg > $arg_max )); then\n            arg_max=$arg\n\
+    \        fi\n        arg_list+=(\"$arg_max\")\n    done\n    # This is tedious,\
+    \ but I don't see an easier way to convert the array back to a space-separated\n\
+    \    # string.\n    echo '\"'$( IFS=$'\\n'; echo \"${arg_list[*]}\" )'\"'", " \
+    \   local ret=''\n    local i=0\n    local max_elem='\"1\"'\n    local seq=($1)\n\
+    \    for elem in \"${seq[@]}\"; do\n        if [[ $elem -gt $max_elem ]]; then\n\
+    \            max_elem=$elem\n        fi\n        ret+=\"$max_elem \"\n    done\n\
+    \    echo $ret", "  local -a list=($1)\n  local local_max=${list[0]}\n  echo \"\
+    \\\"$local_max\\\"\"\n  local i\n  for ((i=1; i<${#list[@]}; i++)); do\n    if\
+    \ [[ ${list[$i]} -gt $local_max ]]; then\n      local_max=${list[$i]}\n    fi\n\
+    \    echo \"\\\"$local_max\\\"\"\n  done", "    # Assume that the first element\
+    \ is max\n    local max=$(echo \"$1\" | awk '{print $1}')\n    local list=$(echo\
+    \ \"$1\" | awk '{$1=\"\"; print}')\n    local result=$(seq 0 $(echo \"$list\"\
+    \ | wc -w))\n    local count=0\n    for el in $list; do\n        if [[ $el -gt\
+    \ $max ]]; then\n            max=$el\n        fi\n        result[$count]=$max\n\
+    \        ((count++))\n    done\n    result=$(echo ${result[@]} | tr \" \" \",\"\
+    )\n    echo \"[$result]\"", "    local -n arr=$1\n    local -a maxlist\n    local\
+    \ elem\n    local maxelem\n    local maxlist\n\n    if [[ ${#arr[@]} -eq 0 ]];\
+    \ then\n        echo -n \"[\"\n        for i in \"${arr[@]}\"; do\n          \
+    \  echo -n \"\\\"$i\\\" \"\n        done\n        echo -n \"]\"\n        return\n\
+    \    fi\n\n    maxelem=${arr[0]}\n    maxlist+=(${arr[0]})\n    for (( i=1; i<${#arr[@]};\
+    \ i++ )); do\n        elem=${arr[$i]}\n        if [[ \"$elem\" -gt \"$maxelem\"\
+    \ ]]; then\n            maxelem=$elem\n        fi\n        maxlist+=($maxelem)\n\
+    \    done\n\n    echo -n \"[\"\n    for i in \"${maxlist[@]}\"; do\n        echo\
+    \ -n \"\\\"$i\\\" \"\n    done\n    echo -n \"]\"", "  local _num_list=$1\n  local\
+    \ _max=0\n  local _num\n  for _num in $_num_list; do\n    echo $((_max = ($_num\
+    \ > $_max) ? $_num : $_max))\n  done", "    if [ -z \"$1\" ]; then\n        echo\
+    \ ''\n        return\n    fi\n\n    echo \"$1\" | awk '{\n        if (n == 0)\
+    \ {\n            max = $1\n        } else {\n            max = $1 > max ? $1 :\
+    \ max\n        }\n        printf(\"\\\"%s\\\" \", max)\n        n += 1\n    }'",
+  "    echo $(cat) |  awk '{\n        for (i = 1; i <= NF; i++) {\n            if\
+    \ (i == 1) {\n                max = $i\n            } else {\n               \
+    \ if ($i > max) {\n                    max = $i\n                }\n         \
+    \   }\n            printf(\"\\\"%s\\\" \", max)\n        }\n    }'", "    local\
+    \ max=\"$1\"\n    while read -r a; do\n        max=\"$a\"\n        printf \"\\\
+    \"%s\\\" \" \"$max\"\n    done <<< \"${@:2}\"", "    declare -a A=($1)\n    echo\
+    \ \"['\"${A[0]}\"',\"\n    for ((i=1; i<${#A[@]}; i++)); do\n        echo \" $((\
+    \ i == ${#A[@]}-1 ? \"\" : \", \" ))'\"$(max \"${A[$i]}\" \"${A[$((i-1))]}\")\"\
+    '\"\n    done\n    echo \"]\"", "    acc=0\n    for i in $1\n    do\n        if\
+    \ [ $i -gt $acc ]\n        then\n            acc=$i\n        fi\n        echo\
+    \ -n \"\\\"$acc\\\" \"\n    done", "    local -a arr arr_sorted arr_sorted_i\n\
+    \    arr=($1)\n    arr_sorted=($(echo \"${arr[@]}\" | xargs -n1 | sort -n))\n\
+    \    for x in \"${arr[@]}\"; do\n        for i in \"${!arr_sorted[@]}\"; do\n\
+    \            if [[ \"${arr_sorted[$i]}\" -eq \"$x\" ]]; then\n               \
+    \ arr_sorted_i+=(\"$i\")\n                break\n            fi\n        done\n\
+    \    done\n    echo \"${arr_sorted_i[@]}\" | xargs -n1 | while read i; do\n  \
+    \      echo \"${arr_sorted[$i]}\"\n    done | tr '\\n' ' '"]
 stop_tokens:
 - "\n}"

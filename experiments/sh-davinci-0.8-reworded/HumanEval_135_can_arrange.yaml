@@ -10,6 +10,108 @@ tests: "}\n\ncandidate() {\n    can_arrange \"$@\"\n}\n\nset -e\nrun_test() {\n 
   \  [[ $(candidate \"1 2 4 3 5\") = \"3\" ]]\n    [[ $(candidate \"1 2 4 5\") = \"\
   -1\" ]]\n    [[ $(candidate \"1 4 2 5 6 7 8 9 10\") = \"2\" ]]\n    [[ $(candidate\
   \ \"4 8 5 7 3\") = \"4\" ]]\n    [[ $(candidate \"\") = \"-1\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local arr\n  read -r -a arr <<< \"$1\"\n  local len=${#arr[@]}\n\
+    \  local n=0\n  while (( n < len )); do\n    local idx=$(( len - 1 - n ))\n  \
+    \  if (( arr[idx] < arr[idx - 1] )); then\n      echo \"$(( idx - 1 ))\"\n   \
+    \   return\n    fi\n    (( n++ ))\n  done\n  echo \"-1\"", "  local max_index=-1\n\
+    \  for (( i=${#arr[@]}-1; i>=0; i-- )); do\n    if [[ ${arr[i]} -le ${arr[i-1]}\
+    \ ]]; then\n      break\n    fi\n    max_index=$i\n  done\n  echo $max_index",
+  "    local -a values\n    local result=-1\n    local i\n    local j\n    local x\n\
+    \    IFS=' ' read -a values <<< \"$1\"\n    for ((i=${#values[@]}-1; i>0; i--));\
+    \ do\n        x=${values[i]}\n        for ((j=i-1; j>=0; j--)); do\n         \
+    \   if [[ \"${values[j]}\" -lt \"$x\" ]]; then\n                result=$j\n  \
+    \              break\n            fi\n        done\n        if [[ \"$result\"\
+    \ -ne -1 ]]; then\n            break\n        fi\n    done\n    echo \"$result\"",
+  "    # replace space-separated list with array\n    local -a array=(\"$@\")\n  \
+    \  local length=${#array[@]}\n    # if the length of the array is 0 then return\
+    \ -1\n    if [ $length -eq 0 ]; then\n        echo \"-1\"\n        return\n  \
+    \  fi\n    # start at the end of the array, looping backwards\n    local i=$((length\
+    \ - 1))\n    while [ $i -ge 0 ]; do\n        # if the current element is greater\
+    \ than the previous element\n        # then return i\n        local j=$((i - 1))\n\
+    \        if [ $j -ge 0 ] && [ ${array[$i]} -gt ${array[$j]} ]; then\n        \
+    \    echo \"$i\"\n            return\n        fi\n        # decrement i\n    \
+    \    i=$((i - 1))\n    done\n    # if we exit the loop then all elements were\
+    \ less than the previous\n    # element, so return -1\n    echo \"-1\"", "  local\
+    \ sorted=($(echo $@ | tr ' ' '\\n' | sort -n))\n  local original=($@)\n  local\
+    \ difference=0\n  local i=0\n  local length=${#original[@]}\n  while [ $i -lt\
+    \ $length ]; do\n    difference=$((sorted[$i] - original[$i]))\n    if [ $difference\
+    \ -gt 0 ]; then\n      echo \"$i\"\n      return\n    fi\n    i=$((i + 1))\n \
+    \ done\n  echo \"-1\"", "    function binary_search() {\n        # Binary search\
+    \ to find the largest index of an element which is not\n        # greater than\
+    \ or equal to the element immediately preceding it. If\n        # no such element\
+    \ exists then return -1.\n        #\n        # $1 is a space-separated list\n\
+    \        # $2 is the start index\n        # $3 is the end index\n        #\n \
+    \       # Returns the result as a string\n        local n=$(echo \"$1\" | wc -w)\n\
+    \        local arr=($1)\n        local start=$2\n        local end=$3\n      \
+    \  if [ $start -eq $end ]; then\n            echo \"$start\"\n            return\n\
+    \        fi\n        local mid=$((start + end))\n        mid=$((mid / 2))\n  \
+    \      if [ $mid -gt 0 ]; then\n            local prev=$((mid - 1))\n        \
+    \    if [ ${arr[$mid]} -lt ${arr[$prev]} ]; then\n                echo \"$mid\"\
+    \n                return\n            elif [ ${arr[$mid]} -gt ${arr[$prev]} ];\
+    \ then\n                local result=$(binary_search \"$1\" \"$start\" \"$mid\"\
+    )\n                echo \"$result\"\n                return\n            fi\n\
+    \        fi\n        local result=$(binary_search \"$1\" \"$((mid + 1))\" \"$end\"\
+    )\n        echo \"$result\"\n        return\n    }\n    local result=$(binary_search\
+    \ \"$1\" \"0\" \"$(echo \"$1\" | wc -w)\")\n    echo \"$result\"\n    return",
+  "  local index=$(for i in $(seq $(($# - 1)) -1 0); do\n    if [[ ${@:i:1} -ge ${@:i+1:1}\
+    \ ]]; then\n      echo -n \"$i \"\n    fi\n  done | head -1)\n  echo \"${index:--1}\"",
+  "    # Read array from command line arguments\n    arr=($@)\n    # Your code goes\
+    \ here\n    # ...\n    # ...\n    # Remember to echo the result at the end\n \
+    \   echo \"...\"", "    local -a arr=($@)\n    local -i i j\n\n    # Loop from\
+    \ the second-to-last element up to the first element\n    for ((i=${#arr[@]}-2;\
+    \ i>=0; i--)); do\n        for ((j=i+1; j<${#arr[@]}; j++)); do\n            #\
+    \ If the current element is greater than or equal to\n            # the element\
+    \ at index $j then break\n            if ((${arr[i]} >= ${arr[j]})); then\n  \
+    \              echo $j\n                return\n            fi\n        done\n\
+    \    done\n\n    # If no such index was found, return -1\n    echo -1", "    local\
+    \ LEN=${#@}\n    if [[ $LEN -eq 1 ]]; then\n        echo -1\n        return\n\
+    \    fi\n    local I=0\n    local J=$(($LEN - 1))\n    for ((I=1; I<LEN; I++));\
+    \ do\n        if [[ $I -gt 0 ]]; then\n            if [[ ${!I} -lt ${!J} ]]; then\n\
+    \                echo $I\n                return\n            fi\n        fi\n\
+    \        J=$I\n    done\n    echo -1", "  local -a array\n  array=($1)\n  local\
+    \ n m max_index\n  n=${#array[@]}\n  m=0\n  max_index=-1\n  # Iterate over the\
+    \ array in reverse order, keeping track of the greatest\n  # index so far.\n \
+    \ while ((n > 0)); do\n    ((n--))\n    if ((array[n] >= m)); then\n      m=${array[n]}\n\
+    \      max_index=$n\n    fi\n  done\n  echo $max_index", "  declare -i x=-1\n\
+    \  declare -i i=-1\n  for s in $1; do\n    i+=1\n    if ((s < ${1%% *})); then\n\
+    \      if ((i > x)); then\n        x=i\n      fi\n    fi\n  done\n  echo $x",
+  "    local -a iarr\n    local largest smallest i j\n    read -a iarr <<< \"$1\"\n\
+    \    largest=$((${#iarr[@]} - 1))\n    smallest=0\n    for ((i = ${#iarr[@]} -\
+    \ 2; i >= 0; i--)); do\n        if [[ ${iarr[i]} -ge ${iarr[i + 1]} ]]; then\n\
+    \            largest=$i\n        else\n            smallest=$i\n            break\n\
+    \        fi\n    done\n    for ((i = largest; i >= smallest; i--)); do\n     \
+    \   for ((j = largest; j > i; j--)); do\n            if [[ ${iarr[j]} -le ${iarr[i]}\
+    \ ]]; then\n                largest=$j\n                break\n            fi\n\
+    \        done\n    done\n    if [[ ${iarr[largest]} -ge ${iarr[smallest]} ]];\
+    \ then\n        echo \"-1\"\n    else\n        echo \"$largest\"\n    fi", " \
+    \   local -a arr=(\"$@\")\n    local arr_len=${#arr[@]}\n    local i=0\n\n   \
+    \ while (( i < arr_len - 1 )); do\n        if (( arr[i+1] < arr[i] )); then\n\
+    \            (( i++ ))\n        else\n            return $i\n        fi\n    done\n\
+    \n    echo \"-1\"", "    local -i array i\n    array=($1)\n    for ((i=1; i<${#array[@]};\
+    \ i++)); do\n        if (( ${array[i]} < ${array[i-1]} )); then\n            break\n\
+    \        fi\n    done\n    echo $((--i))", "    echo \"$1\" | awk '\n        BEGIN\
+    \ {\n            OFS=\" \"\n        }\n        {\n            split($0, A, \"\
+    \ \")\n            for (i in A) {\n                if (A[i] > A[i-1]) {\n    \
+    \                print i\n                    break\n                }\n     \
+    \       }\n            if (i == NF+1) {\n                print -1\n          \
+    \  }\n        }\n    '", "    index=$(($# - 1))\n    while [ \"$index\" -ge 0\
+    \ ]; do\n        # Get the value of the array at $index (which is a positional\n\
+    \        # parameter)\n        val=${!index}\n        # If the next value is not\
+    \ greater than $val then we've found the\n        # largest index of an element\
+    \ which is not greater than the element\n        # immediately preceding it. Return\
+    \ this index.\n        if [ \"$((index + 1))\" -lt \"$#\" ] && [ \"${!index+1}\"\
+    \ -le \"$val\" ]; then\n            echo \"$index\"\n            return\n    \
+    \    fi\n        index=$((index - 1))\n    done\n    # No such element exists.\
+    \ Return -1.\n    echo \"-1\"", "  local arr\n  arr=($1)\n  local can_arrange\n\
+    \  can_arrange=-1\n  local n=${#arr[@]}\n  for ((i = n - 1; i > 0; i--)); do\n\
+    \    if ((arr[i] <= arr[i - 1])); then\n      continue\n    fi\n    can_arrange=$((i\
+    \ - 1))\n    break\n  done\n  echo \"$can_arrange\"", "    local -a array=($1)\n\
+    \    local i=0\n    local res=-1\n    for (( i=${#array[@]}-1; i>0; i-- )); do\n\
+    \        [[ ${array[i]} -lt ${array[i-1]} ]] && res=$((i-1))\n    done\n    echo\
+    \ $res", "  local s=($1)\n\n  local max_index=${#s[@]}\n  local max=${s[$max_index-1]}\n\
+    \  local curr=0\n  local curr_index=$((max_index-1))\n\n  while ((curr_index >=\
+    \ 0)); do\n    curr=${s[$curr_index]}\n    if ((curr < max)); then\n      break\n\
+    \    fi\n    curr_index=$((curr_index-1))\n  done\n\n  if ((curr_index < 0));\
+    \ then\n    echo -1\n  else\n    echo $curr_index\n  fi"]
 stop_tokens:
 - "\n}"

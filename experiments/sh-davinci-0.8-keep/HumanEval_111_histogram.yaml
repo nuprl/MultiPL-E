@@ -14,6 +14,143 @@ tests: "}\n\ncandidate() {\n    histogram \"$@\"\n}\n\nset -e\nrun_test() {\n   
   \ \"b b b b a\") = \"b,4\" ]]\n    [[ $(candidate \"r t g\") = \"r,1\\nt,1\\ng,1\"\
   \ ]]\n    [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"a\") = \"a,1\" ]]\n\
   }\n\nrun_test"
-completions: []
+completions: ["    declare -A char_counts\n    for char in `echo $1 | tr \" \" \"\\\
+    n\"`; do\n        char_counts[$char]=$((char_counts[$char]+1))\n    done\n   \
+    \ max_count=`echo ${char_counts[@]} | tr \" \" \"\\n\" | sort -nr | head -n 1`\n\
+    \    for char in \"${!char_counts[@]}\"; do\n        if [[ ${char_counts[$char]}\
+    \ -eq $max_count ]]; then\n            echo \"$char: ${char_counts[$char]}\"\n\
+    \        fi\n    done", "  # Write your code here\n  echo {}", "    if [[ $# -ne\
+    \ 1 ]]; then\n        echo \"Usage: $0 <string>\"\n        exit 1\n    fi\n\n\
+    \    # Create a map of character and its count\n    declare -A map\n    for char\
+    \ in $(echo \"$1\" | tr \" \" \"\\n\"); do\n        map[$char]=$(( ${map[$char]}\
+    \ + 1 ))\n    done\n\n    # Determine the max occurrence of any character\n  \
+    \  max_count=0\n    for count in ${map[@]}; do\n        [[ $count -gt $max_count\
+    \ ]] && max_count=$count\n    done\n\n    # Generate the output\n    output=\"\
+    {\"\n    for char in ${!map[@]}; do\n        if [[ ${map[$char]} -eq $max_count\
+    \ ]]; then\n            output=\"$output'$char': ${map[$char]}, \"\n        fi\n\
+    \    done\n    output=\"${output%, }}\"\n    echo $output", "    if [[ $# -eq\
+    \ 0 ]]; then\n        echo \"Error: You must specify a string to histogram\"\n\
+    \        exit 1\n    fi\n    # initialize the dictionary with a 0 count for each\
+    \ character in the alphabet\n    declare -A h\n    for i in {a..z}; do\n     \
+    \   h[$i]=0\n    done\n    # count the occurrence of each character in the string\
+    \ and add it to the dictionary\n    for c in $(echo $1 | sed 's/ //g'); do\n \
+    \       h[$c]=$((h[$c]+1))\n    done\n    # find the largest count value in the\
+    \ dictionary\n    max_count=0\n    for c in ${!h[@]}; do\n        if [[ ${h[$c]}\
+    \ -gt $max_count ]]; then\n            max_count=${h[$c]}\n        fi\n    done\n\
+    \    # create a string of characters with the same count\n    result=\"\"\n  \
+    \  for c in ${!h[@]}; do\n        if [[ ${h[$c]} -eq $max_count ]]; then\n   \
+    \         result=\"$result $c\"\n        fi\n    done\n    # display the characters\
+    \ and the count in an associative array format\n    echo -n \"{\"\n    for c in\
+    \ $result; do\n        echo -n \"'$c': $max_count\"\n        if [[ $c != $result\
+    \ ]]; then\n            echo -n \", \"\n        fi\n    done\n    echo \"}\"",
+  "    # generate a frequency table\n    local freq=($(sed 's/ /\\n/g' <<< \"$1\"\
+    \ | sort | uniq -c | sort -rn))\n    # the first entry contains the max count\n\
+    \    local max_count=${freq[0]}\n    # the list of characters with the max count\n\
+    \    local max_chars=()\n    # skip the first entry\n    for ((i=1; i<${#freq[@]};\
+    \ i++)); do\n        if [[ ${freq[$i]} -eq $max_count ]]; then\n            max_chars+=($(sed\
+    \ 's/[^a-z]//g' <<< \"${freq[$i]}\"))\n        else\n            break\n     \
+    \   fi\n    done\n    # convert the characters to array indices\n    for ((i=0;\
+    \ i<${#max_chars[@]}; i++)); do\n        echo -n \"${max_chars[$i]} : $max_count,\
+    \ \"\n    done", "    local -A dict\n    for c in ${1// /}; do\n        ((++dict[$c]))\n\
+    \    done\n    for c in \"${!dict[@]}\"; do\n        [[ dict[$c] -gt 1 ]] && echo\
+    \ \"$c\" ${dict[$c]}\n    done", "  # arg length\n  arg_len=${#1}\n  # previous\
+    \ letter\n  pl=\"\"\n  # counter\n  count=0\n  # dictionary\n  dictionary=\"\"\
+    \n  # loop through each letter\n  for ((i=0; i<arg_len; i++)); do\n    letter=${1:i:1}\n\
+    \    if [ \"$letter\" == \"$pl\" ]; then\n      count=$((count+1))\n    else\n\
+    \      # letter already in dictionary\n      if [ \"$dictionary\" == *\"$pl\"\
+    * ]; then\n        # update dictionary key with new count\n        dictionary=${dictionary//\"\
+    $pl $count\"/\"$pl $count ($count)\"}\n      # letter not in dictionary\n    \
+    \  else\n        dictionary=\"$dictionary $pl $count\"\n      fi\n      pl=$letter\n\
+    \      count=1\n    fi\n  done\n  # last letter of string\n  letter=${1:arg_len-1:1}\n\
+    \  # letter already in dictionary\n  if [ \"$dictionary\" == *\"$letter\"* ];\
+    \ then\n    # update dictionary key with new count\n    dictionary=${dictionary//\"\
+    $letter $count\"/\"$letter $count ($count)\"}\n  # letter not in dictionary\n\
+    \  else\n    dictionary=\"$dictionary $letter $count\"\n  fi\n  echo \"dictionary:\
+    \ $dictionary\"\n  # format dictionary\n  dictionary=${dictionary:1}\n  dictionary=${dictionary//\"\
+    \ \"/\"}\n  dictionary=${dictionary//\"(\"/\"\": \"}\n  dictionary=${dictionary//\"\
+    )\"/\"\"}\n  echo \"histogram('$1') == $dictionary\"", "\tif [ -z \"$1\" ]; then\n\
+    \t\techo \"{}\"\n\t\treturn\n\tfi\n\tprintf \"%s\\n\" \"$1\" | grep -Eo [a-z]\
+    \ | sort | uniq -c | sort -n |\n\t{\n\t\twhile read nb char; do\n\t\t\tif [ \"\
+    $nb\" -eq \"$N\" ]; then\n\t\t\t\techo -n \",\\\"$char\\\":$nb\"\n\t\t\telse\n\
+    \t\t\t\tN=\"$nb\"\n\t\t\t\techo \"{\\\"$char\\\":$nb\"\n\t\t\tfi\n\t\tdone\n\t\
+    \techo '}'\n\t}", "  if [[ -z \"$1\" ]]; then\n    echo \"{}\"\n    return\n \
+    \ fi\n\n  local -A freq\n  for c in $1; do\n    freq[$c]=$(( ${freq[$c]} + 1 ))\n\
+    \  done\n\n  local max=$(printf '%s\\n' \"${freq[@]}\" | sort -nr | head -n 1)\n\
+    \  local result=\"\"\n  for c in ${!freq[@]}; do\n    if [[ ${freq[$c]} -eq $max\
+    \ ]]; then\n      if [[ -z \"$result\" ]]; then\n        result=\"{'$c': ${freq[$c]}}\"\
+    \n      else\n        result=\"$result, {'$c': ${freq[$c]}}\"\n      fi\n    fi\n\
+    \  done\n  echo $result", "  echo $1 | sed 's/\\s/\\n/g' | sort | uniq -c | tr\
+    \ -s ' ' ' ' | tr ' ' '=' | sed 's/^/\\'/g' | sed 's/=/\\'/g' | tr '\\n' ',' |\
+    \ sed 's/^/{/g' | sed 's/,$/}/g'", '  # Insert code here', "\t# convert string\
+    \ to array\n\tmapfile -t arr < <(echo \"$1\")\n\t# create empty array of letters\n\
+    \tmapfile -t letters < <(echo '')\n\t# create empty array of counts\n\tmapfile\
+    \ -t counts < <(echo '')\n\t# create empty array of max counts\n\tmapfile -t max_counts\
+    \ < <(echo '')\n\t# loop through each letter\n\tfor letter in \"${arr[@]}\"; do\n\
+    \t\t# if it's not been seen before, add it to the letters array\n\t\tif [[ ! \"\
+    \ ${letters[@]} \" =~ \" ${letter} \" ]]; then\n\t\t\tletters+=($letter)\n\t\t\
+    \t# add a new count\n\t\t\tcounts+=(0)\n\t\tfi\n\t\t# increment count for letter\n\
+    \t\tindex=$(get_index \"${letters[@]}\" \"$letter\")\n\t\tcounts[$index]=$((counts[$index]\
+    \ + 1))\n\tdone\n\t# find max count\n\tmax_count=0\n\tfor count in \"${counts[@]}\"\
+    ; do\n\t\t(( count > max_count )) && max_count=$count\n\tdone\n\t# store letters\
+    \ with max count\n\tfor i in \"${!counts[@]}\"; do\n\t\tif [[ ${counts[$i]} -eq\
+    \ $max_count ]]; then\n\t\t\tmax_counts+=(${letters[$i]})\n\t\tfi\n\tdone\n\t\
+    # create output\n\tfor max_count in \"${max_counts[@]}\"; do\n\t\techo -n \"$max_count:\
+    \ \"\n\t\tindex=$(get_index \"${letters[@]}\" \"$max_count\")\n\t\techo ${counts[$index]}\n\
+    \tdone", "  words=($(echo $1 | tr \" \" \"\\n\"))\n  max=0\n  result=\"\"\n  for\
+    \ word in ${words[@]}; do\n    count=$(echo ${words[@]} | grep -o $word | wc -l)\n\
+    \    if [ $count -eq $max ]; then\n      result+=\" ${word}\"\n    elif [ $count\
+    \ -gt $max ]; then\n      max=$count\n      result=$word\n    fi\n  done\n  echo\
+    \ ${result[@]}", "  local -A char_count\n  local max_count=0\n  local max_chars=\"\
+    \"\n  for char in $1; do\n    [[ ${char_count[$char]} -gt $max_count ]] && max_count=${char_count[$char]}\n\
+    \    char_count[$char]=$(( char_count[$char] + 1 ))\n  done\n  for char in ${!char_count[@]};\
+    \ do\n    [[ ${char_count[$char]} -eq $max_count ]] && max_chars=\"$max_chars\
+    \ $char\"\n  done\n  for char in $max_chars; do\n    echo \"$char: $max_count\"\
+    \n  done", "  local count letter\n  local hist=()\n  local words=$(\n    echo\
+    \ $1 |\n    sed 's/[^[:alpha:]]/ /g' | # convert non-letters to spaces\n    tr\
+    \ '[:upper:]' '[:lower:]' | # lowercase all letters\n    tr -s ' ' # remove duplicate\
+    \ spaces\n  )\n  for letter in $words; do\n    count=$(echo $words | tr -s ' '\
+    \ | tr ' ' '\\n' | grep -c \"^$letter$\")\n    hist[$letter]=$count\n  done\n\
+    \  for letter in ${!hist[@]}; do\n    echo $letter: ${hist[$letter]}\n  done",
+  "  word_array=($1)\n  mapfile -t -d ' ' letters < <(awk '{print $1}' <<< \"$1\"\
+    )\n  letter_count=${#letters[@]}\n  declare -A letter_map\n  for ((i=0; i<letter_count;\
+    \ i++)); do\n    curr_letter=${letters[$i]}\n    letter_map[$curr_letter]=$(grep\
+    \ -o $curr_letter <<< \"$1\" | wc -l)\n  done\n  echo \"${letter_map[@]}\"", "\t\
+    # initialize the dictionary\n\tdeclare -A dictionary\n\t# get the length of the\
+    \ input string\n\tcount=${#1}\n\t# for each letter in the string\n\tfor ((i=0;\
+    \ i<count; i++)); do\n\t\t# if the letter already exists in the dictionary\n\t\
+    \tif [[ -n ${dictionary[${1:$i:1}]} ]]; then\n\t\t\t# increment the counter\n\t\
+    \t\tdictionary[${1:$i:1}]=$((dictionary[${1:$i:1}]+1))\n\t\telse\n\t\t\t# if it\
+    \ doesn't exist, add it with a value of 1\n\t\t\tdictionary[${1:$i:1}]=1\n\t\t\
+    fi\n\tdone\n\t# get the highest value\n\tmax=0\n\tfor value in \"${dictionary[@]}\"\
+    ; do\n\t\t((value > max)) && max=$value\n\tdone\n\t# print out the histogram\n\
+    \techo '{'\n\tfor key in \"${!dictionary[@]}\"; do\n\t\tif [[ ${dictionary[$key]}\
+    \ -eq $max ]]; then\n\t\t\techo \"'$key': ${dictionary[$key]}\"\n\t\tfi\n\tdone\n\
+    \techo '}'", "  # $1 is a string, $2 is a sorted array\n  # given an array of\
+    \ characters, return an array of letters, sorted by occurrence.\n  get_most_common_letters()\
+    \ {\n    local letters=$(tr -d ' ' <<< \"$1\")\n    local -a letter_arr=()\n \
+    \   local -A letter_count\n    for ((i=0; i<${#letters}; i++)); do\n      c=${letters:$i:1}\n\
+    \      if [[ -z ${letter_count[$c]} ]]; then\n        letter_count[$c]=1\n   \
+    \   else\n        letter_count[$c]=$((letter_count[$c]+1))\n      fi\n    done\n\
+    \    for letter in \"${!letter_count[@]}\"; do\n      letter_arr+=(\"$letter:${letter_count[$letter]}\"\
+    )\n    done\n    echo \"${letter_arr[@]}\" | tr ' ' '\\n' | sort -t: -k2,2rn |\
+    \ cut -d: -f1\n  }\n\n  local -a letter_arr=()\n  local -A letter_count\n  for\
+    \ letter in $(get_most_common_letters \"$1\"); do\n    letter_count[$letter]=$(grep\
+    \ -o \"$letter\" <<< \"$1\" | wc -l)\n  done\n  for letter in \"${!letter_count[@]}\"\
+    ; do\n    letter_arr+=(\"$letter:${letter_count[$letter]}\")\n  done\n  echo \"\
+    ${letter_arr[@]}\" | tr ' ' '\\n' | sort -t: -k2,2rn", "  local -A array\n  while\
+    \ read -r line; do\n    while read -r word; do\n      let array[$word]+=$((array[$word]+1))\n\
+    \    done <<< \"$line\"\n  done <<< \"$1\"\n  for key in \"${!array[@]}\"; do\n\
+    \    printf '%s: %s' \"$key\" \"${array[$key]}\"\n    echo\n  done", "    # Split\
+    \ the string into an array\n    array=($(echo $1 | tr ' ' '\\n'))\n    # Sort\
+    \ the array\n    sorted=($(echo ${array[@]} | tr ' ' '\\n' | sort))\n    prev=\n\
+    \    count=0\n    # Count each letter and set the value to a variable based on\
+    \ the count\n    # Also append to the list if its the same\n    for current in\
+    \ ${sorted[@]}; do\n        if [[ \"$prev\" == \"$current\" ]]; then\n       \
+    \     let count++\n            echo -n \"$current \"\n        else\n         \
+    \   eval \"${prev}=\\\"$count\\\"\"\n            prev=$current\n            count=1\n\
+    \            echo -n \"$current \"\n        fi\n    done\n    # Do it again for\
+    \ the last item in the list\n    eval \"${prev}=\\\"$count\\\"\"\n    # Now we're\
+    \ done, list the dictionary\n    for key in ${!array[@]}; do\n        echo -n\
+    \ \"$key ${!key} \"\n    done"]
 stop_tokens:
 - "\n}"

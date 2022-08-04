@@ -14,6 +14,99 @@ tests: "}\n\ncandidate() {\n    split_words \"$@\"\n}\n\nset -e\nrun_test() {\n 
   Hello,Hello,world \\!\" ]]\n    [[ $(candidate \"abcdef\") = \"3\" ]]\n    [[ $(candidate\
   \ \"aaabb\") = \"2\" ]]\n    [[ $(candidate \"aaaBb\") = \"1\" ]]\n    [[ $(candidate\
   \ \"\") = \"0\" ]]\n}\n\nrun_test"
-completions: []
+completions: ['    # TODO', "    if [[ $1 =~ \\  ]]; then\n        echo \"[\\\"$(echo\
+    \ \"$1\" | sed 's/ /\"', '\"/g')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n      \
+    \  echo \"[\\\"$(echo \"$1\" | sed 's/,/\"', '\"/g')\\\"]\"\n    else\n      \
+    \  echo \"$(echo $1 | grep -o '[a-z]' | grep -c '[a-z]' -o)\"\n    fi", "  local\
+    \ word_re='\\W+'\n  if [[ $1 =~ $word_re ]]; then\n    echo -n \"[\"\n    printf\
+    \ '\"%s\",' ${1//[[:blank:]]/$word_re}\n    echo -n \"]\"\n  else\n    local char_re='[[:lower:]]'\n\
+    \    if [[ $1 =~ $char_re ]]; then\n      echo -n \"\\\"$(echo $1 | grep -o $char_re\
+    \ | awk '{print NR%2}' | grep 1 | wc -l)\\\"\"\n    else\n      echo -n \"\\\"\
+    0\\\"\"\n    fi\n  fi", "    if [[ \"$1\" =~ \" \" ]]; then\n        echo $1 |\
+    \ tr ' ' '\\n' | xargs printf '[%s]'\n    elif [[ \"$1\" =~ \",\" ]]; then\n \
+    \       echo $1 | tr ',' '\\n' | xargs printf '[%s]'\n    else\n        count=0\n\
+    \        for ((i=0; i<${#1}; i++)); do\n            if [[ $(($i % 2)) -ne 0 ]];\
+    \ then\n                case \"${1:$i:1}\" in\n                    [a-z])\n  \
+    \                      count=$(($count + 1))\n                        ;;\n   \
+    \             esac\n            fi\n        done\n        echo $count\n    fi",
+  "    if [[ \"$1\" == *[[:space:]]* ]]; then\n        echo \"$1\" | tr ' ' '\\n'\
+    \ | sed 's/^/\"/g' | sed 's/$/\"/g'\n    elif [[ \"$1\" == *,* ]]; then\n    \
+    \    echo \"$1\" | tr ',' '\\n' | sed 's/^/\"/g' | sed 's/$/\"/g'\n    else\n\
+    \        echo \"$1\" | grep -o '[a-z]' | grep -v -E '[acegikmoqsuwy]' | wc -l\n\
+    \    fi", "  echo $(echo $1 | sed 's/[a-z]/1/g' | sed 's/[^a-z]/0/g' | tr -d '\\\
+    n' | sed 's/1/1,/g' | sed 's/0//g' | sed 's/,$//')", "    if [[ \"$1\" == *\"\
+    \ \"* ]]; then\n        echo \"$1\" | tr -s ' ' ',' | tr -d ' '\n    elif [[ \"\
+    $1\" == *\",\"* ]]; then\n        echo \"$1\" | tr -s ',' ' ' | tr -d ','\n  \
+    \  else\n        echo \"$1\" | grep -Eo '[a-z]' | grep -o '[adgjmptw]' | wc -l\n\
+    \    fi", '    echo "$1"', "    if [[ -z $1 ]]; then\n        echo \"1\"\n   \
+    \ elif [[ $1 =~ \" \" ]]; then\n        echo \"$1\" | tr \" \" \",\"\n    elif\
+    \ [[ $1 =~ \",\" ]]; then\n        echo \"$1\" | tr \",\" \" \"\n    else\n  \
+    \      printf \"%d\" $(printf \"%s\" \"$1\" | tr \"abcdefghijklmnopqrstuvwxyz\"\
+    \ \"0123456789012345678901234\")\n    fi", "  if [ $# -eq 0 ]; then\n    echo\
+    \ \"no word given\"\n    return 1\n  fi\n  if [ $# -gt 1 ]; then\n    echo \"\
+    more than one word given\"\n    return 1\n  fi\n  local result=\"\"\n  local word=\"\
+    \"\n  local i=\"\"\n  local w=\"\"\n  local c=\"\"\n  local count=\"\"\n  local\
+    \ split=\"\"\n  local tmp=\"\"\n  local arr=\"\"\n  word=\"$1\"\n  result=\"\"\
+    \n  split=0\n  count=0\n  #check if there are whitespaces\n  tmp=\"$(echo \"${word}\"\
+    \ | tr -d \"[:space:]\")\"\n  if [ \"${word}\" != \"${tmp}\" ]; then\n    arr=()\n\
+    \    for w in ${word}; do\n      arr+=(\"\\\"${w}\\\"\")\n    done\n    result=\"\
+    ${arr[@]}\"\n    split=1\n  fi\n  #if no whitespaces check for commas\n  if [\
+    \ \"${split}\" -eq 0 ]; then\n    tmp=\"$(echo \"${word}\" | tr -d \"[:punct:]\"\
+    )\"\n    if [ \"${word}\" != \"${tmp}\" ]; then\n      arr=()\n      for w in\
+    \ ${word//,/ }; do\n        arr+=(\"\\\"${w}\\\"\")\n      done\n      result=\"\
+    ${arr[@]}\"\n      split=1\n    fi\n  fi\n  #if no commas count odd order characters\n\
+    \  if [ \"${split}\" -eq 0 ]; then\n    for ((i=0; i<${#word}; i++)); do\n   \
+    \   c=\"${word:i:1}\"\n      c=\"$(printf \"%d\" \"'${c}\")\"\n      c=$((c-97))\n\
+    \      if [ $((c%2)) -eq 1 ]; then\n        count=$((count+1))\n      fi\n   \
+    \ done\n    result=\"${count}\"\n  fi\n  echo \"${result}\"", "    if [[ \"$1\"\
+    \ =~ \\s ]]; then\n        echo \"$1\" | tr -s ' ' '\\n' | awk '{printf \"\\\"\
+    %s\\\" \", $0}'\n    elif [[ \"$1\" =~ , ]]; then\n        echo \"$1\" | tr -s\
+    \ ',' '\\n' | awk '{printf \"\\\"%s\\\" \", $0}'\n    else\n        echo $(($(echo\
+    \ \"$1\" | tr -dc 'a-z' | sed -r 's/[a-z]/&\\n/g' | sed -r 's/[a-z]/&\\n/g' |\
+    \ sed -r 's/\\n//g' | awk '{if (NR % 2 == 1) sum += ord($0) - 97; else sum -=\
+    \ ord($0) - 97} END {print sum}')))\n    fi", "  # Start here\n  if [[ $1 =~ [!,\\\
+    .] ]]; then\n    echo \"$1\" | tr -d '.' | tr -d '!' | tr -d ',' | awk '{ print\
+    \ \"\\\"\"$1\"\\\"\" }'\n  else\n    echo $1 | tr 'a-z' 'A-Z' | tr -d '.,!' |\
+    \ awk 'BEGIN { count = 0 } { for (i = 1; i <= length($0); i++) { if (i % 2 ==\
+    \ 1) { count++ } } } END { print count }'\n  fi", "  local result=\"\"\n  local\
+    \ str=$1\n  if [[ \"$str\" =~ [[:space:]] ]]; then\n    result=$(echo \"$str\"\
+    \ | awk '{for(i=1;i<=NF;i++) print \"\\\"\"$i\"\\\"\"}')\n  elif [[ \"$str\" =~\
+    \ , ]]; then\n    result=$(echo \"$str\" | sed 's/,/\",\"/g')\n  else\n    result=$(echo\
+    \ \"$str\" | tr -d -c '[:lower:]' | awk 'BEGIN{count=0} {for(i=1;i<=length($0);i++)\
+    \ {j=substr($0,i,1); if(ord(j)%2==1) count++;}} END{print count}')\n  fi\n  echo\
+    \ \"$result\"", "  local s=\"$1\"\n  local re='^[a-zA-Z]+$'\n  local re2='^[a-z]+$'\n\
+    \  if [[ \"$s\" =~ $re ]]; then\n    if [[ \"$s\" =~ $re2 ]]; then\n      echo\
+    \ \"$s\" | awk -F '' '{for(i=1;i<=NF;i++) if (i%2!=0) printf $i\" \"}' | wc -w\n\
+    \    else\n      echo \"ERROR: this script only works with lower-case letters\"\
+    \n      exit 1\n    fi\n  else\n    if [[ \"$s\" =~ ' ' ]]; then\n      s=\"$(echo\
+    \ \"$s\" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')\"\n      echo \"\
+    $s\" | awk -F ' ' '{for(i=1;i<=NF;i++) printf \"\\\"\"$i\"\\\" \"}'\n    else\n\
+    \      if [[ \"$s\" =~ ',' ]]; then\n        s=\"$(echo \"$s\" | sed -e 's/^[[:space:]]*//'\
+    \ -e 's/[[:space:]]*$//')\"\n        echo \"$s\" | awk -F ',' '{for(i=1;i<=NF;i++)\
+    \ printf \"\\\"\"$i\"\\\" \"}'\n      else\n        echo \"ERROR: no whitespaces\
+    \ nor commas found in string\"\n        exit 1\n      fi\n    fi\n  fi", "   \
+    \ # YOUR CODE HERE\n    if [ -z \"$1\" ]; then\n        echo \"Please specify\
+    \ a string to split\"\n        return 1\n    fi\n    echo $1 | tr ' ' '\\n' |\
+    \ grep -v '^$' | tr '\\n' ' '", "    if [[ \"$1\" =~ \\[\\\"\\ *(.*)\\\\*\\\"\\\
+    \ *\\] ]]; then\n        echo ${BASH_REMATCH[1]}\n    else\n        # The string\
+    \ is not quoted\n        echo $1\n    fi", "    bash -c \"source <(./split_words.py\
+    \ <<< '$1')\" 2> /dev/null", "  if [[ $1 =~ [a-z] ]]; then\n    echo $(echo $1\
+    \ | grep -o \"a-z\" | grep -vE -e \"[02468ace]\" | wc -l)\n  elif [[ $1 =~ , ]];\
+    \ then\n    echo $1 | sed -e 's/,/\\n/g' | sed -e 's/\\([^ ]\\)/\"\\1\"/g'\n \
+    \ else\n    echo $1 | sed -e 's/ /\\n/g' | sed -e 's/\\([^ ]\\)/\"\\1\"/g'\n \
+    \ fi", "  if [[ $1 =~ [[:space:]] ]]; then\n    echo \"[\\\"${1// /\\\"},\\\"\
+    ${1// /\\\"}\\\"]\"\n  elif [[ $1 =~ ',' ]]; then\n    echo \"[\\\"${1//,/\\\"\
+    },\\\"${1//,/\\\"}\\\"]\"\n  else\n    echo $(( $(tr -d -c [:lower:] <<< \"$1\"\
+    \ | grep -o . | tr -d \"\\n\" | awk '{ printf \"%d\", length }') / 2 ))\n  fi",
+  "  local string=$1\n  local out=\"\"\n  if [[ $string =~ \\ + ]]; then\n    local\
+    \ field\n    for field in $string; do\n      if [[ -z $out ]]; then\n        out=\"\
+    [\\\"$field\\\"\"\n      else\n        out=\"$out, \\\"$field\\\"\"\n      fi\n\
+    \    done\n    echo \"$out]\"\n  elif [[ $string =~ , ]]; then\n    local field\n\
+    \    for field in $(echo $string | tr ',' ' '); do\n      if [[ -z $out ]]; then\n\
+    \        out=\"[\\\"$field\\\"\"\n      else\n        out=\"$out, \\\"$field\\\
+    \"\"\n      fi\n    done\n    echo \"$out]\"\n  else\n    local field\n    local\
+    \ n=0\n    for ((i=0; i<${#string}; i++)); do\n      field=${string:$i:1}\n  \
+    \    let ord=`printf \"%d\" \"'$field\"`-97\n      if (( $ord % 2 == 0 )); then\n\
+    \        let n=$n+1\n      fi\n    done\n    echo $n\n  fi"]
 stop_tokens:
 - "\n}"

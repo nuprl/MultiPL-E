@@ -11,6 +11,91 @@ tests: "}\n\ncandidate() {\n    prod_signs \"$@\"\n}\n\nset -e\nrun_test() {\n  
   \") = \"None\" ]]\n    [[ $(candidate \"2 4 1 2 -1 -1 9\") = \"20\" ]]\n    [[ $(candidate\
   \ \"-1 1 -1 1\") = \"4\" ]]\n    [[ $(candidate \"-1 1 1 1\") = \"-4\" ]]\n    [[\
   \ $(candidate \"-1 1 1 0\") = \"0\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local sum=0\n    local product=1\n    for n in $1; do\n       \
+    \ ((sum += abs(n)))\n        ((product *= sign(n)))\n    done\n    echo $((sum\
+    \ * product))", "    # First determine if there are any negative numbers\n   \
+    \ local is_negative=false\n    local num_zeros=0\n    local prod=1\n    local\
+    \ sum=0\n    for i in $1; do\n        if [ $i -lt 0 ]; then\n            is_negative=true\n\
+    \        elif [ $i -eq 0 ]; then\n            ((num_zeros++))\n        fi\n  \
+    \      prod=$((prod * i))\n        sum=$((sum + i))\n    done\n    if [ $num_zeros\
+    \ -gt 0 ]; then\n        echo \"None\"\n    elif [ $is_negative = true ]; then\n\
+    \        echo $((sum * prod))\n    else\n        echo $((sum * prod))\n    fi",
+  "  local list=$(echo \"${1}\" | tr ' ' '\\n' | tr -d '-')\n  local sum=$(printf\
+    \ '%s + ' \"${list}\")\n  local prod=$(echo \"${1}\" | tr ' ' '\\n' | tr -d '+')\n\
+    \  sum=${sum%\\+\\ }\n  prod=${prod//[^-]/}\n  [[ -z ${list} ]] && echo None &&\
+    \ return\n  echo \"${prod}(${sum})\" | bc", "    if [[ -z $1 ]]; then\n      \
+    \  echo 'None'\n    else\n        local signs=$(echo $@ | sed 's/\\([0-9]*\\)/if\
+    \ [ \"\\1\" == \"0\" ]; then echo 0; elif [ \"\\1\" -lt 0 ]; then echo -1; else\
+    \ echo 1; fi /g' | bc)\n        local values=$(echo $@ | sed 's/\\([0-9]*\\)/\\\
+    1\\*\\1 /g' | bc)\n        echo $values | sed \"s/\\([0-9]*\\)/\\1\\*${signs:0:1}\
+    \ /g\" | bc\n    fi", "  local arr=$1\n  if [ -z \"$arr\" ]; then echo \"None\"\
+    ; return; fi\n  local sum=0\n  local prod=1\n  for x in $arr; do\n    if (( x\
+    \ > 0 )); then\n      (( sum += x ))\n      (( prod *= 1 ))\n    elif (( x < 0\
+    \ )); then\n      (( sum += -x ))\n      (( prod *= -1 ))\n    else\n      ((\
+    \ prod *= 0 ))\n    fi\n  done\n  echo \"$sum * $prod\" | bc", "  local result=\"\
+    0\"\n  local digits=${1:-\"0\"}\n  for digit in $digits; do\n    if [ \"${digit}\"\
+    \ == \"0\" ]; then\n      result=\"0\"\n      break\n    fi\n    if [ $result\
+    \ == \"0\" ]; then\n      result=\"${digit}\"\n    else\n      if [ \"${digit}\"\
+    \ == \"1\" ]; then\n        result=$(($result + 1))\n      elif [ \"${digit}\"\
+    \ == \"-1\" ]; then\n        result=$(($result - 1))\n      else\n        result=$(($result\
+    \ * ${digit}))\n      fi\n    fi\n  done\n  if [ $result == \"0\" ]; then\n  \
+    \  echo \"None\"\n  else\n    echo $result\n  fi", "  test -z \"$1\" && { echo\
+    \ \"None\"; return; }\n  declare -a sz\n  declare -i prod=1\n  declare -i sum=0\n\
+    \  sz=(${1// / })\n  for i in ${sz[@]}; do\n    prod*=$(( ${i#-} / $i ))\n   \
+    \ sum+=$(( ${i#-} ))\n  done\n  echo $(( sum * prod ))", "    local -i sum=0\n\
+    \    local -i prod=1\n    for num in $1; do\n        case $num in\n          \
+    \  *[1-9]*)\n                sum=$((sum + ${num#-}))\n                ;;\n   \
+    \         -[1-9]*)\n                sum=$((sum + ${num#-}))\n                prod=$((prod\
+    \ * -1))\n                ;;\n            *) # 0 or empty\n                sum=$((sum\
+    \ + 0))\n                prod=$((prod * 0))\n                ;;\n        esac\n\
+    \    done\n    if [[ $sum -eq 0 ]]; then\n        echo None\n    else\n      \
+    \  echo $((sum * prod))\n    fi", "  arr=($1)\n  if [ ${#arr[@]} -eq 0 ]; then\n\
+    \    echo \"None\"\n  else\n    prod_signs=$(for i in ${arr[@]}; do [ $i -gt 0\
+    \ ] && echo 1 || echo -1; done | uniq | paste -sd\\* -)\n    sum_signs=$(for i\
+    \ in ${arr[@]}; do [ $i -gt 0 ] && echo $i || echo -$i; done | uniq | paste -sd+\
+    \ -)\n    echo \"$((prod_signs * sum_signs))\"\n  fi", "    # Put your solution\
+    \ here\n    let prod = 1\n    let sum = 0\n    for i in $1\n    do\n\tif [ $i\
+    \ -gt 0 ]\n\tthen\n\t    let sum=sum+$i\n\telif [ $i -lt 0 ]\n\tthen\n\t    let\
+    \ sum=sum+$i\n\t    let prod=prod*(-1)\n\telse\n\t    let prod=prod*0\n\tfi\n\
+    \    done\n    let result=sum*prod\n    echo $result", "    local sum=0 product=1\n\
+    \    for x in $1; do\n        (( product *= x/abs(x) ))\n        (( sum += abs(x)\
+    \ ))\n    done\n    [[ \"$1\" ]] && echo $(( product * sum )) || echo \"None\"",
+  '  echo $1', "    local -a arr=(\"$@\")\n    [[ ${#arr[@]} -eq 0 ]] && echo None\
+    \ && return\n    local mult=1 sum=0\n    for ((i=0; i<${#arr[@]}; i++)); do\n\
+    \        mult=$((mult * sign(arr[i])))\n        sum=$((sum + abs(arr[i])))\n \
+    \   done\n    echo $((mult * sum))", "  local arr=(${1// / })\n  local str=''\n\
+    \  for i in ${arr[@]}; do\n    if [[ $i == 0 ]]; then\n      str+='0'\n    elif\
+    \ [[ $i < 0 ]]; then\n      str+='-1'\n    else\n      str+='1'\n    fi\n  done\n\
+    \  local prod=1\n  local sum=0\n  for i in ${arr[@]}; do\n    [[ $i == 0 ]] &&\
+    \ continue\n    local abs=${i#-}\n    prod=$((prod * ${str:0:1}))\n    sum=$((sum\
+    \ + abs))\n    str=${str:1}\n  done\n  if [[ -z $str ]]; then\n    echo $((prod\
+    \ * sum))\n  else\n    echo None\n  fi", "  declare -i sum=0\n  for i in $1; do\n\
+    \    sum=$((sum + abs($i)))\n  done\n  declare -i prod=1\n  for i in $1; do\n\
+    \    prod=$((prod * sign($i)))\n  done\n  echo $((sum * prod))", "    local arr=($1)\n\
+    \    local sum=0\n    local prod=1\n    for x in ${arr[@]}; do\n        sum=$((sum\
+    \ + abs($x)))\n        if [ $x -lt 0 ]; then\n            prod=$((prod * -1))\n\
+    \        elif [ $x -gt 0 ]; then\n            prod=$((prod * 1))\n        fi\n\
+    \    done\n    echo $((sum * prod))", "  local arr=$@\n  local sum=0\n  local\
+    \ prod=1\n  local n\n\n  for n in $arr; do\n    if [ $n -gt 0 ]; then\n      sum=$((sum\
+    \ + n))\n      prod=$((prod * 1))\n    elif [ $n -lt 0 ]; then\n      sum=$((sum\
+    \ + n * -1))\n      prod=$((prod * -1))\n    else\n      prod=$((prod * 0))\n\
+    \    fi\n  done\n\n  echo \"$sum * $prod\" | bc", "  if [ $# -lt 1 ]; then\n \
+    \   echo \"Error: Please provide an array\"\n    return 1\n  fi\n  local ret=$(echo\
+    \ $@ | tr \" \" \"\\n\" | awk '{sum += $1*(($1>0) - ($1<0))} END {print sum}')\n\
+    \  if [ -z \"$ret\" ]; then\n    echo \"None\"\n  else\n    echo $ret\n  fi",
+  "  arr=($1)\n  local prod=1\n  local sum=0\n  for i in ${arr[@]}; do\n    local\
+    \ sign=$(( i > 0 || (i == 0 && 1%2 == 1) ? 1 : i < 0 || (i == 0 && 1%2 == 0) ?\
+    \ -1 : 0 ))\n    if [ $sign -ne 0 ]; then\n      sum=$(( sum + sign * i ))\n \
+    \     prod=$(( prod * sign ))\n    fi\n  done\n  echo $(( sum * prod ))", "  \
+    \  # check if the array is empty\n    arr=($1)\n    if [[ \"${#arr[@]}\" -eq 0\
+    \ ]]; then\n        echo \"None\"\n        return\n    fi\n\n    # compute product\
+    \ of signs and sum of magnitudes of integers\n    product_of_signs=1\n    sum_of_magnitudes=0\n\
+    \    for num in ${arr[@]}; do\n        if [[ ${num} -gt 0 ]]; then\n         \
+    \   product_of_signs=$(( ${product_of_signs} * 1 ))\n        elif [[ ${num} -lt\
+    \ 0 ]]; then\n            product_of_signs=$(( ${product_of_signs} * -1 ))\n \
+    \       else\n            product_of_signs=$(( ${product_of_signs} * 0 ))\n  \
+    \      fi\n        sum_of_magnitudes=$(( ${sum_of_magnitudes} + ${num} ))\n  \
+    \  done\n\n    # print the multiplication of product of signs and sum of magnitudes\n\
+    \    echo $((${product_of_signs} * ${sum_of_magnitudes}))"]
 stop_tokens:
 - "\n}"

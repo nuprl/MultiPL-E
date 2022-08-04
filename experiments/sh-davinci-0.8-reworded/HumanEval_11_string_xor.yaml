@@ -8,6 +8,87 @@ tests: "}\n\ncandidate() {\n    string_xor \"$@\"\n}\n\nset -e\nrun_test() {\n  
   \ [[ $(candidate \"111000\" \"101010\") = \"010010\" ]]\n    [[ $(candidate \"1\"\
   \ \"1\") = \"0\" ]]\n    [[ $(candidate \"0101\" \"0000\") = \"0101\" ]]\n}\n\n\
   run_test"
-completions: []
+completions: ["  [[ -z \"${1//0}\" ]] && echo $2 && return\n  [[ -z \"${2//0}\" ]]\
+    \ && echo $1 && return\n  [[ -z \"${1//1}\" ]] && echo $2 && return\n  [[ -z \"\
+    ${2//1}\" ]] && echo $1 && return\n  echo $1 | sed \"s/[01]/\\($(echo -n $2 |\
+    \ sed 's/[01]/\\0\\n/g' | sed 's/0/^/g' | sed 's/1/!/g')\\)/g\" | sed 's/\\(^\\\
+    |!\\)//g'", "  printf '%x\\n' $((0x$(echo -n \"$1\" | tr '01' '01') ^ 0x$(echo\
+    \ -n \"$2\" | tr '01' '01')))", "    echo -n \"obase=2;ibase=2;$1\" | bc 2>/dev/null\
+    \ \\\n        | awk \"{ printf \\\"%08d\\\", \\$1 }\" \\\n        | awk \"{ \\\
+    $1=gensub(/./,\"$2\" \\\"&\\\", \\\"g\\\", \\$1); print \\$1 }\" \\\n        |\
+    \ awk \"{ printf \\\"%d\\\", strtonum(\\\"2\\\" \\$1) }\"", "  local a b c i s\n\
+    \  a=$1\n  b=$2\n  c=\"\"\n  # Number of characters in the longest string\n  for\
+    \ ((i=0; i<${#a} || i<${#b}; i++)); do\n    # XOR the ith characters of both strings\
+    \ and store in s\n    s=$(( 2#${a:i:1} ^ 2#${b:i:1} ))\n    # Concatenate s to\
+    \ the result string c\n    c=\"$c$s\"\n  done\n  echo \"$c\"", "    local a=${1:-}\n\
+    \    local b=${2:-}\n    local r=\"\"\n    local i=0\n    local l1=${#a}\n   \
+    \ local l2=${#b}\n    local l=0\n    if [ $l1 -gt $l2 ]; then\n        l=$l1\n\
+    \    else\n        l=$l2\n    fi\n    while [ $i -lt $l ]; do\n        r+=$((\
+    \ ( ${a:$i:1:-} ^ ${b:$i:1:-} ) + 0 ))\n        i=$(( $i + 1 ))\n    done\n  \
+    \  echo $r", "    a=`echo $1 | tr -d ' '`\n    b=`echo $2 | tr -d ' '`\n    c=\"\
+    \"\n    for ((i=0;i<${#a};i++)); do\n        if [[ $a != $b ]]; then\n       \
+    \     c+=\"1\"\n        else\n            c+=\"0\"\n        fi\n    done\n   \
+    \ echo $c", "  local LENGTH=$(echo -n \"$1\" | wc -c)\n  local OUTPUT=\"\"\n \
+    \ local i=1\n  while [ $i -le $LENGTH ]; do\n    if [ $(echo -n \"$1\" | cut -b\
+    \ $i) = $(echo -n \"$2\" | cut -b $i) ]; then\n      OUTPUT=\"${OUTPUT}0\"\n \
+    \   else\n      OUTPUT=\"${OUTPUT}1\"\n    fi\n    i=$((i+1))\n  done\n  echo\
+    \ -n \"$OUTPUT\"", "    local length=${#1}\n    local result=\"\"\n    for ((\
+    \ i=0; i<length; i++ )); do\n        if [[ \"${1:$i:1}\" == \"${2:$i:1}\" ]];\
+    \ then\n            result+=0\n        else\n            result+=1\n        fi\n\
+    \    done\n    echo $result", "  local a=$1\n  local b=$2\n  local output=\"\"\
+    \n  local i=0\n  local len=$((${#a}>${#b}?${#a}:${#b}))\n  local diff=$((${#a}>${#b}?${#a}-${#b}:${#b}-${#a}))\n\
+    \  while [ $i -lt $len ]; do\n    if [ $i -lt $diff ]; then\n      output=$output\"\
+    0\"\n    else\n      output=$output$(($((${a:$i:1}+${b:$i:1}))%2))\n    fi\n \
+    \   ((i++))\n  done\n  echo $output", "    echo \"$1\" | awk '{print $1}' | awk\
+    \ 'BEGIN{a=\"'$2'\"} {l=length(a); for (i=1; i<=l; i++) {a = sprintf(\"%s%s\"\
+    , substr(a, 1, 1) ^ substr($1, i, 1), substr(a, 2))} print a}'", "    local -u\
+    \ a=$1\n    local -u b=$2\n    local i len\n    local -u xored=''\n    (( len\
+    \ = ${#a} < ${#b} ? ${#a} : ${#b} ))\n    for (( i = 0; i < len; i++ )); do\n\
+    \        local ai=${a:i:1}\n        local bi=${b:i:1}\n        xored+=$(( ai ^\
+    \ bi ))\n    done\n    echo \"$xored\"", "  if [ ${#1} -ne ${#2} ]; then\n   \
+    \ echo \"Expected equal length strings but got a length of ${#1} and ${#2}\" >&2\n\
+    \    exit 1\n  fi\n\n  # Convert from ASCII to Binary.\n  local -a a=($(echo -n\
+    \ \"$1\" | unpack $PACK_FORMAT))\n  local -a b=($(echo -n \"$2\" | unpack $PACK_FORMAT))\n\
+    \n  # Perform binary XOR.\n  local -a result=()\n  for ((i=0; i<${#a[@]}; i++));\
+    \ do\n    result+=($((a[i] ^ b[i])))\n  done\n\n  # Convert from Binary to ASCII.\n\
+    \  pack $PACK_FORMAT ${result[@]}", "  # Perform XOR on the string\n  local xor=$(echo\
+    \ \"$1\" | awk -v b=\"$2\" '{\n    # Create an array of characters\n    split($0,\
+    \ a, \"\")\n    # Create an array of characters\n    split(b, b, \"\")\n    #\
+    \ Output a[i] XOR b[i]\n    for (i=1; i<=length(a); i++) {\n      printf \"%i\"\
+    , a[i] ^ b[i]\n    }\n  }')\n  # Print the output and return it\n  echo \"$xor\"\
+    \n  return 0", "    [ $# -eq 2 ] || {\n        echo \"string_xor: 2 arguments\
+    \ required\"\n        return 1\n    }\n    [ ${#1} -eq ${#2} ] || {\n        echo\
+    \ \"string_xor: strings must be the same length\"\n        return 1\n    }\n \
+    \   a=$1\n    b=$2\n    ret=\"\"\n    for i in $(seq 0 $((${#a} - 1))); do\n \
+    \       [ \"${a:$i:1}\" = \"${b:$i:1}\" ] && ret+=\"0\" || ret+=\"1\"\n    done\n\
+    \    echo $ret", "  if [[ ${#1} -ne ${#2} ]]; then\n    echo \"ERROR: string_xor()\
+    \ strings not equal length\"\n    exit 1\n  fi\n  if [[ ! $1 =~ ^[01]+$ ]]; then\n\
+    \    echo \"ERROR: string_xor() string $1 does not only contain 1s and 0s\"\n\
+    \    exit 1\n  fi\n  if [[ ! $2 =~ ^[01]+$ ]]; then\n    echo \"ERROR: string_xor()\
+    \ string $2 does not only contain 1s and 0s\"\n    exit 1\n  fi\n  # pad binary\
+    \ strings\n  string1=$(echo $1 | sed 's/^0*//' | sed 's/^/00000000/' | cut -c\
+    \ -8)\n  string2=$(echo $2 | sed 's/^0*//' | sed 's/^/00000000/' | cut -c -8)\n\
+    \  echo $((2#$string1 ^ 2#$string2)) | sed 's/0*//'", "  if [ $# -ne 2 ]; then\n\
+    \    echo \"Usage: $0 string1 string2\" >&2\n    exit 1\n  fi\n  local str1=\"\
+    $1\"\n  local str2=\"$2\"\n  local result=\"\"\n  local i=\"\"\n  local len=\"\
+    ${#str1}\"\n  if [ \"$len\" -ne \"${#str2}\" ]; then\n    echo \"Length of both\
+    \ strings must be the same!\" >&2\n    exit 1\n  fi\n  for ((i=0; i<len; i++));\
+    \ do\n    if [ \"${str1:$i:1}\" == \"${str2:$i:1}\" ]; then\n      result+=\"\
+    0\"\n    else\n      result+=\"1\"\n    fi\n  done\n  echo \"$result\"", "   \
+    \ local a=\"$1\"\n    local b=\"$2\"\n    local i=0\n    local ar\n    local br\n\
+    \    local ret=\"\"\n    local len=$((${#a}-1))\n    for ((i=0; i<=len; i++));\
+    \ do\n        ar=${a:$i:1}\n        br=${b:$i:1}\n        [ \"$ar\" = \"$br\"\
+    \ ] && { ret=\"${ret}0\"; continue; }\n        ret=\"${ret}1\"\n    done\n   \
+    \ echo \"$ret\"", "    LENGTH=${#1}\n    BINARIES=$(($LENGTH % 8))\n    if [ \"\
+    $BINARIES\" -ne 0 ]; then\n        echo \"Error: $1 and $2 must be equally long\
+    \ strings consisting only of 1s and 0s (binary values). Length is not divisible\
+    \ by 8.\"\n        exit 1\n    fi\n    # Convert the strings to base 10 (integer)\
+    \ and XOR them.\n    local STRING_XOR=$((2#$1 ^ 2#$2))\n    # Convert the resulting\
+    \ integer back to binary and return.\n    echo \"obase=2; $STRING_XOR\" | bc",
+  "  printf %s \"$1\" | xxd -r -p | xxd -p | tr '0-9a-f' '0-1' | xxd -r -p | xxd -p",
+  "    s=\"$1\"\n    t=\"$2\"\n    out=\"\"\n    for (( i=0; i<${#s}; i++ )); do\n\
+    \        if [ \"${s:$i:1}\" = \"${t:$i:1}\" ]; then\n            out=\"${out}0\"\
+    \n        else\n            out=\"${out}1\"\n        fi\n    done\n    echo \"\
+    $out\""]
 stop_tokens:
 - "\n}"

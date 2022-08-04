@@ -11,6 +11,123 @@ tests: "}\n\ncandidate() {\n    sort_third \"$@\"\n}\n\nset -e\nrun_test() {\n  
   5 8 3 4 6 9 2\") = \"2 8 3 4 6 9 5\" ]]\n    [[ $(candidate \"5 6 9 4 8 3 2\") =\
   \ \"2 6 9 4 8 3 5\" ]]\n    [[ $(candidate \"5 6 3 4 8 9 2 1\") = \"2 6 3 4 8 9\
   \ 5 1\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local l=\"$@\"\n    echo \"$l\" | awk '{ for (i=1; i<=NF; i++)\
+    \ { if (i%3==0) { sub(/[0-9]* /, \"\", l); print(l) } else { print $i\" \" } }\
+    \ }' | awk '{ for (i=1; i<=NF; i++) { if (i%3==0) { print(l); sub(/[0-9]* /, \"\
+    \", l) } else { print $i\" \" } } }'", "    #output will be stored here\n    res=\"\
+    \"\n    #split it into an array\n    IFS=' ' read -r -a arr <<< \"$1\"\n    #\
+    \ $i is the index into the array\n    i=0\n    #iterate over the indicies in the\
+    \ array\n    for item in \"${arr[@]}\"; do\n        #if the index is divisible\
+    \ by three\n        if [ $((i % 3)) -eq 0 ]; then\n            #sort the items\
+    \ of the array from the beginning up to the current index\n            sort -n\
+    \ <<< \"${arr[@]:0:$i}\"\n            #add the current item to the end of the\
+    \ array\n            echo -n \"$item \"\n            #remove the first item from\
+    \ the array\n            arr=( \"${arr[@]:1}\" )\n        else\n            #echo\
+    \ the item from the array if the index is not divisible by three\n           \
+    \ echo -n \"$item \"\n        fi\n        #increment the index\n        i=$((i+1))\n\
+    \    done\n    #remove the extra space at the end of the list\n    echo ${res:0:-1}",
+  "    echo -n \"$1\" | awk '{\n            for (i = 1; i <= NF; i++)\n          \
+    \  if (i % 3 == 0) {\n                split($i, arr, \" \")\n                asort(arr)\n\
+    \                for (j in arr)\n                    print arr[j],\n         \
+    \   } else\n                print $i,\n        }'", "    if [ \"$#\" -ne 1 ];\
+    \ then\n        echo \"sort_third requires one argument.\"\n        return 1\n\
+    \    fi\n    list=($1)\n    for i in $(seq 1 $((${#list[@]} - 1)) 3); do\n   \
+    \     list=(\"${list[@]:0:$i}\" $(echo \"${list[@]:$i:3}\" | tr ' ' '\\n' | sort\
+    \ | tr '\\n' ' ') \"${list[@]:$((i + 3))}\")\n    done\n    echo \"${list[@]}\"",
+  "  ret=$(echo \"$1\" |\n    awk '{\n      for (i = 1; i <= NF; i++) {\n        if\
+    \ (i % 3 == 0) {\n          s[i] = s[i] \" \" $i\n        } else {\n         \
+    \ s[i] = s[i] \" \" $i\n        }\n      }\n    } END {\n      for (i = 1; i <=\
+    \ NF; i++) {\n        if (i % 3 == 0) {\n          print s[i] | \"sort -n\"\n\
+    \        } else {\n          print s[i]\n        }\n      }\n    }')\n  # NOTE:\
+    \ ret contains a newline at the end, so we strip it\n  echo \"$ret\" | tr -d '\\\
+    n'", "    result=\"\"\n    for ((i=0; i<${#1}; i+=3)); do\n        s=${1:i:3}\n\
+    \        arr=($s)\n        arr=($(for a in \"${arr[@]}\"; do echo \"$a\"; done\
+    \ | sort))\n        result+=${arr[0]}\n        result+=${arr[1]}\n        result+=${arr[2]}\n\
+    \    done\n    echo $result", "\teval local list=($1)\n\tlocal sorted=()\n\tfor\
+    \ ((i=0; i<${#list[@]}; i++)); do\n\t\tif (($i % 3 == 0)); then\n\t\t\tsorted+=(`echo\
+    \ ${list[@]:$i:3} | tr ' ' '\\n' | sort | tr '\\n' ' '`)\n\t\telse\n\t\t\tsorted+=(${list[$i]})\n\
+    \t\tfi\n\tdone\n\techo ${sorted[@]}", "    # The first line calls the sort_third_elem\
+    \ function on each third element from the input and saves the result in a list.\n\
+    \    # The [::3] syntax means \u201Cevery third element\u201D, [3::3] means \u201C\
+    every third element, starting from the fourth one\u201D.\n    sorted=$(printf\
+    \ '%s\\n' \"$1\" | sort_third_elem | awk '{ print $1 }')\n    # $index is the\
+    \ index of the current element (the first one is 0). We traverse the input and\
+    \ put the element with the index that is divisible by three\n    # into the output\
+    \ without any changes, while putting elements with other indices (every second\
+    \ and every third) into the output with the current index\n    # subtracted by\
+    \ two.\n    index=0\n    while read line; do\n        if ((index % 3 == 0)); then\n\
+    \            echo \"$line\"\n        else\n            echo \"$line\" | sed -e\
+    \ 's/.*/& '\"$index\"'/'\n        fi\n        index=$((index + 1))\n    done <<<\
+    \ \"$1\" | sort -n | cut -d \" \" -f 2-", "    ls=($1)\n    l=$(for i in \"${ls[@]}\"\
+    \n        do\n            for (( j=1; j<=2; j++ ))\n            do\n         \
+    \       if [ $((i%3)) -eq $j ]\n                then\n                    echo\
+    \ -n $i | tr ' ' '\\n' | sort | tr '\\n' ' '\n                else\n         \
+    \           echo -n $i | tr ' ' '\\n'\n                fi\n            done\n\
+    \        done)\n    echo $l", "    l=\"$1\"\n    # first, we split the list into\
+    \ three sublists. The first one contains the values at the indicies that are not\
+    \ divisible by three,\n    # the second contains the values at the indicies that\
+    \ are divisible by three and the third contains the values at the indicies\n \
+    \   # that are divisible by three and bigger than the length of the list.\n  \
+    \  # E.g. for the list [5, 6, 3, 4, 8, 9, 2], these three sublists are [5, 4,\
+    \ 2], [6, 3, 8] and [9].\n    for i in $(seq 3); do\n        sublist=$(echo \"\
+    $l\" | sed -E \"s/([^ ]+[ ]*){$((i-1))}//; s/([^ ]+[ ]*){$(((i-1)*2))}//\")\n\
+    \        echo \"$sublist\"\n    done | sed -E 's/^ *| *$//g' > /tmp/list_split_list\n\
+    \n    # then, we sort the second and the third sublist, and add the values of\
+    \ the first sublist to the sorted second and third sublist\n    # as described\
+    \ above.\n    echo \"$l\" | sed -E \"s/([^ ]+[ ]*){$(((i-1)*2))}//\" | sort -g\
+    \ | paste -d ' ' /tmp/list_split_list - | tr '\\n' ' ' | sed -E 's/ +/ /g' | sed\
+    \ -E 's/^ //'", "    declare -a l=($1)\n    for i in ${!l[@]}; do\n        i=$((i\
+    \ + 1))\n        if [[ \"$i\"%3 -eq 0 ]]; then\n            l[$((i - 1))]=$(echo\
+    \ \"${l[$((i - 1))]}\" | tr ' ' '\\n' | sort | tr '\\n' ' ')\n        fi\n   \
+    \ done\n    echo \"${l[@]}\"", "    list=()\n    result=()\n    while [ $# -gt\
+    \ 0 ]; do\n        list+=(\"$1\")\n        shift\n    done\n    size=${#list[@]}\n\
+    \    for ((i=0; i<size; i++)); do\n        if [ $((i % 3)) -eq 0 ]; then\n   \
+    \         s=${list[i]}\n            sorted=$(echo $s | tr ' ' '\\n' | sort | tr\
+    \ '\\n' ' ')\n            result+=($sorted)\n        else\n            result+=(${list[i]})\n\
+    \        fi\n    done\n    echo ${result[@]}", "  IFS=\" \" read -a A <<<\"$1\"\
+    \n  B=()\n  for index in $(seq 0 $((${#A[@]} - 1))); do\n    if [ $((index % 3))\
+    \ -eq 0 ]; then\n      B+=($(sort -n <<<\"${A[index]} ${A[index+1]} ${A[index+2]}\"\
+    ))\n    else\n      B+=(${A[index]})\n    fi\n  done\n  echo \"${B[@]}\"", " \
+    \   l=$1\n    l_sorted=( $(echo $l | tr ' ' '\\n' | sort -n) )\n    # iterate\
+    \ through the list, setting each element at every third index to a sorted version\
+    \ of that list\n    # in this case, i represents the index, and v represents the\
+    \ value at that index.\n    for ((i=2; i<$(echo $l | wc -w); i+=3)); do\n    \
+    \    l_sorted[$i]=$(echo $l | cut -d' ' -f${i})\n    done\n    echo ${l_sorted[@]}",
+  "    # Parse the list in the parameter and store it in an array\n    local arr=(\
+    \ $1 )\n    local output=\"\"\n    # Iterate over the array, check if the index\
+    \ is divisible by 3 and sort the value if it is\n    for i in ${!arr[@]}; do\n\
+    \        if (( i % 3 == 0 )); then\n            arr[$i]=$(echo ${arr[$i]} | tr\
+    \ ' ' '\\n' | sort | tr '\\n' ' ')\n        fi\n        output=\"$output ${arr[$i]}\"\
+    \n    done\n    echo $output", "    # Your code goes here\n    echo \"Not implemented\"",
+  "   local l\n   local l_0\n   local l_1\n   local l_2\n   l=($1)\n   l_0=(${l[@]::$((${#l[@]}/3))})\n\
+    \   l_1=(${l[@]:$((${#l[@]}/3)):$((${#l[@]}/3))})\n   l_2=(${l[@]:$((${#l[@]}*2/3)):$((${#l[@]}/3))})\n\
+    \   l_2=($(echo \"${l_2[@]}\" | sed 's/ /\\n/g' | sort | sed 's/\\n/ /g'))\n \
+    \  echo \"${l_0[@]} ${l_1[@]} ${l_2[@]}\"", "    # use the 'paste' command to\
+    \ convert the list to one where spaces are replaced with linebreaks\n    local\
+    \ unsorted=$(echo \"$1\" | paste -sd '\\n')\n    # sort the list\n    local sorted=$(echo\
+    \ \"$unsorted\" | sort)\n    # convert the sorted list to one where each number\
+    \ is separated by a space\n    local sorted_str=$(echo \"$sorted\" | tr '\\n'\
+    \ ' ')\n    # for each number in the list\n    for ((i=0; i<$(echo \"$1\" | wc\
+    \ -w); i++)); do\n        # if the number's index is divisible by three\n    \
+    \    if [ $((i%3)) -eq 0 ]; then\n            # replace the number with the corresponding\
+    \ number in the sorted list\n            sorted_str=$(echo \"$sorted_str\" | sed\
+    \ -e \"s/\\b$(echo \"$1\" | cut -d' ' -f$((i+1)))\\b/$(echo \"$sorted_str\" |\
+    \ cut -d' ' -f$((i+1)))/\")\n        fi\n    done\n    # print the sorted list\n\
+    \    echo \"$sorted_str\"", "    local l=\"$1\"\n    local l_sorted l_unsorted\
+    \ l_sorted_part_1 l_sorted_part_2 l_sorted_part_3 l_sorted_part_4 l_sorted_part_5\
+    \ l_sorted_part_6\n    l_sorted=($(sort <<< \"$l\"))\n    l_unsorted=(\"${l//\
+    \ / }\")\n    l_sorted_part_1=(${l_sorted[@]:0:3})\n    l_sorted_part_2=(${l_sorted[@]:3:3})\n\
+    \    l_sorted_part_3=(${l_sorted[@]:6:3})\n    l_sorted_part_4=(${l_sorted[@]:9:3})\n\
+    \    l_sorted_part_5=(${l_sorted[@]:12:3})\n    l_sorted_part_6=(${l_sorted[@]:15:3})\n\
+    \    echo $(\n        echo \"${l_unsorted[@]:0:3} ${l_sorted_part_1[@]} ${l_unsorted[@]:6:3}\
+    \ ${l_sorted_part_2[@]} ${l_unsorted[@]:12:3} ${l_sorted_part_3[@]} ${l_unsorted[@]:18:3}\
+    \ ${l_sorted_part_4[@]} ${l_unsorted[@]:24:3} ${l_sorted_part_5[@]} ${l_unsorted[@]:30:3}\
+    \ ${l_sorted_part_6[@]}\" |\n            tr ' ' '\\n' |\n            sort -n |\n\
+    \            tr '\\n' ' '\n    )", "    # awk '{for(i=1;i<=NF;i++)print i,$i}'\n\
+    \    # awk '$1 % 3 == 0'\n    # awk '$1 % 3 == 0' | sort -n\n    echo $1 | awk\
+    \ '{\n        for(i=1;i<=NF;i++) print i,$i\n    }' | awk '$1 % 3 == 0' | sort\
+    \ -n | awk '{\n        l[$1] = $2\n    } END {\n        for(i=1;i<=NF;i++) {\n\
+    \            if(i % 3 == 0) print l[i]\n            else print $i\n        }\n\
+    \    }'"]
 stop_tokens:
 - "\n}"

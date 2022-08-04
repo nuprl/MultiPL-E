@@ -8,6 +8,75 @@ tests: "}\n\ncandidate() {\n    common \"$@\"\n}\n\nset -e\nrun_test() {\n    [[
   \ \"1 4 3 34 653 2 5\" \"5 7 1 5 9 653 121\") = \"1 5 653\" ]]\n    [[ $(candidate\
   \ \"5 3 2 8\" \"3 2\") = \"2 3\" ]]\n    [[ $(candidate \"4 3 2 8\" \"3 2 4\") =\
   \ \"2 3 4\" ]]\n    [[ $(candidate \"4 3 2 8\" \"\") = \"\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local first second\n  read -ra first <<< \"$1\"\n  read -ra second\
+    \ <<< \"$2\"\n  echo \"${first[@]}\" \"${second[@]}\" | tr ' ' '\\n' | sort |\
+    \ uniq -d | sort", "  awk 'BEGIN{\n    # Generate an array which indexes the first\
+    \ list\n    for (i=1; i<=NF; i++) {\n      list1[$i] = 1\n    }\n  }{\n    # For\
+    \ each element in the second list, print the elements\n    # that are also in\
+    \ the first list. Print the element in\n    # quotes to preserve leading 0s.\n\
+    \    for (i=1; i<=NF; i++) {\n      if (list1[$i]) {\n        printf(\"\\\"%s\\\
+    \" \", $i)\n      }\n    }\n  }' <(echo \"$1\") <(echo \"$2\") |\n  tr ' ' '\\\
+    n' |\n  sort -u |\n  tr '\\n' ' ' |\n  sed 's/^ *//' |\n  sed 's/ *$//'", "  local\
+    \ a=\"${1}\"\n  local b=\"${2}\"\n  local s=\"$(sort <<< \"${a} ${b}\")\"\n  uniq\
+    \ <<< \"${s}\"", "  local array1=($1)\n  local array2=($2)\n  for e in \"${array1[@]}\"\
+    ; do\n    for ee in \"${array2[@]}\"; do\n      if [[ \"$e\" == \"$ee\" ]]; then\n\
+    \        echo -n \"\\\"$e\\\" \"\n      fi\n    done\n  done", "    echo \"$1\"\
+    \ | tr \" \" \"\\n\" | sort | uniq | grep -wFf- <(echo \"$2\" | tr \" \" \"\\\
+    n\" | sort | uniq) | jq -R -s 'split(\"\\n\")'", "    local a\n    local b\n \
+    \   local c\n    local i\n    local j\n    a=($1)\n    b=($2)\n    c=()\n    for\
+    \ ((i=0; i<${#a[@]}; i++)); do\n        for ((j=0; j<${#b[@]}; j++)); do\n   \
+    \         if [[ \"${a[$i]}\" == \"${b[$j]}\" ]]; then\n                c+=(${a[$i]})\n\
+    \            fi\n        done\n    done\n    echo \"$(sorted_unique \"${c[@]}\"\
+    )\"", "    list1=\"$1\"\n    list2=\"$2\"\n    comm -12 <(printf \"%s\\n\" $list1\
+    \ | sort) <(printf \"%s\\n\" $list2 | sort)", "  local a=($1)\n  local b=($2)\n\
+    \  echo $(intersect \"${a[@]}\" \"${b[@]}\") | tr ' ' '\\n' | sort -u | tr '\\\
+    n' ' '", "    # Clone list\n    local list=$2\n    # Loop through each element\n\
+    \    for el in $1; do\n        # Remove $el from $list\n        list=${list/$el/}\n\
+    \        # If $el is not in $list\n        if [ \"${#list}\" -eq \"${#2}\" ];\
+    \ then\n            # Remove $el from $1\n            list=$1\n            list=${list/$el/}\n\
+    \            # Mark $el for removal\n            el=\n        fi\n        # Restore\
+    \ list\n        list=$2\n    done\n    # Escape list\n    list=$(escape \"$list\"\
+    )\n    # Print list\n    echo \"[$list]\"", "    local i\n    if [ -z \"$1\" ];\
+    \ then\n        echo '[]'\n        return\n    fi\n    echo '['\n    for i in\
+    \ $1; do\n        if [[ \" $2 \" =~ \" $i \" ]]; then\n            echo -n '\"\
+    '$i'\", '\n        fi\n    done\n    echo ']'", "    local -n a=\"$1\"\n    local\
+    \ -n b=\"$2\"\n    (( ${#a[@]} >= ${#b[@]} )) && echo \"${a[@]}\" \"${b[@]}\"\
+    \ || echo \"${b[@]}\" \"${a[@]}\" | tr -s ' ' '\\n' | sort -u | xargs", "    local\
+    \ -a list1=($1)\n    local -a list2=($2)\n    local -a result=()\n    for item\
+    \ in \"${list1[@]}\"; do\n        if [[ \" ${list2[*]} \" == *\"$item\"* ]]; then\n\
+    \            result+=(\"$item\")\n        fi\n    done\n    array_sort_unique\
+    \ \"${result[@]}\"", "  echo $(printf \"%s\\n\" $1 $2 | sort | uniq -c | grep\
+    \ -oP '^\\s*2\\s+\\K.+' | sed 's/.*/\"&\"/g' | paste -s -d ' ' -)", "  echo \"\
+    {\"$1\"} & {\"$2\"}\" | bc | tr '\\n' ' ' | sed 's/^/[\"/;s/ /\", \"/g;s/$/\"\
+    ]/'", "  local arga argb arga_set argb_set\n  arga=($1)\n  argb=($2)\n  arga_set=($(echo\
+    \ \"${arga[@]}\" | tr ' ' '\\n' | sort -u | tr '\\n' ' '))\n  argb_set=($(echo\
+    \ \"${argb[@]}\" | tr ' ' '\\n' | sort -u | tr '\\n' ' '))\n  output=()\n  for\
+    \ element in \"${arga_set[@]}\"; do\n    if contains \"${argb_set[@]}\" \"$element\"\
+    ; then\n      output+=(\"$element\")\n    fi\n  done\n  echo \"${output[@]}\"",
+  "    if [[ $# -lt 2 ]]; then\n        echo \"common(): wrong arguments\" >&2\n \
+    \       return 1\n    fi\n\n    A=($1)\n    B=($2)\n\n    # Find intersection\n\
+    \    c=($(printf '%s\\n' \"${A[@]}\" \"${B[@]}\" | sort | uniq -d))\n\n    printf\
+    \ '%s\\n' \"${c[@]}\"", "  printf '%s\\n' \"$1\" \"$2\" | \\\n    awk '{dict[$0]++}\
+    \ END {for (k in dict) if (dict[k] > 1) print k}' | \\\n    sort | \\\n    sed\
+    \ 's/^/\"/;s/$/\"/'", "  local a=\"$1\"\n  local b=\"$2\"\n  # Put the shorter\
+    \ list into t.\n  if [[ ${#a} -gt ${#b} ]]; then\n    local t=\"$b\"\n    b=\"\
+    $a\"\n    a=\"$t\"\n  fi\n  # Split lists into arrays.\n  read -a A <<<\"$a\"\n\
+    \  read -a B <<<\"$b\"\n  # Sort lists.\n  A=($(__sort_unique \"${A[@]}\"))\n\
+    \  B=($(__sort_unique \"${B[@]}\"))\n  # Init empty common list.\n  local C=()\n\
+    \  # Find common elements.\n  for a in \"${A[@]}\"; do\n    for b in \"${B[@]}\"\
+    ; do\n      if [[ \"$a\" == \"$b\" ]]; then\n        C+=(\"$a\")\n      fi\n \
+    \   done\n  done\n  # Output JSON string.\n  if (( ${#C[@]} > 0 )); then\n   \
+    \ echo \"[$(__join_by \", \" \"${C[@]}\")]\"\n  else\n    echo \"[]\"\n  fi",
+  "  first=($1)\n  second=($2)\n  for i in \"${first[@]}\"; do\n    for j in \"${second[@]}\"\
+    ; do\n      if [[ \"$i\" == \"$j\" ]]; then\n        echo \"$i\"\n      fi\n \
+    \   done\n  done | sort -u", "  # The \"tr\" command is used to remove the double-quotes\
+    \ from the output of the\n  # \"comm\" command. If we didn't do this, we'd end\
+    \ up with the following output:\n  # $ common \"1 4 3 34 653 2 5\" \"5 7 1 5 9\
+    \ 653 121\"\n  # [\"1\"\n  #  \"2\"\n  #  \"3\"\n  #  \"4\"\n  #  \"5\"\n  # \
+    \ \"653\"\n  # ]\n  #\n  # The following command gets a sorted unique list of\
+    \ the common elements from\n  # both arguments:\n  # $ comm -12 <(echo -e \"$1\"\
+    \ | tr ' ' '\\n' | sort -u) <(echo -e \"$2\" | tr ' ' '\\n' | sort -u)\n  echo\
+    \ \"$(comm -12 <(echo -e \"$1\" | tr ' ' '\\n' | sort -u) <(echo -e \"$2\" | tr\
+    \ ' ' '\\n' | sort -u))\" | tr -d '\\n'"]
 stop_tokens:
 - "\n}"

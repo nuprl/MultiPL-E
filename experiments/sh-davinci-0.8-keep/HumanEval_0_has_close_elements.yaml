@@ -13,6 +13,124 @@ tests: "}\n\ncandidate() {\n    has_close_elements \"$@\"\n}\n\nset -e\nrun_test
   \ 2.0\" \"0.1\") = \"true\" ]]\n    [[ $(candidate \"1.1 2.2 3.1 4.1 5.1\" \"1.0\"\
   ) = \"true\" ]]\n    [[ $(candidate \"1.1 2.2 3.1 4.1 5.1\" \"0.5\") = \"false\"\
   \ ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local list=\"$1\"\n    local threshold=\"$2\"\n    local number_list=\n\
+    \    # Convert the string list to an array by replacing spaces with newlines\n\
+    \    while read -r number; do\n        number_list+=(\"$number\")\n    done <<<\
+    \ \"$list\"\n    # Compare every element to every other element (in 1-D)\n   \
+    \ for ((i=0; i<${#number_list[@]}; i++)); do\n        for ((j=i+1; j<${#number_list[@]};\
+    \ j++)); do\n            if awk \"BEGIN {exit((${number_list[$i]}-${number_list[$j]})\
+    \ <= $threshold);}\" ; then\n                echo true\n                return\n\
+    \            fi\n        done\n    done\n    echo false", "    arr=($1)\n    threshold=$2\n\
+    \    for ((i=0; i<${#arr[@]}; i++)); do\n        for ((j=i+1; j<${#arr[@]}; j++));\
+    \ do\n            if [ $(echo \"${arr[$i]} ${arr[$j]} $threshold\" | awk '{ print\
+    \ ($1-$2 < $3) }') == \"1\" ]; then\n                return 0\n            fi\n\
+    \        done\n    done\n    return 1", "    local -a list=(\"$@\")\n    local\
+    \ -r threshold=${list[-1]}\n    local -r -a numbers=(\"${list[@]:0:${#list[@]}-1}\"\
+    )\n    local -r -a sorted=($(printf \"%s\\n\" \"${numbers[@]}\" | sort -g))\n\
+    \    local -i index\n\n    for ((index=0; index<${#sorted[@]}-1; index++)); do\n\
+    \        if (( $(bc <<< \"${sorted[$index+1]} - ${sorted[$index]} <= $threshold\"\
+    ) )); then\n            echo \"True\"\n            return 0\n        fi\n    done\n\
+    \n    echo \"False\"\n    return 1", "  local -n array=($1)\n  for i in \"${!array[@]}\"\
+    ; do\n    for j in \"${!array[@]}\"; do\n      if (( i != j )); then\n       \
+    \ if [[ $(bc <<< \"${array[$i]} < ${array[$j]} ? ${array[$j]} - ${array[$i]} :\
+    \ ${array[$i]} - ${array[$j]}\") < $2 ]]; then\n          return 0\n        fi\n\
+    \      fi\n    done\n  done\n  return 1", "    local numbers=\"$1\"\n    local\
+    \ close_threshold=\"$2\"\n    local num=''\n    local last_num\n    local -i i=0\n\
+    \    local -i len=${#numbers}\n    while [ $i -lt $len ]; do\n        num=\"${numbers:$i:1}\"\
+    \n        if [ \"$num\" == ' ' ]; then\n            let i+=1\n            continue\n\
+    \        fi\n        (( i >= 1 )) && (( $(( num - last_num )) <= close_threshold\
+    \ )) && echo -n 'T'\n        last_num=$num\n        let i+=1\n    done\n    echo\
+    \ ''", "    local element previous difference_sqrt\n    if [[ $# -lt 2 ]]; then\n\
+    \        echo \"${FUNCNAME[0]}: At least two arguments are required.\" >&2\n \
+    \       return 1\n    fi\n    IFS=' ' read -r -a list <<< \"$1\"\n    threshold=$2\n\
+    \    for ((i=0; i<${#list[@]}; i++)); do\n        element=${list[$i]}\n      \
+    \  previous=${list[$i-1]}\n        difference_sqrt=$(echo \"sqrt(${element}^2\
+    \ - ${previous}^2)\" | bc -l)\n        if [[ $(echo \"${difference_sqrt} <= ${threshold}\"\
+    \ | bc -l) -eq 1 ]]; then\n            return 0\n        fi\n    done\n    return\
+    \ 1", "    if [[ $# -ne 2 ]]; then\n        echo 'Usage: has_close_elements \"\
+    list\" threshold'\n        exit 1\n    fi\n    local list=\"$1\"\n    local threshold=\"\
+    $2\"\n    local i\n    local j\n    local diff\n    for i in $list; do\n     \
+    \   for j in $list; do\n            diff=$(python -c \"print abs($i - $j)\")\n\
+    \            if [[ $(python -c \"print $diff < $threshold\") = \"True\" ]]; then\n\
+    \                return 0\n            fi\n        done\n    done\n    return\
+    \ 1", "    if [ \"$#\" -ne 2 ]; then\n        echo \"Illegal number of parameters\"\
+    \n        exit 1\n    fi\n    local elems=$1\n    local threshold=$2\n    for\
+    \ i in ${elems}; do\n        for j in ${elems}; do\n            if [ \"${i}\"\
+    \ == \"${j}\" ]; then\n                continue\n            fi\n            if\
+    \ [ $(echo \"${i} - ${j} < ${threshold}\" | bc -l) -eq 1 ]; then\n           \
+    \     return 0\n            fi\n        done\n    done\n    return 1", "  local\
+    \ list=\"$1\"\n  local threshold=\"$2\"\n  local closest\n  local distance\n\n\
+    \  # Find closest pair\n  closest=$(awk '\n    BEGIN { min = 99999 }\n    NR ==\
+    \ 1 { first = $1 }\n    NR == 2 { second = $1 }\n    NR == 2 { if (second - first\
+    \ < min) { min = second - first } }\n    NR >= 3 { first = second }\n    NR >=\
+    \ 3 { second = $1 }\n    NR >= 3 { if (second - first < min) { min = second -\
+    \ first } }\n    END { print min }\n  ' <<< \"$list\")\n\n  # Subtract closest\
+    \ distance from threshold\n  distance=$(awk '{ print $1 - $2 }' <<< \"$closest\
+    \ $threshold\")\n\n  # Compare with zero\n  awk '{ if ($1 > 0) print \"False\"\
+    ; else print \"True\" }' <<< \"$distance\"", "    threshold=$2\n    for e in $1;\
+    \ do\n        for f in $1; do\n            if ! [ $e = $f ]; then\n          \
+    \      if ! [[ $(echo \"$f-$e\" | bc) > $threshold ]]; then\n                \
+    \    echo \"True\"\n                    return\n                fi\n         \
+    \   fi\n        done\n    done\n    echo \"False\"", "    local -a arr\n    read\
+    \ -a arr <<< \"$1\"\n    local threshold=\"$2\"\n    local -i i\n    local -i\
+    \ j\n    local -i k\n    local -i res\n    local -i n=${#arr[@]}\n    for ((i=0;\
+    \ i<n; i++)); do\n        for ((j=i+1; j<n; j++)); do\n            res=$(echo\
+    \ \"${arr[i]} - ${arr[j]}\" | bc)\n            if [[ $(echo \"$res < 0\" | bc)\
+    \ -eq 1 ]]; then\n                res=$(echo \"$res * -1\" | bc)\n           \
+    \ fi\n            if [[ $(echo \"$res < $threshold\" | bc) -eq 1 ]]; then\n  \
+    \              return 0\n            fi\n        done\n    done\n    return 1",
+  "  local array=(\"$@\")\n  local threshold=\"${array[-1]}\"\n  unset array[-1]\n\
+    \  local first_element=\"${array[0]}\"\n  shift\n  local second_element\n  for\
+    \ second_element in \"${array[@]}\"; do\n    if [ \"$(echo \"${first_element}\
+    \ + ${threshold}\" | bc)\" -ge \"${second_element}\" ]; then\n      echo 'True'\n\
+    \      return 0\n    fi\n    first_element=\"${second_element}\"\n  done\n  echo\
+    \ 'False'", "    local list=\"$1\"\n    local threshold=\"$2\"\n    local current\n\
+    \    local prev\n    for current in $list; do\n        for prev in $list; do\n\
+    \            if [ \"$(bc <<< \"$current - $prev < $threshold\")\" -eq 1 ]; then\n\
+    \                return 0\n            fi\n        done\n    done\n    return\
+    \ 1", "    diffs=$(has_close_elements_diffs $1 $2)\n    if [[ -z $diffs ]]; then\n\
+    \        echo 'False'\n    else\n        echo 'True'\n    fi", "  if [ \"$#\"\
+    \ -lt 2 ]; then\n    echo \"Wrong number of arguments given to function has_close_elements.\"\
+    \n    exit 1\n  fi\n  local -r values=($1)\n  local -r close_enough=$2\n  local\
+    \ number=0\n  for value in \"${values[@]}\"; do\n    for value2 in \"${values[@]}\"\
+    ; do\n      if [ \"$(echo \"$value - $value2 < $close_enough\" | bc)\" -eq 1 ];\
+    \ then\n        echo \"True\"\n        return\n      fi\n    done\n  done\n  echo\
+    \ \"False\"", "  if [[ -z $1 ]]; then\n    echo \"First argument cannot be empty.\"\
+    \n    exit 1\n  fi\n  if [[ -z $2 ]]; then\n    echo \"Second argument cannot\
+    \ be empty.\"\n    exit 1\n  fi\n  local numbers=($1)\n  local threshold=$2\n\
+    \  for((i=0; i<${#numbers[@]}; i++)); do\n    local curr=${numbers[$i]}\n    for((j=i+1;\
+    \ j<${#numbers[@]}; j++)); do\n      local next=${numbers[$j]}\n      if (( $(echo\
+    \ \"$next - $curr < $threshold\" | bc -l) )); then\n        echo \"True\"\n  \
+    \      return\n      fi\n    done\n  done\n  echo \"False\"", "    # TODO\n  \
+    \  return 1", "    local -a arr=($1)\n    local -i retval=1\n    local -i len=${#arr[@]}\n\
+    \    local -i i\n    local -i j\n    local -i k\n    local -i m\n    local -i\
+    \ n\n    local -i o\n    local -r THRESHOLD=$2\n    if [ $len -eq 0 ]; then\n\
+    \        return 0\n    fi\n    # Set a flag for each number that has a closer\
+    \ partner.\n    local -a close_flags\n    for (( i=0; i<$len; i++ )); do\n   \
+    \     close_flags[$i]=0\n    done\n    for (( i=0; i<$len; i++ )); do\n      \
+    \  for (( j=i+1; j<$len; j++ )); do\n            local -r i_value=${arr[$i]}\n\
+    \            local -r j_value=${arr[$j]}\n            if [ $(echo \"${i_value}>${j_value}\"\
+    \ | bc) -eq 1 ]; then\n                local -r k=$i\n                local -r\
+    \ m=$j\n            else\n                local -r k=$j\n                local\
+    \ -r m=$i\n            fi\n            if [ $(echo \"${j_value}>${i_value}\" |\
+    \ bc) -eq 1 ]; then\n                local -r n=$i\n                local -r o=$j\n\
+    \            else\n                local -r n=$j\n                local -r o=$i\n\
+    \            fi\n            if [ $(echo \"${arr[$k]}-${arr[$m]}>${THRESHOLD}\"\
+    \ | bc) -eq 1 ]; then\n                close_flags[$n]=1\n                close_flags[$o]=1\n\
+    \            fi\n        done\n    done\n    for (( i=0; i<$len; i++ )); do\n\
+    \        if [ ${close_flags[$i]} -eq 1 ]; then\n            return 0\n       \
+    \ fi\n    done\n    return 1", "    echo $1 | xargs -n1 | awk -v threshold=$2\
+    \ '\n        BEGIN {\n            previous = -threshold - 1;\n        }\n    \
+    \    {\n            if ($1 - previous < threshold) {\n                print \"\
+    True\";\n                exit;\n            }\n            previous = $1;\n  \
+    \      }\n        END {\n            print \"False\";\n        }\n    '", "  \
+    \  local array=(${1// / })\n    local threshold=$2\n    local current_diff=0\n\
+    \    local min_diff=10000\n    local max_value=0\n    local min_value=10000\n\
+    \    for i in ${array[@]}; do\n        if (( $(echo \"$i > $max_value\" | bc -l)\
+    \ )); then\n            max_value=$i\n        fi\n        if (( $(echo \"$i <\
+    \ $min_value\" | bc -l) )); then\n            min_value=$i\n        fi\n    done\n\
+    \    current_diff=$(echo \"$max_value - $min_value\" | bc -l)\n    if (( $(echo\
+    \ \"$current_diff <= $threshold\" | bc -l) )); then\n        echo \"True\"\n \
+    \   else\n        echo \"False\"\n    fi"]
 stop_tokens:
 - "\n}"

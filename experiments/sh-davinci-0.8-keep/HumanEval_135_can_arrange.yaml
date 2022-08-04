@@ -9,6 +9,96 @@ tests: "}\n\ncandidate() {\n    can_arrange \"$@\"\n}\n\nset -e\nrun_test() {\n 
   \  [[ $(candidate \"1 2 4 3 5\") = \"3\" ]]\n    [[ $(candidate \"1 2 4 5\") = \"\
   -1\" ]]\n    [[ $(candidate \"1 4 2 5 6 7 8 9 10\") = \"2\" ]]\n    [[ $(candidate\
   \ \"4 8 5 7 3\") = \"4\" ]]\n    [[ $(candidate \"\") = \"-1\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    arr=($1)\n    for i in $(seq 0 $((${#arr[@]} - 2))); do\n     \
+    \   if [[ ${arr[$i]} -lt ${arr[$(($i + 1))]} ]]; then\n            echo $(($i\
+    \ + 1))\n            return\n        fi\n    done\n    echo -1", "  (($# < 2))\
+    \ && echo -1 && return\n  for i in $(seq 1 $(($# - 1))); do\n    ((${1[$i]} >=\
+    \ ${1[$i - 1]})) && echo -1 && return\n  done\n  echo $((i - 1))", "    # Trim\
+    \ spaces, sort the array and build the regex:\n    regex=$(echo \"$1\" | tr -d\
+    \ ' ' | sort -n |\n        sed 's/\\([0-9]\\+\\)/\\1.*/g;s/[0-9]\\+$//;s/\\(.*\\\
+    )./\\1/')\n    # Check the array against the regex:\n    [[ \"$1\" =~ ^$regex$\
+    \ ]] && echo \"${#BASH_REMATCH[@]} - 1\" || echo -1", "  local -a array=($1)\n\
+    \  local -i i=0\n  local -i j=0\n  local -i k=0\n  local -i l=0\n  local -i m=0\n\
+    \  for i in ${!array[@]}; do\n    for j in ${!array[@]}; do\n      if [ $j -gt\
+    \ $i ] && [ ${array[$j]} -lt ${array[$i]} ]; then\n        k=$j\n        break\n\
+    \      fi\n    done\n    if [ $j -gt $i ] && [ ${array[$j]} -lt ${array[$i]} ];\
+    \ then\n      l=$k\n      break\n    fi\n  done\n  if [ $j -gt $i ] && [ ${array[$j]}\
+    \ -lt ${array[$i]} ]; then\n    for m in ${!array[@]}; do\n      if [ $m -gt $l\
+    \ ] && [ ${array[$m]} -lt ${array[$l]} ]; then\n        echo $m\n        return\n\
+    \      fi\n    done\n  fi\n  echo -1", "    read -a s <<< \"$1\"\n    declare\
+    \ -i i=${#s[@]}-1\n    while (( i > 0 )); do\n        if (( s[i] < s[i-1] ));\
+    \ then\n            echo $i\n            return\n        fi\n        (( i-- ))\n\
+    \    done\n    echo -1", "  # $1 is a space-separated list\n  declare -a array=($1)\n\
+    \  # echo \"array is ${array[@]}\"\n  for index in $(seq 1 $((${#array[@]} - 1)));\
+    \ do\n    # echo \"comparing ${array[$(($index - 1))]} to ${array[$index]}\"\n\
+    \    if [ ${array[$(($index - 1))]} -ge ${array[$index]} ]; then\n      echo $index\n\
+    \      return\n    fi\n  done\n  echo -1", "  local -a arr=($1)\n  local c=0\n\
+    \  local index=1\n  local len=${#arr[@]}\n  local maxIndex=$(($len - 1))\n  local\
+    \ val=${arr[0]}\n  local diff=0\n  local next=0\n  local ret=-1\n\n  while [ $index\
+    \ -lt $len ]; do\n    diff=$((${arr[$index]} - $val))\n    if [ $diff -lt 0 ];\
+    \ then\n      val=${arr[$index]}\n      c=$index\n    elif [ $diff -eq 0 ]; then\n\
+    \      if [ $index -lt $maxIndex ]; then\n        next=${arr[$(($index + 1))]}\n\
+    \        if [ $next -lt $val ]; then\n          val=$next\n          c=$(($index\
+    \ + 1))\n        fi\n      fi\n    fi\n    index=$(($index + 1))\n  done\n\n \
+    \ if [ $c -gt 0 ]; then\n    ret=$c\n  fi\n\n  echo $ret", "  local -a A=(\"$@\"\
+    )\n  local i\n  for ((i=${#A[@]}-1; i>0; i--)); do\n    if [[ ${A[i]} -lt ${A[i-1]}\
+    \ ]]; then\n      break\n    fi\n  done\n  echo $((i-1))", "    # Declare a local\
+    \ array named \"arr\" by first assigning it to a string\n    # containing space-separated\
+    \ elements, then expanding this string\n    # as an array.\n    local -a arr=($1)\n\
+    \    local -i n=$(( ${#arr[@]} - 1 ))  # length of arr - 1\n\n    local -i i=0\n\
+    \    for ((i=0; i<n; i++)); do\n        # arr[i] is not greater than or equal\
+    \ to arr[i-1]\n        if (( arr[i] <= arr[i-1] )); then\n            echo $i\n\
+    \            return\n        fi\n    done\n\n    echo -1", "\tlocal array=($1)\n\
+    \tlocal i=0\n\tlocal p=0\n\tlocal found_idx=-1\n\twhile [[ $i -lt ${#array[@]}\
+    \ ]]; do\n\t\tp=$(($i-1))\n\t\twhile [[ $p -ge 0 ]]; do\n\t\t\tif [[ ${array[$i]}\
+    \ -le ${array[$p]} ]]; then\n\t\t\t\tfound_idx=$p\n\t\t\t\tbreak\n\t\t\tfi\n\t\
+    \t\tp=$(($p-1))\n\t\tdone\n\t\tif [[ $found_idx -ne -1 ]]; then\n\t\t\tbreak\n\
+    \t\tfi\n\t\ti=$(($i+1))\n\tdone\n\techo $found_idx", "  local arr=($1)\n  local\
+    \ last_index=${#arr[@]}-1\n  local last_value=${arr[$last_index]}\n  local index=$((\
+    \ $last_index - 1 ))\n  for (( i = $index; i >= 0; i-- )); do\n    [[ ${arr[$i]}\
+    \ -le $last_value ]] && return $i\n  done\n  echo -1", "  echo -n \"Input: '$1'\
+    \ Output: \"\n  # body of function here\n  echo \"Not implemented\"", "  local\
+    \ i=$(echo \"$1\" | tr ' ' '\\n' | awk '{ print $1-1; }' | tr '\\n' ' ')\n  local\
+    \ j=$(echo \"$1\" | tr ' ' '\\n' | awk '{ print $1; }' | tr '\\n' ' ')\n  [ \"\
+    $i\" == \"$j\" ] && echo -1 || echo \"${i/$j}\"", '  # Enter your code here',
+  "    arr=($1)\n    max=${arr[0]}\n    max_index=0\n    max_index_return=-1\n   \
+    \ for ((i=1; i<${#arr[@]}; i++)); do\n        if [[ ${arr[$i]} -le $max ]]; then\n\
+    \            if [[ $max_index -gt $max_index_return ]]; then\n               \
+    \ max_index_return=$max_index\n            fi\n        fi\n        if [[ ${arr[$i]}\
+    \ -gt $max ]]; then\n            max=${arr[$i]}\n            max_index=$i\n  \
+    \      fi\n    done\n    echo $max_index_return", "    # Replace with your solution.\n\
+    \    if [ $# -gt 0 ]; then\n        echo ${1} | awk 'BEGIN{result=-1;}{\n    \
+    \        for(i=2;i<=NF;i++){\n                if( $i < $(i-1) ){\n           \
+    \         if( $(i-1) > result ){\n                        result = $(i-1);\n \
+    \                   }\n                }\n            }\n        }END{print result;}'\n\
+    \    else\n        echo -1\n    fi", "  echo \"$1\" | sed 's/ /\\n/g' | awk '\n\
+    \    {\n      if(prev != \"\"){\n        if(prev < $1){\n          print NR-1\n\
+    \          exit\n        }\n      }\n      prev = $1\n    }\n    END {\n     \
+    \ if(NR == 1){\n        print -1\n      }\n      else if(prev >= $1){\n      \
+    \  print -1\n      }\n    }\n  '", "  # Copy the array to a temp file\n  arr=$(tr\
+    \ \" \" \"\\n\" <<< \"$1\")\n  # Clear the array file\n  > array.txt\n  # Put\
+    \ the array in the temp file\n  while read item; do\n    echo \"$item\" >> array.txt\n\
+    \  done <<< \"$arr\"\n  # Sort the array file\n  sort array.txt > sorted.txt\n\
+    \  # Reset the array file\n  > array.txt\n  # Copy the sorted array to the array\
+    \ file\n  while read item; do\n    echo \"$item\" >> array.txt\n  done < sorted.txt\n\
+    \  # Clear sorted.txt\n  > sorted.txt\n  # Read each line in the file and compare\
+    \ to previous\n  while read item; do\n    # Get the previous item\n    last=$(head\
+    \ -n 1 sorted.txt)\n    # Get the item index\n    index=$(grep -n \"$item\" array.txt\
+    \ | cut -d \":\" -f 1)\n    # If the item is the first item, add it to sorted.txt\n\
+    \    if [ -z \"$last\" ]; then\n      echo \"$item\" >> sorted.txt\n    # If the\
+    \ item is not the first item, compare it to the last item\n    else\n      # If\
+    \ the current item is not greater than or equal to the last item,\n      # return\
+    \ the index of the current item\n      if [ \"$item\" -le \"$last\" ]; then\n\
+    \        echo \"$index\"\n        break\n      # If the current item is greater\
+    \ than or equal to the last item,\n      # add it to sorted.txt\n      else\n\
+    \        echo \"$item\" >> sorted.txt\n      fi\n    fi\n  done < array.txt\n\
+    \  # If the file is empty, return -1\n  if [ ! -s sorted.txt ]; then\n    echo\
+    \ \"-1\"\n  fi", "    declare -a a=$1\n    n=${#a[@]}\n    last=${a[-1]}\n   \
+    \ for i in `seq 0 $((n-2))`; do\n        if [ ${a[i]} -ge $last ]; then\n    \
+    \        printf \"%d\\n\" $((i-1))\n            return\n        fi\n    done\n\
+    \    printf \"%d\\n\" -1", "    local -a data=($1)\n    local n=${#data[@]}\n\
+    \    local largest_index=-1\n    local i\n    for ((i=1; i<n; i++)); do\n    \
+    \    [[ ${data[i]} -lt ${data[i-1]} ]] && ((largest_index=i))\n    done\n    echo\
+    \ $largest_index"]
 stop_tokens:
 - "\n}"

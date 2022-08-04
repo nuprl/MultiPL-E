@@ -13,6 +13,123 @@ tests: "}\n\ncandidate() {\n    has_close_elements \"$@\"\n}\n\nset -e\nrun_test
   \ 2.0\" \"0.1\") = \"true\" ]]\n    [[ $(candidate \"1.1 2.2 3.1 4.1 5.1\" \"1.0\"\
   ) = \"true\" ]]\n    [[ $(candidate \"1.1 2.2 3.1 4.1 5.1\" \"0.5\") = \"false\"\
   \ ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local nums=$1\n    local threshold=$2\n    local sorted_nums=$(echo\
+    \ $nums | xargs -n1 | sort -n)\n    local num_elements=$(echo $sorted_nums | wc\
+    \ -w)\n    if [ $num_elements -eq 1 ]; then\n        echo \"false\"\n        return\n\
+    \    fi\n    for ((i=0; i<$((num_elements-1)); i++)); do\n        local val1=$(echo\
+    \ $sorted_nums | cut -d \" \" -f $((i+1)))\n        local val2=$(echo $sorted_nums\
+    \ | cut -d \" \" -f $((i+2)))\n        if [ $(echo \"$val2 - $val1 < $threshold\"\
+    \ | bc -l) -eq 1 ]; then\n            echo \"true\"\n            return\n    \
+    \    fi\n    done\n    echo \"false\"", "  local numbers=($1)\n  local threshold=$2\n\
+    \  local size=${#numbers[@]}\n  local closest=$size\n  for i in $(seq 0 $(($size\
+    \ - 2))); do\n    for j in $(seq $(($i + 1)) $(($size - 1))); do\n      local\
+    \ diff=$(echo \"${numbers[$i]} - ${numbers[$j]}\" | bc -l)\n      diff=${diff#-}\
+    \ # take absolute value\n      if [[ $(echo \"$diff < $threshold\" | bc -l) -eq\
+    \ 1 ]]; then\n        local dist=$(echo \"$j - $i\" | bc -l)\n        if [[ $(echo\
+    \ \"$dist < $closest\" | bc -l) -eq 1 ]]; then\n          closest=$dist\n    \
+    \    fi\n      fi\n    done\n  done\n  if [[ $(echo \"$closest == $size\" | bc\
+    \ -l) -eq 1 ]]; then\n    echo \"false\"\n  else\n    echo \"true\"\n  fi", " \
+    \   local list=$1 threshold=$2\n    local numbers=($list)\n    local one two\n\
+    \    for ((i=0; i<$((${#numbers[@]}-1)); i++)); do\n        one=${numbers[$i]}\n\
+    \        for ((j=$i+1; j<${#numbers[@]}; j++)); do\n            two=${numbers[$j]}\n\
+    \            if [[ $(awk \"BEGIN {print ($two - $one) < $threshold}\") == \"1\"\
+    \ ]]; then\n                echo \"true\"\n                return\n          \
+    \  fi\n        done\n    done\n    echo \"false\"", "  # $1 is a space-separated\
+    \ list\n  IFS=' ' read -r -a list <<< \"$1\"\n  # $2 is a threshold for comparison\n\
+    \  threshold=$2\n  # Initial value for result to false.\n  result=\"false\"\n\
+    \  # Loop over all elements except last one.\n  for (( i=0; i<${#list[@]}-1; i++\
+    \ )); do\n    # Check if it is closer to next element than threshold.\n    if\
+    \ awk -v \"a=${list[$i]}\" -v \"b=${list[$i+1]}\" -v \"t=$threshold\" 'BEGIN {\
+    \ if (b-a < t) exit 1; exit 0; }'; then\n      # If yes, return true as result.\n\
+    \      result=\"true\"\n      break\n    fi\n  done\n  echo \"$result\"", "  arr=($1)\n\
+    \  threshold=$2\n  # echo \"${arr[*]}\"\n  # echo $threshold\n  for i in ${!arr[@]};\
+    \ do\n    for j in ${!arr[@]}; do\n      if [[ i -ne j ]]; then\n        diff=$(echo\
+    \ ${arr[i]} - ${arr[j]} | bc)\n        # echo $diff\n        if [[ $(echo \"$diff\
+    \ > 0 && $diff < $threshold\" | bc) -eq 1 ]]; then\n          echo \"true\"\n\
+    \          return\n        fi\n      fi\n    done\n  done\n  echo \"false\"",
+  "    local numbers=\"$1\"\n    local threshold=\"$2\"\n    local number\n    local\
+    \ prev_number=\n    for number in $numbers; do\n        if [[ -n \"$prev_number\"\
+    \ ]]; then\n            local diff=`echo \"$number - $prev_number\" | bc -l`\n\
+    \            if [[ $diff -lt $threshold ]]; then\n                echo \"true\"\
+    \n                return\n            fi\n        fi\n        prev_number=$number\n\
+    \    done\n    echo \"false\"", "  local LIST=\"$1\"\n  local THRESHOLD=\"$2\"\
+    \n  # Compute distance between all numbers in the list:\n  local DISTANCES=\"\"\
+    \n  for NUM in $LIST\n  do\n    for NUM2 in $LIST\n    do\n      if [ \"$NUM\"\
+    \ != \"$NUM2\" ]\n      then\n        DISTANCES=\"$DISTANCES $((NUM-NUM2))\"\n\
+    \      fi\n    done\n  done\n  # Find out if any distance is closer than threshold:\n\
+    \  local CLOSE=\"false\"\n  for DISTANCE in $DISTANCES\n  do\n    if [ \"$((DISTANCE))\"\
+    \ -lt \"$((THRESHOLD))\" ]\n    then\n      CLOSE=\"true\"\n    fi\n  done\n \
+    \ echo \"$CLOSE\"", "  list=$1\n  threshold=$2\n  for element in $list; do\n \
+    \   for other_element in $list; do\n      diff=$(bc <<< \"$element - $other_element\"\
+    )\n      abs_diff=$(bc <<< \"if ($diff < 0) $diff * -1.0 else $diff\")\n     \
+    \ if (( $(bc <<< \"$abs_diff < $threshold\") == 1 )); then\n        echo \"true\"\
+    \n        return\n      fi\n    done\n  done\n  echo \"false\"", "  local list=\"\
+    $1\"\n  local threshold=\"$2\"\n  local -a arr=()\n  while read -r num; do\n \
+    \   arr+=(\"$num\")\n  done <<< \"$list\"\n  local -a diffs=()\n  for num in \"\
+    ${arr[@]}\"; do\n    for compare_num in \"${arr[@]}\"; do\n      if [[ \"$num\"\
+    \ != \"$compare_num\" ]]; then\n        local diff=$(echo \"$num - $compare_num\"\
+    \ | bc -l)\n        if [[ $(echo \"$diff < 0\" | bc -l) == 1 ]]; then\n      \
+    \    diff=$(echo \"$diff * -1\" | bc -l)\n        fi\n        diffs+=(\"$diff\"\
+    )\n      fi\n    done\n  done\n  for diff in \"${diffs[@]}\"; do\n    if [[ $(echo\
+    \ \"$diff < $threshold\" | bc -l) == 1 ]]; then\n      echo \"true\"\n      return\n\
+    \    fi\n  done\n  echo \"false\"", "    seq=${1}\n    threshold=${2}\n    for\
+    \ n in ${seq}; do\n        for m in ${seq}; do\n            if echo ${n} ${m}\
+    \ | ./are_close.py ${threshold}; then\n                echo true\n           \
+    \     return\n            fi\n        done\n    done\n    echo false", "    declare\
+    \ -a a=(\"${!1}\")\n    local threshold=\"$2\"\n    local i\n    local j\n   \
+    \ local delta\n\n    for ((i=0; i<${#a[@]}; i++)); do\n        for ((j=i+1; j<${#a[@]};\
+    \ j++)); do\n            delta=$(awk -v x=${a[$i]} -v y=${a[$j]} 'BEGIN {print\
+    \ x-y}')\n            if [ $(echo \"$delta < 0\" | bc) -eq 1 ]; then\n       \
+    \         delta=$(awk -v x=$delta 'BEGIN {print -x}')\n            fi\n      \
+    \      if [ $(echo \"$delta < $threshold\" | bc) -eq 1 ]; then\n             \
+    \   echo \"true\"\n                return\n            fi\n        done\n    done\n\
+    \    echo \"false\"", "    if (( $(echo \"$(echo \"$1\" | wc -w)\" == \"1\") ));\
+    \ then\n        echo \"false\"\n    else\n        x1=$(echo \"$1\" | awk '{print\
+    \ $1}')\n        x2=$(echo \"$1\" | awk '{print $2}')\n        x_diff=$(bc <<<\
+    \ \"$x2 - $x1\")\n        if (( $(echo \"$x_diff < $2\" | bc -l) )); then\n  \
+    \          echo \"true\"\n        else\n            echo \"false\"\n        fi\n\
+    \    fi", "    list=$1\n    threshold=$2\n    for number in $list; do\n      \
+    \  for number2 in $list; do\n            if [[ \"$number\" == \"$number2\" ]];\
+    \ then\n                continue\n            fi\n            diff=$(echo \"$number\
+    \ - $number2\" | bc -l)\n            abs_diff=$(echo \"if($diff > 0) $diff else\
+    \ $diff * -1\" | bc -l)\n            if [[ $(bc <<< \"$abs_diff < $threshold\"\
+    ) == 1 ]]; then\n                echo \"true\"\n                return\n     \
+    \       fi\n        done\n    done\n    echo \"false\"", "    local numbers=($1)\n\
+    \    local threshold=$2\n    local i\n    local closest\n    local num_elms=${#numbers[@]}\n\
+    \    for ((i=0; i<num_elms; i++)); do\n        local current=${numbers[$i]}\n\
+    \        closest=${numbers[$(((i+1)%num_elms))]}\n        local delta=$(echo \"\
+    $current - $closest\" | bc -l)\n        if [ $(echo \"$delta < 0\" | bc -l) -eq\
+    \ 1 ]; then\n            delta=$(echo \"-$delta\" | bc -l)\n        fi\n     \
+    \   if [ $(echo \"$delta < $threshold\" | bc -l) -eq 1 ]; then\n            echo\
+    \ \"true\"\n            return\n        fi\n    done\n    echo \"false\"", " \
+    \ local -a list=($1)\n  local threshold=$2\n  local -i last_index=${#list[@]}-1\n\
+    \  for ((i=0; i<last_index; i++)); do\n    if $(elements_closer \"${list[$i]}\"\
+    \ \"${list[$i+1]}\" \"$threshold\"); then\n      echo \"true\"\n      return\n\
+    \    fi\n  done\n  echo \"false\"", "  # $1 is a space-separated list\n  local\
+    \ numbers_list=$1\n  # $2 is a floating point\n  local threshold=$2\n  set -o\
+    \ pipefail\n  for number in $numbers_list; do\n    # filter out numbers that are\
+    \ closer than $threshold from $number\n    local close_numbers=$(echo \"$numbers_list\"\
+    \ | awk -v threshold=$threshold -v number=$number '{if ($1 > number-threshold\
+    \ && $1 < number+threshold) print $1}')\n    # check if there are at least two\
+    \ numbers\n    if [[ \"$(echo \"$close_numbers\" | wc -w)\" -gt 1 ]]; then\n \
+    \     echo \"true\"\n      return 0\n    fi\n  done\n  echo \"false\"\n  return\
+    \ 0", "  a=($1)\n  threshold=$2\n  length=${#a[@]}\n  for (( i=0; i<$length; i++\
+    \ )); do\n    for (( j=$((i+1)); j<$length; j++ )); do\n      if (( $(echo \"\
+    ${a[$i]} > ${a[$j]}\" | bc -l) )); then\n        if (( $(echo \"${a[$i]} - ${a[$j]}\
+    \ < $threshold\" | bc -l) )); then\n          echo \"true\"\n          return\n\
+    \        fi\n      else\n        if (( $(echo \"${a[$j]} - ${a[$i]} < $threshold\"\
+    \ | bc -l) )); then\n          echo \"true\"\n          return\n        fi\n \
+    \     fi\n    done\n  done\n  echo \"false\"", "    local arr=() i j\n    read\
+    \ -ra arr <<< \"$1\"\n    for ((i=0; i<${#arr[@]}; i++)); do\n        for ((j=i+1;\
+    \ j<${#arr[@]}; j++)); do\n            if (( $(echo \"${arr[$i]} ${arr[$j]} $2\
+    \ <\" | bc -l) )); then\n                echo \"true\"\n                return\n\
+    \            fi\n        done\n    done\n    echo \"false\"", "  declare -a vals=(${1//\
+    \ / })\n  local -i threshold=$2\n\n  local -i i=0\n  local -i j=0\n  local -i\
+    \ num_vals=${#vals[@]}\n  for ((i=0; i<num_vals; i++)); do\n    for ((j=i+1; j<num_vals;\
+    \ j++)); do\n      if [[ $((${vals[i]}-${vals[j]})) -le ${threshold} ]]; then\n\
+    \        echo \"true\"\n        return\n      fi\n    done\n  done\n  echo \"\
+    false\"", "  for i in $1; do\n    for j in $1; do\n      if [[ $(python -c \"\
+    print($i - $j < $2 and $i - $j > -$2)\") == \"True\" ]]; then\n        return\
+    \ 0\n      fi\n    done\n  done\n  return 1"]
 stop_tokens:
 - "\n}"

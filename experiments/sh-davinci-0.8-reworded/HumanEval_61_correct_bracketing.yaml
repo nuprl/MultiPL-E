@@ -14,6 +14,137 @@ tests: "}\n\ncandidate() {\n    correct_bracketing \"$@\"\n}\n\nset -e\nrun_test
   \ \")\") = \"false\" ]]\n    [[ $(candidate \"(()\") = \"false\" ]]\n    [[ $(candidate\
   \ \"()()(()())())(()\") = \"false\" ]]\n    [[ $(candidate \"()()(()())()))()\"\
   ) = \"false\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local stack=\"\"\n    local i=\"\"\n    for ((i=0; i<${#1}; i++));\
+    \ do\n        c=${1:$i:1}\n        if [[ $c == \"(\" ]]; then\n            stack=\"\
+    $stack$c\"\n        elif [[ $c == \")\" ]]; then\n            if [[ $stack ==\
+    \ \"\" ]]; then\n                echo \"false\"\n                return\n    \
+    \        fi\n            stack=${stack%?}\n        fi\n    done\n    if [[ $stack\
+    \ == \"\" ]]; then\n        echo \"true\"\n    else\n        echo \"false\"\n\
+    \    fi", "  local bracket_count=0\n  for ((i=0; i<${#1}; i++)); do\n    if [[\
+    \ ${1:$i:1} == \"(\" ]]; then\n      ((bracket_count++))\n    elif [[ ${1:$i:1}\
+    \ == \")\" ]]; then\n      ((bracket_count--))\n    fi\n    if ((bracket_count\
+    \ < 0)); then\n      echo \"false\"\n      return\n    fi\n  done\n  if ((bracket_count\
+    \ == 0)); then\n    echo \"true\"\n  else\n    echo \"false\"\n  fi", "    # declare\
+    \ the array where we will store our characters\n    declare -a stack\n    # \"\
+    i\" is our counter, starting at 0 and going up to the length of the string\n \
+    \   for ((i=0; i<${#1}; i++)); do\n        # ${1:i:1} is the character at index\
+    \ $i.\n        # We use case statement because we have only two options\n    \
+    \    case ${1:i:1} in\n            \"(\")\n                # push it to the stack\n\
+    \                stack+=(${1:i:1})\n                ;;\n            \")\")\n \
+    \               # check if stack is empty\n                if [ ${#stack[@]} -eq\
+    \ 0 ]; then\n                    echo \"false\"\n                    return\n\
+    \                fi\n                # take the last element from the stack\n\
+    \                last=${stack[${#stack[@]}-1]}\n                # if last element\
+    \ is \"(\" and current is \")\"\n                if [ \"$last\" == \"(\" ]; then\n\
+    \                    # delete the last element from the stack\n              \
+    \      unset stack[${#stack[@]}-1]\n                else\n                   \
+    \ # if there is a \")\" when stack is empty, it's wrong\n                    echo\
+    \ \"false\"\n                    return\n                fi\n                ;;\n\
+    \        esac\n    done\n    # if stack is empty, we got a correct bracketing\n\
+    \    if [ ${#stack[@]} -eq 0 ]; then\n        echo \"true\"\n    else\n      \
+    \  echo \"false\"\n    fi", "  local brackets=\"$1\"\n  local correct=true\n \
+    \ local char\n  for ((i=0; i<${#brackets}; i++)); do\n    char=\"${brackets:$i:1}\"\
+    \n    if [[ \"$char\" == \"(\" ]]; then\n      bracket_stack+=\"$char\"\n    elif\
+    \ [[ \"$char\" == \")\" ]]; then\n      bracket_stack=\"${bracket_stack:0:-1}\"\
+    \n    fi\n  done\n  [[ -z \"$bracket_stack\" ]] && echo \"true\" || echo \"false\"",
+  "  # One line solution\n  if [ $(echo \"$1\" | grep -o \"\\(\" | wc -l) -eq $(echo\
+    \ \"$1\" | grep -o \"\\)\" | wc -l) ]; then\n    echo \"true\"\n  else\n    echo\
+    \ \"false\"\n  fi", "    # get the length of the string\n    local length=$(echo\
+    \ -n \"$1\" | wc -c)\n    # if the length is zero, then there are no brackets\n\
+    \    if [ \"$length\" -eq 0 ]; then\n        echo \"true\"\n        return\n \
+    \   fi\n    # get the first character of the string\n    local first=$(echo -n\
+    \ \"$1\" | cut -c 1)\n    # if the first character is a closing bracket, then\
+    \ it must be incorrect\n    if [ \"$first\" == \")\" ]; then\n        echo \"\
+    false\"\n        return\n    fi\n    # if the first character is an opening bracket,\
+    \ it must be paired with a closing bracket\n    # if it is, then check the rest\
+    \ of the string recursively\n    if [ \"$first\" == \"(\" ]; then\n        local\
+    \ newstr=$(echo -n \"$1\" | cut -c 2-$length)\n        local other=$(correct_bracketing\
+    \ \"$newstr\")\n        if [ \"$other\" == \"true\" ]; then\n            echo\
+    \ \"true\"\n            return\n        fi\n    fi\n    # if the first character\
+    \ is not a bracket, check the rest of the string recursively\n    local newstr=$(echo\
+    \ -n \"$1\" | cut -c 2-$length)\n    correct_bracketing \"$newstr\"", "  local\
+    \ open_brackets=$(echo $1 | grep -o '(' | wc -l)\n  local close_brackets=$(echo\
+    \ $1 | grep -o ')' | wc -l)\n  [[ \"$open_brackets\" == \"$close_brackets\" ]]\
+    \ && echo \"true\" || echo \"false\"", "  stack=''\n  for ch in $(echo $1 | sed\
+    \ 's/./& /g'); do\n    if [[ $ch == '(' ]]; then\n      stack=\"${stack}(\"\n\
+    \    elif [[ $ch == ')' ]]; then\n      if [[ $stack == '' ]]; then\n        echo\
+    \ \"false\"\n        return 0\n      fi\n      stack=${stack::-1}\n    fi\n  done\n\
+    \  if [[ $stack == '' ]]; then\n    echo \"true\"\n  else\n    echo \"false\"\n\
+    \  fi", "  local brackets=\"$1\"\n  local bal=0\n  for b in $(seq 1 ${#brackets});\
+    \ do\n    local c=${brackets:b-1:1}\n    if [[ \"$c\" == \"(\" ]]; then\n    \
+    \  ((bal++))\n    elif [[ \"$c\" == \")\" ]]; then\n      ((bal--))\n    else\n\
+    \      echo >&2 \"Unrecognized character: $c\"\n      exit 1\n    fi\n    if ((bal\
+    \ < 0)); then\n      echo \"false\"\n      return\n    fi\n  done\n  [[ \"$bal\"\
+    \ == \"0\" ]] && echo \"true\" || echo \"false\"", '    (( $(echo "$1" | grep
+    -o "(" | wc -l) == $(echo "$1" | grep -o ")" | wc -l) )) && [[ $(echo "$1" | grep
+    -o ")" | grep ")" -B1 | grep -v - | wc -l) == 0 ]]', "    local num_open_brackets=0\n\
+    \    local num_close_brackets=0\n    local i\n    for ((i=0; i<${#1}; i++)); do\n\
+    \        if [[ ${1:$i:1} == \"(\" ]]; then\n            num_open_brackets=$((num_open_brackets\
+    \ + 1))\n        elif [[ ${1:$i:1} == \")\" ]]; then\n            num_close_brackets=$((num_close_brackets\
+    \ + 1))\n        fi\n    done\n    if [[ $num_open_brackets == $num_close_brackets\
+    \ ]]; then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi",
+  "    local brackets=$1\n    local open_brackets=0\n    local closed_brackets=0\n\
+    \    for (( i=0; i<${#brackets}; i++ )); do\n        local c=${brackets:$i:1}\n\
+    \        if [[ $c == \"(\" ]]; then\n            open_brackets=$(( open_brackets\
+    \ + 1 ))\n        elif [[ $c == \")\" ]]; then\n            closed_brackets=$((\
+    \ closed_brackets + 1 ))\n        fi\n        if [[ $closed_brackets -gt $open_brackets\
+    \ ]]; then\n            return 1\n        fi\n    done\n    if [[ $open_brackets\
+    \ -eq $closed_brackets ]]; then\n        return 0\n    else\n        return 1\n\
+    \    fi", "  local brackets=$1\n  local left=0\n  local right=0\n  for (( i=0;\
+    \ i<${#brackets}; i++ )); do\n    local c=${brackets:$i:1}\n    if [[ $c == \"\
+    (\" ]]; then\n      (( left += 1 ))\n    elif [[ $c == \")\" ]]; then\n      ((\
+    \ right += 1 ))\n    fi\n    if [[ $right -gt $left ]]; then\n      # right bracket\
+    \ is ahead of left bracket\n      echo \"false\"\n      return\n    fi\n  done\n\
+    \  if [[ $left -eq $right ]]; then\n    echo \"true\"\n  else\n    echo \"false\"\
+    \n  fi", "  # take the string \"$1\" and remove all non-bracket characters\n \
+    \ # this leaves us with a string that is just \"(\", \")\", or empty\n  # stack\
+    \ is a variable of the form \"x,y,z,\" where\n  #   x is the number of open parens\
+    \ at the end of the string\n  #   y is the number of close parens at the end of\
+    \ the string\n  #   z is the number of open parens minus the number of close parens\n\
+    \  # this is the result of the following dynamic programming:\n  #   stack[i]\
+    \ = max(stack[i-1]+1, stack[i-1]-1, stack[i-1])\n  #             if s[i] == '('\n\
+    \  #   stack[i] = max(stack[i-1]+1, stack[i-1]-1, stack[i-1])\n  #           \
+    \  if s[i] == ')'\n  #   stack[i] = stack[i-1]\n  #             if s[i] == ''\n\
+    \  #\n  # note, this only works if there are no other characters in the string\n\
+    \  #\n  # at the end of the string, if stack[N] == 0, then there is a valid\n\
+    \  # bracketing.  for example, for \"(()()\" we would get\n  #   stack = \"1,0,1,\"\
+    \n  # for \"()()\" we would get\n  #   stack = \"2,0,2,\"\n  #\n  # to check stack[N]\
+    \ we use the following condition:\n  # stack[N] == \"0,\"\n  stack=$(echo \"${1//[^()]/}\"\
+    \ | tr '()' '012' | fold -w 1 | sed -e 's/^\\|$/0/g' | tr -d '\\n' | sed -e 's/[012]/,/g')\n\
+    \n  local -r start_parens=$(echo \"$stack\" | tr ',' '\\n' | sed -n '1p')\n  local\
+    \ -r end_parens=$(echo \"$stack\" | tr ',' '\\n' | sed -n '$p')\n  local -r num_parens=$(echo",
+  "    local -i left=$(echo $1 | awk '{ print gsub(/\\(/, \"\") }')\n    local -i\
+    \ right=$(echo $1 | awk '{ print gsub(/\\)/, \"\") }')\n    if [ $left -eq $right\
+    \ ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi", " \
+    \ local stack=0\n  for ((i=0; i<${#1}; i++)); do\n    (( ${1:$i:1} == '(' )) &&\
+    \ (( ++stack )) || (( --stack ))\n    (( stack < 0 )) && break\n  done\n  (( stack\
+    \ == 0 )) && echo true || echo false", "    local opening_count=0\n    local closing_count=0\n\
+    \    local c\n\n    for (( i=0; i<${#1}; i++ ))\n    do\n        c=${1:$i:1}\n\
+    \        if [[ \"$c\" == \"(\" ]]\n        then\n            (( opening_count++\
+    \ ))\n        elif [[ \"$c\" == \")\" ]]\n        then\n            (( closing_count++\
+    \ ))\n        fi\n    done\n\n    [[ \"$opening_count\" -eq \"$closing_count\"\
+    \ ]] && echo \"true\" || echo \"false\"", "    stack=\"\"\n    for char in $(echo\
+    \ \"$1\" | fold -w1); do\n        if [[ $char == \"(\" ]]; then\n            stack+=\"\
+    $char\"\n        elif [[ $char == \")\" ]]; then\n            if [[ -z $stack\
+    \ ]]; then\n                return 1\n            else\n                stack=\"\
+    ${stack::-1}\"\n            fi\n        fi\n    done\n    if [[ -z $stack ]];\
+    \ then\n        return 0\n    else\n        return 1\n    fi", "  # your code\
+    \ here\n  ( test \"$1\" = \"\" ) && echo \"true\" && return\n  ( test \"$1\" =\
+    \ \"(\" ) && echo \"false\" && return\n  ( test \"$1\" = \")\" ) && echo \"false\"\
+    \ && return\n  ( test \"$1\" = \"()\" ) && echo \"true\" && return\n  #( echo\
+    \ $1 | egrep -q \"^[()]+$\" ) && echo \"false\" && return\n  left=$( echo $1 |\
+    \ grep -o \"(\" | wc -l )\n  right=$( echo $1 | grep -o \")\" | wc -l )\n  ( test\
+    \ $left -ne $right ) && echo \"false\" && return\n  test \"$1\" = \"$( echo $1\
+    \ | grep -o \"()\" )\" && echo \"true\" && return\n  correct_bracketing \"$( echo\
+    \ $1 | sed \"s/()//\" )\"", "    local brackets=\"$1\"\n    # loop over string,\
+    \ adding one if the char is \"(\" and subtracting one if the char is \")\"\n \
+    \   # the result should be zero if all brackets are balanced\n    local brackets_balance=0\n\
+    \    for (( i=0; i<${#brackets}; i++ )); do\n        local char=\"${brackets:$i:1}\"\
+    \n        if [[ \"$char\" == \"(\" ]]; then\n            brackets_balance=$((\
+    \ brackets_balance + 1 ))\n        elif [[ \"$char\" == \")\" ]]; then\n     \
+    \       brackets_balance=$(( brackets_balance - 1 ))\n        else\n         \
+    \   echo \"char can only be either '(' or ')'\"\n            return 1\n      \
+    \  fi\n    done\n    [[ $brackets_balance -eq 0 ]] && echo \"true\" || echo \"\
+    false\""]
 stop_tokens:
 - "\n}"

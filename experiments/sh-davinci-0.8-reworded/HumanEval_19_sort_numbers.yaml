@@ -11,6 +11,86 @@ tests: "}\n\ncandidate() {\n    sort_numbers \"$@\"\n}\n\nset -e\nrun_test() {\n
   \ \"five zero four seven nine eight\") = \"zero four five seven eight nine\" ]]\n\
   \    [[ $(candidate \"six five four three two one zero\") = \"zero one two three\
   \ four five six\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local -a array_of_numbers=$1\n  printf \"%s\\n\" ${array_of_numbers[@]}\
+    \ | sort -n", "\t# TODO: ensure $1 is a string\n\t# TODO: ensure $1 contains only\
+    \ valid words\n\t# TODO: ensure $1 contains no words not in the word_to_digit\
+    \ map\n\t# TODO: sort the words using the word_to_digit map\n\t# TODO: reassemble\
+    \ the string and echo it\n\tlocal words=$1\n\tlocal sort_array\n\tlocal word\n\
+    \tlocal i=0\n\tfor word in ${words}; do\n\t\tsort_array[$i]=$(word_to_digit ${word})\n\
+    \t\t(( i += 1 ))\n\tdone\n\techo \"${sort_array[@]}\" | tr ' ' '\\n' | sort -n\
+    \ | tr '\\n' ' '", "    local number_text\n    local -i i\n    local num\n   \
+    \ local tmp\n    local -i n\n    local -i nn\n    local sorted\n    local sorted_string\n\
+    \n    number_text=($1)\n    num_text_length=${#number_text[@]}\n    sorted=($1)\n\
+    \    sorted_string=\"\"\n\n    # Sort\n    for ((i=0; i<num_text_length; i++))\n\
+    \    do\n        for ((j=i+1; j<num_text_length; j++))\n        do\n         \
+    \   num=$(num_from_string ${number_text[i]})\n            nn=$(num_from_string\
+    \ ${number_text[j]})\n            if [ $num -gt $nn ]\n            then\n    \
+    \            tmp=${number_text[i]}\n                number_text[i]=${number_text[j]}\n\
+    \                number_text[j]=$tmp\n            fi\n        done\n    done\n\
+    \n    # Combine into string\n    for ((i=0; i<num_text_length; i++))\n    do\n\
+    \        sorted_string=\"$sorted_string ${number_text[i]}\"\n    done\n\n    echo\
+    \ $sorted_string", "    local numbers=($1)\n    local sorted=( )\n    local index=0\n\
+    \    # \"declare -A\" creates an associative array (hash table)\n    declare -A\
+    \ numbersToDigits=(\n        [zero]=0 [one]=1 [two]=2 [three]=3 [four]=4 [five]=5\
+    \ [six]=6 [seven]=7 [eight]=8 [nine]=9\n    )\n    # Insertion sort: https://en.wikipedia.org/wiki/Insertion_sort\n\
+    \    for ((i=0; i<${#numbers[@]}; i++)); do\n        # Search for the position\
+    \ where the current element should be inserted\n        while ((index>0 && numbersToDigits[${numbers[$i]}]\
+    \ < numbersToDigits[${sorted[$((index-1))]}])); do\n            let index--\n\
+    \        done\n        # Insert the element to the sorted array\n        sorted[$index]=${numbers[$i]}\n\
+    \        let index++\n    done\n    # Echo the sorted array, keeping only the\
+    \ values (not the keys)\n    echo \"${sorted[@]}\"", "    local -r numbers_str=\"\
+    $1\"\n    numbers=$(echo $numbers_str | tr ' ' '\\n' | sed 's/^0*//')\n    echo\
+    \ $numbers | tr ' ' '\\n' | sort -n | tr '\\n' ' '", "    # Step 1: change the\
+    \ string into a list\n    # list=($(echo $1 | tr \" \" \"\\n\"))\n    list=($(echo\
+    \ $1))\n    # Step 2: setup an array to store result\n    result=()\n    # Step\
+    \ 3: setup a dict to map numbers to numberal\n    num_dict=([zero]=0 [one]=1 [two]=2\
+    \ [three]=3 [four]=4 [five]=5 [six]=6 [seven]=7 [eight]=8 [nine]=9)\n    # Step\
+    \ 4: loop through list\n    for i in ${list[@]}; do\n        result[${num_dict[$i]}]=$i\n\
+    \    done\n    # Step 5: output sorted list\n    for i in ${!result[@]}; do\n\
+    \        echo ${result[$i]}\n    done", '  echo "$1" | tr " " "\n" | sort | tr
+    "\n" " "', '  echo $1 | sort -n', "    #echo \"$1\" | tr ' ' '\\n' | sort -n |\
+    \ tr '\\n' ' '\n    echo \"$1\" | tr ' ' '\\n' | sort -n | paste -sd ' ' -", " \
+    \ declare -A num_map\n  num_map=([zero]=0 [one]=1 [two]=2 [three]=3 [four]=4 [five]=5\
+    \ [six]=6 [seven]=7 [eight]=8 [nine]=9)\n  local result=\n  local -a int_list\n\
+    \  while IFS= read -r num; do\n    int_list+=(${num_map[$num]})\n  done <<< \"\
+    ${1// /$'\\n'}\"\n  for i in \"${int_list[@]}\"; do\n    for j in \"${int_list[@]}\"\
+    ; do\n      if [[ $i -lt $j ]]; then\n        result+=\"${!num_map[$i]} \"\n \
+    \       break\n      fi\n    done\n  done\n  echo $result", "  echo $1 | tr '\
+    \ ' '\\n' | sort -n | tr '\\n' ' '", "    # This is not the best way to do this.\
+    \ For example, if user includes \"one\" twice then it will only appear once in\
+    \ output.\n    # Better: use array\n    # Bash guide says 'echo' is slow, as opposed\
+    \ to 'printf'\n    declare -a sortedNums=$(printf %s\\\\n \"$1\" | tr ' ' '\\\
+    n' | sort -k1,1 )\n    # s = string\n    # n = newline\n    # k1,1 = field 1\n\
+    \    echo \"${sortedNums[@]}\"", "    # ----------\n    # Your code goes here\n\
+    \    # ----------\n    echo \"$1\" | tr ' ' '\\n' | sort -n | tr '\\n' ' ' | xargs",
+  "    local unsorted_numbers=(${1})\n    local numeral=\"\"\n    local sorted_numbers=()\n\
+    \    declare -A numbers\n    numbers=( [\"zero\"]=0 [\"one\"]=1 [\"two\"]=2 [\"\
+    three\"]=3 [\"four\"]=4 [\"five\"]=5 [\"six\"]=6 [\"seven\"]=7 [\"eight\"]=8 [\"\
+    nine\"]=9 )\n    for numeral in \"${unsorted_numbers[@]}\"; do\n        sorted_numbers+=(${numbers[$numeral]})\n\
+    \    done\n    IFS=$' ' sorted_numbers=($(for i in \"${sorted_numbers[@]}\"; do\
+    \ echo \"$i\"; done | sort -n))\n    unset IFS\n    for i in \"${!sorted_numbers[@]}\"\
+    ; do\n        for k in \"${!numbers[@]}\"; do\n            if [[ ${sorted_numbers[$i]}\
+    \ -eq ${numbers[$k]} ]]; then\n                sorted_numbers[$i]=$k\n       \
+    \     fi\n        done\n    done\n    echo \"${sorted_numbers[@]}\"", "    local\
+    \ -a words=($1)\n    echo \"${words[@]}\" | tr ' ' '\\n' | sort | tr '\\n' ' '",
+  "    # TODO: implement sort_numbers\n    # This is a stub that simply prints the\
+    \ input.\n    # Delete this when you are ready.\n    echo $1", "    local numbers=($1)\n\
+    \    local sorted=()\n    local max_num=9\n    local idx=0\n    while [ $idx -le\
+    \ $max_num ]; do\n        for number in \"${numbers[@]}\"; do\n            [ \"\
+    $(number_to_digit $number)\" == \"$idx\" ] && sorted+=($number)\n        done\n\
+    \        idx=$((idx+1))\n    done\n    echo \"${sorted[@]}\"", "  # insert code\
+    \ here\n  echo \"$1\" | tr ' ' '\\n' | sort | tr '\\n' ' '", "\techo \"$1\" |\
+    \ tr ' ' '\\n' | sort -n | xargs", "\tif [ -z \"$1\" ]; then return; fi\n\tlocal\
+    \ str=\"$1\"\n\tlocal arr=($str)\n\tlocal result=\"\"\n\t\n\t# Map numberal words\
+    \ to their integer counterparts\n\tdeclare -A MAPPING=( [\"zero\"]=0 [\"one\"\
+    ]=1 [\"two\"]=2 [\"three\"]=3 [\"four\"]=4 [\"five\"]=5 [\"six\"]=6 [\"seven\"\
+    ]=7 [\"eight\"]=8 [\"nine\"]=9 )\n\t\n\t# Create a parallel array that contains\
+    \ the corresponding integer for each word in the input\n\tfor i in ${!arr[@]};\
+    \ do\n\t\tarr[$i]=${MAPPING[${arr[$i]}]}\n\tdone\n\t\n\t# Sort the parallel array\n\
+    \tsort -n -k1 <<<\"${arr[*]}\" | read -a sort_arr\n\t\n\t# Write back to the $str\n\
+    \tfor i in ${!sort_arr[@]}; do\n\t\tstr=${str//${arr[$i]}/${sort_arr[$i]}}\n\t\
+    done\n\t\n\t# Map integer counterparts back to their numberal words\n\tfor i in\
+    \ ${!sort_arr[@]}; do\n\t\tstr=${str//${sort_arr[$i]}/${MAPPING[${sort_arr[$i]}]}}\n\
+    \tdone\n\t\n\t# Return the sorted string\n\techo \"$str\""]
 stop_tokens:
 - "\n}"

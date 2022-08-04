@@ -10,7 +10,187 @@ tests: "unittest\n{\n    alias candidate = parse_nested_parens;\n\n    assert(ca
   (()()) ((())) () ((())()())\") == [2L, 3L, 1L, 3L]);\n    assert(candidate(\"()\
   \ (()) ((())) (((())))\") == [1L, 2L, 3L, 4L]);\n    assert(candidate(\"(()(())((())))\"\
   ) == [4L]);\n}\nvoid main(){}"
-completions: []
+completions: ["{\n\tauto result = new long[](0);\n\tforeach(paren_string_group; paren_string.split(\"\
+    \ \"))\n\t{\n\t\t//Stack to keep track of the level of nested parentheses\n\t\t\
+    auto depth_stack = new Stack!long();\n\t\tlong depth = 0;\n\t\tlong max_depth\
+    \ = 0;\n\t\t//Iterate through each of the character in the string,\n\t\t//get\
+    \ the depth and then pop the stack.\n\t\t//Keep doing that until the end of the\
+    \ string.\n\t\tforeach(paren; paren_string_group)\n\t\t{\n\t\t\tif(paren == '(')\n\
+    \t\t\t{\n\t\t\t\tdepth += 1;\n\t\t\t\tdepth_stack.push(depth);\n\t\t\t}\n\t\t\t\
+    else if(paren == ')')\n\t\t\t{\n\t\t\t\tdepth = depth_stack.pop;\n\t\t\t}\n\t\t\
+    \t//Get the maximum value of the depth\n\t\t\tmax_depth = max(max_depth, depth);\n\
+    \t\t}\n\t\tresult ~= max_depth;\n\t}\n\treturn result;\n}", "{\n    // tokenize\n\
+    \    string[] tokens = split(paren_string, ' ');\n    // container for the result\n\
+    \    long[] counter = new long[tokens.length];\n    // iterate over each token\n\
+    \    foreach (i, token; tokens) \n    {\n        // calculate the depth of nesting\n\
+    \        int depth = 0;\n        int maxDepth = 0;\n        foreach (c; token)\
+    \ \n        {\n            switch (c) \n            {\n                case '(':\n\
+    \                    depth++;\n                    maxDepth = max(maxDepth, depth);\n\
+    \                    break;\n                case ')':\n                    depth--;\n\
+    \                    break;\n            }\n        }\n        counter[i] = maxDepth;\n\
+    \    }\n    return counter;\n}", "{\n    // Tokenize the input string using space\
+    \ as the delimiter\n    string[] tokens = paren_string.split(\" \");\n    long[]\
+    \ results = new long[tokens.length];\n    foreach (i, token; tokens) \n    {\n\
+    \        import std.range;\n        auto r = filter!(a => a == '(' || a == ')')(token);\n\
+    \        import std.algorithm.comparison : max;\n        results[i] = max(count_parens(r),\
+    \ 0L);\n    }\n    return results;\n}", "{\n    long[] max_nesting_level;", "{\n\
+    \    auto input_list = split(paren_string, \" \");\n    long[] output_list;\n\
+    \    long deep = 0L;\n    foreach(paren_group; input_list) \n    {\n        foreach(symbol;\
+    \ paren_group) \n        {\n            if(symbol == '(') \n            {\n  \
+    \              deep += 1L;\n            } \n            else if(symbol == ')')\
+    \ \n            {\n                deep -= 1L;\n            }\n        }\n   \
+    \     output_list ~= deep;\n        deep = 0L;\n    }\n    return output_list;\n\
+    }", "{\n    auto token_stream = paren_string.split(\" \");\n    auto paren_groups\
+    \ = token_stream.map!(g => g.strip);\n    return paren_groups.map!(\n        (group)\
+    \ => \n        {\n            long count = 0;\n            long last_max = 0;\n\
+    \            foreach(paren; group)\n            {\n                if(paren ==\
+    \ '(')\n                {\n                    count++;\n                }\n \
+    \               else if(paren == ')')\n                {\n                   \
+    \ count--;\n                }\n                last_max = max(last_max, count);\n\
+    \            }\n            return last_max;\n        }).array;\n}", "    in \n\
+    \    {\n        assert(paren_string != null);\n    }\n    body\n    {\n      \
+    \  bool[] paren_stack = new bool[](paren_string.length);\n        long[] ans =\
+    \ new long[](paren_string.length / 2);\n        int curr_index = 0;\n        int\
+    \ curr_ans_index = 0;\n        foreach (char c; paren_string)\n        {\n   \
+    \         if (c == '(')\n            {\n                paren_stack[curr_index]\
+    \ = true;\n                curr_index++;\n            }\n            else if (c\
+    \ == ')')\n            {\n                if (curr_index > 0)\n              \
+    \  {\n                    curr_index--;\n                    paren_stack[curr_index]\
+    \ = false;\n                }\n                else\n                {\n     \
+    \               curr_ans_index++;\n                }\n            }\n        \
+    \    else if (c == ' ')\n            {\n                ans[curr_ans_index] =\
+    \ curr_index;\n                curr_index = 0;\n            }\n        }\n   \
+    \     ans[curr_ans_index] = curr_index;\n        return ans[0..curr_ans_index\
+    \ + 1];\n    }\n}", "{\n    long[] result;\n    int i = 0;\n    int accum = 0;\n\
+    \    foreach(j; 0 .. paren_string.length)\n    {\n        if(paren_string[j] ==\
+    \ '(')\n        {\n            accum++;\n        }\n        else if(paren_string[j]\
+    \ == ')')\n        {\n            accum--;\n        }\n        else\n        {\n\
+    \            result ~= cast(long)max(0, accum);\n            accum = 0;\n    \
+    \    }\n    }\n    return result;\n}", "{\n    // 0: no open paren\n    // 1:\
+    \ open paren, no opening paren in the middle\n    // 2: open paren, opening paren\
+    \ in the middle\n    int state = 0;\n    size_t max_nest = 0;\n    size_t cur_nest\
+    \ = 0;\n    long[] res;\n    for (size_t i = 0; i < paren_string.length; i++)\
+    \ \n    {\n        if (paren_string[i] == '(') \n        {\n            if (state\
+    \ == 0)\n            {\n                state = 1;\n            }\n          \
+    \  else\n            {\n                state = 2;\n            }\n          \
+    \  cur_nest++;\n            max_nest = max(max_nest, cur_nest);\n        }\n \
+    \       else if (paren_string[i] == ')') \n        {\n            cur_nest--;\n\
+    \            if (state == 2)\n            {\n                state = 1;\n    \
+    \        }\n            else\n            {\n                state = 0;\n    \
+    \        }\n        }\n        else if (paren_string[i] == ' ') \n        {\n\
+    \            if (state == 0)\n            {\n                res ~= max_nest;\n\
+    \                max_nest = 0;\n            }\n        }\n    }\n    if (max_nest\
+    \ != 0) \n    {\n        res ~= max_nest;\n    }\n    return res;\n}\n \n/*\n\
+    Takes in an array of arrays of integers, and outputs the smallest size of \n \
+    \   these arrays, with all its elements summed up.\n    E.g.\n        Input: [[1,2],\
+    \ [2, 3, 4], [5, 6, 7, 8]]\n        Output: [6L, 15L]\n    \n    >>> min_sum([[1,2],\
+    \ [2, 3, 4], [5, 6, 7, 8]])\n    [6L, 15L]\n*/\nlong[] min_sum(long[][] matrix)\
+    \ \n{\n    size_t min_size = std.algorithm.minElement!(a => a.length)(matrix).length;\n\
+    \    long[]", "{ \n    auto nParens = 0; // nParens is current nesting level \n\
+    \    auto maxParens = 1; // maxParens is max depth of nesting found so far \n\
+    \    // parens.init(0, size(paren_string));\n    long[] parens;\n    for (size_t\
+    \ i = 0; i < size(paren_string); i++) \n    { \n        if (paren_string[i] ==\
+    \ '(') \n        { \n            nParens += 1; \n            if (nParens > maxParens)\
+    \ \n            { \n                maxParens = nParens; \n            } \n  \
+    \      } \n        else if (paren_string[i] == ')') \n        { \n           \
+    \ nParens -= 1; \n        } \n        else if (paren_string[i] == ' ') \n    \
+    \    { \n            parens ~= maxParens; \n            maxParens = 1; \n    \
+    \        nParens = 0; \n        } \n    } \n    return parens; \n} \n/*\n\tfor\
+    \ example, this two lists should be summed, (3 + 2) + (2 + 4) = 7\n*/\nT[] sumArray(T)(T[]\
+    \ list1, T[] list2)\n{\n\tassert(list1.length == list2.length);\n\tT[] list =\
+    \ new T[list1.length];\n\tforeach(i, element; list1)\n\t{\n\t\tlist[i] = list1[i]\
+    \ + list2[i];\n\t}\n\treturn list;\n}\nstring[] invertParens(string[] parens)\n\
+    {\n\tstring[] invert = new string[parens.length];\n\tforeach(i, s; parens)\n\t\
+    {\n\t\tinvert[i] = \"(\" ~ s ~ \")\";\n\t}\n\treturn invert;\n}\nstring genString(string[]\
+    \ parens)\n{\n\tstring s = \"\";\n\tforeach(i, ss; parens)\n\t{\n\t\ts ~=", "{\n\
+    \    const long max_level = 99;\n    long[][] open_parens_at_level = new long[][](paren_string.length,\
+    \ max_level);\n    long[][] close_parens_at_level = new long[][](paren_string.length,\
+    \ max_level);\n    long open_idx = 0;\n    long close_idx = 0;\n    long current_level\
+    \ = 0;\n    foreach (paren_idx, paren_char; paren_string) \n    {\n        if\
+    \ (paren_char == '(') \n        {\n            open_parens_at_level[open_idx][current_level]\
+    \ = paren_idx;\n            open_idx++;\n            current_level++;\n      \
+    \  }\n        else if (paren_char == ')') \n        {\n            current_level--;\n\
+    \            close_parens_at_level[close_idx][current_level] = paren_idx;\n  \
+    \          close_idx++;\n        }\n    }\n    long[] max_level_per_group = new\
+    \ long[paren_string.length];\n    for (long i = 0; i < open_idx; i++) \n    {\n\
+    \        for (long j = 0; j < max_level; j++) \n        {\n            if (open_parens_at_level[i][j]\
+    \ == 0 && close_parens_at_level[i][j] == 0) \n            {\n                max_level_per_group[i]\
+    \ = j;\n                break;\n            }\n        }\n    }\n    return max_level_per_group;\n\
+    }", "{\n    int index = 0;\n    auto result = new long[];\n    int cnt = 0;\n\
+    \    int max_cnt = 0;\n    int state = 0;\n    foreach(c; paren_string) \n   \
+    \ {\n        if (c == '(') \n        {\n            cnt++;\n            if (state\
+    \ == 0) \n            {\n                state = 1;\n            }\n        }\n\
+    \        else if (c == ')') \n        {\n            cnt--;\n            if (state\
+    \ == 1) \n            {\n                max_cnt = max(max_cnt, cnt);\n      \
+    \      }\n        }\n        else if (c == ' ') \n        {\n            if (state\
+    \ == 1) \n            {\n                state = 0;\n                result ~=\
+    \ max_cnt;\n                max_cnt = 0;\n            }\n        }\n    }\n  \
+    \  return result;\n}", "{\n    import std.range;\n    import std.typecons;\n \
+    \   import std.string;\n    import std.algorithm;\n    import std.stdio;\n   \
+    \ import std.container;\n    auto paren_array = [] {\n        long[] result;\n\
+    \        foreach(paren_substr; paren_string.split()) {\n            long stack_len\
+    \ = 0;\n            long max_len = 0;\n            foreach(paren_char; paren_substr)\
+    \ {\n                stack_len += (paren_char == '(') ? 1 : -1;\n            \
+    \    max_len = max(max_len, stack_len);\n            }\n            result ~=\
+    \ max_len;\n        }\n        return result;\n    }();\n    return paren_array;\n\
+    }", "{\n    import std.algorithm.comparison : max;\n    import std.algorithm.iteration\
+    \ : filter, map;\n    import std.array : array;\n    import std.range : startsWith;\n\
+    \    import std.string : split;\n    static int maxLevel(int[] stack) \n    {\n\
+    \        return stack.length - stack.filter!((int x) => x == 0).length;\n    }\n\
+    \    auto parenGroups = paren_string.split(\" \");\n    return parenGroups.map!(group\
+    \ => \n    {\n        int[] stack;\n        foreach (c; group) \n        {\n \
+    \           if (c == '(') \n            {\n                stack ~= 1;\n     \
+    \       } \n            else if (c == ')') \n            {\n                stack\
+    \ ~= 0;\n            }\n        }\n        return maxLevel(stack);\n    }).array;\n\
+    }", "{\n  // TODO: implement\n  return [0L];\n}", "{\n    long[] result;\n   \
+    \ long res = 0L;\n    long max = 0L;\n    bool is_open = false;\n    foreach(c;\
+    \ paren_string)\n    {\n        if(c == '(')\n        {\n            res += 1L;\n\
+    \            if(!is_open)\n            {\n                is_open = true;\n  \
+    \          }\n        }\n        else if(c == ')')\n        {\n            res\
+    \ -= 1L;\n            if(res < 0L)\n            {\n                res = 0L;\n\
+    \            }\n        }\n        else if(c == ' ')\n        {\n            if(is_open)\n\
+    \            {\n                result ~= res;\n                max = max(max,\
+    \ res);\n                res = 0L;\n                is_open = false;\n       \
+    \     }\n        }\n    }\n    if(is_open)\n    {\n        result ~= res;\n  \
+    \      max = max(max, res);\n    }\n    writeln(result);\n    return result;\n\
+    }", "{\n    long[] res = new long[];\n    auto current_level = 0L;\n    auto max_level\
+    \ = 0L;\n    foreach (paren; paren_string)\n    {\n        if (paren == '(')\n\
+    \        {\n            current_level += 1L;\n            max_level = max(max_level,\
+    \ current_level);\n        }\n        else if (paren == ')')\n        {\n    \
+    \        current_level -= 1L;\n        }\n        else if (paren == ' ')\n   \
+    \     {\n            res ~= max_level;\n            max_level = 0L;\n        \
+    \    current_level = 0L;\n        }\n    }\n    return res;\n}", "{\n    // parens\
+    \ will contain all parenthesis groups\n    auto parens = split(paren_string, \"\
+    \ \");\n    long[] result;\n    // For each paren group\n    foreach(paren; parens)\
+    \ \n    {\n        size_t level = 0;\n        size_t max_level = 0;\n        //\
+    \ Iterate over each character\n        foreach(c; paren) \n        {\n       \
+    \     if(c == '(') \n            {\n                // Start of a new level\n\
+    \                ++level;\n                // Update max level\n             \
+    \   max_level = max(max_level, level);\n            } \n            else if(c\
+    \ == ')') \n            {\n                // End of current level\n         \
+    \       --level;\n            }\n        }\n        // Add the max_level to result\n\
+    \        result ~= max_level;\n    }\n    return result;\n}", "{\n    enum ParenType\
+    \ { paren_open, paren_close }", "{\n  auto left_parens = paren_string.count!(\"\
+    (\");\n  auto right_parens = paren_string.count!(\")\");\n  if (left_parens !=\
+    \ right_parens)\n  {\n    return null;\n  }\n  long[] result;\n  import std.algorithm;\n\
+    \  import std.range;\n  // Split groups of nested parentheses using space\n  foreach\
+    \ (paren_group; paren_string.split)\n  {\n    // Remove the outside parentheses\n\
+    \    // E.g. (()()) -> ()()\n    auto paren_group_no_outer_parens = paren_group[1..$-1];\n\
+    \    // Split inside parentheses using the outside parentheses\n    // E.g. ()()\
+    \ -> [\"\", \"\", \"\", \"\"]\n    auto paren_group_split = paren_group_no_outer_parens.split(\"\
+    \");\n    // Calculate the number of nested parentheses.\n    //\n    // This\
+    \ could be done by counting the number of left parentheses \n    // in a group\
+    \ and deducting the count of the left parens from \n    // the immediately following\
+    \ groups.\n    // e.g. for (()())\n    //      count the left paren for the first\
+    \ group, it is 2\n    //      count the left paren for the second group, it is\
+    \ 1\n    //      count the left paren for the third group, it is 0\n    //   \
+    \   The number of nested parentheses should be 2 - 0 = 2\n    //      So there\
+    \ are two levels of nesting in this group\n    auto number_of_nested_parens =\
+    \ paren_group_split.filter!(x => x == \"(\").count;\n    if (number_of_nested_parens\
+    \ == 0)\n    {\n      // For groups that contains no parens, return 1\n      //\
+    \ e.g. ()\n      result ~= 1;\n    }\n    else\n    {\n      // For group with\
+    \ left parens, return the count\n      // e.g. (()())\n      result ~= number_of_nested_parens;\n\
+    \    }\n  }\n  return result;\n}"]
 stop_tokens:
 - "\n\n"
 - "\nvoid"

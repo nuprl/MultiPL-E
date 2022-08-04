@@ -9,6 +9,89 @@ tests: "}\n\ncandidate() {\n    unique_digits \"$@\"\n}\n\nset -e\nrun_test() {\
   \    [[ $(candidate \"15 33 1422 1\") = \"1 15 33\" ]]\n    [[ $(candidate \"152\
   \ 323 1422 10\") = \"\" ]]\n    [[ $(candidate \"12345 2033 111 151\") = \"111 151\"\
   \ ]]\n    [[ $(candidate \"135 103 31\") = \"31 135\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local nums=\"$1\"\n  local result=\"\"\n  local good_nums=\"\"\n\
+    \  local good_num=\"\"\n  local num=\"\"\n  local digit=\"\"\n  local digits=\"\
+    \"\n  local digit_sum=\"\"\n  local max_digit=\"\"\n  local unique=\"\"\n  local\
+    \ digits_array=\"\"\n  local digit_set=\"\"\n  local array_index=\"\"\n  local\
+    \ n=0\n  for num in $nums; do\n    digits=\"\"\n    # get an array of digits\n\
+    \    while [ $num -gt 0 ]; do\n      digit=$((num % 10))\n      digits=\"$digit\
+    \ $digits\"\n      num=$((num / 10))\n    done\n    digits_array=($digits)\n \
+    \   digits_set=()\n    for (( i=0; i<${#digits_array[@]}; i++ )); do\n      array_index=$((digits_array[$i]))\n\
+    \      if [ -z \"${digits_set[$array_index]}\" ]; then\n        digits_set[$array_index]=1\n\
+    \      else\n        digits_set[$array_index]=$(( digits_set[$array_index] + 1\
+    \ ))\n      fi\n    done\n    # get digits with duplicates\n    # if no duplicate\
+    \ digits then add to nums\n    # that can be returned\n    max_digit=$(( ${#digits_set[@]}\
+    \ - 1 ))\n    unique=1\n    for (( i=0; i<=max_digit; i++ )); do\n      if [ !\
+    \ -z \"${digits_set[$i]}\" ] && [ ${digits_set[$i]} -gt 1 ]; then\n        unique=0\n\
+    \        break\n      fi\n    done\n    if [ $unique -eq 1 ]; then\n      good_nums=\"\
+    $good_nums $num\"\n    fi\n  done\n  # sort good_nums and return as JSON array\n\
+    \  good_nums=$(echo $good_nums | tr \" \" \"\\n\" | sort -n)\n  result=\"[\"\n\
+    \  for good_num in $good_nums; do\n    result=\"$result\\\"$good_num\\\",\"\n\
+    \  done\n  if [ ! -z \"$result", "  local -a arr=(\"$@\")\n  local -a result=()\n\
+    \  for i in \"${arr[@]}\"; do\n    local -a digits=()\n    while [ $i -gt 0 ];\
+    \ do\n      local mod=$((i % 10))\n      digits+=($mod)\n      i=$((i / 10))\n\
+    \    done\n    local len=${#digits[@]}\n    local is_unique=1\n    for ((j=0;\
+    \ j<len; j++)); do\n      for ((k=j+1; k<len; k++)); do\n        if [[ ${digits[j]}\
+    \ -eq ${digits[k]} ]]; then\n          is_unique=0\n          break\n        fi\n\
+    \      done\n    done\n    if [[ $is_unique -eq 1 ]]; then\n      result+=($i)\n\
+    \    fi\n  done\n  echo ${result[@]} | tr ' ' '\\n' | sort -n | tr '\\n' ' '",
+  "    echo \"$1\" | grep -E '^[^02468]+$' | sort -n", "    local num_list=$(echo\
+    \ \"$1\" | tr \" \" \"\\n\")\n    local result=()\n    local evens=(\"2\" \"4\"\
+    \ \"6\" \"8\" \"0\")\n    local num\n\n    for num in $num_list; do\n        local\
+    \ valid=true\n        for even in \"${evens[@]}\"; do\n            if [[ $num\
+    \ == *\"$even\"* ]]; then\n                valid=false\n                break\n\
+    \            fi\n        done\n        if $valid; then\n            result+=(\"\
+    $num\")\n        fi\n    done\n\n    echo ${result[@]} | sort -g | sed 's/ /,\
+    \ /g'", "  for x in $(echo $1); do\n    if [[ ! $x =~ [24680] ]]; then\n     \
+    \ printf '\"%s\"' $x\n    fi\n  done", "  # this is just a test. Replace this\
+    \ with a solution\n  echo \"[\\\"${1}\\\"]\"", '    echo "Not implemented"', "\t\
+    local input=\"$1\"\n\tlocal ret=()\n\tfor n in ${input[@]}; do\n\t\tif echo \"\
+    $n\" | grep -qE '[^24680]'; then\n\t\t\tret+=($n)\n\t\tfi\n\tdone\n\t# Don't forget\
+    \ the quotes in the array\n\techo \"${ret[@]}\" | jq -R 'split(\" \")'", "   \
+    \ #use an array to save the result\n    local result=()\n    for element in $1;\
+    \ do\n        flag=true\n        for digit in $(seq 0 9); do\n            if [[\
+    \ $element =~ [$digit] ]]; then\n                flag=false\n                break\n\
+    \            fi\n        done\n        if $flag; then\n            result+=($element)\n\
+    \        fi\n    done\n    IFS=$'\\n'\n    echo ${result[*]} | sed -E 's/ /\"\
+    , \"/g'", "    local result=()\n    for i in $1; do\n        if [[ \"$i\" =~ [02468]\
+    \ ]]; then\n            continue\n        fi\n        result+=($i)\n    done\n\
+    \    IFS=$'\\n'\n    echo \"${result[*]}\"", "  for val in $1; do\n    if [[ $(digits\
+    \ $val) == $(unique_chars $(digits $val)) ]]; then\n      echo -n $val\n    fi\n\
+    \  done", "    local nums=($1)\n    local res=\"\"\n    for num in ${nums[@]};\
+    \ do\n        if [[ $num =~ ^[1-9][0-9]*$ ]]; then\n            if [[ $num =~\
+    \ [13579] ]]; then\n                res+=\"$num \"\n            fi\n        fi\n\
+    \    done\n    echo ${res[@]}", "    local result=()\n    for x in ${1// / };\
+    \ do\n        local y=$(echo $x | sed 's/[02468]//g')\n        if [ $x -eq $y\
+    \ ]; then\n            result+=(\"$x\")\n        fi\n    done\n    echo ${result[@]}\
+    \ | tr ' ' ','", "    [[ $# -lt 1 ]] && {\n        echo '[]'\n        return\n\
+    \    }\n    local nums=\"$1\"\n    local unq_nums=()\n    for num in ${nums[@]};\
+    \ do\n        local has_even=false\n        for ((i=0; i<${#num}; i++)); do\n\
+    \            local cur_d=${num:$i:1}\n            [[ $((cur_d % 2)) -eq 0 ]] &&\
+    \ {\n                has_even=true\n                break\n            }\n   \
+    \     done\n        $has_even || unq_nums+=(\"$num\")\n    done\n    echo ${unq_nums[@]}\
+    \ | tr ' ' ',' | sed 's/^/[/;s/,/\", \"/g;s/$/\"]/'", "    # TODO\n    # 1. Read\
+    \ the input, remove all even digits, sort the remaining and print\n    #    the\
+    \ result.\n    # 2. Usage: $(unique_digits \"15 33 1422 1\")\n    # 3. For example:\n\
+    \    #    $ unique_digits \"15 33 1422 1\"\n    #    [\"1\" \"15\" \"33\"]\n \
+    \   #\n    echo TODO", "    array=($1)\n    echo -n \"[\"\n    for element in\
+    \ ${array[@]}; do\n        if [[ \"$element\" =~ [02468] ]]; then\n          \
+    \  continue\n        fi\n        echo -n \"\\\"$element\\\"\"\n        echo -n\
+    \ \",\"\n    done\n    echo -n \"]\"", "    # TODO: Implement this function\n\
+    \    local out=\"[\"\n    local input=($1)\n    let no=\"${#input[@]}\"\n    for((\
+    \ i=0; i<$no; i++ ))\n    do\n        local temp=\"${input[$i]}\"\n        local\
+    \ count=0\n        local digit\n        local len=${#temp}\n        for(( j=0;\
+    \ j<$len; j++ ))\n        do\n            digit=${temp:$j:1}\n            if [\
+    \ $((digit%2)) -eq 0 ]\n            then\n                let count++\n      \
+    \      fi\n        done\n        if [ $count -eq 0 ]\n        then\n         \
+    \   out+='\"'${input[$i]}'\"'\n            if [ $i -lt $((no-1)) ]\n         \
+    \   then\n                out+=', '\n            fi\n        fi\n    done\n  \
+    \  out+=\"]\"\n    echo $out", '    echo "TODO"', "\t[ $# -eq 0 ] && {\n\t\techo\
+    \ \"Argument required\"\n\t\treturn\n\t}\n\t[ $# -gt 1 ] && {\n\t\techo \"Too\
+    \ many arguments\"\n\t\treturn\n\t}\n\tlocal x\n\tlocal y\n\tlocal z\n\n\tread\
+    \ -a x <<< \"${1}\"\n\ty=\"${x[@]}\"\n\tfor i in ${y[@]}; do\n\t\t[[ ${i} =~ [0-9]*[02468][0-9]*\
+    \ ]] && continue\n\t\tz+=${i}\n\t\tz+=\" \"\n\tdone\n\techo \"[\\\"${z}\\\"]\"",
+  "    echo -n '['\n    for i in ${1}; do\n        [[ ${i} =~ ^([[:digit:]]*)$ ]]\
+    \ || continue\n        if [[ ${i} =~ ^[^0-9]*[1-9][^02468]*$ ]]; then\n      \
+    \      echo -n \"\\\"${i}\\\",\"\n        fi\n    done\n    echo -n ']'"]
 stop_tokens:
 - "\n}"

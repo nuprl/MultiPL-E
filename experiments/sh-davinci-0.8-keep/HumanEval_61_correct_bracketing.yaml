@@ -14,6 +14,116 @@ tests: "}\n\ncandidate() {\n    correct_bracketing \"$@\"\n}\n\nset -e\nrun_test
   \ \")\") = \"false\" ]]\n    [[ $(candidate \"(()\") = \"false\" ]]\n    [[ $(candidate\
   \ \"()()(()())())(()\") = \"false\" ]]\n    [[ $(candidate \"()()(()())()))()\"\
   ) = \"false\" ]]\n}\n\nrun_test"
-completions: []
+completions: ['    echo', "    if [[ $1 == \"\" ]]; then\n        echo True\n    \
+    \    return\n    fi\n    local brackets=\"$1\"\n    local len=${#brackets}\n \
+    \   if [[ $len -eq 1 ]]; then\n        echo False\n        return\n    fi\n  \
+    \  for ((i=0; i<len; i++)); do\n        cur_b=${brackets:$i:1}\n        if [[\
+    \ $cur_b == \"(\" ]]; then\n            # clear first opening bracket and its\
+    \ matching one\n            brackets=${brackets:0:$i}${brackets:$((i+1)):$len}\n\
+    \            len=$((len-2))\n            # exit current loop\n            break\n\
+    \        fi\n    done\n    if [[ $len -eq 0 ]]; then\n        echo True\n    \
+    \    return\n    fi\n    correct_bracketing \"$brackets\"", "    local word=$1\n\
+    \    local word_length=${#word}\n    local count=0\n    for (( i=0; i<$word_length;\
+    \ i++ )); do\n        char=${word:$i:1}\n        if [ \"$char\" == \"(\" ]; then\n\
+    \            count=$((count+1))\n        elif [ \"$char\" == \")\" ]; then\n \
+    \           count=$((count-1))\n        fi\n        if [ $count -lt 0 ]; then\n\
+    \            return 1\n        fi\n    done\n    if [ $count -eq 0 ]; then\n \
+    \       return 0\n    else\n        return 1\n    fi", "    # remove all invalid\
+    \ characters\n    local brackets=${1//[^()]/}\n    # check that the first half\
+    \ is equal to the second half\n    local result=${brackets:0:$((${#brackets}/2))}\n\
+    \    if [[ \"$result\" == \"${brackets:$((${#brackets}/2)):$((${#brackets}/2))}\"\
+    \ ]]; then\n        # if it is, check that the first and second half are equal.\n\
+    \        if [[ \"$result\" == \"${brackets:$((${#brackets}/2)):$((${#brackets}/2))}\"\
+    \ ]]; then\n            echo True\n        else\n            echo False\n    \
+    \    fi\n    else\n        echo False\n    fi", "    local bracket_stack=\"\"\n\
+    \    local brackets=${1//[^()]/}\n    for ((i=0; i<${#brackets}; i++)); do\n \
+    \       case ${brackets:i:1} in\n            \"(\") bracket_stack=${bracket_stack}\"\
+    (\";;\n            \")\")\n                if [ -z \"${bracket_stack}\" ]; then\n\
+    \                    return 1\n                else\n                    bracket_stack=${bracket_stack%\"\
+    (\"}\n                fi\n                ;;\n        esac\n    done\n    [ -z\
+    \ \"${bracket_stack}\" ]", "\tlocal brackets=\"$1\" # brackets is a string of\
+    \ \"(\" and \")\"\n\t# return True if every opening bracket has a corresponding\
+    \ closing bracket.\n\tlocal n\n\tlocal nbrackets=0\n\tfor ((i=0; i<${#brackets};\
+    \ i++)); do\n\t\tlocal c=${brackets:$i:1}\n\t\tif [[ $c == \"(\" ]]; then\n\t\t\
+    \tnbrackets=$((nbrackets+1))\n\t\telif [[ $c == \")\" ]]; then\n\t\t\tnbrackets=$((nbrackets-1))\n\
+    \t\t\tif ((nbrackets < 0)); then\n\t\t\t\treturn 1\n\t\t\tfi\n\t\tfi\n\tdone\n\
+    \tif ((nbrackets == 0)); then\n\t\treturn 0\n\telse\n\t\treturn 1\n\tfi", "  local\
+    \ str=$1\n  local n=${#str}\n  if [ $n -eq 0 ]; then\n    echo True\n    return\n\
+    \  fi\n  local count=0\n  for (( i=0; i<$n; i++ )); do\n    local c=${str:$i:1}\n\
+    \    if [ $c == \"(\" ]; then\n      count=$((count+1))\n    elif [ $c == \")\"\
+    \ ]; then\n      count=$((count-1))\n    fi\n    if [ $count -lt 0 ]; then\n \
+    \     echo False\n      return\n    fi\n  done\n  if [ $count -eq 0 ]; then\n\
+    \    echo True\n  else\n    echo False\n  fi", "    brackets=${1:-}\n    if [[\
+    \ -z \"$brackets\" ]]; then\n        echo \"$FUNCNAME: no input\"\n        return\
+    \ 1\n    fi\n    left_brackets=${brackets//[^(]/}\n    right_brackets=${brackets//[^)]/}\n\
+    \    if [[ ${#left_brackets} -eq ${#right_brackets} ]]; then\n        echo \"\
+    True\"\n    else\n        echo \"False\"\n    fi", "    is_correct=True\n    n_opening=0\n\
+    \    for ((i=0; i<${#1}; i++)); do\n        local char=${1:$i:1}\n        if [[\
+    \ $char == \"(\" ]]; then\n            ((n_opening++))\n        elif [[ $char\
+    \ == \")\" ]]; then\n            ((n_opening--))\n        fi\n        if [[ $n_opening\
+    \ < 0 ]]; then\n            is_correct=False\n            break\n        fi\n\
+    \    done\n    if [[ $n_opening != 0 ]]; then\n        is_correct=False\n    fi\n\
+    \    echo $is_correct", "  # if the length of the string is 0, then we have balanced\
+    \ brackets\n  if [ -z \"$1\" ]; then\n    return 0\n  # if the first character\
+    \ is a \")\", then we can't have balanced brackets\n  elif [ \"${1:0:1}\" = \"\
+    )\" ]; then\n    return 1\n  # if the first character is a \"(\", then it must\
+    \ have a matching \")\"\n  else\n    # the length of the remainder of the string\n\
+    \    local remain=${#1}\n    # check remaining string for matching \")\"\n   \
+    \ while [ \"${remain}\" -gt 0 ]; do\n      if [ \"${1:${remain}:1}\" = \")\" ];\
+    \ then\n        # recursively call this function with the rest of the string\n\
+    \        correct_bracketing \"${1:1:${remain}-1}\"\n        return $?\n      fi\n\
+    \      # don't check past the \"(\"\n      remain=$(( ${remain} - 1 ))\n    done\n\
+    \    # no matching \")\"\n    return 1\n  fi", "  local -a stk\n  local i=0\n\
+    \  while [[ \"$i\" -lt \"${#1}\" ]]; do\n    if [[ \"${1:$i:1}\" == \"(\" ]];\
+    \ then\n      stk+=(\"(\")\n    elif [[ \"${1:$i:1}\" == \")\" ]]; then\n    \
+    \  if [[ ${#stk[@]} -gt 0 ]]; then\n        stk=(\"${stk[@]:0:${#stk[@]}-1}\"\
+    )\n      else\n        return 1\n      fi\n    fi\n    (( i++ ))\n  done\n  if\
+    \ [[ ${#stk[@]} -gt 0 ]]; then\n    return 1\n  else\n    return 0\n  fi", " \
+    \   # TODO: insert code here\n    return 1", "    local brackets=$1\n    local\
+    \ n_opening_brackets=0\n    local n_closing_brackets=0\n    local i=0\n    local\
+    \ char=''\n    local first_opening_bracket_index=0\n    local first_closing_bracket_index=0\n\
+    \    local n_brackets=${#brackets}\n    for (( i=0; i<n_brackets; i++ )); do\n\
+    \        char=${brackets:$i:1}\n        if [[ $char == '(' ]]; then\n        \
+    \    if [[ $n_opening_brackets -eq 0 ]]; then\n                first_opening_bracket_index=$i\n\
+    \            fi\n            (( n_opening_brackets++ ))\n        elif [[ $char\
+    \ == ')' ]]; then\n            if [[ $n_closing_brackets -eq 0 ]]; then\n    \
+    \            first_closing_bracket_index=$i\n            fi\n            (( n_closing_brackets++\
+    \ ))\n        else\n            echo \"Unkown bracket: $char\"\n            return\
+    \ 1\n        fi\n    done\n    if [[ $n_opening_brackets -ne $n_closing_brackets\
+    \ ]]; then\n        if [[ $n_opening_brackets -eq 0 ]]; then\n            echo\
+    \ \"No opening bracket in $brackets\"\n        elif [[ $n_closing_brackets -eq\
+    \ 0 ]]; then\n            echo \"No closing bracket in $brackets\"\n        else\n\
+    \            echo \"Mismatch of brackets: $n_opening_brackets != $n_closing_brackets\"\
+    \n        fi\n        return 1\n    elif [[ $first_opening_bracket_index -gt $first_closing_bracket_index\
+    \ ]]; then\n        echo \"Missing opening bracket: $brackets\"\n        return\
+    \ 1\n    fi\n    return 0", "  local brackets=\"$1\"\n  local count_open=0\n \
+    \ local count_close=0\n  for (( i=0; i<${#brackets}; i++ )); do\n    if [[ \"\
+    ${brackets:$i:1}\" == \"(\" ]]; then\n      count_open=$(( count_open + 1 ))\n\
+    \    elif [[ \"${brackets:$i:1}\" == \")\" ]]; then\n      count_close=$(( count_close\
+    \ + 1 ))\n    fi\n  done\n  if [[ $count_open -eq $count_close ]]; then\n    return\
+    \ 0\n  else\n    return 1\n  fi", "    # replace all \"()\" with \"\".\n    #\
+    \ if the final result is \"\" (i.e. brackets is null), then return True.\n   \
+    \ newstring=${1//()/}\n    if [ \"$newstring\" == \"\" ]; then\n        echo \"\
+    True\"\n    else\n        echo \"False\"\n    fi", "\tlocal expected=\"$1\"\n\t\
+    local actual=\"\"\n\tfor i in $(seq 1 ${#expected}); do\n\t\tlocal c=${expected:i-1:1}\n\
+    \t\tif [ \"$c\" == \"(\" ]; then\n\t\t\tactual=\"$actual(\"\n\t\telif [ \"$c\"\
+    \ == \")\" ]; then\n\t\t\tactual=\"${actual%?}\"\n\t\tfi\n\tdone\n\t[ \"$actual\"\
+    \ == \"\" ]", "\tlocal count=0\n\tfor (( i=0; i<${#1}; i++ )); do\n\t\tlocal ch=${1:$i:1}\n\
+    \t\tif [[ $ch == \"(\" ]]; then\n\t\t\tcount=$((count+1))\n\t\telif [[ $ch ==\
+    \ \")\" ]]; then\n\t\t\tcount=$((count-1))\n\t\t\tif [[ $count -lt 0 ]]; then\n\
+    \t\t\t\treturn 1\n\t\t\tfi\n\t\tfi\n\tdone\n\tif [[ $count -gt 0 ]]; then\n\t\t\
+    return 1\n\tfi\n\treturn 0", "    n=0\n    for (( i=0; i<${#1}; i++ )); do\n \
+    \       if [[ ${1:$i:1} == \"(\" ]]; then\n            n=$((n+1))\n        elif\
+    \ [[ ${1:$i:1} == \")\" ]]; then\n            n=$((n-1))\n        fi\n       \
+    \ if [[ $n -lt 0 ]]; then\n            return 1\n        fi\n    done\n    if\
+    \ [[ $n -gt 0 ]]; then\n        return 1\n    fi\n    return 0", "  local brackets=\"\
+    $1\"\n  local counter=0\n  for (( i=0; i<${#brackets}; i++ )); do\n    [ \"${brackets:$i:1}\"\
+    \ == \"(\" ] && (( counter += 1 ))\n    [ \"${brackets:$i:1}\" == \")\" ] && ((\
+    \ counter -= 1 ))\n    if [ $counter -lt 0 ]; then\n      return 1\n    fi\n \
+    \ done\n  [ $counter -eq 0 ]", "    # original\n    # l=$(expr \"$1\" : '.*(')\n\
+    \    # r=$(expr \"$1\" : '.*)')\n    #\n    # if [ $l -eq $r ]; then\n    #  \
+    \   echo \"True\"\n    # else\n    #     echo \"False\"\n    # fi\n\n    # short\n\
+    \    expr \"$1\" : '.*(' > /dev/null && expr \"$1\" : '.*)' > /dev/null && echo\
+    \ \"True\" || echo \"False\""]
 stop_tokens:
 - "\n}"

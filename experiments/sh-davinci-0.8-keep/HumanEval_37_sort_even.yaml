@@ -9,6 +9,146 @@ tests: "}\n\ncandidate() {\n    sort_even \"$@\"\n}\n\nset -e\nrun_test() {\n   
   \ $(candidate \"1 2 3\") = \"1 2 3\" ]]\n    [[ $(candidate \"5 3 -5 2 -3 3 9 0\
   \ 123 1 -10\") = \"-10 3 -5 2 -3 3 5 0 9 1 123\" ]]\n    [[ $(candidate \"5 8 -12\
   \ 4 23 2 3 11 12 -10\") = \"-12 8 3 4 5 2 12 11 23 -10\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local -a l=(\"$@\")\n    local -a l2\n    local -i even_idx\n \
+    \   for (( i=0; i<${#l[@]}; i++ )); do\n        if (( $i % 2 == 0 )); then\n \
+    \           l2+=(\"${l[$i]}\")\n        else\n            even_idx=$i\n      \
+    \      break\n        fi\n    done\n    for (( i=even_idx; i<${#l[@]}; i++ ));\
+    \ do\n        if (( $i % 2 == 0 )); then\n            l2+=(\"${l[$i]}\")\n   \
+    \     else\n            IFS=$'\\n' sorted=($(sort <<<\"${l[$even_idx]} ${l[$i]}\"\
+    ))\n            unset IFS\n            l2+=(\"${sorted[0]}\")\n            l2+=(\"\
+    ${sorted[1]}\")\n        fi\n    done\n    echo \"${l2[@]}\"", "\tarray=($@)\n\
+    \tresult=\"\"\n\tfor ((i=0; i<${#array[@]}; i+=2)); do\n\t\t# Concatenate the\
+    \ even elements in result\n\t\tif [ $i -ne 0 ]; then\n\t\t\tresult+=\" ${array[$i]}\"\
+    \n\t\telse\n\t\t\tresult+=\"${array[$i]}\"\n\t\tfi\n\tdone\n\t# Sort the even\
+    \ elements\n\tresult=($(echo \"$result\" | tr ' ' '\\n' | sort -n))\n\t# Rebuild\
+    \ the result by adding odd elements at the right positions\n\tfor ((i=0; i<${#array[@]};\
+    \ i+=2)); do\n\t\tarray[$i]=${result[$((i/2))]}\n\tdone\n\t# Concatenate the array\
+    \ into a string\n\tresult=\"\"\n\tfor i in \"${array[@]}\"; do\n\t\tif [ $result\
+    \ ]; then\n\t\t\tresult+=\" $i\"\n\t\telse\n\t\t\tresult+=\"$i\"\n\t\tfi\n\tdone\n\
+    \techo \"$result\"", "    if (( $# < 2 )); then\n        echo \"$1\"\n       \
+    \ return\n    fi\n    local i\n    local a\n    local b\n    local c\n    # Take\
+    \ the first value off l and put it in l'\n    echo -n \"$1 \"\n    shift\n   \
+    \ # Move through the list two at a time, and sort the two even indicies\n    for\
+    \ i in \"$@\"; do\n        a=\"$i\"\n        shift\n        b=\"$i\"\n       \
+    \ if (( a > b )); then\n            i=\"$a\"\n            a=\"$b\"\n         \
+    \   b=\"$i\"\n        fi\n        echo -n \"$a $b \"\n    done\n    echo", " \
+    \   list=()\n    i=0\n    while read line; do\n        list[$i]=$line\n      \
+    \  ((i=i+1))\n    done <<< \"$1\"\n    list=(\"${list[@]}\" \"\") # Add a blank\
+    \ element at the end so we can keep the last one separate in the loop\n    n=${#list[@]}\n\
+    \    n=$((n-1))\n    i=0\n    while ((i<n)); do\n        ((i=i+1))\n        j=$((i+1))\n\
+    \        head -n $j <<< \"$1\" | tail -n 1\n        head -n $j <<< \"$1\" | tail\
+    \ -n 1 | sort | head -n 1\n        ((i=i+1))\n    done", "    s=$(echo $1 | tr\
+    \ \" \" \"\\n\")\n    r=\"\"\n    even=\"\"\n    odd=\"\"\n    i=0\n    for w\
+    \ in $s; do\n        if [ $((i%2)) -eq 0 ]; then\n            even=\"$even $w\"\
+    \n        else\n            odd=\"$odd $w\"\n        fi\n        i=$((i+1))\n\
+    \    done\n    even=$(echo $even | tr \" \" \"\\n\" | sort | tr \"\\n\" \" \"\
+    )\n    s=$(echo $even $odd | tr \" \" \"\\n\")\n    for w in $s; do\n        r=\"\
+    $r $w\"\n    done\n    echo $r", "    l=($1)\n    result=\"\"\n    for ((i=0;\
+    \ i<${#l[@]}; i++)); do\n        if [ $((i%2)) -eq 0 ]; then\n            result+=\"\
+    ${l[i]} \"\n        else\n            evens=()\n            for ((j=i; j<${#l[@]};\
+    \ j++)); do\n                if [ $((j%2)) -eq 1 ]; then\n                   \
+    \ evens+=(${l[j]})\n                fi\n            done\n            sorted_evens=($(printf\
+    \ \"%s\\n\" \"${evens[@]}\" | sort -n))\n            result+=\"${sorted_evens[0]}\
+    \ \"\n        fi\n    done\n    echo $result", "    l=($1)\n    new_l=()\n   \
+    \ for ((i=0; i<${#l[@]}; i++)); do\n        if (($i % 2 == 0)); then\n       \
+    \     new_l+=(${l[$i]})\n        else\n            l_to_sort=()\n            for\
+    \ ((j=$i; j<${#l[@]}; j+=2)); do\n                l_to_sort+=(${l[$j]})\n    \
+    \        done\n            new_l+=($(printf \"%s\\n\" \"${l_to_sort[@]}\" | sort\
+    \ -n))\n            i=$((i+${#l_to_sort[@]}-1))\n        fi\n    done\n    echo\
+    \ ${new_l[@]}", "    local -a l=($1)\n    local -a out=()\n    local i\n    for\
+    \ ((i=0; i<${#l[@]}; i++)); do\n        if [[ $((i%2)) -eq 0 ]]; then\n      \
+    \      out+=(${l[i]})\n        else\n            out+=($(printf \"%s\\n\" ${l[i]}\
+    \ | sort))\n        fi\n    done\n    echo ${out[@]}", "    IFS=' ' read -r -a\
+    \ l <<< \"$1\"\n    l_mod=( )\n    # odd indicies\n    l_mod+=( \"${l[@]:0:2}\"\
+    \ )\n    # even indicies\n    l_mod+=( \"${l[@]:2:2}\" )\n    # sort\n    l_mod[3]=$(echo\
+    \ \"${l_mod[3]}\" | sort)\n    # join\n    echo \"${l_mod[@]}\"", "\t# Convert\
+    \ argument to array\n\tarr=(\"$@\")\n\tfor i in \"${!arr[@]}\"; do\n\t\t# If index\
+    \ of element is even (0 -> 1, 2 -> 3, etc), sort that element\n\t\tif ((i % 2));\
+    \ then\n\t\t\tarr[i]=$(echo \"${arr[i]}\" | tr ' ' '\\n' | sort | tr '\\n' ' '\
+    \ | xargs)\n\t\tfi\n\tdone\n\techo \"${arr[@]}\"", "    # This function takes\
+    \ three arguments:\n    # $1 is a space-separated list of all of the numbers to\
+    \ be sorted\n    # $2 is the index to start sorting from\n    # $3 is the index\
+    \ to stop sorting at\n    sort_even_partial_helper() {\n        if [[ $# -lt 3\
+    \ ]]; then\n            return\n        fi\n        local original_list=$1\n \
+    \       local start_index=$2\n        local end_index=$3\n        local list=()\n\
+    \        local list_in_reverse=()\n        local i=0\n        local num=0\n  \
+    \      local list_string=\"\"\n        local list_reverse_string=\"\"\n      \
+    \  # We don't care about the odd indicies, since they'll remain the same.\n  \
+    \      for ((i = start_index; i <= end_index; i += 2)); do\n            # Get\
+    \ the value at the current index, which we'll add to list.\n            num=`echo\
+    \ $original_list | cut -d' ' -f $i`\n            list+=($num)\n        done\n\
+    \        # Now that list is filled with only the numbers we care about,\n    \
+    \    # we'll reverse it, so we can sort it from largest to smallest.\n       \
+    \ for ((i = ${#list[@]} - 1; i >= 0; i--)); do\n            list_in_reverse+=(${list[$i]})\n\
+    \        done\n        # Now that list_in_reverse is filled, we'll sort it.\n\
+    \        if [[ ${#list_in_reverse[@]} -gt 1 ]]; then\n            list_in_reverse=($(sort\
+    \ -n <<< \"${list_in_reverse[*]}\"))\n        fi\n        # Now that list_in_reverse\
+    \ is sorted, we'll turn it back into a string.\n        list_reverse_string=$(printf\
+    \ \" %s\" \"${list_in_reverse[@]}\")\n        list_reverse_string=${list_reverse_string:1}\n\
+    \        # Now that we have the sorted list in string form, we'll create the\n\
+    \        # new list based on the original list, the sorted list, and the indicies\n\
+    \        # at which we are replacing values.\n        for ((i = 0; i < ${#original_list",
+  "  local l=\"$1\"\n  local l_even=()\n  local l_odd=()\n  for i in ${l[@]}; do\n\
+    \    if is_even ${l[$i]}; then\n      l_even+=(\"${l[$i]}\")\n    else\n     \
+    \ l_odd+=(\"${l[$i]}\")\n    fi\n  done\n  l_even=($(echo \"${l_even[@]}\" | tr\
+    \ ' ' '\\n' | sort -r))\n  local l_even_index=0\n  for i in ${l[@]}; do\n    if\
+    \ is_even ${l[$i]}; then\n      l[$i]=${l_even[$l_even_index]}\n      let l_even_index=l_even_index+1\n\
+    \    fi\n  done\n  echo \"${l[@]}\"", "  local even=()\n  local odd=()\n  local\
+    \ i=0\n  local j=0\n  local arg\n  for arg in $1; do\n    ((i++))\n    if (( i\
+    \ % 2 )); then\n      odd[j]=$arg\n    else\n      even[j]=$arg\n    fi\n    ((j++))\n\
+    \  done\n  # Now we need to sort the even elements\n  # This could be done with\
+    \ a bunch of if statements, but this is more fun\n  local temp\n  for ((i=0; i<${#even[@]};\
+    \ i++)); do\n    for ((j=i+1; j<${#even[@]}; j++)); do\n      if (( even[i] >\
+    \ even[j] )); then\n        temp=${even[i]}\n        even[i]=${even[j]}\n    \
+    \    even[j]=$temp\n      fi\n    done\n  done\n  for ((i=0; i<${#even[@]}; i++));\
+    \ do\n    echo ${odd[i]} ${even[i]}\n  done", "    # XXX: this could be improved\
+    \ by working in-place, but the following solution is easier to reason about.\n\
+    \    local l=( $1 )\n    local l_even=()\n    local l_odd=()\n    for (( i=0;\
+    \ i<${#l[@]}; i++ )); do\n        if (( $i % 2 == 0 )); then\n            l_even+=(\
+    \ ${l[$i]} )\n        else\n            l_odd+=( ${l[$i]} )\n        fi\n    done\n\
+    \    l_even=( $(printf \"%s\\n\" \"${l_even[@]}\" | sort) )\n    local l_sorted=()\n\
+    \    for (( i=0; i<${#l_even[@]}; i++ )); do\n        l_sorted+=( ${l_even[$i]}\
+    \ )\n        l_sorted+=( ${l_odd[$i]} )\n    done\n    echo \"${l_sorted[@]}\"",
+  "    local list\n    local odd=()\n    local even=()\n    local idx=0\n    for elem\
+    \ in $1; do\n        if [ $(($idx % 2)) -eq 0 ]; then\n            odd+=(\"$elem\"\
+    )\n        else\n            even+=(\"$elem\")\n        fi\n        ((idx++))\n\
+    \    done\n    even=$(echo \"${even[@]}\" | tr ' ' '\\n' | sort | tr '\\n' ' ')\n\
+    \    idx=0\n    for elem in $even; do\n        odd[$((idx+1))]=\"$elem\"\n   \
+    \     ((idx+=2))\n    done\n    echo \"${odd[@]}\"", "\tlist=(\"$@\")\n\t# Loop\
+    \ through the list\n\tfor i in \"${!list[@]}\"; do\n\t\tj=$((i+1))\n\t\t# If index\
+    \ is odd\n\t\tif [ $((i%2)) -eq 1 ]; then\n\t\t\t# Make a copy of the odd value\n\
+    \t\t\ttemp=${list[$i]}\n\t\t\t# Sort the next two elements\n\t\t\tfor i in \"\
+    ${!list[@]}\"; do\n\t\t\t\tj=$((i+1))\n\t\t\t\tif [ $((i%2)) -eq 0 ]; then\n\t\
+    \t\t\t\tif [ \"${list[$i]}\" -gt \"${list[$j]}\" ]; then\n\t\t\t\t\t\t# Swap the\
+    \ elements\n\t\t\t\t\t\tlist[$i]=${list[$j]}\n\t\t\t\t\t\tlist[$j]=$temp\n\t\t\
+    \t\t\tfi\n\t\t\t\tfi\n\t\t\tdone\n\t\tfi\n\tdone\n\techo \"${list[@]}\"", "  \
+    \  if [[ -z $1 ]]; then\n        return 1\n    fi\n    l=( $1 )\n    for i in\
+    \ $(seq 0 2 ${#l[@]}); do\n        echo ${l[$i]}\n    done\n    for j in $(seq\
+    \ 1 2 ${#l[@]}); do\n        echo $(sort_even_subset \"${l[$j]}\")\n    done",
+  "\todd=${1//[^ ]/}\n\tl=$(wc -w <<< \"$1\")\n\todd_c=$(wc -w <<< \"$odd\")\n\ti=1\n\
+    \teven=\"\"\n\twhile [ $i -le $l ]; do\n\t\tif [ $((i%2)) -eq 0 ]; then\n\t\t\t\
+    even=\"$even $(cut -d' ' -f$i <<< \"$1\")\"\n\t\tfi\n\t\ti=$((i+1))\n\tdone\n\t\
+    even_sorted=$(selection_sort \"$even\")\n\tj=1\n\teven_sorted_c=$(wc -w <<< \"\
+    $even_sorted\")\n\teven_pos=$(((l-odd_c)/2))\n\teven_pos_c=$(((even_sorted_c-odd_c)/2))\n\
+    \ti=1\n\twhile [ $i -le $l ]; do\n\t\tif [ $((i%2)) -eq 0 ]; then\n\t\t\tval=$(cut\
+    \ -d' ' -f$even_pos <<< \"$1\")\n\t\t\tval_sorted=$(cut -d' ' -f$even_pos_c <<<\
+    \ \"$even_sorted\")\n\t\t\t1=\"${1/$val/$val_sorted}\"\n\t\t\teven_pos=$((even_pos+1))\n\
+    \t\t\teven_pos_c=$((even_pos_c+1))\n\t\tfi\n\t\ti=$((i+1))\n\tdone\n\techo \"\
+    $1\"", "    local orig_list=\"$1\"\n    local ret_list=()\n    local even_list=()\n\
+    \    local odd_list=()\n    local sorted_even_list=()\n    local ret_idx=0\n \
+    \   local even_idx=0\n    local odd_idx=0\n    for i in $orig_list; do\n     \
+    \   if [ $((ret_idx % 2)) -eq 0 ]; then\n            even_list[$even_idx]=$i\n\
+    \            even_idx=$((even_idx + 1))\n        else\n            odd_list[$odd_idx]=$i\n\
+    \            odd_idx=$((odd_idx + 1))\n        fi\n        ret_idx=$((ret_idx\
+    \ + 1))\n    done\n    sorted_even_list=($(echo \"${even_list[@]}\" | tr ' ' '\\\
+    n' | sort -n))\n    for i in $(seq 0 $((ret_idx - 1))); do\n        if [ $((i\
+    \ % 2)) -eq 0 ]; then\n            ret_list[$i]=${sorted_even_list[$((i / 2))]}\n\
+    \        else\n            ret_list[$i]=${odd_list[$((i / 2))]}\n        fi\n\
+    \    done\n    echo \"${ret_list[@]}\"", "    local list=\"\"\n    local even_list=\"\
+    \"\n    local odd_list=\"\"\n    local i=0\n    local n=0\n    list=($1)\n   \
+    \ n=${#list[@]}\n    for ((i=0; i<n; i++)); do\n        if (($i%2 == 0)); then\n\
+    \            even_list+=\"${list[$i]} \"\n        else\n            odd_list+=\"\
+    ${list[$i]} \"\n        fi\n    done\n    echo $(echo $even_list | sort) $(echo\
+    \ $odd_list)"]
 stop_tokens:
 - "\n}"

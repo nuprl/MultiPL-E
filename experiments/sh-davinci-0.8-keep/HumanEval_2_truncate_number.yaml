@@ -8,6 +8,40 @@ prompt: "#!/bin/bash\n# Given a positive floating point number, it can be decomp
 tests: "}\n\ncandidate() {\n    truncate_number \"$@\"\n}\n\nset -e\nrun_test() {\n\
   \    [[ $(candidate \"3.5\") = \"0.5\" ]]\n    [[ $(candidate \"1.25\") = \"0.25\"\
   \ ]]\n    [[ $(candidate \"123.0\") = \"0.0\" ]]\n}\n\nrun_test"
-completions: []
+completions: ['    printf %.2f $1', "  local number=$1\n  local integer=${number%.*}\n\
+    \  local decimal=${number%.*}\n  decimal=$(echo $decimal-$integer | bc)\n  echo\
+    \ $decimal", "  echo $1 | awk '{split($1,a,\".\"); print a[2]}'", "    local part1=${1%.*}\n\
+    \    local part2=${1#*.}\n    echo 0.$part2", "    # local \"$1\"\n    local frac\
+    \ part\n    if [[ $1 =~ ^([[:digit:]]+)\\.([[:digit:]]+)$ ]]; then\n        frac=\"\
+    .${BASH_REMATCH[2]}\"\n        part=\"${BASH_REMATCH[1]}\"\n    else\n       \
+    \ frac=\".0\"\n        part=\"$1\"\n    fi\n    echo \"$frac\"", "    echo \"\
+    $1\" | sed 's/\\(^[0-9]+\\.[0-9]*\\).*/\\1/'", "    # The result is $1 - $2 (the\
+    \ integer part of $1)\n    echo \"$1 - $(bc <<< \"($1/1)\")\"", "    local integer_part=$(printf\
+    \ %.0f $1)\n    echo \"$1 - $integer_part\" | bc -l", "  echo $1 | awk '{printf\
+    \ \"%.3f\", $1 - int($1)}'", "  awk -v num=\"$1\" 'BEGIN { print num - int(num)\
+    \ }'", "  local floating_point=$1\n  local integer_part=${floating_point%.*}\n\
+    \  echo $(echo $floating_point - $integer_part | bc)", "    if [ $# -ne 1 ]; then\n\
+    \        echo \"Usage: truncate_number <float>\"\n        return 1\n    fi\n \
+    \   local -r number=\"$1\"\n    if ! [[ \"$number\" =~ ^[0-9]+\\.[0-9]+$ ]]; then\n\
+    \        echo \"Error: '$number' is not a valid floating point number\"\n    \
+    \    return 1\n    fi\n    local -r integer_part=$(echo \"$number\" | cut -d.\
+    \ -f1)\n    local -r decimal_part=$(echo \"$number\" | cut -d. -f2)\n    echo\
+    \ \"0.$decimal_part\"", "    local number=$1\n    number=$(printf \"%.1f\" $number)\n\
+    \    local int_part=${number%.*}\n    local decimal_part=${number#*.}\n    echo\
+    \ \"${decimal_part}\"", "    local number=${1:?Number is missing.}\n    # This\
+    \ works for all POSIX compatible shells\n    local integer=$(printf %d \"$number\"\
+    )\n    local decimals=$(echo \"scale=20; $number - $integer\" | bc)\n    echo\
+    \ \"$decimals\"", "    local num=\"$1\"\n    local integer_part=\"${num%%.*}\"\
+    \n    local decimal_part=\"${num%.*}\"\n    decimal_part=\"${decimal_part#*.}\"\
+    \n    echo \"($1 - $integer_part) / 1\" | bc -l", "  local decimals=${1##*.}\n\
+    \  local integer=${1%.*}\n  local decimal=$((decimals * 10 / 10**${#decimals}))\n\
+    \  if [ $integer -gt 0 ]; then\n    echo 0.$decimal\n  else\n    echo $decimal\n\
+    \  fi", "\tres=$(echo $1 | awk '{printf \"%.*f\", 0, $1}')\n\techo \"$(echo $1\
+    \ | awk -v res=$res '{print $1 - res}')\"", "    echo \"${1}\" | sed -e 's/^[0-9]*//'",
+  "    truncate_number=`echo \"scale=2; $1-${1%.*}\" | bc`\n    echo ${truncate_number}",
+  "\tlocal input_num=\"$1\"\n\tif [[ \"$input_num\" =~ ^[0-9]+$ ]]; then\n\t\t# no\
+    \ decimal part\n\t\treturn 0\n\tfi\n\tlocal input_integer_part=\"${input_num%.*}\"\
+    \n\tlocal input_decimal_part=\"${input_num#*.}\"\n\tlocal output=\"0.$input_decimal_part\"\
+    \n\techo $output"]
 stop_tokens:
 - "\n}"

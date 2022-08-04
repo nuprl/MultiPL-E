@@ -12,6 +12,209 @@ tests: "}\n\ncandidate() {\n    find_closest_elements \"$@\"\n}\n\nset -e\nrun_t
   \ 5.0 2.2\") = \"2.0 2.2\" ]]\n    [[ $(candidate \"1.0 2.0 3.0 4.0 5.0 2.0\") =\
   \ \"2.0 2.0\" ]]\n    [[ $(candidate \"1.1 2.2 3.1 4.1 5.1\") = \"2.2 3.1\" ]]\n\
   }\n\nrun_test"
-completions: []
+completions: ["  local all_elements=($1)\n  local smallest_index=0\n  local smallest_element=${all_elements[$smallest_index]}\n\
+    \  local smallest_diff=1.0\n  local second_index=0\n  local second_element=${all_elements[$second_index]}\n\
+    \  local second_diff=1.0\n  local i=0\n  for ((i=0; i<${#all_elements[@]}; i++));\
+    \ do\n    local element=${all_elements[$i]}\n    local diff=$(echo \"$element\
+    \ - $smallest_element\" | bc -l)\n    if (( $(echo \"$diff < 0\" | bc -l) ));\
+    \ then\n      continue\n    fi\n    if (( $(echo \"$diff == 0\" | bc -l) )); then\n\
+    \      if (( $(echo \"$second_element - $element\" | bc -l) == 0 )); then\n  \
+    \      continue\n      fi\n      if (( $(echo \"$second_element - $element\" |\
+    \ bc -l) < 0 )); then\n        second_index=$i\n        second_element=$element\n\
+    \        second_diff=$diff\n      fi\n      continue\n    fi\n    if (( $(echo\
+    \ \"$diff < $smallest_diff\" | bc -l) )); then\n      second_index=$smallest_index\n\
+    \      second_element=$smallest_element\n      second_diff=$smallest_diff\n  \
+    \    smallest_index=$i\n      smallest_element=$element\n      smallest_diff=$diff\n\
+    \    fi\n  done\n  local result='['\n  local comma=''\n  if (( $(echo \"$smallest_element\
+    \ < $second_element\" | bc -l) )); then\n    result+=\"\\\"$smallest_element\\\
+    \"\"\n    comma=','\n  else\n    result+=\"\\\"$second_element\\\"\"\n    comma=','\n\
+    \  fi\n  result+=\"$comma\\\"$second_element\\\"]\"\n  echo $result", "  python\
+    \ -c \"from __future__ import print_function; import sys;\\\n    print('[', end='');\
+    \ print('\\\\\\\"{0}\\\\\\\"'.format(min(sys.argv[1:], key=lambda n: abs(float(n)\
+    \ - 2.0))), end='');\\\n    print(',', end=''); print('\\\\\\\"{0}\\\\\\\"'.format(max(sys.argv[1:],\
+    \ key=lambda n: abs(float(n) - 2.0))), end='');\\\n    print(']')\" \"$1\"", " \
+    \ # https://stackoverflow.com/questions/50696568/bash-get-closest-number-from-a-list\n\
+    \  # value to find the closest two numbers to\n  closest=$1\n  shift\n  # array\
+    \ of values\n  elements=$@\n  # array of deltas\n  delta_array=()\n  for elem\
+    \ in $elements; do\n    # compute deltas\n    delta_array+=($(echo $closest -\
+    \ $elem | bc))\n  done\n  # see https://stackoverflow.com/questions/24893951/sort-bash-array-with-numbers\n\
+    \  # the 0th element of the sorted delta array is the closest\n  delta_array_sorted=($(echo\
+    \ ${delta_array[@]} | tr \" \" \"\\n\" | sort -n))\n  delta1=${delta_array_sorted[0]}\n\
+    \  index1=$(printf \"%s\\n\" \"${delta_array[@]}\" | grep -n -m1 \"^$delta1$\"\
+    \ | cut -d: -f1)\n  # the 1st element of the sorted delta array is the next closest\n\
+    \  delta2=${delta_array_sorted[1]}\n  index2=$(printf \"%s\\n\" \"${delta_array[@]}\"\
+    \ | grep -n -m1 \"^$delta2$\" | cut -d: -f1)\n  # finally get the elements by\
+    \ index\n  element1=${elements[$index1]}\n  element2=${elements[$index2]}\n  #\
+    \ return\n  if [[ $element1 -lt $element2 ]]; then\n    echo \"[\\\"$element1\\\
+    \", \\\"$element2\\\"]\"\n  else\n    echo \"[\\\"$element2\\\", \\\"$element1\\\
+    \"]\"\n  fi", "    local list=($1)\n    local count=$((${#list[@]} - 1))\n   \
+    \ local min_value=$(echo \"${list[$count]} - ${list[0]}\" | bc -l)\n    local\
+    \ first_value=${list[0]}\n    local second_value=${list[$count]}\n    for i in\
+    \ $(seq 0 $count); do\n        for j in $(seq $(($i + 1)) $count); do\n      \
+    \      local next_value=$(echo \"${list[$j]} - ${list[$i]}\" | bc -l)\n      \
+    \      if [ $(echo \"$next_value < $min_value\" | bc -l) -eq 1 ]; then\n     \
+    \           min_value=$next_value\n                first_value=${list[$i]}\n \
+    \               second_value=${list[$j]}\n            fi\n        done\n    done\n\
+    \    echo \"[\\\"$first_value\\\", \\\"$second_value\\\"]\"", "    local INPUT=($1)\n\
+    \    local NUMBERS\n    local DISTANCES\n    for (( i=0; i<${#INPUT[@]}; i++ ));\
+    \ do\n        NUMBERS[$i]=${INPUT[$i]}\n        # Set all distances to the maximum\n\
+    \        DISTANCES[$i]=999999999\n    done\n    # Compute the distances between\
+    \ two consecutive numbers\n    for (( i=0; i<$((${#INPUT[@]}-1)); i++ )); do\n\
+    \        DISTANCES[$i]=$(python -c \"print abs(${INPUT[$i]} - ${INPUT[$(($i+1))]})\"\
+    )\n    done\n    # Return the two numbers that are closest to each other\n   \
+    \ echo -n \"[\\\"${NUMBERS[$(($(printf '%s\\n' \"${DISTANCES[@]}\" | sort -n |\
+    \ head -n 1 | grep -oP '^\\d+')+1))]}\\\", \"\n    echo -n \"\\\"${NUMBERS[$(($(printf\
+    \ '%s\\n' \"${DISTANCES[@]}\" | sort -n | head -n 1 | grep -oP '^\\d+')+2))]}\\\
+    \"]\"", "    local -r numbers=\"$1\"\n    local -r sorted_numbers=$(echo \"$numbers\"\
+    \ | tr ' ' '\\n' | sort -n | tr '\\n' ' ')\n    local closest_diff=inf\n    local\
+    \ closest_element_1\n    local closest_element_2\n    for i in $sorted_numbers;\
+    \ do\n        for j in $sorted_numbers; do\n            if [[ $i != $j ]]; then\n\
+    \                local diff=$(echo \"$j - $i\" | bc -l)\n                if ((\
+    \ $(echo \"$diff < $closest_diff\" | bc -l) )); then\n                    closest_diff=$diff\n\
+    \                    closest_element_1=$i\n                    closest_element_2=$j\n\
+    \                fi\n            fi\n        done\n    done\n    echo \"[\\\"\
+    $closest_element_1\\\", \\\"$closest_element_2\\\"]\"", "    # We need at least\
+    \ two numbers\n    [[ $# -lt 2 ]] && { printf \"['\\\"NaN\\\"', '\\\"NaN\\\"']\"\
+    ; return 0; }\n\n    # Special case: only two numbers\n    [[ $# -eq 2 ]] && {\
+    \ printf \"['\\\"$1\\\"', '\\\"$2\\\"']\"; return 0; }\n\n    local closest_difference=1\n\
+    \    local closest_index_1=1\n    local closest_index_2=2\n    local new_difference=1\n\
+    \    local index=1\n    local indices=($@)\n\n    for index in $(seq 1 $(( ${#indices[@]}\
+    \ - 1 )) ); do\n        new_difference=$(echo \"${indices[$index+1]} - ${indices[$index]}\"\
+    \ | bc -l)\n        if (( $(echo \"$new_difference < $closest_difference\" | bc\
+    \ -l) )); then\n            closest_difference=$new_difference\n            closest_index_1=$index\n\
+    \            closest_index_2=$(( $index + 1 ))\n        fi\n    done\n\n    printf\
+    \ \"['\\\"${indices[$closest_index_1]}\\\"', '\\\"${indices[$closest_index_2]}\\\
+    \"']\"", "    if [ \"$1\" == \"\" ]; then return; fi\n\n    # Split the space-separated\
+    \ list into an array\n    IFS=' ' read -ra myarray <<< \"$1\"\n\n    # Find the\
+    \ smallest difference between pairs of numbers\n    smallest_diff=1000000\n  \
+    \  for (( i=0; i<$((${#myarray[@]}-1)); i++ )); do\n        for (( j=$i+1; j<${#myarray[@]};\
+    \ j++ )); do\n            diff=$(echo \"scale=2; ${myarray[i]} - ${myarray[j]}\"\
+    \ | bc)\n            if [ $(echo \"$diff < 0\" | bc) -eq 1 ]; then\n         \
+    \       diff=$(echo \"$diff * -1\" | bc)\n            fi\n            if [ $(echo\
+    \ \"$diff < $smallest_diff\" | bc) -eq 1 ]; then\n                smallest_diff=$diff\n\
+    \                first=${myarray[i]}\n                second=${myarray[j]}\n \
+    \           fi\n        done\n    done\n\n    if [ $(echo \"$smallest_diff ==\
+    \ 0\" | bc) -eq 1 ]; then\n        # If the difference is 0, then just return\
+    \ the first number of the pair\n        echo \"[\\\"$first\\\"]\"\n    else\n\
+    \        # Otherwise, return the smaller then larger\n        if [ $(echo \"$first\
+    \ < $second\" | bc) -eq 1 ]; then\n            echo \"[\\\"$first\\\", \\\"$second\\\
+    \"]\"\n        else\n            echo \"[\\\"$second\\\", \\\"$first\\\"]\"\n\
+    \        fi\n    fi", "    # From http://stackoverflow.com/questions/16989598/bash-comparing-two-numbers-in-version-format\n\
+    \    # The simple version doesn't work:\n    #   [[ 1.0 < 1.2 ]]\n    # so this\
+    \ is a more robust alternative\n\n    # first convert to integers\n    mapfile\
+    \ -t v1 < <(printf \"%s\\n\" \"$1\" | awk -F. '{print $1\".\"$2}' | sed -E 's/(\\\
+    .[0-9]+)$//')\n    mapfile -t v2 < <(printf \"%s\\n\" \"$1\" | awk -F. '{print\
+    \ $1\".\"$2}' | sed -E 's/(\\.[0-9]+)$//')\n\n    # Now compare each pair of values\n\
+    \    closest=99999999999999\n    closestA=99999999999999\n    closestB=99999999999999\n\
+    \    for (( i=0; i<${#v1[@]}; i++ )); do\n        for (( j=0; j<${#v2[@]}; j++\
+    \ )); do\n            if (( i != j )); then\n                diff=$(( ${v1[$i]}\
+    \ - ${v2[$j]} ))\n                if (( ${diff#-} < $closest )); then\n      \
+    \              closest=${diff#-}\n                    closestA=${v1[$i]}\n   \
+    \                 closestB=${v2[$j]}\n                fi\n            fi\n   \
+    \     done\n    done\n\n    # Return the values (since we're in a subshell, we\
+    \ need to print)\n    if (( closestA < closestB )); then\n        printf '[%s,\
+    \ %s]' \"$closestA\" \"$closestB\"\n    else\n        printf '[%s, %s]' \"$closestB\"\
+    \ \"$closestA\"\n    fi", "    local nums=( $1 )\n    local n=${#nums[@]}\n  \
+    \  if [ $n -lt 2 ]; then\n        echo \"Error: Need at least two numbers to calculate\
+    \ a difference\"\n        return 1\n    fi\n    local closest_diff=10000000000000\n\
+    \    local closest_pair=( -1 -1 )\n    for ((i=0; i<n; i++)); do\n        for\
+    \ ((j=i+1; j<n; j++)); do\n            local diff=$(echo ${nums[$i]} - ${nums[$j]}\
+    \ | bc)\n            if [ $diff -lt 0 ]; then\n                diff=-$diff\n \
+    \           fi\n            if [ $diff -lt $closest_diff ]; then\n           \
+    \     closest_diff=$diff\n                closest_pair=( \"${nums[$i]}\" \"${nums[$j]}\"\
+    \ )\n            fi\n        done\n    done\n    echo \"[\\\"${closest_pair[0]}\\\
+    \", \\\"${closest_pair[1]}\\\"]\"", "    local -r numbers=( $1 )\n    local min_distance\n\
+    \    local min_distance_elements=()\n    for (( i=0; i<${#numbers[@]}-1; i++ ));\
+    \ do\n        for (( j=i+1; j<${#numbers[@]}; j++ )); do\n            local distance=`echo\
+    \ \"${numbers[i]} - ${numbers[j]}\" | bc`\n            if (( `echo \"${distance}\
+    \ < 0\" | bc` )); then\n                distance=`echo \"${distance} * -1\" |\
+    \ bc`\n            fi\n            if [[ \"${min_distance}\" == \"\" || `echo\
+    \ \"${distance} < ${min_distance}\" | bc` -eq 1 ]]; then\n                min_distance=${distance}\n\
+    \                min_distance_elements=( \"${numbers[i]}\" \"${numbers[j]}\" )\n\
+    \            fi\n        done\n    done\n    echo ${min_distance_elements[@]}",
+  "  local input_list=($1)\n  # Start from the largest absolute value and keep going\
+    \ until we find a non-zero difference.\n  local closest_distance=$(echo \"${input_list[0]}\
+    \ - ${input_list[-1]}\" | bc)\n  local closest_distance_indices=(0 $(( ${#input_list[@]}\
+    \ - 1 )))\n  local num_elements=$(( ${#input_list[@]} - 1 ))\n  for i in $(seq\
+    \ 0 $num_elements); do\n    for j in $(seq $(( i + 1 )) $num_elements); do\n \
+    \     local this_distance=$(echo \"${input_list[$i]} - ${input_list[$j]}\" | bc)\n\
+    \      if [[ $(echo \"$this_distance < $closest_distance\" | bc) -eq 1 ]]; then\n\
+    \        closest_distance=$this_distance\n        closest_distance_indices=($i\
+    \ $j)\n      fi\n    done\n  done\n  local smallest_index=$(echo \"${closest_distance_indices[0]}\
+    \ < ${closest_distance_indices[1]}\" | bc)\n  echo \"[\\\"${input_list[${closest_distance_indices[$smallest_index]}]}\\\
+    \"]\"\n  echo \"[\\\"${input_list[${closest_distance_indices[$(( 1 - $smallest_index\
+    \ ))]}]}\\\"]\"", "    local nums=($(echo $1 | tr ' ' '\\n' | sort -n -t . -k\
+    \ 1,1 -k 2,2n))\n    local lo=$(echo \"${nums[0]}\")\n    local hi=$(echo \"${nums[0]}\"\
+    )\n    local curr_diff=${nums[1]}\n    local prev_diff=${nums[1]}\n    for n in\
+    \ ${nums[@]:1}; do\n        prev_diff=$curr_diff\n        curr_diff=$(echo \"\
+    ($n - ${nums[${#nums[@]}-1]}) / 1\" | bc -l)\n        if [ \"$(echo \"$prev_diff\
+    \ < $curr_diff\" | bc -l)\" -eq 1 ]; then\n            lo=$(echo \"${nums[${#nums[@]}-2]}\"\
+    )\n            hi=$(echo \"${nums[${#nums[@]}-1]}\")\n        fi\n    done\n \
+    \   echo \"[\\\"$lo\\\", \\\"$hi\\\"]\"", "    local numbers=($(echo $1 | tr '\
+    \ ' '\\n' | sort -n))\n    local length=${#numbers[@]}\n    if [ $length -eq 1\
+    \ ]; then\n        echo -n \"[\\\"\"${numbers[0]}\"\\\", \\\"\"${numbers[0]}\"\
+    \\\"]\"\n    else\n        local smallest_difference=${numbers[1]}\n        local\
+    \ index_of_smallest_difference=0\n        for i in $(seq 1 $(($length - 1)));\
+    \ do\n            local difference=$(echo ${numbers[$i]} - ${numbers[$(($i - 1))]}\
+    \ | bc)\n            if [ $(echo \"$difference < $smallest_difference\" | bc)\
+    \ -eq 1 ]; then\n                smallest_difference=$difference\n           \
+    \     index_of_smallest_difference=$(($i - 1))\n            fi\n        done\n\
+    \        echo -n \"[\\\"\"${numbers[$index_of_smallest_difference]}\"\\\", \\\"\
+    \"${numbers[$(($index_of_smallest_difference + 1))]}\"\\\"]\"\n    fi", "    local\
+    \ -n elements=\"( $1 )\"\n    local num_elements=${#elements[@]}\n    local min_difference=${elements[1]}\n\
+    \    local first_element=${elements[0]}\n    local second_element=${elements[1]}\n\
+    \    if (( $num_elements == 2 )); then\n        echo '[\"'$first_element'\", \"\
+    '$second_element'\"]'\n    else\n        for (( i=0; i<$((num_elements-1)); i++\
+    \ )); do\n            local difference=$(bc <<< \"scale=2; ${elements[$((i+1))]}\
+    \ - ${elements[$i]}\")\n            difference=${difference#-}\n            if\
+    \ (( $(bc <<< \"$difference < $min_difference\") )); then\n                min_difference=$difference\n\
+    \                first_element=${elements[$i]}\n                second_element=${elements[$((i+1))]}\n\
+    \            fi\n        done\n        echo '[\"'$first_element'\", \"'$second_element'\"\
+    ]'\n    fi", "    local min_diff=9999999999.0\n    local closest_1=0\n    local\
+    \ closest_2=0\n    for element_1 in $1\n    do\n        for element_2 in $1\n\
+    \        do\n            if (( $(echo \"$element_1 < $element_2\" | bc -l) ));\
+    \ then\n                local diff=$(echo \"$element_2 - $element_1\" | bc -l)\n\
+    \                if (( $(echo \"$diff < $min_diff\" | bc -l) )); then\n      \
+    \              min_diff=$diff\n                    closest_1=$element_1\n    \
+    \                closest_2=$element_2\n                fi\n            fi\n  \
+    \      done\n    done\n    echo \"['\"$closest_1\"', '\"$closest_2\"']\"", " \
+    \   local numbers=$1\n    local length=$(echo $numbers | wc -w)\n    local min_diff=10\n\
+    \    local min_start\n    local min_end\n    local diff\n    local i\n    local\
+    \ j\n    local start\n    local end\n    local substr\n\n    for ((i=1; i<=$((length-1));\
+    \ i++)); do\n        start=$(echo $numbers | cut -d \" \" -f $i)\n        for\
+    \ ((j=$((i+1)); j<=$length; j++)); do\n            end=$(echo $numbers | cut -d\
+    \ \" \" -f $j)\n            diff=$(echo $end - $start | bc)\n            # echo\
+    \ \"start: $start end: $end diff: $diff min_diff: $min_diff\"\n            if\
+    \ [[ $(echo \"$min_diff>$diff\" | bc) -eq 1 ]]; then\n                min_diff=$diff\n\
+    \                min_start=$start\n                min_end=$end\n            fi\n\
+    \        done\n    done\n    echo \"[\\\"$min_start\\\", \\\"$min_end\\\"]\"",
+  "  local list=$1\n  local min=9.9\n  local min_a=\"\"\n  local min_b=\"\"\n  for\
+    \ a in ${list}; do\n    for b in ${list}; do\n      if [[ ${a} != ${b} ]]; then\n\
+    \        local diff=$(echo \"${a} - ${b}\" | bc -l)\n        local diff_abs=$(echo\
+    \ \"${diff} < 0 ? -${diff} : ${diff}\" | bc -l)\n        if [[ $(echo \"${diff_abs}\
+    \ < ${min}\" | bc -l) -eq 1 ]]; then\n          min=${diff_abs}\n          min_a=${a}\n\
+    \          min_b=${b}\n        fi\n      fi\n    done\n  done\n  if [[ ${min_a}\
+    \ < ${min_b} ]]; then\n    echo \"[\\\"${min_a}\\\", \\\"${min_b}\\\"]\"\n  else\n\
+    \    echo \"[\\\"${min_b}\\\", \\\"${min_a}\\\"]\"\n  fi", "  local numbers=$1\n\
+    \  local -a arr=($numbers)\n\n  # Don't bother if there's less than two numbers\n\
+    \  if [ ${#arr[@]} -lt 2 ]; then\n    return\n  fi\n\n  local smallest_diff=$(echo\
+    \ \"${arr[1]} - ${arr[0]}\" | bc)\n  local first_index=0\n  local second_index=1\n\
+    \n  for ((i=0; i<${#arr[@]}; i++)); do\n    for ((j=i+1; j<${#arr[@]}; j++));\
+    \ do\n      local diff=$(echo \"${arr[j]} - ${arr[i]}\" | bc)\n      if (( $(echo\
+    \ \"$diff < $smallest_diff\" | bc -l) )); then\n        smallest_diff=$diff\n\
+    \        first_index=$i\n        second_index=$j\n      fi\n    done\n  done\n\
+    \n  local first_value=${arr[$first_index]}\n  local second_value=${arr[$second_index]}\n\
+    \n  if (( $(echo \"$first_value > $second_value\" | bc -l) )); then\n    local\
+    \ tmp=$first_value\n    first_value=$second_value\n    second_value=$tmp\n  fi\n\
+    \n  echo '[\\\"'$first_value'\\\", \\\"'$second_value'\\\"]'", "    local numbers=$1\n\
+    \    local closest_distance=0\n    local closest_distance_elements=()\n    for\
+    \ first_number in $numbers\n    do\n        for second_number in $numbers\n  \
+    \      do\n            local distance=$(echo \"($first_number - $second_number)\
+    \ >= 0 ? ($first_number - $second_number) : ($second_number - $first_number)\"\
+    \ | bc -l)\n            if [[ $closest_distance == 0 || $(echo \"$distance < $closest_distance\"\
+    \ | bc -l) == 1 ]]\n            then\n                closest_distance=$distance\n\
+    \                closest_distance_elements=($first_number $second_number)\n  \
+    \          fi\n        done\n    done\n    echo \"['\"${closest_distance_elements[0]}\"\
+    '\", \"'${closest_distance_elements[1]}\"']\""]
 stop_tokens:
 - "\n}"

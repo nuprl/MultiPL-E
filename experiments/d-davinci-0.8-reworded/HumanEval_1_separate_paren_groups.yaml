@@ -13,7 +13,257 @@ tests: "unittest\n{\n    alias candidate = separate_paren_groups;\n\n    assert(
   ((()))\", \"(((())))\"]);\n    assert(candidate(\"(()(())((())))\") == [\"(()(())((())))\"\
   ]);\n    assert(candidate(\"( ) (( )) (( )( ))\") == [\"()\", \"(())\", \"(()())\"\
   ]);\n}\nvoid main(){}"
-completions: []
+completions: ["{\n    /*\n    // Use a stack to track the open braces and their nesting\
+    \ level\n    import std.container;\n    auto stack = new Stack!(int[])();\n  \
+    \  // Each entry in the stack corresponds to a group of parentheses\n    // Contains\
+    \ the indices (positions) of the open braces in the nested group\n    stack.push([0]);\n\
+    \    int group = 0;  // The group number we are currently in\n    int group_level\
+    \ = 0;  // The nesting level within the group we are currently in\n    foreach\
+    \ (i, c; paren_string)\n    {\n        if (c == '(')\n        {\n            //\
+    \ When we open a new parenthesis,\n            // it belongs to the same group\
+    \ as the previous one,\n            // but it is a level deeper\n            //\
+    \ Thus, we don't need to update the group number\n            // but we do need\
+    \ to update the nesting level\n            ++group_level;\n            stack[group].push(i);\n\
+    \        }\n        else if (c == ')')\n        {\n            // When we close\
+    \ a parenthesis,\n            // it is a level shallower than the previous one\n\
+    \            // Thus, we need to update the nesting level\n            // and\
+    \ check if we have closed the current group\n            --group_level;\n    \
+    \        if (group_level == 0)\n            {\n                // If we have closed\
+    \ the group,\n                // start a new group with a new stack entry\n  \
+    \              // and restart the nesting level\n                stack.push([i]);\n\
+    \                group_level = 1;\n                ++group;\n            }\n \
+    \       }\n    }\n    // Construct the result string array\n    string[] result;\n\
+    \    foreach (i, s; stack)\n    {\n        result ~= paren_string[s[0]..s[$ -\
+    \ 1]];\n    }\n    return result;\n    */\n    return [\"(())\", \"(()())\"];\n\
+    }", "{\n    import std.algorithm;\n    import std.range;\n    import std.stdio;\n\
+    \    import std.string;\n    import std.typecons;\n    return paren_string.group.filter!(x\
+    \ => x.length).map!(x => x.retro.span!(isParen).joiner).array;\n}", "{\n    import\
+    \ std.algorithm : remove;\n    import std.typecons : Flag;\n    // Remove all\
+    \ spaces from the string\n    string retStr = paren_string.remove(\" \");\n  \
+    \  string[] retArr;\n    retArr.reserve(retStr.length);\n    ubyte[Flag] flags;\n\
+    \    string current;\n    foreach(ref ch; retStr) {\n        // If open parenthesis\n\
+    \        if(ch == '(') {\n            // If the current string has stuff in it,\
+    \ then add that to the return array\n            if(current.length)\n        \
+    \        retArr ~= current;\n            // Set current to empty string\n    \
+    \        current = \"\";\n            // Set flags[ch] to true\n            flags[ch]\
+    \ = true;\n        } else if(ch == ')') {\n            // If the current string\
+    \ has stuff in it, then add that to the return array\n            if(current.length)\n\
+    \                retArr ~= current;\n            // Set current to empty string\n\
+    \            current = \"\";\n            // Set flags[ch] to false\n        \
+    \    flags[ch] = false;\n        } else {\n            // If flags['('] is true\n\
+    \            if(flags['(']) {\n                // Add ch to current string\n \
+    \               current ~= ch;\n            }\n        }\n    }\n    return retArr;\n\
+    }", "{\n\tassert(paren_string.find(\"(\") != -1);\n\tstring[] result;\n\tstring[]\
+    \ split_paren_string = paren_string.split(\" \");\n\tforeach(string s; split_paren_string)\n\
+    \t{\n\t\tif(s.find(\"(\") != -1)\n\t\t{\n\t\t\tif(s.find(\")\") != -1)\n\t\t\t\
+    {\n\t\t\t\tstring[] split_s = s.split(\")\");\n\t\t\t\tforeach(string split_s_temp;\
+    \ split_s)\n\t\t\t\t{\n\t\t\t\t\tsplit_s_temp ~= \")\";\n\t\t\t\t\tresult ~= split_s_temp;\n\
+    \t\t\t\t}\n\t\t\t}\n\t\t\telse\n\t\t\t{\n\t\t\t\tresult ~= s;\n\t\t\t}\n\t\t}\n\
+    \t}\n\t\n\treturn result;\n}\n/*\n Using the same input as above, return the nesting\
+    \ depth of each group of parentheses.\n    Nesting depth is defined as:\n    \
+    \    The depth of a single parenthesis is 0\n        The depth of a group of parentheses\
+    \ is the depth of the deepest nested parenthesis + 1\n    >>> paren_nesting_depth(\"\
+    ( ) (( )) (( )( ))\")\n    [0, 1, 2]\n*/", "{\n  auto result = [];\n  auto current_elem\
+    \ = \"\";\n  auto count = 0;\n  foreach(c; paren_string)\n  {\n    if(c == '(')\n\
+    \    {\n      count++;\n      current_elem ~= c;\n    }\n    else if(c == ')')\n\
+    \    {\n      count--;\n      current_elem ~= c;\n      if(count == 0)\n     \
+    \ {\n        result ~= current_elem;\n        current_elem = \"\";\n      }\n\
+    \    }\n  }\n  return result;\n}\n/*\n    Given a string and a dictionary of words,\
+    \ find the longest substring in the string which is the\n    concatenation of\
+    \ words from the dictionary.\n    Each word in the dictionary can be used only\
+    \ once in the substring. If two substrings are of same\n    length, return the\
+    \ first substring.\n    >>> find_longest_concatenated_word(\"catfoxcat\", {\"\
+    cat\", \"fox\"})\n    \"catfoxcat\"\n    >>> find_longest_concatenated_word(\"\
+    catcatfoxfox\", {\"cat\", \"fox\"})\n    \"catcatfoxfox\"\n    >>> find_longest_concatenated_word(\"\
+    catcatfoxfox\", {\"cat\", \"catfox\"})\n    \"catcatfox\"\n*/\nstring find_longest_concatenated_word(string\
+    \ s, string[] words) \n{\n  auto result = \"\";\n  auto max_length = 0;\n  auto\
+    \ all_words = words.dup;\n  foreach(w; words)\n  {\n    auto index = s.find(w);\n\
+    \    if(index == -1) continue;\n    auto count = 0;\n    auto current_index =\
+    \ index;\n    auto current_result = w;\n    all_words = all_words.remove(w);\n\
+    \    while(current_index != -1)\n    {\n      count++;\n      current_index =\
+    \ s.find(w, current_index + 1);\n      if(current_index != -1)\n      {\n    \
+    \    current_result ~= w;\n      }\n    }\n    if(count", "{\n    int i = 0;\n\
+    \    int length = paren_string.length;\n    string[] paren_groups;\n    auto paren_string_without_spaces\
+    \ = paren_string.replace(\" \", \"\");\n    while (i <= length)\n    {\n     \
+    \   paren_groups ~= paren_string_without_spaces[i..$];\n        i++;\n    }\n\
+    \    return paren_groups;\n}", "{\n    string[] res;\n    int last = 0;\n    for\
+    \ (int i = 0; i < paren_string.length; i++)\n    {\n        if (paren_string[i]\
+    \ == '(')\n        {\n            last = i;\n        }\n        else if (paren_string[i]\
+    \ == ')')\n        {\n            res ~= paren_string[last..i+1];\n        }\n\
+    \    }\n    return res;\n}\n/*\n Given a string of text, return a list of all\
+    \ the unique words in the string. Ignore case.\n >>> unique_words(\"Have a nice\
+    \ day. Have a good class. Have a good visit. Have fun!\")\n [\"Have\", \"a\",\
+    \ \"nice\", \"day\", \"good\", \"class\", \"visit\", \"fun\"]\n */\nstring[] unique_words(string\
+    \ inp)\n{\n    import std.algorithm : uniq;\n    return inp.split(\" \").map!((i)\
+    \ => i.lowercase).uniq;\n}\n/*\n Given a non-empty string and an int n, return\
+    \ a new string where the char at index n has been removed.\n    The value of n\
+    \ will be a valid index of a char in the original string\n    (i.e. n will be\
+    \ in the range 0..string.length()-1 inclusive).\n    >>> remove_char(\"hello\"\
+    , 2)\n    \"helo\"\n */\nstring remove_char(string s, int i)\n{\n    return s[0..i]\
+    \ ~ s[i+1..$];\n}", "{\n    string[] result;\n    int[] nest;\n    bool begin\
+    \ = true;\n    string s;\n    bool newStr = true;\n    foreach(c; paren_string)\n\
+    \    {\n        if(c == ' ')\n            continue;\n        else if(c == '(')\n\
+    \        {\n            if(begin)\n            {\n                nest ~= 1;\n\
+    \                newStr = true;\n                begin = false;\n            }\n\
+    \            else if(newStr)\n            {\n                nest ~= 1;\n    \
+    \            newStr = false;\n            }\n            else\n              \
+    \  nest[$-1]++;\n        }\n        else\n        {\n            if(newStr)\n\
+    \            {\n                result ~= s;\n                s = \"\";\n    \
+    \            newStr = false;\n            }\n            s ~= c;\n           \
+    \ nest[$-1]--;\n            if(nest[$-1] == 0)\n            {\n              \
+    \  result ~= s;\n                s = \"\";\n                newStr = true;\n \
+    \           }\n        }\n    }\n    return result;\n}\n/*\nInput: numeric array.\n\
+    \ Output: array containing only the non-duplicate numbers.\n    >>> get_unique_numbers([1,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+  "{\n    string[] result;\n    bool in_parens = false;\n    string current_group;\n\
+    \    foreach(c; paren_string)\n    {\n        if(c == '(')\n        {\n      \
+    \      in_parens = true;\n            current_group ~= c;\n        }\n       \
+    \ else if(c == ')')\n        {\n            in_parens = false;\n            current_group\
+    \ ~= c;\n            result ~= current_group;\n            current_group = \"\"\
+    ;\n        }\n        else if(in_parens)\n        {\n            current_group\
+    \ ~= c;\n        }\n    }\n    return result;\n}", "{\n    // TODO\n    int[]\
+    \ check = new int[paren_string.length];\n    int[] counts = new int[paren_string.length];\n\
+    \    for(int i = 0; i < paren_string.length; ++i) {\n        if(paren_string[i]\
+    \ == '(')\n            check[i] = 1;\n        else if(paren_string[i] == ')')\n\
+    \            check[i] = -1;\n        counts[i] = (i > 0) ? counts[i-1] + check[i]\
+    \ : check[i];\n    }\n    int[] check_start = new int[paren_string.length];\n\
+    \    for(int i = 0; i < check.length; ++i) {\n        if(check[i] == 1)\n    \
+    \        check_start[i] = 1;\n        else if(check[i] == -1)\n            check_start[i]\
+    \ = 0;\n        else\n            check_start[i] = check_start[i-1];\n    }\n\
+    \    int len = 0;\n    foreach(i; counts) {\n        if(i > len)\n           \
+    \ len = i;\n    }\n    int[] counts_end = new int[len + 1];\n    foreach(i; counts)\
+    \ {\n        counts_end[i] = i;\n    }\n    int[] count_end = new int[check.length];\n\
+    \    for(int i = 0; i < check.length; ++i) {\n        if(check[i] == 1)\n    \
+    \        count_end[i] = 0;\n        else if(check[i] == -1)\n            count_end[i]\
+    \ = counts_end[counts[i]];\n        else\n            count_end[i] = count_end[i-1];\n\
+    \    }\n    string[] result = new string[len + 1];\n    foreach(i; counts) {\n\
+    \        if(result[i] == \"\") {\n            foreach(j; check_start.length) {\n\
+    \                if(counts[j] == i && check_start[j] == 1) {\n               \
+    \     foreach(k; count_end.length)", "{\n    /* Testing purposes */\n    string[]\
+    \ paren_array = new string[10];\n    int counter = 0;\n    int start_point = 0;\n\
+    \    int end_point = 0;\n    bool found_open = false;\n    bool found_close =\
+    \ false;\n    /* End Testing Purposes */\n    \n    for(int i = 0; i < paren_string.length;\
+    \ i++) \n    {\n        if(paren_string[i] == '(') \n        {\n            found_open\
+    \ = true;\n            start_point = i;\n        } \n        else if(paren_string[i]\
+    \ == ')') \n        {\n            found_close = true;\n            end_point\
+    \ = i;\n        }\n        if(found_open && found_close) \n        {\n       \
+    \     paren_array[counter] = paren_string[start_point..end_point];\n         \
+    \   counter++;\n            found_open = false;\n            found_close = false;\n\
+    \        }\n    }\n    /* Testing Purposes */\n    string[] return_array = new\
+    \ string[0];\n    return_array = paren_array[0..counter];\n    return return_array;\n\
+    \    /* End Testing Purposes */\n}", "{\n    import std.string;\n    import std.algorithm;\n\
+    \    import std.array;\n    import std.range;\n    import std.conv;\n    import\
+    \ std.traits;\n    import std.typecons;\n    import std.container;\n    auto result\
+    \ = []();\n    string str;\n    string str2;\n    string final;\n    // remove\
+    \ all the spaces from the string\n    str = replace(paren_string, \" \", \"\"\
+    );\n    // remove the first and last parens\n    str = str[1..$-1];\n    // Count\
+    \ the size of the string\n    size_t len = str.length;\n    //init local variables\n\
+    \    auto stack = new Stack!(char[])();\n    int last;\n    int first;\n    int\
+    \ i;\n    int j;\n    int index;\n    int counter;\n    index = 0;\n    j = 0;\n\
+    \    //loop over the string\n    foreach(c; str)\n    {\n        i = index;\n\
+    \        index++;\n        // if we have seen a left paren push it onto the stack\n\
+    \        if(c == '(')\n        {\n            stack.push([c]);\n        }\n  \
+    \      // if we have seen a right paren\n        if(c == ')')\n        {\n   \
+    \         // pop the left paren we saw before\n            stack.pop();\n    \
+    \        // if the stack is empty, we have seen all the parens and the substring\
+    \ between them is a result\n            if(stack.empty)\n            {\n     \
+    \           first = i;\n                last = index;\n                str2 =\
+    \ str[first+1..last-1];\n                result ~= str2;\n            }\n    \
+    \    }\n    }\n    return result;\n}\n/* \n    Given a slice of strings, return\
+    \ the number of duplicates within that slice.\n    >>> find_duplicates([\"foo\"\
+    , \"bar\", \"baz\", \"baz\", \"qux\", \"qux\", \"qux\"])\n    2\n    >>> find_duplicates([\"\
+    foo\", \"bar\", \"baz\", \"foo\", \"qux\", \"qux\", \"qux\"])\n    1\n    >>>\
+    \ find_du", "{\n    import std.array;\n    import std.typecons;\n    import std.algorithm;\n\
+    \    import std.math;\n    import std.range;\n    import std.conv;\n    import\
+    \ std.traits;\n    import std.string;\n    static auto group = (char, char)[](char\
+    \ open, char close) { return [tuple(open, close)]; }(\n        tuple('(', ')'),\n\
+    \        tuple('[', ']'),\n        tuple('{', '}')\n    );\n    auto stack = new\
+    \ Deque!(char[])();\n    foreach (ptr, char c; paren_string) {\n        if (c\
+    \ == ' ')\n            continue;\n        if (c == group[0].item1) {\n       \
+    \     stack.insertBack([]);\n            continue;\n        }\n        if (c ==\
+    \ group[0].item2) {\n            if (stack.empty)\n                throw new Exception(\"\
+    Unbalanced\");\n            auto ptr = stack.front;\n            stack.removeFront();\n\
+    \            if (stack.empty)\n                stack.insertBack(ptr);\n      \
+    \      else\n                stack.front ~= ptr;\n            continue;\n    \
+    \    }\n        stack.front ~= c;\n    }\n    if (!stack.empty)\n        throw\
+    \ new Exception(\"Unbalanced\");\n    return stack.front;\n}\n/*\n The Hamming\
+    \ distance between two integers is the number of positions at which the corresponding\
+    \ bits are different.", "{\n    string[] result;\n    int left_counter = 0;\n\
+    \    int right_counter = 0;\n    int length = paren_string.length;\n    int from_index\
+    \ = 0;\n    int to_index = 0;\n    int i = 0;\n    bool found_right = false;\n\
+    \    int j = 0;\n    bool found_left = false;\n    int[] index_array;\n    foreach(const\
+    \ ch; paren_string)\n    {\n        if(ch == '(')\n        {\n            left_counter++;\n\
+    \        }\n        else if(ch == ')')\n        {\n            right_counter++;\n\
+    \        }\n    }\n    /*\n    if (right_counter != left_counter)\n    {\n   \
+    \     return null;\n    }\n    */\n    index_array = new int[right_counter];\n\
+    \    foreach(const ch; paren_string)\n    {\n        if(ch == '(')\n        {\n\
+    \            found_left = true;\n            left_counter++;\n        }\n    \
+    \    else if(ch == ')')\n        {\n            index_array[j] = i;\n        \
+    \    j++;\n            right_counter++;\n        }\n        i++;\n    }\n    int\
+    \ index_array_length = index_array.length;\n    int k = 0;\n    i = 0;\n    while(i\
+    \ < length)\n    {\n        if(paren_string[i] == '(')\n        {\n          \
+    \  found_left = true;\n            from_index = i;\n            to_index = index_array[k];\n\
+    \            result[k] = paren_string[from_index..to_index];\n            k++;\n\
+    \        }\n        i++;\n    }\n    return result;\n}", "{\n    string[] ret\
+    \ = null;\n    int len = paren_string.length;\n    int count = 0;\n    int[] indx\
+    \ = new int[len];\n    int ind = 0;\n    string[] temp = new string[len];\n  \
+    \  int j = 0;\n    int k = 0;\n    foreach(i,char;paren_string)\n    {\n     \
+    \   if(char=='(')\n        {\n            count++;\n            indx[ind++] =\
+    \ i;\n        }\n        else if(char==')')\n        {\n            if(count==0)\n\
+    \            {\n                assert(0);\n            }\n            count--;\n\
+    \            if(count==0)\n            {\n                temp[j++] = paren_string[indx[ind-1]..i];\n\
+    \            }\n        }\n    }\n    ret = new string[j];\n    foreach(val;temp)\n\
+    \    {\n        if(val!=\"\")\n        {\n            ret[k++] = val;\n      \
+    \  }\n    }\n    return ret;\n}", "{\n    auto result = [];\n    int i = 0;\n\
+    \    foreach(c; paren_string) \n    {\n        if(c == '(') \n        {\n    \
+    \        int k = i + 1;\n            int z = 1;\n            while(z != 0) \n\
+    \            {\n                c = paren_string[k];\n                if(c ==\
+    \ '(') z++;\n                if(c == ')') z--;\n                k++;\n       \
+    \     }\n            string temp = paren_string[i..k-1];\n            result ~=\
+    \ temp;\n            i = k;\n        }\n    }\n    return result;\n}", "{\n  \
+    \  import std.string;\n    enum n = paren_string.length;\n    auto paren_string_arr\
+    \ = paren_string.split;\n    int[int] index_range = [0 : n];\n    auto paren_string_arr_nospace\
+    \ = paren_string_arr.filter!(p =&gt; (p != \" \"));\n    return paren_string_arr_nospace.groupby!(p\
+    \ =&gt; p[0])\n                    .map!(u =&gt; u.array).array.map!(v =&gt; v.join).array;\n\
+    }", "{\n    int[][] stack = new int[][];\n    uint num_groups = 0;\n    bool is_in_paren\
+    \ = false;\n    foreach(idx, paren; paren_string)\n    {\n        if(paren ==\
+    \ '(')\n        {\n            if(!is_in_paren)\n            {\n             \
+    \   // start new group\n                stack ~= new int[];\n                num_groups\
+    \ += 1;\n                is_in_paren = true;\n            }\n            stack[$-1]\
+    \ ~= idx;\n        }\n        else if(paren == ')')\n        {\n            if(!is_in_paren)\n\
+    \            {\n                throw new Exception(\"unbalanced parentheses\"\
+    );\n            }\n            stack[$-1] ~= idx;\n        }\n    }\n    if(is_in_paren)\n\
+    \    {\n        throw new Exception(\"unbalanced parentheses\");\n    }\n    string[]\
+    \ paren_groups = new string[num_groups];\n    for(uint i = 0; i < num_groups;\
+    \ i++)\n    {\n        paren_groups[i] = paren_string[stack[i][0]..stack[i][$-1]];\n\
+    \    }\n    return paren_groups;\n}\n/*\n Read in a string and return the word\
+    \ that has the most repeated letters. If there are no repeated letters,\n    return\
+    \ null.\n    >>> word_with_most_repeated_letters(\"she sells sea shells by the\
+    \ sea shore\")\n    \"shells\"\n*/\nstring word_with_most_repeated_letters(string\
+    \ sentence)\n{\n    string[] words = sentence.split(\" \");\n    uint max_repeats\
+    \ = 0;\n    string max_word = null;\n    for(string word; words)\n    {\n    \
+    \    auto counts = count(word);\n        auto repeats = counts.values.max;\n \
+    \       if(repeats > max_repeats)\n        {\n            max_repeats = repeats;\n\
+    \            max_word = word;\n        }\n    }\n    return max_word;\n}\n/*\n\
+    \ Given a length n and an integer k, write a function that returns a length n\
+    \ string that contains k-dist", "{\n    auto open_parens = \"(\";\n    auto close_parens\
+    \ = \")\";\n    auto open_braces = \"[\";\n    auto close_braces = \"]\";\n  \
+    \  auto open_brackets = \"{\";\n    auto close_brackets = \"}\";\n    auto open_chars\
+    \ = open_parens ~ open_braces ~ open_brackets;\n    auto close_chars = close_parens\
+    \ ~ close_braces ~ close_brackets;\n    auto all_chars = open_chars ~ close_chars;\n\
+    \    auto paren_string_no_spaces = filter!(a => a in all_chars)(paren_string);\n\
+    \    auto stack = Stack!(char)();\n    auto start_stop_locations = Tuple!(size_t,\
+    \ size_t)();\n    auto i = 0;\n    foreach(character; paren_string_no_spaces)\n\
+    \    {\n        if(character in open_chars)\n        {\n            stack.push(character);\n\
+    \            start_stop_locations.append(i);\n        }\n        else\n      \
+    \  {\n            stack.pop();\n            if(stack.empty)\n            {\n \
+    \               start_stop_locations.append(i);\n            }\n        }\n  \
+    \      i++;\n    }\n    enum num_elements = start_stop_locations.length;\n   \
+    \ auto output = string[]((num_elements + 1) / 2);\n    auto j = 0;\n    foreach(tuple;\
+    \ start_stop_locations)\n    {\n        output[j] = paren_string_no_spaces[tuple[0]..tuple[1]\
+    \ + 1];\n        j++;\n    }\n    return output;\n}", "{\n    import std.range;\n\
+    \    import std.algorithm;\n    string[] res = paren_string.split(' ');\n    res\
+    \ = res.filter!(a => a.length).array;\n    foreach(int i, ref s; res)\n    {\n\
+    \        s = s.filter!(a => a != ' ').array;\n    }\n    return res;\n}"]
 stop_tokens:
 - "\n\n"
 - "\nvoid"

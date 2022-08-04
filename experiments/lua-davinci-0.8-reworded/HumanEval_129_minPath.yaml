@@ -32,7 +32,279 @@ tests: "lu = require('luaunit')\n\nfunction test_humaneval()\nlocal candidate = 
   \ 1, 5}, {3, 8, 9}, {2, 7, 4}}, 8), {1, 5, 1, 5, 1, 5, 1, 5})\n    lu.assertEquals(candidate({{1,\
   \ 2}, {3, 4}}, 10), {1, 2, 1, 2, 1, 2, 1, 2, 1, 2})\n    lu.assertEquals(candidate({{1,\
   \ 3}, {3, 2}}, 10), {1, 3, 1, 3, 1, 3, 1, 3, 1, 3})\nend\n\nos.exit(lu.LuaUnit.run())"
-completions: []
+completions: ["    local n = #grid\n    local dist = {}\n    local h = minheap()\n\
+    \    local p = {v = 0, x = 1, y = 1}\n    dist[1] = {[1] = 0}\n    h:push(p)\n\
+    \    while not h:empty() do\n        local q = h:pop()\n        local u = grid[q.x][q.y]\n\
+    \        for _, v in ipairs({{1, 0}, {-1, 0}, {0, 1}, {0, -1}}) do\n         \
+    \   local i, j = q.x + v[1], q.y + v[2]\n            if i >= 1 and i <= n and\
+    \ j >= 1 and j <= n then\n                local d = q.v + math.abs(u - grid[i][j])\n\
+    \                if not dist[i] or not dist[i][j] or dist[i][j] > d then\n   \
+    \                 dist[i] = dist[i] or {}\n                    dist[i][j] = d\n\
+    \                    h:push({v = d, x = i, y = j})\n                end\n    \
+    \        end\n        end\n    end\n    local x, y = n, n\n    local path = {}\n\
+    \    for i = 1, k do\n        table.insert(path, grid[x][y])\n        local cur,\
+    \ d\n        for _, v in ipairs({{1, 0}, {-1, 0}, {0, 1}, {0, -1}}) do\n     \
+    \       local i, j = x + v[1], y + v[2]\n            if i >= 1 and i <= n and\
+    \ j >= 1 and j <= n then\n                local t = dist[i][j]\n             \
+    \   if not cur or d > t then\n                    cur = {i, j}\n             \
+    \       d = t\n                end\n            end\n        end\n        x, y\
+    \ = cur[1], cur[2]\n    end\n    return path\nend", "    -- your code here\n \
+    \   return nil\nend", "    local N = #grid\n    local minKPath = {}\n    local\
+    \ kPaths = {}\n    local row, col = 1, 1\n    local moves = { {0, -1}, {-1, 0},\
+    \ {0, 1}, {1, 0} }\n    local t = {}\n    for i = 1, k do\n        table.insert(t,\
+    \ 0)\n    end\n    for i = 1, k do\n        kPaths[i] = {}\n        for j = 1,\
+    \ N * N do\n            kPaths[i][j] = {}\n            for x = 1, k do\n     \
+    \           kPaths[i][j][x] = 0\n            end\n        end\n    end\n    for\
+    \ i = 1, N do\n        for j = 1, N do\n            for x = 1, k do\n        \
+    \        kPaths[1][grid[i][j]][x] = j\n            end\n        end\n    end\n\
+    \    for i = 2, k do\n        for j = 1, N * N do\n            local newGrid =\
+    \ {}\n            for _ = 1, N do\n                newGrid[_] = {}\n         \
+    \       for __ = 1, N do\n                    newGrid[_][__] = 0\n           \
+    \     end\n            end\n            for x = 1, N do\n                for y\
+    \ = 1, N do\n                    if grid[x][y] == j then\n                   \
+    \     for m = 1, 4 do\n                            local newX = x + moves[m][1]\n\
+    \                            local newY = y + moves[m][2]\n                  \
+    \          if newX >= 1 and newX <= N and newY >= 1 and newY <= N then\n     \
+    \                           local newPath = {}\n                             \
+    \   for z = 1, k do\n                                    table.insert(newPath,\
+    \ kPaths[i - 1][grid[newX][newY]][z])\n                                end\n \
+    \                               table.insert(newPath, y)\n                   \
+    \             table.sort(newPath)\n                                local newJ\
+    \ = 0\n                                for z = 1, k do\n                     \
+    \               newJ = newJ * N + newPath[z]\n                               \
+    \ end\n                                newGrid[x][y] = newJ\n                \
+    \            end\n                        end", "    local n = #grid\n    local\
+    \ function get_val(x, y)\n        if 1 <= x and x <= n and 1 <= y and y <= n then\n\
+    \            return grid[x][y]\n        end\n    end\n    local function get_score(x,\
+    \ y, k)\n        if k == 0 then\n            return math.huge\n        end\n \
+    \       local score = get_val(x, y)\n        local min = math.huge\n        for\
+    \ _, d in ipairs({{0, 1}, {0, -1}, {1, 0}, {-1, 0}}) do\n            local xx,\
+    \ yy = x + d[1], y + d[2]\n            local v = get_val(xx, yy)\n           \
+    \ if v then\n                local s = get_score(xx, yy, k - 1)\n            \
+    \    if s ~= math.huge then\n                    s = s + v\n                 \
+    \   if s < min then\n                        min = s\n                    end\n\
+    \                end\n            end\n        end\n        return min\n    end\n\
+    \    local function get_path(x, y, k)\n        if k == 0 then\n            return\
+    \ {get_val(x, y)}\n        end\n        local dirs = {}\n        for _, d in ipairs({{0,\
+    \ 1}, {0, -1}, {1, 0}, {-1, 0}}) do\n            local xx, yy = x + d[1], y +\
+    \ d[2]\n            local v = get_val(xx, yy)\n            if v then\n       \
+    \         local s = get_score(xx, yy, k - 1)\n                if s ~= math.huge\
+    \ then\n                    s = s + v\n                    table.insert(dirs,\
+    \ {d, s})\n                end\n            end\n        end\n        local best_dir,\
+    \ best_score = nil, math.huge\n        for _, d in ipairs(dirs) do\n         \
+    \   if d[2] < best_score then\n                best_dir, best_score = d[1], d[2]\n\
+    \            end\n        end\n        local xx, yy = x + best_dir[1], y + best_dir[2]\n\
+    \        local rest =", "    local N = #grid\n    local function isValid(r, c)\n\
+    \        return 1 <= r and r <= N and 1 <= c and c <= N\n    end\n    local function\
+    \ getValue(r, c)\n        return grid[r][c]\n    end\n    local function less(t1,\
+    \ t2)\n        for i = 1, #t1 do\n            if t1[i] < t2[i] then\n        \
+    \        return true\n            elseif t1[i] > t2[i] then\n                return\
+    \ false\n            end\n        end\n        return false\n    end\n    local\
+    \ function expand(path)\n        local r, c = path[#path][1], path[#path][2]\n\
+    \        local result = {}\n        for _, v in ipairs({{r + 1, c}, {r - 1, c},\
+    \ {r, c + 1}, {r, c - 1}}) do\n            local rr, cc = v[1], v[2]\n       \
+    \     if isValid(rr, cc) then\n                local tmp = {}\n              \
+    \  for _, v in ipairs(path) do\n                    table.insert(tmp, v)\n   \
+    \             end\n                table.insert(tmp, {rr, cc})\n             \
+    \   table.insert(result, tmp)\n            end\n        end\n        return result\n\
+    \    end\n    local function getValues(path)\n        local result = {}\n    \
+    \    for _, v in ipairs(path) do\n            table.insert(result, getValue(v[1],\
+    \ v[2]))\n        end\n        return result\n    end\n    local frontier = {{{1,\
+    \ 1}}}\n    local explored = {}\n    local found = false\n    local finalPath\
+    \ = {}\n    while #frontier > 0 do\n        local path = table.remove(frontier,\
+    \ 1)\n        if #path > k then\n            break\n        end\n        local\
+    \ values = getValues(path)\n        if not found then\n            if #values\
+    \ == k then\n                found = true\n                finalPath = values\n\
+    \            else\n                local toExpand = expand(path)\n           \
+    \     for _, v in ipairs(toExpand) do\n                    if not explored[getValues(v)]\
+    \ then\n                        table.", "    -- build the graph of the grid\n\
+    \    local nodes = {}\n    local N = #grid\n    for i = 1, N do\n        for j\
+    \ = 1, N do\n            nodes[(i - 1) * N + j] = {val = grid[i][j]}\n       \
+    \ end\n    end\n    for i = 1, N do\n        for j = 1, N do\n            if i\
+    \ > 1 then\n                nodes[(i - 1) * N + j].up = nodes[(i - 2) * N + j]\n\
+    \            end\n            if i < N then\n                nodes[(i - 1) * N\
+    \ + j].down = nodes[i * N + j]\n            end\n            if j > 1 then\n \
+    \               nodes[(i - 1) * N + j].left = nodes[(i - 1) * N + j - 1]\n   \
+    \         end\n            if j < N then\n                nodes[(i - 1) * N +\
+    \ j].right = nodes[(i - 1) * N + j + 1]\n            end\n        end\n    end\n\
+    \    -- find the path\n    local min_path\n    for i = 1, N do\n        for j\
+    \ = 1, N do\n            local path = {}\n            local function helper(node,\
+    \ n)\n                table.insert(path, node.val)\n                if n == k\
+    \ then\n                    if not min_path or less(path, min_path) then\n   \
+    \                     min_path = copy(path)\n                    end\n       \
+    \         else\n                    if node.up then\n                        helper(node.up,\
+    \ n + 1)\n                    end\n                    if node.down then\n   \
+    \                     helper(node.down, n + 1)\n                    end\n    \
+    \                if node.left then\n                        helper(node.left,\
+    \ n + 1)\n                    end\n                    if node.right then\n  \
+    \                      helper(node.right, n + 1)\n                    end\n  \
+    \              end\n                table.remove(path)\n            end\n    \
+    \        helper(nodes[(i - 1) * N + j], 1)\n        end\n    end\n    return min_path\n\
+    end", "  local m, n = #grid, #grid[1]\n  local paths = {}\n  local minPath = {}\n\
+    \  local pos = {}\n  for i = 1, m do\n    for j = 1, n do\n      if grid[i][j]\
+    \ == 1 then\n        pos = {i, j}\n      end\n    end\n  end\n  while k > 0 do\n\
+    \    local path = {}\n    table.insert(path, grid[pos[1]][pos[2]])\n    table.insert(paths,\
+    \ path)\n    k = k - 1\n  end\n  minPath = paths[1]\n  for i = 2, #paths do\n\
+    \    if paths[i] < minPath then\n      minPath = paths[i]\n    end\n  end\n  return\
+    \ minPath\nend\nprint(minPath({{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}, 3))\nprint(minPath({{5,\
+    \ 9, 3}, {4, 1, 6}, {7, 8, 2}}, 1))", "  local function cmp(x, y)\n    if x.val\
+    \ == y.val then\n      if x.row == y.row then\n        return x.col < y.col\n\
+    \      else\n        return x.row < y.row\n      end\n    else\n      return x.val\
+    \ < y.val\n    end\n  end\n  local function cmp1(x, y)\n    return x.val < y.val\n\
+    \  end\n  local function get(t, i, j)\n    if 1 <= i and i <= #t and 1 <= j and\
+    \ j <= #t[1] then\n      return t[i][j]\n    end\n  end\n  local function bfs(t,\
+    \ root, k)\n    local queue = {root}\n    local visited = {}\n    visited[root]\
+    \ = true\n    while #queue > 0 do\n      local n = #queue\n      while n > 0 do\n\
+    \        local u = table.remove(queue, 1)\n        local v = {row = u.row, col\
+    \ = u.col, val = u.val}\n        for i = 1, #t do\n          for j = 1, #t[1]\
+    \ do\n            if get(t, i, j) == u.val + 1 then\n              v.row = i\n\
+    \              v.col = j\n              v.val = u.val + 1\n              table.insert(queue,\
+    \ v)\n              visited[v] = true\n            end\n          end\n      \
+    \  end\n        n = n - 1\n      end\n      if #queue > 0 then\n        for _,\
+    \ e in ipairs(queue) do\n          e.val = e.val + 1\n        end\n      end\n\
+    \    end\n    local result = {}\n    for _, e in ipairs(queue) do\n      table.insert(result,\
+    \ e.val)\n    end\n    table.sort(result)\n    return result\n  end\n  local function\
+    \ paths(t, k)\n    local vertices = {}\n    for i = 1, #t do\n      for j = 1,\
+    \ #t[1] do\n        table.insert(vertices, {row = i, col = j, val = t[i][j]})\n\
+    \      end\n", "    local res = {}\n    -- your code here\n    return res\nend",
+  "    local n = #grid\n    if k <= 0 then\n        return {}\n    end\n    if k >\
+    \ n * n then\n        return nil\n    end\n    local cmpFunc = function(lhs, rhs)\n\
+    \        if #lhs ~= #rhs then\n            return false\n        end\n       \
+    \ for i = 1, #lhs do\n            if lhs[i] ~= rhs[i] then\n                return\
+    \ false\n            end\n        end\n        return true\n    end\n    local\
+    \ minTable = {}\n    local minVal = math.huge\n    local dirs = {{-1, 0}, {1,\
+    \ 0}, {0, -1}, {0, 1}}\n    local memo = {}\n    local function dfs(i, j, steps,\
+    \ curVal, visited)\n        if steps == k then\n            if curVal < minVal\
+    \ then\n                minVal = curVal\n                minTable = visited\n\
+    \            elseif curVal == minVal then\n                if cmpFunc(visited,\
+    \ minTable) then\n                    minTable = visited\n                end\n\
+    \            end\n            return\n        end\n        for _, dir in ipairs(dirs)\
+    \ do\n            local nx = i + dir[1]\n            local ny = j + dir[2]\n \
+    \           if nx >= 1 and nx <= n and ny >= 1 and ny <= n then\n            \
+    \    if memo[nx] and memo[nx][ny] and memo[nx][ny] <= curVal then\n          \
+    \          return\n                end\n                local newVal = curVal\
+    \ + grid[nx][ny]\n                local newVisited = {}\n                for _,\
+    \ val in ipairs(visited) do\n                    table.insert(newVisited, val)\n\
+    \                end\n                table.insert(newVisited, grid[nx][ny])\n\
+    \                memo[nx] = memo[nx] or {}\n                memo[nx][ny] = newVal\n\
+    \                dfs(nx, ny, steps + 1, newVal, newVisited)\n            end\n\
+    \        end\n    end\n    for i = 1, n do\n        for j = 1, n do\n        \
+    \    dfs(i, j, 1, grid[i][", "    local n = #grid\n    local function pos(x, y)\n\
+    \        return (x - 1) * n + y\n    end\n    local function value(x, y)\n   \
+    \     return grid[x][y]\n    end\n    local function get(x, y)\n        return\
+    \ x > 0 and x <= n and y > 0 and y <= n and value(x, y) or nil\n    end\n    local\
+    \ function less(x1, y1, x2, y2)\n        return value(x1, y1) < value(x2, y2)\n\
+    \    end\n    local k2 = k * k\n    local goal = {{}, {}}\n    for i = 1, k2 do\n\
+    \        goal[i] = {x = (i - 1) // n + 1, y = (i - 1) % n + 1}\n    end\n    local\
+    \ function h(t, x, y)\n        local res = 0\n        for i = 1, k2 do\n     \
+    \       local cell = t[i]\n            local dx = cell.x - x\n            local\
+    \ dy = cell.y - y\n            res = res + dx * dx + dy * dy\n        end\n  \
+    \      return res\n    end\n    local function make(t, x, y)\n        local res\
+    \ = {}\n        for i = 1, k2 do\n            local cell = t[i]\n            if\
+    \ cell.x == x and cell.y == y then\n                break\n            end\n \
+    \           res[#res + 1] = cell\n        end\n        return res\n    end\n \
+    \   local function find(x, y, k)\n        -- dfs with simple pruning\n       \
+    \ local s = {{x = x, y = y}}\n        local seen = {}\n        seen[pos(x, y)]\
+    \ = true\n        while #s > 0 do\n            local t = s[#s]\n            local\
+    \ x = t.x\n            local y = t.y\n            if k == 1 then\n           \
+    \     return {x = x, y = y}\n            end\n            if get(x - 1, y) and\
+    \ not seen[pos(x - 1, y)] then\n                s[#s + 1] = {x = x - 1, y = y}\n",
+  "  local n = #grid\n  local m = #grid[1]\n  -- Make sure the integers from 1 to\
+    \ n*m appear exactly once.\n  local count = {}\n  for i = 1, n do\n    for j =\
+    \ 1, m do\n      count[grid[i][j]] = true\n    end\n  end\n  for i = 1, n * m\
+    \ do\n    if not count[i] then\n      return {-1}\n    end\n  end\n  local dp\
+    \ = {}\n  local mask = {}\n  local s = {}\n  local c = {}\n  local t = {}\n  local\
+    \ q = {}\n  local valid = {}\n  local pos = {}\n  for i = 1, n do\n    for j =\
+    \ 1, m do\n      pos[grid[i][j]] = {i, j}\n    end\n  end\n  local function get(i,\
+    \ j)\n    return i <= 0 or j <= 0 or i > n or j > m\n  end\n  local function add(q,\
+    \ x, y, z)\n    if get(x, y) then\n      return\n    end\n    z = z + 1\n    if\
+    \ z > k then\n      return\n    end\n    local m = mask[x][y]\n    if s[m] ==\
+    \ nil then\n      s[m] = z\n      t[m] = {grid[x][y]}\n      c[m] = {grid[x][y]}\n\
+    \      table.insert(q, m)\n    elseif s[m] > z then\n      s[m] = z\n      t[m]\
+    \ = {grid[x][y]}\n      c[m] = {grid[x][y]}\n    elseif s[m] == z then\n     \
+    \ if m == 0 then\n        local cmp = {}\n        local v = grid[x][y]\n     \
+    \   for i = 0, v - 1 do\n          cmp[i] = 1\n        end\n        cmp[v] = 0\n\
+    \        for i = v + 1, n * m do\n          cmp[i] = -1\n        end\n       \
+    \ local ans = {}\n        for i = 1, k do\n          ans[i] = cmp[", "    -- TODO\n\
+    end", "    -- your code here\n    return grid\nend", "    if #grid == 0 then\n\
+    \        return {1}\n    end\n    local N = #grid\n    if N == 1 then\n      \
+    \  return {1}\n    end\n    if k == 1 then\n        local min = grid[1][1]\n \
+    \       for i = 1, N do\n            for j = 1, N do\n                if grid[i][j]\
+    \ < min then\n                    min = grid[i][j]\n                end\n    \
+    \        end\n        end\n        return {min}\n    end\n    local dp = {}\n\
+    \    for i = 1, N do\n        dp[i] = {}\n        for j = 1, N do\n          \
+    \  dp[i][j] = {}\n        end\n    end\n    for i = 1, N do\n        for j = 1,\
+    \ N do\n            dp[i][j][1] = {grid[i][j]}\n        end\n    end\n    for\
+    \ l = 2, k do\n        for i = 1, N do\n            for j = 1, N do\n        \
+    \        local cmin = {}\n                local min\n                if i > 1\
+    \ then\n                    if #dp[i - 1][j][l - 1] < #cmin then\n           \
+    \             cmin = dp[i - 1][j][l - 1]\n                        min = cmin[#cmin]\n\
+    \                    elseif #dp[i - 1][j][l - 1] == #cmin then\n             \
+    \           if dp[i - 1][j][l - 1][#cmin] < min then\n                       \
+    \     cmin = dp[i - 1][j][l - 1]\n                            min = cmin[#cmin]\n\
+    \                        end\n                    end\n                end\n \
+    \               if j > 1 then\n                    if #dp[i][j - 1][l - 1] < #cmin\
+    \ then\n                        cmin = dp[i][j - 1][l - 1]\n                 \
+    \       min = cmin[#cmin]\n                    elseif #dp[i][j - 1][l - 1] ==\
+    \ #cmin then\n                        if dp[i][j - 1][l - 1][#cmin] < min then\n\
+    \                            cmin = dp[i][j - 1][l - 1]\n", "\t-- Your code goes\
+    \ here\n\tlocal n = #grid\n\tlocal minPath = {}\n\tlocal function getNeighbor(i,\
+    \ j)\n\t\tlocal neighbor = {}\n\t\tif j < n then\n\t\t\ttable.insert(neighbor,\
+    \ {i, j + 1})\n\t\tend\n\t\tif j > 1 then\n\t\t\ttable.insert(neighbor, {i, j\
+    \ - 1})\n\t\tend\n\t\tif i < n then\n\t\t\ttable.insert(neighbor, {i + 1, j})\n\
+    \t\tend\n\t\tif i > 1 then\n\t\t\ttable.insert(neighbor, {i - 1, j})\n\t\tend\n\
+    \t\treturn neighbor\n\tend\n\tlocal function minPath(k, i, j, prev)\n\t\tif k\
+    \ == 0 then\n\t\t\treturn {}\n\t\tend\n\t\tlocal ans = prev\n\t\tlocal neighbor\
+    \ = getNeighbor(i, j)\n\t\tfor _, v in ipairs(neighbor) do\n\t\t\tlocal r = v[1]\n\
+    \t\t\tlocal c = v[2]\n\t\t\tlocal tmp = minPath(k - 1, r, c, ans)\n\t\t\tif tmp\
+    \ then\n\t\t\t\ttable.insert(tmp, 1, grid[i][j])\n\t\t\t\tif #tmp < #ans then\n\
+    \t\t\t\t\tans = tmp\n\t\t\t\telseif #tmp == #ans then\n\t\t\t\t\tfor ii = 1, #tmp\
+    \ do\n\t\t\t\t\t\tif tmp[ii] < ans[ii] then\n\t\t\t\t\t\t\tans = tmp\n\t\t\t\t\
+    \t\t\tbreak\n\t\t\t\t\t\telseif tmp[ii] > ans[ii] then\n\t\t\t\t\t\t\tbreak\n\t\
+    \t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\t\treturn ans\n\
+    \tend\n\tfor i = 1, n do\n\t\tfor j = 1, n do\n\t\t\tlocal tmp = minPath(k, i,\
+    \ j, minPath)\n\t\t\tif tmp then\n\t\t\t\t", "  local function getIndices()\n\
+    \    local ans = {}\n    for i = 1, #grid do\n      for j = 1, #grid[i] do\n \
+    \       table.insert(ans, {i, j})\n      end\n    end\n    return ans\n  end\n\
+    \  local function getNeighbors(i, j)\n    local ans = {}\n    if i > 1 then\n\
+    \      table.insert(ans, {i - 1, j})\n    end\n    if i < #grid then\n      table.insert(ans,\
+    \ {i + 1, j})\n    end\n    if j > 1 then\n      table.insert(ans, {i, j - 1})\n\
+    \    end\n    if j < #grid[i] then\n      table.insert(ans, {i, j + 1})\n    end\n\
+    \    return ans\n  end\n  local function cmp(a, b)\n    for i = 1, #a do\n   \
+    \   if a[i] < b[i] then\n        return true\n      elseif a[i] > b[i] then\n\
+    \        return false\n      end\n    end\n    return false\n  end\n  local function\
+    \ recur(curr, path, pathSet, set, depth)\n    if depth == k then\n      return\
+    \ true\n    end\n    for _, idx in ipairs(getNeighbors(curr[1], curr[2])) do\n\
+    \      if not set[idx[1] .. ',' .. idx[2]] then\n        set[idx[1] .. ',' ..\
+    \ idx[2]] = true\n        path[depth + 1] = grid[idx[1]][idx[2]]\n        pathSet[depth\
+    \ + 1] = idx\n        if recur(idx, path, pathSet, set, depth + 1) then\n    \
+    \      return true\n        end\n        set[idx[1] .. ',' .. idx[2]] = nil\n\
+    \      end\n    end\n    return false\n  end\n  local ans, ansSet = {}, {}\n \
+    \ for _, idx in ipairs(getIndices()) do\n    local path, pathSet = {grid[idx[1]][idx[2]]},\
+    \ {idx}", "    local n = #grid\n    local vis = {}\n    local vals = {}\n    local\
+    \ ok = false\n    local min = math.huge\n    local len = math.huge\n    local\
+    \ prev = math.huge\n    local function dfs(i, j, sum, idx)\n        if i < 1 or\
+    \ i > n or j < 1 or j > n or vis[i][j] then\n            return\n        end\n\
+    \        if idx > len then\n            return\n        end\n        vis[i][j]\
+    \ = true\n        sum = sum + grid[i][j]\n        if sum > min then\n        \
+    \    vis[i][j] = false\n            return\n        end\n        if idx == k then\n\
+    \            if sum < min then\n                min = sum\n                len\
+    \ = idx\n                ok = true\n                vals = {grid[i][j]}\n    \
+    \            prev = grid[i][j]\n            elseif sum == min then\n         \
+    \       if idx < len then\n                    len = idx\n                   \
+    \ ok = true\n                    vals = {grid[i][j]}\n                    prev\
+    \ = grid[i][j]\n                elseif idx == len then\n                    if\
+    \ grid[i][j] < prev then\n                        ok = true\n                \
+    \        vals = {grid[i][j]}\n                        prev = grid[i][j]\n    \
+    \                elseif grid[i][j] == prev then\n                        ok =\
+    \ true\n                        vals[#vals + 1] = grid[i][j]\n               \
+    \     end\n                end\n            end\n            vis[i][j] = false\n\
+    \            return\n        end\n        dfs(i + 1, j, sum, idx + 1)\n      \
+    \  dfs(i - 1, j, sum, idx + 1)\n        dfs(i, j + 1, sum, idx + 1)\n        dfs(i,\
+    \ j - 1, sum, idx + 1)\n        vis[i][j] = false\n    end\n    for i = 1, n do\n\
+    \        vis[i] = {}\n    end\n    for i = 1, n do\n        for j = 1, n do\n\
+    \            dfs(i, j, 0, 1)\n        end\n    end\n    if", "  for a,b in pairs(grid)\
+    \ do\n    print(a,b)\n  end\nend", "    -- your code here\n    return {}\nend"]
 stop_tokens:
 - "\nlocal"
 - "\nfunction"

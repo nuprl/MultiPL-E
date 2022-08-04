@@ -14,6 +14,176 @@ tests: "}\n\ncandidate() {\n    strange_sort_list \"$@\"\n}\n\nset -e\nrun_test(
   \ \"1 2 3 4 5 6 7 8\") = \"1 8 2 7 3 6 4 5\" ]]\n    [[ $(candidate \"0 2 2 2 5\
   \ 5 -5 -5\") = \"-5 5 -5 5 0 2 2 2\" ]]\n    [[ $(candidate \"111111\") = \"111111\"\
   \ ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local input=$1\n\n  if [ -z \"$input\" ]; then\n    echo -n \"[]\"\
+    \n    return\n  fi\n\n  read -a arr <<< $input\n  local list=\"\"\n  local len=${#arr[@]}\n\
+    \  local num=\"\"\n  local i=\"\"\n  local start=\"\"\n  local end=\"\"\n  local\
+    \ c=0\n\n  for ((i=0; i<len; i++)); do\n    start=${arr[c]}\n    end=${arr[len-c-1]}\n\
+    \    num=$(echo -n \"\\\"$start\\\"\")\n    if [[ \"$i\" != $((len-1)) ]]; then\n\
+    \      num+=$(echo -n \", \")\n    fi\n    list+=$num\n    num=$(echo -n \"\\\"\
+    $end\\\"\")\n    if [[ \"$i\" != $((len-1)) ]]; then\n      num+=$(echo -n \"\
+    , \")\n    fi\n    list+=$num\n    ((c++))\n  done\n\n  echo -n \"[$list]\"",
+  "  local -a arr=($1)\n  local result=()\n  local dir=\"min\"\n  local -i i=0\n \
+    \ local -i n=${#arr[@]}\n  local -i c=1\n  local -i ce=(n-c)\n  local -i j\n \
+    \ while [ $n -gt 0 ]; do\n    local len=$n\n    if [ $c -gt $ce ]; then\n    \
+    \  dir=\"max\"\n    elif [ $c -eq 1 ]; then\n      dir=\"min\"\n    fi\n    if\
+    \ [ $dir == \"min\" ]; then\n      j=$(echo $@ | tr ' ' '\\n' | sort -n | tail\
+    \ -n+$c | head -n1)\n      result[$i]=$j\n      let c++\n    else\n      j=$(echo\
+    \ $@ | tr ' ' '\\n' | sort -n | tail -n$c | head -n1)\n      result[$i]=$j\n \
+    \     let c--\n    fi\n    arr=(${arr[@]/$j})\n    let i++\n    let n--\n  done\n\
+    \  echo ${result[@]}", "    list=( $1 )\n    sorted_list=()\n    sorted_list+=(${list[0]})\n\
+    \    list=( ${list[@]:1} )\n    i=0\n    for num in ${list[@]}; do\n        if\
+    \ (( $i % 2 == 0 )); then\n            sorted_list+=($(echo \"${list[@]}\" | tr\
+    \ ' ' '\\n' | sort -nr | head -n 1))\n            list=( $(echo \"${list[@]}\"\
+    \ | tr ' ' '\\n' | sort -nr | tail -n +2) )\n        else\n            sorted_list+=($(echo\
+    \ \"${list[@]}\" | tr ' ' '\\n' | sort -n | head -n 1))\n            list=( $(echo\
+    \ \"${list[@]}\" | tr ' ' '\\n' | sort -n | tail -n +2) )\n        fi\n      \
+    \  i=$(( $i + 1 ))\n    done\n    echo \"${sorted_list[@]}\"", "  local arr=()\n\
+    \  local i=0\n  for el in $1; do\n    arr[$i]=$el\n    ((i++))\n  done\n  local\
+    \ len=${#arr[@]}\n  local i=$len\n  local j=$(($len / 2))\n  local k=0\n  local\
+    \ tmp\n\n  while [ $j -gt 0 ]; do\n    while [ $i -ge $j ]; do\n      k=$i\n \
+    \     while [ $k -ge $j ]; do\n        if [ ${arr[$k]} -lt ${arr[$((k - j))]}\
+    \ ]; then\n          tmp=${arr[$k]}\n          arr[$k]=${arr[$((k - j))]}\n  \
+    \        arr[$((k - j))]=$tmp\n        fi\n        ((k-=j))\n      done\n    \
+    \  ((i--))\n    done\n    i=$len\n    ((j /= 2))\n  done\n\n  # convert from arr\
+    \ to list\n  local out=()\n  for el in ${arr[@]}; do\n    out+=(\"\\\"$el\\\"\"\
+    )\n  done\n  echo \"${out[@]}\"", "  local python_code='\nimport sys\nfrom collections\
+    \ import deque\n\ninteger_list = [int(x) for x in sys.argv[1].split()]\ninteger_deque\
+    \ = deque(sorted(integer_list))\n\noutput_list = []\nwhile integer_deque:\n  \
+    \  output_list.append(str(integer_deque.popleft()))\n    if integer_deque:\n \
+    \       output_list.append(str(integer_deque.pop()))\nprint(output_list)'\n  python3\
+    \ -c \"$python_code\" \"$1\"", "    [ $# -eq 0 ] && echo [] && return\n    local\
+    \ res=\"\"\n    local -a a=($1)\n    local -a b=($1)\n    local num=${#a[@]}\n\
+    \    for ((i=0; i<num; i++)); do\n        local min=${a[0]}\n        local min_ind=0\n\
+    \        for ((j=1; j<${#a[@]}; j++)); do\n            if [ ${a[j]} -lt $min ];\
+    \ then\n                min=${a[j]}\n                min_ind=$j\n            fi\n\
+    \        done\n        if [ $((i%2)) -eq 0 ]; then\n            res+=\"\\\"$min\\\
+    \" \"\n        else\n            res=\"\\\"$min\\\" $res\"\n        fi\n     \
+    \   unset a[$min_ind]\n    done\n    echo $res", "    local list=(\"$@\")\n  \
+    \  local n=${#list[@]}\n    local tmp=()\n    local result=()\n    local i=0\n\
+    \    local step=0\n    # Can't sort empty array, this is for preventing infinite\
+    \ loop in the if-statement below\n    if [[ $n -eq 0 ]]; then\n        echo \"\
+    $result\"\n        return\n    fi\n    sort -n <(printf \"%s\\n\" \"${list[@]}\"\
+    ) >tmp\n    while [[ $n -gt 0 ]]; do\n        if [[ $step -eq 0 ]]; then\n   \
+    \         result+=(\"${tmp[$i]}\")\n            tmp=(\"${tmp[@]:0:$i}\" \"${tmp[@]:$((i+1))}\"\
+    )\n            n=$((n-1))\n            step=1\n        else\n            local\
+    \ j=$((n-1))\n            result+=(\"${tmp[$j]}\")\n            tmp=(\"${tmp[@]:0:$j}\"\
+    \ \"${tmp[@]:$((j+1))}\")\n            n=$((n-1))\n            step=0\n      \
+    \  fi\n    done\n    printf \"[%s]\\n\" \"$(printf '\"%s\", ' \"${result[@]}\"\
+    )\"", "    local list=(\"$@\")\n    local list_size=\"${#list[@]}\"\n    local\
+    \ sorted_list=()\n    local index=0\n    local min=0\n    local max=0\n    local\
+    \ min_index=0\n    local max_index=0\n    for ((i=0; i<list_size; i++)); do\n\
+    \        if [[ $((i%2)) -eq 0 ]]; then\n            for ((j=0; j<list_size; j++));\
+    \ do\n                if [[ ${list[j]} < ${list[min_index]} ]]; then\n       \
+    \             min_index=$j\n                fi\n            done\n           \
+    \ min=${list[min_index]}\n            list[min_index]=$((min+1))\n           \
+    \ sorted_list[index]=$min\n            index=$((index+1))\n        else\n    \
+    \        for ((j=0; j<list_size; j++)); do\n                if [[ ${list[j]} >\
+    \ ${list[max_index]} ]]; then\n                    max_index=$j\n            \
+    \    fi\n            done\n            max=${list[max_index]}\n            list[max_index]=$((max-1))\n\
+    \            sorted_list[index]=$max\n            index=$((index+1))\n       \
+    \ fi\n    done\n    for ((i=0; i<list_size; i++)); do\n        if [[ $i -eq 0\
+    \ ]]; then\n            printf \"[\\\"%s\\\"\" \"${sorted_list[i]}\"\n       \
+    \ else\n            printf \", \\\"%s\\\"\" \"${sorted_list[i]}\"\n        fi\n\
+    \    done\n    printf \"]\\n\"", "    input=$1\n    l=\n    while [ \"$input\"\
+    \ != \"\" ]; do\n        min=`echo \"$input\" | cut -d' ' -f1`\n        max=`echo\
+    \ \"$input\" | cut -d' ' -f1`\n        for i in $input; do\n            if [ $i\
+    \ -lt $min ]; then\n                min=$i\n            fi\n            if [ $i\
+    \ -gt $max ]; then\n                max=$i\n            fi\n        done\n   \
+    \     input=`echo \"$input\" | sed \"s/$min//g\" | sed \"s/$max//g\"`\n      \
+    \  l=\"$l $min $max\"\n    done\n    echo $l", "  if [ $# -eq 0 ]; then\n    echo\
+    \ []\n    return\n  fi\n  numbers=$(echo $@ | tr ' ' '\\n' | sort -n)\n  result=$(echo\
+    \ $numbers | sed 's/\\([0-9]*\\)/\"\\1\"/g')\n  echo [$result]", "    local list=\"\
+    $1\"\n    local sorted=$(echo \"$list\" | xargs -n1 | sort -n)\n    local min=$(echo\
+    \ \"$sorted\" | head -n1)\n    local max=$(echo \"$sorted\" | tail -n1)\n    local\
+    \ odd_numbers=()\n    local even_numbers=()\n    local odd_index=0\n    local\
+    \ even_index=0\n    local result=()\n    local counter=0\n    while [[ ${#sorted}\
+    \ -gt 0 ]]; do\n        if [[ $counter -eq 0 ]]; then\n            odd_numbers[$odd_index]=$min\n\
+    \            sorted=$(echo \"$sorted\" | sed \"s/$min//\")\n            let odd_index+=1\n\
+    \        else\n            even_numbers[$even_index]=$max\n            sorted=$(echo\
+    \ \"$sorted\" | sed \"s/$max//\")\n            let even_index+=1\n        fi\n\
+    \        let counter+=1\n        if [[ $counter -gt 1 ]]; then\n            let\
+    \ counter=0\n        fi\n        min=$(echo \"$sorted\" | head -n1)\n        max=$(echo\
+    \ \"$sorted\" | tail -n1)\n    done\n    for ((i=0; i<${#odd_numbers[@]}; i++));\
+    \ do\n        result+=(\"\\\"${odd_numbers[$i]}\\\"\")\n        if [[ $i -eq $((\
+    \ ${#even_numbers[@]} - 1 )) ]]; then\n            result+=(\"\\\"${even_numbers[$i]}\\\
+    \"\")\n        elif [[ $i -lt $(( ${#even_numbers[@]} - 1 )) ]]; then\n      \
+    \      result+=(\"\\\"${even_numbers[$i]}\\\"\")\n        fi\n    done\n    echo\
+    \ ${result[@]}", "  if [ \"$#\" -eq 0 ]; then\n    echo \"[]\"\n    return\n \
+    \ fi\n  local list\n  local str=\"[\"\n  list=($@)\n  # sort in decending order\n\
+    \  list=($(printf \"%s\\n\" \"${list[@]}\" | sort -g -r))\n  while [ \"${#list[@]}\"\
+    \ -gt 0 ]; do\n    str=\"$str\\\"${list[0]}\\\"\"\n    list=(${list[@]:1})\n \
+    \   if [ \"${#list[@]}\" -gt 0 ]; then\n      str=\"$str, \"\n    fi\n  done\n\
+    \  str=\"$str]\"\n  echo \"$str\"", "    local list=()\n    local nums=()\n  \
+    \  local temp=()\n    local result=()\n    local is_odd=false\n    local first_idx=0\n\
+    \    local last_idx=0\n    local mid_idx=0\n    local curr_idx=0\n    local next_idx=0\n\
+    \    local num=0\n    local i=0\n    local j=0\n    list=(\"$@\")\n    # Find\
+    \ the count of elements in the list\n    last_idx=$((${#list[@]} - 1))\n    #\
+    \ Check if the count is odd or even\n    if (( $last_idx % 2 == 0 )); then\n \
+    \       mid_idx=$((last_idx / 2))\n    else\n        mid_idx=$(((last_idx + 1)\
+    \ / 2))\n        is_odd=true\n    fi\n    # If odd, process the mid element first\n\
+    \    if $is_odd; then\n        result+=(\"${list[$mid_idx]}\")\n    fi\n    #\
+    \ Process the left part of the list\n    i=$first_idx\n    while (( i <= mid_idx\
+    \ )); do\n        curr_idx=$((first_idx + i))\n        next_idx=$((last_idx -\
+    \ i))\n        result+=(\"${list[$curr_idx]}\")\n        result+=(\"${list[$next_idx]}\"\
+    )\n        ((i++))\n    done\n    # Print the array\n    echo \"${result[@]}\"",
+  "    local list=($(echo \"$1\" | tr ' ' '\\n' | sort -g))\n    local count=${#list[@]}\n\
+    \    local mid=$((count / 2))\n    local result=()\n    for ((i=0; i<mid; i++));\
+    \ do\n        result[$i]=${list[$i]}\n        result[$((i + mid))]=${list[$((count\
+    \ - i - 1))]}\n    done\n    if ((count % 2)); then\n        result[$mid]=${list[$mid]}\n\
+    \    fi\n    printf \"%s\\n\" \"${result[@]}\"", "  list=( $1 )\n  for ((i=1;i<=${#list[@]};i++));\
+    \ do\n    num=$(($i % 2))\n    if [ $num -eq 0 ]; then\n      echo -n \"\\\"${list[$((${#list[@]}\
+    \ - $i))]}\\\" \"\n    else\n      echo -n \"\\\"${list[$i - 1]}\\\" \"\n    fi\n\
+    \  done", "  # a function to return an array's length\n  array_length() {\n  \
+    \  # $# returns the number of arguments\n    echo \"$#\"\n  }\n  # declaring the\
+    \ array, setting element 0 to the first argument\n  # it is important to set element\
+    \ 0, otherwise shellcheck will complain\n  list=( \"$1\" )\n  # get the length\
+    \ of the list\n  length=$(array_length \"${list[@]}\")\n  # declaring the index\
+    \ variable, because shellcheck is complaining\n  # again about it being referenced\
+    \ before being assigned\n  index=0\n  # for index in the range of the list length\n\
+    \  for ((index=0; index<length; index++)); do\n    # if the index is odd\n   \
+    \ if ((index%2)); then\n      # set list[index] to the element at the maximum\
+    \ value, then unset the maximum\n      list[index]=$(max \"${list[@]}\")\n   \
+    \   unset \"$(max \"${list[@]}\")\"\n    # if the index is even\n    else\n  \
+    \    # set list[index] to the element at the minimum value, then unset the minimum\n\
+    \      list[index]=$(min \"${list[@]}\")\n      unset \"$(min \"${list[@]}\")\"\
+    \n    fi\n  done\n  # return the list\n  echo \"${list[@]}\"", "  if [ -z \"$1\"\
+    \ ]; then\n    echo \"[]\"\n    return\n  fi\n  declare -a num_array=($1)\n  declare\
+    \ -a strange_array=()\n  while (( ${#num_array[@]} > 0 )); do\n    # Find minimum\n\
+    \    min=$(echo \"${num_array[*]}\" | tr ' ' '\\n' | sort -n | head -n 1)\n  \
+    \  min_idx=$(echo \"${num_array[*]}\" | tr ' ' '\\n' | grep -n \"^$min$\" | cut\
+    \ -d ':' -f 1)\n    # Remove minimum from array\n    num_array=(${num_array[@]:0:$min_idx-1}\
+    \ ${num_array[@]:$min_idx})\n    # Append minimum to strange array\n    strange_array+=($min)\n\
+    \    # Exit if num_array is empty\n    if (( ${#num_array[@]} == 0 )); then\n\
+    \      break\n    fi\n    # Find maximum\n    max=$(echo \"${num_array[*]}\" |\
+    \ tr ' ' '\\n' | sort -n | tail -n 1)\n    max_idx=$(echo \"${num_array[*]}\"\
+    \ | tr ' ' '\\n' | grep -n \"^$max$\" | cut -d ':' -f 1)\n    # Remove maximum\
+    \ from array\n    num_array=(${num_array[@]:0:$max_idx-1} ${num_array[@]:$max_idx})\n\
+    \    # Append maximum to strange array\n    strange_array+=($max)\n  done\n  printf\
+    \ \"['\"%s\"'\" \"${strange_array[@]}\"\n  echo \"]\"", "  local -a list=($1)\n\
+    \  local -a new_list=()\n  local -i i=0 j=0\n  if [ ${#list[@]} -eq 0 ]; then\n\
+    \    echo \"[]\"\n    return\n  fi\n  for ((i=0; i<${#list[@]}; i++)); do\n  \
+    \  if [ $((i%2)) -eq 0 ]; then\n      # even indices get min\n      new_list[$i]=$(echo\
+    \ \"${list[@]}\" | tr ' ' '\\n' | sort -g | head -n 1)\n      list=(${list[@]/${new_list[$i]}/})\n\
+    \    else\n      # odd indices get max\n      new_list[$i]=$(echo \"${list[@]}\"\
+    \ | tr ' ' '\\n' | sort -g | tail -n 1)\n      list=(${list[@]/${new_list[$i]}/})\n\
+    \    fi\n  done\n  echo \"[$(for ((j=0; j<${#new_list[@]}; j++)); do\n       \
+    \   echo -n '\"'${new_list[$j]}'\"'\n          if [ $j -lt $((i-1)) ]; then\n\
+    \            echo -n ', '\n          fi\n        done)]\"", "    # Arguments are\
+    \ not empty\n    [ -z \"$1\" ] && return 0\n    local list=\"$1\"\n    local res=\"\
+    []\"\n    while [ \"$list\" != \"\" ]; do\n        local min=\"$(echo \"$list\"\
+    \ | cut -d \" \" -f 1)\"\n        local max=\"$min\"\n        for el in $list;\
+    \ do\n            [ \"$el\" -lt \"$min\" ] && min=\"$el\"\n            [ \"$el\"\
+    \ -gt \"$max\" ] && max=\"$el\"\n        done\n        if [ \"$res\" == \"[]\"\
+    \ ]; then\n            res=\"[\\\"$min\\\"\"\n        else\n            res=\"\
+    $res, \\\"$min\\\"\"\n        fi\n        if [ \"$min\" != \"$max\" ]; then\n\
+    \            res=\"$res, \\\"$max\\\"\"\n        fi\n        list=\"$(echo \"\
+    $list\" | tr \" \" \"\\n\" | grep -v \"$min\" | grep -v \"$max\" | tr \"\\n\"\
+    \ \" \")\"\n    done\n    echo \"$res]\"", "  local sorted=$(sort -n <<< \"$1\"\
+    )\n  local ret\n  local front=true\n  # TODO: Figure out how to use $IFS here.\n\
+    \  while read -r line; do\n    if $front; then\n      ret=\"$ret $(head -n 1 <<<\
+    \ \"$sorted\")\"\n      sorted=$(tail -n +2 <<< \"$sorted\")\n    else\n     \
+    \ ret=\"$ret $(tail -n 1 <<< \"$sorted\")\"\n      sorted=$(head -n -1 <<< \"\
+    $sorted\")\n    fi\n    front=!$front\n  done <<< \"$1\"\n  # TODO: Figure out\
+    \ how to not include the space in front\n  echo \"[$(tr ' ' ',' <<< \"$ret\")]\""]
 stop_tokens:
 - "\n}"

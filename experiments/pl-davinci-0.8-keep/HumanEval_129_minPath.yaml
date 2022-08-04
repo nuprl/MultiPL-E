@@ -41,7 +41,205 @@ tests: "use Test::Deep;\n\n\nsub testhumaneval {\n    my $candidate = \\&minPath
   \ 2, 1, 2, 1, 2])) {\n        print \"ok!\" }else{\n        exit 1;\n        }\n\
   \        if(eq_deeply($candidate->([[1, 3], [3, 2]], 10),[1, 3, 1, 3, 1, 3, 1, 3,\
   \ 1, 3])) {\n        print \"ok!\" }else{\n        exit 1;\n        }\n}\n\ntesthumaneval();"
-completions: []
+completions: ['}', "    my $m = scalar(@$grid);\n    my $n = scalar(@{$grid->[0]});\n\
+    \    my $paths = [];\n    my $visited = [];\n    for my $i (0..$m-1) {\n     \
+    \   for my $j (0..$n-1) {\n            if ($k == 1) {\n                push @$paths,\
+    \ [$grid->[$i][$j]];\n            } else {\n                $visited->[$i][$j]\
+    \ = 1;\n                my $neighbours = [];\n                push @$neighbours,\
+    \ [$i-1, $j] if $i - 1 >= 0;\n                push @$neighbours, [$i+1, $j] if\
+    \ $i + 1 < $m;\n                push @$neighbours, [$i, $j-1] if $j - 1 >= 0;\n\
+    \                push @$neighbours, [$i, $j+1] if $j + 1 < $n;\n             \
+    \   for my $neighbour (@$neighbours) {\n                    my $q = $neighbour->[0];\n\
+    \                    my $p = $neighbour->[1];\n                    next if $visited->[$q][$p];\n\
+    \                    $visited->[$q][$p] = 1;\n                    push @$paths,\
+    \ [$grid->[$i][$j], @{minPath($grid, $k-1)}];\n                    $visited->[$q][$p]\
+    \ = 0;\n                }\n                $visited->[$i][$j] = 0;\n         \
+    \   }\n        }\n    }\n    my $min_path = $paths->[0];\n    for my $path (@$paths)\
+    \ {\n        if (compare_paths($path, $min_path) < 0) {\n            $min_path\
+    \ = $path;\n        }\n    }\n    return $min_path;\n}", "    return [1] if $k\
+    \ == 1;\n    my($n) = scalar(@$grid);\n    return [map { $_->[0] } @$grid] if\
+    \ $k == $n;\n    return [map { $_->[0] } reverse @$grid] if $k == $n * 2 - 1;\n\
+    \    my($min_path, $min_sum) = ([], $n * $n + 1);\n    for my $i (0 .. $n - 1)\
+    \ {\n        for my $j (0 .. $n - 1) {\n            my($path, $sum) = findPath(grid\
+    \ => $grid, k => $k, row => $i, col => $j);\n            if (defined($path) &&\
+    \ $sum < $min_sum) {\n                $min_path = $path;\n                $min_sum\
+    \ = $sum;\n            }\n        }\n    }\n    return $min_path;\n}", "    my\
+    \ $n = scalar(@$grid);\n    my $m = scalar(@{$grid->[0]});\n    my $map = [];\n\
+    \    for (my $i = 0; $i < $n; $i++) {\n        for (my $j = 0; $j < $m; $j++)\
+    \ {\n            $map->[$i][$j] = $grid->[$i][$j];\n        }\n    }\n    my $queue\
+    \ = [ [0,0,0] ];\n    my $visited = {};\n    while (scalar(@$queue) > 0) {\n \
+    \       my $tuple = shift @$queue;\n        my $x = $tuple->[0];\n        my $y\
+    \ = $tuple->[1];\n        my $pathLength = $tuple->[2];\n        next if ($visited->{\"\
+    $x,$y\"});\n        $visited->{\"$x,$y\"} = 1;\n        return @{$map->[$x][$y]}\
+    \ if ($pathLength == $k);\n        $pathLength++;\n        push @$queue, [$x-1,\
+    \ $y, $pathLength] if ($x > 0);\n        push @$queue, [$x+1, $y, $pathLength]\
+    \ if ($x < $n-1);\n        push @$queue, [$x, $y-1, $pathLength] if ($y > 0);\n\
+    \        push @$queue, [$x, $y+1, $pathLength] if ($y < $m-1);\n    }\n    die\
+    \ \"not found!\";\n}", "    die unless defined $grid && @$grid;\n    my $size\
+    \ = @$grid;\n    my $min = $size * $size;\n    my @ans;\n    for my $i (0 .. $size\
+    \ - 1) {\n        for my $j (0 .. $size - 1) {\n            my $cell = $grid->[$i][$j];\n\
+    \            my @path = ($cell);\n            next if $k == 1;\n            my\
+    \ %seen;\n            @seen{$i, $j} = (1, 1);\n            minPathHelper($grid,\
+    \ $i, $j, \\@path, \\%seen, $min, \\@ans, $k);\n        }\n    }\n    return @ans;\n\
+    }", "    my $m = @$grid;\n    my $n = @{$grid->[0]};\n    my $minPath = [];\n\
+    \    for (my $i = 0; $i < $m; $i++) {\n        for (my $j = 0; $j < $n; $j++)\
+    \ {\n            my $value = $grid->[$i][$j];\n            my $path = [];\n  \
+    \          backtrack($grid, $i, $j, $k, $path, $minPath);\n        }\n    }\n\
+    \    return $minPath;\n}", "    die unless $k >= 1;\n    my $n = scalar(@$grid);\n\
+    \    for my $i (0..$n-1) {\n        die unless scalar(@{$grid->[$i]}) == $n;\n\
+    \    }\n    my $smaller = sub {\n        my($grid, $a, $b) = @_;\n        return\
+    \ 1 if $a->{k} < $b->{k};\n        return 0 if $a->{k} > $b->{k};\n        for\
+    \ my $i (0..$a->{k}-1) {\n            return 1 if $a->{lst}->[$i] < $b->{lst}->[$i];\n\
+    \            return 0 if $a->{lst}->[$i] > $b->{lst}->[$i];\n        }\n     \
+    \   return 0;\n    };\n    my $key = sub {\n        my($grid, $node) = @_;\n \
+    \       my $s = '';\n        $s .= \"|$node->{x}\";\n        $s .= \"|$node->{y}\"\
+    ;\n        $s .= \"|$node->{k}\";\n        for my $i (0..$node->{k}-1) {\n   \
+    \         $s .= \"|$node->{lst}->[$i]\";\n        }\n        return $s;\n    };\n\
+    \    my $path = sub {\n        my($grid, $node) = @_;\n        my @path = ();\n\
+    \        for my $i (0..$node->{k}-1) {\n            push @path, $node->{lst}->[$i];\n\
+    \        }\n        return \\@path;\n    };\n    my $isGoal = sub {\n        my($grid,\
+    \ $node) = @_;\n        return $node->{k} == $k;\n    };\n    my $getNexts = sub\
+    \ {\n        my($grid, $node) = @_;\n        my @nexts = ();\n        for my $i\
+    \ (-1..1) {\n            for my $j (-1..1) {\n                if", "    my @ret\
+    \ = ();\n    my $m = @$grid;\n    my $n = @{$grid->[0]};\n    my %pos = ();\n\
+    \    for my $i (0..$m-1) {\n        for my $j (0..$n-1) {\n            $pos{$grid->[$i][$j]}\
+    \ = [$i, $j];\n        }\n    }\n    my @pos = values %pos;\n    my %p = ();\n\
+    \    for my $i (0..$m-1) {\n        for my $j (0..$n-1) {\n            $p{$i}{$j}\
+    \ = [$i, $j];\n        }\n    }\n    my @A = sort {$a <=> $b} keys %pos;\n   \
+    \ my $X = [];\n    my $Y = [];\n    my $ind = 0;\n    while ($ind < $k) {\n  \
+    \      push @ret, $A[$ind];\n        my ($r, $c) = @{$pos{$A[$ind]}};\n      \
+    \  if ($r + 1 < $m) {\n            $p{$r+1}{$c} = [$r, $c];\n        }\n     \
+    \   if ($r - 1 >= 0) {\n            $p{$r-1}{$c} = [$r, $c];\n        }\n    \
+    \    if ($c + 1 < $n) {\n            $p{$r}{$c+1} = [$r, $c];\n        }\n   \
+    \     if ($c - 1 >= 0) {\n            $p{$r}{$c-1} = [$r, $c];\n        }\n  \
+    \      push @$X, $r;\n        push @$Y, $c;\n        $ind++;\n    }\n    while\
+    \ ($ind < @A) {\n        my ($r, $c) = @{$pos{$A[$ind]}};\n        my ($r0, $c0)\
+    \ = @{$p{$r}{$c}};\n        my $i = 0;\n        while ($X->[$i] != $r0 || $Y->[$i",
+  "    my @path;\n    my $n = scalar(@$grid);\n    my @visited;\n    for my $i (0..$n-1)\
+    \ {\n        for my $j (0..$n-1) {\n            if ($grid->[$i][$j] == 1) {\n\
+    \                $visited[$i][$j] = 1;\n                push @path, [$i, $j];\n\
+    \                goto FINISH if scalar(@path) == $k;\n            }\n        }\n\
+    \    }\n    FINISH:\n    return [1] if $k == 1;\n    my @result;\n    for my $p\
+    \ (@path) {\n        my($i, $j) = @$p;\n        if ($i > 0 && !$visited[$i-1][$j])\
+    \ {\n            $visited[$i-1][$j] = 1;\n            push @result, $grid->[$i-1][$j];\n\
+    \        }\n        elsif ($j > 0 && !$visited[$i][$j-1]) {\n            $visited[$i][$j-1]\
+    \ = 1;\n            push @result, $grid->[$i][$j-1];\n        }\n        elsif\
+    \ ($i < $n-1 && !$visited[$i+1][$j]) {\n            $visited[$i+1][$j] = 1;\n\
+    \            push @result, $grid->[$i+1][$j];\n        }\n        elsif ($j <\
+    \ $n-1 && !$visited[$i][$j+1]) {\n            $visited[$i][$j+1] = 1;\n      \
+    \      push @result, $grid->[$i][$j+1];\n        }\n    }\n    return \\@result;\n\
+    }", "    return undef;\n}", "    my @candidates;\n    for my $i (0 .. $#{$grid})\
+    \ {\n        for my $j (0 .. $#{$grid->[$i]}) {\n            push @candidates,\
+    \ [$i, $j];\n        }\n    }\n    minPathHelper(\\@candidates, 0, $k, [], $grid);\n\
+    }", "    my @ret;\n    if ($k < 1) {\n        return @ret;\n    }\n    my $N =\
+    \ scalar(@$grid);\n    my $start = [0, 0];\n    @ret = minPathRecur($grid, $start,\
+    \ $k, \\@ret);\n    return @ret;\n}", "    my $cols = scalar(@$grid);\n    my\
+    \ $rows = scalar(@{$grid->[0]});\n    my %seen;\n    my $min_path;\n    my $min_sum\
+    \ = $k * ($k + 1) / 2;\n    my $last = $cols * $rows;\n    foreach my $i (0 ..\
+    \ $cols - 1) {\n        foreach my $j (0 .. $rows - 1) {\n            my @path\
+    \ = ($grid->[$i][$j]);\n            $seen{$i}{$j} = 1;\n            dfs($grid,\
+    \ $i, $j, \\@path, $cols, $rows, $k, \\%seen, $min_sum, \\$min_path);\n      \
+    \      $seen{$i}{$j} = 0;\n        }\n    }\n    return $min_path;\n}", "    my\
+    \ @result;\n    my $min = scalar(@$grid) * scalar(@$grid);\n    for (my $i = 0;\
+    \ $i < scalar(@$grid); $i++) {\n        for (my $j = 0; $j < scalar(@$grid); $j++)\
+    \ {\n            my @curr = dfs($grid, $i, $j, $k, $min);\n            if (scalar(@curr)\
+    \ < $min) {\n                $min = scalar(@curr);\n                @result =\
+    \ @curr;\n            }\n        }\n    }\n    return @result;\n}", "    my $m\
+    \ = @$grid;\n    my $n = @{$grid->[0]};\n    my $i = 0;\n    my $j = 0;\n    my\
+    \ $minSoFar = 100000;\n    while($i < $m) {\n        while($j < $n) {\n      \
+    \      my @minPath = getMinPath($grid, $i, $j, $k);\n            if(listLexOrder(\\\
+    @minPath, $minSoFar) == -1) {\n                $minSoFar = \\@minPath;\n     \
+    \       }\n            $j++;\n        }\n        $i++;\n    }\n    return $minSoFar;\n\
+    }", "    my @ret = ();\n    if(@{$grid} == 0) {\n        return @ret;\n    }\n\
+    \    if($k < 1) {\n        return @ret;\n    }\n    my @dp = ();\n    my @directions\
+    \ = ([-1, 0], [1, 0], [0, -1], [0, 1]);\n    for(my $i = 0; $i < @{$grid}; $i++)\
+    \ {\n        my @tmp = ();\n        for(my $j = 0; $j < @{$grid}; $j++) {\n  \
+    \          push(@tmp, \"\");\n        }\n        push(@dp, \\@tmp);\n    }\n \
+    \   @ret = @{$grid->[0][0]};\n    $dp[0][0] = $grid->[0][0];\n    for(my $i =\
+    \ 0; $i < @{$grid}; $i++) {\n        for(my $j = 0; $j < @{$grid}; $j++) {\n \
+    \           for(my $d = 0; $d < @directions; $d++) {\n                my $ni =\
+    \ $i + $directions[$d][0];\n                my $nj = $j + $directions[$d][1];\n\
+    \                if($ni >= 0 && $ni < @{$grid} && $nj >= 0 && $nj < @{$grid})\
+    \ {\n                    my @tmp = @{$dp[$i][$j]};\n                    push(@tmp,\
+    \ $grid->[$ni][$nj]);\n                    if(@tmp == $k) {\n                \
+    \        if(@tmp < @ret) {\n                            @ret = @tmp;\n       \
+    \                 } else {\n                            if(@tmp == @ret) {\n \
+    \                               for(my $t = 0; $t < @tmp; $t++) {\n          \
+    \                          if($tmp[$t] > $ret[$t]) {\n                       \
+    \                 last;\n                                    } elsif($tmp[$t]\
+    \ < $ret[$t]) {\n                                        @ret = @tmp;\n      \
+    \                                  last;\n                                   \
+    \ }\n                                }\n                            }\n      \
+    \                  }\n                    } els", "    my $n = scalar(@$grid);\n\
+    \    # $candidate[$i][$j] saves the best candidate for start position\n    # ($i,\
+    \ $j) with length of $k.\n    my @candidate = ();\n    for my $i (0 .. $n - 1)\
+    \ {\n        for my $j (0 .. $n - 1) {\n            push @{$candidate[$i][$j]},\
+    \ $grid->[$i][$j];\n        }\n    }\n    for my $i (0 .. $n - 1) {\n        for\
+    \ my $j (0 .. $n - 1) {\n            for my $x (0 .. $n - 1) {\n             \
+    \   for my $y (0 .. $n - 1) {\n                    my $distance = abs($i - $x)\
+    \ + abs($j - $y);\n                    if ($distance == 1 && @{$candidate[$x][$y]}\
+    \ < $k) {\n                        if (@{$candidate[$x][$y]} == $k - 1) {\n  \
+    \                          push @{$candidate[$x][$y]}, $grid->[$i][$j];\n    \
+    \                    }\n                        elsif (@{$candidate[$x][$y]} <\
+    \ $k - 1) {\n                            @{$candidate[$x][$y]} = \n          \
+    \                      (@{$candidate[$i][$j]}, $grid->[$i][$j]);\n           \
+    \             }\n                    }\n                }\n            }\n   \
+    \     }\n    }\n    my @result = ();\n    for my $i (0 .. $n - 1) {\n        for\
+    \ my $j (0 .. $n - 1) {\n            if (!@result || @{$candidate[$i][$j]} < @result\
+    \ ||\n                (@{$candidate[$i][$j]} == @result &&\n                 isLess(@{$candidate[$i][$j]},\
+    \ @result))) {\n                @result = @{$candidate[$i][$j]};\n           \
+    \ }\n        }\n    }\n    return @result;\n}", "    my $N = scalar(@$grid);\n\
+    \    my @dp;\n    for my $i (0..$N-1) {\n        for my $j (0..$N-1) {\n     \
+    \       $dp[$i][$j] = [[]];\n        }\n    }\n    $dp[0][0][0] = [$grid->[0][0]];\n\
+    \    for my $i (0..$N-1) {\n        for my $j (0..$N-1) {\n            if ($i\
+    \ > 0) {\n                if ($dp[$i-1][$j][0][0] > $grid->[$i][$j]) {\n     \
+    \               $dp[$i][$j] = [[$grid->[$i][$j]]];\n                } else {\n\
+    \                    $dp[$i][$j] = $dp[$i-1][$j];\n                }\n       \
+    \     }\n            if ($j > 0) {\n                my $cur = $dp[$i][$j-1];\n\
+    \                if (my $cmp = compare($cur, $dp[$i][$j])) {\n               \
+    \     if ($cmp < 0) {\n                        $dp[$i][$j] = $cur;\n         \
+    \           }\n                }\n            }\n            for my $sz (0..$N-1)\
+    \ {\n                next if $sz >= scalar(@{$dp[$i][$j]});\n                for\
+    \ my $sz2 (0..$N-1) {\n                    my $new = [@{$dp[$i][$j][$sz]}, $grid->[$i][$j]];\n\
+    \                    if ($sz2 >= scalar(@{$dp[$i][$j]})) {\n                 \
+    \       push @{$dp[$i][$j]}, $new;\n                    } else {\n           \
+    \             if (my $cmp = compare($new, $dp[$i][$j][$sz2])) {\n            \
+    \                if ($cmp < 0) {\n                                $dp[$i][$j][$sz2]\
+    \ = $new;\n                            }\n                        }\n        \
+    \            }\n                }\n           ", "    my @output;\n    my @paths;\n\
+    \    my %path_idx;\n    for my $i (0 .. $#{$grid}) {\n        for my $j (0 ..\
+    \ $#{$grid->[$i]}) {\n            @paths = () if !@paths;\n            my $idx\
+    \ = $i * @{$grid->[$i]} + $j;\n            push @paths, {path => [$grid->[$i][$j]],\
+    \ idx => $idx};\n            if (!exists $path_idx{$idx}) {\n                $path_idx{$idx}\
+    \ = 0;\n            }\n            my $idx_idx = $path_idx{$idx};\n          \
+    \  for my $path (@paths) {\n                my $step = $path->{path}[-1];\n  \
+    \              $path_idx{$idx} = $idx_idx + 1;\n                for my $m (0 ..\
+    \ $#{$grid}) {\n                    for my $n (0 .. $#{$grid->[$m]}) {\n     \
+    \                   if (abs($m - $i) + abs($n - $j) == 1 &&\n                \
+    \            $grid->[$m][$n] < $step) {\n                            my $nidx\
+    \ = $m * @{$grid->[$m]} + $n;\n                            if (!exists $path_idx{$nidx}\
+    \ ||\n                                $path_idx{$nidx} < $idx_idx) {\n       \
+    \                         $path_idx{$nidx} = $idx_idx;\n                     \
+    \           push @paths, {path => [@{$path->{path}}, $grid->[$m][$n]], idx =>\
+    \ $nidx};\n                            }\n                        }\n        \
+    \            }\n                }\n            }\n        }\n    }\n    for my\
+    \ $path (@paths) {\n        if (@{$path->{path}} == $k) {\n            if (!@output\
+    \ || @{$path->{path}} < @output) {\n                @output = @{$path", "    my\
+    \ $m = scalar(@$grid); # m rows\n    my $n = scalar(@{$grid->[0]}); # n columns\n\
+    \    my $total = $m * $n;\n    my @v; # value for each position (x, y)\n    for\
+    \ (my $i = 0; $i < $m; $i++) {\n        for (my $j = 0; $j < $n; $j++) {\n   \
+    \         my $pos = $i * $n + $j;\n            $v[$pos] = $grid->[$i][$j];\n \
+    \       }\n    }\n    my @s = (0) x $total; # s[i] is the minimum sum to reach\
+    \ value i\n    my @p = (-1) x $total; # p[i] is the parent value for value i\n\
+    \    my @q = (-1) x $total; # q[i] is the path length to reach value i\n    my\
+    \ $end = $total - 1;\n    $s[$end] = $v[$end];\n    $q[$end] = 0;\n    for (my\
+    \ $i = $end - 1; $i >= 0; $i--) {\n        my $x = $i % $n;\n        my $y = int($i\
+    \ / $n);\n        my $min = $s[$i + 1];\n        $p[$i] = $i + 1;\n        $q[$i]\
+    \ = $q[$i + 1] + 1;\n        if ($x > 0 && $s[$i - 1] < $min) {\n            $min\
+    \ = $s[$i - 1];\n            $p[$i] = $i - 1;\n            $q[$i] = $q[$i - 1]\
+    \ + 1;\n        }\n        if ($y > 0 && $s[$i - $n] < $min) {\n            $min\
+    \ = $s[$i - $n];\n            $p[$i] = $i - $n;\n            $q[$i] = $q[$i -\
+    \ $n] + 1;\n        }\n        $s[$i] = $min"]
 stop_tokens:
 - "\nsub"
 - "\n#"

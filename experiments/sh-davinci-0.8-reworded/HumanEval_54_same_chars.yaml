@@ -13,6 +13,105 @@ tests: "}\n\ncandidate() {\n    same_chars \"$@\"\n}\n\nset -e\nrun_test() {\n  
   \   [[ $(candidate \"abcd\" \"dddddddabcf\") = \"false\" ]]\n    [[ $(candidate\
   \ \"eabcdzzzz\" \"dddzzzzzzzddddabc\") = \"false\" ]]\n    [[ $(candidate \"aabb\"\
   \ \"aaccc\") = \"false\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local word1 word2\n    word1=\"$1\"\n    word2=\"$2\"\n    word1=\"\
+    $(echo \"$word1\" | fold -w1 | sort -u | tr -d '\\n')\"\n    word2=\"$(echo \"\
+    $word2\" | fold -w1 | sort -u | tr -d '\\n')\"\n    # if the two words are equal,\
+    \ they have the same characters\n    if [ \"$word1\" = \"$word2\" ]; then\n  \
+    \      echo \"true\"\n    else\n        echo \"false\"\n    fi", "  printf %s\\\
+    \\n \"$1\" |\n    tr -cd \"$2\" |\n    wc -c |\n    tr -d '[:space:]'", "    local\
+    \ t\n    t=$(declare -p1 $1 | sed 's/declare -a -[^=]*=\\(.*\\)/\\1/' | cut -d\
+    \ \" \" -f 2-)\n    #echo \"1: $t\"\n    #echo \"2: $(declare -p2 $2 | sed 's/declare\
+    \ -a -[^=]*=\\(.*\\)/\\1/' | cut -d \" \" -f 2-)\"\n    if [ \"$t\" == \"$(declare\
+    \ -p2 $2 | sed 's/declare -a -[^=]*=\\(.*\\)/\\1/' | cut -d \" \" -f 2-)\" ];\
+    \ then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi", "  #\
+    \ TODO\n  #local s1=${1//[^a-z]/}\n  #local s2=${2//[^a-z]/}\n  #local s1sorted=$(echo\
+    \ $s1 | grep -o . | sort | tr -d '\\n')\n  #local s2sorted=$(echo $s2 | grep -o\
+    \ . | sort | tr -d '\\n')\n  #if [ \"$s1sorted\" = \"$s2sorted\" ]; then\n  #\
+    \  echo true\n  #else\n  #  echo false\n  #fi\n  local s1=$(echo $1 | grep -o\
+    \ . | sort | tr -d '\\n')\n  local s2=$(echo $2 | grep -o . | sort | tr -d '\\\
+    n')\n  if [ \"$s1\" = \"$s2\" ]; then\n    echo true\n  else\n    echo false\n\
+    \  fi", "    # how many times each character occurs in $1\n    local occurrences1\n\
+    \    occurrences1=$(count_occurrences \"$1\")\n    # how many times each character\
+    \ occurs in $2\n    local occurrences2\n    occurrences2=$(count_occurrences \"\
+    $2\")\n    # compare the two lists of counts\n    local result\n    result=$(compare_occurrences\
+    \ \"$occurrences1\" \"$occurrences2\")\n    echo \"$result\"", "    $(include_once\
+    \ \"strings_lib.sh\")\n    local a1=$(sort_chars \"$1\")\n    local a2=$(sort_chars\
+    \ \"$2\")\n    #echo -e \"a1: $a1\\na2: $a2\" >&2\n    if [ \"$a1\" == \"$a2\"\
+    \ ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi", " \
+    \   local x=$1\n    local y=$2\n    local curr=\"\"\n    local len=${#y}\n   \
+    \ local i=0\n    local j\n    local ch\n    local found\n    while [ $i -lt $len\
+    \ ]; do\n        ch=${y:$i:1}\n        found=false\n        for j in $(seq 0 $((\
+    \ ${#x} - 1 ))); do\n            curr=${x:$j:1}\n            if [ \"$curr\" ==\
+    \ \"$ch\" ]; then\n                x=${x:0:$j}${x:$(( $j + 1 ))}\n           \
+    \     found=true\n                break\n            fi\n        done\n      \
+    \  if [ \"$found\" = false ]; then\n            echo \"false\"\n            return\n\
+    \        fi\n        i=$(( $i + 1 ))\n    done\n    echo \"true\"", "    local\
+    \ chars_to_match=\"$1\"\n    local chars_to_match_count=\"$(echo \"$chars_to_match\"\
+    \ | wc -c)\"\n    local chars_to_match_count=$((chars_to_match_count - 1))\n \
+    \   local chars_to_match_count=\"$(echo \"$chars_to_match_count * 2\" | bc)\"\n\
+    \    local string=\"$2\"\n    while [ \"$chars_to_match_count\" -gt \"0\" ]; do\n\
+    \        local char=\"$(echo \"$chars_to_match\" | head -c 1)\"\n        local\
+    \ new_string=\"$(echo \"$string\" | sed \"s/$char//g\")\"\n        if [ \"$new_string\"\
+    \ = \"$string\" ]; then\n            echo \"false\"\n            break\n     \
+    \   fi\n        string=\"$new_string\"\n        chars_to_match=\"$(echo \"$chars_to_match\"\
+    \ | sed \"s/$char//g\")\"\n        chars_to_match_count=\"$(echo \"$chars_to_match\"\
+    \ | wc -c)\"\n        chars_to_match_count=$((chars_to_match_count - 1))\n   \
+    \     chars_to_match_count=\"$(echo \"$chars_to_match_count * 2\" | bc)\"\n  \
+    \  done\n    if [ \"$chars_to_match_count\" -eq \"0\" ]; then\n        echo \"\
+    true\"\n    fi", "    local x=${1//[^$2]}\n    [[ $x == $1 ]] && echo \"true\"\
+    \ || echo \"false\"", "  local a1\n  local a2\n  local res\n  a1=($(for ((i=0;\
+    \ i<${#1}; i++)); do echo ${1:$i:1}; done | sort))\n  a2=($(for ((i=0; i<${#2};\
+    \ i++)); do echo ${2:$i:1}; done | sort))\n  if [[ \"${a1[*]}\" == \"${a2[*]}\"\
+    \ ]]; then\n    res=\"true\"\n  else\n    res=\"false\"\n  fi\n  echo $res", " \
+    \   if [[ -z \"$1\" ]] || [[ -z \"$2\" ]]; then\n        echo \"false\"\n    \
+    \    return 1\n    fi\n\n    local str_a=\"$1\"\n    local str_b=\"$2\"\n\n  \
+    \  local str_temp=\"\"\n    local tmp=\"\"\n    local str_a_len=${#str_a}\n  \
+    \  local str_b_len=${#str_b}\n\n    if [[ $str_a_len -gt $str_b_len ]]; then\n\
+    \        str_temp=\"$str_a\"\n        str_a=\"$str_b\"\n        str_b=\"$str_temp\"\
+    \n    fi\n\n    local str_a_len=${#str_a}\n    local str_b_len=${#str_b}\n\n \
+    \   local i=0\n    local j=0\n    while [[ $i -lt $str_a_len ]]; do\n        tmp=\"\
+    ${str_a:$i:1}\"\n        if [[ \"${str_b/$tmp}\" == \"$str_b\" ]]; then\n    \
+    \        echo \"false\"\n            return 1\n        fi\n        i=$((i+1))\n\
+    \    done\n\n    echo \"true\"\n    return 0", "    local char string1 string2\n\
+    \    string1=\"$1\"\n    string2=\"$2\"\n    for char in $(echo $string1 | fold\
+    \ -w1); do\n        string2=$(echo $string2 | sed -e \"s/$char//g\")\n    done\n\
+    \    if [ -z \"$string2\" ]; then\n        echo \"true\"\n    else\n        echo\
+    \ \"false\"\n    fi", "    if [ -z \"$1\" ] && [ -z \"$2\" ]; then\n        echo\
+    \ \"true\"\n    elif [ -z \"$1\" ] || [ -z \"$2\" ]; then\n        echo \"false\"\
+    \n    else\n        local char1=$(echo \"$1\" | head -c 1)\n        local char2=$(echo\
+    \ \"$2\" | head -c 1)\n        if [ \"$char1\" == \"$char2\" ]; then\n       \
+    \     same_chars \"${1:1}\" \"${2:1}\"\n        else\n            same_chars \"\
+    $1\" \"${2/$char2/}\"\n        fi\n    fi", "    declare -A A\n    declare -A\
+    \ B\n    for ((i=0; i<${#1}; i++)); do\n        A[${1:$i:1}]=1\n    done\n   \
+    \ for ((i=0; i<${#2}; i++)); do\n        B[${2:$i:1}]=1\n    done\n    for k in\
+    \ \"${!A[@]}\"; do\n        if [ -z \"${B[$k]}\" ]; then\n            echo \"\
+    false\"\n            return\n        fi\n    done\n    for k in \"${!B[@]}\";\
+    \ do\n        if [ -z \"${A[$k]}\" ]; then\n            echo \"false\"\n     \
+    \       return\n        fi\n    done\n    echo \"true\"", "  [ \"$(echo \"$1\"\
+    \ | sed -e 's/./&\\n/g' | sort | tr -d '\\n')\" = \"$(echo \"$2\" | sed -e 's/./&\\\
+    n/g' | sort | tr -d '\\n')\" ] && echo \"true\" || echo \"false\"", "  local chars1\
+    \ chars2\n  chars1=$(chars_in_string \"$1\")\n  chars2=$(chars_in_string \"$2\"\
+    )\n  if [ \"$chars1\" == \"$chars2\" ]; then\n    echo \"true\"\n  else\n    echo\
+    \ \"false\"\n  fi", "  local original\n  local check\n  local current\n  local\
+    \ check_char\n  local count\n\n  original=\"$1\"\n  check=\"$2\"\n\n  if [[ ${#1}\
+    \ -gt ${#2} ]]; then\n    current=\"$1\"\n    check=\"$2\"\n  else\n    current=\"\
+    $2\"\n    check=\"$1\"\n  fi\n\n  while [[ \"$current\" != \"\" ]]; do\n    check_char=\"\
+    ${current:0:1}\"\n    count=\"$(count_chars \"$check\" \"$check_char\")\"\n  \
+    \  if [[ $count -eq 0 ]]; then\n      echo \"false\"\n      return\n    fi\n \
+    \   current=\"${current:1}\"\n  done\n\n  echo \"true\"", "    declare -a _letters=($(echo\
+    \ $1 | grep -o . | sort))\n    declare -a _word=($(echo $2 | grep -o . | sort))\n\
+    \    local _i=0\n\n    for (( _i=0; _i<${#_letters[@]}; _i++ )); do\n        [[\
+    \ ${_letters[$_i]} == ${_word[$_i]} ]] && continue\n        [[ ${_letters[$_i]}\
+    \ == ${_word[$(_i-1)]} ]] && continue\n        [[ ${_letters[$(_i-1)]} == ${_word[$_i]}\
+    \ ]] && continue\n        return 1\n    done\n\n    return 0", "  local -A character_counts\n\
+    \  for ((i=0; i<${#1}; i++)); do\n    character_counts[${1:$i:1}]=$((character_counts[${1:$i:1}]+1))\n\
+    \  done\n  for ((i=0; i<${#2}; i++)); do\n    character_counts[${2:$i:1}]=$((character_counts[${2:$i:1}]-1))\n\
+    \  done\n  for character in \"${!character_counts[@]}\"; do\n    if [[ ${character_counts[$character]}\
+    \ -ne 0 ]]; then\n      echo \"false\"\n      return 0\n    fi\n  done\n  echo\
+    \ \"true\"", "    if [[ \"$1\" == \"$2\" ]]; then\n        echo \"true\"\n   \
+    \ else\n        local sorted1=$(cat <(echo \"$1\") <(echo \"$2\") | sort | tr\
+    \ -d '\\n')\n        local sorted2=$(echo \"$sorted1\" | uniq -u)\n        if\
+    \ [[ -z \"$sorted2\" ]]; then\n            echo \"true\"\n        else\n     \
+    \       echo \"false\"\n        fi\n    fi"]
 stop_tokens:
 - "\n}"

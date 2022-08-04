@@ -13,6 +13,117 @@ tests: "}\n\ncandidate() {\n    factorize \"$@\"\n}\n\nset -e\nrun_test() {\n   
   \    [[ $(candidate \"3249\") = \"3 3 19 19\" ]]\n    [[ $(candidate \"185193\"\
   ) = \"3 3 3 19 19 19\" ]]\n    [[ $(candidate \"20577\") = \"3 19 19 19\" ]]\n \
   \   [[ $(candidate \"18\") = \"2 3 3\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    declare -a factors\n    d=2\n    while (( $1 > 1 ))\n    do\n \
+    \       while (( $1 % $d == 0 ))\n        do\n            echo $d\n          \
+    \  factors+=($d)\n            (( $1 /= $d ))\n        done\n        (( d++ ))\n\
+    \    done\n    echo ${factors[@]}", "    is_number_integer \"$1\"\n    local -r\
+    \ num=$1\n\n    local -a primes\n    local -a factors\n    local divisor\n\n \
+    \   # use prime numbers by default, because other numbers can be factorized on\
+    \ them\n    if (( num < 256 )); then\n        primes=(2 3 5 7 11 13 17 19 23 29\
+    \ 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 101 103 107 109 113 127 131 137\
+    \ 139 149 151 157 163 167 173 179 181 191 193 197 199 211 223 227 229 233 239\
+    \ 241 251 253)\n    else\n        primes=$(get_primes_by_primes \"$(get_primes_by_eratos\
+    \ \"$num\")\")\n    fi\n\n    for divisor in \"${primes[@]}\"; do\n        while\
+    \ (( num % divisor == 0 )); do\n            factors+=($divisor)\n            ((\
+    \ num /= divisor ))\n        done\n    done\n\n    echo \"${factors[@]}\"", " \
+    \   local factor=\"$1\"\n    local factors=()\n    local i=2\n    while [ \"$factor\"\
+    \ -gt 1 ]; do\n        while [ \"$((factor % i))\" == 0 ]; do\n            factor=\"\
+    $((factor / i))\"\n            factors+=(\"$i\")\n        done\n        i=\"$((i\
+    \ + 1))\"\n    done\n    IFS=$'\\n' join '\",\"' \"${factors[@]}\" | sed 's/\"\
+    /'\"'\"'/g'", "    local num=\"$1\"\n\n    until [[ $num -eq 1 ]]; do\n      \
+    \  for ((i=2; i<=$num; i++)); do\n            if [[ $((num % i)) -eq 0 ]]; then\n\
+    \                echo -n \"\\\"$i\\\",\"\n                num=$((num / i))\n \
+    \               break\n            fi\n        done\n    done", "  local -r INPUT=$1\n\
+    \n  local prime_factors=$(\n    local candidate=2\n    local product=1\n    while\
+    \ [ $product -lt $INPUT ]; do\n      local counter=0\n      while [ $(( $INPUT\
+    \ % $candidate )) -eq 0 ]; do\n        (( counter++ ))\n        (( product *=\
+    \ $candidate ))\n      done\n      if [ $counter -gt 0 ]; then\n        echo \"\
+    ${candidate}\"\n      fi\n      (( candidate++ ))\n    done\n  )\n\n  local result=\"\
+    [\"\n  IFS=' ' read -r -a prime_factors_array <<< \"$prime_factors\"\n  for value\
+    \ in \"${prime_factors_array[@]}\"; do\n    result+=\"\\\"${value}\\\",\"\n  done\n\
+    \  result+=\"]\"\n  echo $result", "    integer=$1\n    integer=$((integer+0))\n\
+    \    if [[ ! $integer =~ ^[+-]?[0-9]+$ ]]; then\n        echo 'Input number is\
+    \ not integer'\n        return 1\n    fi\n    if [[ ! $integer -gt 0 ]]; then\n\
+    \        echo 'Input number should be greater than 0'\n        return 1\n    fi\n\
+    \    declare -a prime_factors=()\n    declare -a factorization=()\n    i=2\n \
+    \   while [[ $integer -gt 1 ]]; do\n        if [[ $((integer % i)) -eq 0 ]]; then\n\
+    \            prime_factors+=($i)\n            integer=$((integer / i))\n     \
+    \   else\n            i=$((i + 1))\n        fi\n    done\n    for prime_factor\
+    \ in \"${prime_factors[@]}\"; do\n        factorization+=($(echo \"$prime_factor\"\
+    \ | jq -s -R '@json'))\n    done\n    echo \"[$(IFS=,; echo \"${factorization[*]}\"\
+    )]\"", "  re='^[0-9]+$'\n  if ! [[ $1 =~ $re ]] ; then\n     echo \"error: Not\
+    \ a number\" >&2; exit 1\n  fi\n  primes=$(python -c \"import sys; print([n for\
+    \ n in range(2,$1+1) if all(n%i!=0 for i in range(2,n))])\")\n  l=()\n  for p\
+    \ in $primes; do\n    c=0\n    while [ $(($1 % $p)) -eq 0 ]; do\n      c=$(($c+1))\n\
+    \      f=$(($1/$p))\n    done\n    if [ $c -gt 0 ]; then\n      for i in $(seq\
+    \ 1 $c); do\n        l+=\"\\\"$p\\\"\"\n      done\n    fi\n    if [ $f -eq 1\
+    \ ]; then\n      break\n    else\n      1=$f\n    fi\n  done\n  echo $l", "\t\
+    local n=\"$1\"\n\t\n\tlocal factor\n\tlocal factors=\"[]\"\n\tlocal counter=2\n\
+    \t\n\t# Find all prime factors for the input number\n\twhile [ $n -gt 1 ]; do\n\
+    \t\tif [ $(( n % counter )) -eq 0 ]; then\n\t\t\tfactor=\"$counter\"\n\t\t\tfactors=\"\
+    $factors$factor\"\n\t\t\t# Reduce input number by dividing by factor\n\t\t\tn=$((\
+    \ n / counter ))\n\t\t\t\n\t\t\t# Calculate number of occurences of the prime\
+    \ factor\n\t\t\twhile [ $(( n % counter )) -eq 0 ]; do\n\t\t\t\tfactors=\"$factors$factor\"\
+    \n\t\t\t\tn=$(( n / counter ))\n\t\t\tdone\n\t\tfi\n\t\tcounter=$(( counter +\
+    \ 1 ))\n\tdone\n\t\n\techo \"$factors\"", "\t# check if number has single digit\n\
+    \tif [ $1 -lt 10 ]; then\n\t\techo [\\\"$1\\\"]\n\telse\n\t\t# find smallest prime\
+    \ factor of given number\n\t\tmin=$(factor $1 | grep -oP '(?<=: )[0-9]+' | head\
+    \ -n 1)\n\t\t# recursively call function for that found factor\n\t\techo [\\\"\
+    $min\\\"] $(factorize $(($1/$min)))\n\tfi", "\tlocal -a result\n\tlocal i=2\n\t\
+    local x=$1\n\twhile [ $x -gt 1 ]; do\n\t\twhile [ $(( x % i )) -eq 0 ]; do\n\t\
+    \t\tresult+=( $i )\n\t\t\tx=$(( x / i ))\n\t\tdone\n\t\t(( i++ ))\n\tdone\n\t\
+    echo \"${result[@]}\"", "    if [[ $1 -le 0 ]]; then\n        echo \"Integer must\
+    \ be > 0\" >&2\n        exit 1\n    fi\n    if [[ $1 -le 3 ]]; then\n        echo\
+    \ \"[\\\"$1\\\"]\"\n        return\n    fi\n    result=\"[\"\n    last_divisor=1\n\
+    \    divisor=2\n    while [[ $1 -gt 1 ]]; do\n        if (( $1 % $divisor == 0\
+    \ )); then\n            if [[ $divisor != $last_divisor ]]; then\n           \
+    \     last_divisor=$divisor\n                result=\"$result\\\"$divisor\\\"\
+    ,\"\n            else\n                result=\"$result\\\"$divisor\\\",\"\n \
+    \           fi\n            1=$(( $1 / $divisor ))\n        else\n           \
+    \ divisor=$(( $divisor + 1 ))\n        fi\n    done\n    result=\"${result::-1}]\"\
+    \n    echo $result", "\tlocal number=$1\n\tlocal factors=\"[]\"\n\tlocal i=2\n\
+    \tlocal n=$(( number / i ))\n\twhile [[ $i -le $n ]]; do\n\t\twhile [[ $(( number\
+    \ % i )) -eq 0 ]]; do\n\t\t\tfactors=\"$(printf '%s, \"%s\"' \"$factors\" \"$i\"\
+    )\"\n\t\t\tnumber=$(( number / i ))\n\t\t\tn=$(( number / i ))\n\t\tdone\n\t\t\
+    let i++\n\tdone\n\tif [[ $number -gt 1 ]]; then\n\t\tfactors=\"$(printf '%s, \"\
+    %s\"' \"$factors\" \"$number\")\"\n\tfi\n\techo \"[$(echo \"$factors\" | sed -e\
+    \ 's/^, //')]\"", "    if [ $# -ne 1 ]; then\n        echo \"Usage: $0 N\"\n \
+    \       return\n    fi\n    local N=$1\n    local factor=$(factor $N)\n    local\
+    \ factors=$(echo \"$factor\" | cut -d \":\" -f 2 | sed 's/ //g')\n    echo \"\
+    [$factors]\"", "    if [ -z \"$1\" ]; then\n        echo \"No number provided\"\
+    \n        return 1\n    fi\n    if [ \"$1\" -le 0 ]; then\n        echo \"Negative\
+    \ numbers are not allowed\"\n        return 1\n    fi\n    if ! [[ \"$1\" =~ ^[0-9]+$\
+    \ ]]; then\n        echo \"Non-numeric argument $1\"\n        return 1\n    fi\n\
+    \    # output format\n    local PRINT_FORMAT='[\"%d\"]'\n    # write the first\
+    \ result to the output\n    local res=$(factor $1 | cut -d: -f2)\n    echo -n\
+    \ \"[\"\n    # parse the result into JSON array.\n    echo -n $(echo $res | sed\
+    \ 's/ /\",\"/g')\n    echo \"]\"", "  local num=$1\n  local factors=()\n  for\
+    \ i in $(seq 2 $num); do\n    while [ $((num % i)) -eq 0 ]; do\n      factors+=($i)\n\
+    \      num=$((num / i))\n    done\n  done\n  echo ${factors[@]}", "    number=\"\
+    $1\"\n    jq -n --arg num \"$number\" '\n        def factorize($num):\n      \
+    \      if $num == 1 then\n                return []\n            else\n      \
+    \          foreach range(2; $num / 2 + 1) as $i (\n                    if $num\
+    \ % $i == 0 then\n                        return [$i] + factorize($num / $i)\n\
+    \                    end\n                );\n            end;\n        factorize($num)\n\
+    \    '", "    local -a factors=($(prime_factors $1))\n    printf '['\n    printf\
+    \ '\"%s\"' \"${factors[@]}\"\n    printf ']'", "    local -a factors\n    local\
+    \ i=2\n    local remain=${1}\n    local factor\n    while [[ ${remain} -gt 1 ]];\
+    \ do\n        if (( ${remain} % ${i} == 0 )); then\n            factor=${i}\n\
+    \            (( remain /= ${i} ))\n            factors+=(${factor})\n        else\n\
+    \            (( i++ ))\n        fi\n    done\n    echo \"$(echo \"${factors[@]}\"\
+    \ | sed -e 's/\\(.*\\)/\"\\1\"/g' | tr ' ' ',')\"", "    if ! [[ \"$1\" =~ ^[0-9]+$\
+    \ ]]; then\n        echo \"error: argument is not a number\"\n        return 1\n\
+    \    fi\n    if [ \"$1\" -lt 0 ]; then\n        echo \"error: argument is less\
+    \ than 0\"\n        return 1\n    fi\n    if [ \"$1\" -eq 0 ]; then\n        echo\
+    \ \"error: argument is 0\"\n        return 1\n    fi\n    divisor=2\n    factors=()\n\
+    \    while [ \"$1\" -gt 1 ]; do\n        if [ \"$(($1 % $divisor))\" -eq 0 ];\
+    \ then\n            factors+=(\"$divisor\")\n            let \"1 = $1 / $divisor\"\
+    \n        else\n            let \"divisor += 1\"\n        fi\n    done\n    echo\
+    \ \"${factors[@]}\"", "\tif [[ \"$1\" =~ ^[0-9]+$ ]]; then\n\t\tlocal factors=$(factor\
+    \ $1 | cut -d: -f2)\n\t\tlocal result=[]\n\t\tfor factor in $factors; do\n\t\t\
+    \tlocal count=$(echo $factor | sed 's/[^0-9]//g')\n\t\t\tlocal prime=$(echo $factor\
+    \ | sed 's/[0-9]//g')\n\t\t\tfor i in $(seq $count); do\n\t\t\t\tresult+=$prime\n\
+    \t\t\tdone\n\t\tdone\n\t\techo $result\n\telse\n\t\techo \"Error. '$1' is not\
+    \ an integer.\"\n\tfi"]
 stop_tokens:
 - "\n}"

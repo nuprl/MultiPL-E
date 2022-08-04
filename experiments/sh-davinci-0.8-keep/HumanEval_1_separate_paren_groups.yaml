@@ -11,6 +11,150 @@ tests: "}\n\ncandidate() {\n    separate_paren_groups \"$@\"\n}\n\nset -e\nrun_t
   \ ]]\n    [[ $(candidate \"() (()) ((())) (((())))\") = \"() (()) ((())) (((())))\"\
   \ ]]\n    [[ $(candidate \"(()(())((())))\") = \"(()(())((())))\" ]]\n    [[ $(candidate\
   \ \"( ) (( )) (( )( ))\") = \"() (()) (()())\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    # TODO: Return a list of strings, each one corresponding to a group\
+    \ of parentheses\n    # i.e.\n    # return [\"()\",\"()()\"]\n    all_groups=$(tr\
+    \ -d ' ' <<< $1 | tr -d '[:space:]')\n    left_parens=$(grep -o -E '(' <<< $all_groups)\n\
+    \    right_parens=$(grep -o -E ')' <<< $all_groups)\n    num_left=$(wc -c <<<\
+    \ $left_parens)\n    num_right=$(wc -c <<< $right_parens)\n    if [ $num_left\
+    \ -ne $num_right ]; then\n        echo \"Input string does not have balanced parentheses\"\
+    \n        exit 1\n    fi\n    num_groups=$(wc -c <<< $all_groups)\n    group_len=$(($num_groups\
+    \ / $num_left))\n    for ((i=0; i<$num_left; i++)); do\n        echo ${all_groups:$(($i*$group_len)):$group_len}\n\
+    \    done", "    # get rid of any spaces\n    local input=$(echo $1 | tr -d '\
+    \ ')\n    local output=()\n    local group=''\n    local open_parens=0\n    local\
+    \ last_char=''\n    for (( i=0; i<${#input}; i++ )); do\n        local c=${input:$i:1}\n\
+    \        if [[ $c == '(' ]]; then\n            open_parens=$((open_parens+1))\n\
+    \        elif [[ $c == ')' ]]; then\n            open_parens=$((open_parens-1))\n\
+    \        fi\n        if [[ $open_parens -eq 0 && $c == ')' ]]; then\n        \
+    \    output+=(\"$group\")\n            group=''\n        else\n            group=\"\
+    $group$c\"\n        fi\n    done\n    echo \"${output[@]}\"", "  input=$1\n  #\
+    \ Strip spaces\n  input=${input// }\n  # Store the size of the input\n  size=${#input}\n\
+    \  # Loop through the string, starting at the first parentheses\n  for ((i=0;\
+    \ i<$size; i++)); do\n    currentChar=${input:$i:1}\n    # If a parenthesis is\
+    \ found, find the next matching parenthesis\n    if [ \"$currentChar\" == \"(\"\
+    \ ]; then\n      # Start a counter at 1 and loop through the rest of the string\n\
+    \      ((counter=1))\n      for ((j=$i+1; j<$size; j++)); do\n        currentChar=${input:$j:1}\n\
+    \        # Increment the counter for every open parenthesis\n        if [ \"$currentChar\"\
+    \ == \"(\" ]; then\n          ((counter=counter+1))\n        fi\n        # Decrement\
+    \ the counter for every closed parenthesis\n        if [ \"$currentChar\" == \"\
+    )\" ]; then\n          ((counter=counter-1))\n        fi\n        # If the counter\
+    \ reaches 0, the matching parenthesis has been found\n        if [ $counter -eq\
+    \ 0 ]; then\n          # Print the segment of the string between the first parenthesis\
+    \ and\n          # the matching parenthesis\n          echo ${input:$i:$(($j-$i+1))}\n\
+    \          # Set i to the index of the matching parenthesis\n          i=$j\n\
+    \          break\n        fi\n      done\n    fi\n  done", "    local arg=$1\n\
+    \n    # This is a little helper function that will increment the parenCount value\n\
+    \    # each time it is passed a \"(\" character\n    function increase_paren_count()\
+    \ {\n        local c=$1\n        if [ \"$c\" == \"(\" ]; then\n            parenCount=$((parenCount+1))\n\
+    \        fi\n    }\n\n    # Array that will contain groups of parens\n    parenGroups=()\n\
+    \n    # This will be used to count the number of opening parens\n    parenCount=0\n\
+    \n    # This will be used to track the start of the current group of parens\n\
+    \    parenStartPos=0\n\n    # We'll loop through each character in the string\n\
+    \    for (( i=0; i<${#arg}; i++ )); do\n        char=${arg:$i:1}\n\n        #\
+    \ We'll ignore spaces\n        if [ \"$char\" == \" \" ]; then\n            continue\n\
+    \        fi\n\n        # We'll use the helper function to track parenCount as\
+    \ we go\n        increase_paren_count $char\n\n        # If we hit an open paren,\
+    \ we'll reset the starting position of the current group of parens\n        if\
+    \ [ \"$char\" == \"(\" ]; then\n            parenStartPos=$i\n        fi\n\n \
+    \       # If we hit a close paren and our parenCount is at 0, we'll add the current\
+    \ paren group to the list\n        if [ \"$char\" == \")\" ] && [ $parenCount\
+    \ -eq 0 ]; then\n            parenGroups+=(\"${arg:$parenStartPos:$((i-parenStartPos+1))}\"\
+    )\n        fi\n\n        # Now that we've checked for open/close parens and incremented\
+    \ the parenCount, we can decrement parenCount\n        # if we've hit a close\
+    \ paren so that it's ready for the next time we encounter a close paren\n    \
+    \    if [ \"$char\" == \")\" ]; then\n            parenCount=$((parenCount-1))\n\
+    \        fi\n    done\n\n    echo \"${parenGroups[@]}\"", "    echo $1 | grep\
+    \ -oP '(?<=\\()[^()]*(?=\\))'", "  local input=$1\n  local parens_regex='[()]'\n\
+    \  local separator_regex='[\\[\\]\\,]'\n  local opening_parens_regex='['\"$(echo\
+    \ \"$parens_regex\" | sed -E 's/\\(/\\\\(/g')\"']'\n  local closing_parens_regex='['\"\
+    $(echo \"$parens_regex\" | sed -E 's/\\)/\\\\)/g')\"']'\n  local separator_length=$(echo\
+    \ \"$separator_regex\" | awk '{print length($0)}')\n  local opening_parens_length=$(echo\
+    \ \"$opening_parens_regex\" | awk '{print length($0)}')\n  local closing_parens_length=$(echo\
+    \ \"$closing_parens_regex\" | awk '{print length($0)}')\n  local parens_length=$(echo\
+    \ \"$parens_regex\" | awk '{print length($0)}')\n  local opening_parens_chars=$(echo\
+    \ \"$opening_parens_regex\" | sed -E 's/[\\(\\)]//g')\n  local opening_parens_max_index=$(echo\
+    \ \"$opening_parens_chars\" | awk '{print length($0)}')\n  local parens_separated=$(echo\
+    \ \"$input\" | sed -E 's/'\"$parens_regex\"'/'\"$separator_regex\"'&/g')\n  local\
+    \ parens_separated_length=$(echo \"$parens_separated\" | awk '{print length($0)}')\n\
+    \  local output_length=$(echo \"$parens_separated_length\" | awk '{print $1 /\
+    \ '\"$parens_length\"' + 1}')\n  local output=()\n  local current_paren_char\n\
+    \  local paren_index\n  local current_parens_length=0\n  local index=0\n  local\
+    \ parens_separated_length=0\n  local parens_separated_max_index=$(echo \"$parens_separated\"\
+    \ | awk '{print length($0)}')\n  local current_", "    grep -oP '(?<=\\().*?(?=\\\
+    ))' <<< \"$1\"", "  local string=\"$1\"\n  local temp=\"\"\n  local -a result=()\n\
+    \  local -i i=0\n  local -i len=${#string}\n  local -i open=0\n  local -i close=0\n\
+    \  while (( i < len )); do\n    local char=\"${string:$i:1}\"\n    (( char ==\
+    \ '(' )) && (( open++ ))\n    (( char == ')' )) && (( close++ ))\n    temp+=\"\
+    $char\"\n    (( open == close )) && result+=(\"$temp\") && temp=\"\" && open=0\
+    \ && close=0\n    (( i++ ))\n  done\n  echo \"${result[@]}\"", "  # default is\
+    \ the empty string\n  local default=''\n  # stack will be a list of strings\n\
+    \  declare -a stack=()\n  # this is a list of characters we need to escape in\
+    \ grep, if input string has them\n  # if input string has '|' or '(' or ')', we\
+    \ need to escape them\n  local need_to_escape_chars=''\n  # this is a list of\
+    \ characters we need to escape in grep, if input string has them\n  # if input\
+    \ string has '&' or '^' or '$' or '*' or '[' or ']' or '\\' or '/' or '\"' or\
+    \ '`' or ''', we need to escape them\n  local need_to_escape_regex=''\n  # we\
+    \ need to save the IFS\n  local saved_IFS=$IFS\n  IFS=''\n  for (( i=0; i<${#1};\
+    \ i++ )); do\n    char=\"${1:$i:1}\"\n    # we need to escape the character with\
+    \ '\\' if there is a '&' or '^' or '$' or '*' or '[' or ']' or '\\' or '/' or\
+    \ '\"' or '`' or ''',\n    if [ -n \"$(echo \"$char\" | grep -E '[&^$*[\\]\\/\"\
+    `\\']')\" ]; then\n      need_to_escape_regex+=\"\\\\$char\"\n    else\n     \
+    \ need_to_escape_regex+=\"$char\"\n    fi\n    # if there is a '(', we need to\
+    \ push empty string to stack\n    if [ -n \"$(echo \"$char\" | grep -E '[(]')\"\
+    \ ]; then\n      stack+=(\"$default\")\n    # if there is a ')', we need to pop\
+    \ a string from stack and add to it\n    elif [ -n \"$(echo \"$char\" | grep -E\
+    \ '[)]')\" ]; then\n      if [ ${#stack[@]} -gt 0 ]; then\n        top_str=\"\
+    ${stack[-1]}\"\n        stack=(\"${stack[@]:0:${#stack[@]}-1}\")\n        stack+=(\"\
+    $top_str$char\")\n      else\n        stack+=", "   echo $(echo $1 | tr -d \"\
+    \ \") | grep -o -P '\\([^()]*\\)(?=([^()]*\\([^()]*\\))*[^()]*$)'", "\t# TODO:\
+    \ implement this function.\n\ts=`echo $1 | sed 's/ //g'`\n\techo $s\n\tl=`echo\
+    \ $s | wc -c`\n\tarr=()\n\techo $l\n\tfor ((i=1;i<$l;i++))\n\tdo\n\t\tif [[ `echo\
+    \ $s | cut -c $i` == \"(\" ]]\n\t\tthen\n\t\t\tcur=`echo $s | cut -c $i`\n\t\t\
+    \twhile [[ `echo $s | cut -c $i` != \")\" ]]\n\t\t\tdo\n\t\t\t\ti=$((i+1))\n\t\
+    \t\t\tcur=\"$cur\"\"`echo $s | cut -c $i`\"\n\t\t\tdone\n\t\t\techo $cur\n\t\t\
+    \tarr+=($cur)\n\t\tfi\n\tdone\n\techo ${arr[@]}", '    # your code goes here',
+  "    # fill here\n    # using a stack to keep track of the opened parentheses\n\
+    \    # if the stack is empty, append the string to a result\n    res=()\n    stack=()\n\
+    \    temp=\"\"\n    for ((i=0; i<${#1}; i++)); do\n        char=${1:$i:1}\n  \
+    \      if [[ $char == \"(\" ]]; then\n            stack+=(\"$char\")\n       \
+    \ elif [[ $char == \")\" ]]; then\n            stack=(\"${stack[@]:0:${#stack[@]}-1}\"\
+    )\n        fi\n        temp+=\"$char\"\n        if [[ ${#stack[@]} -eq 0 ]]; then\n\
+    \            res+=(\"$temp\")\n            temp=\"\"\n        fi\n    done\n \
+    \   echo \"${res[@]}\"", "    echo -n \"separate_paren_groups($1) -> \"\n    echo\
+    \ -n $1 | tr -d ' ' | sed 's/[)]()[(]/\\n/g' | sed 's/[)]()/)/g' | sed 's/[(]()/\\\
+    (/g' | sed 's/[(]/&\\n/g' | grep -v ')' | tr -d '\\n'\n    echo", "  [[ $# -ne\
+    \ 1 ]] && echo \"ERROR: Invalid number of arguments!\" && exit 1\n  input_string=$1\n\
+    \  #check input string\n  if [[ \"${input_string}\" =~ ^[\\ (\\)]+$ ]]; then\n\
+    \    IFS=$'\\n'\n    paren_groups=($(echo \"${input_string}\" | sed -r \"s/(\\\
+    ([^\\)]+\\))/\\1\\n/g\" | sed \"s/ //g\"))\n    echo \"${paren_groups[@]}\"\n\
+    \  else\n    echo \"ERROR: invalid input string!\"\n    exit 1\n  fi", "\t# TODO\n\
+    \    echo $1 | sed 's/[[:space:]]//g' | sed 's/(/ ( /g' | sed 's/)/ ) /g' > text.txt\n\
+    \    stack=''\n    list=''\n    while read line\n    do\n        for i in $line\n\
+    \        do\n            if [ \"$i\" == \"(\" ]\n            then\n          \
+    \      stack=$stack$i\n            elif [ \"$i\" == \")\" ]\n            then\n\
+    \                if [ \"$stack\" == \"\" ]\n                then\n           \
+    \         echo \"Something is wrong\"\n                    exit\n            \
+    \    fi\n                stack=$(echo $stack | cut -c 1-$((${#stack}-1)))\n  \
+    \              if [ \"$stack\" == \"\" ]\n                then\n             \
+    \       list=$list$i\n                else\n                    stack=$stack$i\n\
+    \                fi\n            else\n                if [ \"$stack\" == \"\"\
+    \ ]\n                then\n                    list=$list$i\n                else\n\
+    \                    stack=$stack$i\n                fi\n            fi\n    \
+    \    done\n    done < text.txt\n    list=$(echo $list | sed 's/ /,/g')\n    list=\"\
+    [${list}]\"\n    echo $list", "    # Write your solution here\n    return", '  echo
+    "TODO"', "    local paren_groups=\"$1\"\n    local result_list=()\n    local result_str=\"\
+    \"\n    local skip_next=0\n    local paren_count=0\n    local paren_pos=0\n  \
+    \  local i=0\n    local paren_groups_len=${#paren_groups}\n\n    while [ $i -lt\
+    \ $paren_groups_len ]; do\n        if [ $skip_next -eq 1 ]; then\n           \
+    \ skip_next=0\n            ((i++))\n            continue\n        fi\n\n     \
+    \   if [ \"${paren_groups:$i:1}\" == \" \" ]; then\n            ((i++))\n    \
+    \        continue\n        fi\n\n        if [ \"${paren_groups:$i:1}\" == \"(\"\
+    \ ]; then\n            ((paren_count++))\n            result_str+=\"(\"\n    \
+    \        ((i++))\n            continue\n        fi\n\n        if [ \"${paren_groups:$i:1}\"\
+    \ == \")\" ]; then\n            ((paren_count--))\n            result_str+=\"\
+    )\"\n            ((i++))\n            continue\n        fi\n\n        if [ $paren_count\
+    \ -eq 0 ]; then\n            result_list+=(\"$result_str\")\n            result_str=\"\
+    \"\n            skip_next=1\n        fi\n    done\n\n    result_list+=(\"$result_str\"\
+    )\n\n    for i in \"${result_list[@]}\"; do\n        echo \"$i\"\n    done", " \
+    \   echo \"$1\" | tr -d \" \" | perl -nE 'say $& while /\\(+(.*?)\\)(?=\\))/g'"]
 stop_tokens:
 - "\n}"

@@ -20,6 +20,142 @@ tests: "}\n\ncandidate() {\n    move_one_ball \"$@\"\n}\n\nset -e\nrun_test() {\
   \    [[ $(candidate \"3 4 5 1 2\") = \"true\" ]]\n    [[ $(candidate \"3 5 10 1\
   \ 2\") = \"true\" ]]\n    [[ $(candidate \"4 3 1 2\") = \"false\" ]]\n    [[ $(candidate\
   \ \"3 5 4 1 2\") = \"false\" ]]\n    [[ $(candidate \"\") = \"true\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    for ((i=0; i<${#1}; i++)); do\n        element=${1:i:1}\n     \
+    \   if [[ $element -lt ${sorted_list[$i]} ]]; then\n            return 1\n   \
+    \     fi\n    done\n    return 0", "    local ans=0\n    for (( i=1; i<${#1};\
+    \ i++ )); do\n        if [[ ${1:$i:1} -gt ${1:$((i-1)):1} ]]; then\n         \
+    \   ((ans++))\n        fi\n    done\n    if [[ $ans -eq $(( ${#1} - 1 )) ]]; then\n\
+    \        echo \"True\"\n    else\n        echo \"False\"\n    fi", "    declare\
+    \ -a arr=($1)\n    length=${#arr[@]}\n    if [ $length -eq 0 ]; then\n       \
+    \ echo \"True\"\n        return\n    fi\n    first=${arr[0]}\n    last=${arr[$length-1]}\n\
+    \    for ((i=1; i<length; i++)); do\n        if [ ${arr[$i]} -lt $first ]; then\n\
+    \            first=${arr[$i]}\n        fi\n        if [ ${arr[$i]} -gt $last ];\
+    \ then\n            last=${arr[$i]}\n        fi\n    done\n    if [ $first -eq\
+    \ $last ]; then\n        echo \"True\"\n    else\n        echo \"False\"\n   \
+    \ fi", "    if [[ -z \"$1\" ]]; then\n        return 0\n    fi\n    declare -a\
+    \ array=()\n    for i in $1; do\n        array+=($i)\n    done\n    # Generate\
+    \ temporary files for input and output\n    input_file=$(mktemp /tmp/temp.XXXXXX)\n\
+    \    output_file=$(mktemp /tmp/temp.XXXXXX)\n    {\n        printf \"%d\\n\" ${#array[@]}\n\
+    \        printf \"%d \" ${array[@]}\n        printf \"\\n\"\n    } > $input_file\n\
+    \    if $(cat $input_file | ./a.out > $output_file); then\n        read -r answer\
+    \ < $output_file\n        if [[ \"$answer\" == \"Yes\" ]]; then\n            rm\
+    \ $input_file $output_file\n            return 0\n        fi\n    fi\n    rm $input_file\
+    \ $output_file\n    return 1", "  local arr=\"$1\"\n  local IFS=\" \"\n  read\
+    \ -a arr <<<\"$arr\"\n  local N=\"${#arr[@]}\"\n  # The following statements check\
+    \ if it is already sorted\n  if [[ \"$N\" -le 1 ]]; then\n    echo true\n    return\n\
+    \  fi\n  local is_sorted=true\n  for (( i=1; i<\"$N\"; i++ )); do\n    if [[ \"\
+    ${arr[$i]}\" -lt \"${arr[$i-1]}\" ]]; then\n      is_sorted=false\n      break\n\
+    \    fi\n  done\n  if [[ \"$is_sorted\" == true ]]; then\n    echo true\n    return\n\
+    \  fi\n  # If not sorted, then try shifting and check again\n  local temp=\"${arr[$N-1]}\"\
+    \n  for (( i=\"$N\"-1; i>0; i-- )); do\n    arr[$i]=\"${arr[$i-1]}\"\n  done\n\
+    \  arr[0]=\"$temp\"\n  is_sorted=true\n  for (( i=1; i<\"$N\"; i++ )); do\n  \
+    \  if [[ \"${arr[$i]}\" -lt \"${arr[$i-1]}\" ]]; then\n      is_sorted=false\n\
+    \      break\n    fi\n  done\n  if [[ \"$is_sorted\" == true ]]; then\n    echo\
+    \ true\n    return\n  fi\n  echo false", "    local arr=($1)\n    #$2 is the index\
+    \ to be checked for being the lowest\n    local min=0\n    for ((i=1; i<${#arr[@]};\
+    \ i++)); do\n        [[ ${arr[$i]} -lt ${arr[$min]} ]] && min=$i\n    done\n \
+    \   if [[ $min -eq 0 ]]; then\n        echo 'True'\n    else\n        echo 'False'\n\
+    \    fi", "    if [[ $# == 0 ]]; then\n        echo \"True\"\n        return\n\
+    \    fi\n    arr=($1)\n    num_shift=0\n    for (( i=0; i<${#arr[@]}; i++ ));\
+    \ do\n        arr[i]=$(( arr[i] + num_shift ))\n        if [[ $i -gt 0 ]] && [[\
+    \ ${arr[i]} -le ${arr[i-1]} ]]; then\n            num_shift=$(( num_shift + 1\
+    \ ))\n            arr[i]=$(( arr[i] + num_shift ))\n        fi\n    done\n   \
+    \ # Check the first element to see if it is shifted.\n    if [[ ${arr[0]} -gt\
+    \ 0 ]]; then\n        echo \"False\"\n    else\n        echo \"True\"\n    fi",
+  "  # your code goes here\n  arr=($1)\n  flag=0\n  sorted_arr=($(echo ${arr[@]} |\
+    \ tr ' ' '\\n' | sort -g))\n  for ((i=0; i<=${#arr[@]}; i++)); do\n    if [[ \"\
+    ${arr[$i]}\" -eq \"${sorted_arr[$i]}\" ]]; then\n      flag=1\n    else\n    \
+    \  flag=0\n      break\n    fi\n  done\n  if [[ $flag -eq 1 ]]; then\n    echo\
+    \ \"True\"\n  else\n    echo \"False\"\n  fi", "    local element\n    local i\n\
+    \    local -a arr\n    i=0\n    arr=()\n    for element in \"$@\"; do\n      \
+    \  arr[$i]=$element\n        (( i++ ))\n    done\n    for (( i=1; i<${#arr[@]};\
+    \ i++ )); do\n        if [[ ${arr[i-1]} -gt ${arr[i]} ]]; then\n            echo\
+    \ 'True'\n            return\n        fi\n    done\n    echo 'False'", "  # your\
+    \ code here\n  local arr=($1)\n  for((i=1;i<${#arr[@]};i++)); do\n    if [[ ${arr[i]}\
+    \ -lt ${arr[i-1]} ]]; then\n      for((j=0;j<i;j++)); do\n        if [[ ${arr[i]}\
+    \ -lt ${arr[j]} ]]; then\n          return 1\n        fi\n      done\n    fi\n\
+    \  done\n  return 0", "    local arr=(\"$@\")\n    local sorted=($(echo \"${arr[@]}\"\
+    \ | sed 's/ /\\n/g' | sort -n))\n    local prev=\"${sorted[0]}\"\n    local i\n\
+    \    for ((i=1; i<${#sorted[@]}; i++)); do\n        [ \"${sorted[$i]}\" -lt \"\
+    $prev\" ] && return 1\n        prev=\"${sorted[$i]}\"\n    done\n    return 0",
+  "    # '-' is our sentinel value\n    local arr=( \"${@//$' '/-}\" )\n    local\
+    \ len=${#arr[@]}\n    local i=0 j=0 k=0\n\n    for (( i=0; i<len; i++ )); do\n\
+    \        # Put any sentinel values at the end of the array\n        if [ \"${arr[$i]}\"\
+    \ == \"-\" ]; then\n            arr[$i]=\"${arr[$(( len-1 ))]}\"\n           \
+    \ arr[$(( len-1 ))]=\"-\"\n            (( i-- ))\n            (( len-- ))\n  \
+    \      fi\n    done\n\n    for (( i=0; i<len; i++ )); do\n        # Make sure\
+    \ the numbers are ordered in a non-decreasing order.\n        if (( arr[i] > arr[i+1]\
+    \ )); then\n            j=i\n            # Keep moving right until we find the\
+    \ first number that is\n            # smaller than arr[j]. This is a naive linear\
+    \ scan, but it should\n            # work fine as long as the array isn't too\
+    \ large.\n            while (( arr[j] > arr[j+1] )); do\n                (( j++\
+    \ ))\n            done\n            # Swap the two elements\n            k=arr[j]\n\
+    \            arr[j]=${arr[i]}\n            arr[i]=$k\n            break\n    \
+    \    fi\n    done\n\n    # Make sure we didn't find any numbers that need to be\
+    \ moved\n    if (( i == len )); then\n        echo true\n    else\n        echo\
+    \ false\n    fi", "    # Using sort will cause time out\n    # local arr=$(echo\
+    \ $1 | tr ' ' '\\n' | sort -n)\n    # echo $arr\n    local arr=$1\n    local len=${#arr[@]}\n\
+    \    local count=0\n    local max=0\n    local min=10000000000\n    # Get the\
+    \ min and max values\n    for ((i=0; i<$len; i++)); do\n        count=$((count+1))\n\
+    \        arr[$i]=$(echo ${arr[$i]} | sed 's/^0*//')\n        if [ ${arr[$i]} -gt\
+    \ $max ]; then\n            max=${arr[$i]}\n        fi\n        if [ ${arr[$i]}\
+    \ -lt $min ]; then\n            min=${arr[$i]}\n        fi\n    done\n    # Compare\
+    \ the min and max values, if they are equal\n    # we have a situation where only\
+    \ one ball is left\n    # in the array, else return False\n    if [ $max -eq $min\
+    \ ]; then\n        echo \"True\"\n    else\n        echo \"False\"\n    fi", " \
+    \   # Put the arguments in an array\n    arr=($@)\n    # A flag to know if the\
+    \ given array is already sorted\n    already_sorted=1\n    # A flag to know if\
+    \ at any point we have less than 2 numbers in the list\n    # If so, we can consider\
+    \ that the list is already sorted\n    least_two=0\n    for (( i=0; i<${#arr[@]};\
+    \ i++ ))\n    do\n        # If the previous number is greater than the current\
+    \ one, we can\n        # consider that the array is not sorted\n        if [ $i\
+    \ -gt 0 ] && [ ${arr[$i-1]} -gt ${arr[$i]} ]\n        then\n            already_sorted=0\n\
+    \        fi\n        # If at any point we have less than 2 numbers, we consider\
+    \ the array\n        # sorted\n        if [ $i -gt 0 ] && [ $i -lt $(( ${#arr[@]}\
+    \ - 1 )) ]\n        then\n            least_two=1\n        fi\n    done\n    #\
+    \ If the array is already sorted or if we only have 1 or 2 elements in the\n \
+    \   # array, we return True\n    if [ $already_sorted -eq 1 ] || [ $least_two\
+    \ -eq 0 ]\n    then\n        echo \"True\"\n    else\n        echo \"False\"\n\
+    \    fi", "    [[ $# -eq 0 ]] && echo \"True\" && return 0\n    arr=$1\n    min=${arr[0]}\n\
+    \    max=${arr[0]}\n    for i in ${arr[@]}; do\n        if [[ $i -gt $max ]];\
+    \ then\n            max=$i\n        fi\n        if [[ $i -lt $min ]]; then\n \
+    \           min=$i\n        fi\n    done\n    if [[ $max -eq $min ]]; then\n \
+    \       echo \"True\"\n    else\n        echo \"False\"\n    fi", "    # Initialize\
+    \ variables.\n    local -a arr1 arr2\n    local -i i=$((${#arr[@]}-1))\n    arr1=($@)\n\
+    \n    while ((i > 0)); do\n        if ((arr1[i] < arr1[i-1])); then\n        \
+    \    ((i--))\n        else\n            break\n        fi\n    done\n\n    if\
+    \ ((i == 0)); then\n        echo \"True\"\n    else\n        echo \"False\"\n\
+    \    fi", "    arr=($1)\n    n=${#arr[@]}\n    i=0\n    while [ $i -lt $n ]\n\
+    \    do\n        if [ ${arr[$i]} -gt ${arr[$i+1]} ]\n        then\n          \
+    \  arr[$i]=${arr[$i+1]}\n            i=0\n        else\n            i=$((i+1))\n\
+    \        fi\n    done\n    for i in ${arr[@]}\n    do\n        echo -n \"$i \"\
+    \n    done\n    echo \"==>True\"", "    local arr\n    IFS=' ' read -r -a arr\
+    \ <<< \"$1\"\n    [[ ${#arr[@]} -eq 0 ]] && { echo True; return; }\n    local\
+    \ idx_min=0\n    local min=${arr[0]}\n    local i\n    for ((i=1; i<${#arr[@]};\
+    \ i++)); do\n        [[ ${arr[i]} -lt $min ]] && {\n            min=${arr[i]}\n\
+    \            idx_min=$i\n        }\n    done\n    # check if the array is sorted\n\
+    \    local sorted=true\n    for ((i=1; i<${#arr[@]}; i++)); do\n        [[ ${arr[i]}\
+    \ -lt ${arr[i-1]} ]] && {\n            sorted=false\n            break\n     \
+    \   }\n    done\n    if $sorted; then\n        echo True\n        return\n   \
+    \ fi\n    # check if one ball could be moved to the end to sort the array\n  \
+    \  local expected_min=$(( ${#arr[@]} - ${#arr[@]} % 2 ))\n    if [[ $idx_min -lt\
+    \ $expected_min ]]; then\n        echo True\n        return\n    fi\n    echo\
+    \ False", "    local -a arr=($@)\n    local i\n    # echo $@\n    # echo \"${arr[@]}\"\
+    \n    if [ ${#arr[@]} -le 1 ]; then\n        # There is 0 or 1 element in the\
+    \ array\n        echo 'True'\n        return\n    fi\n    # The idea is to find\
+    \ a minimum element and its position in the array.\n    # If the minimum element\
+    \ is in the last position then it will be the\n    # smallest element in the sorted\
+    \ array. So, it is not possible to get\n    # the sorted array by performing the\
+    \ right shift operation.\n    # If the minimum element is not in the last position\
+    \ then it is possible\n    # to get the sorted array by performing the right shift\
+    \ operation.\n    local min=${arr[0]}\n    local min_idx=0\n    for ((i=1; i<${#arr[@]};\
+    \ i++)); do\n        if [ ${arr[$i]} -lt $min ]; then\n            min=${arr[$i]}\n\
+    \            min_idx=$i\n        fi\n    done\n    # echo $min_idx\n    if [ $min_idx\
+    \ -eq $(( ${#arr[@]} - 1 )) ]; then\n        echo 'False'\n    else\n        echo\
+    \ 'True'\n    fi", "  local in=$1\n  local i=0\n  local arr=()\n  local total=0\n\
+    \  local max=0\n  local flag=0\n  for i in $in; do\n    let total=total+i\n  \
+    \  [ $i -gt $max ] && max=$i\n    arr[$i]=$i\n  done\n  [ $total -ne $max ] &&\
+    \ flag=1\n  for(( i=1;i<=$max;i++ )); do\n    [ ${arr[$i]} -ne $i ] && flag=1\n\
+    \  done\n  echo $flag"]
 stop_tokens:
 - "\n}"

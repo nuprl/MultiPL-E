@@ -14,6 +14,85 @@ tests: "}\n\ncandidate() {\n    split_words \"$@\"\n}\n\nset -e\nrun_test() {\n 
   Hello,Hello,world \\!\" ]]\n    [[ $(candidate \"abcdef\") = \"3\" ]]\n    [[ $(candidate\
   \ \"aaabb\") = \"2\" ]]\n    [[ $(candidate \"aaaBb\") = \"1\" ]]\n    [[ $(candidate\
   \ \"\") = \"0\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    # check if there is whitespace\n    if [[ $1 =~ \" \" ]]; then\n\
+    \        echo \"$1\" | tr ' ' '\\n'\n    # check if there is a comma\n    elif\
+    \ [[ $1 =~ \",\" ]]; then\n        echo \"$1\" | tr ',' '\\n'\n    # return the\
+    \ number of odd order\n    else\n        count=0\n        # go through each char\n\
+    \        for (( i=0; i<${#1}; i++ )); do\n            char=\"${1:$i:1}\"\n   \
+    \         # if it is odd\n            if (( (char - \"a\") % 2 != 0 )); then\n\
+    \                (( count++ ))\n            fi\n        done\n        echo \"\
+    $count\"\n    fi", "  [[ $1 =~ [A-Za-z] ]] || return 0\n  [[ $1 =~ \" \" ]] &&\
+    \ echo $1 | tr \" \" \"\\n\"\n  [[ $1 =~ \",\" ]] && echo $1 | tr \",\" \"\\n\"\
+    \n  [[ $1 =~ [a-z] ]] && echo $(awk -v FS=\"\" '{for(i=1;i<=NF;i++)if(!(i%2))print\
+    \ $i}' <<< $1 | wc -c)", "  if [[ $1 =~ ' ' ]]; then\n    echo $1 | awk '{print\
+    \ $1, $2}'\n  elif [[ $1 =~ ',' ]]; then\n    echo $1 | awk -F, '{print $1, $2}'\n\
+    \  else\n    echo $1 | tr -cd '[:lower:]' | awk '{print length($0)}'\n  fi", "\t\
+    # Split $1 on whitespace\n\twords=\"$(sed -E 's/\\s+/\\n/g' <<< \"$1\")\"\n\t\
+    # If there's no whitespace\n\tif [[ -z $words ]]; then\n\t\t# Split $1 on commas\n\
+    \t\twords=\"$(sed -E 's/,+/\\n/g' <<< \"$1\")\"\n\t\t# If there's no commas\n\t\
+    \tif [[ -z $words ]]; then\n\t\t\t# Return number of lower-case letters with odd\
+    \ order in the alphabet\n\t\t\tgrep -o '[a-z]' <<< \"$1\" | wc -l\n\t\t\treturn\n\
+    \t\tfi\n\tfi\n\t# Return list of words\n\techo \"$words\"", "    if [[ \"$1\"\
+    \ =~ [A-Za-z] ]]; then\n        if [[ \"$1\" =~ [,] ]]; then\n            echo\
+    \ \"$1\" | tr ',' ' '\n        else\n            echo \"$1\" | grep -o '[a-z]'\
+    \ | grep -c '[^aeiou]'\n        fi\n    else\n        echo \"$1\" | tr ' ' ','\n\
+    \    fi", '    printf "%s\n" "$1"', "  if [[ $1 =~ [[:blank:]] ]]; then\n    echo\
+    \ \"$1\" | tr ' ' '\\n'\n  elif [[ $1 =~ , ]]; then\n    echo \"$1\" | tr ','\
+    \ '\\n'\n  else\n    count=$(echo \"$1\" | tr -d -c 'a-z' | grep -o . | awk '{a[(NR-1)%26]\
+    \ = $0;} END {for (i=0; i<26; i++) {if (a[i] != \"\") print a[i];}}' | awk 'NR%2==1\
+    \ {count++} END {print count}')\n    echo \"$count\"\n  fi", "  if [[ -z \"${1//\
+    \ }\" ]]; then\n    echo 3\n  elif [[ \"$1\" =~ [,] ]]; then\n    echo \"$1\"\
+    \ | tr \",\" \"\\n\"\n  else\n    echo \"$1\" | tr \" \" \"\\n\"\n  fi", "  case\
+    \ $1 in\n    *[[:space:]]*) printf \"%s\\n\" \"$1\";;\n    *,*)  awk -F, '{print\
+    \ $1,$2}' <<< \"$1\";;\n    *) printf \"%d\\n\" \"$(tr -d -c '[:lower:]' <<< \"\
+    $1\" | wc -c)\"\n  esac", "\tif [[ $1 =~ [[:space:]] ]]; then\n\t\techo $1 | tr\
+    \ \" \" \"\\n\"\n\telif [[ $1 =~ , ]]; then\n\t\techo $1 | tr \",\" \"\\n\"\n\t\
+    else\n\t\techo $(tr -dc 'a-z' <<< $1 | grep -o '[a-z]' | awk '$1 ~ /[a-z]/{a[length($1)]++}END{for(i\
+    \ in a) if(a[i]&1) printf(\"%d\\n\", i)}')\n\tfi", "    # Check if string is empty\n\
+    \    if [ -z \"$1\" ]; then\n        echo \"Try again with a valid string\"\n\
+    \        exit\n    fi\n\n    # Iterate over words and count the number of odd\
+    \ words\n    local counter=0\n    for word in $1; do\n        word=${word,,}\n\
+    \        # echo \"$word\"\n        for letter in $word; do\n            # echo\
+    \ \"$letter\"\n            if [ $(( $(ord $letter) % 2 )) == 1 ]; then\n     \
+    \           counter=$(( counter + 1 ))\n            fi\n        done\n    done\n\
+    \n    if [ $counter -gt 0 ]; then\n        echo $counter\n    else\n        echo\
+    \ $(echo $1 | tr -s , ' ')\n    fi", "    if [[ $1 =~ [[:space:]] ]]; then\n \
+    \       echo \"$1\" | sed -r 's/[,\\s]+/\\n/g'\n    elif [[ $1 =~ [,] ]]; then\n\
+    \        echo \"$1\" | sed -r 's/[,\\s]+/\\n/g'\n    else\n        echo \"$1\"\
+    \ | grep -o \"[a-z]\" | awk '{print tolower($0)}' | awk '{c=c+1; if (c%2==1) {a=a+1}}\
+    \ END {print a}'\n    fi", '  echo $1', "  local -r string=\"$1\"\n  local -r\
+    \ len=$(echo $string | wc -m)\n  local count\n  local -r whitespace=\" \"\n  local\
+    \ -r comma=\",\"\n  local -r space_count=$(echo $string | tr -cd \"$whitespace\"\
+    \ | wc -m)\n  local -r comma_count=$(echo $string | tr -cd \"$comma\" | wc -m)\n\
+    \  #echo -n \"space count: $space_count\"\n  #echo -n \"comma count: $comma_count\"\
+    \n  #echo -n \"len: $len\"\n  if [ $space_count -gt 0 ]; then\n    echo $string\
+    \ | tr \"$whitespace\" \"\\n\"\n  elif [ $comma_count -gt 0 ]; then\n    echo\
+    \ $string | tr \"$comma\" \"\\n\"\n  else\n    for (( count=0; count<$len; count++\
+    \ )); do\n      if [ $((count % 2)) == 1 ]; then\n        echo -n \"${string:$count:1}\"\
+    \n      fi\n    done\n  fi", "  if [[ $1 =~ \" \" ]]; then\n    echo $1 | tr \"\
+    \ \" \"\\n\"\n  elif [[ $1 =~ \",\" ]]; then\n    echo $1 | tr \",\" \"\\n\"\n\
+    \  else\n    echo $1 | grep -o '[a-z]' | sort | uniq -i -c | awk '{if($1 % 2 ==\
+    \ 1) print $2}' | wc -l\n  fi", '  echo "$1"', "  x=$1\n  if [[ $x =~ \\W ]];\
+    \ then\n    echo \"$x\" | tr ' ' '\\n'\n  elif [[ $x =~ , ]]; then\n    echo \"\
+    $x\" | tr ',' '\\n'\n  else\n    echo $(grep -o . <<< $x | grep -iv [aeiou] |\
+    \ wc -l)\n  fi", "  # This function doesn't work for $1 = 'abcdef', it always\
+    \ returned 3\n  # -tr \"[[:space:]]\" \"[,]\" will replace all space chars with\
+    \ commas\n  # tr -s \",\" \" \" will remove the extra commas\n  # tr -s \" \"\
+    \ \"\\n\" will replace all spaces with new lines\n  # -c \",\" \" \" will replace\
+    \ all commas with spaces\n  # wc -l will count the number of lines\n  # wc -c\
+    \ will count the number of chars\n  # sed 's/ //g' will remove all the spaces\n\
+    \  # tr -d '[:lower:]' will remove all the lowercase letters\n  # sed 's/^.//'\
+    \ will remove the first char\n  # bc will evaluate the operation in a math context\n\
+    \  # printf %.0f will return a float rounded to 0 decimals\n  if [[ $1 =~ [[:space:]]\
+    \ ]]; then\n    echo $1 | tr -tr \"[[:space:]]\" \"[,]\" | tr -s \",\" \" \" |\
+    \ tr -s \" \" \"\\n\"\n  elif [[ $1 =~ [,] ]]; then\n    echo $1 | tr -s \",\"\
+    \ \" \" | tr -s \" \" \"\\n\"\n  else\n    echo \"$(($(wc -c <<< $1) - $(tr -d\
+    \ '[:lower:]' <<< $1 | wc -c) - $(sed 's/^.//' <<< $1) + 1))\"\n  fi", "  word_list=$(echo\
+    \ $1 | tr -s \" \")\n  if [ -z \"$word_list\" ]; then\n    word_list=$(echo $1\
+    \ | tr -s \",\")\n    if [ -z \"$word_list\" ]; then\n      word_list=$(echo $1\
+    \ | tr -s \",\" \" \")\n      count=0\n      for letter in $word_list; do\n  \
+    \      count=$((count + $(($(printf \"%d\" \\'$letter) - 97)) % 2))\n      done\n\
+    \      word_list=$count\n    fi\n  fi\n  echo $word_list", "  echo $1 | grep -o\
+    \ -E '[[:alpha:]]+' | wc -l"]
 stop_tokens:
 - "\n}"

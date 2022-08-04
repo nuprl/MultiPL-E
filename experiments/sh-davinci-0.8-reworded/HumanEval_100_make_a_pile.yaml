@@ -12,6 +12,96 @@ tests: "}\n\ncandidate() {\n    make_a_pile \"$@\"\n}\n\nset -e\nrun_test() {\n 
   \ ]]\n    [[ $(candidate \"5\") = \"5 7 9 11 13\" ]]\n    [[ $(candidate \"6\")\
   \ = \"6 8 10 12 14 16\" ]]\n    [[ $(candidate \"8\") = \"8 10 12 14 16 18 20 22\"\
   \ ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local stones=$1\n    local next_layer=()\n    local output=()\n\
+    \    while [[ ${stones} -gt 0 ]]; do\n        if [[ ${stones} -eq 1 ]]; then\n\
+    \            output+=(\"${stones}\")\n            break\n        fi\n        output+=(\"\
+    ${stones}\")\n        if [[ ${stones} -eq 2 ]]; then\n            stones=$((stones-1))\n\
+    \            continue\n        fi\n        if [[ ${stones} -eq 3 ]]; then\n  \
+    \          stones=$((stones-2))\n            continue\n        fi\n        if\
+    \ [[ $((${stones} % 2)) -eq 0 ]]; then\n            stones=$((stones-2))\n   \
+    \     else\n            stones=$((stones-1))\n        fi\n    done\n    echo \"\
+    ${output[@]}\"", "    local i=0\n    local n=$1\n    if [[ $n -le 0 ]]; then\n\
+    \        return 1\n    fi\n    echo \"[\\\"$n\\\"\"\n    while true; do\n    \
+    \    n=$((n%2 ? n+2 : n+1))\n        echo \", \\\"$n\\\"\"\n        i=$((i+1))\n\
+    \        if [[ $i -ge $1 ]]; then\n            break\n        fi\n    done\n \
+    \   echo \"]\"", "  local n=$1\n  local i=1\n  while [ $i -le $n ]; do\n    if\
+    \ [ $i -eq 1 ]; then\n      echo \"\\\"$i\\\"\"\n    else\n      if [ $i -lt $n\
+    \ ]; then\n        echo -n \", \"\n      fi\n      if [ $((i % 2)) -eq 0 ]; then\n\
+    \        echo -n \"\\\"$((i + 1))\\\"\"\n      else\n        echo -n \"\\\"$((i\
+    \ + 2))\\\"\"\n      fi\n    fi\n    i=$((i + 1))\n  done", "  if [ $1 -eq 0 ];\
+    \ then\n    return 0\n  fi\n  echo \"$1\"\n  if [ $(( $1 % 2 )) -eq 0 ]; then\n\
+    \    make_a_pile $(( $1 + 1 ))\n  else\n    make_a_pile $(( $1 + 2 ))\n  fi",
+  "    local p=\"$1\"\n    local i=1\n\n    while ((i < p))\n    do\n        if ((i\
+    \ % 2 == 0))\n        then\n            ((++i))\n        else\n            ((i\
+    \ += 2))\n        fi\n        echo \"\\\"$i\\\"\"\n    done", "    local N=$1\n\
+    \    local res=\"\"\n    local i=0\n    if [ $N -eq 0 ]; then\n        return\
+    \ 0\n    fi\n    while [ $N -ne 0 ]; do\n        res=\"$res \\\"$N\\\"\"\n   \
+    \     if [ $((N % 2)) -eq 0 ]; then\n            N=$((N + 1))\n        else\n\
+    \            N=$((N + 2))\n        fi\n        N=$((N / 2))\n        i=$((i +\
+    \ 1))\n    done\n    echo -e \"$res\"", "    n=\"$1\"\n    res=\"[$n\"\n    n_stones=$n\n\
+    \    while (( n_stones > 1 )); do\n        if (( n_stones % 2 == 0 )); then\n\
+    \            n_stones+=1\n        else\n            n_stones+=2\n        fi\n\
+    \        res+=\",$n_stones\"\n    done\n    echo \"$res]\"", "  local stones_in_level=$1\n\
+    \  local pile=()\n  while ((stones_in_level > 0)); do\n    pile+=($stones_in_level)\n\
+    \    ((stones_in_level%2 == 0)) && ((stones_in_level++)) || ((stones_in_level+=2))\n\
+    \  done\n  printf '[\"%s\"]' \"${pile[@]}\"", "    declare -a result\n    local\
+    \ n=\"$1\"\n    local level=\"$n\"\n    result[0]=\"$n\"\n    until [ \"$level\"\
+    \ -eq \"1\" ]; do\n        if [ \"$(($level % 2))\" -eq \"0\" ]; then\n      \
+    \      level=\"$(($level / 2))\"\n        else\n            level=\"$(($level\
+    \ + 1))\"\n        fi\n        result[${#result[@]}]=\"$level\"\n    done\n  \
+    \  echo \"${result[@]}\"", "  local -r n=\"$1\"\n  local i=1\n\n  # Pad the number\
+    \ with a leading zero for better string manipulation later\n  local n_pad=\"0$n\"\
+    \n\n  # The number of stones at each level is counted by adding a running odd\
+    \ or\n  # even number to the previous.\n  local stones\n\n  # The first level\
+    \ has n stones\n  local -a levels=(\"$n\")\n\n  # The number of stones in the\
+    \ second level is the next odd number after n if\n  # n is odd or the next even\
+    \ number after n if n is even. The counter i is\n  # incremented by two because\
+    \ odd numbers are added to n if n is odd and even\n  # numbers are added to n\
+    \ if n is even.\n  stones=$((n + ((10#${n_pad: -1} % 2) * 2 + 1)))\n  levels+=(\"\
+    $stones\")\n\n  # The number of stones at each level is incremented by the next\
+    \ odd or even\n  # number.\n  while [ \"$stones\" -lt \"$n\" ]; do\n    i=$((i\
+    \ + 2))\n    stones=$((stones + i))\n    levels+=(\"$stones\")\n  done\n\n  #\
+    \ Return the array of stones as a JSON array\n  printf '%s\\n' \"${levels[@]}\"\
+    \ | jq -Rc 'split(\"\\n\")'", "    # generate a list of odd/even numbers\n   \
+    \ local n=$1\n    if [[ $n%2 -eq 0 ]]; then\n        seq $n 2 2*$n\n    else\n\
+    \        seq $n 2 $((n*3-1))\n    fi", "  local -r n=\"$1\"\n  local result=''\n\
+    \  local stones=\"$n\"\n  for ((; stones>0;))\n  do\n    result=\"$result, \\\"\
+    $stones\\\"\"\n    ((stones--))\n    [[ $((stones%2)) -eq 0 ]] && ((stones--))\n\
+    \  done\n  echo \"${result#, }\"", "    for i in $(seq $1); do\n        if [ $(($i\
+    \ % 2)) -eq 0 ]; then\n            echo -n '\"'\"$(($i + 1))\"'\"' '\n       \
+    \ else\n            echo -n '\"'\"$(($i + 2))\"'\"' '\n        fi\n    done",
+  "    local n=\"$1\"\n    local num\n    local -a res\n    local i=0\n    while [[\
+    \ i -lt n ]]; do\n        if [[ $((i%2)) -eq 0 ]]; then\n            num=$((n+(i*2)))\n\
+    \        else\n            num=$((n+(i*2)-1))\n        fi\n        res+=(\"$num\"\
+    )\n        i=$((i+1))\n    done\n    echo ${res[@]}", "    # Local variable\n\
+    \    local -a list\n    local i=0\n\n    if [[ $1 -eq 0 ]]; then\n        echo\
+    \ '[\"0\"]'\n        return\n    fi\n\n    while [[ $i -lt $1 ]]; do\n       \
+    \ if [[ ${#list[@]} -eq 0 ]]; then\n            list[$i]=$1\n        elif [[ $((\
+    \ ${list[$((i-1))]} % 2 )) -eq 0 ]]; then\n            list[$i]=$(( ${list[$((i-1))]}\
+    \ + 2 ))\n        else\n            list[$i]=$(( ${list[$((i-1))]} + 1 ))\n  \
+    \      fi\n        i=$((i+1))\n    done\n\n    # Result\n    echo \"[\"$(printf\
+    \ '\"%s\", ' \"${list[@]}\")\"]\"", "    local n=$1\n    local stone_pile=[]\n\
+    \    local num_stones=\"$n\"\n    while [ \"$num_stones\" -gt 0 ]; do\n      \
+    \  if [ \"$num_stones\" -eq 1 ]; then\n            echo \"${stone_pile[@]}\"\n\
+    \            break\n        fi\n        local next_num_stones\n        if [ $((num_stones\
+    \ % 2)) -eq 0 ]; then\n            # even\n            next_num_stones=$((num_stones\
+    \ + 2))\n        else\n            # odd\n            next_num_stones=$((num_stones\
+    \ + 1))\n        fi\n        stone_pile+=(\"$num_stones\")\n        num_stones=\"\
+    $next_num_stones\"\n    done", "    local N=$1\n    local stones=$N\n    local\
+    \ even odd\n    local -a res=()\n    for ((i=1; i < $N; i++)); do\n        # Find\
+    \ next even/odd number\n        ((stones%2)) && ((++stones)) || ((stones+=2))\n\
+    \        res+=($stones)\n    done\n    echo \"${res[@]}\"", "    n=$1\n    declare\
+    \ -a a\n    for (( i=0; i<n; i++ )); do\n        a[$i]=$n\n        (( n=$((n%2?n+2:n+1))\
+    \ ))\n    done\n    echo \"${a[@]}\"", "  if [ $1 -le 0 ]; then\n    echo \"Please\
+    \ enter a positive integer.\"\n    return\n  fi\n  pile_list=\"$1\"\n  num_stones=\"\
+    $1\"\n  num_levels=1\n  while [ \"$num_stones\" -gt 0 ]; do\n    if [ \"$((num_stones\
+    \ % 2))\" -eq 0 ]; then\n      num_stones=$((num_stones / 2))\n    else\n    \
+    \  num_stones=$((num_stones / 2 + 1))\n    fi\n    pile_list=\"$pile_list $num_stones\"\
+    \n    ((num_levels++))\n  done\n  echo \"$pile_list\"", "    if ! [[ \"$1\" =~\
+    \ ^[0-9]+$ ]]; then\n        echo \"usage: $0 <integer>\"\n        return 1\n\
+    \    fi\n    declare -a pile\n    pile=($1)\n    while [ \"${#pile[@]}\" -lt \"\
+    $1\" ]; do\n        if [[ \"$((${pile[-1]} % 2))\" -eq 0 ]]; then\n          \
+    \  pile+=(\"$((${pile[-1]} + 2))\")\n        else\n            pile+=(\"$((${pile[-1]}\
+    \ + 1))\")\n        fi\n    done\n    echo \"${pile[@]}\""]
 stop_tokens:
 - "\n}"

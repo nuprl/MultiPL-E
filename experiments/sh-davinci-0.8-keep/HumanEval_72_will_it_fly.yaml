@@ -15,6 +15,123 @@ tests: "}\n\ncandidate() {\n    will_it_fly \"$@\"\n}\n\nset -e\nrun_test() {\n 
   5\") = \"false\" ]]\n    [[ $(candidate \"3\" \"5\") = \"true\" ]]\n    [[ $(candidate\
   \ \"3 2 3\" \"1\") = \"false\" ]]\n    [[ $(candidate \"1 2 3\" \"6\") = \"false\"\
   \ ]]\n    [[ $(candidate \"5\" \"5\") = \"true\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local -a list=($1)\n  local -i len=\"${#list[@]}\"\n\n  if (( len\
+    \ == 1 )); then\n    echo $(( list[0] <= $2 ))\n    return\n  fi\n\n  local -i\
+    \ hlen=\"$(( len / 2 ))\"\n  local -i p=1\n  for (( i=0; i<hlen; i++ )); do\n\
+    \    (( list[i] == list[len-i-1] )) || {\n      echo 0\n      return\n    }\n\
+    \    (( p++ ))\n  done\n\n  echo $(( p <= $2 ))", "  ( #subshell\n  ls=$(echo\
+    \ $1 | tr ' ' '\\n')\n  w=$2\n  #check if the list is palindromic\n  rev=$(echo\
+    \ $ls | rev)\n  if [ \"$ls\" != \"$rev\" ]; then\n    echo false\n    exit\n \
+    \ fi\n  #check if the list is not heavier than the weight\n  sum=0\n  for i in\
+    \ $ls; do\n    ((sum += i))\n  done\n  if [ $sum -gt $w ]; then\n    echo false\n\
+    \    exit\n  fi\n  echo true\n  )", "  declare -a list=( $1 )\n  local sum=0\n\
+    \  local length=${#list[@]}\n  local weight=$2\n  local mid=$((length/2))\n  local\
+    \ odd=$((length%2))\n  for ((i=0; i<mid; i++)); do\n    sum=$((sum+list[i]+list[length-i-1]))\n\
+    \    if [[ ${list[i]} -ne ${list[length-i-1]} ]]; then\n      echo False\n   \
+    \   return\n    fi\n  done\n  if [[ $odd -ne 0 ]]; then\n    sum=$((sum+list[mid]))\n\
+    \  fi\n  if [[ $sum -le $weight ]]; then\n    echo True\n  else\n    echo False\n\
+    \  fi", "    local list=\"$1\"\n    local max_weight=\"$2\"\n    local sum=0\n\
+    \    local balanced=0\n    local arr=()\n    local i=0\n    for item in $list;\
+    \ do\n        sum=$((sum + item))\n        arr[$i]=$item\n        ((i++))\n  \
+    \  done\n    for ((j=0; j<${#arr[@]}; j++)); do\n        for ((k=${#arr[@]}-1;\
+    \ k>=0; k--)); do\n            if [ \"${arr[$j]}\" -eq \"${arr[$k]}\" ]; then\n\
+    \                unset arr[$j]\n                unset arr[$k]\n              \
+    \  arr=( \"${arr[@]}\" )\n            fi\n        done\n    done\n    if [ ${#arr[@]}\
+    \ -eq 0 ]; then\n        balanced=1\n    fi\n    if [ $sum -le $max_weight -a\
+    \ $balanced -eq 1 ]; then\n        echo true\n    else\n        echo false\n \
+    \   fi", "  local -r data=\"$1\"\n  local -r max_weight=\"$2\"\n  # convert $data\
+    \ to an array\n  local -a a=($data)\n  local -r len=\"${#a[@]}\"\n  local -r half=\"\
+    $((len/2))\"\n  local weight=0\n\n  # odd-length lists are never balanced\n  if\
+    \ [[ $((len%2)) -eq 1 ]]; then\n    return 1\n  fi\n\n  # count weight\n  for\
+    \ ((i=0; i<len; i++)); do\n    weight=$((weight+a[i]))\n  done\n\n  # is weight\
+    \ less than max weight?\n  if [[ $weight -gt $max_weight ]]; then\n    return\
+    \ 1\n  fi\n\n  # is list balanced?\n  for ((i=0; i<half; i++)); do\n    if [[\
+    \ ${a[i]} -ne ${a[-i-1]} ]]; then\n      return 1\n    fi\n  done\n\n  return\
+    \ 0", "    local word=\"$1\"\n    local max=\"$2\"\n    local reverse=\"$(reverse\
+    \ $word)\"\n    local sum=$(echo $word | sed 's/ /+/g')\n    local total=$(($sum))\n\
+    \    if [[ $word == $reverse ]] && [[ $total -le $max ]]; then\n        echo True\n\
+    \    else\n        echo False\n    fi", "    local -a arr=(\"$@\")\n    arr=(\"\
+    ${arr[@]:1}\")\n    if [[ $((\"${arr[@]}\")) -le $2 ]]; then\n        for ((i=0;\
+    \ i<\"${#arr[@]}\"; i++)); do\n            if [[ ${arr[i]} != ${arr[${#arr[@]}-i-1]}\
+    \ ]]; then\n                echo \"False\"\n                return\n         \
+    \   fi\n        done\n        echo \"True\"\n    else\n        echo \"False\"\n\
+    \    fi", "    local sum=0\n    local mid=$((${#1}/2))\n    local left=${1:0:$mid}\n\
+    \    local right=${1:$mid}\n    local right_len=${#right}\n    if [[ ${#1}%2 -eq\
+    \ 1 ]]; then\n        right_len=$((right_len-1))\n        right=${right:0:$right_len}\n\
+    \    fi\n    for item in $1; do\n        sum=$((sum+item))\n    done\n    if [[\
+    \ $sum -gt $2 ]]; then\n        echo \"False\"\n    elif [[ $left != $(rev <<<$right)\
+    \ ]]; then\n        echo \"False\"\n    else\n        echo \"True\"\n    fi",
+  "  list=$1\n  max_weight=$2\n  list_length=$(echo $list | wc -w)\n  list_length_is_odd=$((list_length\
+    \ % 2))\n  list_sum=$(echo $list | tr ' ' '+' | bc)\n  for i in $(seq 0 $((list_length\
+    \ / 2 - 1))); do\n    first_element=$(echo $list | cut -d ' ' -f $((i + 1)))\n\
+    \    last_element=$(echo $list | cut -d ' ' -f $((list_length - i)))\n    if [[\
+    \ $first_element != $last_element ]]; then\n      echo \"False\"\n      return\n\
+    \    fi\n  done\n  if [[ $list_sum -le $max_weight ]]; then\n    echo \"True\"\
+    \n  else\n    echo \"False\"\n  fi", "\tif [ $# -ne 2 ]; then\n\t\techo \"Usage:\
+    \ ./ex09.sh <q> <w>\"\n\t\texit 1\n\tfi\n\tlocal q=\"$1\"\n\tlocal w=\"$2\"\n\t\
+    q=(${q// / })\n\tqlen=${#q[@]}\n\tif [ $(($qlen % 2)) -eq 0 ]; then\n\t\tmid=$(($qlen\
+    \ / 2))\n\t\tfirst=${q[@]:0:$mid}\n\t\tlast=${q[@]:$mid:$qlen}\n\t\tfirst=${first[@]//\
+    \ /}\n\t\tlast=${last[@]// /}\n\t\tlast=${last// /}\n\t\tfirst=${first// /}\n\t\
+    \tif [ \"$first\" == \"$last\" ]; then\n\t\t\twhile [ $qlen -gt 0 ]; do\n\t\t\t\
+    \tlet qlen-=1\n\t\t\t\tlet w-=${q[$qlen]}\n\t\t\tdone\n\t\t\tif [ $w -ge 0 ];\
+    \ then\n\t\t\t\techo \"True\"\n\t\t\telse\n\t\t\t\techo \"False\"\n\t\t\tfi\n\t\
+    \telse\n\t\t\techo \"False\"\n\t\tfi\n\telse\n\t\tmid=$(($qlen / 2))\n\t\tfirst=${q[@]:0:$mid}\n\
+    \t\tlast=${q[@]:$mid+1:$qlen}\n\t\tfirst=${first[@]// /}\n\t\tlast=${last[@]//\
+    \ /}\n\t\tlast=${last// /}\n\t\tfirst=${first// /}\n\t\tif [ \"$first\" == \"\
+    $last\" ]; then\n\t\t\twhile [ $qlen -gt 0 ]; do\n\t\t\t\tlet qlen-=1\n\t\t\t\t\
+    let w-=${q[$qlen]}\n\t\t\tdone\n\t\t\tif [ $w -ge 0 ]; then\n\t\t\t\techo \"True\"\
+    \n\t\t\telse\n\t\t\t\techo \"False\"\n\t\t\tfi\n\t\telse\n\t\t\techo \"False\"\
+    \n\t\tfi\n\tfi\n", "    local list=$1\n    local max=$2\n    local sum=$(awk '{for(i=1;i<=NF;i++)\
+    \ {s+=$i} print s}' <<< \"$list\")\n    local palindrome=$(echo $list | xargs\
+    \ -n 1 | tr ' ' '\\n' | rev | tr '\\n' ' ')\n    local balanced=0\n    [[ \"$list\"\
+    \ == \"$palindrome\" ]] && balanced=1\n    ((sum <= max && balanced)) && echo\
+    \ True || echo False", "\tlocal list=$1 maxWeight=$2\n\tIFS=' ' read -ra arr <<<\
+    \ \"$list\"\n\tlocal l=${#arr[@]}\n\tlocal balanced=true\n\t# first, check if\
+    \ the list is balanced\n\tfor (( i=0; i<$((l/2)); i++ )); do\n\t\tif [[ ${arr[$i]}\
+    \ -ne ${arr[$l-i-1]} ]]; then\n\t\t\tbalanced=false\n\t\t\tbreak\n\t\tfi\n\tdone\n\
+    \t# now check if the sum of the elements is less than the maxWeight\n\tif $balanced;\
+    \ then\n\t\tlocal sum=0\n\t\tfor e in \"${arr[@]}\"; do\n\t\t\t(( sum += e ))\n\
+    \t\tdone\n\t\tif (( sum <= maxWeight )); then\n\t\t\techo true\n\t\t\treturn\n\
+    \t\tfi\n\tfi\n\techo false", "  local -a lst=($1)\n  local sum=0\n  for i in \"\
+    ${lst[@]}\"; do\n    ((sum+=i))\n  done\n  if [[ $2 -ge $sum ]]; then\n    if\
+    \ [[ $1 == $(echo \"$1\" | rev) ]]; then\n      echo \"True\"\n    else\n    \
+    \  echo \"False\"\n    fi\n  else\n    echo \"False\"\n  fi", "    # get the sum\
+    \ of the list and check if it's smaller than the weight limit\n    n=$(echo \"\
+    $1\" | awk '{s=0; for(i=1;i<=NF;i++) s+=$i} END {print s}')\n    [[ $n -gt $2\
+    \ ]] && echo \"False\" && return\n    # check if it's a palindrome\n    [[ $(echo\
+    \ \"$1\" | sed -e 's/ /\\n/g' | sed -e '1h;2,$H;$!d;g' -e 's/^\\n//' -e 's/\\\
+    n/ /g') == \"$1\" ]] && echo \"True\" || echo \"False\"", "    # $1 is a string,\
+    \ convert it to an array\n    arr=()\n    for element in $1; do\n        arr+=($element)\n\
+    \    done\n    # first check if balanced\n    if [[ \"${arr[@]}\" != \"${arr[@]/%${arr[0]}/}\"\
+    \ ]]; then\n        # not balanced\n        echo False\n    else\n        # balanced,\
+    \ now sum elements and check if it's less than w\n        sum=0\n        for element\
+    \ in \"${arr[@]}\"; do\n            sum=$(( $sum + $element ))\n        done\n\
+    \        if [ $sum -gt $2 ]; then\n            echo False\n        else\n    \
+    \        echo True\n        fi\n    fi", '  # Write your code here', '    echo
+    $(will_it_fly_int "$1" "$2")', "    local list=$1\n    local max_w=$2\n    local\
+    \ w=0\n    local f=\"\"\n    local t=\"\"\n    local m=\"\"\n    list=$(echo $list\
+    \ | tr ' ' '\\n')\n    for i in $list; do\n        t=$f\n        f=$i\n      \
+    \  if [ \"$f\" = \"$t\" ]; then\n            m=1\n        else\n            m=0\n\
+    \        fi\n        w=$((w+i))\n    done\n    if [ $m -eq 1 ] && [ $w -le $max_w\
+    \ ]; then\n        echo \"True\"\n    else\n        echo \"False\"\n    fi", " \
+    \ local it_will=\"\"\n  local a=($1)\n  local b=($1)\n  a=${a[@]::$((${#a[@]}\
+    \ / 2))}\n  b=${b[@]:$((${#b[@]} / 2))}\n  [ \"$a\" = \"${b[@]}\" ] && it_will=\"\
+    True\" || it_will=\"False\"\n  [ $((${1// /+})) -gt $2 ] && it_will=\"False\"\n\
+    \  echo $it_will", "  # We'll keep track of the sum of the elements\n  local sum=0\n\
+    \  # Number of elements\n  local n=$(wc -w <<< $1)\n  # We convert the argument\
+    \ to an array and loop over it\n  # -A is the name of the array, 'a' is the name\
+    \ of the index\n  for a in ${1[@]}; do\n    # We add the value of the element\
+    \ to the sum\n    sum=$((sum+a))\n  done\n  # We convert the string to an array\
+    \ (b) and reverse it. Then we loop over this reversed array\n  for b in $(echo\
+    \ $1 | sed 's/ /\\n/g' | tac); do\n    # We keep taking elements from the front\
+    \ of the original array (a)\n    # and from the end of the reversed array (b)\
+    \ and compare them\n    a=$(echo $1 | cut -d ' ' -f $n)\n    if [ $a -ne $b ];\
+    \ then\n      # If at least one of them is different, we print False and return\
+    \ from the function\n      echo \"False\"\n      return\n    fi\n    # We keep\
+    \ going until we reach the middle of the array\n    n=$((n-1))\n  done\n  # If\
+    \ we get here, we looped through the entire array and it's a palindrome\n  # The\
+    \ sum of the elements is less than or equal to the maximum possible weight $2\n\
+    \  if [ $sum -le $2 ]; then\n    echo \"True\"\n  else\n    echo \"False\"\n \
+    \ fi"]
 stop_tokens:
 - "\n}"

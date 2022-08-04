@@ -13,6 +13,77 @@ tests: "}\n\ncandidate() {\n    words_string \"$@\"\n}\n\nset -e\nrun_test() {\n
   \ \"One,, two, three, four, five, six,\") = \"One two three four five six\" ]]\n\
   \    [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"ahmed     , gamal\") =\
   \ \"ahmed gamal\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    echo $1 | sed -e 's/\\s\\+/,/g' | sed -e 's/^,//' | sed -e 's/,$//'\
+    \ | sed -e 's/,/, /g' | sed -e 's/\\s\\+/\", \"/g' | sed -e 's/^/\"/' | sed -e\
+    \ 's/$/\"/'", "  local words=()\n  local word\n  for word in $(echo $1 | tr ','\
+    \ ' '); do\n    words+=(\\\"$word\\\")\n  done\n  echo ${words[@]}", "    echo\
+    \ $1 | tr -s ' ' '\\n' | tr -s ',' '\\n' | sed 's/^/\"/g' | sed 's/$/\"/g'", " \
+    \ echo \"$1\" | tr ' ' '\\n' | tr ',' '\\n' | sed 's/^/\"/' | sed 's/$/\"/'",
+  "  local words=()\n  local word=''\n  local char=''\n  local in_word=false\n  local\
+    \ in_quote=false\n  local i=0\n  local len=${#1}\n  while [ $i -lt $len ]; do\n\
+    \    char=${1:$i:1}\n    if [ \"$char\" == '\"' ]; then\n      if [ $in_quote\
+    \ == true ]; then\n        in_quote=false\n      else\n        in_quote=true\n\
+    \      fi\n    elif [ \"$char\" == ' ' ] || [ \"$char\" == ',' ]; then\n     \
+    \ if [ $in_quote == false ]; then\n        if [ $in_word == true ]; then\n   \
+    \       words+=(\"\\\"$word\\\"\")\n          word=''\n          in_word=false\n\
+    \        fi\n      else\n        word+=\"$char\"\n      fi\n    else\n      word+=\"\
+    $char\"\n      in_word=true\n    fi\n    i=$((i+1))\n  done\n  if [ $in_word ==\
+    \ true ]; then\n    words+=(\"\\\"$word\\\"\")\n  fi\n  echo ${words[@]}", " \
+    \ echo \"$1\" | tr -s ' ' '\\n' | tr -s ',' '\\n' | sed 's/^/\"/' | sed 's/$/\"\
+    /'", "    echo \"$1\" | sed 's/[, ]\\+/\\n/g' | sed 's/^/\"/g' | sed 's/$/\"/g'",
+  "  local string=\"$1\"\n  local words=()\n  local word=''\n  local char=''\n  local\
+    \ i=0\n  local j=0\n  local len=${#string}\n  local in_word=false\n  local in_quote=false\n\
+    \  local quote_char=''\n  local escaped=false\n\n  while [ $i -lt $len ]; do\n\
+    \    char=\"${string:$i:1}\"\n    if [ \"$char\" == '\\\\' ]; then\n      escaped=true\n\
+    \    elif [ \"$char\" == '\"' ] || [ \"$char\" == \"'\" ]; then\n      if [ \"\
+    $escaped\" == true ]; then\n        word=\"$word$char\"\n        escaped=false\n\
+    \      elif [ \"$in_quote\" == true ]; then\n        if [ \"$char\" == \"$quote_char\"\
+    \ ]; then\n          in_quote=false\n        else\n          word=\"$word$char\"\
+    \n        fi\n      else\n        in_quote=true\n        quote_char=\"$char\"\n\
+    \      fi\n    elif [ \"$char\" == ' ' ] || [ \"$char\" == ',' ]; then\n     \
+    \ if [ \"$in_quote\" == true ]; then\n        word=\"$word$char\"\n      elif\
+    \ [ \"$in_word\" == true ]; then\n        words[$j]=\"$word\"\n        word=''\n\
+    \        j=$((j + 1))\n        in_word=false\n      fi\n    else\n      in_word=true\n\
+    \      word=\"$word$char\"\n    fi\n    i=$((i + 1))\n  done\n\n  if [ \"$in_word\"\
+    \ == true ]; then\n    words[$j]=\"$word\"\n  fi\n\n  echo \"${words[@]}\"", " \
+    \ echo $1 | tr -s '[:space:]' '\\n' | tr -d ',' | sed 's/^/\"/g' | sed 's/$/\"\
+    /g'", "    echo \"$1\" | tr -d '\\n' | tr ' ' '\\n' | tr ',' '\\n' | tr -d '\"\
+    ' | tr '\\n' ' ' | sed 's/^ *//g' | sed 's/ *$//g'", "  echo \"$1\" | tr -s '[:space:]'\
+    \ '\\n' | tr -d ',' | sed -e 's/^/\"/' -e 's/$/\"/'", "  local string=$1\n  local\
+    \ words=()\n  local word=''\n  local word_start=0\n  local word_end=0\n  local\
+    \ word_length=0\n  local word_index=0\n  local char=''\n  local char_index=0\n\
+    \  local char_code=0\n  local char_is_space=0\n  local char_is_comma=0\n  local\
+    \ char_is_quote=0\n  local char_is_escape=0\n  local char_is_escape_quote=0\n\
+    \  local char_is_escape_escape=0\n  local char_is_escape_comma=0\n  local char_is_escape_space=0\n\
+    \  local char_is_escape_newline=0\n  local char_is_escape_tab=0\n  local char_is_escape_carriage_return=0\n\
+    \  local char_is_escape_backspace=0\n  local char_is_escape_form_feed=0\n  local\
+    \ char_is_escape_vertical_tab=0\n  local char_is_escape_octal=0\n  local char_is_escape_hex=0\n\
+    \  local char_is_escape_unicode=0\n  local char_is_escape_unicode_surrogate=0\n\
+    \  local char_is_escape_unicode_surrogate_pair=0\n  local char_is_escape_unicode_surrogate_pair_first=0\n\
+    \  local char_is_escape_unicode_surrogate_pair_second=0\n  local char_is_escape_unicode_surrogate_pair_second_first=0\n\
+    \  local char_is_escape_unicode_surrogate_pair_second_second=0\n  local char_is_escape_unicode_surrogate_pair_second_third=0\n\
+    \  local char_is_escape_unicode_surrogate_pair_second_fourth=0\n  local char_is_escape_unicode_surrogate_pair_second_fifth=0\n\
+    \  local char_is_escape_unicode_surrogate_pair_second_sixth=0\n  local char_is_escape_unicode_sur",
+  "  echo $1 | tr -s '[:space:]' ' ' | tr ' ' '\\n' | tr ',' '\\n' | tr -d '\"' |\
+    \ tr '\\n' ' ' | sed 's/^ *//g' | sed 's/ *$//g'", "  echo \"$1\" | tr -s '[:space:]'\
+    \ '\\n' | tr -d ',' | sed 's/^/\"/;s/$/\"/'", "  echo \"[$(echo \"$1\" | tr ','\
+    \ ' ' | tr ' ' ',')]\"", "  echo \"$1\" | tr -s ' ' '\\n' | tr -s ',' '\\n' |\
+    \ sed 's/^/\"/g' | sed 's/$/\"/g'", "  echo $1 | tr ' ' '\\n' | tr ',' '\\n' |\
+    \ tr -d '\"' | tr '\\n' ' ' | sed 's/ $//'", "  local words=$(echo $1 | sed 's/[,\
+    \ ]\\+/ /g')\n  local words_array=()\n  for word in $words; do\n    words_array+=(\"\
+    \\\"$word\\\"\")\n  done\n  echo ${words_array[@]}", "  echo \"[$(echo \"$1\"\
+    \ | sed -E 's/[, ]+/\" \"] [\"/g')]\"", "    local words=()\n    local word=''\n\
+    \    local in_word=false\n    local in_quote=false\n    local i=0\n    local c=''\n\
+    \    local len=\"${#1}\"\n    while [ $i -lt $len ]; do\n        c=\"${1:$i:1}\"\
+    \n        if [ \"$c\" == '\"' ]; then\n            if [ \"$in_quote\" == true\
+    \ ]; then\n                in_quote=false\n            else\n                in_quote=true\n\
+    \            fi\n        elif [ \"$c\" == ' ' ] || [ \"$c\" == ',' ]; then\n \
+    \           if [ \"$in_quote\" == false ]; then\n                if [ \"$in_word\"\
+    \ == true ]; then\n                    words+=(\"$word\")\n                  \
+    \  word=''\n                    in_word=false\n                fi\n          \
+    \  else\n                word+=\"$c\"\n            fi\n        else\n        \
+    \    word+=\"$c\"\n            in_word=true\n        fi\n        i=$((i+1))\n\
+    \    done\n    if [ \"$in_word\" == true ]; then\n        words+=(\"$word\")\n\
+    \    fi\n    echo \"${words[@]}\""]
 stop_tokens:
 - "\n}"

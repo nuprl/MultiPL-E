@@ -10,6 +10,99 @@ tests: "}\n\ncandidate() {\n    circular_shift \"$@\"\n}\n\nset -e\nrun_test() {
   ) = \"12\" ]]\n    [[ $(candidate \"97\" \"8\") = \"79\" ]]\n    [[ $(candidate\
   \ \"12\" \"1\") = \"21\" ]]\n    [[ $(candidate \"11\" \"101\") = \"11\" ]]\n}\n\
   \nrun_test"
-completions: []
+completions: ["    local num=$1\n    local shift=$2\n    local len=${#num}\n    if\
+    \ [ \"$shift\" -gt \"$len\" ]; then\n        echo \"$num\" | rev\n    else\n \
+    \       echo \"$num\" | cut -c \"$(( len - shift + 1 ))-$len\"\n    fi", "  num=$1\n\
+    \  shift=$2\n  # Take care of negative shifting.\n  # Perhaps it's not strictly\
+    \ necessary.\n  if [[ $shift -lt 0 ]]; then\n    shift=$((10+shift))\n  fi\n \
+    \ if [[ $shift -gt ${#num} ]]; then\n    echo $num | rev\n  else\n    echo ${num:$shift}${num:0:$shift}\n\
+    \  fi", "  local result=\"\"\n  local num=$1\n  local shift=$2\n  local digits=${#num}\n\
+    \  local i=0\n  local t=0\n  local tmp=0\n  for (( ; ; )); do\n    t=$(( shift\
+    \ + i ))\n    if (( shift >= digits )); then\n      # swap digits\n      tmp=${num:$i:1}\n\
+    \      result=\"${result}${num:$(( digits - t )):1}\"\n      result=\"${result}${tmp}\"\
+    \n    else\n      result=\"${result}${num:$(( i + shift )):1}\"\n    fi\n    ((\
+    \ ++i ))\n    if (( i >= digits )); then\n      break\n    fi\n  done\n  echo\
+    \ $result", "    local n=$1\n    local shift=$2\n    local n_digits=$(echo \"\
+    $n\" | wc -c)\n    local n_digits_div=$(( $n_digits / $shift ))\n    local n_digits_mod=$((\
+    \ $n_digits % $shift ))\n    local n_digits_mod_neg=$(( $shift - $n_digits_mod\
+    \ ))\n    local n_digits_div_inv=$(( $n_digits_div - 1 ))\n    local n_digits_mod_neg_inv=$((\
+    \ $n_digits_mod - 1 ))\n    local n_digits_mod_inv=$(( $n_digits_mod - 1 ))\n\
+    \    echo \"$n\" | sed -r \\\n        -e \"s/^(.{$n_digits_mod})(.{$n_digits_mod_neg})$/\\\
+    2\\1/\" \\\n        -e \"s/^(.{$n_digits_mod})(.{$n_digits_mod_neg})$/\\2\\1/\"\
+    \ \\\n        -e \"s/^(.{$n_digits_mod})(.{$n_digits_mod_neg})$/\\2\\1/\" \\\n\
+    \        -e \"s/^(.{$n_digits_mod})(.{$n_digits_mod_neg})$/\\2\\1/\" \\\n    \
+    \    -e \"s/^(.{$n_digits_mod})(.{$n_digits_mod_neg})$/\\2\\1/\" \\\n        -e\
+    \ \"s/^(.{$n_digits_mod})(.{$n_digits_mod_neg})$/\\2\\1/\" \\\n        -e \"s/^(.{$n_digits_mod})(.{$n_digits_mod_neg})$/\\\
+    2\\1/\" \\\n        -e \"s/^(.{$n_digits_mod})(.{$n_digits_mod_neg})$/\\2\\1/\"\
+    \ \\\n        -e \"s/^(.{$n_dig", "    local x=$1\n    local shift=$2\n    local\
+    \ ret=\"\"\n    local s=\"\"\n    local m=$(($shift % ${#x}))\n    if [ $m -eq\
+    \ 0 ]; then\n        ret=$x\n    else\n        s=${x:0:$m}\n        x=${x:$m}\n\
+    \        ret=$x$s\n    fi\n    echo $ret", "    # takes advantage of the fact\
+    \ that string comparison is done digit by digit\n    local x=$1\n    local shift=$2\n\
+    \    local len=$(echo \"${x}\" | wc -c)\n    local diff=$((len - shift))\n   \
+    \ if [ \"${diff}\" -gt \"0\" ]; then\n        echo \"${x: -shift}${x:0:diff}\"\
+    \n    else\n        echo \"${x:0:len}\" | rev\n    fi", "    [ $# -eq 2 ] || {\
+    \ echo \"Usage: $0 integer integer\" >&2; return 1; }\n    [ \"$2\" -ge \"0\"\
+    \ ] || { echo \"shift must be positive or zero\" >&2; return 1; }\n    local d;\
+    \ d=\"$1\"\n    local s; s=\"$2\"\n    local len; len=$(echo \"$d\" | wc -c)\n\
+    \    local dlen; dlen=$((len - 1))\n    local s2; s2=$((dlen - s))\n    local\
+    \ r2; r2=$(echo \"$d\" | rev)\n    [ \"$s\" -ge \"$dlen\" ] && { echo \"$r2\"\
+    ; return 0; }\n    local tail; tail=$(echo \"$r2\" | cut -c1-\"$s\")\n    local\
+    \ head; head=$(echo \"$r2\" | cut -c\"$((s + 1))-\"$len)\n    local r3; r3=$(echo\
+    \ \"$head\"\"$tail\" | rev)\n    echo \"$r3\"", "    local x=$1\n    local shift=$2\n\
+    \    local digits=\"${#x}\"\n    if [ \"$shift\" -gt \"$digits\" ]; then\n   \
+    \     rev <<< \"$x\"\n    else\n        local end=\"${x:0:digits-shift}\"\n  \
+    \      local start=\"${x:digits-shift:shift}\"\n        printf \"%s%s\" \"$start\"\
+    \ \"$end\"\n    fi", "    # I hate bash and its inability to do modulus.\n   \
+    \ local -i num_digits=${#1}\n    local -i shift=$(( $2 % $num_digits ))\n    echo\
+    \ \"$1\" | tail -c $shift | tac | head -c $num_digits", "    local x\n    local\
+    \ shift\n    local x_length\n    local x_last_digit\n    local x_last_digit_length\n\
+    \    x=$1\n    shift=$2\n    x_length=${#x}\n    if (( shift > x_length )); then\n\
+    \        echo \"${x} | rev\" | bash\n    else\n        x_last_digit=${x: -$shift}\n\
+    \        x_last_digit_length=${#x_last_digit}\n        printf \"%0*d\" $x_last_digit_length\
+    \ \"$x_last_digit\"\n        echo \"${x:0:$(( x_length - shift ))}\"\n    fi",
+  "  local x=$1\n  local shift=$2\n  local result=\"\"\n  local l=${#x}\n  if (( $shift\
+    \ > $l )); then\n    for (( i = $l-1; i >= 0; i-- )); do\n      result+=\"${x:$i:1}\"\
+    \n    done\n  else\n    local tmp=\"${x:$shift:$l}\"\n    result=\"${x:0:$shift}$tmp\"\
+    \n  fi\n  echo \"$result\"", "  local digits=$(echo \"$1\" | fold -w1)\n  local\
+    \ num_digits=$(echo \"$digits\" | wc -l)\n  local shift=$2\n  if [[ shift -gt\
+    \ num_digits ]]; then\n    echo \"$digits\" | tac\n  else\n    echo \"$digits\"\
+    \ | tail -n$shift | tac | tr -d '\\n'\n    echo \"$digits\" | head -n$((num_digits\
+    \ - shift)) | tr -d '\\n'\n  fi", "  local digits=\"$1\"\n  local shift=\"$2\"\
+    \n  local numdigits=$(num_digits \"$digits\")\n  local shift=$((shift % numdigits))\n\
+    \  local front=\"\"\n  local back=\"\"\n  if [ \"$shift\" -gt \"0\" ]; then\n\
+    \    front=\"${digits:0:$shift}\"\n    back=\"${digits:$shift}\"\n  fi\n  echo\
+    \ \"$back$front\"", "  local num=$1\n  local shift=$2\n  local count=$(echo $num\
+    \ | wc -c)\n  local rev_num=$(rev $num)\n  if [ $shift -gt $count ]; then\n  \
+    \  echo $rev_num\n  else\n    local shift_digits=$(echo $rev_num | tail -c $shift)\n\
+    \    local reversed_result=$(echo $rev_num | head -c $((count - shift)))\n   \
+    \ echo $shift_digits$reversed_result | rev\n  fi", "    local integer=$1\n   \
+    \ local shift=$2\n    local length=$(echo $integer | wc -c)\n    if [[ $shift\
+    \ -gt $length ]]; then\n        # reverse the digits\n        echo $integer |\
+    \ rev\n    else\n        # calculate the remainder\n        local rem=$(( $shift\
+    \ % $length ))\n        # circular shift right by the remainder\n        local\
+    \ right=$(echo $integer | rev | cut -c1-$rem | rev)\n        local left=$(echo\
+    \ $integer | rev | cut -c$(( $rem + 1 ))-$length | rev)\n        echo \"$right$left\"\
+    \n    fi", "    x=$1\n    shift=$2\n    n=$(echo -n \"$x\" | wc -c)\n    let m=$shift%$n\n\
+    \    let diff=$n-$m\n    x0=${x:0:$diff}\n    x1=${x:$diff}\n    echo -n \"$x1$x0\"",
+  "    if [[ -z \"$1\" ]]; then\n        echo \"circular_shift: Missing first argument\"\
+    \ >&2\n        return 1\n    fi\n    if [[ -z \"$2\" ]]; then\n        echo \"\
+    circular_shift: Missing second argument\" >&2\n        return 1\n    fi\n    if\
+    \ [[ ! \"$1\" =~ ^[0-9]+$ ]]; then\n        echo \"circular_shift: First argument\
+    \ must be a number\" >&2\n        return 1\n    fi\n    if [[ ! \"$2\" =~ ^[0-9]+$\
+    \ ]]; then\n        echo \"circular_shift: Second argument must be a number\"\
+    \ >&2\n        return 1\n    fi\n    local number=\"$1\"\n    local num_digits=\"\
+    ${#number}\"\n    local shift=\"$2\"\n    if [[ $shift -gt $num_digits ]]; then\n\
+    \        echo $number | rev\n        return 0\n    fi\n    echo \"${number:(-shift)}${number:0:(-shift)}\"",
+  "    # Get the number of digits in the number\n    local digits=$(echo \"$1\" |\
+    \ wc -c)\n    # Convert the digits to an array\n    local arr=($(echo \"$1\" |\
+    \ fold -w1))\n    local arr_new=()\n    # Shift the digits\n    for i in $(seq\
+    \ 1 $digits); do\n        shift_digit=$(((i + $2 - 1) % $digits))\n        arr_new[$i-1]=${arr[$shift_digit]}\n\
+    \    done\n    echo ${arr_new[@]}", "  [[ -z \"$1\" ]] && return\n\n  local x=$1\n\
+    \  local shift=$2\n  local len=$(echo -n $x | wc -c)\n  (( shift %= len ))\n \
+    \ local digits=\"$(echo -n \"$x\" | cut -c -$shift)\"\n  local shift_val=\"$(echo\
+    \ -n \"$x\" | cut -c $(( shift + 1 ))-$len)\"\n  echo -n \"$shift_val$digits\"",
+  "  digits=$(wc -c < \"$1\")\n  digits=$((digits - 1))\n  shift_by=$((digits - $2))\n\
+    \  printf \"%s\" \"$1\" | rev | cut -c \"$shift_by-\" | rev"]
 stop_tokens:
 - "\n}"

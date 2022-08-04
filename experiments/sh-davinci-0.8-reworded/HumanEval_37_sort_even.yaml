@@ -10,6 +10,129 @@ tests: "}\n\ncandidate() {\n    sort_even \"$@\"\n}\n\nset -e\nrun_test() {\n   
   \ $(candidate \"1 2 3\") = \"1 2 3\" ]]\n    [[ $(candidate \"5 3 -5 2 -3 3 9 0\
   \ 123 1 -10\") = \"-10 3 -5 2 -3 3 5 0 9 1 123\" ]]\n    [[ $(candidate \"5 8 -12\
   \ 4 23 2 3 11 12 -10\") = \"-12 8 3 4 5 2 12 11 23 -10\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    # Sort the list.\n    # This is a Bash-only method, as there doesn't\
+    \ seem to be a way\n    # to do this in portable POSIX shell.\n    local sorted=\"\
+    $(echo \"$1\" | tr ' ' '\\n' | sort | tr '\\n' ' ')\"\n    # Then, put the unsorted\
+    \ version back into the odd-numbered indices.\n    echo \"$1\" | tr ' ' '\\n'\
+    \ | paste -d ' ' - - | cut -d ' ' -f1,3- | tr '\\n' ' '", "    local l=()\n  \
+    \  for i in $1; do\n        l+=(\"$i\")\n    done\n    for i in $(seq 1 $(( ${#l[@]}\
+    \ - 1 ))); do\n        if (( i % 2 == 0 )); then\n            l[$i]=$(for j in\
+    \ ${l[@]:i:2}; do echo $j; done | sort | tr '\\n' ' ')\n        fi\n    done\n\
+    \    printf '%s' $(for i in ${l[@]}; do echo \\\"$i\\\"; done | tr '\\n' ' ')",
+  "    local list=$1\n    while [ \"$list\" ]; do\n        local head=$(echo \"$list\"\
+    \ | cut -d ' ' -f 1)\n        local rest=$(echo \"$list\" | cut -d ' ' -f 2-)\n\
+    \        local temp=$(echo \"$rest\" | cut -d ' ' -f 1)\n        if [ \"$temp\"\
+    \ ]; then\n            if [ \"$temp\" != \"null\" ]; then\n                temp=$(sort_even_help\
+    \ $temp)\n            fi\n            rest=$(echo \"$rest\" | cut -d ' ' -f 2-)\n\
+    \        fi\n        list=$(echo \"$list\" | cut -d ' ' -f 2-)\n        if [ \"\
+    $temp\" ]; then\n            rest=\"$temp $rest\"\n        fi\n        if [ \"\
+    $return\" ]; then\n            return=\"$return \\\"$head\\\" $rest\"\n      \
+    \  else\n            return=\"\\\"$head\\\" $rest\"\n        fi\n    done\n  \
+    \  echo $return", "  local -a sorted_even\n  local -a odd\n  local -a even\n \
+    \ local -a result\n  sorted_even=( $(echo \"$1\" | sort -n) )\n  odd=( $(echo\
+    \ \"$1\" | awk '{if(NR%2==1) print $0}') )\n  even=( $(echo \"$1\" | awk '{if(NR%2==0)\
+    \ print $0}') )\n  for i in `seq 0 ${#odd[@]}`; do\n    if [[ \"$i\" -eq 0 ]];\
+    \ then\n      result=(\"${odd[i]}\")\n    else\n      result+=(\"${odd[i]}\")\n\
+    \    fi\n    if [[ \"$i\" -lt ${#even[@]} ]]; then\n      result+=(\"${sorted_even[i]}\"\
+    )\n    fi\n  done\n  echo \"${result[@]}\"", "    local list\n    list=(\"$@\"\
+    )\n    local length\n    length=${#list[@]}\n    local evens\n    local odds\n\
+    \    local i\n    local j\n    i=0\n    while [ $i -lt $length ]; do\n       \
+    \ if [ $(( $i % 2 )) -eq 0 ]; then\n            evens[$i]=${list[$i]}\n      \
+    \  else\n            odds[$i]=${list[$i]}\n        fi\n        i=$(( $i + 1 ))\n\
+    \    done\n    # evens is now a list with values only at the even indicies of\
+    \ the original list\n    j=0\n    while [ $j -lt $length ]; do\n        if [ $((\
+    \ $j % 2 )) -eq 0 ]; then\n            list[$j]=${evens[$j]}\n        else\n \
+    \           list[$j]=${odds[$j]}\n        fi\n        j=$(( $j + 1 ))\n    done\n\
+    \    local even_indices\n    even_indices=$( get_even_indices \"${list[@]}\" )\n\
+    \    local even_indices_length\n    even_indices_length=$( echo $even_indices\
+    \ | wc -w )\n    i=0\n    while [ $i -lt $even_indices_length ]; do\n        local\
+    \ index\n        index=$( echo $even_indices | cut -d ' ' -f $(( $i + 1 )) )\n\
+    \        evens[$i]=${list[$index]}\n        i=$(( $i + 1 ))\n    done\n    evens=(\
+    \ $( j_sort ${evens[@]} ) )\n    i=0\n    while [ $i -lt $even_indices_length\
+    \ ]; do\n        local index\n        index=$( echo $even_indices | cut -d ' '\
+    \ -f $(( $i + 1 )) )\n        list[$index]=${evens[$i]}\n        i=$(( $i + 1\
+    \ ))\n    done\n    echo $( convert_to_string \"${list[@]}\" )", "    local list=$(echo\
+    \ $1 | tr \" \" \"\\n\")\n    local list2=()\n    local even=0\n    local odd=0\n\
+    \    local l=()\n    for i in $list; do\n        l[$even]=$i\n        if (( even\
+    \ < odd )); then\n            list2[$odd]=${l[$even]}\n        fi\n        if\
+    \ (( (even+1) % 2 == 0 )); then\n            even=$(($even+1))\n        else\n\
+    \            odd=$(($odd+1))\n        fi\n    done\n    for i in ${list2[@]};\
+    \ do\n        echo $i\n    done | sort", "    local l=()\n    local i=0\n    while\
+    \ IFS= read -r n; do\n        l[i]=$n\n        ((i++))\n    done <<< \"$1\"\n\
+    \    # now l is the array of the original list\n    # now we need to split it\
+    \ up into even and odd indicies and sort them\n    local even=()\n    local odd=()\n\
+    \    local i=0\n    while [[ $i -lt ${#l[@]} ]]; do\n        if [[ $((i % 2))\
+    \ -eq 0 ]]; then\n            even+=(${l[i]})\n        else\n            odd+=(${l[i]})\n\
+    \        fi\n        ((i++))\n    done\n    local sorted_even=($(qsort \"${even[@]}\"\
+    ))\n    i=0\n    while [[ $i -lt ${#even[@]} ]]; do\n        even[i]=${sorted_even[i]}\n\
+    \        ((i++))\n    done\n    # now that even is sorted, we need to interleave\
+    \ it with odd\n    local result=()\n    local i=0\n    while [[ $i -lt ${#even[@]}\
+    \ ]]; do\n        result+=(${even[i]})\n        result+=(${odd[i]})\n        ((i++))\n\
+    \    done\n    echo \"${result[@]}\"", "    echo \"[\"$(paste -d \",\" -s <(echo\
+    \ $1 | tr \" \" \"\\n\" | awk 'NR%2!=0'))\"]\"", "  local -a l_even=()\n  local\
+    \ -a l_odd=()\n  local -a l=()\n  # split $1 into l_even and l_odd\n  for ((i=0;\
+    \ i<$#; i++)); do\n    if ((i % 2 == 0)); then\n      l_even+=($1)\n    else\n\
+    \      l_odd+=($1)\n    fi\n    shift\n  done\n  # sort l_even\n  l_even=($(printf\
+    \ \"%s\\n\" \"${l_even[@]}\" | sort))\n  # push l_even and l_odd back into l\n\
+    \  for ((i=0; i<$#; i++)); do\n    if ((i % 2 == 0)); then\n      l+=(${l_even[i]})\n\
+    \    else\n      l+=(${l_odd[i]})\n    fi\n  done\n  echo \"${l[@]}\"", "  _sorted=\"\
+    \"\n  i=0\n  for v in $1; do\n    if ((i%2 == 0)); then\n      # odd\n      _sorted=\"\
+    $_sorted $v\"\n    else\n      # even\n      _even=\"$_even $v\"\n    fi\n   \
+    \ ((i++))\n  done\n  _sorted=\"$_sorted `echo $_even | tr ' ' '\\n' | sort | tr\
+    \ '\\n' ' '`\"\n  echo $_sorted", "    odd=\"\"\n    even=\"\"\n    i=0\n    for\
+    \ v in $1\n    do\n        if (( $i % 2 == 0 ))\n        then\n            odd=\"\
+    $odd $v\"\n        else\n            even=\"$even $v\"\n        fi\n        i=$((i+1))\n\
+    \    done\n    #the output of sort is space-separated, but the input is newline-separated\n\
+    \    sorted=\"$(echo \"$even\" | tr ' ' '\\n' | sort | tr '\\n' ' ')\"\n    result=\"\
+    \"\n    i=0\n    for v in $odd\n    do\n        result=\"$result $v\"\n      \
+    \  if (( $i % 2 == 0 ))\n        then\n            result=\"$result $(echo \"\
+    $sorted\" | cut -d' ' -f $((i/2+1)))\"\n        fi\n        i=$((i+1))\n    done\n\
+    \    echo \"$result\"", "    local l=(\"$@\")\n    local n=$(( ${#l[@]} / 2 ))\n\
+    \    local e=$( for (( i=0; i<n; i++ )); do printf '\"%s\" ' \"${l[(( 2*i + 1\
+    \ ))]}\"; done )\n    local o=$( for (( i=0; i<n; i++ )); do printf '\"%s\" '\
+    \ \"${l[(( 2*i ))]}\"; done | tr ' ' '\\n' | sort | tr '\\n' ' ' )\n    printf\
+    \ '%s' \"$e $o\"", "    local l=\"$1\"\n    local res=\"\"\n    local acc=\"\"\
+    \n    local l_idx=0\n    # compgen is used to split the input by spaces\n    for\
+    \ word in $(compgen -W \"${l}\" -- \"\"); do\n        if [ $((${l_idx} % 2)) -eq\
+    \ 0 ]; then\n            acc=\"${acc} ${word}\"\n        else\n            res=\"\
+    ${res} ${word}\"\n        fi\n        ((l_idx+=1))\n    done\n    acc=$(echo ${acc}\
+    \ | tr \" \" \"\\n\" | sort | tr \"\\n\" \" \")\n    echo \"${res} ${acc}\"",
+  "    local list=\"$1\"\n    local new_list=\n    local previous_is_odd=\n    for\
+    \ n in $list; do\n        if [[ $previous_is_odd == \"true\" ]]; then\n      \
+    \      new_list+=\" \\\"$n\\\"\"\n            previous_is_odd=false\n        else\n\
+    \            new_list+=\" `echo \"$n\" | sort`\"\n            previous_is_odd=true\n\
+    \        fi\n    done\n    echo \"$new_list\"", "    local -n _list=$1 # this\
+    \ is a 'name reference'. This is how you pass an array to a function.\n    [ \"\
+    $#\" -ne 1 ] && echo \"Error in ${FUNCNAME[0]}: you must pass one argument\" &&\
+    \ return 1\n    local -a __list\n    local i\n    IFS=' ' read -r -a __list <<<\"\
+    $_list\"\n    _list=()\n    for i in \"${!__list[@]}\"; do\n        if [ $((i%2))\
+    \ -eq 0 ]; then\n            _list+=(\"$(sort_indicies \"${__list[i]}\")\")\n\
+    \        else\n            _list+=(\"${__list[i]}\")\n        fi\n    done\n \
+    \   echo \"${_list[@]}\"", "    sorted=()\n    for i in \"$@\"; do\n        if\
+    \ [[ \"$i\" =~ ^[0-9]+$ ]]; then\n            sorted+=(\"$i\")\n        else\n\
+    \            sorted+=(\"$(printf '%q' \"$i\")\")\n        fi\n    done\n    output=()\n\
+    \    for i in $(seq 0 2 $((${#sorted[@]} - 1))); do\n        output+=(\"${sorted[$i]}\"\
+    )\n        if [[ $((i+1)) -lt ${#sorted[@]} ]]; then\n            output+=(\"\
+    $(printf '%q' \"$(echo \"${sorted[$((i+1))]}\" | tr \" \" \"\\n\" | sort -n |\
+    \ tr \"\\n\" \" \")\")\")\n        fi\n    done\n    echo \"${output[@]}\"", " \
+    \   local -a L=($1)\n    local -a L2=()\n    local i\n    for ((i=0; i<${#L[@]};\
+    \ i+=2)); do\n        L2+=(${L[i]})\n        if ((i+1 < ${#L[@]})); then\n   \
+    \         local -a L3=(${L[i+1]})\n            L2+=($(printf \"%s\\n\" \"${L3[@]}\"\
+    \ | sort))\n        fi\n    done\n    echo ${L2[@]}", "  local local_array\n \
+    \ local list=($1)\n  for i in $(seq 0 $((${#list[@]} - 1))); do\n    local_array[$i]=${list[$i]}\n\
+    \  done\n  for i in $(seq 1 $((${#list[@]} - 1))); do\n    if [ $((i % 2)) -eq\
+    \ 0 ]; then\n      local_array[$i]=$(echo \"${list[$i]}\" | sort)\n    fi\n  done\n\
+    \  echo \"${local_array[@]}\"", "    local l=($1)\n    local l2=()\n    local\
+    \ odd=1\n    for v in \"${l[@]}\"; do\n        if [[ $odd -eq 1 ]]; then\n   \
+    \         l2+=(\"$v\")\n            odd=0\n        else\n            l2+=(\"$(echo\
+    \ \"$v\" | sed -e 's/ /\\n/g' | sort | tr '\\n' ' ')\")\n            odd=1\n \
+    \       fi\n    done\n    echo \"${l2[@]}\"", "    local l=()\n    for i in $1;\
+    \ do\n        l+=(\"$i\")\n    done\n    for i in $(seq 0 2 ${#l[@]}); do\n  \
+    \      if [[ -z ${l[$i]} ]]; then\n            continue\n        fi\n        for\
+    \ j in $(seq $((i+2)) 2 ${#l[@]}); do\n            if [[ -z ${l[$j]} ]]; then\n\
+    \                continue\n            fi\n            if [[ ${l[$i]} -gt ${l[$j]}\
+    \ ]]; then\n                local tmp=${l[$i]}\n                l[$i]=${l[$j]}\n\
+    \                l[$j]=$tmp\n            fi\n        done\n    done\n    echo\
+    \ \"${l[@]}\""]
 stop_tokens:
 - "\n}"

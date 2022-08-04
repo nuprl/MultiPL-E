@@ -12,7 +12,142 @@ tests: "using Test\n\n@testset begin\n\ncandidate = separate_paren_groups;\n\t@t
   ])\n\t@test(candidate(\"() (()) ((())) (((())))\") == [\"()\", \"(())\", \"((()))\"\
   , \"(((())))\"])\n\t@test(candidate(\"(()(())((())))\") == [\"(()(())((())))\"])\n\
   \t@test(candidate(\"( ) (( )) (( )( ))\") == [\"()\", \"(())\", \"(()())\"])\nend\n"
-completions: []
+completions: ["    paren_matches = [match(r\"\\(+\\)+\", paren_string) for paren_string\
+    \ in split(paren_string, \" \")]\n    paren_matches = filter(x -> x != nothing,\
+    \ paren_matches)\n    return map(x -> x.match, paren_matches)\nend\n@testset \"\
+    parens\" begin\n    @test separate_paren_groups(\"( ) (( )) (( )( ))\") == [\"\
+    ()\", \"(())\", \"(()())\"]\n    @test separate_paren_groups(\"( ) (( )) (( )(\
+    \ ))\") != [\"()\", \"(())\", \"(()())\", \"()()()()\"]\n    @test separate_paren_groups(\"\
+    ( ) (( )) (( )( ))\") != [\"(())\", \"(()())\", \"()\"]\n    @test separate_paren_groups(\"\
+    ( ) (( )) (( )( ))\") != [\"()\", \"(())\", \"(()())\", \"()()()()\"]\n    @test\
+    \ separate_paren_groups(\"\") == []\n    @test separate_paren_groups(\"(())\"\
+    ) == [\"(())\"]\n    @test separate_paren_groups(\"(((((((())))))))\") == [\"\
+    (((((((())))))))\" ]\n    @test separate_paren_groups(\"( ((((((())))))) )\")\
+    \ == [\"( ((((((())))))) )\"]\n    @test separate_paren_groups(\"()()()\") ==\
+    \ [\"()()()\"]\n    @test separate_paren_groups(\"(())()()()\") == [\"(())()()()\"\
+    ]\n    @test separate_paren_groups(\"()()()(())\") == [\"()()()(())\"]\n    @test\
+    \ separate_paren_groups(\"(())()()()(())\") == [\"(())()()()(())\"]\n    @test\
+    \ separate_paren_groups(\"(())(())(())\") == [\"(())(())(())\"]\n    @test separate_paren_groups(\"\
+    (())()()()(())\") == [\"(())()()()(())\"]\n    @test separate_paren_groups(\"\
+    (()()()()()()())\") == [\"(()()()()()()())\"]\n    @test separate_paren_groups(\"\
+    (()(())(())(())(()", '    end', '    paren_string = replace(paren_string, " "
+    => "") # remove spaces in the string', "    #Vector for storing separated paren\
+    \ groups\n    separate_groups = []\n    #Compute the total number of parens in\
+    \ the input string.\n    count_total_parens = length(findall(r\"\\(|\\)\", paren_string))\n\
+    \    #Compute the number of paren groups in the input string.\n    count_paren_groups\
+    \ = count_total_parens/2\n    #This is the index of the last paren group in the\
+    \ string.\n    last_group_idx = count_paren_groups\n    #Create a temporary string\
+    \ that is the same as paren_string but without spaces.\n    temp_string = replace(paren_string,\
+    \ \" \" => \"\")\n    #Create a temporary string that has the first paren group\
+    \ removed.\n    temp_string2 = replace(temp_string, r\"\\(.*\\)\", \"\")\n   \
+    \ #Add the first paren group to separate_groups\n    push!(separate_groups, replace(temp_string,\
+    \ r\"\\(.*\\)\", \"\"))\n    #Iterate over the input string and locate the indices\
+    \ of the paren groups.\n    for i in 1:count_paren_groups-1\n        #Assemble\
+    \ a regex to find all paren groups after the first.\n        temp_string3 = r\"\
+    (\\()(.*)\"*string(last_group_idx-i)*r\"(\\))\"\n        push!(separate_groups,\
+    \ replace(temp_string2, temp_string3, \"\"))\n        temp_string2 = replace(temp_string2,\
+    \ temp_string3, \"\")\n    end\n    #Return the vector of separate paren groups.\n\
+    \    return separate_groups\nend", "    \n    \"\"\" Initialize an array that\
+    \ will store all the seperate parenthesis groups\"\"\"\n    seperate_groups =\
+    \ []\n    \n    \"\"\" Initialize a counter that will count the number of open\
+    \ parenthesis\"\"\"\n    open_paren = 0\n    \n    \"\"\" Initialize a counter\
+    \ that will count the number of closed parenthesis\"\"\"\n    closed_paren = 0\n\
+    \    \n    \"\"\" Initialize a string that will store the starting index\"\"\"\
+    \n    group_start = \"\"\n    \n    \"\"\" Loop through each character in the\
+    \ string and use conditional statements \n        to determine whether it is a\
+    \ parenthesis or a space \"\"\"\n    for char in paren_string\n        if char\
+    \ == \"(\"\n            open_paren += 1\n        elseif char == \")\"\n      \
+    \      closed_paren += 1\n        elseif char == \" \"\n            nothing\n\
+    \        end\n    end\n    \n    \"\"\" Check to see if the number of open parenthesis\
+    \ is equal to the number of closed parenthesis \"\"\"\n    if open_paren != closed_paren\n\
+    \        print(\"No\")\n        return\n    end\n    \n    \"\"\" Determine the\
+    \ starting index for each group of parenthesis, and the length of each group \"\
+    \"\"\n    for (i, char) in enumerate(paren_string)\n        if char == \"(\"\n\
+    \            group_start = i\n        elseif char == \")\"\n            push!(seperate_groups,\
+    \ String(paren_string[group_start:i]))\n        end\n    end\n    return seperate_groups\n\
+    end", "    paren_list = split(strip(paren_string), \" \")\n    paren_list = paren_list[paren_list\
+    \ .!= \"\"] # Get rid of empty strings in list\n    valid_string = [\"(\" for\
+    \ i in 1:length(paren_list)]\n    for i in 1:length(paren_list)\n        valid_string[i]\
+    \ = valid_string[i] * \"(\" ^ length(paren_list[i])\n    end\n    return paren_list\
+    \ .== valid_string\nend", "    # Start your code after this line\n \nend\n \n\
+    \ \n \n@testset \"Separate groups of nested parentheses\" begin\n    @test separate_paren_groups(\"\
+    ( ) (( )) (( )( ))\") == [\"()\", \"(())\", \"(()())\"]\n    @test separate_paren_groups(\"\
+    ( )( ) ( ( ) )\") == [\"()\", \"()\", \"(())\"]\n    @test separate_paren_groups(\"\
+    ( ) (( ) ) ( ( ) )\") == [\"()\", \"(())\", \"(())\"]\n    @test separate_paren_groups(\"\
+    ( ( ( ) ) )\") == [\"((()))\"]\n    @test separate_paren_groups(\"((((( )))(((((\
+    \ ))))))\") == [\"((((( )))))\", \"((((( )))))\"]\n    @test separate_paren_groups(\"\
+    ( ( ( ) (( )) ) )\") == [\"(((()(()))))\"]\n    @test separate_paren_groups(\"\
+    ( ( ( ) (( )) (( )) ) )\") == [\"(((()(())(()))))\"]\n    @test separate_paren_groups(\"\
+    ( ( ( ) (( (( )) )) ) )\") == [\"(((()(((()))))))\"]\n    @test separate_paren_groups(\"\
+    ( ( ( ) (( (( (( (( (( )) ((( )) ) ) ) ) (( (( (( (( )) ) ) ) ) ) ) )) )) ) )\
+    \ )\") == [\"(((()((((((((((((((((())))))))(((((((((((((()))))))))))))))))))))))\"\
+    ]\nend\n \n \n \n\"\"\" Your task is to implement an autocomplete feature for\
+    \ an input field.\n    You will be given a dictionary of words, and a query string.\n\
+    \    You should return a list of words that start with the query string,\n   \
+    \ and are the shortest possible completions. (If there are multiple words that\
+    \ match,\n    return the word that would appear first in the dictionary.)\n \n\
+    \    Note: You should match from the beginning of the string,\n    rather than\
+    \ anywhere in the string.\n \n    >>> complete(\"abc\", [\"abce\", \"abcd\", \"\
+    abcde\", \"abcdef\"])\n    [\"abcd\", \"abce\"]\n    >>> complete(\"abc\", [\"\
+    abce\", \"abcd\", \"", "    paren_string = replace(paren_string, r\"\\s\", \"\"\
+    )\n    paren_groups = []\n    start = 1\n    i = 1\n    while i <= length(paren_string)\n\
+    \        if paren_string[i] == '('\n            push!(paren_groups, paren_string[start:i])\n\
+    \            start = i\n        elseif paren_string[i] == ')'\n            push!(paren_groups,\
+    \ paren_string[start:i])\n            start = i + 1\n        end\n        i +=\
+    \ 1\n    end\n    # here we want to iterate over paren_groups and delete the empty\
+    \ strings\n    # this is a compact way to do that in Julia\n    # http://stackoverflow.com/questions/20344932/python-delete-empty-strings-from-a-list-of-strings\n\
+    \    paren_groups = [x for x in paren_groups if x != \"\"]\n    return paren_groups\n\
+    end\nseparate_paren_groups(\"( ) (( )) (( )( ))\")", "    # YOUR CODE HERE\n \
+    \   output = []\n    temp = \"\"\n    open_paren = 0\n    close_paren = 0\n  \
+    \  for i in paren_string\n        if i != \" \"\n            if i == \"(\"\n \
+    \               open_paren += 1\n            else\n                close_paren\
+    \ += 1\n            end\n            temp *= i\n        end\n        if open_paren\
+    \ == close_paren\n            push!(output, temp)\n            temp = \"\"\n \
+    \           open_paren = 0\n            close_paren = 0\n        end\n    end\n\
+    \    return output\nend", "    paren_string = filter(x -> x != ' ', paren_string)\n\
+    \    stack = ' '\n    prev = ' '\n    start = 1\n    stop = 1\n    res = Vector{String}()\n\
+    \    for i in 1:length(paren_string)\n        if paren_string[i] == '('\n    \
+    \        if prev == ')'\n                push!(res, paren_string[start:stop])\n\
+    \                start = i\n            end\n            push!(stack, '(')\n \
+    \       elseif paren_string[i] == ')'\n            pop!(stack)\n            if\
+    \ isempty(stack)\n                stop = i\n            end\n        end\n   \
+    \     prev = paren_string[i]\n    end\n    push!(res, paren_string[start:stop])\n\
+    \    return res\nend", "    results = []\n    current_string = \"\"\n    open_paren_count\
+    \ = 0\n    close_paren_count = 0\n    for (i,c) in enumerate(paren_string)\n \
+    \       if c != ' '\n            current_string *= c\n            if c == '('\n\
+    \                open_paren_count += 1\n            elseif c == ')'\n        \
+    \        close_paren_count += 1\n            end\n            if open_paren_count\
+    \ == close_paren_count\n                results *= current_string\n          \
+    \      current_string = \"\"\n                open_paren_count = 0\n         \
+    \       close_paren_count = 0\n            end\n        end\n    end\n    return\
+    \ results\nend", "    # what are your inputs, what is your output?\n    # your\
+    \ code here\nend", "    # Your code here\nend", "    current_group = \"\"\n  \
+    \  groups = []\n    current_parens = 0\n    for c in paren_string\n        if\
+    \ c == '('\n            current_parens += 1\n        elseif c == ')'\n       \
+    \     current_parens -= 1\n        end\n        if current_parens == 0\n     \
+    \       push!(groups, current_group)\n            current_group = \"\"\n     \
+    \   else\n            current_group *= c\n        end\n    end\n    return groups\n\
+    end", "    in_parens = false\n    paren_group = \"\"\n    paren_groups = []\n\
+    \    for c in paren_string\n        if c == '('\n            in_parens = true\n\
+    \        elseif c == ')'\n            in_parens = false\n            push!(paren_groups,\
+    \ paren_group)\n            paren_group = \"\"\n        elseif c != ' '\n    \
+    \        if in_parens\n                paren_group *= c\n            end\n   \
+    \     end\n    end\n    return paren_groups\nend", "    i = 1\n    open = 0\n\
+    \    result = String[]\n    to_remove = String[]\n    for c in paren_string\n\
+    \        if c == '('\n            open += 1\n        elseif c == ')'\n       \
+    \     open -= 1\n        elseif c == ' '\n            push!(to_remove, i)\n  \
+    \      end\n        if open == 0\n            push!(result, paren_string[1:i])\n\
+    \            paren_string = paren_string[i+1:end]\n            paren_string =\
+    \ replace(paren_string, to_remove, \"\")\n            i = 1\n            open\
+    \ = 0\n            to_remove = String[]\n        else\n            i += 1\n  \
+    \      end\n    end\n    return result\nend\nseparate_paren_groups(\"( ) (( ))\
+    \ (( )( ))\")", "    paren_string = replace(paren_string, \" \" => \"\")\n   \
+    \ groups = String[]\n    start = 1\n    i = 1\n    while i <= length(paren_string)\n\
+    \        if paren_string[i] == '('\n            start = i\n        elseif paren_string[i]\
+    \ == ')'\n            push!(groups, paren_string[start:i])\n        end\n    \
+    \    i += 1\n    end\n    return groups\nend", "  # YOUR CODE HERE\nend", "  \
+    \  s=split(paren_string, \" \")\n    v=[]\n    for i in s\n        if i!=\"\"\n\
+    \            push!(v, i)\n        end\n    end\n    v\nend", "    # ...\nend"]
 stop_tokens:
 - "\nfunction"
 - "\nmacro"

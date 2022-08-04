@@ -11,6 +11,141 @@ tests: "}\n\ncandidate() {\n    monotonic \"$@\"\n}\n\nset -e\nrun_test() {\n   
   \    [[ $(candidate \"1 2 3 2 5 60\") = \"false\" ]]\n    [[ $(candidate \"1 2 3\
   \ 4 5 60\") = \"true\" ]]\n    [[ $(candidate \"9 9 9 9\") = \"true\" ]]\n}\n\n\
   run_test"
-completions: []
+completions: ["    [[ -z \"$1\" ]] && return 1\n    [[ -z \"$2\" ]] && return 1\n\
+    \    [[ \"$1\" -eq \"$2\" ]] && return 1\n    local -a tokens=( \"$@\" )\n   \
+    \ if [[ \"${tokens[0]}\" -gt \"${tokens[1]}\" ]]; then\n        # decreasing\n\
+    \        for i in \"${!tokens[@]}\"; do\n            (( $i + 1 > ${#tokens[@]}\
+    \ )) && break\n            (( tokens[i] > tokens[i+1] )) || return 1\n       \
+    \ done\n    else\n        # increasing\n        for i in \"${!tokens[@]}\"; do\n\
+    \            (( $i + 1 > ${#tokens[@]} )) && break\n            (( tokens[i] <\
+    \ tokens[i+1] )) || return 1\n        done\n    fi\n    return 0", "    local\
+    \ direction=$(echo $1 | awk '{ if ($1 > $2) print \">\"; else print \"<\"; }')\n\
+    \    local expect=$direction\n    local prev=$1\n    shift\n    for elem in $@;\
+    \ do\n        if ((prev $direction elem)); then\n            #echo \"Good: $prev\
+    \ $direction $elem\"\n            prev=$elem\n        else\n            #echo\
+    \ \"Bad: $prev $direction $elem\"\n            return 1\n        fi\n    done\n\
+    \    return 0", "    if [ $# -eq 0 ]; then\n        echo \"true\"\n        return\n\
+    \    fi\n    prev=$1\n    for i in $@; do\n        if [[ $prev -gt $i ]]; then\n\
+    \            echo \"false\"\n            return\n        fi\n        prev=$i\n\
+    \    done\n    echo \"true\"", "    local result=\"false\"\n    local nums=($@)\n\
+    \    local len=\"${#nums[@]}\"\n    local i=0\n    if [ \"$len\" -gt 1 ]; then\n\
+    \        result=\"true\"\n        while [ \"$result\" == \"true\" ] && [ \"$i\"\
+    \ -lt \"$len\" ]; do\n            if [ \"$i\" -eq 0 ]; then\n                local\
+    \ sign=\"${nums[$i]} < ${nums[$((i+1))]}\"\n            else\n               \
+    \ local sign=\"${nums[$((i-1))]} < ${nums[$i]}\"\n            fi\n           \
+    \ let i++\n            if [ \"$i\" -lt \"$len\" ]; then\n                if [\
+    \ \"$(eval \"echo $sign\")\" == \"false\" ]; then\n                    sign=\"\
+    ${nums[$((i-1))]} > ${nums[$i]}\"\n                    let i++\n             \
+    \       if [ \"$i\" -lt \"$len\" ]; then\n                        if [ \"$(eval\
+    \ \"echo $sign\")\" == \"false\" ]; then\n                            result=\"\
+    false\"\n                        fi\n                    fi\n                fi\n\
+    \            fi\n        done\n    fi\n    echo \"$result\"", "    local list=(\"\
+    $@\")\n    if [[ ${#list[@]} -lt 2 ]]; then\n        echo \"true\"\n        return\n\
+    \    fi\n    local sign=${list[1]}\n    local prev=${list[0]}\n    for x in \"\
+    ${list[@]:1}\"; do\n        if (( ${prev#-} < ${x#-} )); then\n            if\
+    \ [[ \"$sign\" = \"-\" ]]; then\n                echo \"false\"\n            \
+    \    return\n            fi\n            sign=\"+\"\n        elif (( ${prev#-}\
+    \ > ${x#-} )); then\n            if [[ \"$sign\" = \"+\" ]]; then\n          \
+    \      echo \"false\"\n                return\n            fi\n            sign=\"\
+    -\"\n        fi\n        prev=$x\n    done\n    echo \"true\"", "    local list=($1)\n\
+    \    local is_increasing=true\n    local last=${list[0]}\n    local current\n\
+    \    for current in ${list[@]:1}; do\n        (( current > last )) && {\n    \
+    \        (( is_increasing )) || return 1\n        }\n        (( current < last\
+    \ )) && {\n            (( is_increasing )) && is_increasing=false\n        }\n\
+    \        last=$current\n    done\n    return 0", "  echo \"$1\" | perl -ne '$d\
+    \ = $_; $d =~ s/^\\s*//; @v = split(/\\s+/, $d); print \"true\\n\" if ! grep($v[$_]\
+    \ <= $v[$_-1], (1..$#v));'", "    [[ -z \"$1\" ]] && return 1\n    local prev=$1\n\
+    \    shift\n    for i in $@; do\n        if [[ $prev -gt $i ]]; then\n       \
+    \     return 1\n        fi\n        prev=$i\n    done\n    return 0", "  local\
+    \ list=\"$1\"\n  local item last_item delta_num\n  local -i delta=0\n  local -i\
+    \ i=0\n  for item in $list; do\n    if [[ $i -eq 0 ]]; then\n      let i=i+1\n\
+    \      continue\n    fi\n    let delta_num=item-last_item\n    if [[ $i -eq 1\
+    \ ]]; then\n      let delta=delta_num\n    fi\n    if [[ $delta_num -ne $delta\
+    \ ]]; then\n      echo \"false\"\n      return\n    fi\n    let i=i+1\n    last_item=$item\n\
+    \  done\n  echo \"true\"", "    local list=($1)\n    local i\n    local j\n  \
+    \  local old\n    if [[ ${#list[@]} -eq 0 ]]; then\n        echo \"false\"\n \
+    \       return\n    fi\n    old=${list[0]}\n    for ((i=1; i<${#list[@]}; i++));\
+    \ do\n        if (( ${list[i]} == $old )); then\n            continue\n      \
+    \  elif (( ${list[i]} > $old )); then\n            j=1\n        else\n       \
+    \     j=-1\n        fi\n        old=${list[i]}\n        for ((; i<${#list[@]};\
+    \ i++)); do\n            if (( ${list[i]} == $old )); then\n                continue\n\
+    \            elif (( ${list[i]} > $old )); then\n                if (( j > 0 ));\
+    \ then\n                    continue\n                else\n                 \
+    \   echo \"false\"\n                    return\n                fi\n         \
+    \   else\n                if (( j < 0 )); then\n                    continue\n\
+    \                else\n                    echo \"false\"\n                  \
+    \  return\n                fi\n            fi\n            old=${list[i]}\n  \
+    \      done\n    done\n    echo \"true\"", "    # Set IFS to a newline to iterate\
+    \ over space-separated strings\n    IFS=$'\\n'\n    # Check first element\n  \
+    \  local current=\"$1\"\n    # Check second element\n    local next=\"$2\"\n \
+    \   # Start at beginning of list\n    shift 2\n    # True until proven otherwise\n\
+    \    local result=\"true\"\n    for element in $@; do\n        if [ \"$current\"\
+    \ -gt \"$next\" ]; then\n            # next must be decreasing\n            if\
+    \ [ \"$next\" -ge \"$element\" ]; then\n                result=\"false\"\n   \
+    \             break\n            fi\n        elif [ \"$current\" -lt \"$next\"\
+    \ ]; then\n            # next must be increasing\n            if [ \"$next\" -le\
+    \ \"$element\" ]; then\n                result=\"false\"\n                break\n\
+    \            fi\n        else\n            # Not monotonic if same\n         \
+    \   result=\"false\"\n            break\n        fi\n        current=\"$next\"\
+    \n        next=\"$element\"\n    done\n    echo \"$result\"", "    local list=($1)\n\
+    \    local first=${list[0]}\n    local last=${list[0]}\n    local ascending=0\n\
+    \    local descending=0\n    for number in ${list[@]:1}; do\n        if [[ \"\
+    $first\" -lt \"$number\" ]]; then\n            ascending=1\n        elif [[ \"\
+    $first\" -gt \"$number\" ]]; then\n            descending=1\n        fi\n    \
+    \    if [[ \"$ascending\" -eq 1 && \"$descending\" -eq 1 ]]; then\n          \
+    \  return 1\n        fi\n        last=$number\n    done\n    return 0", "  local\
+    \ dir=$(echo \"$1\" | awk '{x=y;y=$0;\n\t\t\t\t if (y<x) {sign=-1;exit};\n\t\t\
+    \t\t if (y>x) {sign=1;exit}}\n\t\t\t\t END{print sign}')\n  [[ \"$dir\" != \"\
+    0\" ]] &&\n    (echo \"$1\" |\n     awk \"{if (sign*(\\$0-x)<0) {exit 1}\n\t \
+    \  else {x=\\$0}}\n\t   END{print !rc}\")\n  return $?", "    if [ \"$#\" -eq\
+    \ 1 ]; then\n        local list=$(echo \"$1\" | awk '{print $1,$2}')\n       \
+    \ local sign=$(echo \"$list\" | awk '{printf $2-$1}')\n        local list=$(echo\
+    \ \"$1\" | awk '{for(i=3;i<=NF;i++)print $1,$i}')\n        local sign=$(echo \"\
+    $list\" | awk '{printf $2-$1}' | uniq)\n        if [ $(echo \"$sign\" | wc -l)\
+    \ -gt 1 ]; then\n            echo \"false\"\n        else\n            echo \"\
+    true\"\n        fi\n    else\n        echo \"false\"\n    fi", "    local list=\"\
+    $1\"\n    local op=$(\n        echo \"$list\" |\n        tr \" \" \"\\n\" |\n\
+    \        awk '{print ($1==p+1 || $1==p-1)?\"\":$1-p; p=$1}' |\n        grep -v\
+    \ '^$' |\n        head -n 1\n    )\n    [ -z \"$op\" ] && echo \"true\" || echo\
+    \ \"false\"", "  local IN\n  local PREV=0\n  local FIRST=0\n  local COUNT=0\n\
+    \  local INCREASING=true\n  local DECREASING=true\n  for IN in $1; do\n    ((\
+    \ COUNT++ ))\n    if (( COUNT > 1 )); then\n      if (( IN > PREV )); then\n \
+    \       DECREASING=false\n      elif (( IN < PREV )); then\n        INCREASING=false\n\
+    \      fi\n    fi\n    PREV=$IN\n  done\n  $INCREASING || $DECREASING", "    declare\
+    \ -a array=($1)\n    prev=${array[0]}\n    for x in \"${array[@]:1}\"; do\n  \
+    \      if [[ $prev -eq $x ]]; then\n            echo true\n            return\n\
+    \        fi\n        prev=$x\n    done\n    echo false", "    if [ $# -eq 0 ];\
+    \ then\n        echo \"false\"\n        return\n    fi\n    local direction=\"\
+    =\"\n    local last=$1\n    shift\n    for num in $@; do\n        if [ \"$direction\"\
+    \ = \"=\" ]; then\n            if [ \"$num\" -gt \"$last\" ]; then\n         \
+    \       direction=\"+\"\n            elif [ \"$num\" -lt \"$last\" ]; then\n \
+    \               direction=\"-\"\n            fi\n        else\n            if\
+    \ [ \"$direction\" = \"+\" ] && [ \"$num\" -lt \"$last\" ]; then\n           \
+    \     echo \"false\"\n                return\n            elif [ \"$direction\"\
+    \ = \"-\" ] && [ \"$num\" -gt \"$last\" ]; then\n                echo \"false\"\
+    \n                return\n            fi\n        fi\n        last=$num\n    done\n\
+    \    echo \"true\"", "    local list=\"$1\"\n    local prev=\"\"\n    local m=\"\
+    \"\n    local x=\"\"\n    local i=\"\"\n    for i in $list; do\n        [[ -z\
+    \ \"$x\" ]] && x=\"$i\" && continue\n        [[ -z \"$m\" ]] && [[ \"$x\" == \"\
+    $i\" ]] && continue || [[ \"$x\" -lt \"$i\" ]] && m=\"increasing\" || m=\"decreasing\"\
+    \n        if [[ \"$x\" == \"$i\" ]]; then\n            continue\n        elif\
+    \ [[ \"$m\" == \"increasing\" ]] && [[ \"$x\" -lt \"$i\" ]]; then\n          \
+    \  :\n        elif [[ \"$m\" == \"decreasing\" ]] && [[ \"$x\" -gt \"$i\" ]];\
+    \ then\n            :\n        else\n            echo \"false\"\n            return\n\
+    \        fi\n        x=\"$i\"\n    done\n    echo \"true\"", "    local list=\"\
+    $1\"\n    local length=$(awk 'BEGIN{print length(ARGV[1])}' \"$list\")\n    if\
+    \ [[ $length -lt 2 ]]; then\n        echo \"true\"\n        return\n    fi\n \
+    \   local increasing=$(awk 'BEGIN{print ARGV[1]>ARGV[2]}' $(echo $list | cut -d\
+    \ \" \" -f1,2))\n    local decreasing=$(awk 'BEGIN{print ARGV[1]<ARGV[2]}' $(echo\
+    \ $list | cut -d \" \" -f1,2))\n    if [[ $increasing == \"1\" ]]; then\n    \
+    \    for (( i=2; i<$length; i++ )); do\n            if [[ $(awk 'BEGIN{print ARGV[1]<ARGV[2]}'\
+    \ \\\n                $(echo $list | cut -d \" \" -f$i,$((i+1)))) == \"1\" ]];\
+    \ then\n                echo \"false\"\n                return\n            fi\n\
+    \        done\n    elif [[ $decreasing == \"1\" ]]; then\n        for (( i=2;\
+    \ i<$length; i++ )); do\n            if [[ $(awk 'BEGIN{print ARGV[1]>ARGV[2]}'\
+    \ \\\n                $(echo $list | cut -d \" \" -f$i,$((i+1)))) == \"1\" ]];\
+    \ then\n                echo \"false\"\n                return\n            fi\n\
+    \        done\n    else\n        echo \"false\"\n        return\n    fi\n    echo\
+    \ \"true\""]
 stop_tokens:
 - "\n}"
