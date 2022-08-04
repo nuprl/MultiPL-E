@@ -60,6 +60,311 @@ tests: "    }\n    def main(args: Array[String]) = {\n    assert(minPath((List[L
   \ List[Long](3l.toLong, 2l.toLong))), (10l)).equals((List[Long](1l.toLong, 3l.toLong,\
   \ 1l.toLong, 3l.toLong, 1l.toLong, 3l.toLong, 1l.toLong, 3l.toLong, 1l.toLong, 3l.toLong))));\n\
   \    }\n\n}\n"
-completions: []
+completions: ["        // find the list of cells that the minimum path go through\
+    \ by Dijkstra's algorithm\n        // map each cell to the minimum path\n    \
+    \    val minPathMap = HashMap[(Int, Int), List[(Int, Int)]]()\n        // map\
+    \ each cell to the sum of the values of the cells on the minimum path\n      \
+    \  val minPathValueMap = HashMap[(Int, Int), Long]()\n        // start and end\
+    \ cell\n        val (sx, sy) = (0, 0)\n        val (ex, ey) = (grid.length - 1,\
+    \ grid.length - 1)\n        val pq = new PriorityQueue[(Int, Int)]()(Ordering.by(p\
+    \ => minPathValueMap.getOrElse(p, Long.MaxValue)))\n        pq.enqueue((sx, sy))\n\
+    \        while (!pq.isEmpty) {\n            val (x, y) = pq.dequeue\n        \
+    \    // visit all the neighbors and update the minimum path map\n            def\
+    \ visitNeighbor(x : Int, y : Int) {\n                if (x >= 0 && x < grid.length\
+    \ && y >= 0 && y < grid.length) {\n                    val v = grid(x)(y)\n  \
+    \                  if (minPathValueMap.getOrElse((x, y), Long.MaxValue) > minPathValueMap.getOrElse((sx,\
+    \ sy), 0) + v) {\n                        minPathValueMap((x, y)) = minPathValueMap.getOrElse((sx,\
+    \ sy), 0) + v\n                        minPathMap((x, y)) = (x, y) :: minPathMap.getOrElse((sx,\
+    \ sy), List[(Int, Int)]())\n                        pq.enqueue((x, y))\n     \
+    \               }\n                }\n            }\n            visitNeighbor(x\
+    \ + 1, y)\n            visitNeighbor(x - 1, y)\n            visitNeighbor(x, y\
+    \ + 1)\n            visitNeighbor(x, y - 1)\n        }\n        // evaluate the\
+    \ minimum path by the value of cells that the minimum path go through\n      \
+    \  val minPath = minPathMap.getOrElse((ex, ey), List[(Int, Int)]())\n        val\
+    \ minPathValue", "        // g[i][j] represents the distance of the path from\
+    \ the center of cell(i, j) to\n        // the center of cell(grid.length / 2,\
+    \ grid.length / 2).\n        val g = Array.ofDim[Long](grid.length, grid.length)\n\
+    \        for (i <- 0 until grid.length) {\n            for (j <- 0 until grid.length)\
+    \ {\n                g(i)(j) = abs(i - grid.length / 2) + abs(j - grid.length\
+    \ / 2)\n            }\n        }\n        // dp[i][j][k] represents the minimum\
+    \ path which\n        // - starts from cell(i, j)\n        // - visits k cells\n\
+    \        // - visits cell(grid.length / 2, grid.length / 2)\n        val dp =\
+    \ Array.ofDim[(Long, List[(Int, Int)])](grid.length, grid.length, k.toInt + 1)\n\
+    \        for (i <- 0 until grid.length) {\n            for (j <- 0 until grid.length)\
+    \ {\n                for (l <- 0 to k.toInt) {\n                    dp(i)(j)(l)\
+    \ = (Long.MaxValue, List())\n                }\n            }\n        }\n   \
+    \     for (i <- 0 until grid.length) {\n            for (j <- 0 until grid.length)\
+    \ {\n                for (l <- 0 to k.toInt) {\n                    if (g(i)(j)\
+    \ > l) {\n                        dp(i)(j)(l) = (Long.MaxValue, List())\n    \
+    \                } else if (g(i)(j) == l) {\n                        dp(i)(j)(l)\
+    \ = (grid(i)(j), List((i, j)))\n                    } else {\n               \
+    \         if (i != 0) {\n                            if (dp(i - 1)(j)(l - 1)._1\
+    \ + grid(i)(j) < dp(i)(j)(l)._1) {\n                                dp(i)(j)(l)\
+    \ = (dp(i - 1)(j)(l - 1)._1 + grid(i)(j), dp(i - 1)(j)(l - 1)._2 :+ (", "    \
+    \    val n = grid.length\n        if (k == 1) {\n            val minVal = grid.foldLeft(grid(0)(0))((prev,\
+    \ row) => min(prev, row.min))\n            return List(minVal)\n        }\n  \
+    \      val visited = Array.fill(n, n)(false)\n        val prev = Array.fill(n,\
+    \ n)((Long.MaxValue, List[Long]()))\n        val Q = Queue[(Int, Int)]()\n   \
+    \     for (i <- 0 until n) {\n            Q.enqueue((i, 0))\n            Q.enqueue((i,\
+    \ n - 1))\n            Q.enqueue((0, i))\n            Q.enqueue((n - 1, i))\n\
+    \        }\n        while (!Q.isEmpty) {\n            val (row, col) = Q.dequeue\n\
+    \            if (visited(row)(col)) continue\n            visited(row)(col) =\
+    \ true\n            val currentVal = grid(row)(col)\n            val newList =\
+    \ List(currentVal)\n            if (row > 0 && !visited(row - 1)(col)) {\n   \
+    \             val (upVal, upList) = prev(row - 1)(col)\n                if (upVal\
+    \ > currentVal || (upVal == currentVal && upList.length < newList.length)) {\n\
+    \                    prev(row - 1)(col) = (currentVal, newList)\n            \
+    \        Q.enqueue((row - 1, col))\n                }\n            }\n       \
+    \     if (row < n - 1 && !visited(row + 1)(col)) {\n                val (downVal,\
+    \ downList) = prev(row + 1)(col)\n                if (downVal > currentVal ||\
+    \ (downVal == currentVal && downList.length < newList.length)) {\n           \
+    \         prev(row + 1)(col) = (currentVal, newList)\n                    Q.enqueue((row\
+    \ + 1, col))\n                }\n            }\n            if (col > 0 && !visited(row)(col\
+    \ - 1)) {\n                val (leftVal, leftList) = prev(row)(col - 1)\n    \
+    \            if (leftVal > currentVal || (leftVal == currentVal && leftList.length\
+    \ < new", "        // dp(i)(j)(k)\n        // Minimum path starting from the cell\
+    \ (i, j) that covers k cells.\n        val (n, m) = (grid.length, grid(0).length)\n\
+    \        var dp = Array.ofDim[List[Long]](n, m, k.toInt + 1)\n        def update(i\
+    \ : Int, j : Int, k : Int, path : List[Long]) = {\n            if (dp(i)(j)(k)\
+    \ == null || less(path, dp(i)(j)(k))) dp(i)(j)(k) = path\n        }\n        for\
+    \ (i <- 0 until n; j <- 0 until m) dp(i)(j)(1) = List(grid(i)(j))\n        for\
+    \ (k <- 2 to k.toInt) for (i <- 0 until n; j <- 0 until m) {\n            if (i\
+    \ != 0) update(i, j, k, dp(i - 1)(j)(k - 1) :+ grid(i)(j))\n            if (j\
+    \ != 0) update(i, j, k, dp(i)(j - 1)(k - 1) :+ grid(i)(j))\n            if (i\
+    \ != n - 1) update(i, j, k, dp(i + 1)(j)(k - 1) :+ grid(i)(j))\n            if\
+    \ (j != m - 1) update(i, j, k, dp(i)(j + 1)(k - 1) :+ grid(i)(j))\n        }\n\
+    \        var ans = List[Long]()\n        for (i <- 0 until n; j <- 0 until m)\
+    \ if (ans == null || less(dp(i)(j)(k.toInt), ans)) ans = dp(i)(j)(k.toInt)\n \
+    \       ans", "        val n = grid.length\n        val visited = Array.fill(n,\
+    \ n)(false)\n        val q = new PriorityQueue[(Long, Int, Int)]()(Ordering.by(_._1))\n\
+    \        val map = new HashMap[(Long, Int, Int), List[Long]]()\n        val solution\
+    \ = new HashMap[Long, List[Long]]()\n        def isValid(x : Int, y : Int) : Boolean\
+    \ = {\n            0 <= x && x < n && 0 <= y && y < n && !visited(x)(y)\n    \
+    \    }\n        def bfs(k : Long) : List[Long] = {\n            val moves = List((-1,\
+    \ 0), (1, 0), (0, -1), (0, 1))\n            q.clear()\n            q.enqueue((0,\
+    \ 0, 0))\n            map.clear()\n            solution.clear()\n            var\
+    \ found = false\n            for (i <- 0 until n; j <- 0 until n) visited(i)(j)\
+    \ = false\n            while (q.nonEmpty && !found) {\n                val (cost,\
+    \ x, y) = q.dequeue\n                if (cost > k) {\n                    found\
+    \ = true\n                    solution(cost) = map((cost, x, y))\n           \
+    \     } else {\n                    for ((dx, dy) <- moves) {\n              \
+    \          val newX = x + dx\n                        val newY = y + dy\n    \
+    \                    if (isValid(newX, newY)) {\n                            val\
+    \ newCost = cost + grid(newX)(newY)\n                            visited(newX)(newY)\
+    \ = true\n                            q.enqueue((newCost, newX, newY))\n     \
+    \                       map((newCost, newX, newY)) = grid(newX)(newY) :: map((cost,\
+    \ x, y))\n                        }\n                    }\n                }\n\
+    \            }\n            solution(k)\n        }\n        bfs(k)", "       \
+    \ // let f(i, j, k) = minimal list of length k, starting from i, j\n        val\
+    \ n = grid.length\n        val f = Array.ofDim[List[Long]](n, n, k.toInt + 1)\n\
+    \        def solve(i : Int, j : Int, k : Int) : List[Long] = {\n            if\
+    \ (f(i)(j)(k) != null) return f(i)(j)(k)\n            if (k == 1) return List(grid(i)(j))\n\
+    \            f(i)(j)(k) = List(Long.MaxValue)\n            if (i > 0) {\n    \
+    \            val lst = solve(i - 1, j, k - 1)\n                if (grid(i)(j)\
+    \ < lst.head) f(i)(j)(k) = grid(i)(j) :: lst\n                else if (grid(i)(j)\
+    \ == lst.head) {\n                    val ret = grid(i)(j) :: lst\n          \
+    \          if (ret < f(i)(j)(k)) f(i)(j)(k) = ret\n                }\n       \
+    \     }\n            if (i < n - 1) {\n                val lst = solve(i + 1,\
+    \ j, k - 1)\n                if (grid(i)(j) < lst.head) f(i)(j)(k) = grid(i)(j)\
+    \ :: lst\n                else if (grid(i)(j) == lst.head) {\n               \
+    \     val ret = grid(i)(j) :: lst\n                    if (ret < f(i)(j)(k)) f(i)(j)(k)\
+    \ = ret\n                }\n            }\n            if (j > 0) {\n        \
+    \        val lst = solve(i, j - 1, k - 1)\n                if (grid(i)(j) < lst.head)\
+    \ f(i)(j)(k) = grid(i)(j) :: lst\n                else if (grid(i)(j) == lst.head)\
+    \ {\n                    val ret = grid(i)(j) :: lst\n                    if (ret\
+    \ < f(i)(j)(k)) f(i)(j)(k) = ret\n                }\n            }", "       \
+    \ var t = System.currentTimeMillis\n        val N = grid.length\n        val dist\
+    \ = Array.ofDim[Long](N, N)\n        val prev = Array.ofDim[(Int, Int)](N, N)\n\
+    \        for (i <- 0 until N) {\n            for (j <- 0 until N) {\n        \
+    \        dist(i)(j) = Long.MaxValue\n                prev(i)(j) = (-1, -1)\n \
+    \           }\n        }\n        dist(0)(0) = 0\n        for (move <- 0 until\
+    \ k.toInt) {\n            val tmp_dist = Array.ofDim[Long](N, N)\n           \
+    \ val tmp_prev = Array.ofDim[(Int, Int)](N, N)\n            for (i <- 0 until\
+    \ N) {\n                for (j <- 0 until N) {\n                    tmp_dist(i)(j)\
+    \ = Long.MaxValue\n                    tmp_prev(i)(j) = (-1, -1)\n           \
+    \     }\n            }\n            for (i <- 0 until N) {\n                for\
+    \ (j <- 0 until N) {\n                    for (d <- 0 until 4) {\n           \
+    \             val nx = i + \"12065894848976477421378492409\".charAt(d) - '0'\n\
+    \                        val ny = j + \"110465894848976477421378492409\".charAt(d)\
+    \ - '0'\n                        if (nx >= 0 && nx < N && ny >= 0 && ny < N) {\n\
+    \                            val new_dist = dist(i)(j) + grid(nx)(ny)\n      \
+    \                      if (new_dist < tmp_dist(nx)(ny)) {\n                  \
+    \              tmp_dist(nx)(ny) = new_dist\n                                tmp_prev(nx)(ny)\
+    \ = (i, j)\n                            }\n                        }\n       \
+    \             }\n                }\n            }\n            dist = tmp_dist\n\
+    \            prev = tmp_prev\n        }\n        val res = ListBuffer[Long]()\n\
+    \        var x = N - 1\n        var y = N - 1\n        for (i <- 0 until k.toInt)\
+    \ {\n            res +=", '        ???', "        var n = grid.length\n      \
+    \  val arr = new Array[Array[Array[Long]]](n)\n        for (i <- 0 until n) {\n\
+    \            arr(i) = new Array[Array[Long]](n)\n            for (j <- 0 until\
+    \ n) {\n                arr(i)(j) = new Array[Long](k.toInt + 1)\n           \
+    \     for (l <- 0 to k.toInt) arr(i)(j)(l) = Long.MaxValue\n            }\n  \
+    \      }\n        for (i <- 0 until n) {\n            for (j <- 0 until n) {\n\
+    \                for (l <- 0 to k.toInt) {\n                    if (l == 0) arr(i)(j)(l)\
+    \ = 0\n                    else {\n                        var min = Long.MaxValue\n\
+    \                        if (i > 0) min = min(min, arr(i - 1)(j)(l - 1))\n   \
+    \                     if (j > 0) min = min(min, arr(i)(j - 1)(l - 1))\n      \
+    \                  if (i < n - 1) min = min(min, arr(i + 1)(j)(l - 1))\n     \
+    \                   if (j < n - 1) min = min(min, arr(i)(j + 1)(l - 1))\n    \
+    \                    arr(i)(j)(l) = min + grid(i)(j)\n                    }\n\
+    \                }\n            }\n        }\n        var min = Long.MaxValue\n\
+    \        var ii = 0\n        var jj = 0\n        for (i <- 0 until n) {\n    \
+    \        for (j <- 0 until n) {\n                if (arr(i)(j)(k.toInt) < min)\
+    \ {\n                    min = arr(i)(j)(k.toInt)\n                    ii = i\n\
+    \                    jj = j\n                }\n            }\n        }\n   \
+    \     var ret = List[Long]()\n        while (k > 0) {\n            ret = grid(ii)(jj)\
+    \ :: ret\n            k -= 1\n            var min = Long.MaxValue\n          \
+    \  var cur = -1\n            if (ii > 0) {\n                if (arr(ii - 1)(jj)(k.toInt)\
+    \ < min) {\n                    min = arr(ii - 1", '        null', "        val\
+    \ N = grid.length\n        val m = Array.ofDim[Long](N, N)\n        val dp = Array.ofDim[List[Long]](N,\
+    \ N)\n        for (i <- 0 until N) {\n            for (j <- 0 until N) {\n   \
+    \             m(i)(j) = grid(i)(j)\n                dp(i)(j) = List[Long]()\n\
+    \            }\n        }\n        var x = 0\n        var y = 0\n        for (i\
+    \ <- 0 until N * N) {\n            val t = find(m, x, y)\n            val a =\
+    \ List(x - 1, x, x + 1)\n            val b = List(y - 1, y, y + 1)\n         \
+    \   for (ax <- a; by <- b) {\n                if (ax >= 0 && ax < N && by >= 0\
+    \ && by < N) {\n                    val tmp = dp(ax)(by) :+ m(ax)(by)\n      \
+    \              if (tmp.length == k) {\n                        val v = tmp.sorted\n\
+    \                        if (dp(x)(y).isEmpty || v < dp(x)(y)) dp(x)(y) = v\n\
+    \                    }\n                }\n            }\n            x = t._1\n\
+    \            y = t._2\n        }\n        return dp(0)(0)", "        // dp(i)(j)(l)\
+    \ represents the minimum path of length l starting from (i, j)\n        // (row\
+    \ i, column j). We treat List of List of List as a 3D array.\n        // The answer\
+    \ will be at (0)(0)(k).\n        // Our base case is dp(i)(j)(0) = 0 for all i\
+    \ and j.\n        // dp(i)(j)(l) = min(dp(i)(j)(l - 1), dp(i + 1)(j)(l - 1), dp(i\
+    \ - 1)(j)(l - 1), dp(i)(j + 1)(l - 1), dp(i)(j - 1)(l - 1)) + val(i)(j)\n    \
+    \    // with the condition that i + 1, i - 1, j + 1, j - 1 are legal.\n      \
+    \  val n = grid.length\n        val valArr = grid.flatten.toArray\n        val\
+    \ dp = Array.fill(n, n, k.toInt + 1)(Long.MaxValue)\n        // Base case.\n \
+    \       for (i <- 0 until n; j <- 0 until n) dp(i)(j)(0) = 0\n        // dp(i)(j)(l)\
+    \ = min(dp(i)(j)(l - 1), dp(i + 1)(j)(l - 1), dp(i - 1)(j)(l - 1), dp(i)(j + 1)(l\
+    \ - 1), dp(i)(j - 1)(l - 1)) + val(i)(j)\n        for (l <- 1 to k.toInt) {\n\
+    \            for (i <- 0 until n; j <- 0 until n) {\n                if (i + 1\
+    \ < n) dp(i)(j)(l) = min(dp(i)(j)(l), dp(i + 1)(j)(l - 1))\n                if\
+    \ (i - 1 >= 0) dp(i)(j)(l) = min(dp(i)(j)(l), dp(i - 1)(j)(l - 1))\n         \
+    \       if (j + 1 < n) dp(i)(j)(l) = min(dp(i)(j)(l), dp(", "        if (k ==\
+    \ 1) {\n            var res = grid(0)(0)\n            for (i <- 0 until grid.length)\
+    \ for (j <- 0 until grid(0).length) res = min(res, grid(i)(j))\n            return\
+    \ List(res)\n        }\n        var matrix = Array.ofDim[List[Long]](grid.length,\
+    \ grid(0).length)\n        for (i <- 0 until grid.length) for (j <- 0 until grid(0).length)\
+    \ matrix(i)(j) = List(grid(i)(j))\n        for (n <- 1 until k.toInt) {\n    \
+    \        var nxt = Array.ofDim[List[Long]](grid.length, grid(0).length)\n    \
+    \        for (i <- 0 until grid.length) for (j <- 0 until grid(0).length) {\n\
+    \                nxt(i)(j) = List(matrix(i)(j).min)\n                if (i - 1\
+    \ >= 0) nxt(i)(j) = List(min(nxt(i)(j).head, matrix(i - 1)(j).min))\n        \
+    \        if (i + 1 < grid.length) nxt(i)(j) = List(min(nxt(i)(j).head, matrix(i\
+    \ + 1)(j).min))\n                if (j - 1 >= 0) nxt(i)(j) = List(min(nxt(i)(j).head,\
+    \ matrix(i)(j - 1).min))\n                if (j + 1 < grid(0).length) nxt(i)(j)\
+    \ = List(min(nxt(i)(j).head, matrix(i)(j + 1).min))\n            }\n         \
+    \   for (i <- 0 until grid.length) for (j <- 0 until grid(0).length) matrix(i)(j)\
+    \ = nxt(i)(j)\n        }\n        matrix(0)(0)", "        var n = grid.length\n\
+    \        var dp = Array.fill(n)(Array.fill(n)(0L))\n        for (i <- 0 until\
+    \ n) {\n            for (j <- 0 until n) {\n                dp(i)(j) = grid(i)(j)\
+    \ + min(if (i - 1 >= 0) dp(i - 1)(j) else Long.MaxValue, if (j - 1 >= 0) dp(i)(j\
+    \ - 1) else Long.MaxValue)\n            }\n        }\n        var res = ListBuffer[Long]()\n\
+    \        var i = n - 1; var j = n - 1\n        while (k > 0) {\n            res\
+    \ += grid(i)(j)\n            k -= 1\n            if (i - 1 >= 0 && dp(i - 1)(j)\
+    \ <= dp(i)(j - 1)) {\n                i -= 1\n            } else if (j - 1 >=\
+    \ 0 && dp(i)(j - 1) <= dp(i - 1)(j)) {\n                j -= 1\n            }\n\
+    \        }\n        res.toList", "        // dp(i)(j)(length)\n        var n =\
+    \ grid.length\n        val dp = Array.ofDim[Long](n, n, k + 1)\n        val directions\
+    \ = List((-1, 0), (1, 0), (0, -1), (0, 1))\n        for (i <- 0 until n; j <-\
+    \ 0 until n) {\n            dp(i)(j)(1) = grid(i)(j)\n        }\n        for (length\
+    \ <- 2 to k.toInt) {\n            for (i <- 0 until n; j <- 0 until n) {\n   \
+    \             dp(i)(j)(length) = Long.MaxValue\n                for (direction\
+    \ <- directions) {\n                    val dx = direction._1\n              \
+    \      val dy = direction._2\n                    if (i + dx >= 0 && i + dx <\
+    \ n && j + dy >= 0 && j + dy < n) {\n                        dp(i)(j)(length)\
+    \ = min(dp(i)(j)(length), dp(i + dx)(j + dy)(length - 1) + grid(i)(j))\n     \
+    \               }\n                }\n            }\n        }\n        var currentValue\
+    \ = Long.MaxValue\n        var currentIndex = (0, 0)\n        for (i <- 0 until\
+    \ n; j <- 0 until n) {\n            if (dp(i)(j)(k.toInt) < currentValue) {\n\
+    \                currentValue = dp(i)(j)(k.toInt)\n                currentIndex\
+    \ = (i, j)\n            }\n        }\n        var result = new ListBuffer[Long]\n\
+    \        result += grid(currentIndex._1)(currentIndex._2)\n        var currentIndex2\
+    \ = currentIndex\n        for (length <- k.toInt - 1 to 1 by -1) {\n         \
+    \   for (direction <- directions) {\n                val dx = direction._1\n \
+    \               val dy = direction._2\n                if (currentIndex2._1 +\
+    \ dx >= 0 && currentIndex2._1 + dx < n && currentIndex2._2 + dy >= 0 && currentIndex2._2\
+    \ + dy < n) {\n                    if (dp(currentIndex2._1)(currentIndex2._2)(length\
+    \ + 1) == dp(currentIndex2._1 +", "        // path: (value, row, column)\n   \
+    \     // pathQueue : (path, length)\n        val pathQueue = new PriorityQueue[(List[(Long,\
+    \ Int, Int)], Long)]()(new Ordering[(List[(Long, Int, Int)], Long)]() {\n    \
+    \        def compare(a : (List[(Long, Int, Int)], Long), b : (List[(Long, Int,\
+    \ Int)], Long)) = {\n                val aList = a._1\n                val bList\
+    \ = b._1\n                if (aList.size < bList.size) -1\n                else\
+    \ if (aList.size > bList.size) 1\n                else {\n                   \
+    \ for (i <- 0 until aList.size) {\n                        if (aList(i)._1 < bList(i)._1)\
+    \ return -1\n                        else if (aList(i)._1 > bList(i)._1) return\
+    \ 1\n                    }\n                    0\n                }\n       \
+    \     }\n        })\n        val visited = new HashSet[(Int, Int)]()\n       \
+    \ val n = grid.size\n        for (i <- 0 until n) {\n            for (j <- 0 until\
+    \ n) {\n                pathQueue.enqueue((List((grid(i)(j), i, j)), 1))\n   \
+    \             visited.add((i, j))\n            }\n        }\n        while (pathQueue.size\
+    \ > 0) {\n            val current = pathQueue.dequeue()\n            val currentPath\
+    \ = current._1\n            val currentLength = current._2\n            if (currentLength\
+    \ == k) return currentPath.map(x => x._1)\n            val tail = currentPath.last\n\
+    \            for (i <- -1 to 1) {\n                for (j <- -1 to 1) {\n    \
+    \                if (i == 0 && j == 0) {}\n                    else {\n      \
+    \                  val newRow = tail._2 + i\n                        val newColumn\
+    \ = tail._3 + j\n                        if (newRow >= 0 && newRow < n && newColumn\
+    \ >= 0 && newColumn < n && !visited.contains((newRow, newColumn))) {\n       \
+    \                     val newPath = currentPath :+ (grid(newRow)(newColumn), newRow,\
+    \ new", "        val n = grid.length\n        var minPath = List[Long]()\n   \
+    \     for (i <- 0 until n) {\n            for (j <- 0 until n) {\n           \
+    \     var path = List[Long]()\n                var ik = i\n                var\
+    \ jk = j\n                for (l <- 0 until k) {\n                    if (path.length\
+    \ == 0 || path.last < grid(ik)(jk)) path = path :+ grid(ik)(jk)\n            \
+    \        else {\n                        var i2 = ik\n                       \
+    \ var j2 = jk\n                        while (path.length > 0 && path.last > grid(i2)(j2))\
+    \ {\n                            path = path.init\n                          \
+    \  i2 = (i2 + n - 1) % n\n                            j2 = (j2 + n - 1) % n\n\
+    \                        }\n                        path = path :+ grid(i2)(j2)\n\
+    \                        ik = i2\n                        jk = j2\n          \
+    \          }\n                    ik = (ik + 1) % n\n                    jk =\
+    \ (jk + 1) % n\n                }\n                if (minPath.length == 0 ||\
+    \ minPath > path) minPath = path\n            }\n        }\n        minPath",
+  '        null', "        var result = ArrayBuffer[Long]()\n        var visited =\
+    \ ArrayBuffer[List[Long]]()\n        var visitedMap = Map[List[Long], Long]()\n\
+    \        visited += List(0, 0)\n        var queue = Queue[List[Long]]()\n    \
+    \    queue.enqueue(List(0, 0))\n        visitedMap += (List(0, 0) -> 0)\n    \
+    \    while (queue.nonEmpty) {\n            val cur = queue.dequeue\n         \
+    \   val x = cur(0).toInt\n            val y = cur(1).toInt\n            if (visitedMap(cur)\
+    \ == k) {\n                visited.foreach(x => result += grid(x(0).toInt)(x(1).toInt))\n\
+    \                return result.toList\n            }\n            if (x > 0 &&\
+    \ !visited.contains(List(x - 1, y))) {\n                queue.enqueue(List(x -\
+    \ 1, y))\n                visited += List(x - 1, y)\n                visitedMap\
+    \ += (List(x - 1, y) -> (visitedMap(cur) + 1))\n            }\n            if\
+    \ (x < grid.length - 1 && !visited.contains(List(x + 1, y))) {\n             \
+    \   queue.enqueue(List(x + 1, y))\n                visited += List(x + 1, y)\n\
+    \                visitedMap += (List(x + 1, y) -> (visitedMap(cur) + 1))\n   \
+    \         }\n            if (y > 0 && !visited.contains(List(x, y - 1))) {\n \
+    \               queue.enqueue(List(x, y - 1))\n                visited += List(x,\
+    \ y - 1)\n                visitedMap += (List(x, y - 1) -> (visitedMap(cur) +\
+    \ 1))\n            }\n            if (y < grid.length - 1 && !visited.contains(List(x,\
+    \ y + 1))) {\n                queue.enqueue(List(x, y + 1))\n                visited\
+    \ += List(x, y + 1)\n                visitedMap += (List(x, y + 1) -> (visitedMap(cur)\
+    \ + 1))\n            }\n        }\n        null", "        def hasNeighbor(grid\
+    \ : List[List[Long]], row : Int, col : Int) : Boolean = {\n            if (row\
+    \ > 0 && grid(row - 1)(col) != -1) true\n            else if (row < grid.length\
+    \ - 1 && grid(row + 1)(col) != -1) true\n            else if (col > 0 && grid(row)(col\
+    \ - 1) != -1) true\n            else if (col < grid(0).length - 1 && grid(row)(col\
+    \ + 1) != -1) true\n            else false\n        }\n        val m = grid.length\n\
+    \        val n = grid(0).length\n        val memo = Array.fill(m, n)(-1L)\n  \
+    \      val dirs = List((-1, 0), (1, 0), (0, -1), (0, 1))\n        def dfs(row\
+    \ : Int, col : Int, count : Long) : Long = {\n            if (count > k) -1\n\
+    \            else if (count == k) grid(row)(col)\n            else if (memo(row)(col)\
+    \ != -1) memo(row)(col)\n            else {\n                var result = -1L\n\
+    \                for (dir <- dirs) {\n                    val (nextRow, nextCol)\
+    \ = (row + dir._1, col + dir._2)\n                    if (nextRow >= 0 && nextRow\
+    \ < m && nextCol >= 0 && nextCol < n && hasNeighbor(grid, nextRow, nextCol)) {\n\
+    \                        val curr = dfs(nextRow, nextCol, count + 1)\n       \
+    \                 if (curr != -1 && (result == -1 || curr < result)) result =\
+    \ curr\n                    }\n                }\n                memo(row)(col)\
+    \ = result\n                result\n            }\n        }\n        var start\
+    \ = -1L\n        for (i <- 0 until m; j <- 0 until n) {\n            if (hasNeighbor(grid,\
+    \ i, j)) {\n                val curr = dfs(i, j, 1)\n                if (curr\
+    \ != -1 && (start == -1 || curr < start)) start = curr\n            }\n      \
+    \  }\n        var result = List(start)"]
 stop_tokens:
 - "\n    }\n"

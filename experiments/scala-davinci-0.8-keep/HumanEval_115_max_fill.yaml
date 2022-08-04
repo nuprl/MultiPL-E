@@ -28,6 +28,183 @@ tests: "    }\n    def main(args: Array[String]) = {\n    assert(maxFill((List[L
   \ (2l)) == (4l));\n    assert(maxFill((List[List[Long]](List[Long](1l.toLong, 1l.toLong,\
   \ 1l.toLong, 1l.toLong), List[Long](1l.toLong, 1l.toLong, 1l.toLong, 1l.toLong))),\
   \ (9l)) == (2l));\n    }\n\n}\n"
-completions: []
+completions: ["        // calculate columns of 1's\n        val col1s = grid.foldLeft(List[Long]())((a,\
+    \ b) => a ++ List(b.foldLeft(0L)((c, d) => c + d)))\n        // calculate max\
+    \ length of consecutive 1's for each row\n        val maxConsecutive1s = grid.map(row\
+    \ => row.foldLeft(List(0L))((a, b) => if (b == 1) a ++ List(a.last + 1) else List(0L)).max)\n\
+    \        // calculate max length of consecutive 1's in the entire grid\n     \
+    \   val consecutive1s = col1s.foldLeft(List[Long]())((a, b) => a ++ List(a.last\
+    \ + b))\n        // calculate number of consecutive 1's per column\n        val\
+    \ numConsecutive1s = col1s.map(c => col1s.indexOf(c) match {\n            case\
+    \ 0 => consecutive1s(1)\n            case a if a == col1s.length - 1 => consecutive1s(consecutive1s.length\
+    \ - 2)\n            case b => consecutive1s(b + 1) - consecutive1s(b - 1)\n  \
+    \      })\n        // number of times to lower the bucket\n        maxConsecutive1s.max\
+    \ + (numConsecutive1s.filter(a => a % capacity == 0).map(b => b / capacity).sum\
+    \ - 1)", "        val maxFill = grid.map(row => row.sum).max\n        val n =\
+    \ grid.size\n        val m = grid(0).size\n        def f(index : Int, current\
+    \ : List[Long]) : Long = {\n            if (index == n) 1\n            else {\n\
+    \                val next = (0 until m).map(j => if (current(j) == maxFill) current(j)\
+    \ else current(j) + 1).toList\n                next.sum + f(index + 1, next)\n\
+    \            }\n        }\n        f(0, grid(0))", "        // i.e.\n        //\
+    \ 0 0 1 1\n        // 0 0 0 0\n        // 1 1 1 1\n        // 0 1 1 1\n      \
+    \  // if bucket capacity is 2, then maxFill is 5.\n        val length = grid.length\n\
+    \        val gridTranspose = grid.transpose\n        // i.e.\n        // 0 0 1\
+    \ 0\n        // 0 1 0 0\n        // 1 1 1 1\n        // then gridTranspose is\n\
+    \        // 0 0 1\n        // 0 1 1\n        // 1 1 1\n        // 1 1 1\n    \
+    \    val maxFillMap = new HashMap[(Int, Int), Long]()\n        def maxFillRec(rowIndex\
+    \ : Int, colIndex : Int) : Long = {\n            val key = (rowIndex, colIndex)\n\
+    \            if (maxFillMap.contains(key)) maxFillMap(key)\n            else {\n\
+    \                val row = gridTranspose(colIndex)\n                val maxFill\
+    \ = row.slice(rowIndex, rowIndex + capacity.toInt).sum\n                maxFillMap\
+    \ += (key -> maxFill)\n                maxFill\n            }\n        }\n   \
+    \     val result = (0 to (length - capacity.toInt)).map(i => {\n            (0\
+    \ to (length - 1)).map(j => maxFillRec(i, j)).max\n        }).sum\n        result",
+  "        if (grid.length == 0) return 0\n        var bucket = capacity\n       \
+    \ var result = 0\n        for (well <- grid) {\n            for (unit <- well)\
+    \ {\n                if (unit == 1) {\n                    if (bucket == 0) {\n\
+    \                        bucket = capacity\n                        result +=\
+    \ 1\n                    }\n                    bucket -= 1\n                }\n\
+    \            }\n        }\n        result + bucket", "        var result = 0L\n\
+    \        var used = Array.fill(grid.size)(0L)\n        for (i <- 0 until grid.size)\
+    \ {\n            for (j <- 0 until grid(i).size) {\n                if (grid(i)(j)\
+    \ > 0 && used(i) < capacity) {\n                    grid(i)(j) -= 1\n        \
+    \            used(i) += 1\n                    result += 1\n                }\n\
+    \            }\n        }\n        result", "        val rows = grid.length\n\
+    \        val cols = grid(0).length\n        val cache = Array.fill(rows, cols)(0L)\n\
+    \        var max_fill = 0L\n        var i = 0\n        while (i < rows) {\n  \
+    \          var j = 0\n            while (j < cols) {\n                if (grid(i)(j)\
+    \ == 1) {\n                    val up = if (i > 0) cache(i - 1)(j) else 0\n  \
+    \                  val left = if (j > 0) cache(i)(j - 1) else 0\n            \
+    \        cache(i)(j) = 1 + math.min(up, left)\n                    max_fill =\
+    \ math.max(max_fill, cache(i)(j))\n                }\n                j += 1\n\
+    \            }\n            i += 1\n        }\n        max_fill", "        val\
+    \ n = grid.length\n        val m = grid(0).length\n        var max = 0L\n    \
+    \    for (i <- 0 until n) {\n            for (j <- 0 until m) {\n            \
+    \    if (grid(i)(j) == 1) {\n                    if (i == 0) max = max + capacity\n\
+    \                    else {\n                        val prev = grid(i - 1)(j)\n\
+    \                        if (prev < capacity) max = max + (capacity - prev)\n\
+    \                    }\n                }\n            }\n        }\n        max",
+  "        if (grid.isEmpty) 0\n        else {\n            val rowCount = grid.length\n\
+    \            val colCount = grid(0).length\n            val sums = Array.ofDim[Long](rowCount\
+    \ + 1, colCount + 1)\n            for (i <- 0 until rowCount) {\n            \
+    \    for (j <- 0 until colCount) {\n                    sums(i + 1)(j + 1) = sums(i)(j\
+    \ + 1) + sums(i + 1)(j) - sums(i)(j) + grid(i)(j)\n                }\n       \
+    \     }\n            // suppose we have 1 row\n            // number of things\
+    \ filled = floor(sums / capacity)\n            // suppose we have 2 rows\n   \
+    \         // number of things filled = floor(sums / capacity) + floor(sums / capacity)\n\
+    \            //   where sums is the sum of the sum of 2 rows\n            // suppose\
+    \ we have 3 rows\n            // number of things filled = floor(sums / capacity)\
+    \ + floor(sums / capacity) + floor(sums / capacity)\n            //   where sums\
+    \ is the sum of the sum of 3 rows\n            // ...\n            // same thing\
+    \ works with columns\n            // let's think about 2D\n            // let's\
+    \ suppose we have 1 row and 1 column\n            // number of things filled =\
+    \ floor(sums / capacity) + floor(sums / capacity)\n            //   where sums\
+    \ is the sum of the sum of 1 row and 1 column\n            // suppose we have\
+    \ 2 rows and 1 column\n            // number of things filled = floor(sums / capacity)\
+    \ + floor(sums / capacity) + floor(sums / capacity)\n            //   where sums\
+    \ is the sum of the sum of 2 rows and 1 column\n            // suppose we have\
+    \ 1 row and 2 columns\n            // number of things filled = floor(sums / capacity)\
+    \ + floor(sums / capacity) + floor(sums / capacity)\n            //   where sums\
+    \ is the sum of the sum of 1 row and 2 columns\n            // suppose we have\
+    \ 2 rows and 2 columns\n            // number of things filled = floor(sums /\
+    \ capacity) + floor(sums / capacity) + floor(sums / capacity) + floor(sums / capacity)\n\
+    \            //   where sums is the sum of the sum of 2", "        val m = grid.size\n\
+    \        val n = grid(0).size\n        var maxFill = 0L\n        for (i <- 0 until\
+    \ m) {\n            for (j <- 0 until n) {\n                if (grid(i)(j) ==\
+    \ 1) {\n                    maxFill = max(maxFill, getFill(grid, capacity, i,\
+    \ j))\n                }\n            }\n        }\n        return maxFill", " \
+    \       var max = 0L\n        for (i <- 0 until grid.length) {\n            for\
+    \ (j <- 0 until grid(i).length) {\n                max = max max grid(i)(j)\n\
+    \            }\n        }\n        val filled : HashMap[Long, List[List[Long]]]\
+    \ = new HashMap\n        filled(0) = grid\n        var maxfilled = 0L\n      \
+    \  while (filled.contains(maxfilled)) {\n            val empties = filled(maxfilled)\n\
+    \            filled.remove(maxfilled)\n            for (row <- empties) {\n  \
+    \              val emp = row.count(_ == 0)\n                val fill = row.count(_\
+    \ == 1)\n                if (fill > 0) {\n                    val filled2 = row.map(_\
+    \ max (1L - maxfilled))\n                    val maxfilled2 = filled2.map(_ min\
+    \ maxfilled).sum\n                    if (!filled.contains(maxfilled2)) filled(maxfilled2)\
+    \ = List()\n                    filled(maxfilled2) = filled(maxfilled2) :+ filled2\n\
+    \                }\n                var empties2 = List[List[Long]]()\n      \
+    \          var k = 0\n                var rem = 0\n                while (k <=\
+    \ emp && k <= capacity) {\n                    val remaining = maxfilled - k\n\
+    \                    if (remaining >= 0) {\n                        if (!filled.contains(remaining))\
+    \ filled(remaining) = List()\n                        val emp2 = List.fill(rem)(0L)\
+    \ ::: List.fill(k)(1L) ::: List.fill(emp - k)(0L)\n                        filled(remaining)\
+    \ = filled(remaining) :+ emp2\n                    }\n                    rem\
+    \ += 1\n                    k += capacity\n                }\n            }\n\
+    \            maxfilled += 1\n        }\n        maxfilled - 1", "        var result\
+    \ = 0L\n        var fill = ListBuffer[Long]()\n        for (i <- 0 until grid.length)\
+    \ {\n            var sum = 0L\n            for (j <- 0 until grid(i).length) {\n\
+    \                if (grid(i)(j) == 1) sum += 1\n            }\n            fill\
+    \ += sum\n        }\n        val max = fill.max\n        for (i <- 0 until grid.length)\
+    \ {\n            var sum = 0L\n            for (j <- 0 until grid(i).length) {\n\
+    \                if (grid(i)(j) == 1) sum += 1\n            }\n            result\
+    \ += max - sum\n        }\n        result", "        val maxs = grid.map(x =>\
+    \ x.max)\n        if (maxs.max == 0) 0\n        else capacity * maxs.sum", " \
+    \   \tvar max = 0L\n    \tfor (row <- grid)\n    \t\tmax = max max row.sum\n \
+    \   \tvar buckets = if (max % capacity == 0) max / capacity else max / capacity\
+    \ + 1\n    \tbuckets", "        var max = 0L\n        grid.foreach(row => row.foreach(e\
+    \ => if (e > max) max = e))\n        max", "        // Find the lowest index of\
+    \ non-zero rows in the grid\n        val lowInd = (0 until grid.length).find(grid(_).forall(_\
+    \ == 0)) match {\n            case Some(i) => i\n            case None => 0\n\
+    \        }\n        // Find the highest index of non-zero rows in the grid\n \
+    \       val highInd = (0 until grid.length).reverse.find(grid(_).forall(_ == 0))\
+    \ match {\n            case Some(i) => i\n            case None => grid.length\
+    \ - 1\n        }\n        // Initially the result is 0\n        var res = 0L\n\
+    \        // Then you move the bucket down to the lowest non-zero row\n       \
+    \ res += lowInd\n        // Next you go down row by row\n        for (i <- lowInd\
+    \ to highInd) {\n            // Now you move the bucket right to the rightmost\
+    \ 1 in this row\n            res += grid(i).lastIndexOf(1)\n            // Then\
+    \ you move the bucket down to the next row\n            res += 1\n        }\n\
+    \        // Finally you move the bucket left to the leftmost 1 in the last row,\
+    \ which is 0\n        res += 0\n        // The time complexity is O(row_length\
+    \ * row_number)\n        res", "        grid.map(row => {\n            val rowSum\
+    \ = row.sum\n            rowSum - (rowSum % capacity)\n        }).sum", "    \
+    \    var maxFill : Long = 0\n        var totalFill : Long = 0\n        var maxRow\
+    \ : Long = 0\n        var maxRowIndex : Long = 0\n        grid.foreach { row =>\n\
+    \            var rowFill : Long = 0\n            row.foreach { column =>\n   \
+    \             rowFill += column\n            }\n            totalFill += rowFill\n\
+    \            if (rowFill > maxRow) {\n                maxRow = rowFill\n     \
+    \           maxRowIndex = grid.indexOf(row)\n            }\n        }\n      \
+    \  if (maxRow > capacity) {\n            var currentRow = grid(maxRowIndex.toInt)\n\
+    \            var i = 0\n            while (i < currentRow.length) {\n        \
+    \        var j = 0\n                while (j < capacity) {\n                 \
+    \   currentRow(i) -= 1\n                    j += 1\n                }\n      \
+    \          i += 1\n            }\n            maxFill += maxRow / capacity\n \
+    \           maxFill += maxFill(grid, capacity)\n        }\n        return maxFill",
+  "        val max = grid.map(_.max).max\n        if (max <= capacity) return 0\n\
+    \        //val map = Array.ofDim[List[Int]](max + 1)\n        val map = new ListBuffer[List[Int]]\n\
+    \        map += List.empty[Int]\n        for (i <- 1 to max) {\n            val\
+    \ list = new ListBuffer[Int]\n            list += 0\n            map += list.toList\n\
+    \        }\n        var answer = 0\n        for (i <- 0 until grid.length) {\n\
+    \            for (j <- 0 until grid(i).length) {\n                if (grid(i)(j)\
+    \ > 0) {\n                    for (k <- 1 to grid(i)(j).toInt) {\n           \
+    \             if (map(k).isEmpty) answer += 1\n                        else {\n\
+    \                            val t = map(k).tail\n                           \
+    \ map(k) = t\n                        }\n                    }\n             \
+    \   }\n            }\n        }\n        return answer", "        // f(i, j) =\
+    \ the maximum units of water that can be extracted from the (i, j)th well\n  \
+    \      // f(i, j) = max(min(capacity, sum of water in the (i, j)th well and the\
+    \ wells above it), sum of water in the (i, j)th well)\n        // f(i, j) = max(min(capacity,\
+    \ sum of water in the (i, j)th well and the wells above it), the number of units\
+    \ of water in the (i, j)th well)\n        // f(i, j) = max(min(capacity, sum of\
+    \ water in the (i, j)th well and the wells above it), the number of units of water\
+    \ in the (i, j)th well)\n        // f(i, j) = max(min(capacity, sum of water in\
+    \ the (i, j)th well and the wells above it), sum of water in the (i, j)th well)\n\
+    \        // f(i, j) = max(min(capacity, sum of water in the (i, j)th well and\
+    \ the wells above it), the number of units of water in the (i, j)th well)\n  \
+    \      // f(i, j) = max(min(capacity, sum of water in the (i, j)th well and the\
+    \ wells above it), the number of units of water in the (i, j)th well)\n      \
+    \  // f(i, j) = max(min(capacity, sum of water in the (i, j)th well and the wells\
+    \ above it), sum of water in the (i, j)th well)\n        // f(i, j) = max(min(capacity,\
+    \ sum of water in the (i, j)th well and the wells above it), the number of units\
+    \ of water in the (i, j)th well)\n        // f(i, j) = max(min(capacity, sum of\
+    \ water in the (i, j)th well and the wells above it), the number of units of water\
+    \ in the (i, j)th well)\n        // f(i, j) = max(min(capacity, sum of water in\
+    \ the (i, j)th well and the wells above it), sum of water in the (i, j", "   \
+    \     var wells = grid.map(l => l.max).max\n        var buckets = capacity\n \
+    \       var count = 0L\n        for (well <- wells to 1 by -1) {\n           \
+    \ for (bucket <- 1 to buckets) {\n                count += grid.map(l => l.count(_\
+    \ == well)).max\n            }\n        }\n        count"]
 stop_tokens:
 - "\n    }\n"

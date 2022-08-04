@@ -16,6 +16,236 @@ tests: "}\n\ncandidate() {\n    by_length \"$@\"\n}\n\nset -e\nrun_test() {\n   
   \    [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"1 -1 55\") = \"One\" ]]\n\
   \    [[ $(candidate \"1 -1 3 2\") = \"Three Two One\" ]]\n    [[ $(candidate \"\
   9 4 8\") = \"Nine Eight Four\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local IFS=' '\n    local -n line=\"$1\"\n    local length=\"$(expr\
+    \ ${#line[@]} / 2)\"\n    local output\n    for ((i = 0; i < ${#line[@]}; i +=\
+    \ 2)); do\n        local val=\"${line[i]}\"\n        local val2=\"${line[i+1]}\"\
+    \n        local num\n        num=$(expr ${val2} + ${val2} - ${val})\n        case\
+    \ \"${num}\" in\n            0) output=\"One\";;\n            1) output=\"Two\"\
+    ;;\n            2) output=\"Three\";;\n            3) output=\"Four\";;\n    \
+    \        4) output=\"Five\";;\n            5) output=\"Six\";;\n            6)\
+    \ output=\"Seven\";;\n            7) output=\"Eight\";;\n            8) output=\"\
+    Nine\";;\n            9) output=\"Ten\";;\n            *) output=\"${val}\"\n\
+    \        esac\n        echo \"${output}\"\n    done", "    arr=(\"${@}\")\n  \
+    \  echo \"${arr[@]}\"\n    IFS=$'\\n' arr=(${arr[*]})\n    arr=($(sort -r -t'\
+    \ '${arr[*]}'))\n    arr=(${arr[*]} | sed -e 's/\\(.*\\)/'\"$(cat <<-'EOF'\n \
+    \   \"One\" \"Two\" \"Three\" \"Four\" \"Five\" \"Six\" \"Seven\" \"Eight\" \"\
+    Nine\"\n    EOF\n    )'\"/')\n    echo \"${arr[@]}\"\n    arr=(${arr[*]} | tr\
+    \ '[:upper:]' '[:lower:]')\n    arr=(${arr[*]} | sed -e 's/\\(.*\\)/'\"$(cat <<-'EOF'\n\
+    \    \"Eight\" \"Five\" \"Four\" \"Three\" \"Two\" \"Two\" \"One\" \"One\"\n \
+    \   EOF\n    )'\"/')\n    echo \"${arr[@]}\"", "    local input=$1\n    local\
+    \ output\n\n    if [[ -z \"$input\" ]]; then\n        echo \"No input\"\n    \
+    \    return \n    fi\n\n    IFS=\" \" read -r -a array <<< \"$input\"\n    local\
+    \ lengths=($(echo \"${input[@]}\" | tr \" \" \"\\n\" | sort -n | uniq))\n    local\
+    \ i=0\n    local last=0\n    local current=\"\"\n    local previous=\"\"\n   \
+    \ local output\n\n    for length in \"${lengths[@]}\"; do\n        local current\n\
+    \        if [[ -z \"$previous\" ]]; then\n            current=$(echo \"${array[@]:$last:$length-1}\"\
+    \ | tr \" \" \"\\n\")\n        else\n            current=$(echo \"${array[@]:$last:$length-1}\"\
+    \ | tr \" \" \"\\n\" | sort -n | uniq)\n        fi\n        local previous=$(echo\
+    \ \"${array[@]:$last:$length}\" | tr \" \" \"\\n\" | sort -n | uniq)\n       \
+    \ if [[ -z \"$previous\" ]]; then\n            current=$(echo \"${array[@]:$last:$length}\"\
+    \ | tr \" \" \"\\n\")\n        else\n            current=$(echo \"${array[@]:$last:$length}\"\
+    \ | tr \" \" \"\\n\" | sort -n | uniq)\n        fi\n        local output\n   \
+    \     if [[ \"$previous\" = \"$current\" ]]; then\n            output=\"${previous}\\\
+    n\"\n        else\n            output=\"${current}\\n\"\n        fi\n        \n\
+    \        ((last+=length))\n        ((i++))\n    done\n    \n    echo \"${output}\"",
+  "  if [[ \"$#\" -ne 1 ]]; then\n    echo \"Illegal number of parameters. Usage:\
+    \ by_length <list of number>\" >&2\n    exit 1\n  fi\n\n  local arr\n  IFS=' '\
+    \ read -r -a arr <<< \"$1\"\n  local num_lens=()\n  local nums\n  local num\n\
+    \  local result\n\n  for num in \"${arr[@]}\"; do\n    if [[ \"${num}\" -gt 0\
+    \ && \"${num}\" -lt 10 ]]; then\n      num_lens+=(\"${#num}\")\n    fi\n  done\n\
+    \  printf -v nums '%*s' \"${num_lens[@]}\" ''\n\n  for num in \"${arr[@]}\"; do\n\
+    \    if [[ \"${num}\" -gt 0 && \"${num}\" -lt 10 ]]; then\n      printf -v result\
+    \ '%s %s' \"${result}\" \"$((10#${num})) #${nums}\"\n    elif [[ \"${num}\" -eq\
+    \ 0 ]]; then\n      printf -v result '%s %s' \"$result\" \"${nums}\"\n    fi\n\
+    \  done\n\n  echo \"${result%$'\\n'}\"", "  arr=$1\n  lengths=`echo $arr | tr\
+    \ ' ' ','`\n  # For each element in lengths\n  for element in $lengths; do\n \
+    \   echo $element\n    # if the number is in the list of all numbers from 1 to\
+    \ 9\n    if [ $element -ge 1 ] && [ $element -le 9 ]; then\n      arr2=`echo $arr\
+    \ | tr ' ' ','`\n      # Reverse arr2\n      arr2=`echo $arr2 | rev`\n      #\
+    \ Restore arr2\n      arr2=`echo $arr2 | tr ',' '\\n' | rev`\n      # If the element\
+    \ in arr equals the one in arr2\n      if [ \"$arr\" == \"$arr2\" ]; then\n  \
+    \      # Remove one from element\n        element=`expr $element - 1`\n      \
+    \  # And replace it with that number\n        arr=`expr $element \\* 10`\n   \
+    \     arr=`echo $arr | tr ' ' ','`\n      fi\n    fi\n  done\n  echo \"$arr\"",
+  "  local input=\"${1}\"\n  local inputLength=\"${#input}\"\n  if [ \"$inputLength\"\
+    \ -eq 0 ]; then\n    return \"\"\n  fi\n  local arrayNames=(\"${!input}\")\n \
+    \ local outputLength=0\n  while [ \"$outputLength\" -lt \"$inputLength\" ]; do\n\
+    \    local output=\"${input[$outputLength]}\"\n    local outputLength=$((outputLength\
+    \ + 1))\n    local sortedArray=\"${input[@]:$outputLength}\"\n    local sortedArrayLength=\"\
+    ${#sortedArray}\"\n    local reverseArray=\"${sortedArray[@]:0:$sortedArrayLength}\"\
+    \n    local reverseArrayLength=\"${#reverseArray}\"\n    local outputArray=\"\"\
+    \n    for (( i = 0; i < $inputLength; i++ )); do\n      local name=\"${arrayNames[$i]}\"\
+    \n      local value\n      if [ \"$name\" = \"$output\" ]; then\n        value=1\n\
+    \      else\n        value=${sortedArray[$i]}\n      fi\n      outputArray+=\"\
+    ${value} \"\n    done\n    local outputArrayLength=\"${#outputArray}\"\n    local\
+    \ output=\"${outputArray%?}\"\n    echo \"${output}\"\n  done", "    local arr=\"\
+    ${1:-}\"\n    arr=($arr)\n    local -i start=1\n    local -i end=${#arr[@]}\n\
+    \    local -i i\n    local out\n\n    if [[ $# -eq 1 && $1 != \"\" ]]; then\n\
+    \        arr=($1)\n        start=0\n    end\n\n    for ((i=start; i<end; i++))\n\
+    \    do\n        if [[ -n $arr[i] ]]; then\n            out+=\"One Two Three Four\
+    \ Five Six Seven Eight Nine\"\n            case \"$i\" in\n                1)\
+    \ out+=\"One\" ;;\n                2) out+=\"Two\" ;;\n                3) out+=\"\
+    Three\" ;;\n                4) out+=\"Four\" ;;\n                5) out+=\"Five\"\
+    \ ;;\n                6) out+=\"Six\" ;;\n                7) out+=\"Seven\" ;;\n\
+    \                8) out+=\"Eight\" ;;\n                9) out+=\"Nine\" ;;\n \
+    \           esac\n            arr[i]=$(echo \"$arr[i]\" | sed 's/^0\\+//')\n \
+    \           arr[$i]=$(echo \"$arr[$i]\" | sed 's/^0\\+//')\n        fi\n    done\n\
+    \n    printf '%s\\n' \"$out\"", "    local arr=$1\n    local output\n    local\
+    \ length\n    length=$(echo \"$arr\" | wc -c)\n    if [ $length -eq 0 ]; then\n\
+    \        echo \"$arr\"\n        return\n    fi\n    local c\n    c=$((length -\
+    \ 1))\n    local k\n    local i\n    for k in $(seq \"$c\"); do\n        i=$((10*k\
+    \ + 1))\n        output=$(echo \"$arr\" | sort -n | tail -n \"$i\" | head -n1)\n\
+    \        arr=(\"${arr[@]:0:$k}\" \"${output}\")\n    done\n    arr=(\"${arr[@]:0:$c}\"\
+    )\n    local last\n    last=$(echo \"$arr\" | tail -1)\n    arr=($last)\n    local\
+    \ i\n    local name\n    for i in \"${arr[@]}\"; do\n        name=$(echo \"$i\"\
+    \ | sed -r 's/^(.)*(.)$/\\1\\2/' | sed -r 's/^(\\d)/One \\1/g' | sed -r 's/^(\\\
+    d)/Two \\1/g' | sed -r 's/^(\\d)/Three \\1/g' | sed -r 's/^(\\d)/Four \\1/g' |\
+    \ sed -r 's/^(\\d)/Five \\1/g' | sed -r 's/^(\\d)/Six \\1/g' | sed -r 's/^(\\\
+    d)/Seven \\1/g' | sed -r 's/^(\\d)/Eight \\1/g' | sed -r 's/^(\\d)/Nine \\1/g')\n\
+    \        arr=(\"${arr[@]:0:$(($i-1))}\" \"${name}\")\n    done\n    echo \"${arr[@]}\"",
+  "  local -r input_array=\"$1\"\n  local -r output_array=()\n  local -r max_length=10\n\
+    \n  for (( input_index=0;\n       input_index < ${#input_array[@]}\n       input_index++\
+    \ )); do\n    local -ra elements=( \"${input_array[@]:input_index}\" )\n    local\
+    \ -ra first_element=( \"${elements[0]}\" )\n    local -ra last_element=( \"${elements[-1]}\"\
+    \ )\n\n    if (( first_element == 1 || first_element == 9 )); then\n      output_array+=(\
+    \ \"${first_element}\" )\n    elif (( last_element == 1 || last_element == 9 ));\
+    \ then\n      output_array+=( \"${last_element}\" )\n    elif (( last_element\
+    \ == first_element )); then\n      output_array+=( \"${last_element}\" )\n   \
+    \ elif (( last_element > first_element )); then\n      if (( length \"${elements[@]:last_element}\"\
+    \ )) \\\n        && (( max_length < length \"${elements[@]:last_element}\" ));\
+    \ then\n        max_length=${length \"${elements[@]:last_element}\"}\n      fi\n\
+    \n      local -ra first_element_length=( ${#first_element} )\n      local -ra\
+    \ last_element_length=( ${#last_element} )\n      local -ra length_difference=(\
+    \ \"${#elements[@]:first_element_length+1}\" \\\n        - \"${#elements[@]:last_element_length}\"\
+    \ )\n      local -ra element_length_difference=( ${#elements[@]:last_element_length}\
+    \ \\\n        - \"${#elements[@]:first_element_length}\" )\n\n      output_array+=(\
+    \ \"${elements[@]:last_element}\" )\n      output_array+=( ${elements[@]:last_element:${#elements[@]:last_element_length}}\
+    \ )\n\n      for (( i=1;\n            ${length_difference} == ${element_length_difference};\n\
+    \            i++ )); do\n        output_array+=( \"${elements[@]:last_element}\"\
+    \ )\n        output_array+=( \"${elements[@]:last_element:${#elements[@]:last_element_length}}\"\
+    \ )\n      done\n    fi\n  done\n  echo \"${output_array[@]}\"", "    local arr\n\
+    \    arr=$1\n    if [ ! -z $arr ]; then\n        # split str by space\n      \
+    \  arr=($arr)\n        arr=(${arr[@]##*[[:space:]]})\n        arr=(${arr[@]%%[[:space:]]*})\n\
+    \n        # sort array\n        local sorted_arr=(${arr[@]})\n        local sorted_arr_count\n\
+    \        sorted_arr_count=0\n        for i in \"${arr[@]}\"; do\n            if\
+    \ [[ $i == *\"9\"* ]]; then\n                if [ $sorted_arr_count -lt 9 ]; then\
+    \ \n                    sorted_arr_count=$(( sorted_arr_count + 1 ))\n       \
+    \             sorted_arr_sorted[$sorted_arr_count]=$i\n                else\n\
+    \                    break\n                fi\n            else\n           \
+    \     if [ $sorted_arr_count -lt 10 ]; then \n                    sorted_arr_count=$((\
+    \ sorted_arr_count + 1 ))\n                    sorted_arr_sorted[$sorted_arr_count]=$i\n\
+    \                else\n                    break\n                fi\n       \
+    \     fi\n        done\n\n        # reverse array\n        local sorted_arr_count_1\n\
+    \        sorted_arr_count_1=0\n        for i in \"${sorted_arr[@]}\"; do\n   \
+    \         if [[ $i == *\"9\"* ]]; then\n                if [ $sorted_arr_count_1\
+    \ -lt 9 ]; then \n                    sorted_arr_count_1=$(( sorted_arr_count_1\
+    \ + 1 ))\n                    sorted_arr_reversed[$sorted_arr_count_1]=$i\n  \
+    \              else\n                    break\n                fi\n         \
+    \   else\n                if [ $sorted_arr_count_1 -lt 10 ]; then \n         \
+    \           sorted_arr_count_1=$(( sorted_arr_count_1 + 1 ))\n               \
+    \     sorted_arr_reversed[$sorted_arr_count_1]=$i\n                else\n    \
+    \                break\n                fi\n            fi\n        done\n\n \
+    \       # replace values\n        for i in \"${sorted_arr_sorted[@]}\"; do\n \
+    \           if [[ $i == *\"9\"* ]]; then\n                if [ $sorted_arr_count_1\
+    \ -lt 9 ]; then \n                    sorted_arr_count_1=$(( sorted_arr_count_1\
+    \ + 1 ))\n                    sorted_arr_sorted[$sorted_arr_count_1]=$i\n    \
+    \            else\n                    break\n                fi\n           \
+    \ else\n                if [ $sorted_arr_count_1 -lt 10 ]; then \n           \
+    \         sorted_arr_count_1=$(( sorted_arr_count_1 + 1 ))\n                 \
+    \   sorted_arr_sorted[$sorted_arr_count_1]=$i\n                else\n        \
+    \            break\n                fi\n            fi\n        done\n\n     \
+    \   # convert back to string\n        local arr_str=\"\"\n        for i in \"\
+    ${sorted_arr_sorted[@]}\"; do\n            if [[ $i == *\"", "  local i\n  local\
+    \ input=\"${1:-}\"\n  local length=$(wc -l <<< $input)\n  local input2=$(cat <<<\
+    \ $input)\n  \n  i=1\n  while [ $i -le $length ]; do\n    case \"${input2:$i:1}\"\
+    \ in\n      \"1\") echo \"One\";;\n      \"2\") echo \"Two\";;\n      \"3\") echo\
+    \ \"Three\";;\n      \"4\") echo \"Four\";;\n      \"5\") echo \"Five\";;\n  \
+    \    \"6\") echo \"Six\";;\n      \"7\") echo \"Seven\";;\n      \"8\") echo \"\
+    Eight\";;\n      \"9\") echo \"Nine\";;\n      *) echo \"Bad number\"\n    esac\n\
+    \    i=$(( $i + 1 ))\n  done", '    sort -n -k ${1:-length}n -k ${1:-length}r
+    | sort -n -k ${1:-length}r', "    local arr=(\"${@}\")\n    echo \"${arr[@]}\"\
+    \n    local res=()\n    for ((i=0; i < ${#arr[@]}; i++)); do\n        if [[ ${#arr[i]}\
+    \ -gt 0 ]]; then\n            if [[ ${arr[i]} -le 1 ]]; then\n               \
+    \ echo \"${arr[i]}\"\n                res+=(\"${arr[i]}\")\n            fi\n \
+    \           if [[ ${arr[i]} -le 9 ]]; then\n                echo \"${arr[i]}\"\
+    \n                res+=(\"${name[${arr[i]}]}\")\n            fi\n        fi\n\
+    \    done\n    echo \"${res[@]}\"", "  local array=\"$1\"\n  local length=\"$2\"\
+    \n  local result\n  # Remove whitespace\n  array=$(echo \"$array\" | tr -d ' ')\
+    \ # Remove spaces\n  # Split the array into its components:\n  local arrayElements\
+    \ # Array of array elements per index\n  local i # Loop iterator\n  local index\n\
+    \  # Convert the array to an array\n  arrayElements=($array)\n  length=${#arrayElements[@]}\n\
+    \  for ((i=0;i<$length;i++)):\n    # Create a temporary array:\n    arrayElements[$i]=$(echo\
+    \ \"$arrayElements[$i]\")\n  done\n  # Sort the temporary array\n  local j\n \
+    \ for ((j=length-1;j>=1;j--)):\n    local temp\n    for ((i=0;i<j;i++)):\n   \
+    \   temp=${arrayElements[i]}\n      arrayElements[i]=${arrayElements[i+1]}\n \
+    \     arrayElements[i+1]=${temp}\n    done\n  done\n  # Reverse the temporary\
+    \ array\n  for ((i=0;i<$length;i++)):\n    temp=${arrayElements[i]}\n    arrayElements[i]=${arrayElements[i+1]}\n\
+    \    arrayElements[i+1]=${temp}\n  done\n  # Reconstruct the array\n  result=()\n\
+    \  for ((i=0;i<$length;i++)):\n    result+=(\"${arrayElements[i]}\")\n  done\n\
+    \  echo ${result[@]}", "\tlocal n=1\n\tlocal l\n\tlocal arr\n\tlocal res\n\tlocal\
+    \ i\n\tarr=$1\n\tres=()\n\twhile IFS= read -r l; do\n\t\t((n++))\n\t\tif [[ ${#l}\
+    \ -gt 10 ]]; then\n\t\t\t((i=1<<${#l})-1)\n\t\t\tres+=(\"${arr[$((i-1))]}\")\n\
+    \t\t\tarr=$l\n\t\telif [[ ${#l} -eq 10 ]]; then\n\t\t\t((i=1<<${#l})-1)\n\t\t\t\
+    arr=$l\n\t\tfi\n\tdone < <(tr ' ' '\\n' <<<\"${arr[@]}\")\n\tarr=$l\n\twhile IFS=\
+    \ read -r l; do\n\t\t((n--))\n\t\tif [[ ${n} -eq 0 ]]; then\n\t\t\t((i=1<<${#l})-1)\n\
+    \t\t\tarr=$l\n\t\tfi\n\tdone < <(tr ' ' '\\n' <<<\"${arr[@]}\")\n\tif [[ ${#arr}\
+    \ -gt 0 ]]; then\n\t\tres+=(\"${arr}\")\n\tfi\n\tres=(${res[@]})\n\techo \"${res[@]}\"",
+  "    local str=\"${1:-}\"\n    local len\n\n    str=$(echo $str | sed 's/ /, /g')\n\
+    \    len=${#str}\n    num=$(sort -n <<< \"${str}\" | sed 's/^ *\\([0-9]*\\)/\\\
+    1/' | tr -d '\\n' |\n        awk '{printf \"%s\\n\", $0}')\n    while (( len--\
+    \ )); do\n        num=$(echo \"${num}\" | sed 's/^ *//g')\n        num=$(echo\
+    \ \"${num}\" | sed 's/^ *\\([0-9]*\\)/\\1/')\n    done\n    num=$(echo $num |\
+    \ tr -d '\\n')\n    echo \"${num[*]}\"", "    local array=$1\n    local temp\n\
+    \    local i length result\n    length=${#array[@]}\n    if [ \"${length}\" -eq\
+    \ \"0\" ]; then return 1; fi\n    for ((i=0; i<${#array[@]}; i++)); do\n     \
+    \   temp=${array[i]}\n        array[i]=${array[${#array[i]}]}\n        array[${#array[i]}]=${temp}\n\
+    \    done\n    result=$(sort -u <<<\"${array[@]}\")\n    for ((i=0; i<${#result[@]};\
+    \ i++)); do\n        result[i]=${result[i]//[0-9]/${by_length_arr[$i]}}\n    done\n\
+    \    echo \"${result[@]}\"", "    local arr=()\n    local i=\n    local j=\n \
+    \   local key=\n\n    while read line\n    do\n        arr[i]=$line\n        i=$((i+1))\n\
+    \    done <<< \"$1\"\n\n    # check if array is empty\n    if [ \"${#arr[@]}\"\
+    \ -eq 0 ]\n    then\n        arr=()\n        return 0\n    fi\n\n    # reverse\
+    \ array\n    local last_value=\n    local length=\n    arr=(${arr[@]}) # convert\
+    \ to array\n    for i in \"${!arr[@]}\"\n    do\n        length=$((${#arr[@]}\
+    \ - 1))\n        key=\"${arr[${i}]}\"\n        last_value=\"${arr[$((${i}+${length}))]}\"\
+    \n\n        # check if number is between 1 and 9\n        if [ \"$((${key})) -ge\
+    \ 1 -a $((${key})) -le 9 ]\n        then\n            arr[$i]=${by_length_arr[$((${key}-1))]}\n\
+    \        fi\n    done\n\n    # check if array contains strange number \n    local\
+    \ strange_number=\n    for i in \"${!arr[@]}\"\n    do\n        strange_number=$((${#arr[@]}\
+    \ - 1))\n        key=\"${arr[${i}]}\"\n\n        # check if number is between\
+    \ 1 and 9\n        if [ \"$((${key})) -ge 1 -a $((${key})) -le 9 ]\n        then\n\
+    \            arr[$i]=${by_length_arr[$((${key}-1))]}\n        fi\n    done\n\n\
+    \    # return array in string format\n    arr=(${arr[@]})\n    local str=${arr[@]}\n\
+    \    str=${str:1}\n    arr=(${arr[@]})\n    for i in \"${!arr[@]}\"\n    do\n\
+    \        str=${str//${arr[$i]}/${by_length_arr[$i]}}\n    done\n    str=${str//$'\\\
+    n'/''}\n    echo \"$str\"", "  local arr=$1\n  local tmp ret=()\n\n  for val in\
+    \ \"${arr[@]}\"; do\n    if [[ ${val} -gt 0 ]] && [[ ${val} -le 9 ]]; then\n \
+    \     tmp=(\"${!tmp[@]}\" \"$val\")\n      arr=(\"${!arr[@]}\")\n    fi\n  done\n\
+    \n  for val in \"${arr[@]}\"; do\n    for (( i = 0; i < 9; i++ )); do\n      ret+=(\"\
+    ${!ret[@]}\" ${arr[i]})\n    done\n  done\n\n  for val in \"${ret[@]}\"; do\n\
+    \    echo ${val}\n  done\n\n  return 0", "  local array=( \"$@\" )\n  local length\
+    \ first=$(head -n1 <<<\"${array[@]}\")\n  local lengths second=$(head -n2 <<<\"\
+    ${array[@]}\")\n  local lengths last=$(head -n$length <<<\"${array[@]}\")\n  local\
+    \ lengths2 last2 first2 first3 first4\n  local lengths3 last3 first4 first5 first6\
+    \ first7 first8 first9\n  local lengths4 last4 first5 first6 first7 first8 first9\
+    \ first10\n  local lengths5 last5 first6 first7 first8 first9 first10 first11\n\
+    \  local lengths6 last6 first7 first8 first9 first10 first11 first12\n  local\
+    \ lengths7 last7 first8 first9 first10 first11 first12 first13\n  local lengths8\
+    \ last8 first9 first10 first11 first12 first13 first14\n  local lengths9 last9\
+    \ first10 first11 first12 first13 first14 first15\n  local lengths10 last10 first11\
+    \ first12 first13 first14 first15 first16\n  local lengths11 last11 first12 first13\
+    \ first14 first15 first16 first17\n  local lengths12 last12 first13 first14 first15\
+    \ first16 first17 first18\n  local lengths13 last13 first14 first15 first16 first17\
+    \ first18 first19\n  local lengths14 last14 first15 first16 first17 first18 first19\
+    \ first20\n  local lengths15 last15 first16 first17 first18 first19 first20 first21\n\
+    \  local lengths16 last16 first17 first18 first19 first20 first21 first22\n  local\
+    \ lengths17 last17 first18 first19 first20 first21 first22 first23\n  local lengths18\
+    \ last18 first19 first20 first21 first22 first23 first24\n  local lengths19 last19\
+    \ first20 first21 first22 first23 first24 first25\n  local lengths20 last20 first21\
+    \ first22 first23 first24 first25 first26\n  local lengths21 last21 first22 first23\
+    \ first24 first25 first26 first27\n  local lengths22 last22 first23 first24 first25\
+    \ first26 first27 first28\n  local lengths23 last23 first24 first25 first26 first27\
+    \ first28 first29\n  local lengths24 last24 first25 first26 first27 first28 first29\
+    \ first"]
 stop_tokens:
 - "\n}"

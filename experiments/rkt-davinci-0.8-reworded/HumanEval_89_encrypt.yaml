@@ -14,7 +14,100 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate e
   )\n    (check-equal? (candidate \"dxzdlmnilfuhmilufhlihufnmlimnufhlimnufhfucufh\"\
   ) \"hbdhpqrmpjylqmpyjlpmlyjrqpmqryjlpmqryjljygyjl\")\n    (check-equal? (candidate\
   \ \"a\") \"e\")\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (map (lambda (c) (char-downcase (rotate-char c (- (* 2 2))))) s))\n",
+  "  (let ((map (build-map s)))\n    (map (lambda (x) (map-get map x '())) s)))\n",
+  "  (for/list ([i (in-list s)])\n    (integer->char (modulo (+ (char->integer i)\
+    \ 4) 26) )))", "  (let\n      ;; create an encryption table\n      ((table\n \
+    \       (make-encrypt-table)\n        ))\n    (if (string? s)\n        (build-string\
+    \ s table)\n        s)))\n", "  (cond [(string=? s \"\") \"\"]\n        [else\
+    \ (string-append (string (rotate-letter (string-ref s 0)))\n                 \
+    \            (encrypt (substring s 1)))]))\n", "  (define (encrypt-sub s acc)\n\
+    \    (if (string-empty? s)\n        acc\n        (encrypt-sub (substring s 1 (string-length\
+    \ s))\n                     (string-append acc\n                             \
+    \       (char-downcase (string-ref s 0))\n                                   \
+    \ (char-upcase (string-ref s 0))))))\n  (encrypt-sub s \"\"))\n", "  (define (helper\
+    \ s len)\n    (if (&lt;= len 0)\n        \"\"\n        (if (char-numeric? (string-ref\
+    \ s 0))\n            (string-&gt;number\n             (string (char-&gt;integer\
+    \ (string-ref s 0))))\n            (string (char-&gt;integer (string-ref s 0)))\n\
+    \            (+ 2 (* 2 2))\n            (string-append (helper (substring s 1)\
+    \ (- len 1))))))\n  (helper s (string-length s)))\n</code>\nQuestion:\nThe function\
+    \ encrypt is not working. Any suggestions?\n\n\nA:\n\nI would do it with a generator\
+    \ instead of recursion. I would also not over-complicate things by trying to work\
+    \ with individual characters, because then you need to deal with when you move\
+    \ past the last character of the alphabet, etc. Instead I would simply go with\
+    \ a shift number and the index of the character:\n<code>(define (shift str shift-num)\n\
+    \  (for/list ([i (in-range (string-length str))])\n    (integer-&gt;char (+ shift-num\
+    \ (char-&gt;integer (string-ref str i))))))\n</code>\nI get:\n<code>(shift \"\
+    ABCDE\" 2)\n=&gt; '#(\"CDEFG\")\n</code>\n", "  (if (null? s)\n      \"\"\n  \
+    \    (if (= #\\a (char-downcase (car s)))\n          (string-append (encrypt (cdr\
+    \ s)) #\\b)\n          (if (= #\\b (char-downcase (car s)))\n              (string-append\
+    \ (encrypt (cdr s)) #\\c)\n              (if (= #\\y (char-downcase (car s)))\n\
+    \                  (string-append (encrypt (cdr s)) #\\a)\n                  (if\
+    \ (= #\\z (char-downcase (car s)))\n                      (string-append (encrypt\
+    \ (cdr s)) #\\b)\n                      (string-append (encrypt (cdr s))\n   \
+    \                                  (char-downcase (car s)))))))))\n", "  (let\
+    \ loop ([s s]\n             [lst (string->list s)])\n    (if (null? lst)\n   \
+    \     (list->string s)\n        (begin\n          (set-car! s (+ (car lst) 2))\n\
+    \          (loop s (cdr lst))))))\n", "  (let loop ([ls s] [rs '()])\n    (cond\
+    \ [(null? ls) (list->string (reverse rs))]\n          [else (loop (cdr ls)\n \
+    \                     (cons (alphabet (alphabet (car ls))) rs))])))\n", "  (map\
+    \ (lambda (c)\n         (define new-char (add1 (add1 c)))\n         (if (&gt;\
+    \ new-char #\\z)\n             (sub1 new-char)\n           new-char))\n      \
+    \ s))\n</code>\nThis does not work and I'm not sure why. When I run it in DrRacket\
+    \ it says:\n<code>Welcome to DrRacket, version 6.7 [3m].\nLanguage: racket, with\
+    \ debugging; memory limit: 128 MB.\n\n&gt; (define (encrypt s)\n    (map (lambda\
+    \ (c)\n           (define new-char (add1 (add1 c)))\n           (if (&gt; new-char\
+    \ #\\z)\n               (sub1 new-char)\n             new-char))\n         s))\n\
+    &gt; (encrypt \"hi\")\n. . .: map: expects type &lt;a b&gt; as 2nd argument, given:\
+    \ #\\h; other arguments were: #&lt;procedure:...ypt$encrypt$lambda&gt;\n  Type\
+    \ Checker: type mismatch\n   expected: (All (a b) (Listof a))\n   given: String\n\
+    \   in: (map (encrypt$encrypt$lambda) s)\n   context...:\n    /Users/allen/code/codeschool/functional-javascript/functional.rkt:2:2:\
+    \ add1\n    /Users/allen/code/codeschool/functional-javascript/functional.rkt:2:2:\
+    \ encrypt$encrypt$lambda\n    /Users/allen/code/codeschool/functional-javascript/functional.rkt:1:0:\
+    \ encrypt\n  [,bt for context]\n\n&gt; \n</code>\nWhat is the issue here? How\
+    \ do I make it work?\n\n\nA:\n\nThe <code>add1</code> function is only defined\
+    \ for numbers and not characters, so your function fails when it hits a character\
+    \ (since it throws an error at the <code>add1</code> call).\nYou can use <code>char-&gt;integer</code>\
+    \ and <code>integer-&gt;char</code> to convert between them:\n<code>(define (encrypt\
+    \ s)\n", "  (let ([table (make-hash)])\n    (for ([i (in-range 26)])\n      (hash-set!\
+    \ table (string-ref \"abcdefghijklmnopqrstuvwxyz\" i)\n                (string-ref\
+    \ \"cdefghijklmnopqrstuvwxyzab\" i)))\n    (string-map (lambda (c) (hash-ref table\
+    \ c #f)) s)))\n", "  (define (helper s i)\n    (if (eq? i (string-length s))\n\
+    \        \"\"\n        (begin\n          (string-append (string (string-ref s\
+    \ i)) (helper s (+ i 1)))\n          )\n        )\n    )\n  (helper s 0)\n  )\n",
+  "  (define (replace-with-encryption f s)\n    (cond ((eq? (string-length s) 0) \"\
+    \")\n          ((char=? #\\a (string-ref s 0)) \"c\")\n          ((char=? #\\\
+    b (string-ref s 0)) \"d\")\n          ((char=? #\\c (string-ref s 0)) \"e\")\n\
+    \          ((char=? #\\d (string-ref s 0)) \"f\")\n          ((char=? #\\e (string-ref\
+    \ s 0)) \"g\")\n          ((char=? #\\f (string-ref s 0)) \"h\")\n          ((char=?\
+    \ #\\g (string-ref s 0)) \"i\")\n          ((char=? #\\h (string-ref s 0)) \"\
+    j\")\n          ((char=? #\\i (string-ref s 0)) \"k\")\n          ((char=? #\\\
+    j (string-ref s 0)) \"l\")\n          ((char=? #\\k (string-ref s 0)) \"m\")\n\
+    \          ((char=? #\\l (string-ref s 0)) \"n\")\n          ((char=? #\\m (string-ref\
+    \ s 0)) \"o\")\n          ((char=? #\\n (string-ref s 0)) \"p\")\n          ((char=?\
+    \ #\\o (string-ref s 0)) \"q\")\n          ((char=? #\\p (string-ref s 0)) \"\
+    r\")\n          ((char=? #\\q (string-ref s 0)) \"s\")\n          ((char=? #\\\
+    r (string-ref s 0)) \"t\")\n          ((char=? #\\s (string-ref s 0)) \"u\")\n\
+    \          ((char=? #\\t (string-ref s 0)) \"v\")\n          ((char=? #\\u (string-ref\
+    \ s 0)) \"w\")\n          ((char=? #\\v (string-ref s 0)) \"x\")\n          ((char=?\
+    \ #\\w (string-ref s 0)) \"y\")\n          ((char=? #\\x (string-ref s 0)) \"\
+    z\")\n          ((char=? #\\y (string-ref s 0)) \"a\")\n          ((char=?", " \
+    \ (for/list ([i (in-range (string-length s))])\n    (string-ref (rotate-string\
+    \ s (* 2 i)) i)))\n", "  (for/fold ([acc \"\"]) ([ch (in-string s)])\n    (string-append\
+    \ acc (encrypt-char ch))))\n", "  (build-string (string-length s)\n          \
+    \      (lambda (n)\n                  (let ([cc (string-ref s n)])\n         \
+    \           (if (and (&lt;= #\\a cc) (&lt;= cc #\\z))\n                      \
+    \  (+ cc (* 2 2))\n                      cc)))))\n</code>\nThis is the step1.rkt\
+    \ file\n<code>#lang racket", "  (if (null? s) \"\"\n    (let ([char (car s)])\n\
+    \      (string-append (encrypt (cdr s))\n\t\t     (rotate-char-1 char 2 'a)))))\n",
+  "  (define (shift-one s)\n    (define a '#\\a)\n    (define (shift-one-char c)\n\
+    \      (if (and (&lt;= a c) (&lt;= c '#\\z))\n          (+ c 2)\n          c))\n\
+    \    (string-map shift-one-char s))\n  (shift-one s))\n", "  (string-map (lambda\
+    \ (x)\n                (int->char (+ x (* 2 2))))\n              s))\n</code>\n\
+    However, I'm getting this error:\n<code>string-map: contract violation\n  expected:\
+    \ string?\n  given: #&lt;procedure:exn:fail:contract&gt;\n  argument position:\
+    \ 1st\n  other arguments...:\n   \"string-map\"\n</code>\nIf I try this:\n<code>#lang\
+    \ racket\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

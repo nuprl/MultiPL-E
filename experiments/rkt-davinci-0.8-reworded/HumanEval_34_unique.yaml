@@ -5,7 +5,64 @@ prompt: "#lang racket\n\n;; Return sorted unique elements in a list\n;; >>> (uni
 tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate unique))\n\
   \    (check-equal? (candidate (list 5 3 5 2 3 3 9 0 123)) (list 0 2 3 5 9 123))\n\
   ))\n\n(test-humaneval)"
-completions: []
+completions: ["  (cond\n    [(empty? l) l]\n    [(member (first l) (rest l)) (unique\
+    \ (rest l))]\n    [else (cons (first l) (unique (rest l)))]))\n", "  (if (null?\
+    \ l)\n      (list)\n      (if (member (car l) (cdr l))\n          (unique (cdr\
+    \ l))\n          (cons (car l) (unique (cdr l))))))\n", "  (define uniqs (set))\n\
+    \  (for-each (lambda (e) (set-add! uniqs e)) l)\n  (set->list uniqs))\n", "  (define\
+    \ (inner l s)\n    (if (null? l)\n        (reverse s)\n        (if (member (car\
+    \ l) s)\n            (inner (cdr l) s)\n            (inner (cdr l) (cons (car\
+    \ l) s)))))\n  (inner l '()))\n", "  (sort l <))\n", "  (letrec ([each (lambda\
+    \ (uniq)\n                   (match uniq\n                     [() uniq]\n   \
+    \                  [(cons h t)\n                      (if (member h t)\n     \
+    \                     (each t)\n                          (each (cons h t)))]))])\n\
+    \    (each l)))\n", "  (set! l (sort (remove-duplicates l) <))\n  l)\n", "  (cond\n\
+    \    [(empty? l) empty]\n    [else (cons (first l) (unique (remove-all (first\
+    \ l) (remove (first l) (rest l)))))]))\n</code>\nI appreciate this answer using\
+    \ the built-in <code>remove-duplicates</code> which is an order of magnitude faster.\
+    \ I'm asking this question to understand the performance difference between the\
+    \ two.\nTo test my code I created a list of 10 million random integers between\
+    \ <code>0</code> and <code>99</code> and measured the time to process it:\n<code>&gt;\
+    \ (time (unique (random-list 10000000 100)))\ncpu time: 1474 real time: 1474 gc\
+    \ time: 1473\n</code>\nI also tried to rewrite the code using an accumulator to\
+    \ avoid making calls to <code>first</code> and <code>rest</code> on each recursive\
+    \ call, with no significant performance improvement:\n<code>(define (unique l)\n\
+    \  (define (unique-acc acc l)\n    (cond\n      [(empty? l) acc]\n      [else\
+    \ (unique-acc (cons (first l) (remove-all (first l) acc)) (remove (first l) (rest\
+    \ l)))]))\n  (unique-acc empty l))\n</code>\nRunning the code above gives the\
+    \ same timing:\n<code>&gt; (time (unique (random-list 10000000 100)))\ncpu time:\
+    \ 1483 real time: 1483 gc time: 1482\n</code>\nIn both cases the garbage collector\
+    \ takes almost as much time as the actual function. How can I rewrite the code\
+    \ to avoid garbage collection?\nEdit: rewriting the code to avoid allocations\
+    \ (thanks to the answers):\n<code>(define (unique l)\n  (define (unique-acc l\
+    \ acc)\n    (cond\n      [(empty? l) acc]\n      [else (unique-acc (remove (first\
+    \ l) (rest l)) (cons (first l) (remove-all (first l) acc)))]))\n  (unique-acc\
+    \ l empty))\n</code>\nWith no significant performance gain:\n<code>&gt; (time\
+    \ (unique (random-list 10000000 100)))\ncpu time: 1476 real time: 1476 gc time:\
+    \ 14", "  (sort (remove-duplicates l) &lt;))\n", "  (if (empty? l) '()\n     \
+    \ (let loop ([uniques '()] [rest l])\n        (if (empty? rest) uniques\n    \
+    \        (if (member (first rest) uniques)\n                (loop uniques (rest\
+    \ rest))\n                (loop (cons (first rest) uniques) (rest rest)))))))\n",
+  "  (let loop ([l l] [result '()])\n    (if (empty? l)\n        (sort result <)\n\
+    \        (loop (cdr l) (cons (car l) (remove (car l) result))))))\n", "  (let\
+    \ ((set (set)))\n    (for ([e l])\n      (set-add! set e))\n    (sort (set->list\
+    \ set) <)))\n", "  (set! l (sort l <))\n  (foldl (lambda (e acc)\n           (if\
+    \ (null? acc)\n               (list e)\n               (if (equal? e (car acc))\n\
+    \                   acc\n                   (cons e acc))))\n         '()\n  \
+    \       l))\n", "  (let loop ([l l] [res '()])\n    (if (empty? l)\n        (sort\
+    \ res)\n        (loop (cdr l) (if (member (car l) res) res (cons (car l) res))))))\n",
+  "  (sort (remdup l) <))\n", "  (define (append-if-not-member elt lst)\n    (if (member\
+    \ elt lst)\n        lst\n        (append lst (list elt))))\n  (foldl append-if-not-member\
+    \ '() l))\n", "  (apply append\n         (map list\n              (apply append\n\
+    \                     (map list\n                          (apply append\n   \
+    \                              (sort (append (list (car l))\n                \
+    \                               (unique (cdr l)))\n                          \
+    \             (lambda (x y) (< x y)))))))))\n", "  (define (unique' l s)\n   \
+    \ (cond\n      [(empty? l) (reverse s)]\n      [(member (first l) s) (unique'\
+    \ (rest l) s)]\n      [else (unique' (rest l) (cons (first l) s))]))\n  (unique'\
+    \ l '()))\n", "  (let loop ([l l] [r null])\n    (cond [(empty? l) (reverse r)]\n\
+    \          [(member (first l) r) (loop (rest l) r)]\n          [else (loop (rest\
+    \ l) (cons (first l) r))])))\n", "  (unique-helper (sort l #<)))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

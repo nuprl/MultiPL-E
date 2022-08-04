@@ -31,6 +31,307 @@ tests: "}\n\ncandidate() {\n    minPath \"$@\"\n}\n\nset -e\nrun_test() {\n    [
   \  [[ $(candidate \"6 1 5\\n3 8 9\\n2 7 4\" \"8\") = \"1 5 1 5 1 5 1 5\" ]]\n  \
   \  [[ $(candidate \"1 2\\n3 4\" \"10\") = \"1 2 1 2 1 2 1 2 1 2\" ]]\n    [[ $(candidate\
   \ \"1 3\\n3 2\" \"10\") = \"1 3 1 3 1 3 1 3 1 3\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local grid=$1\n  local k=$2\n\n  local lst_A lst_B\n  local i j k\
+    \ result\n\n  lst_A=$( sort <(printf '%s\\n' \"${grid[@]}\" | sed 's/^/1 /') )\n\
+    \  lst_B=$( sort <(printf '%s\\n' \"${grid[@]}\" | sed 's/^/2 /') )\n\n  # For\
+    \ each cell, add it to the result if the corresponding cell is visited before\n\
+    \  for i in \"${lst_A[@]}\"; do\n    for j in \"${lst_A[@]}\"; do\n      for k\
+    \ in \"${lst_A[@]}\"; do\n        if [[ \"${i}\" \"${j}\" \"${k}\" != \"${i}\"\
+    \ \"${j+1}\" \"${k}\" ]]; then\n          if [[ ! \"${lst_A[${i}]}\" =~ ^\"${i}\"\
+    $ ]]; then\n            lst_A[${i}]=\"${i}\"\n          fi\n          if [[ !\
+    \ \"${lst_A[${j}]}\" =~ ^\"${j}\"$ ]]; then\n            lst_A[${j}]=\"${j}\"\n\
+    \          fi\n          if [[ ! \"${lst_A[${k}]}\" =~ ^\"${k}\"$ ]]; then\n \
+    \           lst_A[${k}]=\"${k}\"\n          fi\n          if [[ ! \"${lst_B[${i}]}\"\
+    \ =~ ^\"${i}\"$ ]]; then\n            lst_B[${i}]=\"${i}\"\n          fi\n   \
+    \       if [[ ! \"${lst_B[${j}]}\" =~ ^\"${j}\"$ ]]; then\n            lst_B[${j}]=\"\
+    ${j}\"\n          fi\n          if [[ ! \"${lst_B[${k}]}\" =~ ^\"${k}\"$ ]]; then\n\
+    \            lst_B[${k}]=\"${k}\"\n          fi\n          if [[ ! \"${lst_A[${i}]}\"\
+    \ =~ ^\"${i}\".*$ ]]; then\n            lst_A[${i}]=\"${i}\".*\n          fi\n\
+    \          if [[ ! \"${lst_A[${j}]}\" =~ ^\"${j}\".*$ ]]; then\n            lst_A[${j}]=\"\
+    ${j}\".*\n          fi\n          if [[ ! \"${lst_A[${k}]}\" =~ ^\"${k}\".*$ ]];\
+    \ then\n            lst_A[${k}]=\"${k}\".*\n          fi\n          if [[ ! \"\
+    ${lst_B[${i", "\tset -eu\n\techo \"$1\" | tr ' ' '\\n' | sort -nr | uniq -c |\
+    \ \\\n\t\tgrep -E \"^[[:digit:]]+$\" | \\\n\t\tgrep -E -o \"^[[:digit:]]+$\" |\
+    \ sort -nr | head -n1", "    local gridStr=$1\n    local k=$2\n    \n    # read\
+    \ in grid\n    local grid\n    IFS=$'\\n' read -r grid < <(echo \"$gridStr\")\n\
+    \    \n    # find path\n    local path=($(echo ${grid[@]} | jq \".[] | map(to_entries|map(select(.k==$k)))\"\
+    \ ))\n    \n    # sort path from shortest to longest\n    local i\n    local l\n\
+    \    local j\n    local res\n    for ((i=0; i<${#path[@]}; i++)); do\n       \
+    \ for ((j=0; j<i; j++)); do\n            l=${path[j][k]}\n            if [[ $l\
+    \ -lt ${path[i][k]} ]]; then\n                l=${path[i][k]}\n            fi\n\
+    \            if [[ $l -lt ${path[j][i]} ]]; then\n                l=${path[j][i]}\n\
+    \            fi\n            if [[ $l -ne ${path[j][k]} ]]; then\n           \
+    \     res=$path[j][i]\n                break\n            fi\n        done\n \
+    \   done\n    echo \"$res\"", "    local grid\n    local k\n    grid=$1\n    k=$2\n\
+    \    [[ -z $grid ]] && return 1\n    [[ -z $k ]] && return 1\n    [[ -z ${grid[0]}\
+    \ ]] && return 1\n    [[ -z ${grid[1]} ]] && return 1\n    [[ -z ${grid[2]} ]]\
+    \ && return 1\n    [[ -z ${grid[0]}[0] ]] && return 1\n    [[ -z ${grid[1]}[0]\
+    \ ]] && return 1\n    [[ -z ${grid[2]}[0] ]] && return 1\n    [[ -z ${grid[0]}[1]\
+    \ ]] && return 1\n    [[ -z ${grid[1]}[1] ]] && return 1\n    [[ -z ${grid[2]}[1]\
+    \ ]] && return 1\n    [[ -z ${grid[0]}[2] ]] && return 1\n    [[ -z ${grid[1]}[2]\
+    \ ]] && return 1\n    [[ -z ${grid[2]}[2] ]] && return 1\n    [[ -z ${grid[0]}[0]\
+    \ ]] || return 1\n    [[ -z ${grid[1]}[0] ]] || return 1\n    [[ -z ${grid[2]}[0]\
+    \ ]] || return 1\n    [[ -z ${grid[0]}[1] ]] || return 1\n    [[ -z ${grid[1]}[1]\
+    \ ]] || return 1\n    [[ -z ${grid[2]}[1] ]] || return 1\n    [[ -z ${grid[0]}[2]\
+    \ ]] || return 1\n    [[ -z ${grid[1]}[2] ]] || return 1\n    [[ -z ${grid[2]}[2]\
+    \ ]] || return 1\n    local lst_A\n    lst_A=$(\n        local lst_A\n       \
+    \ for i in $(seq 0 $((k - 1)); do \n            local lst_B\n            lst_B=$(\n\
+    \                for j in $(seq 0 $((k - 1)); do\n                    local lst_C\n\
+    \                    lst_C=$(\n                        for i in $(seq 0 $((k -\
+    \ 1)); do \n                            lst_C=$(echo $lst_C)\"$((grid[$i][$j]\
+    \ + 1))\"\n                        done\n                    )\n             \
+    \       lst_B=$(echo $lst_B)\"$(echo $lst_C)\"\n                done\n       \
+    \     )\n            lst_A=$(echo $lst_A)\"$(echo $lst_B)\"\n        done\n  \
+    \  )\n    local lst_B\n    lst_B=$(\n        for i in $(seq 0 $((k - 1)); do \n\
+    \            local lst_C\n            lst_C=$(\n                for j in $(seq ",
+  "  local i j k s grid lst lst_A lst_B\n  [[ -z $1 || -z $2 ]] && return 1\n  grid=(\
+    \ $1 )\n  k=( $2 )\n  [[ ${#grid[@]} -eq ${#k[@]} ]] && return 1\n  [[ -z ${grid[0]}\
+    \ ]] && return 1\n  [[ -z ${grid[@]:0:1} ]] && return 1\n  s=0\n  lst_A=()\n \
+    \ lst_B=()\n  for ((i=0; i<${#grid[@]}; i++)); do\n    [[ ${grid[i]} == 1 ]] &&\
+    \ break\n    lst_A+=(${grid[i]})\n  done\n  for ((j=0; j<${#grid[@]}; j++)); do\n\
+    \    [[ ${grid[j]} == 1 ]] && break\n    lst_B+=(${grid[j]})\n  done\n  [[ -z\
+    \ ${lst_A[@]} ]] && return 1\n  [[ -z ${lst_B[@]} ]] && return 1\n  for ((i=0;\
+    \ i<${#grid[@]}; i++)); do\n    if [[ $((${grid[i]}-1)) < ${k}+${s} ]]; then\n\
+    \      s+=(${grid[i]}-1)\n    fi\n  done\n  for ((j=0; j<${#grid[@]}; j++)); do\n\
+    \    if [[ $((${grid[j]}-1)) < ${k}+${s} ]]; then\n      s+=(${grid[j]}-1)\n \
+    \   fi\n  done\n  lst=($s)\n  while ((${#lst[@]} > k)); do\n    lst=(${lst[@]:0:k})\n\
+    \  done\n  echo ${lst[@]}", "  if [ -z \"$1\" -o -z \"$2\" ]; then\n    echo \"\
+    Usage: minPath <grid> <k>\"\n    exit 0\n  fi\n  declare -i N=\"$1\"\n  declare\
+    \ -i k=\"$2\"\n  declare -i len=\"$(seq 1 \"$k\")\"\n  declare -i d=\"$(seq 1\
+    \ \"$k\")\"\n  declare -i len_count=0\n  declare -i cnt=0\n  declare -i path_count=0\n\
+    \  while [ \"$len_count\" -lt \"$len\" ]; do\n    local val=\"$(seq 1 \"$k\")\"\
+    \n    local val_tmp=\"\"\n    while [ \"$val_tmp\" -eq \"$val\" ]; then\n    \
+    \  val_tmp=\"$(seq 1 \"$k\")\"\n      val=\"$(seq 1 \"$k\")\"\n      local val_tmp2=\"\
+    \"\n      while [ \"$val_tmp2\" -eq \"$val\" ]; then\n        val_tmp2=\"$(seq\
+    \ 1 \"$k\")\"\n        val=\"$(seq 1 \"$k\")\"\n        val_tmp=\"$(seq 1 \"$k\"\
+    )\"\n      done\n      val=\"$val_tmp2\"\n    fi\n    len_count=$((len_count+1))\n\
+    \    d=\"$(($len_count-cnt))\"\n    cnt=$((cnt+1))\n    path_count=$((path_count+1))\n\
+    \    local path_val=\"$d\"\n    for (( i=1; i<=$k; i++ )); do\n      path_val=\"\
+    $path_val$(printf '%02d' $(( ${grid[$((i-1))][$i]}+1 )))\"\n    done\n    local\
+    \ path_val_tmp=\"\"\n    for (( i=1; i<=$k; i++ )); do\n      path_val_tmp=\"\
+    $path_val_tmp$(printf '%02d' $(( ${grid[$i][$((i-1))]}+1 )))\"\n    done\n   \
+    \ path_val=\"$path_val_tmp\"\n    grid=\"$val\"\n    printf -v path_val %q path_val\n\
+    \    local path_val_tmp=\"\"\n    printf -v path_val_tmp %q path_val_tmp\n  done\n\
+    \  local path_val=\"$d\"\n  grid=\"$val\"\n  printf -v path_val %q path_val\n\
+    \  local path_val_tmp=\"\"\n  printf -v path_val_tmp %q path_val_tmp", "    grid=($1)\n\
+    \    gridSize=`echo ${#grid[@]} | awk '{print $1}'`\n    k=`echo $2 | awk '{print\
+    \ $1}'`\n    \n    local minArray=()\n    local tempArray=()\n\n    local i=0\
+    \ j=0\n    local minIdx=0\n    local minArraySize=0\n\n    for ((i=0; i < gridSize;\
+    \ i++)); do\n        gridElement=`echo ${grid[i]} | awk '{print $1}'`\n      \
+    \  gridElementSize=`echo ${grid[i]} | awk '{print $1} | awk '{print length}'`\n\
+    \        gridElementLength=`echo ${grid[i]} | awk '{print length}'`\n\n      \
+    \  ((gridElementLength == 0))\n\n        minIdx=0\n        minArraySize=gridElementSize\n\
+    \        for ((j=0; j < gridElementLength; j++)); do\n            ((minIdx < minArraySize))\n\
+    \            if [[ ${minArray[$minIdx]} == ${gridElement} ]]; then\n         \
+    \       minArray[$minIdx]=\"${gridElement}\"\n            else\n             \
+    \   minArray[$minIdx]=${gridElement}\n            fi\n            ((minArraySize--))\n\
+    \            ((j++))\n        done\n\n        for ((j=0; j < gridElementLength;\
+    \ j++)); do\n            tempArray[j]=`echo ${minArray[$minIdx]} | awk '{print\
+    \ $1}'`\n            ((j++))\n        done\n        \n        ((i--))\n    done\n\
+    \n    echo ${minArray[@]}", "  local i\n  local grid\n  local N\n  local k\n \
+    \ local lst_A\n  local lst_B\n  local ans_lst\n  read -r -a grid <<< \"$1\"\n\
+    \  read -r -a grid <<< \"$2\"\n  N=\"${#grid[@]}\"\n  read -r -a grid <<< \"$3\"\
+    \n  k=\"${grid[0]}\"\n  lst_A=\"$(seq 1 \"$N\")\"\n  lst_B=\"$(seq 1 \"$k\")\"\
+    \n  while [ $(wc -l <<< \"$lst_A\") -gt \"$k\" ]; then\n    lst_A=\"${lst_A[@]}\"\
+    \n  done\n  while [ $(wc -l <<< \"$lst_B\") -gt \"$k\" ]; then\n    lst_B=\"${lst_B[@]}\"\
+    \n  done\n  ans_lst=()\n  for ((i=1;i<=\"$N\";i++)) ; do\n    if [[ $(echo \"\
+    $lst_A[i] $lst_B[i] \" | sort -n | uniq -c) -eq 1 ]]; then\n      ans_lst+=(\"\
+    $lst_A[i]\")\n    fi\n  done\n  printf \"%s\" \"${ans_lst[@]}\"", "  local i\n\
+    \  local j\n  local k\n  local list\n  list=\"$1\"\n  k=\"$2\"\n  # check if list\
+    \ is empty\n  if [[ \"$list\" == \"\" ]]; then\n    return 0\n  fi\n  # remove\
+    \ empty strings\n  list=$(echo \"$list\" | tr -s ' ' | cut -d ' ' -f 1)\n  if\
+    \ [[ \"$list\" == \"\" ]]; then\n    return 0\n  fi\n  list=\"$list\"\n  local\
+    \ len\n  local res\n  local max\n  local min\n  # initialize min and max\n  max=\"\
+    $(echo \"$list\" | tr -s ' ' | cut -d ' ' -f 1)\"\n  min=\"$(echo \"$list\" |\
+    \ tr -s ' ' | cut -d ' ' -f 1)\"\n  res=\"0\"\n  # iterate through each element\
+    \ of the list and find the min and max value\n  for ((i = 1; i < \"$list\" | tr\
+    \ -s ' ' | cut -d ' ' -f 1 | wc -l ); do\n    j=$(echo \"$list\" | tr -s ' ' |\
+    \ cut -d ' ' -f $i)\n    # check if element smaller than min\n    if [[ \"$j\"\
+    \ < \"$min\" ]]; then\n      min=\"$j\"\n    fi\n    # check if element larger\
+    \ than max\n    if [[ \"$j\" > \"$max\" ]]; then\n      max=\"$j\"\n    fi\n \
+    \ done\n  # if max < min, return 0\n  if [[ \"$min\" == \"$max\" ]]; then\n  \
+    \  return 0\n  fi\n  # count how many elements in the list equal to max\n  len=\"\
+    $(echo \"$list\" | grep -w \"$max\" | wc -l )\"\n  # if there are less than k\
+    \ elements in the list, return 0\n  if [[ \"$len\" < \"$k\" ]]; then\n    return\
+    \ 0\n  fi\n  # for each element, get the index of the element equal to min\n \
+    \ for ((i = 1; i < \"$list\" | tr -s ' ' | cut -d ' ' -f 1 | wc -l ); do\n   \
+    \ j=$(echo \"$list\" | tr -s ' ' | cut -d ' ' -f $i)\n    # get the index of the\
+    \ min element\n    index=$(echo \"$list\" | grep -w \"$min\" | grep -w \"$j\"\
+    \ | wc -l )\n    # add the index of the min element to the result\n    res=\"\
+    $res$(( len-index ))\"\n  done\n  # return a space-separated list\n  echo $res",
+  "    local lines=$1\n    local k=$2\n\n    # sort each line into [x,y] form and\
+    \ put them into an array\n    local array=($(for i in $lines; do echo ${i%,};\
+    \ done | sed 's/,/ /g'))\n    local array2=($(for i in $lines; do echo ${i#* };\
+    \ done | sed 's/ /, /g'))\n    local n=${#array[*]}\n    local m=${#array2[*]}\n\
+    \n    # initialize a 2D array to store a path through the grid\n    local path=($(for\
+    \ i in $(seq 0 $(($n - 1))); do for j in $(seq 0 $(($n - 1))); do echo ${array[$i][$j]};\
+    \  done;  done))\n    local count=0\n    # traverse the grid and put each value\
+    \ into a \"path array\"\n    for i in $(seq 0 $(($n - 1))); do for j in $(seq\
+    \ 0 $(($n - 1))); do path[$i][$j]=$array2[$i][$j]; done; done\n\n    # traverse\
+    \ the grid and put each value into a \"path array\"\n    for i in $(seq 0 $(($n\
+    \ - 1))); do for j in $(seq 0 $(($n - 1))); do path[$i][$j]=$array[$i][$j]; done;\
+    \ done\n\n    # put each value into a \"path array\"\n    for i in $(seq 0 $(($n\
+    \ - 1))); do for j in $(seq 0 $(($n - 1))); do path[$i][$j]=$array2[$i][$j]; done;\
+    \ done\n\n    # sort the path array, starting from the beginning (i.e. the top\
+    \ left cell)\n    for i in $(seq 0 $((m - 1))); do for j in $(seq 0 $((m - 1)));\
+    \ do echo ${path[$i][$j]};  done;  done\n    echo ${path[$((m - 1))][$((m - 1))]}\n\
+    \n    # count the elements in the path array and return the minimum value\n  \
+    \  for ((i=0; i < m; i++))\n    do\n        for ((j=0; j < n; j++))\n        do\n\
+    \            if [ ${path[$i][$j]} != ${path[$((i-1))][$((j-1))]} ]\n         \
+    \   then\n                ((count++))\n            fi\n        done\n    done\n\
+    \    echo ${count}", "  # Your code here\n  N=${#@}\n  \n  grid=( $1 )\n  N=${#grid[*]}\n\
+    \n  grid=( $(seq 0 $((N-1)) ) )\n\n  k=$2\n\n  for i in $(seq 0 $((N-1)) ); do\n\
+    \    grid[$i]=\n  done\n\n  while [ $k -lt $N ]; do\n    grid[$k]=$(( $(eval echo\
+    \ ${grid[$(( $k - 1 ))]:0:$k}) \\\n               $(( $(eval echo ${grid[$(( $k\
+    \ + 1 ))]:0:$k}) \\\n               $(( $(eval echo ${grid[$k]:0:$(( $k - 1 ))})\
+    \ \\\n               $(( $(eval echo ${grid[$k]:0:$(( $k + 1 ))}) \\\n       \
+    \        $k )) )) ))\n    ((k++))\n  done\n\n  echo $(sort -n ${grid[*]})", "\t\
+    local lines=$1\n\tlocal k=$2\n\tlocal lst_A lst_B\n\tlocal count num\n\tlocal\
+    \ counts tmp\n\tlocal tmp tmp1 tmp2\n\tlocal tmp3 tmp4\n\tlocal tmp5 tmp6\n\t\
+    local tmp7 tmp8\n\tlocal tmp9 tmp10\n\tlocal tmp11 tmp12\n\tlocal tmp13 tmp14\n\
+    \tlocal tmp15 tmp16\n\tlocal tmp17 tmp18\n\tlocal tmp19 tmp20\n\tlocal tmp21 tmp22\n\
+    \tlocal tmp23 tmp24\n\tlocal tmp25 tmp26\n\tlocal tmp27 tmp28\n\tlocal tmp29 tmp30\n\
+    \tlocal tmp31 tmp32\n\tlocal tmp33 tmp34\n\tlocal tmp35 tmp36\n\tlocal tmp37 tmp38\n\
+    \tlocal tmp39 tmp40\n\tlocal tmp41 tmp42\n\tlocal tmp43 tmp44\n\tlocal tmp45 tmp46\n\
+    \tlocal tmp47 tmp48\n\tlocal tmp49 tmp50\n\tlocal tmp51 tmp52\n\tlocal tmp53 tmp54\n\
+    \tlocal tmp55 tmp56\n\tlocal tmp57 tmp58\n\tlocal tmp59 tmp60\n\tlocal tmp61 tmp62\n\
+    \tlocal tmp63 tmp64\n\tlocal tmp65 tmp66\n\tlocal tmp67 tmp68\n\tlocal tmp69 tmp70\n\
+    \tlocal tmp71 tmp72\n\tlocal tmp73 tmp74\n\tlocal tmp75 tmp76\n\tlocal tmp77 tmp78\n\
+    \tlocal tmp79 tmp80\n\tlocal tmp81 tmp82\n\tlocal tmp83 tmp84\n\tlocal tmp85 tmp86\n\
+    \tlocal tmp87 tmp88\n\tlocal tmp89 tmp90\n\tlocal tmp91 tmp92\n\tlocal tmp93 tmp94\n\
+    \tlocal tmp95 tmp96\n\tlocal tmp97 tmp98\n\tlocal tmp99 tmp100\n\tlocal tmp101\
+    \ tmp102\n\tlocal tmp103 tmp104\n\tlocal tmp105 tmp106\n\tlocal tmp107 tmp108\n\
+    \tlocal tmp109 tmp110\n\tlocal tmp111 tmp112\n\tlocal tmp113 tmp114\n\tlocal tmp115\
+    \ tmp116\n\tlocal tmp117 tmp118\n\tlocal tmp119 tmp120\n\tlocal tmp121 tmp122\n\
+    \tlocal tmp123 tmp124\n\t", "  local rows=$1 # grid rows\n  local cols=$2 # grid\
+    \ cols\n  local k=$3     # length of path\n\n  local -a lst\n  local -a tmp\n\
+    \  local -a stack\n\n  local i\n\n  lst=()\n\n  for ((i=1; i<=rows*cols; i+=1));\
+    \ do\n    lst+=( $i )\n  done\n\n  stack=()\n  tmp=()\n  stack+=( ${lst[0]} )\
+    \ # push first element\n\n  for i in ${lst[@]:1}; do\n    local j\n\n    stack=()\n\
+    \    tmp=()\n\n    for j in ${stack[@]}; do\n      local c\n\n      local val=0\n\
+    \n      for ((c=1; c<=k; c+=1)); do\n        val=$((val+${i}*${j}))\n      done\n\
+    \n      if (( val == k )); then\n        tmp+=( ${j} )\n      fi\n    done\n\n\
+    \    for ((j=1; j<${#tmp[@]}; j+=1)); do\n      stack+=( ${tmp[j]} )\n    done\n\
+    \n    for ((j=1; j<${#tmp[@]}; j+=1)); do\n      stack+=( ${tmp[j]} )\n    done\n\
+    \    stack+=( ${i} )\n\n    lst=()\n\n    for j in ${stack[@]}; do\n      local\
+    \ c\n\n      local val=0\n\n      for ((c=1; c<=k; c+=1)); do\n        val=$((val+${i}*${j}))\n\
+    \      done\n\n      if (( val == k )); then\n        lst+=( ${j} )\n      fi\n\
+    \    done\n  done\n\n  echo ${lst[@]}", "    local n=$1\n    local k=$2\n    local\
+    \ line=$(nl -z -t -s' ' $n | sort -t)\n    local res=$(\n        echo $line\n\
+    \        | awk -v k=\"$k\" '{\n            for (i = 0; i < k; i++) {\n       \
+    \         lst[i] = \"\"\n                for (j = 0; j < i; j++) {\n         \
+    \           lst[i] = lst[i] $j \" \" $(i + j + 1)\n                }\n       \
+    \         lst[i] = lst[i] \"\\n\"\n            }\n            lst[j] = 0;\n  \
+    \          while (j < k) {\n                lst[j] = lst[j] $0 \" \" $k\n    \
+    \            for (l = 1; l < j; l++) {\n                    lst[l] = lst[l] \"\
+    \\n\"\n                }\n                j++\n            }\n            k =\
+    \ k + k;\n            while (k < n && lst[k]) {\n                lst[k] = lst[k]\
+    \ $0 \" \" k\n                k++\n            }\n            while (k < n &&\
+    \ lst[k]) {\n                for (l = k; l < n; l++) {\n                    if\
+    \ (lst[l] ~ /\\n$/) {\n                        res[NR] = res[NR] substr(lst[l],\
+    \ 1, length(lst[l]) - 2)\n                    } else {\n                     \
+    \   res[NR] = res[NR] substr(lst[l], 1, length(lst[l]) - 1)\n                \
+    \    }\n                }\n                k++\n            }\n            for\
+    \ (i = n; i >= 0; i--) {\n                lst[i] = \"\"\n                for (j\
+    \ = 0; j < i; j++) {\n                    lst[i] = lst[i] $0 \" \" j\n       \
+    \         }\n                lst[i] = lst[i] \"\\n\"\n            }\n        \
+    \    for (l = k; l < n; l++) {\n                if (lst[l] ~ /\\n$/) {\n     \
+    \               res[NR] = res[NR] substr(lst[l], 1, length(lst[l]) - 2)\n    \
+    \            } else {\n                    res[NR] = res[NR] substr(lst[l], 1,\
+    \ length(lst[l]) - 1)\n                }\n            }\n        }'\n    )\n \
+    \   echo $res", "    local -i i j N\n    local -a grid\n    local -i k count\n\
+    \    grid=$1\n    shift\n    for ((N=${#grid[*]}; N>0; N--)); do\n        count=0\n\
+    \        for ((i=0; i<N; i++)) ; do\n            for ((j=0; j<N; j++)) ; do\n\
+    \                if [ ${grid[i,j]} -gt 0 ] ; then\n                    ((count++))\n\
+    \                    grid=${grid[@]}\n                    grid[$i,$j]=$(expr $grid[$i,$j]\
+    \ \\> 0)\n                    if [ \"$count\" -eq \"$k\" ]; then\n           \
+    \             printf '%s\\n' \"${grid[@]}\"\n                        return\n\
+    \                    fi\n                fi\n            done\n        done\n\
+    \    done\n    printf '%s\\n' \"${grid[@]}\"", "  local grid=$1\n  local length=$2\n\
+    \  local output\n  \n  local n=$((${#grid[@]}-1))\n  local i\n  \n  local index\n\
+    \  local count\n  \n  local j\n  local lst_A\n  local lst_B\n  \n  lst_A=()\n\
+    \  lst_B=()\n  \n  for ((i=0; i < ${#grid[@]}; i++)); do\n    index=${grid[$i]}\n\
+    \    lst_A[$i]=$index\n    lst_B[$i]=$index\n  done\n  \n  # Count how many cells\
+    \ share an edge with you current\n  # cell, and how many neighboring cells share\
+    \ an edge\n  for ((i=0; i < ${#grid[@]}; i++)); do\n    index=${grid[$i]}\n  \
+    \  count=${#lst_A[$i]}\n    if [[ ${#lst_B[$i]} -gt 1 ]]; then\n      count=$((count+1))\n\
+    \    fi\n    lst_B[$i]=$((${index} + count))\n  done\n  \n  # If your current\
+    \ cell is at the last row, then there is no path\n  if [[ \"${#grid[@]}\" -gt\
+    \ 0 ]]; then\n    index=${grid[$((${#grid[@]}-1))]}\n    if [[ ${#lst_A[$index]}\
+    \ -gt 1 ]]; then\n      count=${#lst_B[$index]}\n      if [[ ${#lst_A[$index]}\
+    \ -gt $length ]]; then\n        count=$((count+1))\n      fi\n      lst_B[$index]=$((${index}\
+    \ + $length))\n      lst_A[$index]=$((${index} + $count))\n    fi\n  fi\n  # If\
+    \ your current cell is the first row, there is only one path\n  if [[ \"${#grid[@]}\"\
+    \ -eq 1 ]]; then\n    index=${grid[0]}\n    if [[ ${#lst_A[$index]} -gt 1 ]];\
+    \ then\n      count=${#lst_B[$index]}\n      if [[ ${#lst_A[$index]} -gt $length\
+    \ ]]; then\n        count=$((count+1))\n      fi\n      lst_B[$index]=$((${index}\
+    \ + $length))\n      lst_A[$index]=$((${index} + $count))\n    fi\n  fi\n  # The\
+    \ rest are all paths of length k\n  for ((i=0; i < ${#grid[@]}; i++)); do\n  \
+    \  index=${grid[$i]}\n    count=${#lst_A[$i]}", "    local -n array=$1 k=$2\n\
+    \    local -i i j k pos neg len\n    pos=neg=0\n    for ((i = 0; i < ${#array[@]};\
+    \ i++)) {\n        k=1\n        len=0\n        for (j=0; j<i; j++) {\n       \
+    \     if [ $array[$j] < $array[$i] ] ; then\n                ((k++))\n       \
+    \     fi\n            ((len++))\n        }\n        if ((k>0)); then\n       \
+    \     ((neg++))\n        fi\n        if ((len >= k)) {\n            ((pos++))\n\
+    \        fi\n    }\n    echo $(($pos*$neg)) $(( ${array[*]}|sort -n -k 1,1|head\
+    \ -n1 ))", "  local -r lines=$1;\n  local -r k=$2;\n  local -r rows=${#lines[@]};\n\
+    \  local -r cols=${#lines[@]/%};\n  local -r result=();\n\n  echo \"Starting minPath\
+    \ with $rows rows and $cols cols\";\n  for (( row = 1; row <= rows; row++ ));\
+    \ do\n    for (( col = 1; col <= cols; col++ )); do\n      local cell=$lines[$row*$cols];\n\
+    \      result+=($cell);\n    done;\n  done;\n\n  echo \"Removing duplicates from\
+    \ result\";\n  local seen=();\n  for i in \"${!result[@]}\"; do\n    local cell=${result[$i]};\n\
+    \    seen[$cell]=\"${seen[$cell]}\" || true\n  done;\n\n  local found=false;\n\
+    \  while (( found == false )); do\n    found=false;\n    for (( i = 1; i <= k;\
+    \ i++ )); do\n      if [[ ${#seen[$i]} -eq 0 ]]; then\n        found=true;\n \
+    \       break;\n      done;\n    done;\n    local cell;\n    if [[ \"$found\"\
+    \ == true ]]; then\n      cell=${seen[$i]};\n      echo \"Found a duplicate: $cell\"\
+    ;\n      result+=($cell);\n      echo \"Resulting list: $result\";\n      found=false;\n\
+    \    fi;\n  done;\n\n  echo \"Sorting\";\n  echo \"${result[@]}\" | sort -u >&2;",
+  "\tgrid=$1\n\tk=$(echo \"${#grid[@]}\" | bc)\n\t\n\t# check parameter\n\tif [ \"\
+    $k\" -lt 2 ]; then\n\t\techo \"Usage: $0 grid k\"\n\t\techo \"Description:\" \n\
+    \t\techo \"\tgrid is a 2D array: each cell contains a value.\"\n\t\techo \"\t\
+    k is an integer, which defines the length of the path.\"\n\t\techo \"\tThe length\
+    \ of the path must satisfy 1 <= k <= N x N.\"\n\t\techo \"\tIf N is odd, then\
+    \ k is even and we count from the left most cell.\"\n\t\techo \"\tIf N is even,\
+    \ then k is odd and we count from the right most cell.\"\n\t\texit 1\n\tfi\n\t\
+    \n\t# find size of grid\n\tN=${#grid[@]}\n\t\n\t# check number of rows and columns\n\
+    \tif [ \"$N\" -eq 0 ]; then\n\t\techo \"[Error] the length of grid is 0\"\n\t\t\
+    exit 1\n\tfi\n\t\n\t# check k validity\n\tif [ \"$k\" -lt 1 ] || [ \"$k\" -gt\
+    \ \"$N * $N\" ]; then\n\t\techo \"[Error] k should be 1 <= k <= N * N\"\n\t\t\
+    exit 1\n\tfi\n\t\n\t# initialize arrays for storing the path\n\tsorted_cells=()\n\
+    \tpath=()\n\t\n\t# initialize path array\n\ti=0\n\t\n\t# initialize cells for\
+    \ searching next cell\n\tcells=()\n\t\n\t# iterate through grid\n\tfor ((i=1;\
+    \ i<=$((N*N)); i++)); do\n\t\t\n\t\t# initialize flag\n\t\tflag=0\n\t\n\t\t# initialize\
+    \ number of cells visited\n\t\tnum_cells_visited=0\n\t\n\t\t# initialize first\
+    \ cell\n\t\tfirst_cell=${grid[$((i-1))]}\n\t\t\n\t\t# initialize first cell\n\t\
+    \tcurrent_cell=${grid[$i]}\n\t\t\n\t\t# iterate through cells until current cell\
+    \ is not equal to first cell \n\t\t# or the current cell is equal to the first\
+    \ cell\n\t\tfor ((j=0; j<=$((N-1)); j++)); do\n\t\t\t\n\t\t\t# initialize current\
+    \ cell neighbors\n\t\t\tcurrent_cell_neighbors=()\n\t\t\n\t\t\tif [ \"${current_cell:$j}\"\
+    \ != \"${first_cell:$j}\" ]; then\n\t\t\t\n\t\t\t\t# check if current cell neighbor\
+    \ is in the grid\n\t\t\t\t(( flag += 1 ))\n\t\t\t\tnum_cells_visited=$(( num_cells_visited\
+    \ + 1 ))\n\t\t\t\tcurrent_cell_neighbors=(\"${current_cell_neighbors[@]}\" \"\
+    $j\")\n\t\t\t\t\n\t\t\t\t# If current cell neighbor is equal to the first cell\
+    \ and ", "    local line=$1\n    local k=$2\n    local minPath=\"$line\"\n   \
+    \ local i j\n    for ((i=1; i <= k; i++)); do\n        lst_A=$(echo $line | tr\
+    \ \" \" \"\\n\" | sort | uniq)\n        lst_B=$(echo $line | tr \" \" \"\\n\"\
+    \ | sort | uniq)\n        for ((j=1; j <= i; j++)); do\n            if [ $((j-i))\
+    \ -gt 0 ]; then\n                if [ $((lst_A[$j])) -eq $((lst_A[$j-1])) ]; then\n\
+    \                    lst_A[$j]=$((lst_A[$j-1]))\n                    lst_A[$j-1]=$((lst_A[$j]))\n\
+    \                else\n                    lst_A[$j]=$(echo $lst_A[$j-1] | tr\
+    \ \",\" \" \")\n                fi\n            fi\n        done\n        for\
+    \ ((j=$((j-1)); j <= i; j++)); do\n            if [ $((j-i)) -gt 0 ]; then\n \
+    \               if [ $((lst_B[$j])) -eq $((lst_B[$j-1])) ]; then\n           \
+    \         lst_B[$j]=$((lst_B[$j-1]))\n                    lst_B[$j-1]=$((lst_B[$j]))\n\
+    \                else\n                    lst_B[$j]=$(echo $lst_B[$j-1] | tr\
+    \ \",\" \" \")\n                fi\n            fi\n        done\n        if [\
+    \ $((lst_A[$i-1])) -eq $((lst_B[$i-1])) ]; then\n            lst_A[$i-1]=$((lst_A[$i]))\n\
+    \            lst_A[$i]=$((lst_B[$i]))\n        else\n            lst_A[$i-1]=$(echo\
+    \ $lst_A[$i-1] | tr \",\" \" \")\n        fi\n    done\n    minPath=$(echo $minPath\
+    \ | tr \",\" \" \")\n    minPath=$(echo $minPath | sed 's/ //g')\n    minPath=$(echo\
+    \ $minPath | sed 's/,//g')\n    minPath=$(echo $minPath | sed 's/ /\\n/g')\n \
+    \   minPath=$(echo $minPath | sed 's/,/\\n/g')\n    minPath=$(echo $minPath |\
+    \ sed 's/,/\\n/g' | sed 's/\\([0-9]*\\)\\n\\(.*\\)/\\2\\n\\1/')\n    minPath=$(echo\
+    \ $minPath | sed 's/,/\\n/g' | sed 's/\\([0-9]*\\)\\n\\(.*\\)/\\2"]
 stop_tokens:
 - "\n}"

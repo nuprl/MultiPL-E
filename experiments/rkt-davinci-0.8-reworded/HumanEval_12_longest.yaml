@@ -9,7 +9,153 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate l
   \    (check-equal? (candidate (list )) #f)\n    (check-equal? (candidate (list \"\
   x\" \"y\" \"z\")) \"x\")\n    (check-equal? (candidate (list \"x\" \"yyy\" \"zzzz\"\
   \ \"www\" \"kkkk\" \"abc\")) \"zzzz\")\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (if (empty? strings)\n      #f\n      (letrec\n          ([longest-helper\
+    \ (lambda (strings longest)\n                             (cond\n            \
+    \                   [(empty? strings) longest]\n                             \
+    \  [(string-length (first strings)) &gt; (string-length longest)]\n          \
+    \                     (else (longest-helper (rest strings) longest))))])\n   \
+    \     (longest-helper (rest strings) (first strings)))))\n</code>\nAnd here is\
+    \ how I implemented it in Haskell:\n<code>longest :: [String] -&gt; Maybe String\n\
+    longest [] = Nothing\nlongest (x:xs) = Just (longest' xs x)\n\nlongest' :: [String]\
+    \ -&gt; String -&gt; String\nlongest' [] longest = longest\nlongest' (x:xs) longest\n\
+    \    | length x &gt; length longest = longest' xs x\n    | otherwise = longest'\
+    \ xs longest\n</code>\nMy question is what is a better way to code in Racket?\
+    \ What would be the best way to write idiomatic Racket?\n\n\nA:\n\nI think what\
+    \ you want is probably the <code>foldr</code> function. It lets you apply a function\
+    \ to each element of a list, along with a value to hold the result. The first\
+    \ use of <code>foldr</code> that comes to mind is to compute the length of a list:\n\
+    <code>(foldr (lambda (x y) (+ 1 y)) 0 '(1 2 3))", "  (cond\n    [(empty? strings)\
+    \ #f]\n    [(null? (cdr strings)) (car strings)]\n    [else\n     (let ([l (car\
+    \ strings)]\n           [r (longest (cdr strings))])\n       (if (&gt; (string-length\
+    \ l) (string-length r))\n           l\n           r))]))\n</code>\nNow let's look\
+    \ at your code.\n<code>(define (longest list)\n  (cond\n    [(empty? list) #f]\n\
+    \    [(null? (cdr list)) (car list)]\n    [else\n     (let ([l (car list)]\n \
+    \          [r (longest (cdr list))])\n       (if (&gt; (string-length l) (string-length\
+    \ r))\n           l\n           r))]))\n</code>\nYou're missing <code>strings</code>\
+    \ in the first line. What you have here is a recursive call to the function itself.\n\
+    <code>(define (longest list)\n  (cond\n    [(empty? list) #f]\n    [(null? (cdr\
+    \ list)) (car list)]\n    [else\n     (let ([l (car list)]\n           [r (longest\
+    \ (cdr list))])\n       (if (&gt; (string-length l) (string-length r))\n     \
+    \      l\n           r))]))\n</code>\nNotice how it says <code>define (longest\
+    \ list)</code> at the top. We're defining a function called <code>longest</code>\
+    \ that takes one argument called <code>list</code>. What I did was change <code>list</code>\
+    \ to <code>strings</code>. Here is what you're code looks like after that change.\n\
+    <code>(define (longest list)\n  (cond\n    [(empty? list) #f]\n    [(null? (cdr\
+    \ list)) (car list)]\n    [else\n     (let ([l (car list)]\n           [r (longest\
+    \ (cdr list))])\n       (if (&gt; (string-length l) (string-length r))\n     \
+    \      l\n           r))]))\n</code>\nCan you see the differences between the\
+    \ two now?\n", "  (if (empty? strings)\n      #f\n      (if (or (empty? (rest\
+    \ strings))\n              (string&gt;? (first strings) (longest (rest strings))))\n\
+    \          (first strings)\n          (longest (rest strings)))))\n</code>\n",
+  "  (cond\n    [(empty? strings) #f]\n    [(empty? (rest strings)) (first strings)]\n\
+    \    [else\n     (if (&gt; (string-length (first strings)) (string-length (longest\
+    \ (rest strings))))\n         (first strings)\n         (longest (rest strings)))]))\n\
+    </code>\n", "  (if (null? strings)\n      #f\n      (letrec ([l (length (car strings))]\n\
+    \               [curr strings]\n               [next (cdr strings)])\n       \
+    \ (if (null? next)\n            (car curr)\n            (if (> (length (car next))\
+    \ l)\n                (longest next)\n                (longest curr))))))\n",
+  "  (if (null? strings)\n      #f\n      (letrec ([longest-so-far (car strings)]\n\
+    \               [remaining (cdr strings)]\n               [longest-string (if\
+    \ (null? remaining) longest-so-far\n                                 (let ([next-string\
+    \ (car remaining)])\n                                   (if (> (string-length\
+    \ next-string) (string-length longest-so-far))\n                             \
+    \          (recur next-string (cdr remaining))\n                             \
+    \          (recur longest-so-far (cdr remaining))))))])\n        longest-string)))\n\
+    ```\n\n```racket\n#lang racket\n", "  (if (null? strings)\n      #f\n      (if\
+    \ (null? (cdr strings))\n          (car strings)\n          (if (> (string-length\
+    \ (car strings)) (string-length (longest (cdr strings))))\n              (car\
+    \ strings)\n              (longest (cdr strings))))))\n", "  (if (empty? strings)\n\
+    \      #f\n      (reduce (lambda (a b)\n                (if (> (string-length\
+    \ a) (string-length b))\n                    a\n                    b))\n    \
+    \          strings)))\n", "  (if (null? strings)\n      #f\n      (define (aux\
+    \ current rest)\n        (if (null? rest)\n            current\n            (if\
+    \ (> (string-length current) (string-length (car rest)))\n                (aux\
+    \ current (cdr rest))\n                (aux (car rest) (cdr rest)))))\n      (aux\
+    \ (car strings) (cdr strings))))\n\n", "  (cond ((empty? strings) #f)\n      \
+    \  ((null? (cdr strings)) (car strings))\n        (else (let* ([shortest (longest\
+    \ (cdr strings))]\n                     [this (car strings)])\n              \
+    \ (if (&gt; (string-length this) (string-length shortest))\n                 \
+    \  this\n                   shortest)))))\n</code>\nOf course, it is possible\
+    \ to write the same solution in one line, but I feel my version is more readable.\
+    \ What do you think?\n\n\nA:\n\nIt is more readable, although in style you could\
+    \ use <code>let</code> instead of <code>let*</code> as the variables are not bound\
+    \ to each other.\n<code>(define (longest strings)\n  (cond ((empty? strings) #f)\n\
+    \        ((null? (cdr strings)) (car strings))\n        (else (let ([shortest\
+    \ (longest (cdr strings))]\n                    [this (car strings)])\n      \
+    \         (if (&gt; (string-length this) (string-length shortest))\n         \
+    \          this\n                   shortest)))))\n</code>\nNote also that you\
+    \ can write this equivalently as\n<code>(define (longest strings)\n  (if (null?\
+    \ strings)\n      #f\n      (let loop ([strings strings]\n                 [prev\
+    \ (car strings)])\n        (if (null? (cdr strings))\n            prev\n     \
+    \       (loop (cdr strings)\n                  (if (&gt; (string-length (car strings))\n\
+    \                         (string-length prev))\n                      (car strings)\n\
+    \                      prev))))))\n</code>\n", "  (cond ((empty? strings) #f)\n\
+    \        ((null? (cdr strings)) (car strings))\n        (else (cond ((> (string-length\
+    \ (car strings)) (string-length (cadr strings)))\n                     (longest\
+    \ (cons (car strings) (cddr strings))))\n                    (else (longest (cons\
+    \ (cadr strings) (cddr strings))))))))\n", "  (if (null? strings)\n      #f\n\
+    \      (let ([longest-string (first strings)])\n        (for ([string (rest strings)])\n\
+    \          (if (> (string-length string) (string-length longest-string))\n   \
+    \           (set! longest-string string)))\n        longest-string)))\n", "  (if\
+    \ (null? strings)\n      #f\n      (let* ([cur (car strings)]\n             [next\
+    \ (cdr strings)]\n             [next-longest (longest next)])\n        (if (and\
+    \ (string? cur) (string? next-longest))\n            (if (> (string-length cur)\
+    \ (string-length next-longest))\n                cur\n                next-longest)\n\
+    \            (if (string? cur)\n                cur\n                (if (string?\
+    \ next-longest)\n                    next-longest\n                    #f)))))\n\
+    \  )\n", "  (cond [(empty? strings) #f]\n        [else (let ([first (first strings)]\n\
+    \                    [rest (rest strings)])\n                (cond [(empty? rest)\
+    \ first]\n                      [else (longest-of-two first (longest rest))]))]))\n",
+  "  (cond\n    [(empty? strings) #f]\n    [(empty? (rest strings)) (first strings)]\n\
+    \    [else\n     (if (< (string-length (first strings)) (string-length (second\
+    \ strings)))\n         (longest (cons (second strings) (rest (rest strings))))\n\
+    \         (longest (cons (first strings) (rest (rest strings)))))]))\n", "  (let\
+    \ ([max-len 0]\n        [max-len-strings '()])\n    (for ([s strings])\n     \
+    \ (if (> (string-length s) max-len)\n          (begin\n            (set! max-len\
+    \ (string-length s))\n            (set! max-len-strings (list s)))))\n    (if\
+    \ (null? max-len-strings)\n        #f\n        (car max-len-strings))))\n```\n\
+    \n```\n#lang racket\n", "  (cond ((not (empty? strings))\n         (let loop ((remaining\
+    \ (cdr strings))\n                    (current-longest (car strings)))\n     \
+    \      (cond ((empty? remaining)\n                  current-longest)\n       \
+    \          ((&gt; (string-length (car remaining))\n                     (string-length\
+    \ current-longest))\n                  (loop (cdr remaining)\n               \
+    \         (car remaining)))\n                 (else\n                  (loop (cdr\
+    \ remaining)\n                        current-longest)))))\n        (else\n  \
+    \       #f)))\n</code>\nThe problem I am having is that every single time I try\
+    \ to run this function I get the exact same output.\n<code>&gt; (longest (list\
+    \ \"a\" \"bb\" \"ccc\"))\n\"a\"\n&gt; (longest (list \"a\" \"bb\" \"ccc\"))\n\"\
+    a\"\n&gt; (longest (list \"a\" \"bb\" \"ccc\"))\n\"a\"\n&gt; (longest (list \"\
+    a\" \"bb\" \"ccc\"))\n\"a\"\n&gt; (longest (list \"a\" \"bb\" \"ccc\"))\n\"a\"\
+    \n&gt; (longest (list \"a\" \"bb\" \"ccc\"))\n\"a\"\n&gt; (longest (list \"a\"\
+    \ \"bb\" \"ccc\"))\n\"a\"\n&gt; (longest (list \"a\" \"bb\" \"ccc\"))\n\"a\"\n\
+    &gt; (longest (list \"a\" \"bb\" \"ccc\"))\n\"a\"\n&gt; (longest (list \"a\" \"\
+    bb\" \"ccc\"))\n\"a\"\n&gt; (longest (list \"a\" \"bb\" \"ccc\"))\n\"a\"\n&gt;\
+    \ (longest (list \"a\" \"bb\" \"ccc\"))\n\"a\"\n&gt; (longest (list \"a\" \"bb\"\
+    \ \"ccc\"))\n\"a\"\n&gt; (longest (list \"a\" \"bb\" \"ccc\"))\n\"a\"\n&gt; (longest\
+    \ (list \"a\" \"bb\" \"ccc\"))\n\"a\"\n&gt; (longest (list \"a\" \"bb\"", "  (if\
+    \ (empty? strings)\n      #f\n      (apply max-len strings)))\n", "  (if (null?\
+    \ strings)\n      #f\n      (if (null? (cdr strings))\n          (car strings)\n\
+    \          (let* ([longest-tail (longest (cdr strings))]\n                 [this-len\
+    \ (string-length (car strings))]\n                 [that-len (string-length longest-tail)])\n\
+    \            (if (&gt; this-len that-len)\n                (car strings)\n   \
+    \             longest-tail)))))\n</code>\nAbove code is written in Racket (dialect\
+    \ of Scheme).  What's the easiest way to convert it to Clojure?\nMy attempt:\n\
+    <code>(defn longest\n  [strings]\n  (if (nil? strings)\n    false\n    (if (nil?\
+    \ (rest strings))\n      (first strings)\n      (let [longest-tail (longest (rest\
+    \ strings))\n            this-len (count (first strings))\n            that-len\
+    \ (count longest-tail)]\n        (if (&gt; this-len that-len)\n          (first\
+    \ strings)\n          longest-tail)))))\n</code>\nBut I have to replace <code>string-length</code>\
+    \ with <code>count</code>.  Is this the right thing to do?\nWhat if I wanted to\
+    \ convert the following code to Clojure? \n<code>(define (max-score xs)\n  (if\
+    \ (null? xs)\n      (error \"max-score: empty list\")\n      (if (null? (cdr xs))\n\
+    \          (car xs)\n          (let* ([longest-tail (max-score (cdr xs))]\n  \
+    \               [this-score (score (car xs))]\n                 [that-score (score\
+    \ longest-tail)])\n            (if (&gt; this-score that-score)\n            \
+    \    (car xs)\n                longest-tail)))))\n</code>\nIn Clojure, I'm not\
+    \ sure how to use <code>error</code> or <code>score</code> or <code>car</code>\
+    \ or <code>cdr</code>.  Is it possible to convert the above code without changing\
+    \ too much of the logic?\n\n\nA:\n\nIn Clojure we don't need a special <code>if</code>",
+  "  (apply max (map string-length strings)))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

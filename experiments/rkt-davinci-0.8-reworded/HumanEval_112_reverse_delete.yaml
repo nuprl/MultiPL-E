@@ -17,7 +17,137 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate r
   \    (check-equal? (candidate \"abcdedcba\" \"v\") (list \"abcdedcba\" #t))\n  \
   \  (check-equal? (candidate \"vabba\" \"v\") (list \"abba\" #t))\n    (check-equal?\
   \ (candidate \"mamma\" \"mia\") (list \"\" #t))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (let loop ([s s] [c c])\n    (match c\n      [(list) (if (equal?\
+    \ (string-reverse s) s)\n                  (list s #t)\n                  (list\
+    \ s #f))]\n      [(cons hd tl) (loop (string-replace s hd \"\") tl)])))\n", " \
+    \ (define (get-result s c)\n    (define (iter s c new-s)\n      (cond [(null?\
+    \ s) new-s]\n            [(and (string-contains? c (string-ref s 0))\n       \
+    \           (not (string-contains? new-s (string-ref s 0))))\n             (iter\
+    \ (rest s) c new-s)]\n            [else (iter (rest s) c (string-append new-s\
+    \ (string (string-ref s 0))))]))\n    (iter s c \"\"))\n  (list (get-result s\
+    \ c) (string=? (get-result s c) (string-reverse (get-result s c)))))\n```\n\n\
+    ### Python\n\n```python\n#lang py\n\n# Task\n# We are given two strings s and\
+    \ c, you have to deleted all the characters in s that are equal to any character\
+    \ in c\n# then check if the result string is palindrome.\n# A string is called\
+    \ palindrome if it reads the same backward as forward.\n# You should return a\
+    \ list containing the result string and #t/#f for the check.\n# Example\n# >>>\
+    \ (reverse_delete \"abcde\" \"ae\")\n# (list \"bcd\" #f)\n# >>> (reverse_delete\
+    \ \"abcdef\" \"b\")\n# (list \"acdef\" #f)\n# >>> (reverse_delete \"abcdedcba\"\
+    \ \"ab\")\n# (list \"cdedc\" #t)\ndef reverse_delete(s, c):\n    def get_result(s,\
+    \ c):\n        def iter(s, c, new_s):\n            if len(s) == 0:\n         \
+    \       return new_s\n            elif s[0] in c and s[0] not in new_s:\n    \
+    \            return iter(s[1:], c, new_s)\n            else:\n               \
+    \ return iter(s[1:], c, new_s + s[0])\n        return iter(s, c, \"\")\n    return\
+    \ [get_result(s, c), get_result(s, c) == get_result(s, c)[::-1]]\n```\n\n### Ruby\n\
+    \n```ruby\n#lang rb\n\n", "  (define (delete s c)\n    (let loop ([s s] [accumulator\
+    \ (list)])\n      (if (null? s)\n          accumulator\n          (if (member\
+    \ (car s) c)\n              (loop (cdr s) accumulator)\n              (loop (cdr\
+    \ s) (cons (car s) accumulator))))))\n  (let ([s (delete s c)])\n    (cons s\n\
+    \          (equal? s (reverse s)))))\n", "  (cons (for/fold ([res \"\"]) ([s_c\
+    \ (in-string s)])\n            (when (not (char-set-contains? (string->char-set\
+    \ c) s_c))\n              (string-append res (string s_c))))\n        (string=?\
+    \ (car (reverse_delete s c)) (cdr (reverse_delete s c)))))\n", "  (if (empty?\
+    \ s)\n      (list \"\" #t)\n      (let ([result-string (filter (lambda (x) (not\
+    \ (member x c))) s)])\n        (list result-string (eq? result-string (reverse\
+    \ result-string))))))\n", "  (define (delete s c)\n    (if (empty? s)\n      \
+    \  (list '())\n        (if (member (first s) c)\n            (delete (rest s)\
+    \ c)\n            (cons (first s) (delete (rest s) c)))))\n  (define (reverse_delete-check\
+    \ s c)\n    (define (reverse lst)\n      (if (empty? lst)\n          (list '())\n\
+    \          (append (reverse (rest lst)) (list (first lst)))))\n    (define (palindrome\
+    \ lst)\n      (if (empty? lst)\n          #t\n          (cond\n            [(eq?\
+    \ (first lst) (first (reverse lst))) (palindrome (rest (reverse lst)))]\n    \
+    \        [else #f])))\n    (palindrome (delete s c)))\n  (list (reverse_delete-check\
+    \ s c)))", "  (list\n   (apply string (filter (compose not (curry string-contains?\
+    \ c)) (string->list s)))\n   (equal? (apply string (filter (compose not (curry\
+    \ string-contains? c)) (string->list s)))\n           (apply string (filter (compose\
+    \ not (curry string-contains? c)) (string->list (string-reverse s)))))))\n", " \
+    \ (let* ([s-ls (string->list s)]\n         [c-ls (string->list c)]\n         [res-ls\
+    \ (filter (lambda (x) (not (member x c-ls))) s-ls)])\n    (list (list->string\
+    \ res-ls)\n          (equal? res-ls (reverse res-ls)))))\n", "  (let ((len (string-length\
+    \ s))\n        (res (make-string len)))\n    (for ([i len])\n      (let ((ch (string-ref\
+    \ s i)))\n        (when (not (char-set-contains? (string->char-set c) ch))\n \
+    \         (string-set! res i ch))))\n    (let ((res (substring res 0 (string-trim-right\
+    \ res \" \"))))\n      (list res (eq? res (string-reverse res))))))\n", "  (define\
+    \ (substr s n)\n    (substring s n (add1 n)))\n  (define (get-del-list s c)\n\
+    \    (define (get-del-list-iter s c del-list)\n      (cond\n        [(empty? s)\
+    \ del-list]\n        [(string-contains (substr s 0) c) (get-del-list-iter (substring\
+    \ s 1) c (append del-list (list (substr s 0))))]\n        [else (get-del-list-iter\
+    \ (substring s 1) c del-list)]))\n    (get-del-list-iter s c '()))\n  (define\
+    \ (check-palindrome s)\n    (and (string=? s (reverse s)) #t))\n  (define (delete-chars\
+    \ s c)\n    (cond\n      [(empty? s) \"\"]\n      [(string-contains (substr s\
+    \ 0) c) (delete-chars (substring s 1) c)]\n      [else (string-append (substr\
+    \ s 0) (delete-chars (substring s 1) c))]))\n  (define (replace-all-chars s c\
+    \ d)\n    (cond\n      [(empty? s) \"\"]\n      [(string=? (substr s 0) c) (string-append\
+    \ d (replace-all-chars (substring s 1) c d))]\n      [else (string-append (substr\
+    \ s 0) (replace-all-chars (substring s 1) c d))]))\n  (define (check-palindrome\
+    \ s)\n    (and (string=? s (reverse s)) #t))\n  (let ([del-list (get-del-list\
+    \ s c)])\n    (reverse (cons (check-palindrome (replace-all-chars s del-list \"\
+    \")) (replace-all-chars s del-list \"\")))))", "  (define (helper s c res)\n \
+    \   (if (empty? s)\n        (list res #t)\n        (let ((car (car s))\n     \
+    \         (cdr (cdr s)))\n          (if (member car c)\n              (helper\
+    \ cdr c res)\n              (helper cdr c (cons car res))))))\n  (helper s c empty))\n",
+  "  (define (chars->set chars)\n    (set (string->list chars)))\n  (define (delete-chars\
+    \ chars s)\n    (for/list ([c (in-string s)])\n      (unless (set-member chars\
+    \ c)\n        c)))\n  (define (is-palindrome? s)\n    (define (is-palindrome?\
+    \ s)\n      (if (empty? s)\n          #t\n          (let ([first (first s)]\n\
+    \                [rest (rest s)])\n            (if (empty? rest)\n           \
+    \     #t\n                (and (char=? first (last rest))\n                  \
+    \   (is-palindrome? (but-last rest)))))))\n    (is-palindrome? (string->list s)))\n\
+    \  (let ([chars (chars->set c)])\n    (list (list->string (delete-chars chars\
+    \ s))\n          (is-palindrome? (list->string (delete-chars chars s))))))\n",
+  "  (map\n   (lambda (str)\n     (list str\n           (and (not (empty? (string-split\
+    \ str \"\")))\n                (string=? str (apply string-append (reverse (string-split\
+    \ str \"\")))))))\n   (string-split s (string-join c \"\"))))\n", "  (let ((s\
+    \ (string->list s))\n        (c (string->list c)))\n    (for/list ([i (in-list\
+    \ s)]\n               #:when (not (member i c)))\n      i)))\n", "  (define (char-in-str?\
+    \ c str)\n    (and (not (empty? str))\n         (or (equal? c (first str))\n \
+    \            (char-in-str? c (rest str)))))\n  (define (rm-char-from-str c str)\n\
+    \    (cond ((empty? str) '())\n          ((char-in-str? c str) (rm-char-from-str\
+    \ c (rest str)))\n          (else (cons (first str) (rm-char-from-str c (rest\
+    \ str))))))\n  (define (rm-char-from-str-2 c str)\n    (if (char-in-str? c str)\n\
+    \        (if (empty? str)\n            '()\n            (rm-char-from-str-2 c\
+    \ (rest str)))\n        (cons (first str) (rm-char-from-str-2 c (rest str)))))\n\
+    \  (define (palindrome? str)\n    (define (pal? str)\n      (cond ((empty? str)\
+    \ #t)\n            ((equal? (first str) (last str)) (pal? (rest (butlast str))))\n\
+    \            (else #f)))\n    (cond ((empty? str) #t)\n          ((empty? (rest\
+    \ str)) #t)\n          (else (pal? str))))\n  (list (rm-char-from-str-2 c s) (palindrome?\
+    \ (rm-char-from-str-2 c s))))\n```\n\n## \u0417\u0430\u0434\u0430\u0447\u0430\
+    \ 2. \u0421\u043F\u0438\u0441\u044A\u043A \u0441 \u0431\u0440\u043E\u044F \u043F\
+    \u043E\u0432\u0442\u043E\u0440\u0435\u043D\u0438\u044F \u043D\u0430 \u0435\u043B\
+    \u0435\u043C\u0435\u043D\u0442\u0438\u0442\u0435 \u043D\u0430 \u0434\u0440\u0443\
+    \u0433 \u0441\u043F\u0438\u0441\u044A\u043A.\n\n\u0414\u0430 \u0441\u0435 \u043D\
+    \u0430\u043F\u0438\u0448\u0435 \u0444\u0443\u043D\u043A\u0446\u0438\u044F, \u043A\
+    \u043E\u044F\u0442\u043E \u043F\u0440\u0438\u0435\u043C\u0430 \u043A\u0430\u0442\
+    \u043E \u0430\u0440\u0433\u0443\u043C\u0435\u043D\u0442 \u0441\u043F\u0438\u0441\
+    \u044A\u043A \u0438 \u0432\u0440\u044A\u0449\u0430 \u0441\u043F\u0438\u0441\u044A\
+    \u043A \u043E\u0442 \u0441\u043F\u0438\u0441", "  (define (helper str ch)\n  \
+    \  (cond ((null? str) '())\n          ((member (car str) ch) (helper (cdr str)\
+    \ ch))\n          (else (cons (car str) (helper (cdr str) ch)))))\n  (define (is-palindrome?\
+    \ str)\n    (define (helper str result)\n      (cond ((null? str) result)\n  \
+    \          ((null? (cdr str)) result)\n            (else (helper (cdr str) (cons\
+    \ (car str) result)))))\n    (define reversed-str (helper str '()))\n    (equal?\
+    \ str reversed-str)))\n  (define (reverse-delete-helper s c)\n    (let ((str (helper\
+    \ s c)))\n      (cond ((is-palindrome? str) (list str #t))\n            (else\
+    \ (list str #f)))))\n  (reverse-delete-helper s c))\n", "  (let ([str-res (string-filter\
+    \ (lambda (ch) (not (string-contains c ch))) s)])\n    (list str-res (string=?\
+    \ str-res (string-reverse str-res)))))\n", '  (list (string-delete s c) (equal?
+    (string-delete s c) (string-reverse (string-delete s c)))))', "  (define (aux\
+    \ str character)\n    (cond\n      [(empty? str) empty]\n      [(char=? (first\
+    \ str) character) (aux (rest str) character)]\n      [else (cons (first str) (aux\
+    \ (rest str) character))]))\n  (define (is-palindrome str)\n    (cond\n      [(empty?\
+    \ str) #t]\n      [(char=? (first str) (last str)) (is-palindrome (rest (butlast\
+    \ str)))]\n      [else #f]))\n  (list (apply string (aux s (first c))) (is-palindrome\
+    \ (apply string (aux s (first c))))))\n```\n\n##### 20. Hamming distance\nTask\n\
+    \nWe are given two strings, s and t,  of equal length consisting of characters\
+    \ s0, s1,..., sn-1 and t0, t1,..., tn-1. \nWe define the distance between two\
+    \ strings as the number of indices in which the symbols are different.\n\nReturn\
+    \ the distance between the given strings.\n\nExample\n\nfor s = \"coder\" and\
+    \ t = \"hacker\", the output should be 5.\n\nSample Input 1\n\ns: \"coder\"\n\
+    t: \"hacker\"\nSample Output 1\n\n5\nSample Input 2\n\ns: \"1101\"\nt: \"1010\"\
+    \nSample Output 2\n\n3\nSolution\n```\n#lang racket\n", "  (define-values (c-list\
+    \ s-list) (values (string->list c) (string->list s)))\n  (values (list->string\
+    \ (delete-equal c-list s-list)) (is-palindrome (list->string (delete-equal c-list\
+    \ s-list)))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

@@ -8,6 +8,12 @@
 #SBATCH --exclusive
 module load oracle_java julia
 
+LIST_FILES=files.txt
+
+if [ $# -eq 1 ]; then
+  LIST_FILES=$1
+fi
+
 if [ $USER == "a.guha" ]; then
   eval `spack load --sh php lua racket`
 elif [ $USER == "l.phipps-costin" ]; then
@@ -20,7 +26,7 @@ else
 fi
 
 LUA_PATH="${PWD}/luaunit.lua"
-FILE=`sed -n ${SLURM_ARRAY_TASK_ID}p files.txt`
+FILE=`sed -n ${SLURM_ARRAY_TASK_ID}p $LIST_FILES`
 echo $FILE
-python3 problem_evaluator.py --target $FILE --max-workers 24
+#python3 problem_evaluator.py --target $FILE --max-workers 24
 
