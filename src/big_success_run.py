@@ -23,7 +23,7 @@ def checkPassResults(lang,model,temp,docstrings,term):
     with open(passOne) as csvfile:
                 values = reader(csvfile)
                 for v in values:
-                    if v[0] == lang and v[1] == model and v[2] == temp and v[3] == docstrings and v[3] == term:
+                    if v[0] == lang and v[1] == model and v[2] == temp and v[3] == docstrings and v[4] == term:
                         return True
     return False
 
@@ -47,6 +47,6 @@ def main():
                         if result: #we succeeded in a summary, either existing or created now
                             summary = Path('../model_results/'+lang+"-"+model+"-"+temp+'-'+doc+'-'+term+"-summary.csv")
                             print(f'adding results to pass at k for {summary}')
-                            evaluate_functional_correctness(summary)         
+                            evaluate_functional_correctness(summary,lang,model,temp,doc,term)         
 if __name__ == "__main__":                  
     main()
