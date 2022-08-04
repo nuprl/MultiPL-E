@@ -1,0 +1,139 @@
+name: HumanEval_147_get_max_triples
+language: rkt
+prompt: "#lang racket\n\n;; You are given a positive integer n. You have to create\
+  \ an integer list a of length n.\n;; For each i (1 \u2264 i \u2264 n), the value\
+  \ of a[i] = i * i - i + 1.\n;; Return the number of triples (a[i], a[j], a[k]) of\
+  \ a where i < j < k, \n;; and a[i] + a[j] + a[k] is a multiple of 3.\n;; Example\
+  \ :\n;; >>> (get_max_triples 5)\n;; 1\n(define (get_max_triples n)\n"
+tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate get_max_triples))\n\
+  \    (check-equal? (candidate 5) 1)\n    (check-equal? (candidate 6) 4)\n    (check-equal?\
+  \ (candidate 10) 36)\n    (check-equal? (candidate 100) 53361)\n))\n\n(test-humaneval)"
+completions: ["  (define (get-triples lst)\n    (for/fold ([count 0]) ([i (in-list\
+    \ lst)]\n                           [j (in-list (rest lst))]\n               \
+    \            [k (in-list (rest (rest lst)))])\n      (if (and (< i j) (< j k)\
+    \ (zero? (modulo (+ i j k) 3)))\n          (add1 count)\n          count)))\n\
+    \  (get-triples (for/list ([i (in-range n)])\n                 (- (* i i) i 1))))\n",
+  "  (define (get-a i)\n    (+ (* i i) (* -1 i) 1))\n  (define (get-triples a i j\
+    \ k)\n    (define (get-triple a i j k)\n      (list (list (list-ref a i) (list-ref\
+    \ a j) (list-ref a k))))\n    (cond ((and (< i j) (< j k) (< k (length a)))\n\
+    \           (append (get-triple a i j k)\n                   (get-triples a i\
+    \ (+ j 1) (+ k 1))))\n          ((and (< i j) (< j k) (<= k (length a)))\n   \
+    \        (get-triples a (+ i 1) (+ j 1) (+ k 1)))\n          (else '())))\n  (define\
+    \ (is-multiple-of-3? x)\n    (= (modulo x 3) 0))\n  (define (is-sum-multiple-of-3?\
+    \ a i j k)\n    (is-multiple-of-3? (+ (list-ref a i) (list-ref a j) (list-ref\
+    \ a k))))\n  (define (get-triples-sum-multiple-of-3 a)\n    (filter (lambda (x)\
+    \ (is-sum-multiple-of-3? a (list-ref x 0) (list-ref x 1) (list-ref x 2)))\n  \
+    \          (get-triples a 0 1 2)))\n  (length (get-triples-sum-multiple-of-3 (build-list\
+    \ n get-a))))\n", "  (define (get-a-i i)\n    (+ (* i i) (- i 1)))\n  (define\
+    \ (get-triples a i j k)\n    (cond\n      [(and (< i j) (< j k) (< k (length a)))\n\
+    \       (cond\n         [(= (modulo (+ (list-ref a i) (list-ref a j) (list-ref\
+    \ a k)) 3) 0)\n          (+ 1 (get-triples a i (+ j 1) (+ k 1)))]\n         [else\
+    \ (get-triples a i (+ j 1) (+ k 1))])]\n      [else 0]))\n  (define (get-triples-list\
+    \ a i)\n    (cond\n      [(< i (length a))\n       (+ (get-triples a i (+ i 1)\
+    \ (+ i 2)) (get-triples-list a (+ i 1)))]\n      [else 0]))\n  (get-triples-list\
+    \ (build-list n get-a-i) 0))\n", "  (define (get-triples lst)\n    (cond ((null?\
+    \ lst) 0)\n          ((null? (cdr lst)) 0)\n          ((null? (cddr lst)) 0)\n\
+    \          (else (+ (if (multiple-of-3? (+ (car lst) (cadr lst) (caddr lst)))\
+    \ 1 0)\n                  (get-triples (cdr lst))))))\n  (get-triples (build-list\
+    \ n (lambda (x) (- (* x x) x 1)))))\n", "  (define (a i)\n    (+ (* i i) (- i\
+    \ 1)))\n  (define (triples lst)\n    (for/fold ([count 0])\n              ([i\
+    \ (in-range (add1 (length lst)))])\n      (for/fold ([count count])\n        \
+    \        ([j (in-range i (length lst))])\n        (for/fold ([count count])\n\
+    \                  ([k (in-range j (length lst))])\n          (if (zero? (modulo\
+    \ (+ (list-ref lst i) (list-ref lst j) (list-ref lst k)) 3))\n              (add1\
+    \ count)\n              count)))))\n  (triples (build-list n a)))\n", "  (let\
+    \ ([a (build-list n (\u03BB (i) (+ (* i i) (- i 1))))])\n    (for/fold ([count\
+    \ 0]) ([i (in-range (add1 n))] [j (in-range (add1 n))] [k (in-range (add1 n))])\n\
+    \      (if (and (< i j) (< j k) (zero? (modulo (+ (list-ref a i) (list-ref a j)\
+    \ (list-ref a k)) 3)))\n          (add1 count)\n          count))))\n", "  (define\
+    \ (triples lst)\n    (cond\n      [(empty? lst) 0]\n      [(empty? (rest lst))\
+    \ 0]\n      [(empty? (rest (rest lst))) 0]\n      [else (+ (if (zero? (modulo\
+    \ (+ (first lst) (second lst) (third lst)) 3)) 1 0)\n               (triples (rest\
+    \ lst)))]))\n  (triples (for/list ([i (in-range 1 (+ n 1))])\n               \
+    \     (- (* i i) i 1))))\n", "  (define (get-a-i i)\n    (+ (* i i) (- i 1)))\n\
+    \  (define (get-a-j i j)\n    (get-a-i j))\n  (define (get-a-k i j k)\n    (get-a-i\
+    \ k))\n  (define (is-multiple-of-3? a b c)\n    (= (modulo (+ a b c) 3) 0))\n\
+    \  (define (get-triples i j k)\n    (if (= k n)\n        0\n        (if (is-multiple-of-3?\
+    \ (get-a-i i) (get-a-j i j) (get-a-k i j k))\n            (+ 1 (get-triples i\
+    \ j (+ k 1)))\n            (get-triples i j (+ k 1)))))\n  (define (get-triples-j\
+    \ i j)\n    (if (= j n)\n        0\n        (+ (get-triples i j (+ j 1)) (get-triples-j\
+    \ i (+ j 1)))))\n  (define (get-triples-i i)\n    (if (= i n)\n        0\n   \
+    \     (+ (get-triples-j i (+ i 1)) (get-triples-i (+ i 1)))))\n  (get-triples-i\
+    \ 1))\n", "  (define (get-a i)\n    (if (= i 1)\n        1\n        (+ (* i i)\
+    \ (- i))))\n  (define (get-triples i j k)\n    (if (= i j)\n        (get-triples\
+    \ (+ i 1) (+ j 1) (+ k 1))\n        (if (= j k)\n            (get-triples i (+\
+    \ j 1) (+ k 1))\n            (if (= i k)\n                (get-triples i j (+\
+    \ k 1))\n                (if (= (modulo (+ (get-a i) (get-a j) (get-a k)) 3) 0)\n\
+    \                    (+ 1 (get-triples i j (+ k 1)))\n                    (get-triples\
+    \ i j (+ k 1)))))))\n  (get-triples 1 2 3))\n", "  (define (triples lst)\n   \
+    \ (define (triples-iter lst acc)\n      (cond ((null? lst) acc)\n            ((null?\
+    \ (cdr lst)) acc)\n            ((null? (cddr lst)) acc)\n            (else (triples-iter\
+    \ (cdr lst) (+ acc (triples-iter2 (cdr lst) (cddr lst)))))))\n    (define (triples-iter2\
+    \ lst1 lst2 acc)\n      (cond ((null? lst1) acc)\n            ((null? lst2) acc)\n\
+    \            (else (triples-iter2 (cdr lst1) (cdr lst2) (+ acc (triples-iter3\
+    \ lst1 lst2))))))\n    (define (triples-iter3 lst1 lst2 acc)\n      (cond ((null?\
+    \ lst1) acc)\n            ((null? lst2) acc)\n            (else (triples-iter3\
+    \ (cdr lst1) (cdr lst2) (+ acc (if (multiple-of-3? (+ (car lst1) (car lst2) (car\
+    \ (cdr lst2)))) 1 0))))))\n    (triples-iter lst 0))\n  (triples (build-list n\
+    \ (lambda (x) (+ (* x x) (- x 1)))))\n  )\n", "  (define (get_max_triples-iter\
+    \ n i acc)\n    (if (= i n)\n        acc\n        (get_max_triples-iter n (+ i\
+    \ 1) (+ acc (get_max_triples-iter-2 n i)))))\n  (define (get_max_triples-iter-2\
+    \ n i)\n    (define (get_max_triples-iter-2-iter n i j acc)\n      (if (= j n)\n\
+    \          acc\n          (get_max_triples-iter-2-iter n i (+ j 1) (+ acc (get_max_triples-iter-2-iter-2\
+    \ n i j)))))\n    (get_max_triples-iter-2-iter n i (+ i 1) 0))\n  (define (get_max_triples-iter-2-iter-2\
+    \ n i j)\n    (define (get_max_triples-iter-2-iter-2-iter n i j k acc)\n     \
+    \ (if (= k n)\n          acc\n          (get_max_triples-iter-2-iter-2-iter n\
+    \ i j (+ k 1) (+ acc (get_max_triples-iter-2-iter-2-iter-2 n i j k)))))\n    (get_max_triples-iter-2-iter-2-iter\
+    \ n i j (+ j 1) 0))\n  (define (get_max_triples-iter-2-iter-2-iter-2 n i j k)\n\
+    \    (if (= (modulo (+ (- (* i i) i 1) (- (* j j) j 1) (- (* k k) k 1)) 3) 0)\n\
+    \        1\n        0))\n  (get_max_triples-iter n 1 0))\n", "  (define (get_max_triples-iter\
+    \ n i acc)\n    (if (= i n)\n        acc\n        (get_max_triples-iter n (+ i\
+    \ 1) (+ acc (get_max_triples-iter-2 i (+ i 1) n)))))\n  (get_max_triples-iter\
+    \ n 1 0))\n", "  (define (get_max_triples-iter n i acc)\n    (if (= i n)\n   \
+    \     acc\n        (get_max_triples-iter n (+ i 1) (+ acc (get_max_triples-iter-2\
+    \ n i)))))\n  (define (get_max_triples-iter-2 n i)\n    (define (get_max_triples-iter-2-iter\
+    \ n i j acc)\n      (if (= j n)\n          acc\n          (get_max_triples-iter-2-iter\
+    \ n i (+ j 1) (+ acc (get_max_triples-iter-2-iter-2 n i j)))))\n    (get_max_triples-iter-2-iter\
+    \ n i (+ i 2) 0))\n  (get_max_triples-iter n 1 0))\n", "  (let ([a (for/list ([i\
+    \ (in-range n)])\n                    (+ (* i i) (- i 1)))])\n    (for/sum ([i\
+    \ (in-range n)]\n              [j (in-range i n)]\n              [k (in-range\
+    \ j n)])\n      (if (zero? (modulo (+ (list-ref a i) (list-ref a j) (list-ref\
+    \ a k)) 3))\n          1\n          0))))\n", "  (define (get-a-i i)\n    (+ (*\
+    \ i i) (- i 1)))\n  (define (get-a-i-j i j)\n    (+ (get-a-i i) (get-a-i j)))\n\
+    \  (define (get-a-i-j-k i j k)\n    (+ (get-a-i-j i j) (get-a-i k)))\n  (define\
+    \ (get-triples-count i j k)\n    (if (and (< i j) (< j k) (< k n))\n        (+\
+    \ 1 (get-triples-count i j (+ k 1)))\n        0))\n  (define (get-triples-count-j\
+    \ i j)\n    (if (< j n)\n        (+ (get-triples-count i j (+ j 1)) (get-triples-count-j\
+    \ i (+ j 1)))\n        0))\n  (define (get-triples-count-i i)\n    (if (< i n)\n\
+    \        (+ (get-triples-count-j i (+ i 1)) (get-triples-count-i (+ i 1)))\n \
+    \       0))\n  (get-triples-count-i 1))\n", "  (define (get_max_triples_iter n\
+    \ i acc)\n    (if (= i n)\n        acc\n        (get_max_triples_iter n (+ i 1)\
+    \ (+ acc (get_max_triples_iter_2 i n)))))\n  (get_max_triples_iter n 1 0))\n",
+  "  (define (get-a i)\n    (+ (* i i) (- i 1)))\n  (define (get-triples a)\n    (define\
+    \ (get-triples-iter a i j k)\n      (cond\n        [(>= i (length a)) 0]\n   \
+    \     [(>= j (length a)) (get-triples-iter a (+ i 1) (+ i 2) (+ i 3))]\n     \
+    \   [(>= k (length a)) (get-triples-iter a i (+ j 1) (+ j 2))]\n        [(= (modulo\
+    \ (+ (list-ref a i) (list-ref a j) (list-ref a k)) 3) 0)\n         (+ 1 (get-triples-iter\
+    \ a i j (+ k 1)))]\n        [else (get-triples-iter a i j (+ k 1))]))\n    (get-triples-iter\
+    \ a 0 1 2))\n  (get-triples (build-list n get-a)))\n", "  (define (get-triples\
+    \ lst)\n    (let loop ([lst lst] [acc 0])\n      (if (null? lst)\n          acc\n\
+    \          (loop (cdr lst) (if (and (not (null? (cdr lst))) (not (null? (cddr\
+    \ lst))))\n                              (+ acc (if (zero? (modulo (+ (car lst)\
+    \ (cadr lst) (caddr lst)) 3))\n                                         1\n  \
+    \                                       0))\n                              acc)))))\n\
+    \  (get-triples (for/list ([i (in-range 1 (+ n 1))])\n                 (list i\
+    \ (- (* i i) i 1)))))\n", "  (define (get_max_triples-iter n acc)\n    (cond ((=\
+    \ n 1) acc)\n          ((= n 2) (add1 acc))\n          (else (get_max_triples-iter\
+    \ (sub1 n) (add1 acc)))))\n  (get_max_triples-iter n 0))\n", "  (define (a i)\n\
+    \    (+ (* i i) (- i 1)))\n  (define (triples a)\n    (define (triples-iter a\
+    \ i j k)\n      (cond\n        [(> i (- (length a) 2)) 0]\n        [(> j (- (length\
+    \ a) 1)) (triples-iter a (+ i 1) (+ i 2) (+ i 3))]\n        [(> k (length a))\
+    \ (triples-iter a i (+ j 1) (+ j 2))]\n        [(= (modulo (+ (list-ref a i) (list-ref\
+    \ a j) (list-ref a k)) 3) 0)\n         (+ 1 (triples-iter a i j (+ k 1)))]\n \
+    \       [else (triples-iter a i j (+ k 1))]))\n    (triples-iter a 0 1 2))\n \
+    \ (triples (build-list n a)))\n"]
+stop_tokens:
+- "\n(define "
+- "\n#|"
+- "\n;"
+- "\n("

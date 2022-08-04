@@ -1,0 +1,217 @@
+name: HumanEval_111_histogram
+language: rkt
+prompt: "#lang racket\n\n;; Given a string representing a space separated lowercase\
+  \ letters, return a hash\n;; of the letter with the most repetition and containing\
+  \ the corresponding count.\n;; If several letters have the same occurrence, return\
+  \ all of them.\n;; Example:\n;; >>> (histogram \"a b c\")\n;; #hash((\"a\" .  1)\
+  \ (\"b\" .  1) (\"c\" .  1))\n;; >>> (histogram \"a b b a\")\n;; #hash((\"a\" .\
+  \  2) (\"b\" .  2))\n;; >>> (histogram \"a b c a b\")\n;; #hash((\"a\" .  2) (\"\
+  b\" .  2))\n;; >>> (histogram \"b b b b a\")\n;; #hash((\"b\" .  4))\n;; >>> (histogram\
+  \ \"\")\n;; #hash()\n(define (histogram test)\n"
+tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate histogram))\n\
+  \    (check-equal? (candidate \"a b b a\") #hash((\"a\" .  2) (\"b\" .  2)))\n \
+  \   (check-equal? (candidate \"a b c a b\") #hash((\"a\" .  2) (\"b\" .  2)))\n\
+  \    (check-equal? (candidate \"a b c d g\") #hash((\"a\" .  1) (\"b\" .  1) (\"\
+  c\" .  1) (\"d\" .  1) (\"g\" .  1)))\n    (check-equal? (candidate \"r t g\") #hash((\"\
+  r\" .  1) (\"t\" .  1) (\"g\" .  1)))\n    (check-equal? (candidate \"b b b b a\"\
+  ) #hash((\"b\" .  4)))\n    (check-equal? (candidate \"r t g\") #hash((\"r\" . \
+  \ 1) (\"t\" .  1) (\"g\" .  1)))\n    (check-equal? (candidate \"\") #hash())\n\
+  \    (check-equal? (candidate \"a\") #hash((\"a\" .  1)))\n))\n\n(test-humaneval)"
+completions: ["  (define (histogram-helper test-list max-count max-count-letters)\n\
+    \    (if (null? test-list)\n        max-count-letters\n        (let* ([letter\
+    \ (car test-list)]\n               [count (hash-ref max-count-letters letter 0)])\n\
+    \          (hash-set! max-count-letters letter (+ count 1))\n          (if (>\
+    \ count max-count)\n              (histogram-helper (cdr test-list) count max-count-letters)\n\
+    \              (histogram-helper (cdr test-list) max-count max-count-letters)))))\n\
+    \  (histogram-helper (string-&gt;list test) 0 (make-hash)))\n</code>\n", "  (hash-ref\
+    \ (histogram-helper (string->list test) (make-hash)) 'max))\n", "  (hash-from-alist\n\
+    \   (for/fold ([result '()])\n             ([letter (in-list (string-&gt;list\
+    \ test))])\n     (let ([count (count (string-&gt;list test) letter)])\n      \
+    \ (if (equal? count (apply max (map cdr result)))\n           (cons (cons letter\
+    \ count) result)\n           (if (&gt; count (apply max (map cdr result)))\n \
+    \              (list (cons letter count))\n               result)))))))\n</code>\n\
+    I am not sure if I am using <code>for/fold</code> correctly. I am also not sure\
+    \ if I am using <code>hash-from-alist</code> correctly.\n\n\nA:\n\nYou can use\
+    \ <code>for/fold</code> to build a list of pairs, and then use <code>hash-from-alist</code>\
+    \ to convert it to a hash.\n<code>(define (histogram test)\n  (hash-from-alist\n\
+    \   (for/fold ([result '()])\n             ([letter (in-list (string-&gt;list\
+    \ test))])\n     (let ([count (count (string-&gt;list test) letter)])\n      \
+    \ (if (equal? count (apply max (map cdr result)))\n           (cons (cons letter\
+    \ count) result)\n           (if (&gt; count (apply max (map cdr result)))\n \
+    \              (list (cons letter count))\n               result))))))\n</code>\n",
+  "  (define (histogram-helper test result)\n    (cond\n      [(empty? test) result]\n\
+    \      [else\n       (define (update-result letter result)\n         (define (update-result-helper\
+    \ letter result)\n           (cond\n             [(empty? result) (hash-ref result\
+    \ letter 0)]\n             [else\n              (define (update-result-helper-helper\
+    \ letter result)\n                (cond\n                  [(equal? letter (car\
+    \ (car result))) (cons (cons letter (+ 1 (cdr (car result)))) (cdr result))]\n\
+    \                  [else (cons (car result) (update-result-helper-helper letter\
+    \ (cdr result)))]))\n              (update-result-helper-helper letter result)]))\n\
+    \         (hash-set! result letter (update-result-helper letter result)))\n  \
+    \     (update-result (car test) result)\n       (histogram-helper (cdr test) result)]))\n\
+    \  (histogram-helper (string-&gt;list test) (make-hash)))\n</code>\nI'm getting\
+    \ the following error:\n<code>histogram.rkt:16:0: hash-ref: contract violation\n\
+    \  expected: hash?\n  given: '()\n  in: (hash-ref result letter 0)\nhistogram.rkt:16:0:\
+    \ hash-ref: contract violation\n  expected: hash?\n  given: '()\n  in: (hash-ref\
+    \ result letter 0)\nhistogram.rkt:16:0: hash-ref: contract violation\n  expected:\
+    \ hash?\n  given: '()\n  in: (hash-ref result letter 0)\nhistogram.rkt:16:0: hash-ref:\
+    \ contract violation\n  expected: hash?\n  given: '()\n  in: (hash-ref result\
+    \ letter 0)\nhistogram.rkt:16:0: hash-ref: contract violation\n  expected: hash?\n\
+    \  given: '()\n  in: (hash-ref result letter 0)\nhistogram.rkt:16:0: hash-ref:\
+    \ contract violation\n  expected: hash?\n  given: '()\n  in: (hash-ref result\
+    \ letter 0)\nhistogram.rkt:", "  (define (histogram-helper test max-count max-count-letters)\n\
+    \    (cond [(empty? test) max-count-letters]\n          [else\n           (define\
+    \ letter (first test))\n           (define count (hash-ref max-count-letters letter\
+    \ 0))\n           (define new-count (add1 count))\n           (define new-max-count-letters\
+    \ (hash-set max-count-letters letter new-count))\n           (define new-max-count\
+    \ (max new-max-count max-count))\n           (histogram-helper (rest test) new-max-count\
+    \ new-max-count-letters)]))\n  (histogram-helper (string-&gt;list test) 0 (make-hash)))\n\
+    </code>\nI'm not sure if I'm doing this right. I'm not sure if I'm using <code>hash-set</code>\
+    \ correctly. I'm not sure if I'm using <code>hash-ref</code> correctly. I'm not\
+    \ sure if I'm using <code>make-hash</code> correctly. I'm not sure if I'm using\
+    \ <code>max</code> correctly. I'm not sure if I'm using <code>add1</code> correctly.\
+    \ I'm not sure if I'm using <code>string-&gt;list</code> correctly. I'm not sure\
+    \ if I'm using <code>empty?</code> correctly. I'm not sure if I'm using <code>first</code>\
+    \ correctly. I'm not sure if I'm using <code>rest</code> correctly. I'm not sure\
+    \ if I'm using <code>define</code> correctly. I'm not sure if I'm using <code>cond</code>\
+    \ correctly. I'm not sure if I'm using <code>lambda</code> correctly. I'm not\
+    \ sure if I'm using <code>let</code> correctly. I'm not sure if I'm using <code>let*</code>\
+    \ correctly. I'm not sure if I'm using <code>letrec</code> correctly. I'm not\
+    \ sure if I'm using <code>letrec*</code> correctly. I'm not sure if I'm using\
+    \ <code>let-values</code> correctly. I'm not sure if I'm using <code>let*-values</code",
+  "  (define (histogram-helper test max-count max-letter)\n    (if (empty? test)\n\
+    \        (hash-ref (hash-set (hash) max-letter max-count) max-letter)\n      \
+    \  (let ((letter (first test))\n              (rest (rest test)))\n          (if\
+    \ (hash-has-key? (hash) letter)\n              (hash-set (hash) letter (+ 1 (hash-ref\
+    \ (hash) letter)))\n              (hash-set (hash) letter 1))\n          (if (>\
+    \ (hash-ref (hash) letter) max-count)\n              (histogram-helper rest (hash-ref\
+    \ (hash) letter) letter)\n              (histogram-helper rest max-count max-letter)))))\n\
+    \  (histogram-helper test 0 \"\"))\n", "  (define (histogram-helper test max-count)\n\
+    \    (cond\n      [(empty? test) (hash)]\n      [(= (hash-ref (histogram-helper\
+    \ (rest test) max-count) (first test) 0) max-count)\n       (hash-set (histogram-helper\
+    \ (rest test) max-count) (first test) (+ 1 (hash-ref (histogram-helper (rest test)\
+    \ max-count) (first test) 0)))]\n      [else (histogram-helper (rest test) max-count)]))\n\
+    \  (histogram-helper test (hash-ref (histogram-helper test 0) (first test) 0)))\n",
+  "  (define (histogram-helper test max-count)\n    (if (empty? test)\n        (make-hash)\n\
+    \        (let* ([letter (first test)]\n               [count (hash-ref (histogram-helper\
+    \ (rest test) max-count) letter 0)])\n          (hash-set (histogram-helper (rest\
+    \ test) max-count) letter (+ count 1)))))\n  (hash-filter (histogram-helper (string-&gt;list\
+    \ test) 0)\n               (lambda (key value)\n                 (= value (hash-fold\
+    \ max 0 (histogram-helper (string-&gt;list test) 0))))))\n</code>\nI'm not sure\
+    \ how to get the max count from the hash. I tried using <code>hash-fold</code>\
+    \ but I'm not sure how to use it.\n\n\nA:\n\nI think you're overcomplicating the\
+    \ problem. The solution can be done in a single pass, without the need to recurse.\n\
+    <code>(define (histogram test)\n  (let loop ([letters (string-&gt;list test)]\n\
+    \             [counts (make-hash)])\n    (if (empty? letters)\n        counts\n\
+    \        (let ([letter (first letters)])\n          (hash-update counts letter\
+    \ add1 0)\n          (loop (rest letters) counts)))))\n</code>\n", "  (define\
+    \ (histogram-helper test max-count max-letters)\n    (if (empty? test)\n     \
+    \   max-letters\n        (let ((letter (first test))\n              (rest (rest\
+    \ test)))\n          (if (hash-has-key? max-letters letter)\n              (histogram-helper\
+    \ rest\n                                (max max-count (hash-ref max-letters letter))\n\
+    \                                (hash-set max-letters letter\n              \
+    \                            (add1 (hash-ref max-letters letter))))\n        \
+    \      (histogram-helper rest\n                                (max max-count\
+    \ 1)\n                                (hash-set max-letters letter 1))))))\n \
+    \ (define (histogram-filter max-count max-letters)\n    (hash-filter (lambda (key\
+    \ value)\n                   (= value max-count))\n                 max-letters))\n\
+    \  (histogram-filter (histogram-helper test 0 (make-hash))\n                 \
+    \   (make-hash)))\n", "  (define (histogram-helper test max-count max-count-letters)\n\
+    \    (cond [(empty? test) max-count-letters]\n          [else\n           (let*\
+    \ ([letter (first test)]\n                  [count (hash-ref max-count-letters\
+    \ letter 0)])\n             (hash-set! max-count-letters letter (+ count 1))\n\
+    \             (cond [(> (hash-ref max-count-letters letter) max-count)\n     \
+    \               (hash-set! max-count (+ count 1))\n                    (histogram-helper\
+    \ (rest test) max-count max-count-letters)]\n                   [else (histogram-helper\
+    \ (rest test) max-count max-count-letters)]))]))\n  (histogram-helper (string-&gt;list\
+    \ test) 0 (make-hash)))\n</code>\n", "  (define (histogram-helper test max-count)\n\
+    \    (cond\n      [(empty? test) (hash)]\n      [(hash-ref (histogram-helper (rest\
+    \ test) max-count) (first test) (lambda () 0))\n       (hash-set (histogram-helper\
+    \ (rest test) max-count) (first test) (+ 1 (hash-ref (histogram-helper (rest test)\
+    \ max-count) (first test) (lambda () 0))))]\n      [else (histogram-helper (rest\
+    \ test) max-count)]))\n  (define (histogram-helper2 test max-count)\n    (cond\n\
+    \      [(empty? test) (hash)]\n      [(>= (hash-ref (histogram-helper2 (rest test)\
+    \ max-count) (first test) (lambda () 0)) max-count)\n       (hash-set (histogram-helper2\
+    \ (rest test) max-count) (first test) (+ 1 (hash-ref (histogram-helper2 (rest\
+    \ test) max-count) (first test) (lambda () 0))))]\n      [else (histogram-helper2\
+    \ (rest test) max-count)]))\n  (histogram-helper2 (histogram-helper test 0) 0))\n",
+  "  (define (histogram-helper test count)\n    (cond\n      [(empty? test) count]\n\
+    \      [else\n       (let ([letter (first test)])\n         (cond\n          \
+    \ [(hash-has-key? count letter)\n            (hash-set count letter (+ 1 (hash-ref\
+    \ count letter)))]\n           [else (hash-set count letter 1)]))\n       (histogram-helper\
+    \ (rest test) count)]))\n  (histogram-helper (string->list test) (make-hash)))\n",
+  "  (define (histogram-helper test max-count)\n    (cond [(empty? test) (hash)]\n\
+    \          [(hash-ref (histogram-helper (rest test) max-count) (first test) max-count)\n\
+    \           (hash-set (histogram-helper (rest test) max-count) (first test) (+\
+    \ 1 (hash-ref (histogram-helper (rest test) max-count) (first test) max-count)))]\n\
+    \          [else (hash-set (histogram-helper (rest test) max-count) (first test)\
+    \ 1)]))\n  (define (max-count test)\n    (cond [(empty? test) 0]\n          [(>\
+    \ (hash-ref (histogram-helper (rest test) (max-count (rest test))) (first test)\
+    \ (max-count (rest test))) (max-count (rest test)))\n           (hash-ref (histogram-helper\
+    \ (rest test) (max-count (rest test))) (first test) (max-count (rest test)))]\n\
+    \          [else (max-count (rest test))]))\n  (define (histogram-helper2 test\
+    \ max-count)\n    (cond [(empty? test) (hash)]\n          [(= (hash-ref (histogram-helper\
+    \ (rest test) max-count) (first test) max-count) max-count)\n           (hash-set\
+    \ (histogram-helper2 (rest test) max-count) (first test) max-count)]\n       \
+    \   [else (histogram-helper2 (rest test) max-count)]))\n  (histogram-helper2 (string->list\
+    \ test) (max-count (string->list test))))\n", "  (let ([letters (string-&gt;list\
+    \ test)])\n    (hash-map (\u03BB (letter)\n                (list letter (count\
+    \ letter letters)))\n              (remove-duplicates letters))))\n</code>\n",
+  "  (hash-from-alist (histogram-helper (string-split test))))\n", "  (define (histogram-helper\
+    \ test max-count)\n    (if (empty? test)\n        #hash()\n        (let* ([letter\
+    \ (first test)]\n               [count (count letter test)]\n               [max-count\
+    \ (if (> count max-count) count max-count)])\n          (if (= count max-count)\n\
+    \              (hash-set (histogram-helper (rest test) max-count) letter count)\n\
+    \              (histogram-helper (rest test) max-count)))))\n  (histogram-helper\
+    \ (string->list test) 0))\n", "  (define (histogram-helper test-list)\n    (define\
+    \ (histogram-helper-helper test-list-list)\n      (cond\n        [(empty? test-list-list)\
+    \ empty]\n        [(empty? (cdr test-list-list)) (car test-list-list)]\n     \
+    \   [else (cons (car test-list-list) (histogram-helper-helper (cdr test-list-list)))]))\n\
+    \    (cond\n      [(empty? test-list) empty]\n      [(empty? (cdr test-list))\
+    \ (histogram-helper-helper (car test-list))]\n      [else (cons (histogram-helper-helper\
+    \ (car test-list)) (histogram-helper (cdr test-list)))]))\n  (define (histogram-helper-2\
+    \ test-list)\n    (cond\n      [(empty? test-list) empty]\n      [(empty? (cdr\
+    \ test-list)) (car test-list)]\n      [else (cons (car test-list) (histogram-helper-2\
+    \ (cdr test-list)))]))\n  (define (histogram-helper-3 test-list)\n    (cond\n\
+    \      [(empty? test-list) empty]\n      [(empty? (cdr test-list)) (car test-list)]\n\
+    \      [else (cons (car test-list) (histogram-helper-3 (cdr test-list)))]))\n\
+    \  (define (histogram-helper-4 test-list)\n    (cond\n      [(empty? test-list)\
+    \ empty]\n      [(empty? (cdr test-list)) (car test-list)]\n      [else (cons\
+    \ (car test-list) (histogram-helper-4 (cdr test-list)))]))\n  (define (histogram-helper-5\
+    \ test-list)\n    (cond\n      [(empty? test-list) empty]\n      [(empty? (cdr\
+    \ test-list)) (car test-list)]\n      [else (cons (car test-list) (histogram-helper-5\
+    \ (cdr test-list)))]))\n  (define (histogram-helper-6 test-list", "  (define (histogram-helper\
+    \ test result)\n    (cond\n      [(empty? test) result]\n      [else\n       (let*\
+    \ ([letter (first test)]\n              [count (hash-ref result letter 0)])\n\
+    \         (hash-set! result letter (+ count 1))\n         (histogram-helper (rest\
+    \ test) result))]))\n  (histogram-helper test (make-hash)))\n", "  (define (histogram-helper\
+    \ test max-count)\n    (cond\n      [(empty? test) (hash)]\n      [(hash-has-key?\
+    \ max-count (first test))\n       (hash-set max-count (first test) (+ 1 (hash-ref\
+    \ max-count (first test))))]\n      [else (hash-set max-count (first test) 1)]))\n\
+    \  (define (histogram-helper2 test max-count)\n    (cond\n      [(empty? test)\
+    \ (hash)]\n      [(hash-has-key? max-count (first test))\n       (hash-set max-count\
+    \ (first test) (+ 1 (hash-ref max-count (first test))))]\n      [else (hash-set\
+    \ max-count (first test) 1)]))\n  (define (histogram-helper3 test max-count)\n\
+    \    (cond\n      [(empty? test) (hash)]\n      [(hash-has-key? max-count (first\
+    \ test))\n       (hash-set max-count (first test) (+ 1 (hash-ref max-count (first\
+    \ test))))]\n      [else (hash-set max-count (first test) 1)]))\n  (define (histogram-helper4\
+    \ test max-count)\n    (cond\n      [(empty? test) (hash)]\n      [(hash-has-key?\
+    \ max-count (first test))\n       (hash-set max-count (first test) (+ 1 (hash-ref\
+    \ max-count (first test))))]\n      [else (hash-set max-count (first test) 1)]))\n\
+    \  (define (histogram-helper5 test max-count)\n    (cond\n      [(empty? test)\
+    \ (hash)]\n      [(hash-has-key? max-count (first test))\n       (hash-set max-count\
+    \ (first test) (+ 1 (hash-ref max-count (first test))))]\n      [else (hash-set\
+    \ max-count (first test) 1)]))\n  (define (histogram-helper6 test max-count)\n\
+    \    (cond\n      [(empty? test) (hash)]\n      [(hash-has-key? max-count (first\
+    \ test))\n       (hash-set max-count (first test", "  (hash-map-values (hash-map-keys\
+    \ (hash-from-list (string-split test #\\space)) (\u03BB (k) (count (string-split\
+    \ test #\\space) k))) (\u03BB (v) (length (filter (\u03BB (x) (= x v)) (hash-map-values\
+    \ (hash-map-keys (hash-from-list (string-split test #\\space)) (\u03BB (k) (count\
+    \ (string-split test #\\space) k))) (\u03BB (v) (length (filter (\u03BB (x) (=\
+    \ x v)) (hash-map-values (hash-from-list (string-split test #\\space)) (\u03BB\
+    \ (v) v)))))))))))\n"]
+stop_tokens:
+- "\n(define "
+- "\n#|"
+- "\n;"
+- "\n("

@@ -1,0 +1,272 @@
+name: HumanEval_124_valid_date
+language: rkt
+prompt: "#lang racket\n\n;; You have to write a function which validates a given date\
+  \ string and\n;; returns #t if the date is valid otherwise #f.\n;; The date is valid\
+  \ if all of the following rules are satisfied:\n;; 1. The date string is not empty.\n\
+  ;; 2. The number of days is not less than 1 or higher than 31 days for months 1,3,5,7,8,10,12.\
+  \ And the number of days is not less than 1 or higher than 30 days for months 4,6,9,11.\
+  \ And, the number of days is not less than 1 or higher than 29 for the month 2.\n\
+  ;; 3. The months should not be less than 1 or higher than 12.\n;; 4. The date should\
+  \ be in the format: mm-dd-yyyy\n;; >>> (valid_date \"03-11-2000\")\n;; #t\n;; >>>\
+  \ (valid_date \"15-01-2012\")\n;; #f\n;; >>> (valid_date \"04-0-2040\")\n;; #f\n\
+  ;; >>> (valid_date \"06-04-2020\")\n;; #t\n;; >>> (valid_date \"06/04/2020\")\n\
+  ;; #f\n(define (valid_date date)\n"
+tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate valid_date))\n\
+  \    (check-equal? (candidate \"03-11-2000\") #t)\n    (check-equal? (candidate\
+  \ \"15-01-2012\") #f)\n    (check-equal? (candidate \"04-0-2040\") #f)\n    (check-equal?\
+  \ (candidate \"06-04-2020\") #t)\n    (check-equal? (candidate \"01-01-2007\") #t)\n\
+  \    (check-equal? (candidate \"03-32-2011\") #f)\n    (check-equal? (candidate\
+  \ \"\") #f)\n    (check-equal? (candidate \"04-31-3000\") #f)\n    (check-equal?\
+  \ (candidate \"06-06-2005\") #t)\n    (check-equal? (candidate \"21-31-2000\") #f)\n\
+  \    (check-equal? (candidate \"04-12-2003\") #t)\n    (check-equal? (candidate\
+  \ \"04122003\") #f)\n    (check-equal? (candidate \"20030412\") #f)\n    (check-equal?\
+  \ (candidate \"2003-04\") #f)\n    (check-equal? (candidate \"2003-04-12\") #f)\n\
+  \    (check-equal? (candidate \"04-2003\") #f)\n))\n\n(test-humaneval)"
+completions: ["  (define (valid-month month)\n    (and (integer? month)\n        \
+    \ (and (>= month 1) (<= month 12))))\n  (define (valid-day day)\n    (and (integer?\
+    \ day)\n         (and (>= day 1) (<= day 31))))\n  (define (valid-year year)\n\
+    \    (and (integer? year)\n         (and (>= year 1) (<= year 9999))))\n  (define\
+    \ (valid-date-format date)\n    (and (string? date)\n         (regexp-match? #rx\"\
+    ^[0-9]{2}-[0-9]{2}-[0-9]{4}$\" date)))\n  (define (valid-date-parts date)\n  \
+    \  (define (valid-date-parts-helper date)\n      (and (valid-month (string->number\
+    \ (substring date 0 2)))\n           (valid-day (string->number (substring date\
+    \ 3 5)))\n           (valid-year (string->number (substring date 6 10)))))\n \
+    \ (and (valid-date-format date)\n       (valid-date-parts-helper date)))\n", " \
+    \ (define (valid-month month)\n    (and (not (empty? month))\n         (not (empty?\
+    \ (string-&gt;number month)))\n         (not (&lt; (string-&gt;number month) 1))\n\
+    \         (not (&gt; (string-&gt;number month) 12))))\n  (define (valid-day day)\n\
+    \    (and (not (empty? day))\n         (not (empty? (string-&gt;number day)))\n\
+    \         (not (&lt; (string-&gt;number day) 1))\n         (not (&gt; (string-&gt;number\
+    \ day) 31))))\n  (define (valid-year year)\n    (and (not (empty? year))\n   \
+    \      (not (empty? (string-&gt;number year)))\n         (not (&lt; (string-&gt;number\
+    \ year) 1))))\n  (define (valid-date-format date)\n    (and (not (empty? date))\n\
+    \         (regexp-match? #rx\"^[0-9]{2}-[0-9]{2}-[0-9]{4}$\" date)))\n  (define\
+    \ (valid-date-parts date)\n    (let ((date-parts (string-split date #\\-)))\n\
+    \      (and (valid-month (list-ref date-parts 0))\n           (valid-day (list-ref\
+    \ date-parts 1))\n           (valid-year (list-ref date-parts 2)))))\n  (and (valid-date-format\
+    \ date)\n       (valid-date-parts date)))\n", "  (and (not (empty? date))\n  \
+    \     (valid-date-format? date)\n       (valid-date-numbers? date)))\n", "  (define\
+    \ (valid-month month)\n    (and (not (empty? month))\n         (not (< (string->number\
+    \ month) 1))\n         (not (> (string->number month) 12))))\n  (define (valid-day\
+    \ day)\n    (and (not (empty? day))\n         (not (< (string->number day) 1))\n\
+    \         (not (> (string->number day) 31))))\n  (define (valid-year year)\n \
+    \   (and (not (empty? year))\n         (not (< (string->number year) 1))))\n \
+    \ (define (valid-date-format date)\n    (regexp-match? #rx\"^[0-9]{2}-[0-9]{2}-[0-9]{4}$\"\
+    \ date))\n  (define (valid-date-parts date)\n    (let* ([date-parts (string-split\
+    \ date #\\-)]\n           [month (first date-parts)]\n           [day (second\
+    \ date-parts)]\n           [year (third date-parts)])\n      (and (valid-month\
+    \ month)\n           (valid-day day)\n           (valid-year year))))\n  (and\
+    \ (valid-date-format date)\n       (valid-date-parts date)))", "  (define (valid-day\
+    \ day)\n    (and (integer? day)\n         (not (negative? day))\n         (not\
+    \ (> day 31))))\n  (define (valid-month month)\n    (and (integer? month)\n  \
+    \       (not (negative? month))\n         (not (> month 12))))\n  (define (valid-year\
+    \ year)\n    (and (integer? year)\n         (not (negative? year))))\n  (define\
+    \ (valid-date-format date)\n    (and (string? date)\n         (string-length date)\n\
+    \         (string-contains date #\\-)))\n  (define (valid-date-parts date)\n \
+    \   (define (valid-date-part date)\n      (and (string? date)\n           (string-length\
+    \ date)\n           (string-contains date #\\-)))\n    (and (valid-date-part (string-take\
+    \ date 2))\n         (valid-date-part (string-take (string-drop date 3) 2))\n\
+    \         (valid-date-part (string-drop (string-drop date 6) 4))))\n  (define\
+    \ (valid-date-parts-length date)\n    (and (= (string-length (string-take date\
+    \ 2)) 2)\n         (= (string-length (string-take (string-drop date 3) 2)) 2)\n\
+    \         (= (string-length (string-drop (string-drop date 6) 4)) 4)))\n  (define\
+    \ (valid-date-parts-values date)\n    (define (valid-date-part-value date)\n \
+    \     (and (integer? date)\n           (not (negative? date))))\n    (and (valid-date-part-value\
+    \ (string->number (string-take date 2)))\n         (valid-date-part-value (string->number\
+    \ (string-take (string-drop date 3) 2)))\n         (valid-date-part-value (string->number\
+    \ (string-drop (string-drop date 6) 4)))))\n  (define (valid-date-parts-values-range\
+    \ date)\n    (define (valid-date-part-value-range date)\n      (and (integer?\
+    \ date)\n           (not (negative? date))))\n    (and (valid-date-part-", " \
+    \ (define (valid-month month)\n    (and (integer? month)\n         (and (>= month\
+    \ 1) (<= month 12))))\n  (define (valid-day day)\n    (and (integer? day)\n  \
+    \       (and (>= day 1) (<= day 31))))\n  (define (valid-year year)\n    (and\
+    \ (integer? year)\n         (and (>= year 1) (<= year 9999))))\n  (define (valid-date-format\
+    \ date)\n    (and (string? date)\n         (regexp-match #rx\"^[0-9]{2}-[0-9]{2}-[0-9]{4}$\"\
+    \ date)))\n  (define (valid-day-for-month day month)\n    (cond\n      [(and (=\
+    \ month 1) (= month 3) (= month 5) (= month 7) (= month 8) (= month 10) (= month\
+    \ 12))\n       (and (>= day 1) (<= day 31))]\n      [(and (= month 4) (= month\
+    \ 6) (= month 9) (= month 11))\n       (and (>= day 1) (<= day 30))]\n      [(=\
+    \ month 2)\n       (and (>= day 1) (<= day 29))]))\n  (define (valid-date-parts\
+    \ date)\n    (let* ([date-parts (string-split date #\\-)]\n           [month (string->number\
+    \ (list-ref date-parts 0))]\n           [day (string->number (list-ref date-parts\
+    \ 1))]\n           [year (string->number (list-ref date-parts 2))])\n      (and\
+    \ (valid-month month)\n           (valid-day day)\n           (valid-year year)\n\
+    \           (valid-day-for-month day month))))\n  (and (valid-date-format date)\n\
+    \       (valid-date-parts date)))\n", "  (define (is-valid-month month)\n    (and\
+    \ (not (string=? month \"\"))\n         (and (<= 1 (string->number month))\n \
+    \             (<= (string->number month) 12))))\n  (define (is-valid-day month\
+    \ day)\n    (and (not (string=? day \"\"))\n         (and (<= 1 (string->number\
+    \ day))\n              (<= (string->number day)\n                  (cond\n   \
+    \                 [(string=? month \"1\") 31]\n                    [(string=?\
+    \ month \"3\") 31]\n                    [(string=? month \"5\") 31]\n        \
+    \            [(string=? month \"7\") 31]\n                    [(string=? month\
+    \ \"8\") 31]\n                    [(string=? month \"10\") 31]\n             \
+    \       [(string=? month \"12\") 31]\n                    [(string=? month \"\
+    4\") 30]\n                    [(string=? month \"6\") 30]\n                  \
+    \  [(string=? month \"9\") 30]\n                    [(string=? month \"11\") 30]\n\
+    \                    [(string=? month \"2\") 29]\n                    [else 0]))))))\n\
+    \  (define (is-valid-year year)\n    (and (not (string=? year \"\"))\n       \
+    \  (and (<= 1 (string->number year))\n              (<= (string->number year)\
+    \ 9999))))\n  (define (is-valid-date date)\n    (and (not (string=? date \"\"\
+    ))\n         (string-contains date \"-\")))\n  (define (split-date date)\n   \
+    \ (string-split date \"-\"))\n  (define (validate-date date)\n    (let* ([date-list\
+    \ (split-date date)]\n           [month (list-ref date-list 0)]\n           [day\
+    \ (list-ref date-list 1)]\n           [year (list-ref date-list 2)])\n      (and\
+    \ (is-valid-date date)\n           (and (is-valid-month month)\n             \
+    \   (and (is-valid-day month day)\n                     (is-valid-year year))))))\n\
+    \  (validate-date date))\n", "  (define (valid-month month)\n    (and (integer?\
+    \ month)\n         (and (>= month 1) (<= month 12))))\n  (define (valid-day month\
+    \ day)\n    (and (integer? day)\n         (and (>= day 1)\n              (cond\n\
+    \                [(and (= month 1) (= month 3) (= month 5) (= month 7) (= month\
+    \ 8) (= month 10) (= month 12)) (<= day 31)]\n                [(and (= month 4)\
+    \ (= month 6) (= month 9) (= month 11)) (<= day 30)]\n                [(= month\
+    \ 2) (<= day 29)]))))\n  (define (valid-year year)\n    (and (integer? year)\n\
+    \         (>= year 0)))\n  (define (valid-date-string date)\n    (and (string?\
+    \ date)\n         (string-length date)\n         (regexp-match #rx\"^[0-9]{2}-[0-9]{2}-[0-9]{4}$\"\
+    \ date)))\n  (define (split-date date)\n    (string-split date #rx\"-\"))\n  (define\
+    \ (to-int str)\n    (string->number str))\n  (define (valid-date-parts date)\n\
+    \    (define parts (split-date date))\n    (and (= (length parts) 3)\n       \
+    \  (valid-month (to-int (list-ref parts 0)))\n         (valid-day (to-int (list-ref\
+    \ parts 0)) (to-int (list-ref parts 1)))\n         (valid-year (to-int (list-ref\
+    \ parts 2)))))\n  (and (valid-date-string date)\n       (valid-date-parts date)))\n",
+  "  (define (valid-month month)\n    (and (not (empty? month))\n         (not (empty?\
+    \ (string-&gt;number month)))\n         (and (&lt;= 1 (string-&gt;number month))\n\
+    \              (&lt;= (string-&gt;number month) 12))))\n  (define (valid-day day)\n\
+    \    (and (not (empty? day))\n         (not (empty? (string-&gt;number day)))\n\
+    \         (and (&lt;= 1 (string-&gt;number day))\n              (&lt;= (string-&gt;number\
+    \ day) 31))))\n  (define (valid-year year)\n    (and (not (empty? year))\n   \
+    \      (not (empty? (string-&gt;number year)))\n         (and (&lt;= 1 (string-&gt;number\
+    \ year))\n              (&lt;= (string-&gt;number year) 9999))))\n  (define (valid-format\
+    \ date)\n    (and (regexp-match? #rx\"^[0-9]{2}-[0-9]{2}-[0-9]{4}$\" date)\n \
+    \        (not (regexp-match? #rx\"^[0-9]{2}/[0-9]{2}/[0-9]{4}$\" date))))\n  (and\
+    \ (valid-format date)\n       (valid-month (substring date 0 2))\n       (valid-day\
+    \ (substring date 3 5))\n       (valid-year (substring date 6 10))))\n</code>\n",
+  "  (define (valid-month month)\n    (and (>= month 1) (<= month 12)))\n  (define\
+    \ (valid-day month day)\n    (cond\n      [(and (= month 1) (= month 3) (= month\
+    \ 5) (= month 7) (= month 8) (= month 10) (= month 12))\n       (and (>= day 1)\
+    \ (<= day 31))]\n      [(and (= month 4) (= month 6) (= month 9) (= month 11))\n\
+    \       (and (>= day 1) (<= day 30))]\n      [(= month 2)\n       (and (>= day\
+    \ 1) (<= day 29))]))\n  (define (valid-year year)\n    (and (>= year 1) (<= year\
+    \ 9999)))\n  (define (valid-format date)\n    (and (regexp-match? #rx\"^[0-9]{2}-[0-9]{2}-[0-9]{4}$\"\
+    \ date)\n         #t))\n  (and (valid-format date)\n       (valid-month (string->number\
+    \ (regexp-replace* #rx\"^[0-9]{2}-\" date \"\")))\n       (valid-day (string->number\
+    \ (regexp-replace* #rx\"^[0-9]{2}-\" date \"\"))\n                  (string->number\
+    \ (regexp-replace* #rx\"-[0-9]{4}$\" date \"\")))\n       (valid-year (string->number\
+    \ (regexp-replace* #rx\"^[0-9]{2}-[0-9]{2}-\" date \"\")))))\n  )\n", "  (cond\n\
+    \    [(empty? date) #f]\n    [(regexp-match #rx\"^(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-[0-9]{4}$\"\
+    \ date) #t]\n    [else #f]))\n", "  (define (valid-month month)\n    (and (not\
+    \ (empty? month))\n         (integer? (string->number month))\n         (<= 1\
+    \ (string->number month) 12)))\n  (define (valid-day day)\n    (and (not (empty?\
+    \ day))\n         (integer? (string->number day))\n         (<= 1 (string->number\
+    \ day) 31)))\n  (define (valid-year year)\n    (and (not (empty? year))\n    \
+    \     (integer? (string->number year))\n         (<= 1 (string->number year) 9999)))\n\
+    \  (define (valid-date-format date)\n    (regexp-match? #rx\"^[0-9]{2}-[0-9]{2}-[0-9]{4}$\"\
+    \ date))\n  (and (valid-date-format date)\n       (valid-month (substring date\
+    \ 0 2))\n       (valid-day (substring date 3 5))\n       (valid-year (substring\
+    \ date 6 10))))\n", "  (define (valid-month month)\n    (and (>= month 1) (<=\
+    \ month 12)))\n  (define (valid-day month day)\n    (and (>= day 1)\n        \
+    \ (<= day\n             (cond\n               [(or (= month 1) (= month 3) (=\
+    \ month 5) (= month 7) (= month 8) (= month 10) (= month 12)) 31]\n          \
+    \     [(or (= month 4) (= month 6) (= month 9) (= month 11)) 30]\n           \
+    \    [(= month 2) 29]))))\n  (define (valid-year year)\n    (and (>= year 1) (<=\
+    \ year 9999)))\n  (define (valid-date-format date)\n    (regexp-match? #rx\"^[0-9]{2}-[0-9]{2}-[0-9]{4}$\"\
+    \ date))\n  (and (not (string=? date \"\"))\n       (valid-date-format date)\n\
+    \       (valid-month (string->number (regexp-match #rx\"^[0-9]{2}-\" date)))\n\
+    \       (valid-day (string->number (regexp-match #rx\"^[0-9]{2}-\" date))\n  \
+    \                (string->number (regexp-match #rx\"-[0-9]{2}-\" date)))\n   \
+    \    (valid-year (string->number (regexp-match #rx\"-[0-9]{4}$\" date)))))\n",
+  "  (define (valid-month month)\n    (and (not (empty? month))\n         (and (>=\
+    \ month 1) (<= month 12))))\n  (define (valid-day day)\n    (and (not (empty?\
+    \ day))\n         (and (>= day 1) (<= day 31))))\n  (define (valid-year year)\n\
+    \    (and (not (empty? year))\n         (and (>= year 1) (<= year 9999))))\n \
+    \ (define (valid-date-format date)\n    (define (valid-date-format-helper date)\n\
+    \      (cond\n        [(empty? date) #t]\n        [(char=? (first date) #\\- )\
+    \ (valid-date-format-helper (rest date))]\n        [else #f]))\n    (and (not\
+    \ (empty? date))\n         (valid-date-format-helper date)))\n  (define (valid-date-helper\
+    \ date)\n    (cond\n      [(empty? date) #t]\n      [(char=? (first date) #\\\
+    - ) (valid-date-helper (rest date))]\n      [else #f]))\n  (and (valid-date-format\
+    \ date)\n       (valid-date-helper date)\n       (valid-month (string->number\
+    \ (substring date 0 2)))\n       (valid-day (string->number (substring date 3\
+    \ 5)))\n       (valid-year (string->number (substring date 6 10)))))\n", "  (define\
+    \ (valid-month month)\n    (and (>= month 1) (<= month 12)))\n  (define (valid-day\
+    \ month day)\n    (and (>= day 1)\n         (<= day\n             (cond\n    \
+    \           [(or (= month 1) (= month 3) (= month 5) (= month 7) (= month 8) (=\
+    \ month 10) (= month 12)) 31]\n               [(or (= month 4) (= month 6) (=\
+    \ month 9) (= month 11)) 30]\n               [(= month 2) 29]))))\n  (define (valid-year\
+    \ year)\n    (and (>= year 1) (<= year 9999)))\n  (define (valid-date-format date)\n\
+    \    (regexp-match? #rx\"^[0-9]{2}-[0-9]{2}-[0-9]{4}$\" date))\n  (and (not (string=?\
+    \ date \"\"))\n       (valid-date-format date)\n       (let* ([date-parts (string-split\
+    \ date #\\-)]\n              [month (string->number (list-ref date-parts 0))]\n\
+    \              [day (string->number (list-ref date-parts 1))]\n              [year\
+    \ (string->number (list-ref date-parts 2))])\n         (and (valid-month month)\n\
+    \              (valid-day month day)\n              (valid-year year)))))\n",
+  "  (define (valid-month month)\n    (and (>= month 1) (<= month 12)))\n  (define\
+    \ (valid-day month day)\n    (cond\n      [(= month 1) (and (>= day 1) (<= day\
+    \ 31))]\n      [(= month 3) (and (>= day 1) (<= day 31))]\n      [(= month 5)\
+    \ (and (>= day 1) (<= day 31))]\n      [(= month 7) (and (>= day 1) (<= day 31))]\n\
+    \      [(= month 8) (and (>= day 1) (<= day 31))]\n      [(= month 10) (and (>=\
+    \ day 1) (<= day 31))]\n      [(= month 12) (and (>= day 1) (<= day 31))]\n  \
+    \    [(= month 4) (and (>= day 1) (<= day 30))]\n      [(= month 6) (and (>= day\
+    \ 1) (<= day 30))]\n      [(= month 9) (and (>= day 1) (<= day 30))]\n      [(=\
+    \ month 11) (and (>= day 1) (<= day 30))]\n      [(= month 2) (and (>= day 1)\
+    \ (<= day 29))]))\n  (define (valid-year year)\n    (and (>= year 0) (<= year\
+    \ 9999)))\n  (define (valid-format date)\n    (and (string-contains date #\\-)(string-contains\
+    \ date #\\.)))\n  (define (valid-date-string date)\n    (and (not (string=? date\
+    \ \"\"))\n         (valid-format date)))\n  (define (split-date date)\n    (define\
+    \ (split-date-helper date)\n      (cond\n        [(string-contains date #\\-)\
+    \ (string-split date #\\-)]\n        [(string-contains date #\\.) (string-split\
+    \ date #\\.)]))\n    (map string->number (split-date-helper date)))\n  (define\
+    \ (valid-date-list date)\n    (define (valid-date-list-helper date)\n      (cond\n\
+    \        [(= (length date) 3) (and (valid-month (list-ref date 0))\n         \
+    \                         (valid", "  (define (valid-month month)\n    (and (>=\
+    \ month 1) (<= month 12)))\n  (define (valid-day month day)\n    (and (>= day\
+    \ 1)\n         (<= day\n             (cond\n               [(or (= month 1) (=\
+    \ month 3) (= month 5) (= month 7) (= month 8) (= month 10) (= month 12)) 31]\n\
+    \               [(or (= month 4) (= month 6) (= month 9) (= month 11)) 30]\n \
+    \              [(= month 2) 29]))))\n  (define (valid-year year)\n    (and (>=\
+    \ year 0) (<= year 9999)))\n  (define (valid-date-format date)\n    (regexp-match?\
+    \ #rx\"^[0-9]{2}-[0-9]{2}-[0-9]{4}$\" date))\n  (and (valid-date-format date)\n\
+    \       (valid-month (string->number (regexp-match #rx\"^[0-9]{2}-\" date)))\n\
+    \       (valid-day (string->number (regexp-match #rx\"^[0-9]{2}-\" date))\n  \
+    \                (string->number (regexp-match #rx\"-[0-9]{2}-\" date)))\n   \
+    \    (valid-year (string->number (regexp-match #rx\"-[0-9]{4}$\" date)))))\n",
+  "  (define (valid-month month)\n    (and (not (empty? month))\n         (and (<=\
+    \ 1 (string->number month))\n              (<= (string->number month) 12))))\n\
+    \  (define (valid-day day)\n    (and (not (empty? day))\n         (and (<= 1 (string->number\
+    \ day))\n              (<= (string->number day) 31))))\n  (define (valid-year\
+    \ year)\n    (and (not (empty? year))\n         (and (<= 1 (string->number year))\n\
+    \              (<= (string->number year) 9999))))\n  (define (valid-date-format\
+    \ date)\n    (and (not (empty? date))\n         (regexp-match? #rx\"^[0-9]{2}-[0-9]{2}-[0-9]{4}$\"\
+    \ date)))\n  (define (valid-date-parts date)\n    (define (valid-date-parts-helper\
+    \ date)\n      (define (valid-month-day month day)\n        (cond\n          [(string=?\
+    \ month \"01\") (valid-day day)]\n          [(string=? month \"03\") (valid-day\
+    \ day)]\n          [(string=? month \"05\") (valid-day day)]\n          [(string=?\
+    \ month \"07\") (valid-day day)]\n          [(string=? month \"08\") (valid-day\
+    \ day)]\n          [(string=? month \"10\") (valid-day day)]\n          [(string=?\
+    \ month \"12\") (valid-day day)]\n          [(string=? month \"04\") (and (<=\
+    \ 1 (string->number day))\n                                      (<= (string->number\
+    \ day) 30))]\n          [(string=? month \"06\") (and (<= 1 (string->number day))\n\
+    \                                      (<= (string->number day) 30))]\n      \
+    \    [(string=? month \"09\") (and (<= 1 (string->number day))\n             \
+    \                         (<= (string->number day) 30))]\n          [(string=?\
+    \ month \"11\") (and (<= 1 (string->number day))\n                           \
+    \           (<= (string->number day) 30))]\n          [(string=? month \"02\"\
+    ) (and (<", "  (define (valid-month month)\n    (and (integer? month)\n      \
+    \   (and (>= month 1) (<= month 12))))\n  (define (valid-day month day)\n    (and\
+    \ (integer? day)\n         (and (>= day 1)\n              (cond\n            \
+    \    [(or (= month 1) (= month 3) (= month 5) (= month 7) (= month 8) (= month\
+    \ 10) (= month 12)) (<= day 31)]\n                [(or (= month 4) (= month 6)\
+    \ (= month 9) (= month 11)) (<= day 30)]\n                [(= month 2) (<= day\
+    \ 29)]))))\n  (define (valid-year year)\n    (and (integer? year)\n         (>=\
+    \ year 0)))\n  (define (valid-date-format date)\n    (and (string? date)\n   \
+    \      (regexp-match? #rx\"^[0-9]{2}-[0-9]{2}-[0-9]{4}$\" date)))\n  (let ([month\
+    \ (string->number (substring date 0 2))]\n        [day (string->number (substring\
+    \ date 3 5))]\n        [year (string->number (substring date 6 10))])\n    (and\
+    \ (valid-date-format date)\n         (valid-month month)\n         (valid-day\
+    \ month day)\n         (valid-year year))))\n", "  (and (not (empty? date))\n\
+    \       (valid-date-format? date)\n       (valid-date-numbers? date)))\n"]
+stop_tokens:
+- "\n(define "
+- "\n#|"
+- "\n;"
+- "\n("
