@@ -14,7 +14,7 @@ async def process_problem_yaml(problem_yaml_path, completion_function, args, max
     with problem_yaml_path.open() as f:
         problem = Problem.load(f)
 
-    num_completions_required = 200 - len(problem.completions)
+    num_completions_required = 20 - len(problem.completions)
 
     if num_completions_required < 1:
         print(
