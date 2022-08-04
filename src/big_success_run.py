@@ -1,7 +1,7 @@
 '''
 Run to get all pass@k results for provided combinations.
 
-CAUTION: does not currently handle terms differences due to the way results files are formatted.
+CAUTION: will produce output regardless of completion situation
 
 written by Molly Feldman, based on code by Arjun Guha 
 '''
@@ -10,9 +10,8 @@ from calculate_all_pass import evaluate_functional_correctness
 from pathlib import Path
 from csv import reader
 
-#TODO: do for all languages or necessary subset - right now this is a good test set 
-
-LANG = ['rkt']#,'d']#[ "py", "sh","cs","cpp","d","go","java","js", "jl", "lua", "pl", "php", "r", "rkt", "rb", "rs","scala","swift","ts",]
+LANG = ["py", "js", "ts", "java", "d", "r", "rs", "jl", "sh", "cs", \
+          "go", "lua", "pl", "php", "rb",  "scala", "swift"] #CANNOT RUN "cpp", "rkt"]
 MODEL = [ "incoder", "davinci" ]
 TEMP = [ "0.2"] # come back to this
 
@@ -24,7 +23,7 @@ def checkPassResults(lang,model,temp,docstrings,term):
     with open(passOne) as csvfile:
                 values = reader(csvfile)
                 for v in values:
-                    if v[0] == lang and v[1] == model and v[2] == temp and v[3] == docstrings and v[3] == term:
+                    if v[0] == lang and v[1] == model and v[2] == temp and v[3] == docstrings and v[4] == term:
                         return True
     return False
 
@@ -48,6 +47,6 @@ def main():
                         if result: #we succeeded in a summary, either existing or created now
                             summary = Path('../model_results/'+lang+"-"+model+"-"+temp+'-'+doc+'-'+term+"-summary.csv")
                             print(f'adding results to pass at k for {summary}')
-                            evaluate_functional_correctness(summary)         
+                            evaluate_functional_correctness(summary,lang,model,temp,doc,term)         
 if __name__ == "__main__":                  
     main()
