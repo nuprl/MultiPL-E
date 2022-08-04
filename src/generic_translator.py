@@ -127,8 +127,8 @@ class PromptVisitor(ast.NodeVisitor):
                     # for i in range(len(funcCalls)):
                     #     desc += funcCalls[i] + '\n' + outputs[i] + '\n\n'
                 else: #else when there are no doctests
-                    print('skipping (no doctests to remove)')
-                    return None
+                    # Still return the description, because we are probably rewording!
+                    desc = self.description
             case _other:
                 raise Exception(f"bad doctest_transformation")
         return self.translator.translate_prompt(self.name, self.args, self.returns, desc)
@@ -313,12 +313,9 @@ def get_file_ext_from_translator(translator):
     else:
         return translator.file_ext
 
-def list_originals(doctests):
+def list_originals(root):
     directory = Path(Path(__file__).parent, "..", "datasets").resolve()
-    if doctests == "keep":
-        files_unsorted = directory.glob("originals/*.py") 
-    else:
-        files_unsorted = directory.glob("originals-with-cleaned-doctests/*.py")
+    files_unsorted = directory.glob(f"{root}/*.py") 
     # assumption: base filenames are in the format of HumanEval_X_*.py
     # Where X is a valid number
     key_func = lambda s: int(str(s.name).split("_")[1])
@@ -359,13 +356,15 @@ def main(translator):
 
     args.add_argument('--no-completion', action='store_true')
 
+    args.add_argument("--originals", type=str, required=True)
+
     args = args.parse_args()
 
     if args.doctests not in [ "keep", "remove", "transform" ]:
         raise Exception("Invalid value for --doctests")
 
 
-    files_by_number = list_originals(args.doctests)
+    files_by_number = list_originals(args.originals)
     files_index = []
     if len(args.files) > 0:
         files_index = args.files

@@ -136,13 +136,15 @@ def coerce(expr: str, type) -> str:
         case _:
             return expr
 
-class RustTranslator:
+class Translator:
 
     stop = ["\n}"]
 
-    def __init__(self, file_ext):
+    def file_ext(self):
+        return "rs"
+
+    def __init__(self):
         global needs_hashmap
-        self.file_ext = file_ext
         self.type = None
         self.is_candidate_result = False
 
@@ -252,5 +254,5 @@ class RustTranslator:
 
 
 if __name__ == "__main__":
-    translator = RustTranslator("rs")
+    translator = Translator()
     main(translator)
