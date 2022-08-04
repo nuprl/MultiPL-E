@@ -82,6 +82,14 @@ class PromptVisitor(ast.NodeVisitor):
                     print('skipping (no doctests to remove)')
                     return None
             case "transform":
+                # We first run the translate_prompt with the original
+                # prompt. This is a hack! We need each script to have some sort
+                # of setup method that remembers type information and such. But,
+                # people have already done so in translate_prompt because it used
+                # to be called first all the time. Calling it here as a setup
+                # function should hopefully(!) not break anything
+                self.translator.translate_prompt(self.name, self.args, self.returns, self.description)
+
                 # Steps:
                 # Find the Python expression and result in each doctest
                 # py_ast = ast.parse("PYTHON EXPRESSION", "bogus filename")
@@ -102,9 +110,16 @@ class PromptVisitor(ast.NodeVisitor):
                         doclist = doctest.split('\n') #Splitting up the output from the function call of the doctest
                         funcCall = ast.parse(doclist[0].strip('>>> ')).body[0].value
                         output = ast.parse(doclist[1].strip()).body[0].value
-                        transl_funccall = translate_expr(self.translator, funcCall)
-                        transl_output = translate_expr(self.translator, output)
-                        desc += '>>> ' + str(transl_funccall) + '\n    ' + str(transl_output) + '\n'
+                        def strip_type(a):
+                            if type(a) == type(("a", "b")):
+                                return a[0]
+                            elif type(a) == type("a"):
+                                return a
+                            else:
+                                raise Exception("got bad type")
+                        transl_funccall = strip_type(translate_expr(self.translator, funcCall))
+                        transl_output = strip_type(translate_expr(self.translator, output))
+                        desc += '>>> ' + transl_funccall + '\n    ' + str(transl_output) + '\n'
                         pos = i[1]
                     
                     desc += self.description[pos:]
@@ -308,10 +323,10 @@ def get_stop_from_translator(translator) -> List[str]:
         return translator.stop
 
 def get_file_ext_from_translator(translator):
-    if isinstance(translator, LanguageTranslator):
-        return translator.file_ext()
-    else:
+    if type(translator.file_ext) == type(""):
         return translator.file_ext
+    else:
+        return translator.file_ext()
 
 def list_originals(root):
     directory = Path(Path(__file__).parent, "..", "datasets").resolve()
