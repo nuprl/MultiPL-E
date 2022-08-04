@@ -210,18 +210,17 @@ class Translator(humaneval_to_cpp.Translator):
 
         return super().update_type(right, expected_type)
 
-    def deep_equality(self, left: Tuple[str, ast.Expr], right: Tuple[str, ast.Expr]) -> str:
+    def deep_equality(self, left: str, right: str) -> str:
         """
         All tests are assertions that compare deep equality between left and right.
         In C++ using == checks for structural equality
         """
-        right = self.update_type(right, self.translated_return_type)
         #Empty the union declarations
         self.union_decls = {}
         if self.is_primitive_type(self.translated_return_type):
-            return f"    Debug.Assert({left[0]} == {right});"
+            return f"    Debug.Assert({left} == {right});"
         else:
-            return f"    Debug.Assert({left[0]}.Equals({right}));"
+            return f"    Debug.Assert({left}.Equals({right}));"
 
     def find_type_to_coerce(self, expr):
         '''Return a type to coerce into another type.
@@ -256,6 +255,16 @@ class Translator(humaneval_to_cpp.Translator):
         if func_name.lower() == "candidate":
             func_name = self.entry_point
         return func_name + "(" + ", ".join([self.update_type(args[i], self.args_type[i]) for i in range(len(args))]) + ")", None
+
+    def finalize(self, expr, context: str) -> str:
+        match context:
+            case "lhs":
+                return expr[0]
+            case "rhs":
+                return self.update_type(expr, self.translated_return_type)
+            case _other:
+                raise Exception("bad context")
+
 
 if __name__ == "__main__":
     translator = Translator()
