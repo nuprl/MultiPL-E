@@ -261,15 +261,6 @@ class Translator(humaneval_to_cpp.Translator):
             func_name = self.entry_point
         return func_name + "(" + ", ".join([self.update_type(args[i], self.args_type[i]) for i in range(len(args))]) + ")", None
 
-    def finalize(self, expr, context):
-        match context:
-            case "lhs":
-                return expr[0]
-            case "rhs":
-                return self.update_type(expr, self.translated_return_type)
-            case _other:
-                raise Exception("bad finalize context")
-
 if __name__ == "__main__":
     translator = Translator()
     main(translator)
