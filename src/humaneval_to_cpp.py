@@ -266,9 +266,8 @@ class Translator:
         All tests are assertions that compare deep equality between left and right.
         In C++ using == checks for structural equality
         """
-        right = self.update_type(right, self.translated_return_type)
         #Empty the union declarations
-        return f"    assert({left[0]} == {right});"
+        return f"    assert({left} == {right});"
 
     def gen_literal(self, c: bool | str | int | float | None) -> Tuple[str, ast.Name]:
         """Translate a literal expression
@@ -395,6 +394,15 @@ class Translator:
         """
         func_name = self.gen_var(func[0])[0]
         return func_name + "(" + ", ".join([self.update_type(args[i], self.args_type[i]) for i in range(len(args))]) + ")", None
+
+    def finalize(self, expr, context):
+        match context:
+            case "lhs":
+                return expr[0]
+            case "rhs":
+                return self.update_type(expr, self.translated_return_type)
+            case _other:
+                raise Exception("bad finalize context")
 
 
 if __name__ == "__main__":

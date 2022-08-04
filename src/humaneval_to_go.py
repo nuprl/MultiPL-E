@@ -168,7 +168,7 @@ import (
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        return "     { actual: %s, expected: %s }," % (left, self.patch_empty(right, self.type[1]))
+        return "     { actual: %s, expected: %s }," % (left, right)
 
     def pytype_to_gotype(self, pytype: str):
         # These are type checkers for the types that are in the dataset
@@ -311,6 +311,16 @@ import (
 
     def no_completion_prompt_stub(self) -> str:
         return "\tpanic(42)\n}"
+
+
+    def finalize(self, expr: str, context: str) -> str:
+        match context:
+            case "lhs":
+                return expr
+            case "rhs":
+                return self.patch_empty(expr, self.type[1])
+            case _other:
+                raise Exception("bad context in finalize")
 
 
 if __name__ == "__main__":
