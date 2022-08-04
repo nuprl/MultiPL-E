@@ -1,0 +1,1307 @@
+name: HumanEval_145_order_by_points
+language: d
+prompt: "import std.typecons;\nimport std.math;\n/*\n\n    Write a function which\
+  \ sorts the given array of integers\n    in ascending order according to the sum\
+  \ of their digits.\n    Note: if there are several items with similar sum of their\
+  \ digits,\n    order them based on their index in original array.\n\n    For example:\n\
+  \    >>> order_by_points([1L, 11L, -1L, -11L, -12L])\n    [-1L, -11L, 1L, -12L,\
+  \ 11L]\n    >>> order_by_points([])\n    []\n    \n*/\nlong[] order_by_points(long[]\
+  \ nums) \n"
+tests: "unittest\n{\n    alias candidate = order_by_points;\n\n    assert(candidate([1L,\
+  \ 11L, -1L, -11L, -12L]) == [-1L, -11L, 1L, -12L, 11L]);\n    assert(candidate([1234L,\
+  \ 423L, 463L, 145L, 2L, 423L, 423L, 53L, 6L, 37L, 3457L, 3L, 56L, 0L, 46L]) == [0L,\
+  \ 2L, 3L, 6L, 53L, 423L, 423L, 423L, 1234L, 145L, 37L, 46L, 56L, 463L, 3457L]);\n\
+  \    assert(candidate([]) == []);\n    assert(candidate([1L, -11L, -32L, 43L, 54L,\
+  \ -98L, 2L, -3L]) == [-3L, -32L, -98L, -11L, 1L, 2L, 43L, 54L]);\n    assert(candidate([1L,\
+  \ 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L]) == [1L, 10L, 2L, 11L, 3L, 4L, 5L, 6L,\
+  \ 7L, 8L, 9L]);\n    assert(candidate([0L, 6L, 6L, -76L, -21L, 23L, 4L]) == [-76L,\
+  \ -21L, 0L, 4L, 23L, 6L, 6L]);\n}\nvoid main(){}"
+completions: ["{\n    if (nums.length == 0)\n        return nums;\n    auto nums_with_points\
+    \ = new Tuple!(long, long)[nums.length];\n    foreach (i, num; nums)\n    {\n\
+    \        long points = 0;\n        foreach (digit; num.to!string)\n          \
+    \  points += digit.to!long;\n        nums_with_points[i] = tuple(num, points);\n\
+    \    }\n    sort!((a, b) => a[1] < b[1] || (a[1] == b[1] && a[0] < b[0]))(nums_with_points);\n\
+    \    foreach (i, num_with_points; nums_with_points)\n        nums[i] = num_with_points[0];\n\
+    \    return nums;\n}", "{\n    if (nums.length == 0)\n        return nums;\n \
+    \   auto s = new SortedRange!(long[], \"a[0] < b[0]\")(nums);\n    foreach (i,\
+    \ ref n; nums)\n    {\n        long sum = 0;\n        foreach (d; n.to!string)\n\
+    \            sum += d.to!long;\n        s[i] = [sum, i];\n    }\n    auto r =\
+    \ new long[nums.length];\n    foreach (i, n; s)\n        r[i] = nums[n[1]];\n\
+    \    return r;\n}", "{\n    long[] result = nums.dup;\n    result.sort!((a, b)\
+    \ => sumDigits(a) < sumDigits(b));\n    return result;\n}", "{\n    long[] result\
+    \ = new long[nums.length];\n    long[] sums = new long[nums.length];\n    for\
+    \ (int i = 0; i < nums.length; i++)\n    {\n        sums[i] = nums[i];\n     \
+    \   while (sums[i] > 0)\n        {\n            sums[i] = sums[i] - sums[i] %\
+    \ 10;\n            sums[i] = sums[i] / 10;\n        }\n    }\n    for (int i =\
+    \ 0; i < nums.length; i++)\n    {\n        int min = i;\n        for (int j =\
+    \ i + 1; j < nums.length; j++)\n        {\n            if (sums[j] < sums[min])\n\
+    \            {\n                min = j;\n            }\n        }\n        long\
+    \ temp = sums[min];\n        sums[min] = sums[i];\n        sums[i] = temp;\n \
+    \       temp = nums[min];\n        nums[min] = nums[i];\n        nums[i] = temp;\n\
+    \    }\n    return nums;\n}", "{\n    long[] result = new long[nums.length];\n\
+    \    int[] sum = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n\
+    \    {\n        int temp = 0;\n        while (nums[i] != 0)\n        {\n     \
+    \       temp += nums[i] % 10;\n            nums[i] /= 10;\n        }\n       \
+    \ sum[i] = temp;\n    }\n    int[] index = new int[nums.length];\n    for (int\
+    \ i = 0; i < nums.length; i++)\n    {\n        index[i] = i;\n    }\n    for (int\
+    \ i = 0; i < nums.length; i++)\n    {\n        for (int j = i + 1; j < nums.length;\
+    \ j++)\n        {\n            if (sum[i] > sum[j])\n            {\n         \
+    \       int temp = sum[i];\n                sum[i] = sum[j];\n               \
+    \ sum[j] = temp;\n                temp = index[i];\n                index[i] =\
+    \ index[j];\n                index[j] = temp;\n            }\n        }\n    }\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        result[i] = nums[index[i]];\n\
+    \    }\n    return result;\n}", "{\n    if (nums.length == 0)\n        return\
+    \ nums;\n    auto sums = new long[nums.length];\n    foreach (i, v; nums)\n  \
+    \  {\n        sums[i] = v.abs.sumDigits;\n    }\n    auto result = new long[nums.length];\n\
+    \    foreach (i, v; nums)\n    {\n        auto index = sums.indexOf(v.abs.sumDigits);\n\
+    \        result[index] = v;\n        sums[index] = -1;\n    }\n    return result;\n\
+    }", "{\n    if (nums.length == 0)\n        return nums;\n    long[] result = new\
+    \ long[nums.length];\n    int[] sum = new int[nums.length];\n    for (int i =\
+    \ 0; i < nums.length; i++)\n    {\n        int temp = nums[i];\n        if (temp\
+    \ < 0)\n            temp = -temp;\n        while (temp > 0)\n        {\n     \
+    \       sum[i] += temp % 10;\n            temp /= 10;\n        }\n    }\n    int[]\
+    \ index = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n \
+    \       index[i] = i;\n    sort(index, (a, b) => sum[a] < sum[b] ? -1 : 1);\n\
+    \    for (int i = 0; i < nums.length; i++)\n        result[i] = nums[index[i]];\n\
+    \    return result;\n}", "{\n    long[] result = nums.dup;\n    result.sort!((a,\
+    \ b) => \n    {\n        auto a_sum = a.to!string.sum!(c => c.to!int - '0'.to!int);\n\
+    \        auto b_sum = b.to!string.sum!(c => c.to!int - '0'.to!int);\n        return\
+    \ a_sum < b_sum || (a_sum == b_sum && a < b);\n    });\n    return result;\n}",
+  "{\n    return nums.sort!((a, b) => sumDigits(a) < sumDigits(b));\n}", "{\n    if\
+    \ (nums.length == 0)\n        return nums;\n    long[] sums = new long[nums.length];\n\
+    \    long[] result = new long[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        long sum = 0;\n        long num = nums[i];\n        while\
+    \ (num != 0)\n        {\n            sum += num % 10;\n            num /= 10;\n\
+    \        }\n        sums[i] = sum;\n    }\n    auto sorted = sort(zip(sums, nums));\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        result[i] = sorted[i][1];\n\
+    \    }\n    return result;\n}", "{\n    long[] result = new long[nums.length];\n\
+    \    int[] sums = new int[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        sums[i] = sumDigits(nums[i]);\n    }\n    auto sorted =\
+    \ sort(sums);\n    for (int i = 0; i < nums.length; i++)\n    {\n        result[i]\
+    \ = nums[sorted[i].index];\n    }\n    return result;\n}", "{\n    long[] result\
+    \ = new long[nums.length];\n    int[] sums = new int[nums.length];\n    foreach(i,\
+    \ num; nums)\n    {\n        sums[i] = sum_of_digits(num);\n    }\n    sort!((a,\
+    \ b) => a < b)(sums);\n    foreach(i, num; nums)\n    {\n        result[i] = num;\n\
+    \    }\n    sort!((a, b) => a < b)(result);\n    return result;\n}", "{\n    if\
+    \ (nums.length == 0)\n        return nums;\n    auto sums = new long[nums.length];\n\
+    \    foreach (i, num; nums)\n    {\n        long sum = 0;\n        foreach (c;\
+    \ num.to!string)\n            sum += c.to!long - '0'.to!long;\n        sums[i]\
+    \ = sum;\n    }\n    auto indices = new long[nums.length];\n    foreach (i, _;\
+    \ nums)\n        indices[i] = i;\n    sort!((a, b) => sums[a] < sums[b] || (sums[a]\
+    \ == sums[b] && a < b))(indices);\n    return indices.map!(i => nums[i]).array;\n\
+    }", "{\n    if (nums.length == 0)\n        return nums;\n    long[] result = new\
+    \ long[nums.length];\n    long[] sums = new long[nums.length];\n    for (int i\
+    \ = 0; i < nums.length; i++)\n    {\n        long sum = 0;\n        long n = nums[i];\n\
+    \        while (n != 0)\n        {\n            sum += n % 10;\n            n\
+    \ /= 10;\n        }\n        sums[i] = sum;\n    }\n    int[] indices = new int[nums.length];\n\
+    \    for (int i = 0; i < indices.length; i++)\n        indices[i] = i;\n    sort(indices,\
+    \ (a, b) => sums[a] == sums[b] ? a - b : sums[a] - sums[b]);\n    for (int i =\
+    \ 0; i < indices.length; i++)\n        result[i] = nums[indices[i]];\n    return\
+    \ result;\n}", "{\n    long[] result = new long[nums.length];\n    int[] sum =\
+    \ new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n    {\n  \
+    \      int temp = 0;\n        while (nums[i] != 0)\n        {\n            temp\
+    \ += nums[i] % 10;\n            nums[i] /= 10;\n        }\n        sum[i] = temp;\n\
+    \    }\n    int[] index = new int[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        index[i] = i;\n    }\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        for (int j = 0; j < nums.length - 1; j++)\n        {\n\
+    \            if (sum[j] > sum[j + 1])\n            {\n                int temp\
+    \ = sum[j];\n                sum[j] = sum[j + 1];\n                sum[j + 1]\
+    \ = temp;\n                temp = index[j];\n                index[j] = index[j\
+    \ + 1];\n                index[j + 1] = temp;\n            }\n        }\n    }\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        result[i] = nums[index[i]];\n\
+    \    }\n    return result;\n}", "{\n    if (nums.length == 0)\n        return\
+    \ nums;\n    long[] sums = new long[nums.length];\n    long[] indices = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        indices[i] = i;\n \
+    \       sums[i] = nums[i];\n        while (sums[i] > 0)\n        {\n         \
+    \   sums[i] = sums[i] - sums[i] % 10;\n            sums[i] = sums[i] / 10;\n \
+    \       }\n    }\n    sort(sums, indices);\n    long[] result = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        result[i] = nums[indices[i]];\n\
+    \    }\n    return result;\n}", "{\n    if (nums.length == 0)\n        return\
+    \ nums;\n    auto arr = new int[nums.length];\n    foreach (i, n; nums)\n    {\n\
+    \        arr[i] = n.abs.to!int;\n    }\n    auto sum = new int[nums.length];\n\
+    \    foreach (i, n; arr)\n    {\n        int temp = 0;\n        while (n != 0)\n\
+    \        {\n            temp += n % 10;\n            n /= 10;\n        }\n   \
+    \     sum[i] = temp;\n    }\n    auto result = new int[nums.length];\n    foreach\
+    \ (i, n; nums)\n    {\n        result[i] = n;\n    }\n    auto temp = new int[nums.length];\n\
+    \    foreach (i, n; sum)\n    {\n        temp[i] = n;\n    }\n    auto index =\
+    \ new int[nums.length];\n    foreach (i, n; nums)\n    {\n        index[i] = i;\n\
+    \    }\n    auto temp_index = new int[nums.length];\n    foreach (i, n; nums)\n\
+    \    {\n        temp_index[i] = i;\n    }\n    int i, j, key, key_index;\n   \
+    \ for (i = 1; i < nums.length; i++)\n    {\n        key = temp[i];\n        key_index\
+    \ = temp_index[i];\n        j = i - 1;\n        while (j >= 0 && temp[j] > key)\n\
+    \        {\n            temp[j + 1] = temp[j];\n            temp_index[j + 1]\
+    \ = temp_index[j];\n            j = j - 1;\n        }\n        temp[j + 1] = key;\n\
+    \        temp_index[j + 1] = key_index;\n    }\n    foreach (i, n; temp)\n   \
+    \ {\n        sum[i] = n;\n    }\n    foreach (i, n; temp_index)\n    {\n     \
+    \   index[i] = n;\n    }\n    auto temp_result", "{\n    if (nums.length == 0)\n\
+    \        return nums;\n    auto sums = new long[nums.length];\n    foreach (i,\
+    \ n; nums)\n    {\n        sums[i] = n.abs.sumDigits;\n    }\n    auto indices\
+    \ = new int[nums.length];\n    foreach (i, n; nums)\n    {\n        indices[i]\
+    \ = i;\n    }\n    sort!((a, b) => sums[a] < sums[b] || (sums[a] == sums[b] &&\
+    \ a < b))(indices);\n    auto result = new long[nums.length];\n    foreach (i,\
+    \ n; indices)\n    {\n        result[i] = nums[n];\n    }\n    return result;\n\
+    }", "{\n    if (nums.length == 0)\n        return nums;\n    long[] sums = new\
+    \ long[nums.length];\n    foreach (i, v; nums)\n    {\n        sums[i] = v.abs;\n\
+    \        while (sums[i] >= 10)\n        {\n            sums[i] = sums[i] / 10\
+    \ + sums[i] % 10;\n        }\n    }\n    long[] result = new long[nums.length];\n\
+    \    foreach (i, v; nums)\n    {\n        long min = sums[0];\n        long min_index\
+    \ = 0;\n        foreach (j, v2; sums)\n        {\n            if (v2 < min)\n\
+    \            {\n                min = v2;\n                min_index = j;\n  \
+    \          }\n        }\n        result[i] = nums[min_index];\n        sums[min_index]\
+    \ = sums[min_index] + 100;\n    }\n    return result;\n}", "{\n    long[] result\
+    \ = new long[nums.length];\n    int[] sums = new int[nums.length];\n    for (int\
+    \ i = 0; i < nums.length; i++)\n    {\n        sums[i] = sumDigits(nums[i]);\n\
+    \    }\n    int[] sorted = sort(sums);\n    for (int i = 0; i < nums.length; i++)\n\
+    \    {\n        result[i] = nums[sorted[i]];\n    }\n    return result;\n}", "{\n\
+    \    if (nums.length == 0)\n        return nums;\n    auto sum = new long[nums.length];\n\
+    \    foreach (i, x; nums)\n    {\n        sum[i] = 0;\n        while (x != 0)\n\
+    \        {\n            sum[i] += x % 10;\n            x /= 10;\n        }\n \
+    \   }\n    auto indices = iota(nums.length);\n    sort!((a, b) => sum[a] < sum[b]\
+    \ || (sum[a] == sum[b] && a < b))(indices);\n    auto result = new long[nums.length];\n\
+    \    foreach (i, x; indices)\n        result[i] = nums[x];\n    return result;\n\
+    }", "{\n    if (nums.length == 0)\n        return nums;\n    auto sum = new long[nums.length];\n\
+    \    foreach (i, ref n; nums)\n    {\n        long s = 0;\n        foreach (c;\
+    \ to!string(n))\n            s += c.to!long - '0'.to!long;\n        sum[i] = s;\n\
+    \    }\n    auto zipped = zip(sum, nums);\n    zipped.sort!((a, b) => a[0] < b[0]\
+    \ || (a[0] == b[0] && a[1] < b[1]));\n    return zipped.map!(a => a[1]).array;\n\
+    }", "{\n    if (nums.length == 0)\n        return nums;\n    auto arr = nums.dup;\n\
+    \    auto sums = new long[arr.length];\n    foreach (i, num; arr)\n    {\n   \
+    \     sums[i] = sum_digits(num);\n    }\n    auto indices = new int[arr.length];\n\
+    \    foreach (i, _; arr)\n    {\n        indices[i] = i;\n    }\n    sort!((a,\
+    \ b) => sums[a] < sums[b] || (sums[a] == sums[b] && a < b))(indices);\n    auto\
+    \ res = new long[arr.length];\n    foreach (i, _; arr)\n    {\n        res[i]\
+    \ = arr[indices[i]];\n    }\n    return res;\n}", "{\n    long[] result = new\
+    \ long[nums.length];\n    int[] sums = new int[nums.length];\n    for (int i =\
+    \ 0; i < nums.length; i++)\n    {\n        sums[i] = sumDigits(nums[i]);\n   \
+    \ }\n    int[] sorted_sums = sort(sums);\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        result[i] = nums[indexOf(sums, sorted_sums[i])];\n    }\n\
+    \    return result;\n}", "{\n    long[] result = new long[nums.length];\n    int[]\
+    \ sums = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n  \
+    \  {\n        sums[i] = sum_of_digits(nums[i]);\n    }\n    int[] sorted_sums\
+    \ = sums.dup;\n    std.sort(sorted_sums);\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        for (int j = 0; j < nums.length; j++)\n        {\n    \
+    \        if (sums[j] == sorted_sums[i])\n            {\n                result[i]\
+    \ = nums[j];\n                sums[j] = -1;\n                break;\n        \
+    \    }\n        }\n    }\n    return result;\n}", "{\n    if (nums.length == 0)\n\
+    \        return nums;\n    auto arr = nums.dup;\n    auto sums = new long[arr.length];\n\
+    \    foreach (i, num; arr)\n    {\n        sums[i] = sumDigits(num);\n    }\n\
+    \    auto indexes = new int[arr.length];\n    foreach (i, _; arr)\n    {\n   \
+    \     indexes[i] = i;\n    }\n    sort!((a, b) => sums[a] > sums[b] || (sums[a]\
+    \ == sums[b] && a > b))(indexes);\n    auto res = new long[arr.length];\n    foreach\
+    \ (i, _; arr)\n    {\n        res[i] = arr[indexes[i]];\n    }\n    return res;\n\
+    }", "{\n    long[] result;\n    int[] sums;\n    int i;\n    int j;\n    int temp;\n\
+    \    int temp2;\n    int temp3;\n    int temp4;\n    int temp5;\n    int temp6;\n\
+    \    int temp7;\n    int temp8;\n    int temp9;\n    int temp10;\n    int temp11;\n\
+    \    int temp12;\n    int temp13;\n    int temp14;\n    int temp15;\n    int temp16;\n\
+    \    int temp17;\n    int temp18;\n    int temp19;\n    int temp20;\n    int temp21;\n\
+    \    int temp22;\n    int temp23;\n    int temp24;\n    int temp25;\n    int temp26;\n\
+    \    int temp27;\n    int temp28;\n    int temp29;\n    int temp30;\n    int temp31;\n\
+    \    int temp32;\n    int temp33;\n    int temp34;\n    int temp35;\n    int temp36;\n\
+    \    int temp37;\n    int temp38;\n    int temp39;\n    int temp40;\n    int temp41;\n\
+    \    int temp42;\n    int temp43;\n    int temp44;\n    int temp45;\n    int temp46;\n\
+    \    int temp47;\n    int temp48;\n    int temp49;\n    int temp50;\n    int temp51;\n\
+    \    int temp52;\n    int temp53;\n    int temp54;\n    int temp55;\n    int temp56;\n\
+    \    int temp57;\n    int temp58;\n    int temp59;\n    int temp60;\n    int temp61;\n\
+    \    int temp62;\n    int temp63;\n    int temp64;\n    int temp65;\n    int temp66;\n\
+    \    int temp67;\n    int temp68;\n    int temp69;\n    int temp70;\n    int temp71;\n\
+    \    int temp72;\n    int temp73;\n    int temp74;\n    int temp75;\n    int temp76;\n\
+    \    int temp77;\n    int temp78;\n    int temp79;\n    int temp80;\n    int temp81;\n\
+    \    int", "{\n    if (nums.length == 0)\n        return nums;\n    else\n   \
+    \ {\n        long[] result = new long[nums.length];\n        long[] sums = new\
+    \ long[nums.length];\n        long[] indexes = new long[nums.length];\n      \
+    \  for (int i = 0; i < nums.length; i++)\n        {\n            sums[i] = sumDigits(nums[i]);\n\
+    \            indexes[i] = i;\n        }\n        sort(sums, indexes);\n      \
+    \  for (int i = 0; i < nums.length; i++)\n        {\n            result[i] = nums[indexes[i]];\n\
+    \        }\n        return result;\n    }\n}\nlong sumDigits(long num)\n{\n  \
+    \  long sum = 0;\n    while (num != 0)\n    {\n        sum += num % 10;\n    \
+    \    num /= 10;\n    }\n    return sum;\n}", "{\n    if (nums.length == 0)\n \
+    \       return nums;\n    auto sums = new long[nums.length];\n    foreach (i,\
+    \ n; nums)\n    {\n        sums[i] = n.abs;\n        while (sums[i] > 0)\n   \
+    \     {\n            sums[i] -= sums[i] % 10;\n            sums[i] /= 10;\n  \
+    \      }\n    }\n    return nums.sort!((a, b) => sums[a] < sums[b] || (sums[a]\
+    \ == sums[b] && a < b));\n}", "{\n    if (nums.length == 0)\n        return nums;\n\
+    \    int[] sums = new int[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        long num = nums[i];\n        int sum = 0;\n        while\
+    \ (num != 0)\n        {\n            sum += num % 10;\n            num /= 10;\n\
+    \        }\n        sums[i] = sum;\n    }\n    long[] result = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        int min = sums[i];\n\
+    \        int minIndex = i;\n        for (int j = i; j < nums.length; j++)\n  \
+    \      {\n            if (sums[j] < min)\n            {\n                min =\
+    \ sums[j];\n                minIndex = j;\n            }\n        }\n        result[i]\
+    \ = nums[minIndex];\n        sums[minIndex] = int.max;\n    }\n    return result;\n\
+    }", "{\n    if (nums.length == 0)\n        return nums;\n    long[] result = new\
+    \ long[nums.length];\n    long[] sums = new long[nums.length];\n    foreach (i,\
+    \ num; nums)\n    {\n        sums[i] = sum_digits(num);\n    }\n    auto sorted\
+    \ = sort(sums);\n    foreach (i, num; nums)\n    {\n        result[i] = nums[sorted[i]];\n\
+    \    }\n    return result;\n}\nlong sum_digits(long num)\n{\n    long sum = 0;\n\
+    \    while (num != 0)\n    {\n        sum += num % 10;\n        num /= 10;\n \
+    \   }\n    return sum;\n}", "{\n    if (nums.length == 0)\n        return nums;\n\
+    \    long[] sums = new long[nums.length];\n    long[] indices = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        indices[i] = i;\n \
+    \       long sum = 0;\n        long num = nums[i];\n        while (num != 0)\n\
+    \        {\n            sum += num % 10;\n            num /= 10;\n        }\n\
+    \        sums[i] = sum;\n    }\n    sort(sums, indices);\n    long[] result =\
+    \ new long[nums.length];\n    for (int i = 0; i < nums.length; i++)\n        result[i]\
+    \ = nums[indices[i]];\n    return result;\n}", "{\n    if (nums.length == 0)\n\
+    \        return nums;\n    auto arr = new tuple!(long, long)[nums.length];\n \
+    \   foreach (i, n; nums)\n    {\n        long sum = 0;\n        foreach (c; n.to!string)\n\
+    \            sum += c.to!long - '0'.to!long;\n        arr[i] = tuple(sum, n);\n\
+    \    }\n    sort(arr);\n    foreach (i, n; arr)\n        nums[i] = n[1];\n   \
+    \ return nums;\n}", "{\n    if (nums.length == 0)\n        return nums;\n    long[]\
+    \ result = new long[nums.length];\n    int[] sums = new int[nums.length];\n  \
+    \  for (int i = 0; i < nums.length; i++)\n    {\n        sums[i] = sumDigits(nums[i]);\n\
+    \    }\n    int[] indexes = new int[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        indexes[i] = i;\n    }\n    sort(sums, indexes);\n    for\
+    \ (int i = 0; i < nums.length; i++)\n    {\n        result[i] = nums[indexes[i]];\n\
+    \    }\n    return result;\n}", "{\n    if (nums.length == 0)\n        return\
+    \ nums;\n    auto nums_with_points = new tuple[](nums.length);\n    foreach (i,\
+    \ num; nums)\n    {\n        nums_with_points[i] = tuple(num, sum_digits(num));\n\
+    \    }\n    nums_with_points.sort!((a, b) => a[1] < b[1] || (a[1] == b[1] && a[0]\
+    \ < b[0]));\n    foreach (i, num; nums_with_points)\n    {\n        nums[i] =\
+    \ num[0];\n    }\n    return nums;\n}", "{\n    if (nums.length == 0)\n      \
+    \  return nums;\n    long[] sums = new long[nums.length];\n    foreach (i, v;\
+    \ nums)\n    {\n        sums[i] = v.abs;\n        while (sums[i] > 0)\n      \
+    \  {\n            sums[i] -= sums[i] % 10;\n            sums[i] /= 10;\n     \
+    \   }\n    }\n    int[] indices = iota(nums.length);\n    sort!((a, b) => sums[a]\
+    \ < sums[b] || (sums[a] == sums[b] && a < b))(indices);\n    return indices.map!(i\
+    \ => nums[i]).array;\n}", "{\n    if (nums.length == 0)\n        return nums;\n\
+    \    int[] sums = new int[nums.length];\n    foreach (i, v; nums)\n    {\n   \
+    \     sums[i] = 0;\n        foreach (c; v.to!string)\n            sums[i] += c.to!int\
+    \ - '0'.to!int;\n    }\n    auto result = nums.dup;\n    sort!((a, b) => sums[a]\
+    \ < sums[b] || (sums[a] == sums[b] && a < b))(result);\n    return result;\n}",
+  "{\n    if (nums.length == 0)\n        return nums;\n    auto result = nums.dup;\n\
+    \    auto sums = new int[nums.length];\n    foreach (i, n; nums)\n    {\n    \
+    \    int sum = 0;\n        while (n != 0)\n        {\n            sum += n % 10;\n\
+    \            n /= 10;\n        }\n        sums[i] = sum;\n    }\n    sort!((a,\
+    \ b) => sums[a] < sums[b] || (sums[a] == sums[b] && a < b))(result);\n    return\
+    \ result;\n}", "{\n    long[] result = new long[nums.length];\n    int[] points\
+    \ = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n    {\n\
+    \        int sum = 0;\n        long n = nums[i];\n        while (n != 0)\n   \
+    \     {\n            sum += n % 10;\n            n /= 10;\n        }\n       \
+    \ points[i] = sum;\n    }\n    int[] sorted = sort(points);\n    for (int i =\
+    \ 0; i < nums.length; i++)\n    {\n        result[i] = nums[sorted[i]];\n    }\n\
+    \    return result;\n}", "{\n    if (nums.length == 0)\n        return nums;\n\
+    \    long[] sums = new long[nums.length];\n    foreach (i, n; nums)\n    {\n \
+    \       sums[i] = n.abs;\n        while (sums[i] > 0)\n        {\n           \
+    \ sums[i] -= sums[i] % 10;\n            sums[i] /= 10;\n        }\n    }\n   \
+    \ return nums.sort!((a, b) => sums[a] < sums[b] || (sums[a] == sums[b] && a <\
+    \ b));\n}", "{\n    long[] result = nums.dup;\n    sort!((a, b) => sumDigits(a)\
+    \ < sumDigits(b))(result);\n    return result;\n}", "{\n    if (nums.length ==\
+    \ 0)\n        return nums;\n    long[] sum = new long[nums.length];\n    for (int\
+    \ i = 0; i < nums.length; i++)\n    {\n        long temp = nums[i];\n        while\
+    \ (temp != 0)\n        {\n            sum[i] += temp % 10;\n            temp /=\
+    \ 10;\n        }\n    }\n    long[] result = new long[nums.length];\n    for (int\
+    \ i = 0; i < nums.length; i++)\n    {\n        long min = sum[0];\n        int\
+    \ index = 0;\n        for (int j = 0; j < nums.length; j++)\n        {\n     \
+    \       if (sum[j] < min)\n            {\n                min = sum[j];\n    \
+    \            index = j;\n            }\n        }\n        result[i] = nums[index];\n\
+    \        sum[index] = long.max;\n    }\n    return result;\n}", "{\n    auto arr\
+    \ = nums.dup;\n    auto sum = new long[arr.length];\n    foreach(i, ref e; arr)\n\
+    \    {\n        long temp = e;\n        while(temp != 0)\n        {\n        \
+    \    sum[i] += temp % 10;\n            temp /= 10;\n        }\n    }\n    auto\
+    \ temp = new long[arr.length];\n    foreach(i, ref e; arr)\n    {\n        temp[i]\
+    \ = e;\n    }\n    sort!((a, b) => a < b)(sum, arr);\n    foreach(i, ref e; arr)\n\
+    \    {\n        if(e == temp[i])\n        {\n            continue;\n        }\n\
+    \        else\n        {\n            auto temp2 = e;\n            foreach(j,\
+    \ ref f; arr)\n            {\n                if(f == temp[i])\n             \
+    \   {\n                    arr[j] = temp2;\n                    arr[i] = f;\n\
+    \                    break;\n                }\n            }\n        }\n   \
+    \ }\n    return arr;\n}", "{\n    long[] result = new long[nums.length];\n   \
+    \ int[] sum = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n\
+    \    {\n        int temp = nums[i];\n        while (temp != 0)\n        {\n  \
+    \          sum[i] += temp % 10;\n            temp /= 10;\n        }\n    }\n \
+    \   int[] index = new int[nums.length];\n    for (int i = 0; i < index.length;\
+    \ i++)\n    {\n        index[i] = i;\n    }\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        for (int j = i + 1; j < nums.length; j++)\n        {\n\
+    \            if (sum[i] > sum[j])\n            {\n                int temp = sum[i];\n\
+    \                sum[i] = sum[j];\n                sum[j] = temp;\n          \
+    \      temp = index[i];\n                index[i] = index[j];\n              \
+    \  index[j] = temp;\n            }\n            else if (sum[i] == sum[j])\n \
+    \           {\n                if (index[i] > index[j])\n                {\n \
+    \                   int temp = index[i];\n                    index[i] = index[j];\n\
+    \                    index[j] = temp;\n                }\n            }\n    \
+    \    }\n    }\n    for (int i = 0; i < nums.length; i++)\n    {\n        result[i]\
+    \ = nums[index[i]];\n    }\n    return result;\n}", "{\n    long[] result = new\
+    \ long[nums.length];\n    int[] sums = new int[nums.length];\n    for (int i =\
+    \ 0; i < nums.length; i++)\n    {\n        sums[i] = sumDigits(nums[i]);\n   \
+    \ }\n    int[] sorted = sort(sums);\n    for (int i = 0; i < nums.length; i++)\n\
+    \    {\n        result[i] = nums[sorted[i]];\n    }\n    return result;\n}", "{\n\
+    \    if (nums.length == 0)\n        return nums;\n    else\n    {\n        long[]\
+    \ result = new long[nums.length];\n        long[] sums = new long[nums.length];\n\
+    \        for (int i = 0; i < nums.length; i++)\n        {\n            sums[i]\
+    \ = sumDigits(nums[i]);\n        }\n        sort(sums);\n        for (int i =\
+    \ 0; i < nums.length; i++)\n        {\n            result[i] = nums[indexOf(sums[i],\
+    \ sums)];\n        }\n        return result;\n    }\n}", "{\n    if (nums.length\
+    \ == 0)\n        return nums;\n    auto a = new int[nums.length];\n    foreach\
+    \ (i, e; nums)\n    {\n        int sum = 0;\n        foreach (c; to!string(e))\n\
+    \            sum += c - '0';\n        a[i] = sum;\n    }\n    auto b = nums.dup;\n\
+    \    sort!((a, b) => a < b)(a, b);\n    return b;\n}", "{\n    if (nums.length\
+    \ == 0)\n        return nums;\n    long[] sums = new long[nums.length];\n    for\
+    \ (int i = 0; i < nums.length; i++)\n    {\n        long n = nums[i];\n      \
+    \  if (n < 0)\n            n = -n;\n        while (n > 0)\n        {\n       \
+    \     sums[i] += n % 10;\n            n /= 10;\n        }\n    }\n    return nums.sort!((a,\
+    \ b) => sums[a] < sums[b] || (sums[a] == sums[b] && a < b));\n}", "{\n    auto\
+    \ a = nums.dup;\n    auto b = nums.dup;\n    auto c = nums.dup;\n    auto d =\
+    \ nums.dup;\n    auto e = nums.dup;\n    auto f = nums.dup;\n    auto g = nums.dup;\n\
+    \    auto h = nums.dup;\n    auto i = nums.dup;\n    auto j = nums.dup;\n    auto\
+    \ k = nums.dup;\n    auto l = nums.dup;\n    auto m = nums.dup;\n    auto n =\
+    \ nums.dup;\n    auto o = nums.dup;\n    auto p = nums.dup;\n    auto q = nums.dup;\n\
+    \    auto r = nums.dup;\n    auto s = nums.dup;\n    auto t = nums.dup;\n    auto\
+    \ u = nums.dup;\n    auto v = nums.dup;\n    auto w = nums.dup;\n    auto x =\
+    \ nums.dup;\n    auto y = nums.dup;\n    auto z = nums.dup;\n    auto aa = nums.dup;\n\
+    \    auto bb = nums.dup;\n    auto cc = nums.dup;\n    auto dd = nums.dup;\n \
+    \   auto ee = nums.dup;\n    auto ff = nums.dup;\n    auto gg = nums.dup;\n  \
+    \  auto hh = nums.dup;\n    auto ii = nums.dup;\n    auto jj = nums.dup;\n   \
+    \ auto kk = nums.dup;\n    auto ll = nums.dup;\n    auto mm = nums.dup;\n    auto\
+    \ nn = nums.dup;\n    auto oo = nums.dup;\n    auto pp = nums.dup;\n    auto qq\
+    \ = nums.dup;\n    auto rr = nums.dup;\n    auto ss = nums.dup;\n    auto t",
+  "{\n    if (nums.length == 0)\n        return nums;\n    auto sums = new long[nums.length];\n\
+    \    foreach (i, n; nums)\n    {\n        sums[i] = n.abs;\n        while (sums[i]\
+    \ > 0)\n        {\n            sums[i] -= sums[i] % 10;\n            sums[i] /=\
+    \ 10;\n        }\n    }\n    auto indices = new int[nums.length];\n    foreach\
+    \ (i; 0 .. nums.length)\n        indices[i] = i;\n    sort!((a, b) => sums[a]\
+    \ < sums[b] || (sums[a] == sums[b] && a < b))(indices);\n    auto result = new\
+    \ long[nums.length];\n    foreach (i, n; indices)\n        result[i] = nums[n];\n\
+    \    return result;\n}", "{\n    auto arr = nums.dup;\n    sort!((a, b) => sumDigits(a)\
+    \ < sumDigits(b))(arr);\n    return arr;\n}", "{\n    long[] result = new long[nums.length];\n\
+    \    int[] sums = new int[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        sums[i] = sumDigits(nums[i]);\n    }\n    int[] sorted\
+    \ = sort(sums);\n    for (int i = 0; i < nums.length; i++)\n    {\n        result[i]\
+    \ = nums[sorted[i]];\n    }\n    return result;\n}", "{\n    auto result = nums.dup;\n\
+    \    auto sums = new long[nums.length];\n    foreach(i, n; nums)\n    {\n    \
+    \    sums[i] = sumDigits(n);\n    }\n    sort!((a, b) => a > b)(sums);\n    foreach(i,\
+    \ s; sums)\n    {\n        foreach(j, n; nums)\n        {\n            if(s ==\
+    \ sumDigits(n))\n            {\n                result[i] = n;\n             \
+    \   break;\n            }\n        }\n    }\n    return result;\n}", "{\n    if\
+    \ (nums.length == 0)\n        return nums;\n    long[] sums = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        sums[i] = nums[i];\n\
+    \        if (sums[i] < 0)\n            sums[i] *= -1;\n        while (sums[i]\
+    \ > 0)\n        {\n            sums[i] = sums[i] / 10 + sums[i] % 10;\n      \
+    \  }\n    }\n    long[] result = nums.dup;\n    sort!((a, b) => sums[a] < sums[b]\
+    \ || (sums[a] == sums[b] && a < b))(result);\n    return result;\n}", "{\n   \
+    \ if (nums.length == 0)\n        return nums;\n    else\n    {\n        long[]\
+    \ sum = new long[nums.length];\n        for (int i = 0; i < nums.length; i++)\n\
+    \        {\n            long num = nums[i];\n            if (num < 0)\n      \
+    \          num = -num;\n            while (num > 0)\n            {\n         \
+    \       sum[i] += num % 10;\n                num /= 10;\n            }\n     \
+    \   }\n        long[] result = new long[nums.length];\n        for (int i = 0;\
+    \ i < nums.length; i++)\n        {\n            long min = sum[0];\n         \
+    \   int index = 0;\n            for (int j = 0; j < nums.length; j++)\n      \
+    \      {\n                if (sum[j] < min)\n                {\n             \
+    \       min = sum[j];\n                    index = j;\n                }\n   \
+    \         }\n            result[i] = nums[index];\n            sum[index] = long.max;\n\
+    \        }\n        return result;\n    }\n}", "{\n    struct Item\n    {\n  \
+    \      long num;\n        long sum;\n        size_t index;\n    }\n    auto items\
+    \ = new Item[](nums.length);\n    foreach (i, n; nums)\n    {\n        items[i].num\
+    \ = n;\n        items[i].sum = 0;\n        items[i].index = i;\n        while\
+    \ (n != 0)\n        {\n            items[i].sum += n % 10;\n            n /= 10;\n\
+    \        }\n    }\n    items.sort!((a, b) => a.sum < b.sum || (a.sum == b.sum\
+    \ && a.index < b.index));\n    return items.map!(a => a.num).array;\n}", "{\n\
+    \    long[] result = new long[nums.length];\n    int[] sum = new int[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        int temp = 0;\n   \
+    \     while (nums[i] != 0)\n        {\n            temp += nums[i] % 10;\n   \
+    \         nums[i] /= 10;\n        }\n        sum[i] = temp;\n    }\n    auto p\
+    \ = zip(sum, nums);\n    p.sort!((a, b) => a[0] < b[0]);\n    foreach (i, e; p)\n\
+    \    {\n        result[i] = e[1];\n    }\n    return result;\n}", "{\n    long[]\
+    \ result = nums.dup;\n    sort!((a, b) => sumDigits(a) < sumDigits(b))(result);\n\
+    \    return result;\n}", "{\n    if (nums.length == 0)\n        return nums;\n\
+    \    auto sum_digits = (long n) => {\n        long sum = 0;\n        while (n\
+    \ != 0) {\n            sum += n % 10;\n            n /= 10;\n        }\n     \
+    \   return sum;\n    };\n    auto compare = (long a, long b) => {\n        long\
+    \ sum_a = sum_digits(a);\n        long sum_b = sum_digits(b);\n        if (sum_a\
+    \ == sum_b)\n            return a < b;\n        return sum_a < sum_b;\n    };\n\
+    \    return nums.sort!compare;\n}", "{\n    if (nums.length == 0)\n        return\
+    \ nums;\n    long[] result = nums.dup;\n    sort!((a, b) => sumDigits(a) < sumDigits(b))(result);\n\
+    \    return result;\n}", "{\n    if (nums.length == 0)\n        return nums;\n\
+    \    auto list = new Tuple!(long, long)[nums.length];\n    foreach (i, n; nums)\n\
+    \    {\n        long sum = 0;\n        while (n != 0)\n        {\n           \
+    \ sum += n % 10;\n            n /= 10;\n        }\n        list[i] = tuple(sum,\
+    \ i);\n    }\n    sort(list);\n    foreach (i, t; list)\n        nums[i] = nums[t[1]];\n\
+    \    return nums;\n}", "{\n    long[] result = new long[nums.length];\n    int[]\
+    \ sum = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n   \
+    \ {\n        int temp = 0;\n        while (nums[i] != 0)\n        {\n        \
+    \    temp += nums[i] % 10;\n            nums[i] /= 10;\n        }\n        sum[i]\
+    \ = temp;\n    }\n    int[] index = new int[nums.length];\n    for (int i = 0;\
+    \ i < nums.length; i++)\n    {\n        index[i] = i;\n    }\n    for (int i =\
+    \ 0; i < nums.length; i++)\n    {\n        for (int j = 0; j < nums.length - 1;\
+    \ j++)\n        {\n            if (sum[j] > sum[j + 1])\n            {\n     \
+    \           int temp = sum[j];\n                sum[j] = sum[j + 1];\n       \
+    \         sum[j + 1] = temp;\n                temp = index[j];\n             \
+    \   index[j] = index[j + 1];\n                index[j + 1] = temp;\n         \
+    \   }\n        }\n    }\n    for (int i = 0; i < nums.length; i++)\n    {\n  \
+    \      result[i] = nums[index[i]];\n    }\n    return result;\n}", "{\n    if\
+    \ (nums.length == 0)\n        return nums;\n    auto arr = new tuple!(long, long)[nums.length];\n\
+    \    foreach (i, n; nums)\n    {\n        arr[i] = tuple(n, sumDigits(n));\n \
+    \   }\n    sort!((a, b) => a[1] < b[1] || (a[1] == b[1] && a[0] < b[0]))(arr);\n\
+    \    foreach (i, t; arr)\n    {\n        nums[i] = t[0];\n    }\n    return nums;\n\
+    }", "{\n    int[] sums = new int[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        int sum = 0;\n        foreach (int digit; nums[i].to!string)\n\
+    \        {\n            sum += digit.to!int;\n        }\n        sums[i] = sum;\n\
+    \    }\n    return nums.sort!((a, b) => sums[a] > sums[b]);\n}", "{\n    if (nums.length\
+    \ == 0)\n        return nums;\n    auto nums_with_points = nums.map!(x => tuple(x,\
+    \ x.abs.to!string.map!(y => y.to!int).sum));\n    nums_with_points.sort!((a, b)\
+    \ => a[1] < b[1] || (a[1] == b[1] && a[0] < b[0]));\n    return nums_with_points.map!(x\
+    \ => x[0]).array;\n}", "{\n    auto points = nums.map!(n => n.abs.sumDigits);\n\
+    \    auto indices = iota(nums.length).array;\n    indices.sort!((a, b) => points[a]\
+    \ < points[b] || (points[a] == points[b] && a < b));\n    return indices.map!(i\
+    \ => nums[i]).array;\n}", "{\n    if (nums.length == 0)\n        return nums;\n\
+    \    long[] sums = new long[nums.length];\n    long[] indices = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        sums[i] = nums[i];\n\
+    \        indices[i] = i;\n    }\n    sort(sums, indices);\n    long[] result =\
+    \ new long[nums.length];\n    for (int i = 0; i < nums.length; i++)\n        result[i]\
+    \ = nums[indices[i]];\n    return result;\n}", "{\n    auto arr = nums.dup;\n\
+    \    auto sums = arr.map!(a => a.abs.to!string.map!(a => a.to!long - '0'.to!long).sum).array;\n\
+    \    auto indexes = iota(arr.length).array;\n    auto sorted = sort!(\"a[0] <\
+    \ b[0] || (a[0] == b[0] && a[1] < b[1]\")(zip(sums, indexes));\n    return sorted.map!(a\
+    \ => arr[a[1]]).array;\n}", "{\n    long[] result = new long[nums.length];\n \
+    \   int[] sums = new int[nums.length];\n    foreach(i, x; nums)\n    {\n     \
+    \   sums[i] = x.sumDigits;\n    }\n    auto sorted = sort(sums);\n    foreach(i,\
+    \ x; sorted)\n    {\n        result[i] = nums[x];\n    }\n    return result;\n\
+    }", "{\n    long[] result = nums.dup;\n    sort!((a, b) => sumDigits(a) < sumDigits(b))(result);\n\
+    \    return result;\n}", "{\n    long[] result = new long[nums.length];\n    long[]\
+    \ sums = new long[nums.length];\n    foreach(i, item; nums)\n    {\n        sums[i]\
+    \ = sumDigits(item);\n    }\n    sort!((a, b) => a < b)(sums);\n    foreach(i,\
+    \ item; sums)\n    {\n        foreach(j, item2; nums)\n        {\n           \
+    \ if(sumDigits(item2) == item)\n            {\n                result[i] = item2;\n\
+    \                break;\n            }\n        }\n    }\n    return result;\n\
+    }", "{\n    if (nums.length == 0)\n        return nums;\n    long[] sums = new\
+    \ long[nums.length];\n    long[] indices = new long[nums.length];\n    for (int\
+    \ i = 0; i < nums.length; i++)\n    {\n        indices[i] = i;\n        long num\
+    \ = nums[i];\n        if (num < 0)\n            num = -num;\n        while (num\
+    \ > 0)\n        {\n            sums[i] += num % 10;\n            num /= 10;\n\
+    \        }\n    }\n    sort(sums, indices);\n    long[] result = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n        result[i] = nums[indices[i]];\n\
+    \    return result;\n}", "{\n    long[] result = new long[nums.length];\n    int[]\
+    \ sum = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n   \
+    \ {\n        int temp = 0;\n        while (nums[i] != 0)\n        {\n        \
+    \    temp += nums[i] % 10;\n            nums[i] /= 10;\n        }\n        sum[i]\
+    \ = temp;\n    }\n    int[] index = new int[nums.length];\n    for (int i = 0;\
+    \ i < nums.length; i++)\n    {\n        index[i] = i;\n    }\n    for (int i =\
+    \ 0; i < nums.length; i++)\n    {\n        for (int j = i + 1; j < nums.length;\
+    \ j++)\n        {\n            if (sum[i] > sum[j])\n            {\n         \
+    \       int temp = sum[i];\n                sum[i] = sum[j];\n               \
+    \ sum[j] = temp;\n                temp = index[i];\n                index[i] =\
+    \ index[j];\n                index[j] = temp;\n            }\n        }\n    }\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        result[i] = nums[index[i]];\n\
+    \    }\n    return result;\n}", "{\n    auto arr = nums.dup;\n    auto sum = new\
+    \ long[arr.length];\n    foreach(i, ref x; arr)\n    {\n        long temp = 0;\n\
+    \        foreach(c; x.to!string)\n        {\n            temp += c.to!long - '0'.to!long;\n\
+    \        }\n        sum[i] = temp;\n    }\n    auto sorted = sort!((a, b) => a\
+    \ < b)(sum);\n    auto result = new long[arr.length];\n    foreach(i, ref x; arr)\n\
+    \    {\n        foreach(j, ref y; sorted)\n        {\n            if(x == y)\n\
+    \            {\n                result[i] = y;\n                sorted[j] = 0;\n\
+    \                break;\n            }\n        }\n    }\n    return result;\n\
+    }", "{\n    if (nums.length == 0)\n        return nums;\n    long[] sums = new\
+    \ long[nums.length];\n    for (int i = 0; i < nums.length; i++)\n    {\n     \
+    \   long n = nums[i];\n        long sum = 0;\n        while (n != 0)\n       \
+    \ {\n            sum += n % 10;\n            n /= 10;\n        }\n        sums[i]\
+    \ = sum;\n    }\n    long[] result = new long[nums.length];\n    for (int i =\
+    \ 0; i < nums.length; i++)\n    {\n        int minIndex = 0;\n        for (int\
+    \ j = 0; j < nums.length; j++)\n        {\n            if (sums[j] < sums[minIndex])\n\
+    \                minIndex = j;\n        }\n        result[i] = nums[minIndex];\n\
+    \        sums[minIndex] = long.max;\n    }\n    return result;\n}", "{\n    if\
+    \ (nums.length == 0) return nums;\n    auto arr = nums.dup;\n    auto sum = new\
+    \ long[arr.length];\n    foreach (i, ref x; arr)\n    {\n        sum[i] = 0;\n\
+    \        if (x < 0) x = -x;\n        while (x > 0)\n        {\n            sum[i]\
+    \ += x % 10;\n            x /= 10;\n        }\n    }\n    auto t = new Tuple!(long,\
+    \ long)[arr.length];\n    foreach (i, ref x; arr)\n    {\n        t[i] = tuple(sum[i],\
+    \ i);\n    }\n    t.sort;\n    foreach (i, ref x; t)\n    {\n        arr[i] =\
+    \ nums[x[1]];\n    }\n    return arr;\n}", "{\n    auto nums_with_index = zip(nums,\
+    \ iota(nums.length));\n    auto nums_with_index_and_sum = map!((n, i) => tuple(n,\
+    \ i, sumDigits(n)))(nums_with_index);\n    auto sorted_nums_with_index_and_sum\
+    \ = sort!(\"a[2] < b[2] || (a[2] == b[2] && a[1] < b[1])\")(nums_with_index_and_sum);\n\
+    \    return map!((n, i, s) => n)(sorted_nums_with_index_and_sum);\n}", "{\n  \
+    \  if (nums.length == 0)\n        return nums;\n    long[] sums = new long[nums.length];\n\
+    \    foreach (i, n; nums)\n    {\n        long sum = 0;\n        while (n != 0)\n\
+    \        {\n            sum += n % 10;\n            n /= 10;\n        }\n    \
+    \    sums[i] = sum;\n    }\n    auto zipped = zip(nums, sums);\n    sort!((a,\
+    \ b) => a[1] < b[1] || (a[1] == b[1] && a[0] < b[0]))(zipped);\n    return zipped.map!(a\
+    \ => a[0]).array;\n}", "{\n    long[] result = new long[nums.length];\n    long[]\
+    \ sum = new long[nums.length];\n    long[] index = new long[nums.length];\n  \
+    \  for (int i = 0; i < nums.length; i++)\n    {\n        index[i] = i;\n     \
+    \   sum[i] = 0;\n        long num = nums[i];\n        if (num < 0)\n         \
+    \   num = -num;\n        while (num > 0)\n        {\n            sum[i] += num\
+    \ % 10;\n            num /= 10;\n        }\n    }\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        for (int j = i + 1; j < nums.length; j++)\n        {\n\
+    \            if (sum[i] > sum[j])\n            {\n                long temp =\
+    \ sum[i];\n                sum[i] = sum[j];\n                sum[j] = temp;\n\
+    \                temp = nums[i];\n                nums[i] = nums[j];\n       \
+    \         nums[j] = temp;\n                temp = index[i];\n                index[i]\
+    \ = index[j];\n                index[j] = temp;\n            }\n            else\
+    \ if (sum[i] == sum[j])\n            {\n                if (index[i] > index[j])\n\
+    \                {\n                    long temp = sum[i];\n                \
+    \    sum[i] = sum[j];\n                    sum[j] = temp;\n                  \
+    \  temp = nums[i];\n                    nums[i] = nums[j];\n                 \
+    \   nums[j] = temp;\n                    temp = index[i];\n                  \
+    \  index[i] = index[j];\n                    index[j] = temp;\n              \
+    \  }\n            }\n        }\n    }\n    for (int i = 0; i < nums.length; i++)\n\
+    \        result[i] = nums[i];\n    return result;\n}", "{\n    return nums.dup.sort!((a,\
+    \ b) => \n    {\n        auto sumA = a.to!string.map!(x => x.to!long).sum;\n \
+    \       auto sumB = b.to!string.map!(x => x.to!long).sum;\n        return sumA\
+    \ == sumB ? a.idup.compare(b.idup) : sumA.compare(sumB);\n    });\n}", "{\n  \
+    \  long[] result = new long[nums.length];\n    int[] sums = new int[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        sums[i] = sumDigits(nums[i]);\n\
+    \    }\n    int[] sorted = sort(sums);\n    for (int i = 0; i < nums.length; i++)\n\
+    \    {\n        result[i] = nums[sorted[i]];\n    }\n    return result;\n}", "{\n\
+    \    struct Point\n    {\n        long num;\n        long sum;\n        long index;\n\
+    \    }\n    auto points = new Point[](nums.length);\n    foreach(i, num; nums)\n\
+    \    {\n        points[i].num = num;\n        points[i].sum = sum(digits(num));\n\
+    \        points[i].index = i;\n    }\n    sort!((a, b) => a.sum < b.sum || (a.sum\
+    \ == b.sum && a.index < b.index))(points);\n    return points.map!(p => p.num).array;\n\
+    }", "{\n    if (nums.length == 0)\n        return nums;\n    long[] sums = new\
+    \ long[nums.length];\n    foreach (i, e; nums)\n    {\n        long sum = 0;\n\
+    \        foreach (c; to!string(e))\n            sum += c - '0';\n        sums[i]\
+    \ = sum;\n    }\n    auto tuples = zip(nums, sums);\n    tuples.sort!((a, b) =>\
+    \ a[1] < b[1] || (a[1] == b[1] && a[0] < b[0]));\n    return tuples.map!(a =>\
+    \ a[0]).array;\n}", "{\n    if (nums.length == 0)\n        return nums;\n    long[]\
+    \ sums = new long[nums.length];\n    foreach (i, n; nums)\n    {\n        sums[i]\
+    \ = n;\n        while (sums[i] != 0)\n        {\n            sums[i] = sums[i]\
+    \ - (sums[i] % 10);\n            sums[i] = sums[i] / 10;\n        }\n    }\n \
+    \   return nums.sort!((a, b) => sums[a] < sums[b]);\n}", "{\n    if (nums.length\
+    \ == 0)\n        return nums;\n    auto arr = nums.dup;\n    auto sum = new long[arr.length];\n\
+    \    foreach (i, e; arr)\n    {\n        sum[i] = e.abs;\n        while (sum[i]\
+    \ > 0)\n        {\n            sum[i] -= sum[i] % 10;\n            sum[i] /= 10;\n\
+    \        }\n    }\n    auto index = new int[arr.length];\n    foreach (i, e; arr)\n\
+    \        index[i] = i;\n    auto sort = sort!(\"a < b\", \"a > b\")(sum, index);\n\
+    \    auto result = new long[arr.length];\n    foreach (i, e; index)\n        result[i]\
+    \ = arr[e];\n    return result;\n}", "{\n    if (nums.length == 0)\n        return\
+    \ nums;\n    long[] result = new long[nums.length];\n    long[] sums = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        long sum = 0;\n   \
+    \     long num = nums[i];\n        while (num != 0)\n        {\n            sum\
+    \ += num % 10;\n            num /= 10;\n        }\n        sums[i] = sum;\n  \
+    \  }\n    long[] sorted = sums.dup;\n    sorted.sort;\n    for (int i = 0; i <\
+    \ nums.length; i++)\n    {\n        for (int j = 0; j < nums.length; j++)\n  \
+    \      {\n            if (sums[j] == sorted[i])\n            {\n             \
+    \   result[i] = nums[j];\n                sums[j] = -1;\n                break;\n\
+    \            }\n        }\n    }\n    return result;\n}", "{\n    if (nums.length\
+    \ == 0)\n        return nums;\n    auto nums_with_points = new Tuple!(long, long)[nums.length];\n\
+    \    foreach (i, num; nums)\n    {\n        long points = 0;\n        foreach\
+    \ (digit; num.to!string)\n            points += digit.to!long;\n        nums_with_points[i]\
+    \ = tuple(num, points);\n    }\n    nums_with_points.sort!((a, b) => a[1] < b[1]\
+    \ || (a[1] == b[1] && a[0] < b[0]));\n    foreach (i, num_with_points; nums_with_points)\n\
+    \        nums[i] = num_with_points[0];\n    return nums;\n}", "{\n    if (nums.length\
+    \ == 0)\n        return nums;\n    auto nums_with_points = new Tuple!(long, long)[nums.length];\n\
+    \    foreach (i, num; nums)\n    {\n        nums_with_points[i] = tuple(num, sumDigits(num));\n\
+    \    }\n    nums_with_points.sort!((a, b) => a[1] < b[1] || (a[1] == b[1] && a[0]\
+    \ < b[0]));\n    foreach (i, num; nums_with_points)\n    {\n        nums[i] =\
+    \ num[0];\n    }\n    return nums;\n}", "{\n    long[] result = nums.dup;\n  \
+    \  auto comparator = (a, b) => \n    {\n        auto sumA = sumDigits(a);\n  \
+    \      auto sumB = sumDigits(b);\n        if (sumA == sumB)\n            return\
+    \ a < b;\n        return sumA < sumB;\n    };\n    result.sort(comparator);\n\
+    \    return result;\n}", "{\n    long[] result = new long[nums.length];\n    int[]\
+    \ sums = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n  \
+    \  {\n        sums[i] = sumDigits(nums[i]);\n    }\n    int[] sortedIndexes =\
+    \ sort(sums);\n    for (int i = 0; i < nums.length; i++)\n    {\n        result[i]\
+    \ = nums[sortedIndexes[i]];\n    }\n    return result;\n}", "{\n    long[] result\
+    \ = new long[nums.length];\n    int[] sums = new int[nums.length];\n    foreach(int\
+    \ i, long num; nums)\n    {\n        sums[i] = sum_digits(num);\n    }\n    foreach(int\
+    \ i, int sum; sums)\n    {\n        foreach(int j, int sum2; sums)\n        {\n\
+    \            if(sum < sum2)\n            {\n                int temp = sum;\n\
+    \                sum = sum2;\n                sum2 = temp;\n            }\n  \
+    \      }\n    }\n    foreach(int i, int sum; sums)\n    {\n        foreach(int\
+    \ j, long num; nums)\n        {\n            if(sum_digits(num) == sum)\n    \
+    \        {\n                result[i] = num;\n            }\n        }\n    }\n\
+    \    return result;\n}", "{\n    if (nums.length == 0)\n        return nums;\n\
+    \    int[] sums = new int[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        int sum = 0;\n        foreach (c; nums[i].to!string)\n\
+    \        {\n            if (c.isDigit)\n                sum += c.to!int;\n   \
+    \     }\n        sums[i] = sum;\n    }\n    long[] result = nums.dup;\n    sort!((a,\
+    \ b) => sums[a] < sums[b] || (sums[a] == sums[b] && a < b))(result);\n    return\
+    \ result;\n}", "{\n    long[] result = new long[nums.length];\n    int[] sums\
+    \ = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n    {\n\
+    \        sums[i] = 0;\n        long n = nums[i];\n        while (n != 0)\n   \
+    \     {\n            sums[i] += n % 10;\n            n /= 10;\n        }\n   \
+    \ }\n    int[] indices = new int[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        indices[i] = i;\n    }\n    sort!((a, b) => sums[a] < sums[b]\
+    \ || (sums[a] == sums[b] && a < b))(indices);\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        result[i] = nums[indices[i]];\n    }\n    return result;\n\
+    }", "{\n    auto sum = (long n) => n.to!string.map!(a => a.to!long).sum;\n   \
+    \ auto cmp = (long a, long b) => sum(a) < sum(b) ? -1 : sum(a) > sum(b) ? 1 :\
+    \ 0;\n    return nums.sort!(cmp);\n}", "{\n    long[] result = new long[nums.length];\n\
+    \    long[] sums = new long[nums.length];\n    long[] indices = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        indices[i] = i;\n \
+    \       sums[i] = sumDigits(nums[i]);\n    }\n    sort(sums, indices);\n    for\
+    \ (int i = 0; i < nums.length; i++)\n    {\n        result[i] = nums[indices[i]];\n\
+    \    }\n    return result;\n}\nlong sumDigits(long n)\n{\n    long sum = 0;\n\
+    \    while (n != 0)\n    {\n        sum += n % 10;\n        n /= 10;\n    }\n\
+    \    return sum;\n}", "{\n    if (nums.length == 0)\n        return nums;\n  \
+    \  long[] sums = new long[nums.length];\n    foreach (i, e; nums)\n    {\n   \
+    \     long sum = 0;\n        foreach (c; to!string(e))\n            sum += c -\
+    \ '0';\n        sums[i] = sum;\n    }\n    auto result = zip(nums, sums);\n  \
+    \  result.sort!((a, b) => a[1] < b[1] || (a[1] == b[1] && a[0] < b[0]));\n   \
+    \ return result.map!(a => a[0]).array;\n}", "{\n    auto result = nums.dup;\n\
+    \    sort!((a, b) => sumDigits(a) > sumDigits(b))(result);\n    return result;\n\
+    }", "{\n    if (nums.length == 0)\n        return nums;\n    long[] sums = new\
+    \ long[nums.length];\n    foreach (i, n; nums)\n    {\n        sums[i] = n.abs;\n\
+    \        while (sums[i] > 0)\n        {\n            sums[i] -= sums[i] % 10;\n\
+    \            sums[i] /= 10;\n        }\n    }\n    long[] result = new long[nums.length];\n\
+    \    foreach (i, n; nums)\n    {\n        long min = sums[0];\n        long min_index\
+    \ = 0;\n        foreach (j, s; sums)\n        {\n            if (s < min)\n  \
+    \          {\n                min = s;\n                min_index = j;\n     \
+    \       }\n        }\n        result[i] = nums[min_index];\n        sums[min_index]\
+    \ = long.max;\n    }\n    return result;\n}", "{\n    if (nums.length == 0)\n\
+    \        return nums;\n    long[] sums = new long[nums.length];\n    for (int\
+    \ i = 0; i < nums.length; i++)\n    {\n        long sum = 0;\n        long num\
+    \ = nums[i];\n        if (num < 0)\n            num = -num;\n        while (num\
+    \ > 0)\n        {\n            sum += num % 10;\n            num /= 10;\n    \
+    \    }\n        sums[i] = sum;\n    }\n    long[] res = new long[nums.length];\n\
+    \    int[] indices = new int[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n        indices[i] = i;\n    sort!(\"a < b\", \"a\", \"b\")(sums, indices);\n\
+    \    for (int i = 0; i < nums.length; i++)\n        res[i] = nums[indices[i]];\n\
+    \    return res;\n}", "{\n    long[] result = new long[nums.length];\n    int[]\
+    \ sums = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n  \
+    \  {\n        sums[i] = sumDigits(nums[i]);\n    }\n    int[] sortedSums = sums.dup;\n\
+    \    sort(sortedSums);\n    for (int i = 0; i < nums.length; i++)\n    {\n   \
+    \     for (int j = 0; j < nums.length; j++)\n        {\n            if (sums[j]\
+    \ == sortedSums[i])\n            {\n                result[i] = nums[j];\n   \
+    \             sums[j] = -1;\n                break;\n            }\n        }\n\
+    \    }\n    return result;\n}", "{\n    int[] sums = new int[nums.length];\n \
+    \   for (int i = 0; i < nums.length; i++)\n    {\n        sums[i] = 0;\n     \
+    \   foreach (char c; to!string(nums[i]))\n        {\n            sums[i] += c.to!int\
+    \ - '0'.to!int;\n        }\n    }\n    auto sorted = sort!((a, b) => a[1] < b[1]\
+    \ || (a[1] == b[1] && a[0] < b[0]))(zip(iota(nums.length), sums));\n    return\
+    \ sorted.map!(a => nums[a[0]]).array;\n}", "{\n    if (nums.length == 0)\n   \
+    \     return nums;\n    auto temp = new long[][2](nums.length);\n    foreach (i,\
+    \ e; nums)\n    {\n        temp[i][0] = e;\n        temp[i][1] = sumDigits(e);\n\
+    \    }\n    sort(temp, (a, b) => a[1] < b[1] || (a[1] == b[1] && a[0] < b[0]));\n\
+    \    foreach (i, e; temp)\n        nums[i] = e[0];\n    return nums;\n}", "{\n\
+    \    if (nums.length == 0)\n        return nums;\n    \n    auto nums_with_points\
+    \ = new Tuple!(long, long)[nums.length];\n    foreach (i, num; nums)\n    {\n\
+    \        long points = 0;\n        while (num != 0)\n        {\n            points\
+    \ += num % 10;\n            num /= 10;\n        }\n        nums_with_points[i]\
+    \ = tuple(nums[i], points);\n    }\n    \n    sort!((a, b) => a[1] < b[1] || (a[1]\
+    \ == b[1] && a[0] < b[0]))(nums_with_points);\n    \n    foreach (i, num; nums_with_points)\n\
+    \        nums[i] = num[0];\n    \n    return nums;\n}", "{\n    auto arr = nums.dup;\n\
+    \    auto sum = new long[arr.length];\n    foreach(i, ref e; arr)\n    {\n   \
+    \     if(e < 0)\n            e = -e;\n        while(e > 0)\n        {\n      \
+    \      sum[i] += e % 10;\n            e /= 10;\n        }\n    }\n    auto t =\
+    \ tuple(arr, sum);\n    t.sort!((a, b) => a[1] < b[1] || (a[1] == b[1] && a[0]\
+    \ < b[0]));\n    return t[0];\n}", "{\n    long[] result = new long[nums.length];\n\
+    \    int[] sums = new int[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        sums[i] = 0;\n        foreach (int digit; nums[i].to!string)\n\
+    \        {\n            sums[i] += digit.to!int;\n        }\n    }\n    auto pairs\
+    \ = zip(sums, nums);\n    pairs.sort!((a, b) => a[0] < b[0] || (a[0] == b[0] &&\
+    \ a[1] < b[1]));\n    foreach (i, pair; pairs)\n    {\n        result[i] = pair[1];\n\
+    \    }\n    return result;\n}", "{\n    if (nums.length == 0)\n        return\
+    \ nums;\n    auto sum = new long[nums.length];\n    auto index = new long[nums.length];\n\
+    \    foreach (i, num; nums)\n    {\n        sum[i] = 0;\n        foreach (c; num.to!string())\n\
+    \            sum[i] += c.to!long - '0'.to!long;\n        index[i] = i;\n    }\n\
+    \    auto zipped = zip(sum, index);\n    auto sorted = sort!((a, b) => a[0] <\
+    \ b[0])(zipped);\n    auto result = new long[nums.length];\n    foreach (i, item;\
+    \ sorted)\n        result[i] = nums[item[1]];\n    return result;\n}", "{\n  \
+    \  long[] result = new long[nums.length];\n    long[] sums = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        sums[i] = 0;\n    \
+    \    long n = nums[i];\n        while (n != 0)\n        {\n            sums[i]\
+    \ += n % 10;\n            n /= 10;\n        }\n    }\n    for (int i = 0; i <\
+    \ nums.length; i++)\n    {\n        long min = sums[i];\n        int min_index\
+    \ = i;\n        for (int j = i; j < nums.length; j++)\n        {\n           \
+    \ if (sums[j] < min)\n            {\n                min = sums[j];\n        \
+    \        min_index = j;\n            }\n        }\n        sums[min_index] = sums[i];\n\
+    \        sums[i] = min;\n        result[i] = nums[min_index];\n    }\n    return\
+    \ result;\n}", "{\n    if (nums.length == 0)\n        return nums;\n    auto sums\
+    \ = new long[nums.length];\n    foreach (i, n; nums)\n    {\n        long sum\
+    \ = 0;\n        foreach (c; to!string(n))\n            sum += c.to!long - '0'.to!long;\n\
+    \        sums[i] = sum;\n    }\n    auto indices = new size_t[nums.length];\n\
+    \    foreach (i; 0 .. nums.length)\n        indices[i] = i;\n    sort!((a, b)\
+    \ => sums[a] < sums[b] || (sums[a] == sums[b] && a < b))(indices);\n    auto result\
+    \ = new long[nums.length];\n    foreach (i; 0 .. nums.length)\n        result[i]\
+    \ = nums[indices[i]];\n    return result;\n}", "{\n    long[] result = new long[nums.length];\n\
+    \    int[] sums = new int[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        int sum = 0;\n        long num = nums[i];\n        while\
+    \ (num != 0)\n        {\n            sum += num % 10;\n            num /= 10;\n\
+    \        }\n        sums[i] = sum;\n    }\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        int min = sums[i];\n        int minIndex = i;\n       \
+    \ for (int j = i; j < nums.length; j++)\n        {\n            if (sums[j] <\
+    \ min)\n            {\n                min = sums[j];\n                minIndex\
+    \ = j;\n            }\n        }\n        result[i] = nums[minIndex];\n      \
+    \  sums[minIndex] = sums[i];\n    }\n    return result;\n}", "{\n    if (nums.length\
+    \ == 0)\n        return nums;\n    auto result = new long[](nums.length);\n  \
+    \  auto sums = new long[](nums.length);\n    foreach (i, num; nums)\n    {\n \
+    \       sums[i] = sumDigits(num);\n    }\n    auto sorted = sort(sums);\n    foreach\
+    \ (i, num; nums)\n    {\n        result[i] = nums[sorted[i]];\n    }\n    return\
+    \ result;\n}", "{\n    if (nums.length == 0)\n        return nums;\n    auto sums\
+    \ = new long[nums.length];\n    foreach (i, n; nums)\n    {\n        sums[i] =\
+    \ n.abs;\n        while (sums[i] > 0)\n        {\n            sums[i] -= sums[i]\
+    \ % 10;\n            sums[i] /= 10;\n        }\n    }\n    auto indices = new\
+    \ int[nums.length];\n    foreach (i; 0 .. nums.length)\n        indices[i] = i;\n\
+    \    sort!((a, b) => sums[a] > sums[b] || (sums[a] == sums[b] && a > b))(indices);\n\
+    \    auto result = new long[nums.length];\n    foreach (i, j; indices)\n     \
+    \   result[i] = nums[j];\n    return result;\n}", "{\n    struct Point\n    {\n\
+    \        long num;\n        long index;\n    }\n    auto points = new Point[](nums.length);\n\
+    \    foreach(i, n; nums)\n    {\n        points[i].num = n;\n        points[i].index\
+    \ = i;\n    }\n    sort(points, (a, b) =>\n    {\n        long aSum = 0;\n   \
+    \     long bSum = 0;\n        foreach(c; to!string(a.num))\n        {\n      \
+    \      aSum += c.to!long - '0'.to!long;\n        }\n        foreach(c; to!string(b.num))\n\
+    \        {\n            bSum += c.to!long - '0'.to!long;\n        }\n        return\
+    \ aSum == bSum ? a.index < b.index : aSum < bSum;\n    });\n    foreach(i, p;\
+    \ points)\n    {\n        nums[i] = p.num;\n    }\n    return nums;\n}", "{\n\
+    \    auto result = nums.dup;\n    auto sums = nums.map!(a => a.abs.sumDigits).array;\n\
+    \    sort!((a, b) => sums[a] < sums[b] || (sums[a] == sums[b] && a < b))(result);\n\
+    \    return result;\n}", "{\n    int[] sums = new int[nums.length];\n    for (int\
+    \ i = 0; i < nums.length; i++)\n    {\n        long n = nums[i];\n        int\
+    \ sum = 0;\n        while (n != 0)\n        {\n            sum += n % 10;\n  \
+    \          n /= 10;\n        }\n        sums[i] = sum;\n    }\n    return nums.dup.sort!((a,\
+    \ b) => sums[a] < sums[b] || (sums[a] == sums[b] && a < b));\n}", "{\n    if (nums.length\
+    \ == 0)\n        return nums;\n    long[] sums = new long[nums.length];\n    long[]\
+    \ indices = new long[nums.length];\n    for (int i = 0; i < nums.length; i++)\n\
+    \    {\n        indices[i] = i;\n        sums[i] = nums[i];\n        while (sums[i]\
+    \ > 0)\n        {\n            sums[i] -= sums[i] % 10;\n            sums[i] /=\
+    \ 10;\n        }\n    }\n    sort(sums, indices);\n    long[] result = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n        result[i] = nums[indices[i]];\n\
+    \    return result;\n}", "{\n    if (nums.length == 0)\n        return nums;\n\
+    \    long[] result = new long[nums.length];\n    long[] sums = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        long sum = 0;\n   \
+    \     long num = nums[i];\n        while (num != 0)\n        {\n            sum\
+    \ += num % 10;\n            num /= 10;\n        }\n        sums[i] = sum;\n  \
+    \  }\n    int[] indices = new int[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n        indices[i] = i;\n    sort(sums, indices);\n    for (int i = 0;\
+    \ i < nums.length; i++)\n        result[i] = nums[indices[i]];\n    return result;\n\
+    }", "{\n    long[] result = new long[nums.length];\n    int[] sum = new int[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        int temp = 0;\n   \
+    \     while (nums[i] != 0)\n        {\n            temp += nums[i] % 10;\n   \
+    \         nums[i] /= 10;\n        }\n        sum[i] = temp;\n    }\n    int[]\
+    \ index = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n \
+    \   {\n        index[i] = i;\n    }\n    for (int i = 0; i < nums.length; i++)\n\
+    \    {\n        for (int j = i + 1; j < nums.length; j++)\n        {\n       \
+    \     if (sum[i] > sum[j])\n            {\n                int temp = sum[i];\n\
+    \                sum[i] = sum[j];\n                sum[j] = temp;\n          \
+    \      temp = index[i];\n                index[i] = index[j];\n              \
+    \  index[j] = temp;\n            }\n        }\n    }\n    for (int i = 0; i <\
+    \ nums.length; i++)\n    {\n        result[i] = nums[index[i]];\n    }\n    return\
+    \ result;\n}", "{\n    if (nums.length == 0)\n        return nums;\n    long[]\
+    \ result = new long[nums.length];\n    long[] sums = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        sums[i] = sumDigits(nums[i]);\n\
+    \    }\n    auto sorted = sort(sums);\n    for (int i = 0; i < nums.length; i++)\n\
+    \    {\n        result[i] = nums[sorted[i].index];\n    }\n    return result;\n\
+    }", "{\n    if (nums.length == 0)\n        return nums;\n    long[] result = new\
+    \ long[nums.length];\n    long[] sum = new long[nums.length];\n    for (int i\
+    \ = 0; i < nums.length; i++)\n    {\n        long temp = nums[i];\n        while\
+    \ (temp != 0)\n        {\n            sum[i] += temp % 10;\n            temp /=\
+    \ 10;\n        }\n    }\n    int[] index = new int[nums.length];\n    for (int\
+    \ i = 0; i < nums.length; i++)\n        index[i] = i;\n    sort(sum, index);\n\
+    \    for (int i = 0; i < nums.length; i++)\n        result[i] = nums[index[i]];\n\
+    \    return result;\n}", "{\n    long[] result = nums.dup;\n    result.sort!((a,\
+    \ b) => sumDigits(a) < sumDigits(b));\n    return result;\n}", "{\n    long[]\
+    \ result = new long[nums.length];\n    long[] sum = new long[nums.length];\n \
+    \   for (int i = 0; i < nums.length; i++)\n    {\n        sum[i] = nums[i];\n\
+    \        while (sum[i] > 0)\n        {\n            sum[i] = sum[i] / 10;\n  \
+    \          if (sum[i] > 0)\n            {\n                sum[i] = sum[i] + (sum[i]\
+    \ % 10);\n            }\n        }\n    }\n    int[] index = new int[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        index[i] = i;\n   \
+    \ }\n    int temp;\n    for (int i = 0; i < nums.length; i++)\n    {\n       \
+    \ for (int j = i + 1; j < nums.length; j++)\n        {\n            if (sum[i]\
+    \ > sum[j])\n            {\n                temp = sum[i];\n                sum[i]\
+    \ = sum[j];\n                sum[j] = temp;\n                temp = index[i];\n\
+    \                index[i] = index[j];\n                index[j] = temp;\n    \
+    \        }\n        }\n    }\n    for (int i = 0; i < nums.length; i++)\n    {\n\
+    \        result[i] = nums[index[i]];\n    }\n    return result;\n}", "{\n    if\
+    \ (nums.length == 0)\n        return nums;\n    auto arr = nums.dup;\n    auto\
+    \ sum = new long[arr.length];\n    for (int i = 0; i < arr.length; i++)\n    {\n\
+    \        sum[i] = 0;\n        while (arr[i] != 0)\n        {\n            sum[i]\
+    \ += arr[i] % 10;\n            arr[i] /= 10;\n        }\n    }\n    auto result\
+    \ = new long[arr.length];\n    for (int i = 0; i < arr.length; i++)\n    {\n \
+    \       int min = i;\n        for (int j = i + 1; j < arr.length; j++)\n     \
+    \   {\n            if (sum[j] < sum[min])\n                min = j;\n        \
+    \    else if (sum[j] == sum[min])\n            {\n                if (arr[j] <\
+    \ arr[min])\n                    min = j;\n            }\n        }\n        result[i]\
+    \ = arr[min];\n        sum[min] = sum[i];\n        arr[min] = arr[i];\n    }\n\
+    \    return result;\n}", "{\n    long[] result = nums.dup;\n    result.sort!((a,\
+    \ b) => \n    {\n        long aSum = 0;\n        long bSum = 0;\n        foreach(digit;\
+    \ a.to!string)\n        {\n            aSum += digit.to!long;\n        }\n   \
+    \     foreach(digit; b.to!string)\n        {\n            bSum += digit.to!long;\n\
+    \        }\n        return aSum < bSum ? -1 : aSum > bSum ? 1 : 0;\n    });\n\
+    \    return result;\n}", "{\n    if (nums.length == 0)\n        return nums;\n\
+    \    long[] sums = new long[nums.length];\n    foreach (i, n; nums)\n    {\n \
+    \       long sum = 0;\n        while (n != 0)\n        {\n            sum += n\
+    \ % 10;\n            n /= 10;\n        }\n        sums[i] = sum;\n    }\n    auto\
+    \ result = nums.dup;\n    sort!((a, b) => sums[a] < sums[b] || (sums[a] == sums[b]\
+    \ && a < b))(result);\n    return result;\n}", "{\n    if (nums.length == 0)\n\
+    \        return nums;\n    auto arr = new long[][](nums.length);\n    foreach\
+    \ (i, e; nums)\n    {\n        long sum = 0;\n        foreach (c; to!string(e))\n\
+    \            sum += c.to!long - '0'.to!long;\n        arr[i] = [sum, i];\n   \
+    \ }\n    sort!((a, b) => a[0] < b[0] || (a[0] == b[0] && a[1] < b[1]))(arr);\n\
+    \    auto res = new long[](nums.length);\n    foreach (i, e; arr)\n        res[i]\
+    \ = nums[e[1]];\n    return res;\n}", "{\n    long[] result = nums.dup;\n    result.sort!((a,\
+    \ b) => \n    {\n        long sumA = 0;\n        long sumB = 0;\n        foreach(digit;\
+    \ a.digits)\n        {\n            sumA += digit;\n        }\n        foreach(digit;\
+    \ b.digits)\n        {\n            sumB += digit;\n        }\n        return\
+    \ sumA < sumB ? -1 : sumA > sumB ? 1 : 0;\n    });\n    return result;\n}", "{\n\
+    \    long[] result = new long[nums.length];\n    long[] sums = new long[nums.length];\n\
+    \    foreach(i, v; nums)\n    {\n        long sum = 0;\n        foreach(c; to!string(v))\n\
+    \        {\n            sum += c.to!long - '0'.to!long;\n        }\n        sums[i]\
+    \ = sum;\n    }\n    auto t = zip(nums, sums);\n    t.sort!((a, b) => a[1] < b[1]);\n\
+    \    foreach(i, v; t)\n    {\n        result[i] = v[0];\n    }\n    return result;\n\
+    }", "{\n    long[] res = new long[nums.length];\n    int[] sums = new int[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        sums[i] = nums[i].abs.to!string.map!(a\
+    \ => a.to!int - '0').sum;\n    }\n    for (int i = 0; i < nums.length; i++)\n\
+    \    {\n        int min = sums[i];\n        int min_index = i;\n        for (int\
+    \ j = i; j < nums.length; j++)\n        {\n            if (sums[j] < min)\n  \
+    \          {\n                min = sums[j];\n                min_index = j;\n\
+    \            }\n        }\n        res[i] = nums[min_index];\n        sums[min_index]\
+    \ = sums[i];\n        sums[i] = min;\n    }\n    return res;\n}", "{\n    if (nums.length\
+    \ == 0)\n        return nums;\n    auto sums = new long[nums.length];\n    foreach\
+    \ (i, n; nums)\n    {\n        sums[i] = n.digits.sum;\n    }\n    auto indices\
+    \ = new int[nums.length];\n    foreach (i, _; nums)\n    {\n        indices[i]\
+    \ = i;\n    }\n    auto result = new long[nums.length];\n    sort!((a, b) => sums[a]\
+    \ < sums[b] || (sums[a] == sums[b] && a < b))(indices);\n    foreach (i, n; indices)\n\
+    \    {\n        result[i] = nums[n];\n    }\n    return result;\n}", "{\n    if\
+    \ (nums.length == 0)\n        return nums;\n    auto arr = new Tuple!(long, long)[nums.length];\n\
+    \    foreach (i, n; nums)\n    {\n        long sum = 0;\n        long num = n;\n\
+    \        while (num != 0)\n        {\n            sum += num % 10;\n         \
+    \   num /= 10;\n        }\n        arr[i] = tuple(sum, n);\n    }\n    arr.sort!((a,\
+    \ b) => a[0] < b[0] || (a[0] == b[0] && a[1] < b[1]));\n    foreach (i, a; arr)\n\
+    \        nums[i] = a[1];\n    return nums;\n}", "{\n    if (nums.length == 0)\n\
+    \        return nums;\n    long[] result = new long[nums.length];\n    int[] sums\
+    \ = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n    {\n\
+    \        int sum = 0;\n        int num = nums[i];\n        while (num != 0)\n\
+    \        {\n            sum += num % 10;\n            num /= 10;\n        }\n\
+    \        sums[i] = sum;\n    }\n    int[] sorted_indexes = sort!((a, b) => sums[a]\
+    \ < sums[b])(iota(nums.length));\n    for (int i = 0; i < nums.length; i++)\n\
+    \        result[i] = nums[sorted_indexes[i]];\n    return result;\n}", "{\n  \
+    \  if (nums.length == 0)\n        return nums;\n    auto arr = nums.dup;\n   \
+    \ sort!((a, b) => sumDigits(a) < sumDigits(b))(arr);\n    return arr;\n}", "{\n\
+    \    long[] result = new long[nums.length];\n    long[] sums = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        sums[i] = nums[i];\n\
+    \        while (sums[i] > 0)\n        {\n            sums[i] = sums[i] - (sums[i]\
+    \ % 10);\n            sums[i] = sums[i] / 10;\n        }\n    }\n    int[] indexes\
+    \ = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n    {\n\
+    \        indexes[i] = i;\n    }\n    for (int i = 0; i < nums.length; i++)\n \
+    \   {\n        for (int j = i + 1; j < nums.length; j++)\n        {\n        \
+    \    if (sums[i] > sums[j])\n            {\n                long temp = sums[i];\n\
+    \                sums[i] = sums[j];\n                sums[j] = temp;\n       \
+    \         int temp2 = indexes[i];\n                indexes[i] = indexes[j];\n\
+    \                indexes[j] = temp2;\n            }\n        }\n    }\n    for\
+    \ (int i = 0; i < nums.length; i++)\n    {\n        result[i] = nums[indexes[i]];\n\
+    \    }\n    return result;\n}", "{\n    long[] result = nums.dup;\n    sort!((a,\
+    \ b) => sumDigits(a) < sumDigits(b))(result);\n    return result;\n}", "{\n  \
+    \  long[] res = new long[nums.length];\n    long[] sums = new long[nums.length];\n\
+    \    foreach(i, v; nums)\n    {\n        sums[i] = sumDigits(v);\n    }\n    auto\
+    \ sorted = sort(sums);\n    foreach(i, v; sorted)\n    {\n        res[i] = nums[v];\n\
+    \    }\n    return res;\n}", "{\n    long[] res;\n    if (nums.length == 0)\n\
+    \        return res;\n    else\n    {\n        res = new long[nums.length];\n\
+    \        int[] sums = new int[nums.length];\n        for (int i = 0; i < nums.length;\
+    \ i++)\n        {\n            int sum = 0;\n            int num = nums[i];\n\
+    \            while (num != 0)\n            {\n                sum += num % 10;\n\
+    \                num /= 10;\n            }\n            sums[i] = sum;\n     \
+    \   }\n        int[] indexes = new int[nums.length];\n        for (int i = 0;\
+    \ i < nums.length; i++)\n            indexes[i] = i;\n        sort!((a, b) =>\
+    \ sums[a] < sums[b] || (sums[a] == sums[b] && a < b))(indexes);\n        for (int\
+    \ i = 0; i < nums.length; i++)\n            res[i] = nums[indexes[i]];\n     \
+    \   return res;\n    }\n}", "{\n    auto a = nums.dup;\n    a.sort!((a, b) =>\
+    \ sumDigits(a) < sumDigits(b));\n    return a;\n}", "{\n    if (nums.length ==\
+    \ 0)\n        return nums;\n    auto list = new Tuple!(long, long)[nums.length];\n\
+    \    foreach (i, n; nums)\n    {\n        list[i] = tuple(n, sumDigits(n));\n\
+    \    }\n    sort!((a, b) => a[1] < b[1] || (a[1] == b[1] && a[0] < b[0]))(list);\n\
+    \    foreach (i, t; list)\n    {\n        nums[i] = t[0];\n    }\n    return nums;\n\
+    }", "{\n    if (nums.length == 0) return nums;\n    long[] sums = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        long sum = 0;\n   \
+    \     long n = nums[i];\n        while (n != 0)\n        {\n            sum +=\
+    \ n % 10;\n            n /= 10;\n        }\n        sums[i] = sum;\n    }\n  \
+    \  auto result = sort!((a, b) => a[1] < b[1] || (a[1] == b[1] && a[0] < b[0]))(zip(nums,\
+    \ sums));\n    return result.map!(x => x[0]).array();\n}", "{\n    if (nums.length\
+    \ == 0)\n        return nums;\n    int[] sums = new int[nums.length];\n    for\
+    \ (int i = 0; i < nums.length; i++)\n    {\n        long num = nums[i];\n    \
+    \    if (num < 0)\n            num = -num;\n        while (num > 0)\n        {\n\
+    \            sums[i] += num % 10;\n            num /= 10;\n        }\n    }\n\
+    \    return nums.dup.sort!((a, b) => sums[a] < sums[b] || (sums[a] == sums[b]\
+    \ && a < b));\n}", "{\n    if (nums.length == 0)\n        return nums;\n    long[]\
+    \ sums = new long[nums.length];\n    foreach (i, n; nums)\n    {\n        long\
+    \ sum = 0;\n        foreach (c; to!string(n))\n            sum += c.to!long -\
+    \ '0'.to!long;\n        sums[i] = sum;\n    }\n    auto zipped = zip(nums, sums);\n\
+    \    zipped.sort!((a, b) => a[1] < b[1] || (a[1] == b[1] && a[0] < b[0]));\n \
+    \   return zipped.map!(t => t[0]).array;\n}", "{\n    if (nums.length == 0)\n\
+    \        return nums;\n    long[] result = new long[nums.length];\n    long[]\
+    \ sums = new long[nums.length];\n    foreach (i, n; nums)\n    {\n        sums[i]\
+    \ = n.abs;\n        while (sums[i] > 9)\n        {\n            sums[i] = sums[i].digits.sum;\n\
+    \        }\n    }\n    auto sorted = sort(zip(sums, nums));\n    foreach (i, n;\
+    \ sorted)\n    {\n        result[i] = n[1];\n    }\n    return result;\n}", "{\n\
+    \    long[] result = new long[nums.length];\n    int[] sums = new int[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        sums[i] = 0;\n    \
+    \    for (int j = 0; j < nums[i].to!string.length; j++)\n        {\n         \
+    \   sums[i] += nums[i].to!string[j] - '0';\n        }\n    }\n    int[] indexes\
+    \ = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n    {\n\
+    \        indexes[i] = i;\n    }\n    sort!((a, b) => sums[a] < sums[b] || (sums[a]\
+    \ == sums[b] && a < b))(indexes);\n    for (int i = 0; i < nums.length; i++)\n\
+    \    {\n        result[i] = nums[indexes[i]];\n    }\n    return result;\n}",
+  "{\n    if (nums.length == 0)\n        return nums;\n    auto arr = new int[nums.length];\n\
+    \    foreach (i, v; nums)\n    {\n        arr[i] = v.abs.sumDigits;\n    }\n \
+    \   auto index = sort(arr);\n    auto res = new long[nums.length];\n    foreach\
+    \ (i, v; index)\n    {\n        res[i] = nums[v];\n    }\n    return res;\n}",
+  "{\n    if (nums.length == 0)\n        return nums;\n    long[] sums = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        sums[i] = nums[i];\n\
+    \        while (sums[i] != 0)\n        {\n            sums[i] = sums[i] / 10;\n\
+    \            sums[i] += nums[i] % 10;\n            nums[i] = nums[i] / 10;\n \
+    \       }\n    }\n    auto a = tuple(nums, sums);\n    a.sort!((a, b) => a[1]\
+    \ < b[1] || (a[1] == b[1] && a[0] < b[0]));\n    return a.map!(x => x[0]).array;\n\
+    }", "{\n    if (nums.length == 0)\n        return nums;\n    auto arr = new tuple!(long,\
+    \ long)[nums.length];\n    foreach (i, n; nums)\n    {\n        long sum = 0;\n\
+    \        foreach (c; to!string(n))\n            sum += c.to!long - '0'.to!long;\n\
+    \        arr[i] = tuple(sum, n);\n    }\n    sort!((a, b) => a[0] < b[0] || (a[0]\
+    \ == b[0] && a[1] < b[1]))(arr);\n    foreach (i, t; arr)\n        nums[i] = t[1];\n\
+    \    return nums;\n}", "{\n    long[] result = new long[nums.length];\n    int[]\
+    \ sums = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n  \
+    \  {\n        int sum = 0;\n        int num = nums[i];\n        while (num !=\
+    \ 0)\n        {\n            sum += num % 10;\n            num /= 10;\n      \
+    \  }\n        sums[i] = sum;\n    }\n    int[] sorted = sums.dup;\n    sorted.sort;\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        int index = sums.indexOf(sorted[i]);\n\
+    \        result[i] = nums[index];\n    }\n    return result;\n}", "{\n    if (nums.length\
+    \ == 0)\n        return nums;\n    long[] sums = new long[nums.length];\n    foreach\
+    \ (i, v; nums)\n    {\n        long sum = 0;\n        foreach (c; to!string(v))\n\
+    \            sum += c.to!long;\n        sums[i] = sum;\n    }\n    auto result\
+    \ = zip(nums, sums);\n    result.sort!((a, b) => a[1] < b[1]);\n    return result.map!(a\
+    \ => a[0]).array;\n}", "{\n    if (nums.length == 0)\n        return nums;\n \
+    \   auto nums_with_points = new Tuple!(long, long)[nums.length];\n    foreach\
+    \ (i, num; nums)\n    {\n        nums_with_points[i] = tuple(num, sum_of_digits(num));\n\
+    \    }\n    nums_with_points.sort!((a, b) => a[1] < b[1] || (a[1] == b[1] && a[0]\
+    \ < b[0]));\n    foreach (i, num; nums_with_points)\n    {\n        nums[i] =\
+    \ num[0];\n    }\n    return nums;\n}", "{\n    long[] result;\n    if (nums.length\
+    \ == 0)\n        return nums;\n    else\n    {\n        result = new long[nums.length];\n\
+    \        int[] sum = new int[nums.length];\n        for (int i = 0; i < nums.length;\
+    \ i++)\n        {\n            int temp = 0;\n            if (nums[i] < 0)\n \
+    \               nums[i] = -nums[i];\n            while (nums[i] != 0)\n      \
+    \      {\n                temp += nums[i] % 10;\n                nums[i] /= 10;\n\
+    \            }\n            sum[i] = temp;\n        }\n        int[] index = new\
+    \ int[nums.length];\n        for (int i = 0; i < nums.length; i++)\n         \
+    \   index[i] = i;\n        for (int i = 0; i < nums.length; i++)\n        {\n\
+    \            for (int j = i + 1; j < nums.length; j++)\n            {\n      \
+    \          if (sum[i] > sum[j])\n                {\n                    int temp\
+    \ = sum[i];\n                    sum[i] = sum[j];\n                    sum[j]\
+    \ = temp;\n                    temp = index[i];\n                    index[i]\
+    \ = index[j];\n                    index[j] = temp;\n                }\n     \
+    \       }\n        }\n        for (int i = 0; i < nums.length; i++)\n        \
+    \    result[i] = nums[index[i]];\n        return result;\n    }\n}", "{\n    if\
+    \ (nums.length == 0)\n        return nums;\n    long[] sums = new long[nums.length];\n\
+    \    foreach (i, n; nums)\n    {\n        long sum = 0;\n        foreach (c; to!string(n))\n\
+    \            sum += c - '0';\n        sums[i] = sum;\n    }\n    auto sorted =\
+    \ sort!((a, b) => a[0] < b[0])(zip(sums, nums));\n    return sorted.map!(a =>\
+    \ a[1]).array;\n}", "{\n    if (nums.length == 0)\n        return nums;\n    int[]\
+    \ sums = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n  \
+    \  {\n        long num = nums[i];\n        int sum = 0;\n        while (num !=\
+    \ 0)\n        {\n            sum += num % 10;\n            num /= 10;\n      \
+    \  }\n        sums[i] = sum;\n    }\n    auto p = zip(nums, sums);\n    p.sort!((a,\
+    \ b) => a[1] < b[1] || (a[1] == b[1] && a[0] < b[0]));\n    return p.map!(a =>\
+    \ a[0]).array;\n}", "{\n    return nums.sort!((a, b) => sumDigits(a) < sumDigits(b));\n\
+    }", "{\n    if (nums.length == 0)\n        return nums;\n    auto arr = new long[][](nums.length);\n\
+    \    foreach (i, v; nums)\n    {\n        arr[i] = new long[](2);\n        arr[i][0]\
+    \ = v;\n        arr[i][1] = sumDigits(v);\n    }\n    arr.sort!((a, b) => a[1]\
+    \ < b[1] || (a[1] == b[1] && a[0] < b[0]));\n    foreach (i, v; arr)\n       \
+    \ nums[i] = v[0];\n    return nums;\n}", "{\n    if (nums.length == 0)\n     \
+    \   return nums;\n    auto arr = nums.dup;\n    auto sum = new long[arr.length];\n\
+    \    for (int i = 0; i < arr.length; i++)\n    {\n        sum[i] = 0;\n      \
+    \  while (arr[i] != 0)\n        {\n            sum[i] += arr[i] % 10;\n      \
+    \      arr[i] /= 10;\n        }\n    }\n    auto res = new long[arr.length];\n\
+    \    for (int i = 0; i < arr.length; i++)\n    {\n        auto min = sum[0];\n\
+    \        auto min_ind = 0;\n        for (int j = 0; j < arr.length; j++)\n   \
+    \     {\n            if (sum[j] < min)\n            {\n                min = sum[j];\n\
+    \                min_ind = j;\n            }\n        }\n        res[i] = nums[min_ind];\n\
+    \        sum[min_ind] = int.max;\n    }\n    return res;\n}", "{\n    if (nums.length\
+    \ == 0)\n        return nums;\n    auto sum = new long[nums.length];\n    for\
+    \ (int i = 0; i < nums.length; i++)\n    {\n        long n = nums[i];\n      \
+    \  if (n < 0)\n            n = -n;\n        while (n > 0)\n        {\n       \
+    \     sum[i] += n % 10;\n            n /= 10;\n        }\n    }\n    auto res\
+    \ = new long[nums.length];\n    auto index = new int[nums.length];\n    for (int\
+    \ i = 0; i < nums.length; i++)\n        index[i] = i;\n    sort!((a, b) => sum[a]\
+    \ < sum[b] || (sum[a] == sum[b] && a < b))(index);\n    for (int i = 0; i < nums.length;\
+    \ i++)\n        res[i] = nums[index[i]];\n    return res;\n}", "{\n    if (nums.length\
+    \ == 0) return nums;\n    long[] sums = new long[nums.length];\n    foreach (i,\
+    \ n; nums)\n    {\n        sums[i] = sumDigits(n);\n    }\n    return nums.sort(sums);\n\
+    }", "{\n    long[] res = new long[nums.length];\n    int[] sums = new int[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        int sum = 0;\n    \
+    \    foreach (int digit; nums[i].digits)\n        {\n            sum += digit;\n\
+    \        }\n        sums[i] = sum;\n    }\n    int[] indices = new int[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        indices[i] = i;\n \
+    \   }\n    indices.sort!((a, b) => sums[a] < sums[b]);\n    for (int i = 0; i\
+    \ < nums.length; i++)\n    {\n        res[i] = nums[indices[i]];\n    }\n    return\
+    \ res;\n}", "{\n    if (nums.length == 0)\n        return nums;\n    long[] result\
+    \ = new long[nums.length];\n    long[] sums = new long[nums.length];\n    for\
+    \ (int i = 0; i < nums.length; i++)\n    {\n        sums[i] = nums[i];\n     \
+    \   while (sums[i] != 0)\n        {\n            sums[i] = sums[i] / 10;\n   \
+    \         if (sums[i] != 0)\n                sums[i] = sums[i] + (sums[i] % 10);\n\
+    \        }\n    }\n    long[] temp = sums.dup;\n    temp.sort;\n    for (int i\
+    \ = 0; i < nums.length; i++)\n    {\n        for (int j = 0; j < nums.length;\
+    \ j++)\n        {\n            if (temp[i] == sums[j])\n            {\n      \
+    \          result[i] = nums[j];\n                sums[j] = -1;\n             \
+    \   break;\n            }\n        }\n    }\n    return result;\n}", "{\n    if\
+    \ (nums.length == 0)\n        return nums;\n    long[] result = new long[nums.length];\n\
+    \    int[] sums = new int[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        sums[i] = 0;\n        long num = nums[i];\n        if (num\
+    \ < 0)\n            num = -num;\n        while (num > 0)\n        {\n        \
+    \    sums[i] += num % 10;\n            num /= 10;\n        }\n    }\n    int[]\
+    \ order = sort(sums);\n    for (int i = 0; i < nums.length; i++)\n        result[i]\
+    \ = nums[order[i]];\n    return result;\n}", "{\n    long[] result = new long[nums.length];\n\
+    \    long[] sum = new long[nums.length];\n    long[] index = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        index[i] = i;\n   \
+    \     sum[i] = 0;\n        long n = nums[i];\n        if (n < 0)\n           \
+    \ n = -n;\n        while (n > 0)\n        {\n            sum[i] += n % 10;\n \
+    \           n /= 10;\n        }\n    }\n    sort(sum, index);\n    for (int i\
+    \ = 0; i < nums.length; i++)\n        result[i] = nums[(int)index[i]];\n    return\
+    \ result;\n}", "{\n    long[] result = new long[nums.length];\n    int[] sums\
+    \ = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n    {\n\
+    \        int sum = 0;\n        long num = nums[i];\n        while (num != 0)\n\
+    \        {\n            sum += num % 10;\n            num /= 10;\n        }\n\
+    \        sums[i] = sum;\n    }\n    int[] sorted = sort(sums);\n    for (int i\
+    \ = 0; i < nums.length; i++)\n    {\n        int index = sorted[i];\n        result[i]\
+    \ = nums[index];\n    }\n    return result;\n}", "{\n    if (nums.length == 0)\n\
+    \        return nums;\n    auto sums = new long[nums.length];\n    foreach (i,\
+    \ num; nums)\n    {\n        sums[i] = sumDigits(num);\n    }\n    auto indices\
+    \ = new size_t[nums.length];\n    foreach (i, _; nums)\n    {\n        indices[i]\
+    \ = i;\n    }\n    sort!((a, b) => sums[a] < sums[b] || (sums[a] == sums[b] &&\
+    \ a < b))(indices);\n    auto result = new long[nums.length];\n    foreach (i,\
+    \ _; nums)\n    {\n        result[i] = nums[indices[i]];\n    }\n    return result;\n\
+    }", "{\n    if (nums.length == 0) return nums;\n    auto result = nums.dup;\n\
+    \    auto sums = new long[result.length];\n    foreach (i, n; result)\n    {\n\
+    \        sums[i] = n.sumDigits;\n    }\n    result.sort!((a, b) => sums[a] < sums[b]);\n\
+    \    return result;\n}", "{\n    long[] result = new long[nums.length];\n    int[]\
+    \ sums = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n  \
+    \  {\n        int sum = 0;\n        long num = nums[i];\n        while (num !=\
+    \ 0)\n        {\n            sum += num % 10;\n            num /= 10;\n      \
+    \  }\n        sums[i] = sum;\n    }\n    int[] sorted = sort(sums);\n    for (int\
+    \ i = 0; i < nums.length; i++)\n    {\n        int index = 0;\n        for (int\
+    \ j = 0; j < nums.length; j++)\n        {\n            if (sums[j] == sorted[i])\n\
+    \            {\n                index = j;\n                break;\n         \
+    \   }\n        }\n        result[i] = nums[index];\n    }\n    return result;\n\
+    }", "{\n    long[] result = new long[nums.length];\n    int[] sums = new int[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        sums[i] = 0;\n    \
+    \    long num = nums[i];\n        if (num < 0)\n            num = -num;\n    \
+    \    while (num > 0)\n        {\n            sums[i] += num % 10;\n          \
+    \  num /= 10;\n        }\n    }\n    int[] indices = new int[nums.length];\n \
+    \   for (int i = 0; i < nums.length; i++)\n        indices[i] = i;\n    sort(sums,\
+    \ indices);\n    for (int i = 0; i < nums.length; i++)\n        result[i] = nums[indices[i]];\n\
+    \    return result;\n}", "{\n    auto arr = nums.dup;\n    sort!((a, b) => a.sumDigits()\
+    \ < b.sumDigits())(arr);\n    return arr;\n}", "{\n    if (nums.length == 0)\n\
+    \        return nums;\n    auto nums_with_points = new Tuple!(long, long)[nums.length];\n\
+    \    foreach (i, num; nums)\n    {\n        long points = 0;\n        foreach\
+    \ (c; num.to!string)\n        {\n            if (c.isDigit)\n                points\
+    \ += c.to!long;\n        }\n        nums_with_points[i] = tuple(num, points);\n\
+    \    }\n    nums_with_points.sort!((a, b) => a[1] < b[1]);\n    foreach (i, num;\
+    \ nums_with_points)\n        nums[i] = num[0];\n    return nums;\n}", "{\n   \
+    \ if (nums.length == 0)\n        return nums;\n    auto nums_with_sum = new Tuple!(long,\
+    \ long)[nums.length];\n    foreach (i, num; nums)\n    {\n        nums_with_sum[i]\
+    \ = tuple(num, sum_of_digits(num));\n    }\n    sort!((a, b) => a[1] < b[1] ||\
+    \ (a[1] == b[1] && a[0] < b[0]))(nums_with_sum);\n    foreach (i, num; nums_with_sum)\n\
+    \    {\n        nums[i] = num[0];\n    }\n    return nums;\n}", "{\n    if (nums.length\
+    \ == 0)\n        return nums;\n    auto sums = new long[nums.length];\n    foreach\
+    \ (i, n; nums)\n    {\n        long sum = 0;\n        foreach (c; to!string(n))\n\
+    \            sum += c.to!long - '0'.to!long;\n        sums[i] = sum;\n    }\n\
+    \    auto indices = new long[nums.length];\n    foreach (i; 0 .. nums.length)\n\
+    \        indices[i] = i;\n    sort!((a, b) => sums[a] < sums[b] || (sums[a] ==\
+    \ sums[b] && a < b))(indices);\n    auto result = new long[nums.length];\n   \
+    \ foreach (i; 0 .. nums.length)\n        result[i] = nums[indices[i]];\n    return\
+    \ result;\n}", "{\n    auto nums_with_index = zip(nums, iota(nums.length));\n\
+    \    auto nums_with_index_and_sum = map!(a => tuple(a[0], a[1], sum_digits(a[0])))(nums_with_index);\n\
+    \    auto sorted_nums_with_index_and_sum = sort!((a, b) => a[2] < b[2] || (a[2]\
+    \ == b[2] && a[1] < b[1]))(nums_with_index_and_sum);\n    return map!(a => a[0])(sorted_nums_with_index_and_sum);\n\
+    }", "{\n    if (nums.length == 0)\n        return nums;\n    long[] sums = new\
+    \ long[nums.length];\n    foreach (i, x; nums)\n    {\n        long sum = 0;\n\
+    \        foreach (c; to!string(x))\n            sum += c.to!int - '0'.to!int;\n\
+    \        sums[i] = sum;\n    }\n    auto sorted = sort!((a, b) => a[1] < b[1])(zip(nums,\
+    \ sums));\n    return sorted.map!(x => x[0]).array;\n}", "{\n    if (nums.length\
+    \ == 0)\n        return nums;\n    auto nums_with_points = new Tuple!(long, long)[nums.length];\n\
+    \    foreach (i, num; nums)\n    {\n        nums_with_points[i] = tuple(num, sum_of_digits(num));\n\
+    \    }\n    nums_with_points.sort!((a, b) => a[1] < b[1] || (a[1] == b[1] && a[0]\
+    \ < b[0]));\n    foreach (i, num; nums_with_points)\n    {\n        nums[i] =\
+    \ num[0];\n    }\n    return nums;\n}", "{\n    if (nums.length == 0)\n      \
+    \  return nums;\n    auto sums = new long[nums.length];\n    foreach (i, num;\
+    \ nums)\n    {\n        sums[i] = num.digits.sum;\n    }\n    auto indices = new\
+    \ int[nums.length];\n    foreach (i, _; nums)\n    {\n        indices[i] = i;\n\
+    \    }\n    sort!((a, b) => sums[a] < sums[b] || (sums[a] == sums[b] && a < b))(indices);\n\
+    \    auto result = new long[nums.length];\n    foreach (i, _; nums)\n    {\n \
+    \       result[i] = nums[indices[i]];\n    }\n    return result;\n}", "{\n   \
+    \ if (nums.length == 0)\n        return nums;\n    else\n    {\n        long[]\
+    \ result = new long[nums.length];\n        long[] sums = new long[nums.length];\n\
+    \        for (int i = 0; i < nums.length; i++)\n        {\n            long sum\
+    \ = 0;\n            long num = nums[i];\n            while (num != 0)\n      \
+    \      {\n                sum += num % 10;\n                num /= 10;\n     \
+    \       }\n            sums[i] = sum;\n        }\n        int[] indices = new\
+    \ int[nums.length];\n        for (int i = 0; i < indices.length; i++)\n      \
+    \      indices[i] = i;\n        sort(sums, indices);\n        for (int i = 0;\
+    \ i < indices.length; i++)\n            result[i] = nums[indices[i]];\n      \
+    \  return result;\n    }\n}", "{\n    if (nums.length == 0)\n        return nums;\n\
+    \    auto a = new Tuple!(long, long)[nums.length];\n    foreach (i, e; nums)\n\
+    \    {\n        a[i] = tuple(e, e.abs.digits.sum);\n    }\n    a.sort!((a, b)\
+    \ => a[1] < b[1] || (a[1] == b[1] && a[0] < b[0]));\n    foreach (i, e; a)\n \
+    \   {\n        nums[i] = e[0];\n    }\n    return nums;\n}", "{\n    // your code\
+    \ here\n    long[] result = nums.dup;\n    sort!((a, b) => sumDigits(a) < sumDigits(b))(result);\n\
+    \    return result;\n}", "{\n    if (nums.length == 0)\n        return nums;\n\
+    \    auto sums = new long[nums.length];\n    foreach (i, n; nums)\n    {\n   \
+    \     sums[i] = n.abs;\n        while (sums[i] >= 10)\n        {\n           \
+    \ sums[i] = sums[i] / 10 + sums[i] % 10;\n        }\n    }\n    auto indices =\
+    \ new int[nums.length];\n    foreach (i; 0 .. nums.length)\n        indices[i]\
+    \ = i;\n    auto cmp = (int a, int b) =>\n    {\n        if (sums[a] < sums[b])\n\
+    \            return -1;\n        else if (sums[a] > sums[b])\n            return\
+    \ 1;\n        else\n            return a - b;\n    };\n    std.algorithm.sort(indices,\
+    \ cmp);\n    auto result = new long[nums.length];\n    foreach (i, index; indices)\n\
+    \        result[i] = nums[index];\n    return result;\n}", "{\n    long[] result\
+    \ = new long[nums.length];\n    int[] sums = new int[nums.length];\n    for (int\
+    \ i = 0; i < nums.length; i++)\n    {\n        int sum = 0;\n        int n = nums[i];\n\
+    \        while (n != 0)\n        {\n            sum += n % 10;\n            n\
+    \ /= 10;\n        }\n        sums[i] = sum;\n    }\n    int[] sorted = sums.dup;\n\
+    \    sorted.sort();\n    for (int i = 0; i < nums.length; i++)\n    {\n      \
+    \  int index = sums.indexOf(sorted[i]);\n        result[i] = nums[index];\n  \
+    \  }\n    return result;\n}", "{\n    long[] result = new long[nums.length];\n\
+    \    long[] sums = new long[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        long sum = 0;\n        long n = nums[i];\n        while\
+    \ (n != 0)\n        {\n            sum += n % 10;\n            n /= 10;\n    \
+    \    }\n        sums[i] = sum;\n    }\n    long[] sorted = sums.dup;\n    sorted.sort();\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        long sum = sorted[i];\n\
+    \        for (int j = 0; j < nums.length; j++)\n        {\n            if (sums[j]\
+    \ == sum)\n            {\n                result[i] = nums[j];\n             \
+    \   sums[j] = -1;\n                break;\n            }\n        }\n    }\n \
+    \   return result;\n}", "{\n    if (nums.length == 0) return nums;\n    auto sums\
+    \ = new long[nums.length];\n    foreach (i, n; nums)\n    {\n        sums[i] =\
+    \ n.abs.sumDigits;\n    }\n    auto indexes = new int[nums.length];\n    foreach\
+    \ (i, _; nums)\n    {\n        indexes[i] = i;\n    }\n    sort!((a, b) => sums[a]\
+    \ < sums[b] || (sums[a] == sums[b] && a < b))(indexes);\n    auto result = new\
+    \ long[nums.length];\n    foreach (i, _; nums)\n    {\n        result[i] = nums[indexes[i]];\n\
+    \    }\n    return result;\n}", "{\n    if (nums.length == 0)\n        return\
+    \ nums;\n    \n    auto sum = new long[nums.length];\n    for (int i = 0; i <\
+    \ nums.length; i++)\n    {\n        long n = nums[i];\n        while (n != 0)\n\
+    \        {\n            sum[i] += n % 10;\n            n /= 10;\n        }\n \
+    \   }\n    \n    auto indices = new int[nums.length];\n    for (int i = 0; i <\
+    \ nums.length; i++)\n        indices[i] = i;\n    \n    auto sort = new Tuple!(long,\
+    \ int)[nums.length];\n    for (int i = 0; i < nums.length; i++)\n        sort[i]\
+    \ = tuple(sum[i], indices[i]);\n    \n    sort.sort!((a, b) => a[0] < b[0] ||\
+    \ (a[0] == b[0] && a[1] < b[1]));\n    \n    auto result = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n        result[i] = nums[sort[i][1]];\n\
+    \    \n    return result;\n}", "{\n    if (nums.length == 0)\n        return nums;\n\
+    \    long[] result = new long[nums.length];\n    int[] sums = new int[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        int sum = 0;\n    \
+    \    long num = nums[i];\n        while (num != 0)\n        {\n            sum\
+    \ += num % 10;\n            num /= 10;\n        }\n        sums[i] = sum;\n  \
+    \  }\n    int[] indices = new int[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n        indices[i] = i;\n    sort!((a, b) => sums[a] < sums[b] || (sums[a]\
+    \ == sums[b] && a < b))(indices);\n    for (int i = 0; i < nums.length; i++)\n\
+    \        result[i] = nums[indices[i]];\n    return result;\n}", "{\n    if (nums.length\
+    \ == 0)\n        return nums;\n    long[] sums = new long[nums.length];\n    foreach\
+    \ (i, num; nums)\n    {\n        long sum = 0;\n        while (num != 0)\n   \
+    \     {\n            sum += num % 10;\n            num /= 10;\n        }\n   \
+    \     sums[i] = sum;\n    }\n    long[] result = new long[nums.length];\n    foreach\
+    \ (i, num; nums)\n    {\n        long min = sums[0];\n        int min_index =\
+    \ 0;\n        foreach (j, sum; sums)\n        {\n            if (sum < min)\n\
+    \            {\n                min = sum;\n                min_index = j;\n \
+    \           }\n        }\n        result[i] = nums[min_index];\n        sums[min_index]\
+    \ = long.max;\n    }\n    return result;\n}", "{\n    long[] result = new long[nums.length];\n\
+    \    long[] sum = new long[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        long num = nums[i];\n        long sum_of_digits = 0;\n\
+    \        while (num != 0)\n        {\n            sum_of_digits += num % 10;\n\
+    \            num /= 10;\n        }\n        sum[i] = sum_of_digits;\n    }\n \
+    \   long[] sorted_sum = sum.dup;\n    sort(sorted_sum);\n    for (int i = 0; i\
+    \ < sorted_sum.length; i++)\n    {\n        for (int j = 0; j < sum.length; j++)\n\
+    \        {\n            if (sorted_sum[i] == sum[j])\n            {\n        \
+    \        result[i] = nums[j];\n                sum[j] = -1;\n                break;\n\
+    \            }\n        }\n    }\n    return result;\n}", "{\n    long[] result\
+    \ = new long[nums.length];\n    int[] sum = new int[nums.length];\n    for (int\
+    \ i = 0; i < nums.length; i++)\n    {\n        int temp = 0;\n        while (nums[i]\
+    \ != 0)\n        {\n            temp += nums[i] % 10;\n            nums[i] /=\
+    \ 10;\n        }\n        sum[i] = temp;\n    }\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        int min = i;\n        for (int j = i + 1; j < nums.length;\
+    \ j++)\n        {\n            if (sum[j] < sum[min])\n            {\n       \
+    \         min = j;\n            }\n        }\n        if (min != i)\n        {\n\
+    \            int temp = sum[i];\n            sum[i] = sum[min];\n            sum[min]\
+    \ = temp;\n            long temp2 = nums[i];\n            nums[i] = nums[min];\n\
+    \            nums[min] = temp2;\n        }\n    }\n    return nums;\n}", "{\n\
+    \    long[] result;\n    if (nums.length == 0)\n        return nums;\n    else\n\
+    \    {\n        result = new long[nums.length];\n        int[] sum = new int[nums.length];\n\
+    \        for (int i = 0; i < nums.length; i++)\n        {\n            int temp\
+    \ = 0;\n            if (nums[i] < 0)\n                nums[i] = -nums[i];\n  \
+    \          while (nums[i] != 0)\n            {\n                temp += nums[i]\
+    \ % 10;\n                nums[i] /= 10;\n            }\n            sum[i] = temp;\n\
+    \        }\n        int[] index = new int[nums.length];\n        for (int i =\
+    \ 0; i < nums.length; i++)\n            index[i] = i;\n        for (int i = 0;\
+    \ i < nums.length; i++)\n        {\n            for (int j = i + 1; j < nums.length;\
+    \ j++)\n            {\n                if (sum[i] > sum[j])\n                {\n\
+    \                    int temp = sum[i];\n                    sum[i] = sum[j];\n\
+    \                    sum[j] = temp;\n                    temp = index[i];\n  \
+    \                  index[i] = index[j];\n                    index[j] = temp;\n\
+    \                }\n            }\n        }\n        for (int i = 0; i < nums.length;\
+    \ i++)\n            result[i] = nums[index[i]];\n        return result;\n    }\n\
+    }", "{\n    if (nums.length == 0)\n        return nums;\n    int[] sums = new\
+    \ int[nums.length];\n    foreach (i, n; nums)\n    {\n        sums[i] = n.abs.sumDigits;\n\
+    \    }\n    auto sorted = sort(sums, (a, b) => a > b);\n    long[] result = new\
+    \ long[nums.length];\n    foreach (i, s; sorted)\n    {\n        result[i] = nums[s.index];\n\
+    \    }\n    return result;\n}", "{\n    if (nums.length == 0)\n        return\
+    \ nums;\n    auto result = nums.dup;\n    sort!((a, b) => a.sumDigits() < b.sumDigits())(result);\n\
+    \    return result;\n}", "{\n    auto arr = nums.dup;\n    auto sum = new long[arr.length];\n\
+    \    foreach(i, ref e; arr)\n    {\n        if(e < 0)\n            e = -e;\n \
+    \       while(e > 0)\n        {\n            sum[i] += e % 10;\n            e\
+    \ /= 10;\n        }\n    }\n    auto result = new long[arr.length];\n    foreach(i,\
+    \ ref e; arr)\n    {\n        auto min = sum[0];\n        auto index = 0;\n  \
+    \      foreach(j, ref f; sum)\n        {\n            if(f < min)\n          \
+    \  {\n                min = f;\n                index = j;\n            }\n  \
+    \      }\n        result[i] = arr[index];\n        sum[index] = max(sum);\n  \
+    \  }\n    return result;\n}", "{\n    if (nums.length == 0)\n        return nums;\n\
+    \    long[] temp = new long[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        temp[i] = nums[i];\n        if (temp[i] < 0)\n        \
+    \    temp[i] *= -1;\n    }\n    long[] sum = new long[nums.length];\n    for (int\
+    \ i = 0; i < nums.length; i++)\n    {\n        while (temp[i] > 0)\n        {\n\
+    \            sum[i] += temp[i] % 10;\n            temp[i] /= 10;\n        }\n\
+    \    }\n    long[] temp2 = new long[nums.length];\n    for (int i = 0; i < nums.length;\
+    \ i++)\n    {\n        temp2[i] = nums[i];\n        if (temp2[i] < 0)\n      \
+    \      temp2[i] *= -1;\n    }\n    long[] sum2 = new long[nums.length];\n    for\
+    \ (int i = 0; i < nums.length; i++)\n    {\n        while (temp2[i] > 0)\n   \
+    \     {\n            sum2[i] += temp2[i] % 10;\n            temp2[i] /= 10;\n\
+    \        }\n    }\n    long[] temp3 = new long[nums.length];\n    for (int i =\
+    \ 0; i < nums.length; i++)\n    {\n        temp3[i] = nums[i];\n        if (temp3[i]\
+    \ < 0)\n            temp3[i] *= -1;\n    }\n    long[] sum3 = new long[nums.length];\n\
+    \    for (int i = 0; i < nums.length; i++)\n    {\n        while (temp3[i] > 0)\n\
+    \        {\n            sum3[i] += temp3[i] % 10;\n            temp3[i] /= 10;\n\
+    \        }\n    }\n    long[] temp4 = new long[nums.length];\n    for (int i =",
+  "{\n    if (nums.length == 0)\n        return nums;\n    auto sums = new long[nums.length];\n\
+    \    foreach (i, v; nums)\n    {\n        sums[i] = v.abs.sumDigits;\n    }\n\
+    \    auto indices = new int[nums.length];\n    foreach (i, _; nums)\n    {\n \
+    \       indices[i] = i;\n    }\n    auto result = new long[nums.length];\n   \
+    \ sort!((a, b) => sums[a] < sums[b] || (sums[a] == sums[b] && a < b))(indices);\n\
+    \    foreach (i, v; indices)\n    {\n        result[i] = nums[v];\n    }\n   \
+    \ return result;\n}", "{\n    if (nums.length == 0)\n        return nums;\n  \
+    \  auto arr = new long[][](nums.length);\n    foreach (i, num; nums)\n    {\n\
+    \        arr[i] = new long[](2);\n        arr[i][0] = num;\n        arr[i][1]\
+    \ = sumDigits(num);\n    }\n    arr.sort!((a, b) => a[1] < b[1] || (a[1] == b[1]\
+    \ && a[0] < b[0]));\n    foreach (i, _; nums)\n        nums[i] = arr[i][0];\n\
+    \    return nums;\n}", "{\n    long[] result = new long[nums.length];\n    int[]\
+    \ sum = new int[nums.length];\n    for (int i = 0; i < nums.length; i++)\n   \
+    \ {\n        int temp = 0;\n        while (nums[i] != 0)\n        {\n        \
+    \    temp += nums[i] % 10;\n            nums[i] /= 10;\n        }\n        sum[i]\
+    \ = temp;\n    }\n    for (int i = 0; i < nums.length; i++)\n    {\n        int\
+    \ min = sum[i];\n        int index = i;\n        for (int j = i; j < nums.length;\
+    \ j++)\n        {\n            if (sum[j] < min)\n            {\n            \
+    \    min = sum[j];\n                index = j;\n            }\n        }\n   \
+    \     result[i] = nums[index];\n        sum[index] = int.max;\n    }\n    return\
+    \ result;\n}", "{\n    auto arr = nums.dup;\n    auto sum = new int[arr.length];\n\
+    \    foreach(i, ref n; arr)\n    {\n        while(n != 0)\n        {\n       \
+    \     sum[i] += n % 10;\n            n /= 10;\n        }\n    }\n    auto index\
+    \ = new int[arr.length];\n    foreach(i, ref n; arr)\n    {\n        index[i]\
+    \ = i;\n    }\n    auto temp = new int[arr.length];\n    auto temp2 = new int[arr.length];\n\
+    \    for(int i = 0; i < arr.length; i++)\n    {\n        for(int j = 0; j < arr.length\
+    \ - 1; j++)\n        {\n            if(sum[j] > sum[j + 1])\n            {\n \
+    \               temp[j] = sum[j];\n                sum[j] = sum[j + 1];\n    \
+    \            sum[j + 1] = temp[j];\n                temp2[j] = index[j];\n   \
+    \             index[j] = index[j + 1];\n                index[j + 1] = temp2[j];\n\
+    \            }\n        }\n    }\n    auto result = new long[arr.length];\n  \
+    \  foreach(i, ref n; arr)\n    {\n        result[i] = arr[index[i]];\n    }\n\
+    \    return result;\n}", "{\n    if (nums.length == 0)\n        return nums;\n\
+    \    long[][] nums_with_points = new long[nums.length][2];\n    foreach (i, n;\
+    \ nums)\n    {\n        nums_with_points[i][0] = n;\n        nums_with_points[i][1]\
+    \ = n.abs.to!string.sum.to!long;\n    }\n    nums_with_points.sort!((a, b) =>\
+    \ a[1] > b[1]);\n    return nums_with_points.map!(a => a[0]).array;\n}", "{\n\
+    \    return nums.sort!((a, b) => sumDigits(a) < sumDigits(b) || (sumDigits(a)\
+    \ == sumDigits(b) && a < b));\n}", "{\n    long[] result = nums.dup;\n    sort!((a,\
+    \ b) => sumDigits(a) < sumDigits(b))(result);\n    return result;\n}", "{\n  \
+    \  if (nums.length == 0)\n        return nums;\n    long[] sums = new long[nums.length];\n\
+    \    foreach (i, v; nums)\n    {\n        long sum = 0;\n        foreach (c; to!string(v))\n\
+    \            sum += c - '0';\n        sums[i] = sum;\n    }\n    auto sorted =\
+    \ sort!((a, b) => a[1] < b[1])(zip(nums, sums));\n    return sorted.map!(a =>\
+    \ a[0]).array;\n}", "{\n    if (nums.length == 0)\n        return nums;\n    else\n\
+    \    {\n        long[] result = new long[nums.length];\n        long[] sums =\
+    \ new long[nums.length];\n        for (int i = 0; i < nums.length; i++)\n    \
+    \    {\n            sums[i] = sumDigits(nums[i]);\n        }\n        long[] sortedSums\
+    \ = sums.dup;\n        sort(sortedSums);\n        for (int i = 0; i < nums.length;\
+    \ i++)\n        {\n            int index = 0;\n            for (int j = 0; j <\
+    \ nums.length; j++)\n            {\n                if (sums[j] == sortedSums[i])\n\
+    \                {\n                    index = j;\n                    break;\n\
+    \                }\n            }\n            result[i] = nums[index];\n    \
+    \        sums[index] = -1;\n        }\n        return result;\n    }\n}"]
+stop_tokens:
+- "\n\n"
+- "\nvoid"
+- "\nbool"
+- "\nint"

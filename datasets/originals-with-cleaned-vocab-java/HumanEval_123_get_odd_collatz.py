@@ -14,7 +14,8 @@ def get_odd_collatz(n: int) -> List[int]:
         1. Collatz(1) is [1].
         2. returned array list sorted in increasing order.
 
-    
+    For example:
+    get_odd_collatz(5) returns [1, 5] # The collatz sequence for 5 is [5, 16, 8, 4, 2, 1], so the odd numbers are only 1, and 5.
     >>> get_odd_collatz(5) 
     [1, 5]
     """

@@ -6,17 +6,18 @@
 
 import re
 import ast
-from typing import List, Optional, Tuple
+from typing import List,  Tuple
 from generic_translator import main
-from humaneval_to_cpp import CPPTranslator, DOCSTRING_LINESTART_RE
+from humaneval_to_cpp import DOCSTRING_LINESTART_RE
+import humaneval_to_cpp
 
 SCALA_CLASS_NAME = "Problem"
 
-class ScalaTranslator(CPPTranslator):
+class Translator(humaneval_to_cpp.Translator):
     stop = ["\n    }\n"]
 
-    def __init__(self, file_ext):
-        super().__init__(file_ext)
+    def __init__(self):
+        super().__init__()
         self.string_type = "String"
         self.float_type = "Float"
         self.int_type = "Long"
@@ -31,6 +32,9 @@ class ScalaTranslator(CPPTranslator):
         self.make_tuple = ""
         self.make_optional = "Some"
         self.union_decls = {}
+
+    def file_ext(self):
+        return "scala"
 
     #Type creation and literal creation of List, Dict, Map, and Optional
     def gen_list_type(self, elem_type):
@@ -260,5 +264,5 @@ class ScalaTranslator(CPPTranslator):
         return func_name + "(" + ", ".join([self.update_type(args[i], self.args_type[i]) for i in range(len(args))]) + ")", None
 
 if __name__ == "__main__":
-    translator = ScalaTranslator("scala")
+    translator = Translator()
     main(translator)

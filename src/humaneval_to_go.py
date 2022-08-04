@@ -75,12 +75,15 @@ def translate_type(t):
             raise Exception(f"unknown annotation: {t}")
 
 
-class GoTranslator:
+class Translator:
 
     stop = ["\nfunc", "struct", "\n// "]
 
-    def __init__(self, file_ext):
-        self.file_ext = file_ext
+    def file_ext(self):
+        # NOTE: go test need to end with _test.go
+        return "go_test.go"
+
+    def __init__(self):
         self.type = []
 
     def convert_identifier(self, ident):
@@ -311,6 +314,5 @@ import (
 
 
 if __name__ == "__main__":
-    # NOTE: go test need to end with _test.go
-    translator = GoTranslator("go_test.go")
+    translator = Translator()
     main(translator)

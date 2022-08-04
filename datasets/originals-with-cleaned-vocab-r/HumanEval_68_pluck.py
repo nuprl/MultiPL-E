@@ -10,17 +10,25 @@ def pluck(arr: List[int]) -> List[int]:
     The plucked node should be returned in a list, [ smalest_value, its index ],
     If there are no even values or the given vector is empty, return [].
 
+    Example 1:
     >>> pluck([4,2,3])
     [2, 1]
+    Explanation: 2 has the smallest even value, and 2 has the smallest index.
 
+    Example 2:
     >>> pluck([1,2,3])
     [2, 1]
+    Explanation: 2 has the smallest even value, and 2 has the smallest index.
 
+    Example 3:
     >>> pluck([])
     []
     
+    Example 4:
     >>> pluck([5, 0, 3, 0, 4, 2])
     [0, 1]
+    Explanation: 0 is the smallest value, but  there are two zeros,
+                 so we will choose the first zero, which has the smallest index.
 
     Constraints:
         * 1 <= nodes.length <= 10000

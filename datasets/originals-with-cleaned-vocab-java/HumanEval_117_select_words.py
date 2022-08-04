@@ -1,5 +1,6 @@
+from typing import List
 
-def select_words(s: str, n: int) -> str:
+def select_words(s: str, n: int) -> List[str]:
     """Given a string s and a natural number n, you have been tasked to implement 
     a function that returns an array array list of all words from string s that contain exactly 
     n consonants, in order these words appear in the string s.

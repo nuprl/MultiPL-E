@@ -21,12 +21,12 @@ from generic_translator import main
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
 
-class PHPTranslator:
+class Translator:
 
     stop = ["\nfunction", "\n?>", "\n//", "\n#" ]
 
-    def __init__(self, file_ext):
-        self.file_ext = file_ext
+    def file_ext(self):
+        return "php"
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         php_description = (
@@ -110,5 +110,5 @@ class PHPTranslator:
 
 
 if __name__ == "__main__":
-    translator = PHPTranslator("php")
+    translator = Translator()
     main(translator)

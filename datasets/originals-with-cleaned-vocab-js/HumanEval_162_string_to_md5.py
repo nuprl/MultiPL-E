@@ -1,5 +1,6 @@
+from typing import Optional
 
-def string_to_md5(text: str) -> str:
+def string_to_md5(text: str) -> Optional[str]:
     """
     Given a string 'text', return its md5 hash equivalent string.
     If 'text' is an empty string, return undefined.

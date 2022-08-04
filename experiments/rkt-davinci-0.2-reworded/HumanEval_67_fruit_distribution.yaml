@@ -1,0 +1,834 @@
+name: HumanEval_67_fruit_distribution
+language: rkt
+prompt: "#lang racket\n\n;; In this task, you will be given a string that represents\
+  \ a number of apples and oranges \n;; that are distributed in a basket of fruit\
+  \ this basket contains \n;; apples, oranges, and mango fruits. Given the string\
+  \ that represents the total number of \n;; the oranges and apples and an integer\
+  \ that represent the total number of the fruits \n;; in the basket return the number\
+  \ of the mango fruits in the basket.\n;; for examble:\n;; >>> (fruit_distribution\
+  \ \"5 apples and 6 oranges\" 19)\n;; 8\n;; >>> (fruit_distribution \"0 apples and\
+  \ 1 oranges\" 3)\n;; 2\n;; >>> (fruit_distribution \"2 apples and 3 oranges\" 100)\n\
+  ;; 95\n;; >>> (fruit_distribution \"100 apples and 1 oranges\" 120)\n;; 19\n(define\
+  \ (fruit_distribution s n)\n"
+tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate fruit_distribution))\n\
+  \    (check-equal? (candidate \"5 apples and 6 oranges\" 19) 8)\n    (check-equal?\
+  \ (candidate \"5 apples and 6 oranges\" 21) 10)\n    (check-equal? (candidate \"\
+  0 apples and 1 oranges\" 3) 2)\n    (check-equal? (candidate \"1 apples and 0 oranges\"\
+  \ 3) 2)\n    (check-equal? (candidate \"2 apples and 3 oranges\" 100) 95)\n    (check-equal?\
+  \ (candidate \"2 apples and 3 oranges\" 5) 0)\n    (check-equal? (candidate \"1\
+  \ apples and 100 oranges\" 120) 19)\n))\n\n(test-humaneval)"
+completions: ["  (let ([a (string-&gt;number (string-split (string-split s \" and\
+    \ \") \" \"))]\n        [o (string-&gt;number (string-split (string-split s \"\
+    \ and \") \" \"))])\n    (- n (+ a o))))\n</code>\nI am getting the following\
+    \ error:\n<code>string-split: expects type &lt;string&gt; as 1st argument, given:\
+    \ \"5 apples and 6 oranges\"; other arguments were: \" \"\n</code>\nI am not sure\
+    \ what I am doing wrong.\n\n\nA:\n\nThe problem is that <code>string-split</code>\
+    \ is not a function that takes two arguments, it's a function that takes a string\
+    \ and a list of strings as arguments.\nSo, if you want to split a string by a\
+    \ single separator, you need to pass a list containing that separator as the second\
+    \ argument.\n<code>(string-split \"5 apples and 6 oranges\" '(\" \"))\n</code>\n\
+    This will return a list of strings, so you'll need to use <code>string-&gt;number</code>\
+    \ on the first element of the list.\n<code>(string-&gt;number (car (string-split\
+    \ \"5 apples and 6 oranges\" '(\" \"))))\n</code>\n", "  (define (helper s n)\n\
+    \    (cond\n      [(string=? s \"\") n]\n      [(string=? (substring s 0 5) \"\
+    apples\") (helper (substring s 6 (string-length s)) (- n (string->number (substring\
+    \ s 0 (string-index s #\\space))))) ]\n      [(string=? (substring s 0 7) \"oranges\"\
+    ) (helper (substring s 8 (string-length s)) (- n (string->number (substring s\
+    \ 0 (string-index s #\\space))))) ]\n      [else (helper (substring s 1 (string-length\
+    \ s)) n)]))\n  (helper s n))\n", "  (let ((apples (string-&gt;number (substring\
+    \ s 0 (string-index s #\\space))))\n        (oranges (string-&gt;number (substring\
+    \ s (+ (string-index s #\\space) 1) (string-index s #\\a)))))\n    (- n (+ apples\
+    \ oranges))))\n</code>\n", "  (let ([a (string-&gt;number (substring s 0 (string-index\
+    \ s #\\space)))]\n        [o (string-&gt;number (substring s (+ (string-index\
+    \ s #\\space) 1) (string-index s #\\a)))])\n    (- n (+ a o))))\n</code>\n", " \
+    \ (define (get_num s)\n    (string->number (regexp-match #rx\"\\d+\" s)))\n  (-\
+    \ n (get_num s) (get_num (regexp-replace #rx\"apples\" s \"\"))))\n", "  (let\
+    \ ([apples (string->number (regexp-match #rx\"^[0-9]+\" s))]\n        [oranges\
+    \ (string->number (regexp-match #rx\"[0-9]+$\" s))])\n    (- n (+ apples oranges))))\n",
+  "  (define (get-num str)\n    (string->number (regexp-replace #rx\"\\\\D+\" str\
+    \ \"\")))\n  (- n (get-num s)))\n", "  (define (get-num s)\n    (cond ((string=?\
+    \ s \"\") 0)\n          ((string=? (substring s 0 1) \" \") (get-num (substring\
+    \ s 1)))\n          ((string=? (substring s 0 1) \"a\") (get-num (substring s\
+    \ 5)))\n          ((string=? (substring s 0 1) \"o\") (get-num (substring s 7)))\n\
+    \          (else (string->number (substring s 0 1)))))\n  (- n (get-num s)))\n",
+  "  (define (get-num str)\n    (string->number (substring str 0 (string-index str\
+    \ #\\space))))\n  (- n (get-num s) (get-num (substring s (string-index s #\\a)\
+    \ (string-length s)))))\n", "  (define (count-fruit s)\n    (cond\n      [(empty?\
+    \ s) 0]\n      [(string=? (substring s 0 6) \"apples\") (+ (string->number (substring\
+    \ s 0 1)) (count-fruit (substring s 7 (string-length s))))]\n      [(string=?\
+    \ (substring s 0 7) \"oranges\") (+ (string->number (substring s 0 1)) (count-fruit\
+    \ (substring s 8 (string-length s))))]\n      [else (count-fruit (substring s\
+    \ 1 (string-length s)))]))\n  (- n (count-fruit s)))\n", "  (define (split s)\n\
+    \    (string-split s \" \"))\n  (define (get-num s)\n    (string->number (car\
+    \ (cdr (split s)))))\n  (define (get-fruit s)\n    (car (split s)))\n  (define\
+    \ (get-fruit-num s)\n    (cond ((string=? (get-fruit s) \"apples\") (get-num s))\n\
+    \          ((string=? (get-fruit s) \"oranges\") (get-num s))\n          (else\
+    \ 0)))\n  (- n (get-fruit-num s) (get-fruit-num (car (cdr (split s)))))\n)\n",
+  "  (define (get-num s)\n    (string->number (regexp-match #rx\"\\d+\" s)))\n  (-\
+    \ n (+ (get-num (regexp-match #rx\"\\d+ apples\" s))\n          (get-num (regexp-match\
+    \ #rx\"\\d+ oranges\" s)))))\n", "  (let ([apples (string->number (regexp-match\
+    \ #rx\"^[0-9]+\" s))]\n        [oranges (string->number (regexp-match #rx\"and\
+    \ [0-9]+ oranges$\" s))])\n    (- n (+ apples oranges))))\n", "  (define (get-num\
+    \ s)\n    (cond\n      [(string=? (substring s 0 1) \"0\") 0]\n      [(string=?\
+    \ (substring s 0 1) \"1\") (string->number (substring s 0 2))]\n      [(string=?\
+    \ (substring s 0 1) \"2\") (string->number (substring s 0 2))]\n      [(string=?\
+    \ (substring s 0 1) \"3\") (string->number (substring s 0 2))]\n      [(string=?\
+    \ (substring s 0 1) \"4\") (string->number (substring s 0 2))]\n      [(string=?\
+    \ (substring s 0 1) \"5\") (string->number (substring s 0 2))]\n      [(string=?\
+    \ (substring s 0 1) \"6\") (string->number (substring s 0 2))]\n      [(string=?\
+    \ (substring s 0 1) \"7\") (string->number (substring s 0 2))]\n      [(string=?\
+    \ (substring s 0 1) \"8\") (string->number (substring s 0 2))]\n      [(string=?\
+    \ (substring s 0 1) \"9\") (string->number (substring s 0 2))]\n      [else 0]))\n\
+    \  (- n (get-num s) (get-num (substring s (string-index #\\a s) (string-length\
+    \ s)))))\n", "  (define (get_num s)\n    (string->number (substring s 0 (string-index\
+    \ s #\\space))))\n  (- n (get_num s) (get_num (substring s (string-index s #\\\
+    a) (string-length s)))))\n", "  (define (get-num s)\n    (string->number (regexp-match\
+    \ #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num (regexp-replace #rx\"apples\"\
+    \ s \"\"))))\n", "  (define (helper s)\n    (cond\n      [(empty? s) 0]\n    \
+    \  [(char=? (first s) #\\space) (helper (rest s))]\n      [(char=? (first s) #\\\
+    a) (string->number (rest s))]\n      [(char=? (first s) #\\o) (string->number\
+    \ (rest s))]\n      [else (helper (rest s))]))\n  (- n (helper s)))\n", "  (define\
+    \ (fruit_distribution_helper s n)\n    (cond\n      [(empty? s) n]\n      [(char=?\
+    \ (first s) #\\a) (fruit_distribution_helper (rest s) (- n (string->number (string-append\
+    \ (string (first s)) (string (second s)) (string (third s)) (string (fourth s))\
+    \ (string (fifth s))))))]\n      [(char=? (first s) #\\o) (fruit_distribution_helper\
+    \ (rest s) (- n (string->number (string-append (string (first s)) (string (second\
+    \ s)) (string (third s)) (string (fourth s)) (string (fifth s))))))]\n      [else\
+    \ (fruit_distribution_helper (rest s) n)]))\n  (fruit_distribution_helper s n))\n",
+  "  (let ([a (string-&gt;number (regexp-match #rx\"^[0-9]+\" s))]\n        [o (string-&gt;number\
+    \ (regexp-match #rx\"and [0-9]+ oranges$\" s))])\n    (- n (+ a o))))\n", "  (define\
+    \ (fruit_distribution_helper s n)\n    (cond\n      [(empty? s) n]\n      [(string=?\
+    \ (first s) #\\a) (fruit_distribution_helper (rest s) (- n (string->number (substring\
+    \ s 1 (string-index s #\\s))))) ]\n      [(string=? (first s) #\\o) (fruit_distribution_helper\
+    \ (rest s) (- n (string->number (substring s 1 (string-index s #\\s))))) ]\n \
+    \     [else (fruit_distribution_helper (rest s) n)]))\n  (fruit_distribution_helper\
+    \ s n))\n", "  (define (count-fruit s)\n    (cond\n      [(empty? s) 0]\n    \
+    \  [(string=? (substring s 0 6) \"apples\")\n       (+ (string->number (substring\
+    \ s 0 1)) (count-fruit (substring s 7)))]\n      [(string=? (substring s 0 7)\
+    \ \"oranges\")\n       (+ (string->number (substring s 0 1)) (count-fruit (substring\
+    \ s 8)))]\n      [else (count-fruit (substring s 1))]))\n  (- n (count-fruit s)))\n",
+  "  (let ([a (string-&gt;number (regexp-match #rx\"^[0-9]+\" s))]\n        [o (string-&gt;number\
+    \ (regexp-match #rx\"[0-9]+$\" s))])\n    (- n (+ a o))))\n</code>\n", "  (define\
+    \ (get-num str)\n    (string->number (regexp-replace #rx\"\\\\D\" str \"\")))\n\
+    \  (- n (get-num s)))\n", "  (let ([a (string-&gt;number (string-split (string-split\
+    \ s \" and \") \" \"))]\n        [o (string-&gt;number (string-split (string-split\
+    \ s \" and \") \" \"))])\n    (- n (+ a o))))\n</code>\nI am getting the following\
+    \ error:\n<code>string-split: expects type &lt;string&gt; as 1st argument, given:\
+    \ \"5 apples and 6 oranges\"; other arguments were: \" \"\n</code>\nI am not sure\
+    \ what is wrong with my code.\n\n\nA:\n\nThe problem is that <code>string-split</code>\
+    \ returns a list of strings, and you're trying to convert the list to a number.\
+    \ You need to convert each string to a number, and then add them together.\n<code>(define\
+    \ (fruit_distribution s n)\n  (let ([a (string-&gt;number (first (string-split\
+    \ (string-split s \" and \") \" \")))]\n        [o (string-&gt;number (second\
+    \ (string-split (string-split s \" and \") \" \")))])\n    (- n (+ a o))))\n</code>\n",
+  "  (define (helper s n)\n    (cond\n      [(empty? s) n]\n      [(char=? (first\
+    \ s) #\\a) (helper (rest s) (- n 1))]\n      [(char=? (first s) #\\o) (helper\
+    \ (rest s) (- n 1))]\n      [else (helper (rest s) n)]))\n  (helper (string->list\
+    \ s) n))\n", "  (define (parse-fruit-string s)\n    (define (parse-fruit-string-helper\
+    \ s)\n      (define (parse-fruit-string-helper-helper s)\n        (define (parse-fruit-string-helper-helper-helper\
+    \ s)\n          (if (string=? s \"\")\n              (list 0 0)\n            \
+    \  (let* ([fruit-string (string-split s \" \")]\n                     [fruit-string-1\
+    \ (string-split (car fruit-string) \" \")]\n                     [fruit-string-2\
+    \ (string-split (cadr fruit-string) \" \")]\n                     [fruit-string-3\
+    \ (string-split (caddr fruit-string) \" \")])\n                (list (string->number\
+    \ (car fruit-string-1))\n                      (string->number (car fruit-string-2))\n\
+    \                      (string->number (car fruit-string-3))))))\n        (if\
+    \ (string=? s \"\")\n            (list 0 0)\n            (let* ([fruit-string\
+    \ (string-split s \" \")]\n                   [fruit-string-1 (string-split (car\
+    \ fruit-string) \" \")]\n                   [fruit-string-2 (string-split (cadr\
+    \ fruit-string) \" \")])\n              (list (string->number (car fruit-string-1))\n\
+    \                    (string->number (car fruit-string-2))))))\n      (if (string=?\
+    \ s \"\")\n          (list 0 0)\n          (let* ([fruit-string (string-split\
+    \ s \" \")]\n                 [fruit-string-1 (string-split (car fruit-string)\
+    \ \" \")])\n            (list (string->number (car fruit-string-1))\n        \
+    \          0))))\n    (define (parse-fruit-string-helper-helper s)\n      (if\
+    \ (string=? s \"\")\n          (list 0 0)\n          (let* ([fruit-string (string-split\
+    \ s \" \")]\n                 [fruit-string-1 (string-split (car fruit-string)\
+    \ \" \")]\n                 [fruit-string-2 (string-split (cadr fruit-string)\
+    \ \" \")])\n            (list (string->number (car fruit-string-1))", "  (define\
+    \ (helper s n)\n    (cond\n      [(empty? s) n]\n      [(char=? (first s) #\\\
+    a) (helper (rest s) (- n 1))]\n      [(char=? (first s) #\\o) (helper (rest s)\
+    \ (- n 1))]\n      [else (helper (rest s) n)]))\n  (helper (string->list s) n))\n",
+  "  (define (fruit_distribution_helper s n)\n    (cond\n      [(empty? s) n]\n  \
+    \    [(equal? (first s) #\\space) (fruit_distribution_helper (rest s) n)]\n  \
+    \    [(equal? (first s) #\\a) (fruit_distribution_helper (rest s) (- n (string->number\
+    \ (substring s 0 (index-of #\\space s)))))]\n      [(equal? (first s) #\\o) (fruit_distribution_helper\
+    \ (rest s) (- n (string->number (substring s 0 (index-of #\\space s)))))]\n  \
+    \    [else (fruit_distribution_helper (rest s) n)]))\n  (fruit_distribution_helper\
+    \ s n))\n", "  (define (fruit_distribution_helper s n)\n    (cond\n      [(string=?\
+    \ s \"\") n]\n      [(string=? (substring s 0 6) \"apples\") (fruit_distribution_helper\
+    \ (substring s 7 (string-length s)) (- n (string->number (substring s 0 (string-index\
+    \ s #\\space)))))]\n      [(string=? (substring s 0 7) \"oranges\") (fruit_distribution_helper\
+    \ (substring s 8 (string-length s)) (- n (string->number (substring s 0 (string-index\
+    \ s #\\space)))))]))\n  (fruit_distribution_helper s n))\n", "  (define (helper\
+    \ s n)\n    (cond\n      [(empty? s) n]\n      [(char=? (first s) #\\a) (helper\
+    \ (rest s) (- n 1))]\n      [(char=? (first s) #\\o) (helper (rest s) (- n 1))]\n\
+    \      [else (helper (rest s) n)]))\n  (helper (string->list s) n))\n", "  (define\
+    \ (helper s)\n    (if (string=? (substring s 0 1) \"0\")\n        0\n        (string->number\
+    \ (substring s 0 (string-index s #\\space)))))\n  (- n (helper s) (helper (substring\
+    \ s (string-index s #\\a) (string-length s)))))\n", "  (define (get-num s)\n \
+    \   (string->number (regexp-match #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num\
+    \ (substring s (string-index s \"and\") (string-length s))))\n)\n", "  (let* ([s\
+    \ (string-split s \" \")]\n         [a (string->number (list-ref s 0))]\n    \
+    \     [o (string->number (list-ref s 3))])\n    (- n (+ a o))))\n", "  (define\
+    \ (count-fruit s)\n    (cond\n      [(string=? s \"\") 0]\n      [(string=? (substring\
+    \ s 0 1) \" \") (count-fruit (substring s 1))]\n      [(string=? (substring s\
+    \ 0 1) \"a\") (+ (string->number (substring s 0 (string-index s \" \"))) (count-fruit\
+    \ (substring s (string-index s \" \"))))]\n      [(string=? (substring s 0 1)\
+    \ \"o\") (+ (string->number (substring s 0 (string-index s \" \"))) (count-fruit\
+    \ (substring s (string-index s \" \"))))]\n      [else (count-fruit (substring\
+    \ s 1))]))\n  (- n (count-fruit s)))\n", "  (define (helper s n)\n    (cond\n\
+    \      [(empty? s) n]\n      [(char=? (first s) #\\a) (helper (rest s) (- n 1))]\n\
+    \      [(char=? (first s) #\\o) (helper (rest s) (- n 1))]\n      [else (helper\
+    \ (rest s) n)]))\n  (helper (string->list s) n))\n", "  (define (get-num s)\n\
+    \    (string->number (substring s 0 (string-index s #\\space))))\n  (- n (get-num\
+    \ s) (get-num (substring s (string-index s #\\a) (string-length s)))))\n", " \
+    \ (let ([a (string-&gt;number (regexp-match #rx\"^[0-9]+\" s))]\n        [o (string-&gt;number\
+    \ (regexp-match #rx\"[0-9]+$\" s))])\n    (- n (+ a o))))\n</code>\n", "  (define\
+    \ (helper s)\n    (cond\n      [(empty? s) 0]\n      [(char=? (first s) #\\0)\
+    \ (helper (rest s))]\n      [(char=? (first s) #\\1) (helper (rest s))]\n    \
+    \  [(char=? (first s) #\\2) (helper (rest s))]\n      [(char=? (first s) #\\3)\
+    \ (helper (rest s))]\n      [(char=? (first s) #\\4) (helper (rest s))]\n    \
+    \  [(char=? (first s) #\\5) (helper (rest s))]\n      [(char=? (first s) #\\6)\
+    \ (helper (rest s))]\n      [(char=? (first s) #\\7) (helper (rest s))]\n    \
+    \  [(char=? (first s) #\\8) (helper (rest s))]\n      [(char=? (first s) #\\9)\
+    \ (helper (rest s))]\n      [(char=? (first s) #\\a) (helper (rest s))]\n    \
+    \  [(char=? (first s) #\\p) (helper (rest s))]\n      [(char=? (first s) #\\l)\
+    \ (helper (rest s))]\n      [(char=? (first s) #\\e) (helper (rest s))]\n    \
+    \  [(char=? (first s) #\\s) (helper (rest s))]\n      [(char=? (first s) #\\n)\
+    \ (helper (rest s))]\n      [(char=? (first s) #\\d) (helper (rest s))]\n    \
+    \  [(char=? (first s) #\\o) (helper (rest s))]\n      [(char=? (first s) #\\r)\
+    \ (helper (rest s))]\n      [(char=? (first s) #\\g) (helper (rest s))]\n    \
+    \  [(char=? (first s) #\\ ) (helper (rest s))]\n      [else (+ 1 (helper (rest\
+    \ s)))]))\n  (- n (helper s)))\n", "  (let ([a (string-&gt;number (regexp-match\
+    \ #rx\"^[0-9]+\" s))]\n        [o (string-&gt;number (regexp-match #rx\"and [0-9]+\
+    \ oranges$\" s))])\n    (- n (+ a o))))\n</code>\n", "  (define (get-num str)\n\
+    \    (string->number (substring str 0 (string-index str #\\space))))\n  (- n (get-num\
+    \ s) (get-num (substring s (string-index s #\\and) (string-length s)))))\n", " \
+    \ (let* ([s (string-split s \" \")]\n         [a (string->number (cadr s))]\n\
+    \         [o (string->number (caddr s))])\n    (- n (+ a o))))\n", "  (let ([apples\
+    \ (string->number (substring s 0 (string-index s #\\space)))]\n        [oranges\
+    \ (string->number (substring s (+ (string-index s #\\space) 1) (string-index s\
+    \ #\\a)))])\n    (- n (+ apples oranges))))\n", "  (let ([a (string-&gt;number\
+    \ (car (string-split (car (string-split s \" and \")))))])\n    (- n a (string-&gt;number\
+    \ (cadr (string-split (cadr (string-split s \" and \"))))) )))\n</code>\n", " \
+    \ (let ([apples (string->number (regexp-match #rx\"\\d+ apples\" s))]\n      \
+    \  [oranges (string->number (regexp-match #rx\"\\d+ oranges\" s))])\n    (- n\
+    \ (+ apples oranges))))\n", "  (define (get-num s)\n    (string->number (substring\
+    \ s 0 (string-index s #\\space))))\n  (- n (get-num s) (get-num (substring s (string-index\
+    \ s #\\a) (string-length s)))))\n", "  (define (helper s)\n    (cond ((string=?\
+    \ s \"\") 0)\n          ((string=? (substring s 0 5) \"apple\") (+ 1 (helper (substring\
+    \ s 6 (string-length s)))))\n          ((string=? (substring s 0 6) \"orange\"\
+    ) (+ 1 (helper (substring s 7 (string-length s)))))\n          (else (helper (substring\
+    \ s 1 (string-length s))))))\n  (- n (helper s)))\n", "  (define (fruit_distribution_iter\
+    \ s n)\n    (cond\n      [(string=? s \"\") n]\n      [(string=? (substring s\
+    \ 0 6) \"apples\")\n       (fruit_distribution_iter (substring s 7 (string-length\
+    \ s)) (- n (string->number (substring s 0 1))))]\n      [(string=? (substring\
+    \ s 0 7) \"oranges\")\n       (fruit_distribution_iter (substring s 8 (string-length\
+    \ s)) (- n (string->number (substring s 0 1))))]\n      [else (fruit_distribution_iter\
+    \ (substring s 1 (string-length s)) n)]))\n  (fruit_distribution_iter s n))\n",
+  "  (let ([a (string-&gt;number (regexp-match #rx\"^[0-9]+\" s))]\n        [o (string-&gt;number\
+    \ (regexp-match #rx\"[0-9]+$\" s))])\n    (- n (+ a o))))\n</code>\n", "  (define\
+    \ (helper s n)\n    (cond\n      [(empty? s) n]\n      [(char=? (first s) #\\\
+    \ ) (helper (rest s) n)]\n      [(char=? (first s) #\\a) (helper (rest s) (- n\
+    \ (string->number (substring s 0 (string-index s #\\a)))))]\n      [(char=? (first\
+    \ s) #\\o) (helper (rest s) (- n (string->number (substring s 0 (string-index\
+    \ s #\\o)))))]\n      [else (helper (rest s) n)]))\n  (helper s n))\n", "  (define\
+    \ (parse-string s)\n    (define (parse-num s)\n      (string->number (regexp-replace\
+    \ #rx\"[^0-9]\" s \"\")))\n    (define (parse-fruit s)\n      (regexp-replace\
+    \ #rx\"[0-9]\" s \"\"))\n    (define (parse-count s)\n      (parse-num (parse-fruit\
+    \ s)))\n    (parse-count s))\n  (- n (parse-string s)))\n", "  (let ([apples (string->number\
+    \ (regexp-match #rx\"^[0-9]+\" s))]\n        [oranges (string->number (regexp-match\
+    \ #rx\"and [0-9]+ oranges$\" s))])\n    (- n (+ apples oranges))))\n", "  (define\
+    \ (count-fruit s)\n    (cond\n      [(string=? s \"\") 0]\n      [(string=? (substring\
+    \ s 0 1) \" \") (count-fruit (substring s 1))]\n      [(string=? (substring s\
+    \ 0 1) \"a\") (+ (string->number (substring s 0 (string-index s \" \"))) (count-fruit\
+    \ (substring s (string-index s \" \"))))]\n      [(string=? (substring s 0 1)\
+    \ \"o\") (+ (string->number (substring s 0 (string-index s \" \"))) (count-fruit\
+    \ (substring s (string-index s \" \"))))]\n      [else (count-fruit (substring\
+    \ s 1))]))\n  (- n (count-fruit s)))\n", "  (define (get_num s)\n    (string->number\
+    \ (substring s 0 (string-index s #\\space))))\n  (- n (get_num s) (get_num (substring\
+    \ s (+ (string-index s #\\space) 1) (string-length s)))))\n", "  (define (split\
+    \ s)\n    (string-split s \" \"))\n  (define (get-num s)\n    (string->number\
+    \ (car (cdr (split s)))))\n  (define (get-fruit s)\n    (car (split s)))\n  (define\
+    \ (get-total-fruit s)\n    (cond\n      [(equal? (get-fruit s) \"apples\") (+\
+    \ (get-num s) (get-num (car (cdr (split s)))))\n       (else (get-num s))]))\n\
+    \  (- n (get-total-fruit s)))\n", "  (let ([a (string-&gt;number (regexp-match\
+    \ #rx\"^[0-9]+\" s))]\n        [o (string-&gt;number (regexp-match #rx\"[0-9]+$\"\
+    \ s))])\n    (- n (+ a o))))\n</code>\n", "  (let ([apples (string->number (regexp-match\
+    \ #rx\"^[0-9]+\" s))]\n        [oranges (string->number (regexp-match #rx\"and\
+    \ [0-9]+ oranges$\" s))])\n    (- n (+ apples oranges))))\n", "  (define (helper\
+    \ s)\n    (cond\n      [(empty? s) 0]\n      [(char=? (first s) #\\a) (string->number\
+    \ (string-trim (string-trim-right (string-trim-left s \" \") \"apples and \")))]\n\
+    \      [(char=? (first s) #\\o) (string->number (string-trim (string-trim-right\
+    \ (string-trim-left s \" \") \"oranges\")))]))\n  (- n (helper s)))\n", "  (define\
+    \ (helper s n)\n    (cond\n      [(empty? s) n]\n      [(char=? (first s) #\\\
+    a) (helper (rest s) (- n 1))]\n      [(char=? (first s) #\\o) (helper (rest s)\
+    \ (- n 1))]\n      [else (helper (rest s) n)]))\n  (helper (string->list s) n))\n",
+  "  (define (helper s n)\n    (cond\n      [(empty? s) n]\n      [(char=? (first\
+    \ s) #\\a) (helper (rest s) (- n 1))]\n      [(char=? (first s) #\\o) (helper\
+    \ (rest s) (- n 1))]\n      [else (helper (rest s) n)]))\n  (helper (string->list\
+    \ s) n))\n", "  (define (get_number s)\n    (string->number (substring s 0 (string-index\
+    \ s #\\space))))\n  (- n (get_number s) (get_number (substring s (+ (string-index\
+    \ s #\\space) 1) (string-length s)))))\n", "  (define (get-num s)\n    (string->number\
+    \ (substring s 0 (string-index s #\\space))))\n  (- n (get-num s) (get-num (substring\
+    \ s (string-index s #\\a) (string-length s)))))\n", "  (let ([apples (string->number\
+    \ (regexp-match #rx\"^\\d+\" s))]\n        [oranges (string->number (regexp-match\
+    \ #rx\"\\d+$\" s))])\n    (- n (+ apples oranges))))\n", "  (define (fruit_distribution-helper\
+    \ s n)\n    (cond\n      [(empty? s) n]\n      [(char=? (first s) #\\a) (fruit_distribution-helper\
+    \ (rest s) (- n (string->number (string-append (string (first s)) (string (second\
+    \ s)) (string (third s)) (string (fourth s)) (string (fifth s))))))]\n      [(char=?\
+    \ (first s) #\\o) (fruit_distribution-helper (rest s) (- n (string->number (string-append\
+    \ (string (first s)) (string (second s)) (string (third s)) (string (fourth s))\
+    \ (string (fifth s))))))]\n      [else (fruit_distribution-helper (rest s) n)]))\n\
+    \  (fruit_distribution-helper (string->list s) n))\n", "  (let ([apples (string->number\
+    \ (regexp-match #rx\"^[0-9]+\" s))]\n        [oranges (string->number (regexp-match\
+    \ #rx\"and [0-9]+ oranges$\" s))])\n    (- n (+ apples oranges))))\n", "  (define\
+    \ (get_num s)\n    (string->number (substring s 0 (string-index s #\\space))))\n\
+    \  (- n (get_num s) (get_num (substring s (string-index s #\\a) (string-length\
+    \ s)))))\n", "  (let ([a (string-&gt;number (car (string-split (car (string-split\
+    \ s \" and \")))))])\n    (- n (+ a (string-&gt;number (car (string-split (cadr\
+    \ (string-split s \" and \"))))) ))))\n</code>\nI have tried to solve this problem\
+    \ using racket. I have used the string-split function to split the string into\
+    \ two parts. The first part is the number of apples and the second part is the\
+    \ number of oranges. I have used the string-split function again to split the\
+    \ first part into two parts. The first part is the number of apples and the second\
+    \ part is the word \"apples\". I have used the string-split function again to\
+    \ split the second part into two parts. The first part is the number of oranges\
+    \ and the second part is the word \"oranges\". I have converted the number of\
+    \ apples and oranges into numbers using the string-number function. I have subtracted\
+    \ the number of apples and oranges from the total number of fruits in the basket.\
+    \ The result is the number of mango fruits in the basket.\nI have tried to solve\
+    \ this problem using racket. I have used the string-split function to split the\
+    \ string into two parts. The first part is the number of apples and the second\
+    \ part is the number of oranges. I have used the string-split function again to\
+    \ split the first part into two parts. The first part is the number of apples\
+    \ and the second part is the word \"apples\". I have used the string-split function\
+    \ again to split the second part into two parts. The first part is the number\
+    \ of oranges and the second part is the word \"oranges\". I have converted the\
+    \ number of apples and oranges into numbers using the string-number function.\
+    \ I have subtracted the number of apples and oranges from the total number of\
+    \ fruits in the basket. The result is the number of mango fruits in the basket.\n\
+    I have tried to solve this problem using racket. I have used the string-split\
+    \ function to split the string into two parts. The first part is the number of\
+    \ apples and the second part is the number of oranges. I have used the string-split\
+    \ function again to split the first part into two parts. The first part is the\
+    \ number of apples and the second part is the word \"apples\". I have used the\
+    \ string-split function again to split the second part into two parts. The first\
+    \ part is", "  (define (helper s n)\n    (cond\n      [(empty? s) n]\n      [(char=?\
+    \ (first s) #\\a) (helper (rest s) (- n 1))]\n      [(char=? (first s) #\\o) (helper\
+    \ (rest s) (- n 1))]\n      [else (helper (rest s) n)]))\n  (helper (string->list\
+    \ s) n))\n", "  (define (helper s1 s2)\n    (if (string=? s1 \"\")\n        0\n\
+    \        (if (string=? s1 \" \")\n            (helper (substring s2 1) (substring\
+    \ s2 1))\n            (if (string=? (substring s1 0 1) \" \")\n              \
+    \  (helper (substring s2 1) (substring s2 1))\n                (if (string=? (substring\
+    \ s1 0 1) \"a\")\n                    (helper (substring s2 1) (substring s2 1))\n\
+    \                    (if (string=? (substring s1 0 1) \"o\")\n               \
+    \         (helper (substring s2 1) (substring s2 1))\n                       \
+    \ (if (string=? (substring s1 0 1) \"n\")\n                            (helper\
+    \ (substring s2 1) (substring s2 1))\n                            (if (string=?\
+    \ (substring s1 0 1) \"d\")\n                                (helper (substring\
+    \ s2 1) (substring s2 1))\n                                (string->number (substring\
+    \ s1 0 1))))))))))\n  (- n (+ (helper s s) (helper s s))))\n", "  (let ([a (string-&gt;number\
+    \ (string-split (string-split s \"and\") \" \")[0])]\n        [o (string-&gt;number\
+    \ (string-split (string-split s \"and\") \" \")[1])])\n    (- n (+ a o))))\n</code>\n\
+    I'm getting this error:\n<code>application: not a procedure;\n expected a procedure\
+    \ that can be applied to arguments\n  given: '5\n  arguments...:\n   [none]\n\
+    </code>\nI'm not sure what I'm doing wrong.\n\n\nA:\n\nYou're using the wrong\
+    \ syntax for <code>let</code>. The correct syntax is:\n<code>(let ([var1 value1]\n\
+    \      [var2 value2]\n      ...)\n  body)\n</code>\nIn your code, you're missing\
+    \ the <code>value</code> part of the <code>var value</code> pairs.\n", "  (define\
+    \ (fruit_distribution_helper s n)\n    (cond ((string=? s \"\") n)\n         \
+    \ ((string=? (substring s 0 6) \"apples\") (fruit_distribution_helper (substring\
+    \ s 7 (string-length s)) (- n (string->number (substring s 0 (string-index s #\\\
+    space))))))\n          ((string=? (substring s 0 7) \"oranges\") (fruit_distribution_helper\
+    \ (substring s 8 (string-length s)) (- n (string->number (substring s 0 (string-index\
+    \ s #\\space))))))\n          (else (fruit_distribution_helper (substring s 1\
+    \ (string-length s)) n))))\n  (fruit_distribution_helper s n))\n", "  (define\
+    \ (count-fruit s)\n    (cond\n      [(empty? s) 0]\n      [(equal? (first s) #\\\
+    space) (count-fruit (rest s))]\n      [(equal? (first s) #\\a) (string->number\
+    \ (substring s 0 (string-index s #\\space))) ]\n      [(equal? (first s) #\\o)\
+    \ (string->number (substring s (string-index s #\\and) (string-index s #\\space)))]\n\
+    \      [else (count-fruit (rest s))]))\n  (- n (count-fruit s)))\n", "  (define\
+    \ (helper s n)\n    (if (string=? s \"\")\n        n\n        (if (string=? (substring\
+    \ s 0 1) \"a\")\n            (helper (substring s (string-length \" apples and\
+    \ \") (string-length s)) (- n (string->number (substring s 0 (string-index s #\\\
+    space)))))\n            (helper (substring s (string-length \" oranges and \"\
+    ) (string-length s)) (- n (string->number (substring s 0 (string-index s #\\space))))))))\n\
+    \  (helper s n))\n", "  (let ([apples (string->number (regexp-match #rx\"^[0-9]+\"\
+    \ s))]\n        [oranges (string->number (regexp-match #rx\"and [0-9]+ oranges$\"\
+    \ s))])\n    (- n (+ apples oranges))))\n", "  (define (get-number s)\n    (string->number\
+    \ (regexp-match #rx\"\\d+\" s)))\n  (- n (get-number s) (get-number (regexp-replace\
+    \ #rx\"\\d+ apples\" s \"\"))))\n", "  (define (get-num s)\n    (string->number\
+    \ (substring s 0 (string-index s #\\space))))\n  (- n (get-num s) (get-num (substring\
+    \ s (string-index s #\\n) (string-length s)))))\n", "  (define (get-num str)\n\
+    \    (string->number (regexp-replace #rx\"\\\\D\" str \"\")))\n  (- n (get-num\
+    \ s)))\n", "  (define (get-num s)\n    (string->number (substring s 0 (string-index\
+    \ s #\\space))))\n  (- n (get-num s) (get-num (substring s (string-index s #\\\
+    a) (string-length s)))))\n", "  (define (get-num s)\n    (string->number (substring\
+    \ s 0 (string-index s #\\space))))\n  (- n (get-num s) (get-num (substring s (string-index\
+    \ s #\\a) (string-length s)))))\n", "  (let ((apples (string-&gt;number (string-take\
+    \ (string-drop s (string-index s #\\a)) (string-index s #\\s))))\n        (oranges\
+    \ (string-&gt;number (string-take (string-drop s (string-index s #\\o)) (string-index\
+    \ s #\\s)))))\n    (- n (+ apples oranges))))\n", "  (define (get-num s)\n   \
+    \ (string->number (regexp-match #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num\
+    \ (regexp-replace #rx\"apples\" s \"\"))))\n", "  (define (string->number s)\n\
+    \    (string->number (substring s 0 (string-index s #\\space))))\n  (- n (string->number\
+    \ s) (string->number (substring s (string-index s #\\and) (string-length s)))))\n",
+  "  (define (count-fruit s)\n    (cond\n      [(string=? s \"\") 0]\n      [(string=?\
+    \ (substring s 0 1) \" \") (count-fruit (substring s 1))]\n      [(string=? (substring\
+    \ s 0 1) \"a\") (+ (string->number (substring s 0 (string-index s \" \"))) (count-fruit\
+    \ (substring s (string-index s \" \"))))]\n      [(string=? (substring s 0 1)\
+    \ \"o\") (+ (string->number (substring s 0 (string-index s \" \"))) (count-fruit\
+    \ (substring s (string-index s \" \"))))]\n      [else (count-fruit (substring\
+    \ s 1))]))\n  (- n (count-fruit s)))\n", "  (let ([a (string-&gt;number (regexp-match\
+    \ #rx\"^[0-9]+\" s))]\n        [o (string-&gt;number (regexp-match #rx\"[0-9]+$\"\
+    \ s))])\n    (- n (+ a o))))\n</code>\n", "  (let ((apples (string-&gt;number\
+    \ (string-split (string-split s \" and \") \" \")))\n        (oranges (string-&gt;number\
+    \ (string-split (string-split s \" and \") \" \"))))\n    (- n (+ apples oranges))))\n\
+    </code>\nI get the following error:\n<code>string-split: expects type &lt;string&gt;\
+    \ as 1st argument, given: \"5 apples and 6 oranges\"; other arguments were: \"\
+    \ \"\n</code>\nI don't understand why I get this error. I'm using <code>string-split</code>\
+    \ the same way in both cases.\n\n\nA:\n\nThe problem is that <code>string-split</code>\
+    \ is a procedure that takes two arguments, the first one is a string and the second\
+    \ one is a string too. You're passing a list as the first argument, that's why\
+    \ you're getting the error.\nTry this:\n<code>(define (fruit_distribution s n)\n\
+    \  (let ((apples (string-&gt;number (string-split (car (string-split s \" and\
+    \ \")) \" \")))\n        (oranges (string-&gt;number (string-split (cadr (string-split\
+    \ s \" and \")) \" \"))))\n    (- n (+ apples oranges))))\n</code>\n", "  (define\
+    \ (get-num s)\n    (string->number (substring s 0 (string-index s #\\space))))\n\
+    \  (- n (get-num s) (get-num (substring s (string-index s #\\a) (string-length\
+    \ s)))))\n", "  (define (fruit_distribution-helper s n)\n    (cond\n      [(empty?\
+    \ s) n]\n      [(char=? (first s) #\\a) (fruit_distribution-helper (rest s) (-\
+    \ n (string->number (string-append (string (first s)) (string (second s)) (string\
+    \ (third s)) (string (fourth s)) (string (fifth s))))))]\n      [(char=? (first\
+    \ s) #\\o) (fruit_distribution-helper (rest s) (- n (string->number (string-append\
+    \ (string (first s)) (string (second s)) (string (third s)) (string (fourth s))\
+    \ (string (fifth s))))))]\n      [else (fruit_distribution-helper (rest s) n)]))\n\
+    \  (fruit_distribution-helper (string->list s) n))\n", "  (define (helper s n)\n\
+    \    (cond ((string=? s \"\") n)\n          ((string=? (substring s 0 6) \"apples\"\
+    )\n           (helper (substring s 7 (string-length s)) (- n (string->number (substring\
+    \ s 0 (string-index s #\\space))))))\n          ((string=? (substring s 0 7) \"\
+    oranges\")\n           (helper (substring s 8 (string-length s)) (- n (string->number\
+    \ (substring s 0 (string-index s #\\space))))))\n          (else (helper (substring\
+    \ s 1 (string-length s)) n))))\n  (helper s n))\n", "  (define (count-fruit s)\n\
+    \    (cond\n      [(string=? s \"\") 0]\n      [(string=? (substring s 0 1) \"\
+    \ \") (count-fruit (substring s 1))]\n      [(string=? (substring s 0 1) \"a\"\
+    ) (count-fruit (substring s 1))]\n      [(string=? (substring s 0 1) \"o\") (count-fruit\
+    \ (substring s 1))]\n      [else (+ 1 (count-fruit (substring s 1)))]))\n  (-\
+    \ n (count-fruit s)))\n", "  (define (helper s n)\n    (cond\n      [(empty? s)\
+    \ n]\n      [(char=? (first s) #\\a) (helper (rest s) (- n 1))]\n      [(char=?\
+    \ (first s) #\\o) (helper (rest s) (- n 1))]\n      [else (helper (rest s) n)]))\n\
+    \  (helper (string->list s) n))\n", "  (define (get-num s)\n    (string->number\
+    \ (regexp-match #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num (regexp-replace\
+    \ #rx\"apples\" s \"\"))))\n", "  (let ([a (string-&gt;number (regexp-match #rx\"\
+    ^[0-9]+\" s))]\n        [o (string-&gt;number (regexp-match #rx\"and [0-9]+ oranges$\"\
+    \ s))])\n    (- n (+ a o))))\n", "  (define (helper s)\n    (cond [(string=? s\
+    \ \"\") 0]\n          [(string=? (substring s 0 6) \"apples\") (string->number\
+    \ (substring s 0 (string-index s #\\space)))]\n          [(string=? (substring\
+    \ s 0 7) \"oranges\") (string->number (substring s 0 (string-index s #\\space)))]\n\
+    \          [else (helper (substring s 1))]))\n  (- n (helper s)))\n", "  (define\
+    \ (get_number s)\n    (string->number (regexp-match #rx\"\\d+\" s)))\n  (- n (+\
+    \ (get_number (regexp-match #rx\"\\d+ apples\" s))\n          (get_number (regexp-match\
+    \ #rx\"\\d+ oranges\" s)))))\n", "  (let ((apples (string-&gt;number (car (string-split\
+    \ (car (string-split s \"and\")) \" \"))))\n        (oranges (string-&gt;number\
+    \ (car (string-split (cadr (string-split s \"and\")) \" \")))))\n    (- n (+ apples\
+    \ oranges))))\n</code>\n", "  (let ([a (string-&gt;number (regexp-match #rx\"\\\
+    d+\" s))]\n        [o (string-&gt;number (regexp-match #rx\"\\d+\" s 2))])\n \
+    \   (- n (+ a o))))\n</code>\n", "  (define (count-apples s)\n    (string-&gt;number\
+    \ (regexp-match #rx\"\\d+\" s)))\n  (define (count-oranges s)\n    (string-&gt;number\
+    \ (regexp-match #rx\"\\d+\" (regexp-replace #rx\"\\d+ apples\" s \"\"))))\n  (-\
+    \ n (+ (count-apples s) (count-oranges s))))\n</code>\n", "  (define (get-num\
+    \ s)\n    (string->number (regexp-match #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num\
+    \ (regexp-replace #rx\"apples\" s \"\"))))\n", "  (define (get-num s)\n    (string->number\
+    \ (regexp-match #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num (regexp-replace\
+    \ #rx\"apples\" s \"\"))))\n", "  (define (helper s n)\n    (cond\n      [(empty?\
+    \ s) n]\n      [(char=? (first s) #\\ ) (helper (rest s) n)]\n      [(char=? (first\
+    \ s) #\\a) (helper (rest s) (- n (string->number (regexp-match #rx\"\\d+\" s))))]\n\
+    \      [(char=? (first s) #\\o) (helper (rest s) (- n (string->number (regexp-match\
+    \ #rx\"\\d+\" s))))]\n      [else (helper (rest s) n)]))\n  (helper s n))\n",
+  "  (let ([a (string-&gt;number (regexp-match #rx\"^[0-9]+\" s))]\n        [o (string-&gt;number\
+    \ (regexp-match #rx\"and [0-9]+ oranges$\" s))])\n    (- n (+ a o))))\n", "  (define\
+    \ (helper s)\n    (cond\n      [(string=? s \"\") 0]\n      [(string=? (substring\
+    \ s 0 1) \" \") (helper (substring s 1))]\n      [(string=? (substring s 0 1)\
+    \ \"a\") (helper (substring s 5))]\n      [(string=? (substring s 0 1) \"o\")\
+    \ (helper (substring s 7))]\n      [else (string->number (substring s 0 1))]))\n\
+    \  (- n (helper s)))\n", "  (define (helper s n)\n    (cond\n      [(empty? s)\
+    \ n]\n      [(char=? (first s) #\\a) (helper (rest s) (- n 1))]\n      [(char=?\
+    \ (first s) #\\o) (helper (rest s) (- n 1))]\n      [else (helper (rest s) n)]))\n\
+    \  (helper (string->list s) n))\n", "  (let ([apples (string->number (regexp-match\
+    \ #rx\"^[0-9]+\" s))]\n        [oranges (string->number (regexp-match #rx\"and\
+    \ [0-9]+ oranges$\" s))])\n    (- n (+ apples oranges))))\n", "  (define (get_num\
+    \ s)\n    (string->number (substring s 0 (string-index s #\\space))))\n  (- n\
+    \ (get_num s) (get_num (substring s (string-index s #\\a) (string-length s)))))\n",
+  "  (define (count-fruit s)\n    (string-&gt;number (string-trim (string-take-right\
+    \ (string-drop-right s (string-length \" oranges\")) (string-length \" apples\
+    \ and \")))))\n  (- n (count-fruit s)))\n", "  (define (get-num s)\n    (string->number\
+    \ (regexp-match #rx\"\\d+\" s)))\n  (- n (+ (get-num (regexp-match #rx\"\\d+ apples\"\
+    \ s))\n          (get-num (regexp-match #rx\"\\d+ oranges\" s)))))\n", "  (define\
+    \ (helper s)\n    (cond\n      [(empty? s) 0]\n      [(char=? (first s) #\\a)\
+    \ (string->number (substring s 0 (string-index s #\\ )))]\n      [(char=? (first\
+    \ s) #\\o) (string->number (substring s 0 (string-index s #\\ )))]\n      [else\
+    \ (helper (rest s))]))\n  (- n (helper s)))\n", "  (define (get-num s)\n    (string->number\
+    \ (regexp-match #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num (regexp-replace\
+    \ #rx\"apples\" s \"\"))))\n", "  (define (fruit-distribution-helper s n)\n  \
+    \  (cond\n      [(empty? s) n]\n      [(char=? (first s) #\\a) (fruit-distribution-helper\
+    \ (rest s) (- n (string->number (string-append (string (first s)) (string (first\
+    \ (rest s)))))))]\n      [(char=? (first s) #\\o) (fruit-distribution-helper (rest\
+    \ s) (- n (string->number (string-append (string (first s)) (string (first (rest\
+    \ s)))))))]\n      [else (fruit-distribution-helper (rest s) n)]))\n  (fruit-distribution-helper\
+    \ (string->list s) n))\n", "  (let ([a (string-&gt;number (car (string-split (car\
+    \ (string-split s \"and\")))))])\n    (- n (+ a (string-&gt;number (cadr (string-split\
+    \ (cadr (string-split s \"and\"))))) ))))\n</code>\n", "  (define (count-fruit\
+    \ s)\n    (cond\n      [(empty? s) 0]\n      [(equal? (first s) #\\ ) 0]\n   \
+    \   [(equal? (first s) #\\a) (+ (count-fruit (rest s)) 1)]\n      [(equal? (first\
+    \ s) #\\o) (+ (count-fruit (rest s)) 1)]\n      [else (count-fruit (rest s))]))\n\
+    \  (- n (count-fruit s)))\n", "  (define (get-num s)\n    (string->number (substring\
+    \ s 0 (string-index s #\\space))))\n  (- n (get-num s) (get-num (substring s (string-index\
+    \ s #\\a) (string-length s)))))\n", "  (define (parse-fruit-string s)\n    (define\
+    \ (parse-fruit-string-helper s)\n      (cond\n        [(empty? s) (list 0 0)]\n\
+    \        [(string=? (substring s 0 6) \"apples\") (list (string->number (substring\
+    \ s 0 1)) 0)]\n        [(string=? (substring s 0 7) \"oranges\") (list 0 (string->number\
+    \ (substring s 0 1)))]\n        [else (parse-fruit-string-helper (substring s\
+    \ 1))]))\n    (parse-fruit-string-helper s))\n  (- n (apply + (parse-fruit-string\
+    \ s))))\n", "  (define (helper s n)\n    (if (string=? s \"\") n\n        (if\
+    \ (string=? (substring s 0 1) \"a\")\n            (helper (substring s (string-length\
+    \ \" apples and \") (string-length s)) (- n (string->number (substring s (string-length\
+    \ \" apples and \") (string-length s)))))\n            (helper (substring s (string-length\
+    \ \" oranges and \") (string-length s)) (- n (string->number (substring s (string-length\
+    \ \" oranges and \") (string-length s))))))))\n  (helper s n))\n", "  (let ([a\
+    \ (string-&gt;number (regexp-match #rx\"^[0-9]+\" s))]\n        [o (string-&gt;number\
+    \ (regexp-match #rx\"and [0-9]+ oranges$\" s))])\n    (- n (+ a o))))\n", "  (define\
+    \ (fruit_distribution_helper s n)\n    (cond\n      [(string=? s \"\") n]\n  \
+    \    [(string=? (substring s 0 6) \"apples\") (fruit_distribution_helper (substring\
+    \ s 7 (string-length s)) (- n (string->number (substring s 0 (string-index s #\\\
+    space)))))]\n      [(string=? (substring s 0 7) \"oranges\") (fruit_distribution_helper\
+    \ (substring s 8 (string-length s)) (- n (string->number (substring s 0 (string-index\
+    \ s #\\space)))))]\n      [else (fruit_distribution_helper (substring s 1 (string-length\
+    \ s)) n)]))\n  (fruit_distribution_helper s n))\n", "  (let ([apples (string->number\
+    \ (regexp-match #rx\"^[0-9]+\" s))]\n        [oranges (string->number (regexp-match\
+    \ #rx\"and [0-9]+ oranges$\" s))])\n    (- n apples oranges)))\n", "  (define\
+    \ (string->list s)\n    (string-&gt;list s))\n  (define (list->string l)\n   \
+    \ (list-&gt;string l))\n  (define (string-&gt;number s)\n    (string-&gt;number\
+    \ s))\n  (define (number-&gt;string n)\n    (number-&gt;string n))\n  (define\
+    \ (string-&gt;number s)\n    (string-&gt;number s))\n  (define (number-&gt;string\
+    \ n)\n    (number-&gt;string n))\n  (define (string-&gt;number s)\n    (string-&gt;number\
+    \ s))\n  (define (number-&gt;string n)\n    (number-&gt;string n))\n  (define\
+    \ (string-&gt;number s)\n    (string-&gt;number s))\n  (define (number-&gt;string\
+    \ n)\n    (number-&gt;string n))\n  (define (string-&gt;number s)\n    (string-&gt;number\
+    \ s))\n  (define (number-&gt;string n)\n    (number-&gt;string n))\n  (define\
+    \ (string-&gt;number s)\n    (string-&gt;number s))\n  (define (number-&gt;string\
+    \ n)\n    (number-&gt;string n))\n  (define (string-&gt;number s)\n    (string-&gt;number\
+    \ s))\n  (define (number-&gt;string n)\n    (number-&gt;string n))\n  (define\
+    \ (string-&gt;number s)\n    (string-&gt;number s))\n  (define (number-&gt;string\
+    \ n)\n    (number-&gt;string n))\n  (define (string-&gt;number s)\n    (string-&gt;number\
+    \ s))\n  (define (number-&gt;string n)\n    (number-&gt;string n))\n  (define\
+    \ (string-&gt;number s)\n    (string-&gt;number s))\n  (define (number-&gt;string\
+    \ n)\n", "  (define (get-num s)\n    (string->number (regexp-match #rx\"\\d+\"\
+    \ s)))\n  (- n (get-num s) (get-num (regexp-replace #rx\"\\d+ apples\" s \"\"\
+    ))))\n", "  (define (fruit-count s)\n    (cond\n      [(string=? s \"\") 0]\n\
+    \      [(string=? (substring s 0 1) \" \") (fruit-count (substring s 1))]\n  \
+    \    [(string=? (substring s 0 1) \"a\") (fruit-count (substring s 1))]\n    \
+    \  [(string=? (substring s 0 1) \"o\") (fruit-count (substring s 1))]\n      [(string=?\
+    \ (substring s 0 1) \"n\") (fruit-count (substring s 1))]\n      [(string=? (substring\
+    \ s 0 1) \"d\") (fruit-count (substring s 1))]\n      [(string=? (substring s\
+    \ 0 1) \"r\") (fruit-count (substring s 1))]\n      [(string=? (substring s 0\
+    \ 1) \"a\") (fruit-count (substring s 1))]\n      [(string=? (substring s 0 1)\
+    \ \"n\") (fruit-count (substring s 1))]\n      [(string=? (substring s 0 1) \"\
+    g\") (fruit-count (substring s 1))]\n      [(string=? (substring s 0 1) \"e\"\
+    ) (fruit-count (substring s 1))]\n      [(string=? (substring s 0 1) \"s\") (fruit-count\
+    \ (substring s 1))]\n      [(string=? (substring s 0 1) \"a\") (fruit-count (substring\
+    \ s 1))]\n      [(string=? (substring s 0 1) \"n\") (fruit-count (substring s\
+    \ 1))]\n      [(string=? (substring s 0 1) \"d\") (fruit-count (substring s 1))]\n\
+    \      [(string=? (substring s 0 1) \" \") (fruit-count (substring s 1))]\n  \
+    \    [(string=? (substring s 0 1) \"0\") (fruit-count (substring s 1))]\n    \
+    \  [(string=? (substring s 0 1) \"1\") (fruit-count (substring s 1))]\n      [(string=?\
+    \ (substring s 0 1) \"2\") (fruit-count (substring s 1))]\n", "  (let ([a (string-&gt;number\
+    \ (regexp-match #rx\"^[0-9]+\" s))]\n        [o (string-&gt;number (regexp-match\
+    \ #rx\"[0-9]+$\" s))])\n    (- n (+ a o))))\n</code>\n", "  (define (helper s\
+    \ n)\n    (cond\n      [(empty? s) 0]\n      [(char=? (first s) #\\a) (helper\
+    \ (rest s) (- n 1))]\n      [(char=? (first s) #\\o) (helper (rest s) (- n 1))]\n\
+    \      [else (helper (rest s) n)]))\n  (- n (helper (string->list s) n)))\n",
+  "  (define (fruit_distribution_helper s n)\n    (cond\n      [(empty? s) n]\n  \
+    \    [(char=? (first s) #\\a) (fruit_distribution_helper (rest s) (- n 1))]\n\
+    \      [(char=? (first s) #\\o) (fruit_distribution_helper (rest s) (- n 1))]\n\
+    \      [else (fruit_distribution_helper (rest s) n)]))\n  (fruit_distribution_helper\
+    \ (string->list s) n))\n", "  (let ([apples (string->number (regexp-match #rx\"\
+    ^[0-9]+\" s))]\n        [oranges (string->number (regexp-match #rx\"[0-9]+$\"\
+    \ s))])\n    (- n (+ apples oranges))))\n", "  (define (get-num s)\n    (string->number\
+    \ (regexp-match #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num (regexp-replace\
+    \ #rx\"\\d+ apples\" s \"\"))))\n", "  (define (helper s)\n    (cond\n      [(string=?\
+    \ s \"\") 0]\n      [(string=? (substring s 0 6) \"apples\") (string->number (substring\
+    \ s 0 (string-index s #\\space)))]\n      [(string=? (substring s 0 7) \"oranges\"\
+    ) (string->number (substring s 0 (string-index s #\\space)))]))\n  (- n (helper\
+    \ s)))\n", "  (define (get-num s)\n    (string->number (regexp-match #rx\"\\d+\"\
+    \ s)))\n  (- n (+ (get-num (regexp-match #rx\"\\d+ apples\" s))\n          (get-num\
+    \ (regexp-match #rx\"\\d+ oranges\" s)))))\n", "  (define (helper s)\n    (cond\n\
+    \      [(empty? s) 0]\n      [(char=? (first s) #\\a) (string->number (string-trim\
+    \ (string-trim (string-trim (string-trim (string-trim (string-trim (string-trim\
+    \ (string-trim (string-trim (string-trim (string-trim (string-trim (string-trim\
+    \ (string-trim (string-trim (string-trim (string-trim (string-trim (string-trim\
+    \ (string-trim (string-trim (string-trim (string-trim (string-trim (string-trim\
+    \ (string-trim (string-trim (string-trim (string-trim (string-trim (string-trim\
+    \ (string-trim (string-trim (string-trim (string-trim (string-trim (string-trim\
+    \ (string-trim (string-trim (string-trim (string-trim (string-trim (string-trim\
+    \ (string-trim (string-trim (string-trim (string-trim (string-trim (string-trim\
+    \ (string-trim (string-trim (string-trim (string-trim (string-trim (string-trim\
+    \ (string-trim (string-trim (string-trim (string-trim (string-trim (string-trim\
+    \ (string-trim (string-trim (string-trim (string-trim (string-trim (string-trim\
+    \ (string-trim (string-trim (string-trim (string-trim (string-trim (string-trim\
+    \ (string-trim (string-trim (string-trim (string-trim (string-trim (string-trim\
+    \ (string-trim (string-trim (string-trim (string-trim (string-trim (string-trim\
+    \ (string-trim (string-trim (string-trim (string-trim (string-trim (string-trim\
+    \ (string-trim (string-trim (string-trim (string", "  (define (get-num s)\n  \
+    \  (string->number (regexp-match #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num\
+    \ (regexp-replace #rx\"apples\" s \"\"))))\n", "  (let ([a (string-&gt;number\
+    \ (regexp-match #rx\"^[0-9]+\" s))]\n        [o (string-&gt;number (regexp-match\
+    \ #rx\"[0-9]+$\" s))])\n    (- n (+ a o))))\n</code>\n", "  (define (get-num s)\n\
+    \    (string->number (regexp-match #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num\
+    \ (regexp-replace #rx\"\\d+ apples\" s \"\"))))\n", "  (define (fruit-distribution-helper\
+    \ s n)\n    (if (string=? s \"\")\n        n\n        (let* ([fruit-count (string->number\
+    \ (car (string-split (string-trim s) #\\space)))]\n               [fruit-name\
+    \ (car (string-split (cadr (string-split (string-trim s) #\\space)) #\\and))])\n\
+    \          (if (string=? fruit-name \"apples\")\n              (fruit-distribution-helper\
+    \ (cddr (string-split (string-trim s) #\\space)) (- n fruit-count))\n        \
+    \      (fruit-distribution-helper (cddr (string-split (string-trim s) #\\space))\
+    \ (- n fruit-count))))))\n  (fruit-distribution-helper s n))\n", "  (let ([apples\
+    \ (string->number (regexp-match #rx\"\\d+\" s))]\n        [oranges (string->number\
+    \ (regexp-match #rx\"\\d+\" (cadr (regexp-match #rx\"\\d+ oranges\" s))))])\n\
+    \    (- n (+ apples oranges))))\n", "  (define (parse_string s)\n    (define (parse_helper\
+    \ s)\n      (cond ((null? s) 0)\n            ((char=? (car s) #\\a) (+ 1 (parse_helper\
+    \ (cdr s))))\n            ((char=? (car s) #\\o) (+ 1 (parse_helper (cdr s))))\n\
+    \            (else (parse_helper (cdr s)))))\n    (parse_helper (string->list\
+    \ s)))\n  (- n (parse_string s)))\n", "  (let* ([lst (string-split s \" \")]\n\
+    \         [apples (string->number (list-ref lst 1))]\n         [oranges (string->number\
+    \ (list-ref lst 3))])\n    (- n (+ apples oranges))))\n", "  (let ([apples (string->number\
+    \ (regexp-match #rx\"^[0-9]+\" s))]\n        [oranges (string->number (regexp-match\
+    \ #rx\"and [0-9]+ oranges$\" s))])\n    (- n apples oranges)))\n", "  (define\
+    \ (get_num s)\n    (string->number (substring s 0 (string-index s #\\space))))\n\
+    \  (- n (get_num s) (get_num (substring s (string-index s #\\a) (string-length\
+    \ s)))))\n", "  (define (count-fruit s)\n    (cond\n      [(string=? s \"\") 0]\n\
+    \      [(string=? (substring s 0 1) \" \") (count-fruit (substring s 1))]\n  \
+    \    [(string=? (substring s 0 1) \"a\") (+ (string->number (substring s 0 (string-index\
+    \ s \" \"))) (count-fruit (substring s (string-index s \" \"))))]\n      [(string=?\
+    \ (substring s 0 1) \"o\") (+ (string->number (substring s 0 (string-index s \"\
+    \ \"))) (count-fruit (substring s (string-index s \" \"))))]\n      [else (count-fruit\
+    \ (substring s 1))]))\n  (- n (count-fruit s)))\n", "  (let ([apples (string->number\
+    \ (regexp-match #rx\"\\d+\" s))]\n        [oranges (string->number (regexp-match\
+    \ #rx\"\\d+\" (regexp-replace #rx\"\\d+ apples\" s \"\")))])\n    (- n (+ apples\
+    \ oranges))))\n", "  (let ([apples (string->number (regexp-match #rx\"\\d+\" s))]\n\
+    \        [oranges (string->number (regexp-match #rx\"\\d+\" (regexp-replace #rx\"\
+    \\d+ apples\" s \"\")))])\n    (- n (+ apples oranges))))\n", "  (define (get-num\
+    \ str)\n    (string->number (regexp-replace #rx\"[^0-9]\" str \"\")))\n  (- n\
+    \ (get-num (regexp-replace #rx\"apples\" s \"\"))\n     (get-num (regexp-replace\
+    \ #rx\"oranges\" s \"\"))))\n", "  (define (helper s n)\n    (cond\n      [(empty?\
+    \ s) n]\n      [(char=? (first s) #\\a) (helper (rest s) (- n 1))]\n      [(char=?\
+    \ (first s) #\\o) (helper (rest s) (- n 1))]\n      [else (helper (rest s) n)]))\n\
+    \  (helper (string->list s) n))\n", "  (let ([apples (string->number (substring\
+    \ s 0 (string-index s #\\space)))]\n        [oranges (string->number (substring\
+    \ s (+ (string-index s #\\space) 4) (string-index s #\\a)))])\n    (- n (+ apples\
+    \ oranges))))\n", "  (let ([apples (string->number (string-take s (string-index\
+    \ s #\\a)))]\n        [oranges (string->number (string-take s (string-index s\
+    \ #\\o)))]\n        [mangoes (- n (+ apples oranges))])\n    (if (and (>= mangoes\
+    \ 0) (= (+ apples oranges mangoes) n))\n        mangoes\n        \"Invalid input\"\
+    )))\n", "  (define (fruit_distribution_helper s n)\n    (cond\n      [(empty?\
+    \ s) n]\n      [(equal? (first s) #\\ ) (fruit_distribution_helper (rest s) n)]\n\
+    \      [(equal? (first s) #\\a) (fruit_distribution_helper (rest s) (- n (string->number\
+    \ (substring s 0 (string-index s #\\ )))))]\n      [(equal? (first s) #\\o) (fruit_distribution_helper\
+    \ (rest s) (- n (string->number (substring s 0 (string-index s #\\ )))))]\n  \
+    \    [else (fruit_distribution_helper (rest s) n)]))\n  (fruit_distribution_helper\
+    \ s n))\n", "  (define (get-num s)\n    (string->number (regexp-match #rx\"\\\
+    d+\" s)))\n  (- n (get-num s) (get-num (regexp-replace #rx\"apples\" s \"\"))))\n",
+  "  (define (fruit_distribution_helper s n)\n    (cond\n      [(empty? s) n]\n  \
+    \    [(char=? (first s) #\\a) (fruit_distribution_helper (rest s) (- n (string->number\
+    \ (string-append (string (first s)) (string (second s)) (string (third s))))))]\n\
+    \      [(char=? (first s) #\\o) (fruit_distribution_helper (rest s) (- n (string->number\
+    \ (string-append (string (first s)) (string (second s)) (string (third s))))))]\n\
+    \      [else (fruit_distribution_helper (rest s) n)]))\n  (fruit_distribution_helper\
+    \ s n))\n", "  (define (helper s)\n    (if (string=? s \"\")\n        0\n    \
+    \    (if (string=? (substring s 0 6) \"apples\")\n            (string->number\
+    \ (substring s 0 (string-index s #\\space)))\n            (string->number (substring\
+    \ s 0 (string-index s #\\space))))))\n  (- n (+ (helper s) (helper (substring\
+    \ s (string-index s #\\o))))))\n", "  (define (fruit_distribution_helper s n)\n\
+    \    (cond\n      [(empty? s) n]\n      [(char=? (first s) #\\space) (fruit_distribution_helper\
+    \ (rest s) n)]\n      [(char=? (first s) #\\a) (fruit_distribution_helper (rest\
+    \ s) (- n (string->number (string-take s (string-index s #\\space)))))]\n    \
+    \  [(char=? (first s) #\\o) (fruit_distribution_helper (rest s) (- n (string->number\
+    \ (string-take s (string-index s #\\space)))))]\n      [else (fruit_distribution_helper\
+    \ (rest s) n)]))\n  (fruit_distribution_helper s n))\n", "  (define (get-num s)\n\
+    \    (string->number (regexp-match #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num\
+    \ (regexp-replace #rx\"apples\" s \"\"))))\n", "  (let ([apples (string->number\
+    \ (regexp-match #rx\"^[0-9]+\" s))]\n        [oranges (string->number (regexp-match\
+    \ #rx\"and [0-9]+ oranges$\" s))])\n    (- n (+ apples oranges))))\n", "  (let*\
+    \ ([s (string-split s \" \")]\n         [a (string->number (list-ref s 0))]\n\
+    \         [o (string->number (list-ref s 3))])\n    (- n (+ a o))))\n", "  (define\
+    \ (count-fruit s)\n    (cond ((string=? s \"\") 0)\n          ((string-contains\
+    \ s \"apples\")\n           (+ (string->number (substring s 0 (string-index s\
+    \ \" \")))\n              (count-fruit (substring s (+ (string-index s \" \")\
+    \ 1) (string-length s)))))\n          ((string-contains s \"oranges\")\n     \
+    \      (+ (string->number (substring s 0 (string-index s \" \")))\n          \
+    \    (count-fruit (substring s (+ (string-index s \" \") 1) (string-length s)))))\n\
+    \          (else (count-fruit (substring s 1 (string-length s))))))\n  (- n (count-fruit\
+    \ s)))\n", "  (define (split s)\n    (string-split s \" \"))\n  (define (get-num\
+    \ s)\n    (string->number (cadr (split s))))\n  (- n (get-num s) (get-num (cadr\
+    \ (split s)))))\n", "  (define (parse-fruit-distribution s)\n    (define (parse-fruit-distribution-helper\
+    \ s)\n      (cond ((string=? s \"\") '())\n            ((string-contains s \"\
+    \ \")\n             (cons (string->number (substring s 0 (string-index s \" \"\
+    )))\n                   (parse-fruit-distribution-helper (substring s (+ 1 (string-index\
+    \ s \" \"))))))\n            (else (cons (string->number s) '()))))\n    (parse-fruit-distribution-helper\
+    \ (string-replace (string-replace s \"and\" \"\") \" \" \"\")))\n  (- n (apply\
+    \ + (parse-fruit-distribution s))))\n", "  (define (fruit_distribution_helper\
+    \ s n)\n    (cond ((string=? s \"\") n)\n          ((string=? (substring s 0 6)\
+    \ \"apples\") (fruit_distribution_helper (substring s 7 (string-length s)) (-\
+    \ n (string->number (substring s 0 (string-index s #\\space))))))\n          ((string=?\
+    \ (substring s 0 7) \"oranges\") (fruit_distribution_helper (substring s 8 (string-length\
+    \ s)) (- n (string->number (substring s 0 (string-index s #\\space))))))\n   \
+    \       (else (fruit_distribution_helper (substring s 1 (string-length s)) n))))\n\
+    \  (fruit_distribution_helper s n))\n", "  (define (get-num s)\n    (string->number\
+    \ (substring s 0 (string-index s #\\space))))\n  (- n (get-num s) (get-num (substring\
+    \ s (string-index s #\\a) (string-length s)))))\n", "  (define (get_num s)\n \
+    \   (string->number (regexp-match #rx\"\\d+\" s)))\n  (- n (get_num s) (get_num\
+    \ (cadr (regexp-match #rx\"\\d+\" s))))\n)\n", "  (let ([a (string-&gt;number\
+    \ (regexp-match #rx\"^[0-9]+\" s))]\n        [o (string-&gt;number (regexp-match\
+    \ #rx\"and [0-9]+ oranges$\" s))])\n    (- n (+ a o))))\n", "  (define (get-num\
+    \ s)\n    (string->number (substring s 0 (string-index s #\\space))))\n  (- n\
+    \ (get-num s) (get-num (substring s (string-index s #\\o) (string-length s)))))\n",
+  "  (define (get-num s)\n    (string->number (regexp-match #rx\"\\d+\" s)))\n  (-\
+    \ n (get-num s) (get-num (regexp-replace #rx\"apples\" s \"\"))))\n", "  (define\
+    \ (helper s)\n    (cond ((string=? s \"\") 0)\n          ((string=? (substring\
+    \ s 0 6) \"apples\")\n           (+ (string->number (substring s 0 (string-index\
+    \ s #\\space)))\n              (helper (substring s (string-index s #\\space)\
+    \ (string-length s)))))\n          ((string=? (substring s 0 7) \"oranges\")\n\
+    \           (+ (string->number (substring s 0 (string-index s #\\space)))\n  \
+    \            (helper (substring s (string-index s #\\space) (string-length s)))))))\n\
+    \  (- n (helper s)))\n", "  (define (fruit_distribution_helper s n)\n    (cond\n\
+    \      [(empty? s) n]\n      [(char=? (first s) #\\a) (fruit_distribution_helper\
+    \ (rest s) (- n (string->number (string-append (string (first s)) (string (first\
+    \ (rest s)))))))]\n      [(char=? (first s) #\\o) (fruit_distribution_helper (rest\
+    \ s) (- n (string->number (string-append (string (first s)) (string (first (rest\
+    \ s)))))))]\n      [else (fruit_distribution_helper (rest s) n)]))\n  (fruit_distribution_helper\
+    \ (string->list s) n))\n", "  (define (get-number s)\n    (string->number (substring\
+    \ s 0 (string-index s #\\space))))\n  (- n (get-number s) (get-number (substring\
+    \ s (string-index s #\\a) (string-length s)))))\n", "  (define (get-num s)\n \
+    \   (string->number (substring s 0 (string-index s #\\space))))\n  (- n (get-num\
+    \ s) (get-num (substring s (string-index s #\\a) (string-length s)))))\n", " \
+    \ (define (get-num s)\n    (string->number (regexp-match #rx\"\\d+\" s)))\n  (-\
+    \ n (get-num s) (get-num (cadr (regexp-match #rx\"\\d+\" s))))\n)\n```\n\n## Task\
+    \ 3\n\n```racket\n#lang racket\n", "  (let ([apples (string->number (regexp-match\
+    \ #rx\"^[0-9]+\" s))]\n        [oranges (string->number (regexp-match #rx\"and\
+    \ [0-9]+ oranges$\" s))])\n    (- n (+ apples oranges))))\n", "  (define (count-fruit\
+    \ s)\n    (if (string-contains s \"apples\")\n        (string->number (substring\
+    \ s 0 (string-index s \" \")))\n        0))\n  (- n (count-fruit s) (string->number\
+    \ (substring s (- (string-length s) 1) (string-length s)))))\n", "  (let ([a (string-&gt;number\
+    \ (string-split (string-split s \"and\") \" \"))]\n        [o (string-&gt;number\
+    \ (string-split (string-split s \"and\") \" \"))])\n    (- n (+ a o))))\n</code>\n\
+    I am getting the following error:\n<code>string-split: expects type &lt;string&gt;\
+    \ as 1st argument, given: \"5 apples and 6 oranges\"; other arguments were: \"\
+    and\"\n</code>\nI am not sure what I am doing wrong.\n\n\nA:\n\nYou're trying\
+    \ to split a string that already contains a list of strings, that's why you're\
+    \ getting the error.\nTry this instead:\n<code>(define (fruit_distribution s n)\n\
+    \  (let ([a (string-&gt;number (first (string-split s \"and\")))]\n        [o\
+    \ (string-&gt;number (second (string-split s \"and\")))]\n        [m (- n (+ a\
+    \ o))])\n    (if (&lt; m 0)\n        0\n        m)))\n</code>\n", "  (define (get-num\
+    \ s)\n    (string->number (regexp-match #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num\
+    \ (regexp-replace #rx\"apples\" s \"\"))))\n", "  (define (parse s)\n    (define\
+    \ (parse-num s)\n      (string->number (regexp-replace #rx\"\\\\D+\" s \"\")))\n\
+    \    (define (parse-fruit s)\n      (regexp-replace #rx\"\\\\d+\" s \"\"))\n \
+    \   (define (parse-count s)\n      (parse-num s))\n    (define (parse-fruit-count\
+    \ s)\n      (cond\n        [(string=? (parse-fruit s) \"apples\") (parse-count\
+    \ s)]\n        [(string=? (parse-fruit s) \"oranges\") (parse-count s)]\n    \
+    \    [else 0]))\n    (parse-fruit-count s))\n  (- n (parse s)))\n", "  (define\
+    \ (get-num s)\n    (string->number (regexp-match #rx\"\\d+\" s)))\n  (- n (+ (get-num\
+    \ (regexp-match #rx\"\\d+ apples\" s))\n          (get-num (regexp-match #rx\"\
+    \\d+ oranges\" s)))))\n", "  (define (get-num s)\n    (string->number (substring\
+    \ s 0 (string-index s #\\space))))\n  (- n (get-num s) (get-num (substring s (string-index\
+    \ s #\\a) (string-length s)))))\n", "  (define (get-num s)\n    (string->number\
+    \ (substring s 0 (string-index s #\\space))))\n  (- n (get-num s) (get-num (substring\
+    \ s (string-index s #\\a) (string-length s)))))\n", "  (define (get-num s)\n \
+    \   (string->number (regexp-match #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num\
+    \ (regexp-replace #rx\"apples\" s \"\"))))\n", "  (define (get-num s)\n    (string->number\
+    \ (regexp-match #rx\"\\d+\" s)))\n  (- n (+ (get-num (regexp-match #rx\"\\d+ apples\"\
+    \ s))\n          (get-num (regexp-match #rx\"\\d+ oranges\" s)))))\n", "  (define\
+    \ (helper s)\n    (cond\n      [(empty? s) 0]\n      [(char=? (first s) #\\a)\
+    \ (string->number (substring s 0 (string-index s #\\a))) ]\n      [(char=? (first\
+    \ s) #\\o) (string->number (substring s 0 (string-index s #\\o))) ]\n      [else\
+    \ (helper (rest s))]))\n  (- n (helper s)))\n", "  (let ([a (string-&gt;number\
+    \ (regexp-match #rx\"^[0-9]+\" s))]\n        [o (string-&gt;number (regexp-match\
+    \ #rx\"and [0-9]+ oranges$\" s))])\n    (- n (+ a o))))\n</code>\n", "  (let ([a\
+    \ (string-&gt;number (regexp-match #rx\"^[0-9]+\" s))]\n        [o (string-&gt;number\
+    \ (regexp-match #rx\"and [0-9]+ oranges$\" s))])\n    (- n (+ a o))))\n</code>\n",
+  "  (define (get-num s)\n    (string->number (substring s 0 (string-index s #\\space))))\n\
+    \  (- n (get-num s) (get-num (substring s (string-index s #\\a) (string-length\
+    \ s)))))\n", "  (define (get_num str)\n    (string->number (regexp-replace #rx\"\
+    \\\\D\" str \"\")))\n  (- n (get_num s)))\n", "  (define (get_num s)\n    (string->number\
+    \ (regexp-match #rx\"\\d+\" s)))\n  (- n (get_num s) (get_num (regexp-replace\
+    \ #rx\"apples\" s \"\"))))\n", "  (define (helper s n)\n    (cond\n      [(empty?\
+    \ s) n]\n      [(char=? (first s) #\\a) (helper (rest s) (- n 1))]\n      [(char=?\
+    \ (first s) #\\o) (helper (rest s) (- n 1))]\n      [else (helper (rest s) n)]))\n\
+    \  (helper (string->list s) n))\n", "  (let ([a (string-&gt;number (string-split\
+    \ (string-split s \" and \") \" \"))]\n        [b (string-&gt;number (string-split\
+    \ (string-split s \" and \") \" \"))])\n    (- n (+ a b))))\n</code>\nI get this\
+    \ error:\n<code>string-split: expects argument of type &lt;string&gt;; given \"\
+    5 apples and 6 oranges\"\n</code>\nI don't understand why it's not working.\n\n\
+    \nA:\n\nThe problem is that <code>string-split</code> expects a string as its\
+    \ first argument, but you're passing it a list of strings.\nTry this instead:\n\
+    <code>(define (fruit_distribution s n)\n  (let ([a (string-&gt;number (first (string-split\
+    \ s \" and \")))]\n        [b (string-&gt;number (second (string-split s \" and\
+    \ \")))])\n    (- n (+ a b))))\n</code>\n", "  (define (helper s n)\n    (cond\
+    \ ((= n 0) 0)\n          ((string-contains? s \"apples\")\n           (helper\
+    \ (string-replace s \"apples\" \"\") (- n 1)))\n          ((string-contains? s\
+    \ \"oranges\")\n           (helper (string-replace s \"oranges\" \"\") (- n 1)))\n\
+    \          (else (- n 1))))\n  (helper s n))\n", "  (define (count-fruit s)\n\
+    \    (cond ((string=? s \"\") 0)\n          ((string-contains s \"apples\")\n\
+    \           (+ (string->number (substring s 0 (string-index s \" \")))\n     \
+    \         (count-fruit (substring s (+ (string-index s \" \") 1) (string-length\
+    \ s)))))\n          ((string-contains s \"oranges\")\n           (+ (string->number\
+    \ (substring s 0 (string-index s \" \")))\n              (count-fruit (substring\
+    \ s (+ (string-index s \" \") 1) (string-length s)))))\n          (else (count-fruit\
+    \ (substring s 1 (string-length s))))))\n  (- n (count-fruit s)))\n", "  (let\
+    \ ([apples (string->number (car (string-split (cadr (string-split s \"and\"))\
+    \ \" \")))]\n        [oranges (string->number (car (string-split (cadr (string-split\
+    \ s \"and\")) \" \")))]\n        [mangoes (- n (+ apples oranges))])\n    (if\
+    \ (positive? mangoes)\n        mangoes\n        0)))\n", "  (define (get_num s)\n\
+    \    (string->number (string-trim (regexp-replace #rx\"apples and [0-9]+ oranges\"\
+    \ s \"\"))))\n  (- n (get_num s)))\n", "  (define (get-num s)\n    (string->number\
+    \ (regexp-match #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num (regexp-replace\
+    \ #rx\"apples\" s \"\"))))\n", "  (let ([apples (string->number (regexp-match\
+    \ #rx\"\\d+\" s))]\n        [oranges (string->number (regexp-match #rx\"\\d+\"\
+    \ (substring s (string-index s \"and\") (string-length s))))])\n    (- n (+ apples\
+    \ oranges))))\n", "  (let ([a (string-&gt;number (regexp-match #rx\"^\\d+\" s))]\n\
+    \        [o (string-&gt;number (regexp-match #rx\"\\d+$\" s))])\n    (- n (+ a\
+    \ o))))\n</code>\n", "  (define (get-num s)\n    (string->number (regexp-match\
+    \ #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num (string-replace s \"apples\" \"\
+    oranges\"))))\n", "  (define (get_num s)\n    (string->number (string-trim (regexp-replace\
+    \ #rx\"[^0-9]\" s \"\"))))\n  (- n (get_num s)))\n", "  (define (get-num s)\n\
+    \    (string->number (regexp-match #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num\
+    \ (regexp-replace #rx\"apples\" s \"\"))))\n", "  (define (get-number-of-fruits\
+    \ s)\n    (define (get-number-of-fruits-helper s)\n      (if (string-empty? s)\n\
+    \          0\n          (if (char-numeric? (string-ref s 0))\n              (+\
+    \ (string->number (string-take s (string-index s #\\space)))\n               \
+    \  (get-number-of-fruits-helper (string-drop s (string-index s #\\space))))\n\
+    \              (get-number-of-fruits-helper (string-drop s 1)))))\n    (get-number-of-fruits-helper\
+    \ s))\n  (- n (get-number-of-fruits s)))\n", "  (define (fruit_distribution_helper\
+    \ s n)\n    (cond ((string=? s \"\") n)\n          ((string=? (substring s 0 6)\
+    \ \"apples\") (fruit_distribution_helper (substring s 7 (string-length s)) (-\
+    \ n (string->number (substring s 0 (string-index s #\\space))))))\n          ((string=?\
+    \ (substring s 0 7) \"oranges\") (fruit_distribution_helper (substring s 8 (string-length\
+    \ s)) (- n (string->number (substring s 0 (string-index s #\\space))))))\n   \
+    \       (else (fruit_distribution_helper (substring s 1 (string-length s)) n))))\n\
+    \  (fruit_distribution_helper s n))\n", "  (define (get-num s)\n    (string->number\
+    \ (regexp-match #rx\"\\d+\" s)))\n  (- n (+ (get-num (regexp-match #rx\"\\d+ apples\"\
+    \ s))\n          (get-num (regexp-match #rx\"\\d+ oranges\" s)))))\n", "  (define\
+    \ (get-num s)\n    (string->number (regexp-match #rx\"\\d+\" s)))\n  (- n (+ (get-num\
+    \ (regexp-match #rx\"\\d+ apples\" s))\n          (get-num (regexp-match #rx\"\
+    \\d+ oranges\" s)))))\n", "  (define (helper s n)\n    (cond\n      [(empty? s)\
+    \ n]\n      [(char=? (first s) #\\a) (helper (rest s) (- n 1))]\n      [(char=?\
+    \ (first s) #\\o) (helper (rest s) (- n 1))]\n      [else (helper (rest s) n)]))\n\
+    \  (helper (string->list s) n))\n", "  (define (get-num s)\n    (string->number\
+    \ (regexp-match #rx\"\\d+\" s)))\n  (- n (get-num s) (get-num (regexp-replace\
+    \ #rx\"apples\" s \"\"))))\n"]
+stop_tokens:
+- "\n(define "
+- "\n#|"
+- "\n;"
+- "\n("

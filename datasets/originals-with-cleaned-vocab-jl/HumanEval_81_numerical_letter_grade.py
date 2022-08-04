@@ -67,8 +67,8 @@ def check(candidate):
     assert candidate([1.2]) == ['D+']
     assert candidate([0.5]) == ['D-']
     assert candidate([0.0]) == ['E']
-    assert candidate([1, 0.3, 1.5, 2.8, 3.3]) == ['D', 'D-', 'C-', 'B', 'B+']
-    assert candidate([0, 0.7]) == ['E', 'D-']
+    assert candidate([1.0, 0.3, 1.5, 2.8, 3.3]) == ['D', 'D-', 'C-', 'B', 'B+']
+    assert candidate([0.0, 0.7]) == ['E', 'D-']
 
     # Check some edge cases that are easy to work out by hand.
     

@@ -1,6 +1,6 @@
 from typing import List
 
-def median(l: List[int]) -> int:
+def median(l: List[int]) -> float:
     """Return median of elements in the list l.
     >>> median([3, 1, 2, 4, 5])
     3

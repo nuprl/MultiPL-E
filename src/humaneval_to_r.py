@@ -16,8 +16,8 @@ class Translator:
 
     stop = [ '\n#', '\n```']
     
-    def __init__(self):
-        self.file_ext = 'r'
+    def file_ext(self):
+        return "r"
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         r_description = (
@@ -94,5 +94,5 @@ class Translator:
         return func + "(" + ", ".join(args) + ")"
 
 if __name__ == "__main__":
-    translator = RTranslator("R")
+    translator = Translator()
     main(translator)

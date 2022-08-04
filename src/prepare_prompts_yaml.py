@@ -31,29 +31,7 @@ import argparse
 import sys
 from generic_translator import list_originals, translate_prompt_and_tests, get_stop_from_translator
 from pathlib import Path
-from humaneval_to_javascript import JavaScriptTranslator
-from humaneval_to_ruby import RubyTranslator
-from humaneval_to_lua import LuaTranslator
-from humaneval_to_rust import RustTranslator
-from humaneval_to_racket import RacketTranslator
-from humaneval_to_php import PHPTranslator
-from humaneval_to_cpp import CPPTranslator
-from humaneval_to_julia import JuliaTranslator
-from humaneval_to_java import JavaTranslator
 from problem_yaml import Problem
-
-TRANSLATORS = {
-    "rb": RubyTranslator(),
-    "lua": LuaTranslator(),
-    "rs": RustTranslator("rs"),
-    "rkt": RacketTranslator("racket"),
-    "php": PHPTranslator("php"),
-    "cpp": CPPTranslator("cpp"),
-    "jl": JuliaTranslator("jl"),
-    "js": JavaScriptTranslator(),
-    "java": JavaTranslator("java")
-}
-
 
 def main():
     args = argparse.ArgumentParser()
@@ -70,15 +48,11 @@ def main():
         help="What to do with doctests: keep, remove, or transform",
     )
 
+    args.add_argument("--originals", type=str, required=True)
+
     args = args.parse_args()
 
-    if args.lang in TRANSLATORS:
-        translator = TRANSLATORS[args.lang]
-    elif args.lang.endswith(".py"):
-        translator = __import__(args.lang[:-3]).Translator()
-    else:
-        print(f"Unknown language: {args.lang}")
-        sys.exit(1)
+    translator = __import__(args.lang[:-3]).Translator()
 
     if args.doctests not in ["keep", "remove", "transform"]:
         print(f"Unknown doctests option: {args.doctests}")
@@ -86,12 +60,11 @@ def main():
 
     target_dir = Path(args.target_dir)
     if not target_dir.exists():
-        print(f"Target directory {target_dir} does not exist")
-        sys.exit(1)
+        target_dir.mkdir()
 
     
 
-    for original in list_originals(args.doctests).values():
+    for original in list_originals(args.originals).values():
         # original.name with .yaml extension
         original_name = original.name.split(".")[0]
         target_yaml_path = target_dir / (original_name + ".yaml")
@@ -108,7 +81,7 @@ def main():
         (prompt, tests) = result
         problem_file = Problem()
         problem_file.name = original_name
-        problem_file.language = args.lang if args.lang in TRANSLATORS else translator.file_ext()
+        problem_file.language = translator.file_ext()
         problem_file.prompt = prompt
         problem_file.tests = tests
         problem_file.stop_tokens = get_stop_from_translator(translator)

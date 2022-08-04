@@ -11,7 +11,7 @@ from generic_translator import main
 # start of the line.
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
-class CPPTranslator:
+class Translator:
     '''Translate Python to C++.
        Each method returns a tuple of code and type of the expression
     '''
@@ -19,7 +19,7 @@ class CPPTranslator:
     #Seems like reasonable stop sequences for C++
     stop = ["\n}"]
 
-    def __init__(self, file_ext):
+    def __init__(self):
         '''Initializes C++ corresponding types.
             str -> std::string
             int -> long
@@ -34,7 +34,6 @@ class CPPTranslator:
             Union -> Create a new Union type
             Any -> std::any
         '''
-        self.file_ext = file_ext
         #Dictionary of union name to a dictionary of type to field
         self.union_decls = {}
         self.string_type = "std::string"
@@ -52,6 +51,9 @@ class CPPTranslator:
         #C++ Keywords found in the dataset as variable and their idiomatic replacement
         self.keywords = {"operator": "op", "strlen" : "string_length"}
         self.make_tuple = "std::make_tuple"
+
+    def file_ext(self):
+        return "cpp"
 
     def gen_make_list(self, elem_type, list_literal):
         return self.list_type%elem_type + "(" + list_literal + ")"
@@ -396,5 +398,5 @@ class CPPTranslator:
 
 
 if __name__ == "__main__":
-    translator = CPPTranslator("cpp")
+    translator = Translator()
     main(translator)
