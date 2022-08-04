@@ -87,7 +87,7 @@ class CompletionServer(http.server.BaseHTTPRequestHandler):
             self.send_error(400, "Invalid model")
             return
         prompt = data["prompt"]
-        stop_tokens = data["stop_tokens"]
+        stop_tokens = data["stop"]
         max_to_generate = data["max_tokens"]
         temperature = data["temperature"]
         n = data["n"]
