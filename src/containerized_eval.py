@@ -35,6 +35,7 @@ EVALUATORS = {
     "julia": (eval_julia.eval_script, ".jl"),
     "java" : (eval_java.eval_script, ".java"),
     "rust" : (eval_rust.eval_script, ".rs"),
+    "rs" : (eval_rust.eval_script, ".rs"),
     "swift": (eval_swift.eval_script, ".swift"),
     "lua": (eval_lua.eval_script, ".lua"),
     "racket": (eval_racket.eval_script, ".rkt"),
