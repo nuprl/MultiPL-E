@@ -43,7 +43,7 @@ EVALUATORS = {
     "php": (eval_php.eval_script, ".php"),
     "humaneval_to_dlang.py": (eval_dlang.eval_script, ".d"),
     "d": (eval_dlang.eval_script, ".d"),
-    "go", (eval_go.eval_script, ".go")
+    "go": (eval_go.eval_script, ".go")
 }
 
 def eval_script(problem, index):
