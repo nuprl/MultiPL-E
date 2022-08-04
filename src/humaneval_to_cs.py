@@ -13,6 +13,12 @@ import humaneval_to_cpp
 CSHARP_CLASS_NAME = "Problem"
 #Refactoring needed
 
+def to_camel_case(snake_str):
+    components = snake_str.split('_')
+    # We capitalize the first letter of each component
+    # with the 'title' method and join them together.
+    return ''.join(x.title() for x in components)
+
 class Translator(humaneval_to_cpp.Translator):
     stop = ["\n    }\n"]
 
@@ -113,12 +119,6 @@ class Translator(humaneval_to_cpp.Translator):
         '''Translate Python prompt to C#.
             The function name is converted to C#'s convention that uses CamelCase
         '''
-        def to_camel_case(snake_str):
-            components = snake_str.split('_')
-            # We capitalize the first letter of each component except the first one
-            # with the 'title' method and join them together.
-            return ''.join(x.title() for x in components)
-        
         self.reinit()
         class_decl = f"class {CSHARP_CLASS_NAME} {{\n"
         indent = "    "
@@ -129,14 +129,20 @@ class Translator(humaneval_to_cpp.Translator):
         self.args_type = [self.translate_pytype(arg.annotation) for arg in args]
         formal_args = [f"{self.translate_pytype(arg.annotation)} {self.gen_var(arg.arg)[0]}" for arg in args]
         formal_arg_list = ", ".join(formal_args)
-        #Transform entry point to csharp style Camel case
         self.entry_point = to_camel_case(name)
         self.ret_ann = _returns
         self.translated_return_type = self.translate_pytype(_returns) #make it ret_translated_type 
         csharp_prompt = f"{self.module_imports()}{class_decl}{csharp_description}{self.indent}public static {self.translated_return_type} {self.entry_point}({formal_arg_list})" + " {\n"
 
         return csharp_prompt
-    
+
+    def gen_var(self, v: str) -> Tuple[str, None]:
+        """Translate a variable with name v."""
+        if v in self.keywords:
+            #Add _ around keyword
+            return self.keywords[v], None
+        return v, None
+
     def is_primitive_type(self, csharp_type):
         '''Return if a type is primitive.
             float, long, and bool are considered primitive type
@@ -204,18 +210,17 @@ class Translator(humaneval_to_cpp.Translator):
 
         return super().update_type(right, expected_type)
 
-    def deep_equality(self, left: Tuple[str, ast.Expr], right: Tuple[str, ast.Expr]) -> str:
+    def deep_equality(self, left: str, right: str) -> str:
         """
         All tests are assertions that compare deep equality between left and right.
         In C++ using == checks for structural equality
         """
-        right = self.update_type(right, self.translated_return_type)
         #Empty the union declarations
         self.union_decls = {}
         if self.is_primitive_type(self.translated_return_type):
-            return f"    Debug.Assert({left[0]} == {right});"
+            return f"    Debug.Assert({left} == {right});"
         else:
-            return f"    Debug.Assert({left[0]}.Equals({right}));"
+            return f"    Debug.Assert({left}.Equals({right}));"
 
     def find_type_to_coerce(self, expr):
         '''Return a type to coerce into another type.
@@ -245,9 +250,21 @@ class Translator(humaneval_to_cpp.Translator):
         A function call f(x, y, z) translates to f(x, y, z)
         """
         func_name = func[0]
-        if func_name == "candidate":
+        # All function calls are calls to prompt
+        func_name = to_camel_case(func_name)
+        if func_name.lower() == "candidate":
             func_name = self.entry_point
         return func_name + "(" + ", ".join([self.update_type(args[i], self.args_type[i]) for i in range(len(args))]) + ")", None
+
+    def finalize(self, expr, context: str) -> str:
+        match context:
+            case "lhs":
+                return expr[0]
+            case "rhs":
+                return self.update_type(expr, self.translated_return_type)
+            case _other:
+                raise Exception("bad context")
+
 
 if __name__ == "__main__":
     translator = Translator()
