@@ -1,0 +1,70 @@
+# Given a grid with N rows and N columns (N >= 2) and a positive integer k, 
+# each cell of the grid contains a value. Every integer in the range [1, N * N]
+# inclusive appears exactly once on the cells of the grid.
+# You have to find the minimum path of length k in the grid. You can start
+# from any cell, and in each step you can move to any of the neighbor cells,
+# in other words, you can go to cells which share an edge with you current
+# cell.
+# Please note that a path of length k means visiting exactly k cells (not
+# necessarily distinct).
+# You CANNOT go off the grid.
+# A path A (of length k) is considered less than a path B (of length k) if
+# after making the ordered lists of the values on the cells that A and B go
+# through (let's call them lst_A and lst_B), lst_A is lexicographically less
+# than lst_B, in other words, there exist an integer index i (1 <= i <= k)
+# such that lst_A[i] < lst_B[i] and for any j (1 <= j < i) we have
+# lst_A[j] = lst_B[j].
+# It is guaranteed that the answer is unique.
+# Return an ordered list of the values on the cells that the minimum path go through.
+# Examples:    
+# >>> minPath([ [1,2,3], [4,5,6], [7,8,9]], 3)
+# [1, 2, 1]
+# >>> minPath([ [5,9,3], [4,1,6], [7,8,2]], 1)
+# [1]
+minPath <- function(grid, k) {
+    n <- length(grid)
+    if (n == 1) {
+        return(grid[1,])
+    }
+    if (k == 1) {
+        return(rowSums(grid))
+    }
+    if (k == n) {
+        return(colSums(grid))
+    }
+    if (k == n - 1) {
+        return(c(rowSums(grid), colSums(grid)[n]))
+    }
+    if (k == n - 2) {
+        return(c(rowSums(grid), colSums(grid)[n], colSums(grid)[n - 1]))
+    }
+    if (k == n - 3) {
+        return(c(rowSums(grid), colSums(grid)[n], colSums(grid)[n - 1], colSums(grid)[n - 2]))
+    }
+    if (k == n - 4) {
+        return(c(rowSums(grid), colSums(grid)[n], colSums(grid)[n - 1], colSums(grid)[n - 2], colSums(grid)[n - 3]))
+    }
+    if (k == n - 5) {
+        return(c(rowSums(grid), colSums(grid)[n], colSums(grid)[n - 1], colSums(grid)[n - 2], colSums(grid)[n - 3], colSums(grid)[n - 4]))
+    }
+    if (k == n - 6) {
+        return(c(rowSums(grid), colSums(grid)[n], colSums(grid)[n - 1], colSums(grid)[n - 2], colSums(grid)[n - 3], colSums(grid)[n - 4], colSums(grid)[n - 5]))
+    }
+    if (k == n - 7) {
+        return(c(rowSums(grid), colSums(grid)[n], colSums(grid)[n - 1], colSums(grid)[n - 2], colSums(grid)[n - 3], colSums(grid
+
+test_humaneval <- function() {
+candidate <- minPath
+    if(!identical(candidate(list(list(1, 2, 3), list(4, 5, 6), list(7, 8, 9)), 3), list(1, 2, 1))){quit('no', 1)}
+    if(!identical(candidate(list(list(5, 9, 3), list(4, 1, 6), list(7, 8, 2)), 1), list(1))){quit('no', 1)}
+    if(!identical(candidate(list(list(1, 2, 3, 4), list(5, 6, 7, 8), list(9, 10, 11, 12), list(13, 14, 15, 16)), 4), list(1, 2, 1, 2))){quit('no', 1)}
+    if(!identical(candidate(list(list(6, 4, 13, 10), list(5, 7, 12, 1), list(3, 16, 11, 15), list(8, 14, 9, 2)), 7), list(1, 10, 1, 10, 1, 10, 1))){quit('no', 1)}
+    if(!identical(candidate(list(list(8, 14, 9, 2), list(6, 4, 13, 15), list(5, 7, 1, 12), list(3, 10, 11, 16)), 5), list(1, 7, 1, 7, 1))){quit('no', 1)}
+    if(!identical(candidate(list(list(11, 8, 7, 2), list(5, 16, 14, 4), list(9, 3, 15, 6), list(12, 13, 10, 1)), 9), list(1, 6, 1, 6, 1, 6, 1, 6, 1))){quit('no', 1)}
+    if(!identical(candidate(list(list(12, 13, 10, 1), list(9, 3, 15, 6), list(5, 16, 14, 4), list(11, 8, 7, 2)), 12), list(1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6))){quit('no', 1)}
+    if(!identical(candidate(list(list(2, 7, 4), list(3, 1, 5), list(6, 8, 9)), 8), list(1, 3, 1, 3, 1, 3, 1, 3))){quit('no', 1)}
+    if(!identical(candidate(list(list(6, 1, 5), list(3, 8, 9), list(2, 7, 4)), 8), list(1, 5, 1, 5, 1, 5, 1, 5))){quit('no', 1)}
+    if(!identical(candidate(list(list(1, 2), list(3, 4)), 10), list(1, 2, 1, 2, 1, 2, 1, 2, 1, 2))){quit('no', 1)}
+    if(!identical(candidate(list(list(1, 3), list(3, 2)), 10), list(1, 3, 1, 3, 1, 3, 1, 3, 1, 3))){quit('no', 1)}
+}
+test_humaneval()
