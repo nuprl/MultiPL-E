@@ -17,6 +17,7 @@ import eval_java
 import eval_lua
 import eval_racket
 import eval_javascript
+import eval_go
 import eval_swift
 import eval_cpp
 import eval_php
@@ -46,7 +47,8 @@ EVALUATORS = {
     "d": (eval_dlang.eval_script, ".d"),
     "r": (eval_r.eval_script, ".r"),
     "humaneval_to_r.py": (eval_r.eval_script, ".r"),
-    "jl": (eval_julia.eval_script, ".jl")
+    "jl": (eval_julia.eval_script, ".jl"),
+    "go": (eval_go.eval_script, ".go")
 }
 
 def eval_script(problem, index):
