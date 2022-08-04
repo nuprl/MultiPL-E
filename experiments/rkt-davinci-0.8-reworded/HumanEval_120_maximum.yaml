@@ -18,7 +18,111 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate m
   \  (check-equal? (candidate (list 4 -4) 2) (list -4 4))\n    (check-equal? (candidate\
   \ (list -10 10) 2) (list -10 10))\n    (check-equal? (candidate (list 1 2 3 -23\
   \ 243 -400 0) 0) (list ))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (let loop ((arr arr)\n             (k k)\n             (maxs (make-list\
+    \ k (list-ref arr 0))))\n    (if (empty? arr)\n        maxs\n        (loop (cdr\
+    \ arr)\n              k\n              (let loop ((maxs maxs)\n              \
+    \           (n (car arr)))\n                (if (empty? maxs)\n              \
+    \      (list n)\n                    (if (< n (car maxs))\n                  \
+    \      (cons n maxs)\n                        (loop (cdr maxs) n))))))))\n```\n\
+    \n```racket\n#lang racket\n", "  (cond [(empty? arr) empty]\n        [(= k 0)\
+    \ empty]\n        [else\n         (define (loop arr k result)\n           (cond\
+    \ [(empty? arr) result]\n                 [(>= k (length result))\n          \
+    \        (loop (rest arr) k (append result (list (first arr))))]\n           \
+    \      [else\n                  (loop (rest arr) k (remove-min result))]))\n \
+    \        (loop arr k (list (first arr)))]))\n", "  (cond [(empty? arr) empty]\n\
+    \        [(empty? (rest arr)) arr]\n        [else (sort (append arr (list (max\
+    \ (car arr) (cadr arr)))) (lambda (x y) (< x y)) k)]))\n", "  (sort arr &gt;))\n\
+    </code>\nFor example with the first test case:\n<code>&gt; (maximum (list -3 -4\
+    \ 5) 3)", "  (if (or (empty? arr) (zero? k))\n      empty\n      (let ([maxes\
+    \ (build-sorted-list (first arr) (rest arr))])\n        (if (zero? (- k (length\
+    \ maxes)))\n            maxes\n            (maximum (rest arr) (- k 1))))))\n",
+  "  (sort > arr))\n", "  (take (sort arr >) k))\n", "  (let loop ((k k)\n       \
+    \      (sorted (list))\n             (sorted-length 0)\n             (i 0))\n\
+    \    (cond [(< i (length arr))]\n          [(and (= k sorted-length)\n       \
+    \         (and (or (null? (rest sorted))\n                         (< (first sorted)\
+    \ (first arr)))))]\n          [(or (null? (rest sorted))\n               (< (first\
+    \ sorted) (first arr)))\n           (loop (- k 1)\n                 (cons (first\
+    \ arr) sorted)\n                 (+ sorted-length 1)\n                 (+ i 1))]\n\
+    \          [else\n           (loop k\n                 (rest sorted)\n       \
+    \          (- sorted-length 1)\n                 (+ i 1))])))\n", "  (cond [(empty?\
+    \ arr) empty]\n        [(zero? k) empty]\n        [else\n         (define maxnum\
+    \ (apply max arr))\n         (define maxcount (count (\u03BB (e) (= e maxnum))\
+    \ arr))\n         (define max-i (index-of maxnum arr))\n         (let* ([i (modulo\
+    \ max-i k)]\n                [head (take i arr)]\n                [tail (drop\
+    \ (+ i maxcount) arr)])\n           (append head (cons maxnum (maximum tail (-\
+    \ k (add1 i))))))]))", "  (define length (length arr))\n  (when (or (null? arr)\
+    \ (&lt; 0 k) (&gt; k length))\n    (error \"Invalid input\"))\n  (for/fold ([subarr\
+    \ '()])\n            ([elm arr])\n    (define subarr-length (length subarr))\n\
+    \    (if (&lt; subarr-length k)\n        (append subarr (list elm))\n        (if\
+    \ (&lt; elm (car subarr))\n            subarr\n            (append (list elm)\
+    \ (sublist subarr 1 subarr-length))))))\n</code>\nThis implementation is sort\
+    \ of ugly, but it works. I wonder if there's a better way to do it?\n\n\nA:\n\n\
+    Looks good.\n\nThere's no need to use <code>for/fold</code> here, it's a very\
+    \ general construct that you can use to build the sublist in any number of ways.\
+    \ In this case a simple <code>for</code> and a few <code>let</code>s and <code>cond</code>s\
+    \ would suffice.\n\nSide note: <code>sublist</code> is unnecessary, use <code>drop</code>\
+    \ and <code>take</code> instead.\n\n<code>subarr-length</code> is recalculated\
+    \ over and over, let's calculate it only once.\n\nIn the recursive case, <code>sublist</code>\
+    \ is <code>append</code>ed twice, with one of the arguments the same list. That's\
+    \ unnecessary.\n\nThe <code>sublist</code>'s first argument, <code>1</code>, is\
+    \ unnecessary, since it's already zero-indexed.\n\nSorting the sublist after inserting\
+    \ an element is unnecessary, since the elements are inserted in a sorted manner.\
+    \ It's only needed if the list is traversed in reverse order.\n\n\nHere's the\
+    \ final code:\n<code>(define (maximum arr k)\n  (define length (length arr))\n\
+    \  (cond\n    [(or (null? arr) (&lt; 0 k) (&gt; k length))\n     (error \"Invalid\
+    \ input\")]\n    [else\n     (let loop ([subarr '()]\n                [arr arr])\n\
+    \       (cond\n         [(empty? arr)", "  (cond\n    [(empty? arr) empty]\n \
+    \   [(<= k 0) empty]\n    [else\n     (let* ([result (maximum (rest arr) (- k\
+    \ 1))]\n            [minmax (min/max (first arr) (first result))])\n       (if\
+    \ (< (first minmax) (second minmax))\n           (cons (first minmax) result)\n\
+    \           (cons (second minmax) (remove (first minmax) result))))]))\n", " \
+    \ (define (max-helper arr k s)\n    (if (zero? k)\n        (reverse s)\n     \
+    \   (let* ([min (apply min arr)]\n               [pos (position (compose min -\
+    \ list) arr)]\n               [arr- (append (take arr pos) (drop (add1 pos) arr))])\n\
+    \          (max-helper arr- (sub1 k) (cons min s)))))\n  (max-helper arr k (list)))\n",
+  "  (sort arr &gt; (take arr k)))\n</code>\nReference: \nhttps://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort\n\
+    https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice\n\
+    https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice\n\
+    The order that they appear in the original array is only maintained in the order\
+    \ they appeared in the array. \n", "  (sort arr (lambda (a b) (> a b)) k))\n",
+  "  (cond [(empty? arr) empty]\n        [(or (= 1 k)\n             (negative? k))\n\
+    \         (sort (reverse arr))]\n        [else (let-values ([(first k-1) (maximum\
+    \ arr (- k 1))])\n                (sort (reverse (cons (car arr) k-1))))]))\n",
+  "  (let loop ((i 0) (arr arr) (curr (list)))\n    (cond\n      [(= i k) curr]\n\
+    \      [else (loop (+ i 1)\n                  (filter (\u03BB (x) (not (member\
+    \ x curr))) arr)\n                  (cons (max arr) curr))])))\n", "  (letrec\
+    \ ([length (length arr)]\n           [sub-arr (sublist arr 0 k)]\n           [take-max\
+    \ (lambda (arr)\n                       (cond [(null? arr)\n                 \
+    \             '()]\n                             [(null? (cdr arr))\n        \
+    \                      (list (car arr))]\n                             [else\n\
+    \                              (append (list (if (> (car arr) (cadr arr))\n  \
+    \                                             (car arr)\n                    \
+    \                           (cadr arr)))\n                                   \
+    \   (take-max (cdr arr)))]))]\n           [bubble-sort (lambda (arr)\n       \
+    \                   (cond [(= (length arr) 1)\n                              \
+    \   arr]\n                                [else\n                            \
+    \     (cond [(null? (cdr arr))\n                                        arr]\n\
+    \                                       [else\n                              \
+    \          (if (> (car arr) (cadr arr))\n                                    \
+    \        (append (take-max arr)\n                                            \
+    \        (bubble-sort (cdr arr)))\n                                          \
+    \  (append (take-max (cdr arr))\n                                            \
+    \        (bubble-sort (list (car arr)))))]\n                                 \
+    \      )]))]\n           [rec (lambda (arr)\n                  (cond [(>= (length\
+    \ arr) k)\n                         (append (take-max arr)\n                 \
+    \                (rec (cdr arr)))]\n                        [else\n          \
+    \               '()]))])\n    (bubble-sort (rec sub-arr))))\n```\n\n```\n#lang\
+    \ racket\n", "  (sort (take arr k) &gt;))\n", "  (if (= k 0)\n      (list)\n \
+    \     (let ((max-elm (list-ref arr 0)))\n        (let helper ((arr arr) (k k)\
+    \ (result (list)))\n          (if (= k 0)\n              result\n            \
+    \  (let ((max-elm (list-ref arr 0)))\n                (for ((elm arr))\n     \
+    \             (if (> elm max-elm)\n                      (set! max-elm elm)))\n\
+    \                (helper (remove max-elm arr) (- k 1) (cons max-elm result))))))))\n",
+  "  (if (< k 1)\n      (list)\n      (define (max-k-helper arr k max-list)\n    \
+    \    (if (empty? arr)\n            max-list\n            (define next-max (apply\
+    \ max (car arr) max-list))\n            (if (= (length next-max) k)\n        \
+    \        next-max\n                (max-k-helper (cdr arr) k next-max))))\n  \
+    \    (sort (max-k-helper arr k (list)) <)))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

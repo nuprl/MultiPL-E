@@ -17,7 +17,124 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate h
   ) #hash((\"b\" .  4)))\n    (check-equal? (candidate \"r t g\") #hash((\"r\" . \
   \ 1) (\"t\" .  1) (\"g\" .  1)))\n    (check-equal? (candidate \"\") #hash())\n\
   \    (check-equal? (candidate \"a\") #hash((\"a\" .  1)))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (hash))\n", "  (if (string=? test \"\") (make-hash)\n      (let loop\
+    \ ([words (string-split test)])\n        (if (null? words) (make-hash)\n     \
+    \       (let* ([word (car words)]\n                   [counthash (make-hash)]\n\
+    \                   [word-histogram (histogram (string-join (cdr words)))])\n\
+    \              (hash-for-each (lambda (key value)\n                          \
+    \     (hash-set! counthash key (+ value (hash-ref word-histogram key 0))))\n \
+    \                            word-histogram)\n              (hash-set! counthash\
+    \ word (+ 1 (hash-ref counthash word 0)))\n              counthash)))))\n", " \
+    \ (let ([input (string-split test)])\n    (hash-of-max-value input)))\n", "  (cond\n\
+    \    [(null? test) empty-hash]\n    [else\n     (let* ([chars (string->list test)]\n\
+    \            [histo (for/hash ([c chars])\n                     (values c (count\
+    \ c (string->list test))))])\n       (hash-map histo\n                 (lambda\
+    \ (key val)\n                   (hash-ref histo key (lambda () 0)))\n        \
+    \         (lambda (key val)\n                   (> val 1)))]))\n\n", "  (hash\
+    \ \"a\" 1))\n```\n\n### Run the Tests\n\nThe test suite can be run by executing\
+    \ `raco test test.rkt`.\n\nWe will not accept pull requests that pass only partial\
+    \ tests or that fail to\nrun. All tests must pass before we will accept your pull\
+    \ request.\n\n## Fetch and pull requests\n\nIf you don't have a GitHub account\
+    \ and want to contribute to this project, you\ncan fork the project and issue\
+    \ a pull request.\n\nPull requests are welcome! We will take a look at your proposed\
+    \ changes and\ntry to help you integrate them into the project.\n\n## Contact\n\
+    \nIf you have a question about the language-babel project that is not related\
+    \ to\na specific piece of code, you can email lfcolon@gmail.com.", "  (if (equal?\
+    \ test \"\") #hash()\n      (let ((test-list (string-&gt;list test))\n       \
+    \     (letter-hash (hash '())))\n        (for ([letter test-list])\n         \
+    \ (let ((count (hash-ref letter-hash letter 0)))\n            (hash-set! letter-hash\
+    \ letter (+ count 1))))\n        (let ((highest-count 0))\n          (for ([letter\
+    \ test-list])\n            (let ((count (hash-ref letter-hash letter 0)))\n  \
+    \            (if (&gt; count highest-count)\n                  (set! highest-count\
+    \ count))))\n          (let ((solution-hash (hash '())))\n            (for ([letter\
+    \ test-list])\n              (let ((count (hash-ref letter-hash letter 0)))\n\
+    \                (if (= count highest-count)\n                    (hash-set! solution-hash\
+    \ letter count))))\n            solution-hash)))))\n</code>\nFor other problems,\
+    \ should I make it a habit to wrap everything in a top-level <code>let</code>?\
+    \ Also, <code>hash-ref</code> returns an error if you try to access a key that\
+    \ doesn't exist. Would it be better to check to see if the key exists first before\
+    \ trying to get the value for it?\n\n\nA:\n\nA few minor comments:\n\nYou can\
+    \ use <code>equal?</code> to compare strings.  E.g. <code>(equal? test \"\")</code>\
+    \ instead of <code>(string=? test \"\")</code>.\n<code>let</code> is not a special\
+    \ form so you don't need to wrap things in a top-level <code>let</code>.\nI'm\
+    \ not sure that it's the best strategy to first use a single hash to count all\
+    \ the occurrences of each letter and then build another hash of just the letters\
+    \ that had the highest count.  I think it would be better to use a single hash\
+    \ to count the occurrences and keep track of the highest count as you go.\n<code>hash-ref</code>\
+    \ returns an error if you try to access a key that doesn't exist.  That's not\
+    \ a problem.  When you use it in your code, you do:\n<code>(hash-ref letter-hash\
+    \ letter 0)\n</code>\nThis will return", "  (if (equal? test \"\")\n      (hash)\n\
+    \      (define words (string-split test #\\space))\n      (define letters (map\
+    \ string->list words))\n      (define letters-flat (flatten letters))\n      (define\
+    \ letter-hash (make-hash))\n      (for ([x letters-flat])\n           (define\
+    \ current-val (hash-ref letter-hash x 0))\n           (hash-set! letter-hash x\
+    \ (+ current-val 1)))\n      (define max-val (apply max (hash-values letter-hash)))\n\
+    \      (define max-keys (hash-keys letter-hash (lambda (k v) (equal? v max-val))))\n\
+    \      (define histogram-hash (make-hash))\n      (for ([x max-keys])\n      \
+    \     (hash-set! histogram-hash x max-val))\n      histogram-hash))\n", "  (let\
+    \ ([ht (make-hasheq)])\n    (for ([ch (string-&gt;list test)])\n      (let* ([key\
+    \ (hash-ref ht ch (lambda () 0))]\n             [val (+ key 1)])\n        (hash-set!\
+    \ ht ch val)))\n    (hash-filter (lambda (k v)\n                   (eq? v (apply\
+    \ max (hash-values ht))))\n                 ht)))\n</code>\nIt returns the same\
+    \ for each of your examples, and it looks much simpler:\n<code>&gt; (histogram\
+    \ \"a b c\")\n'#hash((#\\a . 1) (#\\b . 1) (#\\c . 1))\n&gt; (histogram \"a b\
+    \ b a\")\n'#hash((#\\a . 2) (#\\b . 2))\n&gt; (histogram \"a b c a b\")\n'#hash((#\\\
+    a . 2) (#\\b . 2))\n&gt; (histogram \"b b b b a\")\n'#hash((#\\b . 4))\n&gt; (histogram\
+    \ \"\")\n'#hash()\n</code>\n", "  (define (insert-item! h l)\n    (hash-update!\
+    \ h l\n                  (lambda (n)\n                    (if (null? n) 1 (+ 1\
+    \ n)))))\n  (define (most-repeated-char h)\n    (let ([max (hash-values h |>\n\
+    \                (apply max))])\n      (filter (lambda (x)\n                (=\
+    \ max (hash-ref h x 0)))\n              (hash-keys h))))\n  (define (to-hash str)\n\
+    \    (let ([h (make-hash)])\n      (for ([c (in-list (string->list str))])\n \
+    \       (insert-item! h c))\n      h))\n  (let ([h (to-hash test)])\n    (for\
+    \ ([c (in-list (most-repeated-char h))])\n      (hash-update! h c (lambda (n)\
+    \ max)))))\n", "  (cond [(empty? test) (hash)]\n        [else (histogram-helper\
+    \ test (hash))]))\n", "  (define (get-max h)\n    (let ([max 0])\n      (hash-for-each\
+    \ (lambda (k v) (when (> v max) (set! max v))) h)\n      max))\n  (define (insert-key\
+    \ h k v)\n    (hash-set! h k\n               (if (hash-has-key? h k)\n       \
+    \            (+ v (hash-ref h k))\n                   v)))\n  (define (insert-histo\
+    \ h k v)\n    (if (hash-has-key? h v)\n        (hash-set! h v (cons k (hash-ref\
+    \ h v)))\n        (hash-set! h v (list k))))\n  (define (insert-keys h k v)\n\
+    \    (let ([keys (hash-ref h v)])\n      (hash-set! h v (cons k keys))))\n  (define\
+    \ (insert-if-max h k v)\n    (let ([max (get-max h)])\n      (if (= v max)\n \
+    \         (insert-keys h k v)\n          (hash-remove h v))))\n  (define (initialize-histo\
+    \ ls)\n    (define histo (make-hash))\n    (for-each (lambda (x) (insert-histo\
+    \ histo x 1)) ls)\n    histo)\n  (define (maximize-histo h)\n    (hash-for-each\
+    \ (lambda (k v) (insert-if-max h k v)) h)\n    h)\n  (define (sort-histo h)\n\
+    \    (hash-for-each (lambda (k v) (hash-set! h k (sort v <))) h)\n    h)\n  (define\
+    \ (get-histo h)\n    (sort-histo (maximize-histo (initialize-histo (string-split\
+    \ test)))))\n  (get-histo (make-hash)))\n", "  (cond\n    [(empty? test) (hash)]\n\
+    \    [else\n     (let* ([histogram-of-a-word (histogram-of-a-word (string->list\
+    \ test))]\n            [word-with-max-count (word-with-max-count histogram-of-a-word)]\n\
+    \            [count-of-max-count (count-of-max-count histogram-of-a-word)])\n\
+    \       (hash-copy (hash-copy histogram-of-a-word word-with-max-count count-of-max-count)\n\
+    \                  '(\"\" . count-of-max-count)))]))\n", "  (make-hasheq))\n",
+  "  (define (helper sorted-data highest)\n    (if (empty? sorted-data)\n        (hash)\n\
+    \        (let* ([item (first sorted-data)]\n               [letter (car item)]\n\
+    \               [next-highest (cdr item)]\n               [next-data (rest sorted-data)])\n\
+    \          (if (= highest next-highest)\n              (cons item (helper next-data\
+    \ highest))\n              (if (&gt; highest next-highest)\n                 \
+    \ (helper next-data highest)\n                  (helper next-data next-highest))))))\n\
+    \  (if (empty? test)\n      (hash)\n      (let* ([data (hash-map (lambda (letter)\
+    \ (cons letter (hash-ref (hash-ref (count-distinct test) letter) 'count))) (count-distinct\
+    \ test))]\n             [sorted-data (sort data &lt; #:key (lambda (x) (cdr x)))]\n\
+    \             [highest (cdr (first sorted-data))])\n        (hash-map (lambda\
+    \ (x) (cons (car x) (cdr x))) (helper sorted-data highest)))))\n</code>\nIs this\
+    \ a good solution? Did I miss an easier way to do it? Can I improve the performances?\n\
+    I don't use any <code>hash</code> in the <code>hash-map</code> because I need\
+    \ the letters to be in alphabetical order. That way I have a code that is not\
+    \ generic but does the job.\nAn equivalent solution would be:\n<code>#lang racket\n",
+  "  (define (helper chars res)\n    (if (null? chars)\n        res\n        (let\
+    \ ([ch (car chars)])\n          (if (hash-has-key? res ch)\n              (let\
+    \ ([v (hash-ref res ch)])\n                (hash-set! res ch (+ v 1))\n      \
+    \          (helper (cdr chars) res))\n              (hash-set! res ch 1)\n   \
+    \           (helper (cdr chars) res)))))\n  (let ([chars (string->list test)])\n\
+    \    (helper chars (make-hash))))\n", "  (hash))\n", "  (cond [(empty? test) (hash)]\n\
+    \        [else (histogram-worker test (string->list test) (hash))]))\n", "  (if\
+    \ (string=? test \"\")\n      #hash()\n      (make-histogram-hash test)))\n",
+  '  (hash))', "  (hash\n   (for/fold ([hist (make-hash)])\n       ([letter (in-list\
+    \ (string-&gt;list test))])\n     (hash-update! hist\n                   letter\n\
+    \                   (\u03BB (c) (add1 c))\n                   add1))))\n</code>\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

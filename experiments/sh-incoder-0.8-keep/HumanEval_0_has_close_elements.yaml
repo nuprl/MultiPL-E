@@ -13,6 +13,222 @@ tests: "}\n\ncandidate() {\n    has_close_elements \"$@\"\n}\n\nset -e\nrun_test
   \ 2.0\" \"0.1\") = \"true\" ]]\n    [[ $(candidate \"1.1 2.2 3.1 4.1 5.1\" \"1.0\"\
   ) = \"true\" ]]\n    [[ $(candidate \"1.1 2.2 3.1 4.1 5.1\" \"0.5\") = \"false\"\
   \ ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local -n list=$1\n  local threshold=$2\n\n  local len=${#list[@]}\n\
+    \  local start=1\n  local end=$len\n\n  # Return true if we have no elements\n\
+    \  if [ ! \"$len\" ]; then\n    return 1\n  fi\n\n  # Check if the first two elements\
+    \ are closer than the threshold\n  if [ \"${list[$start]}${list[$end]}\" == \"\
+    ${list[$start-1]}${list[$end-1]}\" ]; then\n    return 0\n  fi\n\n  while [ \"\
+    ${start}\" -le \"$end\" ]; do\n    local mid=(${list[$start]}${list[$end]}) /\
+    \ 2\n    if [ \"${list[$mid]}${list[$mid+1]}\" == \"${list[$mid]}${list[$mid+1]}\"\
+    \ ]; then\n      start=$(expr ${start} + 2)\n      end=$(expr ${end} + 2)\n  \
+    \    continue\n    fi\n    if [ \"${list[$mid]}${list[$mid-1]}\" == \"${list[$mid]}${list[$mid-1]}\"\
+    \ ]; then\n      start=$(expr ${start} + 1)\n      end=$(expr ${end} + 1)\n  \
+    \    continue\n    fi\n    if [ \"${list[$mid]}${list[$end]}\" == \"${list[$mid]}${list[$end+1]}\"\
+    \ ]; then\n      end=$(expr ${end} + 2)\n      continue\n    fi\n    if [ \"${list[$mid]}${list[$start]}\"\
+    \ == \"${list[$mid]}${list[$start+1]}\" ]; then\n      start=$(expr ${start} +\
+    \ 1)\n      continue\n    fi\n  done\n\n  return 0", "    local elements=$1\n\
+    \    local threshold=$2\n\n    local first=$(( $(echo \"${elements}\" | awk '{print\
+    \ $1}' | sort -s -t -k 1 -r | head -n 1) ))\n    local last=$(( $(echo \"${elements}\"\
+    \ | awk '{print $1}' | sort -s -t -k 1 -r | tail -n 1) ))\n\n    local distance=$((\
+    \ $(echo \"$last - $first\" | bc) ))\n\n    return $(( ( distance < threshold\
+    \ ) ))", "    local lst_numbers=\"${1}\"\n    local threshold=\"${2}\"\n    local\
+    \ count=0\n    local max_count=0\n    while [ -n \"$lst_numbers\" ]\n    do\n\
+    \        count=$((count+1))\n        lst_numbers=$(echo \"${lst_numbers//,/ }\"\
+    \ | sort -u)\n        max_count=$((max_count+1))\n    done\n    if [ $max_count\
+    \ -eq 0 ]; then\n        return 0\n    fi\n    for (( i=1; i<$max_count; i++ ))\n\
+    \    do\n        count_i=$(echo \"${count}\" | grep -w $i)\n        if [ $count_i\
+    \ -eq 0 ]; then\n            return 0\n        fi\n        count_i_minus_one=$(echo\
+    \ \"${count}\" | grep -w $(($i-1)))\n        if [ $count_i_minus_one -eq 0 ];\
+    \ then\n            return 0\n        fi\n        difference=$((($count_i-$count_i_minus_one)*(${threshold}*${threshold})/($count_i+${threshold}))\n\
+    \        if [ $difference -gt 0 ]; then\n            return 0\n        fi\n  \
+    \  done\n    return 1", "    local list=\"$1\"\n    local threshold=\"$2\"\n \
+    \   # Avoid empty lists\n    if [[ ! \"$list\" ]]; then\n        echo \"$list\"\
+    \ 1>&2\n        return 1\n    fi\n    # Check if at least two elements are given\n\
+    \    if [[ $# -lt 2 ]]; then\n        return 1\n    fi\n    # Check if a floating\
+    \ point was given\n    if [[ \"$2\" != * ]]; then\n        return 1\n    fi\n\
+    \    # Convert the list to an array and sort the array\n    local array=\"( $list\
+    \ )\"\n    local array_sorted\n    array_sorted=(\"${array[@]}\")\n    local last\n\
+    \    for ((i=0; i<${#array_sorted[@]}; i++)); do\n        last=${array_sorted[$i]}\n\
+    \        for ((j=$((i-1)); j>=0; j--)); do\n            if [[ \"$array_sorted[$j]\"\
+    \ -eq \"$last\" ]]; then\n                return 0\n            fi\n        done\n\
+    \    done\n    # Check if the list is sorted\n    for ((i=0; i<${#array_sorted[@]};\
+    \ i++)); do\n        for ((j=$((i+1)); j<${#array_sorted[@]}; j++)); do\n    \
+    \        if [[ \"${array_sorted[$i]}\" -gt \"${array_sorted[$j]}\" ]]; then\n\
+    \                return 0\n            fi\n        done\n    done\n    # Check\
+    \ if the list is sorted, and if two consecutive elements are the same\n    for\
+    \ ((i=0; i<${#array_sorted[@]}; i++)); do\n        for ((j=$((i+1)); j<${#array_sorted[@]};\
+    \ j++)); do\n            if [[ \"$array_sorted[$i]\" -eq \"${array_sorted[$j]}\"\
+    \ && \\\n                $((array_sorted[$i]-array_sorted[$j])) -gt $threshold\
+    \ ]]; then\n                return 0\n            fi\n        done\n    done\n\
+    \    return 1", "    local a b diff i\n    for ((i=1; i<=$#; i++))\n    do\n \
+    \       a=$(cat $1 | awk -F \" \" '{print $i}')\n        b=$(cat $1 | awk -F \"\
+    \ \" '{print $i+1}')\n        diff=$(b-a)\n        if [ $diff -le $2 ]; then\n\
+    \            return False\n        fi\n    done\n    return True", "  local -n\
+    \ numbers=\"${1}\"\n  local threshold=\"${2}\"\n\n  for (( i=0; i<${#numbers[*]};\
+    \ i++ )); do\n    (( sorted_number=\"${numbers[$i]}\" - sorted_threshold=\"${threshold}\"\
+    \ ))\n    local -n closest=\"${numbers[$(( i + 1 ))]}\"\n    (( sorted_closest=\"\
+    ${numbers[$(( i + 1 ))]}\" - sorted_sorted_closest=\"${numbers[$(( i + 2 ))]}\"\
+    \ ))\n\n    if [[ ${sorted_number} -le $sorted_threshold ]]; then\n      return\
+    \ 0\n    elif [[ ${sorted_number} -gt $sorted_threshold ]]; then\n      echo \"\
+    ${sorted_number} ${sorted_threshold}\"\n      return 0\n    elif [[ ${closest}\
+    \ -le $sorted_threshold ]]; then\n      echo \"${closest} ${sorted_threshold}\"\
+    \n      return 0\n    elif [[ ${closest} -gt $sorted_threshold ]]; then\n    \
+    \  echo \"${sorted_closest} ${sorted_threshold}\"\n      return 0\n    elif [[\
+    \ ${sorted_number} -eq ${closest_number} ]]; then\n      echo \"${sorted_number}\
+    \ ${sorted_threshold}\"\n      return 0\n    elif [[ ${sorted_number} -eq ${sorted_threshold}\
+    \ ]]; then\n      echo \"${sorted_number} ${sorted_threshold}\"\n      return\
+    \ 1\n    elif [[ ${sorted_closest} -eq ${sorted_threshold} ]]; then\n      echo\
+    \ \"${sorted_closest} ${sorted_threshold}\"\n      return 1\n    elif [[ ${sorted_sorted_closest}\
+    \ -eq ${sorted_threshold} ]]; then\n      echo \"${sorted_sorted_closest} ${sorted_threshold}\"\
+    \n      return 1\n    fi\n  done\n  echo \"${number} ${threshold}\"\n  return\
+    \ 0", "    local arg=$1\n    local threshold=$2\n    local elements=$3\n    local\
+    \ result=0\n    if [[ ${#elements} = 0 ]]; then\n        return 0\n    fi\n  \
+    \  for i in ${!elements[@]}; do\n        if [[ ${elements[$i]} -ge $threshold\
+    \ ]]; then\n            result=1\n        fi\n    done\n    return $result", " \
+    \ local elements=\"${1}\"\n  local threshold=\"${2}\"\n\n  # Make sure elements\
+    \ are given\n  if [[ -z \"${elements}\" ]]; then\n    echo \"ERROR! No elements\
+    \ given!\"\n    exit 1\n  fi\n\n  # Make sure threshold is given\n  if [[ -z \"\
+    ${threshold}\" ]]; then\n    echo \"ERROR! No threshold given!\"\n    exit 1\n\
+    \  fi\n\n  # Get all elements with spaces around them\n  local elements_with_spaces=$(echo\
+    \ \"${elements}\"  | sed 's/ /\\n/g')\n  local elements_with_spaces_sorted=$(echo\
+    \ \"${elements_with_spaces}\" | sort)\n  local elements_sorted=$(echo \"${elements_with_spaces_sorted}\"\
+    \ | uniq)\n\n  # Loop through elements\n  local index=0\n  while [[ ${index} -lt\
+    \ ${#elements_sorted} ]]\n  do\n    # Check if element exists\n    local element=${elements_sorted[${index}]}\n\
+    \    if [[ -z \"${element}\" ]]; then\n      echo \"ERROR! Element ${element}\
+    \ does not exist!\"\n      exit 1\n    fi\n\n    # Check if element is already\
+    \ in another list\n    if [[ -z \"${elements_with_spaces}\" ]]; then\n      break\n\
+    \    fi\n\n    # Check if current element is equal to previous element\n    local\
+    \ element_before=\"${elements_with_spaces_sorted[${index}-1]}\"\n    if [[ \"\
+    ${element}\" \"==\" \"${element_before}\" ]]; then\n      echo \"ERROR! Element\
+    \ ${element} can't be in the same list twice!\"\n      exit 1\n    fi\n\n    #\
+    \ Check if element is closer to previous\n    if [[ \"${element}\" \"<\" \"${element_before}\"\
+    \ ]]; then\n      local element_after=\"${elements_with_spaces_sorted[${index}+1]}\"\
+    \n      if [[ \"${threshold}\" = \"${element_after}\" ]]; then\n        echo \"\
+    ERROR! Element ${element} can't be closer than ${threshold}!\"\n        exit 1\n\
+    \      fi\n    fi\n\n    # Check if element is closer to next\n    if [[ \"${element}\"\
+    \ \"<\" \"${element_after}\" ]]; then\n      local element_before=\"${elements_with_spaces_sorted[${index}-1]}\"\
+    \n      if [[ \"${threshold}\" = \"${element_before}\" ]]; then\n        echo\
+    \ \"ERROR! Element ${element} can't be closer than ${threshold}!\"\n        exit\
+    \ 1\n      fi\n    fi\n\n    # Check if current element is closer to next\n  \
+    \  if [[ \"${element}\" \">\" \"${element_after}\" ]]; then\n      echo \"ERROR!\
+    \ Element ${element} can't be closer than ${threshold}!\"\n      exit 1\n    fi\n\
+    \n    # Increase index\n    index=$((${index} + 1))\n  done\n\n  return 0", " \
+    \   local input_array=(\"${@}\")\n    local threshold=$2\n    local length=\"\
+    ${#input_array[@]}\"\n    local counter=0\n\n    # Loop over each element of the\
+    \ input array and store its current distance from all other elements\n    for\
+    \ element in \"${input_array[@]}\"; do\n        for other_element in \"${input_array[@]}\"\
+    ; do\n            # Check if the distance between current element and all other\
+    \ elements is less than threshold or\n            # if the difference between\
+    \ the current element and the other (also not greater than threshold) is less\n\
+    \            # than threshold\n            if [ $counter -gt 0 ] && \\\n     \
+    \               [[ $element != $other_element || \\\n                        \
+    \  ($element -gt $other_element && $element < $threshold) || ($element -lt $other_element\
+    \ && $element > $threshold) ]]; then\n                counter=0\n            else\n\
+    \                counter=$((counter+1))\n            fi\n        done\n    done\n\
+    \n    # Return true only if counter equals to number of elements minus one (as\
+    \ last element is not checked)\n    (( $counter == $length ))", "    local i element\
+    \ found diff\n    for ((i=2; i<=$#; i++)) do\n        element=$1[i]\n        found=0\n\
+    \        for ((j=1; j<=$i; j++)) do\n            diff=$((${element}+${1[j]}-${2[j]}))\n\
+    \            if ((diff<0)) then\n                found=1\n                break\n\
+    \            fi\n        done\n        if ((found)) ; then\n            return\
+    \ 1\n        fi\n    done\n    return 0", "  local list=\"$1\"\n  local threshold=\"\
+    $2\"\n  local elements_count=$(expr ${#list} - 1)\n  local element_count=0\n\n\
+    \  while [[ $element_count -lt $elements_count ]]; do\n    local element=\"${list}\"\
+    \n    local element_count=\"$element_count + 1\"\n\n    if [[ ${list[$element_count]}\
+    \ -le $threshold ]]; then\n      # Found a number in list\n      return 0\n  \
+    \  fi\n\n    local first_element=\"${list}\"\n    local last_element=\"${list}\"\
+    \n    # Sort list to make sure we go from left to right and if there are two\n\
+    \    # numbers are closer to each other\n    first_element=$(echo \"${first_element}\"\
+    \ | sort -n)\n    last_element=$(echo \"${last_element}\" | sort -n)\n\n    if\
+    \ [[ \"${first_element}\" = \"${last_element}\" ]]; then\n      # List is sorted\n\
+    \      break\n    fi\n\n    if [[ ${list[$element_count]} == ${list[$element_count\
+    \ + 1]} ]]; then\n      # Found two numbers that are closer to each other than\
+    \ threshold\n      return 0\n    fi\n\n    if [[ \"${first_element}\" = \"${last_element}\"\
+    \ ]]; then\n      # List is not sorted\n      break\n    fi\n  done\n\n  # Did\
+    \ not find any numbers in list, are any two numbers closer to each other than\n\
+    \  # given threshold?\n  return 1", "    local elems=$1\n    local threshold=$2\n\
+    \    for element in $elems; do\n        let \"diff += $element - threshold\"\n\
+    \    done\n    echo $((diff < 0)) || diff == 0", "    local IFS=$1\n    local\
+    \ list=$2\n    local threshold=$3\n\n    local element\n    local min_list\n \
+    \   local min_element\n    local diff\n\n    local has_element\n\n    for element\
+    \ in ${list}; do\n        has_element=$(grep \"$element\" <<< \"yes\")\n     \
+    \   if [[ $has_element ]]; then\n            diff=${element/$min_element}\n  \
+    \      else\n            diff=0\n        fi\n        if [ \"$diff\" -ge \"$threshold\"\
+    \ ]; then\n            return 1\n        fi\n    done\n\n    return 0", "    local\
+    \ list=( ${1// / } )\n    local threshold=$2\n    local count=0\n    for i in\
+    \ \"${list[@]}\"; do\n        if [[ $(($i%2)) == 0 ]]; then\n            ((count++))\n\
+    \        fi\n    done\n    [[ \"$count\" -eq \"$(($count%2))\" ]]", "  local elements=\"\
+    ${1}\"\n  local threshold=\"${2}\"\n\n  local num_elements=$(echo $elements |\
+    \ wc -w)\n  local num_to_check=$(echo $num_elements-$num_elements | bc -l)\n \
+    \ local counter=0\n\n  for ((i=0;i<$num_elements;i++)); do\n    let counter+=1\
+    \ \n    local element=$(echo $elements | cut -d' ' -f$i)\n    local closest_element=$(echo\
+    \ $elements | sed -n ${counter}p)\n    local difference=$(echo $element | awk\
+    \ -v x=\"$element\" 'BEGIN{print abs(x-$closest_element)}' )\n    \n    if [ \"\
+    $difference\" -le \"$threshold\" ]; then\n      return 1\n    fi\n  done\n\n \
+    \ return 0", "    local list_elements threshold=$1\n    shift\n    local closer_to_elements=()\n\
+    \    for element in $@; do\n        closer_to_elements+=$(\n            echo $element\
+    \ | sed -E 's/^[0-9\\.]+([0-9\\.]+|)$/\\1/'\n        )\n    done\n    # Now check\
+    \ if all numbers are closer to each other\n    local is_all_closer=true\n    for\
+    \ element in $list_elements; do\n        if [[ ! $element =~ ^[0-9\\.]+$\n   \
+    \         ]]; then\n            echo \"Error: Not all elements are numbers\"\n\
+    \            return 1\n        fi\n        if [[ ! $element =~ ^[0-9\\.]+([0-9\\\
+    .]+|)$\n            ]]; then\n            echo \"Error: Not all elements are numbers\"\
+    \n            return 1\n        fi\n        closer_to_elements=$(\n          \
+    \  echo $closer_to_elements | sed -E 's/^[0-9\\.]+([0-9\\.]+|)$/\\1/'\n      \
+    \  )\n    done\n    if [ \"$closer_to_elements\" != \"${list_elements[*]}\" ];\
+    \ then\n        echo \"Error: Not all elements are in list\"\n        return 1\n\
+    \    fi\n    for element in $list_elements; do\n        if [ \"$closer_to_elements\"\
+    \ != \"${list_elements[*]}\" ]; then\n            is_all_closer=false\n      \
+    \      break\n        fi\n    done\n    if [ \"$is_all_closer\" = true ]; then\n\
+    \        return 0\n    else\n        return 1\n    fi", "  local numbers=\"${1}\"\
+    \n  local threshold=\"${2}\"\n  shift\n  for number in $numbers\n  do\n    local\
+    \ number_array=($number)\n    local closest=$(echo \"${number_array[@]}\" | sort\
+    \ | tail -n 1)\n    local diff_array=($(( $(echo \"${number_array[@]}\" | sort\
+    \ | tail -n 1) - $closest )))\n    local diff=$((${diff_array[0]} / ${diff_array[1]}))\n\
+    \    if [ $diff -gt $threshold ]\n    then\n      return 0\n    fi\n  done\n \
+    \ return 1", "  local elems=$1\n  local threshold=$2\n  [[ \"$threshold\" =~ ^[0-9]+\\\
+    .[0-9]+$ ]]\n  [[ \"${#elems}\" -eq 0 ]]\n\n  local i=0 j=0\n  local has_close_elements=false\n\
+    \n  for element in $elems; do\n    while [ \"$j\" -lt \"${#elems[@]}\" ]; do\n\
+    \      if [[ $(( ${elems[$j]} * $threshold )) -le $(( ${elems[$i]} * $threshold\
+    \ )) ]]; then\n        has_close_elements=true\n        break\n      fi\n    \
+    \  (( j++ ))\n    done\n    (( i++ ))\n    (( j = 0 ))\n  done\n\n  echo \"$has_close_elements\"",
+  "  local -r threshold=\"$1\"\n  local -r elements=\"$2\"\n  # Convert each element\
+    \ to integer\n  local -r elements_new=\"$(echo \"$elements\" | sed 's/^ *//' |\n\
+    \    sed 's/ *$//')\"\n  local elements_num=$(echo \"$elements_new\" | tr '[:upper:]'\
+    \ '[:lower:]')\n  # Sort elements\n  local -r elements_sorted=\"$(echo \"$elements_new\"\
+    \ | tr ' ' '_')\"\n  local -r elements_sorted_num=$(echo \"$elements_sorted\"\
+    \ | tr '[:upper:]' '[:lower:]')\n  local -r min_element=\"$(echo \"$elements_num\"\
+    \ | tr '[:upper:]' '[:lower:]' | paste -sd \",\" | awk '{print $1$2}')\"\n  local\
+    \ max_element=\"$(echo \"$elements_num\" | tr '[:upper:]' '[:lower:]' | paste\
+    \ -sd \",\" | awk '{print $1$3}')\"\n  # If there is no threshold, return True\n\
+    \  if [ -z \"$threshold\" ] || [ \"$threshold\" = \"NA\" ]; then\n    return 1\n\
+    \  fi\n  # If there is one element, return True\n  if [ -z \"$elements\" ] ||\
+    \ [ \"$elements\" = \"NA\" ]; then\n    return 1\n  fi\n  # If there is a threshold\
+    \ and at least one element exists, return True\n  if [ \"$threshold\" -gt \"$min_element\"\
+    \ ] && [ \"$elements\" -gt \"$max_element\" ] &&\n  [ \"$threshold\" -lt \"$max_element\"\
+    \ ]; then\n    return 1\n  fi\n  # If threshold is less than min or greater than\
+    \ max, return False\n  if [ \"$threshold\" -lt \"$min_element\" ] || [ \"$threshold\"\
+    \ -gt \"$max_element\" ]; then\n    return 0\n  fi\n  # If there is only one element\
+    \ in list, return True\n  if [ \"$elements\" -eq \"$elements_num\" ]; then\n \
+    \   return 1\n  fi\n  # If there is only one element in list, return True\n  if\
+    \ [ \"$elements_new\" -eq \"$elements_sorted\" ]; then\n    return 1\n  fi\n \
+    \ # If there is one element in list, return True\n  if [ \"$elements_new\" -eq\
+    \ \"$elements_sorted_num\" ]; then\n    return 1\n  fi\n  # If threshold is bigger\
+    \ than max value, return False\n  if [ \"$threshold\" -gt \"$max_element\" ];\
+    \ then\n    return 0\n  fi\n  # If threshold is less than min value, return False\n\
+    \  if [ \"$threshold\" -lt \"$min_element\" ]; then\n    return 0\n  fi\n  # For\
+    \ all other cases, return False\n  return 0", "    if [ \"$#\" -ne 2 ]; then \n\
+    \        echo \"Wrong input for $1 -- $#\" \n        return 1\n    fi\n    local\
+    \ input=${1}\n    local threshold=${2}\n    local counter=0\n    local last_val=0\n\
+    \    local found=0\n    local max=0\n    local diff\n    for val1 in ${input[@]};\
+    \ do\n        for val2 in ${input[@]}; do\n            if [ \"$counter\" -eq 0\
+    \ ]; then\n                found=1\n            else\n                diff=$(echo\
+    \ \"$val2 - $last_val\" | bc)\n                if [ $diff -le $threshold ]; then\n\
+    \                    found=1\n                    break\n                elif\
+    \ [ $diff -ge $threshold ]; then\n                    found=0\n              \
+    \      break\n                else\n                    found=0\n            \
+    \        break\n                fi\n            fi\n            last_val=$val2\n\
+    \        done\n        if [ $found -eq 1 ]; then break; fi\n        counter=$((counter+1))\n\
+    \    done\n    return $found"]
 stop_tokens:
 - "\n}"

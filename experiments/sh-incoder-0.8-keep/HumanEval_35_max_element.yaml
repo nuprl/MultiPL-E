@@ -6,6 +6,101 @@ prompt: "#!/bin/bash\n# Return maximum element in the list.\n# >>> max_element([
 tests: "}\n\ncandidate() {\n    max_element \"$@\"\n}\n\nset -e\nrun_test() {\n  \
   \  [[ $(candidate \"1 2 3\") = \"3\" ]]\n    [[ $(candidate \"5 3 -5 2 -3 3 9 0\
   \ 124 1 -10\") = \"124\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local input=\"${1:?}\"\n    local max=0\n    local current=0\n\
+    \    local count=0\n    local -i num=${#input}\n    while [ -n \"${input[num]}\"\
+    \ ]; do\n        current=$((current+1))\n        if [ \"${current}\" -gt \"${max}\"\
+    \ ]; then\n            max=\"${current}\"\n        fi\n        ((count++))\n \
+    \       ((num=num-1))\n    done\n    echo \"$max\"", "    local array=(\"${@}\"\
+    )\n    local maximum=$(bc <<< \"(${array[*]} < 0 ? ${array[*]} : ${array[*]})\"\
+    )\n    echo ${maximum}", "    local arr=(\"${!1}\")\n    local max_elem=${arr[0]}\n\
+    \    for x in \"${arr[@]:1}\"; do\n        if [[ $x > $max_elem ]]; then\n   \
+    \         max_elem=$x\n        fi\n    done\n    echo \"$max_elem\"", "    local\
+    \ _max _i _arr\n    _arr=(\"${!1}\")\n    _i=1\n    _max=${_arr[$_i]}\n    while\
+    \ (( ${_i} <= ${#_arr[@]} ));\n    do\n        _max=$(( ${_max} > ${_arr[$_i]}\
+    \ ? ${_max} : ${_arr[$_i]}))\n        _i=$(( ${_i} + 1 ))\n    done\n    echo\
+    \ \"${_max}\"", "  local element maxElement\n  maxElement=0\n  element=$1\n  shift\n\
+    \  for i in $*; do\n    if [ \"$i\" -gt \"$maxElement\" ]\n    then\n      maxElement=$i\n\
+    \    fi\n  done\n  echo $maxElement", "  local -n ele=$1; shift\n  local -n max=${1:-${ele[0]}};\
+    \ shift\n  [[ \"$1\" =~ ^[[:space:]]*(-|)-$((${#max}+1)) ]]\n  [[ \"${!max}\"\
+    \ -gt \"$2\" ]] && [[ \"${!ele}\" -gt \"$2\" ]] || \\\n    [[ \"${!ele}\" -lt\
+    \ \"$2\" ]] && \\\n      [[ \"${!max}\" -gt \"$2\" ]] || \\\n        [[ \"$max\"\
+    \ == \"${!ele}\" ]] && {\n      [[ \"$max\" -le \"$2\" ]] && { ele=$1; max=$2;\
+    \ }\n    } || {\n      [[ \"${!ele}\" -lt \"$2\" ]] && { ele=$1; max=$2; }\n \
+    \   }\n  max_element \"$ele\" \"$max\"", "  local max=$((${1:-0}))\n  local element\n\
+    \  for element in $@; do\n    if [[ $element -gt $max ]]; then\n      max=$element\n\
+    \    fi\n  done\n  echo $max", "\tlocal elems=$@\n\tmax=${elems##*${elems[-1]}}\n\
+    \tfor (( c=0; c<${#elems[*]} && max>${elems[$c]}; c++ )); do\n\t\tmax=${elems[$c]}\n\
+    \tdone\n\techo \"$max\"", "  local list=\"$1\"\n  # If the list is empty, return\
+    \ empty string.\n  [ -z \"$list\" ] && return 1\n  # If the list consists of only\
+    \ one element, return it.\n  [ ${#list[@]} -eq 1 ] && return \"${list[0]}\"\n\
+    \  # Otherwise, use sort and tail to get the last element\n  # and use head to\
+    \ get the first element.\n  # Note: head returns everything before the delimiter,\
+    \ which\n  #       means we get everything up to the last delimiter.\n  # Note:\
+    \ tail returns everything after the delimiter, which\n  #       means we get everything\
+    \ after the first delimiter.\n  local max=\"${list[*]}\" # Copy the list.\n  local\
+    \ last=\"${max}\" # Previous element.\n  local first=\"${list[0]}\" # First element.\n\
+    \  local delimiter=\" \" # Delimiter.\n  # If first and last elements are the\
+    \ same, return first element.\n  if [ \"${first}\" = \"${last}\" ]; then\n   \
+    \ return \"${first}\"\n  fi\n  # Use sort to get the last element.\n  local sorted_list=$(sort\
+    \ --field-separator=\"$delimiter\" <<<\"$list\")\n  local index=$(( ${#sorted_list[@]}\
+    \ - 1 ))\n  local elem\n  for elem in \"${sorted_list[@]}\"; do\n    if [ \"$index\"\
+    \ -eq 0 ]; then\n      break\n    elif [ \"$elem\" == \"${sorted_list[0]}\" ];\
+    \ then\n      # If current element is equal to the first element, then\n     \
+    \ # return the first element.\n      return \"${sorted_list[0]}\"\n    else\n\
+    \      if [ \"$elem\" > \"$last\" ]; then\n        last=\"$elem\"\n      else\n\
+    \        index=$(( $index - 1 ))\n      fi\n    fi\n  done\n  # If current element\
+    \ is greater than the last element, then\n  # return the last element.\n  return\
+    \ \"$last\"", "  local IFS=$1\n  shift\n  # Optimize for empty list.\n  local\
+    \ max \"${max:-$(max_element -n 1)}\"\n  for element \"$@\"; do\n    [ -z \"$max\"\
+    \ ] && max=$element || [ \"$(expr \"$max\" : '[^,] < \"$(expr \"$element\" : '[^,]*')\"\
+    ')\" ] && max=$element\n  done\n  echo \"$max\"", "    local a aa b\n    # a:\
+    \ [1 2 3 -5 2 -3 3 9 0 123 1 -10]\n    # a = [$1...]\n    # a = [$1 $1 $1 $1 $1\
+    \ $1 $1 $1 $1 $1 $1 $1 $1]\n    # a = [$1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1]\n\
+    \    # a = [$1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1]\n    # a = [$1 $1 $1 $1 $1 $1 $1\
+    \ $1 $1 $1 $1]\n    # a = [$1 $1 $1 $1 $1 $1 $1 $1 $1 $1]\n    # a = [$1 $1 $1\
+    \ $1 $1 $1 $1 $1 $1 $1]\n    # a = [$1 $1 $1 $1 $1 $1 $1 $1 $1]\n    # a = [$1\
+    \ $1 $1 $1 $1 $1 $1 $1]\n    # a = [$1 $1 $1 $1 $1 $1]\n    # a = [$1 $1 $1 $1\
+    \ $1]\n    # a = [$1 $1 $1]\n    # a = [$1 $1]\n    # a = [$1]\n    # a = [$1]\n\
+    \    # a = []\n    # a = [$1]\n    # a = [$1]\n    # a = [$1]\n    # a = []\n\
+    \    # a = [$1]\n    # a = [$1]\n    # a = [$1]\n    # a = [$1 $1 $1 $1 $1 $1\
+    \ $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1\
+    \ $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1\
+    \ $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1 $1\
+    \ $1 $1 $", "  local elem=$1; shift\n  local max=`echo $elem | tr -s ' ' | sort\
+    \ -rn | head -1`\n  local i\n  for (( i=0; i<$#; i++ )); do\n    if [ \"$max\"\
+    \ -gt \"$(( ${#elem[*]} - 1 ))\" ]; then\n      max=$(( ${#elem[*]} - 1 ))\n \
+    \   fi\n    elem[i]=$(( ${elem[i]} - 1 ))\n  done\n  echo \"$max\"", "    local\
+    \ n=$1 item=$2 max=${2:-$1} i=0\n    if [[ $n =~ ([0-9]*)([+\\-]?[0-9]+)(.*)$\
+    \ ]]; then\n        while [[ $i -lt $n ]]; do\n            item=${BASH_REMATCH[$i+2]}\n\
+    \            case $item in\n                $(( ${BASH_REMATCH[$i]} < ${BASH_REMATCH[$i+1]}\
+    \ )) )\n                    max=${BASH_REMATCH[$i]}\n                    i=$((\
+    \ $i+2 ))\n                    ;;\n                *)\n                    max=$item\n\
+    \                    i=$(( $i+1 ))\n                    ;;\n            esac\n\
+    \        done\n    fi\n    echo \"$max\"", "  # Split $1\n  read array <<< \"\
+    $1\"\n\n  # Set max_val to first element\n  max_val=\"${array[0]}\"\n\n  # For\
+    \ each element, find its max and update max_val\n  for val in \"${array[@]:1}\"\
+    \n  do\n    max_val=\"${val} > ${max_val}\" || return 1\n  done\n  echo \"${max_val}\"",
+  "  local i elem\n  local len=$1\n  local max=0\n  while (( $len > 0 )); do\n   \
+    \ ((i++))\n    elem=$(( $1 < 0 ? $1 : \"${1}[$i]\" ))\n    if (( ${#elem} > max\
+    \ )); then\n      max=${elem}\n    fi\n    ((--len))\n  done\n  echo \"$max\"",
+  "    local arr=($1);\n    local max=$((${#arr[@]}-1));\n    echo $max;", "    local\
+    \ elements=$1\n    local max_element=$(echo $elements | tr ' ' '\\n' | sort -n\
+    \ | tail -1)\n    echo $max_element", "    local elements=($1)\n    local max=0\n\
+    \    for element in \"${elements[@]}\"; do\n        if [ \"$max\" -le \"$element\"\
+    \ ]; then\n            max=$element\n        fi\n    done\n    echo \"$max\"",
+  "  local elements=\"${1}\"\n  local elements_count=${#elements[@]}\n  if (( ${elements_count}\
+    \ > 1 )); then\n    local max_element=0\n    local max_element_index=0\n    for\
+    \ (( elements_index=${#elements[@]};\n          elements_index >= 0;\n       \
+    \   elements_index-- )); do\n      if [[ ${elements[$elements_index]} -gt ${max_element}\
+    \ ]]; then\n        max_element=${elements[$elements_index]}\n        max_element_index=$elements_index\n\
+    \      fi\n    done\n    if [[ ${max_element_index} -eq 0 ]]; then\n      max_element=\"\
+    ${elements[$elements_count]}\"\n    fi\n    echo \"${max_element}\"\n  else\n\
+    \    echo \"${elements[$elements_count]}\"\n  fi", "  local list=\"${1// /}\"\n\
+    \  local max=\"${list: -1}\"\n  local -a elements\n\n  while read elem; do\n \
+    \   elements+=(\"${elem}\")\n  done < <(printf '\"%s\"' \"${list}\")\n\n  local\
+    \ length=\"${#elements[@]}\"\n  if [[ $length -gt 0 ]]; then\n    local index=0\n\
+    \    for (( i=0; i < length; ++i)); do\n      local -a elem\n      elem=(${elements[$index]})\n\
+    \      if [[ ${elem[0]} -gt $max ]]; then\n        max=\"${elem[0]}\"\n      fi\n\
+    \      ((index++))\n    done\n  fi\n\n  printf '%q' \"$max\""]
 stop_tokens:
 - "\n}"

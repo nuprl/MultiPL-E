@@ -8,6 +8,71 @@ prompt: "#!/bin/bash\n# Given a positive floating point number, it can be decomp
 tests: "}\n\ncandidate() {\n    truncate_number \"$@\"\n}\n\nset -e\nrun_test() {\n\
   \    [[ $(candidate \"3.5\") = \"0.5\" ]]\n    [[ $(candidate \"1.25\") = \"0.25\"\
   \ ]]\n    [[ $(candidate \"123.0\") = \"0.0\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local float=$1\n  echo \"$float\" | awk '{printf \"%f\\n\", $1; exit}'",
+  "\tlocal number=$1\n\techo $(echo \"$number\" | sed 's/^\\([0-9][0-9]*\\).*$/\\\
+    1/')", "   local NUMBER=$1\n   local MAX_NUM=`echo $NUMBER | sed -E 's/^(-?[0-9]+)/\\\
+    1/g' | tr -d '0'`\n   local DECIMALS=`echo $NUMBER | sed -E 's/^(-?[0-9]+)\\.[0-9]+/\\\
+    1/g' | tr -d '0'`\n   local REAL_NUM=`echo $NUMBER | sed -E 's/^(-?[0-9]+)\\.([0-9]+)/\\\
+    1/g' | tr -d '0'`\n\n   local INTEGER_NUM=`echo $NUMBER | sed -E 's/^(-?[0-9]+)\\\
+    ./\\1/g' | tr -d '0'`\n   if (($DECIMALS > 0))\n   then\n      if (( $REAL_NUM\
+    \ == 0 ))\n      then\n         REAL_NUM=1\n      fi\n      DECIMALS=$DECIMALS-1\n\
+    \   fi\n   if (($MAX_NUM < $INTEGER_NUM))\n   then\n      echo \"Invalid Value:\
+    \ ${NUMBER}\"\n      return\n   fi\n   if (($DECIMALS > 0))\n   then\n      echo\
+    \ \"${REAL_NUM}.${DECIMALS}\"\n   else\n      echo \"${REAL_NUM}\"\n   fi", " \
+    \ local number=$1\n  local decimal_part=${number%.*}\n  local integer_part=${number#${decimal_part}}\n\
+    \  if [[ ${integer_part} -ge 1 ]]; then\n    echo ${decimal_part}\n  else\n  \
+    \  echo 0\n  fi", "  local number=\"$1\"\n  local decimals=\"${2}\"\n\n  if [\
+    \ \"$decimals\" -eq \"0\" ]\n  then\n    echo \"${number%.*}\"\n  else\n    echo\
+    \ \"${number%.*}.0${decimals}\"\n  fi", "\t[[ $1 == '' ]] && return 1\n\t[ $(echo\
+    \ \"$1 | bc\" |  cut -d . -f 1 | cut -d E -f 1) -le 0 ] && return 1 || return\
+    \ 0", "  if [[ $1 =~ ^[0-9]+\\.[0-9]+$ ]]; then\n    echo \"$1\"\n  else\n   \
+    \ echo \"0\"\n  fi", "  local number=$1\n  local decpart\n  local truncpart\n\
+    \  decpart=`echo $number | awk '{print int($1)}'`\n  truncpart=`echo $number |\
+    \ awk '{print int($2)}'`\n  if [[ ${truncpart} == ${number} ]]; then\n    return\
+    \ ${decpart}\n  else\n    return ${decpart}\n  fi", '  echo "$(($1 * 100))"',
+  '  echo "$(($1%1)*10+$(($1%1)*100/10+$(($1%1)*100/10)))"', "    echo \"$1\" | awk\
+    \ -F\".\" '{\n        if($1 == 0)\n            exit\n        else{\n         \
+    \   decimals = $1 - 1\n            integer = $1 / 10\n            return integer\
+    \ + decimals\n        }\n    }'", "  # Truncate decimals\n  local NUMBER=$1\n\
+    \  local DECIMAL_PART=$(( $NUMBER % 1))\n\n  if [ $DECIMAL_PART -eq 1 ]; then\n\
+    \    return $NUMBER\n  else\n    local FLOAT_NUMBER=$NUMBER\n    # Check if floating\
+    \ number has integer part\n    if [ $FLOAT_NUMBER -ge 0 ]; then\n      FLOAT_NUMBER=$((\
+    \ $FLOAT_NUMBER + 1 ))\n    fi\n    local INT_PART=$(( $FLOAT_NUMBER / 10 ))\n\
+    \    local REMAINING_DIGITS=$(( $FLOAT_NUMBER - $INT_PART * 10 ))\n    echo $REMAINING_DIGITS\n\
+    \  fi", "    local NUMBER=\"${1}\"\n    if [ ${#NUMBER} -lt 1 ] || ! is_number\
+    \ \"$NUMBER\" ; then\n        echo \"Parameter 1 must be a positive number\"\n\
+    \        return 1\n    fi\n\n    NUMBER=$(echo \"${NUMBER}\" | sed -e 's/^ *//'\
+    \ -e 's/ *$//')\n\n    # split number into integer and decimals\n    integer=\"\
+    ${NUMBER%%.*}\"\n    decimal=\"${NUMBER#*.}\"\n\n    # check decimal\n    if [\
+    \ ${decimal} -gt 0 ]; then\n        echo \"The decimal part cannot be higher than\
+    \ 1.0\"\n        return 1\n    fi\n\n    # remove decimal part\n    truncate_number=\"\
+    ${integer%.*}\"\n\n    # check if integer part is longer than 10\n    if [ ${#truncate_number}\
+    \ -gt 10 ]; then\n        echo \"The integer part cannot be longer than 10\"\n\
+    \        return 1\n    fi\n\n    echo \"${truncate_number}\"", "  local number=$1\n\
+    \  local decimals=$2\n  local decimals_str=\"\"\n  local i\n  decimals=${decimals#0}\n\
+    \  while [ \"$decimals\" -gt 0 ]; do\n    decimals_str=\"$decimals_str$i\"\n \
+    \   decimals=${decimals%%.*}\n    i=$((${decimals}+1))\n  done\n  printf \"%1.$decimals_strf\"\
+    \ \"$number\"", "\tlocal number_string=\"$1\"\n\tlocal number=\"${number_string%.*}\"\
+    \n\tlocal decimal=\"${number_string#*.*}\"\n\n\tlocal integer_part=\"${number%.*}\"\
+    \n\tlocal integer_part=\"${integer_part#*[!0-9]}\"\n\tlocal decimal_part=\"${decimal#*.*}\"\
+    \n\n\techo \"${decimal_part}.${integer_part}\"", "\tif [[ $1 =~ ^[0-9\\.]+$ ]];\
+    \ then\n\t\tif [[ $(echo \"$1\" | grep -o '^[0-9]+$') ]]; then\n\t\t\tprintf \"\
+    $1%%\"\n\t\telse\n\t\t\tprintf \"$1\"\n\t\tfi\n\telse\n\t\techo $1\n\tfi", " \
+    \   local x=$1\n    local decpart=$2\n    local intpart=\n    local res=${x:-0}\n\
+    \    if [ $res -gt 0 ]; then\n        intpart=$((${x} + ${res} - 1))\n    fi\n\
+    \    if [ $intpart -gt 0 ]; then\n        res=\"${intpart}.0\"\n        decpart=1\n\
+    \    fi\n    echo \"${res}\"", "  local number_to_truncate_to_decimal $1\n  number_to_truncate_to_decimal=$(\
+    \ echo \"${number_to_truncate_to_decimal}\" | sed 's/^\\([0-9]*\\.[0-9]*\\)\\\
+    ([0-9]*\\)$/\\1/' )\n  number_to_truncate_to_decimal=$( echo \"${number_to_truncate_to_decimal}\"\
+    \ | sed 's/^\\([0-9]*\\)$/\\1/' )\n  number_to_truncate_to_decimal=$( echo \"\
+    ${number_to_truncate_to_decimal}\" | sed 's/^.*\\([0-9]*\\.\\)[0-9]*\\([0-9]*\\\
+    )$/\\1/' )\n  echo \"${number_to_truncate_to_decimal}\"", "  local NUMBER=$1\n\
+    \  local DECIMALS=`echo \"$NUMBER\" | awk -F \".\" '{ print $1 }'`\n  local INTEGER=`echo\
+    \ \"$NUMBER\" | awk -F \".\" '{ print $2 }'`\n  local FINAL_NUMBER\n\n  if [ \"\
+    $DECIMALS\" -eq 0 ]\n  then\n    FINAL_NUMBER=\"$INTEGER\"\n  else\n    FINAL_NUMBER=`echo\
+    \ \"$INTEGER + $DECIMALS\" | bc -l`\n  fi\n  echo \"$FINAL_NUMBER\"", "    local\
+    \ f=$1\n    local -i dp=$(( ${f%?} * 10 ))\n    local -i int=$(( ${f#??} * 10\
+    \ ))\n    local -i trunc\n    (( int > dp )) && { int=dp; trunc=1; }\n    (( int\
+    \ > 1 )) && { trunc=0; }\n    echo $(( ${int}+${trunc} ))"]
 stop_tokens:
 - "\n}"

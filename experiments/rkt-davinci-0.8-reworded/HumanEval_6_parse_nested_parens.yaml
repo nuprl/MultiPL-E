@@ -10,7 +10,111 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate p
   \    (check-equal? (candidate \"(()()) ((())) () ((())()())\") (list 2 3 1 3))\n\
   \    (check-equal? (candidate \"() (()) ((())) (((())))\") (list 1 2 3 4))\n   \
   \ (check-equal? (candidate \"(()(())((())))\") (list 4))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (map (lambda (x) (string-length x))\n       (split-string paren_string\
+    \ \" \")))\n", "  (apply append\n         (map (lambda (paren_group)\n       \
+    \         (list (depth_of_parens paren_group)))\n              (string-split paren_string))))\n",
+  "  (map\n   (lambda (paren_group)\n     (apply max (map (lambda (paren) (if (eq?\
+    \ paren #\\() 1 -1)) (string->list paren_group))))\n   (string-split paren_string\
+    \ #\\space)))\n```\n\n**Function** `is_divisible_by_two_or_three?`\n\n```racket\n\
+    #lang racket\n", "  ;; take a single group of parentheses, and return the depth\
+    \ of nesting\n  (define (parse_single_group input)\n    (define (parse-helper\
+    \ current-nest input)\n      (cond ((empty? input) current-nest)\n           \
+    \ ((eq? (first input) #\\() (parse-helper (+ current-nest 1) (rest input)))\n\
+    \            ((eq? (first input) #\\)) (parse-helper (- current-nest 1) (rest\
+    \ input)))\n            (else (parse-helper current-nest (rest input)))))\n  \
+    \  (parse-helper 0 input))\n  ;; take a paren string and split it into a list\
+    \ of paren substrings\n  (define (split-parens input)\n    (define (split-helper\
+    \ current-substr current-depth input)\n      (cond ((empty? input) current-substr)\n\
+    \            ((eq? (first input) #\\ )\n             (if (zero? current-depth)\n\
+    \                 (cons current-substr (split-helper \"\" 0 (rest input)))\n \
+    \                (split-helper (string-append current-substr (string (first input)))\
+    \ current-depth (rest input))))\n            ((eq? (first input) #\\()\n     \
+    \        (split-helper (string-append current-substr (string (first input))) (+\
+    \ current-depth 1) (rest input)))\n            ((eq? (first input) #\\))\n   \
+    \          (split-helper (string-append current-substr (string (first input)))\
+    \ (- current-depth 1) (rest input)))\n            (else (split-helper (string-append\
+    \ current-substr (string (first input))) current-depth (rest input)))))\n    (split-helper\
+    \ \"\" 0 input))\n  (map parse_single_group (split-parens paren_string)))\n",
+  "  (map (\u03BB (string) (length (filter (\u03BB (c) (equal? c #\\()) string)))\
+    \ (string-split paren_string #\\space)))\n", "  (define (helper paren_string)\n\
+    \    (if (string-null? paren_string)\n        '()\n        (cons (match paren_string\
+    \ ['(\"(\" . rest) (list (list_ref (helper rest) 0) +1)])\n              (helper\
+    \ (string-drop paren_string (list_ref (helper paren_string) 1))))))\n  (helper\
+    \ paren_string))\n", "  (define (parse_parens paren_str max-depth)\n    (cond\n\
+    \      [(empty? paren_str)\n       (list max-depth)]\n      [(char=? (first paren_str)\
+    \ #\\()\n       (parse_parens (rest paren_str) (add1 max-depth))]\n      [(char=?\
+    \ (first paren_str) #\\))\n       (cons max-depth (parse_parens (rest paren_str)\
+    \ (sub1 max-depth)))]\n      [else\n       (parse_parens (rest paren_str) max-depth)]))\n\
+    \  (map (lambda (paren_group)\n         (cond\n           [(empty? paren_group)\n\
+    \            0]\n           [else\n            (first paren_group)]))\n      \
+    \ (map (lambda (paren_group)\n              (parse_parens paren_group 0))\n  \
+    \          (map (lambda (paren_group)\n                   (regexp-match #rx\"\
+    ^\\(([^)]*)\\)$\" paren_group))\n                 (string-split paren_string #\\\
+    space)))))\n```\n\n#### Implementation 2:\n\n```racket\n#lang racket\n", "  (map\n\
+    \   (lambda (paren_group)\n     (let loop ([left_paren_count 0] [max_left_paren_count\
+    \ 0])\n       (cond [(null? paren_group) max_left_paren_count]\n             [(char=?\
+    \ (car paren_group) #\\()\n              (let ([new_left_paren_count (+ left_paren_count\
+    \ 1)])\n                (if (>= new_left_paren_count max_left_paren_count)\n \
+    \                   (loop new_left_paren_count new_left_paren_count)\n       \
+    \             (loop new_left_paren_count max_left_paren_count)))]\n          \
+    \   [(char=? (car paren_group) #\\))\n              (loop (- left_paren_count\
+    \ 1) max_left_paren_count)]\n             [else (loop left_paren_count max_left_paren_count)])))\n\
+    \   (string-split paren_string)))\n", "  (define (strip-white-space str)\n   \
+    \ (regexp-replace* #rx\"\\s+\" str \"\"))\n  (define (paren-level str acc)\n \
+    \   (cond ((string=? str \"\") acc)\n          ((string=? (substring str 0 1)\
+    \ \"(\") (paren-level (substring str 1) (+ acc 1)))\n          ((string=? (substring\
+    \ str 0 1) \")\") (paren-level (substring str 1) (- acc 1)))\n          (else\
+    \ (error \"Unexpected input string.\"))))\n  (map (\u03BB (str) (paren-level (strip-white-space\
+    \ str) 0)) (string-split paren_string \" \")))\n```\n\n## Palindrome Permutation\n\
+    \n### Description\n\nGiven a string, write a function to check if it is a permutation\
+    \ of a palindrome. A palindrome is a word or phrase that is the same forwards\
+    \ and backwards. A permutation is a rearrangement of letters. The palindrome does\
+    \ not need to be limited to just dictionary words.\n\n### Example\n\n```\nInput:\
+    \ Tact Coa\nOutput: True (permutations: \"taco cat\", \"atco cta\", etc.)\n```\n\
+    \n### Solution\n\n```\n#lang racket\n", "  (let* ((paren-groups (string-split\
+    \ paren_string #\\space))\n         (paren-stack '())\n         (paren-list (list)))\n\
+    \    (for ([group paren-groups])\n      (for ([char (string->list group)])\n \
+    \       (match char\n          [(?\\()\n           (set! paren-stack (cons #\\\
+    ( paren-stack))]\n          [(?\\))\n           (set! paren-stack (cdr paren-stack))]))\n\
+    \      (set! paren-list (cons (length paren-stack) paren-list)))\n    (reverse\
+    \ paren-list)))\n", "  (define (parse-parens paren-string (level 0) (nested-parens\
+    \ '()))\n    (cond ((string=? \"\" paren-string) nested-parens)\n          ((string=?\
+    \ \" \" (substring paren-string 0 1)) (parse-parens (substring paren-string 1)\
+    \ level nested-parens))\n          ((string=? \"(\" (substring paren-string 0\
+    \ 1)) (parse-parens (substring paren-string 1) (+ level 1) nested-parens))\n \
+    \         ((string=? \")\" (substring paren-string 0 1)) (parse-parens (substring\
+    \ paren-string 1) (- level 1) (cons level nested-parens)))))\n  (parse-parens\
+    \ paren_string 0 '()))\n", "  (cond\n    [(null? paren_string) (list)]\n    [else\
+    \ (cons (find-deepest-nesting paren_string) (parse_nested_parens (cdr (find-next-break\
+    \ paren_string))))]))\n", "  (printf \"\\nparen_string: ~s\\n\" paren_string)\n\
+    \  (cond\n    [(string=? \"\" paren_string) '()]\n    [else (map (lambda (paren_group)\
+    \ (parse_parens paren_group)) (string-split paren_string))]))\n", "  (map (\u03BB\
+    \ (paren_group) (paren_nesting_level paren_group)) (string-split paren_string\
+    \ #rx\" \")))\n", "  (map (curryr parse_nested_parens_aux 0) (string-split paren_string\
+    \ \" \")))\n", "  (local [(define (paren-counter paren-list)\n            (if\
+    \ (null? paren-list)\n                0\n                (local [(define (unbalanced-paren\
+    \ paren-list)\n                          (if (or (null? paren-list)\n        \
+    \                          (eq? (first paren-list) #\\()\n                   \
+    \               (eq? (first paren-list) #\\)))\n                             \
+    \ 0\n                              1))\n                        (define (increment-count\
+    \ paren-list)\n                          (if (or (null? paren-list)\n        \
+    \                          (eq? (first paren-list) #\\()\n                   \
+    \               (eq? (first paren-list) #\\)))\n                             \
+    \ 0\n                              (+ 1 (increment-count (rest paren-list)))))\n\
+    \                        (cond [(eq? (unbalanced-paren paren-list) 1) 0]\n   \
+    \                           [else (+ (increment-count paren-list) (paren-counter\
+    \ (rest paren-list)))])))]\n          (paren-counter (string->list paren-string)))]))\n\
+    \n", "  (map (lambda (x) (length (last (split-string x))))\n       (split-string\
+    \ paren_string)))\n", "  (map\n   (lambda (paren_string)\n     (parse_nested_parens_helper\
+    \ paren_string 0))\n   (string-split paren_string \" \")))\n", "  (parse_nested_parens_helper\
+    \ paren_string 0))\n", "  (letrec ([parse-paren (lambda (pstring deepnest)\n \
+    \                         (cond [(null? pstring) deepnest]\n                 \
+    \               [(eq? (car pstring) #\\() (parse-paren (cdr pstring) (+ deepnest\
+    \ 1))]\n                                [(eq? (car pstring) #\\)) (parse-paren\
+    \ (cdr pstring) (- deepnest 1))]\n                                [else (parse-paren\
+    \ (cdr pstring) deepnest)]))]\n          [parse-paren-string (lambda (pstring)\n\
+    \                                (parse-paren pstring 0))])\n    (string-split\
+    \ paren_string \" \")))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

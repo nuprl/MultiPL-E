@@ -34,7 +34,224 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate m
   \ (check-equal? (candidate (list (list 1 2) (list 3 4)) 10) (list 1 2 1 2 1 2 1\
   \ 2 1 2))\n    (check-equal? (candidate (list (list 1 3) (list 3 2)) 10) (list 1\
   \ 3 1 3 1 3 1 3 1 3))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (define (helper i j count)\n    (if (= count k)\n        (list (vector-ref\
+    \ (vector-ref grid i) j))\n        (let ((neighbors (list (list i (+ j 1)) (list\
+    \ (+ i 1) j) (list i (- j 1)) (list (- i 1) j))))\n          (define (isValid\
+    \ v)\n            (and (>= (car v) 0)\n                 (>= (cadr v) 0)\n    \
+    \             (< (car v) (vector-length grid))\n                 (< (cadr v) (vector-length\
+    \ (vector-ref grid (car v))))))\n          (define (getNeighbors ns)\n       \
+    \     (cond ((null? ns) '())\n                  ((isValid (car ns)) (cons (car\
+    \ ns) (getNeighbors (cdr ns))))\n                  (else (getNeighbors (cdr ns)))))\n\
+    \          (define (toList l)\n            (cond ((null? l) '())\n           \
+    \       (else (cons (vector-ref (vector-ref grid (car (car l))) (cadr (car l)))\
+    \ (toList (cdr l))))))\n          (define (lexicographicCompare l1 l2)\n     \
+    \       (cond ((null? l1) '())\n                  ((null? l2) l1)\n          \
+    \        ((< (car l1) (car l2)) l1)\n                  ((> (car l1) (car l2))\
+    \ l2)\n                  (else (lexicographicCompare (cdr l1) (cdr l2)))))\n \
+    \         (lexicographicCompare\n           (toList (getNeighbors neighbors))\n\
+    \           (toList (append (getNeighbors neighbors) (getNeighbors (getNeighbors\
+    \ neighbors))))))))\n  (helper 0 0 0))\n", "  ;; grid: 2d list of integers\n \
+    \ ;; k: integer\n  ;; returns: list\n  (define (minPath-helper grid k)\n    (local\
+    \ [(define cur-row (first grid))\n            (define cur-col (first cur-row))\n\
+    \            (define cur-val (first cur-col))\n            (define cur-visited\
+    \ (list cur-val))\n            (define cur-grid (cdr grid))\n            (define\
+    \ cur-i 0)\n            (define cur-j 0)]\n      (define (do-left)\n        (local\
+    \ [(define cur-left (list-ref cur-row (sub1 cur-j)))\n                (define\
+    \ cur-visited (cons cur-left cur-visited))\n                (define cur-j (sub1\
+    \ cur-j))]\n          (minPath-helper cur-grid (sub1 k))))\n      (define (do-up)\n\
+    \        (local [(define cur-up (list-ref (first cur-grid) cur-j))\n         \
+    \       (define cur-visited (cons cur-up cur-visited))\n                (define\
+    \ cur-i (sub1 cur-i))\n                (define cur-grid (cdr cur-grid))]\n   \
+    \       (minPath-helper cur-grid (sub1 k))))\n      (cond [(zero? k) (reverse\
+    \ cur-visited)]\n            [(< cur-i (sub1 (length grid))) (do-up)]\n      \
+    \      [(< cur-j (sub1 (length cur-row))) (do-left)]\n            [else (error\
+    \ 'minPath-helper \"invalid k\")])))\n  (minPath-helper grid k))\n", "  (cond\n\
+    \    [(= k 1) (list (matrix-ref (car grid) 0 0))]\n    [else (minPathV grid k)]))\n",
+  "    (local [(define-values (row col) (get-dimensions grid))\n            (define\
+    \ (get-value row col)\n                (list-ref (list-ref grid row) col))\n \
+    \           (define (minPath-helper row col k)\n                (cond [(or (<\
+    \ row 0) (>= row row)\n                           (< col 0) (>= col col))\n  \
+    \                     null]\n                      [(or (= k 0) (= k (- row col\
+    \ 1)))\n                       (values (list (get-value row col))\n          \
+    \                     (+ 1 (max row col)))]\n                      [else\n   \
+    \                    (let*-values ([(minPath-right right-end) (minPath-helper\
+    \ (+ row 1) col (- k 1))]\n                                     [(minPath-down\
+    \ down-end) (minPath-helper row (+ col 1) (- k 1))])\n                       \
+    \    (cond [(null? minPath-right)\n                                  (values (cons\
+    \ (get-value row col) minPath-down)\n                                        \
+    \  down-end)]\n                                 [(null? minPath-down)\n      \
+    \                            (values (cons (get-value row col) minPath-right)\n\
+    \                                          right-end)]\n                     \
+    \            [(and (not (null? minPath-right))\n                             \
+    \          (not (null? minPath-down))\n                                      \
+    \ (lexi-cmp minPath-right minPath-down))\n                                  (values\
+    \ (cons (get-value row col) minPath-right)\n                                 \
+    \         right-end)]\n                                 [else\n              \
+    \                    (values (cons (get-value row col) minPath-down)\n       \
+    \                                   down-end)]))]))\n            (define (lexi-cmp\
+    \ lst1 lst2)\n                (cond [(or (null? lst1) (null? lst2))\n        \
+    \               #f]\n                      [(< (car lst1) (car lst2))\n      \
+    \                 #t]\n                      [(> (car lst1) (car lst2))\n    \
+    \                   #f]\n                      [else\n                       (lexi-cmp\
+    \ (cdr lst1) (cdr lst2))]))]\n        (car (minPath-helper 0 0 k))))\n", "  (define\
+    \ (f grid k)\n    (if (or (= k 0) (empty? grid))\n        (list)\n        (let*\
+    \ ([n (length grid)]\n               [head (first grid)]\n               [h (first\
+    \ head)]\n               [tail (cons (map (\u03BB (x) (- x 1)) (rest head)) (map\
+    \ (\u03BB (x) (- x 1)) (map rest grid)))]\n               [tail-k (- k 1)]\n \
+    \              [next-move (min (f tail tail-k) (f (map reverse tail) tail-k))])\n\
+    \          (cons h next-move))))\n  (f grid k))\n", "  (error \"minPath: not implemented\"\
+    ))\n\n```\n\n```scheme\n#lang racket\n", "  (define len (length grid))\n  (define\
+    \ neighbours\n    (lambda (x y)\n      (define n (list))\n      (when (> y 0)\
+    \    (set! n (cons (list x (- y 1)) n)))\n      (when (< y (- len 1)) (set! n\
+    \ (cons (list x (+ y 1)) n)))\n      (when (> x 0)    (set! n (cons (list (- x\
+    \ 1) y) n)))\n      (when (< x (- len 1)) (set! n (cons (list (+ x 1) y) n)))\n\
+    \      n))\n  (define paths-from\n    (lambda (n x y)\n      (define ret (list))\n\
+    \      (cond\n        ((= n 1)\n         (cons (list (list x y)) ret))\n     \
+    \   (else\n         (for-each\n          (lambda (coord)\n            (for-each\n\
+    \             (lambda (path)\n               (set! ret (cons (cons coord path)\
+    \ ret)))\n             (paths-from (- n 1) (car coord) (cadr coord))))\n     \
+    \     (neighbours x y))))\n      ret))\n  (define paths\n    (lambda (n)\n   \
+    \   (define ret (list))\n      (for-each\n       (lambda (x)\n         (for-each\n\
+    \          (lambda (y)\n            (for-each\n             (lambda (path)\n \
+    \              (set! ret (cons path ret)))\n             (paths-from n x y)))\n\
+    \          (range len)))\n       (range len))\n      ret))\n  (define value-of-path\n\
+    \    (lambda (path)\n      (map\n       (lambda (coord)\n         (list-ref (list-ref\
+    \ grid (car coord)) (cadr coord)))\n       path)))\n  (define path-less-than?\n\
+    \    (lambda (path1 path2)\n      (let loop ((path1 path1) (path2 path2))\n  \
+    \      (cond\n          ((or (null? path1) (null? path2))\n           #f)\n  \
+    \        ((< (car path1) (car path2))\n           #t)\n          ((> (car path1)\
+    \ (car path2))\n           #f)\n          (", "  (failure \"minPath is not implemented\
+    \ yet\"))\n```\n\nFor example, in the grid\n\n```\n1 2 3\n4 5 6\n7 8 9\n```\n\n\
+    the minimum path of length 3 is 1-2-1, but if we have length 2, the minimum\n\
+    path is 1-2.\n\nYou have to submit a single Racket source file named `minPath.rkt`\
+    \ (or `.scm`)\nwith the implementation of `minPath`. Please note that you are\
+    \ allowed to\nsubmit additional files that are required by `minPath.rkt` (or `.scm`).\n\
+    You may also send us a GitHub repo with the solution.", "  (define (is-in-range\
+    \ grid row col)\n    (and (< row (length grid)) (< col (length (car grid)))\n\
+    \         (>= row 0) (>= col 0)))\n  (define (min-path grid k row col)\n    (if\
+    \ (or (= k 0) (not (is-in-range grid row col)))\n        (list)\n        (let\
+    \ ((neighbors (list)))\n          (if (is-in-range grid row (+ col 1))\n     \
+    \         (set! neighbors (append neighbors (list `(,row ,(+ col 1)))))\n    \
+    \          (void))\n          (if (is-in-range grid row (- col 1))\n         \
+    \     (set! neighbors (append neighbors (list `(,row ,(- col 1)))))\n        \
+    \      (void))\n          (if (is-in-range grid (+ row 1) col)\n             \
+    \ (set! neighbors (append neighbors (list `(,(+ row 1) ,col))))\n            \
+    \  (void))\n          (if (is-in-range grid (- row 1) col)\n              (set!\
+    \ neighbors (append neighbors (list `(,(- row 1) ,col))))\n              (void))\n\
+    \          (let ((paths (list)))\n            (for ([neighbor neighbors])\n  \
+    \            (set! paths (append paths (list (cons (list (list-ref grid row) col)\n\
+    \                                                   (min-path grid (- k 1) (car\
+    \ neighbor) (cadr neighbor)))))))\n            (sort paths < #:key (lambda (x)\
+    \ (map (lambda (cord) (list-ref (car cord) (cadr cord))) x))))))\n  (let ((paths\
+    \ (list)))\n    (for ([row (in-range (length grid))])\n      (for ([col (in-range\
+    \ (length (car grid)))])\n        (set! paths (append paths (list (cons (list\
+    \ (list-ref grid row) col)\n                                             (min-path\
+    \ grid (- k 1) row col)))))))\n    (sort paths < #:key (lambda (x) (map (lambda\
+    \ (cord) (list-ref (car cord) (cadr cord))) x)))))\n```\n\n#### 3.2.2 Solution\n\
+    ```racket\n#", "  (define (isSafe row col n)\n    (and (< row n) (< col n) (<=\
+    \ 0 row) (<= 0 col)))\n  (define (minPathGrid grid k n row col path)\n    (if\
+    \ (<= k 0)\n        (append path (list (list-ref (list-ref grid row) col)))\n\
+    \        (cond ((isSafe (+ row 1) col n)\n               (minPathGrid grid (-\
+    \ k 1) n (+ row 1) col (append path (list (list-ref (list-ref grid row) col)))))\n\
+    \              ((isSafe (- row 1) col n)\n               (minPathGrid grid (-\
+    \ k 1) n (- row 1) col (append path (list (list-ref (list-ref grid row) col)))))\n\
+    \              ((isSafe row (+ col 1) n)\n               (minPathGrid grid (-\
+    \ k 1) n row (+ col 1) (append path (list (list-ref (list-ref grid row) col)))))\n\
+    \              ((isSafe row (- col 1) n)\n               (minPathGrid grid (-\
+    \ k 1) n row (- col 1) (append path (list (list-ref (list-ref grid row) col))))))))\n\
+    \  (cond ((= k 1) (list (list-ref (list-ref grid 0) 0)))\n        ((= k (apply\
+    \ + (build-list (length grid) (lambda (i) i)))) (append (list (list-ref (list-ref\
+    \ grid 0) 0)) (build-list (- k 1) (lambda (i) i))))\n        (else (minPathGrid\
+    \ grid k (length grid) 0 0 (list)))))\n", "  (define n (length grid))\n  (define\
+    \ (getPaths x y k)\n    (if (= k 0) (list (list (list-ref (list-ref grid x) y)))\n\
+    \        (let ([left (getPaths (- x 1) y (- k 1))]\n              [right (getPaths\
+    \ (+ x 1) y (- k 1))]\n              [up (getPaths x (- y 1) (- k 1))]\n     \
+    \         [down (getPaths x (+ y 1) (- k 1))])\n          (append left right up\
+    \ down))))\n  (define (minPathHelp paths)\n    (cond [(empty? paths) empty]\n\
+    \          [(= (length paths) 1) (car paths)]\n          [(< (car paths) (cadr\
+    \ paths)) (cons (car paths) (minPathHelp (cdr paths)))]\n          [else (cons\
+    \ (cadr paths) (minPathHelp (cdr (cdr paths))))]))\n  (define (getCell grid x\
+    \ y)\n    (list-ref (list-ref grid x) y))\n  (define (concatPath path)\n    (map\
+    \ (lambda (cell) (getCell grid (car cell) (cadr cell))) path))\n  (define (main\
+    \ x y k)\n    (cond [(= k 0) empty]\n          [(= k 1) (list (getCell grid x\
+    \ y))]\n          [else (minPathHelp (map concatPath (getPaths x y k)))]))\n \
+    \ (main 0 0 k))\n", "  (minPath-helper grid k (min-path-weight grid k)))\n", " \
+    \ ;; Write your code here\n  )\n```\n\n### Output Format\n\nReturn an ordered\
+    \ list of the values on the cells that the minimum path go through.\n\n### Sample\
+    \ Test Cases\n\n#### Sample Case 1\n\n##### Sample Input\n\n```racket", "  ;;\
+    \ check input\n  (cond [(< k 1) (error \"k should be a positive integer\")]\n\
+    \        [(< 2 (length grid)) (error \"grid should have at least 2 rows\")]\n\
+    \        [(< 2 (length (first grid))) (error \"grid should have at least 2 columns\"\
+    )]\n        [(not (every (lambda (row) (= (length grid) (length row))) grid))\
+    \ (error \"grid should be square\")]\n        [(not (every (lambda (row) (every\
+    \ (lambda (cell) (and (<= 1 cell) (<= cell (* (length grid) (length grid)))))\
+    \ row)) grid)) (error \"grid cells should be in range [1, grid-size^2]\")]\n \
+    \       [else\n         (let* ([n (length grid)]\n                [#:lines (range\
+    \ n)]\n                [#:cols (range n)]\n                [#:s (make-set)]\n\
+    \                [#:o (make-hash)]\n                [#:tot (for/sum ([x (in-range\
+    \ n)] [y (in-range n)])\n                         (define v (list-ref (list-ref\
+    \ grid x) y))\n                         (hash-set! #:o (list x y) v)\n       \
+    \                  (set-add! #:s v)\n                         v)]\n          \
+    \      [#:ts (make-hash)]\n                [#:tl (for/list ([e (in-list (set->list\
+    \ #:s))])\n                        (hash-set! #:ts e (set-add (make-set) e)) e)]\n\
+    \                [#:g (for/list ([x (in-range n)] [y (in-range n)])\n        \
+    \               (hash-ref #:ts (hash-ref #:o (list x y))))]\n                [#:get-neighbors\
+    \ (lambda (x y)\n                                   (define (inside? x y)\n  \
+    \                                   (and (<= 0 x) (< x n) (<= 0 y) (< y n)))\n\
+    \                                   (filter (lambda (p) (inside? (car p) (cdr\
+    \ p)))\n                                           (list (cons (- x 1) y)\n  \
+    \                                               (cons (+ x 1) y)\n           \
+    \                                      (cons", "  (define r (grid-ref grid 0 0))\n\
+    \  (define l (list r))\n  (define n (length grid))\n  (define (same g i j) (=\
+    \ (grid-ref g i j) r))\n  (define (neigh i j)\n    (cond\n      [(= j (- n 1))\
+    \ (list (list (- i 1) j) (list i (- j 1)) (list (+ i 1) j))]\n      [(= i (- n\
+    \ 1)) (list (list i (- j 1)) (list i (+ j 1)) (list (- i 1) j))]\n      [(= j\
+    \ 0) (list (list (- i 1) j) (list i (+ j 1)) (list (+ i 1) j))]\n      [(= i 0)\
+    \ (list (list i (- j 1)) (list i (+ j 1)) (list (+ i 1) j))]\n      [else (list\
+    \ (list (- i 1) j) (list i (- j 1)) (list i (+ j 1)) (list (+ i 1) j))]))\n  (define\
+    \ (f ll)\n    (define g (car ll))\n    (define i (cadr ll))\n    (define j (caddr\
+    \ ll))\n    (if (= 1 k)\n        l\n        (let ((lst (neigh i j)))\n       \
+    \   (cond\n            [(null? lst) l]\n            [(and (same g (car (car lst))\
+    \ (cadr (car lst)))\n                  (same g (car (cadr lst)) (cadr (cadr lst)))\n\
+    \                  (same g (car (caddr lst)) (cadr (caddr lst)))) l]\n       \
+    \     [(and (same g (car (car lst)) (cadr (car lst)))\n                  (same\
+    \ g (car (cadr lst)) (cadr (cadr lst))))\n             (f (list g (car (caddr\
+    \ lst)) (cadr (caddr lst))))]\n            [(and (same g (car (car lst)) (cadr\
+    \ (car lst)))\n                  (same g (car (caddr lst)) (cadr (caddr lst))))\n\
+    \             (f (list g (car (cadr lst)) (cadr", "  ;; Write your code here.\n\
+    \  (list-ref (list-ref grid 0) 0))\n", "    (if (= k 1)\n        (define curr-grid\
+    \ grid)\n        (set! curr-grid (min-path-for-row (car grid) grid))\n       \
+    \ (set! curr-grid (min-path-for-column curr-grid grid))))\n", "  (minPath-1 grid\
+    \ k (build-graph grid) 0))\n", "  (and (and (and (and (and (and (and (and (and\
+    \ (>= k 1)\n          (integer? k))\n          (and (= (length grid) (length (car\
+    \ grid)))\n          (= (length grid) (length (cdr grid)))))\n          (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and", "  (define\
+    \ (minPath-iter grid i j k)\n    (define (up)\n      (if (equal? i 0)\n      \
+    \    grid\n          (list-ref (list-ref grid (- i 1)) j)))\n    (define (down)\n\
+    \      (if (= i (- (length grid) 1))\n          grid\n          (list-ref (list-ref\
+    \ grid (+ i 1)) j)))\n    (define (left)\n      (if (equal? j 0)\n          grid\n\
+    \          (list-ref (list-ref grid i) (- j 1))))\n    (define (right)\n     \
+    \ (if (= j (- (length (car grid)) 1))\n          grid\n          (list-ref (list-ref\
+    \ grid i) (+ j 1))))\n    (if (equal? k 0)\n        (list grid)\n        (remove-if-not\n\
+    \         (lambda (e)\n           (equal? (car e) '())\n           (append (list\
+    \ grid) (cdr e)))\n         (list (minPath-iter (up) (- i 1) j (- k 1))\n    \
+    \           (minPath-iter (down) (+ i 1) j (- k 1))\n               (minPath-iter\
+    \ (left) i (- j 1) (- k 1))\n               (minPath-iter (right) i (+ j 1) (-\
+    \ k 1))))))\n  (sort (apply append (map (lambda (i) (minPath-iter (list-ref grid\
+    \ i) i 0 k)) (range (length grid)))) <))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"
