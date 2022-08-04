@@ -6,7 +6,7 @@
 #SBATCH --job-name=polyglot-eval
 #SBATCH --partition=express
 #SBATCH --exclusive
-module load oracle_java julia
+module load R oracle_java julia
 
 LIST_FILES=files.txt
 

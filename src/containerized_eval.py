@@ -22,6 +22,8 @@ import eval_swift
 import eval_cpp
 import eval_php
 import eval_dlang
+import eval_julia
+import eval_r
 import tempfile
 import json
 
@@ -43,6 +45,9 @@ EVALUATORS = {
     "php": (eval_php.eval_script, ".php"),
     "humaneval_to_dlang.py": (eval_dlang.eval_script, ".d"),
     "d": (eval_dlang.eval_script, ".d"),
+    "r": (eval_r.eval_script, ".r"),
+    "humaneval_to_r.py": (eval_r.eval_script, ".r"),
+    "jl": (eval_julia.eval_script, ".jl"),
     "go": (eval_go.eval_script, ".go")
 }
 
