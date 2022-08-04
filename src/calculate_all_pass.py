@@ -87,19 +87,17 @@ def estimate_pass_at_k(
 
 def evaluate_functional_correctness(
     sample_file: str,
+    lang: str,
+    model: str,
+    temp: str,
+    doc: str,
+    term: str,
     k: List[int] = [1, 10]#, 100]  
 ):
     """
     Evaluates the functional correctness of generated samples, and writes
     results to related file 
     """
-
-    #find the necessary parts of the filename
-    #example sample_file is lua-davinci-0.2-keep-keep-summary.csv
-    fileAsString = str(sample_file)
-    terminology = "keep" #TODO: will need to change / adapt to the rename of the results
-    partsOfFileName = fileAsString[fileAsString.rfind('/')+1:].split('-')
-    lang, model, temp, doctests = partsOfFileName[0], partsOfFileName[1], partsOfFileName[2], partsOfFileName[3]
 
     for allK in k:
         total, correct = [], []
@@ -121,7 +119,7 @@ def evaluate_functional_correctness(
             #what rounding do we want? Sets up basic elements
             overall = open(f"../model_results/all-pass-at-{allK}-eval-run.csv", 'a') 
             #we round the total sum of all pass at k values to three digits
-            overall.write(f'{lang},{model},{temp},{doctests},{terminology},{minNumComplete},{allK},{len(total)},{pass_at_k}\n')
+            overall.write(f'{lang},{model},{temp},{doc},{term},{minNumComplete},{allK},{len(total)},{pass_at_k}\n')
             overall.close()
 
     return pass_at_k
