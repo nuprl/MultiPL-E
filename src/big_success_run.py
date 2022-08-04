@@ -1,5 +1,7 @@
 '''
-Run to get all pass@k results - caution will add the same entry as already exists! 
+Run to get all pass@k results for provided combinations.
+
+CAUTION: does not currently handle terms differences due to the way results files are formatted.
 
 written by Molly Feldman, based on code by Arjun Guha 
 '''
@@ -10,10 +12,10 @@ from csv import reader
 
 #TODO: do for all languages or necessary subset - right now this is a good test set 
 
-LANG = ['rkt']#,'d']#[ "py", "sh","cs","cpp","d","go","java","js", "jl", "lua", "pl", "php", "r", "rkt", "rb", "rs","scala","swift","ts",]
+LANG = ['cpp']#,'d']#[ "py", "sh","cs","cpp","d","go","java","js", "jl", "lua", "pl", "php", "r", "rkt", "rb", "rs","scala","swift","ts",]
 MODEL = [ "incoder", "davinci" ]
 TEMP = [ "0.8", "0.2", ]
-DOCSTRINGS = [ "keep", "remove", "reworded" ] #original keep 
+DOCSTRINGS = [ "keep"]# "remove", "reworded" ] #original keep 
 TERMS = ['keep']#[ "keep", "transform" ]
 
 def checkPassResults(lang,model,temp,docstrings,term):
