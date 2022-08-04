@@ -87,7 +87,7 @@ def estimate_pass_at_k(
 
 def evaluate_functional_correctness(
     sample_file: str,
-    k: List[int] = [1, 10, 100]  
+    k: List[int] = [1, 10]#, 100]  
 ):
     """
     Evaluates the functional correctness of generated samples, and writes
@@ -103,14 +103,15 @@ def evaluate_functional_correctness(
 
     for allK in k:
         total, correct = [], []
+        minNumComplete = 999999
         with open(sample_file) as csvfile:
             problemReader = csv.reader(csvfile)
             for problem in problemReader:
                 #the value at problem[1] is the count of 'OK'
-                pk = estimate_pass_at_k([200], [int(problem[1])], allK)
-                #we CANNOT run this without this file being true, as summary_generator will not produce the sample_file
-                #unless n is 200
-                total.append(200) 
+                #numComplete should be 20, sometimes 200, sometimes something else
+                numComplete = int(problem[1]) + int(problem[2]) + int(problem[3])
+                minNumComplete = min(minNumComplete, numComplete)
+                total.append(numComplete) 
                 correct.append(int(problem[1]))  
         total = np.array(total)
         correct = np.array(correct)
@@ -118,9 +119,9 @@ def evaluate_functional_correctness(
         if (total >= allK).all():
             pass_at_k = estimate_pass_at_k(total, correct, allK).mean()
             #what rounding do we want? Sets up basic elements
-            overall = open(f"../model_results/all-pass-at-{allK}.csv", 'a') 
+            overall = open(f"../model_results/all-pass-at-{allK}-eval-run.csv", 'a') 
             #we round the total sum of all pass at k values to three digits
-            overall.write(f'{lang},{model},{temp},{doctests},{terminology},{allK},{len(total)},{pass_at_k}\n')
+            overall.write(f'{lang},{model},{temp},{doctests},{terminology},{minNumComplete},{allK},{len(total)},{pass_at_k}\n')
             overall.close()
 
     return pass_at_k
