@@ -65,7 +65,6 @@ def makeSummary(dir, printToShell=False, writeToFile=True):
                     counts["OtherError"] += 1
             if sum(counts.values()) != 200:
                     print(f'{testResults.name} only has {sum(counts.values())} completions - aborting.')
-                    os.remove(results_file)
                     return False
             if printToShell:
                 print(f'For the 200 attempts at {testResults.name}, we get the following results:')
