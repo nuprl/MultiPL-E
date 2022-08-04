@@ -14,7 +14,7 @@ DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
 TargetExp = str
 
-class LuaTranslator(LanguageTranslator[TargetExp]):
+class Translator(LanguageTranslator[TargetExp]):
 
     def stop(self):
         # NOTE(arjun): Seems like reasonable stop sequences for Lua
@@ -93,5 +93,5 @@ class LuaTranslator(LanguageTranslator[TargetExp]):
 
 
 if __name__ == "__main__":
-    translator = LuaTranslator()
+    translator = Translator()
     main(translator)

@@ -22,7 +22,7 @@ DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
 TargetExp = str
 
-class RubyTranslator(LanguageTranslator[TargetExp]):
+class Translator(LanguageTranslator[TargetExp]):
     USub = "-"
 
     def file_ext(self) -> str:
@@ -117,5 +117,5 @@ class RubyTranslator(LanguageTranslator[TargetExp]):
 
 
 if __name__ == "__main__":
-    translator = RubyTranslator()
+    translator = Translator()
     main(translator)

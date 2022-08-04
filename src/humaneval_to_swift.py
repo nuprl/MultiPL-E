@@ -537,7 +537,7 @@ enum {enum_name}: Equatable, Hashable {{
         needs_str += "\n".join(self.protocol_conformances)
         return needs_str
 
-class SwiftTranslator(LanguageTranslator[TargetExp]):
+class Translator(LanguageTranslator[TargetExp]):
     def gen_literal(self, c: bool | str | int | float | None) -> TargetExp:
         return ast.Constant(value=c)
 
@@ -703,5 +703,5 @@ func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
 
 
 if __name__ == "__main__":
-    translator = SwiftTranslator()
+    translator = Translator()
     main(translator)

@@ -17,8 +17,10 @@ class Translator:
     # TODO: what is the stop sequence for it?
     stop = ["\n\n", "\nvoid", "\nbool", "\nint"]
 
+    def file_ext(self):
+        return "d"
+
     def __init__(self):
-        self.file_ext = "d"
         self.require_libs = {"std.math"}
         self.func_type = None
 
