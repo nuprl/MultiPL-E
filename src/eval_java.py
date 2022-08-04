@@ -21,14 +21,18 @@ LANG_EXT = ".java"
 #148: Elipsis
 
 def eval_script(path: Path):
+
+    sys_env = os.environ.copy()
     javatuples_path = Path(__file__).parent.parent/"javatuples-1.2.jar"
+
+    sys_env["CLASSPATH"] =  f"{javatuples_path}"
 
     with tempfile.TemporaryDirectory() as outdir:
         #Each Java file contains the class with same name `JAVA_CLASS_NAME`
         #Hence, javac will same JAVA_CLASS_NAME.class file for each problem
         #Write class for each problem to a different temp dir
         #Use UTF8 encoding with javac
-        build = subprocess.run(["javac", "-encoding", "UTF8", "-d", outdir, path], env={f"CLASSPATH" : f"{javatuples_path}"}, capture_output=True)
+        build = subprocess.run(["javac", "-encoding", "UTF8", "-d", outdir, path], env=sys_env, capture_output=True)
         status = None
         returncode = -1
         output = None
@@ -39,11 +43,10 @@ def eval_script(path: Path):
             status = "SyntaxError"
             returncode = build.returncode
             output = build
-            print(output.stderr)
         else:
             try:
                 # Assumes exit-code 0 is all okay
-                output = subprocess.run(["java", "-ea", "-cp", f"{outdir}", exec_name], env={"CLASSPATH" : f"{javatuples_path}"}, capture_output=True, timeout=5)
+                output = subprocess.run(["java", "-ea", "-cp", f"{outdir}", exec_name], env = sys_env, capture_output=True, timeout=5)
                 returncode = output.returncode
                 if output.returncode == 0:
                     status = "OK"
