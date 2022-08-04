@@ -22,17 +22,20 @@ The TARGET_DIR must be the same as the one used in prepare_prompts_yaml.py.
 
 """
 import csv
-from libcompletions import parameterized_main
 import openai_multimodel_multikey
 import asyncio
-
-
+from problem_yaml import Problem
+import argparse
+import sys
+from pathlib import Path
+from tqdm import tqdm
 
 async def codex_completion(
+    model: str,
     prompt: str, stop_tokens, max_to_generate: int, temperature: float, n: int
 ):
         response = await completions.completion(
-            model="code-davinci-002",
+            model=model,
             prompt=prompt,
             max_tokens=max_to_generate,
             temperature=temperature,
@@ -41,6 +44,58 @@ async def codex_completion(
             stop=[ s for s in stop_tokens])
         return  response
 
+async def process_problem_yaml(problem_yaml_path, args, max_to_generate):
+    with problem_yaml_path.open() as f:
+        problem = Problem.load(f)
+
+    num_completions_required = 20 - len(problem.completions)
+
+    if num_completions_required < 1:
+        print(
+            f"Skipping {problem_yaml_path} because it already has enough completions",
+        )
+        return
+
+    while num_completions_required > 0:
+        num_samples = min(num_completions_required, args.max_samples)
+
+        completions = await codex_completion(
+            model=args.model,
+            prompt=problem.prompt,
+            stop_tokens=problem.stop_tokens,
+            max_to_generate=max_to_generate,
+            temperature=args.temperature,
+            n=num_samples,
+        )
+        problem.completions.extend(completions)
+        with problem_yaml_path.open("w") as f:
+            f.write(Problem.dump(problem))
+        num_completions_required -= num_samples
+
+async def parameterized_main(max_to_generate: int):
+    args = argparse.ArgumentParser()
+    args.add_argument(
+        "--dir", type=str, required=True, help="Directory with problem YAMLs"
+    )
+    args.add_argument(
+        "--temperature", type=float, required=True)
+    args.add_argument("--max-samples", type=int, required=True)
+    args.add_argument("--model", type=str, required=True)
+    args = args.parse_args()
+
+    dir = Path(args.dir)
+    if not dir.exists():
+        print("Directory does not exist: {}".format(dir))
+        sys.exit(1)
+
+    if args.model == "davinci":
+        args.model = "code-davinci-002"
+
+    problems = list(filter(lambda f: not f.name.endswith(".results.yaml"), sorted(dir.glob("*.yaml"))))
+
+    problem_completions = (process_problem_yaml(problem_yaml_path, args, max_to_generate) for problem_yaml_path in problems)
+    await asyncio.gather(*problem_completions)
+
 
 async def main():
     global completions
@@ -48,11 +103,13 @@ async def main():
     # Load the model keys from the CSV file.
     with open("model_keys.csv") as f:
         reader = csv.DictReader(f)
-        model_keys = [row["Keys"] for row in reader]
+        model_keys = [row["Key"] for row in reader if not row["Key"].startswith("http://")]
+        other_models = [ (row["Model"], row["Key"]) for row in reader if row["Key"].startswith("http://")]
+
     
-    completions = openai_multimodel_multikey.MultiModelMultiKeyCompletion(model_keys)
+    completions = openai_multimodel_multikey.MultiModelMultiKeyCompletion(model_keys, other_models)
     
-    await parameterized_main(codex_completion, 'davinci', max_to_generate=512)
+    await parameterized_main(max_to_generate=512)
 
 
 if __name__ == "__main__":
