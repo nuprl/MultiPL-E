@@ -40,6 +40,7 @@ enum Command {
     RunCompletion(RunCompletion),
     CheckPromptCompleteness(CheckPromptCompleteness),
     CheckResultCompleteness,
+    CountDuplicatePrograms,
 }
 
 fn is_completions_yaml(p: &DirEntry) -> bool {
@@ -52,6 +53,25 @@ fn does_result_file_exist(entry: &DirEntry) -> bool {
     let results_path = path.replace(".yaml", ".results.yaml");
 
     Path::new(&results_path).exists()
+}
+
+fn count_duplicate_programs() {
+    let mut problems = 0;
+    let mut unique_problems = 0;
+    let walker = WalkDir::new("../experiments");
+
+    for entry in walker
+        .into_iter()
+        .filter_map(|e| e.ok())
+        .filter(is_completions_yaml)
+    {
+        let contents = std::fs::read_to_string(entry.path()).unwrap();
+        let problem_file: ProblemFile = serde_yaml::from_str(&contents).unwrap();
+        problems += problem_file.completions.len();
+        unique_problems += std::collections::HashSet::<&String>::from_iter(problem_file.completions.iter()).len();
+
+    }
+    println!("{} / {}", unique_problems, problems);
 }
 
 fn check_result_completeness() {
@@ -115,7 +135,7 @@ fn generate_prompts(model: &str, min_prompts_per_problem: usize, max_samples: us
                                 continue;
                             }
                             let contents = std::fs::read_to_string(entry.path()).unwrap();
-                            let problem_file: ProblemFile = serde_yaml::from_str(&contents).unwrap();
+                            let problem_file: ProblemFile = serde_yaml::from_str(&contents).expect(format!("{}", entry.path().display()).as_str());
                             if  problem_file.completions.len() > min_prompts_per_problem {
                                 continue;
                             }
@@ -152,5 +172,6 @@ fn main() {
         Command::CheckResultCompleteness => {
             check_result_completeness();
         }
+        Command::CountDuplicatePrograms => count_duplicate_programs()
     }
 }
