@@ -48,12 +48,9 @@ async def process_problem_yaml(problem_yaml_path, args, max_to_generate):
     with problem_yaml_path.open() as f:
         problem = Problem.load(f)
 
-    num_completions_required = 20 - len(problem.completions)
+    num_completions_required = args.limit_completions - len(problem.completions)
 
     if num_completions_required < 1:
-        print(
-            f"Skipping {problem_yaml_path} because it already has enough completions",
-        )
         return
 
     while num_completions_required > 0:
@@ -81,6 +78,7 @@ async def parameterized_main(max_to_generate: int):
         "--temperature", type=float, required=True)
     args.add_argument("--max-samples", type=int, required=True)
     args.add_argument("--model", type=str, required=True)
+    args.add_argument("--limit-completions", type=int, default=200)
     args = args.parse_args()
 
     dir = Path(args.dir)
@@ -103,9 +101,9 @@ async def main():
     # Load the model keys from the CSV file.
     with open("model_keys.csv") as f:
         reader = csv.DictReader(f)
-        model_keys = [row["Key"] for row in reader if not row["Key"].startswith("http://")]
-        other_models = [ (row["Model"], row["Key"]) for row in reader if row["Key"].startswith("http://")]
-
+        rows = list(reader)
+    model_keys = [row["Key"] for row in rows if not row["Key"].startswith("http://")]
+    other_models = [ (row["Model"], row["Key"]) for row in rows if row["Key"].startswith("http://")]
     
     completions = openai_multimodel_multikey.MultiModelMultiKeyCompletion(model_keys, other_models)
     

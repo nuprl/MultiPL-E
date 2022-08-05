@@ -71,6 +71,7 @@ class MultiModelMultiKeyCompletion:
 
         # self.other_models maps each model name to a list of URLs that serve that model.
         self.other_models = assoc_to_dict_list([ (name, OtherModelKey(name, url)) for (name, url) in  other_models ])
+
         self.other_model_names = set(model for (model, _) in other_models)
         # self.other_models_semaphores maps each model name to a semaphore that has
         # the number of available URLs for that model.
@@ -82,9 +83,9 @@ class MultiModelMultiKeyCompletion:
         # Easy case: we are contacting a self-hosted model server.
         if model_name in self.other_model_names:
             # Acquire the semaphore for model_name. Will block if no URLs are available.
-            async with self.other_models_semaphores[model_name].acquire():
-                model_url = self.other_models[model_name].pop()
-                return model_url
+            await self.other_models_semaphores[model_name].acquire()
+            model_url = self.other_models[model_name].pop()
+            return model_url
 
         await self.openai_api_keys_available.acquire() # decrement semaphore, blocking at 0
 
@@ -110,6 +111,7 @@ class MultiModelMultiKeyCompletion:
             # Easy case: this self-hosted model is now available.
             if isinstance(key, OtherModelKey):
                 self.other_models[key.model_name].append(key)
+                self.other_models_semaphores[key.model_name].release()
                 return
 
             self.openai_api_keys.append(key)
@@ -131,21 +133,32 @@ class MultiModelMultiKeyCompletion:
         }
 
         while True:
-            key = await self.get_least_used_key(model, max_tokens * n)
+            try:
+                key = await self.get_least_used_key(model, max_tokens * n)
 
-            async with self.client_session.post(key.url,
-                json=request_body,
-                headers=key.headers,
-            ) as response:
-                if response.status == 200:
-                    response_json = await response.json()
-                    await self.release_key(key, (response_json["usage"]["total_tokens"]))
-                    return [choice["text"] for choice in response_json["choices"]]
-                elif response.status == 429:
-                    fudge = max(10000, 150000 - key.tokens_used)
-                    print(f"{now_string()}Rate limited with {key.key}. Adding {fudge} tokens.")
-                    await self.release_key(key, fudge) # # Guess
-                else:
-                    print(f"Error {response.status}. Sleeping for 5 seconds.")
-                    print(await response.text())
-                    await asyncio.sleep(5)
+                async with self.client_session.post(key.url,
+                    json=request_body,
+                    headers=key.headers,
+                ) as response:
+                    if response.status == 200:
+                        response_json = await response.json()
+                        
+
+                        if type(response_json) == list:
+                            await self.release_key(key, 0)
+                            return response_json    
+
+                        await self.release_key(key, (response_json["usage"]["total_tokens"]))
+                        return [ choice["text"] for choice in response_json["choices"]]
+                    elif response.status == 429:
+                        fudge = max(10000, 150000 - key.tokens_used)
+                        print(f"{now_string()}Rate limited with {key.key}. Adding {fudge} tokens.")
+                        await self.release_key(key, fudge) # # Guess
+                    else:
+                        print(f"Error {response.status}. Sleeping for 5 seconds.")
+                        print(await response.text())
+                        await asyncio.sleep(5)
+            except Exception as e:
+                print(f"Exception from {key.url}")
+                await self.release_key(key, 0)
+                return []
