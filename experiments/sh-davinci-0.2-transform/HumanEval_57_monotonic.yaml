@@ -11,6 +11,141 @@ tests: "}\n\ncandidate() {\n    monotonic \"$@\"\n}\n\nset -e\nrun_test() {\n   
   \    [[ $(candidate \"1 2 3 2 5 60\") = \"false\" ]]\n    [[ $(candidate \"1 2 3\
   \ 4 5 60\") = \"true\" ]]\n    [[ $(candidate \"9 9 9 9\") = \"true\" ]]\n}\n\n\
   run_test"
-completions: []
+completions: ["    local list=\"$1\"\n    local increasing=\"true\"\n    local decreasing=\"\
+    true\"\n    local last=\"$(echo \"$list\" | awk '{print $1}')\"\n    for i in\
+    \ $list; do\n        if [ \"$i\" -gt \"$last\" ]; then\n            decreasing=\"\
+    false\"\n        elif [ \"$i\" -lt \"$last\" ]; then\n            increasing=\"\
+    false\"\n        fi\n        last=\"$i\"\n    done\n    if [ \"$increasing\" =\
+    \ \"true\" ] || [ \"$decreasing\" = \"true\" ]; then\n        echo \"true\"\n\
+    \    else\n        echo \"false\"\n    fi", "    local -a a=($1)\n    local -i\
+    \ i=0\n    local -i n=${#a[@]}\n    local -i incr=0\n    local -i decr=0\n   \
+    \ local -i res=0\n    if [ $n -lt 2 ]; then\n        echo \"true\"\n        return\
+    \ 0\n    fi\n    while [ $i -lt $n ]; do\n        if [ $i -eq 0 ]; then\n    \
+    \        if [ ${a[$i]} -lt ${a[$i+1]} ]; then\n                incr=1\n      \
+    \      elif [ ${a[$i]} -gt ${a[$i+1]} ]; then\n                decr=1\n      \
+    \      fi\n        else\n            if [ $incr -eq 1 ]; then\n              \
+    \  if [ ${a[$i]} -lt ${a[$i-1]} ]; then\n                    res=1\n         \
+    \           break\n                fi\n            elif [ $decr -eq 1 ]; then\n\
+    \                if [ ${a[$i]} -gt ${a[$i-1]} ]; then\n                    res=1\n\
+    \                    break\n                fi\n            fi\n        fi\n \
+    \       i=$i+1\n    done\n    if [ $res -eq 1 ]; then\n        echo \"false\"\n\
+    \    else\n        echo \"true\"\n    fi", "    local list=\"$1\"\n    local direction=\"\
+    $(echo \"$list\" | awk '{print ($2>$1)?\"+\":\"-\"}')\"\n    local prev=\"$(echo\
+    \ \"$list\" | awk '{print $1}')\"\n    local curr\n    for curr in $list; do\n\
+    \        if [ \"$direction\" == \"+\" ]; then\n            if [ \"$curr\" -lt\
+    \ \"$prev\" ]; then\n                echo \"false\"\n                return\n\
+    \            fi\n        else\n            if [ \"$curr\" -gt \"$prev\" ]; then\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \    fi\n        prev=\"$curr\"\n    done\n    echo \"true\"", "    local -a arr=($1)\n\
+    \    local -a diffs\n    local -i i\n    local -i len=${#arr[@]}\n    local -i\
+    \ sign\n    local -i prev\n    local -i curr\n\n    if (( len < 2 )); then\n \
+    \       echo \"true\"\n        return\n    fi\n\n    for (( i=1; i<len; i++ ));\
+    \ do\n        diffs+=($(( arr[i] - arr[i-1] )))\n    done\n\n    sign=${diffs[0]}\n\
+    \    for (( i=1; i<len-1; i++ )); do\n        if (( sign * diffs[i] < 0 )); then\n\
+    \            echo \"false\"\n            return\n        fi\n    done\n\n    echo\
+    \ \"true\"", "  local list=\"$1\"\n  local prev=$(echo \"$list\" | head -n 1)\n\
+    \  local increasing=true\n  local decreasing=true\n  for i in $list; do\n    if\
+    \ [[ $i -lt $prev ]]; then\n      increasing=false\n    fi\n    if [[ $i -gt $prev\
+    \ ]]; then\n      decreasing=false\n    fi\n    prev=$i\n  done\n  if [[ $increasing\
+    \ == true || $decreasing == true ]]; then\n    echo \"true\"\n  else\n    echo\
+    \ \"false\"\n  fi", "    local list=\"$1\"\n    local increasing=true\n    local\
+    \ decreasing=true\n    local prev=0\n    for i in $list; do\n        if (( i <\
+    \ prev )); then\n            increasing=false\n        fi\n        if (( i > prev\
+    \ )); then\n            decreasing=false\n        fi\n        prev=$i\n    done\n\
+    \    if $increasing || $decreasing; then\n        echo \"true\"\n    else\n  \
+    \      echo \"false\"\n    fi", "    local list=\"$1\"\n    local prev=$(echo\
+    \ \"$list\" | head -n 1)\n    local curr\n    local increasing=true\n    local\
+    \ decreasing=true\n    for curr in $list; do\n        if [ \"$curr\" -lt \"$prev\"\
+    \ ]; then\n            increasing=false\n        fi\n        if [ \"$curr\" -gt\
+    \ \"$prev\" ]; then\n            decreasing=false\n        fi\n        prev=$curr\n\
+    \    done\n    if $increasing || $decreasing; then\n        echo \"true\"\n  \
+    \  else\n        echo \"false\"\n    fi", "    local list=\"$1\"\n    local incr=0\n\
+    \    local decr=0\n    local prev=0\n    local curr=0\n    for i in $list; do\n\
+    \        curr=$i\n        if [[ $curr -gt $prev ]]; then\n            incr=1\n\
+    \        elif [[ $curr -lt $prev ]]; then\n            decr=1\n        fi\n  \
+    \      if [[ $incr -eq 1 && $decr -eq 1 ]]; then\n            echo \"false\"\n\
+    \            return\n        fi\n        prev=$curr\n    done\n    echo \"true\"",
+  "    local -a list=($1)\n    local -a diffs\n    local i\n    for ((i=0; i<${#list[@]}-1;\
+    \ i++)); do\n        diffs[$i]=$((list[$i+1]-list[$i]))\n    done\n    local -a\
+    \ uniq_diffs=($(echo \"${diffs[@]}\" | tr ' ' '\\n' | sort -u | tr '\\n' ' '))\n\
+    \    if [[ ${#uniq_diffs[@]} -eq 1 ]]; then\n        echo \"true\"\n    else\n\
+    \        echo \"false\"\n    fi", "    local list=\"$1\"\n    local inc=0\n  \
+    \  local dec=0\n    local prev=0\n    for i in $list; do\n        if [ $i -gt\
+    \ $prev ]; then\n            inc=1\n        elif [ $i -lt $prev ]; then\n    \
+    \        dec=1\n        fi\n        prev=$i\n    done\n    [ $inc -eq 1 -a $dec\
+    \ -eq 0 ] && echo \"true\" || echo \"false\"", "    local list=($1)\n    local\
+    \ i=0\n    local j=1\n    local increasing=true\n    local decreasing=true\n \
+    \   while [ $j -lt ${#list[@]} ]; do\n        if [ ${list[$i]} -gt ${list[$j]}\
+    \ ]; then\n            increasing=false\n        fi\n        if [ ${list[$i]}\
+    \ -lt ${list[$j]} ]; then\n            decreasing=false\n        fi\n        i=$((i+1))\n\
+    \        j=$((j+1))\n    done\n    if [ $increasing = true ] || [ $decreasing\
+    \ = true ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n  \
+    \  fi", "    local list=\"$1\"\n    local inc=0\n    local dec=0\n    local prev=0\n\
+    \    local curr=0\n    for i in $list; do\n        curr=$i\n        if [ $prev\
+    \ -gt $curr ]; then\n            dec=1\n        elif [ $prev -lt $curr ]; then\n\
+    \            inc=1\n        fi\n        if [ $inc -eq 1 ] && [ $dec -eq 1 ]; then\n\
+    \            echo \"false\"\n            return\n        fi\n        prev=$curr\n\
+    \    done\n    echo \"true\"", "    local -a list=($1)\n    local -i i=0\n   \
+    \ local -i len=${#list[@]}\n    local -i incr=0\n    local -i decr=0\n    local\
+    \ -i curr=0\n    local -i next=0\n    local -i prev=0\n    local -i first=0\n\
+    \    local -i last=0\n    local -i diff=0\n    local -i abs=0\n    local -i sign=0\n\
+    \    local -i ret=0\n    local -i ret_val=0\n    local -i ret_sign=0\n    local\
+    \ -i ret_abs=0\n    local -i ret_diff=0\n    local -i ret_prev=0\n    local -i\
+    \ ret_next=0\n    local -i ret_first=0\n    local -i ret_last=0\n    local -i\
+    \ ret_len=0\n    local -i ret_incr=0\n    local -i ret_decr=0\n    local -i ret_curr=0\n\
+    \    local -i ret_i=0\n    local -i ret_i_plus_1=0\n    local -i ret_i_minus_1=0\n\
+    \    local -i ret_i_plus_2=0\n    local -i ret_i_minus_2=0\n    local -i ret_i_plus_3=0\n\
+    \    local -i ret_i_minus_3=0\n    local -i ret_i_plus_4=0\n    local -i ret_i_minus_4=0\n\
+    \    local -i ret_i_plus_5=0\n    local -i ret_i_minus_5=0\n    local -i ret_i_plus_6=0\n\
+    \    local -i ret_i_minus_6=0\n    local -i ret_i_plus_7=0\n    local -i ret_i_minus_7=0\n\
+    \    local -i ret_i_plus_8=0\n    local -i ret_i_minus_8=0\n    local -i ret_i_plus_9=0\n\
+    \    local -i ret_i_minus_9=0\n    local -i", "    local list=\"$1\"\n    local\
+    \ prev=0\n    local curr=0\n    local increasing=0\n    local decreasing=0\n \
+    \   for i in $list; do\n        curr=$i\n        if [ $curr -gt $prev ]; then\n\
+    \            increasing=1\n        elif [ $curr -lt $prev ]; then\n          \
+    \  decreasing=1\n        fi\n        if [ $increasing -eq 1 ] && [ $decreasing\
+    \ -eq 1 ]; then\n            echo \"false\"\n            return\n        fi\n\
+    \        prev=$curr\n    done\n    echo \"true\"", "    local list=\"$1\"\n  \
+    \  local inc=0\n    local dec=0\n    local prev=0\n    for i in $list; do\n  \
+    \      if [ $i -gt $prev ]; then\n            inc=1\n        elif [ $i -lt $prev\
+    \ ]; then\n            dec=1\n        fi\n        prev=$i\n    done\n    if [\
+    \ $inc -eq 1 -a $dec -eq 1 ]; then\n        echo \"false\"\n    else\n       \
+    \ echo \"true\"\n    fi", "    local -a list=($1)\n    local -i i\n    local -i\
+    \ len=${#list[@]}\n    local -i incr=0\n    local -i decr=0\n    local -i prev=${list[0]}\n\
+    \    for ((i=1; i<len; i++)); do\n        if [[ ${list[i]} -gt $prev ]]; then\n\
+    \            incr=1\n        elif [[ ${list[i]} -lt $prev ]]; then\n         \
+    \   decr=1\n        fi\n        if [[ $incr -eq 1 && $decr -eq 1 ]]; then\n  \
+    \          echo \"false\"\n            return\n        fi\n        prev=${list[i]}\n\
+    \    done\n    echo \"true\"", "    local list=\"$1\"\n    local prev=\n    local\
+    \ curr=\n    local direction=\n    for curr in $list; do\n        if [[ -n $prev\
+    \ ]]; then\n            if [[ -z $direction ]]; then\n                if [[ $prev\
+    \ -lt $curr ]]; then\n                    direction=increasing\n             \
+    \   elif [[ $prev -gt $curr ]]; then\n                    direction=decreasing\n\
+    \                fi\n            elif [[ $direction = increasing ]]; then\n  \
+    \              if [[ $prev -gt $curr ]]; then\n                    echo \"false\"\
+    \n                    return\n                fi\n            elif [[ $direction\
+    \ = decreasing ]]; then\n                if [[ $prev -lt $curr ]]; then\n    \
+    \                echo \"false\"\n                    return\n                fi\n\
+    \            fi\n        fi\n        prev=$curr\n    done\n    echo \"true\"",
+  "    local list=\"$1\"\n    local prev=$(echo \"$list\" | awk '{print $1}')\n  \
+    \  local prev_sign=0\n    local sign=0\n    local curr=0\n    local is_monotonic=true\n\
+    \    for curr in $list; do\n        if [ $prev -eq $curr ]; then\n           \
+    \ continue\n        fi\n        if [ $prev -lt $curr ]; then\n            sign=1\n\
+    \        else\n            sign=-1\n        fi\n        if [ $prev_sign -eq 0\
+    \ ]; then\n            prev_sign=$sign\n        elif [ $prev_sign -ne $sign ];\
+    \ then\n            is_monotonic=false\n            break\n        fi\n      \
+    \  prev=$curr\n    done\n    echo $is_monotonic", "    local list=\"$1\"\n   \
+    \ local -a arr=($list)\n    local -i i\n    local -i len=\"${#arr[@]}\"\n    local\
+    \ -i incr=0\n    local -i decr=0\n    for ((i=0; i<len-1; i++)); do\n        if\
+    \ [[ ${arr[i]} -lt ${arr[i+1]} ]]; then\n            incr=1\n        elif [[ ${arr[i]}\
+    \ -gt ${arr[i+1]} ]]; then\n            decr=1\n        fi\n    done\n    if [[\
+    \ $incr -eq 1 && $decr -eq 0 ]]; then\n        echo \"true\"\n    elif [[ $incr\
+    \ -eq 0 && $decr -eq 1 ]]; then\n        echo \"true\"\n    else\n        echo\
+    \ \"false\"\n    fi", "    local list=\"$1\"\n    local increasing=true\n    local\
+    \ decreasing=true\n    local prev=0\n    for i in $list; do\n        if [ $i -lt\
+    \ $prev ]; then\n            increasing=false\n        elif [ $i -gt $prev ];\
+    \ then\n            decreasing=false\n        fi\n        prev=$i\n    done\n\
+    \    if $increasing || $decreasing; then\n        echo \"true\"\n    else\n  \
+    \      echo \"false\"\n    fi"]
 stop_tokens:
 - "\n}"

@@ -11,6 +11,128 @@ tests: "}\n\ncandidate() {\n    rescale_to_unit \"$@\"\n}\n\nset -e\nrun_test() 
   \ 0.75 1.0\" ]]\n    [[ $(candidate \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0 0.5\
   \ 0.75\" ]]\n    [[ $(candidate \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0 1.0 0.5\
   \ 0.75\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local -a numbers=($1)\n    local min=${numbers[0]}\n    local max=${numbers[0]}\n\
+    \    for n in \"${numbers[@]}\"; do\n        if (( $(echo \"$n < $min\" | bc -l)\
+    \ )); then\n            min=$n\n        fi\n        if (( $(echo \"$n > $max\"\
+    \ | bc -l) )); then\n            max=$n\n        fi\n    done\n    for n in \"\
+    ${numbers[@]}\"; do\n        echo $(echo \"scale=2; ($n - $min) / ($max - $min)\"\
+    \ | bc -l)\n    done", "    local -a numbers=($1)\n    local min=${numbers[0]}\n\
+    \    local max=${numbers[0]}\n    for number in \"${numbers[@]}\"; do\n      \
+    \  if (( $(echo \"$number < $min\" | bc -l) )); then\n            min=$number\n\
+    \        fi\n        if (( $(echo \"$number > $max\" | bc -l) )); then\n     \
+    \       max=$number\n        fi\n    done\n    local range=$(echo \"$max - $min\"\
+    \ | bc -l)\n    local -a rescaled_numbers=()\n    for number in \"${numbers[@]}\"\
+    ; do\n        local rescaled_number=$(echo \"($number - $min) / $range\" | bc\
+    \ -l)\n        rescaled_numbers+=(\"$rescaled_number\")\n    done\n    echo \"\
+    ${rescaled_numbers[@]}\"", "  local -a numbers=($1)\n  local min=${numbers[0]}\n\
+    \  local max=${numbers[0]}\n  for i in \"${numbers[@]}\"; do\n    if (( $(echo\
+    \ \"$i < $min\" | bc -l) )); then\n      min=$i\n    fi\n    if (( $(echo \"$i\
+    \ > $max\" | bc -l) )); then\n      max=$i\n    fi\n  done\n  local range=$(echo\
+    \ \"$max - $min\" | bc -l)\n  local rescaled=()\n  for i in \"${numbers[@]}\"\
+    ; do\n    local rescaled_i=$(echo \"($i - $min) / $range\" | bc -l)\n    rescaled+=($rescaled_i)\n\
+    \  done\n  echo \"${rescaled[@]}\"", "    local -a numbers=($1)\n    local -a\
+    \ rescaled=()\n    local min=${numbers[0]}\n    local max=${numbers[0]}\n    for\
+    \ n in \"${numbers[@]}\"; do\n        if (( $(echo \"$n < $min\" | bc -l) ));\
+    \ then\n            min=$n\n        fi\n        if (( $(echo \"$n > $max\" | bc\
+    \ -l) )); then\n            max=$n\n        fi\n    done\n    for n in \"${numbers[@]}\"\
+    ; do\n        rescaled+=($(echo \"scale=2; ($n - $min) / ($max - $min)\" | bc\
+    \ -l))\n    done\n    echo \"${rescaled[@]}\"", "    local -a list=($1)\n    local\
+    \ min=${list[0]}\n    local max=${list[0]}\n    for i in \"${list[@]}\"; do\n\
+    \        if [[ $i -lt $min ]]; then\n            min=$i\n        fi\n        if\
+    \ [[ $i -gt $max ]]; then\n            max=$i\n        fi\n    done\n    local\
+    \ range=$(echo \"$max - $min\" | bc)\n    local -a rescaled=()\n    for i in \"\
+    ${list[@]}\"; do\n        local rescaled_i=$(echo \"($i - $min) / $range\" | bc\
+    \ -l)\n        rescaled+=($rescaled_i)\n    done\n    echo \"${rescaled[@]}\"",
+  "    local -a numbers=($1)\n    local -a rescaled\n    local min=${numbers[0]}\n\
+    \    local max=${numbers[0]}\n    local i\n    for i in \"${numbers[@]}\"; do\n\
+    \        if (( $(echo \"$i < $min\" | bc -l) )); then\n            min=$i\n  \
+    \      fi\n        if (( $(echo \"$i > $max\" | bc -l) )); then\n            max=$i\n\
+    \        fi\n    done\n    for i in \"${numbers[@]}\"; do\n        rescaled+=($(echo\
+    \ \"scale=2; ($i - $min) / ($max - $min)\" | bc -l))\n    done\n    echo \"${rescaled[@]}\"",
+  "    local -a arr\n    IFS=' ' read -r -a arr <<< \"$1\"\n    local min=${arr[0]}\n\
+    \    local max=${arr[0]}\n    for i in \"${arr[@]}\"; do\n        if (( $(echo\
+    \ \"$i < $min\" | bc -l) )); then\n            min=$i\n        fi\n        if\
+    \ (( $(echo \"$i > $max\" | bc -l) )); then\n            max=$i\n        fi\n\
+    \    done\n    local diff=$(echo \"$max - $min\" | bc -l)\n    local result=()\n\
+    \    for i in \"${arr[@]}\"; do\n        local scaled=$(echo \"($i - $min) / $diff\"\
+    \ | bc -l)\n        result+=(\"$scaled\")\n    done\n    echo \"${result[@]}\"",
+  "    local -a input=($1)\n    local -a output=()\n    local min=${input[0]}\n  \
+    \  local max=${input[0]}\n    local i=0\n    local n=${#input[@]}\n    for ((i=0;\
+    \ i<n; i++)); do\n        if (( $(echo \"${input[$i]} < $min\" | bc -l) )); then\n\
+    \            min=${input[$i]}\n        fi\n        if (( $(echo \"${input[$i]}\
+    \ > $max\" | bc -l) )); then\n            max=${input[$i]}\n        fi\n    done\n\
+    \    for ((i=0; i<n; i++)); do\n        output[$i]=$(echo \"scale=2; (${input[$i]}\
+    \ - $min) / ($max - $min)\" | bc -l)\n    done\n    echo \"${output[@]}\"", " \
+    \   local min=$(echo \"$1\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$1\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max\
+    \ - $min\" | bc)\n    echo \"$1\" | tr ' ' '\\n' | while read x\n    do\n    \
+    \    echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\n    done", "    local\
+    \ -a list=($1)\n    local min=${list[0]}\n    local max=${list[0]}\n    for i\
+    \ in \"${list[@]}\"; do\n        if (( $(echo \"$i < $min\" | bc -l) )); then\n\
+    \            min=$i\n        fi\n        if (( $(echo \"$i > $max\" | bc -l) ));\
+    \ then\n            max=$i\n        fi\n    done\n    local range=$(echo \"$max\
+    \ - $min\" | bc -l)\n    local -a rescaled=()\n    for i in \"${list[@]}\"; do\n\
+    \        rescaled+=($(echo \"($i - $min) / $range\" | bc -l))\n    done\n    echo\
+    \ \"${rescaled[@]}\"", "  local -a numbers=($1)\n  local min=${numbers[0]}\n \
+    \ local max=${numbers[0]}\n  for number in ${numbers[@]}; do\n    if (( $(echo\
+    \ \"$number < $min\" | bc -l) )); then\n      min=$number\n    fi\n    if (( $(echo\
+    \ \"$number > $max\" | bc -l) )); then\n      max=$number\n    fi\n  done\n  local\
+    \ range=$(echo \"$max - $min\" | bc -l)\n  for number in ${numbers[@]}; do\n \
+    \   echo -n \"\\\"$(echo \"($number - $min) / $range\" | bc -l)\\\" \"\n  done",
+  "  local input_list=$1\n  local min=$(echo \"$input_list\" | tr ' ' '\\n' | sort\
+    \ -n | head -n 1)\n  local max=$(echo \"$input_list\" | tr ' ' '\\n' | sort -n\
+    \ | tail -n 1)\n  local range=$(echo \"$max - $min\" | bc)\n  local output_list=$(echo\
+    \ \"$input_list\" | tr ' ' '\\n' | while read x; do echo \"$(echo \"($x - $min)\
+    \ / $range\" | bc)\"; done)\n  echo \"$output_list\"", "    local min=$(echo \"\
+    $1\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$1\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    echo \"$1\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"($x\
+    \ - $min) / $range\" | bc -l)\"\n    done | tr '\\n' ' '", "    local -a numbers=($1)\n\
+    \    local min=${numbers[0]}\n    local max=${numbers[0]}\n    for n in ${numbers[@]};\
+    \ do\n        if (( $(echo \"$n < $min\" | bc -l) )); then\n            min=$n\n\
+    \        fi\n        if (( $(echo \"$n > $max\" | bc -l) )); then\n          \
+    \  max=$n\n        fi\n    done\n    local range=$(echo \"$max - $min\" | bc -l)\n\
+    \    for n in ${numbers[@]}; do\n        echo $(echo \"($n - $min) / $range\"\
+    \ | bc -l)\n    done", "  local numbers=($1)\n  local min=${numbers[0]}\n  local\
+    \ max=${numbers[0]}\n  for number in ${numbers[@]}; do\n    if (( $(echo \"$number\
+    \ < $min\" | bc -l) )); then\n      min=$number\n    fi\n    if (( $(echo \"$number\
+    \ > $max\" | bc -l) )); then\n      max=$number\n    fi\n  done\n  local range=$(echo\
+    \ \"$max - $min\" | bc -l)\n  local result=()\n  for number in ${numbers[@]};\
+    \ do\n    local rescaled=$(echo \"($number - $min) / $range\" | bc -l)\n    result+=(\"\
+    $rescaled\")\n  done\n  echo \"${result[@]}\"", "    local numbers=($1)\n    local\
+    \ min=${numbers[0]}\n    local max=${numbers[0]}\n    for number in \"${numbers[@]}\"\
+    ; do\n        if (( $(echo \"$number < $min\" | bc -l) )); then\n            min=$number\n\
+    \        fi\n        if (( $(echo \"$number > $max\" | bc -l) )); then\n     \
+    \       max=$number\n        fi\n    done\n    local range=$(echo \"$max - $min\"\
+    \ | bc -l)\n    local rescaled_numbers=()\n    for number in \"${numbers[@]}\"\
+    ; do\n        local rescaled_number=$(echo \"($number - $min) / $range\" | bc\
+    \ -l)\n        rescaled_numbers+=($rescaled_number)\n    done\n    echo \"${rescaled_numbers[@]}\"",
+  "    local -a numbers=($1)\n    local min=${numbers[0]}\n    local max=${numbers[0]}\n\
+    \    for number in \"${numbers[@]}\"; do\n        if [[ $number < $min ]]; then\n\
+    \            min=$number\n        fi\n        if [[ $number > $max ]]; then\n\
+    \            max=$number\n        fi\n    done\n    local range=$(echo \"$max\
+    \ - $min\" | bc)\n    local -a rescaled=()\n    for number in \"${numbers[@]}\"\
+    ; do\n        local rescaled_number=$(echo \"($number - $min) / $range\" | bc\
+    \ -l)\n        rescaled+=($rescaled_number)\n    done\n    echo \"${rescaled[@]}\"",
+  "  local -a numbers=($1)\n  local -a rescaled_numbers=()\n  local max=${numbers[0]}\n\
+    \  local min=${numbers[0]}\n  for number in \"${numbers[@]}\"; do\n    if (( $(echo\
+    \ \"$number > $max\" | bc -l) )); then\n      max=$number\n    fi\n    if (( $(echo\
+    \ \"$number < $min\" | bc -l) )); then\n      min=$number\n    fi\n  done\n  for\
+    \ number in \"${numbers[@]}\"; do\n    rescaled_numbers+=($(echo \"scale=2; ($number\
+    \ - $min) / ($max - $min)\" | bc -l))\n  done\n  echo \"${rescaled_numbers[@]}\"",
+  "    local -a list=($1)\n    local min=${list[0]}\n    local max=${list[0]}\n  \
+    \  for i in \"${list[@]}\"; do\n        if (( $(echo \"$i < $min\" | bc -l) ));\
+    \ then\n            min=$i\n        fi\n        if (( $(echo \"$i > $max\" | bc\
+    \ -l) )); then\n            max=$i\n        fi\n    done\n    local range=$(echo\
+    \ \"$max - $min\" | bc -l)\n    local -a rescaled=()\n    for i in \"${list[@]}\"\
+    ; do\n        rescaled+=($(echo \"($i - $min) / $range\" | bc -l))\n    done\n\
+    \    echo \"${rescaled[@]}\"", "    local -a numbers=($1)\n    local min=${numbers[0]}\n\
+    \    local max=${numbers[0]}\n    for number in \"${numbers[@]}\"; do\n      \
+    \  if (( $(echo \"$number < $min\" | bc -l) )); then\n            min=$number\n\
+    \        fi\n        if (( $(echo \"$number > $max\" | bc -l) )); then\n     \
+    \       max=$number\n        fi\n    done\n    local range=$(echo \"$max - $min\"\
+    \ | bc -l)\n    local result=\"\"\n    for number in \"${numbers[@]}\"; do\n \
+    \       local rescaled=$(echo \"($number - $min) / $range\" | bc -l)\n       \
+    \ result=\"$result \\\"$rescaled\\\"\"\n    done\n    echo \"[$result]\""]
 stop_tokens:
 - "\n}"
