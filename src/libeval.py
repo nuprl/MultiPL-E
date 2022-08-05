@@ -21,11 +21,6 @@ def run_without_exn(args: List[str]):
         stderr = exc.stderr
         exit_code = -1
         status = "Timeout"
-    except subprocess.CalledProcessError as exc:
-        stdout = exc.stdout
-        stderr = exc.stderr
-        exit_code = exc.returncode
-        status = "Exception"
 
     if stdout is None:
         stdout = b""
