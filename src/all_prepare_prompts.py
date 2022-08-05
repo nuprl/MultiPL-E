@@ -46,10 +46,12 @@ def prepare(lang, model, temp, variation):
         print(result.stdout[:1024])
 
 if __name__ == "__main__":
-    for lang in LANGS:
+    for temp in TEMPS:
+      for lang in LANGS:
         for model in MODELS:
-            for temp in TEMPS:
-                for variation in VARIATION:
-                    if temp == "0.2" and variation != "reworded":  
-                        continue
-                    prepare(lang, model, temp, variation)
+          for variation in VARIATION:
+            if temp == "0.8" and variation != "reworded":  
+              continue
+            if variation == "remove":
+              continue
+            prepare(lang, model, temp, variation)
