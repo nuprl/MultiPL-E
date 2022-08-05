@@ -41,6 +41,7 @@ enum Command {
     CheckPromptCompleteness(CheckPromptCompleteness),
     CheckResultCompleteness,
     CountDuplicatePrograms,
+    SummarizeCompleteness,
 }
 
 fn is_completions_yaml(p: &DirEntry) -> bool {
@@ -160,6 +161,88 @@ fn generate_prompts(model: &str, min_prompts_per_problem: usize, max_samples: us
         }
     }
 }
+
+fn process_file_for_summary(path: &std::path::Path) -> Result<(usize, usize, usize, usize), Box<dyn std::error::Error>> {
+    let contents = std::fs::read_to_string(path)?;
+    let problem_file: ProblemFile = serde_yaml::from_str(&contents)?;
+    let num_completions = problem_file.completions.len();
+    let completions_for_20 = num_completions.min(20);
+    let completions_for_200 = num_completions.min(200); // would be an oopsie
+    let results_file_path = path.with_extension("results.yaml");
+    if results_file_path.is_file() == false {
+        return Ok((completions_for_20, completions_for_200, 0, 0));
+    }
+    let results_contents = std::fs::read_to_string(results_file_path)?;
+    let results_file: ResultsFile = serde_yaml::from_str(&results_contents)?;
+    let num_results = results_file.results.len();
+    return Ok((completions_for_20, completions_for_200, num_results.min(20), num_results.min(200)));
+
+}
+
+fn summarize_completeness() {
+    println!("Temperature,Variation,Model,Language,Prepared Files,Completions Done (20),Completions Done (200),Results Done (20),Results Done (200)");
+    for temp in TEMPS {
+        for variation in VARIATIONS {
+            for lang in LANGS {
+                for model in MODELS {
+                    let experiment_dir = format!("../experiments/{}-{}-{}-{}", lang, model, temp, variation);
+                    match std::fs::read_dir(&experiment_dir) {
+                        Err(_) => {
+                            println!("{},{},{},{},0,0%,0%,0%", temp, variation, model, lang);
+                        }
+                        Ok(entries) => {
+
+                            // Count the number of .yaml files (not .results.yaml files). This is
+                            // the number of "Prepared Files".
+                            // Count the total number of completions in each .yaml file.
+                            // - For each file, bound to 20 and divide by 20. The mean value is
+                            //   "Completions Done (20)".
+                            // - For each file, divide by 200. The mean value is
+                            //   "Completions Done (200)".
+                            // Count the total number of results in each .results.yaml file.
+                            // - For each file, bound to 20 and divide by 20. The mean value is
+                            //   "Results Done (20)".
+                            // - For each file, divide by 200. The mean value is
+                            //   "Results Done (200)".
+                            // However, note that .results.yaml may be missing. If so, we still
+                            // count it as a result file for each of the Results Done counts.
+                            
+                            // Counts the number of .yaml files (not .results.yaml files)
+                            let mut num_prepared_files = 0;
+
+                            let mut completions_for_20 = 0;
+                            let mut completions_for_200 = 0;
+                            let mut results_for_20 = 0;
+                            let mut results_for_200 = 0;
+
+                            for entry in entries.into_iter().filter_map(|entry| entry.ok()) {
+                                if entry.file_name().to_str().unwrap().ends_with(".results.yaml") {
+                                    continue;
+                                }
+                                num_prepared_files += 1;
+
+                                if let Ok((c20, c200, r20, r200)) = process_file_for_summary(&entry.path()) {
+                                    completions_for_20 += c20;
+                                    completions_for_200 += c200;
+                                    results_for_20 += r20;
+                                    results_for_200 += r200;
+                                }
+                            }
+
+                            let completions_done_20 = completions_for_20 as f64 / (num_prepared_files as f64 * 20.0);
+                            let completions_done_200 = completions_for_200 as f64 / (num_prepared_files as f64 * 200.0);
+                            let results_done_20 = results_for_20 as f64 / (num_prepared_files as f64 * 20.0);
+                            let results_done_200 = results_for_200 as f64 / (num_prepared_files as f64 * 200.0);
+                            println!("{},{},{},{},{},{:.2},{:.2},{:.2},{:.2}", temp, variation, model, lang, num_prepared_files, completions_done_20, completions_done_200, results_done_20, results_done_200);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 fn main() {
     let matches = Command::parse();
     match matches {
@@ -172,6 +255,7 @@ fn main() {
         Command::CheckResultCompleteness => {
             check_result_completeness();
         }
-        Command::CountDuplicatePrograms => count_duplicate_programs()
+        Command::CountDuplicatePrograms => count_duplicate_programs(),
+        Command::SummarizeCompleteness => summarize_completeness(),
     }
 }
