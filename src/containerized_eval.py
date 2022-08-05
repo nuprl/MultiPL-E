@@ -54,7 +54,10 @@ EVALUATORS = {
 
 def eval_script(problem, index):
     program = problem.prompt + problem.completions[index] + '\n' + problem.tests
-    (eval_script, file_ext) = EVALUATORS[problem.language]
+    eval_string_script(problem.language, program)
+
+def eval_string_script(language, program):
+    (eval_script, file_ext) = EVALUATORS[language]
     with tempfile.NamedTemporaryFile(suffix=file_ext, delete=True) as f:
         f.write(program.encode("utf-8"))
         f.flush()
@@ -63,6 +66,12 @@ def eval_script(problem, index):
         # output is very likely an exceptionally long stack trace or a long
         # series of prints.
         #TODO(molly, arjun): make this eyesore not an eyesore
+        if type(result["stdout"]) == bytes:
+            result["stdout"] = result["stdout"].decode("utf-8", errors="ignore")
+        if type(result["stderr"]) == bytes:
+            result["stderr"] = result["stderr"].decode("utf-8", errors="ignore")
+        assert type(result["stdout"]) == str
+        assert type(result["stderr"]) == str
         return {
             "program": program,
             "stdout": result['stdout'].replace("!!int", "")[:2048],
