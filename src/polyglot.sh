@@ -25,10 +25,10 @@ elif [ $USER == "l.phipps-costin" ]; then
 elif [ $USER == "zi.ya" ]; then
   eval `spack load --sh lua dmd`
 else
-  echo "Unkown user account: $USER"
+  echo "Unknown user account: $USER"
 fi
 
 LUA_PATH="${PWD}/luaunit.lua"
-echo "jobs[$SLURM_ARRAY_TASK_ID]"
-python3 problem_evaluator.py --job-file jobs --job-file-line $SLURM_ARRAY_TASK_ID --max-workers 23
+echo "$LIST_FILES[$SLURM_ARRAY_TASK_ID]"
+python3 problem_evaluator.py --job-file $LIST_FILES --job-file-line $SLURM_ARRAY_TASK_ID --max-workers 23
 
