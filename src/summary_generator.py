@@ -51,6 +51,7 @@ def makeSummary(dir, lang, model, temp, doc, term, printToShell=False, writeToFi
     for problem_yaml_path in sorted(dir.glob("*.results.yaml")):
         with problem_yaml_path.open() as f:
             test_results = yaml.safe_load(f)
+            print(problem_yaml_path)
             #TODO (molly): these need to factor out "OtherError" for different types for error analysis stage
             counts = {"OK": 0, "OtherError": 0, "Exception": 0}
             results = test_results['results']
