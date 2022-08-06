@@ -7,17 +7,17 @@ def eval_script(path: Path):
     try: 
         # Assumes exit-code 0 is all okay
         # Run racket on the file, capturing stderr
-        compiled = subprocess.run(" ".join(["tsc", str(path)]), shell=True, capture_output=True, timeout=15)
+        compiled = subprocess.run(["tsc", str(path)], capture_output=True, timeout=15)
         if compiled.returncode == 0:
             pass
         else:
             return {
             "status": "CompileError",
             "exit_code": compiled.returncode,
-            "stdout": str(compiled.stdout),
-            "stderr": str(compiled.stderr),
+            "stdout": compiled.stdout,
+            "stderr": compiled.stderr,
                 }
-        output = subprocess.run(" ".join(["node", str(path).replace('.ts','.js')]), shell=True, capture_output=True, timeout=5)
+        output = subprocess.run(["node", str(path).replace('.ts','.js')], cwd=path.parent, capture_output=True, timeout=15)
         
         if output.returncode == 0:
             status = "OK"
@@ -43,8 +43,8 @@ def eval_script(path: Path):
     return {
             "status": status,
             "exit_code": returncode,
-            "stdout": str(output.stdout),
-            "stderr": str(output.stderr),
+            "stdout": output.stdout,
+            "stderr": output.stderr,
                 }
 
 

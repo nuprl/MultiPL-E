@@ -20,7 +20,7 @@ def eval_script(path: Path):
         #Each Scala file contains the class with same name `JAVA_CLASS_NAME`
         #Hence, scalac will same JAVA_CLASS_NAME.class file for each problem
         #Write class for each problem to a different temp dir
-        build = subprocess.run(["scalac", "-d", outdir, path], capture_output=True)
+        build = subprocess.run(["scalac", "-d", outdir, path], capture_output=True, encoding="utf-8")
         status = None
         returncode = -1
         output = None
@@ -31,13 +31,11 @@ def eval_script(path: Path):
             status = "SyntaxError"
             returncode = build.returncode
             output = build
-            print(output.stderr)
         else:
             try:
-                # Assumes exit-code 0 is all okay
-                output = subprocess.run(["scala", "-cp", f"{outdir}", exec_name], capture_output=True, timeout=5)
+                output = subprocess.run(["scala", "-cp", f"{outdir}", exec_name], capture_output=True, timeout=5, encoding="utf-8")
                 returncode = output.returncode
-                if output.returncode == 0:
+                if output.returncode == 0 and output.stderr == "":
                     status = "OK"
                 else:
                     # Well, it's a panic
@@ -46,14 +44,9 @@ def eval_script(path: Path):
                 status = "Timeout"
                 output = exc
 
-        if output.stdout is not None:
-            output.stdout = output.stdout.decode("utf-8")
-        else:
+        if output.stdout is None:
             output.stdout = "None"
-
-        if output.stderr is not None:
-            output.stderr = output.stderr.decode("utf-8")
-        else:
+        if output.stderr is None:
             output.stderr = "None"
         return {
             "status": status,
