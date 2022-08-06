@@ -4,9 +4,8 @@ Written by Molly Q Feldman, based on code from Arjun Guha
 Given a *.results.yaml file, calculates the summary statistics for model success.
 '''
 import argparse
-import os
 from pathlib import Path
-from problem_yaml import TestResults
+import yaml
 
 def getDir():
 
@@ -51,14 +50,14 @@ def makeSummary(dir, lang, model, temp, doc, term, printToShell=False, writeToFi
 
     for problem_yaml_path in sorted(dir.glob("*.results.yaml")):
         with problem_yaml_path.open() as f:
-            testResults = TestResults.load(f)
+            test_results = yaml.safe_load(f)
             #TODO (molly): these need to factor out "OtherError" for different types for error analysis stage
             counts = {"OK": 0, "OtherError": 0, "Exception": 0}
-            results = testResults.results
+            results = test_results['results']
             for res in results: #res is not a single instance, count it's status
-                if res.status == 'OK':
+                if res['status'] == 'OK':
                     counts["OK"] += 1
-                elif res.status == 'Exception':
+                elif res['status'] == 'Exception':
                     counts['Exception'] += 1
                 else:
                     counts["OtherError"] += 1
@@ -67,11 +66,11 @@ def makeSummary(dir, lang, model, temp, doc, term, printToShell=False, writeToFi
             #         print(f'{testResults.name} only has {sum(counts.values())} completions - aborting.')
             #         return False
             if printToShell:
-                print(f'For the 200 attempts at {testResults.name}, we get the following results:')
+                print(f"For the 200 attempts at {test_results['name']}, we get the following results:")
                 print(f"{counts['OK']} Success, {counts['OtherError']} OtherError, {counts['Exception']} Exception")
             if writeToFile:
                 with open(results_file, "a") as wrf:
-                    countString = f"{testResults.name},{counts['OK']},{counts['OtherError']},{counts['Exception']}\n"
+                    countString = f"{test_results['name']},{counts['OK']},{counts['OtherError']},{counts['Exception']}\n"
                     wrf.write(countString)
         if counts["OK"] > 0:
             overallOK += 1
@@ -84,5 +83,11 @@ def makeSummary(dir, lang, model, temp, doc, term, printToShell=False, writeToFi
         
 if __name__ == "__main__":
     direct = getDir()
-    makeSummary(direct)
+    #test parameters
+    lang = 'py'
+    model = 'davinci'
+    temp = '0.2'
+    doc = 'remove'
+    term = 'keep'
+    makeSummary(direct, lang, model, temp, doc, term)
             
