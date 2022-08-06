@@ -2,11 +2,14 @@
 #SBATCH --mem=48G
 #SBATCH --export=ALL
 #SBATCH --cpus-per-task=24
-#SBATCH --time=0:05:00
+#SBATCH --time=0:30:00
 #SBATCH --job-name=polyglot-eval
 #SBATCH --partition=express
 #SBATCH --exclusive
-module load R oracle_java julia
+source ~/.bashrc
+module load R
+conda activate polyglot
+PATH=/home/a.guha/scala/bin:$PATH
 
 LIST_FILES=files.txt
 
@@ -15,7 +18,7 @@ if [ $# -eq 1 ]; then
 fi
 
 if [ $USER == "a.guha" ]; then
-  eval `spack load --sh php lua racket`
+  echo "I am $USER"
 elif [ $USER == "l.phipps-costin" ]; then
   module load nodejs
   export NODE_PATH=../node_modules
@@ -26,7 +29,6 @@ else
 fi
 
 LUA_PATH="${PWD}/luaunit.lua"
-FILE=`sed -n ${SLURM_ARRAY_TASK_ID}p $LIST_FILES`
-echo $FILE
-python3 problem_evaluator.py --target $FILE --max-workers 24
+echo "jobs[$SLURM_ARRAY_TASK_ID]"
+python3 problem_evaluator.py --job-file jobs --job-file-line $SLURM_ARRAY_TASK_ID --max-workers 23
 

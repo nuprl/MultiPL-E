@@ -35,12 +35,9 @@ def eval_script(path: str):
         status = "SyntaxError"
         returncode = build.returncode
         output = build
-        print(output.stdout)
-        print(output.stderr)
     else:
         try:
-            # Assumes exit-code 0 is all okay
-            output = subprocess.run(["mono", binaryname], env={"MONO_TRACE_LISTENER":"Console.Error"}, capture_output=True, timeout=5)
+            output = subprocess.run(["mono", binaryname], env={"PATH": os.getenv("PATH"), "MONO_TRACE_LISTENER":"Console.Error"}, capture_output=True, timeout=5)
             returncode = output.returncode
             output.stderr = str(output.stderr, "utf-8")
             #mono return 0 even when failing

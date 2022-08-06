@@ -7,7 +7,7 @@ def eval_script(path: Path):
     try: 
         # Assumes exit-code 0 is all okay
         # Run R on the file, capturing stderr
-        output = subprocess.run(" ".join(["Rscript", str(path)]), shell=True, capture_output=True, timeout=5)
+        output = subprocess.run(["Rscript", str(path)], capture_output=True, timeout=5)
         if output.returncode == 0:
             status = "OK"
         else:
