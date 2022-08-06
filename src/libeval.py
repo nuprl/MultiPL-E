@@ -1,6 +1,9 @@
-# Authored by Arjun Guha
 import subprocess
 from typing import List
+import generic_eval
+
+def testing_mail(x, y, z):
+    generic_eval.gmain(x, y, z)
 
 def run_without_exn(args: List[str]):
     """
