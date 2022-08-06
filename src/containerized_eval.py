@@ -57,7 +57,12 @@ def eval_script(problem, index):
     eval_string_script(problem.language, program)
 
 def eval_string_script(language, program):
-    (eval_script, file_ext) = EVALUATORS[language]
+    if language in EVALUATORS:
+        (eval_script, file_ext) = EVALUATORS[language]
+    else:
+        eval_module = __import__(f"eval_{language}")
+        eval_script = eval_module.eval_script
+        file_ext = f".{language}"
     with tempfile.NamedTemporaryFile(suffix=file_ext, delete=True) as f:
         f.write(program.encode("utf-8"))
         f.flush()
@@ -68,6 +73,10 @@ def eval_string_script(language, program):
         #TODO(molly, arjun): make this eyesore not an eyesore
         if type(result["stdout"]) == bytes:
             result["stdout"] = result["stdout"].decode("utf-8", errors="ignore")
+        if result["stdout"] is None:
+            result["stdout"] = ""
+        if result["stderr"] is None:
+            result["stderr"] = ""
         if type(result["stderr"]) == bytes:
             result["stderr"] = result["stderr"].decode("utf-8", errors="ignore")
         assert type(result["stdout"]) == str
