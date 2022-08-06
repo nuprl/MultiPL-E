@@ -92,7 +92,7 @@ def evaluate_functional_correctness(
     temp: str,
     doc: str,
     term: str,
-    k: List[int] = [1, 10]#, 100]  
+    k: List[int] = [1, 10, 100]  
 ):
     """
     Evaluates the functional correctness of generated samples, and writes

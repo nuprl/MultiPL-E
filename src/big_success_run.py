@@ -10,9 +10,9 @@ from calculate_all_pass import evaluate_functional_correctness
 from pathlib import Path
 from csv import reader
 
-LANG = ["py", "js", "ts", "java", "d", "r", "rs", "jl", "sh", "cs", \
-          "go", "lua", "pl", "php", "rb",  "scala", "swift"] #CANNOT RUN "cpp", "rkt"]
-MODEL = [ "incoder", "davinci" ]
+LANG = ["py","ts", "js", "java", "d", "rs", "jl", "sh", "cs", \
+          "go", "lua", "pl", "php", "rb",  "scala", "swift", "r", "rkt", 'cpp']
+MODEL = ["davinci", "incoder"]
 TEMP = [ "0.2"] # come back to this
 
 ENDINGMAP = {'reworded': ['transform', 'transform'], 'keep': ['keep', 'keep'], \
