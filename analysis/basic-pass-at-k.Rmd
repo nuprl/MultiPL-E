@@ -8,6 +8,7 @@ date: "2022-08-06"
 knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(tidyverse)
+library(lme4)
 ```
 
 ## Basic Pass at K Calculation
@@ -42,6 +43,22 @@ per_problem <- merge(per_problem,frequency_map)
 per_problem$rate1 <- as.numeric(per_problem$rate1)
 per_problem$rate10 <- as.numeric(per_problem$rate10)
 per_problem$rate100 <- as.numeric(per_problem$rate100)
+per_problem$PROB <- sub('([^_]*_[^_]*)_\\w+', '\\1', per_problem$PROBLEM)
+```
+
+```{r}
+problem_class <- read_csv("../analysis/problem_classification.csv")
+problem_class <- subset(problem_class,select=-c(Original,Notes))
+```
+
+```{r}
+per_problem_new <- merge(per_problem,problem_class, all=TRUE)
+per_problem_new <- per_problem_new %>% mutate(class = ifelse(List+Array+Tuple+Dictionary+Bool>1,'multiple',
+                                                             ifelse(List==1|Array==1,"list",
+                                                                    ifelse(Tuple==1,"tuple",
+                                                                           ifelse(Dictionary==1,'dictionary',
+                                                                                  ifelse(Bool==1,"bool",
+                                                                                         'basic'))))))
 ```
 
 ```{r load-at-10}
@@ -96,7 +113,7 @@ ggplot(subset(pass_at_1,PL=="py"),aes(x=EXPT,y=RES,fill=MODEL)) + geom_col(posit
 Plot pass at 1 by model, expt=KEEP KEEP, languages by frequency
  
 ```{r}
-pl_labs <- c(`cpp` = "C++", `java` = "Java", `js` = "JavaScript", `py` = "Python",`pl` = "Perl", `r` = "R", `rs` = "Rust", `scala` = "Scala",`swift` = "Swift", `cs` = "C#", `php` = "PHP", `rb` = "Ruby",`d` = "D", `jl` = "Julia", `lua` = "Lua", `rkt` = "Racket", `ts` = "TypeScript")
+pl_labs <- c(`py` = "Python",`cpp` = "C++", `java` = "Java", `js` = "JavaScript", `pl` = "Perl", `r` = "R", `rs` = "Rust", `scala` = "Scala",`swift` = "Swift", `cs` = "C#", `php` = "PHP", `rb` = "Ruby",`d` = "D", `jl` = "Julia", `lua` = "Lua", `rkt` = "Racket", `ts` = "TypeScript")
 pass_at_1$FREQ <- factor(pass_at_1$FREQ,levels = c("High","Medium","Low","Niche"))
 ggplot(subset(pass_at_1,EXPT=='transform_transform'),aes(x=PL,y=RES,fill=MODEL)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~FREQ, nrow = 4,scales = "free_x") + ylab("Pass@1 rates") + theme(text=element_text(size=16))
 ggsave("lang_freq_pass1_reworded.pdf")
@@ -110,6 +127,17 @@ all_pass <- all_pass %>% mutate(MODEL_K = paste0(MODEL,'_',K))
 all_pass$MODEL_K <- factor(all_pass$MODEL_K,levels = c("davinci_1","davinci_10","davinci_100","incoder_1","incoder_10","incoder_100"))
 ggplot(all_pass, aes(x=PL,y=RES,fill=MODEL_K)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~EXPT, nrow = 4) + scale_fill_manual(name = "Model", values=c("#DC267F", "#FE6100", "#FFB000","#000000","#0072B2","#56B4E9"),labels=c('Codex k=1', 'Codex k=10','Codex k=100','InCoder k=1', 'InCoder k=10','InCoder k=100')) + ylab("Average pass rate")+ theme(text=element_text(size=16))
 ggsave("all_models_temps.pdf")
+```
+
+Plot pass at 1 for all experiments, models, and languages
+
+
+```{r}
+expt_labs <- c(`keep_keep` = "Original",`transform_keep` = "Translate Doctests", `transform_transform` = "Transform Doctests and Text",`remove_keep` = "Remove Doctests")
+m_labs <- c("davinci"="Codex","incoder"="InCoder")
+all_pass$EXPT <- factor(all_pass$EXPT,levels = c("keep_keep","transform_keep","transform_transform","remove_keep"))
+ggplot(subset(all_pass,K==1), aes(x=PL,y=RES,fill=EXPT)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~MODEL, nrow = 2,labeller=as_labeller(m_labs)) + scale_fill_manual(name = "Experiment", values=c("#DC267F", "#FFB000","#0072B2","#56B4E9"), labels=expt_labs) + ylab("Average pass rate")+ theme(text=element_text(size=16),axis.text.x = element_text(angle = 90, hjust=1),legend.position="bottom") +guides(fill=guide_legend(nrow=2,byrow=TRUE))
+ggsave("all_expts_pass1.pdf")
 ```
 
 Plot all passes, by model and language for TRANSFORM TRANSFORM
@@ -136,6 +164,25 @@ ggplot(data=na.omit(s), aes(x=PL,y=rate1)) + geom_violin() + geom_jitter(height 
 ggplot(data=na.omit(s), aes(x=factor(PROBLEM),y=rate1)) + geom_jitter(height = 0, width = 0.1)
 ```
 
+## By language feature analysis
+
+```{r}
+pl_order <- c("py","cpp", "java", "js", "pl", "r", "rs", "scala","swift", "cs", "php", "rb","d", "jl", "lua", "rkt", "ts")
+
+per_problem_new$PL <- factor(per_problem_new$PL,levels = pl_order)
+
+class_labs <- c(`basic` = "None", `bool` = "Booleans", `dictionary` = "Dictionaries", `list` = "Lists or Arrays",`multiple` = "Multiple", `tuple` = "Tuples")
+
+mean.by.language.type <- per_problem_new %>%
+  group_by(PL,class) %>% 
+    summarize( meanRate1 = mean(rate1))
+
+mean.by.language.type$PL <- factor(mean.by.language.type$PL,levels = pl_order)
+
+ggplot(data=na.omit(mean.by.language.type), aes(x=PL,y=meanRate1,fill=class,color=PL=="py")) + geom_col(position="dodge", show.legend = FALSE) + facet_wrap(~class, nrow = 6,labeller=as_labeller(class_labs)) + scale_x_discrete(name ="Language", labels=pl_labs)+ ylab("Average pass@1 rate")  + theme(text=element_text(size=16),axis.text.x = element_text(angle = 90, hjust=1)) +  scale_color_manual(name = "Python", values=c("white","black")) +  geom_vline(xintercept=c(0,1.5),linetype="dotted")
+ggsave("reworded_davinci_lang_features_pass1.pdf",height=3,width=12)
+```
+
 
 ## Do Some High Level Stats 
 
@@ -143,3 +190,14 @@ ggplot(data=na.omit(s), aes(x=factor(PROBLEM),y=rate1)) + geom_jitter(height = 0
 category_data <- dplyr::left_join(davinci_only, frequency_map)
 ```
 
+## Mixed effects modeling
+
+```{r}
+mm.data <- per_problem_new
+mm.data$PROB <- factor(mm.data$PROB)
+```
+
+```{r}
+codex.lang.model <- glmer(rate1 ~ PL + (1+PL||PROB), data=subset(per_problem_new,MODEL=="davinci"),control=glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=1e7),calc.derivs = FALSE))
+summary(codex.lang.model)
+```
