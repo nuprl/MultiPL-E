@@ -39,8 +39,8 @@ def eval_script(path: Path):
     return {
         "status": status,
         "exit_code": returncode,
-        "stdout": str(out),
-        "stderr": str(error),
+        "stdout": out,
+        "stderr": error
     }
 
 if __name__ == "__main__":
