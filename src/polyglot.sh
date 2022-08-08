@@ -17,17 +17,6 @@ if [ $# -eq 1 ]; then
   LIST_FILES=$1
 fi
 
-if [ $USER == "a.guha" ]; then
-  echo "I am $USER"
-elif [ $USER == "l.phipps-costin" ]; then
-  module load nodejs
-  export NODE_PATH=../node_modules
-elif [ $USER == "zi.ya" ]; then
-  eval `spack load --sh lua dmd`
-else
-  echo "Unknown user account: $USER"
-fi
-
 LUA_PATH="${PWD}/luaunit.lua"
 echo "$LIST_FILES[$SLURM_ARRAY_TASK_ID]"
 python3 problem_evaluator.py --job-file $LIST_FILES --job-file-line $SLURM_ARRAY_TASK_ID --max-workers 23
