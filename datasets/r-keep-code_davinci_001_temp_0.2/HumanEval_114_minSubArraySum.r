@@ -1,10 +1,8 @@
 # Given an array of integers nums, find the minimum sum of any non-empty sub-array
 # of nums.
 # Example
-# >>> minSubArraySum([2, 3, 4, 1, 2, 4])
-# 1
-# >>> minSubArraySum([-1, -2, -3])
-# -6
+# minSubArraySum([2, 3, 4, 1, 2, 4]) == 1
+# minSubArraySum([-1, -2, -3]) == -6
 minSubArraySum <- function(nums) {
     if (length(nums) == 0) {
         return(0)
@@ -13,19 +11,21 @@ minSubArraySum <- function(nums) {
         return(nums[1])
     }
     min_sum <- nums[1]
+    sum <- nums[1]
     for (i in 2:length(nums)) {
-        nums[i] <- nums[i] + nums[i-1]
-    }
-    min_sum <- nums[1]
-    for (i in 2:length(nums)) {
-        if (nums[i] < min_sum) {
-            min_sum <- nums[i]
+        sum <- sum + nums[i]
+        if (sum < min_sum) {
+            min_sum <- sum
+        }
+        if (sum > 0) {
+            sum <- 0
         }
     }
     return(min_sum)
 }
 minSubArraySum([2, 3, 4, 1, 2, 4])
 minSubArraySum([-1, -2, -3])
+minSubArraySum([-2, 1, -3, 4, -1, 2, 1, -5, 4])
 
 
 test_humaneval <- function() {

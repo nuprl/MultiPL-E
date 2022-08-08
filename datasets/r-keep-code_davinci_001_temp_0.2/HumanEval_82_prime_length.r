@@ -1,26 +1,21 @@
 # Write a function that takes a string and returns True if the string
 # length is a prime number or False otherwise
 # Examples
-# >>> prime_length('Hello')
-# True
-# >>> prime_length('abcdcba')
-# True
-# >>> prime_length('kittens')
-# True
-# >>> prime_length('orange')
-# False
+# prime_length('Hello') == True
+# prime_length('abcdcba') == True
+# prime_length('kittens') == True
+# prime_length('orange') == False
 prime_length <- function(string) {
     if (length(string) == 1) {
         return(FALSE)
     }
-    for (i in 2:(length(string) - 1)) {
+    for (i in 2:(length(string)-1)) {
         if (length(string) %% i == 0) {
             return(FALSE)
         }
     }
     return(TRUE)
 }
-
 prime_length('Hello')
 prime_length('abcdcba')
 prime_length('kittens')

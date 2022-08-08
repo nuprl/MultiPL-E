@@ -4,14 +4,10 @@
 # Note:
 # * don't change the given array.
 # Examples:
-# >>> sort_array([])
-# []
-# >>> sort_array([5])
-# [5]
-# >>> sort_array([2, 4, 3, 0, 1, 5])
-# [0, 1, 2, 3, 4, 5]
-# >>> sort_array([2, 4, 3, 0, 1, 5, 6])
-# [6, 5, 4, 3, 2, 1, 0]
+# * sort_array([]) => []
+# * sort_array([5]) => [5]
+# * sort_array([2, 4, 3, 0, 1, 5]) => [0, 1, 2, 3, 4, 5]
+# * sort_array([2, 4, 3, 0, 1, 5, 6]) => [6, 5, 4, 3, 2, 1, 0]
 sort_array <- function(array) {
     if (length(array) == 0) {
         return(array)
@@ -19,23 +15,24 @@ sort_array <- function(array) {
     if (length(array) == 1) {
         return(array)
     }
-    if (sum(array[1:2]) % 2 == 0) {
-        return(sort(array, decreasing = TRUE))
-    }
-    else {
-        return(sort(array))
+    if (sum(array[1], array[length(array)]) % 2 == 0) {
+        return(array[order(array, decreasing = T)])
+    } else {
+        return(array[order(array)])
     }
 }
+sort_array(c(2, 4, 3, 0, 1, 5))
+sort_array(c(2, 4, 3, 0, 1, 5, 6))
 
 
 test_humaneval <- function() {
 candidate <- sort_array
-    if(!identical(candidate(c()), list())){quit('no', 1)}
-    if(!identical(candidate(c(5)), list(5))){quit('no', 1)}
-    if(!identical(candidate(c(2, 4, 3, 0, 1, 5)), list(0, 1, 2, 3, 4, 5))){quit('no', 1)}
-    if(!identical(candidate(c(2, 4, 3, 0, 1, 5, 6)), list(6, 5, 4, 3, 2, 1, 0))){quit('no', 1)}
-    if(!identical(candidate(c(2, 1)), list(1, 2))){quit('no', 1)}
-    if(!identical(candidate(c(15, 42, 87, 32, 11, 0)), list(0, 11, 15, 32, 42, 87))){quit('no', 1)}
-    if(!identical(candidate(c(21, 14, 23, 11)), list(23, 21, 14, 11))){quit('no', 1)}
+    if(!identical(candidate(c()), c())){quit('no', 1)}
+    if(!identical(candidate(c(5)), c(5))){quit('no', 1)}
+    if(!identical(candidate(c(2, 4, 3, 0, 1, 5)), c(0, 1, 2, 3, 4, 5))){quit('no', 1)}
+    if(!identical(candidate(c(2, 4, 3, 0, 1, 5, 6)), c(6, 5, 4, 3, 2, 1, 0))){quit('no', 1)}
+    if(!identical(candidate(c(2, 1)), c(1, 2))){quit('no', 1)}
+    if(!identical(candidate(c(15, 42, 87, 32, 11, 0)), c(0, 11, 15, 32, 42, 87))){quit('no', 1)}
+    if(!identical(candidate(c(21, 14, 23, 11)), c(23, 21, 14, 11))){quit('no', 1)}
 }
 test_humaneval()

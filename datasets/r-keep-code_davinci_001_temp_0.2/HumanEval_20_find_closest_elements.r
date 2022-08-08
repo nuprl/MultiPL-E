@@ -11,10 +11,10 @@ find_closest_elements <- function(numbers) {
 
 test_humaneval <- function() {
 candidate <- find_closest_elements
-    if(!identical(candidate(c(1.0, 2.0, 3.9, 4.0, 5.0, 2.2)), list(3.9, 4.0))){quit('no', 1)}
-    if(!identical(candidate(c(1.0, 2.0, 5.9, 4.0, 5.0)), list(5.0, 5.9))){quit('no', 1)}
-    if(!identical(candidate(c(1.0, 2.0, 3.0, 4.0, 5.0, 2.2)), list(2.0, 2.2))){quit('no', 1)}
-    if(!identical(candidate(c(1.0, 2.0, 3.0, 4.0, 5.0, 2.0)), list(2.0, 2.0))){quit('no', 1)}
-    if(!identical(candidate(c(1.1, 2.2, 3.1, 4.1, 5.1)), list(2.2, 3.1))){quit('no', 1)}
+    if(!identical(candidate(c(1.0, 2.0, 3.9, 4.0, 5.0, 2.2)), c(3.9, 4.0))){quit('no', 1)}
+    if(!identical(candidate(c(1.0, 2.0, 5.9, 4.0, 5.0)), c(5.0, 5.9))){quit('no', 1)}
+    if(!identical(candidate(c(1.0, 2.0, 3.0, 4.0, 5.0, 2.2)), c(2.0, 2.2))){quit('no', 1)}
+    if(!identical(candidate(c(1.0, 2.0, 3.0, 4.0, 5.0, 2.0)), c(2.0, 2.0))){quit('no', 1)}
+    if(!identical(candidate(c(1.1, 2.2, 3.1, 4.1, 5.1)), c(2.2, 3.1))){quit('no', 1)}
 }
 test_humaneval()

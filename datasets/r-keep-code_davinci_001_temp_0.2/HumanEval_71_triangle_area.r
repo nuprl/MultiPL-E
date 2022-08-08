@@ -4,10 +4,8 @@
 # Three sides make a valid triangle when the sum of any two sides is greater 
 # than the third side.
 # Example:
-# >>> triangle_area(3, 4, 5)
-# 6.00
-# >>> triangle_area(1, 2, 10)
-# -1
+# triangle_area(3, 4, 5) == 6.00
+# triangle_area(1, 2, 10) == -1
 triangle_area <- function(a, b, c) {
     if (a + b > c && a + c > b && b + c > a) {
         return(round(0.5 * (a + b + c), 2))
@@ -15,6 +13,8 @@ triangle_area <- function(a, b, c) {
         return(-1)
     }
 }
+triangle_area(3, 4, 5)
+triangle_area(1, 2, 10)
 
 
 test_humaneval <- function() {

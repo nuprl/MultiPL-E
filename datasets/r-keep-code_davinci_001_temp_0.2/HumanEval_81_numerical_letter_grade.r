@@ -18,75 +18,27 @@
 # > 0.0                D-
 # 0.0                E
 # Example:
-# >>> grade_equation([4.0, 3, 1.7, 2, 3.5])
-# ['A+', 'B', 'C-', 'C', 'A-']
+# grade_equation([4.0, 3, 1.7, 2, 3.5]) ==> ['A+', 'B', 'C-', 'C', 'A-']
 numerical_letter_grade <- function(grades) {
-    if (grades >= 4.0) {
-        return("A+")
-    } else if (grades >= 3.7) {
-        return("A")
-    } else if (grades >= 3.3) {
-        return("A-")
-    } else if (grades >= 3.0) {
-        return("B+")
-    } else if (grades >= 2.7) {
-        return("B")
-    } else if (grades >= 2.3) {
-        return("B-")
-    } else if (grades >= 2.0) {
-        return("C+")
-    } else if (grades >= 1.7) {
-        return("C")
-    } else if (grades >= 1.3) {
-        return("C-")
-    } else if (grades >= 1.0) {
-        return("D+")
-    } else if (grades >= 0.7) {
-        return("D")
-    } else if (grades >= 0.0) {
-        return("D-")
-    } else {
-        return("E")
+    # Define the grade table
+    grade_table <- c(4.0, 3.7, 3.3, 3.0, 2.7, 2.3, 2.0, 1.7, 1.3, 1.0, 0.7, 0.0)
+    letter_grade <- c('A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'E')
+    # Define the function that converts numerical grades to letter grades
+    letter_equation <- function(grade) {
+        letter_grade[which(grade_table %in% grade)]
     }
+    # Apply the function to the input vector
+    letter_equation(grades)
 }
 
-letter_grade <- function(grades) {
-    numerical_letter_grade(grades)
-}
-
-letter_grade(4.0)
-letter_grade(3.7)
-letter_grade(3.3)
-letter_grade(3.0)
-letter_grade(2.7)
-letter_grade(2.3)
-letter_grade(2.0)
-letter_grade(1.7)
-letter_grade(1.3)
-letter_grade(1.0)
-letter_grade(0.7)
-letter_grade(0.0)
-letter_grade(-1.0)
-letter_grade(4.0)
-letter_grade(3.7)
-letter_grade(3.3)
-letter_grade(3.0)
-letter_grade(2.7)
-letter_grade(2.3)
-letter_grade(2.0)
-letter_grade(1.7)
-letter_grade(1.3)
-letter_grade(1.0)
-letter_grade(0.7)
-letter_grade(0.0)
 
 test_humaneval <- function() {
 candidate <- numerical_letter_grade
-    if(!identical(candidate(c(4.0, 3, 1.7, 2, 3.5)), list('A+', 'B', 'C-', 'C', 'A-'))){quit('no', 1)}
-    if(!identical(candidate(c(1.2)), list('D+'))){quit('no', 1)}
-    if(!identical(candidate(c(0.5)), list('D-'))){quit('no', 1)}
-    if(!identical(candidate(c(0.0)), list('E'))){quit('no', 1)}
-    if(!identical(candidate(c(1.0, 0.3, 1.5, 2.8, 3.3)), list('D', 'D-', 'C-', 'B', 'B+'))){quit('no', 1)}
-    if(!identical(candidate(c(0.0, 0.7)), list('E', 'D-'))){quit('no', 1)}
+    if(!identical(candidate(c(4.0, 3, 1.7, 2, 3.5)), c('A+', 'B', 'C-', 'C', 'A-'))){quit('no', 1)}
+    if(!identical(candidate(c(1.2)), c('D+'))){quit('no', 1)}
+    if(!identical(candidate(c(0.5)), c('D-'))){quit('no', 1)}
+    if(!identical(candidate(c(0.0)), c('E'))){quit('no', 1)}
+    if(!identical(candidate(c(1.0, 0.3, 1.5, 2.8, 3.3)), c('D', 'D-', 'C-', 'B', 'B+'))){quit('no', 1)}
+    if(!identical(candidate(c(0.0, 0.7)), c('E', 'D-'))){quit('no', 1)}
 }
 test_humaneval()

@@ -2,19 +2,26 @@
 # of the letter with the most repetition and containing the corresponding count.
 # If several letters have the same occurrence, return all of them.
 # Example:
-# >>> histogram('a b c')
-# {'a': 1, 'b': 1, 'c': 1}
-# >>> histogram('a b b a')
-# {'a': 2, 'b': 2}
-# >>> histogram('a b c a b')
-# {'a': 2, 'b': 2}
-# >>> histogram('b b b b a')
-# {'b': 4}
-# >>> histogram('')
-# {}
+# histogram('a b c') == {'a': 1, 'b': 1, 'c': 1}
+# histogram('a b b a') == {'a': 2, 'b': 2}
+# histogram('a b c a b') == {'a': 2, 'b': 2}
+# histogram('b b b b a') == {'b': 4}
+# histogram('') == {}
 histogram <- function(test) {
-    # your code here
+    test <- strsplit(test, " ")
+    test <- unlist(test)
+    test <- table(test)
+    test <- sort(test, decreasing = TRUE)
+    test <- data.frame(test)
+    names(test) <- c("letter", "count")
+    return(test)
 }
+
+histogram("a b c")
+histogram("a b b a")
+histogram("a b c a b")
+histogram("b b b b a")
+histogram("")
 
 
 test_humaneval <- function() {

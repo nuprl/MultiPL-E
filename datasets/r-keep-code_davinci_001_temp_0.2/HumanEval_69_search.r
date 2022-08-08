@@ -3,16 +3,20 @@
 # The frequency of an integer is the number of times it appears in the list.
 # If no such a value exist, return -1.
 # Examples:
-# >>> search([4, 1, 2, 2, 3, 1])
-# 2
-# >>>  search([1, 2, 2, 3, 3, 3, 4, 4, 4])
-# 3
-# >>> search([5, 5, 4, 4, 4])
-# -1
+# search([4, 1, 2, 2, 3, 1]) == 2
+# search([1, 2, 2, 3, 3, 3, 4, 4, 4]) == 3
+# search([5, 5, 4, 4, 4]) == -1
 search <- function(lst) {
-    # your code here
-    return(ans)
+    for (i in 1:length(lst)) {
+        if (lst[i] > 0 && lst[i] == max(lst[lst == lst[i]])) {
+            return(lst[i])
+        }
+    }
+    return(-1)
 }
+search([4, 1, 2, 2, 3, 1])
+search([1, 2, 2, 3, 3, 3, 4, 4, 4])
+search([5, 5, 4, 4, 4])
 
 
 test_humaneval <- function() {

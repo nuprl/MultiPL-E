@@ -8,53 +8,31 @@
 # The function should return an empty tuple if planet1 or planet2
 # are not correct planet names. 
 # Examples
-# >>> bf("Jupiter", "Neptune")
-# ("Saturn", "Uranus")
-# >>> bf("Earth", "Mercury")
-# ("Venus")
-# >>> bf("Mercury", "Uranus")
-# ("Venus", "Earth", "Mars", "Jupiter", "Saturn")
+# bf("Jupiter", "Neptune") ==> ("Saturn", "Uranus")
+# bf("Earth", "Mercury") ==> ("Venus")
+# bf("Mercury", "Uranus") ==> ("Venus", "Earth", "Mars", "Jupiter", "Saturn")
 bf <- function(planet1, planet2) {
-    if (planet1 == "Mercury") {
-        if (planet2 == "Venus") {
-            return(c("Mercury", "Venus"))
-        } else if (planet2 == "Earth") {
-            return(c("Mercury", "Venus", "Earth"))
-        } else if (planet2 == "Mars") {
-            return(c("Mercury", "Venus", "Earth", "Mars"))
-        } else if (planet2 == "Jupiter") {
-            return(c("Mercury", "Venus", "Earth", "Mars", "Jupiter"))
-        } else if (planet2 == "Saturn") {
-            return(c("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn"))
-        } else if (planet2 == "Uranus") {
-            return(c("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus"))
-        } else if (planet2 == "Neptune") {
-            return(c("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"))
-        } else {
-            return(c())
-        }
-    } else if (planet1 == "Venus") {
-        if (planet2 == "Earth") {
-            return(c("Venus", "Earth"))
-        } else if (planet2 == "Mars") {
-            return(c("Venus", "Earth", "Mars"))
-        } else if (planet2 == "Jupiter") {
-            return(c("Venus", "Earth", "Mars", "Jupiter"))
-        } else if (planet2 == "Saturn") {
-            return(c("Venus", "Earth", "Mars", "Jupiter", "Saturn"))
-        } else if (planet2 == "Uranus") {
-            return(c("Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus"))
-        } else if (planet2 == "Neptune") {
-            return(c("Venus", "Earth", "Mars", "J
+    planets <- c("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune")
+    if (planet1 %in% planets && planet2 %in% planets) {
+        planets <- planets[planets %in% c(planet1, planet2)]
+        planets <- planets[planets %in% planets[planets %>% sort(.) %>% .[1]] : planets %in% planets[planets %>% sort(.) %>% .[nrow(planets)] ]
+        return(planets)
+    }
+    return(c())
+}
+bf("Jupiter", "Neptune")
+bf("Earth", "Mercury")
+bf("Mercury", "Uranus")
+
 
 test_humaneval <- function() {
 candidate <- bf
-    if(!identical(candidate('Jupiter', 'Neptune'), list('Saturn', 'Uranus'))){quit('no', 1)}
-    if(!identical(candidate('Earth', 'Mercury'), list('Venus'))){quit('no', 1)}
-    if(!identical(candidate('Mercury', 'Uranus'), list('Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn'))){quit('no', 1)}
-    if(!identical(candidate('Neptune', 'Venus'), list('Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus'))){quit('no', 1)}
-    if(!identical(candidate('Earth', 'Earth'), list())){quit('no', 1)}
-    if(!identical(candidate('Mars', 'Earth'), list())){quit('no', 1)}
-    if(!identical(candidate('Jupiter', 'Makemake'), list())){quit('no', 1)}
+    if(!identical(candidate('Jupiter', 'Neptune'), c('Saturn', 'Uranus'))){quit('no', 1)}
+    if(!identical(candidate('Earth', 'Mercury'), c('Venus'))){quit('no', 1)}
+    if(!identical(candidate('Mercury', 'Uranus'), c('Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn'))){quit('no', 1)}
+    if(!identical(candidate('Neptune', 'Venus'), c('Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus'))){quit('no', 1)}
+    if(!identical(candidate('Earth', 'Earth'), c())){quit('no', 1)}
+    if(!identical(candidate('Mars', 'Earth'), c())){quit('no', 1)}
+    if(!identical(candidate('Jupiter', 'Makemake'), c())){quit('no', 1)}
 }
 test_humaneval()

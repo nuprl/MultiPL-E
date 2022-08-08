@@ -7,22 +7,29 @@
 # '())' is not.
 # Return 'Yes' if there's a way to make a good string, and return 'No' otherwise.
 # Examples:
-# >>> match_parens(['()(', ')'])
-# 'Yes'
-# >>> match_parens([')', ')'])
-# 'No'
+# match_parens(['()(', ')']) == 'Yes'
+# match_parens([')', ')']) == 'No'
 match_parens <- function(lst) {
     if (length(lst) == 0) {
         return('Yes')
     }
-    if (lst[1] == ')') {
+    if (length(lst) == 1) {
         return('No')
     }
     if (lst[1] == '(') {
-        return(match_parens(lst[2:length(lst)]))
+        if (lst[2] == ')') {
+            return(match_parens(lst[3:length(lst)]))
+        } else {
+            return(match_parens(c(lst[1], lst[3:length(lst)])))
+        }
+    } else {
+        if (lst[2] == '(') {
+            return(match_parens(c(lst[2], lst[3:length(lst)])))
+        } else {
+            return(match_parens(c(lst[1], lst[3:length(lst)])))
+        }
     }
 }
-match_parens(c('(())()', '()', ')()'))
 
 
 test_humaneval <- function() {

@@ -3,25 +3,20 @@
 # of each number in the array, represented by 1, -1 or 0.
 # Note: return None for empty arr.
 # Example:
-# >>> prod_signs([1, 2, 2, -4]) 
-# 9
-# >>> prod_signs([0, 1])
-# 0
-# >>> prod_signs([])
-# None
+# >>> prod_signs([1, 2, 2, -4]) == -9
+# >>> prod_signs([0, 1]) == 0
+# >>> prod_signs([]) == None
 prod_signs <- function(arr) {
     if (length(arr) == 0) {
         return(None)
     }
-    prod_signs <- 1
-    for (i in arr) {
-        prod_signs <- prod_signs * i
+    else {
+        prod <- 1
+        for (i in arr) {
+            prod <- prod * sign(i)
+        }
+        return(sum(abs(arr)) * prod)
     }
-    sum_magnitude <- 0
-    for (i in arr) {
-        sum_magnitude <- sum_magnitude + abs(i)
-    }
-    return(sum_magnitude * prod_signs)
 }
 
 

@@ -11,7 +11,7 @@ filter_by_prefix(c('abc', 'bcd', 'cde', 'array'), 'a')
 
 test_humaneval <- function() {
 candidate <- filter_by_prefix
-    if(!identical(candidate(c(), 'john'), list())){quit('no', 1)}
-    if(!identical(candidate(c('xxx', 'asd', 'xxy', 'john doe', 'xxxAAA', 'xxx'), 'xxx'), list('xxx', 'xxxAAA', 'xxx'))){quit('no', 1)}
+    if(!identical(candidate(c(), 'john'), c())){quit('no', 1)}
+    if(!identical(candidate(c('xxx', 'asd', 'xxy', 'john doe', 'xxxAAA', 'xxx'), 'xxx'), c('xxx', 'xxxAAA', 'xxx'))){quit('no', 1)}
 }
 test_humaneval()

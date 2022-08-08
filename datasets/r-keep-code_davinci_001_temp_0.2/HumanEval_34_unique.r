@@ -8,6 +8,6 @@ unique <- function(l) {
 
 test_humaneval <- function() {
 candidate <- unique
-    if(!identical(candidate(c(5, 3, 5, 2, 3, 3, 9, 0, 123)), list(0, 2, 3, 5, 9, 123))){quit('no', 1)}
+    if(!identical(candidate(c(5, 3, 5, 2, 3, 3, 9, 0, 123)), c(0, 2, 3, 5, 9, 123))){quit('no', 1)}
 }
 test_humaneval()

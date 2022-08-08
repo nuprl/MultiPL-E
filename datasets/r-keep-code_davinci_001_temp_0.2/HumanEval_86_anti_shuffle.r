@@ -4,12 +4,9 @@
 # ascending order based on ascii value.
 # Note: You should keep the order of words and blank spaces in the sentence.
 # For example:
-# >>> anti_shuffle('Hi')
-# 'Hi'
-# >>> anti_shuffle('hello')
-# 'ehllo'
-# >>> anti_shuffle('Hello World!!!')
-# 'Hello !!!Wdlor'
+# anti_shuffle('Hi') returns 'Hi'
+# anti_shuffle('hello') returns 'ehllo'
+# anti_shuffle('Hello World!!!') returns 'Hello !!!Wdlor'
 anti_shuffle <- function(s) {
     # your code here
 }

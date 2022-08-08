@@ -1,23 +1,17 @@
 # Given a string s, count the number of uppercase vowels in even indices.
 # For example:
-# >>> count_upper('aBCdEf')
-# 1
-# >>> count_upper('abcdefg')
-# 0
-# >>> count_upper('dBBE')
-# 0
+# count_upper('aBCdEf') returns 1
+# count_upper('abcdefg') returns 0
+# count_upper('dBBE') returns 0
 count_upper <- function(s) {
     count <- 0
-    for (i in seq(1, length(s), 2)) {
-        if (s[i] == toupper(s[i])) {
+    for (i in seq(1, length(s), by = 2)) {
+        if (s[i] == 'A' | s[i] == 'E' | s[i] == 'I' | s[i] == 'O' | s[i] == 'U') {
             count <- count + 1
         }
     }
     return(count)
 }
-count_upper('aBCdEf')
-count_upper('abcdefg')
-count_upper('dBBE')
 
 
 test_humaneval <- function() {

@@ -3,61 +3,39 @@
 # a part of a word, and False otherwise.
 # Note: "word" is a group of characters separated by space.
 # Examples:
-# >>> check_if_last_char_is_a_letter("apple pie") 
-# False
-# >>> check_if_last_char_is_a_letter("apple pi e") 
-# True
-# >>> check_if_last_char_is_a_letter("apple pi e ") 
-# False
-# >>> check_if_last_char_is_a_letter("") 
-# False
+# check_if_last_char_is_a_letter("apple pie") ➞ False
+# check_if_last_char_is_a_letter("apple pi e") ➞ True
+# check_if_last_char_is_a_letter("apple pi e ") ➞ False
+# check_if_last_char_is_a_letter("") ➞ False
 check_if_last_char_is_a_letter <- function(txt) {
-    if (length(txt) == 0) {
+    if(length(txt) == 0) {
         return(FALSE)
     }
-    if (nchar(txt) == 1) {
-        return(TRUE)
-    }
-    if (substr(txt, nchar(txt), nchar(txt)) == " ") {
+    if(!is.na(str_match(txt, "\\S+\\s+\\S+"))) {
         return(FALSE)
     }
-    if (substr(txt, nchar(txt), nchar(txt)) == "") {
+    if(!is.na(str_match(txt, "\\S+\\s+\\S+\\s+\\S+"))) {
         return(FALSE)
     }
-    if (substr(txt, nchar(txt), nchar(txt)) == " ") {
+    if(!is.na(str_match(txt, "\\S+\\s+\\S+\\s+\\S+\\s+\\S+"))) {
         return(FALSE)
     }
-    if (substr(txt, nchar(txt), nchar(txt)) == " ") {
+    if(!is.na(str_match(txt, "\\S+\\s+\\S+\\s+\\S+\\s+\\S+\\s+\\S+"))) {
         return(FALSE)
     }
-    if (substr(txt, nchar(txt), nchar(txt)) == " ") {
+    if(!is.na(str_match(txt, "\\S+\\s+\\S+\\s+\\S+\\s+\\S+\\s+\\S+\\s+\\S+"))) {
         return(FALSE)
     }
-    if (substr(txt, nchar(txt), nchar(txt)) == " ") {
+    if(!is.na(str_match(txt, "\\S+\\s+\\S+\\s+\\S+\\s+\\S+\\s+\\S+\\s+\\S+\\s+\\S+"))) {
         return(FALSE)
     }
-    if (substr(txt, nchar(txt), nchar(txt)) == " ") {
+    if(!is.na(str_match(txt, "\\S+\\s+\\S+\\s+\\S+\\s+\\S+\\s+\\S+\\s+\\S+\\s+\\S+\\s+\\S+"))) {
         return(FALSE)
     }
-    if (substr(txt, nchar(txt), nchar(txt)) == " ") {
+    if(!is.na(str_match(txt, "\\S+\\s+\\S+\\s+\\S+\\s+\\S+\\s+\\S+\\s+\\S+\\s+\\S+\\s+\\S+\\s+\\S+"))) {
         return(FALSE)
     }
-    if (substr(txt, nchar(txt), nchar(txt)) == " ") {
-        return(FALSE)
-    }
-    if (substr(txt, nchar(txt), nchar(txt)) == " ") {
-        return(FALSE)
-    }
-    if (substr(txt, nchar(txt), nchar(txt)) == " ") {
-        return(FALSE)
-    }
-    if (substr(txt, nchar(txt), nchar(txt)) == " ") {
-        return(FALSE)
-    }
-    if (substr(txt, nchar(txt), nchar(txt)) == " ") {
-        return(FALSE)
-    }
-    if (substr(txt, nchar(txt
+    if(!
 
 test_humaneval <- function() {
 candidate <- check_if_last_char_is_a_letter

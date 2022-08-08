@@ -9,8 +9,6 @@
 # 2. returned list sorted in increasing order.
 # For example:
 # get_odd_collatz(5) returns [1, 5] # The collatz sequence for 5 is [5, 16, 8, 4, 2, 1], so the odd numbers are only 1, and 5.
-# >>> get_odd_collatz(5) 
-# [1, 5]
 get_odd_collatz <- function(n) {
     if (n == 1) {
         return (c(1))
@@ -21,14 +19,13 @@ get_odd_collatz <- function(n) {
         return (c(n, get_odd_collatz(3*n + 1)))
     }
 }
-get_odd_collatz(5)
 
 
 test_humaneval <- function() {
 candidate <- get_odd_collatz
-    if(!identical(candidate(14), list(1, 5, 7, 11, 13, 17))){quit('no', 1)}
-    if(!identical(candidate(5), list(1, 5))){quit('no', 1)}
-    if(!identical(candidate(12), list(1, 3, 5))){quit('no', 1)}
-    if(!identical(candidate(1), list(1))){quit('no', 1)}
+    if(!identical(candidate(14), c(1, 5, 7, 11, 13, 17))){quit('no', 1)}
+    if(!identical(candidate(5), c(1, 5))){quit('no', 1)}
+    if(!identical(candidate(12), c(1, 3, 5))){quit('no', 1)}
+    if(!identical(candidate(1), c(1))){quit('no', 1)}
 }
 test_humaneval()

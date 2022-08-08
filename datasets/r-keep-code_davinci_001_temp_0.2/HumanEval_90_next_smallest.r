@@ -1,30 +1,32 @@
 # You are given a list of integers.
 # Write a function next_smallest() that returns the 2nd smallest element of the list.
 # Return None if there is no such element.
-# >>> next_smallest([1, 2, 3, 4, 5])
-# 2
-# >>> next_smallest([5, 1, 4, 3, 2])
-# 2
-# >>> next_smallest([])
-# None
-# >>> next_smallest([1, 1])
-# None
+# next_smallest([1, 2, 3, 4, 5]) == 2
+# next_smallest([5, 1, 4, 3, 2]) == 2
+# next_smallest([]) == None
+# next_smallest([1, 1]) == None
 next_smallest <- function(lst) {
-    if (length(lst) < 2) {
+    if (length(lst) == 0) {
+        return(None)
+    }
+    if (length(lst) == 1) {
         return(None)
     }
     if (length(lst) == 2) {
-        if (lst[1] > lst[2]) {
-            return(lst[2])
+        if (lst[1] < lst[2]) {
+            return(lst[1])
         } else {
-            return(None)
+            return(lst[2])
         }
     }
-    if (lst[1] > lst[2]) {
-        return(lst[2])
-    }
     if (lst[1] < lst[2]) {
-        return(next_smallest(lst[-1]))
+        return(lst[1])
+    }
+    if (lst[1] > lst[2]) {
+        return(next_smallest(lst[2:length(lst)]))
+    }
+    if (lst[1] == lst[2]) {
+        return(next_smallest(lst[2:length(lst)]))
     }
 }
 next_smallest([1, 2, 3, 4, 5])

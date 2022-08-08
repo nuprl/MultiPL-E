@@ -23,10 +23,10 @@ make_a_pile <- function(n) {
 
 test_humaneval <- function() {
 candidate <- make_a_pile
-    if(!identical(candidate(3), list(3, 5, 7))){quit('no', 1)}
-    if(!identical(candidate(4), list(4, 6, 8, 10))){quit('no', 1)}
-    if(!identical(candidate(5), list(5, 7, 9, 11, 13))){quit('no', 1)}
-    if(!identical(candidate(6), list(6, 8, 10, 12, 14, 16))){quit('no', 1)}
-    if(!identical(candidate(8), list(8, 10, 12, 14, 16, 18, 20, 22))){quit('no', 1)}
+    if(!identical(candidate(3), c(3, 5, 7))){quit('no', 1)}
+    if(!identical(candidate(4), c(4, 6, 8, 10))){quit('no', 1)}
+    if(!identical(candidate(5), c(5, 7, 9, 11, 13))){quit('no', 1)}
+    if(!identical(candidate(6), c(6, 8, 10, 12, 14, 16))){quit('no', 1)}
+    if(!identical(candidate(8), c(8, 10, 12, 14, 16, 18, 20, 22))){quit('no', 1)}
 }
 test_humaneval()

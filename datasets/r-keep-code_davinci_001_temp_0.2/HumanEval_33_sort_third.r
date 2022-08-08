@@ -14,9 +14,9 @@ sort_third([5, 6, 3, 4, 8, 9, 2])
 
 test_humaneval <- function() {
 candidate <- sort_third
-    if(!identical(candidate(c(5, 6, 3, 4, 8, 9, 2)), list(2, 6, 3, 4, 8, 9, 5))){quit('no', 1)}
-    if(!identical(candidate(c(5, 8, 3, 4, 6, 9, 2)), list(2, 8, 3, 4, 6, 9, 5))){quit('no', 1)}
-    if(!identical(candidate(c(5, 6, 9, 4, 8, 3, 2)), list(2, 6, 9, 4, 8, 3, 5))){quit('no', 1)}
-    if(!identical(candidate(c(5, 6, 3, 4, 8, 9, 2, 1)), list(2, 6, 3, 4, 8, 9, 5, 1))){quit('no', 1)}
+    if(!identical(candidate(c(5, 6, 3, 4, 8, 9, 2)), c(2, 6, 3, 4, 8, 9, 5))){quit('no', 1)}
+    if(!identical(candidate(c(5, 8, 3, 4, 6, 9, 2)), c(2, 8, 3, 4, 6, 9, 5))){quit('no', 1)}
+    if(!identical(candidate(c(5, 6, 9, 4, 8, 3, 2)), c(2, 6, 9, 4, 8, 3, 5))){quit('no', 1)}
+    if(!identical(candidate(c(5, 6, 3, 4, 8, 9, 2, 1)), c(2, 6, 3, 4, 8, 9, 5, 1))){quit('no', 1)}
 }
 test_humaneval()

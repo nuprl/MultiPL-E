@@ -12,10 +12,10 @@ derivative <- function(xs) {
 
 test_humaneval <- function() {
 candidate <- derivative
-    if(!identical(candidate(c(3, 1, 2, 4, 5)), list(1, 4, 12, 20))){quit('no', 1)}
-    if(!identical(candidate(c(1, 2, 3)), list(2, 6))){quit('no', 1)}
-    if(!identical(candidate(c(3, 2, 1)), list(2, 2))){quit('no', 1)}
-    if(!identical(candidate(c(3, 2, 1, 0, 4)), list(2, 2, 0, 16))){quit('no', 1)}
-    if(!identical(candidate(c(1)), list())){quit('no', 1)}
+    if(!identical(candidate(c(3, 1, 2, 4, 5)), c(1, 4, 12, 20))){quit('no', 1)}
+    if(!identical(candidate(c(1, 2, 3)), c(2, 6))){quit('no', 1)}
+    if(!identical(candidate(c(3, 2, 1)), c(2, 2))){quit('no', 1)}
+    if(!identical(candidate(c(3, 2, 1, 0, 4)), c(2, 2, 0, 16))){quit('no', 1)}
+    if(!identical(candidate(c(1)), c())){quit('no', 1)}
 }
 test_humaneval()

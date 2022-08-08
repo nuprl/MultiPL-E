@@ -4,17 +4,27 @@
 # If the string contains no letters, reverse the string.
 # The function should return the resulted string.
 # Examples
-# >>> solve("1234") 
-# "4321"
-# >>> solve("ab") 
-# "AB"
-# >>> solve("#a@C") 
-# "#A@c"
+# solve("1234") = "4321"
+# solve("ab") = "AB"
+# solve("#a@C") = "#A@c"
 solve <- function(s) {
-    if(length(grep("[a-zA-Z]", s)) == 0){
+    if (length(s) == 0) {
         return(s)
+    }
+    if (nchar(s) == 0) {
+        return(s)
+    }
+    if (nchar(s) == 1) {
+        if (s == toupper(s)) {
+            return(tolower(s))
+        } else {
+            return(toupper(s))
+        }
+    }
+    if (s[1] == toupper(s[1])) {
+        return(tolower(s[1]) + solve(substring(s, 2, nchar(s))))
     } else {
-        return(sub("[a-z]", gsub("[a-z]", toupper(substr(s, match(s, "[a-z]"), 1)), substr(s, match(s, "[a-z]"), 1)), s))
+        return(toupper(s[1]) + solve(substring(s, 2, nchar(s))))
     }
 }
 solve("1234")

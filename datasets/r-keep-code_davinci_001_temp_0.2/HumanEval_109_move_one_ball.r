@@ -11,32 +11,33 @@
 # If the given array is empty then return True.
 # Note: The given list is guaranteed to have unique elements.
 # For Example:
-# >>> move_one_ball([3, 4, 5, 1, 2])
-# True
+# move_one_ball([3, 4, 5, 1, 2])==>True
 # Explanation: By performin 2 right shift operations, non-decreasing order can
 # be achieved for the given array.
-# >>> move_one_ball([3, 5, 4, 1, 2])
-# False
+# move_one_ball([3, 5, 4, 1, 2])==>False
 # Explanation:It is not possible to get non-decreasing order for the given
 # array by performing any number of right shift operations.
 move_one_ball <- function(arr) {
-    # Write your code here
-    if(length(arr) == 0) {
+    if(length(arr)==0) {
         return(TRUE)
     }
-    if(length(arr) == 1) {
+    if(length(arr)==1) {
         return(TRUE)
     }
-    if(arr[1] > arr[2]) {
+    if(arr[1]>arr[2]) {
         return(FALSE)
     }
     for(i in 2:length(arr)) {
-        if(arr[i-1] > arr[i]) {
+        if(arr[i-1]>arr[i]) {
             return(FALSE)
         }
     }
     return(TRUE)
 }
+move_one_ball([3, 4, 5, 1, 2])
+move_one_ball([3, 5, 4, 1, 2])
+move_one_ball([])
+move_one_ball([1])
 
 
 test_humaneval <- function() {

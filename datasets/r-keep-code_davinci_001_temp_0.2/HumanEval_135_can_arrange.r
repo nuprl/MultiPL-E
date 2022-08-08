@@ -3,20 +3,18 @@
 # no such element exists then return -1. The given array will not contain
 # duplicate values.
 # Examples:
-# >>> can_arrange([1,2,4,3,5])
-# 3
-# >>> can_arrange([1,2,3])
-# -1
+# can_arrange([1,2,4,3,5]) = 3
+# can_arrange([1,2,3]) = -1
 can_arrange <- function(arr) {
-    for (i in 1:length(arr)) {
-        if (arr[i] < arr[i-1]) {
-            return(i-1)
+    for (i in 1:length(arr) - 1) {
+        if (arr[i] < arr[i + 1]) {
+            return(i)
         }
     }
     return(-1)
 }
-can_arrange([1,2,4,3,5])
-can_arrange([1,2,3])
+can_arrange(c(1,2,4,3,5))
+can_arrange(c(1,2,3))
 
 
 test_humaneval <- function() {

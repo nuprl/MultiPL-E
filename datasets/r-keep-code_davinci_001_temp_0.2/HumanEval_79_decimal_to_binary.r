@@ -4,17 +4,10 @@
 # There will be an extra couple of characters 'db' at the beginning and at the end of the string.
 # The extra characters are there to help with the format.
 # Examples:
-# >>> decimal_to_binary(15)
-# "db1111db"
-# >>> decimal_to_binary(32)
-# "db100000db"
+# decimal_to_binary(15)   # returns "db1111db"
+# decimal_to_binary(32)   # returns "db100000db"
 decimal_to_binary <- function(decimal) {
-    binary <- ""
-    while (decimal > 0) {
-        binary <- paste(as.character(decimal %% 2), binary)
-        decimal <- floor(decimal / 2)
-    }
-    return(paste("db", binary, "db"))
+    # your code here
 }
 
 

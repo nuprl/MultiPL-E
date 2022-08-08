@@ -1,15 +1,14 @@
 # Given a non-empty list of integers lst. add the even elements that are at odd indices..
 # Examples:
-# >>> add([4, 2, 6, 7])
-# 2
+# add([4, 2, 6, 7]) ==> 2
 add <- function(lst) {
-    sum <- 0
+    add <- 0
     for (i in 1:length(lst)) {
-        if (i %% 2 == 1 && lst[i] %% 2 == 0) {
-            sum <- sum + lst[i]
+        if (lst[i] %% 2 == 0 & i %% 2 != 0) {
+            add <- add + lst[i]
         }
     }
-    return(sum)
+    return(add)
 }
 add([4, 2, 6, 7])
 

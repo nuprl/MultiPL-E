@@ -3,23 +3,44 @@
 # The alphabet should be rotated in a manner such that the letters 
 # shift down by two multiplied to two places.
 # For example:
-# >>> encrypt('hi')
-# 'lm'
-# >>> encrypt('asdfghjkl')
-# 'ewhjklnop'
-# >>> encrypt('gf')
-# 'kj'
-# >>> encrypt('et')
-# 'ix'
+# encrypt('hi') returns 'lm'
+# encrypt('asdfghjkl') returns 'ewhjklnop'
+# encrypt('gf') returns 'kj'
+# encrypt('et') returns 'ix'
 encrypt <- function(s) {
     alphabet <- c('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
-    encrypted <- c()
-    for (i in 1:length(s)) {
-        encrypted <- c(encrypted, alphabet[(alphabet[1:26] == s[i]) + 1])
-    }
-    return(encrypted)
-}
-
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
+    alphabet <- alphabet[-c(1:2)]
 
 test_humaneval <- function() {
 candidate <- encrypt

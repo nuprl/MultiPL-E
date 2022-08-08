@@ -4,34 +4,14 @@
 # find any vowel met the above condition. 
 # You may assume that the given string contains English letter only.
 # Example:
-# >>> get_closest_vowel("yogurt")
-# "u"
-# >>> get_closest_vowel("FULL")
-# "U"
-# >>> get_closest_vowel("quick")
-# ""
-# >>> get_closest_vowel("ab")
-# ""
+# get_closest_vowel("yogurt") ==> "u"
+# get_closest_vowel("FULL") ==> "U"
+# get_closest_vowel("quick") ==> ""
+# get_closest_vowel("ab") ==> ""
 get_closest_vowel <- function(word) {
-    vowels <- c("a", "e", "i", "o", "u")
-    consonants <- c("b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z")
-    word <- tolower(word)
-    if (nchar(word) < 3) {
-        return("")
-    }
-    for (i in seq(1, nchar(word))) {
-        if (word[i] %in% vowels) {
-            if (word[i - 1] %in% consonants && word[i + 1] %in% consonants) {
-                return(word[i])
-            }
-        }
-    }
-    return("")
+    # your code goes here
+    return('')
 }
-get_closest_vowel("yogurt")
-get_closest_vowel("FULL")
-get_closest_vowel("quick")
-get_closest_vowel("ab")
 
 
 test_humaneval <- function() {

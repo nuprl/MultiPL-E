@@ -3,8 +3,8 @@
 # Return the number of triples (a[i], a[j], a[k]) of a where i < j < k, 
 # and a[i] + a[j] + a[k] is a multiple of 3.
 # Example :
-# >>> get_max_triples(5)
-# 1
+# Input: n = 5
+# Output: 1
 # Explanation: 
 # a = [1, 3, 7, 13, 21]
 # The only valid triple is (1, 7, 13).
@@ -17,7 +17,7 @@ get_max_triples <- function(n) {
     for (i in 1:(n - 2)) {
         for (j in (i + 1):(n - 1)) {
             for (k in (j + 1):n) {
-                if ((a[i] + a[j] + a[k]) %% 3 == 0) {
+                if (a[i] + a[j] + a[k] %% 3 == 0) {
                     count <- count + 1
                 }
             }
@@ -25,6 +25,16 @@ get_max_triples <- function(n) {
     }
     return(count)
 }
+n <- 5
+get_max_triples(n)
+n <- 10
+get_max_triples(n)
+n <- 20
+get_max_triples(n)
+n <- 30
+get_max_triples(n)
+n <- 100
+get_max_triples(n)
 
 
 test_humaneval <- function() {

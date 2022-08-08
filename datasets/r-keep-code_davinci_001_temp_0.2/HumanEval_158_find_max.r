@@ -2,15 +2,19 @@
 # The list contains different words. Return the word with maximum number
 # of unique characters. If multiple strings have maximum number of unique
 # characters, return the one which comes first in lexicographical order.
-# >>> find_max(["name", "of", "string"])
-# "string"
-# >>> find_max(["name", "enam", "game"])
-# "enam"
-# >>> find_max(["aaaaaaa", "bb" ,"cc"])
-# "aaaaaaa"
+# find_max(["name", "of", "string"]) == "string"
+# find_max(["name", "enam", "game"]) == "enam"
+# find_max(["aaaaaaa", "bb" ,"cc"]) == ""aaaaaaa"
 find_max <- function(words) {
-    unique_chars <- unique(unlist(lapply(words, unique)))
-    return(words[which.max(sapply(words, function(x) length(unique_chars[!unique_chars %in% x]))), 1])
+    max_len <- 0
+    max_word <- ""
+    for (word in words) {
+        if (length(unique(word)) > max_len) {
+            max_len <- length(unique(word))
+            max_word <- word
+        }
+    }
+    max_word
 }
 find_max(c("name", "of", "string"))
 find_max(c("name", "enam", "game"))

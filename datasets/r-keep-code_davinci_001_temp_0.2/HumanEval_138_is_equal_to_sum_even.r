@@ -1,18 +1,20 @@
 # Evaluate whether the given number n can be written as the sum of exactly 4 positive even numbers
 # Example
-# >>> is_equal_to_sum_even(4) 
-# False
-# >>> is_equal_to_sum_even(6) 
-# False
-# >>> is_equal_to_sum_even(8) 
-# True
+# is_equal_to_sum_even(4) == False
+# is_equal_to_sum_even(6) == False
+# is_equal_to_sum_even(8) == True
 is_equal_to_sum_even <- function(n) {
-    for (i in 1:n) {
-        for (j in 1:n) {
-            for (k in 1:n) {
-                for (l in 1:n) {
-                    if (i + j + k + l == n && i % 2 == 0 && j % 2 == 0 && k % 2 == 0 && l % 2 == 0) {
-                        return(TRUE)
+    if(n %% 2 != 0) {
+        return(FALSE)
+    }
+    for(i in 2:n) {
+        for(j in 2:n) {
+            for(k in 2:n) {
+                for(l in 2:n) {
+                    if(i + j + k + l == n) {
+                        if(i %% 2 == 0 && j %% 2 == 0 && k %% 2 == 0 && l %% 2 == 0) {
+                            return(TRUE)
+                        }
                     }
                 }
             }

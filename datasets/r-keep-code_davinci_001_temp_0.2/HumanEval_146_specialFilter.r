@@ -2,18 +2,10 @@
 # the number of elements in the array that are greater than 10 and both 
 # first and last digits of a number are odd (1, 3, 5, 7, 9).
 # For example:
-# >>> specialFilter([15, -73, 14, -15])
-# 1 
-# >>> specialFilter([33, -2, -3, 45, 21, 109])
-# 2
+# specialFilter([15, -73, 14, -15]) => 1 
+# specialFilter([33, -2, -3, 45, 21, 109]) => 2
 specialFilter <- function(nums) {
-    count <- 0
-    for (n in nums) {
-        if (n > 10 && n%%10 != 0 && n%%10 != 9) {
-            count <- count + 1
-        }
-    }
-    return(count)
+    return(length(nums[nums > 10 & nums%%10 == 5 & nums%%10 == 7]))
 }
 
 

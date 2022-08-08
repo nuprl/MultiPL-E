@@ -11,26 +11,35 @@
 # otherwise, return "NO".
 # If the two intervals don't intersect, return "NO".
 # [input/output] samples:
-# >>> intersection((1, 2), (2, 3))
-# "NO"
-# >>> intersection((-1, 1), (0, 4))
-# "NO"
-# >>> intersection((-3, -1), (-5, 5))
-# "YES"
+# intersection((1, 2), (2, 3)) ==> "NO"
+# intersection((-1, 1), (0, 4)) ==> "NO"
+# intersection((-3, -1), (-5, 5)) ==> "YES"
 intersection <- function(interval1, interval2) {
-    # your code here
+    if (interval1[1] > interval2[2] || interval2[1] > interval1[2]) {
+        return("NO")
+    }
+    if (interval1[1] <= interval2[1] && interval2[2] <= interval1[2]) {
+        return(interval2[2] - interval2[1] == 1)
+    }
+    if (interval2[1] <= interval1[1] && interval1[2] <= interval2[2]) {
+        return(interval1[2] - interval1[1] == 1)
+    }
+    return("NO")
 }
+intersection((1, 2), (2, 3))
+intersection((-1, 1), (0, 4))
+intersection((-3, -1), (-5, 5))
 
 
 test_humaneval <- function() {
 candidate <- intersection
-    if(!identical(candidate(list(1, 2), list(2, 3)), 'NO')){quit('no', 1)}
-    if(!identical(candidate(list(-1, 1), list(0, 4)), 'NO')){quit('no', 1)}
-    if(!identical(candidate(list(-3, -1), list(-5, 5)), 'YES')){quit('no', 1)}
-    if(!identical(candidate(list(-2, 2), list(-4, 0)), 'YES')){quit('no', 1)}
-    if(!identical(candidate(list(-11, 2), list(-1, -1)), 'NO')){quit('no', 1)}
-    if(!identical(candidate(list(1, 2), list(3, 5)), 'NO')){quit('no', 1)}
-    if(!identical(candidate(list(1, 2), list(1, 2)), 'NO')){quit('no', 1)}
-    if(!identical(candidate(list(-2, -2), list(-3, -2)), 'NO')){quit('no', 1)}
+    if(!identical(candidate(c(1, 2), c(2, 3)), 'NO')){quit('no', 1)}
+    if(!identical(candidate(c(-1, 1), c(0, 4)), 'NO')){quit('no', 1)}
+    if(!identical(candidate(c(-3, -1), c(-5, 5)), 'YES')){quit('no', 1)}
+    if(!identical(candidate(c(-2, 2), c(-4, 0)), 'YES')){quit('no', 1)}
+    if(!identical(candidate(c(-11, 2), c(-1, -1)), 'NO')){quit('no', 1)}
+    if(!identical(candidate(c(1, 2), c(3, 5)), 'NO')){quit('no', 1)}
+    if(!identical(candidate(c(1, 2), c(1, 2)), 'NO')){quit('no', 1)}
+    if(!identical(candidate(c(-2, -2), c(-3, -2)), 'NO')){quit('no', 1)}
 }
 test_humaneval()

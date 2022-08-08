@@ -1,23 +1,17 @@
 # Given a positive integer N, return the total sum of its digits in binary.
 # Example
-# >>> solve(1000)
-# "1"
-# >>> solve(150)
-# "110"
-# >>> solve(147)
-# "1100"
+# For N = 1000, the sum of digits will be 1 the output should be "1".
+# For N = 150, the sum of digits will be 6 the output should be "110".
+# For N = 147, the sum of digits will be 12 the output should be "1100".
 # Variables:
 # @N integer
 # Constraints: 0 ≤ N ≤ 10000.
 # Output:
 # a string of binary number
 solve <- function(N) {
-    return(paste(as.character(as.integer(as.binary(N))), collapse=""))
+    # your code here
+    return(sum(as.numeric(strsplit(as.character(N), "")[[1]])))
 }
-
-solve(1000)
-solve(150)
-solve(147)
 
 
 test_humaneval <- function() {

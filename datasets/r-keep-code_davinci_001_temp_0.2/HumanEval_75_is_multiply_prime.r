@@ -2,8 +2,7 @@
 # and false otherwise.
 # Knowing that (a) is less then 100. 
 # Example:
-# >>> is_multiply_prime(30)
-# True
+# is_multiply_prime(30) == True
 # 30 = 2 * 3 * 5
 is_multiply_prime <- function(a) {
     if (a == 1) {
@@ -16,8 +15,8 @@ is_multiply_prime <- function(a) {
     }
     return(TRUE)
 }
-
 is_multiply_prime(30)
+is_multiply_prime(31)
 
 
 test_humaneval <- function() {

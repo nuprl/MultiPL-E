@@ -12,8 +12,8 @@ filter_integers(c(1, 2, 3, 'abc', {}, []))
 
 test_humaneval <- function() {
 candidate <- filter_integers
-    if(!identical(candidate(list()), list())){quit('no', 1)}
-    if(!identical(candidate(list(4, list(), list(), 23.2, 9, 'adasd')), list(4, 9))){quit('no', 1)}
-    if(!identical(candidate(list(3, 'c', 3, 3, 'a', 'b')), list(3, 3, 3))){quit('no', 1)}
+    if(!identical(candidate(c()), c())){quit('no', 1)}
+    if(!identical(candidate(c(4, list(), c(), 23.2, 9, 'adasd')), c(4, 9))){quit('no', 1)}
+    if(!identical(candidate(c(3, 'c', 3, 3, 'a', 'b')), c(3, 3, 3))){quit('no', 1)}
 }
 test_humaneval()

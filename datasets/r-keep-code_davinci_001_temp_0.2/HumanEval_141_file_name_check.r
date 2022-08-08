@@ -8,60 +8,12 @@
 # the latin alphapet ('a'-'z' and 'A'-'Z').
 # - The substring after the dot should be one of these: ['txt', 'exe', 'dll']
 # Examples:
-# >>> file_name_check("example.txt")
-# 'Yes'
-# >>> file_name_check("1example.dll")
-# 'No'
+# file_name_check("example.txt") # => 'Yes'
+# file_name_check("1example.dll") # => 'No' (the name should start with a latin alphapet letter)
 file_name_check <- function(file_name) {
-    # YOUR CODE HERE
-    if(grepl('.txt$', file_name) == 0) {
-        return('No')
-    }
-    if(grepl('[0-9]{4}', file_name) == 1) {
-        return('No')
-    }
-    if(grepl('^[a-zA-Z]', file_name) == 0) {
-        return('No')
-    }
-    if(grepl('[.]', file_name) == 0) {
-        return('No')
-    }
-    if(grepl('[.]txt$', file_name) == 0) {
-        return('No')
-    }
-    if(grepl('[.]exe$', file_name) == 0) {
-        return('No')
-    }
-    if(grepl('[.]dll$', file_name) == 0) {
-        return('No')
-    }
-    return('Yes')
+    # your code here
 }
-file_name_check("example.txt")
-file_name_check("1example.dll")
-file_name_check("example.exe")
-file_name_check("example.dll")
-file_name_check("example.dll")
-file_name_check("example.txt")
-file_name_check("example.exe")
-file_name_check("example.dll")
-file_name_check("example.dll")
-file_name_check("example.txt")
-file_name_check("example.exe")
-file_name_check("example.dll")
-file_name_check("example.dll")
-file_name_check("example.txt")
-file_name_check("example.exe")
-file_name_check("example.dll")
-file_name_check("example.dll")
-file_name_check("example.txt")
-file_name_check("example.exe")
-file_name_check("example.dll")
-file_name_check("example.dll")
-file_name_check("example.txt")
-file_name_check("example.exe")
-file_name_check("example.dll")
-file_name_check("example.dll")
+
 
 test_humaneval <- function() {
 candidate <- file_name_check

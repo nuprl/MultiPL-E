@@ -9,31 +9,52 @@
 # Note: you may assume the input is always correct or empty string, 
 # and symbols A,B,C,D,E,F are always uppercase.
 # Examples:
-# >>> hex_key("AB")
-# 1
-# >>> hex_key("1077E")
-# 2
-# >>> hex_key("ABED1A33")
-# 4
-# >>> hex_key("123456789ABCDEF0")
-# 6
-# >>> hex_key("2020")
-# 2
+# For num = "AB" the output should be 1.
+# For num = "1077E" the output should be 2.
+# For num = "ABED1A33" the output should be 4.
+# For num = "123456789ABCDEF0" the output should be 6.
+# For num = "2020" the output should be 2.
 hex_key <- function(num) {
-    num <- strsplit(num, "")[[1]]
+    num <- gsub("[^0-9A-F]", "", num)
     num <- as.numeric(num)
-    num <- num[num >= 10]
-    num <- num[num < 16]
-    num <- as.character(num)
+    num <- format(num, format="%x")
+    num <- gsub("[^0-9A-F]", "", num)
     num <- as.numeric(num)
-    num <- num[num %in% c(2, 3, 5, 7, 11, 13, 17)]
-    return(length(num))
-}
-hex_key("AB")
-hex_key("1077E")
-hex_key("ABED1A33")
-hex_key("123456789ABCDEF0")
-hex_key("2020")
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
+    num <- as.numeric(num)
+    num <- format(num, format="%x")
 
 
 test_humaneval <- function() {

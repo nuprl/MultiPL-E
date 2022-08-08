@@ -1,19 +1,15 @@
 # A simple program which should return the value of x if n is 
 # a prime number and should return the value of y otherwise.
 # Examples:
-# >>> x_or_y(7, 34, 12)
-# 34
-# >>> x_or_y(15, 8, 5)
-# 5
+# for x_or_y(7, 34, 12) == 34
+# for x_or_y(15, 8, 5) == 5
 x_or_y <- function(n, x, y) {
-    if (is_prime(n)) {
+    if (isprime(n)) {
         return(x)
     } else {
         return(y)
     }
 }
-x_or_y(7, 34, 12)
-x_or_y(15, 8, 5)
 
 
 test_humaneval <- function() {

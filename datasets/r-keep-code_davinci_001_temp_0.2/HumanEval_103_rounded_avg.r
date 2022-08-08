@@ -3,23 +3,16 @@
 # Round the answer to the nearest integer and convert that to binary.
 # If n is greater than m, return -1.
 # Example:
-# >>> rounded_avg(1, 5)
-# "0b11"
-# >>> rounded_avg(7, 5)
-# -1
-# >>> rounded_avg(10, 20)
-# "0b1111"
-# >>> rounded_avg(20, 33)
-# "0b11010"
+# rounded_avg(1, 5) => "0b11"
+# rounded_avg(7, 5) => -1
+# rounded_avg(10, 20) => "0b1111"
+# rounded_avg(20, 33) => "0b11010"
 rounded_avg <- function(n, m) {
     if (n > m) {
         return(-1)
     } else {
-        sum <- 0
-        for (i in n:m) {
-            sum <- sum + i
-        }
-        return(bin(round(sum/(m-n+1))))
+        avg <- mean(seq(n, m))
+        return(paste(sprintf("%0.0f", avg), collapse = ''))
     }
 }
 rounded_avg(1, 5)

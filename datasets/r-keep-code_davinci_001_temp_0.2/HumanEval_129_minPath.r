@@ -16,55 +16,48 @@
 # lst_A[j] = lst_B[j].
 # It is guaranteed that the answer is unique.
 # Return an ordered list of the values on the cells that the minimum path go through.
-# Examples:    
-# >>> minPath([ [1,2,3], [4,5,6], [7,8,9]], 3)
-# [1, 2, 1]
-# >>> minPath([ [5,9,3], [4,1,6], [7,8,2]], 1)
-# [1]
+# Examples:
+# Input: grid = [ [1,2,3], [4,5,6], [7,8,9]], k = 3
+# Output: [1, 2, 1]
+# Input: grid = [ [5,9,3], [4,1,6], [7,8,2]], k = 1
+# Output: [1]
 minPath <- function(grid, k) {
     n <- length(grid)
-    if (n == 1) {
-        return(grid[1,])
+    dp <- matrix(0, nrow=n, ncol=n)
+    dp[1, 1] <- grid[1, 1]
+    for (i in 1:n) {
+        for (j in 1:n) {
+            if (i == 1 && j == 1) {
+                continue
+            }
+            if (i == 1) {
+                dp[i, j] <- dp[i, j-1] + grid[i, j]
+            } else if (j == 1) {
+                dp[i, j] <- dp[i-1, j] + grid[i, j]
+            } else {
+                dp[i, j] <- min(dp[i-1, j], dp[i, j-1]) + grid[i, j]
+            }
+        }
     }
-    if (k == 1) {
-        return(rowSums(grid))
-    }
-    if (k == n) {
-        return(colSums(grid))
-    }
-    if (k == n - 1) {
-        return(c(rowSums(grid), colSums(grid)[n]))
-    }
-    if (k == n - 2) {
-        return(c(rowSums(grid), colSums(grid)[n], colSums(grid)[n - 1]))
-    }
-    if (k == n - 3) {
-        return(c(rowSums(grid), colSums(grid)[n], colSums(grid)[n - 1], colSums(grid)[n - 2]))
-    }
-    if (k == n - 4) {
-        return(c(rowSums(grid), colSums(grid)[n], colSums(grid)[n - 1], colSums(grid)[n - 2], colSums(grid)[n - 3]))
-    }
-    if (k == n - 5) {
-        return(c(rowSums(grid), colSums(grid)[n], colSums(grid)[n - 1], colSums(grid)[n - 2], colSums(grid)[n - 3], colSums(grid)[n - 4]))
-    }
-    if (k == n - 6) {
-        return(c(rowSums(grid), colSums(grid)[n], colSums(grid)[n - 1], colSums(grid)[n - 2], colSums(grid)[n - 3], colSums(grid)[n - 4], colSums(grid)[n - 5]))
-    }
-    if (k == n - 7) {
-        return(c(rowSums(grid), colSums(grid)[n], colSums(grid)[n - 1], colSums(grid)[n - 2], colSums(grid)[n - 3], colSums(grid
+    dp
+}
+
+minPath(grid = matrix(c(1,2,3,4,5,6,7,8,9), nrow=3, byrow=T), k=3)
+minPath(grid = matrix(c(5,9,3,4,1,6,7,8,2), nrow=3, byrow=T), k=1)
+
 
 test_humaneval <- function() {
 candidate <- minPath
-    if(!identical(candidate(list(list(1, 2, 3), list(4, 5, 6), list(7, 8, 9)), 3), list(1, 2, 1))){quit('no', 1)}
-    if(!identical(candidate(list(list(5, 9, 3), list(4, 1, 6), list(7, 8, 2)), 1), list(1))){quit('no', 1)}
-    if(!identical(candidate(list(list(1, 2, 3, 4), list(5, 6, 7, 8), list(9, 10, 11, 12), list(13, 14, 15, 16)), 4), list(1, 2, 1, 2))){quit('no', 1)}
-    if(!identical(candidate(list(list(6, 4, 13, 10), list(5, 7, 12, 1), list(3, 16, 11, 15), list(8, 14, 9, 2)), 7), list(1, 10, 1, 10, 1, 10, 1))){quit('no', 1)}
-    if(!identical(candidate(list(list(8, 14, 9, 2), list(6, 4, 13, 15), list(5, 7, 1, 12), list(3, 10, 11, 16)), 5), list(1, 7, 1, 7, 1))){quit('no', 1)}
-    if(!identical(candidate(list(list(11, 8, 7, 2), list(5, 16, 14, 4), list(9, 3, 15, 6), list(12, 13, 10, 1)), 9), list(1, 6, 1, 6, 1, 6, 1, 6, 1))){quit('no', 1)}
-    if(!identical(candidate(list(list(12, 13, 10, 1), list(9, 3, 15, 6), list(5, 16, 14, 4), list(11, 8, 7, 2)), 12), list(1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6))){quit('no', 1)}
-    if(!identical(candidate(list(list(2, 7, 4), list(3, 1, 5), list(6, 8, 9)), 8), list(1, 3, 1, 3, 1, 3, 1, 3))){quit('no', 1)}
-    if(!identical(candidate(list(list(6, 1, 5), list(3, 8, 9), list(2, 7, 4)), 8), list(1, 5, 1, 5, 1, 5, 1, 5))){quit('no', 1)}
-    if(!identical(candidate(list(list(1, 2), list(3, 4)), 10), list(1, 2, 1, 2, 1, 2, 1, 2, 1, 2))){quit('no', 1)}
-    if(!identical(candidate(list(list(1, 3), list(3, 2)), 10), list(1, 3, 1, 3, 1, 3, 1, 3, 1, 3))){quit('no', 1)}
+    if(!identical(candidate(c(c(1, 2, 3), c(4, 5, 6), c(7, 8, 9)), 3), c(1, 2, 1))){quit('no', 1)}
+    if(!identical(candidate(c(c(5, 9, 3), c(4, 1, 6), c(7, 8, 2)), 1), c(1))){quit('no', 1)}
+    if(!identical(candidate(c(c(1, 2, 3, 4), c(5, 6, 7, 8), c(9, 10, 11, 12), c(13, 14, 15, 16)), 4), c(1, 2, 1, 2))){quit('no', 1)}
+    if(!identical(candidate(c(c(6, 4, 13, 10), c(5, 7, 12, 1), c(3, 16, 11, 15), c(8, 14, 9, 2)), 7), c(1, 10, 1, 10, 1, 10, 1))){quit('no', 1)}
+    if(!identical(candidate(c(c(8, 14, 9, 2), c(6, 4, 13, 15), c(5, 7, 1, 12), c(3, 10, 11, 16)), 5), c(1, 7, 1, 7, 1))){quit('no', 1)}
+    if(!identical(candidate(c(c(11, 8, 7, 2), c(5, 16, 14, 4), c(9, 3, 15, 6), c(12, 13, 10, 1)), 9), c(1, 6, 1, 6, 1, 6, 1, 6, 1))){quit('no', 1)}
+    if(!identical(candidate(c(c(12, 13, 10, 1), c(9, 3, 15, 6), c(5, 16, 14, 4), c(11, 8, 7, 2)), 12), c(1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6))){quit('no', 1)}
+    if(!identical(candidate(c(c(2, 7, 4), c(3, 1, 5), c(6, 8, 9)), 8), c(1, 3, 1, 3, 1, 3, 1, 3))){quit('no', 1)}
+    if(!identical(candidate(c(c(6, 1, 5), c(3, 8, 9), c(2, 7, 4)), 8), c(1, 5, 1, 5, 1, 5, 1, 5))){quit('no', 1)}
+    if(!identical(candidate(c(c(1, 2), c(3, 4)), 10), c(1, 2, 1, 2, 1, 2, 1, 2, 1, 2))){quit('no', 1)}
+    if(!identical(candidate(c(c(1, 3), c(3, 2)), 10), c(1, 3, 1, 3, 1, 3, 1, 3, 1, 3))){quit('no', 1)}
 }
 test_humaneval()

@@ -2,54 +2,18 @@
 # the product of their unit digits.
 # Assume the input is always valid.
 # Examples:
-# >>> multiply(148, 412)
-# 16
-# >>> multiply(19, 28)
-# 72
-# >>> multiply(2020, 1851)
-# 0
-# >>> multiply(14,-15)
-# 20
+# multiply(148, 412) should return 16.
+# multiply(19, 28) should return 72.
+# multiply(2020, 1851) should return 0.
+# multiply(14,-15) should return 20.
 multiply <- function(a, b) {
-    if (a < 0) {
-        a <- -a
-        b <- -b
-    }
-    if (a == 0 || b == 0) {
-        return(0)
-    }
-    if (a == 1) {
-        return(b)
-    }
-    if (b == 1) {
-        return(a)
-    }
-    if (a < b) {
-        return(multiply(b, a))
-    }
-    if (a %% b == 0) {
-        return(a / b)
-    }
-    if (b %% a == 0) {
-        return(b / a)
-    }
-    if (a %% 10 == 0) {
-        return(multiply(a / 10, b) * 10)
-    }
-    if (b %% 10 == 0) {
-        return(multiply(a, b / 10) * 10)
-    }
-    if (a %% 10 == b %% 10) {
-        return(multiply(a / 10, b / 10) * 100)
-    }
-    if (a %% 10 == b %% 1) {
-        return(multiply(a / 10, b) * 10)
-    }
-    if (a %% 1 == b %% 10) {
-        return(multiply(a, b / 10) * 10)
-    }
-    if (a %% 1 == b %% 1) {
-        return(multiply(a, b))
+    # your code here
+    a <- as.character(a)
+    b <- as.character(b)
+    if (length(a) == 1) {
+        return(a %*% b)
+    } else {
+        return(as.integer(a[1]) %*% b %*% 10 ^ (length(a) - 1))
     }
 }
 

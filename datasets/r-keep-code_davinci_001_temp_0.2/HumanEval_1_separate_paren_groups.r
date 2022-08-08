@@ -11,9 +11,9 @@ separate_paren_groups <- function(paren_string) {
 
 test_humaneval <- function() {
 candidate <- separate_paren_groups
-    if(!identical(candidate('(()()) ((())) () ((())()())'), list('(()())', '((()))', '()', '((())()())'))){quit('no', 1)}
-    if(!identical(candidate('() (()) ((())) (((())))'), list('()', '(())', '((()))', '(((())))'))){quit('no', 1)}
-    if(!identical(candidate('(()(())((())))'), list('(()(())((())))'))){quit('no', 1)}
-    if(!identical(candidate('( ) (( )) (( )( ))'), list('()', '(())', '(()())'))){quit('no', 1)}
+    if(!identical(candidate('(()()) ((())) () ((())()())'), c('(()())', '((()))', '()', '((())()())'))){quit('no', 1)}
+    if(!identical(candidate('() (()) ((())) (((())))'), c('()', '(())', '((()))', '(((())))'))){quit('no', 1)}
+    if(!identical(candidate('(()(())((())))'), c('(()(())((())))'))){quit('no', 1)}
+    if(!identical(candidate('( ) (( )) (( )( ))'), c('()', '(())', '(()())'))){quit('no', 1)}
 }
 test_humaneval()

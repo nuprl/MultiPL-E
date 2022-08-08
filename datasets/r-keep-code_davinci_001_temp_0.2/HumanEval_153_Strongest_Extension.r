@@ -12,8 +12,7 @@
 # return 'Slices.SErviNGSliCes' since 'SErviNGSliCes' is the strongest extension 
 # (its strength is -1).
 # Example:
-# >>> Strongest_Extension('my_class', ['AA', 'Be', 'CC'])
-# 'my_class.AA'
+# for Strongest_Extension('my_class', ['AA', 'Be', 'CC']) == 'my_class.AA'
 Strongest_Extension <- function(class_name, extensions) {
     # your code here
 }
