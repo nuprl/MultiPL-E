@@ -155,6 +155,7 @@ class Translator(humaneval_to_cpp.Translator):
         '''
         return boxed_type in [self.box_type(t) for t in [self.float_type, self.bool_type, self.int_type]]
 
+    # TODO: I believe this is dead code. Can we please delete it if so.
     def return_default_value(self, csharp_type):
         '''Recursively generate default value of a given Java type based on following rules:
 
@@ -199,7 +200,6 @@ class Translator(humaneval_to_cpp.Translator):
         """
 
         return [
-            # "return " + self.return_default_value(self.translated_return_type) + ";",
             self.indent + "}",
             self.indent + "public static void main(String[] args) {",
         ]

@@ -198,7 +198,7 @@ class Translator:
         # This is a total hack. It only works for a very stupid reason:
         # Left is compiled before right, and in the test suite, candidate is
         # never on the rhs
-        return "    assert_eq!({left}, {right});"
+        return f"    assert_eq!({left}, {right});"
 
     # NOTE(arjun): Really, no Nones?
     def gen_literal(self, c: bool | str | int | float):
