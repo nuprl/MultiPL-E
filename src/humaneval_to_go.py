@@ -258,7 +258,7 @@ import (
             return str(c).lower()
         if type(c) == str:
             return "\"%s\"" % c.replace("\n", "\\n")
-        if type(c) == None:  # this is possible, maybe we should make a box for Optional
+        if type(c) == None or c is None:  # this is possible, maybe we should make a box for Optional
             return "nil"
         return repr(c)
 
