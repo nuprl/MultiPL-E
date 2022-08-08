@@ -141,12 +141,13 @@ def main():
 
     if args.file:
         evaluate_problem(Path(args.file), args.max_workers)
-    elif args.job_file and args.job_file_line:
+    elif args.job_file and args.job_file_line is not None:
         with open(args.job_file) as f:
             # Skip the first two space, separated columns, which identify the language
             # and the number of jobs.
             files = f.readlines()[args.job_file_line].rstrip().split(" ")[2:]
         for f in files:
+            print(f"Processing {f}")
             evaluate_problem(Path(f), args.max_workers)    
     else:
         print("Specify either --file or --job-file and --job-file-line")
